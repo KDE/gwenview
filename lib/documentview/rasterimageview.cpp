@@ -329,6 +329,7 @@ void RasterImageView::setCurrentTool(AbstractRasterImageViewTool* tool) {
 	if (d->mTool) {
 		d->mTool.data()->toolActivated();
 	}
+	currentToolChanged(tool);
 	update();
 }
 

@@ -61,6 +61,8 @@ public:
 	virtual void toolActivated() {}
 	virtual void toolDeactivated() {}
 
+	virtual QWidget* widget() { return 0; }
+
 private:
 	AbstractRasterImageViewToolPrivate * const d;
 };

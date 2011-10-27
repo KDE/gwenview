@@ -46,6 +46,9 @@ public:
 	void setCurrentTool(AbstractRasterImageViewTool* tool);
 	AbstractRasterImageViewTool* currentTool() const;
 
+Q_SIGNALS:
+	void currentToolChanged(AbstractRasterImageViewTool*);
+
 protected:
 	void loadFromDocument();
 	void onZoomChanged();

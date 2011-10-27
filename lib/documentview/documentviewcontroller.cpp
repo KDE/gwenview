@@ -24,7 +24,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include "abstractdocumentviewadapter.h"
 #include "documentview.h"
+#include <lib/documentview/abstractrasterimageviewtool.h>
 #include <lib/signalblocker.h>
+#include <lib/slidecontainer.h>
 #include <lib/zoomwidget.h>
 
 // KDE
@@ -45,6 +47,7 @@ struct DocumentViewControllerPrivate {
 	KActionCollection* mActionCollection;
 	DocumentView* mView;
 	ZoomWidget* mZoomWidget;
+	SlideContainer* mToolContainer;
 
 	KAction* mZoomToFitAction;
 	KAction* mActualSizeAction;
@@ -112,6 +115,7 @@ DocumentViewController::DocumentViewController(KActionCollection* actionCollecti
 	d->mActionCollection = actionCollection;
 	d->mView = 0;
 	d->mZoomWidget = 0;
+	d->mToolContainer = 0;
 
 	d->setupActions();
 }
@@ -137,9 +141,10 @@ void DocumentViewController::setView(DocumentView* view) {
 	d->mView = view;
 	connect(d->mView, SIGNAL(adapterChanged()),
 		SLOT(slotAdapterChanged()));
-
 	connect(d->mView, SIGNAL(zoomToFitChanged(bool)),
 		SLOT(updateZoomToFitActionFromView()));
+	connect(d->mView, SIGNAL(currentToolChanged(AbstractRasterImageViewTool*)),
+		SLOT(updateTool()));
 
 	connect(d->mZoomToFitAction, SIGNAL(toggled(bool)),
 		d->mView, SLOT(setZoomToFit(bool)));
@@ -152,6 +157,7 @@ void DocumentViewController::setView(DocumentView* view) {
 
 	d->updateActions();
 	updateZoomToFitActionFromView();
+	updateTool();
 
 	// Sync zoom widget
 	d->connectZoomWidget();
@@ -195,5 +201,22 @@ void DocumentViewController::updateZoomToFitActionFromView() {
 	d->mZoomToFitAction->setChecked(d->mView->zoomToFit());
 }
 
+void DocumentViewController::updateTool() {
+	if (!d->mToolContainer) {
+		return;
+	}
+	AbstractRasterImageViewTool* tool = d->mView->currentTool();
+	if (tool && tool->widget()) {
+		d->mToolContainer->setContent(tool->widget());
+		d->mToolContainer->slideIn();
+	} else {
+		d->mToolContainer->setContent(0);
+		d->mToolContainer->slideOut();
+	}
+}
+
+void DocumentViewController::setToolContainer(SlideContainer* container) {
+	d->mToolContainer = container;
+}
 
 } // namespace

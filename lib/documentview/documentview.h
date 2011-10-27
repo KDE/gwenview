@@ -36,6 +36,7 @@ class KUrl;
 
 namespace Gwenview {
 
+class AbstractRasterImageViewTool;
 class RasterImageView;
 class SlideShow;
 class ZoomWidget;
@@ -107,6 +108,8 @@ public:
 	 */
 	RasterImageView* imageView() const;
 
+	AbstractRasterImageViewTool* currentTool() const;
+
 	void moveTo(const QRect&);
 	void moveToAnimated(const QRect&);
 	void fadeIn();
@@ -155,6 +158,8 @@ Q_SIGNALS:
 	void animationFinished(DocumentView*);
 
 	void contextMenuRequested();
+
+	void currentToolChanged(AbstractRasterImageViewTool*);
 
 protected:
 	void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);

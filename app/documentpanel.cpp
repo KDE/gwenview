@@ -48,6 +48,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/gwenviewconfig.h>
 #include <lib/paintutils.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
+#include <lib/slidecontainer.h>
 #include <lib/slideshow.h>
 #include <lib/statusbartoolbutton.h>
 #include <lib/thumbnailview/thumbnailbarview.h>
@@ -113,6 +114,9 @@ static QString gradient(Qt::Orientation orientation, const QColor &color, int va
  * ||||                     ||                      ||||
  * |||+---------------------++----------------------+|||
  * ||+-----------------------------------------------+||
+ * ||+-mToolContainer--------------------------------+||
+ * |||                                               |||
+ * ||+-----------------------------------------------+||
  * ||+-mStatusBarContainer---------------------------+||
  * |||[mToggleThumbnailBarButton]       [mZoomWidget]|||
  * ||+-----------------------------------------------+||
@@ -134,7 +138,9 @@ struct DocumentPanelPrivate {
 	QList<DocumentView*> mDocumentViews;
 	DocumentViewSynchronizer* mSynchronizer;
 	QToolButton* mToggleThumbnailBarButton;
+	ZoomWidget* mZoomWidget;
 	DocumentViewContainer* mDocumentViewContainer;
+	SlideContainer* mToolContainer;
 	QWidget* mStatusBarContainer;
 	ThumbnailBarView* mThumbnailBar;
 	KToggleAction* mToggleThumbnailBarAction;
@@ -211,14 +217,14 @@ struct DocumentPanelPrivate {
 		mDocumentViewContainer->setAutoFillBackground(true);
 		mDocumentViewContainer->setBackgroundRole(QPalette::Base);
 		layout->addWidget(mDocumentViewContainer);
+		layout->addWidget(mToolContainer);
 		layout->addWidget(mStatusBarContainer);
 	}
 
 	void setupDocumentViewController() {
 		mDocumentViewController = new DocumentViewController(mActionCollection, that);
-
-		ZoomWidget* zoomWidget = new ZoomWidget(that);
-		mDocumentViewController->setZoomWidget(zoomWidget);
+		mDocumentViewController->setZoomWidget(mZoomWidget);
+		mDocumentViewController->setToolContainer(mToolContainer);
 		mSynchronizer = new DocumentViewSynchronizer(that);
 	}
 
@@ -259,9 +265,14 @@ struct DocumentPanelPrivate {
 		mDocumentViews.removeOne(view);
 	}
 
+	void setupToolContainer() {
+		mToolContainer = new SlideContainer;
+	}
+
 	void setupStatusBar() {
 		mStatusBarContainer = new QWidget;
 		mToggleThumbnailBarButton = new StatusBarToolButton;
+		mZoomWidget = new ZoomWidget;
 		mSynchronizeCheckBox = new QCheckBox(i18n("Synchronize"));
 		mSynchronizeCheckBox->hide();
 
@@ -272,7 +283,7 @@ struct DocumentPanelPrivate {
 		layout->addStretch();
 		layout->addWidget(mSynchronizeCheckBox);
 		layout->addStretch();
-		layout->addWidget(mDocumentViewController->zoomWidget());
+		layout->addWidget(mZoomWidget);
 	}
 
 	void setupSplitter() {
@@ -356,8 +367,7 @@ DocumentPanel::DocumentPanel(QWidget* parent, SlideShow* slideShow, KActionColle
 	toggleFullScreenShortcut->setKey(Qt::Key_Return);
 	connect(toggleFullScreenShortcut, SIGNAL(activated()), SIGNAL(toggleFullScreenRequested()) );
 
-	d->setupDocumentViewController();
-
+	d->setupToolContainer();
 	d->setupStatusBar();
 
 	d->setupAdapterContainer();
@@ -365,6 +375,8 @@ DocumentPanel::DocumentPanel(QWidget* parent, SlideShow* slideShow, KActionColle
 	d->setupThumbnailBar();
 
 	d->setupSplitter();
+
+	d->setupDocumentViewController();
 
 	KActionCategory* view = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface","View"), actionCollection);
 

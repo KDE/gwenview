@@ -47,8 +47,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include <lib/document/document.h>
 #include <lib/document/documentfactory.h>
+#include <lib/documentview/abstractrasterimageviewtool.h>
 #include <lib/documentview/messageviewadapter.h>
 #include <lib/documentview/imageviewadapter.h>
+#include <lib/documentview/rasterimageview.h>
 #include <lib/documentview/svgviewadapter.h>
 #include <lib/documentview/videoviewadapter.h>
 #include <lib/graphicshudwidget.h>
@@ -124,6 +126,10 @@ struct DocumentViewPrivate {
 		that->positionChanged();
 		if (adapter->canZoom()) {
 			that->zoomToFitChanged(adapter->zoomToFit());
+		}
+		if (adapter->rasterImageView()) {
+			QObject::connect(adapter->rasterImageView(), SIGNAL(currentToolChanged(AbstractRasterImageViewTool*)),
+				that, SIGNAL(currentToolChanged(AbstractRasterImageViewTool*)));
 		}
 	}
 
@@ -737,5 +743,8 @@ bool DocumentView::sceneEventFilter(QGraphicsItem*, QEvent* event) {
 	return false;
 }
 
+AbstractRasterImageViewTool* DocumentView::currentTool() const {
+	return imageView() ? imageView()->currentTool() : 0;
+}
 
 } // namespace
