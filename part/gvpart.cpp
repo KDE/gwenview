@@ -41,6 +41,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "../lib/document/document.h"
 #include "../lib/document/documentfactory.h"
 #include "../lib/documentview/documentview.h"
+#include "../lib/documentview/documentviewcontainer.h"
 #include "../lib/documentview/documentviewcontroller.h"
 #include "../lib/imageformats/imageformats.h"
 #include "../lib/urlutils.h"
@@ -56,20 +57,20 @@ K_EXPORT_PLUGIN(GVPartFactory )
 namespace Gwenview {
 
 
-GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QVariantList& /*args*/)
+GVPart::GVPart(QWidget* /*parentWidget*/, QObject* parent, const QVariantList& /*args*/)
 : KParts::ReadOnlyPart(parent)
 {
-        KGlobal::locale()->insertCatalog("gwenview");
-	mDocumentView = new DocumentView(parentWidget);
-	setWidget(mDocumentView);
+	KGlobal::locale()->insertCatalog("gwenview");
+	DocumentViewContainer* container = new DocumentViewContainer;
+	setWidget(container);
+	mDocumentView = container->createView();
 
 	connect(mDocumentView, SIGNAL(captionUpdateRequested(QString)),
 		SIGNAL(setWindowCaption(QString)));
 	connect(mDocumentView, SIGNAL(completed()),
 		SIGNAL(completed()));
 
-	mDocumentView->setContextMenuPolicy(Qt::CustomContextMenu);
-	connect(mDocumentView, SIGNAL(customContextMenuRequested(QPoint)),
+	connect(mDocumentView, SIGNAL(contextMenuRequested()),
 		SLOT(showContextMenu()) );
 
 	// Necessary to have zoom actions
@@ -91,7 +92,7 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QVariantList& /*arg
 
 
 void GVPart::showProperties() {
-	KPropertiesDialog::showDialog(url(), mDocumentView);
+	KPropertiesDialog::showDialog(url(), widget());
 }
 
 
@@ -145,7 +146,7 @@ inline void addActionToMenu(KMenu* menu, KActionCollection* actionCollection, co
 
 
 void GVPart::showContextMenu() {
-	KMenu menu(mDocumentView);
+	KMenu menu(widget());
 	addActionToMenu(&menu, actionCollection(), "file_save_as");
 	menu.addSeparator();
 	addActionToMenu(&menu, actionCollection(), "view_actual_size");

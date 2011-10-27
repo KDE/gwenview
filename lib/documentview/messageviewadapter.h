@@ -35,10 +35,8 @@ struct MessageViewAdapterPrivate;
 class MessageViewAdapter : public AbstractDocumentViewAdapter {
 	Q_OBJECT
 public:
-	MessageViewAdapter(QWidget* parent);
+	MessageViewAdapter();
 	~MessageViewAdapter();
-
-	virtual void installEventFilterOnViewWidgets(QObject*);
 
 	virtual MimeTypeUtils::Kind kind() const { return MimeTypeUtils::KIND_UNKNOWN; }
 

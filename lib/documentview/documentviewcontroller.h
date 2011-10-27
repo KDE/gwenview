@@ -35,6 +35,7 @@ class KActionCollection;
 namespace Gwenview {
 
 class DocumentView;
+class SlideContainer;
 class ZoomWidget;
 
 class DocumentViewControllerPrivate;
@@ -55,12 +56,12 @@ public:
 	void setView(DocumentView*);
 	void setZoomWidget(ZoomWidget* widget);
 
-protected:
-	bool eventFilter(QObject*, QEvent*);
+	void setToolContainer(SlideContainer* container);
 
 private Q_SLOTS:
 	void slotAdapterChanged();
 	void updateZoomToFitActionFromView();
+	void updateTool();
 
 private:
 	DocumentViewControllerPrivate* const d;

@@ -24,7 +24,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include "abstractdocumentviewadapter.h"
 #include "documentview.h"
+#include <lib/documentview/abstractrasterimageviewtool.h>
 #include <lib/signalblocker.h>
+#include <lib/slidecontainer.h>
 #include <lib/zoomwidget.h>
 
 // KDE
@@ -45,6 +47,7 @@ struct DocumentViewControllerPrivate {
 	KActionCollection* mActionCollection;
 	DocumentView* mView;
 	ZoomWidget* mZoomWidget;
+	SlideContainer* mToolContainer;
 
 	KAction* mZoomToFitAction;
 	KAction* mActualSizeAction;
@@ -112,6 +115,7 @@ DocumentViewController::DocumentViewController(KActionCollection* actionCollecti
 	d->mActionCollection = actionCollection;
 	d->mView = 0;
 	d->mZoomWidget = 0;
+	d->mToolContainer = 0;
 
 	d->setupActions();
 }
@@ -126,7 +130,6 @@ void DocumentViewController::setView(DocumentView* view) {
 	Q_ASSERT(view);
 	// Forget old view
 	if (d->mView) {
-		d->mView->removeEventFilter(this);
 		disconnect(d->mView, 0, this, 0);
 		Q_FOREACH(QAction* action, d->mActions) {
 			disconnect(action, 0, d->mView, 0);
@@ -136,12 +139,12 @@ void DocumentViewController::setView(DocumentView* view) {
 
 	// Connect new view
 	d->mView = view;
-	d->mView->installEventFilter(this);
 	connect(d->mView, SIGNAL(adapterChanged()),
 		SLOT(slotAdapterChanged()));
-
 	connect(d->mView, SIGNAL(zoomToFitChanged(bool)),
 		SLOT(updateZoomToFitActionFromView()));
+	connect(d->mView, SIGNAL(currentToolChanged(AbstractRasterImageViewTool*)),
+		SLOT(updateTool()));
 
 	connect(d->mZoomToFitAction, SIGNAL(toggled(bool)),
 		d->mView, SLOT(setZoomToFit(bool)));
@@ -154,6 +157,7 @@ void DocumentViewController::setView(DocumentView* view) {
 
 	d->updateActions();
 	updateZoomToFitActionFromView();
+	updateTool();
 
 	// Sync zoom widget
 	d->connectZoomWidget();
@@ -192,23 +196,27 @@ void DocumentViewController::slotAdapterChanged() {
 }
 
 
-bool DocumentViewController::eventFilter(QObject*, QEvent* event) {
-	switch (event->type()) {
-	case QEvent::Show:
-	case QEvent::Hide:
-		d->updateActions();
-		break;
-	default:
-		break;
-	}
-	return false;
-}
-
-
 void DocumentViewController::updateZoomToFitActionFromView() {
 	SignalBlocker blocker(d->mZoomToFitAction);
 	d->mZoomToFitAction->setChecked(d->mView->zoomToFit());
 }
 
+void DocumentViewController::updateTool() {
+	if (!d->mToolContainer) {
+		return;
+	}
+	AbstractRasterImageViewTool* tool = d->mView->currentTool();
+	if (tool && tool->widget()) {
+		d->mToolContainer->setContent(tool->widget());
+		d->mToolContainer->slideIn();
+	} else {
+		d->mToolContainer->setContent(0);
+		d->mToolContainer->slideOut();
+	}
+}
+
+void DocumentViewController::setToolContainer(SlideContainer* container) {
+	d->mToolContainer = container;
+}
 
 } // namespace

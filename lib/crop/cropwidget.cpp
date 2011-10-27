@@ -34,8 +34,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <klocale.h>
 
 // Local
+#include <lib/documentview/rasterimageview.h>
 #include "croptool.h"
-#include "imageview.h"
 #include "signalblocker.h"
 #include "ui_cropwidget.h"
 
@@ -160,16 +160,20 @@ struct CropWidgetPrivate : public Ui_CropWidget {
 	}
 
 
-	void initCropButton() {
+	void initDialogButtonBox() {
+		QPushButton* cropButton = dialogButtonBox->button(QDialogButtonBox::Ok);
 		cropButton->setIcon(KIcon("transform-crop-and-resize"));
+		cropButton->setText(i18n("Crop"));
 
-		QObject::connect(cropButton, SIGNAL(clicked()),
+		QObject::connect(dialogButtonBox, SIGNAL(accepted()),
 			that, SIGNAL(cropRequested()) );
+		QObject::connect(dialogButtonBox, SIGNAL(rejected()),
+			that, SIGNAL(done()) );
 	}
 };
 
 
-CropWidget::CropWidget(QWidget* parent, ImageView* imageView, CropTool* cropTool)
+CropWidget::CropWidget(QWidget* parent, RasterImageView* imageView, CropTool* cropTool)
 : QWidget(parent)
 , d(new CropWidgetPrivate) {
 	setWindowFlags(Qt::Tool);
@@ -201,7 +205,7 @@ CropWidget::CropWidget(QWidget* parent, ImageView* imageView, CropTool* cropTool
 	connect(d->heightSpinBox, SIGNAL(valueChanged(int)),
 		SLOT(slotHeightChanged()) );
 
-	d->initCropButton();
+	d->initDialogButtonBox();
 	
 	connect(d->ratioComboBox, SIGNAL(editTextChanged(QString)),
 		SLOT(slotRatioComboBoxEditTextChanged()) );

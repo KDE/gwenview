@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QPaintEvent>
 #include <QPointer>
 #include <QScrollBar>
+#include <QTimer>
 
 // KDE
 #include <kdebug.h>
@@ -49,6 +50,7 @@ struct ImageViewPrivate {
 	ImageView* mView;
 	QPixmap mBackgroundTexture;
 	QWidget* mViewport;
+	QTimer* mZoomToFitUpdateTimer;
 	ImageView::AlphaBackgroundMode mAlphaBackgroundMode;
 	QColor mAlphaBackgroundColor;
 	bool mEnlargeSmallerImages;
@@ -62,6 +64,13 @@ struct ImageViewPrivate {
 	QPointer<AbstractImageViewTool> mDefaultTool;
 	bool mInsideSetZoom;
 
+	void setupZoomToFitUpdateTimer() {
+		mZoomToFitUpdateTimer = new QTimer(mView);
+		mZoomToFitUpdateTimer->setInterval(500);
+		mZoomToFitUpdateTimer->setSingleShot(true);
+		QObject::connect(mZoomToFitUpdateTimer, SIGNAL(timeout()),
+			mView, SLOT(updateZoomToFit()));
+	}
 
 	void createBackgroundTexture() {
 		mBackgroundTexture = QPixmap(32, 32);
@@ -108,7 +117,7 @@ struct ImageViewPrivate {
 	}
 
 	void createBuffer() {
-		QSize size = mView->size();
+		QSize size = visibleImageSize();
 		if (size == mCurrentBuffer.size()) {
 			return;
 		}
@@ -119,10 +128,11 @@ struct ImageViewPrivate {
 		}
 
 		mAlternateBuffer = QPixmap(size);
-		QPainter painter(&mAlternateBuffer);
-		QColor bgColor = mViewport->palette().color(mViewport->backgroundRole());
-		painter.fillRect(mAlternateBuffer.rect(), bgColor);
-		painter.drawPixmap(0, 0, mCurrentBuffer);
+		mAlternateBuffer.fill(Qt::transparent);
+		{
+			QPainter painter(&mAlternateBuffer);
+			painter.drawPixmap(0, 0, mCurrentBuffer);
+		}
 		qSwap(mAlternateBuffer, mCurrentBuffer);
 
 		mAlternateBuffer = QPixmap();
@@ -187,6 +197,8 @@ ImageView::ImageView(QWidget* parent)
 : QAbstractScrollArea(parent)
 , d(new ImageViewPrivate)
 {
+	setAttribute(Qt::WA_NoSystemBackground);
+
 	d->mAlphaBackgroundMode = AlphaBackgroundCheckBoard;
 	d->mAlphaBackgroundColor = Qt::black;
 
@@ -195,14 +207,17 @@ ImageView::ImageView(QWidget* parent)
 	d->mZoomToFit = true;
 	d->createBackgroundTexture();
 	setFrameShape(QFrame::NoFrame);
-	setBackgroundRole(QPalette::Base);
+	//setBackgroundRole(QPalette::Base);
 	d->mViewport = new QWidget();
+	d->mViewport->setAttribute(Qt::WA_NoSystemBackground);
 	setViewport(d->mViewport);
 	d->mViewport->setMouseTracking(true);
 	horizontalScrollBar()->setSingleStep(16);
 	verticalScrollBar()->setSingleStep(16);
 	d->mScaler = new ImageScaler(this);
 	d->mInsideSetZoom = false;
+
+	d->setupZoomToFitUpdateTimer();
 
 	if (QApplication::isRightToLeft()) {
 		// Ensure we don't get weird behavior in RightToleft mode
@@ -336,10 +351,23 @@ void ImageView::paintEvent(QPaintEvent* event) {
 	QPainter painter(d->mViewport);
 	painter.setClipRect(event->rect());
 
-	painter.setCompositionMode(QPainter::CompositionMode_Source);
-	painter.drawPixmap(0, 0, d->mCurrentBuffer);
+	QSize viewportSize = d->mViewport->size();
 
-	painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+	QSize bufferSize = d->mCurrentBuffer.size();
+
+	QSize paintSize;
+	if (d->mZoomToFit) {
+		paintSize = d->mDocument->size() * computeZoomToFit();
+	} else {
+		paintSize = bufferSize;
+	}
+	painter.drawPixmap(
+		(viewportSize.width() - paintSize.width()) / 2,
+		(viewportSize.height() - paintSize.height()) / 2,
+		paintSize.width(),
+		paintSize.height(),
+		d->mCurrentBuffer);
+
 	if (d->mTool) {
 		d->mTool->paint(&painter);
 	}
@@ -347,11 +375,7 @@ void ImageView::paintEvent(QPaintEvent* event) {
 
 void ImageView::resizeEvent(QResizeEvent*) {
 	if (d->mZoomToFit) {
-		// Bypass "same zoom" test: even if the zoom is the same we want a new
-		// buffer of the correct size (and if switching from/to fullscreen, using
-		// the correct background) to be created
-		d->mZoom = -1;
-		setZoom(computeZoomToFit());
+		d->mZoomToFitUpdateTimer->start();
 		// Make sure one can't use mousewheel in zoom-to-fit mode
 		horizontalScrollBar()->setRange(0, 0);
 		verticalScrollBar()->setRange(0, 0);
@@ -360,6 +384,17 @@ void ImageView::resizeEvent(QResizeEvent*) {
 		updateScrollBars();
 		d->setScalerRegionToVisibleRect();
 	}
+}
+
+void ImageView::updateZoomToFit() {
+	if (!d->mZoomToFit) {
+		return;
+	}
+	// Bypass "same zoom" test: even if the zoom is the same we want a new
+	// buffer of the correct size (and if switching from/to fullscreen, using
+	// the correct background) to be created
+	d->mZoom = -1;
+	setZoom(computeZoomToFit());
 }
 
 QPoint ImageView::imageOffset() const {
@@ -531,9 +566,8 @@ void ImageView::scrollContentsBy(int dx, int dy) {
 
 void ImageView::updateFromScaler(int zoomedImageLeft, int zoomedImageTop, const QImage& image) {
 	LOG("");
-	QPoint offset = imageOffset();
-	int viewportLeft = offset.x() + zoomedImageLeft - d->hScroll();
-	int viewportTop = offset.y() + zoomedImageTop - d->vScroll();
+	int viewportLeft = zoomedImageLeft - d->hScroll();
+	int viewportTop = zoomedImageTop - d->vScroll();
 
 	{
 		QPainter painter(&d->mCurrentBuffer);
@@ -546,18 +580,6 @@ void ImageView::updateFromScaler(int zoomedImageLeft, int zoomedImageTop, const 
 			painter.setCompositionMode(QPainter::CompositionMode_Source);
 		}
 		painter.drawImage(viewportLeft, viewportTop, image);
-
-		// Clear borders. We do it here which is quite late, but this way we ensure
-		// borders are not cleared until the new image is ready. Meanwhile we
-		// continue to show the previous image. If we cleared the borders earlier
-		// we could end up clearing the borders on the previous image, leading to
-		// a temporary cropped result
-		QColor bgColor = d->mViewport->palette().color(d->mViewport->backgroundRole());
-		QRegion region = d->mCurrentBuffer.rect();
-		region -= QRect(imageOffset(), d->mDocument->size() * d->mZoom);
-		Q_FOREACH(const QRect& rect, region.rects()) {
-			painter.fillRect(rect, bgColor);
-		}
 		/*
 		// Debug rects
 		QPen pen(Qt::red);
@@ -767,6 +789,5 @@ void ImageView::keyReleaseEvent(QKeyEvent* event) {
 	}
 	QAbstractScrollArea::keyReleaseEvent(event);
 }
-
 
 } // namespace

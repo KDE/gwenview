@@ -24,23 +24,42 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/gwenviewlib_export.h>
 
 // Qt
+#include <QGraphicsWidget>
 
 // KDE
 
 // Local
+#include <lib/documentview/abstractimageview.h>
 #include <lib/documentview/abstractdocumentviewadapter.h>
+
+class QGraphicsSvgItem;
 
 namespace Gwenview {
 
+class SvgImageView : public AbstractImageView {
+	Q_OBJECT
+public:
+    SvgImageView(QGraphicsItem* parent = 0);
+
+	QSizeF documentSize() const;
+
+protected:
+	void loadFromDocument();
+	void onZoomChanged();
+	void onImageOffsetChanged();
+	void onScrollPosChanged(const QPointF& oldPos);
+
+private:
+	QGraphicsSvgItem* mSvgItem;
+	void adjustItemPos();
+};
 
 struct SvgViewAdapterPrivate;
 class GWENVIEWLIB_EXPORT SvgViewAdapter : public AbstractDocumentViewAdapter {
 	Q_OBJECT
 public:
-	SvgViewAdapter(QWidget*);
+	SvgViewAdapter();
 	~SvgViewAdapter();
-
-	virtual void installEventFilterOnViewWidgets(QObject*);
 
 	virtual QCursor cursor() const;
 
@@ -60,17 +79,9 @@ public:
 
 	virtual qreal zoom() const;
 
-	virtual void setZoom(qreal /*zoom*/, const QPoint& /*center*/ = QPoint(-1, -1));
+	virtual void setZoom(qreal /*zoom*/, const QPointF& /*center*/ = QPointF(-1, -1));
 
 	virtual qreal computeZoomToFit() const;
-	virtual qreal computeZoomToFitWidth() const;
-	virtual qreal computeZoomToFitHeight() const;
-
-protected:
-	virtual bool eventFilter(QObject*, QEvent*);
-
-private Q_SLOTS:
-	void loadFromDocument();
 
 private:
 	SvgViewAdapterPrivate* const d;

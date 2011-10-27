@@ -24,7 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/gwenviewlib_export.h>
 
 // Qt
-#include <QWidget>
+#include <QGraphicsWidget>
 
 // KDE
 #include <kactioncollection.h>
@@ -36,7 +36,8 @@ class KUrl;
 
 namespace Gwenview {
 
-class ImageView;
+class AbstractRasterImageViewTool;
+class RasterImageView;
 class SlideShow;
 class ZoomWidget;
 
@@ -46,7 +47,7 @@ struct DocumentViewPrivate;
  * This widget can display various documents, using an instance of
  * AbstractDocumentViewAdapter
  */
-class GWENVIEWLIB_EXPORT DocumentView : public QWidget {
+class GWENVIEWLIB_EXPORT DocumentView : public QGraphicsWidget {
 	Q_OBJECT
 	Q_PROPERTY(qreal zoom READ zoom WRITE setZoom NOTIFY zoomChanged)
 	Q_PROPERTY(bool zoomToFit READ zoomToFit WRITE setZoomToFit NOTIFY zoomToFitChanged)
@@ -55,7 +56,12 @@ public:
 	enum {
 		MaximumZoom = 16
 	};
-	DocumentView(QWidget* parent);
+
+	/**
+	 * Create a new view attached to scene. We need the scene to be able to
+	 * install scene event filters.
+	 */
+	DocumentView(QGraphicsScene* scene);
 	~DocumentView();
 
 	Document::Ptr document() const;
@@ -98,9 +104,18 @@ public:
 	QPoint position() const;
 
 	/**
-	 * Returns the ImageView of the current adapter, if it has one
+	 * Returns the RasterImageView of the current adapter, if it has one
 	 */
-	ImageView* imageView() const;
+	RasterImageView* imageView() const;
+
+	AbstractRasterImageViewTool* currentTool() const;
+
+	void moveTo(const QRect&);
+	void moveToAnimated(const QRect&);
+	void fadeIn();
+	void fadeOut();
+
+	void setGeometry(const QRectF& rect); // reimp
 
 public Q_SLOTS:
 	void setZoom(qreal);
@@ -137,10 +152,22 @@ Q_SIGNALS:
 
 	void positionChanged();
 
-protected:
-	virtual bool eventFilter(QObject*, QEvent* event);
+	void hudTrashClicked(DocumentView*);
+	void hudDeselectClicked(DocumentView*);
 
-	virtual void paintEvent(QPaintEvent*);
+	void animationFinished(DocumentView*);
+
+	void contextMenuRequested();
+
+	void currentToolChanged(AbstractRasterImageViewTool*);
+
+protected:
+	void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
+
+	void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event);
+	void wheelEvent(QGraphicsSceneWheelEvent* event);
+	void contextMenuEvent(QGraphicsSceneContextMenuEvent* event);
+	bool sceneEventFilter(QGraphicsItem*, QEvent*);
 
 private Q_SLOTS:
 	void finishOpenUrl();
@@ -149,14 +176,20 @@ private Q_SLOTS:
 
 	void zoomActualSize();
 
-	void zoomIn(const QPoint& center = QPoint(-1,-1));
-	void zoomOut(const QPoint& center = QPoint(-1,-1));
+	void zoomIn(const QPointF& center = QPointF(-1,-1));
+	void zoomOut(const QPointF& center = QPointF(-1,-1));
 
 	void slotZoomChanged(qreal);
 
 	void slotBusyChanged(const KUrl&, bool);
 
 	void slotKeyPressed(Qt::Key key, bool pressed);
+
+	void emitHudTrashClicked();
+	void emitHudDeselectClicked();
+	void emitFocused();
+
+	void slotAnimationFinished();
 
 private:
 	friend struct DocumentViewPrivate;

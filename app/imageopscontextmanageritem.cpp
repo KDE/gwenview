@@ -40,10 +40,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "sidebar.h"
 #include <lib/crop/croptool.h>
 #include <lib/document/documentfactory.h>
+#include <lib/documentview/rasterimageview.h>
 #include <lib/eventwatcher.h>
 #include <lib/redeyereduction/redeyereductiontool.h>
 #include <lib/gwenviewconfig.h>
-#include <lib/imageview.h>
 #include <lib/resize/resizeimageoperation.h>
 #include <lib/resize/resizeimagedialog.h>
 #include <lib/transformimageoperation.h>
@@ -233,7 +233,7 @@ void ImageOpsContextManagerItem::crop() {
 	if (!d->ensureEditable()) {
 		return;
 	}
-	ImageView* imageView = d->mMainWindow->documentPanel()->imageView();
+	RasterImageView* imageView = d->mMainWindow->documentPanel()->imageView();
 	if (!imageView) {
 		kError() << "No ImageView available!";
 		return;
@@ -253,19 +253,19 @@ void ImageOpsContextManagerItem::startRedEyeReduction() {
 	if (!d->ensureEditable()) {
 		return;
 	}
-	ImageView* imageView = d->mMainWindow->documentPanel()->imageView();
-	if (!imageView) {
-		kError() << "No ImageView available!";
+	RasterImageView* view = d->mMainWindow->documentPanel()->imageView();
+	if (!view) {
+		kError() << "No RasterImageView available!";
 		return;
 	}
-	RedEyeReductionTool* tool = new RedEyeReductionTool(imageView);
+	RedEyeReductionTool* tool = new RedEyeReductionTool(view);
 	connect(tool, SIGNAL(imageOperationRequested(AbstractImageOperation*)),
 		SLOT(applyImageOperation(AbstractImageOperation*)) );
 	connect(tool, SIGNAL(done()),
 		SLOT(restoreDefaultImageViewTool()) );
 
 	d->mMainWindow->setDistractionFreeMode(true);
-	imageView->setCurrentTool(tool);
+	view->setCurrentTool(tool);
 }
 
 
@@ -279,13 +279,13 @@ void ImageOpsContextManagerItem::applyImageOperation(AbstractImageOperation* op)
 
 
 void ImageOpsContextManagerItem::restoreDefaultImageViewTool() {
-	ImageView* imageView = d->mMainWindow->documentPanel()->imageView();
+	RasterImageView* imageView = d->mMainWindow->documentPanel()->imageView();
 	if (!imageView) {
-		kError() << "No ImageView available!";
+		kError() << "No RasterImageView available!";
 		return;
 	}
 
-	AbstractImageViewTool* tool = imageView->currentTool();
+	AbstractRasterImageViewTool* tool = imageView->currentTool();
 	imageView->setCurrentTool(0);
 	tool->deleteLater();
 	d->mMainWindow->setDistractionFreeMode(false);

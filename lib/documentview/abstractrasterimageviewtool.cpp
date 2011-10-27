@@ -18,43 +18,39 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 */
-#ifndef SCROLLTOOL_H
-#define SCROLLTOOL_H
-
-#include <lib/gwenviewlib_export.h>
+// Self
+#include "abstractrasterimageviewtool.h"
 
 // Qt
 
 // KDE
 
 // Local
-#include <lib/abstractimageviewtool.h>
-
-class QPoint;
+#include "rasterimageview.h"
 
 namespace Gwenview {
 
 
-struct ScrollToolPrivate;
-class GWENVIEWLIB_EXPORT ScrollTool : public AbstractImageViewTool {
-	Q_OBJECT
-public:
-	ScrollTool(ImageView* view);
-	~ScrollTool();
-
-	virtual void mousePressEvent(QMouseEvent*);
-	virtual void mouseMoveEvent(QMouseEvent*);
-	virtual void mouseReleaseEvent(QMouseEvent*);
-	virtual void wheelEvent(QWheelEvent*);
-
-	virtual void toolActivated();
-	virtual void toolDeactivated();
-
-private:
-	ScrollToolPrivate* const d;
+struct AbstractRasterImageViewToolPrivate {
+	RasterImageView* mRasterImageView;
 };
 
 
-} // namespace
+AbstractRasterImageViewTool::AbstractRasterImageViewTool(RasterImageView* view)
+: QObject(view)
+, d(new AbstractRasterImageViewToolPrivate) {
+	d->mRasterImageView = view;
+}
 
-#endif /* SCROLLTOOL_H */
+
+AbstractRasterImageViewTool::~AbstractRasterImageViewTool() {
+	delete d;
+}
+
+
+RasterImageView* AbstractRasterImageViewTool::imageView() const {
+	return d->mRasterImageView;
+}
+
+
+} // namespace

@@ -37,10 +37,8 @@ struct VideoViewAdapterPrivate;
 class GWENVIEWLIB_EXPORT VideoViewAdapter : public AbstractDocumentViewAdapter {
 	Q_OBJECT
 public:
-	VideoViewAdapter(QWidget*);
+	VideoViewAdapter();
 	~VideoViewAdapter();
-
-	virtual void installEventFilterOnViewWidgets(QObject*);
 
 	virtual MimeTypeUtils::Kind kind() const { return MimeTypeUtils::KIND_VIDEO; }
 

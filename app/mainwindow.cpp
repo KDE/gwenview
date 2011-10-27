@@ -960,10 +960,14 @@ void MainWindow::openSelectedDocuments() {
 
 	KUrl::List urls;
 	KUrl currentUrl;
+	QModelIndex firstDocumentIndex;
 	Q_FOREACH(const QModelIndex& index, d->mThumbnailView->selectionModel()->selectedIndexes()) {
 		KFileItem item = d->mDirModel->itemForIndex(index);
 		if (!item.isNull() && !ArchiveUtils::fileItemIsDirOrArchive(item)) {
 			KUrl url = item.url();
+			if (!firstDocumentIndex.isValid()) {
+				firstDocumentIndex = index;
+			}
 			urls << url;
 			if (index == currentIndex) {
 				currentUrl = url;
@@ -973,6 +977,20 @@ void MainWindow::openSelectedDocuments() {
 				break;
 			}
 		}
+	}
+	if (urls.isEmpty()) {
+		// No image to display
+		return;
+	}
+	if (currentUrl.isEmpty()) {
+		// Current index is not selected, or it is not a document: set
+		// firstDocumentIndex as current
+		if (!firstDocumentIndex.isValid()) {
+			kWarning() << "firstDocumentIndex is invalid. This should not happen!";
+			return;
+		}
+		d->mThumbnailView->selectionModel()->setCurrentIndex(firstDocumentIndex, QItemSelectionModel::Current);
+		currentUrl = urls.first();
 	}
 
 	d->mDocumentPanel->openUrls(urls, currentUrl);
@@ -1072,7 +1090,8 @@ void MainWindow::slotPartCompleted() {
 		QModelIndex index = d->mDirModel->indexForUrl(url);
 		QItemSelectionModel* selectionModel = d->mThumbnailView->selectionModel();
 		if (index.isValid() && !selectionModel->isSelected(index)) {
-			selectionModel->select(index, QItemSelectionModel::SelectCurrent);
+			// FIXME: QGV Reactivating this line prevents navigation to prev/next image
+			//selectionModel->select(index, QItemSelectionModel::SelectCurrent);
 		}
 	} else {
 		d->mDirModel->dirLister()->openUrl(dirUrl);

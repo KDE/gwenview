@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "messageviewadapter.moc"
 
 // Qt
+#include <QGraphicsProxyWidget>
 
 // KDE
 #include <klocale.h>
@@ -38,10 +39,9 @@ struct MessageViewAdapterPrivate : Ui_MessageView {
 };
 
 
-MessageViewAdapter::MessageViewAdapter(QWidget* parent)
-: AbstractDocumentViewAdapter(parent)
-, d(new MessageViewAdapterPrivate) {
-	QWidget* widget = new QWidget(parent);
+MessageViewAdapter::MessageViewAdapter()
+: d(new MessageViewAdapterPrivate) {
+	QWidget* widget = new QWidget;
 	d->setupUi(widget);
 	d->mMessageWidget->setCloseButtonVisible(false);
 	d->mMessageWidget->setWordWrap(true);
@@ -52,7 +52,9 @@ MessageViewAdapter::MessageViewAdapter(QWidget* parent)
 	widget->setBackgroundRole(QPalette::Base);
 	widget->setForegroundRole(QPalette::Text);
 
-	setWidget(widget);
+	QGraphicsProxyWidget* proxy = new QGraphicsProxyWidget;
+	proxy->setWidget(widget);
+	setWidget(proxy);
 }
 
 
@@ -79,11 +81,6 @@ void MessageViewAdapter::setInfoMessage(const QString& message) {
 }
 
 
-void MessageViewAdapter::installEventFilterOnViewWidgets(QObject* object) {
-	widget()->installEventFilter(object);
-}
-
-
 Document::Ptr MessageViewAdapter::document() const {
 	return d->mDocument;
 }
@@ -92,6 +89,5 @@ Document::Ptr MessageViewAdapter::document() const {
 void MessageViewAdapter::setDocument(Document::Ptr doc) {
 	d->mDocument = doc;
 }
-
 
 } // namespace

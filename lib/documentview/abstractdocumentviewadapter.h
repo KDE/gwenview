@@ -26,7 +26,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QObject>
 #include <QPoint>
-#include <QWidget>
 
 // KDE
 
@@ -34,14 +33,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/document/document.h>
 
 class QCursor;
-class QWidget;
+class QGraphicsWidget;
 
 
 namespace Gwenview {
 
 
 class ImageView;
-
+class RasterImageView;
 
 /**
  * Classes inherit from this class so that they can be used inside the
@@ -50,16 +49,16 @@ class ImageView;
 class GWENVIEWLIB_EXPORT AbstractDocumentViewAdapter : public QObject {
 	Q_OBJECT
 public:
-	AbstractDocumentViewAdapter(QWidget*);
+	AbstractDocumentViewAdapter();
 	virtual ~AbstractDocumentViewAdapter();
 
-	QWidget* widget() const { return mWidget; }
+	QGraphicsWidget* widget() const { return mWidget; }
 
 	virtual MimeTypeUtils::Kind kind() const = 0;
 
 	virtual ImageView* imageView() const { return 0; }
 
-	virtual void installEventFilterOnViewWidgets(QObject*) = 0;
+	virtual RasterImageView* rasterImageView() const { return 0; }
 
 	virtual QCursor cursor() const;
 
@@ -78,11 +77,9 @@ public:
 
 	virtual qreal zoom() const { return 0; }
 
-	virtual void setZoom(qreal /*zoom*/, const QPoint& /*center*/ = QPoint(-1, -1)) {}
+	virtual void setZoom(qreal /*zoom*/, const QPointF& /*center*/ = QPointF(-1, -1)) {}
 
 	virtual qreal computeZoomToFit() const { return 1.; }
-	virtual qreal computeZoomToFitWidth() const { return 1.; }
-	virtual qreal computeZoomToFitHeight() const { return 1.; }
 	/** @} */
 
 	virtual Document::Ptr document() const = 0;
@@ -91,12 +88,9 @@ public:
 	virtual void loadConfig() {}
 
 protected:
-	void setWidget(QWidget* widget) { mWidget = widget; }
+	void setWidget(QGraphicsWidget* widget) { mWidget = widget; }
 
 Q_SIGNALS:
-	void previousImageRequested();
-	void nextImageRequested();
-
 	/**
 	 * @addgroup zooming functions
 	 * @{
@@ -104,22 +98,10 @@ Q_SIGNALS:
 	void zoomChanged(qreal);
 
 	void zoomToFitChanged(bool);
-
-	/**
-	 * Emitted when the ui would like to zoom in at a particular point.
-	 * @param center the zoom point in widget coordinates
-	 */
-	void zoomInRequested(const QPoint& center);
-
-	/**
-	 * Emitted when the ui would like to zoom out from a particular point.
-	 * @param center the zoom point in widget coordinates
-	 */
-	void zoomOutRequested(const QPoint& center);
 	/** @} */
 
 private:
-	QWidget* mWidget;
+	QGraphicsWidget* mWidget;
 };
 
 
@@ -130,13 +112,8 @@ class EmptyAdapter : public AbstractDocumentViewAdapter
 {
 	Q_OBJECT
 public:
-	EmptyAdapter(QWidget* parent)
-	: AbstractDocumentViewAdapter(parent) {
-		setWidget(new QWidget);
-	}
-
+	EmptyAdapter();
 	virtual MimeTypeUtils::Kind kind() const { return MimeTypeUtils::KIND_UNKNOWN; }
-	virtual void installEventFilterOnViewWidgets(QObject*) {}
 	virtual Document::Ptr document() const { return Document::Ptr(); }
 	virtual void setDocument(Document::Ptr) {}
 };

@@ -327,10 +327,6 @@ void SaveBar::setFullScreenMode(bool value) {
 
 void SaveBar::updateContent() {
 	QList<KUrl> lst = DocumentFactory::instance()->modifiedDocumentList();
-	if (lst.size() == 0) {
-		slideOut();
-		return;
-	}
 
 	if (d->mFullScreenMode) {
 		d->mTopRowWidget->hide();
@@ -342,7 +338,7 @@ void SaveBar::updateContent() {
 	d->updateTooManyChangesFrame(lst);
 
 	d->updateWidgetSizes();
-	if (d->mFullScreenMode && !d->mTooManyChangesFrame->isVisibleTo(d->mSaveBarWidget)) {
+	if (lst.isEmpty() || (d->mFullScreenMode && !d->mTooManyChangesFrame->isVisibleTo(d->mSaveBarWidget))) {
 		slideOut();
 	} else {
 		slideIn();

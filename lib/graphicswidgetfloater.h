@@ -18,44 +18,57 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
-#ifndef FULLSCREENTHEME_H
-#define FULLSCREENTHEME_H
+#ifndef GRAPHICSWIDGETFLOATER_H
+#define GRAPHICSWIDGETFLOATER_H
 
 #include <lib/gwenviewlib_export.h>
 
 // Qt
+#include <QObject>
 
 // KDE
 
 // Local
 
-class QPalette;
-class QString;
-class QStringList;
+class QGraphicsWidget;
 
 namespace Gwenview {
 
 
-struct FullScreenThemePrivate;
-class GWENVIEWLIB_EXPORT FullScreenTheme {
+struct GraphicsWidgetFloaterPrivate;
+
+/**
+ * This helper object makes it possible to place a widget (the child) over
+ * another (the parent), ensuring the child remains aligned as specified by
+ * setAlignment() whenever either widget get resized.
+ */
+class GWENVIEWLIB_EXPORT GraphicsWidgetFloater : public QObject {
+	Q_OBJECT
 public:
-	FullScreenTheme(const QString& themeName);
-	QString styleSheet() const;
-	QString replaceThemeVars(const QString& styleSheet);
+	GraphicsWidgetFloater(QGraphicsWidget* parent);
+	~GraphicsWidgetFloater();
 
-	~FullScreenTheme();
+	void setChildWidget(QGraphicsWidget*);
 
-	static QStringList themeNameList();
-	static QString currentThemeName();
-	static void setCurrentThemeName(const QString&);
+	void setAlignment(Qt::Alignment);
 
-	static QPalette palette();
+	void setHorizontalMargin(int);
+	int horizontalMargin() const;
+
+	void setVerticalMargin(int);
+	int verticalMargin() const;
+
+protected:
+	bool eventFilter(QObject*, QEvent*);
+
+private Q_SLOTS:
+	void slotChildVisibilityChanged();
 
 private:
-	FullScreenThemePrivate* const d;
+	GraphicsWidgetFloaterPrivate* const d;
 };
 
 
 } // namespace
 
-#endif /* FULLSCREENTHEME_H */
+#endif /* GRAPHICSWIDGETFLOATER_H */

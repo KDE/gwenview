@@ -18,61 +18,58 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
-#ifndef IMAGEVIEWADAPTER_H
-#define IMAGEVIEWADAPTER_H
+#ifndef GRAPHICSHUDWIDGET_H
+#define GRAPHICSHUDWIDGET_H
 
 #include <lib/gwenviewlib_export.h>
 
 // Qt
+#include <QGraphicsWidget>
+#include <QWidget>
 
 // KDE
 
 // Local
-#include <lib/documentview/abstractdocumentviewadapter.h>
+
 
 namespace Gwenview {
 
-struct ImageViewAdapterPrivate;
-class GWENVIEWLIB_EXPORT ImageViewAdapter : public AbstractDocumentViewAdapter {
+
+struct GraphicsHudWidgetPrivate;
+class GWENVIEWLIB_EXPORT GraphicsHudWidget : public QGraphicsWidget {
 	Q_OBJECT
 public:
-	ImageViewAdapter();
-	~ImageViewAdapter();
+	enum Option {
+		OptionNone                 = 0,
+		OptionCloseButton          = 1 << 1,
+		// FIXME: Ugly
+		OptionDoNotFollowChildSize = 1 << 2, /// Make it possible to resize the graphicshudwidget independently of child size
+		OptionOpaque               = 1 << 3
+	};
+	Q_DECLARE_FLAGS(Options, Option)
 
-	virtual QCursor cursor() const;
+	GraphicsHudWidget(QGraphicsWidget* parent = 0);
+	~GraphicsHudWidget();
 
-	virtual void setCursor(const QCursor&);
+	void init(QWidget*, Options options);
 
-	virtual MimeTypeUtils::Kind kind() const { return MimeTypeUtils::KIND_RASTER_IMAGE; }
+	QWidget* mainWidget() const;
 
-	virtual bool canZoom() const { return true; }
+	void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
 
-	virtual void setZoomToFit(bool);
-
-	virtual bool zoomToFit() const;
-
-	virtual qreal zoom() const;
-
-	virtual void setZoom(qreal zoom, const QPointF& center);
-
-	virtual qreal computeZoomToFit() const;
-
-	virtual Document::Ptr document() const;
-
-	virtual void setDocument(Document::Ptr);
-
-	virtual void loadConfig();
-
-	virtual RasterImageView* rasterImageView() const;
+Q_SIGNALS:
+	void closed();
 
 private Q_SLOTS:
-	void slotLoadingFailed();
+	void slotCloseButtonClicked();
 
 private:
-	ImageViewAdapterPrivate* const d;
+	GraphicsHudWidgetPrivate* const d;
 };
 
 
 } // namespace
 
-#endif /* IMAGEVIEWADAPTER_H */
+Q_DECLARE_OPERATORS_FOR_FLAGS(Gwenview::GraphicsHudWidget::Options)
+
+#endif /* GRAPHICSHUDWIDGET_H */

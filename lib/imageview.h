@@ -41,7 +41,7 @@ public:
 		AlphaBackgroundSolid
 	};
 
-	ImageView(QWidget* parent);
+	ImageView(QWidget* parent=0);
 	~ImageView();
 
 	/**
@@ -125,6 +125,7 @@ protected:
 private Q_SLOTS:
 	void slotDocumentMetaInfoLoaded();
 	void slotDocumentIsAnimatedUpdated();
+	void updateZoomToFit();
 
 	/**
 	 * This method performs the necessary adjustments to get the view ready to

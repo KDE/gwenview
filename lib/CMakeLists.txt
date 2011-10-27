@@ -59,11 +59,14 @@ set(gwenviewlib_SRCS
 	document/svgdocumentloadedimpl.cpp
 	document/videodocumentloadedimpl.cpp
 	documentview/abstractdocumentviewadapter.cpp
+	documentview/abstractimageview.cpp
+	documentview/abstractrasterimageviewtool.cpp
 	documentview/documentview.cpp
 	documentview/documentviewcontroller.cpp
 	documentview/documentviewsynchronizer.cpp
 	documentview/messageviewadapter.cpp
 	documentview/imageviewadapter.cpp
+	documentview/rasterimageview.cpp
 	documentview/svgviewadapter.cpp
 	documentview/videoviewadapter.cpp
 	abstractimageoperation.cpp
@@ -79,6 +82,8 @@ set(gwenviewlib_SRCS
 	flowlayout.cpp
 	fullscreenbar.cpp
 	fullscreentheme.cpp
+	graphicshudwidget.cpp
+	graphicswidgetfloater.cpp
 	hudwidget.cpp
 	imageformats/imageformats.cpp
 	imageformats/jpegplugin.cpp
@@ -179,6 +184,7 @@ target_link_libraries(gwenviewlib
 	${KDE4_PHONON_LIBS}
 	${JPEG_LIBRARY}
 	${EXIV2_LIBRARIES}
+	${QT_QTOPENGL_LIBRARY}
 	)
 if( WIN32 )
 target_link_libraries( gwenviewlib ${EXPAT_LIBRARIES} )

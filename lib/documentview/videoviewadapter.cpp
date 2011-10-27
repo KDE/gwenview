@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <Phonon/SeekSlider>
 #include <Phonon/VideoWidget>
 #include <Phonon/VolumeSlider>
+#include <QGraphicsProxyWidget>
 #include <QHBoxLayout>
 #include <QMouseEvent>
 #include <QToolButton>
@@ -118,14 +119,13 @@ struct VideoViewAdapterPrivate {
 };
 
 
-VideoViewAdapter::VideoViewAdapter(QWidget* parent)
-: AbstractDocumentViewAdapter(parent)
-, d(new VideoViewAdapterPrivate) {
+VideoViewAdapter::VideoViewAdapter()
+: d(new VideoViewAdapterPrivate) {
 	d->q = this;
 	d->mMediaObject = new Phonon::MediaObject(this);
 	connect(d->mMediaObject, SIGNAL(finished()), SIGNAL(videoFinished()));
 
-	d->mVideoWidget = new Phonon::VideoWidget(parent);
+	d->mVideoWidget = new Phonon::VideoWidget;
 	d->mVideoWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	d->mVideoWidget->setAttribute(Qt::WA_Hover);
 
@@ -136,12 +136,9 @@ VideoViewAdapter::VideoViewAdapter(QWidget* parent)
 
 	d->setupHud(d->mVideoWidget);
 
-	setWidget(d->mVideoWidget);
-}
-
-
-void VideoViewAdapter::installEventFilterOnViewWidgets(QObject* object) {
-	d->mVideoWidget->installEventFilter(object);
+	QGraphicsProxyWidget* proxy = new QGraphicsProxyWidget;
+	proxy->setWidget(d->mVideoWidget);
+	setWidget(proxy);
 }
 
 
@@ -187,6 +184,5 @@ void VideoViewAdapter::updatePlayPauseButton() {
 		d->mPlayPauseButton->setIcon(KIcon("media-playback-start"));
 	}
 }
-
 
 } // namespace

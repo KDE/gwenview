@@ -21,76 +21,45 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Self
 #include "imageviewadapter.moc"
 
-// Qt
+// Local
+#include <lib/gwenviewconfig.h>
+#include <lib/imageview.h>
+#include <lib/document/documentfactory.h>
+#include <lib/documentview/rasterimageview.h>
 
 // KDE
 #include <kurl.h>
 
-// Local
-#include <lib/gwenviewconfig.h>
-#include <lib/imageview.h>
-#include <lib/scrolltool.h>
-#include <lib/document/documentfactory.h>
+// Qt
 
 namespace Gwenview {
 
-
+//// ImageViewAdapter ////
 struct ImageViewAdapterPrivate {
 	ImageViewAdapter* that;
-	ImageView* mView;
-	ScrollTool* mScrollTool;
-
-	void setupScrollTool() {
-		mScrollTool = new ScrollTool(mView);
-		mView->setDefaultTool(mScrollTool);
-		QObject::connect(mScrollTool, SIGNAL(previousImageRequested()),
-			that, SIGNAL(previousImageRequested()) );
-		QObject::connect(mScrollTool, SIGNAL(nextImageRequested()),
-			that, SIGNAL(nextImageRequested()) );
-		QObject::connect(mScrollTool, SIGNAL(zoomInRequested(QPoint)),
-			that, SIGNAL(zoomInRequested(QPoint)) );
-		QObject::connect(mScrollTool, SIGNAL(zoomOutRequested(QPoint)),
-			that, SIGNAL(zoomOutRequested(QPoint)) );
-	}
+	RasterImageView* mView;
 };
 
-
-ImageViewAdapter::ImageViewAdapter(QWidget* parent)
-: AbstractDocumentViewAdapter(parent)
-, d(new ImageViewAdapterPrivate) {
+ImageViewAdapter::ImageViewAdapter()
+: d(new ImageViewAdapterPrivate) {
 	d->that = this;
-	d->mView = new ImageView(parent);
-	setWidget(d->mView);
-	d->setupScrollTool();
-
+	d->mView = new RasterImageView;
 	connect(d->mView, SIGNAL(zoomChanged(qreal)), SIGNAL(zoomChanged(qreal)) );
+	connect(d->mView, SIGNAL(zoomToFitChanged(bool)), SIGNAL(zoomToFitChanged(bool)) );
+	setWidget(d->mView);
 }
-
-
-void ImageViewAdapter::installEventFilterOnViewWidgets(QObject* object) {
-	d->mView->viewport()->installEventFilter(object);
-	// Necessary to receive key{Press,Release} events
-	d->mView->installEventFilter(object);
-}
-
 
 ImageViewAdapter::~ImageViewAdapter() {
 	delete d;
 }
 
-
-ImageView* ImageViewAdapter::imageView() const {
-	return d->mView;
-}
-
-
 QCursor ImageViewAdapter::cursor() const {
-	return d->mView->viewport()->cursor();
+	return d->mView->cursor();
 }
 
 
 void ImageViewAdapter::setCursor(const QCursor& cursor) {
-	d->mView->viewport()->setCursor(cursor);
+	d->mView->setCursor(cursor);
 }
 
 
@@ -110,10 +79,7 @@ qreal ImageViewAdapter::zoom() const {
 
 
 void ImageViewAdapter::setZoomToFit(bool on) {
-	if (d->mView->zoomToFit() != on) {
-		d->mView->setZoomToFit(on);
-		zoomToFitChanged(on);
-	}
+	d->mView->setZoomToFit(on);
 }
 
 
@@ -122,23 +88,13 @@ bool ImageViewAdapter::zoomToFit() const {
 }
 
 
-void ImageViewAdapter::setZoom(qreal zoom, const QPoint& center) {
+void ImageViewAdapter::setZoom(qreal zoom, const QPointF& center) {
 	d->mView->setZoom(zoom, center);
 }
 
 
 qreal ImageViewAdapter::computeZoomToFit() const {
 	return d->mView->computeZoomToFit();
-}
-
-
-qreal ImageViewAdapter::computeZoomToFitWidth() const {
-	return d->mView->computeZoomToFitWidth();
-}
-
-
-qreal ImageViewAdapter::computeZoomToFitHeight() const {
-	return d->mView->computeZoomToFitHeight();
 }
 
 
@@ -153,10 +109,16 @@ void ImageViewAdapter::slotLoadingFailed() {
 
 
 void ImageViewAdapter::loadConfig() {
+	// FIXME: QGV
+	/*
 	d->mView->setAlphaBackgroundMode(GwenviewConfig::alphaBackgroundMode());
 	d->mView->setAlphaBackgroundColor(GwenviewConfig::alphaBackgroundColor());
 	d->mView->setEnlargeSmallerImages(GwenviewConfig::enlargeSmallerImages());
+	*/
 }
 
+RasterImageView* ImageViewAdapter::rasterImageView() const {
+	return d->mView;
+}
 
 } // namespace

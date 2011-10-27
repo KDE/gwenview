@@ -6,45 +6,37 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>235</width>
-    <height>143</height>
+    <width>737</width>
+    <height>62</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>Crop</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QHBoxLayout" name="horizontalLayout_2">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QCheckBox" name="advancedCheckBox">
-       <property name="focusPolicy">
-        <enum>Qt::NoFocus</enum>
-       </property>
-       <property name="text">
-        <string>Advanced settings</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="cropButton">
-       <property name="text">
-        <string>Crop</string>
-       </property>
-       <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextBesideIcon</enum>
-       </property>
-       <property name="autoRaise">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>0</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
    </item>
    <item>
     <widget class="QWidget" name="advancedWidget" native="true">
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0" rowspan="2">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
        <widget class="QLabel" name="label_6">
         <property name="text">
          <string>Ratio:</string>
@@ -54,7 +46,7 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="1" colspan="2">
+      <item>
        <widget class="KComboBox" name="ratioComboBox">
         <property name="editable">
          <bool>true</bool>
@@ -64,7 +56,7 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
+      <item>
        <widget class="QLabel" name="label">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -83,7 +75,7 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
+      <item>
        <widget class="KIntSpinBox" name="leftSpinBox">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -93,7 +85,7 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="2">
+      <item>
        <widget class="KIntSpinBox" name="topSpinBox">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -103,7 +95,7 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="0">
+      <item>
        <widget class="QLabel" name="label_3">
         <property name="text">
          <string>Size:</string>
@@ -116,7 +108,7 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
+      <item>
        <widget class="KIntSpinBox" name="widthSpinBox">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -126,7 +118,7 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="2">
+      <item>
        <widget class="KIntSpinBox" name="heightSpinBox">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -139,9 +131,31 @@
      </layout>
     </widget>
    </item>
+   <item>
+    <widget class="QCheckBox" name="advancedCheckBox">
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="text">
+      <string>Advanced settings</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="KDialogButtonBox" name="dialogButtonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>KDialogButtonBox</class>
+   <extends>QDialogButtonBox</extends>
+   <header>kdialogbuttonbox.h</header>
+  </customwidget>
   <customwidget>
    <class>KComboBox</class>
    <extends>QComboBox</extends>
@@ -154,7 +168,6 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>advancedCheckBox</tabstop>
   <tabstop>ratioComboBox</tabstop>
   <tabstop>leftSpinBox</tabstop>
   <tabstop>topSpinBox</tabstop>

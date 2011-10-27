@@ -23,11 +23,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QAbstractScrollArea>
+#include <QGraphicsProxyWidget>
+#include <QGraphicsScene>
+#include <QGraphicsSceneMouseEvent>
+#include <QGraphicsSceneWheelEvent>
 #include <QMouseEvent>
 #include <QPainter>
+#include <QPropertyAnimation>
 #include <QScrollBar>
 #include <QToolButton>
 #include <QVBoxLayout>
+#include <QWeakPointer>
 
 // KDE
 #include <kdebug.h>
@@ -41,10 +47,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include <lib/document/document.h>
 #include <lib/document/documentfactory.h>
+#include <lib/documentview/abstractrasterimageviewtool.h>
 #include <lib/documentview/messageviewadapter.h>
 #include <lib/documentview/imageviewadapter.h>
+#include <lib/documentview/rasterimageview.h>
 #include <lib/documentview/svgviewadapter.h>
 #include <lib/documentview/videoviewadapter.h>
+#include <lib/graphicshudwidget.h>
+#include <lib/graphicswidgetfloater.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/mimetypeutils.h>
 #include <lib/signalblocker.h>
@@ -64,37 +74,30 @@ namespace Gwenview {
 static const qreal REAL_DELTA = 0.001;
 static const qreal MAXIMUM_ZOOM_VALUE = qreal(DocumentView::MaximumZoom);
 
+static const int COMPARE_MARGIN = 4;
 
 struct DocumentViewPrivate {
 	DocumentView* that;
+	GraphicsHudWidget* mHud;
 	KModifierKeyInfo* mModifierKeyInfo;
 	QCursor mZoomCursor;
 	QCursor mPreviousCursor;
+	QWeakPointer<QPropertyAnimation> mMoveAnimation;
 
-	KPixmapSequenceWidget* mLoadingIndicator;
+	QGraphicsProxyWidget* mLoadingIndicator;
 
 	QScopedPointer<AbstractDocumentViewAdapter> mAdapter;
 	QList<qreal> mZoomSnapValues;
 	Document::Ptr mDocument;
 	bool mCurrent;
-
+	bool mCompareMode;
 
 	void setCurrentAdapter(AbstractDocumentViewAdapter* adapter) {
 		Q_ASSERT(adapter);
 		mAdapter.reset(adapter);
 
-		adapter->loadConfig();
-
-		QObject::connect(adapter, SIGNAL(previousImageRequested()),
-			that, SIGNAL(previousImageRequested()) );
-		QObject::connect(adapter, SIGNAL(nextImageRequested()),
-			that, SIGNAL(nextImageRequested()) );
-		QObject::connect(adapter, SIGNAL(zoomInRequested(QPoint)),
-			that, SLOT(zoomIn(QPoint)) );
-		QObject::connect(adapter, SIGNAL(zoomOutRequested(QPoint)),
-			that, SLOT(zoomOut(QPoint)) );
-
-		that->layout()->addWidget(adapter->widget());
+		adapter->widget()->setParentItem(that);
+		resizeAdapterWidget();
 
 		if (adapter->canZoom()) {
 			QObject::connect(adapter, SIGNAL(zoomChanged(qreal)),
@@ -102,8 +105,9 @@ struct DocumentViewPrivate {
 			QObject::connect(adapter, SIGNAL(zoomToFitChanged(bool)),
 				that, SIGNAL(zoomToFitChanged(bool)) );
 		}
-		adapter->installEventFilterOnViewWidgets(that);
 
+		// FIXME QGV
+		/*
 		QAbstractScrollArea* area = qobject_cast<QAbstractScrollArea*>(adapter->widget());
 		if (area) {
 			QObject::connect(area->horizontalScrollBar(), SIGNAL(valueChanged(int)),
@@ -111,7 +115,9 @@ struct DocumentViewPrivate {
 			QObject::connect(area->verticalScrollBar(), SIGNAL(valueChanged(int)),
 				that, SIGNAL(positionChanged()));
 		}
+		*/
 
+		adapter->widget()->installSceneEventFilter(that);
 		if (mCurrent) {
 			adapter->widget()->setFocus();
 		}
@@ -120,6 +126,10 @@ struct DocumentViewPrivate {
 		that->positionChanged();
 		if (adapter->canZoom()) {
 			that->zoomToFitChanged(adapter->zoomToFit());
+		}
+		if (adapter->rasterImageView()) {
+			QObject::connect(adapter->rasterImageView(), SIGNAL(currentToolChanged(AbstractRasterImageViewTool*)),
+				that, SIGNAL(currentToolChanged(AbstractRasterImageViewTool*)));
 		}
 	}
 
@@ -144,12 +154,50 @@ struct DocumentViewPrivate {
 
 	void setupLoadingIndicator() {
 		KPixmapSequence sequence("process-working", 22);
-		mLoadingIndicator = new KPixmapSequenceWidget;
-		mLoadingIndicator->setSequence(sequence);
-		mLoadingIndicator->setInterval(100);
+		KPixmapSequenceWidget* widget = new KPixmapSequenceWidget;
+		widget->setSequence(sequence);
+		widget->setInterval(100);
 
-		WidgetFloater* floater = new WidgetFloater(that);
+		mLoadingIndicator = new QGraphicsProxyWidget(that);
+		mLoadingIndicator->setWidget(widget);
+
+		GraphicsWidgetFloater* floater = new GraphicsWidgetFloater(that);
 		floater->setChildWidget(mLoadingIndicator);
+	}
+
+	QToolButton* createHudButton(const QString& text, const char* iconName, bool showText) {
+		QToolButton* button = new QToolButton;
+		if (showText) {
+			button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+			button->setText(text);
+		} else {
+			button->setToolTip(text);
+		}
+		button->setIcon(SmallIcon(iconName));
+		return button;
+	}
+
+	void setupHud() {
+		QToolButton* trashButton = createHudButton(i18n("Trash"), "user-trash", false);
+		QToolButton* deselectButton = createHudButton(i18n("Deselect"), "list-remove", true);
+
+		QWidget* content = new QWidget;
+		QHBoxLayout* layout = new QHBoxLayout(content);
+		layout->setMargin(0);
+		layout->setSpacing(4);
+		layout->addWidget(trashButton);
+		layout->addWidget(deselectButton);
+
+		mHud = new GraphicsHudWidget(that);
+		mHud->init(content, GraphicsHudWidget::OptionNone);
+		GraphicsWidgetFloater* floater = new GraphicsWidgetFloater(that);
+		floater->setChildWidget(mHud);
+		floater->setAlignment(Qt::AlignBottom | Qt::AlignHCenter);
+
+		QObject::connect(trashButton, SIGNAL(clicked()), that, SLOT(emitHudTrashClicked()));
+		QObject::connect(deselectButton, SIGNAL(clicked()), that, SLOT(emitHudDeselectClicked()));
+
+		mHud->hide();
 	}
 
 	void updateCaption() {
@@ -185,7 +233,7 @@ struct DocumentViewPrivate {
 	}
 
 
-	void setZoom(qreal zoom, const QPoint& center = QPoint(-1, -1)) {
+	void setZoom(qreal zoom, const QPointF& center = QPointF(-1, -1)) {
 		uncheckZoomToFit();
 		zoom = qBound(that->minimumZoom(), zoom, MAXIMUM_ZOOM_VALUE);
 		mAdapter->setZoom(zoom, center);
@@ -218,7 +266,7 @@ struct DocumentViewPrivate {
 			setupLoadingIndicator();
 		}
 		mLoadingIndicator->show();
-		mLoadingIndicator->raise();
+		mLoadingIndicator->setZValue(1);
 	}
 
 
@@ -229,8 +277,22 @@ struct DocumentViewPrivate {
 		mLoadingIndicator->hide();
 	}
 
+	void animate(QPropertyAnimation* anim) {
+		QObject::connect(anim, SIGNAL(finished()),
+			that, SLOT(slotAnimationFinished()));
+		anim->setDuration(500);
+		anim->start(QAbstractAnimation::DeleteWhenStopped);
+	}
 
-	bool adapterMousePressEventFilter(QMouseEvent* event) {
+	void resizeAdapterWidget() {
+		QRectF rect = QRectF(QPointF(0, 0), that->boundingRect().size());
+		if (mCompareMode) {
+			rect.adjust(COMPARE_MARGIN, COMPARE_MARGIN, -COMPARE_MARGIN, -COMPARE_MARGIN);
+		}
+		mAdapter->widget()->setGeometry(rect);
+	}
+
+	void adapterMousePressEvent(QGraphicsSceneMouseEvent* event) {
 		if (mAdapter->canZoom()) {
 			if (event->modifiers() == Qt::ControlModifier) {
 				// Ctrl + Left or right button => zoom in or out
@@ -239,83 +301,34 @@ struct DocumentViewPrivate {
 				} else if (event->button() == Qt::RightButton) {
 					that->zoomOut(event->pos());
 				}
-				return true;
 			} else if (event->button() == Qt::MidButton) {
 				// Middle click => toggle zoom to fit
 				that->setZoomToFit(!mAdapter->zoomToFit());
-				return true;
 			}
 		}
-		return false;
-	}
-
-	bool adapterMouseReleaseEventFilter(QMouseEvent* event) {
-		if (mAdapter->canZoom() && event->modifiers() == Qt::ControlModifier) {
-			// Eat the mouse release so that the svg view does not restore its
-			// drag cursor on release: we want the zoom cursor to stay as long
-			// as Control is held down.
-			return true;
-		}
-		return false;
-	}
-
-	bool adapterMouseDoubleClickEventFilter(QMouseEvent* event) {
-		if (event->modifiers() == Qt::NoModifier) {
-			that->toggleFullScreenRequested();
-			return true;
-		}
-		return false;
-	}
-
-
-	bool adapterWheelEventFilter(QWheelEvent* event) {
-		if (mAdapter->canZoom() && event->modifiers() & Qt::ControlModifier) {
-			// Ctrl + wheel => zoom in or out
-			if (event->delta() > 0) {
-				that->zoomIn(event->pos());
-			} else {
-				that->zoomOut(event->pos());
-			}
-			return true;
-		}
-		if (event->modifiers() == Qt::NoModifier
-			&& GwenviewConfig::mouseWheelBehavior() == MouseWheelBehavior::Browse
-			) {
-			// Browse with mouse wheel
-			if (event->delta() > 0) {
-				that->previousImageRequested();
-			} else {
-				that->nextImageRequested();
-			}
-			return true;
-		}
-		return false;
-	}
-
-
-	bool adapterContextMenuEventFilter(QContextMenuEvent* event) {
-		// Filter out context menu if Ctrl is down to avoid showing it when
-		// zooming out with Ctrl + Right button
-		if (event->modifiers() == Qt::ControlModifier) {
-			return true;
-		}
-		return false;
+		QMetaObject::invokeMethod(that, "emitFocused", Qt::QueuedConnection);
 	}
 };
 
 
-DocumentView::DocumentView(QWidget* parent)
-: QWidget(parent)
-, d(new DocumentViewPrivate) {
+DocumentView::DocumentView(QGraphicsScene* scene)
+: d(new DocumentViewPrivate) {
+	setFlag(ItemIsFocusable);
+	setFlag(ItemIsSelectable);
+	setFlag(ItemClipsChildrenToShape);
+
 	d->that = this;
+	d->mLoadingIndicator = 0;
+	d->mCurrent = false;
+	d->mCompareMode = false;
 	d->mModifierKeyInfo = new KModifierKeyInfo(this);
 	connect(d->mModifierKeyInfo, SIGNAL(keyPressed(Qt::Key,bool)), SLOT(slotKeyPressed(Qt::Key,bool)));
-	d->mLoadingIndicator = 0;
-	QVBoxLayout* layout = new QVBoxLayout(this);
-	layout->setMargin(0);
+
+	scene->addItem(this);
+
 	d->setupZoomCursor();
-	d->setCurrentAdapter(new MessageViewAdapter(this));
-	d->mCurrent = false;
+	d->setupHud();
+	d->setCurrentAdapter(new MessageViewAdapter);
 }
 
 
@@ -334,23 +347,23 @@ void DocumentView::createAdapterForDocument() {
 	AbstractDocumentViewAdapter* adapter = 0;
 	switch (documentKind) {
 	case MimeTypeUtils::KIND_RASTER_IMAGE:
-		adapter = new ImageViewAdapter(this);
+		adapter = new ImageViewAdapter;
 		break;
 	case MimeTypeUtils::KIND_SVG_IMAGE:
-		adapter = new SvgViewAdapter(this);
+		adapter = new SvgViewAdapter;
 		break;
 	case MimeTypeUtils::KIND_VIDEO:
-		adapter = new VideoViewAdapter(this);
+		adapter = new VideoViewAdapter;
 		connect(adapter, SIGNAL(videoFinished()),
 			SIGNAL(videoFinished()));
 		break;
 	case MimeTypeUtils::KIND_UNKNOWN:
-		adapter = new MessageViewAdapter(this);
+		adapter = new MessageViewAdapter;
 		static_cast<MessageViewAdapter*>(adapter)->setErrorMessage(i18n("Gwenview does not know how to display this kind of document"));
 		break;
 	default:
 		kWarning() << "should not be called for documentKind=" << documentKind;
-		adapter = new MessageViewAdapter(this);
+		adapter = new MessageViewAdapter;
 		break;
 	}
 
@@ -414,7 +427,7 @@ void DocumentView::reset() {
 		disconnect(d->mDocument.data(), 0, this, 0);
 		d->mDocument = 0;
 	}
-	d->setCurrentAdapter(new EmptyAdapter(this));
+	d->setCurrentAdapter(new EmptyAdapter);
 }
 
 
@@ -428,8 +441,8 @@ void DocumentView::loadAdapterConfig() {
 }
 
 
-ImageView* DocumentView::imageView() const {
-	return d->mAdapter->imageView();
+RasterImageView* DocumentView::imageView() const {
+	return d->mAdapter->rasterImageView();
 }
 
 
@@ -449,7 +462,7 @@ void DocumentView::slotLoaded() {
 
 void DocumentView::slotLoadingFailed() {
 	d->hideLoadingIndicator();
-	MessageViewAdapter* adapter = new MessageViewAdapter(this);
+	MessageViewAdapter* adapter = new MessageViewAdapter;
 	adapter->setDocument(d->mDocument);
 	QString message = i18n("Loading <filename>%1</filename> failed", d->mDocument->url().fileName());
 	adapter->setErrorMessage(message, d->mDocument->errorString());
@@ -485,7 +498,7 @@ void DocumentView::zoomActualSize() {
 }
 
 
-void DocumentView::zoomIn(const QPoint& center) {
+void DocumentView::zoomIn(const QPointF& center) {
 	qreal currentZoom = d->mAdapter->zoom();
 
 	Q_FOREACH(qreal zoom, d->mZoomSnapValues) {
@@ -497,7 +510,7 @@ void DocumentView::zoomIn(const QPoint& center) {
 }
 
 
-void DocumentView::zoomOut(const QPoint& center) {
+void DocumentView::zoomOut(const QPointF& center) {
 	qreal currentZoom = d->mAdapter->zoom();
 
 	QListIterator<qreal> it(d->mZoomSnapValues);
@@ -527,45 +540,54 @@ qreal DocumentView::zoom() const {
 	return d->mAdapter->zoom();
 }
 
-
-bool DocumentView::eventFilter(QObject*, QEvent* event) {
-	switch (event->type()) {
-	case QEvent::MouseButtonPress:
-		return d->adapterMousePressEventFilter(static_cast<QMouseEvent*>(event));
-	case QEvent::MouseButtonRelease:
-		return d->adapterMouseReleaseEventFilter(static_cast<QMouseEvent*>(event));
-	case QEvent::Resize:
-		d->updateZoomSnapValues();
-		break;
-	case QEvent::MouseButtonDblClick:
-		return d->adapterMouseDoubleClickEventFilter(static_cast<QMouseEvent*>(event));
-	case QEvent::Wheel:
-		return d->adapterWheelEventFilter(static_cast<QWheelEvent*>(event));
-	case QEvent::ContextMenu:
-		return d->adapterContextMenuEventFilter(static_cast<QContextMenuEvent*>(event));
-	case QEvent::FocusIn:
-		focused(this);
-		break;
-	default:
-		break;
+void DocumentView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) {
+	if (event->modifiers() == Qt::NoModifier) {
+		toggleFullScreenRequested();
 	}
-
-	return false;
 }
 
-
-void DocumentView::paintEvent(QPaintEvent* event) {
-	QWidget::paintEvent(event);
-	if (layout()->margin() == 0) {
+void DocumentView::wheelEvent(QGraphicsSceneWheelEvent* event) {
+	if (d->mAdapter->canZoom() && event->modifiers() & Qt::ControlModifier) {
+		// Ctrl + wheel => zoom in or out
+		if (event->delta() > 0) {
+			zoomIn(event->pos());
+		} else {
+			zoomOut(event->pos());
+		}
 		return;
 	}
-	QPainter painter(this);
+	if (event->modifiers() == Qt::NoModifier
+		&& GwenviewConfig::mouseWheelBehavior() == MouseWheelBehavior::Browse
+		) {
+		// Browse with mouse wheel
+		if (event->delta() > 0) {
+			previousImageRequested();
+		} else {
+			nextImageRequested();
+		}
+	}
+}
+
+void DocumentView::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
+	// Filter out context menu if Ctrl is down to avoid showing it when
+	// zooming out with Ctrl + Right button
+	if (event->modifiers() != Qt::ControlModifier) {
+		contextMenuRequested();
+	}
+}
+
+void DocumentView::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/) {
+	if (!d->mCompareMode) {
+		return;
+	}
 	if (d->mCurrent) {
-		painter.setBrush(Qt::NoBrush);
-		painter.setPen(QPen(palette().highlight().color(), 2));
-		painter.setRenderHint(QPainter::Antialiasing);
-		QRectF selectionRect = QRectF(rect()).adjusted(2, 2, -2, -2);
-		painter.drawRoundedRect(selectionRect, 3, 3);
+		painter->save();
+		painter->setBrush(Qt::NoBrush);
+		painter->setPen(QPen(palette().highlight().color(), 2));
+		painter->setRenderHint(QPainter::Antialiasing);
+		QRectF selectionRect = boundingRect().adjusted(2, 2, -2, -2);
+		painter->drawRoundedRect(selectionRect, 3, 3);
+		painter->restore();
 	}
 }
 
@@ -587,7 +609,14 @@ qreal DocumentView::minimumZoom() const {
 
 
 void DocumentView::setCompareMode(bool compare) {
-	layout()->setMargin(compare ? 4 : 0);
+	d->mCompareMode = compare;
+	d->resizeAdapterWidget();
+	if (compare) {
+		d->mHud->show();
+		d->mHud->setZValue(1);
+	} else {
+		d->mHud->hide();
+	}
 }
 
 
@@ -606,6 +635,8 @@ bool DocumentView::isCurrent() const {
 
 
 QPoint DocumentView::position() const {
+	// FIXME: QGV
+	/*
 	QAbstractScrollArea* area = qobject_cast<QAbstractScrollArea*>(d->mAdapter->widget());
 	if (!area) {
 		return QPoint();
@@ -614,6 +645,8 @@ QPoint DocumentView::position() const {
 		area->horizontalScrollBar()->value(),
 		area->verticalScrollBar()->value()
 		);
+	*/
+	return QPoint();
 }
 
 
@@ -649,5 +682,69 @@ KUrl DocumentView::url() const {
 	return doc ? doc->url() : KUrl();
 }
 
+void DocumentView::emitHudDeselectClicked() {
+	hudDeselectClicked(this);
+}
+
+void DocumentView::emitHudTrashClicked() {
+	hudTrashClicked(this);
+}
+
+void DocumentView::emitFocused() {
+	focused(this);
+}
+
+void DocumentView::setGeometry(const QRectF& rect) {
+	QGraphicsWidget::setGeometry(rect);
+	d->resizeAdapterWidget();
+}
+
+void DocumentView::moveTo(const QRect& rect) {
+	if (d->mMoveAnimation) {
+		d->mMoveAnimation.data()->setEndValue(rect);
+	} else {
+		setGeometry(rect);
+	}
+}
+
+void DocumentView::moveToAnimated(const QRect& rect) {
+	QPropertyAnimation* anim = new QPropertyAnimation(this, "geometry");
+	anim->setStartValue(geometry());
+	anim->setEndValue(rect);
+	d->animate(anim);
+	d->mMoveAnimation = anim;
+}
+
+void DocumentView::fadeIn() {
+	setOpacity(0);
+	show();
+	QPropertyAnimation* anim = new QPropertyAnimation(this, "opacity");
+	anim->setStartValue(0.);
+	anim->setEndValue(1.);
+	d->animate(anim);
+}
+
+void DocumentView::fadeOut() {
+	QPropertyAnimation* anim = new QPropertyAnimation(this, "opacity");
+	anim->setStartValue(1.);
+	anim->setEndValue(0.);
+	d->animate(anim);
+}
+
+void DocumentView::slotAnimationFinished() {
+	animationFinished(this);
+}
+
+bool DocumentView::sceneEventFilter(QGraphicsItem*, QEvent* event) {
+	if (event->type() == QEvent::GraphicsSceneMousePress) {
+		QGraphicsSceneMouseEvent* mouseEvent = static_cast<QGraphicsSceneMouseEvent*>(event);
+		d->adapterMousePressEvent(mouseEvent);
+	}
+	return false;
+}
+
+AbstractRasterImageViewTool* DocumentView::currentTool() const {
+	return imageView() ? imageView()->currentTool() : 0;
+}
 
 } // namespace
