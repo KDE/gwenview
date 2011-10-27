@@ -59,18 +59,15 @@ public:
 	virtual void toolActivated();
 	virtual void toolDeactivated();
 
+	virtual QWidget* widget();
+
 Q_SIGNALS:
 	void rectUpdated(const QRect&);
 	void done();
 	void imageOperationRequested(AbstractImageOperation*);
 
-protected:
-	virtual bool eventFilter(QObject*, QEvent*);
-
 private Q_SLOTS:
 	void slotCropRequested();
-	void moveHudWidget();
-	void updateHudWidgetPosition();
 
 private:
 	CropToolPrivate* const d;
