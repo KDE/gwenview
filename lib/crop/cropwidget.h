@@ -45,6 +45,7 @@ public:
 
 Q_SIGNALS:
 	void cropRequested();
+	void done();
 
 private Q_SLOTS:
 	void slotPositionChanged();

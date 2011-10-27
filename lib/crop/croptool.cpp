@@ -195,6 +195,8 @@ struct CropToolPrivate {
 		mCropWidget = new CropWidget(0, view, mCropTool);
 		QObject::connect(mCropWidget, SIGNAL(cropRequested()),
 			mCropTool, SLOT(slotCropRequested()));
+		QObject::connect(mCropWidget, SIGNAL(done()),
+			mCropTool, SIGNAL(done()));
 	}
 
 	void connectToView() {

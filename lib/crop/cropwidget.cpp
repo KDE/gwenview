@@ -160,11 +160,15 @@ struct CropWidgetPrivate : public Ui_CropWidget {
 	}
 
 
-	void initCropButton() {
+	void initDialogButtonBox() {
+		QPushButton* cropButton = dialogButtonBox->button(QDialogButtonBox::Ok);
 		cropButton->setIcon(KIcon("transform-crop-and-resize"));
+		cropButton->setText(i18n("Crop"));
 
-		QObject::connect(cropButton, SIGNAL(clicked()),
+		QObject::connect(dialogButtonBox, SIGNAL(accepted()),
 			that, SIGNAL(cropRequested()) );
+		QObject::connect(dialogButtonBox, SIGNAL(rejected()),
+			that, SIGNAL(done()) );
 	}
 };
 
@@ -201,7 +205,7 @@ CropWidget::CropWidget(QWidget* parent, RasterImageView* imageView, CropTool* cr
 	connect(d->heightSpinBox, SIGNAL(valueChanged(int)),
 		SLOT(slotHeightChanged()) );
 
-	d->initCropButton();
+	d->initDialogButtonBox();
 	
 	connect(d->ratioComboBox, SIGNAL(editTextChanged(QString)),
 		SLOT(slotRatioComboBoxEditTextChanged()) );

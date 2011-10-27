@@ -142,18 +142,20 @@
     </widget>
    </item>
    <item>
-    <widget class="QToolButton" name="cropButton">
-     <property name="text">
-      <string>Crop</string>
-     </property>
-     <property name="toolButtonStyle">
-      <enum>Qt::ToolButtonTextBesideIcon</enum>
+    <widget class="KDialogButtonBox" name="dialogButtonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>
     </widget>
    </item>
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>KDialogButtonBox</class>
+   <extends>QDialogButtonBox</extends>
+   <header>kdialogbuttonbox.h</header>
+  </customwidget>
   <customwidget>
    <class>KComboBox</class>
    <extends>QComboBox</extends>
