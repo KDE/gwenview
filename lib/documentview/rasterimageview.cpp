@@ -187,14 +187,6 @@ void RasterImageView::setAlphaBackgroundColor(const QColor& color) {
 	}
 }
 
-
-void RasterImageView::setEnlargeSmallerImages(bool value) {
-	d->mEnlargeSmallerImages = value;
-	if (zoomToFit()) {
-		setZoom(computeZoomToFit());
-	}
-}
-
 void RasterImageView::loadFromDocument() {
 	Document::Ptr doc = document();
 	connect(doc.data(), SIGNAL(metaInfoLoaded(KUrl)),
@@ -233,7 +225,9 @@ void RasterImageView::finishSetDocument() {
 		SLOT(updateImageRect(QRect)) );
 
 	if (zoomToFit()) {
-		setZoom(computeZoomToFit());
+		// Force the update otherwise if computeZoomToFit() returns 1, setZoom()
+		// will think zoom has not changed and won't update the image
+		setZoom(computeZoomToFit(), QPointF(-1, -1), ForceUpdate);
 	} else {
 		QRect rect(QPoint(0, 0), document()->size());
 		updateImageRect(rect);

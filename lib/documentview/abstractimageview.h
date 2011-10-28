@@ -39,12 +39,16 @@ class AbstractImageViewPrivate;
 class AbstractImageView : public QGraphicsWidget {
 	Q_OBJECT
 public:
+	enum UpdateType {
+		UpdateIfNecessary,
+		ForceUpdate
+	};
 	AbstractImageView(QGraphicsItem* parent);
 	~AbstractImageView();
 
 	qreal zoom() const;
 
-	virtual void setZoom(qreal zoom, const QPointF& center = QPointF(-1, -1));
+	virtual void setZoom(qreal zoom, const QPointF& center = QPointF(-1, -1), UpdateType updateType = UpdateIfNecessary);
 
 	bool zoomToFit() const;
 
@@ -82,6 +86,8 @@ public:
 	QPoint mapToImage(const QPoint& viewPos) const;
 	QRectF mapToImage(const QRectF& viewRect) const;
 	QRect mapToImage(const QRect& viewRect) const;
+
+	void setEnlargeSmallerImages(bool value);
 
 Q_SIGNALS:
 	void zoomToFitChanged(bool);

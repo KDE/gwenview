@@ -53,7 +53,6 @@ public:
 
 	void setAlphaBackgroundMode(AlphaBackgroundMode mode);
 	void setAlphaBackgroundColor(const QColor& color);
-	void setEnlargeSmallerImages(bool value);
 
 Q_SIGNALS:
 	void currentToolChanged(AbstractRasterImageViewTool*);
