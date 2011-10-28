@@ -70,7 +70,6 @@ set(gwenviewlib_SRCS
 	documentview/svgviewadapter.cpp
 	documentview/videoviewadapter.cpp
 	abstractimageoperation.cpp
-	abstractimageviewtool.cpp
 	documentview/documentviewcontainer.cpp
 	binder.cpp
 	eventwatcher.cpp
@@ -91,7 +90,6 @@ set(gwenviewlib_SRCS
 	imagemetainfomodel.cpp
 	imagescaler.cpp
 	imageutils.cpp
-	imageview.cpp
 	invisiblebuttongroup.cpp
 	iodevicejpegsourcemanager.cpp
 	jpegcontent.cpp
