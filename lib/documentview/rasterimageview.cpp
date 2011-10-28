@@ -180,15 +180,11 @@ void RasterImageView::finishSetDocument() {
 	update();
 }
 
-void RasterImageView::updateImageRect(const QRect& /*imageRect*/) {
-	// FIXME: QGV
-	/*
-	QRect viewportRect = mapToViewport(imageRect);
-	viewportRect = viewportRect.intersected(d->mViewport->rect());
-	if (viewportRect.isEmpty()) {
+void RasterImageView::updateImageRect(const QRect& imageRect) {
+	QRectF viewRect = mapToView(imageRect);
+	if (!viewRect.intersects(boundingRect())) {
 		return;
 	}
-	*/
 
 	if (zoomToFit()) {
 		setZoom(computeZoomToFit());
