@@ -42,6 +42,9 @@ struct AbstractImageViewPrivate {
 	};
 	AbstractImageView* q;
 	Document::Ptr mDocument;
+
+	bool mEnlargeSmallerImages;
+
 	qreal mZoom;
 	bool mZoomToFit;
 	QPointF mImageOffset;
@@ -88,6 +91,7 @@ AbstractImageView::AbstractImageView(QGraphicsItem* parent)
 : QGraphicsWidget(parent)
 , d(new AbstractImageViewPrivate) {
 	d->q = this;
+	d->mEnlargeSmallerImages = false;
 	d->mZoom = 1;
 	d->mZoomToFit = true;
 	d->mImageOffset = QPointF(0, 0);
@@ -121,11 +125,11 @@ qreal AbstractImageView::zoom() const {
 	return d->mZoom;
 }
 
-void AbstractImageView::setZoom(qreal zoom, const QPointF& _center) {
-	qreal oldZoom = d->mZoom;
-	if (qFuzzyCompare(zoom, oldZoom)) {
+void AbstractImageView::setZoom(qreal zoom, const QPointF& _center, AbstractImageView::UpdateType updateType) {
+	if (updateType == UpdateIfNecessary && qFuzzyCompare(zoom, d->mZoom)) {
 		return;
 	}
+	qreal oldZoom = d->mZoom;
 	d->mZoom = zoom;
 
 	QPointF center;
@@ -210,7 +214,11 @@ qreal AbstractImageView::computeZoomToFit() const {
 	QSizeF viewSize = boundingRect().size();
 	qreal fitWidth = viewSize.width() / docSize.width();
 	qreal fitHeight = viewSize.height() / docSize.height();
-	return qMin(fitWidth, fitHeight);
+	qreal fit = qMin(fitWidth, fitHeight);
+	if (!d->mEnlargeSmallerImages) {
+		fit = qMin(fit, 1.);
+	}
+	return fit;
 }
 
 void AbstractImageView::mousePressEvent(QGraphicsSceneMouseEvent* event) {
@@ -349,6 +357,13 @@ QRect AbstractImageView::mapToImage(const QRect& viewRect) const {
 		mapToImage(viewRect.topLeft()),
 		viewRect.size() / zoom()
 		);
+}
+
+void AbstractImageView::setEnlargeSmallerImages(bool value) {
+	d->mEnlargeSmallerImages = value;
+	if (zoomToFit()) {
+		setZoom(computeZoomToFit());
+	}
 }
 
 

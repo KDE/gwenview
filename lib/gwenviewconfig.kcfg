@@ -7,7 +7,7 @@
 	<kcfgfile name="gwenviewrc"/>
 	<include>lib/sorting.h</include>
 	<include>lib/mousewheelbehavior.h</include>
-	<include>lib/imageview.h</include>
+	<include>lib/documentview/rasterimageview.h</include>
 	<include>lib/print/printoptionspage.h</include>
 	<group name="SideBar">
 		<entry name="PreferredMetaInfoKeyList" type="StringList">
@@ -90,11 +90,11 @@
 
 	<group name="ImageView">
 		<entry name="AlphaBackgroundMode" type="Enum">
-			<choices name="Gwenview::ImageView::AlphaBackgroundMode">
-				<choice name="ImageView::AlphaBackgroundCheckBoard"/>
-				<choice name="ImageView::AlphaBackgroundSolid"/>
+			<choices name="Gwenview::RasterImageView::AlphaBackgroundMode">
+				<choice name="RasterImageView::AlphaBackgroundCheckBoard"/>
+				<choice name="RasterImageView::AlphaBackgroundSolid"/>
 			</choices>
-			<default>ImageView::AlphaBackgroundCheckBoard</default>
+			<default>RasterImageView::AlphaBackgroundCheckBoard</default>
 		</entry>
 		<entry name="AlphaBackgroundColor" type="Color">
 			<default>#ffffff</default>
