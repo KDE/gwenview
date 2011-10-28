@@ -60,6 +60,9 @@ struct RasterImageViewPrivate {
 	}
 
 	void startAnimationIfNecessary() {
+		if (q->document() && q->isVisible()) {
+			q->document()->startAnimation();
+		}
 	}
 
 	QSizeF visibleImageSize() const {
