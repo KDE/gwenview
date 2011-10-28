@@ -40,6 +40,7 @@ namespace Gwenview {
 struct RasterImageViewPrivate {
 	RasterImageView* q;
 	ImageScaler* mScaler;
+	QPixmap mBackgroundTexture;
 	bool mBufferIsEmpty;
 	QPixmap mCurrentBuffer;
 	// The alternate buffer is useful when scrolling: existing content is copied
@@ -50,6 +51,15 @@ struct RasterImageViewPrivate {
 	QTimer* mUpdateTimer;
 
 	QWeakPointer<AbstractRasterImageViewTool> mTool;
+
+	void createBackgroundTexture() {
+		mBackgroundTexture = QPixmap(32, 32);
+		QPainter painter(&mBackgroundTexture);
+		painter.fillRect(mBackgroundTexture.rect(), QColor(128, 128, 128));
+		QColor light = QColor(192, 192, 192);
+		painter.fillRect(0, 0, 16, 16, light);
+		painter.fillRect(16, 16, 16, 16, light);
+	}
 
 	void setupUpdateTimer() {
 		mUpdateTimer = new QTimer(q);
@@ -113,6 +123,22 @@ struct RasterImageViewPrivate {
 
 		mAlternateBuffer = QPixmap();
 	}
+
+	void drawAlphaBackground(QPainter* painter, const QRect& viewportRect, const QPoint& zoomedImageTopLeft) {
+		// FIXME: QGV
+		//if (mAlphaBackgroundMode == ImageView::AlphaBackgroundCheckBoard) {
+			QPoint textureOffset(
+				zoomedImageTopLeft.x() % mBackgroundTexture.width(),
+				zoomedImageTopLeft.y() % mBackgroundTexture.height()
+				);
+			painter->drawTiledPixmap(
+				viewportRect,
+				mBackgroundTexture,
+				textureOffset);
+		/*} else {
+			painter->fillRect(viewportRect, mAlphaBackgroundColor);
+		}*/
+	}
 };
 
 RasterImageView::RasterImageView(QGraphicsItem* parent)
@@ -125,6 +151,7 @@ RasterImageView::RasterImageView(QGraphicsItem* parent)
 		SLOT(updateFromScaler(int,int,QImage)) );
 	setAcceptHoverEvents(true);
 
+	d->createBackgroundTexture();
 	d->setupUpdateTimer();
 }
 
@@ -203,8 +230,7 @@ void RasterImageView::updateFromScaler(int zoomedImageLeft, int zoomedImageTop, 
 	d->mBufferIsEmpty = false;
 	{
 		QPainter painter(&d->mCurrentBuffer);
-		/*
-		if (d->mDocument->hasAlphaChannel()) {
+		if (document()->hasAlphaChannel()) {
 			d->drawAlphaBackground(
 				&painter, QRect(viewportLeft, viewportTop, image.width(), image.height()),
 				QPoint(zoomedImageLeft, zoomedImageTop)
@@ -212,9 +238,6 @@ void RasterImageView::updateFromScaler(int zoomedImageLeft, int zoomedImageTop, 
 		} else {
 			painter.setCompositionMode(QPainter::CompositionMode_Source);
 		}
-		painter.drawImage(viewportLeft, viewportTop, image);
-		*/
-		painter.setCompositionMode(QPainter::CompositionMode_Source);
 		painter.drawImage(viewportLeft, viewportTop, image);
 	}
 	update();
