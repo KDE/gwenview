@@ -106,7 +106,6 @@ set(gwenviewlib_SRCS
 	print/printoptionspage.cpp
 	slidecontainer.cpp
 	slideshow.cpp
-	scrolltool.cpp
 	statusbartoolbutton.cpp
 	redeyereduction/redeyereductionimageoperation.cpp
 	redeyereduction/redeyereductiontool.cpp
