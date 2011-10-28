@@ -106,6 +106,7 @@ struct DocumentViewPrivate {
 				that, SIGNAL(zoomToFitChanged(bool)) );
 		}
 
+		adapter->loadConfig();
 		// FIXME QGV
 		/*
 		QAbstractScrollArea* area = qobject_cast<QAbstractScrollArea*>(adapter->widget());

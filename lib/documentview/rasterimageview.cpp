@@ -41,6 +41,13 @@ struct RasterImageViewPrivate {
 	RasterImageView* q;
 	ImageScaler* mScaler;
 	QPixmap mBackgroundTexture;
+
+	// Config
+	RasterImageView::AlphaBackgroundMode mAlphaBackgroundMode;
+	QColor mAlphaBackgroundColor;
+	bool mEnlargeSmallerImages;
+	// /Config
+
 	bool mBufferIsEmpty;
 	QPixmap mCurrentBuffer;
 	// The alternate buffer is useful when scrolling: existing content is copied
@@ -125,8 +132,7 @@ struct RasterImageViewPrivate {
 	}
 
 	void drawAlphaBackground(QPainter* painter, const QRect& viewportRect, const QPoint& zoomedImageTopLeft) {
-		// FIXME: QGV
-		//if (mAlphaBackgroundMode == ImageView::AlphaBackgroundCheckBoard) {
+		if (mAlphaBackgroundMode == RasterImageView::AlphaBackgroundCheckBoard) {
 			QPoint textureOffset(
 				zoomedImageTopLeft.x() % mBackgroundTexture.width(),
 				zoomedImageTopLeft.y() % mBackgroundTexture.height()
@@ -135,9 +141,9 @@ struct RasterImageViewPrivate {
 				viewportRect,
 				mBackgroundTexture,
 				textureOffset);
-		/*} else {
+		} else {
 			painter->fillRect(viewportRect, mAlphaBackgroundColor);
-		}*/
+		}
 	}
 };
 
@@ -145,6 +151,11 @@ RasterImageView::RasterImageView(QGraphicsItem* parent)
 : AbstractImageView(parent)
 , d(new RasterImageViewPrivate) {
 	d->q = this;
+
+	d->mAlphaBackgroundMode = AlphaBackgroundCheckBoard;
+	d->mAlphaBackgroundColor = Qt::black;
+	d->mEnlargeSmallerImages = false;
+
 	d->mBufferIsEmpty = true;
 	d->mScaler = new ImageScaler(this);
 	connect(d->mScaler, SIGNAL(scaledRect(int,int,QImage)), 
@@ -157,6 +168,31 @@ RasterImageView::RasterImageView(QGraphicsItem* parent)
 
 RasterImageView::~RasterImageView() {
 	delete d;
+}
+
+void RasterImageView::setAlphaBackgroundMode(AlphaBackgroundMode mode) {
+	d->mAlphaBackgroundMode = mode;
+	if (document() && document()->hasAlphaChannel()) {
+		d->mCurrentBuffer = QPixmap();
+		updateBuffer();
+	}
+}
+
+
+void RasterImageView::setAlphaBackgroundColor(const QColor& color) {
+	d->mAlphaBackgroundColor = color;
+	if (document() && document()->hasAlphaChannel()) {
+		d->mCurrentBuffer = QPixmap();
+		updateBuffer();
+	}
+}
+
+
+void RasterImageView::setEnlargeSmallerImages(bool value) {
+	d->mEnlargeSmallerImages = value;
+	if (zoomToFit()) {
+		setZoom(computeZoomToFit());
+	}
 }
 
 void RasterImageView::loadFromDocument() {

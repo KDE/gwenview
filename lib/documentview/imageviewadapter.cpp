@@ -109,12 +109,9 @@ void ImageViewAdapter::slotLoadingFailed() {
 
 
 void ImageViewAdapter::loadConfig() {
-	// FIXME: QGV
-	/*
 	d->mView->setAlphaBackgroundMode(GwenviewConfig::alphaBackgroundMode());
 	d->mView->setAlphaBackgroundColor(GwenviewConfig::alphaBackgroundColor());
 	d->mView->setEnlargeSmallerImages(GwenviewConfig::enlargeSmallerImages());
-	*/
 }
 
 RasterImageView* ImageViewAdapter::rasterImageView() const {

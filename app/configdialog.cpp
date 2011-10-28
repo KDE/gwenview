@@ -74,8 +74,8 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 
 	d->mAlphaBackgroundModeGroup = new InvisibleButtonGroup(widget);
 	d->mAlphaBackgroundModeGroup->setObjectName( QLatin1String("kcfg_AlphaBackgroundMode" ));
-	d->mAlphaBackgroundModeGroup->addButton(d->mImageViewConfigPage.checkBoardRadioButton, int(ImageView::AlphaBackgroundCheckBoard));
-	d->mAlphaBackgroundModeGroup->addButton(d->mImageViewConfigPage.solidColorRadioButton, int(ImageView::AlphaBackgroundSolid));
+	d->mAlphaBackgroundModeGroup->addButton(d->mImageViewConfigPage.checkBoardRadioButton, int(RasterImageView::AlphaBackgroundCheckBoard));
+	d->mAlphaBackgroundModeGroup->addButton(d->mImageViewConfigPage.solidColorRadioButton, int(RasterImageView::AlphaBackgroundSolid));
 
 	d->mWheelBehaviorGroup = new InvisibleButtonGroup(widget);
 	d->mWheelBehaviorGroup->setObjectName( QLatin1String("kcfg_MouseWheelBehavior" ));
