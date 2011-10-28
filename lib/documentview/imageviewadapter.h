@@ -65,6 +65,9 @@ public:
 
 	virtual RasterImageView* rasterImageView() const;
 
+	virtual QPointF scrollPos() const;
+	virtual void setScrollPos(const QPointF& pos);
+
 private Q_SLOTS:
 	void slotLoadingFailed();
 

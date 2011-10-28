@@ -76,6 +76,7 @@ public:
 	 * x and y are always between 0 and (docsize * zoom - viewsize)
 	 */
 	QPointF scrollPos() const;
+	void setScrollPos(const QPointF& pos);
 
 	QPointF mapToView(const QPointF& imagePos) const;
 	QPoint mapToView(const QPoint& imagePos) const;
@@ -92,6 +93,7 @@ public:
 Q_SIGNALS:
 	void zoomToFitChanged(bool);
 	void zoomChanged(qreal);
+	void scrollPosChanged();
 
 protected:
 	void setChildItem(QGraphicsItem*);

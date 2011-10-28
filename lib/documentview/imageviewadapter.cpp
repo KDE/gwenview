@@ -45,6 +45,7 @@ ImageViewAdapter::ImageViewAdapter()
 	d->mView = new RasterImageView;
 	connect(d->mView, SIGNAL(zoomChanged(qreal)), SIGNAL(zoomChanged(qreal)) );
 	connect(d->mView, SIGNAL(zoomToFitChanged(bool)), SIGNAL(zoomToFitChanged(bool)) );
+	connect(d->mView, SIGNAL(scrollPosChanged()), SIGNAL(scrollPosChanged()) );
 	setWidget(d->mView);
 }
 
@@ -116,5 +117,14 @@ void ImageViewAdapter::loadConfig() {
 RasterImageView* ImageViewAdapter::rasterImageView() const {
 	return d->mView;
 }
+
+QPointF ImageViewAdapter::scrollPos() const {
+    return d->mView->scrollPos();
+}
+
+void ImageViewAdapter::setScrollPos(const QPointF& pos) {
+	d->mView->setScrollPos(pos);
+}
+
 
 } // namespace

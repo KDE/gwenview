@@ -87,6 +87,9 @@ public:
 
 	virtual void loadConfig() {}
 
+	virtual QPointF scrollPos() const { return QPointF(0, 0); }
+	virtual void setScrollPos(const QPointF& /*pos*/) {}
+
 protected:
 	void setWidget(QGraphicsWidget* widget) { mWidget = widget; }
 
@@ -99,6 +102,8 @@ Q_SIGNALS:
 
 	void zoomToFitChanged(bool);
 	/** @} */
+
+	void scrollPosChanged();
 
 private:
 	QGraphicsWidget* mWidget;

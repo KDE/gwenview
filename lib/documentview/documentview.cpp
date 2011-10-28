@@ -106,17 +106,10 @@ struct DocumentViewPrivate {
 				that, SIGNAL(zoomToFitChanged(bool)) );
 		}
 
+		QObject::connect(adapter, SIGNAL(scrollPosChanged()),
+				that, SIGNAL(positionChanged()));
+
 		adapter->loadConfig();
-		// FIXME QGV
-		/*
-		QAbstractScrollArea* area = qobject_cast<QAbstractScrollArea*>(adapter->widget());
-		if (area) {
-			QObject::connect(area->horizontalScrollBar(), SIGNAL(valueChanged(int)),
-				that, SIGNAL(positionChanged()));
-			QObject::connect(area->verticalScrollBar(), SIGNAL(valueChanged(int)),
-				that, SIGNAL(positionChanged()));
-		}
-		*/
 
 		adapter->widget()->installSceneEventFilter(that);
 		if (mCurrent) {
@@ -636,28 +629,12 @@ bool DocumentView::isCurrent() const {
 
 
 QPoint DocumentView::position() const {
-	// FIXME: QGV
-	/*
-	QAbstractScrollArea* area = qobject_cast<QAbstractScrollArea*>(d->mAdapter->widget());
-	if (!area) {
-		return QPoint();
-	}
-	return QPoint(
-		area->horizontalScrollBar()->value(),
-		area->verticalScrollBar()->value()
-		);
-	*/
-	return QPoint();
+	return d->mAdapter->scrollPos().toPoint();
 }
 
 
 void DocumentView::setPosition(const QPoint& pos) {
-	QAbstractScrollArea* area = qobject_cast<QAbstractScrollArea*>(d->mAdapter->widget());
-	if (!area) {
-		return;
-	}
-	area->horizontalScrollBar()->setValue(pos.x());
-	area->verticalScrollBar()->setValue(pos.y());
+	d->mAdapter->setScrollPos(pos);
 }
 
 

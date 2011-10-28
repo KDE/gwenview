@@ -83,6 +83,9 @@ public:
 
 	virtual qreal computeZoomToFit() const;
 
+	virtual QPointF scrollPos() const;
+	virtual void setScrollPos(const QPointF& pos);
+
 private:
 	SvgViewAdapterPrivate* const d;
 };

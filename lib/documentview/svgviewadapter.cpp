@@ -85,6 +85,7 @@ SvgViewAdapter::SvgViewAdapter()
 	setWidget(d->mView);
 	connect(d->mView, SIGNAL(zoomChanged(qreal)), SIGNAL(zoomChanged(qreal)) );
 	connect(d->mView, SIGNAL(zoomToFitChanged(bool)), SIGNAL(zoomToFitChanged(bool)) );
+	connect(d->mView, SIGNAL(scrollPosChanged()), SIGNAL(scrollPosChanged()) );
 }
 
 
@@ -136,5 +137,14 @@ void SvgViewAdapter::setZoom(qreal zoom, const QPointF& center) {
 qreal SvgViewAdapter::computeZoomToFit() const {
 	return d->mView->computeZoomToFit();
 }
+
+QPointF SvgViewAdapter::scrollPos() const {
+    return d->mView->scrollPos();
+}
+
+void SvgViewAdapter::setScrollPos(const QPointF& pos) {
+    d->mView->setScrollPos(pos);
+}
+
 
 } // namespace

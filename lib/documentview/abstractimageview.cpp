@@ -83,6 +83,9 @@ struct AbstractImageViewPrivate {
 			if (verbosity == Notify) {
 				q->onScrollPosChanged(oldPos);
 			}
+			// No verbosity test: we always notify the outside world about
+			// scrollPos changes
+			QMetaObject::invokeMethod(q, "scrollPosChanged");
 		}
 	}
 };
@@ -313,6 +316,10 @@ QPointF AbstractImageView::imageOffset() const {
 
 QPointF AbstractImageView::scrollPos() const {
 	return d->mScrollPos;
+}
+
+void AbstractImageView::setScrollPos(const QPointF& pos) {
+	d->setScrollPos(pos);
 }
 
 QPointF AbstractImageView::mapToView(const QPointF& imagePos) const {
