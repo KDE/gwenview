@@ -30,8 +30,20 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // KDE
 #include <kdebug.h>
+#include <ktempdir.h>
 #include <kurl.h>
 
+class SandBoxDir : public QDir {
+public:
+	SandBoxDir()
+	: mTempDir(QDir::currentPath() + "/sandbox-")
+	{
+		setPath(mTempDir.name());
+	}
+
+private:
+	KTempDir mTempDir;
+};
 
 /*
  * This file contains simple helpers to access test files
@@ -87,6 +99,8 @@ inline bool fuzzyImageCompare(const QImage& img1, const QImage& img2) {
 	}
 	return true;
 }
+
+void createEmptyFile(const QString& path);
 
 /**
  * Returns the url of the remote url dir if remote test dir was successfully

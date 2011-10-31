@@ -66,3 +66,10 @@ KUrl setUpRemoteTestDir(const QString& testFile) {
 
 	return KUrl("sftp://localhost" + testDir);
 }
+
+void createEmptyFile(const QString& path) {
+	Q_ASSERT(!QFile::exists(path));
+	QFile file(path);
+	bool ok = file.open(QIODevice::WriteOnly);
+	Q_ASSERT(ok);
+}

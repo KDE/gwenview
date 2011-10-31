@@ -21,13 +21,24 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifndef SORTEDDIRMODELTEST_H
 #define SORTEDDIRMODELTEST_H
 
+// Local
+#include <testutils.h>
+
+// Qt
 #include <QObject>
+
+// std c++
+#include <memory>
 
 class SortedDirModelTest : public QObject {
 	Q_OBJECT
 private Q_SLOTS:
+	void initTestCase();
 	void testHasDocuments_data();
 	void testHasDocuments();
+
+private:
+	SandBoxDir mSandBoxDir;
 };
 
 #endif /* SORTEDDIRMODELTEST_H */
