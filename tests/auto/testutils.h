@@ -50,7 +50,7 @@ private:
  */
 
 inline QString pathForTestFile(const QString& name) {
-	return QString("%1/%2").arg(KDESRCDIR).arg(name);
+	return QDir::cleanPath(QString("%1/../data/%2").arg(KDESRCDIR).arg(name));
 }
 
 inline KUrl urlForTestFile(const QString& name) {

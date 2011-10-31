@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QVBoxLayout>
 
 // Local
-#include "../lib/slidecontainer.h"
+#include <lib/slidecontainer.h>
 
 
 using namespace Gwenview;

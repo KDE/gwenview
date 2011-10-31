@@ -71,7 +71,8 @@ void SandBox::fill() {
 
 
 void SandBox::copyTestImage(const QString& testFileName, int width, int height) {
-	KIO::Job* job = KIO::copy(pathForTestFile(testFileName), KUrl(mPath + '/' + testFileName));
+	QString testPath = pathForTestFile(testFileName);
+	KIO::Job* job = KIO::copy(testPath, KUrl(mPath + '/' + testFileName));
 	QVERIFY2(job->exec(), "Couldn't copy test image");
 	mSizeHash.insert(testFileName, QSize(width, height));
 }
