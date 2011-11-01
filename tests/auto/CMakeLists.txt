@@ -44,3 +44,4 @@ gv_add_unit_test(importertest
 	${importer_SOURCE_DIR}/filenameformater.cpp
 	)
 gv_add_unit_test(sorteddirmodeltest testutils.cpp)
+gv_add_unit_test(slidecontainerautotest slidecontainerautotest.cpp)
