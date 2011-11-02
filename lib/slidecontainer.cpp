@@ -37,7 +37,6 @@ SlideContainer::SlideContainer(QWidget* parent)
 	mContent = 0;
 	mSlidingOut = false;
 	setFixedHeight(0);
-	hide();
 }
 
 
@@ -55,7 +54,7 @@ void SlideContainer::setContent(QWidget* content) {
 	if (mContent) {
 		mContent->setParent(this);
 		mContent->installEventFilter(this);
-		adjustContentGeometry();
+		mContent->hide();
 	}
 }
 
@@ -71,6 +70,7 @@ void SlideContainer::animTo(int newHeight) {
 
 void SlideContainer::slideIn() {
 	mSlidingOut = false;
+	mContent->show();
 	mContent->adjustSize();
 	delete mAnim.data();
 	if (height() == mContent->height()) {
@@ -81,13 +81,6 @@ void SlideContainer::slideIn() {
 
 
 void SlideContainer::slideOut() {
-	if (!isVisible()) {
-		return;
-	}
-	if (!mContent) {
-		hide();
-		return;
-	}
 	mSlidingOut = true;
 	animTo(0);
 	connect(mAnim.data(), SIGNAL(finished()), SLOT(slotSlidedOut()));
@@ -95,7 +88,6 @@ void SlideContainer::slideOut() {
 
 void SlideContainer::slotSlidedOut() {
 	mSlidingOut = false;
-	hide();
 }
 
 QSize SlideContainer::sizeHint() const {
@@ -144,7 +136,6 @@ int SlideContainer::slideHeight() const {
 }
 
 void SlideContainer::setSlideHeight(int value) {
-	show();
 	setFixedHeight(value);
 	adjustContentGeometry();
 }

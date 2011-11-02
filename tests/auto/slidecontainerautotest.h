@@ -33,8 +33,8 @@ class SlideContainerAutoTest : public QObject {
 private Q_SLOTS:
 	void testInit();
 	void testSlideIn();
-	void testSlideIn2();
 	void testSlideOut();
+	void testSlideInDeleteSlideOut();
 };
 
 #endif /* SLIDECONTAINERAUTOTEST_H */

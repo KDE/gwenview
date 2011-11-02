@@ -39,10 +39,8 @@ struct TestWindow : public QWidget {
     explicit TestWindow(QWidget* parent = 0)
 	: QWidget(parent)
 	, mContainer(new SlideContainer)
-	, mContent(new QTextEdit)
-	{
-		mContent->setFixedSize(100, 40);
-		mContainer->setContent(mContent);
+	, mContent(0) {
+		createContent();
 
 		mMainWidget = new QTextEdit();
 		QVBoxLayout* layout = new QVBoxLayout(this);
@@ -52,17 +50,24 @@ struct TestWindow : public QWidget {
 		layout->addWidget(mContainer);
 	}
 
+	void createContent() {
+		mContent = new QTextEdit;
+		mContent->setFixedSize(100, 40);
+		mContainer->setContent(mContent);
+	}
+
 	SlideContainer* mContainer;
 	QWidget* mMainWidget;
 	QWidget* mContent;
 };
 
 void SlideContainerAutoTest::testInit() {
+	// Even with content, a SlideContainer should be invisible until slideIn()
+	// is called
 	TestWindow window;
 	window.show();
 
 	QTest::qWait(500);
-	QVERIFY(!window.mContainer->isVisible());
 	QCOMPARE(window.mMainWidget->height(), window.height());
 }
 
@@ -74,7 +79,6 @@ void SlideContainerAutoTest::testSlideIn() {
 	while (window.mContainer->slideHeight() != window.mContent->height()) {
 		QTest::qWait(100);
 	}
-	QVERIFY(window.mContainer->isVisible());
 	QCOMPARE(window.mContainer->height(), window.mContent->height());
 }
 
@@ -90,11 +94,12 @@ void SlideContainerAutoTest::testSlideOut() {
 	while (window.mContainer->slideHeight() != 0) {
 		QTest::qWait(100);
 	}
-	QVERIFY(!window.mContainer->isVisible());
 	QCOMPARE(window.mContainer->height(), 0);
 }
 
-void SlideContainerAutoTest::testSlideIn2() {
+void SlideContainerAutoTest::testSlideInDeleteSlideOut() {
+	// If content is deleted while visible, slideOut() should still produce an
+	// animation
 	TestWindow window;
 	window.show();
 
@@ -102,17 +107,10 @@ void SlideContainerAutoTest::testSlideIn2() {
 	while (window.mContainer->slideHeight() != window.mContent->height()) {
 		QTest::qWait(100);
 	}
+	window.mContent->deleteLater();
 	window.mContainer->slideOut();
 	while (window.mContainer->slideHeight() != 0) {
 		QTest::qWait(100);
 	}
-	QVERIFY(!window.mContainer->isVisible());
 	QCOMPARE(window.mContainer->height(), 0);
-
-	window.mContainer->slideIn();
-	while (window.mContainer->slideHeight() != window.mContent->height()) {
-		QTest::qWait(100);
-	}
-	QVERIFY(window.mContainer->isVisible());
-	QCOMPARE(window.mContainer->height(), window.mContent->height());
 }
