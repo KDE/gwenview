@@ -37,10 +37,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 #include <kdebug.h>
+#include <kiconloader.h>
 #include <klocale.h>
 #include <kmodifierkeyinfo.h>
-#include <kpixmapsequence.h>
-#include <kpixmapsequencewidget.h>
 #include <kstandarddirs.h>
 #include <kurl.h>
 
@@ -48,8 +47,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/document/document.h>
 #include <lib/document/documentfactory.h>
 #include <lib/documentview/abstractrasterimageviewtool.h>
-#include <lib/documentview/messageviewadapter.h>
+#include <lib/documentview/loadingindicator.h>
 #include <lib/documentview/imageviewadapter.h>
+#include <lib/documentview/messageviewadapter.h>
 #include <lib/documentview/rasterimageview.h>
 #include <lib/documentview/svgviewadapter.h>
 #include <lib/documentview/videoviewadapter.h>
@@ -58,7 +58,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/gwenviewconfig.h>
 #include <lib/mimetypeutils.h>
 #include <lib/signalblocker.h>
-#include <lib/widgetfloater.h>
 
 namespace Gwenview {
 
@@ -84,7 +83,7 @@ struct DocumentViewPrivate {
 	QCursor mPreviousCursor;
 	QWeakPointer<QPropertyAnimation> mMoveAnimation;
 
-	QGraphicsProxyWidget* mLoadingIndicator;
+	LoadingIndicator* mLoadingIndicator;
 
 	QScopedPointer<AbstractDocumentViewAdapter> mAdapter;
 	QList<qreal> mZoomSnapValues;
@@ -147,14 +146,7 @@ struct DocumentViewPrivate {
 	}
 
 	void setupLoadingIndicator() {
-		KPixmapSequence sequence("process-working", 22);
-		KPixmapSequenceWidget* widget = new KPixmapSequenceWidget;
-		widget->setSequence(sequence);
-		widget->setInterval(100);
-
-		mLoadingIndicator = new QGraphicsProxyWidget(that);
-		mLoadingIndicator->setWidget(widget);
-
+		mLoadingIndicator = new LoadingIndicator(that);
 		GraphicsWidgetFloater* floater = new GraphicsWidgetFloater(that);
 		floater->setChildWidget(mLoadingIndicator);
 	}

@@ -64,8 +64,9 @@ set(gwenviewlib_SRCS
 	documentview/documentview.cpp
 	documentview/documentviewcontroller.cpp
 	documentview/documentviewsynchronizer.cpp
-	documentview/messageviewadapter.cpp
 	documentview/imageviewadapter.cpp
+	documentview/loadingindicator.cpp
+	documentview/messageviewadapter.cpp
 	documentview/rasterimageview.cpp
 	documentview/svgviewadapter.cpp
 	documentview/videoviewadapter.cpp
