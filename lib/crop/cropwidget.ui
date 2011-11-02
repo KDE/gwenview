@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>737</width>
-    <height>62</height>
+    <width>790</width>
+    <height>66</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -21,21 +21,34 @@
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_2">
    <item>
-    <spacer name="horizontalSpacer">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+    <widget class="QCheckBox" name="advancedCheckBox">
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
      </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>0</width>
-       <height>20</height>
-      </size>
+     <property name="text">
+      <string>Advanced settings</string>
      </property>
-    </spacer>
+    </widget>
    </item>
    <item>
     <widget class="QWidget" name="advancedWidget" native="true">
      <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>12</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
       <item>
        <widget class="QLabel" name="label_6">
         <property name="text">
@@ -43,6 +56,9 @@
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>ratioComboBox</cstring>
         </property>
        </widget>
       </item>
@@ -132,14 +148,17 @@
     </widget>
    </item>
    <item>
-    <widget class="QCheckBox" name="advancedCheckBox">
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
      </property>
-     <property name="text">
-      <string>Advanced settings</string>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>0</width>
+       <height>20</height>
+      </size>
      </property>
-    </widget>
+    </spacer>
    </item>
    <item>
     <widget class="KDialogButtonBox" name="dialogButtonBox">
