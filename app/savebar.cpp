@@ -219,7 +219,6 @@ struct SaveBarPrivate {
 			height += layout->spacing();
 		}
 		mSaveBarWidget->setFixedHeight(height);
-		that->setFixedHeight(height);
 	}
 };
 
@@ -273,8 +272,6 @@ SaveBar::SaveBar(QWidget* parent, KActionCollection* actionCollection)
 	layout->addLayout(bottomRowLayout);
 	layout->setMargin(3);
 	layout->setSpacing(3);
-
-	hide();
 
 	setContent(d->mSaveBarWidget);
 

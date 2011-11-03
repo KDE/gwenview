@@ -81,6 +81,9 @@ void SlideContainer::slideIn() {
 
 
 void SlideContainer::slideOut() {
+	if (height() == 0) {
+		return;
+	}
 	mSlidingOut = true;
 	animTo(0);
 	connect(mAnim.data(), SIGNAL(finished()), SLOT(slotSlidedOut()));
@@ -124,7 +127,7 @@ void SlideContainer::adjustContentGeometry() {
 
 bool SlideContainer::eventFilter(QObject*, QEvent* event) {
 	if (event->type() == QEvent::Resize) {
-		if (!mSlidingOut) {
+		if (!mSlidingOut && height() != 0) {
 			animTo(mContent->height());
 		}
 	}

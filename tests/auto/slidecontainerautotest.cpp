@@ -26,6 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 #include <qtest_kde.h>
+#include <kdebug.h>
 
 // Qt
 #include <QTextEdit>
@@ -112,5 +113,17 @@ void SlideContainerAutoTest::testSlideInDeleteSlideOut() {
 	while (window.mContainer->slideHeight() != 0) {
 		QTest::qWait(100);
 	}
+	QCOMPARE(window.mContainer->height(), 0);
+}
+
+void SlideContainerAutoTest::testHiddenContentResize() {
+	// Resizing content should not trigger a slide if it is not visible.
+	TestWindow window;
+	window.show();
+	QTest::qWaitForWindowShown(&window);
+
+	window.mContent->show();
+	window.mContent->setFixedSize(150, 80);
+	QTest::qWait(500);
 	QCOMPARE(window.mContainer->height(), 0);
 }

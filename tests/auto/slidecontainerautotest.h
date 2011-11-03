@@ -35,6 +35,7 @@ private Q_SLOTS:
 	void testSlideIn();
 	void testSlideOut();
 	void testSlideInDeleteSlideOut();
+	void testHiddenContentResize();
 };
 
 #endif /* SLIDECONTAINERAUTOTEST_H */
