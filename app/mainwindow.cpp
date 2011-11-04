@@ -98,7 +98,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/slideshow.h>
 #include <lib/signalblocker.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
-#include <lib/splittercollapser.h>
 #include <lib/thumbnailview/thumbnailbarview.h>
 #include <lib/thumbnailview/thumbnailview.h>
 #include <lib/thumbnailloadjob.h>
@@ -152,7 +151,6 @@ struct MainWindow::Private {
 	ThumbnailViewPanel* mThumbnailViewPanel;
 	StartPage* mStartPage;
 	SideBar* mSideBar;
-	SplitterCollapser* mSideBarCollapser;
 	QStackedWidget* mViewStackedWidget;
 	FullScreenBar* mFullScreenBar;
 	FullScreenContent* mFullScreenContent;
@@ -215,8 +213,6 @@ struct MainWindow::Private {
 		layout->setMargin(0);
 		layout->setSpacing(0);
 		////
-
-		mSideBarCollapser = new SplitterCollapser(mCentralSplitter, mSideBar);
 
 		mStartSlideShowWhenDirListerCompleted = false;
 		mSlideShow = new SlideShow(mWindow);
@@ -383,6 +379,10 @@ struct MainWindow::Private {
 		mToggleSideBarAction->setIcon(KIcon("view-sidetree"));
 		mToggleSideBarAction->setShortcut(Qt::Key_F11);
 		mToggleSideBarAction->setText(i18nc("@action", "Sidebar"));
+		connect(mThumbnailViewPanel->toggleSideBarButton(), SIGNAL(clicked()),
+			mToggleSideBarAction, SLOT(trigger()));
+		connect(mDocumentPanel->toggleSideBarButton(), SIGNAL(clicked()),
+			mToggleSideBarAction, SLOT(trigger()));
 
 		mToggleSlideShowAction = view->addAction("toggle_slideshow",mWindow, SLOT(toggleSlideShow()));
 		mWindow->updateSlideShowAction();
@@ -619,7 +619,6 @@ struct MainWindow::Private {
 
 	void updateDistractionsState() {
 		const bool isFullScreen = mFullScreenAction->isChecked();
-		mSideBarCollapser->setVisible(!mDistractionFreeMode && !isFullScreen);
 		mFullScreenBar->setActivated(!mDistractionFreeMode && isFullScreen);
 	}
 
@@ -884,9 +883,7 @@ void MainWindow::startSlideShow() {
 
 
 void MainWindow::setActiveViewModeAction(QAction* action) {
-	if (d->mCurrentPageId == StartPageId) {
-		d->mSideBarCollapser->show();
-	} else {
+	if (d->mCurrentPageId != StartPageId) {
 		d->saveSideBarConfig();
 	}
 	if (action == d->mViewAction) {
@@ -1017,7 +1014,6 @@ void MainWindow::showStartPage() {
 	d->spreadCurrentDirUrl(KUrl());
 
 	d->mSideBar->hide();
-	d->mSideBarCollapser->hide();
 	d->mViewStackedWidget->setCurrentWidget(d->mStartPage);
 
 	d->updateActions();
@@ -1073,7 +1069,19 @@ void MainWindow::toggleSideBar(bool on) {
 
 void MainWindow::updateToggleSideBarAction() {
 	SignalBlocker blocker(d->mToggleSideBarAction);
-	d->mToggleSideBarAction->setChecked(d->mSideBar->isVisible());
+	bool visible = d->mSideBar->isVisible();
+	d->mToggleSideBarAction->setChecked(visible);
+
+	QString text = QString::fromUtf8(visible ? "▮←" : "▮→");
+	QString toolTip = visible ? i18n("Hide Sidebar") : i18n("Show Sidebar");
+
+	QList<QToolButton*> lst;
+	lst << d->mThumbnailViewPanel->toggleSideBarButton()
+		<< d->mDocumentPanel->toggleSideBarButton();
+	Q_FOREACH(QToolButton* button, lst) {
+		button->setText(text);
+		button->setToolTip(toolTip);
+	}
 }
 
 
@@ -1439,14 +1447,6 @@ void MainWindow::loadConfig() {
 	d->mThumbnailViewPanel->applyPalette(pal);
 	d->mStartPage->applyPalette(pal);
 	d->mDocumentPanel->setNormalPalette(pal);
-
-	// FIXME: Should we avoid CSS here to get a more native look?
-	d->mSideBarCollapser->setAutoFillBackground(true);
-	d->mSideBarCollapser->setStyleSheet(
-		"	background-color: palette(window);"
-		"	border: 1px solid palette(mid);"
-		"	border-radius: 5px;"
-		);
 }
 
 

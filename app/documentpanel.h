@@ -27,6 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kurl.h>
 
 // Qt
+#include <QToolButton>
 #include <QWidget>
 
 class QPalette;
@@ -106,6 +107,8 @@ public:
 	 * Sets a widget to show at the bottom of the panel
 	 */
 	void setToolWidget(QWidget* widget);
+
+	QToolButton* toggleSideBarButton() const;
 
 Q_SIGNALS:
 

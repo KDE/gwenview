@@ -345,5 +345,8 @@ void ThumbnailViewPanel::showMenuForDroppedUrls(const KUrl::List& urlList, const
 	FileOperations::showMenuForDroppedUrls(d->mUrlNavigator, urlList, destUrl);
 }
 
+QToolButton* ThumbnailViewPanel::toggleSideBarButton() const {
+	return d->mToggleSideBarButton;
+}
 
 } // namespace

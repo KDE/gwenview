@@ -59,6 +59,9 @@
        <number>0</number>
       </property>
       <item>
+       <widget class="Gwenview::StatusBarToolButton" name="mToggleSideBarButton"/>
+      </item>
+      <item>
        <widget class="Gwenview::StatusBarToolButton" name="mAddFilterButton">
         <property name="text">
          <string>Add Filter</string>
@@ -85,7 +88,7 @@
        </widget>
       </item>
       <item>
-       <widget class="Gwenview::ThumbnailSlider" name="mThumbnailSlider">
+       <widget class="Gwenview::ThumbnailSlider" name="mThumbnailSlider" native="true">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
           <horstretch>0</horstretch>

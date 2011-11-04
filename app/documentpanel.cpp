@@ -102,31 +102,31 @@ static QString gradient(Qt::Orientation orientation, const QColor &color, int va
 /*
  * Layout of mThumbnailSplitter is:
  *
- * +-mThumbnailSplitter--------------------------------+
- * |+-mAdapterContainer-------------------------------+|
- * ||+-mDocumentViewContainer------------------------+||
- * |||+-DocumentView--------++-DocumentView---------+|||
- * ||||                     ||                      ||||
- * ||||                     ||                      ||||
- * ||||                     ||                      ||||
- * ||||                     ||                      ||||
- * ||||                     ||                      ||||
- * ||||                     ||                      ||||
- * |||+---------------------++----------------------+|||
- * ||+-----------------------------------------------+||
- * ||+-mToolContainer--------------------------------+||
- * |||                                               |||
- * ||+-----------------------------------------------+||
- * ||+-mStatusBarContainer---------------------------+||
- * |||[mToggleThumbnailBarButton]       [mZoomWidget]|||
- * ||+-----------------------------------------------+||
- * |+-------------------------------------------------+|
- * |===================================================|
- * |+-mThumbnailBar-----------------------------------+|
- * ||                                                 ||
- * ||                                                 ||
- * |+-------------------------------------------------+|
- * +---------------------------------------------------+
+ * +-mThumbnailSplitter------------------------------------------------+
+ * |+-mAdapterContainer-----------------------------------------------+|
+ * ||+-mDocumentViewContainer----------------------------------------+||
+ * |||+-DocumentView----------------++-DocumentView-----------------+|||
+ * ||||                             ||                              ||||
+ * ||||                             ||                              ||||
+ * ||||                             ||                              ||||
+ * ||||                             ||                              ||||
+ * ||||                             ||                              ||||
+ * ||||                             ||                              ||||
+ * |||+-----------------------------++------------------------------+|||
+ * ||+---------------------------------------------------------------+||
+ * ||+-mToolContainer------------------------------------------------+||
+ * |||                                                               |||
+ * ||+---------------------------------------------------------------+||
+ * ||+-mStatusBarContainer-------------------------------------------+||
+ * |||[mToggleSideBarButton][mToggleThumbnailBarButton] [mZoomWidget]|||
+ * ||+---------------------------------------------------------------+||
+ * |+-----------------------------------------------------------------+|
+ * |===================================================================|
+ * |+-mThumbnailBar---------------------------------------------------+|
+ * ||                                                                 ||
+ * ||                                                                 ||
+ * |+-----------------------------------------------------------------+|
+ * +-------------------------------------------------------------------+
  */
 struct DocumentPanelPrivate {
 	DocumentPanel* that;
@@ -137,6 +137,7 @@ struct DocumentPanelPrivate {
 	DocumentViewController* mDocumentViewController;
 	QList<DocumentView*> mDocumentViews;
 	DocumentViewSynchronizer* mSynchronizer;
+	QToolButton* mToggleSideBarButton;
 	QToolButton* mToggleThumbnailBarButton;
 	ZoomWidget* mZoomWidget;
 	DocumentViewContainer* mDocumentViewContainer;
@@ -271,6 +272,7 @@ struct DocumentPanelPrivate {
 
 	void setupStatusBar() {
 		mStatusBarContainer = new QWidget;
+		mToggleSideBarButton = new StatusBarToolButton;
 		mToggleThumbnailBarButton = new StatusBarToolButton;
 		mZoomWidget = new ZoomWidget;
 		mSynchronizeCheckBox = new QCheckBox(i18n("Synchronize"));
@@ -279,6 +281,7 @@ struct DocumentPanelPrivate {
 		QHBoxLayout* layout = new QHBoxLayout(mStatusBarContainer);
 		layout->setMargin(0);
 		layout->setSpacing(0);
+		layout->addWidget(mToggleSideBarButton);
 		layout->addWidget(mToggleThumbnailBarButton);
 		layout->addStretch();
 		layout->addWidget(mSynchronizeCheckBox);
@@ -708,6 +711,10 @@ void DocumentPanel::deselectView(DocumentView* view) {
 	if (newCurrentView) {
 		d->setCurrentView(newCurrentView);
 	}
+}
+
+QToolButton* DocumentPanel::toggleSideBarButton() const {
+	return d->mToggleSideBarButton;
 }
 
 

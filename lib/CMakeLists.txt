@@ -74,7 +74,6 @@ set(gwenviewlib_SRCS
 	documentview/documentviewcontainer.cpp
 	binder.cpp
 	eventwatcher.cpp
-	splittercollapser.cpp
 	historymodel.cpp
 	archiveutils.cpp
 	datewidget.cpp

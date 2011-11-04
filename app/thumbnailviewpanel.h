@@ -31,6 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 class QDropEvent;
 class QModelIndex;
+class QToolButton;
 
 class KActionCollection;
 class KUrlNavigator;
@@ -60,6 +61,8 @@ public:
 
 	void loadConfig();
 	void saveConfig() const;
+
+	QToolButton* toggleSideBarButton() const;
 
 private Q_SLOTS:
 	void editLocation();
