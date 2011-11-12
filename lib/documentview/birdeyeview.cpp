@@ -33,8 +33,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview {
 
-static qreal MAX_SIZE = 128;
-static qreal VIEW_OFFSET = 48;
+static qreal MAX_SIZE = 96;
+static qreal VIEW_OFFSET = MAX_SIZE / 4;
 
 struct BirdEyeViewPrivate {
 	BirdEyeView* q;
@@ -91,6 +91,7 @@ BirdEyeView::~BirdEyeView() {
 void BirdEyeView::slotMetaInfoUpdated() {
 	d->updateGeometry();
 	d->updateVisibleRect();
+	d->updateVisibility();
 }
 
 void BirdEyeView::slotZoomChanged() {
@@ -103,10 +104,19 @@ void BirdEyeView::slotPositionChanged() {
 	d->updateVisibleRect();
 }
 
+inline void drawTransparentRect(QPainter* painter, const QRectF& rect, const QColor& color) {
+	QColor bg = color;
+	bg.setAlphaF(.33);
+	QColor fg = color;
+	fg.setAlphaF(.66);
+	painter->setPen(fg);
+	painter->setBrush(bg);
+	painter->drawRect(rect.adjusted(0, 0, -1, -1));
+}
+
 void BirdEyeView::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) {
-	painter->fillRect(boundingRect(), QColor(0, 0, 0, 64));
-	painter->setPen(Qt::red);
-	painter->drawRect(d->mVisibleRect.adjusted(0, 0, -1, -1));
+	drawTransparentRect(painter, boundingRect(), Qt::black);
+	drawTransparentRect(painter, d->mVisibleRect, Qt::white);
 }
 
 } // namespace
