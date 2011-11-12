@@ -66,6 +66,7 @@ struct BirdEyeViewPrivate {
 	}
 
 	void updateVisibility() {
+		q->setVisible(mVisibleRect != q->boundingRect());
 	}
 };
 
