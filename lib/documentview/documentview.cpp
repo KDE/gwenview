@@ -47,6 +47,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/document/document.h>
 #include <lib/document/documentfactory.h>
 #include <lib/documentview/abstractrasterimageviewtool.h>
+#include <lib/documentview/birdeyeview.h>
 #include <lib/documentview/loadingindicator.h>
 #include <lib/documentview/imageviewadapter.h>
 #include <lib/documentview/messageviewadapter.h>
@@ -79,6 +80,7 @@ struct DocumentViewPrivate {
 	DocumentView* that;
 	GraphicsHudWidget* mHud;
 	KModifierKeyInfo* mModifierKeyInfo;
+	BirdEyeView* mBirdEyeView;
 	QCursor mZoomCursor;
 	QCursor mPreviousCursor;
 	QWeakPointer<QPropertyAnimation> mMoveAnimation;
@@ -184,6 +186,13 @@ struct DocumentViewPrivate {
 		QObject::connect(deselectButton, SIGNAL(clicked()), that, SLOT(emitHudDeselectClicked()));
 
 		mHud->hide();
+	}
+
+	void setupBirdEyeView() {
+		if (mBirdEyeView) {
+			delete mBirdEyeView;
+		}
+		mBirdEyeView = new BirdEyeView(that);
 	}
 
 	void updateCaption() {
@@ -305,6 +314,7 @@ DocumentView::DocumentView(QGraphicsScene* scene)
 
 	d->that = this;
 	d->mLoadingIndicator = 0;
+	d->mBirdEyeView = 0;
 	d->mCurrent = false;
 	d->mCompareMode = false;
 	d->mModifierKeyInfo = new KModifierKeyInfo(this);
@@ -375,6 +385,7 @@ void DocumentView::openUrl(const KUrl& url) {
 	} else {
 		finishOpenUrl();
 	}
+	d->setupBirdEyeView();
 }
 
 

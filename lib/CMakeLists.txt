@@ -61,6 +61,7 @@ set(gwenviewlib_SRCS
 	documentview/abstractdocumentviewadapter.cpp
 	documentview/abstractimageview.cpp
 	documentview/abstractrasterimageviewtool.cpp
+	documentview/birdeyeview.cpp
 	documentview/documentview.cpp
 	documentview/documentviewcontroller.cpp
 	documentview/documentviewsynchronizer.cpp
