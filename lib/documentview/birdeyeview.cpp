@@ -103,9 +103,9 @@ void BirdEyeView::slotPositionChanged() {
 }
 
 void BirdEyeView::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) {
-	painter->fillRect(boundingRect(), QColor(0, 0, 0, 192));
+	painter->fillRect(boundingRect(), QColor(0, 0, 0, 64));
 	painter->setPen(Qt::red);
-	painter->drawRect(d->mVisibleRect);
+	painter->drawRect(d->mVisibleRect.adjusted(0, 0, -1, -1));
 }
 
 } // namespace
