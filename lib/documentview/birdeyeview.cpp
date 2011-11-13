@@ -37,6 +37,7 @@ namespace Gwenview {
 
 static qreal MAX_SIZE = 96;
 static qreal VIEW_OFFSET = MAX_SIZE / 4;
+static qreal Y_POSITION_PERCENT = 1 / 3.;
 
 struct BirdEyeViewPrivate {
 	BirdEyeView* q;
@@ -47,11 +48,11 @@ struct BirdEyeViewPrivate {
 	void updateGeometry() {
 		QSize size = mDocView->document()->size();
 		size.scale(MAX_SIZE, MAX_SIZE, Qt::KeepAspectRatio);
-		QPointF topRight = mDocView->boundingRect().topRight();
+		QRectF rect = mDocView->boundingRect();
 		q->setGeometry(
 			QRectF(
-				topRight.x() - VIEW_OFFSET - size.width(),
-				topRight.y() + VIEW_OFFSET,
+				rect.right() - VIEW_OFFSET - size.width(),
+				rect.top() + rect.height() * Y_POSITION_PERCENT - size.height(),
 				size.width(),
 				size.height()
 			));
