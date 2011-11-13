@@ -29,6 +29,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kdebug.h>
 
 // Qt
+#include <QCursor>
+#include <QGraphicsSceneEvent>
 #include <QPainter>
 
 namespace Gwenview {
@@ -40,6 +42,7 @@ struct BirdEyeViewPrivate {
 	BirdEyeView* q;
 	DocumentView* mDocView;
 	QRectF mVisibleRect;
+	QPointF mLastDragPos;
 
 	void updateGeometry() {
 		QSize size = mDocView->document()->size();
@@ -73,6 +76,7 @@ struct BirdEyeViewPrivate {
 BirdEyeView::BirdEyeView(DocumentView* docView)
 : QGraphicsWidget(docView)
 , d(new BirdEyeViewPrivate) {
+	setFlag(ItemIsSelectable);
 	d->q = this;
 	d->mDocView = docView;
 	d->updateGeometry();
@@ -117,6 +121,37 @@ inline void drawTransparentRect(QPainter* painter, const QRectF& rect, const QCo
 void BirdEyeView::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) {
 	drawTransparentRect(painter, boundingRect(), Qt::black);
 	drawTransparentRect(painter, d->mVisibleRect, Qt::white);
+}
+
+void BirdEyeView::mousePressEvent(QGraphicsSceneMouseEvent* event) {
+	if (d->mVisibleRect.contains(event->pos())) {
+		setCursor(Qt::ClosedHandCursor);
+		d->mLastDragPos = event->pos();
+	}
+}
+
+void BirdEyeView::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
+	QGraphicsItem::mouseMoveEvent(event);
+	if (d->mLastDragPos.isNull()) {
+		return;
+	}
+	qreal ratio = d->mDocView->boundingRect().width() / boundingRect().width();
+
+	QPointF mousePos = event->pos();
+	QPointF viewPos = d->mDocView->position() + (mousePos - d->mLastDragPos) * ratio;
+
+	d->mLastDragPos = mousePos;
+	d->mDocView->setPosition(viewPos.toPoint());
+
+}
+
+void BirdEyeView::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
+	QGraphicsItem::mouseReleaseEvent(event);
+	if (d->mLastDragPos.isNull()) {
+		return;
+	}
+	setCursor(Qt::OpenHandCursor);
+	d->mLastDragPos = QPointF();
 }
 
 } // namespace
