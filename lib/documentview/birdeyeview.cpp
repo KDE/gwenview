@@ -44,34 +44,6 @@ struct BirdEyeViewPrivate {
 	DocumentView* mDocView;
 	QRectF mVisibleRect;
 	QPointF mLastDragPos;
-
-	void updateGeometry() {
-		QSize size = mDocView->document()->size();
-		size.scale(MAX_SIZE, MAX_SIZE, Qt::KeepAspectRatio);
-		QRectF rect = mDocView->boundingRect();
-		q->setGeometry(
-			QRectF(
-				rect.right() - VIEW_OFFSET - size.width(),
-				qMax(rect.top() + rect.height() * Y_POSITION_PERCENT - size.height(), 0.),
-				size.width(),
-				size.height()
-			));
-	}
-
-	void updateVisibleRect() {
-		QSizeF docSize = mDocView->document()->size();
-		qreal viewZoom = mDocView->zoom();
-		qreal bevZoom = q->size().width() / docSize.width();
-
-		mVisibleRect = QRectF(
-			QPointF(mDocView->position()) / viewZoom * bevZoom,
-			(mDocView->size() / viewZoom).boundedTo(docSize) * bevZoom);
-		q->update();
-	}
-
-	void updateVisibility() {
-		q->setVisible(mVisibleRect != q->boundingRect());
-	}
 };
 
 BirdEyeView::BirdEyeView(DocumentView* docView)
@@ -80,13 +52,11 @@ BirdEyeView::BirdEyeView(DocumentView* docView)
 	setFlag(ItemIsSelectable);
 	d->q = this;
 	d->mDocView = docView;
-	d->updateGeometry();
-	d->updateVisibleRect();
-	d->updateVisibility();
+	adjustGeometry();
 
 	connect(docView->document().data(), SIGNAL(metaInfoUpdated()), SLOT(adjustGeometry()));
 	connect(docView, SIGNAL(zoomChanged(qreal)), SLOT(adjustGeometry()));
-	connect(docView, SIGNAL(positionChanged()), SLOT(slotPositionChanged()));
+	connect(docView, SIGNAL(positionChanged()), SLOT(adjustVisibleRect()));
 }
 
 BirdEyeView::~BirdEyeView() {
@@ -94,13 +64,29 @@ BirdEyeView::~BirdEyeView() {
 }
 
 void BirdEyeView::adjustGeometry() {
-	d->updateGeometry();
-	d->updateVisibleRect();
-	d->updateVisibility();
+	QSize size = d->mDocView->document()->size();
+	size.scale(MAX_SIZE, MAX_SIZE, Qt::KeepAspectRatio);
+	QRectF rect = d->mDocView->boundingRect();
+	setGeometry(
+		QRectF(
+			rect.right() - VIEW_OFFSET - size.width(),
+			qMax(rect.top() + rect.height() * Y_POSITION_PERCENT - size.height(), 0.),
+			size.width(),
+			size.height()
+		));
+	adjustVisibleRect();
+	setVisible(d->mVisibleRect != boundingRect());
 }
 
-void BirdEyeView::slotPositionChanged() {
-	d->updateVisibleRect();
+void BirdEyeView::adjustVisibleRect() {
+	QSizeF docSize = d->mDocView->document()->size();
+	qreal viewZoom = d->mDocView->zoom();
+	qreal bevZoom = size().width() / docSize.width();
+
+	d->mVisibleRect = QRectF(
+		QPointF(d->mDocView->position()) / viewZoom * bevZoom,
+		(d->mDocView->size() / viewZoom).boundedTo(docSize) * bevZoom);
+	update();
 }
 
 inline void drawTransparentRect(QPainter* painter, const QRectF& rect, const QColor& color) {

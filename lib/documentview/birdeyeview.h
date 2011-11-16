@@ -54,7 +54,7 @@ protected:
 	void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
 
 private Q_SLOTS:
-	void slotPositionChanged();
+	void adjustVisibleRect();
 
 private:
 	BirdEyeViewPrivate* const d;
