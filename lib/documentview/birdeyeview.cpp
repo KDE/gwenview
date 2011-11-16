@@ -116,14 +116,13 @@ void BirdEyeView::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	if (d->mLastDragPos.isNull()) {
 		return;
 	}
-	qreal ratio = d->mDocView->boundingRect().width() / boundingRect().width();
+	qreal ratio = d->mDocView->boundingRect().width() / d->mVisibleRect.width();
 
 	QPointF mousePos = event->pos();
 	QPointF viewPos = d->mDocView->position() + (mousePos - d->mLastDragPos) * ratio;
 
 	d->mLastDragPos = mousePos;
 	d->mDocView->setPosition(viewPos.toPoint());
-
 }
 
 void BirdEyeView::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
