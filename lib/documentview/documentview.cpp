@@ -678,6 +678,9 @@ void DocumentView::emitFocused() {
 void DocumentView::setGeometry(const QRectF& rect) {
 	QGraphicsWidget::setGeometry(rect);
 	d->resizeAdapterWidget();
+	if (d->mBirdEyeView) {
+		d->mBirdEyeView->adjustGeometry();
+	}
 }
 
 void DocumentView::moveTo(const QRect& rect) {

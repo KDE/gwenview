@@ -84,8 +84,8 @@ BirdEyeView::BirdEyeView(DocumentView* docView)
 	d->updateVisibleRect();
 	d->updateVisibility();
 
-	connect(docView->document().data(), SIGNAL(metaInfoUpdated()), SLOT(slotMetaInfoUpdated()));
-	connect(docView, SIGNAL(zoomChanged(qreal)), SLOT(slotZoomChanged()));
+	connect(docView->document().data(), SIGNAL(metaInfoUpdated()), SLOT(adjustGeometry()));
+	connect(docView, SIGNAL(zoomChanged(qreal)), SLOT(adjustGeometry()));
 	connect(docView, SIGNAL(positionChanged()), SLOT(slotPositionChanged()));
 }
 
@@ -93,13 +93,7 @@ BirdEyeView::~BirdEyeView() {
 	delete d;
 }
 
-void BirdEyeView::slotMetaInfoUpdated() {
-	d->updateGeometry();
-	d->updateVisibleRect();
-	d->updateVisibility();
-}
-
-void BirdEyeView::slotZoomChanged() {
+void BirdEyeView::adjustGeometry() {
 	d->updateGeometry();
 	d->updateVisibleRect();
 	d->updateVisibility();
