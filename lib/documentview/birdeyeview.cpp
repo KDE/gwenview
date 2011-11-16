@@ -52,7 +52,7 @@ struct BirdEyeViewPrivate {
 		q->setGeometry(
 			QRectF(
 				rect.right() - VIEW_OFFSET - size.width(),
-				rect.top() + rect.height() * Y_POSITION_PERCENT - size.height(),
+				qMax(rect.top() + rect.height() * Y_POSITION_PERCENT - size.height(), 0.),
 				size.width(),
 				size.height()
 			));
