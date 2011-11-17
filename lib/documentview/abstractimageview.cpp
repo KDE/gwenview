@@ -202,6 +202,11 @@ void AbstractImageView::setZoomToFit(bool on) {
 void AbstractImageView::resizeEvent(QGraphicsSceneResizeEvent* event) {
     QGraphicsWidget::resizeEvent(event);
 	if (d->mZoomToFit) {
+		// Set zoom calls adjustImageOffset(), but only if the zoom changes.
+		// If the view is resized but does not cause a zoom change we want the
+		// offset to be adjusted so we call adjustImageOffset() from there as
+		// well.
+		d->adjustImageOffset(AbstractImageViewPrivate::Silent);
 		setZoom(computeZoomToFit());
 	} else {
 		d->adjustImageOffset();
