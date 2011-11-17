@@ -83,7 +83,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(Gwenview::CropHandle)
 namespace Gwenview {
 
 struct CropToolPrivate {
-	CropTool* mCropTool;
+	CropTool* q;
 	QRect mRect;
 	QList<CropHandle> mCropHandleList;
 	CropHandle mMovingHandle;
@@ -92,11 +92,11 @@ struct CropToolPrivate {
 	CropWidget* mCropWidget;
 
 	QRect viewportCropRect() const {
-		return mCropTool->imageView()->mapToView(mRect.adjusted(0, 0, 1, 1));
+		return q->imageView()->mapToView(mRect.adjusted(0, 0, 1, 1));
 	}
 
 	QRect handleViewportRect(CropHandle handle) {
-		QSize viewportSize = mCropTool->imageView()->size().toSize();
+		QSize viewportSize = q->imageView()->size().toSize();
 		QRect rect = viewportCropRect();
 		int left, top;
 		if (handle & CH_Top) {
@@ -165,11 +165,11 @@ struct CropToolPrivate {
 			shape = Qt::ArrowCursor;
 			break;
 		}
-		mCropTool->imageView()->setCursor(shape);
+		q->imageView()->setCursor(shape);
 	}
 
 	void keepRectInsideImage() {
-		const QSize imageSize = mCropTool->imageView()->documentSize().toSize();
+		const QSize imageSize = q->imageView()->documentSize().toSize();
 		if (mRect.width() > imageSize.width() || mRect.height() > imageSize.height()) {
 			// This can happen when the crop ratio changes
 			QSize rectSize = mRect.size();
@@ -190,28 +190,12 @@ struct CropToolPrivate {
 	}
 
 	void setupWidget() {
-		RasterImageView* view = mCropTool->imageView();
-		mCropWidget = new CropWidget(0, view, mCropTool);
+		RasterImageView* view = q->imageView();
+		mCropWidget = new CropWidget(0, view, q);
 		QObject::connect(mCropWidget, SIGNAL(cropRequested()),
-			mCropTool, SLOT(slotCropRequested()));
+			q, SLOT(slotCropRequested()));
 		QObject::connect(mCropWidget, SIGNAL(done()),
-			mCropTool, SIGNAL(done()));
-	}
-
-	void connectToView() {
-		RasterImageView* view = mCropTool->imageView();
-		QObject::connect(view, SIGNAL(zoomChanged(qreal)),
-			mCropTool, SLOT(updateHudWidgetPosition()));
-		QObject::connect(view, SIGNAL(scrollPosChanged()),
-			mCropTool, SLOT(updateHudWidgetPosition()));
-		// FIXME: QGV
-		/*
-		// rangeChanged() is emitted when the view is resized
-		QObject::connect(view->horizontalScrollBar(), SIGNAL(rangeChanged(int,int)),
-			mCropTool, SLOT(updateHudWidgetPosition()));
-		QObject::connect(view->verticalScrollBar(), SIGNAL(rangeChanged(int,int)),
-			mCropTool, SLOT(updateHudWidgetPosition()));
-		*/
+			q, SIGNAL(done()));
 	}
 };
 
@@ -219,7 +203,7 @@ struct CropToolPrivate {
 CropTool::CropTool(RasterImageView* view)
 : AbstractRasterImageViewTool(view)
 , d(new CropToolPrivate) {
-	d->mCropTool = this;
+	d->q = this;
 	d->mCropHandleList << CH_Left << CH_Right << CH_Top << CH_Bottom << CH_TopLeft << CH_TopRight << CH_BottomLeft << CH_BottomRight;
 	d->mMovingHandle = CH_None;
 	const QRect imageRect = QRect(QPoint(0, 0), view->documentSize().toSize());
