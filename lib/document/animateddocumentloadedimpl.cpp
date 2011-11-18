@@ -31,82 +31,81 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct AnimatedDocumentLoadedImplPrivate {
-	QByteArray mRawData;
-	QBuffer mMovieBuffer;
-	QMovie mMovie;
+    QByteArray mRawData;
+    QBuffer mMovieBuffer;
+    QMovie mMovie;
 };
-
 
 AnimatedDocumentLoadedImpl::AnimatedDocumentLoadedImpl(Document* document, const QByteArray& rawData)
 : AbstractDocumentImpl(document)
-, d(new AnimatedDocumentLoadedImplPrivate) {
-	d->mRawData = rawData;
+, d(new AnimatedDocumentLoadedImplPrivate)
+{
+    d->mRawData = rawData;
 
-	connect(&d->mMovie, SIGNAL(frameChanged(int)), SLOT(slotFrameChanged(int)) );
+    connect(&d->mMovie, SIGNAL(frameChanged(int)), SLOT(slotFrameChanged(int)));
 
-	d->mMovieBuffer.setBuffer(&d->mRawData);
-	d->mMovieBuffer.open(QIODevice::ReadOnly);
-	d->mMovie.setDevice(&d->mMovieBuffer);
+    d->mMovieBuffer.setBuffer(&d->mRawData);
+    d->mMovieBuffer.open(QIODevice::ReadOnly);
+    d->mMovie.setDevice(&d->mMovieBuffer);
 }
 
-
-AnimatedDocumentLoadedImpl::~AnimatedDocumentLoadedImpl() {
-	delete d;
+AnimatedDocumentLoadedImpl::~AnimatedDocumentLoadedImpl()
+{
+    delete d;
 }
 
-
-void AnimatedDocumentLoadedImpl::init() {
-	emit isAnimatedUpdated();
-	if (!document()->image().isNull()) {
-		// We may reach this point without an image if the first frame got
-		// downsampled by LoadingDocumentImpl (unlikely for now because the gif
-		// io handler does not support the QImageIOHandler::ScaledSize option)
-		emit imageRectUpdated(document()->image().rect());
-		emit loaded();
-	}
+void AnimatedDocumentLoadedImpl::init()
+{
+    emit isAnimatedUpdated();
+    if (!document()->image().isNull()) {
+        // We may reach this point without an image if the first frame got
+        // downsampled by LoadingDocumentImpl (unlikely for now because the gif
+        // io handler does not support the QImageIOHandler::ScaledSize option)
+        emit imageRectUpdated(document()->image().rect());
+        emit loaded();
+    }
 }
 
-
-Document::LoadingState AnimatedDocumentLoadedImpl::loadingState() const {
-	return Document::Loaded;
+Document::LoadingState AnimatedDocumentLoadedImpl::loadingState() const
+{
+    return Document::Loaded;
 }
 
-
-QByteArray AnimatedDocumentLoadedImpl::rawData() const {
-	return d->mRawData;
+QByteArray AnimatedDocumentLoadedImpl::rawData() const
+{
+    return d->mRawData;
 }
 
-
-void AnimatedDocumentLoadedImpl::slotFrameChanged(int /*frameNumber*/) {
-	QImage image = d->mMovie.currentImage();
-	setDocumentImage(image);
-	emit imageRectUpdated(image.rect());
+void AnimatedDocumentLoadedImpl::slotFrameChanged(int /*frameNumber*/)
+{
+    QImage image = d->mMovie.currentImage();
+    setDocumentImage(image);
+    emit imageRectUpdated(image.rect());
 }
 
-
-bool AnimatedDocumentLoadedImpl::isAnimated() const {
-	return true;
+bool AnimatedDocumentLoadedImpl::isAnimated() const
+{
+    return true;
 }
 
-
-void AnimatedDocumentLoadedImpl::startAnimation() {
-	d->mMovie.start();
-	if (d->mMovie.state() == QMovie::NotRunning) {
-		// This is true with qt-copy as of 2008.08.23
-		kDebug() << "QMovie didn't start. This can happen in some cases when starting for the second time.";
-		kDebug() << "Trying to start again, it usually fixes the bug.";
-		d->mMovie.start();
-	}
+void AnimatedDocumentLoadedImpl::startAnimation()
+{
+    d->mMovie.start();
+    if (d->mMovie.state() == QMovie::NotRunning) {
+        // This is true with qt-copy as of 2008.08.23
+        kDebug() << "QMovie didn't start. This can happen in some cases when starting for the second time.";
+        kDebug() << "Trying to start again, it usually fixes the bug.";
+        d->mMovie.start();
+    }
 }
 
-
-void AnimatedDocumentLoadedImpl::stopAnimation() {
-	d->mMovie.stop();
+void AnimatedDocumentLoadedImpl::stopAnimation()
+{
+    d->mMovie.stop();
 }
-
 
 } // namespace

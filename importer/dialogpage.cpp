@@ -33,67 +33,65 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include <ui_dialogpage.h>
 
-
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct DialogPagePrivate : public Ui_DialogPage {
-	QVBoxLayout* mLayout;
-	QList<KPushButton*> mButtons;
-	QSignalMapper* mMapper;
-	QEventLoop* mEventLoop;
+    QVBoxLayout* mLayout;
+    QList<KPushButton*> mButtons;
+    QSignalMapper* mMapper;
+    QEventLoop* mEventLoop;
 };
-
 
 DialogPage::DialogPage(QWidget* parent)
 : QWidget(parent)
-, d(new DialogPagePrivate) {
-	d->setupUi(this);
-	d->mLayout = new QVBoxLayout(d->mButtonContainer);
-	d->mMapper = new QSignalMapper(this);
-	connect(d->mMapper, SIGNAL(mapped(int)), SLOT(slotMapped(int)));
+, d(new DialogPagePrivate)
+{
+    d->setupUi(this);
+    d->mLayout = new QVBoxLayout(d->mButtonContainer);
+    d->mMapper = new QSignalMapper(this);
+    connect(d->mMapper, SIGNAL(mapped(int)), SLOT(slotMapped(int)));
 }
 
-
-DialogPage::~DialogPage() {
-	delete d;
+DialogPage::~DialogPage()
+{
+    delete d;
 }
 
-
-void DialogPage::removeButtons() {
-	qDeleteAll(d->mButtons);
-	d->mButtons.clear();
+void DialogPage::removeButtons()
+{
+    qDeleteAll(d->mButtons);
+    d->mButtons.clear();
 }
 
-
-void DialogPage::setText(const QString& text) {
-	d->mLabel->setText(text);
+void DialogPage::setText(const QString& text)
+{
+    d->mLabel->setText(text);
 }
 
+int DialogPage::addButton(const KGuiItem& item)
+{
+    int id = d->mButtons.size();
+    KPushButton* button = new KPushButton(item);
+    button->setFixedHeight(button->sizeHint().height() * 2);
 
-int DialogPage::addButton(const KGuiItem& item) {
-	int id = d->mButtons.size();
-	KPushButton* button = new KPushButton(item);
-	button->setFixedHeight(button->sizeHint().height() * 2);
-
-	connect(button, SIGNAL(clicked()), d->mMapper, SLOT(map()));
-	d->mLayout->addWidget(button);
-	d->mMapper->setMapping(button, id);
-	d->mButtons << button;
-	return id;
+    connect(button, SIGNAL(clicked()), d->mMapper, SLOT(map()));
+    d->mLayout->addWidget(button);
+    d->mMapper->setMapping(button, id);
+    d->mButtons << button;
+    return id;
 }
 
-
-int DialogPage::exec() {
-	QEventLoop loop;
-	d->mEventLoop = &loop;
-	return loop.exec();
+int DialogPage::exec()
+{
+    QEventLoop loop;
+    d->mEventLoop = &loop;
+    return loop.exec();
 }
 
-
-void DialogPage::slotMapped(int value) {
-	d->mEventLoop->exit(value);
+void DialogPage::slotMapped(int value)
+{
+    d->mEventLoop->exit(value);
 }
-
 
 } // namespace

@@ -25,27 +25,30 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <ui_progresspage.h>
 #include "importer.h"
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 struct ProgressPagePrivate : public Ui_ProgressPage {
-	ProgressPage* q;
-	Importer* mImporter;
+    ProgressPage* q;
+    Importer* mImporter;
 };
 
 ProgressPage::ProgressPage(Importer* importer)
-: d(new ProgressPagePrivate) {
-	d->q = this;
-	d->mImporter = importer;
-	d->setupUi(this);
+: d(new ProgressPagePrivate)
+{
+    d->q = this;
+    d->mImporter = importer;
+    d->setupUi(this);
 
-	connect(d->mImporter, SIGNAL(progressChanged(int)),
-		d->mProgressBar, SLOT(setValue(int)));
-	connect(d->mImporter, SIGNAL(maximumChanged(int)),
-		d->mProgressBar, SLOT(setMaximum(int)));
+    connect(d->mImporter, SIGNAL(progressChanged(int)),
+            d->mProgressBar, SLOT(setValue(int)));
+    connect(d->mImporter, SIGNAL(maximumChanged(int)),
+            d->mProgressBar, SLOT(setMaximum(int)));
 }
 
-ProgressPage::~ProgressPage() {
-	delete d;
+ProgressPage::~ProgressPage()
+{
+    delete d;
 }
 
 } // namespace

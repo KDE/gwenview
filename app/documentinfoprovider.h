@@ -28,31 +28,32 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include <lib/thumbnailview/abstractdocumentinfoprovider.h>
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 class SortedDirModel;
 
 class DocumentInfoProviderPrivate;
-class DocumentInfoProvider : public AbstractDocumentInfoProvider {
-	Q_OBJECT
+class DocumentInfoProvider : public AbstractDocumentInfoProvider
+{
+    Q_OBJECT
 public:
-	DocumentInfoProvider(SortedDirModel* model);
-	~DocumentInfoProvider();
+    DocumentInfoProvider(SortedDirModel* model);
+    ~DocumentInfoProvider();
 
-	virtual bool isBusy(const KUrl& url);
+    virtual bool isBusy(const KUrl& url);
 
-	virtual bool isModified(const KUrl& url);
+    virtual bool isModified(const KUrl& url);
 
-	virtual void thumbnailForDocument(const KUrl& url, ThumbnailGroup::Enum group, QPixmap* outPix, QSize* outFullSize) const;
+    virtual void thumbnailForDocument(const KUrl& url, ThumbnailGroup::Enum group, QPixmap* outPix, QSize* outFullSize) const;
 
 private Q_SLOTS:
-	void emitBusyStateChanged(const KUrl&, bool);
-	void emitDocumentChanged(const KUrl&);
+    void emitBusyStateChanged(const KUrl&, bool);
+    void emitDocumentChanged(const KUrl&);
 
 private:
-	DocumentInfoProviderPrivate* const d;
+    DocumentInfoProviderPrivate* const d;
 };
-
 
 } // namespace
 

@@ -34,149 +34,150 @@ class QDragMoveEvent;
 class QDropEvent;
 class QPixmap;
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 class AbstractDocumentInfoProvider;
 class AbstractThumbnailViewHelper;
 
 struct ThumbnailViewPrivate;
-class GWENVIEWLIB_EXPORT ThumbnailView : public QListView {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT ThumbnailView : public QListView
+{
+    Q_OBJECT
 public:
-	enum {
-		MinThumbnailSize = 48,
-		MaxThumbnailSize = 256
-	};
-	ThumbnailView(QWidget* parent);
-	~ThumbnailView();
+    enum {
+        MinThumbnailSize = 48,
+        MaxThumbnailSize = 256
+    };
+    ThumbnailView(QWidget* parent);
+    ~ThumbnailView();
 
-	void setThumbnailViewHelper(AbstractThumbnailViewHelper* helper);
+    void setThumbnailViewHelper(AbstractThumbnailViewHelper* helper);
 
-	AbstractThumbnailViewHelper* thumbnailViewHelper() const;
+    AbstractThumbnailViewHelper* thumbnailViewHelper() const;
 
-	void setDocumentInfoProvider(AbstractDocumentInfoProvider* provider);
+    void setDocumentInfoProvider(AbstractDocumentInfoProvider* provider);
 
-	AbstractDocumentInfoProvider* documentInfoProvider() const;
+    AbstractDocumentInfoProvider* documentInfoProvider() const;
 
-	/**
-	 * Returns the thumbnail size.
-	 */
-	int thumbnailSize() const;
+    /**
+     * Returns the thumbnail size.
+     */
+    int thumbnailSize() const;
 
-	QPixmap thumbnailForIndex(const QModelIndex&, QSize* fullSize = 0);
+    QPixmap thumbnailForIndex(const QModelIndex&, QSize* fullSize = 0);
 
-	/**
-	 * Returns true if the document pointed by the index has been modified
-	 * inside Gwenview.
-	 */
-	bool isModified(const QModelIndex&) const;
+    /**
+     * Returns true if the document pointed by the index has been modified
+     * inside Gwenview.
+     */
+    bool isModified(const QModelIndex&) const;
 
-	/**
-	 * Returns true if the document pointed by the index is currently busy
-	 * (loading, saving, rotating...)
-	 */
-	bool isBusy(const QModelIndex& index) const;
+    /**
+     * Returns true if the document pointed by the index is currently busy
+     * (loading, saving, rotating...)
+     */
+    bool isBusy(const QModelIndex& index) const;
 
-	virtual void setModel(QAbstractItemModel* model);
+    virtual void setModel(QAbstractItemModel* model);
 
-	/**
-	 * Publish this method so that delegates can call it.
-	 */
-	using QListView::scheduleDelayedItemsLayout;
+    /**
+     * Publish this method so that delegates can call it.
+     */
+    using QListView::scheduleDelayedItemsLayout;
 
-	/**
-	 * Returns the current pixmap to paint when drawing a busy index.
-	 */
-	QPixmap busySequenceCurrentPixmap() const;
+    /**
+     * Returns the current pixmap to paint when drawing a busy index.
+     */
+    QPixmap busySequenceCurrentPixmap() const;
 
-	void reloadThumbnail(const QModelIndex&);
+    void reloadThumbnail(const QModelIndex&);
 
 Q_SIGNALS:
-	/**
-	 * It seems we can't use the 'activated()' signal for now because it does
-	 * not know about KDE single vs doubleclick settings. The indexActivated()
-	 * signal replaces it.
-	 */
-	void indexActivated(const QModelIndex&);
-	void urlListDropped(const KUrl::List& lst, const KUrl& destination);
+    /**
+     * It seems we can't use the 'activated()' signal for now because it does
+     * not know about KDE single vs doubleclick settings. The indexActivated()
+     * signal replaces it.
+     */
+    void indexActivated(const QModelIndex&);
+    void urlListDropped(const KUrl::List& lst, const KUrl& destination);
 
-	void thumbnailSizeChanged(int);
+    void thumbnailSizeChanged(int);
 
-	/**
-	 * Emitted whenever selectionChanged() is called.
-	 * This signal is suffixed with "Signal" because
-	 * QAbstractItemView::selectionChanged() is a slot.
-	 */
-	void selectionChangedSignal(const QItemSelection&, const QItemSelection&);
+    /**
+     * Emitted whenever selectionChanged() is called.
+     * This signal is suffixed with "Signal" because
+     * QAbstractItemView::selectionChanged() is a slot.
+     */
+    void selectionChangedSignal(const QItemSelection&, const QItemSelection&);
 
-	/**
-	 * Forward some signals from model, so that the delegate can use them
-	 */
-	void rowsRemovedSignal(const QModelIndex& parent, int start, int end);
+    /**
+     * Forward some signals from model, so that the delegate can use them
+     */
+    void rowsRemovedSignal(const QModelIndex& parent, int start, int end);
 
-	void rowsInsertedSignal(const QModelIndex& parent, int start, int end);
-
+    void rowsInsertedSignal(const QModelIndex& parent, int start, int end);
 
 public Q_SLOTS:
-	/**
-	 * Sets the thumbnail size, in pixels.
-	 */
-	void setThumbnailSize(int pixel);
+    /**
+     * Sets the thumbnail size, in pixels.
+     */
+    void setThumbnailSize(int pixel);
 
-	void scrollToSelectedIndex();
+    void scrollToSelectedIndex();
 
 protected:
-	virtual void dragEnterEvent(QDragEnterEvent*);
+    virtual void dragEnterEvent(QDragEnterEvent*);
 
-	virtual void dragMoveEvent(QDragMoveEvent*);
+    virtual void dragMoveEvent(QDragMoveEvent*);
 
-	virtual void dropEvent(QDropEvent*);
+    virtual void dropEvent(QDropEvent*);
 
-	virtual void keyPressEvent(QKeyEvent*);
+    virtual void keyPressEvent(QKeyEvent*);
 
-	virtual void resizeEvent(QResizeEvent*);
+    virtual void resizeEvent(QResizeEvent*);
 
-	virtual void scrollContentsBy(int dx, int dy);
+    virtual void scrollContentsBy(int dx, int dy);
 
-	virtual void showEvent(QShowEvent*);
+    virtual void showEvent(QShowEvent*);
 
-	virtual void wheelEvent(QWheelEvent*);
+    virtual void wheelEvent(QWheelEvent*);
 
-	virtual void startDrag(Qt::DropActions);
+    virtual void startDrag(Qt::DropActions);
 
 protected Q_SLOTS:
-	virtual void rowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
-	virtual void rowsInserted(const QModelIndex& parent, int start, int end);
-	virtual void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
-	virtual void dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
+    virtual void rowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
+    virtual void rowsInserted(const QModelIndex& parent, int start, int end);
+    virtual void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
+    virtual void dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
 
 private Q_SLOTS:
-	void showContextMenu();
-	void emitIndexActivatedIfNoModifiers(const QModelIndex&);
-	void setThumbnail(const KFileItem&, const QPixmap&, const QSize&);
-	void setBrokenThumbnail(const KFileItem&);
+    void showContextMenu();
+    void emitIndexActivatedIfNoModifiers(const QModelIndex&);
+    void setThumbnail(const KFileItem&, const QPixmap&, const QSize&);
+    void setBrokenThumbnail(const KFileItem&);
 
-	/**
-	 * Generate thumbnail for @a index.
-	 */
-	void updateThumbnail(const QModelIndex& index);
+    /**
+     * Generate thumbnail for @a index.
+     */
+    void updateThumbnail(const QModelIndex& index);
 
-	/**
-	 * Tells the view the busy state of the document pointed by the index has changed.
-	 */
-	void updateThumbnailBusyState(const QModelIndex& index, bool);
+    /**
+     * Tells the view the busy state of the document pointed by the index has changed.
+     */
+    void updateThumbnailBusyState(const QModelIndex& index, bool);
 
-	/*
-	 * Cause a repaint of all busy indexes
-	 */
-	void updateBusyIndexes();
+    /*
+     * Cause a repaint of all busy indexes
+     */
+    void updateBusyIndexes();
 
-	void generateThumbnailsForVisibleItems();
-	void smoothNextThumbnail();
+    void generateThumbnailsForVisibleItems();
+    void smoothNextThumbnail();
 
 private:
-	friend struct ThumbnailViewPrivate;
-	ThumbnailViewPrivate * const d;
+    friend struct ThumbnailViewPrivate;
+    ThumbnailViewPrivate * const d;
 };
 
 } // namespace

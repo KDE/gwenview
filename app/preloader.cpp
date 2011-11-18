@@ -29,7 +29,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include <lib/document/documentfactory.h>
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 #undef ENABLE_LOG
 #undef LOG
@@ -41,64 +42,63 @@ namespace Gwenview {
 #endif
 
 struct PreloaderPrivate {
-	Document::Ptr mDocument;
-	QSize mSize;
+    Document::Ptr mDocument;
+    QSize mSize;
 };
-
 
 Preloader::Preloader(QObject* parent)
 : QObject(parent)
-, d(new PreloaderPrivate) {
+, d(new PreloaderPrivate)
+{
 }
 
-
-Preloader::~Preloader() {
-	delete d;
+Preloader::~Preloader()
+{
+    delete d;
 }
 
+void Preloader::preload(const KUrl& url, const QSize& size)
+{
+    LOG("url=" << url);
+    if (d->mDocument) {
+        disconnect(d->mDocument.data(), 0, this, 0);
+    }
 
-void Preloader::preload(const KUrl& url, const QSize& size) {
-	LOG("url=" << url);
-	if (d->mDocument) {
-		disconnect(d->mDocument.data(), 0, this, 0);
-	}
+    d->mDocument = DocumentFactory::instance()->load(url);
+    d->mSize = size;
+    connect(d->mDocument.data(), SIGNAL(metaInfoUpdated()),
+            SLOT(doPreload()));
 
-	d->mDocument = DocumentFactory::instance()->load(url);
-	d->mSize = size;
-	connect(d->mDocument.data(), SIGNAL(metaInfoUpdated()),
-		SLOT(doPreload()) );
-
-	if (d->mDocument->size().isValid()) {
-		LOG("size is already available");
-		doPreload();
-	}
+    if (d->mDocument->size().isValid()) {
+        LOG("size is already available");
+        doPreload();
+    }
 }
 
+void Preloader::doPreload()
+{
+    if (!d->mDocument->size().isValid()) {
+        LOG("size not available yet");
+        return;
+    }
 
-void Preloader::doPreload() {
-	if (!d->mDocument->size().isValid()) {
-		LOG("size not available yet");
-		return;
-	}
+    qreal zoom = qMin(
+                     d->mSize.width() / qreal(d->mDocument->width()),
+                     d->mSize.height() / qreal(d->mDocument->height())
+                 );
 
-	qreal zoom = qMin(
-		d->mSize.width() / qreal(d->mDocument->width()),
-		d->mSize.height() / qreal(d->mDocument->height())
-		);
+    if (zoom < Document::maxDownSampledZoom()) {
+        LOG("preloading down sampled, zoom=" << zoom);
+        d->mDocument->prepareDownSampledImageForZoom(zoom);
+    } else {
+        LOG("preloading full image");
+        d->mDocument->startLoadingFullImage();
+    }
 
-	if (zoom < Document::maxDownSampledZoom()) {
-		LOG("preloading down sampled, zoom=" << zoom);
-		d->mDocument->prepareDownSampledImageForZoom(zoom);
-	} else {
-		LOG("preloading full image");
-		d->mDocument->startLoadingFullImage();
-	}
-
-	// Forget about the document. Keeping a reference to it would prevent it
-	// from being garbage collected.
-	disconnect(d->mDocument.data(), 0, this, 0);
-	d->mDocument = 0;
+    // Forget about the document. Keeping a reference to it would prevent it
+    // from being garbage collected.
+    disconnect(d->mDocument.data(), 0, this, 0);
+    d->mDocument = 0;
 }
-
 
 } // namespace

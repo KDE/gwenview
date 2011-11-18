@@ -28,87 +28,87 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include <ui_resizeimagewidget.h>
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct ResizeImageDialogPrivate : public Ui_ResizeImageWidget {
-	bool mUpdateFromRatio;
-	QSize mOriginalSize;
+    bool mUpdateFromRatio;
+    QSize mOriginalSize;
 };
-
 
 ResizeImageDialog::ResizeImageDialog(QWidget* parent)
 : KDialog(parent)
-, d(new ResizeImageDialogPrivate) {
-	d->mUpdateFromRatio = false;
+, d(new ResizeImageDialogPrivate)
+{
+    d->mUpdateFromRatio = false;
 
-	QWidget* content = new QWidget(this);
-	d->setupUi(content);
-	content->layout()->setMargin(0);
-	setMainWidget(content);
-	showButtonSeparator(true);
-	setButtonGuiItem(Ok, KGuiItem(i18n("Resize"), "transform-scale"));
-	setWindowTitle(content->windowTitle());
-	d->mWidthSpinBox->setFocus();
+    QWidget* content = new QWidget(this);
+    d->setupUi(content);
+    content->layout()->setMargin(0);
+    setMainWidget(content);
+    showButtonSeparator(true);
+    setButtonGuiItem(Ok, KGuiItem(i18n("Resize"), "transform-scale"));
+    setWindowTitle(content->windowTitle());
+    d->mWidthSpinBox->setFocus();
 
-	connect(d->mWidthSpinBox, SIGNAL(valueChanged(int)), SLOT(slotWidthChanged(int)));
-	connect(d->mHeightSpinBox, SIGNAL(valueChanged(int)), SLOT(slotHeightChanged(int)));
-	connect(d->mKeepAspectCheckBox, SIGNAL(toggled(bool)), SLOT(slotKeepAspectChanged(bool)));
+    connect(d->mWidthSpinBox, SIGNAL(valueChanged(int)), SLOT(slotWidthChanged(int)));
+    connect(d->mHeightSpinBox, SIGNAL(valueChanged(int)), SLOT(slotHeightChanged(int)));
+    connect(d->mKeepAspectCheckBox, SIGNAL(toggled(bool)), SLOT(slotKeepAspectChanged(bool)));
 }
 
-
-ResizeImageDialog::~ResizeImageDialog() {
-	delete d;
+ResizeImageDialog::~ResizeImageDialog()
+{
+    delete d;
 }
 
-
-void ResizeImageDialog::setOriginalSize(const QSize& size) {
-	d->mOriginalSize = size;
-	d->mOriginalWidthLabel->setText(QString::number(size.width()));
-	d->mOriginalHeightLabel->setText(QString::number(size.height()));
-	d->mWidthSpinBox->setValue(size.width());
-	d->mHeightSpinBox->setValue(size.height());
+void ResizeImageDialog::setOriginalSize(const QSize& size)
+{
+    d->mOriginalSize = size;
+    d->mOriginalWidthLabel->setText(QString::number(size.width()));
+    d->mOriginalHeightLabel->setText(QString::number(size.height()));
+    d->mWidthSpinBox->setValue(size.width());
+    d->mHeightSpinBox->setValue(size.height());
 }
 
-
-QSize ResizeImageDialog::size() const {
-	return QSize(
-		d->mWidthSpinBox->value(),
-		d->mHeightSpinBox->value()
-	);
+QSize ResizeImageDialog::size() const
+{
+    return QSize(
+               d->mWidthSpinBox->value(),
+               d->mHeightSpinBox->value()
+           );
 }
 
-
-void ResizeImageDialog::slotWidthChanged(int width) {
-	if (!d->mKeepAspectCheckBox->isChecked()) {
-		return;
-	}
-	if (d->mUpdateFromRatio) {
-		return;
-	}
-	d->mUpdateFromRatio = true;
-	d->mHeightSpinBox->setValue(d->mOriginalSize.height() * width / d->mOriginalSize.width());
-	d->mUpdateFromRatio = false;
+void ResizeImageDialog::slotWidthChanged(int width)
+{
+    if (!d->mKeepAspectCheckBox->isChecked()) {
+        return;
+    }
+    if (d->mUpdateFromRatio) {
+        return;
+    }
+    d->mUpdateFromRatio = true;
+    d->mHeightSpinBox->setValue(d->mOriginalSize.height() * width / d->mOriginalSize.width());
+    d->mUpdateFromRatio = false;
 }
 
-
-void ResizeImageDialog::slotHeightChanged(int height) {
-	if (!d->mKeepAspectCheckBox->isChecked()) {
-		return;
-	}
-	if (d->mUpdateFromRatio) {
-		return;
-	}
-	d->mUpdateFromRatio = true;
-	d->mWidthSpinBox->setValue(d->mOriginalSize.width() * height / d->mOriginalSize.height());
-	d->mUpdateFromRatio = false;
+void ResizeImageDialog::slotHeightChanged(int height)
+{
+    if (!d->mKeepAspectCheckBox->isChecked()) {
+        return;
+    }
+    if (d->mUpdateFromRatio) {
+        return;
+    }
+    d->mUpdateFromRatio = true;
+    d->mWidthSpinBox->setValue(d->mOriginalSize.width() * height / d->mOriginalSize.height());
+    d->mUpdateFromRatio = false;
 }
 
-
-void ResizeImageDialog::slotKeepAspectChanged(bool value) {
-	if (value) {
-		slotWidthChanged(d->mWidthSpinBox->value());
-	}
+void ResizeImageDialog::slotKeepAspectChanged(bool value)
+{
+    if (value) {
+        slotWidthChanged(d->mWidthSpinBox->value());
+    }
 }
 
 } // namespace

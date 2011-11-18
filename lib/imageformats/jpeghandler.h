@@ -28,32 +28,32 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct JpegHandlerPrivate;
 /**
  * A Jpeg handler which is more aggressive when loading down sampled images.
  */
-class JpegHandler : public QImageIOHandler {
+class JpegHandler : public QImageIOHandler
+{
 public:
-	JpegHandler();
-	~JpegHandler();
+    JpegHandler();
+    ~JpegHandler();
 
-	bool canRead() const;
-	bool read(QImage *image);
-	bool write(const QImage& image);
+    bool canRead() const;
+    bool read(QImage *image);
+    bool write(const QImage& image);
 
-	static bool canRead(QIODevice *device);
+    static bool canRead(QIODevice *device);
 
-	QVariant option(ImageOption option) const;
-	void setOption(ImageOption option, const QVariant &value);
-	bool supportsOption(ImageOption option) const;
+    QVariant option(ImageOption option) const;
+    void setOption(ImageOption option, const QVariant &value);
+    bool supportsOption(ImageOption option) const;
 
 private:
-	JpegHandlerPrivate* const d;
+    JpegHandlerPrivate* const d;
 };
-
 
 } // namespace
 

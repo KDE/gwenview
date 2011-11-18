@@ -32,40 +32,38 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 class QImage;
 
-namespace Gwenview {
-
-
-
+namespace Gwenview
+{
 
 /**
  * An interface which can be returned by some implementations of
  * AbstractDocumentImpl if they support edition.
  */
-class GWENVIEWLIB_EXPORT AbstractDocumentEditor {
+class GWENVIEWLIB_EXPORT AbstractDocumentEditor
+{
 public:
-	virtual ~AbstractDocumentEditor() {}
+    virtual ~AbstractDocumentEditor() {}
 
-	/**
-	 * Replaces the current image with image.
-	 * Calling this while the document is loaded won't do anything.
-	 *
-	 * This method should only be called from a subclass of
-	 * AbstractImageOperation and applied through Document::undoStack().
-	 */
-	virtual void setImage(const QImage&) = 0;
+    /**
+     * Replaces the current image with image.
+     * Calling this while the document is loaded won't do anything.
+     *
+     * This method should only be called from a subclass of
+     * AbstractImageOperation and applied through Document::undoStack().
+     */
+    virtual void setImage(const QImage&) = 0;
 
-	/**
-	 * Apply a transformation to the document image.
-	 *
-	 * Transformations are handled by the Document class because it can be
-	 * done in a lossless way by some Document implementations.
-	 *
-	 * This method should only be called from a subclass of
-	 * AbstractImageOperation and applied through Document::undoStack().
-	 */
-	virtual void applyTransformation(Orientation) = 0;
+    /**
+     * Apply a transformation to the document image.
+     *
+     * Transformations are handled by the Document class because it can be
+     * done in a lossless way by some Document implementations.
+     *
+     * This method should only be called from a subclass of
+     * AbstractImageOperation and applied through Document::undoStack().
+     */
+    virtual void applyTransformation(Orientation) = 0;
 };
-
 
 } // namespace
 

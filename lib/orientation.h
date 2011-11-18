@@ -21,14 +21,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifndef ORIENTATION_H
 #define ORIENTATION_H
 
-
-namespace Gwenview {
+namespace Gwenview
+{
 
 /* Explanation extracted from http://sylvana.net/jpegcrop/exif_orientation.html
 
    For convenience, here is what the letter F would look like if it were tagged
 correctly and displayed by a program that ignores the orientation tag (thus
-showing the stored image): 
+showing the stored image):
 
   1        2       3      4         5            6           7          8
 
@@ -41,18 +41,17 @@ showing the stored image):
 */
 
 enum Orientation {
-	NOT_AVAILABLE=0,
-	NORMAL=1,
-	HFLIP=2,
-	ROT_180=3,
-	VFLIP=4,
-	TRANSPOSE=5,
-	ROT_90=6,
-	TRANSVERSE=7,
-	ROT_270=8
+    NOT_AVAILABLE = 0,
+    NORMAL = 1,
+    HFLIP = 2,
+    ROT_180 = 3,
+    VFLIP = 4,
+    TRANSPOSE = 5,
+    ROT_90 = 6,
+    TRANSVERSE = 7,
+    ROT_270 = 8
 };
 
 }
-
 
 #endif

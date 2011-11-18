@@ -34,40 +34,40 @@ class KAction;
 class KActionCollection;
 class KXMLGUIClient;
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct FileOpsContextManagerItemPrivate;
-class FileOpsContextManagerItem : public AbstractContextManagerItem {
-	Q_OBJECT
+class FileOpsContextManagerItem : public AbstractContextManagerItem
+{
+    Q_OBJECT
 public:
-	FileOpsContextManagerItem(Gwenview::ContextManager* manager, QListView* thumbnailView, KActionCollection* actionCollection, KXMLGUIClient* client);
-	~FileOpsContextManagerItem();
+    FileOpsContextManagerItem(Gwenview::ContextManager* manager, QListView* thumbnailView, KActionCollection* actionCollection, KXMLGUIClient* client);
+    ~FileOpsContextManagerItem();
 
 private Q_SLOTS:
-	void updateActions();
-	void updatePasteAction();
-	void updateSideBarContent();
+    void updateActions();
+    void updatePasteAction();
+    void updateSideBarContent();
 
-	void cut();
-	void copy();
-	void paste();
-	void rename();
-	void copyTo();
-	void moveTo();
-	void linkTo();
-	void trash();
-	void del();
-	void restore();
-	void showProperties();
-	void createFolder();
-	void populateOpenMenu();
-	void openWith(QAction* action);
+    void cut();
+    void copy();
+    void paste();
+    void rename();
+    void copyTo();
+    void moveTo();
+    void linkTo();
+    void trash();
+    void del();
+    void restore();
+    void showProperties();
+    void createFolder();
+    void populateOpenMenu();
+    void openWith(QAction* action);
 
 private:
-	FileOpsContextManagerItemPrivate* const d;
+    FileOpsContextManagerItemPrivate* const d;
 };
-
 
 } // namespace
 

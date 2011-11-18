@@ -40,173 +40,175 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/document/documentfactory.h>
 #include <lib/thumbnailloadjob.h>
 
-namespace Gwenview {
+namespace Gwenview
+{
 
-namespace FileOperations {
+namespace FileOperations
+{
 
-static void copyMoveOrLink(KonqOperations::Operation operation, const KUrl::List& urlList, QWidget* parent) {
-	Q_ASSERT(urlList.count() > 0);
+static void copyMoveOrLink(KonqOperations::Operation operation, const KUrl::List& urlList, QWidget* parent)
+{
+    Q_ASSERT(urlList.count() > 0);
 
-	KFileDialog dialog(
-		KUrl("kfiledialog:///<copyMoveOrLink>"),
-		QString() /* filter */,
-		parent);
-	dialog.setOperationMode(KFileDialog::Saving);
-	switch (operation) {
-	case KonqOperations::COPY:
-		dialog.setCaption(i18nc("@title:window", "Copy To"));
-		dialog.okButton()->setText(i18nc("@action:button", "Copy"));
-		break;
-	case KonqOperations::MOVE:
-		dialog.setCaption(i18nc("@title:window", "Move To"));
-		dialog.okButton()->setText(i18nc("@action:button", "Move"));
-		break;
-	case KonqOperations::LINK:
-		dialog.setCaption(i18nc("@title:window", "Link To"));
-		dialog.okButton()->setText(i18nc("@action:button", "Link"));
-		break;
-	default:
-		Q_ASSERT(0);
-	}
-	if (urlList.count() == 1) {
-		dialog.setMode(KFile::File);
-		dialog.setSelection(urlList[0].fileName());
-	} else {
-		dialog.setMode(KFile::ExistingOnly | KFile::Directory);
-	}
-	if (!dialog.exec()) {
-		return;
-	}
+    KFileDialog dialog(
+        KUrl("kfiledialog:///<copyMoveOrLink>"),
+        QString() /* filter */,
+        parent);
+    dialog.setOperationMode(KFileDialog::Saving);
+    switch (operation) {
+    case KonqOperations::COPY:
+        dialog.setCaption(i18nc("@title:window", "Copy To"));
+        dialog.okButton()->setText(i18nc("@action:button", "Copy"));
+        break;
+    case KonqOperations::MOVE:
+        dialog.setCaption(i18nc("@title:window", "Move To"));
+        dialog.okButton()->setText(i18nc("@action:button", "Move"));
+        break;
+    case KonqOperations::LINK:
+        dialog.setCaption(i18nc("@title:window", "Link To"));
+        dialog.okButton()->setText(i18nc("@action:button", "Link"));
+        break;
+    default:
+        Q_ASSERT(0);
+    }
+    if (urlList.count() == 1) {
+        dialog.setMode(KFile::File);
+        dialog.setSelection(urlList[0].fileName());
+    } else {
+        dialog.setMode(KFile::ExistingOnly | KFile::Directory);
+    }
+    if (!dialog.exec()) {
+        return;
+    }
 
-	KUrl destUrl = dialog.selectedUrl();
-	KonqOperations::copy(parent, operation, urlList, destUrl);
+    KUrl destUrl = dialog.selectedUrl();
+    KonqOperations::copy(parent, operation, urlList, destUrl);
 }
 
+static void delOrTrash(KonqOperations::Operation operation, const KUrl::List& urlList, QWidget* parent)
+{
+    Q_ASSERT(urlList.count() > 0);
 
-static void delOrTrash(KonqOperations::Operation operation, const KUrl::List& urlList, QWidget* parent) {
-	Q_ASSERT(urlList.count() > 0);
+    if (!KonqOperations::askDeleteConfirmation(urlList, operation, KonqOperations::DEFAULT_CONFIRMATION, parent)) {
+        return;
+    }
 
-	if (!KonqOperations::askDeleteConfirmation(urlList, operation, KonqOperations::DEFAULT_CONFIRMATION, parent)) {
-		return;
-	}
+    KIO::Job* job = 0;
+    // KonqOperations::delOrTrash() handles the confirmation and does not provide
+    // a way to know if the deletion has been accepted.
+    // We need to know about the confirmation so that DocumentFactory can forget
+    // about the deleted urls. That's why we can't use KonqOperations::delOrTrash()
+    switch (operation) {
+    case KonqOperations::TRASH:
+        job = KIO::trash(urlList);
+        break;
 
-	KIO::Job* job = 0;
-	// KonqOperations::delOrTrash() handles the confirmation and does not provide
-	// a way to know if the deletion has been accepted.
-	// We need to know about the confirmation so that DocumentFactory can forget
-	// about the deleted urls. That's why we can't use KonqOperations::delOrTrash()
-	switch (operation) {
-	case KonqOperations::TRASH:
-		job = KIO::trash(urlList);
-		break;
+    case KonqOperations::DEL:
+        job = KIO::del(urlList);
+        break;
 
-	case KonqOperations::DEL:
-		job = KIO::del(urlList);
-		break;
+    default:
+        kWarning() << "Unknown operation" << operation;
+        return;
+    }
+    Q_ASSERT(job);
+    job->ui()->setWindow(parent);
 
-	default:
-		kWarning() << "Unknown operation" << operation;
-		return;
-	}
-	Q_ASSERT(job);
-	job->ui()->setWindow(parent);
-
-	Q_FOREACH(const KUrl& url, urlList) {
-		DocumentFactory::instance()->forget(url);
-	}
+    Q_FOREACH(const KUrl & url, urlList) {
+        DocumentFactory::instance()->forget(url);
+    }
 }
 
-
-void copyTo(const KUrl::List& urlList, QWidget* parent) {
-	copyMoveOrLink(KonqOperations::COPY, urlList, parent);
+void copyTo(const KUrl::List& urlList, QWidget* parent)
+{
+    copyMoveOrLink(KonqOperations::COPY, urlList, parent);
 }
 
-
-void moveTo(const KUrl::List& urlList, QWidget* parent) {
-	copyMoveOrLink(KonqOperations::MOVE, urlList, parent);
+void moveTo(const KUrl::List& urlList, QWidget* parent)
+{
+    copyMoveOrLink(KonqOperations::MOVE, urlList, parent);
 }
 
-
-void linkTo(const KUrl::List& urlList, QWidget* parent) {
-	copyMoveOrLink(KonqOperations::LINK, urlList, parent);
+void linkTo(const KUrl::List& urlList, QWidget* parent)
+{
+    copyMoveOrLink(KonqOperations::LINK, urlList, parent);
 }
 
-
-void trash(const KUrl::List& urlList, QWidget* parent) {
-	delOrTrash(KonqOperations::TRASH, urlList, parent);
+void trash(const KUrl::List& urlList, QWidget* parent)
+{
+    delOrTrash(KonqOperations::TRASH, urlList, parent);
 }
 
-
-void del(const KUrl::List& urlList, QWidget* parent) {
-	delOrTrash(KonqOperations::DEL, urlList, parent);
+void del(const KUrl::List& urlList, QWidget* parent)
+{
+    delOrTrash(KonqOperations::DEL, urlList, parent);
 }
 
+void showMenuForDroppedUrls(QWidget* parent, const KUrl::List& urlList, const KUrl& destUrl)
+{
+    if (urlList.isEmpty()) {
+        kWarning() << "urlList is empty!";
+        return;
+    }
 
-void showMenuForDroppedUrls(QWidget* parent, const KUrl::List& urlList, const KUrl& destUrl) {
-	if (urlList.isEmpty()) {
-		kWarning() << "urlList is empty!";
-		return;
-	}
+    if (!destUrl.isValid()) {
+        kWarning() << "destUrl is not valid!";
+        return;
+    }
 
-	if (!destUrl.isValid()) {
-		kWarning() << "destUrl is not valid!";
-		return;
-	}
+    KMenu menu(parent);
+    QAction* moveAction = menu.addAction(
+                              KIcon("go-jump"),
+                              i18n("Move Here"));
+    QAction* copyAction = menu.addAction(
+                              KIcon("edit-copy"),
+                              i18n("Copy Here"));
+    QAction* linkAction = menu.addAction(
+                              KIcon("edit-link"),
+                              i18n("Link Here"));
+    menu.addSeparator();
+    menu.addAction(
+        KIcon("process-stop"),
+        i18n("Cancel"));
 
-	KMenu menu(parent);
-	QAction* moveAction = menu.addAction(
-		KIcon("go-jump"),
-		i18n("Move Here"));
-	QAction* copyAction = menu.addAction(
-		KIcon("edit-copy"),
-		i18n("Copy Here"));
-	QAction* linkAction = menu.addAction(
-		KIcon("edit-link"),
-		i18n("Link Here"));
-	menu.addSeparator();
-	menu.addAction(
-		KIcon("process-stop"),
-		i18n("Cancel"));
+    QAction* action = menu.exec(QCursor::pos());
 
-	QAction* action = menu.exec(QCursor::pos());
-
-	KIO::Job* job = 0;
-	if (action == moveAction) {
-		job = KIO::move(urlList, destUrl);
-	} else if (action == copyAction) {
-		job = KIO::copy(urlList, destUrl);
-	} else if (action == linkAction) {
-		job = KIO::link(urlList, destUrl);
-	} else {
-		return;
-	}
-	Q_ASSERT(job);
-	job->ui()->setWindow(parent);
+    KIO::Job* job = 0;
+    if (action == moveAction) {
+        job = KIO::move(urlList, destUrl);
+    } else if (action == copyAction) {
+        job = KIO::copy(urlList, destUrl);
+    } else if (action == linkAction) {
+        job = KIO::link(urlList, destUrl);
+    } else {
+        return;
+    }
+    Q_ASSERT(job);
+    job->ui()->setWindow(parent);
 }
 
+void rename(const KUrl& oldUrl, QWidget* parent)
+{
+    QString name = KInputDialog::getText(
+                       i18nc("@title:window", "Rename") /* caption */,
+                       i18n("Rename <filename>%1</filename> to:", oldUrl.fileName()) /* label */,
+                       oldUrl.fileName() /* value */,
+                       0 /* ok */,
+                       parent
+                   );
+    if (name.isEmpty() || name == oldUrl.fileName()) {
+        return;
+    }
 
-void rename(const KUrl& oldUrl, QWidget* parent) {
-	QString name = KInputDialog::getText(
-		i18nc("@title:window", "Rename") /* caption */,
-		i18n("Rename <filename>%1</filename> to:", oldUrl.fileName()) /* label */,
-		oldUrl.fileName() /* value */,
-		0 /* ok */,
-		parent
-		);
-	if (name.isEmpty() || name == oldUrl.fileName()) {
-		return;
-	}
-
-	KUrl newUrl = oldUrl;
-	newUrl.setFileName(name);
-	KIO::SimpleJob* job = KIO::rename(oldUrl, newUrl, KIO::HideProgressInfo);
-	if (!KIO::NetAccess::synchronousRun(job, parent)) {
-		job->ui()->showErrorMessage();
-		return;
-	}
-	ThumbnailLoadJob::moveThumbnail(oldUrl, newUrl);
+    KUrl newUrl = oldUrl;
+    newUrl.setFileName(name);
+    KIO::SimpleJob* job = KIO::rename(oldUrl, newUrl, KIO::HideProgressInfo);
+    if (!KIO::NetAccess::synchronousRun(job, parent)) {
+        job->ui()->showErrorMessage();
+        return;
+    }
+    ThumbnailLoadJob::moveThumbnail(oldUrl, newUrl);
 }
-
 
 } // namespace
 

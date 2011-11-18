@@ -42,97 +42,98 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #else
 #ifdef __GNUC__
-	#error No metadata backend defined
+#error No metadata backend defined
 #endif
 #endif
 
-QTEST_KDEMAIN( Gwenview::SemanticInfoBackEndTest, GUI )
+QTEST_KDEMAIN(Gwenview::SemanticInfoBackEndTest, GUI)
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 SemanticInfoBackEndClient::SemanticInfoBackEndClient(AbstractSemanticInfoBackEnd* backEnd)
-: mBackEnd(backEnd) {
-	connect(backEnd, SIGNAL(semanticInfoRetrieved(KUrl,SemanticInfo)),
-		SLOT(slotSemanticInfoRetrieved(KUrl,SemanticInfo)) );
+: mBackEnd(backEnd)
+{
+    connect(backEnd, SIGNAL(semanticInfoRetrieved(KUrl, SemanticInfo)),
+            SLOT(slotSemanticInfoRetrieved(KUrl, SemanticInfo)));
 }
 
-
-void SemanticInfoBackEndClient::slotSemanticInfoRetrieved(const KUrl& url, const SemanticInfo& semanticInfo) {
-	mSemanticInfoForUrl[url] = semanticInfo;
+void SemanticInfoBackEndClient::slotSemanticInfoRetrieved(const KUrl& url, const SemanticInfo& semanticInfo)
+{
+    mSemanticInfoForUrl[url] = semanticInfo;
 }
 
-
-void SemanticInfoBackEndTest::initTestCase() {
+void SemanticInfoBackEndTest::initTestCase()
+{
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
-	if (Nepomuk::ResourceManager::instance()->init() != 0) {
-		QSKIP("This test needs Nepomuk", SkipAll);
-	}
+    if (Nepomuk::ResourceManager::instance()->init() != 0) {
+        QSKIP("This test needs Nepomuk", SkipAll);
+    }
 #endif
-	qRegisterMetaType<KUrl>("KUrl");
-	qRegisterMetaType<QString>("SemanticInfoTag");
+    qRegisterMetaType<KUrl>("KUrl");
+    qRegisterMetaType<QString>("SemanticInfoTag");
 }
 
-
-void SemanticInfoBackEndTest::init() {
+void SemanticInfoBackEndTest::init()
+{
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_FAKE
-	mBackEnd = new FakeSemanticInfoBackEnd(0, FakeSemanticInfoBackEnd::InitializeEmpty);
+    mBackEnd = new FakeSemanticInfoBackEnd(0, FakeSemanticInfoBackEnd::InitializeEmpty);
 #elif defined(GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK)
-	mBackEnd = new NepomukSemanticInfoBackEnd(0);
+    mBackEnd = new NepomukSemanticInfoBackEnd(0);
 #endif
 }
 
-void SemanticInfoBackEndTest::cleanup() {
-	delete mBackEnd;
-	mBackEnd = 0;
+void SemanticInfoBackEndTest::cleanup()
+{
+    delete mBackEnd;
+    mBackEnd = 0;
 }
-
 
 /**
  * Get and set the rating of a temp file
  */
-void SemanticInfoBackEndTest::testRating() {
-	KTemporaryFile temp;
-	temp.setSuffix(".metadatabackendtest");
-	QVERIFY(temp.open());
+void SemanticInfoBackEndTest::testRating()
+{
+    KTemporaryFile temp;
+    temp.setSuffix(".metadatabackendtest");
+    QVERIFY(temp.open());
 
-	KUrl url;
-	url.setPath(temp.fileName());
+    KUrl url;
+    url.setPath(temp.fileName());
 
-	SemanticInfoBackEndClient client(mBackEnd);
-	QSignalSpy spy(mBackEnd, SIGNAL(semanticInfoRetrieved(KUrl,SemanticInfo)) );
-	mBackEnd->retrieveSemanticInfo(url);
-	QVERIFY(waitForSignal(spy));
+    SemanticInfoBackEndClient client(mBackEnd);
+    QSignalSpy spy(mBackEnd, SIGNAL(semanticInfoRetrieved(KUrl, SemanticInfo)));
+    mBackEnd->retrieveSemanticInfo(url);
+    QVERIFY(waitForSignal(spy));
 
-	SemanticInfo semanticInfo = client.semanticInfoForUrl(url);
-	QCOMPARE(semanticInfo.mRating, 0);
+    SemanticInfo semanticInfo = client.semanticInfoForUrl(url);
+    QCOMPARE(semanticInfo.mRating, 0);
 
-	semanticInfo.mRating = 5;
-	mBackEnd->storeSemanticInfo(url, semanticInfo);
+    semanticInfo.mRating = 5;
+    mBackEnd->storeSemanticInfo(url, semanticInfo);
 }
 
+void SemanticInfoBackEndTest::testTagForLabel()
+{
+    QSignalSpy spy(mBackEnd, SIGNAL(tagAdded(SemanticInfoTag, QString)));
 
-void SemanticInfoBackEndTest::testTagForLabel() {
-	QSignalSpy spy(mBackEnd, SIGNAL(tagAdded(SemanticInfoTag,QString)) );
+    TagSet oldAllTags = mBackEnd->allTags();
+    QString label = "testTagForLabel-" + KRandom::randomString(5);
+    SemanticInfoTag tag1 = mBackEnd->tagForLabel(label);
+    QVERIFY(!tag1.isEmpty());
+    QVERIFY(!oldAllTags.contains(tag1));
+    QVERIFY(mBackEnd->allTags().contains(tag1));
 
-	TagSet oldAllTags = mBackEnd->allTags();
-	QString label = "testTagForLabel-" + KRandom::randomString(5);
-	SemanticInfoTag tag1 = mBackEnd->tagForLabel(label);
-	QVERIFY(!tag1.isEmpty());
-	QVERIFY(!oldAllTags.contains(tag1));
-	QVERIFY(mBackEnd->allTags().contains(tag1));
+    // This is a new tag, we should receive a signal
+    QCOMPARE(spy.count(), 1);
 
-	// This is a new tag, we should receive a signal
-	QCOMPARE(spy.count(), 1);
+    SemanticInfoTag tag2 = mBackEnd->tagForLabel(label);
+    QCOMPARE(tag1, tag2);
+    // This is not a new tag, we should not receive a signal
+    QCOMPARE(spy.count(), 1);
 
-	SemanticInfoTag tag2 = mBackEnd->tagForLabel(label);
-	QCOMPARE(tag1, tag2);
-	// This is not a new tag, we should not receive a signal
-	QCOMPARE(spy.count(), 1);
-
-	QString label2 = mBackEnd->labelForTag(tag2);
-	QCOMPARE(label, label2);
+    QString label2 = mBackEnd->labelForTag(tag2);
+    QCOMPARE(label, label2);
 }
-
 
 } // namespace

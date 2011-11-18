@@ -31,34 +31,35 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 class KActionCollection;
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 class DocumentPanel;
 
 struct SemanticInfoContextManagerItemPrivate;
-class SemanticInfoContextManagerItem : public AbstractContextManagerItem {
-	Q_OBJECT
+class SemanticInfoContextManagerItem : public AbstractContextManagerItem
+{
+    Q_OBJECT
 public:
-	SemanticInfoContextManagerItem(ContextManager*, KActionCollection*, DocumentPanel* documentPanel);
-	~SemanticInfoContextManagerItem();
+    SemanticInfoContextManagerItem(ContextManager*, KActionCollection*, DocumentPanel* documentPanel);
+    ~SemanticInfoContextManagerItem();
 
 protected:
-	virtual bool eventFilter(QObject*, QEvent*);
+    virtual bool eventFilter(QObject*, QEvent*);
 
 private Q_SLOTS:
-	void slotSelectionChanged();
-	void update();
-	void slotRatingChanged(int rating);
-	void storeDescription();
-	void assignTag(const SemanticInfoTag&);
-	void removeTag(const SemanticInfoTag&);
-	void showSemanticInfoDialog();
+    void slotSelectionChanged();
+    void update();
+    void slotRatingChanged(int rating);
+    void storeDescription();
+    void assignTag(const SemanticInfoTag&);
+    void removeTag(const SemanticInfoTag&);
+    void showSemanticInfoDialog();
 
 private:
-	friend class SemanticInfoContextManagerItemPrivate;
-	SemanticInfoContextManagerItemPrivate* const d;
+    friend class SemanticInfoContextManagerItemPrivate;
+    SemanticInfoContextManagerItemPrivate* const d;
 };
-
 
 } // namespace
 

@@ -30,32 +30,32 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
-namespace Gwenview {
+namespace Gwenview
+{
 
-
-void LoadingJob::doStart() {
-	Document::LoadingState state = document()->loadingState();
-	if (state == Document::Loaded || state == Document::LoadingFailed) {
-		setError(NoError);
-		emitResult();
-	} else {
-		connect(document().data(), SIGNAL(loaded(KUrl)), SLOT(slotLoaded()));
-		connect(document().data(), SIGNAL(loadingFailed(KUrl)), SLOT(slotLoadingFailed()));
-	}
+void LoadingJob::doStart()
+{
+    Document::LoadingState state = document()->loadingState();
+    if (state == Document::Loaded || state == Document::LoadingFailed) {
+        setError(NoError);
+        emitResult();
+    } else {
+        connect(document().data(), SIGNAL(loaded(KUrl)), SLOT(slotLoaded()));
+        connect(document().data(), SIGNAL(loadingFailed(KUrl)), SLOT(slotLoadingFailed()));
+    }
 }
 
-
-void LoadingJob::slotLoaded() {
-	setError(NoError);
-	emitResult();
+void LoadingJob::slotLoaded()
+{
+    setError(NoError);
+    emitResult();
 }
 
-
-void LoadingJob::slotLoadingFailed() {
-	setError(UserDefinedError + 1);
-	setErrorText(i18n("Could not load document %1", document()->url().pathOrUrl()));
-	emitResult();
+void LoadingJob::slotLoadingFailed()
+{
+    setError(UserDefinedError + 1);
+    setErrorText(i18n("Could not load document %1", document()->url().pathOrUrl()));
+    emitResult();
 }
-
 
 } // namespace

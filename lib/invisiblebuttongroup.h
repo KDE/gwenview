@@ -32,8 +32,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 class QAbstractButton;
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct InvisibleButtonGroupPrivate;
 /**
@@ -75,27 +75,27 @@ struct InvisibleButtonGroupPrivate;
  * group->addButton(ui->detailRadioButton, 2);
  * @endcode
  */
-class GWENVIEWLIB_EXPORT InvisibleButtonGroup : public QWidget {
-	Q_OBJECT
-	Q_PROPERTY(int current READ selected WRITE setSelected)
+class GWENVIEWLIB_EXPORT InvisibleButtonGroup : public QWidget
+{
+    Q_OBJECT
+    Q_PROPERTY(int current READ selected WRITE setSelected)
 public:
-	explicit InvisibleButtonGroup(QWidget* parent = 0);
-	~InvisibleButtonGroup();
+    explicit InvisibleButtonGroup(QWidget* parent = 0);
+    ~InvisibleButtonGroup();
 
-	int selected() const;
+    int selected() const;
 
-	void addButton(QAbstractButton* button, int id);
+    void addButton(QAbstractButton* button, int id);
 
 public Q_SLOTS:
-	void setSelected(int id);
+    void setSelected(int id);
 
 Q_SIGNALS:
-	void selectionChanged(int id);
+    void selectionChanged(int id);
 
 private:
-	InvisibleButtonGroupPrivate* const d;
+    InvisibleButtonGroupPrivate* const d;
 };
-
 
 } // namespace
 

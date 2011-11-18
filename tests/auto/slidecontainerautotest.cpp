@@ -38,92 +38,98 @@ using namespace Gwenview;
 
 struct TestWindow : public QWidget {
     explicit TestWindow(QWidget* parent = 0)
-	: QWidget(parent)
-	, mContainer(new SlideContainer)
-	, mContent(0) {
-		createContent();
+        : QWidget(parent)
+        , mContainer(new SlideContainer)
+        , mContent(0) {
+        createContent();
 
-		mMainWidget = new QTextEdit();
-		QVBoxLayout* layout = new QVBoxLayout(this);
-		layout->setSpacing(0);
-		layout->setMargin(0);
-		layout->addWidget(mMainWidget);
-		layout->addWidget(mContainer);
-	}
+        mMainWidget = new QTextEdit();
+        QVBoxLayout* layout = new QVBoxLayout(this);
+        layout->setSpacing(0);
+        layout->setMargin(0);
+        layout->addWidget(mMainWidget);
+        layout->addWidget(mContainer);
+    }
 
-	void createContent() {
-		mContent = new QTextEdit;
-		mContent->setFixedSize(100, 40);
-		mContainer->setContent(mContent);
-	}
+    void createContent()
+    {
+        mContent = new QTextEdit;
+        mContent->setFixedSize(100, 40);
+        mContainer->setContent(mContent);
+    }
 
-	SlideContainer* mContainer;
-	QWidget* mMainWidget;
-	QWidget* mContent;
+    SlideContainer* mContainer;
+    QWidget* mMainWidget;
+    QWidget* mContent;
 };
 
-void SlideContainerAutoTest::testInit() {
-	// Even with content, a SlideContainer should be invisible until slideIn()
-	// is called
-	TestWindow window;
-	window.show();
+void SlideContainerAutoTest::testInit()
+{
+    // Even with content, a SlideContainer should be invisible until slideIn()
+    // is called
+    TestWindow window;
+    window.show();
 
-	QTest::qWait(500);
-	QCOMPARE(window.mMainWidget->height(), window.height());
+    QTest::qWait(500);
+    QCOMPARE(window.mMainWidget->height(), window.height());
 }
 
-void SlideContainerAutoTest::testSlideIn() {
-	TestWindow window;
-	window.show();
+void SlideContainerAutoTest::testSlideIn()
+{
+    TestWindow window;
+    window.show();
 
-	window.mContainer->slideIn();
-	while (window.mContainer->slideHeight() != window.mContent->height()) {
-		QTest::qWait(100);
-	}
-	QCOMPARE(window.mContainer->height(), window.mContent->height());
+    window.mContainer->slideIn();
+    while (window.mContainer->slideHeight() != window.mContent->height()) {
+        QTest::qWait(100);
+    }
+    QCOMPARE(window.mContainer->height(), window.mContent->height());
 }
 
-void SlideContainerAutoTest::testSlideOut() {
-	TestWindow window;
-	window.show();
+void SlideContainerAutoTest::testSlideOut()
+{
+    TestWindow window;
+    window.show();
 
-	window.mContainer->slideIn();
-	while (window.mContainer->slideHeight() != window.mContent->height()) {
-		QTest::qWait(100);
-	}
-	window.mContainer->slideOut();
-	while (window.mContainer->slideHeight() != 0) {
-		QTest::qWait(100);
-	}
-	QCOMPARE(window.mContainer->height(), 0);
+    window.mContainer->slideIn();
+    while (window.mContainer->slideHeight() != window.mContent->height()) {
+        QTest::qWait(100);
+    }
+    window.mContainer->slideOut();
+    while (window.mContainer->slideHeight() != 0) {
+        QTest::qWait(100);
+    }
+    QCOMPARE(window.mContainer->height(), 0);
 }
 
-void SlideContainerAutoTest::testSlideInDeleteSlideOut() {
-	// If content is deleted while visible, slideOut() should still produce an
-	// animation
-	TestWindow window;
-	window.show();
+void SlideContainerAutoTest::testSlideInDeleteSlideOut()
+{
+    // If content is deleted while visible, slideOut() should still produce an
+    // animation
+    TestWindow window;
+    window.show();
 
-	window.mContainer->slideIn();
-	while (window.mContainer->slideHeight() != window.mContent->height()) {
-		QTest::qWait(100);
-	}
-	window.mContent->deleteLater();
-	window.mContainer->slideOut();
-	while (window.mContainer->slideHeight() != 0) {
-		QTest::qWait(100);
-	}
-	QCOMPARE(window.mContainer->height(), 0);
+    window.mContainer->slideIn();
+    while (window.mContainer->slideHeight() != window.mContent->height()) {
+        QTest::qWait(100);
+    }
+    window.mContent->deleteLater();
+    window.mContainer->slideOut();
+    while (window.mContainer->slideHeight() != 0) {
+        QTest::qWait(100);
+    }
+    QCOMPARE(window.mContainer->height(), 0);
 }
 
-void SlideContainerAutoTest::testHiddenContentResize() {
-	// Resizing content should not trigger a slide if it is not visible.
-	TestWindow window;
-	window.show();
-	QTest::qWaitForWindowShown(&window);
+void SlideContainerAutoTest::testHiddenContentResize()
+{
+    // Resizing content should not trigger a slide if it is not visible.
+    TestWindow window;
+    window.show();
+    QTest::qWaitForWindowShown(&window);
 
-	window.mContent->show();
-	window.mContent->setFixedSize(150, 80);
-	QTest::qWait(500);
-	QCOMPARE(window.mContainer->height(), 0);
+    window.mContent->show();
+    window.mContent->setFixedSize(150, 80);
+    QTest::qWait(500);
+    QCOMPARE(window.mContainer->height(), 0);
 }

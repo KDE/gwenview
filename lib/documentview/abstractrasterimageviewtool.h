@@ -36,37 +36,40 @@ class QGraphicsSceneMouseEvent;
 class QGraphicsSceneWheelEvent;
 class QPainter;
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 class RasterImageView;
 
 struct AbstractRasterImageViewToolPrivate;
-class GWENVIEWLIB_EXPORT AbstractRasterImageViewTool : public QObject {
+class GWENVIEWLIB_EXPORT AbstractRasterImageViewTool : public QObject
+{
 public:
-	AbstractRasterImageViewTool(RasterImageView* view);
-	virtual ~AbstractRasterImageViewTool();
+    AbstractRasterImageViewTool(RasterImageView* view);
+    virtual ~AbstractRasterImageViewTool();
 
-	RasterImageView* imageView() const;
+    RasterImageView* imageView() const;
 
-	virtual void paint(QPainter*) {}
+    virtual void paint(QPainter*) {}
 
-	virtual void mousePressEvent(QGraphicsSceneMouseEvent*) {}
-	virtual void mouseMoveEvent(QGraphicsSceneMouseEvent*) {}
-	virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*) {}
-	virtual void hoverMoveEvent(QGraphicsSceneHoverEvent*) {}
-	virtual void wheelEvent(QGraphicsSceneWheelEvent*) {}
-	virtual void keyPressEvent(QKeyEvent*) {}
-	virtual void keyReleaseEvent(QKeyEvent*) {}
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent*) {}
+    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent*) {}
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*) {}
+    virtual void hoverMoveEvent(QGraphicsSceneHoverEvent*) {}
+    virtual void wheelEvent(QGraphicsSceneWheelEvent*) {}
+    virtual void keyPressEvent(QKeyEvent*) {}
+    virtual void keyReleaseEvent(QKeyEvent*) {}
 
-	virtual void toolActivated() {}
-	virtual void toolDeactivated() {}
+    virtual void toolActivated() {}
+    virtual void toolDeactivated() {}
 
-	virtual QWidget* widget() { return 0; }
+    virtual QWidget* widget() {
+        return 0;
+    }
 
 private:
-	AbstractRasterImageViewToolPrivate * const d;
+    AbstractRasterImageViewToolPrivate * const d;
 };
-
 
 } // namespace
 

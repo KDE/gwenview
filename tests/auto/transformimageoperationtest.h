@@ -26,14 +26,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Local
 #include "../lib/document/document.h"
 
-
-class TransformImageOperationTest : public QObject {
-	Q_OBJECT
+class TransformImageOperationTest : public QObject
+{
+    Q_OBJECT
 
 private Q_SLOTS:
-	void testRotate90();
-	void initTestCase();
-	void init();
+    void testRotate90();
+    void initTestCase();
+    void init();
 };
 
 #endif // TRANSFORMIMAGEOPERATIONTEST_H

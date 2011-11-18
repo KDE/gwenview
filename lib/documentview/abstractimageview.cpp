@@ -31,352 +31,382 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QCursor>
 #include <QGraphicsSceneMouseEvent>
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 static const int UNIT_STEP = 16;
 
 struct AbstractImageViewPrivate {
-	enum Verbosity {
-		Silent,
-		Notify
-	};
-	AbstractImageView* q;
-	Document::Ptr mDocument;
+    enum Verbosity {
+        Silent,
+        Notify
+    };
+    AbstractImageView* q;
+    Document::Ptr mDocument;
 
-	bool mEnlargeSmallerImages;
+    bool mEnlargeSmallerImages;
 
-	qreal mZoom;
-	bool mZoomToFit;
-	QPointF mImageOffset;
-	QPointF mScrollPos;
-	QPointF mLastDragPos;
+    qreal mZoom;
+    bool mZoomToFit;
+    QPointF mImageOffset;
+    QPointF mScrollPos;
+    QPointF mLastDragPos;
 
-	void adjustImageOffset(Verbosity verbosity = Notify) {
-		QSizeF zoomedDocSize = q->documentSize() * mZoom;
-		QSizeF viewSize = q->boundingRect().size();
-		QPointF offset(
-			qMax((viewSize.width() - zoomedDocSize.width()) / 2, 0.),
-			qMax((viewSize.height() - zoomedDocSize.height()) / 2, 0.)
-			);
-		if (offset != mImageOffset) {
-			mImageOffset = offset;
-			if (verbosity == Notify) {
-				q->onImageOffsetChanged();
-			}
-		}
-	}
+    void adjustImageOffset(Verbosity verbosity = Notify)
+    {
+        QSizeF zoomedDocSize = q->documentSize() * mZoom;
+        QSizeF viewSize = q->boundingRect().size();
+        QPointF offset(
+            qMax((viewSize.width() - zoomedDocSize.width()) / 2, 0.),
+            qMax((viewSize.height() - zoomedDocSize.height()) / 2, 0.)
+        );
+        if (offset != mImageOffset) {
+            mImageOffset = offset;
+            if (verbosity == Notify) {
+                q->onImageOffsetChanged();
+            }
+        }
+    }
 
-	void adjustScrollPos(Verbosity verbosity = Notify) {
-		setScrollPos(mScrollPos, verbosity);
-	}
+    void adjustScrollPos(Verbosity verbosity = Notify)
+    {
+        setScrollPos(mScrollPos, verbosity);
+    }
 
-	void setScrollPos(const QPointF& _newPos, Verbosity verbosity = Notify) {
-		QSizeF zoomedDocSize = q->documentSize() * mZoom;
-		QSizeF viewSize = q->boundingRect().size();
-		QPointF newPos(
-			qBound(0., _newPos.x(), zoomedDocSize.width() - viewSize.width()),
-			qBound(0., _newPos.y(), zoomedDocSize.height() - viewSize.height())
-			);
-		if (newPos != mScrollPos) {
-			QPointF oldPos = mScrollPos;
-			mScrollPos = newPos;
-			if (verbosity == Notify) {
-				q->onScrollPosChanged(oldPos);
-			}
-			// No verbosity test: we always notify the outside world about
-			// scrollPos changes
-			QMetaObject::invokeMethod(q, "scrollPosChanged");
-		}
-	}
+    void setScrollPos(const QPointF& _newPos, Verbosity verbosity = Notify)
+    {
+        QSizeF zoomedDocSize = q->documentSize() * mZoom;
+        QSizeF viewSize = q->boundingRect().size();
+        QPointF newPos(
+            qBound(0., _newPos.x(), zoomedDocSize.width() - viewSize.width()),
+            qBound(0., _newPos.y(), zoomedDocSize.height() - viewSize.height())
+        );
+        if (newPos != mScrollPos) {
+            QPointF oldPos = mScrollPos;
+            mScrollPos = newPos;
+            if (verbosity == Notify) {
+                q->onScrollPosChanged(oldPos);
+            }
+            // No verbosity test: we always notify the outside world about
+            // scrollPos changes
+            QMetaObject::invokeMethod(q, "scrollPosChanged");
+        }
+    }
 };
 
 AbstractImageView::AbstractImageView(QGraphicsItem* parent)
 : QGraphicsWidget(parent)
-, d(new AbstractImageViewPrivate) {
-	d->q = this;
-	d->mEnlargeSmallerImages = false;
-	d->mZoom = 1;
-	d->mZoomToFit = true;
-	d->mImageOffset = QPointF(0, 0);
-	d->mScrollPos = QPointF(0, 0);
-	setCursor(Qt::OpenHandCursor);
-	setFocusPolicy(Qt::WheelFocus);
-	setFlag(ItemIsSelectable);
+, d(new AbstractImageViewPrivate)
+{
+    d->q = this;
+    d->mEnlargeSmallerImages = false;
+    d->mZoom = 1;
+    d->mZoomToFit = true;
+    d->mImageOffset = QPointF(0, 0);
+    d->mScrollPos = QPointF(0, 0);
+    setCursor(Qt::OpenHandCursor);
+    setFocusPolicy(Qt::WheelFocus);
+    setFlag(ItemIsSelectable);
 }
 
-AbstractImageView::~AbstractImageView() {
-	delete d;
+AbstractImageView::~AbstractImageView()
+{
+    delete d;
 }
 
-Document::Ptr AbstractImageView::document() const {
-	return d->mDocument;
+Document::Ptr AbstractImageView::document() const
+{
+    return d->mDocument;
 }
 
-void AbstractImageView::setDocument(Document::Ptr doc) {
-	d->mDocument = doc;
-	loadFromDocument();
-	if (d->mZoomToFit) {
-		setZoom(computeZoomToFit());
-	}
+void AbstractImageView::setDocument(Document::Ptr doc)
+{
+    d->mDocument = doc;
+    loadFromDocument();
+    if (d->mZoomToFit) {
+        setZoom(computeZoomToFit());
+    }
 }
 
-QSizeF AbstractImageView::documentSize() const {
-	return d->mDocument ? d->mDocument->size() : QSizeF();
+QSizeF AbstractImageView::documentSize() const
+{
+    return d->mDocument ? d->mDocument->size() : QSizeF();
 }
 
-qreal AbstractImageView::zoom() const {
-	return d->mZoom;
+qreal AbstractImageView::zoom() const
+{
+    return d->mZoom;
 }
 
-void AbstractImageView::setZoom(qreal zoom, const QPointF& _center, AbstractImageView::UpdateType updateType) {
-	if (updateType == UpdateIfNecessary && qFuzzyCompare(zoom, d->mZoom)) {
-		return;
-	}
-	qreal oldZoom = d->mZoom;
-	d->mZoom = zoom;
+void AbstractImageView::setZoom(qreal zoom, const QPointF& _center, AbstractImageView::UpdateType updateType)
+{
+    if (updateType == UpdateIfNecessary && qFuzzyCompare(zoom, d->mZoom)) {
+        return;
+    }
+    qreal oldZoom = d->mZoom;
+    d->mZoom = zoom;
 
-	QPointF center;
-	if (_center == QPointF(-1, -1)) {
-		center = boundingRect().center();
-	} else {
-		center = _center;
-	}
+    QPointF center;
+    if (_center == QPointF(-1, -1)) {
+        center = boundingRect().center();
+    } else {
+        center = _center;
+    }
 
-	/*
-	We want to keep the point at viewport coordinates "center" at the same
-	position after zooming. The coordinates of this point in image coordinates
-	can be expressed like this:
+    /*
+    We want to keep the point at viewport coordinates "center" at the same
+    position after zooming. The coordinates of this point in image coordinates
+    can be expressed like this:
 
-	                      oldScroll + center
-	imagePointAtOldZoom = ------------------
-	                           oldZoom
+                          oldScroll + center
+    imagePointAtOldZoom = ------------------
+                               oldZoom
 
-	                   scroll + center
-	imagePointAtZoom = ---------------
-	                        zoom
+                       scroll + center
+    imagePointAtZoom = ---------------
+                            zoom
 
-	So we want:
+    So we want:
 
-	    imagePointAtOldZoom = imagePointAtZoom
+        imagePointAtOldZoom = imagePointAtZoom
 
-	    oldScroll + center   scroll + center
-	<=> ------------------ = ---------------
-	          oldZoom             zoom
+        oldScroll + center   scroll + center
+    <=> ------------------ = ---------------
+              oldZoom             zoom
 
-	              zoom
-	<=> scroll = ------- (oldScroll + center) - center
-	             oldZoom
-	*/
+                  zoom
+    <=> scroll = ------- (oldScroll + center) - center
+                 oldZoom
+    */
 
-	/*
-	Compute oldScroll
-	It's useless to take the new offset in consideration because if a direction
-	of the new offset is not 0, we won't be able to center on a specific point
-	in that direction.
-	*/
-	QPointF oldScroll = scrollPos() - imageOffset();
+    /*
+    Compute oldScroll
+    It's useless to take the new offset in consideration because if a direction
+    of the new offset is not 0, we won't be able to center on a specific point
+    in that direction.
+    */
+    QPointF oldScroll = scrollPos() - imageOffset();
 
-	QPointF scroll = (zoom / oldZoom) * (oldScroll + center) - center;
+    QPointF scroll = (zoom / oldZoom) * (oldScroll + center) - center;
 
-	d->adjustImageOffset(AbstractImageViewPrivate::Silent);
-	d->setScrollPos(scroll, AbstractImageViewPrivate::Silent);
-	onZoomChanged();
-	zoomChanged(d->mZoom);
+    d->adjustImageOffset(AbstractImageViewPrivate::Silent);
+    d->setScrollPos(scroll, AbstractImageViewPrivate::Silent);
+    onZoomChanged();
+    zoomChanged(d->mZoom);
 }
 
-bool AbstractImageView::zoomToFit() const {
-	return d->mZoomToFit;
+bool AbstractImageView::zoomToFit() const
+{
+    return d->mZoomToFit;
 }
 
-void AbstractImageView::setZoomToFit(bool on) {
-	d->mZoomToFit = on;
-	if (on) {
-		setZoom(computeZoomToFit());
-	}
-	// We do not set zoom to 1 if zoomToFit is off, this is up to the code
-	// calling us. It may went to zoom to some other level and/or to zoom on
-	// a particular position
-	zoomToFitChanged(d->mZoomToFit);
+void AbstractImageView::setZoomToFit(bool on)
+{
+    d->mZoomToFit = on;
+    if (on) {
+        setZoom(computeZoomToFit());
+    }
+    // We do not set zoom to 1 if zoomToFit is off, this is up to the code
+    // calling us. It may went to zoom to some other level and/or to zoom on
+    // a particular position
+    zoomToFitChanged(d->mZoomToFit);
 }
 
-void AbstractImageView::resizeEvent(QGraphicsSceneResizeEvent* event) {
+void AbstractImageView::resizeEvent(QGraphicsSceneResizeEvent* event)
+{
     QGraphicsWidget::resizeEvent(event);
-	if (d->mZoomToFit) {
-		// Set zoom calls adjustImageOffset(), but only if the zoom changes.
-		// If the view is resized but does not cause a zoom change we want the
-		// offset to be adjusted so we call adjustImageOffset() from there as
-		// well.
-		d->adjustImageOffset(AbstractImageViewPrivate::Silent);
-		setZoom(computeZoomToFit());
-	} else {
-		d->adjustImageOffset();
-		d->adjustScrollPos();
-	}
+    if (d->mZoomToFit) {
+        // Set zoom calls adjustImageOffset(), but only if the zoom changes.
+        // If the view is resized but does not cause a zoom change we want the
+        // offset to be adjusted so we call adjustImageOffset() from there as
+        // well.
+        d->adjustImageOffset(AbstractImageViewPrivate::Silent);
+        setZoom(computeZoomToFit());
+    } else {
+        d->adjustImageOffset();
+        d->adjustScrollPos();
+    }
 }
 
-qreal AbstractImageView::computeZoomToFit() const {
-	QSizeF docSize = documentSize();
-	if (docSize.isEmpty()) {
-		return 1;
-	}
-	QSizeF viewSize = boundingRect().size();
-	qreal fitWidth = viewSize.width() / docSize.width();
-	qreal fitHeight = viewSize.height() / docSize.height();
-	qreal fit = qMin(fitWidth, fitHeight);
-	if (!d->mEnlargeSmallerImages) {
-		fit = qMin(fit, 1.);
-	}
-	return fit;
+qreal AbstractImageView::computeZoomToFit() const
+{
+    QSizeF docSize = documentSize();
+    if (docSize.isEmpty()) {
+        return 1;
+    }
+    QSizeF viewSize = boundingRect().size();
+    qreal fitWidth = viewSize.width() / docSize.width();
+    qreal fitHeight = viewSize.height() / docSize.height();
+    qreal fit = qMin(fitWidth, fitHeight);
+    if (!d->mEnlargeSmallerImages) {
+        fit = qMin(fit, 1.);
+    }
+    return fit;
 }
 
-void AbstractImageView::mousePressEvent(QGraphicsSceneMouseEvent* event) {
-	QGraphicsItem::mousePressEvent(event);
-	setCursor(Qt::ClosedHandCursor);
-	d->mLastDragPos = event->pos();
+void AbstractImageView::mousePressEvent(QGraphicsSceneMouseEvent* event)
+{
+    QGraphicsItem::mousePressEvent(event);
+    setCursor(Qt::ClosedHandCursor);
+    d->mLastDragPos = event->pos();
 }
 
-void AbstractImageView::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
-	QGraphicsItem::mouseMoveEvent(event);
+void AbstractImageView::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
+{
+    QGraphicsItem::mouseMoveEvent(event);
 
-	QPointF mousePos = event->pos();
-	QPointF newScrollPos = d->mScrollPos + d->mLastDragPos - mousePos;
+    QPointF mousePos = event->pos();
+    QPointF newScrollPos = d->mScrollPos + d->mLastDragPos - mousePos;
 
-	// Wrap mouse pos
-	qreal maxWidth = boundingRect().width();
-	qreal maxHeight = boundingRect().height();
-	// We need a margin because if the window is maximized, the mouse may not
-	// be able to go past the bounding rect.
-	// The mouse get placed 1 pixel before/after the margin to avoid getting
-	// considered as needing to wrap the other way in next mouseMoveEvent
-	// (because we don't check the move vector)
-	const int margin = 5;
-	if (mousePos.x() <= margin) {
-		mousePos.setX(maxWidth - margin - 1);
-	} else if (mousePos.x() >= maxWidth - margin) {
-		mousePos.setX(margin + 1);
-	}
-	if (mousePos.y() <= margin) {
-		mousePos.setY(maxHeight - margin - 1);
-	} else if (mousePos.y() >= maxHeight - margin) {
-		mousePos.setY(margin + 1);
-	}
+    // Wrap mouse pos
+    qreal maxWidth = boundingRect().width();
+    qreal maxHeight = boundingRect().height();
+    // We need a margin because if the window is maximized, the mouse may not
+    // be able to go past the bounding rect.
+    // The mouse get placed 1 pixel before/after the margin to avoid getting
+    // considered as needing to wrap the other way in next mouseMoveEvent
+    // (because we don't check the move vector)
+    const int margin = 5;
+    if (mousePos.x() <= margin) {
+        mousePos.setX(maxWidth - margin - 1);
+    } else if (mousePos.x() >= maxWidth - margin) {
+        mousePos.setX(margin + 1);
+    }
+    if (mousePos.y() <= margin) {
+        mousePos.setY(maxHeight - margin - 1);
+    } else if (mousePos.y() >= maxHeight - margin) {
+        mousePos.setY(margin + 1);
+    }
 
-	// Set mouse pos (Hackish translation to screen coords!)
-	QPointF screenDelta = event->screenPos() - event->pos();
-	QCursor::setPos((mousePos + screenDelta).toPoint());
+    // Set mouse pos (Hackish translation to screen coords!)
+    QPointF screenDelta = event->screenPos() - event->pos();
+    QCursor::setPos((mousePos + screenDelta).toPoint());
 
-	d->mLastDragPos = mousePos;
-	d->setScrollPos(newScrollPos);
+    d->mLastDragPos = mousePos;
+    d->setScrollPos(newScrollPos);
 
 }
 
-void AbstractImageView::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
-	QGraphicsItem::mouseReleaseEvent(event);
-	setCursor(Qt::OpenHandCursor);
+void AbstractImageView::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
+{
+    QGraphicsItem::mouseReleaseEvent(event);
+    setCursor(Qt::OpenHandCursor);
 }
 
-void AbstractImageView::keyPressEvent(QKeyEvent* event) {
-	QPointF delta(0, 0);
-	qreal pageStep = boundingRect().height();
-	qreal unitStep;
-	if (event->modifiers() & Qt::ShiftModifier) {
-		unitStep = pageStep / 2;
-	} else {
-		unitStep = UNIT_STEP;
-	}
-	switch (event->key()) {
-	case Qt::Key_Left:
-		delta.setX(-unitStep);
-		break;
-	case Qt::Key_Right:
-		delta.setX(unitStep);
-		break;
-	case Qt::Key_Up:
-		delta.setY(-unitStep);
-		break;
-	case Qt::Key_Down:
-		delta.setY(unitStep);
-		break;
-	case Qt::Key_PageUp:
-		delta.setY(-pageStep);
-		break;
-	case Qt::Key_PageDown:
-		delta.setY(pageStep);
-		break;
-	case Qt::Key_Home:
-		d->setScrollPos(QPointF(d->mScrollPos.x(), 0));
-		return;
-	case Qt::Key_End:
-		d->setScrollPos(QPointF(d->mScrollPos.x(), documentSize().height() * zoom()));
-		return;
-	default:
-		return;
-	}
-	d->setScrollPos(d->mScrollPos + delta);
+void AbstractImageView::keyPressEvent(QKeyEvent* event)
+{
+    QPointF delta(0, 0);
+    qreal pageStep = boundingRect().height();
+    qreal unitStep;
+    if (event->modifiers() & Qt::ShiftModifier) {
+        unitStep = pageStep / 2;
+    } else {
+        unitStep = UNIT_STEP;
+    }
+    switch (event->key()) {
+    case Qt::Key_Left:
+        delta.setX(-unitStep);
+        break;
+    case Qt::Key_Right:
+        delta.setX(unitStep);
+        break;
+    case Qt::Key_Up:
+        delta.setY(-unitStep);
+        break;
+    case Qt::Key_Down:
+        delta.setY(unitStep);
+        break;
+    case Qt::Key_PageUp:
+        delta.setY(-pageStep);
+        break;
+    case Qt::Key_PageDown:
+        delta.setY(pageStep);
+        break;
+    case Qt::Key_Home:
+        d->setScrollPos(QPointF(d->mScrollPos.x(), 0));
+        return;
+    case Qt::Key_End:
+        d->setScrollPos(QPointF(d->mScrollPos.x(), documentSize().height() * zoom()));
+        return;
+    default:
+        return;
+    }
+    d->setScrollPos(d->mScrollPos + delta);
 }
 
-QPointF AbstractImageView::imageOffset() const {
-	return d->mImageOffset;
+QPointF AbstractImageView::imageOffset() const
+{
+    return d->mImageOffset;
 }
 
-QPointF AbstractImageView::scrollPos() const {
-	return d->mScrollPos;
+QPointF AbstractImageView::scrollPos() const
+{
+    return d->mScrollPos;
 }
 
-void AbstractImageView::setScrollPos(const QPointF& pos) {
-	d->setScrollPos(pos);
+void AbstractImageView::setScrollPos(const QPointF& pos)
+{
+    d->setScrollPos(pos);
 }
 
-QPointF AbstractImageView::mapToView(const QPointF& imagePos) const {
-	return imagePos * d->mZoom + d->mImageOffset - d->mScrollPos;
+QPointF AbstractImageView::mapToView(const QPointF& imagePos) const
+{
+    return imagePos * d->mZoom + d->mImageOffset - d->mScrollPos;
 }
 
-QPoint AbstractImageView::mapToView(const QPoint& imagePos) const {
-	return mapToView(QPointF(imagePos)).toPoint();
+QPoint AbstractImageView::mapToView(const QPoint& imagePos) const
+{
+    return mapToView(QPointF(imagePos)).toPoint();
 }
 
-QRectF AbstractImageView::mapToView(const QRectF& imageRect) const {
-	return QRectF(
-		mapToView(imageRect.topLeft()),
-		imageRect.size() * zoom()
-		);
+QRectF AbstractImageView::mapToView(const QRectF& imageRect) const
+{
+    return QRectF(
+               mapToView(imageRect.topLeft()),
+               imageRect.size() * zoom()
+           );
 }
 
-QRect AbstractImageView::mapToView(const QRect& imageRect) const {
-	return QRect(
-		mapToView(imageRect.topLeft()),
-		imageRect.size() * zoom()
-		);
+QRect AbstractImageView::mapToView(const QRect& imageRect) const
+{
+    return QRect(
+               mapToView(imageRect.topLeft()),
+               imageRect.size() * zoom()
+           );
 }
 
-QPointF AbstractImageView::mapToImage(const QPointF& viewPos) const {
-	return (viewPos - d->mImageOffset + d->mScrollPos) / d->mZoom;
+QPointF AbstractImageView::mapToImage(const QPointF& viewPos) const
+{
+    return (viewPos - d->mImageOffset + d->mScrollPos) / d->mZoom;
 }
 
-QPoint AbstractImageView::mapToImage(const QPoint& viewPos) const {
-	return mapToImage(QPointF(viewPos)).toPoint();
+QPoint AbstractImageView::mapToImage(const QPoint& viewPos) const
+{
+    return mapToImage(QPointF(viewPos)).toPoint();
 }
 
-QRectF AbstractImageView::mapToImage(const QRectF& viewRect) const {
-	return QRectF(
-		mapToImage(viewRect.topLeft()),
-		viewRect.size() / zoom()
-		);
+QRectF AbstractImageView::mapToImage(const QRectF& viewRect) const
+{
+    return QRectF(
+               mapToImage(viewRect.topLeft()),
+               viewRect.size() / zoom()
+           );
 }
 
-QRect AbstractImageView::mapToImage(const QRect& viewRect) const {
-	return QRect(
-		mapToImage(viewRect.topLeft()),
-		viewRect.size() / zoom()
-		);
+QRect AbstractImageView::mapToImage(const QRect& viewRect) const
+{
+    return QRect(
+               mapToImage(viewRect.topLeft()),
+               viewRect.size() / zoom()
+           );
 }
 
-void AbstractImageView::setEnlargeSmallerImages(bool value) {
-	d->mEnlargeSmallerImages = value;
-	if (zoomToFit()) {
-		setZoom(computeZoomToFit());
-	}
+void AbstractImageView::setEnlargeSmallerImages(bool value)
+{
+    d->mEnlargeSmallerImages = value;
+    if (zoomToFit()) {
+        setZoom(computeZoomToFit());
+    }
 }
-
 
 } // namespace

@@ -29,70 +29,71 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KDE
 #include <kdebug.h>
 
-class ImageScalerClient : public QObject {
-	Q_OBJECT
+class ImageScalerClient : public QObject
+{
+    Q_OBJECT
 public:
-	ImageScalerClient(Gwenview::ImageScaler* scaler)
-	{
-		connect(scaler, SIGNAL(scaledRect(int, int, const QImage&)),
-			SLOT(slotScaledRect(int, int, const QImage&)) );
-	}
+    ImageScalerClient(Gwenview::ImageScaler* scaler) {
+        connect(scaler, SIGNAL(scaledRect(int, int, const QImage&)),
+                SLOT(slotScaledRect(int, int, const QImage&)));
+    }
 
-	struct ImageInfo {
-		int left;
-		int top;
-		QImage image;
-	};
-	QVector<ImageInfo> mImageInfoList;
+    struct ImageInfo {
+        int left;
+        int top;
+        QImage image;
+    };
+    QVector<ImageInfo> mImageInfoList;
 
-	QImage createFullImage() {
-		Q_ASSERT(mImageInfoList.size() > 0);
-		QImage::Format format = mImageInfoList[0].image.format();
+    QImage createFullImage() {
+        Q_ASSERT(mImageInfoList.size() > 0);
+        QImage::Format format = mImageInfoList[0].image.format();
 
-		int imageWidth = 0;
-		int imageHeight = 0;
-		Q_FOREACH(const ImageInfo& info, mImageInfoList) {
-			int right = info.left + info.image.width();
-			int bottom = info.top + info.image.height();
-			imageWidth = qMax(imageWidth, right);
-			imageHeight = qMax(imageHeight, bottom);
-		}
+        int imageWidth = 0;
+        int imageHeight = 0;
+        Q_FOREACH(const ImageInfo & info, mImageInfoList) {
+            int right = info.left + info.image.width();
+            int bottom = info.top + info.image.height();
+            imageWidth = qMax(imageWidth, right);
+            imageHeight = qMax(imageHeight, bottom);
+        }
 
-		QImage image(imageWidth, imageHeight, format);
-		image.fill(0);
-		QPainter painter(&image);
-		Q_FOREACH(const ImageInfo& info, mImageInfoList) {
-			painter.drawImage(info.left, info.top, info.image);
-		}
-		return image;
-	}
+        QImage image(imageWidth, imageHeight, format);
+        image.fill(0);
+        QPainter painter(&image);
+        Q_FOREACH(const ImageInfo & info, mImageInfoList) {
+            painter.drawImage(info.left, info.top, info.image);
+        }
+        return image;
+    }
 
 public Q_SLOTS:
-	void slotScaledRect(int left, int top, const QImage& image) {
-		ImageInfo info;
-		info.left = left;
-		info.top = top;
-		info.image = image;
+    void slotScaledRect(int left, int top, const QImage& image) {
+        ImageInfo info;
+        info.left = left;
+        info.top = top;
+        info.image = image;
 
-		mImageInfoList.append(info);
-	}
+        mImageInfoList.append(info);
+    }
 };
 
-class ImageScalerTest : public QObject {
-	Q_OBJECT
+class ImageScalerTest : public QObject
+{
+    Q_OBJECT
 
 private Q_SLOTS:
-	void testScaleFullImage();
+    void testScaleFullImage();
 
-	// FIXME Disabled for now, does not compile since ImageScaler::setImage() has
-	// been replaced with ImageScaler::setDocument()
+    // FIXME Disabled for now, does not compile since ImageScaler::setImage() has
+    // been replaced with ImageScaler::setDocument()
 #if 0
-	void testScalePartialImage();
-	void testScaleFullImageTwoPasses();
-	void testScaleFullImageTwoPasses_data();
-	void testScaleThinArea();
-	void testDontCrashWithoutImage();
-	void testScaleDownBigImage();
+    void testScalePartialImage();
+    void testScaleFullImageTwoPasses();
+    void testScaleFullImageTwoPasses_data();
+    void testScaleThinArea();
+    void testDontCrashWithoutImage();
+    void testScaleDownBigImage();
 #endif
 };
 

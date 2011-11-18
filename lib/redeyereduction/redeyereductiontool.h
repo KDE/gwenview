@@ -30,44 +30,45 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Local
 #include <lib/documentview/abstractrasterimageviewtool.h>
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 class AbstractImageOperation;
 class RasterImageView;
 
 struct RedEyeReductionToolPrivate;
-class GWENVIEWLIB_EXPORT RedEyeReductionTool : public AbstractRasterImageViewTool {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT RedEyeReductionTool : public AbstractRasterImageViewTool
+{
+    Q_OBJECT
 public:
-	enum Status {
-		NotSet,
-		Adjusting
-	};
+    enum Status {
+        NotSet,
+        Adjusting
+    };
 
-	RedEyeReductionTool(RasterImageView* parent);
-	~RedEyeReductionTool();
+    RedEyeReductionTool(RasterImageView* parent);
+    ~RedEyeReductionTool();
 
-	virtual void paint(QPainter*);
+    virtual void paint(QPainter*);
 
-	virtual void mousePressEvent(QGraphicsSceneMouseEvent*);
-	virtual void mouseMoveEvent(QGraphicsSceneMouseEvent*);
-	virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent*);
+    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent*);
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
 
-	virtual void toolActivated();
-	virtual void toolDeactivated();
+    virtual void toolActivated();
+    virtual void toolDeactivated();
 
 Q_SIGNALS:
-	void done();
-	void imageOperationRequested(AbstractImageOperation*);
+    void done();
+    void imageOperationRequested(AbstractImageOperation*);
 
 private Q_SLOTS:
-	void setDiameter(int);
-	void slotApplyClicked();
+    void setDiameter(int);
+    void slotApplyClicked();
 
 private:
-	RedEyeReductionToolPrivate* const d;
+    RedEyeReductionToolPrivate* const d;
 };
-
 
 } // namespace
 

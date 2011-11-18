@@ -34,41 +34,42 @@ class QIODevice;
 
 class KUrl;
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 struct DocumentLoadedImplPrivate;
-class DocumentLoadedImpl : public AbstractDocumentImpl, protected AbstractDocumentEditor {
-	Q_OBJECT
+class DocumentLoadedImpl : public AbstractDocumentImpl, protected AbstractDocumentEditor
+{
+    Q_OBJECT
 public:
-	/**
-	 * @param quietInit set to true if init() should not emit any signal
-	 */
-	DocumentLoadedImpl(Document*, const QByteArray&, bool quietInit = false);
-	~DocumentLoadedImpl();
+    /**
+     * @param quietInit set to true if init() should not emit any signal
+     */
+    DocumentLoadedImpl(Document*, const QByteArray&, bool quietInit = false);
+    ~DocumentLoadedImpl();
 
-	// AbstractDocumentImpl
-	virtual void init();
-	virtual Document::LoadingState loadingState() const;
-	virtual DocumentJob* save(const KUrl&, const QByteArray& format);
-	virtual AbstractDocumentEditor* editor();
-	virtual QByteArray rawData() const;
-	virtual bool isEditable() const;
-	//
+    // AbstractDocumentImpl
+    virtual void init();
+    virtual Document::LoadingState loadingState() const;
+    virtual DocumentJob* save(const KUrl&, const QByteArray& format);
+    virtual AbstractDocumentEditor* editor();
+    virtual QByteArray rawData() const;
+    virtual bool isEditable() const;
+    //
 
 protected:
-	virtual bool saveInternal(QIODevice* device, const QByteArray& format);
+    virtual bool saveInternal(QIODevice* device, const QByteArray& format);
 
-	// AbstractDocumentEditor
-	virtual void setImage(const QImage&);
-	virtual void applyTransformation(Orientation orientation);
-	//
+    // AbstractDocumentEditor
+    virtual void setImage(const QImage&);
+    virtual void applyTransformation(Orientation orientation);
+    //
 
 private:
-	DocumentLoadedImplPrivate* const d;
+    DocumentLoadedImplPrivate* const d;
 
-	friend class SaveJob;
+    friend class SaveJob;
 };
-
 
 } // namespace
 

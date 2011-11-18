@@ -23,12 +23,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QObject>
 
-class UrlUtilsTest : public QObject {
-	Q_OBJECT
+class UrlUtilsTest : public QObject
+{
+    Q_OBJECT
 
 private Q_SLOTS:
-	void testFixUserEnteredUrl();
-	void testFixUserEnteredUrl_data();
+    void testFixUserEnteredUrl();
+    void testFixUserEnteredUrl_data();
 };
 
 #endif /* URLUTILSTEST_H */

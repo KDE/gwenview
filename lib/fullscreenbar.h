@@ -32,38 +32,38 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 class QEvent;
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct FullScreenBarPrivate;
-class GWENVIEWLIB_EXPORT FullScreenBar : public QFrame {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT FullScreenBar : public QFrame
+{
+    Q_OBJECT
 public:
-	FullScreenBar(QWidget* parent);
-	~FullScreenBar();
+    FullScreenBar(QWidget* parent);
+    ~FullScreenBar();
 
-	void setActivated(bool);
+    void setActivated(bool);
 
-	void setAutoHidingEnabled(bool);
+    void setAutoHidingEnabled(bool);
 
-	virtual QSize sizeHint() const;
+    virtual QSize sizeHint() const;
 
 public Q_SLOTS:
-	void slideIn();
-	void slideOut();
+    void slideIn();
+    void slideOut();
 
 private Q_SLOTS:
-	void slotAutoHideCursorTimeout();
-	void moveBar(qreal);
-	void delayedInstallEventFilter();
+    void slotAutoHideCursorTimeout();
+    void moveBar(qreal);
+    void delayedInstallEventFilter();
 
 protected:
-	virtual bool eventFilter(QObject*, QEvent*);
+    virtual bool eventFilter(QObject*, QEvent*);
 
 private:
-	FullScreenBarPrivate* const d;
+    FullScreenBarPrivate* const d;
 };
-
 
 } // namespace
 

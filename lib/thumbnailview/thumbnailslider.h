@@ -31,29 +31,29 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include <lib/zoomslider.h>
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct ThumbnailSliderPrivate;
 /**
  * A zoom slider which shows the thumbnail size as a tooltip when it is
  * adjusted
  */
-class GWENVIEWLIB_EXPORT ThumbnailSlider : public ZoomSlider {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT ThumbnailSlider : public ZoomSlider
+{
+    Q_OBJECT
 public:
-	ThumbnailSlider(QWidget* parent=0);
-	~ThumbnailSlider();
+    ThumbnailSlider(QWidget* parent = 0);
+    ~ThumbnailSlider();
 
-	void updateToolTip();
+    void updateToolTip();
 
 private Q_SLOTS:
-	void slotActionTriggered(int actionTriggered);
+    void slotActionTriggered(int actionTriggered);
 
 private:
-	ThumbnailSliderPrivate* const d;
+    ThumbnailSliderPrivate* const d;
 };
-
 
 } // namespace
 

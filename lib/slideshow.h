@@ -31,48 +31,50 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 class QAction;
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 struct SlideShowPrivate;
-class GWENVIEWLIB_EXPORT SlideShow : public QObject {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT SlideShow : public QObject
+{
+    Q_OBJECT
 public:
-	SlideShow(QObject* parent);
-	virtual ~SlideShow();
+    SlideShow(QObject* parent);
+    virtual ~SlideShow();
 
-	void start(const QList<KUrl>& urls);
-	void stop();
+    void start(const QList<KUrl>& urls);
+    void stop();
 
-	QAction* loopAction() const;
-	QAction* randomAction() const;
+    QAction* loopAction() const;
+    QAction* randomAction() const;
 
-	/** @return true if the slideshow is running */
-	bool isRunning() const;
+    /** @return true if the slideshow is running */
+    bool isRunning() const;
 
-	void setCurrentUrl(const KUrl& url);
+    void setCurrentUrl(const KUrl& url);
 
 public Q_SLOTS:
-	void setInterval(int);
+    void setInterval(int);
 
-	/**
-	 * Resume slideshow and go to next url.
-	 */
-	void resumeAndGoToNextUrl();
+    /**
+     * Resume slideshow and go to next url.
+     */
+    void resumeAndGoToNextUrl();
 
 Q_SIGNALS:
-	void goToUrl( const KUrl& );
-	/**
-	 * Slideshow has been started or stopped
-	 */
-	void stateChanged(bool running);
+    void goToUrl(const KUrl&);
+    /**
+     * Slideshow has been started or stopped
+     */
+    void stateChanged(bool running);
 
 private Q_SLOTS:
-	void goToNextUrl();
-	void updateConfig();
-	void slotRandomActionToggled(bool on);
+    void goToNextUrl();
+    void updateConfig();
+    void slotRandomActionToggled(bool on);
 
 private:
-	SlideShowPrivate* const d;
+    SlideShowPrivate* const d;
 };
 
 } // namespace

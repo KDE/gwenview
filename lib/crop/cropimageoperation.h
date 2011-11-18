@@ -32,22 +32,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 class QRect;
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct CropImageOperationPrivate;
-class GWENVIEWLIB_EXPORT CropImageOperation : public AbstractImageOperation {
+class GWENVIEWLIB_EXPORT CropImageOperation : public AbstractImageOperation
+{
 public:
-	CropImageOperation(const QRect&);
-	~CropImageOperation();
+    CropImageOperation(const QRect&);
+    ~CropImageOperation();
 
-	virtual void redo();
-	virtual void undo();
+    virtual void redo();
+    virtual void undo();
 
 private:
-	CropImageOperationPrivate* const d;
+    CropImageOperationPrivate* const d;
 };
-
 
 } // namespace
 

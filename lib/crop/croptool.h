@@ -32,47 +32,48 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 class QRect;
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 class AbstractImageOperation;
 class ImageView;
 
 struct CropToolPrivate;
-class GWENVIEWLIB_EXPORT CropTool : public AbstractRasterImageViewTool {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT CropTool : public AbstractRasterImageViewTool
+{
+    Q_OBJECT
 public:
-	CropTool(RasterImageView* parent);
-	~CropTool();
+    CropTool(RasterImageView* parent);
+    ~CropTool();
 
-	void setCropRatio(double ratio);
+    void setCropRatio(double ratio);
 
-	void setRect(const QRect&);
-	QRect rect() const;
+    void setRect(const QRect&);
+    QRect rect() const;
 
-	virtual void paint(QPainter*);
+    virtual void paint(QPainter*);
 
-	virtual void mousePressEvent(QGraphicsSceneMouseEvent*);
-	virtual void mouseMoveEvent(QGraphicsSceneMouseEvent*);
-	virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
-	virtual void hoverMoveEvent(QGraphicsSceneHoverEvent*);
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent*);
+    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent*);
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
+    virtual void hoverMoveEvent(QGraphicsSceneHoverEvent*);
 
-	virtual void toolActivated();
-	virtual void toolDeactivated();
+    virtual void toolActivated();
+    virtual void toolDeactivated();
 
-	virtual QWidget* widget();
+    virtual QWidget* widget();
 
 Q_SIGNALS:
-	void rectUpdated(const QRect&);
-	void done();
-	void imageOperationRequested(AbstractImageOperation*);
+    void rectUpdated(const QRect&);
+    void done();
+    void imageOperationRequested(AbstractImageOperation*);
 
 private Q_SLOTS:
-	void slotCropRequested();
+    void slotCropRequested();
 
 private:
-	CropToolPrivate* const d;
+    CropToolPrivate* const d;
 };
-
 
 } // namespace
 

@@ -31,60 +31,61 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 class KJob;
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 class ImporterPrivate;
-class Importer : public QObject {
-	Q_OBJECT
+class Importer : public QObject
+{
+    Q_OBJECT
 public:
-	Importer(QWidget* authWindow);
-	~Importer();
+    Importer(QWidget* authWindow);
+    ~Importer();
 
-	/**
-	 * Defines the auto-rename format applied to imported documents
-	 * Set to QString() to reset
-	 */
-	void setAutoRenameFormat(const QString&);
+    /**
+     * Defines the auto-rename format applied to imported documents
+     * Set to QString() to reset
+     */
+    void setAutoRenameFormat(const QString&);
 
-	void start(const KUrl::List& list, const KUrl& destUrl);
+    void start(const KUrl::List& list, const KUrl& destUrl);
 
-	KUrl::List importedUrlList() const;
+    KUrl::List importedUrlList() const;
 
-	/**
-	 * Documents which have been skipped during import
-	 */
-	KUrl::List skippedUrlList() const;
+    /**
+     * Documents which have been skipped during import
+     */
+    KUrl::List skippedUrlList() const;
 
-	/**
-	 * How many documents have been renamed during import
-	 */
-	int renamedCount() const;
+    /**
+     * How many documents have been renamed during import
+     */
+    int renamedCount() const;
 
 Q_SIGNALS:
-	void importFinished();
+    void importFinished();
 
-	void progressChanged(int);
+    void progressChanged(int);
 
-	void maximumChanged(int);
+    void maximumChanged(int);
 
-	/**
-	 * An error has occured and caused the whole process to stop without
-	 * importing anything
-	 */
-	void error(const QString& message);
+    /**
+     * An error has occured and caused the whole process to stop without
+     * importing anything
+     */
+    void error(const QString& message);
 
 private Q_SLOTS:
-	void slotCopyDone(KJob*);
-	void slotPercent(KJob*, unsigned long);
-	void emitProgressChanged();
+    void slotCopyDone(KJob*);
+    void slotPercent(KJob*, unsigned long);
+    void emitProgressChanged();
 
 private:
-	friend class ImporterPrivate;
-	ImporterPrivate* const d;
-	void advance();
-	void finalizeImport();
+    friend class ImporterPrivate;
+    ImporterPrivate* const d;
+    void advance();
+    void finalizeImport();
 };
-
 
 } // namespace
 

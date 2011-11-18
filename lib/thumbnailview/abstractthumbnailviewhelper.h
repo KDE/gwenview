@@ -30,22 +30,24 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Local
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 /**
  * This class is used by the ThumbnailView to request various things.
  */
-class GWENVIEWLIB_EXPORT AbstractThumbnailViewHelper : public QObject {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT AbstractThumbnailViewHelper : public QObject
+{
+    Q_OBJECT
 public:
-	AbstractThumbnailViewHelper(QObject* parent);
-	virtual ~AbstractThumbnailViewHelper();
+    AbstractThumbnailViewHelper(QObject* parent);
+    virtual ~AbstractThumbnailViewHelper();
 
-	virtual void showContextMenu(QWidget* parent) = 0;
+    virtual void showContextMenu(QWidget* parent) = 0;
 
-	virtual void showMenuForUrlDroppedOnViewport(QWidget* parent, const KUrl::List&) = 0;
+    virtual void showMenuForUrlDroppedOnViewport(QWidget* parent, const KUrl::List&) = 0;
 
-	virtual void showMenuForUrlDroppedOnDir(QWidget* parent, const KUrl::List&, const KUrl&) = 0;
+    virtual void showMenuForUrlDroppedOnDir(QWidget* parent, const KUrl::List&, const KUrl&) = 0;
 };
 
 } // namespace

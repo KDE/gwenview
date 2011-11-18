@@ -30,15 +30,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // std c++
 #include <memory>
 
-class SortedDirModelTest : public QObject {
-	Q_OBJECT
+class SortedDirModelTest : public QObject
+{
+    Q_OBJECT
 private Q_SLOTS:
-	void initTestCase();
-	void testHasDocuments_data();
-	void testHasDocuments();
+    void initTestCase();
+    void testHasDocuments_data();
+    void testHasDocuments();
 
 private:
-	SandBoxDir mSandBoxDir;
+    SandBoxDir mSandBoxDir;
 };
 
 #endif /* SORTEDDIRMODELTEST_H */

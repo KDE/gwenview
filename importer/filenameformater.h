@@ -33,33 +33,33 @@ class QString;
 class KDateTime;
 class KUrl;
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 class FileNameFormaterPrivate;
-class FileNameFormater {
+class FileNameFormater
+{
 public:
-	typedef QMap<QString, QString> HelpMap;
+    typedef QMap<QString, QString> HelpMap;
 
-	FileNameFormater(const QString& format);
-	~FileNameFormater();
+    FileNameFormater(const QString& format);
+    ~FileNameFormater();
 
-	/**
-	 * Given an url and its dateTime, returns a filename according to the
-	 * format passed to the constructor
-	 */
-	QString format(const KUrl& url, const KDateTime& dateTime);
+    /**
+     * Given an url and its dateTime, returns a filename according to the
+     * format passed to the constructor
+     */
+    QString format(const KUrl& url, const KDateTime& dateTime);
 
-	/**
-	 * Returns a map whose keys are the available keywords and values are the
-	 * keyword help
-	 */
-	static HelpMap helpMap();
+    /**
+     * Returns a map whose keys are the available keywords and values are the
+     * keyword help
+     */
+    static HelpMap helpMap();
 
 private:
-	FileNameFormaterPrivate* const d;
+    FileNameFormaterPrivate* const d;
 };
-
 
 } // namespace
 

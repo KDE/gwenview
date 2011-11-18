@@ -33,47 +33,49 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include "testutils.h"
 
-QTEST_KDEMAIN( TimeUtilsTest, GUI )
+QTEST_KDEMAIN(TimeUtilsTest, GUI)
 
 using namespace Gwenview;
 
-static void touchFile(const QString& path) {
-	utime(QFile::encodeName(path).data(), 0);
+static void touchFile(const QString& path)
+{
+    utime(QFile::encodeName(path).data(), 0);
 }
 
-void TimeUtilsTest::testPng() {
-	KUrl url = urlForTestFile("test.png");
-	KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
-	KDateTime dateTime = TimeUtils::dateTimeForFileItem(item);
-	QCOMPARE(dateTime, item.time(KFileItem::ModificationTime));
+void TimeUtilsTest::testPng()
+{
+    KUrl url = urlForTestFile("test.png");
+    KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
+    KDateTime dateTime = TimeUtils::dateTimeForFileItem(item);
+    QCOMPARE(dateTime, item.time(KFileItem::ModificationTime));
 }
 
+void TimeUtilsTest::testJpeg()
+{
+    KUrl url = urlForTestFile("orient6.jpg");
+    KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
+    KDateTime dateTime = TimeUtils::dateTimeForFileItem(item);
 
-void TimeUtilsTest::testJpeg() {
-	KUrl url = urlForTestFile("orient6.jpg");
-	KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
-	KDateTime dateTime = TimeUtils::dateTimeForFileItem(item);
-
-	const KDateTime orient6DateTime = KDateTime::fromString("2003-03-25T02:02:21");
-	QCOMPARE(dateTime, orient6DateTime);
+    const KDateTime orient6DateTime = KDateTime::fromString("2003-03-25T02:02:21");
+    QCOMPARE(dateTime, orient6DateTime);
 }
 
+void TimeUtilsTest::testCache()
+{
+    KTemporaryFile tempFile;
+    QVERIFY(tempFile.open());
+    KUrl url = KUrl::fromLocalFile(tempFile.fileName());
+    KFileItem item1(KFileItem::Unknown, KFileItem::Unknown, url);
+    KDateTime dateTime1 = TimeUtils::dateTimeForFileItem(item1);
+    QCOMPARE(dateTime1, item1.time(KFileItem::ModificationTime));
 
-void TimeUtilsTest::testCache() {
-	KTemporaryFile tempFile;
-	QVERIFY(tempFile.open());
-	KUrl url = KUrl::fromLocalFile(tempFile.fileName());
-	KFileItem item1(KFileItem::Unknown, KFileItem::Unknown, url);
-	KDateTime dateTime1 = TimeUtils::dateTimeForFileItem(item1);
-	QCOMPARE(dateTime1, item1.time(KFileItem::ModificationTime));
+    QTest::qWait(1200);
+    touchFile(url.toLocalFile());
 
-	QTest::qWait(1200);
-	touchFile(url.toLocalFile());
+    KFileItem item2(KFileItem::Unknown, KFileItem::Unknown, url);
+    KDateTime dateTime2 = TimeUtils::dateTimeForFileItem(item2);
 
-	KFileItem item2(KFileItem::Unknown, KFileItem::Unknown, url);
-	KDateTime dateTime2 = TimeUtils::dateTimeForFileItem(item2);
+    QVERIFY(dateTime1 != dateTime2);
 
-	QVERIFY(dateTime1 != dateTime2);
-
-	QCOMPARE(dateTime2, item2.time(KFileItem::ModificationTime));
+    QCOMPARE(dateTime2, item2.time(KFileItem::ModificationTime));
 }

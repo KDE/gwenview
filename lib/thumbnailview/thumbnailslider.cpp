@@ -30,46 +30,44 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct ThumbnailSliderPrivate {
 };
 
-
 ThumbnailSlider::ThumbnailSlider(QWidget* parent)
 : ZoomSlider(parent)
-, d(new ThumbnailSliderPrivate) {
-	connect(slider(), SIGNAL(actionTriggered(int)),
-		SLOT(slotActionTriggered(int)) );
-	slider()->setRange(ThumbnailView::MinThumbnailSize, ThumbnailView::MaxThumbnailSize);
+, d(new ThumbnailSliderPrivate)
+{
+    connect(slider(), SIGNAL(actionTriggered(int)),
+            SLOT(slotActionTriggered(int)));
+    slider()->setRange(ThumbnailView::MinThumbnailSize, ThumbnailView::MaxThumbnailSize);
 }
 
-
-ThumbnailSlider::~ThumbnailSlider() {
-	delete d;
+ThumbnailSlider::~ThumbnailSlider()
+{
+    delete d;
 }
 
+void ThumbnailSlider::slotActionTriggered(int actionTriggered)
+{
+    updateToolTip();
 
-void ThumbnailSlider::slotActionTriggered(int actionTriggered) {
-	updateToolTip();
-
-	if (actionTriggered != QAbstractSlider::SliderNoAction) {
-		// If we are updating because of a direct action on the slider, show
-		// the tooltip immediatly.
-		const QPoint pos = slider()->mapToGlobal(QPoint(0, slider()->height() / 2));
-		QToolTip::showText(pos, slider()->toolTip(), slider());
-	}
+    if (actionTriggered != QAbstractSlider::SliderNoAction) {
+        // If we are updating because of a direct action on the slider, show
+        // the tooltip immediatly.
+        const QPoint pos = slider()->mapToGlobal(QPoint(0, slider()->height() / 2));
+        QToolTip::showText(pos, slider()->toolTip(), slider());
+    }
 }
 
-
-void ThumbnailSlider::updateToolTip() {
-	// FIXME: i18n?
-	const int size = slider()->sliderPosition();
-	const QString text = QString("%1 x %2").arg(size).arg(size);
-	slider()->setToolTip(text);
+void ThumbnailSlider::updateToolTip()
+{
+    // FIXME: i18n?
+    const int size = slider()->sliderPosition();
+    const QString text = QString("%1 x %2").arg(size).arg(size);
+    slider()->setToolTip(text);
 }
-
-
 
 } // namespace

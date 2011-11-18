@@ -28,17 +28,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Local
 #include <lib/document/abstractdocumentimpl.h>
 
-namespace Gwenview {
+namespace Gwenview
+{
 
-class EmptyDocumentImpl : public AbstractDocumentImpl {
+class EmptyDocumentImpl : public AbstractDocumentImpl
+{
 public:
-	EmptyDocumentImpl(Document*);
-	~EmptyDocumentImpl();
+    EmptyDocumentImpl(Document*);
+    ~EmptyDocumentImpl();
 
-	virtual void init();
-	virtual Document::LoadingState loadingState() const;
+    virtual void init();
+    virtual Document::LoadingState loadingState() const;
 };
-
 
 } // namespace
 

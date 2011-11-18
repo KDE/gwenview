@@ -33,105 +33,115 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QGraphicsSceneEvent>
 #include <QPainter>
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 static qreal MAX_SIZE = 96;
 static qreal VIEW_OFFSET = MAX_SIZE / 4;
 static qreal Y_POSITION_PERCENT = 1 / 3.;
 
 struct BirdEyeViewPrivate {
-	BirdEyeView* q;
-	DocumentView* mDocView;
-	QRectF mVisibleRect;
-	QPointF mLastDragPos;
+    BirdEyeView* q;
+    DocumentView* mDocView;
+    QRectF mVisibleRect;
+    QPointF mLastDragPos;
 };
 
 BirdEyeView::BirdEyeView(DocumentView* docView)
 : QGraphicsWidget(docView)
-, d(new BirdEyeViewPrivate) {
-	setFlag(ItemIsSelectable);
-	d->q = this;
-	d->mDocView = docView;
-	adjustGeometry();
+, d(new BirdEyeViewPrivate)
+{
+    setFlag(ItemIsSelectable);
+    d->q = this;
+    d->mDocView = docView;
+    adjustGeometry();
 
-	connect(docView->document().data(), SIGNAL(metaInfoUpdated()), SLOT(adjustGeometry()));
-	connect(docView, SIGNAL(zoomChanged(qreal)), SLOT(adjustGeometry()));
-	connect(docView, SIGNAL(positionChanged()), SLOT(adjustVisibleRect()));
+    connect(docView->document().data(), SIGNAL(metaInfoUpdated()), SLOT(adjustGeometry()));
+    connect(docView, SIGNAL(zoomChanged(qreal)), SLOT(adjustGeometry()));
+    connect(docView, SIGNAL(positionChanged()), SLOT(adjustVisibleRect()));
 }
 
-BirdEyeView::~BirdEyeView() {
-	delete d;
+BirdEyeView::~BirdEyeView()
+{
+    delete d;
 }
 
-void BirdEyeView::adjustGeometry() {
-	QSize size = d->mDocView->document()->size();
-	size.scale(MAX_SIZE, MAX_SIZE, Qt::KeepAspectRatio);
-	QRectF rect = d->mDocView->boundingRect();
-	setGeometry(
-		QRectF(
-			rect.right() - VIEW_OFFSET - size.width(),
-			qMax(rect.top() + rect.height() * Y_POSITION_PERCENT - size.height(), 0.),
-			size.width(),
-			size.height()
-		));
-	adjustVisibleRect();
-	setVisible(d->mVisibleRect != boundingRect());
+void BirdEyeView::adjustGeometry()
+{
+    QSize size = d->mDocView->document()->size();
+    size.scale(MAX_SIZE, MAX_SIZE, Qt::KeepAspectRatio);
+    QRectF rect = d->mDocView->boundingRect();
+    setGeometry(
+        QRectF(
+            rect.right() - VIEW_OFFSET - size.width(),
+            qMax(rect.top() + rect.height() * Y_POSITION_PERCENT - size.height(), 0.),
+            size.width(),
+            size.height()
+        ));
+    adjustVisibleRect();
+    setVisible(d->mVisibleRect != boundingRect());
 }
 
-void BirdEyeView::adjustVisibleRect() {
-	QSizeF docSize = d->mDocView->document()->size();
-	qreal viewZoom = d->mDocView->zoom();
-	qreal bevZoom = size().width() / docSize.width();
+void BirdEyeView::adjustVisibleRect()
+{
+    QSizeF docSize = d->mDocView->document()->size();
+    qreal viewZoom = d->mDocView->zoom();
+    qreal bevZoom = size().width() / docSize.width();
 
-	d->mVisibleRect = QRectF(
-		QPointF(d->mDocView->position()) / viewZoom * bevZoom,
-		(d->mDocView->size() / viewZoom).boundedTo(docSize) * bevZoom);
-	update();
+    d->mVisibleRect = QRectF(
+                          QPointF(d->mDocView->position()) / viewZoom * bevZoom,
+                          (d->mDocView->size() / viewZoom).boundedTo(docSize) * bevZoom);
+    update();
 }
 
-inline void drawTransparentRect(QPainter* painter, const QRectF& rect, const QColor& color) {
-	QColor bg = color;
-	bg.setAlphaF(.33);
-	QColor fg = color;
-	fg.setAlphaF(.66);
-	painter->setPen(fg);
-	painter->setBrush(bg);
-	painter->drawRect(rect.adjusted(0, 0, -1, -1));
+inline void drawTransparentRect(QPainter* painter, const QRectF& rect, const QColor& color)
+{
+    QColor bg = color;
+    bg.setAlphaF(.33);
+    QColor fg = color;
+    fg.setAlphaF(.66);
+    painter->setPen(fg);
+    painter->setBrush(bg);
+    painter->drawRect(rect.adjusted(0, 0, -1, -1));
 }
 
-void BirdEyeView::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) {
-	drawTransparentRect(painter, boundingRect(), Qt::black);
-	drawTransparentRect(painter, d->mVisibleRect, Qt::white);
+void BirdEyeView::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
+{
+    drawTransparentRect(painter, boundingRect(), Qt::black);
+    drawTransparentRect(painter, d->mVisibleRect, Qt::white);
 }
 
-void BirdEyeView::mousePressEvent(QGraphicsSceneMouseEvent* event) {
-	if (d->mVisibleRect.contains(event->pos())) {
-		setCursor(Qt::ClosedHandCursor);
-		d->mLastDragPos = event->pos();
-	}
+void BirdEyeView::mousePressEvent(QGraphicsSceneMouseEvent* event)
+{
+    if (d->mVisibleRect.contains(event->pos())) {
+        setCursor(Qt::ClosedHandCursor);
+        d->mLastDragPos = event->pos();
+    }
 }
 
-void BirdEyeView::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
-	QGraphicsItem::mouseMoveEvent(event);
-	if (d->mLastDragPos.isNull()) {
-		return;
-	}
-	qreal ratio = d->mDocView->boundingRect().width() / d->mVisibleRect.width();
+void BirdEyeView::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
+{
+    QGraphicsItem::mouseMoveEvent(event);
+    if (d->mLastDragPos.isNull()) {
+        return;
+    }
+    qreal ratio = d->mDocView->boundingRect().width() / d->mVisibleRect.width();
 
-	QPointF mousePos = event->pos();
-	QPointF viewPos = d->mDocView->position() + (mousePos - d->mLastDragPos) * ratio;
+    QPointF mousePos = event->pos();
+    QPointF viewPos = d->mDocView->position() + (mousePos - d->mLastDragPos) * ratio;
 
-	d->mLastDragPos = mousePos;
-	d->mDocView->setPosition(viewPos.toPoint());
+    d->mLastDragPos = mousePos;
+    d->mDocView->setPosition(viewPos.toPoint());
 }
 
-void BirdEyeView::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
-	QGraphicsItem::mouseReleaseEvent(event);
-	if (d->mLastDragPos.isNull()) {
-		return;
-	}
-	setCursor(Qt::OpenHandCursor);
-	d->mLastDragPos = QPointF();
+void BirdEyeView::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
+{
+    QGraphicsItem::mouseReleaseEvent(event);
+    if (d->mLastDragPos.isNull()) {
+        return;
+    }
+    setCursor(Qt::OpenHandCursor);
+    d->mLastDragPos = QPointF();
 }
 
 } // namespace

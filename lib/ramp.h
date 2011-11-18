@@ -21,7 +21,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #ifndef RAMP_H
 #define RAMP_H
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 /**
  * This class maps values on a linear ramp.
@@ -33,29 +34,29 @@ namespace Gwenview {
  *
  * Note that y1 can be greater than y2 if necessary
  */
-class Ramp {
+class Ramp
+{
 public:
-	Ramp(qreal x1, qreal x2, qreal y1, qreal y2)
-	: mX1(x1)
-	, mX2(x2)
-	, mY1(y1)
-	, mY2(y2)
-	{
-		mK = (y2 - y1) / (x2 - x1);
-	}
+    Ramp(qreal x1, qreal x2, qreal y1, qreal y2)
+        : mX1(x1)
+        , mX2(x2)
+        , mY1(y1)
+        , mY2(y2) {
+        mK = (y2 - y1) / (x2 - x1);
+    }
 
-	qreal operator()(qreal x) const {
-		if (x < mX1) {
-			return mY1;
-		}
-		if (x > mX2) {
-			return mY2;
-		}
-		return mY1 + (x - mX1) * mK;
-	}
+    qreal operator()(qreal x) const {
+        if (x < mX1) {
+            return mY1;
+        }
+        if (x > mX2) {
+            return mY2;
+        }
+        return mY1 + (x - mX1) * mK;
+    }
 
 private:
-	qreal mX1, mX2, mY1, mY2, mK;
+    qreal mX1, mX2, mY1, mY2, mK;
 };
 
 } // namespace

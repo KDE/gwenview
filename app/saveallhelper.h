@@ -30,25 +30,26 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 class KJob;
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 class SaveAllHelperPrivate;
-class SaveAllHelper : public QObject {
-	Q_OBJECT
+class SaveAllHelper : public QObject
+{
+    Q_OBJECT
 public:
-	SaveAllHelper(QWidget* parent);
-	~SaveAllHelper();
+    SaveAllHelper(QWidget* parent);
+    ~SaveAllHelper();
 
-	void save();
+    void save();
 
 private Q_SLOTS:
-	void slotCanceled();
-	void slotResult(KJob*);
+    void slotCanceled();
+    void slotResult(KJob*);
 
 private:
-	SaveAllHelperPrivate* const d;
+    SaveAllHelperPrivate* const d;
 };
-
 
 } // namespace
 

@@ -32,34 +32,35 @@ class QImage;
 class QRect;
 class QRegion;
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 class Document;
 
 struct ImageScalerPrivate;
-class GWENVIEWLIB_EXPORT ImageScaler : public QObject {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT ImageScaler : public QObject
+{
+    Q_OBJECT
 public:
-	ImageScaler(QObject* parent=0);
-	~ImageScaler();
-	void setDocument(KSharedPtr<Document>);
-	void setZoom(qreal);
-	void setDestinationRegion(const QRegion&);
+    ImageScaler(QObject* parent = 0);
+    ~ImageScaler();
+    void setDocument(KSharedPtr<Document>);
+    void setZoom(qreal);
+    void setDestinationRegion(const QRegion&);
 
-	void setTransformationMode(Qt::TransformationMode);
+    void setTransformationMode(Qt::TransformationMode);
 
 Q_SIGNALS:
-	void scaledRect(int left, int top, const QImage&);
+    void scaledRect(int left, int top, const QImage&);
 
 private:
-	ImageScalerPrivate * const d;
-	void scaleRect(const QRect&);
+    ImageScalerPrivate * const d;
+    void scaleRect(const QRect&);
 
 private Q_SLOTS:
-	void doScale();
+    void doScale();
 };
 
 } // namespace
-
 
 #endif /* IMAGESCALER_H */

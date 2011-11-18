@@ -28,19 +28,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include <lib/document/documentjob.h>
 
-namespace Gwenview {
+namespace Gwenview
+{
 
-
-class LoadingJob : public DocumentJob {
-	Q_OBJECT
+class LoadingJob : public DocumentJob
+{
+    Q_OBJECT
 protected:
-	void doStart();
+    void doStart();
 
 private Q_SLOTS:
-	void slotLoaded();
-	void slotLoadingFailed();
+    void slotLoaded();
+    void slotLoadingFailed();
 };
-
 
 } // namespace
 

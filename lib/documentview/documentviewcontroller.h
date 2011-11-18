@@ -32,7 +32,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 class KActionCollection;
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 class DocumentView;
 class SlideContainer;
@@ -44,29 +45,29 @@ class DocumentViewControllerPrivate;
  * Handles all DocumentView specific actions like zooming. Calls the
  * corresponding code on its view, if any.
  */
-class GWENVIEWLIB_EXPORT DocumentViewController : public QObject {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT DocumentViewController : public QObject
+{
+    Q_OBJECT
 public:
-	DocumentViewController(KActionCollection*, QObject* parent=0);
-	~DocumentViewController();
+    DocumentViewController(KActionCollection*, QObject* parent = 0);
+    ~DocumentViewController();
 
-	DocumentView* view() const;
-	ZoomWidget* zoomWidget() const;
+    DocumentView* view() const;
+    ZoomWidget* zoomWidget() const;
 
-	void setView(DocumentView*);
-	void setZoomWidget(ZoomWidget* widget);
+    void setView(DocumentView*);
+    void setZoomWidget(ZoomWidget* widget);
 
-	void setToolContainer(SlideContainer* container);
+    void setToolContainer(SlideContainer* container);
 
 private Q_SLOTS:
-	void slotAdapterChanged();
-	void updateZoomToFitActionFromView();
-	void updateTool();
+    void slotAdapterChanged();
+    void updateZoomToFitActionFromView();
+    void updateTool();
 
 private:
-	DocumentViewControllerPrivate* const d;
+    DocumentViewControllerPrivate* const d;
 };
-
 
 } // namespace
 

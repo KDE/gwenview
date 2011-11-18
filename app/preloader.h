@@ -32,29 +32,29 @@ class QSize;
 
 class KUrl;
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 class PreloaderPrivate;
 
 /**
  * This class preloads a document to fit a specific size.
  */
-class Preloader : public QObject {
-	Q_OBJECT
+class Preloader : public QObject
+{
+    Q_OBJECT
 public:
-	Preloader(QObject* parent);
-	~Preloader();
+    Preloader(QObject* parent);
+    ~Preloader();
 
-	void preload(const KUrl&, const QSize&);
+    void preload(const KUrl&, const QSize&);
 
 private Q_SLOTS:
-	void doPreload();
+    void doPreload();
 
 private:
-	PreloaderPrivate* const d;
+    PreloaderPrivate* const d;
 };
-
 
 } // namespace
 

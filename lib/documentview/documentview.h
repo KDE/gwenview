@@ -34,7 +34,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 class KUrl;
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 class AbstractRasterImageViewTool;
 class RasterImageView;
@@ -47,157 +48,157 @@ struct DocumentViewPrivate;
  * This widget can display various documents, using an instance of
  * AbstractDocumentViewAdapter
  */
-class GWENVIEWLIB_EXPORT DocumentView : public QGraphicsWidget {
-	Q_OBJECT
-	Q_PROPERTY(qreal zoom READ zoom WRITE setZoom NOTIFY zoomChanged)
-	Q_PROPERTY(bool zoomToFit READ zoomToFit WRITE setZoomToFit NOTIFY zoomToFitChanged)
-	Q_PROPERTY(QPoint position READ position WRITE setPosition NOTIFY positionChanged)
+class GWENVIEWLIB_EXPORT DocumentView : public QGraphicsWidget
+{
+    Q_OBJECT
+    Q_PROPERTY(qreal zoom READ zoom WRITE setZoom NOTIFY zoomChanged)
+    Q_PROPERTY(bool zoomToFit READ zoomToFit WRITE setZoomToFit NOTIFY zoomToFitChanged)
+    Q_PROPERTY(QPoint position READ position WRITE setPosition NOTIFY positionChanged)
 public:
-	enum {
-		MaximumZoom = 16
-	};
+    enum {
+        MaximumZoom = 16
+    };
 
-	/**
-	 * Create a new view attached to scene. We need the scene to be able to
-	 * install scene event filters.
-	 */
-	DocumentView(QGraphicsScene* scene);
-	~DocumentView();
+    /**
+     * Create a new view attached to scene. We need the scene to be able to
+     * install scene event filters.
+     */
+    DocumentView(QGraphicsScene* scene);
+    ~DocumentView();
 
-	Document::Ptr document() const;
+    Document::Ptr document() const;
 
-	KUrl url() const;
+    KUrl url() const;
 
-	void openUrl(const KUrl&);
+    void openUrl(const KUrl&);
 
-	/**
-	 * Tells the current adapter to load its config. Used when the user changed
-	 * the config while the view was visible.
-	 */
-	void loadAdapterConfig();
+    /**
+     * Tells the current adapter to load its config. Used when the user changed
+     * the config while the view was visible.
+     */
+    void loadAdapterConfig();
 
-	/**
-	 * Unload the current adapter, if any
-	 */
-	void reset();
+    /**
+     * Unload the current adapter, if any
+     */
+    void reset();
 
-	/**
-	 * Returns true if an adapter is loaded (note: adapters are also used to
-	 * display error messages!)
-	 */
-	bool isEmpty() const;
+    /**
+     * Returns true if an adapter is loaded (note: adapters are also used to
+     * display error messages!)
+     */
+    bool isEmpty() const;
 
-	bool canZoom() const;
+    bool canZoom() const;
 
-	qreal minimumZoom() const;
+    qreal minimumZoom() const;
 
-	qreal zoom() const;
+    qreal zoom() const;
 
-	bool isCurrent() const;
+    bool isCurrent() const;
 
-	void setCurrent(bool);
+    void setCurrent(bool);
 
-	void setCompareMode(bool);
+    void setCompareMode(bool);
 
-	bool zoomToFit() const;
+    bool zoomToFit() const;
 
-	QPoint position() const;
+    QPoint position() const;
 
-	/**
-	 * Returns the RasterImageView of the current adapter, if it has one
-	 */
-	RasterImageView* imageView() const;
+    /**
+     * Returns the RasterImageView of the current adapter, if it has one
+     */
+    RasterImageView* imageView() const;
 
-	AbstractRasterImageViewTool* currentTool() const;
+    AbstractRasterImageViewTool* currentTool() const;
 
-	void moveTo(const QRect&);
-	void moveToAnimated(const QRect&);
-	void fadeIn();
-	void fadeOut();
+    void moveTo(const QRect&);
+    void moveToAnimated(const QRect&);
+    void fadeIn();
+    void fadeOut();
 
-	void setGeometry(const QRectF& rect); // reimp
+    void setGeometry(const QRectF& rect); // reimp
 
 public Q_SLOTS:
-	void setZoom(qreal);
+    void setZoom(qreal);
 
-	void setZoomToFit(bool);
+    void setZoomToFit(bool);
 
-	void setPosition(const QPoint&);
+    void setPosition(const QPoint&);
 
 Q_SIGNALS:
-	/**
-	 * Emitted when the part has finished loading
-	 */
-	void completed();
+    /**
+     * Emitted when the part has finished loading
+     */
+    void completed();
 
-	void previousImageRequested();
+    void previousImageRequested();
 
-	void nextImageRequested();
+    void nextImageRequested();
 
-	void captionUpdateRequested(const QString&);
+    void captionUpdateRequested(const QString&);
 
-	void toggleFullScreenRequested();
+    void toggleFullScreenRequested();
 
-	void videoFinished();
+    void videoFinished();
 
-	void minimumZoomChanged(qreal);
+    void minimumZoomChanged(qreal);
 
-	void zoomChanged(qreal);
+    void zoomChanged(qreal);
 
-	void adapterChanged();
+    void adapterChanged();
 
-	void focused(DocumentView*);
+    void focused(DocumentView*);
 
-	void zoomToFitChanged(bool);
+    void zoomToFitChanged(bool);
 
-	void positionChanged();
+    void positionChanged();
 
-	void hudTrashClicked(DocumentView*);
-	void hudDeselectClicked(DocumentView*);
+    void hudTrashClicked(DocumentView*);
+    void hudDeselectClicked(DocumentView*);
 
-	void animationFinished(DocumentView*);
+    void animationFinished(DocumentView*);
 
-	void contextMenuRequested();
+    void contextMenuRequested();
 
-	void currentToolChanged(AbstractRasterImageViewTool*);
+    void currentToolChanged(AbstractRasterImageViewTool*);
 
 protected:
-	void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
 
-	void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event);
-	void wheelEvent(QGraphicsSceneWheelEvent* event);
-	void contextMenuEvent(QGraphicsSceneContextMenuEvent* event);
-	bool sceneEventFilter(QGraphicsItem*, QEvent*);
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event);
+    void wheelEvent(QGraphicsSceneWheelEvent* event);
+    void contextMenuEvent(QGraphicsSceneContextMenuEvent* event);
+    bool sceneEventFilter(QGraphicsItem*, QEvent*);
 
 private Q_SLOTS:
-	void finishOpenUrl();
-	void slotLoaded();
-	void slotLoadingFailed();
+    void finishOpenUrl();
+    void slotLoaded();
+    void slotLoadingFailed();
 
-	void zoomActualSize();
+    void zoomActualSize();
 
-	void zoomIn(const QPointF& center = QPointF(-1,-1));
-	void zoomOut(const QPointF& center = QPointF(-1,-1));
+    void zoomIn(const QPointF& center = QPointF(-1, -1));
+    void zoomOut(const QPointF& center = QPointF(-1, -1));
 
-	void slotZoomChanged(qreal);
+    void slotZoomChanged(qreal);
 
-	void slotBusyChanged(const KUrl&, bool);
+    void slotBusyChanged(const KUrl&, bool);
 
-	void slotKeyPressed(Qt::Key key, bool pressed);
+    void slotKeyPressed(Qt::Key key, bool pressed);
 
-	void emitHudTrashClicked();
-	void emitHudDeselectClicked();
-	void emitFocused();
+    void emitHudTrashClicked();
+    void emitHudDeselectClicked();
+    void emitFocused();
 
-	void slotAnimationFinished();
+    void slotAnimationFinished();
 
 private:
-	friend struct DocumentViewPrivate;
-	DocumentViewPrivate* const d;
+    friend struct DocumentViewPrivate;
+    DocumentViewPrivate* const d;
 
-	void createAdapterForDocument();
+    void createAdapterForDocument();
 };
-
 
 } // namespace
 

@@ -28,29 +28,28 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Local
 #include "rasterimageview.h"
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct AbstractRasterImageViewToolPrivate {
-	RasterImageView* mRasterImageView;
+    RasterImageView* mRasterImageView;
 };
-
 
 AbstractRasterImageViewTool::AbstractRasterImageViewTool(RasterImageView* view)
 : QObject(view)
-, d(new AbstractRasterImageViewToolPrivate) {
-	d->mRasterImageView = view;
+, d(new AbstractRasterImageViewToolPrivate)
+{
+    d->mRasterImageView = view;
 }
 
-
-AbstractRasterImageViewTool::~AbstractRasterImageViewTool() {
-	delete d;
+AbstractRasterImageViewTool::~AbstractRasterImageViewTool()
+{
+    delete d;
 }
 
-
-RasterImageView* AbstractRasterImageViewTool::imageView() const {
-	return d->mRasterImageView;
+RasterImageView* AbstractRasterImageViewTool::imageView() const
+{
+    return d->mRasterImageView;
 }
-
 
 } // namespace

@@ -33,8 +33,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 class KJob;
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct AbstractImageOperationPrivate;
 
@@ -48,40 +48,40 @@ struct AbstractImageOperationPrivate;
  * - Implement undo()
  * - Define the operation/command text with setText()
  */
-class GWENVIEWLIB_EXPORT AbstractImageOperation : public QObject {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT AbstractImageOperation : public QObject
+{
+    Q_OBJECT
 public:
-	AbstractImageOperation();
-	virtual ~AbstractImageOperation();
+    AbstractImageOperation();
+    virtual ~AbstractImageOperation();
 
-	void applyToDocument(Document::Ptr);
-	Document::Ptr document() const;
+    void applyToDocument(Document::Ptr);
+    Document::Ptr document() const;
 
 protected:
-	virtual void redo() = 0;
-	virtual void undo() {}
-	void setText(const QString&);
+    virtual void redo() = 0;
+    virtual void undo() {}
+    void setText(const QString&);
 
-	/**
-	 * Convenience method which can be called from redo() if the operation is
-	 * implemented as a job
-	 */
-	void redoAsDocumentJob(DocumentJob* job);
+    /**
+     * Convenience method which can be called from redo() if the operation is
+     * implemented as a job
+     */
+    void redoAsDocumentJob(DocumentJob* job);
 
 protected Q_SLOTS:
-	void finish(bool ok);
+    void finish(bool ok);
 
-	/**
-	 * Convenience slot which call finish() correctly if job succeeded
-	 */
-	void finishFromKJob(KJob* job);
+    /**
+     * Convenience slot which call finish() correctly if job succeeded
+     */
+    void finishFromKJob(KJob* job);
 
 private:
-	AbstractImageOperationPrivate* const d;
+    AbstractImageOperationPrivate* const d;
 
-	friend class ImageOperationCommand;
+    friend class ImageOperationCommand;
 };
-
 
 } // namespace
 

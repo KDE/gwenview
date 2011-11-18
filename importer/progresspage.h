@@ -29,21 +29,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 class Importer;
 
 class ProgressPagePrivate;
-class ProgressPage : public QWidget {
-	Q_OBJECT
+class ProgressPage : public QWidget
+{
+    Q_OBJECT
 public:
-	ProgressPage(Importer*);
-	~ProgressPage();
+    ProgressPage(Importer*);
+    ~ProgressPage();
 
 private:
-	ProgressPagePrivate* const d;
+    ProgressPagePrivate* const d;
 };
-
 
 } // namespace
 

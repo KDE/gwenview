@@ -34,7 +34,8 @@ class QPalette;
 
 class KActionCollection;
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 class DocumentView;
 class RasterImageView;
@@ -46,98 +47,99 @@ struct DocumentPanelPrivate;
 /**
  * Holds the active document view and associated widgetry.
  */
-class DocumentPanel : public QWidget {
-	Q_OBJECT
+class DocumentPanel : public QWidget
+{
+    Q_OBJECT
 public:
-	static const int MaxViewCount;
+    static const int MaxViewCount;
 
-	DocumentPanel(QWidget* parent, SlideShow*, KActionCollection*);
-	~DocumentPanel();
+    DocumentPanel(QWidget* parent, SlideShow*, KActionCollection*);
+    ~DocumentPanel();
 
-	ThumbnailBarView* thumbnailBar() const;
+    ThumbnailBarView* thumbnailBar() const;
 
-	void loadConfig();
+    void loadConfig();
 
-	void saveConfig();
+    void saveConfig();
 
-	/**
-	 * Reset the view
-	 */
-	void reset();
+    /**
+     * Reset the view
+     */
+    void reset();
 
-	void setFullScreenMode(bool fullScreen);
+    void setFullScreenMode(bool fullScreen);
 
-	bool isFullScreenMode() const;
+    bool isFullScreenMode() const;
 
-	void setNormalPalette(const QPalette&);
+    void setNormalPalette(const QPalette&);
 
-	int statusBarHeight() const;
+    int statusBarHeight() const;
 
-	virtual QSize sizeHint() const;
+    virtual QSize sizeHint() const;
 
-	/**
-	 * Returns the url of the current document, or an invalid url if unknown
-	 */
-	KUrl url() const;
+    /**
+     * Returns the url of the current document, or an invalid url if unknown
+     */
+    KUrl url() const;
 
-	void openUrl(const KUrl& url);
+    void openUrl(const KUrl& url);
 
-	/**
-	 * Opens up to MaxViewCount urls, and set currentUrl as the current one
-	 */
-	void openUrls(const KUrl::List& urls, const KUrl& currentUrl);
+    /**
+     * Opens up to MaxViewCount urls, and set currentUrl as the current one
+     */
+    void openUrls(const KUrl::List& urls, const KUrl& currentUrl);
 
-	void reload();
+    void reload();
 
-	Document::Ptr currentDocument() const;
+    Document::Ptr currentDocument() const;
 
-	bool isEmpty() const;
+    bool isEmpty() const;
 
-	/**
-	 * Returns the image view, if the current adapter has one.
-	 */
-	RasterImageView* imageView() const;
+    /**
+     * Returns the image view, if the current adapter has one.
+     */
+    RasterImageView* imageView() const;
 
-	/**
-	 * Returns the document view
-	 */
-	DocumentView* documentView() const;
+    /**
+     * Returns the document view
+     */
+    DocumentView* documentView() const;
 
-	/**
-	 * Sets a widget to show at the bottom of the panel
-	 */
-	void setToolWidget(QWidget* widget);
+    /**
+     * Sets a widget to show at the bottom of the panel
+     */
+    void setToolWidget(QWidget* widget);
 
-	QToolButton* toggleSideBarButton() const;
+    QToolButton* toggleSideBarButton() const;
 
 Q_SIGNALS:
 
-	/**
-	 * Emitted when the part has finished loading
-	 */
-	void completed();
+    /**
+     * Emitted when the part has finished loading
+     */
+    void completed();
 
-	void previousImageRequested();
+    void previousImageRequested();
 
-	void nextImageRequested();
+    void nextImageRequested();
 
-	void toggleFullScreenRequested();
+    void toggleFullScreenRequested();
 
-	void captionUpdateRequested(const QString&);
+    void captionUpdateRequested(const QString&);
 
 private Q_SLOTS:
-	void setThumbnailBarVisibility(bool visible);
+    void setThumbnailBarVisibility(bool visible);
 
-	void showContextMenu();
+    void showContextMenu();
 
-	void slotViewFocused(DocumentView*);
+    void slotViewFocused(DocumentView*);
 
-	void trashView(DocumentView*);
-	void deselectView(DocumentView*);
+    void trashView(DocumentView*);
+    void deselectView(DocumentView*);
 
 private:
-	friend struct DocumentPanelPrivate;
-	DocumentPanelPrivate* const d;
+    friend struct DocumentPanelPrivate;
+    DocumentPanelPrivate* const d;
 };
 
 } // namespace

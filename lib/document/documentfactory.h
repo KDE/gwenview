@@ -29,47 +29,49 @@ class QUndoGroup;
 
 class KUrl;
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 struct DocumentFactoryPrivate;
 
-class GWENVIEWLIB_EXPORT DocumentFactory : public QObject {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT DocumentFactory : public QObject
+{
+    Q_OBJECT
 public:
-	static DocumentFactory* instance();
-	~DocumentFactory();
+    static DocumentFactory* instance();
+    ~DocumentFactory();
 
-	Document::Ptr load(const KUrl&);
+    Document::Ptr load(const KUrl&);
 
-	QList<KUrl> modifiedDocumentList() const;
+    QList<KUrl> modifiedDocumentList() const;
 
-	bool hasUrl(const KUrl&) const;
+    bool hasUrl(const KUrl&) const;
 
-	void clearCache();
+    void clearCache();
 
-	QUndoGroup* undoGroup();
+    QUndoGroup* undoGroup();
 
-	/**
-	 * Do not keep document whose url is @url in cache even if it has been
-	 * modified
-	 */
-	void forget(const KUrl& url);
+    /**
+     * Do not keep document whose url is @url in cache even if it has been
+     * modified
+     */
+    void forget(const KUrl& url);
 
 Q_SIGNALS:
-	void modifiedDocumentListChanged();
-	void documentChanged(const KUrl&);
-	void documentBusyStateChanged(const KUrl&, bool);
+    void modifiedDocumentListChanged();
+    void documentChanged(const KUrl&);
+    void documentBusyStateChanged(const KUrl&, bool);
 
 private Q_SLOTS:
-	void slotLoaded(const KUrl&);
-	void slotSaved(const KUrl&, const KUrl&);
-	void slotModified(const KUrl&);
-	void slotBusyChanged(const KUrl&, bool);
+    void slotLoaded(const KUrl&);
+    void slotSaved(const KUrl&, const KUrl&);
+    void slotModified(const KUrl&);
+    void slotBusyChanged(const KUrl&, bool);
 
 private:
-	DocumentFactory();
+    DocumentFactory();
 
-	DocumentFactoryPrivate* const d;
+    DocumentFactoryPrivate* const d;
 };
 
 } // namespace

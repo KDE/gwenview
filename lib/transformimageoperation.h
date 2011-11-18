@@ -32,22 +32,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 #include <lib/orientation.h>
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct TransformImageOperationPrivate;
-class GWENVIEWLIB_EXPORT TransformImageOperation : public AbstractImageOperation {
+class GWENVIEWLIB_EXPORT TransformImageOperation : public AbstractImageOperation
+{
 public:
-	TransformImageOperation(Orientation);
-	~TransformImageOperation();
+    TransformImageOperation(Orientation);
+    ~TransformImageOperation();
 
-	virtual void redo();
-	virtual void undo();
+    virtual void redo();
+    virtual void undo();
 
 private:
-	TransformImageOperationPrivate* const d;
+    TransformImageOperationPrivate* const d;
 };
-
 
 } // namespace
 

@@ -44,359 +44,367 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 static const int HANDLE_SIZE = 15;
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 enum CropHandleFlag {
-	CH_None,
-	CH_Top = 1,
-	CH_Left = 2,
-	CH_Right = 4,
-	CH_Bottom = 8,
-	CH_TopLeft = CH_Top | CH_Left,
-	CH_BottomLeft = CH_Bottom | CH_Left,
-	CH_TopRight = CH_Top | CH_Right,
-	CH_BottomRight = CH_Bottom | CH_Right,
-	CH_Content = 16
+    CH_None,
+    CH_Top = 1,
+    CH_Left = 2,
+    CH_Right = 4,
+    CH_Bottom = 8,
+    CH_TopLeft = CH_Top | CH_Left,
+    CH_BottomLeft = CH_Bottom | CH_Left,
+    CH_TopRight = CH_Top | CH_Right,
+    CH_BottomRight = CH_Bottom | CH_Right,
+    CH_Content = 16
 };
 
 Q_DECLARE_FLAGS(CropHandle, CropHandleFlag)
 
 } // namespace
 
-inline QPoint boundPointX(const QPoint& point, const QRect& rect) {
-	return QPoint(
-		qBound(rect.left(), point.x(), rect.right()),
-		point.y()
-		);
+inline QPoint boundPointX(const QPoint& point, const QRect& rect)
+{
+    return QPoint(
+               qBound(rect.left(), point.x(), rect.right()),
+               point.y()
+           );
 }
 
-inline QPoint boundPointXY(const QPoint& point, const QRect& rect) {
-	return QPoint(
-		qBound(rect.left(), point.x(), rect.right()),
-		qBound(rect.top(),  point.y(), rect.bottom())
-		);
+inline QPoint boundPointXY(const QPoint& point, const QRect& rect)
+{
+    return QPoint(
+               qBound(rect.left(), point.x(), rect.right()),
+               qBound(rect.top(),  point.y(), rect.bottom())
+           );
 }
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Gwenview::CropHandle)
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 struct CropToolPrivate {
-	CropTool* q;
-	QRect mRect;
-	QList<CropHandle> mCropHandleList;
-	CropHandle mMovingHandle;
-	QPoint mLastMouseMovePos;
-	double mCropRatio;
-	CropWidget* mCropWidget;
+    CropTool* q;
+    QRect mRect;
+    QList<CropHandle> mCropHandleList;
+    CropHandle mMovingHandle;
+    QPoint mLastMouseMovePos;
+    double mCropRatio;
+    CropWidget* mCropWidget;
 
-	QRect viewportCropRect() const {
-		return q->imageView()->mapToView(mRect.adjusted(0, 0, 1, 1));
-	}
+    QRect viewportCropRect() const {
+        return q->imageView()->mapToView(mRect.adjusted(0, 0, 1, 1));
+    }
 
-	QRect handleViewportRect(CropHandle handle) {
-		QSize viewportSize = q->imageView()->size().toSize();
-		QRect rect = viewportCropRect();
-		int left, top;
-		if (handle & CH_Top) {
-			top = rect.top();
-		} else if (handle & CH_Bottom) {
-			top = rect.bottom() - HANDLE_SIZE;
-		} else {
-			top = rect.top() + (rect.height() - HANDLE_SIZE) / 2;
-			top = qBound(0, top, viewportSize.height() - HANDLE_SIZE);
-		}
+    QRect handleViewportRect(CropHandle handle)
+    {
+        QSize viewportSize = q->imageView()->size().toSize();
+        QRect rect = viewportCropRect();
+        int left, top;
+        if (handle & CH_Top) {
+            top = rect.top();
+        } else if (handle & CH_Bottom) {
+            top = rect.bottom() - HANDLE_SIZE;
+        } else {
+            top = rect.top() + (rect.height() - HANDLE_SIZE) / 2;
+            top = qBound(0, top, viewportSize.height() - HANDLE_SIZE);
+        }
 
-		if (handle & CH_Left) {
-			left = rect.left();
-		} else if (handle & CH_Right) {
-			left = rect.right() - HANDLE_SIZE;
-		} else {
-			left = rect.left() + (rect.width() - HANDLE_SIZE) / 2;
-			left = qBound(0, left, viewportSize.width() - HANDLE_SIZE);
-		}
+        if (handle & CH_Left) {
+            left = rect.left();
+        } else if (handle & CH_Right) {
+            left = rect.right() - HANDLE_SIZE;
+        } else {
+            left = rect.left() + (rect.width() - HANDLE_SIZE) / 2;
+            left = qBound(0, left, viewportSize.width() - HANDLE_SIZE);
+        }
 
-		return QRect(left, top, HANDLE_SIZE, HANDLE_SIZE);
-	}
+        return QRect(left, top, HANDLE_SIZE, HANDLE_SIZE);
+    }
 
-	CropHandle handleAt(const QPointF& pos) {
-		Q_FOREACH(const CropHandle& handle, mCropHandleList) {
-			QRectF rect = handleViewportRect(handle);
-			if (rect.contains(pos)) {
-				return handle;
-			}
-		}
-		QRectF rect = viewportCropRect();
-		if (rect.contains(pos)) {
-			return CH_Content;
-		}
-		return CH_None;
-	}
+    CropHandle handleAt(const QPointF& pos)
+    {
+        Q_FOREACH(const CropHandle & handle, mCropHandleList) {
+            QRectF rect = handleViewportRect(handle);
+            if (rect.contains(pos)) {
+                return handle;
+            }
+        }
+        QRectF rect = viewportCropRect();
+        if (rect.contains(pos)) {
+            return CH_Content;
+        }
+        return CH_None;
+    }
 
-	void updateCursor(CropHandle handle, bool buttonDown) {
-		Qt::CursorShape shape;
-		switch (handle) {
-		case CH_TopLeft:
-		case CH_BottomRight:
-			shape = Qt::SizeFDiagCursor;
-			break;
-		
-		case CH_TopRight:
-		case CH_BottomLeft:
-			shape = Qt::SizeBDiagCursor;
-			break;
+    void updateCursor(CropHandle handle, bool buttonDown)
+    {
+        Qt::CursorShape shape;
+        switch (handle) {
+        case CH_TopLeft:
+        case CH_BottomRight:
+            shape = Qt::SizeFDiagCursor;
+            break;
 
-		case CH_Left:
-		case CH_Right:
-			shape = Qt::SizeHorCursor;
-			break;
+        case CH_TopRight:
+        case CH_BottomLeft:
+            shape = Qt::SizeBDiagCursor;
+            break;
 
-		case CH_Top:
-		case CH_Bottom:
-			shape = Qt::SizeVerCursor;
-			break;
+        case CH_Left:
+        case CH_Right:
+            shape = Qt::SizeHorCursor;
+            break;
 
-		case CH_Content:
-			shape = buttonDown ? Qt::ClosedHandCursor : Qt::OpenHandCursor;
-			break;
+        case CH_Top:
+        case CH_Bottom:
+            shape = Qt::SizeVerCursor;
+            break;
 
-		default:
-			shape = Qt::ArrowCursor;
-			break;
-		}
-		q->imageView()->setCursor(shape);
-	}
+        case CH_Content:
+            shape = buttonDown ? Qt::ClosedHandCursor : Qt::OpenHandCursor;
+            break;
 
-	void keepRectInsideImage() {
-		const QSize imageSize = q->imageView()->documentSize().toSize();
-		if (mRect.width() > imageSize.width() || mRect.height() > imageSize.height()) {
-			// This can happen when the crop ratio changes
-			QSize rectSize = mRect.size();
-			rectSize.scale(imageSize, Qt::KeepAspectRatio);
-			mRect.setSize(rectSize);
-		}
+        default:
+            shape = Qt::ArrowCursor;
+            break;
+        }
+        q->imageView()->setCursor(shape);
+    }
 
-		if (mRect.right() >= imageSize.width()) {
-			mRect.moveRight(imageSize.width() - 1);
-		} else if (mRect.left() < 0) {
-			mRect.moveLeft(0);
-		}
-		if (mRect.bottom() >= imageSize.height()) {
-			mRect.moveBottom(imageSize.height() - 1);
-		} else if (mRect.top() < 0) {
-			mRect.moveTop(0);
-		}
-	}
+    void keepRectInsideImage()
+    {
+        const QSize imageSize = q->imageView()->documentSize().toSize();
+        if (mRect.width() > imageSize.width() || mRect.height() > imageSize.height()) {
+            // This can happen when the crop ratio changes
+            QSize rectSize = mRect.size();
+            rectSize.scale(imageSize, Qt::KeepAspectRatio);
+            mRect.setSize(rectSize);
+        }
 
-	void setupWidget() {
-		RasterImageView* view = q->imageView();
-		mCropWidget = new CropWidget(0, view, q);
-		QObject::connect(mCropWidget, SIGNAL(cropRequested()),
-			q, SLOT(slotCropRequested()));
-		QObject::connect(mCropWidget, SIGNAL(done()),
-			q, SIGNAL(done()));
-	}
+        if (mRect.right() >= imageSize.width()) {
+            mRect.moveRight(imageSize.width() - 1);
+        } else if (mRect.left() < 0) {
+            mRect.moveLeft(0);
+        }
+        if (mRect.bottom() >= imageSize.height()) {
+            mRect.moveBottom(imageSize.height() - 1);
+        } else if (mRect.top() < 0) {
+            mRect.moveTop(0);
+        }
+    }
+
+    void setupWidget()
+    {
+        RasterImageView* view = q->imageView();
+        mCropWidget = new CropWidget(0, view, q);
+        QObject::connect(mCropWidget, SIGNAL(cropRequested()),
+                         q, SLOT(slotCropRequested()));
+        QObject::connect(mCropWidget, SIGNAL(done()),
+                         q, SIGNAL(done()));
+    }
 };
-
 
 CropTool::CropTool(RasterImageView* view)
 : AbstractRasterImageViewTool(view)
-, d(new CropToolPrivate) {
-	d->q = this;
-	d->mCropHandleList << CH_Left << CH_Right << CH_Top << CH_Bottom << CH_TopLeft << CH_TopRight << CH_BottomLeft << CH_BottomRight;
-	d->mMovingHandle = CH_None;
-	const QRect imageRect = QRect(QPoint(0, 0), view->documentSize().toSize());
-	const QRect viewportRect = view->mapToImage(view->rect().toRect());
-	d->mRect = imageRect & viewportRect;
-	d->mCropRatio = 0.;
+, d(new CropToolPrivate)
+{
+    d->q = this;
+    d->mCropHandleList << CH_Left << CH_Right << CH_Top << CH_Bottom << CH_TopLeft << CH_TopRight << CH_BottomLeft << CH_BottomRight;
+    d->mMovingHandle = CH_None;
+    const QRect imageRect = QRect(QPoint(0, 0), view->documentSize().toSize());
+    const QRect viewportRect = view->mapToImage(view->rect().toRect());
+    d->mRect = imageRect & viewportRect;
+    d->mCropRatio = 0.;
 
-	d->setupWidget();
+    d->setupWidget();
 }
 
-
-CropTool::~CropTool() {
-	delete d;
+CropTool::~CropTool()
+{
+    delete d;
 }
 
-
-void CropTool::setCropRatio(double ratio) {
-	d->mCropRatio = ratio;
+void CropTool::setCropRatio(double ratio)
+{
+    d->mCropRatio = ratio;
 }
 
-
-void CropTool::setRect(const QRect& rect) {
-	d->mRect = rect;
-	d->keepRectInsideImage();
-	if (d->mRect != rect) {
-		rectUpdated(d->mRect);
-	}
-	imageView()->update();
+void CropTool::setRect(const QRect& rect)
+{
+    d->mRect = rect;
+    d->keepRectInsideImage();
+    if (d->mRect != rect) {
+        rectUpdated(d->mRect);
+    }
+    imageView()->update();
 }
 
-
-QRect CropTool::rect() const {
-	return d->mRect;
+QRect CropTool::rect() const
+{
+    return d->mRect;
 }
 
+void CropTool::paint(QPainter* painter)
+{
+    QRect rect = d->viewportCropRect();
 
-void CropTool::paint(QPainter* painter) {
-	QRect rect = d->viewportCropRect();
+    QRect imageRect = imageView()->rect().toRect();
 
-	QRect imageRect = imageView()->rect().toRect();
+    static const QColor outerColor  = QColor::fromHsvF(0, 0, 0, 0.5);
+    // For some reason nothing gets drawn if borderColor is not fully opaque!
+    //static const QColor borderColor = QColor::fromHsvF(0, 0, 1.0, 0.66);
+    static const QColor borderColor = QColor::fromHsvF(0, 0, 1.0);
+    static const QColor fillColor   = QColor::fromHsvF(0, 0, 0.75, 0.66);
 
-	static const QColor outerColor  = QColor::fromHsvF(0, 0, 0, 0.5);
-	// For some reason nothing gets drawn if borderColor is not fully opaque!
-	//static const QColor borderColor = QColor::fromHsvF(0, 0, 1.0, 0.66);
-	static const QColor borderColor = QColor::fromHsvF(0, 0, 1.0);
-	static const QColor fillColor   = QColor::fromHsvF(0, 0, 0.75, 0.66);
+    QRegion outerRegion = QRegion(imageRect) - QRegion(rect);
+    Q_FOREACH(const QRect & outerRect, outerRegion.rects()) {
+        painter->fillRect(outerRect, outerColor);
+    }
 
-	QRegion outerRegion = QRegion(imageRect) - QRegion(rect);
-	Q_FOREACH(const QRect& outerRect, outerRegion.rects()) {
-		painter->fillRect(outerRect, outerColor);
-	}
+    painter->setPen(borderColor);
 
-	painter->setPen(borderColor);
+    rect.adjust(0, 0, -1, -1);
+    painter->drawRect(rect);
 
-	rect.adjust(0, 0, -1, -1);
-	painter->drawRect(rect);
-
-	if (d->mMovingHandle == CH_None) {
-		// Only draw handles when user is not resizing
-		painter->setBrush(fillColor);
-		Q_FOREACH(const CropHandle& handle, d->mCropHandleList) {
-			rect = d->handleViewportRect(handle);
-			painter->drawRect(rect);
-		}
-	}
+    if (d->mMovingHandle == CH_None) {
+        // Only draw handles when user is not resizing
+        painter->setBrush(fillColor);
+        Q_FOREACH(const CropHandle & handle, d->mCropHandleList) {
+            rect = d->handleViewportRect(handle);
+            painter->drawRect(rect);
+        }
+    }
 }
 
+void CropTool::mousePressEvent(QGraphicsSceneMouseEvent* event)
+{
+    event->accept();
+    if (event->buttons() != Qt::LeftButton) {
+        return;
+    }
+    d->mMovingHandle = d->handleAt(event->pos());
+    d->updateCursor(d->mMovingHandle, true /* down */);
 
-void CropTool::mousePressEvent(QGraphicsSceneMouseEvent* event) {
-	event->accept();
-	if (event->buttons() != Qt::LeftButton) {
-		return;
-	}
-	d->mMovingHandle = d->handleAt(event->pos());
-	d->updateCursor(d->mMovingHandle, true /* down */);
+    if (d->mMovingHandle == CH_Content) {
+        d->mLastMouseMovePos = imageView()->mapToImage(event->pos().toPoint());
+    }
 
-	if (d->mMovingHandle == CH_Content) {
-		d->mLastMouseMovePos = imageView()->mapToImage(event->pos().toPoint());
-	}
-
-	// Update to hide handles
-	imageView()->update();
+    // Update to hide handles
+    imageView()->update();
 }
 
+void CropTool::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
+{
+    event->accept();
+    if (event->buttons() != Qt::LeftButton) {
+        return;
+    }
 
-void CropTool::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
-	event->accept();
-	if (event->buttons() != Qt::LeftButton) {
-		return;
-	}
+    const QSize imageSize = imageView()->document()->size();
 
-	const QSize imageSize = imageView()->document()->size();
+    QPoint point = imageView()->mapToImage(event->pos().toPoint());
+    int posX = qBound(0, point.x(), imageSize.width() - 1);
+    int posY = qBound(0, point.y(), imageSize.height() - 1);
 
-	QPoint point = imageView()->mapToImage(event->pos().toPoint());
-	int posX = qBound(0, point.x(), imageSize.width() - 1);
-	int posY = qBound(0, point.y(), imageSize.height() - 1);
+    if (d->mMovingHandle == CH_None) {
+        return;
+    }
 
-	if (d->mMovingHandle == CH_None) {
-		return;
-	}
+    // Adjust edge
+    if (d->mMovingHandle & CH_Top) {
+        d->mRect.setTop(posY);
+    } else if (d->mMovingHandle & CH_Bottom) {
+        d->mRect.setBottom(posY);
+    }
+    if (d->mMovingHandle & CH_Left) {
+        d->mRect.setLeft(posX);
+    } else if (d->mMovingHandle & CH_Right) {
+        d->mRect.setRight(posX);
+    }
 
-	// Adjust edge
-	if (d->mMovingHandle & CH_Top) {
-		d->mRect.setTop(posY);
-	} else if (d->mMovingHandle & CH_Bottom) {
-		d->mRect.setBottom(posY);
-	}
-	if (d->mMovingHandle & CH_Left) {
-		d->mRect.setLeft(posX);
-	} else if (d->mMovingHandle & CH_Right) {
-		d->mRect.setRight(posX);
-	}
+    // Normalize rect and handles (this is useful when user drag the right side
+    // of the crop rect to the left of the left side)
+    if (d->mRect.height() < 0) {
+        d->mMovingHandle = d->mMovingHandle ^(CH_Top | CH_Bottom);
+    }
+    if (d->mRect.width() < 0) {
+        d->mMovingHandle = d->mMovingHandle ^(CH_Left | CH_Right);
+    }
+    d->mRect = d->mRect.normalized();
 
-	// Normalize rect and handles (this is useful when user drag the right side
-	// of the crop rect to the left of the left side)
-	if (d->mRect.height() < 0) {
-		d->mMovingHandle = d->mMovingHandle ^ (CH_Top | CH_Bottom);
-	}
-	if (d->mRect.width() < 0) {
-		d->mMovingHandle = d->mMovingHandle ^ (CH_Left | CH_Right);
-	}
-	d->mRect = d->mRect.normalized();
+    // Enforce ratio
+    if (d->mCropRatio > 0.) {
+        if (d->mMovingHandle == CH_Top || d->mMovingHandle == CH_Bottom) {
+            // Top or bottom
+            int width = int(d->mRect.height() / d->mCropRatio);
+            d->mRect.setWidth(width);
+        } else if (d->mMovingHandle == CH_Left || d->mMovingHandle == CH_Right) {
+            // Left or right
+            int height = int(d->mRect.width() * d->mCropRatio);
+            d->mRect.setHeight(height);
+        } else if (d->mMovingHandle & CH_Top) {
+            // Top left or top right
+            int height = int(d->mRect.width() * d->mCropRatio);
+            d->mRect.setTop(d->mRect.bottom() - height);
+        } else if (d->mMovingHandle & CH_Bottom) {
+            // Bottom left or bottom right
+            int height = int(d->mRect.width() * d->mCropRatio);
+            d->mRect.setHeight(height);
+        }
+    }
 
-	// Enforce ratio
-	if (d->mCropRatio > 0.) {
-		if (d->mMovingHandle == CH_Top || d->mMovingHandle == CH_Bottom) {
-			// Top or bottom
-			int width = int(d->mRect.height() / d->mCropRatio);
-			d->mRect.setWidth(width);
-		} else if (d->mMovingHandle == CH_Left || d->mMovingHandle == CH_Right) {
-			// Left or right
-			int height = int(d->mRect.width() * d->mCropRatio);
-			d->mRect.setHeight(height);
-		} else if (d->mMovingHandle & CH_Top) {
-			// Top left or top right
-			int height = int(d->mRect.width() * d->mCropRatio);
-			d->mRect.setTop(d->mRect.bottom() - height);
-		} else if (d->mMovingHandle & CH_Bottom) {
-			// Bottom left or bottom right
-			int height = int(d->mRect.width() * d->mCropRatio);
-			d->mRect.setHeight(height);
-		}
-	}
+    if (d->mMovingHandle == CH_Content) {
+        d->mRect.translate(point - d->mLastMouseMovePos);
+        d->mLastMouseMovePos = point;
+    }
 
-	if (d->mMovingHandle == CH_Content) {
-		d->mRect.translate(point - d->mLastMouseMovePos);
-		d->mLastMouseMovePos = point;
-	}
+    d->keepRectInsideImage();
 
-	d->keepRectInsideImage();
-
-	imageView()->update();
-	rectUpdated(d->mRect);
+    imageView()->update();
+    rectUpdated(d->mRect);
 }
 
+void CropTool::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
+{
+    event->accept();
+    d->mMovingHandle = CH_None;
+    d->updateCursor(d->handleAt(event->lastPos()), false);
 
-void CropTool::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
-	event->accept();
-	d->mMovingHandle = CH_None;
-	d->updateCursor(d->handleAt(event->lastPos()), false);
-
-	// Update to show handles
-	imageView()->update();
+    // Update to show handles
+    imageView()->update();
 }
 
-
-void CropTool::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
-	event->accept();
-	// Make sure cursor is updated when moving over handles
-	CropHandle handle = d->handleAt(event->lastPos());
-	d->updateCursor(handle, false /* buttonDown */);
+void CropTool::hoverMoveEvent(QGraphicsSceneHoverEvent* event)
+{
+    event->accept();
+    // Make sure cursor is updated when moving over handles
+    CropHandle handle = d->handleAt(event->lastPos());
+    d->updateCursor(handle, false /* buttonDown */);
 }
 
-
-void CropTool::toolActivated() {
-	imageView()->setCursor(Qt::CrossCursor);
+void CropTool::toolActivated()
+{
+    imageView()->setCursor(Qt::CrossCursor);
 }
 
-
-void CropTool::toolDeactivated() {
-	//delete d->mHudWidget;
+void CropTool::toolDeactivated()
+{
+    //delete d->mHudWidget;
 }
 
-
-void CropTool::slotCropRequested() {
-	CropImageOperation* op = new CropImageOperation(d->mRect);
-	emit imageOperationRequested(op);
-	emit done();
+void CropTool::slotCropRequested()
+{
+    CropImageOperation* op = new CropImageOperation(d->mRect);
+    emit imageOperationRequested(op);
+    emit done();
 }
 
-QWidget* CropTool::widget() {
-	return d->mCropWidget;
+QWidget* CropTool::widget()
+{
+    return d->mCropWidget;
 }
-
 
 } // namespace

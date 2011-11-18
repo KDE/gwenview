@@ -28,18 +28,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <ktempdir.h>
 #include <kurl.h>
 
-class PlaceTreeModelTest : public QObject {
-	Q_OBJECT
+class PlaceTreeModelTest : public QObject
+{
+    Q_OBJECT
 
 private Q_SLOTS:
-	void initTestCase();
-	void testListPlaces();
-	void testListUrl1();
+    void initTestCase();
+    void testListPlaces();
+    void testListUrl1();
 
 private:
-	KUrl mUrl1, mUrl2;
-	QStringList mUrl1Dirs;
-	KTempDir mTempDir;
+    KUrl mUrl1, mUrl2;
+    QStringList mUrl1Dirs;
+    KTempDir mTempDir;
 };
 
 #endif /* PLACETREEMODELTEST_H */

@@ -31,8 +31,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QStyleOptionToolButton>
 #include <QStylePainter>
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 /** How lighter is the border of context bar buttons */
 const int CONTEXTBAR_BORDER_LIGHTNESS = 140;
@@ -46,64 +46,62 @@ const int CONTEXTBAR_MOUSEOVER_LIGHTNESS = 115;
 /** Radius of ContextBarButtons */
 const int CONTEXTBAR_RADIUS = 5;
 
-
 struct ContextBarButtonPrivate {
 };
 
-
 ContextBarButton::ContextBarButton(const QString& iconName, QWidget* parent)
 : QToolButton(parent)
-, d(new ContextBarButtonPrivate) {
-	const int size = KIconLoader::global()->currentSize(KIconLoader::Small);
-	setIconSize(QSize(size, size));
-	setAutoRaise(true);
-	setIcon(SmallIcon(iconName));
+, d(new ContextBarButtonPrivate)
+{
+    const int size = KIconLoader::global()->currentSize(KIconLoader::Small);
+    setIconSize(QSize(size, size));
+    setAutoRaise(true);
+    setIcon(SmallIcon(iconName));
 }
 
-
-ContextBarButton::~ContextBarButton() {
-	delete d;
+ContextBarButton::~ContextBarButton()
+{
+    delete d;
 }
 
+void Gwenview::ContextBarButton::paintEvent(QPaintEvent*)
+{
+    QStylePainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
+    QStyleOptionToolButton opt;
+    initStyleOption(&opt);
 
-void Gwenview::ContextBarButton::paintEvent(QPaintEvent*) {
-	QStylePainter painter(this);
-	painter.setRenderHint(QPainter::Antialiasing);
-	QStyleOptionToolButton opt;
-	initStyleOption(&opt);
+    const QColor bgColor = palette().color(backgroundRole());
+    QColor color = bgColor.dark(CONTEXTBAR_BACKGROUND_DARKNESS);
+    QColor borderColor = bgColor.light(CONTEXTBAR_BORDER_LIGHTNESS);
 
-	const QColor bgColor = palette().color(backgroundRole());
-	QColor color = bgColor.dark(CONTEXTBAR_BACKGROUND_DARKNESS);
-	QColor borderColor = bgColor.light(CONTEXTBAR_BORDER_LIGHTNESS);
+    if (opt.state & QStyle::State_MouseOver && opt.state & QStyle::State_Enabled) {
+        color = color.light(CONTEXTBAR_MOUSEOVER_LIGHTNESS);
+        borderColor = borderColor.light(CONTEXTBAR_MOUSEOVER_LIGHTNESS);
+    }
 
-	if (opt.state & QStyle::State_MouseOver && opt.state & QStyle::State_Enabled) {
-		color = color.light(CONTEXTBAR_MOUSEOVER_LIGHTNESS);
-		borderColor = borderColor.light(CONTEXTBAR_MOUSEOVER_LIGHTNESS);
-	}
+    const QRectF rectF = QRectF(opt.rect).adjusted(0.5, 0.5, -0.5, -0.5);
+    const QPainterPath path = PaintUtils::roundedRectangle(rectF, CONTEXTBAR_RADIUS);
 
-	const QRectF rectF = QRectF(opt.rect).adjusted(0.5, 0.5, -0.5, -0.5);
-	const QPainterPath path = PaintUtils::roundedRectangle(rectF, CONTEXTBAR_RADIUS);
+    // Background
+    painter.fillPath(path, color);
 
-	// Background
-	painter.fillPath(path, color);
+    // Top shadow
+    QLinearGradient gradient(rectF.topLeft(), rectF.topLeft() + QPoint(0, 5));
+    gradient.setColorAt(0, QColor::fromHsvF(0, 0, 0, .3));
+    gradient.setColorAt(1, Qt::transparent);
+    painter.fillPath(path, gradient);
 
-	// Top shadow
-	QLinearGradient gradient(rectF.topLeft(), rectF.topLeft() + QPoint(0, 5));
-	gradient.setColorAt(0, QColor::fromHsvF(0, 0, 0, .3));
-	gradient.setColorAt(1, Qt::transparent);
-	painter.fillPath(path, gradient);
+    // Left shadow
+    gradient.setFinalStop(rectF.topLeft() + QPoint(5, 0));
+    painter.fillPath(path, gradient);
 
-	// Left shadow
-	gradient.setFinalStop(rectF.topLeft() + QPoint(5, 0));
-	painter.fillPath(path, gradient);
+    // Border
+    painter.setPen(borderColor);
+    painter.drawPath(path);
 
-	// Border
-	painter.setPen(borderColor);
-	painter.drawPath(path);
-
-	// Content
-	painter.drawControl(QStyle::CE_ToolButtonLabel, opt);
+    // Content
+    painter.drawControl(QStyle::CE_ToolButtonLabel, opt);
 }
-
 
 } // namespace

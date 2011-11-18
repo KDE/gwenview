@@ -32,12 +32,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/gwenviewlib_export.h>
 #include <lib/mimetypeutils.h>
 
-
 class KDirLister;
 class KFileItem;
 class KUrl;
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 class AbstractSemanticInfoBackEnd;
 struct SortedDirModelPrivate;
@@ -47,76 +47,80 @@ struct SemanticInfo;
 #endif
 
 class SortedDirModel;
-class GWENVIEWLIB_EXPORT AbstractSortedDirModelFilter : public QObject {
+class GWENVIEWLIB_EXPORT AbstractSortedDirModelFilter : public QObject
+{
 public:
-	AbstractSortedDirModelFilter(SortedDirModel* model);
-	~AbstractSortedDirModelFilter();
-	SortedDirModel* model() const { return mModel; }
+    AbstractSortedDirModelFilter(SortedDirModel* model);
+    ~AbstractSortedDirModelFilter();
+    SortedDirModel* model() const {
+        return mModel;
+    }
 
-	virtual bool needsSemanticInfo() const = 0;
-	/**
-	 * Returns true if index should be accepted.
-	 * Warning: index is a source index of SortedDirModel
-	 */
-	virtual bool acceptsIndex(const QModelIndex& index) const = 0;
+    virtual bool needsSemanticInfo() const = 0;
+    /**
+     * Returns true if index should be accepted.
+     * Warning: index is a source index of SortedDirModel
+     */
+    virtual bool acceptsIndex(const QModelIndex& index) const = 0;
 
 private:
-	QPointer<SortedDirModel> mModel;
+    QPointer<SortedDirModel> mModel;
 };
 
 /**
  * This model makes it possible to show all images in a folder.
  * It can filter images based on name and metadata.
  */
-class GWENVIEWLIB_EXPORT SortedDirModel : public KDirSortFilterProxyModel {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT SortedDirModel : public KDirSortFilterProxyModel
+{
+    Q_OBJECT
 public:
-	SortedDirModel(QObject* parent=0);
-	~SortedDirModel();
-	KDirLister* dirLister() const;
-	KFileItem itemForIndex(const QModelIndex& index) const;
-	KUrl urlForIndex(const QModelIndex& index) const;
-	KFileItem itemForSourceIndex(const QModelIndex& sourceIndex) const;
-	QModelIndex indexForItem(const KFileItem& item) const;
-	QModelIndex indexForUrl(const KUrl& url) const;
+    SortedDirModel(QObject* parent = 0);
+    ~SortedDirModel();
+    KDirLister* dirLister() const;
+    KFileItem itemForIndex(const QModelIndex& index) const;
+    KUrl urlForIndex(const QModelIndex& index) const;
+    KFileItem itemForSourceIndex(const QModelIndex& sourceIndex) const;
+    QModelIndex indexForItem(const KFileItem& item) const;
+    QModelIndex indexForUrl(const KUrl& url) const;
 
-	void setKindFilter(MimeTypeUtils::Kinds);
-	MimeTypeUtils::Kinds kindFilter() const;
+    void setKindFilter(MimeTypeUtils::Kinds);
+    MimeTypeUtils::Kinds kindFilter() const;
 
-	void adjustKindFilter(MimeTypeUtils::Kinds, bool set);
+    void adjustKindFilter(MimeTypeUtils::Kinds, bool set);
 
-	/**
-	 * A list of file extensions we should skip
-	 */
-	void setBlackListedExtensions(const QStringList& list);
+    /**
+     * A list of file extensions we should skip
+     */
+    void setBlackListedExtensions(const QStringList& list);
 
-	void addFilter(AbstractSortedDirModelFilter*);
+    void addFilter(AbstractSortedDirModelFilter*);
 
-	void removeFilter(AbstractSortedDirModelFilter*);
+    void removeFilter(AbstractSortedDirModelFilter*);
 
-	void reload();
+    void reload();
 
-	AbstractSemanticInfoBackEnd* semanticInfoBackEnd() const;
+    AbstractSemanticInfoBackEnd* semanticInfoBackEnd() const;
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-	SemanticInfo semanticInfoForSourceIndex(const QModelIndex& sourceIndex) const;
+    SemanticInfo semanticInfoForSourceIndex(const QModelIndex& sourceIndex) const;
 #endif
 
-	bool hasDocuments() const;
+    bool hasDocuments() const;
 
 public Q_SLOTS:
     void applyFilters();
 
 protected:
-	bool filterAcceptsRow(int row, const QModelIndex& parent) const;
-	bool lessThan(const QModelIndex& left, const QModelIndex& right) const;
+    bool filterAcceptsRow(int row, const QModelIndex& parent) const;
+    bool lessThan(const QModelIndex& left, const QModelIndex& right) const;
 
 private Q_SLOTS:
-	void doApplyFilters();
+    void doApplyFilters();
 
 private:
-	friend struct SortedDirModelPrivate;
-	SortedDirModelPrivate * const d;
+    friend struct SortedDirModelPrivate;
+    SortedDirModelPrivate * const d;
 };
 
 } // namespace

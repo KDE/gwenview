@@ -24,62 +24,63 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QFrame>
 #include <QTabWidget>
 
-
-namespace Gwenview {
+namespace Gwenview
+{
 
 class SideBar;
 
 class SideBarGroupPrivate;
-class SideBarGroup : public QFrame {
-	Q_OBJECT
+class SideBarGroup : public QFrame
+{
+    Q_OBJECT
 public:
-	SideBarGroup(const QString& title);
-	~SideBarGroup();
+    SideBarGroup(const QString& title);
+    ~SideBarGroup();
 
-	void addWidget(QWidget*);
-	void addAction(QAction*);
-	void clear();
+    void addWidget(QWidget*);
+    void addAction(QAction*);
+    void clear();
 
 protected:
-	virtual void paintEvent(QPaintEvent*);
+    virtual void paintEvent(QPaintEvent*);
 
 private:
-	SideBarGroupPrivate* const d;
+    SideBarGroupPrivate* const d;
 };
-
 
 class SideBarPagePrivate;
-class SideBarPage : public QWidget {
-	Q_OBJECT
+class SideBarPage : public QWidget
+{
+    Q_OBJECT
 public:
-	SideBarPage(const QString& title);
-	~SideBarPage();
-	void addWidget(QWidget*);
-	void addStretch();
+    SideBarPage(const QString& title);
+    ~SideBarPage();
+    void addWidget(QWidget*);
+    void addStretch();
 
-	const QString& title() const;
+    const QString& title() const;
 
 private:
-	SideBarPagePrivate* const d;
+    SideBarPagePrivate* const d;
 };
 
-
 class SideBarPrivate;
-class SideBar : public QTabWidget {
-	Q_OBJECT
+class SideBar : public QTabWidget
+{
+    Q_OBJECT
 public:
-	SideBar(QWidget* parent);
-	~SideBar();
+    SideBar(QWidget* parent);
+    ~SideBar();
 
-	void addPage(SideBarPage*);
+    void addPage(SideBarPage*);
 
-	QString currentPage() const;
-	void setCurrentPage(const QString& name);
+    QString currentPage() const;
+    void setCurrentPage(const QString& name);
 
-	virtual QSize sizeHint() const;
+    virtual QSize sizeHint() const;
 
 private:
-	SideBarPrivate* const d;
+    SideBarPrivate* const d;
 };
 
 } // namespace

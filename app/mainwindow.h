@@ -30,124 +30,126 @@ class QModelIndex;
 
 class KUrl;
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 class DocumentPanel;
 class ContextManager;
 class MessageBubble;
 
-class MainWindow : public KXmlGuiWindow {
-Q_OBJECT
+class MainWindow : public KXmlGuiWindow
+{
+    Q_OBJECT
 public:
-	MainWindow();
-	~MainWindow();
-	/**
-	 * Defines the url to display when the window is shown for the first time.
-	 */
-	void setInitialUrl(const KUrl&);
+    MainWindow();
+    ~MainWindow();
+    /**
+     * Defines the url to display when the window is shown for the first time.
+     */
+    void setInitialUrl(const KUrl&);
 
-	void startSlideShow();
+    void startSlideShow();
 
-	DocumentPanel* documentPanel() const;
+    DocumentPanel* documentPanel() const;
 
-	ContextManager* contextManager() const;
+    ContextManager* contextManager() const;
 
-	bool currentDocumentIsRasterImage() const;
+    bool currentDocumentIsRasterImage() const;
 
-	void setDistractionFreeMode(bool);
+    void setDistractionFreeMode(bool);
 
-	void showMessageBubble(MessageBubble*);
+    void showMessageBubble(MessageBubble*);
 
 public Q_SLOTS:
-	void showStartPage();
+    void showStartPage();
 
-	/**
-	 * Go to url, without changing current mode
-	 */
-	void goToUrl(const KUrl&);
+    /**
+     * Go to url, without changing current mode
+     */
+    void goToUrl(const KUrl&);
 
 Q_SIGNALS:
-	void viewModeChanged();
+    void viewModeChanged();
 
 public Q_SLOTS:
-	virtual void setCaption(const QString&);
+    virtual void setCaption(const QString&);
 
-	virtual void setCaption(const QString&, bool modified);
+    virtual void setCaption(const QString&, bool modified);
 
 protected:
-	virtual bool queryClose();
-	virtual bool queryExit();
-	virtual QSize sizeHint() const;
-	virtual void showEvent(QShowEvent*);
-	virtual void resizeEvent(QResizeEvent*);
-	virtual void saveProperties(KConfigGroup&);
-	virtual void readProperties(const KConfigGroup&);
+    virtual bool queryClose();
+    virtual bool queryExit();
+    virtual QSize sizeHint() const;
+    virtual void showEvent(QShowEvent*);
+    virtual void resizeEvent(QResizeEvent*);
+    virtual void saveProperties(KConfigGroup&);
+    virtual void readProperties(const KConfigGroup&);
 
 private Q_SLOTS:
-	void setActiveViewModeAction(QAction* action);
-	void openDirUrl(const KUrl&);
-	void slotThumbnailViewIndexActivated(const QModelIndex&);
+    void setActiveViewModeAction(QAction* action);
+    void openDirUrl(const KUrl&);
+    void slotThumbnailViewIndexActivated(const QModelIndex&);
 
-	void slotStartPageUrlSelected(const KUrl&);
+    void slotStartPageUrlSelected(const KUrl&);
 
-	void goUp();
-	void toggleSideBar(bool visible);
-	void updateToggleSideBarAction();
-	void slotModifiedDocumentListChanged();
+    void goUp();
+    void toggleSideBar(bool visible);
+    void updateToggleSideBarAction();
+    void slotModifiedDocumentListChanged();
 
-	/**
-	 * Init all the file list stuff. This should only be necessary when
-	 * Gwenview is started with an image as a parameter (in this case we load
-	 * the image before looking at the content of the image folder)
-	 */
-	void slotPartCompleted();
-	
-	/**
-	 * If an image is loaded but there is no item selected for it in the file
-	 * view, this function will select the corresponding item if it comes up in
-	 * list.
-	 */
-	void slotDirModelNewItems();
+    /**
+     * Init all the file list stuff. This should only be necessary when
+     * Gwenview is started with an image as a parameter (in this case we load
+     * the image before looking at the content of the image folder)
+     */
+    void slotPartCompleted();
 
-	/**
-	 * If no image is selected, select the first one available.
-	 */
-	void slotDirListerCompleted();
+    /**
+     * If an image is loaded but there is no item selected for it in the file
+     * view, this function will select the corresponding item if it comes up in
+     * list.
+     */
+    void slotDirModelNewItems();
 
-	void slotSelectionChanged();
+    /**
+     * If no image is selected, select the first one available.
+     */
+    void slotDirListerCompleted();
 
-	void goToPrevious();
-	void goToNext();
-	void goToFirst();
-	void goToLast();
-	void updatePreviousNextActions();
+    void slotSelectionChanged();
 
-	void reduceLevelOfDetails();
-	void toggleFullScreen(bool);
-	void toggleSlideShow();
-	void updateSlideShowAction();
+    void goToPrevious();
+    void goToNext();
+    void goToFirst();
+    void goToLast();
+    void updatePreviousNextActions();
 
-	void saveCurrent();
-	void saveCurrentAs();
-	void openFile();
-	void reload();
+    void reduceLevelOfDetails();
+    void toggleFullScreen(bool);
+    void toggleSlideShow();
+    void updateSlideShowAction();
 
-	void showDocumentInFullScreen(const KUrl&);
+    void saveCurrent();
+    void saveCurrentAs();
+    void openFile();
+    void reload();
 
-	void showConfigDialog();
-	void loadConfig();
-	void print();
+    void showDocumentInFullScreen(const KUrl&);
 
-	void preloadNextUrl();
+    void showConfigDialog();
+    void loadConfig();
+    void print();
 
-	void toggleMenuBar();
+    void preloadNextUrl();
+
+    void toggleMenuBar();
 
 private:
-	struct Private;
-	MainWindow::Private* const d;
+    struct Private;
+    MainWindow::Private* const d;
 
-	void openSelectedDocuments();
-	void saveConfig();
+    void openSelectedDocuments();
+    void saveConfig();
 };
 
 } // namespace

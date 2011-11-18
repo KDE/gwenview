@@ -32,8 +32,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 class KUrl;
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct HistoryModelPrivate;
 /**
@@ -41,20 +41,20 @@ struct HistoryModelPrivate;
  * storageDir parameter of its ctor.
  * Each url is stored in a separate KConfig file to avoid concurrency issues.
  */
-class GWENVIEWLIB_EXPORT HistoryModel : public QStandardItemModel {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT HistoryModel : public QStandardItemModel
+{
+    Q_OBJECT
 public:
-	HistoryModel(QObject* parent, const QString& storageDir, int maxCount = 20);
-	~HistoryModel();
+    HistoryModel(QObject* parent, const QString& storageDir, int maxCount = 20);
+    ~HistoryModel();
 
-	void addUrl(const KUrl&, const QDateTime& dateTime = QDateTime());
+    void addUrl(const KUrl&, const QDateTime& dateTime = QDateTime());
 
-	virtual bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex());
+    virtual bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex());
 
 private:
-	HistoryModelPrivate* const d;
+    HistoryModelPrivate* const d;
 };
-
 
 } // namespace
 

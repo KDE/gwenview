@@ -21,14 +21,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Self
 #include <binder.moc>
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 BinderInternal::BinderInternal(QObject* parent)
 : QObject(parent)
 {
 }
 
-BinderInternal::~BinderInternal() {
+BinderInternal::~BinderInternal()
+{
 }
 
 } // namespace

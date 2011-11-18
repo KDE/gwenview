@@ -28,36 +28,36 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct ToolTipWidgetPrivate;
 
 /**
  * A label which uses tooltip colors and can be faded
  */
-class ToolTipWidget : public QWidget {
-	Q_OBJECT
-	Q_PROPERTY(qreal opacity READ opacity WRITE setOpacity)
+class ToolTipWidget : public QWidget
+{
+    Q_OBJECT
+    Q_PROPERTY(qreal opacity READ opacity WRITE setOpacity)
 public:
-	ToolTipWidget(QWidget* parent = 0);
-	~ToolTipWidget();
+    ToolTipWidget(QWidget* parent = 0);
+    ~ToolTipWidget();
 
-	qreal opacity() const;
-	void setOpacity(qreal);
+    qreal opacity() const;
+    void setOpacity(qreal);
 
-	QString text() const;
-	void setText(const QString& text);
+    QString text() const;
+    void setText(const QString& text);
 
-	virtual QSize sizeHint() const;
+    virtual QSize sizeHint() const;
 
 protected:
-	virtual void paintEvent(QPaintEvent*);
+    virtual void paintEvent(QPaintEvent*);
 
 private:
-	ToolTipWidgetPrivate* const d;
+    ToolTipWidgetPrivate* const d;
 };
-
 
 } // namespace
 

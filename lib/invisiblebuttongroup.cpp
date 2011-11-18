@@ -30,50 +30,49 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct InvisibleButtonGroupPrivate {
-	QButtonGroup* mGroup;
+    QButtonGroup* mGroup;
 };
-
 
 InvisibleButtonGroup::InvisibleButtonGroup(QWidget* parent)
 : QWidget(parent)
-, d(new InvisibleButtonGroupPrivate) {
-	hide();
-	d->mGroup = new QButtonGroup(this);
-	d->mGroup->setExclusive(true);
-	connect(d->mGroup, SIGNAL(buttonClicked(int)), SIGNAL(selectionChanged(int)) );
-	const QString name = metaObject()->className();
-	if (!KConfigDialogManager::propertyMap()->contains(name)) {
-		KConfigDialogManager::propertyMap()->insert(name, "current");
-		KConfigDialogManager::changedMap()->insert(name, SIGNAL(selectionChanged(int)));
-	}
+, d(new InvisibleButtonGroupPrivate)
+{
+    hide();
+    d->mGroup = new QButtonGroup(this);
+    d->mGroup->setExclusive(true);
+    connect(d->mGroup, SIGNAL(buttonClicked(int)), SIGNAL(selectionChanged(int)));
+    const QString name = metaObject()->className();
+    if (!KConfigDialogManager::propertyMap()->contains(name)) {
+        KConfigDialogManager::propertyMap()->insert(name, "current");
+        KConfigDialogManager::changedMap()->insert(name, SIGNAL(selectionChanged(int)));
+    }
 }
 
-
-InvisibleButtonGroup::~InvisibleButtonGroup() {
-	delete d;
+InvisibleButtonGroup::~InvisibleButtonGroup()
+{
+    delete d;
 }
 
-
-int InvisibleButtonGroup::selected() const {
-	return d->mGroup->checkedId();
+int InvisibleButtonGroup::selected() const
+{
+    return d->mGroup->checkedId();
 }
 
-
-void InvisibleButtonGroup::addButton(QAbstractButton* button, int id) {
-	d->mGroup->addButton(button, id);
+void InvisibleButtonGroup::addButton(QAbstractButton* button, int id)
+{
+    d->mGroup->addButton(button, id);
 }
 
-
-void InvisibleButtonGroup::setSelected(int id) {
-	QAbstractButton* button = d->mGroup->button(id);
-	if (button) {
-		button->setChecked(true);
-	}
+void InvisibleButtonGroup::setSelected(int id)
+{
+    QAbstractButton* button = d->mGroup->button(id);
+    if (button) {
+        button->setChecked(true);
+    }
 }
-
 
 } // namespace

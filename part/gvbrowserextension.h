@@ -28,23 +28,23 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 class GVBrowserExtensionPrivate;
-class GVBrowserExtension : public KParts::BrowserExtension {
-	Q_OBJECT
+class GVBrowserExtension : public KParts::BrowserExtension
+{
+    Q_OBJECT
 public:
-	GVBrowserExtension(KParts::ReadOnlyPart*);
-	~GVBrowserExtension();
+    GVBrowserExtension(KParts::ReadOnlyPart*);
+    ~GVBrowserExtension();
 
 private Q_SLOTS:
-	void print();
+    void print();
 
 private:
-	GVBrowserExtensionPrivate* const d;
+    GVBrowserExtensionPrivate* const d;
 };
-
 
 } // namespace
 

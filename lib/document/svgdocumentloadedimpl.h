@@ -28,28 +28,28 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include <lib/document/abstractdocumentimpl.h>
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct SvgDocumentLoadedImplPrivate;
-class SvgDocumentLoadedImpl : public AbstractDocumentImpl {
-	Q_OBJECT
+class SvgDocumentLoadedImpl : public AbstractDocumentImpl
+{
+    Q_OBJECT
 public:
-	SvgDocumentLoadedImpl(Document*, const QByteArray&);
-	~SvgDocumentLoadedImpl();
+    SvgDocumentLoadedImpl(Document*, const QByteArray&);
+    ~SvgDocumentLoadedImpl();
 
-	virtual void init();
+    virtual void init();
 
-	virtual Document::LoadingState loadingState() const;
+    virtual Document::LoadingState loadingState() const;
 
-	virtual void setImage(const QImage&);
+    virtual void setImage(const QImage&);
 
-	QByteArray rawData() const;
+    QByteArray rawData() const;
 
 private:
-	SvgDocumentLoadedImplPrivate* const d;
+    SvgDocumentLoadedImplPrivate* const d;
 };
-
 
 } // namespace
 

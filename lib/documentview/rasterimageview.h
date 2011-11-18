@@ -30,57 +30,59 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 class QGraphicsSceneHoverEvent;
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 class AbstractRasterImageViewTool;
 
 class RasterImageViewPrivate;
-class GWENVIEWLIB_EXPORT RasterImageView : public AbstractImageView {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT RasterImageView : public AbstractImageView
+{
+    Q_OBJECT
 public:
-	enum AlphaBackgroundMode {
-		AlphaBackgroundCheckBoard,
-		AlphaBackgroundSolid
-	};
+    enum AlphaBackgroundMode {
+        AlphaBackgroundCheckBoard,
+        AlphaBackgroundSolid
+    };
 
-	RasterImageView(QGraphicsItem* parent = 0);
-	~RasterImageView();
+    RasterImageView(QGraphicsItem* parent = 0);
+    ~RasterImageView();
 
-	void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
 
-	void setCurrentTool(AbstractRasterImageViewTool* tool);
-	AbstractRasterImageViewTool* currentTool() const;
+    void setCurrentTool(AbstractRasterImageViewTool* tool);
+    AbstractRasterImageViewTool* currentTool() const;
 
-	void setAlphaBackgroundMode(AlphaBackgroundMode mode);
-	void setAlphaBackgroundColor(const QColor& color);
+    void setAlphaBackgroundMode(AlphaBackgroundMode mode);
+    void setAlphaBackgroundColor(const QColor& color);
 
 Q_SIGNALS:
-	void currentToolChanged(AbstractRasterImageViewTool*);
+    void currentToolChanged(AbstractRasterImageViewTool*);
 
 protected:
-	void loadFromDocument();
-	void onZoomChanged();
-	void onImageOffsetChanged();
-	void onScrollPosChanged(const QPointF& oldPos);
-	void resizeEvent(QGraphicsSceneResizeEvent* event);
-	void mousePressEvent(QGraphicsSceneMouseEvent* event);
-	void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
-	void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
-	void wheelEvent(QGraphicsSceneWheelEvent* event);
-	void keyPressEvent(QKeyEvent* event);
-	void keyReleaseEvent(QKeyEvent* event);
-	void hoverMoveEvent(QGraphicsSceneHoverEvent*);
+    void loadFromDocument();
+    void onZoomChanged();
+    void onImageOffsetChanged();
+    void onScrollPosChanged(const QPointF& oldPos);
+    void resizeEvent(QGraphicsSceneResizeEvent* event);
+    void mousePressEvent(QGraphicsSceneMouseEvent* event);
+    void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
+    void wheelEvent(QGraphicsSceneWheelEvent* event);
+    void keyPressEvent(QKeyEvent* event);
+    void keyReleaseEvent(QKeyEvent* event);
+    void hoverMoveEvent(QGraphicsSceneHoverEvent*);
 
 private Q_SLOTS:
-	void slotDocumentMetaInfoLoaded();
-	void slotDocumentIsAnimatedUpdated();
-	void finishSetDocument();
-	void updateFromScaler(int, int, const QImage&);
-	void updateImageRect(const QRect& imageRect);
-	void updateBuffer(const QRegion& region = QRegion());
+    void slotDocumentMetaInfoLoaded();
+    void slotDocumentIsAnimatedUpdated();
+    void finishSetDocument();
+    void updateFromScaler(int, int, const QImage&);
+    void updateImageRect(const QRect& imageRect);
+    void updateBuffer(const QRegion& region = QRegion());
 
 private:
-	RasterImageViewPrivate* const d;
+    RasterImageViewPrivate* const d;
 };
 
 } // namespace

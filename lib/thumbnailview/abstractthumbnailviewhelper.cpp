@@ -19,16 +19,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 #include "abstractthumbnailviewhelper.moc"
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 AbstractThumbnailViewHelper::AbstractThumbnailViewHelper(QObject* parent)
-: QObject(parent) {
+: QObject(parent)
+{
 }
 
-
-AbstractThumbnailViewHelper::~AbstractThumbnailViewHelper() {
+AbstractThumbnailViewHelper::~AbstractThumbnailViewHelper()
+{
 }
-
 
 } // namespace

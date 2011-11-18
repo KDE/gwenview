@@ -30,97 +30,96 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/document/documentfactory.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct DocumentInfoProviderPrivate {
-	SortedDirModel* mDirModel;
+    SortedDirModel* mDirModel;
 };
-
 
 DocumentInfoProvider::DocumentInfoProvider(SortedDirModel* model)
 : AbstractDocumentInfoProvider(model)
-, d(new DocumentInfoProviderPrivate) {
-	d->mDirModel = model;
-	connect(DocumentFactory::instance(), SIGNAL(documentBusyStateChanged(KUrl,bool)),
-		SLOT(emitBusyStateChanged(KUrl,bool)) );
+, d(new DocumentInfoProviderPrivate)
+{
+    d->mDirModel = model;
+    connect(DocumentFactory::instance(), SIGNAL(documentBusyStateChanged(KUrl, bool)),
+            SLOT(emitBusyStateChanged(KUrl, bool)));
 
-	connect(DocumentFactory::instance(), SIGNAL(documentChanged(KUrl)),
-		SLOT(emitDocumentChanged(KUrl)) );
+    connect(DocumentFactory::instance(), SIGNAL(documentChanged(KUrl)),
+            SLOT(emitDocumentChanged(KUrl)));
 }
 
-
-DocumentInfoProvider::~DocumentInfoProvider() {
-	delete d;
+DocumentInfoProvider::~DocumentInfoProvider()
+{
+    delete d;
 }
 
+void DocumentInfoProvider::thumbnailForDocument(const KUrl& url, ThumbnailGroup::Enum group, QPixmap* outPix, QSize* outFullSize) const
+{
+    Q_ASSERT(outPix);
+    Q_ASSERT(outFullSize);
+    *outPix = QPixmap();
+    *outFullSize = QSize();
+    DocumentFactory* factory = DocumentFactory::instance();
+    const int pixelSize = ThumbnailGroup::pixelSize(group);
 
-void DocumentInfoProvider::thumbnailForDocument(const KUrl& url, ThumbnailGroup::Enum group, QPixmap* outPix, QSize* outFullSize) const {
-	Q_ASSERT(outPix);
-	Q_ASSERT(outFullSize);
-	*outPix = QPixmap();
-	*outFullSize = QSize();
-	DocumentFactory* factory = DocumentFactory::instance();
-	const int pixelSize = ThumbnailGroup::pixelSize(group);
+    if (!factory->hasUrl(url)) {
+        return;
+    }
 
-	if (!factory->hasUrl(url)) {
-		return;
-	}
+    Document::Ptr doc = factory->load(url);
+    if (doc->loadingState() != Document::Loaded) {
+        return;
+    }
 
-	Document::Ptr doc = factory->load(url);
-	if (doc->loadingState() != Document::Loaded) {
-		return;
-	}
-
-	QImage image = doc->image();
-	if (image.width() > pixelSize || image.height() > pixelSize) {
-		image = image.scaled(pixelSize, pixelSize, Qt::KeepAspectRatio);
-	}
-	*outPix = QPixmap::fromImage(image);
-	*outFullSize = doc->size();
+    QImage image = doc->image();
+    if (image.width() > pixelSize || image.height() > pixelSize) {
+        image = image.scaled(pixelSize, pixelSize, Qt::KeepAspectRatio);
+    }
+    *outPix = QPixmap::fromImage(image);
+    *outFullSize = doc->size();
 }
 
+bool DocumentInfoProvider::isModified(const KUrl& url)
+{
+    DocumentFactory* factory = DocumentFactory::instance();
 
-bool DocumentInfoProvider::isModified(const KUrl& url) {
-	DocumentFactory* factory = DocumentFactory::instance();
-
-	if (factory->hasUrl(url)) {
-		Document::Ptr doc = factory->load(url);
-		return doc->loadingState() == Document::Loaded && doc->isModified();
-	} else {
-		return false;
-	}
+    if (factory->hasUrl(url)) {
+        Document::Ptr doc = factory->load(url);
+        return doc->loadingState() == Document::Loaded && doc->isModified();
+    } else {
+        return false;
+    }
 }
 
+bool DocumentInfoProvider::isBusy(const KUrl& url)
+{
+    DocumentFactory* factory = DocumentFactory::instance();
 
-bool DocumentInfoProvider::isBusy(const KUrl& url) {
-	DocumentFactory* factory = DocumentFactory::instance();
-
-	if (factory->hasUrl(url)) {
-		Document::Ptr doc = factory->load(url);
-		return doc->isBusy();
-	} else {
-		return false;
-	}
+    if (factory->hasUrl(url)) {
+        Document::Ptr doc = factory->load(url);
+        return doc->isBusy();
+    } else {
+        return false;
+    }
 }
 
-
-void DocumentInfoProvider::emitBusyStateChanged(const KUrl& url, bool busy) {
-	QModelIndex index = d->mDirModel->indexForUrl(url);
-	if (!index.isValid()) {
-		return;
-	}
-	busyStateChanged(index, busy);
+void DocumentInfoProvider::emitBusyStateChanged(const KUrl& url, bool busy)
+{
+    QModelIndex index = d->mDirModel->indexForUrl(url);
+    if (!index.isValid()) {
+        return;
+    }
+    busyStateChanged(index, busy);
 }
 
-
-void DocumentInfoProvider::emitDocumentChanged(const KUrl& url) {
-	QModelIndex index = d->mDirModel->indexForUrl(url);
-	if (!index.isValid()) {
-		return;
-	}
-	documentChanged(index);
+void DocumentInfoProvider::emitDocumentChanged(const KUrl& url)
+{
+    QModelIndex index = d->mDirModel->indexForUrl(url);
+    if (!index.isValid()) {
+        return;
+    }
+    documentChanged(index);
 }
-
 
 } // namespace

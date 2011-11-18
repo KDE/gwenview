@@ -28,26 +28,26 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QToolButton>
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 class ContextBarButtonPrivate;
 /**
  * A button with a special look, appears when hovering over thumbnails
  */
-class ContextBarButton : public QToolButton {
-	Q_OBJECT
+class ContextBarButton : public QToolButton
+{
+    Q_OBJECT
 public:
-	ContextBarButton(const QString& iconName, QWidget* parent=0);
-	~ContextBarButton();
+    ContextBarButton(const QString& iconName, QWidget* parent = 0);
+    ~ContextBarButton();
 
 protected:
-	void paintEvent(QPaintEvent*);
+    void paintEvent(QPaintEvent*);
 
 private:
-	ContextBarButtonPrivate* const d;
+    ContextBarButtonPrivate* const d;
 };
-
 
 } // namespace
 

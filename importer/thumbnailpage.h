@@ -31,46 +31,46 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include "documentdirfinder.h"
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 class ThumbnailPagePrivate;
-class ThumbnailPage : public QWidget {
-	Q_OBJECT
+class ThumbnailPage : public QWidget
+{
+    Q_OBJECT
 public:
-	ThumbnailPage();
-	~ThumbnailPage();
+    ThumbnailPage();
+    ~ThumbnailPage();
 
-	/**
-	 * Returns the list of urls to import
-	 * Only valid after importRequested() has been emitted
-	 */
-	KUrl::List urlList() const;
+    /**
+     * Returns the list of urls to import
+     * Only valid after importRequested() has been emitted
+     */
+    KUrl::List urlList() const;
 
-	KUrl destinationUrl() const;
-	void setDestinationUrl(const KUrl&);
+    KUrl destinationUrl() const;
+    void setDestinationUrl(const KUrl&);
 
-	void setSourceUrl(const KUrl&);
+    void setSourceUrl(const KUrl&);
 
 Q_SIGNALS:
-	void importRequested();
-	void rejected();
+    void importRequested();
+    void rejected();
 
 private Q_SLOTS:
-	void slotImportSelected();
-	void slotImportAll();
-	void updateImportButtons();
-	void slotThumbnailViewIndexActivated(const QModelIndex&);
-	void openUrl(const KUrl&);
-	void slotDocumentDirFinderDone(const KUrl& url, DocumentDirFinder::Status status);
-	void showConfigDialog();
+    void slotImportSelected();
+    void slotImportAll();
+    void updateImportButtons();
+    void slotThumbnailViewIndexActivated(const QModelIndex&);
+    void openUrl(const KUrl&);
+    void slotDocumentDirFinderDone(const KUrl& url, DocumentDirFinder::Status status);
+    void showConfigDialog();
 
 private:
-	friend class ThumbnailPagePrivate;
-	ThumbnailPagePrivate* const d;
-	void importList(const QModelIndexList&);
+    friend class ThumbnailPagePrivate;
+    ThumbnailPagePrivate* const d;
+    void importList(const QModelIndexList&);
 };
-
 
 } // namespace
 

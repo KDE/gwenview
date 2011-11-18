@@ -30,40 +30,39 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
-
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct HudWidgetPrivate;
-class GWENVIEWLIB_EXPORT HudWidget : public QFrame {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT HudWidget : public QFrame
+{
+    Q_OBJECT
 public:
-	enum Option {
-		OptionNone                 = 0,
-		OptionCloseButton          = 1 << 1,
-		// FIXME: Ugly
-		OptionDoNotFollowChildSize = 1 << 2, /// Make it possible to resize the hudwidget independently of child size
-		OptionOpaque               = 1 << 3
-	};
-	Q_DECLARE_FLAGS(Options, Option)
+    enum Option {
+        OptionNone                 = 0,
+        OptionCloseButton          = 1 << 1,
+        // FIXME: Ugly
+        OptionDoNotFollowChildSize = 1 << 2, /// Make it possible to resize the hudwidget independently of child size
+        OptionOpaque               = 1 << 3
+    };
+    Q_DECLARE_FLAGS(Options, Option)
 
-	HudWidget(QWidget* parent = 0);
-	~HudWidget();
+    HudWidget(QWidget* parent = 0);
+    ~HudWidget();
 
-	void init(QWidget*, Options options);
+    void init(QWidget*, Options options);
 
-	QWidget* mainWidget() const;
+    QWidget* mainWidget() const;
 
 Q_SIGNALS:
-	void closed();
+    void closed();
 
 private Q_SLOTS:
-	void slotCloseButtonClicked();
+    void slotCloseButtonClicked();
 
 private:
-	HudWidgetPrivate* const d;
+    HudWidgetPrivate* const d;
 };
-
 
 } // namespace
 

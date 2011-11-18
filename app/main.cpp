@@ -40,101 +40,104 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/version.h>
 #include "mainwindow.h"
 
-class StartHelper {
+class StartHelper
+{
 public:
-	StartHelper()
-	: mFullScreen(false)
-	, mSlideShow(false)
-	{
-		KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
-		if (args->count() > 0) {
-			parseArgs(args);
-		}
-		args->clear();
-	}
+    StartHelper()
+        : mFullScreen(false)
+        , mSlideShow(false) {
+        KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
+        if (args->count() > 0) {
+            parseArgs(args);
+        }
+        args->clear();
+    }
 
-	void parseArgs(KCmdLineArgs* args) {
-		if (args->count() > 1) {
-			// Createa a temp dir containing links to url args
-			mMultipleUrlsDir.reset(new KTempDir);
-			mUrl = KUrl::fromPath(mMultipleUrlsDir->name());
-			KUrl::List list;
-			for (int pos = 0; pos < args->count(); ++pos) {
-				list << args->url(pos);
-			}
-			KIO::CopyJob* job = KIO::link(list, mUrl);
-			job->exec();
-		} else {
-			mUrl = args->url(0);
-		}
+    void parseArgs(KCmdLineArgs* args)
+    {
+        if (args->count() > 1) {
+            // Createa a temp dir containing links to url args
+            mMultipleUrlsDir.reset(new KTempDir);
+            mUrl = KUrl::fromPath(mMultipleUrlsDir->name());
+            KUrl::List list;
+            for (int pos = 0; pos < args->count(); ++pos) {
+                list << args->url(pos);
+            }
+            KIO::CopyJob* job = KIO::link(list, mUrl);
+            job->exec();
+        } else {
+            mUrl = args->url(0);
+        }
 
-		if (mUrl.isValid() && (args->isSet("f") || args->isSet("s"))) {
-			mFullScreen = true;
-			if (args->isSet("s")) {
-				mSlideShow = true;
-			}
-		}
-	}
+        if (mUrl.isValid() && (args->isSet("f") || args->isSet("s"))) {
+            mFullScreen = true;
+            if (args->isSet("s")) {
+                mSlideShow = true;
+            }
+        }
+    }
 
-	void createMainWindow() {
-		Gwenview::MainWindow* window = new Gwenview::MainWindow();
-		if (mUrl.isValid()) {
-			window->setInitialUrl(mUrl);
-		} else {
-			window->showStartPage();
-		}
+    void createMainWindow()
+    {
+        Gwenview::MainWindow* window = new Gwenview::MainWindow();
+        if (mUrl.isValid()) {
+            window->setInitialUrl(mUrl);
+        } else {
+            window->showStartPage();
+        }
 
-		window->show();
-		if (mFullScreen) {
-			window->actionCollection()->action("fullscreen")->trigger();
-		} else {
-			window->show();
-		}
+        window->show();
+        if (mFullScreen) {
+            window->actionCollection()->action("fullscreen")->trigger();
+        } else {
+            window->show();
+        }
 
-		if (mSlideShow) {
-			window->startSlideShow();
-		}
-	}
+        if (mSlideShow) {
+            window->startSlideShow();
+        }
+    }
 
 private:
-	KUrl mUrl;
-	bool mFullScreen;
-	bool mSlideShow;
-	std::auto_ptr<KTempDir> mMultipleUrlsDir;
-	std::auto_ptr<Gwenview::MainWindow> mMainWindow;
+    KUrl mUrl;
+    bool mFullScreen;
+    bool mSlideShow;
+    std::auto_ptr<KTempDir> mMultipleUrlsDir;
+    std::auto_ptr<Gwenview::MainWindow> mMainWindow;
 };
 
-int main(int argc, char *argv[]) {
-	KAboutData aboutData(
-		"gwenview",        /* appname */
-		0,                 /* catalogName */
-		ki18n("Gwenview"), /* programName */
-		GWENVIEW_VERSION); /* version */
-	aboutData.setShortDescription(ki18n("An Image Viewer"));
-	aboutData.setLicense(KAboutData::License_GPL);
-	aboutData.setCopyrightStatement(ki18n("Copyright 2000-2010 Aurélien Gâteau"));
-	aboutData.addAuthor(
-		ki18n("Aurélien Gâteau"),
-		ki18n("Main developer"),
-		"agateau@kde.org");
+int main(int argc, char *argv[])
+{
+    KAboutData aboutData(
+        "gwenview",        /* appname */
+        0,                 /* catalogName */
+        ki18n("Gwenview"), /* programName */
+        GWENVIEW_VERSION); /* version */
+    aboutData.setShortDescription(ki18n("An Image Viewer"));
+    aboutData.setLicense(KAboutData::License_GPL);
+    aboutData.setCopyrightStatement(ki18n("Copyright 2000-2010 Aurélien Gâteau"));
+    aboutData.addAuthor(
+        ki18n("Aurélien Gâteau"),
+        ki18n("Main developer"),
+        "agateau@kde.org");
 
-	KCmdLineArgs::init( argc, argv, &aboutData );
+    KCmdLineArgs::init(argc, argv, &aboutData);
 
-	KCmdLineOptions options;
-	options.add("f", ki18n("Start in fullscreen mode"));
-	options.add("s", ki18n("Start in slideshow mode"));
-	options.add("+[file or folder]", ki18n("A starting file or folder"));
-	KCmdLineArgs::addCmdLineOptions( options );
+    KCmdLineOptions options;
+    options.add("f", ki18n("Start in fullscreen mode"));
+    options.add("s", ki18n("Start in slideshow mode"));
+    options.add("+[file or folder]", ki18n("A starting file or folder"));
+    KCmdLineArgs::addCmdLineOptions(options);
 
-	KApplication app;
-	Gwenview::ImageFormats::registerPlugins();
+    KApplication app;
+    Gwenview::ImageFormats::registerPlugins();
 
-	// startHelper must live for the whole live of the application
-	StartHelper startHelper;
-	if (app.isSessionRestored()) {
-		kRestoreMainWindows<Gwenview::MainWindow>();
-	} else {
-		startHelper.createMainWindow();
-	}
-	return app.exec();
+    // startHelper must live for the whole live of the application
+    StartHelper startHelper;
+    if (app.isSessionRestored()) {
+        kRestoreMainWindows<Gwenview::MainWindow>();
+    } else {
+        startHelper.createMainWindow();
+    }
+    return app.exec();
 }

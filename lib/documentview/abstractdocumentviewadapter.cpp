@@ -29,32 +29,34 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 AbstractDocumentViewAdapter::AbstractDocumentViewAdapter()
-: mWidget(0) {
+: mWidget(0)
+{
 }
 
-
-AbstractDocumentViewAdapter::~AbstractDocumentViewAdapter() {
-	delete mWidget;
+AbstractDocumentViewAdapter::~AbstractDocumentViewAdapter()
+{
+    delete mWidget;
 }
 
-
-QCursor AbstractDocumentViewAdapter::cursor() const {
-	return mWidget ? mWidget->cursor() : QCursor();
+QCursor AbstractDocumentViewAdapter::cursor() const
+{
+    return mWidget ? mWidget->cursor() : QCursor();
 }
 
-
-void AbstractDocumentViewAdapter::setCursor(const QCursor& cursor) {
-	if (mWidget) {
-		mWidget->setCursor(cursor);
-	}
+void AbstractDocumentViewAdapter::setCursor(const QCursor& cursor)
+{
+    if (mWidget) {
+        mWidget->setCursor(cursor);
+    }
 }
 
-EmptyAdapter::EmptyAdapter() {
-	setWidget(new QGraphicsWidget);
+EmptyAdapter::EmptyAdapter()
+{
+    setWidget(new QGraphicsWidget);
 }
 
 } // namespace

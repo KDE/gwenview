@@ -37,261 +37,258 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "semanticinfodirmodel.h"
 #endif
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 AbstractSortedDirModelFilter::AbstractSortedDirModelFilter(SortedDirModel* model)
 : QObject(model)
 , mModel(model)
 {
-	if (mModel) {
-		mModel->addFilter(this);
-	}
+    if (mModel) {
+        mModel->addFilter(this);
+    }
 }
 
 AbstractSortedDirModelFilter::~AbstractSortedDirModelFilter()
 {
-	if (mModel) {
-		mModel->removeFilter(this);
-	}
+    if (mModel) {
+        mModel->removeFilter(this);
+    }
 }
-
 
 struct SortedDirModelPrivate {
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-	KDirModel* mSourceModel;
+    KDirModel* mSourceModel;
 #else
-	SemanticInfoDirModel* mSourceModel;
+    SemanticInfoDirModel* mSourceModel;
 #endif
-	QStringList mBlackListedExtensions;
-	QList<AbstractSortedDirModelFilter*> mFilters;
-	QTimer mDelayedApplyFiltersTimer;
-	MimeTypeUtils::Kinds mKindFilter;
+    QStringList mBlackListedExtensions;
+    QList<AbstractSortedDirModelFilter*> mFilters;
+    QTimer mDelayedApplyFiltersTimer;
+    MimeTypeUtils::Kinds mKindFilter;
 };
-
 
 SortedDirModel::SortedDirModel(QObject* parent)
 : KDirSortFilterProxyModel(parent)
 , d(new SortedDirModelPrivate)
 {
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-	d->mSourceModel = new KDirModel(this);
+    d->mSourceModel = new KDirModel(this);
 #else
-	d->mSourceModel = new SemanticInfoDirModel(this);
+    d->mSourceModel = new SemanticInfoDirModel(this);
 #endif
-	setSourceModel(d->mSourceModel);
-	d->mDelayedApplyFiltersTimer.setInterval(0);
-	d->mDelayedApplyFiltersTimer.setSingleShot(true);
-	connect(&d->mDelayedApplyFiltersTimer, SIGNAL(timeout()), SLOT(doApplyFilters()));
+    setSourceModel(d->mSourceModel);
+    d->mDelayedApplyFiltersTimer.setInterval(0);
+    d->mDelayedApplyFiltersTimer.setSingleShot(true);
+    connect(&d->mDelayedApplyFiltersTimer, SIGNAL(timeout()), SLOT(doApplyFilters()));
 }
 
-
-SortedDirModel::~SortedDirModel() {
-	delete d;
+SortedDirModel::~SortedDirModel()
+{
+    delete d;
 }
 
-
-MimeTypeUtils::Kinds SortedDirModel::kindFilter() const {
-	return d->mKindFilter;
+MimeTypeUtils::Kinds SortedDirModel::kindFilter() const
+{
+    return d->mKindFilter;
 }
 
-
-void SortedDirModel::setKindFilter(MimeTypeUtils::Kinds kindFilter) {
-	if (d->mKindFilter == kindFilter) {
-		return;
-	}
-	d->mKindFilter = kindFilter;
-	applyFilters();
+void SortedDirModel::setKindFilter(MimeTypeUtils::Kinds kindFilter)
+{
+    if (d->mKindFilter == kindFilter) {
+        return;
+    }
+    d->mKindFilter = kindFilter;
+    applyFilters();
 }
 
-
-void SortedDirModel::adjustKindFilter(MimeTypeUtils::Kinds kinds, bool set) {
-	MimeTypeUtils::Kinds kindFilter = d->mKindFilter;
-	if (set) {
-		kindFilter |= kinds;
-	} else {
-		kindFilter &= ~kinds;
-	}
-	setKindFilter(kindFilter);
+void SortedDirModel::adjustKindFilter(MimeTypeUtils::Kinds kinds, bool set)
+{
+    MimeTypeUtils::Kinds kindFilter = d->mKindFilter;
+    if (set) {
+        kindFilter |= kinds;
+    } else {
+        kindFilter &= ~kinds;
+    }
+    setKindFilter(kindFilter);
 }
 
-
-void SortedDirModel::addFilter(AbstractSortedDirModelFilter* filter) {
-	d->mFilters << filter;
-	applyFilters();
+void SortedDirModel::addFilter(AbstractSortedDirModelFilter* filter)
+{
+    d->mFilters << filter;
+    applyFilters();
 }
 
-
-void SortedDirModel::removeFilter(AbstractSortedDirModelFilter* filter) {
-	d->mFilters.removeAll(filter);
-	applyFilters();
+void SortedDirModel::removeFilter(AbstractSortedDirModelFilter* filter)
+{
+    d->mFilters.removeAll(filter);
+    applyFilters();
 }
 
-
-KDirLister* SortedDirModel::dirLister() const {
-	return d->mSourceModel->dirLister();
+KDirLister* SortedDirModel::dirLister() const
+{
+    return d->mSourceModel->dirLister();
 }
 
-
-void SortedDirModel::reload() {
-	#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-	d->mSourceModel->clearSemanticInfoCache();
-	#endif
-	dirLister()->updateDirectory(dirLister()->url());
+void SortedDirModel::reload()
+{
+#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
+    d->mSourceModel->clearSemanticInfoCache();
+#endif
+    dirLister()->updateDirectory(dirLister()->url());
 }
 
-
-void SortedDirModel::setBlackListedExtensions(const QStringList& list) {
-	d->mBlackListedExtensions = list;
+void SortedDirModel::setBlackListedExtensions(const QStringList& list)
+{
+    d->mBlackListedExtensions = list;
 }
 
+KFileItem SortedDirModel::itemForIndex(const QModelIndex& index) const
+{
+    if (!index.isValid()) {
+        return KFileItem();
+    }
 
-KFileItem SortedDirModel::itemForIndex(const QModelIndex& index) const {
-	if (!index.isValid()) {
-		return KFileItem();
-	}
-
-	QModelIndex sourceIndex = mapToSource(index);
-	return d->mSourceModel->itemForIndex(sourceIndex);
+    QModelIndex sourceIndex = mapToSource(index);
+    return d->mSourceModel->itemForIndex(sourceIndex);
 }
 
-
-KUrl SortedDirModel::urlForIndex(const QModelIndex& index) const {
+KUrl SortedDirModel::urlForIndex(const QModelIndex& index) const
+{
     KFileItem item = itemForIndex(index);
     return item.isNull() ? KUrl() : item.url();
 }
 
-
-KFileItem SortedDirModel::itemForSourceIndex(const QModelIndex& sourceIndex) const {
-	if (!sourceIndex.isValid()) {
-		return KFileItem();
-	}
-	return d->mSourceModel->itemForIndex(sourceIndex);
+KFileItem SortedDirModel::itemForSourceIndex(const QModelIndex& sourceIndex) const
+{
+    if (!sourceIndex.isValid()) {
+        return KFileItem();
+    }
+    return d->mSourceModel->itemForIndex(sourceIndex);
 }
 
+QModelIndex SortedDirModel::indexForItem(const KFileItem& item) const
+{
+    if (item.isNull()) {
+        return QModelIndex();
+    }
 
-QModelIndex SortedDirModel::indexForItem(const KFileItem& item) const {
-	if (item.isNull()) {
-		return QModelIndex();
-	}
-
-	QModelIndex sourceIndex = d->mSourceModel->indexForItem(item);
-	return mapFromSource(sourceIndex);
+    QModelIndex sourceIndex = d->mSourceModel->indexForItem(item);
+    return mapFromSource(sourceIndex);
 }
 
-
-QModelIndex SortedDirModel::indexForUrl(const KUrl& url) const {
-	if (!url.isValid()) {
-		return QModelIndex();
-	}
-	QModelIndex sourceIndex = d->mSourceModel->indexForUrl(url);
-	return mapFromSource(sourceIndex);
+QModelIndex SortedDirModel::indexForUrl(const KUrl& url) const
+{
+    if (!url.isValid()) {
+        return QModelIndex();
+    }
+    QModelIndex sourceIndex = d->mSourceModel->indexForUrl(url);
+    return mapFromSource(sourceIndex);
 }
 
+bool SortedDirModel::filterAcceptsRow(int row, const QModelIndex& parent) const
+{
+    QModelIndex index = d->mSourceModel->index(row, 0, parent);
+    KFileItem fileItem = d->mSourceModel->itemForIndex(index);
 
-bool SortedDirModel::filterAcceptsRow(int row, const QModelIndex& parent) const {
-	QModelIndex index = d->mSourceModel->index(row, 0, parent);
-	KFileItem fileItem = d->mSourceModel->itemForIndex(index);
+    MimeTypeUtils::Kinds kind = MimeTypeUtils::fileItemKind(fileItem);
+    if (d->mKindFilter != MimeTypeUtils::Kinds() && !(d->mKindFilter & kind)) {
+        return false;
+    }
 
-	MimeTypeUtils::Kinds kind = MimeTypeUtils::fileItemKind(fileItem);
-	if (d->mKindFilter != MimeTypeUtils::Kinds() && !(d->mKindFilter & kind)) {
-		return false;
-	}
-
-	if (kind != MimeTypeUtils::KIND_DIR && kind != MimeTypeUtils::KIND_ARCHIVE) {
-		int dotPos = fileItem.name().lastIndexOf('.');
-		if (dotPos >= 1) {
-			QString extension = fileItem.name().mid(dotPos + 1).toLower();
-			if (d->mBlackListedExtensions.contains(extension)) {
-				return false;
-			}
-		}
+    if (kind != MimeTypeUtils::KIND_DIR && kind != MimeTypeUtils::KIND_ARCHIVE) {
+        int dotPos = fileItem.name().lastIndexOf('.');
+        if (dotPos >= 1) {
+            QString extension = fileItem.name().mid(dotPos + 1).toLower();
+            if (d->mBlackListedExtensions.contains(extension)) {
+                return false;
+            }
+        }
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-		if (!d->mSourceModel->semanticInfoAvailableForIndex(index)) {
-			Q_FOREACH(const AbstractSortedDirModelFilter* filter, d->mFilters) {
-				// Make sure we have semanticinfo, otherwise retrieve it and
-				// return false, we will be called again later when it is
-				// there.
-				if (filter->needsSemanticInfo()) {
-					d->mSourceModel->retrieveSemanticInfoForIndex(index);
-					return false;
-				}
-			}
-		}
+        if (!d->mSourceModel->semanticInfoAvailableForIndex(index)) {
+            Q_FOREACH(const AbstractSortedDirModelFilter * filter, d->mFilters) {
+                // Make sure we have semanticinfo, otherwise retrieve it and
+                // return false, we will be called again later when it is
+                // there.
+                if (filter->needsSemanticInfo()) {
+                    d->mSourceModel->retrieveSemanticInfoForIndex(index);
+                    return false;
+                }
+            }
+        }
 #endif
 
-		Q_FOREACH(const AbstractSortedDirModelFilter* filter, d->mFilters) {
-			if (!filter->acceptsIndex(index)) {
-				return false;
-			}
-		}
-	}
-	return KDirSortFilterProxyModel::filterAcceptsRow(row, parent);
+        Q_FOREACH(const AbstractSortedDirModelFilter * filter, d->mFilters) {
+            if (!filter->acceptsIndex(index)) {
+                return false;
+            }
+        }
+    }
+    return KDirSortFilterProxyModel::filterAcceptsRow(row, parent);
 }
 
-
-AbstractSemanticInfoBackEnd* SortedDirModel::semanticInfoBackEnd() const {
+AbstractSemanticInfoBackEnd* SortedDirModel::semanticInfoBackEnd() const
+{
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-	return 0;
+    return 0;
 #else
-	return d->mSourceModel->semanticInfoBackEnd();
+    return d->mSourceModel->semanticInfoBackEnd();
 #endif
 }
-
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-SemanticInfo SortedDirModel::semanticInfoForSourceIndex(const QModelIndex& sourceIndex) const {
-	return d->mSourceModel->semanticInfoForIndex(sourceIndex);
+SemanticInfo SortedDirModel::semanticInfoForSourceIndex(const QModelIndex& sourceIndex) const
+{
+    return d->mSourceModel->semanticInfoForIndex(sourceIndex);
 }
 #endif
 
-
-void SortedDirModel::applyFilters() {
-	d->mDelayedApplyFiltersTimer.start();
+void SortedDirModel::applyFilters()
+{
+    d->mDelayedApplyFiltersTimer.start();
 }
 
-
-void SortedDirModel::doApplyFilters() {
-	QSortFilterProxyModel::invalidateFilter();
+void SortedDirModel::doApplyFilters()
+{
+    QSortFilterProxyModel::invalidateFilter();
 }
 
+bool SortedDirModel::lessThan(const QModelIndex& left, const QModelIndex& right) const
+{
+    const KFileItem leftItem = itemForSourceIndex(left);
+    const KFileItem rightItem = itemForSourceIndex(right);
 
-bool SortedDirModel::lessThan(const QModelIndex& left, const QModelIndex& right) const {
-	const KFileItem leftItem = itemForSourceIndex(left);
-	const KFileItem rightItem = itemForSourceIndex(right);
+    const bool leftIsDirOrArchive = ArchiveUtils::fileItemIsDirOrArchive(leftItem);
+    const bool rightIsDirOrArchive = ArchiveUtils::fileItemIsDirOrArchive(rightItem);
 
-	const bool leftIsDirOrArchive = ArchiveUtils::fileItemIsDirOrArchive(leftItem);
-	const bool rightIsDirOrArchive = ArchiveUtils::fileItemIsDirOrArchive(rightItem);
+    if (leftIsDirOrArchive != rightIsDirOrArchive) {
+        return leftIsDirOrArchive;
+    }
 
-	if (leftIsDirOrArchive != rightIsDirOrArchive) {
-		return leftIsDirOrArchive;
-	}
+    if (sortRole() != KDirModel::ModifiedTime) {
+        return KDirSortFilterProxyModel::lessThan(left, right);
+    }
 
-	if (sortRole() != KDirModel::ModifiedTime) {
-		return KDirSortFilterProxyModel::lessThan(left, right);
-	}
+    const KDateTime leftDate = TimeUtils::dateTimeForFileItem(leftItem);
+    const KDateTime rightDate = TimeUtils::dateTimeForFileItem(rightItem);
 
-	const KDateTime leftDate = TimeUtils::dateTimeForFileItem(leftItem);
-	const KDateTime rightDate = TimeUtils::dateTimeForFileItem(rightItem);
-
-	return leftDate < rightDate;
+    return leftDate < rightDate;
 }
-
 
 bool SortedDirModel::hasDocuments() const
 {
-	const int count = rowCount();
-	if (count == 0) {
-		return false;
-	}
-	for (int row = 0; row < count; ++row) {
-		const QModelIndex idx = index(row, 0);
-		const KFileItem item = itemForIndex(idx);
-		if (!ArchiveUtils::fileItemIsDirOrArchive(item)) {
-			return true;
-		}
-	}
-	return false;
+    const int count = rowCount();
+    if (count == 0) {
+        return false;
+    }
+    for (int row = 0; row < count; ++row) {
+        const QModelIndex idx = index(row, 0);
+        const KFileItem item = itemForIndex(idx);
+        if (!ArchiveUtils::fileItemIsDirOrArchive(item)) {
+            return true;
+        }
+    }
+    return false;
 }
-
 
 } //namespace

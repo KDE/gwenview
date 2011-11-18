@@ -27,24 +27,23 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // Local
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 EmptyDocumentImpl::EmptyDocumentImpl(Document* document)
 : AbstractDocumentImpl(document)
 {}
 
-
 EmptyDocumentImpl::~EmptyDocumentImpl()
 {}
 
-
-void EmptyDocumentImpl::init() {
+void EmptyDocumentImpl::init()
+{
 }
 
-
-Document::LoadingState EmptyDocumentImpl::loadingState() const {
-	return Document::LoadingFailed;
+Document::LoadingState EmptyDocumentImpl::loadingState() const
+{
+    return Document::LoadingFailed;
 }
-
 
 } // namespace

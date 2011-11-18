@@ -24,26 +24,28 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 class QWidget;
 class KUrl;
 
-namespace Gwenview {
+namespace Gwenview
+{
 
-namespace FileUtils {
+namespace FileUtils
+{
 
 enum RenameResult {
-	RenamedOK,           /** Renamed without problem */
-	RenamedUnderNewName, /** Destination already existed, so rename() added a suffix to make the name unique */
-	Skipped,             /** Destination already existed and contained the same data as source, so rename() just removed the source */
-	RenameFailed         /** Rename failed */
+    RenamedOK,           /** Renamed without problem */
+    RenamedUnderNewName, /** Destination already existed, so rename() added a suffix to make the name unique */
+    Skipped,             /** Destination already existed and contained the same data as source, so rename() just removed the source */
+    RenameFailed         /** Rename failed */
 };
 
 /**
  * Compare content of two urls, returns whether they are the same
  */
-bool contentsAreIdentical(const KUrl& url1, const KUrl& url2, QWidget* authWindow=0);
+bool contentsAreIdentical(const KUrl& url1, const KUrl& url2, QWidget* authWindow = 0);
 
 /**
  * Rename src to dst, returns RenameResult
  */
-RenameResult rename(const KUrl& src, const KUrl& dst, QWidget* authWindow=0);
+RenameResult rename(const KUrl& src, const KUrl& dst, QWidget* authWindow = 0);
 
 } // namespace
 } // namespace

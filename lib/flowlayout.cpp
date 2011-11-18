@@ -40,7 +40,7 @@
 #include <QLayout>
 
 FlowLayout::FlowLayout(QWidget *parent, int margin, int spacing)
-    : QLayout(parent)
+: QLayout(parent)
 {
     setMargin(margin);
     setSpacing(spacing);
@@ -112,10 +112,10 @@ QSize FlowLayout::minimumSize() const
 {
     QSize size;
     QLayoutItem *item;
-    foreach (item, itemList)
-        size = size.expandedTo(item->minimumSize());
+    foreach(item, itemList)
+    size = size.expandedTo(item->minimumSize());
 
-    size += QSize(2*margin(), 2*margin());
+    size += QSize(2 * margin(), 2 * margin());
     return size;
 }
 
@@ -126,7 +126,7 @@ int FlowLayout::doLayout(const QRect &rect, bool testOnly) const
     int lineHeight = 0;
 
     QLayoutItem *item;
-    foreach (item, itemList) {
+    foreach(item, itemList) {
         int nextX = x + item->sizeHint().width() + spacing();
         if (nextX - spacing() > rect.right() && lineHeight > 0) {
             x = rect.x();

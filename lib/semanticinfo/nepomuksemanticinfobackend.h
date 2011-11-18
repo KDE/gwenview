@@ -30,39 +30,38 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include "abstractsemanticinfobackend.h"
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct NepomukSemanticInfoBackEndPrivate;
-
 
 /**
  * A real metadata backend using Nepomuk to store and retrieve metadata.
  */
-class GWENVIEWLIB_EXPORT NepomukSemanticInfoBackEnd : public AbstractSemanticInfoBackEnd {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT NepomukSemanticInfoBackEnd : public AbstractSemanticInfoBackEnd
+{
+    Q_OBJECT
 public:
-	NepomukSemanticInfoBackEnd(QObject* parent);
-	~NepomukSemanticInfoBackEnd();
+    NepomukSemanticInfoBackEnd(QObject* parent);
+    ~NepomukSemanticInfoBackEnd();
 
-	virtual TagSet allTags() const;
+    virtual TagSet allTags() const;
 
-	virtual void refreshAllTags();
+    virtual void refreshAllTags();
 
-	virtual void storeSemanticInfo(const KUrl&, const SemanticInfo&);
+    virtual void storeSemanticInfo(const KUrl&, const SemanticInfo&);
 
-	virtual void retrieveSemanticInfo(const KUrl&);
+    virtual void retrieveSemanticInfo(const KUrl&);
 
-	virtual QString labelForTag(const SemanticInfoTag&) const;
+    virtual QString labelForTag(const SemanticInfoTag&) const;
 
-	virtual SemanticInfoTag tagForLabel(const QString&);
+    virtual SemanticInfoTag tagForLabel(const QString&);
 
-	void emitSemanticInfoRetrieved(const KUrl&, const SemanticInfo&);
+    void emitSemanticInfoRetrieved(const KUrl&, const SemanticInfo&);
 
 private:
-	NepomukSemanticInfoBackEndPrivate* const d;
+    NepomukSemanticInfoBackEndPrivate* const d;
 };
-
 
 } // namespace
 

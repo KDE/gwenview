@@ -32,136 +32,137 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 struct WidgetFloaterPrivate {
-	QWidget* mParent;
-	QPointer<QWidget> mChild;
-	Qt::Alignment mAlignment;
+    QWidget* mParent;
+    QPointer<QWidget> mChild;
+    Qt::Alignment mAlignment;
 
-	int mHorizontalMargin;
-	int mVerticalMargin;
-	bool mInsideUpdateChildGeometry;
+    int mHorizontalMargin;
+    int mVerticalMargin;
+    bool mInsideUpdateChildGeometry;
 
-	void updateChildGeometry() {
-		if (!mChild) {
-			return;
-		}
-		if (mInsideUpdateChildGeometry) {
-			return;
-		}
-		mInsideUpdateChildGeometry = true;
+    void updateChildGeometry()
+    {
+        if (!mChild) {
+            return;
+        }
+        if (mInsideUpdateChildGeometry) {
+            return;
+        }
+        mInsideUpdateChildGeometry = true;
 
-		int posX, posY;
-		int childWidth, childHeight;
-		int parentWidth, parentHeight;
+        int posX, posY;
+        int childWidth, childHeight;
+        int parentWidth, parentHeight;
 
-		childWidth = mChild->width();
-		childHeight = mChild->height();
+        childWidth = mChild->width();
+        childHeight = mChild->height();
 
-		parentWidth = mParent->width();
-		parentHeight = mParent->height();
+        parentWidth = mParent->width();
+        parentHeight = mParent->height();
 
-		if (mAlignment & Qt::AlignLeft) {
-			posX = mHorizontalMargin;
-		} else if (mAlignment & Qt::AlignHCenter) {
-			posX = (parentWidth - childWidth) / 2;
-		} else if (mAlignment & Qt::AlignJustify) {
-			posX = mHorizontalMargin;
-			childWidth = parentWidth - 2 * mHorizontalMargin;
-			QRect childGeometry = mChild->geometry();
-			childGeometry.setWidth(childWidth);
-			mChild->setGeometry(childGeometry);
-		} else {
-			posX = parentWidth - childWidth - mHorizontalMargin;
-		}
+        if (mAlignment & Qt::AlignLeft) {
+            posX = mHorizontalMargin;
+        } else if (mAlignment & Qt::AlignHCenter) {
+            posX = (parentWidth - childWidth) / 2;
+        } else if (mAlignment & Qt::AlignJustify) {
+            posX = mHorizontalMargin;
+            childWidth = parentWidth - 2 * mHorizontalMargin;
+            QRect childGeometry = mChild->geometry();
+            childGeometry.setWidth(childWidth);
+            mChild->setGeometry(childGeometry);
+        } else {
+            posX = parentWidth - childWidth - mHorizontalMargin;
+        }
 
-		if (mAlignment & Qt::AlignTop) {
-			posY = mVerticalMargin;
-		} else if (mAlignment & Qt::AlignVCenter) {
-			posY = (parentHeight - childHeight) / 2;
-		} else {
-			posY = parentHeight - childHeight - mVerticalMargin;
-		}
+        if (mAlignment & Qt::AlignTop) {
+            posY = mVerticalMargin;
+        } else if (mAlignment & Qt::AlignVCenter) {
+            posY = (parentHeight - childHeight) / 2;
+        } else {
+            posY = parentHeight - childHeight - mVerticalMargin;
+        }
 
-		mChild->move(posX, posY);
+        mChild->move(posX, posY);
 
-		mInsideUpdateChildGeometry = false;
-	}
+        mInsideUpdateChildGeometry = false;
+    }
 };
-
 
 WidgetFloater::WidgetFloater(QWidget* parent)
 : QObject(parent)
-, d(new WidgetFloaterPrivate) {
-	Q_ASSERT(parent);
-	d->mParent = parent;
-	d->mParent->installEventFilter(this);
-	d->mChild = 0;
-	d->mAlignment = Qt::AlignCenter;
-	d->mHorizontalMargin = KDialog::marginHint();
-	d->mVerticalMargin = KDialog::marginHint();
-	d->mInsideUpdateChildGeometry = false;
+, d(new WidgetFloaterPrivate)
+{
+    Q_ASSERT(parent);
+    d->mParent = parent;
+    d->mParent->installEventFilter(this);
+    d->mChild = 0;
+    d->mAlignment = Qt::AlignCenter;
+    d->mHorizontalMargin = KDialog::marginHint();
+    d->mVerticalMargin = KDialog::marginHint();
+    d->mInsideUpdateChildGeometry = false;
 }
 
-
-WidgetFloater::~WidgetFloater() {
-	delete d;
+WidgetFloater::~WidgetFloater()
+{
+    delete d;
 }
 
-
-void WidgetFloater::setChildWidget(QWidget* child) {
-	if (d->mChild) {
-		d->mChild->removeEventFilter(this);
-	}
-	d->mChild = child;
-	d->mChild->setParent(d->mParent);
-	d->mChild->installEventFilter(this);
-	d->updateChildGeometry();
-	d->mChild->raise();
-	d->mChild->show();
+void WidgetFloater::setChildWidget(QWidget* child)
+{
+    if (d->mChild) {
+        d->mChild->removeEventFilter(this);
+    }
+    d->mChild = child;
+    d->mChild->setParent(d->mParent);
+    d->mChild->installEventFilter(this);
+    d->updateChildGeometry();
+    d->mChild->raise();
+    d->mChild->show();
 }
 
-
-void WidgetFloater::setAlignment(Qt::Alignment alignment) {
-	d->mAlignment = alignment;
-	d->updateChildGeometry();
+void WidgetFloater::setAlignment(Qt::Alignment alignment)
+{
+    d->mAlignment = alignment;
+    d->updateChildGeometry();
 }
 
-
-bool WidgetFloater::eventFilter(QObject*, QEvent* event) {
-	switch (event->type()) {
-	case QEvent::Resize:
-	case QEvent::Show:
-		d->updateChildGeometry();
-		break;
-	default:
-		break;
-	}
-	return false;
+bool WidgetFloater::eventFilter(QObject*, QEvent* event)
+{
+    switch (event->type()) {
+    case QEvent::Resize:
+    case QEvent::Show:
+        d->updateChildGeometry();
+        break;
+    default:
+        break;
+    }
+    return false;
 }
 
-
-void WidgetFloater::setHorizontalMargin(int value) {
-	d->mHorizontalMargin = value;
-	d->updateChildGeometry();
+void WidgetFloater::setHorizontalMargin(int value)
+{
+    d->mHorizontalMargin = value;
+    d->updateChildGeometry();
 }
 
-
-int WidgetFloater::horizontalMargin() const {
-	return d->mHorizontalMargin;
+int WidgetFloater::horizontalMargin() const
+{
+    return d->mHorizontalMargin;
 }
 
-
-void WidgetFloater::setVerticalMargin(int value) {
-	d->mVerticalMargin = value;
-	d->updateChildGeometry();
+void WidgetFloater::setVerticalMargin(int value)
+{
+    d->mVerticalMargin = value;
+    d->updateChildGeometry();
 }
 
-
-int WidgetFloater::verticalMargin() const {
-	return d->mVerticalMargin;
+int WidgetFloater::verticalMargin() const
+{
+    return d->mVerticalMargin;
 }
-
 
 } // namespace

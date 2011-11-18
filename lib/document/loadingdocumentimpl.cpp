@@ -58,7 +58,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "urlutils.h"
 #include "videodocumentloadedimpl.h"
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 #undef ENABLE_LOG
 #undef LOG
@@ -72,388 +73,390 @@ namespace Gwenview {
 const int HEADER_SIZE = 256;
 
 struct LoadingDocumentImplPrivate {
-	LoadingDocumentImpl* mImpl;
-	QPointer<KIO::TransferJob> mTransferJob;
-	QFuture<bool> mMetaInfoFuture;
-	QFutureWatcher<bool> mMetaInfoFutureWatcher;
-	QFuture<void> mImageDataFuture;
-	QFutureWatcher<void> mImageDataFutureWatcher;
+    LoadingDocumentImpl* mImpl;
+    QPointer<KIO::TransferJob> mTransferJob;
+    QFuture<bool> mMetaInfoFuture;
+    QFutureWatcher<bool> mMetaInfoFutureWatcher;
+    QFuture<void> mImageDataFuture;
+    QFutureWatcher<void> mImageDataFutureWatcher;
 
-	// If != 0, this means we need to load an image at zoom =
-	// 1/mImageDataInvertedZoom
-	int mImageDataInvertedZoom;
+    // If != 0, this means we need to load an image at zoom =
+    // 1/mImageDataInvertedZoom
+    int mImageDataInvertedZoom;
 
-	bool mMetaInfoLoaded;
-	bool mAnimated;
-	bool mDownSampledImageLoaded;
-	QByteArray mData;
-	QByteArray mFormat;
-	QSize mImageSize;
-	Exiv2::Image::AutoPtr mExiv2Image;
-	std::auto_ptr<JpegContent> mJpegContent;
-	QImage mImage;
+    bool mMetaInfoLoaded;
+    bool mAnimated;
+    bool mDownSampledImageLoaded;
+    QByteArray mData;
+    QByteArray mFormat;
+    QSize mImageSize;
+    Exiv2::Image::AutoPtr mExiv2Image;
+    std::auto_ptr<JpegContent> mJpegContent;
+    QImage mImage;
 
+    /**
+     * Determine kind of document and switch to an implementation if it is not
+     * necessary to download more data.
+     * @return true if switched to another implementation.
+     */
+    bool determineKind()
+    {
+        QString mimeType;
+        const KUrl& url = mImpl->document()->url();
+        if (KProtocolInfo::determineMimetypeFromExtension(url.protocol())) {
+            mimeType = KMimeType::findByNameAndContent(url.fileName(), mData)->name();
+        } else {
+            mimeType = KMimeType::findByContent(mData)->name();
+        }
+        MimeTypeUtils::Kind kind = MimeTypeUtils::mimeTypeKind(mimeType);
+        LOG("mimeType:" << mimeType);
+        LOG("kind:" << kind);
+        mImpl->setDocumentKind(kind);
 
-	/**
-	 * Determine kind of document and switch to an implementation if it is not
-	 * necessary to download more data.
-	 * @return true if switched to another implementation.
-	 */
-	bool determineKind() {
-		QString mimeType;
-		const KUrl& url = mImpl->document()->url();
-		if (KProtocolInfo::determineMimetypeFromExtension(url.protocol())) {
-			mimeType = KMimeType::findByNameAndContent(url.fileName(), mData)->name();
-		} else {
-			mimeType = KMimeType::findByContent(mData)->name();
-		}
-		MimeTypeUtils::Kind kind = MimeTypeUtils::mimeTypeKind(mimeType);
-		LOG("mimeType:" << mimeType);
-		LOG("kind:" << kind);
-		mImpl->setDocumentKind(kind);
+        switch (kind) {
+        case MimeTypeUtils::KIND_RASTER_IMAGE:
+        case MimeTypeUtils::KIND_SVG_IMAGE:
+            return false;
 
-		switch (kind) {
-		case MimeTypeUtils::KIND_RASTER_IMAGE:
-		case MimeTypeUtils::KIND_SVG_IMAGE:
-			return false;
+        case MimeTypeUtils::KIND_VIDEO:
+            mImpl->switchToImpl(new VideoDocumentLoadedImpl(mImpl->document()));
+            return true;
 
-		case MimeTypeUtils::KIND_VIDEO:
-			mImpl->switchToImpl(new VideoDocumentLoadedImpl(mImpl->document()));
-			return true;
+        default:
+            mImpl->setDocumentErrorString(
+                i18nc("@info", "Gwenview cannot display documents of type %1.", mimeType)
+            );
+            emit mImpl->loadingFailed();
+            mImpl->switchToImpl(new EmptyDocumentImpl(mImpl->document()));
+            return true;
+        }
+    }
 
-		default:
-			mImpl->setDocumentErrorString(
-				i18nc("@info", "Gwenview cannot display documents of type %1.", mimeType)
-				);
-			emit mImpl->loadingFailed();
-			mImpl->switchToImpl(new EmptyDocumentImpl(mImpl->document()));
-			return true;
-		}
-	}
+    void startLoading()
+    {
+        Q_ASSERT(!mMetaInfoLoaded);
 
+        switch (mImpl->document()->kind()) {
+        case MimeTypeUtils::KIND_RASTER_IMAGE:
+            mMetaInfoFuture = QtConcurrent::run(this, &LoadingDocumentImplPrivate::loadMetaInfo);
+            mMetaInfoFutureWatcher.setFuture(mMetaInfoFuture);
+            break;
 
-	void startLoading() {
-		Q_ASSERT(!mMetaInfoLoaded);
+        case MimeTypeUtils::KIND_SVG_IMAGE:
+            mImpl->switchToImpl(new SvgDocumentLoadedImpl(mImpl->document(), mData));
+            break;
 
-		switch (mImpl->document()->kind()) {
-		case MimeTypeUtils::KIND_RASTER_IMAGE:
-			mMetaInfoFuture = QtConcurrent::run(this, &LoadingDocumentImplPrivate::loadMetaInfo);
-			mMetaInfoFutureWatcher.setFuture(mMetaInfoFuture);
-			break;
+        case MimeTypeUtils::KIND_VIDEO:
+            break;
 
-		case MimeTypeUtils::KIND_SVG_IMAGE:
-			mImpl->switchToImpl(new SvgDocumentLoadedImpl(mImpl->document(), mData));
-			break;
+        default:
+            kWarning() << "We should not reach this point!";
+            break;
+        }
+    }
 
-		case MimeTypeUtils::KIND_VIDEO:
-			break;
+    void startImageDataLoading()
+    {
+        LOG("");
+        Q_ASSERT(mMetaInfoLoaded);
+        Q_ASSERT(mImageDataInvertedZoom != 0);
+        Q_ASSERT(!mImageDataFuture.isRunning());
+        mImageDataFuture = QtConcurrent::run(this, &LoadingDocumentImplPrivate::loadImageData);
+        mImageDataFutureWatcher.setFuture(mImageDataFuture);
+    }
 
-		default:
-			kWarning() << "We should not reach this point!";
-			break;
-		}
-	}
+    bool loadMetaInfo()
+    {
+        QBuffer buffer;
+        buffer.setBuffer(&mData);
+        buffer.open(QIODevice::ReadOnly);
+        QImageReader reader(&buffer);
+        mFormat = reader.format();
+        if (mFormat.isEmpty()) {
+            return false;
+        }
 
-	void startImageDataLoading() {
-		LOG("");
-		Q_ASSERT(mMetaInfoLoaded);
-		Q_ASSERT(mImageDataInvertedZoom != 0);
-		Q_ASSERT(!mImageDataFuture.isRunning());
-		mImageDataFuture = QtConcurrent::run(this, &LoadingDocumentImplPrivate::loadImageData);
-		mImageDataFutureWatcher.setFuture(mImageDataFuture);
-	}
+        Exiv2ImageLoader loader;
+        if (loader.load(mData)) {
+            mExiv2Image = loader.popImage();
+        }
 
-	bool loadMetaInfo() {
-		QBuffer buffer;
-		buffer.setBuffer(&mData);
-		buffer.open(QIODevice::ReadOnly);
-		QImageReader reader(&buffer);
-		mFormat = reader.format();
-		if (mFormat.isEmpty()) {
-			return false;
-		}
+        if (mFormat == "jpeg" && mExiv2Image.get()) {
+            mJpegContent.reset(new JpegContent());
+            if (!mJpegContent->loadFromData(mData, mExiv2Image.get())) {
+                return false;
+            }
 
-		Exiv2ImageLoader loader;
-		if (loader.load(mData)) {
-			mExiv2Image = loader.popImage();
-		}
+            // Use the size from JpegContent, as its correctly transposed if the
+            // image has been rotated
+            mImageSize = mJpegContent->size();
+        } else {
+            mImageSize = reader.size();
+        }
+        LOG("mImageSize" << mImageSize);
 
-		if (mFormat == "jpeg" && mExiv2Image.get()) {
-			mJpegContent.reset(new JpegContent());
-			if (!mJpegContent->loadFromData(mData, mExiv2Image.get())) {
-				return false;
-			}
+        return true;
+    }
 
-			// Use the size from JpegContent, as its correctly transposed if the
-			// image has been rotated
-			mImageSize = mJpegContent->size();
-		} else {
-			mImageSize = reader.size();
-		}
-		LOG("mImageSize" << mImageSize);
+    void loadImageData()
+    {
+        QBuffer buffer;
+        buffer.setBuffer(&mData);
+        buffer.open(QIODevice::ReadOnly);
+        QImageReader reader(&buffer);
 
-		return true;
-	}
+        LOG("mImageDataInvertedZoom=" << mImageDataInvertedZoom);
+        if (mImageSize.isValid()
+                && mImageDataInvertedZoom != 1
+                && reader.supportsOption(QImageIOHandler::ScaledSize)
+           ) {
+            // Do not use mImageSize here: QImageReader needs a non-transposed
+            // image size
+            QSize size = reader.size() / mImageDataInvertedZoom;
+            if (!size.isEmpty()) {
+                LOG("Setting scaled size to" << size);
+                reader.setScaledSize(size);
+            } else {
+                LOG("Not setting scaled size as it is empty" << size);
+            }
+        }
 
-	void loadImageData() {
-		QBuffer buffer;
-		buffer.setBuffer(&mData);
-		buffer.open(QIODevice::ReadOnly);
-		QImageReader reader(&buffer);
+        bool ok = reader.read(&mImage);
+        if (!ok) {
+            LOG("QImageReader::read() failed");
+            return;
+        }
 
-		LOG("mImageDataInvertedZoom=" << mImageDataInvertedZoom);
-		if (mImageSize.isValid()
-			&& mImageDataInvertedZoom != 1
-			&& reader.supportsOption(QImageIOHandler::ScaledSize)
-			)
-		{
-			// Do not use mImageSize here: QImageReader needs a non-transposed
-			// image size
-			QSize size = reader.size() / mImageDataInvertedZoom;
-			if (!size.isEmpty()) {
-				LOG("Setting scaled size to" << size);
-				reader.setScaledSize(size);
-			} else {
-				LOG("Not setting scaled size as it is empty" << size);
-			}
-		}
+        if (mJpegContent.get()) {
+            Gwenview::Orientation orientation = mJpegContent->orientation();
+            QMatrix matrix = ImageUtils::transformMatrix(orientation);
+            mImage = mImage.transformed(matrix);
+        }
 
-		bool ok = reader.read(&mImage);
-		if (!ok) {
-			LOG("QImageReader::read() failed");
-			return;
-		}
-
-		if (mJpegContent.get()) {
-			Gwenview::Orientation orientation = mJpegContent->orientation();
-			QMatrix matrix = ImageUtils::transformMatrix(orientation);
-			mImage = mImage.transformed(matrix);
-		}
-
-		if (reader.supportsAnimation()
-			&& reader.nextImageDelay() > 0 // Assume delay == 0 <=> only one frame
-		) {
-			/*
-			 * QImageReader is not really helpful to detect animated gif:
-			 * - QImageReader::imageCount() returns 0
-			 * - QImageReader::nextImageDelay() may return something > 0 if the
-			 *   image consists of only one frame but includes a "Graphic
-			 *   Control Extension" (usually only present if we have an
-			 *   animation) (Bug #185523)
-			 *
-			 * Decoding the next frame is the only reliable way I found to
-			 * detect an animated gif
-			 */
-			LOG("May be an animated image. delay:" << reader.nextImageDelay());
-			QImage nextImage;
-			if (reader.read(&nextImage)) {
-				LOG("Really an animated image (more than one frame)");
-				mAnimated = true;
-			} else {
-				kWarning() << mImpl->document()->url() << "is not really an animated image (only one frame)";
-			}
-		}
-	}
+        if (reader.supportsAnimation()
+                && reader.nextImageDelay() > 0 // Assume delay == 0 <=> only one frame
+           ) {
+            /*
+             * QImageReader is not really helpful to detect animated gif:
+             * - QImageReader::imageCount() returns 0
+             * - QImageReader::nextImageDelay() may return something > 0 if the
+             *   image consists of only one frame but includes a "Graphic
+             *   Control Extension" (usually only present if we have an
+             *   animation) (Bug #185523)
+             *
+             * Decoding the next frame is the only reliable way I found to
+             * detect an animated gif
+             */
+            LOG("May be an animated image. delay:" << reader.nextImageDelay());
+            QImage nextImage;
+            if (reader.read(&nextImage)) {
+                LOG("Really an animated image (more than one frame)");
+                mAnimated = true;
+            } else {
+                kWarning() << mImpl->document()->url() << "is not really an animated image (only one frame)";
+            }
+        }
+    }
 };
-
 
 LoadingDocumentImpl::LoadingDocumentImpl(Document* document)
 : AbstractDocumentImpl(document)
-, d(new LoadingDocumentImplPrivate) {
-	d->mImpl = this;
-	d->mMetaInfoLoaded = false;
-	d->mAnimated = false;
-	d->mDownSampledImageLoaded = false;
-	d->mImageDataInvertedZoom = 0;
+, d(new LoadingDocumentImplPrivate)
+{
+    d->mImpl = this;
+    d->mMetaInfoLoaded = false;
+    d->mAnimated = false;
+    d->mDownSampledImageLoaded = false;
+    d->mImageDataInvertedZoom = 0;
 
-	connect(&d->mMetaInfoFutureWatcher, SIGNAL(finished()),
-		SLOT(slotMetaInfoLoaded()) );
+    connect(&d->mMetaInfoFutureWatcher, SIGNAL(finished()),
+            SLOT(slotMetaInfoLoaded()));
 
-	connect(&d->mImageDataFutureWatcher, SIGNAL(finished()),
-		SLOT(slotImageLoaded()) );
+    connect(&d->mImageDataFutureWatcher, SIGNAL(finished()),
+            SLOT(slotImageLoaded()));
 }
 
+LoadingDocumentImpl::~LoadingDocumentImpl()
+{
+    LOG("");
+    // Disconnect watchers to make sure they do not trigger further work
+    d->mMetaInfoFutureWatcher.disconnect();
+    d->mImageDataFutureWatcher.disconnect();
 
-LoadingDocumentImpl::~LoadingDocumentImpl() {
-	LOG("");
-	// Disconnect watchers to make sure they do not trigger further work
-	d->mMetaInfoFutureWatcher.disconnect();
-	d->mImageDataFutureWatcher.disconnect();
+    d->mMetaInfoFutureWatcher.waitForFinished();
+    d->mImageDataFutureWatcher.waitForFinished();
 
-	d->mMetaInfoFutureWatcher.waitForFinished();
-	d->mImageDataFutureWatcher.waitForFinished();
-
-	if (d->mTransferJob) {
-		d->mTransferJob->kill();
-	}
-	delete d;
+    if (d->mTransferJob) {
+        d->mTransferJob->kill();
+    }
+    delete d;
 }
 
-void LoadingDocumentImpl::init() {
-	KUrl url = document()->url();
+void LoadingDocumentImpl::init()
+{
+    KUrl url = document()->url();
 
-	if (UrlUtils::urlIsFastLocalFile(url)) {
-		// Load file content directly
-		QFile file(url.toLocalFile());
-		if (!file.open(QIODevice::ReadOnly)) {
-			setDocumentErrorString(i18nc("@info", "Could not open file %1", url.toLocalFile()));
-			emit loadingFailed();
-			switchToImpl(new EmptyDocumentImpl(document()));
-			return;
-		}
-		d->mData = file.read(HEADER_SIZE);
-		if (d->determineKind()) {
-			return;
-		}
-		d->mData += file.readAll();
-		d->startLoading();
-	} else {
-		// Transfer file via KIO
-		d->mTransferJob = KIO::get(document()->url());
-		connect(d->mTransferJob, SIGNAL(data(KIO::Job*,QByteArray)),
-			SLOT(slotDataReceived(KIO::Job*,QByteArray)) );
-		connect(d->mTransferJob, SIGNAL(result(KJob*)),
-			SLOT(slotTransferFinished(KJob*)) );
-		d->mTransferJob->start();
-	}
+    if (UrlUtils::urlIsFastLocalFile(url)) {
+        // Load file content directly
+        QFile file(url.toLocalFile());
+        if (!file.open(QIODevice::ReadOnly)) {
+            setDocumentErrorString(i18nc("@info", "Could not open file %1", url.toLocalFile()));
+            emit loadingFailed();
+            switchToImpl(new EmptyDocumentImpl(document()));
+            return;
+        }
+        d->mData = file.read(HEADER_SIZE);
+        if (d->determineKind()) {
+            return;
+        }
+        d->mData += file.readAll();
+        d->startLoading();
+    } else {
+        // Transfer file via KIO
+        d->mTransferJob = KIO::get(document()->url());
+        connect(d->mTransferJob, SIGNAL(data(KIO::Job*, QByteArray)),
+                SLOT(slotDataReceived(KIO::Job*, QByteArray)));
+        connect(d->mTransferJob, SIGNAL(result(KJob*)),
+                SLOT(slotTransferFinished(KJob*)));
+        d->mTransferJob->start();
+    }
 }
 
+void LoadingDocumentImpl::loadImage(int invertedZoom)
+{
+    if (d->mImageDataInvertedZoom == invertedZoom) {
+        LOG("Already loading an image at invertedZoom=" << invertedZoom);
+        return;
+    }
+    if (d->mImageDataInvertedZoom == 1) {
+        LOG("Ignoring request: we are loading a full image");
+        return;
+    }
+    d->mImageDataFutureWatcher.waitForFinished();
+    d->mImageDataInvertedZoom = invertedZoom;
 
-void LoadingDocumentImpl::loadImage(int invertedZoom) {
-	if (d->mImageDataInvertedZoom == invertedZoom) {
-		LOG("Already loading an image at invertedZoom=" << invertedZoom);
-		return;
-	}
-	if (d->mImageDataInvertedZoom == 1) {
-		LOG("Ignoring request: we are loading a full image");
-		return;
-	}
-	d->mImageDataFutureWatcher.waitForFinished();
-	d->mImageDataInvertedZoom = invertedZoom;
-
-	if (d->mMetaInfoLoaded) {
-		// Do not test on mMetaInfoFuture.isRunning() here: it might not have
-		// started if we are downloading the image from a remote url
-		d->startImageDataLoading();
-	}
+    if (d->mMetaInfoLoaded) {
+        // Do not test on mMetaInfoFuture.isRunning() here: it might not have
+        // started if we are downloading the image from a remote url
+        d->startImageDataLoading();
+    }
 }
 
-
-void LoadingDocumentImpl::slotDataReceived(KIO::Job* job, const QByteArray& chunk) {
-	d->mData.append(chunk);
-	if (document()->kind() == MimeTypeUtils::KIND_UNKNOWN && d->mData.length() >= HEADER_SIZE) {
-		if (d->determineKind()) {
-			job->kill();
-			return;
-		}
-	}
+void LoadingDocumentImpl::slotDataReceived(KIO::Job* job, const QByteArray& chunk)
+{
+    d->mData.append(chunk);
+    if (document()->kind() == MimeTypeUtils::KIND_UNKNOWN && d->mData.length() >= HEADER_SIZE) {
+        if (d->determineKind()) {
+            job->kill();
+            return;
+        }
+    }
 }
 
-
-void LoadingDocumentImpl::slotTransferFinished(KJob* job) {
-	if (job->error()) {
-		setDocumentErrorString(job->errorString());
-		emit loadingFailed();
-		switchToImpl(new EmptyDocumentImpl(document()));
-		return;
-	}
-	d->startLoading();
+void LoadingDocumentImpl::slotTransferFinished(KJob* job)
+{
+    if (job->error()) {
+        setDocumentErrorString(job->errorString());
+        emit loadingFailed();
+        switchToImpl(new EmptyDocumentImpl(document()));
+        return;
+    }
+    d->startLoading();
 }
 
-
-bool LoadingDocumentImpl::isEditable() const {
-	return d->mDownSampledImageLoaded;
+bool LoadingDocumentImpl::isEditable() const
+{
+    return d->mDownSampledImageLoaded;
 }
 
-
-Document::LoadingState LoadingDocumentImpl::loadingState() const {
-	if (!document()->image().isNull()) {
-		return Document::Loaded;
-	} else if (d->mMetaInfoLoaded) {
-		return Document::MetaInfoLoaded;
-	} else if (document()->kind() != MimeTypeUtils::KIND_UNKNOWN) {
-		return Document::KindDetermined;
-	} else {
-		return Document::Loading;
-	}
+Document::LoadingState LoadingDocumentImpl::loadingState() const
+{
+    if (!document()->image().isNull()) {
+        return Document::Loaded;
+    } else if (d->mMetaInfoLoaded) {
+        return Document::MetaInfoLoaded;
+    } else if (document()->kind() != MimeTypeUtils::KIND_UNKNOWN) {
+        return Document::KindDetermined;
+    } else {
+        return Document::Loading;
+    }
 }
 
+void LoadingDocumentImpl::slotMetaInfoLoaded()
+{
+    LOG("");
+    Q_ASSERT(!d->mMetaInfoFuture.isRunning());
+    if (!d->mMetaInfoFuture.result()) {
+        setDocumentErrorString(
+            i18nc("@info", "Loading meta information failed.")
+        );
+        emit loadingFailed();
+        switchToImpl(new EmptyDocumentImpl(document()));
+        return;
+    }
 
-void LoadingDocumentImpl::slotMetaInfoLoaded() {
-	LOG("");
-	Q_ASSERT(!d->mMetaInfoFuture.isRunning());
-	if (!d->mMetaInfoFuture.result()) {
-		setDocumentErrorString(
-			i18nc("@info", "Loading meta information failed.")
-			);
-		emit loadingFailed();
-		switchToImpl(new EmptyDocumentImpl(document()));
-		return;
-	}
+    setDocumentFormat(d->mFormat);
+    setDocumentImageSize(d->mImageSize);
+    setDocumentExiv2Image(d->mExiv2Image);
 
-	setDocumentFormat(d->mFormat);
-	setDocumentImageSize(d->mImageSize);
-	setDocumentExiv2Image(d->mExiv2Image);
+    d->mMetaInfoLoaded = true;
+    emit metaInfoLoaded();
 
-	d->mMetaInfoLoaded = true;
-	emit metaInfoLoaded();
-
-	// Start image loading if necessary
-	// We test if mImageDataFuture is not already running because code connected to
-	// metaInfoLoaded() signal could have called loadImage()
-	if (!d->mImageDataFuture.isRunning() && d->mImageDataInvertedZoom != 0) {
-		d->startImageDataLoading();
-	}
+    // Start image loading if necessary
+    // We test if mImageDataFuture is not already running because code connected to
+    // metaInfoLoaded() signal could have called loadImage()
+    if (!d->mImageDataFuture.isRunning() && d->mImageDataInvertedZoom != 0) {
+        d->startImageDataLoading();
+    }
 }
 
+void LoadingDocumentImpl::slotImageLoaded()
+{
+    LOG("");
+    if (d->mImage.isNull()) {
+        setDocumentErrorString(
+            i18nc("@info", "Loading image failed.")
+        );
+        emit loadingFailed();
+        switchToImpl(new EmptyDocumentImpl(document()));
+        return;
+    }
 
-void LoadingDocumentImpl::slotImageLoaded() {
-	LOG("");
-	if (d->mImage.isNull()) {
-		setDocumentErrorString(
-			i18nc("@info", "Loading image failed.")
-			);
-		emit loadingFailed();
-		switchToImpl(new EmptyDocumentImpl(document()));
-		return;
-	}
+    if (d->mAnimated) {
+        if (d->mImage.size() == d->mImageSize) {
+            // We already decoded the first frame at the right size, let's show
+            // it
+            setDocumentImage(d->mImage);
+        }
 
-	if (d->mAnimated) {
-		if (d->mImage.size() == d->mImageSize) {
-			// We already decoded the first frame at the right size, let's show
-			// it
-			setDocumentImage(d->mImage);
-		}
+        switchToImpl(new AnimatedDocumentLoadedImpl(
+                         document(),
+                         d->mData));
 
-		switchToImpl(new AnimatedDocumentLoadedImpl(
-			document(),
-			d->mData));
+        return;
+    }
 
-		return;
-	}
+    if (d->mImageDataInvertedZoom != 1 && d->mImage.size() != d->mImageSize) {
+        LOG("Loaded a down sampled image");
+        d->mDownSampledImageLoaded = true;
+        // We loaded a down sampled image
+        setDocumentDownSampledImage(d->mImage, d->mImageDataInvertedZoom);
+        return;
+    }
 
-	if (d->mImageDataInvertedZoom != 1 && d->mImage.size() != d->mImageSize) {
-		LOG("Loaded a down sampled image");
-		d->mDownSampledImageLoaded = true;
-		// We loaded a down sampled image
-		setDocumentDownSampledImage(d->mImage, d->mImageDataInvertedZoom);
-		return;
-	}
-
-	LOG("Loaded a full image");
-	setDocumentImage(d->mImage);
-	DocumentLoadedImpl* impl;
-	if (d->mJpegContent.get()) {
-		impl = new JpegDocumentLoadedImpl(
-			document(),
-			d->mJpegContent.release());
-	} else {
-		impl = new DocumentLoadedImpl(
-			document(),
-			d->mData);
-	}
-	switchToImpl(impl);
+    LOG("Loaded a full image");
+    setDocumentImage(d->mImage);
+    DocumentLoadedImpl* impl;
+    if (d->mJpegContent.get()) {
+        impl = new JpegDocumentLoadedImpl(
+            document(),
+            d->mJpegContent.release());
+    } else {
+        impl = new DocumentLoadedImpl(
+            document(),
+            d->mData);
+    }
+    switchToImpl(impl);
 }
-
 
 } // namespace

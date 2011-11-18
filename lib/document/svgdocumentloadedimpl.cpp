@@ -28,44 +28,43 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct SvgDocumentLoadedImplPrivate {
-	QByteArray mRawData;
+    QByteArray mRawData;
 };
-
 
 SvgDocumentLoadedImpl::SvgDocumentLoadedImpl(Document* document, const QByteArray& data)
 : AbstractDocumentImpl(document)
-, d(new SvgDocumentLoadedImplPrivate) {
-	d->mRawData = data;
+, d(new SvgDocumentLoadedImplPrivate)
+{
+    d->mRawData = data;
 }
 
-
-SvgDocumentLoadedImpl::~SvgDocumentLoadedImpl() {
-	delete d;
+SvgDocumentLoadedImpl::~SvgDocumentLoadedImpl()
+{
+    delete d;
 }
 
-
-void SvgDocumentLoadedImpl::init() {
-	emit loaded();
+void SvgDocumentLoadedImpl::init()
+{
+    emit loaded();
 }
 
-
-Document::LoadingState SvgDocumentLoadedImpl::loadingState() const {
-	return Document::Loaded;
+Document::LoadingState SvgDocumentLoadedImpl::loadingState() const
+{
+    return Document::Loaded;
 }
 
-
-void SvgDocumentLoadedImpl::setImage(const QImage&) {
-	kWarning() << "Should not be called";
+void SvgDocumentLoadedImpl::setImage(const QImage&)
+{
+    kWarning() << "Should not be called";
 }
 
-
-QByteArray SvgDocumentLoadedImpl::rawData() const {
-	return d->mRawData;
+QByteArray SvgDocumentLoadedImpl::rawData() const
+{
+    return d->mRawData;
 }
-
 
 } // namespace

@@ -27,13 +27,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
-namespace Gwenview {
+namespace Gwenview
+{
 
-namespace MouseWheelBehavior {
-	enum Enum {
-		Scroll,
-		Browse
-	};
+namespace MouseWheelBehavior
+{
+enum Enum {
+    Scroll,
+    Browse
+};
 
 } // namespace MouseWheelBehavior
 

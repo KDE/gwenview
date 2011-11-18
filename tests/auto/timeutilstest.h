@@ -23,13 +23,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QObject>
 
-class TimeUtilsTest : public QObject {
-	Q_OBJECT
+class TimeUtilsTest : public QObject
+{
+    Q_OBJECT
 
 private Q_SLOTS:
-	void testPng();
-	void testJpeg();
-	void testCache();
+    void testPng();
+    void testJpeg();
+    void testCache();
 };
 
 #endif /* TIMEUTILSTEST_H */

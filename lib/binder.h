@@ -26,21 +26,23 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QObject>
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 /**
  * @internal
  *
  * Necessary helper class because a QObject class cannot be a template
  */
-class GWENVIEWLIB_EXPORT BinderInternal : public QObject {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT BinderInternal : public QObject
+{
+    Q_OBJECT
 public:
-	explicit BinderInternal(QObject* parent);
-	~BinderInternal();
+    explicit BinderInternal(QObject* parent);
+    ~BinderInternal();
 
 protected Q_SLOTS:
-	virtual void callMethod() {}
+    virtual void callMethod() {}
 };
 
 /**
@@ -79,29 +81,29 @@ template <class Receiver, class Arg, typename MethodArg>
 class BaseBinder : public BinderInternal
 {
 public:
-	typedef void (Receiver::*Method)(MethodArg);
-	static void bind(QObject* emitter, const char* signal, Receiver* receiver, Method method, MethodArg arg) {
-		BaseBinder<Receiver, Arg, MethodArg>* binder = new BaseBinder<Receiver, Arg, MethodArg>(emitter);
-		binder->mReceiver = receiver;
-		binder->mMethod = method;
-		binder->mArg = arg;
-		QObject::connect(emitter, signal, binder, SLOT(callMethod()));
-		QObject::connect(receiver, SIGNAL(destroyed(QObject*)), binder, SLOT(deleteLater()));
-	}
+    typedef void (Receiver::*Method)(MethodArg);
+    static void bind(QObject* emitter, const char* signal, Receiver* receiver, Method method, MethodArg arg) {
+        BaseBinder<Receiver, Arg, MethodArg>* binder = new BaseBinder<Receiver, Arg, MethodArg>(emitter);
+        binder->mReceiver = receiver;
+        binder->mMethod = method;
+        binder->mArg = arg;
+        QObject::connect(emitter, signal, binder, SLOT(callMethod()));
+        QObject::connect(receiver, SIGNAL(destroyed(QObject*)), binder, SLOT(deleteLater()));
+    }
 
 protected:
-	void callMethod() {
-		(mReceiver->*mMethod)(mArg);
-	}
+    void callMethod() {
+        (mReceiver->*mMethod)(mArg);
+    }
 
 private:
-	BaseBinder(QObject* emitter)
-	: BinderInternal(emitter)
-	{}
+    BaseBinder(QObject* emitter)
+        : BinderInternal(emitter)
+    {}
 
-	Receiver* mReceiver;
-	Method mMethod;
-	Arg mArg;
+    Receiver* mReceiver;
+    Method mMethod;
+    Arg mArg;
 };
 
 template <class Receiver, class Arg>

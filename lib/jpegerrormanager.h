@@ -29,7 +29,8 @@ extern "C" {
 #undef const
 }
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 /**
  * A simple error manager which overrides jpeg_error_mgr.error_exit to avoid
@@ -40,20 +41,20 @@ namespace Gwenview {
  * then call setjmp(errorManager.jmp_buffer)
  */
 struct JPEGErrorManager : public jpeg_error_mgr {
-	JPEGErrorManager() : jpeg_error_mgr() {
-		jpeg_std_error(this);
-		error_exit=errorExitCallBack;
-	}
+    JPEGErrorManager() : jpeg_error_mgr() {
+        jpeg_std_error(this);
+        error_exit = errorExitCallBack;
+    }
 
-	jmp_buf jmp_buffer;
+    jmp_buf jmp_buffer;
 
-	static void errorExitCallBack (j_common_ptr cinfo) {
-		JPEGErrorManager* myerr = static_cast<JPEGErrorManager*>(cinfo->err);
-		char buffer[JMSG_LENGTH_MAX];
-		(*cinfo->err->format_message)(cinfo, buffer);
-		kWarning() << buffer ;
-		longjmp(myerr->jmp_buffer, 1);
-	}
+    static void errorExitCallBack(j_common_ptr cinfo) {
+        JPEGErrorManager* myerr = static_cast<JPEGErrorManager*>(cinfo->err);
+        char buffer[JMSG_LENGTH_MAX];
+        (*cinfo->err->format_message)(cinfo, buffer);
+        kWarning() << buffer ;
+        longjmp(myerr->jmp_buffer, 1);
+    }
 };
 
 } // namespace

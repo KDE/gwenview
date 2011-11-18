@@ -30,39 +30,37 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
-
-
 class QAction;
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct ZoomWidgetPrivate;
-class GWENVIEWLIB_EXPORT ZoomWidget : public QFrame {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT ZoomWidget : public QFrame
+{
+    Q_OBJECT
 public:
-	ZoomWidget(QWidget* parent = 0);
-	~ZoomWidget();
+    ZoomWidget(QWidget* parent = 0);
+    ~ZoomWidget();
 
-	void setActions(QAction* zoomToFitAction, QAction* actualSizeAction, QAction* zoomInAction, QAction* zoomOutAction);
+    void setActions(QAction* zoomToFitAction, QAction* actualSizeAction, QAction* zoomInAction, QAction* zoomOutAction);
 
 public Q_SLOTS:
-	void setZoom(qreal zoom);
+    void setZoom(qreal zoom);
 
-	void setMinimumZoom(qreal zoom);
-	void setMaximumZoom(qreal zoom);
+    void setMinimumZoom(qreal zoom);
+    void setMaximumZoom(qreal zoom);
 
 Q_SIGNALS:
-	void zoomChanged(qreal);
+    void zoomChanged(qreal);
 
 private Q_SLOTS:
-	void slotZoomSliderActionTriggered();
+    void slotZoomSliderActionTriggered();
 
 private:
-	friend struct ZoomWidgetPrivate;
-	ZoomWidgetPrivate* const d;
+    friend struct ZoomWidgetPrivate;
+    ZoomWidgetPrivate* const d;
 };
-
 
 } // namespace
 

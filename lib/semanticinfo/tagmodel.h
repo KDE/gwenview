@@ -30,53 +30,53 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 typedef QString SemanticInfoTag;
 
 class AbstractSemanticInfoBackEnd;
 class TagSet;
 
-
 struct TagModelPrivate;
-class GWENVIEWLIB_EXPORT TagModel : public QStandardItemModel {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT TagModel : public QStandardItemModel
+{
+    Q_OBJECT
 public:
-	TagModel(QObject*);
-	~TagModel();
+    TagModel(QObject*);
+    ~TagModel();
 
-	enum {
-		TagRole = Qt::UserRole,
-		SortRole,
-		AssignmentStatusRole
-	};
+    enum {
+        TagRole = Qt::UserRole,
+        SortRole,
+        AssignmentStatusRole
+    };
 
-	enum AssignmentStatus {
-		PartiallyAssigned,
-		FullyAssigned
-	};
+    enum AssignmentStatus {
+        PartiallyAssigned,
+        FullyAssigned
+    };
 
-	void setSemanticInfoBackEnd(AbstractSemanticInfoBackEnd*);
-	void setTagSet(const TagSet& set);
+    void setSemanticInfoBackEnd(AbstractSemanticInfoBackEnd*);
+    void setTagSet(const TagSet& set);
 
-	/**
-	 * Convenience method to create a TagModel showing all tags available in
-	 * AbstractSemanticInfoBackEnd
-	 */
-	static TagModel* createAllTagsModel(QObject* parent, AbstractSemanticInfoBackEnd*);
+    /**
+     * Convenience method to create a TagModel showing all tags available in
+     * AbstractSemanticInfoBackEnd
+     */
+    static TagModel* createAllTagsModel(QObject* parent, AbstractSemanticInfoBackEnd*);
 
 public Q_SLOTS:
-	/**
-	 * Add a new tag. If label is empty, backend will be queried for it
-	 */
-	void addTag(const SemanticInfoTag& tag, const QString& label = QString(), AssignmentStatus status = FullyAssigned);
+    /**
+     * Add a new tag. If label is empty, backend will be queried for it
+     */
+    void addTag(const SemanticInfoTag& tag, const QString& label = QString(), AssignmentStatus status = FullyAssigned);
 
-	void removeTag(const SemanticInfoTag& tag);
+    void removeTag(const SemanticInfoTag& tag);
 
 private:
-	TagModelPrivate* const d;
+    TagModelPrivate* const d;
 };
-
 
 } // namespace
 

@@ -37,73 +37,75 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <archiveutils.h>
 #include <mimetypeutils.h>
 
-namespace Gwenview {
+namespace Gwenview
+{
 
-namespace UrlUtils {
+namespace UrlUtils
+{
 
-bool urlIsFastLocalFile(const KUrl& url) {
-	if (!url.isLocalFile()) {
-		return false;
-	}
+bool urlIsFastLocalFile(const KUrl& url)
+{
+    if (!url.isLocalFile()) {
+        return false;
+    }
 
-	KMountPoint::List list = KMountPoint::currentMountPoints();
-	KMountPoint::Ptr mountPoint = list.findByPath(url.toLocalFile());
-	if (!mountPoint) {
-		// We couldn't find a mount point for the url. We are probably in a
-		// chroot. Assume everything is fast then.
-		return true;
-	}
+    KMountPoint::List list = KMountPoint::currentMountPoints();
+    KMountPoint::Ptr mountPoint = list.findByPath(url.toLocalFile());
+    if (!mountPoint) {
+        // We couldn't find a mount point for the url. We are probably in a
+        // chroot. Assume everything is fast then.
+        return true;
+    }
 
-	return !mountPoint->probablySlow();
+    return !mountPoint->probablySlow();
 }
 
+bool urlIsDirectory(const KUrl& url)
+{
+    if (url.fileName(KUrl::ObeyTrailingSlash).isEmpty()) {
+        return true; // file:/somewhere/<nothing here>
+    }
 
-bool urlIsDirectory(const KUrl& url) {
-	if( url.fileName(KUrl::ObeyTrailingSlash).isEmpty()) {
-		return true; // file:/somewhere/<nothing here>
-	}
+    // Do direct stat instead of using KIO if the file is local (faster)
+    if (UrlUtils::urlIsFastLocalFile(url)) {
+        KDE_struct_stat buff;
+        if (KDE_stat(QFile::encodeName(url.toLocalFile()), &buff) == 0)  {
+            return S_ISDIR(buff.st_mode);
+        }
+    }
 
-	// Do direct stat instead of using KIO if the file is local (faster)
-	if (UrlUtils::urlIsFastLocalFile(url)) {
-		KDE_struct_stat buff;
-		if ( KDE_stat( QFile::encodeName(url.toLocalFile()), &buff ) == 0 )  {
-			return S_ISDIR( buff.st_mode );
-		}
-	}
-
-	QWidgetList list = QApplication::topLevelWidgets();
-	QWidget* parent;
-	if (list.count() > 0) {
-		parent = list[0];
-	} else {
-		parent = 0;
-	}
-	KIO::UDSEntry entry;
-	if( KIO::NetAccess::stat( url, entry, parent)) {
-		return entry.isDir();
-	}
-	return false;
+    QWidgetList list = QApplication::topLevelWidgets();
+    QWidget* parent;
+    if (list.count() > 0) {
+        parent = list[0];
+    } else {
+        parent = 0;
+    }
+    KIO::UDSEntry entry;
+    if (KIO::NetAccess::stat(url, entry, parent)) {
+        return entry.isDir();
+    }
+    return false;
 }
 
+KUrl fixUserEnteredUrl(const KUrl& in)
+{
+    if (!in.isRelative() && !in.isLocalFile()) {
+        return in;
+    }
 
-KUrl fixUserEnteredUrl(const KUrl& in) {
-	if (!in.isRelative() && !in.isLocalFile()) {
-		return in;
-	}
+    QFileInfo info(in.toLocalFile());
+    QString path = info.absoluteFilePath();
 
-	QFileInfo info(in.toLocalFile());
-	QString path = info.absoluteFilePath();
+    KUrl out = KUrl::fromPath(path);
+    QString mimeType = MimeTypeUtils::urlMimeType(out);
 
-	KUrl out = KUrl::fromPath(path);
-	QString mimeType = MimeTypeUtils::urlMimeType(out);
-
-	const QString protocol = ArchiveUtils::protocolForMimeType(mimeType);
-	if (!protocol.isEmpty()) {
-		out.setProtocol(protocol);
-	}
-	return out;
+    const QString protocol = ArchiveUtils::protocolForMimeType(mimeType);
+    if (!protocol.isEmpty()) {
+        out.setProtocol(protocol);
+    }
+    return out;
 }
-
 
 } // namespace
 

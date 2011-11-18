@@ -24,27 +24,28 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QWidget>
 
-
-namespace Gwenview {
+namespace Gwenview
+{
 
 class ContextManager;
 
 struct AbstractContextManagerItemPrivate;
-class AbstractContextManagerItem : public QObject {
-	Q_OBJECT
+class AbstractContextManagerItem : public QObject
+{
+    Q_OBJECT
 public:
-	AbstractContextManagerItem(ContextManager*);
-	virtual ~AbstractContextManagerItem();
+    AbstractContextManagerItem(ContextManager*);
+    virtual ~AbstractContextManagerItem();
 
-	QWidget* widget() const;
+    QWidget* widget() const;
 
-	ContextManager* contextManager() const;
+    ContextManager* contextManager() const;
 
 protected:
-	void setWidget(QWidget* widget);
+    void setWidget(QWidget* widget);
 
 private:
-	AbstractContextManagerItemPrivate * const d;
+    AbstractContextManagerItemPrivate * const d;
 };
 
 } // namespace

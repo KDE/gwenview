@@ -37,113 +37,113 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Local
 #include "printoptionspage.h"
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct PrintHelperPrivate {
-	QWidget* mParent;
+    QWidget* mParent;
 
-	QSize adjustSize(PrintOptionsPage* optionsPage, Document::Ptr doc, int printerResolution, const QSize & viewportSize) {
-		QSize size = doc->size();
-		PrintOptionsPage::ScaleMode scaleMode = optionsPage->scaleMode();
-		if (scaleMode == PrintOptionsPage::ScaleToPage) {
-			bool imageBiggerThanPaper =
-				size.width() > viewportSize.width()
-				|| size.height() > viewportSize.height();
+    QSize adjustSize(PrintOptionsPage* optionsPage, Document::Ptr doc, int printerResolution, const QSize & viewportSize)
+    {
+        QSize size = doc->size();
+        PrintOptionsPage::ScaleMode scaleMode = optionsPage->scaleMode();
+        if (scaleMode == PrintOptionsPage::ScaleToPage) {
+            bool imageBiggerThanPaper =
+                size.width() > viewportSize.width()
+                || size.height() > viewportSize.height();
 
-			if (imageBiggerThanPaper || optionsPage->enlargeSmallerImages()) {
-				size.scale(viewportSize, Qt::KeepAspectRatio);
-			}
+            if (imageBiggerThanPaper || optionsPage->enlargeSmallerImages()) {
+                size.scale(viewportSize, Qt::KeepAspectRatio);
+            }
 
-		} else if (scaleMode == PrintOptionsPage::ScaleToCustomSize) {
-			double wImg = optionsPage->scaleWidth();
-			double hImg = optionsPage->scaleHeight();
-			size.setWidth( int(wImg * printerResolution) );
-			size.setHeight( int(hImg * printerResolution) );
+        } else if (scaleMode == PrintOptionsPage::ScaleToCustomSize) {
+            double wImg = optionsPage->scaleWidth();
+            double hImg = optionsPage->scaleHeight();
+            size.setWidth(int(wImg * printerResolution));
+            size.setHeight(int(hImg * printerResolution));
 
-		} else {
-			// No scale
-			const double INCHES_PER_METER = 100. / 2.54;
-			int dpmX = doc->image().dotsPerMeterX();
-			int dpmY = doc->image().dotsPerMeterY();
-			if (dpmX > 0 && dpmY > 0) {
-				double wImg = double(size.width()) / double(dpmX) * INCHES_PER_METER;
-				double hImg = double(size.height()) / double(dpmY) * INCHES_PER_METER;
-				size.setWidth( int(wImg * printerResolution) );
-				size.setHeight( int(hImg * printerResolution) );
-			}
-		}
-		return size;
-	}
+        } else {
+            // No scale
+            const double INCHES_PER_METER = 100. / 2.54;
+            int dpmX = doc->image().dotsPerMeterX();
+            int dpmY = doc->image().dotsPerMeterY();
+            if (dpmX > 0 && dpmY > 0) {
+                double wImg = double(size.width()) / double(dpmX) * INCHES_PER_METER;
+                double hImg = double(size.height()) / double(dpmY) * INCHES_PER_METER;
+                size.setWidth(int(wImg * printerResolution));
+                size.setHeight(int(hImg * printerResolution));
+            }
+        }
+        return size;
+    }
 
+    QPoint adjustPosition(PrintOptionsPage* optionsPage, const QSize& imageSize, const QSize & viewportSize)
+    {
+        Qt::Alignment alignment = optionsPage->alignment();
+        int posX, posY;
 
-	QPoint adjustPosition(PrintOptionsPage* optionsPage, const QSize& imageSize, const QSize & viewportSize) {
-		Qt::Alignment alignment = optionsPage->alignment();
-		int posX, posY;
+        if (alignment & Qt::AlignLeft) {
+            posX = 0;
+        } else if (alignment & Qt::AlignHCenter) {
+            posX = (viewportSize.width() - imageSize.width()) / 2;
+        } else {
+            posX = viewportSize.width() - imageSize.width();
+        }
 
-		if (alignment & Qt::AlignLeft) {
-			posX = 0;
-		} else if (alignment & Qt::AlignHCenter) {
-			posX = (viewportSize.width() - imageSize.width()) / 2;
-		} else {
-			posX = viewportSize.width() - imageSize.width();
-		}
+        if (alignment & Qt::AlignTop) {
+            posY = 0;
+        } else if (alignment & Qt::AlignVCenter) {
+            posY = (viewportSize.height() - imageSize.height()) / 2;
+        } else {
+            posY = viewportSize.height() - imageSize.height();
+        }
 
-		if (alignment & Qt::AlignTop) {
-			posY = 0;
-		} else if (alignment & Qt::AlignVCenter) {
-			posY = (viewportSize.height() - imageSize.height()) / 2;
-		} else {
-			posY = viewportSize.height() - imageSize.height();
-		}
-
-		return QPoint(posX, posY);
-	}
+        return QPoint(posX, posY);
+    }
 };
 
-
 PrintHelper::PrintHelper(QWidget* parent)
-: d(new PrintHelperPrivate) {
-	d->mParent = parent;
+: d(new PrintHelperPrivate)
+{
+    d->mParent = parent;
 }
 
-
-PrintHelper::~PrintHelper() {
-	delete d;
+PrintHelper::~PrintHelper()
+{
+    delete d;
 }
 
+void PrintHelper::print(Document::Ptr doc)
+{
+    doc->startLoadingFullImage();
+    doc->waitUntilLoaded();
+    QPrinter printer;
 
-void PrintHelper::print(Document::Ptr doc) {
-	doc->startLoadingFullImage();
-	doc->waitUntilLoaded();
-	QPrinter printer;
+    PrintOptionsPage* optionsPage = new PrintOptionsPage(doc->size());
+    optionsPage->loadConfig();
 
-	PrintOptionsPage* optionsPage = new PrintOptionsPage(doc->size());
-	optionsPage->loadConfig();
+    std::auto_ptr<QPrintDialog> dialog(
+        KdePrint::createPrintDialog(&printer,
+                                    QList<QWidget*>() << optionsPage,
+                                    d->mParent)
+    );
+    dialog->setWindowTitle(i18n("Print Image"));
+    bool wantToPrint = dialog->exec();
 
-	std::auto_ptr<QPrintDialog> dialog(
-		KdePrint::createPrintDialog(&printer,
-			QList<QWidget*>() << optionsPage,
-			d->mParent)
-		);
-	dialog->setWindowTitle(i18n("Print Image"));
-	bool wantToPrint = dialog->exec();
+    optionsPage->saveConfig();
+    if (!wantToPrint) {
+        return;
+    }
 
-	optionsPage->saveConfig();
-	if (!wantToPrint) {
-		return;
-	}
+    QPainter painter(&printer);
+    QRect rect = painter.viewport();
+    QSize size = d->adjustSize(optionsPage, doc, printer.resolution(), rect.size());
+    QPoint pos = d->adjustPosition(optionsPage, size, rect.size());
+    painter.setViewport(pos.x(), pos.y(), size.width(), size.height());
 
-	QPainter painter(&printer);
-	QRect rect = painter.viewport();
-	QSize size = d->adjustSize(optionsPage, doc, printer.resolution(), rect.size());
-	QPoint pos = d->adjustPosition(optionsPage, size, rect.size());
-	painter.setViewport(pos.x(), pos.y(), size.width(), size.height());
-
-	QImage image = doc->image();
-	painter.setWindow(image.rect());
-	painter.drawImage(0, 0, image);
+    QImage image = doc->image();
+    painter.setWindow(image.rect());
+    painter.drawImage(0, 0, image);
 }
-
 
 } // namespace

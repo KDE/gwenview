@@ -32,39 +32,39 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include "abstractsemanticinfobackend.h"
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 /**
  * A fake metadata backend, useful to test the ui layer.
  * It provides fake rating values based on the image url.
  */
-class GWENVIEWLIB_EXPORT FakeSemanticInfoBackEnd : public AbstractSemanticInfoBackEnd {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT FakeSemanticInfoBackEnd : public AbstractSemanticInfoBackEnd
+{
+    Q_OBJECT
 public:
-	enum InitializeMode { InitializeEmpty, InitializeRandom };
-	FakeSemanticInfoBackEnd(QObject* parent, InitializeMode initializeMode);
+    enum InitializeMode { InitializeEmpty, InitializeRandom };
+    FakeSemanticInfoBackEnd(QObject* parent, InitializeMode initializeMode);
 
-	virtual TagSet allTags() const;
+    virtual TagSet allTags() const;
 
-	virtual void refreshAllTags();
+    virtual void refreshAllTags();
 
-	virtual void storeSemanticInfo(const KUrl&, const SemanticInfo&);
+    virtual void storeSemanticInfo(const KUrl&, const SemanticInfo&);
 
-	virtual void retrieveSemanticInfo(const KUrl&);
+    virtual void retrieveSemanticInfo(const KUrl&);
 
-	virtual QString labelForTag(const SemanticInfoTag&) const;
+    virtual QString labelForTag(const SemanticInfoTag&) const;
 
-	virtual SemanticInfoTag tagForLabel(const QString&);
+    virtual SemanticInfoTag tagForLabel(const QString&);
 
 private:
-	void mergeTagsWithAllTags(const TagSet&);
+    void mergeTagsWithAllTags(const TagSet&);
 
-	QHash<KUrl, SemanticInfo> mSemanticInfoForUrl;
-	InitializeMode mInitializeMode;
-	TagSet mAllTags;
+    QHash<KUrl, SemanticInfo> mSemanticInfoForUrl;
+    InitializeMode mInitializeMode;
+    TagSet mAllTags;
 };
-
 
 } // namespace
 

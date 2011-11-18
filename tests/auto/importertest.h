@@ -30,23 +30,24 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <ktempdir.h>
 #include <kurl.h>
 
-class ImporterTest : public QObject {
-	Q_OBJECT
+class ImporterTest : public QObject
+{
+    Q_OBJECT
 
 private Q_SLOTS:
-	void init();
-	void testContentsAreIdentical();
-	void testSuccessfulImport();
-	void testAutoRenameFormat();
-	void testReadOnlyDestination();
-	void testFileNameFormater();
-	void testFileNameFormater_data();
-	void testSkippedUrlList();
-	void testRenamedCount();
+    void init();
+    void testContentsAreIdentical();
+    void testSuccessfulImport();
+    void testAutoRenameFormat();
+    void testReadOnlyDestination();
+    void testFileNameFormater();
+    void testFileNameFormater_data();
+    void testSkippedUrlList();
+    void testRenamedCount();
 
 private:
-	std::auto_ptr<KTempDir> mTempDir;
-	KUrl::List mDocumentList;
+    std::auto_ptr<KTempDir> mTempDir;
+    KUrl::List mDocumentList;
 };
 
 #endif /* IMPORTERTEST_H */

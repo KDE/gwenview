@@ -31,63 +31,63 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/document/document.h>
 #include <lib/ui_messageview.h>
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct MessageViewAdapterPrivate : Ui_MessageView {
-	Document::Ptr mDocument;
+    Document::Ptr mDocument;
 };
 
-
 MessageViewAdapter::MessageViewAdapter()
-: d(new MessageViewAdapterPrivate) {
-	QWidget* widget = new QWidget;
-	d->setupUi(widget);
-	d->mMessageWidget->setCloseButtonVisible(false);
-	d->mMessageWidget->setWordWrap(true);
+: d(new MessageViewAdapterPrivate)
+{
+    QWidget* widget = new QWidget;
+    d->setupUi(widget);
+    d->mMessageWidget->setCloseButtonVisible(false);
+    d->mMessageWidget->setWordWrap(true);
 
-	setInfoMessage(i18n("No document selected"));
+    setInfoMessage(i18n("No document selected"));
 
-	widget->setAutoFillBackground(true);
-	widget->setBackgroundRole(QPalette::Base);
-	widget->setForegroundRole(QPalette::Text);
+    widget->setAutoFillBackground(true);
+    widget->setBackgroundRole(QPalette::Base);
+    widget->setForegroundRole(QPalette::Text);
 
-	QGraphicsProxyWidget* proxy = new QGraphicsProxyWidget;
-	proxy->setWidget(widget);
-	setWidget(proxy);
+    QGraphicsProxyWidget* proxy = new QGraphicsProxyWidget;
+    proxy->setWidget(widget);
+    setWidget(proxy);
 }
 
-
-MessageViewAdapter::~MessageViewAdapter() {
-	delete d;
+MessageViewAdapter::~MessageViewAdapter()
+{
+    delete d;
 }
 
-
-void MessageViewAdapter::setErrorMessage(const QString& main, const QString& detail) {
-	d->mMessageWidget->setMessageType(KMessageWidget::Error);
-	QString message;
-	if (detail.isEmpty()) {
-		message = main;
-	} else {
-		message = QString("<b>%1</b><br>%2").arg(main).arg(detail);
-	}
-	d->mMessageWidget->setText(message);
+void MessageViewAdapter::setErrorMessage(const QString& main, const QString& detail)
+{
+    d->mMessageWidget->setMessageType(KMessageWidget::Error);
+    QString message;
+    if (detail.isEmpty()) {
+        message = main;
+    } else {
+        message = QString("<b>%1</b><br>%2").arg(main).arg(detail);
+    }
+    d->mMessageWidget->setText(message);
 }
 
-
-void MessageViewAdapter::setInfoMessage(const QString& message) {
-	d->mMessageWidget->setMessageType(KMessageWidget::Information);
-	d->mMessageWidget->setText(message);
+void MessageViewAdapter::setInfoMessage(const QString& message)
+{
+    d->mMessageWidget->setMessageType(KMessageWidget::Information);
+    d->mMessageWidget->setText(message);
 }
 
-
-Document::Ptr MessageViewAdapter::document() const {
-	return d->mDocument;
+Document::Ptr MessageViewAdapter::document() const
+{
+    return d->mDocument;
 }
 
-
-void MessageViewAdapter::setDocument(Document::Ptr doc) {
-	d->mDocument = doc;
+void MessageViewAdapter::setDocument(Document::Ptr doc)
+{
+    d->mDocument = doc;
 }
 
 } // namespace

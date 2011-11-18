@@ -35,100 +35,100 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 class QAction;
 class QFrame;
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 class SortedDirModel;
 
-
 struct NameFilterWidgetPrivate;
-class NameFilterWidget : public QWidget {
-	Q_OBJECT
+class NameFilterWidget : public QWidget
+{
+    Q_OBJECT
 public:
-	NameFilterWidget(SortedDirModel*);
-	~NameFilterWidget();
+    NameFilterWidget(SortedDirModel*);
+    ~NameFilterWidget();
 
 private Q_SLOTS:
-	void applyNameFilter();
+    void applyNameFilter();
 
 private:
-	NameFilterWidgetPrivate* const d;
+    NameFilterWidgetPrivate* const d;
 };
-
 
 struct DateFilterWidgetPrivate;
-class DateFilterWidget : public QWidget {
-	Q_OBJECT
+class DateFilterWidget : public QWidget
+{
+    Q_OBJECT
 public:
-	DateFilterWidget(SortedDirModel*);
-	~DateFilterWidget();
+    DateFilterWidget(SortedDirModel*);
+    ~DateFilterWidget();
 
 private Q_SLOTS:
-	void applyDateFilter();
+    void applyDateFilter();
 
 private:
-	DateFilterWidgetPrivate* const d;
+    DateFilterWidgetPrivate* const d;
 };
-
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 class RatingWidgetPrivate;
-class RatingFilterWidget : public QWidget {
-	Q_OBJECT
+class RatingFilterWidget : public QWidget
+{
+    Q_OBJECT
 public:
-	RatingFilterWidget(SortedDirModel*);
-	~RatingFilterWidget();
+    RatingFilterWidget(SortedDirModel*);
+    ~RatingFilterWidget();
 
 private Q_SLOTS:
-	void slotRatingChanged(int value);
-	void updateFilterMode();
+    void slotRatingChanged(int value);
+    void updateFilterMode();
 
 private:
-	RatingWidgetPrivate* const d;
+    RatingWidgetPrivate* const d;
 };
-
 
 class TagFilterWidgetPrivate;
-class TagFilterWidget : public QWidget {
-	Q_OBJECT
+class TagFilterWidget : public QWidget
+{
+    Q_OBJECT
 public:
-	TagFilterWidget(SortedDirModel*);
-	~TagFilterWidget();
+    TagFilterWidget(SortedDirModel*);
+    ~TagFilterWidget();
 
 private Q_SLOTS:
-	void updateTagSetFilter();
+    void updateTagSetFilter();
 
 private:
-	TagFilterWidgetPrivate* const d;
+    TagFilterWidgetPrivate* const d;
 };
 #endif
-
 
 class FilterControllerPrivate;
 /**
  * This class manages the filter widgets in the filter frame and assign the
  * corresponding filters to the SortedDirModel
  */
-class FilterController : public QObject {
-	Q_OBJECT
+class FilterController : public QObject
+{
+    Q_OBJECT
 public:
-	FilterController(QFrame* filterFrame, SortedDirModel* model);
-	~FilterController();
+    FilterController(QFrame* filterFrame, SortedDirModel* model);
+    ~FilterController();
 
-	QList<QAction*> actionList() const;
+    QList<QAction*> actionList() const;
 
 private Q_SLOTS:
-	void addFilterByName();
-	void addFilterByDate();
+    void addFilterByName();
+    void addFilterByDate();
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-	void addFilterByRating();
-	void addFilterByTag();
+    void addFilterByRating();
+    void addFilterByTag();
 #endif
-	void slotFilterWidgetClosed();
+    void slotFilterWidgetClosed();
 
 private:
-	FilterControllerPrivate* const d;
+    FilterControllerPrivate* const d;
 };
-
 
 } // namespace
 

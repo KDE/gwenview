@@ -25,35 +25,42 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QByteArray>
 #include <QObject>
 
-namespace KIO { class Job; class TransferJob; }
+namespace KIO
+{
+class Job;
+class TransferJob;
+}
 
-namespace Gwenview {
+namespace Gwenview
+{
 
-namespace MimeTypeUtils {
+namespace MimeTypeUtils
+{
 /**
  * A simple helper class used to determine mime type in some extreme cases
  * where we need to download the url header
  */
-class DataAccumulator : public QObject {
-	Q_OBJECT
+class DataAccumulator : public QObject
+{
+    Q_OBJECT
 public:
-	DataAccumulator(KIO::TransferJob* job);
+    DataAccumulator(KIO::TransferJob* job);
 
-	const QByteArray& data() const {
-		return mData;
-	}
+    const QByteArray& data() const {
+        return mData;
+    }
 
-	bool finished() const {
-		return mFinished;
-	}
+    bool finished() const {
+        return mFinished;
+    }
 
 private Q_SLOTS:
-	void slotDataReceived(KIO::Job*, const QByteArray& data);
-	void slotFinished();
+    void slotDataReceived(KIO::Job*, const QByteArray& data);
+    void slotFinished();
 
 private:
-	QByteArray mData;
-	bool mFinished;
+    QByteArray mData;
+    bool mFinished;
 };
 
 } // namespace MimeTypeUtils

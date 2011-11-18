@@ -29,14 +29,15 @@ class QImageIOHandler;
 class QIODevice;
 class QStringList;
 
-namespace Gwenview {
+namespace Gwenview
+{
 
-
-class JpegPlugin : public QImageIOPlugin {
+class JpegPlugin : public QImageIOPlugin
+{
 public:
-	QStringList keys() const;
-	Capabilities capabilities(QIODevice *device, const QByteArray &format) const;
-	QImageIOHandler *create(QIODevice *device, const QByteArray &format = QByteArray()) const;
+    QStringList keys() const;
+    Capabilities capabilities(QIODevice *device, const QByteArray &format) const;
+    QImageIOHandler *create(QIODevice *device, const QByteArray &format = QByteArray()) const;
 };
 
 } // namespace

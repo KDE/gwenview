@@ -32,23 +32,25 @@ QTEST_KDEMAIN(UrlUtilsTest, GUI)
 
 using namespace Gwenview;
 
-void UrlUtilsTest::testFixUserEnteredUrl() {
-	QFETCH(KUrl, in);
-	QFETCH(KUrl, expected);
-	KUrl out = UrlUtils::fixUserEnteredUrl(in);
-	QCOMPARE(out.url(), expected.url());
+void UrlUtilsTest::testFixUserEnteredUrl()
+{
+    QFETCH(KUrl, in);
+    QFETCH(KUrl, expected);
+    KUrl out = UrlUtils::fixUserEnteredUrl(in);
+    QCOMPARE(out.url(), expected.url());
 }
 
 #define NEW_ROW(in, expected) QTest::newRow(QString(in).toLocal8Bit().data()) << KUrl(in) << KUrl(expected)
-void UrlUtilsTest::testFixUserEnteredUrl_data() {
-	QTest::addColumn<KUrl>("in");
-	QTest::addColumn<KUrl>("expected");
+void UrlUtilsTest::testFixUserEnteredUrl_data()
+{
+    QTest::addColumn<KUrl>("in");
+    QTest::addColumn<KUrl>("expected");
 
-	QString pwd = QDir::currentPath();
+    QString pwd = QDir::currentPath();
 
-	NEW_ROW("http://example.com", "http://example.com");
-	NEW_ROW("example.zip", "zip://" + pwd + "/example.zip");
-	NEW_ROW("file://" + pwd + "/example.zip", "zip://" + pwd + "/example.zip");
-	NEW_ROW("file://" + pwd + "/example.cbz", "zip://" + pwd + "/example.cbz");
-	NEW_ROW("file://" + pwd + "/example.jpg", "file://" + pwd + "/example.jpg");
+    NEW_ROW("http://example.com", "http://example.com");
+    NEW_ROW("example.zip", "zip://" + pwd + "/example.zip");
+    NEW_ROW("file://" + pwd + "/example.zip", "zip://" + pwd + "/example.zip");
+    NEW_ROW("file://" + pwd + "/example.cbz", "zip://" + pwd + "/example.cbz");
+    NEW_ROW("file://" + pwd + "/example.jpg", "file://" + pwd + "/example.jpg");
 }

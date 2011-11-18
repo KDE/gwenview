@@ -30,8 +30,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 class KUrl;
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 class AbstractSemanticInfoBackEnd;
 struct SemanticInfo;
@@ -40,44 +40,44 @@ struct SemanticInfoDirModelPrivate;
  * Extends KDirModel by providing read/write access to image metadata such as
  * rating, tags and descriptions.
  */
-class SemanticInfoDirModel : public KDirModel {
-	Q_OBJECT
+class SemanticInfoDirModel : public KDirModel
+{
+    Q_OBJECT
 public:
-	enum {
-		RatingRole = 0x21a43a51,
-		DescriptionRole = 0x26FB33FA,
-		TagsRole = 0x0462F0A8
-	};
-	SemanticInfoDirModel(QObject* parent);
-	~SemanticInfoDirModel();
+    enum {
+        RatingRole = 0x21a43a51,
+        DescriptionRole = 0x26FB33FA,
+        TagsRole = 0x0462F0A8
+    };
+    SemanticInfoDirModel(QObject* parent);
+    ~SemanticInfoDirModel();
 
-	void clearSemanticInfoCache();
+    void clearSemanticInfoCache();
 
-	bool semanticInfoAvailableForIndex(const QModelIndex&) const;
+    bool semanticInfoAvailableForIndex(const QModelIndex&) const;
 
-	void retrieveSemanticInfoForIndex(const QModelIndex&);
+    void retrieveSemanticInfoForIndex(const QModelIndex&);
 
-	SemanticInfo semanticInfoForIndex(const QModelIndex&) const;
+    SemanticInfo semanticInfoForIndex(const QModelIndex&) const;
 
-	virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
 
-	bool setData(const QModelIndex& index, const QVariant& data, int role = Qt::EditRole);
+    bool setData(const QModelIndex& index, const QVariant& data, int role = Qt::EditRole);
 
-	AbstractSemanticInfoBackEnd* semanticInfoBackEnd() const;
+    AbstractSemanticInfoBackEnd* semanticInfoBackEnd() const;
 
 Q_SIGNALS:
-	void semanticInfoRetrieved(const KUrl&, const SemanticInfo&);
+    void semanticInfoRetrieved(const KUrl&, const SemanticInfo&);
 
 private:
-	SemanticInfoDirModelPrivate* const d;
+    SemanticInfoDirModelPrivate* const d;
 
 private Q_SLOTS:
-	void slotSemanticInfoRetrieved(const KUrl& url, const SemanticInfo&);
+    void slotSemanticInfoRetrieved(const KUrl& url, const SemanticInfo&);
 
-	void slotRowsAboutToBeRemoved(const QModelIndex&, int, int);
-	void slotModelAboutToBeReset();
+    void slotRowsAboutToBeRemoved(const QModelIndex&, int, int);
+    void slotModelAboutToBeReset();
 };
-
 
 } // namespace
 

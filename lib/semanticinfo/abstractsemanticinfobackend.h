@@ -33,11 +33,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 class KUrl;
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 typedef QString SemanticInfoTag;
-
 
 /**
  * This class represents the set of tags associated to an url.
@@ -45,60 +44,59 @@ typedef QString SemanticInfoTag;
  * It provides convenience methods to convert to and from QVariant, which are
  * useful to communicate with SemanticInfoDirModel.
  */
-class GWENVIEWLIB_EXPORT TagSet : public QSet<SemanticInfoTag> {
+class GWENVIEWLIB_EXPORT TagSet : public QSet<SemanticInfoTag>
+{
 public:
-	TagSet();
-	TagSet(const QSet<SemanticInfoTag>&);
+    TagSet();
+    TagSet(const QSet<SemanticInfoTag>&);
 
-	QVariant toVariant() const;
-	static TagSet fromVariant(const QVariant&);
+    QVariant toVariant() const;
+    static TagSet fromVariant(const QVariant&);
 };
-
 
 /**
  * A POD struct used by AbstractSemanticInfoBackEnd to store the metadata
  * associated to an url.
  */
 struct SemanticInfo {
-	int mRating;
-	QString mDescription;
-	TagSet mTags;
+    int mRating;
+    QString mDescription;
+    TagSet mTags;
 };
-
 
 /**
  * An abstract class, used by SemanticInfoDirModel to store and retrieve metadata.
  */
-class AbstractSemanticInfoBackEnd : public QObject {
-	Q_OBJECT
+class AbstractSemanticInfoBackEnd : public QObject
+{
+    Q_OBJECT
 public:
-	AbstractSemanticInfoBackEnd(QObject* parent);
+    AbstractSemanticInfoBackEnd(QObject* parent);
 
-	virtual TagSet allTags() const = 0;
+    virtual TagSet allTags() const = 0;
 
-	virtual void refreshAllTags() = 0;
+    virtual void refreshAllTags() = 0;
 
-	virtual void storeSemanticInfo(const KUrl&, const SemanticInfo&) = 0;
+    virtual void storeSemanticInfo(const KUrl&, const SemanticInfo&) = 0;
 
-	virtual void retrieveSemanticInfo(const KUrl&) = 0;
+    virtual void retrieveSemanticInfo(const KUrl&) = 0;
 
-	virtual QString labelForTag(const SemanticInfoTag&) const = 0;
+    virtual QString labelForTag(const SemanticInfoTag&) const = 0;
 
-	/**
-	 * Return a tag for a label. Will emit tagAdded() if the tag had to be
-	 * created.
-	 */
-	virtual SemanticInfoTag tagForLabel(const QString&) = 0;
+    /**
+     * Return a tag for a label. Will emit tagAdded() if the tag had to be
+     * created.
+     */
+    virtual SemanticInfoTag tagForLabel(const QString&) = 0;
 
 Q_SIGNALS:
-	void semanticInfoRetrieved(const KUrl&, const SemanticInfo&);
+    void semanticInfoRetrieved(const KUrl&, const SemanticInfo&);
 
-	/**
-	 * Emitted whenever a new tag is added to allTags()
-	 */
-	void tagAdded(const SemanticInfoTag&, const QString& label);
+    /**
+     * Emitted whenever a new tag is added to allTags()
+     */
+    void tagAdded(const SemanticInfoTag&, const QString& label);
 };
-
 
 } // namespace
 

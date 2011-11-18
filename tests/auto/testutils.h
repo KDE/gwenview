@@ -33,71 +33,77 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <ktempdir.h>
 #include <kurl.h>
 
-class SandBoxDir : public QDir {
+class SandBoxDir : public QDir
+{
 public:
-	SandBoxDir()
-	: mTempDir(QDir::currentPath() + "/sandbox-")
-	{
-		setPath(mTempDir.name());
-	}
+    SandBoxDir()
+        : mTempDir(QDir::currentPath() + "/sandbox-") {
+        setPath(mTempDir.name());
+    }
 
 private:
-	KTempDir mTempDir;
+    KTempDir mTempDir;
 };
 
 /*
  * This file contains simple helpers to access test files
  */
 
-inline QString pathForTestFile(const QString& name) {
-	return QDir::cleanPath(QString("%1/../data/%2").arg(KDESRCDIR).arg(name));
+inline QString pathForTestFile(const QString& name)
+{
+    return QDir::cleanPath(QString("%1/../data/%2").arg(KDESRCDIR).arg(name));
 }
 
-inline KUrl urlForTestFile(const QString& name) {
-	KUrl url;
-	url.setPath(pathForTestFile(name));
-	return url;
+inline KUrl urlForTestFile(const QString& name)
+{
+    KUrl url;
+    url.setPath(pathForTestFile(name));
+    return url;
 }
 
-inline QString pathForTestOutputFile(const QString& name) {
-	return QString("%1/%2").arg(QDir::currentPath()).arg(name);
+inline QString pathForTestOutputFile(const QString& name)
+{
+    return QString("%1/%2").arg(QDir::currentPath()).arg(name);
 }
 
-inline KUrl urlForTestOutputFile(const QString& name) {
-	KUrl url;
-	url.setPath(pathForTestOutputFile(name));
-	return url;
+inline KUrl urlForTestOutputFile(const QString& name)
+{
+    KUrl url;
+    url.setPath(pathForTestOutputFile(name));
+    return url;
 }
 
-inline bool waitForSignal(const QSignalSpy& spy, int timeout = 5) {
-	for (int x = 0; x < timeout; ++x) {
-		if (spy.count() > 0) {
-			return true;
-		}
-		QTest::qWait(1000);
-	}
-	return false;
+inline bool waitForSignal(const QSignalSpy& spy, int timeout = 5)
+{
+    for (int x = 0; x < timeout; ++x) {
+        if (spy.count() > 0) {
+            return true;
+        }
+        QTest::qWait(1000);
+    }
+    return false;
 }
 
-inline bool fuzzyImageCompare(const QImage& img1, const QImage& img2) {
-	if (img1.size() != img2.size()) {
-		kWarning() << "Different sizes" << img1.size() << img2.size();
-		return false;
-	}
-	if (img1.format() != img2.format()) {
-		kWarning() << "Different formats" << img1.format() << img2.format();
-		return false;
-	}
+inline bool fuzzyImageCompare(const QImage& img1, const QImage& img2)
+{
+    if (img1.size() != img2.size()) {
+        kWarning() << "Different sizes" << img1.size() << img2.size();
+        return false;
+    }
+    if (img1.format() != img2.format()) {
+        kWarning() << "Different formats" << img1.format() << img2.format();
+        return false;
+    }
 
-	for(int posY = 0; posY < img1.height(); ++posY) {
-		for (int posX = 0; posX < img2.width(); ++posX) {
-			if (!(int)abs((double)img1.pixel(posX, posY) - img2.pixel(posX, posY)) > 2) {
-				kWarning() << "Different at" << QPoint(posX, posY);
-				return false;
-			}
-		}
-	}
-	return true;
+    for (int posY = 0; posY < img1.height(); ++posY) {
+        for (int posX = 0; posX < img2.width(); ++posX) {
+            if (!(int)abs((double)img1.pixel(posX, posY) - img2.pixel(posX, posY)) > 2) {
+                kWarning() << "Different at" << QPoint(posX, posY);
+                return false;
+            }
+        }
+    }
+    return true;
 }
 
 void createEmptyFile(const QString& path);

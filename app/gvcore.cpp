@@ -50,278 +50,279 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <mainwindow.h>
 #include <saveallhelper.h>
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct GvCorePrivate {
-	GvCore* q;
-	MainWindow* mMainWindow;
-	SortedDirModel* mDirModel;
-	HistoryModel* mRecentFoldersModel;
-	HistoryModel* mRecentUrlsModel;
+    GvCore* q;
+    MainWindow* mMainWindow;
+    SortedDirModel* mDirModel;
+    HistoryModel* mRecentFoldersModel;
+    HistoryModel* mRecentUrlsModel;
 
-	bool showSaveAsDialog(const KUrl& url, KUrl* outUrl, QByteArray* format) {
-		KFileDialog dialog(url, QString(), mMainWindow);
-		dialog.setOperationMode(KFileDialog::Saving);
-		dialog.setSelection(url.fileName());
-		dialog.setMimeFilter(
-			KImageIO::mimeTypes(KImageIO::Writing), // List
-			MimeTypeUtils::urlMimeType(url)         // Default
-			);
+    bool showSaveAsDialog(const KUrl& url, KUrl* outUrl, QByteArray* format)
+    {
+        KFileDialog dialog(url, QString(), mMainWindow);
+        dialog.setOperationMode(KFileDialog::Saving);
+        dialog.setSelection(url.fileName());
+        dialog.setMimeFilter(
+            KImageIO::mimeTypes(KImageIO::Writing), // List
+            MimeTypeUtils::urlMimeType(url)         // Default
+        );
 
-		// Show dialog
-		do {
-			if (!dialog.exec()) {
-				return false;
-			}
+        // Show dialog
+        do {
+            if (!dialog.exec()) {
+                return false;
+            }
 
-			const QString mimeType = dialog.currentMimeFilter();
-			if (mimeType.isEmpty()) {
-				KMessageBox::sorry(
-					mMainWindow,
-					i18nc("@info",
-						"No image format selected.")
-					);
-				continue;
-			}
+            const QString mimeType = dialog.currentMimeFilter();
+            if (mimeType.isEmpty()) {
+                KMessageBox::sorry(
+                    mMainWindow,
+                    i18nc("@info",
+                          "No image format selected.")
+                );
+                continue;
+            }
 
-			const QStringList typeList = KImageIO::typeForMime(mimeType);
-			if (typeList.count() > 0) {
-				*format = typeList[0].toAscii();
-				break;
-			}
-			KMessageBox::sorry(
-				mMainWindow,
-				i18nc("@info",
-					"Gwenview cannot save images as %1.", mimeType)
-				);
-		} while (true);
+            const QStringList typeList = KImageIO::typeForMime(mimeType);
+            if (typeList.count() > 0) {
+                *format = typeList[0].toAscii();
+                break;
+            }
+            KMessageBox::sorry(
+                mMainWindow,
+                i18nc("@info",
+                      "Gwenview cannot save images as %1.", mimeType)
+            );
+        } while (true);
 
-		*outUrl = dialog.selectedUrl();
-		return true;
-	}
+        *outUrl = dialog.selectedUrl();
+        return true;
+    }
 };
-
 
 GvCore::GvCore(MainWindow* mainWindow, SortedDirModel* dirModel)
 : QObject(mainWindow)
-, d(new GvCorePrivate) {
-	d->q = this;
-	d->mMainWindow = mainWindow;
-	d->mDirModel = dirModel;
-	d->mRecentFoldersModel = 0;
-	d->mRecentUrlsModel = 0;
+, d(new GvCorePrivate)
+{
+    d->q = this;
+    d->mMainWindow = mainWindow;
+    d->mDirModel = dirModel;
+    d->mRecentFoldersModel = 0;
+    d->mRecentUrlsModel = 0;
 
-	connect(GwenviewConfig::self(), SIGNAL(configChanged()),
-		SLOT(slotConfigChanged()));
+    connect(GwenviewConfig::self(), SIGNAL(configChanged()),
+            SLOT(slotConfigChanged()));
 }
 
-
-GvCore::~GvCore() {
-	delete d;
+GvCore::~GvCore()
+{
+    delete d;
 }
 
-
-QAbstractItemModel* GvCore::recentFoldersModel() const {
-	if (!d->mRecentFoldersModel) {
-		d->mRecentFoldersModel = new HistoryModel(const_cast<GvCore*>(this), KStandardDirs::locateLocal("appdata", "recentfolders/"));
-	}
-	return d->mRecentFoldersModel;
+QAbstractItemModel* GvCore::recentFoldersModel() const
+{
+    if (!d->mRecentFoldersModel) {
+        d->mRecentFoldersModel = new HistoryModel(const_cast<GvCore*>(this), KStandardDirs::locateLocal("appdata", "recentfolders/"));
+    }
+    return d->mRecentFoldersModel;
 }
 
-
-QAbstractItemModel* GvCore::recentUrlsModel() const {
-	if (!d->mRecentUrlsModel) {
-		d->mRecentUrlsModel = new HistoryModel(const_cast<GvCore*>(this), KStandardDirs::locateLocal("appdata", "recenturls/"));
-	}
-	return d->mRecentUrlsModel;
+QAbstractItemModel* GvCore::recentUrlsModel() const
+{
+    if (!d->mRecentUrlsModel) {
+        d->mRecentUrlsModel = new HistoryModel(const_cast<GvCore*>(this), KStandardDirs::locateLocal("appdata", "recenturls/"));
+    }
+    return d->mRecentUrlsModel;
 }
 
-
-AbstractSemanticInfoBackEnd* GvCore::semanticInfoBackEnd() const {
-	return d->mDirModel->semanticInfoBackEnd();
+AbstractSemanticInfoBackEnd* GvCore::semanticInfoBackEnd() const
+{
+    return d->mDirModel->semanticInfoBackEnd();
 }
 
-
-void GvCore::addUrlToRecentFolders(const KUrl& url) {
-	if (!GwenviewConfig::historyEnabled()) {
-		return;
-	}
-	recentFoldersModel();
-	d->mRecentFoldersModel->addUrl(url);
+void GvCore::addUrlToRecentFolders(const KUrl& url)
+{
+    if (!GwenviewConfig::historyEnabled()) {
+        return;
+    }
+    recentFoldersModel();
+    d->mRecentFoldersModel->addUrl(url);
 }
 
-
-void GvCore::addUrlToRecentUrls(const KUrl& url) {
-	if (!GwenviewConfig::historyEnabled()) {
-		return;
-	}
-	recentUrlsModel();
-	d->mRecentUrlsModel->addUrl(url);
+void GvCore::addUrlToRecentUrls(const KUrl& url)
+{
+    if (!GwenviewConfig::historyEnabled()) {
+        return;
+    }
+    recentUrlsModel();
+    d->mRecentUrlsModel->addUrl(url);
 }
 
-
-void GvCore::saveAll() {
-	SaveAllHelper helper(d->mMainWindow);
-	helper.save();
+void GvCore::saveAll()
+{
+    SaveAllHelper helper(d->mMainWindow);
+    helper.save();
 }
 
-
-void GvCore::save(const KUrl& url) {
-	Document::Ptr doc = DocumentFactory::instance()->load(url);
-	QByteArray format = doc->format();
-	const QStringList availableTypes = KImageIO::types(KImageIO::Writing);
-	if (availableTypes.contains(QString(format))) {
-		DocumentJob* job = doc->save(url, format);
-		connect(job, SIGNAL(result(KJob*)), SLOT(slotSaveResult(KJob*)));
-	} else {
-		// We don't know how to save in 'format', ask the user for a format we can
-		// write to.
-		KGuiItem saveUsingAnotherFormat = KStandardGuiItem::saveAs();
-		saveUsingAnotherFormat.setText(i18n("Save using another format"));
-		int result = KMessageBox::warningContinueCancel(
-			d->mMainWindow,
-			i18n("Gwenview cannot save images in '%1' format.", QString(format)),
-			QString() /* caption */,
-			saveUsingAnotherFormat
-			);
-		if (result == KMessageBox::Continue) {
-			saveAs(url);
-		}
-	}
+void GvCore::save(const KUrl& url)
+{
+    Document::Ptr doc = DocumentFactory::instance()->load(url);
+    QByteArray format = doc->format();
+    const QStringList availableTypes = KImageIO::types(KImageIO::Writing);
+    if (availableTypes.contains(QString(format))) {
+        DocumentJob* job = doc->save(url, format);
+        connect(job, SIGNAL(result(KJob*)), SLOT(slotSaveResult(KJob*)));
+    } else {
+        // We don't know how to save in 'format', ask the user for a format we can
+        // write to.
+        KGuiItem saveUsingAnotherFormat = KStandardGuiItem::saveAs();
+        saveUsingAnotherFormat.setText(i18n("Save using another format"));
+        int result = KMessageBox::warningContinueCancel(
+                         d->mMainWindow,
+                         i18n("Gwenview cannot save images in '%1' format.", QString(format)),
+                         QString() /* caption */,
+                         saveUsingAnotherFormat
+                     );
+        if (result == KMessageBox::Continue) {
+            saveAs(url);
+        }
+    }
 }
 
+void GvCore::saveAs(const KUrl& url)
+{
+    QByteArray format;
+    KUrl saveAsUrl;
+    if (!d->showSaveAsDialog(url, &saveAsUrl, &format)) {
+        return;
+    }
 
-void GvCore::saveAs(const KUrl& url) {
-	QByteArray format;
-	KUrl saveAsUrl;
-	if (!d->showSaveAsDialog(url, &saveAsUrl, &format)) {
-		return;
-	}
+    // Check for overwrite
+    if (KIO::NetAccess::exists(saveAsUrl, KIO::NetAccess::DestinationSide, d->mMainWindow)) {
+        int answer = KMessageBox::warningContinueCancel(
+                         d->mMainWindow,
+                         i18nc("@info",
+                               "A file named <filename>%1</filename> already exists.\n"
+                               "Are you sure you want to overwrite it?",
+                               saveAsUrl.fileName()),
+                         QString(),
+                         KStandardGuiItem::overwrite());
+        if (answer == KMessageBox::Cancel) {
+            return;
+        }
+    }
 
-	// Check for overwrite
-	if (KIO::NetAccess::exists(saveAsUrl, KIO::NetAccess::DestinationSide, d->mMainWindow)) {
-		int answer = KMessageBox::warningContinueCancel(
-			d->mMainWindow,
-			i18nc("@info",
-				"A file named <filename>%1</filename> already exists.\n"
-				"Are you sure you want to overwrite it?",
-				saveAsUrl.fileName()),
-			QString(),
-			KStandardGuiItem::overwrite());
-		if (answer == KMessageBox::Cancel) {
-			return;
-		}
-	}
-
-	// Start save
-	Document::Ptr doc = DocumentFactory::instance()->load(url);
-	KJob* job = doc->save(saveAsUrl, format.data());
-	if (!job) {
-		const QString name = saveAsUrl.fileName().isEmpty() ? saveAsUrl.pathOrUrl() : saveAsUrl.fileName();
-		const QString msg = i18nc("@info", "<b>Saving <filename>%1</filename> failed:</b><br>%2",
-			name, doc->errorString());
-		KMessageBox::sorry(QApplication::activeWindow(), msg);
-	} else {
-		connect(job, SIGNAL(result(KJob*)), SLOT(slotSaveResult(KJob*)));
-	}
+    // Start save
+    Document::Ptr doc = DocumentFactory::instance()->load(url);
+    KJob* job = doc->save(saveAsUrl, format.data());
+    if (!job) {
+        const QString name = saveAsUrl.fileName().isEmpty() ? saveAsUrl.pathOrUrl() : saveAsUrl.fileName();
+        const QString msg = i18nc("@info", "<b>Saving <filename>%1</filename> failed:</b><br>%2",
+                                  name, doc->errorString());
+        KMessageBox::sorry(QApplication::activeWindow(), msg);
+    } else {
+        connect(job, SIGNAL(result(KJob*)), SLOT(slotSaveResult(KJob*)));
+    }
 }
 
-
-static void applyTransform(const KUrl& url, Orientation orientation) {
-	TransformImageOperation* op = new TransformImageOperation(orientation);
-	Document::Ptr doc = DocumentFactory::instance()->load(url);
-	op->applyToDocument(doc);
+static void applyTransform(const KUrl& url, Orientation orientation)
+{
+    TransformImageOperation* op = new TransformImageOperation(orientation);
+    Document::Ptr doc = DocumentFactory::instance()->load(url);
+    op->applyToDocument(doc);
 }
 
+void GvCore::slotSaveResult(KJob* _job)
+{
+    SaveJob* job = static_cast<SaveJob*>(_job);
+    KUrl oldUrl = job->oldUrl();
+    KUrl newUrl = job->newUrl();
 
-void GvCore::slotSaveResult(KJob* _job) {
-	SaveJob* job = static_cast<SaveJob*>(_job);
-	KUrl oldUrl = job->oldUrl();
-	KUrl newUrl = job->newUrl();
+    if (job->error()) {
+        QString name = newUrl.fileName().isEmpty() ? newUrl.pathOrUrl() : newUrl.fileName();
+        QString msg = i18nc("@info", "<b>Saving <filename>%1</filename> failed:</b><br>%2",
+                            name, job->errorString());
 
-	if (job->error()) {
-		QString name = newUrl.fileName().isEmpty() ? newUrl.pathOrUrl() : newUrl.fileName();
-		QString msg = i18nc("@info", "<b>Saving <filename>%1</filename> failed:</b><br>%2",
-			name, job->errorString());
+        int result = KMessageBox::warningContinueCancel(
+                         d->mMainWindow, msg,
+                         QString() /* caption */,
+                         KStandardGuiItem::saveAs());
 
-		int result = KMessageBox::warningContinueCancel(
-			d->mMainWindow, msg,
-			QString() /* caption */,
-			KStandardGuiItem::saveAs());
+        if (result == KMessageBox::Continue) {
+            saveAs(newUrl);
+        }
+        return;
+    }
 
-		if (result == KMessageBox::Continue) {
-			saveAs(newUrl);
-		}
-		return;
-	}
+    if (oldUrl != newUrl) {
+        d->mMainWindow->goToUrl(newUrl);
 
-	if (oldUrl != newUrl) {
-		d->mMainWindow->goToUrl(newUrl);
+        MessageBubble* bubble = new MessageBubble();
+        bubble->setText(i18n("You are now viewing the new document."));
+        KGuiItem item = KStandardGuiItem::back();
+        item.setText(i18n("Go back to the original"));
+        QToolButton* button = bubble->addButton(item);
 
-		MessageBubble* bubble = new MessageBubble();
-		bubble->setText(i18n("You are now viewing the new document."));
-		KGuiItem item = KStandardGuiItem::back();
-		item.setText(i18n("Go back to the original"));
-		QToolButton* button = bubble->addButton(item);
+        BinderRef<MainWindow, KUrl>::bind(button, SIGNAL(clicked()), d->mMainWindow, &MainWindow::goToUrl, oldUrl);
+        connect(button, SIGNAL(clicked()),
+                bubble, SLOT(deleteLater()));
 
-		BinderRef<MainWindow, KUrl>::bind(button, SIGNAL(clicked()), d->mMainWindow, &MainWindow::goToUrl, oldUrl);
-		connect(button, SIGNAL(clicked()),
-			bubble, SLOT(deleteLater()));
-
-		d->mMainWindow->showMessageBubble(bubble);
-	}
+        d->mMainWindow->showMessageBubble(bubble);
+    }
 }
 
-
-void GvCore::rotateLeft(const KUrl& url) {
-	applyTransform(url, ROT_270);
+void GvCore::rotateLeft(const KUrl& url)
+{
+    applyTransform(url, ROT_270);
 }
 
-
-void GvCore::rotateRight(const KUrl& url) {
-	applyTransform(url, ROT_90);
+void GvCore::rotateRight(const KUrl& url)
+{
+    applyTransform(url, ROT_90);
 }
 
-
-void GvCore::setRating(const KUrl& url, int rating) {
-	QModelIndex index = d->mDirModel->indexForUrl(url);
-	if (!index.isValid()) {
-		kWarning() << "invalid index!";
-		return;
-	}
-	d->mDirModel->setData(index, rating, SemanticInfoDirModel::RatingRole);
+void GvCore::setRating(const KUrl& url, int rating)
+{
+    QModelIndex index = d->mDirModel->indexForUrl(url);
+    if (!index.isValid()) {
+        kWarning() << "invalid index!";
+        return;
+    }
+    d->mDirModel->setData(index, rating, SemanticInfoDirModel::RatingRole);
 }
 
+bool GvCore::ensureDocumentIsEditable(const KUrl& url)
+{
+    // FIXME: Replace with a CheckEditableJob?
+    // This way we can factorize the error message
+    Document::Ptr doc = DocumentFactory::instance()->load(url);
+    doc->startLoadingFullImage();
+    doc->waitUntilLoaded();
+    if (doc->isEditable()) {
+        return true;
+    }
 
-bool GvCore::ensureDocumentIsEditable(const KUrl& url) {
-	// FIXME: Replace with a CheckEditableJob?
-	// This way we can factorize the error message
-	Document::Ptr doc = DocumentFactory::instance()->load(url);
-	doc->startLoadingFullImage();
-	doc->waitUntilLoaded();
-	if (doc->isEditable()) {
-		return true;
-	}
-
-	KMessageBox::sorry(
-		QApplication::activeWindow(),
-		i18nc("@info", "Gwenview cannot edit this kind of image.")
-		);
-	return false;
+    KMessageBox::sorry(
+        QApplication::activeWindow(),
+        i18nc("@info", "Gwenview cannot edit this kind of image.")
+    );
+    return false;
 }
 
-
-static void clearModel(QAbstractItemModel* model) {
-	model->removeRows(0, model->rowCount());
+static void clearModel(QAbstractItemModel* model)
+{
+    model->removeRows(0, model->rowCount());
 }
 
-void GvCore::slotConfigChanged() {
-	if (!GwenviewConfig::historyEnabled()) {
-		clearModel(recentFoldersModel());
-		clearModel(recentUrlsModel());
-	}
+void GvCore::slotConfigChanged()
+{
+    if (!GwenviewConfig::historyEnabled()) {
+        clearModel(recentFoldersModel());
+        clearModel(recentUrlsModel());
+    }
 }
-
 
 } // namespace

@@ -26,8 +26,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 class QMatrix;
 
-namespace Gwenview {
-namespace ImageUtils {
+namespace Gwenview
+{
+namespace ImageUtils
+{
 
 GWENVIEWLIB_EXPORT QMatrix transformMatrix(Orientation);
 

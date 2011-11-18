@@ -28,31 +28,30 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
-
 class KGuiItem;
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 class DialogPagePrivate;
-class DialogPage : public QWidget {
-	Q_OBJECT
+class DialogPage : public QWidget
+{
+    Q_OBJECT
 public:
-	DialogPage(QWidget* parent = 0);
-	~DialogPage();
+    DialogPage(QWidget* parent = 0);
+    ~DialogPage();
 
-	void removeButtons();
-	void setText(const QString&);
-	int addButton(const KGuiItem&);
-	int exec();
+    void removeButtons();
+    void setText(const QString&);
+    int addButton(const KGuiItem&);
+    int exec();
 
 private Q_SLOTS:
-	void slotMapped(int);
+    void slotMapped(int);
 
 private:
-	DialogPagePrivate* const d;
+    DialogPagePrivate* const d;
 };
-
 
 } // namespace
 

@@ -33,49 +33,50 @@ class KUrl;
 
 class QAbstractItemModel;
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 class AbstractSemanticInfoBackEnd;
 class MainWindow;
 class SortedDirModel;
 
 class GvCorePrivate;
-class GvCore : public QObject {
-	Q_OBJECT
+class GvCore : public QObject
+{
+    Q_OBJECT
 public:
-	GvCore(MainWindow* mainWindow, SortedDirModel*);
-	~GvCore();
+    GvCore(MainWindow* mainWindow, SortedDirModel*);
+    ~GvCore();
 
-	QAbstractItemModel* recentFoldersModel() const;
-	QAbstractItemModel* recentUrlsModel() const;
-	AbstractSemanticInfoBackEnd* semanticInfoBackEnd() const;
+    QAbstractItemModel* recentFoldersModel() const;
+    QAbstractItemModel* recentUrlsModel() const;
+    AbstractSemanticInfoBackEnd* semanticInfoBackEnd() const;
 
-	void addUrlToRecentFolders(const KUrl&);
-	void addUrlToRecentUrls(const KUrl& url);
+    void addUrlToRecentFolders(const KUrl&);
+    void addUrlToRecentUrls(const KUrl& url);
 
-	/**
-	 * Checks if the document referenced by url is editable, shows a sorry
-	 * dialog if it's not.
-	 * @return true if editable, false if not
-	 */
-	static bool ensureDocumentIsEditable(const KUrl& url);
+    /**
+     * Checks if the document referenced by url is editable, shows a sorry
+     * dialog if it's not.
+     * @return true if editable, false if not
+     */
+    static bool ensureDocumentIsEditable(const KUrl& url);
 
 public Q_SLOTS:
-	void saveAll();
-	void save(const KUrl&);
-	void saveAs(const KUrl&);
-	void rotateLeft(const KUrl&);
-	void rotateRight(const KUrl&);
-	void setRating(const KUrl&, int);
+    void saveAll();
+    void save(const KUrl&);
+    void saveAs(const KUrl&);
+    void rotateLeft(const KUrl&);
+    void rotateRight(const KUrl&);
+    void setRating(const KUrl&, int);
 
 private Q_SLOTS:
-	void slotConfigChanged();
-	void slotSaveResult(KJob*);
+    void slotConfigChanged();
+    void slotSaveResult(KJob*);
 
 private:
-	GvCorePrivate* const d;
+    GvCorePrivate* const d;
 };
-
 
 } // namespace
 

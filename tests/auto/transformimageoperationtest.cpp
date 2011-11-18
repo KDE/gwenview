@@ -33,37 +33,37 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include "transformimageoperationtest.moc"
 
-QTEST_KDEMAIN( TransformImageOperationTest, GUI )
+QTEST_KDEMAIN(TransformImageOperationTest, GUI)
 
 using namespace Gwenview;
 
-
-void TransformImageOperationTest::initTestCase() {
-	qRegisterMetaType<KUrl>("KUrl");
+void TransformImageOperationTest::initTestCase()
+{
+    qRegisterMetaType<KUrl>("KUrl");
 }
 
-
-void TransformImageOperationTest::init() {
-	DocumentFactory::instance()->clearCache();
+void TransformImageOperationTest::init()
+{
+    DocumentFactory::instance()->clearCache();
 }
 
+void TransformImageOperationTest::testRotate90()
+{
+    KUrl url = urlForTestFile("test.png");
+    QImage image;
 
-void TransformImageOperationTest::testRotate90() {
-	KUrl url = urlForTestFile("test.png");
-	QImage image;
+    bool ok = image.load(url.toLocalFile());
+    QVERIFY2(ok, "Could not load 'test.png'");
+    QMatrix matrix = ImageUtils::transformMatrix(ROT_90);
+    image = image.transformed(matrix);
 
-	bool ok = image.load(url.toLocalFile());
-	QVERIFY2(ok, "Could not load 'test.png'");
-	QMatrix matrix = ImageUtils::transformMatrix(ROT_90);
-	image = image.transformed(matrix);
+    Document::Ptr doc = DocumentFactory::instance()->load(url);
 
-	Document::Ptr doc = DocumentFactory::instance()->load(url);
+    TransformImageOperation* op = new TransformImageOperation(ROT_90);
+    QEventLoop loop;
+    connect(doc.data(), SIGNAL(allTasksDone()), &loop, SLOT(quit()));
+    op->applyToDocument(doc);
+    loop.exec();
 
-	TransformImageOperation* op = new TransformImageOperation(ROT_90);
-	QEventLoop loop;
-	connect(doc.data(), SIGNAL(allTasksDone()), &loop, SLOT(quit()));
-	op->applyToDocument(doc);
-	loop.exec();
-
-	QCOMPARE(image, doc->image());
+    QCOMPARE(image, doc->image());
 }

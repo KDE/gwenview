@@ -40,196 +40,194 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 struct Task {
-	Task(const KUrl& url): mUrl(url) {}
-	virtual ~Task() {}
-	virtual void execute() = 0;
+    Task(const KUrl& url): mUrl(url) {}
+    virtual ~Task() {}
+    virtual void execute() = 0;
 
-	KUrl mUrl;
+    KUrl mUrl;
 };
-
 
 struct RetrieveTask : public Task {
-	RetrieveTask(NepomukSemanticInfoBackEnd* backEnd, const KUrl& url)
-	: Task(url), mBackEnd(backEnd) {}
+    RetrieveTask(NepomukSemanticInfoBackEnd* backEnd, const KUrl& url)
+        : Task(url), mBackEnd(backEnd) {}
 
-	virtual void execute() {
-		Nepomuk::Resource resource(mUrl);
+    virtual void execute()
+    {
+        Nepomuk::Resource resource(mUrl);
 
-		SemanticInfo semanticInfo;
-		semanticInfo.mRating = resource.rating();
-		semanticInfo.mDescription = resource.description();
-		Q_FOREACH(const Nepomuk::Tag& tag, resource.tags()) {
-			semanticInfo.mTags << KUrl(tag.resourceUri()).url();
-		}
-		mBackEnd->emitSemanticInfoRetrieved(mUrl, semanticInfo);
-	}
+        SemanticInfo semanticInfo;
+        semanticInfo.mRating = resource.rating();
+        semanticInfo.mDescription = resource.description();
+        Q_FOREACH(const Nepomuk::Tag & tag, resource.tags()) {
+            semanticInfo.mTags << KUrl(tag.resourceUri()).url();
+        }
+        mBackEnd->emitSemanticInfoRetrieved(mUrl, semanticInfo);
+    }
 
-	NepomukSemanticInfoBackEnd* mBackEnd;
+    NepomukSemanticInfoBackEnd* mBackEnd;
 };
-
 
 struct StoreTask : public Task {
-	StoreTask(const KUrl& url, const SemanticInfo& semanticInfo)
-	: Task(url), mSemanticInfo(semanticInfo) {}
+    StoreTask(const KUrl& url, const SemanticInfo& semanticInfo)
+        : Task(url), mSemanticInfo(semanticInfo) {}
 
-	virtual void execute() {
-		Nepomuk::Resource resource(mUrl);
-		resource.setRating(mSemanticInfo.mRating);
-		resource.setDescription(mSemanticInfo.mDescription);
-		QList<Nepomuk::Tag> tags;
-		Q_FOREACH(const SemanticInfoTag& uri, mSemanticInfo.mTags) {
-			tags << Nepomuk::Tag(KUrl(uri));
-		}
-		resource.setTags(tags);
-	}
+    virtual void execute()
+    {
+        Nepomuk::Resource resource(mUrl);
+        resource.setRating(mSemanticInfo.mRating);
+        resource.setDescription(mSemanticInfo.mDescription);
+        QList<Nepomuk::Tag> tags;
+        Q_FOREACH(const SemanticInfoTag & uri, mSemanticInfo.mTags) {
+            tags << Nepomuk::Tag(KUrl(uri));
+        }
+        resource.setTags(tags);
+    }
 
-	SemanticInfo mSemanticInfo;
+    SemanticInfo mSemanticInfo;
 };
-
 
 typedef QQueue<Task*> TaskQueue;
 
-class SemanticInfoThread : public QThread {
+class SemanticInfoThread : public QThread
+{
 public:
-	SemanticInfoThread()
-	: mDeleting(false)
-	{}
+    SemanticInfoThread()
+        : mDeleting(false)
+    {}
 
-	~SemanticInfoThread() {
-		{
-			QMutexLocker locker(&mMutex);
-			mDeleting = true;
-		}
-		// Notify the thread so that it doesn't stay blocked waiting for mQueueNotEmpty
-		mQueueNotEmpty.wakeAll();
+    ~SemanticInfoThread() {
+        {
+            QMutexLocker locker(&mMutex);
+            mDeleting = true;
+        }
+        // Notify the thread so that it doesn't stay blocked waiting for mQueueNotEmpty
+        mQueueNotEmpty.wakeAll();
 
-		wait();
-		qDeleteAll(mTaskQueue);
-	}
+        wait();
+        qDeleteAll(mTaskQueue);
+    }
 
+    void enqueueTask(Task* task)
+    {
+        {
+            QMutexLocker locker(&mMutex);
+            mTaskQueue.enqueue(task);
+        }
+        if (!isRunning()) {
+            start();
+        }
+        mQueueNotEmpty.wakeAll();
+    }
 
-	void enqueueTask(Task* task) {
-		{
-			QMutexLocker locker(&mMutex);
-			mTaskQueue.enqueue(task);
-		}
-		if (!isRunning()) {
-			start();
-		}
-		mQueueNotEmpty.wakeAll();
-	}
-
-
-	virtual void run() {
-		while (true) {
-			Task* task;
-			{
-				QMutexLocker locker(&mMutex);
-				if (mDeleting) {
-					return;
-				}
-				if (mTaskQueue.isEmpty()) {
-					mQueueNotEmpty.wait(&mMutex);
-				}
-				if (mDeleting) {
-					return;
-				}
-				task = mTaskQueue.dequeue();
-			}
-			task->execute();
-			delete task;
-		}
-	}
-
+    virtual void run()
+    {
+        while (true) {
+            Task* task;
+            {
+                QMutexLocker locker(&mMutex);
+                if (mDeleting) {
+                    return;
+                }
+                if (mTaskQueue.isEmpty()) {
+                    mQueueNotEmpty.wait(&mMutex);
+                }
+                if (mDeleting) {
+                    return;
+                }
+                task = mTaskQueue.dequeue();
+            }
+            task->execute();
+            delete task;
+        }
+    }
 
 private:
-	TaskQueue mTaskQueue;
-	QMutex mMutex;
-	QWaitCondition mQueueNotEmpty;
-	bool mDeleting;
+    TaskQueue mTaskQueue;
+    QMutex mMutex;
+    QWaitCondition mQueueNotEmpty;
+    bool mDeleting;
 };
-
 
 struct NepomukSemanticInfoBackEndPrivate {
-	SemanticInfoThread mThread;
-	TagSet mAllTags;
+    SemanticInfoThread mThread;
+    TagSet mAllTags;
 };
-
 
 NepomukSemanticInfoBackEnd::NepomukSemanticInfoBackEnd(QObject* parent)
 : AbstractSemanticInfoBackEnd(parent)
-, d(new NepomukSemanticInfoBackEndPrivate) {
-	// FIXME: Check it returns 0
-	Nepomuk::ResourceManager::instance()->init();
+, d(new NepomukSemanticInfoBackEndPrivate)
+{
+    // FIXME: Check it returns 0
+    Nepomuk::ResourceManager::instance()->init();
 }
 
-
-NepomukSemanticInfoBackEnd::~NepomukSemanticInfoBackEnd() {
-	delete d;
+NepomukSemanticInfoBackEnd::~NepomukSemanticInfoBackEnd()
+{
+    delete d;
 }
 
-
-TagSet NepomukSemanticInfoBackEnd::allTags() const {
-	if (d->mAllTags.empty()) {
-		const_cast<NepomukSemanticInfoBackEnd*>(this)->refreshAllTags();
-	}
-	return d->mAllTags;
+TagSet NepomukSemanticInfoBackEnd::allTags() const
+{
+    if (d->mAllTags.empty()) {
+        const_cast<NepomukSemanticInfoBackEnd*>(this)->refreshAllTags();
+    }
+    return d->mAllTags;
 }
 
-
-void NepomukSemanticInfoBackEnd::refreshAllTags() {
-	d->mAllTags.clear();
-	Q_FOREACH(const Nepomuk::Tag& tag, Nepomuk::Tag::allTags()) {
-		d->mAllTags << KUrl(tag.resourceUri()).url();
-	}
+void NepomukSemanticInfoBackEnd::refreshAllTags()
+{
+    d->mAllTags.clear();
+    Q_FOREACH(const Nepomuk::Tag & tag, Nepomuk::Tag::allTags()) {
+        d->mAllTags << KUrl(tag.resourceUri()).url();
+    }
 }
 
-
-void NepomukSemanticInfoBackEnd::storeSemanticInfo(const KUrl& url, const SemanticInfo& semanticInfo) {
-	StoreTask* task = new StoreTask(url, semanticInfo);
-	d->mThread.enqueueTask(task);
+void NepomukSemanticInfoBackEnd::storeSemanticInfo(const KUrl& url, const SemanticInfo& semanticInfo)
+{
+    StoreTask* task = new StoreTask(url, semanticInfo);
+    d->mThread.enqueueTask(task);
 }
 
-
-void NepomukSemanticInfoBackEnd::retrieveSemanticInfo(const KUrl& url) {
-	RetrieveTask* task = new RetrieveTask(this, url);
-	d->mThread.enqueueTask(task);
+void NepomukSemanticInfoBackEnd::retrieveSemanticInfo(const KUrl& url)
+{
+    RetrieveTask* task = new RetrieveTask(this, url);
+    d->mThread.enqueueTask(task);
 }
 
-
-void NepomukSemanticInfoBackEnd::emitSemanticInfoRetrieved(const KUrl& url, const SemanticInfo& semanticInfo) {
-	emit semanticInfoRetrieved(url, semanticInfo);
+void NepomukSemanticInfoBackEnd::emitSemanticInfoRetrieved(const KUrl& url, const SemanticInfo& semanticInfo)
+{
+    emit semanticInfoRetrieved(url, semanticInfo);
 }
 
-
-QString NepomukSemanticInfoBackEnd::labelForTag(const SemanticInfoTag& uriString) const {
+QString NepomukSemanticInfoBackEnd::labelForTag(const SemanticInfoTag& uriString) const
+{
     KUrl uri(uriString);
-	Nepomuk::Tag tag(uri);
-	if (!tag.exists()) {
-		kError() << "No tag for uri" << uri << ". This should not happen!";
-		return QString();
-	}
-	return tag.label();
+    Nepomuk::Tag tag(uri);
+    if (!tag.exists()) {
+        kError() << "No tag for uri" << uri << ". This should not happen!";
+        return QString();
+    }
+    return tag.label();
 }
 
-
-SemanticInfoTag NepomukSemanticInfoBackEnd::tagForLabel(const QString& label) {
-	Nepomuk::Tag tag(label);
-	SemanticInfoTag uri;
-	if (tag.exists()) {
-		uri = KUrl(tag.resourceUri()).url();
-	} else {
-		// Not found, create the tag
-		tag.setLabel(label);
-		uri = KUrl(tag.resourceUri()).url();
-		d->mAllTags << uri;
-		emit tagAdded(uri, label);
-	}
-	return uri;
+SemanticInfoTag NepomukSemanticInfoBackEnd::tagForLabel(const QString& label)
+{
+    Nepomuk::Tag tag(label);
+    SemanticInfoTag uri;
+    if (tag.exists()) {
+        uri = KUrl(tag.resourceUri()).url();
+    } else {
+        // Not found, create the tag
+        tag.setLabel(label);
+        uri = KUrl(tag.resourceUri()).url();
+        d->mAllTags << uri;
+        emit tagAdded(uri, label);
+    }
+    return uri;
 }
-
 
 } // namespace

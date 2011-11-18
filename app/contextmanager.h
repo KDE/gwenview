@@ -30,7 +30,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 class QItemSelectionModel;
 class QModelIndex;
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 class SortedDirModel;
 
@@ -39,49 +40,50 @@ class AbstractContextManagerItem;
 struct ContextManagerPrivate;
 
 /**
- * Manage the update of the contextual parts of the applications, 
+ * Manage the update of the contextual parts of the applications,
  * like the sidebar or the context menu.
  */
-class ContextManager : public QObject {
-	Q_OBJECT
+class ContextManager : public QObject
+{
+    Q_OBJECT
 public:
-	ContextManager(SortedDirModel*, QItemSelectionModel*, QObject* parent);
+    ContextManager(SortedDirModel*, QItemSelectionModel*, QObject* parent);
 
-	~ContextManager();
+    ~ContextManager();
 
-	void addItem(AbstractContextManagerItem* item);
+    void addItem(AbstractContextManagerItem* item);
 
-	KUrl currentUrl() const;
+    KUrl currentUrl() const;
 
-	void setCurrentDirUrl(const KUrl&);
+    void setCurrentDirUrl(const KUrl&);
 
-	KUrl currentDirUrl() const;
+    KUrl currentDirUrl() const;
 
-	void setCurrentUrl(const KUrl& currentUrl);
+    void setCurrentUrl(const KUrl& currentUrl);
 
-	KFileItemList selectedFileItemList() const;
+    KFileItemList selectedFileItemList() const;
 
-	SortedDirModel* dirModel() const;
+    SortedDirModel* dirModel() const;
 
-	/**
-	 * If true, selectedFileItemList() will only return current url
-	 * (useful in view mode)
-	 */
-	void setOnlyCurrentUrl(bool onlyCurrentUrl);
+    /**
+     * If true, selectedFileItemList() will only return current url
+     * (useful in view mode)
+     */
+    void setOnlyCurrentUrl(bool onlyCurrentUrl);
 
 Q_SIGNALS:
-	void selectionChanged();
-	void selectionDataChanged();
-	void currentDirUrlChanged();
+    void selectionChanged();
+    void selectionDataChanged();
+    void currentDirUrlChanged();
 
 private Q_SLOTS:
-	void slotDirModelDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
-	void slotSelectionChanged();
-	void slotCurrentChanged(const QModelIndex&);
-	void emitQueuedSignals();
+    void slotDirModelDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
+    void slotSelectionChanged();
+    void slotCurrentChanged(const QModelIndex&);
+    void emitQueuedSignals();
 
 private:
-	ContextManagerPrivate* const d;
+    ContextManagerPrivate* const d;
 };
 
 } // namespace

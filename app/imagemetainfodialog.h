@@ -28,33 +28,32 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // Local
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 class ImageMetaInfoModel;
 
-
 class ImageMetaInfoDialogPrivate;
-class ImageMetaInfoDialog : public KDialog {
-	Q_OBJECT
+class ImageMetaInfoDialog : public KDialog
+{
+    Q_OBJECT
 public:
-	ImageMetaInfoDialog(QWidget* parent);
-	~ImageMetaInfoDialog();
+    ImageMetaInfoDialog(QWidget* parent);
+    ~ImageMetaInfoDialog();
 
-	/**
-	 * Defines the image metainfo model and the preferred metainfo key list.
-	 */
-	void setMetaInfo(ImageMetaInfoModel*, const QStringList& list);
+    /**
+     * Defines the image metainfo model and the preferred metainfo key list.
+     */
+    void setMetaInfo(ImageMetaInfoModel*, const QStringList& list);
 
-	virtual QSize sizeHint() const;
+    virtual QSize sizeHint() const;
 
 Q_SIGNALS:
-	void preferredMetaInfoKeyListChanged(const QStringList&);
+    void preferredMetaInfoKeyListChanged(const QStringList&);
 
 private:
-	ImageMetaInfoDialogPrivate* const d;
+    ImageMetaInfoDialogPrivate* const d;
 };
-
 
 } // namespace
 

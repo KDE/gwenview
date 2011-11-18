@@ -34,59 +34,59 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct DocumentJobPrivate {
-	Document::Ptr mDoc;
+    Document::Ptr mDoc;
 };
-
 
 DocumentJob::DocumentJob()
 : KCompositeJob(0)
-, d(new DocumentJobPrivate) {
-	KDialogJobUiDelegate* delegate = new KDialogJobUiDelegate;
-	delegate->setWindow(KApplication::kApplication()->activeWindow());
-	delegate->setAutoErrorHandlingEnabled(true);
-	setUiDelegate(delegate);
+, d(new DocumentJobPrivate)
+{
+    KDialogJobUiDelegate* delegate = new KDialogJobUiDelegate;
+    delegate->setWindow(KApplication::kApplication()->activeWindow());
+    delegate->setAutoErrorHandlingEnabled(true);
+    setUiDelegate(delegate);
 }
 
-
-DocumentJob::~DocumentJob() {
-	delete d;
+DocumentJob::~DocumentJob()
+{
+    delete d;
 }
 
-
-Document::Ptr DocumentJob::document() const {
-	return d->mDoc;
+Document::Ptr DocumentJob::document() const
+{
+    return d->mDoc;
 }
 
-
-void DocumentJob::setDocument(const Document::Ptr& doc) {
-	d->mDoc = doc;
+void DocumentJob::setDocument(const Document::Ptr& doc)
+{
+    d->mDoc = doc;
 }
 
-
-void DocumentJob::start() {
-	QMetaObject::invokeMethod(this, "doStart", Qt::QueuedConnection);
+void DocumentJob::start()
+{
+    QMetaObject::invokeMethod(this, "doStart", Qt::QueuedConnection);
 }
 
-
-bool DocumentJob::checkDocumentEditor() {
-	if (!document()->editor()) {
-		setError(NoDocumentEditorError);
-		setErrorText(i18nc("@info", "Gwenview cannot edit this kind of image."));
-		return false;
-	}
-	return true;
+bool DocumentJob::checkDocumentEditor()
+{
+    if (!document()->editor()) {
+        setError(NoDocumentEditorError);
+        setErrorText(i18nc("@info", "Gwenview cannot edit this kind of image."));
+        return false;
+    }
+    return true;
 }
 
-
-void ThreadedDocumentJob::doStart() {
-	QFuture<void> future = QtConcurrent::run(this, &ThreadedDocumentJob::threadedStart);
-	QFutureWatcher<void>* watcher = new QFutureWatcher<void>(this);
-	watcher->setFuture(future);
-	connect(watcher, SIGNAL(finished()), SLOT(emitResult()));
+void ThreadedDocumentJob::doStart()
+{
+    QFuture<void> future = QtConcurrent::run(this, &ThreadedDocumentJob::threadedStart);
+    QFutureWatcher<void>* watcher = new QFutureWatcher<void>(this);
+    watcher->setFuture(future);
+    connect(watcher, SIGNAL(finished()), SLOT(emitResult()));
 }
 
 } // namespace

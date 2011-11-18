@@ -44,7 +44,8 @@ class QUndoStack;
 class KJob;
 class KUrl;
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 class AbstractDocumentEditor;
 class AbstractDocumentImpl;
@@ -52,7 +53,6 @@ class DocumentJob;
 class DocumentFactory;
 struct DocumentPrivate;
 class ImageMetaInfoModel;
-
 
 /**
  * This class represents an image.
@@ -68,163 +68,168 @@ class ImageMetaInfoModel;
  * To get a Document instance for url, ask for one with
  * DocumentFactory::instance()->load(url);
  */
-class GWENVIEWLIB_EXPORT Document : public QObject, public QSharedData {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT Document : public QObject, public QSharedData
+{
+    Q_OBJECT
 public:
-	/**
-	 * Document won't produce down sampled images for any zoom value higher than maxDownSampledZoom().
-	 *
-	 * Note: We can't use the enum {} trick to declare this constant, that's
-	 * why it's defined as a static method
-	 */
-	static qreal maxDownSampledZoom();
+    /**
+     * Document won't produce down sampled images for any zoom value higher than maxDownSampledZoom().
+     *
+     * Note: We can't use the enum {} trick to declare this constant, that's
+     * why it's defined as a static method
+     */
+    static qreal maxDownSampledZoom();
 
-	enum LoadingState {
-		Loading,        ///< Image is loading
-		KindDetermined, ///< Image is still loading, but kind has been determined
-		MetaInfoLoaded, ///< Image is still loading, but meta info has been loaded
-		Loaded,         ///< Full image has been loaded
-		LoadingFailed   ///< Image loading has failed
-	};
+    enum LoadingState {
+        Loading,        ///< Image is loading
+        KindDetermined, ///< Image is still loading, but kind has been determined
+        MetaInfoLoaded, ///< Image is still loading, but meta info has been loaded
+        Loaded,         ///< Full image has been loaded
+        LoadingFailed   ///< Image loading has failed
+    };
 
-	typedef KSharedPtr<Document> Ptr;
-	~Document();
+    typedef KSharedPtr<Document> Ptr;
+    ~Document();
 
-	/**
-	 * Returns a message for the last error which happened
-	 */
-	QString errorString() const;
+    /**
+     * Returns a message for the last error which happened
+     */
+    QString errorString() const;
 
-	void reload();
+    void reload();
 
-	void startLoadingFullImage();
+    void startLoadingFullImage();
 
-	/**
-	 * Prepare a version of the image down sampled to be a bit bigger than
-	 * size() * @a zoom.
-	 * Do not ask for a down sampled image for @a zoom >= to MaxDownSampledZoom.
-	 *
-	 * @return true if the image is ready, false if not. In this case the
-	 * downSampledImageReady() signal will be emitted.
-	 */
-	bool prepareDownSampledImageForZoom(qreal zoom);
+    /**
+     * Prepare a version of the image down sampled to be a bit bigger than
+     * size() * @a zoom.
+     * Do not ask for a down sampled image for @a zoom >= to MaxDownSampledZoom.
+     *
+     * @return true if the image is ready, false if not. In this case the
+     * downSampledImageReady() signal will be emitted.
+     */
+    bool prepareDownSampledImageForZoom(qreal zoom);
 
-	LoadingState loadingState() const;
+    LoadingState loadingState() const;
 
-	MimeTypeUtils::Kind kind() const;
+    MimeTypeUtils::Kind kind() const;
 
-	bool isModified() const;
+    bool isModified() const;
 
-	const QImage& image() const;
+    const QImage& image() const;
 
-	const QImage& downSampledImageForZoom(qreal zoom) const;
+    const QImage& downSampledImageForZoom(qreal zoom) const;
 
-	/**
-	 * Returns an implementation of AbstractDocumentEditor if this document can
-	 * be edited.
-	 */
-	AbstractDocumentEditor* editor();
+    /**
+     * Returns an implementation of AbstractDocumentEditor if this document can
+     * be edited.
+     */
+    AbstractDocumentEditor* editor();
 
-	KUrl url() const;
+    KUrl url() const;
 
-	DocumentJob* save(const KUrl& url, const QByteArray& format);
+    DocumentJob* save(const KUrl& url, const QByteArray& format);
 
-	QByteArray format() const;
+    QByteArray format() const;
 
-	void waitUntilLoaded();
+    void waitUntilLoaded();
 
-	QSize size() const;
+    QSize size() const;
 
-	int width() const { return size().width(); }
+    int width() const {
+        return size().width();
+    }
 
-	int height() const { return size().height(); }
+    int height() const {
+        return size().height();
+    }
 
-	bool hasAlphaChannel() const;
+    bool hasAlphaChannel() const;
 
-	ImageMetaInfoModel* metaInfo() const;
+    ImageMetaInfoModel* metaInfo() const;
 
-	QUndoStack* undoStack() const;
+    QUndoStack* undoStack() const;
 
-	void setKeepRawData(bool);
+    void setKeepRawData(bool);
 
-	bool keepRawData() const;
+    bool keepRawData() const;
 
-	/**
-	 * Returns how much bytes the document is using
-	 */
-	int memoryUsage() const;
+    /**
+     * Returns how much bytes the document is using
+     */
+    int memoryUsage() const;
 
-	/**
-	 * Returns the compressed version of the document, if it is still
-	 * available.
-	 */
-	QByteArray rawData() const;
+    /**
+     * Returns the compressed version of the document, if it is still
+     * available.
+     */
+    QByteArray rawData() const;
 
-	/**
-	 * Returns true if the image can be edited.
-	 * You must ensure it has been fully loaded with startLoadingFullImage() first.
-	 */
-	bool isEditable() const;
+    /**
+     * Returns true if the image can be edited.
+     * You must ensure it has been fully loaded with startLoadingFullImage() first.
+     */
+    bool isEditable() const;
 
-	/**
-	 * Returns true if the image is animated (eg: gif or mng format)
-	 */
-	bool isAnimated() const;
+    /**
+     * Returns true if the image is animated (eg: gif or mng format)
+     */
+    bool isAnimated() const;
 
-	/**
-	 * Starts animation. Only sensible if isAnimated() returns true.
-	 */
-	void startAnimation();
+    /**
+     * Starts animation. Only sensible if isAnimated() returns true.
+     */
+    void startAnimation();
 
-	/**
-	 * Stops animation. Only sensible if isAnimated() returns true.
-	 */
-	void stopAnimation();
+    /**
+     * Stops animation. Only sensible if isAnimated() returns true.
+     */
+    void stopAnimation();
 
-	void enqueueJob(DocumentJob*);
+    void enqueueJob(DocumentJob*);
 
-	/**
-	 * Returns true if there are queued tasks for this document.
-	 */
-	bool isBusy() const;
+    /**
+     * Returns true if there are queued tasks for this document.
+     */
+    bool isBusy() const;
 
 Q_SIGNALS:
-	void downSampledImageReady();
-	void imageRectUpdated(const QRect&);
-	void kindDetermined(const KUrl&);
-	void metaInfoLoaded(const KUrl&);
-	void loaded(const KUrl&);
-	void loadingFailed(const KUrl&);
-	void saved(const KUrl& oldUrl, const KUrl& newUrl);
-	void modified(const KUrl&);
-	void metaInfoUpdated();
-	void isAnimatedUpdated();
-	void busyChanged(const KUrl&, bool);
-	void allTasksDone();
+    void downSampledImageReady();
+    void imageRectUpdated(const QRect&);
+    void kindDetermined(const KUrl&);
+    void metaInfoLoaded(const KUrl&);
+    void loaded(const KUrl&);
+    void loadingFailed(const KUrl&);
+    void saved(const KUrl& oldUrl, const KUrl& newUrl);
+    void modified(const KUrl&);
+    void metaInfoUpdated();
+    void isAnimatedUpdated();
+    void busyChanged(const KUrl&, bool);
+    void allTasksDone();
 
 private Q_SLOTS:
-	void emitMetaInfoLoaded();
-	void emitLoaded();
-	void emitLoadingFailed();
-	void slotUndoIndexChanged();
-	void slotSaveResult(KJob*);
-	void slotJobDestroyed(QObject*);
+    void emitMetaInfoLoaded();
+    void emitLoaded();
+    void emitLoadingFailed();
+    void slotUndoIndexChanged();
+    void slotSaveResult(KJob*);
+    void slotJobDestroyed(QObject*);
 
 private:
-	friend class DocumentFactory;
-	friend class AbstractDocumentImpl;
+    friend class DocumentFactory;
+    friend class AbstractDocumentImpl;
 
-	void setImageInternal(const QImage&);
-	void setKind(MimeTypeUtils::Kind);
-	void setFormat(const QByteArray&);
-	void setSize(const QSize&);
-	void setExiv2Image(Exiv2::Image::AutoPtr);
-	void setDownSampledImage(const QImage&, int invertedZoom);
-	void switchToImpl(AbstractDocumentImpl* impl);
-	void setErrorString(const QString&);
+    void setImageInternal(const QImage&);
+    void setKind(MimeTypeUtils::Kind);
+    void setFormat(const QByteArray&);
+    void setSize(const QSize&);
+    void setExiv2Image(Exiv2::Image::AutoPtr);
+    void setDownSampledImage(const QImage&, int invertedZoom);
+    void switchToImpl(AbstractDocumentImpl* impl);
+    void setErrorString(const QString&);
 
-	Document(const KUrl&);
-	DocumentPrivate * const d;
+    Document(const KUrl&);
+    DocumentPrivate * const d;
 };
 
 } // namespace

@@ -31,42 +31,41 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
-
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct GraphicsHudWidgetPrivate;
-class GWENVIEWLIB_EXPORT GraphicsHudWidget : public QGraphicsWidget {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT GraphicsHudWidget : public QGraphicsWidget
+{
+    Q_OBJECT
 public:
-	enum Option {
-		OptionNone                 = 0,
-		OptionCloseButton          = 1 << 1,
-		// FIXME: Ugly
-		OptionDoNotFollowChildSize = 1 << 2, /// Make it possible to resize the graphicshudwidget independently of child size
-		OptionOpaque               = 1 << 3
-	};
-	Q_DECLARE_FLAGS(Options, Option)
+    enum Option {
+        OptionNone                 = 0,
+        OptionCloseButton          = 1 << 1,
+        // FIXME: Ugly
+        OptionDoNotFollowChildSize = 1 << 2, /// Make it possible to resize the graphicshudwidget independently of child size
+        OptionOpaque               = 1 << 3
+    };
+    Q_DECLARE_FLAGS(Options, Option)
 
-	GraphicsHudWidget(QGraphicsWidget* parent = 0);
-	~GraphicsHudWidget();
+    GraphicsHudWidget(QGraphicsWidget* parent = 0);
+    ~GraphicsHudWidget();
 
-	void init(QWidget*, Options options);
+    void init(QWidget*, Options options);
 
-	QWidget* mainWidget() const;
+    QWidget* mainWidget() const;
 
-	void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
 
 Q_SIGNALS:
-	void closed();
+    void closed();
 
 private Q_SLOTS:
-	void slotCloseButtonClicked();
+    void slotCloseButtonClicked();
 
 private:
-	GraphicsHudWidgetPrivate* const d;
+    GraphicsHudWidgetPrivate* const d;
 };
-
 
 } // namespace
 

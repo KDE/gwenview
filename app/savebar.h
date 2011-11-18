@@ -31,37 +31,37 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 class KActionCollection;
 class KUrl;
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 class SaveBarPrivate;
-class SaveBar : public SlideContainer {
-	Q_OBJECT
+class SaveBar : public SlideContainer
+{
+    Q_OBJECT
 public:
-	SaveBar(QWidget* parent, KActionCollection* collection);
-	~SaveBar();
+    SaveBar(QWidget* parent, KActionCollection* collection);
+    ~SaveBar();
 
-	/**
-	 * Init widgets which depend on an initialized actionCollection
-	 */
-	void initActionDependentWidgets();
+    /**
+     * Init widgets which depend on an initialized actionCollection
+     */
+    void initActionDependentWidgets();
 
-	void setCurrentUrl(const KUrl&);
+    void setCurrentUrl(const KUrl&);
 
-	void setFullScreenMode(bool);
+    void setFullScreenMode(bool);
 
 Q_SIGNALS:
-	void requestSaveAll();
-	void goToUrl(const KUrl&);
+    void requestSaveAll();
+    void goToUrl(const KUrl&);
 
 private:
-	SaveBarPrivate* const d;
+    SaveBarPrivate* const d;
 
 private Q_SLOTS:
-	void updateContent();
-	void triggerAction(const QString& action);
+    void updateContent();
+    void triggerAction(const QString& action);
 };
-
 
 } // namespace
 

@@ -24,49 +24,48 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QPainter>
 #include <QSplitter>
 
+namespace Gwenview
+{
 
-namespace Gwenview {
-
-
-class SplitterHandle : public QSplitterHandle {
+class SplitterHandle : public QSplitterHandle
+{
 public:
-	SplitterHandle(Qt::Orientation orientation, QSplitter* parent)
-	: QSplitterHandle(orientation, parent) {}
+    SplitterHandle(Qt::Orientation orientation, QSplitter* parent)
+        : QSplitterHandle(orientation, parent) {}
 
 protected:
-	virtual void paintEvent(QPaintEvent* event) {
-		QSplitterHandle::paintEvent(event);
+    virtual void paintEvent(QPaintEvent* event) {
+        QSplitterHandle::paintEvent(event);
 
-		QPainter painter(this);
-		painter.setPen(palette().mid().color());
-		if (orientation() == Qt::Vertical) {
-			painter.drawLine(rect().topLeft(), rect().topRight());
-			painter.drawLine(rect().bottomLeft(), rect().bottomRight());
-		} else {
-			//painter.drawLine(rect().topLeft(), rect().bottomLeft());
-			painter.drawLine(rect().topRight(), rect().bottomRight());
-		}
-	}
+        QPainter painter(this);
+        painter.setPen(palette().mid().color());
+        if (orientation() == Qt::Vertical) {
+            painter.drawLine(rect().topLeft(), rect().topRight());
+            painter.drawLine(rect().bottomLeft(), rect().bottomRight());
+        } else {
+            //painter.drawLine(rect().topLeft(), rect().bottomLeft());
+            painter.drawLine(rect().topRight(), rect().bottomRight());
+        }
+    }
 };
-
 
 /**
  * Home made splitter to be able to define a custom handle which is border with
  * "mid" colored lines.
  */
-class Splitter : public QSplitter {
+class Splitter : public QSplitter
+{
 public:
-	Splitter(Qt::Orientation orientation, QWidget* parent)
-	: QSplitter(orientation, parent) {
-		setHandleWidth(handleWidth() + 2);
-	}
+    Splitter(Qt::Orientation orientation, QWidget* parent)
+        : QSplitter(orientation, parent) {
+        setHandleWidth(handleWidth() + 2);
+    }
 
 protected:
-	virtual QSplitterHandle* createHandle() {
-		return new SplitterHandle(orientation(), this);
-	}
+    virtual QSplitterHandle* createHandle() {
+        return new SplitterHandle(orientation(), this);
+    }
 };
-
 
 } // namespace
 

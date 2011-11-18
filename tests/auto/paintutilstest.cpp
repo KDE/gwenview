@@ -23,19 +23,21 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include "paintutilstest.moc"
 
-QTEST_KDEMAIN( PaintUtilsTest, GUI )
+QTEST_KDEMAIN(PaintUtilsTest, GUI)
 
-void PaintUtilsTest::testScaledRect_data() {
-	QTest::addColumn<QRectF>("input");
-	QTest::addColumn<QRect>("expected");
+void PaintUtilsTest::testScaledRect_data()
+{
+    QTest::addColumn<QRectF>("input");
+    QTest::addColumn<QRect>("expected");
 
-	QTest::newRow("overflow right") << QRectF(1.0, 1.0, 2.7, 3.2) << QRect(1, 1, 3, 4);
-	QTest::newRow("overflow left")  << QRectF(0.5, 1.0, 2.0, 3.2) << QRect(0, 1, 3, 4);
-	QTest::newRow("overflow both")  << QRectF(0.5, 1.0, 2.6, 3.2) << QRect(0, 1, 4, 4);
+    QTest::newRow("overflow right") << QRectF(1.0, 1.0, 2.7, 3.2) << QRect(1, 1, 3, 4);
+    QTest::newRow("overflow left")  << QRectF(0.5, 1.0, 2.0, 3.2) << QRect(0, 1, 3, 4);
+    QTest::newRow("overflow both")  << QRectF(0.5, 1.0, 2.6, 3.2) << QRect(0, 1, 4, 4);
 }
 
-void PaintUtilsTest::testScaledRect() {
-	QFETCH(QRectF, input);
-	QFETCH(QRect,  expected);
-	QCOMPARE(Gwenview::PaintUtils::containingRect(input), expected);
+void PaintUtilsTest::testScaledRect()
+{
+    QFETCH(QRectF, input);
+    QFETCH(QRect,  expected);
+    QCOMPARE(Gwenview::PaintUtils::containingRect(input), expected);
 }

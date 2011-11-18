@@ -34,35 +34,36 @@ class QShowEvent;
 
 class KUrl;
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 class GvCore;
 
 class StartPagePrivate;
-class StartPage : public QFrame {
-	Q_OBJECT
+class StartPage : public QFrame
+{
+    Q_OBJECT
 public:
-	StartPage(QWidget* parent, GvCore*);
-	~StartPage();
+    StartPage(QWidget* parent, GvCore*);
+    ~StartPage();
 
-	void applyPalette(const QPalette&);
+    void applyPalette(const QPalette&);
 
 Q_SIGNALS:
-	void urlSelected(const KUrl& url);
+    void urlSelected(const KUrl& url);
 
 protected:
-	virtual void showEvent(QShowEvent*);
+    virtual void showEvent(QShowEvent*);
 
 private Q_SLOTS:
-	void slotListViewActivated(const QModelIndex& index);
-	void showRecentFoldersViewContextMenu(const QPoint& pos);
-	void slotTagViewClicked(const QModelIndex& index);
-	void slotConfigChanged();
+    void slotListViewActivated(const QModelIndex& index);
+    void showRecentFoldersViewContextMenu(const QPoint& pos);
+    void slotTagViewClicked(const QModelIndex& index);
+    void slotConfigChanged();
 
 private:
-	StartPagePrivate* const d;
+    StartPagePrivate* const d;
 };
-
 
 } // namespace
 

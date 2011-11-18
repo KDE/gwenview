@@ -28,30 +28,31 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Local
 #include "gwenviewlib_export.h"
 
-
-namespace Gwenview {
+namespace Gwenview
+{
 
 /**
  * This class emits a signal when some events are triggered on a watched
  * object.
  */
-class GWENVIEWLIB_EXPORT EventWatcher : public QObject {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT EventWatcher : public QObject
+{
+    Q_OBJECT
 public:
-	EventWatcher(QObject* watched, const QList<QEvent::Type>& eventTypes);
+    EventWatcher(QObject* watched, const QList<QEvent::Type>& eventTypes);
 
-	static EventWatcher* install(QObject* watched, const QList<QEvent::Type>& eventTypes, QObject* receiver, const char* slot);
+    static EventWatcher* install(QObject* watched, const QList<QEvent::Type>& eventTypes, QObject* receiver, const char* slot);
 
-	static EventWatcher* install(QObject* watched, QEvent::Type eventType, QObject* receiver, const char* slot);
+    static EventWatcher* install(QObject* watched, QEvent::Type eventType, QObject* receiver, const char* slot);
 
 Q_SIGNALS:
-	void eventTriggered(QEvent*);
+    void eventTriggered(QEvent*);
 
 protected:
-	virtual bool eventFilter(QObject*, QEvent* event);
+    virtual bool eventFilter(QObject*, QEvent* event);
 
 private:
-	QList<QEvent::Type> mEventTypes;
+    QList<QEvent::Type> mEventTypes;
 };
 
 }

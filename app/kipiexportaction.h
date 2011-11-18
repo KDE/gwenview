@@ -28,27 +28,28 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 class KIPIInterface;
 
 class KIPIExportActionPrivate;
-class KIPIExportAction : public KToolBarPopupAction {
-	Q_OBJECT
+class KIPIExportAction : public KToolBarPopupAction
+{
+    Q_OBJECT
 public:
-	KIPIExportAction(QObject* parent);
-	~KIPIExportAction();
+    KIPIExportAction(QObject* parent);
+    ~KIPIExportAction();
 
-	void setKIPIInterface(KIPIInterface*);
+    void setKIPIInterface(KIPIInterface*);
 
 private Q_SLOTS:
-	void init();
-	void setDefaultAction(QAction*);
+    void init();
+    void setDefaultAction(QAction*);
 
 private:
-	KIPIExportActionPrivate* const d;
+    KIPIExportActionPrivate* const d;
 };
-
 
 } // namespace
 

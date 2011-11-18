@@ -32,19 +32,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 QObject* qt_plugin_instance_JpegPlugin();
 
-namespace ImageFormats {
+namespace ImageFormats
+{
 
 static bool sPluginsRegistered = false;
-void registerPlugins() {
-	if (sPluginsRegistered) {
-		return;
-	}
-	sPluginsRegistered = true;
-	qRegisterStaticPluginInstanceFunction(qt_plugin_instance_JpegPlugin);
+void registerPlugins()
+{
+    if (sPluginsRegistered) {
+        return;
+    }
+    sPluginsRegistered = true;
+    qRegisterStaticPluginInstanceFunction(qt_plugin_instance_JpegPlugin);
 }
 
 } // namespace

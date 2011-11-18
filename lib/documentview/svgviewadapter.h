@@ -34,62 +34,68 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 class QGraphicsSvgItem;
 
-namespace Gwenview {
+namespace Gwenview
+{
 
-class SvgImageView : public AbstractImageView {
-	Q_OBJECT
+class SvgImageView : public AbstractImageView
+{
+    Q_OBJECT
 public:
     SvgImageView(QGraphicsItem* parent = 0);
 
-	QSizeF documentSize() const;
+    QSizeF documentSize() const;
 
 protected:
-	void loadFromDocument();
-	void onZoomChanged();
-	void onImageOffsetChanged();
-	void onScrollPosChanged(const QPointF& oldPos);
+    void loadFromDocument();
+    void onZoomChanged();
+    void onImageOffsetChanged();
+    void onScrollPosChanged(const QPointF& oldPos);
 
 private:
-	QGraphicsSvgItem* mSvgItem;
-	void adjustItemPos();
+    QGraphicsSvgItem* mSvgItem;
+    void adjustItemPos();
 };
 
 struct SvgViewAdapterPrivate;
-class GWENVIEWLIB_EXPORT SvgViewAdapter : public AbstractDocumentViewAdapter {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT SvgViewAdapter : public AbstractDocumentViewAdapter
+{
+    Q_OBJECT
 public:
-	SvgViewAdapter();
-	~SvgViewAdapter();
+    SvgViewAdapter();
+    ~SvgViewAdapter();
 
-	virtual QCursor cursor() const;
+    virtual QCursor cursor() const;
 
-	virtual void setCursor(const QCursor&);
+    virtual void setCursor(const QCursor&);
 
-	virtual void setDocument(Document::Ptr);
+    virtual void setDocument(Document::Ptr);
 
-	virtual Document::Ptr document() const;
+    virtual Document::Ptr document() const;
 
-	virtual MimeTypeUtils::Kind kind() const { return MimeTypeUtils::KIND_SVG_IMAGE; }
+    virtual MimeTypeUtils::Kind kind() const {
+        return MimeTypeUtils::KIND_SVG_IMAGE;
+    }
 
-	virtual bool canZoom() const { return true; }
+    virtual bool canZoom() const {
+        return true;
+    }
 
-	virtual void setZoomToFit(bool);
+    virtual void setZoomToFit(bool);
 
-	virtual bool zoomToFit() const;
+    virtual bool zoomToFit() const;
 
-	virtual qreal zoom() const;
+    virtual qreal zoom() const;
 
-	virtual void setZoom(qreal /*zoom*/, const QPointF& /*center*/ = QPointF(-1, -1));
+    virtual void setZoom(qreal /*zoom*/, const QPointF& /*center*/ = QPointF(-1, -1));
 
-	virtual qreal computeZoomToFit() const;
+    virtual qreal computeZoomToFit() const;
 
-	virtual QPointF scrollPos() const;
-	virtual void setScrollPos(const QPointF& pos);
+    virtual QPointF scrollPos() const;
+    virtual void setScrollPos(const QPointF& pos);
 
 private:
-	SvgViewAdapterPrivate* const d;
+    SvgViewAdapterPrivate* const d;
 };
-
 
 } // namespace
 

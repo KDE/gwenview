@@ -31,83 +31,83 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "document/abstractdocumenteditor.h"
 #include "document/documentjob.h"
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct TransformImageOperationPrivate {
-	Orientation mOrientation;
+    Orientation mOrientation;
 };
 
-
-class TransformJob : public ThreadedDocumentJob {
+class TransformJob : public ThreadedDocumentJob
+{
 public:
-	TransformJob(Orientation orientation)
-	: mOrientation(orientation)
-	{}
+    TransformJob(Orientation orientation)
+        : mOrientation(orientation)
+    {}
 
-	virtual void threadedStart() {
-		if (!checkDocumentEditor()) {
-			return;
-		}
-		document()->editor()->applyTransformation(mOrientation);
-		setError(NoError);
-	}
+    virtual void threadedStart()
+    {
+        if (!checkDocumentEditor()) {
+            return;
+        }
+        document()->editor()->applyTransformation(mOrientation);
+        setError(NoError);
+    }
 
 private:
-	Orientation mOrientation;
+    Orientation mOrientation;
 };
 
-
 TransformImageOperation::TransformImageOperation(Orientation orientation)
-: d(new TransformImageOperationPrivate) {
-	d->mOrientation = orientation;
-	switch (d->mOrientation) {
-	case ROT_90:
-		setText(i18nc("(qtundo-format)", "Rotate Right"));
-		break;
-	case ROT_270:
-		setText(i18nc("(qtundo-format)", "Rotate Left"));
-		break;
-	case HFLIP:
-		setText(i18nc("(qtundo-format)", "Mirror"));
-		break;
-	case VFLIP:
-		setText(i18nc("(qtundo-format)", "Flip"));
-		break;
-	default:
-		// We should not get there because the transformations listed above are
-		// the only one available from the UI. Define a default text nevertheless.
-		setText(i18nc("(qtundo-format)", "Transform"));
-		break;
-	}
+: d(new TransformImageOperationPrivate)
+{
+    d->mOrientation = orientation;
+    switch (d->mOrientation) {
+    case ROT_90:
+        setText(i18nc("(qtundo-format)", "Rotate Right"));
+        break;
+    case ROT_270:
+        setText(i18nc("(qtundo-format)", "Rotate Left"));
+        break;
+    case HFLIP:
+        setText(i18nc("(qtundo-format)", "Mirror"));
+        break;
+    case VFLIP:
+        setText(i18nc("(qtundo-format)", "Flip"));
+        break;
+    default:
+        // We should not get there because the transformations listed above are
+        // the only one available from the UI. Define a default text nevertheless.
+        setText(i18nc("(qtundo-format)", "Transform"));
+        break;
+    }
 }
 
-
-TransformImageOperation::~TransformImageOperation() {
-	delete d;
+TransformImageOperation::~TransformImageOperation()
+{
+    delete d;
 }
 
-
-void TransformImageOperation::redo() {
-	redoAsDocumentJob(new TransformJob(d->mOrientation));
+void TransformImageOperation::redo()
+{
+    redoAsDocumentJob(new TransformJob(d->mOrientation));
 }
 
-
-void TransformImageOperation::undo() {
-	Orientation orientation;
-	switch (d->mOrientation) {
-	case ROT_90:
-		orientation = ROT_270;
-		break;
-	case ROT_270:
-		orientation = ROT_90;
-		break;
-	default:
-		orientation = d->mOrientation;
-		break;
-	}
-	document()->enqueueJob(new TransformJob(orientation));
+void TransformImageOperation::undo()
+{
+    Orientation orientation;
+    switch (d->mOrientation) {
+    case ROT_90:
+        orientation = ROT_270;
+        break;
+    case ROT_270:
+        orientation = ROT_90;
+        break;
+    default:
+        orientation = d->mOrientation;
+        break;
+    }
+    document()->enqueueJob(new TransformJob(orientation));
 }
-
 
 } // namespace

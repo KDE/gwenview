@@ -33,35 +33,36 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 class QByteArray;
 class KUrl;
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 class DocumentLoadedImpl;
 
 class SaveJobPrivate;
-class GWENVIEWLIB_EXPORT SaveJob : public DocumentJob {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT SaveJob : public DocumentJob
+{
+    Q_OBJECT
 public:
-	SaveJob(DocumentLoadedImpl* impl, const KUrl& url, const QByteArray& format);
-	~SaveJob();
-	void saveInternal();
+    SaveJob(DocumentLoadedImpl* impl, const KUrl& url, const QByteArray& format);
+    ~SaveJob();
+    void saveInternal();
 
-	KUrl oldUrl() const;
-	KUrl newUrl() const;
+    KUrl oldUrl() const;
+    KUrl newUrl() const;
 
 protected Q_SLOTS:
-	virtual void doStart();
-	virtual void slotResult(KJob*);
+    virtual void doStart();
+    virtual void slotResult(KJob*);
 
 protected:
-	virtual bool doKill();
+    virtual bool doKill();
 
 private Q_SLOTS:
-	void finishSave();
+    void finishSave();
 
 private:
-	SaveJobPrivate* const d;
+    SaveJobPrivate* const d;
 };
-
 
 } // namespace
 

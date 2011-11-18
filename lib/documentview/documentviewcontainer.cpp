@@ -37,178 +37,183 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // libc
 #include <qmath.h>
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 typedef QSet<DocumentView*> DocumentViewSet;
 
 struct DocumentViewContainerPrivate {
-	DocumentViewContainer* q;
-	QGraphicsScene* mScene;
-	DocumentViewSet mViews;
-	DocumentViewSet mAddedViews;
-	DocumentViewSet mRemovedViews;
-	QTimer* mLayoutUpdateTimer;
+    DocumentViewContainer* q;
+    QGraphicsScene* mScene;
+    DocumentViewSet mViews;
+    DocumentViewSet mAddedViews;
+    DocumentViewSet mRemovedViews;
+    QTimer* mLayoutUpdateTimer;
 
-	void scheduleLayoutUpdate() {
-		mLayoutUpdateTimer->start();
-	}
+    void scheduleLayoutUpdate()
+    {
+        mLayoutUpdateTimer->start();
+    }
 
-	bool removeFromSet(DocumentView* view, DocumentViewSet* set) {
-		DocumentViewSet::Iterator it = set->find(view);
-		if (it == set->end()) {
-			return false;
-		}
-		set->erase(it);
-		mRemovedViews << *it;
-		scheduleLayoutUpdate();
-		return true;
-	}
+    bool removeFromSet(DocumentView* view, DocumentViewSet* set)
+    {
+        DocumentViewSet::Iterator it = set->find(view);
+        if (it == set->end()) {
+            return false;
+        }
+        set->erase(it);
+        mRemovedViews << *it;
+        scheduleLayoutUpdate();
+        return true;
+    }
 };
-
 
 DocumentViewContainer::DocumentViewContainer(QWidget* parent)
 : QGraphicsView(parent)
-, d(new DocumentViewContainerPrivate) {
-	d->q = this;
-	d->mScene = new QGraphicsScene(this);
-	setViewport(new QGLWidget);
-	setScene(d->mScene);
-	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+, d(new DocumentViewContainerPrivate)
+{
+    d->q = this;
+    d->mScene = new QGraphicsScene(this);
+    setViewport(new QGLWidget);
+    setScene(d->mScene);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-	setFrameStyle(QFrame::NoFrame);
-	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setFrameStyle(QFrame::NoFrame);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-	d->mLayoutUpdateTimer = new QTimer(this);
-	d->mLayoutUpdateTimer->setInterval(0);
-	d->mLayoutUpdateTimer->setSingleShot(true);
-	connect(d->mLayoutUpdateTimer, SIGNAL(timeout()), SLOT(updateLayout()));
+    d->mLayoutUpdateTimer = new QTimer(this);
+    d->mLayoutUpdateTimer->setInterval(0);
+    d->mLayoutUpdateTimer->setSingleShot(true);
+    connect(d->mLayoutUpdateTimer, SIGNAL(timeout()), SLOT(updateLayout()));
 }
 
-
-DocumentViewContainer::~DocumentViewContainer() {
-	delete d;
+DocumentViewContainer::~DocumentViewContainer()
+{
+    delete d;
 }
 
-
-DocumentView* DocumentViewContainer::createView() {
-	DocumentView* view = new DocumentView(d->mScene);
-	d->mAddedViews << view;
-	view->show();
-	connect(view, SIGNAL(animationFinished(DocumentView*)),
-		SLOT(slotViewAnimationFinished(DocumentView*)));
-	d->scheduleLayoutUpdate();
-	return view;
+DocumentView* DocumentViewContainer::createView()
+{
+    DocumentView* view = new DocumentView(d->mScene);
+    d->mAddedViews << view;
+    view->show();
+    connect(view, SIGNAL(animationFinished(DocumentView*)),
+            SLOT(slotViewAnimationFinished(DocumentView*)));
+    d->scheduleLayoutUpdate();
+    return view;
 }
 
-
-void DocumentViewContainer::removeView(DocumentView* view) {
-	if (d->removeFromSet(view, &d->mViews)) {
-		return;
-	}
-	d->removeFromSet(view, &d->mAddedViews);
+void DocumentViewContainer::removeView(DocumentView* view)
+{
+    if (d->removeFromSet(view, &d->mViews)) {
+        return;
+    }
+    d->removeFromSet(view, &d->mAddedViews);
 }
 
-
-void DocumentViewContainer::showEvent(QShowEvent* event) {
-	QWidget::showEvent(event);
-	updateLayout();
+void DocumentViewContainer::showEvent(QShowEvent* event)
+{
+    QWidget::showEvent(event);
+    updateLayout();
 }
 
-
-void DocumentViewContainer::resizeEvent(QResizeEvent* event) {
-	QWidget::resizeEvent(event);
-	d->mScene->setSceneRect(rect());
-	updateLayout();
+void DocumentViewContainer::resizeEvent(QResizeEvent* event)
+{
+    QWidget::resizeEvent(event);
+    d->mScene->setSceneRect(rect());
+    updateLayout();
 }
 
-void DocumentViewContainer::updateLayout() {
-	// Stop update timer: this is useful if updateLayout() is called directly
-	// and not through scheduleLayoutUpdate()
-	d->mLayoutUpdateTimer->stop();
-	DocumentViewSet views = d->mViews | d->mAddedViews;
+void DocumentViewContainer::updateLayout()
+{
+    // Stop update timer: this is useful if updateLayout() is called directly
+    // and not through scheduleLayoutUpdate()
+    d->mLayoutUpdateTimer->stop();
+    DocumentViewSet views = d->mViews | d->mAddedViews;
 
-	if (!views.isEmpty()) {
-		// Compute column count
-		int colCount;
-		switch (views.count()) {
-		case 1:
-			colCount = 1;
-			break;
-		case 2:
-			colCount = 2;
-			break;
-		case 3:
-			colCount = 3;
-			break;
-		case 4:
-			colCount = 2;
-			break;
-		case 5:
-			colCount = 3;
-			break;
-		case 6:
-			colCount = 3;
-			break;
-		default:
-			colCount = 3;
-			break;
-		}
+    if (!views.isEmpty()) {
+        // Compute column count
+        int colCount;
+        switch (views.count()) {
+        case 1:
+            colCount = 1;
+            break;
+        case 2:
+            colCount = 2;
+            break;
+        case 3:
+            colCount = 3;
+            break;
+        case 4:
+            colCount = 2;
+            break;
+        case 5:
+            colCount = 3;
+            break;
+        case 6:
+            colCount = 3;
+            break;
+        default:
+            colCount = 3;
+            break;
+        }
 
-		int rowCount = qCeil(views.count() / qreal(colCount));
-		Q_ASSERT(rowCount > 0);
-		int viewWidth = width() / colCount;
-		int viewHeight = height() / rowCount;
+        int rowCount = qCeil(views.count() / qreal(colCount));
+        Q_ASSERT(rowCount > 0);
+        int viewWidth = width() / colCount;
+        int viewHeight = height() / rowCount;
 
-		int col = 0;
-		int row = 0;
+        int col = 0;
+        int row = 0;
 
-		Q_FOREACH(DocumentView* view, views) {
-			QRect rect;
-			rect.setLeft(col * viewWidth);
-			rect.setTop(row * viewHeight);
-			rect.setWidth(viewWidth);
-			rect.setHeight(viewHeight);
+        Q_FOREACH(DocumentView * view, views) {
+            QRect rect;
+            rect.setLeft(col * viewWidth);
+            rect.setTop(row * viewHeight);
+            rect.setWidth(viewWidth);
+            rect.setHeight(viewHeight);
 
-			if (d->mViews.contains(view)) {
-				if (rect != view->geometry()) {
-					if (d->mAddedViews.isEmpty() && d->mRemovedViews.isEmpty()) {
-						// View moves because of a resize
-						view->moveTo(rect);
-					} else {
-						// View moves because the number of views changed,
-						// animate the change
-						view->moveToAnimated(rect);
-					}
-				}
-			} else {
-				view->setGeometry(rect);
-				view->fadeIn();
-			}
+            if (d->mViews.contains(view)) {
+                if (rect != view->geometry()) {
+                    if (d->mAddedViews.isEmpty() && d->mRemovedViews.isEmpty()) {
+                        // View moves because of a resize
+                        view->moveTo(rect);
+                    } else {
+                        // View moves because the number of views changed,
+                        // animate the change
+                        view->moveToAnimated(rect);
+                    }
+                }
+            } else {
+                view->setGeometry(rect);
+                view->fadeIn();
+            }
 
-			++col;
-			if (col == colCount) {
-				col = 0;
-				++row;
-			}
-		}
-	}
+            ++col;
+            if (col == colCount) {
+                col = 0;
+                ++row;
+            }
+        }
+    }
 
-	Q_FOREACH(DocumentView* view, d->mRemovedViews) {
-		view->fadeOut();
-	}
+    Q_FOREACH(DocumentView * view, d->mRemovedViews) {
+        view->fadeOut();
+    }
 }
 
-void DocumentViewContainer::slotViewAnimationFinished(DocumentView* view) {
-	if (d->mRemovedViews.contains(view)) {
-		d->mRemovedViews.remove(view);
-		delete view;
-		return;
-	}
-	if (d->mAddedViews.contains(view)) {
-		d->mAddedViews.remove(view);
-		d->mViews.insert(view);
-	}
+void DocumentViewContainer::slotViewAnimationFinished(DocumentView* view)
+{
+    if (d->mRemovedViews.contains(view)) {
+        d->mRemovedViews.remove(view);
+        delete view;
+        return;
+    }
+    if (d->mAddedViews.contains(view)) {
+        d->mAddedViews.remove(view);
+        d->mViews.insert(view);
+    }
 }
 
 } // namespace

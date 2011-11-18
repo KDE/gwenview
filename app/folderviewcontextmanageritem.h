@@ -32,30 +32,30 @@ class QModelIndex;
 
 class KUrl;
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct FolderViewContextManagerItemPrivate;
-class FolderViewContextManagerItem : public AbstractContextManagerItem {
-	Q_OBJECT
+class FolderViewContextManagerItem : public AbstractContextManagerItem
+{
+    Q_OBJECT
 public:
-	FolderViewContextManagerItem(ContextManager*);
-	~FolderViewContextManagerItem();
+    FolderViewContextManagerItem(ContextManager*);
+    ~FolderViewContextManagerItem();
 
 Q_SIGNALS:
-	void urlChanged(const KUrl&);
+    void urlChanged(const KUrl&);
 
 private Q_SLOTS:
-	void slotCurrentDirUrlChanged();
-	void expandToSelectedUrl();
-	void slotRowsInserted(const QModelIndex&, int start, int end);
-	void slotActivated(const QModelIndex&);
+    void slotCurrentDirUrlChanged();
+    void expandToSelectedUrl();
+    void slotRowsInserted(const QModelIndex&, int start, int end);
+    void slotActivated(const QModelIndex&);
 
 private:
-	friend class FolderViewContextManagerItemPrivate;
-	FolderViewContextManagerItemPrivate* const d;
+    friend class FolderViewContextManagerItemPrivate;
+    FolderViewContextManagerItemPrivate* const d;
 };
-
 
 } // namespace
 

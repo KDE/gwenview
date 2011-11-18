@@ -36,7 +36,8 @@ class QToolButton;
 class KActionCollection;
 class KUrlNavigator;
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 class SortedDirModel;
 class ThumbnailView;
@@ -46,40 +47,40 @@ struct ThumbnailViewPanelPrivate;
  * This class contains all the necessary widgets displayed in browse mode:
  * the thumbnail view, the url navigator, the bottom bar.
  */
-class ThumbnailViewPanel : public QWidget {
-	Q_OBJECT
+class ThumbnailViewPanel : public QWidget
+{
+    Q_OBJECT
 public:
-	ThumbnailViewPanel(QWidget* parent, SortedDirModel*, KActionCollection*);
-	~ThumbnailViewPanel();
+    ThumbnailViewPanel(QWidget* parent, SortedDirModel*, KActionCollection*);
+    ~ThumbnailViewPanel();
 
-	void applyPalette(const QPalette&);
+    void applyPalette(const QPalette&);
 
-	void reload();
+    void reload();
 
-	ThumbnailView* thumbnailView() const;
-	KUrlNavigator* urlNavigator() const;
+    ThumbnailView* thumbnailView() const;
+    KUrlNavigator* urlNavigator() const;
 
-	void loadConfig();
-	void saveConfig() const;
+    void loadConfig();
+    void saveConfig() const;
 
-	QToolButton* toggleSideBarButton() const;
+    QToolButton* toggleSideBarButton() const;
 
 private Q_SLOTS:
-	void editLocation();
-	void addFolderToPlaces();
+    void editLocation();
+    void addFolderToPlaces();
 
-	void slotDirModelRowsInserted(const QModelIndex& parent, int start, int end);
-	void slotDirModelRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
-	void slotDirModelReset();
-	void updateSortOrder();
-	void updateThumbnailDetails();
-	void slotUrlsDropped(const KUrl& destUrl, QDropEvent*);
-	void showMenuForDroppedUrls(const KUrl::List&, const KUrl& destUrl);
+    void slotDirModelRowsInserted(const QModelIndex& parent, int start, int end);
+    void slotDirModelRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
+    void slotDirModelReset();
+    void updateSortOrder();
+    void updateThumbnailDetails();
+    void slotUrlsDropped(const KUrl& destUrl, QDropEvent*);
+    void showMenuForDroppedUrls(const KUrl::List&, const KUrl& destUrl);
 
 private:
-	ThumbnailViewPanelPrivate* const d;
+    ThumbnailViewPanelPrivate* const d;
 };
-
 
 } // namespace
 

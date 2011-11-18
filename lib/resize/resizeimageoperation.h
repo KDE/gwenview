@@ -30,22 +30,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Local
 #include <lib/abstractimageoperation.h>
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct ResizeImageOperationPrivate;
-class GWENVIEWLIB_EXPORT ResizeImageOperation : public AbstractImageOperation {
+class GWENVIEWLIB_EXPORT ResizeImageOperation : public AbstractImageOperation
+{
 public:
-	ResizeImageOperation(const QSize& size);
-	~ResizeImageOperation();
+    ResizeImageOperation(const QSize& size);
+    ~ResizeImageOperation();
 
-	virtual void redo();
-	virtual void undo();
+    virtual void redo();
+    virtual void undo();
 
 private:
-	ResizeImageOperationPrivate* const d;
+    ResizeImageOperationPrivate* const d;
 };
-
 
 } // namespace
 

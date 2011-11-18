@@ -33,47 +33,47 @@ class QStringList;
 class KActionCollection;
 class KUrl;
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 class FullScreenBar;
 class SlideShow;
 
 class ThumbnailBarView;
 
-
 struct FullScreenContentPrivate;
 /**
  * The content of the fullscreen bar
  */
-class FullScreenContent : public QObject {
-	Q_OBJECT
+class FullScreenContent : public QObject
+{
+    Q_OBJECT
 public:
-	FullScreenContent(FullScreenBar* parent, KActionCollection*, SlideShow*);
-	~FullScreenContent();
+    FullScreenContent(FullScreenBar* parent, KActionCollection*, SlideShow*);
+    ~FullScreenContent();
 
-	ThumbnailBarView* thumbnailBar() const;
+    ThumbnailBarView* thumbnailBar() const;
 
-	void setCurrentUrl(const KUrl&);
+    void setCurrentUrl(const KUrl&);
 
 protected:
-	bool eventFilter(QObject*, QEvent*);
+    bool eventFilter(QObject*, QEvent*);
 
 private Q_SLOTS:
-	void updateInformationLabel();
-	void updateMetaInfoDialog();
-	void showImageMetaInfoDialog();
-	void slotPreferredMetaInfoKeyListChanged(const QStringList& list);
-	void showFullScreenConfigDialog();
-	void updateSlideShowIntervalLabel();
-	void setCurrentFullScreenTheme(const QString& themeName);
-	void setFullScreenBarHeight(int value);
-	void enableAutoHiding();
-	void slotShowThumbnailsToggled(bool value);
+    void updateInformationLabel();
+    void updateMetaInfoDialog();
+    void showImageMetaInfoDialog();
+    void slotPreferredMetaInfoKeyListChanged(const QStringList& list);
+    void showFullScreenConfigDialog();
+    void updateSlideShowIntervalLabel();
+    void setCurrentFullScreenTheme(const QString& themeName);
+    void setFullScreenBarHeight(int value);
+    void enableAutoHiding();
+    void slotShowThumbnailsToggled(bool value);
 
 private:
-	FullScreenContentPrivate* const d;
+    FullScreenContentPrivate* const d;
 };
-
 
 } // namespace
 

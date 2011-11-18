@@ -27,19 +27,21 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
-namespace Gwenview {
+namespace Gwenview
+{
 
-namespace Sorting {
-	/**
-	 * This enum represents the different sorting orders.
-	 * For now it maps with KDirModel::ModelColumns, but in the future it may
-	 * be possible to add custom sort orders like Rating.
-	 */
-	enum Enum {
-		Name,
-		Size,
-		Date
-	};
+namespace Sorting
+{
+/**
+ * This enum represents the different sorting orders.
+ * For now it maps with KDirModel::ModelColumns, but in the future it may
+ * be possible to add custom sort orders like Rating.
+ */
+enum Enum {
+    Name,
+    Size,
+    Date
+};
 
 } // namespace Sorting
 

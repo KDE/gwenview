@@ -42,147 +42,147 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "hudwidget.h"
 #include "widgetfloater.h"
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct VideoViewAdapterPrivate {
-	VideoViewAdapter* q;
-	Phonon::MediaObject* mMediaObject;
-	Phonon::VideoWidget* mVideoWidget;
-	Phonon::AudioOutput* mAudioOutput;
-	HudWidget* mHud;
-	WidgetFloater* mFloater;
-	QToolButton* mPlayPauseButton;
+    VideoViewAdapter* q;
+    Phonon::MediaObject* mMediaObject;
+    Phonon::VideoWidget* mVideoWidget;
+    Phonon::AudioOutput* mAudioOutput;
+    HudWidget* mHud;
+    WidgetFloater* mFloater;
+    QToolButton* mPlayPauseButton;
 
-	Document::Ptr mDocument;
+    Document::Ptr mDocument;
 
-	void setupHud(QWidget* parent) {
-		// Create hud content
-		QWidget* widget = new QWidget;
-		QHBoxLayout* layout = new QHBoxLayout(widget);
+    void setupHud(QWidget* parent)
+    {
+        // Create hud content
+        QWidget* widget = new QWidget;
+        QHBoxLayout* layout = new QHBoxLayout(widget);
 
-		mPlayPauseButton = new QToolButton;
-		mPlayPauseButton->setAutoRaise(true);
-		q->updatePlayPauseButton();
-		QObject::connect(mPlayPauseButton, SIGNAL(clicked()),
-			q, SLOT(slotPlayPauseClicked()));
-		QObject::connect(mMediaObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)),
-			q, SLOT(updatePlayPauseButton()));
+        mPlayPauseButton = new QToolButton;
+        mPlayPauseButton->setAutoRaise(true);
+        q->updatePlayPauseButton();
+        QObject::connect(mPlayPauseButton, SIGNAL(clicked()),
+                         q, SLOT(slotPlayPauseClicked()));
+        QObject::connect(mMediaObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
+                         q, SLOT(updatePlayPauseButton()));
 
-		Phonon::SeekSlider* seekSlider = new Phonon::SeekSlider;
-		seekSlider->setTracking(false);
-		seekSlider->setIconVisible(false);
-		seekSlider->setMediaObject(mMediaObject);
+        Phonon::SeekSlider* seekSlider = new Phonon::SeekSlider;
+        seekSlider->setTracking(false);
+        seekSlider->setIconVisible(false);
+        seekSlider->setMediaObject(mMediaObject);
 
-		Phonon::VolumeSlider* volumeSlider = new Phonon::VolumeSlider;
-		volumeSlider->setAudioOutput(mAudioOutput);
-		volumeSlider->setMinimumWidth(100);
+        Phonon::VolumeSlider* volumeSlider = new Phonon::VolumeSlider;
+        volumeSlider->setAudioOutput(mAudioOutput);
+        volumeSlider->setMinimumWidth(100);
 
-		layout->addWidget(mPlayPauseButton);
-		layout->addWidget(seekSlider, 5 /* stretch */);
-		layout->addWidget(volumeSlider, 1 /* stretch */);
-		widget->adjustSize();
+        layout->addWidget(mPlayPauseButton);
+        layout->addWidget(seekSlider, 5 /* stretch */);
+        layout->addWidget(volumeSlider, 1 /* stretch */);
+        widget->adjustSize();
 
-		// Create hud
-		mHud = new HudWidget;
-		mHud->setAutoFillBackground(true);
-		mHud->init(widget, HudWidget::OptionDoNotFollowChildSize | HudWidget::OptionOpaque);
+        // Create hud
+        mHud = new HudWidget;
+        mHud->setAutoFillBackground(true);
+        mHud->init(widget, HudWidget::OptionDoNotFollowChildSize | HudWidget::OptionOpaque);
 
-		// Init floater
-		mFloater = new WidgetFloater(parent);
-		mFloater->setChildWidget(mHud);
-		mFloater->setAlignment(Qt::AlignJustify | Qt::AlignBottom);
+        // Init floater
+        mFloater = new WidgetFloater(parent);
+        mFloater->setChildWidget(mHud);
+        mFloater->setAlignment(Qt::AlignJustify | Qt::AlignBottom);
 
-		mVideoWidget->installEventFilter(q);
-	}
+        mVideoWidget->installEventFilter(q);
+    }
 
+    bool isPlaying() const {
+        switch (mMediaObject->state()) {
+        case Phonon::StoppedState:
+        case Phonon::PausedState:
+            return false;
+        default:
+            return true;
+        }
+    }
 
-	bool isPlaying() const {
-		switch (mMediaObject->state()) {
-		case Phonon::StoppedState:
-		case Phonon::PausedState:
-			return false;
-		default:
-			return true;
-		}
-	}
-
-
-	void updateHudVisibility(int yPos) {
-		const int floaterY = mVideoWidget->height() - mFloater->verticalMargin() - mHud->sizeHint().height() * 3 / 2;
-		if (mHud->isVisible() && yPos < floaterY) {
-			mHud->hide();
-		} else if (!mHud->isVisible() && yPos >= floaterY) {
-			mHud->show();
-		}
-	}
+    void updateHudVisibility(int yPos)
+    {
+        const int floaterY = mVideoWidget->height() - mFloater->verticalMargin() - mHud->sizeHint().height() * 3 / 2;
+        if (mHud->isVisible() && yPos < floaterY) {
+            mHud->hide();
+        } else if (!mHud->isVisible() && yPos >= floaterY) {
+            mHud->show();
+        }
+    }
 };
 
-
 VideoViewAdapter::VideoViewAdapter()
-: d(new VideoViewAdapterPrivate) {
-	d->q = this;
-	d->mMediaObject = new Phonon::MediaObject(this);
-	connect(d->mMediaObject, SIGNAL(finished()), SIGNAL(videoFinished()));
+: d(new VideoViewAdapterPrivate)
+{
+    d->q = this;
+    d->mMediaObject = new Phonon::MediaObject(this);
+    connect(d->mMediaObject, SIGNAL(finished()), SIGNAL(videoFinished()));
 
-	d->mVideoWidget = new Phonon::VideoWidget;
-	d->mVideoWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-	d->mVideoWidget->setAttribute(Qt::WA_Hover);
+    d->mVideoWidget = new Phonon::VideoWidget;
+    d->mVideoWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    d->mVideoWidget->setAttribute(Qt::WA_Hover);
 
-	Phonon::createPath(d->mMediaObject, d->mVideoWidget);
+    Phonon::createPath(d->mMediaObject, d->mVideoWidget);
 
-	d->mAudioOutput = new Phonon::AudioOutput(Phonon::VideoCategory, this);
-	Phonon::createPath(d->mMediaObject, d->mAudioOutput);
+    d->mAudioOutput = new Phonon::AudioOutput(Phonon::VideoCategory, this);
+    Phonon::createPath(d->mMediaObject, d->mAudioOutput);
 
-	d->setupHud(d->mVideoWidget);
+    d->setupHud(d->mVideoWidget);
 
-	QGraphicsProxyWidget* proxy = new QGraphicsProxyWidget;
-	proxy->setWidget(d->mVideoWidget);
-	setWidget(proxy);
+    QGraphicsProxyWidget* proxy = new QGraphicsProxyWidget;
+    proxy->setWidget(d->mVideoWidget);
+    setWidget(proxy);
 }
 
-
-VideoViewAdapter::~VideoViewAdapter() {
-	delete d;
+VideoViewAdapter::~VideoViewAdapter()
+{
+    delete d;
 }
 
-
-void VideoViewAdapter::setDocument(Document::Ptr doc) {
-	d->mHud->show();
-	d->mDocument = doc;
-	d->mMediaObject->setCurrentSource(d->mDocument->url());
-	d->mMediaObject->play();
+void VideoViewAdapter::setDocument(Document::Ptr doc)
+{
+    d->mHud->show();
+    d->mDocument = doc;
+    d->mMediaObject->setCurrentSource(d->mDocument->url());
+    d->mMediaObject->play();
 }
 
-
-Document::Ptr VideoViewAdapter::document() const {
-	return d->mDocument;
+Document::Ptr VideoViewAdapter::document() const
+{
+    return d->mDocument;
 }
 
-
-void VideoViewAdapter::slotPlayPauseClicked() {
-	if (d->isPlaying()) {
-		d->mMediaObject->pause();
-	} else {
-		d->mMediaObject->play();
-	}
+void VideoViewAdapter::slotPlayPauseClicked()
+{
+    if (d->isPlaying()) {
+        d->mMediaObject->pause();
+    } else {
+        d->mMediaObject->play();
+    }
 }
 
-
-bool VideoViewAdapter::eventFilter(QObject*, QEvent* event) {
-	if (event->type() == QEvent::MouseMove) {
-		d->updateHudVisibility(static_cast<QMouseEvent*>(event)->y());
-	}
-	return false;
+bool VideoViewAdapter::eventFilter(QObject*, QEvent* event)
+{
+    if (event->type() == QEvent::MouseMove) {
+        d->updateHudVisibility(static_cast<QMouseEvent*>(event)->y());
+    }
+    return false;
 }
 
-
-void VideoViewAdapter::updatePlayPauseButton() {
-	if (d->isPlaying()) {
-		d->mPlayPauseButton->setIcon(KIcon("media-playback-pause"));
-	} else {
-		d->mPlayPauseButton->setIcon(KIcon("media-playback-start"));
-	}
+void VideoViewAdapter::updatePlayPauseButton()
+{
+    if (d->isPlaying()) {
+        d->mPlayPauseButton->setIcon(KIcon("media-playback-pause"));
+    } else {
+        d->mPlayPauseButton->setIcon(KIcon("media-playback-start"));
+    }
 }
 
 } // namespace

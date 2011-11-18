@@ -42,173 +42,172 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "redeyereductionimageoperation.h"
 #include "ui_redeyereductionhud.h"
 
-
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct RedEyeReductionHud : public QWidget, public Ui_RedEyeReductionHud {
-	RedEyeReductionHud() {
-		setupUi(this);
-		setCursor(Qt::ArrowCursor);
-	}
+    RedEyeReductionHud() {
+        setupUi(this);
+        setCursor(Qt::ArrowCursor);
+    }
 };
-
 
 struct RedEyeReductionToolPrivate {
-	RedEyeReductionTool* mRedEyeReductionTool;
-	RedEyeReductionTool::Status mStatus;
-	QPointF mCenter;
-	int mDiameter;
-	GraphicsHudWidget* mHudWidget;
-	GraphicsWidgetFloater* mFloater;
+    RedEyeReductionTool* mRedEyeReductionTool;
+    RedEyeReductionTool::Status mStatus;
+    QPointF mCenter;
+    int mDiameter;
+    GraphicsHudWidget* mHudWidget;
+    GraphicsWidgetFloater* mFloater;
 
+    void showNotSetHudWidget()
+    {
+        QLabel* label = new QLabel(i18n("Click on the red eye you want to fix."));
+        label->show();
+        label->adjustSize();
+        createHudWidgetForWidget(label);
+    }
 
-	void showNotSetHudWidget() {
-		QLabel* label = new QLabel(i18n("Click on the red eye you want to fix."));
-		label->show();
-		label->adjustSize();
-		createHudWidgetForWidget(label);
-	}
+    void showAdjustingHudWidget()
+    {
+        RedEyeReductionHud* hud = new RedEyeReductionHud();
 
+        hud->diameterSpinBox->setValue(mDiameter);
+        QObject::connect(hud->applyButton, SIGNAL(clicked()),
+                         mRedEyeReductionTool, SLOT(slotApplyClicked()));
+        QObject::connect(hud->diameterSpinBox, SIGNAL(valueChanged(int)),
+                         mRedEyeReductionTool, SLOT(setDiameter(int)));
 
-	void showAdjustingHudWidget() {
-		RedEyeReductionHud* hud = new RedEyeReductionHud();
+        createHudWidgetForWidget(hud);
+    }
 
-		hud->diameterSpinBox->setValue(mDiameter);
-		QObject::connect(hud->applyButton, SIGNAL(clicked()),
-			mRedEyeReductionTool, SLOT(slotApplyClicked()));
-		QObject::connect(hud->diameterSpinBox, SIGNAL(valueChanged(int)),
-			mRedEyeReductionTool, SLOT(setDiameter(int)));
+    void createHudWidgetForWidget(QWidget* widget)
+    {
+        mHudWidget->deleteLater();
+        mHudWidget = new GraphicsHudWidget(mRedEyeReductionTool->imageView());
+        mHudWidget->init(widget, GraphicsHudWidget::OptionCloseButton);
+        mHudWidget->adjustSize();
+        QObject::connect(mHudWidget, SIGNAL(closed()),
+                         mRedEyeReductionTool, SIGNAL(done()));
+        mFloater->setChildWidget(mHudWidget);
+    }
 
-		createHudWidgetForWidget(hud);
-	}
+    void hideHud()
+    {
+        mHudWidget->hide();
+    }
 
-
-	void createHudWidgetForWidget(QWidget* widget) {
-		mHudWidget->deleteLater();
-		mHudWidget = new GraphicsHudWidget(mRedEyeReductionTool->imageView());
-		mHudWidget->init(widget, GraphicsHudWidget::OptionCloseButton);
-		mHudWidget->adjustSize();
-		QObject::connect(mHudWidget, SIGNAL(closed()),
-			mRedEyeReductionTool, SIGNAL(done()) );
-		mFloater->setChildWidget(mHudWidget);
-	}
-
-
-	void hideHud() {
-		mHudWidget->hide();
-	}
-
-
-	QRectF rectF() const {
-		if (mStatus == RedEyeReductionTool::NotSet) {
-			return QRectF();
-		}
-		return QRectF(mCenter.x() - mDiameter / 2, mCenter.y() - mDiameter / 2, mDiameter, mDiameter);
-	}
+    QRectF rectF() const {
+        if (mStatus == RedEyeReductionTool::NotSet) {
+            return QRectF();
+        }
+        return QRectF(mCenter.x() - mDiameter / 2, mCenter.y() - mDiameter / 2, mDiameter, mDiameter);
+    }
 };
-
 
 RedEyeReductionTool::RedEyeReductionTool(RasterImageView* view)
 : AbstractRasterImageViewTool(view)
-, d(new RedEyeReductionToolPrivate) {
-	d->mRedEyeReductionTool = this;
-	d->mDiameter = GwenviewConfig::redEyeReductionDiameter();
-	d->mStatus = NotSet;
-	d->mHudWidget = 0;
+, d(new RedEyeReductionToolPrivate)
+{
+    d->mRedEyeReductionTool = this;
+    d->mDiameter = GwenviewConfig::redEyeReductionDiameter();
+    d->mStatus = NotSet;
+    d->mHudWidget = 0;
 
-	d->mFloater = new GraphicsWidgetFloater(imageView());
-	d->mFloater->setAlignment(Qt::AlignHCenter | Qt::AlignBottom);
-	d->mFloater->setVerticalMargin(
-		KDialog::marginHint()
-		+ imageView()->style()->pixelMetric(QStyle::PM_ScrollBarExtent)
-		);
-	d->showNotSetHudWidget();
+    d->mFloater = new GraphicsWidgetFloater(imageView());
+    d->mFloater->setAlignment(Qt::AlignHCenter | Qt::AlignBottom);
+    d->mFloater->setVerticalMargin(
+        KDialog::marginHint()
+        + imageView()->style()->pixelMetric(QStyle::PM_ScrollBarExtent)
+    );
+    d->showNotSetHudWidget();
 
-	view->document()->startLoadingFullImage();
+    view->document()->startLoadingFullImage();
 }
 
-
-RedEyeReductionTool::~RedEyeReductionTool() {
-	GwenviewConfig::setRedEyeReductionDiameter(d->mDiameter);
-	delete d;
+RedEyeReductionTool::~RedEyeReductionTool()
+{
+    GwenviewConfig::setRedEyeReductionDiameter(d->mDiameter);
+    delete d;
 }
 
+void RedEyeReductionTool::paint(QPainter* painter)
+{
+    if (d->mStatus == NotSet) {
+        return;
+    }
+    QRectF docRectF = d->rectF();
+    imageView()->document()->waitUntilLoaded();
 
-void RedEyeReductionTool::paint(QPainter* painter) {
-	if (d->mStatus == NotSet) {
-		return;
-	}
-	QRectF docRectF = d->rectF();
-	imageView()->document()->waitUntilLoaded();
+    QRect docRect = PaintUtils::containingRect(docRectF);
+    QImage img = imageView()->document()->image().copy(docRect);
+    QRectF imgRectF(
+        docRectF.left() - docRect.left(),
+        docRectF.top()  - docRect.top(),
+        docRectF.width(),
+        docRectF.height()
+    );
+    RedEyeReductionImageOperation::apply(&img, imgRectF);
 
-	QRect docRect = PaintUtils::containingRect(docRectF);
-	QImage img = imageView()->document()->image().copy(docRect);
-	QRectF imgRectF(
-		docRectF.left() - docRect.left(),
-		docRectF.top()  - docRect.top(),
-		docRectF.width(),
-		docRectF.height()
-		);
-	RedEyeReductionImageOperation::apply(&img, imgRectF);
-
-	const QRectF viewRectF = imageView()->mapToView(docRectF);
-	painter->drawImage(viewRectF, img, imgRectF);
+    const QRectF viewRectF = imageView()->mapToView(docRectF);
+    painter->drawImage(viewRectF, img, imgRectF);
 }
 
-
-void RedEyeReductionTool::mousePressEvent(QGraphicsSceneMouseEvent* event) {
-	event->accept();
-	if (d->mStatus == NotSet) {
-		d->showAdjustingHudWidget();
-		d->mStatus = Adjusting;
-	}
-	d->mCenter = imageView()->mapToImage(event->pos());
-	imageView()->update();
+void RedEyeReductionTool::mousePressEvent(QGraphicsSceneMouseEvent* event)
+{
+    event->accept();
+    if (d->mStatus == NotSet) {
+        d->showAdjustingHudWidget();
+        d->mStatus = Adjusting;
+    }
+    d->mCenter = imageView()->mapToImage(event->pos());
+    imageView()->update();
 }
 
-void RedEyeReductionTool::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
-	event->accept();
-	if (event->buttons() == Qt::NoButton) {
-		return;
-	}
-	d->mCenter = imageView()->mapToImage(event->pos());
-	imageView()->update();
+void RedEyeReductionTool::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
+{
+    event->accept();
+    if (event->buttons() == Qt::NoButton) {
+        return;
+    }
+    d->mCenter = imageView()->mapToImage(event->pos());
+    imageView()->update();
 }
 
-void RedEyeReductionTool::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
-	// Just prevent the event from reaching the image view
-	event->accept();
+void RedEyeReductionTool::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
+{
+    // Just prevent the event from reaching the image view
+    event->accept();
 }
 
-void RedEyeReductionTool::toolActivated() {
-	imageView()->setCursor(Qt::CrossCursor);
+void RedEyeReductionTool::toolActivated()
+{
+    imageView()->setCursor(Qt::CrossCursor);
 }
 
-
-void RedEyeReductionTool::toolDeactivated() {
-	d->mHudWidget->deleteLater();
+void RedEyeReductionTool::toolDeactivated()
+{
+    d->mHudWidget->deleteLater();
 }
 
+void RedEyeReductionTool::slotApplyClicked()
+{
+    QRectF docRectF = d->rectF();
+    if (!docRectF.isValid()) {
+        kWarning() << "invalid rect";
+        return;
+    }
+    RedEyeReductionImageOperation* op = new RedEyeReductionImageOperation(docRectF);
+    emit imageOperationRequested(op);
 
-void RedEyeReductionTool::slotApplyClicked() {
-	QRectF docRectF = d->rectF();
-	if (!docRectF.isValid()) {
-		kWarning() << "invalid rect";
-		return;
-	}
-	RedEyeReductionImageOperation* op = new RedEyeReductionImageOperation(docRectF);
-	emit imageOperationRequested(op);
-
-	d->mStatus = NotSet;
-	d->showNotSetHudWidget();
+    d->mStatus = NotSet;
+    d->showNotSetHudWidget();
 }
 
-
-void RedEyeReductionTool::setDiameter(int value) {
-	d->mDiameter = value;
-	imageView()->update();
+void RedEyeReductionTool::setDiameter(int value)
+{
+    d->mDiameter = value;
+    imageView()->update();
 }
-
 
 } // namespace

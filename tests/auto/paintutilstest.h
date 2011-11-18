@@ -24,12 +24,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // KDE
 
-class PaintUtilsTest : public QObject {
-	Q_OBJECT
+class PaintUtilsTest : public QObject
+{
+    Q_OBJECT
 
 private Q_SLOTS:
-	void testScaledRect();
-	void testScaledRect_data();
+    void testScaledRect();
+    void testScaledRect_data();
 };
 
 #endif // PAINTUTILSTEST_H

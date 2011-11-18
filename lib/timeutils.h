@@ -27,9 +27,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 class KFileItem;
 class KDateTime;
 
-namespace Gwenview {
+namespace Gwenview
+{
 
-namespace TimeUtils {
+namespace TimeUtils
+{
 
 GWENVIEWLIB_EXPORT KDateTime dateTimeForFileItem(const KFileItem&);
 

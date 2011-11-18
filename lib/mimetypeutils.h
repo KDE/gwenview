@@ -29,9 +29,11 @@ class QStringList;
 class KFileItem;
 class KUrl;
 
-namespace Gwenview {
+namespace Gwenview
+{
 
-namespace MimeTypeUtils {
+namespace MimeTypeUtils
+{
 
 GWENVIEWLIB_EXPORT const QStringList& rasterImageMimeTypes();
 GWENVIEWLIB_EXPORT const QStringList& svgImageMimeTypes();
@@ -45,13 +47,13 @@ GWENVIEWLIB_EXPORT QString urlMimeType(const KUrl&);
 GWENVIEWLIB_EXPORT QString urlMimeTypeByContent(const KUrl&);
 
 enum Kind {
-	KIND_UNKNOWN      = 0,
-	KIND_DIR          = 1,
-	KIND_ARCHIVE      = 1 << 2,
-	KIND_FILE         = 1 << 3,
-	KIND_RASTER_IMAGE = 1 << 4,
-	KIND_SVG_IMAGE    = 1 << 5,
-	KIND_VIDEO        = 1 << 6
+    KIND_UNKNOWN      = 0,
+    KIND_DIR          = 1,
+    KIND_ARCHIVE      = 1 << 2,
+    KIND_FILE         = 1 << 3,
+    KIND_RASTER_IMAGE = 1 << 4,
+    KIND_SVG_IMAGE    = 1 << 5,
+    KIND_VIDEO        = 1 << 6
 };
 Q_DECLARE_FLAGS(Kinds, Kind)
 

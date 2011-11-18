@@ -30,10 +30,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
-namespace Gwenview {
+namespace Gwenview
+{
 
-
-namespace MemoryUtils {
+namespace MemoryUtils
+{
 
 /**
  * This function returns the amount of total memory installed on the system
@@ -49,7 +50,6 @@ GWENVIEWLIB_EXPORT qulonglong getTotalMemory();
 GWENVIEWLIB_EXPORT qulonglong getFreeMemory();
 
 } // namespace
-
 
 } // namespace
 

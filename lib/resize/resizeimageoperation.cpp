@@ -33,61 +33,61 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "document/document.h"
 #include "document/documentjob.h"
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct ResizeImageOperationPrivate {
-	QSize mSize;
-	QImage mOriginalImage;
+    QSize mSize;
+    QImage mOriginalImage;
 };
 
-
-class ResizeJob : public ThreadedDocumentJob {
+class ResizeJob : public ThreadedDocumentJob
+{
 public:
-	ResizeJob(const QSize& size)
-	: mSize(size)
-	{}
+    ResizeJob(const QSize& size)
+        : mSize(size)
+    {}
 
-	virtual void threadedStart() {
-		if (!checkDocumentEditor()) {
-			return;
-		}
-		QImage image = document()->image();
-		image = image.scaled(mSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-		document()->editor()->setImage(image);
-		setError(NoError);
-	}
+    virtual void threadedStart()
+    {
+        if (!checkDocumentEditor()) {
+            return;
+        }
+        QImage image = document()->image();
+        image = image.scaled(mSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        document()->editor()->setImage(image);
+        setError(NoError);
+    }
 
 private:
-	QSize mSize;
+    QSize mSize;
 };
 
-
 ResizeImageOperation::ResizeImageOperation(const QSize& size)
-: d(new ResizeImageOperationPrivate) {
-	d->mSize = size;
-	setText(i18nc("(qtundo-format)", "Resize"));
+: d(new ResizeImageOperationPrivate)
+{
+    d->mSize = size;
+    setText(i18nc("(qtundo-format)", "Resize"));
 }
 
-
-ResizeImageOperation::~ResizeImageOperation() {
-	delete d;
+ResizeImageOperation::~ResizeImageOperation()
+{
+    delete d;
 }
 
-
-void ResizeImageOperation::redo() {
-	d->mOriginalImage = document()->image();
-	redoAsDocumentJob(new ResizeJob(d->mSize));
+void ResizeImageOperation::redo()
+{
+    d->mOriginalImage = document()->image();
+    redoAsDocumentJob(new ResizeJob(d->mSize));
 }
 
-
-void ResizeImageOperation::undo() {
-	if (!document()->editor()) {
-		kWarning() << "!document->editor()";
-		return;
-	}
-	document()->editor()->setImage(d->mOriginalImage);
+void ResizeImageOperation::undo()
+{
+    if (!document()->editor()) {
+        kWarning() << "!document->editor()";
+        return;
+    }
+    document()->editor()->setImage(d->mOriginalImage);
 }
-
 
 } // namespace

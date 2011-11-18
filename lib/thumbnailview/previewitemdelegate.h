@@ -32,11 +32,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 class KUrl;
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 class ThumbnailView;
-
 
 struct PreviewItemDelegatePrivate;
 
@@ -44,77 +43,77 @@ struct PreviewItemDelegatePrivate;
  * An ItemDelegate which generates thumbnails for images. It also makes sure
  * all items are of the same size.
  */
-class GWENVIEWLIB_EXPORT PreviewItemDelegate : public QItemDelegate {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT PreviewItemDelegate : public QItemDelegate
+{
+    Q_OBJECT
 public:
-	PreviewItemDelegate(ThumbnailView*);
-	~PreviewItemDelegate();
+    PreviewItemDelegate(ThumbnailView*);
+    ~PreviewItemDelegate();
 
-	enum ContextBarMode {
-		NoContextBar,            /** Do not show context bar at all */
-		SelectionOnlyContextBar, /** Only show the +/- button */
-		FullContextBar           /** Show all buttons, provided there is enough room */
-	};
+    enum ContextBarMode {
+        NoContextBar,            /** Do not show context bar at all */
+        SelectionOnlyContextBar, /** Only show the +/- button */
+        FullContextBar           /** Show all buttons, provided there is enough room */
+    };
 
-	enum ThumbnailDetail {
-		FileNameDetail  = 1,
-		DateDetail      = 2,
-		RatingDetail    = 4,
-		ImageSizeDetail = 8,
-		FileSizeDetail  = 16
-	};
-	// FIXME: Find out why this cause problems with Qt::Alignment in
-	// PreviewItemDelegate!
-	Q_DECLARE_FLAGS(ThumbnailDetails, ThumbnailDetail)
+    enum ThumbnailDetail {
+        FileNameDetail  = 1,
+        DateDetail      = 2,
+        RatingDetail    = 4,
+        ImageSizeDetail = 8,
+        FileSizeDetail  = 16
+    };
+    // FIXME: Find out why this cause problems with Qt::Alignment in
+    // PreviewItemDelegate!
+    Q_DECLARE_FLAGS(ThumbnailDetails, ThumbnailDetail)
 
-	/**
-	 * Returns which thumbnail details are shown
-	 */
-	ThumbnailDetails thumbnailDetails() const;
+    /**
+     * Returns which thumbnail details are shown
+     */
+    ThumbnailDetails thumbnailDetails() const;
 
-	void setThumbnailDetails(ThumbnailDetails);
+    void setThumbnailDetails(ThumbnailDetails);
 
-	ContextBarMode contextBarMode() const;
+    ContextBarMode contextBarMode() const;
 
-	void setContextBarMode(ContextBarMode);
+    void setContextBarMode(ContextBarMode);
 
-	Qt::TextElideMode textElideMode() const;
+    Qt::TextElideMode textElideMode() const;
 
-	void setTextElideMode(Qt::TextElideMode);
+    void setTextElideMode(Qt::TextElideMode);
 
-	virtual QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
-	virtual void setEditorData(QWidget* editor, const QModelIndex& index) const;
-	virtual void setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const;
-	virtual void updateEditorGeometry(QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+    virtual QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+    virtual void setEditorData(QWidget* editor, const QModelIndex& index) const;
+    virtual void setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const;
+    virtual void updateEditorGeometry(QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& index) const;
 
-	virtual void paint( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
-	virtual QSize sizeHint( const QStyleOptionViewItem & /*option*/, const QModelIndex & /*index*/ ) const;
+    virtual void paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const;
+    virtual QSize sizeHint(const QStyleOptionViewItem & /*option*/, const QModelIndex & /*index*/) const;
 
 Q_SIGNALS:
-	void saveDocumentRequested(const KUrl&);
-	void rotateDocumentLeftRequested(const KUrl&);
-	void rotateDocumentRightRequested(const KUrl&);
-	void showDocumentInFullScreenRequested(const KUrl&);
-	void setDocumentRatingRequested(const KUrl&, int rating);
+    void saveDocumentRequested(const KUrl&);
+    void rotateDocumentLeftRequested(const KUrl&);
+    void rotateDocumentRightRequested(const KUrl&);
+    void showDocumentInFullScreenRequested(const KUrl&);
+    void setDocumentRatingRequested(const KUrl&, int rating);
 
 private Q_SLOTS:
-	void setThumbnailSize(int);
+    void setThumbnailSize(int);
 
-	void slotSaveClicked();
-	void slotRotateLeftClicked();
-	void slotRotateRightClicked();
-	void slotFullScreenClicked();
-	void slotToggleSelectionClicked();
-	void slotRowsChanged();
+    void slotSaveClicked();
+    void slotRotateLeftClicked();
+    void slotRotateRightClicked();
+    void slotFullScreenClicked();
+    void slotToggleSelectionClicked();
+    void slotRowsChanged();
 
 protected:
-	virtual bool eventFilter(QObject*, QEvent*);
+    virtual bool eventFilter(QObject*, QEvent*);
 
 private:
-	PreviewItemDelegatePrivate* const d;
-	friend struct PreviewItemDelegatePrivate;
+    PreviewItemDelegatePrivate* const d;
+    friend struct PreviewItemDelegatePrivate;
 };
-
 
 } // namespace
 

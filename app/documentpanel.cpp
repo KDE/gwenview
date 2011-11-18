@@ -54,7 +54,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/thumbnailview/thumbnailbarview.h>
 #include <lib/zoomwidget.h>
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 #undef ENABLE_LOG
 #undef LOG
@@ -65,39 +66,37 @@ namespace Gwenview {
 #define LOG(x) ;
 #endif
 
-
 const int DocumentPanel::MaxViewCount = 6;
 
-
-static QString rgba(const QColor &color) {
-	return QString::fromAscii("rgba(%1, %2, %3, %4)")
-		.arg(color.red())
-		.arg(color.green())
-		.arg(color.blue())
-		.arg(color.alpha());
+static QString rgba(const QColor &color)
+{
+    return QString::fromAscii("rgba(%1, %2, %3, %4)")
+           .arg(color.red())
+           .arg(color.green())
+           .arg(color.blue())
+           .arg(color.alpha());
 }
 
-
-static QString gradient(Qt::Orientation orientation, const QColor &color, int value) {
-	int x2, y2;
-	if (orientation == Qt::Horizontal) {
-		x2 = 0;
-		y2 = 1;
-	} else {
-		x2 = 1;
-		y2 = 0;
-	}
-	QString grad =
-		"qlineargradient(x1:0, y1:0, x2:%1, y2:%2,"
-		"stop:0 %3, stop: 1 %4)";
-	return grad
-		.arg(x2)
-		.arg(y2)
-		.arg(rgba(PaintUtils::adjustedHsv(color, 0, 0, qMin(255 - color.value(), value/2))))
-		.arg(rgba(PaintUtils::adjustedHsv(color, 0, 0, -qMin(color.value(), value/2))))
-		;
+static QString gradient(Qt::Orientation orientation, const QColor &color, int value)
+{
+    int x2, y2;
+    if (orientation == Qt::Horizontal) {
+        x2 = 0;
+        y2 = 1;
+    } else {
+        x2 = 1;
+        y2 = 0;
+    }
+    QString grad =
+        "qlineargradient(x1:0, y1:0, x2:%1, y2:%2,"
+        "stop:0 %3, stop: 1 %4)";
+    return grad
+           .arg(x2)
+           .arg(y2)
+           .arg(rgba(PaintUtils::adjustedHsv(color, 0, 0, qMin(255 - color.value(), value / 2))))
+           .arg(rgba(PaintUtils::adjustedHsv(color, 0, 0, -qMin(color.value(), value / 2))))
+           ;
 }
-
 
 /*
  * Layout of mThumbnailSplitter is:
@@ -129,593 +128,605 @@ static QString gradient(Qt::Orientation orientation, const QColor &color, int va
  * +-------------------------------------------------------------------+
  */
 struct DocumentPanelPrivate {
-	DocumentPanel* that;
-	SlideShow* mSlideShow;
-	KActionCollection* mActionCollection;
-	QSplitter *mThumbnailSplitter;
-	QWidget* mAdapterContainer;
-	DocumentViewController* mDocumentViewController;
-	QList<DocumentView*> mDocumentViews;
-	DocumentViewSynchronizer* mSynchronizer;
-	QToolButton* mToggleSideBarButton;
-	QToolButton* mToggleThumbnailBarButton;
-	ZoomWidget* mZoomWidget;
-	DocumentViewContainer* mDocumentViewContainer;
-	SlideContainer* mToolContainer;
-	QWidget* mStatusBarContainer;
-	ThumbnailBarView* mThumbnailBar;
-	KToggleAction* mToggleThumbnailBarAction;
-	KToggleAction* mSynchronizeAction;
+    DocumentPanel* that;
+    SlideShow* mSlideShow;
+    KActionCollection* mActionCollection;
+    QSplitter *mThumbnailSplitter;
+    QWidget* mAdapterContainer;
+    DocumentViewController* mDocumentViewController;
+    QList<DocumentView*> mDocumentViews;
+    DocumentViewSynchronizer* mSynchronizer;
+    QToolButton* mToggleSideBarButton;
+    QToolButton* mToggleThumbnailBarButton;
+    ZoomWidget* mZoomWidget;
+    DocumentViewContainer* mDocumentViewContainer;
+    SlideContainer* mToolContainer;
+    QWidget* mStatusBarContainer;
+    ThumbnailBarView* mThumbnailBar;
+    KToggleAction* mToggleThumbnailBarAction;
+    KToggleAction* mSynchronizeAction;
     QCheckBox* mSynchronizeCheckBox;
 
-	bool mFullScreenMode;
-	QPalette mNormalPalette;
-	QPalette mFullScreenPalette;
-	bool mCompareMode;
-	bool mThumbnailBarVisibleBeforeFullScreen;
+    bool mFullScreenMode;
+    QPalette mNormalPalette;
+    QPalette mFullScreenPalette;
+    bool mCompareMode;
+    bool mThumbnailBarVisibleBeforeFullScreen;
 
-	void setupThumbnailBar() {
-		mThumbnailBar = new ThumbnailBarView;
-		ThumbnailBarItemDelegate* delegate = new ThumbnailBarItemDelegate(mThumbnailBar);
-		mThumbnailBar->setItemDelegate(delegate);
-		mThumbnailBar->setVisible(GwenviewConfig::thumbnailBarIsVisible());
-		mThumbnailBar->setSelectionMode(QAbstractItemView::ExtendedSelection);
-	}
+    void setupThumbnailBar()
+    {
+        mThumbnailBar = new ThumbnailBarView;
+        ThumbnailBarItemDelegate* delegate = new ThumbnailBarItemDelegate(mThumbnailBar);
+        mThumbnailBar->setItemDelegate(delegate);
+        mThumbnailBar->setVisible(GwenviewConfig::thumbnailBarIsVisible());
+        mThumbnailBar->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    }
 
-	void setupThumbnailBarStyleSheet() {
-		Qt::Orientation orientation = mThumbnailBar->orientation();
-		QColor bgColor = mNormalPalette.color(QPalette::Normal, QPalette::Window);
-		QColor bgSelColor = mNormalPalette.color(QPalette::Normal, QPalette::Highlight);
+    void setupThumbnailBarStyleSheet()
+    {
+        Qt::Orientation orientation = mThumbnailBar->orientation();
+        QColor bgColor = mNormalPalette.color(QPalette::Normal, QPalette::Window);
+        QColor bgSelColor = mNormalPalette.color(QPalette::Normal, QPalette::Highlight);
 
-		// Avoid dark and bright colors
-		bgColor.setHsv(bgColor.hue(), bgColor.saturation(), (127 + 3 * bgColor.value()) / 4);
+        // Avoid dark and bright colors
+        bgColor.setHsv(bgColor.hue(), bgColor.saturation(), (127 + 3 * bgColor.value()) / 4);
 
-		QColor leftBorderColor = PaintUtils::adjustedHsv(bgColor, 0, 0, qMin(20, 255 - bgColor.value()));
-		QColor rightBorderColor = PaintUtils::adjustedHsv(bgColor, 0, 0, -qMin(40, bgColor.value()));
-		QColor borderSelColor = PaintUtils::adjustedHsv(bgSelColor, 0, 0, -qMin(60, bgSelColor.value()));
+        QColor leftBorderColor = PaintUtils::adjustedHsv(bgColor, 0, 0, qMin(20, 255 - bgColor.value()));
+        QColor rightBorderColor = PaintUtils::adjustedHsv(bgColor, 0, 0, -qMin(40, bgColor.value()));
+        QColor borderSelColor = PaintUtils::adjustedHsv(bgSelColor, 0, 0, -qMin(60, bgSelColor.value()));
 
-		QString viewCss =
-			"#thumbnailBarView {"
-			"	background-color: rgba(0, 0, 0, 10%);"
-			"}";
+        QString viewCss =
+            "#thumbnailBarView {"
+            "	background-color: rgba(0, 0, 0, 10%);"
+            "}";
 
-		QString itemCss =
-			"QListView::item {"
-			"	background-color: %1;"
-			"	border-left: 1px solid %2;"
-			"	border-right: 1px solid %3;"
-			"}";
-		itemCss = itemCss.arg(
-			gradient(orientation, bgColor, 46),
-			gradient(orientation, leftBorderColor, 36),
-			gradient(orientation, rightBorderColor, 26));
+        QString itemCss =
+            "QListView::item {"
+            "	background-color: %1;"
+            "	border-left: 1px solid %2;"
+            "	border-right: 1px solid %3;"
+            "}";
+        itemCss = itemCss.arg(
+                      gradient(orientation, bgColor, 46),
+                      gradient(orientation, leftBorderColor, 36),
+                      gradient(orientation, rightBorderColor, 26));
 
-		QString itemSelCss =
-			"QListView::item:selected {"
-			"	background-color: %1;"
-			"	border-left: 1px solid %2;"
-			"	border-right: 1px solid %2;"
-			"}";
-		itemSelCss = itemSelCss.arg(
-			gradient(orientation, bgSelColor, 56),
-			rgba(borderSelColor));
+        QString itemSelCss =
+            "QListView::item:selected {"
+            "	background-color: %1;"
+            "	border-left: 1px solid %2;"
+            "	border-right: 1px solid %2;"
+            "}";
+        itemSelCss = itemSelCss.arg(
+                         gradient(orientation, bgSelColor, 56),
+                         rgba(borderSelColor));
 
-		QString css = viewCss + itemCss + itemSelCss;
-		if (orientation == Qt::Vertical) {
-			css.replace("left", "top").replace("right", "bottom");
-		}
+        QString css = viewCss + itemCss + itemSelCss;
+        if (orientation == Qt::Vertical) {
+            css.replace("left", "top").replace("right", "bottom");
+        }
 
-		mThumbnailBar->setStyleSheet(css);
-	}
+        mThumbnailBar->setStyleSheet(css);
+    }
 
-	void setupAdapterContainer() {
-		mAdapterContainer = new QWidget;
+    void setupAdapterContainer()
+    {
+        mAdapterContainer = new QWidget;
 
-		QVBoxLayout* layout = new QVBoxLayout(mAdapterContainer);
-		layout->setMargin(0);
-		layout->setSpacing(0);
-		mDocumentViewContainer = new DocumentViewContainer;
-		mDocumentViewContainer->setAutoFillBackground(true);
-		mDocumentViewContainer->setBackgroundRole(QPalette::Base);
-		layout->addWidget(mDocumentViewContainer);
-		layout->addWidget(mToolContainer);
-		layout->addWidget(mStatusBarContainer);
-	}
+        QVBoxLayout* layout = new QVBoxLayout(mAdapterContainer);
+        layout->setMargin(0);
+        layout->setSpacing(0);
+        mDocumentViewContainer = new DocumentViewContainer;
+        mDocumentViewContainer->setAutoFillBackground(true);
+        mDocumentViewContainer->setBackgroundRole(QPalette::Base);
+        layout->addWidget(mDocumentViewContainer);
+        layout->addWidget(mToolContainer);
+        layout->addWidget(mStatusBarContainer);
+    }
 
-	void setupDocumentViewController() {
-		mDocumentViewController = new DocumentViewController(mActionCollection, that);
-		mDocumentViewController->setZoomWidget(mZoomWidget);
-		mDocumentViewController->setToolContainer(mToolContainer);
-		mSynchronizer = new DocumentViewSynchronizer(that);
-	}
+    void setupDocumentViewController()
+    {
+        mDocumentViewController = new DocumentViewController(mActionCollection, that);
+        mDocumentViewController->setZoomWidget(mZoomWidget);
+        mDocumentViewController->setToolContainer(mToolContainer);
+        mSynchronizer = new DocumentViewSynchronizer(that);
+    }
 
-	DocumentView* createDocumentView() {
-		DocumentView* view = mDocumentViewContainer->createView();
+    DocumentView* createDocumentView()
+    {
+        DocumentView* view = mDocumentViewContainer->createView();
 
-		// Connect context menu
-		QObject::connect(view, SIGNAL(contextMenuRequested()),
-			that, SLOT(showContextMenu()) );
+        // Connect context menu
+        QObject::connect(view, SIGNAL(contextMenuRequested()),
+                         that, SLOT(showContextMenu()));
 
-		QObject::connect(view, SIGNAL(completed()),
-			that, SIGNAL(completed()) );
-		QObject::connect(view, SIGNAL(previousImageRequested()),
-			that, SIGNAL(previousImageRequested()) );
-		QObject::connect(view, SIGNAL(nextImageRequested()),
-			that, SIGNAL(nextImageRequested()) );
-		QObject::connect(view, SIGNAL(captionUpdateRequested(QString)),
-			that, SIGNAL(captionUpdateRequested(QString)) );
-		QObject::connect(view, SIGNAL(toggleFullScreenRequested()),
-			that, SIGNAL(toggleFullScreenRequested()) );
-		QObject::connect(view, SIGNAL(focused(DocumentView*)),
-			that, SLOT(slotViewFocused(DocumentView*)) );
-		QObject::connect(view, SIGNAL(hudTrashClicked(DocumentView*)),
-			that, SLOT(trashView(DocumentView*)) );
-		QObject::connect(view, SIGNAL(hudDeselectClicked(DocumentView*)),
-			that, SLOT(deselectView(DocumentView*)) );
+        QObject::connect(view, SIGNAL(completed()),
+                         that, SIGNAL(completed()));
+        QObject::connect(view, SIGNAL(previousImageRequested()),
+                         that, SIGNAL(previousImageRequested()));
+        QObject::connect(view, SIGNAL(nextImageRequested()),
+                         that, SIGNAL(nextImageRequested()));
+        QObject::connect(view, SIGNAL(captionUpdateRequested(QString)),
+                         that, SIGNAL(captionUpdateRequested(QString)));
+        QObject::connect(view, SIGNAL(toggleFullScreenRequested()),
+                         that, SIGNAL(toggleFullScreenRequested()));
+        QObject::connect(view, SIGNAL(focused(DocumentView*)),
+                         that, SLOT(slotViewFocused(DocumentView*)));
+        QObject::connect(view, SIGNAL(hudTrashClicked(DocumentView*)),
+                         that, SLOT(trashView(DocumentView*)));
+        QObject::connect(view, SIGNAL(hudDeselectClicked(DocumentView*)),
+                         that, SLOT(deselectView(DocumentView*)));
 
-		QObject::connect(view, SIGNAL(videoFinished()),
-			mSlideShow, SLOT(resumeAndGoToNextUrl()));
+        QObject::connect(view, SIGNAL(videoFinished()),
+                         mSlideShow, SLOT(resumeAndGoToNextUrl()));
 
-		mDocumentViews << view;
+        mDocumentViews << view;
 
-		return view;
-	}
+        return view;
+    }
 
-	void removeDocumentView(DocumentView* view) {
-		mDocumentViewContainer->removeView(view);
-		mDocumentViews.removeOne(view);
-	}
+    void removeDocumentView(DocumentView* view)
+    {
+        mDocumentViewContainer->removeView(view);
+        mDocumentViews.removeOne(view);
+    }
 
-	void setupToolContainer() {
-		mToolContainer = new SlideContainer;
-	}
+    void setupToolContainer()
+    {
+        mToolContainer = new SlideContainer;
+    }
 
-	void setupStatusBar() {
-		mStatusBarContainer = new QWidget;
-		mToggleSideBarButton = new StatusBarToolButton;
-		mToggleThumbnailBarButton = new StatusBarToolButton;
-		mZoomWidget = new ZoomWidget;
-		mSynchronizeCheckBox = new QCheckBox(i18n("Synchronize"));
-		mSynchronizeCheckBox->hide();
+    void setupStatusBar()
+    {
+        mStatusBarContainer = new QWidget;
+        mToggleSideBarButton = new StatusBarToolButton;
+        mToggleThumbnailBarButton = new StatusBarToolButton;
+        mZoomWidget = new ZoomWidget;
+        mSynchronizeCheckBox = new QCheckBox(i18n("Synchronize"));
+        mSynchronizeCheckBox->hide();
 
-		QHBoxLayout* layout = new QHBoxLayout(mStatusBarContainer);
-		layout->setMargin(0);
-		layout->setSpacing(0);
-		layout->addWidget(mToggleSideBarButton);
-		layout->addWidget(mToggleThumbnailBarButton);
-		layout->addStretch();
-		layout->addWidget(mSynchronizeCheckBox);
-		layout->addStretch();
-		layout->addWidget(mZoomWidget);
-	}
+        QHBoxLayout* layout = new QHBoxLayout(mStatusBarContainer);
+        layout->setMargin(0);
+        layout->setSpacing(0);
+        layout->addWidget(mToggleSideBarButton);
+        layout->addWidget(mToggleThumbnailBarButton);
+        layout->addStretch();
+        layout->addWidget(mSynchronizeCheckBox);
+        layout->addStretch();
+        layout->addWidget(mZoomWidget);
+    }
 
-	void setupSplitter() {
-		Qt::Orientation orientation = GwenviewConfig::thumbnailBarOrientation();
-		mThumbnailSplitter = new Splitter(orientation == Qt::Horizontal ? Qt::Vertical : Qt::Horizontal, that);
-		mThumbnailBar->setOrientation(orientation);
-		mThumbnailBar->setRowCount(GwenviewConfig::thumbnailBarRowCount());
-		mThumbnailSplitter->addWidget(mAdapterContainer);
-		mThumbnailSplitter->addWidget(mThumbnailBar);
-		mThumbnailSplitter->setSizes(GwenviewConfig::thumbnailSplitterSizes());
+    void setupSplitter()
+    {
+        Qt::Orientation orientation = GwenviewConfig::thumbnailBarOrientation();
+        mThumbnailSplitter = new Splitter(orientation == Qt::Horizontal ? Qt::Vertical : Qt::Horizontal, that);
+        mThumbnailBar->setOrientation(orientation);
+        mThumbnailBar->setRowCount(GwenviewConfig::thumbnailBarRowCount());
+        mThumbnailSplitter->addWidget(mAdapterContainer);
+        mThumbnailSplitter->addWidget(mThumbnailBar);
+        mThumbnailSplitter->setSizes(GwenviewConfig::thumbnailSplitterSizes());
 
-		QVBoxLayout* layout = new QVBoxLayout(that);
-		layout->setMargin(0);
-		layout->addWidget(mThumbnailSplitter);
-	}
+        QVBoxLayout* layout = new QVBoxLayout(that);
+        layout->setMargin(0);
+        layout->addWidget(mThumbnailSplitter);
+    }
 
-	void applyPalette() {
-		QPalette palette = mFullScreenMode ? mFullScreenPalette : mNormalPalette;
-		mDocumentViewContainer->setPalette(palette);
-	}
+    void applyPalette()
+    {
+        QPalette palette = mFullScreenMode ? mFullScreenPalette : mNormalPalette;
+        mDocumentViewContainer->setPalette(palette);
+    }
 
-	void saveSplitterConfig() {
-		if (mThumbnailBar->isVisible()) {
-			GwenviewConfig::setThumbnailSplitterSizes(mThumbnailSplitter->sizes());
-		}
-	}
+    void saveSplitterConfig()
+    {
+        if (mThumbnailBar->isVisible()) {
+            GwenviewConfig::setThumbnailSplitterSizes(mThumbnailSplitter->sizes());
+        }
+    }
 
-	DocumentView* currentView() const {
-		return mDocumentViewController->view();
-	}
+    DocumentView* currentView() const {
+        return mDocumentViewController->view();
+    }
 
-	void setCurrentView(DocumentView* view) {
-		DocumentView* oldView = currentView();
-		if (view == oldView) {
-			return;
-		}
-		if (oldView) {
-			oldView->setCurrent(false);
-		}
-		view->setCurrent(true);
-		mDocumentViewController->setView(view);
-		mSynchronizer->setCurrentView(view);
+    void setCurrentView(DocumentView* view)
+    {
+        DocumentView* oldView = currentView();
+        if (view == oldView) {
+            return;
+        }
+        if (oldView) {
+            oldView->setCurrent(false);
+        }
+        view->setCurrent(true);
+        mDocumentViewController->setView(view);
+        mSynchronizer->setCurrentView(view);
 
-		QModelIndex index = indexForView(view);
-		if (!index.isValid()) {
-			kWarning() << "No index found for current view";
-			return;
-		}
-		mThumbnailBar->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Current);
-	}
+        QModelIndex index = indexForView(view);
+        if (!index.isValid()) {
+            kWarning() << "No index found for current view";
+            return;
+        }
+        mThumbnailBar->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Current);
+    }
 
-	QModelIndex indexForView(DocumentView* view) const {
-		KUrl url = view->url();
-		if (!url.isValid()) {
-			kWarning() << "View does not display any document!";
-			return QModelIndex();
-		}
+    QModelIndex indexForView(DocumentView* view) const {
+        KUrl url = view->url();
+        if (!url.isValid()) {
+            kWarning() << "View does not display any document!";
+            return QModelIndex();
+        }
 
-		// FIXME: Ugly coupling!
-		SortedDirModel* model = static_cast<SortedDirModel*>(mThumbnailBar->model());
-		return model->indexForUrl(url);
-	}
+        // FIXME: Ugly coupling!
+        SortedDirModel* model = static_cast<SortedDirModel*>(mThumbnailBar->model());
+        return model->indexForUrl(url);
+    }
 };
-
 
 DocumentPanel::DocumentPanel(QWidget* parent, SlideShow* slideShow, KActionCollection* actionCollection)
 : QWidget(parent)
 , d(new DocumentPanelPrivate)
 {
-	d->that = this;
-	d->mSlideShow = slideShow;
-	d->mActionCollection = actionCollection;
-	d->mFullScreenMode = false;
-	d->mCompareMode = false;
-	d->mThumbnailBarVisibleBeforeFullScreen = false;
-	d->mFullScreenPalette = QPalette(palette());
-	d->mFullScreenPalette.setColor(QPalette::Base, Qt::black);
-	d->mFullScreenPalette.setColor(QPalette::Text, Qt::white);
+    d->that = this;
+    d->mSlideShow = slideShow;
+    d->mActionCollection = actionCollection;
+    d->mFullScreenMode = false;
+    d->mCompareMode = false;
+    d->mThumbnailBarVisibleBeforeFullScreen = false;
+    d->mFullScreenPalette = QPalette(palette());
+    d->mFullScreenPalette.setColor(QPalette::Base, Qt::black);
+    d->mFullScreenPalette.setColor(QPalette::Text, Qt::white);
 
-	QShortcut* toggleFullScreenShortcut = new QShortcut(this);
-	toggleFullScreenShortcut->setKey(Qt::Key_Return);
-	connect(toggleFullScreenShortcut, SIGNAL(activated()), SIGNAL(toggleFullScreenRequested()) );
+    QShortcut* toggleFullScreenShortcut = new QShortcut(this);
+    toggleFullScreenShortcut->setKey(Qt::Key_Return);
+    connect(toggleFullScreenShortcut, SIGNAL(activated()), SIGNAL(toggleFullScreenRequested()));
 
-	d->setupToolContainer();
-	d->setupStatusBar();
+    d->setupToolContainer();
+    d->setupStatusBar();
 
-	d->setupAdapterContainer();
+    d->setupAdapterContainer();
 
-	d->setupThumbnailBar();
+    d->setupThumbnailBar();
 
-	d->setupSplitter();
+    d->setupSplitter();
 
-	d->setupDocumentViewController();
+    d->setupDocumentViewController();
 
-	KActionCategory* view = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface","View"), actionCollection);
+    KActionCategory* view = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface", "View"), actionCollection);
 
-	d->mToggleThumbnailBarAction = view->add<KToggleAction>(QString("toggle_thumbnailbar"));
-	d->mToggleThumbnailBarAction->setText(i18n("Thumbnail Bar"));
-	d->mToggleThumbnailBarAction->setIcon(KIcon("folder-image"));
-	d->mToggleThumbnailBarAction->setShortcut(Qt::CTRL | Qt::Key_B);
-	d->mToggleThumbnailBarAction->setChecked(GwenviewConfig::thumbnailBarIsVisible());
-	connect(d->mToggleThumbnailBarAction, SIGNAL(triggered(bool)),
-		this, SLOT(setThumbnailBarVisibility(bool)) );
-	d->mToggleThumbnailBarButton->setDefaultAction(d->mToggleThumbnailBarAction);
+    d->mToggleThumbnailBarAction = view->add<KToggleAction>(QString("toggle_thumbnailbar"));
+    d->mToggleThumbnailBarAction->setText(i18n("Thumbnail Bar"));
+    d->mToggleThumbnailBarAction->setIcon(KIcon("folder-image"));
+    d->mToggleThumbnailBarAction->setShortcut(Qt::CTRL | Qt::Key_B);
+    d->mToggleThumbnailBarAction->setChecked(GwenviewConfig::thumbnailBarIsVisible());
+    connect(d->mToggleThumbnailBarAction, SIGNAL(triggered(bool)),
+            this, SLOT(setThumbnailBarVisibility(bool)));
+    d->mToggleThumbnailBarButton->setDefaultAction(d->mToggleThumbnailBarAction);
 
-	d->mSynchronizeAction = view->add<KToggleAction>("synchronize_views");
-	d->mSynchronizeAction->setText(i18n("Synchronize"));
-	d->mSynchronizeAction->setShortcut(Qt::CTRL | Qt::Key_Y);
-	connect(d->mSynchronizeAction, SIGNAL(toggled(bool)),
-		d->mSynchronizer, SLOT(setActive(bool)));
-	// Ensure mSynchronizeAction and mSynchronizeCheckBox are in sync
-	connect(d->mSynchronizeAction, SIGNAL(toggled(bool)),
-		d->mSynchronizeCheckBox, SLOT(setChecked(bool)));
-	connect(d->mSynchronizeCheckBox, SIGNAL(toggled(bool)),
-		d->mSynchronizeAction, SLOT(setChecked(bool)));
+    d->mSynchronizeAction = view->add<KToggleAction>("synchronize_views");
+    d->mSynchronizeAction->setText(i18n("Synchronize"));
+    d->mSynchronizeAction->setShortcut(Qt::CTRL | Qt::Key_Y);
+    connect(d->mSynchronizeAction, SIGNAL(toggled(bool)),
+            d->mSynchronizer, SLOT(setActive(bool)));
+    // Ensure mSynchronizeAction and mSynchronizeCheckBox are in sync
+    connect(d->mSynchronizeAction, SIGNAL(toggled(bool)),
+            d->mSynchronizeCheckBox, SLOT(setChecked(bool)));
+    connect(d->mSynchronizeCheckBox, SIGNAL(toggled(bool)),
+            d->mSynchronizeAction, SLOT(setChecked(bool)));
 }
 
-
-DocumentPanel::~DocumentPanel() {
-	delete d;
+DocumentPanel::~DocumentPanel()
+{
+    delete d;
 }
 
+void DocumentPanel::loadConfig()
+{
+    // FIXME: Not symetric with saveConfig(). Check if it matters.
+    Q_FOREACH(DocumentView * view, d->mDocumentViews) {
+        view->loadAdapterConfig();
+    }
 
-void DocumentPanel::loadConfig() {
-	// FIXME: Not symetric with saveConfig(). Check if it matters.
-	Q_FOREACH(DocumentView* view, d->mDocumentViews) {
-		view->loadAdapterConfig();
-	}
+    Qt::Orientation orientation = GwenviewConfig::thumbnailBarOrientation();
+    d->mThumbnailSplitter->setOrientation(orientation == Qt::Horizontal ? Qt::Vertical : Qt::Horizontal);
+    d->mThumbnailBar->setOrientation(orientation);
+    d->setupThumbnailBarStyleSheet();
 
-	Qt::Orientation orientation = GwenviewConfig::thumbnailBarOrientation();
-	d->mThumbnailSplitter->setOrientation(orientation == Qt::Horizontal ? Qt::Vertical : Qt::Horizontal);
-	d->mThumbnailBar->setOrientation(orientation);
-	d->setupThumbnailBarStyleSheet();
+    int oldRowCount = d->mThumbnailBar->rowCount();
+    int newRowCount = GwenviewConfig::thumbnailBarRowCount();
+    if (oldRowCount != newRowCount) {
+        d->mThumbnailBar->setUpdatesEnabled(false);
+        int gridSize = d->mThumbnailBar->gridSize().width();
 
-	int oldRowCount = d->mThumbnailBar->rowCount();
-	int newRowCount = GwenviewConfig::thumbnailBarRowCount();
-	if (oldRowCount != newRowCount) {
-		d->mThumbnailBar->setUpdatesEnabled(false);
-		int gridSize = d->mThumbnailBar->gridSize().width();
+        d->mThumbnailBar->setRowCount(newRowCount);
 
-		d->mThumbnailBar->setRowCount(newRowCount);
+        // Adjust splitter to ensure thumbnail size remains the same
+        int delta = (newRowCount - oldRowCount) * gridSize;
+        QList<int> sizes = d->mThumbnailSplitter->sizes();
+        Q_ASSERT(sizes.count() == 2);
+        sizes[0] -= delta;
+        sizes[1] += delta;
+        d->mThumbnailSplitter->setSizes(sizes);
 
-		// Adjust splitter to ensure thumbnail size remains the same
-		int delta = (newRowCount - oldRowCount) * gridSize;
-		QList<int> sizes = d->mThumbnailSplitter->sizes();
-		Q_ASSERT(sizes.count() == 2);
-		sizes[0] -= delta;
-		sizes[1] += delta;
-		d->mThumbnailSplitter->setSizes(sizes);
-
-		d->mThumbnailBar->setUpdatesEnabled(true);
-	}
+        d->mThumbnailBar->setUpdatesEnabled(true);
+    }
 }
 
-
-void DocumentPanel::saveConfig() {
-	d->saveSplitterConfig();
-	GwenviewConfig::setThumbnailBarIsVisible(d->mToggleThumbnailBarAction->isChecked());
+void DocumentPanel::saveConfig()
+{
+    d->saveSplitterConfig();
+    GwenviewConfig::setThumbnailBarIsVisible(d->mToggleThumbnailBarAction->isChecked());
 }
 
-
-void DocumentPanel::setThumbnailBarVisibility(bool visible) {
-	d->saveSplitterConfig();
-	d->mThumbnailBar->setVisible(visible);
+void DocumentPanel::setThumbnailBarVisibility(bool visible)
+{
+    d->saveSplitterConfig();
+    d->mThumbnailBar->setVisible(visible);
 }
 
-
-int DocumentPanel::statusBarHeight() const {
-	return d->mStatusBarContainer->height();
+int DocumentPanel::statusBarHeight() const
+{
+    return d->mStatusBarContainer->height();
 }
 
-
-void DocumentPanel::setFullScreenMode(bool fullScreenMode) {
-	d->mFullScreenMode = fullScreenMode;
-	d->mStatusBarContainer->setVisible(!fullScreenMode);
-	d->applyPalette();
-	if (fullScreenMode) {
-		d->mThumbnailBarVisibleBeforeFullScreen = d->mToggleThumbnailBarAction->isChecked();
-		if (d->mThumbnailBarVisibleBeforeFullScreen) {
-			d->mToggleThumbnailBarAction->trigger();
-		}
-	} else if (d->mThumbnailBarVisibleBeforeFullScreen) {
-		d->mToggleThumbnailBarAction->trigger();
-	}
-	d->mToggleThumbnailBarAction->setEnabled(!fullScreenMode);
+void DocumentPanel::setFullScreenMode(bool fullScreenMode)
+{
+    d->mFullScreenMode = fullScreenMode;
+    d->mStatusBarContainer->setVisible(!fullScreenMode);
+    d->applyPalette();
+    if (fullScreenMode) {
+        d->mThumbnailBarVisibleBeforeFullScreen = d->mToggleThumbnailBarAction->isChecked();
+        if (d->mThumbnailBarVisibleBeforeFullScreen) {
+            d->mToggleThumbnailBarAction->trigger();
+        }
+    } else if (d->mThumbnailBarVisibleBeforeFullScreen) {
+        d->mToggleThumbnailBarAction->trigger();
+    }
+    d->mToggleThumbnailBarAction->setEnabled(!fullScreenMode);
 }
 
-
-bool DocumentPanel::isFullScreenMode() const {
-	return d->mFullScreenMode;
+bool DocumentPanel::isFullScreenMode() const
+{
+    return d->mFullScreenMode;
 }
 
-
-ThumbnailBarView* DocumentPanel::thumbnailBar() const {
-	return d->mThumbnailBar;
+ThumbnailBarView* DocumentPanel::thumbnailBar() const
+{
+    return d->mThumbnailBar;
 }
 
-
-inline void addActionToMenu(KMenu* menu, KActionCollection* actionCollection, const char* name) {
-	QAction* action = actionCollection->action(name);
-	if (action) {
-		menu->addAction(action);
-	}
+inline void addActionToMenu(KMenu* menu, KActionCollection* actionCollection, const char* name)
+{
+    QAction* action = actionCollection->action(name);
+    if (action) {
+        menu->addAction(action);
+    }
 }
 
+void DocumentPanel::showContextMenu()
+{
+    KMenu menu(this);
+    addActionToMenu(&menu, d->mActionCollection, "fullscreen");
+    menu.addSeparator();
+    addActionToMenu(&menu, d->mActionCollection, "go_previous");
+    addActionToMenu(&menu, d->mActionCollection, "go_next");
+    if (d->currentView()->canZoom()) {
+        menu.addSeparator();
+        addActionToMenu(&menu, d->mActionCollection, "view_actual_size");
+        addActionToMenu(&menu, d->mActionCollection, "view_zoom_to_fit");
+        addActionToMenu(&menu, d->mActionCollection, "view_zoom_in");
+        addActionToMenu(&menu, d->mActionCollection, "view_zoom_out");
+    }
+    if (d->mCompareMode) {
+        menu.addSeparator();
+        addActionToMenu(&menu, d->mActionCollection, "synchronize_views");
+    }
 
-void DocumentPanel::showContextMenu() {
-	KMenu menu(this);
-	addActionToMenu(&menu, d->mActionCollection, "fullscreen");
-	menu.addSeparator();
-	addActionToMenu(&menu, d->mActionCollection, "go_previous");
-	addActionToMenu(&menu, d->mActionCollection, "go_next");
-	if (d->currentView()->canZoom()) {
-		menu.addSeparator();
-		addActionToMenu(&menu, d->mActionCollection, "view_actual_size");
-		addActionToMenu(&menu, d->mActionCollection, "view_zoom_to_fit");
-		addActionToMenu(&menu, d->mActionCollection, "view_zoom_in");
-		addActionToMenu(&menu, d->mActionCollection, "view_zoom_out");
-	}
-	if (d->mCompareMode) {
-		menu.addSeparator();
-		addActionToMenu(&menu, d->mActionCollection, "synchronize_views");
-	}
-
-	menu.addSeparator();
-	addActionToMenu(&menu, d->mActionCollection, "file_copy_to");
-	addActionToMenu(&menu, d->mActionCollection, "file_move_to");
-	addActionToMenu(&menu, d->mActionCollection, "file_link_to");
-	menu.addSeparator();
-	addActionToMenu(&menu, d->mActionCollection, "file_open_with");
-	menu.exec(QCursor::pos());
+    menu.addSeparator();
+    addActionToMenu(&menu, d->mActionCollection, "file_copy_to");
+    addActionToMenu(&menu, d->mActionCollection, "file_move_to");
+    addActionToMenu(&menu, d->mActionCollection, "file_link_to");
+    menu.addSeparator();
+    addActionToMenu(&menu, d->mActionCollection, "file_open_with");
+    menu.exec(QCursor::pos());
 }
 
-
-QSize DocumentPanel::sizeHint() const {
-	return QSize(400, 300);
+QSize DocumentPanel::sizeHint() const
+{
+    return QSize(400, 300);
 }
 
+KUrl DocumentPanel::url() const
+{
+    if (!d->currentView()) {
+        LOG("!d->documentView()");
+        return KUrl();
+    }
 
-KUrl DocumentPanel::url() const {
-	if (!d->currentView()) {
-		LOG("!d->documentView()");
-		return KUrl();
-	}
-
-	return d->currentView()->url();
+    return d->currentView()->url();
 }
 
+Document::Ptr DocumentPanel::currentDocument() const
+{
+    if (!d->currentView()) {
+        LOG("!d->documentView()");
+        return Document::Ptr();
+    }
 
-Document::Ptr DocumentPanel::currentDocument() const {
-	if (!d->currentView()) {
-		LOG("!d->documentView()");
-		return Document::Ptr();
-	}
-
-	return d->currentView()->document();
+    return d->currentView()->document();
 }
 
-
-bool DocumentPanel::isEmpty() const {
-	if (!d->currentView()) {
-		return true;
-	}
-	return d->currentView()->isEmpty();
+bool DocumentPanel::isEmpty() const
+{
+    if (!d->currentView()) {
+        return true;
+    }
+    return d->currentView()->isEmpty();
 }
 
-
-RasterImageView* DocumentPanel::imageView() const {
-	if (!d->currentView()) {
-		return 0;
-	}
-	return d->currentView()->imageView();
+RasterImageView* DocumentPanel::imageView() const
+{
+    if (!d->currentView()) {
+        return 0;
+    }
+    return d->currentView()->imageView();
 }
 
-
-DocumentView* DocumentPanel::documentView() const {
-	return d->currentView();
+DocumentView* DocumentPanel::documentView() const
+{
+    return d->currentView();
 }
 
-
-void DocumentPanel::setNormalPalette(const QPalette& palette) {
-	d->mNormalPalette = palette;
-	d->applyPalette();
-	d->setupThumbnailBarStyleSheet();
+void DocumentPanel::setNormalPalette(const QPalette& palette)
+{
+    d->mNormalPalette = palette;
+    d->applyPalette();
+    d->setupThumbnailBarStyleSheet();
 }
 
-
-void DocumentPanel::openUrl(const KUrl& url) {
-	openUrls(KUrl::List() << url, url);
+void DocumentPanel::openUrl(const KUrl& url)
+{
+    openUrls(KUrl::List() << url, url);
 }
 
+void DocumentPanel::openUrls(const KUrl::List& _urls, const KUrl& currentUrl)
+{
+    QSet<KUrl> urls = _urls.toSet();
+    d->mCompareMode = urls.count() > 1;
 
-void DocumentPanel::openUrls(const KUrl::List& _urls, const KUrl& currentUrl) {
-	QSet<KUrl> urls = _urls.toSet();
-	d->mCompareMode = urls.count() > 1;
+    // Destroy views which show urls we don't care about, remove from "urls" the
+    // urls which already have a view.
+    Q_FOREACH(DocumentView * view, d->mDocumentViews) {
+        KUrl url = view->url();
+        if (urls.contains(url)) {
+            // view displays an url we must display, keep it
+            urls.remove(url);
+        } else {
+            // view url is not interesting, drop it
+            d->removeDocumentView(view);
+        }
+    }
 
-	// Destroy views which show urls we don't care about, remove from "urls" the
-	// urls which already have a view.
-	Q_FOREACH(DocumentView* view, d->mDocumentViews) {
-		KUrl url = view->url();
-		if (urls.contains(url)) {
-			// view displays an url we must display, keep it
-			urls.remove(url);
-		} else {
-			// view url is not interesting, drop it
-			d->removeDocumentView(view);
-		}
-	}
+    // Create view for remaining urls
+    typedef QPair<DocumentView*, KUrl> ViewUrlPair;
+    QList<ViewUrlPair> urlForViewList;
+    Q_FOREACH(const KUrl & url, urls) {
+        if (d->mDocumentViews.count() >= MaxViewCount) {
+            kWarning() << "Too many documents to show";
+            break;
+        }
+        DocumentView* view = d->createDocumentView();
+        urlForViewList << qMakePair(view, url);
+    }
 
-	// Create view for remaining urls
-	typedef QPair<DocumentView*, KUrl> ViewUrlPair;
-	QList<ViewUrlPair> urlForViewList;
-	Q_FOREACH(const KUrl& url, urls) {
-		if (d->mDocumentViews.count() >= MaxViewCount) {
-			kWarning() << "Too many documents to show";
-			break;
-		}
-		DocumentView* view = d->createDocumentView();
-		urlForViewList << qMakePair(view, url);
-	}
+    d->mDocumentViewContainer->updateLayout();
 
-	d->mDocumentViewContainer->updateLayout();
+    // Load urls for new views. Do it only now because the view must have the
+    // correct size before it starts loading its url. Do not do it later because
+    // view->url() needs to be set for the next loop.
+    Q_FOREACH(const ViewUrlPair & pair, urlForViewList) {
+        pair.first->openUrl(pair.second);
+    }
 
-	// Load urls for new views. Do it only now because the view must have the
-	// correct size before it starts loading its url. Do not do it later because
-	// view->url() needs to be set for the next loop.
-	Q_FOREACH(const ViewUrlPair& pair, urlForViewList) {
-		pair.first->openUrl(pair.second);
-	}
+    // Init views
+    Q_FOREACH(DocumentView * view, d->mDocumentViews) {
+        view->setCompareMode(d->mCompareMode);
+        if (view->url() == currentUrl) {
+            d->setCurrentView(view);
+        } else {
+            view->setCurrent(false);
+        }
+    }
 
-	// Init views
-	Q_FOREACH(DocumentView* view, d->mDocumentViews) {
-		view->setCompareMode(d->mCompareMode);
-		if (view->url() == currentUrl) {
-			d->setCurrentView(view);
-		} else {
-			view->setCurrent(false);
-		}
-	}
-
-	d->mSynchronizeCheckBox->setVisible(d->mCompareMode);
-	if (d->mCompareMode) {
-		d->mSynchronizer->setDocumentViews(d->mDocumentViews);
-		d->mSynchronizer->setActive(d->mSynchronizeCheckBox->isChecked());
-	} else {
-		d->mSynchronizer->setDocumentViews(QList<DocumentView*>());
-		d->mSynchronizer->setActive(false);
-	}
+    d->mSynchronizeCheckBox->setVisible(d->mCompareMode);
+    if (d->mCompareMode) {
+        d->mSynchronizer->setDocumentViews(d->mDocumentViews);
+        d->mSynchronizer->setActive(d->mSynchronizeCheckBox->isChecked());
+    } else {
+        d->mSynchronizer->setDocumentViews(QList<DocumentView*>());
+        d->mSynchronizer->setActive(false);
+    }
 }
 
-
-void DocumentPanel::reload() {
-	Document::Ptr doc = d->currentView()->document();
-	if (!doc) {
-		kWarning() << "!doc";
-		return;
-	}
-	if (doc->isModified()) {
-		KGuiItem cont = KStandardGuiItem::cont();
-		cont.setText(i18nc("@action:button", "Discard Changes and Reload"));
-		int answer = KMessageBox::warningContinueCancel(this,
-			i18nc("@info", "This image has been modified. Reloading it will discard all your changes."),
-			QString() /* caption */,
-			cont);
-		if (answer != KMessageBox::Continue) {
-			return;
-		}
-	}
-	doc->reload();
-	// Call openUrl again because DocumentView may need to switch to a new
-	// adapter (for example because document was broken and it is not anymore)
-	d->currentView()->openUrl(doc->url());
+void DocumentPanel::reload()
+{
+    Document::Ptr doc = d->currentView()->document();
+    if (!doc) {
+        kWarning() << "!doc";
+        return;
+    }
+    if (doc->isModified()) {
+        KGuiItem cont = KStandardGuiItem::cont();
+        cont.setText(i18nc("@action:button", "Discard Changes and Reload"));
+        int answer = KMessageBox::warningContinueCancel(this,
+                     i18nc("@info", "This image has been modified. Reloading it will discard all your changes."),
+                     QString() /* caption */,
+                     cont);
+        if (answer != KMessageBox::Continue) {
+            return;
+        }
+    }
+    doc->reload();
+    // Call openUrl again because DocumentView may need to switch to a new
+    // adapter (for example because document was broken and it is not anymore)
+    d->currentView()->openUrl(doc->url());
 }
 
-
-void DocumentPanel::reset() {
-	// FIXME: Should probably delete views instead of resetting and hiding them
-	Q_FOREACH(DocumentView* view, d->mDocumentViews) {
-		view->reset();
-		view->hide();
-	}
+void DocumentPanel::reset()
+{
+    // FIXME: Should probably delete views instead of resetting and hiding them
+    Q_FOREACH(DocumentView * view, d->mDocumentViews) {
+        view->reset();
+        view->hide();
+    }
 }
 
-void DocumentPanel::slotViewFocused(DocumentView* view) {
-	d->setCurrentView(view);
+void DocumentPanel::slotViewFocused(DocumentView* view)
+{
+    d->setCurrentView(view);
 }
 
-
-void DocumentPanel::trashView(DocumentView* view) {
-	KUrl url = view->url();
-	deselectView(view);
-	FileOperations::trash(KUrl::List() << url, this);
+void DocumentPanel::trashView(DocumentView* view)
+{
+    KUrl url = view->url();
+    deselectView(view);
+    FileOperations::trash(KUrl::List() << url, this);
 }
 
+void DocumentPanel::deselectView(DocumentView* view)
+{
+    DocumentView* newCurrentView = 0;
+    if (view == d->currentView()) {
+        // We need to find a new view to set as current
+        int idx = d->mDocumentViews.indexOf(view);
+        // Look for the next visible view after the current one
+        for (int newIdx = idx + 1; newIdx < d->mDocumentViews.count(); ++newIdx) {
+            newCurrentView = d->mDocumentViews.at(newIdx);
+            break;
+        }
+        if (!newCurrentView) {
+            // No visible view found after the current one, look before
+            for (int newIdx = idx - 1; newIdx >= 0; --newIdx) {
+                newCurrentView = d->mDocumentViews.at(newIdx);
+                break;
+            }
+        }
+        if (!newCurrentView) {
+            kWarning() << "No view found to set as current, this should not happen!";
+        }
+    }
 
-void DocumentPanel::deselectView(DocumentView* view) {
-	DocumentView* newCurrentView = 0;
-	if (view == d->currentView()) {
-		// We need to find a new view to set as current
-		int idx = d->mDocumentViews.indexOf(view);
-		// Look for the next visible view after the current one
-		for (int newIdx = idx + 1; newIdx < d->mDocumentViews.count(); ++newIdx) {
-			newCurrentView = d->mDocumentViews.at(newIdx);
-			break;
-		}
-		if (!newCurrentView) {
-			// No visible view found after the current one, look before
-			for (int newIdx = idx - 1; newIdx >= 0; --newIdx) {
-				newCurrentView = d->mDocumentViews.at(newIdx);
-				break;
-			}
-		}
-		if (!newCurrentView) {
-			kWarning() << "No view found to set as current, this should not happen!";
-		}
-	}
+    QModelIndex index = d->indexForView(view);
+    QItemSelectionModel* selectionModel = d->mThumbnailBar->selectionModel();
+    selectionModel->select(index, QItemSelectionModel::Deselect);
 
-	QModelIndex index = d->indexForView(view);
-	QItemSelectionModel* selectionModel = d->mThumbnailBar->selectionModel();
-	selectionModel->select(index, QItemSelectionModel::Deselect);
-
-	if (newCurrentView) {
-		d->setCurrentView(newCurrentView);
-	}
+    if (newCurrentView) {
+        d->setCurrentView(newCurrentView);
+    }
 }
 
-QToolButton* DocumentPanel::toggleSideBarButton() const {
-	return d->mToggleSideBarButton;
+QToolButton* DocumentPanel::toggleSideBarButton() const
+{
+    return d->mToggleSideBarButton;
 }
-
 
 } // namespace

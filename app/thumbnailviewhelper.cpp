@@ -37,80 +37,80 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <lib/document/documentfactory.h>
 #include "fileoperations.h"
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct ThumbnailViewHelperPrivate {
-	KActionCollection* mActionCollection;
-	KUrl mCurrentDirUrl;
+    KActionCollection* mActionCollection;
+    KUrl mCurrentDirUrl;
 
-	void addActionToMenu(KMenu& popup, const char* name) {
-		QAction* action = mActionCollection->action(name);
-		if (!action) {
-			kWarning() << "Unknown action" << name;
-			return;
-		}
-		if (action->isEnabled()) {
-			popup.addAction(action);
-		}
-	}
+    void addActionToMenu(KMenu& popup, const char* name)
+    {
+        QAction* action = mActionCollection->action(name);
+        if (!action) {
+            kWarning() << "Unknown action" << name;
+            return;
+        }
+        if (action->isEnabled()) {
+            popup.addAction(action);
+        }
+    }
 };
-
 
 ThumbnailViewHelper::ThumbnailViewHelper(QObject* parent, KActionCollection* actionCollection)
 : AbstractThumbnailViewHelper(parent)
-, d(new ThumbnailViewHelperPrivate) {
-	d->mActionCollection = actionCollection;
+, d(new ThumbnailViewHelperPrivate)
+{
+    d->mActionCollection = actionCollection;
 }
 
-
-ThumbnailViewHelper::~ThumbnailViewHelper() {
-	delete d;
+ThumbnailViewHelper::~ThumbnailViewHelper()
+{
+    delete d;
 }
 
-
-void ThumbnailViewHelper::setCurrentDirUrl(const KUrl& url) {
-	d->mCurrentDirUrl = url;
+void ThumbnailViewHelper::setCurrentDirUrl(const KUrl& url)
+{
+    d->mCurrentDirUrl = url;
 }
 
-
-void ThumbnailViewHelper::showContextMenu(QWidget* parent) {
-	KMenu popup(parent);
-	if (d->mCurrentDirUrl.protocol() == "trash") {
-		d->addActionToMenu(popup, "file_restore");
-		d->addActionToMenu(popup, "file_delete");
-		popup.addSeparator();
-		d->addActionToMenu(popup, "file_show_properties");
-	} else {
-		d->addActionToMenu(popup, "file_create_folder");
-		popup.addSeparator();
-		d->addActionToMenu(popup, "file_rename");
-		d->addActionToMenu(popup, "file_trash");
-		d->addActionToMenu(popup, "file_delete");
-		popup.addSeparator();
-		d->addActionToMenu(popup, "file_copy_to");
-		d->addActionToMenu(popup, "file_move_to");
-		d->addActionToMenu(popup, "file_link_to");
-		popup.addSeparator();
-		d->addActionToMenu(popup, "file_open_with");
+void ThumbnailViewHelper::showContextMenu(QWidget* parent)
+{
+    KMenu popup(parent);
+    if (d->mCurrentDirUrl.protocol() == "trash") {
+        d->addActionToMenu(popup, "file_restore");
+        d->addActionToMenu(popup, "file_delete");
+        popup.addSeparator();
+        d->addActionToMenu(popup, "file_show_properties");
+    } else {
+        d->addActionToMenu(popup, "file_create_folder");
+        popup.addSeparator();
+        d->addActionToMenu(popup, "file_rename");
+        d->addActionToMenu(popup, "file_trash");
+        d->addActionToMenu(popup, "file_delete");
+        popup.addSeparator();
+        d->addActionToMenu(popup, "file_copy_to");
+        d->addActionToMenu(popup, "file_move_to");
+        d->addActionToMenu(popup, "file_link_to");
+        popup.addSeparator();
+        d->addActionToMenu(popup, "file_open_with");
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-		d->addActionToMenu(popup, "edit_tags");
+        d->addActionToMenu(popup, "edit_tags");
 #endif
-		popup.addSeparator();
-		d->addActionToMenu(popup, "file_show_properties");
-	}
-	popup.exec(QCursor::pos());
+        popup.addSeparator();
+        d->addActionToMenu(popup, "file_show_properties");
+    }
+    popup.exec(QCursor::pos());
 }
 
-
-void ThumbnailViewHelper::showMenuForUrlDroppedOnViewport(QWidget* parent, const KUrl::List& lst) {
-	showMenuForUrlDroppedOnDir(parent, lst, d->mCurrentDirUrl);
+void ThumbnailViewHelper::showMenuForUrlDroppedOnViewport(QWidget* parent, const KUrl::List& lst)
+{
+    showMenuForUrlDroppedOnDir(parent, lst, d->mCurrentDirUrl);
 }
 
-
-void ThumbnailViewHelper::showMenuForUrlDroppedOnDir(QWidget* parent, const KUrl::List& urlList, const KUrl& destUrl) {
-	FileOperations::showMenuForDroppedUrls(parent, urlList, destUrl);
+void ThumbnailViewHelper::showMenuForUrlDroppedOnDir(QWidget* parent, const KUrl::List& urlList, const KUrl& destUrl)
+{
+    FileOperations::showMenuForDroppedUrls(parent, urlList, destUrl);
 }
-
 
 } // namespace

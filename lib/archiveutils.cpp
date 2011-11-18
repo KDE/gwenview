@@ -27,44 +27,48 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kmimetype.h>
 #include <kprotocolmanager.h>
 
-namespace Gwenview {
+namespace Gwenview
+{
 
+namespace ArchiveUtils
+{
 
-namespace ArchiveUtils {
-
-bool fileItemIsArchive(const KFileItem& item) {
-	KMimeType::Ptr mimeType = item.determineMimeType();
-	return !ArchiveUtils::protocolForMimeType(mimeType->name()).isEmpty();
+bool fileItemIsArchive(const KFileItem& item)
+{
+    KMimeType::Ptr mimeType = item.determineMimeType();
+    return !ArchiveUtils::protocolForMimeType(mimeType->name()).isEmpty();
 }
 
-bool fileItemIsDirOrArchive(const KFileItem& item) {
-	return item.isDir() || fileItemIsArchive(item);
+bool fileItemIsDirOrArchive(const KFileItem& item)
+{
+    return item.isDir() || fileItemIsArchive(item);
 }
 
-QString protocolForMimeType(const QString& mimeType) {
-	static QHash<QString, QString> cache;
-	QHash<QString, QString>::ConstIterator it = cache.constFind(mimeType);
-	if (it != cache.constEnd()) {
-		return it.value();
-	}
+QString protocolForMimeType(const QString& mimeType)
+{
+    static QHash<QString, QString> cache;
+    QHash<QString, QString>::ConstIterator it = cache.constFind(mimeType);
+    if (it != cache.constEnd()) {
+        return it.value();
+    }
 
-	QString protocol = KProtocolManager::protocolForArchiveMimetype(mimeType);
-	if (protocol.isEmpty()) {
-		// No protocol, try with mimeType parents. This is useful for .cbz for
-		// example
-		KMimeType::Ptr ptr = KMimeType::mimeType(mimeType);
-		if (ptr) {
-			Q_FOREACH(const QString& parentMimeType, ptr->allParentMimeTypes()) {
-				protocol = KProtocolManager::protocolForArchiveMimetype(parentMimeType);
-				if (!protocol.isEmpty()) {
-					break;
-				}
-			}
-		}
-	}
+    QString protocol = KProtocolManager::protocolForArchiveMimetype(mimeType);
+    if (protocol.isEmpty()) {
+        // No protocol, try with mimeType parents. This is useful for .cbz for
+        // example
+        KMimeType::Ptr ptr = KMimeType::mimeType(mimeType);
+        if (ptr) {
+            Q_FOREACH(const QString & parentMimeType, ptr->allParentMimeTypes()) {
+                protocol = KProtocolManager::protocolForArchiveMimetype(parentMimeType);
+                if (!protocol.isEmpty()) {
+                    break;
+                }
+            }
+        }
+    }
 
-	cache.insert(mimeType, protocol);
-	return protocol;
+    cache.insert(mimeType, protocol);
+    return protocol;
 }
 
 } // namespace ArchiveUtils

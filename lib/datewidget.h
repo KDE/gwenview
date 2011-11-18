@@ -32,32 +32,32 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 class QDate;
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct DateWidgetPrivate;
-class GWENVIEWLIB_EXPORT DateWidget : public QWidget {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT DateWidget : public QWidget
+{
+    Q_OBJECT
 public:
-	DateWidget(QWidget* parent = 0);
-	~DateWidget();
+    DateWidget(QWidget* parent = 0);
+    ~DateWidget();
 
-	QDate date() const;
+    QDate date() const;
 
 Q_SIGNALS:
-	void dateChanged(const QDate&);
+    void dateChanged(const QDate&);
 
 private Q_SLOTS:
-	void showDatePicker();
-	void slotDatePickerModified(const QDate& date);
-	void goToPrevious();
-	void goToNext();
+    void showDatePicker();
+    void slotDatePickerModified(const QDate& date);
+    void goToPrevious();
+    void goToNext();
 
 private:
-	friend struct DateWidgetPrivate;
-	DateWidgetPrivate* const d;
+    friend struct DateWidgetPrivate;
+    DateWidgetPrivate* const d;
 };
-
 
 } // namespace
 

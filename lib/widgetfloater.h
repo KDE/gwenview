@@ -30,8 +30,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct WidgetFloaterPrivate;
 
@@ -40,29 +40,29 @@ struct WidgetFloaterPrivate;
  * another (the parent), ensuring the child remains aligned as specified by
  * setAlignment() whenever either widget get resized.
  */
-class GWENVIEWLIB_EXPORT WidgetFloater : public QObject {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT WidgetFloater : public QObject
+{
+    Q_OBJECT
 public:
-	WidgetFloater(QWidget* parent);
-	~WidgetFloater();
+    WidgetFloater(QWidget* parent);
+    ~WidgetFloater();
 
-	void setChildWidget(QWidget*);
+    void setChildWidget(QWidget*);
 
-	void setAlignment(Qt::Alignment);
+    void setAlignment(Qt::Alignment);
 
-	void setHorizontalMargin(int);
-	int horizontalMargin() const;
+    void setHorizontalMargin(int);
+    int horizontalMargin() const;
 
-	void setVerticalMargin(int);
-	int verticalMargin() const;
+    void setVerticalMargin(int);
+    int verticalMargin() const;
 
 protected:
-	bool eventFilter(QObject*, QEvent*);
+    bool eventFilter(QObject*, QEvent*);
 
 private:
-	WidgetFloaterPrivate* const d;
+    WidgetFloaterPrivate* const d;
 };
-
 
 } // namespace
 

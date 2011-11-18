@@ -30,28 +30,28 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 class ResizeImageDialogPrivate;
-class GWENVIEWLIB_EXPORT ResizeImageDialog : public KDialog {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT ResizeImageDialog : public KDialog
+{
+    Q_OBJECT
 public:
-	ResizeImageDialog(QWidget *parent);
-	~ResizeImageDialog();
+    ResizeImageDialog(QWidget *parent);
+    ~ResizeImageDialog();
 
-	void setOriginalSize(const QSize&);
-	QSize size() const;
+    void setOriginalSize(const QSize&);
+    QSize size() const;
 
 private Q_SLOTS:
-	void slotWidthChanged(int);
-	void slotHeightChanged(int);
-	void slotKeepAspectChanged(bool);
+    void slotWidthChanged(int);
+    void slotHeightChanged(int);
+    void slotKeepAspectChanged(bool);
 
 private:
-	ResizeImageDialogPrivate* const d;
+    ResizeImageDialogPrivate* const d;
 };
-
 
 } // namespace
 

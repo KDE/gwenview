@@ -30,51 +30,56 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include <lib/documentview/abstractdocumentviewadapter.h>
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 struct ImageViewAdapterPrivate;
-class GWENVIEWLIB_EXPORT ImageViewAdapter : public AbstractDocumentViewAdapter {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT ImageViewAdapter : public AbstractDocumentViewAdapter
+{
+    Q_OBJECT
 public:
-	ImageViewAdapter();
-	~ImageViewAdapter();
+    ImageViewAdapter();
+    ~ImageViewAdapter();
 
-	virtual QCursor cursor() const;
+    virtual QCursor cursor() const;
 
-	virtual void setCursor(const QCursor&);
+    virtual void setCursor(const QCursor&);
 
-	virtual MimeTypeUtils::Kind kind() const { return MimeTypeUtils::KIND_RASTER_IMAGE; }
+    virtual MimeTypeUtils::Kind kind() const {
+        return MimeTypeUtils::KIND_RASTER_IMAGE;
+    }
 
-	virtual bool canZoom() const { return true; }
+    virtual bool canZoom() const {
+        return true;
+    }
 
-	virtual void setZoomToFit(bool);
+    virtual void setZoomToFit(bool);
 
-	virtual bool zoomToFit() const;
+    virtual bool zoomToFit() const;
 
-	virtual qreal zoom() const;
+    virtual qreal zoom() const;
 
-	virtual void setZoom(qreal zoom, const QPointF& center);
+    virtual void setZoom(qreal zoom, const QPointF& center);
 
-	virtual qreal computeZoomToFit() const;
+    virtual qreal computeZoomToFit() const;
 
-	virtual Document::Ptr document() const;
+    virtual Document::Ptr document() const;
 
-	virtual void setDocument(Document::Ptr);
+    virtual void setDocument(Document::Ptr);
 
-	virtual void loadConfig();
+    virtual void loadConfig();
 
-	virtual RasterImageView* rasterImageView() const;
+    virtual RasterImageView* rasterImageView() const;
 
-	virtual QPointF scrollPos() const;
-	virtual void setScrollPos(const QPointF& pos);
+    virtual QPointF scrollPos() const;
+    virtual void setScrollPos(const QPointF& pos);
 
 private Q_SLOTS:
-	void slotLoadingFailed();
+    void slotLoadingFailed();
 
 private:
-	ImageViewAdapterPrivate* const d;
+    ImageViewAdapterPrivate* const d;
 };
-
 
 } // namespace
 

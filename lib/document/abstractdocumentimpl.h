@@ -34,65 +34,76 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 class QImage;
 class QRect;
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 class Document;
 class DocumentJob;
 class AbstractDocumentEditor;
 
 struct AbstractDocumentImplPrivate;
-class AbstractDocumentImpl : public QObject {
-	Q_OBJECT
+class AbstractDocumentImpl : public QObject
+{
+    Q_OBJECT
 public:
-	AbstractDocumentImpl(Document*);
-	virtual ~AbstractDocumentImpl();
+    AbstractDocumentImpl(Document*);
+    virtual ~AbstractDocumentImpl();
 
-	/**
-	 * This method is called by Document::switchToImpl after it has connected
-	 * signals to the object
-	 */
-	virtual void init() = 0;
+    /**
+     * This method is called by Document::switchToImpl after it has connected
+     * signals to the object
+     */
+    virtual void init() = 0;
 
-	virtual Document::LoadingState loadingState() const = 0;
+    virtual Document::LoadingState loadingState() const = 0;
 
-	virtual DocumentJob* save(const KUrl&, const QByteArray& /*format*/) { return 0; }
+    virtual DocumentJob* save(const KUrl&, const QByteArray& /*format*/) {
+        return 0;
+    }
 
-	virtual AbstractDocumentEditor* editor() { return 0; }
+    virtual AbstractDocumentEditor* editor() {
+        return 0;
+    }
 
-	virtual QByteArray rawData() const { return QByteArray(); }
+    virtual QByteArray rawData() const {
+        return QByteArray();
+    }
 
-	virtual bool isEditable() const { return false; }
+    virtual bool isEditable() const {
+        return false;
+    }
 
-	virtual bool isAnimated() const { return false; }
+    virtual bool isAnimated() const {
+        return false;
+    }
 
-	virtual void startAnimation() {}
+    virtual void startAnimation() {}
 
-	virtual void stopAnimation() {}
+    virtual void stopAnimation() {}
 
-	Document* document() const;
+    Document* document() const;
 
 Q_SIGNALS:
-	void imageRectUpdated(const QRect&);
-	void metaInfoLoaded();
-	void loaded();
-	void loadingFailed();
-	void isAnimatedUpdated();
-	void editorUpdated();
+    void imageRectUpdated(const QRect&);
+    void metaInfoLoaded();
+    void loaded();
+    void loadingFailed();
+    void isAnimatedUpdated();
+    void editorUpdated();
 
 protected:
-	void setDocumentImage(const QImage& image);
-	void setDocumentImageSize(const QSize& size);
-	void setDocumentKind(MimeTypeUtils::Kind);
-	void setDocumentFormat(const QByteArray& format);
-	void setDocumentExiv2Image(Exiv2::Image::AutoPtr);
-	void setDocumentDownSampledImage(const QImage&, int invertedZoom);
-	void setDocumentErrorString(const QString&);
-	void switchToImpl(AbstractDocumentImpl*  impl);
+    void setDocumentImage(const QImage& image);
+    void setDocumentImageSize(const QSize& size);
+    void setDocumentKind(MimeTypeUtils::Kind);
+    void setDocumentFormat(const QByteArray& format);
+    void setDocumentExiv2Image(Exiv2::Image::AutoPtr);
+    void setDocumentDownSampledImage(const QImage&, int invertedZoom);
+    void setDocumentErrorString(const QString&);
+    void switchToImpl(AbstractDocumentImpl*  impl);
 
 private:
-	AbstractDocumentImplPrivate* const d;
+    AbstractDocumentImplPrivate* const d;
 };
-
 
 } // namespace
 

@@ -31,8 +31,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include <lib/document/document.h>
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 class DocumentJobPrivate;
 
@@ -47,69 +47,68 @@ class DocumentJobPrivate;
  * You can of course use threading inside your task implementation to speed it
  * up.
  */
-class GWENVIEWLIB_EXPORT DocumentJob : public KCompositeJob {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT DocumentJob : public KCompositeJob
+{
+    Q_OBJECT
 public:
-	enum {
-		NoDocumentEditorError = UserDefinedError + 1
-	};
-	DocumentJob();
-	~DocumentJob();
+    enum {
+        NoDocumentEditorError = UserDefinedError + 1
+    };
+    DocumentJob();
+    ~DocumentJob();
 
-	Document::Ptr document() const;
+    Document::Ptr document() const;
 
-	virtual void start();
+    virtual void start();
 
 protected Q_SLOTS:
-	/**
-	 * Implement this method to provide the task behavior.
-	 * You *must* emit the done() signal when your work is finished, but it
-	 * does not have to be finished when run() returns.
-	 * If you are not emitting it from the GUI thread, then use a queued
-	 * connection to emit it.
-	 */
-	virtual void doStart() = 0;
+    /**
+     * Implement this method to provide the task behavior.
+     * You *must* emit the done() signal when your work is finished, but it
+     * does not have to be finished when run() returns.
+     * If you are not emitting it from the GUI thread, then use a queued
+     * connection to emit it.
+     */
+    virtual void doStart() = 0;
 
-	/**
-	 * slot-ification of emitResult()
-	 */
-	void emitResult() {
-		KJob::emitResult();
-	}
+    /**
+     * slot-ification of emitResult()
+     */
+    void emitResult() {
+        KJob::emitResult();
+    }
 
 protected:
-	/**
-	 * Convenience method which checks document()->editor() is valid
-	 * and set the job error properties if it's not.
-	 * @return true if the editor is valid.
-	 */
-	bool checkDocumentEditor();
+    /**
+     * Convenience method which checks document()->editor() is valid
+     * and set the job error properties if it's not.
+     * @return true if the editor is valid.
+     */
+    bool checkDocumentEditor();
 
 private:
-	void setDocument(const Document::Ptr&);
+    void setDocument(const Document::Ptr&);
 
-	DocumentJobPrivate* const d;
+    DocumentJobPrivate* const d;
 
-	friend class Document;
+    friend class Document;
 };
-
 
 /**
  * A document job whose action is started in a separate thread
  */
-class ThreadedDocumentJob : public DocumentJob {
+class ThreadedDocumentJob : public DocumentJob
+{
 public:
-	/**
-	 * Must be reimplemented to apply the action to the document.
-	 * This method is never called from the GUI thread.
-	 */
-	virtual void threadedStart() = 0;
+    /**
+     * Must be reimplemented to apply the action to the document.
+     * This method is never called from the GUI thread.
+     */
+    virtual void threadedStart() = 0;
 
 protected:
-	virtual void doStart();
+    virtual void doStart();
 };
-
-
 
 } // namespace
 

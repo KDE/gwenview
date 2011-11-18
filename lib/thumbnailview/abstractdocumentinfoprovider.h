@@ -37,29 +37,29 @@ class QSize;
 
 class KUrl;
 
-namespace Gwenview {
+namespace Gwenview
+{
 
-
-class GWENVIEWLIB_EXPORT AbstractDocumentInfoProvider : public QObject {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT AbstractDocumentInfoProvider : public QObject
+{
+    Q_OBJECT
 public:
-	AbstractDocumentInfoProvider(QObject* parent=0);
+    AbstractDocumentInfoProvider(QObject* parent = 0);
 
-	/**
-	 * Returns true if the document is currently busy (loading, saving,
-	 * rotating...)
-	 */
-	virtual bool isBusy(const KUrl& url) = 0;
+    /**
+     * Returns true if the document is currently busy (loading, saving,
+     * rotating...)
+     */
+    virtual bool isBusy(const KUrl& url) = 0;
 
-	virtual bool isModified(const KUrl& url) = 0;
+    virtual bool isModified(const KUrl& url) = 0;
 
-	virtual void thumbnailForDocument(const KUrl& url, ThumbnailGroup::Enum, QPixmap* outPix, QSize* outFullSize) const = 0;
+    virtual void thumbnailForDocument(const KUrl& url, ThumbnailGroup::Enum, QPixmap* outPix, QSize* outFullSize) const = 0;
 
 Q_SIGNALS:
-	void busyStateChanged(const QModelIndex&, bool);
-	void documentChanged(const QModelIndex&);
+    void busyStateChanged(const QModelIndex&, bool);
+    void documentChanged(const QModelIndex&);
 };
-
 
 } // namespace
 

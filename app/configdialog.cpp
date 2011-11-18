@@ -33,91 +33,92 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <lib/gwenviewconfig.h>
 #include <lib/invisiblebuttongroup.h>
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct ConfigDialogPrivate {
-	InvisibleButtonGroup* mAlphaBackgroundModeGroup;
-	InvisibleButtonGroup* mWheelBehaviorGroup;
-	InvisibleButtonGroup* mThumbnailBarOrientationGroup;
-	Ui_GeneralConfigPage mGeneralConfigPage;
-	Ui_ImageViewConfigPage mImageViewConfigPage;
-	Ui_AdvancedConfigPage mAdvancedConfigPage;
+    InvisibleButtonGroup* mAlphaBackgroundModeGroup;
+    InvisibleButtonGroup* mWheelBehaviorGroup;
+    InvisibleButtonGroup* mThumbnailBarOrientationGroup;
+    Ui_GeneralConfigPage mGeneralConfigPage;
+    Ui_ImageViewConfigPage mImageViewConfigPage;
+    Ui_AdvancedConfigPage mAdvancedConfigPage;
 };
 
 template <class Ui>
-QWidget* setupPage(Ui& ui) {
-	QWidget* widget = new QWidget;
-	ui.setupUi(widget);
-	widget->layout()->setMargin(0);
-	return widget;
+QWidget* setupPage(Ui& ui)
+{
+    QWidget* widget = new QWidget;
+    ui.setupUi(widget);
+    widget->layout()->setMargin(0);
+    return widget;
 }
 
 ConfigDialog::ConfigDialog(QWidget* parent)
 : KConfigDialog(parent, "Settings", GwenviewConfig::self())
-, d(new ConfigDialogPrivate) {
-	setFaceType(KPageDialog::List);
-	setButtons(KDialog::Ok | KDialog::Cancel | KDialog::Apply | KDialog::Default);
-	showButtonSeparator(true);
+, d(new ConfigDialogPrivate)
+{
+    setFaceType(KPageDialog::List);
+    setButtons(KDialog::Ok | KDialog::Cancel | KDialog::Apply | KDialog::Default);
+    showButtonSeparator(true);
 
-	QWidget* widget;
-	KPageWidgetItem* pageItem;
+    QWidget* widget;
+    KPageWidgetItem* pageItem;
 
-	// General
-	widget = setupPage(d->mGeneralConfigPage);
-	pageItem = addPage(widget, i18n("General"));
-	pageItem->setIcon(KIcon("gwenview"));
-	connect(d->mGeneralConfigPage.kcfg_ViewBackgroundValue, SIGNAL(valueChanged(int)), SLOT(updateViewBackgroundFrame()));
+    // General
+    widget = setupPage(d->mGeneralConfigPage);
+    pageItem = addPage(widget, i18n("General"));
+    pageItem->setIcon(KIcon("gwenview"));
+    connect(d->mGeneralConfigPage.kcfg_ViewBackgroundValue, SIGNAL(valueChanged(int)), SLOT(updateViewBackgroundFrame()));
 
-	// Image View
-	widget = setupPage(d->mImageViewConfigPage);
+    // Image View
+    widget = setupPage(d->mImageViewConfigPage);
 
-	d->mAlphaBackgroundModeGroup = new InvisibleButtonGroup(widget);
-	d->mAlphaBackgroundModeGroup->setObjectName( QLatin1String("kcfg_AlphaBackgroundMode" ));
-	d->mAlphaBackgroundModeGroup->addButton(d->mImageViewConfigPage.checkBoardRadioButton, int(RasterImageView::AlphaBackgroundCheckBoard));
-	d->mAlphaBackgroundModeGroup->addButton(d->mImageViewConfigPage.solidColorRadioButton, int(RasterImageView::AlphaBackgroundSolid));
+    d->mAlphaBackgroundModeGroup = new InvisibleButtonGroup(widget);
+    d->mAlphaBackgroundModeGroup->setObjectName(QLatin1String("kcfg_AlphaBackgroundMode"));
+    d->mAlphaBackgroundModeGroup->addButton(d->mImageViewConfigPage.checkBoardRadioButton, int(RasterImageView::AlphaBackgroundCheckBoard));
+    d->mAlphaBackgroundModeGroup->addButton(d->mImageViewConfigPage.solidColorRadioButton, int(RasterImageView::AlphaBackgroundSolid));
 
-	d->mWheelBehaviorGroup = new InvisibleButtonGroup(widget);
-	d->mWheelBehaviorGroup->setObjectName( QLatin1String("kcfg_MouseWheelBehavior" ));
-	d->mWheelBehaviorGroup->addButton(d->mImageViewConfigPage.mouseWheelScrollRadioButton, int(MouseWheelBehavior::Scroll));
-	d->mWheelBehaviorGroup->addButton(d->mImageViewConfigPage.mouseWheelBrowseRadioButton, int(MouseWheelBehavior::Browse));
+    d->mWheelBehaviorGroup = new InvisibleButtonGroup(widget);
+    d->mWheelBehaviorGroup->setObjectName(QLatin1String("kcfg_MouseWheelBehavior"));
+    d->mWheelBehaviorGroup->addButton(d->mImageViewConfigPage.mouseWheelScrollRadioButton, int(MouseWheelBehavior::Scroll));
+    d->mWheelBehaviorGroup->addButton(d->mImageViewConfigPage.mouseWheelBrowseRadioButton, int(MouseWheelBehavior::Browse));
 
-	d->mThumbnailBarOrientationGroup = new InvisibleButtonGroup(widget);
-	d->mThumbnailBarOrientationGroup->setObjectName( QLatin1String("kcfg_ThumbnailBarOrientation" ));
-	d->mThumbnailBarOrientationGroup->addButton(d->mImageViewConfigPage.horizontalRadioButton, int(Qt::Horizontal));
-	d->mThumbnailBarOrientationGroup->addButton(d->mImageViewConfigPage.verticalRadioButton, int(Qt::Vertical));
+    d->mThumbnailBarOrientationGroup = new InvisibleButtonGroup(widget);
+    d->mThumbnailBarOrientationGroup->setObjectName(QLatin1String("kcfg_ThumbnailBarOrientation"));
+    d->mThumbnailBarOrientationGroup->addButton(d->mImageViewConfigPage.horizontalRadioButton, int(Qt::Horizontal));
+    d->mThumbnailBarOrientationGroup->addButton(d->mImageViewConfigPage.verticalRadioButton, int(Qt::Vertical));
 
-	pageItem = addPage(widget, i18n("Image View"));
-	pageItem->setIcon(KIcon("view-preview"));
+    pageItem = addPage(widget, i18n("Image View"));
+    pageItem->setIcon(KIcon("view-preview"));
 
-	// Advanced
-	widget = setupPage(d->mAdvancedConfigPage);
-	pageItem = addPage(widget, i18n("Advanced"));
-	pageItem->setIcon(KIcon("preferences-other"));
-	d->mAdvancedConfigPage.cacheHelpLabel->setFont(KGlobalSettings::smallestReadableFont());
+    // Advanced
+    widget = setupPage(d->mAdvancedConfigPage);
+    pageItem = addPage(widget, i18n("Advanced"));
+    pageItem->setIcon(KIcon("preferences-other"));
+    d->mAdvancedConfigPage.cacheHelpLabel->setFont(KGlobalSettings::smallestReadableFont());
 
-	updateViewBackgroundFrame();
+    updateViewBackgroundFrame();
 }
 
-
-ConfigDialog::~ConfigDialog() {
-	delete d;
+ConfigDialog::~ConfigDialog()
+{
+    delete d;
 }
 
-
-void ConfigDialog::updateViewBackgroundFrame() {
-	QColor color = QColor::fromHsv(0, 0, d->mGeneralConfigPage.kcfg_ViewBackgroundValue->value());
-	QString css =
-		QString(
-		"background-color: %1;"
-		"border-radius: 5px;"
-		"border: 1px solid %1;")
-		.arg(color.name());
-	// When using Oxygen, setting the background color via palette causes the
-	// pixels outside the frame to be painted with the new background color as
-	// well. Using CSS works more like expected.
-	d->mGeneralConfigPage.backgroundValueFrame->setStyleSheet(css);
+void ConfigDialog::updateViewBackgroundFrame()
+{
+    QColor color = QColor::fromHsv(0, 0, d->mGeneralConfigPage.kcfg_ViewBackgroundValue->value());
+    QString css =
+        QString(
+            "background-color: %1;"
+            "border-radius: 5px;"
+            "border: 1px solid %1;")
+        .arg(color.name());
+    // When using Oxygen, setting the background color via palette causes the
+    // pixels outside the frame to be painted with the new background color as
+    // well. Using CSS works more like expected.
+    d->mGeneralConfigPage.backgroundValueFrame->setStyleSheet(css);
 }
-
 
 } // namespace

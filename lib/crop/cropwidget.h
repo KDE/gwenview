@@ -31,36 +31,37 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Local
 #include <lib/document/document.h>
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 class CropTool;
 class RasterImageView;
 
 struct CropWidgetPrivate;
-class GWENVIEWLIB_EXPORT CropWidget : public QWidget {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT CropWidget : public QWidget
+{
+    Q_OBJECT
 public:
-	CropWidget(QWidget* parent, RasterImageView*, CropTool*);
-	~CropWidget();
+    CropWidget(QWidget* parent, RasterImageView*, CropTool*);
+    ~CropWidget();
 
 Q_SIGNALS:
-	void cropRequested();
-	void done();
+    void cropRequested();
+    void done();
 
 private Q_SLOTS:
-	void slotPositionChanged();
-	void slotWidthChanged();
-	void slotHeightChanged();
-	void setCropRect(const QRect& rect);
+    void slotPositionChanged();
+    void slotWidthChanged();
+    void slotHeightChanged();
+    void setCropRect(const QRect& rect);
 
-	void slotRatioComboBoxEditTextChanged();
-	void slotRatioComboBoxActivated();
-	void applyRatioConstraint();
+    void slotRatioComboBoxEditTextChanged();
+    void slotRatioComboBoxActivated();
+    void applyRatioConstraint();
 
 private:
-	CropWidgetPrivate* const d;
+    CropWidgetPrivate* const d;
 };
-
 
 } // namespace
 

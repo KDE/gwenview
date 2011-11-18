@@ -28,37 +28,36 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct VideoDocumentLoadedImplPrivate {
 };
 
-
 VideoDocumentLoadedImpl::VideoDocumentLoadedImpl(Document* document)
 : AbstractDocumentImpl(document)
-, d(new VideoDocumentLoadedImplPrivate) {
+, d(new VideoDocumentLoadedImplPrivate)
+{
 }
 
-
-VideoDocumentLoadedImpl::~VideoDocumentLoadedImpl() {
-	delete d;
+VideoDocumentLoadedImpl::~VideoDocumentLoadedImpl()
+{
+    delete d;
 }
 
-
-void VideoDocumentLoadedImpl::init() {
-	emit loaded();
+void VideoDocumentLoadedImpl::init()
+{
+    emit loaded();
 }
 
-
-Document::LoadingState VideoDocumentLoadedImpl::loadingState() const {
-	return Document::Loaded;
+Document::LoadingState VideoDocumentLoadedImpl::loadingState() const
+{
+    return Document::Loaded;
 }
 
-
-void VideoDocumentLoadedImpl::setImage(const QImage&) {
-	kWarning() << "Should not be called";
+void VideoDocumentLoadedImpl::setImage(const QImage&)
+{
+    kWarning() << "Should not be called";
 }
-
 
 } // namespace

@@ -32,58 +32,57 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include <lib/thumbnailview/thumbnailview.h>
 
-
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct ThumbnailBarItemDelegatePrivate;
 
-class GWENVIEWLIB_EXPORT ThumbnailBarItemDelegate : public QAbstractItemDelegate {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT ThumbnailBarItemDelegate : public QAbstractItemDelegate
+{
+    Q_OBJECT
 public:
-	ThumbnailBarItemDelegate(ThumbnailView*);
-	~ThumbnailBarItemDelegate();
+    ThumbnailBarItemDelegate(ThumbnailView*);
+    ~ThumbnailBarItemDelegate();
 
-	virtual void paint( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
-	virtual QSize sizeHint( const QStyleOptionViewItem & /*option*/, const QModelIndex & /*index*/ ) const;
+    virtual void paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const;
+    virtual QSize sizeHint(const QStyleOptionViewItem & /*option*/, const QModelIndex & /*index*/) const;
 
 protected:
-	virtual bool eventFilter(QObject*, QEvent*);
+    virtual bool eventFilter(QObject*, QEvent*);
 
 private Q_SLOTS:
-	void toggleSelection();
+    void toggleSelection();
 
 private:
-	ThumbnailBarItemDelegatePrivate* const d;
-	friend struct ThumbnailBarItemDelegatePrivate;
+    ThumbnailBarItemDelegatePrivate* const d;
+    friend struct ThumbnailBarItemDelegatePrivate;
 };
-
 
 struct ThumbnailBarViewPrivate;
-class GWENVIEWLIB_EXPORT ThumbnailBarView : public ThumbnailView {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT ThumbnailBarView : public ThumbnailView
+{
+    Q_OBJECT
 public:
-	ThumbnailBarView(QWidget* = 0);
-	~ThumbnailBarView();
+    ThumbnailBarView(QWidget* = 0);
+    ~ThumbnailBarView();
 
-	Qt::Orientation orientation() const;
-	void setOrientation(Qt::Orientation);
+    Qt::Orientation orientation() const;
+    void setOrientation(Qt::Orientation);
 
-	int rowCount() const;
-	void setRowCount(int);
+    int rowCount() const;
+    void setRowCount(int);
 
 protected:
-	virtual void resizeEvent(QResizeEvent * event);
-	virtual void wheelEvent(QWheelEvent* event);
-	virtual void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
+    virtual void resizeEvent(QResizeEvent * event);
+    virtual void wheelEvent(QWheelEvent* event);
+    virtual void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
 
 private Q_SLOTS:
-	void slotFrameChanged(int);
+    void slotFrameChanged(int);
 
 private:
-	ThumbnailBarViewPrivate* const d;
+    ThumbnailBarViewPrivate* const d;
 };
-
 
 } // namespace
 

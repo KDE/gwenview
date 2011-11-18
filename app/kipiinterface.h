@@ -29,66 +29,83 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 class QAction;
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 struct KIPIInterfacePrivate;
 
 class MainWindow;
 
-class KIPIInterface :public KIPI::Interface {
-	Q_OBJECT
+class KIPIInterface : public KIPI::Interface
+{
+    Q_OBJECT
 
 public:
-	KIPIInterface(MainWindow*);
-	virtual ~KIPIInterface();
+    KIPIInterface(MainWindow*);
+    virtual ~KIPIInterface();
 
-	KIPI::ImageCollection currentAlbum();
-	KIPI::ImageCollection currentSelection();
-	QList<KIPI::ImageCollection> allAlbums();
-	KIPI::ImageInfo info( const KUrl& url);
-	int features() const;
-	virtual bool addImage(const KUrl&, QString& err);
-	virtual void delImage( const KUrl& );
-	virtual void refreshImages( const KUrl::List& urls );
+    KIPI::ImageCollection currentAlbum();
+    KIPI::ImageCollection currentSelection();
+    QList<KIPI::ImageCollection> allAlbums();
+    KIPI::ImageInfo info(const KUrl& url);
+    int features() const;
+    virtual bool addImage(const KUrl&, QString& err);
+    virtual void delImage(const KUrl&);
+    virtual void refreshImages(const KUrl::List& urls);
 
-	virtual KIPI::ImageCollectionSelector* imageCollectionSelector(QWidget *parent);
-	virtual KIPI::UploadWidget* uploadWidget(QWidget *parent);
+    virtual KIPI::ImageCollectionSelector* imageCollectionSelector(QWidget *parent);
+    virtual KIPI::UploadWidget* uploadWidget(QWidget *parent);
 
-	QList<QAction*> pluginActions(KIPI::Category) const;
+    QList<QAction*> pluginActions(KIPI::Category) const;
 
 public Q_SLOTS:
-	void loadPlugins();
+    void loadPlugins();
 
 private Q_SLOTS:
-	void slotSelectionChanged();
-	void slotDirectoryChanged();
-	void init();
-	void loadOnePlugin();
+    void slotSelectionChanged();
+    void slotDirectoryChanged();
+    void init();
+    void loadOnePlugin();
 
 private:
-	KIPIInterfacePrivate* const d;
+    KIPIInterfacePrivate* const d;
 };
 
-class ImageCollection : public KIPI::ImageCollectionShared {
+class ImageCollection : public KIPI::ImageCollectionShared
+{
 public:
-	ImageCollection(KUrl dirURL, const QString& name, const KUrl::List& images)
-	: KIPI::ImageCollectionShared()
-    , mDirURL(dirURL)
-    , mName(name)
-    , mImages(images) {}
+    ImageCollection(KUrl dirURL, const QString& name, const KUrl::List& images)
+        : KIPI::ImageCollectionShared()
+        , mDirURL(dirURL)
+        , mName(name)
+        , mImages(images) {}
 
-	QString name()           { return mName; }
-	QString comment()        { return QString(); }
-	KUrl::List images()      { return mImages; }
-	KUrl uploadRoot()        { return KUrl("/"); }
-	KUrl uploadPath()        { return mDirURL; }
-	QString uploadRootName() { return "/"; }
-	bool isDirectory()       { return true; }
+    QString name()           {
+        return mName;
+    }
+    QString comment()        {
+        return QString();
+    }
+    KUrl::List images()      {
+        return mImages;
+    }
+    KUrl uploadRoot()        {
+        return KUrl("/");
+    }
+    KUrl uploadPath()        {
+        return mDirURL;
+    }
+    QString uploadRootName() {
+        return "/";
+    }
+    bool isDirectory()       {
+        return true;
+    }
 
 private:
     KUrl mDirURL;
-	QString mName;
-	KUrl::List mImages;
+    QString mName;
+    KUrl::List mImages;
 };
 
 } // namespace

@@ -31,21 +31,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 class KIPIInterface;
 
-class KIPIUploadWidget : public KIPI::UploadWidget {
-	Q_OBJECT
+class KIPIUploadWidget : public KIPI::UploadWidget
+{
+    Q_OBJECT
 public:
-	KIPIUploadWidget(KIPIInterface*, QWidget* parent);
+    KIPIUploadWidget(KIPIInterface*, QWidget* parent);
 
-	virtual KIPI::ImageCollection selectedImageCollection() const;
+    virtual KIPI::ImageCollection selectedImageCollection() const;
 
 private:
-	KIPIInterface* mInterface;
+    KIPIInterface* mInterface;
 };
-
 
 } // namespace
 

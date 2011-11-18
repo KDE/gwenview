@@ -52,273 +52,281 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <nepomuk/tag.h>
 #endif
 
+namespace Gwenview
+{
 
-namespace Gwenview {
-
-class HistoryThumbnailViewHelper : public AbstractThumbnailViewHelper {
+class HistoryThumbnailViewHelper : public AbstractThumbnailViewHelper
+{
 public:
-	HistoryThumbnailViewHelper(QObject* parent)
-	: AbstractThumbnailViewHelper(parent)
-	{}
+    HistoryThumbnailViewHelper(QObject* parent)
+        : AbstractThumbnailViewHelper(parent)
+    {}
 
-	virtual void showContextMenu(QWidget*) {
-	}
+    virtual void showContextMenu(QWidget*)
+    {
+    }
 
-	virtual void showMenuForUrlDroppedOnViewport(QWidget*, const KUrl::List&) {
-	}
+    virtual void showMenuForUrlDroppedOnViewport(QWidget*, const KUrl::List&)
+    {
+    }
 
-	virtual void showMenuForUrlDroppedOnDir(QWidget*, const KUrl::List&, const KUrl&) {
-	}
+    virtual void showMenuForUrlDroppedOnDir(QWidget*, const KUrl::List&, const KUrl&)
+    {
+    }
 };
 
 /**
  * Inherit from QStyledItemDelegate to match KFilePlacesViewDelegate sizeHint
  * height.
  */
-class HistoryViewDelegate : public QStyledItemDelegate {
+class HistoryViewDelegate : public QStyledItemDelegate
+{
 public:
-	HistoryViewDelegate(QObject* parent = 0)
-	: QStyledItemDelegate(parent) {}
+    HistoryViewDelegate(QObject* parent = 0)
+        : QStyledItemDelegate(parent) {}
 
-	virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const {
-		QSize sh = QStyledItemDelegate::sizeHint(option, index);
-		int iconSize = static_cast<QAbstractItemView*>(parent())->iconSize().height();
-		// Copied from KFilePlacesViewDelegate::sizeHint()
-		int height = option.fontMetrics.height() / 2 + qMax(iconSize, option.fontMetrics.height());
-		sh.setHeight(qMax(sh.height(), height));
-		return sh;
-	}
+    virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const {
+        QSize sh = QStyledItemDelegate::sizeHint(option, index);
+        int iconSize = static_cast<QAbstractItemView*>(parent())->iconSize().height();
+        // Copied from KFilePlacesViewDelegate::sizeHint()
+        int height = option.fontMetrics.height() / 2 + qMax(iconSize, option.fontMetrics.height());
+        sh.setHeight(qMax(sh.height(), height));
+        return sh;
+    }
 };
 
+struct StartPagePrivate : public Ui_StartPage {
+    StartPage* that;
+    GvCore* mGvCore;
+    KFilePlacesModel* mBookmarksModel;
+    bool mSearchUiInitialized;
 
-struct StartPagePrivate : public Ui_StartPage{
-	StartPage* that;
-	GvCore* mGvCore;
-	KFilePlacesModel* mBookmarksModel;
-	bool mSearchUiInitialized;
+    void setupSearchUi()
+    {
+#ifdef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
+        if (Nepomuk::ResourceManager::instance()->init() == 0) {
+            mTagView->setModel(TagModel::createAllTagsModel(mTagView, mGvCore->semanticInfoBackEnd()));
+            mTagView->show();
+            mTagLabel->hide();
+        } else {
+            mTagView->hide();
+            mTagLabel->show();
+        }
+#else
+        mTagView->hide();
+        mTagLabel->hide();
+#endif
+    }
 
-	void setupSearchUi() {
-	#ifdef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
-		if (Nepomuk::ResourceManager::instance()->init() == 0) {
-			mTagView->setModel(TagModel::createAllTagsModel(mTagView, mGvCore->semanticInfoBackEnd()));
-			mTagView->show();
-			mTagLabel->hide();
-		} else {
-			mTagView->hide();
-			mTagLabel->show();
-		}
-	#else
-		mTagView->hide();
-		mTagLabel->hide();
-	#endif
-	}
-
-	void updateHistoryTab() {
-		mHistoryWidget->setVisible(GwenviewConfig::historyEnabled());
-		mHistoryDisabledLabel->setVisible(!GwenviewConfig::historyEnabled());
-	}
+    void updateHistoryTab()
+    {
+        mHistoryWidget->setVisible(GwenviewConfig::historyEnabled());
+        mHistoryDisabledLabel->setVisible(!GwenviewConfig::historyEnabled());
+    }
 };
 
-static void initViewPalette(QAbstractItemView* view, const QColor& fgColor) {
-	QWidget* viewport = view->viewport();
-	QPalette palette = viewport->palette();
-	palette.setColor(viewport->backgroundRole(), Qt::transparent);
-	palette.setColor(QPalette::WindowText, fgColor);
-	palette.setColor(QPalette::Text, fgColor);
+static void initViewPalette(QAbstractItemView* view, const QColor& fgColor)
+{
+    QWidget* viewport = view->viewport();
+    QPalette palette = viewport->palette();
+    palette.setColor(viewport->backgroundRole(), Qt::transparent);
+    palette.setColor(QPalette::WindowText, fgColor);
+    palette.setColor(QPalette::Text, fgColor);
 
-	// QListView uses QStyledItemDelegate, which uses the view palette for
-	// foreground color, while KFilePlacesView uses the viewport palette.
-	viewport->setPalette(palette);
-	view->setPalette(palette);
+    // QListView uses QStyledItemDelegate, which uses the view palette for
+    // foreground color, while KFilePlacesView uses the viewport palette.
+    viewport->setPalette(palette);
+    view->setPalette(palette);
 }
 
-static bool styleIsGtkBased() {
-	const char* name = QApplication::style()->metaObject()->className();
-	return qstrcmp(name, "QGtkStyle") == 0;
+static bool styleIsGtkBased()
+{
+    const char* name = QApplication::style()->metaObject()->className();
+    return qstrcmp(name, "QGtkStyle") == 0;
 }
 
 StartPage::StartPage(QWidget* parent, GvCore* gvCore)
 : QFrame(parent)
-, d(new StartPagePrivate) {
-	d->that = this;
-	d->mGvCore = gvCore;
-	d->mSearchUiInitialized = false;
+, d(new StartPagePrivate)
+{
+    d->that = this;
+    d->mGvCore = gvCore;
+    d->mSearchUiInitialized = false;
 
-	d->setupUi(this);
-	if (styleIsGtkBased()) {
-		// Gtk-based styles do not apply the correct background color on tabs.
-		// As a workaround, use the Plastique style instead.
-		QStyle* fix = new QPlastiqueStyle();
-		fix->setParent(this);
-		d->mHistoryWidget->tabBar()->setStyle(fix);
-		d->mPlacesTagsWidget->tabBar()->setStyle(fix);
-	}
-	setFrameStyle(QFrame::NoFrame);
+    d->setupUi(this);
+    if (styleIsGtkBased()) {
+        // Gtk-based styles do not apply the correct background color on tabs.
+        // As a workaround, use the Plastique style instead.
+        QStyle* fix = new QPlastiqueStyle();
+        fix->setParent(this);
+        d->mHistoryWidget->tabBar()->setStyle(fix);
+        d->mPlacesTagsWidget->tabBar()->setStyle(fix);
+    }
+    setFrameStyle(QFrame::NoFrame);
 
-	// Bookmark view
-	d->mBookmarksModel = new KFilePlacesModel(this);
+    // Bookmark view
+    d->mBookmarksModel = new KFilePlacesModel(this);
 
-	d->mBookmarksView->setModel(d->mBookmarksModel);
-	d->mBookmarksView->setAutoResizeItemsEnabled(false);
+    d->mBookmarksView->setModel(d->mBookmarksModel);
+    d->mBookmarksView->setAutoResizeItemsEnabled(false);
 
-	connect(d->mBookmarksView, SIGNAL(urlChanged(KUrl)),
-		SIGNAL(urlSelected(KUrl)) );
+    connect(d->mBookmarksView, SIGNAL(urlChanged(KUrl)),
+            SIGNAL(urlSelected(KUrl)));
 
-	// Tag view
-	connect(d->mTagView, SIGNAL(clicked(QModelIndex)),
-		SLOT(slotTagViewClicked(QModelIndex)));
+    // Tag view
+    connect(d->mTagView, SIGNAL(clicked(QModelIndex)),
+            SLOT(slotTagViewClicked(QModelIndex)));
 
-	// Recent folder view
-	connect(d->mRecentFoldersView, SIGNAL(indexActivated(QModelIndex)),
-		SLOT(slotListViewActivated(QModelIndex)) );
+    // Recent folder view
+    connect(d->mRecentFoldersView, SIGNAL(indexActivated(QModelIndex)),
+            SLOT(slotListViewActivated(QModelIndex)));
 
-	connect(d->mRecentFoldersView, SIGNAL(customContextMenuRequested(QPoint)),
-		SLOT(showRecentFoldersViewContextMenu(QPoint)));
+    connect(d->mRecentFoldersView, SIGNAL(customContextMenuRequested(QPoint)),
+            SLOT(showRecentFoldersViewContextMenu(QPoint)));
 
-	// Url bag view
-	d->mRecentUrlsView->setItemDelegate(new HistoryViewDelegate(d->mRecentUrlsView));
+    // Url bag view
+    d->mRecentUrlsView->setItemDelegate(new HistoryViewDelegate(d->mRecentUrlsView));
 
-	connect(d->mRecentUrlsView, SIGNAL(customContextMenuRequested(QPoint)),
-		SLOT(showRecentFoldersViewContextMenu(QPoint)));
+    connect(d->mRecentUrlsView, SIGNAL(customContextMenuRequested(QPoint)),
+            SLOT(showRecentFoldersViewContextMenu(QPoint)));
 
-	if (KGlobalSettings::singleClick()) {
-		if (KGlobalSettings::changeCursorOverIcon()) {
-			d->mRecentUrlsView->setCursor(Qt::PointingHandCursor);
-		}
-		connect(d->mRecentUrlsView, SIGNAL(clicked(QModelIndex)),
-			SLOT(slotListViewActivated(QModelIndex)) );
-	} else {
-		connect(d->mRecentUrlsView, SIGNAL(doubleClicked(QModelIndex)),
-			SLOT(slotListViewActivated(QModelIndex)) );
-	}
+    if (KGlobalSettings::singleClick()) {
+        if (KGlobalSettings::changeCursorOverIcon()) {
+            d->mRecentUrlsView->setCursor(Qt::PointingHandCursor);
+        }
+        connect(d->mRecentUrlsView, SIGNAL(clicked(QModelIndex)),
+                SLOT(slotListViewActivated(QModelIndex)));
+    } else {
+        connect(d->mRecentUrlsView, SIGNAL(doubleClicked(QModelIndex)),
+                SLOT(slotListViewActivated(QModelIndex)));
+    }
 
-	d->updateHistoryTab();
-	connect(GwenviewConfig::self(), SIGNAL(configChanged()),
-		SLOT(slotConfigChanged()));
+    d->updateHistoryTab();
+    connect(GwenviewConfig::self(), SIGNAL(configChanged()),
+            SLOT(slotConfigChanged()));
 }
 
-
-StartPage::~StartPage() {
-	delete d;
+StartPage::~StartPage()
+{
+    delete d;
 }
 
-
-void StartPage::slotTagViewClicked(const QModelIndex& index) {
+void StartPage::slotTagViewClicked(const QModelIndex& index)
+{
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
-	if (!index.isValid()) {
-		return;
-	}
-	// FIXME: Check label encoding
-	Nepomuk::Tag tagr(index.data().toString());
-	KUrl url = KUrl(tagr.resourceUri()).url();
-	emit urlSelected(url);
+    if (!index.isValid()) {
+        return;
+    }
+    // FIXME: Check label encoding
+    Nepomuk::Tag tagr(index.data().toString());
+    KUrl url = KUrl(tagr.resourceUri()).url();
+    emit urlSelected(url);
 #endif
 }
 
+void StartPage::applyPalette(const QPalette& newPalette)
+{
+    QColor fgColor = newPalette.text().color();
 
-void StartPage::applyPalette(const QPalette& newPalette) {
-	QColor fgColor = newPalette.text().color();
+    QPalette pal = palette();
+    pal.setBrush(backgroundRole(), newPalette.base());
+    pal.setBrush(QPalette::Button, newPalette.base());
+    pal.setBrush(QPalette::WindowText, fgColor);
+    pal.setBrush(QPalette::ButtonText, fgColor);
+    pal.setBrush(QPalette::Text, fgColor);
+    setPalette(pal);
 
-	QPalette pal = palette();
-	pal.setBrush(backgroundRole(), newPalette.base());
-	pal.setBrush(QPalette::Button, newPalette.base());
-	pal.setBrush(QPalette::WindowText, fgColor);
-	pal.setBrush(QPalette::ButtonText, fgColor);
-	pal.setBrush(QPalette::Text, fgColor);
-	setPalette(pal);
-
-	initViewPalette(d->mBookmarksView, fgColor);
-	initViewPalette(d->mTagView, fgColor);
-	initViewPalette(d->mRecentFoldersView, fgColor);
-	initViewPalette(d->mRecentUrlsView, fgColor);
+    initViewPalette(d->mBookmarksView, fgColor);
+    initViewPalette(d->mTagView, fgColor);
+    initViewPalette(d->mRecentFoldersView, fgColor);
+    initViewPalette(d->mRecentUrlsView, fgColor);
 }
 
+void StartPage::slotListViewActivated(const QModelIndex& index)
+{
+    if (!index.isValid()) {
+        return;
+    }
+    QVariant data = index.data(KFilePlacesModel::UrlRole);
+    KUrl url = data.toUrl();
 
-void StartPage::slotListViewActivated(const QModelIndex& index) {
-	if (!index.isValid()) {
-		return;
-	}
-	QVariant data = index.data(KFilePlacesModel::UrlRole);
-	KUrl url = data.toUrl();
-
-	// Prevent dir lister error
-	if (!url.isValid()) {
-		kError() << "Tried to open an invalid url";
-		return;
-	}
-	emit urlSelected(url);
+    // Prevent dir lister error
+    if (!url.isValid()) {
+        kError() << "Tried to open an invalid url";
+        return;
+    }
+    emit urlSelected(url);
 }
 
-
-void StartPage::showEvent(QShowEvent* event) {
-	if (GwenviewConfig::historyEnabled()) {
-		if (!d->mRecentFoldersView->model()) {
-			d->mRecentFoldersView->setThumbnailViewHelper(new HistoryThumbnailViewHelper(d->mRecentFoldersView));
-			d->mRecentFoldersView->setModel(d->mGvCore->recentFoldersModel());
-			PreviewItemDelegate* delegate = new PreviewItemDelegate(d->mRecentFoldersView);
-			delegate->setContextBarMode(PreviewItemDelegate::NoContextBar);
-			delegate->setTextElideMode(Qt::ElideLeft);
-			d->mRecentFoldersView->setItemDelegate(delegate);
-			d->mRecentFoldersView->setThumbnailSize(128);
-		}
-		if (!d->mRecentUrlsView->model()) {
-			d->mRecentUrlsView->setModel(d->mGvCore->recentUrlsModel());
-		}
-	}
-	if (!d->mSearchUiInitialized) {
-		d->mSearchUiInitialized = true;
-		d->setupSearchUi();
-	}
-	QFrame::showEvent(event);
+void StartPage::showEvent(QShowEvent* event)
+{
+    if (GwenviewConfig::historyEnabled()) {
+        if (!d->mRecentFoldersView->model()) {
+            d->mRecentFoldersView->setThumbnailViewHelper(new HistoryThumbnailViewHelper(d->mRecentFoldersView));
+            d->mRecentFoldersView->setModel(d->mGvCore->recentFoldersModel());
+            PreviewItemDelegate* delegate = new PreviewItemDelegate(d->mRecentFoldersView);
+            delegate->setContextBarMode(PreviewItemDelegate::NoContextBar);
+            delegate->setTextElideMode(Qt::ElideLeft);
+            d->mRecentFoldersView->setItemDelegate(delegate);
+            d->mRecentFoldersView->setThumbnailSize(128);
+        }
+        if (!d->mRecentUrlsView->model()) {
+            d->mRecentUrlsView->setModel(d->mGvCore->recentUrlsModel());
+        }
+    }
+    if (!d->mSearchUiInitialized) {
+        d->mSearchUiInitialized = true;
+        d->setupSearchUi();
+    }
+    QFrame::showEvent(event);
 }
 
+void StartPage::showRecentFoldersViewContextMenu(const QPoint& pos)
+{
+    QAbstractItemView* view = qobject_cast<QAbstractItemView*>(sender());
+    KUrl url;
+    QModelIndex index = view->indexAt(pos);
+    if (index.isValid()) {
+        QVariant data = index.data(KFilePlacesModel::UrlRole);
+        url = data.toUrl();
+    }
 
-void StartPage::showRecentFoldersViewContextMenu(const QPoint& pos) {
-	QAbstractItemView* view = qobject_cast<QAbstractItemView*>(sender());
-	KUrl url;
-	QModelIndex index = view->indexAt(pos);
-	if (index.isValid()) {
-		QVariant data = index.data(KFilePlacesModel::UrlRole);
-		url = data.toUrl();
-	}
+    // Create menu
+    QMenu menu(this);
+    bool fromRecentUrls = view == d->mRecentUrlsView;
+    QAction* addToPlacesAction = fromRecentUrls ? 0 : menu.addAction(KIcon("bookmark-new"), i18n("Add to Places"));
+    QAction* removeAction = menu.addAction(KIcon("edit-delete"), fromRecentUrls ? i18n("Forget this URL") : i18n("Forget this Folder"));
+    menu.addSeparator();
+    QAction* clearAction = menu.addAction(KIcon("edit-delete-all"), i18n("Forget All"));
 
-	// Create menu
-	QMenu menu(this);
-	bool fromRecentUrls = view == d->mRecentUrlsView;
-	QAction* addToPlacesAction = fromRecentUrls ? 0 : menu.addAction(KIcon("bookmark-new"), i18n("Add to Places"));
-	QAction* removeAction = menu.addAction(KIcon("edit-delete"), fromRecentUrls ? i18n("Forget this URL") : i18n("Forget this Folder"));
-	menu.addSeparator();
-	QAction* clearAction = menu.addAction(KIcon("edit-delete-all"), i18n("Forget All"));
+    if (!index.isValid()) {
+        if (addToPlacesAction) {
+            addToPlacesAction->setEnabled(false);
+        }
+        removeAction->setEnabled(false);
+    }
 
-	if (!index.isValid()) {
-		if (addToPlacesAction) {
-			addToPlacesAction->setEnabled(false);
-		}
-		removeAction->setEnabled(false);
-	}
-
-	// Handle menu
-	QAction* action = menu.exec(view->mapToGlobal(pos));
-	if (!action) {
-		return;
-	}
-	if (action == addToPlacesAction) {
-		QString text = url.fileName();
-		if (text.isEmpty()) {
-			text = url.pathOrUrl();
-		}
-		d->mBookmarksModel->addPlace(text, url);
-	} else if (action == removeAction) {
-		view->model()->removeRow(index.row());
-	} else if (action == clearAction) {
-		view->model()->removeRows(0, view->model()->rowCount());
-	}
+    // Handle menu
+    QAction* action = menu.exec(view->mapToGlobal(pos));
+    if (!action) {
+        return;
+    }
+    if (action == addToPlacesAction) {
+        QString text = url.fileName();
+        if (text.isEmpty()) {
+            text = url.pathOrUrl();
+        }
+        d->mBookmarksModel->addPlace(text, url);
+    } else if (action == removeAction) {
+        view->model()->removeRow(index.row());
+    } else if (action == clearAction) {
+        view->model()->removeRows(0, view->model()->rowCount());
+    }
 }
 
-
-void StartPage::slotConfigChanged() {
-	d->updateHistoryTab();
+void StartPage::slotConfigChanged()
+{
+    d->updateHistoryTab();
 }
-
 
 } // namespace

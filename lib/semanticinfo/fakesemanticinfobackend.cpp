@@ -29,77 +29,77 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 FakeSemanticInfoBackEnd::FakeSemanticInfoBackEnd(QObject* parent, InitializeMode mode)
 : AbstractSemanticInfoBackEnd(parent)
-, mInitializeMode(mode) {
-	mAllTags
-		<< tagForLabel("beach")
-		<< tagForLabel("mountains")
-		<< tagForLabel("wallpaper")
-		;
+, mInitializeMode(mode)
+{
+    mAllTags
+            << tagForLabel("beach")
+            << tagForLabel("mountains")
+            << tagForLabel("wallpaper")
+            ;
 }
 
-
-void FakeSemanticInfoBackEnd::storeSemanticInfo(const KUrl& url, const SemanticInfo& semanticInfo) {
-	mSemanticInfoForUrl[url] = semanticInfo;
-	mergeTagsWithAllTags(semanticInfo.mTags);
+void FakeSemanticInfoBackEnd::storeSemanticInfo(const KUrl& url, const SemanticInfo& semanticInfo)
+{
+    mSemanticInfoForUrl[url] = semanticInfo;
+    mergeTagsWithAllTags(semanticInfo.mTags);
 }
 
-
-void FakeSemanticInfoBackEnd::mergeTagsWithAllTags(const TagSet& set) {
-	int size = mAllTags.size();
-	mAllTags |= set;
-	if (mAllTags.size() > size) {
-		//emit allTagsUpdated();
-	}
+void FakeSemanticInfoBackEnd::mergeTagsWithAllTags(const TagSet& set)
+{
+    int size = mAllTags.size();
+    mAllTags |= set;
+    if (mAllTags.size() > size) {
+        //emit allTagsUpdated();
+    }
 }
 
-
-TagSet FakeSemanticInfoBackEnd::allTags() const {
-	return mAllTags;
+TagSet FakeSemanticInfoBackEnd::allTags() const
+{
+    return mAllTags;
 }
 
-
-void FakeSemanticInfoBackEnd::refreshAllTags() {
+void FakeSemanticInfoBackEnd::refreshAllTags()
+{
 }
 
+void FakeSemanticInfoBackEnd::retrieveSemanticInfo(const KUrl& url)
+{
+    if (!mSemanticInfoForUrl.contains(url)) {
+        QString urlString = url.url();
+        SemanticInfo semanticInfo;
+        if (mInitializeMode == InitializeRandom) {
+            semanticInfo.mRating = int(urlString.length()) % 6;
+            semanticInfo.mDescription = url.fileName();
+            QStringList lst = url.path().split('/');
+            Q_FOREACH(const QString & token, lst) {
+                if (!token.isEmpty()) {
+                    semanticInfo.mTags << '#' + token.toLower();
+                }
+            }
+            semanticInfo.mTags << QString("#length-%1").arg(url.fileName().length());
 
-void FakeSemanticInfoBackEnd::retrieveSemanticInfo(const KUrl& url) {
-	if (!mSemanticInfoForUrl.contains(url)) {
-		QString urlString = url.url();
-		SemanticInfo semanticInfo;
-		if (mInitializeMode == InitializeRandom) {
-			semanticInfo.mRating = int(urlString.length()) % 6;
-			semanticInfo.mDescription = url.fileName();
-			QStringList lst = url.path().split('/');
-			Q_FOREACH(const QString& token, lst) {
-				if (!token.isEmpty()) {
-					semanticInfo.mTags << '#' + token.toLower();
-				}
-			}
-			semanticInfo.mTags << QString("#length-%1").arg(url.fileName().length());
-
-			mergeTagsWithAllTags(semanticInfo.mTags);
-		} else {
-			semanticInfo.mRating = 0;
-		}
-		mSemanticInfoForUrl[url] = semanticInfo;
-	}
-	emit semanticInfoRetrieved(url, mSemanticInfoForUrl.value(url));
+            mergeTagsWithAllTags(semanticInfo.mTags);
+        } else {
+            semanticInfo.mRating = 0;
+        }
+        mSemanticInfoForUrl[url] = semanticInfo;
+    }
+    emit semanticInfoRetrieved(url, mSemanticInfoForUrl.value(url));
 }
 
-
-QString FakeSemanticInfoBackEnd::labelForTag(const SemanticInfoTag& tag) const {
-	return tag[1].toUpper() + tag.mid(2);
+QString FakeSemanticInfoBackEnd::labelForTag(const SemanticInfoTag& tag) const
+{
+    return tag[1].toUpper() + tag.mid(2);
 }
 
-
-SemanticInfoTag FakeSemanticInfoBackEnd::tagForLabel(const QString& label) {
-	return '#' + label.toLower();
+SemanticInfoTag FakeSemanticInfoBackEnd::tagForLabel(const QString& label)
+{
+    return '#' + label.toLower();
 }
-
 
 } // namespace

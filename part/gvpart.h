@@ -31,33 +31,33 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class KAboutData;
 
-
-namespace Gwenview {
+namespace Gwenview
+{
 
 class DocumentView;
 
-class GVPart : public KParts::ReadOnlyPart {
-	Q_OBJECT
+class GVPart : public KParts::ReadOnlyPart
+{
+    Q_OBJECT
 public:
-	GVPart(QWidget* parentWidget, QObject* parent, const QVariantList&);
+    GVPart(QWidget* parentWidget, QObject* parent, const QVariantList&);
 
-	static KAboutData* createAboutData();
+    static KAboutData* createAboutData();
 
 protected:
-	virtual bool openFile();
-	virtual bool openUrl(const KUrl&);
+    virtual bool openFile();
+    virtual bool openUrl(const KUrl&);
 
 private Q_SLOTS:
-	void showContextMenu();
-	void showProperties();
-	void saveAs();
-	void showJobError(KJob*);
+    void showContextMenu();
+    void showProperties();
+    void saveAs();
+    void showJobError(KJob*);
 
 private:
-	DocumentView* mDocumentView;
+    DocumentView* mDocumentView;
 };
 
 } // namespace
-
 
 #endif /* GVPART_H */

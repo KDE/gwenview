@@ -27,29 +27,33 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
-namespace Gwenview {
+namespace Gwenview
+{
 
-namespace ThumbnailGroup {
-	enum Enum {
-		Normal,
-		Large
-	};
+namespace ThumbnailGroup
+{
+enum Enum {
+    Normal,
+    Large
+};
 
-	inline int pixelSize(Enum value) {
-		if (value == Normal) {
-			return 128;
-		} else {
-			return 256;
-		}
-	}
+inline int pixelSize(Enum value)
+{
+    if (value == Normal) {
+        return 128;
+    } else {
+        return 256;
+    }
+}
 
-	inline Enum fromPixelSize(int value) {
-		if (value <= 128) {
-			return Normal;
-		} else {
-			return Large;
-		}
-	}
+inline Enum fromPixelSize(int value)
+{
+    if (value <= 128) {
+        return Normal;
+    } else {
+        return Large;
+    }
+}
 } // namespace ThumbnailGroup
 
 } // namespace Gwenview

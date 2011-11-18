@@ -23,21 +23,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QObject>
 
-class JpegContentTest : public QObject {
-	Q_OBJECT
+class JpegContentTest : public QObject
+{
+    Q_OBJECT
 
 private Q_SLOTS:
-	void initTestCase();
-	void cleanupTestCase();
-	void testReadInfo();
-	void testThumbnail();
-	void testResetOrientation();
-	void testTransform();
-	void testSetComment();
-	void testMultipleRotations();
-	void testLoadTruncated();
-	void testRawData();
-	void testSetImage();
+    void initTestCase();
+    void cleanupTestCase();
+    void testReadInfo();
+    void testThumbnail();
+    void testResetOrientation();
+    void testTransform();
+    void testSetComment();
+    void testMultipleRotations();
+    void testLoadTruncated();
+    void testRawData();
+    void testSetImage();
 };
 
 #endif // JPEGCONTENTTEST_H

@@ -29,8 +29,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 class DocumentDirFinderPrivate;
 
@@ -45,32 +45,32 @@ class DocumentDirFinderPrivate;
  *     ...
  *     /PICTnnnn.JPG
  */
-class DocumentDirFinder : public QObject {
-	Q_OBJECT
+class DocumentDirFinder : public QObject
+{
+    Q_OBJECT
 public:
-	enum Status {
-		NoDocumentFound,
-		DocumentDirFound,
-		MultipleDirsFound
-	};
+    enum Status {
+        NoDocumentFound,
+        DocumentDirFound,
+        MultipleDirsFound
+    };
 
-	DocumentDirFinder(const KUrl& rootUrl);
-	~DocumentDirFinder();
+    DocumentDirFinder(const KUrl& rootUrl);
+    ~DocumentDirFinder();
 
-	void start();
+    void start();
 
 Q_SIGNALS:
-	void done(const KUrl&, DocumentDirFinder::Status);
+    void done(const KUrl&, DocumentDirFinder::Status);
 
 private Q_SLOTS:
-	void slotItemsAdded(const KUrl&, const KFileItemList&);
-	void slotCompleted();
+    void slotItemsAdded(const KUrl&, const KFileItemList&);
+    void slotCompleted();
 
 private:
-	DocumentDirFinderPrivate* const d;
-	void finish(const KUrl&, Status);
+    DocumentDirFinderPrivate* const d;
+    void finish(const KUrl&, Status);
 };
-
 
 } // namespace
 

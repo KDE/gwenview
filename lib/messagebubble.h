@@ -34,31 +34,31 @@ class QToolButton;
 
 class KGuiItem;
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct MessageBubblePrivate;
 /**
  * Shows a bubble with a QLabel and optional buttons.
  * Automatically goes away after a while.
  */
-class GWENVIEWLIB_EXPORT MessageBubble : public HudWidget {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT MessageBubble : public HudWidget
+{
+    Q_OBJECT
 public:
-	MessageBubble(QWidget* parent = 0);
-	~MessageBubble();
+    MessageBubble(QWidget* parent = 0);
+    ~MessageBubble();
 
-	void setText(const QString& text);
+    void setText(const QString& text);
 
-	QToolButton* addButton(const KGuiItem&);
+    QToolButton* addButton(const KGuiItem&);
 
 private Q_SLOTS:
-	void slotTimeLineChanged(qreal);
+    void slotTimeLineChanged(qreal);
 
 private:
-	MessageBubblePrivate* const d;
+    MessageBubblePrivate* const d;
 };
-
 
 } // namespace
 

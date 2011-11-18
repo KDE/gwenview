@@ -50,10 +50,10 @@ extern "C" {
 #include "iodevicejpegsourcemanager.h"
 #include "exiv2imageloader.h"
 
-namespace Gwenview {
+namespace Gwenview
+{
 
-const int INMEM_DST_DELTA=4096;
-
+const int INMEM_DST_DELTA = 4096;
 
 //-----------------------------------------------
 //
@@ -61,41 +61,44 @@ const int INMEM_DST_DELTA=4096;
 //
 //-----------------------------------------------
 struct inmem_dest_mgr : public jpeg_destination_mgr {
-	QByteArray* mOutput;
+    QByteArray* mOutput;
 
-	void dump() {
-		kDebug() << "dest_mgr:\n";
-		kDebug() << "- next_output_byte: " << next_output_byte;
-		kDebug() << "- free_in_buffer: " << free_in_buffer;
-		kDebug() << "- output size: " << mOutput->size();
-	}
+    void dump()
+    {
+        kDebug() << "dest_mgr:\n";
+        kDebug() << "- next_output_byte: " << next_output_byte;
+        kDebug() << "- free_in_buffer: " << free_in_buffer;
+        kDebug() << "- output size: " << mOutput->size();
+    }
 };
 
-void inmem_init_destination(j_compress_ptr cinfo) {
-	inmem_dest_mgr* dest=(inmem_dest_mgr*)(cinfo->dest);
-	if (dest->mOutput->size()==0) {
-		dest->mOutput->resize(INMEM_DST_DELTA);
-	}
-	dest->free_in_buffer=dest->mOutput->size();
-	dest->next_output_byte=(JOCTET*)(dest->mOutput->data() );
+void inmem_init_destination(j_compress_ptr cinfo)
+{
+    inmem_dest_mgr* dest = (inmem_dest_mgr*)(cinfo->dest);
+    if (dest->mOutput->size() == 0) {
+        dest->mOutput->resize(INMEM_DST_DELTA);
+    }
+    dest->free_in_buffer = dest->mOutput->size();
+    dest->next_output_byte = (JOCTET*)(dest->mOutput->data());
 }
 
-boolean inmem_empty_output_buffer(j_compress_ptr cinfo) {
-	inmem_dest_mgr* dest=(inmem_dest_mgr*)(cinfo->dest);
-	dest->mOutput->resize(dest->mOutput->size() + INMEM_DST_DELTA);
-	dest->next_output_byte=(JOCTET*)( dest->mOutput->data() + dest->mOutput->size() - INMEM_DST_DELTA );
-	dest->free_in_buffer=INMEM_DST_DELTA;
+boolean inmem_empty_output_buffer(j_compress_ptr cinfo)
+{
+    inmem_dest_mgr* dest = (inmem_dest_mgr*)(cinfo->dest);
+    dest->mOutput->resize(dest->mOutput->size() + INMEM_DST_DELTA);
+    dest->next_output_byte = (JOCTET*)(dest->mOutput->data() + dest->mOutput->size() - INMEM_DST_DELTA);
+    dest->free_in_buffer = INMEM_DST_DELTA;
 
-	return true;
+    return true;
 }
 
-void inmem_term_destination(j_compress_ptr cinfo) {
-	inmem_dest_mgr* dest=(inmem_dest_mgr*)(cinfo->dest);
-	int finalSize=dest->next_output_byte - (JOCTET*)(dest->mOutput->data());
-	Q_ASSERT(finalSize>=0);
-	dest->mOutput->resize(finalSize);
+void inmem_term_destination(j_compress_ptr cinfo)
+{
+    inmem_dest_mgr* dest = (inmem_dest_mgr*)(cinfo->dest);
+    int finalSize = dest->next_output_byte - (JOCTET*)(dest->mOutput->data());
+    Q_ASSERT(finalSize >= 0);
+    dest->mOutput->resize(finalSize);
 }
-
 
 //---------------------
 //
@@ -103,523 +106,522 @@ void inmem_term_destination(j_compress_ptr cinfo) {
 //
 //---------------------
 struct JpegContent::Private {
-	// JpegContent usually stores the image pixels as compressed JPEG data in
-	// mRawData. However if the image is set with setImage() because the user
-	// performed a lossy image manipulation, mRawData is cleared and the image
-	// pixels are kept in mImage until updateRawDataFromImage() is called.
-	QImage mImage;
-	QByteArray mRawData;
-	QSize mSize;
-	QString mComment;
-	bool mPendingTransformation;
-	QMatrix mTransformMatrix;
-	Exiv2::ExifData mExifData;
-	QString mErrorString;
+    // JpegContent usually stores the image pixels as compressed JPEG data in
+    // mRawData. However if the image is set with setImage() because the user
+    // performed a lossy image manipulation, mRawData is cleared and the image
+    // pixels are kept in mImage until updateRawDataFromImage() is called.
+    QImage mImage;
+    QByteArray mRawData;
+    QSize mSize;
+    QString mComment;
+    bool mPendingTransformation;
+    QMatrix mTransformMatrix;
+    Exiv2::ExifData mExifData;
+    QString mErrorString;
 
-	Private() {
-		mPendingTransformation = false;
-	}
+    Private() {
+        mPendingTransformation = false;
+    }
 
+    void setupInmemDestination(j_compress_ptr cinfo, QByteArray* outputData)
+    {
+        Q_ASSERT(!cinfo->dest);
+        inmem_dest_mgr* dest = (inmem_dest_mgr*)
+                               (*cinfo->mem->alloc_small)((j_common_ptr) cinfo, JPOOL_PERMANENT,
+                                       sizeof(inmem_dest_mgr));
+        cinfo->dest = (struct jpeg_destination_mgr*)(dest);
 
-	void setupInmemDestination(j_compress_ptr cinfo, QByteArray* outputData) {
-		Q_ASSERT(!cinfo->dest);
-		inmem_dest_mgr* dest = (inmem_dest_mgr*)
-			(*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
-										sizeof(inmem_dest_mgr));
-		cinfo->dest=(struct jpeg_destination_mgr*)(dest);
+        dest->init_destination = inmem_init_destination;
+        dest->empty_output_buffer = inmem_empty_output_buffer;
+        dest->term_destination = inmem_term_destination;
 
-		dest->init_destination=inmem_init_destination;
-		dest->empty_output_buffer=inmem_empty_output_buffer;
-		dest->term_destination=inmem_term_destination;
+        dest->mOutput = outputData;
+    }
+    bool readSize()
+    {
+        struct jpeg_decompress_struct srcinfo;
 
-		dest->mOutput=outputData;
-	}
-	bool readSize() {
-		struct jpeg_decompress_struct srcinfo;
-		
-		// Init JPEG structs 
-		JPEGErrorManager errorManager;
+        // Init JPEG structs
+        JPEGErrorManager errorManager;
 
-		// Initialize the JPEG decompression object
-		srcinfo.err = &errorManager;
-		jpeg_create_decompress(&srcinfo);
-		if (setjmp(errorManager.jmp_buffer)) {
-			kError() << "libjpeg fatal error\n";
-			return false;
-		}
+        // Initialize the JPEG decompression object
+        srcinfo.err = &errorManager;
+        jpeg_create_decompress(&srcinfo);
+        if (setjmp(errorManager.jmp_buffer)) {
+            kError() << "libjpeg fatal error\n";
+            return false;
+        }
 
-		// Specify data source for decompression
-		QBuffer buffer(&mRawData);
-		buffer.open(QIODevice::ReadOnly);
-		IODeviceJpegSourceManager::setup(&srcinfo, &buffer);
+        // Specify data source for decompression
+        QBuffer buffer(&mRawData);
+        buffer.open(QIODevice::ReadOnly);
+        IODeviceJpegSourceManager::setup(&srcinfo, &buffer);
 
-		// Read the header
-		jcopy_markers_setup(&srcinfo, JCOPYOPT_ALL);
-		int result=jpeg_read_header(&srcinfo, true);
-		if (result!=JPEG_HEADER_OK) {
-			kError() << "Could not read jpeg header\n";
-			jpeg_destroy_decompress(&srcinfo);
-			return false;
-		}
-		mSize=QSize(srcinfo.image_width, srcinfo.image_height);
-		
-		jpeg_destroy_decompress(&srcinfo);
-		return true;
-	}
+        // Read the header
+        jcopy_markers_setup(&srcinfo, JCOPYOPT_ALL);
+        int result = jpeg_read_header(&srcinfo, true);
+        if (result != JPEG_HEADER_OK) {
+            kError() << "Could not read jpeg header\n";
+            jpeg_destroy_decompress(&srcinfo);
+            return false;
+        }
+        mSize = QSize(srcinfo.image_width, srcinfo.image_height);
 
+        jpeg_destroy_decompress(&srcinfo);
+        return true;
+    }
 
-	bool updateRawDataFromImage() {
-		QBuffer buffer;
-		QImageWriter writer(&buffer, "jpeg");
-		if (!writer.write(mImage)) {
-			mErrorString = writer.errorString();
-			return false;
-		}
-		mRawData = buffer.data();
-		mImage = QImage();
-		return true;
-	}
+    bool updateRawDataFromImage()
+    {
+        QBuffer buffer;
+        QImageWriter writer(&buffer, "jpeg");
+        if (!writer.write(mImage)) {
+            mErrorString = writer.errorString();
+            return false;
+        }
+        mRawData = buffer.data();
+        mImage = QImage();
+        return true;
+    }
 };
-
 
 //------------
 //
 // JpegContent
 //
 //------------
-JpegContent::JpegContent() {
-	d=new JpegContent::Private();
+JpegContent::JpegContent()
+{
+    d = new JpegContent::Private();
 }
 
-
-JpegContent::~JpegContent() {
-	delete d;
+JpegContent::~JpegContent()
+{
+    delete d;
 }
 
-
-bool JpegContent::load(const QString& path) {
-	QFile file(path);
-	if (!file.open(QIODevice::ReadOnly)) {
-		kError() << "Could not open '" << path << "' for reading\n";
-		return false;
-	}
-	return loadFromData(file.readAll());
+bool JpegContent::load(const QString& path)
+{
+    QFile file(path);
+    if (!file.open(QIODevice::ReadOnly)) {
+        kError() << "Could not open '" << path << "' for reading\n";
+        return false;
+    }
+    return loadFromData(file.readAll());
 }
 
+bool JpegContent::loadFromData(const QByteArray& data)
+{
+    Exiv2::Image::AutoPtr image;
+    Exiv2ImageLoader loader;
+    if (!loader.load(data)) {
+        kError() << "Could not load image with Exiv2, reported error:" << loader.errorMessage();
+    }
+    image = loader.popImage();
 
-bool JpegContent::loadFromData(const QByteArray& data) {
-	Exiv2::Image::AutoPtr image;
-	Exiv2ImageLoader loader;
-	if (!loader.load(data)) {
-		kError() << "Could not load image with Exiv2, reported error:" << loader.errorMessage();
-	}
-	image = loader.popImage();
-
-	return loadFromData(data, image.get());
+    return loadFromData(data, image.get());
 }
 
+bool JpegContent::loadFromData(const QByteArray& data, Exiv2::Image* exiv2Image)
+{
+    d->mPendingTransformation = false;
+    d->mTransformMatrix.reset();
 
-bool JpegContent::loadFromData(const QByteArray& data, Exiv2::Image* exiv2Image) {
-	d->mPendingTransformation = false;
-	d->mTransformMatrix.reset();
+    d->mRawData = data;
+    if (d->mRawData.size() == 0) {
+        kError() << "No data\n";
+        return false;
+    }
 
-	d->mRawData = data;
-	if (d->mRawData.size()==0) {
-		kError() << "No data\n";
-		return false;
-	}
+    if (!d->readSize()) return false;
 
-	if (!d->readSize()) return false;
+    d->mExifData = exiv2Image->exifData();
+    d->mComment = QString::fromUtf8(exiv2Image->comment().c_str());
 
-	d->mExifData = exiv2Image->exifData();
-	d->mComment = QString::fromUtf8( exiv2Image->comment().c_str() );
+    // Adjust the size according to the orientation
+    switch (orientation()) {
+    case TRANSPOSE:
+    case ROT_90:
+    case TRANSVERSE:
+    case ROT_270:
+        d->mSize.transpose();
+        break;
+    default:
+        break;
+    }
 
-	// Adjust the size according to the orientation
-	switch (orientation()) {
-	case TRANSPOSE:
-	case ROT_90:
-	case TRANSVERSE:
-	case ROT_270:
-		d->mSize.transpose();
-		break;
-	default:
-		break;
-	}
-
-	return true;
+    return true;
 }
 
-
-QByteArray JpegContent::rawData() const {
-	return d->mRawData;
+QByteArray JpegContent::rawData() const
+{
+    return d->mRawData;
 }
 
-
-Orientation JpegContent::orientation() const {
-	Exiv2::ExifKey key("Exif.Image.Orientation");
-	Exiv2::ExifData::iterator it = d->mExifData.findKey(key);
-	if (it == d->mExifData.end()) {
-		return NOT_AVAILABLE;
-	}
-	return Orientation( it->toLong() );
+Orientation JpegContent::orientation() const
+{
+    Exiv2::ExifKey key("Exif.Image.Orientation");
+    Exiv2::ExifData::iterator it = d->mExifData.findKey(key);
+    if (it == d->mExifData.end()) {
+        return NOT_AVAILABLE;
+    }
+    return Orientation(it->toLong());
 }
 
-
-int JpegContent::dotsPerMeterX() const {
-	return dotsPerMeter("XResolution");
+int JpegContent::dotsPerMeterX() const
+{
+    return dotsPerMeter("XResolution");
 }
 
-
-int JpegContent::dotsPerMeterY() const {
-	return dotsPerMeter("YResolution");
+int JpegContent::dotsPerMeterY() const
+{
+    return dotsPerMeter("YResolution");
 }
 
+int JpegContent::dotsPerMeter(const QString& keyName) const
+{
+    Exiv2::ExifKey keyResUnit("Exif.Image.ResolutionUnit");
+    Exiv2::ExifData::iterator it = d->mExifData.findKey(keyResUnit);
+    if (it == d->mExifData.end()) {
+        return 0;
+    }
+    int res = it->toLong();
+    QString keyVal = "Exif.Image." + keyName;
+    Exiv2::ExifKey keyResolution(keyVal.toAscii().data());
+    it = d->mExifData.findKey(keyResolution);
+    if (it == d->mExifData.end()) {
+        return 0;
+    }
+    // The unit for measuring XResolution and YResolution. The same unit is used for both XResolution and YResolution.
+    //     If the image resolution in unknown, 2 (inches) is designated.
+    //         Default = 2
+    //         2 = inches
+    //         3 = centimeters
+    //         Other = reserved
+    const float INCHESPERMETER = (100. / 2.54);
+    switch (res) {
+    case 3:  // dots per cm
+        return int(it->toLong() * 100);
+    default:  // dots per inch
+        return int(it->toLong() * INCHESPERMETER);
+    }
 
-int JpegContent::dotsPerMeter(const QString& keyName) const {
-	Exiv2::ExifKey keyResUnit("Exif.Image.ResolutionUnit");
-	Exiv2::ExifData::iterator it = d->mExifData.findKey(keyResUnit);
-	if (it == d->mExifData.end()) {
-		return 0;
-	}
-	int res = it->toLong();
-	QString keyVal = "Exif.Image." + keyName;
-	Exiv2::ExifKey keyResolution(keyVal.toAscii().data());
-	it = d->mExifData.findKey(keyResolution);
-	if (it == d->mExifData.end()) {
-		return 0;
-	}
-	// The unit for measuring XResolution and YResolution. The same unit is used for both XResolution and YResolution.
-	//     If the image resolution in unknown, 2 (inches) is designated.
-	//         Default = 2
-	//         2 = inches
-	//         3 = centimeters
-	//         Other = reserved
-	const float INCHESPERMETER = (100. / 2.54); 
-	switch (res) {
-	case 3:  // dots per cm
-		return int(it->toLong() * 100);
-	default:  // dots per inch
-		return int(it->toLong() * INCHESPERMETER);
-	}
-
-	return 0;
+    return 0;
 }
 
+void JpegContent::resetOrientation()
+{
+    Exiv2::ExifKey key("Exif.Image.Orientation");
+    Exiv2::ExifData::iterator it = d->mExifData.findKey(key);
+    if (it == d->mExifData.end()) {
+        return;
+    }
 
-void JpegContent::resetOrientation() {
-	Exiv2::ExifKey key("Exif.Image.Orientation");
-	Exiv2::ExifData::iterator it = d->mExifData.findKey(key);
-	if (it == d->mExifData.end()) {
-		return;
-	}
-
-	*it = uint16_t(NORMAL);
+    *it = uint16_t(NORMAL);
 }
 
-
-QSize JpegContent::size() const {
-	return d->mSize;
+QSize JpegContent::size() const
+{
+    return d->mSize;
 }
 
-
-QString JpegContent::comment() const {
-	return d->mComment;
+QString JpegContent::comment() const
+{
+    return d->mComment;
 }
 
-
-void JpegContent::setComment(const QString& comment) {
-	d->mComment = comment;
+void JpegContent::setComment(const QString& comment)
+{
+    d->mComment = comment;
 }
 
-
-static QMatrix createRotMatrix(int angle) {
-	QMatrix matrix;
-	matrix.rotate(angle);
-	return matrix;
+static QMatrix createRotMatrix(int angle)
+{
+    QMatrix matrix;
+    matrix.rotate(angle);
+    return matrix;
 }
 
-
-static QMatrix createScaleMatrix(int dx, int dy) {
-	QMatrix matrix;
-	matrix.scale(dx, dy);
-	return matrix;
+static QMatrix createScaleMatrix(int dx, int dy)
+{
+    QMatrix matrix;
+    matrix.scale(dx, dy);
+    return matrix;
 }
-
-
 
 struct OrientationInfo {
-	OrientationInfo() {}
-	OrientationInfo(Orientation o, QMatrix m, JXFORM_CODE j)
-	: orientation(o), matrix(m), jxform(j) {}
+    OrientationInfo() {}
+    OrientationInfo(Orientation o, QMatrix m, JXFORM_CODE j)
+        : orientation(o), matrix(m), jxform(j) {}
 
-	Orientation orientation;
-	QMatrix matrix;
-	JXFORM_CODE jxform;
+    Orientation orientation;
+    QMatrix matrix;
+    JXFORM_CODE jxform;
 };
 typedef QList<OrientationInfo> OrientationInfoList;
 
-static const OrientationInfoList& orientationInfoList() {
-	static OrientationInfoList list;
-	if (list.size() == 0) {
-		QMatrix rot90 = createRotMatrix(90);
-		QMatrix hflip = createScaleMatrix(-1, 1);
-		QMatrix vflip = createScaleMatrix(1, -1);
+static const OrientationInfoList& orientationInfoList()
+{
+    static OrientationInfoList list;
+    if (list.size() == 0) {
+        QMatrix rot90 = createRotMatrix(90);
+        QMatrix hflip = createScaleMatrix(-1, 1);
+        QMatrix vflip = createScaleMatrix(1, -1);
 
-		list
-			<< OrientationInfo(NOT_AVAILABLE, QMatrix(), JXFORM_NONE)
-			<< OrientationInfo(NORMAL, QMatrix(), JXFORM_NONE)
-			<< OrientationInfo(HFLIP, hflip, JXFORM_FLIP_H)
-			<< OrientationInfo(ROT_180, createRotMatrix(180), JXFORM_ROT_180)
-			<< OrientationInfo(VFLIP, vflip, JXFORM_FLIP_V)
-			<< OrientationInfo(TRANSPOSE, hflip * rot90, JXFORM_TRANSPOSE)
-			<< OrientationInfo(ROT_90, rot90, JXFORM_ROT_90)
-			<< OrientationInfo(TRANSVERSE, vflip * rot90, JXFORM_TRANSVERSE)
-			<< OrientationInfo(ROT_270, createRotMatrix(270), JXFORM_ROT_270)
-			;
-	}
-	return list;
+        list
+                << OrientationInfo(NOT_AVAILABLE, QMatrix(), JXFORM_NONE)
+                << OrientationInfo(NORMAL, QMatrix(), JXFORM_NONE)
+                << OrientationInfo(HFLIP, hflip, JXFORM_FLIP_H)
+                << OrientationInfo(ROT_180, createRotMatrix(180), JXFORM_ROT_180)
+                << OrientationInfo(VFLIP, vflip, JXFORM_FLIP_V)
+                << OrientationInfo(TRANSPOSE, hflip * rot90, JXFORM_TRANSPOSE)
+                << OrientationInfo(ROT_90, rot90, JXFORM_ROT_90)
+                << OrientationInfo(TRANSVERSE, vflip * rot90, JXFORM_TRANSVERSE)
+                << OrientationInfo(ROT_270, createRotMatrix(270), JXFORM_ROT_270)
+                ;
+    }
+    return list;
 }
 
-
-void JpegContent::transform(Orientation orientation) {
-	if (orientation != NOT_AVAILABLE && orientation != NORMAL) {
-		d->mPendingTransformation = true;
-		OrientationInfoList::ConstIterator it(orientationInfoList().begin()), end(orientationInfoList().end());
-		for (; it!=end; ++it) {
-			if ( (*it).orientation == orientation ) {
-				d->mTransformMatrix = (*it).matrix * d->mTransformMatrix;
-				break;
-			}
-		}
-		if (it == end) {
-			kWarning() << "Could not find matrix for orientation\n";
-		}
-	}
+void JpegContent::transform(Orientation orientation)
+{
+    if (orientation != NOT_AVAILABLE && orientation != NORMAL) {
+        d->mPendingTransformation = true;
+        OrientationInfoList::ConstIterator it(orientationInfoList().begin()), end(orientationInfoList().end());
+        for (; it != end; ++it) {
+            if ((*it).orientation == orientation) {
+                d->mTransformMatrix = (*it).matrix * d->mTransformMatrix;
+                break;
+            }
+        }
+        if (it == end) {
+            kWarning() << "Could not find matrix for orientation\n";
+        }
+    }
 }
-
 
 #if 0
-static void dumpMatrix(const QMatrix& matrix) {
-	kDebug() << "matrix | " << matrix.m11() << ", " << matrix.m12() << " |\n";
-	kDebug() << "       | " << matrix.m21() << ", " << matrix.m22() << " |\n";
-	kDebug() << "       ( " << matrix.dx()  << ", " << matrix.dy()  << " )\n";
+static void dumpMatrix(const QMatrix& matrix)
+{
+    kDebug() << "matrix | " << matrix.m11() << ", " << matrix.m12() << " |\n";
+    kDebug() << "       | " << matrix.m21() << ", " << matrix.m22() << " |\n";
+    kDebug() << "       ( " << matrix.dx()  << ", " << matrix.dy()  << " )\n";
 }
 #endif
 
-
-static bool matricesAreSame(const QMatrix& m1, const QMatrix& m2, double tolerance) {
-	return fabs( m1.m11() - m2.m11() ) < tolerance
-		&& fabs( m1.m12() - m2.m12() ) < tolerance
-		&& fabs( m1.m21() - m2.m21() ) < tolerance
-		&& fabs( m1.m22() - m2.m22() ) < tolerance
-		&& fabs( m1.dx()  - m2.dx()  ) < tolerance
-		&& fabs( m1.dy()  - m2.dy()  ) < tolerance;
+static bool matricesAreSame(const QMatrix& m1, const QMatrix& m2, double tolerance)
+{
+    return fabs(m1.m11() - m2.m11()) < tolerance
+           && fabs(m1.m12() - m2.m12()) < tolerance
+           && fabs(m1.m21() - m2.m21()) < tolerance
+           && fabs(m1.m22() - m2.m22()) < tolerance
+           && fabs(m1.dx()  - m2.dx()) < tolerance
+           && fabs(m1.dy()  - m2.dy()) < tolerance;
 }
 
-
-static JXFORM_CODE findJxform(const QMatrix& matrix) {
-	OrientationInfoList::ConstIterator it(orientationInfoList().begin()), end(orientationInfoList().end());
-	for (; it!=end; ++it) {
-		if ( matricesAreSame( (*it).matrix, matrix, 0.001) ) {
-			return (*it).jxform;
-		}
-	}
-	kWarning() << "findJxform: failed\n";
-	return JXFORM_NONE;
+static JXFORM_CODE findJxform(const QMatrix& matrix)
+{
+    OrientationInfoList::ConstIterator it(orientationInfoList().begin()), end(orientationInfoList().end());
+    for (; it != end; ++it) {
+        if (matricesAreSame((*it).matrix, matrix, 0.001)) {
+            return (*it).jxform;
+        }
+    }
+    kWarning() << "findJxform: failed\n";
+    return JXFORM_NONE;
 }
 
+void JpegContent::applyPendingTransformation()
+{
+    if (d->mRawData.size() == 0) {
+        kError() << "No data loaded\n";
+        return;
+    }
 
-void JpegContent::applyPendingTransformation() {
-	if (d->mRawData.size()==0) {
-		kError() << "No data loaded\n";
-		return;
-	}
+    // The following code is inspired by jpegtran.c from the libjpeg
 
-	// The following code is inspired by jpegtran.c from the libjpeg
+    // Init JPEG structs
+    struct jpeg_decompress_struct srcinfo;
+    struct jpeg_compress_struct dstinfo;
+    jvirt_barray_ptr * src_coef_arrays;
+    jvirt_barray_ptr * dst_coef_arrays;
 
-	// Init JPEG structs 
-	struct jpeg_decompress_struct srcinfo;
-	struct jpeg_compress_struct dstinfo;
-	jvirt_barray_ptr * src_coef_arrays;
-	jvirt_barray_ptr * dst_coef_arrays;
+    // Initialize the JPEG decompression object
+    JPEGErrorManager srcErrorManager;
+    srcinfo.err = &srcErrorManager;
+    jpeg_create_decompress(&srcinfo);
+    if (setjmp(srcErrorManager.jmp_buffer)) {
+        kError() << "libjpeg error in src\n";
+        return;
+    }
 
-	// Initialize the JPEG decompression object
-	JPEGErrorManager srcErrorManager;
-	srcinfo.err = &srcErrorManager;
-	jpeg_create_decompress(&srcinfo);
-	if (setjmp(srcErrorManager.jmp_buffer)) {
-		kError() << "libjpeg error in src\n";
-		return;
-	}
+    // Initialize the JPEG compression object
+    JPEGErrorManager dstErrorManager;
+    dstinfo.err = &dstErrorManager;
+    jpeg_create_compress(&dstinfo);
+    if (setjmp(dstErrorManager.jmp_buffer)) {
+        kError() << "libjpeg error in dst\n";
+        return;
+    }
 
-	// Initialize the JPEG compression object
-	JPEGErrorManager dstErrorManager;
-	dstinfo.err = &dstErrorManager;
-	jpeg_create_compress(&dstinfo);
-	if (setjmp(dstErrorManager.jmp_buffer)) {
-		kError() << "libjpeg error in dst\n";
-		return;
-	}
+    // Specify data source for decompression
+    QBuffer buffer(&d->mRawData);
+    buffer.open(QIODevice::ReadOnly);
+    IODeviceJpegSourceManager::setup(&srcinfo, &buffer);
 
-	// Specify data source for decompression
-	QBuffer buffer(&d->mRawData);
-	buffer.open(QIODevice::ReadOnly);
-	IODeviceJpegSourceManager::setup(&srcinfo, &buffer);
+    // Enable saving of extra markers that we want to copy
+    jcopy_markers_setup(&srcinfo, JCOPYOPT_ALL);
 
-	// Enable saving of extra markers that we want to copy
-	jcopy_markers_setup(&srcinfo, JCOPYOPT_ALL);
+    (void) jpeg_read_header(&srcinfo, true);
 
-	(void) jpeg_read_header(&srcinfo, true);
+    // Init transformation
+    jpeg_transform_info transformoption;
+    memset(&transformoption, 0, sizeof(jpeg_transform_info));
+    transformoption.transform = findJxform(d->mTransformMatrix);
+    jtransform_request_workspace(&srcinfo, &transformoption);
 
-	// Init transformation
-	jpeg_transform_info transformoption;
-	memset(&transformoption, 0, sizeof(jpeg_transform_info));
-	transformoption.transform = findJxform(d->mTransformMatrix);
-	jtransform_request_workspace(&srcinfo, &transformoption);
+    /* Read source file as DCT coefficients */
+    src_coef_arrays = jpeg_read_coefficients(&srcinfo);
 
-	/* Read source file as DCT coefficients */
-	src_coef_arrays = jpeg_read_coefficients(&srcinfo);
+    /* Initialize destination compression parameters from source values */
+    jpeg_copy_critical_parameters(&srcinfo, &dstinfo);
 
-	/* Initialize destination compression parameters from source values */
-	jpeg_copy_critical_parameters(&srcinfo, &dstinfo);
+    /* Adjust destination parameters if required by transform options;
+    * also find out which set of coefficient arrays will hold the output.
+    */
+    dst_coef_arrays = jtransform_adjust_parameters(&srcinfo, &dstinfo,
+                      src_coef_arrays,
+                      &transformoption);
 
-	/* Adjust destination parameters if required by transform options;
-	* also find out which set of coefficient arrays will hold the output.
-	*/
-	dst_coef_arrays = jtransform_adjust_parameters(&srcinfo, &dstinfo,
-		src_coef_arrays,
-		&transformoption);
+    /* Specify data destination for compression */
+    QByteArray output;
+    output.resize(d->mRawData.size());
+    d->setupInmemDestination(&dstinfo, &output);
 
-	/* Specify data destination for compression */
-	QByteArray output;
-	output.resize(d->mRawData.size());
-	d->setupInmemDestination(&dstinfo, &output);
+    /* Start compressor (note no image data is actually written here) */
+    jpeg_write_coefficients(&dstinfo, dst_coef_arrays);
 
-	/* Start compressor (note no image data is actually written here) */
-	jpeg_write_coefficients(&dstinfo, dst_coef_arrays);
-	
-	/* Copy to the output file any extra markers that we want to preserve */
-	jcopy_markers_execute(&srcinfo, &dstinfo, JCOPYOPT_ALL);
+    /* Copy to the output file any extra markers that we want to preserve */
+    jcopy_markers_execute(&srcinfo, &dstinfo, JCOPYOPT_ALL);
 
-	/* Execute image transformation, if any */
-	jtransform_execute_transformation(&srcinfo, &dstinfo,
-		src_coef_arrays,
-		&transformoption);
+    /* Execute image transformation, if any */
+    jtransform_execute_transformation(&srcinfo, &dstinfo,
+                                      src_coef_arrays,
+                                      &transformoption);
 
-	/* Finish compression and release memory */
-	jpeg_finish_compress(&dstinfo);
-	jpeg_destroy_compress(&dstinfo);
-	(void) jpeg_finish_decompress(&srcinfo);
-	jpeg_destroy_decompress(&srcinfo);
+    /* Finish compression and release memory */
+    jpeg_finish_compress(&dstinfo);
+    jpeg_destroy_compress(&dstinfo);
+    (void) jpeg_finish_decompress(&srcinfo);
+    jpeg_destroy_decompress(&srcinfo);
 
-	// Set rawData to our new JPEG 
-	d->mRawData = output;
+    // Set rawData to our new JPEG
+    d->mRawData = output;
 }
 
-
-QImage JpegContent::thumbnail() const {
-	QImage image;
-	if (!d->mExifData.empty()) {
+QImage JpegContent::thumbnail() const
+{
+    QImage image;
+    if (!d->mExifData.empty()) {
 #if(EXIV2_TEST_VERSION(0,17,91))
         Exiv2::ExifThumbC thumb(d->mExifData);
         Exiv2::DataBuf thumbnail = thumb.copy();
 #else
-		Exiv2::DataBuf thumbnail = d->mExifData.copyThumbnail();
+        Exiv2::DataBuf thumbnail = d->mExifData.copyThumbnail();
 #endif
-		image.loadFromData(thumbnail.pData_, thumbnail.size_);
-	}
-	return image;
+        image.loadFromData(thumbnail.pData_, thumbnail.size_);
+    }
+    return image;
 }
 
+void JpegContent::setThumbnail(const QImage& thumbnail)
+{
+    if (d->mExifData.empty()) {
+        return;
+    }
 
-void JpegContent::setThumbnail(const QImage& thumbnail) {
-	if (d->mExifData.empty()) {
-		return;
-	}
-	
-	QByteArray array;
-	QBuffer buffer(&array);
-	buffer.open(QIODevice::WriteOnly);
-	QImageWriter writer(&buffer, "JPEG");
-	if (!writer.write(thumbnail)) {
-		kError() << "Could not write thumbnail\n";
-		return;
-	}
-	
+    QByteArray array;
+    QBuffer buffer(&array);
+    buffer.open(QIODevice::WriteOnly);
+    QImageWriter writer(&buffer, "JPEG");
+    if (!writer.write(thumbnail)) {
+        kError() << "Could not write thumbnail\n";
+        return;
+    }
+
 #if (EXIV2_TEST_VERSION(0,17,91))
     Exiv2::ExifThumb thumb(d->mExifData);
     thumb.setJpegThumbnail((unsigned char*)array.data(), array.size());
 #else
-	d->mExifData.setJpegThumbnail((unsigned char*)array.data(), array.size());
+    d->mExifData.setJpegThumbnail((unsigned char*)array.data(), array.size());
 #endif
 }
 
+bool JpegContent::save(const QString& path)
+{
+    QFile file(path);
+    if (!file.open(QIODevice::WriteOnly)) {
+        d->mErrorString = i18nc("@info", "Could not open file for writing.");
+        return false;
+    }
 
-bool JpegContent::save(const QString& path) {
-	QFile file(path);
-	if (!file.open(QIODevice::WriteOnly)) {
-		d->mErrorString = i18nc("@info", "Could not open file for writing.");
-		return false;
-	}
-
-	return save(&file);
+    return save(&file);
 }
 
+bool JpegContent::save(QIODevice* device)
+{
+    if (!d->mImage.isNull()) {
+        if (!d->updateRawDataFromImage()) {
+            return false;
+        }
+    }
 
-bool JpegContent::save(QIODevice* device) {
-	if (!d->mImage.isNull()) {
-		if (!d->updateRawDataFromImage()) {
-			return false;
-		}
-	}
+    if (d->mRawData.size() == 0) {
+        d->mErrorString = i18nc("@info", "No data to store.");
+        return false;
+    }
 
-	if (d->mRawData.size()==0) {
-		d->mErrorString = i18nc("@info", "No data to store.");
-		return false;
-	}
+    if (d->mPendingTransformation) {
+        applyPendingTransformation();
+        d->mPendingTransformation = false;
+    }
 
-	if (d->mPendingTransformation) {
-		applyPendingTransformation();
-		d->mPendingTransformation = false;
-	}
+    Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((unsigned char*)d->mRawData.data(), d->mRawData.size());
 
-	Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((unsigned char*)d->mRawData.data(), d->mRawData.size());
+    // Store Exif info
+    image->setExifData(d->mExifData);
+    image->setComment(d->mComment.toUtf8().data());
+    image->writeMetadata();
 
-	// Store Exif info
-	image->setExifData(d->mExifData);
-	image->setComment(d->mComment.toUtf8().data());
-	image->writeMetadata();
-	
-	// Update mRawData
-	Exiv2::BasicIo& io = image->io();
-	d->mRawData.resize(io.size());
-	io.read((unsigned char*)d->mRawData.data(), io.size());
-	
-	QDataStream stream(device);
-	stream.writeRawData(d->mRawData.data(), d->mRawData.size());
+    // Update mRawData
+    Exiv2::BasicIo& io = image->io();
+    d->mRawData.resize(io.size());
+    io.read((unsigned char*)d->mRawData.data(), io.size());
 
-	// Make sure we are up to date
-	loadFromData(d->mRawData);
-	return true;
+    QDataStream stream(device);
+    stream.writeRawData(d->mRawData.data(), d->mRawData.size());
+
+    // Make sure we are up to date
+    loadFromData(d->mRawData);
+    return true;
 }
 
-
-QString JpegContent::errorString() const {
-	return d->mErrorString;
+QString JpegContent::errorString() const
+{
+    return d->mErrorString;
 }
 
+void JpegContent::setImage(const QImage& image)
+{
+    d->mRawData.clear();
+    d->mImage = image;
+    d->mSize = image.size();
+    d->mExifData["Exif.Photo.PixelXDimension"] = image.width();
+    d->mExifData["Exif.Photo.PixelYDimension"] = image.height();
+    resetOrientation();
 
-void JpegContent::setImage(const QImage& image) {
-	d->mRawData.clear();
-	d->mImage = image;
-	d->mSize = image.size();
-	d->mExifData["Exif.Photo.PixelXDimension"] = image.width();
-	d->mExifData["Exif.Photo.PixelYDimension"] = image.height();
-	resetOrientation();
-
-	d->mPendingTransformation = false;
-	d->mTransformMatrix = QMatrix();
+    d->mPendingTransformation = false;
+    d->mTransformMatrix = QMatrix();
 }
-
 
 } // namespace

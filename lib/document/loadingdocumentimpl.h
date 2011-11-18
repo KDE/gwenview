@@ -29,35 +29,38 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <lib/document/abstractdocumentimpl.h>
 
 class KJob;
-namespace KIO { class Job; }
+namespace KIO
+{
+class Job;
+}
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct LoadingDocumentImplPrivate;
-class LoadingDocumentImpl : public AbstractDocumentImpl {
-	Q_OBJECT
+class LoadingDocumentImpl : public AbstractDocumentImpl
+{
+    Q_OBJECT
 public:
-	LoadingDocumentImpl(Document*);
-	~LoadingDocumentImpl();
+    LoadingDocumentImpl(Document*);
+    ~LoadingDocumentImpl();
 
-	virtual void init();
-	virtual Document::LoadingState loadingState() const;
-	virtual bool isEditable() const;
+    virtual void init();
+    virtual Document::LoadingState loadingState() const;
+    virtual bool isEditable() const;
 
-	void loadImage(int invertedZoom);
+    void loadImage(int invertedZoom);
 
 private Q_SLOTS:
-	void slotMetaInfoLoaded();
-	void slotImageLoaded();
-	void slotDataReceived(KIO::Job*, const QByteArray&);
-	void slotTransferFinished(KJob*);
+    void slotMetaInfoLoaded();
+    void slotImageLoaded();
+    void slotDataReceived(KIO::Job*, const QByteArray&);
+    void slotTransferFinished(KJob*);
 
 private:
-	LoadingDocumentImplPrivate* const d;
-	friend struct LoadingDocumentImplPrivate;
+    LoadingDocumentImplPrivate* const d;
+    friend struct LoadingDocumentImplPrivate;
 };
-
 
 } // namespace
 

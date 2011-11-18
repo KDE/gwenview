@@ -29,32 +29,32 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Local
 #include <lib/imagemetainfomodel.h>
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 /**
  * This model uses an instance of ImageMetaInfoModel to make it possible to
  * select your preferred image metainfo keys by checking them.
  */
 struct PreferredImageMetaInfoModelPrivate;
-class GWENVIEWLIB_EXPORT PreferredImageMetaInfoModel : public QSortFilterProxyModel {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT PreferredImageMetaInfoModel : public QSortFilterProxyModel
+{
+    Q_OBJECT
 public:
-	PreferredImageMetaInfoModel(ImageMetaInfoModel* model, const QStringList& list);
-	~PreferredImageMetaInfoModel();
+    PreferredImageMetaInfoModel(ImageMetaInfoModel* model, const QStringList& list);
+    ~PreferredImageMetaInfoModel();
 
-	virtual QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const;
-	virtual bool setData(const QModelIndex& index, const QVariant& value, int role);
-	virtual Qt::ItemFlags flags(const QModelIndex& index) const;
+    virtual QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const;
+    virtual bool setData(const QModelIndex& index, const QVariant& value, int role);
+    virtual Qt::ItemFlags flags(const QModelIndex& index) const;
 
 Q_SIGNALS:
-	void preferredMetaInfoKeyListChanged(const QStringList&);
+    void preferredMetaInfoKeyListChanged(const QStringList&);
 
 private:
-	PreferredImageMetaInfoModelPrivate* const d;
-	friend struct PreferredImageMetaInfoModelPrivate;
+    PreferredImageMetaInfoModelPrivate* const d;
+    friend struct PreferredImageMetaInfoModelPrivate;
 };
-
 
 } // namespace
 

@@ -34,429 +34,458 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QTimer>
 #include <QWeakPointer>
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct RasterImageViewPrivate {
-	RasterImageView* q;
-	ImageScaler* mScaler;
-	QPixmap mBackgroundTexture;
+    RasterImageView* q;
+    ImageScaler* mScaler;
+    QPixmap mBackgroundTexture;
 
-	// Config
-	RasterImageView::AlphaBackgroundMode mAlphaBackgroundMode;
-	QColor mAlphaBackgroundColor;
-	bool mEnlargeSmallerImages;
-	// /Config
+    // Config
+    RasterImageView::AlphaBackgroundMode mAlphaBackgroundMode;
+    QColor mAlphaBackgroundColor;
+    bool mEnlargeSmallerImages;
+    // /Config
 
-	bool mBufferIsEmpty;
-	QPixmap mCurrentBuffer;
-	// The alternate buffer is useful when scrolling: existing content is copied
-	// to mAlternateBuffer and buffers are swapped. This avoids allocating a new
-	// QPixmap everytime the image is scrolled.
-	QPixmap mAlternateBuffer;
+    bool mBufferIsEmpty;
+    QPixmap mCurrentBuffer;
+    // The alternate buffer is useful when scrolling: existing content is copied
+    // to mAlternateBuffer and buffers are swapped. This avoids allocating a new
+    // QPixmap everytime the image is scrolled.
+    QPixmap mAlternateBuffer;
 
-	QTimer* mUpdateTimer;
+    QTimer* mUpdateTimer;
 
-	QWeakPointer<AbstractRasterImageViewTool> mTool;
+    QWeakPointer<AbstractRasterImageViewTool> mTool;
 
-	void createBackgroundTexture() {
-		mBackgroundTexture = QPixmap(32, 32);
-		QPainter painter(&mBackgroundTexture);
-		painter.fillRect(mBackgroundTexture.rect(), QColor(128, 128, 128));
-		QColor light = QColor(192, 192, 192);
-		painter.fillRect(0, 0, 16, 16, light);
-		painter.fillRect(16, 16, 16, 16, light);
-	}
+    void createBackgroundTexture()
+    {
+        mBackgroundTexture = QPixmap(32, 32);
+        QPainter painter(&mBackgroundTexture);
+        painter.fillRect(mBackgroundTexture.rect(), QColor(128, 128, 128));
+        QColor light = QColor(192, 192, 192);
+        painter.fillRect(0, 0, 16, 16, light);
+        painter.fillRect(16, 16, 16, 16, light);
+    }
 
-	void setupUpdateTimer() {
-		mUpdateTimer = new QTimer(q);
-		mUpdateTimer->setInterval(500);
-		mUpdateTimer->setSingleShot(true);
-		QObject::connect(mUpdateTimer, SIGNAL(timeout()),
-			q, SLOT(updateBuffer()));
-	}
+    void setupUpdateTimer()
+    {
+        mUpdateTimer = new QTimer(q);
+        mUpdateTimer->setInterval(500);
+        mUpdateTimer->setSingleShot(true);
+        QObject::connect(mUpdateTimer, SIGNAL(timeout()),
+                         q, SLOT(updateBuffer()));
+    }
 
-	void startAnimationIfNecessary() {
-		if (q->document() && q->isVisible()) {
-			q->document()->startAnimation();
-		}
-	}
+    void startAnimationIfNecessary()
+    {
+        if (q->document() && q->isVisible()) {
+            q->document()->startAnimation();
+        }
+    }
 
-	QSizeF visibleImageSize() const {
-		if (!q->document()) {
-			return QSizeF();
-		}
-		qreal zoom;
-		if (q->zoomToFit()) {
-			zoom = q->computeZoomToFit();
-		} else {
-			zoom = q->zoom();
-		}
+    QSizeF visibleImageSize() const {
+        if (!q->document()) {
+            return QSizeF();
+        }
+        qreal zoom;
+        if (q->zoomToFit()) {
+            zoom = q->computeZoomToFit();
+        } else {
+            zoom = q->zoom();
+        }
 
-		QSizeF size = q->documentSize() * zoom;
-		return size.boundedTo(q->boundingRect().size());
-	}
+        QSizeF size = q->documentSize() * zoom;
+        return size.boundedTo(q->boundingRect().size());
+    }
 
-	QRectF mapViewportToZoomedImage(const QRectF& viewportRect) const {
-		return QRectF(
-			viewportRect.topLeft() - q->imageOffset() + q->scrollPos(),
-			viewportRect.size()
-			);
-	}
+    QRectF mapViewportToZoomedImage(const QRectF& viewportRect) const {
+        return QRectF(
+                   viewportRect.topLeft() - q->imageOffset() + q->scrollPos(),
+                   viewportRect.size()
+               );
+    }
 
-	void setScalerRegionToVisibleRect() {
-		QRectF rect = mapViewportToZoomedImage(q->boundingRect());
-		mScaler->setDestinationRegion(QRegion(rect.toRect()));
-	}
+    void setScalerRegionToVisibleRect()
+    {
+        QRectF rect = mapViewportToZoomedImage(q->boundingRect());
+        mScaler->setDestinationRegion(QRegion(rect.toRect()));
+    }
 
-	void createBuffer() {
-		QSize size = visibleImageSize().toSize();
-		if (size == mCurrentBuffer.size()) {
-			return;
-		}
-		if (!size.isValid()) {
-			mAlternateBuffer = QPixmap();
-			mCurrentBuffer = QPixmap();
-			return;
-		}
+    void createBuffer()
+    {
+        QSize size = visibleImageSize().toSize();
+        if (size == mCurrentBuffer.size()) {
+            return;
+        }
+        if (!size.isValid()) {
+            mAlternateBuffer = QPixmap();
+            mCurrentBuffer = QPixmap();
+            return;
+        }
 
-		mAlternateBuffer = QPixmap(size);
-		mAlternateBuffer.fill(Qt::transparent);
-		{
-			QPainter painter(&mAlternateBuffer);
-			painter.drawPixmap(0, 0, mCurrentBuffer);
-		}
-		qSwap(mAlternateBuffer, mCurrentBuffer);
+        mAlternateBuffer = QPixmap(size);
+        mAlternateBuffer.fill(Qt::transparent);
+        {
+            QPainter painter(&mAlternateBuffer);
+            painter.drawPixmap(0, 0, mCurrentBuffer);
+        }
+        qSwap(mAlternateBuffer, mCurrentBuffer);
 
-		mAlternateBuffer = QPixmap();
-	}
+        mAlternateBuffer = QPixmap();
+    }
 
-	void drawAlphaBackground(QPainter* painter, const QRect& viewportRect, const QPoint& zoomedImageTopLeft) {
-		if (mAlphaBackgroundMode == RasterImageView::AlphaBackgroundCheckBoard) {
-			QPoint textureOffset(
-				zoomedImageTopLeft.x() % mBackgroundTexture.width(),
-				zoomedImageTopLeft.y() % mBackgroundTexture.height()
-				);
-			painter->drawTiledPixmap(
-				viewportRect,
-				mBackgroundTexture,
-				textureOffset);
-		} else {
-			painter->fillRect(viewportRect, mAlphaBackgroundColor);
-		}
-	}
+    void drawAlphaBackground(QPainter* painter, const QRect& viewportRect, const QPoint& zoomedImageTopLeft)
+    {
+        if (mAlphaBackgroundMode == RasterImageView::AlphaBackgroundCheckBoard) {
+            QPoint textureOffset(
+                zoomedImageTopLeft.x() % mBackgroundTexture.width(),
+                zoomedImageTopLeft.y() % mBackgroundTexture.height()
+            );
+            painter->drawTiledPixmap(
+                viewportRect,
+                mBackgroundTexture,
+                textureOffset);
+        } else {
+            painter->fillRect(viewportRect, mAlphaBackgroundColor);
+        }
+    }
 };
 
 RasterImageView::RasterImageView(QGraphicsItem* parent)
 : AbstractImageView(parent)
-, d(new RasterImageViewPrivate) {
-	d->q = this;
+, d(new RasterImageViewPrivate)
+{
+    d->q = this;
 
-	d->mAlphaBackgroundMode = AlphaBackgroundCheckBoard;
-	d->mAlphaBackgroundColor = Qt::black;
-	d->mEnlargeSmallerImages = false;
+    d->mAlphaBackgroundMode = AlphaBackgroundCheckBoard;
+    d->mAlphaBackgroundColor = Qt::black;
+    d->mEnlargeSmallerImages = false;
 
-	d->mBufferIsEmpty = true;
-	d->mScaler = new ImageScaler(this);
-	connect(d->mScaler, SIGNAL(scaledRect(int,int,QImage)), 
-		SLOT(updateFromScaler(int,int,QImage)) );
-	setAcceptHoverEvents(true);
+    d->mBufferIsEmpty = true;
+    d->mScaler = new ImageScaler(this);
+    connect(d->mScaler, SIGNAL(scaledRect(int, int, QImage)),
+            SLOT(updateFromScaler(int, int, QImage)));
+    setAcceptHoverEvents(true);
 
-	d->createBackgroundTexture();
-	d->setupUpdateTimer();
+    d->createBackgroundTexture();
+    d->setupUpdateTimer();
 }
 
-RasterImageView::~RasterImageView() {
-	delete d;
+RasterImageView::~RasterImageView()
+{
+    delete d;
 }
 
-void RasterImageView::setAlphaBackgroundMode(AlphaBackgroundMode mode) {
-	d->mAlphaBackgroundMode = mode;
-	if (document() && document()->hasAlphaChannel()) {
-		d->mCurrentBuffer = QPixmap();
-		updateBuffer();
-	}
+void RasterImageView::setAlphaBackgroundMode(AlphaBackgroundMode mode)
+{
+    d->mAlphaBackgroundMode = mode;
+    if (document() && document()->hasAlphaChannel()) {
+        d->mCurrentBuffer = QPixmap();
+        updateBuffer();
+    }
 }
 
-
-void RasterImageView::setAlphaBackgroundColor(const QColor& color) {
-	d->mAlphaBackgroundColor = color;
-	if (document() && document()->hasAlphaChannel()) {
-		d->mCurrentBuffer = QPixmap();
-		updateBuffer();
-	}
+void RasterImageView::setAlphaBackgroundColor(const QColor& color)
+{
+    d->mAlphaBackgroundColor = color;
+    if (document() && document()->hasAlphaChannel()) {
+        d->mCurrentBuffer = QPixmap();
+        updateBuffer();
+    }
 }
 
-void RasterImageView::loadFromDocument() {
-	Document::Ptr doc = document();
-	connect(doc.data(), SIGNAL(metaInfoLoaded(KUrl)),
-		SLOT(slotDocumentMetaInfoLoaded()) );
-	connect(doc.data(), SIGNAL(isAnimatedUpdated()),
-		SLOT(slotDocumentIsAnimatedUpdated()) );
+void RasterImageView::loadFromDocument()
+{
+    Document::Ptr doc = document();
+    connect(doc.data(), SIGNAL(metaInfoLoaded(KUrl)),
+            SLOT(slotDocumentMetaInfoLoaded()));
+    connect(doc.data(), SIGNAL(isAnimatedUpdated()),
+            SLOT(slotDocumentIsAnimatedUpdated()));
 
-	const Document::LoadingState state = doc->loadingState();
-	if (state == Document::MetaInfoLoaded || state == Document::Loaded) {
-		slotDocumentMetaInfoLoaded();
-	}
+    const Document::LoadingState state = doc->loadingState();
+    if (state == Document::MetaInfoLoaded || state == Document::Loaded) {
+        slotDocumentMetaInfoLoaded();
+    }
 }
 
-void RasterImageView::slotDocumentMetaInfoLoaded() {
-	if (document()->size().isValid()) {
-		finishSetDocument();
-	} else {
-		// Could not retrieve image size from meta info, we need to load the
-		// full image now.
-		connect(document().data(), SIGNAL(loaded(KUrl)),
-			SLOT(finishSetDocument()) );
-		document()->startLoadingFullImage();
-	}
+void RasterImageView::slotDocumentMetaInfoLoaded()
+{
+    if (document()->size().isValid()) {
+        finishSetDocument();
+    } else {
+        // Could not retrieve image size from meta info, we need to load the
+        // full image now.
+        connect(document().data(), SIGNAL(loaded(KUrl)),
+                SLOT(finishSetDocument()));
+        document()->startLoadingFullImage();
+    }
 }
 
-void RasterImageView::finishSetDocument() {
-	if (!document()->size().isValid()) {
-		kError() << "No valid image size available, this should not happen!";
-		return;
-	}
+void RasterImageView::finishSetDocument()
+{
+    if (!document()->size().isValid()) {
+        kError() << "No valid image size available, this should not happen!";
+        return;
+    }
 
-	d->createBuffer();
-	d->mScaler->setDocument(document());
+    d->createBuffer();
+    d->mScaler->setDocument(document());
 
-	connect(document().data(), SIGNAL(imageRectUpdated(QRect)),
-		SLOT(updateImageRect(QRect)) );
+    connect(document().data(), SIGNAL(imageRectUpdated(QRect)),
+            SLOT(updateImageRect(QRect)));
 
-	if (zoomToFit()) {
-		// Force the update otherwise if computeZoomToFit() returns 1, setZoom()
-		// will think zoom has not changed and won't update the image
-		setZoom(computeZoomToFit(), QPointF(-1, -1), ForceUpdate);
-	} else {
-		QRect rect(QPoint(0, 0), document()->size());
-		updateImageRect(rect);
-	}
+    if (zoomToFit()) {
+        // Force the update otherwise if computeZoomToFit() returns 1, setZoom()
+        // will think zoom has not changed and won't update the image
+        setZoom(computeZoomToFit(), QPointF(-1, -1), ForceUpdate);
+    } else {
+        QRect rect(QPoint(0, 0), document()->size());
+        updateImageRect(rect);
+    }
 
-	d->startAnimationIfNecessary();
-	update();
+    d->startAnimationIfNecessary();
+    update();
 }
 
-void RasterImageView::updateImageRect(const QRect& imageRect) {
-	QRectF viewRect = mapToView(imageRect);
-	if (!viewRect.intersects(boundingRect())) {
-		return;
-	}
+void RasterImageView::updateImageRect(const QRect& imageRect)
+{
+    QRectF viewRect = mapToView(imageRect);
+    if (!viewRect.intersects(boundingRect())) {
+        return;
+    }
 
-	if (zoomToFit()) {
-		setZoom(computeZoomToFit());
-	}
-	d->setScalerRegionToVisibleRect();
-	update();
+    if (zoomToFit()) {
+        setZoom(computeZoomToFit());
+    }
+    d->setScalerRegionToVisibleRect();
+    update();
 }
 
-void RasterImageView::slotDocumentIsAnimatedUpdated() {
-	d->startAnimationIfNecessary();
+void RasterImageView::slotDocumentIsAnimatedUpdated()
+{
+    d->startAnimationIfNecessary();
 }
 
-void RasterImageView::updateFromScaler(int zoomedImageLeft, int zoomedImageTop, const QImage& image) {
-	int viewportLeft = zoomedImageLeft - scrollPos().x();
-	int viewportTop = zoomedImageTop - scrollPos().y();
-	d->mBufferIsEmpty = false;
-	{
-		QPainter painter(&d->mCurrentBuffer);
-		if (document()->hasAlphaChannel()) {
-			d->drawAlphaBackground(
-				&painter, QRect(viewportLeft, viewportTop, image.width(), image.height()),
-				QPoint(zoomedImageLeft, zoomedImageTop)
-				);
-		} else {
-			painter.setCompositionMode(QPainter::CompositionMode_Source);
-		}
-		painter.drawImage(viewportLeft, viewportTop, image);
-	}
-	update();
+void RasterImageView::updateFromScaler(int zoomedImageLeft, int zoomedImageTop, const QImage& image)
+{
+    int viewportLeft = zoomedImageLeft - scrollPos().x();
+    int viewportTop = zoomedImageTop - scrollPos().y();
+    d->mBufferIsEmpty = false;
+    {
+        QPainter painter(&d->mCurrentBuffer);
+        if (document()->hasAlphaChannel()) {
+            d->drawAlphaBackground(
+                &painter, QRect(viewportLeft, viewportTop, image.width(), image.height()),
+                QPoint(zoomedImageLeft, zoomedImageTop)
+            );
+        } else {
+            painter.setCompositionMode(QPainter::CompositionMode_Source);
+        }
+        painter.drawImage(viewportLeft, viewportTop, image);
+    }
+    update();
 }
 
-void RasterImageView::onZoomChanged() {
-	// If we zoom more than twice, then assume the user wants to see the real
-	// pixels, for example to fine tune a crop operation
-	if (zoom() < 2.) {
-		d->mScaler->setTransformationMode(Qt::SmoothTransformation);
-	} else {
-		d->mScaler->setTransformationMode(Qt::FastTransformation);
-	}
-	if (!d->mUpdateTimer->isActive()) {
-		updateBuffer();
-	}
+void RasterImageView::onZoomChanged()
+{
+    // If we zoom more than twice, then assume the user wants to see the real
+    // pixels, for example to fine tune a crop operation
+    if (zoom() < 2.) {
+        d->mScaler->setTransformationMode(Qt::SmoothTransformation);
+    } else {
+        d->mScaler->setTransformationMode(Qt::FastTransformation);
+    }
+    if (!d->mUpdateTimer->isActive()) {
+        updateBuffer();
+    }
 }
 
-void RasterImageView::onImageOffsetChanged() {
-	update();
+void RasterImageView::onImageOffsetChanged()
+{
+    update();
 }
 
-void RasterImageView::onScrollPosChanged(const QPointF& oldPos) {
-	QPointF delta = scrollPos() - oldPos;
+void RasterImageView::onScrollPosChanged(const QPointF& oldPos)
+{
+    QPointF delta = scrollPos() - oldPos;
 
-	// Scroll existing
-	{
-		if (d->mAlternateBuffer.size() != d->mCurrentBuffer.size()) {
-			d->mAlternateBuffer = QPixmap(d->mCurrentBuffer.size());
-		}
-		QPainter painter(&d->mAlternateBuffer);
-		painter.drawPixmap(-delta, d->mCurrentBuffer);
-	}
-	qSwap(d->mCurrentBuffer, d->mAlternateBuffer);
+    // Scroll existing
+    {
+        if (d->mAlternateBuffer.size() != d->mCurrentBuffer.size()) {
+            d->mAlternateBuffer = QPixmap(d->mCurrentBuffer.size());
+        }
+        QPainter painter(&d->mAlternateBuffer);
+        painter.drawPixmap(-delta, d->mCurrentBuffer);
+    }
+    qSwap(d->mCurrentBuffer, d->mAlternateBuffer);
 
-	// Scale missing parts
-	QRegion bufferRegion = QRegion(d->mCurrentBuffer.rect().translated(scrollPos().toPoint()));
-	QRegion updateRegion = bufferRegion - bufferRegion.translated(-delta.toPoint());
-	updateBuffer(updateRegion);
-	update();
+    // Scale missing parts
+    QRegion bufferRegion = QRegion(d->mCurrentBuffer.rect().translated(scrollPos().toPoint()));
+    QRegion updateRegion = bufferRegion - bufferRegion.translated(-delta.toPoint());
+    updateBuffer(updateRegion);
+    update();
 }
 
 void RasterImageView::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/)
 {
-	QSize bufferSize = d->mCurrentBuffer.size();
+    QSize bufferSize = d->mCurrentBuffer.size();
 
-	QSizeF paintSize;
-	if (zoomToFit()) {
-		paintSize = documentSize() * computeZoomToFit();
-	} else {
-		paintSize = bufferSize;
-	}
-	painter->drawPixmap(
-		(boundingRect().width() - paintSize.width()) / 2,
-		(boundingRect().height() - paintSize.height()) / 2,
-		paintSize.width(),
-		paintSize.height(),
-		d->mCurrentBuffer);
+    QSizeF paintSize;
+    if (zoomToFit()) {
+        paintSize = documentSize() * computeZoomToFit();
+    } else {
+        paintSize = bufferSize;
+    }
+    painter->drawPixmap(
+        (boundingRect().width() - paintSize.width()) / 2,
+        (boundingRect().height() - paintSize.height()) / 2,
+        paintSize.width(),
+        paintSize.height(),
+        d->mCurrentBuffer);
 
-	if (d->mTool) {
-		d->mTool.data()->paint(painter);
-	}
+    if (d->mTool) {
+        d->mTool.data()->paint(painter);
+    }
 
-	// Debug
+    // Debug
 #if 0
-	QPointF topLeft = imageOffset();
-	QSizeF visibleSize = documentSize() * zoom();
-	painter->setPen(Qt::red);
-	painter->drawRect(topLeft.x(), topLeft.y(), visibleSize.width() - 1, visibleSize.height() - 1);
+    QPointF topLeft = imageOffset();
+    QSizeF visibleSize = documentSize() * zoom();
+    painter->setPen(Qt::red);
+    painter->drawRect(topLeft.x(), topLeft.y(), visibleSize.width() - 1, visibleSize.height() - 1);
 
-	painter->setPen(Qt::blue);
-	painter->drawRect(topLeft.x(), topLeft.y(), d->mCurrentBuffer.width() - 1, d->mCurrentBuffer.height() - 1);
+    painter->setPen(Qt::blue);
+    painter->drawRect(topLeft.x(), topLeft.y(), d->mCurrentBuffer.width() - 1, d->mCurrentBuffer.height() - 1);
 #endif
 }
 
-void RasterImageView::resizeEvent(QGraphicsSceneResizeEvent* event) {
-	// If we are in zoomToFit mode and have something in our buffer, delay the
-	// update: paint() will paint a scaled version of the buffer until resizing
-	// is done. This is much faster than rescaling the whole image for each
-	// resize event we receive.
-	// mUpdateTimer must be start before calling AbstractImageView::resizeEvent()
-	// because AbstractImageView::resizeEvent() will call onZoomChanged(), which
-	// will trigger an immediate update unless the mUpdateTimer is active.
-	if (zoomToFit() && !d->mBufferIsEmpty) {
-		d->mUpdateTimer->start();
-	}
-	AbstractImageView::resizeEvent(event);
-	if (!zoomToFit()) {
-		// Only update buffer if we are not in zoomToFit mode: if we are
-		// onZoomChanged() will have already updated the buffer.
-		updateBuffer();
-	}
+void RasterImageView::resizeEvent(QGraphicsSceneResizeEvent* event)
+{
+    // If we are in zoomToFit mode and have something in our buffer, delay the
+    // update: paint() will paint a scaled version of the buffer until resizing
+    // is done. This is much faster than rescaling the whole image for each
+    // resize event we receive.
+    // mUpdateTimer must be start before calling AbstractImageView::resizeEvent()
+    // because AbstractImageView::resizeEvent() will call onZoomChanged(), which
+    // will trigger an immediate update unless the mUpdateTimer is active.
+    if (zoomToFit() && !d->mBufferIsEmpty) {
+        d->mUpdateTimer->start();
+    }
+    AbstractImageView::resizeEvent(event);
+    if (!zoomToFit()) {
+        // Only update buffer if we are not in zoomToFit mode: if we are
+        // onZoomChanged() will have already updated the buffer.
+        updateBuffer();
+    }
 }
 
-void RasterImageView::updateBuffer(const QRegion& region) {
-	d->mUpdateTimer->stop();
-	d->createBuffer();
-	d->mScaler->setZoom(zoom());
-	if (region.isEmpty()) {
-		d->setScalerRegionToVisibleRect();
-	} else {
-		d->mScaler->setDestinationRegion(region);
-	}
+void RasterImageView::updateBuffer(const QRegion& region)
+{
+    d->mUpdateTimer->stop();
+    d->createBuffer();
+    d->mScaler->setZoom(zoom());
+    if (region.isEmpty()) {
+        d->setScalerRegionToVisibleRect();
+    } else {
+        d->mScaler->setDestinationRegion(region);
+    }
 }
 
-void RasterImageView::setCurrentTool(AbstractRasterImageViewTool* tool) {
-	if (d->mTool) {
-		d->mTool.data()->toolDeactivated();
-	}
-	d->mTool = tool;
-	if (d->mTool) {
-		d->mTool.data()->toolActivated();
-	}
-	currentToolChanged(tool);
-	update();
+void RasterImageView::setCurrentTool(AbstractRasterImageViewTool* tool)
+{
+    if (d->mTool) {
+        d->mTool.data()->toolDeactivated();
+    }
+    d->mTool = tool;
+    if (d->mTool) {
+        d->mTool.data()->toolActivated();
+    }
+    currentToolChanged(tool);
+    update();
 }
 
-AbstractRasterImageViewTool* RasterImageView::currentTool() const {
-	return d->mTool.data();
+AbstractRasterImageViewTool* RasterImageView::currentTool() const
+{
+    return d->mTool.data();
 }
 
-void RasterImageView::mousePressEvent(QGraphicsSceneMouseEvent* event) {
-	if (d->mTool) {
-		d->mTool.data()->mousePressEvent(event);
-		if (event->isAccepted()) {
-			return;
-		}
-	}
-	AbstractImageView::mousePressEvent(event);
+void RasterImageView::mousePressEvent(QGraphicsSceneMouseEvent* event)
+{
+    if (d->mTool) {
+        d->mTool.data()->mousePressEvent(event);
+        if (event->isAccepted()) {
+            return;
+        }
+    }
+    AbstractImageView::mousePressEvent(event);
 }
 
-void RasterImageView::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
-	if (d->mTool) {
-		d->mTool.data()->mouseMoveEvent(event);
-		if (event->isAccepted()) {
-			return;
-		}
-	}
-	AbstractImageView::mouseMoveEvent(event);
+void RasterImageView::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
+{
+    if (d->mTool) {
+        d->mTool.data()->mouseMoveEvent(event);
+        if (event->isAccepted()) {
+            return;
+        }
+    }
+    AbstractImageView::mouseMoveEvent(event);
 }
 
-void RasterImageView::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
-	if (d->mTool) {
-		d->mTool.data()->mouseReleaseEvent(event);
-		if (event->isAccepted()) {
-			return;
-		}
-	}
-	AbstractImageView::mouseReleaseEvent(event);
+void RasterImageView::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
+{
+    if (d->mTool) {
+        d->mTool.data()->mouseReleaseEvent(event);
+        if (event->isAccepted()) {
+            return;
+        }
+    }
+    AbstractImageView::mouseReleaseEvent(event);
 }
 
-void RasterImageView::wheelEvent(QGraphicsSceneWheelEvent* event) {
-	if (d->mTool) {
-		d->mTool.data()->wheelEvent(event);
-		if (event->isAccepted()) {
-			return;
-		}
-	}
-	AbstractImageView::wheelEvent(event);
+void RasterImageView::wheelEvent(QGraphicsSceneWheelEvent* event)
+{
+    if (d->mTool) {
+        d->mTool.data()->wheelEvent(event);
+        if (event->isAccepted()) {
+            return;
+        }
+    }
+    AbstractImageView::wheelEvent(event);
 }
 
-void RasterImageView::keyPressEvent(QKeyEvent* event) {
-	if (d->mTool) {
-		d->mTool.data()->keyPressEvent(event);
-		if (event->isAccepted()) {
-			return;
-		}
-	}
-	AbstractImageView::keyPressEvent(event);
+void RasterImageView::keyPressEvent(QKeyEvent* event)
+{
+    if (d->mTool) {
+        d->mTool.data()->keyPressEvent(event);
+        if (event->isAccepted()) {
+            return;
+        }
+    }
+    AbstractImageView::keyPressEvent(event);
 }
 
-void RasterImageView::keyReleaseEvent(QKeyEvent* event) {
-	if (d->mTool) {
-		d->mTool.data()->keyReleaseEvent(event);
-		if (event->isAccepted()) {
-			return;
-		}
-	}
-	AbstractImageView::keyReleaseEvent(event);
+void RasterImageView::keyReleaseEvent(QKeyEvent* event)
+{
+    if (d->mTool) {
+        d->mTool.data()->keyReleaseEvent(event);
+        if (event->isAccepted()) {
+            return;
+        }
+    }
+    AbstractImageView::keyReleaseEvent(event);
 }
 
-void RasterImageView::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
-	if (d->mTool) {
-		d->mTool.data()->hoverMoveEvent(event);
-		if (event->isAccepted()) {
-			return;
-		}
-	}
-	AbstractImageView::hoverMoveEvent(event);
+void RasterImageView::hoverMoveEvent(QGraphicsSceneHoverEvent* event)
+{
+    if (d->mTool) {
+        d->mTool.data()->hoverMoveEvent(event);
+        if (event->isAccepted()) {
+            return;
+        }
+    }
+    AbstractImageView::hoverMoveEvent(event);
 }
 
 } // namespace

@@ -33,60 +33,61 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "document/documentjob.h"
 #include "document/abstractdocumenteditor.h"
 
-namespace Gwenview {
+namespace Gwenview
+{
 
-class CropJob : public ThreadedDocumentJob {
+class CropJob : public ThreadedDocumentJob
+{
 public:
-	CropJob(const QRect& rect)
-	: mRect(rect)
-	{}
+    CropJob(const QRect& rect)
+        : mRect(rect)
+    {}
 
-	virtual void threadedStart() {
-		if (!checkDocumentEditor()) {
-			return;
-		}
-		const QImage src = document()->image();
-		const QImage dst = src.copy(mRect);
-		document()->editor()->setImage(dst);
-		setError(NoError);
-	}
+    virtual void threadedStart()
+    {
+        if (!checkDocumentEditor()) {
+            return;
+        }
+        const QImage src = document()->image();
+        const QImage dst = src.copy(mRect);
+        document()->editor()->setImage(dst);
+        setError(NoError);
+    }
 
 private:
-	QRect mRect;
+    QRect mRect;
 };
-
 
 struct CropImageOperationPrivate {
-	QRect mRect;
-	QImage mOriginalImage;
+    QRect mRect;
+    QImage mOriginalImage;
 };
 
-
 CropImageOperation::CropImageOperation(const QRect& rect)
-: d(new CropImageOperationPrivate) {
-	d->mRect = rect;
-	setText(i18n("Crop"));
+: d(new CropImageOperationPrivate)
+{
+    d->mRect = rect;
+    setText(i18n("Crop"));
 }
 
-
-CropImageOperation::~CropImageOperation() {
-	delete d;
+CropImageOperation::~CropImageOperation()
+{
+    delete d;
 }
 
-
-void CropImageOperation::redo() {
-	d->mOriginalImage = document()->image();
-	redoAsDocumentJob(new CropJob(d->mRect));
+void CropImageOperation::redo()
+{
+    d->mOriginalImage = document()->image();
+    redoAsDocumentJob(new CropJob(d->mRect));
 }
 
-
-void CropImageOperation::undo() {
-	if (!document()->editor()) {
-		kWarning() << "!document->editor()";
-		return;
-	}
-	document()->editor()->setImage(d->mOriginalImage);
+void CropImageOperation::undo()
+{
+    if (!document()->editor()) {
+        kWarning() << "!document->editor()";
+        return;
+    }
+    document()->editor()->setImage(d->mOriginalImage);
 }
-
 
 } // namespace

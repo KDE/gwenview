@@ -23,50 +23,51 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Qt
 #include <QMatrix>
 
+namespace Gwenview
+{
+namespace ImageUtils
+{
 
-namespace Gwenview {
-namespace ImageUtils {
+QMatrix transformMatrix(Orientation orientation)
+{
+    QMatrix matrix;
+    switch (orientation) {
+    case NOT_AVAILABLE:
+    case NORMAL:
+        break;
 
+    case HFLIP:
+        matrix.scale(-1, 1);
+        break;
 
-QMatrix transformMatrix(Orientation orientation) {
-	QMatrix matrix;
-	switch (orientation) {
-	case NOT_AVAILABLE:
-	case NORMAL:
-		break;
+    case ROT_180:
+        matrix.rotate(180);
+        break;
 
-	case HFLIP:
-		matrix.scale(-1,1);
-		break;
+    case VFLIP:
+        matrix.scale(1, -1);
+        break;
 
-	case ROT_180:
-		matrix.rotate(180);
-		break;
+    case TRANSPOSE:
+        matrix.scale(-1, 1);
+        matrix.rotate(90);
+        break;
 
-	case VFLIP:
-		matrix.scale(1,-1);
-		break;
-	
-	case TRANSPOSE:
-		matrix.scale(-1,1);
-		matrix.rotate(90);
-		break;
-		
-	case ROT_90:		
-		matrix.rotate(90);
-		break;
-	
-	case TRANSVERSE:
-		matrix.scale(1,-1);
-		matrix.rotate(90);
-		break;
-		
-	case ROT_270:		
-		matrix.rotate(270);
-		break;
-	}
+    case ROT_90:
+        matrix.rotate(90);
+        break;
 
-	return matrix;
+    case TRANSVERSE:
+        matrix.scale(1, -1);
+        matrix.rotate(90);
+        break;
+
+    case ROT_270:
+        matrix.rotate(270);
+        break;
+    }
+
+    return matrix;
 }
 
 } // namespace

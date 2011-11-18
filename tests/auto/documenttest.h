@@ -29,102 +29,101 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Local
 #include "../lib/document/document.h"
 
-class LoadingStateSpy : public QObject {
-	Q_OBJECT
+class LoadingStateSpy : public QObject
+{
+    Q_OBJECT
 public:
-	LoadingStateSpy(const Gwenview::Document::Ptr& doc)
-	: mDocument(doc)
-	, mCallCount(0)
-	{
-	}
+    LoadingStateSpy(const Gwenview::Document::Ptr& doc)
+        : mDocument(doc)
+        , mCallCount(0) {
+    }
 
 public Q_SLOTS:
-	void readState() {
-		mCallCount++;
-		mState = mDocument->loadingState();
-	}
+    void readState() {
+        mCallCount++;
+        mState = mDocument->loadingState();
+    }
 
 public:
-	Gwenview::Document::Ptr mDocument;
-	int mCallCount;
-	Gwenview::Document::LoadingState mState;
+    Gwenview::Document::Ptr mDocument;
+    int mCallCount;
+    Gwenview::Document::LoadingState mState;
 };
 
-
-class JobWatcher : public QObject {
-	Q_OBJECT
+class JobWatcher : public QObject
+{
+    Q_OBJECT
 public:
-	JobWatcher(KJob* job)
-	: mJob(job)
-	, mDone(false)
-	, mError(0)
-	{
-		connect(job, SIGNAL(result(KJob*)),
-			SLOT(slotResult(KJob*)));
-		connect(job, SIGNAL(destroyed(QObject*)),
-			SLOT(slotDestroyed()));
-	}
+    JobWatcher(KJob* job)
+        : mJob(job)
+        , mDone(false)
+        , mError(0) {
+        connect(job, SIGNAL(result(KJob*)),
+                SLOT(slotResult(KJob*)));
+        connect(job, SIGNAL(destroyed(QObject*)),
+                SLOT(slotDestroyed()));
+    }
 
-	void wait() {
-		while (!mDone) {
-			QApplication::processEvents();
-		}
-	}
+    void wait() {
+        while (!mDone) {
+            QApplication::processEvents();
+        }
+    }
 
-	int error() const {
-		return mError;
-	}
+    int error() const {
+        return mError;
+    }
 
 private Q_SLOTS:
-	void slotResult(KJob* job) {
-		mError = job->error();
-		mDone = true;
-	}
+    void slotResult(KJob* job) {
+        mError = job->error();
+        mDone = true;
+    }
 
-	void slotDestroyed() {
-		kWarning() << "Destroyed";
-		mError = -1;
-		mDone = true;
-	}
+    void slotDestroyed() {
+        kWarning() << "Destroyed";
+        mError = -1;
+        mDone = true;
+    }
 
 private:
-	KJob* mJob;
-	bool mDone;
-	int mError;
+    KJob* mJob;
+    bool mDone;
+    int mError;
 };
 
-
-class DocumentTest : public QObject {
-	Q_OBJECT
+class DocumentTest : public QObject
+{
+    Q_OBJECT
 
 private Q_SLOTS:
-	void testLoad();
-	void testLoad_data();
-	void testLoadTwoPasses();
-	void testLoadEmpty();
-	void testLoadDownSampled();
-	void testLoadDownSampled_data();
-	void testLoadDownSampledPng();
-	void testLoadRemote();
-	void testLoadAnimated();
-	void testDeleteWhileLoading();
-	void testLoadRotated();
-	void testMultipleLoads();
-	void testSaveAs();
-	void testSaveRemote();
-	void testLosslessSave();
-	void testLosslessRotate();
-	void testModifyAndSaveAs();
-	void testMetaInfoJpeg();
-	void testMetaInfoBmp();
-	void testForgetModifiedDocument();
-	void testModifiedAndSavedSignals();
-	void testJobQueue();
-	void testCheckDocumentEditor();
-	void testUndoStackPush();
+    void testLoad();
+    void testLoad_data();
+    void testLoadTwoPasses();
+    void testLoadEmpty();
+    void testLoadDownSampled();
+    void testLoadDownSampled_data();
+    void testLoadDownSampledPng();
+    void testLoadRemote();
+    void testLoadAnimated();
+    void testDeleteWhileLoading();
+    void testLoadRotated();
+    void testMultipleLoads();
+    void testSaveAs();
+    void testSaveRemote();
+    void testLosslessSave();
+    void testLosslessRotate();
+    void testModifyAndSaveAs();
+    void testMetaInfoJpeg();
+    void testMetaInfoBmp();
+    void testForgetModifiedDocument();
+    void testModifiedAndSavedSignals();
+    void testJobQueue();
+    void testCheckDocumentEditor();
+    void testUndoStackPush();
 
-	void initTestCase();
-	void init();
+    void initTestCase();
+    void init();
 };
 
 #endif // DOCUMENTTEST_H

@@ -28,30 +28,32 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include <lib/documentview/abstractdocumentviewadapter.h>
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct MessageViewAdapterPrivate;
-class MessageViewAdapter : public AbstractDocumentViewAdapter {
-	Q_OBJECT
+class MessageViewAdapter : public AbstractDocumentViewAdapter
+{
+    Q_OBJECT
 public:
-	MessageViewAdapter();
-	~MessageViewAdapter();
+    MessageViewAdapter();
+    ~MessageViewAdapter();
 
-	virtual MimeTypeUtils::Kind kind() const { return MimeTypeUtils::KIND_UNKNOWN; }
+    virtual MimeTypeUtils::Kind kind() const {
+        return MimeTypeUtils::KIND_UNKNOWN;
+    }
 
-	virtual Document::Ptr document() const;
+    virtual Document::Ptr document() const;
 
-	virtual void setDocument(Document::Ptr);
+    virtual void setDocument(Document::Ptr);
 
-	void setInfoMessage(const QString&);
+    void setInfoMessage(const QString&);
 
-	void setErrorMessage(const QString& main, const QString& detail = QString());
+    void setErrorMessage(const QString& main, const QString& detail = QString());
 
 private:
-	MessageViewAdapterPrivate* const d;
+    MessageViewAdapterPrivate* const d;
 };
-
 
 } // namespace
 

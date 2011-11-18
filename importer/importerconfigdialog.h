@@ -28,24 +28,24 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 class ImporterConfigDialogPrivate;
-class ImporterConfigDialog : public KConfigDialog {
-	Q_OBJECT
+class ImporterConfigDialog : public KConfigDialog
+{
+    Q_OBJECT
 public:
-	ImporterConfigDialog(QWidget*);
-	~ImporterConfigDialog();
+    ImporterConfigDialog(QWidget*);
+    ~ImporterConfigDialog();
 
 private Q_SLOTS:
-	void slotHelpLinkActivated(const QString& keyword);
-	void updatePreview();
+    void slotHelpLinkActivated(const QString& keyword);
+    void updatePreview();
 
 private:
-	ImporterConfigDialogPrivate* const d;
+    ImporterConfigDialogPrivate* const d;
 };
-
 
 } // namespace
 

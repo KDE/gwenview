@@ -30,30 +30,31 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 class QByteArray;
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 class JpegContent;
 
 struct JpegDocumentLoadedImplPrivate;
-class JpegDocumentLoadedImpl : public DocumentLoadedImpl {
-	Q_OBJECT
+class JpegDocumentLoadedImpl : public DocumentLoadedImpl
+{
+    Q_OBJECT
 public:
-	JpegDocumentLoadedImpl(Document*, JpegContent*);
-	~JpegDocumentLoadedImpl();
-	virtual QByteArray rawData() const;
+    JpegDocumentLoadedImpl(Document*, JpegContent*);
+    ~JpegDocumentLoadedImpl();
+    virtual QByteArray rawData() const;
 
 protected:
-	virtual bool saveInternal(QIODevice* device, const QByteArray& format);
+    virtual bool saveInternal(QIODevice* device, const QByteArray& format);
 
-	// AbstractDocumentEditor
-	virtual void setImage(const QImage&);
-	virtual void applyTransformation(Orientation orientation);
-	//
+    // AbstractDocumentEditor
+    virtual void setImage(const QImage&);
+    virtual void applyTransformation(Orientation orientation);
+    //
 
 private:
-	JpegDocumentLoadedImplPrivate* const d;
+    JpegDocumentLoadedImplPrivate* const d;
 };
-
 
 } // namespace
 

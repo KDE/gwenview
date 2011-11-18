@@ -30,63 +30,61 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct KIPIImageCollectionSelectorPrivate {
-	KIPIInterface* mInterface;
-	QListWidget* mListWidget;
+    KIPIInterface* mInterface;
+    QListWidget* mListWidget;
 };
-
 
 KIPIImageCollectionSelector::KIPIImageCollectionSelector(KIPIInterface* interface, QWidget* parent)
 : KIPI::ImageCollectionSelector(parent)
-, d(new KIPIImageCollectionSelectorPrivate) {
-	d->mInterface = interface;
+, d(new KIPIImageCollectionSelectorPrivate)
+{
+    d->mInterface = interface;
 
-	d->mListWidget = new QListWidget;
-	QList<KIPI::ImageCollection> list = interface->allAlbums();
-	Q_FOREACH(const KIPI::ImageCollection& collection, list) {
-		QListWidgetItem* item = new QListWidgetItem(d->mListWidget);
-		QString name = collection.name();
-		int imageCount = collection.images().size();
-		QString title = i18ncp("%1 is collection name, %2 is image count in collection",
-			"%1 (%2 image)", "%1 (%2 images)", name, imageCount);
+    d->mListWidget = new QListWidget;
+    QList<KIPI::ImageCollection> list = interface->allAlbums();
+    Q_FOREACH(const KIPI::ImageCollection & collection, list) {
+        QListWidgetItem* item = new QListWidgetItem(d->mListWidget);
+        QString name = collection.name();
+        int imageCount = collection.images().size();
+        QString title = i18ncp("%1 is collection name, %2 is image count in collection",
+                               "%1 (%2 image)", "%1 (%2 images)", name, imageCount);
 
-		item->setText(title);
-		item->setData(Qt::UserRole, name);
-	}
+        item->setText(title);
+        item->setData(Qt::UserRole, name);
+    }
 
-	connect(d->mListWidget, SIGNAL(currentRowChanged(int)),
-		SIGNAL(selectionChanged()) );
+    connect(d->mListWidget, SIGNAL(currentRowChanged(int)),
+            SIGNAL(selectionChanged()));
 
-	QVBoxLayout* layout = new QVBoxLayout(this);
-	layout->addWidget(d->mListWidget);
-	layout->setMargin(0);
+    QVBoxLayout* layout = new QVBoxLayout(this);
+    layout->addWidget(d->mListWidget);
+    layout->setMargin(0);
 }
 
-
-KIPIImageCollectionSelector::~KIPIImageCollectionSelector() {
-	delete d;
+KIPIImageCollectionSelector::~KIPIImageCollectionSelector()
+{
+    delete d;
 }
 
-
-
-QList<KIPI::ImageCollection> KIPIImageCollectionSelector::selectedImageCollections() const {
-	QListWidgetItem* item = d->mListWidget->currentItem();
-	QList<KIPI::ImageCollection> selectedList;
-	if (item) {
-		QString name = item->data(Qt::UserRole).toString();
-		QList<KIPI::ImageCollection> list = d->mInterface->allAlbums();
-		Q_FOREACH(const KIPI::ImageCollection& collection, list) {
-			if (collection.name() == name) {
-				selectedList << collection;
-				break;
-			}
-		}
-	}
-	return selectedList;
+QList<KIPI::ImageCollection> KIPIImageCollectionSelector::selectedImageCollections() const
+{
+    QListWidgetItem* item = d->mListWidget->currentItem();
+    QList<KIPI::ImageCollection> selectedList;
+    if (item) {
+        QString name = item->data(Qt::UserRole).toString();
+        QList<KIPI::ImageCollection> list = d->mInterface->allAlbums();
+        Q_FOREACH(const KIPI::ImageCollection & collection, list) {
+            if (collection.name() == name) {
+                selectedList << collection;
+                break;
+            }
+        }
+    }
+    return selectedList;
 }
-
 
 } // namespace

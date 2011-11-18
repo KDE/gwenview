@@ -28,30 +28,30 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include <lib/document/abstractdocumentimpl.h>
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct AnimatedDocumentLoadedImplPrivate;
-class AnimatedDocumentLoadedImpl : public AbstractDocumentImpl {
-	Q_OBJECT
+class AnimatedDocumentLoadedImpl : public AbstractDocumentImpl
+{
+    Q_OBJECT
 public:
-	AnimatedDocumentLoadedImpl(Document*, const QByteArray&);
-	~AnimatedDocumentLoadedImpl();
+    AnimatedDocumentLoadedImpl(Document*, const QByteArray&);
+    ~AnimatedDocumentLoadedImpl();
 
-	virtual void init();
-	virtual Document::LoadingState loadingState() const;
-	virtual QByteArray rawData() const;
-	virtual bool isAnimated() const;
-	virtual void startAnimation();
-	virtual void stopAnimation();
+    virtual void init();
+    virtual Document::LoadingState loadingState() const;
+    virtual QByteArray rawData() const;
+    virtual bool isAnimated() const;
+    virtual void startAnimation();
+    virtual void stopAnimation();
 
 private Q_SLOTS:
-	void slotFrameChanged(int frameNumber);
+    void slotFrameChanged(int frameNumber);
 
 private:
-	AnimatedDocumentLoadedImplPrivate* const d;
+    AnimatedDocumentLoadedImplPrivate* const d;
 };
-
 
 } // namespace
 

@@ -28,12 +28,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class KFileItem;
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 /**
  * Helper functions to deal with archives
  */
-namespace ArchiveUtils {
+namespace ArchiveUtils
+{
 
 /**
  * Returns true if @p item is an archive

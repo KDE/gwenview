@@ -33,124 +33,126 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct ZoomSliderPrivate {
-	QToolButton* mZoomOutButton;
-	QToolButton* mZoomInButton;
-	QSlider* mSlider;
-	QAction* mZoomInAction;
-	QAction* mZoomOutAction;
+    QToolButton* mZoomOutButton;
+    QToolButton* mZoomInButton;
+    QSlider* mSlider;
+    QAction* mZoomInAction;
+    QAction* mZoomOutAction;
 
-	void updateButtons() {
-		mZoomOutButton->setEnabled(mSlider->value() > mSlider->minimum());
-		mZoomInButton->setEnabled(mSlider->value() < mSlider->maximum());
-	}
+    void updateButtons()
+    {
+        mZoomOutButton->setEnabled(mSlider->value() > mSlider->minimum());
+        mZoomInButton->setEnabled(mSlider->value() < mSlider->maximum());
+    }
 };
 
-static QToolButton* createZoomButton(const char* iconName) {
-	QToolButton* button = new QToolButton;
-	button->setIcon(KIcon(iconName));
-	button->setAutoRaise(true);
-	button->setAutoRepeat(true);
-	return button;
+static QToolButton* createZoomButton(const char* iconName)
+{
+    QToolButton* button = new QToolButton;
+    button->setIcon(KIcon(iconName));
+    button->setAutoRaise(true);
+    button->setAutoRepeat(true);
+    return button;
 }
 
 ZoomSlider::ZoomSlider(QWidget* parent)
 : QWidget(parent)
-, d(new ZoomSliderPrivate) {
-	d->mZoomInButton = createZoomButton("zoom-in");
-	d->mZoomOutButton = createZoomButton("zoom-out");
-	d->mZoomInAction = 0;
-	d->mZoomOutAction = 0;
+, d(new ZoomSliderPrivate)
+{
+    d->mZoomInButton = createZoomButton("zoom-in");
+    d->mZoomOutButton = createZoomButton("zoom-out");
+    d->mZoomInAction = 0;
+    d->mZoomOutAction = 0;
 
-	d->mSlider = new QSlider;
-	d->mSlider->setOrientation(Qt::Horizontal);
+    d->mSlider = new QSlider;
+    d->mSlider->setOrientation(Qt::Horizontal);
 
-	QHBoxLayout* layout = new QHBoxLayout(this);
-	layout->setMargin(0);
-	layout->setSpacing(0);
-	layout->addWidget(d->mZoomOutButton);
-	layout->addWidget(d->mSlider);
-	layout->addWidget(d->mZoomInButton);
+    QHBoxLayout* layout = new QHBoxLayout(this);
+    layout->setMargin(0);
+    layout->setSpacing(0);
+    layout->addWidget(d->mZoomOutButton);
+    layout->addWidget(d->mSlider);
+    layout->addWidget(d->mZoomInButton);
 
-	connect(d->mSlider, SIGNAL(actionTriggered(int)),
-		SLOT(slotActionTriggered(int)) );
-	connect(d->mSlider, SIGNAL(valueChanged(int)),
-		SIGNAL(valueChanged(int)));
+    connect(d->mSlider, SIGNAL(actionTriggered(int)),
+            SLOT(slotActionTriggered(int)));
+    connect(d->mSlider, SIGNAL(valueChanged(int)),
+            SIGNAL(valueChanged(int)));
 
-	connect(d->mZoomOutButton, SIGNAL(clicked()),
-		SLOT(zoomOut()));
-	connect(d->mZoomInButton, SIGNAL(clicked()),
-		SLOT(zoomIn()));
+    connect(d->mZoomOutButton, SIGNAL(clicked()),
+            SLOT(zoomOut()));
+    connect(d->mZoomInButton, SIGNAL(clicked()),
+            SLOT(zoomIn()));
 }
 
-
-ZoomSlider::~ZoomSlider() {
-	delete d;
+ZoomSlider::~ZoomSlider()
+{
+    delete d;
 }
 
-
-int ZoomSlider::value() const {
-	return d->mSlider->value();
+int ZoomSlider::value() const
+{
+    return d->mSlider->value();
 }
 
-
-void ZoomSlider::setValue(int value) {
-	d->mSlider->setValue(value);
-	d->updateButtons();
+void ZoomSlider::setValue(int value)
+{
+    d->mSlider->setValue(value);
+    d->updateButtons();
 }
 
-
-void ZoomSlider::setMinimum(int value) {
-	d->mSlider->setMinimum(value);
-	d->updateButtons();
+void ZoomSlider::setMinimum(int value)
+{
+    d->mSlider->setMinimum(value);
+    d->updateButtons();
 }
 
-
-void ZoomSlider::setMaximum(int value) {
-	d->mSlider->setMaximum(value);
-	d->updateButtons();
+void ZoomSlider::setMaximum(int value)
+{
+    d->mSlider->setMaximum(value);
+    d->updateButtons();
 }
 
-
-void ZoomSlider::setZoomInAction(QAction* action) {
-	d->mZoomInAction = action;
+void ZoomSlider::setZoomInAction(QAction* action)
+{
+    d->mZoomInAction = action;
 }
 
-
-void ZoomSlider::setZoomOutAction(QAction* action) {
-	d->mZoomOutAction = action;
+void ZoomSlider::setZoomOutAction(QAction* action)
+{
+    d->mZoomOutAction = action;
 }
 
-
-void ZoomSlider::slotActionTriggered(int) {
-	d->updateButtons();
+void ZoomSlider::slotActionTriggered(int)
+{
+    d->updateButtons();
 }
 
-
-void ZoomSlider::zoomOut() {
-	if (d->mZoomOutAction) {
-		d->mZoomOutAction->trigger();
-	} else {
-		d->mSlider->triggerAction(QAbstractSlider::SliderPageStepSub);
-	}
+void ZoomSlider::zoomOut()
+{
+    if (d->mZoomOutAction) {
+        d->mZoomOutAction->trigger();
+    } else {
+        d->mSlider->triggerAction(QAbstractSlider::SliderPageStepSub);
+    }
 }
 
-
-void ZoomSlider::zoomIn() {
-	if (d->mZoomInAction) {
-		d->mZoomInAction->trigger();
-	} else {
-		d->mSlider->triggerAction(QAbstractSlider::SliderPageStepAdd);
-	}
+void ZoomSlider::zoomIn()
+{
+    if (d->mZoomInAction) {
+        d->mZoomInAction->trigger();
+    } else {
+        d->mSlider->triggerAction(QAbstractSlider::SliderPageStepAdd);
+    }
 }
 
-
-QSlider* ZoomSlider::slider() const {
-	return d->mSlider;
+QSlider* ZoomSlider::slider() const
+{
+    return d->mSlider;
 }
-
 
 } // namespace

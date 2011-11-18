@@ -22,39 +22,40 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Local
 #include "contextmanager.h"
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 struct AbstractContextManagerItemPrivate {
-	ContextManager* mContextManager;
-	QWidget* mWidget;
+    ContextManager* mContextManager;
+    QWidget* mWidget;
 };
 
 AbstractContextManagerItem::AbstractContextManagerItem(ContextManager* manager)
 : QObject(manager)
-, d(new AbstractContextManagerItemPrivate) {
-	d->mContextManager = manager;
-	d->mWidget = 0;
+, d(new AbstractContextManagerItemPrivate)
+{
+    d->mContextManager = manager;
+    d->mWidget = 0;
 }
 
-
-AbstractContextManagerItem::~AbstractContextManagerItem() {
-	delete d;
+AbstractContextManagerItem::~AbstractContextManagerItem()
+{
+    delete d;
 }
 
-
-ContextManager* AbstractContextManagerItem::contextManager() const {
-	return d->mContextManager;
+ContextManager* AbstractContextManagerItem::contextManager() const
+{
+    return d->mContextManager;
 }
 
-
-QWidget* AbstractContextManagerItem::widget() const {
-	return d->mWidget;
+QWidget* AbstractContextManagerItem::widget() const
+{
+    return d->mWidget;
 }
 
-
-void AbstractContextManagerItem::setWidget(QWidget* widget) {
-	d->mWidget = widget;
+void AbstractContextManagerItem::setWidget(QWidget* widget)
+{
+    d->mWidget = widget;
 }
-
 
 } // namespace

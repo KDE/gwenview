@@ -30,7 +30,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 class QIODevice;
 struct jpeg_decompress_struct;
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 /**
  * This namespace provides a function which makes it possible to decode JPEG
@@ -39,7 +40,8 @@ namespace Gwenview {
  * To use it, simply call setup() to initialize your jpeg_decompress_struct
  * with QIODevice-ready callbacks. The device should be opened for reading.
  */
-namespace IODeviceJpegSourceManager {
+namespace IODeviceJpegSourceManager
+{
 
 void setup(jpeg_decompress_struct* cinfo, QIODevice* ioDevice);
 

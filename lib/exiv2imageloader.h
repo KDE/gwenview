@@ -34,8 +34,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 class QByteArray;
 class QString;
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct Exiv2ImageLoaderPrivate;
 
@@ -43,19 +43,19 @@ struct Exiv2ImageLoaderPrivate;
  * This helper class loads image using libexiv2, and takes care of exception
  * handling for the different versions of libexiv2.
  */
-class Exiv2ImageLoader {
+class Exiv2ImageLoader
+{
 public:
-	Exiv2ImageLoader();
-	~Exiv2ImageLoader();
+    Exiv2ImageLoader();
+    ~Exiv2ImageLoader();
 
-	bool load(const QByteArray&);
-	QString errorMessage() const;
-	Exiv2::Image::AutoPtr popImage();
+    bool load(const QByteArray&);
+    QString errorMessage() const;
+    Exiv2::Image::AutoPtr popImage();
 
 private:
-	Exiv2ImageLoaderPrivate* const d;
+    Exiv2ImageLoaderPrivate* const d;
 };
-
 
 } // namespace
 

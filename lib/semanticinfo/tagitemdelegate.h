@@ -24,40 +24,42 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KDE
 #include <kwidgetitemdelegate.h>
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 typedef QString SemanticInfoTag;
 
-class TagItemDelegate : public KWidgetItemDelegate {
-	Q_OBJECT
+class TagItemDelegate : public KWidgetItemDelegate
+{
+    Q_OBJECT
 public:
-	TagItemDelegate(QAbstractItemView* view);
+    TagItemDelegate(QAbstractItemView* view);
 
 protected:
-	virtual QList<QWidget*> createItemWidgets() const;
+    virtual QList<QWidget*> createItemWidgets() const;
 
-	virtual void updateItemWidgets(const QList<QWidget*> widgets,
-		const QStyleOptionViewItem& option,
-		const QPersistentModelIndex& /*index*/) const;
+    virtual void updateItemWidgets(const QList<QWidget*> widgets,
+                                   const QStyleOptionViewItem& option,
+                                   const QPersistentModelIndex& /*index*/) const;
 
-	virtual void paint(QPainter *painter, const QStyleOptionViewItem &option,
-		const QModelIndex &index) const;
+    virtual void paint(QPainter *painter, const QStyleOptionViewItem &option,
+                       const QModelIndex &index) const;
 
-	virtual QSize sizeHint(const QStyleOptionViewItem &/*option*/,
-		const QModelIndex &/*index*/) const;
+    virtual QSize sizeHint(const QStyleOptionViewItem &/*option*/,
+                           const QModelIndex &/*index*/) const;
 
 Q_SIGNALS:
-	void removeTagRequested(const SemanticInfoTag& tag);
-	void assignTagToAllRequested(const SemanticInfoTag& tag);
+    void removeTagRequested(const SemanticInfoTag& tag);
+    void assignTagToAllRequested(const SemanticInfoTag& tag);
 
 private Q_SLOTS:
-	void slotRemoveButtonClicked();
-	void slotAssignToAllButtonClicked();
+    void slotRemoveButtonClicked();
+    void slotAssignToAllButtonClicked();
 
 private:
-	int mButtonSize;
-	int mMargin;
-	int mSpacing;
+    int mButtonSize;
+    int mMargin;
+    int mSpacing;
 };
 
 } // namespace

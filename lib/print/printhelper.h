@@ -32,21 +32,21 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 class QWidget;
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct PrintHelperPrivate;
-class GWENVIEWLIB_EXPORT PrintHelper {
+class GWENVIEWLIB_EXPORT PrintHelper
+{
 public:
-	PrintHelper(QWidget* parent);
-	~PrintHelper();
+    PrintHelper(QWidget* parent);
+    ~PrintHelper();
 
-	void print(Document::Ptr);
+    void print(Document::Ptr);
 
 private:
-	PrintHelperPrivate* const d;
+    PrintHelperPrivate* const d;
 };
-
 
 } // namespace
 

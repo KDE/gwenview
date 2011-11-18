@@ -28,67 +28,67 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Local
 #include "document.h"
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 struct AbstractDocumentImplPrivate {
-	Document* mDocument;
+    Document* mDocument;
 };
 
-
 AbstractDocumentImpl::AbstractDocumentImpl(Document* document)
-: d(new AbstractDocumentImplPrivate) {
-	d->mDocument = document;
+: d(new AbstractDocumentImplPrivate)
+{
+    d->mDocument = document;
 }
 
-
-AbstractDocumentImpl::~AbstractDocumentImpl() {
-	delete d;
+AbstractDocumentImpl::~AbstractDocumentImpl()
+{
+    delete d;
 }
 
-
-Document* AbstractDocumentImpl::document() const {
-	return d->mDocument;
+Document* AbstractDocumentImpl::document() const
+{
+    return d->mDocument;
 }
 
-
-void AbstractDocumentImpl::switchToImpl(AbstractDocumentImpl*  impl) {
-	d->mDocument->switchToImpl(impl);
+void AbstractDocumentImpl::switchToImpl(AbstractDocumentImpl*  impl)
+{
+    d->mDocument->switchToImpl(impl);
 }
 
-
-void AbstractDocumentImpl::setDocumentImage(const QImage& image) {
-	d->mDocument->setImageInternal(image);
+void AbstractDocumentImpl::setDocumentImage(const QImage& image)
+{
+    d->mDocument->setImageInternal(image);
 }
 
-
-void AbstractDocumentImpl::setDocumentImageSize(const QSize& size) {
-	d->mDocument->setSize(size);
+void AbstractDocumentImpl::setDocumentImageSize(const QSize& size)
+{
+    d->mDocument->setSize(size);
 }
 
-
-void AbstractDocumentImpl::setDocumentFormat(const QByteArray& format) {
-	d->mDocument->setFormat(format);
+void AbstractDocumentImpl::setDocumentFormat(const QByteArray& format)
+{
+    d->mDocument->setFormat(format);
 }
 
-
-void AbstractDocumentImpl::setDocumentKind(MimeTypeUtils::Kind kind) {
-	d->mDocument->setKind(kind);
+void AbstractDocumentImpl::setDocumentKind(MimeTypeUtils::Kind kind)
+{
+    d->mDocument->setKind(kind);
 }
 
-
-void AbstractDocumentImpl::setDocumentExiv2Image(Exiv2::Image::AutoPtr image) {
-	d->mDocument->setExiv2Image(image);
+void AbstractDocumentImpl::setDocumentExiv2Image(Exiv2::Image::AutoPtr image)
+{
+    d->mDocument->setExiv2Image(image);
 }
 
-
-void AbstractDocumentImpl::setDocumentDownSampledImage(const QImage& image, int invertedZoom) {
-	d->mDocument->setDownSampledImage(image, invertedZoom);
+void AbstractDocumentImpl::setDocumentDownSampledImage(const QImage& image, int invertedZoom)
+{
+    d->mDocument->setDownSampledImage(image, invertedZoom);
 }
 
-
-void AbstractDocumentImpl::setDocumentErrorString(const QString& string) {
-	d->mDocument->setErrorString(string);
+void AbstractDocumentImpl::setDocumentErrorString(const QString& string)
+{
+    d->mDocument->setErrorString(string);
 }
-
 
 } // namespace

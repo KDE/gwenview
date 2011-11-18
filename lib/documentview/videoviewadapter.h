@@ -30,37 +30,39 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include <lib/documentview/abstractdocumentviewadapter.h>
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct VideoViewAdapterPrivate;
-class GWENVIEWLIB_EXPORT VideoViewAdapter : public AbstractDocumentViewAdapter {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT VideoViewAdapter : public AbstractDocumentViewAdapter
+{
+    Q_OBJECT
 public:
-	VideoViewAdapter();
-	~VideoViewAdapter();
+    VideoViewAdapter();
+    ~VideoViewAdapter();
 
-	virtual MimeTypeUtils::Kind kind() const { return MimeTypeUtils::KIND_VIDEO; }
+    virtual MimeTypeUtils::Kind kind() const {
+        return MimeTypeUtils::KIND_VIDEO;
+    }
 
-	virtual Document::Ptr document() const;
+    virtual Document::Ptr document() const;
 
-	virtual void setDocument(Document::Ptr);
+    virtual void setDocument(Document::Ptr);
 
 Q_SIGNALS:
-	void videoFinished();
+    void videoFinished();
 
 protected:
-	bool eventFilter(QObject*, QEvent*);
+    bool eventFilter(QObject*, QEvent*);
 
 private Q_SLOTS:
-	void slotPlayPauseClicked();
-	void updatePlayPauseButton();
+    void slotPlayPauseClicked();
+    void updatePlayPauseButton();
 
 private:
-	friend struct VideoViewAdapterPrivate;
-	VideoViewAdapterPrivate* const d;
+    friend struct VideoViewAdapterPrivate;
+    VideoViewAdapterPrivate* const d;
 };
-
 
 } // namespace
 

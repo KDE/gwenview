@@ -30,61 +30,63 @@ class QSize;
 class QString;
 class QIODevice;
 
-namespace Exiv2 { class Image; }
+namespace Exiv2
+{
+class Image;
+}
 
-namespace Gwenview {
+namespace Gwenview
+{
 
-
-class GWENVIEWLIB_EXPORT JpegContent {
+class GWENVIEWLIB_EXPORT JpegContent
+{
 public:
-	JpegContent();
-	~JpegContent();
-	
-	Orientation orientation() const;
-	void resetOrientation();
+    JpegContent();
+    ~JpegContent();
 
-	int dotsPerMeterX() const;
-	int dotsPerMeterY() const;
+    Orientation orientation() const;
+    void resetOrientation();
 
-	QSize size() const;
+    int dotsPerMeterX() const;
+    int dotsPerMeterY() const;
 
-	QString comment() const;
-	void setComment(const QString&);
-	
-	void transform(Orientation);
+    QSize size() const;
 
-	QImage thumbnail() const;
-	void setThumbnail(const QImage&);
+    QString comment() const;
+    void setComment(const QString&);
 
-	// Recreate raw data to represent image
-	// Note: thumbnail must be updated separately
-	void setImage(const QImage& image);
+    void transform(Orientation);
 
-	bool load(const QString& file);
-	bool loadFromData(const QByteArray& rawData);
-	/**
-	 * Use this version of loadFromData if you already have an Exiv2::Image*
-	 */
-	bool loadFromData(const QByteArray& rawData, Exiv2::Image*);
-	bool save(const QString& file);
-	bool save(QIODevice*);
+    QImage thumbnail() const;
+    void setThumbnail(const QImage&);
 
-	QByteArray rawData() const;
+    // Recreate raw data to represent image
+    // Note: thumbnail must be updated separately
+    void setImage(const QImage& image);
 
-	QString errorString() const;
+    bool load(const QString& file);
+    bool loadFromData(const QByteArray& rawData);
+    /**
+     * Use this version of loadFromData if you already have an Exiv2::Image*
+     */
+    bool loadFromData(const QByteArray& rawData, Exiv2::Image*);
+    bool save(const QString& file);
+    bool save(QIODevice*);
+
+    QByteArray rawData() const;
+
+    QString errorString() const;
 
 private:
-	struct Private;
-	Private *d;
+    struct Private;
+    Private *d;
 
-	JpegContent(const JpegContent&);
-	void operator=(const JpegContent&);
-	void applyPendingTransformation();
-	int dotsPerMeter(const QString& keyName) const;
+    JpegContent(const JpegContent&);
+    void operator=(const JpegContent&);
+    void applyPendingTransformation();
+    int dotsPerMeter(const QString& keyName) const;
 };
 
-
 } // namespace
-
 
 #endif /* JPEGCONTENT_H */

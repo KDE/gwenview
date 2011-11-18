@@ -29,100 +29,99 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QGraphicsWidget>
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 class AbstractImageViewPrivate;
 /**
  *
  */
-class AbstractImageView : public QGraphicsWidget {
-	Q_OBJECT
+class AbstractImageView : public QGraphicsWidget
+{
+    Q_OBJECT
 public:
-	enum UpdateType {
-		UpdateIfNecessary,
-		ForceUpdate
-	};
-	AbstractImageView(QGraphicsItem* parent);
-	~AbstractImageView();
+    enum UpdateType {
+        UpdateIfNecessary,
+        ForceUpdate
+    };
+    AbstractImageView(QGraphicsItem* parent);
+    ~AbstractImageView();
 
-	qreal zoom() const;
+    qreal zoom() const;
 
-	virtual void setZoom(qreal zoom, const QPointF& center = QPointF(-1, -1), UpdateType updateType = UpdateIfNecessary);
+    virtual void setZoom(qreal zoom, const QPointF& center = QPointF(-1, -1), UpdateType updateType = UpdateIfNecessary);
 
-	bool zoomToFit() const;
+    bool zoomToFit() const;
 
-	virtual void setZoomToFit(bool value);
+    virtual void setZoomToFit(bool value);
 
-	virtual void setDocument(Document::Ptr doc);
+    virtual void setDocument(Document::Ptr doc);
 
-	Document::Ptr document() const;
+    Document::Ptr document() const;
 
-	qreal computeZoomToFit() const;
+    qreal computeZoomToFit() const;
 
-	virtual QSizeF documentSize() const;
+    virtual QSizeF documentSize() const;
 
-	QSizeF visibleImageSize() const;
+    QSizeF visibleImageSize() const;
 
-	/**
-	 * If the image is smaller than the view, imageOffset is the distance from
-	 * the topleft corner of the view to the topleft corner of the image.
-	 * Neither x nor y can be negative.
-	 */
-	QPointF imageOffset() const;
+    /**
+     * If the image is smaller than the view, imageOffset is the distance from
+     * the topleft corner of the view to the topleft corner of the image.
+     * Neither x nor y can be negative.
+     */
+    QPointF imageOffset() const;
 
-	/**
-	 * The scroll position, in zoomed image coordinates.
-	 * x and y are always between 0 and (docsize * zoom - viewsize)
-	 */
-	QPointF scrollPos() const;
-	void setScrollPos(const QPointF& pos);
+    /**
+     * The scroll position, in zoomed image coordinates.
+     * x and y are always between 0 and (docsize * zoom - viewsize)
+     */
+    QPointF scrollPos() const;
+    void setScrollPos(const QPointF& pos);
 
-	QPointF mapToView(const QPointF& imagePos) const;
-	QPoint mapToView(const QPoint& imagePos) const;
-	QRectF mapToView(const QRectF& imageRect) const;
-	QRect mapToView(const QRect& imageRect) const;
+    QPointF mapToView(const QPointF& imagePos) const;
+    QPoint mapToView(const QPoint& imagePos) const;
+    QRectF mapToView(const QRectF& imageRect) const;
+    QRect mapToView(const QRect& imageRect) const;
 
-	QPointF mapToImage(const QPointF& viewPos) const;
-	QPoint mapToImage(const QPoint& viewPos) const;
-	QRectF mapToImage(const QRectF& viewRect) const;
-	QRect mapToImage(const QRect& viewRect) const;
+    QPointF mapToImage(const QPointF& viewPos) const;
+    QPoint mapToImage(const QPoint& viewPos) const;
+    QRectF mapToImage(const QRectF& viewRect) const;
+    QRect mapToImage(const QRect& viewRect) const;
 
-	void setEnlargeSmallerImages(bool value);
+    void setEnlargeSmallerImages(bool value);
 
 Q_SIGNALS:
-	void zoomToFitChanged(bool);
-	void zoomChanged(qreal);
-	void scrollPosChanged();
+    void zoomToFitChanged(bool);
+    void zoomChanged(qreal);
+    void scrollPosChanged();
 
 protected:
-	void setChildItem(QGraphicsItem*);
-	virtual void loadFromDocument() = 0;
-	virtual void onZoomChanged() = 0;
-	/**
-	 * Called when the offset changes.
-	 * Note: to avoid multiple adjustments, this is not called if zoom changes!
-	 */
-	virtual void onImageOffsetChanged() = 0;
-	/**
-	 * Called when the scrollPos changes.
-	 * Note: to avoid multiple adjustments, this is not called if zoom changes!
-	 */
-	virtual void onScrollPosChanged(const QPointF& oldPos) = 0;
+    void setChildItem(QGraphicsItem*);
+    virtual void loadFromDocument() = 0;
+    virtual void onZoomChanged() = 0;
+    /**
+     * Called when the offset changes.
+     * Note: to avoid multiple adjustments, this is not called if zoom changes!
+     */
+    virtual void onImageOffsetChanged() = 0;
+    /**
+     * Called when the scrollPos changes.
+     * Note: to avoid multiple adjustments, this is not called if zoom changes!
+     */
+    virtual void onScrollPosChanged(const QPointF& oldPos) = 0;
 
-	void resizeEvent(QGraphicsSceneResizeEvent* event);
+    void resizeEvent(QGraphicsSceneResizeEvent* event);
 
-	void keyPressEvent(QKeyEvent* event);
-	void mousePressEvent(QGraphicsSceneMouseEvent* event);
-	void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
-	void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
+    void keyPressEvent(QKeyEvent* event);
+    void mousePressEvent(QGraphicsSceneMouseEvent* event);
+    void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
 
 private:
-	friend class AbstractImageViewPrivate;
-	AbstractImageViewPrivate* const d;
+    friend class AbstractImageViewPrivate;
+    AbstractImageViewPrivate* const d;
 };
-
-
 
 } // namespace
 

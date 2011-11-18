@@ -32,33 +32,33 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include <lib/semanticinfo/abstractsemanticinfobackend.h>
 
-
-namespace Gwenview {
+namespace Gwenview
+{
 
 typedef QMap<SemanticInfoTag, bool> TagInfo;
 
 struct TagWidgetPrivate;
-class GWENVIEWLIB_EXPORT TagWidget : public QWidget {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT TagWidget : public QWidget
+{
+    Q_OBJECT
 public:
-	TagWidget(QWidget* parent = 0);
-	~TagWidget();
-	void setTagInfo(const TagInfo&);
-	void setSemanticInfoBackEnd(AbstractSemanticInfoBackEnd*);
+    TagWidget(QWidget* parent = 0);
+    ~TagWidget();
+    void setTagInfo(const TagInfo&);
+    void setSemanticInfoBackEnd(AbstractSemanticInfoBackEnd*);
 
 Q_SIGNALS:
-	void tagAssigned(const SemanticInfoTag&);
-	void tagRemoved(const SemanticInfoTag&);
+    void tagAssigned(const SemanticInfoTag&);
+    void tagRemoved(const SemanticInfoTag&);
 
 private Q_SLOTS:
-	void addTagFromComboBox();
-	void assignTag(const SemanticInfoTag& tag);
-	void removeTag(const SemanticInfoTag&);
+    void addTagFromComboBox();
+    void assignTag(const SemanticInfoTag& tag);
+    void removeTag(const SemanticInfoTag&);
 
 private:
-	TagWidgetPrivate* const d;
+    TagWidgetPrivate* const d;
 };
-
 
 } // namespace
 

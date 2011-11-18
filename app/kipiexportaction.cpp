@@ -33,37 +33,38 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/gwenviewconfig.h>
 #include "kipiinterface.h"
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct KIPIExportActionPrivate {
-	KIPIExportAction* q;
-	KIPIInterface* mKIPIInterface;
-	QAction* mDefaultAction;
-	QList<QAction*> mExportActionList;
+    KIPIExportAction* q;
+    KIPIInterface* mKIPIInterface;
+    QAction* mDefaultAction;
+    QList<QAction*> mExportActionList;
 
-	void updateMenu() {
-		KMenu* menu = static_cast<KMenu*>(q->menu());
-		menu->clear();
+    void updateMenu()
+    {
+        KMenu* menu = static_cast<KMenu*>(q->menu());
+        menu->clear();
 
-		if (mDefaultAction) {
-			menu->addTitle(i18n("Last Used Plugin"));
-			menu->addAction(mDefaultAction);
-			menu->addTitle(i18n("Other Plugins"));
-		}
-		Q_FOREACH(QAction* action, mExportActionList) {
-			action->setIconVisibleInMenu(true);
-			if (action != mDefaultAction) {
-				menu->addAction(action);
-			}
-		}
-		if (menu->isEmpty()) {
-			QAction* action = new QAction(menu);
-			action->setText(i18n("No Plugin Found"));
-			action->setEnabled(false);
-			menu->addAction(action);
-		}
-	}
+        if (mDefaultAction) {
+            menu->addTitle(i18n("Last Used Plugin"));
+            menu->addAction(mDefaultAction);
+            menu->addTitle(i18n("Other Plugins"));
+        }
+        Q_FOREACH(QAction * action, mExportActionList) {
+            action->setIconVisibleInMenu(true);
+            if (action != mDefaultAction) {
+                menu->addAction(action);
+            }
+        }
+        if (menu->isEmpty()) {
+            QAction* action = new QAction(menu);
+            action->setText(i18n("No Plugin Found"));
+            action->setEnabled(false);
+            menu->addAction(action);
+        }
+    }
 };
 
 /**
@@ -73,56 +74,56 @@ struct KIPIExportActionPrivate {
  */
 KIPIExportAction::KIPIExportAction(QObject* parent)
 : KToolBarPopupAction(KIcon("document-share"), i18n("Share"), parent)
-, d(new KIPIExportActionPrivate) {
-	d->q = this;
-	d->mKIPIInterface = 0;
-	d->mDefaultAction = 0;
+, d(new KIPIExportActionPrivate)
+{
+    d->q = this;
+    d->mKIPIInterface = 0;
+    d->mDefaultAction = 0;
 
-	setDelayed(false);
-	connect(menu(), SIGNAL(aboutToShow()), SLOT(init()));
-	connect(menu(), SIGNAL(triggered(QAction*)), SLOT(setDefaultAction(QAction*)));
+    setDelayed(false);
+    connect(menu(), SIGNAL(aboutToShow()), SLOT(init()));
+    connect(menu(), SIGNAL(triggered(QAction*)), SLOT(setDefaultAction(QAction*)));
 }
 
-
-KIPIExportAction::~KIPIExportAction() {
-	delete d;
+KIPIExportAction::~KIPIExportAction()
+{
+    delete d;
 }
 
-
-void KIPIExportAction::setKIPIInterface(KIPIInterface* interface) {
-	d->mKIPIInterface = interface;
+void KIPIExportAction::setKIPIInterface(KIPIInterface* interface)
+{
+    d->mKIPIInterface = interface;
 }
 
+void KIPIExportAction::init()
+{
+    if (!menu()->isEmpty()) {
+        return;
+    }
+    d->mKIPIInterface->loadPlugins();
+    d->mExportActionList = d->mKIPIInterface->pluginActions(KIPI::ExportPlugin);
 
-void KIPIExportAction::init() {
-	if (!menu()->isEmpty()) {
-		return;
-	}
-	d->mKIPIInterface->loadPlugins();
-	d->mExportActionList = d->mKIPIInterface->pluginActions(KIPI::ExportPlugin);
+    // Look for default action
+    QString defaultActionText = GwenviewConfig::defaultExportPluginText();
+    Q_FOREACH(QAction * action, d->mExportActionList) {
+        if (action->text() == defaultActionText) {
+            setDefaultAction(action);
+            break;
+        }
+    }
 
-	// Look for default action
-	QString defaultActionText = GwenviewConfig::defaultExportPluginText();
-	Q_FOREACH(QAction* action, d->mExportActionList) {
-		if (action->text() == defaultActionText) {
-			setDefaultAction(action);
-			break;
-		}
-	}
-
-	d->updateMenu();
+    d->updateMenu();
 }
 
+void KIPIExportAction::setDefaultAction(QAction* action)
+{
+    if (action == d->mDefaultAction) {
+        return;
+    }
+    d->mDefaultAction = action;
 
-void KIPIExportAction::setDefaultAction(QAction* action) {
-	if (action == d->mDefaultAction) {
-		return;
-	}
-	d->mDefaultAction = action;
-
-	GwenviewConfig::setDefaultExportPluginText(action->text());
-	d->updateMenu();
+    GwenviewConfig::setDefaultExportPluginText(action->text());
+    d->updateMenu();
 }
-
 
 } // namespace

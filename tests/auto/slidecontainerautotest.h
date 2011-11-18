@@ -28,14 +28,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QObject>
 
-class SlideContainerAutoTest : public QObject {
-	Q_OBJECT
+class SlideContainerAutoTest : public QObject
+{
+    Q_OBJECT
 private Q_SLOTS:
-	void testInit();
-	void testSlideIn();
-	void testSlideOut();
-	void testSlideInDeleteSlideOut();
-	void testHiddenContentResize();
+    void testInit();
+    void testSlideIn();
+    void testSlideOut();
+    void testSlideInDeleteSlideOut();
+    void testHiddenContentResize();
 };
 
 #endif /* SLIDECONTAINERAUTOTEST_H */

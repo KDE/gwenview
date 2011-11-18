@@ -25,51 +25,56 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kio/netaccess.h>
 #include <kio/job.h>
 
-static void rm_rf(const QString& pathOrUrl) {
-	KIO::Job* job = KIO::del(pathOrUrl, KIO::HideProgressInfo);
-	job->setUiDelegate(0);
-	KIO::NetAccess::synchronousRun(job, 0);
+static void rm_rf(const QString& pathOrUrl)
+{
+    KIO::Job* job = KIO::del(pathOrUrl, KIO::HideProgressInfo);
+    job->setUiDelegate(0);
+    KIO::NetAccess::synchronousRun(job, 0);
 }
 
-static bool mkdir(const QString& pathOrUrl) {
-	KIO::Job* job = KIO::mkdir(pathOrUrl, -1);
-	job->setUiDelegate(0);
-	return KIO::NetAccess::synchronousRun(job, 0);
+static bool mkdir(const QString& pathOrUrl)
+{
+    KIO::Job* job = KIO::mkdir(pathOrUrl, -1);
+    job->setUiDelegate(0);
+    return KIO::NetAccess::synchronousRun(job, 0);
 }
 
-static bool cp(const QString& src, const QString& _dst) {
-	KIO::Job* job = KIO::file_copy(src, _dst, -1, KIO::Overwrite | KIO::HideProgressInfo);
-	job->setUiDelegate(0);
-	return KIO::NetAccess::synchronousRun(job, 0);
+static bool cp(const QString& src, const QString& _dst)
+{
+    KIO::Job* job = KIO::file_copy(src, _dst, -1, KIO::Overwrite | KIO::HideProgressInfo);
+    job->setUiDelegate(0);
+    return KIO::NetAccess::synchronousRun(job, 0);
 }
 
-KUrl setUpRemoteTestDir(const QString& testFile) {
-	if (!qgetenv("NO_REMOTE_TESTS").isEmpty()) {
-		kWarning() << "Remote tests disabled";
-		return KUrl();
-	}
+KUrl setUpRemoteTestDir(const QString& testFile)
+{
+    if (!qgetenv("NO_REMOTE_TESTS").isEmpty()) {
+        kWarning() << "Remote tests disabled";
+        return KUrl();
+    }
 
-	QString testDir("/tmp/gwenview-remote-tests/");
-	rm_rf(testDir);
+    QString testDir("/tmp/gwenview-remote-tests/");
+    rm_rf(testDir);
 
-	if (!mkdir(testDir)) {
-		kFatal() << "Could not create dir" << testDir;
-		return KUrl();
-	}
+    if (!mkdir(testDir)) {
+        kFatal() << "Could not create dir" << testDir;
+        return KUrl();
+    }
 
-	if (!testFile.isEmpty()) {
-		if (!cp(pathForTestFile(testFile), testDir + testFile)) {
-			kFatal() << "Could not copy" << testFile << "to" << testDir;
-			return KUrl();
-		}
-	}
+    if (!testFile.isEmpty()) {
+        if (!cp(pathForTestFile(testFile), testDir + testFile)) {
+            kFatal() << "Could not copy" << testFile << "to" << testDir;
+            return KUrl();
+        }
+    }
 
-	return KUrl("sftp://localhost" + testDir);
+    return KUrl("sftp://localhost" + testDir);
 }
 
-void createEmptyFile(const QString& path) {
-	Q_ASSERT(!QFile::exists(path));
-	QFile file(path);
-	bool ok = file.open(QIODevice::WriteOnly);
-	Q_ASSERT(ok);
+void createEmptyFile(const QString& path)
+{
+    Q_ASSERT(!QFile::exists(path));
+    QFile file(path);
+    bool ok = file.open(QIODevice::WriteOnly);
+    Q_ASSERT(ok);
 }

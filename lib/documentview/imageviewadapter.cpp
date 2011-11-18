@@ -31,100 +31,106 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 //// ImageViewAdapter ////
 struct ImageViewAdapterPrivate {
-	ImageViewAdapter* that;
-	RasterImageView* mView;
+    ImageViewAdapter* that;
+    RasterImageView* mView;
 };
 
 ImageViewAdapter::ImageViewAdapter()
-: d(new ImageViewAdapterPrivate) {
-	d->that = this;
-	d->mView = new RasterImageView;
-	connect(d->mView, SIGNAL(zoomChanged(qreal)), SIGNAL(zoomChanged(qreal)) );
-	connect(d->mView, SIGNAL(zoomToFitChanged(bool)), SIGNAL(zoomToFitChanged(bool)) );
-	connect(d->mView, SIGNAL(scrollPosChanged()), SIGNAL(scrollPosChanged()) );
-	setWidget(d->mView);
+: d(new ImageViewAdapterPrivate)
+{
+    d->that = this;
+    d->mView = new RasterImageView;
+    connect(d->mView, SIGNAL(zoomChanged(qreal)), SIGNAL(zoomChanged(qreal)));
+    connect(d->mView, SIGNAL(zoomToFitChanged(bool)), SIGNAL(zoomToFitChanged(bool)));
+    connect(d->mView, SIGNAL(scrollPosChanged()), SIGNAL(scrollPosChanged()));
+    setWidget(d->mView);
 }
 
-ImageViewAdapter::~ImageViewAdapter() {
-	delete d;
+ImageViewAdapter::~ImageViewAdapter()
+{
+    delete d;
 }
 
-QCursor ImageViewAdapter::cursor() const {
-	return d->mView->cursor();
+QCursor ImageViewAdapter::cursor() const
+{
+    return d->mView->cursor();
 }
 
-
-void ImageViewAdapter::setCursor(const QCursor& cursor) {
-	d->mView->setCursor(cursor);
+void ImageViewAdapter::setCursor(const QCursor& cursor)
+{
+    d->mView->setCursor(cursor);
 }
 
+void ImageViewAdapter::setDocument(Document::Ptr doc)
+{
+    d->mView->setDocument(doc);
 
-void ImageViewAdapter::setDocument(Document::Ptr doc) {
-	d->mView->setDocument(doc);
-
-	connect(doc.data(), SIGNAL(loadingFailed(KUrl)), SLOT(slotLoadingFailed()) );
-	if (doc->loadingState() == Document::LoadingFailed) {
-		slotLoadingFailed();
-	}
+    connect(doc.data(), SIGNAL(loadingFailed(KUrl)), SLOT(slotLoadingFailed()));
+    if (doc->loadingState() == Document::LoadingFailed) {
+        slotLoadingFailed();
+    }
 }
 
-
-qreal ImageViewAdapter::zoom() const {
-	return d->mView->zoom();
+qreal ImageViewAdapter::zoom() const
+{
+    return d->mView->zoom();
 }
 
-
-void ImageViewAdapter::setZoomToFit(bool on) {
-	d->mView->setZoomToFit(on);
+void ImageViewAdapter::setZoomToFit(bool on)
+{
+    d->mView->setZoomToFit(on);
 }
 
-
-bool ImageViewAdapter::zoomToFit() const {
-	return d->mView->zoomToFit();
+bool ImageViewAdapter::zoomToFit() const
+{
+    return d->mView->zoomToFit();
 }
 
-
-void ImageViewAdapter::setZoom(qreal zoom, const QPointF& center) {
-	d->mView->setZoom(zoom, center);
+void ImageViewAdapter::setZoom(qreal zoom, const QPointF& center)
+{
+    d->mView->setZoom(zoom, center);
 }
 
-
-qreal ImageViewAdapter::computeZoomToFit() const {
-	return d->mView->computeZoomToFit();
+qreal ImageViewAdapter::computeZoomToFit() const
+{
+    return d->mView->computeZoomToFit();
 }
 
-
-Document::Ptr ImageViewAdapter::document() const {
-	return d->mView->document();
+Document::Ptr ImageViewAdapter::document() const
+{
+    return d->mView->document();
 }
 
-
-void ImageViewAdapter::slotLoadingFailed() {
-	d->mView->setDocument(Document::Ptr());
+void ImageViewAdapter::slotLoadingFailed()
+{
+    d->mView->setDocument(Document::Ptr());
 }
 
-
-void ImageViewAdapter::loadConfig() {
-	d->mView->setAlphaBackgroundMode(GwenviewConfig::alphaBackgroundMode());
-	d->mView->setAlphaBackgroundColor(GwenviewConfig::alphaBackgroundColor());
-	d->mView->setEnlargeSmallerImages(GwenviewConfig::enlargeSmallerImages());
+void ImageViewAdapter::loadConfig()
+{
+    d->mView->setAlphaBackgroundMode(GwenviewConfig::alphaBackgroundMode());
+    d->mView->setAlphaBackgroundColor(GwenviewConfig::alphaBackgroundColor());
+    d->mView->setEnlargeSmallerImages(GwenviewConfig::enlargeSmallerImages());
 }
 
-RasterImageView* ImageViewAdapter::rasterImageView() const {
-	return d->mView;
+RasterImageView* ImageViewAdapter::rasterImageView() const
+{
+    return d->mView;
 }
 
-QPointF ImageViewAdapter::scrollPos() const {
+QPointF ImageViewAdapter::scrollPos() const
+{
     return d->mView->scrollPos();
 }
 
-void ImageViewAdapter::setScrollPos(const QPointF& pos) {
-	d->mView->setScrollPos(pos);
+void ImageViewAdapter::setScrollPos(const QPointF& pos)
+{
+    d->mView->setScrollPos(pos);
 }
-
 
 } // namespace

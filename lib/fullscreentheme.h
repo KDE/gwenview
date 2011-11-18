@@ -33,28 +33,28 @@ class QPalette;
 class QString;
 class QStringList;
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct FullScreenThemePrivate;
-class GWENVIEWLIB_EXPORT FullScreenTheme {
+class GWENVIEWLIB_EXPORT FullScreenTheme
+{
 public:
-	FullScreenTheme(const QString& themeName);
-	QString styleSheet() const;
-	QString replaceThemeVars(const QString& styleSheet);
+    FullScreenTheme(const QString& themeName);
+    QString styleSheet() const;
+    QString replaceThemeVars(const QString& styleSheet);
 
-	~FullScreenTheme();
+    ~FullScreenTheme();
 
-	static QStringList themeNameList();
-	static QString currentThemeName();
-	static void setCurrentThemeName(const QString&);
+    static QStringList themeNameList();
+    static QString currentThemeName();
+    static void setCurrentThemeName(const QString&);
 
-	static QPalette palette();
+    static QPalette palette();
 
 private:
-	FullScreenThemePrivate* const d;
+    FullScreenThemePrivate* const d;
 };
-
 
 } // namespace
 

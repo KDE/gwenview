@@ -30,58 +30,56 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct ItemEditorPrivate {
-	QPoint mCenter;
+    QPoint mCenter;
 };
-
 
 ItemEditor::ItemEditor(QWidget* parent)
 : KLineEdit(parent)
-, d(new ItemEditorPrivate) {
-	connect(this, SIGNAL(textChanged(QString)), SLOT(resizeToContents()));
-	setTrapReturnKey(true);
+, d(new ItemEditorPrivate)
+{
+    connect(this, SIGNAL(textChanged(QString)), SLOT(resizeToContents()));
+    setTrapReturnKey(true);
 }
 
-
-ItemEditor::~ItemEditor() {
-	delete d;
+ItemEditor::~ItemEditor()
+{
+    delete d;
 }
 
-
-void ItemEditor::showEvent(QShowEvent* event) {
+void ItemEditor::showEvent(QShowEvent* event)
+{
     // We can't do this in PreviewItemDelegate::updateEditorGeometry() because QAbstractItemView outsmarts us by calling selectAll() on the editor if it is a QLineEdit
-	const QString extension = KMimeType::extractKnownExtension(text());
-	if (!extension.isEmpty()) {
-		// The filename contains an extension. Assure that only the filename
-		// gets selected.
-		const int selectionLength = text().length() - extension.length() - 1;
-		setSelection(0, selectionLength);
+    const QString extension = KMimeType::extractKnownExtension(text());
+    if (!extension.isEmpty()) {
+        // The filename contains an extension. Assure that only the filename
+        // gets selected.
+        const int selectionLength = text().length() - extension.length() - 1;
+        setSelection(0, selectionLength);
     }
-	KLineEdit::showEvent(event);
+    KLineEdit::showEvent(event);
 }
 
-
-void ItemEditor::resizeToContents() {
-	if (d->mCenter.isNull()) {
-		d->mCenter = geometry().center();
-	}
-	int textWidth = fontMetrics().width("  " + text() + "  ");
-	QRect rect = geometry();
-	rect.setWidth(textWidth);
-	rect.moveCenter(d->mCenter);
-	if (rect.right() > parentWidget()->width()) {
-		rect.setRight(parentWidget()->width());
-	}
-	if (rect.left() < 0) {
-		rect.setLeft(0);
-	}
-	setGeometry(rect);
+void ItemEditor::resizeToContents()
+{
+    if (d->mCenter.isNull()) {
+        d->mCenter = geometry().center();
+    }
+    int textWidth = fontMetrics().width("  " + text() + "  ");
+    QRect rect = geometry();
+    rect.setWidth(textWidth);
+    rect.moveCenter(d->mCenter);
+    if (rect.right() > parentWidget()->width()) {
+        rect.setRight(parentWidget()->width());
+    }
+    if (rect.left() < 0) {
+        rect.setLeft(0);
+    }
+    setGeometry(rect);
 
 }
-
-
 
 } // namespace

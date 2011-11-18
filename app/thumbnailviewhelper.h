@@ -30,29 +30,30 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 class KActionCollection;
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 class SortedDirModel;
 
 struct ThumbnailViewHelperPrivate;
-class ThumbnailViewHelper : public AbstractThumbnailViewHelper {
-	Q_OBJECT
+class ThumbnailViewHelper : public AbstractThumbnailViewHelper
+{
+    Q_OBJECT
 public:
-	ThumbnailViewHelper(QObject* parent, KActionCollection*);
-	~ThumbnailViewHelper();
+    ThumbnailViewHelper(QObject* parent, KActionCollection*);
+    ~ThumbnailViewHelper();
 
-	virtual void showContextMenu(QWidget* parent);
+    virtual void showContextMenu(QWidget* parent);
 
-	virtual void showMenuForUrlDroppedOnViewport(QWidget* parent, const KUrl::List&);
+    virtual void showMenuForUrlDroppedOnViewport(QWidget* parent, const KUrl::List&);
 
-	virtual void showMenuForUrlDroppedOnDir(QWidget* parent, const KUrl::List&, const KUrl&);
+    virtual void showMenuForUrlDroppedOnDir(QWidget* parent, const KUrl::List&, const KUrl&);
 
-	void setCurrentDirUrl(const KUrl&);
+    void setCurrentDirUrl(const KUrl&);
 
 private:
-	ThumbnailViewHelperPrivate* const d;
+    ThumbnailViewHelperPrivate* const d;
 };
-
 
 } // namespace
 

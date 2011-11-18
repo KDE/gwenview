@@ -34,89 +34,91 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include "fullscreentheme.h"
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 static const int CORNER_RADIUS = 5;
 
 struct GraphicsHudWidgetPrivate {
-	QWidget* mMainWidget;
-	QToolButton* mCloseButton;
+    QWidget* mMainWidget;
+    QToolButton* mCloseButton;
 };
-
 
 GraphicsHudWidget::GraphicsHudWidget(QGraphicsWidget* parent)
 : QGraphicsWidget(parent)
-, d(new GraphicsHudWidgetPrivate) {
-	d->mMainWidget = 0;
-	d->mCloseButton = 0;
+, d(new GraphicsHudWidgetPrivate)
+{
+    d->mMainWidget = 0;
+    d->mCloseButton = 0;
 }
 
-
-GraphicsHudWidget::~GraphicsHudWidget() {
-	delete d;
+GraphicsHudWidget::~GraphicsHudWidget()
+{
+    delete d;
 }
 
+void GraphicsHudWidget::init(QWidget* mainWidget, Options options)
+{
+    if (options & OptionOpaque) {
+        setProperty("opaque", QVariant(true));
+    }
 
-void GraphicsHudWidget::init(QWidget* mainWidget, Options options) {
-	if (options & OptionOpaque) {
-		setProperty("opaque", QVariant(true));
-	}
+    QPalette pal = FullScreenTheme::palette();
 
-	QPalette pal = FullScreenTheme::palette();
+    QGraphicsLinearLayout* layout = new QGraphicsLinearLayout(this);
+    layout->setContentsMargins(4, 4, 4, 4);
+    d->mMainWidget = mainWidget;
+    if (d->mMainWidget) {
+        d->mMainWidget->setPalette(pal);
+        if (d->mMainWidget->layout()) {
+            d->mMainWidget->layout()->setMargin(0);
+        }
+        QGraphicsProxyWidget* proxy = new QGraphicsProxyWidget(this);
+        proxy->setWidget(d->mMainWidget);
+        layout->addItem(proxy);
+    }
+    // FIXME: QGV
+    /*
+    if (options & OptionDoNotFollowChildSize) {
+        adjustSize();
+    } else {
+        layout->setSizeConstraint(QLayout::SetFixedSize);
+    }
+    */
 
-	QGraphicsLinearLayout* layout = new QGraphicsLinearLayout(this);
-	layout->setContentsMargins(4, 4, 4, 4);
-	d->mMainWidget = mainWidget;
-	if (d->mMainWidget) {
-		d->mMainWidget->setPalette(pal);
-		if (d->mMainWidget->layout()) {
-			d->mMainWidget->layout()->setMargin(0);
-		}
-		QGraphicsProxyWidget* proxy = new QGraphicsProxyWidget(this);
-		proxy->setWidget(d->mMainWidget);
-		layout->addItem(proxy);
-	}
-	// FIXME: QGV
-	/*
-	if (options & OptionDoNotFollowChildSize) {
-		adjustSize();
-	} else {
-		layout->setSizeConstraint(QLayout::SetFixedSize);
-	}
-	*/
+    if (options & OptionCloseButton) {
+        d->mCloseButton = new QToolButton;
+        d->mCloseButton->setAutoRaise(true);
+        d->mCloseButton->setIcon(SmallIcon("window-close"));
+        d->mCloseButton->setPalette(pal);
 
-	if (options & OptionCloseButton) {
-		d->mCloseButton = new QToolButton;
-		d->mCloseButton->setAutoRaise(true);
-		d->mCloseButton->setIcon(SmallIcon("window-close"));
-		d->mCloseButton->setPalette(pal);
+        QGraphicsProxyWidget* proxy = new QGraphicsProxyWidget(this);
+        proxy->setWidget(d->mCloseButton);
+        layout->addItem(proxy);
+        layout->setAlignment(proxy, Qt::AlignTop | Qt::AlignHCenter);
 
-		QGraphicsProxyWidget* proxy = new QGraphicsProxyWidget(this);
-		proxy->setWidget(d->mCloseButton);
-		layout->addItem(proxy);
-		layout->setAlignment(proxy, Qt::AlignTop | Qt::AlignHCenter);
-
-		connect(d->mCloseButton, SIGNAL(clicked()), SLOT(slotCloseButtonClicked()));
-	}
+        connect(d->mCloseButton, SIGNAL(clicked()), SLOT(slotCloseButtonClicked()));
+    }
 }
 
-
-QWidget* GraphicsHudWidget::mainWidget() const {
-	return d->mMainWidget;
+QWidget* GraphicsHudWidget::mainWidget() const
+{
+    return d->mMainWidget;
 }
 
-
-void GraphicsHudWidget::slotCloseButtonClicked() {
-	close();
-	closed();
+void GraphicsHudWidget::slotCloseButtonClicked()
+{
+    close();
+    closed();
 }
 
-void GraphicsHudWidget::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) {
-	QPalette pal = FullScreenTheme::palette();
-	painter->setPen(pal.midlight().color());
-	painter->setRenderHint(QPainter::Antialiasing);
-	painter->setBrush(pal.window());
-	painter->drawRoundedRect(boundingRect().adjusted(.5, .5, -.5, -.5), CORNER_RADIUS, CORNER_RADIUS);
+void GraphicsHudWidget::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
+{
+    QPalette pal = FullScreenTheme::palette();
+    painter->setPen(pal.midlight().color());
+    painter->setRenderHint(QPainter::Antialiasing);
+    painter->setBrush(pal.window());
+    painter->drawRoundedRect(boundingRect().adjusted(.5, .5, -.5, -.5), CORNER_RADIUS, CORNER_RADIUS);
 }
 
 } // namespace

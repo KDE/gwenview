@@ -39,164 +39,171 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #define LOG(x) ;
 #endif
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 // Amount of pixels to keep so that smooth scale is correct
 static const int SMOOTH_MARGIN = 3;
 
 struct ImageScalerPrivate {
-	Qt::TransformationMode mTransformationMode;
-	Document::Ptr mDocument;
-	qreal mZoom;
-	QRegion mRegion;
+    Qt::TransformationMode mTransformationMode;
+    Document::Ptr mDocument;
+    qreal mZoom;
+    QRegion mRegion;
 };
 
 ImageScaler::ImageScaler(QObject* parent)
 : QObject(parent)
-, d(new ImageScalerPrivate) {
-	d->mTransformationMode = Qt::FastTransformation;
-	d->mZoom = 0;
+, d(new ImageScalerPrivate)
+{
+    d->mTransformationMode = Qt::FastTransformation;
+    d->mZoom = 0;
 }
 
-ImageScaler::~ImageScaler() {
-	delete d;
+ImageScaler::~ImageScaler()
+{
+    delete d;
 }
 
-void ImageScaler::setDocument(Document::Ptr document) {
-	if (d->mDocument) {
-		disconnect(d->mDocument.data(), 0, this, 0);
-	}
-	d->mDocument = document;
-	connect(d->mDocument.data(), SIGNAL(downSampledImageReady()),
-		SLOT(doScale()) );
+void ImageScaler::setDocument(Document::Ptr document)
+{
+    if (d->mDocument) {
+        disconnect(d->mDocument.data(), 0, this, 0);
+    }
+    d->mDocument = document;
+    connect(d->mDocument.data(), SIGNAL(downSampledImageReady()),
+            SLOT(doScale()));
 }
 
-void ImageScaler::setZoom(qreal zoom) {
-	d->mZoom = zoom;
+void ImageScaler::setZoom(qreal zoom)
+{
+    d->mZoom = zoom;
 }
 
-void ImageScaler::setTransformationMode(Qt::TransformationMode mode) {
-	d->mTransformationMode = mode;
+void ImageScaler::setTransformationMode(Qt::TransformationMode mode)
+{
+    d->mTransformationMode = mode;
 }
 
-void ImageScaler::setDestinationRegion(const QRegion& region) {
-	LOG(region);
-	d->mRegion = region;
-	if (d->mRegion.isEmpty()) {
-		return;
-	}
+void ImageScaler::setDestinationRegion(const QRegion& region)
+{
+    LOG(region);
+    d->mRegion = region;
+    if (d->mRegion.isEmpty()) {
+        return;
+    }
 
-	if (d->mDocument && d->mZoom > 0) {
-		doScale();
-	}
+    if (d->mDocument && d->mZoom > 0) {
+        doScale();
+    }
 }
 
+void ImageScaler::doScale()
+{
+    if (d->mZoom < Document::maxDownSampledZoom()) {
+        if (!d->mDocument->prepareDownSampledImageForZoom(d->mZoom)) {
+            LOG("Asked for a down sampled image");
+            return;
+        }
+    } else if (d->mDocument->image().isNull()) {
+        LOG("Asked for the full image");
+        d->mDocument->startLoadingFullImage();
+        return;
+    }
 
-void ImageScaler::doScale() {
-	if (d->mZoom < Document::maxDownSampledZoom()) {
-		if (!d->mDocument->prepareDownSampledImageForZoom(d->mZoom)) {
-			LOG("Asked for a down sampled image");
-			return;
-		}
-	} else if (d->mDocument->image().isNull()) {
-		LOG("Asked for the full image");
-		d->mDocument->startLoadingFullImage();
-		return;
-	}
-
-	LOG("Starting");
-	Q_FOREACH(const QRect& rect, d->mRegion.rects()) {
-		LOG(rect);
-		scaleRect(rect);
-	}
-	LOG("Done");
+    LOG("Starting");
+    Q_FOREACH(const QRect & rect, d->mRegion.rects()) {
+        LOG(rect);
+        scaleRect(rect);
+    }
+    LOG("Done");
 }
 
+void ImageScaler::scaleRect(const QRect& rect)
+{
+    const qreal REAL_DELTA = 0.001;
+    if (qAbs(d->mZoom - 1.0) < REAL_DELTA) {
+        QImage tmp = d->mDocument->image().copy(rect);
+        tmp.convertToFormat(QImage::Format_ARGB32_Premultiplied);
+        scaledRect(rect.left(), rect.top(), tmp);
+        return;
+    }
 
-void ImageScaler::scaleRect(const QRect& rect) {
-	const qreal REAL_DELTA = 0.001;
-	if (qAbs(d->mZoom - 1.0) < REAL_DELTA) {
-		QImage tmp = d->mDocument->image().copy(rect);
-		tmp.convertToFormat(QImage::Format_ARGB32_Premultiplied);
-		scaledRect(rect.left(), rect.top(), tmp);
-		return;
-	}
+    QImage image;
+    qreal zoom;
+    if (d->mZoom < Document::maxDownSampledZoom()) {
+        image = d->mDocument->downSampledImageForZoom(d->mZoom);
+        Q_ASSERT(!image.isNull());
+        qreal zoom1 = qreal(image.width()) / d->mDocument->width();
+        zoom = d->mZoom / zoom1;
+    } else {
+        image = d->mDocument->image();
+        zoom = d->mZoom;
+    }
+    // If rect contains "half" pixels, make sure sourceRect includes them
+    QRectF sourceRectF(
+        rect.left() / zoom,
+        rect.top() / zoom,
+        rect.width() / zoom,
+        rect.height() / zoom);
 
-	QImage image;
-	qreal zoom;
-	if (d->mZoom < Document::maxDownSampledZoom()) {
-		image = d->mDocument->downSampledImageForZoom(d->mZoom);
-		Q_ASSERT(!image.isNull());
-		qreal zoom1 = qreal(image.width()) / d->mDocument->width();
-		zoom = d->mZoom / zoom1;
-	} else {
-		image = d->mDocument->image();
-		zoom = d->mZoom;
-	}
-	// If rect contains "half" pixels, make sure sourceRect includes them
-	QRectF sourceRectF(
-		rect.left() / zoom,
-		rect.top() / zoom,
-		rect.width() / zoom,
-		rect.height() / zoom);
+    sourceRectF = sourceRectF.intersected(image.rect());
+    QRect sourceRect = PaintUtils::containingRect(sourceRectF);
+    if (sourceRect.isEmpty()) {
+        return;
+    }
 
-	sourceRectF = sourceRectF.intersected(image.rect());
-	QRect sourceRect = PaintUtils::containingRect(sourceRectF);
-	if (sourceRect.isEmpty()) {
-		return;
-	}
+    // Compute smooth margin
+    bool needsSmoothMargins = d->mTransformationMode == Qt::SmoothTransformation;
 
-	// Compute smooth margin
-	bool needsSmoothMargins = d->mTransformationMode == Qt::SmoothTransformation;
+    int sourceLeftMargin, sourceRightMargin, sourceTopMargin, sourceBottomMargin;
+    int destLeftMargin, destRightMargin, destTopMargin, destBottomMargin;
+    if (needsSmoothMargins) {
+        sourceLeftMargin = qMin(sourceRect.left(), SMOOTH_MARGIN);
+        sourceTopMargin = qMin(sourceRect.top(), SMOOTH_MARGIN);
+        sourceRightMargin = qMin(image.rect().right() - sourceRect.right(), SMOOTH_MARGIN);
+        sourceBottomMargin = qMin(image.rect().bottom() - sourceRect.bottom(), SMOOTH_MARGIN);
+        sourceRect.adjust(
+            -sourceLeftMargin,
+            -sourceTopMargin,
+            sourceRightMargin,
+            sourceBottomMargin);
+        destLeftMargin = int(sourceLeftMargin * zoom);
+        destTopMargin = int(sourceTopMargin * zoom);
+        destRightMargin = int(sourceRightMargin * zoom);
+        destBottomMargin = int(sourceBottomMargin * zoom);
+    } else {
+        sourceLeftMargin = sourceRightMargin = sourceTopMargin = sourceBottomMargin = 0;
+        destLeftMargin = destRightMargin = destTopMargin = destBottomMargin = 0;
+    }
 
-	int sourceLeftMargin, sourceRightMargin, sourceTopMargin, sourceBottomMargin;
-	int destLeftMargin, destRightMargin, destTopMargin, destBottomMargin;
-	if (needsSmoothMargins) {
-		sourceLeftMargin = qMin(sourceRect.left(), SMOOTH_MARGIN);
-		sourceTopMargin = qMin(sourceRect.top(), SMOOTH_MARGIN);
-		sourceRightMargin = qMin(image.rect().right() - sourceRect.right(), SMOOTH_MARGIN);
-		sourceBottomMargin = qMin(image.rect().bottom() - sourceRect.bottom(), SMOOTH_MARGIN);
-		sourceRect.adjust(
-			-sourceLeftMargin,
-			-sourceTopMargin,
-			sourceRightMargin,
-			sourceBottomMargin);
-		destLeftMargin = int(sourceLeftMargin * zoom);
-		destTopMargin = int(sourceTopMargin * zoom);
-		destRightMargin = int(sourceRightMargin * zoom);
-		destBottomMargin = int(sourceBottomMargin * zoom);
-	} else {
-		sourceLeftMargin = sourceRightMargin = sourceTopMargin = sourceBottomMargin = 0;
-		destLeftMargin = destRightMargin = destTopMargin = destBottomMargin = 0;
-	}
+    // destRect is almost like rect, but it contains only "full" pixels
+    QRectF destRectF = QRectF(
+                           sourceRect.left() * zoom,
+                           sourceRect.top() * zoom,
+                           sourceRect.width() * zoom,
+                           sourceRect.height() * zoom
+                       );
+    QRect destRect = PaintUtils::containingRect(destRectF);
 
-	// destRect is almost like rect, but it contains only "full" pixels
-	QRectF destRectF = QRectF(
-		sourceRect.left() * zoom,
-		sourceRect.top() * zoom,
-		sourceRect.width() * zoom,
-		sourceRect.height() * zoom
-		);
-	QRect destRect = PaintUtils::containingRect(destRectF);
+    QImage tmp;
+    tmp = image.copy(sourceRect);
+    tmp.convertToFormat(QImage::Format_ARGB32_Premultiplied);
+    tmp = tmp.scaled(
+              destRect.width(),
+              destRect.height(),
+              Qt::IgnoreAspectRatio, // Do not use KeepAspectRatio, it can lead to skipped rows or columns
+              d->mTransformationMode);
 
-	QImage tmp;
-	tmp = image.copy(sourceRect);
-	tmp.convertToFormat(QImage::Format_ARGB32_Premultiplied);
-	tmp = tmp.scaled(
-		destRect.width(),
-		destRect.height(),
-		Qt::IgnoreAspectRatio, // Do not use KeepAspectRatio, it can lead to skipped rows or columns
-		d->mTransformationMode);
+    if (needsSmoothMargins) {
+        tmp = tmp.copy(
+                  destLeftMargin, destTopMargin,
+                  destRect.width() - (destLeftMargin + destRightMargin),
+                  destRect.height() - (destTopMargin + destBottomMargin)
+              );
+    }
 
-	if (needsSmoothMargins) {
-		tmp = tmp.copy(
-			destLeftMargin, destTopMargin,
-			destRect.width() - (destLeftMargin + destRightMargin),
-			destRect.height() - (destTopMargin + destBottomMargin)
-			);
-	}
-
-	scaledRect(destRect.left() + destLeftMargin, destRect.top() + destTopMargin, tmp);
+    scaledRect(destRect.left() + destLeftMargin, destRect.top() + destTopMargin, tmp);
 }
 
 } // namespace

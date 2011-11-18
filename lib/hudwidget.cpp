@@ -32,75 +32,74 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include "fullscreentheme.h"
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct HudWidgetPrivate {
-	QWidget* mMainWidget;
-	QToolButton* mCloseButton;
+    QWidget* mMainWidget;
+    QToolButton* mCloseButton;
 };
-
 
 HudWidget::HudWidget(QWidget* parent)
 : QFrame(parent)
-, d(new HudWidgetPrivate) {
-	d->mMainWidget = 0;
-	d->mCloseButton = 0;
+, d(new HudWidgetPrivate)
+{
+    d->mMainWidget = 0;
+    d->mCloseButton = 0;
 }
 
-
-HudWidget::~HudWidget() {
-	delete d;
+HudWidget::~HudWidget()
+{
+    delete d;
 }
 
+void HudWidget::init(QWidget* mainWidget, Options options)
+{
+    d->mMainWidget = mainWidget;
+    if (d->mMainWidget) {
+        d->mMainWidget->setParent(this);
+        if (d->mMainWidget->layout()) {
+            d->mMainWidget->layout()->setMargin(0);
+        }
+    }
 
-void HudWidget::init(QWidget* mainWidget, Options options) {
-	d->mMainWidget = mainWidget;
-	if (d->mMainWidget) {
-		d->mMainWidget->setParent(this);
-		if (d->mMainWidget->layout()) {
-			d->mMainWidget->layout()->setMargin(0);
-		}
-	}
+    if (options & OptionOpaque) {
+        setProperty("opaque", QVariant(true));
+    }
 
-	if (options & OptionOpaque) {
-		setProperty("opaque", QVariant(true));
-	}
+    FullScreenTheme theme(FullScreenTheme::currentThemeName());
+    setStyleSheet(theme.styleSheet());
 
-	FullScreenTheme theme(FullScreenTheme::currentThemeName());
-	setStyleSheet(theme.styleSheet());
+    QHBoxLayout* layout = new QHBoxLayout(this);
+    layout->setMargin(4);
+    if (d->mMainWidget) {
+        layout->addWidget(d->mMainWidget);
+    }
+    if (options & OptionDoNotFollowChildSize) {
+        adjustSize();
+    } else {
+        layout->setSizeConstraint(QLayout::SetFixedSize);
+    }
 
-	QHBoxLayout* layout = new QHBoxLayout(this);
-	layout->setMargin(4);
-	if (d->mMainWidget) {
-		layout->addWidget(d->mMainWidget);
-	}
-	if (options & OptionDoNotFollowChildSize) {
-		adjustSize();
-	} else {
-		layout->setSizeConstraint(QLayout::SetFixedSize);
-	}
+    if (options & OptionCloseButton) {
+        d->mCloseButton = new QToolButton(this);
+        d->mCloseButton->setAutoRaise(true);
+        d->mCloseButton->setIcon(SmallIcon("window-close"));
+        layout->addWidget(d->mCloseButton, 0, Qt::AlignTop | Qt::AlignHCenter);
 
-	if (options & OptionCloseButton) {
-		d->mCloseButton = new QToolButton(this);
-		d->mCloseButton->setAutoRaise(true);
-		d->mCloseButton->setIcon(SmallIcon("window-close"));
-		layout->addWidget(d->mCloseButton, 0, Qt::AlignTop | Qt::AlignHCenter);
-
-		connect(d->mCloseButton, SIGNAL(clicked()), SLOT(slotCloseButtonClicked()));
-	}
+        connect(d->mCloseButton, SIGNAL(clicked()), SLOT(slotCloseButtonClicked()));
+    }
 }
 
-
-QWidget* HudWidget::mainWidget() const {
-	return d->mMainWidget;
+QWidget* HudWidget::mainWidget() const
+{
+    return d->mMainWidget;
 }
 
-
-void HudWidget::slotCloseButtonClicked() {
-	close();
-	closed();
+void HudWidget::slotCloseButtonClicked()
+{
+    close();
+    closed();
 }
-
 
 } // namespace

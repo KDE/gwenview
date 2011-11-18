@@ -28,40 +28,36 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Local
 #include "abstractcontextmanageritem.h"
 
-
-
-
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 class AbstractImageOperation;
 class MainWindow;
 
-
-class ImageOpsContextManagerItem : public AbstractContextManagerItem {
-	Q_OBJECT
+class ImageOpsContextManagerItem : public AbstractContextManagerItem
+{
+    Q_OBJECT
 public:
-	ImageOpsContextManagerItem(ContextManager*, MainWindow*);
-	~ImageOpsContextManagerItem();
+    ImageOpsContextManagerItem(ContextManager*, MainWindow*);
+    ~ImageOpsContextManagerItem();
 
 private Q_SLOTS:
-	void updateActions();
-	void updateSideBarContent();
-	void rotateLeft();
-	void rotateRight();
-	void mirror();
-	void flip();
-	void resizeImage();
-	void crop();
-	void startRedEyeReduction();
-	void applyImageOperation(AbstractImageOperation*);
-	void restoreDefaultImageViewTool();
+    void updateActions();
+    void updateSideBarContent();
+    void rotateLeft();
+    void rotateRight();
+    void mirror();
+    void flip();
+    void resizeImage();
+    void crop();
+    void startRedEyeReduction();
+    void applyImageOperation(AbstractImageOperation*);
+    void restoreDefaultImageViewTool();
 
 private:
-	struct Private;
-	Private* const d;
+    struct Private;
+    Private* const d;
 };
-
 
 } // namespace
 

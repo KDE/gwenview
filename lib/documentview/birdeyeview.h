@@ -28,7 +28,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QGraphicsWidget>
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 class DocumentView;
 
@@ -37,29 +38,29 @@ class BirdEyeViewPrivate;
  * Shows a bird-eye view of the current document. Makes it possible to scroll
  * through the document.
  */
-class BirdEyeView : public QGraphicsWidget {
-	Q_OBJECT
+class BirdEyeView : public QGraphicsWidget
+{
+    Q_OBJECT
 public:
-	BirdEyeView(DocumentView* docView);
-	~BirdEyeView();
+    BirdEyeView(DocumentView* docView);
+    ~BirdEyeView();
 
-	void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0); // reimp
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0); // reimp
 
 public Q_SLOTS:
-	void adjustGeometry();
+    void adjustGeometry();
 
 protected:
-	void mousePressEvent(QGraphicsSceneMouseEvent* event);
-	void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
-	void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
+    void mousePressEvent(QGraphicsSceneMouseEvent* event);
+    void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
 
 private Q_SLOTS:
-	void adjustVisibleRect();
+    void adjustVisibleRect();
 
 private:
-	BirdEyeViewPrivate* const d;
+    BirdEyeViewPrivate* const d;
 };
-
 
 } // namespace
 

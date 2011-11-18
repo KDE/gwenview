@@ -32,7 +32,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 class QPoint;
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 class DocumentView;
 
@@ -40,28 +41,28 @@ class DocumentViewSynchronizerPrivate;
 /**
  * A class to synchronize zoom and scroll of two DocumentView
  */
-class GWENVIEWLIB_EXPORT DocumentViewSynchronizer : public QObject {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT DocumentViewSynchronizer : public QObject
+{
+    Q_OBJECT
 public:
-	DocumentViewSynchronizer(QObject* parent=0);
-	~DocumentViewSynchronizer();
+    DocumentViewSynchronizer(QObject* parent = 0);
+    ~DocumentViewSynchronizer();
 
-	void setDocumentViews(QList<DocumentView*> views);
+    void setDocumentViews(QList<DocumentView*> views);
 
-	void setCurrentView(DocumentView* view);
+    void setCurrentView(DocumentView* view);
 
 public Q_SLOTS:
-	void setActive(bool);
+    void setActive(bool);
 
 private Q_SLOTS:
-	void setZoom(qreal zoom);
-	void setZoomToFit(bool);
-	void updatePosition();
+    void setZoom(qreal zoom);
+    void setZoomToFit(bool);
+    void updatePosition();
 
 private:
-	DocumentViewSynchronizerPrivate* const d;
+    DocumentViewSynchronizerPrivate* const d;
 };
-
 
 } // namespace
 

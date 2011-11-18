@@ -30,99 +30,98 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include "abstractsemanticinfobackend.h"
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct TagModelPrivate {
-	AbstractSemanticInfoBackEnd* mBackEnd;
+    AbstractSemanticInfoBackEnd* mBackEnd;
 };
 
-
-static QStandardItem* createItem(const SemanticInfoTag& tag, const QString& label, TagModel::AssignmentStatus status) {
-	QStandardItem* item = new QStandardItem(label);
-	item->setData(tag, TagModel::TagRole);
-	item->setData(label.toLower(), TagModel::SortRole);
-	item->setData(status, TagModel::AssignmentStatusRole);
-	item->setData(KIcon("mail-tagged.png"), Qt::DecorationRole);
-	return item;
+static QStandardItem* createItem(const SemanticInfoTag& tag, const QString& label, TagModel::AssignmentStatus status)
+{
+    QStandardItem* item = new QStandardItem(label);
+    item->setData(tag, TagModel::TagRole);
+    item->setData(label.toLower(), TagModel::SortRole);
+    item->setData(status, TagModel::AssignmentStatusRole);
+    item->setData(KIcon("mail-tagged.png"), Qt::DecorationRole);
+    return item;
 }
-
 
 TagModel::TagModel(QObject* parent)
 : QStandardItemModel(parent)
-, d(new TagModelPrivate) {
-	d->mBackEnd = 0;
-	setSortRole(SortRole);
+, d(new TagModelPrivate)
+{
+    d->mBackEnd = 0;
+    setSortRole(SortRole);
 }
 
-
-TagModel::~TagModel() {
-	delete d;
+TagModel::~TagModel()
+{
+    delete d;
 }
 
-
-void TagModel::setSemanticInfoBackEnd(AbstractSemanticInfoBackEnd* backEnd) {
-	d->mBackEnd = backEnd;
+void TagModel::setSemanticInfoBackEnd(AbstractSemanticInfoBackEnd* backEnd)
+{
+    d->mBackEnd = backEnd;
 }
 
-
-void TagModel::setTagSet(const TagSet& set) {
-	clear();
-	Q_FOREACH(const SemanticInfoTag& tag, set) {
-		QString label = d->mBackEnd->labelForTag(tag);
-		QStandardItem* item = createItem(tag, label, TagModel::FullyAssigned);
-		appendRow(item);
-	}
-	sort(0);
+void TagModel::setTagSet(const TagSet& set)
+{
+    clear();
+    Q_FOREACH(const SemanticInfoTag & tag, set) {
+        QString label = d->mBackEnd->labelForTag(tag);
+        QStandardItem* item = createItem(tag, label, TagModel::FullyAssigned);
+        appendRow(item);
+    }
+    sort(0);
 }
 
+void TagModel::addTag(const SemanticInfoTag& tag, const QString& _label, TagModel::AssignmentStatus status)
+{
+    int row;
+    QString label = _label.isEmpty() ? d->mBackEnd->labelForTag(tag) : _label;
 
-void TagModel::addTag(const SemanticInfoTag& tag, const QString& _label, TagModel::AssignmentStatus status) {
-	int row;
-	QString label = _label.isEmpty() ? d->mBackEnd->labelForTag(tag) : _label;
-
-	const QString sortLabel = label.toLower();
-	// This is not optimal, implement dichotomic search if necessary
-	for (row=0; row < rowCount(); ++row) {
-		const QModelIndex idx = index(row, 0);
-		if (idx.data(SortRole).toString().compare(sortLabel) > 0) {
-			break;
-		}
-	}
-	if (row > 0) {
-		QStandardItem* _item = item(row - 1);
-		Q_ASSERT(_item);
-		if (_item->data(TagRole).toString() == tag) {
-			// Update, do not add
-			_item->setData(label.toLower(), SortRole);
-			_item->setData(status, AssignmentStatusRole);
-			return;
-		}
-	}
-	QStandardItem* _item = createItem(tag, label, status);
-	insertRow(row, _item);
+    const QString sortLabel = label.toLower();
+    // This is not optimal, implement dichotomic search if necessary
+    for (row = 0; row < rowCount(); ++row) {
+        const QModelIndex idx = index(row, 0);
+        if (idx.data(SortRole).toString().compare(sortLabel) > 0) {
+            break;
+        }
+    }
+    if (row > 0) {
+        QStandardItem* _item = item(row - 1);
+        Q_ASSERT(_item);
+        if (_item->data(TagRole).toString() == tag) {
+            // Update, do not add
+            _item->setData(label.toLower(), SortRole);
+            _item->setData(status, AssignmentStatusRole);
+            return;
+        }
+    }
+    QStandardItem* _item = createItem(tag, label, status);
+    insertRow(row, _item);
 }
 
-
-void TagModel::removeTag(const SemanticInfoTag& tag) {
-	// This is not optimal, implement dichotomic search if necessary
-	for (int row=0; row < rowCount(); ++row) {
-		if (index(row, 0).data(TagRole).toString() == tag) {
-			removeRow(row);
-			return;
-		}
-	}
+void TagModel::removeTag(const SemanticInfoTag& tag)
+{
+    // This is not optimal, implement dichotomic search if necessary
+    for (int row = 0; row < rowCount(); ++row) {
+        if (index(row, 0).data(TagRole).toString() == tag) {
+            removeRow(row);
+            return;
+        }
+    }
 }
 
-
-TagModel* TagModel::createAllTagsModel(QObject* parent, AbstractSemanticInfoBackEnd* backEnd) {
-	TagModel* tagModel = new TagModel(parent);
-	tagModel->setSemanticInfoBackEnd(backEnd);
-	tagModel->setTagSet(backEnd->allTags());
-	connect(backEnd, SIGNAL(tagAdded(SemanticInfoTag,QString)),
-		tagModel, SLOT(addTag(SemanticInfoTag,QString)));
-	return tagModel;
+TagModel* TagModel::createAllTagsModel(QObject* parent, AbstractSemanticInfoBackEnd* backEnd)
+{
+    TagModel* tagModel = new TagModel(parent);
+    tagModel->setSemanticInfoBackEnd(backEnd);
+    tagModel->setTagSet(backEnd->allTags());
+    connect(backEnd, SIGNAL(tagAdded(SemanticInfoTag, QString)),
+            tagModel, SLOT(addTag(SemanticInfoTag, QString)));
+    return tagModel;
 }
-
 
 } // namespace

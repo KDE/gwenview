@@ -29,43 +29,44 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include "jpeghandler.h"
 
-namespace Gwenview {
+namespace Gwenview
+{
 
-
-QStringList JpegPlugin::keys() const {
-	return QStringList() << QLatin1String("jpeg") << QLatin1String("jpg");
+QStringList JpegPlugin::keys() const
+{
+    return QStringList() << QLatin1String("jpeg") << QLatin1String("jpg");
 }
 
+QImageIOPlugin::Capabilities JpegPlugin::capabilities(QIODevice *device, const QByteArray &format) const
+{
+    if (format == "jpeg" || format == "jpg") {
+        return Capabilities(CanRead | CanWrite);
+    }
+    if (!format.isEmpty()) {
+        return 0;
+    }
+    if (!device->isOpen()) {
+        return 0;
+    }
 
-QImageIOPlugin::Capabilities JpegPlugin::capabilities(QIODevice *device, const QByteArray &format) const {
-	if (format == "jpeg" || format == "jpg") {
-		return Capabilities(CanRead | CanWrite);
-	}
-	if (!format.isEmpty()) {
-		return 0;
-	}
-	if (!device->isOpen()) {
-		return 0;
-	}
-
-	Capabilities cap;
-	if (device->isReadable() && JpegHandler::canRead(device)) {
-		cap |= CanRead;
-	}
-	if (device->isWritable()) {
-		cap |= CanWrite;
-	}
-	return cap;
+    Capabilities cap;
+    if (device->isReadable() && JpegHandler::canRead(device)) {
+        cap |= CanRead;
+    }
+    if (device->isWritable()) {
+        cap |= CanWrite;
+    }
+    return cap;
 }
 
-QImageIOHandler *JpegPlugin::create(QIODevice *device, const QByteArray &format) const {
-	QImageIOHandler *handler = new JpegHandler;
-	handler->setDevice(device);
-	handler->setFormat(format);
-	return handler;
+QImageIOHandler *JpegPlugin::create(QIODevice *device, const QByteArray &format) const
+{
+    QImageIOHandler *handler = new JpegHandler;
+    handler->setDevice(device);
+    handler->setFormat(format);
+    return handler;
 }
 
 Q_EXPORT_STATIC_PLUGIN(JpegPlugin)
-
 
 } // namespace

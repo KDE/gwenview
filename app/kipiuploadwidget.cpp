@@ -31,28 +31,26 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include "kipiinterface.h"
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 KIPIUploadWidget::KIPIUploadWidget(KIPIInterface* interface, QWidget* parent)
 : KIPI::UploadWidget(parent)
-, mInterface(interface) {
-	QLabel* label = new QLabel(this);
-	KUrl url = mInterface->currentAlbum().uploadPath();
-	label->setText(i18n("Images will be uploaded here:\n%1", url.pathOrUrl()));
-	label->setWordWrap(true);
+, mInterface(interface)
+{
+    QLabel* label = new QLabel(this);
+    KUrl url = mInterface->currentAlbum().uploadPath();
+    label->setText(i18n("Images will be uploaded here:\n%1", url.pathOrUrl()));
+    label->setWordWrap(true);
 
-	QVBoxLayout* layout = new QVBoxLayout(this);
-	layout->setMargin(0);
-	layout->addWidget(label);
+    QVBoxLayout* layout = new QVBoxLayout(this);
+    layout->setMargin(0);
+    layout->addWidget(label);
 }
 
-
-KIPI::ImageCollection KIPIUploadWidget::selectedImageCollection() const {
-	return mInterface->currentAlbum();
+KIPI::ImageCollection KIPIUploadWidget::selectedImageCollection() const
+{
+    return mInterface->currentAlbum();
 }
-
-
-
 
 } // namespace

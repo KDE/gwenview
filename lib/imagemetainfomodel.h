@@ -32,38 +32,41 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 class KUrl;
 
-namespace Exiv2 { class Image; }
+namespace Exiv2
+{
+class Image;
+}
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct ImageMetaInfoModelPrivate;
-class GWENVIEWLIB_EXPORT ImageMetaInfoModel : public QAbstractItemModel {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT ImageMetaInfoModel : public QAbstractItemModel
+{
+    Q_OBJECT
 public:
-	ImageMetaInfoModel();
-	~ImageMetaInfoModel();
+    ImageMetaInfoModel();
+    ~ImageMetaInfoModel();
 
-	void setUrl(const KUrl&);
-	void setImageSize(const QSize&);
-	void setExiv2Image(const Exiv2::Image*);
+    void setUrl(const KUrl&);
+    void setImageSize(const QSize&);
+    void setExiv2Image(const Exiv2::Image*);
 
-	QString keyForIndex(const QModelIndex&) const;
-	void getInfoForKey(const QString& key, QString* label, QString* value) const;
-	QString getValueForKey(const QString& key) const;
+    QString keyForIndex(const QModelIndex&) const;
+    void getInfoForKey(const QString& key, QString* label, QString* value) const;
+    QString getValueForKey(const QString& key) const;
 
-	virtual QModelIndex index(int row, int col, const QModelIndex& parent = QModelIndex()) const;
-	virtual QModelIndex parent(const QModelIndex&) const;
-	virtual int rowCount(const QModelIndex& = QModelIndex()) const;
-	virtual int columnCount(const QModelIndex& = QModelIndex()) const;
-	virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-	virtual QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const;
+    virtual QModelIndex index(int row, int col, const QModelIndex& parent = QModelIndex()) const;
+    virtual QModelIndex parent(const QModelIndex&) const;
+    virtual int rowCount(const QModelIndex& = QModelIndex()) const;
+    virtual int columnCount(const QModelIndex& = QModelIndex()) const;
+    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+    virtual QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const;
 
 private:
-	ImageMetaInfoModelPrivate* const d;
-	friend struct ImageMetaInfoModelPrivate;
+    ImageMetaInfoModelPrivate* const d;
+    friend struct ImageMetaInfoModelPrivate;
 };
-
 
 } // namespace
 

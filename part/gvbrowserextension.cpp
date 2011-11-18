@@ -31,33 +31,33 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "../lib/document/documentfactory.h"
 #include "../lib/print/printhelper.h"
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct GVBrowserExtensionPrivate {
-	KParts::ReadOnlyPart* mPart;
+    KParts::ReadOnlyPart* mPart;
 };
-
 
 GVBrowserExtension::GVBrowserExtension(KParts::ReadOnlyPart* part)
 : KParts::BrowserExtension(part)
-, d(new GVBrowserExtensionPrivate) {
-	d->mPart = part;
-	emit enableAction("print", true);
-	QString iconPath = KIconLoader::global()->iconPath("image-x-generic", KIconLoader::SizeSmall);
-	emit setIconUrl(KUrl::fromPath(iconPath));
+, d(new GVBrowserExtensionPrivate)
+{
+    d->mPart = part;
+    emit enableAction("print", true);
+    QString iconPath = KIconLoader::global()->iconPath("image-x-generic", KIconLoader::SizeSmall);
+    emit setIconUrl(KUrl::fromPath(iconPath));
 }
 
-
-GVBrowserExtension::~GVBrowserExtension() {
-	delete d;
+GVBrowserExtension::~GVBrowserExtension()
+{
+    delete d;
 }
 
-
-void GVBrowserExtension::print() {
-	Document::Ptr doc = DocumentFactory::instance()->load(d->mPart->url());
-	PrintHelper printHelper(d->mPart->widget());
-	printHelper.print(doc);
+void GVBrowserExtension::print()
+{
+    Document::Ptr doc = DocumentFactory::instance()->load(d->mPart->url());
+    PrintHelper printHelper(d->mPart->widget());
+    printHelper.print(doc);
 }
 
 } // namespace

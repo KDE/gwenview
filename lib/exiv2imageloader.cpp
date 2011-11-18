@@ -33,54 +33,53 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // Local
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct Exiv2ImageLoaderPrivate {
-	Exiv2::Image::AutoPtr mImage;
-	QString mErrorMessage;
+    Exiv2::Image::AutoPtr mImage;
+    QString mErrorMessage;
 };
 
-
 Exiv2ImageLoader::Exiv2ImageLoader()
-: d(new Exiv2ImageLoaderPrivate) {
+: d(new Exiv2ImageLoaderPrivate)
+{
 }
 
-
-Exiv2ImageLoader::~Exiv2ImageLoader() {
-	delete d;
+Exiv2ImageLoader::~Exiv2ImageLoader()
+{
+    delete d;
 }
 
-
-bool Exiv2ImageLoader::load(const QByteArray& data) {
-	try {
-		d->mImage = Exiv2::ImageFactory::open((unsigned char*)data.constData(), data.size());
-		d->mImage->readMetadata();
+bool Exiv2ImageLoader::load(const QByteArray& data)
+{
+    try {
+        d->mImage = Exiv2::ImageFactory::open((unsigned char*)data.constData(), data.size());
+        d->mImage->readMetadata();
 #if EXIV2_VERSION >= EXIV2_MAKE_VERSION(0, 14, 0)
-	// For some unknown reason, trying to catch Exiv2::Error fails with Exiv2
-	// >=0.14. For now, just catch std::exception. I would welcome any
-	// explanation.
-	} catch (const std::exception& error) {
-		d->mErrorMessage = error.what();
+        // For some unknown reason, trying to catch Exiv2::Error fails with Exiv2
+        // >=0.14. For now, just catch std::exception. I would welcome any
+        // explanation.
+    } catch (const std::exception& error) {
+        d->mErrorMessage = error.what();
 #else
-	// In libexiv2 0.12, Exiv2::Error::what() returns an std::string.
-	} catch (const Exiv2::Error& error) {
-		d->mErrorMessage = error.what().c_str();
+        // In libexiv2 0.12, Exiv2::Error::what() returns an std::string.
+    } catch (const Exiv2::Error& error) {
+        d->mErrorMessage = error.what().c_str();
 #endif
-		return false;
-	}
-	return true;
+        return false;
+    }
+    return true;
 }
 
-
-QString Exiv2ImageLoader::errorMessage() const {
-	return d->mErrorMessage;
+QString Exiv2ImageLoader::errorMessage() const
+{
+    return d->mErrorMessage;
 }
 
-
-Exiv2::Image::AutoPtr Exiv2ImageLoader::popImage() {
-	return d->mImage;
+Exiv2::Image::AutoPtr Exiv2ImageLoader::popImage()
+{
+    return d->mImage;
 }
-
 
 } // namespace

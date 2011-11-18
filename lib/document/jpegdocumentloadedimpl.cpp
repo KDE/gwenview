@@ -30,62 +30,61 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Local
 #include "jpegcontent.h"
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct JpegDocumentLoadedImplPrivate {
-	JpegContent* mJpegContent;
+    JpegContent* mJpegContent;
 };
-
 
 JpegDocumentLoadedImpl::JpegDocumentLoadedImpl(Document* doc, JpegContent* jpegContent)
 : DocumentLoadedImpl(doc, QByteArray() /* rawData */)
-, d(new JpegDocumentLoadedImplPrivate) {
-	Q_ASSERT(jpegContent);
-	d->mJpegContent = jpegContent;
+, d(new JpegDocumentLoadedImplPrivate)
+{
+    Q_ASSERT(jpegContent);
+    d->mJpegContent = jpegContent;
 }
 
-
-JpegDocumentLoadedImpl::~JpegDocumentLoadedImpl() {
-	delete d->mJpegContent;
-	delete d;
+JpegDocumentLoadedImpl::~JpegDocumentLoadedImpl()
+{
+    delete d->mJpegContent;
+    delete d;
 }
 
+bool JpegDocumentLoadedImpl::saveInternal(QIODevice* device, const QByteArray& format)
+{
+    if (format == "jpeg") {
+        d->mJpegContent->resetOrientation();
+        if (!d->mJpegContent->thumbnail().isNull()) {
+            QImage thumbnail = document()->image().scaled(128, 128, Qt::KeepAspectRatio);
+            d->mJpegContent->setThumbnail(thumbnail);
+        }
 
-bool JpegDocumentLoadedImpl::saveInternal(QIODevice* device, const QByteArray& format) {
-	if (format == "jpeg") {
-		d->mJpegContent->resetOrientation();
-		if (!d->mJpegContent->thumbnail().isNull()) {
-			QImage thumbnail = document()->image().scaled(128, 128, Qt::KeepAspectRatio);
-			d->mJpegContent->setThumbnail(thumbnail);
-		}
-
-		bool ok = d->mJpegContent->save(device);
-		if (!ok) {
-			setDocumentErrorString(d->mJpegContent->errorString());
-		}
-		return ok;
-	} else {
-		return DocumentLoadedImpl::saveInternal(device, format);
-	}
+        bool ok = d->mJpegContent->save(device);
+        if (!ok) {
+            setDocumentErrorString(d->mJpegContent->errorString());
+        }
+        return ok;
+    } else {
+        return DocumentLoadedImpl::saveInternal(device, format);
+    }
 }
 
-
-void JpegDocumentLoadedImpl::setImage(const QImage& image) {
-	d->mJpegContent->setImage(image);
-	DocumentLoadedImpl::setImage(image);
+void JpegDocumentLoadedImpl::setImage(const QImage& image)
+{
+    d->mJpegContent->setImage(image);
+    DocumentLoadedImpl::setImage(image);
 }
 
-
-void JpegDocumentLoadedImpl::applyTransformation(Orientation orientation) {
-	DocumentLoadedImpl::applyTransformation(orientation);
-	d->mJpegContent->transform(orientation);
+void JpegDocumentLoadedImpl::applyTransformation(Orientation orientation)
+{
+    DocumentLoadedImpl::applyTransformation(orientation);
+    d->mJpegContent->transform(orientation);
 }
 
-
-QByteArray JpegDocumentLoadedImpl::rawData() const {
-	return d->mJpegContent->rawData();
+QByteArray JpegDocumentLoadedImpl::rawData() const
+{
+    return d->mJpegContent->rawData();
 }
-
 
 } // namespace

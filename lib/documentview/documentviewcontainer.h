@@ -30,7 +30,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QGraphicsView>
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 class DocumentView;
 
@@ -39,37 +40,37 @@ class DocumentViewContainerPrivate;
  * A container for DocumentViews which will arrange them to make best use of
  * available space.
  */
-class GWENVIEWLIB_EXPORT DocumentViewContainer : public QGraphicsView {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT DocumentViewContainer : public QGraphicsView
+{
+    Q_OBJECT
 public:
-	DocumentViewContainer(QWidget* parent=0);
-	~DocumentViewContainer();
+    DocumentViewContainer(QWidget* parent = 0);
+    ~DocumentViewContainer();
 
-	/**
-	 * Create a DocumentView in the DocumentViewContainer scene
-	 */
-	DocumentView* createView();
+    /**
+     * Create a DocumentView in the DocumentViewContainer scene
+     */
+    DocumentView* createView();
 
-	/**
-	 * Note: this method takes ownership of the view and will delete it
-	 */
-	void removeView(DocumentView* view);
+    /**
+     * Note: this method takes ownership of the view and will delete it
+     */
+    void removeView(DocumentView* view);
 
 public Q_SLOTS:
-	void updateLayout();
+    void updateLayout();
 
 protected:
-	void showEvent(QShowEvent*);
-	void resizeEvent(QResizeEvent*);
+    void showEvent(QShowEvent*);
+    void resizeEvent(QResizeEvent*);
 
 private:
-	friend class ViewItem;
-	DocumentViewContainerPrivate* const d;
+    friend class ViewItem;
+    DocumentViewContainerPrivate* const d;
 
 private Q_SLOTS:
-	void slotViewAnimationFinished(DocumentView*);
+    void slotViewAnimationFinished(DocumentView*);
 };
-
 
 } // namespace
 

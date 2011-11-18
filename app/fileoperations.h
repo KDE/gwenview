@@ -25,9 +25,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 class QWidget;
 
-namespace Gwenview {
+namespace Gwenview
+{
 
-namespace FileOperations {
+namespace FileOperations
+{
 
 void copyTo(const KUrl::List& urlList, QWidget* parent);
 void moveTo(const KUrl::List& urlList, QWidget* parent);

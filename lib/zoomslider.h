@@ -33,7 +33,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 class QAction;
 class QSlider;
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 struct ZoomSliderPrivate;
 /**
@@ -42,39 +43,39 @@ struct ZoomSliderPrivate;
  * Their behavior can be changed with setZoomInAction() and
  * setZoomOutAction().
  */
-class GWENVIEWLIB_EXPORT ZoomSlider : public QWidget {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT ZoomSlider : public QWidget
+{
+    Q_OBJECT
 public:
-	ZoomSlider(QWidget* parent=0);
-	~ZoomSlider();
+    ZoomSlider(QWidget* parent = 0);
+    ~ZoomSlider();
 
-	int value() const;
+    int value() const;
 
-	QSlider* slider() const;
+    QSlider* slider() const;
 
-	void setZoomInAction(QAction*);
+    void setZoomInAction(QAction*);
 
-	void setZoomOutAction(QAction*);
+    void setZoomOutAction(QAction*);
 
 public Q_SLOTS:
-	void setValue(int);
+    void setValue(int);
 
-	void setMinimum(int);
+    void setMinimum(int);
 
-	void setMaximum(int);
+    void setMaximum(int);
 
 Q_SIGNALS:
-	int valueChanged(int);
+    int valueChanged(int);
 
 private Q_SLOTS:
-	void slotActionTriggered(int actionTriggered);
-	void zoomOut();
-	void zoomIn();
+    void slotActionTriggered(int actionTriggered);
+    void zoomOut();
+    void zoomIn();
 
 private:
-	ZoomSliderPrivate* const d;
+    ZoomSliderPrivate* const d;
 };
-
 
 } // namespace
 

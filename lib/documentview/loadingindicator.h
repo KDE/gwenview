@@ -28,36 +28,36 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QGraphicsWidget>
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 class LoadingIndicatorPrivate;
 /**
  * A graphics widget which shows a spinner
  */
-class LoadingIndicator : public QGraphicsWidget {
-	Q_OBJECT
+class LoadingIndicator : public QGraphicsWidget
+{
+    Q_OBJECT
 public:
-	LoadingIndicator(QGraphicsItem* parent=0);
-	~LoadingIndicator();
+    LoadingIndicator(QGraphicsItem* parent = 0);
+    ~LoadingIndicator();
 
-	// reimp
-	void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
+    // reimp
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
 
-	// reimp
-	QRectF boundingRect() const;
+    // reimp
+    QRectF boundingRect() const;
 
 private Q_SLOTS:
-	void showNextFrame();
+    void showNextFrame();
 
 protected:
-	// reimp
+    // reimp
     QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
 private:
-	LoadingIndicatorPrivate* const d;
+    LoadingIndicatorPrivate* const d;
 };
-
 
 } // namespace
 

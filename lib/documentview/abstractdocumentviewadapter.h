@@ -35,9 +35,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 class QCursor;
 class QGraphicsWidget;
 
-
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 class ImageView;
 class RasterImageView;
@@ -46,81 +45,103 @@ class RasterImageView;
  * Classes inherit from this class so that they can be used inside the
  * DocumentPanel.
  */
-class GWENVIEWLIB_EXPORT AbstractDocumentViewAdapter : public QObject {
-	Q_OBJECT
+class GWENVIEWLIB_EXPORT AbstractDocumentViewAdapter : public QObject
+{
+    Q_OBJECT
 public:
-	AbstractDocumentViewAdapter();
-	virtual ~AbstractDocumentViewAdapter();
+    AbstractDocumentViewAdapter();
+    virtual ~AbstractDocumentViewAdapter();
 
-	QGraphicsWidget* widget() const { return mWidget; }
+    QGraphicsWidget* widget() const {
+        return mWidget;
+    }
 
-	virtual MimeTypeUtils::Kind kind() const = 0;
+    virtual MimeTypeUtils::Kind kind() const = 0;
 
-	virtual ImageView* imageView() const { return 0; }
+    virtual ImageView* imageView() const {
+        return 0;
+    }
 
-	virtual RasterImageView* rasterImageView() const { return 0; }
+    virtual RasterImageView* rasterImageView() const {
+        return 0;
+    }
 
-	virtual QCursor cursor() const;
+    virtual QCursor cursor() const;
 
-	virtual void setCursor(const QCursor&);
+    virtual void setCursor(const QCursor&);
 
-	/**
-	 * @defgroup zooming functions
-	 * @{
-	 */
-	virtual bool canZoom() const { return false; }
+    /**
+     * @defgroup zooming functions
+     * @{
+     */
+    virtual bool canZoom() const {
+        return false;
+    }
 
-	// Implementation must emit zoomToFitChanged()
-	virtual void setZoomToFit(bool) {}
+    // Implementation must emit zoomToFitChanged()
+    virtual void setZoomToFit(bool) {}
 
-	virtual bool zoomToFit() const { return false; }
+    virtual bool zoomToFit() const {
+        return false;
+    }
 
-	virtual qreal zoom() const { return 0; }
+    virtual qreal zoom() const {
+        return 0;
+    }
 
-	virtual void setZoom(qreal /*zoom*/, const QPointF& /*center*/ = QPointF(-1, -1)) {}
+    virtual void setZoom(qreal /*zoom*/, const QPointF& /*center*/ = QPointF(-1, -1)) {}
 
-	virtual qreal computeZoomToFit() const { return 1.; }
-	/** @} */
+    virtual qreal computeZoomToFit() const {
+        return 1.;
+    }
+    /** @} */
 
-	virtual Document::Ptr document() const = 0;
-	virtual void setDocument(Document::Ptr) = 0;
+    virtual Document::Ptr document() const = 0;
+    virtual void setDocument(Document::Ptr) = 0;
 
-	virtual void loadConfig() {}
+    virtual void loadConfig() {}
 
-	virtual QPointF scrollPos() const { return QPointF(0, 0); }
-	virtual void setScrollPos(const QPointF& /*pos*/) {}
+    virtual QPointF scrollPos() const {
+        return QPointF(0, 0);
+    }
+    virtual void setScrollPos(const QPointF& /*pos*/) {}
 
 protected:
-	void setWidget(QGraphicsWidget* widget) { mWidget = widget; }
+    void setWidget(QGraphicsWidget* widget) {
+        mWidget = widget;
+    }
 
 Q_SIGNALS:
-	/**
-	 * @addgroup zooming functions
-	 * @{
-	 */
-	void zoomChanged(qreal);
+    /**
+     * @addgroup zooming functions
+     * @{
+     */
+    void zoomChanged(qreal);
 
-	void zoomToFitChanged(bool);
-	/** @} */
+    void zoomToFitChanged(bool);
+    /** @} */
 
-	void scrollPosChanged();
+    void scrollPosChanged();
 
 private:
-	QGraphicsWidget* mWidget;
+    QGraphicsWidget* mWidget;
 };
-
 
 /**
  * An empty adapter, used when no document is displayed
  */
 class EmptyAdapter : public AbstractDocumentViewAdapter
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	EmptyAdapter();
-	virtual MimeTypeUtils::Kind kind() const { return MimeTypeUtils::KIND_UNKNOWN; }
-	virtual Document::Ptr document() const { return Document::Ptr(); }
-	virtual void setDocument(Document::Ptr) {}
+    EmptyAdapter();
+    virtual MimeTypeUtils::Kind kind() const {
+        return MimeTypeUtils::KIND_UNKNOWN;
+    }
+    virtual Document::Ptr document() const {
+        return Document::Ptr();
+    }
+    virtual void setDocument(Document::Ptr) {}
 };
 
 } // namespace

@@ -31,9 +31,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 class KUrl;
 
-namespace Gwenview {
+namespace Gwenview
+{
 
-namespace UrlUtils {
+namespace UrlUtils
+{
 
 /**
  * Returns whether the url is a local file, and it's not on a slow device like

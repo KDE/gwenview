@@ -26,30 +26,32 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QObject>
 #include <QSize>
 
-class SandBox {
+class SandBox
+{
 public:
-	SandBox();
-	void initDir();
-	void fill();
-	void createTestImage(const QString& name, int width, int height, const QColor& color);
-	void copyTestImage(const QString& name, int width, int height);
+    SandBox();
+    void initDir();
+    void fill();
+    void createTestImage(const QString& name, int width, int height, const QColor& color);
+    void copyTestImage(const QString& name, int width, int height);
 
-	QHash<QString, QSize> mSizeHash;
-	QString mPath;
+    QHash<QString, QSize> mSizeHash;
+    QString mPath;
 };
 
-class ThumbnailLoadJobTest : public QObject {
-	Q_OBJECT
+class ThumbnailLoadJobTest : public QObject
+{
+    Q_OBJECT
 
 private Q_SLOTS:
-	void init();
-	void initTestCase();
-	void testLoadLocal();
-	void testLoadRemote();
-	void testUseEmbeddedOrNot();
+    void init();
+    void initTestCase();
+    void testLoadLocal();
+    void testLoadRemote();
+    void testUseEmbeddedOrNot();
 
 private:
-	SandBox mSandBox;
+    SandBox mSandBox;
 };
 
 #endif // THUMBNAILLOADJOBTEST_H

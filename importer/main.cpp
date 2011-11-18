@@ -32,44 +32,45 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/version.h>
 #include "importdialog.h"
 
-int main(int argc, char *argv[]) {
-	KAboutData aboutData(
-		"gwenview_importer",        /* appname */
-		"gwenview",                          /* catalogName */
-		ki18n("Gwenview Importer"), /* programName */
-		GWENVIEW_VERSION);          /* version */
-	aboutData.setShortDescription(ki18n("Photo Importer"));
-	aboutData.setLicense(KAboutData::License_GPL);
-	aboutData.setCopyrightStatement(ki18n("Copyright 2009-2010 Aurélien Gâteau"));
-	aboutData.addAuthor(
-		ki18n("Aurélien Gâteau"),
-		ki18n("Main developer"),
-		"agateau@kde.org");
+int main(int argc, char *argv[])
+{
+    KAboutData aboutData(
+        "gwenview_importer",        /* appname */
+        "gwenview",                          /* catalogName */
+        ki18n("Gwenview Importer"), /* programName */
+        GWENVIEW_VERSION);          /* version */
+    aboutData.setShortDescription(ki18n("Photo Importer"));
+    aboutData.setLicense(KAboutData::License_GPL);
+    aboutData.setCopyrightStatement(ki18n("Copyright 2009-2010 Aurélien Gâteau"));
+    aboutData.addAuthor(
+        ki18n("Aurélien Gâteau"),
+        ki18n("Main developer"),
+        "agateau@kde.org");
 
-	KCmdLineArgs::init(argc, argv, &aboutData);
+    KCmdLineArgs::init(argc, argv, &aboutData);
 
-	KCmdLineOptions options;
-	options.add("+[folder]", ki18n("Source folder"));
-	KCmdLineArgs::addCmdLineOptions( options );
+    KCmdLineOptions options;
+    options.add("+[folder]", ki18n("Source folder"));
+    KCmdLineArgs::addCmdLineOptions(options);
 
-	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-	if (args->count() != 1) {
-		kError() << "Wrong arg count. FIXME";
-		return 1;
-	}
-	KUrl url = args->url(0);
-	if (!url.isValid()) {
-		kError() << "Invalid url. FIXME";
-		return 1;
-	}
-	args->clear();
+    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+    if (args->count() != 1) {
+        kError() << "Wrong arg count. FIXME";
+        return 1;
+    }
+    KUrl url = args->url(0);
+    if (!url.isValid()) {
+        kError() << "Invalid url. FIXME";
+        return 1;
+    }
+    args->clear();
 
-	KApplication app;
+    KApplication app;
 
-	Gwenview::ImageFormats::registerPlugins();
+    Gwenview::ImageFormats::registerPlugins();
 
-	Gwenview::ImportDialog* dialog = new Gwenview::ImportDialog();
-	dialog->show();
-	QMetaObject::invokeMethod(dialog, "setSourceUrl", Qt::QueuedConnection, Q_ARG(KUrl, url));
-	return app.exec();
+    Gwenview::ImportDialog* dialog = new Gwenview::ImportDialog();
+    dialog->show();
+    QMetaObject::invokeMethod(dialog, "setSourceUrl", Qt::QueuedConnection, Q_ARG(KUrl, url));
+    return app.exec();
 }

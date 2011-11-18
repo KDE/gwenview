@@ -44,180 +44,196 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <filenameformater.h>
 #include <lib/timeutils.h>
 
-namespace Gwenview {
+namespace Gwenview
+{
 
 struct ImporterPrivate {
-	Importer* q;
-	QWidget* mAuthWindow;
-	std::auto_ptr<FileNameFormater> mFileNameFormater;
-	std::auto_ptr<KTempDir> mDestImportDir;
+    Importer* q;
+    QWidget* mAuthWindow;
+    std::auto_ptr<FileNameFormater> mFileNameFormater;
+    std::auto_ptr<KTempDir> mDestImportDir;
 
-	/* @defgroup reset Should be reset in start()
-	 * @{ */
-	KUrl::List mUrlList;
-	KUrl::List mImportedUrlList;
-	KUrl::List mSkippedUrlList;
-	int mRenamedCount;
-	int mProgress;
-	int mJobProgress;
-	/* @} */
+    /* @defgroup reset Should be reset in start()
+     * @{ */
+    KUrl::List mUrlList;
+    KUrl::List mImportedUrlList;
+    KUrl::List mSkippedUrlList;
+    int mRenamedCount;
+    int mProgress;
+    int mJobProgress;
+    /* @} */
 
-	KUrl mCurrentUrl;
+    KUrl mCurrentUrl;
 
-	void emitError(const QString& message) {
-		QMetaObject::invokeMethod(q, "error", Q_ARG(QString, message));
-	}
+    void emitError(const QString& message)
+    {
+        QMetaObject::invokeMethod(q, "error", Q_ARG(QString, message));
+    }
 
-	bool createImportDir(const KUrl url) {
-		Q_ASSERT(url.isLocalFile());
-		// FIXME: Support remote urls
+    bool createImportDir(const KUrl url)
+    {
+        Q_ASSERT(url.isLocalFile());
+        // FIXME: Support remote urls
 
-		if (!KStandardDirs::makeDir(url.toLocalFile())) {
-			emitError(i18n("Could not create destination folder."));
-			return false;
-		}
-		mDestImportDir.reset(new KTempDir(url.toLocalFile() + "/.gwenview_importer-"));
-		mDestImportDir->setAutoRemove(false);
-		if (mDestImportDir->status() != 0) {
-			const QString message = QString::fromLocal8Bit(::strerror(mDestImportDir->status()));
-			emitError(i18n("Could not create temporary upload folder:\n%1", message));
-			return false;
-		}
-		return true;
-	}
+        if (!KStandardDirs::makeDir(url.toLocalFile())) {
+            emitError(i18n("Could not create destination folder."));
+            return false;
+        }
+        mDestImportDir.reset(new KTempDir(url.toLocalFile() + "/.gwenview_importer-"));
+        mDestImportDir->setAutoRemove(false);
+        if (mDestImportDir->status() != 0) {
+            const QString message = QString::fromLocal8Bit(::strerror(mDestImportDir->status()));
+            emitError(i18n("Could not create temporary upload folder:\n%1", message));
+            return false;
+        }
+        return true;
+    }
 
-	void importNext() {
-		if (mUrlList.empty()) {
-			q->finalizeImport();
-			return;
-		}
-		mCurrentUrl = mUrlList.takeFirst();
-		KUrl dst = KUrl(mDestImportDir->name());
-		dst.addPath(mCurrentUrl.fileName());
-		KIO::Job* job = KIO::copy(mCurrentUrl, dst, KIO::HideProgressInfo);
-		if (job->ui()) {
-			job->ui()->setWindow(mAuthWindow);
-		}
-		QObject::connect(job, SIGNAL(result(KJob*)),
-			q, SLOT(slotCopyDone(KJob*)));
-		QObject::connect(job, SIGNAL(percent(KJob*,ulong)),
-			q, SLOT(slotPercent(KJob*,ulong)));
-	}
+    void importNext()
+    {
+        if (mUrlList.empty()) {
+            q->finalizeImport();
+            return;
+        }
+        mCurrentUrl = mUrlList.takeFirst();
+        KUrl dst = KUrl(mDestImportDir->name());
+        dst.addPath(mCurrentUrl.fileName());
+        KIO::Job* job = KIO::copy(mCurrentUrl, dst, KIO::HideProgressInfo);
+        if (job->ui()) {
+            job->ui()->setWindow(mAuthWindow);
+        }
+        QObject::connect(job, SIGNAL(result(KJob*)),
+                         q, SLOT(slotCopyDone(KJob*)));
+        QObject::connect(job, SIGNAL(percent(KJob*, ulong)),
+                         q, SLOT(slotPercent(KJob*, ulong)));
+    }
 
-	void renameImportedUrl(const KUrl& src) {
-		KUrl dst = src;
-		dst.cd("..");
-		QString fileName;
-		if (mFileNameFormater.get()) {
-			KFileItem item(KFileItem::Unknown, KFileItem::Unknown, src, true /* delayedMimeTypes */);
-			KDateTime dateTime = TimeUtils::dateTimeForFileItem(item);
-			fileName = mFileNameFormater->format(src, dateTime);
-		} else {
-			fileName = src.fileName();
-		}
-		dst.setFileName(fileName);
+    void renameImportedUrl(const KUrl& src)
+    {
+        KUrl dst = src;
+        dst.cd("..");
+        QString fileName;
+        if (mFileNameFormater.get()) {
+            KFileItem item(KFileItem::Unknown, KFileItem::Unknown, src, true /* delayedMimeTypes */);
+            KDateTime dateTime = TimeUtils::dateTimeForFileItem(item);
+            fileName = mFileNameFormater->format(src, dateTime);
+        } else {
+            fileName = src.fileName();
+        }
+        dst.setFileName(fileName);
 
-		FileUtils::RenameResult result = FileUtils::rename(src, dst, mAuthWindow);
-		switch (result) {
-		case FileUtils::RenamedOK:
-			mImportedUrlList << mCurrentUrl;
-			break;
-		case FileUtils::RenamedUnderNewName:
-			mRenamedCount++;
-			mImportedUrlList << mCurrentUrl;
-			break;
-		case FileUtils::Skipped:
-			mSkippedUrlList << mCurrentUrl;
-			break;
-		case FileUtils::RenameFailed:
-			kWarning() << "Rename failed for" << mCurrentUrl;
-		}
-		q->advance();
-		importNext();
-	}
+        FileUtils::RenameResult result = FileUtils::rename(src, dst, mAuthWindow);
+        switch (result) {
+        case FileUtils::RenamedOK:
+            mImportedUrlList << mCurrentUrl;
+            break;
+        case FileUtils::RenamedUnderNewName:
+            mRenamedCount++;
+            mImportedUrlList << mCurrentUrl;
+            break;
+        case FileUtils::Skipped:
+            mSkippedUrlList << mCurrentUrl;
+            break;
+        case FileUtils::RenameFailed:
+            kWarning() << "Rename failed for" << mCurrentUrl;
+        }
+        q->advance();
+        importNext();
+    }
 };
-
 
 Importer::Importer(QWidget* parent)
 : QObject(parent)
-, d(new ImporterPrivate) {
-	d->q = this;
-	d->mAuthWindow = parent;
+, d(new ImporterPrivate)
+{
+    d->q = this;
+    d->mAuthWindow = parent;
 }
 
-Importer::~Importer() {
-	delete d;
+Importer::~Importer()
+{
+    delete d;
 }
 
-void Importer::setAutoRenameFormat(const QString& format) {
-	if (format.isEmpty()) {
-		d->mFileNameFormater.reset(0);
-	} else {
-		d->mFileNameFormater.reset(new FileNameFormater(format));
-	}
+void Importer::setAutoRenameFormat(const QString& format)
+{
+    if (format.isEmpty()) {
+        d->mFileNameFormater.reset(0);
+    } else {
+        d->mFileNameFormater.reset(new FileNameFormater(format));
+    }
 }
 
-void Importer::start(const KUrl::List& list, const KUrl& destination) {
-	d->mUrlList = list;
-	d->mImportedUrlList.clear();
-	d->mSkippedUrlList.clear();
-	d->mRenamedCount = 0;
-	d->mProgress = 0;
-	d->mJobProgress = 0;
+void Importer::start(const KUrl::List& list, const KUrl& destination)
+{
+    d->mUrlList = list;
+    d->mImportedUrlList.clear();
+    d->mSkippedUrlList.clear();
+    d->mRenamedCount = 0;
+    d->mProgress = 0;
+    d->mJobProgress = 0;
 
-	emitProgressChanged();
-	maximumChanged(d->mUrlList.count() * 100);
+    emitProgressChanged();
+    maximumChanged(d->mUrlList.count() * 100);
 
-	if (!d->createImportDir(destination)) {
-		kWarning() << "Could not create import dir";
-		return;
-	}
-	d->importNext();
+    if (!d->createImportDir(destination)) {
+        kWarning() << "Could not create import dir";
+        return;
+    }
+    d->importNext();
 }
 
-void Importer::slotCopyDone(KJob* _job) {
-	KIO::CopyJob* job = static_cast<KIO::CopyJob*>(_job);
-	KUrl url = job->destUrl();
-	if (job->error()) {
-		kWarning() << "FIXME: What do we do with failed urls?";
-		advance();
-		d->importNext();
-		return;
-	}
+void Importer::slotCopyDone(KJob* _job)
+{
+    KIO::CopyJob* job = static_cast<KIO::CopyJob*>(_job);
+    KUrl url = job->destUrl();
+    if (job->error()) {
+        kWarning() << "FIXME: What do we do with failed urls?";
+        advance();
+        d->importNext();
+        return;
+    }
 
-	d->renameImportedUrl(url);
+    d->renameImportedUrl(url);
 }
 
-void Importer::finalizeImport() {
-	d->mDestImportDir->unlink();
-	importFinished();
+void Importer::finalizeImport()
+{
+    d->mDestImportDir->unlink();
+    importFinished();
 }
 
-void Importer::advance() {
-	++d->mProgress;
-	d->mJobProgress = 0;
-	emitProgressChanged();
+void Importer::advance()
+{
+    ++d->mProgress;
+    d->mJobProgress = 0;
+    emitProgressChanged();
 }
 
-void Importer::slotPercent(KJob*, unsigned long percent) {
-	d->mJobProgress = percent;
-	emitProgressChanged();
+void Importer::slotPercent(KJob*, unsigned long percent)
+{
+    d->mJobProgress = percent;
+    emitProgressChanged();
 }
 
-void Importer::emitProgressChanged() {
-	progressChanged(d->mProgress * 100 + d->mJobProgress);
+void Importer::emitProgressChanged()
+{
+    progressChanged(d->mProgress * 100 + d->mJobProgress);
 }
 
-KUrl::List Importer::importedUrlList() const {
-	return d->mImportedUrlList;
+KUrl::List Importer::importedUrlList() const
+{
+    return d->mImportedUrlList;
 }
 
-KUrl::List Importer::skippedUrlList() const {
-	return d->mSkippedUrlList;
+KUrl::List Importer::skippedUrlList() const
+{
+    return d->mSkippedUrlList;
 }
 
-int Importer::renamedCount() const {
-	return d->mRenamedCount;
+int Importer::renamedCount() const
+{
+    return d->mRenamedCount;
 }
 
 } // namespace

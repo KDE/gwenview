@@ -36,72 +36,71 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 static const int RADIUS = 5;
 static const int HMARGIN = 2;
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct ToolTipWidgetPrivate {
-	QString mText;
-	qreal mOpacity;
+    QString mText;
+    qreal mOpacity;
 };
-
 
 ToolTipWidget::ToolTipWidget(QWidget* parent)
 : QWidget(parent)
-, d(new ToolTipWidgetPrivate) {
-	d->mOpacity = 1.;
-	setAutoFillBackground(true);
+, d(new ToolTipWidgetPrivate)
+{
+    d->mOpacity = 1.;
+    setAutoFillBackground(true);
 }
 
-
-ToolTipWidget::~ToolTipWidget() {
-	delete d;
+ToolTipWidget::~ToolTipWidget()
+{
+    delete d;
 }
 
-
-qreal ToolTipWidget::opacity() const {
-	return d->mOpacity;
+qreal ToolTipWidget::opacity() const
+{
+    return d->mOpacity;
 }
 
-
-void ToolTipWidget::setOpacity(qreal opacity) {
-	d->mOpacity = opacity;
-	update();
+void ToolTipWidget::setOpacity(qreal opacity)
+{
+    d->mOpacity = opacity;
+    update();
 }
 
-
-QString ToolTipWidget::text() const {
-	return d->mText;
+QString ToolTipWidget::text() const
+{
+    return d->mText;
 }
 
-
-void ToolTipWidget::setText(const QString& text) {
-	d->mText = text;
-	update();
+void ToolTipWidget::setText(const QString& text)
+{
+    d->mText = text;
+    update();
 }
 
-
-QSize ToolTipWidget::sizeHint() const {
-	QSize sh = fontMetrics().size(0 /* flags */, d->mText);
-	return QSize(sh.width() + 2 * HMARGIN, sh.height());
+QSize ToolTipWidget::sizeHint() const
+{
+    QSize sh = fontMetrics().size(0 /* flags */, d->mText);
+    return QSize(sh.width() + 2 * HMARGIN, sh.height());
 }
 
+void ToolTipWidget::paintEvent(QPaintEvent*)
+{
+    QColor bg2Color = QToolTip::palette().color(QPalette::ToolTipBase);
+    QColor bg1Color = KColorScheme::shade(bg2Color, KColorScheme::LightShade, 0.2);
 
-void ToolTipWidget::paintEvent(QPaintEvent*) {
-	QColor bg2Color = QToolTip::palette().color(QPalette::ToolTipBase);
-	QColor bg1Color = KColorScheme::shade(bg2Color, KColorScheme::LightShade, 0.2);
+    QLinearGradient gradient(QPointF(0.0, 0.0), QPointF(0.0, height()));
+    gradient.setColorAt(0.0, bg1Color);
+    gradient.setColorAt(1.0, bg2Color);
 
-	QLinearGradient gradient(QPointF(0.0, 0.0), QPointF(0.0, height()));
-	gradient.setColorAt(0.0, bg1Color);
-	gradient.setColorAt(1.0, bg2Color);
-
-	QPainter painter(this);
-	painter.setRenderHint(QPainter::Antialiasing);
-	painter.setOpacity(d->mOpacity);
-	QPainterPath path = PaintUtils::roundedRectangle(rect(), RADIUS);
-	painter.fillPath(path, gradient);
-	painter.setPen(palette().color(QPalette::ToolTipText));
-	painter.drawText(rect().adjusted(HMARGIN, 0, -HMARGIN, 0), 0 /* flags */, d->mText);
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setOpacity(d->mOpacity);
+    QPainterPath path = PaintUtils::roundedRectangle(rect(), RADIUS);
+    painter.fillPath(path, gradient);
+    painter.setPen(palette().color(QPalette::ToolTipText));
+    painter.drawText(rect().adjusted(HMARGIN, 0, -HMARGIN, 0), 0 /* flags */, d->mText);
 }
-
 
 } // namespace

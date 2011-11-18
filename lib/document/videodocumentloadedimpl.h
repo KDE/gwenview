@@ -28,26 +28,26 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include <lib/document/abstractdocumentimpl.h>
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 
 struct VideoDocumentLoadedImplPrivate;
-class VideoDocumentLoadedImpl : public AbstractDocumentImpl {
-	Q_OBJECT
+class VideoDocumentLoadedImpl : public AbstractDocumentImpl
+{
+    Q_OBJECT
 public:
-	VideoDocumentLoadedImpl(Document*);
-	~VideoDocumentLoadedImpl();
+    VideoDocumentLoadedImpl(Document*);
+    ~VideoDocumentLoadedImpl();
 
-	virtual void init();
+    virtual void init();
 
-	virtual Document::LoadingState loadingState() const;
+    virtual Document::LoadingState loadingState() const;
 
-	virtual void setImage(const QImage&);
+    virtual void setImage(const QImage&);
 
 private:
-	VideoDocumentLoadedImplPrivate* const d;
+    VideoDocumentLoadedImplPrivate* const d;
 };
-
 
 } // namespace
 

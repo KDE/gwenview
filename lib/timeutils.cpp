@@ -31,48 +31,52 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kfilemetainfo.h>
 #include <kfilemetainfoitem.h>
 
-namespace Gwenview {
+namespace Gwenview
+{
 
-namespace TimeUtils {
+namespace TimeUtils
+{
 
 struct CacheItem {
-	KDateTime fileMTime;
-	KDateTime realTime;
+    KDateTime fileMTime;
+    KDateTime realTime;
 
-	void update(const KFileItem& fileItem) {
-		KDateTime time = fileItem.time(KFileItem::ModificationTime);
-		if (fileMTime == time) {
-			return;
-		}
+    void update(const KFileItem& fileItem)
+    {
+        KDateTime time = fileItem.time(KFileItem::ModificationTime);
+        if (fileMTime == time) {
+            return;
+        }
 
-		fileMTime = time;
-		const KFileMetaInfo info = fileItem.metaInfo();
-		if (info.isValid()) {
-			const KFileMetaInfoItem& mii = info.item("http://www.semanticdesktop.org/ontologies/2007/01/19/nie#contentCreated");
-			KDateTime dt(mii.value().toDateTime(), KDateTime::LocalZone);
-			if (dt.isValid()) {
-				realTime = dt;
-				return;
-			}
-		}
+        fileMTime = time;
+        const KFileMetaInfo info = fileItem.metaInfo();
+        if (info.isValid()) {
+            const KFileMetaInfoItem& mii = info.item("http://www.semanticdesktop.org/ontologies/2007/01/19/nie#contentCreated");
+            KDateTime dt(mii.value().toDateTime(), KDateTime::LocalZone);
+            if (dt.isValid()) {
+                realTime = dt;
+                return;
+            }
+        }
 
-		realTime = time;
-	}
+        realTime = time;
+    }
 };
 
 typedef QHash<KUrl, CacheItem> Cache;
 
-KDateTime dateTimeForFileItem(const KFileItem& fileItem) {
-	static Cache cache;
-	const KUrl url = fileItem.targetUrl();
+KDateTime dateTimeForFileItem(const KFileItem& fileItem)
+{
+    static Cache cache;
+    const KUrl url = fileItem.targetUrl();
 
-	Cache::iterator it = cache.find(url);
-	if (it == cache.end()) {
-		it = cache.insert(url, CacheItem());
-	}
+    Cache::iterator it = cache.find(url);
+    if (it == cache.end()) {
+        it = cache.insert(url, CacheItem());
+    }
 
-	it.value().update(fileItem);
-	return it.value().realTime;
+    it.value().update(fileItem);
+    return it.value().realTime;
 }
 
 } // namespace
