@@ -430,16 +430,6 @@ void DocumentView::finishOpenUrl()
     }
 }
 
-void DocumentView::reset()
-{
-    d->hideLoadingIndicator();
-    if (d->mDocument) {
-        disconnect(d->mDocument.data(), 0, this, 0);
-        d->mDocument = 0;
-    }
-    d->setCurrentAdapter(new EmptyAdapter);
-}
-
 bool DocumentView::isEmpty() const
 {
     return qobject_cast<EmptyAdapter*>(d->mAdapter.data());

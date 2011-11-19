@@ -131,7 +131,6 @@ DocumentViewController::~DocumentViewController()
 
 void DocumentViewController::setView(DocumentView* view)
 {
-    Q_ASSERT(view);
     // Forget old view
     if (d->mView) {
         disconnect(d->mView, 0, this, 0);
@@ -143,6 +142,9 @@ void DocumentViewController::setView(DocumentView* view)
 
     // Connect new view
     d->mView = view;
+    if (!d->mView) {
+        return;
+    }
     connect(d->mView, SIGNAL(adapterChanged()),
             SLOT(slotAdapterChanged()));
     connect(d->mView, SIGNAL(zoomToFitChanged(bool)),

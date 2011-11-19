@@ -79,11 +79,6 @@ public:
     void loadAdapterConfig();
 
     /**
-     * Unload the current adapter, if any
-     */
-    void reset();
-
-    /**
      * Returns true if an adapter is loaded (note: adapters are also used to
      * display error messages!)
      */

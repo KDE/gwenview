@@ -673,11 +673,9 @@ void DocumentPanel::reload()
 
 void DocumentPanel::reset()
 {
-    // FIXME: Should probably delete views instead of resetting and hiding them
-    Q_FOREACH(DocumentView * view, d->mDocumentViews) {
-        view->reset();
-        view->hide();
-    }
+    d->mDocumentViewController->setView(0);
+    d->mDocumentViewContainer->reset();
+    d->mDocumentViews.clear();
 }
 
 void DocumentPanel::slotViewFocused(DocumentView* view)

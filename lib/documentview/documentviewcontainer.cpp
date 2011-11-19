@@ -66,6 +66,12 @@ struct DocumentViewContainerPrivate {
         scheduleLayoutUpdate();
         return true;
     }
+
+    void resetSet(DocumentViewSet* set)
+    {
+        qDeleteAll(*set);
+        set->clear();
+    }
 };
 
 DocumentViewContainer::DocumentViewContainer(QWidget* parent)
@@ -110,6 +116,13 @@ void DocumentViewContainer::removeView(DocumentView* view)
         return;
     }
     d->removeFromSet(view, &d->mAddedViews);
+}
+
+void DocumentViewContainer::reset()
+{
+    d->resetSet(&d->mViews);
+    d->resetSet(&d->mAddedViews);
+    d->resetSet(&d->mRemovedViews);
 }
 
 void DocumentViewContainer::showEvent(QShowEvent* event)

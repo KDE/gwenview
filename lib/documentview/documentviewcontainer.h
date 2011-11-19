@@ -57,6 +57,11 @@ public:
      */
     void removeView(DocumentView* view);
 
+    /**
+     * Immediately delete all views
+     */
+    void reset();
+
 public Q_SLOTS:
     void updateLayout();
 
