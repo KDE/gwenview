@@ -87,6 +87,10 @@ void BirdEyeView::adjustVisibleRect()
     QSizeF docSize = d->mDocView->document()->size();
     qreal viewZoom = d->mDocView->zoom();
     qreal bevZoom = size().width() / docSize.width();
+    if (qFuzzyIsNull(viewZoom) || qFuzzyIsNull(bevZoom)) {
+        // Prevent divide-by-zero crashes
+        return;
+    }
 
     d->mVisibleRect = QRectF(
                           QPointF(d->mDocView->position()) / viewZoom * bevZoom,
