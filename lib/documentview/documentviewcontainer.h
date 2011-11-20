@@ -53,9 +53,10 @@ public:
     DocumentView* createView();
 
     /**
-     * Note: this method takes ownership of the view and will delete it
+     * Delete view. Note that the view will first be faded to black before
+     * being destroyed.
      */
-    void removeView(DocumentView* view);
+    void deleteView(DocumentView* view);
 
     /**
      * Immediately delete all views

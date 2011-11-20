@@ -55,6 +55,10 @@ struct DocumentViewContainerPrivate {
         mLayoutUpdateTimer->start();
     }
 
+    /**
+     * Remove view from set, move it to mRemovedViews so that it is later
+     * deleted.
+     */
     bool removeFromSet(DocumentView* view, DocumentViewSet* set)
     {
         DocumentViewSet::Iterator it = set->find(view);
@@ -110,7 +114,7 @@ DocumentView* DocumentViewContainer::createView()
     return view;
 }
 
-void DocumentViewContainer::removeView(DocumentView* view)
+void DocumentViewContainer::deleteView(DocumentView* view)
 {
     if (d->removeFromSet(view, &d->mViews)) {
         return;
