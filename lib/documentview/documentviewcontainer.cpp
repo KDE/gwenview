@@ -66,7 +66,7 @@ struct DocumentViewContainerPrivate {
             return false;
         }
         set->erase(it);
-        mRemovedViews << *it;
+        mRemovedViews << view;
         scheduleLayoutUpdate();
         return true;
     }
