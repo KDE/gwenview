@@ -218,6 +218,8 @@ private:
 
 	ThumbnailThread mThumbnailThread;
 
+	QStringList mPreviewPlugins;
+
 	void determineNextIcon();
 	void startCreatingThumbnail(const QString& path);
 

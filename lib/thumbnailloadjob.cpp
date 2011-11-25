@@ -667,7 +667,10 @@ void ThumbnailLoadJob::checkThumbnail() {
 		KFileItemList list;
 		list.append(mCurrentItem);
 		const int pixelSize = ThumbnailGroup::pixelSize(mThumbnailGroup);
-		KIO::Job* job = KIO::filePreview(list, QSize(pixelSize, pixelSize));
+		if (mPreviewPlugins.isEmpty()) {
+			mPreviewPlugins = KIO::PreviewJob::availablePlugins();
+		}
+		KIO::Job* job = KIO::filePreview(list, QSize(pixelSize, pixelSize), &mPreviewPlugins);
 		//job->ui()->setWindow(KApplication::kApplication()->activeWindow());
 		connect(job, SIGNAL(gotPreview(const KFileItem&, const QPixmap&)),
 			this, SLOT(slotGotPreview(const KFileItem&, const QPixmap&)) );
