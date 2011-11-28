@@ -39,6 +39,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 class QImage;
 class QRect;
 class QSize;
+class QSvgRenderer;
 class QUndoStack;
 
 class KJob;
@@ -164,6 +165,12 @@ public:
      * available.
      */
     QByteArray rawData() const;
+
+    /**
+     * Returns a QSvgRenderer which can be used to render this document if it is
+     * an SVG image. Returns a NULL pointer otherwise.
+     */
+    QSvgRenderer* svgRenderer() const;
 
     /**
      * Returns true if the image can be edited.

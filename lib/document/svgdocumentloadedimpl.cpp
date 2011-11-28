@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "svgdocumentloadedimpl.moc"
 
 // Qt
+#include <QSvgRenderer>
 
 // KDE
 #include <kdebug.h>
@@ -33,6 +34,7 @@ namespace Gwenview
 
 struct SvgDocumentLoadedImplPrivate {
     QByteArray mRawData;
+    QSvgRenderer* mRenderer;
 };
 
 SvgDocumentLoadedImpl::SvgDocumentLoadedImpl(Document* document, const QByteArray& data)
@@ -40,6 +42,7 @@ SvgDocumentLoadedImpl::SvgDocumentLoadedImpl(Document* document, const QByteArra
 , d(new SvgDocumentLoadedImplPrivate)
 {
     d->mRawData = data;
+    d->mRenderer = new QSvgRenderer(this);
 }
 
 SvgDocumentLoadedImpl::~SvgDocumentLoadedImpl()
@@ -49,6 +52,8 @@ SvgDocumentLoadedImpl::~SvgDocumentLoadedImpl()
 
 void SvgDocumentLoadedImpl::init()
 {
+    d->mRenderer->load(d->mRawData);
+    setDocumentImageSize(d->mRenderer->defaultSize());
     emit loaded();
 }
 
@@ -65,6 +70,11 @@ void SvgDocumentLoadedImpl::setImage(const QImage&)
 QByteArray SvgDocumentLoadedImpl::rawData() const
 {
     return d->mRawData;
+}
+
+QSvgRenderer* SvgDocumentLoadedImpl::svgRenderer() const
+{
+    return d->mRenderer;
 }
 
 } // namespace

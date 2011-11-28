@@ -49,8 +49,11 @@ SvgImageView::SvgImageView(QGraphicsItem* parent)
 
 void SvgImageView::loadFromDocument()
 {
-    QSvgRenderer* renderer = new QSvgRenderer(this);
-    renderer->load(document()->rawData());
+    QSvgRenderer* renderer = document()->svgRenderer();
+    if (!renderer) {
+        kWarning() << "No SVG renderer. This should not happen!";
+        return;
+    }
     mSvgItem->setSharedRenderer(renderer);
 }
 

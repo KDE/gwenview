@@ -83,6 +83,10 @@ public:
 
     Document* document() const;
 
+    virtual QSvgRenderer* svgRenderer() const {
+        return 0;
+    }
+
 Q_SIGNALS:
     void imageRectUpdated(const QRect&);
     void metaInfoLoaded();

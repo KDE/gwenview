@@ -47,6 +47,8 @@ public:
 
     QByteArray rawData() const;
 
+    QSvgRenderer* svgRenderer() const;
+
 private:
     SvgDocumentLoadedImplPrivate* const d;
 };
