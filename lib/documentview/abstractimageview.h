@@ -61,7 +61,7 @@ public:
 
     qreal computeZoomToFit() const;
 
-    virtual QSizeF documentSize() const;
+    QSizeF documentSize() const;
 
     QSizeF visibleImageSize() const;
 

@@ -57,11 +57,6 @@ void SvgImageView::loadFromDocument()
     mSvgItem->setSharedRenderer(renderer);
 }
 
-QSizeF SvgImageView::documentSize() const
-{
-    return mSvgItem->renderer()->defaultSize();
-}
-
 void SvgImageView::onZoomChanged()
 {
     mSvgItem->setScale(zoom());

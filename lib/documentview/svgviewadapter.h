@@ -43,8 +43,6 @@ class SvgImageView : public AbstractImageView
 public:
     SvgImageView(QGraphicsItem* parent = 0);
 
-    QSizeF documentSize() const;
-
 protected:
     void loadFromDocument();
     void onZoomChanged();
