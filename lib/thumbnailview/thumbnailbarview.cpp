@@ -67,7 +67,7 @@ struct ThumbnailBarItemDelegatePrivate {
     typedef QMap<int, QPixmap> ShadowCache;
     mutable ShadowCache mShadowCache;
 
-    ThumbnailBarItemDelegate* mDelegate;
+    ThumbnailBarItemDelegate* q;
     ThumbnailView* mView;
     ContextBarButton* mToggleSelectionButton;
 
@@ -78,7 +78,7 @@ struct ThumbnailBarItemDelegatePrivate {
     {
         mToggleSelectionButton = new ContextBarButton("list-add", mView->viewport());
         mToggleSelectionButton->hide();
-        QObject::connect(mToggleSelectionButton, SIGNAL(clicked(bool)), mDelegate, SLOT(toggleSelection()));
+        QObject::connect(mToggleSelectionButton, SIGNAL(clicked(bool)), q, SLOT(toggleSelection()));
     }
 
     void showToolTip(QHelpEvent* helpEvent)
@@ -144,7 +144,7 @@ ThumbnailBarItemDelegate::ThumbnailBarItemDelegate(ThumbnailView* view)
 : QAbstractItemDelegate(view)
 , d(new ThumbnailBarItemDelegatePrivate)
 {
-    d->mDelegate = this;
+    d->q = this;
     d->mView = view;
     d->setupToggleSelectionButton();
     view->viewport()->installEventFilter(this);

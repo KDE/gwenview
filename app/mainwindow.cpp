@@ -140,7 +140,7 @@ struct MainWindowState {
 
 struct MainWindow::Private {
     GvCore* mGvCore;
-    MainWindow* mWindow;
+    MainWindow* q;
     QSplitter* mCentralSplitter;
     QWidget* mContentWidget;
     DocumentPanel* mDocumentPanel;
@@ -195,18 +195,18 @@ struct MainWindow::Private {
 
     void setupWidgets()
     {
-        mCentralSplitter = new Splitter(Qt::Horizontal, mWindow);
-        mWindow->setCentralWidget(mCentralSplitter);
+        mCentralSplitter = new Splitter(Qt::Horizontal, q);
+        q->setCentralWidget(mCentralSplitter);
 
         // Left side of splitter
         mSideBar = new SideBar(mCentralSplitter);
         EventWatcher::install(mSideBar, QList<QEvent::Type>() << QEvent::Show << QEvent::Hide,
-                              mWindow, SLOT(updateToggleSideBarAction()));
+                              q, SLOT(updateToggleSideBarAction()));
 
         // Right side of splitter
         mContentWidget = new QWidget(mCentralSplitter);
 
-        mSaveBar = new SaveBar(mContentWidget, mWindow->actionCollection());
+        mSaveBar = new SaveBar(mContentWidget, q->actionCollection());
         mViewStackedWidget = new QStackedWidget(mContentWidget);
         QVBoxLayout* layout = new QVBoxLayout(mContentWidget);
         layout->addWidget(mSaveBar);
@@ -216,7 +216,7 @@ struct MainWindow::Private {
         ////
 
         mStartSlideShowWhenDirListerCompleted = false;
-        mSlideShow = new SlideShow(mWindow);
+        mSlideShow = new SlideShow(q);
 
         setupThumbnailView(mViewStackedWidget);
         setupDocumentPanel(mViewStackedWidget);
@@ -232,15 +232,15 @@ struct MainWindow::Private {
         connect(mSaveBar, SIGNAL(requestSaveAll()),
                 mGvCore, SLOT(saveAll()));
         connect(mSaveBar, SIGNAL(goToUrl(KUrl)),
-                mWindow, SLOT(goToUrl(KUrl)));
+                q, SLOT(goToUrl(KUrl)));
 
         connect(mSlideShow, SIGNAL(goToUrl(KUrl)),
-                mWindow, SLOT(goToUrl(KUrl)));
+                q, SLOT(goToUrl(KUrl)));
     }
 
     void setupThumbnailView(QWidget* parent)
     {
-        mThumbnailViewPanel = new ThumbnailViewPanel(parent, mDirModel, mWindow->actionCollection());
+        mThumbnailViewPanel = new ThumbnailViewPanel(parent, mDirModel, q->actionCollection());
 
         mThumbnailView = mThumbnailViewPanel->thumbnailView();
         mUrlNavigator = mThumbnailViewPanel->urlNavigator();
@@ -252,14 +252,14 @@ struct MainWindow::Private {
         mDocumentInfoProvider = new DocumentInfoProvider(mDirModel);
         mThumbnailView->setDocumentInfoProvider(mDocumentInfoProvider);
 
-        mThumbnailViewHelper = new ThumbnailViewHelper(mDirModel, mWindow->actionCollection());
+        mThumbnailViewHelper = new ThumbnailViewHelper(mDirModel, q->actionCollection());
         mThumbnailView->setThumbnailViewHelper(mThumbnailViewHelper);
 
         // Connect thumbnail view
         connect(mThumbnailView, SIGNAL(indexActivated(QModelIndex)),
-                mWindow, SLOT(slotThumbnailViewIndexActivated(QModelIndex)));
+                q, SLOT(slotThumbnailViewIndexActivated(QModelIndex)));
         connect(mThumbnailView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
-                mWindow, SLOT(slotSelectionChanged()));
+                q, SLOT(slotSelectionChanged()));
 
         // Connect delegate
         QAbstractItemDelegate* delegate = mThumbnailView->itemDelegate();
@@ -270,26 +270,26 @@ struct MainWindow::Private {
         connect(delegate, SIGNAL(rotateDocumentRightRequested(KUrl)),
                 mGvCore, SLOT(rotateRight(KUrl)));
         connect(delegate, SIGNAL(showDocumentInFullScreenRequested(KUrl)),
-                mWindow, SLOT(showDocumentInFullScreen(KUrl)));
+                q, SLOT(showDocumentInFullScreen(KUrl)));
         connect(delegate, SIGNAL(setDocumentRatingRequested(KUrl, int)),
                 mGvCore, SLOT(setRating(KUrl, int)));
 
         // Connect url navigator
         connect(mUrlNavigator, SIGNAL(urlChanged(KUrl)),
-                mWindow, SLOT(openDirUrl(KUrl)));
+                q, SLOT(openDirUrl(KUrl)));
     }
 
     void setupDocumentPanel(QWidget* parent)
     {
-        mDocumentPanel = new DocumentPanel(parent, mSlideShow, mWindow->actionCollection());
+        mDocumentPanel = new DocumentPanel(parent, mSlideShow, q->actionCollection());
         connect(mDocumentPanel, SIGNAL(captionUpdateRequested(QString)),
-                mWindow, SLOT(setCaption(QString)));
+                q, SLOT(setCaption(QString)));
         connect(mDocumentPanel, SIGNAL(completed()),
-                mWindow, SLOT(slotPartCompleted()));
+                q, SLOT(slotPartCompleted()));
         connect(mDocumentPanel, SIGNAL(previousImageRequested()),
-                mWindow, SLOT(goToPrevious()));
+                q, SLOT(goToPrevious()));
         connect(mDocumentPanel, SIGNAL(nextImageRequested()),
-                mWindow, SLOT(goToNext()));
+                q, SLOT(goToNext()));
 
         ThumbnailView* bar = mDocumentPanel->thumbnailBar();
         bar->setModel(mDirModel);
@@ -302,22 +302,22 @@ struct MainWindow::Private {
     {
         mStartPage = new StartPage(parent, mGvCore);
         connect(mStartPage, SIGNAL(urlSelected(KUrl)),
-                mWindow, SLOT(slotStartPageUrlSelected(KUrl)));
+                q, SLOT(slotStartPageUrlSelected(KUrl)));
     }
 
     void setupActions()
     {
-        KActionCollection* actionCollection = mWindow->actionCollection();
+        KActionCollection* actionCollection = q->actionCollection();
         KActionCategory* file = new KActionCategory(i18nc("@title actions category", "File"), actionCollection);
         KActionCategory* view = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface", "View"), actionCollection);
 
-        file->addAction(KStandardAction::Save, mWindow, SLOT(saveCurrent()));
-        file->addAction(KStandardAction::SaveAs, mWindow, SLOT(saveCurrentAs()));
-        file->addAction(KStandardAction::Open, mWindow, SLOT(openFile()));
-        file->addAction(KStandardAction::Print, mWindow, SLOT(print()));
+        file->addAction(KStandardAction::Save, q, SLOT(saveCurrent()));
+        file->addAction(KStandardAction::SaveAs, q, SLOT(saveCurrentAs()));
+        file->addAction(KStandardAction::Open, q, SLOT(openFile()));
+        file->addAction(KStandardAction::Print, q, SLOT(print()));
         file->addAction(KStandardAction::Quit, KApplication::kApplication(), SLOT(closeAllWindows()));
 
-        KAction* action = file->addAction("reload", mWindow, SLOT(reload()));
+        KAction* action = file->addAction("reload", q, SLOT(reload()));
         action->setText(i18nc("@action reload the currently viewed image", "Reload"));
         action->setIcon(KIcon("view-refresh"));
         action->setShortcut(Qt::Key_F5);
@@ -332,53 +332,53 @@ struct MainWindow::Private {
         mViewAction->setIcon(KIcon("view-preview"));
         mViewAction->setCheckable(true);
 
-        mViewModeActionGroup = new QActionGroup(mWindow);
+        mViewModeActionGroup = new QActionGroup(q);
         mViewModeActionGroup->addAction(mBrowseAction);
         mViewModeActionGroup->addAction(mViewAction);
 
         connect(mViewModeActionGroup, SIGNAL(triggered(QAction*)),
-                mWindow, SLOT(setActiveViewModeAction(QAction*)));
+                q, SLOT(setActiveViewModeAction(QAction*)));
 
-        mFullScreenAction = static_cast<KToggleFullScreenAction*>(view->addAction(KStandardAction::FullScreen, mWindow, SLOT(toggleFullScreen(bool))));
+        mFullScreenAction = static_cast<KToggleFullScreenAction*>(view->addAction(KStandardAction::FullScreen, q, SLOT(toggleFullScreen(bool))));
         connect(mDocumentPanel, SIGNAL(toggleFullScreenRequested()),
                 mFullScreenAction, SLOT(trigger()));
 
-        KAction* reduceLodAction = view->addAction("reduce_lod", mWindow, SLOT(reduceLevelOfDetails()));
+        KAction* reduceLodAction = view->addAction("reduce_lod", q, SLOT(reduceLevelOfDetails()));
         // FIXME Find a better text for this action
         reduceLodAction->setText(i18nc("@action Go back to a more general page (start page <- list <- image)", "Back"));
         reduceLodAction->setShortcut(Qt::Key_Escape);
 
-        mGoToPreviousAction = view->addAction("go_previous", mWindow, SLOT(goToPrevious()));
+        mGoToPreviousAction = view->addAction("go_previous", q, SLOT(goToPrevious()));
         mGoToPreviousAction->setIcon(KIcon("media-skip-backward"));
         mGoToPreviousAction->setText(i18nc("@action Go to previous image", "Previous"));
         mGoToPreviousAction->setToolTip(i18n("Go to Previous Image"));
         mGoToPreviousAction->setShortcut(Qt::Key_Backspace);
 
-        mGoToNextAction = view->addAction("go_next", mWindow, SLOT(goToNext()));
+        mGoToNextAction = view->addAction("go_next", q, SLOT(goToNext()));
         mGoToNextAction->setIcon(KIcon("media-skip-forward"));
         mGoToNextAction->setText(i18nc("@action Go to next image", "Next"));
         mGoToNextAction->setToolTip(i18n("Go to Next Image"));
         mGoToNextAction->setShortcut(Qt::Key_Space);
 
-        mGoToFirstAction = view->addAction("go_first", mWindow, SLOT(goToFirst()));
+        mGoToFirstAction = view->addAction("go_first", q, SLOT(goToFirst()));
         mGoToFirstAction->setText(i18nc("@action Go to first image", "First"));
         mGoToFirstAction->setToolTip(i18n("Go to First Image"));
         mGoToFirstAction->setShortcut(Qt::Key_Home);
 
-        mGoToLastAction = view->addAction("go_last", mWindow, SLOT(goToLast()));
+        mGoToLastAction = view->addAction("go_last", q, SLOT(goToLast()));
         mGoToLastAction->setText(i18nc("@action Go to last image", "Last"));
         mGoToLastAction->setToolTip(i18n("Go to Last Image"));
         mGoToLastAction->setShortcut(Qt::Key_End);
 
-        mGoUpAction = view->addAction(KStandardAction::Up, mWindow, SLOT(goUp()));
+        mGoUpAction = view->addAction(KStandardAction::Up, q, SLOT(goUp()));
 
-        action = view->addAction("go_start_page", mWindow, SLOT(showStartPage()));
+        action = view->addAction("go_start_page", q, SLOT(showStartPage()));
         action->setIcon(KIcon("go-home"));
         action->setText(i18nc("@action", "Start Page"));
 
         mToggleSideBarAction = view->add<KToggleAction>("toggle_sidebar");
         connect(mToggleSideBarAction, SIGNAL(toggled(bool)),
-                mWindow, SLOT(toggleSideBar(bool)));
+                q, SLOT(toggleSideBar(bool)));
         mToggleSideBarAction->setIcon(KIcon("view-sidetree"));
         mToggleSideBarAction->setShortcut(Qt::Key_F11);
         mToggleSideBarAction->setText(i18nc("@action", "Sidebar"));
@@ -387,24 +387,24 @@ struct MainWindow::Private {
         connect(mDocumentPanel->toggleSideBarButton(), SIGNAL(clicked()),
                 mToggleSideBarAction, SLOT(trigger()));
 
-        mToggleSlideShowAction = view->addAction("toggle_slideshow", mWindow, SLOT(toggleSlideShow()));
-        mWindow->updateSlideShowAction();
+        mToggleSlideShowAction = view->addAction("toggle_slideshow", q, SLOT(toggleSlideShow()));
+        q->updateSlideShowAction();
         connect(mSlideShow, SIGNAL(stateChanged(bool)),
-                mWindow, SLOT(updateSlideShowAction()));
+                q, SLOT(updateSlideShowAction()));
 
-        mShowMenuBarAction = static_cast<KToggleAction*>(view->addAction(KStandardAction::ShowMenubar, mWindow, SLOT(toggleMenuBar())));
+        mShowMenuBarAction = static_cast<KToggleAction*>(view->addAction(KStandardAction::ShowMenubar, q, SLOT(toggleMenuBar())));
 
-        view->addAction(KStandardAction::KeyBindings, mWindow->guiFactory(),
+        view->addAction(KStandardAction::KeyBindings, q->guiFactory(),
                         SLOT(configureShortcuts()));
 
-        view->addAction(KStandardAction::Preferences, mWindow,
+        view->addAction(KStandardAction::Preferences, q,
                         SLOT(showConfigDialog()));
 
-        view->addAction(KStandardAction::ConfigureToolbars, mWindow,
+        view->addAction(KStandardAction::ConfigureToolbars, q,
                         SLOT(configureToolbars()));
 
 #ifdef KIPI_FOUND
-        mKIPIExportAction = new KIPIExportAction(mWindow);
+        mKIPIExportAction = new KIPIExportAction(q);
         actionCollection->addAction("kipi_export", mKIPIExportAction);
 #endif
     }
@@ -415,7 +415,7 @@ struct MainWindow::Private {
         // does the same as KUndoStack, but for the KUndoGroup actions.
         QUndoGroup* undoGroup = DocumentFactory::instance()->undoGroup();
         QAction* action;
-        KActionCollection* actionCollection =  mWindow->actionCollection();
+        KActionCollection* actionCollection =  q->actionCollection();
         KActionCategory* edit = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface", "Edit"), actionCollection);
 
         action = undoGroup->createRedoAction(actionCollection);
@@ -435,15 +435,15 @@ struct MainWindow::Private {
 
     void setupContextManager()
     {
-        KActionCollection* actionCollection = mWindow->actionCollection();
+        KActionCollection* actionCollection = q->actionCollection();
 
-        mContextManager = new ContextManager(mDirModel, mThumbnailView->selectionModel(), mWindow);
+        mContextManager = new ContextManager(mDirModel, mThumbnailView->selectionModel(), q);
 
         // Create context manager items
         FolderViewContextManagerItem* folderViewItem = new FolderViewContextManagerItem(mContextManager);
         mContextManager->addItem(folderViewItem);
         connect(folderViewItem, SIGNAL(urlChanged(KUrl)),
-                mWindow, SLOT(openDirUrl(KUrl)));
+                q, SLOT(openDirUrl(KUrl)));
 
         InfoContextManagerItem* infoItem = new InfoContextManagerItem(mContextManager);
         mContextManager->addItem(infoItem);
@@ -466,10 +466,10 @@ struct MainWindow::Private {
 #endif
 
         ImageOpsContextManagerItem* imageOpsItem =
-            new ImageOpsContextManagerItem(mContextManager, mWindow);
+            new ImageOpsContextManagerItem(mContextManager, q);
         mContextManager->addItem(imageOpsItem);
 
-        FileOpsContextManagerItem* fileOpsItem = new FileOpsContextManagerItem(mContextManager, mThumbnailView, actionCollection, mWindow);
+        FileOpsContextManagerItem* fileOpsItem = new FileOpsContextManagerItem(mContextManager, mThumbnailView, actionCollection, q);
         mContextManager->addItem(fileOpsItem);
 
         // Fill sidebar
@@ -508,15 +508,15 @@ struct MainWindow::Private {
         setDirModelShowDirs(true);
 
         connect(mDirModel, SIGNAL(rowsInserted(QModelIndex, int, int)),
-                mWindow, SLOT(slotDirModelNewItems()));
+                q, SLOT(slotDirModelNewItems()));
 
         connect(mDirModel, SIGNAL(rowsRemoved(QModelIndex, int, int)),
-                mWindow, SLOT(updatePreviousNextActions()));
+                q, SLOT(updatePreviousNextActions()));
         connect(mDirModel, SIGNAL(modelReset()),
-                mWindow, SLOT(updatePreviousNextActions()));
+                q, SLOT(updatePreviousNextActions()));
 
         connect(mDirModel->dirLister(), SIGNAL(completed()),
-                mWindow, SLOT(slotDirListerCompleted()));
+                q, SLOT(slotDirListerCompleted()));
     }
 
     void setDirModelShowDirs(bool showDirs)
@@ -595,7 +595,7 @@ struct MainWindow::Private {
     {
         mFullScreenBar = new FullScreenBar(mDocumentPanel);
         mFullScreenContent = new FullScreenContent(
-            mFullScreenBar, mWindow->actionCollection(), mSlideShow);
+            mFullScreenBar, q->actionCollection(), mSlideShow);
 
         ThumbnailBarView* view = mFullScreenContent->thumbnailBar();
         view->setModel(mDirModel);
@@ -606,7 +606,7 @@ struct MainWindow::Private {
 
     inline void setActionEnabled(const char* name, bool enabled)
     {
-        QAction* action = mWindow->actionCollection()->action(name);
+        QAction* action = q->actionCollection()->action(name);
         if (action) {
             action->setEnabled(enabled);
         } else {
@@ -641,7 +641,7 @@ struct MainWindow::Private {
         const KUrl url = currentUrl();
 
         if (url.isValid()) {
-            isRasterImage = mWindow->currentDocumentIsRasterImage();
+            isRasterImage = q->currentDocumentIsRasterImage();
             canSave = isRasterImage;
             isModified = DocumentFactory::instance()->load(url)->isModified();
             if (mCurrentPageId != ViewPageId) {
@@ -654,7 +654,7 @@ struct MainWindow::Private {
             }
         }
 
-        KActionCollection* actionCollection = mWindow->actionCollection();
+        KActionCollection* actionCollection = q->actionCollection();
         actionCollection->action("file_save")->setEnabled(canSave && isModified);
         actionCollection->action("file_save_as")->setEnabled(canSave);
         actionCollection->action("file_print")->setEnabled(isRasterImage);
@@ -777,7 +777,7 @@ struct MainWindow::Private {
         // Always delete mNotificationRestrictions, it does not hurt
         delete mNotificationRestrictions;
         if (!enabled) {
-            mNotificationRestrictions = new KNotificationRestrictions(KNotificationRestrictions::ScreenSaver, mWindow);
+            mNotificationRestrictions = new KNotificationRestrictions(KNotificationRestrictions::ScreenSaver, q);
         } else {
             mNotificationRestrictions = 0;
         }
@@ -788,7 +788,7 @@ MainWindow::MainWindow()
 : KXmlGuiWindow(),
       d(new MainWindow::Private)
 {
-    d->mWindow = this;
+    d->q = this;
     d->mCurrentPageId = StartPageId;
     d->mDistractionFreeMode = false;
     d->mDirModel = new SortedDirModel(this);

@@ -73,7 +73,7 @@ namespace Gwenview
 const int HEADER_SIZE = 256;
 
 struct LoadingDocumentImplPrivate {
-    LoadingDocumentImpl* mImpl;
+    LoadingDocumentImpl* q;
     QPointer<KIO::TransferJob> mTransferJob;
     QFuture<bool> mMetaInfoFuture;
     QFutureWatcher<bool> mMetaInfoFutureWatcher;
@@ -102,7 +102,7 @@ struct LoadingDocumentImplPrivate {
     bool determineKind()
     {
         QString mimeType;
-        const KUrl& url = mImpl->document()->url();
+        const KUrl& url = q->document()->url();
         if (KProtocolInfo::determineMimetypeFromExtension(url.protocol())) {
             mimeType = KMimeType::findByNameAndContent(url.fileName(), mData)->name();
         } else {
@@ -111,7 +111,7 @@ struct LoadingDocumentImplPrivate {
         MimeTypeUtils::Kind kind = MimeTypeUtils::mimeTypeKind(mimeType);
         LOG("mimeType:" << mimeType);
         LOG("kind:" << kind);
-        mImpl->setDocumentKind(kind);
+        q->setDocumentKind(kind);
 
         switch (kind) {
         case MimeTypeUtils::KIND_RASTER_IMAGE:
@@ -119,15 +119,15 @@ struct LoadingDocumentImplPrivate {
             return false;
 
         case MimeTypeUtils::KIND_VIDEO:
-            mImpl->switchToImpl(new VideoDocumentLoadedImpl(mImpl->document()));
+            q->switchToImpl(new VideoDocumentLoadedImpl(q->document()));
             return true;
 
         default:
-            mImpl->setDocumentErrorString(
+            q->setDocumentErrorString(
                 i18nc("@info", "Gwenview cannot display documents of type %1.", mimeType)
             );
-            emit mImpl->loadingFailed();
-            mImpl->switchToImpl(new EmptyDocumentImpl(mImpl->document()));
+            emit q->loadingFailed();
+            q->switchToImpl(new EmptyDocumentImpl(q->document()));
             return true;
         }
     }
@@ -136,14 +136,14 @@ struct LoadingDocumentImplPrivate {
     {
         Q_ASSERT(!mMetaInfoLoaded);
 
-        switch (mImpl->document()->kind()) {
+        switch (q->document()->kind()) {
         case MimeTypeUtils::KIND_RASTER_IMAGE:
             mMetaInfoFuture = QtConcurrent::run(this, &LoadingDocumentImplPrivate::loadMetaInfo);
             mMetaInfoFutureWatcher.setFuture(mMetaInfoFuture);
             break;
 
         case MimeTypeUtils::KIND_SVG_IMAGE:
-            mImpl->switchToImpl(new SvgDocumentLoadedImpl(mImpl->document(), mData));
+            q->switchToImpl(new SvgDocumentLoadedImpl(q->document(), mData));
             break;
 
         case MimeTypeUtils::KIND_VIDEO:
@@ -253,7 +253,7 @@ struct LoadingDocumentImplPrivate {
                 LOG("Really an animated image (more than one frame)");
                 mAnimated = true;
             } else {
-                kWarning() << mImpl->document()->url() << "is not really an animated image (only one frame)";
+                kWarning() << q->document()->url() << "is not really an animated image (only one frame)";
             }
         }
     }
@@ -263,7 +263,7 @@ LoadingDocumentImpl::LoadingDocumentImpl(Document* document)
 : AbstractDocumentImpl(document)
 , d(new LoadingDocumentImplPrivate)
 {
-    d->mImpl = this;
+    d->q = this;
     d->mMetaInfoLoaded = false;
     d->mAnimated = false;
     d->mDownSampledImageLoaded = false;

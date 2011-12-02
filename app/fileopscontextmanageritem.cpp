@@ -59,7 +59,7 @@ namespace Gwenview
 {
 
 struct FileOpsContextManagerItemPrivate {
-    FileOpsContextManagerItem* mContextManagerItem;
+    FileOpsContextManagerItem* q;
     QListView* mThumbnailView;
     KXMLGUIClient* mXMLGUIClient;
     SideBarGroup* mGroup;
@@ -84,11 +84,11 @@ struct FileOpsContextManagerItemPrivate {
     KUrl::List urlList() const {
         KUrl::List urlList;
 
-        KFileItemList list = mContextManagerItem->contextManager()->selectedFileItemList();
+        KFileItemList list = q->contextManager()->selectedFileItemList();
         if (list.count() > 0) {
             urlList = list.urlList();
         } else {
-            KUrl url = mContextManagerItem->contextManager()->currentUrl();
+            KUrl url = q->contextManager()->currentUrl();
             Q_ASSERT(url.isValid());
             urlList << url;
         }
@@ -102,7 +102,7 @@ struct FileOpsContextManagerItemPrivate {
 
         // Get list of all distinct mimetypes in selection
         QStringList mimeTypes;
-        Q_FOREACH(const KFileItem & item, mContextManagerItem->contextManager()->selectedFileItemList()) {
+        Q_FOREACH(const KFileItem & item, q->contextManager()->selectedFileItemList()) {
             const QString mimeType = item.mimetype();
             if (!mimeTypes.contains(mimeType)) {
                 mimeTypes << mimeType;
@@ -131,7 +131,7 @@ struct FileOpsContextManagerItemPrivate {
     QMimeData* selectionMimeData()
     {
         QMimeData* mimeData = new QMimeData;
-        KFileItemList list = mContextManagerItem->contextManager()->selectedFileItemList();
+        KFileItemList list = q->contextManager()->selectedFileItemList();
         list.urlList().populateMimeData(mimeData);
         return mimeData;
     }
@@ -139,11 +139,11 @@ struct FileOpsContextManagerItemPrivate {
     KUrl pasteTargetUrl() const {
         // If only one folder is selected, paste inside it, otherwise paste in
         // current
-        KFileItemList list = mContextManagerItem->contextManager()->selectedFileItemList();
+        KFileItemList list = q->contextManager()->selectedFileItemList();
         if (list.count() == 1 && list.first().isDir()) {
             return list.first().url();
         } else {
-            return mContextManagerItem->contextManager()->currentDirUrl();
+            return q->contextManager()->currentDirUrl();
         }
     }
 };
@@ -159,7 +159,7 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, QL
 : AbstractContextManagerItem(manager)
 , d(new FileOpsContextManagerItemPrivate)
 {
-    d->mContextManagerItem = this;
+    d->q = this;
     d->mThumbnailView = thumbnailView;
     d->mXMLGUIClient = client;
     d->mGroup = new SideBarGroup(i18n("File Operations"));

@@ -53,7 +53,7 @@ struct RedEyeReductionHud : public QWidget, public Ui_RedEyeReductionHud {
 };
 
 struct RedEyeReductionToolPrivate {
-    RedEyeReductionTool* mRedEyeReductionTool;
+    RedEyeReductionTool* q;
     RedEyeReductionTool::Status mStatus;
     QPointF mCenter;
     int mDiameter;
@@ -74,9 +74,9 @@ struct RedEyeReductionToolPrivate {
 
         hud->diameterSpinBox->setValue(mDiameter);
         QObject::connect(hud->applyButton, SIGNAL(clicked()),
-                         mRedEyeReductionTool, SLOT(slotApplyClicked()));
+                         q, SLOT(slotApplyClicked()));
         QObject::connect(hud->diameterSpinBox, SIGNAL(valueChanged(int)),
-                         mRedEyeReductionTool, SLOT(setDiameter(int)));
+                         q, SLOT(setDiameter(int)));
 
         createHudWidgetForWidget(hud);
     }
@@ -84,11 +84,11 @@ struct RedEyeReductionToolPrivate {
     void createHudWidgetForWidget(QWidget* widget)
     {
         mHudWidget->deleteLater();
-        mHudWidget = new GraphicsHudWidget(mRedEyeReductionTool->imageView());
+        mHudWidget = new GraphicsHudWidget(q->imageView());
         mHudWidget->init(widget, GraphicsHudWidget::OptionCloseButton);
         mHudWidget->adjustSize();
         QObject::connect(mHudWidget, SIGNAL(closed()),
-                         mRedEyeReductionTool, SIGNAL(done()));
+                         q, SIGNAL(done()));
         mFloater->setChildWidget(mHudWidget);
     }
 
@@ -109,7 +109,7 @@ RedEyeReductionTool::RedEyeReductionTool(RasterImageView* view)
 : AbstractRasterImageViewTool(view)
 , d(new RedEyeReductionToolPrivate)
 {
-    d->mRedEyeReductionTool = this;
+    d->q = this;
     d->mDiameter = GwenviewConfig::redEyeReductionDiameter();
     d->mStatus = NotSet;
     d->mHudWidget = 0;

@@ -178,14 +178,14 @@ private:
 
 struct ImageMetaInfoModelPrivate {
     QVector<MetaInfoGroup*> mMetaInfoGroupVector;
-    ImageMetaInfoModel* mModel;
+    ImageMetaInfoModel* q;
 
     void clearGroup(MetaInfoGroup* group, const QModelIndex& parent)
     {
         if (group->size() > 0) {
-            mModel->beginRemoveRows(parent, 0, group->size() - 1);
+            q->beginRemoveRows(parent, 0, group->size() - 1);
             group->clear();
-            mModel->endRemoveRows();
+            q->endRemoveRows();
         }
     }
 
@@ -198,9 +198,9 @@ struct ImageMetaInfoModelPrivate {
             return;
         }
         group->setValueForKeyAt(entryRow, value);
-        QModelIndex groupIndex = mModel->index(groupRow, 0);
-        QModelIndex entryIndex = mModel->index(entryRow, 1, groupIndex);
-        emit mModel->dataChanged(entryIndex, entryIndex);
+        QModelIndex groupIndex = q->index(groupRow, 0);
+        QModelIndex entryIndex = q->index(entryRow, 1, groupIndex);
+        emit q->dataChanged(entryIndex, entryIndex);
     }
 
     QVariant displayData(const QModelIndex& index) const {
@@ -267,18 +267,18 @@ struct ImageMetaInfoModelPrivate {
             }
         }
 
-        mModel->beginInsertRows(parent, 0, hash.size() - 1);
+        q->beginInsertRows(parent, 0, hash.size() - 1);
         Q_FOREACH(MetaInfoGroup::Entry * entry, hash) {
             group->addEntry(entry);
         }
-        mModel->endInsertRows();
+        q->endInsertRows();
     }
 };
 
 ImageMetaInfoModel::ImageMetaInfoModel()
 : d(new ImageMetaInfoModelPrivate)
 {
-    d->mModel = this;
+    d->q = this;
     d->mMetaInfoGroupVector.resize(4);
     d->mMetaInfoGroupVector[GeneralGroup] = new MetaInfoGroup(i18nc("@title:group General info about the image", "General"));
     d->mMetaInfoGroupVector[ExifGroup] = new MetaInfoGroup("EXIF");
