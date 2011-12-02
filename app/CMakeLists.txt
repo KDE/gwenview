@@ -37,7 +37,7 @@ set(gwenview_SRCS
 	sidebar.cpp
 	startmainpage.cpp
 	thumbnailviewhelper.cpp
-	thumbnailviewpanel.cpp
+	browsemainpage.cpp
 	)
 
 if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
@@ -64,7 +64,7 @@ kde4_add_ui_files(gwenview_SRCS
 	imageviewconfigpage.ui
 	semanticinfodialog.ui
 	startmainpage.ui
-	thumbnailviewpanel.ui
+	browsemainpage.ui
 	)
 
 if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)

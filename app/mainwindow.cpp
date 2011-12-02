@@ -86,7 +86,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "splitter.h"
 #include "startmainpage.h"
 #include "thumbnailviewhelper.h"
-#include "thumbnailviewpanel.h"
+#include "browsemainpage.h"
 #include <lib/archiveutils.h>
 #include <lib/document/documentfactory.h>
 #include <lib/eventwatcher.h>
@@ -148,7 +148,7 @@ struct MainWindow::Private {
     ThumbnailView* mThumbnailView;
     DocumentInfoProvider* mDocumentInfoProvider;
     ThumbnailViewHelper* mThumbnailViewHelper;
-    ThumbnailViewPanel* mThumbnailViewPanel;
+    BrowseMainPage* mBrowseMainPage;
     StartMainPage* mStartMainPage;
     SideBar* mSideBar;
     QStackedWidget* mViewStackedWidget;
@@ -221,10 +221,10 @@ struct MainWindow::Private {
         setupThumbnailView(mViewStackedWidget);
         setupDocumentPanel(mViewStackedWidget);
         setupStartMainPage(mViewStackedWidget);
-        mViewStackedWidget->addWidget(mThumbnailViewPanel);
+        mViewStackedWidget->addWidget(mBrowseMainPage);
         mViewStackedWidget->addWidget(mDocumentPanel);
         mViewStackedWidget->addWidget(mStartMainPage);
-        mViewStackedWidget->setCurrentWidget(mThumbnailViewPanel);
+        mViewStackedWidget->setCurrentWidget(mBrowseMainPage);
 
         mCentralSplitter->setStretchFactor(0, 0);
         mCentralSplitter->setStretchFactor(1, 1);
@@ -240,10 +240,10 @@ struct MainWindow::Private {
 
     void setupThumbnailView(QWidget* parent)
     {
-        mThumbnailViewPanel = new ThumbnailViewPanel(parent, mDirModel, q->actionCollection());
+        mBrowseMainPage = new BrowseMainPage(parent, mDirModel, q->actionCollection());
 
-        mThumbnailView = mThumbnailViewPanel->thumbnailView();
-        mUrlNavigator = mThumbnailViewPanel->urlNavigator();
+        mThumbnailView = mBrowseMainPage->thumbnailView();
+        mUrlNavigator = mBrowseMainPage->urlNavigator();
         QPalette pal = mUrlNavigator->palette();
         pal.setColor(QPalette::Window, pal.color(QPalette::Window).dark(110));
         mUrlNavigator->setAutoFillBackground(true);
@@ -382,7 +382,7 @@ struct MainWindow::Private {
         mToggleSideBarAction->setIcon(KIcon("view-sidetree"));
         mToggleSideBarAction->setShortcut(Qt::Key_F11);
         mToggleSideBarAction->setText(i18nc("@action", "Sidebar"));
-        connect(mThumbnailViewPanel->toggleSideBarButton(), SIGNAL(clicked()),
+        connect(mBrowseMainPage->toggleSideBarButton(), SIGNAL(clicked()),
                 mToggleSideBarAction, SLOT(trigger()));
         connect(mDocumentPanel->toggleSideBarButton(), SIGNAL(clicked()),
                 mToggleSideBarAction, SLOT(trigger()));
@@ -671,12 +671,12 @@ struct MainWindow::Private {
             return mUrlToSelect;
         }
 
-        // mThumbnailViewPanel and mDocumentPanel urls are almost always synced, but
-        // mThumbnailViewPanel can be more up-to-date because mDocumentPanel
+        // mBrowseMainPage and mDocumentPanel urls are almost always synced, but
+        // mBrowseMainPage can be more up-to-date because mDocumentPanel
         // url is only updated when the DocumentView starts to load the
         // document.
         // This is why we only thrust mDocumentPanel url if it shows an url
-        // which can't be listed: in this case mThumbnailViewPanel url is
+        // which can't be listed: in this case mBrowseMainPage url is
         // empty.
         if (mCurrentPageId == ViewPageId && !mDocumentPanel->isEmpty()) {
             KUrl url = mDocumentPanel->url();
@@ -918,7 +918,7 @@ void MainWindow::setActiveViewModeAction(QAction* action)
     } else {
         d->mCurrentPageId = BrowsePageId;
         // Switching to browse mode
-        d->mViewStackedWidget->setCurrentWidget(d->mThumbnailViewPanel);
+        d->mViewStackedWidget->setCurrentWidget(d->mBrowseMainPage);
         if (!d->mDocumentPanel->isEmpty()
                 && KProtocolManager::supportsListing(d->mDocumentPanel->url())) {
             // Reset the view to spare resources, but don't do it if we can't
@@ -1095,7 +1095,7 @@ void MainWindow::updateToggleSideBarAction()
     QString toolTip = visible ? i18n("Hide Sidebar") : i18n("Show Sidebar");
 
     QList<QToolButton*> lst;
-    lst << d->mThumbnailViewPanel->toggleSideBarButton()
+    lst << d->mBrowseMainPage->toggleSideBarButton()
         << d->mDocumentPanel->toggleSideBarButton();
     Q_FOREACH(QToolButton * button, lst) {
         button->setText(text);
@@ -1315,7 +1315,7 @@ void MainWindow::reload()
     if (d->mCurrentPageId == ViewPageId) {
         d->mDocumentPanel->reload();
     } else {
-        d->mThumbnailViewPanel->reload();
+        d->mBrowseMainPage->reload();
     }
 }
 
@@ -1454,7 +1454,7 @@ void MainWindow::loadConfig()
     d->mDirModel->adjustKindFilter(MimeTypeUtils::KIND_VIDEO, GwenviewConfig::listVideos());
 
     d->mDocumentPanel->loadConfig();
-    d->mThumbnailViewPanel->loadConfig();
+    d->mBrowseMainPage->loadConfig();
 
     // Colors
     int value = GwenviewConfig::viewBackgroundValue();
@@ -1466,7 +1466,7 @@ void MainWindow::loadConfig()
     pal.setColor(QPalette::Text, fgColor);
 
     // Apply to widgets
-    d->mThumbnailViewPanel->applyPalette(pal);
+    d->mBrowseMainPage->applyPalette(pal);
     d->mStartMainPage->applyPalette(pal);
     d->mDocumentPanel->setNormalPalette(pal);
 }
@@ -1474,7 +1474,7 @@ void MainWindow::loadConfig()
 void MainWindow::saveConfig()
 {
     d->mDocumentPanel->saveConfig();
-    d->mThumbnailViewPanel->saveConfig();
+    d->mBrowseMainPage->saveConfig();
 }
 
 void MainWindow::print()

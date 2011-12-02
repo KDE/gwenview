@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "thumbnailviewpanel.moc"
+#include "browsemainpage.moc"
 
 // Qt
 #include <QDropEvent>
@@ -54,7 +54,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/archiveutils.h>
 #include <lib/thumbnailview/previewitemdelegate.h>
 #include <lib/thumbnailview/thumbnailview.h>
-#include <ui_thumbnailviewpanel.h>
+#include <ui_browsemainpage.h>
 
 namespace Gwenview
 {
@@ -65,8 +65,8 @@ inline Sorting::Enum sortingFromSortAction(const QAction* action)
     return Sorting::Enum(action->data().toInt());
 }
 
-struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
-    ThumbnailViewPanel* q;
+struct BrowseMainPagePrivate : public Ui_BrowseMainPage {
+    BrowseMainPage* q;
     KFilePlacesModel* mFilePlacesModel;
     KUrlNavigator* mUrlNavigator;
     SortedDirModel* mDirModel;
@@ -194,9 +194,9 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
     }
 };
 
-ThumbnailViewPanel::ThumbnailViewPanel(QWidget* parent, SortedDirModel* dirModel, KActionCollection* actionCollection)
+BrowseMainPage::BrowseMainPage(QWidget* parent, SortedDirModel* dirModel, KActionCollection* actionCollection)
 : QWidget(parent)
-, d(new ThumbnailViewPanelPrivate)
+, d(new BrowseMainPagePrivate)
 {
     d->q = this;
     d->mDirModel = dirModel;
@@ -211,12 +211,12 @@ ThumbnailViewPanel::ThumbnailViewPanel(QWidget* parent, SortedDirModel* dirModel
     updateThumbnailDetails();
 }
 
-ThumbnailViewPanel::~ThumbnailViewPanel()
+BrowseMainPage::~BrowseMainPage()
 {
     delete d;
 }
 
-void ThumbnailViewPanel::loadConfig()
+void BrowseMainPage::loadConfig()
 {
     d->mUrlNavigator->setUrlEditable(GwenviewConfig::urlNavigatorIsEditable());
     d->mUrlNavigator->setShowFullPath(GwenviewConfig::urlNavigatorShowFullPath());
@@ -236,7 +236,7 @@ void ThumbnailViewPanel::loadConfig()
     }
 }
 
-void ThumbnailViewPanel::saveConfig() const
+void BrowseMainPage::saveConfig() const
 {
     GwenviewConfig::setUrlNavigatorIsEditable(d->mUrlNavigator->isUrlEditable());
     GwenviewConfig::setUrlNavigatorShowFullPath(d->mUrlNavigator->showFullPath());
@@ -245,17 +245,17 @@ void ThumbnailViewPanel::saveConfig() const
     GwenviewConfig::setThumbnailDetails(d->mDelegate->thumbnailDetails());
 }
 
-ThumbnailView* ThumbnailViewPanel::thumbnailView() const
+ThumbnailView* BrowseMainPage::thumbnailView() const
 {
     return d->mThumbnailView;
 }
 
-KUrlNavigator* ThumbnailViewPanel::urlNavigator() const
+KUrlNavigator* BrowseMainPage::urlNavigator() const
 {
     return d->mUrlNavigator;
 }
 
-void ThumbnailViewPanel::reload()
+void BrowseMainPage::reload()
 {
     QModelIndexList list = d->mThumbnailView->selectionModel()->selectedIndexes();
     Q_FOREACH(const QModelIndex & index, list) {
@@ -264,13 +264,13 @@ void ThumbnailViewPanel::reload()
     d->mDirModel->reload();
 }
 
-void ThumbnailViewPanel::editLocation()
+void BrowseMainPage::editLocation()
 {
     d->mUrlNavigator->setUrlEditable(true);
     d->mUrlNavigator->setFocus();
 }
 
-void ThumbnailViewPanel::addFolderToPlaces()
+void BrowseMainPage::addFolderToPlaces()
 {
     KUrl url = d->mUrlNavigator->locationUrl();
     QString text = url.fileName();
@@ -280,7 +280,7 @@ void ThumbnailViewPanel::addFolderToPlaces()
     d->mFilePlacesModel->addPlace(text, url);
 }
 
-void ThumbnailViewPanel::slotDirModelRowsInserted(const QModelIndex& parent, int start, int end)
+void BrowseMainPage::slotDirModelRowsInserted(const QModelIndex& parent, int start, int end)
 {
     int count = d->documentCountInIndexRange(parent, start, end);
     if (count > 0) {
@@ -289,7 +289,7 @@ void ThumbnailViewPanel::slotDirModelRowsInserted(const QModelIndex& parent, int
     }
 }
 
-void ThumbnailViewPanel::slotDirModelRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end)
+void BrowseMainPage::slotDirModelRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end)
 {
     int count = d->documentCountInIndexRange(parent, start, end);
     if (count > 0) {
@@ -298,13 +298,13 @@ void ThumbnailViewPanel::slotDirModelRowsAboutToBeRemoved(const QModelIndex& par
     }
 }
 
-void ThumbnailViewPanel::slotDirModelReset()
+void BrowseMainPage::slotDirModelReset()
 {
     d->mDocumentCount = 0;
     d->updateDocumentCountLabel();
 }
 
-void ThumbnailViewPanel::updateSortOrder()
+void BrowseMainPage::updateSortOrder()
 {
     const QAction* action = d->mSortAction->currentAction();
     if (!action) {
@@ -316,7 +316,7 @@ void ThumbnailViewPanel::updateSortOrder()
     d->mDirModel->setSortRole(sortingFromSortAction(action));
 }
 
-void ThumbnailViewPanel::updateThumbnailDetails()
+void BrowseMainPage::updateThumbnailDetails()
 {
     PreviewItemDelegate::ThumbnailDetails details = 0;
     Q_FOREACH(const QAction * action, d->mThumbnailDetailsActionGroup->actions()) {
@@ -327,12 +327,12 @@ void ThumbnailViewPanel::updateThumbnailDetails()
     d->mDelegate->setThumbnailDetails(details);
 }
 
-void ThumbnailViewPanel::applyPalette(const QPalette& palette)
+void BrowseMainPage::applyPalette(const QPalette& palette)
 {
     d->mThumbnailView->setPalette(palette);
 }
 
-void ThumbnailViewPanel::slotUrlsDropped(const KUrl& destUrl, QDropEvent* event)
+void BrowseMainPage::slotUrlsDropped(const KUrl& destUrl, QDropEvent* event)
 {
     const KUrl::List urlList = KUrl::List::fromMimeData(event->mimeData());
     if (urlList.isEmpty()) {
@@ -346,12 +346,12 @@ void ThumbnailViewPanel::slotUrlsDropped(const KUrl& destUrl, QDropEvent* event)
     QMetaObject::invokeMethod(this, "showMenuForDroppedUrls", Qt::QueuedConnection, Q_ARG(KUrl::List, urlList), Q_ARG(KUrl, destUrl));
 }
 
-void ThumbnailViewPanel::showMenuForDroppedUrls(const KUrl::List& urlList, const KUrl& destUrl)
+void BrowseMainPage::showMenuForDroppedUrls(const KUrl::List& urlList, const KUrl& destUrl)
 {
     FileOperations::showMenuForDroppedUrls(d->mUrlNavigator, urlList, destUrl);
 }
 
-QToolButton* ThumbnailViewPanel::toggleSideBarButton() const
+QToolButton* BrowseMainPage::toggleSideBarButton() const
 {
     return d->mToggleSideBarButton;
 }

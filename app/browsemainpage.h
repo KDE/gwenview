@@ -18,8 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
-#ifndef THUMBNAILVIEWPANEL_H
-#define THUMBNAILVIEWPANEL_H
+#ifndef BROWSEMAINPAGE_H
+#define BROWSEMAINPAGE_H
 
 // Qt
 #include <QWidget>
@@ -42,17 +42,17 @@ namespace Gwenview
 class SortedDirModel;
 class ThumbnailView;
 
-struct ThumbnailViewPanelPrivate;
+struct BrowseMainPagePrivate;
 /**
  * This class contains all the necessary widgets displayed in browse mode:
  * the thumbnail view, the url navigator, the bottom bar.
  */
-class ThumbnailViewPanel : public QWidget
+class BrowseMainPage : public QWidget
 {
     Q_OBJECT
 public:
-    ThumbnailViewPanel(QWidget* parent, SortedDirModel*, KActionCollection*);
-    ~ThumbnailViewPanel();
+    BrowseMainPage(QWidget* parent, SortedDirModel*, KActionCollection*);
+    ~BrowseMainPage();
 
     void applyPalette(const QPalette&);
 
@@ -79,9 +79,9 @@ private Q_SLOTS:
     void showMenuForDroppedUrls(const KUrl::List&, const KUrl& destUrl);
 
 private:
-    ThumbnailViewPanelPrivate* const d;
+    BrowseMainPagePrivate* const d;
 };
 
 } // namespace
 
-#endif /* THUMBNAILVIEWPANEL_H */
+#endif /* BROWSEMAINPAGE_H */
