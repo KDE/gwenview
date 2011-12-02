@@ -397,6 +397,7 @@ void RasterImageView::setCurrentTool(AbstractRasterImageViewTool* tool)
 {
     if (d->mTool) {
         d->mTool.data()->toolDeactivated();
+        d->mTool.data()->deleteLater();
     }
     d->mTool = tool;
     if (d->mTool) {

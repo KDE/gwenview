@@ -224,6 +224,8 @@ CropTool::CropTool(RasterImageView* view)
 
 CropTool::~CropTool()
 {
+    // mCropWidget is a child of its container not of us, so it is not deleted automatically
+    delete d->mCropWidget;
     delete d;
 }
 
