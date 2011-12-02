@@ -61,7 +61,7 @@ public:
     void showMessageBubble(MessageBubble*);
 
 public Q_SLOTS:
-    void showStartPage();
+    void showStartMainPage();
 
     /**
      * Go to url, without changing current mode
@@ -90,7 +90,7 @@ private Q_SLOTS:
     void openDirUrl(const KUrl&);
     void slotThumbnailViewIndexActivated(const QModelIndex&);
 
-    void slotStartPageUrlSelected(const KUrl&);
+    void slotStartMainPageUrlSelected(const KUrl&);
 
     void goUp();
     void toggleSideBar(bool visible);

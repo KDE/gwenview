@@ -18,8 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
-#ifndef STARTPAGE_H
-#define STARTPAGE_H
+#ifndef STARTMAINPAGE_H
+#define STARTMAINPAGE_H
 
 // Qt
 #include <QFrame>
@@ -39,13 +39,13 @@ namespace Gwenview
 
 class GvCore;
 
-class StartPagePrivate;
-class StartPage : public QFrame
+class StartMainPagePrivate;
+class StartMainPage : public QFrame
 {
     Q_OBJECT
 public:
-    StartPage(QWidget* parent, GvCore*);
-    ~StartPage();
+    StartMainPage(QWidget* parent, GvCore*);
+    ~StartMainPage();
 
     void applyPalette(const QPalette&);
 
@@ -62,9 +62,9 @@ private Q_SLOTS:
     void slotConfigChanged();
 
 private:
-    StartPagePrivate* const d;
+    StartMainPagePrivate* const d;
 };
 
 } // namespace
 
-#endif /* STARTPAGE_H */
+#endif /* STARTMAINPAGE_H */

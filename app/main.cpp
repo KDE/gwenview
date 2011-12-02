@@ -83,7 +83,7 @@ public:
         if (mUrl.isValid()) {
             window->setInitialUrl(mUrl);
         } else {
-            window->showStartPage();
+            window->showStartMainPage();
         }
 
         window->show();

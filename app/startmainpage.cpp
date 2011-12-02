@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "startpage.moc"
+#include "startmainpage.moc"
 
 #include <config-gwenview.h>
 
@@ -37,7 +37,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include <gvcore.h>
-#include <ui_startpage.h>
+#include <ui_startmainpage.h>
 #include <lib/flowlayout.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/thumbnailview/abstractthumbnailviewhelper.h>
@@ -95,8 +95,8 @@ public:
     }
 };
 
-struct StartPagePrivate : public Ui_StartPage {
-    StartPage* q;
+struct StartMainPagePrivate : public Ui_StartMainPage {
+    StartMainPage* q;
     GvCore* mGvCore;
     KFilePlacesModel* mBookmarksModel;
     bool mSearchUiInitialized;
@@ -145,9 +145,9 @@ static bool styleIsGtkBased()
     return qstrcmp(name, "QGtkStyle") == 0;
 }
 
-StartPage::StartPage(QWidget* parent, GvCore* gvCore)
+StartMainPage::StartMainPage(QWidget* parent, GvCore* gvCore)
 : QFrame(parent)
-, d(new StartPagePrivate)
+, d(new StartMainPagePrivate)
 {
     d->q = this;
     d->mGvCore = gvCore;
@@ -206,12 +206,12 @@ StartPage::StartPage(QWidget* parent, GvCore* gvCore)
             SLOT(slotConfigChanged()));
 }
 
-StartPage::~StartPage()
+StartMainPage::~StartMainPage()
 {
     delete d;
 }
 
-void StartPage::slotTagViewClicked(const QModelIndex& index)
+void StartMainPage::slotTagViewClicked(const QModelIndex& index)
 {
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
     if (!index.isValid()) {
@@ -224,7 +224,7 @@ void StartPage::slotTagViewClicked(const QModelIndex& index)
 #endif
 }
 
-void StartPage::applyPalette(const QPalette& newPalette)
+void StartMainPage::applyPalette(const QPalette& newPalette)
 {
     QColor fgColor = newPalette.text().color();
 
@@ -242,7 +242,7 @@ void StartPage::applyPalette(const QPalette& newPalette)
     initViewPalette(d->mRecentUrlsView, fgColor);
 }
 
-void StartPage::slotListViewActivated(const QModelIndex& index)
+void StartMainPage::slotListViewActivated(const QModelIndex& index)
 {
     if (!index.isValid()) {
         return;
@@ -258,7 +258,7 @@ void StartPage::slotListViewActivated(const QModelIndex& index)
     emit urlSelected(url);
 }
 
-void StartPage::showEvent(QShowEvent* event)
+void StartMainPage::showEvent(QShowEvent* event)
 {
     if (GwenviewConfig::historyEnabled()) {
         if (!d->mRecentFoldersView->model()) {
@@ -281,7 +281,7 @@ void StartPage::showEvent(QShowEvent* event)
     QFrame::showEvent(event);
 }
 
-void StartPage::showRecentFoldersViewContextMenu(const QPoint& pos)
+void StartMainPage::showRecentFoldersViewContextMenu(const QPoint& pos)
 {
     QAbstractItemView* view = qobject_cast<QAbstractItemView*>(sender());
     KUrl url;
@@ -324,7 +324,7 @@ void StartPage::showRecentFoldersViewContextMenu(const QPoint& pos)
     }
 }
 
-void StartPage::slotConfigChanged()
+void StartMainPage::slotConfigChanged()
 {
     d->updateHistoryTab();
 }

@@ -35,7 +35,7 @@ set(gwenview_SRCS
 	saveallhelper.cpp
 	savebar.cpp
 	sidebar.cpp
-	startpage.cpp
+	startmainpage.cpp
 	thumbnailviewhelper.cpp
 	thumbnailviewpanel.cpp
 	)
@@ -63,7 +63,7 @@ kde4_add_ui_files(gwenview_SRCS
 	generalconfigpage.ui
 	imageviewconfigpage.ui
 	semanticinfodialog.ui
-	startpage.ui
+	startmainpage.ui
 	thumbnailviewpanel.ui
 	)
 

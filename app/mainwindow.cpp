@@ -84,7 +84,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "savebar.h"
 #include "sidebar.h"
 #include "splitter.h"
-#include "startpage.h"
+#include "startmainpage.h"
 #include "thumbnailviewhelper.h"
 #include "thumbnailviewpanel.h"
 #include <lib/archiveutils.h>
@@ -127,7 +127,7 @@ static const char* SESSION_CURRENT_PAGE_KEY = "Page";
 static const char* SESSION_URL_KEY = "Url";
 
 enum PageId {
-    StartPageId,
+    StartMainPageId,
     BrowsePageId,
     ViewPageId
 };
@@ -149,7 +149,7 @@ struct MainWindow::Private {
     DocumentInfoProvider* mDocumentInfoProvider;
     ThumbnailViewHelper* mThumbnailViewHelper;
     ThumbnailViewPanel* mThumbnailViewPanel;
-    StartPage* mStartPage;
+    StartMainPage* mStartMainPage;
     SideBar* mSideBar;
     QStackedWidget* mViewStackedWidget;
     FullScreenBar* mFullScreenBar;
@@ -220,10 +220,10 @@ struct MainWindow::Private {
 
         setupThumbnailView(mViewStackedWidget);
         setupDocumentPanel(mViewStackedWidget);
-        setupStartPage(mViewStackedWidget);
+        setupStartMainPage(mViewStackedWidget);
         mViewStackedWidget->addWidget(mThumbnailViewPanel);
         mViewStackedWidget->addWidget(mDocumentPanel);
-        mViewStackedWidget->addWidget(mStartPage);
+        mViewStackedWidget->addWidget(mStartMainPage);
         mViewStackedWidget->setCurrentWidget(mThumbnailViewPanel);
 
         mCentralSplitter->setStretchFactor(0, 0);
@@ -298,11 +298,11 @@ struct MainWindow::Private {
         bar->setSelectionModel(mThumbnailView->selectionModel());
     }
 
-    void setupStartPage(QWidget* parent)
+    void setupStartMainPage(QWidget* parent)
     {
-        mStartPage = new StartPage(parent, mGvCore);
-        connect(mStartPage, SIGNAL(urlSelected(KUrl)),
-                q, SLOT(slotStartPageUrlSelected(KUrl)));
+        mStartMainPage = new StartMainPage(parent, mGvCore);
+        connect(mStartMainPage, SIGNAL(urlSelected(KUrl)),
+                q, SLOT(slotStartMainPageUrlSelected(KUrl)));
     }
 
     void setupActions()
@@ -372,7 +372,7 @@ struct MainWindow::Private {
 
         mGoUpAction = view->addAction(KStandardAction::Up, q, SLOT(goUp()));
 
-        action = view->addAction("go_start_page", q, SLOT(showStartPage()));
+        action = view->addAction("go_start_page", q, SLOT(showStartMainPage()));
         action->setIcon(KIcon("go-home"));
         action->setText(i18nc("@action", "Start Page"));
 
@@ -614,7 +614,7 @@ struct MainWindow::Private {
         }
     }
 
-    void setActionsDisabledOnStartPageEnabled(bool enabled)
+    void setActionsDisabledOnStartMainPageEnabled(bool enabled)
     {
         mBrowseAction->setEnabled(enabled);
         mViewAction->setEnabled(enabled);
@@ -661,7 +661,7 @@ struct MainWindow::Private {
     }
 
     KUrl currentUrl() const {
-        if (mCurrentPageId == StartPageId) {
+        if (mCurrentPageId == StartMainPageId) {
             return KUrl();
         }
 
@@ -735,7 +735,7 @@ struct MainWindow::Private {
     const char* sideBarConfigGroupName() const {
         const char* name = 0;
         switch (mCurrentPageId) {
-        case StartPageId:
+        case StartMainPageId:
             kWarning() << "Should not happen!";
             // Fall through
         case BrowsePageId:
@@ -789,7 +789,7 @@ MainWindow::MainWindow()
       d(new MainWindow::Private)
 {
     d->q = this;
-    d->mCurrentPageId = StartPageId;
+    d->mCurrentPageId = StartMainPageId;
     d->mDistractionFreeMode = false;
     d->mDirModel = new SortedDirModel(this);
     d->mGvCore = new GvCore(this, d->mDirModel);
@@ -903,7 +903,7 @@ void MainWindow::startSlideShow()
 
 void MainWindow::setActiveViewModeAction(QAction* action)
 {
-    if (d->mCurrentPageId != StartPageId) {
+    if (d->mCurrentPageId != StartMainPageId) {
         d->saveSideBarConfig();
     }
     if (action == d->mViewAction) {
@@ -1023,26 +1023,26 @@ void MainWindow::goUp()
     }
 }
 
-void MainWindow::showStartPage()
+void MainWindow::showStartMainPage()
 {
-    if (d->mCurrentPageId != StartPageId) {
+    if (d->mCurrentPageId != StartMainPageId) {
         d->saveSideBarConfig();
-        d->mCurrentPageId = StartPageId;
+        d->mCurrentPageId = StartMainPageId;
     }
-    d->setActionsDisabledOnStartPageEnabled(false);
+    d->setActionsDisabledOnStartMainPageEnabled(false);
     d->spreadCurrentDirUrl(KUrl());
 
     d->mSideBar->hide();
-    d->mViewStackedWidget->setCurrentWidget(d->mStartPage);
+    d->mViewStackedWidget->setCurrentWidget(d->mStartMainPage);
 
     d->updateActions();
     updatePreviousNextActions();
     d->updateContextDependentComponents();
 }
 
-void MainWindow::slotStartPageUrlSelected(const KUrl& url)
+void MainWindow::slotStartMainPageUrlSelected(const KUrl& url)
 {
-    d->setActionsDisabledOnStartPageEnabled(true);
+    d->setActionsDisabledOnStartMainPageEnabled(true);
 
     if (d->mBrowseAction->isChecked()) {
         // Silently uncheck the action so that setInitialUrl() does the right thing
@@ -1237,7 +1237,7 @@ void MainWindow::reduceLevelOfDetails()
     } else if (d->mCurrentPageId == ViewPageId) {
         d->mBrowseAction->trigger();
     } else {
-        showStartPage();
+        showStartMainPage();
     }
 }
 
@@ -1332,7 +1332,7 @@ void MainWindow::openFile()
         return;
     }
 
-    d->setActionsDisabledOnStartPageEnabled(true);
+    d->setActionsDisabledOnStartMainPageEnabled(true);
     KUrl url = dialog.selectedUrl();
     d->mViewAction->trigger();
     d->mDocumentPanel->openUrl(url);
@@ -1467,7 +1467,7 @@ void MainWindow::loadConfig()
 
     // Apply to widgets
     d->mThumbnailViewPanel->applyPalette(pal);
-    d->mStartPage->applyPalette(pal);
+    d->mStartMainPage->applyPalette(pal);
     d->mDocumentPanel->setNormalPalette(pal);
 }
 
@@ -1572,10 +1572,10 @@ void MainWindow::saveProperties(KConfigGroup& group)
 
 void MainWindow::readProperties(const KConfigGroup& group)
 {
-    PageId pageId = PageId(group.readEntry(SESSION_CURRENT_PAGE_KEY, int(StartPageId)));
-    if (pageId == StartPageId) {
-        d->mCurrentPageId = StartPageId;
-        showStartPage();
+    PageId pageId = PageId(group.readEntry(SESSION_CURRENT_PAGE_KEY, int(StartMainPageId)));
+    if (pageId == StartMainPageId) {
+        d->mCurrentPageId = StartMainPageId;
+        showStartMainPage();
     } else if (pageId == BrowsePageId) {
         d->mBrowseAction->trigger();
     } else {
