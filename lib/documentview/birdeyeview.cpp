@@ -58,6 +58,7 @@ BirdEyeView::BirdEyeView(DocumentView* docView)
 
     connect(docView->document().data(), SIGNAL(metaInfoUpdated()), SLOT(adjustGeometry()));
     connect(docView, SIGNAL(zoomChanged(qreal)), SLOT(adjustGeometry()));
+    connect(docView, SIGNAL(zoomToFitChanged(bool)), SLOT(adjustGeometry()));
     connect(docView, SIGNAL(positionChanged()), SLOT(adjustVisibleRect()));
 }
 
@@ -68,6 +69,11 @@ BirdEyeView::~BirdEyeView()
 
 void BirdEyeView::adjustGeometry()
 {
+    if (d->mDocView->zoomToFit()) {
+        hide();
+        return;
+    }
+    show();
     QSize size = d->mDocView->document()->size();
     size.scale(MAX_SIZE, MAX_SIZE, Qt::KeepAspectRatio);
     QRectF rect = d->mDocView->boundingRect();
