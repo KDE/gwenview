@@ -85,6 +85,7 @@ struct DocumentViewPrivate {
     QCursor mZoomCursor;
     QCursor mPreviousCursor;
     QWeakPointer<QPropertyAnimation> mMoveAnimation;
+    QWeakPointer<QPropertyAnimation> mFadeAnimation;
 
     LoadingIndicator* mLoadingIndicator;
 
@@ -316,6 +317,24 @@ struct DocumentViewPrivate {
         }
         QMetaObject::invokeMethod(that, "emitFocused", Qt::QueuedConnection);
     }
+
+    void fadeTo(qreal value)
+    {
+        if (mFadeAnimation.data()) {
+            // Reuse existing fade animation
+            mFadeAnimation.data()->stop();
+            mFadeAnimation.data()->setStartValue(that->opacity());
+            mFadeAnimation.data()->setEndValue(value);
+            mFadeAnimation.data()->start();
+            return;
+        }
+        // Create a new fade animation
+        QPropertyAnimation* anim = new QPropertyAnimation(that, "opacity");
+        anim->setStartValue(that->opacity());
+        anim->setEndValue(value);
+        animate(anim);
+        mFadeAnimation = anim;
+    }
 };
 
 DocumentView::DocumentView(QGraphicsScene* scene)
@@ -332,6 +351,8 @@ DocumentView::DocumentView(QGraphicsScene* scene)
     d->mCompareMode = false;
     d->mModifierKeyInfo = new KModifierKeyInfo(this);
     connect(d->mModifierKeyInfo, SIGNAL(keyPressed(Qt::Key, bool)), SLOT(slotKeyPressed(Qt::Key, bool)));
+
+    setOpacity(0);
 
     scene->addItem(this);
 
@@ -713,20 +734,12 @@ void DocumentView::moveToAnimated(const QRect& rect)
 
 void DocumentView::fadeIn()
 {
-    setOpacity(0);
-    show();
-    QPropertyAnimation* anim = new QPropertyAnimation(this, "opacity");
-    anim->setStartValue(0.);
-    anim->setEndValue(1.);
-    d->animate(anim);
+    d->fadeTo(1);
 }
 
 void DocumentView::fadeOut()
 {
-    QPropertyAnimation* anim = new QPropertyAnimation(this, "opacity");
-    anim->setStartValue(1.);
-    anim->setEndValue(0.);
-    d->animate(anim);
+    d->fadeTo(0);
 }
 
 void DocumentView::slotAnimationFinished()
