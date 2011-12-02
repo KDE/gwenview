@@ -126,14 +126,14 @@ static const char* SIDE_BAR_IS_VISIBLE_KEY = "IsVisible";
 static const char* SESSION_CURRENT_PAGE_KEY = "Page";
 static const char* SESSION_URL_KEY = "Url";
 
-enum PageId {
+enum MainPageId {
     StartMainPageId,
-    BrowsePageId,
-    ViewPageId
+    BrowseMainPageId,
+    ViewMainPageId
 };
 
 struct MainWindowState {
-    PageId mPageId;
+    MainPageId mMainPageId;
     bool mToolBarVisible;
     Qt::WindowStates mWindowState;
 };
@@ -188,7 +188,7 @@ struct MainWindow::Private {
 
     QString mCaption;
 
-    PageId mCurrentPageId;
+    MainPageId mCurrentMainPageId;
 
     QDateTime mFullScreenLeftAt;
     KNotificationRestrictions* mNotificationRestrictions;
@@ -644,7 +644,7 @@ struct MainWindow::Private {
             isRasterImage = q->currentDocumentIsRasterImage();
             canSave = isRasterImage;
             isModified = DocumentFactory::instance()->load(url)->isModified();
-            if (mCurrentPageId != ViewPageId) {
+            if (mCurrentMainPageId != ViewMainPageId) {
                 // Saving only makes sense if exactly one image is selected
                 QItemSelection selection = mThumbnailView->selectionModel()->selection();
                 QModelIndexList indexList = selection.indexes();
@@ -661,7 +661,7 @@ struct MainWindow::Private {
     }
 
     KUrl currentUrl() const {
-        if (mCurrentPageId == StartMainPageId) {
+        if (mCurrentMainPageId == StartMainPageId) {
             return KUrl();
         }
 
@@ -678,7 +678,7 @@ struct MainWindow::Private {
         // This is why we only thrust mViewMainPage url if it shows an url
         // which can't be listed: in this case mBrowseMainPage url is
         // empty.
-        if (mCurrentPageId == ViewPageId && !mViewMainPage->isEmpty()) {
+        if (mCurrentMainPageId == ViewMainPageId && !mViewMainPage->isEmpty()) {
             KUrl url = mViewMainPage->url();
             if (!KProtocolManager::supportsListing(url)) {
                 return url;
@@ -692,7 +692,7 @@ struct MainWindow::Private {
         // Ignore the current index if it's not part of the selection. This
         // situation can happen when you select an image, then click on the
         // background of the thumbnail view.
-        if (mCurrentPageId == BrowsePageId && !mThumbnailView->selectionModel()->isSelected(index)) {
+        if (mCurrentMainPageId == BrowseMainPageId && !mThumbnailView->selectionModel()->isSelected(index)) {
             return KUrl();
         }
         KFileItem item = mDirModel->itemForIndex(index);
@@ -734,14 +734,14 @@ struct MainWindow::Private {
 
     const char* sideBarConfigGroupName() const {
         const char* name = 0;
-        switch (mCurrentPageId) {
+        switch (mCurrentMainPageId) {
         case StartMainPageId:
             kWarning() << "Should not happen!";
             // Fall through
-        case BrowsePageId:
+        case BrowseMainPageId:
             name = BROWSE_MODE_SIDE_BAR_GROUP;
             break;
-        case ViewPageId:
+        case ViewMainPageId:
             name = mViewMainPage->isFullScreenMode()
                    ? FULLSCREEN_MODE_SIDE_BAR_GROUP
                    : VIEW_MODE_SIDE_BAR_GROUP;
@@ -789,7 +789,7 @@ MainWindow::MainWindow()
       d(new MainWindow::Private)
 {
     d->q = this;
-    d->mCurrentPageId = StartMainPageId;
+    d->mCurrentMainPageId = StartMainPageId;
     d->mDistractionFreeMode = false;
     d->mDirModel = new SortedDirModel(this);
     d->mGvCore = new GvCore(this, d->mDirModel);
@@ -835,7 +835,7 @@ ViewMainPage* MainWindow::documentPanel() const
 
 bool MainWindow::currentDocumentIsRasterImage() const
 {
-    if (d->mCurrentPageId == ViewPageId) {
+    if (d->mCurrentMainPageId == ViewMainPageId) {
         Document::Ptr doc = d->mViewMainPage->currentDocument();
         if (!doc) {
             return false;
@@ -903,11 +903,11 @@ void MainWindow::startSlideShow()
 
 void MainWindow::setActiveViewModeAction(QAction* action)
 {
-    if (d->mCurrentPageId != StartMainPageId) {
+    if (d->mCurrentMainPageId != StartMainPageId) {
         d->saveSideBarConfig();
     }
     if (action == d->mViewAction) {
-        d->mCurrentPageId = ViewPageId;
+        d->mCurrentMainPageId = ViewMainPageId;
         // Switching to view mode
         d->setDirModelShowDirs(false);
         d->mViewStackedWidget->setCurrentWidget(d->mViewMainPage);
@@ -916,7 +916,7 @@ void MainWindow::setActiveViewModeAction(QAction* action)
             openSelectedDocuments();
         }
     } else {
-        d->mCurrentPageId = BrowsePageId;
+        d->mCurrentMainPageId = BrowseMainPageId;
         // Switching to browse mode
         d->mViewStackedWidget->setCurrentWidget(d->mBrowseMainPage);
         if (!d->mViewMainPage->isEmpty()
@@ -963,7 +963,7 @@ void MainWindow::slotThumbnailViewIndexActivated(const QModelIndex& index)
 
 void MainWindow::openSelectedDocuments()
 {
-    if (d->mCurrentPageId != ViewPageId) {
+    if (d->mCurrentMainPageId != ViewMainPageId) {
         return;
     }
 
@@ -1014,7 +1014,7 @@ void MainWindow::openSelectedDocuments()
 
 void MainWindow::goUp()
 {
-    if (d->mCurrentPageId == BrowsePageId) {
+    if (d->mCurrentMainPageId == BrowseMainPageId) {
         KUrl url = d->mDirModel->dirLister()->url();
         url = url.upUrl();
         openDirUrl(url);
@@ -1025,9 +1025,9 @@ void MainWindow::goUp()
 
 void MainWindow::showStartMainPage()
 {
-    if (d->mCurrentPageId != StartMainPageId) {
+    if (d->mCurrentMainPageId != StartMainPageId) {
         d->saveSideBarConfig();
-        d->mCurrentPageId = StartMainPageId;
+        d->mCurrentMainPageId = StartMainPageId;
     }
     d->setActionsDisabledOnStartMainPageEnabled(false);
     d->spreadCurrentDirUrl(KUrl());
@@ -1128,7 +1128,7 @@ void MainWindow::slotPartCompleted()
 
 void MainWindow::slotSelectionChanged()
 {
-    if (d->mCurrentPageId == ViewPageId) {
+    if (d->mCurrentMainPageId == ViewMainPageId) {
         // The user selected a new file in the thumbnail view, since the
         // document view is visible, let's show it
         openSelectedDocuments();
@@ -1205,7 +1205,7 @@ void MainWindow::goToLast()
 
 void MainWindow::goToUrl(const KUrl& url)
 {
-    if (d->mCurrentPageId == ViewPageId) {
+    if (d->mCurrentMainPageId == ViewMainPageId) {
         d->mViewMainPage->openUrl(url);
     }
     KUrl dirUrl = url;
@@ -1234,7 +1234,7 @@ void MainWindow::reduceLevelOfDetails()
 {
     if (d->mFullScreenAction->isChecked()) {
         d->mFullScreenAction->trigger();
-    } else if (d->mCurrentPageId == ViewPageId) {
+    } else if (d->mCurrentMainPageId == ViewMainPageId) {
         d->mBrowseAction->trigger();
     } else {
         showStartMainPage();
@@ -1252,7 +1252,7 @@ void MainWindow::toggleFullScreen(bool checked)
         resetAutoSaveSettings();
 
         // Save state
-        d->mStateBeforeFullScreen.mPageId = d->mCurrentPageId;
+        d->mStateBeforeFullScreen.mMainPageId = d->mCurrentMainPageId;
         d->mStateBeforeFullScreen.mToolBarVisible = toolBar()->isVisible();
         d->mStateBeforeFullScreen.mWindowState = windowState();
 
@@ -1275,8 +1275,8 @@ void MainWindow::toggleFullScreen(bool checked)
         setAutoSaveSettings();
 
         // Back to normal
-        d->mCurrentPageId = d->mStateBeforeFullScreen.mPageId;
-        if (d->mCurrentPageId == BrowsePageId) {
+        d->mCurrentMainPageId = d->mStateBeforeFullScreen.mMainPageId;
+        if (d->mCurrentMainPageId == BrowseMainPageId) {
             d->mBrowseAction->trigger();
         }
 
@@ -1312,7 +1312,7 @@ void MainWindow::saveCurrentAs()
 
 void MainWindow::reload()
 {
-    if (d->mCurrentPageId == ViewPageId) {
+    if (d->mCurrentMainPageId == ViewMainPageId) {
         d->mViewMainPage->reload();
     } else {
         d->mBrowseMainPage->reload();
@@ -1505,7 +1505,7 @@ void MainWindow::preloadNextUrl()
         return;
     }
 
-    if (d->mCurrentPageId == ViewPageId) {
+    if (d->mCurrentMainPageId == ViewMainPageId) {
         // If we are in view mode, preload the next url, otherwise preload the
         // selected one
         index = d->mDirModel->sibling(index.row() + 1, index.column(), index);
@@ -1543,7 +1543,7 @@ void MainWindow::resizeEvent(QResizeEvent* event)
     // This is a small hack to execute code after leaving fullscreen, and after
     // the window has been resized back to its former size.
     if (d->mFullScreenLeftAt.isValid() && d->mFullScreenLeftAt.secsTo(QDateTime::currentDateTime()) < 2) {
-        if (d->mCurrentPageId == BrowsePageId) {
+        if (d->mCurrentMainPageId == BrowseMainPageId) {
             d->mThumbnailView->scrollToSelectedIndex();
         }
         d->mFullScreenLeftAt = QDateTime();
@@ -1566,17 +1566,17 @@ void MainWindow::showMessageBubble(MessageBubble* bubble)
 
 void MainWindow::saveProperties(KConfigGroup& group)
 {
-    group.writeEntry(SESSION_CURRENT_PAGE_KEY, int(d->mCurrentPageId));
+    group.writeEntry(SESSION_CURRENT_PAGE_KEY, int(d->mCurrentMainPageId));
     group.writeEntry(SESSION_URL_KEY, d->currentUrl());
 }
 
 void MainWindow::readProperties(const KConfigGroup& group)
 {
-    PageId pageId = PageId(group.readEntry(SESSION_CURRENT_PAGE_KEY, int(StartMainPageId)));
+    MainPageId pageId = MainPageId(group.readEntry(SESSION_CURRENT_PAGE_KEY, int(StartMainPageId)));
     if (pageId == StartMainPageId) {
-        d->mCurrentPageId = StartMainPageId;
+        d->mCurrentMainPageId = StartMainPageId;
         showStartMainPage();
-    } else if (pageId == BrowsePageId) {
+    } else if (pageId == BrowseMainPageId) {
         d->mBrowseAction->trigger();
     } else {
         d->mViewAction->trigger();
