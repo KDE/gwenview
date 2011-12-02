@@ -61,7 +61,7 @@ public:
     virtual void toolActivated();
     virtual void toolDeactivated();
 
-    virtual QWidget* widget();
+    virtual QWidget* widget() const;
 
 Q_SIGNALS:
     void rectUpdated(const QRect&);

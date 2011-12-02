@@ -404,7 +404,7 @@ void CropTool::slotCropRequested()
     emit done();
 }
 
-QWidget* CropTool::widget()
+QWidget* CropTool::widget() const
 {
     return d->mCropWidget;
 }

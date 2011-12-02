@@ -63,7 +63,7 @@ public:
     virtual void toolActivated() {}
     virtual void toolDeactivated() {}
 
-    virtual QWidget* widget() {
+    virtual QWidget* widget() const {
         return 0;
     }
 
