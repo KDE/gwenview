@@ -397,18 +397,12 @@ void DocumentView::finishOpenUrl()
     }
     createAdapterForDocument();
 
-    connect(d->mDocument.data(), SIGNAL(downSampledImageReady()),
-            SLOT(slotLoaded()));
-    connect(d->mDocument.data(), SIGNAL(loaded(KUrl)),
-            SLOT(slotLoaded()));
+    connect(d->mAdapter.data(), SIGNAL(completed()),
+            SLOT(slotCompleted()));
     connect(d->mDocument.data(), SIGNAL(loadingFailed(KUrl)),
             SLOT(slotLoadingFailed()));
     d->mAdapter->setDocument(d->mDocument);
     d->updateCaption();
-
-    if (d->mDocument->loadingState() == Document::Loaded) {
-        slotLoaded();
-    }
 }
 
 bool DocumentView::isEmpty() const
@@ -426,7 +420,7 @@ RasterImageView* DocumentView::imageView() const
     return d->mAdapter->rasterImageView();
 }
 
-void DocumentView::slotLoaded()
+void DocumentView::slotCompleted()
 {
     d->hideLoadingIndicator();
     d->updateCaption();

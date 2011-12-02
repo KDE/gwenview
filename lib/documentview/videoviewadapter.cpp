@@ -152,6 +152,7 @@ void VideoViewAdapter::setDocument(Document::Ptr doc)
     d->mDocument = doc;
     d->mMediaObject->setCurrentSource(d->mDocument->url());
     d->mMediaObject->play();
+    completed();
 }
 
 Document::Ptr VideoViewAdapter::document() const

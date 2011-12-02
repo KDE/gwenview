@@ -168,7 +168,7 @@ protected:
 
 private Q_SLOTS:
     void finishOpenUrl();
-    void slotLoaded();
+    void slotCompleted();
     void slotLoadingFailed();
 
     void zoomActualSize();

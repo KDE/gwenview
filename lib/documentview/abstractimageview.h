@@ -100,6 +100,7 @@ Q_SIGNALS:
     void zoomInRequested(const QPointF&);
     void zoomOutRequested(const QPointF&);
     void scrollPosChanged();
+    void completed();
 
 protected:
     void setChildItem(QGraphicsItem*);

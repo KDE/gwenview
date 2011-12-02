@@ -127,6 +127,11 @@ Q_SIGNALS:
 
     void scrollPosChanged();
 
+    /**
+     * Emitted when the adapter is done showing the document for the first time
+     */
+    void completed();
+
 private:
     QGraphicsWidget* mWidget;
 };

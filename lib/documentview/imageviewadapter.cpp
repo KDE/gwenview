@@ -50,6 +50,7 @@ ImageViewAdapter::ImageViewAdapter()
     connect(d->mView, SIGNAL(zoomInRequested(QPointF)), SIGNAL(zoomInRequested(QPointF)));
     connect(d->mView, SIGNAL(zoomOutRequested(QPointF)), SIGNAL(zoomOutRequested(QPointF)));
     connect(d->mView, SIGNAL(scrollPosChanged()), SIGNAL(scrollPosChanged()));
+    connect(d->mView, SIGNAL(completed()), SIGNAL(completed()));
     setWidget(d->mView);
 }
 

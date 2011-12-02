@@ -41,6 +41,7 @@ struct RasterImageViewPrivate {
     RasterImageView* q;
     ImageScaler* mScaler;
     QPixmap mBackgroundTexture;
+    bool mEmittedCompleted;
 
     // Config
     RasterImageView::AlphaBackgroundMode mAlphaBackgroundMode;
@@ -158,6 +159,7 @@ RasterImageView::RasterImageView(QGraphicsItem* parent)
 , d(new RasterImageViewPrivate)
 {
     d->q = this;
+    d->mEmittedCompleted = false;
 
     d->mAlphaBackgroundMode = AlphaBackgroundCheckBoard;
     d->mAlphaBackgroundColor = Qt::black;
@@ -286,6 +288,11 @@ void RasterImageView::updateFromScaler(int zoomedImageLeft, int zoomedImageTop, 
         painter.drawImage(viewportLeft, viewportTop, image);
     }
     update();
+
+    if (!d->mEmittedCompleted) {
+        d->mEmittedCompleted = true;
+        completed();
+    }
 }
 
 void RasterImageView::onZoomChanged()

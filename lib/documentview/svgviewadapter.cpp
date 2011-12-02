@@ -55,6 +55,7 @@ void SvgImageView::loadFromDocument()
         return;
     }
     mSvgItem->setSharedRenderer(renderer);
+    completed();
 }
 
 void SvgImageView::onZoomChanged()
@@ -90,7 +91,10 @@ SvgViewAdapter::SvgViewAdapter()
     setWidget(d->mView);
     connect(d->mView, SIGNAL(zoomChanged(qreal)), SIGNAL(zoomChanged(qreal)));
     connect(d->mView, SIGNAL(zoomToFitChanged(bool)), SIGNAL(zoomToFitChanged(bool)));
+    connect(d->mView, SIGNAL(zoomInRequested(QPointF)), SIGNAL(zoomInRequested(QPointF)));
+    connect(d->mView, SIGNAL(zoomOutRequested(QPointF)), SIGNAL(zoomOutRequested(QPointF)));
     connect(d->mView, SIGNAL(scrollPosChanged()), SIGNAL(scrollPosChanged()));
+    connect(d->mView, SIGNAL(completed()), SIGNAL(completed()));
 }
 
 SvgViewAdapter::~SvgViewAdapter()
