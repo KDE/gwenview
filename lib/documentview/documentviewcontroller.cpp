@@ -38,9 +38,39 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QAction>
 #include <QEvent>
+#include <QHBoxLayout>
 
 namespace Gwenview
 {
+
+/**
+ * A simple container which:
+ * - Horizontally center the tool widget
+ * - Provide a darker background
+ */
+class ToolContainerContent : public QWidget
+{
+public:
+    ToolContainerContent(QWidget* parent = 0)
+    : QWidget(parent)
+    , mLayout(new QHBoxLayout(this))
+    {
+        mLayout->setMargin(0);
+        setAutoFillBackground(true);
+        QPalette pal = palette();
+        pal.setColor(QPalette::Window, pal.color(QPalette::Window).dark(120));
+        setPalette(pal);
+    }
+
+    void setToolWidget(QWidget* widget)
+    {
+        mLayout->addWidget(widget, 0, Qt::AlignCenter);
+        setFixedHeight(widget->sizeHint().height());
+    }
+
+private:
+    QHBoxLayout* mLayout;
+};
 
 struct DocumentViewControllerPrivate {
     DocumentViewController* q;
@@ -48,6 +78,7 @@ struct DocumentViewControllerPrivate {
     DocumentView* mView;
     ZoomWidget* mZoomWidget;
     SlideContainer* mToolContainer;
+    ToolContainerContent* mToolContainerContent;
 
     KAction* mZoomToFitAction;
     KAction* mActualSizeAction;
@@ -120,6 +151,7 @@ DocumentViewController::DocumentViewController(KActionCollection* actionCollecti
     d->mView = 0;
     d->mZoomWidget = 0;
     d->mToolContainer = 0;
+    d->mToolContainerContent = new ToolContainerContent;
 
     d->setupActions();
 }
@@ -216,10 +248,9 @@ void DocumentViewController::updateTool()
     }
     AbstractRasterImageViewTool* tool = d->mView->currentTool();
     if (tool && tool->widget()) {
-        d->mToolContainer->setContent(tool->widget());
+        d->mToolContainerContent->setToolWidget(tool->widget());
         d->mToolContainer->slideIn();
     } else {
-        d->mToolContainer->setContent(0);
         d->mToolContainer->slideOut();
     }
 }
@@ -227,6 +258,7 @@ void DocumentViewController::updateTool()
 void DocumentViewController::setToolContainer(SlideContainer* container)
 {
     d->mToolContainer = container;
+    container->setContent(d->mToolContainerContent);
 }
 
 } // namespace
