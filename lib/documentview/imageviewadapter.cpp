@@ -36,14 +36,14 @@ namespace Gwenview
 
 //// ImageViewAdapter ////
 struct ImageViewAdapterPrivate {
-    ImageViewAdapter* that;
+    ImageViewAdapter* q;
     RasterImageView* mView;
 };
 
 ImageViewAdapter::ImageViewAdapter()
 : d(new ImageViewAdapterPrivate)
 {
-    d->that = this;
+    d->q = this;
     d->mView = new RasterImageView;
     connect(d->mView, SIGNAL(zoomChanged(qreal)), SIGNAL(zoomChanged(qreal)));
     connect(d->mView, SIGNAL(zoomToFitChanged(bool)), SIGNAL(zoomToFitChanged(bool)));

@@ -60,7 +60,7 @@ static QSize screenRatio()
 }
 
 struct CropWidgetPrivate : public Ui_CropWidget {
-    CropWidget* that;
+    CropWidget* q;
 
     Document::Ptr mDocument;
     CropTool* mCropTool;
@@ -163,9 +163,9 @@ struct CropWidgetPrivate : public Ui_CropWidget {
         cropButton->setText(i18n("Crop"));
 
         QObject::connect(dialogButtonBox, SIGNAL(accepted()),
-                         that, SIGNAL(cropRequested()));
+                         q, SIGNAL(cropRequested()));
         QObject::connect(dialogButtonBox, SIGNAL(rejected()),
-                         that, SIGNAL(done()));
+                         q, SIGNAL(done()));
     }
 };
 
@@ -174,7 +174,7 @@ CropWidget::CropWidget(QWidget* parent, RasterImageView* imageView, CropTool* cr
 , d(new CropWidgetPrivate)
 {
     setWindowFlags(Qt::Tool);
-    d->that = this;
+    d->q = this;
     d->mDocument = imageView->document();
     d->mUpdatingFromCropTool = false;
     d->mCropTool = cropTool;

@@ -78,7 +78,7 @@ static const qreal MAXIMUM_ZOOM_VALUE = qreal(DocumentView::MaximumZoom);
 static const int COMPARE_MARGIN = 4;
 
 struct DocumentViewPrivate {
-    DocumentView* that;
+    DocumentView* q;
     GraphicsHudWidget* mHud;
     KModifierKeyInfo* mModifierKeyInfo;
     BirdEyeView* mBirdEyeView;
@@ -100,34 +100,34 @@ struct DocumentViewPrivate {
         Q_ASSERT(adapter);
         mAdapter.reset(adapter);
 
-        adapter->widget()->setParentItem(that);
+        adapter->widget()->setParentItem(q);
         resizeAdapterWidget();
 
         if (adapter->canZoom()) {
             QObject::connect(adapter, SIGNAL(zoomChanged(qreal)),
-                             that, SLOT(slotZoomChanged(qreal)));
+                             q, SLOT(slotZoomChanged(qreal)));
             QObject::connect(adapter, SIGNAL(zoomToFitChanged(bool)),
-                             that, SIGNAL(zoomToFitChanged(bool)));
+                             q, SIGNAL(zoomToFitChanged(bool)));
         }
 
         QObject::connect(adapter, SIGNAL(scrollPosChanged()),
-                         that, SIGNAL(positionChanged()));
+                         q, SIGNAL(positionChanged()));
 
         adapter->loadConfig();
 
-        adapter->widget()->installSceneEventFilter(that);
+        adapter->widget()->installSceneEventFilter(q);
         if (mCurrent) {
             adapter->widget()->setFocus();
         }
 
-        that->adapterChanged();
-        that->positionChanged();
+        q->adapterChanged();
+        q->positionChanged();
         if (adapter->canZoom()) {
-            that->zoomToFitChanged(adapter->zoomToFit());
+            q->zoomToFitChanged(adapter->zoomToFit());
         }
         if (adapter->rasterImageView()) {
             QObject::connect(adapter->rasterImageView(), SIGNAL(currentToolChanged(AbstractRasterImageViewTool*)),
-                             that, SIGNAL(currentToolChanged(AbstractRasterImageViewTool*)));
+                             q, SIGNAL(currentToolChanged(AbstractRasterImageViewTool*)));
         }
     }
 
@@ -155,8 +155,8 @@ struct DocumentViewPrivate {
 
     void setupLoadingIndicator()
     {
-        mLoadingIndicator = new LoadingIndicator(that);
-        GraphicsWidgetFloater* floater = new GraphicsWidgetFloater(that);
+        mLoadingIndicator = new LoadingIndicator(q);
+        GraphicsWidgetFloater* floater = new GraphicsWidgetFloater(q);
         floater->setChildWidget(mLoadingIndicator);
     }
 
@@ -185,14 +185,14 @@ struct DocumentViewPrivate {
         layout->addWidget(trashButton);
         layout->addWidget(deselectButton);
 
-        mHud = new GraphicsHudWidget(that);
+        mHud = new GraphicsHudWidget(q);
         mHud->init(content, GraphicsHudWidget::OptionNone);
-        GraphicsWidgetFloater* floater = new GraphicsWidgetFloater(that);
+        GraphicsWidgetFloater* floater = new GraphicsWidgetFloater(q);
         floater->setChildWidget(mHud);
         floater->setAlignment(Qt::AlignBottom | Qt::AlignHCenter);
 
-        QObject::connect(trashButton, SIGNAL(clicked()), that, SLOT(emitHudTrashClicked()));
-        QObject::connect(deselectButton, SIGNAL(clicked()), that, SLOT(emitHudDeselectClicked()));
+        QObject::connect(trashButton, SIGNAL(clicked()), q, SLOT(emitHudTrashClicked()));
+        QObject::connect(deselectButton, SIGNAL(clicked()), q, SLOT(emitHudDeselectClicked()));
 
         mHud->hide();
     }
@@ -202,7 +202,7 @@ struct DocumentViewPrivate {
         if (mBirdEyeView) {
             delete mBirdEyeView;
         }
-        mBirdEyeView = new BirdEyeView(that);
+        mBirdEyeView = new BirdEyeView(q);
     }
 
     void updateCaption()
@@ -211,7 +211,7 @@ struct DocumentViewPrivate {
 
         Document::Ptr doc = mAdapter->document();
         if (!doc) {
-            emit that->captionUpdateRequested(caption);
+            emit q->captionUpdateRequested(caption);
             return;
         }
 
@@ -228,7 +228,7 @@ struct DocumentViewPrivate {
                            .arg(intZoom);
             }
         }
-        emit that->captionUpdateRequested(caption);
+        emit q->captionUpdateRequested(caption);
     }
 
     void uncheckZoomToFit()
@@ -241,13 +241,13 @@ struct DocumentViewPrivate {
     void setZoom(qreal zoom, const QPointF& center = QPointF(-1, -1))
     {
         uncheckZoomToFit();
-        zoom = qBound(that->minimumZoom(), zoom, MAXIMUM_ZOOM_VALUE);
+        zoom = qBound(q->minimumZoom(), zoom, MAXIMUM_ZOOM_VALUE);
         mAdapter->setZoom(zoom, center);
     }
 
     void updateZoomSnapValues()
     {
-        qreal min = that->minimumZoom();
+        qreal min = q->minimumZoom();
 
         mZoomSnapValues.clear();
         if (min < 1.) {
@@ -263,7 +263,7 @@ struct DocumentViewPrivate {
             mZoomSnapValues << zoom;
         }
 
-        that->minimumZoomChanged(min);
+        q->minimumZoomChanged(min);
     }
 
     void showLoadingIndicator()
@@ -286,14 +286,14 @@ struct DocumentViewPrivate {
     void animate(QPropertyAnimation* anim)
     {
         QObject::connect(anim, SIGNAL(finished()),
-                         that, SLOT(slotAnimationFinished()));
+                         q, SLOT(slotAnimationFinished()));
         anim->setDuration(500);
         anim->start(QAbstractAnimation::DeleteWhenStopped);
     }
 
     void resizeAdapterWidget()
     {
-        QRectF rect = QRectF(QPointF(0, 0), that->boundingRect().size());
+        QRectF rect = QRectF(QPointF(0, 0), q->boundingRect().size());
         if (mCompareMode) {
             rect.adjust(COMPARE_MARGIN, COMPARE_MARGIN, -COMPARE_MARGIN, -COMPARE_MARGIN);
         }
@@ -306,16 +306,16 @@ struct DocumentViewPrivate {
             if (event->modifiers() == Qt::ControlModifier) {
                 // Ctrl + Left or right button => zoom in or out
                 if (event->button() == Qt::LeftButton) {
-                    that->zoomIn(event->pos());
+                    q->zoomIn(event->pos());
                 } else if (event->button() == Qt::RightButton) {
-                    that->zoomOut(event->pos());
+                    q->zoomOut(event->pos());
                 }
             } else if (event->button() == Qt::MidButton) {
                 // Middle click => toggle zoom to fit
-                that->setZoomToFit(!mAdapter->zoomToFit());
+                q->setZoomToFit(!mAdapter->zoomToFit());
             }
         }
-        QMetaObject::invokeMethod(that, "emitFocused", Qt::QueuedConnection);
+        QMetaObject::invokeMethod(q, "emitFocused", Qt::QueuedConnection);
     }
 
     void fadeTo(qreal value)
@@ -323,14 +323,14 @@ struct DocumentViewPrivate {
         if (mFadeAnimation.data()) {
             // Reuse existing fade animation
             mFadeAnimation.data()->stop();
-            mFadeAnimation.data()->setStartValue(that->opacity());
+            mFadeAnimation.data()->setStartValue(q->opacity());
             mFadeAnimation.data()->setEndValue(value);
             mFadeAnimation.data()->start();
             return;
         }
         // Create a new fade animation
-        QPropertyAnimation* anim = new QPropertyAnimation(that, "opacity");
-        anim->setStartValue(that->opacity());
+        QPropertyAnimation* anim = new QPropertyAnimation(q, "opacity");
+        anim->setStartValue(q->opacity());
         anim->setEndValue(value);
         animate(anim);
         mFadeAnimation = anim;
@@ -344,7 +344,7 @@ DocumentView::DocumentView(QGraphicsScene* scene)
     setFlag(ItemIsSelectable);
     setFlag(ItemClipsChildrenToShape);
 
-    d->that = this;
+    d->q = this;
     d->mLoadingIndicator = 0;
     d->mBirdEyeView = 0;
     d->mCurrent = false;

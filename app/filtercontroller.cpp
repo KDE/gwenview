@@ -512,7 +512,7 @@ protected:
 };
 
 struct FilterControllerPrivate {
-    FilterController* that;
+    FilterController* q;
     QFrame* mFrame;
     SortedDirModel* mDirModel;
     QList<QAction*> mActionList;
@@ -521,8 +521,8 @@ struct FilterControllerPrivate {
 
     void addAction(const QString& text, const char* slot)
     {
-        QAction* action = new QAction(text, that);
-        QObject::connect(action, SIGNAL(triggered()), that, slot);
+        QAction* action = new QAction(text, q);
+        QObject::connect(action, SIGNAL(triggered()), q, slot);
         mActionList << action;
     }
 
@@ -536,7 +536,7 @@ struct FilterControllerPrivate {
         mFrame->layout()->addWidget(container);
 
         mFilterWidgetCount++;
-        QObject::connect(container, SIGNAL(destroyed()), that, SLOT(slotFilterWidgetClosed()));
+        QObject::connect(container, SIGNAL(destroyed()), q, SLOT(slotFilterWidgetClosed()));
     }
 };
 
@@ -544,7 +544,7 @@ FilterController::FilterController(QFrame* frame, SortedDirModel* dirModel)
 : QObject(frame)
 , d(new FilterControllerPrivate)
 {
-    d->that = this;
+    d->q = this;
     d->mFrame = frame;
     d->mDirModel = dirModel;
     d->mFilterWidgetCount = 0;

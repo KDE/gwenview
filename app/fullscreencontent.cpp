@@ -93,7 +93,7 @@ public:
 };
 
 struct FullScreenContentPrivate {
-    FullScreenContent* that;
+    FullScreenContent* q;
     FullScreenBar* mFullScreenBar;
     SlideShow* mSlideShow;
     QWidget* mButtonBar;
@@ -110,7 +110,7 @@ struct FullScreenContentPrivate {
         mOptionsButton->setIcon(KIcon("configure"));
         mOptionsButton->setToolTip(i18nc("@info:tooltip", "Configure Full Screen Mode"));
         QObject::connect(mOptionsButton, SIGNAL(clicked()),
-                         that, SLOT(showFullScreenConfigDialog()));
+                         q, SLOT(showFullScreenConfigDialog()));
     }
 
     void setupThemeListWidget(QListWidget* listWidget)
@@ -121,7 +121,7 @@ struct FullScreenContentPrivate {
         listWidget->setCurrentRow(row);
 
         QObject::connect(listWidget, SIGNAL(currentTextChanged(QString)),
-                         that, SLOT(setCurrentFullScreenTheme(QString)));
+                         q, SLOT(setCurrentFullScreenTheme(QString)));
     }
 
     void applyCurrentFullScreenTheme()
@@ -178,7 +178,7 @@ FullScreenContent::FullScreenContent(FullScreenBar* bar, KActionCollection* acti
 : QObject(bar)
 , d(new FullScreenContentPrivate)
 {
-    d->that = this;
+    d->q = this;
     d->mFullScreenBar = bar;
     d->mSlideShow = slideShow;
     bar->installEventFilter(this);

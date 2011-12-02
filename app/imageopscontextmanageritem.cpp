@@ -61,7 +61,7 @@ namespace Gwenview
 #endif
 
 struct ImageOpsContextManagerItem::Private {
-    ImageOpsContextManagerItem* that;
+    ImageOpsContextManagerItem* q;
     MainWindow* mMainWindow;
     SideBarGroup* mGroup;
 
@@ -78,35 +78,35 @@ struct ImageOpsContextManagerItem::Private {
     {
         KActionCollection* actionCollection = mMainWindow->actionCollection();
         KActionCategory* edit = new KActionCategory(i18nc("@title actions category - means actions changing image", "Edit"), actionCollection);
-        mRotateLeftAction = edit->addAction("rotate_left", that, SLOT(rotateLeft()));
+        mRotateLeftAction = edit->addAction("rotate_left", q, SLOT(rotateLeft()));
         mRotateLeftAction->setText(i18n("Rotate Left"));
         mRotateLeftAction->setIcon(KIcon("object-rotate-left"));
         mRotateLeftAction->setShortcut(Qt::CTRL + Qt::Key_L);
 
-        mRotateRightAction = edit->addAction("rotate_right", that, SLOT(rotateRight()));
+        mRotateRightAction = edit->addAction("rotate_right", q, SLOT(rotateRight()));
         mRotateRightAction->setText(i18n("Rotate Right"));
         mRotateRightAction->setIcon(KIcon("object-rotate-right"));
         mRotateRightAction->setShortcut(Qt::CTRL + Qt::Key_R);
 
-        mMirrorAction = edit->addAction("mirror", that, SLOT(mirror()));
+        mMirrorAction = edit->addAction("mirror", q, SLOT(mirror()));
         mMirrorAction->setText(i18n("Mirror"));
         mMirrorAction->setIcon(KIcon("object-flip-horizontal"));
 
-        mFlipAction = edit->addAction("flip", that, SLOT(flip()));
+        mFlipAction = edit->addAction("flip", q, SLOT(flip()));
         mFlipAction->setText(i18n("Flip"));
         mFlipAction->setIcon(KIcon("object-flip-vertical"));
 
-        mResizeAction = edit->addAction("resize", that, SLOT(resizeImage()));
+        mResizeAction = edit->addAction("resize", q, SLOT(resizeImage()));
         mResizeAction->setText(i18n("Resize"));
         mResizeAction->setIcon(KIcon("transform-scale"));
         mResizeAction->setShortcut(Qt::SHIFT + Qt::Key_R);
 
-        mCropAction = edit->addAction("crop", that, SLOT(crop()));
+        mCropAction = edit->addAction("crop", q, SLOT(crop()));
         mCropAction->setText(i18n("Crop"));
         mCropAction->setIcon(KIcon("transform-crop-and-resize"));
         mCropAction->setShortcut(Qt::SHIFT + Qt::Key_C);
 
-        mRedEyeReductionAction = edit->addAction("red_eye_reduction", that, SLOT(startRedEyeReduction()));
+        mRedEyeReductionAction = edit->addAction("red_eye_reduction", q, SLOT(startRedEyeReduction()));
         mRedEyeReductionAction->setText(i18n("Red Eye Reduction"));
         //mRedEyeReductionAction->setIcon(KIcon("transform-crop-and-resize"));
 
@@ -123,7 +123,7 @@ struct ImageOpsContextManagerItem::Private {
 
     bool ensureEditable()
     {
-        KUrl url = that->contextManager()->currentUrl();
+        KUrl url = q->contextManager()->currentUrl();
         return GvCore::ensureDocumentIsEditable(url);
     }
 };
@@ -132,7 +132,7 @@ ImageOpsContextManagerItem::ImageOpsContextManagerItem(ContextManager* manager, 
 : AbstractContextManagerItem(manager)
 , d(new Private)
 {
-    d->that = this;
+    d->q = this;
     d->mMainWindow = mainWindow;
     d->mGroup = new SideBarGroup(i18n("Image Operations"));
     setWidget(d->mGroup);

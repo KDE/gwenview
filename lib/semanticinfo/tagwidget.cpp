@@ -110,7 +110,7 @@ protected:
 };
 
 struct TagWidgetPrivate {
-    TagWidget* that;
+    TagWidget* q;
     TagInfo mTagInfo;
     QListView* mListView;
     QComboBox* mComboBox;
@@ -124,9 +124,9 @@ struct TagWidgetPrivate {
         mListView = new QListView;
         TagItemDelegate* delegate = new TagItemDelegate(mListView);
         QObject::connect(delegate, SIGNAL(removeTagRequested(SemanticInfoTag)),
-                         that, SLOT(removeTag(SemanticInfoTag)));
+                         q, SLOT(removeTag(SemanticInfoTag)));
         QObject::connect(delegate, SIGNAL(assignTagToAllRequested(SemanticInfoTag)),
-                         that, SLOT(assignTag(SemanticInfoTag)));
+                         q, SLOT(assignTag(SemanticInfoTag)));
         mListView->setItemDelegate(delegate);
         mListView->setModel(mAssignedTagModel);
 
@@ -134,8 +134,8 @@ struct TagWidgetPrivate {
         mComboBox->setEditable(true);
         mComboBox->setInsertPolicy(QComboBox::NoInsert);
 
-        mTagCompleterModel = new TagCompleterModel(that);
-        QCompleter* completer = new QCompleter(that);
+        mTagCompleterModel = new TagCompleterModel(q);
+        QCompleter* completer = new QCompleter(q);
         completer->setCaseSensitivity(Qt::CaseInsensitive);
         completer->setModel(mTagCompleterModel);
         mComboBox->setCompleter(completer);
@@ -146,9 +146,9 @@ struct TagWidgetPrivate {
         mAddButton->setIcon(KIcon("list-add"));
         mAddButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         QObject::connect(mAddButton, SIGNAL(clicked()),
-                         that, SLOT(addTagFromComboBox()));
+                         q, SLOT(addTagFromComboBox()));
 
-        QVBoxLayout* layout = new QVBoxLayout(that);
+        QVBoxLayout* layout = new QVBoxLayout(q);
         layout->setMargin(0);
         layout->addWidget(mListView);
 
@@ -157,7 +157,7 @@ struct TagWidgetPrivate {
         hLayout->addWidget(mAddButton);
         layout->addLayout(hLayout);
 
-        that->setTabOrder(mComboBox, mListView);
+        q->setTabOrder(mComboBox, mListView);
     }
 
     void fillTagModel()
@@ -186,7 +186,7 @@ TagWidget::TagWidget(QWidget* parent)
 : QWidget(parent)
 , d(new TagWidgetPrivate)
 {
-    d->that = this;
+    d->q = this;
     d->mBackEnd = 0;
     d->mAssignedTagModel = new TagModel(this);
     d->setupWidgets();

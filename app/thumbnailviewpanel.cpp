@@ -66,7 +66,7 @@ inline Sorting::Enum sortingFromSortAction(const QAction* action)
 }
 
 struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
-    ThumbnailViewPanel* that;
+    ThumbnailViewPanel* q;
     KFilePlacesModel* mFilePlacesModel;
     KUrlNavigator* mUrlNavigator;
     SortedDirModel* mDirModel;
@@ -79,8 +79,8 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 
     void setupWidgets()
     {
-        setupUi(that);
-        that->layout()->setMargin(0);
+        setupUi(q);
+        q->layout()->setMargin(0);
 
         // mThumbnailView
         mThumbnailView->setModel(mDirModel);
@@ -91,13 +91,13 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 
         // mUrlNavigator (use stupid layouting code because KUrlNavigator ctor
         // can't be used directly from Designer)
-        mFilePlacesModel = new KFilePlacesModel(that);
+        mFilePlacesModel = new KFilePlacesModel(q);
         mUrlNavigator = new KUrlNavigator(mFilePlacesModel, KUrl(), mUrlNavigatorContainer);
         QVBoxLayout* layout = new QVBoxLayout(mUrlNavigatorContainer);
         layout->setMargin(0);
         layout->addWidget(mUrlNavigator);
         QObject::connect(mUrlNavigator, SIGNAL(urlsDropped(KUrl, QDropEvent*)),
-                         that, SLOT(slotUrlsDropped(KUrl, QDropEvent*)));
+                         q, SLOT(slotUrlsDropped(KUrl, QDropEvent*)));
 
         // Thumbnail slider
         QObject::connect(mThumbnailSlider, SIGNAL(valueChanged(int)),
@@ -109,7 +109,7 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
     void setupActions(KActionCollection* actionCollection)
     {
         KActionCategory* view = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface", "View"), actionCollection);
-        KAction* action = view->addAction("edit_location", that, SLOT(editLocation()));
+        KAction* action = view->addAction("edit_location", q, SLOT(editLocation()));
         action->setText(i18nc("@action:inmenu Navigation Bar", "Edit Location"));
         action->setShortcut(Qt::Key_F6);
 
@@ -122,14 +122,14 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
         action = mSortAction->addAction(i18nc("@addAction:inmenu", "Size"));
         action->setData(QVariant(Sorting::Size));
         QObject::connect(mSortAction, SIGNAL(triggered(QAction*)),
-                         that, SLOT(updateSortOrder()));
+                         q, SLOT(updateSortOrder()));
 
-        mThumbnailDetailsActionGroup = new QActionGroup(that);
+        mThumbnailDetailsActionGroup = new QActionGroup(q);
         mThumbnailDetailsActionGroup->setExclusive(false);
         KActionMenu* thumbnailDetailsAction = view->add<KActionMenu>("thumbnail_details");
         thumbnailDetailsAction->setText(i18nc("@action:inmenu", "Thumbnail Details"));
 #define addAction(text, detail) \
-    action = new KAction(that); \
+    action = new KAction(q); \
     thumbnailDetailsAction->addAction(action); \
     action->setText(text); \
     action->setCheckable(true); \
@@ -137,7 +137,7 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
     action->setData(QVariant(detail)); \
     mThumbnailDetailsActionGroup->addAction(action); \
     QObject::connect(action, SIGNAL(triggered(bool)), \
-                     that, SLOT(updateThumbnailDetails()));
+                     q, SLOT(updateThumbnailDetails()));
         addAction(i18nc("@action:inmenu", "Filename"), PreviewItemDelegate::FileNameDetail);
         addAction(i18nc("@action:inmenu", "Date"), PreviewItemDelegate::DateDetail);
         addAction(i18nc("@action:inmenu", "Image Size"), PreviewItemDelegate::ImageSizeDetail);
@@ -148,7 +148,7 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 #undef addAction
 
         KActionCategory* file = new KActionCategory(i18nc("@title actions category", "File"), actionCollection);
-        action = file->addAction("add_folder_to_places", that, SLOT(addFolderToPlaces()));
+        action = file->addAction("add_folder_to_places", q, SLOT(addFolderToPlaces()));
         action->setText(i18nc("@action:inmenu", "Add Folder to Places"));
     }
 
@@ -171,13 +171,13 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
     void setupDocumentCountConnections()
     {
         QObject::connect(mDirModel, SIGNAL(rowsInserted(QModelIndex, int, int)),
-                         that, SLOT(slotDirModelRowsInserted(QModelIndex, int, int)));
+                         q, SLOT(slotDirModelRowsInserted(QModelIndex, int, int)));
 
         QObject::connect(mDirModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex, int, int)),
-                         that, SLOT(slotDirModelRowsAboutToBeRemoved(QModelIndex, int, int)));
+                         q, SLOT(slotDirModelRowsAboutToBeRemoved(QModelIndex, int, int)));
 
         QObject::connect(mDirModel, SIGNAL(modelReset()),
-                         that, SLOT(slotDirModelReset()));
+                         q, SLOT(slotDirModelReset()));
     }
 
     int documentCountInIndexRange(const QModelIndex& parent, int start, int end)
@@ -198,7 +198,7 @@ ThumbnailViewPanel::ThumbnailViewPanel(QWidget* parent, SortedDirModel* dirModel
 : QWidget(parent)
 , d(new ThumbnailViewPanelPrivate)
 {
-    d->that = this;
+    d->q = this;
     d->mDirModel = dirModel;
     d->mDocumentCount = 0;
     d->mActionCollection = actionCollection;

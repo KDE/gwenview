@@ -54,7 +54,7 @@ QToolButton* createToolButton()
 }
 
 struct SaveBarPrivate {
-    SaveBar* that;
+    SaveBar* q;
     KActionCollection* mActionCollection;
     QWidget* mSaveBarWidget;
     QWidget* mTopRowWidget;
@@ -229,7 +229,7 @@ SaveBar::SaveBar(QWidget* parent, KActionCollection* actionCollection)
 : SlideContainer(parent)
 , d(new SaveBarPrivate)
 {
-    d->that = this;
+    d->q = this;
     d->mFullScreenMode = false;
     d->mActionCollection = actionCollection;
     d->mSaveBarWidget = new QWidget();

@@ -54,7 +54,7 @@ static const int INITIAL_HIDE_TIMEOUT = 2000;
 static const int EXTRA_BAR_HEIGHT = 20;
 
 struct FullScreenBarPrivate {
-    FullScreenBar* that;
+    FullScreenBar* q;
     QTimeLine* mTimeLine;
     QTimer* mAutoHideCursorTimer;
     bool mAutoHidingEnabled;
@@ -80,16 +80,16 @@ struct FullScreenBarPrivate {
      * sliding. The rectangle is in global coords.
      */
     QRect slideInTriggerRect() const {
-        QRect rect = QApplication::desktop()->screenGeometry(QApplication::desktop()->screenNumber(that->parentWidget()));
+        QRect rect = QApplication::desktop()->screenGeometry(QApplication::desktop()->screenNumber(q->parentWidget()));
         // Take parent widget position into account because it may not be at
         // the top of the screen, for example when the save bar warning is
         // shown.
-        rect.setHeight(that->parentWidget()->y() + that->height() + EXTRA_BAR_HEIGHT);
+        rect.setHeight(q->parentWidget()->y() + q->height() + EXTRA_BAR_HEIGHT);
         return rect;
     }
 
     bool shouldHide() const {
-        Q_ASSERT(that->parentWidget());
+        Q_ASSERT(q->parentWidget());
 
         if (!mAutoHidingEnabled) {
             return false;
@@ -113,7 +113,7 @@ FullScreenBar::FullScreenBar(QWidget* parent)
 : QFrame(parent)
 , d(new FullScreenBarPrivate)
 {
-    d->that = this;
+    d->q = this;
     d->mAutoHidingEnabled = true;
     setObjectName(QLatin1String("fullScreenBar"));
 

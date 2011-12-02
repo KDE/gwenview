@@ -56,7 +56,7 @@ inline qreal zoomForSliderValue(int sliderValue)
 }
 
 struct ZoomWidgetPrivate {
-    ZoomWidget* that;
+    ZoomWidget* q;
 
     StatusBarToolButton* mZoomToFitButton;
     StatusBarToolButton* mActualSizeButton;
@@ -74,7 +74,7 @@ struct ZoomWidgetPrivate {
         // been updated yet.
         qreal zoom = zoomForSliderValue(mZoomSlider->slider()->sliderPosition());
         mZoomUpdatedBySlider = true;
-        emit that->zoomChanged(zoom);
+        emit q->zoomChanged(zoom);
         mZoomUpdatedBySlider = false;
     }
 };
@@ -83,7 +83,7 @@ ZoomWidget::ZoomWidget(QWidget* parent)
 : QFrame(parent)
 , d(new ZoomWidgetPrivate)
 {
-    d->that = this;
+    d->q = this;
     d->mZoomUpdatedBySlider = false;
 
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);

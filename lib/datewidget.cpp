@@ -38,7 +38,7 @@ namespace Gwenview
 {
 
 struct DateWidgetPrivate {
-    DateWidget* that;
+    DateWidget* q;
 
     QDate mDate;
     KDatePicker* mDatePicker;
@@ -56,9 +56,9 @@ struct DateWidgetPrivate {
         mDatePicker->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
 
         QObject::connect(mDatePicker, SIGNAL(dateEntered(QDate)),
-                         that, SLOT(slotDatePickerModified(QDate)));
+                         q, SLOT(slotDatePickerModified(QDate)));
         QObject::connect(mDatePicker, SIGNAL(dateSelected(QDate)),
-                         that, SLOT(slotDatePickerModified(QDate)));
+                         q, SLOT(slotDatePickerModified(QDate)));
     }
 
     void updateButton()
@@ -70,7 +70,7 @@ struct DateWidgetPrivate {
     {
         mDate = mDate.addDays(delta);
         updateButton();
-        that->dateChanged(mDate);
+        q->dateChanged(mDate);
     }
 };
 
@@ -78,7 +78,7 @@ DateWidget::DateWidget(QWidget* parent)
 : QWidget(parent)
 , d(new DateWidgetPrivate)
 {
-    d->that = this;
+    d->q = this;
 
     d->setupDatePicker();
 

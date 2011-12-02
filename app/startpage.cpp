@@ -96,7 +96,7 @@ public:
 };
 
 struct StartPagePrivate : public Ui_StartPage {
-    StartPage* that;
+    StartPage* q;
     GvCore* mGvCore;
     KFilePlacesModel* mBookmarksModel;
     bool mSearchUiInitialized;
@@ -149,7 +149,7 @@ StartPage::StartPage(QWidget* parent, GvCore* gvCore)
 : QFrame(parent)
 , d(new StartPagePrivate)
 {
-    d->that = this;
+    d->q = this;
     d->mGvCore = gvCore;
     d->mSearchUiInitialized = false;
 

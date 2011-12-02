@@ -123,7 +123,7 @@ private:
 };
 
 struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem {
-    SemanticInfoContextManagerItem* that;
+    SemanticInfoContextManagerItem* q;
     SideBarGroup* mGroup;
     KActionCollection* mActionCollection;
     DocumentPanel* mDocumentPanel;
@@ -138,8 +138,8 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
     void setupGroup()
     {
         mGroup = new SideBarGroup(i18n("Semantic Information"));
-        that->setWidget(mGroup);
-        EventWatcher::install(mGroup, QEvent::Show, that, SLOT(update()));
+        q->setWidget(mGroup);
+        EventWatcher::install(mGroup, QEvent::Show, q, SLOT(update()));
 
         QWidget* container = new QWidget;
         setupUi(container);
@@ -147,11 +147,11 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
         mGroup->addWidget(container);
 
         QObject::connect(mRatingWidget, SIGNAL(ratingChanged(int)),
-                         that, SLOT(slotRatingChanged(int)));
+                         q, SLOT(slotRatingChanged(int)));
         QObject::connect(mRatingMapper, SIGNAL(mapped(int)),
                          mRatingWidget, SLOT(setRating(int)));
 
-        mDescriptionTextEdit->installEventFilter(that);
+        mDescriptionTextEdit->installEventFilter(q);
 
         QObject::connect(mTagLabel, SIGNAL(linkActivated(QString)),
                          mEditTagsAction, SLOT(trigger()));
@@ -165,10 +165,10 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
         mEditTagsAction->setText(i18nc("@action", "Edit Tags"));
         mEditTagsAction->setShortcut(Qt::CTRL | Qt::Key_T);
         QObject::connect(mEditTagsAction, SIGNAL(triggered()),
-                         that, SLOT(showSemanticInfoDialog()));
+                         q, SLOT(showSemanticInfoDialog()));
         mActions << mEditTagsAction;
 
-        mRatingMapper = new QSignalMapper(that);
+        mRatingMapper = new QSignalMapper(q);
         for (int rating = 0; rating <= 5; ++rating) {
             KAction* action = edit->addAction(QString("rate_%1").arg(rating));
             if (rating == 0) {
@@ -181,17 +181,17 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
             mRatingMapper->setMapping(action, rating * 2);
             mActions << action;
         }
-        QObject::connect(mRatingMapper, SIGNAL(mapped(int)), that, SLOT(slotRatingChanged(int)));
+        QObject::connect(mRatingMapper, SIGNAL(mapped(int)), q, SLOT(slotRatingChanged(int)));
     }
 
     void updateTagLabel()
     {
-        if (that->contextManager()->selectedFileItemList().isEmpty()) {
+        if (q->contextManager()->selectedFileItemList().isEmpty()) {
             mTagLabel->clear();
             return;
         }
 
-        AbstractSemanticInfoBackEnd* backEnd = that->contextManager()->dirModel()->semanticInfoBackEnd();
+        AbstractSemanticInfoBackEnd* backEnd = q->contextManager()->dirModel()->semanticInfoBackEnd();
 
         TagInfo::ConstIterator
         it = mTagInfo.constBegin(),
@@ -215,7 +215,7 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
 
     void updateSemanticInfoDialog()
     {
-        mSemanticInfoDialog->mTagWidget->setEnabled(!that->contextManager()->selectedFileItemList().isEmpty());
+        mSemanticInfoDialog->mTagWidget->setEnabled(!q->contextManager()->selectedFileItemList().isEmpty());
         mSemanticInfoDialog->mTagWidget->setTagInfo(mTagInfo);
     }
 };
@@ -224,7 +224,7 @@ SemanticInfoContextManagerItem::SemanticInfoContextManagerItem(ContextManager* m
 : AbstractContextManagerItem(manager)
 , d(new SemanticInfoContextManagerItemPrivate)
 {
-    d->that = this;
+    d->q = this;
     d->mActionCollection = actionCollection;
     d->mDocumentPanel = documentPanel;
 

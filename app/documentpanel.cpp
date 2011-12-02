@@ -128,7 +128,7 @@ static QString gradient(Qt::Orientation orientation, const QColor &color, int va
  * +-------------------------------------------------------------------+
  */
 struct DocumentPanelPrivate {
-    DocumentPanel* that;
+    DocumentPanel* q;
     SlideShow* mSlideShow;
     KActionCollection* mActionCollection;
     QSplitter *mThumbnailSplitter;
@@ -226,10 +226,10 @@ struct DocumentPanelPrivate {
 
     void setupDocumentViewController()
     {
-        mDocumentViewController = new DocumentViewController(mActionCollection, that);
+        mDocumentViewController = new DocumentViewController(mActionCollection, q);
         mDocumentViewController->setZoomWidget(mZoomWidget);
         mDocumentViewController->setToolContainer(mToolContainer);
-        mSynchronizer = new DocumentViewSynchronizer(that);
+        mSynchronizer = new DocumentViewSynchronizer(q);
     }
 
     DocumentView* createDocumentView()
@@ -238,24 +238,24 @@ struct DocumentPanelPrivate {
 
         // Connect context menu
         QObject::connect(view, SIGNAL(contextMenuRequested()),
-                         that, SLOT(showContextMenu()));
+                         q, SLOT(showContextMenu()));
 
         QObject::connect(view, SIGNAL(completed()),
-                         that, SIGNAL(completed()));
+                         q, SIGNAL(completed()));
         QObject::connect(view, SIGNAL(previousImageRequested()),
-                         that, SIGNAL(previousImageRequested()));
+                         q, SIGNAL(previousImageRequested()));
         QObject::connect(view, SIGNAL(nextImageRequested()),
-                         that, SIGNAL(nextImageRequested()));
+                         q, SIGNAL(nextImageRequested()));
         QObject::connect(view, SIGNAL(captionUpdateRequested(QString)),
-                         that, SIGNAL(captionUpdateRequested(QString)));
+                         q, SIGNAL(captionUpdateRequested(QString)));
         QObject::connect(view, SIGNAL(toggleFullScreenRequested()),
-                         that, SIGNAL(toggleFullScreenRequested()));
+                         q, SIGNAL(toggleFullScreenRequested()));
         QObject::connect(view, SIGNAL(focused(DocumentView*)),
-                         that, SLOT(slotViewFocused(DocumentView*)));
+                         q, SLOT(slotViewFocused(DocumentView*)));
         QObject::connect(view, SIGNAL(hudTrashClicked(DocumentView*)),
-                         that, SLOT(trashView(DocumentView*)));
+                         q, SLOT(trashView(DocumentView*)));
         QObject::connect(view, SIGNAL(hudDeselectClicked(DocumentView*)),
-                         that, SLOT(deselectView(DocumentView*)));
+                         q, SLOT(deselectView(DocumentView*)));
 
         QObject::connect(view, SIGNAL(videoFinished()),
                          mSlideShow, SLOT(resumeAndGoToNextUrl()));
@@ -299,14 +299,14 @@ struct DocumentPanelPrivate {
     void setupSplitter()
     {
         Qt::Orientation orientation = GwenviewConfig::thumbnailBarOrientation();
-        mThumbnailSplitter = new Splitter(orientation == Qt::Horizontal ? Qt::Vertical : Qt::Horizontal, that);
+        mThumbnailSplitter = new Splitter(orientation == Qt::Horizontal ? Qt::Vertical : Qt::Horizontal, q);
         mThumbnailBar->setOrientation(orientation);
         mThumbnailBar->setRowCount(GwenviewConfig::thumbnailBarRowCount());
         mThumbnailSplitter->addWidget(mAdapterContainer);
         mThumbnailSplitter->addWidget(mThumbnailBar);
         mThumbnailSplitter->setSizes(GwenviewConfig::thumbnailSplitterSizes());
 
-        QVBoxLayout* layout = new QVBoxLayout(that);
+        QVBoxLayout* layout = new QVBoxLayout(q);
         layout->setMargin(0);
         layout->addWidget(mThumbnailSplitter);
     }
@@ -366,7 +366,7 @@ DocumentPanel::DocumentPanel(QWidget* parent, SlideShow* slideShow, KActionColle
 : QWidget(parent)
 , d(new DocumentPanelPrivate)
 {
-    d->that = this;
+    d->q = this;
     d->mSlideShow = slideShow;
     d->mActionCollection = actionCollection;
     d->mFullScreenMode = false;

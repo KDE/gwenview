@@ -112,7 +112,7 @@ struct PreviewItemDelegatePrivate {
     typedef QHash<int, QPixmap> ShadowCache;
     mutable ShadowCache mShadowCache;
 
-    PreviewItemDelegate* that;
+    PreviewItemDelegate* q;
     ThumbnailView* mView;
     QWidget* mContextBar;
     QToolButton* mSaveButton;
@@ -241,7 +241,7 @@ struct PreviewItemDelegatePrivate {
             return false;
         }
         if (type == QEvent::MouseButtonRelease) {
-            that->setDocumentRatingRequested(urlForIndex(mIndexUnderCursor) , rating);
+            q->setDocumentRatingRequested(urlForIndex(mIndexUnderCursor) , rating);
         }
         return true;
 #else
@@ -565,7 +565,7 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
 : QItemDelegate(view)
 , d(new PreviewItemDelegatePrivate)
 {
-    d->that = this;
+    d->q = this;
     d->mView = view;
     view->viewport()->installEventFilter(this);
     d->mThumbnailSize = view->thumbnailSize();

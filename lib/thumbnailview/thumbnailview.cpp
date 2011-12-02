@@ -157,7 +157,7 @@ typedef QQueue<KUrl> UrlQueue;
 typedef QSet<QPersistentModelIndex> PersistentModelIndexSet;
 
 struct ThumbnailViewPrivate {
-    ThumbnailView* that;
+    ThumbnailView* q;
     int mThumbnailSize;
     AbstractDocumentInfoProvider* mDocumentInfoProvider;
     AbstractThumbnailViewHelper* mThumbnailViewHelper;
@@ -177,12 +177,12 @@ struct ThumbnailViewPrivate {
     void setupBusyAnimation()
     {
         mBusySequence = KPixmapSequence("process-working", 22);
-        mBusyAnimationTimeLine = new QTimeLine(100 * mBusySequence.frameCount(), that);
+        mBusyAnimationTimeLine = new QTimeLine(100 * mBusySequence.frameCount(), q);
         mBusyAnimationTimeLine->setCurveShape(QTimeLine::LinearCurve);
         mBusyAnimationTimeLine->setEndFrame(mBusySequence.frameCount() - 1);
         mBusyAnimationTimeLine->setLoopCount(0);
         QObject::connect(mBusyAnimationTimeLine, SIGNAL(frameChanged(int)),
-                         that, SLOT(updateBusyIndexes()));
+                         q, SLOT(updateBusyIndexes()));
     }
 
     void scheduleThumbnailGenerationForVisibleItems()
@@ -204,7 +204,7 @@ struct ThumbnailViewPrivate {
         QSize fullSize;
         mDocumentInfoProvider->thumbnailForDocument(url, group, &pix, &fullSize);
         mThumbnailForUrl[url] = Thumbnail(QPersistentModelIndex(index), KDateTime::currentLocalDateTime());
-        that->setThumbnail(item, pix, fullSize);
+        q->setThumbnail(item, pix, fullSize);
     }
 
     void generateThumbnailsForItems(const KFileItemList& list)
@@ -213,9 +213,9 @@ struct ThumbnailViewPrivate {
         if (!mThumbnailLoadJob) {
             mThumbnailLoadJob = new ThumbnailLoadJob(list, group);
             QObject::connect(mThumbnailLoadJob, SIGNAL(thumbnailLoaded(KFileItem, QPixmap, QSize)),
-                             that, SLOT(setThumbnail(KFileItem, QPixmap, QSize)));
+                             q, SLOT(setThumbnail(KFileItem, QPixmap, QSize)));
             QObject::connect(mThumbnailLoadJob, SIGNAL(thumbnailLoadingFailed(KFileItem)),
-                             that, SLOT(setBrokenThumbnail(KFileItem)));
+                             q, SLOT(setBrokenThumbnail(KFileItem)));
             mThumbnailLoadJob->start();
         } else {
             mThumbnailLoadJob->setThumbnailGroup(group);
@@ -269,7 +269,7 @@ struct ThumbnailViewPrivate {
             QModelIndex index;
             if (row == thumbCount - 1 && more) {
                 QString text = "(...)";
-                QPixmap pix(that->fontMetrics().boundingRect(text).size());
+                QPixmap pix(q->fontMetrics().boundingRect(text).size());
                 pix.fill(Qt::transparent);
                 {
                     QPainter painter(&pix);
@@ -307,7 +307,7 @@ ThumbnailView::ThumbnailView(QWidget* parent)
 : QListView(parent)
 , d(new ThumbnailViewPrivate)
 {
-    d->that = this;
+    d->q = this;
     d->mThumbnailViewHelper = 0;
     d->mDocumentInfoProvider = 0;
     // Init to some stupid value so that the first call to setThumbnailSize()

@@ -166,7 +166,7 @@ struct MenuInfo {
 typedef QMap<KIPI::Category, MenuInfo> MenuInfoMap;
 
 struct KIPIInterfacePrivate {
-    KIPIInterface* that;
+    KIPIInterface* q;
     MainWindow* mMainWindow;
     QMenu* mPluginMenu;
     KIPI::PluginLoader* mPluginLoader;
@@ -178,7 +178,7 @@ struct KIPIInterfacePrivate {
         mPluginMenu = static_cast<QMenu*>(
                           mMainWindow->factory()->container("plugins", mMainWindow));
         QObject::connect(mPluginMenu, SIGNAL(aboutToShow()),
-                         that, SLOT(loadPlugins()));
+                         q, SLOT(loadPlugins()));
     }
 
     void createDummyPluginAction(const QString& text)
@@ -195,7 +195,7 @@ KIPIInterface::KIPIInterface(MainWindow* mainWindow)
 : KIPI::Interface(mainWindow)
 , d(new KIPIInterfacePrivate)
 {
-    d->that = this;
+    d->q = this;
     d->mMainWindow = mainWindow;
     d->mPluginLoader = 0;
 
