@@ -781,12 +781,12 @@ void ThumbnailView::generateThumbnailsForVisibleItems()
     }
     KFileItemList list;
     QRect visibleRect = viewport()->rect();
-    // Adjust visibleRect so that next invisible rows of thumbnails
+    // Adjust visibleRect so that next thumbnail page|row
     // get generated too
     if (isWrapping()) {
-        visibleRect.adjust(0, 0, 0, d->mThumbnailSize * 2);
+        visibleRect.setHeight(visibleRect.height() * 2);
     } else {
-        visibleRect.adjust(0, 0, visibleRect.width() / 2, 0);
+        visibleRect.setWidth(visibleRect.width() * 2);
     }
 
     for (int row = 0; row < model()->rowCount(); ++row) {
