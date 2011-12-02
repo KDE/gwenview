@@ -33,7 +33,7 @@ class KUrl;
 namespace Gwenview
 {
 
-class DocumentPanel;
+class ViewMainPage;
 class ContextManager;
 class MessageBubble;
 
@@ -50,7 +50,7 @@ public:
 
     void startSlideShow();
 
-    DocumentPanel* documentPanel() const;
+    ViewMainPage* documentPanel() const;
 
     ContextManager* contextManager() const;
 

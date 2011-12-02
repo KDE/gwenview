@@ -63,7 +63,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "configdialog.h"
 #include "contextmanager.h"
 #include "documentinfoprovider.h"
-#include "documentpanel.h"
+#include "viewmainpage.h"
 #include "fileopscontextmanageritem.h"
 #include "folderviewcontextmanageritem.h"
 #include "fullscreencontent.h"
@@ -143,7 +143,7 @@ struct MainWindow::Private {
     MainWindow* q;
     QSplitter* mCentralSplitter;
     QWidget* mContentWidget;
-    DocumentPanel* mDocumentPanel;
+    ViewMainPage* mViewMainPage;
     KUrlNavigator* mUrlNavigator;
     ThumbnailView* mThumbnailView;
     DocumentInfoProvider* mDocumentInfoProvider;
@@ -219,10 +219,10 @@ struct MainWindow::Private {
         mSlideShow = new SlideShow(q);
 
         setupThumbnailView(mViewStackedWidget);
-        setupDocumentPanel(mViewStackedWidget);
+        setupViewMainPage(mViewStackedWidget);
         setupStartMainPage(mViewStackedWidget);
         mViewStackedWidget->addWidget(mBrowseMainPage);
-        mViewStackedWidget->addWidget(mDocumentPanel);
+        mViewStackedWidget->addWidget(mViewMainPage);
         mViewStackedWidget->addWidget(mStartMainPage);
         mViewStackedWidget->setCurrentWidget(mBrowseMainPage);
 
@@ -279,19 +279,19 @@ struct MainWindow::Private {
                 q, SLOT(openDirUrl(KUrl)));
     }
 
-    void setupDocumentPanel(QWidget* parent)
+    void setupViewMainPage(QWidget* parent)
     {
-        mDocumentPanel = new DocumentPanel(parent, mSlideShow, q->actionCollection());
-        connect(mDocumentPanel, SIGNAL(captionUpdateRequested(QString)),
+        mViewMainPage = new ViewMainPage(parent, mSlideShow, q->actionCollection());
+        connect(mViewMainPage, SIGNAL(captionUpdateRequested(QString)),
                 q, SLOT(setCaption(QString)));
-        connect(mDocumentPanel, SIGNAL(completed()),
+        connect(mViewMainPage, SIGNAL(completed()),
                 q, SLOT(slotPartCompleted()));
-        connect(mDocumentPanel, SIGNAL(previousImageRequested()),
+        connect(mViewMainPage, SIGNAL(previousImageRequested()),
                 q, SLOT(goToPrevious()));
-        connect(mDocumentPanel, SIGNAL(nextImageRequested()),
+        connect(mViewMainPage, SIGNAL(nextImageRequested()),
                 q, SLOT(goToNext()));
 
-        ThumbnailView* bar = mDocumentPanel->thumbnailBar();
+        ThumbnailView* bar = mViewMainPage->thumbnailBar();
         bar->setModel(mDirModel);
         bar->setDocumentInfoProvider(mDocumentInfoProvider);
         bar->setThumbnailViewHelper(mThumbnailViewHelper);
@@ -340,7 +340,7 @@ struct MainWindow::Private {
                 q, SLOT(setActiveViewModeAction(QAction*)));
 
         mFullScreenAction = static_cast<KToggleFullScreenAction*>(view->addAction(KStandardAction::FullScreen, q, SLOT(toggleFullScreen(bool))));
-        connect(mDocumentPanel, SIGNAL(toggleFullScreenRequested()),
+        connect(mViewMainPage, SIGNAL(toggleFullScreenRequested()),
                 mFullScreenAction, SLOT(trigger()));
 
         KAction* reduceLodAction = view->addAction("reduce_lod", q, SLOT(reduceLevelOfDetails()));
@@ -384,7 +384,7 @@ struct MainWindow::Private {
         mToggleSideBarAction->setText(i18nc("@action", "Sidebar"));
         connect(mBrowseMainPage->toggleSideBarButton(), SIGNAL(clicked()),
                 mToggleSideBarAction, SLOT(trigger()));
-        connect(mDocumentPanel->toggleSideBarButton(), SIGNAL(clicked()),
+        connect(mViewMainPage->toggleSideBarButton(), SIGNAL(clicked()),
                 mToggleSideBarAction, SLOT(trigger()));
 
         mToggleSlideShowAction = view->addAction("toggle_slideshow", q, SLOT(toggleSlideShow()));
@@ -456,7 +456,7 @@ struct MainWindow::Private {
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
         if (Nepomuk::ResourceManager::instance()->init() == 0) {
 #endif
-            semanticInfoItem = new SemanticInfoContextManagerItem(mContextManager, actionCollection, mDocumentPanel);
+            semanticInfoItem = new SemanticInfoContextManagerItem(mContextManager, actionCollection, mViewMainPage);
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
         }
 #endif
@@ -593,7 +593,7 @@ struct MainWindow::Private {
 
     void setupFullScreenBar()
     {
-        mFullScreenBar = new FullScreenBar(mDocumentPanel);
+        mFullScreenBar = new FullScreenBar(mViewMainPage);
         mFullScreenContent = new FullScreenContent(
             mFullScreenBar, q->actionCollection(), mSlideShow);
 
@@ -671,15 +671,15 @@ struct MainWindow::Private {
             return mUrlToSelect;
         }
 
-        // mBrowseMainPage and mDocumentPanel urls are almost always synced, but
-        // mBrowseMainPage can be more up-to-date because mDocumentPanel
+        // mBrowseMainPage and mViewMainPage urls are almost always synced, but
+        // mBrowseMainPage can be more up-to-date because mViewMainPage
         // url is only updated when the DocumentView starts to load the
         // document.
-        // This is why we only thrust mDocumentPanel url if it shows an url
+        // This is why we only thrust mViewMainPage url if it shows an url
         // which can't be listed: in this case mBrowseMainPage url is
         // empty.
-        if (mCurrentPageId == ViewPageId && !mDocumentPanel->isEmpty()) {
-            KUrl url = mDocumentPanel->url();
+        if (mCurrentPageId == ViewPageId && !mViewMainPage->isEmpty()) {
+            KUrl url = mViewMainPage->url();
             if (!KProtocolManager::supportsListing(url)) {
                 return url;
             }
@@ -742,7 +742,7 @@ struct MainWindow::Private {
             name = BROWSE_MODE_SIDE_BAR_GROUP;
             break;
         case ViewPageId:
-            name = mDocumentPanel->isFullScreenMode()
+            name = mViewMainPage->isFullScreenMode()
                    ? FULLSCREEN_MODE_SIDE_BAR_GROUP
                    : VIEW_MODE_SIDE_BAR_GROUP;
             break;
@@ -828,15 +828,15 @@ ContextManager* MainWindow::contextManager() const
     return d->mContextManager;
 }
 
-DocumentPanel* MainWindow::documentPanel() const
+ViewMainPage* MainWindow::documentPanel() const
 {
-    return d->mDocumentPanel;
+    return d->mViewMainPage;
 }
 
 bool MainWindow::currentDocumentIsRasterImage() const
 {
     if (d->mCurrentPageId == ViewPageId) {
-        Document::Ptr doc = d->mDocumentPanel->currentDocument();
+        Document::Ptr doc = d->mViewMainPage->currentDocument();
         if (!doc) {
             return false;
         }
@@ -887,7 +887,7 @@ void MainWindow::setInitialUrl(const KUrl& _url)
         openDirUrl(url);
     } else {
         d->mViewAction->trigger();
-        d->mDocumentPanel->openUrl(url);
+        d->mViewMainPage->openUrl(url);
         d->setUrlToSelect(url);
     }
     d->updateContextDependentComponents();
@@ -910,23 +910,23 @@ void MainWindow::setActiveViewModeAction(QAction* action)
         d->mCurrentPageId = ViewPageId;
         // Switching to view mode
         d->setDirModelShowDirs(false);
-        d->mViewStackedWidget->setCurrentWidget(d->mDocumentPanel);
+        d->mViewStackedWidget->setCurrentWidget(d->mViewMainPage);
         d->mContextManager->setOnlyCurrentUrl(true);
-        if (d->mDocumentPanel->isEmpty()) {
+        if (d->mViewMainPage->isEmpty()) {
             openSelectedDocuments();
         }
     } else {
         d->mCurrentPageId = BrowsePageId;
         // Switching to browse mode
         d->mViewStackedWidget->setCurrentWidget(d->mBrowseMainPage);
-        if (!d->mDocumentPanel->isEmpty()
-                && KProtocolManager::supportsListing(d->mDocumentPanel->url())) {
+        if (!d->mViewMainPage->isEmpty()
+                && KProtocolManager::supportsListing(d->mViewMainPage->url())) {
             // Reset the view to spare resources, but don't do it if we can't
             // browse the url, otherwise if the user starts Gwenview this way:
             // gwenview http://example.com/example.png
             // and switch to browse mode, switching back to view mode won't bring
             // his image back.
-            d->mDocumentPanel->reset();
+            d->mViewMainPage->reset();
         }
         d->setDirModelShowDirs(true);
         setCaption(QString());
@@ -989,7 +989,7 @@ void MainWindow::openSelectedDocuments()
                 currentUrl = url;
             }
             ++count;
-            if (count == DocumentPanel::MaxViewCount) {
+            if (count == ViewMainPage::MaxViewCount) {
                 break;
             }
         }
@@ -1009,7 +1009,7 @@ void MainWindow::openSelectedDocuments()
         currentUrl = urls.first();
     }
 
-    d->mDocumentPanel->openUrls(urls, currentUrl);
+    d->mViewMainPage->openUrls(urls, currentUrl);
 }
 
 void MainWindow::goUp()
@@ -1077,7 +1077,7 @@ void MainWindow::openDirUrl(const KUrl& url)
     }
     d->mDirModel->dirLister()->openUrl(url);
     d->spreadCurrentDirUrl(url);
-    d->mDocumentPanel->reset();
+    d->mViewMainPage->reset();
 }
 
 void MainWindow::toggleSideBar(bool on)
@@ -1096,7 +1096,7 @@ void MainWindow::updateToggleSideBarAction()
 
     QList<QToolButton*> lst;
     lst << d->mBrowseMainPage->toggleSideBarButton()
-        << d->mDocumentPanel->toggleSideBarButton();
+        << d->mViewMainPage->toggleSideBarButton();
     Q_FOREACH(QToolButton * button, lst) {
         button->setText(text);
         button->setToolTip(toolTip);
@@ -1106,7 +1106,7 @@ void MainWindow::updateToggleSideBarAction()
 void MainWindow::slotPartCompleted()
 {
     d->updateActions();
-    KUrl url = d->mDocumentPanel->url();
+    KUrl url = d->mViewMainPage->url();
     if (!KProtocolManager::supportsListing(url)) {
         return;
     }
@@ -1206,7 +1206,7 @@ void MainWindow::goToLast()
 void MainWindow::goToUrl(const KUrl& url)
 {
     if (d->mCurrentPageId == ViewPageId) {
-        d->mDocumentPanel->openUrl(url);
+        d->mViewMainPage->openUrl(url);
     }
     KUrl dirUrl = url;
     dirUrl.setFileName("");
@@ -1262,13 +1262,13 @@ void MainWindow::toggleFullScreen(bool checked)
         setWindowState(windowState() | Qt::WindowFullScreen);
         menuBar()->hide();
         toolBar()->hide();
-        d->mDocumentPanel->setFullScreenMode(true);
+        d->mViewMainPage->setFullScreenMode(true);
         d->mSaveBar->setFullScreenMode(true);
         d->updateDistractionsState();
         d->setScreenSaverEnabled(false);
 
         // HACK: Only load sidebar config now, because it looks at
-        // DocumentPanel fullScreenMode property to determine the sidebar
+        // ViewMainPage fullScreenMode property to determine the sidebar
         // config group.
         d->loadSideBarConfig();
     } else {
@@ -1280,7 +1280,7 @@ void MainWindow::toggleFullScreen(bool checked)
             d->mBrowseAction->trigger();
         }
 
-        d->mDocumentPanel->setFullScreenMode(false);
+        d->mViewMainPage->setFullScreenMode(false);
         d->mSlideShow->stop();
         d->mSaveBar->setFullScreenMode(false);
         setWindowState(d->mStateBeforeFullScreen.mWindowState);
@@ -1290,7 +1290,7 @@ void MainWindow::toggleFullScreen(bool checked)
         d->updateDistractionsState();
         d->setScreenSaverEnabled(true);
 
-        // Keep this after mDocumentPanel->setFullScreenMode(false).
+        // Keep this after mViewMainPage->setFullScreenMode(false).
         // See call to loadSideBarConfig() above.
         d->loadSideBarConfig();
 
@@ -1313,7 +1313,7 @@ void MainWindow::saveCurrentAs()
 void MainWindow::reload()
 {
     if (d->mCurrentPageId == ViewPageId) {
-        d->mDocumentPanel->reload();
+        d->mViewMainPage->reload();
     } else {
         d->mBrowseMainPage->reload();
     }
@@ -1335,14 +1335,14 @@ void MainWindow::openFile()
     d->setActionsDisabledOnStartMainPageEnabled(true);
     KUrl url = dialog.selectedUrl();
     d->mViewAction->trigger();
-    d->mDocumentPanel->openUrl(url);
+    d->mViewMainPage->openUrl(url);
     d->setUrlToSelect(url);
     d->updateContextDependentComponents();
 }
 
 void MainWindow::showDocumentInFullScreen(const KUrl& url)
 {
-    d->mDocumentPanel->openUrl(url);
+    d->mViewMainPage->openUrl(url);
     d->setUrlToSelect(url);
     d->mFullScreenAction->trigger();
 }
@@ -1453,7 +1453,7 @@ void MainWindow::loadConfig()
     d->mDirModel->setBlackListedExtensions(GwenviewConfig::blackListedExtensions());
     d->mDirModel->adjustKindFilter(MimeTypeUtils::KIND_VIDEO, GwenviewConfig::listVideos());
 
-    d->mDocumentPanel->loadConfig();
+    d->mViewMainPage->loadConfig();
     d->mBrowseMainPage->loadConfig();
 
     // Colors
@@ -1468,12 +1468,12 @@ void MainWindow::loadConfig()
     // Apply to widgets
     d->mBrowseMainPage->applyPalette(pal);
     d->mStartMainPage->applyPalette(pal);
-    d->mDocumentPanel->setNormalPalette(pal);
+    d->mViewMainPage->setNormalPalette(pal);
 }
 
 void MainWindow::saveConfig()
 {
-    d->mDocumentPanel->saveConfig();
+    d->mViewMainPage->saveConfig();
     d->mBrowseMainPage->saveConfig();
 }
 

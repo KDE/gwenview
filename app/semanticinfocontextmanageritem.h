@@ -34,14 +34,14 @@ class KActionCollection;
 namespace Gwenview
 {
 
-class DocumentPanel;
+class ViewMainPage;
 
 struct SemanticInfoContextManagerItemPrivate;
 class SemanticInfoContextManagerItem : public AbstractContextManagerItem
 {
     Q_OBJECT
 public:
-    SemanticInfoContextManagerItem(ContextManager*, KActionCollection*, DocumentPanel* documentPanel);
+    SemanticInfoContextManagerItem(ContextManager*, KActionCollection*, ViewMainPage* documentPanel);
     ~SemanticInfoContextManagerItem();
 
 protected:

@@ -17,7 +17,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
-#include "documentpanel.moc"
+#include "viewmainpage.moc"
 
 // Qt
 #include <QCheckBox>
@@ -66,7 +66,7 @@ namespace Gwenview
 #define LOG(x) ;
 #endif
 
-const int DocumentPanel::MaxViewCount = 6;
+const int ViewMainPage::MaxViewCount = 6;
 
 static QString rgba(const QColor &color)
 {
@@ -127,8 +127,8 @@ static QString gradient(Qt::Orientation orientation, const QColor &color, int va
  * |+-----------------------------------------------------------------+|
  * +-------------------------------------------------------------------+
  */
-struct DocumentPanelPrivate {
-    DocumentPanel* q;
+struct ViewMainPagePrivate {
+    ViewMainPage* q;
     SlideShow* mSlideShow;
     KActionCollection* mActionCollection;
     QSplitter *mThumbnailSplitter;
@@ -362,9 +362,9 @@ struct DocumentPanelPrivate {
     }
 };
 
-DocumentPanel::DocumentPanel(QWidget* parent, SlideShow* slideShow, KActionCollection* actionCollection)
+ViewMainPage::ViewMainPage(QWidget* parent, SlideShow* slideShow, KActionCollection* actionCollection)
 : QWidget(parent)
-, d(new DocumentPanelPrivate)
+, d(new ViewMainPagePrivate)
 {
     d->q = this;
     d->mSlideShow = slideShow;
@@ -414,12 +414,12 @@ DocumentPanel::DocumentPanel(QWidget* parent, SlideShow* slideShow, KActionColle
             d->mSynchronizeAction, SLOT(setChecked(bool)));
 }
 
-DocumentPanel::~DocumentPanel()
+ViewMainPage::~ViewMainPage()
 {
     delete d;
 }
 
-void DocumentPanel::loadConfig()
+void ViewMainPage::loadConfig()
 {
     // FIXME: Not symetric with saveConfig(). Check if it matters.
     Q_FOREACH(DocumentView * view, d->mDocumentViews) {
@@ -451,24 +451,24 @@ void DocumentPanel::loadConfig()
     }
 }
 
-void DocumentPanel::saveConfig()
+void ViewMainPage::saveConfig()
 {
     d->saveSplitterConfig();
     GwenviewConfig::setThumbnailBarIsVisible(d->mToggleThumbnailBarAction->isChecked());
 }
 
-void DocumentPanel::setThumbnailBarVisibility(bool visible)
+void ViewMainPage::setThumbnailBarVisibility(bool visible)
 {
     d->saveSplitterConfig();
     d->mThumbnailBar->setVisible(visible);
 }
 
-int DocumentPanel::statusBarHeight() const
+int ViewMainPage::statusBarHeight() const
 {
     return d->mStatusBarContainer->height();
 }
 
-void DocumentPanel::setFullScreenMode(bool fullScreenMode)
+void ViewMainPage::setFullScreenMode(bool fullScreenMode)
 {
     d->mFullScreenMode = fullScreenMode;
     d->mStatusBarContainer->setVisible(!fullScreenMode);
@@ -484,12 +484,12 @@ void DocumentPanel::setFullScreenMode(bool fullScreenMode)
     d->mToggleThumbnailBarAction->setEnabled(!fullScreenMode);
 }
 
-bool DocumentPanel::isFullScreenMode() const
+bool ViewMainPage::isFullScreenMode() const
 {
     return d->mFullScreenMode;
 }
 
-ThumbnailBarView* DocumentPanel::thumbnailBar() const
+ThumbnailBarView* ViewMainPage::thumbnailBar() const
 {
     return d->mThumbnailBar;
 }
@@ -502,7 +502,7 @@ inline void addActionToMenu(KMenu* menu, KActionCollection* actionCollection, co
     }
 }
 
-void DocumentPanel::showContextMenu()
+void ViewMainPage::showContextMenu()
 {
     KMenu menu(this);
     addActionToMenu(&menu, d->mActionCollection, "fullscreen");
@@ -530,12 +530,12 @@ void DocumentPanel::showContextMenu()
     menu.exec(QCursor::pos());
 }
 
-QSize DocumentPanel::sizeHint() const
+QSize ViewMainPage::sizeHint() const
 {
     return QSize(400, 300);
 }
 
-KUrl DocumentPanel::url() const
+KUrl ViewMainPage::url() const
 {
     if (!d->currentView()) {
         LOG("!d->documentView()");
@@ -545,7 +545,7 @@ KUrl DocumentPanel::url() const
     return d->currentView()->url();
 }
 
-Document::Ptr DocumentPanel::currentDocument() const
+Document::Ptr ViewMainPage::currentDocument() const
 {
     if (!d->currentView()) {
         LOG("!d->documentView()");
@@ -555,7 +555,7 @@ Document::Ptr DocumentPanel::currentDocument() const
     return d->currentView()->document();
 }
 
-bool DocumentPanel::isEmpty() const
+bool ViewMainPage::isEmpty() const
 {
     if (!d->currentView()) {
         return true;
@@ -563,7 +563,7 @@ bool DocumentPanel::isEmpty() const
     return d->currentView()->isEmpty();
 }
 
-RasterImageView* DocumentPanel::imageView() const
+RasterImageView* ViewMainPage::imageView() const
 {
     if (!d->currentView()) {
         return 0;
@@ -571,24 +571,24 @@ RasterImageView* DocumentPanel::imageView() const
     return d->currentView()->imageView();
 }
 
-DocumentView* DocumentPanel::documentView() const
+DocumentView* ViewMainPage::documentView() const
 {
     return d->currentView();
 }
 
-void DocumentPanel::setNormalPalette(const QPalette& palette)
+void ViewMainPage::setNormalPalette(const QPalette& palette)
 {
     d->mNormalPalette = palette;
     d->applyPalette();
     d->setupThumbnailBarStyleSheet();
 }
 
-void DocumentPanel::openUrl(const KUrl& url)
+void ViewMainPage::openUrl(const KUrl& url)
 {
     openUrls(KUrl::List() << url, url);
 }
 
-void DocumentPanel::openUrls(const KUrl::List& _urls, const KUrl& currentUrl)
+void ViewMainPage::openUrls(const KUrl::List& _urls, const KUrl& currentUrl)
 {
     QSet<KUrl> urls = _urls.toSet();
     d->mCompareMode = urls.count() > 1;
@@ -647,7 +647,7 @@ void DocumentPanel::openUrls(const KUrl::List& _urls, const KUrl& currentUrl)
     }
 }
 
-void DocumentPanel::reload()
+void ViewMainPage::reload()
 {
     Document::Ptr doc = d->currentView()->document();
     if (!doc) {
@@ -671,26 +671,26 @@ void DocumentPanel::reload()
     d->currentView()->openUrl(doc->url());
 }
 
-void DocumentPanel::reset()
+void ViewMainPage::reset()
 {
     d->mDocumentViewController->setView(0);
     d->mDocumentViewContainer->reset();
     d->mDocumentViews.clear();
 }
 
-void DocumentPanel::slotViewFocused(DocumentView* view)
+void ViewMainPage::slotViewFocused(DocumentView* view)
 {
     d->setCurrentView(view);
 }
 
-void DocumentPanel::trashView(DocumentView* view)
+void ViewMainPage::trashView(DocumentView* view)
 {
     KUrl url = view->url();
     deselectView(view);
     FileOperations::trash(KUrl::List() << url, this);
 }
 
-void DocumentPanel::deselectView(DocumentView* view)
+void ViewMainPage::deselectView(DocumentView* view)
 {
     DocumentView* newCurrentView = 0;
     if (view == d->currentView()) {
@@ -722,7 +722,7 @@ void DocumentPanel::deselectView(DocumentView* view)
     }
 }
 
-QToolButton* DocumentPanel::toggleSideBarButton() const
+QToolButton* ViewMainPage::toggleSideBarButton() const
 {
     return d->mToggleSideBarButton;
 }

@@ -17,8 +17,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
-#ifndef DOCUMENTPANEL_H
-#define DOCUMENTPANEL_H
+#ifndef VIEWMAINPAGE_H
+#define VIEWMAINPAGE_H
 
 // Local
 #include <lib/document/document.h>
@@ -42,19 +42,19 @@ class RasterImageView;
 class SlideShow;
 class ThumbnailBarView;
 
-struct DocumentPanelPrivate;
+struct ViewMainPagePrivate;
 
 /**
  * Holds the active document view and associated widgetry.
  */
-class DocumentPanel : public QWidget
+class ViewMainPage : public QWidget
 {
     Q_OBJECT
 public:
     static const int MaxViewCount;
 
-    DocumentPanel(QWidget* parent, SlideShow*, KActionCollection*);
-    ~DocumentPanel();
+    ViewMainPage(QWidget* parent, SlideShow*, KActionCollection*);
+    ~ViewMainPage();
 
     ThumbnailBarView* thumbnailBar() const;
 
@@ -138,10 +138,10 @@ private Q_SLOTS:
     void deselectView(DocumentView*);
 
 private:
-    friend struct DocumentPanelPrivate;
-    DocumentPanelPrivate* const d;
+    friend struct ViewMainPagePrivate;
+    ViewMainPagePrivate* const d;
 };
 
 } // namespace
 
-#endif /* DOCUMENTPANEL_H */
+#endif /* VIEWMAINPAGE_H */

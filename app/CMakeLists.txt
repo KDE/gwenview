@@ -20,7 +20,7 @@ set(gwenview_SRCS
 	contextmanager.cpp
 	gvcore.cpp
 	documentinfoprovider.cpp
-	documentpanel.cpp
+	viewmainpage.cpp
 	fileoperations.cpp
 	filtercontroller.cpp
 	folderviewcontextmanageritem.cpp

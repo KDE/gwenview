@@ -41,7 +41,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include "contextmanager.h"
-#include "documentpanel.h"
+#include "viewmainpage.h"
 #include "sidebar.h"
 #include "ui_semanticinfosidebaritem.h"
 #include "ui_semanticinfodialog.h"
@@ -126,7 +126,7 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
     SemanticInfoContextManagerItem* q;
     SideBarGroup* mGroup;
     KActionCollection* mActionCollection;
-    DocumentPanel* mDocumentPanel;
+    ViewMainPage* mViewMainPage;
     QPointer<SemanticInfoDialog> mSemanticInfoDialog;
     TagInfo mTagInfo;
     KAction* mEditTagsAction;
@@ -220,13 +220,13 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
     }
 };
 
-SemanticInfoContextManagerItem::SemanticInfoContextManagerItem(ContextManager* manager, KActionCollection* actionCollection, DocumentPanel* documentPanel)
+SemanticInfoContextManagerItem::SemanticInfoContextManagerItem(ContextManager* manager, KActionCollection* actionCollection, ViewMainPage* documentPanel)
 : AbstractContextManagerItem(manager)
 , d(new SemanticInfoContextManagerItemPrivate)
 {
     d->q = this;
     d->mActionCollection = actionCollection;
-    d->mDocumentPanel = documentPanel;
+    d->mViewMainPage = documentPanel;
 
     connect(contextManager(), SIGNAL(selectionChanged()),
             SLOT(slotSelectionChanged()));
@@ -340,11 +340,11 @@ void SemanticInfoContextManagerItem::slotRatingChanged(int rating)
     KFileItemList itemList = contextManager()->selectedFileItemList();
 
     // Show rating indicator in view mode, and only if sidebar is not visible
-    if (d->mDocumentPanel->isVisible() && !d->mRatingWidget->isVisible()) {
+    if (d->mViewMainPage->isVisible() && !d->mRatingWidget->isVisible()) {
         delete d->mRatingIndicator.data();
         // FIXME QGV
-        //d->mRatingIndicator = new RatingIndicator(d->mDocumentPanel->documentView());
-        d->mRatingIndicator = new RatingIndicator(d->mDocumentPanel);
+        //d->mRatingIndicator = new RatingIndicator(d->mViewMainPage->documentView());
+        d->mRatingIndicator = new RatingIndicator(d->mViewMainPage);
         d->mRatingIndicator->setRating(rating);
         d->mRatingIndicator->show();
     }
