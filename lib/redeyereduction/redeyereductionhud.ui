@@ -1,55 +1,88 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>RedEyeReductionHud</class>
- <widget class="QWidget" name="RedEyeReductionHud" >
-  <property name="geometry" >
+ <widget class="QWidget" name="RedEyeReductionHud">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>253</width>
-    <height>37</height>
+    <width>372</width>
+    <height>51</height>
    </rect>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout" >
+  <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
-    <widget class="QLabel" name="label" >
-     <property name="text" >
-      <string>Size</string>
+    <widget class="QStackedWidget" name="stackedWidget">
+     <property name="currentIndex">
+      <number>0</number>
      </property>
+     <widget class="QWidget" name="mainPage">
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Size</string>
+         </property>
+         <property name="buddy">
+          <cstring>diameterSlider</cstring>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSlider" name="diameterSlider">
+         <property name="minimum">
+          <number>2</number>
+         </property>
+         <property name="maximum">
+          <number>40</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="KIntSpinBox" name="diameterSpinBox">
+         <property name="minimum">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+      </layout>
+      <zorder>diameterSpinBox</zorder>
+      <zorder>diameterSlider</zorder>
+      <zorder>diameterSpinBox</zorder>
+      <zorder>label</zorder>
+      <zorder>diameterSlider</zorder>
+     </widget>
+     <widget class="QWidget" name="notSetPage">
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Click on the red eye you want to fix</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
    <item>
-    <widget class="QSlider" name="diameterSlider" >
-     <property name="minimum" >
-      <number>2</number>
-     </property>
-     <property name="maximum" >
-      <number>40</number>
-     </property>
-     <property name="orientation" >
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="KIntSpinBox" name="diameterSpinBox" >
-     <property name="minimum" >
-      <number>2</number>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QToolButton" name="applyButton" >
-     <property name="text" >
-      <string>Apply</string>
-     </property>
-     <property name="autoRaise" >
-      <bool>true</bool>
+    <widget class="KDialogButtonBox" name="dialogButtonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Close|QDialogButtonBox::Ok</set>
      </property>
     </widget>
    </item>
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>KDialogButtonBox</class>
+   <extends>QDialogButtonBox</extends>
+   <header>kdialogbuttonbox.h</header>
+  </customwidget>
   <customwidget>
    <class>KIntSpinBox</class>
    <extends>QSpinBox</extends>
@@ -64,11 +97,11 @@
    <receiver>diameterSpinBox</receiver>
    <slot>setValue(int)</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>120</x>
      <y>22</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>175</x>
      <y>21</y>
     </hint>
@@ -80,11 +113,11 @@
    <receiver>diameterSlider</receiver>
    <slot>setValue(int)</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>153</x>
      <y>7</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>124</x>
      <y>7</y>
     </hint>

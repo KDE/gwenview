@@ -56,7 +56,8 @@ public:
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
 
     virtual void toolActivated();
-    virtual void toolDeactivated();
+
+    QWidget* widget() const;
 
 Q_SIGNALS:
     void done();
