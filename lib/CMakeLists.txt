@@ -164,7 +164,7 @@ kde4_add_ui_files(gwenviewlib_SRCS
 	crop/cropwidget.ui
 	documentview/messageview.ui
 	print/printoptionspage.ui
-	redeyereduction/redeyereductionhud.ui
+	redeyereduction/redeyereductionwidget.ui
 	resize/resizeimagewidget.ui
 	)
 

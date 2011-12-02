@@ -36,14 +36,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "gwenviewconfig.h"
 #include "paintutils.h"
 #include "redeyereductionimageoperation.h"
-#include "ui_redeyereductionhud.h"
+#include "ui_redeyereductionwidget.h"
 
 namespace Gwenview
 {
 
-struct RedEyeReductionHud : public QWidget, public Ui_RedEyeReductionHud
+struct RedEyeReductionWidget : public QWidget, public Ui_RedEyeReductionWidget
 {
-    RedEyeReductionHud()
+    RedEyeReductionWidget()
     {
         setupUi(this);
     }
@@ -67,11 +67,11 @@ struct RedEyeReductionToolPrivate
     RedEyeReductionTool::Status mStatus;
     QPointF mCenter;
     int mDiameter;
-    RedEyeReductionHud* mToolWidget;
+    RedEyeReductionWidget* mToolWidget;
 
     void setupToolWidget()
     {
-        mToolWidget = new RedEyeReductionHud;
+        mToolWidget = new RedEyeReductionWidget;
         mToolWidget->showNotSetPage();
         QObject::connect(mToolWidget->diameterSpinBox, SIGNAL(valueChanged(int)),
                          q, SLOT(setDiameter(int)));

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>RedEyeReductionHud</class>
- <widget class="QWidget" name="RedEyeReductionHud">
+ <class>RedEyeReductionWidget</class>
+ <widget class="QWidget" name="RedEyeReductionWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
