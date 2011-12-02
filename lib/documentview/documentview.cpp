@@ -39,8 +39,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kmodifierkeyinfo.h>
-#include <kstandarddirs.h>
 #include <kurl.h>
 
 // Local
@@ -80,10 +78,7 @@ static const int COMPARE_MARGIN = 4;
 struct DocumentViewPrivate {
     DocumentView* q;
     GraphicsHudWidget* mHud;
-    KModifierKeyInfo* mModifierKeyInfo;
     BirdEyeView* mBirdEyeView;
-    QCursor mZoomCursor;
-    QCursor mPreviousCursor;
     QWeakPointer<QPropertyAnimation> mMoveAnimation;
     QWeakPointer<QPropertyAnimation> mFadeAnimation;
 
@@ -106,6 +101,10 @@ struct DocumentViewPrivate {
         if (adapter->canZoom()) {
             QObject::connect(adapter, SIGNAL(zoomChanged(qreal)),
                              q, SLOT(slotZoomChanged(qreal)));
+            QObject::connect(adapter, SIGNAL(zoomInRequested(QPointF)),
+                             q, SLOT(zoomIn(QPointF)));
+            QObject::connect(adapter, SIGNAL(zoomOutRequested(QPointF)),
+                             q, SLOT(zoomOut(QPointF)));
             QObject::connect(adapter, SIGNAL(zoomToFitChanged(bool)),
                              q, SIGNAL(zoomToFitChanged(bool)));
         }
@@ -129,28 +128,6 @@ struct DocumentViewPrivate {
             QObject::connect(adapter->rasterImageView(), SIGNAL(currentToolChanged(AbstractRasterImageViewTool*)),
                              q, SIGNAL(currentToolChanged(AbstractRasterImageViewTool*)));
         }
-    }
-
-    void setupZoomCursor()
-    {
-        QString path = KStandardDirs::locate("appdata", "cursors/zoom.png");
-        QPixmap cursorPixmap = QPixmap(path);
-        mZoomCursor = QCursor(cursorPixmap);
-    }
-
-    void setZoomCursor()
-    {
-        QCursor currentCursor = mAdapter.data()->cursor();
-        if (currentCursor.pixmap().cacheKey() == mZoomCursor.pixmap().cacheKey()) {
-            return;
-        }
-        mPreviousCursor = currentCursor;
-        mAdapter.data()->setCursor(mZoomCursor);
-    }
-
-    void restoreCursor()
-    {
-        mAdapter.data()->setCursor(mPreviousCursor);
     }
 
     void setupLoadingIndicator()
@@ -300,24 +277,6 @@ struct DocumentViewPrivate {
         mAdapter->widget()->setGeometry(rect);
     }
 
-    void adapterMousePressEvent(QGraphicsSceneMouseEvent* event)
-    {
-        if (mAdapter->canZoom()) {
-            if (event->modifiers() == Qt::ControlModifier) {
-                // Ctrl + Left or right button => zoom in or out
-                if (event->button() == Qt::LeftButton) {
-                    q->zoomIn(event->pos());
-                } else if (event->button() == Qt::RightButton) {
-                    q->zoomOut(event->pos());
-                }
-            } else if (event->button() == Qt::MidButton) {
-                // Middle click => toggle zoom to fit
-                q->setZoomToFit(!mAdapter->zoomToFit());
-            }
-        }
-        QMetaObject::invokeMethod(q, "emitFocused", Qt::QueuedConnection);
-    }
-
     void fadeTo(qreal value)
     {
         if (mFadeAnimation.data()) {
@@ -349,14 +308,11 @@ DocumentView::DocumentView(QGraphicsScene* scene)
     d->mBirdEyeView = 0;
     d->mCurrent = false;
     d->mCompareMode = false;
-    d->mModifierKeyInfo = new KModifierKeyInfo(this);
-    connect(d->mModifierKeyInfo, SIGNAL(keyPressed(Qt::Key, bool)), SLOT(slotKeyPressed(Qt::Key, bool)));
 
     setOpacity(0);
 
     scene->addItem(this);
 
-    d->setupZoomCursor();
     d->setupHud();
     d->setCurrentAdapter(new MessageViewAdapter);
 }
@@ -668,17 +624,6 @@ void DocumentView::setPosition(const QPoint& pos)
     d->mAdapter->setScrollPos(pos);
 }
 
-void DocumentView::slotKeyPressed(Qt::Key key, bool pressed)
-{
-    if (key == Qt::Key_Control) {
-        if (pressed) {
-            d->setZoomCursor();
-        } else {
-            d->restoreCursor();
-        }
-    }
-}
-
 Document::Ptr DocumentView::document() const
 {
     return d->mDocument;
@@ -750,8 +695,7 @@ void DocumentView::slotAnimationFinished()
 bool DocumentView::sceneEventFilter(QGraphicsItem*, QEvent* event)
 {
     if (event->type() == QEvent::GraphicsSceneMousePress) {
-        QGraphicsSceneMouseEvent* mouseEvent = static_cast<QGraphicsSceneMouseEvent*>(event);
-        d->adapterMousePressEvent(mouseEvent);
+        QMetaObject::invokeMethod(this, "emitFocused", Qt::QueuedConnection);
     }
     return false;
 }

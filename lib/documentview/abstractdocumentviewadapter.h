@@ -119,6 +119,10 @@ Q_SIGNALS:
     void zoomChanged(qreal);
 
     void zoomToFitChanged(bool);
+
+    void zoomInRequested(const QPointF&);
+
+    void zoomOutRequested(const QPointF&);
     /** @} */
 
     void scrollPosChanged();

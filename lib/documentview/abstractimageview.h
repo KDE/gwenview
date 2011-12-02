@@ -91,9 +91,14 @@ public:
 
     void setEnlargeSmallerImages(bool value);
 
+public Q_SLOTS:
+    void updateCursor();
+
 Q_SIGNALS:
     void zoomToFitChanged(bool);
     void zoomChanged(qreal);
+    void zoomInRequested(const QPointF&);
+    void zoomOutRequested(const QPointF&);
     void scrollPosChanged();
 
 protected:

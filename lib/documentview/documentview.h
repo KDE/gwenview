@@ -180,8 +180,6 @@ private Q_SLOTS:
 
     void slotBusyChanged(const KUrl&, bool);
 
-    void slotKeyPressed(Qt::Key key, bool pressed);
-
     void emitHudTrashClicked();
     void emitHudDeselectClicked();
     void emitFocused();

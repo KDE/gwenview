@@ -25,6 +25,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 #include <kdebug.h>
+#include <kmodifierkeyinfo.h>
+#include <kstandarddirs.h>
 #include <kurl.h>
 
 // Qt
@@ -42,6 +44,8 @@ struct AbstractImageViewPrivate {
         Notify
     };
     AbstractImageView* q;
+    KModifierKeyInfo* mModifierKeyInfo;
+    QCursor mZoomCursor;
     Document::Ptr mDocument;
 
     bool mEnlargeSmallerImages;
@@ -92,6 +96,13 @@ struct AbstractImageViewPrivate {
             QMetaObject::invokeMethod(q, "scrollPosChanged");
         }
     }
+
+    void setupZoomCursor()
+    {
+        QString path = KStandardDirs::locate("appdata", "cursors/zoom.png");
+        QPixmap cursorPixmap = QPixmap(path);
+        mZoomCursor = QCursor(cursorPixmap);
+    }
 };
 
 AbstractImageView::AbstractImageView(QGraphicsItem* parent)
@@ -104,9 +115,12 @@ AbstractImageView::AbstractImageView(QGraphicsItem* parent)
     d->mZoomToFit = true;
     d->mImageOffset = QPointF(0, 0);
     d->mScrollPos = QPointF(0, 0);
-    setCursor(Qt::OpenHandCursor);
+    d->mModifierKeyInfo = new KModifierKeyInfo(this);
+    connect(d->mModifierKeyInfo, SIGNAL(keyPressed(Qt::Key, bool)), SLOT(updateCursor()));
     setFocusPolicy(Qt::WheelFocus);
     setFlag(ItemIsSelectable);
+    d->setupZoomCursor();
+    updateCursor();
 }
 
 AbstractImageView::~AbstractImageView()
@@ -247,8 +261,27 @@ qreal AbstractImageView::computeZoomToFit() const
 void AbstractImageView::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
     QGraphicsItem::mousePressEvent(event);
-    setCursor(Qt::ClosedHandCursor);
+    if (event->button() == Qt::MiddleButton) {
+        bool value = !zoomToFit();
+        setZoomToFit(value);
+        if (!value) {
+            setZoom(1.);
+        }
+        return;
+    }
+
+    if (event->modifiers() & Qt::ControlModifier) {
+        if (event->button() == Qt::LeftButton) {
+            zoomInRequested(event->pos());
+            return;
+        } else if (event->button() == Qt::RightButton) {
+            zoomOutRequested(event->pos());
+            return;
+        }
+    }
+
     d->mLastDragPos = event->pos();
+    updateCursor();
 }
 
 void AbstractImageView::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
@@ -290,7 +323,10 @@ void AbstractImageView::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 void AbstractImageView::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 {
     QGraphicsItem::mouseReleaseEvent(event);
-    setCursor(Qt::OpenHandCursor);
+    if (!d->mLastDragPos.isNull()) {
+        d->mLastDragPos = QPointF();
+    }
+    updateCursor();
 }
 
 void AbstractImageView::keyPressEvent(QKeyEvent* event)
@@ -406,6 +442,19 @@ void AbstractImageView::setEnlargeSmallerImages(bool value)
     d->mEnlargeSmallerImages = value;
     if (zoomToFit()) {
         setZoom(computeZoomToFit());
+    }
+}
+
+void AbstractImageView::updateCursor()
+{
+    if (d->mModifierKeyInfo->isKeyPressed(Qt::Key_Control)) {
+        setCursor(d->mZoomCursor);
+    } else {
+        if (d->mLastDragPos.isNull()) {
+            setCursor(Qt::OpenHandCursor);
+        } else {
+            setCursor(Qt::ClosedHandCursor);
+        }
     }
 }
 
