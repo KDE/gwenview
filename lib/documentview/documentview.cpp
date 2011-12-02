@@ -265,7 +265,11 @@ struct DocumentViewPrivate {
         QObject::connect(anim, SIGNAL(finished()),
                          q, SLOT(slotAnimationFinished()));
         anim->setDuration(500);
-        anim->start(QAbstractAnimation::DeleteWhenStopped);
+        // FIXME: If anim is not started with a QueuedConnection, then this fails:
+        // - Start Gwenview
+        // - Browse a folder
+        // - Click an image => nothing appears!
+        QMetaObject::invokeMethod(anim, "start", Qt::QueuedConnection);
     }
 
     void resizeAdapterWidget()
