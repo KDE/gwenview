@@ -292,7 +292,7 @@ struct DocumentViewPrivate {
             return;
         }
         // Create a new fade animation
-        QPropertyAnimation* anim = new QPropertyAnimation(q, "opacity");
+        QPropertyAnimation* anim = new QPropertyAnimation(q, "opacity", q);
         anim->setStartValue(q->opacity());
         anim->setEndValue(value);
         animate(anim);
