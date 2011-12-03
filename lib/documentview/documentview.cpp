@@ -265,11 +265,7 @@ struct DocumentViewPrivate {
         QObject::connect(anim, SIGNAL(finished()),
                          q, SLOT(slotAnimationFinished()));
         anim->setDuration(500);
-        // FIXME: If anim is not started with a QueuedConnection, then this fails:
-        // - Start Gwenview
-        // - Browse a folder
-        // - Click an image => nothing appears!
-        QMetaObject::invokeMethod(anim, "start", Qt::QueuedConnection);
+        anim->start(QAbstractAnimation::DeleteWhenStopped);
     }
 
     void resizeAdapterWidget()
@@ -284,15 +280,14 @@ struct DocumentViewPrivate {
     void fadeTo(qreal value)
     {
         if (mFadeAnimation.data()) {
-            // Reuse existing fade animation
-            mFadeAnimation.data()->stop();
-            mFadeAnimation.data()->setStartValue(q->opacity());
-            mFadeAnimation.data()->setEndValue(value);
-            mFadeAnimation.data()->start();
-            return;
+            qreal endValue = mFadeAnimation.data()->endValue().toReal();
+            if (qFuzzyCompare(value, endValue)) {
+                // Same end value, don't change the actual animation
+                return;
+            }
         }
         // Create a new fade animation
-        QPropertyAnimation* anim = new QPropertyAnimation(q, "opacity", q);
+        QPropertyAnimation* anim = new QPropertyAnimation(q, "opacity");
         anim->setStartValue(q->opacity());
         anim->setEndValue(value);
         animate(anim);
