@@ -39,6 +39,7 @@ namespace Gwenview
 struct ConfigDialogPrivate {
     InvisibleButtonGroup* mAlphaBackgroundModeGroup;
     InvisibleButtonGroup* mWheelBehaviorGroup;
+    InvisibleButtonGroup* mAnimationMethodGroup;
     InvisibleButtonGroup* mThumbnailBarOrientationGroup;
     Ui_GeneralConfigPage mGeneralConfigPage;
     Ui_ImageViewConfigPage mImageViewConfigPage;
@@ -83,6 +84,12 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     d->mWheelBehaviorGroup->setObjectName(QLatin1String("kcfg_MouseWheelBehavior"));
     d->mWheelBehaviorGroup->addButton(d->mImageViewConfigPage.mouseWheelScrollRadioButton, int(MouseWheelBehavior::Scroll));
     d->mWheelBehaviorGroup->addButton(d->mImageViewConfigPage.mouseWheelBrowseRadioButton, int(MouseWheelBehavior::Browse));
+
+    d->mAnimationMethodGroup = new InvisibleButtonGroup(widget);
+    d->mAnimationMethodGroup->setObjectName(QLatin1String("kcfg_AnimationMethod"));
+    d->mAnimationMethodGroup->addButton(d->mImageViewConfigPage.glAnimationRadioButton, int(DocumentView::GLAnimation));
+    d->mAnimationMethodGroup->addButton(d->mImageViewConfigPage.softwareAnimationRadioButton, int(DocumentView::SoftwareAnimation));
+    d->mAnimationMethodGroup->addButton(d->mImageViewConfigPage.noAnimationRadioButton, int(DocumentView::NoAnimation));
 
     d->mThumbnailBarOrientationGroup = new InvisibleButtonGroup(widget);
     d->mThumbnailBarOrientationGroup->setObjectName(QLatin1String("kcfg_ThumbnailBarOrientation"));
