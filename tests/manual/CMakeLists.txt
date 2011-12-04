@@ -1,10 +1,10 @@
 include_directories(
-	${gwenview_SOURCE_DIR}
+    ${gwenview_SOURCE_DIR}
     )
 # SlideContainer
 set(slidecontainertest_SRCS
-	slidecontainertest.cpp
-	)
+    slidecontainertest.cpp
+    )
 
 kde4_add_executable(slidecontainertest TEST ${slidecontainertest_SRCS})
 
@@ -12,8 +12,8 @@ target_link_libraries(slidecontainertest ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY
 
 # imageloadbench
 set(imageloadbench_SRCS
-	imageloadbench.cpp
-	)
+    imageloadbench.cpp
+    )
 
 kde4_add_executable(imageloadbench TEST ${imageloadbench_SRCS})
 

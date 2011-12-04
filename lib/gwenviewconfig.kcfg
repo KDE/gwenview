@@ -1,222 +1,222 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE kcfg SYSTEM "http://www.kde.org/standards/kcfg/1.0/kcfg.dtd">
 <kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
-	                    http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
-	<kcfgfile name="gwenviewrc"/>
-	<include>lib/sorting.h</include>
-	<include>lib/mousewheelbehavior.h</include>
-	<include>lib/documentview/rasterimageview.h</include>
-	<include>lib/print/printoptionspage.h</include>
-	<group name="SideBar">
-		<entry name="PreferredMetaInfoKeyList" type="StringList">
-		<default>General.Name,General.ImageSize,Exif.Photo.ExposureTime,Exif.Photo.Flash</default>
-		</entry>
-	</group>
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+                        http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+    <kcfgfile name="gwenviewrc"/>
+    <include>lib/sorting.h</include>
+    <include>lib/mousewheelbehavior.h</include>
+    <include>lib/documentview/rasterimageview.h</include>
+    <include>lib/print/printoptionspage.h</include>
+    <group name="SideBar">
+        <entry name="PreferredMetaInfoKeyList" type="StringList">
+        <default>General.Name,General.ImageSize,Exif.Photo.ExposureTime,Exif.Photo.Flash</default>
+        </entry>
+    </group>
 
-	<group name="General">
-		<entry name="ViewBackgroundValue" type="Int">
-			<default>100</default>
-		</entry>
+    <group name="General">
+        <entry name="ViewBackgroundValue" type="Int">
+            <default>100</default>
+        </entry>
 
-		<entry name="HistoryEnabled" type="Bool">
-			<default>true</default>
-		</entry>
+        <entry name="HistoryEnabled" type="Bool">
+            <default>true</default>
+        </entry>
 
-		<entry name="PercentageOfMemoryUsageWarning" type="Double">
-			<default>0.5</default>
-			<whatsthis>The percentage of memory used by Gwenview before it
-			warns the user and suggest saving changes.</whatsthis>
-		</entry>
+        <entry name="PercentageOfMemoryUsageWarning" type="Double">
+            <default>0.5</default>
+            <whatsthis>The percentage of memory used by Gwenview before it
+            warns the user and suggest saving changes.</whatsthis>
+        </entry>
 
-		<entry name="BlackListedExtensions" type="StringList">
-			<default>nef,cr2,new</default>
-			<whatsthis>A list of filename extensions Gwenview should not try to
-			load. This is useful to exclude raw files which are recognized as
-			TIFF or JPEG. We exclude *.new as well because this is the extension
-			used for temporary files by KSaveFile.</whatsthis>
-		</entry>
-		<entry name="ThumbnailBarIsVisible" type="Bool">
-			<default>false</default>
-		</entry>
+        <entry name="BlackListedExtensions" type="StringList">
+            <default>nef,cr2,new</default>
+            <whatsthis>A list of filename extensions Gwenview should not try to
+            load. This is useful to exclude raw files which are recognized as
+            TIFF or JPEG. We exclude *.new as well because this is the extension
+            used for temporary files by KSaveFile.</whatsthis>
+        </entry>
+        <entry name="ThumbnailBarIsVisible" type="Bool">
+            <default>false</default>
+        </entry>
 
-		<entry name="ThumbnailBarOrientation" type="Enum">
-			<choices name="Qt::Orientation">
-				<!-- Enum entries do not support enums with arbitrary values.
-				Since Qt::Horizontal is 1 and Qt::Vertical is 2, we need to
-				introduce a Dummy value here.
-				-->
-				<choice name="Dummy"/>
-				<choice name="Horizontal"/>
-				<choice name="Vertical"/>
-			</choices>
-			<default>Horizontal</default>
-		</entry>
+        <entry name="ThumbnailBarOrientation" type="Enum">
+            <choices name="Qt::Orientation">
+                <!-- Enum entries do not support enums with arbitrary values.
+                Since Qt::Horizontal is 1 and Qt::Vertical is 2, we need to
+                introduce a Dummy value here.
+                -->
+                <choice name="Dummy"/>
+                <choice name="Horizontal"/>
+                <choice name="Vertical"/>
+            </choices>
+            <default>Horizontal</default>
+        </entry>
 
-		<entry name="ThumbnailBarRowCount" type="Int">
-			<default>1</default>
-		</entry>
+        <entry name="ThumbnailBarRowCount" type="Int">
+            <default>1</default>
+        </entry>
 
-		<entry name="UrlNavigatorIsEditable" type="Bool">
-			<default>false</default>
-		</entry>
-		<entry name="UrlNavigatorShowFullPath" type="Bool">
-			<default>false</default>
-		</entry>
+        <entry name="UrlNavigatorIsEditable" type="Bool">
+            <default>false</default>
+        </entry>
+        <entry name="UrlNavigatorShowFullPath" type="Bool">
+            <default>false</default>
+        </entry>
 
-		<entry name="DefaultExportPluginText" type="String">
-		</entry>
+        <entry name="DefaultExportPluginText" type="String">
+        </entry>
 
-		<entry name="SideBarPage" type="String">
-			<default>information</default>
-		</entry>
-	</group>
+        <entry name="SideBarPage" type="String">
+            <default>information</default>
+        </entry>
+    </group>
 
-	<group name="FullScreen">
-		<entry name="FullScreenPreferredMetaInfoKeyList" type="StringList">
-			<default>General.Name,Exif.Image.DateTime</default>
-		</entry>
-		<entry name="FullScreenTheme" type="String">
-			<default>blackglass</default>
-		</entry>
-		<entry name="FullScreenBarHeight" type="Int">
-			<default>75</default>
-		</entry>
-		<entry name="ShowFullScreenThumbnails" type="Bool">
-			<default>true</default>
-		</entry>
-	</group>
+    <group name="FullScreen">
+        <entry name="FullScreenPreferredMetaInfoKeyList" type="StringList">
+            <default>General.Name,Exif.Image.DateTime</default>
+        </entry>
+        <entry name="FullScreenTheme" type="String">
+            <default>blackglass</default>
+        </entry>
+        <entry name="FullScreenBarHeight" type="Int">
+            <default>75</default>
+        </entry>
+        <entry name="ShowFullScreenThumbnails" type="Bool">
+            <default>true</default>
+        </entry>
+    </group>
 
-	<group name="ImageView">
-		<entry name="AlphaBackgroundMode" type="Enum">
-			<choices name="Gwenview::RasterImageView::AlphaBackgroundMode">
-				<choice name="RasterImageView::AlphaBackgroundCheckBoard"/>
-				<choice name="RasterImageView::AlphaBackgroundSolid"/>
-			</choices>
-			<default>RasterImageView::AlphaBackgroundCheckBoard</default>
-		</entry>
-		<entry name="AlphaBackgroundColor" type="Color">
-			<default>#ffffff</default>
-		</entry>
+    <group name="ImageView">
+        <entry name="AlphaBackgroundMode" type="Enum">
+            <choices name="Gwenview::RasterImageView::AlphaBackgroundMode">
+                <choice name="RasterImageView::AlphaBackgroundCheckBoard"/>
+                <choice name="RasterImageView::AlphaBackgroundSolid"/>
+            </choices>
+            <default>RasterImageView::AlphaBackgroundCheckBoard</default>
+        </entry>
+        <entry name="AlphaBackgroundColor" type="Color">
+            <default>#ffffff</default>
+        </entry>
 
-		<entry name="MouseWheelBehavior" type="Enum">
-			<choices name="Gwenview::MouseWheelBehavior::Enum">
-				<choice name="MouseWheelBehavior::Scroll"/>
-				<choice name="MouseWheelBehavior::Browse"/>
-			</choices>
-			<default>MouseWheelBehavior::Scroll</default>
-		</entry>
+        <entry name="MouseWheelBehavior" type="Enum">
+            <choices name="Gwenview::MouseWheelBehavior::Enum">
+                <choice name="MouseWheelBehavior::Scroll"/>
+                <choice name="MouseWheelBehavior::Browse"/>
+            </choices>
+            <default>MouseWheelBehavior::Scroll</default>
+        </entry>
 
-		<entry name="EnlargeSmallerImages" type="Bool">
-			<default>false</default>
-		</entry>
+        <entry name="EnlargeSmallerImages" type="Bool">
+            <default>false</default>
+        </entry>
 
 
-		<entry name="ThumbnailSplitterSizes" type="IntList">
-			<default>350, 100</default>
-		</entry>
-	</group>
+        <entry name="ThumbnailSplitterSizes" type="IntList">
+            <default>350, 100</default>
+        </entry>
+    </group>
 
-	<group name="ThumbnailView">
-		<entry name="ThumbnailSize" type="Int">
-			<default>128</default>
-		</entry>
+    <group name="ThumbnailView">
+        <entry name="ThumbnailSize" type="Int">
+            <default>128</default>
+        </entry>
 
-		<entry name="DeleteThumbnailCacheOnExit" type="Bool">
-			<default>false</default>
-		</entry>
+        <entry name="DeleteThumbnailCacheOnExit" type="Bool">
+            <default>false</default>
+        </entry>
 
-		<entry name="Sorting" type="Enum">
-			<choices name="Gwenview::Sorting::Enum">
-				<choice name="Sorting::Name"/>
-				<choice name="Sorting::Size"/>
-				<choice name="Sorting::Date"/>
-			</choices>
-			<default>Sorting::Name</default>
-		</entry>
+        <entry name="Sorting" type="Enum">
+            <choices name="Gwenview::Sorting::Enum">
+                <choice name="Sorting::Name"/>
+                <choice name="Sorting::Size"/>
+                <choice name="Sorting::Date"/>
+            </choices>
+            <default>Sorting::Name</default>
+        </entry>
 
-		<entry name="ThumbnailDetails" type="Int">
-			<default>1</default>
-			<!-- 1 == PreviewItemDelegate::FileNameDetail -->
-		</entry>
+        <entry name="ThumbnailDetails" type="Int">
+            <default>1</default>
+            <!-- 1 == PreviewItemDelegate::FileNameDetail -->
+        </entry>
 
-		<entry name="ListVideos" type="Bool">
-			<default>true</default>
-		</entry>
-	</group>
+        <entry name="ListVideos" type="Bool">
+            <default>true</default>
+        </entry>
+    </group>
 
-	<group name="Print">
-		<entry name="PrintPosition" type="Int">
-			<default code="true">
-				Qt::AlignHCenter | Qt::AlignVCenter
-			</default>
-		</entry>
+    <group name="Print">
+        <entry name="PrintPosition" type="Int">
+            <default code="true">
+                Qt::AlignHCenter | Qt::AlignVCenter
+            </default>
+        </entry>
 
-		<entry name="PrintScaleMode" type="Enum">
-			<choices name="Gwenview::PrintOptionsPage::ScaleMode">
-				<choice name="PrintOptionsPage::NoScale"/>
-				<choice name="PrintOptionsPage::ScaleToPage"/>
-				<choice name="PrintOptionsPage::ScaleToCustomSize"/>
-			</choices>
-			<default>PrintOptionsPage::ScaleToPage</default>
-		</entry>
+        <entry name="PrintScaleMode" type="Enum">
+            <choices name="Gwenview::PrintOptionsPage::ScaleMode">
+                <choice name="PrintOptionsPage::NoScale"/>
+                <choice name="PrintOptionsPage::ScaleToPage"/>
+                <choice name="PrintOptionsPage::ScaleToCustomSize"/>
+            </choices>
+            <default>PrintOptionsPage::ScaleToPage</default>
+        </entry>
 
-		<entry name="PrintEnlargeSmallerImages" type="Bool">
-			<default>false</default>
-		</entry>
+        <entry name="PrintEnlargeSmallerImages" type="Bool">
+            <default>false</default>
+        </entry>
 
-		<entry name="PrintWidth" type="Double">
-			<default>15.0</default>
-		</entry>
+        <entry name="PrintWidth" type="Double">
+            <default>15.0</default>
+        </entry>
 
-		<entry name="PrintHeight" type="Double">
-			<default>10.0</default>
-			<!-- Default is in fact computed from PrintWidth because PrintKeepRatio is true -->
-		</entry>
+        <entry name="PrintHeight" type="Double">
+            <default>10.0</default>
+            <!-- Default is in fact computed from PrintWidth because PrintKeepRatio is true -->
+        </entry>
 
-		<entry name="PrintUnit" type="Enum">
-			<choices name="Gwenview::PrintOptionsPage::Unit">
-				<choice name="PrintOptionsPage::Millimeters"/>
-				<choice name="PrintOptionsPage::Centimeters"/>
-				<choice name="PrintOptionsPage::Inches"/>
-			</choices>
-			<default>PrintOptionsPage::Centimeters</default>
-		</entry>
+        <entry name="PrintUnit" type="Enum">
+            <choices name="Gwenview::PrintOptionsPage::Unit">
+                <choice name="PrintOptionsPage::Millimeters"/>
+                <choice name="PrintOptionsPage::Centimeters"/>
+                <choice name="PrintOptionsPage::Inches"/>
+            </choices>
+            <default>PrintOptionsPage::Centimeters</default>
+        </entry>
 
-		<entry name="PrintKeepRatio" type="Bool">
-			<default>true</default>
-		</entry>
-	</group>
+        <entry name="PrintKeepRatio" type="Bool">
+            <default>true</default>
+        </entry>
+    </group>
 
-	<group name="slide show">
-		<entry name="random" type="Bool">
-			<label>Display slide show images in random order</label>
-			<default>false</default>
-		</entry>
-		<entry name="fullscreen" type="Bool">
-			<label>Show slideshow in fullscreen mode</label>
-			<default>true</default>
-		</entry>
-		<entry name="loop" type="Bool">
-			<label>Loop on images</label>
-			<default>false</default>
-		</entry>
-		<entry name="stopAtEnd" key="stop at end" type="Bool">
-			<label>Stop at last image of folder</label>
-			<default>false</default>
-		</entry>
-		<entry name="interval" type="Double">
-			<label>Interval between images (in seconds)</label>
-			<default>5.0</default>
-		</entry>
-	</group>
+    <group name="slide show">
+        <entry name="random" type="Bool">
+            <label>Display slide show images in random order</label>
+            <default>false</default>
+        </entry>
+        <entry name="fullscreen" type="Bool">
+            <label>Show slideshow in fullscreen mode</label>
+            <default>true</default>
+        </entry>
+        <entry name="loop" type="Bool">
+            <label>Loop on images</label>
+            <default>false</default>
+        </entry>
+        <entry name="stopAtEnd" key="stop at end" type="Bool">
+            <label>Stop at last image of folder</label>
+            <default>false</default>
+        </entry>
+        <entry name="interval" type="Double">
+            <label>Interval between images (in seconds)</label>
+            <default>5.0</default>
+        </entry>
+    </group>
 
-	<group name="RedEyeReduction">
-		<entry name="RedEyeReductionDiameter" type="Int">
-			<default>24</default>
-		</entry>
-	</group>
+    <group name="RedEyeReduction">
+        <entry name="RedEyeReductionDiameter" type="Int">
+            <default>24</default>
+        </entry>
+    </group>
 
 </kcfg>
 

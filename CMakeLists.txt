@@ -16,13 +16,13 @@ set(GWENVIEW_SEMANTICINFO_BACKEND "Nepomuk" CACHE STRING "Semantic info backend 
 
 # Init GWENVIEW_SEMANTICINFO_BACKEND_* vars
 if (GWENVIEW_SEMANTICINFO_BACKEND STREQUAL "None")
-	set(GWENVIEW_SEMANTICINFO_BACKEND_NONE ON)
+    set(GWENVIEW_SEMANTICINFO_BACKEND_NONE ON)
 else (GWENVIEW_SEMANTICINFO_BACKEND STREQUAL "None")
-	if (GWENVIEW_SEMANTICINFO_BACKEND STREQUAL "Fake")
-		set(GWENVIEW_SEMANTICINFO_BACKEND_FAKE ON)
-	else (GWENVIEW_SEMANTICINFO_BACKEND STREQUAL "Fake")
-		set(GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK ON)
-	endif (GWENVIEW_SEMANTICINFO_BACKEND STREQUAL "Fake")
+    if (GWENVIEW_SEMANTICINFO_BACKEND STREQUAL "Fake")
+        set(GWENVIEW_SEMANTICINFO_BACKEND_FAKE ON)
+    else (GWENVIEW_SEMANTICINFO_BACKEND STREQUAL "Fake")
+        set(GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK ON)
+    endif (GWENVIEW_SEMANTICINFO_BACKEND STREQUAL "Fake")
 endif (GWENVIEW_SEMANTICINFO_BACKEND STREQUAL "None")
 
 ## Dependencies
@@ -37,9 +37,9 @@ macro_optional_find_package(Kipi)
 macro_log_feature(KIPI_FOUND "KIPI Plugins" "Provides various image manipulation and export features" "http://www.kipi-plugins.org" FALSE "" "")
 
 if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
-	# We need Nepomuk widgets for all backends but "None"
-	find_package(Nepomuk)
-	macro_log_feature(Nepomuk_FOUND "Nepomuk" "Provides desktop-wide semantic information support" "http://www.kde.org" TRUE "" "")
+    # We need Nepomuk widgets for all backends but "None"
+    find_package(Nepomuk)
+    macro_log_feature(Nepomuk_FOUND "Nepomuk" "Provides desktop-wide semantic information support" "http://www.kde.org" TRUE "" "")
 endif (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 
 find_package(LibKonq)
@@ -51,17 +51,17 @@ macro_log_feature(LIBKONQ_FOUND "libkonq" "Provides file management features" "h
 add_definitions(-DDISABLE_NEPOMUK_LEGACY)
 add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
 add_definitions(
-	${QT_DEFINITIONS}
-	${QT_QTDBUS_DEFINITIONS}
-	${KDE4_DEFINITIONS}
-	)
+    ${QT_DEFINITIONS}
+    ${QT_QTDBUS_DEFINITIONS}
+    ${KDE4_DEFINITIONS}
+    )
 
 include_directories(
-	${QDBUS_INCLUDE_DIRS}
-	${CMAKE_SOURCE_DIR}
-	${CMAKE_BINARY_DIR}
-	${KDE4_INCLUDES}
-	)
+    ${QDBUS_INCLUDE_DIRS}
+    ${CMAKE_SOURCE_DIR}
+    ${CMAKE_BINARY_DIR}
+    ${KDE4_INCLUDES}
+    )
 
 ## dirs to build
 add_subdirectory(lib)
