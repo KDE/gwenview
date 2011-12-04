@@ -59,6 +59,12 @@ public:
         MaximumZoom = 16
     };
 
+    enum AnimationMethod {
+        NoAnimation,
+        SoftwareAnimation,
+        GLAnimation
+    };
+
     /**
      * Create a new view attached to scene. We need the scene to be able to
      * install scene event filters.

@@ -7,6 +7,7 @@
     <kcfgfile name="gwenviewrc"/>
     <include>lib/sorting.h</include>
     <include>lib/mousewheelbehavior.h</include>
+    <include>lib/documentview/documentview.h</include>
     <include>lib/documentview/rasterimageview.h</include>
     <include>lib/print/printoptionspage.h</include>
     <group name="SideBar">
@@ -112,9 +113,17 @@
             <default>false</default>
         </entry>
 
-
         <entry name="ThumbnailSplitterSizes" type="IntList">
             <default>350, 100</default>
+        </entry>
+
+        <entry name="AnimationMethod" type="Enum">
+            <choices name="Gwenview::DocumentView::AnimationMethod">
+                <choice name="DocumentView::NoAnimation"/>
+                <choice name="DocumentView::SoftwareAnimation"/>
+                <choice name="DocumentView::GLAnimation"/>
+            </choices>
+            <default>DocumentView::GLAnimation</default>
         </entry>
     </group>
 

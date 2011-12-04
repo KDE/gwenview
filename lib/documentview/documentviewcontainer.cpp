@@ -23,6 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include <lib/documentview/documentview.h>
+#include <lib/gwenviewconfig.h>
 
 // KDE
 #include <kdebug.h>
@@ -84,7 +85,9 @@ DocumentViewContainer::DocumentViewContainer(QWidget* parent)
 {
     d->q = this;
     d->mScene = new QGraphicsScene(this);
-    setViewport(new QGLWidget);
+    if (GwenviewConfig::animationMethod() == DocumentView::GLAnimation) {
+        setViewport(new QGLWidget);
+    }
     setScene(d->mScene);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
@@ -149,6 +152,8 @@ void DocumentViewContainer::updateLayout()
     d->mLayoutUpdateTimer->stop();
     DocumentViewSet views = d->mViews | d->mAddedViews;
 
+    bool animated = GwenviewConfig::animationMethod() != DocumentView::NoAnimation;
+
     if (!views.isEmpty()) {
         // Compute column count
         int colCount;
@@ -191,20 +196,26 @@ void DocumentViewContainer::updateLayout()
             rect.setWidth(viewWidth);
             rect.setHeight(viewHeight);
 
-            if (d->mViews.contains(view)) {
-                if (rect != view->geometry()) {
-                    if (d->mAddedViews.isEmpty() && d->mRemovedViews.isEmpty()) {
-                        // View moves because of a resize
-                        view->moveTo(rect);
-                    } else {
-                        // View moves because the number of views changed,
-                        // animate the change
-                        view->moveToAnimated(rect);
+            if (animated) {
+                if (d->mViews.contains(view)) {
+                    if (rect != view->geometry()) {
+                        if (d->mAddedViews.isEmpty() && d->mRemovedViews.isEmpty()) {
+                            // View moves because of a resize
+                            view->moveTo(rect);
+                        } else {
+                            // View moves because the number of views changed,
+                            // animate the change
+                            view->moveToAnimated(rect);
+                        }
                     }
+                } else {
+                    view->setGeometry(rect);
+                    view->fadeIn();
                 }
             } else {
+                // Not animated, set final geometry and opacity now
                 view->setGeometry(rect);
-                view->fadeIn();
+                view->setOpacity(1);
             }
 
             ++col;
@@ -215,8 +226,24 @@ void DocumentViewContainer::updateLayout()
         }
     }
 
-    Q_FOREACH(DocumentView * view, d->mRemovedViews) {
-        view->fadeOut();
+    if (animated) {
+        Q_FOREACH(DocumentView* view, d->mRemovedViews) {
+            view->fadeOut();
+        }
+    } else {
+        QMetaObject::invokeMethod(this, "fakeViewAnimationsFinished", Qt::QueuedConnection);
+    }
+}
+
+void DocumentViewContainer::fakeViewAnimationsFinished()
+{
+    // Animations are disabled. Pretend they are all done so that removed views
+    // are deleted and added views are moved to mViews
+    Q_FOREACH(DocumentView* view, d->mRemovedViews) {
+        slotViewAnimationFinished(view);
+    }
+    Q_FOREACH(DocumentView* view, d->mAddedViews) {
+        slotViewAnimationFinished(view);
     }
 }
 
