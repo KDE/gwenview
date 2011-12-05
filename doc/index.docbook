@@ -3,10 +3,6 @@
 "dtd/kdex.dtd" [
   <!ENTITY kappname "<application>Gwenview</application>">
   <!ENTITY package "kdegraphics">
-  <!ENTITY introduction SYSTEM "introduction.docbook">
-  <!ENTITY interface SYSTEM "interface.docbook">
-  <!ENTITY mouse SYSTEM "mouse.docbook">
-  <!ENTITY keybindings SYSTEM "keybindings.docbook">
   <!ENTITY % addindex "IGNORE">
   <!ENTITY % English "INCLUDE"><!-- change language only here -->
 ]>
@@ -42,8 +38,8 @@
 </copyright>
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2011-08-03</date>
-<releaseinfo>2.7.0 (&kde; 4.7)</releaseinfo>
+<date>2011-12-02</date>
+<releaseinfo>2.7.0 (&kde; 4.8)</releaseinfo>
 <abstract>
 <para>&kappname; is an image viewer for &kde;.</para>
 </abstract>
@@ -334,10 +330,9 @@ not appear by default in Browse Mode.  Its appearance can be toggled using
 <guimenu>View</guimenu>
 <guimenuitem>Sidebar</guimenuitem>
 </menuchoice>
-or using the little arrow on the top of the sidebar splitter. When clicked it
-collapses or expands the sidebar. The collapser can overlap the image, but fades
-away when the mouse cursor moves out of the sidebar.  The sidebar contains several
-tabs:</para>
+or using the <guiicon>▮←</guiicon> / <guiicon>▮→</guiicon> button at the left side 
+of the statusbar. When clicked it collapses or expands the sidebar. 
+The sidebar contains several tabs:</para>
 
 <variablelist>
 
