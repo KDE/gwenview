@@ -251,7 +251,7 @@
      <item>
       <widget class="QRadioButton" name="glAnimationRadioButton">
        <property name="text">
-        <string>Open GL</string>
+        <string>OpenGL</string>
        </property>
        <property name="checked">
         <bool>true</bool>
