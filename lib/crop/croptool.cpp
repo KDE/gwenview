@@ -394,7 +394,6 @@ void CropTool::toolActivated()
 
 void CropTool::toolDeactivated()
 {
-    //delete d->mHudWidget;
 }
 
 void CropTool::slotCropRequested()
