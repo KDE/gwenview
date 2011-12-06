@@ -42,9 +42,7 @@ public:
     enum Option {
         OptionNone                 = 0,
         OptionCloseButton          = 1 << 1,
-        // FIXME: Ugly
-        OptionDoNotFollowChildSize = 1 << 2, /// Make it possible to resize the graphicshudwidget independently of child size
-        OptionOpaque               = 1 << 3
+        OptionOpaque               = 1 << 2
     };
     Q_DECLARE_FLAGS(Options, Option)
 
@@ -52,8 +50,6 @@ public:
     ~GraphicsHudWidget();
 
     void init(QWidget*, Options options);
-
-    QWidget* mainWidget() const;
 
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
 

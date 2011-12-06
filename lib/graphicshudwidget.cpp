@@ -77,14 +77,6 @@ void GraphicsHudWidget::init(QWidget* mainWidget, Options options)
         proxy->setWidget(d->mMainWidget);
         layout->addItem(proxy);
     }
-    // FIXME: QGV
-    /*
-    if (options & OptionDoNotFollowChildSize) {
-        adjustSize();
-    } else {
-        layout->setSizeConstraint(QLayout::SetFixedSize);
-    }
-    */
 
     if (options & OptionCloseButton) {
         d->mCloseButton = new QToolButton;
@@ -99,11 +91,6 @@ void GraphicsHudWidget::init(QWidget* mainWidget, Options options)
 
         connect(d->mCloseButton, SIGNAL(clicked()), SLOT(slotCloseButtonClicked()));
     }
-}
-
-QWidget* GraphicsHudWidget::mainWidget() const
-{
-    return d->mMainWidget;
 }
 
 void GraphicsHudWidget::slotCloseButtonClicked()
