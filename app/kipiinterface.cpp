@@ -27,12 +27,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QRegExp>
 
 // KDE
-#include <kaction.h>
-#include <kactioncollection.h>
-#include <kdebug.h>
-#include <kurl.h>
-#include <kxmlguifactory.h>
-#include <kdirlister.h>
+#include <KAction>
+#include <KActionCollection>
+#include <KDebug>
+#include <KUrl>
+#include <KXMLGUIFactory>
+#include <KDirLister>
 
 // KIPI
 #include <libkipi/imagecollectionshared.h>

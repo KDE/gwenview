@@ -33,8 +33,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QWindowsStyle>
 
 // KDE
-#include <kdebug.h>
-#include <kiconloader.h>
+#include <KDebug>
+#include <KIconLoader>
 
 // Local
 #include "lib/fullscreentheme.h"

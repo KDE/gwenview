@@ -28,10 +28,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QCursor>
 
 // KDE
-#include <kactioncollection.h>
-#include <kdebug.h>
-#include <klocale.h>
-#include <kmenu.h>
+#include <KActionCollection>
+#include <KDebug>
+#include <KLocale>
+#include <KMenu>
 
 // Local
 #include <lib/document/documentfactory.h>

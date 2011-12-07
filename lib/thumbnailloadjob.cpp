@@ -38,15 +38,15 @@
 #include <QTimer>
 
 // KDE
-#include <kapplication.h>
-#include <kcodecs.h>
-#include <kdebug.h>
+#include <KApplication>
+#include <KCodecs>
+#include <KDebug>
 #include <kde_file.h>
-#include <kfileitem.h>
-#include <kio/jobuidelegate.h>
-#include <kio/previewjob.h>
-#include <kstandarddirs.h>
-#include <ktemporaryfile.h>
+#include <KFileItem>
+#include <KIO/JobUiDelegate>
+#include <KIO/PreviewJob>
+#include <KStandardDirs>
+#include <KTemporaryFile>
 
 // Local
 #include "mimetypeutils.h"

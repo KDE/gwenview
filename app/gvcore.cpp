@@ -27,13 +27,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QToolButton>
 
 // KDE
-#include <kfiledialog.h>
-#include <kimageio.h>
-#include <kio/netaccess.h>
-#include <klocale.h>
-#include <kmessagebox.h>
-#include <kstandarddirs.h>
-#include <kurl.h>
+#include <KFileDialog>
+#include <KImageIO>
+#include <KIO/NetAccess>
+#include <KLocale>
+#include <KMessageBox>
+#include <KStandardDirs>
+#include <KUrl>
 
 // Local
 #include <lib/binder.h>

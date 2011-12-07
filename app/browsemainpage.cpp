@@ -29,18 +29,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QVBoxLayout>
 
 // KDE
-#include <kactioncollection.h>
-#include <kactioncategory.h>
-#include <kactionmenu.h>
-#include <kdebug.h>
-#include <kfileitem.h>
-#include <kfileplacesmodel.h>
-#include <klineedit.h>
-#include <klocale.h>
-#include <kselectaction.h>
-#include <kstatusbar.h>
-#include <ktoggleaction.h>
-#include <kurlnavigator.h>
+#include <KActionCollection>
+#include <KActionCategory>
+#include <KActionMenu>
+#include <KDebug>
+#include <KFileItem>
+#include <KFilePlacesModel>
+#include <KLineEdit>
+#include <KLocale>
+#include <KSelectAction>
+#include <KStatusBar>
+#include <KToggleAction>
+#include <KUrlNavigator>
 
 // Local
 #include <filtercontroller.h>

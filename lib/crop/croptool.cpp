@@ -34,8 +34,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QToolButton>
 
 // KDE
-#include <kdebug.h>
-#include <kdialog.h>
+#include <KDebug>
+#include <KDialog>
 
 // Local
 #include <lib/documentview/rasterimageview.h>

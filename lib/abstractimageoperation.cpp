@@ -24,8 +24,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Qt
 
 // KDE
-#include <kjob.h>
-#include <kurl.h>
+#include <KJob>
+#include <KUrl>
 
 // Local
 #include "document/documentfactory.h"

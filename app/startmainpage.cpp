@@ -30,10 +30,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QStyledItemDelegate>
 
 // KDE
-#include <kfileplacesmodel.h>
-#include <kglobalsettings.h>
-#include <kicon.h>
-#include <kmimetype.h>
+#include <KFilePlacesModel>
+#include <KGlobalSettings>
+#include <KIcon>
+#include <KMimeType>
 
 // Local
 #include <gvcore.h>

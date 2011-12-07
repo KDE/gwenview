@@ -28,8 +28,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // KDE
 #include <qtest_kde.h>
-#include <kdebug.h>
-#include <kfilemetainfo.h>
+#include <KDebug>
+#include <KFileMetaInfo>
 
 // Local
 #include "../lib/orientation.h"

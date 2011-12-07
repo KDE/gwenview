@@ -27,10 +27,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QToolButton>
 
 // KDE
-#include <kdebug.h>
-#include <kdialog.h>
-#include <kiconloader.h>
-#include <klocale.h>
+#include <KDebug>
+#include <KDialog>
+#include <KIconLoader>
+#include <KLocale>
 
 // Local
 #include <lib/semanticinfo/tagmodel.h>

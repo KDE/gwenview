@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QObject>
 
 // KDE
-#include <kurl.h>
+#include <KUrl>
 
 // Local
 #include <lib/semanticinfo/abstractsemanticinfobackend.h>

@@ -26,9 +26,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // KDE
 #include <qtest_kde.h>
-#include <kdebug.h>
-#include <kio/copyjob.h>
-#include <kio/deletejob.h>
+#include <KDebug>
+#include <KIO/CopyJob>
+#include <KIO/DeleteJob>
 
 // Local
 #include "../lib/imageformats/imageformats.h"

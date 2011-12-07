@@ -28,9 +28,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QMatrix>
 
 // KDE
-#include <kdebug.h>
-#include <klocale.h>
-#include <kurl.h>
+#include <KDebug>
+#include <KLocale>
+#include <KUrl>
 
 // Local
 #include "documentjob.h"

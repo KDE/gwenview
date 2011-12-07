@@ -36,13 +36,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QtConcurrentRun>
 
 // KDE
-#include <kdebug.h>
-#include <kio/job.h>
-#include <kio/jobclasses.h>
-#include <klocale.h>
-#include <kmimetype.h>
-#include <kprotocolinfo.h>
-#include <kurl.h>
+#include <KDebug>
+#include <KIO/Job>
+#include <KIO/JobClasses>
+#include <KLocale>
+#include <KMimeType>
+#include <KProtocolInfo>
+#include <KUrl>
 
 // Local
 #include "animateddocumentloadedimpl.h"

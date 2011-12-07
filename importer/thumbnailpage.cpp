@@ -25,10 +25,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QPushButton>
 
 // KDE
-#include <kdebug.h>
-#include <kdirlister.h>
-#include <kiconloader.h>
-#include <kurlnavigator.h>
+#include <KDebug>
+#include <KDirLister>
+#include <KIconLoader>
+#include <KUrlNavigator>
 
 // Local
 #include <lib/archiveutils.h>

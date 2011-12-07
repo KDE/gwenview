@@ -27,8 +27,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QToolTip>
 
 // KDE
-#include <kdebug.h>
-#include <kcolorscheme.h>
+#include <KDebug>
+#include <KColorScheme>
 
 // Local
 #include <lib/paintutils.h>

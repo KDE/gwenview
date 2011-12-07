@@ -26,8 +26,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QUndoGroup>
 
 // KDE
-#include <kdebug.h>
-#include <kurl.h>
+#include <KDebug>
+#include <KUrl>
 
 namespace Gwenview
 {

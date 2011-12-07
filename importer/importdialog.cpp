@@ -27,15 +27,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QStackedWidget>
 
 // KDE
-#include <kdebug.h>
-#include <kglobalsettings.h>
-#include <kio/deletejob.h>
-#include <kio/netaccess.h>
-#include <klocale.h>
-#include <kmessagebox.h>
-#include <krun.h>
-#include <kservice.h>
-#include <kstandardguiitem.h>
+#include <KDebug>
+#include <KGlobalSettings>
+#include <KIO/DeleteJob>
+#include <KIO/NetAccess>
+#include <KLocale>
+#include <KMessageBox>
+#include <KRun>
+#include <KService>
+#include <KStandardGuiItem>
 
 // Local
 #include "dialogpage.h"

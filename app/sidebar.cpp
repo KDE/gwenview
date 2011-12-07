@@ -32,11 +32,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QVBoxLayout>
 
 // KDE
-#include <kdebug.h>
-#include <kicon.h>
-#include <kiconloader.h>
-#include <kglobalsettings.h>
-#include <kwordwrap.h>
+#include <KDebug>
+#include <KIcon>
+#include <KIconLoader>
+#include <KGlobalSettings>
+#include <KWordWrap>
 
 // Local
 

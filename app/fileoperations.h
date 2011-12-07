@@ -21,7 +21,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #ifndef FILEOPERATIONS_H
 #define FILEOPERATIONS_H
 
-#include <kurl.h>
+#include <KUrl>
 
 class QWidget;
 

@@ -22,18 +22,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "fileoperations.h"
 
 // KDE
-#include <kdebug.h>
-#include <kfiledialog.h>
-#include <kfileitem.h>
-#include <kmenu.h>
-#include <kinputdialog.h>
-#include <kpushbutton.h>
-#include <kio/copyjob.h>
-#include <kio/deletejob.h>
-#include <kio/job.h>
-#include <kio/jobuidelegate.h>
-#include <kio/netaccess.h>
-#include <klocale.h>
+#include <KDebug>
+#include <KFileDialog>
+#include <KFileItem>
+#include <KMenu>
+#include <KInputDialog>
+#include <KPushButton>
+#include <KIO/CopyJob>
+#include <KIO/DeleteJob>
+#include <KIO/Job>
+#include <KIO/JobUiDelegate>
+#include <KIO/NetAccess>
+#include <KLocale>
 #include <konq_operations.h>
 
 // Local

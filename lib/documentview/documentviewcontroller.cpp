@@ -30,10 +30,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/zoomwidget.h>
 
 // KDE
-#include <kaction.h>
-#include <kactioncategory.h>
-#include <kdebug.h>
-#include <klocale.h>
+#include <KAction>
+#include <KActionCategory>
+#include <KDebug>
+#include <KLocale>
 
 // Qt
 #include <QAction>

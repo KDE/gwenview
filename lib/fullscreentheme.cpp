@@ -27,10 +27,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QString>
 
 // KDE
-#include <kcomponentdata.h>
-#include <kmacroexpander.h>
-#include <kstandarddirs.h>
-#include <kstringhandler.h>
+#include <KComponentData>
+#include <KMacroExpanderBase>
+#include <KStandardDirs>
+#include <KStringHandler>
 
 // Local
 #include <lib/gwenviewconfig.h>

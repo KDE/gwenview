@@ -30,10 +30,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QTimer>
 
 // KDE
-#include <kconfig.h>
-#include <kdebug.h>
-#include <kicon.h>
-#include <klocale.h>
+#include <KConfig>
+#include <KDebug>
+#include <KIcon>
+#include <KLocale>
 
 // Local
 #include <gwenviewconfig.h>

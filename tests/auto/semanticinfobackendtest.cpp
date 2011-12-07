@@ -24,9 +24,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QSignalSpy>
 
 // KDE
-#include <kdebug.h>
-#include <krandom.h>
-#include <ktemporaryfile.h>
+#include <KDebug>
+#include <KRandom>
+#include <KTemporaryFile>
 #include <qtest_kde.h>
 
 // Local

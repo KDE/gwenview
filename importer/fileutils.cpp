@@ -26,14 +26,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QFileInfo>
 
 // KDE
-#include <kdebug.h>
-#include <kfileitem.h>
-#include <kio/copyjob.h>
-#include <kio/job.h>
-#include <kio/jobclasses.h>
-#include <kio/jobuidelegate.h>
-#include <kio/netaccess.h>
-#include <kurl.h>
+#include <KDebug>
+#include <KFileItem>
+#include <KIO/CopyJob>
+#include <KIO/Job>
+#include <KIO/JobClasses>
+#include <KIO/JobUiDelegate>
+#include <KIO/NetAccess>
+#include <KUrl>
 
 namespace Gwenview
 {

@@ -32,7 +32,7 @@ Copyright (C) 1992-2008 Trolltech ASA. All rights reserved.
 #include <QVariant>
 
 // KDE
-#include <kdebug.h>
+#include <KDebug>
 
 // libjpeg
 #include <setjmp.h>

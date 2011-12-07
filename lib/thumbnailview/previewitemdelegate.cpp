@@ -35,12 +35,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QSequentialAnimationGroup>
 
 // KDE
-#include <kdebug.h>
-#include <kdirmodel.h>
-#include <kglobalsettings.h>
-#include <klineedit.h>
-#include <klocale.h>
-#include <kurl.h>
+#include <KDebug>
+#include <KDirModel>
+#include <KGlobalSettings>
+#include <KLineEdit>
+#include <KLocale>
+#include <KUrl>
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 #include <nepomuk/kratingpainter.h>
 #endif

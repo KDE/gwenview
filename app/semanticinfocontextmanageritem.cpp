@@ -29,12 +29,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QTimer>
 
 // KDE
-#include <kaction.h>
-#include <kactioncategory.h>
-#include <kactioncollection.h>
-#include <kdebug.h>
-#include <kdialog.h>
-#include <klocale.h>
+#include <KAction>
+#include <KActionCategory>
+#include <KActionCollection>
+#include <KDebug>
+#include <KDialog>
+#include <KLocale>
 
 // Nepomuk
 #include <nepomuk/kratingwidget.h>

@@ -25,11 +25,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QHash>
 
 // KDE
-#include <kdatetime.h>
-#include <kdebug.h>
-#include <kfileitem.h>
-#include <kfilemetainfo.h>
-#include <kfilemetainfoitem.h>
+#include <KDateTime>
+#include <KDebug>
+#include <KFileItem>
+#include <KFileMetaInfo>
+#include <KFileMetaInfoItem>
 
 namespace Gwenview
 {

@@ -24,16 +24,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 
 // KDE
-#include <kaboutdata.h>
-#include <kactioncollection.h>
-#include <kapplication.h>
-#include <kcmdlineargs.h>
-#include <kdebug.h>
-#include <kio/copyjob.h>
-#include <klocale.h>
-#include <kmessagebox.h>
-#include <ktempdir.h>
-#include <kurl.h>
+#include <KAboutData>
+#include <KActionCollection>
+#include <KApplication>
+#include <KCmdLineArgs>
+#include <KDebug>
+#include <KIO/CopyJob>
+#include <KLocale>
+#include <KMessageBox>
+#include <KTempDir>
+#include <KUrl>
 
 // Local
 #include <lib/imageformats/imageformats.h>

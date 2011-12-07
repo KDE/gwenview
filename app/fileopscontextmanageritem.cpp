@@ -30,20 +30,20 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QMimeData>
 
 // KDE
-#include <kaction.h>
-#include <kactioncollection.h>
-#include <kactioncategory.h>
-#include <kdebug.h>
-#include <kfileitem.h>
-#include <kfileitemlistproperties.h>
+#include <KAction>
+#include <KActionCollection>
+#include <KActionCategory>
+#include <KDebug>
+#include <KFileItem>
+#include <KFileItemListProperties>
 #include <kio/paste.h>
-#include <klocale.h>
-#include <kmimetypetrader.h>
-#include <kopenwithdialog.h>
-#include <kpropertiesdialog.h>
-#include <krun.h>
-#include <kservice.h>
-#include <kxmlguiclient.h>
+#include <KLocale>
+#include <KMimeTypeTrader>
+#include <KOpenWithDialog>
+#include <KPropertiesDialog>
+#include <KRun>
+#include <KService>
+#include <KXMLGUIClient>
 
 // libkonq
 #include <konqmimedata.h>

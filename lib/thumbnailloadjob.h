@@ -34,8 +34,8 @@
 #include <QWaitCondition>
 
 // KDE
-#include <kio/job.h>
-#include <kfileitem.h>
+#include <KIO/Job>
+#include <KFileItem>
 
 // Local
 #include <lib/thumbnailgroup.h>

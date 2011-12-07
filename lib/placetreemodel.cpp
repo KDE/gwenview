@@ -24,9 +24,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 
 // KDE
-#include <kdebug.h>
-#include <kdirlister.h>
-#include <kfileplacesmodel.h>
+#include <KDebug>
+#include <KDirLister>
+#include <KFilePlacesModel>
 
 // Local
 #include <lib/semanticinfo/sorteddirmodel.h>

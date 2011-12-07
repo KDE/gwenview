@@ -20,12 +20,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 
 // KDE
-#include <kaboutdata.h>
-#include <kapplication.h>
-#include <kcmdlineargs.h>
-#include <kdebug.h>
-#include <klocale.h>
-#include <kurl.h>
+#include <KAboutData>
+#include <KApplication>
+#include <KCmdLineArgs>
+#include <KDebug>
+#include <KLocale>
+#include <KUrl>
 
 // Local
 #include <lib/imageformats/imageformats.h>

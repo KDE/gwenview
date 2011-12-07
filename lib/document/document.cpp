@@ -26,11 +26,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QUndoStack>
 
 // KDE
-#include <kdebug.h>
-#include <kfileitem.h>
-#include <kjobuidelegate.h>
-#include <klocale.h>
-#include <kurl.h>
+#include <KDebug>
+#include <KFileItem>
+#include <KJobUiDelegate>
+#include <KLocale>
+#include <KUrl>
 
 // Local
 #include "documentjob.h"

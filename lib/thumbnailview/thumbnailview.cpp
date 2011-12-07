@@ -35,12 +35,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QToolTip>
 
 // KDE
-#include <kdebug.h>
-#include <kdirmodel.h>
-#include <kicon.h>
-#include <kiconloader.h>
-#include <kglobalsettings.h>
-#include <kpixmapsequence.h>
+#include <KDebug>
+#include <KDirModel>
+#include <KIcon>
+#include <KIconLoader>
+#include <KGlobalSettings>
+#include <KPixmapSequence>
 
 // Local
 #include "abstractdocumentinfoprovider.h"

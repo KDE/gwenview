@@ -27,8 +27,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QTreeView>
 
 // KDE
-#include <kdebug.h>
-#include <klocale.h>
+#include <KDebug>
+#include <KLocale>
 
 // Local
 #include <lib/eventwatcher.h>
@@ -41,7 +41,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <lib/placetreemodel.h>
 #define MODEL_CLASS PlaceTreeModel
 #else
-#include <kdirlister.h>
+#include <KDirLister>
 #include <lib/semanticinfo/sorteddirmodel.h>
 #define MODEL_CLASS SortedDirModel
 #endif

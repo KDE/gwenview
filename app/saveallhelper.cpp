@@ -28,10 +28,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QStringList>
 
 // KDE
-#include <klocale.h>
-#include <kmessagebox.h>
-#include <kprogressdialog.h>
-#include <kurl.h>
+#include <KLocale>
+#include <KMessageBox>
+#include <KProgressDialog>
+#include <KUrl>
 
 // Local
 #include <lib/document/document.h>

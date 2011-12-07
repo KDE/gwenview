@@ -28,13 +28,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QToolTip>
 
 // KDE
-#include <kactioncollection.h>
-#include <kcolorscheme.h>
-#include <kdebug.h>
-#include <kicon.h>
-#include <kiconloader.h>
-#include <klocale.h>
-#include <kurl.h>
+#include <KActionCollection>
+#include <KColorScheme>
+#include <KDebug>
+#include <KIcon>
+#include <KIconLoader>
+#include <KLocale>
+#include <KUrl>
 
 // Local
 #include "lib/document/documentfactory.h"

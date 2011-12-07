@@ -25,8 +25,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QUndoGroup>
 
 // KDE
-#include <kdebug.h>
-#include <kfileitem.h>
+#include <KDebug>
+#include <KFileItem>
 
 // Local
 #include "sidebar.h"

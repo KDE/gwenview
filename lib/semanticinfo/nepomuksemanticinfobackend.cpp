@@ -29,8 +29,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QWaitCondition>
 
 // KDE
-#include <kdebug.h>
-#include <kurl.h>
+#include <KDebug>
+#include <KUrl>
 
 // Nepomuk
 #include <nepomuk/global.h>

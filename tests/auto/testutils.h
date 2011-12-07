@@ -29,9 +29,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QTest>
 
 // KDE
-#include <kdebug.h>
-#include <ktempdir.h>
-#include <kurl.h>
+#include <KDebug>
+#include <KTempDir>
+#include <KUrl>
 
 class SandBoxDir : public QDir
 {

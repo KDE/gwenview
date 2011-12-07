@@ -20,10 +20,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "testutils.h"
 
 // KDE
-#include <kdebug.h>
-#include <kio/deletejob.h>
-#include <kio/netaccess.h>
-#include <kio/job.h>
+#include <KDebug>
+#include <KIO/DeleteJob>
+#include <KIO/NetAccess>
+#include <KIO/Job>
 
 static void rm_rf(const QString& pathOrUrl)
 {

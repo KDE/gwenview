@@ -28,13 +28,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QtConcurrentRun>
 
 // KDE
-#include <kapplication.h>
-#include <kio/copyjob.h>
-#include <kio/jobuidelegate.h>
-#include <klocale.h>
-#include <ksavefile.h>
-#include <ktemporaryfile.h>
-#include <kurl.h>
+#include <KApplication>
+#include <KIO/CopyJob>
+#include <KIO/JobUiDelegate>
+#include <KLocale>
+#include <KSaveFile>
+#include <KTemporaryFile>
+#include <KUrl>
 
 // Local
 #include "documentloadedimpl.h"

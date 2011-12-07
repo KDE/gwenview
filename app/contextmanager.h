@@ -24,8 +24,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QObject>
 
 // KDE
-#include <kurl.h>
-#include <kfileitem.h>
+#include <KUrl>
+#include <KFileItem>
 
 class QItemSelectionModel;
 class QModelIndex;

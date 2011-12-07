@@ -26,10 +26,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QHBoxLayout>
 
 // KDE
-#include <kdatepicker.h>
-#include <kdebug.h>
-#include <kiconloader.h>
-#include <klocale.h>
+#include <KDatePicker>
+#include <KDebug>
+#include <KIconLoader>
+#include <KLocale>
 
 // Local
 #include <lib/statusbartoolbutton.h>

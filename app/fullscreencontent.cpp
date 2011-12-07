@@ -35,8 +35,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QWindowsStyle>
 
 // KDE
-#include <kactioncollection.h>
-#include <klocale.h>
+#include <KActionCollection>
+#include <KLocale>
 
 // Local
 #include "imagemetainfodialog.h"

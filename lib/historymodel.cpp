@@ -27,18 +27,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QFile>
 
 // KDE
-#include <kconfig.h>
-#include <kconfiggroup.h>
-#include <kdebug.h>
-#include <kdirmodel.h>
-#include <kfileitem.h>
-#include <kfileplacesmodel.h>
-#include <kglobal.h>
-#include <klocale.h>
-#include <kmimetype.h>
-#include <kstandarddirs.h>
-#include <ktemporaryfile.h>
-#include <kurl.h>
+#include <KConfig>
+#include <KConfigGroup>
+#include <KDebug>
+#include <KDirModel>
+#include <KFileItem>
+#include <KFilePlacesModel>
+#include <KGlobal>
+#include <KLocale>
+#include <KMimeType>
+#include <KStandardDirs>
+#include <KTemporaryFile>
+#include <KUrl>
 
 // Local
 

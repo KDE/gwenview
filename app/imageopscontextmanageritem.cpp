@@ -24,13 +24,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Qt
 
 // KDE
-#include <kaction.h>
-#include <kdebug.h>
-#include <kinputdialog.h>
-#include <klocale.h>
-#include <kmessagebox.h>
-#include <kactioncollection.h>
-#include <kactioncategory.h>
+#include <KAction>
+#include <KDebug>
+#include <KInputDialog>
+#include <KLocale>
+#include <KMessageBox>
+#include <KActionCollection>
+#include <KActionCategory>
 
 // Local
 #include "contextmanager.h"

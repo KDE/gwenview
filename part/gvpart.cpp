@@ -22,20 +22,20 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 
 // KDE
-#include <kaboutdata.h>
-#include <kaction.h>
-#include <kactioncollection.h>
-#include <kdebug.h>
-#include <kfiledialog.h>
-#include <kicon.h>
-#include <kiconloader.h>
-#include <kio/job.h>
-#include <kio/jobuidelegate.h>
-#include <klocale.h>
-#include <kmenu.h>
-#include <kstandardaction.h>
-#include <kpluginfactory.h>
-#include <kpropertiesdialog.h>
+#include <KAboutData>
+#include <KAction>
+#include <KActionCollection>
+#include <KDebug>
+#include <KFileDialog>
+#include <KIcon>
+#include <KIconLoader>
+#include <KIO/Job>
+#include <KIO/JobUiDelegate>
+#include <KLocale>
+#include <KMenu>
+#include <KStandardAction>
+#include <KPluginFactory>
+#include <KPropertiesDialog>
 
 // Local
 #include "../lib/document/document.h"

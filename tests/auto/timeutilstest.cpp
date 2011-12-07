@@ -24,8 +24,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <utime.h>
 
 // KDE
-#include <kfileitem.h>
-#include <ktemporaryfile.h>
+#include <KFileItem>
+#include <KTemporaryFile>
 #include <qtest_kde.h>
 
 // Local

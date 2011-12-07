@@ -24,8 +24,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 
 // KDE
-#include <kdebug.h>
-#include <kdirlister.h>
+#include <KDebug>
+#include <KDirLister>
 
 // Local
 #include <lib/mimetypeutils.h>

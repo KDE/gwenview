@@ -33,8 +33,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QVBoxLayout>
 
 // KDE
-#include <kdebug.h>
-#include <kpushbutton.h>
+#include <KDebug>
+#include <KPushButton>
 
 // Local
 #include <lib/semanticinfo/tagitemdelegate.h>

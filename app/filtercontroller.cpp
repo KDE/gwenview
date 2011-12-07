@@ -34,13 +34,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QToolButton>
 
 // KDE
-#include <kcombobox.h>
-#include <kdebug.h>
-#include <kfileitem.h>
-#include <kicon.h>
-#include <kiconloader.h>
-#include <klineedit.h>
-#include <klocale.h>
+#include <KComboBox>
+#include <KDebug>
+#include <KFileItem>
+#include <KIcon>
+#include <KIconLoader>
+#include <KLineEdit>
+#include <KLocale>
 
 // Local
 #include <lib/datewidget.h>

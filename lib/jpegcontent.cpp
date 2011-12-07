@@ -38,8 +38,8 @@ extern "C" {
 #include <QMatrix>
 
 // KDE
-#include <kdebug.h>
-#include <klocale.h>
+#include <KDebug>
+#include <KLocale>
 
 // Exiv2
 #include <exiv2/exif.hpp>

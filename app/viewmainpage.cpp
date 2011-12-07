@@ -28,13 +28,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QVBoxLayout>
 
 // KDE
-#include <kactioncollection.h>
-#include <kactioncategory.h>
-#include <kdebug.h>
-#include <klocale.h>
-#include <kmenu.h>
-#include <kmessagebox.h>
-#include <ktoggleaction.h>
+#include <KActionCollection>
+#include <KActionCategory>
+#include <KDebug>
+#include <KLocale>
+#include <KMenu>
+#include <KMessageBox>
+#include <KToggleAction>
 
 // Local
 #include "fileoperations.h"

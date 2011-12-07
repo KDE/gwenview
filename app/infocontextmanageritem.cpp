@@ -31,9 +31,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QVBoxLayout>
 
 // KDE
-#include <kfileitem.h>
-#include <klocale.h>
-#include <ksqueezedtextlabel.h>
+#include <KFileItem>
+#include <KLocale>
+#include <KSqueezedTextLabel>
 
 // Local
 #include "contextmanager.h"

@@ -24,10 +24,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Qt
 
 // KDE
-#include <kdebug.h>
-#include <kfileitem.h>
-#include <kglobal.h>
-#include <klocale.h>
+#include <KDebug>
+#include <KFileItem>
+#include <KGlobal>
+#include <KLocale>
 
 // Exiv2
 #include <exiv2/exif.hpp>

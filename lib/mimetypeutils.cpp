@@ -26,16 +26,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QStringList>
 
 // KDE
-#include <kapplication.h>
-#include <kdebug.h>
-#include <kfileitem.h>
-#include <kio/job.h>
-#include <kio/jobclasses.h>
-#include <kio/netaccess.h>
-#include <kmimetype.h>
-#include <kurl.h>
+#include <KApplication>
+#include <KDebug>
+#include <KFileItem>
+#include <KIO/Job>
+#include <KIO/JobClasses>
+#include <KIO/NetAccess>
+#include <KMimeType>
+#include <KUrl>
 
-#include <kimageio.h>
+#include <KImageIO>
 
 // Local
 #include <archiveutils.h>

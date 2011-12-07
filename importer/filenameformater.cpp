@@ -25,9 +25,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QFileInfo>
 
 // KDE
-#include <kdatetime.h>
-#include <klocale.h>
-#include <kurl.h>
+#include <KDateTime>
+#include <KLocale>
+#include <KUrl>
 
 // Local
 

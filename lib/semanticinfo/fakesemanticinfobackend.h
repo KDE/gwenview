@@ -27,7 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QHash>
 
 // KDE
-#include <kurl.h>
+#include <KUrl>
 
 // Local
 #include "abstractsemanticinfobackend.h"

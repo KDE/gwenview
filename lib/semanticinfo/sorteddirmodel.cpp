@@ -23,15 +23,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 
 // KDE
-#include <kdebug.h>
-#include <kdatetime.h>
-#include <kdirlister.h>
+#include <KDebug>
+#include <KDateTime>
+#include <KDirLister>
 
 // Local
 #include <lib/archiveutils.h>
 #include <lib/timeutils.h>
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-#include <kdirmodel.h>
+#include <KDirModel>
 #else
 #include "abstractsemanticinfobackend.h"
 #include "semanticinfodirmodel.h"

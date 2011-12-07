@@ -34,9 +34,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QToolButton>
 
 // KDE
-#include <kdebug.h>
-#include <klocale.h>
-#include <kglobal.h>
+#include <KDebug>
+#include <KLocale>
+#include <KGlobal>
 
 // Local
 

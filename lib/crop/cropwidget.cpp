@@ -27,11 +27,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QPushButton>
 
 // KDE
-#include <kdebug.h>
-#include <kdialog.h>
-#include <kglobalsettings.h>
-#include <klineedit.h>
-#include <klocale.h>
+#include <KDebug>
+#include <KDialog>
+#include <KGlobalSettings>
+#include <KLineEdit>
+#include <KLocale>
 
 // Local
 #include <lib/documentview/rasterimageview.h>

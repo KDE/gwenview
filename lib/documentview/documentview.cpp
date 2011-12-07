@@ -36,10 +36,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QWeakPointer>
 
 // KDE
-#include <kdebug.h>
-#include <kiconloader.h>
-#include <klocale.h>
-#include <kurl.h>
+#include <KDebug>
+#include <KIconLoader>
+#include <KLocale>
+#include <KUrl>
 
 // Local
 #include <lib/document/document.h>

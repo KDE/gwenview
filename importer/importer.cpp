@@ -24,17 +24,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 
 // KDE
-#include <kdatetime.h>
-#include <kdebug.h>
-#include <kfileitem.h>
-#include <klocale.h>
-#include <ktempdir.h>
-#include <kurl.h>
-#include <kio/copyjob.h>
-#include <kio/job.h>
-#include <kio/jobuidelegate.h>
-#include <kio/netaccess.h>
-#include <kstandarddirs.h>
+#include <KDateTime>
+#include <KDebug>
+#include <KFileItem>
+#include <KLocale>
+#include <KTempDir>
+#include <KUrl>
+#include <KIO/CopyJob>
+#include <KIO/Job>
+#include <KIO/JobUiDelegate>
+#include <KIO/NetAccess>
+#include <KStandardDirs>
 
 // stdc++
 #include <memory>

@@ -24,8 +24,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 
 // KDE
-#include <kparts/part.h>
-#include <kiconloader.h>
+#include <KParts/Part>
+#include <KIconLoader>
 
 // Local
 #include "../lib/document/documentfactory.h"
