@@ -77,6 +77,7 @@ private:
 private Q_SLOTS:
     void slotViewAnimationFinished(DocumentView*);
     void fakeViewAnimationsFinished();
+    void slotConfigChanged();
 };
 
 } // namespace

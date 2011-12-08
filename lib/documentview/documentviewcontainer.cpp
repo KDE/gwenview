@@ -99,6 +99,8 @@ DocumentViewContainer::DocumentViewContainer(QWidget* parent)
     d->mLayoutUpdateTimer->setInterval(0);
     d->mLayoutUpdateTimer->setSingleShot(true);
     connect(d->mLayoutUpdateTimer, SIGNAL(timeout()), SLOT(updateLayout()));
+
+    connect(GwenviewConfig::self(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
 }
 
 DocumentViewContainer::~DocumentViewContainer()
@@ -257,6 +259,15 @@ void DocumentViewContainer::slotViewAnimationFinished(DocumentView* view)
     if (d->mAddedViews.contains(view)) {
         d->mAddedViews.remove(view);
         d->mViews.insert(view);
+    }
+}
+
+void DocumentViewContainer::slotConfigChanged()
+{
+    bool currentlyGL = qobject_cast<QGLWidget*>(viewport());
+    bool wantGL = GwenviewConfig::animationMethod() == DocumentView::GLAnimation;
+    if (currentlyGL != wantGL) {
+        setViewport(wantGL ? new QGLWidget() : new QWidget());
     }
 }
 
