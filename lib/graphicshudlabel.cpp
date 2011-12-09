@@ -61,20 +61,16 @@ void GraphicsHudLabel::setText(const QString& text)
 
 void GraphicsHudLabel::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
 {
-    FullScreenTheme::RenderInfo info = FullScreenTheme::renderInfo(FullScreenTheme::LabelWidget);
-    const int padding = info.padding;
+    FullScreenTheme::RenderInfo info = FullScreenTheme::renderInfo(FullScreenTheme::FrameWidget);
     painter->setPen(info.textPen);
-    QRectF rect = boundingRect().adjusted(padding, padding, -padding, -padding);
-    painter->drawText(rect, Qt::AlignCenter, d->mText);
+    painter->drawText(boundingRect(), Qt::AlignCenter, d->mText);
 }
 
 QSizeF GraphicsHudLabel::sizeHint(Qt::SizeHint /*which*/, const QSizeF& /*constraint*/) const
 {
-    FullScreenTheme::RenderInfo info = FullScreenTheme::renderInfo(FullScreenTheme::LabelWidget);
     QFont font = KGlobalSettings::generalFont();
     QFontMetrics fm(font);
-    QSize size = fm.size(0, d->mText);
-    return QSizeF(size.width() + 2 * info.padding, size.height() + 2 * info.padding);
+    return fm.size(0, d->mText);
 }
 
 } // namespace

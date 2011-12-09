@@ -61,7 +61,6 @@ public:
     enum WidgetType
     {
         ButtonWidget,
-        LabelWidget,
         FrameWidget
     };
 
