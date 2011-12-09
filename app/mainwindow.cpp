@@ -92,7 +92,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/eventwatcher.h>
 #include <lib/fullscreenbar.h>
 #include <lib/gwenviewconfig.h>
-#include <lib/messagebubble.h>
 #include <lib/mimetypeutils.h>
 #include <lib/print/printhelper.h>
 #include <lib/slideshow.h>
@@ -102,7 +101,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/thumbnailview/thumbnailview.h>
 #include <lib/thumbnailloadjob.h>
 #include <lib/urlutils.h>
-#include <lib/widgetfloater.h>
 
 namespace Gwenview
 {
@@ -1554,14 +1552,6 @@ void MainWindow::setDistractionFreeMode(bool value)
 {
     d->mDistractionFreeMode = value;
     d->updateDistractionsState();
-}
-
-void MainWindow::showMessageBubble(MessageBubble* bubble)
-{
-    WidgetFloater* floater = new WidgetFloater(d->mContentWidget);
-    floater->setChildWidget(bubble);
-    floater->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
-    bubble->show();
 }
 
 void MainWindow::saveProperties(KConfigGroup& group)

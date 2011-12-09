@@ -38,6 +38,7 @@ namespace Gwenview
 {
 
 class DocumentView;
+class MessageBubble;
 class RasterImageView;
 class SlideShow;
 class ThumbnailBarView;
@@ -111,6 +112,8 @@ public:
     void setToolWidget(QWidget* widget);
 
     QToolButton* toggleSideBarButton() const;
+
+    void showMessageBubble(MessageBubble*);
 
 Q_SIGNALS:
 

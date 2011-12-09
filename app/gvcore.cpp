@@ -49,6 +49,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/transformimageoperation.h>
 #include <mainwindow.h>
 #include <saveallhelper.h>
+#include <viewmainpage.h>
 
 namespace Gwenview
 {
@@ -270,7 +271,10 @@ void GvCore::slotSaveResult(KJob* _job)
         connect(button, SIGNAL(clicked()),
                 bubble, SLOT(deleteLater()));
 
-        d->mMainWindow->showMessageBubble(bubble);
+        ViewMainPage* page = d->mMainWindow->viewMainPage();
+        if (page->isVisible()) {
+            page->showMessageBubble(bubble);
+        }
     }
 }
 
