@@ -50,7 +50,7 @@ public:
 
     void startSlideShow();
 
-    ViewMainPage* documentPanel() const;
+    ViewMainPage* viewMainPage() const;
 
     ContextManager* contextManager() const;
 

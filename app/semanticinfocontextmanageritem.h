@@ -41,7 +41,7 @@ class SemanticInfoContextManagerItem : public AbstractContextManagerItem
 {
     Q_OBJECT
 public:
-    SemanticInfoContextManagerItem(ContextManager*, KActionCollection*, ViewMainPage* documentPanel);
+    SemanticInfoContextManagerItem(ContextManager*, KActionCollection*, ViewMainPage* viewMainPage);
     ~SemanticInfoContextManagerItem();
 
 protected:

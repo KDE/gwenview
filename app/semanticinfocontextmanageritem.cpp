@@ -220,13 +220,13 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
     }
 };
 
-SemanticInfoContextManagerItem::SemanticInfoContextManagerItem(ContextManager* manager, KActionCollection* actionCollection, ViewMainPage* documentPanel)
+SemanticInfoContextManagerItem::SemanticInfoContextManagerItem(ContextManager* manager, KActionCollection* actionCollection, ViewMainPage* viewMainPage)
 : AbstractContextManagerItem(manager)
 , d(new SemanticInfoContextManagerItemPrivate)
 {
     d->q = this;
     d->mActionCollection = actionCollection;
-    d->mViewMainPage = documentPanel;
+    d->mViewMainPage = viewMainPage;
 
     connect(contextManager(), SIGNAL(selectionChanged()),
             SLOT(slotSelectionChanged()));

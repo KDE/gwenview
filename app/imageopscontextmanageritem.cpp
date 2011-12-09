@@ -143,7 +143,7 @@ ImageOpsContextManagerItem::ImageOpsContextManagerItem(ContextManager* manager, 
             SLOT(updateActions()));
     connect(mainWindow, SIGNAL(viewModeChanged()),
             SLOT(updateActions()));
-    connect(mainWindow->documentPanel(), SIGNAL(completed()),
+    connect(mainWindow->viewMainPage(), SIGNAL(completed()),
             SLOT(updateActions()));
 }
 
@@ -169,8 +169,8 @@ void ImageOpsContextManagerItem::updateSideBarContent()
 void ImageOpsContextManagerItem::updateActions()
 {
     bool canModify = d->mMainWindow->currentDocumentIsRasterImage();
-    bool documentPanelIsVisible = d->mMainWindow->documentPanel()->isVisible();
-    if (!documentPanelIsVisible) {
+    bool viewMainPageIsVisible = d->mMainWindow->viewMainPage()->isVisible();
+    if (!viewMainPageIsVisible) {
         // Since we only support image operations on one image for now,
         // disable actions if several images are selected and the document
         // view is not visible.
@@ -184,8 +184,8 @@ void ImageOpsContextManagerItem::updateActions()
     d->mMirrorAction->setEnabled(canModify);
     d->mFlipAction->setEnabled(canModify);
     d->mResizeAction->setEnabled(canModify);
-    d->mCropAction->setEnabled(canModify && documentPanelIsVisible);
-    d->mRedEyeReductionAction->setEnabled(canModify && documentPanelIsVisible);
+    d->mCropAction->setEnabled(canModify && viewMainPageIsVisible);
+    d->mRedEyeReductionAction->setEnabled(canModify && viewMainPageIsVisible);
 
     updateSideBarContent();
 }
@@ -235,7 +235,7 @@ void ImageOpsContextManagerItem::crop()
     if (!d->ensureEditable()) {
         return;
     }
-    RasterImageView* imageView = d->mMainWindow->documentPanel()->imageView();
+    RasterImageView* imageView = d->mMainWindow->viewMainPage()->imageView();
     if (!imageView) {
         kError() << "No ImageView available!";
         return;
@@ -255,7 +255,7 @@ void ImageOpsContextManagerItem::startRedEyeReduction()
     if (!d->ensureEditable()) {
         return;
     }
-    RasterImageView* view = d->mMainWindow->documentPanel()->imageView();
+    RasterImageView* view = d->mMainWindow->viewMainPage()->imageView();
     if (!view) {
         kError() << "No RasterImageView available!";
         return;
@@ -281,7 +281,7 @@ void ImageOpsContextManagerItem::applyImageOperation(AbstractImageOperation* op)
 
 void ImageOpsContextManagerItem::restoreDefaultImageViewTool()
 {
-    RasterImageView* imageView = d->mMainWindow->documentPanel()->imageView();
+    RasterImageView* imageView = d->mMainWindow->viewMainPage()->imageView();
     if (!imageView) {
         kError() << "No RasterImageView available!";
         return;

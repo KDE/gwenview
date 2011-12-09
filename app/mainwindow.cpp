@@ -828,7 +828,7 @@ ContextManager* MainWindow::contextManager() const
     return d->mContextManager;
 }
 
-ViewMainPage* MainWindow::documentPanel() const
+ViewMainPage* MainWindow::viewMainPage() const
 {
     return d->mViewMainPage;
 }
