@@ -35,6 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include <lib/graphicshudbutton.h>
+#include <lib/graphicshudlabel.h>
 
 namespace Gwenview
 {
@@ -92,7 +93,7 @@ struct MessageBubblePrivate {
     QGraphicsWidget* mWidget;
     QGraphicsLinearLayout* mLayout;
     PieWidget* mCountDownWidget;
-    QLabel* mLabel;
+    GraphicsHudLabel* mLabel;
 };
 
 static QGraphicsProxyWidget* proxyFor(QWidget* widget)
@@ -109,7 +110,7 @@ MessageBubble::MessageBubble(QGraphicsWidget* parent)
     d->mWidget = new QGraphicsWidget;
     d->mCountDownWidget = new PieWidget;
     d->mCountDownWidget->setValue(1);
-    d->mLabel = new QLabel;
+    d->mLabel = new GraphicsHudLabel;
 
     QTimeLine* timeLine = new QTimeLine(TIMEOUT, this);
     connect(timeLine, SIGNAL(valueChanged(qreal)),
@@ -121,7 +122,7 @@ MessageBubble::MessageBubble(QGraphicsWidget* parent)
     d->mLayout = new QGraphicsLinearLayout(d->mWidget);
     d->mLayout->setContentsMargins(0, 0, 0, 0);
     d->mLayout->addItem(proxyFor(d->mCountDownWidget));
-    d->mLayout->addItem(proxyFor(d->mLabel));
+    d->mLayout->addItem(d->mLabel);
 
     init(d->mWidget, GraphicsHudWidget::OptionCloseButton);
 }

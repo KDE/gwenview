@@ -168,6 +168,11 @@ FullScreenTheme::RenderInfo FullScreenTheme::renderInfo(FullScreenTheme::WidgetT
         frame.borderPen = QPen(QColor::fromHsvF(0, 0, .4, .6));
         frame.borderRadius = 8;
         renderInfoMap[FrameWidget].infos[NormalState] = frame;
+
+        // Label
+        RenderInfo label;
+        label.textPen = QPen(QColor("#ccc"));
+        renderInfoMap[LabelWidget].infos[NormalState] = label;
     }
     RenderInfo normalInfo = renderInfoMap[widget].infos.value(NormalState);
     if (state == NormalState) {

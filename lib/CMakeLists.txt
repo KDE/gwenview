@@ -83,6 +83,7 @@ set(gwenviewlib_SRCS
     fullscreenbar.cpp
     fullscreentheme.cpp
     graphicshudbutton.cpp
+    graphicshudlabel.cpp
     graphicshudwidget.cpp
     graphicswidgetfloater.cpp
     hudwidget.cpp
