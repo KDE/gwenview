@@ -63,6 +63,8 @@ public:
      */
     void reset();
 
+    void showMessageWidget(QGraphicsWidget*);
+
 public Q_SLOTS:
     void updateLayout();
 

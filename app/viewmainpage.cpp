@@ -46,14 +46,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/documentview/documentviewcontroller.h>
 #include <lib/documentview/documentviewsynchronizer.h>
 #include <lib/gwenviewconfig.h>
-#include <lib/messagebubble.h>
 #include <lib/paintutils.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
 #include <lib/slidecontainer.h>
 #include <lib/slideshow.h>
 #include <lib/statusbartoolbutton.h>
 #include <lib/thumbnailview/thumbnailbarview.h>
-#include <lib/widgetfloater.h>
 #include <lib/zoomwidget.h>
 
 namespace Gwenview
@@ -729,12 +727,9 @@ QToolButton* ViewMainPage::toggleSideBarButton() const
     return d->mToggleSideBarButton;
 }
 
-void ViewMainPage::showMessageBubble(MessageBubble* bubble)
+void ViewMainPage::showMessageWidget(QGraphicsWidget* widget)
 {
-    WidgetFloater* floater = new WidgetFloater(this);
-    floater->setChildWidget(bubble);
-    floater->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
-    bubble->show();
+    d->mDocumentViewContainer->showMessageWidget(widget);
 }
 
 } // namespace

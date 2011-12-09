@@ -23,6 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include <lib/documentview/documentview.h>
+#include <lib/graphicswidgetfloater.h>
 #include <lib/gwenviewconfig.h>
 
 // KDE
@@ -269,6 +270,21 @@ void DocumentViewContainer::slotConfigChanged()
     if (currentlyGL != wantGL) {
         setViewport(wantGL ? new QGLWidget() : new QWidget());
     }
+}
+
+void DocumentViewContainer::showMessageWidget(QGraphicsWidget* widget)
+{
+    if (d->mViews.isEmpty()) {
+        kWarning() << "No view to show message on, this should not happen!";
+        return;
+    }
+    DocumentView* view = *d->mViews.begin();
+    widget->setParentItem(view);
+    GraphicsWidgetFloater* floater = new GraphicsWidgetFloater(view);
+    floater->setChildWidget(widget);
+    floater->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
+    widget->show();
+    widget->setZValue(1);
 }
 
 } // namespace

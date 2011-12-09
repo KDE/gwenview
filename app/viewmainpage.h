@@ -30,6 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QToolButton>
 #include <QWidget>
 
+class QGraphicsWidget;
 class QPalette;
 
 class KActionCollection;
@@ -38,7 +39,6 @@ namespace Gwenview
 {
 
 class DocumentView;
-class MessageBubble;
 class RasterImageView;
 class SlideShow;
 class ThumbnailBarView;
@@ -113,7 +113,7 @@ public:
 
     QToolButton* toggleSideBarButton() const;
 
-    void showMessageBubble(MessageBubble*);
+    void showMessageWidget(QGraphicsWidget*);
 
 Q_SIGNALS:
 

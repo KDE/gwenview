@@ -22,7 +22,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "messagebubble.moc"
 
 // Qt
-#include <QHBoxLayout>
+#include <QGraphicsLinearLayout>
+#include <QGraphicsProxyWidget>
 #include <QLabel>
 #include <QPainter>
 #include <QTimeLine>
@@ -33,6 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KGuiItem>
 
 // Local
+#include <lib/graphicshudbutton.h>
 
 namespace Gwenview
 {
@@ -87,16 +89,24 @@ private:
 };
 
 struct MessageBubblePrivate {
+    QGraphicsWidget* mWidget;
+    QGraphicsLinearLayout* mLayout;
     PieWidget* mCountDownWidget;
-    QWidget* mWidget;
     QLabel* mLabel;
 };
 
-MessageBubble::MessageBubble(QWidget* parent)
-: HudWidget(parent)
+static QGraphicsProxyWidget* proxyFor(QWidget* widget)
+{
+    QGraphicsProxyWidget* proxy = new QGraphicsProxyWidget;
+    proxy->setWidget(widget);
+    return proxy;
+}
+
+MessageBubble::MessageBubble(QGraphicsWidget* parent)
+: GraphicsHudWidget(parent)
 , d(new MessageBubblePrivate)
 {
-    d->mWidget = new QWidget;
+    d->mWidget = new QGraphicsWidget;
     d->mCountDownWidget = new PieWidget;
     d->mCountDownWidget->setValue(1);
     d->mLabel = new QLabel;
@@ -108,12 +118,12 @@ MessageBubble::MessageBubble(QWidget* parent)
             SLOT(deleteLater()));
     timeLine->start();
 
-    QHBoxLayout* layout = new QHBoxLayout(d->mWidget);
-    layout->setMargin(0);
-    layout->addWidget(d->mCountDownWidget);
-    layout->addWidget(d->mLabel);
+    d->mLayout = new QGraphicsLinearLayout(d->mWidget);
+    d->mLayout->setContentsMargins(0, 0, 0, 0);
+    d->mLayout->addItem(proxyFor(d->mCountDownWidget));
+    d->mLayout->addItem(proxyFor(d->mLabel));
 
-    init(d->mWidget, HudWidget::OptionCloseButton);
+    init(d->mWidget, GraphicsHudWidget::OptionCloseButton);
 }
 
 MessageBubble::~MessageBubble()
@@ -124,17 +134,14 @@ MessageBubble::~MessageBubble()
 void MessageBubble::setText(const QString& text)
 {
     d->mLabel->setText(text);
-    adjustSize();
 }
 
-QToolButton* MessageBubble::addButton(const KGuiItem& guiItem)
+GraphicsHudButton* MessageBubble::addButton(const KGuiItem& guiItem)
 {
-    QToolButton* button = new QToolButton;
+    GraphicsHudButton* button = new GraphicsHudButton;
     button->setText(guiItem.text());
     button->setIcon(guiItem.icon());
-    button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    d->mWidget->layout()->addWidget(button);
-    adjustSize();
+    d->mLayout->addItem(button);
     return button;
 }
 
