@@ -169,6 +169,12 @@ FullScreenTheme::RenderInfo FullScreenTheme::renderInfo(FullScreenTheme::WidgetT
         frame.borderRadius = 8;
         frame.textPen = QPen(QColor("#ccc"));
         renderInfoMap[FrameWidget].infos[NormalState] = frame;
+
+        // CountDownWidget
+        RenderInfo countDownWidget;
+        countDownWidget.bgBrush = QColor::fromHsvF(0, 0, .5);
+        countDownWidget.borderPen = QPen(QColor::fromHsvF(0, 0, .8));
+        renderInfoMap[CountDownWidget].infos[NormalState] = countDownWidget;
     }
     RenderInfo normalInfo = renderInfoMap[widget].infos.value(NormalState);
     if (state == NormalState) {

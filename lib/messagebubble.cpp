@@ -34,6 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KGuiItem>
 
 // Local
+#include <lib/fullscreentheme.h>
 #include <lib/graphicshudbutton.h>
 #include <lib/graphicshudlabel.h>
 
@@ -62,12 +63,13 @@ public:
 
     void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
     {
+        FullScreenTheme::RenderInfo info = FullScreenTheme::renderInfo(FullScreenTheme::CountDownWidget);
         painter->setRenderHint(QPainter::Antialiasing);
         const int circle = 5760;
         const int start = circle / 4; // Start at 12h, not 3h
         const int end = int(circle * mValue);
-        painter->setBrush(palette().dark());
-        painter->setPen(palette().light().color());
+        painter->setBrush(info.bgBrush);
+        painter->setPen(info.borderPen);
 
         QRectF square = boundingRect().adjusted(.5, .5, -.5, -.5);
         qreal width = square.width();

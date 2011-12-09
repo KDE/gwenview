@@ -61,7 +61,8 @@ public:
     enum WidgetType
     {
         ButtonWidget,
-        FrameWidget
+        FrameWidget,
+        CountDownWidget
     };
 
     FullScreenTheme(const QString& themeName);
