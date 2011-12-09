@@ -54,9 +54,9 @@ struct GraphicsWidgetFloaterPrivate {
         }
         mInsideUpdateChildGeometry = true;
 
-        qreal posX, posY;
-        qreal childWidth, childHeight;
-        qreal parentWidth, parentHeight;
+        int posX, posY;
+        int childWidth, childHeight;
+        int parentWidth, parentHeight;
 
         childWidth = mChild->size().width();
         childHeight = mChild->size().height();
