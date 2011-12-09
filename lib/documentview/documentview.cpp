@@ -31,13 +31,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QPainter>
 #include <QPropertyAnimation>
 #include <QScrollBar>
-#include <QToolButton>
 #include <QVBoxLayout>
 #include <QWeakPointer>
 
 // KDE
 #include <KDebug>
-#include <KIconLoader>
+#include <KIcon>
 #include <KLocale>
 #include <KUrl>
 
@@ -52,11 +51,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/documentview/rasterimageview.h>
 #include <lib/documentview/svgviewadapter.h>
 #include <lib/documentview/videoviewadapter.h>
+#include <lib/graphicshudbutton.h>
 #include <lib/graphicshudwidget.h>
 #include <lib/graphicswidgetfloater.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/mimetypeutils.h>
 #include <lib/signalblocker.h>
+#include <qgraphicslinearlayout.h>
 
 namespace Gwenview
 {
@@ -137,30 +138,27 @@ struct DocumentViewPrivate {
         floater->setChildWidget(mLoadingIndicator);
     }
 
-    QToolButton* createHudButton(const QString& text, const char* iconName, bool showText)
+    GraphicsHudButton* createHudButton(const QString& text, const char* iconName, bool showText)
     {
-        QToolButton* button = new QToolButton;
+        GraphicsHudButton* button = new GraphicsHudButton;
         if (showText) {
-            button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
             button->setText(text);
         } else {
             button->setToolTip(text);
         }
-        button->setIcon(SmallIcon(iconName));
+        button->setIcon(KIcon(iconName));
         return button;
     }
 
     void setupHud()
     {
-        QToolButton* trashButton = createHudButton(i18n("Trash"), "user-trash", false);
-        QToolButton* deselectButton = createHudButton(i18n("Deselect"), "list-remove", true);
+        GraphicsHudButton* trashButton = createHudButton(i18n("Trash"), "user-trash", false);
+        GraphicsHudButton* deselectButton = createHudButton(i18n("Deselect"), "list-remove", true);
 
-        QWidget* content = new QWidget;
-        QHBoxLayout* layout = new QHBoxLayout(content);
-        layout->setMargin(0);
-        layout->setSpacing(4);
-        layout->addWidget(trashButton);
-        layout->addWidget(deselectButton);
+        QGraphicsWidget* content = new QGraphicsWidget;
+        QGraphicsLinearLayout* layout = new QGraphicsLinearLayout(content);
+        layout->addItem(trashButton);
+        layout->addItem(deselectButton);
 
         mHud = new GraphicsHudWidget(q);
         mHud->init(content, GraphicsHudWidget::OptionNone);
