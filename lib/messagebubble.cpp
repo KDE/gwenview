@@ -42,13 +42,16 @@ namespace Gwenview
 
 static const int TIMEOUT = 10000;
 
-class PieWidget : public QWidget
+class PieWidget : public QGraphicsWidget
 {
 public:
-    PieWidget(QWidget* parent = 0)
-        : QWidget(parent)
-        , mValue(0) {
-        setMinimumSize(16, 16);
+    PieWidget(QGraphicsWidget* parent = 0)
+    : QGraphicsWidget(parent)
+    , mValue(0)
+    {
+        // Use an odd value so that the vertical line is aligned to pixel
+        // boundaries
+        setMinimumSize(17, 17);
     }
 
     void setValue(qreal value)
@@ -57,22 +60,16 @@ public:
         update();
     }
 
-    int heightForWidth(int width) const {
-        return width;
-    }
-
-protected:
-    void paintEvent(QPaintEvent*)
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
     {
-        QPainter painter(this);
-        painter.setRenderHint(QPainter::Antialiasing);
+        painter->setRenderHint(QPainter::Antialiasing);
         const int circle = 5760;
         const int start = circle / 4; // Start at 12h, not 3h
         const int end = int(circle * mValue);
-        painter.setBrush(palette().dark());
-        painter.setPen(palette().light().color());
+        painter->setBrush(palette().dark());
+        painter->setPen(palette().light().color());
 
-        QRectF square = QRectF(rect()).adjusted(.5, .5, -.5, -.5);
+        QRectF square = boundingRect().adjusted(.5, .5, -.5, -.5);
         qreal width = square.width();
         qreal height = square.height();
         if (width < height) {
@@ -82,7 +79,7 @@ protected:
             square.setWidth(height);
             square.moveLeft((width - height) / 2);
         }
-        painter.drawPie(square, start, end);
+        painter->drawPie(square, start, end);
     }
 
 private:
@@ -95,13 +92,6 @@ struct MessageBubblePrivate {
     PieWidget* mCountDownWidget;
     GraphicsHudLabel* mLabel;
 };
-
-static QGraphicsProxyWidget* proxyFor(QWidget* widget)
-{
-    QGraphicsProxyWidget* proxy = new QGraphicsProxyWidget;
-    proxy->setWidget(widget);
-    return proxy;
-}
 
 MessageBubble::MessageBubble(QGraphicsWidget* parent)
 : GraphicsHudWidget(parent)
@@ -121,7 +111,7 @@ MessageBubble::MessageBubble(QGraphicsWidget* parent)
 
     d->mLayout = new QGraphicsLinearLayout(d->mWidget);
     d->mLayout->setContentsMargins(0, 0, 0, 0);
-    d->mLayout->addItem(proxyFor(d->mCountDownWidget));
+    d->mLayout->addItem(d->mCountDownWidget);
     d->mLayout->addItem(d->mLabel);
 
     init(d->mWidget, GraphicsHudWidget::OptionCloseButton);
