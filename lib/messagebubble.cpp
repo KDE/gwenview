@@ -42,10 +42,10 @@ namespace Gwenview
 
 static const int TIMEOUT = 10000;
 
-class PieWidget : public QGraphicsWidget
+class CountDownWidget : public QGraphicsWidget
 {
 public:
-    PieWidget(QGraphicsWidget* parent = 0)
+    CountDownWidget(QGraphicsWidget* parent = 0)
     : QGraphicsWidget(parent)
     , mValue(0)
     {
@@ -89,7 +89,7 @@ private:
 struct MessageBubblePrivate {
     QGraphicsWidget* mWidget;
     QGraphicsLinearLayout* mLayout;
-    PieWidget* mCountDownWidget;
+    CountDownWidget* mCountDownWidget;
     GraphicsHudLabel* mLabel;
 };
 
@@ -98,7 +98,7 @@ MessageBubble::MessageBubble(QGraphicsWidget* parent)
 , d(new MessageBubblePrivate)
 {
     d->mWidget = new QGraphicsWidget;
-    d->mCountDownWidget = new PieWidget;
+    d->mCountDownWidget = new CountDownWidget;
     d->mCountDownWidget->setValue(1);
     d->mLabel = new GraphicsHudLabel;
 
