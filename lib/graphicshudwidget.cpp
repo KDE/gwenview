@@ -40,7 +40,7 @@ namespace Gwenview
 {
 
 struct GraphicsHudWidgetPrivate {
-    QWidget* mMainWidget;
+    QGraphicsWidget* mMainWidget;
     GraphicsHudButton* mCloseButton;
 };
 
@@ -59,6 +59,13 @@ GraphicsHudWidget::~GraphicsHudWidget()
 
 void GraphicsHudWidget::init(QWidget* mainWidget, Options options)
 {
+    QGraphicsProxyWidget* proxy = new QGraphicsProxyWidget(this);
+    proxy->setWidget(mainWidget);
+    init(proxy, options);
+}
+
+void GraphicsHudWidget::init(QGraphicsWidget* mainWidget, Options options)
+{
     if (options & OptionOpaque) {
         setProperty("opaque", QVariant(true));
     }
@@ -68,11 +75,9 @@ void GraphicsHudWidget::init(QWidget* mainWidget, Options options)
     d->mMainWidget = mainWidget;
     if (d->mMainWidget) {
         if (d->mMainWidget->layout()) {
-            d->mMainWidget->layout()->setMargin(0);
+            d->mMainWidget->layout()->setContentsMargins(0, 0, 0, 0);
         }
-        QGraphicsProxyWidget* proxy = new QGraphicsProxyWidget(this);
-        proxy->setWidget(d->mMainWidget);
-        layout->addItem(proxy);
+        layout->addItem(d->mMainWidget);
     }
 
     if (options & OptionCloseButton) {

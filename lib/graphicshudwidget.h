@@ -50,6 +50,7 @@ public:
     ~GraphicsHudWidget();
 
     void init(QWidget*, Options options);
+    void init(QGraphicsWidget*, Options options);
 
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
 
