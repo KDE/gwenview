@@ -114,10 +114,67 @@ QStringList FullScreenTheme::themeNameList()
     return list;
 }
 
-QPalette FullScreenTheme::palette()
+struct RenderInfoSet
 {
-    static QPalette pal = QPalette(QColor::fromHsvF(0, 0, 0, 0.6));
-    return pal;
+    QMap<FullScreenTheme::State, FullScreenTheme::RenderInfo> infos;
+};
+
+static QLinearGradient createGradient()
+{
+    QLinearGradient gradient(0, 0, 0, 1.);
+    gradient.setCoordinateMode(QGradient::ObjectBoundingMode);
+    return gradient;
+}
+
+FullScreenTheme::RenderInfo FullScreenTheme::renderInfo(FullScreenTheme::WidgetType widget, FullScreenTheme::State state)
+{
+    static QMap<WidgetType, RenderInfoSet> renderInfoMap;
+    if (renderInfoMap.isEmpty()) {
+        QLinearGradient gradient;
+
+        // Button, normal
+        RenderInfo button;
+        button.borderRadius = 5;
+        button.borderPen = QPen(QColor::fromHsvF(0, 0, .25, .8));
+        gradient = createGradient();
+        gradient.setColorAt(0, QColor::fromHsvF(0, 0, .34, .66));
+        gradient.setColorAt(0.5, QColor::fromHsvF(0, 0, 0, .66));
+        button.bgBrush = gradient;
+        button.padding = 6;
+        button.textPen = QPen(QColor("#ccc"));
+        renderInfoMap[ButtonWidget].infos[NormalState] = button;
+
+        // Button, over
+        RenderInfo overButton = button;
+        overButton.bgBrush = gradient;
+        overButton.borderPen = QPen(QColor("#ccc"));
+        renderInfoMap[ButtonWidget].infos[MouseOverState] = overButton;
+
+        // Button, down
+        RenderInfo downButton = button;
+        gradient = createGradient();
+        gradient.setColorAt(0, QColor::fromHsvF(0, 0, .12));
+        gradient.setColorAt(0.6, Qt::black);
+        downButton.bgBrush = gradient;
+        downButton.borderPen = QPen(QColor("#444"));
+        renderInfoMap[ButtonWidget].infos[DownState] = downButton;
+
+        // Frame
+        RenderInfo frame;
+        gradient = createGradient();
+        gradient.setColorAt(0, QColor::fromHsvF(0, 0, 0.1, .6));
+        gradient.setColorAt(.6, QColor::fromHsvF(0, 0, 0, .6));
+        frame.bgBrush = gradient;
+        frame.borderPen = QPen(QColor::fromHsvF(0, 0, .4, .6));
+        frame.borderRadius = 8;
+        renderInfoMap[FrameWidget].infos[NormalState] = frame;
+    }
+    RenderInfo normalInfo = renderInfoMap[widget].infos.value(NormalState);
+    if (state == NormalState) {
+        return normalInfo;
+    } else {
+        return renderInfoMap[widget].infos.value(state, normalInfo);
+    }
 }
 
 } // namespace

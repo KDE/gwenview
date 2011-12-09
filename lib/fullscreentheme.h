@@ -24,6 +24,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/gwenviewlib_export.h>
 
 // Qt
+#include <QBrush>
+#include <QPen>
 
 // KDE
 
@@ -40,6 +42,29 @@ struct FullScreenThemePrivate;
 class GWENVIEWLIB_EXPORT FullScreenTheme
 {
 public:
+    struct RenderInfo
+    {
+        qreal borderRadius;
+        QPen borderPen;
+        QBrush bgBrush;
+        qreal padding;
+        QPen textPen;
+    };
+
+    enum State
+    {
+        NormalState,
+        MouseOverState,
+        DownState
+    };
+
+    enum WidgetType
+    {
+        ButtonWidget,
+        LabelWidget,
+        FrameWidget
+    };
+
     FullScreenTheme(const QString& themeName);
     QString styleSheet() const;
     QString replaceThemeVars(const QString& styleSheet);
@@ -50,7 +75,7 @@ public:
     static QString currentThemeName();
     static void setCurrentThemeName(const QString&);
 
-    static QPalette palette();
+    static RenderInfo renderInfo(WidgetType, State = NormalState);
 
 private:
     FullScreenThemePrivate* const d;

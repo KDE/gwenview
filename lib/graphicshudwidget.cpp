@@ -29,19 +29,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QToolButton>
 
 // KDE
+#include <KIcon>
 #include <KIconLoader>
 
 // Local
-#include "fullscreentheme.h"
+#include <fullscreentheme.h>
+#include <graphicshudbutton.h>
 
 namespace Gwenview
 {
 
-static const int CORNER_RADIUS = 5;
-
 struct GraphicsHudWidgetPrivate {
     QWidget* mMainWidget;
-    QToolButton* mCloseButton;
+    GraphicsHudButton* mCloseButton;
 };
 
 GraphicsHudWidget::GraphicsHudWidget(QGraphicsWidget* parent)
@@ -63,13 +63,10 @@ void GraphicsHudWidget::init(QWidget* mainWidget, Options options)
         setProperty("opaque", QVariant(true));
     }
 
-    QPalette pal = FullScreenTheme::palette();
-
     QGraphicsLinearLayout* layout = new QGraphicsLinearLayout(this);
     layout->setContentsMargins(4, 4, 4, 4);
     d->mMainWidget = mainWidget;
     if (d->mMainWidget) {
-        d->mMainWidget->setPalette(pal);
         if (d->mMainWidget->layout()) {
             d->mMainWidget->layout()->setMargin(0);
         }
@@ -79,15 +76,12 @@ void GraphicsHudWidget::init(QWidget* mainWidget, Options options)
     }
 
     if (options & OptionCloseButton) {
-        d->mCloseButton = new QToolButton;
-        d->mCloseButton->setAutoRaise(true);
-        d->mCloseButton->setIcon(SmallIcon("window-close"));
-        d->mCloseButton->setPalette(pal);
+        d->mCloseButton = new GraphicsHudButton(this);
+        d->mCloseButton->setIcon(KIcon("window-close"));
+        d->mCloseButton->setText("Close");
 
-        QGraphicsProxyWidget* proxy = new QGraphicsProxyWidget(this);
-        proxy->setWidget(d->mCloseButton);
-        layout->addItem(proxy);
-        layout->setAlignment(proxy, Qt::AlignTop | Qt::AlignHCenter);
+        layout->addItem(d->mCloseButton);
+        layout->setAlignment(d->mCloseButton, Qt::AlignTop | Qt::AlignHCenter);
 
         connect(d->mCloseButton, SIGNAL(clicked()), SLOT(slotCloseButtonClicked()));
     }
@@ -101,11 +95,11 @@ void GraphicsHudWidget::slotCloseButtonClicked()
 
 void GraphicsHudWidget::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
 {
-    QPalette pal = FullScreenTheme::palette();
-    painter->setPen(pal.midlight().color());
+    FullScreenTheme::RenderInfo renderInfo = FullScreenTheme::renderInfo(FullScreenTheme::FrameWidget);
+    painter->setPen(renderInfo.borderPen);
     painter->setRenderHint(QPainter::Antialiasing);
-    painter->setBrush(pal.window());
-    painter->drawRoundedRect(boundingRect().adjusted(.5, .5, -.5, -.5), CORNER_RADIUS, CORNER_RADIUS);
+    painter->setBrush(renderInfo.bgBrush);
+    painter->drawRoundedRect(boundingRect().adjusted(.5, .5, -.5, -.5), renderInfo.borderRadius, renderInfo.borderRadius);
 }
 
 } // namespace
