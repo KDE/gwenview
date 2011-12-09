@@ -46,9 +46,6 @@ public:
 
     void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*);
 
-protected:
-    QSizeF sizeHint(Qt::SizeHint which, const QSizeF& constraint = QSizeF()) const;
-
 private:
     GraphicsHudLabelPrivate* const d;
 };

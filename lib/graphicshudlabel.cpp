@@ -46,6 +46,7 @@ GraphicsHudLabel::GraphicsHudLabel(QGraphicsItem* parent)
 , d(new GraphicsHudLabelPrivate)
 {
     setCursor(Qt::ArrowCursor);
+    setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 }
 
 GraphicsHudLabel::~GraphicsHudLabel()
@@ -56,7 +57,11 @@ GraphicsHudLabel::~GraphicsHudLabel()
 void GraphicsHudLabel::setText(const QString& text)
 {
     d->mText = text;
-    updateGeometry();
+    QFont font = KGlobalSettings::generalFont();
+    QFontMetrics fm(font);
+    QSize minSize = fm.size(0, d->mText);
+    setMinimumSize(minSize);
+    setPreferredSize(minSize);
 }
 
 void GraphicsHudLabel::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
@@ -64,13 +69,6 @@ void GraphicsHudLabel::paint(QPainter* painter, const QStyleOptionGraphicsItem*,
     FullScreenTheme::RenderInfo info = FullScreenTheme::renderInfo(FullScreenTheme::FrameWidget);
     painter->setPen(info.textPen);
     painter->drawText(boundingRect(), Qt::AlignCenter, d->mText);
-}
-
-QSizeF GraphicsHudLabel::sizeHint(Qt::SizeHint /*which*/, const QSizeF& /*constraint*/) const
-{
-    QFont font = KGlobalSettings::generalFont();
-    QFontMetrics fm(font);
-    return fm.size(0, d->mText);
 }
 
 } // namespace
