@@ -31,38 +31,36 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 
-typedef QList<DocumentView*> ViewList;
-
 struct DocumentViewSynchronizerPrivate {
     DocumentViewSynchronizer* q;
-    ViewList mViews;
-    DocumentView* mCurrentView;
+    const QList<DocumentView*>* mViews;
+    QWeakPointer<DocumentView> mCurrentView;
     bool mActive;
     QPoint mOldPosition;
 
+    DocumentViewSynchronizerPrivate(const QList<DocumentView*>* views)
+    : mViews(views)
+    {}
+
     void updateConnections()
     {
-        Q_FOREACH(DocumentView * view, mViews) {
-            QObject::disconnect(view, 0, q, 0);
-        }
-
         if (!mCurrentView || !mActive) {
             return;
         }
 
-        QObject::connect(mCurrentView, SIGNAL(zoomChanged(qreal)),
+        QObject::connect(mCurrentView.data(), SIGNAL(zoomChanged(qreal)),
                          q, SLOT(setZoom(qreal)));
-        QObject::connect(mCurrentView, SIGNAL(zoomToFitChanged(bool)),
+        QObject::connect(mCurrentView.data(), SIGNAL(zoomToFitChanged(bool)),
                          q, SLOT(setZoomToFit(bool)));
-        QObject::connect(mCurrentView, SIGNAL(positionChanged()),
+        QObject::connect(mCurrentView.data(), SIGNAL(positionChanged()),
                          q, SLOT(updatePosition()));
 
-        Q_FOREACH(DocumentView * view, mViews) {
-            if (view == mCurrentView) {
+        Q_FOREACH(DocumentView* view, *mViews) {
+            if (view == mCurrentView.data()) {
                 continue;
             }
-            view->setZoom(mCurrentView->zoom());
-            view->setZoomToFit(mCurrentView->zoomToFit());
+            view->setZoom(mCurrentView.data()->zoom());
+            view->setZoomToFit(mCurrentView.data()->zoomToFit());
         }
     }
 
@@ -71,16 +69,15 @@ struct DocumentViewSynchronizerPrivate {
         if (!mCurrentView || !mActive) {
             return;
         }
-        mOldPosition = mCurrentView->position();
+        mOldPosition = mCurrentView.data()->position();
     }
 };
 
-DocumentViewSynchronizer::DocumentViewSynchronizer(QObject* parent)
+DocumentViewSynchronizer::DocumentViewSynchronizer(const QList<DocumentView*>* views, QObject* parent)
 : QObject(parent)
-, d(new DocumentViewSynchronizerPrivate)
+, d(new DocumentViewSynchronizerPrivate(views))
 {
     d->q = this;
-    d->mCurrentView = 0;
     d->mActive = false;
 }
 
@@ -89,14 +86,11 @@ DocumentViewSynchronizer::~DocumentViewSynchronizer()
     delete d;
 }
 
-void DocumentViewSynchronizer::setDocumentViews(QList< DocumentView* > views)
-{
-    d->mViews = views;
-    d->updateConnections();
-}
-
 void DocumentViewSynchronizer::setCurrentView(DocumentView* view)
 {
+    if (d->mCurrentView) {
+        disconnect(d->mCurrentView.data(), 0, this, 0);
+    }
     d->mCurrentView = view;
     d->updateOldPosition();
     d->updateConnections();
@@ -111,8 +105,8 @@ void DocumentViewSynchronizer::setActive(bool active)
 
 void DocumentViewSynchronizer::setZoom(qreal zoom)
 {
-    Q_FOREACH(DocumentView * view, d->mViews) {
-        if (view == d->mCurrentView) {
+    Q_FOREACH(DocumentView* view, *d->mViews) {
+        if (view == d->mCurrentView.data()) {
             continue;
         }
         view->setZoom(zoom);
@@ -122,8 +116,8 @@ void DocumentViewSynchronizer::setZoom(qreal zoom)
 
 void DocumentViewSynchronizer::setZoomToFit(bool fit)
 {
-    Q_FOREACH(DocumentView * view, d->mViews) {
-        if (view == d->mCurrentView) {
+    Q_FOREACH(DocumentView* view, *d->mViews) {
+        if (view == d->mCurrentView.data()) {
             continue;
         }
         view->setZoomToFit(fit);
@@ -133,11 +127,11 @@ void DocumentViewSynchronizer::setZoomToFit(bool fit)
 
 void DocumentViewSynchronizer::updatePosition()
 {
-    QPoint pos = d->mCurrentView->position();
+    QPoint pos = d->mCurrentView.data()->position();
     QPoint delta = pos - d->mOldPosition;
     d->mOldPosition = pos;
-    Q_FOREACH(DocumentView * view, d->mViews) {
-        if (view == d->mCurrentView) {
+    Q_FOREACH(DocumentView* view, *d->mViews) {
+        if (view == d->mCurrentView.data()) {
             continue;
         }
         view->setPosition(view->position() + delta);

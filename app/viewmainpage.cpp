@@ -229,7 +229,7 @@ struct ViewMainPagePrivate {
         mDocumentViewController = new DocumentViewController(mActionCollection, q);
         mDocumentViewController->setZoomWidget(mZoomWidget);
         mDocumentViewController->setToolContainer(mToolContainer);
-        mSynchronizer = new DocumentViewSynchronizer(q);
+        mSynchronizer = new DocumentViewSynchronizer(&mDocumentViews, q);
     }
 
     DocumentView* createDocumentView()
@@ -642,10 +642,8 @@ void ViewMainPage::openUrls(const KUrl::List& _urls, const KUrl& currentUrl)
 
     d->mSynchronizeCheckBox->setVisible(d->mCompareMode);
     if (d->mCompareMode) {
-        d->mSynchronizer->setDocumentViews(d->mDocumentViews);
         d->mSynchronizer->setActive(d->mSynchronizeCheckBox->isChecked());
     } else {
-        d->mSynchronizer->setDocumentViews(QList<DocumentView*>());
         d->mSynchronizer->setActive(false);
     }
 }

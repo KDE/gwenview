@@ -39,16 +39,16 @@ class DocumentView;
 
 class DocumentViewSynchronizerPrivate;
 /**
- * A class to synchronize zoom and scroll of two DocumentView
+ * A class to synchronize zoom and scroll of DocumentViews
  */
 class GWENVIEWLIB_EXPORT DocumentViewSynchronizer : public QObject
 {
     Q_OBJECT
 public:
-    DocumentViewSynchronizer(QObject* parent = 0);
+    // We pass a pointer to the view list because we don't want to maintain
+    // a copy of the list itself
+    DocumentViewSynchronizer(const QList<DocumentView*>* views, QObject* parent = 0);
     ~DocumentViewSynchronizer();
-
-    void setDocumentViews(QList<DocumentView*> views);
 
     void setCurrentView(DocumentView* view);
 
