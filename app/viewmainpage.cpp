@@ -607,15 +607,15 @@ void ViewMainPage::openUrls(const KUrl::List& _urls, const KUrl& currentUrl)
     }
 
     // Create view for remaining urls
-    typedef QPair<DocumentView*, KUrl> ViewUrlPair;
-    QList<ViewUrlPair> urlForViewList;
+    typedef QMap<KUrl, DocumentView*> ViewForUrlMap;
+    ViewForUrlMap viewForUrlMap;
     Q_FOREACH(const KUrl & url, urls) {
         if (d->mDocumentViews.count() >= MaxViewCount) {
             kWarning() << "Too many documents to show";
             break;
         }
         DocumentView* view = d->createDocumentView();
-        urlForViewList << qMakePair(view, url);
+        viewForUrlMap.insert(url, view);
     }
 
     d->mDocumentViewContainer->updateLayout();
@@ -623,8 +623,11 @@ void ViewMainPage::openUrls(const KUrl::List& _urls, const KUrl& currentUrl)
     // Load urls for new views. Do it only now because the view must have the
     // correct size before it starts loading its url. Do not do it later because
     // view->url() needs to be set for the next loop.
-    Q_FOREACH(const ViewUrlPair & pair, urlForViewList) {
-        pair.first->openUrl(pair.second);
+    ViewForUrlMap::ConstIterator
+        it = viewForUrlMap.begin(),
+        end = viewForUrlMap.end();
+    for (; it != end; ++it) {
+        it.value()->openUrl(it.key());
     }
 
     // Init views
