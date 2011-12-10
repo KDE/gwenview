@@ -148,12 +148,18 @@ void DocumentViewContainer::resizeEvent(QResizeEvent* event)
     updateLayout();
 }
 
+static bool viewLessThan(DocumentView* v1, DocumentView* v2)
+{
+    return v1->sortKey() < v2->sortKey();
+}
+
 void DocumentViewContainer::updateLayout()
 {
     // Stop update timer: this is useful if updateLayout() is called directly
     // and not through scheduleLayoutUpdate()
     d->mLayoutUpdateTimer->stop();
-    DocumentViewSet views = d->mViews | d->mAddedViews;
+    QList<DocumentView*> views = (d->mViews | d->mAddedViews).toList();
+    qSort(views.begin(), views.end(), viewLessThan);
 
     bool animated = GwenviewConfig::animationMethod() != DocumentView::NoAnimation;
 

@@ -588,10 +588,13 @@ void ViewMainPage::openUrl(const KUrl& url)
     openUrls(KUrl::List() << url, url);
 }
 
-void ViewMainPage::openUrls(const KUrl::List& _urls, const KUrl& currentUrl)
+void ViewMainPage::openUrls(const KUrl::List& allUrls, const KUrl& currentUrl)
 {
-    QSet<KUrl> urls = _urls.toSet();
+    QSet<KUrl> urls = allUrls.toSet();
     d->mCompareMode = urls.count() > 1;
+
+    typedef QMap<KUrl, DocumentView*> ViewForUrlMap;
+    ViewForUrlMap viewForUrlMap;
 
     // Destroy views which show urls we don't care about, remove from "urls" the
     // urls which already have a view.
@@ -600,6 +603,7 @@ void ViewMainPage::openUrls(const KUrl::List& _urls, const KUrl& currentUrl)
         if (urls.contains(url)) {
             // view displays an url we must display, keep it
             urls.remove(url);
+            viewForUrlMap.insert(url, view);
         } else {
             // view url is not interesting, drop it
             d->deleteDocumentView(view);
@@ -607,8 +611,6 @@ void ViewMainPage::openUrls(const KUrl::List& _urls, const KUrl& currentUrl)
     }
 
     // Create view for remaining urls
-    typedef QMap<KUrl, DocumentView*> ViewForUrlMap;
-    ViewForUrlMap viewForUrlMap;
     Q_FOREACH(const KUrl & url, urls) {
         if (d->mDocumentViews.count() >= MaxViewCount) {
             kWarning() << "Too many documents to show";
@@ -616,6 +618,13 @@ void ViewMainPage::openUrls(const KUrl::List& _urls, const KUrl& currentUrl)
         }
         DocumentView* view = d->createDocumentView();
         viewForUrlMap.insert(url, view);
+    }
+
+    // Set sortKey to match url order
+    int sortKey = 0;
+    Q_FOREACH(const KUrl& url, allUrls) {
+        viewForUrlMap[url]->setSortKey(sortKey);
+        ++sortKey;
     }
 
     d->mDocumentViewContainer->updateLayout();

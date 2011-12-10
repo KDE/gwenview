@@ -959,6 +959,11 @@ void MainWindow::slotThumbnailViewIndexActivated(const QModelIndex& index)
     }
 }
 
+static bool indexRowLessThan(const QModelIndex& i1, const QModelIndex& i2)
+{
+    return i1.row() < i2.row();
+}
+
 void MainWindow::openSelectedDocuments()
 {
     if (d->mCurrentMainPageId != ViewMainPageId) {
@@ -975,7 +980,11 @@ void MainWindow::openSelectedDocuments()
     KUrl::List urls;
     KUrl currentUrl;
     QModelIndex firstDocumentIndex;
-    Q_FOREACH(const QModelIndex & index, d->mThumbnailView->selectionModel()->selectedIndexes()) {
+    QModelIndexList list = d->mThumbnailView->selectionModel()->selectedIndexes();
+    // Make 'list' follow the same order as 'mThumbnailView'
+    qSort(list.begin(), list.end(), indexRowLessThan);
+
+    Q_FOREACH(const QModelIndex& index, list) {
         KFileItem item = d->mDirModel->itemForIndex(index);
         if (!item.isNull() && !ArchiveUtils::fileItemIsDirOrArchive(item)) {
             KUrl url = item.url();

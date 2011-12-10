@@ -78,6 +78,7 @@ static const int COMPARE_MARGIN = 4;
 
 struct DocumentViewPrivate {
     DocumentView* q;
+    int mSortKey; // Used to sort views when displayed in compare mode
     GraphicsHudWidget* mHud;
     BirdEyeView* mBirdEyeView;
     QWeakPointer<QPropertyAnimation> mMoveAnimation;
@@ -694,6 +695,16 @@ bool DocumentView::sceneEventFilter(QGraphicsItem*, QEvent* event)
 AbstractRasterImageViewTool* DocumentView::currentTool() const
 {
     return imageView() ? imageView()->currentTool() : 0;
+}
+
+int DocumentView::sortKey() const
+{
+    return d->mSortKey;
+}
+
+void DocumentView::setSortKey(int sortKey)
+{
+    d->mSortKey = sortKey;
 }
 
 } // namespace

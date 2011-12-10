@@ -120,6 +120,9 @@ public:
 
     void setGeometry(const QRectF& rect); // reimp
 
+    int sortKey() const;
+    void setSortKey(int sortKey);
+
 public Q_SLOTS:
     void setZoom(qreal);
 
