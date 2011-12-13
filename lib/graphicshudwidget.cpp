@@ -31,6 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KDE
 #include <KIcon>
 #include <KIconLoader>
+#include <KLocale>
 
 // Local
 #include <fullscreentheme.h>
@@ -83,7 +84,7 @@ void GraphicsHudWidget::init(QGraphicsWidget* mainWidget, Options options)
     if (options & OptionCloseButton) {
         d->mCloseButton = new GraphicsHudButton(this);
         d->mCloseButton->setIcon(KIcon("window-close"));
-        d->mCloseButton->setText("Close");
+        d->mCloseButton->setToolTip(i18n("Close"));
 
         layout->addItem(d->mCloseButton);
         layout->setAlignment(d->mCloseButton, Qt::AlignTop | Qt::AlignHCenter);
