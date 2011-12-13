@@ -321,11 +321,13 @@ struct MainWindow::Private {
         action->setShortcut(Qt::Key_F5);
 
         mBrowseAction = view->addAction("browse");
+        mBrowseAction->setPriority(QAction::LowPriority);
         mBrowseAction->setText(i18nc("@action Switch to file list", "Browse"));
         mBrowseAction->setCheckable(true);
         mBrowseAction->setIcon(KIcon("view-list-icons"));
 
         mViewAction = view->addAction("view");
+        mViewAction->setPriority(QAction::LowPriority);
         mViewAction->setText(i18nc("@action Switch to image view", "View"));
         mViewAction->setIcon(KIcon("view-preview"));
         mViewAction->setCheckable(true);
@@ -338,6 +340,7 @@ struct MainWindow::Private {
                 q, SLOT(setActiveViewModeAction(QAction*)));
 
         mFullScreenAction = static_cast<KToggleFullScreenAction*>(view->addAction(KStandardAction::FullScreen, q, SLOT(toggleFullScreen(bool))));
+        mFullScreenAction->setPriority(QAction::LowPriority);
         connect(mViewMainPage, SIGNAL(toggleFullScreenRequested()),
                 mFullScreenAction, SLOT(trigger()));
 
@@ -371,6 +374,7 @@ struct MainWindow::Private {
         mGoUpAction = view->addAction(KStandardAction::Up, q, SLOT(goUp()));
 
         action = view->addAction("go_start_page", q, SLOT(showStartMainPage()));
+        action->setPriority(QAction::LowPriority);
         action->setIcon(KIcon("go-home"));
         action->setText(i18nc("@action", "Start Page"));
 

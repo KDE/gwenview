@@ -89,6 +89,7 @@
 <ToolBar name="mainToolBar" noMerge="1">
     <text>Main Toolbar</text>
     <Action name="go_start_page" />
+    <Separator/>
     <Action name="browse" />
     <Action name="view" />
     <Action name="fullscreen" />
