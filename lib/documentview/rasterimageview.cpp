@@ -374,7 +374,7 @@ void RasterImageView::resizeEvent(QGraphicsSceneResizeEvent* event)
     // update: paint() will paint a scaled version of the buffer until resizing
     // is done. This is much faster than rescaling the whole image for each
     // resize event we receive.
-    // mUpdateTimer must be start before calling AbstractImageView::resizeEvent()
+    // mUpdateTimer must be started before calling AbstractImageView::resizeEvent()
     // because AbstractImageView::resizeEvent() will call onZoomChanged(), which
     // will trigger an immediate update unless the mUpdateTimer is active.
     if (zoomToFit() && !d->mBufferIsEmpty) {
