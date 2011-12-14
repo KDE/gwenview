@@ -119,7 +119,8 @@ inline void drawTransparentRect(QPainter* painter, const QRectF& rect, const QCo
     fg.setAlphaF(.66);
     painter->setPen(fg);
     painter->setBrush(bg);
-    painter->drawRect(rect.adjusted(0, 0, -1, -1));
+    // Use a QRect to avoid missing pixels in the corners
+    painter->drawRect(rect.toRect().adjusted(0, 0, -1, -1));
 }
 
 void BirdEyeView::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
