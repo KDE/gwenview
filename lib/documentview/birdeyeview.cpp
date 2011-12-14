@@ -45,15 +45,22 @@ struct BirdEyeViewPrivate {
     DocumentView* mDocView;
     QRectF mVisibleRect;
     QPointF mLastDragPos;
+
+    void updateCursor(const QPointF& pos)
+    {
+        q->setCursor(mVisibleRect.contains(pos) ? Qt::OpenHandCursor : Qt::ArrowCursor);
+    }
 };
 
 BirdEyeView::BirdEyeView(DocumentView* docView)
 : QGraphicsWidget(docView)
 , d(new BirdEyeViewPrivate)
 {
-    setFlag(ItemIsSelectable);
     d->q = this;
     d->mDocView = docView;
+    setFlag(ItemIsSelectable);
+    setCursor(Qt::ArrowCursor);
+    setAcceptHoverEvents(true);
     adjustGeometry();
 
     connect(docView->document().data(), SIGNAL(metaInfoUpdated()), SLOT(adjustGeometry()));
@@ -133,6 +140,7 @@ void BirdEyeView::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 {
     QGraphicsItem::mouseMoveEvent(event);
     if (d->mLastDragPos.isNull()) {
+        // Do not drag if mouse was pressed outside visible rect
         return;
     }
     qreal ratio = d->mDocView->boundingRect().width() / d->mVisibleRect.width();
@@ -150,8 +158,15 @@ void BirdEyeView::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
     if (d->mLastDragPos.isNull()) {
         return;
     }
-    setCursor(Qt::OpenHandCursor);
+    d->updateCursor(event->pos());
     d->mLastDragPos = QPointF();
+}
+
+void BirdEyeView::hoverMoveEvent(QGraphicsSceneHoverEvent* event)
+{
+    if (d->mLastDragPos.isNull()) {
+        d->updateCursor(event->pos());
+    }
 }
 
 } // namespace
