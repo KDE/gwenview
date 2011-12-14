@@ -114,7 +114,7 @@ struct RasterImageViewPrivate {
         mScaler->setDestinationRegion(QRegion(rect.toRect()));
     }
 
-    void createBuffer()
+    void resizeBuffer()
     {
         QSize size = visibleImageSize().toSize();
         if (size == mCurrentBuffer.size()) {
@@ -232,7 +232,7 @@ void RasterImageView::finishSetDocument()
         return;
     }
 
-    d->createBuffer();
+    d->resizeBuffer();
     d->mScaler->setDocument(document());
 
     connect(document().data(), SIGNAL(imageRectUpdated(QRect)),
@@ -272,7 +272,7 @@ void RasterImageView::slotDocumentIsAnimatedUpdated()
 
 void RasterImageView::updateFromScaler(int zoomedImageLeft, int zoomedImageTop, const QImage& image)
 {
-    d->createBuffer();
+    d->resizeBuffer();
     int viewportLeft = zoomedImageLeft - scrollPos().x();
     int viewportTop = zoomedImageTop - scrollPos().y();
     d->mBufferIsEmpty = false;
