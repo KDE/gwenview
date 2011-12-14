@@ -272,6 +272,7 @@ void RasterImageView::slotDocumentIsAnimatedUpdated()
 
 void RasterImageView::updateFromScaler(int zoomedImageLeft, int zoomedImageTop, const QImage& image)
 {
+    d->createBuffer();
     int viewportLeft = zoomedImageLeft - scrollPos().x();
     int viewportTop = zoomedImageTop - scrollPos().y();
     d->mBufferIsEmpty = false;
@@ -391,7 +392,6 @@ void RasterImageView::resizeEvent(QGraphicsSceneResizeEvent* event)
 void RasterImageView::updateBuffer(const QRegion& region)
 {
     d->mUpdateTimer->stop();
-    d->createBuffer();
     d->mScaler->setZoom(zoom());
     if (region.isEmpty()) {
         d->setScalerRegionToVisibleRect();
