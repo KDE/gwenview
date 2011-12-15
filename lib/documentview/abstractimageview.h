@@ -103,7 +103,6 @@ Q_SIGNALS:
     void completed();
 
 protected:
-    void setChildItem(QGraphicsItem*);
     virtual void loadFromDocument() = 0;
     virtual void onZoomChanged() = 0;
     /**
