@@ -136,4 +136,10 @@ void ImageViewAdapter::setScrollPos(const QPointF& pos)
     d->mView->setScrollPos(pos);
 }
 
+QRectF ImageViewAdapter::visibleDocumentRect() const
+{
+    return QRectF(d->mView->imageOffset(), d->mView->visibleImageSize());
+}
+
+
 } // namespace

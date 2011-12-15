@@ -74,6 +74,8 @@ public:
     virtual QPointF scrollPos() const;
     virtual void setScrollPos(const QPointF& pos);
 
+    virtual QRectF visibleDocumentRect() const;
+
 private Q_SLOTS:
     void slotLoadingFailed();
 

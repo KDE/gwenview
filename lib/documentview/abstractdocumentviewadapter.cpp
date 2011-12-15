@@ -54,6 +54,11 @@ void AbstractDocumentViewAdapter::setCursor(const QCursor& cursor)
     }
 }
 
+QRectF AbstractDocumentViewAdapter::visibleDocumentRect() const
+{
+    return mWidget ? mWidget->boundingRect() : QRectF();
+}
+
 EmptyAdapter::EmptyAdapter()
 {
     setWidget(new QGraphicsWidget);

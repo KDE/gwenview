@@ -34,6 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 class QCursor;
 class QGraphicsWidget;
+class QRectF;
 
 namespace Gwenview
 {
@@ -105,6 +106,12 @@ public:
         return QPointF(0, 0);
     }
     virtual void setScrollPos(const QPointF& /*pos*/) {}
+
+    /**
+     * Rectangle within the item which is actually used to show the document.
+     * In item coordinates.
+     */
+    virtual QRectF visibleDocumentRect() const;
 
 protected:
     void setWidget(QGraphicsWidget* widget) {
