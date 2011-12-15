@@ -633,8 +633,8 @@ void ViewMainPage::openUrls(const KUrl::List& allUrls, const KUrl& currentUrl)
     // correct size before it starts loading its url. Do not do it later because
     // view->url() needs to be set for the next loop.
     ViewForUrlMap::ConstIterator
-        it = viewForUrlMap.begin(),
-        end = viewForUrlMap.end();
+        it = viewForUrlMap.constBegin(),
+        end = viewForUrlMap.constEnd();
     for (; it != end; ++it) {
         it.value()->openUrl(it.key());
     }
