@@ -29,7 +29,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QGraphicsSceneWheelEvent>
 #include <QMouseEvent>
 #include <QPainter>
-#include <QPauseAnimation>
 #include <QPropertyAnimation>
 #include <QScrollBar>
 #include <QVBoxLayout>
@@ -261,16 +260,6 @@ struct DocumentViewPrivate {
         mLoadingIndicator->hide();
     }
 
-    // Use a template because setDuration() is not part of QAbstractAnimation
-    template <class Anim>
-    void animate(Anim* anim)
-    {
-        QObject::connect(anim, SIGNAL(finished()),
-                         q, SLOT(slotAnimationFinished()));
-        anim->setDuration(500);
-        anim->start(QAbstractAnimation::DeleteWhenStopped);
-    }
-
     void resizeAdapterWidget()
     {
         QRectF rect = QRectF(QPointF(0, 0), q->boundingRect().size());
@@ -293,7 +282,13 @@ struct DocumentViewPrivate {
         QPropertyAnimation* anim = new QPropertyAnimation(q, "opacity");
         anim->setStartValue(q->opacity());
         anim->setEndValue(value);
-        animate(anim);
+        if (qFuzzyCompare(value, 1)) {
+            QObject::connect(anim, SIGNAL(finished()),
+                            q, SLOT(slotFadeInFinished()));
+        }
+        anim->setDuration(DocumentView::AnimDuration);
+        anim->start(QAbstractAnimation::DeleteWhenStopped);
+
         mFadeAnimation = anim;
     }
 };
@@ -676,7 +671,8 @@ void DocumentView::moveToAnimated(const QRect& rect)
     QPropertyAnimation* anim = new QPropertyAnimation(this, "geometry");
     anim->setStartValue(geometry());
     anim->setEndValue(rect);
-    d->animate(anim);
+    anim->setDuration(DocumentView::AnimDuration);
+    anim->start(QAbstractAnimation::DeleteWhenStopped);
     d->mMoveAnimation = anim;
 }
 
@@ -690,15 +686,9 @@ void DocumentView::fadeOut()
     d->fadeTo(0);
 }
 
-void DocumentView::fakeFadeOut()
+void DocumentView::slotFadeInFinished()
 {
-    QPauseAnimation* anim = new QPauseAnimation(this);
-    d->animate(anim);
-}
-
-void DocumentView::slotAnimationFinished()
-{
-    animationFinished(this);
+    fadeInFinished(this);
 }
 
 bool DocumentView::sceneEventFilter(QGraphicsItem*, QEvent* event)

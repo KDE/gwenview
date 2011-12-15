@@ -114,8 +114,8 @@ DocumentView* DocumentViewContainer::createView()
     DocumentView* view = new DocumentView(d->mScene);
     d->mAddedViews << view;
     view->show();
-    connect(view, SIGNAL(animationFinished(DocumentView*)),
-            SLOT(slotViewAnimationFinished(DocumentView*)));
+    connect(view, SIGNAL(fadeInFinished(DocumentView*)),
+            SLOT(slotFadeInFinished(DocumentView*)));
     d->scheduleLayoutUpdate();
     return view;
 }
@@ -238,44 +238,42 @@ void DocumentViewContainer::updateLayout()
         }
     }
 
+    // Handle removed views
     if (animated) {
-        if (crossFade) {
-            (*d->mRemovedViews.begin())->fakeFadeOut();
-        } else {
-            Q_FOREACH(DocumentView* view, d->mRemovedViews) {
+        Q_FOREACH(DocumentView* view, d->mRemovedViews) {
+            if (!crossFade) {
                 view->fadeOut();
             }
+            QTimer::singleShot(DocumentView::AnimDuration, view, SLOT(deleteLater()));
         }
     } else {
-        QMetaObject::invokeMethod(this, "fakeViewAnimationsFinished", Qt::QueuedConnection);
+        Q_FOREACH(DocumentView* view, d->mRemovedViews) {
+            view->deleteLater();
+        }
+        QMetaObject::invokeMethod(this, "pretendFadeInFinished", Qt::QueuedConnection);
     }
+    d->mRemovedViews.clear();
 }
 
-void DocumentViewContainer::fakeViewAnimationsFinished()
+void DocumentViewContainer::pretendFadeInFinished()
 {
-    // Animations are disabled. Pretend they are all done so that removed views
-    // are deleted and added views are moved to mViews
-    Q_FOREACH(DocumentView* view, d->mRemovedViews) {
-        slotViewAnimationFinished(view);
-    }
+    // Animations are disabled. Pretend all fade ins are finished so that added
+    // views are moved to mViews
     Q_FOREACH(DocumentView* view, d->mAddedViews) {
-        slotViewAnimationFinished(view);
+        slotFadeInFinished(view);
     }
 }
 
-void DocumentViewContainer::slotViewAnimationFinished(DocumentView* view)
+void DocumentViewContainer::slotFadeInFinished(DocumentView* view)
 {
-    if (d->mRemovedViews.contains(view)) {
-        d->mRemovedViews.remove(view);
-        delete view;
+    if (!d->mAddedViews.contains(view)) {
+        kWarning() << view << "is not in mAddedViews. This should not happen!";
         return;
     }
-    if (d->mAddedViews.contains(view)) {
-        d->mAddedViews.remove(view);
-        d->mViews.insert(view);
-        view->setZValue(0);
-        view->setEraseBorders(false);
-    }
+    d->mAddedViews.remove(view);
+    d->mViews.insert(view);
+    view->setZValue(0);
+    view->setEraseBorders(false);
 }
 
 void DocumentViewContainer::slotConfigChanged()

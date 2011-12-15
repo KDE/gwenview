@@ -56,7 +56,8 @@ class GWENVIEWLIB_EXPORT DocumentView : public QGraphicsWidget
     Q_PROPERTY(QPoint position READ position WRITE setPosition NOTIFY positionChanged)
 public:
     enum {
-        MaximumZoom = 16
+        MaximumZoom = 16,
+        AnimDuration = 500
     };
 
     enum AnimationMethod {
@@ -168,7 +169,7 @@ Q_SIGNALS:
     void hudTrashClicked(DocumentView*);
     void hudDeselectClicked(DocumentView*);
 
-    void animationFinished(DocumentView*);
+    void fadeInFinished(DocumentView*);
 
     void contextMenuRequested();
 
@@ -200,7 +201,7 @@ private Q_SLOTS:
     void emitHudDeselectClicked();
     void emitFocused();
 
-    void slotAnimationFinished();
+    void slotFadeInFinished();
 
 private:
     friend struct DocumentViewPrivate;

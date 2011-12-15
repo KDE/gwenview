@@ -77,8 +77,8 @@ private:
     DocumentViewContainerPrivate* const d;
 
 private Q_SLOTS:
-    void slotViewAnimationFinished(DocumentView*);
-    void fakeViewAnimationsFinished();
+    void slotFadeInFinished(DocumentView*);
+    void pretendFadeInFinished();
     void slotConfigChanged();
 };
 
