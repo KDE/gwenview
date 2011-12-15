@@ -90,14 +90,7 @@ struct RasterImageViewPrivate {
         if (!q->document()) {
             return QSizeF();
         }
-        qreal zoom;
-        if (q->zoomToFit()) {
-            zoom = q->computeZoomToFit();
-        } else {
-            zoom = q->zoom();
-        }
-
-        QSizeF size = q->documentSize() * zoom;
+        QSizeF size = q->documentSize() * q->zoom();
         return size.boundedTo(q->boundingRect().size());
     }
 
@@ -338,20 +331,16 @@ void RasterImageView::onScrollPosChanged(const QPointF& oldPos)
 
 void RasterImageView::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/)
 {
-    QSize bufferSize = d->mCurrentBuffer.size();
-
-    QSizeF paintSize;
+    QPointF topLeft = imageOffset();
     if (zoomToFit()) {
-        paintSize = documentSize() * computeZoomToFit();
+        // In zoomToFit mode, scale crudely the buffer to fit the screen. This
+        // provide an approximate rendered which will be replaced when the scheduled
+        // proper scale is ready.
+        QSizeF size = documentSize() * zoom();
+        painter->drawPixmap(topLeft.x(), topLeft.y(), size.width(), size.height(), d->mCurrentBuffer);
     } else {
-        paintSize = bufferSize;
+        painter->drawPixmap(topLeft, d->mCurrentBuffer);
     }
-    painter->drawPixmap(
-        (boundingRect().width() - paintSize.width()) / 2,
-        (boundingRect().height() - paintSize.height()) / 2,
-        paintSize.width(),
-        paintSize.height(),
-        d->mCurrentBuffer);
 
     if (d->mTool) {
         d->mTool.data()->paint(painter);
@@ -359,7 +348,6 @@ void RasterImageView::paint(QPainter* painter, const QStyleOptionGraphicsItem* /
 
     // Debug
 #if 0
-    QPointF topLeft = imageOffset();
     QSizeF visibleSize = documentSize() * zoom();
     painter->setPen(Qt::red);
     painter->drawRect(topLeft.x(), topLeft.y(), visibleSize.width() - 1, visibleSize.height() - 1);
