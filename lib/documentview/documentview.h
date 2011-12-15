@@ -117,11 +117,18 @@ public:
     void moveToAnimated(const QRect&);
     void fadeIn();
     void fadeOut();
+    void fakeFadeOut();
 
     void setGeometry(const QRectF& rect); // reimp
 
     int sortKey() const;
     void setSortKey(int sortKey);
+
+    /**
+     * If true, areas around the document will be painted with the default brush.
+     * If false they will be kept transparent.
+     */
+    void setEraseBorders(bool);
 
 public Q_SLOTS:
     void setZoom(qreal);

@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QGraphicsSceneWheelEvent>
 #include <QMouseEvent>
 #include <QPainter>
+#include <QPauseAnimation>
 #include <QPropertyAnimation>
 #include <QScrollBar>
 #include <QVBoxLayout>
@@ -91,6 +92,7 @@ struct DocumentViewPrivate {
     Document::Ptr mDocument;
     bool mCurrent;
     bool mCompareMode;
+    bool mEraseBorders;
 
     void setCurrentAdapter(AbstractDocumentViewAdapter* adapter)
     {
@@ -259,7 +261,9 @@ struct DocumentViewPrivate {
         mLoadingIndicator->hide();
     }
 
-    void animate(QPropertyAnimation* anim)
+    // Use a template because setDuration() is not part of QAbstractAnimation
+    template <class Anim>
+    void animate(Anim* anim)
     {
         QObject::connect(anim, SIGNAL(finished()),
                          q, SLOT(slotAnimationFinished()));
@@ -306,6 +310,7 @@ DocumentView::DocumentView(QGraphicsScene* scene)
     d->mBirdEyeView = 0;
     d->mCurrent = false;
     d->mCompareMode = false;
+    d->mEraseBorders = false;
 
     setOpacity(0);
 
@@ -550,10 +555,16 @@ void DocumentView::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
 
 void DocumentView::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/)
 {
-    if (!d->mCompareMode) {
-        return;
+    QRectF visibleRect = mapRectFromItem(d->mAdapter->widget(), d->mAdapter->visibleDocumentRect());
+    if (d->mEraseBorders) {
+        QRegion borders = QRegion(boundingRect().toRect())
+            - QRegion(visibleRect.toRect());
+        Q_FOREACH(const QRect& rect, borders.rects()) {
+            painter->eraseRect(rect);
+        }
     }
-    if (d->mCurrent) {
+
+    if (d->mCompareMode && d->mCurrent) {
         painter->save();
         painter->setBrush(Qt::NoBrush);
         painter->setPen(QPen(palette().highlight().color(), 2));
@@ -679,6 +690,12 @@ void DocumentView::fadeOut()
     d->fadeTo(0);
 }
 
+void DocumentView::fakeFadeOut()
+{
+    QPauseAnimation* anim = new QPauseAnimation(this);
+    d->animate(anim);
+}
+
 void DocumentView::slotAnimationFinished()
 {
     animationFinished(this);
@@ -705,6 +722,11 @@ int DocumentView::sortKey() const
 void DocumentView::setSortKey(int sortKey)
 {
     d->mSortKey = sortKey;
+}
+
+void DocumentView::setEraseBorders(bool value)
+{
+    d->mEraseBorders = value;
 }
 
 } // namespace

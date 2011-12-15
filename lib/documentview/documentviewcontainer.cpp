@@ -162,6 +162,7 @@ void DocumentViewContainer::updateLayout()
     qSort(views.begin(), views.end(), viewLessThan);
 
     bool animated = GwenviewConfig::animationMethod() != DocumentView::NoAnimation;
+    bool crossFade = d->mAddedViews.count() == 1 && d->mRemovedViews.count() == 1;
 
     if (!views.isEmpty()) {
         // Compute column count
@@ -219,6 +220,8 @@ void DocumentViewContainer::updateLayout()
                     }
                 } else {
                     view->setGeometry(rect);
+                    view->setZValue(0.5);
+                    view->setEraseBorders(crossFade);
                     view->fadeIn();
                 }
             } else {
@@ -236,8 +239,12 @@ void DocumentViewContainer::updateLayout()
     }
 
     if (animated) {
-        Q_FOREACH(DocumentView* view, d->mRemovedViews) {
-            view->fadeOut();
+        if (crossFade) {
+            (*d->mRemovedViews.begin())->fakeFadeOut();
+        } else {
+            Q_FOREACH(DocumentView* view, d->mRemovedViews) {
+                view->fadeOut();
+            }
         }
     } else {
         QMetaObject::invokeMethod(this, "fakeViewAnimationsFinished", Qt::QueuedConnection);
@@ -266,6 +273,8 @@ void DocumentViewContainer::slotViewAnimationFinished(DocumentView* view)
     if (d->mAddedViews.contains(view)) {
         d->mAddedViews.remove(view);
         d->mViews.insert(view);
+        view->setZValue(0);
+        view->setEraseBorders(false);
     }
 }
 
