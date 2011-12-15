@@ -458,4 +458,13 @@ void AbstractImageView::updateCursor()
     }
 }
 
+QSizeF AbstractImageView::visibleImageSize() const
+{
+    if (!document()) {
+        return QSizeF();
+    }
+    QSizeF size = documentSize() * zoom();
+    return size.boundedTo(boundingRect().size());
+}
+
 } // namespace

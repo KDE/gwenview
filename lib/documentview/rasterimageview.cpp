@@ -86,14 +86,6 @@ struct RasterImageViewPrivate {
         }
     }
 
-    QSizeF visibleImageSize() const {
-        if (!q->document()) {
-            return QSizeF();
-        }
-        QSizeF size = q->documentSize() * q->zoom();
-        return size.boundedTo(q->boundingRect().size());
-    }
-
     QRectF mapViewportToZoomedImage(const QRectF& viewportRect) const {
         return QRectF(
                    viewportRect.topLeft() - q->imageOffset() + q->scrollPos(),
@@ -109,7 +101,7 @@ struct RasterImageViewPrivate {
 
     void resizeBuffer()
     {
-        QSize size = visibleImageSize().toSize();
+        QSize size = q->visibleImageSize().toSize();
         if (size == mCurrentBuffer.size()) {
             return;
         }
