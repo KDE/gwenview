@@ -569,7 +569,7 @@ void DocumentView::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*op
         painter->setBrush(Qt::NoBrush);
         painter->setPen(QPen(palette().highlight().color(), 2));
         painter->setRenderHint(QPainter::Antialiasing);
-        QRectF selectionRect = boundingRect().adjusted(2, 2, -2, -2);
+        QRectF selectionRect = visibleRect.adjusted(-2, -2, 2, 2);
         painter->drawRoundedRect(selectionRect, 3, 3);
         painter->restore();
     }
