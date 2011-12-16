@@ -88,7 +88,8 @@ private:
     qreal mValue;
 };
 
-struct MessageBubblePrivate {
+struct MessageBubblePrivate
+{
     QGraphicsWidget* mWidget;
     QGraphicsLinearLayout* mLayout;
     CountDownWidget* mCountDownWidget;

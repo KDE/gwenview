@@ -95,7 +95,8 @@ public:
     KUrl uploadPath()        {
         return mDirURL;
     }
-    QString uploadRootName() {
+    QString uploadRootName()
+    {
         return "/";
     }
     bool isDirectory()       {

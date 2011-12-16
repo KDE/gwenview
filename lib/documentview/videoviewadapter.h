@@ -41,7 +41,8 @@ public:
     VideoViewAdapter();
     ~VideoViewAdapter();
 
-    virtual MimeTypeUtils::Kind kind() const {
+    virtual MimeTypeUtils::Kind kind() const
+    {
         return MimeTypeUtils::KIND_VIDEO;
     }
 

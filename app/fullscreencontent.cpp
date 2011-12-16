@@ -86,13 +86,15 @@ class FullScreenConfigDialog : public QFrame, public Ui_FullScreenConfigDialog
 {
 public:
     FullScreenConfigDialog(QWidget* parent)
-        : QFrame(parent) {
+        : QFrame(parent)
+        {
         setWindowFlags(Qt::Popup);
         setupUi(this);
     }
 };
 
-struct FullScreenContentPrivate {
+struct FullScreenContentPrivate
+{
     FullScreenContent* q;
     FullScreenBar* mFullScreenBar;
     SlideShow* mSlideShow;

@@ -48,7 +48,8 @@ static inline double unitToInches(PrintOptionsPage::Unit unit)
     }
 }
 
-struct PrintOptionsPagePrivate : public Ui_PrintOptionsPage {
+struct PrintOptionsPagePrivate : public Ui_PrintOptionsPage
+{
     QSize mImageSize;
     QButtonGroup mScaleGroup;
     QButtonGroup mPositionGroup;

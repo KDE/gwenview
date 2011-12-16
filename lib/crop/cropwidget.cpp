@@ -59,18 +59,21 @@ static QSize screenRatio()
     return QSize(width / divisor, height / divisor);
 }
 
-struct CropWidgetPrivate : public Ui_CropWidget {
+struct CropWidgetPrivate : public Ui_CropWidget
+{
     CropWidget* q;
 
     Document::Ptr mDocument;
     CropTool* mCropTool;
     bool mUpdatingFromCropTool;
 
-    bool ratioIsConstrained() const {
+    bool ratioIsConstrained() const
+    {
         return cropRatio() > 0;
     }
 
-    double cropRatio() const {
+    double cropRatio() const
+    {
         const QStringList lst = ratioComboBox->currentText().split(':');
         if (lst.size() != 2) {
             return 0;
@@ -136,7 +139,8 @@ struct CropWidgetPrivate : public Ui_CropWidget {
         edit->setClickMessage(QString("%1:%2").arg(i18n("Width")).arg(i18n("Height")));
     }
 
-    QRect cropRect() const {
+    QRect cropRect() const
+    {
         QRect rect(
             leftSpinBox->value(),
             topSpinBox->value(),

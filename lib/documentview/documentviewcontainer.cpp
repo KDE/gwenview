@@ -44,7 +44,8 @@ namespace Gwenview
 
 typedef QSet<DocumentView*> DocumentViewSet;
 
-struct DocumentViewContainerPrivate {
+struct DocumentViewContainerPrivate
+{
     DocumentViewContainer* q;
     QGraphicsScene* mScene;
     DocumentViewSet mViews;

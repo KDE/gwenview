@@ -43,7 +43,8 @@ class SemanticInfoBackEndClient : public QObject
 public:
     SemanticInfoBackEndClient(AbstractSemanticInfoBackEnd*);
 
-    SemanticInfo semanticInfoForUrl(const KUrl& url) const {
+    SemanticInfo semanticInfoForUrl(const KUrl& url) const
+    {
         return mSemanticInfoForUrl.value(url);
     }
 

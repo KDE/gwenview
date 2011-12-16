@@ -34,17 +34,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 
-struct LoadingIndicatorPrivate {
+struct LoadingIndicatorPrivate
+{
     LoadingIndicator* q;
     KPixmapSequence mSequence;
     int mIndex;
     QTimer* mTimer;
 
     LoadingIndicatorPrivate(LoadingIndicator* qq)
-        : q(qq)
-        , mSequence("process-working", 22)
-        , mIndex(0)
-        , mTimer(new QTimer(qq)) {
+    : q(qq)
+    , mSequence("process-working", 22)
+    , mIndex(0)
+    , mTimer(new QTimer(qq))
+    {
         mTimer->setInterval(100);
         QObject::connect(mTimer, SIGNAL(timeout()), q, SLOT(showNextFrame()));
     }

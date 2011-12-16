@@ -56,7 +56,8 @@ class UrlDropTreeView : public QTreeView
 {
 public:
     UrlDropTreeView(QWidget* parent = 0)
-        : QTreeView(parent) {}
+        : QTreeView(parent)
+        {}
 
 protected:
     void dragEnterEvent(QDragEnterEvent* event)
@@ -103,7 +104,8 @@ private:
     QRect mDropRect;
 };
 
-struct FolderViewContextManagerItemPrivate {
+struct FolderViewContextManagerItemPrivate
+{
     FolderViewContextManagerItem* q;
     MODEL_CLASS* mModel;
     QTreeView* mView;

@@ -77,7 +77,8 @@ private:
     unsigned int mSeed;
 };
 
-struct SlideShowPrivate {
+struct SlideShowPrivate
+{
     QTimer* mTimer;
     State mState;
     QVector<KUrl> mUrls;

@@ -41,7 +41,8 @@ public:
         : mOp(op)
     {}
 
-    ~ImageOperationCommand() {
+    ~ImageOperationCommand()
+    {
         delete mOp;
     }
 
@@ -54,7 +55,8 @@ private:
     AbstractImageOperation* mOp;
 };
 
-struct AbstractImageOperationPrivate {
+struct AbstractImageOperationPrivate
+{
     QString mText;
     KUrl mUrl;
 };

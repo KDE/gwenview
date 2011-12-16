@@ -127,7 +127,8 @@ static QString gradient(Qt::Orientation orientation, const QColor &color, int va
  * |+-----------------------------------------------------------------+|
  * +-------------------------------------------------------------------+
  */
-struct ViewMainPagePrivate {
+struct ViewMainPagePrivate
+{
     ViewMainPage* q;
     SlideShow* mSlideShow;
     KActionCollection* mActionCollection;
@@ -324,7 +325,8 @@ struct ViewMainPagePrivate {
         }
     }
 
-    DocumentView* currentView() const {
+    DocumentView* currentView() const
+    {
         return mDocumentViewController->view();
     }
 
@@ -349,7 +351,8 @@ struct ViewMainPagePrivate {
         mThumbnailBar->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Current);
     }
 
-    QModelIndex indexForView(DocumentView* view) const {
+    QModelIndex indexForView(DocumentView* view) const
+    {
         KUrl url = view->url();
         if (!url.isValid()) {
             kWarning() << "View does not display any document!";

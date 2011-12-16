@@ -41,7 +41,8 @@ namespace Gwenview
 #define LOG(x) ;
 #endif
 
-struct PreloaderPrivate {
+struct PreloaderPrivate
+{
     Document::Ptr mDocument;
     QSize mSize;
 };

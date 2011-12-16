@@ -45,7 +45,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 
-struct HistoryItem : public QStandardItem {
+struct HistoryItem : public QStandardItem
+{
     void save() const
     {
         KConfig config(mConfigPath, KConfig::SimpleConfig);
@@ -55,7 +56,8 @@ struct HistoryItem : public QStandardItem {
         config.sync();
     }
 
-    static HistoryItem* create(const KUrl& url, const QDateTime& dateTime, const QString& storageDir) {
+    static HistoryItem* create(const KUrl& url, const QDateTime& dateTime, const QString& storageDir)
+    {
         if (!KStandardDirs::makeDir(storageDir, 0600)) {
             kError() << "Could not create history dir" << storageDir;
             return 0;
@@ -74,7 +76,8 @@ struct HistoryItem : public QStandardItem {
         return item;
     }
 
-    static HistoryItem* load(const QString& fileName) {
+    static HistoryItem* load(const QString& fileName)
+    {
         KConfig config(fileName, KConfig::SimpleConfig);
         KConfigGroup group(&config, "general");
 
@@ -92,11 +95,13 @@ struct HistoryItem : public QStandardItem {
         return new HistoryItem(url, dateTime, fileName);
     }
 
-    KUrl url() const {
+    KUrl url() const
+    {
         return mUrl;
     }
 
-    QDateTime dateTime() const {
+    QDateTime dateTime() const
+    {
         return mDateTime;
     }
 
@@ -143,7 +148,8 @@ private:
     }
 };
 
-struct HistoryModelPrivate {
+struct HistoryModelPrivate
+{
     HistoryModel* q;
     QString mStorageDir;
     int mMaxCount;

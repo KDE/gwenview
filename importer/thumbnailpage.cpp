@@ -62,7 +62,8 @@ public:
     {}
 };
 
-struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
+struct ThumbnailPagePrivate : public Ui_ThumbnailPage
+{
     ThumbnailPage* q;
     KUrlNavigator* mUrlNavigator;
     SortedDirModel* mDirModel;

@@ -64,7 +64,8 @@ private:
     QRectF mRectF;
 };
 
-struct RedEyeReductionImageOperationPrivate {
+struct RedEyeReductionImageOperationPrivate
+{
     QRectF mRectF;
     QImage mOriginalImage;
 };

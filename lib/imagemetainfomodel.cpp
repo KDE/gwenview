@@ -62,14 +62,17 @@ public:
             : mKey(key), mLabel(label.trimmed()), mValue(value.trimmed())
         {}
 
-        QString key() const {
+        QString key() const
+        {
             return mKey;
         }
-        QString label() const {
+        QString label() const
+        {
             return mLabel;
         }
 
-        QString value() const {
+        QString value() const
+        {
             return mValue;
         }
         void setValue(const QString& value)
@@ -92,9 +95,11 @@ public:
     };
 
     MetaInfoGroup(const QString& label)
-        : mLabel(label) {}
+        : mLabel(label)
+        {}
 
-    ~MetaInfoGroup() {
+    ~MetaInfoGroup()
+    {
         qDeleteAll(mList);
     }
 
@@ -125,17 +130,20 @@ public:
         }
     }
 
-    QString getKeyAt(int row) const {
+    QString getKeyAt(int row) const
+    {
         Q_ASSERT(row < mList.size());
         return mList[row]->key();
     }
 
-    QString getLabelForKeyAt(int row) const {
+    QString getLabelForKeyAt(int row) const
+    {
         Q_ASSERT(row < mList.size());
         return mList[row]->label();
     }
 
-    QString getValueForKeyAt(int row) const {
+    QString getValueForKeyAt(int row) const
+    {
         Q_ASSERT(row < mList.size());
         return mList[row]->value();
     }
@@ -146,15 +154,18 @@ public:
         mList[row]->setValue(value);
     }
 
-    int getRowForKey(const QString& key) const {
+    int getRowForKey(const QString& key) const
+    {
         return mRowForKey.value(key, InvalidRow);
     }
 
-    int size() const {
+    int size() const
+    {
         return mList.size();
     }
 
-    QString label() const {
+    QString label() const
+    {
         return mLabel;
     }
 
@@ -163,7 +174,8 @@ public:
     }
 
 private:
-    Entry* getEntryForKey(const QString& key) const {
+    Entry* getEntryForKey(const QString& key) const
+    {
         int row = getRowForKey(key);
         if (row == InvalidRow) {
             return 0;
@@ -176,7 +188,8 @@ private:
     QString mLabel;
 };
 
-struct ImageMetaInfoModelPrivate {
+struct ImageMetaInfoModelPrivate
+{
     QVector<MetaInfoGroup*> mMetaInfoGroupVector;
     ImageMetaInfoModel* q;
 
@@ -203,7 +216,8 @@ struct ImageMetaInfoModelPrivate {
         emit q->dataChanged(entryIndex, entryIndex);
     }
 
-    QVariant displayData(const QModelIndex& index) const {
+    QVariant displayData(const QModelIndex& index) const
+    {
         if (index.internalId() == NoGroup) {
             if (index.column() != 0) {
                 return QVariant();

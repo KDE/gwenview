@@ -47,7 +47,8 @@ struct LayoutInfo
     QSize size;
 };
 
-struct GraphicsHudButtonPrivate {
+struct GraphicsHudButtonPrivate
+{
     QIcon mIcon;
     QString mText;
 

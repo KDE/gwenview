@@ -58,7 +58,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 namespace Gwenview
 {
 
-struct FileOpsContextManagerItemPrivate {
+struct FileOpsContextManagerItemPrivate
+{
     FileOpsContextManagerItem* q;
     QListView* mThumbnailView;
     KXMLGUIClient* mXMLGUIClient;
@@ -81,7 +82,8 @@ struct FileOpsContextManagerItemPrivate {
     QMap<QString, KService::Ptr> mServiceForName;
     bool mInTrash;
 
-    KUrl::List urlList() const {
+    KUrl::List urlList() const
+    {
         KUrl::List urlList;
 
         KFileItemList list = q->contextManager()->selectedFileItemList();
@@ -136,7 +138,8 @@ struct FileOpsContextManagerItemPrivate {
         return mimeData;
     }
 
-    KUrl pasteTargetUrl() const {
+    KUrl pasteTargetUrl() const
+    {
         // If only one folder is selected, paste inside it, otherwise paste in
         // current
         KFileItemList list = q->contextManager()->selectedFileItemList();

@@ -40,15 +40,19 @@ namespace Gwenview
  * In order to use it, give an instance of it to jpeg_decompress_struct.err,
  * then call setjmp(errorManager.jmp_buffer)
  */
-struct JPEGErrorManager : public jpeg_error_mgr {
-    JPEGErrorManager() : jpeg_error_mgr() {
+struct JPEGErrorManager : public jpeg_error_mgr
+{
+    JPEGErrorManager()
+    : jpeg_error_mgr()
+    {
         jpeg_std_error(this);
         error_exit = errorExitCallBack;
     }
 
     jmp_buf jmp_buffer;
 
-    static void errorExitCallBack(j_common_ptr cinfo) {
+    static void errorExitCallBack(j_common_ptr cinfo)
+    {
         JPEGErrorManager* myerr = static_cast<JPEGErrorManager*>(cinfo->err);
         char buffer[JMSG_LENGTH_MAX];
         (*cinfo->err->format_message)(cinfo, buffer);

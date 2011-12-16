@@ -62,7 +62,8 @@ const int SHADOW_STRENGTH = 127;
 /** How many pixels around the thumbnail are shadowed */
 const int SHADOW_SIZE = 4;
 
-struct ThumbnailBarItemDelegatePrivate {
+struct ThumbnailBarItemDelegatePrivate
+{
     // Key is height * 1000 + width
     typedef QMap<int, QPixmap> ShadowCache;
     mutable ShadowCache mShadowCache;
@@ -237,7 +238,8 @@ ThumbnailBarItemDelegate::~ThumbnailBarItemDelegate()
 class ProxyStyle : public QWindowsStyle
 {
 public:
-    ProxyStyle(QStyle* baseStyle) : QWindowsStyle() {
+    ProxyStyle(QStyle* baseStyle) : QWindowsStyle()
+ {
         mBaseStyle = baseStyle;
     }
 
@@ -256,7 +258,8 @@ public:
         mBaseStyle->drawComplexControl(cc, opt, p, w);
     }
 
-    int styleHint(StyleHint sh, const QStyleOption *opt = 0, const QWidget *w = 0, QStyleHintReturn *shret = 0) const {
+    int styleHint(StyleHint sh, const QStyleOption *opt = 0, const QWidget *w = 0, QStyleHintReturn *shret = 0) const
+    {
         switch (sh) {
         case SH_ItemView_ShowDecorationSelected:
             return true;
@@ -292,7 +295,8 @@ public:
         mBaseStyle->unpolish(application);
     }
 
-    int pixelMetric(PixelMetric pm, const QStyleOption* opt, const QWidget* widget) const {
+    int pixelMetric(PixelMetric pm, const QStyleOption* opt, const QWidget* widget) const
+    {
         switch (pm) {
         case PM_MaximumDragDistance:
             return -1;
@@ -307,7 +311,8 @@ private:
 
 typedef int (QSize::*QSizeDimension)() const;
 
-struct ThumbnailBarViewPrivate {
+struct ThumbnailBarViewPrivate
+{
     ThumbnailBarView* q;
     QStyle* mStyle;
     QTimeLine* mTimeLine;
@@ -315,15 +320,18 @@ struct ThumbnailBarViewPrivate {
     Qt::Orientation mOrientation;
     int mRowCount;
 
-    QScrollBar* scrollBar() const {
+    QScrollBar* scrollBar() const
+    {
         return mOrientation == Qt::Horizontal ? q->horizontalScrollBar() : q->verticalScrollBar();
     }
 
-    QSizeDimension mainDimension() const {
+    QSizeDimension mainDimension() const
+    {
         return mOrientation == Qt::Horizontal ? &QSize::width : &QSize::height;
     }
 
-    QSizeDimension oppositeDimension() const {
+    QSizeDimension oppositeDimension() const
+    {
         return mOrientation == Qt::Horizontal ? &QSize::height : &QSize::width;
     }
 

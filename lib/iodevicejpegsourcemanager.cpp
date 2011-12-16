@@ -42,7 +42,8 @@ namespace IODeviceJpegSourceManager
 {
 
 #define SOURCE_MANAGER_BUFFER_SIZE 4096
-struct IODeviceJpegSourceManager : public jpeg_source_mgr {
+struct IODeviceJpegSourceManager : public jpeg_source_mgr
+{
     QIODevice* mIODevice;
     JOCTET mBuffer[SOURCE_MANAGER_BUFFER_SIZE];
 };

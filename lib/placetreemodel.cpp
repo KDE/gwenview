@@ -55,7 +55,8 @@ namespace Gwenview
  * code, in QSortFilterProxyModel or somewhere else.
  */
 
-struct Node {
+struct Node
+{
     Node()
         : model(0)
     {}
@@ -68,7 +69,8 @@ struct Node {
     SortedDirModel* model;
     KUrl parentUrl;
 
-    bool isPlace() const {
+    bool isPlace() const
+    {
         return !parentUrl.isValid();
     }
 };
@@ -76,19 +78,22 @@ struct Node {
 typedef QHash<KUrl, Node*> NodeHash;
 typedef QMap<SortedDirModel*, NodeHash*> NodeHashMap;
 
-struct PlaceTreeModelPrivate {
+struct PlaceTreeModelPrivate
+{
     PlaceTreeModel* q;
     KFilePlacesModel* mPlacesModel;
     QList<SortedDirModel*> mDirModels;
     mutable NodeHashMap mNodes;
 
-    Node nodeForIndex(const QModelIndex& index) const {
+    Node nodeForIndex(const QModelIndex& index) const
+    {
         Q_ASSERT(index.isValid());
         Q_ASSERT(index.internalPointer());
         return *static_cast<Node*>(index.internalPointer());
     }
 
-    Node* createNode(SortedDirModel* dirModel, const KUrl& parentUrl) const {
+    Node* createNode(SortedDirModel* dirModel, const KUrl& parentUrl) const
+    {
         NodeHashMap::iterator nhmIt = mNodes.find(dirModel);
         if (nhmIt == mNodes.end()) {
             nhmIt = mNodes.insert(dirModel, new NodeHash);
@@ -102,7 +107,8 @@ struct PlaceTreeModelPrivate {
         return nhIt.value();
     }
 
-    QModelIndex createIndexForDir(SortedDirModel* dirModel, const KUrl& url) const {
+    QModelIndex createIndexForDir(SortedDirModel* dirModel, const KUrl& url) const
+    {
         QModelIndex dirIndex = dirModel->indexForUrl(url);
         QModelIndex parentDirIndex = dirIndex.parent();
         KUrl parentUrl;
@@ -114,20 +120,23 @@ struct PlaceTreeModelPrivate {
         return createIndexForDirChild(dirModel, parentUrl, dirIndex.row(), dirIndex.column());
     }
 
-    QModelIndex createIndexForDirChild(SortedDirModel* dirModel, const KUrl& parentUrl, int row, int column) const {
+    QModelIndex createIndexForDirChild(SortedDirModel* dirModel, const KUrl& parentUrl, int row, int column) const
+    {
         Q_ASSERT(parentUrl.isValid());
         Node* node = createNode(dirModel, parentUrl);
         return q->createIndex(row, column, node);
     }
 
-    QModelIndex createIndexForPlace(SortedDirModel* dirModel) const {
+    QModelIndex createIndexForPlace(SortedDirModel* dirModel) const
+    {
         int row = mDirModels.indexOf(dirModel);
         Q_ASSERT(row != -1);
         Node* node = createNode(dirModel, KUrl());
         return q->createIndex(row, 0, node);
     }
 
-    QModelIndex dirIndexForNode(const Node& node, const QModelIndex& index) const {
+    QModelIndex dirIndexForNode(const Node& node, const QModelIndex& index) const
+    {
         if (node.isPlace()) {
             return QModelIndex();
         }

@@ -37,7 +37,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 
-struct RasterImageViewPrivate {
+struct RasterImageViewPrivate
+{
     RasterImageView* q;
     ImageScaler* mScaler;
     QPixmap mBackgroundTexture;
@@ -86,7 +87,8 @@ struct RasterImageViewPrivate {
         }
     }
 
-    QRectF mapViewportToZoomedImage(const QRectF& viewportRect) const {
+    QRectF mapViewportToZoomedImage(const QRectF& viewportRect) const
+    {
         return QRectF(
                    viewportRect.topLeft() - q->imageOffset() + q->scrollPos(),
                    viewportRect.size()

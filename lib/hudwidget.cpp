@@ -35,7 +35,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 
-struct HudWidgetPrivate {
+struct HudWidgetPrivate
+{
     QWidget* mMainWidget;
     QToolButton* mCloseButton;
 };

@@ -52,7 +52,8 @@ class GWENVIEWLIB_EXPORT AbstractSortedDirModelFilter : public QObject
 public:
     AbstractSortedDirModelFilter(SortedDirModel* model);
     ~AbstractSortedDirModelFilter();
-    SortedDirModel* model() const {
+    SortedDirModel* model() const
+    {
         return mModel;
     }
 

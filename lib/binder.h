@@ -42,7 +42,8 @@ public:
     ~BinderInternal();
 
 protected Q_SLOTS:
-    virtual void callMethod() {}
+    virtual void callMethod()
+    {}
 };
 
 /**
@@ -54,7 +55,8 @@ protected Q_SLOTS:
  *
  * Assuming a class like this:
  *
- * class Receiver {
+ * class Receiver
+ * {
  * public:
  *   void doSomething(Param* p);
  * };
@@ -82,7 +84,8 @@ class BaseBinder : public BinderInternal
 {
 public:
     typedef void (Receiver::*Method)(MethodArg);
-    static void bind(QObject* emitter, const char* signal, Receiver* receiver, Method method, MethodArg arg) {
+    static void bind(QObject* emitter, const char* signal, Receiver* receiver, Method method, MethodArg arg)
+    {
         BaseBinder<Receiver, Arg, MethodArg>* binder = new BaseBinder<Receiver, Arg, MethodArg>(emitter);
         binder->mReceiver = receiver;
         binder->mMethod = method;
@@ -92,7 +95,8 @@ public:
     }
 
 protected:
-    void callMethod() {
+    void callMethod()
+    {
         (mReceiver->*mMethod)(mArg);
     }
 
@@ -107,10 +111,12 @@ private:
 };
 
 template <class Receiver, class Arg>
-class Binder : public BaseBinder<Receiver, Arg, Arg> {};
+class Binder : public BaseBinder<Receiver, Arg, Arg>
+{};
 
 template <class Receiver, class Arg>
-class BinderRef : public BaseBinder<Receiver, Arg, const Arg&> {};
+class BinderRef : public BaseBinder<Receiver, Arg, const Arg&>
+{};
 
 } // namespace
 

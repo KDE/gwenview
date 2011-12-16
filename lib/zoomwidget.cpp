@@ -55,7 +55,8 @@ inline qreal zoomForSliderValue(int sliderValue)
     return pow(MAGIC_K, sliderValue / PRECISION - MAGIC_OFFSET);
 }
 
-struct ZoomWidgetPrivate {
+struct ZoomWidgetPrivate
+{
     ZoomWidget* q;
 
     StatusBarToolButton* mZoomToFitButton;

@@ -40,7 +40,8 @@ static qreal MAX_SIZE = 96;
 static qreal VIEW_OFFSET = MAX_SIZE / 4;
 static qreal Y_POSITION_PERCENT = 1 / 3.;
 
-struct BirdEyeViewPrivate {
+struct BirdEyeViewPrivate
+{
     BirdEyeView* q;
     DocumentView* mDocView;
     QRectF mVisibleRect;

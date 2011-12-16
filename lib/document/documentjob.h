@@ -74,7 +74,8 @@ protected Q_SLOTS:
     /**
      * slot-ification of emitResult()
      */
-    void emitResult() {
+    void emitResult()
+    {
         KJob::emitResult();
     }
 

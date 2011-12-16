@@ -65,7 +65,8 @@ inline Sorting::Enum sortingFromSortAction(const QAction* action)
     return Sorting::Enum(action->data().toInt());
 }
 
-struct BrowseMainPagePrivate : public Ui_BrowseMainPage {
+struct BrowseMainPagePrivate : public Ui_BrowseMainPage
+{
     BrowseMainPage* q;
     KFilePlacesModel* mFilePlacesModel;
     KUrlNavigator* mUrlNavigator;

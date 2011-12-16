@@ -53,17 +53,20 @@ public:
     AbstractDocumentViewAdapter();
     virtual ~AbstractDocumentViewAdapter();
 
-    QGraphicsWidget* widget() const {
+    QGraphicsWidget* widget() const
+    {
         return mWidget;
     }
 
     virtual MimeTypeUtils::Kind kind() const = 0;
 
-    virtual ImageView* imageView() const {
+    virtual ImageView* imageView() const
+    {
         return 0;
     }
 
-    virtual RasterImageView* rasterImageView() const {
+    virtual RasterImageView* rasterImageView() const
+    {
         return 0;
     }
 
@@ -75,24 +78,30 @@ public:
      * @defgroup zooming functions
      * @{
      */
-    virtual bool canZoom() const {
+    virtual bool canZoom() const
+    {
         return false;
     }
 
     // Implementation must emit zoomToFitChanged()
-    virtual void setZoomToFit(bool) {}
+    virtual void setZoomToFit(bool)
+    {}
 
-    virtual bool zoomToFit() const {
+    virtual bool zoomToFit() const
+    {
         return false;
     }
 
-    virtual qreal zoom() const {
+    virtual qreal zoom() const
+    {
         return 0;
     }
 
-    virtual void setZoom(qreal /*zoom*/, const QPointF& /*center*/ = QPointF(-1, -1)) {}
+    virtual void setZoom(qreal /*zoom*/, const QPointF& /*center*/ = QPointF(-1, -1))
+    {}
 
-    virtual qreal computeZoomToFit() const {
+    virtual qreal computeZoomToFit() const
+    {
         return 1.;
     }
     /** @} */
@@ -100,12 +109,15 @@ public:
     virtual Document::Ptr document() const = 0;
     virtual void setDocument(Document::Ptr) = 0;
 
-    virtual void loadConfig() {}
+    virtual void loadConfig()
+    {}
 
-    virtual QPointF scrollPos() const {
+    virtual QPointF scrollPos() const
+    {
         return QPointF(0, 0);
     }
-    virtual void setScrollPos(const QPointF& /*pos*/) {}
+    virtual void setScrollPos(const QPointF& /*pos*/)
+    {}
 
     /**
      * Rectangle within the item which is actually used to show the document.
@@ -114,7 +126,8 @@ public:
     virtual QRectF visibleDocumentRect() const;
 
 protected:
-    void setWidget(QGraphicsWidget* widget) {
+    void setWidget(QGraphicsWidget* widget)
+    {
         mWidget = widget;
     }
 
@@ -151,13 +164,16 @@ class EmptyAdapter : public AbstractDocumentViewAdapter
     Q_OBJECT
 public:
     EmptyAdapter();
-    virtual MimeTypeUtils::Kind kind() const {
+    virtual MimeTypeUtils::Kind kind() const
+    {
         return MimeTypeUtils::KIND_UNKNOWN;
     }
-    virtual Document::Ptr document() const {
+    virtual Document::Ptr document() const
+    {
         return Document::Ptr();
     }
-    virtual void setDocument(Document::Ptr) {}
+    virtual void setDocument(Document::Ptr)
+    {}
 };
 
 } // namespace

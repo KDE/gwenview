@@ -37,7 +37,8 @@ class SandBoxDir : public QDir
 {
 public:
     SandBoxDir()
-        : mTempDir(QDir::currentPath() + "/sandbox-") {
+        : mTempDir(QDir::currentPath() + "/sandbox-")
+        {
         setPath(mTempDir.name());
     }
 

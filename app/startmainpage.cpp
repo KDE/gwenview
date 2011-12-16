@@ -83,9 +83,11 @@ class HistoryViewDelegate : public QStyledItemDelegate
 {
 public:
     HistoryViewDelegate(QObject* parent = 0)
-        : QStyledItemDelegate(parent) {}
+        : QStyledItemDelegate(parent)
+        {}
 
-    virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const {
+    virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
+    {
         QSize sh = QStyledItemDelegate::sizeHint(option, index);
         int iconSize = static_cast<QAbstractItemView*>(parent())->iconSize().height();
         // Copied from KFilePlacesViewDelegate::sizeHint()
@@ -95,7 +97,8 @@ public:
     }
 };
 
-struct StartMainPagePrivate : public Ui_StartMainPage {
+struct StartMainPagePrivate : public Ui_StartMainPage
+{
     StartMainPage* q;
     GvCore* mGvCore;
     KFilePlacesModel* mBookmarksModel;

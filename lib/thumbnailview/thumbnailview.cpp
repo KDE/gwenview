@@ -85,7 +85,8 @@ static KUrl urlForIndex(const QModelIndex& index)
     return item.isNull() ? KUrl() : item.url();
 }
 
-struct Thumbnail {
+struct Thumbnail
+{
     Thumbnail(const QPersistentModelIndex& index_, const KDateTime& mtime)
         : mIndex(index_)
         , mModificationTime(mtime)
@@ -106,7 +107,8 @@ struct Thumbnail {
         mFullSize = QSize(largeGroupSize, largeGroupSize);
     }
 
-    bool isGroupPixAdaptedForSize(int size) const {
+    bool isGroupPixAdaptedForSize(int size) const
+    {
         if (mWaitingForThumbnail) {
             return false;
         }
@@ -156,7 +158,8 @@ typedef QHash<QUrl, Thumbnail> ThumbnailForUrl;
 typedef QQueue<KUrl> UrlQueue;
 typedef QSet<QPersistentModelIndex> PersistentModelIndexSet;
 
-struct ThumbnailViewPrivate {
+struct ThumbnailViewPrivate
+{
     ThumbnailView* q;
     int mThumbnailSize;
     AbstractDocumentInfoProvider* mDocumentInfoProvider;
@@ -239,7 +242,8 @@ struct ThumbnailViewPrivate {
         }
     }
 
-    QPixmap dragPixmapForIndex(const QModelIndex& index) const {
+    QPixmap dragPixmapForIndex(const QModelIndex& index) const
+    {
         KUrl url = urlForIndex(index);
         QPixmap pix = mThumbnailForUrl.value(url).mAdjustedPix;
         if (qMax(pix.width(), pix.height()) > DRAG_THUMB_SIZE) {

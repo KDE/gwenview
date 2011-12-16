@@ -60,7 +60,8 @@ namespace Gwenview
 #define LOG(x) ;
 #endif
 
-struct ImageOpsContextManagerItem::Private {
+struct ImageOpsContextManagerItem::Private
+{
     ImageOpsContextManagerItem* q;
     MainWindow* mMainWindow;
     SideBarGroup* mGroup;

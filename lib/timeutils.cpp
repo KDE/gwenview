@@ -37,7 +37,8 @@ namespace Gwenview
 namespace TimeUtils
 {
 
-struct CacheItem {
+struct CacheItem
+{
     KDateTime fileMTime;
     KDateTime realTime;
 

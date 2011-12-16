@@ -72,7 +72,8 @@ private:
     QHBoxLayout* mLayout;
 };
 
-struct DocumentViewControllerPrivate {
+struct DocumentViewControllerPrivate
+{
     DocumentViewController* q;
     KActionCollection* mActionCollection;
     DocumentView* mView;

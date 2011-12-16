@@ -38,7 +38,8 @@ namespace Gwenview
 
 static const int UNIT_STEP = 16;
 
-struct AbstractImageViewPrivate {
+struct AbstractImageViewPrivate
+{
     enum Verbosity {
         Silent,
         Notify

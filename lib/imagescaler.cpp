@@ -45,7 +45,8 @@ namespace Gwenview
 // Amount of pixels to keep so that smooth scale is correct
 static const int SMOOTH_MARGIN = 3;
 
-struct ImageScalerPrivate {
+struct ImageScalerPrivate
+{
     Qt::TransformationMode mTransformationMode;
     Document::Ptr mDocument;
     qreal mZoom;

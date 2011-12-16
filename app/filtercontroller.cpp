@@ -80,11 +80,13 @@ public:
         , mMode(Contains)
     {}
 
-    virtual bool needsSemanticInfo() const {
+    virtual bool needsSemanticInfo() const
+    {
         return false;
     }
 
-    virtual bool acceptsIndex(const QModelIndex& index) const {
+    virtual bool acceptsIndex(const QModelIndex& index) const
+    {
         if (mText.isEmpty()) {
             return true;
         }
@@ -113,7 +115,8 @@ private:
     Mode mMode;
 };
 
-struct NameFilterWidgetPrivate {
+struct NameFilterWidgetPrivate
+{
     QPointer<NameFilter> mFilter;
     KComboBox* mModeComboBox;
     KLineEdit* mLineEdit;
@@ -179,11 +182,13 @@ public:
         , mMode(GreaterOrEqual)
     {}
 
-    virtual bool needsSemanticInfo() const {
+    virtual bool needsSemanticInfo() const
+    {
         return false;
     }
 
-    virtual bool acceptsIndex(const QModelIndex& index) const {
+    virtual bool acceptsIndex(const QModelIndex& index) const
+    {
         if (!mDate.isValid()) {
             return true;
         }
@@ -216,7 +221,8 @@ private:
     Mode mMode;
 };
 
-struct DateFilterWidgetPrivate {
+struct DateFilterWidgetPrivate
+{
     QPointer<DateFilter> mFilter;
     KComboBox* mModeComboBox;
     DateWidget* mDateWidget;
@@ -278,11 +284,13 @@ public:
         , mRating(0)
         , mMode(GreaterOrEqual) {}
 
-    virtual bool needsSemanticInfo() const {
+    virtual bool needsSemanticInfo() const
+    {
         return true;
     }
 
-    virtual bool acceptsIndex(const QModelIndex& index) const {
+    virtual bool acceptsIndex(const QModelIndex& index) const
+    {
         SemanticInfo info = model()->semanticInfoForSourceIndex(index);
         switch (mMode) {
         case GreaterOrEqual:
@@ -311,7 +319,8 @@ private:
     Mode mMode;
 };
 
-struct RatingWidgetPrivate {
+struct RatingWidgetPrivate
+{
     KComboBox* mModeComboBox;
     KRatingWidget* mRatingWidget;
     QPointer<RatingFilter> mFilter;
@@ -373,11 +382,13 @@ public:
         , mWantMatchingTag(true)
     {}
 
-    virtual bool needsSemanticInfo() const {
+    virtual bool needsSemanticInfo() const
+    {
         return true;
     }
 
-    virtual bool acceptsIndex(const QModelIndex& index) const {
+    virtual bool acceptsIndex(const QModelIndex& index) const
+    {
         if (mTag.isEmpty()) {
             return true;
         }
@@ -406,7 +417,8 @@ private:
     bool mWantMatchingTag;
 };
 
-struct TagFilterWidgetPrivate {
+struct TagFilterWidgetPrivate
+{
     KComboBox* mModeComboBox;
     QComboBox* mTagComboBox;
     QPointer<TagFilter> mFilter;
@@ -475,7 +487,8 @@ void TagFilterWidget::updateTagSetFilter()
 class FilterWidgetContainer : public QFrame
 {
 public:
-    FilterWidgetContainer() {
+    FilterWidgetContainer()
+    {
         QPalette pal = palette();
         pal.setColor(QPalette::Window, pal.color(QPalette::Highlight));
         setPalette(pal);
@@ -511,7 +524,8 @@ protected:
     }
 };
 
-struct FilterControllerPrivate {
+struct FilterControllerPrivate
+{
     FilterController* q;
     QFrame* mFrame;
     SortedDirModel* mDirModel;

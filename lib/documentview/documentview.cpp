@@ -76,7 +76,8 @@ static const qreal MAXIMUM_ZOOM_VALUE = qreal(DocumentView::MaximumZoom);
 
 static const int COMPARE_MARGIN = 4;
 
-struct DocumentViewPrivate {
+struct DocumentViewPrivate
+{
     DocumentView* q;
     int mSortKey; // Used to sort views when displayed in compare mode
     GraphicsHudWidget* mHud;

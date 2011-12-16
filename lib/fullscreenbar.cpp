@@ -53,7 +53,8 @@ static const int INITIAL_HIDE_TIMEOUT = 2000;
 // prevent accidental slide outs
 static const int EXTRA_BAR_HEIGHT = 20;
 
-struct FullScreenBarPrivate {
+struct FullScreenBarPrivate
+{
     FullScreenBar* q;
     QTimeLine* mTimeLine;
     QTimer* mAutoHideCursorTimer;
@@ -79,7 +80,8 @@ struct FullScreenBarPrivate {
      * Returns the rectangle in which the mouse must enter to trigger bar
      * sliding. The rectangle is in global coords.
      */
-    QRect slideInTriggerRect() const {
+    QRect slideInTriggerRect() const
+    {
         QRect rect = QApplication::desktop()->screenGeometry(QApplication::desktop()->screenNumber(q->parentWidget()));
         // Take parent widget position into account because it may not be at
         // the top of the screen, for example when the save bar warning is
@@ -88,7 +90,8 @@ struct FullScreenBarPrivate {
         return rect;
     }
 
-    bool shouldHide() const {
+    bool shouldHide() const
+    {
         Q_ASSERT(q->parentWidget());
 
         if (!mAutoHidingEnabled) {

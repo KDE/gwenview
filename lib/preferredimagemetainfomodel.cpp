@@ -30,11 +30,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 namespace Gwenview
 {
 
-struct PreferredImageMetaInfoModelPrivate {
+struct PreferredImageMetaInfoModelPrivate
+{
     const ImageMetaInfoModel* mModel;
     QStringList mPreferredMetaInfoKeyList;
 
-    QVariant checkStateData(const QModelIndex& sourceIndex) const {
+    QVariant checkStateData(const QModelIndex& sourceIndex) const
+    {
         if (sourceIndex.parent().isValid() && sourceIndex.column() == 0) {
             QString key = mModel->keyForIndex(sourceIndex);
             bool checked = mPreferredMetaInfoKeyList.contains(key);

@@ -38,7 +38,8 @@ namespace Gwenview
 static const QString PREVIEW_FILENAME = "PICT0012.JPG";
 static const KDateTime PREVIEW_DATETIME = KDateTime(QDate(2009, 10, 25), QTime(17, 51, 18));
 
-struct ImporterConfigDialogPrivate : public Ui_ImporterConfigDialog {
+struct ImporterConfigDialogPrivate : public Ui_ImporterConfigDialog
+{
     ImporterConfigDialog* q;
 
     void setupHelpText()

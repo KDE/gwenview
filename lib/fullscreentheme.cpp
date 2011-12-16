@@ -40,7 +40,8 @@ namespace Gwenview
 
 static const char* THEME_BASE_DIR = "fullscreenthemes/";
 
-struct FullScreenThemePrivate {
+struct FullScreenThemePrivate
+{
     QString mThemeDir;
     QString mStyleSheet;
 };

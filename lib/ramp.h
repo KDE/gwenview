@@ -45,7 +45,8 @@ public:
         mK = (y2 - y1) / (x2 - x1);
     }
 
-    qreal operator()(qreal x) const {
+    qreal operator()(qreal x) const
+    {
         if (x < mX1) {
             return mY1;
         }

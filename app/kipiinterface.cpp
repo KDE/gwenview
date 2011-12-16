@@ -66,7 +66,9 @@ class KIPIImageInfo : public KIPI::ImageInfoShared
 {
     static const QRegExp sExtensionRE;
 public:
-    KIPIImageInfo(KIPI::Interface* interface, const KUrl& url) : KIPI::ImageInfoShared(interface, url) {}
+    KIPIImageInfo(KIPI::Interface* interface, const KUrl& url)
+    : KIPI::ImageInfoShared(interface, url)
+    {}
 
     QString title()
     {
@@ -157,15 +159,22 @@ private:
 
 const QRegExp KIPIImageInfo::sExtensionRE("\\.[a-z0-9]+$", Qt::CaseInsensitive);
 
-struct MenuInfo {
+struct MenuInfo
+{
     QString mName;
     QList<QAction*> mActions;
-    MenuInfo() {}
-    MenuInfo(const QString& name) : mName(name) {}
+
+    MenuInfo()
+    {}
+
+    MenuInfo(const QString& name)
+    : mName(name)
+    {}
 };
 typedef QMap<KIPI::Category, MenuInfo> MenuInfoMap;
 
-struct KIPIInterfacePrivate {
+struct KIPIInterfacePrivate
+{
     KIPIInterface* q;
     MainWindow* mMainWindow;
     QMenu* mPluginMenu;

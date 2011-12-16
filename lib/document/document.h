@@ -137,11 +137,13 @@ public:
 
     QSize size() const;
 
-    int width() const {
+    int width() const
+    {
         return size().width();
     }
 
-    int height() const {
+    int height() const
+    {
         return size().height();
     }
 

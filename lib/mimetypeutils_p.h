@@ -50,7 +50,8 @@ public:
         return mData;
     }
 
-    bool finished() const {
+    bool finished() const
+    {
         return mFinished;
     }
 

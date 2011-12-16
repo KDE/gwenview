@@ -45,11 +45,13 @@ public:
 
     virtual void setCursor(const QCursor&);
 
-    virtual MimeTypeUtils::Kind kind() const {
+    virtual MimeTypeUtils::Kind kind() const
+    {
         return MimeTypeUtils::KIND_RASTER_IMAGE;
     }
 
-    virtual bool canZoom() const {
+    virtual bool canZoom() const
+    {
         return true;
     }
 

@@ -61,7 +61,8 @@ protected:
         }
     }
 
-    virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const {
+    virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
+    {
         QSize sh = QStyledItemDelegate::sizeHint(option, index);
         if (!index.parent().isValid()) {
             sh.setHeight(sh.height() * 3 / 2);
@@ -77,7 +78,8 @@ class ExpandedTreeView : public QTreeView
 {
 public:
     ExpandedTreeView(QWidget* parent)
-        : QTreeView(parent) {}
+        : QTreeView(parent)
+        {}
 
 protected:
     virtual void rowsInserted(const QModelIndex& parent, int start, int end)
@@ -108,7 +110,8 @@ private:
     }
 };
 
-struct ImageMetaInfoDialogPrivate {
+struct ImageMetaInfoDialogPrivate
+{
     std::auto_ptr<PreferredImageMetaInfoModel> mModel;
     QTreeView* mTreeView;
 };

@@ -47,7 +47,8 @@ class TagCompleterModel : public QSortFilterProxyModel
 {
 public:
     TagCompleterModel(QObject* parent)
-        : QSortFilterProxyModel(parent) {
+        : QSortFilterProxyModel(parent)
+        {
     }
 
     void setTagInfo(const TagInfo& tagInfo)
@@ -70,7 +71,8 @@ public:
     }
 
 protected:
-    virtual bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const {
+    virtual bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
+    {
         QModelIndex sourceIndex = sourceModel()->index(sourceRow, 0, sourceParent);
         SemanticInfoTag tag = sourceIndex.data(TagModel::TagRole).toString();
         return !mExcludedTagSet.contains(tag);
@@ -94,7 +96,8 @@ public:
     {}
 
 protected:
-    virtual bool eventFilter(QObject*, QEvent* event) {
+    virtual bool eventFilter(QObject*, QEvent* event)
+    {
         if (event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease) {
             QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
             switch (keyEvent->key()) {
@@ -109,7 +112,8 @@ protected:
     }
 };
 
-struct TagWidgetPrivate {
+struct TagWidgetPrivate
+{
     TagWidget* q;
     TagInfo mTagInfo;
     QListView* mListView;

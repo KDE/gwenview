@@ -32,12 +32,14 @@ namespace Gwenview
 class SignalBlocker
 {
 public:
-    SignalBlocker(QObject* object) {
+    SignalBlocker(QObject* object)
+    {
         mObject = object;
         mWasBlocked = object->blockSignals(true);
     }
 
-    ~SignalBlocker() {
+    ~SignalBlocker()
+    {
         mObject->blockSignals(mWasBlocked);
     }
 

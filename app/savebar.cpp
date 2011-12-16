@@ -53,7 +53,8 @@ QToolButton* createToolButton()
     return button;
 }
 
-struct SaveBarPrivate {
+struct SaveBarPrivate
+{
     SaveBar* q;
     KActionCollection* mActionCollection;
     QWidget* mSaveBarWidget;

@@ -47,9 +47,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 
-struct SemanticInfoCacheItem {
+struct SemanticInfoCacheItem
+{
     SemanticInfoCacheItem()
-        : mValid(false) {}
+        : mValid(false)
+        {}
     QPersistentModelIndex mIndex;
     bool mValid;
     SemanticInfo mInfo;
@@ -57,7 +59,8 @@ struct SemanticInfoCacheItem {
 
 typedef QHash<KUrl, SemanticInfoCacheItem> SemanticInfoCache;
 
-struct SemanticInfoDirModelPrivate {
+struct SemanticInfoDirModelPrivate
+{
     SemanticInfoCache mSemanticInfoCache;
     AbstractSemanticInfoBackEnd* mBackEnd;
 };

@@ -102,7 +102,8 @@ static KUrl urlForIndex(const QModelIndex& index)
     return item.url();
 }
 
-struct PreviewItemDelegatePrivate {
+struct PreviewItemDelegatePrivate
+{
     /**
      * Maps full text to elided text.
      */
@@ -217,7 +218,8 @@ struct PreviewItemDelegatePrivate {
         }
     }
 
-    QRect ratingRectFromIndexRect(const QRect& rect) const {
+    QRect ratingRectFromIndexRect(const QRect& rect) const
+    {
         return QRect(
                    rect.left(),
                    rect.bottom() - ratingRowHeight() - ITEM_MARGIN,
@@ -226,7 +228,8 @@ struct PreviewItemDelegatePrivate {
     }
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-    int ratingFromCursorPosition(const QRect& ratingRect) const {
+    int ratingFromCursorPosition(const QRect& ratingRect) const
+    {
         const QPoint pos = mView->viewport()->mapFromGlobal(QCursor::pos());
         return mRatingPainter.ratingFromPosition(ratingRect, pos);
     }
@@ -249,7 +252,8 @@ struct PreviewItemDelegatePrivate {
 #endif
     }
 
-    QPoint saveButtonPosition(const QRect& itemRect) const {
+    QPoint saveButtonPosition(const QRect& itemRect) const
+    {
         QSize buttonSize = mSaveButton->sizeHint();
         int posX = itemRect.right() - buttonSize.width();
         int posY = itemRect.top() + mThumbnailSize + 2 * ITEM_MARGIN - buttonSize.height();
@@ -360,7 +364,8 @@ struct PreviewItemDelegatePrivate {
 #endif
     }
 
-    bool isTextElided(const QString& text) const {
+    bool isTextElided(const QString& text) const
+    {
         QHash<QString, QString>::const_iterator it = mElidedTextCache.constFind(text);
         if (it == mElidedTextCache.constEnd()) {
             return false;
@@ -481,18 +486,21 @@ struct PreviewItemDelegatePrivate {
         QObject::connect(anim, SIGNAL(finished()), mToolTip, SLOT(deleteLater()));
     }
 
-    int itemWidth() const {
+    int itemWidth() const
+    {
         return mThumbnailSize + 2 * ITEM_MARGIN;
     }
 
-    int ratingRowHeight() const {
+    int ratingRowHeight() const
+    {
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
         return mView->fontMetrics().ascent();
 #endif
         return 0;
     }
 
-    int itemHeight() const {
+    int itemHeight() const
+    {
         const int lineHeight = mView->fontMetrics().height();
         int textHeight = 0;
         if (mDetails & PreviewItemDelegate::FileNameDetail) {

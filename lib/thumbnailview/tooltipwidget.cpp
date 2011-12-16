@@ -39,7 +39,8 @@ static const int HMARGIN = 2;
 namespace Gwenview
 {
 
-struct ToolTipWidgetPrivate {
+struct ToolTipWidgetPrivate
+{
     QString mText;
     qreal mOpacity;
 };

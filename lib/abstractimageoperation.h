@@ -60,7 +60,8 @@ public:
 
 protected:
     virtual void redo() = 0;
-    virtual void undo() {}
+    virtual void undo()
+    {}
     void setText(const QString&);
 
     /**

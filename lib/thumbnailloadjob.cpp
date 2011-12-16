@@ -151,7 +151,8 @@ bool ThumbnailCache::isEmpty() const
 //
 //------------------------------------------------------------------------
 ThumbnailThread::ThumbnailThread()
-: mCancel(false) {}
+: mCancel(false)
+{}
 
 void ThumbnailThread::load(
     const QString& originalUri, time_t originalTime, int originalSize, const QString& originalMimeType,

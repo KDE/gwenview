@@ -56,7 +56,8 @@ AbstractSortedDirModelFilter::~AbstractSortedDirModelFilter()
     }
 }
 
-struct SortedDirModelPrivate {
+struct SortedDirModelPrivate
+{
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_NONE
     KDirModel* mSourceModel;
 #else

@@ -36,7 +36,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 namespace Gwenview
 {
 
-struct Exiv2ImageLoaderPrivate {
+struct Exiv2ImageLoaderPrivate
+{
     Exiv2::Image::AutoPtr mImage;
     QString mErrorMessage;
 };

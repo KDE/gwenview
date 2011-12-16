@@ -70,11 +70,13 @@ public:
 
     virtual Document::Ptr document() const;
 
-    virtual MimeTypeUtils::Kind kind() const {
+    virtual MimeTypeUtils::Kind kind() const
+    {
         return MimeTypeUtils::KIND_SVG_IMAGE;
     }
 
-    virtual bool canZoom() const {
+    virtual bool canZoom() const
+    {
         return true;
     }
 

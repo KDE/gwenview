@@ -36,7 +36,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 
-struct DialogPagePrivate : public Ui_DialogPage {
+struct DialogPagePrivate : public Ui_DialogPage
+{
     QVBoxLayout* mLayout;
     QList<KPushButton*> mButtons;
     QSignalMapper* mMapper;

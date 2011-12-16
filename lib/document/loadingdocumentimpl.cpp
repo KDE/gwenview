@@ -72,7 +72,8 @@ namespace Gwenview
 
 const int HEADER_SIZE = 256;
 
-struct LoadingDocumentImplPrivate {
+struct LoadingDocumentImplPrivate
+{
     LoadingDocumentImpl* q;
     QPointer<KIO::TransferJob> mTransferJob;
     QFuture<bool> mMetaInfoFuture;

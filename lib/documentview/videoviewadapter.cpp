@@ -45,7 +45,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 
-struct VideoViewAdapterPrivate {
+struct VideoViewAdapterPrivate
+{
     VideoViewAdapter* q;
     Phonon::MediaObject* mMediaObject;
     Phonon::VideoWidget* mVideoWidget;
@@ -97,7 +98,8 @@ struct VideoViewAdapterPrivate {
         mVideoWidget->installEventFilter(q);
     }
 
-    bool isPlaying() const {
+    bool isPlaying() const
+    {
         switch (mMediaObject->state()) {
         case Phonon::StoppedState:
         case Phonon::PausedState:

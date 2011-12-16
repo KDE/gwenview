@@ -50,20 +50,31 @@ public:
 
     RasterImageView* imageView() const;
 
-    virtual void paint(QPainter*) {}
+    virtual void paint(QPainter*)
+    {}
 
-    virtual void mousePressEvent(QGraphicsSceneMouseEvent*) {}
-    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent*) {}
-    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*) {}
-    virtual void hoverMoveEvent(QGraphicsSceneHoverEvent*) {}
-    virtual void wheelEvent(QGraphicsSceneWheelEvent*) {}
-    virtual void keyPressEvent(QKeyEvent*) {}
-    virtual void keyReleaseEvent(QKeyEvent*) {}
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent*)
+    {}
+    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent*)
+    {}
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*)
+    {}
+    virtual void hoverMoveEvent(QGraphicsSceneHoverEvent*)
+    {}
+    virtual void wheelEvent(QGraphicsSceneWheelEvent*)
+    {}
+    virtual void keyPressEvent(QKeyEvent*)
+    {}
+    virtual void keyReleaseEvent(QKeyEvent*)
+    {}
 
-    virtual void toolActivated() {}
-    virtual void toolDeactivated() {}
+    virtual void toolActivated()
+    {}
+    virtual void toolDeactivated()
+    {}
 
-    virtual QWidget* widget() const {
+    virtual QWidget* widget() const
+    {
         return 0;
     }
 

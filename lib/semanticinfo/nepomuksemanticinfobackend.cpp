@@ -43,17 +43,23 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 
-struct Task {
-    Task(const KUrl& url): mUrl(url) {}
-    virtual ~Task() {}
+struct Task
+{
+    Task(const KUrl& url)
+    : mUrl(url)
+    {}
+    virtual ~Task()
+    {}
     virtual void execute() = 0;
 
     KUrl mUrl;
 };
 
-struct RetrieveTask : public Task {
+struct RetrieveTask : public Task
+{
     RetrieveTask(NepomukSemanticInfoBackEnd* backEnd, const KUrl& url)
-        : Task(url), mBackEnd(backEnd) {}
+    : Task(url), mBackEnd(backEnd)
+    {}
 
     virtual void execute()
     {
@@ -71,9 +77,11 @@ struct RetrieveTask : public Task {
     NepomukSemanticInfoBackEnd* mBackEnd;
 };
 
-struct StoreTask : public Task {
+struct StoreTask : public Task
+{
     StoreTask(const KUrl& url, const SemanticInfo& semanticInfo)
-        : Task(url), mSemanticInfo(semanticInfo) {}
+    : Task(url), mSemanticInfo(semanticInfo)
+    {}
 
     virtual void execute()
     {
@@ -96,10 +104,11 @@ class SemanticInfoThread : public QThread
 {
 public:
     SemanticInfoThread()
-        : mDeleting(false)
+    : mDeleting(false)
     {}
 
-    ~SemanticInfoThread() {
+    ~SemanticInfoThread()
+    {
         {
             QMutexLocker locker(&mMutex);
             mDeleting = true;
@@ -152,7 +161,8 @@ private:
     bool mDeleting;
 };
 
-struct NepomukSemanticInfoBackEndPrivate {
+struct NepomukSemanticInfoBackEndPrivate
+{
     SemanticInfoThread mThread;
     TagSet mAllTags;
 };

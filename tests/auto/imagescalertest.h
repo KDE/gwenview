@@ -33,19 +33,22 @@ class ImageScalerClient : public QObject
 {
     Q_OBJECT
 public:
-    ImageScalerClient(Gwenview::ImageScaler* scaler) {
+    ImageScalerClient(Gwenview::ImageScaler* scaler)
+    {
         connect(scaler, SIGNAL(scaledRect(int, int, const QImage&)),
                 SLOT(slotScaledRect(int, int, const QImage&)));
     }
 
-    struct ImageInfo {
+    struct ImageInfo
+    {
         int left;
         int top;
         QImage image;
     };
     QVector<ImageInfo> mImageInfoList;
 
-    QImage createFullImage() {
+    QImage createFullImage()
+    {
         Q_ASSERT(mImageInfoList.size() > 0);
         QImage::Format format = mImageInfoList[0].image.format();
 
@@ -68,7 +71,8 @@ public:
     }
 
 public Q_SLOTS:
-    void slotScaledRect(int left, int top, const QImage& image) {
+    void slotScaledRect(int left, int top, const QImage& image)
+    {
         ImageInfo info;
         info.left = left;
         info.top = top;

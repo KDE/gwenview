@@ -66,12 +66,14 @@ class FadingLabel : public QLabel
 {
 public:
     explicit FadingLabel(QWidget* parent = 0)
-        : QLabel(parent) {
+        : QLabel(parent)
+        {
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         setTextInteractionFlags(Qt::TextBrowserInteraction);
     }
 
-    QSize minimumSizeHint() const {
+    QSize minimumSizeHint() const
+    {
         return QSize();
     }
 
@@ -116,7 +118,8 @@ protected:
         return QLabel::event(event);
     }
 
-    inline bool isCropped() const {
+    inline bool isCropped() const
+ {
         return sizeHint().width() > width();
     }
 };
@@ -126,10 +129,12 @@ protected:
  */
 class KeyValueWidget : public QWidget
 {
-    struct Row {
+    struct Row
+    {
         Row()
-            : keyLabel(new FadingLabel)
-            , valueLabel(new FadingLabel) {
+        : keyLabel(new FadingLabel)
+        , valueLabel(new FadingLabel)
+        {
             if (QApplication::isLeftToRight()) {
                 keyLabel->setAlignment(Qt::AlignRight);
             } else {
@@ -137,7 +142,8 @@ class KeyValueWidget : public QWidget
             }
         }
 
-        ~Row() {
+        ~Row()
+        {
             delete keyLabel;
             delete valueLabel;
         }
@@ -147,15 +153,17 @@ class KeyValueWidget : public QWidget
     };
 public:
     KeyValueWidget(QWidget* parent)
-        : QWidget(parent)
-        , mLayout(new QGridLayout(this)) {
+    : QWidget(parent)
+    , mLayout(new QGridLayout(this))
+    {
         mLayout->setMargin(0);
         mLayout->setVerticalSpacing(0);
         mLayout->setHorizontalSpacing(4);
         setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     }
 
-    QSize sizeHint() const {
+    QSize sizeHint() const
+    {
         int height = fontMetrics().height() * mRows.count();
         return QSize(150, height);
     }
@@ -211,7 +219,8 @@ private:
     }
 };
 
-struct InfoContextManagerItemPrivate {
+struct InfoContextManagerItemPrivate
+{
     InfoContextManagerItem* q;
     SideBarGroup* mGroup;
 

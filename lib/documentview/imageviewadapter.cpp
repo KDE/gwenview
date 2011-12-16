@@ -35,7 +35,8 @@ namespace Gwenview
 {
 
 //// ImageViewAdapter ////
-struct ImageViewAdapterPrivate {
+struct ImageViewAdapterPrivate
+{
     ImageViewAdapter* q;
     RasterImageView* mView;
 };

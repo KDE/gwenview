@@ -46,7 +46,8 @@ const int CONTEXTBAR_MOUSEOVER_LIGHTNESS = 115;
 /** Radius of ContextBarButtons */
 const int CONTEXTBAR_RADIUS = 5;
 
-struct ContextBarButtonPrivate {
+struct ContextBarButtonPrivate
+{
 };
 
 ContextBarButton::ContextBarButton(const QString& iconName, QWidget* parent)

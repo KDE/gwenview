@@ -80,7 +80,8 @@ void SvgImageView::adjustItemPos()
 }
 
 //// SvgViewAdapter ////
-struct SvgViewAdapterPrivate {
+struct SvgViewAdapterPrivate
+{
     SvgImageView* mView;
 };
 

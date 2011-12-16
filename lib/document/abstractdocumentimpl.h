@@ -57,33 +57,41 @@ public:
 
     virtual Document::LoadingState loadingState() const = 0;
 
-    virtual DocumentJob* save(const KUrl&, const QByteArray& /*format*/) {
+    virtual DocumentJob* save(const KUrl&, const QByteArray& /*format*/)
+    {
         return 0;
     }
 
-    virtual AbstractDocumentEditor* editor() {
+    virtual AbstractDocumentEditor* editor()
+    {
         return 0;
     }
 
-    virtual QByteArray rawData() const {
+    virtual QByteArray rawData() const
+    {
         return QByteArray();
     }
 
-    virtual bool isEditable() const {
+    virtual bool isEditable() const
+    {
         return false;
     }
 
-    virtual bool isAnimated() const {
+    virtual bool isAnimated() const
+    {
         return false;
     }
 
-    virtual void startAnimation() {}
+    virtual void startAnimation()
+    {}
 
-    virtual void stopAnimation() {}
+    virtual void stopAnimation()
+    {}
 
     Document* document() const;
 
-    virtual QSvgRenderer* svgRenderer() const {
+    virtual QSvgRenderer* svgRenderer() const
+    {
         return 0;
     }
 

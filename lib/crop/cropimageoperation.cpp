@@ -58,7 +58,8 @@ private:
     QRect mRect;
 };
 
-struct CropImageOperationPrivate {
+struct CropImageOperationPrivate
+{
     QRect mRect;
     QImage mOriginalImage;
 };

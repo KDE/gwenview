@@ -58,7 +58,8 @@ public:
  * A POD struct used by AbstractSemanticInfoBackEnd to store the metadata
  * associated to an url.
  */
-struct SemanticInfo {
+struct SemanticInfo
+{
     int mRating;
     QString mDescription;
     TagSet mTags;

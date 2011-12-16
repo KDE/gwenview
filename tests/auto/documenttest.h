@@ -39,7 +39,8 @@ public:
     }
 
 public Q_SLOTS:
-    void readState() {
+    void readState()
+    {
         mCallCount++;
         mState = mDocument->loadingState();
     }
@@ -64,23 +65,27 @@ public:
                 SLOT(slotDestroyed()));
     }
 
-    void wait() {
+    void wait()
+    {
         while (!mDone) {
             QApplication::processEvents();
         }
     }
 
-    int error() const {
+    int error() const
+    {
         return mError;
     }
 
 private Q_SLOTS:
-    void slotResult(KJob* job) {
+    void slotResult(KJob* job)
+    {
         mError = job->error();
         mDone = true;
     }
 
-    void slotDestroyed() {
+    void slotDestroyed()
+    {
         kWarning() << "Destroyed";
         mError = -1;
         mDone = true;

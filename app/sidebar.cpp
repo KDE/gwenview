@@ -56,7 +56,8 @@ protected:
         QToolButton::paintEvent(event);
     }
 
-    virtual QSize sizeHint() const {
+    virtual QSize sizeHint() const
+    {
         const_cast<SideBarButton*>(this)->forceIcon();
         return QToolButton::sizeHint();
     }
@@ -83,7 +84,8 @@ private:
 };
 
 //- SideBarGroup ---------------------------------------------------------------
-struct SideBarGroupPrivate {
+struct SideBarGroupPrivate
+{
     QFrame* mContainer;
     QLabel* mTitleLabel;
 };
@@ -164,7 +166,8 @@ void SideBarGroup::addAction(QAction* action)
 }
 
 //- SideBarPage ----------------------------------------------------------------
-struct SideBarPagePrivate {
+struct SideBarPagePrivate
+{
     QString mTitle;
     QVBoxLayout* mLayout;
 };
@@ -200,7 +203,8 @@ void SideBarPage::addStretch()
 }
 
 //- SideBar --------------------------------------------------------------------
-struct SideBarPrivate {
+struct SideBarPrivate
+{
 };
 
 SideBar::SideBar(QWidget* parent)

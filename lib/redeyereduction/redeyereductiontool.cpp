@@ -81,7 +81,8 @@ struct RedEyeReductionToolPrivate
                          q, SIGNAL(done()));
     }
 
-    QRectF rectF() const {
+    QRectF rectF() const
+    {
         if (mStatus == RedEyeReductionTool::NotSet) {
             return QRectF();
         }

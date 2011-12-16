@@ -31,10 +31,12 @@ class SplitterHandle : public QSplitterHandle
 {
 public:
     SplitterHandle(Qt::Orientation orientation, QSplitter* parent)
-        : QSplitterHandle(orientation, parent) {}
+        : QSplitterHandle(orientation, parent)
+        {}
 
 protected:
-    virtual void paintEvent(QPaintEvent* event) {
+    virtual void paintEvent(QPaintEvent* event)
+    {
         QSplitterHandle::paintEvent(event);
 
         QPainter painter(this);
@@ -57,12 +59,14 @@ class Splitter : public QSplitter
 {
 public:
     Splitter(Qt::Orientation orientation, QWidget* parent)
-        : QSplitter(orientation, parent) {
+        : QSplitter(orientation, parent)
+        {
         setHandleWidth(handleWidth() + 2);
     }
 
 protected:
-    virtual QSplitterHandle* createHandle() {
+    virtual QSplitterHandle* createHandle()
+    {
         return new SplitterHandle(orientation(), this);
     }
 };

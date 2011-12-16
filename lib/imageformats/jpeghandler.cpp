@@ -56,7 +56,8 @@ namespace Gwenview
 #define LOG(x) ;
 #endif
 
-struct JpegFatalError : public jpeg_error_mgr {
+struct JpegFatalError : public jpeg_error_mgr
+{
     jmp_buf mJmpBuffer;
 
     static void handler(j_common_ptr cinfo)
@@ -212,7 +213,8 @@ This code is a copy of qjpeghandler.cpp because I can't find a way to fallback
 to it for image writing.
 BEGIN_COPY
 ****************************************************************************/
-struct my_error_mgr : public jpeg_error_mgr {
+struct my_error_mgr : public jpeg_error_mgr
+{
     jmp_buf setjmp_buffer;
 };
 
@@ -235,7 +237,8 @@ extern "C" {
 
 static const int max_buf = 4096;
 
-struct my_jpeg_destination_mgr : public jpeg_destination_mgr {
+struct my_jpeg_destination_mgr : public jpeg_destination_mgr
+{
     // Nothing dynamic - cannot rely on destruction over longjump
     QIODevice *device;
     JOCTET buffer[max_buf];
@@ -448,7 +451,8 @@ static bool write_jpeg_image(const QImage &sourceImage, QIODevice *device, int s
 END_COPY
 ****************************************************************************/
 
-struct JpegHandlerPrivate {
+struct JpegHandlerPrivate
+{
     QSize mScaledSize;
     int mQuality;
 };

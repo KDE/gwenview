@@ -60,7 +60,8 @@ const int INMEM_DST_DELTA = 4096;
 // In-memory data destination manager for libjpeg
 //
 //-----------------------------------------------
-struct inmem_dest_mgr : public jpeg_destination_mgr {
+struct inmem_dest_mgr : public jpeg_destination_mgr
+{
     QByteArray* mOutput;
 
     void dump()
@@ -105,7 +106,8 @@ void inmem_term_destination(j_compress_ptr cinfo)
 // JpegContent::Private
 //
 //---------------------
-struct JpegContent::Private {
+struct JpegContent::Private
+{
     // JpegContent usually stores the image pixels as compressed JPEG data in
     // mRawData. However if the image is set with setImage() because the user
     // performed a lossy image manipulation, mRawData is cleared and the image
@@ -119,7 +121,8 @@ struct JpegContent::Private {
     Exiv2::ExifData mExifData;
     QString mErrorString;
 
-    Private() {
+    Private()
+    {
         mPendingTransformation = false;
     }
 
@@ -349,10 +352,14 @@ static QMatrix createScaleMatrix(int dx, int dy)
     return matrix;
 }
 
-struct OrientationInfo {
-    OrientationInfo() {}
+struct OrientationInfo
+{
+    OrientationInfo()
+    {}
+
     OrientationInfo(Orientation o, QMatrix m, JXFORM_CODE j)
-        : orientation(o), matrix(m), jxform(j) {}
+    : orientation(o), matrix(m), jxform(j)
+    {}
 
     Orientation orientation;
     QMatrix matrix;

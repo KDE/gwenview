@@ -660,7 +660,8 @@ class TestCheckDocumentEditorJob : public DocumentJob
 {
 public:
     TestCheckDocumentEditorJob(int* hasEditor)
-        : mHasEditor(hasEditor) {
+        : mHasEditor(hasEditor)
+        {
         *mHasEditor = -1;
     }
 
@@ -680,7 +681,8 @@ class TestUiDelegate : public KJobUiDelegate
 {
 public:
     TestUiDelegate(bool* showErrorMessageCalled)
-        : mShowErrorMessageCalled(showErrorMessageCalled) {
+        : mShowErrorMessageCalled(showErrorMessageCalled)
+        {
         setAutoErrorHandlingEnabled(true);
         *mShowErrorMessageCalled = false;
     }

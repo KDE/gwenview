@@ -130,13 +130,15 @@ enum MainPageId {
     ViewMainPageId
 };
 
-struct MainWindowState {
+struct MainWindowState
+{
     MainPageId mMainPageId;
     bool mToolBarVisible;
     Qt::WindowStates mWindowState;
 };
 
-struct MainWindow::Private {
+struct MainWindow::Private
+{
     GvCore* mGvCore;
     MainWindow* q;
     QSplitter* mCentralSplitter;
@@ -526,12 +528,14 @@ struct MainWindow::Private {
         mDirModel->adjustKindFilter(MimeTypeUtils::KIND_DIR | MimeTypeUtils::KIND_ARCHIVE, showDirs);
     }
 
-    QModelIndex currentIndex() const {
+    QModelIndex currentIndex() const
+    {
         KUrl url = currentUrl();
         return url.isValid() ? mDirModel->indexForUrl(url) : QModelIndex();
     }
 
-    bool indexIsDirOrArchive(const QModelIndex& index) const {
+    bool indexIsDirOrArchive(const QModelIndex& index) const
+    {
         Q_ASSERT(index.isValid());
         KFileItem item = mDirModel->itemForIndex(index);
         return ArchiveUtils::fileItemIsDirOrArchive(item);
@@ -662,7 +666,8 @@ struct MainWindow::Private {
         actionCollection->action("file_print")->setEnabled(isRasterImage);
     }
 
-    KUrl currentUrl() const {
+    KUrl currentUrl() const
+    {
         if (mCurrentMainPageId == StartMainPageId) {
             return KUrl();
         }
@@ -734,7 +739,8 @@ struct MainWindow::Private {
         mFullScreenContent->setCurrentUrl(url);
     }
 
-    const char* sideBarConfigGroupName() const {
+    const char* sideBarConfigGroupName() const
+ {
         const char* name = 0;
         switch (mCurrentMainPageId) {
         case StartMainPageId:

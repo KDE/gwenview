@@ -43,7 +43,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 namespace Gwenview
 {
 
-struct DocumentPrivate {
+struct DocumentPrivate
+{
     AbstractDocumentImpl* mImpl;
     KUrl mUrl;
     bool mKeepRawData;

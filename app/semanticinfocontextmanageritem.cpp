@@ -59,9 +59,11 @@ namespace Gwenview
 
 static const int RATING_INDICATOR_HIDE_DELAY = 3000;
 
-struct SemanticInfoDialog : public KDialog, public Ui_SemanticInfoDialog {
+struct SemanticInfoDialog : public KDialog, public Ui_SemanticInfoDialog
+{
     SemanticInfoDialog(QWidget* parent)
-        : KDialog(parent) {
+    : KDialog(parent)
+    {
         setButtons(None);
         QWidget* mainWidget = new QWidget;
         setMainWidget(mainWidget);
@@ -72,12 +74,14 @@ struct SemanticInfoDialog : public KDialog, public Ui_SemanticInfoDialog {
         restoreDialogSize(configGroup());
     }
 
-    ~SemanticInfoDialog() {
+    ~SemanticInfoDialog()
+    {
         KConfigGroup group = configGroup();
         saveDialogSize(group);
     }
 
-    KConfigGroup configGroup() const {
+    KConfigGroup configGroup() const
+    {
         KSharedConfigPtr config = KGlobal::config();
         return KConfigGroup(config, "SemanticInfoDialog");
     }
@@ -87,9 +91,10 @@ class RatingIndicator : public HudWidget
 {
 public:
     RatingIndicator(QWidget* parent)
-        : HudWidget(parent)
-        , mRatingWidget(new KRatingWidget)
-        , mHideTimer(new QTimer(this)) {
+    : HudWidget(parent)
+    , mRatingWidget(new KRatingWidget)
+    , mHideTimer(new QTimer(this))
+    {
         init(mRatingWidget, OptionNone);
         WidgetFloater* floater = new WidgetFloater(parent);
         floater->setAlignment(Qt::AlignHCenter | Qt::AlignBottom);
@@ -122,7 +127,8 @@ private:
     QTimer* mHideTimer;
 };
 
-struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem {
+struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
+{
     SemanticInfoContextManagerItem* q;
     SideBarGroup* mGroup;
     KActionCollection* mActionCollection;

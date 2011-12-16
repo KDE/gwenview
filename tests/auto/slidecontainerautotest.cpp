@@ -36,7 +36,8 @@ QTEST_KDEMAIN(SlideContainerAutoTest, GUI)
 
 using namespace Gwenview;
 
-struct TestWindow : public QWidget {
+struct TestWindow : public QWidget
+{
     explicit TestWindow(QWidget* parent = 0)
         : QWidget(parent)
         , mContainer(new SlideContainer)

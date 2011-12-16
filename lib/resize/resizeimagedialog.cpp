@@ -31,7 +31,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 
-struct ResizeImageDialogPrivate : public Ui_ResizeImageWidget {
+struct ResizeImageDialogPrivate : public Ui_ResizeImageWidget
+{
     bool mUpdateFromRatio;
     QSize mOriginalSize;
 };

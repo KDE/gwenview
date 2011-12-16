@@ -36,7 +36,8 @@ namespace Gwenview
 
 typedef QHash<QString, QString> Dict;
 
-struct FileNameFormaterPrivate {
+struct FileNameFormaterPrivate
+{
     QString mFormat;
 };
 

@@ -61,7 +61,8 @@ static const int MAX_UNREFERENCED_IMAGES = getMaxUnreferencedImages();
  * accessed. This access time is used to "garbage collect" the loaded
  * documents.
  */
-struct DocumentInfo {
+struct DocumentInfo
+{
     Document::Ptr mDocument;
     QDateTime mLastAccess;
 };
@@ -73,7 +74,8 @@ struct DocumentInfo {
  */
 typedef QMap<KUrl, DocumentInfo*> DocumentMap;
 
-struct DocumentFactoryPrivate {
+struct DocumentFactoryPrivate
+{
     DocumentMap mDocumentMap;
     QUndoGroup mUndoGroup;
 

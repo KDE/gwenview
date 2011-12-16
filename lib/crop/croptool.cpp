@@ -85,7 +85,8 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(Gwenview::CropHandle)
 namespace Gwenview
 {
 
-struct CropToolPrivate {
+struct CropToolPrivate
+{
     CropTool* q;
     QRect mRect;
     QList<CropHandle> mCropHandleList;
@@ -94,7 +95,8 @@ struct CropToolPrivate {
     double mCropRatio;
     CropWidget* mCropWidget;
 
-    QRect viewportCropRect() const {
+    QRect viewportCropRect() const
+    {
         return q->imageView()->mapToView(mRect.adjusted(0, 0, 1, 1));
     }
 

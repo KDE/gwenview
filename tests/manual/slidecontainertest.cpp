@@ -33,7 +33,8 @@ class Window : public QWidget
 {
 public:
     Window()
-        : QWidget() {
+        : QWidget()
+        {
         SlideContainer* container = new SlideContainer(this);
 
         QPushButton* inButton = new QPushButton(this);
