@@ -65,12 +65,6 @@ public:
 
     SortedDirModel* dirModel() const;
 
-    /**
-     * If true, selectedFileItemList() will only return current url
-     * (useful in view mode)
-     */
-    void setOnlyCurrentUrl(bool onlyCurrentUrl);
-
 Q_SIGNALS:
     void selectionChanged();
     void selectionDataChanged();

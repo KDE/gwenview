@@ -45,7 +45,6 @@ struct ContextManagerPrivate
     KUrl mCurrentDirUrl;
     KUrl mCurrentUrl;
 
-    bool mOnlyCurrentUrl;
     bool mSelectedFileItemListNeedsUpdate;
     QSet<QByteArray> mQueuedSignals;
     KFileItemList mSelectedFileItemList;
@@ -64,11 +63,9 @@ struct ContextManagerPrivate
             return;
         }
         mSelectedFileItemList.clear();
-        if (!mOnlyCurrentUrl) {
-            QItemSelection selection = mSelectionModel->selection();
-            Q_FOREACH(const QModelIndex & index, selection.indexes()) {
-                mSelectedFileItemList << mDirModel->itemForIndex(index);
-            }
+        QItemSelection selection = mSelectionModel->selection();
+        Q_FOREACH(const QModelIndex & index, selection.indexes()) {
+            mSelectedFileItemList << mDirModel->itemForIndex(index);
         }
 
         // At least add current url if it's valid (it may not be in
@@ -104,7 +101,6 @@ ContextManager::ContextManager(SortedDirModel* dirModel, QItemSelectionModel* se
             SLOT(slotCurrentChanged(QModelIndex)));
 
     d->mSelectedFileItemListNeedsUpdate = false;
-    d->mOnlyCurrentUrl = false;
 }
 
 ContextManager::~ContextManager()
@@ -129,10 +125,6 @@ void ContextManager::setCurrentUrl(const KUrl& currentUrl)
     QUndoGroup* undoGroup = DocumentFactory::instance()->undoGroup();
     undoGroup->addStack(doc->undoStack());
     undoGroup->setActiveStack(doc->undoStack());
-
-    if (d->mOnlyCurrentUrl) {
-        d->mSelectedFileItemListNeedsUpdate = true;
-    }
 
     d->queueSignal("selectionChanged");
 }
@@ -219,15 +211,6 @@ void ContextManager::emitQueuedSignals()
         QMetaObject::invokeMethod(this, signal.data());
     }
     d->mQueuedSignals.clear();
-}
-
-void ContextManager::setOnlyCurrentUrl(bool onlyCurrentUrl)
-{
-    if (d->mOnlyCurrentUrl != onlyCurrentUrl) {
-        d->mOnlyCurrentUrl = onlyCurrentUrl;
-        d->mSelectedFileItemListNeedsUpdate = true;
-        d->queueSignal("selectionChanged");
-    }
 }
 
 } // namespace

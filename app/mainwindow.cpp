@@ -919,7 +919,6 @@ void MainWindow::setActiveViewModeAction(QAction* action)
         // Switching to view mode
         d->setDirModelShowDirs(false);
         d->mViewStackedWidget->setCurrentWidget(d->mViewMainPage);
-        d->mContextManager->setOnlyCurrentUrl(true);
         if (d->mViewMainPage->isEmpty()) {
             openSelectedDocuments();
         }
@@ -938,7 +937,6 @@ void MainWindow::setActiveViewModeAction(QAction* action)
         }
         d->setDirModelShowDirs(true);
         setCaption(QString());
-        d->mContextManager->setOnlyCurrentUrl(false);
     }
     d->loadSideBarConfig();
 
