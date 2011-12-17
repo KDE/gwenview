@@ -28,9 +28,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KDebug>
 #include <KFileItem>
 #include <KLocale>
-#include <KTempDir>
 #include <KUrl>
 #include <KIO/CopyJob>
+#include <KIO/DeleteJob>
 #include <KIO/Job>
 #include <KIO/JobUiDelegate>
 #include <KIO/NetAccess>
@@ -52,7 +52,7 @@ struct ImporterPrivate
     Importer* q;
     QWidget* mAuthWindow;
     std::auto_ptr<FileNameFormater> mFileNameFormater;
-    std::auto_ptr<KTempDir> mDestImportDir;
+    KUrl mTempImportDir;
 
     /* @defgroup reset Should be reset in start()
      * @{ */
@@ -80,10 +80,9 @@ struct ImporterPrivate
             emitError(i18n("Could not create destination folder."));
             return false;
         }
-        mDestImportDir.reset(new KTempDir(url.toLocalFile() + "/.gwenview_importer-"));
-        mDestImportDir->setAutoRemove(false);
-        if (mDestImportDir->status() != 0) {
-            const QString message = QString::fromLocal8Bit(::strerror(mDestImportDir->status()));
+        QString message;
+        mTempImportDir = FileUtils::createTempDir(url.toLocalFile(), ".gwenview_importer-", &message);
+        if (mTempImportDir.isEmpty()) {
             emitError(i18n("Could not create temporary upload folder:\n%1", message));
             return false;
         }
@@ -97,7 +96,7 @@ struct ImporterPrivate
             return;
         }
         mCurrentUrl = mUrlList.takeFirst();
-        KUrl dst = KUrl(mDestImportDir->name());
+        KUrl dst = mTempImportDir;
         dst.addPath(mCurrentUrl.fileName());
         KIO::Job* job = KIO::copy(mCurrentUrl, dst, KIO::HideProgressInfo);
         if (job->ui()) {
@@ -200,7 +199,10 @@ void Importer::slotCopyDone(KJob* _job)
 
 void Importer::finalizeImport()
 {
-    d->mDestImportDir->unlink();
+    KIO::Job* job = KIO::del(d->mTempImportDir, KIO::HideProgressInfo);
+    if (job->ui()) {
+        job->ui()->setWindow(d->mAuthWindow);
+    }
     importFinished();
 }
 

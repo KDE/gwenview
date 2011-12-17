@@ -21,6 +21,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #ifndef FILEUTILS_H
 #define FILEUTILS_H
 
+class QString;
 class QWidget;
 class KUrl;
 
@@ -46,6 +47,15 @@ bool contentsAreIdentical(const KUrl& url1, const KUrl& url2, QWidget* authWindo
  * Rename src to dst, returns RenameResult
  */
 RenameResult rename(const KUrl& src, const KUrl& dst, QWidget* authWindow = 0);
+
+/**
+ * Create a temp dir in baseDir, starting with prefix.  If successful returns
+ * the created dir otherwise returns an empty string and writes the error message
+ * in errorMessage.
+ *
+ * errorMessage must be a valid pointer.
+ */
+QString createTempDir(const QString& baseDir, const QString& prefix, QString* errorMessage);
 
 } // namespace
 } // namespace

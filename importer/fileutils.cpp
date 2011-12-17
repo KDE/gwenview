@@ -35,6 +35,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KIO/NetAccess>
 #include <KUrl>
 
+// libc
+#include <errno.h>
+#include <stdlib.h>
+#include <string.h>
+
 namespace Gwenview
 {
 namespace FileUtils
@@ -117,6 +122,20 @@ RenameResult rename(const KUrl& src, const KUrl& dst_, QWidget* authWindow)
         result = RenameFailed;
     }
     return result;
+}
+
+QString createTempDir(const QString& baseDir, const QString& prefix, QString* errorMessage)
+{
+    Q_ASSERT(errorMessage);
+
+    QByteArray name = QFile::encodeName(baseDir + "/" + prefix + "XXXXXX");
+
+    if (!mkdtemp(name.data())) {
+        // Failure
+        *errorMessage = QString::fromLocal8Bit(::strerror(errno));
+        return QString();
+    }
+    return QFile::decodeName(name + '/');
 }
 
 } // namespace
