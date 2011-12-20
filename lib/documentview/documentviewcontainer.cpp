@@ -280,7 +280,8 @@ void DocumentViewContainer::pretendFadeInFinished()
 void DocumentViewContainer::slotFadeInFinished(DocumentView* view)
 {
     if (!d->mAddedViews.contains(view)) {
-        kWarning() << view << "is not in mAddedViews. This should not happen!";
+        // This can happen if user goes to next image then quickly goes to the
+        // next one before the animation is finished.
         return;
     }
     d->mAddedViews.remove(view);
