@@ -34,6 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QEvent>
 #include <QGLWidget>
 #include <QGraphicsScene>
+#include <QPropertyAnimation>
 #include <QTimer>
 
 // libc
@@ -165,6 +166,21 @@ void DocumentViewContainer::updateLayout()
     bool animated = GwenviewConfig::animationMethod() != DocumentView::NoAnimation;
     bool crossFade = d->mAddedViews.count() == 1 && d->mRemovedViews.count() == 1;
 
+    if (animated && crossFade) {
+        DocumentView* oldView = *d->mRemovedViews.begin();
+        DocumentView* newView = *d->mAddedViews.begin();
+
+        newView->setGeometry(rect());
+        newView->setEraseBorders(true);
+        QPropertyAnimation* anim = newView->fadeIn();
+
+        oldView->setZValue(-1);
+        connect(anim, SIGNAL(finished()), oldView, SLOT(hideAndDeleteLater()));
+        d->mRemovedViews.clear();
+
+        return;
+    }
+
     if (!views.isEmpty()) {
         // Compute column count
         int colCount;
@@ -221,8 +237,6 @@ void DocumentViewContainer::updateLayout()
                     }
                 } else {
                     view->setGeometry(rect);
-                    view->setZValue(0.5);
-                    view->setEraseBorders(crossFade);
                     view->fadeIn();
                 }
             } else {
@@ -242,9 +256,7 @@ void DocumentViewContainer::updateLayout()
     // Handle removed views
     if (animated) {
         Q_FOREACH(DocumentView* view, d->mRemovedViews) {
-            if (!crossFade) {
-                view->fadeOut();
-            }
+            view->fadeOut();
             QTimer::singleShot(DocumentView::AnimDuration, view, SLOT(deleteLater()));
         }
     } else {
@@ -273,7 +285,6 @@ void DocumentViewContainer::slotFadeInFinished(DocumentView* view)
     }
     d->mAddedViews.remove(view);
     d->mViews.insert(view);
-    view->setZValue(0);
     view->setEraseBorders(false);
 }
 

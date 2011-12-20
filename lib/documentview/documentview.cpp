@@ -680,9 +680,10 @@ void DocumentView::moveToAnimated(const QRect& rect)
     d->mMoveAnimation = anim;
 }
 
-void DocumentView::fadeIn()
+QPropertyAnimation* DocumentView::fadeIn()
 {
     d->fadeTo(1);
+    return d->mFadeAnimation.data();
 }
 
 void DocumentView::fadeOut()
@@ -721,6 +722,12 @@ void DocumentView::setSortKey(int sortKey)
 void DocumentView::setEraseBorders(bool value)
 {
     d->mEraseBorders = value;
+}
+
+void DocumentView::hideAndDeleteLater()
+{
+    hide();
+    deleteLater();
 }
 
 } // namespace

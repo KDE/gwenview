@@ -32,6 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include <lib/document/document.h>
 
+class QPropertyAnimation;
 class KUrl;
 
 namespace Gwenview
@@ -114,7 +115,7 @@ public:
 
     void moveTo(const QRect&);
     void moveToAnimated(const QRect&);
-    void fadeIn();
+    QPropertyAnimation* fadeIn();
     void fadeOut();
     void fakeFadeOut();
 
@@ -135,6 +136,8 @@ public Q_SLOTS:
     void setZoomToFit(bool);
 
     void setPosition(const QPoint&);
+
+    void hideAndDeleteLater();
 
 Q_SIGNALS:
     /**
