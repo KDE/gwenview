@@ -55,10 +55,8 @@ class GWENVIEWLIB_EXPORT DocumentView : public QGraphicsWidget
     Q_PROPERTY(bool zoomToFit READ zoomToFit WRITE setZoomToFit NOTIFY zoomToFitChanged)
     Q_PROPERTY(QPoint position READ position WRITE setPosition NOTIFY positionChanged)
 public:
-    enum {
-        MaximumZoom = 16,
-        AnimDuration = 500
-    };
+    static const int MaximumZoom;
+    static const int AnimDuration;
 
     enum AnimationMethod {
         NoAnimation,

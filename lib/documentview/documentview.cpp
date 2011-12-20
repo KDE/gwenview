@@ -76,6 +76,9 @@ static const qreal MAXIMUM_ZOOM_VALUE = qreal(DocumentView::MaximumZoom);
 
 static const int COMPARE_MARGIN = 4;
 
+const int DocumentView::MaximumZoom = 16;
+const int DocumentView::AnimDuration = 500;
+
 struct DocumentViewPrivate
 {
     DocumentView* q;
