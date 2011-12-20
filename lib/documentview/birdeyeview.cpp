@@ -126,7 +126,8 @@ inline void drawTransparentRect(QPainter* painter, const QRectF& rect, const QCo
 
 void BirdEyeView::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
 {
-    drawTransparentRect(painter, boundingRect(), Qt::black);
+    static const QColor bgColor = QColor::fromHsvF(0, 0, .33);
+    drawTransparentRect(painter, boundingRect(), bgColor);
     drawTransparentRect(painter, d->mVisibleRect, Qt::white);
 }
 
