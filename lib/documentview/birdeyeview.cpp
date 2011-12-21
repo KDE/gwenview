@@ -77,7 +77,7 @@ BirdEyeView::~BirdEyeView()
 
 void BirdEyeView::adjustGeometry()
 {
-    if (d->mDocView->zoomToFit()) {
+    if (!d->mDocView->canZoom() || d->mDocView->zoomToFit()) {
         hide();
         return;
     }
