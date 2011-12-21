@@ -27,13 +27,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <Phonon/Path>
 #include <Phonon/SeekSlider>
 #include <Phonon/VideoWidget>
-#include <Phonon/VolumeSlider>
 #include <QGraphicsProxyWidget>
 #include <QHBoxLayout>
 #include <QMouseEvent>
+#include <QSlider>
+#include <QTime>
 #include <QToolButton>
 
 // KDE
+#include <KDebug>
 #include <KIcon>
 #include <KUrl>
 
@@ -55,6 +57,9 @@ struct VideoViewAdapterPrivate
     WidgetFloater* mFloater;
     QToolButton* mPlayPauseButton;
     QToolButton* mMuteButton;
+
+    QSlider* mVolumeSlider;
+    QTime mLastVolumeSliderChangeTime;
 
     Document::Ptr mDocument;
 
@@ -85,15 +90,22 @@ struct VideoViewAdapterPrivate
         QObject::connect(mAudioOutput, SIGNAL(mutedChanged(bool)),
             q, SLOT(updateMuteButton()));
 
-        Phonon::VolumeSlider* volumeSlider = new Phonon::VolumeSlider;
-        volumeSlider->setMuteVisible(false);
-        volumeSlider->setAudioOutput(mAudioOutput);
-        volumeSlider->setMinimumWidth(100);
+        mVolumeSlider = new QSlider;
+        mVolumeSlider->setOrientation(Qt::Horizontal);
+        mVolumeSlider->setTracking(true);
+        mVolumeSlider->setMinimumWidth(100);
+        mVolumeSlider->setRange(0, 100);
+        mVolumeSlider->setPageStep(5);
+        mVolumeSlider->setSingleStep(1);
+        QObject::connect(mVolumeSlider, SIGNAL(valueChanged(int)),
+            q, SLOT(slotVolumeSliderChanged(int)));
+        QObject::connect(mAudioOutput, SIGNAL(volumeChanged(qreal)),
+            q, SLOT(slotOutputVolumeChanged(qreal)));
 
         layout->addWidget(mPlayPauseButton);
         layout->addWidget(seekSlider, 5 /* stretch */);
         layout->addWidget(mMuteButton);
-        layout->addWidget(volumeSlider, 1 /* stretch */);
+        layout->addWidget(mVolumeSlider, 1 /* stretch */);
         widget->adjustSize();
 
         // Create hud
@@ -209,6 +221,20 @@ void VideoViewAdapter::updateMuteButton()
     d->mMuteButton->setIcon(
         KIcon(d->mAudioOutput->isMuted() ? "player-volume-muted" : "player-volume")
         );
+}
+
+void VideoViewAdapter::slotVolumeSliderChanged(int value)
+{
+    d->mLastVolumeSliderChangeTime.restart();
+    d->mAudioOutput->setVolume(value / 100.);
+}
+
+void VideoViewAdapter::slotOutputVolumeChanged(qreal value)
+{
+    if (d->mLastVolumeSliderChangeTime.isValid() && d->mLastVolumeSliderChangeTime.elapsed() < 2000) {
+        return;
+    }
+    d->mVolumeSlider->setValue(qRound(value * 100));
 }
 
 } // namespace

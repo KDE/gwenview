@@ -61,6 +61,8 @@ private Q_SLOTS:
     void updatePlayPauseButton();
     void slotMuteClicked();
     void updateMuteButton();
+    void slotVolumeSliderChanged(int);
+    void slotOutputVolumeChanged(qreal);
 
 private:
     friend struct VideoViewAdapterPrivate;
