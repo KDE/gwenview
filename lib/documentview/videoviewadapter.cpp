@@ -54,6 +54,7 @@ struct VideoViewAdapterPrivate
     HudWidget* mHud;
     WidgetFloater* mFloater;
     QToolButton* mPlayPauseButton;
+    QToolButton* mMuteButton;
 
     Document::Ptr mDocument;
 
@@ -76,12 +77,22 @@ struct VideoViewAdapterPrivate
         seekSlider->setIconVisible(false);
         seekSlider->setMediaObject(mMediaObject);
 
+        mMuteButton = new QToolButton;
+        mMuteButton->setAutoRaise(true);
+        q->updateMuteButton();
+        QObject::connect(mMuteButton, SIGNAL(clicked()),
+            q, SLOT(slotMuteClicked()));
+        QObject::connect(mAudioOutput, SIGNAL(mutedChanged(bool)),
+            q, SLOT(updateMuteButton()));
+
         Phonon::VolumeSlider* volumeSlider = new Phonon::VolumeSlider;
+        volumeSlider->setMuteVisible(false);
         volumeSlider->setAudioOutput(mAudioOutput);
         volumeSlider->setMinimumWidth(100);
 
         layout->addWidget(mPlayPauseButton);
         layout->addWidget(seekSlider, 5 /* stretch */);
+        layout->addWidget(mMuteButton);
         layout->addWidget(volumeSlider, 1 /* stretch */);
         widget->adjustSize();
 
@@ -171,6 +182,11 @@ void VideoViewAdapter::slotPlayPauseClicked()
     }
 }
 
+void VideoViewAdapter::slotMuteClicked()
+{
+    d->mAudioOutput->setMuted(!d->mAudioOutput->isMuted());
+}
+
 bool VideoViewAdapter::eventFilter(QObject*, QEvent* event)
 {
     if (event->type() == QEvent::MouseMove) {
@@ -186,6 +202,13 @@ void VideoViewAdapter::updatePlayPauseButton()
     } else {
         d->mPlayPauseButton->setIcon(KIcon("media-playback-start"));
     }
+}
+
+void VideoViewAdapter::updateMuteButton()
+{
+    d->mMuteButton->setIcon(
+        KIcon(d->mAudioOutput->isMuted() ? "player-volume-muted" : "player-volume")
+        );
 }
 
 } // namespace

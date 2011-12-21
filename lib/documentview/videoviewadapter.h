@@ -59,6 +59,8 @@ protected:
 private Q_SLOTS:
     void slotPlayPauseClicked();
     void updatePlayPauseButton();
+    void slotMuteClicked();
+    void updateMuteButton();
 
 private:
     friend struct VideoViewAdapterPrivate;
