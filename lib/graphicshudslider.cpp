@@ -148,7 +148,7 @@ void GraphicsHudSlider::paint(QPainter* painter, const QStyleOptionGraphicsItem*
 
 void GraphicsHudSlider::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
-    if (boundingRect().contains(event->pos())) {
+    if (d->mHandleRect.contains(event->pos())) {
         switch (event->button()) {
         case Qt::LeftButton:
             d->mIsDown = true;
@@ -159,6 +159,16 @@ void GraphicsHudSlider::mousePressEvent(QGraphicsSceneMouseEvent* event)
             break;
         default:
             break;
+        }
+    } else {
+        const int pos = d->positionForX(event->pos().x());
+        if (qAbs(pos - d->mSliderPosition) < d->mPageStep) {
+            setSliderPosition(d->positionForX(event->pos().x()));
+            triggerAction(QAbstractSlider::SliderMove);
+        } else {
+            triggerAction(
+                pos < d->mSliderPosition ? QAbstractSlider::SliderPageStepSub : QAbstractSlider::SliderPageStepAdd
+                );
         }
     }
     update();
