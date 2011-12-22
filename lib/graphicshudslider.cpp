@@ -150,7 +150,18 @@ void GraphicsHudSlider::paint(QPainter* painter, const QStyleOptionGraphicsItem*
 void GraphicsHudSlider::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
     if (boundingRect().contains(event->pos())) {
-        d->mIsDown = true;
+        switch (event->button()) {
+        case Qt::LeftButton:
+            d->mIsDown = true;
+            break;
+        case Qt::MiddleButton:
+            setSliderPosition(d->positionForX(event->pos().x()));
+            actionTriggered(QAbstractSlider::SliderMove);
+            setValue(d->mSliderPosition);
+            break;
+        default:
+            break;
+        }
     }
     update();
 }
