@@ -41,6 +41,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include <document/documentfactory.h>
+#include <graphicshudbutton.h>
 #include <graphicshudwidget.h>
 #include <graphicswidgetfloater.h>
 
@@ -66,8 +67,8 @@ struct VideoViewAdapterPrivate
     QSlider* mSeekSlider;
     QTime mLastSeekSliderActionTime;
 
-    QToolButton* mPlayPauseButton;
-    QToolButton* mMuteButton;
+    GraphicsHudButton* mPlayPauseButton;
+    GraphicsHudButton* mMuteButton;
 
     QSlider* mVolumeSlider;
     QTime mLastVolumeSliderChangeTime;
@@ -77,8 +78,7 @@ struct VideoViewAdapterPrivate
     void setupHud(QGraphicsWidget* parent)
     {
         // Create hud content
-        mPlayPauseButton = new QToolButton;
-        mPlayPauseButton->setAutoRaise(true);
+        mPlayPauseButton = new GraphicsHudButton;
         QObject::connect(mPlayPauseButton, SIGNAL(clicked()),
                          q, SLOT(slotPlayPauseClicked()));
         QObject::connect(mMediaObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
@@ -98,8 +98,7 @@ struct VideoViewAdapterPrivate
         QObject::connect(mMediaObject, SIGNAL(seekableChanged(bool)),
             q, SLOT(updatePlayUi()));
 
-        mMuteButton = new QToolButton;
-        mMuteButton->setAutoRaise(true);
+        mMuteButton = new GraphicsHudButton;
         q->updateMuteButton();
         QObject::connect(mMuteButton, SIGNAL(clicked()),
             q, SLOT(slotMuteClicked()));
@@ -120,11 +119,11 @@ struct VideoViewAdapterPrivate
 
         QGraphicsWidget* hudContent = new QGraphicsWidget;
         QGraphicsLinearLayout* layout = new QGraphicsLinearLayout(hudContent);
-        layout->addItem(proxyFor(mPlayPauseButton));
+        layout->addItem(mPlayPauseButton);
         QGraphicsWidget* seekSliderProxy = proxyFor(mSeekSlider);
         layout->addItem(seekSliderProxy);
         layout->setStretchFactor(seekSliderProxy, 5);
-        layout->addItem(proxyFor(mMuteButton));
+        layout->addItem(mMuteButton);
         QGraphicsWidget* volumeSliderProxy = proxyFor(mVolumeSlider);
         layout->addItem(volumeSliderProxy);
         layout->setStretchFactor(volumeSliderProxy, 1);
