@@ -33,7 +33,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QApplication>
 #include <QGraphicsSceneEvent>
 #include <QPainter>
-#include <QAbstractSlider>
 #include <QStyle>
 #include <QStyleOptionGraphicsItem>
 
@@ -156,8 +155,7 @@ void GraphicsHudSlider::mousePressEvent(QGraphicsSceneMouseEvent* event)
             break;
         case Qt::MiddleButton:
             setSliderPosition(d->positionForX(event->pos().x()));
-            actionTriggered(QAbstractSlider::SliderMove);
-            setValue(d->mSliderPosition);
+            triggerAction(QAbstractSlider::SliderMove);
             break;
         default:
             break;
@@ -170,8 +168,7 @@ void GraphicsHudSlider::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 {
     if (d->mIsDown) {
         setSliderPosition(d->positionForX(event->pos().x()));
-        actionTriggered(QAbstractSlider::SliderMove);
-        setValue(d->mSliderPosition);
+        triggerAction(QAbstractSlider::SliderMove);
         update();
     }
 }
@@ -238,6 +235,35 @@ void GraphicsHudSlider::setSliderPosition(int pos)
 bool GraphicsHudSlider::isSliderDown() const
 {
     return d->mIsDown;
+}
+
+void GraphicsHudSlider::triggerAction(QAbstractSlider::SliderAction action)
+{
+    switch (action) {
+    case QAbstractSlider::SliderSingleStepAdd:
+        setSliderPosition(d->mValue + d->mSingleStep);
+        break;
+    case QAbstractSlider::SliderSingleStepSub:
+        setSliderPosition(d->mValue - d->mSingleStep);
+        break;
+    case QAbstractSlider::SliderPageStepAdd:
+        setSliderPosition(d->mValue + d->mPageStep);
+        break;
+    case QAbstractSlider::SliderPageStepSub:
+        setSliderPosition(d->mValue - d->mPageStep);
+        break;
+    case QAbstractSlider::SliderToMinimum:
+        setSliderPosition(d->mMin);
+        break;
+    case QAbstractSlider::SliderToMaximum:
+        setSliderPosition(d->mMax);
+        break;
+    case QAbstractSlider::SliderMove:
+    case QAbstractSlider::SliderNoAction:
+        break;
+    };
+    actionTriggered(action);
+    setValue(d->mSliderPosition);
 }
 
 } // namespace

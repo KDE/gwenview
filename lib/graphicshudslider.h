@@ -26,9 +26,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KDE
 
 // Qt
+#include <QAbstractSlider>
 #include <QGraphicsWidget>
-
-class QIcon;
 
 namespace Gwenview
 {
@@ -56,6 +55,8 @@ public:
     bool isSliderDown() const;
 
     void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*);
+
+    void triggerAction(QAbstractSlider::SliderAction);
 
 Q_SIGNALS:
     void valueChanged(int);
