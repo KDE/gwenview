@@ -58,11 +58,13 @@ protected:
 
 private Q_SLOTS:
     void slotPlayPauseClicked();
-    void updatePlayPauseButton();
+    void updatePlayUi();
     void slotMuteClicked();
     void updateMuteButton();
     void slotVolumeSliderChanged(int);
     void slotOutputVolumeChanged(qreal);
+    void slotSeekSliderActionTriggered(int);
+    void slotTicked(qint64);
 
 private:
     friend struct VideoViewAdapterPrivate;

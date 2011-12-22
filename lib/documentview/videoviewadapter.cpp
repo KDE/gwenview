@@ -25,7 +25,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <Phonon/AudioOutput>
 #include <Phonon/MediaObject>
 #include <Phonon/Path>
-#include <Phonon/SeekSlider>
 #include <Phonon/VideoWidget>
 #include <QGraphicsProxyWidget>
 #include <QHBoxLayout>
@@ -55,6 +54,10 @@ struct VideoViewAdapterPrivate
     Phonon::AudioOutput* mAudioOutput;
     HudWidget* mHud;
     WidgetFloater* mFloater;
+
+    QSlider* mSeekSlider;
+    QTime mLastSeekSliderActionTime;
+
     QToolButton* mPlayPauseButton;
     QToolButton* mMuteButton;
 
@@ -71,16 +74,24 @@ struct VideoViewAdapterPrivate
 
         mPlayPauseButton = new QToolButton;
         mPlayPauseButton->setAutoRaise(true);
-        q->updatePlayPauseButton();
         QObject::connect(mPlayPauseButton, SIGNAL(clicked()),
                          q, SLOT(slotPlayPauseClicked()));
         QObject::connect(mMediaObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
-                         q, SLOT(updatePlayPauseButton()));
+                         q, SLOT(updatePlayUi()));
 
-        Phonon::SeekSlider* seekSlider = new Phonon::SeekSlider;
-        seekSlider->setTracking(false);
-        seekSlider->setIconVisible(false);
-        seekSlider->setMediaObject(mMediaObject);
+        mSeekSlider = new QSlider;
+        mSeekSlider->setOrientation(Qt::Horizontal);
+        mSeekSlider->setTracking(true);
+        mSeekSlider->setPageStep(5000);
+        mSeekSlider->setSingleStep(200);
+        QObject::connect(mSeekSlider, SIGNAL(actionTriggered(int)),
+            q, SLOT(slotSeekSliderActionTriggered(int)));
+        QObject::connect(mMediaObject, SIGNAL(tick(qint64)),
+            q, SLOT(slotTicked(qint64)));
+        QObject::connect(mMediaObject, SIGNAL(totalTimeChanged(qint64)),
+            q, SLOT(updatePlayUi()));
+        QObject::connect(mMediaObject, SIGNAL(seekableChanged(bool)),
+            q, SLOT(updatePlayUi()));
 
         mMuteButton = new QToolButton;
         mMuteButton->setAutoRaise(true);
@@ -103,10 +114,12 @@ struct VideoViewAdapterPrivate
             q, SLOT(slotOutputVolumeChanged(qreal)));
 
         layout->addWidget(mPlayPauseButton);
-        layout->addWidget(seekSlider, 5 /* stretch */);
+        layout->addWidget(mSeekSlider, 5 /* stretch */);
         layout->addWidget(mMuteButton);
         layout->addWidget(mVolumeSlider, 1 /* stretch */);
         widget->adjustSize();
+
+        q->updatePlayUi();
 
         // Create hud
         mHud = new HudWidget;
@@ -148,6 +161,7 @@ VideoViewAdapter::VideoViewAdapter()
 {
     d->q = this;
     d->mMediaObject = new Phonon::MediaObject(this);
+    d->mMediaObject->setTickInterval(350);
     connect(d->mMediaObject, SIGNAL(finished()), SIGNAL(videoFinished()));
 
     d->mVideoWidget = new Phonon::VideoWidget;
@@ -207,12 +221,29 @@ bool VideoViewAdapter::eventFilter(QObject*, QEvent* event)
     return false;
 }
 
-void VideoViewAdapter::updatePlayPauseButton()
+void VideoViewAdapter::updatePlayUi()
 {
     if (d->isPlaying()) {
         d->mPlayPauseButton->setIcon(KIcon("media-playback-pause"));
     } else {
         d->mPlayPauseButton->setIcon(KIcon("media-playback-start"));
+    }
+
+    d->mLastSeekSliderActionTime.restart();
+    d->mSeekSlider->setRange(0, d->mMediaObject->totalTime());
+
+    switch (d->mMediaObject->state()) {
+    case Phonon::PlayingState:
+    case Phonon::BufferingState:
+    case Phonon::PausedState:
+        d->mSeekSlider->setEnabled(true);
+        break;
+    case Phonon::StoppedState:
+    case Phonon::LoadingState:
+    case Phonon::ErrorState:
+        d->mSeekSlider->setEnabled(false);
+        d->mSeekSlider->setValue(0);
+        break;
     }
 }
 
@@ -235,6 +266,22 @@ void VideoViewAdapter::slotOutputVolumeChanged(qreal value)
         return;
     }
     d->mVolumeSlider->setValue(qRound(value * 100));
+}
+
+void VideoViewAdapter::slotSeekSliderActionTriggered(int /*action*/)
+{
+    d->mLastSeekSliderActionTime.restart();
+    d->mMediaObject->seek(d->mSeekSlider->sliderPosition());
+}
+
+void VideoViewAdapter::slotTicked(qint64 value)
+{
+    if (d->mLastSeekSliderActionTime.isValid() && d->mLastSeekSliderActionTime.elapsed() < 2000) {
+        return;
+    }
+    if (!d->mSeekSlider->isSliderDown()) {
+        d->mSeekSlider->setValue(value);
+    }
 }
 
 } // namespace
