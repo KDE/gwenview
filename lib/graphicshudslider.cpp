@@ -177,11 +177,6 @@ void GraphicsHudSlider::mouseReleaseEvent(QGraphicsSceneMouseEvent* /*event*/)
 {
     d->mIsDown = false;
     update();
-    /*
-    if (boundingRect().contains(event->pos())) {
-        clicked();
-    }
-    */
 }
 
 void GraphicsHudSlider::setRange(int min, int max)
