@@ -33,6 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QApplication>
 #include <QGraphicsSceneEvent>
 #include <QPainter>
+#include <QAbstractSlider>
 #include <QStyle>
 #include <QStyleOptionGraphicsItem>
 
@@ -51,15 +52,40 @@ struct GraphicsHudSliderPrivate
 
     void updateHandleRect()
     {
+        static const FullScreenTheme::RenderInfo renderInfo = FullScreenTheme::renderInfo(FullScreenTheme::SliderWidgetHandle);
+        static const int radius = renderInfo.borderRadius;
+
         const QRectF sliderRect = q->boundingRect();
-        FullScreenTheme::RenderInfo renderInfo = FullScreenTheme::renderInfo(FullScreenTheme::SliderWidgetHandle);
-        const int radius = renderInfo.borderRadius;
-        qreal posX = (qreal(mSliderPosition - mMin) / (mMax - mMin)) * (sliderRect.width() - 2 * radius);
-        if (QApplication::isRightToLeft()) {
-            posX = sliderRect.width() - 2 * radius - posX;
-        }
+        const qreal posX = xForPosition(mSliderPosition) - radius;
         const qreal posY = sliderRect.height() / 2 - radius;
         mHandleRect = QRectF(posX, posY, radius * 2, radius * 2);
+    }
+
+    int positionForX(qreal x) const
+    {
+        static const FullScreenTheme::RenderInfo renderInfo = FullScreenTheme::renderInfo(FullScreenTheme::SliderWidgetHandle);
+        static const int radius = renderInfo.borderRadius;
+
+        const qreal sliderWidth = q->boundingRect().width();
+
+        x -= radius;
+        if (QApplication::isRightToLeft()) {
+            x = sliderWidth - 2 * radius - x;
+        }
+        return mMin + int(x / (sliderWidth - 2 * radius) * (mMax - mMin));
+    }
+
+    qreal xForPosition(int pos) const
+    {
+        static const FullScreenTheme::RenderInfo renderInfo = FullScreenTheme::renderInfo(FullScreenTheme::SliderWidgetHandle);
+        static const int radius = renderInfo.borderRadius;
+
+        const qreal sliderWidth = q->boundingRect().width();
+        qreal x = (qreal(pos - mMin) / (mMax - mMin)) * (sliderWidth - 2 * radius);
+        if (QApplication::isRightToLeft()) {
+            x = sliderWidth - 2 * radius - x;
+        }
+        return x + radius;
     }
 };
 
@@ -121,10 +147,22 @@ void GraphicsHudSlider::paint(QPainter* painter, const QStyleOptionGraphicsItem*
     painter->drawRoundedRect(d->mHandleRect.adjusted(.5, .5, -.5, -.5), renderInfo.borderRadius, renderInfo.borderRadius);
 }
 
-void GraphicsHudSlider::mousePressEvent(QGraphicsSceneMouseEvent*)
+void GraphicsHudSlider::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
-    d->mIsDown = true;
+    if (boundingRect().contains(event->pos())) {
+        d->mIsDown = true;
+    }
     update();
+}
+
+void GraphicsHudSlider::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
+{
+    if (d->mIsDown) {
+        setSliderPosition(d->positionForX(event->pos().x()));
+        actionTriggered(QAbstractSlider::SliderMove);
+        setValue(d->mSliderPosition);
+        update();
+    }
 }
 
 void GraphicsHudSlider::mouseReleaseEvent(QGraphicsSceneMouseEvent* /*event*/)
@@ -167,6 +205,7 @@ void GraphicsHudSlider::setValue(int value)
         d->mValue = value;
         setSliderPosition(value);
         update();
+        valueChanged(d->mValue);
     }
 }
 
