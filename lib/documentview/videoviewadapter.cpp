@@ -26,6 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <Phonon/MediaObject>
 #include <Phonon/Path>
 #include <Phonon/VideoWidget>
+#include <QGraphicsLinearLayout>
 #include <QGraphicsProxyWidget>
 #include <QHBoxLayout>
 #include <QMouseEvent>
@@ -39,12 +40,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KUrl>
 
 // Local
-#include "document/documentfactory.h"
-#include "hudwidget.h"
-#include "widgetfloater.h"
+#include <document/documentfactory.h>
+#include <graphicshudwidget.h>
+#include <graphicswidgetfloater.h>
 
 namespace Gwenview
 {
+
+static QGraphicsProxyWidget* proxyFor(QWidget* widget)
+{
+    QGraphicsProxyWidget* proxy = new QGraphicsProxyWidget;
+    proxy->setWidget(widget);
+    return proxy;
+}
 
 struct VideoViewAdapterPrivate
 {
@@ -52,8 +60,8 @@ struct VideoViewAdapterPrivate
     Phonon::MediaObject* mMediaObject;
     Phonon::VideoWidget* mVideoWidget;
     Phonon::AudioOutput* mAudioOutput;
-    HudWidget* mHud;
-    WidgetFloater* mFloater;
+    GraphicsHudWidget* mHud;
+    GraphicsWidgetFloater* mFloater;
 
     QSlider* mSeekSlider;
     QTime mLastSeekSliderActionTime;
@@ -66,12 +74,9 @@ struct VideoViewAdapterPrivate
 
     Document::Ptr mDocument;
 
-    void setupHud(QWidget* parent)
+    void setupHud(QGraphicsWidget* parent)
     {
         // Create hud content
-        QWidget* widget = new QWidget;
-        QHBoxLayout* layout = new QHBoxLayout(widget);
-
         mPlayPauseButton = new QToolButton;
         mPlayPauseButton->setAutoRaise(true);
         QObject::connect(mPlayPauseButton, SIGNAL(clicked()),
@@ -113,21 +118,26 @@ struct VideoViewAdapterPrivate
         QObject::connect(mAudioOutput, SIGNAL(volumeChanged(qreal)),
             q, SLOT(slotOutputVolumeChanged(qreal)));
 
-        layout->addWidget(mPlayPauseButton);
-        layout->addWidget(mSeekSlider, 5 /* stretch */);
-        layout->addWidget(mMuteButton);
-        layout->addWidget(mVolumeSlider, 1 /* stretch */);
-        widget->adjustSize();
+        QGraphicsWidget* hudContent = new QGraphicsWidget;
+        QGraphicsLinearLayout* layout = new QGraphicsLinearLayout(hudContent);
+        layout->addItem(proxyFor(mPlayPauseButton));
+        QGraphicsWidget* seekSliderProxy = proxyFor(mSeekSlider);
+        layout->addItem(seekSliderProxy);
+        layout->setStretchFactor(seekSliderProxy, 5);
+        layout->addItem(proxyFor(mMuteButton));
+        QGraphicsWidget* volumeSliderProxy = proxyFor(mVolumeSlider);
+        layout->addItem(volumeSliderProxy);
+        layout->setStretchFactor(volumeSliderProxy, 1);
 
         q->updatePlayUi();
 
         // Create hud
-        mHud = new HudWidget;
-        mHud->setAutoFillBackground(true);
-        mHud->init(widget, HudWidget::OptionDoNotFollowChildSize | HudWidget::OptionOpaque);
+        mHud = new GraphicsHudWidget(parent);
+        mHud->init(hudContent, GraphicsHudWidget::OptionNone);
+        mHud->setZValue(1);
 
         // Init floater
-        mFloater = new WidgetFloater(parent);
+        mFloater = new GraphicsWidgetFloater(parent);
         mFloater->setChildWidget(mHud);
         mFloater->setAlignment(Qt::AlignJustify | Qt::AlignBottom);
 
@@ -147,7 +157,7 @@ struct VideoViewAdapterPrivate
 
     void updateHudVisibility(int yPos)
     {
-        const int floaterY = mVideoWidget->height() - mFloater->verticalMargin() - mHud->sizeHint().height() * 3 / 2;
+        const int floaterY = mVideoWidget->height() - mFloater->verticalMargin() - mHud->effectiveSizeHint(Qt::MinimumSize).height() * 3 / 2;
         if (mHud->isVisible() && yPos < floaterY) {
             mHud->hide();
         } else if (!mHud->isVisible() && yPos >= floaterY) {
@@ -173,11 +183,11 @@ VideoViewAdapter::VideoViewAdapter()
     d->mAudioOutput = new Phonon::AudioOutput(Phonon::VideoCategory, this);
     Phonon::createPath(d->mMediaObject, d->mAudioOutput);
 
-    d->setupHud(d->mVideoWidget);
-
     QGraphicsProxyWidget* proxy = new QGraphicsProxyWidget;
     proxy->setWidget(d->mVideoWidget);
     setWidget(proxy);
+
+    d->setupHud(proxy);
 }
 
 VideoViewAdapter::~VideoViewAdapter()
