@@ -62,7 +62,9 @@ public:
     {
         ButtonWidget,
         FrameWidget,
-        CountDownWidget
+        CountDownWidget,
+        SliderWidgetHandle,
+        SliderWidgetGroove
     };
 
     FullScreenTheme(const QString& themeName);

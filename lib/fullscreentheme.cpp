@@ -176,6 +176,38 @@ FullScreenTheme::RenderInfo FullScreenTheme::renderInfo(FullScreenTheme::WidgetT
         countDownWidget.bgBrush = QColor::fromHsvF(0, 0, .5);
         countDownWidget.borderPen = QPen(QColor::fromHsvF(0, 0, .8));
         renderInfoMap[CountDownWidget].infos[NormalState] = countDownWidget;
+
+        // SliderWidgetHandle
+        RenderInfo sliderWidgetHandle = button;
+        sliderWidgetHandle.borderPen = QPen(QColor("#666"));
+        sliderWidgetHandle.borderRadius = 7;
+        renderInfoMap[SliderWidgetHandle].infos[NormalState] = sliderWidgetHandle;
+
+        // SliderWidgetHandle, over
+        sliderWidgetHandle = overButton;
+        sliderWidgetHandle.borderPen = QPen(QColor("#ccc"));
+        sliderWidgetHandle.borderRadius = 7;
+        renderInfoMap[SliderWidgetHandle].infos[MouseOverState] = sliderWidgetHandle;
+
+        // SliderWidgetHandle, down
+        sliderWidgetHandle = downButton;
+        sliderWidgetHandle.borderRadius = 7;
+        renderInfoMap[SliderWidgetHandle].infos[DownState] = sliderWidgetHandle;
+
+        // SliderWidgetGroove
+        RenderInfo sliderWidgetGroove = button;
+        sliderWidgetGroove.borderPen = QPen(QColor("#666"));
+        gradient = createGradient();
+        gradient.setColorAt(0, Qt::black);
+        gradient.setColorAt(1, QColor("#444"));
+        sliderWidgetGroove.bgBrush = gradient;
+        sliderWidgetGroove.borderRadius = 3;
+        renderInfoMap[SliderWidgetGroove].infos[NormalState] = sliderWidgetGroove;
+
+        // SliderWidgetGroove, over
+        RenderInfo overSliderWidgetGroove = sliderWidgetGroove;
+        overSliderWidgetGroove.borderPen = QPen(QColor("#ccc"));
+        renderInfoMap[SliderWidgetGroove].infos[MouseOverState] = overSliderWidgetGroove;
     }
     RenderInfo normalInfo = renderInfoMap[widget].infos.value(NormalState);
     if (state == NormalState) {

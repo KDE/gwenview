@@ -30,9 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QGraphicsProxyWidget>
 #include <QHBoxLayout>
 #include <QMouseEvent>
-#include <QSlider>
 #include <QTime>
-#include <QToolButton>
 
 // KDE
 #include <KDebug>
@@ -42,18 +40,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include <document/documentfactory.h>
 #include <graphicshudbutton.h>
+#include <graphicshudslider.h>
 #include <graphicshudwidget.h>
 #include <graphicswidgetfloater.h>
 
 namespace Gwenview
 {
-
-static QGraphicsProxyWidget* proxyFor(QWidget* widget)
-{
-    QGraphicsProxyWidget* proxy = new QGraphicsProxyWidget;
-    proxy->setWidget(widget);
-    return proxy;
-}
 
 struct VideoViewAdapterPrivate
 {
@@ -64,13 +56,13 @@ struct VideoViewAdapterPrivate
     GraphicsHudWidget* mHud;
     GraphicsWidgetFloater* mFloater;
 
-    QSlider* mSeekSlider;
+    GraphicsHudSlider* mSeekSlider;
     QTime mLastSeekSliderActionTime;
 
     GraphicsHudButton* mPlayPauseButton;
     GraphicsHudButton* mMuteButton;
 
-    QSlider* mVolumeSlider;
+    GraphicsHudSlider* mVolumeSlider;
     QTime mLastVolumeSliderChangeTime;
 
     Document::Ptr mDocument;
@@ -84,9 +76,7 @@ struct VideoViewAdapterPrivate
         QObject::connect(mMediaObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
                          q, SLOT(updatePlayUi()));
 
-        mSeekSlider = new QSlider;
-        mSeekSlider->setOrientation(Qt::Horizontal);
-        mSeekSlider->setTracking(true);
+        mSeekSlider = new GraphicsHudSlider;
         mSeekSlider->setPageStep(5000);
         mSeekSlider->setSingleStep(200);
         QObject::connect(mSeekSlider, SIGNAL(actionTriggered(int)),
@@ -105,9 +95,7 @@ struct VideoViewAdapterPrivate
         QObject::connect(mAudioOutput, SIGNAL(mutedChanged(bool)),
             q, SLOT(updateMuteButton()));
 
-        mVolumeSlider = new QSlider;
-        mVolumeSlider->setOrientation(Qt::Horizontal);
-        mVolumeSlider->setTracking(true);
+        mVolumeSlider = new GraphicsHudSlider;
         mVolumeSlider->setMinimumWidth(100);
         mVolumeSlider->setRange(0, 100);
         mVolumeSlider->setPageStep(5);
@@ -120,13 +108,11 @@ struct VideoViewAdapterPrivate
         QGraphicsWidget* hudContent = new QGraphicsWidget;
         QGraphicsLinearLayout* layout = new QGraphicsLinearLayout(hudContent);
         layout->addItem(mPlayPauseButton);
-        QGraphicsWidget* seekSliderProxy = proxyFor(mSeekSlider);
-        layout->addItem(seekSliderProxy);
-        layout->setStretchFactor(seekSliderProxy, 5);
+        layout->addItem(mSeekSlider);
+        layout->setStretchFactor(mSeekSlider, 5);
         layout->addItem(mMuteButton);
-        QGraphicsWidget* volumeSliderProxy = proxyFor(mVolumeSlider);
-        layout->addItem(volumeSliderProxy);
-        layout->setStretchFactor(volumeSliderProxy, 1);
+        layout->addItem(mVolumeSlider);
+        layout->setStretchFactor(mVolumeSlider, 1);
 
         q->updatePlayUi();
 
