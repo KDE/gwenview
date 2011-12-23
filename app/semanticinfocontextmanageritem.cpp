@@ -23,6 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QEvent>
+#include <QPainter>
 #include <QShortcut>
 #include <QSignalMapper>
 #include <QStyle>
@@ -37,7 +38,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KLocale>
 
 // Nepomuk
-#include <nepomuk/kratingwidget.h>
+#include <Nepomuk/KRatingPainter>
 
 // Local
 #include "contextmanager.h"
@@ -47,7 +48,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "ui_semanticinfodialog.h"
 #include <lib/documentview/documentview.h>
 #include <lib/eventwatcher.h>
-#include <lib/hudwidget.h>
+#include <lib/graphicshudwidget.h>
 #include <lib/signalblocker.h>
 #include <lib/widgetfloater.h>
 #include <lib/semanticinfo/abstractsemanticinfobackend.h>
@@ -87,43 +88,63 @@ struct SemanticInfoDialog : public KDialog, public Ui_SemanticInfoDialog
     }
 };
 
-class RatingIndicator : public HudWidget
+/**
+ * A QGraphicsPixmapItem-like class, but which inherits from QGraphicsWidget
+ */
+class GraphicsPixmapWidget : public QGraphicsWidget
 {
 public:
-    RatingIndicator(QWidget* parent)
-    : HudWidget(parent)
-    , mRatingWidget(new KRatingWidget)
+    void setPixmap(const QPixmap& pix)
+    {
+        mPix = pix;
+        setMinimumSize(pix.size());
+    }
+
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
+    {
+        painter->drawPixmap(
+            (size().width() - mPix.width()) / 2,
+            (size().height() - mPix.height()) / 2,
+            mPix);
+    }
+
+private:
+    QPixmap mPix;
+};
+
+class RatingIndicator : public GraphicsHudWidget
+{
+public:
+    RatingIndicator()
+    : GraphicsHudWidget()
+    , mPixmapWidget(new GraphicsPixmapWidget)
     , mHideTimer(new QTimer(this))
     {
-        init(mRatingWidget, OptionNone);
-        WidgetFloater* floater = new WidgetFloater(parent);
-        floater->setAlignment(Qt::AlignHCenter | Qt::AlignBottom);
-        floater->setVerticalMargin(
-            KDialog::marginHint()
-            + parent->style()->pixelMetric(QStyle::PM_ScrollBarExtent)
-        );
-        floater->setChildWidget(this);
+        setRating(0);
+        init(mPixmapWidget, OptionNone);
 
         mHideTimer->setInterval(RATING_INDICATOR_HIDE_DELAY);
         mHideTimer->setSingleShot(true);
         connect(mHideTimer, SIGNAL(timeout()), SLOT(deleteLater()));
-        hide();
     }
 
     void setRating(int rating)
     {
-        mRatingWidget->setRating(rating);
-    }
-
-    void show()
-    {
-        HudWidget::show();
-        raise();
+        KRatingPainter ratingPainter;
+        const int iconSize = KIconLoader::global()->currentSize(KIconLoader::Small);
+        QPixmap pix(iconSize * 5 + ratingPainter.spacing() * 4, iconSize);
+        pix.fill(Qt::transparent);
+        {
+            QPainter painter(&pix);
+            ratingPainter.paint(&painter, pix.rect(), rating);
+        }
+        mPixmapWidget->setPixmap(pix);
+        update();
         mHideTimer->start();
     }
 
 private:
-    KRatingWidget* mRatingWidget;
+    GraphicsPixmapWidget* mPixmapWidget;
     QTimer* mHideTimer;
 };
 
@@ -261,9 +282,6 @@ inline int ratingForVariant(const QVariant& variant)
 
 void SemanticInfoContextManagerItem::slotSelectionChanged()
 {
-    if (d->mRatingIndicator) {
-        d->mRatingIndicator->deleteLater();
-    }
     update();
 }
 
@@ -347,12 +365,11 @@ void SemanticInfoContextManagerItem::slotRatingChanged(int rating)
 
     // Show rating indicator in view mode, and only if sidebar is not visible
     if (d->mViewMainPage->isVisible() && !d->mRatingWidget->isVisible()) {
-        delete d->mRatingIndicator.data();
-        // FIXME QGV
-        //d->mRatingIndicator = new RatingIndicator(d->mViewMainPage->documentView());
-        d->mRatingIndicator = new RatingIndicator(d->mViewMainPage);
+        if (!d->mRatingIndicator.data()) {
+            d->mRatingIndicator = new RatingIndicator;
+            d->mViewMainPage->showMessageWidget(d->mRatingIndicator, Qt::AlignBottom | Qt::AlignHCenter);
+        }
         d->mRatingIndicator->setRating(rating);
-        d->mRatingIndicator->show();
     }
 
     SortedDirModel* dirModel = contextManager()->dirModel();

@@ -740,9 +740,9 @@ QToolButton* ViewMainPage::toggleSideBarButton() const
     return d->mToggleSideBarButton;
 }
 
-void ViewMainPage::showMessageWidget(QGraphicsWidget* widget)
+void ViewMainPage::showMessageWidget(QGraphicsWidget* widget, Qt::Alignment align)
 {
-    d->mDocumentViewContainer->showMessageWidget(widget);
+    d->mDocumentViewContainer->showMessageWidget(widget, align);
 }
 
 } // namespace

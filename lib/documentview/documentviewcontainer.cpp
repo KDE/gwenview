@@ -298,7 +298,7 @@ void DocumentViewContainer::slotConfigChanged()
     }
 }
 
-void DocumentViewContainer::showMessageWidget(QGraphicsWidget* widget)
+void DocumentViewContainer::showMessageWidget(QGraphicsWidget* widget, Qt::Alignment align)
 {
     if (d->mViews.isEmpty()) {
         kWarning() << "No view to show message on, this should not happen!";
@@ -308,7 +308,7 @@ void DocumentViewContainer::showMessageWidget(QGraphicsWidget* widget)
     widget->setParentItem(view);
     GraphicsWidgetFloater* floater = new GraphicsWidgetFloater(view);
     floater->setChildWidget(widget);
-    floater->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
+    floater->setAlignment(align);
     widget->show();
     widget->setZValue(1);
 }

@@ -113,7 +113,7 @@ public:
 
     QToolButton* toggleSideBarButton() const;
 
-    void showMessageWidget(QGraphicsWidget*);
+    void showMessageWidget(QGraphicsWidget*, Qt::Alignment align = Qt::AlignHCenter | Qt::AlignTop);
 
 Q_SIGNALS:
 

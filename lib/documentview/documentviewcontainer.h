@@ -63,7 +63,7 @@ public:
      */
     void reset();
 
-    void showMessageWidget(QGraphicsWidget*);
+    void showMessageWidget(QGraphicsWidget*, Qt::Alignment);
 
 public Q_SLOTS:
     void updateLayout();
