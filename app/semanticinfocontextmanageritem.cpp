@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QEvent>
 #include <QPainter>
+#include <QPropertyAnimation>
 #include <QShortcut>
 #include <QSignalMapper>
 #include <QStyle>
@@ -58,7 +59,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 
-static const int RATING_INDICATOR_HIDE_DELAY = 3000;
+static const int RATING_INDICATOR_HIDE_DELAY = 2000;
 
 struct SemanticInfoDialog : public KDialog, public Ui_SemanticInfoDialog
 {
@@ -125,7 +126,11 @@ public:
 
         mHideTimer->setInterval(RATING_INDICATOR_HIDE_DELAY);
         mHideTimer->setSingleShot(true);
-        connect(mHideTimer, SIGNAL(timeout()), SLOT(deleteLater()));
+        QPropertyAnimation* hideAnimation = new QPropertyAnimation(this, "opacity", this);
+        hideAnimation->setStartValue(1);
+        hideAnimation->setEndValue(0);
+        connect(mHideTimer, SIGNAL(timeout()), hideAnimation, SLOT(start()));
+        connect(hideAnimation, SIGNAL(finished()), SLOT(deleteLater()));
     }
 
     void setRating(int rating)
