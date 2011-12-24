@@ -143,10 +143,10 @@ struct VideoViewAdapterPrivate
     void updateHudVisibility(int yPos)
     {
         const int floaterY = mVideoWidget->height() - mFloater->verticalMargin() - mHud->effectiveSizeHint(Qt::MinimumSize).height() * 3 / 2;
-        if (mHud->isVisible() && yPos < floaterY) {
-            mHud->hide();
-        } else if (!mHud->isVisible() && yPos >= floaterY) {
-            mHud->show();
+        if (yPos < floaterY) {
+            mHud->fadeOut();
+        } else {
+            mHud->fadeIn();
         }
     }
 };

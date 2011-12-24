@@ -24,7 +24,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QEvent>
 #include <QPainter>
-#include <QPropertyAnimation>
 #include <QShortcut>
 #include <QSignalMapper>
 #include <QStyle>
@@ -119,21 +118,31 @@ public:
     RatingIndicator()
     : GraphicsHudWidget()
     , mPixmapWidget(new GraphicsPixmapWidget)
-    , mHideTimer(new QTimer(this))
+    , mDeleteTimer(new QTimer(this))
     {
-        setRating(0);
+        updatePixmap(0);
+        setOpacity(0);
         init(mPixmapWidget, OptionNone);
 
-        mHideTimer->setInterval(RATING_INDICATOR_HIDE_DELAY);
-        mHideTimer->setSingleShot(true);
-        QPropertyAnimation* hideAnimation = new QPropertyAnimation(this, "opacity", this);
-        hideAnimation->setStartValue(1);
-        hideAnimation->setEndValue(0);
-        connect(mHideTimer, SIGNAL(timeout()), hideAnimation, SLOT(start()));
-        connect(hideAnimation, SIGNAL(finished()), SLOT(deleteLater()));
+        mDeleteTimer->setInterval(RATING_INDICATOR_HIDE_DELAY);
+        mDeleteTimer->setSingleShot(true);
+        connect(mDeleteTimer, SIGNAL(timeout()), SLOT(fadeOut()));
+        connect(this, SIGNAL(fadedOut()), SLOT(deleteLater()));
     }
 
     void setRating(int rating)
+    {
+        updatePixmap(rating);
+        update();
+        mDeleteTimer->start();
+        fadeIn();
+    }
+
+private:
+    GraphicsPixmapWidget* mPixmapWidget;
+    QTimer* mDeleteTimer;
+
+    void updatePixmap(int rating)
     {
         KRatingPainter ratingPainter;
         const int iconSize = KIconLoader::global()->currentSize(KIconLoader::Small);
@@ -144,13 +153,7 @@ public:
             ratingPainter.paint(&painter, pix.rect(), rating);
         }
         mPixmapWidget->setPixmap(pix);
-        update();
-        mHideTimer->start();
     }
-
-private:
-    GraphicsPixmapWidget* mPixmapWidget;
-    QTimer* mHideTimer;
 };
 
 struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
