@@ -1106,7 +1106,12 @@ void MainWindow::updateToggleSideBarAction()
     bool visible = d->mSideBar->isVisible();
     d->mToggleSideBarAction->setChecked(visible);
 
-    QString text = QString::fromUtf8(visible ? "▮←" : "▮→");
+    QString text;
+    if (QApplication::isRightToLeft()) {
+        text = QString::fromUtf8(visible ? "▮→" : "▮←");
+    } else {
+        text = QString::fromUtf8(visible ? "▮←" : "▮→");
+    }
     QString toolTip = visible ? i18n("Hide Sidebar") : i18n("Show Sidebar");
 
     QList<QToolButton*> lst;
