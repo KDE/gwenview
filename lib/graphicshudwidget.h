@@ -54,11 +54,18 @@ public:
 
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
 
+public Q_SLOTS:
+    void fadeIn();
+    void fadeOut();
+
 Q_SIGNALS:
     void closed();
+    void fadedIn();
+    void fadedOut();
 
 private Q_SLOTS:
     void slotCloseButtonClicked();
+    void slotFadeAnimationFinished();
 
 private:
     GraphicsHudWidgetPrivate* const d;

@@ -26,6 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QGraphicsLinearLayout>
 #include <QLayout>
 #include <QPainter>
+#include <QPropertyAnimation>
 #include <QToolButton>
 
 // KDE
@@ -42,16 +43,33 @@ namespace Gwenview
 
 struct GraphicsHudWidgetPrivate
 {
+    GraphicsHudWidget* q;
+    QPropertyAnimation* mAnim;
     QGraphicsWidget* mMainWidget;
     GraphicsHudButton* mCloseButton;
+
+    void fadeTo(qreal value)
+    {
+        if (qFuzzyCompare(q->opacity(), value)) {
+            return;
+        }
+        mAnim->stop();
+        mAnim->setStartValue(q->opacity());
+        mAnim->setEndValue(value);
+        mAnim->start();
+    }
 };
 
 GraphicsHudWidget::GraphicsHudWidget(QGraphicsWidget* parent)
 : QGraphicsWidget(parent)
 , d(new GraphicsHudWidgetPrivate)
 {
+    d->q = this;
+    d->mAnim = new QPropertyAnimation(this, "opacity", this);
     d->mMainWidget = 0;
     d->mCloseButton = 0;
+
+    connect(d->mAnim, SIGNAL(finished()), SLOT(slotFadeAnimationFinished()));
 }
 
 GraphicsHudWidget::~GraphicsHudWidget()
@@ -107,6 +125,25 @@ void GraphicsHudWidget::paint(QPainter* painter, const QStyleOptionGraphicsItem*
     painter->setRenderHint(QPainter::Antialiasing);
     painter->setBrush(renderInfo.bgBrush);
     painter->drawRoundedRect(boundingRect().adjusted(.5, .5, -.5, -.5), renderInfo.borderRadius, renderInfo.borderRadius);
+}
+
+void GraphicsHudWidget::fadeIn()
+{
+    d->fadeTo(1.);
+}
+
+void GraphicsHudWidget::fadeOut()
+{
+    d->fadeTo(0.);
+}
+
+void GraphicsHudWidget::slotFadeAnimationFinished()
+{
+    if (qFuzzyCompare(opacity(), 1)) {
+        fadedIn();
+    } else {
+        fadedOut();
+    }
 }
 
 } // namespace
