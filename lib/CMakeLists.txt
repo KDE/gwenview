@@ -87,7 +87,6 @@ set(gwenviewlib_SRCS
     graphicshudslider.cpp
     graphicshudwidget.cpp
     graphicswidgetfloater.cpp
-    hudwidget.cpp
     imageformats/imageformats.cpp
     imageformats/jpegplugin.cpp
     imageformats/jpeghandler.cpp

@@ -26,44 +26,6 @@ QToolButton {
 	border-radius: 4px;
 }
 
-Gwenview--HudWidget QToolButton {
-	padding: 2px;
-	border: 1px solid hsva(0, 0, 25%, 80%);
-	border-radius: 4px;
-
-	background-color:
-		qlineargradient(x1:0, y1:0, x2:0, y2:1,
-				stop:0   hsva(0, 0, 33%, 66%),
-				stop:0.5 hsva(0, 0, 0,   66%),
-				stop:1   hsva(0, 0, 0,   66%)
-				);
-}
-
-Gwenview--HudWidget QToolButton[segment-left=true] {
-	border-top-right-radius: 0px;
-	border-bottom-right-radius: 0px;
-	border-right-width: 0px;
-	padding-right: 1px;
-}
-
-Gwenview--HudWidget QToolButton[segment-left=true]:hover {
-	border-right-width: 1px;
-	padding-right: 0px;
-}
-
-Gwenview--HudWidget QToolButton[segment-right=true] {
-	border-top-left-radius: 0px;
-	border-bottom-left-radius: 0px;
-	border-left-width: 0px;
-	padding-left: 1px;
-}
-
-Gwenview--HudWidget QToolButton[segment-right=true]:hover {
-	border-left-width: 1px;
-	padding-left: 0px;
-}
-
-
 QToolButton:pressed {
 	background-color:
 		qlineargradient(x1:0, y1:0, x2:0, y2:1,
@@ -77,21 +39,6 @@ QComboBox:editable, QSpinBox, QLineEdit, QTextEdit, QListView {
 }
 
 /* Containers */
-Gwenview--HudWidget {
-	background-color:
-		qlineargradient(x1:0, y1:0, x2:0, y2:1,
-		stop:0 rgba(4, 4, 4, 66%), stop: 0.6 rgba(0, 0, 0, 66%), stop:1 rgba(0, 0, 0, 66%));
-	border: 1px solid rgba(100, 100, 100, 66%);
-	border-radius: 8px;
-}
-
-Gwenview--HudWidget[opaque=true] {
-	border-radius: 0;
-	background-color:
-		qlineargradient(x1:0, y1:0, x2:0, y2:1,
-		stop:0 hsv(0, 0, 20%), stop: 0.6 rgb(0, 0, 0), stop:1 rgb(0, 0, 0));
-}
-
 #fullScreenBar {
 	background-color:
 		qlineargradient(x1:0, y1:0, x2:0, y2:1,
