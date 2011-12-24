@@ -48,10 +48,6 @@ public:
 
     StatusBarToolButton(QWidget* parent = 0);
 
-    virtual QSize minimumSizeHint() const;
-
-    virtual QSize sizeHint() const;
-
     void setGroupPosition(StatusBarToolButton::GroupPosition groupPosition);
 
 protected:

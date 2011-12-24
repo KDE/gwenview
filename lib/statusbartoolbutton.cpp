@@ -42,18 +42,6 @@ StatusBarToolButton::StatusBarToolButton(QWidget* parent)
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 }
 
-QSize StatusBarToolButton::minimumSizeHint() const
-{
-    return sizeHint();
-}
-
-QSize StatusBarToolButton::sizeHint() const
-{
-    QSize sh = QToolButton::sizeHint();
-    sh.setHeight(fontMetrics().height());
-    return sh;
-}
-
 void StatusBarToolButton::setGroupPosition(StatusBarToolButton::GroupPosition groupPosition)
 {
     mGroupPosition = groupPosition;
