@@ -771,6 +771,7 @@ struct MainWindow::Private
         KConfigGroup group(KGlobal::config(), name);
         mSideBar->setVisible(group.readEntry(SIDE_BAR_IS_VISIBLE_KEY, defaultVisibility[name]));
         mSideBar->setCurrentPage(GwenviewConfig::sideBarPage());
+        q->updateToggleSideBarAction();
     }
 
     void saveSideBarConfig() const
