@@ -472,9 +472,14 @@ void ThumbnailBarView::selectionChanged(const QItemSelection& selected, const QI
 {
     QListView::selectionChanged(selected, deselected);
 
-    QModelIndexList list = selected.indexes();
-    if (list.count() == 1 && isVisible()) {
-        d->smoothScrollTo(list.first());
+    QModelIndexList oldList = deselected.indexes();
+    QModelIndexList newList = selected.indexes();
+    // Only scroll the list if the user went from one image to another. If the
+    // user just unselected one image from a set of two, he might want to
+    // reselect it again, scrolling the thumbnails would prevent him from
+    // reselecting it by clicking again without moving the mouse.
+    if (oldList.count() == 1 && newList.count() == 1 && isVisible()) {
+        d->smoothScrollTo(newList.first());
     }
 }
 
