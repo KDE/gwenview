@@ -115,9 +115,12 @@ struct DocumentViewPrivate
             QObject::connect(adapter, SIGNAL(zoomToFitChanged(bool)),
                              q, SIGNAL(zoomToFitChanged(bool)));
         }
-
         QObject::connect(adapter, SIGNAL(scrollPosChanged()),
                          q, SIGNAL(positionChanged()));
+        QObject::connect(adapter, SIGNAL(previousImageRequested()),
+                         q, SIGNAL(previousImageRequested()));
+        QObject::connect(adapter, SIGNAL(nextImageRequested()),
+                         q, SIGNAL(nextImageRequested()));
 
         adapter->loadConfig();
 

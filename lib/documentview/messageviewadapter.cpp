@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QGraphicsProxyWidget>
 
 // KDE
+#include <KDebug>
 #include <KLocale>
 
 // Local
@@ -43,6 +44,7 @@ MessageViewAdapter::MessageViewAdapter()
 : d(new MessageViewAdapterPrivate)
 {
     QWidget* widget = new QWidget;
+    widget->installEventFilter(this);
     d->setupUi(widget);
     d->mMessageWidget->setCloseButtonVisible(false);
     d->mMessageWidget->setWordWrap(true);
@@ -89,6 +91,30 @@ Document::Ptr MessageViewAdapter::document() const
 void MessageViewAdapter::setDocument(Document::Ptr doc)
 {
     d->mDocument = doc;
+}
+
+bool MessageViewAdapter::eventFilter(QObject*, QEvent* ev)
+{
+    if (ev->type() == QEvent::KeyPress) {
+        QKeyEvent* event = static_cast<QKeyEvent*>(ev);
+        if (event->modifiers() != Qt::NoModifier) {
+            return false;
+        }
+
+        switch (event->key()) {
+        case Qt::Key_Left:
+        case Qt::Key_Up:
+            previousImageRequested();
+            break;
+        case Qt::Key_Right:
+        case Qt::Key_Down:
+            nextImageRequested();
+            break;
+        default:
+            break;
+        }
+    }
+    return false;
 }
 
 } // namespace

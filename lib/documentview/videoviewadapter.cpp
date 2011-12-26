@@ -149,6 +149,30 @@ struct VideoViewAdapterPrivate
             mHud->fadeIn();
         }
     }
+
+    void keyPressEvent(QKeyEvent* event)
+    {
+        if (event->modifiers() != Qt::NoModifier) {
+            return;
+        }
+
+        switch (event->key()) {
+        case Qt::Key_Left:
+            mSeekSlider->triggerAction(QAbstractSlider::SliderSingleStepSub);
+            break;
+        case Qt::Key_Right:
+            mSeekSlider->triggerAction(QAbstractSlider::SliderSingleStepAdd);
+            break;
+        case Qt::Key_Up:
+            q->previousImageRequested();
+            break;
+        case Qt::Key_Down:
+            q->nextImageRequested();
+            break;
+        default:
+            break;
+        }
+    }
 };
 
 VideoViewAdapter::VideoViewAdapter()
@@ -215,6 +239,8 @@ bool VideoViewAdapter::eventFilter(QObject*, QEvent* event)
 {
     if (event->type() == QEvent::MouseMove) {
         d->updateHudVisibility(static_cast<QMouseEvent*>(event)->y());
+    } else if (event->type() == QEvent::KeyPress) {
+        d->keyPressEvent(static_cast<QKeyEvent*>(event));
     }
     return false;
 }

@@ -101,6 +101,8 @@ Q_SIGNALS:
     void zoomOutRequested(const QPointF&);
     void scrollPosChanged();
     void completed();
+    void previousImageRequested();
+    void nextImageRequested();
 
 protected:
     virtual void loadFromDocument() = 0;

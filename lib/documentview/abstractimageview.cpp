@@ -332,9 +332,30 @@ void AbstractImageView::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 
 void AbstractImageView::keyPressEvent(QKeyEvent* event)
 {
+    if (zoomToFit() || qFuzzyCompare(computeZoomToFit(), zoom())) {
+        if (event->modifiers() != Qt::NoModifier) {
+            return;
+        }
+
+        switch (event->key()) {
+        case Qt::Key_Left:
+        case Qt::Key_Up:
+            previousImageRequested();
+            break;
+        case Qt::Key_Right:
+        case Qt::Key_Down:
+            nextImageRequested();
+            break;
+        default:
+            break;
+        }
+        return;
+    }
+
     QPointF delta(0, 0);
     qreal pageStep = boundingRect().height();
     qreal unitStep;
+
     if (event->modifiers() & Qt::ShiftModifier) {
         unitStep = pageStep / 2;
     } else {

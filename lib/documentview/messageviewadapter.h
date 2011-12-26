@@ -52,6 +52,9 @@ public:
 
     void setErrorMessage(const QString& main, const QString& detail = QString());
 
+protected:
+    bool eventFilter(QObject*, QEvent*);
+
 private:
     MessageViewAdapterPrivate* const d;
 };

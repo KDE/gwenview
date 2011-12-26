@@ -152,6 +152,10 @@ Q_SIGNALS:
      */
     void completed();
 
+    void previousImageRequested();
+
+    void nextImageRequested();
+
 private:
     QGraphicsWidget* mWidget;
 };
