@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "imageviewadapter.moc"
+#include <rasterimageviewadapter.moc>
 
 // Local
 #include <lib/document/documentfactory.h>
@@ -34,15 +34,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 
-//// ImageViewAdapter ////
-struct ImageViewAdapterPrivate
+//// RasterImageViewAdapter ////
+struct RasterImageViewAdapterPrivate
 {
-    ImageViewAdapter* q;
+    RasterImageViewAdapter* q;
     RasterImageView* mView;
 };
 
-ImageViewAdapter::ImageViewAdapter()
-: d(new ImageViewAdapterPrivate)
+RasterImageViewAdapter::RasterImageViewAdapter()
+: d(new RasterImageViewAdapterPrivate)
 {
     d->q = this;
     d->mView = new RasterImageView;
@@ -58,22 +58,22 @@ ImageViewAdapter::ImageViewAdapter()
     setWidget(d->mView);
 }
 
-ImageViewAdapter::~ImageViewAdapter()
+RasterImageViewAdapter::~RasterImageViewAdapter()
 {
     delete d;
 }
 
-QCursor ImageViewAdapter::cursor() const
+QCursor RasterImageViewAdapter::cursor() const
 {
     return d->mView->cursor();
 }
 
-void ImageViewAdapter::setCursor(const QCursor& cursor)
+void RasterImageViewAdapter::setCursor(const QCursor& cursor)
 {
     d->mView->setCursor(cursor);
 }
 
-void ImageViewAdapter::setDocument(Document::Ptr doc)
+void RasterImageViewAdapter::setDocument(Document::Ptr doc)
 {
     d->mView->setDocument(doc);
 
@@ -83,64 +83,64 @@ void ImageViewAdapter::setDocument(Document::Ptr doc)
     }
 }
 
-qreal ImageViewAdapter::zoom() const
+qreal RasterImageViewAdapter::zoom() const
 {
     return d->mView->zoom();
 }
 
-void ImageViewAdapter::setZoomToFit(bool on)
+void RasterImageViewAdapter::setZoomToFit(bool on)
 {
     d->mView->setZoomToFit(on);
 }
 
-bool ImageViewAdapter::zoomToFit() const
+bool RasterImageViewAdapter::zoomToFit() const
 {
     return d->mView->zoomToFit();
 }
 
-void ImageViewAdapter::setZoom(qreal zoom, const QPointF& center)
+void RasterImageViewAdapter::setZoom(qreal zoom, const QPointF& center)
 {
     d->mView->setZoom(zoom, center);
 }
 
-qreal ImageViewAdapter::computeZoomToFit() const
+qreal RasterImageViewAdapter::computeZoomToFit() const
 {
     return d->mView->computeZoomToFit();
 }
 
-Document::Ptr ImageViewAdapter::document() const
+Document::Ptr RasterImageViewAdapter::document() const
 {
     return d->mView->document();
 }
 
-void ImageViewAdapter::slotLoadingFailed()
+void RasterImageViewAdapter::slotLoadingFailed()
 {
     d->mView->setDocument(Document::Ptr());
 }
 
-void ImageViewAdapter::loadConfig()
+void RasterImageViewAdapter::loadConfig()
 {
     d->mView->setAlphaBackgroundMode(GwenviewConfig::alphaBackgroundMode());
     d->mView->setAlphaBackgroundColor(GwenviewConfig::alphaBackgroundColor());
     d->mView->setEnlargeSmallerImages(GwenviewConfig::enlargeSmallerImages());
 }
 
-RasterImageView* ImageViewAdapter::rasterImageView() const
+RasterImageView* RasterImageViewAdapter::rasterImageView() const
 {
     return d->mView;
 }
 
-QPointF ImageViewAdapter::scrollPos() const
+QPointF RasterImageViewAdapter::scrollPos() const
 {
     return d->mView->scrollPos();
 }
 
-void ImageViewAdapter::setScrollPos(const QPointF& pos)
+void RasterImageViewAdapter::setScrollPos(const QPointF& pos)
 {
     d->mView->setScrollPos(pos);
 }
 
-QRectF ImageViewAdapter::visibleDocumentRect() const
+QRectF RasterImageViewAdapter::visibleDocumentRect() const
 {
     return QRectF(d->mView->imageOffset(), d->mView->visibleImageSize());
 }

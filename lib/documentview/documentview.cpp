@@ -47,9 +47,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/documentview/abstractrasterimageviewtool.h>
 #include <lib/documentview/birdeyeview.h>
 #include <lib/documentview/loadingindicator.h>
-#include <lib/documentview/imageviewadapter.h>
 #include <lib/documentview/messageviewadapter.h>
 #include <lib/documentview/rasterimageview.h>
+#include <lib/documentview/rasterimageviewadapter.h>
 #include <lib/documentview/svgviewadapter.h>
 #include <lib/documentview/videoviewadapter.h>
 #include <lib/graphicshudbutton.h>
@@ -340,7 +340,7 @@ void DocumentView::createAdapterForDocument()
     AbstractDocumentViewAdapter* adapter = 0;
     switch (documentKind) {
     case MimeTypeUtils::KIND_RASTER_IMAGE:
-        adapter = new ImageViewAdapter;
+        adapter = new RasterImageViewAdapter;
         break;
     case MimeTypeUtils::KIND_SVG_IMAGE:
         adapter = new SvgViewAdapter;

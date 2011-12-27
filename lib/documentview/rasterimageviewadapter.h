@@ -18,8 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
-#ifndef IMAGEVIEWADAPTER_H
-#define IMAGEVIEWADAPTER_H
+#ifndef RASTERIMAGEVIEWADAPTER_H
+#define RASTERIMAGEVIEWADAPTER_H
 
 #include <lib/gwenviewlib_export.h>
 
@@ -33,13 +33,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 
-struct ImageViewAdapterPrivate;
-class GWENVIEWLIB_EXPORT ImageViewAdapter : public AbstractDocumentViewAdapter
+struct RasterImageViewAdapterPrivate;
+class GWENVIEWLIB_EXPORT RasterImageViewAdapter : public AbstractDocumentViewAdapter
 {
     Q_OBJECT
 public:
-    ImageViewAdapter();
-    ~ImageViewAdapter();
+    RasterImageViewAdapter();
+    ~RasterImageViewAdapter();
 
     virtual QCursor cursor() const;
 
@@ -82,9 +82,9 @@ private Q_SLOTS:
     void slotLoadingFailed();
 
 private:
-    ImageViewAdapterPrivate* const d;
+    RasterImageViewAdapterPrivate* const d;
 };
 
 } // namespace
 
-#endif /* IMAGEVIEWADAPTER_H */
+#endif /* RASTERIMAGEVIEWADAPTER_H */
