@@ -156,6 +156,8 @@ Q_SIGNALS:
 
     void nextImageRequested();
 
+    void toggleFullScreenRequested();
+
 private:
     QGraphicsWidget* mWidget;
 };

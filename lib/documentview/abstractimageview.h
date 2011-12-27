@@ -103,6 +103,7 @@ Q_SIGNALS:
     void completed();
     void previousImageRequested();
     void nextImageRequested();
+    void toggleFullScreenRequested();
 
 protected:
     virtual void loadFromDocument() = 0;
@@ -124,6 +125,7 @@ protected:
     void mousePressEvent(QGraphicsSceneMouseEvent* event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event);
 
 private:
     friend class AbstractImageViewPrivate;

@@ -186,6 +186,24 @@ struct VideoViewAdapterPrivate
     }
 };
 
+/**
+ * This is a workaround for a bug in QGraphicsProxyWidget: it does not forward
+ * double-click events to the proxy-fied widget.
+ *
+ * QGraphicsProxyWidget::mouseDoubleClickEvent() correctly forwards the event
+ * to its QWidget, but it is never called. This is because for it to be called,
+ * the implementation of mousePressEvent() must call
+ * QGraphicsItem::mousePressEvent() but it does not.
+ */
+class DoubleClickableProxyWidget : public QGraphicsProxyWidget
+{
+protected:
+    void mousePressEvent(QGraphicsSceneMouseEvent* event)
+    {
+        QGraphicsWidget::mousePressEvent(event);
+    }
+};
+
 VideoViewAdapter::VideoViewAdapter()
 : d(new VideoViewAdapterPrivate)
 {
@@ -204,7 +222,8 @@ VideoViewAdapter::VideoViewAdapter()
     d->mAudioOutput = new Phonon::AudioOutput(Phonon::VideoCategory, this);
     Phonon::createPath(d->mMediaObject, d->mAudioOutput);
 
-    QGraphicsProxyWidget* proxy = new QGraphicsProxyWidget;
+    QGraphicsProxyWidget* proxy = new DoubleClickableProxyWidget;
+    proxy->setFlag(QGraphicsItem::ItemIsSelectable); // Needed for doubleclick to work
     proxy->setWidget(d->mVideoWidget);
     setWidget(proxy);
 
@@ -257,6 +276,10 @@ bool VideoViewAdapter::eventFilter(QObject*, QEvent* event)
         d->updateHudVisibility(static_cast<QMouseEvent*>(event)->y());
     } else if (event->type() == QEvent::KeyPress) {
         d->keyPressEvent(static_cast<QKeyEvent*>(event));
+    } else if (event->type() == QEvent::MouseButtonDblClick) {
+        if (static_cast<QMouseEvent*>(event)->modifiers() == Qt::NoModifier) {
+            toggleFullScreenRequested();
+        }
     }
     return false;
 }

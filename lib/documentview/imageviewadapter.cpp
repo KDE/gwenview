@@ -54,6 +54,7 @@ ImageViewAdapter::ImageViewAdapter()
     connect(d->mView, SIGNAL(completed()), SIGNAL(completed()));
     connect(d->mView, SIGNAL(previousImageRequested()), SIGNAL(previousImageRequested()));
     connect(d->mView, SIGNAL(nextImageRequested()), SIGNAL(nextImageRequested()));
+    connect(d->mView, SIGNAL(toggleFullScreenRequested()), SIGNAL(toggleFullScreenRequested()));
     setWidget(d->mView);
 }
 

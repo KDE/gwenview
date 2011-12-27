@@ -121,6 +121,8 @@ struct DocumentViewPrivate
                          q, SIGNAL(previousImageRequested()));
         QObject::connect(adapter, SIGNAL(nextImageRequested()),
                          q, SIGNAL(nextImageRequested()));
+        QObject::connect(adapter, SIGNAL(toggleFullScreenRequested()),
+                         q, SIGNAL(toggleFullScreenRequested()));
 
         adapter->loadConfig();
 
@@ -514,13 +516,6 @@ void DocumentView::setZoom(qreal zoom)
 qreal DocumentView::zoom() const
 {
     return d->mAdapter->zoom();
-}
-
-void DocumentView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
-{
-    if (event->modifiers() == Qt::NoModifier) {
-        toggleFullScreenRequested();
-    }
 }
 
 void DocumentView::wheelEvent(QGraphicsSceneWheelEvent* event)

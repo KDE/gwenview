@@ -392,6 +392,13 @@ void AbstractImageView::keyPressEvent(QKeyEvent* event)
     d->setScrollPos(d->mScrollPos + delta);
 }
 
+void AbstractImageView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
+{
+    if (event->modifiers() == Qt::NoModifier) {
+        toggleFullScreenRequested();
+    }
+}
+
 QPointF AbstractImageView::imageOffset() const
 {
     return d->mImageOffset;
