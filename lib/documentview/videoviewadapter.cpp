@@ -68,18 +68,30 @@ struct VideoViewAdapterPrivate
 
     Document::Ptr mDocument;
 
-    void setupHud(QGraphicsWidget* parent)
+    void setupActions()
     {
-        // Create hud content
         mPlayPauseAction = new QAction(q);
         mPlayPauseAction->setShortcut(Qt::Key_P);
         QObject::connect(mPlayPauseAction, SIGNAL(triggered()),
                          q, SLOT(slotPlayPauseClicked()));
-        GraphicsHudButton* playPauseButton = new GraphicsHudButton;
-        playPauseButton->setDefaultAction(mPlayPauseAction);
         QObject::connect(mMediaObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
                          q, SLOT(updatePlayUi()));
 
+        mMuteAction = new QAction(q);
+        mMuteAction->setShortcut(Qt::Key_M);
+        QObject::connect(mMuteAction, SIGNAL(triggered()),
+            q, SLOT(slotMuteClicked()));
+        QObject::connect(mAudioOutput, SIGNAL(mutedChanged(bool)),
+            q, SLOT(updateMuteAction()));
+    }
+
+    void setupHud(QGraphicsWidget* parent)
+    {
+        // Play/Pause
+        GraphicsHudButton* playPauseButton = new GraphicsHudButton;
+        playPauseButton->setDefaultAction(mPlayPauseAction);
+
+        // Seek
         mSeekSlider = new GraphicsHudSlider;
         mSeekSlider->setPageStep(5000);
         mSeekSlider->setSingleStep(200);
@@ -92,16 +104,11 @@ struct VideoViewAdapterPrivate
         QObject::connect(mMediaObject, SIGNAL(seekableChanged(bool)),
             q, SLOT(updatePlayUi()));
 
-        mMuteAction = new QAction(q);
-        mMuteAction->setShortcut(Qt::Key_M);
-        QObject::connect(mMuteAction, SIGNAL(triggered()),
-            q, SLOT(slotMuteClicked()));
-        QObject::connect(mAudioOutput, SIGNAL(mutedChanged(bool)),
-            q, SLOT(updateMuteAction()));
+        // Mute
         GraphicsHudButton* muteButton = new GraphicsHudButton;
         muteButton->setDefaultAction(mMuteAction);
-        q->updateMuteAction();
 
+        // Volume
         mVolumeSlider = new GraphicsHudSlider;
         mVolumeSlider->setMinimumWidth(100);
         mVolumeSlider->setRange(0, 100);
@@ -112,6 +119,7 @@ struct VideoViewAdapterPrivate
         QObject::connect(mAudioOutput, SIGNAL(volumeChanged(qreal)),
             q, SLOT(slotOutputVolumeChanged(qreal)));
 
+        // Layout
         QGraphicsWidget* hudContent = new QGraphicsWidget;
         QGraphicsLinearLayout* layout = new QGraphicsLinearLayout(hudContent);
         layout->addItem(playPauseButton);
@@ -120,8 +128,6 @@ struct VideoViewAdapterPrivate
         layout->addItem(muteButton);
         layout->addItem(mVolumeSlider);
         layout->setStretchFactor(mVolumeSlider, 1);
-
-        q->updatePlayUi();
 
         // Create hud
         mHud = new GraphicsHudWidget(parent);
@@ -132,8 +138,6 @@ struct VideoViewAdapterPrivate
         mFloater = new GraphicsWidgetFloater(parent);
         mFloater->setChildWidget(mHud);
         mFloater->setAlignment(Qt::AlignJustify | Qt::AlignBottom);
-
-        mVideoWidget->installEventFilter(q);
     }
 
     bool isPlaying() const
@@ -193,6 +197,7 @@ VideoViewAdapter::VideoViewAdapter()
     d->mVideoWidget = new Phonon::VideoWidget;
     d->mVideoWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     d->mVideoWidget->setAttribute(Qt::WA_Hover);
+    d->mVideoWidget->installEventFilter(this);
 
     Phonon::createPath(d->mMediaObject, d->mVideoWidget);
 
@@ -203,7 +208,11 @@ VideoViewAdapter::VideoViewAdapter()
     proxy->setWidget(d->mVideoWidget);
     setWidget(proxy);
 
+    d->setupActions();
     d->setupHud(proxy);
+
+    updatePlayUi();
+    updateMuteAction();
 }
 
 VideoViewAdapter::~VideoViewAdapter()
