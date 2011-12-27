@@ -226,9 +226,9 @@ void VideoViewAdapter::setDocument(Document::Ptr doc)
     d->mDocument = doc;
     d->mMediaObject->setCurrentSource(d->mDocument->url());
     d->mMediaObject->play();
-    // If we do not use a queued connection, the signal arrives too early.
-    // This prevents loading of the dir content when Gwenview is started with a
-    // video as an argument.
+    // If we do not use a queued connection, the signal arrives too early,
+    // preventing the listing of the dir content when Gwenview is started with
+    // a video as an argument.
     QMetaObject::invokeMethod(this, "completed", Qt::QueuedConnection);
 }
 
