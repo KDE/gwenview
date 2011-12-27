@@ -30,6 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KIconLoader>
 
 // Qt
+#include <QAction>
 #include <QFontMetrics>
 #include <QGraphicsSceneEvent>
 #include <QIcon>
@@ -49,6 +50,9 @@ struct LayoutInfo
 
 struct GraphicsHudButtonPrivate
 {
+    GraphicsHudButton* q;
+    QAction* mAction;
+
     QIcon mIcon;
     QString mText;
 
@@ -77,12 +81,21 @@ struct GraphicsHudButtonPrivate
         QRectF rect = info->iconRect | info->textRect;
         info->size = QSize(rect.right() + padding, rect.bottom() + padding);
     }
+
+    void initFromAction()
+    {
+        Q_ASSERT(mAction);
+        q->setIcon(mAction->icon());
+        q->setText(mAction->text());
+    }
 };
 
 GraphicsHudButton::GraphicsHudButton(QGraphicsItem* parent)
 : QGraphicsWidget(parent)
 , d(new GraphicsHudButtonPrivate)
 {
+    d->q = this;
+    d->mAction = 0;
     d->mIsDown = false;
     setCursor(Qt::ArrowCursor);
     setAcceptHoverEvents(true);
@@ -158,6 +171,27 @@ void GraphicsHudButton::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
     if (boundingRect().contains(event->pos())) {
         clicked();
     }
+}
+
+void GraphicsHudButton::setDefaultAction(QAction* action)
+{
+    if (action != d->mAction) {
+        d->mAction = action;
+        if (!actions().contains(action)) {
+            addAction(action);
+        }
+        d->initFromAction();
+        connect(this, SIGNAL(clicked()),
+            d->mAction, SLOT(trigger()));
+    }
+}
+
+bool GraphicsHudButton::event(QEvent* event)
+{
+    if (event->type() == QEvent::ActionChanged) {
+        d->initFromAction();
+    }
+    return QGraphicsWidget::event(event);
 }
 
 } // namespace

@@ -50,10 +50,13 @@ public:
 
     void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*);
 
+    void setDefaultAction(QAction*);
+
 Q_SIGNALS:
     void clicked();
 
 protected:
+    bool event(QEvent* event);
     QSizeF sizeHint(Qt::SizeHint which, const QSizeF& constraint = QSizeF()) const;
     void mousePressEvent(QGraphicsSceneMouseEvent* event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
