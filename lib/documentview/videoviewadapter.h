@@ -60,7 +60,7 @@ private Q_SLOTS:
     void slotPlayPauseClicked();
     void updatePlayUi();
     void slotMuteClicked();
-    void updateMuteButton();
+    void updateMuteAction();
     void slotVolumeSliderChanged(int);
     void slotOutputVolumeChanged(qreal);
     void slotSeekSliderActionTriggered(int);
