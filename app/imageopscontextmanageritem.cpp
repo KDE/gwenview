@@ -80,11 +80,13 @@ struct ImageOpsContextManagerItem::Private
         KActionCollection* actionCollection = mMainWindow->actionCollection();
         KActionCategory* edit = new KActionCategory(i18nc("@title actions category - means actions changing image", "Edit"), actionCollection);
         mRotateLeftAction = edit->addAction("rotate_left", q, SLOT(rotateLeft()));
+        mRotateLeftAction->setPriority(QAction::LowPriority);
         mRotateLeftAction->setText(i18n("Rotate Left"));
         mRotateLeftAction->setIcon(KIcon("object-rotate-left"));
         mRotateLeftAction->setShortcut(Qt::CTRL + Qt::Key_L);
 
         mRotateRightAction = edit->addAction("rotate_right", q, SLOT(rotateRight()));
+        mRotateRightAction->setPriority(QAction::LowPriority);
         mRotateRightAction->setText(i18n("Rotate Right"));
         mRotateRightAction->setIcon(KIcon("object-rotate-right"));
         mRotateRightAction->setShortcut(Qt::CTRL + Qt::Key_R);
@@ -161,7 +163,7 @@ void ImageOpsContextManagerItem::updateSideBarContent()
 
     d->mGroup->clear();
     Q_FOREACH(KAction * action, d->mActionList) {
-        if (action->isEnabled()) {
+        if (action->isEnabled() && action->priority() != QAction::LowPriority) {
             d->mGroup->addAction(action);
         }
     }

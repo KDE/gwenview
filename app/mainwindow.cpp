@@ -323,13 +323,11 @@ struct MainWindow::Private
         action->setShortcut(Qt::Key_F5);
 
         mBrowseAction = view->addAction("browse");
-        mBrowseAction->setPriority(QAction::LowPriority);
         mBrowseAction->setText(i18nc("@action Switch to file list", "Browse"));
         mBrowseAction->setCheckable(true);
         mBrowseAction->setIcon(KIcon("view-list-icons"));
 
         mViewAction = view->addAction("view");
-        mViewAction->setPriority(QAction::LowPriority);
         mViewAction->setText(i18nc("@action Switch to image view", "View"));
         mViewAction->setIcon(KIcon("view-preview"));
         mViewAction->setCheckable(true);
@@ -342,7 +340,6 @@ struct MainWindow::Private
                 q, SLOT(setActiveViewModeAction(QAction*)));
 
         mFullScreenAction = static_cast<KToggleFullScreenAction*>(view->addAction(KStandardAction::FullScreen, q, SLOT(toggleFullScreen(bool))));
-        mFullScreenAction->setPriority(QAction::LowPriority);
         connect(mViewMainPage, SIGNAL(toggleFullScreenRequested()),
                 mFullScreenAction, SLOT(trigger()));
 
@@ -352,23 +349,27 @@ struct MainWindow::Private
         reduceLodAction->setShortcut(Qt::Key_Escape);
 
         mGoToPreviousAction = view->addAction("go_previous", q, SLOT(goToPrevious()));
+        mGoToPreviousAction->setPriority(QAction::LowPriority);
         mGoToPreviousAction->setIcon(KIcon("media-skip-backward"));
         mGoToPreviousAction->setText(i18nc("@action Go to previous image", "Previous"));
         mGoToPreviousAction->setToolTip(i18n("Go to Previous Image"));
         mGoToPreviousAction->setShortcut(Qt::Key_Backspace);
 
         mGoToNextAction = view->addAction("go_next", q, SLOT(goToNext()));
+        mGoToNextAction->setPriority(QAction::LowPriority);
         mGoToNextAction->setIcon(KIcon("media-skip-forward"));
         mGoToNextAction->setText(i18nc("@action Go to next image", "Next"));
         mGoToNextAction->setToolTip(i18n("Go to Next Image"));
         mGoToNextAction->setShortcut(Qt::Key_Space);
 
         mGoToFirstAction = view->addAction("go_first", q, SLOT(goToFirst()));
+        mGoToFirstAction->setPriority(QAction::LowPriority);
         mGoToFirstAction->setText(i18nc("@action Go to first image", "First"));
         mGoToFirstAction->setToolTip(i18n("Go to First Image"));
         mGoToFirstAction->setShortcut(Qt::Key_Home);
 
         mGoToLastAction = view->addAction("go_last", q, SLOT(goToLast()));
+        mGoToLastAction->setPriority(QAction::LowPriority);
         mGoToLastAction->setText(i18nc("@action Go to last image", "Last"));
         mGoToLastAction->setToolTip(i18n("Go to Last Image"));
         mGoToLastAction->setShortcut(Qt::Key_End);
