@@ -88,7 +88,7 @@ void BirdEyeView::adjustGeometry()
     setGeometry(
         QRectF(
             rect.right() - VIEW_OFFSET - size.width(),
-            qMax(rect.top() + rect.height() * Y_POSITION_PERCENT - size.height(), 0.),
+            qMax(rect.top() + rect.height() * Y_POSITION_PERCENT - size.height(), qreal(0.)),
             size.width(),
             size.height()
         ));

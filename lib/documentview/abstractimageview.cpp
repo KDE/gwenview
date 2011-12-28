@@ -62,8 +62,8 @@ struct AbstractImageViewPrivate
         QSizeF zoomedDocSize = q->documentSize() * mZoom;
         QSizeF viewSize = q->boundingRect().size();
         QPointF offset(
-            qMax((viewSize.width() - zoomedDocSize.width()) / 2, 0.),
-            qMax((viewSize.height() - zoomedDocSize.height()) / 2, 0.)
+            qMax((viewSize.width() - zoomedDocSize.width()) / 2, qreal(0.)),
+            qMax((viewSize.height() - zoomedDocSize.height()) / 2, qreal(0.))
         );
         if (offset != mImageOffset) {
             mImageOffset = offset;
@@ -83,8 +83,8 @@ struct AbstractImageViewPrivate
         QSizeF zoomedDocSize = q->documentSize() * mZoom;
         QSizeF viewSize = q->boundingRect().size();
         QPointF newPos(
-            qBound(0., _newPos.x(), zoomedDocSize.width() - viewSize.width()),
-            qBound(0., _newPos.y(), zoomedDocSize.height() - viewSize.height())
+            qBound(qreal(0.), _newPos.x(), zoomedDocSize.width() - viewSize.width()),
+            qBound(qreal(0.), _newPos.y(), zoomedDocSize.height() - viewSize.height())
         );
         if (newPos != mScrollPos) {
             QPointF oldPos = mScrollPos;
@@ -254,7 +254,7 @@ qreal AbstractImageView::computeZoomToFit() const
     qreal fitHeight = viewSize.height() / docSize.height();
     qreal fit = qMin(fitWidth, fitHeight);
     if (!d->mEnlargeSmallerImages) {
-        fit = qMin(fit, 1.);
+        fit = qMin(fit, qreal(1.));
     }
     return fit;
 }
