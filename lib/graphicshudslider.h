@@ -67,6 +67,9 @@ protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
 
+private Q_SLOTS:
+    void doRepeatAction(int time = 50);
+
 private:
     GraphicsHudSliderPrivate* const d;
 };
