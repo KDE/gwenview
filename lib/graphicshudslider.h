@@ -66,6 +66,8 @@ protected:
     void mousePressEvent(QGraphicsSceneMouseEvent* event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
+    void keyPressEvent(QKeyEvent* event);
+    void keyReleaseEvent(QKeyEvent* event);
 
 private Q_SLOTS:
     void doRepeatAction(int time = 50);

@@ -40,12 +40,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 
+static const int FIRST_REPEAT_DELAY = 500;
+
 struct GraphicsHudSliderPrivate
 {
     GraphicsHudSlider* q;
     int mMin, mMax, mPageStep, mSingleStep;
     int mSliderPosition;
-    int mRepeatPos;
+    int mRepeatX;
     QAbstractSlider::SliderAction mRepeatAction;
     int mValue;
     bool mIsDown;
@@ -105,6 +107,7 @@ GraphicsHudSlider::GraphicsHudSlider(QGraphicsItem* parent)
     d->mRepeatAction = QAbstractSlider::SliderNoAction;
     setCursor(Qt::ArrowCursor);
     setAcceptHoverEvents(true);
+    setFocusPolicy(Qt::WheelFocus);
 }
 
 GraphicsHudSlider::~GraphicsHudSlider()
@@ -166,11 +169,11 @@ void GraphicsHudSlider::mousePressEvent(QGraphicsSceneMouseEvent* event)
             break;
         }
     } else {
-        d->mRepeatPos = pos;
+        d->mRepeatX = event->pos().x();
         d->mRepeatAction = pos < d->mSliderPosition
             ? QAbstractSlider::SliderPageStepSub
             : QAbstractSlider::SliderPageStepAdd;
-        doRepeatAction(500);
+        doRepeatAction(FIRST_REPEAT_DELAY);
     }
     update();
 }
@@ -189,6 +192,32 @@ void GraphicsHudSlider::mouseReleaseEvent(QGraphicsSceneMouseEvent* /*event*/)
     d->mIsDown = false;
     d->mRepeatAction = QAbstractSlider::SliderNoAction;
     update();
+}
+
+void GraphicsHudSlider::keyPressEvent(QKeyEvent* event)
+{
+    d->mRepeatAction = QAbstractSlider::SliderNoAction;
+    bool rtl = QApplication::isRightToLeft();
+    switch (event->key()) {
+    case Qt::Key_Left:
+        d->mRepeatAction = rtl ? QAbstractSlider::SliderSingleStepAdd : QAbstractSlider::SliderSingleStepSub;
+        break;
+    case Qt::Key_Right:
+        d->mRepeatAction = rtl ? QAbstractSlider::SliderSingleStepSub : QAbstractSlider::SliderSingleStepAdd;
+        break;
+    default:
+        break;
+    }
+
+    if (d->mRepeatAction != QAbstractSlider::SliderNoAction) {
+        d->mRepeatX = -1;
+        doRepeatAction(FIRST_REPEAT_DELAY);
+    }
+}
+
+void GraphicsHudSlider::keyReleaseEvent(QKeyEvent* /*event*/)
+{
+    d->mRepeatAction = QAbstractSlider::SliderNoAction;
 }
 
 void GraphicsHudSlider::setRange(int min, int max)
@@ -287,19 +316,25 @@ void GraphicsHudSlider::doRepeatAction(int time)
     case QAbstractSlider::SliderToMinimum:
     case QAbstractSlider::SliderToMaximum:
     case QAbstractSlider::SliderMove:
-    case QAbstractSlider::SliderNoAction:
         kWarning() << "Not much point in repeating action of type" << d->mRepeatAction;
+        return;
+    case QAbstractSlider::SliderNoAction:
         return;
     }
 
-    if (qAbs(d->mRepeatPos - d->mSliderPosition) < step) {
-        d->mRepeatAction = QAbstractSlider::SliderNoAction;
-        setSliderPosition(d->mRepeatPos);
-        triggerAction(QAbstractSlider::SliderMove);
-    } else {
-        triggerAction(d->mRepeatAction);
-        QTimer::singleShot(time, this, SLOT(doRepeatAction()));
+    if (d->mRepeatX != -1) {
+        // If we reach the position where the mouse button is held down,
+        // stop repeating.
+        int pos = d->positionForX(d->mRepeatX);
+        if (qAbs(pos - d->mSliderPosition) < step) {
+            d->mRepeatAction = QAbstractSlider::SliderNoAction;
+            setSliderPosition(pos);
+            triggerAction(QAbstractSlider::SliderMove);
+            return;
+        }
     }
+    triggerAction(d->mRepeatAction);
+    QTimer::singleShot(time, this, SLOT(doRepeatAction()));
 }
 
 } // namespace
