@@ -196,20 +196,19 @@ void GraphicsHudSlider::mouseReleaseEvent(QGraphicsSceneMouseEvent* /*event*/)
 
 void GraphicsHudSlider::keyPressEvent(QKeyEvent* event)
 {
-    d->mRepeatAction = QAbstractSlider::SliderNoAction;
     bool rtl = QApplication::isRightToLeft();
     switch (event->key()) {
     case Qt::Key_Left:
-        d->mRepeatAction = rtl ? QAbstractSlider::SliderSingleStepAdd : QAbstractSlider::SliderSingleStepSub;
+        triggerAction(rtl ? QAbstractSlider::SliderSingleStepAdd : QAbstractSlider::SliderSingleStepSub);
         break;
     case Qt::Key_Right:
-        d->mRepeatAction = rtl ? QAbstractSlider::SliderSingleStepSub : QAbstractSlider::SliderSingleStepAdd;
+        triggerAction(rtl ? QAbstractSlider::SliderSingleStepSub : QAbstractSlider::SliderSingleStepAdd);
         break;
     case Qt::Key_PageUp:
-        d->mRepeatAction = QAbstractSlider::SliderPageStepSub;
+        triggerAction(QAbstractSlider::SliderPageStepSub);
         break;
     case Qt::Key_PageDown:
-        d->mRepeatAction = QAbstractSlider::SliderPageStepAdd;
+        triggerAction(QAbstractSlider::SliderPageStepAdd);
         break;
     case Qt::Key_Home:
         triggerAction(QAbstractSlider::SliderToMinimum);
@@ -220,11 +219,6 @@ void GraphicsHudSlider::keyPressEvent(QKeyEvent* event)
     default:
         event->ignore();
         break;
-    }
-
-    if (d->mRepeatAction != QAbstractSlider::SliderNoAction) {
-        d->mRepeatX = -1;
-        doRepeatAction(FIRST_REPEAT_DELAY);
     }
 }
 
@@ -335,19 +329,20 @@ void GraphicsHudSlider::doRepeatAction(int time)
         return;
     }
 
-    if (d->mRepeatX != -1) {
-        // If we reach the position where the mouse button is held down,
-        // stop repeating.
-        int pos = d->positionForX(d->mRepeatX);
-        if (qAbs(pos - d->mSliderPosition) < step) {
-            d->mRepeatAction = QAbstractSlider::SliderNoAction;
-            setSliderPosition(pos);
-            triggerAction(QAbstractSlider::SliderMove);
-            return;
-        }
+    int pos = d->positionForX(d->mRepeatX);
+    if (qAbs(pos - d->mSliderPosition) >= step) {
+        // We are far enough from the position where the mouse button was held
+        // down to be able to repeat the action one more time
+        triggerAction(d->mRepeatAction);
+        QTimer::singleShot(time, this, SLOT(doRepeatAction()));
+    } else {
+        // We are too close to the held down position, reach the position and
+        // don't repeat
+        d->mRepeatAction = QAbstractSlider::SliderNoAction;
+        setSliderPosition(pos);
+        triggerAction(QAbstractSlider::SliderMove);
+        return;
     }
-    triggerAction(d->mRepeatAction);
-    QTimer::singleShot(time, this, SLOT(doRepeatAction()));
 }
 
 } // namespace
