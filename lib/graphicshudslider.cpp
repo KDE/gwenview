@@ -205,7 +205,20 @@ void GraphicsHudSlider::keyPressEvent(QKeyEvent* event)
     case Qt::Key_Right:
         d->mRepeatAction = rtl ? QAbstractSlider::SliderSingleStepSub : QAbstractSlider::SliderSingleStepAdd;
         break;
+    case Qt::Key_PageUp:
+        d->mRepeatAction = QAbstractSlider::SliderPageStepSub;
+        break;
+    case Qt::Key_PageDown:
+        d->mRepeatAction = QAbstractSlider::SliderPageStepAdd;
+        break;
+    case Qt::Key_Home:
+        triggerAction(QAbstractSlider::SliderToMinimum);
+        break;
+    case Qt::Key_End:
+        triggerAction(QAbstractSlider::SliderToMaximum);
+        break;
     default:
+        event->ignore();
         break;
     }
 
