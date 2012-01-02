@@ -194,6 +194,16 @@ void GraphicsHudSlider::mouseReleaseEvent(QGraphicsSceneMouseEvent* /*event*/)
     update();
 }
 
+void GraphicsHudSlider::wheelEvent(QGraphicsSceneWheelEvent* event)
+{
+    int step = qMin(QApplication::wheelScrollLines() * d->mSingleStep, d->mPageStep);
+    if ((event->modifiers() & Qt::ControlModifier) || (event->modifiers() & Qt::ShiftModifier)) {
+        step = d->mPageStep;
+    }
+    setSliderPosition(d->mSliderPosition + event->delta() * step / 120);
+    triggerAction(QAbstractSlider::SliderMove);
+}
+
 void GraphicsHudSlider::keyPressEvent(QKeyEvent* event)
 {
     bool rtl = QApplication::isRightToLeft();
