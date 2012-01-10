@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "itemeditor.moc"
 
 // Qt
+#include <QApplication>
 #include <QShowEvent>
 
 // KDE
@@ -42,6 +43,7 @@ ItemEditor::ItemEditor(QWidget* parent)
 : KLineEdit(parent)
 , d(new ItemEditorPrivate)
 {
+    setPalette(QApplication::palette());
     connect(this, SIGNAL(textChanged(QString)), SLOT(resizeToContents()));
     setTrapReturnKey(true);
 }
