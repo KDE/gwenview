@@ -23,6 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QAbstractScrollArea>
+#include <QApplication>
 #include <QGraphicsLinearLayout>
 #include <QGraphicsProxyWidget>
 #include <QGraphicsScene>
@@ -529,16 +530,25 @@ void DocumentView::wheelEvent(QGraphicsSceneWheelEvent* event)
         }
         return;
     }
-    if (event->modifiers() == Qt::NoModifier
-            && GwenviewConfig::mouseWheelBehavior() == MouseWheelBehavior::Browse
-       ) {
+    if (GwenviewConfig::mouseWheelBehavior() == MouseWheelBehavior::Browse
+        && event->modifiers() == Qt::NoModifier) {
         // Browse with mouse wheel
         if (event->delta() > 0) {
             previousImageRequested();
         } else {
             nextImageRequested();
         }
+        return;
     }
+    // Scroll
+    qreal dx = 0;
+    // 16 = pixels for one line
+    // 120: see QWheelEvent::delta() doc
+    qreal dy = -qApp->wheelScrollLines() * 16 * event->delta() / 120;
+    if (event->orientation() == Qt::Horizontal) {
+        qSwap(dx, dy);
+    }
+    d->mAdapter->setScrollPos(d->mAdapter->scrollPos() + QPointF(dx, dy));
 }
 
 void DocumentView::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
