@@ -7,7 +7,12 @@ string(REGEX MATCH "#define +JPEG_LIB_VERSION +([0-9]+)" "\\1" jpeglib_version "
 set(jpeglib_version ${CMAKE_MATCH_1})
 if ("${jpeglib_version}" STREQUAL "")
     # libjpeg-turbo keeps JPEG_LIB_VERSION in jconfig.h, not jpeglib.h :/
-    file(READ "${JPEG_INCLUDE_DIR}/jconfig.h" jconfig_h_content)
+    find_file(JCONFIG_H jconfig.h PATHS "${JPEG_INCLUDE_DIR}")
+    if (NOT EXISTS "${JCONFIG_H}")
+        message(FATAL_ERROR "Could not find jconfig.h. You can specify its path with -DJCONFIG_H=/path/to/jconfig.h.")
+    endif (NOT EXISTS "${JCONFIG_H}")
+    message(STATUS "Looking for libjpeg version in ${JCONFIG_H}")
+    file(READ "${JCONFIG_H}" jconfig_h_content)
     string(REGEX MATCH "#define +JPEG_LIB_VERSION +([0-9]+)" "\\1" jpeglib_version "${jconfig_h_content}")
     set(jpeglib_version ${CMAKE_MATCH_1})
 endif ("${jpeglib_version}" STREQUAL "")
