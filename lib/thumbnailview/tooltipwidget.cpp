@@ -88,7 +88,7 @@ QSize ToolTipWidget::sizeHint() const
 
 void ToolTipWidget::paintEvent(QPaintEvent*)
 {
-    QColor bg2Color = QToolTip::palette().color(QPalette::ToolTipBase);
+    QColor bg2Color = palette().color(QPalette::ToolTipBase);
     QColor bg1Color = KColorScheme::shade(bg2Color, KColorScheme::LightShade, 0.2);
 
     QLinearGradient gradient(QPointF(0.0, 0.0), QPointF(0.0, height()));
