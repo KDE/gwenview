@@ -54,6 +54,11 @@ struct GraphicsHudSliderPrivate
 
     QRectF mHandleRect;
 
+    bool hasValidRange() const
+    {
+        return mMax > mMin;
+    }
+
     void updateHandleRect()
     {
         static const FullScreenTheme::RenderInfo renderInfo = FullScreenTheme::renderInfo(FullScreenTheme::SliderWidgetHandle);
@@ -105,6 +110,7 @@ GraphicsHudSlider::GraphicsHudSlider(QGraphicsItem* parent)
     d->mSliderPosition = d->mValue = 0;
     d->mIsDown = false;
     d->mRepeatAction = QAbstractSlider::SliderNoAction;
+    d->updateHandleRect();
     setCursor(Qt::ArrowCursor);
     setAcceptHoverEvents(true);
     setFocusPolicy(Qt::WheelFocus);
@@ -117,8 +123,9 @@ GraphicsHudSlider::~GraphicsHudSlider()
 
 void GraphicsHudSlider::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget*)
 {
+    bool drawHandle = d->hasValidRange();
     FullScreenTheme::State state;
-    if (option->state.testFlag(QStyle::State_MouseOver)) {
+    if (drawHandle && option->state.testFlag(QStyle::State_MouseOver)) {
         state = d->mIsDown ? FullScreenTheme::DownState : FullScreenTheme::MouseOverState;
     } else {
         state = FullScreenTheme::NormalState;
@@ -138,12 +145,17 @@ void GraphicsHudSlider::paint(QPainter* painter, const QStyleOptionGraphicsItem*
         2 * renderInfo.borderRadius
         );
 
-    // Clip out handle
-    QPainterPath clipPath;
-    clipPath.addRect(QRectF(QPointF(0, 0), d->mHandleRect.bottomLeft()).adjusted(0, 0, 1, 0));
-    clipPath.addRect(QRectF(d->mHandleRect.topRight(), sliderRect.bottomRight()).adjusted(-1, 0, 0, 0));
-    painter->setClipPath(clipPath);
+    if (drawHandle) {
+        // Clip out handle
+        QPainterPath clipPath;
+        clipPath.addRect(QRectF(QPointF(0, 0), d->mHandleRect.bottomLeft()).adjusted(0, 0, 1, 0));
+        clipPath.addRect(QRectF(d->mHandleRect.topRight(), sliderRect.bottomRight()).adjusted(-1, 0, 0, 0));
+        painter->setClipPath(clipPath);
+    }
     painter->drawRoundedRect(grooveRect.adjusted(.5, .5, -.5, -.5), renderInfo.borderRadius, renderInfo.borderRadius);
+    if (!drawHandle) {
+        return;
+    }
     painter->setClipping(false);
 
     // Handle
@@ -155,6 +167,9 @@ void GraphicsHudSlider::paint(QPainter* painter, const QStyleOptionGraphicsItem*
 
 void GraphicsHudSlider::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
+    if (!d->hasValidRange()) {
+        return;
+    }
     const int pos = d->positionForX(event->pos().x());
     if (d->mHandleRect.contains(event->pos())) {
         switch (event->button()) {
@@ -180,6 +195,9 @@ void GraphicsHudSlider::mousePressEvent(QGraphicsSceneMouseEvent* event)
 
 void GraphicsHudSlider::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 {
+    if (!d->hasValidRange()) {
+        return;
+    }
     if (d->mIsDown) {
         setSliderPosition(d->positionForX(event->pos().x()));
         triggerAction(QAbstractSlider::SliderMove);
@@ -189,6 +207,9 @@ void GraphicsHudSlider::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 
 void GraphicsHudSlider::mouseReleaseEvent(QGraphicsSceneMouseEvent* /*event*/)
 {
+    if (!d->hasValidRange()) {
+        return;
+    }
     d->mIsDown = false;
     d->mRepeatAction = QAbstractSlider::SliderNoAction;
     update();
@@ -196,6 +217,9 @@ void GraphicsHudSlider::mouseReleaseEvent(QGraphicsSceneMouseEvent* /*event*/)
 
 void GraphicsHudSlider::wheelEvent(QGraphicsSceneWheelEvent* event)
 {
+    if (!d->hasValidRange()) {
+        return;
+    }
     int step = qMin(QApplication::wheelScrollLines() * d->mSingleStep, d->mPageStep);
     if ((event->modifiers() & Qt::ControlModifier) || (event->modifiers() & Qt::ShiftModifier)) {
         step = d->mPageStep;
@@ -206,6 +230,9 @@ void GraphicsHudSlider::wheelEvent(QGraphicsSceneWheelEvent* event)
 
 void GraphicsHudSlider::keyPressEvent(QKeyEvent* event)
 {
+    if (!d->hasValidRange()) {
+        return;
+    }
     bool rtl = QApplication::isRightToLeft();
     switch (event->key()) {
     case Qt::Key_Left:
@@ -234,6 +261,9 @@ void GraphicsHudSlider::keyPressEvent(QKeyEvent* event)
 
 void GraphicsHudSlider::keyReleaseEvent(QKeyEvent* /*event*/)
 {
+    if (!d->hasValidRange()) {
+        return;
+    }
     d->mRepeatAction = QAbstractSlider::SliderNoAction;
 }
 
