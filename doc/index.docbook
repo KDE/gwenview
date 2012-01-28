@@ -233,8 +233,8 @@ the actual pixel size. The shortcut <keycap>F</keycap> toggles between both view
 image with the arrow keys. When you zoom in, arrow keys are used to scroll the image. 
 This is very similar to the behavior provided by phones or digital cameras.</para>
 
-<para>When an image is in zoomed in, a bird-eye view appears and lets you scroll 
-the image using the mouse.</para>
+<para>When an image is zoomed in, a bird-eye view appears and lets you scroll 
+the image using the mouse and the arrow keys.</para>
 
 <tip><para>You can start directly in View mode by starting &kappname; from a
 context menu like <guimenuitem>Open With</guimenuitem> in another program or by
