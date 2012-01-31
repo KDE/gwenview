@@ -88,7 +88,7 @@ QSize ToolTipWidget::sizeHint() const
 
 void ToolTipWidget::paintEvent(QPaintEvent*)
 {
-    QColor bg2Color = palette().color(QPalette::ToolTipBase);
+    QColor bg2Color = palette().color(QPalette::Highlight);
     QColor bg1Color = KColorScheme::shade(bg2Color, KColorScheme::LightShade, 0.2);
 
     QLinearGradient gradient(QPointF(0.0, 0.0), QPointF(0.0, height()));
@@ -100,7 +100,7 @@ void ToolTipWidget::paintEvent(QPaintEvent*)
     painter.setOpacity(d->mOpacity);
     QPainterPath path = PaintUtils::roundedRectangle(rect(), RADIUS);
     painter.fillPath(path, gradient);
-    painter.setPen(palette().color(QPalette::ToolTipText));
+    painter.setPen(palette().color(QPalette::HighlightedText));
     painter.drawText(rect().adjusted(HMARGIN, 0, -HMARGIN, 0), 0 /* flags */, d->mText);
 }
 

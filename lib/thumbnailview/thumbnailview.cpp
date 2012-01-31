@@ -783,26 +783,17 @@ void ThumbnailView::generateThumbnailsForVisibleItems()
     if (!isVisible() || !model()) {
         return;
     }
-    KFileItemList list;
-    QRect visibleRect = viewport()->rect();
-    // Adjust visibleRect so that next thumbnail page|row
-    // get generated too
-    if (isWrapping()) {
-        visibleRect.setHeight(visibleRect.height() * 2);
-    } else {
-        visibleRect.setWidth(visibleRect.width() * 2);
-    }
+    const QRect visibleRect = viewport()->rect();
+    const int visibleSurface = visibleRect.width() * visibleRect.height();
+    const QPoint origin = visibleRect.center();
+
+    // distance => item
+    QMap<int, KFileItem> itemMap;
 
     for (int row = 0; row < model()->rowCount(); ++row) {
         QModelIndex index = model()->index(row, 0);
         KFileItem item = fileItemForIndex(index);
         QUrl url = item.url();
-
-        // Filter out invisible items
-        QRect rect = visualRect(index);
-        if (!visibleRect.intersects(rect)) {
-            continue;
-        }
 
         // Filter out archives
         MimeTypeUtils::Kind kind = MimeTypeUtils::fileItemKind(item);
@@ -822,8 +813,22 @@ void ThumbnailView::generateThumbnailsForVisibleItems()
             continue;
         }
 
-        // Add the item to our list
-        list << item;
+        // Compute distance
+        const QRect itemRect = visualRect(index);
+        int distance;
+        if (visibleRect.intersects(itemRect)) {
+            // Item is visible, order thumbnails from left to right, top to bottom
+            // Distance is computed so that it is between 0 and visibleSurface
+            distance = itemRect.top() * visibleRect.width() + itemRect.left();
+        } else {
+            // Item is not visible, order thumbnails according to distance
+            // Start at visibleSurface to ensure invisible thumbnails are
+            // generated *after* visible thumbnails
+            distance = visibleSurface + (itemRect.center() - origin).manhattanLength();
+        }
+
+        // Add the item to our map
+        itemMap.insert(distance, item);
 
         // Insert the thumbnail in mThumbnailForUrl, so that
         // setThumbnail() can find the item to update
@@ -833,8 +838,8 @@ void ThumbnailView::generateThumbnailsForVisibleItems()
         }
     }
 
-    if (!list.empty()) {
-        d->generateThumbnailsForItems(list);
+    if (!itemMap.isEmpty()) {
+        d->generateThumbnailsForItems(itemMap.values());
     }
 }
 
