@@ -68,6 +68,10 @@ const QStringList& rasterImageMimeTypes()
     if (list.isEmpty()) {
         list = KImageIO::mimeTypes(KImageIO::Reading);
         resolveAliasInList(&list);
+        // We don't want svg images to be considered as raster images
+        Q_FOREACH(const QString& mimeType, svgImageMimeTypes()) {
+            list.removeOne(mimeType);
+        }
     }
     return list;
 }

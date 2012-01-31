@@ -1,0 +1,6 @@
+Some of the unit tests in this dir can test code which access images on remote
+urls.
+
+To enable these tests, set the environment variable GV_REMOTE_TESTS_BASE_URL
+to something like "sftp://user@host/tmp". The tests will create a dir named
+"gwenview-remote-tests" in the supplied url.

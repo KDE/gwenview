@@ -21,54 +21,40 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // KDE
 #include <KDebug>
-#include <KIO/DeleteJob>
 #include <KIO/NetAccess>
-#include <KIO/Job>
-
-static void rm_rf(const QString& pathOrUrl)
-{
-    KIO::Job* job = KIO::del(pathOrUrl, KIO::HideProgressInfo);
-    job->setUiDelegate(0);
-    KIO::NetAccess::synchronousRun(job, 0);
-}
-
-static bool mkdir(const QString& pathOrUrl)
-{
-    KIO::Job* job = KIO::mkdir(pathOrUrl, -1);
-    job->setUiDelegate(0);
-    return KIO::NetAccess::synchronousRun(job, 0);
-}
-
-static bool cp(const QString& src, const QString& _dst)
-{
-    KIO::Job* job = KIO::file_copy(src, _dst, -1, KIO::Overwrite | KIO::HideProgressInfo);
-    job->setUiDelegate(0);
-    return KIO::NetAccess::synchronousRun(job, 0);
-}
 
 KUrl setUpRemoteTestDir(const QString& testFile)
 {
-    if (!qgetenv("NO_REMOTE_TESTS").isEmpty()) {
-        kWarning() << "Remote tests disabled";
+    QWidget* authWindow = 0;
+    bool ok;
+    if (qgetenv("GV_REMOTE_TESTS_BASE_URL").isEmpty()) {
+        kWarning() << "Environment variable GV_REMOTE_TESTS_BASE_URL not set: remote tests disabled";
         return KUrl();
     }
 
-    QString testDir("/tmp/gwenview-remote-tests/");
-    rm_rf(testDir);
+    KUrl baseUrl = QString::fromLocal8Bit(qgetenv("GV_REMOTE_TESTS_BASE_URL"));
+    baseUrl.addPath("gwenview-remote-tests");
 
-    if (!mkdir(testDir)) {
-        kFatal() << "Could not create dir" << testDir;
+    if (KIO::NetAccess::exists(baseUrl, KIO::NetAccess::DestinationSide, authWindow)) {
+        KIO::NetAccess::del(baseUrl, authWindow);
+    }
+    ok = KIO::NetAccess::mkdir(baseUrl, authWindow);
+    if (!ok) {
+        kFatal() << "Could not create dir" << baseUrl;
         return KUrl();
     }
 
     if (!testFile.isEmpty()) {
-        if (!cp(pathForTestFile(testFile), testDir + testFile)) {
-            kFatal() << "Could not copy" << testFile << "to" << testDir;
+        KUrl dstUrl = baseUrl;
+        dstUrl.addPath(testFile);
+        ok = KIO::NetAccess::file_copy(urlForTestFile(testFile), dstUrl, authWindow);
+        if (!ok) {
+            kFatal() << "Could not copy" << testFile << "to" << dstUrl;
             return KUrl();
         }
     }
 
-    return KUrl("sftp://localhost" + testDir);
+    return baseUrl;
 }
 
 void createEmptyFile(const QString& path)

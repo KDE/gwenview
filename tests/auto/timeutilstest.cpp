@@ -57,7 +57,7 @@ void TimeUtilsTest::testJpeg()
     KDateTime dateTime = TimeUtils::dateTimeForFileItem(item);
 
     const KDateTime orient6DateTime = KDateTime::fromString("2003-03-25T02:02:21");
-    QCOMPARE(dateTime, orient6DateTime);
+    QVERIFY2(dateTime == orient6DateTime, "This could be caused by not having strigi jpeg analyzer installed (usually in $KDEDIR/lib/strigi/strigiea_jpeg.so)");
 }
 
 void TimeUtilsTest::testCache()
