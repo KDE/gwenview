@@ -38,8 +38,8 @@
 </copyright>
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2011-12-02</date>
-<releaseinfo>2.7.0 (&kde; 4.8)</releaseinfo>
+<date>2012-01-28</date>
+<releaseinfo>2.8 (&kde; 4.8)</releaseinfo>
 <abstract>
 <para>&kappname; is an image viewer for &kde;.</para>
 </abstract>
@@ -60,7 +60,7 @@
 <title>What is &kappname;</title>
 
 <para>
-&kappname; is a fast and easy to use image viewer for KDE.
+&kappname; is a fast and easy to use image and video viewer for KDE.
 </para>
 
 <para>
@@ -227,7 +227,14 @@ on the left, press <keycombo action="simul">&Shift;&Tab;</keycombo>.</para>
 button are next to the zoom slider and are two preset zoom levels. The
 <guibutton>Fit</guibutton> button zooms the current image to fit the size
 of the window, and the <guibutton>100%</guibutton> button zooms the image to
-the actual pixel size.</para>
+the actual pixel size. The shortcut <keycap>F</keycap> toggles between both view modes.</para>
+
+<para>When an image is in zoom-to-fit mode, you can go to the previous and next 
+image with the arrow keys. When you zoom in, arrow keys are used to scroll the image. 
+This is very similar to the behavior provided by phones or digital cameras.</para>
+
+<para>When an image is zoomed in, a bird-eye view appears and lets you scroll 
+the image using the mouse and the arrow keys.</para>
 
 <tip><para>You can start directly in View mode by starting &kappname; from a
 context menu like <guimenuitem>Open With</guimenuitem> in another program or by
@@ -544,6 +551,12 @@ Print the current image.</para></listitem>
 <listitem><para><keycombo
 action="simul">&Ctrl;<keycap>O</keycap></keycombo>:
 Open an image using the standard file selection dialog.</para></listitem>
+
+<listitem><para><keycap>F</keycap>:
+Pressing this shortcut toggles zoom-to-fit on and off.</para></listitem>
+
+<listitem><para><keycap>P</keycap>:
+Viewing a video this shortcut toggles playback on and off.</para></listitem>
 </itemizedlist>
 </sect1>
 </chapter>
