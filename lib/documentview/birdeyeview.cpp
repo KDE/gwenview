@@ -36,9 +36,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 
-static qreal MAX_SIZE = 96;
-static qreal VIEW_OFFSET = MAX_SIZE / 4;
 static qreal Y_POSITION_PERCENT = 1 / 3.;
+static qreal MIN_SIZE = 72;
+static qreal VIEW_OFFSET = MIN_SIZE / 4;
 
 struct BirdEyeViewPrivate
 {
@@ -83,7 +83,7 @@ void BirdEyeView::adjustGeometry()
     }
     show();
     QSize size = d->mDocView->document()->size();
-    size.scale(MAX_SIZE, MAX_SIZE, Qt::KeepAspectRatio);
+    size.scale(MIN_SIZE, MIN_SIZE, Qt::KeepAspectRatioByExpanding);
     QRectF rect = d->mDocView->boundingRect();
     setGeometry(
         QRectF(
