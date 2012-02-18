@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KDebug>
 
 // Qt
+#include <QApplication>
 #include <QCursor>
 #include <QGraphicsSceneEvent>
 #include <QPainter>
@@ -36,7 +37,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 
-static qreal Y_POSITION_PERCENT = 1 / 3.;
 static qreal MIN_SIZE = 72;
 static qreal VIEW_OFFSET = MIN_SIZE / 4;
 
@@ -87,8 +87,10 @@ void BirdEyeView::adjustGeometry()
     QRectF rect = d->mDocView->boundingRect();
     setGeometry(
         QRectF(
-            rect.right() - VIEW_OFFSET - size.width(),
-            qMax(rect.top() + rect.height() * Y_POSITION_PERCENT - size.height(), qreal(0.)),
+            QApplication::isRightToLeft()
+            ? rect.left() + VIEW_OFFSET
+            : rect.right() - VIEW_OFFSET - size.width(),
+            rect.bottom() - VIEW_OFFSET - size.height(),
             size.width(),
             size.height()
         ));
