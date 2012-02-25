@@ -63,6 +63,9 @@ public:
 
     virtual QWidget* widget() const;
 
+public Q_SLOTS:
+    void onWidgetSlidedIn(); // reimp
+
 Q_SIGNALS:
     void rectUpdated(const QRect&);
     void done();

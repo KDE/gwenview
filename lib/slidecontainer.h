@@ -74,12 +74,16 @@ public Q_SLOTS:
      */
     void slideOut();
 
+Q_SIGNALS:
+    void slidedIn();
+    void slidedOut();
+
 protected:
     void resizeEvent(QResizeEvent*);
     bool eventFilter(QObject*, QEvent* event);
 
 private Q_SLOTS:
-    void slotSlidedOut();
+    void slotAnimFinished();
 
 private:
     QWidget* mContent;
