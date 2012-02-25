@@ -78,6 +78,8 @@ void SlideContainerAutoTest::testInit()
 void SlideContainerAutoTest::testSlideIn()
 {
     TestWindow window;
+    QSignalSpy inSpy(window.mContainer, SIGNAL(slidedIn()));
+    QSignalSpy outSpy(window.mContainer, SIGNAL(slidedOut()));
     window.show();
 
     window.mContainer->slideIn();
@@ -85,6 +87,8 @@ void SlideContainerAutoTest::testSlideIn()
         QTest::qWait(100);
     }
     QCOMPARE(window.mContainer->height(), window.mContent->height());
+    QCOMPARE(inSpy.count(), 1);
+    QCOMPARE(outSpy.count(), 0);
 }
 
 void SlideContainerAutoTest::testSlideOut()
@@ -96,11 +100,16 @@ void SlideContainerAutoTest::testSlideOut()
     while (window.mContainer->slideHeight() != window.mContent->height()) {
         QTest::qWait(100);
     }
+
+    QSignalSpy inSpy(window.mContainer, SIGNAL(slidedIn()));
+    QSignalSpy outSpy(window.mContainer, SIGNAL(slidedOut()));
     window.mContainer->slideOut();
     while (window.mContainer->slideHeight() != 0) {
         QTest::qWait(100);
     }
     QCOMPARE(window.mContainer->height(), 0);
+    QCOMPARE(inSpy.count(), 0);
+    QCOMPARE(outSpy.count(), 1);
 }
 
 void SlideContainerAutoTest::testSlideInDeleteSlideOut()
