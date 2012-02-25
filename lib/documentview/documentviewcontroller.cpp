@@ -250,6 +250,11 @@ void DocumentViewController::updateTool()
     }
     AbstractRasterImageViewTool* tool = d->mView->currentTool();
     if (tool && tool->widget()) {
+        // Use a QueuedConnection to ensure the size of the view has been
+        // updated by the time the slot is called.
+        connect(d->mToolContainer, SIGNAL(slidedIn()),
+            tool, SLOT(onWidgetSlidedIn()),
+            Qt::QueuedConnection);
         d->mToolContainerContent->setToolWidget(tool->widget());
         d->mToolContainer->slideIn();
     } else {

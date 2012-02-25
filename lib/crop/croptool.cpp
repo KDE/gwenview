@@ -207,6 +207,14 @@ struct CropToolPrivate
         QObject::connect(mCropWidget, SIGNAL(done()),
                          q, SIGNAL(done()));
     }
+
+    QRect computeVisibleImageRect() const
+    {
+        RasterImageView* view = q->imageView();
+        const QRect imageRect = QRect(QPoint(0, 0), view->documentSize().toSize());
+        const QRect viewportRect = view->mapToImage(view->rect().toRect());
+        return imageRect & viewportRect;
+    }
 };
 
 CropTool::CropTool(RasterImageView* view)
@@ -216,11 +224,8 @@ CropTool::CropTool(RasterImageView* view)
     d->q = this;
     d->mCropHandleList << CH_Left << CH_Right << CH_Top << CH_Bottom << CH_TopLeft << CH_TopRight << CH_BottomLeft << CH_BottomRight;
     d->mMovingHandle = CH_None;
-    const QRect imageRect = QRect(QPoint(0, 0), view->documentSize().toSize());
-    const QRect viewportRect = view->mapToImage(view->rect().toRect());
-    d->mRect = imageRect & viewportRect;
     d->mCropRatio = 0.;
-
+    d->mRect = d->computeVisibleImageRect();
     d->setupWidget();
 }
 
@@ -409,6 +414,11 @@ void CropTool::slotCropRequested()
 QWidget* CropTool::widget() const
 {
     return d->mCropWidget;
+}
+
+void CropTool::onWidgetSlidedIn()
+{
+    setRect(d->computeVisibleImageRect());
 }
 
 } // namespace
