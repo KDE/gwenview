@@ -40,6 +40,14 @@ namespace Gwenview
 static qreal MIN_SIZE = 72;
 static qreal VIEW_OFFSET = MIN_SIZE / 4;
 
+/**
+ * Returns a QRectF whose coordinates are rounded to completely contains rect
+ */
+inline QRectF alignedRectF(const QRectF& rect)
+{
+    return QRectF(rect.toAlignedRect());
+}
+
 struct BirdEyeViewPrivate
 {
     BirdEyeView* q;
@@ -77,6 +85,7 @@ BirdEyeView::~BirdEyeView()
 
 void BirdEyeView::adjustGeometry()
 {
+    kDebug();
     if (!d->mDocView->canZoom() || d->mDocView->zoomToFit()) {
         hide();
         return;
@@ -84,17 +93,18 @@ void BirdEyeView::adjustGeometry()
     show();
     QSize size = d->mDocView->document()->size();
     size.scale(MIN_SIZE, MIN_SIZE, Qt::KeepAspectRatioByExpanding);
-    QRectF rect = d->mDocView->boundingRect();
-    setGeometry(
-        QRectF(
-            QApplication::isRightToLeft()
-            ? rect.left() + VIEW_OFFSET
-            : rect.right() - VIEW_OFFSET - size.width(),
-            rect.bottom() - VIEW_OFFSET - size.height(),
-            size.width(),
-            size.height()
-        ));
+    QRectF docViewRect = d->mDocView->boundingRect();
+    QRectF geom = QRectF(
+        QApplication::isRightToLeft()
+        ? docViewRect.left() + VIEW_OFFSET
+        : docViewRect.right() - VIEW_OFFSET - size.width(),
+        docViewRect.bottom() - VIEW_OFFSET - size.height(),
+        size.width(),
+        size.height()
+    );
+    setGeometry(alignedRectF(geom));
     adjustVisibleRect();
+
     setVisible(d->mVisibleRect != boundingRect());
 }
 
@@ -108,9 +118,10 @@ void BirdEyeView::adjustVisibleRect()
         return;
     }
 
-    d->mVisibleRect = QRectF(
-                          QPointF(d->mDocView->position()) / viewZoom * bevZoom,
-                          (d->mDocView->size() / viewZoom).boundedTo(docSize) * bevZoom);
+    QRectF rect = QRectF(
+        QPointF(d->mDocView->position()) / viewZoom * bevZoom,
+        (d->mDocView->size() / viewZoom).boundedTo(docSize) * bevZoom);
+    d->mVisibleRect = alignedRectF(rect);
     update();
 }
 
@@ -122,8 +133,7 @@ inline void drawTransparentRect(QPainter* painter, const QRectF& rect, const QCo
     fg.setAlphaF(.66);
     painter->setPen(fg);
     painter->setBrush(bg);
-    // Use a QRect to avoid missing pixels in the corners
-    painter->drawRect(rect.toRect().adjusted(0, 0, -1, -1));
+    painter->drawRect(rect.adjusted(0, 0, -1, -1));
 }
 
 void BirdEyeView::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
