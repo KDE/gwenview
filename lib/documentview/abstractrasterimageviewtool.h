@@ -44,6 +44,7 @@ class RasterImageView;
 struct AbstractRasterImageViewToolPrivate;
 class GWENVIEWLIB_EXPORT AbstractRasterImageViewTool : public QObject
 {
+    Q_OBJECT
 public:
     AbstractRasterImageViewTool(RasterImageView* view);
     virtual ~AbstractRasterImageViewTool();
@@ -77,6 +78,10 @@ public:
     {
         return 0;
     }
+
+public Q_SLOTS:
+    virtual void onWidgetSlidedIn()
+    {}
 
 private:
     AbstractRasterImageViewToolPrivate * const d;

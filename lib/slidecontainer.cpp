@@ -68,6 +68,7 @@ void SlideContainer::animTo(int newHeight)
     anim->setStartValue(slideHeight());
     anim->setEndValue(newHeight);
     anim->start(QAbstractAnimation::DeleteWhenStopped);
+    connect(anim, SIGNAL(finished()), SLOT(slotAnimFinished()));
     mAnim = anim;
 }
 
@@ -90,12 +91,6 @@ void SlideContainer::slideOut()
     }
     mSlidingOut = true;
     animTo(0);
-    connect(mAnim.data(), SIGNAL(finished()), SLOT(slotSlidedOut()));
-}
-
-void SlideContainer::slotSlidedOut()
-{
-    mSlidingOut = false;
 }
 
 QSize SlideContainer::sizeHint() const
@@ -151,6 +146,16 @@ void SlideContainer::setSlideHeight(int value)
 {
     setFixedHeight(value);
     adjustContentGeometry();
+}
+
+void SlideContainer::slotAnimFinished()
+{
+    if (height() == 0) {
+        mSlidingOut = false;
+        slidedOut();
+    } else {
+        slidedIn();
+    }
 }
 
 } // namespace
