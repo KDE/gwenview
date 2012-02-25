@@ -238,9 +238,10 @@ void CropTool::setCropRatio(double ratio)
 
 void CropTool::setRect(const QRect& rect)
 {
+    QRect oldRect = d->mRect;
     d->mRect = rect;
     d->keepRectInsideImage();
-    if (d->mRect != rect) {
+    if (d->mRect != oldRect) {
         rectUpdated(d->mRect);
     }
     imageView()->update();
