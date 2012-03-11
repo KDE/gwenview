@@ -56,11 +56,11 @@ K_EXPORT_PLUGIN(GVPartFactory)
 namespace Gwenview
 {
 
-GVPart::GVPart(QWidget* /*parentWidget*/, QObject* parent, const QVariantList& /*args*/)
+GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QVariantList& /*args*/)
 : KParts::ReadOnlyPart(parent)
 {
     KGlobal::locale()->insertCatalog("gwenview");
-    DocumentViewContainer* container = new DocumentViewContainer;
+    DocumentViewContainer* container = new DocumentViewContainer(parentWidget);
     setWidget(container);
     mDocumentView = container->createView();
 
