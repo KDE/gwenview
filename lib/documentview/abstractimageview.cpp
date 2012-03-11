@@ -100,7 +100,9 @@ struct AbstractImageViewPrivate
 
     void setupZoomCursor()
     {
-        QString path = KStandardDirs::locate("appdata", "cursors/zoom.png");
+        // We do not use "appdata" here because that does not work when this
+        // code is called from a KPart.
+        QString path = KStandardDirs::locate("data", "gwenview/cursors/zoom.png");
         QPixmap cursorPixmap = QPixmap(path);
         mZoomCursor = QCursor(cursorPixmap, 11, 11);
     }
