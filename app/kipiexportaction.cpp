@@ -93,21 +93,22 @@ void KIPIExportAction::setKIPIInterface(KIPIInterface* interface)
 
 void KIPIExportAction::init()
 {
-    if (!menu()->isEmpty()) {
-        return;
-    }
-    d->mKIPIInterface->loadPlugins();
     d->mExportActionList = d->mKIPIInterface->pluginActions(KIPI::ExportPlugin);
-
-    // Look for default action
-    QString defaultActionText = GwenviewConfig::defaultExportPluginText();
-    Q_FOREACH(QAction * action, d->mExportActionList) {
-        if (action->text() == defaultActionText) {
-            setDefaultAction(action);
-            break;
+    if (d->mKIPIInterface->isLoadingFinished()) {
+        // Look for default action
+        QString defaultActionText = GwenviewConfig::defaultExportPluginText();
+        Q_FOREACH(QAction* action, d->mExportActionList) {
+            if (action->text() == defaultActionText) {
+                setDefaultAction(action);
+                break;
+            }
         }
+        // We are done, don't come back next time menu is shown
+        disconnect(menu(), SIGNAL(aboutToShow()), this, SLOT(init()));
+    } else {
+        // Loading is in progress, come back when it is done
+        connect(d->mKIPIInterface, SIGNAL(loadingFinished()), SLOT(init()));
     }
-
     d->updateMenu();
 }
 
