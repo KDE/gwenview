@@ -83,7 +83,7 @@ KIPIExportAction::KIPIExportAction(QObject* parent)
 
     setDelayed(false);
     connect(menu(), SIGNAL(aboutToShow()), SLOT(init()));
-    connect(menu(), SIGNAL(triggered(QAction*)), SLOT(setDefaultAction(QAction*)));
+    connect(menu(), SIGNAL(triggered(QAction*)), SLOT(slotPluginTriggered(QAction*)));
 }
 
 KIPIExportAction::~KIPIExportAction()
@@ -124,6 +124,11 @@ void KIPIExportAction::setDefaultAction(QAction* action)
     d->mDefaultAction = action;
 
     GwenviewConfig::setDefaultExportPluginText(action->text());
+}
+
+void KIPIExportAction::slotPluginTriggered(QAction* action)
+{
+    setDefaultAction(action);
     d->updateMenu();
 }
 
