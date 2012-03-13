@@ -58,6 +58,11 @@ public:
 
     QList<QAction*> pluginActions(KIPI::Category) const;
 
+    bool isLoadingFinished() const;
+
+Q_SIGNALS:
+    void loadingFinished();
+
 public Q_SLOTS:
     void loadPlugins();
 

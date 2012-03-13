@@ -68,11 +68,6 @@ struct KIPIExportActionPrivate
     }
 };
 
-/**
- * If no default action set: clicking the button shows the menu
- * If a default action is set: clicking the button triggers it, clicking the arrow shows the menu
- * When an action in the menu is triggered, it is set as the default action
- */
 KIPIExportAction::KIPIExportAction(QObject* parent)
 : KToolBarPopupAction(KIcon("document-share"), i18n("Share"), parent)
 , d(new KIPIExportActionPrivate)
@@ -83,7 +78,7 @@ KIPIExportAction::KIPIExportAction(QObject* parent)
 
     setDelayed(false);
     connect(menu(), SIGNAL(aboutToShow()), SLOT(init()));
-    connect(menu(), SIGNAL(triggered(QAction*)), SLOT(setDefaultAction(QAction*)));
+    connect(menu(), SIGNAL(triggered(QAction*)), SLOT(slotPluginTriggered(QAction*)));
 }
 
 KIPIExportAction::~KIPIExportAction()
@@ -98,21 +93,22 @@ void KIPIExportAction::setKIPIInterface(KIPIInterface* interface)
 
 void KIPIExportAction::init()
 {
-    if (!menu()->isEmpty()) {
-        return;
-    }
-    d->mKIPIInterface->loadPlugins();
     d->mExportActionList = d->mKIPIInterface->pluginActions(KIPI::ExportPlugin);
-
-    // Look for default action
-    QString defaultActionText = GwenviewConfig::defaultExportPluginText();
-    Q_FOREACH(QAction * action, d->mExportActionList) {
-        if (action->text() == defaultActionText) {
-            setDefaultAction(action);
-            break;
+    if (d->mKIPIInterface->isLoadingFinished()) {
+        // Look for default action
+        QString defaultActionText = GwenviewConfig::defaultExportPluginText();
+        Q_FOREACH(QAction* action, d->mExportActionList) {
+            if (action->text() == defaultActionText) {
+                setDefaultAction(action);
+                break;
+            }
         }
+        // We are done, don't come back next time menu is shown
+        disconnect(menu(), SIGNAL(aboutToShow()), this, SLOT(init()));
+    } else {
+        // Loading is in progress, come back when it is done
+        connect(d->mKIPIInterface, SIGNAL(loadingFinished()), SLOT(init()));
     }
-
     d->updateMenu();
 }
 
@@ -124,6 +120,11 @@ void KIPIExportAction::setDefaultAction(QAction* action)
     d->mDefaultAction = action;
 
     GwenviewConfig::setDefaultExportPluginText(action->text());
+}
+
+void KIPIExportAction::slotPluginTriggered(QAction* action)
+{
+    setDefaultAction(action);
     d->updateMenu();
 }
 

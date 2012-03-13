@@ -181,6 +181,8 @@ struct KIPIInterfacePrivate
     KIPI::PluginLoader* mPluginLoader;
     KIPI::PluginLoader::PluginList mPluginQueue;
     MenuInfoMap mMenuInfoMap;
+    KAction* mLoadingAction;
+    KAction* mNoPluginAction;
 
     void setupPluginsMenu()
     {
@@ -190,13 +192,13 @@ struct KIPIInterfacePrivate
                          q, SLOT(loadPlugins()));
     }
 
-    void createDummyPluginAction(const QString& text)
+    KAction* createDummyPluginAction(const QString& text)
     {
-        KAction* action = mMainWindow->actionCollection()->add<KAction>("dummy_plugin");
+        KAction* action = new KAction(q);
         action->setText(text);
         action->setShortcutConfigurable(false);
         action->setEnabled(false);
-        mPluginMenu->addAction(action);
+        return action;
     }
 };
 
@@ -207,6 +209,8 @@ KIPIInterface::KIPIInterface(MainWindow* mainWindow)
     d->q = this;
     d->mMainWindow = mainWindow;
     d->mPluginLoader = 0;
+    d->mLoadingAction = d->createDummyPluginAction(i18n("Loading..."));
+    d->mNoPluginAction = d->createDummyPluginAction(i18n("No Plugin Found"));
 
     d->setupPluginsMenu();
     QObject::connect(d->mMainWindow->contextManager(), SIGNAL(selectionChanged()),
@@ -249,7 +253,7 @@ void KIPIInterface::loadPlugins()
 
     d->mPluginLoader = new KIPI::PluginLoader(QStringList(), this);
     d->mPluginQueue = d->mPluginLoader->pluginList();
-    d->createDummyPluginAction(i18n("Loading..."));
+    d->mPluginMenu->addAction(d->mLoadingAction);
     loadOnePlugin();
 }
 
@@ -291,7 +295,6 @@ void KIPIInterface::loadOnePlugin()
 
     // If we reach this point, all plugins have been loaded. We can fill the
     // menu
-    bool atLeastOnePluginLoaded = false;
     MenuInfoMap::Iterator
     it = d->mMenuInfoMap.begin(),
     end = d->mMenuInfoMap.end();
@@ -301,22 +304,41 @@ void KIPIInterface::loadOnePlugin()
             QMenu* menu = d->mPluginMenu->addMenu(info.mName);
             qSort(info.mActions.begin(), info.mActions.end(), actionLessThan);
             Q_FOREACH(QAction * action, info.mActions) {
-                atLeastOnePluginLoaded = true;
                 menu->addAction(action);
             }
         }
     }
 
-    delete d->mMainWindow->actionCollection()->action("dummy_plugin");
-    if (!atLeastOnePluginLoaded) {
-        d->createDummyPluginAction(i18n("No Plugin Found"));
+    d->mPluginMenu->removeAction(d->mLoadingAction);
+    if (d->mPluginMenu->isEmpty()) {
+        d->mPluginMenu->addAction(d->mNoPluginAction);
     }
+
+    loadingFinished();
 }
 
 QList<QAction*> KIPIInterface::pluginActions(KIPI::Category category) const
 {
     const_cast<KIPIInterface*>(this)->loadPlugins();
-    return d->mMenuInfoMap.value(category).mActions;
+
+    if (isLoadingFinished()) {
+        QList<QAction*> list = d->mMenuInfoMap.value(category).mActions;
+        if (list.isEmpty()) {
+            list << d->mNoPluginAction;
+        }
+        return list;
+    } else {
+        return QList<QAction*>() << d->mLoadingAction;
+    }
+}
+
+bool KIPIInterface::isLoadingFinished() const
+{
+    if (!d->mPluginLoader) {
+        // Not even started
+        return false;
+    }
+    return d->mPluginQueue.isEmpty();
 }
 
 void KIPIInterface::init()

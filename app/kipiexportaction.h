@@ -46,6 +46,7 @@ public:
 private Q_SLOTS:
     void init();
     void setDefaultAction(QAction*);
+    void slotPluginTriggered(QAction*);
 
 private:
     KIPIExportActionPrivate* const d;
