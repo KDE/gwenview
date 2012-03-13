@@ -68,11 +68,6 @@ struct KIPIExportActionPrivate
     }
 };
 
-/**
- * If no default action set: clicking the button shows the menu
- * If a default action is set: clicking the button triggers it, clicking the arrow shows the menu
- * When an action in the menu is triggered, it is set as the default action
- */
 KIPIExportAction::KIPIExportAction(QObject* parent)
 : KToolBarPopupAction(KIcon("document-share"), i18n("Share"), parent)
 , d(new KIPIExportActionPrivate)
