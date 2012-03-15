@@ -244,7 +244,6 @@ void KIPIInterface::loadPlugins()
     }
 
     d->mMenuInfoMap[KIPI::ImagesPlugin]      = MenuInfo(i18nc("@title:menu", "Images"));
-    d->mMenuInfoMap[KIPI::EffectsPlugin]     = MenuInfo(i18nc("@title:menu", "Effects"));
     d->mMenuInfoMap[KIPI::ToolsPlugin]       = MenuInfo(i18nc("@title:menu", "Tools"));
     d->mMenuInfoMap[KIPI::ImportPlugin]      = MenuInfo(i18nc("@title:menu", "Import"));
     d->mMenuInfoMap[KIPI::ExportPlugin]      = MenuInfo(i18nc("@title:menu", "Export"));
