@@ -90,12 +90,12 @@ void DocumentTest::testLoad()
     doc->waitUntilLoaded();
     QCOMPARE(doc->loadingState(), Document::Loaded);
 
-    QCOMPARE(expectedKind, doc->kind());
-    QCOMPARE(expectedIsAnimated, doc->isAnimated());
+    QCOMPARE(doc->kind(), expectedKind);
+    QCOMPARE(doc->isAnimated(), expectedIsAnimated);
     QCOMPARE(spy.count(), doc->isAnimated() ? 1 : 0);
     if (doc->kind() == MimeTypeUtils::KIND_RASTER_IMAGE) {
-        QCOMPARE(expectedImage, doc->image());
-        QCOMPARE(expectedFormat, doc->format());
+        QCOMPARE(doc->image(), expectedImage);
+        QCOMPARE(QString(doc->format()), QString(expectedFormat));
     }
 }
 
@@ -131,6 +131,8 @@ void DocumentTest::testLoad_data()
             "xcf", MimeTypeUtils::KIND_RASTER_IMAGE, false);
     NEW_ROW("188191_does_not_load.tga",
             "tga", MimeTypeUtils::KIND_RASTER_IMAGE, false);
+    NEW_ROW("289819_does_not_load.png",
+            "png", MimeTypeUtils::KIND_RASTER_IMAGE, false);
 }
 #undef NEW_ROW
 
