@@ -88,6 +88,7 @@ struct LoadingDocumentImplPrivate
     bool mMetaInfoLoaded;
     bool mAnimated;
     bool mDownSampledImageLoaded;
+    QByteArray mFormatHint;
     QByteArray mData;
     QByteArray mFormat;
     QSize mImageSize;
@@ -139,6 +140,15 @@ struct LoadingDocumentImplPrivate
 
         switch (q->document()->kind()) {
         case MimeTypeUtils::KIND_RASTER_IMAGE:
+            // The hint is used to:
+            // - Speed up loadMetaInfo(): QImageReader will try to decode the
+            //   image using plugins matching this format first.
+            // - Avoid breakage: Because of a bug in Qt TGA image plugin, some
+            //   PNG were incorrectly identified as PCX! See:
+            //   https://bugs.kde.org/show_bug.cgi?id=289819
+            //
+            mFormatHint = q->document()->url().fileName()
+                .section('.', -1).toAscii().toLower();
             mMetaInfoFuture = QtConcurrent::run(this, &LoadingDocumentImplPrivate::loadMetaInfo);
             mMetaInfoFutureWatcher.setFuture(mMetaInfoFuture);
             break;
@@ -171,9 +181,18 @@ struct LoadingDocumentImplPrivate
         QBuffer buffer;
         buffer.setBuffer(&mData);
         buffer.open(QIODevice::ReadOnly);
-        QImageReader reader(&buffer);
+        QImageReader reader(&buffer, mFormatHint);
+        if (!reader.canRead()) {
+            return false;
+        }
         mFormat = reader.format();
+        if (mFormat == "jpg") {
+            // if mFormatHint was "jpg", then mFormat is "jpg", but the rest of
+            // Gwenview code assumes JPEG images have "jpeg" format.
+            mFormat = "jpeg";
+        }
         if (mFormat.isEmpty()) {
+            kError() << "mFormat.isEmpty(): this should not happen!";
             return false;
         }
 
@@ -204,7 +223,7 @@ struct LoadingDocumentImplPrivate
         QBuffer buffer;
         buffer.setBuffer(&mData);
         buffer.open(QIODevice::ReadOnly);
-        QImageReader reader(&buffer);
+        QImageReader reader(&buffer, mFormat);
 
         LOG("mImageDataInvertedZoom=" << mImageDataInvertedZoom);
         if (mImageSize.isValid()
