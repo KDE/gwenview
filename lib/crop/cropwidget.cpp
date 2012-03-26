@@ -113,7 +113,6 @@ struct CropWidgetPrivate : public Ui_CropWidget
                 << QSize(3, 2)
                 << QSize(4, 3)
                 << QSize(5, 4)
-                << QSize(6, 4)
                 << QSize(7, 5);
 
         addRatioToComboBox(QSize(1, 1), i18n("Square"));
