@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QPushButton>
+#include <QtCore/qmath.h>
 
 // KDE
 #include <KDebug>
@@ -74,6 +75,14 @@ struct CropWidgetPrivate : public Ui_CropWidget
 
     double cropRatio() const
     {
+        int index = ratioComboBox->currentIndex();
+        if (index != -1) {
+            // Get ratio from predefined value
+            QSizeF size = ratioComboBox->itemData(index).toSizeF();
+            return size.height() / size.width();
+        }
+
+        // Not a predefined value, extract ratio from the combobox text
         const QStringList lst = ratioComboBox->currentText().split(':');
         if (lst.size() != 2) {
             return 0;
@@ -92,12 +101,11 @@ struct CropWidgetPrivate : public Ui_CropWidget
         return height / width;
     }
 
-    void addRatioToComboBox(const QSize& size, const QString& label = QString())
+    void addRatioToComboBox(const QSizeF& size, const QString& label = QString())
     {
-        QString text = QString("%1:%2").arg(size.width()).arg(size.height());
-        if (!label.isEmpty()) {
-            text += QString(" (%1)").arg(label);
-        }
+        QString text = label.isEmpty()
+            ? QString("%1:%2").arg(size.width()).arg(size.height())
+            : label;
         ratioComboBox->addItem(text, QVariant(size));
     }
 
@@ -108,25 +116,28 @@ struct CropWidgetPrivate : public Ui_CropWidget
 
     void initRatioComboBox()
     {
-        QList<QSize> ratioList;
+        QList<QSizeF> ratioList;
+        const qreal sqrt2 = qSqrt(2.);
         ratioList
-                << QSize(3, 2)
-                << QSize(4, 3)
-                << QSize(5, 4)
-                << QSize(7, 5);
+                << QSizeF(7, 5)
+                << QSizeF(3, 2)
+                << QSizeF(4, 3)
+                << QSizeF(5, 4);
 
-        addRatioToComboBox(QSize(1, 1), i18n("Square"));
+        addRatioToComboBox(QSizeF(1, 1), i18n("Square"));
         addRatioToComboBox(screenRatio(), i18n("This Screen"));
         addSeparatorToComboBox();
 
-        Q_FOREACH(const QSize & size, ratioList) {
+        Q_FOREACH(const QSizeF& size, ratioList) {
             addRatioToComboBox(size);
         }
+        addRatioToComboBox(QSizeF(sqrt2, 1), i18n("A4 Landscape"));
         addSeparatorToComboBox();
-        Q_FOREACH(QSize size, ratioList) {
+        Q_FOREACH(QSizeF size, ratioList) {
             size.transpose();
             addRatioToComboBox(size);
         }
+        addRatioToComboBox(QSizeF(1, sqrt2), i18n("A4 Portrait"));
 
         ratioComboBox->setMaxVisibleItems(ratioComboBox->count());
         ratioComboBox->setEditText(QString());
@@ -208,8 +219,6 @@ CropWidget::CropWidget(QWidget* parent, RasterImageView* imageView, CropTool* cr
 
     connect(d->ratioComboBox, SIGNAL(editTextChanged(QString)),
             SLOT(slotRatioComboBoxEditTextChanged()));
-    connect(d->ratioComboBox, SIGNAL(activated(int)),
-            SLOT(slotRatioComboBoxActivated()));
 
     // Don't do this before signals are connected, otherwise the tool won't get
     // initialized
@@ -289,18 +298,6 @@ void CropWidget::applyRatioConstraint()
 void CropWidget::slotRatioComboBoxEditTextChanged()
 {
     applyRatioConstraint();
-}
-
-void CropWidget::slotRatioComboBoxActivated()
-{
-    // If the ratioComboBox contains text like this: "w:h (foo bar)", change it
-    // to "w:h" only, so that it's easier to edit for the user.
-    QStringList lst = d->ratioComboBox->currentText().split(' ');
-    if (lst.size() > 1) {
-        SignalBlocker blocker(d->ratioComboBox);
-        d->ratioComboBox->setEditText(lst[0]);
-        applyRatioConstraint();
-    }
 }
 
 } // namespace
