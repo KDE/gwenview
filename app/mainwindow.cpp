@@ -340,6 +340,11 @@ struct MainWindow::Private
                 q, SLOT(setActiveViewModeAction(QAction*)));
 
         mFullScreenAction = static_cast<KToggleFullScreenAction*>(view->addAction(KStandardAction::FullScreen, q, SLOT(toggleFullScreen(bool))));
+        KShortcut shortcut = mFullScreenAction->shortcut();
+        if (shortcut.alternate().isEmpty()) {
+            shortcut.setAlternate(Qt::Key_F11);
+        }
+        mFullScreenAction->setShortcut(shortcut);
         connect(mViewMainPage, SIGNAL(toggleFullScreenRequested()),
                 mFullScreenAction, SLOT(trigger()));
 
@@ -385,7 +390,7 @@ struct MainWindow::Private
         connect(mToggleSideBarAction, SIGNAL(toggled(bool)),
                 q, SLOT(toggleSideBar(bool)));
         mToggleSideBarAction->setIcon(KIcon("view-sidetree"));
-        mToggleSideBarAction->setShortcut(Qt::Key_F11);
+        mToggleSideBarAction->setShortcut(Qt::Key_F4);
         mToggleSideBarAction->setText(i18nc("@action", "Sidebar"));
         connect(mBrowseMainPage->toggleSideBarButton(), SIGNAL(clicked()),
                 mToggleSideBarAction, SLOT(trigger()));
