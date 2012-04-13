@@ -42,6 +42,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KEditToolBar>
 #include <KFileDialog>
 #include <KFileItem>
+#include <KGlobalSettings>
 #include <KMenuBar>
 #include <KLocale>
 #include <KMessageBox>
@@ -153,6 +154,7 @@ struct MainWindow::Private
     QStackedWidget* mViewStackedWidget;
     FullScreenBar* mFullScreenBar;
     FullScreenContent* mFullScreenContent;
+    QPalette mFullScreenPalette;
     SaveBar* mSaveBar;
     bool mStartSlideShowWhenDirListerCompleted;
     SlideShow* mSlideShow;
@@ -194,6 +196,10 @@ struct MainWindow::Private
 
     void setupWidgets()
     {
+        // FIXME: Can we rely on ObsidianCoast to always be there?
+        KSharedConfigPtr config = KSharedConfig::openConfig("color-schemes/ObsidianCoast.colors", KConfig::FullConfig, "data");
+        mFullScreenPalette = KGlobalSettings::createApplicationPalette(config);
+
         mCentralSplitter = new Splitter(Qt::Horizontal, q);
         q->setCentralWidget(mCentralSplitter);
 
@@ -243,10 +249,6 @@ struct MainWindow::Private
 
         mThumbnailView = mBrowseMainPage->thumbnailView();
         mUrlNavigator = mBrowseMainPage->urlNavigator();
-        QPalette pal = mUrlNavigator->palette();
-        pal.setColor(QPalette::Window, pal.color(QPalette::Window).dark(110));
-        mUrlNavigator->setAutoFillBackground(true);
-        mUrlNavigator->setPalette(pal);
 
         mDocumentInfoProvider = new DocumentInfoProvider(mDirModel);
         mThumbnailView->setDocumentInfoProvider(mDocumentInfoProvider);
@@ -1279,6 +1281,9 @@ void MainWindow::toggleFullScreen(bool checked)
         setWindowState(windowState() | Qt::WindowFullScreen);
         menuBar()->hide();
         toolBar()->hide();
+
+        QApplication::setPalette(d->mFullScreenPalette);
+        d->mBrowseMainPage->setFullScreenMode(true);
         d->mViewMainPage->setFullScreenMode(true);
         d->mSaveBar->setFullScreenMode(true);
         d->updateDistractionsState();
@@ -1292,6 +1297,8 @@ void MainWindow::toggleFullScreen(bool checked)
         setAutoSaveSettings();
 
         // Back to normal
+        QApplication::setPalette(KGlobalSettings::createApplicationPalette());
+        d->mBrowseMainPage->setFullScreenMode(false);
         d->mViewMainPage->setFullScreenMode(false);
         d->mSlideShow->stop();
         d->mSaveBar->setFullScreenMode(false);
@@ -1478,8 +1485,8 @@ void MainWindow::loadConfig()
     pal.setColor(QPalette::Text, fgColor);
 
     // Apply to widgets
-    d->mBrowseMainPage->applyPalette(pal);
     d->mStartMainPage->applyPalette(pal);
+    d->mBrowseMainPage->setNormalPalette(pal);
     d->mViewMainPage->setNormalPalette(pal);
 }
 

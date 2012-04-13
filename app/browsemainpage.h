@@ -54,7 +54,7 @@ public:
     BrowseMainPage(QWidget* parent, SortedDirModel*, KActionCollection*);
     ~BrowseMainPage();
 
-    void applyPalette(const QPalette&);
+    void setNormalPalette(const QPalette&);
 
     void reload();
 
@@ -63,6 +63,8 @@ public:
 
     void loadConfig();
     void saveConfig() const;
+
+    void setFullScreenMode(bool);
 
     QToolButton* toggleSideBarButton() const;
 

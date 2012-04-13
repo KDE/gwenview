@@ -77,6 +77,7 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
     KSelectAction* mSortAction;
     QActionGroup* mThumbnailDetailsActionGroup;
     PreviewItemDelegate* mDelegate;
+    QPalette mNormalPalette;
 
     void setupWidgets()
     {
@@ -94,11 +95,13 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
         // can't be used directly from Designer)
         mFilePlacesModel = new KFilePlacesModel(q);
         mUrlNavigator = new KUrlNavigator(mFilePlacesModel, KUrl(), mUrlNavigatorContainer);
+        mUrlNavigator->setAutoFillBackground(true);
         QVBoxLayout* layout = new QVBoxLayout(mUrlNavigatorContainer);
         layout->setMargin(0);
         layout->addWidget(mUrlNavigator);
         QObject::connect(mUrlNavigator, SIGNAL(urlsDropped(KUrl, QDropEvent*)),
                          q, SLOT(slotUrlsDropped(KUrl, QDropEvent*)));
+        updateUrlNavigatorBackgroundColor();
 
         // Thumbnail slider
         QObject::connect(mThumbnailSlider, SIGNAL(valueChanged(int)),
@@ -192,6 +195,13 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
             }
         }
         return count;
+    }
+
+    void updateUrlNavigatorBackgroundColor()
+    {
+       QPalette pal(q->palette());
+       pal.setColor(QPalette::Window, pal.color(QPalette::Window).dark(110));
+       mUrlNavigator->setPalette(pal);
     }
 };
 
@@ -328,9 +338,17 @@ void BrowseMainPage::updateThumbnailDetails()
     d->mDelegate->setThumbnailDetails(details);
 }
 
-void BrowseMainPage::applyPalette(const QPalette& palette)
+void BrowseMainPage::setFullScreenMode(bool fullScreen)
 {
-    d->mThumbnailView->setPalette(palette);
+   // For fullscreen mode, we use the application palette, which has been set to a fullscreen version
+   setPalette(fullScreen ? QPalette() : d->mNormalPalette);
+   d->updateUrlNavigatorBackgroundColor();
+}
+
+void BrowseMainPage::setNormalPalette(const QPalette& palette)
+{
+    d->mNormalPalette = palette;
+    setPalette(d->mNormalPalette);
 }
 
 void BrowseMainPage::slotUrlsDropped(const KUrl& destUrl, QDropEvent* event)
