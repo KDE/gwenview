@@ -379,9 +379,9 @@ ViewMainPage::ViewMainPage(QWidget* parent, SlideShow* slideShow, KActionCollect
     d->mFullScreenPalette.setColor(QPalette::Base, Qt::black);
     d->mFullScreenPalette.setColor(QPalette::Text, Qt::white);
 
-    QShortcut* toggleFullScreenShortcut = new QShortcut(this);
-    toggleFullScreenShortcut->setKey(Qt::Key_Return);
-    connect(toggleFullScreenShortcut, SIGNAL(activated()), SIGNAL(toggleFullScreenRequested()));
+    QShortcut* goToBrowseModeShortcut = new QShortcut(this);
+    goToBrowseModeShortcut->setKey(Qt::Key_Return);
+    connect(goToBrowseModeShortcut, SIGNAL(activated()), SIGNAL(goToBrowseModeRequested()));
 
     d->setupToolContainer();
     d->setupStatusBar();

@@ -132,7 +132,6 @@ enum MainPageId {
 
 struct MainWindowState
 {
-    MainPageId mMainPageId;
     bool mToolBarVisible;
     Qt::WindowStates mWindowState;
 };
@@ -326,6 +325,8 @@ struct MainWindow::Private
         mBrowseAction->setText(i18nc("@action Switch to file list", "Browse"));
         mBrowseAction->setCheckable(true);
         mBrowseAction->setIcon(KIcon("view-list-icons"));
+        connect(mViewMainPage, SIGNAL(goToBrowseModeRequested()),
+            mBrowseAction, SLOT(trigger()));
 
         mViewAction = view->addAction("view");
         mViewAction->setText(i18nc("@action Switch to image view", "View"));
@@ -345,13 +346,10 @@ struct MainWindow::Private
             shortcut.setAlternate(Qt::Key_F11);
         }
         mFullScreenAction->setShortcut(shortcut);
-        connect(mViewMainPage, SIGNAL(toggleFullScreenRequested()),
-                mFullScreenAction, SLOT(trigger()));
 
-        KAction* reduceLodAction = view->addAction("reduce_lod", q, SLOT(reduceLevelOfDetails()));
-        // FIXME Find a better text for this action
-        reduceLodAction->setText(i18nc("@action Go back to a more general page (start page <- list <- image)", "Back"));
-        reduceLodAction->setShortcut(Qt::Key_Escape);
+        KAction* leaveFullScreenAction = view->addAction("leave_fullscreen", q, SLOT(leaveFullScreen()));
+        leaveFullScreenAction->setText(i18nc("@action", "Leave Fullscreen Mode"));
+        leaveFullScreenAction->setShortcut(Qt::Key_Escape);
 
         mGoToPreviousAction = view->addAction("go_previous", q, SLOT(goToPrevious()));
         mGoToPreviousAction->setPriority(QAction::LowPriority);
@@ -1256,14 +1254,10 @@ void MainWindow::updatePreviousNextActions()
     d->mGoToLastAction->setEnabled(d->mGoToNextAction->isEnabled());
 }
 
-void MainWindow::reduceLevelOfDetails()
+void MainWindow::leaveFullScreen()
 {
     if (d->mFullScreenAction->isChecked()) {
         d->mFullScreenAction->trigger();
-    } else if (d->mCurrentMainPageId == ViewMainPageId) {
-        d->mBrowseAction->trigger();
-    } else {
-        showStartMainPage();
     }
 }
 
@@ -1278,13 +1272,10 @@ void MainWindow::toggleFullScreen(bool checked)
         resetAutoSaveSettings();
 
         // Save state
-        d->mStateBeforeFullScreen.mMainPageId = d->mCurrentMainPageId;
         d->mStateBeforeFullScreen.mToolBarVisible = toolBar()->isVisible();
         d->mStateBeforeFullScreen.mWindowState = windowState();
 
         // Go full screen
-        d->mViewAction->trigger();
-
         setWindowState(windowState() | Qt::WindowFullScreen);
         menuBar()->hide();
         toolBar()->hide();
@@ -1301,11 +1292,6 @@ void MainWindow::toggleFullScreen(bool checked)
         setAutoSaveSettings();
 
         // Back to normal
-        d->mCurrentMainPageId = d->mStateBeforeFullScreen.mMainPageId;
-        if (d->mCurrentMainPageId == BrowseMainPageId) {
-            d->mBrowseAction->trigger();
-        }
-
         d->mViewMainPage->setFullScreenMode(false);
         d->mSlideShow->stop();
         d->mSaveBar->setFullScreenMode(false);
