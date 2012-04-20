@@ -76,8 +76,10 @@ struct CropWidgetPrivate : public Ui_CropWidget
     double cropRatio() const
     {
         int index = ratioComboBox->currentIndex();
-        if (index != -1) {
+        if (index != -1 && ratioComboBox->currentText() == ratioComboBox->itemText(index)) {
             // Get ratio from predefined value
+            // Note: We check currentText is itemText(currentIndex) because
+            // currentIndex is not reset to -1 when text is edited by hand.
             QSizeF size = ratioComboBox->itemData(index).toSizeF();
             return size.height() / size.width();
         }
