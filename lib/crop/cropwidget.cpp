@@ -109,9 +109,20 @@ struct CropWidgetPrivate : public Ui_CropWidget
         ratioComboBox->addItem(text, QVariant(size));
     }
 
-    void addSeparatorToComboBox()
+    void addSectionHeaderToComboBox(const QString& title)
     {
+        // Insert a line
         ratioComboBox->insertSeparator(ratioComboBox->count());
+
+        // Insert our section header
+        // This header is made of a separator with a text. We reset
+        // Qt::AccessibleDescriptionRole to the header text otherwise QComboBox
+        // delegate will draw a separator line instead of our text.
+        int index = ratioComboBox->count();
+        ratioComboBox->insertSeparator(index);
+        ratioComboBox->setItemText(index, title);
+        ratioComboBox->setItemData(index, title, Qt::AccessibleDescriptionRole);
+        ratioComboBox->setItemData(index, Qt::AlignHCenter, Qt::TextAlignmentRole);
     }
 
     void initRatioComboBox()
@@ -126,18 +137,20 @@ struct CropWidgetPrivate : public Ui_CropWidget
 
         addRatioToComboBox(QSizeF(1, 1), i18n("Square"));
         addRatioToComboBox(screenRatio(), i18n("This Screen"));
-        addSeparatorToComboBox();
+        addSectionHeaderToComboBox(i18n("Landscape"));
 
         Q_FOREACH(const QSizeF& size, ratioList) {
             addRatioToComboBox(size);
         }
-        addRatioToComboBox(QSizeF(sqrt2, 1), i18n("A4 Landscape"));
-        addSeparatorToComboBox();
+        addRatioToComboBox(QSizeF(sqrt2, 1), i18n("ISO Size (A4, A3...)"));
+        addRatioToComboBox(QSizeF(11, 8.5), i18n("US Letter"));
+        addSectionHeaderToComboBox(i18n("Portrait"));
         Q_FOREACH(QSizeF size, ratioList) {
             size.transpose();
             addRatioToComboBox(size);
         }
-        addRatioToComboBox(QSizeF(1, sqrt2), i18n("A4 Portrait"));
+        addRatioToComboBox(QSizeF(1, sqrt2), i18n("ISO Size (A4, A3...)"));
+        addRatioToComboBox(QSizeF(8.5, 11), i18n("US Letter"));
 
         ratioComboBox->setMaxVisibleItems(ratioComboBox->count());
         ratioComboBox->setEditText(QString());
