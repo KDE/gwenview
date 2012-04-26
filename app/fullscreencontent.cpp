@@ -37,6 +37,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KDE
 #include <KActionCollection>
 #include <KLocale>
+#include <KToolBar>
 
 // Local
 #include "imagemetainfodialog.h"
@@ -53,35 +54,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
-// Subclass QToolButton to make initStyleOption public
-class ButtonBarButton : public QToolButton
-{
-public:
-    void initStyleOption(QStyleOptionToolButton* option) const
-    {
-        return QToolButton::initStyleOption(option);
-    }
-};
-
-static QToolButton* createButtonBarButton()
-{
-
-    ButtonBarButton* button = new ButtonBarButton;
-    QSize iconSize = QSize(32, 32);
-    button->setIconSize(iconSize);
-
-    // When the action icon changes, the button gets a few pixels larger. This
-    // is probably caused by the css styling.
-    // Setting a fixed size prevents this problem.
-    QStyleOptionToolButton opt;
-    button->initStyleOption(&opt);
-    QSize buttonSize = button->style()
-                       ->sizeFromContents(QStyle::CT_ToolButton, &opt, iconSize, button)
-                       .expandedTo(QApplication::globalStrut());
-    button->setFixedSize(buttonSize);
-    return button;
-}
 
 class FullScreenConfigDialog : public QFrame, public Ui_FullScreenConfigDialog
 {
@@ -100,23 +72,24 @@ struct FullScreenContentPrivate
     FullScreenBar* mAutoHideContainer;
     SlideShow* mSlideShow;
     QWidget* mContent;
-    QWidget* mButtonBar;
+    KToolBar* mToolBar;
     ThumbnailBarView* mThumbnailBar;
     QLabel* mInformationLabel;
     Document::Ptr mCurrentDocument;
     QPointer<ImageMetaInfoDialog> mImageMetaInfoDialog;
     QPointer<FullScreenConfigDialog> mFullScreenConfigDialog;
-    QToolButton* mOptionsButton;
+    QAction* mOptionsAction;
+    QWidget* mOptionsButton;
 
     bool mFullScreenMode;
     bool mAutoHideMode;
 
-    void createOptionsButton()
+    void createOptionsAction()
     {
-        mOptionsButton = createButtonBarButton();
-        mOptionsButton->setIcon(KIcon("configure"));
-        mOptionsButton->setToolTip(i18nc("@info:tooltip", "Configure Full Screen Mode"));
-        QObject::connect(mOptionsButton, SIGNAL(clicked()),
+        mOptionsAction = new QAction(q);
+        mOptionsAction->setIcon(KIcon("configure"));
+        mOptionsAction->setToolTip(i18nc("@info:tooltip", "Configure Full Screen Mode"));
+        QObject::connect(mOptionsAction, SIGNAL(triggered()),
                          q, SLOT(showFullScreenConfigDialog()));
     }
 
@@ -133,28 +106,16 @@ struct FullScreenContentPrivate
 
     void createLayout()
     {
-        /*
-        Layout looks like this:
-        mButtonBar | mInformationLabel
-        ------------------------------
-        mThumbnailBar
-        */
-        QGridLayout* layout = new QGridLayout(mContent);
+        QVBoxLayout* layout = new QVBoxLayout(mContent);
         layout->setMargin(0);
         layout->setSpacing(0);
-        layout->addWidget(mButtonBar, 0, 0, Qt::AlignTop | Qt::AlignLeft);
-        layout->addWidget(mInformationLabel, 0, 1);
+        layout->addWidget(mToolBar);
 
         if (GwenviewConfig::showFullScreenThumbnails()) {
             mThumbnailBar->show();
-            layout->addWidget(mThumbnailBar, 1, 0, 1, 2);
+            layout->addWidget(mThumbnailBar);
         } else {
             mThumbnailBar->hide();
-            QHBoxLayout* layout = new QHBoxLayout(mContent);
-            layout->setMargin(0);
-            layout->setSpacing(2);
-            layout->addWidget(mButtonBar);
-            layout->addWidget(mInformationLabel);
         }
         mContent->adjustSize();
     }
@@ -229,40 +190,50 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
     layout->setSpacing(0);
     layout->addWidget(d->mContent);
 
-    // Button bar
-    d->mButtonBar = new QWidget;
-    d->mButtonBar->setObjectName(QLatin1String("buttonBar"));
-    QHBoxLayout* buttonBarLayout = new QHBoxLayout(d->mButtonBar);
-    buttonBarLayout->setMargin(0);
-    buttonBarLayout->setSpacing(0);
-    QStringList actionNameList;
-    actionNameList
-            << "fullscreen"
-            << "toggle_slideshow"
-            << "go_previous"
-            << "go_next"
-            << "rotate_left"
-            << "rotate_right"
-            ;
-    Q_FOREACH(const QString & actionName, actionNameList) {
-        QAction* action = actionCollection->action(actionName);
-        QToolButton* button = createButtonBarButton();
-        button->setDefaultAction(action);
-        buttonBarLayout->addWidget(button);
-    }
+    // mInformationLabel
+    d->mInformationLabel = new QLabel;
+    d->mInformationLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    d->mInformationLabel->setWordWrap(true);
 
-    d->createOptionsButton();
-    buttonBarLayout->addWidget(d->mOptionsButton);
+    d->createOptionsAction();
+
+    // mToolBar
+    d->mToolBar = new KToolBar(d->mContent);
+    QStringList actions = QStringList()
+        << "go_start_page"
+        << "-"
+        << "browse"
+        << "view"
+        << "-"
+        << "go_previous"
+        << "toggle_slideshow"
+        << "go_next"
+        << "-"
+        << "rotate_left"
+        << "rotate_right"
+        << "-"
+        << "label"
+        << "configure"
+        << "leave_fullscreen"
+        ;
+    Q_FOREACH(const QString& name, actions) {
+        if (name == "-") {
+            d->mToolBar->addSeparator();
+        } else if (name == "label") {
+            d->mToolBar->addWidget(d->mInformationLabel);
+        } else if (name == "configure") {
+            d->mToolBar->addAction(d->mOptionsAction);
+            d->mOptionsButton = d->mOptionsAction->associatedWidgets().first();
+        } else {
+            d->mToolBar->addAction(actionCollection->action(name));
+        }
+    }
 
     // Thumbnail bar
     d->mThumbnailBar = new ThumbnailBarView(d->mContent);
     ThumbnailBarItemDelegate* delegate = new ThumbnailBarItemDelegate(d->mThumbnailBar);
     d->mThumbnailBar->setItemDelegate(delegate);
     d->mThumbnailBar->setSelectionMode(QAbstractItemView::ExtendedSelection);
-
-    // mInformationLabel
-    d->mInformationLabel = new QLabel;
-    d->mInformationLabel->setWordWrap(true);
 
     d->createLayout();
     d->updateContainerAppearance();

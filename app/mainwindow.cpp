@@ -381,6 +381,8 @@ struct MainWindow::Private
         mFullScreenAction->setShortcut(shortcut);
 
         KAction* leaveFullScreenAction = view->addAction("leave_fullscreen", q, SLOT(leaveFullScreen()));
+        leaveFullScreenAction->setIcon(KIcon("view-restore"));
+        leaveFullScreenAction->setPriority(QAction::LowPriority);
         leaveFullScreenAction->setText(i18nc("@action", "Leave Fullscreen Mode"));
         leaveFullScreenAction->setShortcut(Qt::Key_Escape);
 
