@@ -87,6 +87,7 @@ struct FullScreenContentPrivate
     void createOptionsAction()
     {
         mOptionsAction = new QAction(q);
+        mOptionsAction->setPriority(QAction::LowPriority);
         mOptionsAction->setIcon(KIcon("configure"));
         mOptionsAction->setToolTip(i18nc("@info:tooltip", "Configure Full Screen Mode"));
         QObject::connect(mOptionsAction, SIGNAL(triggered()),
