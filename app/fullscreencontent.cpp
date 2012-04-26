@@ -184,6 +184,7 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
 
     // mToolBar
     d->mToolBar = new KToolBar(d->mContent);
+    d->mToolBar->setIconDimensions(KIconLoader::SizeMedium);
     QStringList actions = QStringList()
         << "go_start_page"
         << "-"
