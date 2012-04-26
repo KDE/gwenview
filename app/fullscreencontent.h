@@ -45,31 +45,36 @@ struct FullScreenContentPrivate;
 /**
  * The content of the fullscreen bar
  */
-class FullScreenContent : public QObject
+class FullScreenContent : public QWidget
 {
     Q_OBJECT
 public:
-    FullScreenContent(FullScreenBar* parent, KActionCollection*, SlideShow*);
+    FullScreenContent(QWidget* parent);
     ~FullScreenContent();
+
+    void init(KActionCollection*, QWidget* autoHideParentWidget, SlideShow*);
 
     ThumbnailBarView* thumbnailBar() const;
 
     void setCurrentUrl(const KUrl&);
 
-protected:
-    bool eventFilter(QObject*, QEvent*);
+    void setDistractionFreeMode(bool);
+
+    void setFullScreenMode(bool);
 
 private Q_SLOTS:
+    void updateCurrentUrlWidgets();
     void updateInformationLabel();
     void updateMetaInfoDialog();
     void showImageMetaInfoDialog();
+    void slotImageMetaInfoDialogClosed();
     void slotPreferredMetaInfoKeyListChanged(const QStringList& list);
     void showFullScreenConfigDialog();
     void updateSlideShowIntervalLabel();
     void setCurrentFullScreenTheme(const QString& themeName);
     void setFullScreenBarHeight(int value);
-    void enableAutoHiding();
     void slotShowThumbnailsToggled(bool value);
+    void slotViewModeActionToggled(bool value);
 
 private:
     FullScreenContentPrivate* const d;

@@ -91,7 +91,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/archiveutils.h>
 #include <lib/document/documentfactory.h>
 #include <lib/eventwatcher.h>
-#include <lib/fullscreenbar.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/mimetypeutils.h>
 #include <lib/print/printhelper.h>
@@ -137,10 +136,35 @@ struct MainWindowState
     Qt::WindowStates mWindowState;
 };
 
+/*
+
+Layout of the main window looks like this:
+
+.-mCentralWidget---------------------------------.
+|.-mFullScreenContent---------------------------.|
+||                                              ||
+|'----------------------------------------------'|
+|.-mCentralSplitter-----------------------------.|
+||.-mSideBar--. .-mContentWidget---------------.||
+|||           | |.-mSaveBar-------------------.|||
+|||           | ||                            ||||
+|||           | |'----------------------------'|||
+|||           | |.-mViewStackedWidget---------.|||
+|||           | ||                            ||||
+|||           | ||                            ||||
+|||           | ||                            ||||
+|||           | ||                            ||||
+|||           | |'----------------------------'|||
+||'-----------' '------------------------------'||
+|'----------------------------------------------'|
+'------------------------------------------------'
+
+*/
 struct MainWindow::Private
 {
     GvCore* mGvCore;
     MainWindow* q;
+    QWidget* mCentralWidget;
     QSplitter* mCentralSplitter;
     QWidget* mContentWidget;
     ViewMainPage* mViewMainPage;
@@ -152,7 +176,6 @@ struct MainWindow::Private
     StartMainPage* mStartMainPage;
     SideBar* mSideBar;
     QStackedWidget* mViewStackedWidget;
-    FullScreenBar* mFullScreenBar;
     FullScreenContent* mFullScreenContent;
     QPalette mFullScreenPalette;
     SaveBar* mSaveBar;
@@ -182,7 +205,6 @@ struct MainWindow::Private
     SortedDirModel* mDirModel;
     ContextManager* mContextManager;
 
-    bool mDistractionFreeMode;
     MainWindowState mStateBeforeFullScreen;
 
     KUrl mUrlToSelect;
@@ -200,8 +222,17 @@ struct MainWindow::Private
         KSharedConfigPtr config = KSharedConfig::openConfig("color-schemes/ObsidianCoast.colors", KConfig::FullConfig, "data");
         mFullScreenPalette = KGlobalSettings::createApplicationPalette(config);
 
-        mCentralSplitter = new Splitter(Qt::Horizontal, q);
-        q->setCentralWidget(mCentralSplitter);
+        mCentralWidget = new QWidget(q);
+        q->setCentralWidget(mCentralWidget);
+
+        mFullScreenContent = new FullScreenContent(mCentralWidget);
+
+        mCentralSplitter = new Splitter(Qt::Horizontal, mCentralWidget);
+        QVBoxLayout* layout = new QVBoxLayout(mCentralWidget);
+        layout->setMargin(0);
+        layout->setSpacing(0);
+        layout->addWidget(mFullScreenContent);
+        layout->addWidget(mCentralSplitter);
 
         // Left side of splitter
         mSideBar = new SideBar(mCentralSplitter);
@@ -213,7 +244,7 @@ struct MainWindow::Private
 
         mSaveBar = new SaveBar(mContentWidget, q->actionCollection());
         mViewStackedWidget = new QStackedWidget(mContentWidget);
-        QVBoxLayout* layout = new QVBoxLayout(mContentWidget);
+        layout = new QVBoxLayout(mContentWidget);
         layout->addWidget(mSaveBar);
         layout->addWidget(mViewStackedWidget);
         layout->setMargin(0);
@@ -603,12 +634,9 @@ struct MainWindow::Private
         }
     }
 
-    void setupFullScreenBar()
+    void setupFullScreenContent()
     {
-        mFullScreenBar = new FullScreenBar(mViewMainPage);
-        mFullScreenContent = new FullScreenContent(
-            mFullScreenBar, q->actionCollection(), mSlideShow);
-
+        mFullScreenContent->init(q->actionCollection(), mViewMainPage, mSlideShow);
         ThumbnailBarView* view = mFullScreenContent->thumbnailBar();
         view->setModel(mDirModel);
         view->setDocumentInfoProvider(mDocumentInfoProvider);
@@ -637,12 +665,6 @@ struct MainWindow::Private
         setActionEnabled("reload", enabled);
         setActionEnabled("go_start_page", enabled);
         setActionEnabled("add_folder_to_places", enabled);
-    }
-
-    void updateDistractionsState()
-    {
-        const bool isFullScreen = mFullScreenAction->isChecked();
-        mFullScreenBar->setActivated(!mDistractionFreeMode && isFullScreen);
     }
 
     void updateActions()
@@ -804,7 +826,6 @@ MainWindow::MainWindow()
 {
     d->q = this;
     d->mCurrentMainPageId = StartMainPageId;
-    d->mDistractionFreeMode = false;
     d->mDirModel = new SortedDirModel(this);
     d->mGvCore = new GvCore(this, d->mDirModel);
     d->mPreloader = new Preloader(this);
@@ -814,7 +835,7 @@ MainWindow::MainWindow()
     d->setupActions();
     d->setupUndoActions();
     d->setupContextManager();
-    d->setupFullScreenBar();
+    d->setupFullScreenContent();
     d->updateActions();
     updatePreviousNextActions();
     d->mSaveBar->initActionDependentWidgets();
@@ -1283,10 +1304,10 @@ void MainWindow::toggleFullScreen(bool checked)
         toolBar()->hide();
 
         QApplication::setPalette(d->mFullScreenPalette);
+        d->mFullScreenContent->setFullScreenMode(true);
         d->mBrowseMainPage->setFullScreenMode(true);
         d->mViewMainPage->setFullScreenMode(true);
         d->mSaveBar->setFullScreenMode(true);
-        d->updateDistractionsState();
         d->setScreenSaverEnabled(false);
 
         // HACK: Only load sidebar config now, because it looks at
@@ -1298,6 +1319,7 @@ void MainWindow::toggleFullScreen(bool checked)
 
         // Back to normal
         QApplication::setPalette(KGlobalSettings::createApplicationPalette());
+        d->mFullScreenContent->setFullScreenMode(false);
         d->mBrowseMainPage->setFullScreenMode(false);
         d->mViewMainPage->setFullScreenMode(false);
         d->mSlideShow->stop();
@@ -1306,7 +1328,6 @@ void MainWindow::toggleFullScreen(bool checked)
         menuBar()->setVisible(d->mShowMenuBarAction->isChecked());
         toolBar()->setVisible(d->mStateBeforeFullScreen.mToolBarVisible);
 
-        d->updateDistractionsState();
         d->setScreenSaverEnabled(true);
 
         // Keep this after mViewMainPage->setFullScreenMode(false).
@@ -1571,8 +1592,7 @@ void MainWindow::resizeEvent(QResizeEvent* event)
 
 void MainWindow::setDistractionFreeMode(bool value)
 {
-    d->mDistractionFreeMode = value;
-    d->updateDistractionsState();
+    d->mFullScreenContent->setDistractionFreeMode(value);
 }
 
 void MainWindow::saveProperties(KConfigGroup& group)
