@@ -104,15 +104,6 @@ struct FullScreenContentPrivate
                          q, SLOT(setCurrentFullScreenTheme(QString)));
     }
 
-    void createLayout()
-    {
-        QVBoxLayout* layout = new QVBoxLayout(mContent);
-        layout->setMargin(0);
-        layout->setSpacing(0);
-        layout->addWidget(mToolBar);
-        layout->addWidget(mThumbnailBar);
-    }
-
     void adjustBarWidth()
     {
         if (GwenviewConfig::showFullScreenThumbnails()) {
@@ -229,7 +220,13 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
     d->mThumbnailBar->setItemDelegate(delegate);
     d->mThumbnailBar->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
-    d->createLayout();
+    // Content Layout
+    layout = new QVBoxLayout(d->mContent);
+    layout->setMargin(0);
+    layout->setSpacing(0);
+    layout->addWidget(d->mToolBar);
+    layout->addWidget(d->mThumbnailBar);
+
     d->updateContainerAppearance();
 }
 
@@ -423,8 +420,10 @@ void FullScreenContent::slotShowThumbnailsToggled(bool value)
 {
     GwenviewConfig::setShowFullScreenThumbnails(value);
     GwenviewConfig::self()->writeConfig();
-    delete layout();
-    d->createLayout();
+    if (d->mViewPageVisible) {
+        d->mThumbnailBar->setVisible(value);
+        d->mAutoHideContainer->adjustSize();
+    }
 }
 
 void FullScreenContent::slotViewModeActionToggled(bool value)
