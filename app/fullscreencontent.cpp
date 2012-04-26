@@ -82,7 +82,7 @@ struct FullScreenContentPrivate
     QWidget* mOptionsButton;
 
     bool mFullScreenMode;
-    bool mAutoHideMode;
+    bool mViewPageVisible;
 
     void createOptionsAction()
     {
@@ -110,14 +110,7 @@ struct FullScreenContentPrivate
         layout->setMargin(0);
         layout->setSpacing(0);
         layout->addWidget(mToolBar);
-
-        if (GwenviewConfig::showFullScreenThumbnails()) {
-            mThumbnailBar->show();
-            layout->addWidget(mThumbnailBar);
-        } else {
-            mThumbnailBar->hide();
-        }
-        mContent->adjustSize();
+        layout->addWidget(mThumbnailBar);
     }
 
     void adjustBarWidth()
@@ -139,7 +132,8 @@ struct FullScreenContentPrivate
             return;
         }
 
-        if (mAutoHideMode) {
+        mThumbnailBar->setVisible(mViewPageVisible && GwenviewConfig::showFullScreenThumbnails());
+        if (mViewPageVisible) {
             mAutoHideContainer->layout()->addWidget(mContent);
             mContent->show();
             mAutoHideContainer->adjustSize();
@@ -148,7 +142,7 @@ struct FullScreenContentPrivate
             q->show();
             q->layout()->addWidget(mContent);
         }
-        mAutoHideContainer->setActivated(mAutoHideMode);
+        mAutoHideContainer->setActivated(mViewPageVisible);
     }
 };
 
@@ -158,7 +152,7 @@ FullScreenContent::FullScreenContent(QWidget* parent)
 {
     d->q = this;
     d->mFullScreenMode = false;
-    d->mAutoHideMode = false;
+    d->mViewPageVisible = false;
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 }
 
@@ -435,7 +429,7 @@ void FullScreenContent::slotShowThumbnailsToggled(bool value)
 
 void FullScreenContent::slotViewModeActionToggled(bool value)
 {
-    d->mAutoHideMode = value;
+    d->mViewPageVisible = value;
     d->updateContainerAppearance();
 }
 
