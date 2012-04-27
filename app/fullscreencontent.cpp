@@ -30,9 +30,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QLabel>
 #include <QMenu>
 #include <QPointer>
-#include <QPushButton>
-#include <QStyle>
-#include <QToolButton>
 #include <QWidgetAction>
 
 // KDE
