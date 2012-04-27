@@ -353,7 +353,7 @@ void FullScreenContent::slotAboutToShowOptionsMenu()
     widget->mThumbnailGroupBox->setVisible(d->mViewPageVisible);
     if (d->mViewPageVisible) {
         widget->mShowThumbnailsCheckBox->setChecked(GwenviewConfig::showFullScreenThumbnails());
-        widget->mHeightSlider->setValue(height());
+        widget->mHeightSlider->setValue(d->mThumbnailBar->height());
         connect(widget->mShowThumbnailsCheckBox, SIGNAL(toggled(bool)),
                 SLOT(slotShowThumbnailsToggled(bool)));
         connect(widget->mHeightSlider, SIGNAL(valueChanged(int)),
