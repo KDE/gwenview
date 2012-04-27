@@ -10,6 +10,11 @@
     <height>224</height>
    </rect>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QLabel[isTitle=&quot;true&quot;] {
+font-weight: bold;
+}</string>
+  </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0" colspan="2">
     <widget class="QLabel" name="mSlideShowTitle">
