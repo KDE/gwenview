@@ -311,38 +311,33 @@ void FullScreenContent::setFullScreenBarHeight(int value)
 
 void FullScreenContent::slotAboutToShowOptionsMenu()
 {
-    FullScreenConfigDialog* dialog;
-    if (!d->mFullScreenConfigDialog) {
-        d->mFullScreenConfigDialog = new FullScreenConfigDialog;
-        dialog = d->mFullScreenConfigDialog;
-        connect(dialog->mSlideShowLoopCheckBox, SIGNAL(toggled(bool)),
-                d->mSlideShow->loopAction(), SLOT(trigger()));
-        connect(dialog->mSlideShowRandomCheckBox, SIGNAL(toggled(bool)),
-                d->mSlideShow->randomAction(), SLOT(trigger()));
-        connect(dialog->mSlideShowIntervalSlider, SIGNAL(valueChanged(int)),
-                d->mSlideShow, SLOT(setInterval(int)));
-        connect(dialog->mSlideShowIntervalSlider, SIGNAL(valueChanged(int)),
-                SLOT(updateSlideShowIntervalLabel()));
-        connect(dialog->mConfigureDisplayedInformationButton, SIGNAL(clicked()),
-                SLOT(showImageMetaInfoDialog()));
-        connect(dialog->mShowThumbnailsCheckBox, SIGNAL(toggled(bool)),
-                SLOT(slotShowThumbnailsToggled(bool)));
-        connect(dialog->mHeightSlider, SIGNAL(valueChanged(int)),
-                this, SLOT(setFullScreenBarHeight(int)));
+    // This will delete d->mFullScreenConfigDialog
+    d->mOptionsAction->menu()->clear();
+    Q_ASSERT(!d->mFullScreenConfigDialog);
 
-        QWidgetAction* action = new QWidgetAction(d->mOptionsAction->menu());
-        action->setDefaultWidget(dialog);
-        d->mOptionsAction->menu()->addAction(action);
-    } else {
-        dialog = d->mFullScreenConfigDialog;
-    }
+    d->mFullScreenConfigDialog = new FullScreenConfigDialog;
+    FullScreenConfigDialog* dialog = d->mFullScreenConfigDialog;
 
-    // Checkboxes
+    // Put widget in the menu
+    QWidgetAction* action = new QWidgetAction(d->mOptionsAction->menu());
+    action->setDefaultWidget(dialog);
+    d->mOptionsAction->menu()->addAction(action);
+
+    // Slideshow checkboxes
     dialog->mSlideShowLoopCheckBox->setChecked(d->mSlideShow->loopAction()->isChecked());
+    connect(dialog->mSlideShowLoopCheckBox, SIGNAL(toggled(bool)),
+            d->mSlideShow->loopAction(), SLOT(trigger()));
+
     dialog->mSlideShowRandomCheckBox->setChecked(d->mSlideShow->randomAction()->isChecked());
+    connect(dialog->mSlideShowRandomCheckBox, SIGNAL(toggled(bool)),
+            d->mSlideShow->randomAction(), SLOT(trigger()));
 
     // Interval slider
     dialog->mSlideShowIntervalSlider->setValue(int(GwenviewConfig::interval()));
+    connect(dialog->mSlideShowIntervalSlider, SIGNAL(valueChanged(int)),
+            d->mSlideShow, SLOT(setInterval(int)));
+    connect(dialog->mSlideShowIntervalSlider, SIGNAL(valueChanged(int)),
+            SLOT(updateSlideShowIntervalLabel()));
 
     // Interval label
     QString text = formatSlideShowIntervalText(88);
@@ -350,11 +345,20 @@ void FullScreenContent::slotAboutToShowOptionsMenu()
     dialog->mSlideShowIntervalLabel->setFixedWidth(width);
     updateSlideShowIntervalLabel();
 
-    // Thumbnails check box
-    dialog->mShowThumbnailsCheckBox->setChecked(GwenviewConfig::showFullScreenThumbnails());
+    // Image information
+    connect(dialog->mConfigureDisplayedInformationButton, SIGNAL(clicked()),
+            SLOT(showImageMetaInfoDialog()));
 
-    // Height slider
-    dialog->mHeightSlider->setValue(height());
+    // Thumbnails
+    dialog->mThumbnailGroupBox->setVisible(d->mViewPageVisible);
+    if (d->mViewPageVisible) {
+        dialog->mShowThumbnailsCheckBox->setChecked(GwenviewConfig::showFullScreenThumbnails());
+        dialog->mHeightSlider->setValue(height());
+        connect(dialog->mShowThumbnailsCheckBox, SIGNAL(toggled(bool)),
+                SLOT(slotShowThumbnailsToggled(bool)));
+        connect(dialog->mHeightSlider, SIGNAL(valueChanged(int)),
+                SLOT(setFullScreenBarHeight(int)));
+    }
 }
 
 void FullScreenContent::setFullScreenMode(bool fullScreenMode)
