@@ -89,7 +89,7 @@ font-weight: bold;
    <item row="4" column="0" colspan="2">
     <widget class="QLabel" name="mMetaDataTitle">
      <property name="text">
-      <string>Metadata</string>
+      <string>Image Information</string>
      </property>
      <property name="isTitle" stdset="0">
       <bool>true</bool>
@@ -101,7 +101,7 @@ font-weight: bold;
      <item>
       <widget class="QPushButton" name="mConfigureDisplayedInformationButton">
        <property name="text">
-        <string>Configure Displayed Metadata...</string>
+        <string>Select Image Information to Display...</string>
        </property>
       </widget>
      </item>
@@ -112,7 +112,7 @@ font-weight: bold;
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>40</width>
+         <width>0</width>
          <height>20</height>
         </size>
        </property>
