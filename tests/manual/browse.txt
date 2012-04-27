@@ -1,0 +1,17 @@
+name: browse/startup_down_sampled
+description:
+ 1. Start Gwenview in a folder with raster images large enough to make use of down-sampling
+    => thumbnails show
+ 2. Click one image
+    => Gwenview switches to View mode and show the image, zoomed-to-fit
+ 3. Ctrl + left click
+    => Image zooms in
+
+name: browse/startup_svg
+description:
+ 1. Start Gwenview in a folder with an svg
+    => thumbnails show
+ 2. Click the svg
+    => Gwenview switches to View mode and show the image, zoomed-to-fit
+ 3. Ctrl + left click
+    => Image zooms in
