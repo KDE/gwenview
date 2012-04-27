@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>FullScreenConfigDialog</class>
- <widget class="QWidget" name="FullScreenConfigDialog">
+ <class>FullScreenConfigWidget</class>
+ <widget class="QWidget" name="FullScreenConfigWidget">
   <property name="geometry">
    <rect>
     <x>0</x>

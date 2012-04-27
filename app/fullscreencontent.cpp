@@ -41,7 +41,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include "imagemetainfodialog.h"
-#include "ui_fullscreenconfigdialog.h"
+#include "ui_fullscreenconfigwidget.h"
 #include <lib/document/document.h>
 #include <lib/document/documentfactory.h>
 #include <lib/eventwatcher.h>
@@ -54,10 +54,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 
-class FullScreenConfigDialog : public QWidget, public Ui_FullScreenConfigDialog
+class FullScreenConfigWidget : public QWidget, public Ui_FullScreenConfigWidget
 {
 public:
-    FullScreenConfigDialog(QWidget* parent=0)
+    FullScreenConfigWidget(QWidget* parent=0)
     : QWidget(parent)
     {
         setupUi(this);
@@ -75,7 +75,7 @@ struct FullScreenContentPrivate
     QLabel* mInformationLabel;
     Document::Ptr mCurrentDocument;
     QPointer<ImageMetaInfoDialog> mImageMetaInfoDialog;
-    QPointer<FullScreenConfigDialog> mFullScreenConfigDialog;
+    QPointer<FullScreenConfigWidget> mConfigWidget;
     KActionMenu* mOptionsAction;
 
     bool mFullScreenMode;
@@ -297,10 +297,10 @@ static QString formatSlideShowIntervalText(int value)
 
 void FullScreenContent::updateSlideShowIntervalLabel()
 {
-    Q_ASSERT(d->mFullScreenConfigDialog);
-    int value = d->mFullScreenConfigDialog->mSlideShowIntervalSlider->value();
+    Q_ASSERT(d->mConfigWidget);
+    int value = d->mConfigWidget->mSlideShowIntervalSlider->value();
     QString text = formatSlideShowIntervalText(value);
-    d->mFullScreenConfigDialog->mSlideShowIntervalLabel->setText(text);
+    d->mConfigWidget->mSlideShowIntervalLabel->setText(text);
 }
 
 void FullScreenContent::setFullScreenBarHeight(int value)
@@ -311,52 +311,52 @@ void FullScreenContent::setFullScreenBarHeight(int value)
 
 void FullScreenContent::slotAboutToShowOptionsMenu()
 {
-    // This will delete d->mFullScreenConfigDialog
+    // This will delete d->mConfigWidget
     d->mOptionsAction->menu()->clear();
-    Q_ASSERT(!d->mFullScreenConfigDialog);
+    Q_ASSERT(!d->mConfigWidget);
 
-    d->mFullScreenConfigDialog = new FullScreenConfigDialog;
-    FullScreenConfigDialog* dialog = d->mFullScreenConfigDialog;
+    d->mConfigWidget = new FullScreenConfigWidget;
+    FullScreenConfigWidget* widget = d->mConfigWidget;
 
     // Put widget in the menu
     QWidgetAction* action = new QWidgetAction(d->mOptionsAction->menu());
-    action->setDefaultWidget(dialog);
+    action->setDefaultWidget(widget);
     d->mOptionsAction->menu()->addAction(action);
 
     // Slideshow checkboxes
-    dialog->mSlideShowLoopCheckBox->setChecked(d->mSlideShow->loopAction()->isChecked());
-    connect(dialog->mSlideShowLoopCheckBox, SIGNAL(toggled(bool)),
+    widget->mSlideShowLoopCheckBox->setChecked(d->mSlideShow->loopAction()->isChecked());
+    connect(widget->mSlideShowLoopCheckBox, SIGNAL(toggled(bool)),
             d->mSlideShow->loopAction(), SLOT(trigger()));
 
-    dialog->mSlideShowRandomCheckBox->setChecked(d->mSlideShow->randomAction()->isChecked());
-    connect(dialog->mSlideShowRandomCheckBox, SIGNAL(toggled(bool)),
+    widget->mSlideShowRandomCheckBox->setChecked(d->mSlideShow->randomAction()->isChecked());
+    connect(widget->mSlideShowRandomCheckBox, SIGNAL(toggled(bool)),
             d->mSlideShow->randomAction(), SLOT(trigger()));
 
     // Interval slider
-    dialog->mSlideShowIntervalSlider->setValue(int(GwenviewConfig::interval()));
-    connect(dialog->mSlideShowIntervalSlider, SIGNAL(valueChanged(int)),
+    widget->mSlideShowIntervalSlider->setValue(int(GwenviewConfig::interval()));
+    connect(widget->mSlideShowIntervalSlider, SIGNAL(valueChanged(int)),
             d->mSlideShow, SLOT(setInterval(int)));
-    connect(dialog->mSlideShowIntervalSlider, SIGNAL(valueChanged(int)),
+    connect(widget->mSlideShowIntervalSlider, SIGNAL(valueChanged(int)),
             SLOT(updateSlideShowIntervalLabel()));
 
     // Interval label
     QString text = formatSlideShowIntervalText(88);
-    int width = dialog->mSlideShowIntervalLabel->fontMetrics().width(text);
-    dialog->mSlideShowIntervalLabel->setFixedWidth(width);
+    int width = widget->mSlideShowIntervalLabel->fontMetrics().width(text);
+    widget->mSlideShowIntervalLabel->setFixedWidth(width);
     updateSlideShowIntervalLabel();
 
     // Image information
-    connect(dialog->mConfigureDisplayedInformationButton, SIGNAL(clicked()),
+    connect(widget->mConfigureDisplayedInformationButton, SIGNAL(clicked()),
             SLOT(showImageMetaInfoDialog()));
 
     // Thumbnails
-    dialog->mThumbnailGroupBox->setVisible(d->mViewPageVisible);
+    widget->mThumbnailGroupBox->setVisible(d->mViewPageVisible);
     if (d->mViewPageVisible) {
-        dialog->mShowThumbnailsCheckBox->setChecked(GwenviewConfig::showFullScreenThumbnails());
-        dialog->mHeightSlider->setValue(height());
-        connect(dialog->mShowThumbnailsCheckBox, SIGNAL(toggled(bool)),
+        widget->mShowThumbnailsCheckBox->setChecked(GwenviewConfig::showFullScreenThumbnails());
+        widget->mHeightSlider->setValue(height());
+        connect(widget->mShowThumbnailsCheckBox, SIGNAL(toggled(bool)),
                 SLOT(slotShowThumbnailsToggled(bool)));
-        connect(dialog->mHeightSlider, SIGNAL(valueChanged(int)),
+        connect(widget->mHeightSlider, SIGNAL(valueChanged(int)),
                 SLOT(setFullScreenBarHeight(int)));
     }
 }
