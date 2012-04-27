@@ -28,15 +28,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QEvent>
 #include <QGridLayout>
 #include <QLabel>
+#include <QMenu>
 #include <QPointer>
 #include <QPushButton>
 #include <QStyle>
 #include <QToolButton>
-#include <QWindowsStyle>
+#include <QWidgetAction>
 
 // KDE
 #include <KActionCollection>
+#include <KActionMenu>
 #include <KLocale>
+#include <KMenu>
 #include <KToolBar>
 
 // Local
@@ -55,13 +58,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 
-class FullScreenConfigDialog : public QFrame, public Ui_FullScreenConfigDialog
+class FullScreenConfigDialog : public QWidget, public Ui_FullScreenConfigDialog
 {
 public:
-    FullScreenConfigDialog(QWidget* parent)
-        : QFrame(parent)
-        {
-        setWindowFlags(Qt::Popup);
+    FullScreenConfigDialog(QWidget* parent=0)
+    : QWidget(parent)
+    {
         setupUi(this);
     }
 };
@@ -78,31 +80,19 @@ struct FullScreenContentPrivate
     Document::Ptr mCurrentDocument;
     QPointer<ImageMetaInfoDialog> mImageMetaInfoDialog;
     QPointer<FullScreenConfigDialog> mFullScreenConfigDialog;
-    QAction* mOptionsAction;
-    QWidget* mOptionsButton;
+    KActionMenu* mOptionsAction;
 
     bool mFullScreenMode;
     bool mViewPageVisible;
 
     void createOptionsAction()
     {
-        mOptionsAction = new QAction(q);
+        mOptionsAction = new KActionMenu(q);
         mOptionsAction->setPriority(QAction::LowPriority);
+        mOptionsAction->setDelayed(false);
         mOptionsAction->setIcon(KIcon("configure"));
         mOptionsAction->setToolTip(i18nc("@info:tooltip", "Configure Full Screen Mode"));
-        QObject::connect(mOptionsAction, SIGNAL(triggered()),
-                         q, SLOT(showFullScreenConfigDialog()));
-    }
-
-    void setupThemeListWidget(QListWidget* listWidget)
-    {
-        QStringList themeList = FullScreenTheme::themeNameList();
-        listWidget->addItems(themeList);
-        int row = themeList.indexOf(FullScreenTheme::currentThemeName());
-        listWidget->setCurrentRow(row);
-
-        QObject::connect(listWidget, SIGNAL(currentTextChanged(QString)),
-                         q, SLOT(setCurrentFullScreenTheme(QString)));
+        QObject::connect(mOptionsAction->menu(), SIGNAL(aboutToShow()), q, SLOT(slotAboutToShowOptionsMenu()));
     }
 
     void adjustBarWidth()
@@ -210,7 +200,7 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
             d->mToolBar->addWidget(d->mInformationLabel);
         } else if (name == "configure") {
             d->mToolBar->addAction(d->mOptionsAction);
-            d->mOptionsButton = d->mOptionsAction->associatedWidgets().first();
+            d->mOptionsAction->associatedWidgets().first();
         } else {
             d->mToolBar->addAction(actionCollection->action(name));
         }
@@ -338,68 +328,52 @@ void FullScreenContent::setFullScreenBarHeight(int value)
     GwenviewConfig::setFullScreenBarHeight(value);
 }
 
-/**
- * Helper function for showFullScreenConfigDialog
- */
-static void setupCheckBox(QCheckBox* checkBox, QAction* action)
+void FullScreenContent::slotAboutToShowOptionsMenu()
 {
-    checkBox->setChecked(action->isChecked());
-    QObject::connect(checkBox, SIGNAL(toggled(bool)),
-                     action, SLOT(trigger()));
-}
+    FullScreenConfigDialog* dialog;
+    if (!d->mFullScreenConfigDialog) {
+        d->mFullScreenConfigDialog = new FullScreenConfigDialog;
+        dialog = d->mFullScreenConfigDialog;
+        connect(dialog->mSlideShowLoopCheckBox, SIGNAL(toggled(bool)),
+                d->mSlideShow->loopAction(), SLOT(trigger()));
+        connect(dialog->mSlideShowRandomCheckBox, SIGNAL(toggled(bool)),
+                d->mSlideShow->randomAction(), SLOT(trigger()));
+        connect(dialog->mSlideShowIntervalSlider, SIGNAL(valueChanged(int)),
+                d->mSlideShow, SLOT(setInterval(int)));
+        connect(dialog->mSlideShowIntervalSlider, SIGNAL(valueChanged(int)),
+                SLOT(updateSlideShowIntervalLabel()));
+        connect(dialog->mConfigureDisplayedInformationButton, SIGNAL(clicked()),
+                SLOT(showImageMetaInfoDialog()));
+        connect(dialog->mShowThumbnailsCheckBox, SIGNAL(toggled(bool)),
+                SLOT(slotShowThumbnailsToggled(bool)));
+        connect(dialog->mHeightSlider, SIGNAL(valueChanged(int)),
+                this, SLOT(setFullScreenBarHeight(int)));
 
-void FullScreenContent::showFullScreenConfigDialog()
-{
-    FullScreenConfigDialog* dialog = new FullScreenConfigDialog(d->mOptionsButton);
-    d->mFullScreenConfigDialog = dialog;
-    dialog->setAttribute(Qt::WA_DeleteOnClose, true);
-    dialog->setObjectName(QLatin1String("configDialog"));
+        QWidgetAction* action = new QWidgetAction(d->mOptionsAction->menu());
+        action->setDefaultWidget(dialog);
+        d->mOptionsAction->menu()->addAction(action);
+    } else {
+        dialog = d->mFullScreenConfigDialog;
+    }
 
     // Checkboxes
-    setupCheckBox(dialog->mSlideShowLoopCheckBox, d->mSlideShow->loopAction());
-    setupCheckBox(dialog->mSlideShowRandomCheckBox, d->mSlideShow->randomAction());
+    dialog->mSlideShowLoopCheckBox->setChecked(d->mSlideShow->loopAction()->isChecked());
+    dialog->mSlideShowRandomCheckBox->setChecked(d->mSlideShow->randomAction()->isChecked());
 
     // Interval slider
     dialog->mSlideShowIntervalSlider->setValue(int(GwenviewConfig::interval()));
-    connect(dialog->mSlideShowIntervalSlider, SIGNAL(valueChanged(int)),
-            d->mSlideShow, SLOT(setInterval(int)));
 
     // Interval label
-    connect(dialog->mSlideShowIntervalSlider, SIGNAL(valueChanged(int)),
-            SLOT(updateSlideShowIntervalLabel()));
     QString text = formatSlideShowIntervalText(88);
     int width = dialog->mSlideShowIntervalLabel->fontMetrics().width(text);
     dialog->mSlideShowIntervalLabel->setFixedWidth(width);
     updateSlideShowIntervalLabel();
 
-    // Config button
-    connect(dialog->mConfigureDisplayedInformationButton, SIGNAL(clicked()),
-            SLOT(showImageMetaInfoDialog()));
-
-    d->setupThemeListWidget(dialog->mThemeListWidget);
-
     // Thumbnails check box
     dialog->mShowThumbnailsCheckBox->setChecked(GwenviewConfig::showFullScreenThumbnails());
-    connect(dialog->mShowThumbnailsCheckBox, SIGNAL(toggled(bool)),
-            SLOT(slotShowThumbnailsToggled(bool)));
 
     // Height slider
     dialog->mHeightSlider->setValue(height());
-    connect(dialog->mHeightSlider, SIGNAL(valueChanged(int)),
-            this, SLOT(setFullScreenBarHeight(int)));
-
-    // Show dialog below the button
-    QRect buttonRect = d->mOptionsButton->rect();
-    QPoint pos;
-    if (dialog->isRightToLeft()) {
-        pos = buttonRect.bottomRight();
-        pos.rx() -= dialog->width() - 1;
-    } else {
-        pos = buttonRect.bottomLeft();
-    }
-    pos = d->mOptionsButton->mapToGlobal(pos);
-    dialog->move(pos);
-    dialog->show();
 }
 
 void FullScreenContent::setFullScreenMode(bool fullScreenMode)

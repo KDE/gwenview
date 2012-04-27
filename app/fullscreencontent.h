@@ -69,7 +69,7 @@ private Q_SLOTS:
     void showImageMetaInfoDialog();
     void slotImageMetaInfoDialogClosed();
     void slotPreferredMetaInfoKeyListChanged(const QStringList& list);
-    void showFullScreenConfigDialog();
+    void slotAboutToShowOptionsMenu();
     void updateSlideShowIntervalLabel();
     void setCurrentFullScreenTheme(const QString& themeName);
     void setFullScreenBarHeight(int value);
