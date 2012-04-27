@@ -46,7 +46,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/document/documentfactory.h>
 #include <lib/eventwatcher.h>
 #include <lib/fullscreenbar.h>
-#include <lib/fullscreentheme.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/imagemetainfomodel.h>
 #include <lib/thumbnailview/thumbnailbarview.h>
@@ -257,11 +256,6 @@ void FullScreenContent::updateInformationLabel()
     d->mInformationLabel->setText(text);
 
     d->adjustBarWidth();
-}
-
-void FullScreenContent::setCurrentFullScreenTheme(const QString& themeName)
-{
-    FullScreenTheme::setCurrentThemeName(themeName);
 }
 
 void FullScreenContent::updateCurrentUrlWidgets()
