@@ -91,14 +91,6 @@ struct FullScreenContentPrivate
         QObject::connect(mOptionsAction->menu(), SIGNAL(aboutToShow()), q, SLOT(slotAboutToShowOptionsMenu()));
     }
 
-    void adjustBarWidth()
-    {
-        if (GwenviewConfig::showFullScreenThumbnails()) {
-            return;
-        }
-        q->adjustSize();
-    }
-
     void updateContainerAppearance()
     {
         bool wasAutoHide = mContent->parentWidget() == mAutoHideContainer;
@@ -254,8 +246,6 @@ void FullScreenContent::updateInformationLabel()
     QString text = valueList.join(i18nc("@item:intext fullscreen meta info separator", ", "));
 
     d->mInformationLabel->setText(text);
-
-    d->adjustBarWidth();
 }
 
 void FullScreenContent::updateCurrentUrlWidgets()
