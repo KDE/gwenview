@@ -199,6 +199,7 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
     ThumbnailBarItemDelegate* delegate = new ThumbnailBarItemDelegate(d->mThumbnailBar);
     d->mThumbnailBar->setItemDelegate(delegate);
     d->mThumbnailBar->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    setFullScreenBarHeight(GwenviewConfig::fullScreenBarHeight());
 
     // Content Layout
     layout = new QVBoxLayout(d->mContent);
@@ -305,8 +306,9 @@ void FullScreenContent::updateSlideShowIntervalLabel()
 
 void FullScreenContent::setFullScreenBarHeight(int value)
 {
-    d->mAutoHideContainer->setFixedHeight(value);
+    d->mAutoHideContainer->setFixedHeight(d->mToolBar->sizeHint().height() + value);
     GwenviewConfig::setFullScreenBarHeight(value);
+    d->mAutoHideContainer->adjustSize();
 }
 
 void FullScreenContent::slotAboutToShowOptionsMenu()
