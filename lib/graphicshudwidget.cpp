@@ -103,7 +103,7 @@ void GraphicsHudWidget::init(QGraphicsWidget* mainWidget, Options options)
     if (options & OptionCloseButton) {
         d->mCloseButton = new GraphicsHudButton(this);
         d->mCloseButton->setIcon(KIcon("window-close"));
-        d->mCloseButton->setToolTip(i18n("Close"));
+        d->mCloseButton->setToolTip(i18nc("@info:tooltip", "Close"));
 
         layout->addItem(d->mCloseButton);
         layout->setAlignment(d->mCloseButton, Qt::AlignTop | Qt::AlignHCenter);

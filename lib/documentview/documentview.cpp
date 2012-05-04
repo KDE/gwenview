@@ -164,8 +164,8 @@ struct DocumentViewPrivate
 
     void setupHud()
     {
-        GraphicsHudButton* trashButton = createHudButton(i18n("Trash"), "user-trash", false);
-        GraphicsHudButton* deselectButton = createHudButton(i18n("Deselect"), "list-remove", true);
+        GraphicsHudButton* trashButton = createHudButton(i18nc("@action:button", "Trash"), "user-trash", false);
+        GraphicsHudButton* deselectButton = createHudButton(i18nc("@info:tooltip", "Deselect"), "list-remove", true);
 
         QGraphicsWidget* content = new QGraphicsWidget;
         QGraphicsLinearLayout* layout = new QGraphicsLinearLayout(content);
