@@ -34,7 +34,7 @@ namespace Gwenview
 
 #undef ENABLE_LOG
 #undef LOG
-//#define ENABLE_LOG
+#define ENABLE_LOG
 #ifdef ENABLE_LOG
 #define LOG(x) kDebug() << x
 #else
@@ -84,8 +84,10 @@ struct DocumentFactoryPrivate
      */
     void garbageCollect(DocumentMap& map)
     {
-        // Build a map of all unreferenced images
-        typedef QMap<QDateTime, KUrl> UnreferencedImages;
+        // Build a map of all unreferenced images. We use a MultiMap because in
+        // rare cases documents may get accessed at the same millisecond.
+        // See https://bugs.kde.org/show_bug.cgi?id=296401
+        typedef QMultiMap<QDateTime, KUrl> UnreferencedImages;
         UnreferencedImages unreferencedImages;
 
         DocumentMap::Iterator
@@ -94,7 +96,7 @@ struct DocumentFactoryPrivate
         for (; it != end; ++it) {
             DocumentInfo* info = it.value();
             if (info->mDocument.count() == 1 && !info->mDocument->isModified()) {
-                unreferencedImages[info->mLastAccess] = it.key();
+                unreferencedImages.insert(info->mLastAccess, it.key());
             }
         }
 
@@ -148,6 +150,12 @@ DocumentFactory* DocumentFactory::instance()
 {
     static DocumentFactory factory;
     return &factory;
+}
+
+Document::Ptr DocumentFactory::getCachedDocument(const KUrl& url) const
+{
+    const DocumentInfo* info = d->mDocumentMap.value(url);
+    return info ? info->mDocument : Document::Ptr();
 }
 
 Document::Ptr DocumentFactory::load(const KUrl& url)
