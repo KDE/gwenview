@@ -323,12 +323,14 @@ struct MainWindow::Private
         action->setShortcut(Qt::Key_F5);
 
         mBrowseAction = view->addAction("browse");
-        mBrowseAction->setText(i18nc("@action Switch to file list", "Browse"));
+        mBrowseAction->setText(i18nc("@action:intoolbar Switch to file list", "Browse"));
+        mBrowseAction->setToolTip(i18nc("@info:tooltip", "Browse folders for images"));
         mBrowseAction->setCheckable(true);
         mBrowseAction->setIcon(KIcon("view-list-icons"));
 
         mViewAction = view->addAction("view");
-        mViewAction->setText(i18nc("@action Switch to image view", "View"));
+        mViewAction->setText(i18nc("@action:intoolbar Switch to image view", "View"));
+        mViewAction->setToolTip(i18nc("@info:tooltip", "View one image"));
         mViewAction->setIcon(KIcon("view-preview"));
         mViewAction->setCheckable(true);
 

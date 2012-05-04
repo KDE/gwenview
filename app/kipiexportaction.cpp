@@ -69,12 +69,13 @@ struct KIPIExportActionPrivate
 };
 
 KIPIExportAction::KIPIExportAction(QObject* parent)
-: KToolBarPopupAction(KIcon("document-share"), i18n("Share"), parent)
+: KToolBarPopupAction(KIcon("document-share"), i18nc("@action", "Share"), parent)
 , d(new KIPIExportActionPrivate)
 {
     d->q = this;
     d->mKIPIInterface = 0;
     d->mDefaultAction = 0;
+    setToolTip(i18nc("@info:tooltip", "Share images using various services"));
 
     setDelayed(false);
     connect(menu(), SIGNAL(aboutToShow()), SLOT(init()));
