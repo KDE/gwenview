@@ -110,7 +110,7 @@ struct FullScreenContentPrivate
     {
         mOptionsButton = createButtonBarButton();
         mOptionsButton->setIcon(KIcon("configure"));
-        mOptionsButton->setToolTip(i18nc("@info:tooltip", "Configure Full Screen Mode"));
+        mOptionsButton->setToolTip(i18nc("@info:tooltip", "Configure full screen mode"));
         QObject::connect(mOptionsButton, SIGNAL(clicked()),
                          q, SLOT(showFullScreenConfigDialog()));
     }

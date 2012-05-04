@@ -82,12 +82,14 @@ struct ImageOpsContextManagerItem::Private
         mRotateLeftAction = edit->addAction("rotate_left", q, SLOT(rotateLeft()));
         mRotateLeftAction->setPriority(QAction::LowPriority);
         mRotateLeftAction->setText(i18n("Rotate Left"));
+        mRotateLeftAction->setToolTip(i18nc("@info:tooltip", "Rotate image to the left"));
         mRotateLeftAction->setIcon(KIcon("object-rotate-left"));
         mRotateLeftAction->setShortcut(Qt::CTRL + Qt::Key_L);
 
         mRotateRightAction = edit->addAction("rotate_right", q, SLOT(rotateRight()));
         mRotateRightAction->setPriority(QAction::LowPriority);
         mRotateRightAction->setText(i18n("Rotate Right"));
+        mRotateRightAction->setToolTip(i18nc("@info:tooltip", "Rotate image to the right"));
         mRotateRightAction->setIcon(KIcon("object-rotate-right"));
         mRotateRightAction->setShortcut(Qt::CTRL + Qt::Key_R);
 

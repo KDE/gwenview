@@ -359,26 +359,26 @@ struct MainWindow::Private
         mGoToPreviousAction->setPriority(QAction::LowPriority);
         mGoToPreviousAction->setIcon(KIcon("media-skip-backward"));
         mGoToPreviousAction->setText(i18nc("@action Go to previous image", "Previous"));
-        mGoToPreviousAction->setToolTip(i18n("Go to Previous Image"));
+        mGoToPreviousAction->setToolTip(i18nc("@info:tooltip", "Go to previous image"));
         mGoToPreviousAction->setShortcut(Qt::Key_Backspace);
 
         mGoToNextAction = view->addAction("go_next", q, SLOT(goToNext()));
         mGoToNextAction->setPriority(QAction::LowPriority);
         mGoToNextAction->setIcon(KIcon("media-skip-forward"));
         mGoToNextAction->setText(i18nc("@action Go to next image", "Next"));
-        mGoToNextAction->setToolTip(i18n("Go to Next Image"));
+        mGoToNextAction->setToolTip(i18nc("@info:tooltip", "Go to next image"));
         mGoToNextAction->setShortcut(Qt::Key_Space);
 
         mGoToFirstAction = view->addAction("go_first", q, SLOT(goToFirst()));
         mGoToFirstAction->setPriority(QAction::LowPriority);
         mGoToFirstAction->setText(i18nc("@action Go to first image", "First"));
-        mGoToFirstAction->setToolTip(i18n("Go to First Image"));
+        mGoToFirstAction->setToolTip(i18nc("@info:tooltip", "Go to first image"));
         mGoToFirstAction->setShortcut(Qt::Key_Home);
 
         mGoToLastAction = view->addAction("go_last", q, SLOT(goToLast()));
         mGoToLastAction->setPriority(QAction::LowPriority);
         mGoToLastAction->setText(i18nc("@action Go to last image", "Last"));
-        mGoToLastAction->setToolTip(i18n("Go to Last Image"));
+        mGoToLastAction->setToolTip(i18nc("@info:tooltip", "Go to last image"));
         mGoToLastAction->setShortcut(Qt::Key_End);
 
         mGoUpAction = view->addAction(KStandardAction::Up, q, SLOT(goUp()));
@@ -387,6 +387,7 @@ struct MainWindow::Private
         action->setPriority(QAction::LowPriority);
         action->setIcon(KIcon("go-home"));
         action->setText(i18nc("@action", "Start Page"));
+        action->setToolTip(i18nc("@info:tooltip", "Open the start page"));
 
         mToggleSideBarAction = view->add<KToggleAction>("toggle_sidebar");
         connect(mToggleSideBarAction, SIGNAL(toggled(bool)),
@@ -1120,7 +1121,7 @@ void MainWindow::updateToggleSideBarAction()
     } else {
         text = QString::fromUtf8(visible ? "▮←" : "▮→");
     }
-    QString toolTip = visible ? i18n("Hide Sidebar") : i18n("Show Sidebar");
+    QString toolTip = visible ? i18nc("@info:tooltip", "Hide sidebar") : i18nc("@info:tooltip", "Show sidebar");
 
     QList<QToolButton*> lst;
     lst << d->mBrowseMainPage->toggleSideBarButton()
