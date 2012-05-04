@@ -61,14 +61,13 @@ void DocumentInfoProvider::thumbnailForDocument(const KUrl& url, ThumbnailGroup:
     Q_ASSERT(outFullSize);
     *outPix = QPixmap();
     *outFullSize = QSize();
-    DocumentFactory* factory = DocumentFactory::instance();
     const int pixelSize = ThumbnailGroup::pixelSize(group);
 
-    if (!factory->hasUrl(url)) {
+    Document::Ptr doc = DocumentFactory::instance()->getCachedDocument(url);
+    if (!doc) {
         return;
     }
 
-    Document::Ptr doc = factory->load(url);
     if (doc->loadingState() != Document::Loaded) {
         return;
     }
@@ -83,10 +82,8 @@ void DocumentInfoProvider::thumbnailForDocument(const KUrl& url, ThumbnailGroup:
 
 bool DocumentInfoProvider::isModified(const KUrl& url)
 {
-    DocumentFactory* factory = DocumentFactory::instance();
-
-    if (factory->hasUrl(url)) {
-        Document::Ptr doc = factory->load(url);
+    Document::Ptr doc = DocumentFactory::instance()->getCachedDocument(url);
+    if (doc) {
         return doc->loadingState() == Document::Loaded && doc->isModified();
     } else {
         return false;
@@ -95,10 +92,8 @@ bool DocumentInfoProvider::isModified(const KUrl& url)
 
 bool DocumentInfoProvider::isBusy(const KUrl& url)
 {
-    DocumentFactory* factory = DocumentFactory::instance();
-
-    if (factory->hasUrl(url)) {
-        Document::Ptr doc = factory->load(url);
+    Document::Ptr doc = DocumentFactory::instance()->getCachedDocument(url);
+    if (doc) {
         return doc->isBusy();
     } else {
         return false;

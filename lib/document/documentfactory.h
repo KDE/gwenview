@@ -34,6 +34,13 @@ namespace Gwenview
 
 struct DocumentFactoryPrivate;
 
+/**
+ * This class holds all instances of Document.
+ *
+ * It keeps a cache of recently accessed documents to avoid reloading them.
+ * To do so it keeps a last-access timestamp, which is updated to the
+ * current time everytime DocumentFactory::load() is called.
+ */
 class GWENVIEWLIB_EXPORT DocumentFactory : public QObject
 {
     Q_OBJECT
@@ -41,7 +48,18 @@ public:
     static DocumentFactory* instance();
     ~DocumentFactory();
 
-    Document::Ptr load(const KUrl&);
+    /**
+     * Loads the document associated with url, or returns an already cached
+     * instance of Document::Ptr if there is any.
+     * This method updates the last-access timestamp.
+     */
+    Document::Ptr load(const KUrl& url);
+
+    /**
+     * Returns a document if it has already been loaded once with load().
+     * This method does not update the last-access timestamp.
+     */
+    Document::Ptr getCachedDocument(const KUrl&) const;
 
     QList<KUrl> modifiedDocumentList() const;
 
