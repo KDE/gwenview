@@ -95,7 +95,7 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
         // can't be used directly from Designer)
         mFilePlacesModel = new KFilePlacesModel(q);
         mUrlNavigator = new KUrlNavigator(mFilePlacesModel, KUrl(), mUrlNavigatorContainer);
-        mUrlNavigator->setAutoFillBackground(true);
+        mUrlNavigatorContainer->setAutoFillBackground(true);
         QVBoxLayout* layout = new QVBoxLayout(mUrlNavigatorContainer);
         layout->setMargin(0);
         layout->addWidget(mUrlNavigator);
@@ -213,7 +213,7 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
     {
        QPalette pal(q->palette());
        pal.setColor(QPalette::Window, pal.color(QPalette::Window).dark(110));
-       mUrlNavigator->setPalette(pal);
+       mUrlNavigatorContainer->setPalette(pal);
     }
 };
 
