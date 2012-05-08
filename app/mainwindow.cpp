@@ -140,31 +140,25 @@ struct MainWindowState
 
 Layout of the main window looks like this:
 
-.-mCentralWidget---------------------------------.
-|.-mFullScreenContent---------------------------.|
-||                                              ||
-|'----------------------------------------------'|
-|.-mCentralSplitter-----------------------------.|
-||.-mSideBar--. .-mContentWidget---------------.||
-|||           | |.-mSaveBar-------------------.|||
-|||           | ||                            ||||
-|||           | |'----------------------------'|||
-|||           | |.-mViewStackedWidget---------.|||
-|||           | ||                            ||||
-|||           | ||                            ||||
-|||           | ||                            ||||
-|||           | ||                            ||||
-|||           | |'----------------------------'|||
-||'-----------' '------------------------------'||
-|'----------------------------------------------'|
-'------------------------------------------------'
+.-mCentralSplitter-----------------------------.
+|.-mSideBar--. .-mContentWidget---------------.|
+||           | |.-mSaveBar-------------------.||
+||           | ||                            |||
+||           | |'----------------------------'||
+||           | |.-mViewStackedWidget---------.||
+||           | ||                            |||
+||           | ||                            |||
+||           | ||                            |||
+||           | ||                            |||
+||           | |'----------------------------'||
+|'-----------' '------------------------------'|
+'----------------------------------------------'
 
 */
 struct MainWindow::Private
 {
     GvCore* mGvCore;
     MainWindow* q;
-    QWidget* mCentralWidget;
     QSplitter* mCentralSplitter;
     QWidget* mContentWidget;
     ViewMainPage* mViewMainPage;
@@ -222,17 +216,10 @@ struct MainWindow::Private
         KSharedConfigPtr config = KSharedConfig::openConfig("color-schemes/ObsidianCoast.colors", KConfig::FullConfig, "data");
         mFullScreenPalette = KGlobalSettings::createApplicationPalette(config);
 
-        mCentralWidget = new QWidget(q);
-        q->setCentralWidget(mCentralWidget);
+        mFullScreenContent = new FullScreenContent(q);
 
-        mFullScreenContent = new FullScreenContent(mCentralWidget);
-
-        mCentralSplitter = new Splitter(Qt::Horizontal, mCentralWidget);
-        QVBoxLayout* layout = new QVBoxLayout(mCentralWidget);
-        layout->setMargin(0);
-        layout->setSpacing(0);
-        layout->addWidget(mFullScreenContent);
-        layout->addWidget(mCentralSplitter);
+        mCentralSplitter = new Splitter(Qt::Horizontal, q);
+        q->setCentralWidget(mCentralSplitter);
 
         // Left side of splitter
         mSideBar = new SideBar(mCentralSplitter);
@@ -244,7 +231,7 @@ struct MainWindow::Private
 
         mSaveBar = new SaveBar(mContentWidget, q->actionCollection());
         mViewStackedWidget = new QStackedWidget(mContentWidget);
-        layout = new QVBoxLayout(mContentWidget);
+        QVBoxLayout* layout = new QVBoxLayout(mContentWidget);
         layout->addWidget(mSaveBar);
         layout->addWidget(mViewStackedWidget);
         layout->setMargin(0);

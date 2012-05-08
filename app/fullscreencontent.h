@@ -45,11 +45,11 @@ struct FullScreenContentPrivate;
 /**
  * The content of the fullscreen bar
  */
-class FullScreenContent : public QWidget
+class FullScreenContent : public QObject
 {
     Q_OBJECT
 public:
-    FullScreenContent(QWidget* parent);
+    FullScreenContent(QObject* parent);
     ~FullScreenContent();
 
     void init(KActionCollection*, QWidget* autoHideParentWidget, SlideShow*);

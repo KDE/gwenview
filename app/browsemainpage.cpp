@@ -166,6 +166,18 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
         mAddFilterButton->setMenu(menu);
     }
 
+    void setupFullScreenToolBar()
+    {
+        mFullScreenToolBar->setIconDimensions(KIconLoader::SizeMedium);
+        mFullScreenToolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
+        #define addAction(name) mFullScreenToolBar->addAction(mActionCollection->action(name))
+        addAction("browse");
+        addAction("view");
+        mFullScreenToolBar->addSeparator();
+        addAction("leave_fullscreen");
+        #undef addAction
+    }
+
     void updateDocumentCountLabel()
     {
         QString text = i18ncp("@label", "%1 document", "%1 documents", mDocumentCount);
@@ -348,6 +360,11 @@ void BrowseMainPage::setFullScreenMode(bool fullScreen)
        actions |= PreviewItemDelegate::FullScreenAction;
    }
    d->mDelegate->setContextBarActions(actions);
+
+   d->mFullScreenToolBar->setVisible(fullScreen);
+   if (fullScreen && d->mFullScreenToolBar->actions().isEmpty()) {
+       d->setupFullScreenToolBar();
+   }
 }
 
 void BrowseMainPage::setNormalPalette(const QPalette& palette)

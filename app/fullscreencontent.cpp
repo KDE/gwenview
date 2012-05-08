@@ -30,6 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QLabel>
 #include <QMenu>
 #include <QPointer>
+#include <QToolButton>
 #include <QWidgetAction>
 
 // KDE
@@ -93,37 +94,24 @@ struct FullScreenContentPrivate
 
     void updateContainerAppearance()
     {
-        bool wasAutoHide = mContent->parentWidget() == mAutoHideContainer;
-        if (!mFullScreenMode) {
-            if (wasAutoHide) {
-                q->layout()->addWidget(mContent);
-            }
-            q->hide();
+        if (!mFullScreenMode || !mViewPageVisible) {
+            mAutoHideContainer->setActivated(false);
             return;
         }
 
-        mThumbnailBar->setVisible(mViewPageVisible && GwenviewConfig::showFullScreenThumbnails());
-        if (mViewPageVisible) {
-            mAutoHideContainer->layout()->addWidget(mContent);
-            mContent->show();
-            mAutoHideContainer->adjustSize();
-            q->hide();
-        } else {
-            q->show();
-            q->layout()->addWidget(mContent);
-        }
-        mAutoHideContainer->setActivated(mViewPageVisible);
+        mThumbnailBar->setVisible(GwenviewConfig::showFullScreenThumbnails());
+        mAutoHideContainer->adjustSize();
+        mAutoHideContainer->setActivated(true);
     }
 };
 
-FullScreenContent::FullScreenContent(QWidget* parent)
-: QWidget(parent)
+FullScreenContent::FullScreenContent(QObject* parent)
+: QObject(parent)
 , d(new FullScreenContentPrivate)
 {
     d->q = this;
     d->mFullScreenMode = false;
     d->mViewPageVisible = false;
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 }
 
 FullScreenContent::~FullScreenContent()
@@ -149,14 +137,11 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
     d->mContent->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     d->mContent->setAutoFillBackground(true);
     EventWatcher::install(d->mContent, QEvent::Show, this, SLOT(updateCurrentUrlWidgets()));
-    layout = new QVBoxLayout(this);
-    layout->setMargin(0);
-    layout->setSpacing(0);
     layout->addWidget(d->mContent);
 
     // mInformationLabel
     d->mInformationLabel = new QLabel;
-    d->mInformationLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    d->mInformationLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     d->mInformationLabel->setWordWrap(true);
 
     d->createOptionsAction();
@@ -164,11 +149,13 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
     // mToolBar
     d->mToolBar = new KToolBar(d->mContent);
     d->mToolBar->setIconDimensions(KIconLoader::SizeMedium);
+    d->mToolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    d->mToolBar->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     QStringList actions = QStringList()
-        << "go_start_page"
-        << "-"
         << "browse"
         << "view"
+        << "-"
+        << "leave_fullscreen"
         << "-"
         << "go_previous"
         << "toggle_slideshow"
@@ -177,15 +164,11 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
         << "rotate_left"
         << "rotate_right"
         << "-"
-        << "label"
         << "configure"
-        << "leave_fullscreen"
         ;
     Q_FOREACH(const QString& name, actions) {
         if (name == "-") {
             d->mToolBar->addSeparator();
-        } else if (name == "label") {
-            d->mToolBar->addWidget(d->mInformationLabel);
         } else if (name == "configure") {
             d->mToolBar->addAction(d->mOptionsAction);
             d->mOptionsAction->associatedWidgets().first();
@@ -202,11 +185,14 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
     setFullScreenBarHeight(GwenviewConfig::fullScreenBarHeight());
 
     // Content Layout
-    layout = new QVBoxLayout(d->mContent);
-    layout->setMargin(0);
-    layout->setSpacing(0);
-    layout->addWidget(d->mToolBar);
-    layout->addWidget(d->mThumbnailBar);
+    {
+        QGridLayout* layout = new QGridLayout(d->mContent);
+        layout->setMargin(0);
+        layout->setSpacing(0);
+        layout->addWidget(d->mToolBar, 0, 0);
+        layout->addWidget(d->mThumbnailBar, 0, 1, 2, 1);
+        layout->addWidget(d->mInformationLabel, 1, 0);
+    }
 
     d->updateContainerAppearance();
 }
@@ -306,7 +292,7 @@ void FullScreenContent::updateSlideShowIntervalLabel()
 
 void FullScreenContent::setFullScreenBarHeight(int value)
 {
-    d->mAutoHideContainer->setFixedHeight(d->mToolBar->sizeHint().height() + value);
+    d->mAutoHideContainer->setFixedHeight(value);
     GwenviewConfig::setFullScreenBarHeight(value);
     d->mAutoHideContainer->adjustSize();
 }
@@ -383,10 +369,8 @@ void FullScreenContent::slotShowThumbnailsToggled(bool value)
 {
     GwenviewConfig::setShowFullScreenThumbnails(value);
     GwenviewConfig::self()->writeConfig();
-    if (d->mViewPageVisible) {
-        d->mThumbnailBar->setVisible(value);
-        d->mAutoHideContainer->adjustSize();
-    }
+    d->mThumbnailBar->setVisible(value);
+    d->mAutoHideContainer->adjustSize();
 }
 
 void FullScreenContent::slotViewModeActionToggled(bool value)
