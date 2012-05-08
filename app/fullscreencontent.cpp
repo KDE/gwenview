@@ -151,31 +151,22 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
     d->mToolBar->setIconDimensions(KIconLoader::SizeMedium);
     d->mToolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
     d->mToolBar->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    QStringList actions = QStringList()
-        << "browse"
-        << "view"
-        << "-"
-        << "leave_fullscreen"
-        << "-"
-        << "go_previous"
-        << "toggle_slideshow"
-        << "go_next"
-        << "-"
-        << "rotate_left"
-        << "rotate_right"
-        << "-"
-        << "configure"
-        ;
-    Q_FOREACH(const QString& name, actions) {
-        if (name == "-") {
-            d->mToolBar->addSeparator();
-        } else if (name == "configure") {
-            d->mToolBar->addAction(d->mOptionsAction);
-            d->mOptionsAction->associatedWidgets().first();
-        } else {
-            d->mToolBar->addAction(actionCollection->action(name));
-        }
-    }
+
+    #define addAction(name) d->mToolBar->addAction(actionCollection->action(name))
+    addAction("browse");
+    addAction("view");
+    d->mToolBar->addSeparator();
+    addAction("leave_fullscreen");
+    d->mToolBar->addSeparator();
+    addAction("go_previous");
+    addAction("toggle_slideshow");
+    addAction("go_next");
+    d->mToolBar->addSeparator();
+    addAction("rotate_left");
+    addAction("rotate_right");
+    d->mToolBar->addSeparator();
+    #undef addAction
+    d->mToolBar->addAction(d->mOptionsAction);
 
     // Thumbnail bar
     d->mThumbnailBar = new ThumbnailBarView(d->mContent);
