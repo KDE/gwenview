@@ -351,7 +351,7 @@ struct MainWindow::Private
 
         mViewAction = view->addAction("view");
         mViewAction->setText(i18nc("@action:intoolbar Switch to image view", "View"));
-        mViewAction->setToolTip(i18nc("@info:tooltip", "View one image"));
+        mViewAction->setToolTip(i18nc("@info:tooltip", "View selected images"));
         mViewAction->setIcon(KIcon("view-preview"));
         mViewAction->setCheckable(true);
 
