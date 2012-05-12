@@ -59,7 +59,7 @@ endif (KIPI_FOUND)
 
 kde4_add_ui_files(gwenview_SRCS
     advancedconfigpage.ui
-    fullscreenconfigdialog.ui
+    fullscreenconfigwidget.ui
     generalconfigpage.ui
     imageviewconfigpage.ui
     semanticinfodialog.ui

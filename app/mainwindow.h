@@ -121,7 +121,7 @@ private Q_SLOTS:
     void goToLast();
     void updatePreviousNextActions();
 
-    void reduceLevelOfDetails();
+    void leaveFullScreen();
     void toggleFullScreen(bool);
     void toggleSlideShow();
     void updateSlideShowAction();

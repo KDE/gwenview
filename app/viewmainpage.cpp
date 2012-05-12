@@ -150,7 +150,6 @@ struct ViewMainPagePrivate
 
     bool mFullScreenMode;
     QPalette mNormalPalette;
-    QPalette mFullScreenPalette;
     bool mCompareMode;
     bool mThumbnailBarVisibleBeforeFullScreen;
 
@@ -312,12 +311,6 @@ struct ViewMainPagePrivate
         layout->addWidget(mThumbnailSplitter);
     }
 
-    void applyPalette()
-    {
-        QPalette palette = mFullScreenMode ? mFullScreenPalette : mNormalPalette;
-        mDocumentViewContainer->setPalette(palette);
-    }
-
     void saveSplitterConfig()
     {
         if (mThumbnailBar->isVisible()) {
@@ -375,13 +368,10 @@ ViewMainPage::ViewMainPage(QWidget* parent, SlideShow* slideShow, KActionCollect
     d->mFullScreenMode = false;
     d->mCompareMode = false;
     d->mThumbnailBarVisibleBeforeFullScreen = false;
-    d->mFullScreenPalette = QPalette(palette());
-    d->mFullScreenPalette.setColor(QPalette::Base, Qt::black);
-    d->mFullScreenPalette.setColor(QPalette::Text, Qt::white);
 
-    QShortcut* toggleFullScreenShortcut = new QShortcut(this);
-    toggleFullScreenShortcut->setKey(Qt::Key_Return);
-    connect(toggleFullScreenShortcut, SIGNAL(activated()), SIGNAL(toggleFullScreenRequested()));
+    QShortcut* goToBrowseModeShortcut = new QShortcut(this);
+    goToBrowseModeShortcut->setKey(Qt::Key_Return);
+    connect(goToBrowseModeShortcut, SIGNAL(activated()), SIGNAL(goToBrowseModeRequested()));
 
     d->setupToolContainer();
     d->setupStatusBar();
@@ -475,7 +465,9 @@ void ViewMainPage::setFullScreenMode(bool fullScreenMode)
 {
     d->mFullScreenMode = fullScreenMode;
     d->mStatusBarContainer->setVisible(!fullScreenMode);
-    d->applyPalette();
+    // For fullscreen mode, we use the application palette, which has been set to a fullscreen version
+    d->mDocumentViewContainer->setPalette(fullScreenMode ? QPalette() : d->mNormalPalette);
+
     if (fullScreenMode) {
         d->mThumbnailBarVisibleBeforeFullScreen = d->mToggleThumbnailBarAction->isChecked();
         if (d->mThumbnailBarVisibleBeforeFullScreen) {
@@ -582,7 +574,7 @@ DocumentView* ViewMainPage::documentView() const
 void ViewMainPage::setNormalPalette(const QPalette& palette)
 {
     d->mNormalPalette = palette;
-    d->applyPalette();
+    d->mDocumentViewContainer->setPalette(palette);
     d->setupThumbnailBarStyleSheet();
 }
 

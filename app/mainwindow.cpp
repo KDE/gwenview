@@ -42,6 +42,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KEditToolBar>
 #include <KFileDialog>
 #include <KFileItem>
+#include <KGlobalSettings>
 #include <KMenuBar>
 #include <KLocale>
 #include <KMessageBox>
@@ -90,7 +91,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/archiveutils.h>
 #include <lib/document/documentfactory.h>
 #include <lib/eventwatcher.h>
-#include <lib/fullscreenbar.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/mimetypeutils.h>
 #include <lib/print/printhelper.h>
@@ -132,11 +132,29 @@ enum MainPageId {
 
 struct MainWindowState
 {
-    MainPageId mMainPageId;
     bool mToolBarVisible;
     Qt::WindowStates mWindowState;
 };
 
+/*
+
+Layout of the main window looks like this:
+
+.-mCentralSplitter-----------------------------.
+|.-mSideBar--. .-mContentWidget---------------.|
+||           | |.-mSaveBar-------------------.||
+||           | ||                            |||
+||           | |'----------------------------'||
+||           | |.-mViewStackedWidget---------.||
+||           | ||                            |||
+||           | ||                            |||
+||           | ||                            |||
+||           | ||                            |||
+||           | |'----------------------------'||
+|'-----------' '------------------------------'|
+'----------------------------------------------'
+
+*/
 struct MainWindow::Private
 {
     GvCore* mGvCore;
@@ -152,8 +170,8 @@ struct MainWindow::Private
     StartMainPage* mStartMainPage;
     SideBar* mSideBar;
     QStackedWidget* mViewStackedWidget;
-    FullScreenBar* mFullScreenBar;
     FullScreenContent* mFullScreenContent;
+    QPalette mFullScreenPalette;
     SaveBar* mSaveBar;
     bool mStartSlideShowWhenDirListerCompleted;
     SlideShow* mSlideShow;
@@ -181,7 +199,6 @@ struct MainWindow::Private
     SortedDirModel* mDirModel;
     ContextManager* mContextManager;
 
-    bool mDistractionFreeMode;
     MainWindowState mStateBeforeFullScreen;
 
     KUrl mUrlToSelect;
@@ -195,6 +212,12 @@ struct MainWindow::Private
 
     void setupWidgets()
     {
+        // FIXME: Can we rely on ObsidianCoast to always be there?
+        KSharedConfigPtr config = KSharedConfig::openConfig("color-schemes/ObsidianCoast.colors", KConfig::FullConfig, "data");
+        mFullScreenPalette = KGlobalSettings::createApplicationPalette(config);
+
+        mFullScreenContent = new FullScreenContent(q);
+
         mCentralSplitter = new Splitter(Qt::Horizontal, q);
         q->setCentralWidget(mCentralSplitter);
 
@@ -244,10 +267,6 @@ struct MainWindow::Private
 
         mThumbnailView = mBrowseMainPage->thumbnailView();
         mUrlNavigator = mBrowseMainPage->urlNavigator();
-        QPalette pal = mUrlNavigator->palette();
-        pal.setColor(QPalette::Window, pal.color(QPalette::Window).dark(110));
-        mUrlNavigator->setAutoFillBackground(true);
-        mUrlNavigator->setPalette(pal);
 
         mDocumentInfoProvider = new DocumentInfoProvider(mDirModel);
         mThumbnailView->setDocumentInfoProvider(mDocumentInfoProvider);
@@ -327,6 +346,8 @@ struct MainWindow::Private
         mBrowseAction->setToolTip(i18nc("@info:tooltip", "Browse folders for images"));
         mBrowseAction->setCheckable(true);
         mBrowseAction->setIcon(KIcon("view-list-icons"));
+        connect(mViewMainPage, SIGNAL(goToBrowseModeRequested()),
+            mBrowseAction, SLOT(trigger()));
 
         mViewAction = view->addAction("view");
         mViewAction->setText(i18nc("@action:intoolbar Switch to image view", "View"));
@@ -347,13 +368,12 @@ struct MainWindow::Private
             shortcut.setAlternate(Qt::Key_F11);
         }
         mFullScreenAction->setShortcut(shortcut);
-        connect(mViewMainPage, SIGNAL(toggleFullScreenRequested()),
-                mFullScreenAction, SLOT(trigger()));
 
-        KAction* reduceLodAction = view->addAction("reduce_lod", q, SLOT(reduceLevelOfDetails()));
-        // FIXME Find a better text for this action
-        reduceLodAction->setText(i18nc("@action Go back to a more general page (start page <- list <- image)", "Back"));
-        reduceLodAction->setShortcut(Qt::Key_Escape);
+        KAction* leaveFullScreenAction = view->addAction("leave_fullscreen", q, SLOT(leaveFullScreen()));
+        leaveFullScreenAction->setIcon(KIcon("view-restore"));
+        leaveFullScreenAction->setPriority(QAction::LowPriority);
+        leaveFullScreenAction->setText(i18nc("@action", "Leave Fullscreen Mode"));
+        leaveFullScreenAction->setShortcut(Qt::Key_Escape);
 
         mGoToPreviousAction = view->addAction("go_previous", q, SLOT(goToPrevious()));
         mGoToPreviousAction->setPriority(QAction::LowPriority);
@@ -606,12 +626,9 @@ struct MainWindow::Private
         }
     }
 
-    void setupFullScreenBar()
+    void setupFullScreenContent()
     {
-        mFullScreenBar = new FullScreenBar(mViewMainPage);
-        mFullScreenContent = new FullScreenContent(
-            mFullScreenBar, q->actionCollection(), mSlideShow);
-
+        mFullScreenContent->init(q->actionCollection(), mViewMainPage, mSlideShow);
         ThumbnailBarView* view = mFullScreenContent->thumbnailBar();
         view->setModel(mDirModel);
         view->setDocumentInfoProvider(mDocumentInfoProvider);
@@ -640,12 +657,6 @@ struct MainWindow::Private
         setActionEnabled("reload", enabled);
         setActionEnabled("go_start_page", enabled);
         setActionEnabled("add_folder_to_places", enabled);
-    }
-
-    void updateDistractionsState()
-    {
-        const bool isFullScreen = mFullScreenAction->isChecked();
-        mFullScreenBar->setActivated(!mDistractionFreeMode && isFullScreen);
     }
 
     void updateActions()
@@ -807,7 +818,6 @@ MainWindow::MainWindow()
 {
     d->q = this;
     d->mCurrentMainPageId = StartMainPageId;
-    d->mDistractionFreeMode = false;
     d->mDirModel = new SortedDirModel(this);
     d->mGvCore = new GvCore(this, d->mDirModel);
     d->mPreloader = new Preloader(this);
@@ -817,7 +827,7 @@ MainWindow::MainWindow()
     d->setupActions();
     d->setupUndoActions();
     d->setupContextManager();
-    d->setupFullScreenBar();
+    d->setupFullScreenContent();
     d->updateActions();
     updatePreviousNextActions();
     d->mSaveBar->initActionDependentWidgets();
@@ -1259,14 +1269,10 @@ void MainWindow::updatePreviousNextActions()
     d->mGoToLastAction->setEnabled(d->mGoToNextAction->isEnabled());
 }
 
-void MainWindow::reduceLevelOfDetails()
+void MainWindow::leaveFullScreen()
 {
     if (d->mFullScreenAction->isChecked()) {
         d->mFullScreenAction->trigger();
-    } else if (d->mCurrentMainPageId == ViewMainPageId) {
-        d->mBrowseAction->trigger();
-    } else {
-        showStartMainPage();
     }
 }
 
@@ -1281,19 +1287,19 @@ void MainWindow::toggleFullScreen(bool checked)
         resetAutoSaveSettings();
 
         // Save state
-        d->mStateBeforeFullScreen.mMainPageId = d->mCurrentMainPageId;
         d->mStateBeforeFullScreen.mToolBarVisible = toolBar()->isVisible();
         d->mStateBeforeFullScreen.mWindowState = windowState();
 
         // Go full screen
-        d->mViewAction->trigger();
-
         setWindowState(windowState() | Qt::WindowFullScreen);
         menuBar()->hide();
         toolBar()->hide();
+
+        QApplication::setPalette(d->mFullScreenPalette);
+        d->mFullScreenContent->setFullScreenMode(true);
+        d->mBrowseMainPage->setFullScreenMode(true);
         d->mViewMainPage->setFullScreenMode(true);
         d->mSaveBar->setFullScreenMode(true);
-        d->updateDistractionsState();
         d->setScreenSaverEnabled(false);
 
         // HACK: Only load sidebar config now, because it looks at
@@ -1304,11 +1310,9 @@ void MainWindow::toggleFullScreen(bool checked)
         setAutoSaveSettings();
 
         // Back to normal
-        d->mCurrentMainPageId = d->mStateBeforeFullScreen.mMainPageId;
-        if (d->mCurrentMainPageId == BrowseMainPageId) {
-            d->mBrowseAction->trigger();
-        }
-
+        QApplication::setPalette(KGlobalSettings::createApplicationPalette());
+        d->mFullScreenContent->setFullScreenMode(false);
+        d->mBrowseMainPage->setFullScreenMode(false);
         d->mViewMainPage->setFullScreenMode(false);
         d->mSlideShow->stop();
         d->mSaveBar->setFullScreenMode(false);
@@ -1316,7 +1320,6 @@ void MainWindow::toggleFullScreen(bool checked)
         menuBar()->setVisible(d->mShowMenuBarAction->isChecked());
         toolBar()->setVisible(d->mStateBeforeFullScreen.mToolBarVisible);
 
-        d->updateDistractionsState();
         d->setScreenSaverEnabled(true);
 
         // Keep this after mViewMainPage->setFullScreenMode(false).
@@ -1495,8 +1498,8 @@ void MainWindow::loadConfig()
     pal.setColor(QPalette::Text, fgColor);
 
     // Apply to widgets
-    d->mBrowseMainPage->applyPalette(pal);
     d->mStartMainPage->applyPalette(pal);
+    d->mBrowseMainPage->setNormalPalette(pal);
     d->mViewMainPage->setNormalPalette(pal);
 }
 
@@ -1581,8 +1584,7 @@ void MainWindow::resizeEvent(QResizeEvent* event)
 
 void MainWindow::setDistractionFreeMode(bool value)
 {
-    d->mDistractionFreeMode = value;
-    d->updateDistractionsState();
+    d->mFullScreenContent->setDistractionFreeMode(value);
 }
 
 void MainWindow::saveProperties(KConfigGroup& group)

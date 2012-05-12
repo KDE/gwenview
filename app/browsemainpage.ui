@@ -10,30 +10,47 @@
     <height>267</height>
    </rect>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
+  <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
     <number>0</number>
    </property>
-   <item row="0" column="1">
-    <widget class="QWidget" name="mUrlNavigatorContainer" native="true">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>10</height>
-      </size>
-     </property>
-    </widget>
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="KToolBar" name="mFullScreenToolBar" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QWidget" name="mUrlNavigatorContainer" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>10</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
-   <item row="1" column="0" colspan="2">
+   <item>
     <widget class="Gwenview::ThumbnailView" name="mThumbnailView"/>
    </item>
-   <item row="2" column="0" colspan="2">
+   <item>
     <widget class="QFrame" name="mFilterFrame">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -49,7 +66,7 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="0" colspan="2">
+   <item>
     <widget class="QWidget" name="mStatusBarContainer" native="true">
      <layout class="QHBoxLayout" name="horizontalLayout">
       <property name="spacing">
@@ -123,6 +140,12 @@
    <class>Gwenview::ThumbnailSlider</class>
    <extends>QWidget</extends>
    <header location="global">lib/thumbnailview/thumbnailslider.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KToolBar</class>
+   <extends>QWidget</extends>
+   <header location="global">KToolBar</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

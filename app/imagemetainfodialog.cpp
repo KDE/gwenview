@@ -125,7 +125,7 @@ ImageMetaInfoDialog::ImageMetaInfoDialog(QWidget* parent)
     d->mTreeView->setIndentation(0);
     d->mTreeView->setItemDelegate(new MetaInfoDelegate(d->mTreeView));
     setMainWidget(d->mTreeView);
-    setCaption(i18nc("@title:window", "Meta Information"));
+    setCaption(i18nc("@title:window", "Image Information"));
     setButtons(KDialog::Close);
 }
 
