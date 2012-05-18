@@ -153,9 +153,13 @@ ThumbnailBarItemDelegate::ThumbnailBarItemDelegate(ThumbnailView* view)
     d->mBorderColor = PaintUtils::alphaAdjustedF(QColor(Qt::white), 0.65);
 }
 
-QSize ThumbnailBarItemDelegate::sizeHint(const QStyleOptionViewItem & /*option*/, const QModelIndex & /*index*/) const
+QSize ThumbnailBarItemDelegate::sizeHint(const QStyleOptionViewItem & /*option*/, const QModelIndex & index) const
 {
-    return d->mView->gridSize();
+    QPixmap thumbnailPix = d->mView->thumbnailForIndex(index);
+    QSize size = thumbnailPix.size();
+    size.rwidth() += ITEM_MARGIN * 2;
+    size.rheight() += ITEM_MARGIN * 2;
+    return size;
 }
 
 bool ThumbnailBarItemDelegate::eventFilter(QObject*, QEvent* event)
@@ -399,8 +403,6 @@ struct ThumbnailBarViewPrivate
         }
 
         int gridSize = (widgetSize - scrollBarSize - 2 * q->frameWidth()) / mRowCount;
-
-        q->setGridSize(QSize(gridSize, gridSize));
         q->setThumbnailSize(gridSize - ITEM_MARGIN * 2);
     }
 };
@@ -418,8 +420,10 @@ ThumbnailBarView::ThumbnailBarView(QWidget* parent)
     d->mOrientation = Qt::Vertical; // To pass value-has-changed check in setOrientation()
     setOrientation(Qt::Horizontal);
 
+    setThumbnailScaleMode(ScaleToHeight);
     setObjectName(QLatin1String("thumbnailBarView"));
-    setUniformItemSizes(true);
+    setUniformItemSizes(false);
+    setMovement(QListView::Static);
     setWrapping(true);
 
     d->mStyle = new ProxyStyle(style());

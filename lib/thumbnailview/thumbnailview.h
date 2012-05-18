@@ -49,6 +49,12 @@ public:
         MinThumbnailSize = 48,
         MaxThumbnailSize = 256
     };
+
+    enum ThumbnailScaleMode {
+        ScaleToHeight,
+        ScaleToWidth,
+        ScaleToFit
+    };
     ThumbnailView(QWidget* parent);
     ~ThumbnailView();
 
@@ -59,6 +65,8 @@ public:
     void setDocumentInfoProvider(AbstractDocumentInfoProvider* provider);
 
     AbstractDocumentInfoProvider* documentInfoProvider() const;
+
+    void setThumbnailScaleMode(ThumbnailScaleMode);
 
     /**
      * Returns the thumbnail size.
