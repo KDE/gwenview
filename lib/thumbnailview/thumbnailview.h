@@ -68,7 +68,7 @@ public:
 
     ThumbnailScaleMode thumbnailScaleMode() const;
 
-    virtual void setThumbnailScaleMode(ThumbnailScaleMode);
+    void setThumbnailScaleMode(ThumbnailScaleMode);
 
     /**
      * Returns the thumbnail size.

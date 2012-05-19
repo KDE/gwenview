@@ -441,18 +441,6 @@ ThumbnailBarView::~ThumbnailBarView()
     delete d;
 }
 
-void ThumbnailBarView::setThumbnailScaleMode(ThumbnailScaleMode mode)
-{
-    ThumbnailView::setThumbnailScaleMode(mode);
-    if (mode == ScaleToFit) {
-        setUniformItemSizes(true);
-        //setMovement(QListView::Static);
-    } else {
-        setUniformItemSizes(false);
-        //setMovement(QListView::Static);
-    }
-}
-
 Qt::Orientation ThumbnailBarView::orientation() const
 {
     return d->mOrientation;

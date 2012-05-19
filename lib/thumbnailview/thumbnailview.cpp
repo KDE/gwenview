@@ -393,6 +393,7 @@ ThumbnailView::ThumbnailScaleMode ThumbnailView::thumbnailScaleMode() const
 void ThumbnailView::setThumbnailScaleMode(ThumbnailScaleMode mode)
 {
     d->mScaleMode = mode;
+    setUniformItemSizes(mode == ScaleToFit);
 }
 
 void ThumbnailView::setModel(QAbstractItemModel* newModel)
