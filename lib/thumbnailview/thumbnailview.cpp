@@ -420,16 +420,14 @@ void ThumbnailView::setThumbnailSize(int value)
     } else {
         waitingThumbnailSize = 32;
     }
-    if (d->mWaitingThumbnail.width() != waitingThumbnailSize) {
-        QPixmap icon = DesktopIcon("chronometer", waitingThumbnailSize);
-        QPixmap pix(icon.size());
-        pix.fill(Qt::transparent);
-        QPainter painter(&pix);
-        painter.setOpacity(0.5);
-        painter.drawPixmap(0, 0, icon);
-        painter.end();
-        d->mWaitingThumbnail = pix;
-    }
+    QPixmap icon = DesktopIcon("chronometer", waitingThumbnailSize);
+    QPixmap pix(value, value);
+    pix.fill(Qt::transparent);
+    QPainter painter(&pix);
+    painter.setOpacity(0.5);
+    painter.drawPixmap((value - icon.width()) / 2, (value - icon.height()) / 2, icon);
+    painter.end();
+    d->mWaitingThumbnail = pix;
 
     // Stop smoothing
     d->mSmoothThumbnailTimer.stop();
