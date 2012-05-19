@@ -66,7 +66,9 @@ public:
 
     AbstractDocumentInfoProvider* documentInfoProvider() const;
 
-    void setThumbnailScaleMode(ThumbnailScaleMode);
+    ThumbnailScaleMode thumbnailScaleMode() const;
+
+    virtual void setThumbnailScaleMode(ThumbnailScaleMode);
 
     /**
      * Returns the thumbnail size.

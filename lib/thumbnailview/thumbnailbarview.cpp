@@ -155,10 +155,15 @@ ThumbnailBarItemDelegate::ThumbnailBarItemDelegate(ThumbnailView* view)
 
 QSize ThumbnailBarItemDelegate::sizeHint(const QStyleOptionViewItem & /*option*/, const QModelIndex & index) const
 {
-    QPixmap thumbnailPix = d->mView->thumbnailForIndex(index);
-    QSize size = thumbnailPix.size();
-    size.rwidth() += ITEM_MARGIN * 2;
-    size.rheight() += ITEM_MARGIN * 2;
+    QSize size;
+    if (d->mView->thumbnailScaleMode() == ThumbnailView::ScaleToFit) {
+        size = d->mView->gridSize();
+    } else {
+        QPixmap thumbnailPix = d->mView->thumbnailForIndex(index);
+        size = thumbnailPix.size();
+        size.rwidth() += ITEM_MARGIN * 2;
+        size.rheight() += ITEM_MARGIN * 2;
+    }
     return size;
 }
 
@@ -403,6 +408,9 @@ struct ThumbnailBarViewPrivate
         }
 
         int gridSize = (widgetSize - scrollBarSize - 2 * q->frameWidth()) / mRowCount;
+        if (q->thumbnailScaleMode() == ThumbnailView::ScaleToFit) {
+            q->setGridSize(QSize(gridSize, gridSize));
+        }
         q->setThumbnailSize(gridSize - ITEM_MARGIN * 2);
     }
 };
@@ -420,10 +428,7 @@ ThumbnailBarView::ThumbnailBarView(QWidget* parent)
     d->mOrientation = Qt::Vertical; // To pass value-has-changed check in setOrientation()
     setOrientation(Qt::Horizontal);
 
-    setThumbnailScaleMode(ScaleToHeight);
     setObjectName(QLatin1String("thumbnailBarView"));
-    setUniformItemSizes(false);
-    setMovement(QListView::Static);
     setWrapping(true);
 
     d->mStyle = new ProxyStyle(style());
@@ -434,6 +439,18 @@ ThumbnailBarView::~ThumbnailBarView()
 {
     delete d->mStyle;
     delete d;
+}
+
+void ThumbnailBarView::setThumbnailScaleMode(ThumbnailScaleMode mode)
+{
+    ThumbnailView::setThumbnailScaleMode(mode);
+    if (mode == ScaleToFit) {
+        setUniformItemSizes(true);
+        //setMovement(QListView::Static);
+    } else {
+        setUniformItemSizes(false);
+        //setMovement(QListView::Static);
+    }
 }
 
 Qt::Orientation ThumbnailBarView::orientation() const

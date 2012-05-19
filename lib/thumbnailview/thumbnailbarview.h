@@ -69,6 +69,8 @@ public:
     Qt::Orientation orientation() const;
     void setOrientation(Qt::Orientation);
 
+    void setThumbnailScaleMode(ThumbnailScaleMode mode); // reimp
+
     int rowCount() const;
     void setRowCount(int);
 

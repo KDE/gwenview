@@ -385,6 +385,11 @@ ThumbnailView::~ThumbnailView()
     delete d;
 }
 
+ThumbnailView::ThumbnailScaleMode ThumbnailView::thumbnailScaleMode() const
+{
+    return d->mScaleMode;
+}
+
 void ThumbnailView::setThumbnailScaleMode(ThumbnailScaleMode mode)
 {
     d->mScaleMode = mode;
