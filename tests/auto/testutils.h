@@ -116,4 +116,10 @@ void createEmptyFile(const QString& path);
  */
 KUrl setUpRemoteTestDir(const QString& testFile = QString());
 
+/**
+ * Make sure all objects on which deleteLater() have been called have been
+ * destroyed.
+ */
+void waitForDeferredDeletes();
+
 #endif /* TESTUTILS_H */
