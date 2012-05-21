@@ -40,7 +40,7 @@ KUrl setUpRemoteTestDir(const QString& testFile)
     }
     ok = KIO::NetAccess::mkdir(baseUrl, authWindow);
     if (!ok) {
-        kFatal() << "Could not create dir" << baseUrl;
+        kFatal() << "Could not create dir" << baseUrl << ":" << KIO::NetAccess::lastErrorString();
         return KUrl();
     }
 
@@ -49,7 +49,7 @@ KUrl setUpRemoteTestDir(const QString& testFile)
         dstUrl.addPath(testFile);
         ok = KIO::NetAccess::file_copy(urlForTestFile(testFile), dstUrl, authWindow);
         if (!ok) {
-            kFatal() << "Could not copy" << testFile << "to" << dstUrl;
+            kFatal() << "Could not copy" << testFile << "to" << dstUrl << ":" << KIO::NetAccess::lastErrorString();
             return KUrl();
         }
     }
@@ -63,4 +63,13 @@ void createEmptyFile(const QString& path)
     QFile file(path);
     bool ok = file.open(QIODevice::WriteOnly);
     Q_ASSERT(ok);
+}
+
+void waitForDeferredDeletes()
+{
+    while (QCoreApplication::hasPendingEvents()) {
+        QCoreApplication::sendPostedEvents();
+        QCoreApplication::sendPostedEvents(0, QEvent::DeferredDelete);
+        QCoreApplication::processEvents();
+    }
 }

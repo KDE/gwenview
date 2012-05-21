@@ -431,7 +431,6 @@ void ThumbnailLoadJob::start()
     if (mItems.isEmpty()) {
         LOG("Nothing to do");
         emitResult();
-        delete this;
         return;
     }
 
@@ -490,7 +489,6 @@ void ThumbnailLoadJob::determineNextIcon()
         // Done
         LOG("emitting result");
         emitResult();
-        delete this;
         return;
     }
 
