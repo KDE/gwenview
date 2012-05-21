@@ -114,16 +114,10 @@ void ThumbnailLoadJobTest::testLoadLocal()
     }
 
     // Generate the thumbnails
-    QPointer<ThumbnailLoadJob> job = new ThumbnailLoadJob(list, ThumbnailGroup::Normal);
+    ThumbnailLoadJob* job = new ThumbnailLoadJob(list, ThumbnailGroup::Normal);
     QSignalSpy spy(job, SIGNAL(thumbnailLoaded(KFileItem, QPixmap, QSize)));
-    // FIXME: job->exec() causes a double free(), so wait for the job to be
-    // deleted instead
-    //job->exec();
-    job->start();
-    while (job) {
-        QTest::qWait(100);
-    }
-
+    job->exec();
+    waitForDeferredDeletes();
     while (!ThumbnailLoadJob::isPendingThumbnailCacheEmpty()) {
         QTest::qWait(100);
     }
@@ -151,7 +145,7 @@ void ThumbnailLoadJobTest::testLoadLocal()
 void ThumbnailLoadJobTest::testUseEmbeddedOrNot()
 {
     QImage expectedThumbnail;
-    QPointer<ThumbnailLoadJob> job;
+    ThumbnailLoadJob* job;
     QPixmap thumbnailPix;
     SandBox sandBox;
     sandBox.initDir();
@@ -165,13 +159,8 @@ void ThumbnailLoadJobTest::testUseEmbeddedOrNot()
     // Loading a normal thumbnail should bring the white one
     job = new ThumbnailLoadJob(list, ThumbnailGroup::Normal);
     QSignalSpy spy1(job, SIGNAL(thumbnailLoaded(KFileItem, QPixmap, QSize)));
-    // FIXME: job->exec() causes a double free(), so wait for the job to be
-    // deleted instead
-    //job->exec();
-    job->start();
-    while (job) {
-        QTest::qWait(100);
-    }
+    job->exec();
+    waitForDeferredDeletes();
 
     QCOMPARE(spy1.count(), 1);
     expectedThumbnail = createColoredImage(128, 64, Qt::white);
@@ -181,10 +170,8 @@ void ThumbnailLoadJobTest::testUseEmbeddedOrNot()
     // Loading a large thumbnail should bring the red one
     job = new ThumbnailLoadJob(list, ThumbnailGroup::Large);
     QSignalSpy spy2(job, SIGNAL(thumbnailLoaded(KFileItem, QPixmap, QSize)));
-    job->start();
-    while (job) {
-        QTest::qWait(100);
-    }
+    job->exec();
+    waitForDeferredDeletes();
 
     QCOMPARE(spy2.count(), 1);
     expectedThumbnail = createColoredImage(256, 128, Qt::red);
@@ -204,14 +191,9 @@ void ThumbnailLoadJobTest::testLoadRemote()
     KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
     list << item;
 
-    QPointer<ThumbnailLoadJob> job = new ThumbnailLoadJob(list, ThumbnailGroup::Normal);
-    // FIXME: job->exec() causes a double free(), so wait for the job to be
-    // deleted instead
-    //job->exec();
-    job->start();
-    while (job) {
-        QTest::qWait(100);
-    }
+    ThumbnailLoadJob* job = new ThumbnailLoadJob(list, ThumbnailGroup::Normal);
+    job->exec();
+    waitForDeferredDeletes();
     while (!ThumbnailLoadJob::isPendingThumbnailCacheEmpty()) {
         QTest::qWait(100);
     }
