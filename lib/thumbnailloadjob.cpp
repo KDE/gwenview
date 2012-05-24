@@ -492,8 +492,7 @@ void ThumbnailLoadJob::determineNextIcon()
         return;
     }
 
-    mCurrentItem = mItems.first();
-    mItems.pop_front();
+    mCurrentItem = mItems.takeFirst();
     LOG("mCurrentItem.url=" << mCurrentItem.url());
 
     // First, stat the orig file
@@ -508,7 +507,7 @@ void ThumbnailLoadJob::determineNextIcon()
         if (KDE::stat(mCurrentUrl.toLocalFile(), &buff) == 0)  {
             directStatOk = true;
             mOriginalTime = buff.st_mtime;
-            QTimer::singleShot(0, this, SLOT(checkThumbnail()));
+            QMetaObject::invokeMethod(this, "checkThumbnail", Qt::QueuedConnection);
         }
     }
     if (!directStatOk) {
