@@ -620,17 +620,17 @@ void ThumbnailLoadJob::checkThumbnail()
             if (ok) {
                 size = QSize(width, height);
             } else {
-                LOG("Thumbnail for" << mOriginalUri << "does not contain correct image size information");
+                kWarning() << "Thumbnail for" << mOriginalUri << "does not contain correct image size information";
                 KFileMetaInfo fmi(mCurrentUrl);
                 if (fmi.isValid()) {
                     KFileMetaInfoItem item = fmi.item("Dimensions");
                     if (item.isValid()) {
                         size = item.value().toSize();
                     } else {
-                        LOG("KFileMetaInfoItem for" << mOriginalUri << "did not get image size information");
+                        kWarning() << "KFileMetaInfoItem for" << mOriginalUri << "did not get image size information";
                     }
                 } else {
-                    LOG("Could not get a valid KFileMetaInfo instance for" << mOriginalUri);
+                    kWarning() << "Could not get a valid KFileMetaInfo instance for" << mOriginalUri;
                 }
             }
             emitThumbnailLoaded(thumb, size);
