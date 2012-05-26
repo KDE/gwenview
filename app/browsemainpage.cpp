@@ -173,9 +173,11 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
         #define addAction(name) mFullScreenToolBar->addAction(mActionCollection->action(name))
         addAction("browse");
         addAction("view");
-        mFullScreenToolBar->addSeparator();
-        addAction("leave_fullscreen");
         #undef addAction
+
+        mFullScreenToolBar2->setIconDimensions(KIconLoader::SizeMedium);
+        mFullScreenToolBar2->setToolButtonStyle(Qt::ToolButtonIconOnly);
+        mFullScreenToolBar2->addAction(mActionCollection->action("leave_fullscreen"));
     }
 
     void updateDocumentCountLabel()
@@ -362,6 +364,7 @@ void BrowseMainPage::setFullScreenMode(bool fullScreen)
    d->mDelegate->setContextBarActions(actions);
 
    d->mFullScreenToolBar->setVisible(fullScreen);
+   d->mFullScreenToolBar2->setVisible(fullScreen);
    if (fullScreen && d->mFullScreenToolBar->actions().isEmpty()) {
        d->setupFullScreenToolBar();
    }
