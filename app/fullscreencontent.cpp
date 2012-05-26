@@ -87,7 +87,7 @@ struct FullScreenContentPrivate
         mOptionsAction = new KActionMenu(q);
         mOptionsAction->setPriority(QAction::LowPriority);
         mOptionsAction->setDelayed(false);
-        mOptionsAction->setIcon(KIcon("configure"));
+        mOptionsAction->setIcon(KIcon("fs-configure"));
         mOptionsAction->setToolTip(i18nc("@info:tooltip", "Configure full screen mode"));
         QObject::connect(mOptionsAction->menu(), SIGNAL(aboutToShow()), q, SLOT(slotAboutToShowOptionsMenu()));
     }

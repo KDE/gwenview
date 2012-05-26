@@ -370,7 +370,7 @@ struct MainWindow::Private
         mFullScreenAction->setShortcut(shortcut);
 
         KAction* leaveFullScreenAction = view->addAction("leave_fullscreen", q, SLOT(leaveFullScreen()));
-        leaveFullScreenAction->setIcon(KIcon("view-restore"));
+        leaveFullScreenAction->setIcon(KIcon("fs-view-restore"));
         leaveFullScreenAction->setPriority(QAction::LowPriority);
         leaveFullScreenAction->setText(i18nc("@action", "Leave Fullscreen Mode"));
         leaveFullScreenAction->setShortcut(Qt::Key_Escape);
@@ -1329,6 +1329,17 @@ void MainWindow::toggleFullScreen(bool checked)
         // See resizeEvent
         d->mFullScreenLeftAt = QDateTime::currentDateTime();
     }
+
+    // Ugly hack to use different icons in fullscreen mode
+    const QString iconPrefix = checked ? "fs-" : QString();
+    d->mBrowseAction->setIcon(KIcon(iconPrefix + "view-list-icons"));
+    d->mViewAction->setIcon(KIcon(iconPrefix + "view-preview"));
+    d->mGoToPreviousAction->setIcon(KIcon(iconPrefix + "media-skip-backward"));
+    d->mGoToNextAction->setIcon(KIcon(iconPrefix + "media-skip-forward"));
+    actionCollection()->action("rotate_left")->setIcon(KIcon(iconPrefix + "object-rotate-left"));
+    actionCollection()->action("rotate_right")->setIcon(KIcon(iconPrefix + "object-rotate-right"));
+    updateSlideShowAction();
+
     setUpdatesEnabled(true);
 }
 
@@ -1409,12 +1420,13 @@ void MainWindow::toggleSlideShow()
 
 void MainWindow::updateSlideShowAction()
 {
+    QString iconPrefix = d->mFullScreenAction->isChecked() ? "fs-" : QString();
     if (d->mSlideShow->isRunning()) {
         d->mToggleSlideShowAction->setText(i18n("Stop Slideshow"));
-        d->mToggleSlideShowAction->setIcon(KIcon("media-playback-pause"));
+        d->mToggleSlideShowAction->setIcon(KIcon(iconPrefix + "media-playback-pause"));
     } else {
         d->mToggleSlideShowAction->setText(i18n("Start Slideshow"));
-        d->mToggleSlideShowAction->setIcon(KIcon("media-playback-start"));
+        d->mToggleSlideShowAction->setIcon(KIcon(iconPrefix + "media-playback-start"));
     }
 }
 
