@@ -156,17 +156,13 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
     addAction("browse");
     addAction("view");
     d->mToolBar->addSeparator();
-    addAction("leave_fullscreen");
-    d->mToolBar->addSeparator();
     addAction("go_previous");
     addAction("toggle_slideshow");
     addAction("go_next");
     d->mToolBar->addSeparator();
     addAction("rotate_left");
     addAction("rotate_right");
-    d->mToolBar->addSeparator();
     #undef addAction
-    d->mToolBar->addAction(d->mOptionsAction);
 
     // Thumbnail bar
     d->mThumbnailBar = new ThumbnailBarView(d->mContent);
@@ -175,6 +171,16 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
     d->mThumbnailBar->setSelectionMode(QAbstractItemView::ExtendedSelection);
     setFullScreenBarHeight(GwenviewConfig::fullScreenBarHeight());
 
+    // Right bar
+    KToolBar* rightBar = new KToolBar(d->mContent);
+    rightBar->setOrientation(Qt::Vertical);
+    rightBar->setIconDimensions(KIconLoader::SizeMedium);
+    rightBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    rightBar->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    rightBar->addAction(actionCollection->action("leave_fullscreen"));
+    rightBar->addAction(d->mOptionsAction);
+
     // Content Layout
     {
         QGridLayout* layout = new QGridLayout(d->mContent);
@@ -182,6 +188,7 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
         layout->setSpacing(0);
         layout->addWidget(d->mToolBar, 0, 0);
         layout->addWidget(d->mThumbnailBar, 0, 1, 2, 1);
+        layout->addWidget(rightBar, 0, 2, 2, 1);
         layout->addWidget(d->mInformationLabel, 1, 0);
     }
 
