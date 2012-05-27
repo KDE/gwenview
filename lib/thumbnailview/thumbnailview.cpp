@@ -314,7 +314,15 @@ struct ThumbnailViewPrivate
             return pix.scaled(mThumbnailSize, mThumbnailSize, Qt::KeepAspectRatio, transformationMode);
             break;
         case ThumbnailView::ScaleToHeight:
+        #ifdef SQUARE_THUMBS
+        {
+            int minSize = qMin(pix.width(), pix.height());
+            QPixmap pix2 = pix.copy((pix.width() - minSize) / 2, (pix.height() - minSize) / 2, minSize, minSize);
+            return pix2.scaled(mThumbnailSize, mThumbnailSize, Qt::KeepAspectRatio, transformationMode);
+        }
+        #else
             return pix.scaledToHeight(mThumbnailSize, transformationMode);
+        #endif
             break;
         case ThumbnailView::ScaleToWidth:
             return pix.scaledToWidth(mThumbnailSize, transformationMode);
