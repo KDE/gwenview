@@ -354,20 +354,20 @@ void BrowseMainPage::updateThumbnailDetails()
 
 void BrowseMainPage::setFullScreenMode(bool fullScreen)
 {
-   // For fullscreen mode, we use the application palette, which has been set to a fullscreen version
-   setPalette(fullScreen ? QPalette() : d->mNormalPalette);
-   d->updateUrlNavigatorBackgroundColor();
-   PreviewItemDelegate::ContextBarActions actions = PreviewItemDelegate::SelectionAction | PreviewItemDelegate::RotateAction;
-   if (!fullScreen) {
-       actions |= PreviewItemDelegate::FullScreenAction;
-   }
-   d->mDelegate->setContextBarActions(actions);
+    // For fullscreen mode, we use the application palette, which has been set to a fullscreen version
+    setPalette(fullScreen ? QPalette() : d->mNormalPalette);
+    d->updateUrlNavigatorBackgroundColor();
+    PreviewItemDelegate::ContextBarActions actions = PreviewItemDelegate::SelectionAction | PreviewItemDelegate::RotateAction;
+    if (!fullScreen) {
+        actions |= PreviewItemDelegate::FullScreenAction;
+    }
+    d->mDelegate->setContextBarActions(actions);
 
-   d->mFullScreenToolBar->setVisible(fullScreen);
-   d->mFullScreenToolBar2->setVisible(fullScreen);
-   if (fullScreen && d->mFullScreenToolBar->actions().isEmpty()) {
-       d->setupFullScreenToolBar();
-   }
+    d->mFullScreenToolBar->setVisible(fullScreen);
+    d->mFullScreenToolBar2->setVisible(fullScreen);
+    if (fullScreen && d->mFullScreenToolBar->actions().isEmpty()) {
+        d->setupFullScreenToolBar();
+    }
 }
 
 void BrowseMainPage::setNormalPalette(const QPalette& palette)
