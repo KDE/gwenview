@@ -112,7 +112,6 @@ struct FullScreenContentPrivate
 
         if (GwenviewConfig::showFullScreenThumbnails()) {
             mInformationLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-            mInformationLabel->setContentsMargins(0, 0, 0, 0);
             mRightToolBar->setOrientation(Qt::Vertical);
 
             QGridLayout* layout = new QGridLayout(mContent);
@@ -127,7 +126,6 @@ struct FullScreenContentPrivate
             mAutoHideContainer->setFixedHeight(GwenviewConfig::fullScreenBarHeight());
         } else {
             mInformationLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-            mInformationLabel->setContentsMargins(6, 0, 0, 0);
             mRightToolBar->setOrientation(Qt::Horizontal);
 
             QHBoxLayout* layout = new QHBoxLayout(mContent);
@@ -180,6 +178,7 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
     // mInformationLabel
     d->mInformationLabel = new QLabel;
     d->mInformationLabel->setWordWrap(true);
+    d->mInformationLabel->setContentsMargins(6, 0, 6, 0);
 
     d->createOptionsAction();
 
