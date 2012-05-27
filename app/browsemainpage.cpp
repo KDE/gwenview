@@ -357,6 +357,9 @@ void BrowseMainPage::setFullScreenMode(bool fullScreen)
     // For fullscreen mode, we use the application palette, which has been set to a fullscreen version
     setPalette(fullScreen ? QPalette() : d->mNormalPalette);
     d->updateUrlNavigatorBackgroundColor();
+    d->mUrlNavigatorContainer->setContentsMargins(
+        fullScreen ? 6 : 0,
+        0, 0, 0);
     PreviewItemDelegate::ContextBarActions actions = PreviewItemDelegate::SelectionAction | PreviewItemDelegate::RotateAction;
     if (!fullScreen) {
         actions |= PreviewItemDelegate::FullScreenAction;
