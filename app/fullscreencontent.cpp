@@ -123,6 +123,7 @@ struct FullScreenContentPrivate
             layout->addWidget(mRightToolBar, 0, 2, 2, 1);
             layout->addWidget(mInformationLabel, 1, 0);
 
+            mThumbnailBar->setFixedHeight(GwenviewConfig::fullScreenBarHeight());
             mAutoHideContainer->setFixedHeight(GwenviewConfig::fullScreenBarHeight());
         } else {
             mInformationLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
@@ -315,9 +316,9 @@ void FullScreenContent::updateSlideShowIntervalLabel()
 
 void FullScreenContent::setFullScreenBarHeight(int value)
 {
+    d->mThumbnailBar->setFixedHeight(value);
     d->mAutoHideContainer->setFixedHeight(value);
     GwenviewConfig::setFullScreenBarHeight(value);
-    d->mAutoHideContainer->adjustSize();
 }
 
 void FullScreenContent::slotAboutToShowOptionsMenu()
