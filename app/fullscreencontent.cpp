@@ -68,10 +68,12 @@ public:
 struct FullScreenContentPrivate
 {
     FullScreenContent* q;
+    KActionCollection* mActionCollection;
     FullScreenBar* mAutoHideContainer;
     SlideShow* mSlideShow;
     QWidget* mContent;
     KToolBar* mToolBar;
+    KToolBar* mRightToolBar;
     ThumbnailBarView* mThumbnailBar;
     QLabel* mInformationLabel;
     Document::Ptr mCurrentDocument;
@@ -103,6 +105,40 @@ struct FullScreenContentPrivate
         mAutoHideContainer->adjustSize();
         mAutoHideContainer->setActivated(true);
     }
+
+    void updateLayout()
+    {
+        delete mContent->layout();
+
+        if (GwenviewConfig::showFullScreenThumbnails()) {
+            mInformationLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+            mInformationLabel->setContentsMargins(0, 0, 0, 0);
+            mRightToolBar->setOrientation(Qt::Vertical);
+
+            QGridLayout* layout = new QGridLayout(mContent);
+            layout->setMargin(0);
+            layout->setSpacing(0);
+            layout->addWidget(mToolBar, 0, 0);
+            layout->addWidget(mThumbnailBar, 0, 1, 2, 1);
+            layout->addWidget(mRightToolBar, 0, 2, 2, 1);
+            layout->addWidget(mInformationLabel, 1, 0);
+
+            mAutoHideContainer->setFixedHeight(GwenviewConfig::fullScreenBarHeight());
+        } else {
+            mInformationLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+            mInformationLabel->setContentsMargins(6, 0, 0, 0);
+            mRightToolBar->setOrientation(Qt::Horizontal);
+
+            QHBoxLayout* layout = new QHBoxLayout(mContent);
+            layout->setMargin(0);
+            layout->setSpacing(0);
+            layout->addWidget(mToolBar);
+            layout->addWidget(mInformationLabel);
+            layout->addWidget(mRightToolBar);
+
+            mAutoHideContainer->setFixedHeight(mContent->sizeHint().height());
+        }
+    }
 };
 
 FullScreenContent::FullScreenContent(QObject* parent)
@@ -122,6 +158,7 @@ FullScreenContent::~FullScreenContent()
 void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoHideParentWidget, SlideShow* slideShow)
 {
     d->mSlideShow = slideShow;
+    d->mActionCollection = actionCollection;
     connect(actionCollection->action("view"), SIGNAL(toggled(bool)),
         SLOT(slotViewModeActionToggled(bool)));
 
@@ -141,7 +178,6 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
 
     // mInformationLabel
     d->mInformationLabel = new QLabel;
-    d->mInformationLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     d->mInformationLabel->setWordWrap(true);
 
     d->createOptionsAction();
@@ -169,28 +205,17 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
     ThumbnailBarItemDelegate* delegate = new ThumbnailBarItemDelegate(d->mThumbnailBar);
     d->mThumbnailBar->setItemDelegate(delegate);
     d->mThumbnailBar->setSelectionMode(QAbstractItemView::ExtendedSelection);
-    setFullScreenBarHeight(GwenviewConfig::fullScreenBarHeight());
 
     // Right bar
-    KToolBar* rightBar = new KToolBar(d->mContent);
-    rightBar->setOrientation(Qt::Vertical);
-    rightBar->setIconDimensions(KIconLoader::SizeMedium);
-    rightBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    rightBar->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    d->mRightToolBar = new KToolBar(d->mContent);
+    d->mRightToolBar->setIconDimensions(KIconLoader::SizeMedium);
+    d->mRightToolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    d->mRightToolBar->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    d->mRightToolBar->addAction(d->mActionCollection->action("leave_fullscreen"));
+    d->mRightToolBar->addAction(d->mOptionsAction);
 
-    rightBar->addAction(actionCollection->action("leave_fullscreen"));
-    rightBar->addAction(d->mOptionsAction);
 
-    // Content Layout
-    {
-        QGridLayout* layout = new QGridLayout(d->mContent);
-        layout->setMargin(0);
-        layout->setSpacing(0);
-        layout->addWidget(d->mToolBar, 0, 0);
-        layout->addWidget(d->mThumbnailBar, 0, 1, 2, 1);
-        layout->addWidget(rightBar, 0, 2, 2, 1);
-        layout->addWidget(d->mInformationLabel, 1, 0);
-    }
+    d->updateLayout();
 
     d->updateContainerAppearance();
 }
@@ -368,6 +393,8 @@ void FullScreenContent::slotShowThumbnailsToggled(bool value)
     GwenviewConfig::setShowFullScreenThumbnails(value);
     GwenviewConfig::self()->writeConfig();
     d->mThumbnailBar->setVisible(value);
+    d->updateLayout();
+    d->mContent->adjustSize();
     d->mAutoHideContainer->adjustSize();
 }
 
