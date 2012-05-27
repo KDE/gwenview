@@ -66,6 +66,7 @@ private Q_SLOTS:
     void updateCurrentUrlWidgets();
     void updateInformationLabel();
     void updateMetaInfoDialog();
+    void updateWidgetMask();
     void showImageMetaInfoDialog();
     void slotImageMetaInfoDialogClosed();
     void slotPreferredMetaInfoKeyListChanged(const QStringList& list);

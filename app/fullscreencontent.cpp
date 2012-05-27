@@ -24,11 +24,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QAction>
 #include <QApplication>
+#include <QBitmap>
 #include <QCheckBox>
 #include <QEvent>
 #include <QGridLayout>
 #include <QLabel>
 #include <QMenu>
+#include <QPainter>
 #include <QPointer>
 #include <QToolButton>
 #include <QWidgetAction>
@@ -111,16 +113,29 @@ struct FullScreenContentPrivate
         delete mContent->layout();
 
         if (GwenviewConfig::showFullScreenThumbnails()) {
-            mInformationLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+            mInformationLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
             mRightToolBar->setOrientation(Qt::Vertical);
 
-            QGridLayout* layout = new QGridLayout(mContent);
+            QHBoxLayout* layout = new QHBoxLayout(mContent);
             layout->setMargin(0);
             layout->setSpacing(0);
-            layout->addWidget(mToolBar, 0, 0);
-            layout->addWidget(mThumbnailBar, 0, 1, 2, 1);
-            layout->addWidget(mRightToolBar, 0, 2, 2, 1);
-            layout->addWidget(mInformationLabel, 1, 0);
+            QVBoxLayout* vLayout;
+
+            // First column
+            vLayout = new QVBoxLayout;
+            vLayout->addWidget(mToolBar);
+            vLayout->addWidget(mInformationLabel);
+            vLayout->addStretch();
+            layout->addLayout(vLayout);
+            // Second column
+            layout->addSpacing(2);
+            layout->addWidget(mThumbnailBar);
+            layout->addSpacing(2);
+            // Third column
+            vLayout = new QVBoxLayout;
+            vLayout->addWidget(mRightToolBar);
+            vLayout->addStretch();
+            layout->addLayout(vLayout);
 
             mThumbnailBar->setFixedHeight(GwenviewConfig::fullScreenBarHeight());
             mAutoHideContainer->setFixedHeight(GwenviewConfig::fullScreenBarHeight());
@@ -173,12 +188,8 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
     d->mContent->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     d->mContent->setAutoFillBackground(true);
     EventWatcher::install(d->mContent, QEvent::Show, this, SLOT(updateCurrentUrlWidgets()));
+    EventWatcher::install(d->mContent, QEvent::Resize, this, SLOT(updateWidgetMask()));
     layout->addWidget(d->mContent);
-
-    // mInformationLabel
-    d->mInformationLabel = new QLabel;
-    d->mInformationLabel->setWordWrap(true);
-    d->mInformationLabel->setContentsMargins(6, 0, 6, 0);
 
     d->createOptionsAction();
 
@@ -199,6 +210,12 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
     addAction("rotate_left");
     addAction("rotate_right");
     #undef addAction
+
+    // mInformationLabel
+    d->mInformationLabel = new QLabel;
+    d->mInformationLabel->setWordWrap(true);
+    d->mInformationLabel->setContentsMargins(6, 0, 6, 0);
+    d->mInformationLabel->setFixedHeight(d->mToolBar->sizeHint().height());
 
     // Thumbnail bar
     d->mThumbnailBar = new ThumbnailBarView(d->mContent);
@@ -262,6 +279,41 @@ void FullScreenContent::updateCurrentUrlWidgets()
 {
     updateInformationLabel();
     updateMetaInfoDialog();
+}
+
+void FullScreenContent::updateWidgetMask()
+{
+    if (!GwenviewConfig::showFullScreenThumbnails()) {
+        d->mContent->clearMask();
+        return;
+    }
+
+    QSize size = d->mContent->size();
+    QBitmap mask(size);
+    mask.clear();
+    {
+        QPainter painter(&mask);
+        // Paint thumbnailbar + thin borders
+        QRect rect = d->mThumbnailBar->geometry().adjusted(-2, 0, 2, 0);
+        painter.fillRect(rect, Qt::color1);
+
+        // "Round the corners of the thin borders. We can't use compositing
+        // yet, so it's pixel-art for now :/
+        painter.setPen(Qt::color0);
+        int x = rect.left(), y = rect.bottom();
+        painter.drawPoint(x, y);
+        painter.drawPoint(x, y - 1);
+        painter.drawPoint(x + 1, y);
+        x = rect.right();
+        painter.drawPoint(x, y);
+        painter.drawPoint(x, y - 1);
+        painter.drawPoint(x - 1, y);
+
+        // Paint toolbars + label as one big rectangle, this way we repaint
+        // rounded corners if necessary
+        painter.fillRect(0, 0, size.width(), d->mRightToolBar->height(), Qt::color1);
+    }
+    d->mContent->setMask(mask);
 }
 
 void FullScreenContent::showImageMetaInfoDialog()
