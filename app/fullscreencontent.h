@@ -70,7 +70,7 @@ private Q_SLOTS:
     void showImageMetaInfoDialog();
     void slotImageMetaInfoDialogClosed();
     void slotPreferredMetaInfoKeyListChanged(const QStringList& list);
-    void slotAboutToShowOptionsMenu();
+    void showOptionsMenu();
     void updateSlideShowIntervalLabel();
     void setFullScreenBarHeight(int value);
     void slotShowThumbnailsToggled(bool value);
