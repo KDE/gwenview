@@ -213,8 +213,16 @@ struct MainWindow::Private
     void setupWidgets()
     {
         // FIXME: Can we rely on ObsidianCoast to always be there?
-        KSharedConfigPtr config = KSharedConfig::openConfig("color-schemes/ObsidianCoast.colors", KConfig::FullConfig, "data");
-        mFullScreenPalette = KGlobalSettings::createApplicationPalette(config);
+        {
+            KSharedConfigPtr config;
+            QString name = GwenviewConfig::fullScreenColorScheme();
+            if (name.contains('/')) {
+                config = KSharedConfig::openConfig(name);
+            } else {
+                config = KSharedConfig::openConfig(QString("color-schemes/%1.colors").arg(name), KConfig::FullConfig, "data");
+            }
+            mFullScreenPalette = KGlobalSettings::createApplicationPalette(config);
+        }
 
         mFullScreenContent = new FullScreenContent(q);
 
