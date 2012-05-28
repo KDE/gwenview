@@ -78,9 +78,6 @@
         <entry name="FullScreenPreferredMetaInfoKeyList" type="StringList">
             <default>General.Name,Exif.Image.DateTime</default>
         </entry>
-        <entry name="FullScreenTheme" type="String">
-            <default>blackglass</default>
-        </entry>
         <entry name="FullScreenColorScheme" type="String">
             <default>ObsidianCoast</default>
         </entry>
