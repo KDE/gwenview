@@ -161,6 +161,7 @@ typedef QSet<QPersistentModelIndex> PersistentModelIndexSet;
 struct ThumbnailViewPrivate
 {
     ThumbnailView* q;
+    ThumbnailView::ThumbnailScaleMode mScaleMode;
     int mThumbnailSize;
     AbstractDocumentInfoProvider* mDocumentInfoProvider;
     AbstractThumbnailViewHelper* mThumbnailViewHelper;
@@ -237,7 +238,7 @@ struct ThumbnailViewPrivate
             thumbnail->mAdjustedPix = mGroupPix;
             thumbnail->mRough = false;
         } else {
-            thumbnail->mAdjustedPix = mGroupPix.scaled(mThumbnailSize, mThumbnailSize, Qt::KeepAspectRatio);
+            thumbnail->mAdjustedPix = scale(mGroupPix, Qt::FastTransformation);
             thumbnail->mRough = true;
         }
     }
@@ -305,6 +306,29 @@ struct ThumbnailViewPrivate
         }
         return pix;
     }
+
+    QPixmap scale(const QPixmap& pix, Qt::TransformationMode transformationMode)
+    {
+        switch (mScaleMode) {
+        case ThumbnailView::ScaleToFit:
+            return pix.scaled(mThumbnailSize, mThumbnailSize, Qt::KeepAspectRatio, transformationMode);
+            break;
+        case ThumbnailView::ScaleToSquare: {
+            int minSize = qMin(pix.width(), pix.height());
+            QPixmap pix2 = pix.copy((pix.width() - minSize) / 2, (pix.height() - minSize) / 2, minSize, minSize);
+            return pix2.scaled(mThumbnailSize, mThumbnailSize, Qt::KeepAspectRatio, transformationMode);
+        }
+        case ThumbnailView::ScaleToHeight:
+            return pix.scaledToHeight(mThumbnailSize, transformationMode);
+            break;
+        case ThumbnailView::ScaleToWidth:
+            return pix.scaledToWidth(mThumbnailSize, transformationMode);
+            break;
+        }
+        // Keep compiler happy
+        Q_ASSERT(0);
+        return QPixmap();
+    }
 };
 
 ThumbnailView::ThumbnailView(QWidget* parent)
@@ -312,6 +336,7 @@ ThumbnailView::ThumbnailView(QWidget* parent)
 , d(new ThumbnailViewPrivate)
 {
     d->q = this;
+    d->mScaleMode = ScaleToFit;
     d->mThumbnailViewHelper = 0;
     d->mDocumentInfoProvider = 0;
     // Init to some stupid value so that the first call to setThumbnailSize()
@@ -365,6 +390,17 @@ ThumbnailView::~ThumbnailView()
     delete d;
 }
 
+ThumbnailView::ThumbnailScaleMode ThumbnailView::thumbnailScaleMode() const
+{
+    return d->mScaleMode;
+}
+
+void ThumbnailView::setThumbnailScaleMode(ThumbnailScaleMode mode)
+{
+    d->mScaleMode = mode;
+    setUniformItemSizes(mode == ScaleToFit || mode == ScaleToSquare);
+}
+
 void ThumbnailView::setModel(QAbstractItemModel* newModel)
 {
     if (model()) {
@@ -389,16 +425,14 @@ void ThumbnailView::setThumbnailSize(int value)
     } else {
         waitingThumbnailSize = 32;
     }
-    if (d->mWaitingThumbnail.width() != waitingThumbnailSize) {
-        QPixmap icon = DesktopIcon("chronometer", waitingThumbnailSize);
-        QPixmap pix(icon.size());
-        pix.fill(Qt::transparent);
-        QPainter painter(&pix);
-        painter.setOpacity(0.5);
-        painter.drawPixmap(0, 0, icon);
-        painter.end();
-        d->mWaitingThumbnail = pix;
-    }
+    QPixmap icon = DesktopIcon("chronometer", waitingThumbnailSize);
+    QPixmap pix(value, value);
+    pix.fill(Qt::transparent);
+    QPainter painter(&pix);
+    painter.setOpacity(0.5);
+    painter.drawPixmap((value - icon.width()) / 2, (value - icon.height()) / 2, icon);
+    painter.end();
+    d->mWaitingThumbnail = pix;
 
     // Stop smoothing
     d->mSmoothThumbnailTimer.stop();
@@ -413,6 +447,9 @@ void ThumbnailView::setThumbnailSize(int value)
     }
 
     thumbnailSizeChanged(value);
+    if (d->mScaleMode != ScaleToFit) {
+        scheduleDelayedItemsLayout();
+    }
     d->scheduleThumbnailGenerationForVisibleItems();
 }
 
@@ -558,6 +595,9 @@ void ThumbnailView::setThumbnail(const KFileItem& item, const QPixmap& pixmap, c
     thumbnail.mWaitingForThumbnail = false;
 
     update(thumbnail.mIndex);
+    if (d->mScaleMode != ScaleToFit) {
+        scheduleDelayedItemsLayout();
+    }
 }
 
 void ThumbnailView::setBrokenThumbnail(const KFileItem& item)
@@ -905,7 +945,7 @@ void ThumbnailView::smoothNextThumbnail()
     }
 
     Thumbnail& thumbnail = it.value();
-    thumbnail.mAdjustedPix = thumbnail.mGroupPix.scaled(d->mThumbnailSize, d->mThumbnailSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    thumbnail.mAdjustedPix = d->scale(thumbnail.mGroupPix, Qt::SmoothTransformation);
     thumbnail.mRough = false;
 
     if (thumbnail.mIndex.isValid()) {

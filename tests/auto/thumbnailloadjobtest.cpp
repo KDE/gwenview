@@ -165,7 +165,7 @@ void ThumbnailLoadJobTest::testUseEmbeddedOrNot()
     QCOMPARE(spy1.count(), 1);
     expectedThumbnail = createColoredImage(128, 64, Qt::white);
     thumbnailPix = qvariant_cast<QPixmap>(spy1.at(0).at(1));
-    fuzzyImageCompare(expectedThumbnail, thumbnailPix.toImage());
+    QVERIFY(fuzzyImageCompare(expectedThumbnail, thumbnailPix.toImage()));
 
     // Loading a large thumbnail should bring the red one
     job = new ThumbnailLoadJob(list, ThumbnailGroup::Large);
@@ -176,7 +176,7 @@ void ThumbnailLoadJobTest::testUseEmbeddedOrNot()
     QCOMPARE(spy2.count(), 1);
     expectedThumbnail = createColoredImage(256, 128, Qt::red);
     thumbnailPix = qvariant_cast<QPixmap>(spy2.at(0).at(1));
-    fuzzyImageCompare(expectedThumbnail, thumbnailPix.toImage());
+    QVERIFY(fuzzyImageCompare(expectedThumbnail, thumbnailPix.toImage()));
 }
 
 void ThumbnailLoadJobTest::testLoadRemote()

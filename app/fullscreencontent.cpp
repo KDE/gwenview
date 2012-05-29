@@ -270,6 +270,7 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
 
     // Thumbnail bar
     d->mThumbnailBar = new ThumbnailBarView(d->mContent);
+    d->mThumbnailBar->setThumbnailScaleMode(ThumbnailView::ScaleToSquare);
     ThumbnailBarItemDelegate* delegate = new ThumbnailBarItemDelegate(d->mThumbnailBar);
     d->mThumbnailBar->setItemDelegate(delegate);
     d->mThumbnailBar->setSelectionMode(QAbstractItemView::ExtendedSelection);
