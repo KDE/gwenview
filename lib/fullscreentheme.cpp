@@ -22,15 +22,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "fullscreentheme.h"
 
 // Qt
-#include <QDir>
-#include <QFile>
-#include <QString>
 
 // KDE
-#include <KComponentData>
-#include <KMacroExpanderBase>
-#include <KStandardDirs>
-#include <KStringHandler>
 
 // Local
 #include <lib/gwenviewconfig.h>
@@ -38,82 +31,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 
-static const char* THEME_BASE_DIR = "fullscreenthemes/";
-
-struct FullScreenThemePrivate
+namespace FullScreenTheme
 {
-    QString mThemeDir;
-    QString mStyleSheet;
-};
-
-FullScreenTheme::FullScreenTheme(const QString& themeName)
-: d(new FullScreenThemePrivate)
-{
-    // Get theme dir
-    d->mThemeDir = KStandardDirs::locate("appdata", THEME_BASE_DIR + themeName + '/');
-    if (d->mThemeDir.isEmpty()) {
-        kWarning() << "Couldn't find fullscreen theme" << themeName;
-        return;
-    }
-
-    // Read css file
-    QString styleSheetPath = d->mThemeDir + "/style.css";
-    QFile file(styleSheetPath);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        kWarning() << "Couldn't open" << styleSheetPath;
-        return;
-    }
-    QString styleSheet = QString::fromUtf8(file.readAll());
-
-    d->mStyleSheet = replaceThemeVars(styleSheet);
-}
-
-FullScreenTheme::~FullScreenTheme()
-{
-    delete d;
-}
-
-QString FullScreenTheme::styleSheet() const
-{
-    return d->mStyleSheet;
-}
-
-QString FullScreenTheme::replaceThemeVars(const QString& styleSheet)
-{
-    QHash<QString, QString> macros;
-    macros["themeDir"] = d->mThemeDir;
-    return KMacroExpander::expandMacros(styleSheet, macros, QLatin1Char('$'));
-}
-
-QString FullScreenTheme::currentThemeName()
-{
-    return GwenviewConfig::fullScreenTheme();
-}
-
-void FullScreenTheme::setCurrentThemeName(const QString& name)
-{
-    GwenviewConfig::setFullScreenTheme(name);
-}
-
-static bool themeNameLessThan(const QString& s1, const QString& s2)
-{
-    return KStringHandler::naturalCompare(s1.toLower(), s2.toLower()) < 0;
-}
-
-QStringList FullScreenTheme::themeNameList()
-{
-    QStringList list;
-    const QStringList themeBaseDirs =
-        KGlobal::mainComponent().dirs()
-        ->findDirs("appdata", THEME_BASE_DIR);
-    Q_FOREACH(const QString & themeBaseDir, themeBaseDirs) {
-        QDir dir(themeBaseDir);
-        list += dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
-    }
-    qSort(list.begin(), list.end(), themeNameLessThan);
-
-    return list;
-}
 
 struct RenderInfoSet
 {
@@ -127,7 +46,7 @@ static QLinearGradient createGradient()
     return gradient;
 }
 
-FullScreenTheme::RenderInfo FullScreenTheme::renderInfo(FullScreenTheme::WidgetType widget, FullScreenTheme::State state)
+RenderInfo renderInfo(WidgetType widget, State state)
 {
     static QMap<WidgetType, RenderInfoSet> renderInfoMap;
     if (renderInfoMap.isEmpty()) {
@@ -217,4 +136,6 @@ FullScreenTheme::RenderInfo FullScreenTheme::renderInfo(FullScreenTheme::WidgetT
     }
 }
 
-} // namespace
+} // FullScreenTheme namespace
+
+} // Gwenview namespace

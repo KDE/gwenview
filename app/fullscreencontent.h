@@ -66,10 +66,12 @@ private Q_SLOTS:
     void updateCurrentUrlWidgets();
     void updateInformationLabel();
     void updateMetaInfoDialog();
+    void updateWidgetMask();
     void showImageMetaInfoDialog();
+    void slotPaletteChanged();
     void slotImageMetaInfoDialogClosed();
     void slotPreferredMetaInfoKeyListChanged(const QStringList& list);
-    void slotAboutToShowOptionsMenu();
+    void showOptionsMenu();
     void updateSlideShowIntervalLabel();
     void setFullScreenBarHeight(int value);
     void slotShowThumbnailsToggled(bool value);

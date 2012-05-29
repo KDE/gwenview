@@ -24,11 +24,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QAction>
 #include <QApplication>
+#include <QBitmap>
 #include <QCheckBox>
 #include <QEvent>
 #include <QGridLayout>
 #include <QLabel>
 #include <QMenu>
+#include <QPainter>
 #include <QPointer>
 #include <QToolButton>
 #include <QWidgetAction>
@@ -55,6 +57,48 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 
+/**
+ * A widget which behaves more or less like a QToolBar, but which uses real
+ * widgets for the toolbar items. We need a real widget to be able to position
+ * the option menu.
+ */
+class FullScreenToolBar : public QWidget
+{
+public:
+    FullScreenToolBar(QWidget* parent = 0)
+    : QWidget(parent)
+    , mLayout(new QHBoxLayout(this))
+    {
+        setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        mLayout->setSpacing(0);
+        mLayout->setMargin(0);
+    }
+
+    void addAction(QAction* action)
+    {
+        QToolButton* button = new QToolButton;
+        button->setDefaultAction(action);
+        button->setToolButtonStyle(Qt::ToolButtonIconOnly);
+        button->setAutoRaise(true);
+        const int extent = KIconLoader::SizeMedium;
+        button->setIconSize(QSize(extent, extent));
+        mLayout->addWidget(button);
+    }
+
+    void addSeparator()
+    {
+        mLayout->addSpacing(KDialog::spacingHint());
+    }
+
+    void setDirection(QBoxLayout::Direction direction)
+    {
+        mLayout->setDirection(direction);
+    }
+
+private:
+    QBoxLayout* mLayout;
+};
+
 class FullScreenConfigWidget : public QWidget, public Ui_FullScreenConfigWidget
 {
 public:
@@ -68,28 +112,38 @@ public:
 struct FullScreenContentPrivate
 {
     FullScreenContent* q;
+    KActionCollection* mActionCollection;
     FullScreenBar* mAutoHideContainer;
     SlideShow* mSlideShow;
     QWidget* mContent;
-    KToolBar* mToolBar;
+    FullScreenToolBar* mToolBar;
+    FullScreenToolBar* mRightToolBar;
     ThumbnailBarView* mThumbnailBar;
     QLabel* mInformationLabel;
     Document::Ptr mCurrentDocument;
     QPointer<ImageMetaInfoDialog> mImageMetaInfoDialog;
     QPointer<FullScreenConfigWidget> mConfigWidget;
-    KActionMenu* mOptionsAction;
+    KAction* mOptionsAction;
 
     bool mFullScreenMode;
     bool mViewPageVisible;
 
     void createOptionsAction()
     {
-        mOptionsAction = new KActionMenu(q);
+        // We do not use a KActionMenu because:
+        //
+        // - It causes the button to show a small down arrow on its right,
+        // which makes it wider
+        //
+        // - We can't control where the menu shows: in no-thumbnail-mode, the
+        // menu should not be aligned to the right edge of the screen because
+        // if the mode is changed to thumbnail-mode, we want the option button
+        // to remain visible
+        mOptionsAction = new KAction(q);
         mOptionsAction->setPriority(QAction::LowPriority);
-        mOptionsAction->setDelayed(false);
         mOptionsAction->setIcon(KIcon("configure"));
         mOptionsAction->setToolTip(i18nc("@info:tooltip", "Configure full screen mode"));
-        QObject::connect(mOptionsAction->menu(), SIGNAL(aboutToShow()), q, SLOT(slotAboutToShowOptionsMenu()));
+        QObject::connect(mOptionsAction, SIGNAL(triggered()), q, SLOT(showOptionsMenu()));
     }
 
     void updateContainerAppearance()
@@ -102,6 +156,54 @@ struct FullScreenContentPrivate
         mThumbnailBar->setVisible(GwenviewConfig::showFullScreenThumbnails());
         mAutoHideContainer->adjustSize();
         mAutoHideContainer->setActivated(true);
+    }
+
+    void updateLayout()
+    {
+        delete mContent->layout();
+
+        if (GwenviewConfig::showFullScreenThumbnails()) {
+            mInformationLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+
+            mRightToolBar->setDirection(QBoxLayout::TopToBottom);
+
+            QHBoxLayout* layout = new QHBoxLayout(mContent);
+            layout->setMargin(0);
+            layout->setSpacing(0);
+            QVBoxLayout* vLayout;
+
+            // First column
+            vLayout = new QVBoxLayout;
+            vLayout->addWidget(mToolBar);
+            vLayout->addWidget(mInformationLabel);
+            vLayout->addStretch();
+            layout->addLayout(vLayout);
+            // Second column
+            layout->addSpacing(2);
+            layout->addWidget(mThumbnailBar);
+            layout->addSpacing(2);
+            // Third column
+            vLayout = new QVBoxLayout;
+            vLayout->addWidget(mRightToolBar);
+            vLayout->addStretch();
+            layout->addLayout(vLayout);
+
+            mThumbnailBar->setFixedHeight(GwenviewConfig::fullScreenBarHeight());
+            mAutoHideContainer->setFixedHeight(GwenviewConfig::fullScreenBarHeight());
+        } else {
+            mInformationLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+            mRightToolBar->setDirection(QBoxLayout::RightToLeft);
+
+            QHBoxLayout* layout = new QHBoxLayout(mContent);
+            layout->setMargin(0);
+            layout->setSpacing(0);
+            layout->addWidget(mToolBar);
+            layout->addWidget(mInformationLabel);
+            layout->addWidget(mRightToolBar);
+
+            mAutoHideContainer->setFixedHeight(mContent->sizeHint().height());
+        }
     }
 };
 
@@ -122,6 +224,7 @@ FullScreenContent::~FullScreenContent()
 void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoHideParentWidget, SlideShow* slideShow)
 {
     d->mSlideShow = slideShow;
+    d->mActionCollection = actionCollection;
     connect(actionCollection->action("view"), SIGNAL(toggled(bool)),
         SLOT(slotViewModeActionToggled(bool)));
 
@@ -137,26 +240,18 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
     d->mContent->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     d->mContent->setAutoFillBackground(true);
     EventWatcher::install(d->mContent, QEvent::Show, this, SLOT(updateCurrentUrlWidgets()));
+    EventWatcher::install(d->mContent, QEvent::Resize, this, SLOT(updateWidgetMask()));
+    EventWatcher::install(d->mContent, QEvent::PaletteChange, this, SLOT(slotPaletteChanged()));
     layout->addWidget(d->mContent);
-
-    // mInformationLabel
-    d->mInformationLabel = new QLabel;
-    d->mInformationLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    d->mInformationLabel->setWordWrap(true);
 
     d->createOptionsAction();
 
     // mToolBar
-    d->mToolBar = new KToolBar(d->mContent);
-    d->mToolBar->setIconDimensions(KIconLoader::SizeMedium);
-    d->mToolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    d->mToolBar->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    d->mToolBar = new FullScreenToolBar(d->mContent);
 
     #define addAction(name) d->mToolBar->addAction(actionCollection->action(name))
     addAction("browse");
     addAction("view");
-    d->mToolBar->addSeparator();
-    addAction("leave_fullscreen");
     d->mToolBar->addSeparator();
     addAction("go_previous");
     addAction("toggle_slideshow");
@@ -164,26 +259,27 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
     d->mToolBar->addSeparator();
     addAction("rotate_left");
     addAction("rotate_right");
-    d->mToolBar->addSeparator();
     #undef addAction
-    d->mToolBar->addAction(d->mOptionsAction);
+
+    // mInformationLabel
+    d->mInformationLabel = new QLabel;
+    d->mInformationLabel->setWordWrap(true);
+    d->mInformationLabel->setContentsMargins(6, 0, 6, 0);
+    d->mInformationLabel->setFixedHeight(d->mToolBar->sizeHint().height());
+    d->mInformationLabel->setAutoFillBackground(true);
 
     // Thumbnail bar
     d->mThumbnailBar = new ThumbnailBarView(d->mContent);
     ThumbnailBarItemDelegate* delegate = new ThumbnailBarItemDelegate(d->mThumbnailBar);
     d->mThumbnailBar->setItemDelegate(delegate);
     d->mThumbnailBar->setSelectionMode(QAbstractItemView::ExtendedSelection);
-    setFullScreenBarHeight(GwenviewConfig::fullScreenBarHeight());
 
-    // Content Layout
-    {
-        QGridLayout* layout = new QGridLayout(d->mContent);
-        layout->setMargin(0);
-        layout->setSpacing(0);
-        layout->addWidget(d->mToolBar, 0, 0);
-        layout->addWidget(d->mThumbnailBar, 0, 1, 2, 1);
-        layout->addWidget(d->mInformationLabel, 1, 0);
-    }
+    // Right bar
+    d->mRightToolBar = new FullScreenToolBar(d->mContent);
+    d->mRightToolBar->addAction(d->mActionCollection->action("leave_fullscreen"));
+    d->mRightToolBar->addAction(d->mOptionsAction);
+
+    d->updateLayout();
 
     d->updateContainerAppearance();
 }
@@ -226,10 +322,52 @@ void FullScreenContent::updateInformationLabel()
     d->mInformationLabel->setText(text);
 }
 
+void FullScreenContent::slotPaletteChanged()
+{
+    QPalette pal = d->mContent->palette();
+    pal.setColor(QPalette::Window, pal.color(QPalette::Window).dark(110));
+    d->mInformationLabel->setPalette(pal);
+}
+
 void FullScreenContent::updateCurrentUrlWidgets()
 {
     updateInformationLabel();
     updateMetaInfoDialog();
+}
+
+void FullScreenContent::updateWidgetMask()
+{
+    if (!GwenviewConfig::showFullScreenThumbnails()) {
+        d->mContent->clearMask();
+        return;
+    }
+
+    QSize size = d->mContent->size();
+    QBitmap mask(size);
+    mask.clear();
+    {
+        QPainter painter(&mask);
+        // Paint thumbnailbar + thin borders
+        QRect rect = d->mThumbnailBar->geometry().adjusted(-2, 0, 2, 0);
+        painter.fillRect(rect, Qt::color1);
+
+        // "Round the corners of the thin borders. We can't use compositing
+        // yet, so it's pixel-art for now :/
+        painter.setPen(Qt::color0);
+        int x = rect.left(), y = rect.bottom();
+        painter.drawPoint(x, y);
+        painter.drawPoint(x, y - 1);
+        painter.drawPoint(x + 1, y);
+        x = rect.right();
+        painter.drawPoint(x, y);
+        painter.drawPoint(x, y - 1);
+        painter.drawPoint(x - 1, y);
+
+        // Paint toolbars + label as one big rectangle, this way we repaint
+        // rounded corners if necessary
+        painter.fillRect(0, 0, size.width(), d->mRightToolBar->height(), Qt::color1);
+    }
+    d->mContent->setMask(mask);
 }
 
 void FullScreenContent::showImageMetaInfoDialog()
@@ -283,24 +421,23 @@ void FullScreenContent::updateSlideShowIntervalLabel()
 
 void FullScreenContent::setFullScreenBarHeight(int value)
 {
+    d->mThumbnailBar->setFixedHeight(value);
     d->mAutoHideContainer->setFixedHeight(value);
     GwenviewConfig::setFullScreenBarHeight(value);
-    d->mAutoHideContainer->adjustSize();
 }
 
-void FullScreenContent::slotAboutToShowOptionsMenu()
+void FullScreenContent::showOptionsMenu()
 {
-    // This will delete d->mConfigWidget
-    d->mOptionsAction->menu()->clear();
     Q_ASSERT(!d->mConfigWidget);
 
     d->mConfigWidget = new FullScreenConfigWidget;
     FullScreenConfigWidget* widget = d->mConfigWidget;
 
-    // Put widget in the menu
-    QWidgetAction* action = new QWidgetAction(d->mOptionsAction->menu());
+    // Put widget in a menu
+    QMenu menu;
+    QWidgetAction* action = new QWidgetAction(&menu);
     action->setDefaultWidget(widget);
-    d->mOptionsAction->menu()->addAction(action);
+    menu.addAction(action);
 
     // Slideshow checkboxes
     widget->mSlideShowLoopCheckBox->setChecked(d->mSlideShow->loopAction()->isChecked());
@@ -332,12 +469,27 @@ void FullScreenContent::slotAboutToShowOptionsMenu()
     widget->mThumbnailGroupBox->setVisible(d->mViewPageVisible);
     if (d->mViewPageVisible) {
         widget->mShowThumbnailsCheckBox->setChecked(GwenviewConfig::showFullScreenThumbnails());
+        widget->mHeightSlider->setMinimum(d->mRightToolBar->sizeHint().height());
         widget->mHeightSlider->setValue(d->mThumbnailBar->height());
         connect(widget->mShowThumbnailsCheckBox, SIGNAL(toggled(bool)),
                 SLOT(slotShowThumbnailsToggled(bool)));
         connect(widget->mHeightSlider, SIGNAL(valueChanged(int)),
                 SLOT(setFullScreenBarHeight(int)));
     }
+
+    // Show menu below its button
+    QPoint pos;
+    QWidget* button = d->mOptionsAction->associatedWidgets().first();
+    Q_ASSERT(button);
+    kWarning() << button << button->geometry();
+    if (QApplication::isRightToLeft()) {
+        pos = button->mapToGlobal(button->rect().bottomLeft());
+    } else {
+        pos = button->mapToGlobal(button->rect().bottomRight());
+        pos.rx() -= menu.sizeHint().width();
+    }
+    kWarning() << pos;
+    menu.exec(pos);
 }
 
 void FullScreenContent::setFullScreenMode(bool fullScreenMode)
@@ -361,6 +513,8 @@ void FullScreenContent::slotShowThumbnailsToggled(bool value)
     GwenviewConfig::setShowFullScreenThumbnails(value);
     GwenviewConfig::self()->writeConfig();
     d->mThumbnailBar->setVisible(value);
+    d->updateLayout();
+    d->mContent->adjustSize();
     d->mAutoHideContainer->adjustSize();
 }
 

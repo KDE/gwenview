@@ -31,58 +31,41 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
-class QPalette;
-class QString;
-class QStringList;
-
 namespace Gwenview
 {
 
-struct FullScreenThemePrivate;
-class GWENVIEWLIB_EXPORT FullScreenTheme
+namespace FullScreenTheme
 {
-public:
-    struct RenderInfo
-    {
-        qreal borderRadius;
-        QPen borderPen;
-        QBrush bgBrush;
-        qreal padding;
-        QPen textPen;
-    };
 
-    enum State
-    {
-        NormalState,
-        MouseOverState,
-        DownState
-    };
-
-    enum WidgetType
-    {
-        ButtonWidget,
-        FrameWidget,
-        CountDownWidget,
-        SliderWidgetHandle,
-        SliderWidgetGroove
-    };
-
-    FullScreenTheme(const QString& themeName);
-    QString styleSheet() const;
-    QString replaceThemeVars(const QString& styleSheet);
-
-    ~FullScreenTheme();
-
-    static QStringList themeNameList();
-    static QString currentThemeName();
-    static void setCurrentThemeName(const QString&);
-
-    static RenderInfo renderInfo(WidgetType, State = NormalState);
-
-private:
-    FullScreenThemePrivate* const d;
+struct RenderInfo
+{
+    qreal borderRadius;
+    QPen borderPen;
+    QBrush bgBrush;
+    qreal padding;
+    QPen textPen;
 };
 
-} // namespace
+enum State
+{
+    NormalState,
+    MouseOverState,
+    DownState
+};
+
+enum WidgetType
+{
+    ButtonWidget,
+    FrameWidget,
+    CountDownWidget,
+    SliderWidgetHandle,
+    SliderWidgetGroove
+};
+
+GWENVIEWLIB_EXPORT RenderInfo renderInfo(WidgetType, State = NormalState);
+
+} // FullScreenTheme namespace
+
+} // Gwenview namespace
 
 #endif /* FULLSCREENTHEME_H */

@@ -20,6 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "viewmainpage.moc"
 
 // Qt
+#include <QApplication>
 #include <QCheckBox>
 #include <QItemSelectionModel>
 #include <QLabel>
@@ -465,16 +466,20 @@ void ViewMainPage::setFullScreenMode(bool fullScreenMode)
 {
     d->mFullScreenMode = fullScreenMode;
     d->mStatusBarContainer->setVisible(!fullScreenMode);
-    // For fullscreen mode, we use the application palette, which has been set to a fullscreen version
-    d->mDocumentViewContainer->setPalette(fullScreenMode ? QPalette() : d->mNormalPalette);
 
     if (fullScreenMode) {
         d->mThumbnailBarVisibleBeforeFullScreen = d->mToggleThumbnailBarAction->isChecked();
         if (d->mThumbnailBarVisibleBeforeFullScreen) {
             d->mToggleThumbnailBarAction->trigger();
         }
-    } else if (d->mThumbnailBarVisibleBeforeFullScreen) {
-        d->mToggleThumbnailBarAction->trigger();
+        QPalette pal = QApplication::palette();
+        pal.setColor(QPalette::Base, Qt::black);
+        d->mDocumentViewContainer->setPalette(pal);
+    } else {
+        if (d->mThumbnailBarVisibleBeforeFullScreen) {
+            d->mToggleThumbnailBarAction->trigger();
+        }
+        d->mDocumentViewContainer->setPalette(d->mNormalPalette);
     }
     d->mToggleThumbnailBarAction->setEnabled(!fullScreenMode);
 }
