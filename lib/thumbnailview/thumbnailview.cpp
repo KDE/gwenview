@@ -313,16 +313,13 @@ struct ThumbnailViewPrivate
         case ThumbnailView::ScaleToFit:
             return pix.scaled(mThumbnailSize, mThumbnailSize, Qt::KeepAspectRatio, transformationMode);
             break;
-        case ThumbnailView::ScaleToHeight:
-        #ifdef SQUARE_THUMBS
-        {
+        case ThumbnailView::ScaleToSquare: {
             int minSize = qMin(pix.width(), pix.height());
             QPixmap pix2 = pix.copy((pix.width() - minSize) / 2, (pix.height() - minSize) / 2, minSize, minSize);
             return pix2.scaled(mThumbnailSize, mThumbnailSize, Qt::KeepAspectRatio, transformationMode);
         }
-        #else
+        case ThumbnailView::ScaleToHeight:
             return pix.scaledToHeight(mThumbnailSize, transformationMode);
-        #endif
             break;
         case ThumbnailView::ScaleToWidth:
             return pix.scaledToWidth(mThumbnailSize, transformationMode);
@@ -401,7 +398,7 @@ ThumbnailView::ThumbnailScaleMode ThumbnailView::thumbnailScaleMode() const
 void ThumbnailView::setThumbnailScaleMode(ThumbnailScaleMode mode)
 {
     d->mScaleMode = mode;
-    setUniformItemSizes(mode == ScaleToFit);
+    setUniformItemSizes(mode == ScaleToFit || mode == ScaleToSquare);
 }
 
 void ThumbnailView::setModel(QAbstractItemModel* newModel)

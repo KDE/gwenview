@@ -51,6 +51,7 @@ public:
     };
 
     enum ThumbnailScaleMode {
+        ScaleToSquare,
         ScaleToHeight,
         ScaleToWidth,
         ScaleToFit
