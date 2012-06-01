@@ -708,6 +708,10 @@ bool DocumentView::sceneEventFilter(QGraphicsItem*, QEvent* event)
 {
     if (event->type() == QEvent::GraphicsSceneMousePress) {
         QMetaObject::invokeMethod(this, "emitFocused", Qt::QueuedConnection);
+    } else if (event->type() == QEvent::GraphicsSceneHoverMove) {
+        if (d->mBirdEyeView) {
+            d->mBirdEyeView->onMouseMoved();
+        }
     }
     return false;
 }

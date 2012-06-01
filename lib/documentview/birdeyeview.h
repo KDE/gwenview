@@ -47,6 +47,12 @@ public:
 
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0); // reimp
 
+    // Called by DocumentView when it detects mouse movements
+    // We cannot use a sceneEventFilter because QGraphicsSceneHoverEvent are not
+    // sent to parent items (unlike QHoverEvent). Therefore DocumentView has to
+    // do the work of event-filtering the actual document widget.
+    void onMouseMoved();
+
 public Q_SLOTS:
     void adjustGeometry();
 
@@ -58,6 +64,8 @@ protected:
 
 private Q_SLOTS:
     void adjustVisibleRect();
+    void slotAutoHideTimeout();
+    void slotPositionChanged();
 
 private:
     BirdEyeViewPrivate* const d;

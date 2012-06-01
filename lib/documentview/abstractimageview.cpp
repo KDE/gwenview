@@ -122,6 +122,7 @@ AbstractImageView::AbstractImageView(QGraphicsItem* parent)
     connect(d->mModifierKeyInfo, SIGNAL(keyPressed(Qt::Key, bool)), SLOT(updateCursor()));
     setFocusPolicy(Qt::WheelFocus);
     setFlag(ItemIsSelectable);
+    setAcceptHoverEvents(true);
     d->setupZoomCursor();
     updateCursor();
 }

@@ -34,12 +34,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QGraphicsSceneEvent>
 #include <QPainter>
 #include <QPropertyAnimation>
+#include <QTimer>
 
 namespace Gwenview
 {
 
 static qreal MIN_SIZE = 72;
 static qreal VIEW_OFFSET = MIN_SIZE / 4;
+
+static int AUTOHIDE_DELAY = 2000;
 
 /**
  * Returns a QRectF whose coordinates are rounded to completely contains rect
@@ -54,6 +57,7 @@ struct BirdEyeViewPrivate
     BirdEyeView* q;
     DocumentView* mDocView;
     QPropertyAnimation* mOpacityAnim;
+    QTimer* mAutoHideTimer;
     QRectF mVisibleRect;
     QPointF mLastDragPos;
 
@@ -68,6 +72,10 @@ struct BirdEyeViewPrivate
         // to assign an int to "opacity", and this does not work.
         mOpacityAnim->setEndValue(qreal(visible ? 1 : 0));
         mOpacityAnim->start();
+
+        if (visible) {
+            mAutoHideTimer->start();
+        }
     }
 };
 
@@ -83,12 +91,17 @@ BirdEyeView::BirdEyeView(DocumentView* docView)
 
     d->mOpacityAnim = new QPropertyAnimation(this, "opacity", this);
 
+    d->mAutoHideTimer = new QTimer(this);
+    d->mAutoHideTimer->setSingleShot(true);
+    d->mAutoHideTimer->setInterval(AUTOHIDE_DELAY);
+    connect(d->mAutoHideTimer, SIGNAL(timeout()), SLOT(slotAutoHideTimeout()));
+
     adjustGeometry();
 
     connect(docView->document().data(), SIGNAL(metaInfoUpdated()), SLOT(adjustGeometry()));
     connect(docView, SIGNAL(zoomChanged(qreal)), SLOT(adjustGeometry()));
     connect(docView, SIGNAL(zoomToFitChanged(bool)), SLOT(adjustGeometry()));
-    connect(docView, SIGNAL(positionChanged()), SLOT(adjustVisibleRect()));
+    connect(docView, SIGNAL(positionChanged()), SLOT(slotPositionChanged()));
 }
 
 BirdEyeView::~BirdEyeView()
@@ -136,6 +149,17 @@ void BirdEyeView::adjustVisibleRect()
     update();
 }
 
+void BirdEyeView::slotAutoHideTimeout()
+{
+    d->setVisible(false);
+}
+
+void BirdEyeView::slotPositionChanged()
+{
+    adjustVisibleRect();
+    d->setVisible(true);
+}
+
 inline void drawTransparentRect(QPainter* painter, const QRectF& rect, const QColor& color)
 {
     QColor bg = color;
@@ -152,6 +176,11 @@ void BirdEyeView::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWid
     static const QColor bgColor = QColor::fromHsvF(0, 0, .33);
     drawTransparentRect(painter, boundingRect(), bgColor);
     drawTransparentRect(painter, d->mVisibleRect, Qt::white);
+}
+
+void BirdEyeView::onMouseMoved()
+{
+    d->setVisible(d->mVisibleRect != boundingRect());
 }
 
 void BirdEyeView::mousePressEvent(QGraphicsSceneMouseEvent* event)
