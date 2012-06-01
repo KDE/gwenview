@@ -54,21 +54,24 @@ public:
     void onMouseMoved();
 
 public Q_SLOTS:
-    void adjustGeometry();
+    void slotZoomOrSizeChanged();
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent* event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
+    void hoverEnterEvent(QGraphicsSceneHoverEvent* event);
     void hoverMoveEvent(QGraphicsSceneHoverEvent* event);
+    void hoverLeaveEvent(QGraphicsSceneHoverEvent* event);
 
 private Q_SLOTS:
-    void adjustVisibleRect();
     void slotAutoHideTimeout();
     void slotPositionChanged();
 
 private:
     BirdEyeViewPrivate* const d;
+    void adjustVisibleRect();
+    void adjustGeometry();
 };
 
 } // namespace

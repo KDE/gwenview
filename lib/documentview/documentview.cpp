@@ -665,7 +665,7 @@ void DocumentView::setGeometry(const QRectF& rect)
     QGraphicsWidget::setGeometry(rect);
     d->resizeAdapterWidget();
     if (d->mBirdEyeView) {
-        d->mBirdEyeView->adjustGeometry();
+        d->mBirdEyeView->slotZoomOrSizeChanged();
     }
 }
 
