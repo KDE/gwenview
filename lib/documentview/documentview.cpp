@@ -665,7 +665,7 @@ void DocumentView::setGeometry(const QRectF& rect)
     QGraphicsWidget::setGeometry(rect);
     d->resizeAdapterWidget();
     if (d->mBirdEyeView) {
-        d->mBirdEyeView->adjustGeometry();
+        d->mBirdEyeView->slotZoomOrSizeChanged();
     }
 }
 
@@ -708,6 +708,10 @@ bool DocumentView::sceneEventFilter(QGraphicsItem*, QEvent* event)
 {
     if (event->type() == QEvent::GraphicsSceneMousePress) {
         QMetaObject::invokeMethod(this, "emitFocused", Qt::QueuedConnection);
+    } else if (event->type() == QEvent::GraphicsSceneHoverMove) {
+        if (d->mBirdEyeView) {
+            d->mBirdEyeView->onMouseMoved();
+        }
     }
     return false;
 }

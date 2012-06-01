@@ -225,6 +225,7 @@ VideoViewAdapter::VideoViewAdapter()
     QGraphicsProxyWidget* proxy = new DoubleClickableProxyWidget;
     proxy->setFlag(QGraphicsItem::ItemIsSelectable); // Needed for doubleclick to work
     proxy->setWidget(d->mVideoWidget);
+    proxy->setAcceptHoverEvents(true);
     setWidget(proxy);
 
     d->setupActions();

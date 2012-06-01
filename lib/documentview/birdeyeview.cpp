@@ -33,12 +33,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QCursor>
 #include <QGraphicsSceneEvent>
 #include <QPainter>
+#include <QPropertyAnimation>
+#include <QTimer>
 
 namespace Gwenview
 {
 
 static qreal MIN_SIZE = 72;
 static qreal VIEW_OFFSET = MIN_SIZE / 4;
+
+static int AUTOHIDE_DELAY = 2000;
 
 /**
  * Returns a QRectF whose coordinates are rounded to completely contains rect
@@ -52,12 +56,43 @@ struct BirdEyeViewPrivate
 {
     BirdEyeView* q;
     DocumentView* mDocView;
+    QPropertyAnimation* mOpacityAnim;
+    QTimer* mAutoHideTimer;
     QRectF mVisibleRect;
     QPointF mLastDragPos;
 
     void updateCursor(const QPointF& pos)
     {
         q->setCursor(mVisibleRect.contains(pos) ? Qt::OpenHandCursor : Qt::ArrowCursor);
+    }
+
+    void updateVisibility()
+    {
+        bool visible;
+        if (!mDocView->canZoom() || mDocView->zoomToFit()) {
+            // No need to show
+            visible = false;
+        } else if (mVisibleRect == q->boundingRect()) {
+            // All of the image is visible
+            visible = false;
+        } else if (q->isUnderMouse() || !mLastDragPos.isNull()) {
+            // User is interacting or about to interact with birdeyeview
+            visible = true;
+        } else if (mAutoHideTimer->isActive()) {
+            // User triggered some activity recently (move mouse, scroll, zoom)
+            visible = true;
+        } else {
+            // No recent activity
+            visible = false;
+        }
+        // The qreal() cast is important here: without it QPropertyAnimation tries
+        // to assign an int to "opacity", and this does not work.
+        mOpacityAnim->setEndValue(qreal(visible ? 1 : 0));
+        mOpacityAnim->start();
+
+        if (visible) {
+            mAutoHideTimer->start();
+        }
     }
 };
 
@@ -70,12 +105,20 @@ BirdEyeView::BirdEyeView(DocumentView* docView)
     setFlag(ItemIsSelectable);
     setCursor(Qt::ArrowCursor);
     setAcceptHoverEvents(true);
-    adjustGeometry();
 
-    connect(docView->document().data(), SIGNAL(metaInfoUpdated()), SLOT(adjustGeometry()));
-    connect(docView, SIGNAL(zoomChanged(qreal)), SLOT(adjustGeometry()));
-    connect(docView, SIGNAL(zoomToFitChanged(bool)), SLOT(adjustGeometry()));
-    connect(docView, SIGNAL(positionChanged()), SLOT(adjustVisibleRect()));
+    d->mOpacityAnim = new QPropertyAnimation(this, "opacity", this);
+
+    d->mAutoHideTimer = new QTimer(this);
+    d->mAutoHideTimer->setSingleShot(true);
+    d->mAutoHideTimer->setInterval(AUTOHIDE_DELAY);
+    connect(d->mAutoHideTimer, SIGNAL(timeout()), SLOT(slotAutoHideTimeout()));
+
+    slotZoomOrSizeChanged();
+
+    connect(docView->document().data(), SIGNAL(metaInfoUpdated()), SLOT(slotZoomOrSizeChanged()));
+    connect(docView, SIGNAL(zoomChanged(qreal)), SLOT(slotZoomOrSizeChanged()));
+    connect(docView, SIGNAL(zoomToFitChanged(bool)), SLOT(slotZoomOrSizeChanged()));
+    connect(docView, SIGNAL(positionChanged()), SLOT(slotPositionChanged()));
 }
 
 BirdEyeView::~BirdEyeView()
@@ -86,10 +129,8 @@ BirdEyeView::~BirdEyeView()
 void BirdEyeView::adjustGeometry()
 {
     if (!d->mDocView->canZoom() || d->mDocView->zoomToFit()) {
-        hide();
         return;
     }
-    show();
     QSize size = d->mDocView->document()->size();
     size.scale(MIN_SIZE, MIN_SIZE, Qt::KeepAspectRatioByExpanding);
     QRectF docViewRect = d->mDocView->boundingRect();
@@ -103,8 +144,6 @@ void BirdEyeView::adjustGeometry()
     );
     setGeometry(alignedRectF(geom));
     adjustVisibleRect();
-
-    setVisible(d->mVisibleRect != boundingRect());
 }
 
 void BirdEyeView::adjustVisibleRect()
@@ -121,7 +160,31 @@ void BirdEyeView::adjustVisibleRect()
         QPointF(d->mDocView->position()) / viewZoom * bevZoom,
         (d->mDocView->size() / viewZoom).boundedTo(docSize) * bevZoom);
     d->mVisibleRect = alignedRectF(rect);
+}
+
+void BirdEyeView::slotAutoHideTimeout()
+{
+    d->updateVisibility();
+}
+
+void BirdEyeView::slotZoomOrSizeChanged()
+{
+    if (!d->mDocView->canZoom() || d->mDocView->zoomToFit()) {
+        d->updateVisibility();
+        return;
+    }
+    adjustGeometry();
     update();
+    d->mAutoHideTimer->start();
+    d->updateVisibility();
+}
+
+void BirdEyeView::slotPositionChanged()
+{
+    adjustVisibleRect();
+    update();
+    d->mAutoHideTimer->start();
+    d->updateVisibility();
 }
 
 inline void drawTransparentRect(QPainter* painter, const QRectF& rect, const QColor& color)
@@ -140,6 +203,12 @@ void BirdEyeView::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWid
     static const QColor bgColor = QColor::fromHsvF(0, 0, .33);
     drawTransparentRect(painter, boundingRect(), bgColor);
     drawTransparentRect(painter, d->mVisibleRect, Qt::white);
+}
+
+void BirdEyeView::onMouseMoved()
+{
+    d->mAutoHideTimer->start();
+    d->updateVisibility();
 }
 
 void BirdEyeView::mousePressEvent(QGraphicsSceneMouseEvent* event)
@@ -174,6 +243,13 @@ void BirdEyeView::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
     }
     d->updateCursor(event->pos());
     d->mLastDragPos = QPointF();
+    d->mAutoHideTimer->start();
+}
+
+void BirdEyeView::hoverEnterEvent(QGraphicsSceneHoverEvent* /*event*/)
+{
+    d->mAutoHideTimer->stop();
+    d->updateVisibility();
 }
 
 void BirdEyeView::hoverMoveEvent(QGraphicsSceneHoverEvent* event)
@@ -181,6 +257,12 @@ void BirdEyeView::hoverMoveEvent(QGraphicsSceneHoverEvent* event)
     if (d->mLastDragPos.isNull()) {
         d->updateCursor(event->pos());
     }
+}
+
+void BirdEyeView::hoverLeaveEvent(QGraphicsSceneHoverEvent* /*event*/)
+{
+    d->mAutoHideTimer->start();
+    d->updateVisibility();
 }
 
 } // namespace
