@@ -33,6 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QCursor>
 #include <QGraphicsSceneEvent>
 #include <QPainter>
+#include <QPropertyAnimation>
 
 namespace Gwenview
 {
@@ -52,12 +53,21 @@ struct BirdEyeViewPrivate
 {
     BirdEyeView* q;
     DocumentView* mDocView;
+    QPropertyAnimation* mOpacityAnim;
     QRectF mVisibleRect;
     QPointF mLastDragPos;
 
     void updateCursor(const QPointF& pos)
     {
         q->setCursor(mVisibleRect.contains(pos) ? Qt::OpenHandCursor : Qt::ArrowCursor);
+    }
+
+    void setVisible(bool visible)
+    {
+        // The qreal() cast is important here: without it QPropertyAnimation tries
+        // to assign an int to "opacity", and this does not work.
+        mOpacityAnim->setEndValue(qreal(visible ? 1 : 0));
+        mOpacityAnim->start();
     }
 };
 
@@ -70,6 +80,9 @@ BirdEyeView::BirdEyeView(DocumentView* docView)
     setFlag(ItemIsSelectable);
     setCursor(Qt::ArrowCursor);
     setAcceptHoverEvents(true);
+
+    d->mOpacityAnim = new QPropertyAnimation(this, "opacity", this);
+
     adjustGeometry();
 
     connect(docView->document().data(), SIGNAL(metaInfoUpdated()), SLOT(adjustGeometry()));
@@ -86,10 +99,9 @@ BirdEyeView::~BirdEyeView()
 void BirdEyeView::adjustGeometry()
 {
     if (!d->mDocView->canZoom() || d->mDocView->zoomToFit()) {
-        hide();
+        d->setVisible(false);
         return;
     }
-    show();
     QSize size = d->mDocView->document()->size();
     size.scale(MIN_SIZE, MIN_SIZE, Qt::KeepAspectRatioByExpanding);
     QRectF docViewRect = d->mDocView->boundingRect();
@@ -104,7 +116,7 @@ void BirdEyeView::adjustGeometry()
     setGeometry(alignedRectF(geom));
     adjustVisibleRect();
 
-    setVisible(d->mVisibleRect != boundingRect());
+    d->setVisible(d->mVisibleRect != boundingRect());
 }
 
 void BirdEyeView::adjustVisibleRect()
