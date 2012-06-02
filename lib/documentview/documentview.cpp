@@ -409,11 +409,6 @@ void DocumentView::finishOpenUrl()
     d->updateCaption();
 }
 
-bool DocumentView::isEmpty() const
-{
-    return qobject_cast<EmptyAdapter*>(d->mAdapter.data());
-}
-
 void DocumentView::loadAdapterConfig()
 {
     d->mAdapter->loadConfig();
