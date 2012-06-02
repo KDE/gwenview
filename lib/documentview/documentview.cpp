@@ -322,7 +322,7 @@ DocumentView::DocumentView(QGraphicsScene* scene)
     scene->addItem(this);
 
     d->setupHud();
-    d->setCurrentAdapter(new MessageViewAdapter);
+    d->setCurrentAdapter(new EmptyAdapter);
 }
 
 DocumentView::~DocumentView()
