@@ -84,12 +84,6 @@ public:
      */
     void loadAdapterConfig();
 
-    /**
-     * Returns true if an adapter is loaded (note: adapters are also used to
-     * display error messages!)
-     */
-    bool isEmpty() const;
-
     bool canZoom() const;
 
     qreal minimumZoom() const;

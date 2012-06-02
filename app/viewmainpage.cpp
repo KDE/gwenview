@@ -557,10 +557,7 @@ Document::Ptr ViewMainPage::currentDocument() const
 
 bool ViewMainPage::isEmpty() const
 {
-    if (!d->currentView()) {
-        return true;
-    }
-    return d->currentView()->isEmpty();
+    return !currentDocument();
 }
 
 RasterImageView* ViewMainPage::imageView() const
