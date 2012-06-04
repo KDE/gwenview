@@ -124,6 +124,8 @@ public:
      */
     void setEraseBorders(bool);
 
+    bool isAnimated() const;
+
 public Q_SLOTS:
     void setZoom(qreal);
 
@@ -169,6 +171,8 @@ Q_SIGNALS:
     void contextMenuRequested();
 
     void currentToolChanged(AbstractRasterImageViewTool*);
+
+    void isAnimatedChanged();
 
 protected:
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);

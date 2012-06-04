@@ -72,6 +72,9 @@ struct BirdEyeViewPrivate
         if (!mDocView->canZoom() || mDocView->zoomToFit()) {
             // No need to show
             visible = false;
+        } else if (mDocView->isAnimated()) {
+            // Do not show while animated
+            visible = false;
         } else if (mVisibleRect == q->boundingRect()) {
             // All of the image is visible
             visible = false;
@@ -85,10 +88,11 @@ struct BirdEyeViewPrivate
             // No recent activity
             visible = false;
         }
-        // The qreal() cast is important here: without it QPropertyAnimation tries
-        // to assign an int to "opacity", and this does not work.
-        mOpacityAnim->setEndValue(qreal(visible ? 1 : 0));
-        mOpacityAnim->start();
+        qreal wantedOpacity = visible ? 1 : 0;
+        if (!qFuzzyCompare(wantedOpacity, q->opacity())) {
+            mOpacityAnim->setEndValue(wantedOpacity);
+            mOpacityAnim->start();
+        }
 
         if (visible) {
             mAutoHideTimer->start();
@@ -113,7 +117,9 @@ BirdEyeView::BirdEyeView(DocumentView* docView)
     d->mAutoHideTimer->setInterval(AUTOHIDE_DELAY);
     connect(d->mAutoHideTimer, SIGNAL(timeout()), SLOT(slotAutoHideTimeout()));
 
-    slotZoomOrSizeChanged();
+    // Hide ourself by default, to avoid startup flashes (if we let updateOpacity
+    // update opacity, it will do so through an animation)
+    setOpacity(0);
 
     connect(docView->document().data(), SIGNAL(metaInfoUpdated()), SLOT(slotZoomOrSizeChanged()));
     connect(docView, SIGNAL(zoomChanged(qreal)), SLOT(slotZoomOrSizeChanged()));
@@ -208,6 +214,11 @@ void BirdEyeView::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWid
 void BirdEyeView::onMouseMoved()
 {
     d->mAutoHideTimer->start();
+    d->updateVisibility();
+}
+
+void BirdEyeView::slotIsAnimatedChanged()
+{
     d->updateVisibility();
 }
 

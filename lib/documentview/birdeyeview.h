@@ -67,6 +67,7 @@ protected:
 private Q_SLOTS:
     void slotAutoHideTimeout();
     void slotPositionChanged();
+    void slotIsAnimatedChanged();
 
 private:
     BirdEyeViewPrivate* const d;

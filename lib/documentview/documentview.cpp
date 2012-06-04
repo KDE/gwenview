@@ -296,10 +296,11 @@ struct DocumentViewPrivate
             QObject::connect(anim, SIGNAL(finished()),
                             q, SLOT(slotFadeInFinished()));
         }
+        QObject::connect(anim, SIGNAL(finished()), q, SIGNAL(isAnimatedChanged()));
         anim->setDuration(DocumentView::AnimDuration);
-        anim->start(QAbstractAnimation::DeleteWhenStopped);
-
         mFadeAnimation = anim;
+        q->isAnimatedChanged();
+        anim->start(QAbstractAnimation::DeleteWhenStopped);
     }
 };
 
@@ -679,8 +680,10 @@ void DocumentView::moveToAnimated(const QRect& rect)
     anim->setStartValue(geometry());
     anim->setEndValue(rect);
     anim->setDuration(DocumentView::AnimDuration);
-    anim->start(QAbstractAnimation::DeleteWhenStopped);
+    connect(anim, SIGNAL(finished()), SIGNAL(isAnimatedChanged()));
     d->mMoveAnimation = anim;
+    isAnimatedChanged();
+    anim->start(QAbstractAnimation::DeleteWhenStopped);
 }
 
 QPropertyAnimation* DocumentView::fadeIn()
@@ -697,6 +700,11 @@ void DocumentView::fadeOut()
 void DocumentView::slotFadeInFinished()
 {
     fadeInFinished(this);
+}
+
+bool DocumentView::isAnimated() const
+{
+    return d->mMoveAnimation || d->mFadeAnimation;
 }
 
 bool DocumentView::sceneEventFilter(QGraphicsItem*, QEvent* event)
