@@ -49,6 +49,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KNotificationRestrictions>
 #include <KProtocolManager>
 #include <KStatusBar>
+#include <KStandardDirs>
 #include <KStandardGuiItem>
 #include <KStandardShortcut>
 #include <KActionCategory>
@@ -212,13 +213,18 @@ struct MainWindow::Private
 
     void setupWidgets()
     {
-        // FIXME: Can we rely on ObsidianCoast to always be there?
         {
             KSharedConfigPtr config;
             QString name = GwenviewConfig::fullScreenColorScheme();
-            if (name.contains('/')) {
+            if (name.isEmpty()) {
+                // Default color scheme
+                QString path = KStandardDirs::locate("data", "gwenview/color-schemes/fullscreen.colors");
+                config = KSharedConfig::openConfig(path);
+            } else if (name.contains('/')) {
+                // Full path to a .colors file
                 config = KSharedConfig::openConfig(name);
             } else {
+                // Standard KDE color scheme
                 config = KSharedConfig::openConfig(QString("color-schemes/%1.colors").arg(name), KConfig::FullConfig, "data");
             }
             mFullScreenPalette = KGlobalSettings::createApplicationPalette(config);

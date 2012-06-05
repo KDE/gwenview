@@ -79,7 +79,7 @@
             <default>General.Name,Exif.Image.DateTime</default>
         </entry>
         <entry name="FullScreenColorScheme" type="String">
-            <default>ObsidianCoast</default>
+            <default></default>
         </entry>
         <entry name="FullScreenBarHeight" type="Int">
             <default>75</default>
