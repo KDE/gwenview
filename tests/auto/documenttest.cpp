@@ -274,6 +274,18 @@ void DocumentTest::testLoadAnimated()
     QVERIFY2(spy.count() > count, "No imageRectUpdated() signal received after restarting");
 }
 
+void DocumentTest::testPrepareDownSampledAfterFailure()
+{
+    KUrl url = urlForTestFile("empty.png");
+    Document::Ptr doc = DocumentFactory::instance()->load(url);
+
+    doc->startLoadingFullImage();
+    doc->waitUntilLoaded();
+    QCOMPARE(doc->loadingState(), Document::LoadingFailed);
+
+    doc->prepareDownSampledImageForZoom(0.25);
+}
+
 void DocumentTest::testSaveRemote()
 {
     KUrl dstUrl = setUpRemoteTestDir();
