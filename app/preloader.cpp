@@ -43,14 +43,24 @@ namespace Gwenview
 
 struct PreloaderPrivate
 {
+    Preloader* q;
     Document::Ptr mDocument;
     QSize mSize;
+
+    void forgetDocument()
+    {
+        // Forget about the document. Keeping a reference to it would prevent it
+        // from being garbage collected.
+        QObject::disconnect(mDocument.data(), 0, q, 0);
+        mDocument = 0;
+    }
 };
 
 Preloader::Preloader(QObject* parent)
 : QObject(parent)
 , d(new PreloaderPrivate)
 {
+    d->q = this;
 }
 
 Preloader::~Preloader()
@@ -78,6 +88,12 @@ void Preloader::preload(const KUrl& url, const QSize& size)
 
 void Preloader::doPreload()
 {
+    if (d->mDocument->loadingState() == Document::LoadingFailed) {
+        LOG("loading failed");
+        d->forgetDocument();
+        return;
+    }
+
     if (!d->mDocument->size().isValid()) {
         LOG("size not available yet");
         return;
@@ -95,11 +111,7 @@ void Preloader::doPreload()
         LOG("preloading full image");
         d->mDocument->startLoadingFullImage();
     }
-
-    // Forget about the document. Keeping a reference to it would prevent it
-    // from being garbage collected.
-    disconnect(d->mDocument.data(), 0, this, 0);
-    d->mDocument = 0;
+    d->forgetDocument();
 }
 
 } // namespace
