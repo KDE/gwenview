@@ -111,6 +111,7 @@ private Q_SLOTS:
     void testLoadDownSampledPng();
     void testLoadRemote();
     void testLoadAnimated();
+    void testPrepareDownSampledAfterFailure();
     void testDeleteWhileLoading();
     void testLoadRotated();
     void testMultipleLoads();
