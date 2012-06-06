@@ -283,7 +283,8 @@ void DocumentTest::testPrepareDownSampledAfterFailure()
     doc->waitUntilLoaded();
     QCOMPARE(doc->loadingState(), Document::LoadingFailed);
 
-    doc->prepareDownSampledImageForZoom(0.25);
+    bool ready = doc->prepareDownSampledImageForZoom(0.25);
+    QVERIFY2(!ready, "Down sampled image should not be ready");
 }
 
 void DocumentTest::testSaveRemote()
