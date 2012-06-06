@@ -90,9 +90,7 @@ struct DocumentFactoryPrivate
         typedef QMultiMap<QDateTime, KUrl> UnreferencedImages;
         UnreferencedImages unreferencedImages;
 
-        DocumentMap::Iterator
-        it = map.begin(),
-        end = map.end();
+        DocumentMap::Iterator it = map.begin(), end = map.end();
         for (; it != end; ++it) {
             DocumentInfo* info = it.value();
             if (info->mDocument.count() == 1 && !info->mDocument->isModified()) {
@@ -105,7 +103,8 @@ struct DocumentFactoryPrivate
         for (
             UnreferencedImages::Iterator unreferencedIt = unreferencedImages.begin();
             unreferencedImages.count() > MAX_UNREFERENCED_IMAGES;
-            unreferencedIt = unreferencedImages.erase(unreferencedIt)) {
+            unreferencedIt = unreferencedImages.erase(unreferencedIt))
+        {
             KUrl url = unreferencedIt.value();
             LOG("Collecting" << url);
             it = map.find(url);
