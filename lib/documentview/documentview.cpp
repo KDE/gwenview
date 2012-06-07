@@ -591,7 +591,7 @@ qreal DocumentView::minimumZoom() const
 {
     // There is no point zooming out less than zoomToFit, but make sure it does
     // not get too small either
-    return qMax(0.001, qMin(double(d->mAdapter->computeZoomToFit()), 1.));
+    return qBound(qreal(0.001), d->mAdapter->computeZoomToFit(), qreal(1.));
 }
 
 void DocumentView::setCompareMode(bool compare)

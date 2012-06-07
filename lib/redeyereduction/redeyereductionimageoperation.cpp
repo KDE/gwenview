@@ -133,7 +133,7 @@ void RedEyeReductionImageOperation::apply(QImage* img, const QRectF& rectF)
     const qreal radius = rectF.width() / 2;
     const qreal centerX = rectF.x() + radius;
     const qreal centerY = rectF.y() + radius;
-    const Ramp radiusRamp(qMin(double(radius * 0.7), double(radius - 1)), radius, 1., 0.);
+    const Ramp radiusRamp(qMin(qreal(radius * 0.7), qreal(radius - 1)), radius, 1., 0.);
 
     uchar* line = img->scanLine(rect.top()) + rect.left() * 4;
     for (int y = rect.top(); y < rect.bottom(); ++y, line += img->bytesPerLine()) {
