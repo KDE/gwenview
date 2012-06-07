@@ -128,7 +128,7 @@ QString createTempDir(const QString& baseDir, const QString& prefix, QString* er
 {
     Q_ASSERT(errorMessage);
 
-    QByteArray name = QFile::encodeName(baseDir + "/" + prefix + "XXXXXX");
+    QByteArray name = QFile::encodeName(baseDir + '/' + prefix + "XXXXXX");
 
     if (!mkdtemp(name.data())) {
         // Failure

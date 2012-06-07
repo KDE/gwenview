@@ -96,7 +96,7 @@ void ImporterConfigDialog::slotHelpLinkActivated(const QString& keyword)
 void ImporterConfigDialog::updatePreview()
 {
     FileNameFormater formater(d->kcfg_AutoRenameFormat->text());
-    d->mPreviewOutputLabel->setText(formater.format(KUrl::fromPath("/" + PREVIEW_FILENAME), PREVIEW_DATETIME));
+    d->mPreviewOutputLabel->setText(formater.format(KUrl::fromPath('/' + PREVIEW_FILENAME), PREVIEW_DATETIME));
 }
 
 } // namespace

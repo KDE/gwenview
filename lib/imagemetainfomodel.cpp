@@ -334,7 +334,7 @@ void ImageMetaInfoModel::setImageSize(const QSize& size)
                              "(%1MP)", megaPixelsString);
         }
     } else {
-        imageSize = "-";
+        imageSize = '-';
     }
     d->setGroupEntryValue(GeneralGroup, "General.ImageSize", imageSize);
 }
