@@ -49,7 +49,7 @@ class GWENVIEWLIB_EXPORT DocumentViewController : public QObject
 {
     Q_OBJECT
 public:
-    DocumentViewController(KActionCollection*, QObject* parent = 0);
+    explicit DocumentViewController(KActionCollection*, QObject* parent = 0);
     ~DocumentViewController();
 
     DocumentView* view() const;

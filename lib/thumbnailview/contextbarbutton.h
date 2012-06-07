@@ -39,7 +39,7 @@ class ContextBarButton : public QToolButton
 {
     Q_OBJECT
 public:
-    ContextBarButton(const QString& iconName, QWidget* parent = 0);
+    explicit ContextBarButton(const QString& iconName, QWidget* parent = 0);
     ~ContextBarButton();
 
 protected:
