@@ -57,7 +57,7 @@ void ThumbnailSlider::slotActionTriggered(int actionTriggered)
 
     if (actionTriggered != QAbstractSlider::SliderNoAction) {
         // If we are updating because of a direct action on the slider, show
-        // the tooltip immediatly.
+        // the tooltip immediately.
         const QPoint pos = slider()->mapToGlobal(QPoint(0, slider()->height() / 2));
         QToolTip::showText(pos, slider()->toolTip(), slider());
     }

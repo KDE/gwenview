@@ -39,7 +39,7 @@ struct DocumentFactoryPrivate;
  *
  * It keeps a cache of recently accessed documents to avoid reloading them.
  * To do so it keeps a last-access timestamp, which is updated to the
- * current time everytime DocumentFactory::load() is called.
+ * current time every time DocumentFactory::load() is called.
  */
 class GWENVIEWLIB_EXPORT DocumentFactory : public QObject
 {

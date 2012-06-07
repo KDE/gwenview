@@ -54,7 +54,7 @@ struct RasterImageViewPrivate
     QPixmap mCurrentBuffer;
     // The alternate buffer is useful when scrolling: existing content is copied
     // to mAlternateBuffer and buffers are swapped. This avoids allocating a new
-    // QPixmap everytime the image is scrolled.
+    // QPixmap every time the image is scrolled.
     QPixmap mAlternateBuffer;
 
     QTimer* mUpdateTimer;
