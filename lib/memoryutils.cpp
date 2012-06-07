@@ -63,7 +63,7 @@ qulonglong getTotalMemory()
     while (true) {
         QString entry = readStream.readLine();
         if (entry.isNull()) break;
-        if (entry.startsWith("MemTotal:"))
+        if (entry.startsWith(QLatin1String("MemTotal:")))
             return (cachedValue = (Q_UINT64_C(1024) * entry.section(' ', -2, -2).toULongLong()));
     }
 #elif defined(Q_OS_FREEBSD)
@@ -104,12 +104,12 @@ qulonglong getFreeMemory()
     while (true) {
         entry = readStream.readLine();
         if (entry.isNull()) break;
-        if (entry.startsWith("MemFree:") ||
-                entry.startsWith("Buffers:") ||
-                entry.startsWith("Cached:") ||
-                entry.startsWith("SwapFree:"))
+        if (entry.startsWith(QLatin1String("MemFree:")) ||
+                entry.startsWith(QLatin1String("Buffers:")) ||
+                entry.startsWith(QLatin1String("Cached:")) ||
+                entry.startsWith(QLatin1String("SwapFree:")))
             memoryFree += entry.section(' ', -2, -2).toULongLong();
-        if (entry.startsWith("SwapTotal:"))
+        if (entry.startsWith(QLatin1String("SwapTotal:")))
             memoryFree -= entry.section(' ', -2, -2).toULongLong();
     }
     memFile.close();
