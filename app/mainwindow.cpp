@@ -25,16 +25,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QDateTime>
 #include <QDesktopWidget>
 #include <QLabel>
-#include <QTimer>
 #include <QShortcut>
-#include <QSplitter>
 #include <QSlider>
+#include <QSplitter>
 #include <QStackedWidget>
+#include <QTimer>
 #include <QUndoGroup>
 #include <QVBoxLayout>
 
 // KDE
 #include <KIO/NetAccess>
+#include <KActionCategory>
 #include <KActionCollection>
 #include <KAction>
 #include <KApplication>
@@ -43,8 +44,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KFileDialog>
 #include <KFileItem>
 #include <KGlobalSettings>
-#include <KMenuBar>
 #include <KLocale>
+#include <KMenuBar>
 #include <KMessageBox>
 #include <KNotificationRestrictions>
 #include <KProtocolManager>
@@ -52,8 +53,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KStandardDirs>
 #include <KStandardGuiItem>
 #include <KStandardShortcut>
-#include <KActionCategory>
-#include <KProtocolManager>
 #include <KToggleFullScreenAction>
 #include <KToolBar>
 #include <KUrl>
