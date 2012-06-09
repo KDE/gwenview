@@ -46,8 +46,8 @@ DocumentDirFinder::DocumentDirFinder(const KUrl& rootUrl)
 {
     d->mRootUrl = rootUrl;
     d->mDirLister = new KDirLister(this);
-    connect(d->mDirLister, SIGNAL(itemsAdded(KUrl, KFileItemList)),
-            SLOT(slotItemsAdded(KUrl, KFileItemList)));
+    connect(d->mDirLister, SIGNAL(itemsAdded(KUrl,KFileItemList)),
+            SLOT(slotItemsAdded(KUrl,KFileItemList)));
     connect(d->mDirLister, SIGNAL(completed()),
             SLOT(slotCompleted()));
     d->mDirLister->openUrl(rootUrl);

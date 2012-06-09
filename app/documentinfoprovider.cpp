@@ -43,8 +43,8 @@ DocumentInfoProvider::DocumentInfoProvider(SortedDirModel* model)
 , d(new DocumentInfoProviderPrivate)
 {
     d->mDirModel = model;
-    connect(DocumentFactory::instance(), SIGNAL(documentBusyStateChanged(KUrl, bool)),
-            SLOT(emitBusyStateChanged(KUrl, bool)));
+    connect(DocumentFactory::instance(), SIGNAL(documentBusyStateChanged(KUrl,bool)),
+            SLOT(emitBusyStateChanged(KUrl,bool)));
 
     connect(DocumentFactory::instance(), SIGNAL(documentChanged(KUrl)),
             SLOT(emitDocumentChanged(KUrl)));

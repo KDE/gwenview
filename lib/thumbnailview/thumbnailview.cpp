@@ -216,8 +216,8 @@ struct ThumbnailViewPrivate
         ThumbnailGroup::Enum group = ThumbnailGroup::fromPixelSize(mThumbnailSize);
         if (!mThumbnailLoadJob) {
             mThumbnailLoadJob = new ThumbnailLoadJob(list, group);
-            QObject::connect(mThumbnailLoadJob, SIGNAL(thumbnailLoaded(KFileItem, QPixmap, QSize)),
-                             q, SLOT(setThumbnail(KFileItem, QPixmap, QSize)));
+            QObject::connect(mThumbnailLoadJob, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize)),
+                             q, SLOT(setThumbnail(KFileItem,QPixmap,QSize)));
             QObject::connect(mThumbnailLoadJob, SIGNAL(thumbnailLoadingFailed(KFileItem)),
                              q, SLOT(setBrokenThumbnail(KFileItem)));
             mThumbnailLoadJob->start();
@@ -407,8 +407,8 @@ void ThumbnailView::setModel(QAbstractItemModel* newModel)
         disconnect(model(), 0, this, 0);
     }
     QListView::setModel(newModel);
-    connect(model(), SIGNAL(rowsRemoved(QModelIndex, int, int)),
-            SIGNAL(rowsRemovedSignal(QModelIndex, int, int)));
+    connect(model(), SIGNAL(rowsRemoved(QModelIndex,int,int)),
+            SIGNAL(rowsRemovedSignal(QModelIndex,int,int)));
 }
 
 void ThumbnailView::setThumbnailSize(int value)
@@ -472,8 +472,8 @@ void ThumbnailView::setDocumentInfoProvider(AbstractDocumentInfoProvider* provid
 {
     d->mDocumentInfoProvider = provider;
     if (provider) {
-        connect(provider, SIGNAL(busyStateChanged(QModelIndex, bool)),
-                SLOT(updateThumbnailBusyState(QModelIndex, bool)));
+        connect(provider, SIGNAL(busyStateChanged(QModelIndex,bool)),
+                SLOT(updateThumbnailBusyState(QModelIndex,bool)));
         connect(provider, SIGNAL(documentChanged(QModelIndex)),
                 SLOT(updateThumbnail(QModelIndex)));
     }

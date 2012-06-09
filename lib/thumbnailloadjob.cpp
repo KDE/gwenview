@@ -401,12 +401,12 @@ ThumbnailLoadJob::ThumbnailLoadJob(const KFileItemList& items, ThumbnailGroup::E
     mItems = items;
     mCurrentItem = KFileItem();
 
-    connect(&mThumbnailThread, SIGNAL(done(QImage, QSize)),
-            SLOT(thumbnailReady(QImage, QSize)),
+    connect(&mThumbnailThread, SIGNAL(done(QImage,QSize)),
+            SLOT(thumbnailReady(QImage,QSize)),
             Qt::QueuedConnection);
 
-    connect(&mThumbnailThread, SIGNAL(thumbnailReadyToBeCached(QString, QImage)),
-            sThumbnailCache, SLOT(queueThumbnail(QString, QImage)),
+    connect(&mThumbnailThread, SIGNAL(thumbnailReadyToBeCached(QString,QImage)),
+            sThumbnailCache, SLOT(queueThumbnail(QString,QImage)),
             Qt::QueuedConnection);
 }
 
@@ -677,8 +677,8 @@ void ThumbnailLoadJob::checkThumbnail()
         }
         KIO::Job* job = KIO::filePreview(list, QSize(pixelSize, pixelSize), &mPreviewPlugins);
         //job->ui()->setWindow(KApplication::kApplication()->activeWindow());
-        connect(job, SIGNAL(gotPreview(KFileItem, QPixmap)),
-                this, SLOT(slotGotPreview(KFileItem, QPixmap)));
+        connect(job, SIGNAL(gotPreview(KFileItem,QPixmap)),
+                this, SLOT(slotGotPreview(KFileItem,QPixmap)));
         connect(job, SIGNAL(failed(KFileItem)),
                 this, SLOT(emitThumbnailLoadingFailed()));
         addSubjob(job);

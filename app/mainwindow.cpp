@@ -290,7 +290,7 @@ struct MainWindow::Private
         // Connect thumbnail view
         connect(mThumbnailView, SIGNAL(indexActivated(QModelIndex)),
                 q, SLOT(slotThumbnailViewIndexActivated(QModelIndex)));
-        connect(mThumbnailView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
+        connect(mThumbnailView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
                 q, SLOT(slotSelectionChanged()));
 
         // Connect delegate
@@ -303,8 +303,8 @@ struct MainWindow::Private
                 mGvCore, SLOT(rotateRight(KUrl)));
         connect(delegate, SIGNAL(showDocumentInFullScreenRequested(KUrl)),
                 q, SLOT(showDocumentInFullScreen(KUrl)));
-        connect(delegate, SIGNAL(setDocumentRatingRequested(KUrl, int)),
-                mGvCore, SLOT(setRating(KUrl, int)));
+        connect(delegate, SIGNAL(setDocumentRatingRequested(KUrl,int)),
+                mGvCore, SLOT(setRating(KUrl,int)));
 
         // Connect url navigator
         connect(mUrlNavigator, SIGNAL(urlChanged(KUrl)),
@@ -553,10 +553,10 @@ struct MainWindow::Private
             | MimeTypeUtils::KIND_VIDEO);
         setDirModelShowDirs(true);
 
-        connect(mDirModel, SIGNAL(rowsInserted(QModelIndex, int, int)),
+        connect(mDirModel, SIGNAL(rowsInserted(QModelIndex,int,int)),
                 q, SLOT(slotDirModelNewItems()));
 
-        connect(mDirModel, SIGNAL(rowsRemoved(QModelIndex, int, int)),
+        connect(mDirModel, SIGNAL(rowsRemoved(QModelIndex,int,int)),
                 q, SLOT(updatePreviousNextActions()));
         connect(mDirModel, SIGNAL(modelReset()),
                 q, SLOT(updatePreviousNextActions()));

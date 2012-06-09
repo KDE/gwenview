@@ -119,7 +119,7 @@ AbstractImageView::AbstractImageView(QGraphicsItem* parent)
     d->mImageOffset = QPointF(0, 0);
     d->mScrollPos = QPointF(0, 0);
     d->mModifierKeyInfo = new KModifierKeyInfo(this);
-    connect(d->mModifierKeyInfo, SIGNAL(keyPressed(Qt::Key, bool)), SLOT(updateCursor()));
+    connect(d->mModifierKeyInfo, SIGNAL(keyPressed(Qt::Key,bool)), SLOT(updateCursor()));
     setFocusPolicy(Qt::WheelFocus);
     setFlag(ItemIsSelectable);
     setAcceptHoverEvents(true);

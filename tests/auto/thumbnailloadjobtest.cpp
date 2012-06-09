@@ -115,7 +115,7 @@ void ThumbnailLoadJobTest::testLoadLocal()
 
     // Generate the thumbnails
     ThumbnailLoadJob* job = new ThumbnailLoadJob(list, ThumbnailGroup::Normal);
-    QSignalSpy spy(job, SIGNAL(thumbnailLoaded(KFileItem, QPixmap, QSize)));
+    QSignalSpy spy(job, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize)));
     job->exec();
     waitForDeferredDeletes();
     while (!ThumbnailLoadJob::isPendingThumbnailCacheEmpty()) {
@@ -158,7 +158,7 @@ void ThumbnailLoadJobTest::testUseEmbeddedOrNot()
 
     // Loading a normal thumbnail should bring the white one
     job = new ThumbnailLoadJob(list, ThumbnailGroup::Normal);
-    QSignalSpy spy1(job, SIGNAL(thumbnailLoaded(KFileItem, QPixmap, QSize)));
+    QSignalSpy spy1(job, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize)));
     job->exec();
     waitForDeferredDeletes();
 
@@ -169,7 +169,7 @@ void ThumbnailLoadJobTest::testUseEmbeddedOrNot()
 
     // Loading a large thumbnail should bring the red one
     job = new ThumbnailLoadJob(list, ThumbnailGroup::Large);
-    QSignalSpy spy2(job, SIGNAL(thumbnailLoaded(KFileItem, QPixmap, QSize)));
+    QSignalSpy spy2(job, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize)));
     job->exec();
     waitForDeferredDeletes();
 

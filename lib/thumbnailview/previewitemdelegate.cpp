@@ -580,9 +580,9 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
     d->mContextBarActions = SelectionAction | FullScreenAction | RotateAction;
     d->mTextElideMode = Qt::ElideRight;
 
-    connect(view, SIGNAL(rowsRemovedSignal(QModelIndex, int, int)),
+    connect(view, SIGNAL(rowsRemovedSignal(QModelIndex,int,int)),
             SLOT(slotRowsChanged()));
-    connect(view, SIGNAL(rowsInsertedSignal(QModelIndex, int, int)),
+    connect(view, SIGNAL(rowsInsertedSignal(QModelIndex,int,int)),
             SLOT(slotRowsChanged()));
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE

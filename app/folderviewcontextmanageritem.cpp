@@ -123,8 +123,8 @@ struct FolderViewContextManagerItemPrivate
         }
         mModel->dirLister()->openUrl(KUrl("/"));
 #endif
-        QObject::connect(mModel, SIGNAL(rowsInserted(QModelIndex, int, int)),
-                         q, SLOT(slotRowsInserted(QModelIndex, int, int)));
+        QObject::connect(mModel, SIGNAL(rowsInserted(QModelIndex,int,int)),
+                         q, SLOT(slotRowsInserted(QModelIndex,int,int)));
     }
 
     void setupView()

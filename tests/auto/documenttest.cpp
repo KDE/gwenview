@@ -353,7 +353,7 @@ void DocumentTest::testSaveAs()
     KUrl url = urlForTestFile("orient6.jpg");
     DocumentFactory* factory = DocumentFactory::instance();
     Document::Ptr doc = factory->load(url);
-    QSignalSpy savedSpy(doc.data(), SIGNAL(saved(KUrl, KUrl)));
+    QSignalSpy savedSpy(doc.data(), SIGNAL(saved(KUrl,KUrl)));
     QSignalSpy modifiedDocumentListChangedSpy(factory, SIGNAL(modifiedDocumentListChanged()));
     QSignalSpy documentChangedSpy(factory, SIGNAL(documentChanged(KUrl)));
     doc->startLoadingFullImage();
@@ -469,7 +469,7 @@ void DocumentTest::testModifyAndSaveAs()
     DocumentFactory* factory = DocumentFactory::instance();
     Document::Ptr doc = factory->load(url);
 
-    QSignalSpy savedSpy(doc.data(), SIGNAL(saved(KUrl, KUrl)));
+    QSignalSpy savedSpy(doc.data(), SIGNAL(saved(KUrl,KUrl)));
     QSignalSpy modifiedDocumentListChangedSpy(factory, SIGNAL(modifiedDocumentListChanged()));
     QSignalSpy documentChangedSpy(factory, SIGNAL(documentChanged(KUrl)));
 
@@ -601,7 +601,7 @@ void DocumentTest::testModifiedAndSavedSignals()
     KUrl url = urlForTestFile("orient6.jpg");
     Document::Ptr doc = DocumentFactory::instance()->load(url);
     QSignalSpy modifiedSpy(doc.data(), SIGNAL(modified(KUrl)));
-    QSignalSpy savedSpy(doc.data(), SIGNAL(saved(KUrl, KUrl)));
+    QSignalSpy savedSpy(doc.data(), SIGNAL(saved(KUrl,KUrl)));
     doc->startLoadingFullImage();
     doc->waitUntilLoaded();
 
@@ -649,7 +649,7 @@ void DocumentTest::testJobQueue()
 {
     KUrl url = urlForTestFile("orient6.jpg");
     Document::Ptr doc = DocumentFactory::instance()->load(url);
-    QSignalSpy spy(doc.data(), SIGNAL(busyChanged(KUrl, bool)));
+    QSignalSpy spy(doc.data(), SIGNAL(busyChanged(KUrl,bool)));
 
     QString str;
     doc->enqueueJob(new TestJob(&str, 'a'));

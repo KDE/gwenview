@@ -371,7 +371,7 @@ void DocumentView::openUrl(const KUrl& url)
         disconnect(d->mDocument.data(), 0, this, 0);
     }
     d->mDocument = DocumentFactory::instance()->load(url);
-    connect(d->mDocument.data(), SIGNAL(busyChanged(KUrl, bool)), SLOT(slotBusyChanged(KUrl, bool)));
+    connect(d->mDocument.data(), SIGNAL(busyChanged(KUrl,bool)), SLOT(slotBusyChanged(KUrl,bool)));
 
     if (d->mDocument->loadingState() < Document::KindDetermined) {
         MessageViewAdapter* messageViewAdapter = qobject_cast<MessageViewAdapter*>(d->mAdapter.data());

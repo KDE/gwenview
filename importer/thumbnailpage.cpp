@@ -155,13 +155,13 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
                                q, SLOT(slotImportAll()));
 
         QObject::connect(
-            mThumbnailView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
+            mThumbnailView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             q, SLOT(updateImportButtons()));
         QObject::connect(
-            mDirModel, SIGNAL(rowsInserted(QModelIndex, int, int)),
+            mDirModel, SIGNAL(rowsInserted(QModelIndex,int,int)),
             q, SLOT(updateImportButtons()));
         QObject::connect(
-            mDirModel, SIGNAL(rowsRemoved(QModelIndex, int, int)),
+            mDirModel, SIGNAL(rowsRemoved(QModelIndex,int,int)),
             q, SLOT(updateImportButtons()));
         QObject::connect(
             mDirModel, SIGNAL(modelReset()),
@@ -196,8 +196,8 @@ ThumbnailPage::~ThumbnailPage()
 void ThumbnailPage::setSourceUrl(const KUrl& url)
 {
     DocumentDirFinder* finder = new DocumentDirFinder(url);
-    connect(finder, SIGNAL(done(KUrl, DocumentDirFinder::Status)),
-            SLOT(slotDocumentDirFinderDone(KUrl, DocumentDirFinder::Status)));
+    connect(finder, SIGNAL(done(KUrl,DocumentDirFinder::Status)),
+            SLOT(slotDocumentDirFinderDone(KUrl,DocumentDirFinder::Status)));
     finder->start();
 }
 

@@ -154,8 +154,8 @@ RasterImageView::RasterImageView(QGraphicsItem* parent)
 
     d->mBufferIsEmpty = true;
     d->mScaler = new ImageScaler(this);
-    connect(d->mScaler, SIGNAL(scaledRect(int, int, QImage)),
-            SLOT(updateFromScaler(int, int, QImage)));
+    connect(d->mScaler, SIGNAL(scaledRect(int,int,QImage)),
+            SLOT(updateFromScaler(int,int,QImage)));
 
     d->createBackgroundTexture();
     d->setupUpdateTimer();

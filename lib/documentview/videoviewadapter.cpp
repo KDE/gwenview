@@ -74,7 +74,7 @@ struct VideoViewAdapterPrivate
         mPlayPauseAction->setShortcut(Qt::Key_P);
         QObject::connect(mPlayPauseAction, SIGNAL(triggered()),
                          q, SLOT(slotPlayPauseClicked()));
-        QObject::connect(mMediaObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
+        QObject::connect(mMediaObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)),
                          q, SLOT(updatePlayUi()));
 
         mMuteAction = new QAction(q);

@@ -177,12 +177,12 @@ Document::Ptr DocumentFactory::load(const KUrl& url)
     Document* doc = new Document(url);
     connect(doc, SIGNAL(loaded(KUrl)),
             SLOT(slotLoaded(KUrl)));
-    connect(doc, SIGNAL(saved(KUrl, KUrl)),
-            SLOT(slotSaved(KUrl, KUrl)));
+    connect(doc, SIGNAL(saved(KUrl,KUrl)),
+            SLOT(slotSaved(KUrl,KUrl)));
     connect(doc, SIGNAL(modified(KUrl)),
             SLOT(slotModified(KUrl)));
-    connect(doc, SIGNAL(busyChanged(KUrl, bool)),
-            SLOT(slotBusyChanged(KUrl, bool)));
+    connect(doc, SIGNAL(busyChanged(KUrl,bool)),
+            SLOT(slotBusyChanged(KUrl,bool)));
 
     // Create DocumentInfo instance
     info = new DocumentInfo;

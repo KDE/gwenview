@@ -99,8 +99,8 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
         QVBoxLayout* layout = new QVBoxLayout(mUrlNavigatorContainer);
         layout->setMargin(0);
         layout->addWidget(mUrlNavigator);
-        QObject::connect(mUrlNavigator, SIGNAL(urlsDropped(KUrl, QDropEvent*)),
-                         q, SLOT(slotUrlsDropped(KUrl, QDropEvent*)));
+        QObject::connect(mUrlNavigator, SIGNAL(urlsDropped(KUrl,QDropEvent*)),
+                         q, SLOT(slotUrlsDropped(KUrl,QDropEvent*)));
         updateUrlNavigatorBackgroundColor();
 
         // Thumbnail slider
@@ -188,11 +188,11 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
 
     void setupDocumentCountConnections()
     {
-        QObject::connect(mDirModel, SIGNAL(rowsInserted(QModelIndex, int, int)),
-                         q, SLOT(slotDirModelRowsInserted(QModelIndex, int, int)));
+        QObject::connect(mDirModel, SIGNAL(rowsInserted(QModelIndex,int,int)),
+                         q, SLOT(slotDirModelRowsInserted(QModelIndex,int,int)));
 
-        QObject::connect(mDirModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex, int, int)),
-                         q, SLOT(slotDirModelRowsAboutToBeRemoved(QModelIndex, int, int)));
+        QObject::connect(mDirModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)),
+                         q, SLOT(slotDirModelRowsAboutToBeRemoved(QModelIndex,int,int)));
 
         QObject::connect(mDirModel, SIGNAL(modelReset()),
                          q, SLOT(slotDirModelReset()));
