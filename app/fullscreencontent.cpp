@@ -51,6 +51,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/gwenviewconfig.h>
 #include <lib/imagemetainfomodel.h>
 #include <lib/thumbnailview/thumbnailbarview.h>
+#include <lib/shadowfilter.h>
 #include <lib/slideshow.h>
 
 namespace Gwenview
@@ -257,6 +258,9 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
     addAction("rotate_left");
     addAction("rotate_right");
     #undef addAction
+    ShadowFilter* filter = new ShadowFilter(d->mToolBar);
+    filter->setShadow(ShadowFilter::RightEdge, QColor(0, 0, 0, 64));
+    filter->setShadow(ShadowFilter::BottomEdge, QColor(255, 255, 255, 8));
 
     // mInformationLabel
     d->mInformationLabel = new QLabel;
@@ -264,6 +268,12 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
     d->mInformationLabel->setContentsMargins(6, 0, 6, 0);
     d->mInformationLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
     d->mInformationLabel->setAutoFillBackground(true);
+
+    filter = new ShadowFilter(d->mInformationLabel);
+    filter->setShadow(ShadowFilter::LeftEdge, QColor(0, 0, 0, 64));
+    filter->setShadow(ShadowFilter::TopEdge, QColor(0, 0, 0, 64));
+    filter->setShadow(ShadowFilter::RightEdge, QColor(0, 0, 0, 128));
+    filter->setShadow(ShadowFilter::BottomEdge, QColor(255, 255, 255, 8));
 
     // Thumbnail bar
     d->mThumbnailBar = new ThumbnailBarView(d->mContent);
@@ -278,6 +288,9 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
     d->mRightToolBar->addAction(d->mOptionsAction);
     d->mRightToolBar->addStretch();
     d->mRightToolBar->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+    filter = new ShadowFilter(d->mRightToolBar);
+    filter->setShadow(ShadowFilter::LeftEdge, QColor(0, 0, 0, 64));
+    filter->setShadow(ShadowFilter::BottomEdge, QColor(255, 255, 255, 8));
 
     d->updateLayout();
 

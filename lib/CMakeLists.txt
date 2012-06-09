@@ -110,6 +110,7 @@ set(gwenviewlib_SRCS
     preferredimagemetainfomodel.cpp
     print/printhelper.cpp
     print/printoptionspage.cpp
+    shadowfilter.cpp
     slidecontainer.cpp
     slideshow.cpp
     statusbartoolbutton.cpp
