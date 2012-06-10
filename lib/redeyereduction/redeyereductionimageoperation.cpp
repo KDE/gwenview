@@ -124,7 +124,7 @@ inline qreal computeRedEyeAlpha(const QColor& src)
         axs = ramp(sat);
     }
 
-    return qBound(0., double(src.alphaF()) * axs, 1.);
+    return qBound(qreal(0.), src.alphaF() * axs, qreal(1.));
 }
 
 void RedEyeReductionImageOperation::apply(QImage* img, const QRectF& rectF)
@@ -133,7 +133,9 @@ void RedEyeReductionImageOperation::apply(QImage* img, const QRectF& rectF)
     const qreal radius = rectF.width() / 2;
     const qreal centerX = rectF.x() + radius;
     const qreal centerY = rectF.y() + radius;
-    const Ramp radiusRamp(qMin(qreal(radius * 0.7), qreal(radius - 1)), radius, 1., 0.);
+    const Ramp radiusRamp(
+        qMin(qreal(radius * 0.7), qreal(radius - 1)), radius,
+        qreal(1.), qreal(0.));
 
     uchar* line = img->scanLine(rect.top()) + rect.left() * 4;
     for (int y = rect.top(); y < rect.bottom(); ++y, line += img->bytesPerLine()) {
