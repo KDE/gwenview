@@ -587,10 +587,9 @@ void ViewMainPage::openUrl(const KUrl& url)
 
 void ViewMainPage::openUrls(const KUrl::List& allUrls, const KUrl& currentUrl)
 {
-    bool mChangeSettings = false;
-    bool mZoomToFit;
-    qreal mZoom;
-    QPoint mPosition;
+    bool zoomToFit;
+    qreal zoom;
+    QPoint position;
 
     QSet<KUrl> urls = allUrls.toSet();
     d->mCompareMode = urls.count() > 1;
@@ -608,12 +607,11 @@ void ViewMainPage::openUrls(const KUrl::List& allUrls, const KUrl& currentUrl)
             viewForUrlMap.insert(url, view);
         } else {
             // Should we remember current zoom settings?
-            mZoomToFit = view->zoomToFit();
-            if (! mZoomToFit) {
-                mZoom = view->zoom();
-                mPosition = view->position();
+            zoomToFit = view->zoomToFit();
+            if (!zoomToFit) {
+                zoom = view->zoom();
+                position = view->position();
             }
-            mChangeSettings = true;
 
             // view url is not interesting, drop it
             d->deleteDocumentView(view);
@@ -652,10 +650,10 @@ void ViewMainPage::openUrls(const KUrl::List& allUrls, const KUrl& currentUrl)
     // Init views
     Q_FOREACH(DocumentView * view, d->mDocumentViews) {
         // Preserve zoom settings from one image to the next
-        view->setZoomToFit(mZoomToFit);
-        if (! mZoomToFit) {
-            view->setZoom(mZoom);
-            view->setPosition(mPosition);
+        view->setZoomToFit(zoomToFit);
+        if (!zoomToFit) {
+            view->setZoom(zoom);
+            view->setPosition(position);
         }
 
         view->setCompareMode(d->mCompareMode);
