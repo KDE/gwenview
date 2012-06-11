@@ -91,6 +91,8 @@ public:
 
     void setEnlargeSmallerImages(bool value);
 
+    void aboutToFinishLoadDocument();
+
 public Q_SLOTS:
     void updateCursor();
 

@@ -80,6 +80,10 @@ struct AbstractImageViewPrivate
 
     void setScrollPos(const QPointF& _newPos, Verbosity verbosity = Notify)
     {
+        if (!mDocument) {
+            mScrollPos = _newPos;
+            return;
+        }
         QSizeF zoomedDocSize = q->documentSize() * mZoom;
         QSizeF viewSize = q->boundingRect().size();
         QPointF newPos(
@@ -141,9 +145,6 @@ void AbstractImageView::setDocument(Document::Ptr doc)
 {
     d->mDocument = doc;
     loadFromDocument();
-    if (d->mZoomToFit) {
-        setZoom(computeZoomToFit());
-    }
 }
 
 QSizeF AbstractImageView::documentSize() const
@@ -158,6 +159,10 @@ qreal AbstractImageView::zoom() const
 
 void AbstractImageView::setZoom(qreal zoom, const QPointF& _center, AbstractImageView::UpdateType updateType)
 {
+    if (!d->mDocument) {
+        d->mZoom = zoom;
+        return;
+    }
     if (updateType == UpdateIfNecessary && qFuzzyCompare(zoom, d->mZoom)) {
         return;
     }
@@ -497,6 +502,16 @@ QSizeF AbstractImageView::visibleImageSize() const
     }
     QSizeF size = documentSize() * zoom();
     return size.boundedTo(boundingRect().size());
+}
+
+void AbstractImageView::aboutToFinishLoadDocument()
+{
+    if (d->mZoomToFit) {
+        setZoom(computeZoomToFit());
+    } else {
+        d->adjustImageOffset();
+        d->adjustScrollPos();
+    }
 }
 
 } // namespace

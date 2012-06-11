@@ -59,6 +59,12 @@ public:
     static const int MaximumZoom;
     static const int AnimDuration;
 
+    struct Setup {
+        bool zoomToFit;
+        qreal zoom;
+        QPointF position;
+    };
+
     enum AnimationMethod {
         NoAnimation,
         SoftwareAnimation,
@@ -76,7 +82,9 @@ public:
 
     KUrl url() const;
 
-    void openUrl(const KUrl&);
+    void openUrl(const KUrl&, const Setup&);
+
+    Setup setup() const;
 
     /**
      * Tells the current adapter to load its config. Used when the user changed

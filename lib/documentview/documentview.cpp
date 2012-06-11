@@ -94,6 +94,7 @@ struct DocumentViewPrivate
     QScopedPointer<AbstractDocumentViewAdapter> mAdapter;
     QList<qreal> mZoomSnapValues;
     Document::Ptr mDocument;
+    DocumentView::Setup mSetup;
     bool mCurrent;
     bool mCompareMode;
     bool mEraseBorders;
@@ -132,6 +133,13 @@ struct DocumentViewPrivate
             adapter->widget()->setFocus();
         }
 
+        if (adapter->canZoom()) {
+            adapter->setZoomToFit(mSetup.zoomToFit);
+            if (!mSetup.zoomToFit) {
+                adapter->setZoom(mSetup.zoom);
+                adapter->setScrollPos(mSetup.position);
+            }
+        }
         q->adapterChanged();
         q->positionChanged();
         if (adapter->canZoom()) {
@@ -365,11 +373,12 @@ void DocumentView::createAdapterForDocument()
     d->setCurrentAdapter(adapter);
 }
 
-void DocumentView::openUrl(const KUrl& url)
+void DocumentView::openUrl(const KUrl& url, const DocumentView::Setup& setup)
 {
     if (d->mDocument) {
         disconnect(d->mDocument.data(), 0, this, 0);
     }
+    d->mSetup = setup;
     d->mDocument = DocumentFactory::instance()->load(url);
     connect(d->mDocument.data(), SIGNAL(busyChanged(KUrl,bool)), SLOT(slotBusyChanged(KUrl,bool)));
 
@@ -432,6 +441,17 @@ void DocumentView::slotCompleted()
         }
     }
     emit completed();
+}
+
+DocumentView::Setup DocumentView::setup() const
+{
+    Setup setup;
+    setup.zoomToFit = zoomToFit();
+    if (!setup.zoomToFit) {
+        setup.zoom = zoom();
+        setup.position = position();
+    }
+    return setup;
 }
 
 void DocumentView::slotLoadingFailed()
