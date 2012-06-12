@@ -507,14 +507,10 @@ QSizeF AbstractImageView::visibleImageSize() const
     return size.boundedTo(boundingRect().size());
 }
 
-void AbstractImageView::aboutToFinishLoadDocument()
+void AbstractImageView::applyPendingScrollPos()
 {
-    if (d->mZoomToFit) {
-        setZoom(computeZoomToFit());
-    } else {
-        d->adjustImageOffset();
-        d->adjustScrollPos();
-    }
+    d->adjustImageOffset();
+    d->adjustScrollPos();
 }
 
 } // namespace

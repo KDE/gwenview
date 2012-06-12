@@ -220,7 +220,7 @@ void RasterImageView::finishSetDocument()
 
     d->mScaler->setDocument(document());
     d->resizeBuffer();
-    aboutToFinishLoadDocument();
+    applyPendingScrollPos();
 
     connect(document().data(), SIGNAL(imageRectUpdated(QRect)),
             SLOT(updateImageRect(QRect)));

@@ -60,7 +60,7 @@ void SvgImageView::loadFromDocument()
     } else {
         mSvgItem->setScale(zoom());
     }
-    aboutToFinishLoadDocument();
+    applyPendingScrollPos();
     completed();
 }
 
