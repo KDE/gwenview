@@ -120,6 +120,7 @@ BirdEyeView::BirdEyeView(DocumentView* docView)
     // Hide ourself by default, to avoid startup flashes (if we let updateOpacity
     // update opacity, it will do so through an animation)
     setOpacity(0);
+    slotZoomOrSizeChanged();
 
     connect(docView->document().data(), SIGNAL(metaInfoUpdated()), SLOT(slotZoomOrSizeChanged()));
     connect(docView, SIGNAL(zoomChanged(qreal)), SLOT(slotZoomOrSizeChanged()));
