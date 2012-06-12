@@ -114,7 +114,9 @@ bool GVPart::openUrl(const KUrl& url)
         // saveAs()
         doc->setKeepRawData(true);
     }
-    mDocumentView->openUrl(url);
+    DocumentView::Setup setup;
+    setup.zoomToFit = true;
+    mDocumentView->openUrl(url, setup);
     return true;
 }
 

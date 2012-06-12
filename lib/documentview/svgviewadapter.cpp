@@ -55,6 +55,12 @@ void SvgImageView::loadFromDocument()
         return;
     }
     mSvgItem->setSharedRenderer(renderer);
+    if (zoomToFit()) {
+        setZoom(computeZoomToFit(), QPointF(-1, -1), ForceUpdate);
+    } else {
+        mSvgItem->setScale(zoom());
+    }
+    applyPendingScrollPos();
     completed();
 }
 

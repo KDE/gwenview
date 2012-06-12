@@ -91,6 +91,8 @@ public:
 
     void setEnlargeSmallerImages(bool value);
 
+    void applyPendingScrollPos();
+
 public Q_SLOTS:
     void updateCursor();
 

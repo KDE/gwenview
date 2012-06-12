@@ -218,8 +218,9 @@ void RasterImageView::finishSetDocument()
         return;
     }
 
-    d->resizeBuffer();
     d->mScaler->setDocument(document());
+    d->resizeBuffer();
+    applyPendingScrollPos();
 
     connect(document().data(), SIGNAL(imageRectUpdated(QRect)),
             SLOT(updateImageRect(QRect)));
@@ -229,8 +230,7 @@ void RasterImageView::finishSetDocument()
         // will think zoom has not changed and won't update the image
         setZoom(computeZoomToFit(), QPointF(-1, -1), ForceUpdate);
     } else {
-        QRect rect(QPoint(0, 0), document()->size());
-        updateImageRect(rect);
+        updateBuffer();
     }
 
     d->startAnimationIfNecessary();

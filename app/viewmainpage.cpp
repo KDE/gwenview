@@ -587,12 +587,19 @@ void ViewMainPage::openUrl(const KUrl& url)
 
 void ViewMainPage::openUrls(const KUrl::List& allUrls, const KUrl& currentUrl)
 {
+    DocumentView::Setup setup;
+
     QSet<KUrl> urls = allUrls.toSet();
     d->mCompareMode = urls.count() > 1;
 
     typedef QMap<KUrl, DocumentView*> ViewForUrlMap;
     ViewForUrlMap viewForUrlMap;
 
+    if (!d->mDocumentViews.isEmpty()) {
+        setup = d->mDocumentViews.last()->setup();
+    } else {
+        setup.zoomToFit = true;
+    }
     // Destroy views which show urls we don't care about, remove from "urls" the
     // urls which already have a view.
     Q_FOREACH(DocumentView * view, d->mDocumentViews) {
@@ -633,7 +640,7 @@ void ViewMainPage::openUrls(const KUrl::List& allUrls, const KUrl& currentUrl)
         it = viewForUrlMap.constBegin(),
         end = viewForUrlMap.constEnd();
     for (; it != end; ++it) {
-        it.value()->openUrl(it.key());
+        it.value()->openUrl(it.key(), setup);
     }
 
     // Init views
@@ -675,7 +682,7 @@ void ViewMainPage::reload()
     doc->reload();
     // Call openUrl again because DocumentView may need to switch to a new
     // adapter (for example because document was broken and it is not anymore)
-    d->currentView()->openUrl(doc->url());
+    d->currentView()->openUrl(doc->url(), d->currentView()->setup());
 }
 
 void ViewMainPage::reset()

@@ -80,6 +80,10 @@ struct AbstractImageViewPrivate
 
     void setScrollPos(const QPointF& _newPos, Verbosity verbosity = Notify)
     {
+        if (!mDocument) {
+            mScrollPos = _newPos;
+            return;
+        }
         QSizeF zoomedDocSize = q->documentSize() * mZoom;
         QSizeF viewSize = q->boundingRect().size();
         QPointF newPos(
@@ -141,9 +145,6 @@ void AbstractImageView::setDocument(Document::Ptr doc)
 {
     d->mDocument = doc;
     loadFromDocument();
-    if (d->mZoomToFit) {
-        setZoom(computeZoomToFit());
-    }
 }
 
 QSizeF AbstractImageView::documentSize() const
@@ -158,6 +159,10 @@ qreal AbstractImageView::zoom() const
 
 void AbstractImageView::setZoom(qreal zoom, const QPointF& _center, AbstractImageView::UpdateType updateType)
 {
+    if (!d->mDocument) {
+        d->mZoom = zoom;
+        return;
+    }
     if (updateType == UpdateIfNecessary && qFuzzyCompare(zoom, d->mZoom)) {
         return;
     }
@@ -234,12 +239,15 @@ void AbstractImageView::resizeEvent(QGraphicsSceneResizeEvent* event)
 {
     QGraphicsWidget::resizeEvent(event);
     if (d->mZoomToFit) {
-        // Set zoom calls adjustImageOffset(), but only if the zoom changes.
-        // If the view is resized but does not cause a zoom change we want the
-        // offset to be adjusted so we call adjustImageOffset() from there as
-        // well.
-        d->adjustImageOffset(AbstractImageViewPrivate::Silent);
-        setZoom(computeZoomToFit());
+        // setZoom() calls adjustImageOffset(), but only if the zoom changes.
+        // If the view is resized but does not cause a zoom change, we call
+        // adjustImageOffset() ourself.
+        const qreal newZoom = computeZoomToFit();
+        if (qFuzzyCompare(zoom(), newZoom)) {
+            d->adjustImageOffset(AbstractImageViewPrivate::Notify);
+        } else {
+            setZoom(newZoom);
+        }
     } else {
         d->adjustImageOffset();
         d->adjustScrollPos();
@@ -497,6 +505,12 @@ QSizeF AbstractImageView::visibleImageSize() const
     }
     QSizeF size = documentSize() * zoom();
     return size.boundedTo(boundingRect().size());
+}
+
+void AbstractImageView::applyPendingScrollPos()
+{
+    d->adjustImageOffset();
+    d->adjustScrollPos();
 }
 
 } // namespace
