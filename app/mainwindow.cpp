@@ -1214,7 +1214,9 @@ void MainWindow::slotSelectionChanged()
     d->updateContextDependentComponents();
 
     // Start preloading
-    QTimer::singleShot(PRELOAD_DELAY, this, SLOT(preloadNextUrl()));
+    int preloadDelay = PRELOAD_DELAY;
+    if (d->mCurrentMainPageId == ViewMainPageId) preloadDelay = 100;
+    QTimer::singleShot(preloadDelay, this, SLOT(preloadNextUrl()));
 }
 
 void MainWindow::slotDirModelNewItems()
