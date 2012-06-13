@@ -176,6 +176,7 @@ struct MainWindow::Private
     bool mStartSlideShowWhenDirListerCompleted;
     SlideShow* mSlideShow;
     Preloader* mPreloader;
+    bool mPreloadDirectionIsForward;
 #ifdef KIPI_FOUND
     KIPIInterface* mKIPIInterface;
 #endif
@@ -414,6 +415,8 @@ struct MainWindow::Private
         mGoToLastAction->setToolTip(i18nc("@info:tooltip", "Go to last image"));
         mGoToLastAction->setShortcut(Qt::Key_End);
 
+        mPreloadDirectionIsForward = true;
+
         mGoUpAction = view->addAction(KStandardAction::Up, q, SLOT(goUp()));
 
         action = view->addAction("go_start_page", q, SLOT(showStartMainPage()));
@@ -594,6 +597,8 @@ struct MainWindow::Private
 
     void goTo(int offset)
     {
+        if(offset > 0) mPreloadDirectionIsForward = true;
+        else mPreloadDirectionIsForward = false;
         QModelIndex index = currentIndex();
         index = mDirModel->index(index.row() + offset, 0);
         if (!index.isValid()) {
@@ -1553,7 +1558,9 @@ void MainWindow::preloadNextUrl()
     if (d->mCurrentMainPageId == ViewMainPageId) {
         // If we are in view mode, preload the next url, otherwise preload the
         // selected one
-        index = d->mDirModel->sibling(index.row() + 1, index.column(), index);
+        int offset = 1;
+        if(!d->mPreloadDirectionIsForward) offset = -1;
+        index = d->mDirModel->sibling(index.row() + offset, index.column(), index);
         if (!index.isValid()) {
             return;
         }
