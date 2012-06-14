@@ -54,6 +54,7 @@ public:
     ~ShadowFilter();
 
     void setShadow(WidgetEdge edge, const QColor& color);
+    void reset();
 
 protected:
     bool eventFilter(QObject*, QEvent*); // reimp

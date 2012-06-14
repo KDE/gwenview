@@ -92,6 +92,11 @@ void ShadowFilter::setShadow(ShadowFilter::WidgetEdge edge, const QColor& color)
     d->mShadows[edge] = color;
 }
 
+void ShadowFilter::reset()
+{
+    d->mShadows.clear();
+}
+
 bool ShadowFilter::eventFilter(QObject* obj, QEvent* event)
 {
     if (event->type() == QEvent::Paint) {

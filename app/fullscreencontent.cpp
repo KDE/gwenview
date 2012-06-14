@@ -125,6 +125,9 @@ struct FullScreenContentPrivate
     FullScreenToolBar* mRightToolBar;
     ThumbnailBarView* mThumbnailBar;
     QLabel* mInformationLabel;
+    ShadowFilter* mToolBarShadow;
+    ShadowFilter* mRightToolBarShadow;
+    ShadowFilter* mInformationLabelShadow;
     Document::Ptr mCurrentDocument;
     QPointer<ImageMetaInfoDialog> mImageMetaInfoDialog;
     QPointer<FullScreenConfigWidget> mConfigWidget;
@@ -191,6 +194,21 @@ struct FullScreenContentPrivate
 
             mThumbnailBar->setFixedHeight(GwenviewConfig::fullScreenBarHeight());
             mAutoHideContainer->setFixedHeight(GwenviewConfig::fullScreenBarHeight());
+
+            // Shadows
+            mToolBarShadow->reset();
+            mToolBarShadow->setShadow(ShadowFilter::RightEdge, QColor(0, 0, 0, 64));
+            mToolBarShadow->setShadow(ShadowFilter::BottomEdge, QColor(255, 255, 255, 8));
+
+            mInformationLabelShadow->reset();
+            mInformationLabelShadow->setShadow(ShadowFilter::LeftEdge, QColor(0, 0, 0, 64));
+            mInformationLabelShadow->setShadow(ShadowFilter::TopEdge, QColor(0, 0, 0, 64));
+            mInformationLabelShadow->setShadow(ShadowFilter::RightEdge, QColor(0, 0, 0, 128));
+            mInformationLabelShadow->setShadow(ShadowFilter::BottomEdge, QColor(255, 255, 255, 8));
+
+            mRightToolBarShadow->reset();
+            mRightToolBarShadow->setShadow(ShadowFilter::LeftEdge, QColor(0, 0, 0, 64));
+            mRightToolBarShadow->setShadow(ShadowFilter::BottomEdge, QColor(255, 255, 255, 8));
         } else {
             mRightToolBar->setDirection(QBoxLayout::RightToLeft);
 
@@ -202,6 +220,16 @@ struct FullScreenContentPrivate
             layout->addWidget(mRightToolBar);
 
             mAutoHideContainer->setFixedHeight(mContent->sizeHint().height());
+
+            // Shadows
+            mToolBarShadow->reset();
+
+            mInformationLabelShadow->reset();
+            mInformationLabelShadow->setShadow(ShadowFilter::LeftEdge, QColor(0, 0, 0, 64));
+            mInformationLabelShadow->setShadow(ShadowFilter::RightEdge, QColor(0, 0, 0, 32));
+
+            mRightToolBarShadow->reset();
+            mRightToolBarShadow->setShadow(ShadowFilter::LeftEdge, QColor(255, 255, 255, 8));
         }
     }
 };
@@ -258,9 +286,7 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
     addAction("rotate_left");
     addAction("rotate_right");
     #undef addAction
-    ShadowFilter* filter = new ShadowFilter(d->mToolBar);
-    filter->setShadow(ShadowFilter::RightEdge, QColor(0, 0, 0, 64));
-    filter->setShadow(ShadowFilter::BottomEdge, QColor(255, 255, 255, 8));
+    d->mToolBarShadow = new ShadowFilter(d->mToolBar);
 
     // mInformationLabel
     d->mInformationLabel = new QLabel;
@@ -268,12 +294,7 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
     d->mInformationLabel->setContentsMargins(6, 0, 6, 0);
     d->mInformationLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
     d->mInformationLabel->setAutoFillBackground(true);
-
-    filter = new ShadowFilter(d->mInformationLabel);
-    filter->setShadow(ShadowFilter::LeftEdge, QColor(0, 0, 0, 64));
-    filter->setShadow(ShadowFilter::TopEdge, QColor(0, 0, 0, 64));
-    filter->setShadow(ShadowFilter::RightEdge, QColor(0, 0, 0, 128));
-    filter->setShadow(ShadowFilter::BottomEdge, QColor(255, 255, 255, 8));
+    d->mInformationLabelShadow = new ShadowFilter(d->mInformationLabel);
 
     // Thumbnail bar
     d->mThumbnailBar = new ThumbnailBarView(d->mContent);
@@ -288,9 +309,7 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
     d->mRightToolBar->addAction(d->mOptionsAction);
     d->mRightToolBar->addStretch();
     d->mRightToolBar->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
-    filter = new ShadowFilter(d->mRightToolBar);
-    filter->setShadow(ShadowFilter::LeftEdge, QColor(0, 0, 0, 64));
-    filter->setShadow(ShadowFilter::BottomEdge, QColor(255, 255, 255, 8));
+    d->mRightToolBarShadow = new ShadowFilter(d->mRightToolBar);
 
     d->updateLayout();
 
