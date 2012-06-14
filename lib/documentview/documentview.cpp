@@ -133,7 +133,7 @@ struct DocumentViewPrivate
             adapter->widget()->setFocus();
         }
 
-        if (adapter->canZoom()) {
+        if (mSetup.valid && adapter->canZoom()) {
             adapter->setZoomToFit(mSetup.zoomToFit);
             if (!mSetup.zoomToFit) {
                 adapter->setZoom(mSetup.zoom);
@@ -446,10 +446,13 @@ void DocumentView::slotCompleted()
 DocumentView::Setup DocumentView::setup() const
 {
     Setup setup;
-    setup.zoomToFit = zoomToFit();
-    if (!setup.zoomToFit) {
-        setup.zoom = zoom();
-        setup.position = position();
+    if (d->mAdapter->canZoom()) {
+        setup.valid = true;
+        setup.zoomToFit = zoomToFit();
+        if (!setup.zoomToFit) {
+            setup.zoom = zoom();
+            setup.position = position();
+        }
     }
     return setup;
 }
