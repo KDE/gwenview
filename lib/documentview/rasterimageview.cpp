@@ -78,6 +78,8 @@ struct RasterImageViewPrivate
      * Use @link mOpenGLInitialized to determine whether OpenGL is initialized.
      **/
     bool mOpenGLValid;
+    int mVertexLocation;
+    int mMatrixLocation;
 
     void createBackgroundTexture()
     {
@@ -179,6 +181,8 @@ RasterImageView::RasterImageView(QGraphicsItem* parent)
     d->mTexture = 0;
     d->mOpenGLInitialized = false;
     d->mOpenGLValid = false;
+    d->mVertexLocation = 0;
+    d->mMatrixLocation = 0;
 
     d->createBackgroundTexture();
     d->setupUpdateTimer();
@@ -394,6 +398,8 @@ bool RasterImageView::paintGL(QPainter* painter)
         }
         int textureLocation = d->mShader.data()->uniformLocation("texture");
         d->mShader.data()->setUniformValue(textureLocation, 0);
+        d->mVertexLocation = d->mShader.data()->attributeLocation("vertex");
+        d->mMatrixLocation = d->mShader.data()->uniformLocation("modelviewProjection");
         // everything initialized correctly
         d->mOpenGLValid = true;
     }
@@ -416,8 +422,6 @@ bool RasterImageView::paintGL(QPainter* painter)
     if (!d->mTexture) {
         d->mTexture = const_cast<QGLContext*>(QGLContext::currentContext())->bindTexture(document()->image());
     }
-    int vertexLocation = d->mShader.data()->attributeLocation("vertex");
-    int matrixLocation = d->mShader.data()->uniformLocation("modelviewProjection");
     glBindTexture(GL_TEXTURE_2D, d->mTexture);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -428,11 +432,11 @@ bool RasterImageView::paintGL(QPainter* painter)
     modelviewProjection.translate(-scrollPos().x(), -scrollPos().y());
     modelviewProjection.scale(zoom(), zoom());
     glViewport(x(), y(), size().width(), size().height());
-    d->mShader.data()->setUniformValue(matrixLocation, modelviewProjection);
-    d->mShader.data()->enableAttributeArray(vertexLocation);
-    d->mShader.data()->setAttributeArray(vertexLocation, vertices, 4);
+    d->mShader.data()->setUniformValue(d->mMatrixLocation, modelviewProjection);
+    d->mShader.data()->enableAttributeArray(d->mVertexLocation);
+    d->mShader.data()->setAttributeArray(d->mVertexLocation, vertices, 4);
     glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-    d->mShader.data()->disableAttributeArray(vertexLocation);
+    d->mShader.data()->disableAttributeArray(d->mVertexLocation);
     painter->endNativePainting();
     return true;
 }
