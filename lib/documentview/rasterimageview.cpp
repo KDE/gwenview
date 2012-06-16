@@ -380,25 +380,11 @@ bool RasterImageView::paintGL(QPainter* painter)
         d->mOpenGLInitialized = true;
         // shader not yet created
         d->mShader = new QGLShaderProgram(QGLContext::currentContext(), this);
-        const QByteArray vertexShader(
-"uniform mat4 modelviewProjection;\n"
-"attribute vec4 vertex;\n"
-"varying vec2 texCoords;\n"
-"void main() {\n"
-"    texCoords = vertex.zw;\n"
-"    gl_Position = modelviewProjection*vec4(vertex.xy, 0.0, 1.0);\n"
-"}");
-        const QByteArray fragmentShader(
-"uniform sampler2D texture;\n"
-"varying vec2 texCoords;\n"
-"void main() {\n"
-"    gl_FragColor = texture2D(texture, texCoords);\n"
-"}");
-        if (!d->mShader.data()->addShaderFromSourceCode(QGLShader::Vertex, vertexShader)) {
+        if (!d->mShader.data()->addShaderFromSourceFile(QGLShader::Vertex, ":/shaders/texture-vertex.glsl")) {
             kDebug() << d->mShader.data()->log();
             return false;
         }
-        if (!d->mShader.data()->addShaderFromSourceCode(QGLShader::Fragment, fragmentShader)) {
+        if (!d->mShader.data()->addShaderFromSourceFile(QGLShader::Fragment, ":/shaders/texture-fragment.glsl")) {
             kDebug() << d->mShader.data()->log();
             return false;
         }
@@ -459,25 +445,13 @@ bool RasterImageView::paintGL(QPainter* painter)
     } else {
         if (d->mBackgroundColorShader.isNull()) {
             d->mBackgroundColorShader = new QGLShaderProgram(QGLContext::currentContext(), this);
-            const QByteArray vertexShader(
-"uniform mat4 modelviewProjection;\n"
-"attribute vec4 vertex;\n"
-"void main() {\n"
-"    gl_Position = modelviewProjection*vec4(vertex.xy, 0.0, 1.0);\n"
-"}");
-            const QByteArray fragmentShader(
-"uniform vec4 color;\n"
-"void main() {\n"
-"    gl_FragColor = color;\n"
-"}"
-            );
-            if (!d->mBackgroundColorShader.data()->addShaderFromSourceCode(QGLShader::Vertex, vertexShader)) {
+            if (!d->mBackgroundColorShader.data()->addShaderFromSourceFile(QGLShader::Vertex, ":/shaders/color-vertex.glsl")) {
                 kDebug() << d->mBackgroundColorShader.data()->log();
                 // shader failed - disable OpenGL
                 d->mOpenGLValid = false;
                 return false;
             }
-            if (!d->mBackgroundColorShader.data()->addShaderFromSourceCode(QGLShader::Fragment, fragmentShader)) {
+            if (!d->mBackgroundColorShader.data()->addShaderFromSourceFile(QGLShader::Fragment, ":/shaders/color-fragment.glsl")) {
                 kDebug() << d->mBackgroundColorShader.data()->log();
                 // shader failed - disable OpenGL
                 d->mOpenGLValid = false;

@@ -1,0 +1,8 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource prefix="/shaders">
+  <file>color-vertex.glsl</file>
+  <file>color-fragment.glsl</file>
+  <file>texture-vertex.glsl</file>
+  <file>texture-fragment.glsl</file>
+</qresource>
+</RCC>

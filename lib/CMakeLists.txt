@@ -175,6 +175,10 @@ kde4_add_ui_files(gwenviewlib_SRCS
     resize/resizeimagewidget.ui
     )
 
+qt4_add_resources(gwenviewlib_SRCS
+    documentview/shaders/resources.qrc
+    )
+
 kde4_add_kcfg_files(gwenviewlib_SRCS
     gwenviewconfig.kcfgc
     )
