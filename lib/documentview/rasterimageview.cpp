@@ -85,6 +85,7 @@ struct RasterImageViewPrivate
     int mColorLocation;
     int mColorMatrixLocation;
     int mColorVertexLocation;
+    GLuint mBackgroundTextureId;
 
     void createBackgroundTexture()
     {
@@ -191,6 +192,7 @@ RasterImageView::RasterImageView(QGraphicsItem* parent)
     d->mColorLocation = 0;
     d->mColorMatrixLocation = 0;
     d->mColorVertexLocation = 0;
+    d->mBackgroundTextureId = 0;
 
     d->createBackgroundTexture();
     d->setupUpdateTimer();
@@ -430,7 +432,30 @@ bool RasterImageView::paintGL(QPainter* painter)
     glViewport(x(), y(), size().width(), size().height());
     // render background
     if (d->mAlphaBackgroundMode == AlphaBackgroundCheckBoard) {
-        // TODO
+        if (!d->mBackgroundTextureId) {
+            d->mBackgroundTextureId = const_cast<QGLContext*>(QGLContext::currentContext())->bindTexture(d->mBackgroundTexture);
+        }
+        const float xMax = width/d->mBackgroundTexture.width();
+        const float yMax = height/d->mBackgroundTexture.height();
+        float backgroundVertices[16] = {
+            width, 0.0, xMax, yMax,
+            0.0, 0.0, 0.0, yMax,
+            0.0, height, 0.0, 0.0,
+            width, height, xMax, 0.0
+        };
+        if (!d->mShader.data()->bind()) {
+            // that's bad, better disable OpenGL
+            d->mOpenGLValid = false;
+            return false;
+        }
+        glBindTexture(GL_TEXTURE_2D, d->mBackgroundTextureId);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        d->mShader.data()->setUniformValue(d->mMatrixLocation, modelviewProjection);
+        d->mShader.data()->enableAttributeArray(d->mVertexLocation);
+        d->mShader.data()->setAttributeArray(d->mVertexLocation, backgroundVertices, 4);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+        d->mShader.data()->disableAttributeArray(d->mVertexLocation);
     } else {
         if (d->mBackgroundColorShader.isNull()) {
             d->mBackgroundColorShader = new QGLShaderProgram(QGLContext::currentContext(), this);
