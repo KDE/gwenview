@@ -67,6 +67,17 @@ struct RasterImageViewPrivate
     QWeakPointer<AbstractRasterImageViewTool> mTool;
     QWeakPointer<QGLShaderProgram> mShader;
     GLuint mTexture;
+    /**
+     * @c true if OpenGL has been initialized.
+     * Used to determine whether we have to create shaders.
+     **/
+    bool mOpenGLInitialized;
+    /**
+     * @c true if OpenGL has been initialized correctly.
+     * @c false otherwise and if OpenGL has not been initialized yet.
+     * Use @link mOpenGLInitialized to determine whether OpenGL is initialized.
+     **/
+    bool mOpenGLValid;
 
     void createBackgroundTexture()
     {
@@ -166,6 +177,8 @@ RasterImageView::RasterImageView(QGraphicsItem* parent)
 
     // OpenGL
     d->mTexture = 0;
+    d->mOpenGLInitialized = false;
+    d->mOpenGLValid = false;
 
     d->createBackgroundTexture();
     d->setupUpdateTimer();
@@ -344,9 +357,13 @@ bool RasterImageView::paintGL(QPainter* painter)
     if (painter->paintEngine()->type() != QPaintEngine::OpenGL && painter->paintEngine()->type() != QPaintEngine::OpenGL2) {
         return false;
     }
+    if (d->mOpenGLInitialized && !d->mOpenGLValid) {
+        // OpenGL not functional
+        return false;
+    }
     painter->beginNativePainting();
-    // TODO: ensure that only once it is tried to create the shader
-    if (d->mShader.isNull()) {
+    if (d->mShader.isNull() || !d->mOpenGLInitialized) {
+        d->mOpenGLInitialized = true;
         // shader not yet created
         d->mShader = new QGLShaderProgram(QGLContext::currentContext(), this);
         const QByteArray vertexShader(
@@ -377,6 +394,8 @@ bool RasterImageView::paintGL(QPainter* painter)
         }
         int textureLocation = d->mShader.data()->uniformLocation("texture");
         d->mShader.data()->setUniformValue(textureLocation, 0);
+        // everything initialized correctly
+        d->mOpenGLValid = true;
     }
 
     const qreal width = documentSize().width();
@@ -390,6 +409,8 @@ bool RasterImageView::paintGL(QPainter* painter)
     };
 
     if (!d->mShader.data()->bind()) {
+        // that's bad, better disable OpenGL
+        d->mOpenGLValid = false;
         return false;
     }
     if (!d->mTexture) {
