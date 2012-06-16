@@ -202,4 +202,11 @@ if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
         )
 endif (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 
+target_link_libraries(gwenviewlib ${OPENGL_gl_LIBRARY})
+# -ldl used by OpenGL code
+find_library(DL_LIBRARY dl)
+if (DL_LIBRARY)
+target_link_libraries(gwenviewlib ${DL_LIBRARY})
+endif(DL_LIBRARY)
+
 install(TARGETS gwenviewlib ${INSTALL_TARGETS_DEFAULT_ARGS})

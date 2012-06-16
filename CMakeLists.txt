@@ -45,6 +45,8 @@ endif (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 find_package(LibKonq)
 macro_log_feature(LIBKONQ_FOUND "libkonq" "Provides file management features" "http://www.kde.org" TRUE "" "")
 
+macro_optional_find_package(OpenGL)
+
 ## Global settings
 
 # Avoid some build-time warnings in Nepomuk

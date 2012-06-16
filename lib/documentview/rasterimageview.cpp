@@ -2,6 +2,7 @@
 /*
 Gwenview: an image viewer
 Copyright 2011 Aurélien Gâteau <agateau@kde.org>
+Copyright 2012 Martin Gräßlin <mgraesslin@kde.org>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -30,9 +31,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QGraphicsSceneMouseEvent>
+#include <QPaintEngine>
 #include <QPainter>
 #include <QTimer>
 #include <QWeakPointer>
+// OpenGL
+#include <QtOpenGL/QGLContext>
+#include <QtOpenGL/QGLShaderProgram>
 
 namespace Gwenview
 {
@@ -60,6 +65,8 @@ struct RasterImageViewPrivate
     QTimer* mUpdateTimer;
 
     QWeakPointer<AbstractRasterImageViewTool> mTool;
+    QWeakPointer<QGLShaderProgram> mShader;
+    GLuint mTexture;
 
     void createBackgroundTexture()
     {
@@ -157,12 +164,16 @@ RasterImageView::RasterImageView(QGraphicsItem* parent)
     connect(d->mScaler, SIGNAL(scaledRect(int, int, QImage)),
             SLOT(updateFromScaler(int, int, QImage)));
 
+    // OpenGL
+    d->mTexture = 0;
+
     d->createBackgroundTexture();
     d->setupUpdateTimer();
 }
 
 RasterImageView::~RasterImageView()
 {
+    const_cast<QGLContext*>(QGLContext::currentContext())->deleteTexture(d->mTexture);
     delete d;
 }
 
@@ -219,7 +230,12 @@ void RasterImageView::finishSetDocument()
     }
 
     d->resizeBuffer();
+    // TODO: proper way to differentiate between OpenGL and no GL
+#if 0
     d->mScaler->setDocument(document());
+#else
+    document()->startLoadingFullImage();
+#endif
 
     connect(document().data(), SIGNAL(imageRectUpdated(QRect)),
             SLOT(updateImageRect(QRect)));
@@ -322,8 +338,93 @@ void RasterImageView::onScrollPosChanged(const QPointF& oldPos)
     update();
 }
 
+bool RasterImageView::paintGL(QPainter* painter)
+{
+    // TODO: find better way to figure out whether we are on OpenGL
+    if (painter->paintEngine()->type() != QPaintEngine::OpenGL && painter->paintEngine()->type() != QPaintEngine::OpenGL2) {
+        return false;
+    }
+    painter->beginNativePainting();
+    // TODO: ensure that only once it is tried to create the shader
+    if (d->mShader.isNull()) {
+        // shader not yet created
+        d->mShader = new QGLShaderProgram(QGLContext::currentContext(), this);
+        const QByteArray vertexShader(
+"uniform mat4 modelviewProjection;\n"
+"attribute vec4 vertex;\n"
+"varying vec2 texCoords;\n"
+"void main() {\n"
+"    texCoords = vertex.zw;\n"
+"    gl_Position = modelviewProjection*vec4(vertex.xy, 0.0, 1.0);\n"
+"}");
+        const QByteArray fragmentShader(
+"uniform sampler2D texture;\n"
+"varying vec2 texCoords;\n"
+"void main() {\n"
+"    gl_FragColor = texture2D(texture, texCoords);\n"
+"}");
+        if (!d->mShader.data()->addShaderFromSourceCode(QGLShader::Vertex, vertexShader)) {
+            kDebug() << d->mShader.data()->log();
+            return false;
+        }
+        if (!d->mShader.data()->addShaderFromSourceCode(QGLShader::Fragment, fragmentShader)) {
+            kDebug() << d->mShader.data()->log();
+            return false;
+        }
+        if (!d->mShader.data()->link()) {
+            kDebug() << d->mShader.data()->log();
+            return false;
+        }
+        int textureLocation = d->mShader.data()->uniformLocation("texture");
+        d->mShader.data()->setUniformValue(textureLocation, 0);
+    }
+
+    const qreal width = documentSize().width();
+    const qreal height = documentSize().height();
+    // each vertex consists of x/y and texX/texY
+    float vertices[16] = {
+        width, 0.0, 1.0, 1.0,
+        0.0, 0.0, 0.0, 1.0,
+        0.0, height, 0.0, 0.0,
+        width, height, 1.0, 0.0
+    };
+
+    if (!d->mShader.data()->bind()) {
+        return false;
+    }
+    if (!d->mTexture) {
+        d->mTexture = const_cast<QGLContext*>(QGLContext::currentContext())->bindTexture(document()->image());
+    }
+    int vertexLocation = d->mShader.data()->attributeLocation("vertex");
+    int matrixLocation = d->mShader.data()->uniformLocation("modelviewProjection");
+    glBindTexture(GL_TEXTURE_2D, d->mTexture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glEnable(GL_BLEND);
+    QMatrix4x4 modelviewProjection;
+    modelviewProjection.ortho(x(), size().width(), size().height(), y(), 0, 65535);
+    modelviewProjection.translate(imageOffset().x(), imageOffset().y());
+    modelviewProjection.translate(-scrollPos().x(), -scrollPos().y());
+    modelviewProjection.scale(zoom(), zoom());
+    glViewport(x(), y(), size().width(), size().height());
+    d->mShader.data()->setUniformValue(matrixLocation, modelviewProjection);
+    d->mShader.data()->enableAttributeArray(vertexLocation);
+    d->mShader.data()->setAttributeArray(vertexLocation, vertices, 4);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+    d->mShader.data()->disableAttributeArray(vertexLocation);
+    painter->endNativePainting();
+    return true;
+}
+
 void RasterImageView::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/)
 {
+    if (paintGL(painter)) {
+        if (d->mTool) {
+            d->mTool.data()->paint(painter);
+        }
+        return;
+    }
+
     QPointF topLeft = imageOffset();
     if (zoomToFit()) {
         // In zoomToFit mode, scale crudely the buffer to fit the screen. This

@@ -82,6 +82,7 @@ private Q_SLOTS:
     void updateBuffer(const QRegion& region = QRegion());
 
 private:
+    bool paintGL(QPainter *painter);
     RasterImageViewPrivate* const d;
 };
 
