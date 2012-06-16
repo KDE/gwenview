@@ -66,6 +66,7 @@ struct RasterImageViewPrivate
 
     QWeakPointer<AbstractRasterImageViewTool> mTool;
     QWeakPointer<QGLShaderProgram> mShader;
+    QWeakPointer<QGLShaderProgram> mBackgroundColorShader;
     GLuint mTexture;
     /**
      * @c true if OpenGL has been initialized.
@@ -80,6 +81,10 @@ struct RasterImageViewPrivate
     bool mOpenGLValid;
     int mVertexLocation;
     int mMatrixLocation;
+    // color shader location
+    int mColorLocation;
+    int mColorMatrixLocation;
+    int mColorVertexLocation;
 
     void createBackgroundTexture()
     {
@@ -183,6 +188,9 @@ RasterImageView::RasterImageView(QGraphicsItem* parent)
     d->mOpenGLValid = false;
     d->mVertexLocation = 0;
     d->mMatrixLocation = 0;
+    d->mColorLocation = 0;
+    d->mColorMatrixLocation = 0;
+    d->mColorVertexLocation = 0;
 
     d->createBackgroundTexture();
     d->setupUpdateTimer();
@@ -414,6 +422,66 @@ bool RasterImageView::paintGL(QPainter* painter)
         width, height, 1.0, 0.0
     };
 
+    QMatrix4x4 modelviewProjection;
+    modelviewProjection.ortho(x(), size().width(), size().height(), y(), 0, 65535);
+    modelviewProjection.translate(imageOffset().x(), imageOffset().y());
+    modelviewProjection.translate(-scrollPos().x(), -scrollPos().y());
+    modelviewProjection.scale(zoom(), zoom());
+    glViewport(x(), y(), size().width(), size().height());
+    // render background
+    if (d->mAlphaBackgroundMode == AlphaBackgroundCheckBoard) {
+        // TODO
+    } else {
+        if (d->mBackgroundColorShader.isNull()) {
+            d->mBackgroundColorShader = new QGLShaderProgram(QGLContext::currentContext(), this);
+            const QByteArray vertexShader(
+"uniform mat4 modelviewProjection;\n"
+"attribute vec4 vertex;\n"
+"void main() {\n"
+"    gl_Position = modelviewProjection*vec4(vertex.xy, 0.0, 1.0);\n"
+"}");
+            const QByteArray fragmentShader(
+"uniform vec4 color;\n"
+"void main() {\n"
+"    gl_FragColor = color;\n"
+"}"
+            );
+            if (!d->mBackgroundColorShader.data()->addShaderFromSourceCode(QGLShader::Vertex, vertexShader)) {
+                kDebug() << d->mBackgroundColorShader.data()->log();
+                // shader failed - disable OpenGL
+                d->mOpenGLValid = false;
+                return false;
+            }
+            if (!d->mBackgroundColorShader.data()->addShaderFromSourceCode(QGLShader::Fragment, fragmentShader)) {
+                kDebug() << d->mBackgroundColorShader.data()->log();
+                // shader failed - disable OpenGL
+                d->mOpenGLValid = false;
+                return false;
+            }
+            if (!d->mBackgroundColorShader.data()->link()) {
+                kDebug() << d->mBackgroundColorShader.data()->log();
+                // shader failed to link - disable OpenGL
+                d->mOpenGLValid = false;
+                return false;
+            }
+            d->mColorMatrixLocation = d->mBackgroundColorShader.data()->uniformLocation("modelviewProjection");
+            d->mColorVertexLocation = d->mBackgroundColorShader.data()->attributeLocation("vertex");
+            d->mColorLocation = d->mBackgroundColorShader.data()->uniformLocation("color");
+        }
+        if (!d->mBackgroundColorShader.data()->bind()) {
+            // that's bad, better disable OpenGL
+            d->mOpenGLValid = false;
+            return false;
+        }
+        d->mBackgroundColorShader.data()->setUniformValue(d->mColorMatrixLocation, modelviewProjection);
+        d->mBackgroundColorShader.data()->setUniformValue(d->mColorLocation, d->mAlphaBackgroundColor);
+        d->mBackgroundColorShader.data()->enableAttributeArray(d->mColorVertexLocation);
+        d->mBackgroundColorShader.data()->setAttributeArray(d->mColorVertexLocation, vertices, 4);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+        d->mBackgroundColorShader.data()->disableAttributeArray(d->mColorVertexLocation);
+    }
+
+    // render image
     if (!d->mShader.data()->bind()) {
         // that's bad, better disable OpenGL
         d->mOpenGLValid = false;
@@ -426,12 +494,6 @@ bool RasterImageView::paintGL(QPainter* painter)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glEnable(GL_BLEND);
-    QMatrix4x4 modelviewProjection;
-    modelviewProjection.ortho(x(), size().width(), size().height(), y(), 0, 65535);
-    modelviewProjection.translate(imageOffset().x(), imageOffset().y());
-    modelviewProjection.translate(-scrollPos().x(), -scrollPos().y());
-    modelviewProjection.scale(zoom(), zoom());
-    glViewport(x(), y(), size().width(), size().height());
     d->mShader.data()->setUniformValue(d->mMatrixLocation, modelviewProjection);
     d->mShader.data()->enableAttributeArray(d->mVertexLocation);
     d->mShader.data()->setAttributeArray(d->mVertexLocation, vertices, 4);
