@@ -181,8 +181,10 @@ struct LoadingDocumentImplPrivate
         QBuffer buffer;
         buffer.setBuffer(&mData);
         buffer.open(QIODevice::ReadOnly);
+        LOG("mFormatHint" << mFormatHint);
         QImageReader reader(&buffer, mFormatHint);
         if (!reader.canRead()) {
+            kError() << "QImageReader::read() failed:" << reader.errorString();
             return false;
         }
         mFormat = reader.format();
@@ -191,6 +193,7 @@ struct LoadingDocumentImplPrivate
             // Gwenview code assumes JPEG images have "jpeg" format.
             mFormat = "jpeg";
         }
+        LOG("mFormat" << mFormat);
         if (mFormat.isEmpty()) {
             kError() << "mFormat.isEmpty(): this should not happen!";
             return false;
