@@ -83,7 +83,7 @@ qulonglong getTotalMemory()
 
 qulonglong getFreeMemory()
 {
-    static QTime lastUpdate = QTime::currentTime();
+    static QTime lastUpdate = QTime::currentTime().addSecs(-3);
     static qulonglong cachedValue = 0;
 
     if ( qAbs( lastUpdate.secsTo( QTime::currentTime() ) ) <= 2 )
