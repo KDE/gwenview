@@ -122,6 +122,7 @@ set(gwenviewlib_SRCS
     thumbnailview/abstractthumbnailviewhelper.cpp
     thumbnailview/abstractdocumentinfoprovider.cpp
     thumbnailview/contextbarbutton.cpp
+    thumbnailview/dragpixmapgenerator.cpp
     thumbnailview/itemeditor.cpp
     thumbnailview/previewitemdelegate.cpp
     thumbnailview/thumbnailbarview.cpp
