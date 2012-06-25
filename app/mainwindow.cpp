@@ -114,7 +114,8 @@ namespace Gwenview
 #define LOG(x) ;
 #endif
 
-static const int PRELOAD_DELAY = 1000;
+static const int BROWSE_PRELOAD_DELAY = 1000;
+static const int VIEW_PRELOAD_DELAY = 100;
 
 static const char* BROWSE_MODE_SIDE_BAR_GROUP = "SideBar-BrowseMode";
 static const char* VIEW_MODE_SIDE_BAR_GROUP = "SideBar-ViewMode";
@@ -597,8 +598,7 @@ struct MainWindow::Private
 
     void goTo(int offset)
     {
-        if(offset > 0) mPreloadDirectionIsForward = true;
-        else mPreloadDirectionIsForward = false;
+        mPreloadDirectionIsForward = offset > 0;
         QModelIndex index = currentIndex();
         index = mDirModel->index(index.row() + offset, 0);
         if (!index.isValid()) {
@@ -1214,8 +1214,7 @@ void MainWindow::slotSelectionChanged()
     d->updateContextDependentComponents();
 
     // Start preloading
-    int preloadDelay = PRELOAD_DELAY;
-    if (d->mCurrentMainPageId == ViewMainPageId) preloadDelay = 100;
+    int preloadDelay = d->mCurrentMainPageId == ViewMainPageId ? VIEW_PRELOAD_DELAY : BROWSE_PRELOAD_DELAY;
     QTimer::singleShot(preloadDelay, this, SLOT(preloadNextUrl()));
 }
 
@@ -1560,8 +1559,7 @@ void MainWindow::preloadNextUrl()
     if (d->mCurrentMainPageId == ViewMainPageId) {
         // If we are in view mode, preload the next url, otherwise preload the
         // selected one
-        int offset = 1;
-        if(!d->mPreloadDirectionIsForward) offset = -1;
+        int offset = d->mPreloadDirectionIsForward ? 1 : -1;
         index = d->mDirModel->sibling(index.row() + offset, index.column(), index);
         if (!index.isValid()) {
             return;
