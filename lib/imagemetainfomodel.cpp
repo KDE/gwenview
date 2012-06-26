@@ -262,25 +262,28 @@ struct ImageMetaInfoModelPrivate
         it = container.begin(),
         end = container.end();
 
-        if (it == end) {
-            return;
-        }
-
         for (; it != end; ++it) {
-            QString key = QString::fromUtf8(it->key().c_str());
-            QString label = QString::fromLocal8Bit(it->tagLabel().c_str());
-            std::ostringstream stream;
-            stream << *it;
-            QString value = QString::fromLocal8Bit(stream.str().c_str());
+            try {
+                QString key = QString::fromUtf8(it->key().c_str());
+                QString label = QString::fromLocal8Bit(it->tagLabel().c_str());
+                std::ostringstream stream;
+                stream << *it;
+                QString value = QString::fromLocal8Bit(stream.str().c_str());
 
-            EntryHash::iterator hashIt = hash.find(key);
-            if (hashIt != hash.end()) {
-                hashIt.value()->appendValue(value);
-            } else {
-                hash.insert(key, new MetaInfoGroup::Entry(key, label, value));
+                EntryHash::iterator hashIt = hash.find(key);
+                if (hashIt != hash.end()) {
+                    hashIt.value()->appendValue(value);
+                } else {
+                    hash.insert(key, new MetaInfoGroup::Entry(key, label, value));
+                }
+            } catch (const Exiv2::Error& error) {
+                kWarning() << "Failed to read some meta info:" << error.what();
             }
         }
 
+        if (hash.isEmpty()) {
+            return;
+        }
         q->beginInsertRows(parent, 0, hash.size() - 1);
         Q_FOREACH(MetaInfoGroup::Entry * entry, hash) {
             group->addEntry(entry);
