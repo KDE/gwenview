@@ -21,6 +21,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #ifndef EXIV2IMAGELOADER_H
 #define EXIV2IMAGELOADER_H
 
+#include <lib/gwenviewlib_export.h>
+
 // Qt
 
 // KDE
@@ -43,7 +45,7 @@ struct Exiv2ImageLoaderPrivate;
  * This helper class loads image using libexiv2, and takes care of exception
  * handling for the different versions of libexiv2.
  */
-class Exiv2ImageLoader
+class GWENVIEWLIB_EXPORT Exiv2ImageLoader
 {
 public:
     Exiv2ImageLoader();
