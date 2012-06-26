@@ -114,7 +114,8 @@ namespace Gwenview
 #define LOG(x) ;
 #endif
 
-static const int PRELOAD_DELAY = 1000;
+static const int BROWSE_PRELOAD_DELAY = 1000;
+static const int VIEW_PRELOAD_DELAY = 100;
 
 static const char* BROWSE_MODE_SIDE_BAR_GROUP = "SideBar-BrowseMode";
 static const char* VIEW_MODE_SIDE_BAR_GROUP = "SideBar-ViewMode";
@@ -176,6 +177,7 @@ struct MainWindow::Private
     bool mStartSlideShowWhenDirListerCompleted;
     SlideShow* mSlideShow;
     Preloader* mPreloader;
+    bool mPreloadDirectionIsForward;
 #ifdef KIPI_FOUND
     KIPIInterface* mKIPIInterface;
 #endif
@@ -414,6 +416,8 @@ struct MainWindow::Private
         mGoToLastAction->setToolTip(i18nc("@info:tooltip", "Go to last image"));
         mGoToLastAction->setShortcut(Qt::Key_End);
 
+        mPreloadDirectionIsForward = true;
+
         mGoUpAction = view->addAction(KStandardAction::Up, q, SLOT(goUp()));
 
         action = view->addAction("go_start_page", q, SLOT(showStartMainPage()));
@@ -594,6 +598,7 @@ struct MainWindow::Private
 
     void goTo(int offset)
     {
+        mPreloadDirectionIsForward = offset > 0;
         QModelIndex index = currentIndex();
         index = mDirModel->index(index.row() + offset, 0);
         if (!index.isValid()) {
@@ -1209,7 +1214,8 @@ void MainWindow::slotSelectionChanged()
     d->updateContextDependentComponents();
 
     // Start preloading
-    QTimer::singleShot(PRELOAD_DELAY, this, SLOT(preloadNextUrl()));
+    int preloadDelay = d->mCurrentMainPageId == ViewMainPageId ? VIEW_PRELOAD_DELAY : BROWSE_PRELOAD_DELAY;
+    QTimer::singleShot(preloadDelay, this, SLOT(preloadNextUrl()));
 }
 
 void MainWindow::slotDirModelNewItems()
@@ -1553,7 +1559,8 @@ void MainWindow::preloadNextUrl()
     if (d->mCurrentMainPageId == ViewMainPageId) {
         // If we are in view mode, preload the next url, otherwise preload the
         // selected one
-        index = d->mDirModel->sibling(index.row() + 1, index.column(), index);
+        int offset = d->mPreloadDirectionIsForward ? 1 : -1;
+        index = d->mDirModel->sibling(index.row() + offset, index.column(), index);
         if (!index.isValid()) {
             return;
         }
