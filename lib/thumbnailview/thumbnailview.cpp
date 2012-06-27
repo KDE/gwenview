@@ -46,6 +46,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "abstractdocumentinfoprovider.h"
 #include "abstractthumbnailviewhelper.h"
 #include "archiveutils.h"
+#include "dragpixmapgenerator.h"
 #include "mimetypeutils.h"
 #include "thumbnailloadjob.h"
 
@@ -63,9 +64,6 @@ namespace Gwenview
 
 /** How many msec to wait before starting to smooth thumbnails */
 const int SMOOTH_DELAY = 500;
-
-const int DRAG_THUMB_SIZE = KIconLoader::SizeHuge;
-const int DRAG_THUMB_SPACING = 4;
 
 const int WHEEL_ZOOM_MULTIPLIER = 4;
 
@@ -243,68 +241,17 @@ struct ThumbnailViewPrivate
         }
     }
 
-    QPixmap dragPixmapForIndex(const QModelIndex& index) const
+    void initDragPixmap(QDrag* drag, const QModelIndexList& indexes)
     {
-        KUrl url = urlForIndex(index);
-        QPixmap pix = mThumbnailForUrl.value(url).mAdjustedPix;
-        if (qMax(pix.width(), pix.height()) > DRAG_THUMB_SIZE) {
-            return pix.scaled(DRAG_THUMB_SIZE, DRAG_THUMB_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-        } else {
-            return pix;
-        }
-    }
-
-    QPixmap createDragPixmap(const QModelIndexList& indexes)
-    {
-        const int MAX_THUMBS = 3;
-
-        int thumbCount;
-        bool more;
-        if (indexes.count() > MAX_THUMBS) {
-            thumbCount = MAX_THUMBS;
-            more = true;
-        } else {
-            thumbCount = indexes.count();
-            more = false;
-        }
-        QList<QPixmap> thumbs;
-        int width = 0;
-        int height = 0;
+        const int thumbCount = qMin(indexes.count(), int(DragPixmapGenerator::MaxCount));
+        QList<QPixmap> lst;
         for (int row = 0; row < thumbCount; ++row) {
-            QModelIndex index;
-            if (row == thumbCount - 1 && more) {
-                QString text = "(...)";
-                QPixmap pix(q->fontMetrics().boundingRect(text).size());
-                pix.fill(Qt::transparent);
-                {
-                    QPainter painter(&pix);
-                    painter.drawText(pix.rect(), Qt::AlignHCenter | Qt::AlignBottom, text);
-                }
-                index = indexes.last();
-                width += pix.width();
-                thumbs << pix;
-            } else {
-                index = indexes[row];
-            }
-            QPixmap thumb = dragPixmapForIndex(index);
-            height = qMax(height, thumb.height());
-            width += thumb.width();
-            thumbs << thumb;
+            const KUrl url = urlForIndex(indexes[row]);
+            lst << mThumbnailForUrl.value(url).mAdjustedPix;
         }
-
-        QPixmap pix(
-            width + (thumbs.count() + 1) * DRAG_THUMB_SPACING,
-            height + 2 * DRAG_THUMB_SPACING
-        );
-        pix.fill(QToolTip::palette().color(QPalette::Inactive, QPalette::ToolTipBase));
-        QPainter painter(&pix);
-
-        int x = DRAG_THUMB_SPACING;
-        Q_FOREACH(const QPixmap & thumb, thumbs) {
-            painter.drawPixmap(x, (pix.height() - thumb.height()) / 2, thumb);
-            x += thumb.width() + DRAG_THUMB_SPACING;
-        }
-        return pix;
+        DragPixmapGenerator::DragPixmap dragPixmap = DragPixmapGenerator::generate(lst, indexes.count());
+        drag->setPixmap(dragPixmap.pix);
+        drag->setHotSpot(dragPixmap.hotSpot);
     }
 
     QPixmap scale(const QPixmap& pix, Qt::TransformationMode transformationMode)
@@ -715,8 +662,7 @@ void ThumbnailView::startDrag(Qt::DropActions supportedActions)
     }
     QDrag* drag = new QDrag(this);
     drag->setMimeData(model()->mimeData(indexes));
-    QPixmap pix = d->createDragPixmap(indexes);
-    drag->setPixmap(pix);
+    d->initDragPixmap(drag, indexes);
     drag->exec(supportedActions, Qt::CopyAction);
 }
 
