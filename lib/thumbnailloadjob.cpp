@@ -592,6 +592,12 @@ QImage ThumbnailLoadJob::loadThumbnailFromCache() const
 
 void ThumbnailLoadJob::checkThumbnail()
 {
+    if (mCurrentItem.isNull()) {
+        // This can happen if current item has been removed by removeItems()
+        determineNextIcon();
+        return;
+    }
+
     // If we are in the thumbnail dir, just load the file
     if (mCurrentUrl.isLocalFile()
             && mCurrentUrl.directory().startsWith(thumbnailBaseDir())) {
