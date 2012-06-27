@@ -125,6 +125,16 @@
             </choices>
             <default>DocumentView::SoftwareAnimation</default>
         </entry>
+
+        <entry name="ShowLockZoomButton" type="Bool">
+            <default>false</default>
+        </entry>
+
+        <entry name="LockZoom" type="Bool">
+            <default>false</default>
+            <whatsthis>Defines what happens when going to image B after having zoomed an area of image A.
+                When true: zoom and position is kept. When false: image B is zoomed out to fit the screen.</whatsthis>
+        </entry>
     </group>
 
     <group name="ThumbnailView">

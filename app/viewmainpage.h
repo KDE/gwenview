@@ -141,6 +141,7 @@ private Q_SLOTS:
 
     void trashView(DocumentView*);
     void deselectView(DocumentView*);
+    void updateLockZoomButton();
 
 private:
     friend struct ViewMainPagePrivate;
