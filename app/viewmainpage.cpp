@@ -140,6 +140,7 @@ struct ViewMainPagePrivate
     DocumentViewSynchronizer* mSynchronizer;
     QToolButton* mToggleSideBarButton;
     QToolButton* mToggleThumbnailBarButton;
+    QToolButton* mLockZoomButton;
     ZoomWidget* mZoomWidget;
     DocumentViewContainer* mDocumentViewContainer;
     SlideContainer* mToolContainer;
@@ -285,6 +286,11 @@ struct ViewMainPagePrivate
         mZoomWidget = new ZoomWidget;
         mSynchronizeCheckBox = new QCheckBox(i18n("Synchronize"));
         mSynchronizeCheckBox->hide();
+        mLockZoomButton = new QToolButton;
+        mLockZoomButton->setAutoRaise(true);
+        mLockZoomButton->setCheckable(true);
+        q->updateLockZoomButton();
+        QObject::connect(mLockZoomButton, SIGNAL(toggled(bool)), q, SLOT(updateLockZoomButton()));
 
         QHBoxLayout* layout = new QHBoxLayout(mStatusBarContainer);
         layout->setMargin(0);
@@ -295,6 +301,7 @@ struct ViewMainPagePrivate
         layout->addWidget(mSynchronizeCheckBox);
         layout->addStretch();
         layout->addWidget(mZoomWidget);
+        layout->addWidget(mLockZoomButton);
     }
 
     void setupSplitter()
@@ -443,12 +450,21 @@ void ViewMainPage::loadConfig()
 
         d->mThumbnailBar->setUpdatesEnabled(true);
     }
+
+    if (GwenviewConfig::showLockZoomButton()) {
+        d->mLockZoomButton->setChecked(GwenviewConfig::lockZoom());
+    } else {
+        d->mLockZoomButton->hide();
+    }
 }
 
 void ViewMainPage::saveConfig()
 {
     d->saveSplitterConfig();
     GwenviewConfig::setThumbnailBarIsVisible(d->mToggleThumbnailBarAction->isChecked());
+    if (GwenviewConfig::showLockZoomButton()) {
+        GwenviewConfig::setLockZoom(d->mLockZoomButton->isChecked());
+    }
 }
 
 void ViewMainPage::setThumbnailBarVisibility(bool visible)
@@ -595,9 +611,10 @@ void ViewMainPage::openUrls(const KUrl::List& allUrls, const KUrl& currentUrl)
     typedef QMap<KUrl, DocumentView*> ViewForUrlMap;
     ViewForUrlMap viewForUrlMap;
 
-    if (!d->mDocumentViews.isEmpty()) {
+    if (!d->mDocumentViews.isEmpty() && GwenviewConfig::showLockZoomButton() && d->mLockZoomButton->isChecked()) {
         setup = d->mDocumentViews.last()->setup();
     } else {
+        setup.valid = true;
         setup.zoomToFit = true;
     }
     // Destroy views which show urls we don't care about, remove from "urls" the
@@ -744,6 +761,11 @@ QToolButton* ViewMainPage::toggleSideBarButton() const
 void ViewMainPage::showMessageWidget(QGraphicsWidget* widget, Qt::Alignment align)
 {
     d->mDocumentViewContainer->showMessageWidget(widget, align);
+}
+
+void ViewMainPage::updateLockZoomButton()
+{
+    d->mLockZoomButton->setIcon(KIcon(d->mLockZoomButton->isChecked() ? "object-locked" : "object-unlocked"));
 }
 
 } // namespace
