@@ -45,18 +45,6 @@ const int DRAG_THUMB_SIZE = KIconLoader::SizeHuge;
 const int DRAG_THUMB_SPACING = 4;
 const int SPREAD_ANGLE = 30;
 
-static bool isFullyOpaque(const QPixmap& pix)
-{
-    QImage img = pix.toImage();
-#define CHECK_PIXEL(x, y) if (qAlpha(img.pixel(x, y)) == 0) { return false; }
-    CHECK_PIXEL(0, 0)
-    CHECK_PIXEL(pix.width() - 1, 0)
-    CHECK_PIXEL(pix.width() - 1, pix.height() - 1)
-    CHECK_PIXEL(0, pix.height() - 1)
-#undef CHECK_PIXEL
-    return true;
-}
-
 DragPixmap generate(const QList<QPixmap>& pixmaps, int totalCount)
 {
     DragPixmap out;
@@ -84,7 +72,7 @@ DragPixmap generate(const QList<QPixmap>& pixmaps, int totalCount)
         QPixmap pix2 = pix.scaled(DRAG_THUMB_SIZE - 2, DRAG_THUMB_SIZE - 2, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         QRect rect(-pix2.width() / 2, -pix2.height() - extraSpace, pix2.width(), pix2.height());
 
-        if (isFullyOpaque(pix2)) {
+        if (!pix2.hasAlphaChannel()) {
             // Draw a thin white border around fully opaque pictures to give them a photo-like appearance
             painter.fillRect(rect.adjusted(-1, -1, 1, 1), Qt::white);
         }
