@@ -243,21 +243,13 @@ struct ThumbnailViewPrivate
 
     void initDragPixmap(QDrag* drag, const QModelIndexList& indexes)
     {
-        int thumbCount;
-        bool more;
-        if (indexes.count() > DragPixmapGenerator::MaxCount) {
-            thumbCount = DragPixmapGenerator::MaxCount;
-            more = true;
-        } else {
-            thumbCount = indexes.count();
-            more = false;
-        }
+        const int thumbCount = qMin(indexes.count(), int(DragPixmapGenerator::MaxCount));
         QList<QPixmap> lst;
         for (int row = 0; row < thumbCount; ++row) {
             const KUrl url = urlForIndex(indexes[row]);
             lst << mThumbnailForUrl.value(url).mAdjustedPix;
         }
-        DragPixmapGenerator::DragPixmap dragPixmap = DragPixmapGenerator::generate(lst, more);
+        DragPixmapGenerator::DragPixmap dragPixmap = DragPixmapGenerator::generate(lst, indexes.count());
         drag->setPixmap(dragPixmap.pix);
         drag->setHotSpot(dragPixmap.hotSpot);
     }

@@ -46,7 +46,7 @@ struct DragPixmap {
     QPoint hotSpot;
 };
 
-DragPixmap generate(const QList<QPixmap>& pixmaps, bool more);
+DragPixmap generate(const QList<QPixmap>& pixmaps, int totalCount);
 
 } // DragPixmapGenerator namespace
 
