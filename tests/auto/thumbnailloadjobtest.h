@@ -49,6 +49,7 @@ private Q_SLOTS:
     void testLoadLocal();
     void testLoadRemote();
     void testUseEmbeddedOrNot();
+    void testRemoveItemsWhileGenerating();
 
 private:
     SandBox mSandBox;

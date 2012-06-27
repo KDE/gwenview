@@ -202,3 +202,26 @@ void ThumbnailLoadJobTest::testLoadRemote()
     QStringList entryList = thumbnailDir.entryList(QStringList("*.png"));
     QCOMPARE(entryList.count(), 1);
 }
+
+void ThumbnailLoadJobTest::testRemoveItemsWhileGenerating()
+{
+    QDir dir(mSandBox.mPath);
+
+    // Create a list of items which will be thumbnailed
+    KFileItemList list;
+    Q_FOREACH(const QFileInfo & info, dir.entryInfoList(QDir::Files)) {
+        KUrl url("file://" + info.absoluteFilePath());
+        KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
+        list << item;
+    }
+
+    // Start generating thumbnails for items
+    ThumbnailLoadJob* job = new ThumbnailLoadJob(list, ThumbnailGroup::Normal);
+    QEventLoop loop;
+    connect(job, SIGNAL(result(KJob*)), &loop, SLOT(quit()));
+    job->start();
+
+    // Remove items, it should not crash
+    job->removeItems(list);
+    loop.exec();
+}

@@ -39,6 +39,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Local
 #include <archiveutils.h>
+#include <gvdebug.h>
 
 namespace Gwenview
 {
@@ -147,6 +148,7 @@ Kind mimeTypeKind(const QString& mimeType)
 
 Kind fileItemKind(const KFileItem& item)
 {
+    GV_RETURN_VALUE_IF_FAIL(!item.isNull(), KIND_UNKNOWN);
     return mimeTypeKind(item.mimetype());
 }
 
