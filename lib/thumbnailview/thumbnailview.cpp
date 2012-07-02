@@ -302,11 +302,6 @@ ThumbnailView::ThumbnailView(QWidget* parent)
 
     d->setupBusyAnimation();
 
-    viewport()->setMouseTracking(true);
-    // Set this attribute, otherwise the item delegate won't get the
-    // State_MouseOver state
-    viewport()->setAttribute(Qt::WA_Hover);
-
     setVerticalScrollMode(ScrollPerPixel);
     setHorizontalScrollMode(ScrollPerPixel);
 
