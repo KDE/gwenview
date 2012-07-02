@@ -493,7 +493,7 @@ struct PreviewItemDelegatePrivate
     int ratingRowHeight() const
     {
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-        return mView->fontMetrics().ascent();
+        return qMax(mView->fontMetrics().ascent(), int(KIconLoader::SizeSmall));
 #endif
         return 0;
     }
