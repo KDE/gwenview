@@ -119,6 +119,7 @@ struct RasterImageViewPrivate
             mDisplayTransform = cmsCreateTransform(workingProfile, TYPE_BGRA_8,
                                                    monitorProfile, TYPE_BGRA_8,
                                                    INTENT_PERCEPTUAL, cmsFLAGS_BLACKPOINTCOMPENSATION);
+            cmsCloseProfile(workingProfile);
             cmsCloseProfile(monitorProfile);
         }
     }
