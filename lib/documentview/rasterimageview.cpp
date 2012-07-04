@@ -71,12 +71,11 @@ struct RasterImageViewPrivate
 
     QWeakPointer<AbstractRasterImageViewTool> mTool;
 
-    cmsHPROFILE mMonitorProfile;
     cmsHTRANSFORM mDisplayTransform;
 
     void getMonitorProfile()
     {
-        mMonitorProfile = 0;
+        cmsHPROFILE monitorProfile = 0;
         mDisplayTransform = 0;
         // Get the profile from you config file if the user has set it.
         // if the user allows override through the atom, do this:
@@ -110,19 +109,18 @@ struct RasterImageViewPrivate
 //            QByteArray bytes(nitems, '\0');
 //            bytes = QByteArray::fromRawData((char*)str, (quint32)nitems);
 //            // XXX: this assumes the screen is 8 bits -- which might not be true
-            mMonitorProfile = cmsOpenProfileFromMem((void*)str, nitems);
+            monitorProfile = cmsOpenProfileFromMem((void*)str, nitems);
         }
 
 #endif
-        if (mMonitorProfile) {
+        if (monitorProfile) {
             // this should be the embedded profile if the image has one.
             cmsHPROFILE workingProfile = cmsCreate_sRGBProfile();
             mDisplayTransform = cmsCreateTransform(workingProfile, TYPE_BGRA_8,
-                                                   mMonitorProfile, TYPE_BGRA_8,
+                                                   monitorProfile, TYPE_BGRA_8,
                                                    INTENT_PERCEPTUAL, cmsFLAGS_BLACKPOINTCOMPENSATION);
+            cmsCloseProfile(monitorProfile);
         }
-
-
     }
 
     void createBackgroundTexture()
@@ -229,7 +227,6 @@ RasterImageView::RasterImageView(QGraphicsItem* parent)
 
 RasterImageView::~RasterImageView()
 {
-    cmsCloseProfile(d->mMonitorProfile);
     cmsDeleteTransform(d->mDisplayTransform);
     delete d;
 }
