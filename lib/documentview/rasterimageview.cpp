@@ -228,7 +228,9 @@ RasterImageView::RasterImageView(QGraphicsItem* parent)
 
 RasterImageView::~RasterImageView()
 {
-    cmsDeleteTransform(d->mDisplayTransform);
+    if (d->mDisplayTransform) {
+        cmsDeleteTransform(d->mDisplayTransform);
+    }
     delete d;
 }
 
