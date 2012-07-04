@@ -193,6 +193,8 @@ target_link_libraries(gwenviewlib
     ${JPEG_LIBRARY}
     ${EXIV2_LIBRARIES}
     ${QT_QTOPENGL_LIBRARY}
+    ${LCMS2_LIBRARIES}
+    ${X11_X11_LIB}
     )
 if( WIN32 )
 target_link_libraries( gwenviewlib ${EXPAT_LIBRARIES} )
