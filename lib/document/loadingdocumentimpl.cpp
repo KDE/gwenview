@@ -44,12 +44,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KProtocolInfo>
 #include <KUrl>
 
+// libpng
+#include <png.h>
+
 // Local
 #include "animateddocumentloadedimpl.h"
 #include "document.h"
 #include "documentloadedimpl.h"
 #include "emptydocumentimpl.h"
 #include "exiv2imageloader.h"
+#include "gvdebug.h"
 #include "imageutils.h"
 #include "jpegcontent.h"
 #include "jpegdocumentloadedimpl.h"
@@ -71,6 +75,20 @@ namespace Gwenview
 #endif
 
 const int HEADER_SIZE = 256;
+
+static void readPngChunk(png_structp png_ptr, png_bytep data, png_size_t length)
+{
+    QIODevice *in = (QIODevice *)png_get_io_ptr(png_ptr);
+
+    while (length) {
+        int nr = in->read((char*)data, length);
+        if (nr <= 0) {
+            png_error(png_ptr, "Read Error");
+            return;
+        }
+        length -= nr;
+    }
+}
 
 struct LoadingDocumentImplPrivate
 {
@@ -250,6 +268,10 @@ struct LoadingDocumentImplPrivate
             return;
         }
 
+        if (mFormat == "png") {
+            loadPngIccProfile();
+        }
+
         if (mJpegContent.get()) {
             Gwenview::Orientation orientation = mJpegContent->orientation();
             QMatrix matrix = ImageUtils::transformMatrix(orientation);
@@ -278,6 +300,74 @@ struct LoadingDocumentImplPrivate
             } else {
                 kWarning() << q->document()->url() << "is not really an animated image (only one frame)";
             }
+        }
+    }
+
+    void loadPngIccProfile()
+    {
+        QBuffer buffer;
+        buffer.setBuffer(&mData);
+        buffer.open(QIODevice::ReadOnly);
+
+        // Initialize the internal structures
+        png_structp png_ptr =  png_create_read_struct(PNG_LIBPNG_VER_STRING, 0, 0, 0);
+        GV_RETURN_IF_FAIL(png_ptr);
+
+        png_infop info_ptr = png_create_info_struct(png_ptr);
+        if (!info_ptr) {
+            png_destroy_read_struct(&png_ptr, (png_infopp)NULL, (png_infopp)NULL);
+            kWarning() << "Could not create info_struct";
+            return;
+        }
+
+        png_infop end_info = png_create_info_struct(png_ptr);
+        if (!end_info) {
+            png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
+            kWarning() << "Could not create info_struct2";
+            return;
+        }
+
+        // Catch errors
+        if (setjmp(png_jmpbuf(png_ptr))) {
+            png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
+            kWarning() << "Error decoding png file";
+            return;
+        }
+
+        // Initialize the special
+        png_set_read_fn(png_ptr, &buffer, readPngChunk);
+
+        // read all PNG info up to image data
+        png_read_info(png_ptr, info_ptr);
+
+        // Get profile
+        png_charp profile_name;
+    #if PNG_LIBPNG_VER_MAJOR >= 1 && PNG_LIBPNG_VER_MINOR >= 5
+        png_bytep profile_data;
+    #else
+        png_charp profile_data;
+    #endif
+        int compression_type;
+        png_uint_32 proflen;
+
+        if (png_get_iCCP(png_ptr, info_ptr, &profile_name, &compression_type, &profile_data, &proflen)) {
+            kWarning() << "Read ICC profile:" << profile_name;
+            /*
+            QByteArray profile_rawdata;
+            // XXX: Hardcoded for icc type -- is that correct for us?
+            profile_rawdata.resize(proflen);
+            memcpy(profile_rawdata.data(), profile_data, proflen);
+            profile = KoColorSpaceRegistry::instance()->createColorProfile(csName.first, csName.second, profile_rawdata);
+            Q_CHECK_PTR(profile);
+            if (profile) {
+    //                 dbgFile << "profile name: " << profile->productName() << " profile description: " << profile->productDescription() << " information sur le produit: " << profile->productInfo();
+                if (!profile->isSuitableForOutput()) {
+                    dbgFile << "the profile is not suitable for output and therefore cannot be used in krita, we need to convert the image to a standard profile"; // TODO: in ko2 popup a selection menu to inform the user
+                }
+            }
+            */
+        } else {
+            kWarning() << "No ICC profile in this file";
         }
     }
 };

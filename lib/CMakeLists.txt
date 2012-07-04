@@ -39,6 +39,7 @@ include_directories(
     ${SOPRANO_INCLUDE_DIR}
     ${EXIV2_INCLUDE_DIR}
     ${JPEG_INCLUDE_DIR}
+    ${PNG_INCLUDE_DIRS}
     )
 
 # For config-gwenview.h
@@ -195,6 +196,7 @@ target_link_libraries(gwenviewlib
     ${QT_QTOPENGL_LIBRARY}
     ${LCMS2_LIBRARIES}
     ${X11_X11_LIB}
+    ${PNG_LIBRARIES}
     )
 if( WIN32 )
 target_link_libraries( gwenviewlib ${EXPAT_LIBRARIES} )

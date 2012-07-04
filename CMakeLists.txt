@@ -31,6 +31,9 @@ endif (GWENVIEW_SEMANTICINFO_BACKEND STREQUAL "None")
 find_package(JPEG)
 macro_log_feature(JPEG_FOUND "libjpeg" "Provides JPEG image manipulation support" "http://libjpeg.sourceforge.net/" TRUE "" "")
 
+find_package(PNG)
+macro_log_feature(PNG_FOUND "libpng" "Provides PNG image manipulation support" "http://www.libpng.org" TRUE "" "")
+
 set(EXIV2_MIN_VERSION "0.19")
 find_package(Exiv2)
 macro_log_feature(EXIV2_FOUND "Exiv2" "Provides image metadata support" "http://www.exiv2.org" TRUE ${EXIV2_MIN_VERSION} "")
