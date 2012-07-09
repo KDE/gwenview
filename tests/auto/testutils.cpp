@@ -19,9 +19,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 #include "testutils.h"
 
+// Qt
+#include <QDir>
+
 // KDE
 #include <KDebug>
 #include <KIO/NetAccess>
+#include <KStandardDirs>
 
 KUrl setUpRemoteTestDir(const QString& testFile)
 {
@@ -72,4 +76,31 @@ void waitForDeferredDeletes()
         QCoreApplication::sendPostedEvents(0, QEvent::DeferredDelete);
         QCoreApplication::processEvents();
     }
+}
+
+namespace TestUtils
+{
+
+void purgeUserConfiguration()
+{
+    QString confDir = qgetenv("KDEHOME");
+    Q_ASSERT(confDir.endsWith(".kde-unit-test")); // Better safe than sorry
+    if (QFileInfo(confDir).isDir()) {
+        bool ok = KIO::NetAccess::del(KUrl::fromPath(confDir), 0);
+        Q_ASSERT(ok);
+    }
+
+    QFile kdebugrc(KStandardDirs::locateLocal("config", "kdebugrc"));
+    Q_ASSERT(kdebugrc.open(QIODevice::WriteOnly));
+    kdebugrc.write(
+        "DisableAll=true\n"
+        "InfoOutput=4\n"
+        "[gwenview]\n"
+        "InfoOutput=2\n"
+        "[gwenview_importer]\n"
+        "InfoOutput=2\n"
+        );
+    kClearDebugConfig();
+}
+
 }
