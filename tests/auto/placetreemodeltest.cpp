@@ -30,8 +30,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Local
 #include "../lib/placetreemodel.h"
+#include "testutils.h"
 
-#define KEEP_TEMP_DIR
+//#define KEEP_TEMP_DIR
 
 QTEST_KDEMAIN(PlaceTreeModelTest, GUI)
 
@@ -82,6 +83,16 @@ void PlaceTreeModelTest::initTestCase()
     Q_FOREACH(const QString & dirName, mUrl1Dirs) {
         dir.mkdir("url1/" + dirName);
     }
+
+#ifdef KEEP_TEMP_DIR
+    mTempDir.setAutoRemove(false);
+    kDebug() << "mTempDir:" << mTempDir.name();
+#endif
+}
+
+void PlaceTreeModelTest::init()
+{
+    TestUtils::purgeUserConfiguration();
 
     QFile bookmark(KStandardDirs::locateLocal("data", "kfileplaces/bookmarks.xml"));
     Q_ASSERT(bookmark.open(QIODevice::WriteOnly));

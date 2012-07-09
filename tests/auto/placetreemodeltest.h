@@ -33,6 +33,7 @@ class PlaceTreeModelTest : public QObject
     Q_OBJECT
 
 private Q_SLOTS:
+    void init();
     void initTestCase();
     void testListPlaces();
     void testListUrl1();
