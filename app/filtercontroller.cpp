@@ -37,6 +37,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KComboBox>
 #include <KDebug>
 #include <KFileItem>
+#include <KFileMetaInfo>
 #include <KIcon>
 #include <KIconLoader>
 #include <KLineEdit>
@@ -482,6 +483,112 @@ void TagFilterWidget::updateTagSetFilter()
 #endif
 
 /**
+ * An AbstractSortedDirModelFilter which filters on the camera make and model
+ */
+class CameraFilter : public AbstractSortedDirModelFilter
+{
+public:
+    enum Mode {
+        Contains,
+        DoesNotContain
+    };
+    CameraFilter(SortedDirModel* model)
+        : AbstractSortedDirModelFilter(model)
+        , mMode(Contains)
+    {}
+
+    virtual bool needsSemanticInfo() const
+    {
+        return false;
+    }
+
+    virtual bool acceptsIndex(const QModelIndex& index) const
+    {
+        if (mText.isEmpty()) {
+            return true;
+        }
+        KFileItem fileItem = model()->itemForSourceIndex(index);
+        KFileMetaInfo info(fileItem.url());
+#define NEXIF "http://www.semanticdesktop.org/ontologies/2007/05/10/nexif#"
+        QString make = info.item(NEXIF "make").value().toString();
+        QString model = info.item(NEXIF "model").value().toString();
+#undef NEXIF
+        bool match = make.contains(mText, Qt::CaseInsensitive) || model.contains(mText, Qt::CaseInsensitive);
+        if (mMode == DoesNotContain) {
+            match = !match;
+        }
+        return match;
+    }
+
+    void setText(const QString& text)
+    {
+        mText = text;
+        model()->applyFilters();
+    }
+
+    void setMode(Mode mode)
+    {
+        mMode = mode;
+        model()->applyFilters();
+    }
+
+private:
+    QString mText;
+    Mode mMode;
+};
+
+struct CameraFilterWidgetPrivate
+{
+    QPointer<CameraFilter> mFilter;
+    KComboBox* mModeComboBox;
+    KLineEdit* mLineEdit;
+};
+
+CameraFilterWidget::CameraFilterWidget(SortedDirModel* model)
+: d(new CameraFilterWidgetPrivate)
+{
+    d->mFilter = new CameraFilter(model);
+
+    d->mModeComboBox = new KComboBox;
+    d->mModeComboBox->addItem(i18n("Model contains"), CameraFilter::Contains);
+    d->mModeComboBox->addItem(i18n("Model does not contain"),  CameraFilter::DoesNotContain);
+
+    d->mLineEdit = new KLineEdit;
+
+    QHBoxLayout* layout = new QHBoxLayout(this);
+    layout->setMargin(0);
+    layout->setSpacing(2);
+    layout->addWidget(d->mModeComboBox);
+    layout->addWidget(d->mLineEdit);
+
+    QTimer* timer = new QTimer(this);
+    timer->setInterval(350);
+    timer->setSingleShot(true);
+    connect(timer, SIGNAL(timeout()), SLOT(applyCameraFilter()));
+
+    connect(d->mLineEdit, SIGNAL(textChanged(QString)),
+            timer, SLOT(start()));
+
+    connect(d->mModeComboBox, SIGNAL(currentIndexChanged(int)),
+            SLOT(applyCameraFilter()));
+
+    QTimer::singleShot(0, d->mLineEdit, SLOT(setFocus()));
+}
+
+CameraFilterWidget::~CameraFilterWidget()
+{
+    delete d->mFilter;
+    delete d;
+}
+
+void CameraFilterWidget::applyCameraFilter()
+{
+    QVariant data = d->mModeComboBox->itemData(d->mModeComboBox->currentIndex());
+    d->mFilter->setMode(CameraFilter::Mode(data.toInt()));
+    d->mFilter->setText(d->mLineEdit->text());
+}
+
+/**
  * A container for all filter widgets. It features a close button on the right.
  */
 class FilterWidgetContainer : public QFrame
@@ -569,6 +676,7 @@ FilterController::FilterController(QFrame* frame, SortedDirModel* dirModel)
 
     d->addAction(i18nc("@action:inmenu", "Filter by Name"), SLOT(addFilterByName()));
     d->addAction(i18nc("@action:inmenu", "Filter by Date"), SLOT(addFilterByDate()));
+    d->addAction(i18nc("@action:inmenu", "Filter by Camera"), SLOT(addFilterByCamera()));
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
     // Only add filters if Nepomuk is running
@@ -600,6 +708,11 @@ void FilterController::addFilterByName()
 void FilterController::addFilterByDate()
 {
     d->addFilter(new DateFilterWidget(d->mDirModel));
+}
+
+void FilterController::addFilterByCamera()
+{
+    d->addFilter(new CameraFilterWidget(d->mDirModel));
 }
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE

@@ -103,6 +103,21 @@ private:
 };
 #endif
 
+struct CameraFilterWidgetPrivate;
+class CameraFilterWidget : public QWidget
+{
+    Q_OBJECT
+public:
+    CameraFilterWidget(SortedDirModel*);
+    ~CameraFilterWidget();
+
+private Q_SLOTS:
+    void applyCameraFilter();
+
+private:
+    CameraFilterWidgetPrivate* const d;
+};
+
 class FilterControllerPrivate;
 /**
  * This class manages the filter widgets in the filter frame and assign the
@@ -120,6 +135,7 @@ public:
 private Q_SLOTS:
     void addFilterByName();
     void addFilterByDate();
+    void addFilterByCamera();
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
     void addFilterByRating();
     void addFilterByTag();
