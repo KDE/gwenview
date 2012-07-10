@@ -166,6 +166,7 @@ endif (GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK)
 set_source_files_properties(
     exiv2imageloader.cpp
     imagemetainfomodel.cpp
+    timeutils.cpp
     PROPERTIES
     COMPILE_FLAGS "${KDE4_ENABLE_EXCEPTIONS}"
     )
