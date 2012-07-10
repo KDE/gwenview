@@ -43,6 +43,25 @@ namespace Gwenview
 namespace TimeUtils
 {
 
+static Exiv2::ExifData::const_iterator findDateTimeKey(const Exiv2::ExifData& exifData)
+{
+    // Ordered list of keys to try
+    static QList<Exiv2::ExifKey> lst = QList<Exiv2::ExifKey>()
+        << Exiv2::ExifKey("Exif.Photo.DateTimeOriginal")
+        << Exiv2::ExifKey("Exif.Image.DateTimeOriginal")
+        << Exiv2::ExifKey("Exif.Photo.DateTimeDigitized")
+        << Exiv2::ExifKey("Exif.Image.DateTime");
+
+    Exiv2::ExifData::const_iterator it, end = exifData.end();
+    Q_FOREACH(const Exiv2::ExifKey& key, lst) {
+        it = exifData.findKey(key);
+        if (it != end) {
+            return it;
+        }
+    }
+    return end;
+}
+
 struct CacheItem
 {
     KDateTime fileMTime;
@@ -88,8 +107,7 @@ struct CacheItem
             if (exifData.empty()) {
                 return false;
             }
-            Exiv2::ExifKey key("Exif.Image.DateTime");
-            Exiv2::ExifData::iterator it = exifData.findKey(key);
+            Exiv2::ExifData::const_iterator it = findDateTimeKey(exifData);
             if (it == exifData.end()) {
                 kWarning() << "No date in exif header of" << path;
                 return false;
