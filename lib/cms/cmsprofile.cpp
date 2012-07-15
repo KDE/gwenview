@@ -104,27 +104,14 @@ static cmsHPROFILE loadFromPngData(const QByteArray& data)
     int compression_type;
     png_uint_32 proflen;
 
+    cmsHPROFILE profile = 0;
     if (png_get_iCCP(png_ptr, info_ptr, &profile_name, &compression_type, &profile_data, &proflen)) {
-        kWarning() << "Read ICC profile:" << profile_name;
-        /*
-        QByteArray profile_rawdata;
-        // XXX: Hardcoded for icc type -- is that correct for us?
-        profile_rawdata.resize(proflen);
-        memcpy(profile_rawdata.data(), profile_data, proflen);
-        profile = KoColorSpaceRegistry::instance()->createColorProfile(csName.first, csName.second, profile_rawdata);
-        Q_CHECK_PTR(profile);
-        if (profile) {
-//                 dbgFile << "profile name: " << profile->productName() << " profile description: " << profile->productDescription() << " information sur le produit: " << profile->productInfo();
-            if (!profile->isSuitableForOutput()) {
-                dbgFile << "the profile is not suitable for output and therefore cannot be used in krita, we need to convert the image to a standard profile"; // TODO: in ko2 popup a selection menu to inform the user
-            }
-        }
-        */
+        profile = cmsOpenProfileFromMem(profile_data, proflen);
     } else {
         kWarning() << "No ICC profile in this file";
-        return 0;
     }
-    return 0;
+    png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
+    return profile;
 }
 
 
