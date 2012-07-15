@@ -48,6 +48,7 @@ include_directories(
     )
 
 set(gwenviewlib_SRCS
+    cms/cmsprofile.cpp
     crop/cropwidget.cpp
     crop/cropimageoperation.cpp
     crop/croptool.cpp
