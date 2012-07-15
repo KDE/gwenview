@@ -32,6 +32,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 class QByteArray;
 class QString;
 
+typedef void* cmsHPROFILE;
+
 namespace Gwenview
 {
 
@@ -57,6 +59,7 @@ public:
 
     static Profile::Ptr loadFromData(const QByteArray& data, const QString& format);
 private:
+    Profile(cmsHPROFILE);
     ProfilePrivate* const d;
 };
 

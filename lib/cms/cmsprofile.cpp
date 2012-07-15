@@ -143,6 +143,12 @@ Profile::Profile()
     d->mProfile = 0;
 }
 
+Profile::Profile(cmsHPROFILE hProfile)
+: d(new ProfilePrivate)
+{
+    d->mProfile = hProfile;
+}
+
 Profile::~Profile()
 {
     d->reset();
@@ -157,9 +163,7 @@ Profile::Ptr Profile::loadFromData(const QByteArray& data, const QString& format
         hProfile = loadFromPngData(data);
     }
     if (hProfile) {
-        Profile* profile = new Profile;
-        profile->d->mProfile = hProfile;
-        ptr = Profile::Ptr(profile);
+        ptr = new Profile(hProfile);
     }
     return ptr;
 }
