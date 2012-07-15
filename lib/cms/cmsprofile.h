@@ -57,7 +57,11 @@ public:
     QString model() const;
     QString copyright() const;
 
+    cmsHPROFILE handle() const;
+
     static Profile::Ptr loadFromData(const QByteArray& data, const QString& format);
+    static Profile::Ptr getMonitorProfile();
+
 private:
     Profile(cmsHPROFILE);
     ProfilePrivate* const d;

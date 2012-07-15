@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include <lib/documentview/abstractrasterimageviewtool.h>
 #include <lib/imagescaler.h>
+#include <cms/cmsprofile.h>
 
 // KDE
 #include <KDebug>
@@ -35,13 +36,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QWeakPointer>
 
 #include <lcms2.h>
-
-#ifdef Q_WS_X11
-#include <X11/Xlib.h>
-#include <X11/Xatom.h>
-#include <fixx11h.h>
-#include <QX11Info>
-#endif
 
 
 namespace Gwenview
@@ -75,52 +69,15 @@ struct RasterImageViewPrivate
 
     void getMonitorProfile()
     {
-        cmsHPROFILE monitorProfile = 0;
+        Cms::Profile::Ptr monitorProfile = Cms::Profile::getMonitorProfile();
         mDisplayTransform = 0;
-        // Get the profile from you config file if the user has set it.
-        // if the user allows override through the atom, do this:
-#ifdef Q_WS_X11
-
-        // get the current screen...
-        int screen = -1;
-
-        Atom type;
-        int format;
-        unsigned long nitems;
-        unsigned long bytes_after;
-        quint8 *str;
-
-        static Atom icc_atom = XInternAtom(QX11Info::display(), "_ICC_PROFILE", True);
-
-        if (XGetWindowProperty(QX11Info::display(),
-                               QX11Info::appRootWindow(screen),
-                               icc_atom,
-                               0,
-                               INT_MAX,
-                               False,
-                               XA_CARDINAL,
-                               &type,
-                               &format,
-                               &nitems,
-                               &bytes_after,
-                               (unsigned char **) &str) == Success
-                ) {
-            qDebug() << "got a profile from the image";
-//            QByteArray bytes(nitems, '\0');
-//            bytes = QByteArray::fromRawData((char*)str, (quint32)nitems);
-//            // XXX: this assumes the screen is 8 bits -- which might not be true
-            monitorProfile = cmsOpenProfileFromMem((void*)str, nitems);
-        }
-
-#endif
         if (monitorProfile) {
             // this should be the embedded profile if the image has one.
             cmsHPROFILE workingProfile = cmsCreate_sRGBProfile();
             mDisplayTransform = cmsCreateTransform(workingProfile, TYPE_BGRA_8,
-                                                   monitorProfile, TYPE_BGRA_8,
+                                                   monitorProfile->handle(), TYPE_BGRA_8,
                                                    INTENT_PERCEPTUAL, cmsFLAGS_BLACKPOINTCOMPENSATION);
             cmsCloseProfile(workingProfile);
-            cmsCloseProfile(monitorProfile);
         }
     }
 

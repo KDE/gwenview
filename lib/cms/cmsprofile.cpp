@@ -36,6 +36,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // libpng
 #include <png.h>
 
+// X11
+#ifdef Q_WS_X11
+#include <X11/Xlib.h>
+#include <X11/Xatom.h>
+#include <fixx11h.h>
+#include <QX11Info>
+#endif
+
 namespace Gwenview
 {
 
@@ -168,6 +176,11 @@ Profile::Ptr Profile::loadFromData(const QByteArray& data, const QString& format
     return ptr;
 }
 
+cmsHPROFILE Profile::handle() const
+{
+    return d->mProfile;
+}
+
 QString Profile::copyright() const
 {
     return d->readInfo(cmsInfoCopyright);
@@ -186,6 +199,43 @@ QString Profile::manufacturer() const
 QString Profile::model() const
 {
     return d->readInfo(cmsInfoModel);
+}
+
+Profile::Ptr Profile::getMonitorProfile()
+{
+    cmsHPROFILE hProfile = 0;
+    // Get the profile from you config file if the user has set it.
+    // if the user allows override through the atom, do this:
+#ifdef Q_WS_X11
+
+    // get the current screen...
+    int screen = -1;
+
+    Atom type;
+    int format;
+    unsigned long nitems;
+    unsigned long bytes_after;
+    quint8 *str;
+
+    static Atom icc_atom = XInternAtom(QX11Info::display(), "_ICC_PROFILE", True);
+
+    if (XGetWindowProperty(QX11Info::display(),
+                            QX11Info::appRootWindow(screen),
+                            icc_atom,
+                            0,
+                            INT_MAX,
+                            False,
+                            XA_CARDINAL,
+                            &type,
+                            &format,
+                            &nitems,
+                            &bytes_after,
+                            (unsigned char **) &str) == Success
+    ) {
+        hProfile = cmsOpenProfileFromMem((void*)str, nitems);
+    }
+#endif
+    return hProfile ? Profile::Ptr(new Profile(hProfile)) : Profile::Ptr();
 }
 
 } // namespace Cms
