@@ -50,6 +50,11 @@ public:
     Profile();
     ~Profile();
 
+    QString description() const;
+    QString manufacturer() const;
+    QString model() const;
+    QString copyright() const;
+
     static Profile::Ptr loadFromData(const QByteArray& data, const QString& format);
 private:
     ProfilePrivate* const d;

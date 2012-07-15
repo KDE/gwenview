@@ -127,6 +127,14 @@ struct ProfilePrivate
         }
         mProfile = 0;
     }
+
+    QString readInfo(cmsInfoType info)
+    {
+        GV_RETURN_VALUE_IF_FAIL(mProfile, QString());
+        wchar_t buffer[1024];
+        int size = cmsGetProfileInfo(mProfile, info, "en", "US", buffer, 1024);
+        return QString::fromWCharArray(buffer, size);
+    }
 };
 
 Profile::Profile()
@@ -154,6 +162,26 @@ Profile::Ptr Profile::loadFromData(const QByteArray& data, const QString& format
         ptr = Profile::Ptr(profile);
     }
     return ptr;
+}
+
+QString Profile::copyright() const
+{
+    return d->readInfo(cmsInfoCopyright);
+}
+
+QString Profile::description() const
+{
+    return d->readInfo(cmsInfoDescription);
+}
+
+QString Profile::manufacturer() const
+{
+    return d->readInfo(cmsInfoManufacturer);
+}
+
+QString Profile::model() const
+{
+    return d->readInfo(cmsInfoModel);
 }
 
 } // namespace Cms
