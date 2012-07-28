@@ -700,6 +700,10 @@ void ThumbnailLoadJob::startCreatingThumbnail(const QString& pixPath)
 
 void ThumbnailLoadJob::slotGotPreview(const KFileItem& item, const QPixmap& pixmap)
 {
+    if (mCurrentItem.isNull()) {
+        // This can happen if current item has been removed by removeItems()
+        return;
+    }
     LOG(mCurrentItem.url());
     QSize size;
     emit thumbnailLoaded(item, pixmap, size);
@@ -707,6 +711,10 @@ void ThumbnailLoadJob::slotGotPreview(const KFileItem& item, const QPixmap& pixm
 
 void ThumbnailLoadJob::emitThumbnailLoaded(const QImage& img, const QSize& size)
 {
+    if (mCurrentItem.isNull()) {
+        // This can happen if current item has been removed by removeItems()
+        return;
+    }
     LOG(mCurrentItem.url());
     QPixmap thumb = QPixmap::fromImage(img);
     emit thumbnailLoaded(mCurrentItem, thumb, size);
@@ -714,6 +722,10 @@ void ThumbnailLoadJob::emitThumbnailLoaded(const QImage& img, const QSize& size)
 
 void ThumbnailLoadJob::emitThumbnailLoadingFailed()
 {
+    if (mCurrentItem.isNull()) {
+        // This can happen if current item has been removed by removeItems()
+        return;
+    }
     LOG(mCurrentItem.url());
     emit thumbnailLoadingFailed(mCurrentItem);
 }
