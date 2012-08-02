@@ -424,6 +424,7 @@ ThumbnailLoadJob::~ThumbnailLoadJob()
     if (!sThumbnailCache->isRunning()) {
         sThumbnailCache->start();
     }
+    sThumbnailCache->wait();
 }
 
 void ThumbnailLoadJob::start()
