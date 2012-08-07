@@ -33,6 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 #include <KDebug>
+#include <KIcon>
 
 // Local
 #include "zoomslider.h"
@@ -65,6 +66,8 @@ struct ZoomWidgetPrivate
     ZoomSlider* mZoomSlider;
     QAction* mZoomToFitAction;
     QAction* mActualSizeAction;
+
+    QToolButton* mLockZoomButton;
 
     bool mZoomUpdatedBySlider;
 
@@ -110,6 +113,12 @@ ZoomWidget::ZoomWidget(QWidget* parent)
     d->mZoomSlider->slider()->setPageStep(3 * int(PRECISION));
     connect(d->mZoomSlider->slider(), SIGNAL(actionTriggered(int)), SLOT(slotZoomSliderActionTriggered()));
 
+    d->mLockZoomButton = new QToolButton;
+    d->mLockZoomButton->setAutoRaise(true);
+    d->mLockZoomButton->setCheckable(true);
+    updateLockZoomButton();
+    connect(d->mLockZoomButton, SIGNAL(toggled(bool)), SLOT(updateLockZoomButton()));
+
     // Layout
     QHBoxLayout* layout = new QHBoxLayout(this);
     layout->setMargin(0);
@@ -118,6 +127,7 @@ ZoomWidget::ZoomWidget(QWidget* parent)
     layout->addWidget(d->mActualSizeButton);
     layout->addWidget(d->mZoomSlider);
     layout->addWidget(d->mZoomLabel);
+    layout->addWidget(d->mLockZoomButton);
 }
 
 ZoomWidget::~ZoomWidget()
@@ -178,6 +188,26 @@ void ZoomWidget::setMinimumZoom(qreal minimumZoom)
 void ZoomWidget::setMaximumZoom(qreal zoom)
 {
     d->mZoomSlider->setMaximum(sliderValueForZoom(zoom));
+}
+
+bool ZoomWidget::isZoomLocked() const
+{
+    return d->mLockZoomButton->isVisible() && d->mLockZoomButton->isChecked();
+}
+
+void ZoomWidget::setZoomLocked(bool locked)
+{
+    d->mLockZoomButton->setChecked(locked);
+}
+
+void ZoomWidget::setLockZoomButtonVisible(bool visible)
+{
+    d->mLockZoomButton->setVisible(visible);
+}
+
+void ZoomWidget::updateLockZoomButton()
+{
+    d->mLockZoomButton->setIcon(KIcon(d->mLockZoomButton->isChecked() ? "object-locked" : "object-unlocked"));
 }
 
 } // namespace
