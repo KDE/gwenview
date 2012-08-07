@@ -308,7 +308,7 @@ bool ThumbnailThread::loadThumbnail(bool* needCaching)
 
 void ThumbnailThread::cacheThumbnail()
 {
-    mImage.setText("Thumb::Uri"          , 0, mOriginalUri);
+    mImage.setText("Thumb::URI"          , 0, mOriginalUri);
     mImage.setText("Thumb::MTime"        , 0, QString::number(mOriginalTime));
     mImage.setText("Thumb::Size"         , 0, QString::number(mOriginalSize));
     mImage.setText("Thumb::Mimetype"     , 0, mOriginalMimeType);
