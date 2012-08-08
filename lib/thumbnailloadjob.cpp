@@ -367,7 +367,7 @@ static void moveThumbnailHelper(const QString& oldUri, const QString& newUri, Th
     if (!thumb.load(oldPath)) {
         return;
     }
-    thumb.setText("Thumb::Uri", 0, newUri);
+    thumb.setText("Thumb::URI", 0, newUri);
     thumb.save(newPath, "png");
     QFile::remove(QFile::encodeName(oldPath));
 }
@@ -616,7 +616,7 @@ void ThumbnailLoadJob::checkThumbnail()
 
     QImage thumb = loadThumbnailFromCache();
     if (!thumb.isNull()) {
-        if (thumb.text("Thumb::Uri", 0) == mOriginalUri &&
+        if (thumb.text("Thumb::URI", 0) == mOriginalUri &&
                 thumb.text("Thumb::MTime", 0).toInt() == mOriginalTime) {
             int width = 0, height = 0;
             QSize size;
