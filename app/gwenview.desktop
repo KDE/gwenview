@@ -62,6 +62,7 @@ Name[x-test]=xxGwenviewxx
 Name[zh_CN]=Gwenview
 Name[zh_TW]=影像檢視_Gwenview
 GenericName=KDE Image Viewer
+GenericName[bg]=Преглед на изображения в KDE
 GenericName[cs]=Prohlížeč obrázků KDE
 GenericName[de]=KDE-Bildbetrachter
 GenericName[es]=Visor de imágenes de KDE
