@@ -592,18 +592,18 @@ QImage ThumbnailLoadJob::loadThumbnailFromCache() const
     image = QImage(mThumbnailPath);
     if (image.isNull() && mThumbnailGroup == ThumbnailGroup::Normal) {
         // If there is a large-sized thumbnail, generate the normal-sized version from it
-        QString alternativeThumbnailPath = generateThumbnailPath(mOriginalUri, ThumbnailGroup::Large);
-        image = QImage(alternativeThumbnailPath);
-        if (image.isNull()) {
+        QString largeThumbnailPath = generateThumbnailPath(mOriginalUri, ThumbnailGroup::Large);
+        QImage largeImage(largeThumbnailPath);
+        if (largeImage.isNull()) {
             return image;
         }
         int size = ThumbnailGroup::pixelSize(ThumbnailGroup::Normal);
-        QImage newImage = image.scaled(size, size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-        Q_FOREACH(const QString& key, image.textKeys()) {
-            QString text = image.text(key);
-            newImage.setText(key, text);
+        image = largeImage.scaled(size, size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        Q_FOREACH(const QString& key, largeImage.textKeys()) {
+            QString text = largeImage.text(key);
+            image.setText(key, text);
         }
-        sThumbnailCache->queueThumbnail(mThumbnailPath, newImage);
+        sThumbnailCache->queueThumbnail(mThumbnailPath, image);
     }
 
     return image;
