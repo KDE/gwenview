@@ -595,7 +595,7 @@ QImage ThumbnailLoadJob::loadThumbnailFromCache() const
         image = QImage(alternativeThumbnailPath);
         if (image.isNull()) return image;
         int size = ThumbnailGroup::pixelSize(ThumbnailGroup::Normal);
-        QImage newimage = image.scaled(size, size, Qt::KeepAspectRatio, Qt::FastTransformation);
+        QImage newimage = image.scaled(size, size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         foreach(QString key, image.textKeys())
         {
             QString text = image.text(key);
