@@ -588,7 +588,23 @@ QImage ThumbnailLoadJob::loadThumbnailFromCache() const
     if (!image.isNull()) {
         return image;
     }
-    return QImage(mThumbnailPath);
+
+    image = QImage(mThumbnailPath);
+    if (image.isNull() && mThumbnailGroup == ThumbnailGroup::Normal) {
+        QString alternativeThumbnailPath = generateThumbnailPath(mOriginalUri, ThumbnailGroup::Large);
+        image = QImage(alternativeThumbnailPath);
+        if (image.isNull()) return image;
+        int size = ThumbnailGroup::pixelSize(ThumbnailGroup::Normal);
+        QImage newimage = image.scaled(size, size, Qt::KeepAspectRatio, Qt::FastTransformation);
+        foreach(QString key, image.textKeys())
+        {
+            QString text = image.text(key);
+            newimage.setText(key, text);
+        }
+        sThumbnailCache->queueThumbnail(mThumbnailPath, newimage);
+    }
+
+    return image;
 }
 
 void ThumbnailLoadJob::checkThumbnail()
