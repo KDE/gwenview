@@ -588,7 +588,25 @@ QImage ThumbnailLoadJob::loadThumbnailFromCache() const
     if (!image.isNull()) {
         return image;
     }
-    return QImage(mThumbnailPath);
+
+    image = QImage(mThumbnailPath);
+    if (image.isNull() && mThumbnailGroup == ThumbnailGroup::Normal) {
+        // If there is a large-sized thumbnail, generate the normal-sized version from it
+        QString largeThumbnailPath = generateThumbnailPath(mOriginalUri, ThumbnailGroup::Large);
+        QImage largeImage(largeThumbnailPath);
+        if (largeImage.isNull()) {
+            return image;
+        }
+        int size = ThumbnailGroup::pixelSize(ThumbnailGroup::Normal);
+        image = largeImage.scaled(size, size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        Q_FOREACH(const QString& key, largeImage.textKeys()) {
+            QString text = largeImage.text(key);
+            image.setText(key, text);
+        }
+        sThumbnailCache->queueThumbnail(mThumbnailPath, image);
+    }
+
+    return image;
 }
 
 void ThumbnailLoadJob::checkThumbnail()
