@@ -51,6 +51,8 @@ int main(int argc, char** argv)
     options.add("t").add("thumbnail-dir <dir>", ki18n("Use <dir> instead of ~/.thumbnails to store thumbnails"));
     KCmdLineArgs::addCmdLineOptions(options);
 
+    KApplication app;
+
     // Read cmdline options
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
     if (args->count() != 2) {
@@ -96,8 +98,6 @@ int main(int argc, char** argv)
     kWarning() << "Generating thumbnails for" << list.count() << "files";
 
     // Start the job
-    KApplication app;
-
     QTime chrono;
     ThumbnailLoadJob* job = new ThumbnailLoadJob(list, group);
 
