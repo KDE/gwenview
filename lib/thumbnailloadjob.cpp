@@ -112,6 +112,7 @@ void ThumbnailCache::queueThumbnail(const QString& path, const QImage& image)
     LOG(path);
     QMutexLocker locker(&mMutex);
     mCache.insert(path, image);
+    start();
 }
 
 void ThumbnailCache::run()
@@ -421,9 +422,6 @@ ThumbnailLoadJob::~ThumbnailLoadJob()
     }
     mThumbnailThread.cancel();
     mThumbnailThread.wait();
-    if (!sThumbnailCache->isRunning()) {
-        sThumbnailCache->start();
-    }
     sThumbnailCache->wait();
 }
 
