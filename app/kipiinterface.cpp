@@ -70,7 +70,7 @@ public:
     : KIPI::ImageInfoShared(interface, url)
     {}
 
-    QString title()
+    QString name()
     {
         QString txt = _url.fileName();
         txt.replace('_', ' ');
