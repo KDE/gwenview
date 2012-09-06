@@ -163,7 +163,7 @@ Profile::~Profile()
     delete d;
 }
 
-Profile::Ptr Profile::loadFromImageData(const QByteArray& data, const QString& format)
+Profile::Ptr Profile::loadFromImageData(const QByteArray& data, const QByteArray& format)
 {
     Profile::Ptr ptr;
     cmsHPROFILE hProfile;
