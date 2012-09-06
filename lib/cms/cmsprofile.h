@@ -21,6 +21,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #ifndef CMSPROFILE_H
 #define CMSPROFILE_H
 
+#include <lib/gwenviewlib_export.h>
+
 // Local
 
 // KDE
@@ -44,7 +46,7 @@ class ProfilePrivate;
 /**
  * Wrapper for lcms color profile
  */
-class Profile : public QSharedData
+class GWENVIEWLIB_EXPORT Profile : public QSharedData
 {
 public:
     typedef KSharedPtr<Profile> Ptr;

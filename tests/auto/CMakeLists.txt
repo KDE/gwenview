@@ -46,3 +46,4 @@ gv_add_unit_test(importertest
 gv_add_unit_test(sorteddirmodeltest testutils.cpp)
 gv_add_unit_test(slidecontainerautotest slidecontainerautotest.cpp)
 gv_add_unit_test(imagemetainfomodeltest testutils.cpp)
+gv_add_unit_test(cmsprofiletest testutils.cpp)

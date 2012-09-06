@@ -166,7 +166,7 @@ Profile::~Profile()
 Profile::Ptr Profile::loadFromImageData(const QByteArray& data, const QByteArray& format)
 {
     Profile::Ptr ptr;
-    cmsHPROFILE hProfile;
+    cmsHPROFILE hProfile = 0;
     if (format == "png") {
         hProfile = loadFromPngData(data);
     }
