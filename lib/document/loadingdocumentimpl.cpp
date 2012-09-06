@@ -253,7 +253,7 @@ struct LoadingDocumentImplPrivate
             return;
         }
 
-        mCmsProfile = Cms::Profile::loadFromData(mData, mFormat);
+        mCmsProfile = Cms::Profile::loadFromImageData(mData, mFormat);
 
         if (mJpegContent.get()) {
             Gwenview::Orientation orientation = mJpegContent->orientation();

@@ -59,7 +59,7 @@ public:
 
     cmsHPROFILE handle() const;
 
-    static Profile::Ptr loadFromData(const QByteArray& data, const QString& format);
+    static Profile::Ptr loadFromImageData(const QByteArray& data, const QString& format);
     static Profile::Ptr getMonitorProfile();
 
 private:
