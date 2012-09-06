@@ -40,6 +40,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <libkipi/imageinfoshared.h>
 #include <libkipi/plugin.h>
 #include <libkipi/pluginloader.h>
+#include <libkipi/version.h>
 
 // local
 #include "mainwindow.h"
@@ -250,7 +251,13 @@ void KIPIInterface::loadPlugins()
     d->mMenuInfoMap[KIPI::BatchPlugin]       = MenuInfo(i18nc("@title:menu", "Batch Processing"));
     d->mMenuInfoMap[KIPI::CollectionsPlugin] = MenuInfo(i18nc("@title:menu", "Collections"));
 
+#if (KIPI_VERSION >= 0x020000)
+    d->mPluginLoader = new KIPI::PluginLoader();
+    d->mPluginLoader->setInterface(this);
+    d->mPluginLoader->init();
+#else
     d->mPluginLoader = new KIPI::PluginLoader(QStringList(), this);
+#endif
     d->mPluginQueue = d->mPluginLoader->pluginList();
     d->mPluginMenu->addAction(d->mLoadingAction);
     loadOnePlugin();
