@@ -383,6 +383,8 @@ struct MainWindow::Private
             shortcut.setAlternate(Qt::Key_F11);
         }
         mFullScreenAction->setShortcut(shortcut);
+        connect(mViewMainPage, SIGNAL(toggleFullScreenRequested()),
+                mFullScreenAction, SLOT(trigger()));
 
         KAction* leaveFullScreenAction = view->addAction("leave_fullscreen", q, SLOT(leaveFullScreen()));
         leaveFullScreenAction->setIcon(KIcon("view-restore"));

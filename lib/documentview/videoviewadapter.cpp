@@ -143,11 +143,11 @@ struct VideoViewAdapterPrivate
     bool isPlaying() const
     {
         switch (mMediaObject->state()) {
-        case Phonon::StoppedState:
-        case Phonon::PausedState:
-            return false;
-        default:
+        case Phonon::PlayingState:
+        case Phonon::BufferingState:
             return true;
+        default:
+            return false;
         }
     }
 

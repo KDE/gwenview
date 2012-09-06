@@ -122,4 +122,12 @@ KUrl setUpRemoteTestDir(const QString& testFile = QString());
  */
 void waitForDeferredDeletes();
 
+// FIXME: Top-level functions should move to the TestUtils namespace
+namespace TestUtils
+{
+
+void purgeUserConfiguration();
+
+} // namespace
+
 #endif /* TESTUTILS_H */

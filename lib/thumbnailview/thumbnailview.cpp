@@ -329,6 +329,7 @@ ThumbnailView::ThumbnailView(QWidget* parent)
 
 ThumbnailView::~ThumbnailView()
 {
+    delete d->mThumbnailLoadJob;
     delete d;
 }
 

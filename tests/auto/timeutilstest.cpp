@@ -50,14 +50,25 @@ void TimeUtilsTest::testPng()
     QCOMPARE(dateTime, item.time(KFileItem::ModificationTime));
 }
 
+#define NEW_ROW(fileName, dateTime) QTest::newRow(fileName) << fileName << KDateTime::fromString(dateTime)
+void TimeUtilsTest::testJpeg_data()
+{
+    QTest::addColumn<QString>("fileName");
+    QTest::addColumn<KDateTime>("expectedDateTime");
+
+    NEW_ROW("date/exif-datetimeoriginal.jpg", "2003-03-10T17:45:21");
+    NEW_ROW("date/exif-datetime-only.jpg", "2003-03-25T02:02:21");
+}
+
 void TimeUtilsTest::testJpeg()
 {
-    KUrl url = urlForTestFile("orient6.jpg");
+    QFETCH(QString, fileName);
+    QFETCH(KDateTime, expectedDateTime);
+    KUrl url = urlForTestFile(fileName);
     KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
     KDateTime dateTime = TimeUtils::dateTimeForFileItem(item);
 
-    const KDateTime orient6DateTime = KDateTime::fromString("2003-03-25T02:02:21");
-    QVERIFY2(dateTime == orient6DateTime, "This could be caused by not having strigi jpeg analyzer installed (usually in $KDEDIR/lib/strigi/strigiea_jpeg.so)");
+    QCOMPARE(dateTime, expectedDateTime);
 }
 
 void TimeUtilsTest::testCache()
