@@ -22,7 +22,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "cmsprofile.h"
 
 // Local
+#include <cms/cmsprofile_png.h>
 #include <gvdebug.h>
+#include <iodevicejpegsourcemanager.h>
+#include <jpegerrormanager.h>
+
+extern "C" {
+#include <cms/iccjpeg.h>
+}
 
 // KDE
 #include <KDebug>
@@ -32,9 +39,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // lcms
 #include <lcms2.h>
-
-// libpng
-#include <png.h>
 
 // X11
 #ifdef Q_WS_X11
@@ -47,81 +51,51 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 
+#undef ENABLE_LOG
+#undef LOG
+//#define ENABLE_LOG
+#ifdef ENABLE_LOG
+#define LOG(x) kDebug() << x
+#else
+#define LOG(x) ;
+#endif
+
 namespace Cms
 {
 
-//- Png ------------------------------------------------------------------------
-static void readPngChunk(png_structp png_ptr, png_bytep data, png_size_t length)
+//- JPEG -----------------------------------------------------------------------
+static cmsHPROFILE loadFromJpegData(const QByteArray& data)
 {
-    QIODevice *in = (QIODevice *)png_get_io_ptr(png_ptr);
-
-    while (length) {
-        int nr = in->read((char*)data, length);
-        if (nr <= 0) {
-            png_error(png_ptr, "Read Error");
-            return;
-        }
-        length -= nr;
-    }
-}
-
-static cmsHPROFILE loadFromPngData(const QByteArray& data)
-{
-    QBuffer buffer;
-    buffer.setBuffer(const_cast<QByteArray*>(&data));
-    buffer.open(QIODevice::ReadOnly);
-
-    // Initialize the internal structures
-    png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, 0, 0, 0);
-    GV_RETURN_VALUE_IF_FAIL(png_ptr, 0);
-
-    png_infop info_ptr = png_create_info_struct(png_ptr);
-    if (!info_ptr) {
-        png_destroy_read_struct(&png_ptr, (png_infopp)NULL, (png_infopp)NULL);
-        kWarning() << "Could not create info_struct";
-        return 0;
-    }
-
-    png_infop end_info = png_create_info_struct(png_ptr);
-    if (!end_info) {
-        png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
-        kWarning() << "Could not create info_struct2";
-        return 0;
-    }
-
-    // Catch errors
-    if (setjmp(png_jmpbuf(png_ptr))) {
-        png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
-        kWarning() << "Error decoding png file";
-        return 0;
-    }
-
-    // Initialize the special
-    png_set_read_fn(png_ptr, &buffer, readPngChunk);
-
-    // read all PNG info up to image data
-    png_read_info(png_ptr, info_ptr);
-
-    // Get profile
-    png_charp profile_name;
-#if PNG_LIBPNG_VER_MAJOR >= 1 && PNG_LIBPNG_VER_MINOR >= 5
-    png_bytep profile_data;
-#else
-    png_charp profile_data;
-#endif
-    int compression_type;
-    png_uint_32 proflen;
-
     cmsHPROFILE profile = 0;
-    if (png_get_iCCP(png_ptr, info_ptr, &profile_name, &compression_type, &profile_data, &proflen)) {
-        profile = cmsOpenProfileFromMem(profile_data, proflen);
-    } else {
-        kWarning() << "No ICC profile in this file";
+    struct jpeg_decompress_struct srcinfo;
+
+    JPEGErrorManager srcErrorManager;
+    srcinfo.err = &srcErrorManager;
+    jpeg_create_decompress(&srcinfo);
+    if (setjmp(srcErrorManager.jmp_buffer)) {
+        kError() << "libjpeg error in src\n";
+        return 0;
     }
-    png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
+
+    QBuffer buffer(const_cast<QByteArray*>(&data));
+    buffer.open(QIODevice::ReadOnly);
+    IODeviceJpegSourceManager::setup(&srcinfo, &buffer);
+
+    setup_read_icc_profile(&srcinfo);
+    jpeg_read_header(&srcinfo, true);
+    jpeg_start_decompress(&srcinfo);
+
+    uchar* profile_data;
+    uint profile_len;
+    if (read_icc_profile(&srcinfo, &profile_data, &profile_len)) {
+        LOG("Found a profile, length:" << profile_len);
+        profile = cmsOpenProfileFromMem(profile_data, profile_len);
+    }
+
+    jpeg_destroy_decompress(&srcinfo);
+
     return profile;
 }
-
 
 //- Profile class --------------------------------------------------------------
 struct ProfilePrivate
@@ -169,6 +143,9 @@ Profile::Ptr Profile::loadFromImageData(const QByteArray& data, const QByteArray
     cmsHPROFILE hProfile = 0;
     if (format == "png") {
         hProfile = loadFromPngData(data);
+    }
+    if (format == "jpeg") {
+        hProfile = loadFromJpegData(data);
     }
     if (hProfile) {
         ptr = new Profile(hProfile);
