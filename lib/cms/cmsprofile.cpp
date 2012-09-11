@@ -212,7 +212,10 @@ Profile::Ptr Profile::getMonitorProfile()
         hProfile = cmsOpenProfileFromMem((void*)str, nitems);
     }
 #endif
-    return hProfile ? Profile::Ptr(new Profile(hProfile)) : Profile::Ptr();
+    if (!hProfile) {
+        hProfile = cmsCreate_sRGBProfile();
+    }
+    return Profile::Ptr(new Profile(hProfile));
 }
 
 } // namespace Cms
