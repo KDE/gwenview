@@ -153,6 +153,32 @@ Profile::Ptr Profile::loadFromImageData(const QByteArray& data, const QByteArray
     return ptr;
 }
 
+Profile::Ptr Profile::loadFromExiv2Image(const Exiv2::Image* image)
+{
+    Profile::Ptr ptr;
+    cmsHPROFILE hProfile = 0;
+
+    const Exiv2::ExifData& exifData = image->exifData();
+    Exiv2::ExifKey key("Exif.Image.InterColorProfile");
+    Exiv2::ExifData::const_iterator it = exifData.findKey(key);
+    if (it == exifData.end()) {
+        LOG("No profile found");
+        return ptr;
+    }
+    int size = it->size();
+    LOG("size:" << size);
+
+    QByteArray data;
+    data.resize(size);
+    it->copy(reinterpret_cast<Exiv2::byte*>(data.data()), Exiv2::invalidByteOrder);
+    hProfile = cmsOpenProfileFromMem(data, size);
+
+    if (hProfile) {
+        ptr = new Profile(hProfile);
+    }
+    return ptr;
+}
+
 cmsHPROFILE Profile::handle() const
 {
     return d->mProfile;

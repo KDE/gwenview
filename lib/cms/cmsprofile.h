@@ -31,6 +31,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QSharedData>
 
+// Exiv2
+#include <exiv2/image.hpp>
+
 class QByteArray;
 class QString;
 
@@ -62,6 +65,7 @@ public:
     cmsHPROFILE handle() const;
 
     static Profile::Ptr loadFromImageData(const QByteArray& data, const QByteArray& format);
+    static Profile::Ptr loadFromExiv2Image(const Exiv2::Image* image);
     static Profile::Ptr getMonitorProfile();
 
 private:

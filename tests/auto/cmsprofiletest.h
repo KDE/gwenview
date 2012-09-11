@@ -35,6 +35,10 @@ class CmsProfileTest : public QObject
 private Q_SLOTS:
     void testLoadFromImageData();
     void testLoadFromImageData_data();
+#if 0 // Need some test data
+    void testLoadFromExiv2Image();
+    void testLoadFromExiv2Image_data();
+#endif
 };
 
 #endif /* CMSPROFILETEST_H */

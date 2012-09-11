@@ -23,6 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include <lib/cms/cmsprofile.h>
+#include <lib/exiv2imageloader.h>
 #include <testutils.h>
 
 // KDE
@@ -62,3 +63,34 @@ void CmsProfileTest::testLoadFromImageData_data()
     NEW_ROW("cms/Lower_Right.jpg", "jpeg");
 }
 #undef NEW_ROW
+
+#if 0
+
+void CmsProfileTest::testLoadFromExiv2Image()
+{
+    QFETCH(QString, fileName);
+    Exiv2::Image::AutoPtr image;
+    {
+        QByteArray data;
+        QString path = pathForTestFile(fileName);
+        kWarning() << path;
+        QFile file(path);
+        QVERIFY(file.open(QIODevice::ReadOnly));
+        data = file.readAll();
+
+        Exiv2ImageLoader loader;
+        QVERIFY(loader.load(data));
+        image = loader.popImage();
+    }
+    Cms::Profile::Ptr ptr = Cms::Profile::loadFromExiv2Image(image.get());
+    QVERIFY(!ptr.isNull());
+}
+
+#define NEW_ROW(fileName) QTest::newRow(fileName) << fileName
+void CmsProfileTest::testLoadFromExiv2Image_data()
+{
+    QTest::addColumn<QString>("fileName");
+}
+#undef NEW_ROW
+
+#endif

@@ -216,10 +216,16 @@ struct LoadingDocumentImplPrivate
             // Use the size from JpegContent, as its correctly transposed if the
             // image has been rotated
             mImageSize = mJpegContent->size();
+
+            mCmsProfile = Cms::Profile::loadFromExiv2Image(mExiv2Image.get());
         } else {
             mImageSize = reader.size();
         }
         LOG("mImageSize" << mImageSize);
+
+        if (!mCmsProfile) {
+            mCmsProfile = Cms::Profile::loadFromImageData(mData, mFormat);
+        }
 
         return true;
     }
@@ -252,8 +258,6 @@ struct LoadingDocumentImplPrivate
             LOG("QImageReader::read() failed");
             return;
         }
-
-        mCmsProfile = Cms::Profile::loadFromImageData(mData, mFormat);
 
         if (mJpegContent.get()) {
             Gwenview::Orientation orientation = mJpegContent->orientation();
