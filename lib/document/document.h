@@ -35,6 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Local
 #include <lib/mimetypeutils.h>
+#include <lib/cms/cmsprofile.h>
 
 class QImage;
 class QRect;
@@ -168,6 +169,8 @@ public:
      */
     QByteArray rawData() const;
 
+    Cms::Profile::Ptr cmsProfile() const;
+
     /**
      * Returns a QSvgRenderer which can be used to render this document if it is
      * an SVG image. Returns a NULL pointer otherwise.
@@ -236,6 +239,7 @@ private:
     void setDownSampledImage(const QImage&, int invertedZoom);
     void switchToImpl(AbstractDocumentImpl* impl);
     void setErrorString(const QString&);
+    void setCmsProfile(Cms::Profile::Ptr);
 
     Document(const KUrl&);
     DocumentPrivate * const d;

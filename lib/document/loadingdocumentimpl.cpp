@@ -430,6 +430,7 @@ void LoadingDocumentImpl::slotMetaInfoLoaded()
     setDocumentFormat(d->mFormat);
     setDocumentImageSize(d->mImageSize);
     setDocumentExiv2Image(d->mExiv2Image);
+    setDocumentCmsProfile(d->mCmsProfile);
 
     d->mMetaInfoLoaded = true;
     emit metaInfoLoaded();
