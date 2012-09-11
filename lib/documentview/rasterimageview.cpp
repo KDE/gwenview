@@ -67,18 +67,24 @@ struct RasterImageViewPrivate
 
     cmsHTRANSFORM mDisplayTransform;
 
-    void getMonitorProfile()
+    void updateDisplayTransform()
     {
-        Cms::Profile::Ptr monitorProfile = Cms::Profile::getMonitorProfile();
-        mDisplayTransform = 0;
-        if (monitorProfile) {
-            // this should be the embedded profile if the image has one.
-            cmsHPROFILE workingProfile = cmsCreate_sRGBProfile();
-            mDisplayTransform = cmsCreateTransform(workingProfile, TYPE_BGRA_8,
-                                                   monitorProfile->handle(), TYPE_BGRA_8,
-                                                   INTENT_PERCEPTUAL, cmsFLAGS_BLACKPOINTCOMPENSATION);
-            cmsCloseProfile(workingProfile);
+        if (mDisplayTransform) {
+            cmsDeleteTransform(mDisplayTransform);
         }
+        mDisplayTransform = 0;
+        Cms::Profile::Ptr profile = q->document()->cmsProfile();
+        if (!profile) {
+            return;
+        }
+        Cms::Profile::Ptr monitorProfile = Cms::Profile::getMonitorProfile();
+        if (!monitorProfile) {
+            return;
+        }
+        // FIXME: Wrap cmsHTRANSFORM type?
+        mDisplayTransform = cmsCreateTransform(profile->handle(), TYPE_BGRA_8,
+                                               monitorProfile->handle(), TYPE_BGRA_8,
+                                               INTENT_PERCEPTUAL, cmsFLAGS_BLACKPOINTCOMPENSATION);
     }
 
     void createBackgroundTexture()
@@ -167,6 +173,7 @@ RasterImageView::RasterImageView(QGraphicsItem* parent)
 {
     d->q = this;
     d->mEmittedCompleted = false;
+    d->mDisplayTransform = 0;
 
     d->mAlphaBackgroundMode = AlphaBackgroundCheckBoard;
     d->mAlphaBackgroundColor = Qt::black;
@@ -179,8 +186,6 @@ RasterImageView::RasterImageView(QGraphicsItem* parent)
 
     d->createBackgroundTexture();
     d->setupUpdateTimer();
-
-    d->getMonitorProfile();
 }
 
 RasterImageView::~RasterImageView()
@@ -242,6 +247,8 @@ void RasterImageView::finishSetDocument()
         kError() << "No valid image size available, this should not happen!";
         return;
     }
+
+    d->updateDisplayTransform();
 
     d->mScaler->setDocument(document());
     d->resizeBuffer();
