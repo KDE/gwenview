@@ -189,11 +189,17 @@ struct ThumbnailViewPrivate
 
     void scheduleThumbnailGenerationForVisibleItems()
     {
-        if (mThumbnailLoadJob) {
-            mThumbnailLoadJob->removeItems(mThumbnailLoadJob->pendingItems());
+        // don't delay start if there is no job
+        if(!mThumbnailLoadJob) {
+            mSmoothThumbnailQueue.clear();
+            q->generateThumbnailsForVisibleItems();
+            return;
         }
-        mSmoothThumbnailQueue.clear();
-        mScheduledThumbnailGenerationTimer.start();
+
+        // if there is no thumbnail generation scheduled, start timer
+        if(!mScheduledThumbnailGenerationTimer.isActive()) {
+            mScheduledThumbnailGenerationTimer.start();
+        }
     }
 
     void updateThumbnailForModifiedDocument(const QModelIndex& index)
@@ -221,9 +227,7 @@ struct ThumbnailViewPrivate
             mThumbnailLoadJob->start();
         } else {
             mThumbnailLoadJob->setThumbnailGroup(group);
-            Q_FOREACH(const KFileItem & item, list) {
-                mThumbnailLoadJob->appendItem(item);
-            }
+            mThumbnailLoadJob->prependItems(list);
         }
     }
 
@@ -308,7 +312,7 @@ ThumbnailView::ThumbnailView(QWidget* parent)
     d->mScheduledThumbnailGenerationTimer.setSingleShot(true);
     d->mScheduledThumbnailGenerationTimer.setInterval(500);
     connect(&d->mScheduledThumbnailGenerationTimer, SIGNAL(timeout()),
-            SLOT(generateThumbnailsForVisibleItems()));
+            SLOT(scheduledThumbnailGenerationTimeout()));
 
     d->mSmoothThumbnailTimer.setSingleShot(true);
     connect(&d->mSmoothThumbnailTimer, SIGNAL(timeout()),
@@ -758,6 +762,12 @@ void ThumbnailView::scrollContentsBy(int dx, int dy)
 {
     QListView::scrollContentsBy(dx, dy);
     d->scheduleThumbnailGenerationForVisibleItems();
+}
+
+void ThumbnailView::scheduledThumbnailGenerationTimeout()
+{
+    d->mSmoothThumbnailQueue.clear();
+    generateThumbnailsForVisibleItems();
 }
 
 void ThumbnailView::generateThumbnailsForVisibleItems()

@@ -478,6 +478,20 @@ void ThumbnailLoadJob::removeItems(const KFileItemList& itemList)
     }
 }
 
+void ThumbnailLoadJob::prependItems(const KFileItemList& itemList)
+{
+    for(int i = itemList.size()-1; i >= 0; i--) {
+        KFileItem item = itemList.at(i);
+        mItems.removeAll(item);
+        if(item != mCurrentItem) {
+            mItems.prepend(item);
+        }
+    }
+    if (mCurrentItem.isNull()) {
+        determineNextIcon();
+    }
+}
+
 void ThumbnailLoadJob::determineNextIcon()
 {
     LOG(this);

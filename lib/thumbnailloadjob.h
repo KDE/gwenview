@@ -132,6 +132,8 @@ public:
      */
     void removeItems(const KFileItemList& itemList);
 
+    void prependItems(const KFileItemList& itemList);
+
     /**
      * Returns the list of items waiting for a thumbnail
      */

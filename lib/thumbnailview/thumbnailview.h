@@ -183,6 +183,7 @@ private Q_SLOTS:
      */
     void updateBusyIndexes();
 
+    void scheduledThumbnailGenerationTimeout();
     void generateThumbnailsForVisibleItems();
     void smoothNextThumbnail();
 
