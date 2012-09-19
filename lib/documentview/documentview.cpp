@@ -586,7 +586,7 @@ void DocumentView::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*op
         QRegion borders = QRegion(boundingRect().toRect())
             - QRegion(visibleRect.toRect());
         Q_FOREACH(const QRect& rect, borders.rects()) {
-            painter->eraseRect(rect);
+            painter->fillRect(rect, scene()->backgroundBrush());
         }
     }
 
