@@ -24,12 +24,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include <lib/documentview/documentview.h>
 #include <lib/graphicswidgetfloater.h>
-#include <lib/gvdebug.h>
 #include <lib/gwenviewconfig.h>
 
 // KDE
 #include <KDebug>
-#include <KStandardDirs>
 #include <KUrl>
 
 // Qt
@@ -55,14 +53,6 @@ struct DocumentViewContainerPrivate
     DocumentViewSet mAddedViews;
     DocumentViewSet mRemovedViews;
     QTimer* mLayoutUpdateTimer;
-
-    void setupSceneBackground()
-    {
-        QString path = KStandardDirs::locate("data", "gwenview/images/background.png");
-        QPixmap pix(path);
-        GV_RETURN_IF_FAIL(!pix.isNull());
-        mScene->setBackgroundBrush(pix);
-    }
 
     void scheduleLayoutUpdate()
     {
@@ -102,7 +92,6 @@ DocumentViewContainer::DocumentViewContainer(QWidget* parent)
         setViewport(new QGLWidget);
     }
     setScene(d->mScene);
-    d->setupSceneBackground();
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     setFrameStyle(QFrame::NoFrame);

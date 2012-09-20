@@ -355,7 +355,14 @@ void BrowseMainPage::updateThumbnailDetails()
 void BrowseMainPage::setFullScreenMode(bool fullScreen)
 {
     // For fullscreen mode, we use the application palette, which has been set to a fullscreen version
-    setPalette(fullScreen ? QPalette() : d->mNormalPalette);
+    QPalette pal;
+    if (fullScreen) {
+        pal = QApplication::palette();
+        pal.setBrush(QPalette::Base, d->mNormalPalette.brush(QPalette::Base));
+    } else {
+        pal = d->mNormalPalette;
+    }
+    setPalette(pal);
     d->updateUrlNavigatorBackgroundColor();
     d->mUrlNavigatorContainer->setContentsMargins(
         fullScreen ? 6 : 0,
