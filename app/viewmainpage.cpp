@@ -476,20 +476,21 @@ void ViewMainPage::setFullScreenMode(bool fullScreenMode)
     d->mFullScreenMode = fullScreenMode;
     d->mStatusBarContainer->setVisible(!fullScreenMode);
 
+    QPalette pal;
     if (fullScreenMode) {
         d->mThumbnailBarVisibleBeforeFullScreen = d->mToggleThumbnailBarAction->isChecked();
         if (d->mThumbnailBarVisibleBeforeFullScreen) {
             d->mToggleThumbnailBarAction->trigger();
         }
-        QPalette pal = QApplication::palette();
-        pal.setColor(QPalette::Base, Qt::black);
-        d->mDocumentViewContainer->setPalette(pal);
+        pal = QApplication::palette();
+        pal.setBrush(QPalette::Base, d->mNormalPalette.brush(QPalette::Base));
     } else {
         if (d->mThumbnailBarVisibleBeforeFullScreen) {
             d->mToggleThumbnailBarAction->trigger();
         }
-        d->mDocumentViewContainer->setPalette(d->mNormalPalette);
+        pal = d->mNormalPalette;
     }
+    d->mDocumentViewContainer->setPalette(pal);
     d->mToggleThumbnailBarAction->setEnabled(!fullScreenMode);
 }
 

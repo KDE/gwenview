@@ -1511,11 +1511,13 @@ void MainWindow::loadConfig()
 
     // Colors
     int value = GwenviewConfig::viewBackgroundValue();
-    QColor bgColor = QColor::fromHsv(0, 0, value);
     QColor fgColor = value > 128 ? Qt::black : Qt::white;
 
+    QString path = KStandardDirs::locate("data", "gwenview/images/background.png");
+    QPixmap bgTexture(path);
+
     QPalette pal = palette();
-    pal.setColor(QPalette::Base, bgColor);
+    pal.setBrush(QPalette::Base, bgTexture);
     pal.setColor(QPalette::Text, fgColor);
 
     // Apply to widgets
