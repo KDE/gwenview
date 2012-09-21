@@ -346,6 +346,19 @@ void VideoViewAdapter::slotTicked(qint64 value)
     if (!d->mSeekSlider->isSliderDown()) {
         d->mSeekSlider->setValue(value);
     }
+    if (value == d->mMediaObject->totalTime()) {
+        // With phonon-gstreamer backend we sometimes have to wait for 8 seconds
+        // after the end of the video for the finished() signal to be emitted.
+        // See https://bugs.kde.org/show_bug.cgi?id=307156
+        // To workaround this, we emit videoFinished() ourself if the tick value
+        // reaches totalTime.
+        // tick() will continue to be emitted with the same end value until
+        // finished() is emitted. To avoid emitting videoFinished() several times,
+        // We disconnect from tick() and finished().
+        disconnect(d->mMediaObject, SIGNAL(finished()), this, SIGNAL(videoFinished()));
+        disconnect(d->mMediaObject, SIGNAL(tick(qint64)), this, SIGNAL(slotTicked(qint64)));
+        videoFinished();
+    }
 }
 
 } // namespace
