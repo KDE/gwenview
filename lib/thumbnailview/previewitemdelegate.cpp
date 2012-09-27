@@ -42,7 +42,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KLocale>
 #include <KUrl>
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-#include <nepomuk/kratingpainter.h>
+#include <kratingpainter.h>
 #endif
 
 // Local

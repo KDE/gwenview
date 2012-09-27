@@ -36,9 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KDebug>
 #include <KDialog>
 #include <KLocale>
-
-// Nepomuk
-#include <Nepomuk/KRatingPainter>
+#include <KRatingPainter>
 
 // Local
 #include "contextmanager.h"
