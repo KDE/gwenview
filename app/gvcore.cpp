@@ -27,6 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 #include <KFileDialog>
+#include <KGlobalSettings>
 #include <KImageIO>
 #include <KIO/NetAccess>
 #include <KLocale>
@@ -61,6 +62,7 @@ struct GvCorePrivate
     SortedDirModel* mDirModel;
     HistoryModel* mRecentFoldersModel;
     HistoryModel* mRecentUrlsModel;
+    QPalette mPalettes[4];
 
     bool showSaveAsDialog(const KUrl& url, KUrl* outUrl, QByteArray* format)
     {
@@ -103,6 +105,43 @@ struct GvCorePrivate
         *outUrl = dialog.selectedUrl();
         return true;
     }
+
+    void setupPalettes()
+    {
+        QPalette pal;
+        int value = GwenviewConfig::viewBackgroundValue();
+        QColor fgColor = value > 128 ? Qt::black : Qt::white;
+
+        // Normal
+        mPalettes[GvCore::NormalPalette] = KGlobalSettings::createApplicationPalette();
+
+        pal = mPalettes[GvCore::NormalPalette];
+        pal.setColor(QPalette::Base, QColor::fromHsv(0, 0, value));
+        pal.setColor(QPalette::Text, fgColor);
+        mPalettes[GvCore::NormalViewPalette] = pal;
+
+        // Fullscreen
+        KSharedConfigPtr config;
+        QString name = GwenviewConfig::fullScreenColorScheme();
+        if (name.isEmpty()) {
+            // Default color scheme
+            QString path = KStandardDirs::locate("data", "gwenview/color-schemes/fullscreen.colors");
+            config = KSharedConfig::openConfig(path);
+        } else if (name.contains('/')) {
+            // Full path to a .colors file
+            config = KSharedConfig::openConfig(name);
+        } else {
+            // Standard KDE color scheme
+            config = KSharedConfig::openConfig(QString("color-schemes/%1.colors").arg(name), KConfig::FullConfig, "data");
+        }
+        mPalettes[GvCore::FullScreenPalette] = KGlobalSettings::createApplicationPalette(config);
+
+        pal = mPalettes[GvCore::FullScreenPalette];
+        QString path = KStandardDirs::locate("data", "gwenview/images/background.png");
+        QPixmap bgTexture(path);
+        pal.setBrush(QPalette::Base, bgTexture);
+        mPalettes[GvCore::FullScreenViewPalette] = pal;
+    }
 };
 
 GvCore::GvCore(MainWindow* mainWindow, SortedDirModel* dirModel)
@@ -114,6 +153,8 @@ GvCore::GvCore(MainWindow* mainWindow, SortedDirModel* dirModel)
     d->mDirModel = dirModel;
     d->mRecentFoldersModel = 0;
     d->mRecentUrlsModel = 0;
+
+    d->setupPalettes();
 
     connect(GwenviewConfig::self(), SIGNAL(configChanged()),
             SLOT(slotConfigChanged()));
@@ -328,6 +369,12 @@ void GvCore::slotConfigChanged()
         clearModel(recentFoldersModel());
         clearModel(recentUrlsModel());
     }
+    d->setupPalettes();
+}
+
+QPalette GvCore::palette(GvCore::PaletteType type) const
+{
+    return d->mPalettes[type];
 }
 
 } // namespace

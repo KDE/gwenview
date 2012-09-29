@@ -39,6 +39,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Local
 #include "fileoperations.h"
+#include <gvcore.h>
 #include "splitter.h"
 #include <lib/document/document.h>
 #include <lib/documentview/abstractdocumentviewadapter.h>
@@ -133,6 +134,7 @@ struct ViewMainPagePrivate
     ViewMainPage* q;
     SlideShow* mSlideShow;
     KActionCollection* mActionCollection;
+    GvCore* mGvCore;
     QSplitter *mThumbnailSplitter;
     QWidget* mAdapterContainer;
     DocumentViewController* mDocumentViewController;
@@ -357,15 +359,22 @@ struct ViewMainPagePrivate
         SortedDirModel* model = static_cast<SortedDirModel*>(mThumbnailBar->model());
         return model->indexForUrl(url);
     }
+
+    void applyPalette(bool fullScreenMode)
+    {
+        mDocumentViewContainer->setPalette(mGvCore->palette(fullScreenMode ? GvCore::FullScreenViewPalette : GvCore::NormalViewPalette));
+        setupThumbnailBarStyleSheet();
+    }
 };
 
-ViewMainPage::ViewMainPage(QWidget* parent, SlideShow* slideShow, KActionCollection* actionCollection)
+ViewMainPage::ViewMainPage(QWidget* parent, SlideShow* slideShow, KActionCollection* actionCollection, GvCore* gvCore)
 : QWidget(parent)
 , d(new ViewMainPagePrivate)
 {
     d->q = this;
     d->mSlideShow = slideShow;
     d->mActionCollection = actionCollection;
+    d->mGvCore = gvCore;
     d->mFullScreenMode = false;
     d->mCompareMode = false;
     d->mThumbnailBarVisibleBeforeFullScreen = false;
@@ -415,6 +424,8 @@ ViewMainPage::~ViewMainPage()
 
 void ViewMainPage::loadConfig()
 {
+    d->applyPalette(false /* fullScreenMode */);
+
     // FIXME: Not symetric with saveConfig(). Check if it matters.
     Q_FOREACH(DocumentView * view, d->mDocumentViews) {
         view->loadAdapterConfig();
@@ -476,21 +487,17 @@ void ViewMainPage::setFullScreenMode(bool fullScreenMode)
     d->mFullScreenMode = fullScreenMode;
     d->mStatusBarContainer->setVisible(!fullScreenMode);
 
-    QPalette pal;
     if (fullScreenMode) {
         d->mThumbnailBarVisibleBeforeFullScreen = d->mToggleThumbnailBarAction->isChecked();
         if (d->mThumbnailBarVisibleBeforeFullScreen) {
             d->mToggleThumbnailBarAction->trigger();
         }
-        pal = QApplication::palette();
-        pal.setBrush(QPalette::Base, d->mNormalPalette.brush(QPalette::Base));
     } else {
         if (d->mThumbnailBarVisibleBeforeFullScreen) {
             d->mToggleThumbnailBarAction->trigger();
         }
-        pal = d->mNormalPalette;
     }
-    d->mDocumentViewContainer->setPalette(pal);
+    d->applyPalette(fullScreenMode);
     d->mToggleThumbnailBarAction->setEnabled(!fullScreenMode);
 }
 
@@ -581,13 +588,6 @@ RasterImageView* ViewMainPage::imageView() const
 DocumentView* ViewMainPage::documentView() const
 {
     return d->currentView();
-}
-
-void ViewMainPage::setNormalPalette(const QPalette& palette)
-{
-    d->mNormalPalette = palette;
-    d->mDocumentViewContainer->setPalette(palette);
-    d->setupThumbnailBarStyleSheet();
 }
 
 void ViewMainPage::openUrl(const KUrl& url)

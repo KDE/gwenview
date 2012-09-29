@@ -32,6 +32,7 @@ class KJob;
 class KUrl;
 
 class QAbstractItemModel;
+class QPalette;
 
 namespace Gwenview
 {
@@ -48,6 +49,13 @@ public:
     GvCore(MainWindow* mainWindow, SortedDirModel*);
     ~GvCore();
 
+    enum PaletteType {
+        NormalPalette = 0,
+        NormalViewPalette,
+        FullScreenPalette,
+        FullScreenViewPalette
+    };
+
     QAbstractItemModel* recentFoldersModel() const;
     QAbstractItemModel* recentUrlsModel() const;
     AbstractSemanticInfoBackEnd* semanticInfoBackEnd() const;
@@ -61,6 +69,8 @@ public:
      * @return true if editable, false if not
      */
     static bool ensureDocumentIsEditable(const KUrl& url);
+
+    QPalette palette(PaletteType type) const;
 
 public Q_SLOTS:
     void saveAll();
