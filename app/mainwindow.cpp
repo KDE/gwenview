@@ -43,7 +43,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KEditToolBar>
 #include <KFileDialog>
 #include <KFileItem>
-#include <KGlobalSettings>
 #include <KLocale>
 #include <KMenuBar>
 #include <KMessageBox>
@@ -172,7 +171,6 @@ struct MainWindow::Private
     SideBar* mSideBar;
     QStackedWidget* mViewStackedWidget;
     FullScreenContent* mFullScreenContent;
-    QPalette mFullScreenPalette;
     SaveBar* mSaveBar;
     bool mStartSlideShowWhenDirListerCompleted;
     SlideShow* mSlideShow;
@@ -214,23 +212,6 @@ struct MainWindow::Private
 
     void setupWidgets()
     {
-        {
-            KSharedConfigPtr config;
-            QString name = GwenviewConfig::fullScreenColorScheme();
-            if (name.isEmpty()) {
-                // Default color scheme
-                QString path = KStandardDirs::locate("data", "gwenview/color-schemes/fullscreen.colors");
-                config = KSharedConfig::openConfig(path);
-            } else if (name.contains('/')) {
-                // Full path to a .colors file
-                config = KSharedConfig::openConfig(name);
-            } else {
-                // Standard KDE color scheme
-                config = KSharedConfig::openConfig(QString("color-schemes/%1.colors").arg(name), KConfig::FullConfig, "data");
-            }
-            mFullScreenPalette = KGlobalSettings::createApplicationPalette(config);
-        }
-
         mFullScreenContent = new FullScreenContent(q);
 
         mCentralSplitter = new Splitter(Qt::Horizontal, q);
@@ -278,7 +259,7 @@ struct MainWindow::Private
 
     void setupThumbnailView(QWidget* parent)
     {
-        mBrowseMainPage = new BrowseMainPage(parent, mDirModel, q->actionCollection());
+        mBrowseMainPage = new BrowseMainPage(parent, mDirModel, q->actionCollection(), mGvCore);
 
         mThumbnailView = mBrowseMainPage->thumbnailView();
         mUrlNavigator = mBrowseMainPage->urlNavigator();
@@ -315,7 +296,7 @@ struct MainWindow::Private
 
     void setupViewMainPage(QWidget* parent)
     {
-        mViewMainPage = new ViewMainPage(parent, mSlideShow, q->actionCollection());
+        mViewMainPage = new ViewMainPage(parent, mSlideShow, q->actionCollection(), mGvCore);
         connect(mViewMainPage, SIGNAL(captionUpdateRequested(QString)),
                 q, SLOT(setCaption(QString)));
         connect(mViewMainPage, SIGNAL(completed()),
@@ -1316,7 +1297,7 @@ void MainWindow::toggleFullScreen(bool checked)
         menuBar()->hide();
         toolBar()->hide();
 
-        QApplication::setPalette(d->mFullScreenPalette);
+        QApplication::setPalette(d->mGvCore->palette(GvCore::FullScreenPalette));
         d->mFullScreenContent->setFullScreenMode(true);
         d->mBrowseMainPage->setFullScreenMode(true);
         d->mViewMainPage->setFullScreenMode(true);
@@ -1331,7 +1312,7 @@ void MainWindow::toggleFullScreen(bool checked)
         setAutoSaveSettings();
 
         // Back to normal
-        QApplication::setPalette(KGlobalSettings::createApplicationPalette());
+        QApplication::setPalette(d->mGvCore->palette(GvCore::NormalPalette));
         d->mFullScreenContent->setFullScreenMode(false);
         d->mBrowseMainPage->setFullScreenMode(false);
         d->mViewMainPage->setFullScreenMode(false);
@@ -1506,22 +1487,9 @@ void MainWindow::loadConfig()
     d->mDirModel->setBlackListedExtensions(GwenviewConfig::blackListedExtensions());
     d->mDirModel->adjustKindFilter(MimeTypeUtils::KIND_VIDEO, GwenviewConfig::listVideos());
 
+    d->mStartMainPage->loadConfig();
     d->mViewMainPage->loadConfig();
     d->mBrowseMainPage->loadConfig();
-
-    // Colors
-    int value = GwenviewConfig::viewBackgroundValue();
-    QColor bgColor = QColor::fromHsv(0, 0, value);
-    QColor fgColor = value > 128 ? Qt::black : Qt::white;
-
-    QPalette pal = palette();
-    pal.setColor(QPalette::Base, bgColor);
-    pal.setColor(QPalette::Text, fgColor);
-
-    // Apply to widgets
-    d->mStartMainPage->applyPalette(pal);
-    d->mBrowseMainPage->setNormalPalette(pal);
-    d->mViewMainPage->setNormalPalette(pal);
 }
 
 void MainWindow::saveConfig()

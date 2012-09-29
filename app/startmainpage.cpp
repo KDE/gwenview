@@ -206,7 +206,7 @@ StartMainPage::StartMainPage(QWidget* parent, GvCore* gvCore)
 
     d->updateHistoryTab();
     connect(GwenviewConfig::self(), SIGNAL(configChanged()),
-            SLOT(slotConfigChanged()));
+            SLOT(loadConfig()));
 }
 
 StartMainPage::~StartMainPage()
@@ -327,9 +327,10 @@ void StartMainPage::showRecentFoldersViewContextMenu(const QPoint& pos)
     }
 }
 
-void StartMainPage::slotConfigChanged()
+void StartMainPage::loadConfig()
 {
     d->updateHistoryTab();
+    applyPalette(d->mGvCore->palette(GvCore::NormalViewPalette));
 }
 
 } // namespace

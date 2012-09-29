@@ -39,6 +39,7 @@ namespace Gwenview
 {
 
 class DocumentView;
+class GvCore;
 class RasterImageView;
 class SlideShow;
 class ThumbnailBarView;
@@ -54,7 +55,7 @@ class ViewMainPage : public QWidget
 public:
     static const int MaxViewCount;
 
-    ViewMainPage(QWidget* parent, SlideShow*, KActionCollection*);
+    ViewMainPage(QWidget* parent, SlideShow*, KActionCollection*, GvCore*);
     ~ViewMainPage();
 
     ThumbnailBarView* thumbnailBar() const;
@@ -71,8 +72,6 @@ public:
     void setFullScreenMode(bool fullScreen);
 
     bool isFullScreenMode() const;
-
-    void setNormalPalette(const QPalette&);
 
     int statusBarHeight() const;
 

@@ -39,6 +39,7 @@ class KUrlNavigator;
 namespace Gwenview
 {
 
+class GvCore;
 class SortedDirModel;
 class ThumbnailView;
 
@@ -51,10 +52,8 @@ class BrowseMainPage : public QWidget
 {
     Q_OBJECT
 public:
-    BrowseMainPage(QWidget* parent, SortedDirModel*, KActionCollection*);
+    BrowseMainPage(QWidget* parent, SortedDirModel*, KActionCollection*, GvCore*);
     ~BrowseMainPage();
-
-    void setNormalPalette(const QPalette&);
 
     void reload();
 
