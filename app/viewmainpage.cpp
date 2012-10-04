@@ -36,6 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KMenu>
 #include <KMessageBox>
 #include <KToggleAction>
+#include <KActivities/ResourceInstance>
 
 // Local
 #include "fileoperations.h"
@@ -150,6 +151,11 @@ struct ViewMainPagePrivate
     KToggleAction* mToggleThumbnailBarAction;
     KToggleAction* mSynchronizeAction;
     QCheckBox* mSynchronizeCheckBox;
+
+    // Activity Resource events reporting needs to be above KPart,
+    // in the shell itself, to avoid problems with other MDI applications
+    // that use this KPart
+    QHash<DocumentView*, KActivities::ResourceInstance*> mActivityResources;
 
     bool mFullScreenMode;
     QPalette mNormalPalette;
@@ -272,6 +278,7 @@ struct ViewMainPagePrivate
     {
         mDocumentViewContainer->deleteView(view);
         mDocumentViews.removeOne(view);
+        mActivityResources.remove(view);
     }
 
     void setupToolContainer()
@@ -345,6 +352,14 @@ struct ViewMainPagePrivate
             return;
         }
         mThumbnailBar->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Current);
+
+        if (mActivityResources.contains(oldView)) {
+            mActivityResources[oldView]->notifyFocusedOut();
+        }
+
+        if (mActivityResources.contains(view)) {
+            mActivityResources[view]->notifyFocusedIn();
+        }
     }
 
     QModelIndex indexForView(DocumentView* view) const
@@ -661,6 +676,18 @@ void ViewMainPage::openUrls(const KUrl::List& allUrls, const KUrl& currentUrl)
             d->setCurrentView(view);
         } else {
             view->setCurrent(false);
+        }
+
+        if (!d->mActivityResources.contains(view)) {
+            d->mActivityResources[view] = new KActivities::ResourceInstance(window()->winId(), view);
+        }
+
+        d->mActivityResources[view]->setUri(view->url());
+
+        if (view->url() == currentUrl) {
+            d->mActivityResources[view]->notifyFocusedIn();
+        } else {
+            d->mActivityResources[view]->notifyFocusedOut();
         }
     }
 

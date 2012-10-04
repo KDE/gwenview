@@ -45,6 +45,9 @@ endif (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 find_package(LibKonq)
 macro_log_feature(LIBKONQ_FOUND "libkonq" "Provides file management features" "http://www.kde.org" TRUE "" "")
 
+find_package(KActivities 6.1.0 REQUIRED)
+macro_log_feature(KActivities_FOUND "KActivities" "Activities interface library" "https://projects.kde.org/projects/kde/kdelibs/    kactivities" FALSE "6.1.0" "Required for Activities integration.")
+
 ## Global settings
 
 # Avoid some build-time warnings in Nepomuk
