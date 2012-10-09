@@ -27,6 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KDE
 #include <KDebug>
 #include <KDirLister>
+#include <KDirModel>
 #include <KIconLoader>
 #include <KUrlNavigator>
 
@@ -61,6 +62,11 @@ public:
     void showMenuForUrlDroppedOnDir(QWidget*, const KUrl::List&, const KUrl&)
     {}
 };
+
+inline KFileItem itemForIndex(const QModelIndex& index)
+{
+    return index.data(KDirModel::FileItemRole).value<KFileItem>();
+}
 
 struct ThumbnailPagePrivate : public Ui_ThumbnailPage
 {
@@ -235,7 +241,7 @@ void ThumbnailPage::slotThumbnailViewIndexActivated(const QModelIndex& index)
         return;
     }
 
-    KFileItem item = d->mDirModel->itemForIndex(index);
+    KFileItem item = itemForIndex(index);
     if (item.isDir()) {
         // Item is a dir, open it
         openUrl(item.url());
@@ -268,7 +274,7 @@ void ThumbnailPage::importList(const QModelIndexList& list)
 {
     d->mUrlList.clear();
     Q_FOREACH(const QModelIndex & index, list) {
-        KFileItem item = d->mDirModel->itemForIndex(index);
+        KFileItem item = itemForIndex(index);
         if (!ArchiveUtils::fileItemIsDirOrArchive(item)) {
             d->mUrlList << item.url();
         }
