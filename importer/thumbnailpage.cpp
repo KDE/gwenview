@@ -87,6 +87,16 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
             | MimeTypeUtils::KIND_SVG_IMAGE
             | MimeTypeUtils::KIND_VIDEO
         );
+
+        QObject::connect(
+            mDirModel, SIGNAL(rowsInserted(QModelIndex,int,int)),
+            q, SLOT(updateImportButtons()));
+        QObject::connect(
+            mDirModel, SIGNAL(rowsRemoved(QModelIndex,int,int)),
+            q, SLOT(updateImportButtons()));
+        QObject::connect(
+            mDirModel, SIGNAL(modelReset()),
+            q, SLOT(updateImportButtons()));
     }
 
     void setupIcons()
@@ -162,15 +172,6 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
 
         QObject::connect(
             mThumbnailView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-            q, SLOT(updateImportButtons()));
-        QObject::connect(
-            mDirModel, SIGNAL(rowsInserted(QModelIndex,int,int)),
-            q, SLOT(updateImportButtons()));
-        QObject::connect(
-            mDirModel, SIGNAL(rowsRemoved(QModelIndex,int,int)),
-            q, SLOT(updateImportButtons()));
-        QObject::connect(
-            mDirModel, SIGNAL(modelReset()),
             q, SLOT(updateImportButtons()));
 
         QObject::connect(
