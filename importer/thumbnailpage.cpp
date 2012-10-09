@@ -265,8 +265,9 @@ void ThumbnailPage::slotImportSelected()
 void ThumbnailPage::slotImportAll()
 {
     QModelIndexList list;
-    for (int row = d->mDirModel->rowCount() - 1; row >= 0; --row) {
-        list << d->mDirModel->index(row, 0);
+    QAbstractItemModel* model = d->mThumbnailView->model();
+    for (int row = model->rowCount() - 1; row >= 0; --row) {
+        list << model->index(row, 0);
     }
     importList(list);
 }
