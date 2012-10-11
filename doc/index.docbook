@@ -10,7 +10,7 @@
 <book id="gwenview" lang="&language;">
 <title>Gwenview User Manual</title>
 
-<book id="gwenview"info>
+<bookinfo>
 <authorgroup>
 <author>
 <firstname>Aurélien</firstname>
