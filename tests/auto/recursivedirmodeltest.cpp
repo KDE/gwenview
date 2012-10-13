@@ -37,50 +37,90 @@ QTEST_KDEMAIN(RecursiveDirModelTest, GUI)
 
 void RecursiveDirModelTest::testBasic_data()
 {
-    QTest::addColumn<QStringList>("files");
-#define NEW_ROW(name, files) QTest::newRow(name) << (files)
-    NEW_ROW("empty_dir", QStringList());
-
-    NEW_ROW("images_only", QStringList()
-        << "pict01.jpg" << "pict02.jpg" << "pict03.jpg"
+    QTest::addColumn<QStringList>("initialFiles");
+    QTest::addColumn<QStringList>("addedFiles");
+#define NEW_ROW(name, initialFiles, addedFiles) QTest::newRow(name) << (initialFiles) << (addedFiles)
+    NEW_ROW("empty_dir",
+        QStringList(),
+        QStringList()
+            << "new.jpg"
         );
-    NEW_ROW("images_in_two_dirs", QStringList()
-        << "d1/pict101.jpg" << "d1/pict102.jpg"
-        << "d2/pict201.jpg"
+    NEW_ROW("images_only",
+        QStringList()
+            << "pict01.jpg"
+            << "pict02.jpg"
+            << "pict03.jpg",
+        QStringList()
+            << "pict04.jpg"
         );
-    NEW_ROW("images_in_two_dirs_w_same_names", QStringList()
-        << "d1/a.jpg" << "d1/b.jpg"
-        << "d2/a.jpg" << "d2/b.jpg"
+    NEW_ROW("images_in_two_dirs",
+        QStringList()
+            << "d1/pict101.jpg"
+            << "d1/pict102.jpg"
+            << "d2/pict201.jpg",
+        QStringList()
+            << "d1/pict103.jpg"
+            << "d2/pict202.jpg"
+        );
+    NEW_ROW("images_in_two_dirs_w_same_names",
+        QStringList()
+            << "d1/a.jpg"
+            << "d1/b.jpg"
+            << "d2/a.jpg"
+            << "d2/b.jpg",
+        QStringList()
+            << "d3/a.jpg"
+            << "d3/b.jpg"
         );
 #undef NEW_ROW
 }
 
-void RecursiveDirModelTest::testBasic()
+static QList<KUrl> listModelUrls(QAbstractItemModel* model)
 {
-    QFETCH(QStringList, files);
-    TestUtils::SandBoxDir sandBoxDir;
-    sandBoxDir.fill(files);
-
-    RecursiveDirModel model;
-    QEventLoop loop;
-    connect(&model, SIGNAL(completed()), &loop, SLOT(quit()));
-    model.setUrl(sandBoxDir.absolutePath());
-    loop.exec();
-
     QList<KUrl> out;
-    for (int row = 0; row < model.rowCount(QModelIndex()); ++row) {
-        QModelIndex index = model.index(row, 0);
+    for (int row = 0; row < model->rowCount(QModelIndex()); ++row) {
+        QModelIndex index = model->index(row, 0);
         KFileItem item = index.data(KDirModel::FileItemRole).value<KFileItem>();
         out << item.url();
     }
     qSort(out);
+    return out;
+}
 
-    QList<KUrl> expected;
+static QList<KUrl> listExpectedUrls(const QDir& dir, const QStringList& files)
+{
+    QList<KUrl> lst;
     Q_FOREACH(const QString &name, files) {
-        KUrl url(sandBoxDir.absoluteFilePath(name));
-        expected << url;
+        KUrl url(dir.absoluteFilePath(name));
+        lst << url;
     }
-    qSort(expected);
+    qSort(lst);
+    return lst;
+}
 
+void RecursiveDirModelTest::testBasic()
+{
+    QFETCH(QStringList, initialFiles);
+    QFETCH(QStringList, addedFiles);
+    TestUtils::SandBoxDir sandBoxDir;
+    sandBoxDir.fill(initialFiles);
+
+    RecursiveDirModel model;
+    QEventLoop loop;
+    connect(&model, SIGNAL(completed()), &loop, SLOT(quit()));
+
+    model.setUrl(sandBoxDir.absolutePath());
+    loop.exec();
+
+    QList<KUrl> out = listModelUrls(&model);
+    QList<KUrl> expected = listExpectedUrls(sandBoxDir, initialFiles);
+    QCOMPARE(out, expected);
+
+    sandBoxDir.fill(addedFiles);
+    loop.exec();
+
+    out = listModelUrls(&model);
+    expected = listExpectedUrls(sandBoxDir, initialFiles + addedFiles);
     QCOMPARE(out, expected);
 }
+
