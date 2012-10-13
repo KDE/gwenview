@@ -53,6 +53,9 @@ public:
 
     void setSourceUrl(const KUrl&);
 
+public Q_SLOTS:
+    void setListRecursively(bool);
+
 Q_SIGNALS:
     void importRequested();
     void rejected();
