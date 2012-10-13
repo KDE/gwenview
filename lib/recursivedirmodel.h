@@ -52,6 +52,9 @@ public:
     int rowCount(const QModelIndex&) const; // reimp
     QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const; // reimp
 
+Q_SIGNALS:
+    void completed();
+
 private Q_SLOTS:
     void slotItemsAdded(const KUrl& dirUrl, const KFileItemList&);
     void slotItemsDeleted(const KFileItemList&);

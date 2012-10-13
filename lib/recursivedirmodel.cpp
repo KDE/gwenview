@@ -47,6 +47,8 @@ RecursiveDirModel::RecursiveDirModel(QObject* parent)
         SLOT(slotItemsAdded(KUrl, KFileItemList)));
     connect(d->mDirLister, SIGNAL(itemsDeleted(KFileItemList)),
         SLOT(slotItemsDeleted(KFileItemList)));
+    connect(d->mDirLister, SIGNAL(completed()),
+        SIGNAL(completed()));
 }
 
 RecursiveDirModel::~RecursiveDirModel()
