@@ -271,7 +271,7 @@ void StartMainPage::showEvent(QShowEvent* event)
             delegate->setContextBarActions(PreviewItemDelegate::NoAction);
             delegate->setTextElideMode(Qt::ElideLeft);
             d->mRecentFoldersView->setItemDelegate(delegate);
-            d->mRecentFoldersView->setThumbnailSize(128);
+            d->mRecentFoldersView->setThumbnailWidth(128);
         }
         if (!d->mRecentUrlsView->model()) {
             d->mRecentUrlsView->setModel(d->mGvCore->recentUrlsModel());

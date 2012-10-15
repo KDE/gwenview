@@ -100,7 +100,7 @@ Q_SIGNALS:
     void setDocumentRatingRequested(const KUrl&, int rating);
 
 private Q_SLOTS:
-    void setThumbnailSize(int);
+    void setThumbnailSize(const QSize&);
 
     void slotSaveClicked();
     void slotRotateLeftClicked();

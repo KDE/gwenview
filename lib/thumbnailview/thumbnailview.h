@@ -74,7 +74,12 @@ public:
     /**
      * Returns the thumbnail size.
      */
-    int thumbnailSize() const;
+    QSize thumbnailSize() const;
+
+    /**
+     * Returns the aspect ratio of the thumbnail.
+     */
+    qreal thumbnailAspectRatio() const;
 
     QPixmap thumbnailForIndex(const QModelIndex&, QSize* fullSize = 0);
 
@@ -104,6 +109,8 @@ public:
 
     void reloadThumbnail(const QModelIndex&);
 
+    void updateThumbnailSize();
+
 Q_SIGNALS:
     /**
      * It seems we can't use the 'activated()' signal for now because it does
@@ -113,7 +120,8 @@ Q_SIGNALS:
     void indexActivated(const QModelIndex&);
     void urlListDropped(const KUrl::List& lst, const KUrl& destination);
 
-    void thumbnailSizeChanged(int);
+    void thumbnailSizeChanged(const QSize&);
+    void thumbnailWidthChanged(int);
 
     /**
      * Emitted whenever selectionChanged() is called.
@@ -131,9 +139,14 @@ Q_SIGNALS:
 
 public Q_SLOTS:
     /**
-     * Sets the thumbnail size, in pixels.
+     * Sets the thumbnail's width, in pixels. Keeps aspect ratio unchanged.
      */
-    void setThumbnailSize(int pixel);
+    void setThumbnailWidth(int width);
+
+    /**
+     * Sets the thumbnail's aspect ratio. Keeps width unchanged.
+     */
+    void setThumbnailAspectRatio(qreal ratio);
 
     void scrollToSelectedIndex();
 

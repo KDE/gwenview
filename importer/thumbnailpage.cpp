@@ -44,6 +44,7 @@ namespace Gwenview
 {
 
 static const int DEFAULT_THUMBNAIL_SIZE = 128;
+static const qreal DEFAULT_THUMBNAIL_ASPECT_RATIO = 3. / 2.;
 
 class ImporterThumbnailViewHelper : public AbstractThumbnailViewHelper
 {
@@ -131,11 +132,14 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
         mThumbnailView->setPalette(pal);
 
         QObject::connect(mSlider, SIGNAL(valueChanged(int)),
-                         mThumbnailView, SLOT(setThumbnailSize(int)));
+                         mThumbnailView, SLOT(setThumbnailWidth(int)));
+        QObject::connect(mThumbnailView, SIGNAL(thumbnailWidthChanged(int)),
+                         mSlider, SLOT(setValue(int)));
         int thumbnailSize = DEFAULT_THUMBNAIL_SIZE;
         mSlider->setValue(thumbnailSize);
         mSlider->updateToolTip();
-        mThumbnailView->setThumbnailSize(thumbnailSize);
+        mThumbnailView->setThumbnailAspectRatio(DEFAULT_THUMBNAIL_ASPECT_RATIO);
+        mThumbnailView->setThumbnailWidth(thumbnailSize);
 
         QObject::connect(mThumbnailView, SIGNAL(indexActivated(QModelIndex)),
                          q, SLOT(slotThumbnailViewIndexActivated(QModelIndex)));

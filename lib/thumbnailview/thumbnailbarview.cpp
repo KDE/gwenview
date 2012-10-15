@@ -411,7 +411,7 @@ struct ThumbnailBarViewPrivate
         if (q->thumbnailScaleMode() == ThumbnailView::ScaleToFit) {
             q->setGridSize(QSize(gridSize, gridSize));
         }
-        q->setThumbnailSize(gridSize - ITEM_MARGIN * 2);
+        q->setThumbnailWidth(gridSize - ITEM_MARGIN * 2);
     }
 };
 

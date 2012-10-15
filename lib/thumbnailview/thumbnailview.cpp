@@ -160,7 +160,8 @@ struct ThumbnailViewPrivate
 {
     ThumbnailView* q;
     ThumbnailView::ThumbnailScaleMode mScaleMode;
-    int mThumbnailSize;
+    QSize mThumbnailSize;
+    qreal mThumbnailAspectRatio;
     AbstractDocumentInfoProvider* mDocumentInfoProvider;
     AbstractThumbnailViewHelper* mThumbnailViewHelper;
     ThumbnailForUrl mThumbnailForUrl;
@@ -201,7 +202,7 @@ struct ThumbnailViewPrivate
         Q_ASSERT(mDocumentInfoProvider);
         KFileItem item = fileItemForIndex(index);
         KUrl url = item.url();
-        ThumbnailGroup::Enum group = ThumbnailGroup::fromPixelSize(mThumbnailSize);
+        ThumbnailGroup::Enum group = ThumbnailGroup::fromPixelSize(mThumbnailSize.width());
         QPixmap pix;
         QSize fullSize;
         mDocumentInfoProvider->thumbnailForDocument(url, group, &pix, &fullSize);
@@ -211,7 +212,7 @@ struct ThumbnailViewPrivate
 
     void generateThumbnailsForItems(const KFileItemList& list)
     {
-        ThumbnailGroup::Enum group = ThumbnailGroup::fromPixelSize(mThumbnailSize);
+        ThumbnailGroup::Enum group = ThumbnailGroup::fromPixelSize(mThumbnailSize.width());
         if (!mThumbnailLoadJob) {
             mThumbnailLoadJob = new ThumbnailLoadJob(list, group);
             QObject::connect(mThumbnailLoadJob, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize)),
@@ -232,7 +233,7 @@ struct ThumbnailViewPrivate
         const QPixmap& mGroupPix = thumbnail->mGroupPix;
         const int groupSize = qMax(mGroupPix.width(), mGroupPix.height());
         const int fullSize = qMax(thumbnail->mFullSize.width(), thumbnail->mFullSize.height());
-        if (fullSize == groupSize && groupSize <= mThumbnailSize) {
+        if (fullSize == groupSize && mGroupPix.height() <= mThumbnailSize.height() && mGroupPix.width() <= mThumbnailSize.width()) {
             thumbnail->mAdjustedPix = mGroupPix;
             thumbnail->mRough = false;
         } else {
@@ -258,18 +259,18 @@ struct ThumbnailViewPrivate
     {
         switch (mScaleMode) {
         case ThumbnailView::ScaleToFit:
-            return pix.scaled(mThumbnailSize, mThumbnailSize, Qt::KeepAspectRatio, transformationMode);
+            return pix.scaled(mThumbnailSize.width(), mThumbnailSize.height(), Qt::KeepAspectRatio, transformationMode);
             break;
         case ThumbnailView::ScaleToSquare: {
             int minSize = qMin(pix.width(), pix.height());
             QPixmap pix2 = pix.copy((pix.width() - minSize) / 2, (pix.height() - minSize) / 2, minSize, minSize);
-            return pix2.scaled(mThumbnailSize, mThumbnailSize, Qt::KeepAspectRatio, transformationMode);
+            return pix2.scaled(mThumbnailSize.width(), mThumbnailSize.height(), Qt::KeepAspectRatio, transformationMode);
         }
         case ThumbnailView::ScaleToHeight:
-            return pix.scaledToHeight(mThumbnailSize, transformationMode);
+            return pix.scaledToHeight(mThumbnailSize.height(), transformationMode);
             break;
         case ThumbnailView::ScaleToWidth:
-            return pix.scaledToWidth(mThumbnailSize, transformationMode);
+            return pix.scaledToWidth(mThumbnailSize.width(), transformationMode);
             break;
         }
         // Keep compiler happy
@@ -289,7 +290,8 @@ ThumbnailView::ThumbnailView(QWidget* parent)
     // Init to some stupid value so that the first call to setThumbnailSize()
     // is not ignored (do not use 0 in case someone try to divide by
     // mThumbnailSize...)
-    d->mThumbnailSize = 1;
+    d->mThumbnailSize = QSize(1, 1);
+    d->mThumbnailAspectRatio = 1;
 
     setFrameShape(QFrame::NoFrame);
     setViewMode(QListView::IconMode);
@@ -354,26 +356,22 @@ void ThumbnailView::setModel(QAbstractItemModel* newModel)
             SIGNAL(rowsRemovedSignal(QModelIndex,int,int)));
 }
 
-void ThumbnailView::setThumbnailSize(int value)
+void ThumbnailView::updateThumbnailSize()
 {
-    if (d->mThumbnailSize == value) {
-        return;
-    }
-    d->mThumbnailSize = value;
-
+    QSize value = d->mThumbnailSize;
     // mWaitingThumbnail
     int waitingThumbnailSize;
-    if (value > 64) {
+    if (value.width() > 64) {
         waitingThumbnailSize = 48;
     } else {
         waitingThumbnailSize = 32;
     }
     QPixmap icon = DesktopIcon("chronometer", waitingThumbnailSize);
-    QPixmap pix(value, value);
+    QPixmap pix(value);
     pix.fill(Qt::transparent);
     QPainter painter(&pix);
     painter.setOpacity(0.5);
-    painter.drawPixmap((value - icon.width()) / 2, (value - icon.height()) / 2, icon);
+    painter.drawPixmap((value.width() - icon.width()) / 2, (value.height() - icon.height()) / 2, icon);
     painter.end();
     d->mWaitingThumbnail = pix;
 
@@ -390,13 +388,41 @@ void ThumbnailView::setThumbnailSize(int value)
     }
 
     thumbnailSizeChanged(value);
+    thumbnailWidthChanged(value.width());
     if (d->mScaleMode != ScaleToFit) {
         scheduleDelayedItemsLayout();
     }
     d->scheduleThumbnailGenerationForVisibleItems();
 }
 
-int ThumbnailView::thumbnailSize() const
+void ThumbnailView::setThumbnailWidth(int width)
+{
+    if(d->mThumbnailSize.width() == width) {
+        return;
+    }
+    int height = round((qreal)width / d->mThumbnailAspectRatio);
+    d->mThumbnailSize = QSize(width, height);
+    updateThumbnailSize();
+}
+
+void ThumbnailView::setThumbnailAspectRatio(qreal ratio)
+{
+    if(d->mThumbnailAspectRatio == ratio) {
+        return;
+    }
+    d->mThumbnailAspectRatio = ratio;
+    int width = d->mThumbnailSize.width();
+    int height = round((qreal)width / d->mThumbnailAspectRatio);
+    d->mThumbnailSize = QSize(width, height);
+    updateThumbnailSize();
+}
+
+qreal ThumbnailView::thumbnailAspectRatio() const
+{
+    return d->mThumbnailAspectRatio;
+}
+
+QSize ThumbnailView::thumbnailSize() const
 {
     return d->mThumbnailSize;
 }
@@ -555,7 +581,7 @@ void ThumbnailView::setBrokenThumbnail(const KFileItem& item)
         // Special case for videos because our kde install may come without
         // support for video thumbnails so we show the mimetype icon instead of
         // a broken image icon
-        ThumbnailGroup::Enum group = ThumbnailGroup::fromPixelSize(d->mThumbnailSize);
+        ThumbnailGroup::Enum group = ThumbnailGroup::fromPixelSize(d->mThumbnailSize.height());
         QPixmap pix = item.pixmap(ThumbnailGroup::pixelSize(group));
         thumbnail.initAsIcon(pix);
     } else if (kind == MimeTypeUtils::KIND_DIR) {
@@ -593,8 +619,8 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index, QSize* fullSi
     // If dir or archive, generate a thumbnail from fileitem pixmap
     MimeTypeUtils::Kind kind = MimeTypeUtils::fileItemKind(item);
     if (kind == MimeTypeUtils::KIND_ARCHIVE || kind == MimeTypeUtils::KIND_DIR) {
-        int groupSize = ThumbnailGroup::pixelSize(ThumbnailGroup::fromPixelSize(d->mThumbnailSize));
-        if (thumbnail.mGroupPix.isNull() || thumbnail.mGroupPix.width() < groupSize) {
+        int groupSize = ThumbnailGroup::pixelSize(ThumbnailGroup::fromPixelSize(d->mThumbnailSize.height()));
+        if (thumbnail.mGroupPix.isNull() || thumbnail.mGroupPix.height() < groupSize) {
             QPixmap pix = item.pixmap(groupSize);
             thumbnail.initAsIcon(pix);
             if (kind == MimeTypeUtils::KIND_ARCHIVE) {
@@ -732,9 +758,9 @@ void ThumbnailView::wheelEvent(QWheelEvent* event)
     // setThumbnailSize() does not work
     //verticalScrollBar()->setSingleStep(d->mThumbnailSize / 5);
     if (event->modifiers() == Qt::ControlModifier) {
-        int size = d->mThumbnailSize + (event->delta() > 0 ? 1 : -1) * WHEEL_ZOOM_MULTIPLIER;
-        size = qMax(int(MinThumbnailSize), qMin(size, int(MaxThumbnailSize)));
-        setThumbnailSize(size);
+        int width = d->mThumbnailSize.width() + (event->delta() > 0 ? 1 : -1) * WHEEL_ZOOM_MULTIPLIER;
+        width = qMax(int(MinThumbnailSize), qMin(width, int(MaxThumbnailSize)));
+        setThumbnailWidth(width);
     } else {
         QListView::wheelEvent(event);
     }
@@ -791,7 +817,7 @@ void ThumbnailView::generateThumbnailsForVisibleItems()
 
         // Filter out items which already have a thumbnail
         ThumbnailForUrl::ConstIterator it = d->mThumbnailForUrl.constFind(url);
-        if (it != d->mThumbnailForUrl.constEnd() && it.value().isGroupPixAdaptedForSize(d->mThumbnailSize)) {
+        if (it != d->mThumbnailForUrl.constEnd() && it.value().isGroupPixAdaptedForSize(d->mThumbnailSize.height())) {
             continue;
         }
 

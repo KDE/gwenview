@@ -106,8 +106,8 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
 
         // Thumbnail slider
         QObject::connect(mThumbnailSlider, SIGNAL(valueChanged(int)),
-                         mThumbnailView, SLOT(setThumbnailSize(int)));
-        QObject::connect(mThumbnailView, SIGNAL(thumbnailSizeChanged(int)),
+                         mThumbnailView, SLOT(setThumbnailWidth(int)));
+        QObject::connect(mThumbnailView, SIGNAL(thumbnailWidthChanged(int)),
                          mThumbnailSlider, SLOT(setValue(int)));
     }
 
@@ -255,7 +255,8 @@ void BrowseMainPage::loadConfig()
     // If GwenviewConfig::thumbnailSize() returns the current value of
     // mThumbnailSlider, it won't emit valueChanged() and the thumbnail view
     // won't be updated. That's why we do it ourself.
-    d->mThumbnailView->setThumbnailSize(GwenviewConfig::thumbnailSize());
+    d->mThumbnailView->setThumbnailAspectRatio(GwenviewConfig::thumbnailAspectRatio());
+    d->mThumbnailView->setThumbnailWidth(GwenviewConfig::thumbnailSize());
 
     Q_FOREACH(QAction * action, d->mSortAction->actions()) {
         if (sortingFromSortAction(action) == GwenviewConfig::sorting()) {
