@@ -33,6 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include <lib/archiveutils.h>
+#include <lib/kindproxymodel.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/recursivedirmodel.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
@@ -74,7 +75,10 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
     ThumbnailPage* q;
     KUrlNavigator* mUrlNavigator;
     SortedDirModel* mDirModel;
+
     RecursiveDirModel* mRecursiveDirModel;
+    KindProxyModel* mKindProxyModel;
+
     QPushButton* mImportSelectedButton;
     QPushButton* mImportAllButton;
     KUrl::List mUrlList;
@@ -102,6 +106,12 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
             q, SLOT(updateImportButtons()));
 
         mRecursiveDirModel = new RecursiveDirModel(q);
+        mKindProxyModel = new KindProxyModel(q);
+        mKindProxyModel->setKindFilter(
+            MimeTypeUtils::KIND_RASTER_IMAGE
+            | MimeTypeUtils::KIND_SVG_IMAGE
+            | MimeTypeUtils::KIND_VIDEO);
+        mKindProxyModel->setSourceModel(mRecursiveDirModel);
     }
 
     void setupIcons()
@@ -303,7 +313,7 @@ void ThumbnailPage::updateImportButtons()
 {
     d->mImportSelectedButton->setEnabled(d->mThumbnailView->selectionModel()->hasSelection());
     d->mImportAllButton->setEnabled(d->mRecurse
-        ? d->mRecursiveDirModel->rowCount(QModelIndex()) > 0
+        ? d->mThumbnailView->model()->rowCount(QModelIndex()) > 0
         : d->mDirModel->hasDocuments());
 }
 
@@ -321,7 +331,7 @@ void ThumbnailPage::setListRecursively(bool recurse)
         if (url.isValid()) {
             d->mRecursiveDirModel->setUrl(url);
         }
-        d->mThumbnailView->setModel(d->mRecursiveDirModel);
+        d->mThumbnailView->setModel(d->mKindProxyModel);
     } else {
         if (url.isValid()) {
             d->mDirModel->dirLister()->openUrl(url);
