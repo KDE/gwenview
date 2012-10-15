@@ -36,6 +36,28 @@ namespace Gwenview
 struct RecursiveDirModelPrivate {
     KDirLister* mDirLister;
     KFileItemList mList;
+
+    int indexForUrl(const KUrl &url) const
+    {
+        int row = 0;
+        KFileItemList::ConstIterator it = mList.begin(), end = mList.end();
+        for (; it != end; ++it , ++row) {
+            if (it->url() == url) {
+                return row;
+            }
+        }
+        return -1;
+    }
+
+    void removeAt(int row)
+    {
+        mList.removeAt(row);
+    }
+
+    void addItem(const KFileItem& item)
+    {
+        mList.append(item);
+    }
 };
 
 RecursiveDirModel::RecursiveDirModel(QObject* parent)
@@ -49,6 +71,10 @@ RecursiveDirModel::RecursiveDirModel(QObject* parent)
         SLOT(slotItemsDeleted(KFileItemList)));
     connect(d->mDirLister, SIGNAL(completed()),
         SIGNAL(completed()));
+    connect(d->mDirLister, SIGNAL(clear()),
+        SLOT(slotCleared()));
+    connect(d->mDirLister, SIGNAL(clear(KUrl)),
+        SLOT(slotDirCleared(KUrl)));
 }
 
 RecursiveDirModel::~RecursiveDirModel()
@@ -63,7 +89,7 @@ KUrl RecursiveDirModel::url() const
 
 void RecursiveDirModel::setUrl(const KUrl& url)
 {
-    d->mDirLister->openUrl(url);
+    d->mDirLister->openUrl(url, KDirLister::Keep);
 }
 
 int RecursiveDirModel::rowCount(const QModelIndex& parent) const
@@ -104,9 +130,11 @@ void RecursiveDirModel::slotItemsAdded(const KUrl&, const KFileItemList& newList
     QList<KUrl> dirUrls;
     Q_FOREACH(const KFileItem& item, newList) {
         if (item.isFile()) {
-            beginInsertRows(QModelIndex(), d->mList.count(), d->mList.count());
-            d->mList << item;
-            endInsertRows();
+            if (d->indexForUrl(item.url()) == -1) {
+                beginInsertRows(QModelIndex(), d->mList.count(), d->mList.count());
+                d->addItem(item);
+                endInsertRows();
+            }
         } else {
             dirUrls << item.url();
         }
@@ -116,8 +144,41 @@ void RecursiveDirModel::slotItemsAdded(const KUrl&, const KFileItemList& newList
     }
 }
 
-void RecursiveDirModel::slotItemsDeleted(const KFileItemList&)
+void RecursiveDirModel::slotItemsDeleted(const KFileItemList& list)
 {
+    Q_FOREACH(const KFileItem& item, list) {
+        if (item.isDir()) {
+            continue;
+        }
+        int row = d->indexForUrl(item.url());
+        if (row == -1) {
+            kWarning() << "Received itemsDeleted for an unknown item: this should not happen!";
+            continue;
+        }
+        beginRemoveRows(QModelIndex(), row, row);
+        d->removeAt(row);
+        endRemoveRows();
+    }
+}
+
+void RecursiveDirModel::slotCleared()
+{
+    beginRemoveRows(QModelIndex(), 0, d->mList.count() - 1);
+    d->mList.clear();
+    endRemoveRows();
+}
+
+void RecursiveDirModel::slotDirCleared(const KUrl& dirUrl)
+{
+    int row;
+    for (row = d->mList.count() - 1; row >= 0; --row) {
+        const KUrl url = d->mList.at(row).url();
+        if (dirUrl.isParentOf(url)) {
+            beginRemoveRows(QModelIndex(), row, row);
+            d->removeAt(row);
+            endRemoveRows();
+        }
+    }
 }
 
 } // namespace

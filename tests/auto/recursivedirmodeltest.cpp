@@ -39,9 +39,12 @@ void RecursiveDirModelTest::testBasic_data()
 {
     QTest::addColumn<QStringList>("initialFiles");
     QTest::addColumn<QStringList>("addedFiles");
-#define NEW_ROW(name, initialFiles, addedFiles) QTest::newRow(name) << (initialFiles) << (addedFiles)
+    QTest::addColumn<QStringList>("removedFiles");
+#define NEW_ROW(name, initialFiles, addedFiles, removedFiles) QTest::newRow(name) << (initialFiles) << (addedFiles) << (removedFiles)
     NEW_ROW("empty_dir",
         QStringList(),
+        QStringList()
+            << "new.jpg",
         QStringList()
             << "new.jpg"
         );
@@ -51,7 +54,9 @@ void RecursiveDirModelTest::testBasic_data()
             << "pict02.jpg"
             << "pict03.jpg",
         QStringList()
-            << "pict04.jpg"
+            << "pict04.jpg",
+        QStringList()
+            << "pict02.jpg"
         );
     NEW_ROW("images_in_two_dirs",
         QStringList()
@@ -60,6 +65,8 @@ void RecursiveDirModelTest::testBasic_data()
             << "d2/pict201.jpg",
         QStringList()
             << "d1/pict103.jpg"
+            << "d2/pict202.jpg",
+        QStringList()
             << "d2/pict202.jpg"
         );
     NEW_ROW("images_in_two_dirs_w_same_names",
@@ -70,7 +77,11 @@ void RecursiveDirModelTest::testBasic_data()
             << "d2/b.jpg",
         QStringList()
             << "d3/a.jpg"
-            << "d3/b.jpg"
+            << "d3/b.jpg",
+        QStringList()
+            << "d1/a.jpg"
+            << "d2/a.jpg"
+            << "d3/a.jpg"
         );
 #undef NEW_ROW
 }
@@ -98,17 +109,26 @@ static QList<KUrl> listExpectedUrls(const QDir& dir, const QStringList& files)
     return lst;
 }
 
+void logLst(const QList<KUrl>& lst)
+{
+    Q_FOREACH(const KUrl& url, lst) {
+        kWarning() << url.fileName();
+    }
+}
+
 void RecursiveDirModelTest::testBasic()
 {
     QFETCH(QStringList, initialFiles);
     QFETCH(QStringList, addedFiles);
+    QFETCH(QStringList, removedFiles);
     TestUtils::SandBoxDir sandBoxDir;
-    sandBoxDir.fill(initialFiles);
 
     RecursiveDirModel model;
     QEventLoop loop;
     connect(&model, SIGNAL(completed()), &loop, SLOT(quit()));
 
+    // Test initial files
+    sandBoxDir.fill(initialFiles);
     model.setUrl(sandBoxDir.absolutePath());
     loop.exec();
 
@@ -116,11 +136,38 @@ void RecursiveDirModelTest::testBasic()
     QList<KUrl> expected = listExpectedUrls(sandBoxDir, initialFiles);
     QCOMPARE(out, expected);
 
+    // Test adding new files
     sandBoxDir.fill(addedFiles);
     loop.exec();
 
     out = listModelUrls(&model);
     expected = listExpectedUrls(sandBoxDir, initialFiles + addedFiles);
     QCOMPARE(out, expected);
-}
 
+# if 0
+    /* FIXME: This part of the test is not reliable :/ Sometimes some tests pass,
+     * sometimes they don't. It feels like KDirLister::itemsDeleted() is not
+     * always emitted.
+     */
+
+    // Test removing files
+    Q_FOREACH(const QString &name, removedFiles) {
+        Q_ASSERT(sandBoxDir.remove(name));
+        expected.removeOne(KUrl(sandBoxDir.absoluteFilePath(name)));
+    }
+    QTime chrono;
+    chrono.start();
+    while (chrono.elapsed() < 2000) {
+        waitForDeferredDeletes();
+    }
+
+    out = listModelUrls(&model);
+    if (out != expected) {
+        kWarning() << "out:";
+        logLst(out);
+        kWarning() << "expected:";
+        logLst(expected);
+    }
+    QCOMPARE(out, expected);
+#endif
+}
