@@ -796,7 +796,7 @@ void ThumbnailView::generateThumbnailsForVisibleItems()
     const QPoint origin = visibleRect.center();
 
     // distance => item
-    QMap<int, KFileItem> itemMap;
+    QMultiMap<int, KFileItem> itemMap;
 
     for (int row = 0; row < model()->rowCount(); ++row) {
         QModelIndex index = model()->index(row, 0);
