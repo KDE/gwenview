@@ -61,7 +61,6 @@ Name[vi]=Gwenview
 Name[x-test]=xxGwenviewxx
 Name[zh_CN]=Gwenview
 Name[zh_TW]=影像檢視_Gwenview
-<<<<<<< HEAD
 GenericName=Image Viewer
 GenericName[af]=Beeld Aansig
 GenericName[ar]=عارض الصّور
@@ -135,22 +134,6 @@ GenericName[x-test]=xxImage Viewerxx
 GenericName[zh_CN]=图像查看器
 GenericName[zh_HK]=圖像檢視器
 GenericName[zh_TW]=影像檢視程式
-=======
-GenericName=KDE Image Viewer
-GenericName[ca]=Visor d'imatges del KDE
-GenericName[cs]=Prohlížeč obrázků KDE
-GenericName[es]=Visor de imágenes de KDE
-GenericName[fi]=KDE:n kuvankatselin
-GenericName[kk]=KDE кескін қарау құралы
-GenericName[nb]=KDE bildeviser
-GenericName[nl]=KDE afbeeldingenviewer
-GenericName[pt_BR]=Visualizador de imagens do KDE
-GenericName[sk]=Prehliadač obrázkov KDE
-GenericName[sv]=Bildvisare för KDE
-GenericName[uk]=Переглядач зображень KDE
-GenericName[x-test]=xxKDE Image Viewerxx
-GenericName[zh_TW]=KDE 影像檢視器
->>>>>>> 627075f... SVN_SILENT made messages (.desktop file)
 Comment=A simple image viewer
 Comment[ar]=عارض صور بسيط
 Comment[ast]=Un visor d'imáxenes cenciellu
