@@ -942,6 +942,8 @@ void MainWindow::setActiveViewModeAction(QAction* action)
         if (d->mViewMainPage->isEmpty()) {
             openSelectedDocuments();
         }
+        d->mPreloadDirectionIsForward = true;
+        QTimer::singleShot(VIEW_PRELOAD_DELAY, this, SLOT(preloadNextUrl()));
     } else {
         d->mCurrentMainPageId = BrowseMainPageId;
         // Switching to browse mode
