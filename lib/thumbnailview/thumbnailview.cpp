@@ -828,11 +828,16 @@ void ThumbnailView::generateThumbnailsForVisibleItems()
             // Item is visible, order thumbnails from left to right, top to bottom
             // Distance is computed so that it is between 0 and visibleSurface
             distance = itemRect.top() * visibleRect.width() + itemRect.left();
+            // Make sure directory thumbnails are generated after image thumbnails:
+            // Distance is between visibleSurface and 2 * visibleSurface
+            if (kind == MimeTypeUtils::KIND_DIR) {
+                distance = distance + visibleSurface;
+            }
         } else {
             // Item is not visible, order thumbnails according to distance
-            // Start at visibleSurface to ensure invisible thumbnails are
+            // Start at 2 * visibleSurface to ensure invisible thumbnails are
             // generated *after* visible thumbnails
-            distance = visibleSurface + (itemRect.center() - origin).manhattanLength();
+            distance = 2 * visibleSurface + (itemRect.center() - origin).manhattanLength();
         }
 
         // Add the item to our map
