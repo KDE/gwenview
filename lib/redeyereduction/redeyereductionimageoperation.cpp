@@ -156,8 +156,8 @@ void RedEyeReductionImageOperation::apply(QImage* img, const QRectF& rectF)
             QColor dst;
             // Replace red with green, and blend according to alpha
             dst.setRed(int((1 - alpha) * r + alpha * g));
-            dst.setGreen(int((1 - alpha) * g + alpha * g));
-            dst.setBlue(int((1 - alpha) * b + alpha * b));
+            dst.setGreen(g);
+            dst.setBlue(b);
             *ptr = dst.rgba();
         }
     }
