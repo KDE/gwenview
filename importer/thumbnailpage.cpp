@@ -235,9 +235,9 @@ void ThumbnailPage::openUrl(const KUrl& url)
 {
     d->mUrlNavigator->setLocationUrl(url);
     if (d->mRecurse) {
-        d->mDirModel->dirLister()->openUrl(url);
-    } else {
         d->mRecursiveDirModel->setUrl(url);
+    } else {
+        d->mDirModel->dirLister()->openUrl(url);
     }
 }
 
