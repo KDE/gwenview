@@ -190,10 +190,6 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
                                q, SLOT(slotImportAll()));
 
         QObject::connect(
-            mThumbnailView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-            q, SLOT(updateImportButtons()));
-
-        QObject::connect(
             mButtonBox, SIGNAL(rejected()),
             q, SIGNAL(rejected()));
     }
@@ -338,6 +334,10 @@ void ThumbnailPage::setListRecursively(bool recurse)
         }
         d->mThumbnailView->setModel(d->mDirModel);
     }
+
+    connect(
+        d->mThumbnailView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+        SLOT(updateImportButtons()));
 }
 
 } // namespace
