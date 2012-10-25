@@ -101,6 +101,7 @@ set(gwenviewlib_SRCS
     invisiblebuttongroup.cpp
     iodevicejpegsourcemanager.cpp
     jpegcontent.cpp
+    kindproxymodel.cpp
     semanticinfo/sorteddirmodel.cpp
     memoryutils.cpp
     messagebubble.cpp
@@ -110,6 +111,7 @@ set(gwenviewlib_SRCS
     preferredimagemetainfomodel.cpp
     print/printhelper.cpp
     print/printoptionspage.cpp
+    recursivedirmodel.cpp
     shadowfilter.cpp
     slidecontainer.cpp
     slideshow.cpp

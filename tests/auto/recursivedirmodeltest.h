@@ -1,7 +1,7 @@
 // vim: set tabstop=4 shiftwidth=4 expandtab:
 /*
 Gwenview: an image viewer
-Copyright 2011 Aurélien Gâteau <agateau@kde.org>
+Copyright 2012 Aurélien Gâteau <agateau@kde.org>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -18,8 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
-#ifndef SORTEDDIRMODELTEST_H
-#define SORTEDDIRMODELTEST_H
+#ifndef RECURSIVEDIRMODELTEST_H
+#define RECURSIVEDIRMODELTEST_H
 
 // Local
 #include <testutils.h>
@@ -27,19 +27,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QObject>
 
-// std c++
-#include <memory>
-
-class SortedDirModelTest : public QObject
+class RecursiveDirModelTest : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
-    void initTestCase();
-    void testHasDocuments_data();
-    void testHasDocuments();
-
-private:
-    TestUtils::SandBoxDir mSandBoxDir;
+    void testBasic_data();
+    void testBasic();
+    void testSetNewUrl();
 };
 
-#endif /* SORTEDDIRMODELTEST_H */
+#endif /* RECURSIVEDIRMODELTEST_H */

@@ -103,4 +103,19 @@ void purgeUserConfiguration()
     kClearDebugConfig();
 }
 
+SandBoxDir::SandBoxDir()
+: mTempDir(QDir::currentPath() + "/sandbox-")
+{
+    setPath(mTempDir.name());
 }
+
+void SandBoxDir::fill(const QStringList& filePaths)
+{
+    Q_FOREACH(const QString& filePath, filePaths) {
+        QFileInfo info(*this, filePath);
+        Q_ASSERT(mkpath(info.absolutePath()));
+        createEmptyFile(info.absoluteFilePath());
+    }
+}
+
+} // namespace TestUtils
