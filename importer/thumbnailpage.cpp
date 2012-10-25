@@ -28,8 +28,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KDebug>
 #include <KDirLister>
 #include <KDirModel>
+#include <KDirSelectDialog>
 #include <KIconLoader>
-#include <KUrlNavigator>
 
 // Local
 #include <lib/archiveutils.h>
@@ -73,8 +73,8 @@ inline KFileItem itemForIndex(const QModelIndex& index)
 struct ThumbnailPagePrivate : public Ui_ThumbnailPage
 {
     ThumbnailPage* q;
-    KUrlNavigator* mUrlNavigator;
-    SortedDirModel* mDirModel;
+
+    KUrl mSrcUrl;
 
     RecursiveDirModel* mRecursiveDirModel;
     KindProxyModel* mKindProxyModel;
@@ -82,36 +82,27 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
     QPushButton* mImportSelectedButton;
     QPushButton* mImportAllButton;
     KUrl::List mUrlList;
-    bool mRecurse;
 
     void setupDirModel()
     {
-        mDirModel = new SortedDirModel(q);
-        mDirModel->setKindFilter(
-            MimeTypeUtils::KIND_DIR
-            | MimeTypeUtils::KIND_ARCHIVE
-            | MimeTypeUtils::KIND_RASTER_IMAGE
-            | MimeTypeUtils::KIND_SVG_IMAGE
-            | MimeTypeUtils::KIND_VIDEO
-        );
-
-        QObject::connect(
-            mDirModel, SIGNAL(rowsInserted(QModelIndex,int,int)),
-            q, SLOT(updateImportButtons()));
-        QObject::connect(
-            mDirModel, SIGNAL(rowsRemoved(QModelIndex,int,int)),
-            q, SLOT(updateImportButtons()));
-        QObject::connect(
-            mDirModel, SIGNAL(modelReset()),
-            q, SLOT(updateImportButtons()));
-
         mRecursiveDirModel = new RecursiveDirModel(q);
+
         mKindProxyModel = new KindProxyModel(q);
         mKindProxyModel->setKindFilter(
             MimeTypeUtils::KIND_RASTER_IMAGE
             | MimeTypeUtils::KIND_SVG_IMAGE
             | MimeTypeUtils::KIND_VIDEO);
         mKindProxyModel->setSourceModel(mRecursiveDirModel);
+
+        QObject::connect(
+            mKindProxyModel, SIGNAL(rowsInserted(QModelIndex,int,int)),
+            q, SLOT(updateImportButtons()));
+        QObject::connect(
+            mKindProxyModel, SIGNAL(rowsRemoved(QModelIndex,int,int)),
+            q, SLOT(updateImportButtons()));
+        QObject::connect(
+            mKindProxyModel, SIGNAL(modelReset()),
+            q, SLOT(updateImportButtons()));
     }
 
     void setupIcons()
@@ -122,9 +113,9 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
         mDstIconLabel->setPixmap(KIconLoader::global()->loadIcon("computer", group, size));
     }
 
-    void setupListingModeRadioButtons()
+    void setupSrcUrlButton()
     {
-        QObject::connect(mRecurseRadioButton, SIGNAL(toggled(bool)), q, SLOT(setListRecursively(bool)));
+        QObject::connect(mSrcUrlButton, SIGNAL(clicked()), q, SLOT(showSrcUrlDialog()));
     }
 
     void setupDstUrlRequester()
@@ -132,20 +123,10 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
         mDstUrlRequester->setMode(KFile::Directory | KFile::LocalOnly);
     }
 
-    void setupUrlNavigator()
-    {
-        mUrlNavigator = new KUrlNavigator(0 /* KFilePlacesModel */, KUrl(), mUrlNavigatorContainer);
-        mUrlNavigator->setShowFullPath(true);
-        QVBoxLayout* layout = new QVBoxLayout(mUrlNavigatorContainer);
-        layout->setMargin(0);
-        layout->addWidget(mUrlNavigator);
-
-        QObject::connect(mUrlNavigator, SIGNAL(urlChanged(KUrl)),
-                         q, SLOT(openUrl(KUrl)));
-    }
-
     void setupThumbnailView()
     {
+        mThumbnailView->setModel(mKindProxyModel);
+
         mThumbnailView->setSelectionMode(QAbstractItemView::ExtendedSelection);
         mThumbnailView->setThumbnailViewHelper(new ImporterThumbnailViewHelper(q));
 
@@ -172,8 +153,9 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
         mSlider->updateToolTip();
         mThumbnailView->setThumbnailSize(thumbnailSize);
 
-        QObject::connect(mThumbnailView, SIGNAL(indexActivated(QModelIndex)),
-                         q, SLOT(slotThumbnailViewIndexActivated(QModelIndex)));
+        QObject::connect(
+            mThumbnailView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+            q, SLOT(updateImportButtons()));
     }
 
     void setupButtonBox()
@@ -201,13 +183,11 @@ ThumbnailPage::ThumbnailPage()
     d->q = this;
     d->setupUi(this);
     d->setupIcons();
-    d->setupListingModeRadioButtons();
     d->setupDirModel();
+    d->setupSrcUrlButton();
     d->setupDstUrlRequester();
-    d->setupUrlNavigator();
     d->setupThumbnailView();
     d->setupButtonBox();
-    setListRecursively(false);
     updateImportButtons();
 }
 
@@ -233,12 +213,9 @@ void ThumbnailPage::slotDocumentDirFinderDone(const KUrl& url, DocumentDirFinder
 
 void ThumbnailPage::openUrl(const KUrl& url)
 {
-    d->mUrlNavigator->setLocationUrl(url);
-    if (d->mRecurse) {
-        d->mRecursiveDirModel->setUrl(url);
-    } else {
-        d->mDirModel->dirLister()->openUrl(url);
-    }
+    d->mSrcUrl = url;
+    d->mSrcUrlButton->setText(url.pathOrUrl());
+    d->mRecursiveDirModel->setUrl(url);
 }
 
 KUrl::List ThumbnailPage::urlList() const
@@ -254,27 +231,6 @@ void ThumbnailPage::setDestinationUrl(const KUrl& url)
 KUrl ThumbnailPage::destinationUrl() const
 {
     return d->mDstUrlRequester->url();
-}
-
-void ThumbnailPage::slotThumbnailViewIndexActivated(const QModelIndex& index)
-{
-    if (!index.isValid()) {
-        return;
-    }
-
-    KFileItem item = itemForIndex(index);
-    if (item.isDir()) {
-        // Item is a dir, open it
-        openUrl(item.url());
-    } else {
-        QString protocol = ArchiveUtils::protocolForMimeType(item.mimetype());
-        if (!protocol.isEmpty()) {
-            // Item is an archive, tweak url then open it
-            KUrl url = item.url();
-            url.setProtocol(protocol);
-            openUrl(url);
-        }
-    }
 }
 
 void ThumbnailPage::slotImportSelected()
@@ -308,9 +264,7 @@ void ThumbnailPage::importList(const QModelIndexList& list)
 void ThumbnailPage::updateImportButtons()
 {
     d->mImportSelectedButton->setEnabled(d->mThumbnailView->selectionModel()->hasSelection());
-    d->mImportAllButton->setEnabled(d->mRecurse
-        ? d->mThumbnailView->model()->rowCount(QModelIndex()) > 0
-        : d->mDirModel->hasDocuments());
+    d->mImportAllButton->setEnabled(d->mThumbnailView->model()->rowCount(QModelIndex()) > 0);
 }
 
 void ThumbnailPage::showConfigDialog()
@@ -319,25 +273,12 @@ void ThumbnailPage::showConfigDialog()
     dialog.exec();
 }
 
-void ThumbnailPage::setListRecursively(bool recurse)
+void ThumbnailPage::showSrcUrlDialog()
 {
-    d->mRecurse = recurse;
-    KUrl url = d->mUrlNavigator->locationUrl();
-    if (recurse) {
-        if (url.isValid()) {
-            d->mRecursiveDirModel->setUrl(url);
-        }
-        d->mThumbnailView->setModel(d->mKindProxyModel);
-    } else {
-        if (url.isValid()) {
-            d->mDirModel->dirLister()->openUrl(url);
-        }
-        d->mThumbnailView->setModel(d->mDirModel);
+    KUrl url = KDirSelectDialog::selectDirectory(d->mSrcUrl, false /* localOnly */, this);
+    if (!url.isEmpty()) {
+        openUrl(url);
     }
-
-    connect(
-        d->mThumbnailView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-        SLOT(updateImportButtons()));
 }
 
 } // namespace

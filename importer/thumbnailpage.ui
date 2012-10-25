@@ -30,9 +30,6 @@ QLabel[isIcon=true] {
        <number>0</number>
       </property>
       <item>
-       <widget class="QWidget" name="mUrlNavigatorContainer" native="true"/>
-      </item>
-      <item>
        <widget class="Gwenview::ThumbnailView" name="mThumbnailView"/>
       </item>
       <item>
@@ -177,21 +174,17 @@ QLabel[isIcon=true] {
     <widget class="QWidget" name="widget_2" native="true">
      <layout class="QHBoxLayout" name="horizontalLayout_3">
       <item>
-       <widget class="QRadioButton" name="mBrowseRadioButton">
+       <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>Browse</string>
+         <string>Listing content of:</string>
         </property>
-        <property name="checked">
-         <bool>true</bool>
+        <property name="buddy">
+         <cstring>mSrcUrlButton</cstring>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QRadioButton" name="mRecurseRadioButton">
-        <property name="text">
-         <string>List all documents recursively</string>
-        </property>
-       </widget>
+       <widget class="KPushButton" name="mSrcUrlButton"/>
       </item>
       <item>
        <spacer name="horizontalSpacer_2">
@@ -218,6 +211,11 @@ QLabel[isIcon=true] {
    <header>kdialogbuttonbox.h</header>
   </customwidget>
   <customwidget>
+   <class>KPushButton</class>
+   <extends>QPushButton</extends>
+   <header>kpushbutton.h</header>
+  </customwidget>
+  <customwidget>
    <class>KUrlRequester</class>
    <extends>QFrame</extends>
    <header>kurlrequester.h</header>
@@ -234,12 +232,11 @@ QLabel[isIcon=true] {
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>mBrowseRadioButton</tabstop>
-  <tabstop>mRecurseRadioButton</tabstop>
+  <tabstop>mSrcUrlButton</tabstop>
   <tabstop>mThumbnailView</tabstop>
   <tabstop>mDstUrlRequester</tabstop>
-  <tabstop>mConfigureButton</tabstop>
   <tabstop>mButtonBox</tabstop>
+  <tabstop>mConfigureButton</tabstop>
  </tabstops>
  <resources/>
  <connections/>

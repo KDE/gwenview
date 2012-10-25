@@ -53,9 +53,6 @@ public:
 
     void setSourceUrl(const KUrl&);
 
-public Q_SLOTS:
-    void setListRecursively(bool);
-
 Q_SIGNALS:
     void importRequested();
     void rejected();
@@ -64,10 +61,10 @@ private Q_SLOTS:
     void slotImportSelected();
     void slotImportAll();
     void updateImportButtons();
-    void slotThumbnailViewIndexActivated(const QModelIndex&);
     void openUrl(const KUrl&);
     void slotDocumentDirFinderDone(const KUrl& url, DocumentDirFinder::Status status);
     void showConfigDialog();
+    void showSrcUrlDialog();
 
 private:
     friend class ThumbnailPagePrivate;
