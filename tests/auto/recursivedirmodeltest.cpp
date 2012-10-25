@@ -171,3 +171,29 @@ void RecursiveDirModelTest::testBasic()
     QCOMPARE(out, expected);
 #endif
 }
+
+void RecursiveDirModelTest::testSetNewUrl()
+{
+    TestUtils::SandBoxDir sandBoxDir;
+    sandBoxDir.fill(
+        QStringList()
+        << "d1/a.jpg"
+        << "d1/b.jpg"
+        << "d1/c.jpg"
+        << "d1/d.jpg"
+        << "d2/e.jpg"
+        << "d2/f.jpg"
+        );
+
+    RecursiveDirModel model;
+    QEventLoop loop;
+    connect(&model, SIGNAL(completed()), &loop, SLOT(quit()));
+
+    model.setUrl(sandBoxDir.absoluteFilePath("d1"));
+    loop.exec();
+    QCOMPARE(model.rowCount(QModelIndex()), 4);
+
+    model.setUrl(sandBoxDir.absoluteFilePath("d2"));
+    loop.exec();
+    QCOMPARE(model.rowCount(QModelIndex()), 2);
+}

@@ -89,6 +89,9 @@ KUrl RecursiveDirModel::url() const
 
 void RecursiveDirModel::setUrl(const KUrl& url)
 {
+    beginResetModel();
+    d->mList.clear();
+    endResetModel();
     d->mDirLister->openUrl(url, KDirLister::Keep);
 }
 

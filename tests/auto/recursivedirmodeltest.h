@@ -33,6 +33,7 @@ class RecursiveDirModelTest : public QObject
 private Q_SLOTS:
     void testBasic_data();
     void testBasic();
+    void testSetNewUrl();
 };
 
 #endif /* RECURSIVEDIRMODELTEST_H */
