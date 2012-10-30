@@ -63,10 +63,10 @@ KUrl setUpRemoteTestDir(const QString& testFile)
 
 void createEmptyFile(const QString& path)
 {
-    Q_ASSERT(!QFile::exists(path));
+    QVERIFY(!QFile::exists(path));
     QFile file(path);
     bool ok = file.open(QIODevice::WriteOnly);
-    Q_ASSERT(ok);
+    QVERIFY(ok);
 }
 
 void waitForDeferredDeletes()
@@ -84,14 +84,14 @@ namespace TestUtils
 void purgeUserConfiguration()
 {
     QString confDir = qgetenv("KDEHOME");
-    Q_ASSERT(confDir.endsWith(".kde-unit-test")); // Better safe than sorry
+    QVERIFY(confDir.endsWith(".kde-unit-test")); // Better safe than sorry
     if (QFileInfo(confDir).isDir()) {
         bool ok = KIO::NetAccess::del(KUrl::fromPath(confDir), 0);
-        Q_ASSERT(ok);
+        QVERIFY(ok);
     }
 
     QFile kdebugrc(KStandardDirs::locateLocal("config", "kdebugrc"));
-    Q_ASSERT(kdebugrc.open(QIODevice::WriteOnly));
+    QVERIFY(kdebugrc.open(QIODevice::WriteOnly));
     kdebugrc.write(
         "DisableAll=true\n"
         "InfoOutput=4\n"

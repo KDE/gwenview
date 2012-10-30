@@ -232,7 +232,7 @@ DocumentJob* Document::save(const KUrl& url, const QByteArray& format)
     if (!job) {
         kWarning() << "Implementation does not support saving!";
         setErrorString(i18nc("@info", "Gwenview cannot save this kind of documents."));
-        return false;
+        return 0;
     }
     job->setProperty("oldUrl", d->mUrl);
     job->setProperty("newUrl", url);
