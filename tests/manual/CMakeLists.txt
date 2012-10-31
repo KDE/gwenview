@@ -30,6 +30,7 @@ kde4_add_executable(thumbnailgen TEST ${thumbnailgen_SRCS})
 target_link_libraries(thumbnailgen
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
+    ${QT_QTTEST_LIBRARY}
     ${KDE4_KIO_LIBS}
     ${KDE4_KDEUI_LIBS}
     gwenviewlib)
