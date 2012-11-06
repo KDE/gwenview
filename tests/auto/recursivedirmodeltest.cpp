@@ -124,7 +124,7 @@ void RecursiveDirModelTest::testBasic()
     TestUtils::SandBoxDir sandBoxDir;
 
     RecursiveDirModel model;
-    QEventLoop loop;
+    TestUtils::TimedEventLoop loop;
     connect(&model, SIGNAL(completed()), &loop, SLOT(quit()));
 
     // Test initial files
@@ -186,7 +186,7 @@ void RecursiveDirModelTest::testSetNewUrl()
         );
 
     RecursiveDirModel model;
-    QEventLoop loop;
+    TestUtils::TimedEventLoop loop;
     connect(&model, SIGNAL(completed()), &loop, SLOT(quit()));
 
     model.setUrl(sandBoxDir.absoluteFilePath("d1"));

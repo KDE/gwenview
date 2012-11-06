@@ -125,6 +125,24 @@ private:
     KTempDir mTempDir;
 };
 
+/**
+ * An event loop which stops itself after a predefined duration
+ */
+class TimedEventLoop : public QEventLoop
+{
+    Q_OBJECT
+public:
+    TimedEventLoop(int maxDurationInSeconds = 60);
+
+    int exec(ProcessEventsFlags flags = AllEvents);
+
+private Q_SLOTS:
+    void fail();
+
+private:
+    QTimer *mTimer;
+};
+
 } // namespace
 
 #endif /* TESTUTILS_H */

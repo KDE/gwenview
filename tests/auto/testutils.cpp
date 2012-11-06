@@ -17,10 +17,11 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
-#include "testutils.h"
+#include <testutils.moc>
 
 // Qt
 #include <QDir>
+#include <QTimer>
 
 // KDE
 #include <KDebug>
@@ -115,6 +116,28 @@ void SandBoxDir::fill(const QStringList& filePaths)
         QFileInfo info(*this, filePath);
         Q_ASSERT(mkpath(info.absolutePath()));
         createEmptyFile(info.absoluteFilePath());
+    }
+}
+
+TimedEventLoop::TimedEventLoop(int maxDuration)
+: mTimer(new QTimer(this))
+{
+    mTimer->setSingleShot(true);
+    mTimer->setInterval(maxDuration * 1000);
+    connect(mTimer, SIGNAL(timeout()), SLOT(fail()));
+}
+
+int TimedEventLoop::exec(ProcessEventsFlags flags)
+{
+    mTimer->start();
+    return QEventLoop::exec(flags);
+}
+
+void TimedEventLoop::fail()
+{
+    if (isRunning()) {
+        qFatal("TimedEventLoop has been running for %d seconds. Aborting.", mTimer->interval() / 1000);
+        exit(1);
     }
 }
 
