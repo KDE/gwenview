@@ -60,11 +60,11 @@ int main(int argc, char** argv)
         return 1;
     }
     QString imageDirName = args->arg(0);
-    ThumbnailGroup::Enum group;
+    ThumbnailGroup::Enum group = ThumbnailGroup::Normal;
     if (args->arg(1) == "large") {
         group = ThumbnailGroup::Large;
     } else if (args->arg(1) == "normal") {
-        group = ThumbnailGroup::Normal;
+        // group is already set to the right value
     } else {
         kFatal() << "Invalid thumbnail size:" << args->arg(1);
     }
