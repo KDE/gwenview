@@ -99,7 +99,15 @@ void DocumentTest::testLoad()
     }
 }
 
-#define NEW_ROW(fileName, format, kind, isAnimated) QTest::newRow(fileName) << fileName << QByteArray(format) << int(kind) << isAnimated << QImage(pathForTestFile(fileName))
+static void testLoad_newRow(
+    const char* fileName,
+    const QByteArray& format,
+    MimeTypeUtils::Kind kind = MimeTypeUtils::KIND_RASTER_IMAGE,
+    bool isAnimated = false)
+{
+    QTest::newRow(fileName) << fileName << QByteArray(format) << int(kind) << isAnimated << QImage(pathForTestFile(fileName));
+}
+
 void DocumentTest::testLoad_data()
 {
     QTest::addColumn<QString>("fileName");
@@ -108,33 +116,25 @@ void DocumentTest::testLoad_data()
     QTest::addColumn<bool>("expectedIsAnimated");
     QTest::addColumn<QImage>("expectedImage");
 
-    NEW_ROW("test.png",
-            "png", MimeTypeUtils::KIND_RASTER_IMAGE, false);
-    NEW_ROW("160216_no_size_before_decoding.eps",
-            "eps", MimeTypeUtils::KIND_RASTER_IMAGE, false);
-    NEW_ROW("160382_corrupted.jpeg",
-            "jpeg", MimeTypeUtils::KIND_RASTER_IMAGE, false);
-    NEW_ROW("test.svg",
-            "", MimeTypeUtils::KIND_SVG_IMAGE, false);
+    testLoad_newRow("test.png", "png");
+    testLoad_newRow("160216_no_size_before_decoding.eps", "eps");
+    testLoad_newRow("160382_corrupted.jpeg", "jpeg");
+    testLoad_newRow("1x10k.png", "png");
+    testLoad_newRow("1x10k.jpg", "jpeg");
+    testLoad_newRow("test.xcf", "xcf");
+    testLoad_newRow("188191_does_not_load.tga", "tga");
+    testLoad_newRow("289819_does_not_load.png", "png");
+
+    // SVG
+    testLoad_newRow("test.svg", "", MimeTypeUtils::KIND_SVG_IMAGE);
     // FIXME: Test svgz
-    NEW_ROW("1x10k.png",
-            "png", MimeTypeUtils::KIND_RASTER_IMAGE, false);
-    NEW_ROW("1x10k.jpg",
-            "jpeg", MimeTypeUtils::KIND_RASTER_IMAGE, false);
-    NEW_ROW("4frames.gif",
-            "gif", MimeTypeUtils::KIND_RASTER_IMAGE, true);
-    NEW_ROW("1frame.gif",
-            "gif", MimeTypeUtils::KIND_RASTER_IMAGE, false);
-    NEW_ROW("185523_1frame_with_graphic_control_extension.gif",
-            "gif", MimeTypeUtils::KIND_RASTER_IMAGE, false);
-    NEW_ROW("test.xcf",
-            "xcf", MimeTypeUtils::KIND_RASTER_IMAGE, false);
-    NEW_ROW("188191_does_not_load.tga",
-            "tga", MimeTypeUtils::KIND_RASTER_IMAGE, false);
-    NEW_ROW("289819_does_not_load.png",
-            "png", MimeTypeUtils::KIND_RASTER_IMAGE, false);
+
+    // Animated
+    testLoad_newRow("4frames.gif", "gif", MimeTypeUtils::KIND_RASTER_IMAGE, true);
+    testLoad_newRow("1frame.gif", "gif", MimeTypeUtils::KIND_RASTER_IMAGE, false);
+    testLoad_newRow("185523_1frame_with_graphic_control_extension.gif",
+                    "gif", MimeTypeUtils::KIND_RASTER_IMAGE, false);
 }
-#undef NEW_ROW
 
 void DocumentTest::testLoadTwoPasses()
 {
