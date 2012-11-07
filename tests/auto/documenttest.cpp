@@ -77,6 +77,8 @@ void DocumentTest::testLoad()
     QFETCH(int, expectedKindInt);
     QFETCH(bool, expectedIsAnimated);
     QFETCH(QImage, expectedImage);
+    QFETCH(int, maxHeight); // number of lines to test. -1 to test all lines
+
     MimeTypeUtils::Kind expectedKind = MimeTypeUtils::Kind(expectedKindInt);
 
     KUrl url = urlForTestFile(fileName);
@@ -94,7 +96,13 @@ void DocumentTest::testLoad()
     QCOMPARE(doc->isAnimated(), expectedIsAnimated);
     QCOMPARE(spy.count(), doc->isAnimated() ? 1 : 0);
     if (doc->kind() == MimeTypeUtils::KIND_RASTER_IMAGE) {
-        QCOMPARE(doc->image(), expectedImage);
+        QImage image = doc->image();
+        if (maxHeight > -1) {
+            QRect poiRect(0, 0, image.width(), maxHeight);
+            image = image.copy(poiRect);
+            expectedImage = expectedImage.copy(poiRect);
+        }
+        QCOMPARE(image, expectedImage);
         QCOMPARE(QString(doc->format()), QString(expectedFormat));
     }
 }
@@ -103,9 +111,17 @@ static void testLoad_newRow(
     const char* fileName,
     const QByteArray& format,
     MimeTypeUtils::Kind kind = MimeTypeUtils::KIND_RASTER_IMAGE,
-    bool isAnimated = false)
+    bool isAnimated = false,
+    int maxHeight = -1
+    )
 {
-    QTest::newRow(fileName) << fileName << QByteArray(format) << int(kind) << isAnimated << QImage(pathForTestFile(fileName));
+    QTest::newRow(fileName)
+        << fileName
+        << QByteArray(format)
+        << int(kind)
+        << isAnimated
+        << QImage(pathForTestFile(fileName))
+        << maxHeight;
 }
 
 void DocumentTest::testLoad_data()
@@ -115,10 +131,11 @@ void DocumentTest::testLoad_data()
     QTest::addColumn<int>("expectedKindInt");
     QTest::addColumn<bool>("expectedIsAnimated");
     QTest::addColumn<QImage>("expectedImage");
+    QTest::addColumn<int>("maxHeight");
 
     testLoad_newRow("test.png", "png");
     testLoad_newRow("160216_no_size_before_decoding.eps", "eps");
-    testLoad_newRow("160382_corrupted.jpeg", "jpeg");
+    testLoad_newRow("160382_corrupted.jpeg", "jpeg", MimeTypeUtils::KIND_RASTER_IMAGE, false, 55);
     testLoad_newRow("1x10k.png", "png");
     testLoad_newRow("1x10k.jpg", "jpeg");
     testLoad_newRow("test.xcf", "xcf");
