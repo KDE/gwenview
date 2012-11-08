@@ -81,9 +81,19 @@ struct RasterImageViewPrivate
         if (!monitorProfile) {
             return;
         }
+
+        cmsUInt32Number cmsFormat = 0;
+        switch (q->document()->image().format()) {
+        case QImage::Format_RGB32:
+        case QImage::Format_ARGB32:
+            cmsFormat = TYPE_BGRA_8;
+            break;
+        default:
+            return;
+        }
         // FIXME: Wrap cmsHTRANSFORM type?
-        mDisplayTransform = cmsCreateTransform(profile->handle(), TYPE_BGRA_8,
-                                               monitorProfile->handle(), TYPE_BGRA_8,
+        mDisplayTransform = cmsCreateTransform(profile->handle(), cmsFormat,
+                                               monitorProfile->handle(), cmsFormat,
                                                INTENT_PERCEPTUAL, cmsFLAGS_BLACKPOINTCOMPENSATION);
     }
 
