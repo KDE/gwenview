@@ -1,5 +1,7 @@
 project(gwenview)
 
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake )
+
 find_package(KDE4 4.6.41 REQUIRED)
 include(KDE4Defaults)
 include(MacroLibrary)
@@ -29,12 +31,18 @@ endif (GWENVIEW_SEMANTICINFO_BACKEND STREQUAL "None")
 find_package(JPEG)
 macro_log_feature(JPEG_FOUND "libjpeg" "Provides JPEG image manipulation support" "http://libjpeg.sourceforge.net/" TRUE "" "")
 
+find_package(PNG)
+macro_log_feature(PNG_FOUND "libpng" "Provides PNG image manipulation support" "http://www.libpng.org" TRUE "" "")
+
 set(EXIV2_MIN_VERSION "0.19")
 find_package(Exiv2)
 macro_log_feature(EXIV2_FOUND "Exiv2" "Provides image metadata support" "http://www.exiv2.org" TRUE ${EXIV2_MIN_VERSION} "")
 
 macro_optional_find_package(Kipi)
 macro_log_feature(KIPI_FOUND "KIPI Plugins" "Provides various image manipulation and export features" "http://www.kipi-plugins.org" FALSE "" "")
+
+find_package(LCMS2)
+macro_log_feature(LCMS2_FOUND "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "2.0" "Used for color management")
 
 if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
     # We need Nepomuk widgets for all backends but "None"

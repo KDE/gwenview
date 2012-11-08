@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include <lib/documentview/abstractrasterimageviewtool.h>
 #include <lib/imagescaler.h>
+#include <cms/cmsprofile.h>
 
 // KDE
 #include <KDebug>
@@ -33,6 +34,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QPainter>
 #include <QTimer>
 #include <QWeakPointer>
+
+#include <lcms2.h>
+
 
 namespace Gwenview
 {
@@ -60,6 +64,28 @@ struct RasterImageViewPrivate
     QTimer* mUpdateTimer;
 
     QWeakPointer<AbstractRasterImageViewTool> mTool;
+
+    cmsHTRANSFORM mDisplayTransform;
+
+    void updateDisplayTransform()
+    {
+        if (mDisplayTransform) {
+            cmsDeleteTransform(mDisplayTransform);
+        }
+        mDisplayTransform = 0;
+        Cms::Profile::Ptr profile = q->document()->cmsProfile();
+        if (!profile) {
+            return;
+        }
+        Cms::Profile::Ptr monitorProfile = Cms::Profile::getMonitorProfile();
+        if (!monitorProfile) {
+            return;
+        }
+        // FIXME: Wrap cmsHTRANSFORM type?
+        mDisplayTransform = cmsCreateTransform(profile->handle(), TYPE_BGRA_8,
+                                               monitorProfile->handle(), TYPE_BGRA_8,
+                                               INTENT_PERCEPTUAL, cmsFLAGS_BLACKPOINTCOMPENSATION);
+    }
 
     void createBackgroundTexture()
     {
@@ -147,6 +173,7 @@ RasterImageView::RasterImageView(QGraphicsItem* parent)
 {
     d->q = this;
     d->mEmittedCompleted = false;
+    d->mDisplayTransform = 0;
 
     d->mAlphaBackgroundMode = AlphaBackgroundCheckBoard;
     d->mAlphaBackgroundColor = Qt::black;
@@ -163,6 +190,9 @@ RasterImageView::RasterImageView(QGraphicsItem* parent)
 
 RasterImageView::~RasterImageView()
 {
+    if (d->mDisplayTransform) {
+        cmsDeleteTransform(d->mDisplayTransform);
+    }
     delete d;
 }
 
@@ -218,6 +248,8 @@ void RasterImageView::finishSetDocument()
         return;
     }
 
+    d->updateDisplayTransform();
+
     d->mScaler->setDocument(document());
     d->resizeBuffer();
     applyPendingScrollPos();
@@ -258,6 +290,11 @@ void RasterImageView::slotDocumentIsAnimatedUpdated()
 
 void RasterImageView::updateFromScaler(int zoomedImageLeft, int zoomedImageTop, const QImage& image)
 {
+    if (d->mDisplayTransform) {
+        quint8 *bytes = const_cast<quint8*>(image.bits());
+        cmsDoTransform(d->mDisplayTransform, bytes, bytes, image.width() * image.height());
+    }
+
     d->resizeBuffer();
     int viewportLeft = zoomedImageLeft - scrollPos().x();
     int viewportTop = zoomedImageTop - scrollPos().y();

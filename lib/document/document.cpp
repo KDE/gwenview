@@ -63,6 +63,7 @@ struct DocumentPrivate
     ImageMetaInfoModel mImageMetaInfoModel;
     QUndoStack mUndoStack;
     QString mErrorString;
+    Cms::Profile::Ptr mCmsProfile;
     /** @} */
 
     void scheduleImageLoading(int invertedZoom)
@@ -111,6 +112,7 @@ void Document::reload()
     d->mImageMetaInfoModel.setUrl(d->mUrl);
     d->mUndoStack.clear();
     d->mErrorString.clear();
+    d->mCmsProfile = 0;
 
     switchToImpl(new LoadingDocumentImpl(this));
 }
@@ -486,6 +488,16 @@ bool Document::isBusy() const
 QSvgRenderer* Document::svgRenderer() const
 {
     return d->mImpl->svgRenderer();
+}
+
+void Document::setCmsProfile(Cms::Profile::Ptr ptr)
+{
+    d->mCmsProfile = ptr;
+}
+
+Cms::Profile::Ptr Document::cmsProfile() const
+{
+    return d->mCmsProfile;
 }
 
 } // namespace

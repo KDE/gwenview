@@ -39,6 +39,7 @@ include_directories(
     ${SOPRANO_INCLUDE_DIR}
     ${EXIV2_INCLUDE_DIR}
     ${JPEG_INCLUDE_DIR}
+    ${PNG_INCLUDE_DIRS}
     )
 
 # For config-gwenview.h
@@ -47,6 +48,9 @@ include_directories(
     )
 
 set(gwenviewlib_SRCS
+    cms/iccjpeg.c
+    cms/cmsprofile.cpp
+    cms/cmsprofile_png.cpp
     crop/cropwidget.cpp
     crop/cropimageoperation.cpp
     crop/croptool.cpp
@@ -196,6 +200,9 @@ target_link_libraries(gwenviewlib
     ${JPEG_LIBRARY}
     ${EXIV2_LIBRARIES}
     ${QT_QTOPENGL_LIBRARY}
+    ${LCMS2_LIBRARIES}
+    ${X11_X11_LIB}
+    ${PNG_LIBRARIES}
     )
 if( WIN32 )
 target_link_libraries( gwenviewlib ${EXPAT_LIBRARIES} )
