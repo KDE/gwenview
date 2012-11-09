@@ -311,6 +311,7 @@ struct ViewMainPagePrivate
         Qt::Orientation orientation = GwenviewConfig::thumbnailBarOrientation();
         mThumbnailSplitter = new Splitter(orientation == Qt::Horizontal ? Qt::Vertical : Qt::Horizontal, q);
         mThumbnailBar->setOrientation(orientation);
+        mThumbnailBar->setThumbnailAspectRatio(GwenviewConfig::thumbnailAspectRatio());
         mThumbnailBar->setRowCount(GwenviewConfig::thumbnailBarRowCount());
         mThumbnailSplitter->addWidget(mAdapterContainer);
         mThumbnailSplitter->addWidget(mThumbnailBar);

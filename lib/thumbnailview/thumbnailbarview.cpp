@@ -407,11 +407,18 @@ struct ThumbnailBarViewPrivate
             --widgetSize;
         }
 
-        int gridSize = (widgetSize - scrollBarSize - 2 * q->frameWidth()) / mRowCount;
-        if (q->thumbnailScaleMode() == ThumbnailView::ScaleToFit) {
-            q->setGridSize(QSize(gridSize, gridSize));
+        int gridWidth, gridHeight;
+        if (mOrientation == Qt::Horizontal) {
+            gridHeight = (widgetSize - scrollBarSize - 2 * q->frameWidth()) / mRowCount;
+            gridWidth = qRound(gridHeight * q->thumbnailAspectRatio());
+        } else {
+            gridWidth = (widgetSize - scrollBarSize - 2 * q->frameWidth()) / mRowCount;
+            gridHeight = qRound(gridWidth / q->thumbnailAspectRatio());
         }
-        q->setThumbnailWidth(gridSize - ITEM_MARGIN * 2);
+        if (q->thumbnailScaleMode() == ThumbnailView::ScaleToFit) {
+            q->setGridSize(QSize(gridWidth, gridHeight));
+        }
+        q->setThumbnailWidth(gridWidth - ITEM_MARGIN * 2);
     }
 };
 
