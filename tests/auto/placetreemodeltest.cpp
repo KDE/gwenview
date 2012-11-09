@@ -73,10 +73,14 @@ void PlaceTreeModelTest::initTestCase()
     Q_ASSERT(mTempDir.exists());
     QDir dir(mTempDir.name());
 
-    Q_ASSERT(dir.mkdir("url1"));
+    const bool dir1created = dir.mkdir("url1");
+    Q_ASSERT(dir1created);
+    Q_UNUSED(dir1created);
     mUrl1 = KUrl::fromPath(dir.filePath("url1"));
 
-    Q_ASSERT(dir.mkdir("url2"));
+    const bool dir2created = dir.mkdir("url2");
+    Q_ASSERT(dir2created);
+    Q_UNUSED(dir2created);
     mUrl2 = KUrl::fromPath(dir.filePath("url2"));
 
     mUrl1Dirs << "aaa" << "zzz" << "bbb";
@@ -95,7 +99,9 @@ void PlaceTreeModelTest::init()
     TestUtils::purgeUserConfiguration();
 
     QFile bookmark(KStandardDirs::locateLocal("data", "kfileplaces/bookmarks.xml"));
-    Q_ASSERT(bookmark.open(QIODevice::WriteOnly));
+    const bool bookmarkOpened = bookmark.open(QIODevice::WriteOnly);
+    Q_ASSERT(bookmarkOpened);
+    Q_UNUSED(bookmarkOpened);
 
     QString xml = QString(BOOKMARKS_XML)
                   .arg(mUrl1.toLocalFile())
