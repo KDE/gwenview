@@ -745,7 +745,6 @@ struct MainWindow::Private
         if (index.isValid()) {
             // Note: calling setCurrentIndex also takes care of selecting the index
             mThumbnailView->setCurrentIndex(index);
-            mThumbnailView->scrollTo(index, QAbstractItemView::PositionAtCenter);
             mUrlToSelect = KUrl();
         }
     }
@@ -1224,6 +1223,8 @@ void MainWindow::slotDirListerCompleted()
     } else if (!d->mUrlToSelect.isValid()) {
         d->goToFirstDocument();
     }
+    d->mThumbnailView->scrollToSelectedIndex();
+    d->mViewMainPage->thumbnailBar()->scrollToSelectedIndex();
 }
 
 void MainWindow::goToPrevious()
