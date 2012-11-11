@@ -92,7 +92,7 @@ void RecursiveDirModel::setUrl(const KUrl& url)
     beginResetModel();
     d->mList.clear();
     endResetModel();
-    d->mDirLister->openUrl(url, KDirLister::Keep);
+    d->mDirLister->openUrl(url);
 }
 
 int RecursiveDirModel::rowCount(const QModelIndex& parent) const
@@ -166,6 +166,9 @@ void RecursiveDirModel::slotItemsDeleted(const KFileItemList& list)
 
 void RecursiveDirModel::slotCleared()
 {
+    if (d->mList.isEmpty()) {
+        return;
+    }
     beginRemoveRows(QModelIndex(), 0, d->mList.count() - 1);
     d->mList.clear();
     endRemoveRows();
