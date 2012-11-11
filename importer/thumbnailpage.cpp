@@ -33,6 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KDirModel>
 #include <KDirSelectDialog>
 #include <KIconLoader>
+#include <KIO/NetAccess>
 
 // Local
 #include <lib/archiveutils.h>
@@ -42,8 +43,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/semanticinfo/sorteddirmodel.h>
 #include <lib/thumbnailview/abstractthumbnailviewhelper.h>
 #include <lib/thumbnailview/previewitemdelegate.h>
-#include "documentdirfinder.h"
-#include "importerconfigdialog.h"
+#include <documentdirfinder.h>
+#include <importerconfigdialog.h>
+#include <serializedurlmap.h>
 #include <ui_thumbnailpage.h>
 
 namespace Gwenview
@@ -51,6 +53,8 @@ namespace Gwenview
 
 static const int DEFAULT_THUMBNAIL_SIZE = 128;
 static const qreal DEFAULT_THUMBNAIL_ASPECT_RATIO = 3. / 2.;
+
+static const char* URL_FOR_BASE_URL_GROUP = "UrlForBaseUrl";
 
 class ImporterThumbnailViewHelper : public AbstractThumbnailViewHelper
 {
@@ -78,6 +82,12 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
 {
     ThumbnailPage* q;
     QMenu* mSrcUrlMenu;
+    SerializedUrlMap mUrlMap;
+
+    ThumbnailPagePrivate()
+    {
+        mUrlMap.setConfigGroup(KConfigGroup(KGlobal::config(), URL_FOR_BASE_URL_GROUP));
+    }
 
     KUrl mSrcBaseUrl;
     KUrl mSrcUrl;
@@ -193,6 +203,27 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
             mButtonBox, SIGNAL(rejected()),
             q, SIGNAL(rejected()));
     }
+
+    KUrl urlForBaseUrl() const
+    {
+        KUrl url = mUrlMap.value(mSrcBaseUrl);
+        if (!url.isValid()) {
+            return KUrl();
+        }
+
+        KIO::UDSEntry entry;
+        bool ok = KIO::NetAccess::stat(url, entry, q);
+        if (!ok) {
+            return KUrl();
+        }
+        KFileItem item(entry, url, true /* delayedMimeTypes */);
+        return item.isDir() ? url : KUrl();
+    }
+
+    void rememberUrl(const KUrl& url)
+    {
+        mUrlMap.insert(mSrcBaseUrl, url);
+    }
 };
 
 ThumbnailPage::ThumbnailPage()
@@ -214,19 +245,24 @@ ThumbnailPage::~ThumbnailPage()
     delete d;
 }
 
-void ThumbnailPage::setSourceUrl(const KUrl& url)
+void ThumbnailPage::setSourceUrl(const KUrl& srcBaseUrl)
 {
-    d->mSrcBaseUrl = url;
-    DocumentDirFinder* finder = new DocumentDirFinder(url);
-    connect(finder, SIGNAL(done(KUrl,DocumentDirFinder::Status)),
-            SLOT(slotDocumentDirFinderDone(KUrl,DocumentDirFinder::Status)));
-    finder->start();
+    d->mSrcBaseUrl = srcBaseUrl;
+    KUrl url = d->urlForBaseUrl();
+
+    if (url.isValid()) {
+        openUrl(url);
+    } else {
+        DocumentDirFinder* finder = new DocumentDirFinder(srcBaseUrl);
+        connect(finder, SIGNAL(done(KUrl,DocumentDirFinder::Status)),
+                SLOT(slotDocumentDirFinderDone(KUrl,DocumentDirFinder::Status)));
+        finder->start();
+    }
 }
 
-void ThumbnailPage::slotDocumentDirFinderDone(const KUrl& url, DocumentDirFinder::Status status)
+void ThumbnailPage::slotDocumentDirFinderDone(const KUrl& url, DocumentDirFinder::Status /*status*/)
 {
-    kDebug() << url << "status:" << status;
-    kDebug() << "FIXME: Handle different status";
+    d->rememberUrl(url);
     openUrl(url);
 }
 
@@ -323,11 +359,12 @@ void ThumbnailPage::initSrcUrlMenu()
 void ThumbnailPage::openUrlFromIndex(const QModelIndex& index)
 {
     KFileItem item = itemForIndex(index);
-    kWarning() << item.url();
     if (item.isNull()) {
         return;
     }
-    openUrl(item.url());
+    KUrl url = item.url();
+    d->rememberUrl(url);
+    openUrl(url);
 }
 
 } // namespace

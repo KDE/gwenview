@@ -16,6 +16,7 @@ set(importer_SRCS
     importer.cpp
     progresspage.cpp
     filenameformater.cpp
+    serializedurlmap.cpp
     thumbnailpage.cpp
     )
 
