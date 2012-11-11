@@ -339,10 +339,15 @@ void ThumbnailPage::initSrcUrlMenu()
     model->dirLister()->setDirOnlyMode(true);
     model->dirLister()->openUrl(d->mSrcBaseUrl);
 
+    QSortFilterProxyModel *sortModel = new QSortFilterProxyModel(this);
+    sortModel->setDynamicSortFilter(true);
+    sortModel->setSourceModel(model);
+    sortModel->sort(0);
+
     QTreeView* view = new QTreeView;
     view->resize(200, 300);
     view->setEditTriggers(QTreeView::NoEditTriggers);
-    view->setModel(model);
+    view->setModel(sortModel);
     for(int i = 1; i < model->columnCount(); ++i) {
         view->hideColumn(i);
     }
