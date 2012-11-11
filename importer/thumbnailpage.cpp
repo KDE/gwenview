@@ -78,7 +78,7 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
     KUrl mSrcUrl;
 
     RecursiveDirModel* mRecursiveDirModel;
-    KindProxyModel* mKindProxyModel;
+    QAbstractItemModel* mFinalModel;
 
     QPushButton* mImportSelectedButton;
     QPushButton* mImportAllButton;
@@ -88,21 +88,28 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
     {
         mRecursiveDirModel = new RecursiveDirModel(q);
 
-        mKindProxyModel = new KindProxyModel(q);
-        mKindProxyModel->setKindFilter(
+        KindProxyModel* kindProxyModel = new KindProxyModel(q);
+        kindProxyModel->setKindFilter(
             MimeTypeUtils::KIND_RASTER_IMAGE
             | MimeTypeUtils::KIND_SVG_IMAGE
             | MimeTypeUtils::KIND_VIDEO);
-        mKindProxyModel->setSourceModel(mRecursiveDirModel);
+        kindProxyModel->setSourceModel(mRecursiveDirModel);
+
+        QSortFilterProxyModel *sortModel = new QSortFilterProxyModel(q);
+        sortModel->setDynamicSortFilter(true);
+        sortModel->setSourceModel(kindProxyModel);
+        sortModel->sort(0);
+
+        mFinalModel = sortModel;
 
         QObject::connect(
-            mKindProxyModel, SIGNAL(rowsInserted(QModelIndex,int,int)),
+            mFinalModel, SIGNAL(rowsInserted(QModelIndex,int,int)),
             q, SLOT(updateImportButtons()));
         QObject::connect(
-            mKindProxyModel, SIGNAL(rowsRemoved(QModelIndex,int,int)),
+            mFinalModel, SIGNAL(rowsRemoved(QModelIndex,int,int)),
             q, SLOT(updateImportButtons()));
         QObject::connect(
-            mKindProxyModel, SIGNAL(modelReset()),
+            mFinalModel, SIGNAL(modelReset()),
             q, SLOT(updateImportButtons()));
     }
 
@@ -126,7 +133,7 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
 
     void setupThumbnailView()
     {
-        mThumbnailView->setModel(mKindProxyModel);
+        mThumbnailView->setModel(mFinalModel);
 
         mThumbnailView->setSelectionMode(QAbstractItemView::ExtendedSelection);
         mThumbnailView->setThumbnailViewHelper(new ImporterThumbnailViewHelper(q));
