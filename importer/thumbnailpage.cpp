@@ -22,7 +22,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "thumbnailpage.moc"
 
 // Qt
+#include <QMenu>
 #include <QPushButton>
+#include <QTreeView>
+#include <QWidgetAction>
 
 // KDE
 #include <KDebug>
@@ -74,7 +77,9 @@ inline KFileItem itemForIndex(const QModelIndex& index)
 struct ThumbnailPagePrivate : public Ui_ThumbnailPage
 {
     ThumbnailPage* q;
+    QMenu* mSrcUrlMenu;
 
+    KUrl mSrcBaseUrl;
     KUrl mSrcUrl;
 
     RecursiveDirModel* mRecursiveDirModel;
@@ -123,7 +128,9 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
 
     void setupSrcUrlButton()
     {
-        QObject::connect(mSrcUrlButton, SIGNAL(clicked()), q, SLOT(showSrcUrlDialog()));
+        mSrcUrlMenu = new QMenu(q);
+        QObject::connect(mSrcUrlMenu, SIGNAL(aboutToShow()), q, SLOT(initSrcUrlMenu()));
+        mSrcUrlButton->setMenu(mSrcUrlMenu);
     }
 
     void setupDstUrlRequester()
@@ -209,6 +216,7 @@ ThumbnailPage::~ThumbnailPage()
 
 void ThumbnailPage::setSourceUrl(const KUrl& url)
 {
+    d->mSrcBaseUrl = url;
     DocumentDirFinder* finder = new DocumentDirFinder(url);
     connect(finder, SIGNAL(done(KUrl,DocumentDirFinder::Status)),
             SLOT(slotDocumentDirFinderDone(KUrl,DocumentDirFinder::Status)));
@@ -224,6 +232,7 @@ void ThumbnailPage::slotDocumentDirFinderDone(const KUrl& url, DocumentDirFinder
 
 void ThumbnailPage::openUrl(const KUrl& url)
 {
+    kWarning() << url;
     d->mSrcUrl = url;
     d->mSrcUrlButton->setText(url.pathOrUrl());
     d->mRecursiveDirModel->setUrl(url);
@@ -284,12 +293,41 @@ void ThumbnailPage::showConfigDialog()
     dialog.exec();
 }
 
-void ThumbnailPage::showSrcUrlDialog()
+void ThumbnailPage::initSrcUrlMenu()
 {
-    KUrl url = KDirSelectDialog::selectDirectory(d->mSrcUrl, false /* localOnly */, this);
-    if (!url.isEmpty()) {
-        openUrl(url);
+    if (!d->mSrcUrlMenu->isEmpty()) {
+        return;
     }
+
+    KDirModel* model = new KDirModel(this);
+    model->dirLister()->setDirOnlyMode(true);
+    model->dirLister()->openUrl(d->mSrcBaseUrl);
+
+    QTreeView* view = new QTreeView;
+    view->resize(200, 300);
+    view->setEditTriggers(QTreeView::NoEditTriggers);
+    view->setModel(model);
+    for(int i = 1; i < model->columnCount(); ++i) {
+        view->hideColumn(i);
+    }
+    view->setHeaderHidden(true);
+    connect(view, SIGNAL(activated(QModelIndex)), SLOT(openUrlFromIndex(QModelIndex)));
+    connect(view, SIGNAL(clicked(QModelIndex)), SLOT(openUrlFromIndex(QModelIndex)));
+
+    QWidgetAction* viewAction = new QWidgetAction(d->mSrcUrlMenu);
+    viewAction->setDefaultWidget(view);
+
+    d->mSrcUrlMenu->addAction(viewAction);
+}
+
+void ThumbnailPage::openUrlFromIndex(const QModelIndex& index)
+{
+    KFileItem item = itemForIndex(index);
+    kWarning() << item.url();
+    if (item.isNull()) {
+        return;
+    }
+    openUrl(item.url());
 }
 
 } // namespace

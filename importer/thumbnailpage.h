@@ -64,7 +64,8 @@ private Q_SLOTS:
     void openUrl(const KUrl&);
     void slotDocumentDirFinderDone(const KUrl& url, DocumentDirFinder::Status status);
     void showConfigDialog();
-    void showSrcUrlDialog();
+    void initSrcUrlMenu();
+    void openUrlFromIndex(const QModelIndex& index);
 
 private:
     friend class ThumbnailPagePrivate;
