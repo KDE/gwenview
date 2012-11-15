@@ -487,8 +487,8 @@ Moves to the parent folder of the current folder.</para></listitem>
 action="simul">&Ctrl;&Shift;<keycap>F</keycap></keycombo>:
 Switches into Full Screen Mode.</para></listitem>
 
-<listitem><para>&Esc;: Exits from Full Screen
-mode.</para></listitem>
+<listitem><para>&Esc;: Switches back to Browse Mode.
+</para></listitem>
 
 <listitem><para><keycombo
 action="simul">&Ctrl;<keycap>M</keycap></keycombo>:

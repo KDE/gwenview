@@ -342,6 +342,7 @@ struct MainWindow::Private
         mBrowseAction->setToolTip(i18nc("@info:tooltip", "Browse folders for images"));
         mBrowseAction->setCheckable(true);
         mBrowseAction->setIcon(KIcon("view-list-icons"));
+        mBrowseAction->setShortcut(Qt::Key_Escape);
         connect(mViewMainPage, SIGNAL(goToBrowseModeRequested()),
             mBrowseAction, SLOT(trigger()));
 
@@ -371,7 +372,6 @@ struct MainWindow::Private
         leaveFullScreenAction->setIcon(KIcon("view-restore"));
         leaveFullScreenAction->setPriority(QAction::LowPriority);
         leaveFullScreenAction->setText(i18nc("@action", "Leave Fullscreen Mode"));
-        leaveFullScreenAction->setShortcut(Qt::Key_Escape);
 
         mGoToPreviousAction = view->addAction("go_previous", q, SLOT(goToPrevious()));
         mGoToPreviousAction->setPriority(QAction::LowPriority);
