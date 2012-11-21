@@ -220,7 +220,7 @@ if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
         )
 endif (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 
-if (LCMS2)
+if (LCMS2_FOUND)
 target_link_libraries(gwenviewlib
     ${LCMS2_LIBRARIES}
     )
