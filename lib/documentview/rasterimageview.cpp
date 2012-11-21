@@ -22,9 +22,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "rasterimageview.moc"
 
 // Local
+#include <config-gwenview.h>
 #include <lib/documentview/abstractrasterimageviewtool.h>
 #include <lib/imagescaler.h>
+#ifdef LCMS2_FOUND
 #include <cms/cmsprofile.h>
+#endif
 
 // KDE
 #include <KDebug>
@@ -35,7 +38,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QTimer>
 #include <QWeakPointer>
 
+#ifdef LCMS2_FOUND
 #include <lcms2.h>
+#endif
 
 
 namespace Gwenview
@@ -65,6 +70,7 @@ struct RasterImageViewPrivate
 
     QWeakPointer<AbstractRasterImageViewTool> mTool;
 
+#ifdef LCMS2_FOUND
     cmsHTRANSFORM mDisplayTransform;
 
     void updateDisplayTransform()
@@ -96,6 +102,7 @@ struct RasterImageViewPrivate
                                                monitorProfile->handle(), cmsFormat,
                                                INTENT_PERCEPTUAL, cmsFLAGS_BLACKPOINTCOMPENSATION);
     }
+#endif
 
     void createBackgroundTexture()
     {
@@ -183,7 +190,9 @@ RasterImageView::RasterImageView(QGraphicsItem* parent)
 {
     d->q = this;
     d->mEmittedCompleted = false;
+#ifdef LCMS2_FOUND
     d->mDisplayTransform = 0;
+#endif
 
     d->mAlphaBackgroundMode = AlphaBackgroundCheckBoard;
     d->mAlphaBackgroundColor = Qt::black;
@@ -200,9 +209,11 @@ RasterImageView::RasterImageView(QGraphicsItem* parent)
 
 RasterImageView::~RasterImageView()
 {
+#ifdef LCMS2_FOUND
     if (d->mDisplayTransform) {
         cmsDeleteTransform(d->mDisplayTransform);
     }
+#endif
     delete d;
 }
 
@@ -258,7 +269,9 @@ void RasterImageView::finishSetDocument()
         return;
     }
 
+#ifdef LCMS2_FOUND
     d->updateDisplayTransform();
+#endif
 
     d->mScaler->setDocument(document());
     d->resizeBuffer();
@@ -300,10 +313,12 @@ void RasterImageView::slotDocumentIsAnimatedUpdated()
 
 void RasterImageView::updateFromScaler(int zoomedImageLeft, int zoomedImageTop, const QImage& image)
 {
+#ifdef LCMS2_FOUND
     if (d->mDisplayTransform) {
         quint8 *bytes = const_cast<quint8*>(image.bits());
         cmsDoTransform(d->mDisplayTransform, bytes, bytes, image.width() * image.height());
     }
+#endif
 
     d->resizeBuffer();
     int viewportLeft = zoomedImageLeft - scrollPos().x();

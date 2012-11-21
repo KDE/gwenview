@@ -34,8 +34,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KSharedPtr>
 
 // Local
+#include <config-gwenview.h>
 #include <lib/mimetypeutils.h>
+
+#ifdef LCMS2_FOUND
 #include <lib/cms/cmsprofile.h>
+#endif
 
 class QImage;
 class QRect;
@@ -169,7 +173,9 @@ public:
      */
     QByteArray rawData() const;
 
+#ifdef LCMS2_FOUND
     Cms::Profile::Ptr cmsProfile() const;
+#endif
 
     /**
      * Returns a QSvgRenderer which can be used to render this document if it is
@@ -239,7 +245,9 @@ private:
     void setDownSampledImage(const QImage&, int invertedZoom);
     void switchToImpl(AbstractDocumentImpl* impl);
     void setErrorString(const QString&);
+#ifdef LCMS2_FOUND
     void setCmsProfile(Cms::Profile::Ptr);
+#endif
 
     Document(const KUrl&);
     DocumentPrivate * const d;
