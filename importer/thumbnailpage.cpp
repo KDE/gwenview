@@ -268,7 +268,6 @@ void ThumbnailPage::slotDocumentDirFinderDone(const KUrl& url, DocumentDirFinder
 
 void ThumbnailPage::openUrl(const KUrl& url)
 {
-    kWarning() << url;
     d->mSrcUrl = url;
     d->mSrcUrlButton->setText(url.pathOrUrl());
     d->mRecursiveDirModel->setUrl(url);
