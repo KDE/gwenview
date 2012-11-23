@@ -89,6 +89,8 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
         mUrlMap.setConfigGroup(KConfigGroup(KGlobal::config(), URL_FOR_BASE_URL_GROUP));
     }
 
+    KIcon mSrcBaseIcon;
+    QString mSrcBaseName;
     KUrl mSrcBaseUrl;
     KUrl mSrcUrl;
 
@@ -136,11 +138,10 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
         mDstIconLabel->setPixmap(KIconLoader::global()->loadIcon("computer", group, size));
     }
 
-    void setupSrcUrlButton()
+    void setupSrcUrlWidgets()
     {
-        mSrcUrlMenu = new QMenu(q);
-        QObject::connect(mSrcUrlMenu, SIGNAL(aboutToShow()), q, SLOT(initSrcUrlMenu()));
-        mSrcUrlButton->setMenu(mSrcUrlMenu);
+        QObject::connect(mSrcUrlButton, SIGNAL(clicked()), q, SLOT(setupSrcUrlTreeView()));
+        mSrcUrlTreeView->hide();
     }
 
     void setupDstUrlRequester()
@@ -233,7 +234,7 @@ ThumbnailPage::ThumbnailPage()
     d->setupUi(this);
     d->setupIcons();
     d->setupDirModel();
-    d->setupSrcUrlButton();
+    d->setupSrcUrlWidgets();
     d->setupDstUrlRequester();
     d->setupThumbnailView();
     d->setupButtonBox();
@@ -245,9 +246,16 @@ ThumbnailPage::~ThumbnailPage()
     delete d;
 }
 
-void ThumbnailPage::setSourceUrl(const KUrl& srcBaseUrl)
+void ThumbnailPage::setSourceUrl(const KUrl& srcBaseUrl, const QString& iconName, const QString& name)
 {
+    d->mSrcBaseIcon = KIcon(iconName);
+    d->mSrcBaseName = name;
+
+    const int size = KIconLoader::SizeHuge;
+    d->mSrcIconLabel->setPixmap(d->mSrcBaseIcon.pixmap(size));
+
     d->mSrcBaseUrl = srcBaseUrl;
+    d->mSrcBaseUrl.adjustPath(KUrl::AddTrailingSlash);
     KUrl url = d->urlForBaseUrl();
 
     if (url.isValid()) {
@@ -269,7 +277,14 @@ void ThumbnailPage::slotDocumentDirFinderDone(const KUrl& url, DocumentDirFinder
 void ThumbnailPage::openUrl(const KUrl& url)
 {
     d->mSrcUrl = url;
-    d->mSrcUrlButton->setText(url.pathOrUrl());
+    QString path = KUrl::relativeUrl(d->mSrcBaseUrl, d->mSrcUrl);
+    QString text;
+    if (path.isEmpty() || path == "./") {
+        text = d->mSrcBaseName;
+    } else {
+        text = QString("%1/%2").arg(d->mSrcBaseName).arg(path);
+    }
+    d->mSrcUrlButton->setText(text);
     d->mRecursiveDirModel->setUrl(url);
 }
 
@@ -328,36 +343,71 @@ void ThumbnailPage::showConfigDialog()
     dialog.exec();
 }
 
-void ThumbnailPage::initSrcUrlMenu()
+class OnlyBaseUrlProxyModel : public QSortFilterProxyModel
 {
-    if (!d->mSrcUrlMenu->isEmpty()) {
+public:
+    OnlyBaseUrlProxyModel(const KUrl& url, const KIcon& icon, const QString& name, QObject* parent)
+    : QSortFilterProxyModel(parent)
+    , mUrl(url)
+    , mIcon(icon)
+    , mName(name)
+    {}
+
+    bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const // reimp
+    {
+        if (sourceParent.isValid()) {
+            return true;
+        }
+        QModelIndex index = sourceModel()->index(sourceRow, 0);
+        KFileItem item = itemForIndex(index);
+        return item.url().equals(mUrl, KUrl::CompareWithoutTrailingSlash);
+    }
+
+    QVariant data(const QModelIndex& index, int role) const // reimp
+    {
+        if (index.parent().isValid()) {
+            return QSortFilterProxyModel::data(index, role);
+        }
+        switch (role) {
+        case Qt::DisplayRole:
+            return mName;
+        case Qt::DecorationRole:
+            return mIcon;
+        default:
+            return QSortFilterProxyModel::data(index, role);
+        }
+    }
+
+private:
+    KUrl mUrl;
+    KIcon mIcon;
+    QString mName;
+};
+
+void ThumbnailPage::setupSrcUrlTreeView()
+{
+    if (d->mSrcUrlTreeView->model()) {
+        // Already initialized
         return;
     }
-
     KDirModel* model = new KDirModel(this);
     model->dirLister()->setDirOnlyMode(true);
-    model->dirLister()->openUrl(d->mSrcBaseUrl);
+    model->dirLister()->openUrl(d->mSrcBaseUrl.upUrl());
 
-    QSortFilterProxyModel *sortModel = new QSortFilterProxyModel(this);
+    OnlyBaseUrlProxyModel* onlyBaseUrlModel = new OnlyBaseUrlProxyModel(d->mSrcBaseUrl, d->mSrcBaseIcon, d->mSrcBaseName, this);
+    onlyBaseUrlModel->setSourceModel(model);
+
+    QSortFilterProxyModel* sortModel = new QSortFilterProxyModel(this);
     sortModel->setDynamicSortFilter(true);
-    sortModel->setSourceModel(model);
+    sortModel->setSourceModel(onlyBaseUrlModel);
     sortModel->sort(0);
 
-    QTreeView* view = new QTreeView;
-    view->resize(200, 300);
-    view->setEditTriggers(QTreeView::NoEditTriggers);
-    view->setModel(sortModel);
+    d->mSrcUrlTreeView->setModel(sortModel);
     for(int i = 1; i < model->columnCount(); ++i) {
-        view->hideColumn(i);
+        d->mSrcUrlTreeView->hideColumn(i);
     }
-    view->setHeaderHidden(true);
-    connect(view, SIGNAL(activated(QModelIndex)), SLOT(openUrlFromIndex(QModelIndex)));
-    connect(view, SIGNAL(clicked(QModelIndex)), SLOT(openUrlFromIndex(QModelIndex)));
-
-    QWidgetAction* viewAction = new QWidgetAction(d->mSrcUrlMenu);
-    viewAction->setDefaultWidget(view);
-
-    d->mSrcUrlMenu->addAction(viewAction);
+    connect(d->mSrcUrlTreeView, SIGNAL(activated(QModelIndex)), SLOT(openUrlFromIndex(QModelIndex)));
+    connect(d->mSrcUrlTreeView, SIGNAL(clicked(QModelIndex)), SLOT(openUrlFromIndex(QModelIndex)));
 }
 
 void ThumbnailPage::openUrlFromIndex(const QModelIndex& index)

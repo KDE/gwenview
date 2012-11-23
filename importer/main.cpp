@@ -51,6 +51,7 @@ int main(int argc, char *argv[])
 
     KCmdLineOptions options;
     options.add("+[folder]", ki18n("Source folder"));
+    options.add("udi <device-udi>", ki18n("Device UDI"));
     KCmdLineArgs::addCmdLineOptions(options);
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
@@ -63,6 +64,7 @@ int main(int argc, char *argv[])
         kError() << "Invalid url. FIXME";
         return 1;
     }
+    QString deviceUdi = args->isSet("udi") ? args->getOption("udi") : QString();
     args->clear();
 
     KApplication app;
@@ -71,6 +73,6 @@ int main(int argc, char *argv[])
 
     Gwenview::ImportDialog* dialog = new Gwenview::ImportDialog();
     dialog->show();
-    QMetaObject::invokeMethod(dialog, "setSourceUrl", Qt::QueuedConnection, Q_ARG(KUrl, url));
+    QMetaObject::invokeMethod(dialog, "setSourceUrl", Qt::QueuedConnection, Q_ARG(KUrl, url), Q_ARG(QString, deviceUdi));
     return app.exec();
 }

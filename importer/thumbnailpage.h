@@ -51,7 +51,7 @@ public:
     KUrl destinationUrl() const;
     void setDestinationUrl(const KUrl&);
 
-    void setSourceUrl(const KUrl&);
+    void setSourceUrl(const KUrl&, const QString& icon, const QString& label);
 
 Q_SIGNALS:
     void importRequested();
@@ -64,8 +64,8 @@ private Q_SLOTS:
     void openUrl(const KUrl&);
     void slotDocumentDirFinderDone(const KUrl& url, DocumentDirFinder::Status status);
     void showConfigDialog();
-    void initSrcUrlMenu();
     void openUrlFromIndex(const QModelIndex& index);
+    void setupSrcUrlTreeView();
 
 private:
     friend class ThumbnailPagePrivate;

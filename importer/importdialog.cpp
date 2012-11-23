@@ -33,9 +33,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KIO/NetAccess>
 #include <KLocale>
 #include <KMessageBox>
+#include <KProtocolInfo>
 #include <KRun>
 #include <KService>
 #include <KStandardGuiItem>
+#include <Solid/Device>
 
 // Local
 #include "dialogpage.h"
@@ -219,9 +221,21 @@ QSize ImportDialog::sizeHint() const
     return QSize(700, 500);
 }
 
-void ImportDialog::setSourceUrl(const KUrl& url)
+void ImportDialog::setSourceUrl(const KUrl& url, const QString& deviceUdi)
 {
-    d->mThumbnailPage->setSourceUrl(url);
+    QString name, iconName;
+    if (deviceUdi.isEmpty()) {
+        name = url.pathOrUrl();
+        iconName = KProtocolInfo::icon(url.protocol());
+        if (iconName.isEmpty()) {
+            iconName = "folder";
+        }
+    } else {
+        Solid::Device device(deviceUdi);
+        name = device.vendor() + " " + device.product();
+        iconName = device.icon();
+    }
+    d->mThumbnailPage->setSourceUrl(url, iconName, name);
 }
 
 void ImportDialog::startImport()

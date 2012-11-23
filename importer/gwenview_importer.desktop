@@ -5,7 +5,7 @@ Actions=open;
 
 [Desktop Action open]
 # %f gives StorageAccess.filePath, %d gives Block.device, %i gives UDI
-Exec=gwenview_importer %f
+Exec=gwenview_importer %f --udi %i
 Icon=gwenview
 Name=Download Photos with Gwenview
 Name[ar]=نزل الصور بجوينفيو

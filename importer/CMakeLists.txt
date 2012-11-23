@@ -39,12 +39,14 @@ target_link_libraries(gwenview_importer
     ${KDE4_KFILE_LIBS}
     gwenviewlib
     ${KDE4_KIO_LIBS}
+    ${KDE4_SOLID_LIBS}
     ${QT_QTCORE_LIBRARY}
     )
 
 target_link_libraries(gwenview_importer
     LINK_INTERFACE_LIBRARIES
     ${KDE4_KIO_LIBS}
+    ${KDE4_SOLID_LIBS}
     ${QT_QTCORE_LIBRARY})
 
 install(TARGETS gwenview_importer
