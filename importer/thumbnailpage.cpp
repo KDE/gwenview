@@ -141,6 +141,7 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
     void setupSrcUrlWidgets()
     {
         QObject::connect(mSrcUrlButton, SIGNAL(clicked()), q, SLOT(setupSrcUrlTreeView()));
+        QObject::connect(mSrcUrlButton, SIGNAL(clicked()), q, SLOT(toggleSrcUrlTreeView()));
         mSrcUrlTreeView->hide();
     }
 
@@ -408,6 +409,11 @@ void ThumbnailPage::setupSrcUrlTreeView()
     }
     connect(d->mSrcUrlTreeView, SIGNAL(activated(QModelIndex)), SLOT(openUrlFromIndex(QModelIndex)));
     connect(d->mSrcUrlTreeView, SIGNAL(clicked(QModelIndex)), SLOT(openUrlFromIndex(QModelIndex)));
+}
+
+void ThumbnailPage::toggleSrcUrlTreeView()
+{
+    d->mSrcUrlTreeView->setVisible(!d->mSrcUrlTreeView->isVisible());
 }
 
 void ThumbnailPage::openUrlFromIndex(const QModelIndex& index)

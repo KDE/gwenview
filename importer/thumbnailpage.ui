@@ -210,11 +210,7 @@ QLabel[isIcon=true] {
        </widget>
       </item>
       <item>
-       <widget class="KPushButton" name="mSrcUrlButton">
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-       </widget>
+       <widget class="KPushButton" name="mSrcUrlButton"/>
       </item>
       <item>
        <spacer name="horizontalSpacer_2">
@@ -269,22 +265,5 @@ QLabel[isIcon=true] {
   <tabstop>mConfigureButton</tabstop>
  </tabstops>
  <resources/>
- <connections>
-  <connection>
-   <sender>mSrcUrlButton</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>mSrcUrlTreeView</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>202</x>
-     <y>35</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>136</x>
-     <y>79</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

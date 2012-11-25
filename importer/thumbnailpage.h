@@ -66,6 +66,7 @@ private Q_SLOTS:
     void showConfigDialog();
     void openUrlFromIndex(const QModelIndex& index);
     void setupSrcUrlTreeView();
+    void toggleSrcUrlTreeView();
 
 private:
     friend class ThumbnailPagePrivate;
