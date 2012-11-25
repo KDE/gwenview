@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 #include <KDebug>
+#include <KDialog>
 #include <KDirLister>
 #include <KDirModel>
 #include <KDirSelectDialog>
@@ -143,6 +144,7 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
         QObject::connect(mSrcUrlButton, SIGNAL(clicked()), q, SLOT(setupSrcUrlTreeView()));
         QObject::connect(mSrcUrlButton, SIGNAL(clicked()), q, SLOT(toggleSrcUrlTreeView()));
         mSrcUrlTreeView->hide();
+        mSrcUrlTreeView->parentWidget()->layout()->setSpacing(0);
     }
 
     void setupDstUrlRequester()
@@ -414,6 +416,8 @@ void ThumbnailPage::setupSrcUrlTreeView()
 void ThumbnailPage::toggleSrcUrlTreeView()
 {
     d->mSrcUrlTreeView->setVisible(!d->mSrcUrlTreeView->isVisible());
+    QLayout* layout = d->mSrcUrlTreeView->parentWidget()->layout();
+    layout->setSpacing(d->mSrcUrlTreeView->isVisible() ? KDialog::spacingHint() : 0);
 }
 
 void ThumbnailPage::openUrlFromIndex(const QModelIndex& index)
