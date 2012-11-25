@@ -346,6 +346,11 @@ void ThumbnailPage::showConfigDialog()
     dialog.exec();
 }
 
+/**
+ * This model allows only the url passed in the constructor to appear at the root
+ * level. This makes it possible to select the url, but not its siblings.
+ * It also provides custom role values for the root item.
+ */
 class OnlyBaseUrlProxyModel : public QSortFilterProxyModel
 {
 public:
