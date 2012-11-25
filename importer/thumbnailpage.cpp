@@ -376,6 +376,8 @@ public:
             return mName;
         case Qt::DecorationRole:
             return mIcon;
+        case Qt::ToolTipRole:
+            return mUrl.pathOrUrl();
         default:
             return QSortFilterProxyModel::data(index, role);
         }
