@@ -2,15 +2,22 @@ project(gwenviewlib)
 
 # Extract version of libjpeg so that we can use the appropriate dir
 # See bug #227313
+message(STATUS "Looking for libjpeg version in ${JPEG_INCLUDE_DIR}/jpeglib.h")
 file(READ "${JPEG_INCLUDE_DIR}/jpeglib.h" jpeglib_h_content)
 string(REGEX MATCH "#define +JPEG_LIB_VERSION +([0-9]+)" "\\1" jpeglib_version "${jpeglib_h_content}")
 set(jpeglib_version ${CMAKE_MATCH_1})
+
 if ("${jpeglib_version}" STREQUAL "")
+    message(STATUS "No version defined in ${JPEG_INCLUDE_DIR}/jpeglib.h, looking for jconfig.h")
     # libjpeg-turbo keeps JPEG_LIB_VERSION in jconfig.h, not jpeglib.h :/
-    find_file(JCONFIG_H jconfig.h PATHS "${JPEG_INCLUDE_DIR}")
+    find_file(JCONFIG_H jconfig.h
+        PATHS "${JPEG_INCLUDE_DIR}"
+        PATH_SUFFIXES "x86_64-linux-gnu"
+        )
     if (NOT EXISTS "${JCONFIG_H}")
-        message(FATAL_ERROR "Could not find jconfig.h. You can specify its path with -DJCONFIG_H=/path/to/jconfig.h.")
+        message(FATAL_ERROR "Could not find jconfig.h. This file comes with libjpeg. You can specify its path with -DJCONFIG_H=/path/to/jconfig.h.")
     endif (NOT EXISTS "${JCONFIG_H}")
+    message(STATUS "Found jconfig.h: ${JCONFIG_H}")
     message(STATUS "Looking for libjpeg version in ${JCONFIG_H}")
     file(READ "${JCONFIG_H}" jconfig_h_content)
     string(REGEX MATCH "#define +JPEG_LIB_VERSION +([0-9]+)" "\\1" jpeglib_version "${jconfig_h_content}")
