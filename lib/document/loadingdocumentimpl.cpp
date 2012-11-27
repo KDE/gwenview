@@ -94,6 +94,7 @@ struct LoadingDocumentImplPrivate
     bool mAnimated;
     bool mDownSampledImageLoaded;
     QByteArray mFormatHint;
+    QIODevice* mIODevice;
     QByteArray mData;
     QByteArray mFormat;
     QSize mImageSize;
@@ -111,12 +112,13 @@ struct LoadingDocumentImplPrivate
      */
     bool determineKind()
     {
+        QByteArray header = mIODevice->peek(HEADER_SIZE);
         QString mimeType;
         const KUrl& url = q->document()->url();
         if (KProtocolInfo::determineMimetypeFromExtension(url.protocol())) {
-            mimeType = KMimeType::findByNameAndContent(url.fileName(), mData)->name();
+            mimeType = KMimeType::findByNameAndContent(url.fileName(), header)->name();
         } else {
-            mimeType = KMimeType::findByContent(mData)->name();
+            mimeType = KMimeType::findByContent(header)->name();
         }
         MimeTypeUtils::Kind kind = MimeTypeUtils::mimeTypeKind(mimeType);
         LOG("mimeType:" << mimeType);
@@ -339,21 +341,23 @@ void LoadingDocumentImpl::init()
 
     if (UrlUtils::urlIsFastLocalFile(url)) {
         // Load file content directly
-        QFile file(url.toLocalFile());
-        if (!file.open(QIODevice::ReadOnly)) {
+        QScopedPointer<QFile> file(new QFile(url.toLocalFile(), this));
+        if (!file->open(QIODevice::ReadOnly)) {
             setDocumentErrorString(i18nc("@info", "Could not open file %1", url.toLocalFile()));
             emit loadingFailed();
             switchToImpl(new EmptyDocumentImpl(document()));
             return;
         }
-        d->mData = file.read(HEADER_SIZE);
+        d->mIODevice = file.take();
         if (d->determineKind()) {
             return;
         }
-        d->mData += file.readAll();
+        d->mData = d->mIODevice->readAll();
         d->startLoading();
     } else {
         // Transfer file via KIO
+        d->mIODevice = new QBuffer(this);
+        d->mIODevice->open(QIODevice::ReadWrite);
         d->mTransferJob = KIO::get(document()->url());
         connect(d->mTransferJob, SIGNAL(data(KIO::Job*,QByteArray)),
                 SLOT(slotDataReceived(KIO::Job*,QByteArray)));
@@ -385,8 +389,9 @@ void LoadingDocumentImpl::loadImage(int invertedZoom)
 
 void LoadingDocumentImpl::slotDataReceived(KIO::Job* job, const QByteArray& chunk)
 {
+    d->mIODevice->write(chunk);
     d->mData.append(chunk);
-    if (document()->kind() == MimeTypeUtils::KIND_UNKNOWN && d->mData.length() >= HEADER_SIZE) {
+    if (document()->kind() == MimeTypeUtils::KIND_UNKNOWN && d->mIODevice->size() >= HEADER_SIZE) {
         if (d->determineKind()) {
             job->kill();
             return;
