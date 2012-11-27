@@ -241,10 +241,8 @@ struct LoadingDocumentImplPrivate
 
     void loadImageData()
     {
-        QBuffer buffer;
-        buffer.setBuffer(&mData);
-        buffer.open(QIODevice::ReadOnly);
-        QImageReader reader(&buffer, mFormat);
+        mIODevice->seek(0);
+        QImageReader reader(mIODevice, mFormat);
 
         LOG("mImageDataInvertedZoom=" << mImageDataInvertedZoom);
         if (mImageSize.isValid()
