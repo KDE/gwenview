@@ -188,15 +188,13 @@ struct LoadingDocumentImplPrivate
 
     bool loadMetaInfo()
     {
-        QBuffer buffer;
-        buffer.setBuffer(&mData);
-        buffer.open(QIODevice::ReadOnly);
         LOG("mFormatHint" << mFormatHint);
-        QImageReader reader(&buffer, mFormatHint);
+        QImageReader reader(mIODevice, mFormatHint);
         if (!reader.canRead()) {
             kError() << "QImageReader::read() failed:" << reader.errorString();
             return false;
         }
+        mIODevice->seek(0);
         mFormat = reader.format();
         if (mFormat == "jpg") {
             // if mFormatHint was "jpg", then mFormat is "jpg", but the rest of
@@ -353,6 +351,7 @@ void LoadingDocumentImpl::init()
             return;
         }
         d->mData = d->mIODevice->readAll();
+        d->mIODevice->seek(0);
         d->startLoading();
     } else {
         // Transfer file via KIO
@@ -407,6 +406,7 @@ void LoadingDocumentImpl::slotTransferFinished(KJob* job)
         switchToImpl(new EmptyDocumentImpl(document()));
         return;
     }
+    d->mIODevice->seek(0);
     d->startLoading();
 }
 
