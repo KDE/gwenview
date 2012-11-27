@@ -22,17 +22,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "thumbnailpage.moc"
 
 // Qt
-#include <QMenu>
 #include <QPushButton>
 #include <QTreeView>
-#include <QWidgetAction>
 
 // KDE
 #include <KDebug>
 #include <KDialog>
 #include <KDirLister>
 #include <KDirModel>
-#include <KDirSelectDialog>
 #include <KIconLoader>
 #include <KIO/NetAccess>
 
@@ -82,7 +79,6 @@ inline KFileItem itemForIndex(const QModelIndex& index)
 struct ThumbnailPagePrivate : public Ui_ThumbnailPage
 {
     ThumbnailPage* q;
-    QMenu* mSrcUrlMenu;
     SerializedUrlMap mUrlMap;
 
     ThumbnailPagePrivate()
