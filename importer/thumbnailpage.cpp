@@ -32,6 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KDirModel>
 #include <KIconLoader>
 #include <KIO/NetAccess>
+#include <kmodelindexproxymapper.h>
 
 // Local
 #include <lib/archiveutils.h>
@@ -90,6 +91,7 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
     QString mSrcBaseName;
     KUrl mSrcBaseUrl;
     KUrl mSrcUrl;
+    KModelIndexProxyMapper* mSrcUrlModelProxyMapper;
 
     RecursiveDirModel* mRecursiveDirModel;
     QAbstractItemModel* mFinalModel;
@@ -137,6 +139,7 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
 
     void setupSrcUrlWidgets()
     {
+        mSrcUrlModelProxyMapper = 0;
         QObject::connect(mSrcUrlButton, SIGNAL(clicked()), q, SLOT(setupSrcUrlTreeView()));
         QObject::connect(mSrcUrlButton, SIGNAL(clicked()), q, SLOT(toggleSrcUrlTreeView()));
         mSrcUrlTreeView->hide();
@@ -408,12 +411,27 @@ void ThumbnailPage::setupSrcUrlTreeView()
     sortModel->setSourceModel(onlyBaseUrlModel);
     sortModel->sort(0);
 
+    d->mSrcUrlModelProxyMapper = new KModelIndexProxyMapper(dirModel, sortModel, this);
+
     d->mSrcUrlTreeView->setModel(sortModel);
     for(int i = 1; i < dirModel->columnCount(); ++i) {
         d->mSrcUrlTreeView->hideColumn(i);
     }
     connect(d->mSrcUrlTreeView, SIGNAL(activated(QModelIndex)), SLOT(openUrlFromIndex(QModelIndex)));
     connect(d->mSrcUrlTreeView, SIGNAL(clicked(QModelIndex)), SLOT(openUrlFromIndex(QModelIndex)));
+
+    dirModel->expandToUrl(d->mSrcUrl);
+    connect(dirModel, SIGNAL(expand(QModelIndex)), SLOT(slotSrcUrlModelExpand(QModelIndex)));
+}
+
+void ThumbnailPage::slotSrcUrlModelExpand(const QModelIndex& index)
+{
+    QModelIndex viewIndex = d->mSrcUrlModelProxyMapper->mapLeftToRight(index);
+    d->mSrcUrlTreeView->expand(viewIndex);
+    KFileItem item = itemForIndex(index);
+    if (item.url() == d->mSrcUrl) {
+        d->mSrcUrlTreeView->selectionModel()->select(viewIndex, QItemSelectionModel::ClearAndSelect);
+    }
 }
 
 void ThumbnailPage::toggleSrcUrlTreeView()
