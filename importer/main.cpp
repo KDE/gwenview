@@ -55,19 +55,19 @@ int main(int argc, char *argv[])
     KCmdLineArgs::addCmdLineOptions(options);
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+    KApplication app;
+
     if (args->count() != 1) {
-        kError() << "Wrong arg count. FIXME";
+        KCmdLineArgs::usageError("Missing required source folder argument."); // FIXME 2.11 Add i18n() call
         return 1;
     }
     KUrl url = args->url(0);
     if (!url.isValid()) {
-        kError() << "Invalid url. FIXME";
+        kError() << "Invalid source folder."; // FIXME 2.11 Add i18n() call
         return 1;
     }
     QString deviceUdi = args->isSet("udi") ? args->getOption("udi") : QString();
     args->clear();
-
-    KApplication app;
 
     Gwenview::ImageFormats::registerPlugins();
 
