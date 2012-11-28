@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
     KCmdLineArgs::init(argc, argv, &aboutData);
 
     KCmdLineOptions options;
-    options.add("+[folder]", ki18n("Source folder"));
+    options.add("+folder", ki18n("Source folder"));
     options.add("udi <device-udi>", ki18n("Device UDI"));
     KCmdLineArgs::addCmdLineOptions(options);
 
