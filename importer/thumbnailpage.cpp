@@ -396,12 +396,12 @@ void ThumbnailPage::setupSrcUrlTreeView()
         // Already initialized
         return;
     }
-    KDirModel* model = new KDirModel(this);
-    model->dirLister()->setDirOnlyMode(true);
-    model->dirLister()->openUrl(d->mSrcBaseUrl.upUrl());
+    KDirModel* dirModel = new KDirModel(this);
+    dirModel->dirLister()->setDirOnlyMode(true);
+    dirModel->dirLister()->openUrl(d->mSrcBaseUrl.upUrl());
 
     OnlyBaseUrlProxyModel* onlyBaseUrlModel = new OnlyBaseUrlProxyModel(d->mSrcBaseUrl, d->mSrcBaseIcon, d->mSrcBaseName, this);
-    onlyBaseUrlModel->setSourceModel(model);
+    onlyBaseUrlModel->setSourceModel(dirModel);
 
     QSortFilterProxyModel* sortModel = new QSortFilterProxyModel(this);
     sortModel->setDynamicSortFilter(true);
@@ -409,7 +409,7 @@ void ThumbnailPage::setupSrcUrlTreeView()
     sortModel->sort(0);
 
     d->mSrcUrlTreeView->setModel(sortModel);
-    for(int i = 1; i < model->columnCount(); ++i) {
+    for(int i = 1; i < dirModel->columnCount(); ++i) {
         d->mSrcUrlTreeView->hideColumn(i);
     }
     connect(d->mSrcUrlTreeView, SIGNAL(activated(QModelIndex)), SLOT(openUrlFromIndex(QModelIndex)));
