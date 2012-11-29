@@ -65,6 +65,10 @@ struct GraphicsWidgetFloaterPrivate
         parentWidth = mParent->size().width();
         parentHeight = mParent->size().height();
 
+        if (parentWidth == 0 || parentHeight == 0) {
+            return;
+        }
+
         if (mAlignment & Qt::AlignLeft) {
             posX = mHorizontalMargin;
         } else if (mAlignment & Qt::AlignHCenter) {
@@ -72,9 +76,6 @@ struct GraphicsWidgetFloaterPrivate
         } else if (mAlignment & Qt::AlignJustify) {
             posX = mHorizontalMargin;
             childWidth = parentWidth - 2 * mHorizontalMargin;
-            QRectF childGeometry = mChild->geometry();
-            childGeometry.setWidth(childWidth);
-            mChild->setGeometry(childGeometry);
         } else {
             posX = parentWidth - childWidth - mHorizontalMargin;
         }
