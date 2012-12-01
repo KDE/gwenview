@@ -59,7 +59,8 @@ struct BirdEyeViewPrivate
     QPropertyAnimation* mOpacityAnim;
     QTimer* mAutoHideTimer;
     QRectF mVisibleRect;
-    QPointF mLastDragPos;
+    QPointF mStartDragMousePos;
+    QPointF mStartDragViewPos;
 
     void updateCursor(const QPointF& pos)
     {
@@ -78,7 +79,7 @@ struct BirdEyeViewPrivate
         } else if (mVisibleRect == q->boundingRect()) {
             // All of the image is visible
             visible = false;
-        } else if (q->isUnderMouse() || !mLastDragPos.isNull()) {
+        } else if (q->isUnderMouse() || !mStartDragMousePos.isNull()) {
             // User is interacting or about to interact with birdeyeview
             visible = true;
         } else if (mAutoHideTimer->isActive()) {
@@ -180,7 +181,7 @@ void BirdEyeView::adjustVisibleRect()
     QRectF rect = QRectF(
         QPointF(d->mDocView->position()) / viewZoom * bevZoom,
         (d->mDocView->size() / viewZoom).boundedTo(docSize) * bevZoom);
-    d->mVisibleRect = alignedRectF(rect);
+    d->mVisibleRect = rect;
 }
 
 void BirdEyeView::slotAutoHideTimeout()
@@ -241,34 +242,34 @@ void BirdEyeView::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
     if (d->mVisibleRect.contains(event->pos())) {
         setCursor(Qt::ClosedHandCursor);
-        d->mLastDragPos = event->pos();
+        d->mStartDragMousePos = event->pos();
+        d->mStartDragViewPos = d->mDocView->position();
     }
 }
 
 void BirdEyeView::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 {
     QGraphicsItem::mouseMoveEvent(event);
-    if (d->mLastDragPos.isNull()) {
+    if (d->mStartDragMousePos.isNull()) {
         // Do not drag if mouse was pressed outside visible rect
         return;
     }
     qreal ratio = qMin(d->mDocView->boundingRect().height() / d->mVisibleRect.height(),
                        d->mDocView->boundingRect().width() / d->mVisibleRect.width());
     QPointF mousePos = event->pos();
-    QPointF viewPos = d->mDocView->position() + (mousePos - d->mLastDragPos) * ratio;
+    QPointF viewPos = d->mStartDragViewPos + (mousePos - d->mStartDragMousePos) * ratio;
 
-    d->mLastDragPos = mousePos;
     d->mDocView->setPosition(viewPos.toPoint());
 }
 
 void BirdEyeView::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 {
     QGraphicsItem::mouseReleaseEvent(event);
-    if (d->mLastDragPos.isNull()) {
+    if (d->mStartDragMousePos.isNull()) {
         return;
     }
     d->updateCursor(event->pos());
-    d->mLastDragPos = QPointF();
+    d->mStartDragMousePos = QPointF();
     d->mAutoHideTimer->start();
 }
 
@@ -280,7 +281,7 @@ void BirdEyeView::hoverEnterEvent(QGraphicsSceneHoverEvent* /*event*/)
 
 void BirdEyeView::hoverMoveEvent(QGraphicsSceneHoverEvent* event)
 {
-    if (d->mLastDragPos.isNull()) {
+    if (d->mStartDragMousePos.isNull()) {
         d->updateCursor(event->pos());
     }
 }
