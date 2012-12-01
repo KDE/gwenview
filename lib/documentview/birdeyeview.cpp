@@ -252,8 +252,8 @@ void BirdEyeView::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
         // Do not drag if mouse was pressed outside visible rect
         return;
     }
-    qreal ratio = d->mDocView->boundingRect().width() / d->mVisibleRect.width();
-
+    qreal ratio = qMin(d->mDocView->boundingRect().height() / d->mVisibleRect.height(),
+                       d->mDocView->boundingRect().width() / d->mVisibleRect.width());
     QPointF mousePos = event->pos();
     QPointF viewPos = d->mDocView->position() + (mousePos - d->mLastDragPos) * ratio;
 
