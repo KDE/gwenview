@@ -138,9 +138,17 @@ void BirdEyeView::adjustGeometry()
     if (!d->mDocView->canZoom() || d->mDocView->zoomToFit()) {
         return;
     }
-    QSize size = d->mDocView->document()->size();
+    QSizeF size = d->mDocView->document()->size();
     size.scale(MIN_SIZE, MIN_SIZE, Qt::KeepAspectRatioByExpanding);
     QRectF docViewRect = d->mDocView->boundingRect();
+    int maxBevHeight = docViewRect.height() - 2 * VIEW_OFFSET;
+    int maxBevWidth = docViewRect.width() - 2 * VIEW_OFFSET;
+    if (size.height() > maxBevHeight) {
+        size.scale(MIN_SIZE, maxBevHeight, Qt::KeepAspectRatio);
+    }
+    if (size.width() > maxBevWidth) {
+        size.scale(maxBevWidth, MIN_SIZE, Qt::KeepAspectRatio);
+    }
     QRectF geom = QRectF(
         QApplication::isRightToLeft()
         ? docViewRect.left() + VIEW_OFFSET
@@ -157,7 +165,13 @@ void BirdEyeView::adjustVisibleRect()
 {
     QSizeF docSize = d->mDocView->document()->size();
     qreal viewZoom = d->mDocView->zoom();
-    qreal bevZoom = size().width() / docSize.width();
+    qreal bevZoom;
+    if (docSize.height() > docSize.width()) {
+        bevZoom = size().height() / docSize.height();
+    } else {
+        bevZoom = size().width() / docSize.width();
+    }
+
     if (qFuzzyIsNull(viewZoom) || qFuzzyIsNull(bevZoom)) {
         // Prevent divide-by-zero crashes
         return;
