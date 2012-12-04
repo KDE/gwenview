@@ -208,6 +208,7 @@ ImportDialog::ImportDialog()
 
     d->mCentralWidget->setCurrentWidget(d->mThumbnailPage);
 
+    setWindowIcon(KIcon("gwenview"));
     setAutoSaveSettings();
 }
 
