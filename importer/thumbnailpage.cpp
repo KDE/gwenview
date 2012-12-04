@@ -26,6 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QTreeView>
 
 // KDE
+#include <KAcceleratorManager>
 #include <KDebug>
 #include <KDialog>
 #include <KDirLister>
@@ -144,6 +145,7 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
         QObject::connect(mSrcUrlButton, SIGNAL(clicked()), q, SLOT(toggleSrcUrlTreeView()));
         mSrcUrlTreeView->hide();
         mSrcUrlTreeView->parentWidget()->layout()->setSpacing(0);
+        KAcceleratorManager::setNoAccel(mSrcUrlButton);
     }
 
     void setupDstUrlRequester()
