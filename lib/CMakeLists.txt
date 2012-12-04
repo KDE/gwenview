@@ -12,7 +12,7 @@ if ("${jpeglib_version}" STREQUAL "")
     # libjpeg-turbo keeps JPEG_LIB_VERSION in jconfig.h, not jpeglib.h :/
     find_file(JCONFIG_H jconfig.h
         PATHS "${JPEG_INCLUDE_DIR}"
-        PATH_SUFFIXES "x86_64-linux-gnu"
+        PATH_SUFFIXES "${CMAKE_LIBRARY_ARCHITECTURE}"
         )
     if (NOT EXISTS "${JCONFIG_H}")
         message(FATAL_ERROR "Could not find jconfig.h. This file comes with libjpeg. You can specify its path with -DJCONFIG_H=/path/to/jconfig.h.")
