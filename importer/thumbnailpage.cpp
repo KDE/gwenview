@@ -286,7 +286,8 @@ void ThumbnailPage::openUrl(const KUrl& url)
     if (path.isEmpty() || path == "./") {
         text = d->mSrcBaseName;
     } else {
-        text = QString("%1/%2").arg(d->mSrcBaseName).arg(path);
+        path.replace("/", QString::fromUtf8(" › "));
+        text = QString::fromUtf8("%1 › %2").arg(d->mSrcBaseName).arg(path);
     }
     d->mSrcUrlButton->setText(text);
     d->mRecursiveDirModel->setUrl(url);
