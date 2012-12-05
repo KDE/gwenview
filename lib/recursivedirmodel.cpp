@@ -142,17 +142,25 @@ QVariant RecursiveDirModel::data(const QModelIndex& index, int role) const
 void RecursiveDirModel::slotItemsAdded(const KUrl&, const KFileItemList& newList)
 {
     QList<KUrl> dirUrls;
+    KFileItemList fileList;
     Q_FOREACH(const KFileItem& item, newList) {
         if (item.isFile()) {
             if (d->rowForUrl(item.url()) == -1) {
-                beginInsertRows(QModelIndex(), d->list().count(), d->list().count());
-                d->addItem(item);
-                endInsertRows();
+                fileList << item;
             }
         } else {
             dirUrls << item.url();
         }
     }
+
+    if (!fileList.isEmpty()) {
+        beginInsertRows(QModelIndex(), d->list().count(), d->list().count() + fileList.count());
+        Q_FOREACH(const KFileItem& item, fileList) {
+            d->addItem(item);
+        }
+        endInsertRows();
+    }
+
     Q_FOREACH(const KUrl& url, dirUrls) {
         d->mDirLister->openUrl(url, KDirLister::Keep);
     }
