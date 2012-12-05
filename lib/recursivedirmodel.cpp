@@ -45,6 +45,14 @@ struct RecursiveDirModelPrivate {
     {
         KFileItem item = mList.takeAt(row);
         mRowForUrl.remove(item.url());
+
+        // Decrease row value for all urls after the one we removed
+        // ("row" now points to the item after the one we removed since we used takeAt)
+        const int count = mList.count();
+        for (; row < count; ++row) {
+            KUrl url = mList.at(row).url();
+            mRowForUrl[url]--;
+        }
     }
 
     void addItem(const KFileItem& item)
