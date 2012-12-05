@@ -1514,7 +1514,7 @@ void MainWindow::print()
 
 void MainWindow::preloadNextUrl()
 {
-    static bool disablePreload = qgetenv("GWENVIEW_MAX_UNREFERENCED_IMAGES") == "0";
+    static bool disablePreload = qgetenv("GV_MAX_UNREFERENCED_IMAGES") == "0";
     if (disablePreload) {
         kDebug() << "Preloading disabled";
         return;
