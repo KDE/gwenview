@@ -35,7 +35,6 @@ namespace Gwenview
 
 struct RecursiveDirModelPrivate {
     KDirLister* mDirLister;
-    KFileItemList mList;
 
     int indexForUrl(const KUrl &url) const
     {
@@ -58,6 +57,21 @@ struct RecursiveDirModelPrivate {
     {
         mList.append(item);
     }
+
+    void clear()
+    {
+        mList.clear();
+    }
+
+    // Let the rest of the code access mList through this accessor to ensure it
+    // cannot introduce inconsistencies with the hash
+    const KFileItemList& list() const
+    {
+        return mList;
+    }
+
+private:
+    KFileItemList mList;
 };
 
 RecursiveDirModel::RecursiveDirModel(QObject* parent)
@@ -90,7 +104,7 @@ KUrl RecursiveDirModel::url() const
 void RecursiveDirModel::setUrl(const KUrl& url)
 {
     beginResetModel();
-    d->mList.clear();
+    d->clear();
     endResetModel();
     d->mDirLister->openUrl(url);
 }
@@ -100,7 +114,7 @@ int RecursiveDirModel::rowCount(const QModelIndex& parent) const
     if (parent.isValid()) {
         return 0;
     } else {
-        return d->mList.count();
+        return d->list().count();
     }
 }
 
@@ -109,7 +123,7 @@ QVariant RecursiveDirModel::data(const QModelIndex& index, int role) const
     if (index.parent().isValid()) {
         return QVariant();
     }
-    KFileItem item = d->mList.value(index.row());
+    KFileItem item = d->list().value(index.row());
     if (item.isNull()) {
         kWarning() << "Invalid row" << index.row();
         return QVariant();
@@ -134,7 +148,7 @@ void RecursiveDirModel::slotItemsAdded(const KUrl&, const KFileItemList& newList
     Q_FOREACH(const KFileItem& item, newList) {
         if (item.isFile()) {
             if (d->indexForUrl(item.url()) == -1) {
-                beginInsertRows(QModelIndex(), d->mList.count(), d->mList.count());
+                beginInsertRows(QModelIndex(), d->list().count(), d->list().count());
                 d->addItem(item);
                 endInsertRows();
             }
@@ -166,19 +180,19 @@ void RecursiveDirModel::slotItemsDeleted(const KFileItemList& list)
 
 void RecursiveDirModel::slotCleared()
 {
-    if (d->mList.isEmpty()) {
+    if (d->list().isEmpty()) {
         return;
     }
-    beginRemoveRows(QModelIndex(), 0, d->mList.count() - 1);
-    d->mList.clear();
-    endRemoveRows();
+    beginResetModel();
+    d->clear();
+    endResetModel();
 }
 
 void RecursiveDirModel::slotDirCleared(const KUrl& dirUrl)
 {
     int row;
-    for (row = d->mList.count() - 1; row >= 0; --row) {
-        const KUrl url = d->mList.at(row).url();
+    for (row = d->list().count() - 1; row >= 0; --row) {
+        const KUrl url = d->list().at(row).url();
         if (dirUrl.isParentOf(url)) {
             beginRemoveRows(QModelIndex(), row, row);
             d->removeAt(row);
