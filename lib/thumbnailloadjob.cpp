@@ -329,7 +329,12 @@ static QString sThumbnailBaseDir;
 QString ThumbnailLoadJob::thumbnailBaseDir()
 {
     if (sThumbnailBaseDir.isEmpty()) {
-        sThumbnailBaseDir = QDir::homePath() + "/.thumbnails/";
+        const QByteArray customDir = qgetenv("GV_THUMBNAIL_DIR");
+        if (customDir.isEmpty()) {
+            sThumbnailBaseDir = QDir::homePath() + "/.thumbnails/";
+        } else {
+            sThumbnailBaseDir = QString::fromLocal8Bit(customDir.constData()) + '/';
+        }
     }
     return sThumbnailBaseDir;
 }
