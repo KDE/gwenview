@@ -36,35 +36,31 @@ namespace Gwenview
 struct RecursiveDirModelPrivate {
     KDirLister* mDirLister;
 
-    int indexForUrl(const KUrl &url) const
+    int rowForUrl(const KUrl &url) const
     {
-        int row = 0;
-        KFileItemList::ConstIterator it = mList.begin(), end = mList.end();
-        for (; it != end; ++it , ++row) {
-            if (it->url() == url) {
-                return row;
-            }
-        }
-        return -1;
+        return mRowForUrl.value(url, -1);
     }
 
     void removeAt(int row)
     {
-        mList.removeAt(row);
+        KFileItem item = mList.takeAt(row);
+        mRowForUrl.remove(item.url());
     }
 
     void addItem(const KFileItem& item)
     {
+        mRowForUrl.insert(item.url(), mList.count());
         mList.append(item);
     }
 
     void clear()
     {
+        mRowForUrl.clear();
         mList.clear();
     }
 
-    // Let the rest of the code access mList through this accessor to ensure it
-    // cannot introduce inconsistencies with the hash
+    // RecursiveDirModel can only access mList through this read-only getter.
+    // This ensures it cannot introduce inconsistencies between mList and mRowForUrl.
     const KFileItemList& list() const
     {
         return mList;
@@ -72,6 +68,7 @@ struct RecursiveDirModelPrivate {
 
 private:
     KFileItemList mList;
+    QHash<KUrl, int> mRowForUrl;
 };
 
 RecursiveDirModel::RecursiveDirModel(QObject* parent)
@@ -147,7 +144,7 @@ void RecursiveDirModel::slotItemsAdded(const KUrl&, const KFileItemList& newList
     QList<KUrl> dirUrls;
     Q_FOREACH(const KFileItem& item, newList) {
         if (item.isFile()) {
-            if (d->indexForUrl(item.url()) == -1) {
+            if (d->rowForUrl(item.url()) == -1) {
                 beginInsertRows(QModelIndex(), d->list().count(), d->list().count());
                 d->addItem(item);
                 endInsertRows();
@@ -167,7 +164,7 @@ void RecursiveDirModel::slotItemsDeleted(const KFileItemList& list)
         if (item.isDir()) {
             continue;
         }
-        int row = d->indexForUrl(item.url());
+        int row = d->rowForUrl(item.url());
         if (row == -1) {
             kWarning() << "Received itemsDeleted for an unknown item: this should not happen!";
             continue;
