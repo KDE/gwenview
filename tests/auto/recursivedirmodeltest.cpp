@@ -152,7 +152,8 @@ void RecursiveDirModelTest::testBasic()
 
     // Test removing files
     Q_FOREACH(const QString &name, removedFiles) {
-        Q_ASSERT(sandBoxDir.remove(name));
+        bool ok = sandBoxDir.remove(name);
+        Q_ASSERT(ok);
         expected.removeOne(KUrl(sandBoxDir.absoluteFilePath(name)));
     }
     QTime chrono;
