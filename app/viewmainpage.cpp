@@ -277,9 +277,12 @@ struct ViewMainPagePrivate
 
     void deleteDocumentView(DocumentView* view)
     {
-        mDocumentViewContainer->deleteView(view);
+        if (mDocumentViewController->view() == view) {
+            mDocumentViewController->setView(0);
+        }
         mDocumentViews.removeOne(view);
         mActivityResources.remove(view);
+        mDocumentViewContainer->deleteView(view);
     }
 
     void setupToolContainer()
