@@ -91,7 +91,7 @@ RenameResult rename(const KUrl& src, const KUrl& dst_, QWidget* authWindow)
 
     // Get src size
     KIO::UDSEntry udsEntry;
-    KIO::NetAccess::stat(dst, udsEntry, authWindow);
+    KIO::NetAccess::stat(src, udsEntry, authWindow);
     KFileItem item(udsEntry, src, true /* delayedMimeTypes */);
     KIO::filesize_t srcSize = item.size();
 
