@@ -270,6 +270,7 @@ struct ViewMainPagePrivate
                          mSlideShow, SLOT(resumeAndGoToNextUrl()));
 
         mDocumentViews << view;
+        mActivityResources.insert(view, new KActivities::ResourceInstance(q->window()->winId(), view));
 
         return view;
     }
@@ -342,6 +343,8 @@ struct ViewMainPagePrivate
         }
         if (oldView) {
             oldView->setCurrent(false);
+            Q_ASSERT(mActivityResources.contains(oldView));
+            mActivityResources[oldView]->notifyFocusedOut();
         }
         view->setCurrent(true);
         mDocumentViewController->setView(view);
@@ -354,13 +357,8 @@ struct ViewMainPagePrivate
         }
         mThumbnailBar->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Current);
 
-        if (mActivityResources.contains(oldView)) {
-            mActivityResources[oldView]->notifyFocusedOut();
-        }
-
-        if (mActivityResources.contains(view)) {
-            mActivityResources[view]->notifyFocusedIn();
-        }
+        Q_ASSERT(mActivityResources.contains(view));
+        mActivityResources[view]->notifyFocusedIn();
     }
 
     QModelIndex indexForView(DocumentView* view) const
@@ -667,7 +665,10 @@ void ViewMainPage::openUrls(const KUrl::List& allUrls, const KUrl& currentUrl)
         it = viewForUrlMap.constBegin(),
         end = viewForUrlMap.constEnd();
     for (; it != end; ++it) {
-        it.value()->openUrl(it.key(), setup);
+        KUrl url = it.key();
+        DocumentView* view = it.value();
+        view->openUrl(url, setup);
+        d->mActivityResources[view]->setUri(url);
     }
 
     // Init views
@@ -677,18 +678,6 @@ void ViewMainPage::openUrls(const KUrl::List& allUrls, const KUrl& currentUrl)
             d->setCurrentView(view);
         } else {
             view->setCurrent(false);
-        }
-
-        if (!d->mActivityResources.contains(view)) {
-            d->mActivityResources[view] = new KActivities::ResourceInstance(window()->winId(), view);
-        }
-
-        d->mActivityResources[view]->setUri(view->url());
-
-        if (view->url() == currentUrl) {
-            d->mActivityResources[view]->notifyFocusedIn();
-        } else {
-            d->mActivityResources[view]->notifyFocusedOut();
         }
     }
 
