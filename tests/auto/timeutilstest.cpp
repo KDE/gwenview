@@ -42,25 +42,21 @@ static void touchFile(const QString& path)
     utime(QFile::encodeName(path).data(), 0);
 }
 
-void TimeUtilsTest::testPng()
-{
-    KUrl url = urlForTestFile("test.png");
-    KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
-    KDateTime dateTime = TimeUtils::dateTimeForFileItem(item);
-    QCOMPARE(dateTime, item.time(KFileItem::ModificationTime));
-}
-
-#define NEW_ROW(fileName, dateTime) QTest::newRow(fileName) << fileName << KDateTime::fromString(dateTime)
-void TimeUtilsTest::testJpeg_data()
+#define NEW_ROW(fileName, dateTime) QTest::newRow(fileName) << fileName << dateTime
+void TimeUtilsTest::testBasic_data()
 {
     QTest::addColumn<QString>("fileName");
     QTest::addColumn<KDateTime>("expectedDateTime");
 
-    NEW_ROW("date/exif-datetimeoriginal.jpg", "2003-03-10T17:45:21");
-    NEW_ROW("date/exif-datetime-only.jpg", "2003-03-25T02:02:21");
+    NEW_ROW("date/exif-datetimeoriginal.jpg", KDateTime::fromString("2003-03-10T17:45:21"));
+    NEW_ROW("date/exif-datetime-only.jpg", KDateTime::fromString("2003-03-25T02:02:21"));
+
+    KUrl url = urlForTestFile("test.png");
+    KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
+    NEW_ROW("test.png", item.time(KFileItem::ModificationTime));
 }
 
-void TimeUtilsTest::testJpeg()
+void TimeUtilsTest::testBasic()
 {
     QFETCH(QString, fileName);
     QFETCH(KDateTime, expectedDateTime);
