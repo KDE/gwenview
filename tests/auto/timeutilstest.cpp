@@ -60,10 +60,14 @@ void TimeUtilsTest::testBasic()
 {
     QFETCH(QString, fileName);
     QFETCH(KDateTime, expectedDateTime);
+    KDateTime dateTime;
     KUrl url = urlForTestFile(fileName);
     KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
-    KDateTime dateTime = TimeUtils::dateTimeForFileItem(item);
 
+    dateTime = TimeUtils::dateTimeForFileItem(item);
+    QCOMPARE(dateTime, expectedDateTime);
+
+    dateTime = TimeUtils::dateTimeForFileItem(item, TimeUtils::SkipCache);
     QCOMPARE(dateTime, expectedDateTime);
 }
 

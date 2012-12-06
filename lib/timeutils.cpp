@@ -134,8 +134,14 @@ struct CacheItem
 
 typedef QHash<KUrl, CacheItem> Cache;
 
-KDateTime dateTimeForFileItem(const KFileItem& fileItem)
+KDateTime dateTimeForFileItem(const KFileItem& fileItem, CachePolicy cachePolicy)
 {
+    if (cachePolicy == SkipCache) {
+        CacheItem item;
+        item.update(fileItem);
+        return item.realTime;
+    }
+
     static Cache cache;
     const KUrl url = fileItem.targetUrl();
 

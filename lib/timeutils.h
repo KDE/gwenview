@@ -33,7 +33,13 @@ namespace Gwenview
 namespace TimeUtils
 {
 
-GWENVIEWLIB_EXPORT KDateTime dateTimeForFileItem(const KFileItem&);
+enum CachePolicy
+{
+    SkipCache,
+    UseCache
+};
+
+GWENVIEWLIB_EXPORT KDateTime dateTimeForFileItem(const KFileItem&, CachePolicy cachePolicy = UseCache);
 
 } // namespace
 
