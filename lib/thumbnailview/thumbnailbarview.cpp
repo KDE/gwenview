@@ -247,24 +247,23 @@ ThumbnailBarItemDelegate::~ThumbnailBarItemDelegate()
 class ProxyStyle : public QWindowsStyle
 {
 public:
-    ProxyStyle(QStyle* baseStyle) : QWindowsStyle()
- {
-        mBaseStyle = baseStyle;
+    ProxyStyle() : QWindowsStyle()
+    {
     }
 
     void drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, QPainter *p, const QWidget *w = 0) const
     {
-        mBaseStyle->drawPrimitive(pe, opt, p, w);
+        QApplication::style()->drawPrimitive(pe, opt, p, w);
     }
 
     void drawControl(ControlElement element, const QStyleOption *opt, QPainter *p, const QWidget *w = 0) const
     {
-        mBaseStyle->drawControl(element, opt, p, w);
+        QApplication::style()->drawControl(element, opt, p, w);
     }
 
     void drawComplexControl(ComplexControl cc, const QStyleOptionComplex *opt, QPainter *p, const QWidget *w = 0) const
     {
-        mBaseStyle->drawComplexControl(cc, opt, p, w);
+        QApplication::style()->drawComplexControl(cc, opt, p, w);
     }
 
     int styleHint(StyleHint sh, const QStyleOption *opt = 0, const QWidget *w = 0, QStyleHintReturn *shret = 0) const
@@ -281,27 +280,27 @@ public:
 
     void polish(QApplication* application)
     {
-        mBaseStyle->polish(application);
+        QApplication::style()->polish(application);
     }
 
     void polish(QPalette& palette)
     {
-        mBaseStyle->polish(palette);
+        QApplication::style()->polish(palette);
     }
 
     void polish(QWidget* widget)
     {
-        mBaseStyle->polish(widget);
+        QApplication::style()->polish(widget);
     }
 
     void unpolish(QWidget* widget)
     {
-        mBaseStyle->unpolish(widget);
+        QApplication::style()->unpolish(widget);
     }
 
     void unpolish(QApplication* application)
     {
-        mBaseStyle->unpolish(application);
+        QApplication::style()->unpolish(application);
     }
 
     int pixelMetric(PixelMetric pm, const QStyleOption* opt, const QWidget* widget) const
@@ -313,9 +312,6 @@ public:
             return QWindowsStyle::pixelMetric(pm, opt, widget);
         }
     }
-
-private:
-    QStyle* mBaseStyle;
 };
 
 typedef int (QSize::*QSizeDimension)() const;
@@ -438,7 +434,7 @@ ThumbnailBarView::ThumbnailBarView(QWidget* parent)
     setObjectName(QLatin1String("thumbnailBarView"));
     setWrapping(true);
 
-    d->mStyle = new ProxyStyle(style());
+    d->mStyle = new ProxyStyle;
     setStyle(d->mStyle);
 }
 
