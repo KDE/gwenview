@@ -922,6 +922,7 @@ void MainWindow::setInitialUrl(const KUrl& _url)
 
 void MainWindow::startSlideShow()
 {
+    d->mViewAction->trigger();
     // We need to wait until we have listed all images in the dirlister to
     // start the slideshow because the SlideShow objects needs an image list to
     // work.
@@ -1389,6 +1390,9 @@ void MainWindow::toggleSlideShow()
     if (d->mSlideShow->isRunning()) {
         d->mSlideShow->stop();
     } else {
+        if (!d->mViewAction->isChecked()) {
+            d->mViewAction->trigger();
+        }
         if (!d->mFullScreenAction->isChecked()) {
             d->mFullScreenAction->trigger();
         }
