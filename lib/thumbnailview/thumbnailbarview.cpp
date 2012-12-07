@@ -274,7 +274,7 @@ public:
         case SH_ScrollView_FrameOnlyAroundContents:
             return false;
         default:
-            return QWindowsStyle::styleHint(sh, opt, w, shret);
+            return QApplication::style()->styleHint(sh, opt, w, shret);
         }
     }
 
@@ -309,7 +309,7 @@ public:
         case PM_MaximumDragDistance:
             return -1;
         default:
-            return QWindowsStyle::pixelMetric(pm, opt, widget);
+            return QApplication::style()->pixelMetric(pm, opt, widget);
         }
     }
 };
