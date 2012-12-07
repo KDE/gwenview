@@ -243,6 +243,9 @@ ThumbnailBarItemDelegate::~ThumbnailBarItemDelegate()
 /**
  * This proxy style makes it possible to override the value returned by
  * styleHint() which leads to not-so-nice results with some styles.
+ *
+ * We cannot use QProxyStyle because it takes ownership of the base style,
+ * which causes crash when user change styles.
  */
 class ProxyStyle : public QWindowsStyle
 {
@@ -270,8 +273,12 @@ public:
     {
         switch (sh) {
         case SH_ItemView_ShowDecorationSelected:
+            // We want the highlight to cover our thumbnail
             return true;
         case SH_ScrollView_FrameOnlyAroundContents:
+            // Ensure the frame does not include the scrollbar. This ensure the
+            // scrollbar touches the edge of the window and thus can touch the
+            // edge of the screen when maximized
             return false;
         default:
             return QApplication::style()->styleHint(sh, opt, w, shret);
@@ -307,6 +314,9 @@ public:
     {
         switch (pm) {
         case PM_MaximumDragDistance:
+            // Ensure the fullscreen thumbnailbar does not go away while
+            // dragging the scrollbar if the mouse cursor is too far away from
+            // the widget
             return -1;
         default:
             return QApplication::style()->pixelMetric(pm, opt, widget);
