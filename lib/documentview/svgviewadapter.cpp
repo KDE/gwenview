@@ -50,21 +50,23 @@ SvgImageView::SvgImageView(QGraphicsItem* parent)
 void SvgImageView::loadFromDocument()
 {
     Document::Ptr doc = document();
-    if (doc) {
-        QSvgRenderer* renderer = doc->svgRenderer();
-        if (!renderer) {
-            kWarning() << "No SVG renderer. This should not happen!";
-            return;
-        }
-        mSvgItem->setSharedRenderer(renderer);
-        if (zoomToFit()) {
-            setZoom(computeZoomToFit(), QPointF(-1, -1), ForceUpdate);
-        } else {
-            mSvgItem->setScale(zoom());
-        }
-        applyPendingScrollPos();
-        completed();
+    if (!doc) {
+        return;
     }
+
+    QSvgRenderer* renderer = doc->svgRenderer();
+    if (!renderer) {
+        kWarning() << "No SVG renderer. This should not happen!";
+        return;
+    }
+    mSvgItem->setSharedRenderer(renderer);
+    if (zoomToFit()) {
+        setZoom(computeZoomToFit(), QPointF(-1, -1), ForceUpdate);
+    } else {
+        mSvgItem->setScale(zoom());
+    }
+    applyPendingScrollPos();
+    completed();
 }
 
 void SvgImageView::onZoomChanged()
