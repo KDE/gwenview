@@ -133,7 +133,9 @@ AbstractImageView::AbstractImageView(QGraphicsItem* parent)
 
 AbstractImageView::~AbstractImageView()
 {
-    d->mDocument->stopAnimation();
+    if (d->mDocument) {
+        d->mDocument->stopAnimation();
+    }
     delete d;
 }
 

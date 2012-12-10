@@ -238,14 +238,16 @@ void RasterImageView::setAlphaBackgroundColor(const QColor& color)
 void RasterImageView::loadFromDocument()
 {
     Document::Ptr doc = document();
-    connect(doc.data(), SIGNAL(metaInfoLoaded(KUrl)),
-            SLOT(slotDocumentMetaInfoLoaded()));
-    connect(doc.data(), SIGNAL(isAnimatedUpdated()),
-            SLOT(slotDocumentIsAnimatedUpdated()));
+    if (doc) {
+        connect(doc.data(), SIGNAL(metaInfoLoaded(KUrl)),
+                SLOT(slotDocumentMetaInfoLoaded()));
+        connect(doc.data(), SIGNAL(isAnimatedUpdated()),
+                SLOT(slotDocumentIsAnimatedUpdated()));
 
-    const Document::LoadingState state = doc->loadingState();
-    if (state == Document::MetaInfoLoaded || state == Document::Loaded) {
-        slotDocumentMetaInfoLoaded();
+        const Document::LoadingState state = doc->loadingState();
+        if (state == Document::MetaInfoLoaded || state == Document::Loaded) {
+            slotDocumentMetaInfoLoaded();
+        }
     }
 }
 
