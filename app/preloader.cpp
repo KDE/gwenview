@@ -88,6 +88,10 @@ void Preloader::preload(const KUrl& url, const QSize& size)
 
 void Preloader::doPreload()
 {
+    if (!d->mDocument) {
+        return;
+    }
+
     if (d->mDocument->loadingState() == Document::LoadingFailed) {
         LOG("loading failed");
         d->forgetDocument();
