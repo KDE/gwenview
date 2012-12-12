@@ -559,6 +559,21 @@ Pressing this shortcut toggles zoom-to-fit on and off.</para></listitem>
 Viewing a video this shortcut toggles playback on and off.</para></listitem>
 </itemizedlist>
 </sect1>
+<sect1 id="advanced-configuration">
+    <title>Advanced Configuration Options</title>
+    <para>
+        Some notes on hidden &kappname; options can be found on
+        <ulink url="http://userbase.kde.org/Special:myLanguage/Gwenview/Hidden_Configuration_Options">this page</ulink>.
+    </para>
+    <important>
+        <para>
+            The options described on the above-mentioned page may help you
+            tune &kappname; for specific needs, but please keep in mind
+            there is no warranty they will continue working from one
+            version to another.
+        </para>
+    </important>
+</sect1>
 </chapter>
 
 <chapter id="credits">
