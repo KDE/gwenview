@@ -112,6 +112,7 @@ private Q_SLOTS:
      * If no image is selected, select the first one available.
      */
     void slotDirListerCompleted();
+    void slotDirListerRedirection(const KUrl& newUrl);
 
     void slotSelectionChanged();
 
