@@ -49,6 +49,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "dragpixmapgenerator.h"
 #include "mimetypeutils.h"
 #include "thumbnailloadjob.h"
+#include "urlutils.h"
 
 namespace Gwenview
 {
@@ -177,6 +178,8 @@ struct ThumbnailViewPrivate
     KPixmapSequence mBusySequence;
     QTimeLine* mBusyAnimationTimeLine;
 
+    bool mCreateThumbnailsForRemoteUrls;
+
     void setupBusyAnimation()
     {
         mBusySequence = KPixmapSequence("process-working", 22);
@@ -292,6 +295,7 @@ ThumbnailView::ThumbnailView(QWidget* parent)
     // mThumbnailSize...)
     d->mThumbnailSize = QSize(1, 1);
     d->mThumbnailAspectRatio = 1;
+    d->mCreateThumbnailsForRemoteUrls = true;
 
     setFrameShape(QFrame::NoFrame);
     setViewMode(QListView::IconMode);
@@ -626,6 +630,12 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index, QSize* fullSi
             if (kind == MimeTypeUtils::KIND_ARCHIVE) {
                 // No thumbnails for archives
                 thumbnail.mWaitingForThumbnail = false;
+            } else if (!d->mCreateThumbnailsForRemoteUrls && !UrlUtils::urlIsFastLocalFile(url)) {
+                // If we don't want thumbnails for remote urls, use
+                // "folder-remote" icon for remote folders, so that they do
+                // not look like regular folders
+                thumbnail.mWaitingForThumbnail = false;
+                thumbnail.initAsIcon(DesktopIcon("folder-remote", groupSize));
             } else {
                 // set mWaitingForThumbnail to true (necessary in the case
                 // 'thumbnail' already existed before, but with a too small
@@ -803,6 +813,11 @@ void ThumbnailView::generateThumbnailsForVisibleItems()
         KFileItem item = fileItemForIndex(index);
         QUrl url = item.url();
 
+        // Filter out remote items if necessary
+        if (!d->mCreateThumbnailsForRemoteUrls && !url.isLocalFile()) {
+            continue;
+        }
+
         // Filter out archives
         MimeTypeUtils::Kind kind = MimeTypeUtils::fileItemKind(item);
         if (kind == MimeTypeUtils::KIND_ARCHIVE) {
@@ -952,6 +967,11 @@ void ThumbnailView::reloadThumbnail(const QModelIndex& index)
     }
     d->mThumbnailForUrl.erase(it);
     generateThumbnailsForVisibleItems();
+}
+
+void ThumbnailView::setCreateThumbnailsForRemoteUrls(bool createRemoteThumbs)
+{
+    d->mCreateThumbnailsForRemoteUrls = createRemoteThumbs;
 }
 
 } // namespace
