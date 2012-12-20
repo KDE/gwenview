@@ -550,6 +550,8 @@ struct MainWindow::Private
 
         connect(mDirModel->dirLister(), SIGNAL(completed()),
                 q, SLOT(slotDirListerCompleted()));
+        connect(mDirModel->dirLister(), SIGNAL(redirection(KUrl)),
+                q, SLOT(slotDirListerRedirection(KUrl)));
     }
 
     void setDirModelShowDirs(bool showDirs)
@@ -621,7 +623,6 @@ struct MainWindow::Private
         if (url.isValid()) {
             mUrlNavigator->setLocationUrl(url);
             mGoUpAction->setEnabled(url.path() != "/");
-            mGvCore->addUrlToRecentFolders(url);
         } else {
             mGoUpAction->setEnabled(false);
         }
@@ -1118,6 +1119,7 @@ void MainWindow::openDirUrl(const KUrl& url)
     }
     d->mDirModel->dirLister()->openUrl(url);
     d->spreadCurrentDirUrl(url);
+    d->mGvCore->addUrlToRecentFolders(url);
     d->mViewMainPage->reset();
 }
 
@@ -1169,6 +1171,7 @@ void MainWindow::slotPartCompleted()
     } else {
         d->mDirModel->dirLister()->openUrl(dirUrl);
         d->spreadCurrentDirUrl(dirUrl);
+        d->mGvCore->addUrlToRecentFolders(dirUrl);
     }
 }
 
@@ -1232,6 +1235,11 @@ void MainWindow::slotDirListerCompleted()
     d->mViewMainPage->thumbnailBar()->scrollToSelectedIndex();
 }
 
+void MainWindow::slotDirListerRedirection(const KUrl& newUrl)
+{
+    d->spreadCurrentDirUrl(newUrl);
+}
+
 void MainWindow::goToPrevious()
 {
     d->goTo(-1);
@@ -1262,6 +1270,7 @@ void MainWindow::goToUrl(const KUrl& url)
     if (!dirUrl.equals(d->mContextManager->currentDirUrl(), KUrl::CompareWithoutTrailingSlash)) {
         d->mDirModel->dirLister()->openUrl(dirUrl);
         d->spreadCurrentDirUrl(dirUrl);
+        d->mGvCore->addUrlToRecentFolders(dirUrl);
     }
     d->setUrlToSelect(url);
 }

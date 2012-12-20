@@ -191,6 +191,9 @@ void GvCore::addUrlToRecentFolders(const KUrl& url)
     if (!GwenviewConfig::historyEnabled()) {
         return;
     }
+    if (!url.isValid()) {
+        return;
+    }
     recentFoldersModel();
     d->mRecentFoldersModel->addUrl(url);
 }
