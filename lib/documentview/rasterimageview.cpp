@@ -22,8 +22,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "rasterimageview.moc"
 
 // Local
+#include <config-gwenview.h>
 #include <lib/documentview/abstractrasterimageviewtool.h>
 #include <lib/imagescaler.h>
+#ifdef LCMS2_FOUND
+#include <cms/cmsprofile.h>
+#endif
 
 // KDE
 #include <KDebug>
@@ -33,6 +37,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QPainter>
 #include <QTimer>
 #include <QWeakPointer>
+
+#ifdef LCMS2_FOUND
+#include <lcms2.h>
+#endif
+
 
 namespace Gwenview
 {
@@ -60,6 +69,40 @@ struct RasterImageViewPrivate
     QTimer* mUpdateTimer;
 
     QWeakPointer<AbstractRasterImageViewTool> mTool;
+
+#ifdef LCMS2_FOUND
+    cmsHTRANSFORM mDisplayTransform;
+
+    void updateDisplayTransform()
+    {
+        if (mDisplayTransform) {
+            cmsDeleteTransform(mDisplayTransform);
+        }
+        mDisplayTransform = 0;
+        Cms::Profile::Ptr profile = q->document()->cmsProfile();
+        if (!profile) {
+            return;
+        }
+        Cms::Profile::Ptr monitorProfile = Cms::Profile::getMonitorProfile();
+        if (!monitorProfile) {
+            return;
+        }
+
+        cmsUInt32Number cmsFormat = 0;
+        switch (q->document()->image().format()) {
+        case QImage::Format_RGB32:
+        case QImage::Format_ARGB32:
+            cmsFormat = TYPE_BGRA_8;
+            break;
+        default:
+            return;
+        }
+        // FIXME: Wrap cmsHTRANSFORM type?
+        mDisplayTransform = cmsCreateTransform(profile->handle(), cmsFormat,
+                                               monitorProfile->handle(), cmsFormat,
+                                               INTENT_PERCEPTUAL, cmsFLAGS_BLACKPOINTCOMPENSATION);
+    }
+#endif
 
     void createBackgroundTexture()
     {
@@ -147,6 +190,9 @@ RasterImageView::RasterImageView(QGraphicsItem* parent)
 {
     d->q = this;
     d->mEmittedCompleted = false;
+#ifdef LCMS2_FOUND
+    d->mDisplayTransform = 0;
+#endif
 
     d->mAlphaBackgroundMode = AlphaBackgroundCheckBoard;
     d->mAlphaBackgroundColor = Qt::black;
@@ -163,6 +209,11 @@ RasterImageView::RasterImageView(QGraphicsItem* parent)
 
 RasterImageView::~RasterImageView()
 {
+#ifdef LCMS2_FOUND
+    if (d->mDisplayTransform) {
+        cmsDeleteTransform(d->mDisplayTransform);
+    }
+#endif
     delete d;
 }
 
@@ -187,6 +238,10 @@ void RasterImageView::setAlphaBackgroundColor(const QColor& color)
 void RasterImageView::loadFromDocument()
 {
     Document::Ptr doc = document();
+    if (!doc) {
+        return;
+    }
+
     connect(doc.data(), SIGNAL(metaInfoLoaded(KUrl)),
             SLOT(slotDocumentMetaInfoLoaded()));
     connect(doc.data(), SIGNAL(isAnimatedUpdated()),
@@ -217,6 +272,10 @@ void RasterImageView::finishSetDocument()
         kError() << "No valid image size available, this should not happen!";
         return;
     }
+
+#ifdef LCMS2_FOUND
+    d->updateDisplayTransform();
+#endif
 
     d->mScaler->setDocument(document());
     d->resizeBuffer();
@@ -258,6 +317,13 @@ void RasterImageView::slotDocumentIsAnimatedUpdated()
 
 void RasterImageView::updateFromScaler(int zoomedImageLeft, int zoomedImageTop, const QImage& image)
 {
+#ifdef LCMS2_FOUND
+    if (d->mDisplayTransform) {
+        quint8 *bytes = const_cast<quint8*>(image.bits());
+        cmsDoTransform(d->mDisplayTransform, bytes, bytes, image.width() * image.height());
+    }
+#endif
+
     d->resizeBuffer();
     int viewportLeft = zoomedImageLeft - scrollPos().x();
     int viewportTop = zoomedImageTop - scrollPos().y();

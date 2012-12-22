@@ -206,7 +206,7 @@ StartMainPage::StartMainPage(QWidget* parent, GvCore* gvCore)
 
     d->updateHistoryTab();
     connect(GwenviewConfig::self(), SIGNAL(configChanged()),
-            SLOT(slotConfigChanged()));
+            SLOT(loadConfig()));
 }
 
 StartMainPage::~StartMainPage()
@@ -271,7 +271,7 @@ void StartMainPage::showEvent(QShowEvent* event)
             delegate->setContextBarActions(PreviewItemDelegate::NoAction);
             delegate->setTextElideMode(Qt::ElideLeft);
             d->mRecentFoldersView->setItemDelegate(delegate);
-            d->mRecentFoldersView->setThumbnailSize(128);
+            d->mRecentFoldersView->setThumbnailWidth(128);
         }
         if (!d->mRecentUrlsView->model()) {
             d->mRecentUrlsView->setModel(d->mGvCore->recentUrlsModel());
@@ -327,9 +327,10 @@ void StartMainPage::showRecentFoldersViewContextMenu(const QPoint& pos)
     }
 }
 
-void StartMainPage::slotConfigChanged()
+void StartMainPage::loadConfig()
 {
     d->updateHistoryTab();
+    applyPalette(d->mGvCore->palette(GvCore::NormalViewPalette));
 }
 
 } // namespace

@@ -60,10 +60,10 @@ QString FileNameFormater::format(const KUrl& url, const KDateTime& dateTime)
     Dict dict;
     dict["date"]       = dateTime.toString("%Y-%m-%d");
     dict["time"]       = dateTime.toString("%H-%M-%S");
-    dict["ext"]        = info.completeSuffix();
-    dict["ext.lower"]  = info.completeSuffix().toLower();
-    dict["name"]       = info.baseName();
-    dict["name.lower"] = info.baseName().toLower();
+    dict["ext"]        = info.suffix();
+    dict["ext.lower"]  = info.suffix().toLower();
+    dict["name"]       = info.completeBaseName();
+    dict["name.lower"] = info.completeBaseName().toLower();
 
     QString name;
     int length = d->mFormat.length();

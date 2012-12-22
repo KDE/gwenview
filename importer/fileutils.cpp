@@ -86,12 +86,12 @@ RenameResult rename(const KUrl& src, const KUrl& dst_, QWidget* authWindow)
     int count = 1;
 
     QFileInfo fileInfo(dst.fileName());
-    QString prefix = fileInfo.baseName() + '_';
-    QString suffix = '.' + fileInfo.completeSuffix();
+    QString prefix = fileInfo.completeBaseName() + '_';
+    QString suffix = '.' + fileInfo.suffix();
 
     // Get src size
     KIO::UDSEntry udsEntry;
-    KIO::NetAccess::stat(dst, udsEntry, authWindow);
+    KIO::NetAccess::stat(src, udsEntry, authWindow);
     KFileItem item(udsEntry, src, true /* delayedMimeTypes */);
     KIO::filesize_t srcSize = item.size();
 

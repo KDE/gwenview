@@ -196,6 +196,7 @@ void ImporterTest::testFileNameFormater_data()
 
     NEW_ROW("PICT0001.JPG", "20091024T225049", "{date}_{time}.{ext}", "2009-10-24_22-50-49.JPG");
     NEW_ROW("PICT0001.JPG", "20091024T225049", "{date}_{time}.{ext.lower}", "2009-10-24_22-50-49.jpg");
+    NEW_ROW("2009.10.24.JPG", "20091024T225049", "{date}_{time}.{ext.lower}", "2009-10-24_22-50-49.jpg");
     NEW_ROW("PICT0001.JPG", "20091024T225049", "{name}.{ext}", "PICT0001.JPG");
     NEW_ROW("PICT0001.JPG", "20091024T225049", "{name.lower}.{ext.lower}", "pict0001.jpg");
     NEW_ROW("iLikeCurlies", "20091024T225049", "{{{name}}", "{iLikeCurlies}");

@@ -351,7 +351,7 @@ void GraphicsHudSlider::triggerAction(QAbstractSlider::SliderAction action)
 
 void GraphicsHudSlider::doRepeatAction(int time)
 {
-    int step;
+    int step = 0;
     switch (d->mRepeatAction) {
     case QAbstractSlider::SliderSingleStepAdd:
     case QAbstractSlider::SliderSingleStepSub:

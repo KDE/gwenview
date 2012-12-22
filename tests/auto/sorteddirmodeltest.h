@@ -39,7 +39,7 @@ private Q_SLOTS:
     void testHasDocuments();
 
 private:
-    SandBoxDir mSandBoxDir;
+    TestUtils::SandBoxDir mSandBoxDir;
 };
 
 #endif /* SORTEDDIRMODELTEST_H */

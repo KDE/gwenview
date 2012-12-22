@@ -44,8 +44,9 @@ class StartHelper
 {
 public:
     StartHelper()
-        : mFullScreen(false)
-        , mSlideShow(false) {
+    : mFullScreen(false)
+    , mSlideShow(false)
+    {
         KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
         if (args->count() > 0) {
             parseArgs(args);
@@ -132,7 +133,7 @@ int main(int argc, char *argv[])
     KApplication app;
     Gwenview::ImageFormats::registerPlugins();
 
-    // startHelper must live for the whole live of the application
+    // startHelper must live for the whole life of the application
     StartHelper startHelper;
     if (app.isSessionRestored()) {
         kRestoreMainWindows<Gwenview::MainWindow>();

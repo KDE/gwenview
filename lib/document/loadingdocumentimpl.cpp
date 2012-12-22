@@ -45,11 +45,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KUrl>
 
 // Local
+#include "config-gwenview.h"
 #include "animateddocumentloadedimpl.h"
+#ifdef LCMS2_FOUND
+#include "cms/cmsprofile.h"
+#endif
 #include "document.h"
 #include "documentloadedimpl.h"
 #include "emptydocumentimpl.h"
 #include "exiv2imageloader.h"
+#include "gvdebug.h"
 #include "imageutils.h"
 #include "jpegcontent.h"
 #include "jpegdocumentloadedimpl.h"
@@ -95,6 +100,9 @@ struct LoadingDocumentImplPrivate
     Exiv2::Image::AutoPtr mExiv2Image;
     std::auto_ptr<JpegContent> mJpegContent;
     QImage mImage;
+#ifdef LCMS2_FOUND
+    Cms::Profile::Ptr mCmsProfile;
+#endif
 
     /**
      * Determine kind of document and switch to an implementation if it is not
@@ -213,10 +221,20 @@ struct LoadingDocumentImplPrivate
             // Use the size from JpegContent, as its correctly transposed if the
             // image has been rotated
             mImageSize = mJpegContent->size();
+
+#ifdef LCMS2_FOUND
+            mCmsProfile = Cms::Profile::loadFromExiv2Image(mExiv2Image.get());
+#endif
         } else {
             mImageSize = reader.size();
         }
         LOG("mImageSize" << mImageSize);
+
+#ifdef LCMS2_FOUND
+        if (!mCmsProfile) {
+            mCmsProfile = Cms::Profile::loadFromImageData(mData, mFormat);
+        }
+#endif
 
         return true;
     }
@@ -421,6 +439,9 @@ void LoadingDocumentImpl::slotMetaInfoLoaded()
     setDocumentFormat(d->mFormat);
     setDocumentImageSize(d->mImageSize);
     setDocumentExiv2Image(d->mExiv2Image);
+#ifdef LCMS2_FOUND
+    setDocumentCmsProfile(d->mCmsProfile);
+#endif
 
     d->mMetaInfoLoaded = true;
     emit metaInfoLoaded();

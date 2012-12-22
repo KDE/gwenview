@@ -40,6 +40,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <libkipi/imageinfoshared.h>
 #include <libkipi/plugin.h>
 #include <libkipi/pluginloader.h>
+#include <libkipi/version.h>
 
 // local
 #include "mainwindow.h"
@@ -48,6 +49,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "kipiuploadwidget.h"
 #include <lib/jpegcontent.h>
 #include <lib/mimetypeutils.h>
+#include <lib/timeutils.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
 
 namespace Gwenview
@@ -68,9 +70,68 @@ class KIPIImageInfo : public KIPI::ImageInfoShared
 public:
     KIPIImageInfo(KIPI::Interface* interface, const KUrl& url)
     : KIPI::ImageInfoShared(interface, url)
+    {
+        KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
+
+        mAttributes.insert("name", url.fileName());
+        mAttributes.insert("comment", comment());
+        mAttributes.insert("date", TimeUtils::dateTimeForFileItem(item).dateTime());
+        mAttributes.insert("orientation", orientation());
+        mAttributes.insert("title", prettyFileName());
+        int size = item.size();
+        if (size > 0) {
+            mAttributes.insert("filesize", size);
+        }
+    }
+
+#if (KIPI_VERSION < 0x020000)
+    QString name()
+    {
+        return mAttributes.value("name").toString();
+    }
+
+    QString description()
+    {
+        return mAttributes.value("comment").toString();
+    }
+
+    void setDescription(const QString&)
     {}
 
-    QString title()
+    int angle()
+    {
+        return mAttributes.value("angle").toInt();
+    }
+#endif
+
+    QMap<QString, QVariant> attributes() {
+        return mAttributes;
+    }
+
+    void delAttributes(const QStringList& attributeNames)
+    {
+        Q_FOREACH(const QString& name, attributeNames) {
+            mAttributes.remove(name);
+        }
+    }
+
+    void clearAttributes()
+    {
+        mAttributes.clear();
+    }
+
+    void addAttributes(const QVariantMap& attributes)
+    {
+        QVariantMap::ConstIterator
+            it = attributes.constBegin(),
+            end = attributes.constEnd();
+        for (; it != end; ++it) {
+            mAttributes.insert(it.key(), it.value());
+        }
+    }
+
+private:
+    QString prettyFileName() const
     {
         QString txt = _url.fileName();
         txt.replace('_', ' ');
@@ -78,7 +139,7 @@ public:
         return txt;
     }
 
-    QString description()
+    QString comment() const
     {
         if (!_url.isLocalFile()) return QString();
 
@@ -89,18 +150,15 @@ public:
         return content.comment();
     }
 
-    void setDescription(const QString&)
-    {}
-
-    int angle()
+    int orientation() const
     {
-        loadMetaInfo();
+        KFileMetaInfo metaInfo(_url);
 
-        if (!mMetaInfo.isValid()) {
+        if (!metaInfo.isValid()) {
             return 0;
         }
 
-        const KFileMetaInfoItem& mii = mMetaInfo.item("http://freedesktop.org/standards/xesam/1.0/core#orientation");
+        const KFileMetaInfoItem& mii = metaInfo.item("http://freedesktop.org/standards/xesam/1.0/core#orientation");
         bool ok = false;
         const Orientation orientation = (Orientation)mii.value().toInt(&ok);
         if (!ok) {
@@ -133,28 +191,7 @@ public:
         return 0;
     }
 
-    QMap<QString, QVariant> attributes() {
-        return QMap<QString, QVariant>();
-    }
-
-    void delAttributes(const QStringList&)
-    {}
-
-    void clearAttributes()
-    {}
-
-    void addAttributes(const QMap<QString, QVariant>&)
-    {}
-
-private:
-    KFileMetaInfo mMetaInfo;
-
-    void loadMetaInfo()
-    {
-        if (!mMetaInfo.isValid()) {
-            mMetaInfo = KFileMetaInfo(_url);
-        }
-    }
+    QVariantMap mAttributes;
 };
 
 const QRegExp KIPIImageInfo::sExtensionRE("\\.[a-z0-9]+$", Qt::CaseInsensitive);
@@ -250,7 +287,13 @@ void KIPIInterface::loadPlugins()
     d->mMenuInfoMap[KIPI::BatchPlugin]       = MenuInfo(i18nc("@title:menu", "Batch Processing"));
     d->mMenuInfoMap[KIPI::CollectionsPlugin] = MenuInfo(i18nc("@title:menu", "Collections"));
 
+#if (KIPI_VERSION >= 0x020000)
+    d->mPluginLoader = new KIPI::PluginLoader();
+    d->mPluginLoader->setInterface(this);
+    d->mPluginLoader->init();
+#else
     d->mPluginLoader = new KIPI::PluginLoader(QStringList(), this);
+#endif
     d->mPluginQueue = d->mPluginLoader->pluginList();
     d->mPluginMenu->addAction(d->mLoadingAction);
     loadOnePlugin();

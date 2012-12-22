@@ -63,6 +63,9 @@ struct DocumentPrivate
     ImageMetaInfoModel mImageMetaInfoModel;
     QUndoStack mUndoStack;
     QString mErrorString;
+#ifdef LCMS2_FOUND
+    Cms::Profile::Ptr mCmsProfile;
+#endif
     /** @} */
 
     void scheduleImageLoading(int invertedZoom)
@@ -111,6 +114,9 @@ void Document::reload()
     d->mImageMetaInfoModel.setUrl(d->mUrl);
     d->mUndoStack.clear();
     d->mErrorString.clear();
+#ifdef LCMS2_FOUND
+    d->mCmsProfile = 0;
+#endif
 
     switchToImpl(new LoadingDocumentImpl(this));
 }
@@ -232,7 +238,7 @@ DocumentJob* Document::save(const KUrl& url, const QByteArray& format)
     if (!job) {
         kWarning() << "Implementation does not support saving!";
         setErrorString(i18nc("@info", "Gwenview cannot save this kind of documents."));
-        return false;
+        return 0;
     }
     job->setProperty("oldUrl", d->mUrl);
     job->setProperty("newUrl", url);
@@ -381,6 +387,9 @@ bool Document::prepareDownSampledImageForZoom(qreal zoom)
         return false;
     } else if (loadingState() == Loaded) {
         // Resample image from the full one
+        if (isBusy()) {
+            return false;
+        }
         d->mDownSampledImageMap[invertedZoom] = d->mImage.scaled(d->mImage.size() / invertedZoom, Qt::KeepAspectRatio, Qt::FastTransformation);
         if (d->mDownSampledImageMap[invertedZoom].size().isEmpty()) {
             d->mDownSampledImageMap[invertedZoom] = d->mImage;
@@ -487,5 +496,17 @@ QSvgRenderer* Document::svgRenderer() const
 {
     return d->mImpl->svgRenderer();
 }
+
+#ifdef LCMS2_FOUND
+void Document::setCmsProfile(Cms::Profile::Ptr ptr)
+{
+    d->mCmsProfile = ptr;
+}
+
+Cms::Profile::Ptr Document::cmsProfile() const
+{
+    return d->mCmsProfile;
+}
+#endif
 
 } // namespace

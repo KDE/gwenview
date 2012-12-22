@@ -33,19 +33,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KTempDir>
 #include <KUrl>
 
-class SandBoxDir : public QDir
-{
-public:
-    SandBoxDir()
-        : mTempDir(QDir::currentPath() + "/sandbox-")
-        {
-        setPath(mTempDir.name());
-    }
-
-private:
-    KTempDir mTempDir;
-};
-
 /*
  * This file contains simple helpers to access test files
  */
@@ -127,6 +114,34 @@ namespace TestUtils
 {
 
 void purgeUserConfiguration();
+
+class SandBoxDir : public QDir
+{
+public:
+    SandBoxDir();
+    void fill(const QStringList& files);
+
+private:
+    KTempDir mTempDir;
+};
+
+/**
+ * An event loop which stops itself after a predefined duration
+ */
+class TimedEventLoop : public QEventLoop
+{
+    Q_OBJECT
+public:
+    TimedEventLoop(int maxDurationInSeconds = 60);
+
+    int exec(ProcessEventsFlags flags = AllEvents);
+
+private Q_SLOTS:
+    void fail();
+
+private:
+    QTimer *mTimer;
+};
 
 } // namespace
 

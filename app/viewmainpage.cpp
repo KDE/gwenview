@@ -36,9 +36,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KMenu>
 #include <KMessageBox>
 #include <KToggleAction>
+#include <KActivities/ResourceInstance>
 
 // Local
 #include "fileoperations.h"
+#include <gvcore.h>
 #include "splitter.h"
 #include <lib/document/document.h>
 #include <lib/documentview/abstractdocumentviewadapter.h>
@@ -133,6 +135,7 @@ struct ViewMainPagePrivate
     ViewMainPage* q;
     SlideShow* mSlideShow;
     KActionCollection* mActionCollection;
+    GvCore* mGvCore;
     QSplitter *mThumbnailSplitter;
     QWidget* mAdapterContainer;
     DocumentViewController* mDocumentViewController;
@@ -140,7 +143,6 @@ struct ViewMainPagePrivate
     DocumentViewSynchronizer* mSynchronizer;
     QToolButton* mToggleSideBarButton;
     QToolButton* mToggleThumbnailBarButton;
-    QToolButton* mLockZoomButton;
     ZoomWidget* mZoomWidget;
     DocumentViewContainer* mDocumentViewContainer;
     SlideContainer* mToolContainer;
@@ -149,6 +151,11 @@ struct ViewMainPagePrivate
     KToggleAction* mToggleThumbnailBarAction;
     KToggleAction* mSynchronizeAction;
     QCheckBox* mSynchronizeCheckBox;
+
+    // Activity Resource events reporting needs to be above KPart,
+    // in the shell itself, to avoid problems with other MDI applications
+    // that use this KPart
+    QHash<DocumentView*, KActivities::ResourceInstance*> mActivityResources;
 
     bool mFullScreenMode;
     QPalette mNormalPalette;
@@ -263,14 +270,19 @@ struct ViewMainPagePrivate
                          mSlideShow, SLOT(resumeAndGoToNextUrl()));
 
         mDocumentViews << view;
+        mActivityResources.insert(view, new KActivities::ResourceInstance(q->window()->winId(), view));
 
         return view;
     }
 
     void deleteDocumentView(DocumentView* view)
     {
-        mDocumentViewContainer->deleteView(view);
+        if (mDocumentViewController->view() == view) {
+            mDocumentViewController->setView(0);
+        }
         mDocumentViews.removeOne(view);
+        mActivityResources.remove(view);
+        mDocumentViewContainer->deleteView(view);
     }
 
     void setupToolContainer()
@@ -286,11 +298,6 @@ struct ViewMainPagePrivate
         mZoomWidget = new ZoomWidget;
         mSynchronizeCheckBox = new QCheckBox(i18n("Synchronize"));
         mSynchronizeCheckBox->hide();
-        mLockZoomButton = new QToolButton;
-        mLockZoomButton->setAutoRaise(true);
-        mLockZoomButton->setCheckable(true);
-        q->updateLockZoomButton();
-        QObject::connect(mLockZoomButton, SIGNAL(toggled(bool)), q, SLOT(updateLockZoomButton()));
 
         QHBoxLayout* layout = new QHBoxLayout(mStatusBarContainer);
         layout->setMargin(0);
@@ -301,7 +308,6 @@ struct ViewMainPagePrivate
         layout->addWidget(mSynchronizeCheckBox);
         layout->addStretch();
         layout->addWidget(mZoomWidget);
-        layout->addWidget(mLockZoomButton);
     }
 
     void setupSplitter()
@@ -309,6 +315,7 @@ struct ViewMainPagePrivate
         Qt::Orientation orientation = GwenviewConfig::thumbnailBarOrientation();
         mThumbnailSplitter = new Splitter(orientation == Qt::Horizontal ? Qt::Vertical : Qt::Horizontal, q);
         mThumbnailBar->setOrientation(orientation);
+        mThumbnailBar->setThumbnailAspectRatio(GwenviewConfig::thumbnailAspectRatio());
         mThumbnailBar->setRowCount(GwenviewConfig::thumbnailBarRowCount());
         mThumbnailSplitter->addWidget(mAdapterContainer);
         mThumbnailSplitter->addWidget(mThumbnailBar);
@@ -339,6 +346,8 @@ struct ViewMainPagePrivate
         }
         if (oldView) {
             oldView->setCurrent(false);
+            Q_ASSERT(mActivityResources.contains(oldView));
+            mActivityResources[oldView]->notifyFocusedOut();
         }
         view->setCurrent(true);
         mDocumentViewController->setView(view);
@@ -350,6 +359,9 @@ struct ViewMainPagePrivate
             return;
         }
         mThumbnailBar->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Current);
+
+        Q_ASSERT(mActivityResources.contains(view));
+        mActivityResources[view]->notifyFocusedIn();
     }
 
     QModelIndex indexForView(DocumentView* view) const
@@ -364,15 +376,22 @@ struct ViewMainPagePrivate
         SortedDirModel* model = static_cast<SortedDirModel*>(mThumbnailBar->model());
         return model->indexForUrl(url);
     }
+
+    void applyPalette(bool fullScreenMode)
+    {
+        mDocumentViewContainer->setPalette(mGvCore->palette(fullScreenMode ? GvCore::FullScreenViewPalette : GvCore::NormalViewPalette));
+        setupThumbnailBarStyleSheet();
+    }
 };
 
-ViewMainPage::ViewMainPage(QWidget* parent, SlideShow* slideShow, KActionCollection* actionCollection)
+ViewMainPage::ViewMainPage(QWidget* parent, SlideShow* slideShow, KActionCollection* actionCollection, GvCore* gvCore)
 : QWidget(parent)
 , d(new ViewMainPagePrivate)
 {
     d->q = this;
     d->mSlideShow = slideShow;
     d->mActionCollection = actionCollection;
+    d->mGvCore = gvCore;
     d->mFullScreenMode = false;
     d->mCompareMode = false;
     d->mThumbnailBarVisibleBeforeFullScreen = false;
@@ -422,6 +441,8 @@ ViewMainPage::~ViewMainPage()
 
 void ViewMainPage::loadConfig()
 {
+    d->applyPalette(false /* fullScreenMode */);
+
     // FIXME: Not symetric with saveConfig(). Check if it matters.
     Q_FOREACH(DocumentView * view, d->mDocumentViews) {
         view->loadAdapterConfig();
@@ -452,9 +473,9 @@ void ViewMainPage::loadConfig()
     }
 
     if (GwenviewConfig::showLockZoomButton()) {
-        d->mLockZoomButton->setChecked(GwenviewConfig::lockZoom());
+        d->mZoomWidget->setZoomLocked(GwenviewConfig::lockZoom());
     } else {
-        d->mLockZoomButton->hide();
+        d->mZoomWidget->setLockZoomButtonVisible(false);
     }
 }
 
@@ -463,7 +484,7 @@ void ViewMainPage::saveConfig()
     d->saveSplitterConfig();
     GwenviewConfig::setThumbnailBarIsVisible(d->mToggleThumbnailBarAction->isChecked());
     if (GwenviewConfig::showLockZoomButton()) {
-        GwenviewConfig::setLockZoom(d->mLockZoomButton->isChecked());
+        GwenviewConfig::setLockZoom(d->mZoomWidget->isZoomLocked());
     }
 }
 
@@ -488,15 +509,12 @@ void ViewMainPage::setFullScreenMode(bool fullScreenMode)
         if (d->mThumbnailBarVisibleBeforeFullScreen) {
             d->mToggleThumbnailBarAction->trigger();
         }
-        QPalette pal = QApplication::palette();
-        pal.setColor(QPalette::Base, Qt::black);
-        d->mDocumentViewContainer->setPalette(pal);
     } else {
         if (d->mThumbnailBarVisibleBeforeFullScreen) {
             d->mToggleThumbnailBarAction->trigger();
         }
-        d->mDocumentViewContainer->setPalette(d->mNormalPalette);
     }
+    d->applyPalette(fullScreenMode);
     d->mToggleThumbnailBarAction->setEnabled(!fullScreenMode);
 }
 
@@ -589,13 +607,6 @@ DocumentView* ViewMainPage::documentView() const
     return d->currentView();
 }
 
-void ViewMainPage::setNormalPalette(const QPalette& palette)
-{
-    d->mNormalPalette = palette;
-    d->mDocumentViewContainer->setPalette(palette);
-    d->setupThumbnailBarStyleSheet();
-}
-
 void ViewMainPage::openUrl(const KUrl& url)
 {
     openUrls(KUrl::List() << url, url);
@@ -611,7 +622,7 @@ void ViewMainPage::openUrls(const KUrl::List& allUrls, const KUrl& currentUrl)
     typedef QMap<KUrl, DocumentView*> ViewForUrlMap;
     ViewForUrlMap viewForUrlMap;
 
-    if (!d->mDocumentViews.isEmpty() && GwenviewConfig::showLockZoomButton() && d->mLockZoomButton->isChecked()) {
+    if (!d->mDocumentViews.isEmpty() && d->mZoomWidget->isZoomLocked()) {
         setup = d->mDocumentViews.last()->setup();
     } else {
         setup.valid = true;
@@ -657,7 +668,10 @@ void ViewMainPage::openUrls(const KUrl::List& allUrls, const KUrl& currentUrl)
         it = viewForUrlMap.constBegin(),
         end = viewForUrlMap.constEnd();
     for (; it != end; ++it) {
-        it.value()->openUrl(it.key(), setup);
+        KUrl url = it.key();
+        DocumentView* view = it.value();
+        view->openUrl(url, setup);
+        d->mActivityResources[view]->setUri(url);
     }
 
     // Init views
@@ -761,11 +775,6 @@ QToolButton* ViewMainPage::toggleSideBarButton() const
 void ViewMainPage::showMessageWidget(QGraphicsWidget* widget, Qt::Alignment align)
 {
     d->mDocumentViewContainer->showMessageWidget(widget, align);
-}
-
-void ViewMainPage::updateLockZoomButton()
-{
-    d->mLockZoomButton->setIcon(KIcon(d->mLockZoomButton->isChecked() ? "object-locked" : "object-unlocked"));
 }
 
 } // namespace

@@ -7,7 +7,7 @@
   <!ENTITY % English "INCLUDE"><!-- change language only here -->
 ]>
 
-<book lang="&language;">
+<book id="gwenview" lang="&language;">
 <title>Gwenview User Manual</title>
 
 <bookinfo>
@@ -487,8 +487,8 @@ Moves to the parent folder of the current folder.</para></listitem>
 action="simul">&Ctrl;&Shift;<keycap>F</keycap></keycombo>:
 Switches into Full Screen Mode.</para></listitem>
 
-<listitem><para>&Esc;: Exits from Full Screen
-mode.</para></listitem>
+<listitem><para>&Esc;: Switches back to Browse Mode.
+</para></listitem>
 
 <listitem><para><keycombo
 action="simul">&Ctrl;<keycap>M</keycap></keycombo>:
@@ -558,6 +558,21 @@ Pressing this shortcut toggles zoom-to-fit on and off.</para></listitem>
 <listitem><para><keycap>P</keycap>:
 Viewing a video this shortcut toggles playback on and off.</para></listitem>
 </itemizedlist>
+</sect1>
+<sect1 id="advanced-configuration">
+    <title>Advanced Configuration Options</title>
+    <para>
+        Some notes on hidden &kappname; options can be found on
+        <ulink url="http://userbase.kde.org/Special:myLanguage/Gwenview/Hidden_Configuration_Options">this page</ulink>.
+    </para>
+    <important>
+        <para>
+            The options described on the above-mentioned page may help you
+            tune &kappname; for specific needs, but please keep in mind
+            there is no warranty they will continue working from one
+            version to another.
+        </para>
+    </important>
 </sect1>
 </chapter>
 

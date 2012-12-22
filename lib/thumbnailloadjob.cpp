@@ -112,6 +112,7 @@ void ThumbnailCache::queueThumbnail(const QString& path, const QImage& image)
     LOG(path);
     QMutexLocker locker(&mMutex);
     mCache.insert(path, image);
+    start();
 }
 
 void ThumbnailCache::run()
@@ -308,7 +309,7 @@ bool ThumbnailThread::loadThumbnail(bool* needCaching)
 
 void ThumbnailThread::cacheThumbnail()
 {
-    mImage.setText("Thumb::Uri"          , 0, mOriginalUri);
+    mImage.setText("Thumb::URI"          , 0, mOriginalUri);
     mImage.setText("Thumb::MTime"        , 0, QString::number(mOriginalTime));
     mImage.setText("Thumb::Size"         , 0, QString::number(mOriginalSize));
     mImage.setText("Thumb::Mimetype"     , 0, mOriginalMimeType);
@@ -328,7 +329,12 @@ static QString sThumbnailBaseDir;
 QString ThumbnailLoadJob::thumbnailBaseDir()
 {
     if (sThumbnailBaseDir.isEmpty()) {
-        sThumbnailBaseDir = QDir::homePath() + "/.thumbnails/";
+        const QByteArray customDir = qgetenv("GV_THUMBNAIL_DIR");
+        if (customDir.isEmpty()) {
+            sThumbnailBaseDir = QDir::homePath() + "/.thumbnails/";
+        } else {
+            sThumbnailBaseDir = QString::fromLocal8Bit(customDir.constData()) + '/';
+        }
     }
     return sThumbnailBaseDir;
 }
@@ -367,7 +373,7 @@ static void moveThumbnailHelper(const QString& oldUri, const QString& newUri, Th
     if (!thumb.load(oldPath)) {
         return;
     }
-    thumb.setText("Thumb::Uri", 0, newUri);
+    thumb.setText("Thumb::URI", 0, newUri);
     thumb.save(newPath, "png");
     QFile::remove(QFile::encodeName(oldPath));
 }
@@ -421,9 +427,7 @@ ThumbnailLoadJob::~ThumbnailLoadJob()
     }
     mThumbnailThread.cancel();
     mThumbnailThread.wait();
-    if (!sThumbnailCache->isRunning()) {
-        sThumbnailCache->start();
-    }
+    sThumbnailCache->wait();
 }
 
 void ThumbnailLoadJob::start()
@@ -587,7 +591,25 @@ QImage ThumbnailLoadJob::loadThumbnailFromCache() const
     if (!image.isNull()) {
         return image;
     }
-    return QImage(mThumbnailPath);
+
+    image = QImage(mThumbnailPath);
+    if (image.isNull() && mThumbnailGroup == ThumbnailGroup::Normal) {
+        // If there is a large-sized thumbnail, generate the normal-sized version from it
+        QString largeThumbnailPath = generateThumbnailPath(mOriginalUri, ThumbnailGroup::Large);
+        QImage largeImage(largeThumbnailPath);
+        if (largeImage.isNull()) {
+            return image;
+        }
+        int size = ThumbnailGroup::pixelSize(ThumbnailGroup::Normal);
+        image = largeImage.scaled(size, size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        Q_FOREACH(const QString& key, largeImage.textKeys()) {
+            QString text = largeImage.text(key);
+            image.setText(key, text);
+        }
+        sThumbnailCache->queueThumbnail(mThumbnailPath, image);
+    }
+
+    return image;
 }
 
 void ThumbnailLoadJob::checkThumbnail()
@@ -615,7 +637,7 @@ void ThumbnailLoadJob::checkThumbnail()
 
     QImage thumb = loadThumbnailFromCache();
     if (!thumb.isNull()) {
-        if (thumb.text("Thumb::Uri", 0) == mOriginalUri &&
+        if (thumb.text("Thumb::URI", 0) == mOriginalUri &&
                 thumb.text("Thumb::MTime", 0).toInt() == mOriginalTime) {
             int width = 0, height = 0;
             QSize size;
@@ -700,6 +722,10 @@ void ThumbnailLoadJob::startCreatingThumbnail(const QString& pixPath)
 
 void ThumbnailLoadJob::slotGotPreview(const KFileItem& item, const QPixmap& pixmap)
 {
+    if (mCurrentItem.isNull()) {
+        // This can happen if current item has been removed by removeItems()
+        return;
+    }
     LOG(mCurrentItem.url());
     QSize size;
     emit thumbnailLoaded(item, pixmap, size);
@@ -707,6 +733,10 @@ void ThumbnailLoadJob::slotGotPreview(const KFileItem& item, const QPixmap& pixm
 
 void ThumbnailLoadJob::emitThumbnailLoaded(const QImage& img, const QSize& size)
 {
+    if (mCurrentItem.isNull()) {
+        // This can happen if current item has been removed by removeItems()
+        return;
+    }
     LOG(mCurrentItem.url());
     QPixmap thumb = QPixmap::fromImage(img);
     emit thumbnailLoaded(mCurrentItem, thumb, size);
@@ -714,6 +744,10 @@ void ThumbnailLoadJob::emitThumbnailLoaded(const QImage& img, const QSize& size)
 
 void ThumbnailLoadJob::emitThumbnailLoadingFailed()
 {
+    if (mCurrentItem.isNull()) {
+        // This can happen if current item has been removed by removeItems()
+        return;
+    }
     LOG(mCurrentItem.url());
     emit thumbnailLoadingFailed(mCurrentItem);
 }

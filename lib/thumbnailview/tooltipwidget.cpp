@@ -50,7 +50,7 @@ ToolTipWidget::ToolTipWidget(QWidget* parent)
 , d(new ToolTipWidgetPrivate)
 {
     d->mOpacity = 1.;
-    setAutoFillBackground(true);
+    setAttribute(Qt::WA_NoSystemBackground);
 }
 
 ToolTipWidget::~ToolTipWidget()

@@ -44,7 +44,7 @@ namespace Gwenview
 inline int getMaxUnreferencedImages()
 {
     int defaultValue = 3;
-    QByteArray ba = qgetenv("GWENVIEW_MAX_UNREFERENCED_IMAGES");
+    QByteArray ba = qgetenv("GV_MAX_UNREFERENCED_IMAGES");
     if (ba.isEmpty()) {
         return defaultValue;
     }

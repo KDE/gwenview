@@ -42,7 +42,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KLocale>
 #include <KUrl>
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-#include <nepomuk/kratingpainter.h>
+#include <kratingpainter.h>
 #endif
 
 // Local
@@ -128,7 +128,7 @@ struct PreviewItemDelegatePrivate
 #endif
 
     QModelIndex mIndexUnderCursor;
-    int mThumbnailSize;
+    QSize mThumbnailSize;
     PreviewItemDelegate::ThumbnailDetails mDetails;
     PreviewItemDelegate::ContextBarActions mContextBarActions;
     Qt::TextElideMode mTextElideMode;
@@ -159,7 +159,7 @@ struct PreviewItemDelegatePrivate
         const int posX = mContextBarActions == PreviewItemDelegate::SelectionAction
             ? 0
             : (rect.width() - mContextBar->width()) / 2;
-        const int posY = qMax(CONTEXTBAR_MARGIN, mThumbnailSize - thumbnailPix.height() - mContextBar->height());
+        const int posY = qMax(CONTEXTBAR_MARGIN, mThumbnailSize.height() - thumbnailPix.height() - mContextBar->height());
         mContextBar->move(rect.topLeft() + QPoint(posX, posY));
         mContextBar->show();
     }
@@ -255,7 +255,7 @@ struct PreviewItemDelegatePrivate
     {
         QSize buttonSize = mSaveButton->sizeHint();
         int posX = itemRect.right() - buttonSize.width();
-        int posY = itemRect.top() + mThumbnailSize + 2 * ITEM_MARGIN - buttonSize.height();
+        int posY = itemRect.top() + mThumbnailSize.height() + 2 * ITEM_MARGIN - buttonSize.height();
 
         return QPoint(posX, posY);
     }
@@ -437,7 +437,7 @@ struct PreviewItemDelegatePrivate
 
         // Compute tip position
         QRect rect = mView->visualRect(index);
-        const int textY = ITEM_MARGIN + mThumbnailSize + ITEM_MARGIN;
+        const int textY = ITEM_MARGIN + mThumbnailSize.height() + ITEM_MARGIN;
         const int spacing = 1;
         QRect geometry(
             QPoint(rect.topLeft() + QPoint((rect.width() - tipSize.width()) / 2, textY + spacing)),
@@ -487,7 +487,7 @@ struct PreviewItemDelegatePrivate
 
     int itemWidth() const
     {
-        return mThumbnailSize + 2 * ITEM_MARGIN;
+        return mThumbnailSize.width() + 2 * ITEM_MARGIN;
     }
 
     int ratingRowHeight() const
@@ -521,7 +521,7 @@ struct PreviewItemDelegatePrivate
             // Keep at least one row of text, so that we can show folder names
             textHeight = lineHeight;
         }
-        return mThumbnailSize + textHeight + 3 * ITEM_MARGIN;
+        return mThumbnailSize.height() + textHeight + 3 * ITEM_MARGIN;
     }
 
     void selectIndexUnderCursorIfNoMultiSelection()
@@ -591,8 +591,8 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
     d->mRatingPainter.setMaxRating(10);
 #endif
 
-    connect(view, SIGNAL(thumbnailSizeChanged(int)),
-            SLOT(setThumbnailSize(int)));
+    connect(view, SIGNAL(thumbnailSizeChanged(QSize)),
+            SLOT(setThumbnailSize(QSize)));
 
     // Button frame
     d->mContextBar = new QWidget(d->mView->viewport());
@@ -666,7 +666,7 @@ bool PreviewItemDelegate::eventFilter(QObject* object, QEvent* event)
 
 void PreviewItemDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const
 {
-    int thumbnailSize = d->mThumbnailSize;
+    int thumbnailHeight = d->mThumbnailSize.height();
     QSize fullSize;
     QPixmap thumbnailPix = d->mView->thumbnailForIndex(index, &fullSize);
     const KFileItem fileItem = fileItemForIndex(index);
@@ -708,7 +708,7 @@ void PreviewItemDelegate::paint(QPainter * painter, const QStyleOptionViewItem &
     // Compute thumbnailRect
     QRect thumbnailRect = QRect(
                               rect.left() + (rect.width() - thumbnailPix.width()) / 2,
-                              rect.top() + (thumbnailSize - thumbnailPix.height()) + ITEM_MARGIN,
+                              rect.top() + (thumbnailHeight - thumbnailPix.height()) + ITEM_MARGIN,
                               thumbnailPix.width(),
                               thumbnailPix.height());
 
@@ -772,7 +772,7 @@ void PreviewItemDelegate::paint(QPainter * painter, const QStyleOptionViewItem &
 
     QRect textRect(
         rect.left() + ITEM_MARGIN,
-        rect.top() + 2 * ITEM_MARGIN + thumbnailSize,
+        rect.top() + 2 * ITEM_MARGIN + thumbnailHeight,
         rect.width() - 2 * ITEM_MARGIN,
         d->mView->fontMetrics().height());
     if (isDirOrArchive || (d->mDetails & PreviewItemDelegate::FileNameDetail)) {
@@ -810,7 +810,7 @@ void PreviewItemDelegate::paint(QPainter * painter, const QStyleOptionViewItem &
     }
 }
 
-void PreviewItemDelegate::setThumbnailSize(int value)
+void PreviewItemDelegate::setThumbnailSize(const QSize& value)
 {
     d->mThumbnailSize = value;
     d->updateViewGridSize();
@@ -917,7 +917,7 @@ void PreviewItemDelegate::updateEditorGeometry(QWidget* widget, const QStyleOpti
     int textWidth = edit->fontMetrics().width("  " + text + "  ");
     QRect textRect(
         option.rect.left() + (option.rect.width() - textWidth) / 2,
-        option.rect.top() + 2 * ITEM_MARGIN + d->mThumbnailSize,
+        option.rect.top() + 2 * ITEM_MARGIN + d->mThumbnailSize.height(),
         textWidth,
         edit->sizeHint().height());
 

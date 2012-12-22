@@ -49,7 +49,12 @@ SvgImageView::SvgImageView(QGraphicsItem* parent)
 
 void SvgImageView::loadFromDocument()
 {
-    QSvgRenderer* renderer = document()->svgRenderer();
+    Document::Ptr doc = document();
+    if (!doc) {
+        return;
+    }
+
+    QSvgRenderer* renderer = doc->svgRenderer();
     if (!renderer) {
         kWarning() << "No SVG renderer. This should not happen!";
         return;
@@ -104,6 +109,7 @@ SvgViewAdapter::SvgViewAdapter()
     connect(d->mView, SIGNAL(completed()), SIGNAL(completed()));
     connect(d->mView, SIGNAL(previousImageRequested()), SIGNAL(previousImageRequested()));
     connect(d->mView, SIGNAL(nextImageRequested()), SIGNAL(nextImageRequested()));
+    connect(d->mView, SIGNAL(toggleFullScreenRequested()), SIGNAL(toggleFullScreenRequested()));
 }
 
 SvgViewAdapter::~SvgViewAdapter()

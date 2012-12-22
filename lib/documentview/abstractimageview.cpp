@@ -133,6 +133,9 @@ AbstractImageView::AbstractImageView(QGraphicsItem* parent)
 
 AbstractImageView::~AbstractImageView()
 {
+    if (d->mDocument) {
+        d->mDocument->stopAnimation();
+    }
     delete d;
 }
 
@@ -143,6 +146,9 @@ Document::Ptr AbstractImageView::document() const
 
 void AbstractImageView::setDocument(Document::Ptr doc)
 {
+    if (d->mDocument) {
+        disconnect(d->mDocument.data(), 0, this, 0);
+    }
     d->mDocument = doc;
     loadFromDocument();
 }

@@ -28,9 +28,8 @@ class TimeUtilsTest : public QObject
     Q_OBJECT
 
 private Q_SLOTS:
-    void testPng();
-    void testJpeg();
-    void testJpeg_data();
+    void testBasic();
+    void testBasic_data();
     void testCache();
 };
 

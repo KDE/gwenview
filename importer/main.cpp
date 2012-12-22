@@ -50,27 +50,29 @@ int main(int argc, char *argv[])
     KCmdLineArgs::init(argc, argv, &aboutData);
 
     KCmdLineOptions options;
-    options.add("+[folder]", ki18n("Source folder"));
+    options.add("+folder", ki18n("Source folder"));
+    options.add("udi <device-udi>", ki18n("Device UDI"));
     KCmdLineArgs::addCmdLineOptions(options);
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+    KApplication app;
+
     if (args->count() != 1) {
-        kError() << "Wrong arg count. FIXME";
+        KCmdLineArgs::usageError("Missing required source folder argument."); // FIXME 2.11 Add i18n() call
         return 1;
     }
     KUrl url = args->url(0);
     if (!url.isValid()) {
-        kError() << "Invalid url. FIXME";
+        kError() << "Invalid source folder."; // FIXME 2.11 Add i18n() call
         return 1;
     }
+    QString deviceUdi = args->isSet("udi") ? args->getOption("udi") : QString();
     args->clear();
-
-    KApplication app;
 
     Gwenview::ImageFormats::registerPlugins();
 
     Gwenview::ImportDialog* dialog = new Gwenview::ImportDialog();
     dialog->show();
-    QMetaObject::invokeMethod(dialog, "setSourceUrl", Qt::QueuedConnection, Q_ARG(KUrl, url));
+    QMetaObject::invokeMethod(dialog, "setSourceUrl", Qt::QueuedConnection, Q_ARG(KUrl, url), Q_ARG(QString, deviceUdi));
     return app.exec();
 }

@@ -115,7 +115,11 @@ struct ImporterPrivate
         QString fileName;
         if (mFileNameFormater.get()) {
             KFileItem item(KFileItem::Unknown, KFileItem::Unknown, src, true /* delayedMimeTypes */);
-            KDateTime dateTime = TimeUtils::dateTimeForFileItem(item);
+            // Get the document time, but do not cache the result because the
+            // 'src' url is temporary: if we import "foo/image.jpg" and
+            // "bar/image.jpg", both images will be temporarily saved in the
+            // 'src' url.
+            KDateTime dateTime = TimeUtils::dateTimeForFileItem(item, TimeUtils::SkipCache);
             fileName = mFileNameFormater->format(src, dateTime);
         } else {
             fileName = src.fileName();

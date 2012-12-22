@@ -44,6 +44,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include <filtercontroller.h>
+#include <gvcore.h>
 #include <fileoperations.h>
 #include <lib/document/documentfactory.h>
 #include <lib/gwenviewconfig.h>
@@ -68,6 +69,7 @@ inline Sorting::Enum sortingFromSortAction(const QAction* action)
 struct BrowseMainPagePrivate : public Ui_BrowseMainPage
 {
     BrowseMainPage* q;
+    GvCore* mGvCore;
     KFilePlacesModel* mFilePlacesModel;
     KUrlNavigator* mUrlNavigator;
     SortedDirModel* mDirModel;
@@ -77,7 +79,6 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
     KSelectAction* mSortAction;
     QActionGroup* mThumbnailDetailsActionGroup;
     PreviewItemDelegate* mDelegate;
-    QPalette mNormalPalette;
 
     void setupWidgets()
     {
@@ -105,8 +106,8 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
 
         // Thumbnail slider
         QObject::connect(mThumbnailSlider, SIGNAL(valueChanged(int)),
-                         mThumbnailView, SLOT(setThumbnailSize(int)));
-        QObject::connect(mThumbnailView, SIGNAL(thumbnailSizeChanged(int)),
+                         mThumbnailView, SLOT(setThumbnailWidth(int)));
+        QObject::connect(mThumbnailView, SIGNAL(thumbnailWidthChanged(int)),
                          mThumbnailSlider, SLOT(setValue(int)));
     }
 
@@ -219,7 +220,7 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
     }
 };
 
-BrowseMainPage::BrowseMainPage(QWidget* parent, SortedDirModel* dirModel, KActionCollection* actionCollection)
+BrowseMainPage::BrowseMainPage(QWidget* parent, SortedDirModel* dirModel, KActionCollection* actionCollection, GvCore* gvCore)
 : QWidget(parent)
 , d(new BrowseMainPagePrivate)
 {
@@ -227,6 +228,7 @@ BrowseMainPage::BrowseMainPage(QWidget* parent, SortedDirModel* dirModel, KActio
     d->mDirModel = dirModel;
     d->mDocumentCount = 0;
     d->mActionCollection = actionCollection;
+    d->mGvCore = gvCore;
     d->setupWidgets();
     d->setupActions(actionCollection);
     d->setupFilterController();
@@ -243,6 +245,8 @@ BrowseMainPage::~BrowseMainPage()
 
 void BrowseMainPage::loadConfig()
 {
+    setPalette(d->mGvCore->palette(GvCore::NormalPalette));
+    d->mThumbnailView->setPalette(d->mGvCore->palette(GvCore::NormalViewPalette));
     d->mUrlNavigator->setUrlEditable(GwenviewConfig::urlNavigatorIsEditable());
     d->mUrlNavigator->setShowFullPath(GwenviewConfig::urlNavigatorShowFullPath());
 
@@ -251,7 +255,8 @@ void BrowseMainPage::loadConfig()
     // If GwenviewConfig::thumbnailSize() returns the current value of
     // mThumbnailSlider, it won't emit valueChanged() and the thumbnail view
     // won't be updated. That's why we do it ourself.
-    d->mThumbnailView->setThumbnailSize(GwenviewConfig::thumbnailSize());
+    d->mThumbnailView->setThumbnailAspectRatio(GwenviewConfig::thumbnailAspectRatio());
+    d->mThumbnailView->setThumbnailWidth(GwenviewConfig::thumbnailSize());
 
     Q_FOREACH(QAction * action, d->mSortAction->actions()) {
         if (sortingFromSortAction(action) == GwenviewConfig::sorting()) {
@@ -354,8 +359,8 @@ void BrowseMainPage::updateThumbnailDetails()
 
 void BrowseMainPage::setFullScreenMode(bool fullScreen)
 {
-    // For fullscreen mode, we use the application palette, which has been set to a fullscreen version
-    setPalette(fullScreen ? QPalette() : d->mNormalPalette);
+    setPalette(d->mGvCore->palette(fullScreen ? GvCore::FullScreenPalette : GvCore::NormalPalette));
+    d->mThumbnailView->setPalette(d->mGvCore->palette(fullScreen ? GvCore::FullScreenViewPalette : GvCore::NormalViewPalette));
     d->updateUrlNavigatorBackgroundColor();
     d->mUrlNavigatorContainer->setContentsMargins(
         fullScreen ? 6 : 0,
@@ -371,12 +376,6 @@ void BrowseMainPage::setFullScreenMode(bool fullScreen)
     if (fullScreen && d->mFullScreenToolBar->actions().isEmpty()) {
         d->setupFullScreenToolBar();
     }
-}
-
-void BrowseMainPage::setNormalPalette(const QPalette& palette)
-{
-    d->mNormalPalette = palette;
-    setPalette(d->mNormalPalette);
 }
 
 void BrowseMainPage::slotUrlsDropped(const KUrl& destUrl, QDropEvent* event)

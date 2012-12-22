@@ -129,6 +129,26 @@ void ThumbnailLoadJobTest::testLoadLocal()
     QStringList entryList = thumbnailDir.entryList(QStringList("*.png"));
     QCOMPARE(entryList.count(), mSandBox.mSizeHash.size() - 1);
 
+    // Check thumbnail keys
+    QHash<KFileItem, QHash<QString, QString> > thumbnailHash;
+    Q_FOREACH(const QString& name, entryList) {
+        QImage thumb;
+        QVERIFY(thumb.load(thumbnailDir.filePath(name)));
+
+        KUrl url(thumb.text("Thumb::URI"));
+        KFileItem item = list.findByUrl(url);
+        QVERIFY(!item.isNull());
+
+        QSize originalSize = mSandBox.mSizeHash.value(item.url().fileName());
+        uint mtime = item.time(KFileItem::ModificationTime).toTime_t();
+
+        QCOMPARE(thumb.text("Thumb::Image::Width"), QString::number(originalSize.width()));
+        QCOMPARE(thumb.text("Thumb::Image::Height"), QString::number(originalSize.height()));
+        QCOMPARE(thumb.text("Thumb::Mimetype"), item.mimetype());
+        QCOMPARE(thumb.text("Thumb::Size"), QString::number(item.size()));
+        QCOMPARE(thumb.text("Thumb::MTime"), QString::number(mtime));
+    }
+
     // Check what was in the thumbnailLoaded() signals
     QCOMPARE(spy.count(), mSandBox.mSizeHash.size());
     QSignalSpy::ConstIterator it = spy.constBegin(),

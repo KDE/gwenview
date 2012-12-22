@@ -41,6 +41,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KUrl>
 
 // Local
+#include <lib/urlutils.h>
 
 namespace Gwenview
 {
@@ -90,6 +91,12 @@ struct HistoryItem : public QStandardItem
         if (!dateTime.isValid()) {
             kError() << "Invalid dateTime" << dateTime;
             return 0;
+        }
+        if (UrlUtils::urlIsFastLocalFile(url)) {
+            if (!QFile::exists(url.path())) {
+                kDebug() << "Skipping" << url.path() << "from recent folders. It does not exist anymore";
+                return 0;
+            }
         }
 
         return new HistoryItem(url, dateTime, fileName);

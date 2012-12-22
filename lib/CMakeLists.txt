@@ -2,15 +2,22 @@ project(gwenviewlib)
 
 # Extract version of libjpeg so that we can use the appropriate dir
 # See bug #227313
+message(STATUS "Looking for libjpeg version in ${JPEG_INCLUDE_DIR}/jpeglib.h")
 file(READ "${JPEG_INCLUDE_DIR}/jpeglib.h" jpeglib_h_content)
 string(REGEX MATCH "#define +JPEG_LIB_VERSION +([0-9]+)" "\\1" jpeglib_version "${jpeglib_h_content}")
 set(jpeglib_version ${CMAKE_MATCH_1})
+
 if ("${jpeglib_version}" STREQUAL "")
+    message(STATUS "No version defined in ${JPEG_INCLUDE_DIR}/jpeglib.h, looking for jconfig.h")
     # libjpeg-turbo keeps JPEG_LIB_VERSION in jconfig.h, not jpeglib.h :/
-    find_file(JCONFIG_H jconfig.h PATHS "${JPEG_INCLUDE_DIR}")
+    find_file(JCONFIG_H jconfig.h
+        PATHS "${JPEG_INCLUDE_DIR}"
+        PATH_SUFFIXES "${CMAKE_LIBRARY_ARCHITECTURE}"
+        )
     if (NOT EXISTS "${JCONFIG_H}")
-        message(FATAL_ERROR "Could not find jconfig.h. You can specify its path with -DJCONFIG_H=/path/to/jconfig.h.")
+        message(FATAL_ERROR "Could not find jconfig.h. This file comes with libjpeg. You can specify its path with -DJCONFIG_H=/path/to/jconfig.h.")
     endif (NOT EXISTS "${JCONFIG_H}")
+    message(STATUS "Found jconfig.h: ${JCONFIG_H}")
     message(STATUS "Looking for libjpeg version in ${JCONFIG_H}")
     file(READ "${JCONFIG_H}" jconfig_h_content)
     string(REGEX MATCH "#define +JPEG_LIB_VERSION +([0-9]+)" "\\1" jpeglib_version "${jconfig_h_content}")
@@ -39,6 +46,7 @@ include_directories(
     ${SOPRANO_INCLUDE_DIR}
     ${EXIV2_INCLUDE_DIR}
     ${JPEG_INCLUDE_DIR}
+    ${PNG_INCLUDE_DIRS}
     )
 
 # For config-gwenview.h
@@ -101,6 +109,7 @@ set(gwenviewlib_SRCS
     invisiblebuttongroup.cpp
     iodevicejpegsourcemanager.cpp
     jpegcontent.cpp
+    kindproxymodel.cpp
     semanticinfo/sorteddirmodel.cpp
     memoryutils.cpp
     messagebubble.cpp
@@ -110,6 +119,7 @@ set(gwenviewlib_SRCS
     preferredimagemetainfomodel.cpp
     print/printhelper.cpp
     print/printoptionspage.cpp
+    recursivedirmodel.cpp
     shadowfilter.cpp
     slidecontainer.cpp
     slideshow.cpp
@@ -163,6 +173,15 @@ if (GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK)
         )
 endif (GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK)
 
+if (LCMS2_FOUND)
+    set(gwenviewlib_SRCS
+        ${gwenviewlib_SRCS}
+        cms/iccjpeg.c
+        cms/cmsprofile.cpp
+        cms/cmsprofile_png.cpp
+        )
+endif()
+
 set_source_files_properties(
     exiv2imageloader.cpp
     imagemetainfomodel.cpp
@@ -194,6 +213,8 @@ target_link_libraries(gwenviewlib
     ${JPEG_LIBRARY}
     ${EXIV2_LIBRARIES}
     ${QT_QTOPENGL_LIBRARY}
+    ${X11_X11_LIB}
+    ${PNG_LIBRARIES}
     )
 if( WIN32 )
 target_link_libraries( gwenviewlib ${EXPAT_LIBRARIES} )
@@ -205,5 +226,11 @@ if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
         ${SOPRANO_LIBRARIES}
         )
 endif (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
+
+if (LCMS2_FOUND)
+target_link_libraries(gwenviewlib
+    ${LCMS2_LIBRARIES}
+    )
+endif()
 
 install(TARGETS gwenviewlib ${INSTALL_TARGETS_DEFAULT_ARGS})

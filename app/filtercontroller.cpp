@@ -52,7 +52,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 // KDE
-#include <nepomuk/kratingwidget.h>
+#include <kratingwidget.h>
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
 #include <nepomuk/resourcemanager.h>
 #endif

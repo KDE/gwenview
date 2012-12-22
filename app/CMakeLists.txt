@@ -3,6 +3,7 @@ include_directories(
     ${SOPRANO_INCLUDE_DIR}
     ${EXIV2_INCLUDE_DIR}
     ${LIBKONQ_INCLUDE_DIR}
+    ${KACTIVITIES_INCLUDE_DIRS}
     )
 
 if (KIPI_FOUND)
@@ -84,6 +85,7 @@ target_link_libraries(gwenview
     ${LIBKONQ_LIBRARY}
     ${SOPRANO_LIBRARIES}
     ${QT_QTCORE_LIBRARY}
+    ${KACTIVITIES_LIBRARY}
     )
 
 target_link_libraries(gwenview LINK_INTERFACE_LIBRARIES ${KDE4_KIO_LIBS} ${QT_QTCORE_LIBRARY})

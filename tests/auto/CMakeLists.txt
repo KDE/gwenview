@@ -46,3 +46,7 @@ gv_add_unit_test(importertest
 gv_add_unit_test(sorteddirmodeltest testutils.cpp)
 gv_add_unit_test(slidecontainerautotest slidecontainerautotest.cpp)
 gv_add_unit_test(imagemetainfomodeltest testutils.cpp)
+if (LCMS2_FOUND)
+    gv_add_unit_test(cmsprofiletest testutils.cpp)
+endif()
+gv_add_unit_test(recursivedirmodeltest testutils.cpp)

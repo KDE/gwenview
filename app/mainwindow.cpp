@@ -43,7 +43,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KEditToolBar>
 #include <KFileDialog>
 #include <KFileItem>
-#include <KGlobalSettings>
 #include <KLocale>
 #include <KMenuBar>
 #include <KMessageBox>
@@ -172,7 +171,6 @@ struct MainWindow::Private
     SideBar* mSideBar;
     QStackedWidget* mViewStackedWidget;
     FullScreenContent* mFullScreenContent;
-    QPalette mFullScreenPalette;
     SaveBar* mSaveBar;
     bool mStartSlideShowWhenDirListerCompleted;
     SlideShow* mSlideShow;
@@ -214,23 +212,6 @@ struct MainWindow::Private
 
     void setupWidgets()
     {
-        {
-            KSharedConfigPtr config;
-            QString name = GwenviewConfig::fullScreenColorScheme();
-            if (name.isEmpty()) {
-                // Default color scheme
-                QString path = KStandardDirs::locate("data", "gwenview/color-schemes/fullscreen.colors");
-                config = KSharedConfig::openConfig(path);
-            } else if (name.contains('/')) {
-                // Full path to a .colors file
-                config = KSharedConfig::openConfig(name);
-            } else {
-                // Standard KDE color scheme
-                config = KSharedConfig::openConfig(QString("color-schemes/%1.colors").arg(name), KConfig::FullConfig, "data");
-            }
-            mFullScreenPalette = KGlobalSettings::createApplicationPalette(config);
-        }
-
         mFullScreenContent = new FullScreenContent(q);
 
         mCentralSplitter = new Splitter(Qt::Horizontal, q);
@@ -278,7 +259,7 @@ struct MainWindow::Private
 
     void setupThumbnailView(QWidget* parent)
     {
-        mBrowseMainPage = new BrowseMainPage(parent, mDirModel, q->actionCollection());
+        mBrowseMainPage = new BrowseMainPage(parent, mDirModel, q->actionCollection(), mGvCore);
 
         mThumbnailView = mBrowseMainPage->thumbnailView();
         mUrlNavigator = mBrowseMainPage->urlNavigator();
@@ -315,7 +296,7 @@ struct MainWindow::Private
 
     void setupViewMainPage(QWidget* parent)
     {
-        mViewMainPage = new ViewMainPage(parent, mSlideShow, q->actionCollection());
+        mViewMainPage = new ViewMainPage(parent, mSlideShow, q->actionCollection(), mGvCore);
         connect(mViewMainPage, SIGNAL(captionUpdateRequested(QString)),
                 q, SLOT(setCaption(QString)));
         connect(mViewMainPage, SIGNAL(completed()),
@@ -361,6 +342,7 @@ struct MainWindow::Private
         mBrowseAction->setToolTip(i18nc("@info:tooltip", "Browse folders for images"));
         mBrowseAction->setCheckable(true);
         mBrowseAction->setIcon(KIcon("view-list-icons"));
+        mBrowseAction->setShortcut(Qt::Key_Escape);
         connect(mViewMainPage, SIGNAL(goToBrowseModeRequested()),
             mBrowseAction, SLOT(trigger()));
 
@@ -383,12 +365,13 @@ struct MainWindow::Private
             shortcut.setAlternate(Qt::Key_F11);
         }
         mFullScreenAction->setShortcut(shortcut);
+        connect(mViewMainPage, SIGNAL(toggleFullScreenRequested()),
+                mFullScreenAction, SLOT(trigger()));
 
         KAction* leaveFullScreenAction = view->addAction("leave_fullscreen", q, SLOT(leaveFullScreen()));
         leaveFullScreenAction->setIcon(KIcon("view-restore"));
         leaveFullScreenAction->setPriority(QAction::LowPriority);
         leaveFullScreenAction->setText(i18nc("@action", "Leave Fullscreen Mode"));
-        leaveFullScreenAction->setShortcut(Qt::Key_Escape);
 
         mGoToPreviousAction = view->addAction("go_previous", q, SLOT(goToPrevious()));
         mGoToPreviousAction->setPriority(QAction::LowPriority);
@@ -762,7 +745,6 @@ struct MainWindow::Private
         if (index.isValid()) {
             // Note: calling setCurrentIndex also takes care of selecting the index
             mThumbnailView->setCurrentIndex(index);
-            mThumbnailView->scrollTo(index, QAbstractItemView::PositionAtCenter);
             mUrlToSelect = KUrl();
         }
     }
@@ -940,6 +922,7 @@ void MainWindow::setInitialUrl(const KUrl& _url)
 
 void MainWindow::startSlideShow()
 {
+    d->mViewAction->trigger();
     // We need to wait until we have listed all images in the dirlister to
     // start the slideshow because the SlideShow objects needs an image list to
     // work.
@@ -959,6 +942,8 @@ void MainWindow::setActiveViewModeAction(QAction* action)
         if (d->mViewMainPage->isEmpty()) {
             openSelectedDocuments();
         }
+        d->mPreloadDirectionIsForward = true;
+        QTimer::singleShot(VIEW_PRELOAD_DELAY, this, SLOT(preloadNextUrl()));
     } else {
         d->mCurrentMainPageId = BrowseMainPageId;
         // Switching to browse mode
@@ -1118,8 +1103,12 @@ void MainWindow::openDirUrl(const KUrl& url)
         // If currentPath is      "/home/user/photos/2008/event"
         // and wantedPath is      "/home/user/photos"
         // pathToSelect should be "/home/user/photos/2008"
-        const QString currentPath = QDir::cleanPath(currentUrl.toLocalFile(KUrl::RemoveTrailingSlash));
-        const QString wantedPath  = QDir::cleanPath(url.toLocalFile(KUrl::RemoveTrailingSlash));
+
+        // To anyone considering using KUrl::toLocalFile() instead of
+        // KUrl::path() here. Please don't, using KUrl::path() is the right
+        // thing to do here.
+        const QString currentPath = QDir::cleanPath(currentUrl.path(KUrl::RemoveTrailingSlash));
+        const QString wantedPath  = QDir::cleanPath(url.path(KUrl::RemoveTrailingSlash));
         const QChar separator('/');
         const int slashCount = wantedPath.count(separator);
         const QString pathToSelect = currentPath.section(separator, 0, slashCount + 1);
@@ -1239,6 +1228,8 @@ void MainWindow::slotDirListerCompleted()
     } else if (!d->mUrlToSelect.isValid()) {
         d->goToFirstDocument();
     }
+    d->mThumbnailView->scrollToSelectedIndex();
+    d->mViewMainPage->thumbnailBar()->scrollToSelectedIndex();
 }
 
 void MainWindow::goToPrevious()
@@ -1314,7 +1305,7 @@ void MainWindow::toggleFullScreen(bool checked)
         menuBar()->hide();
         toolBar()->hide();
 
-        QApplication::setPalette(d->mFullScreenPalette);
+        QApplication::setPalette(d->mGvCore->palette(GvCore::FullScreenPalette));
         d->mFullScreenContent->setFullScreenMode(true);
         d->mBrowseMainPage->setFullScreenMode(true);
         d->mViewMainPage->setFullScreenMode(true);
@@ -1329,7 +1320,7 @@ void MainWindow::toggleFullScreen(bool checked)
         setAutoSaveSettings();
 
         // Back to normal
-        QApplication::setPalette(KGlobalSettings::createApplicationPalette());
+        QApplication::setPalette(d->mGvCore->palette(GvCore::NormalPalette));
         d->mFullScreenContent->setFullScreenMode(false);
         d->mBrowseMainPage->setFullScreenMode(false);
         d->mViewMainPage->setFullScreenMode(false);
@@ -1403,6 +1394,9 @@ void MainWindow::toggleSlideShow()
     if (d->mSlideShow->isRunning()) {
         d->mSlideShow->stop();
     } else {
+        if (!d->mViewAction->isChecked()) {
+            d->mViewAction->trigger();
+        }
         if (!d->mFullScreenAction->isChecked()) {
             d->mFullScreenAction->trigger();
         }
@@ -1504,22 +1498,9 @@ void MainWindow::loadConfig()
     d->mDirModel->setBlackListedExtensions(GwenviewConfig::blackListedExtensions());
     d->mDirModel->adjustKindFilter(MimeTypeUtils::KIND_VIDEO, GwenviewConfig::listVideos());
 
+    d->mStartMainPage->loadConfig();
     d->mViewMainPage->loadConfig();
     d->mBrowseMainPage->loadConfig();
-
-    // Colors
-    int value = GwenviewConfig::viewBackgroundValue();
-    QColor bgColor = QColor::fromHsv(0, 0, value);
-    QColor fgColor = value > 128 ? Qt::black : Qt::white;
-
-    QPalette pal = palette();
-    pal.setColor(QPalette::Base, bgColor);
-    pal.setColor(QPalette::Text, fgColor);
-
-    // Apply to widgets
-    d->mStartMainPage->applyPalette(pal);
-    d->mBrowseMainPage->setNormalPalette(pal);
-    d->mViewMainPage->setNormalPalette(pal);
 }
 
 void MainWindow::saveConfig()
@@ -1541,7 +1522,7 @@ void MainWindow::print()
 
 void MainWindow::preloadNextUrl()
 {
-    static bool disablePreload = qgetenv("GWENVIEW_MAX_UNREFERENCED_IMAGES") == "0";
+    static bool disablePreload = qgetenv("GV_MAX_UNREFERENCED_IMAGES") == "0";
     if (disablePreload) {
         kDebug() << "Preloading disabled";
         return;

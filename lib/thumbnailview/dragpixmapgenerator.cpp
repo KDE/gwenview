@@ -58,7 +58,7 @@ DragPixmap generate(const QList<QPixmap>& pixmaps, int totalCount)
     painter.translate(out.pix.width() / 2, out.pix.height());
 
     const int count = pixmaps.count();
-    qreal delta;
+    qreal delta = 0;
     if (count > 1) {
         painter.rotate(-SPREAD_ANGLE / 2);
         delta = SPREAD_ANGLE / (count - 1);

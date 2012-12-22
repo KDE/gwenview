@@ -52,6 +52,9 @@ public:
 Q_SIGNALS:
     void urlSelected(const KUrl& url);
 
+public Q_SLOTS:
+    void loadConfig();
+
 protected:
     virtual void showEvent(QShowEvent*);
 
@@ -59,7 +62,6 @@ private Q_SLOTS:
     void slotListViewActivated(const QModelIndex& index);
     void showRecentFoldersViewContextMenu(const QPoint& pos);
     void slotTagViewClicked(const QModelIndex& index);
-    void slotConfigChanged();
 
 private:
     StartMainPagePrivate* const d;

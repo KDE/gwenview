@@ -30,13 +30,6 @@ QTEST_KDEMAIN(ImageScalerTest, GUI)
 
 using namespace Gwenview;
 
-static void waitUntilMetaInfoLoaded(Document::Ptr doc)
-{
-    while (doc->loadingState() < Document::MetaInfoLoaded) {
-        QTest::qWait(100);
-    }
-}
-
 /**
  * Scale whole image in one pass
  */

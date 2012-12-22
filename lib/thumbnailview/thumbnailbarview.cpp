@@ -243,79 +243,85 @@ ThumbnailBarItemDelegate::~ThumbnailBarItemDelegate()
 /**
  * This proxy style makes it possible to override the value returned by
  * styleHint() which leads to not-so-nice results with some styles.
+ *
+ * We cannot use QProxyStyle because it takes ownership of the base style,
+ * which causes crash when user change styles.
  */
 class ProxyStyle : public QWindowsStyle
 {
 public:
-    ProxyStyle(QStyle* baseStyle) : QWindowsStyle()
- {
-        mBaseStyle = baseStyle;
+    ProxyStyle() : QWindowsStyle()
+    {
     }
 
     void drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, QPainter *p, const QWidget *w = 0) const
     {
-        mBaseStyle->drawPrimitive(pe, opt, p, w);
+        QApplication::style()->drawPrimitive(pe, opt, p, w);
     }
 
     void drawControl(ControlElement element, const QStyleOption *opt, QPainter *p, const QWidget *w = 0) const
     {
-        mBaseStyle->drawControl(element, opt, p, w);
+        QApplication::style()->drawControl(element, opt, p, w);
     }
 
     void drawComplexControl(ComplexControl cc, const QStyleOptionComplex *opt, QPainter *p, const QWidget *w = 0) const
     {
-        mBaseStyle->drawComplexControl(cc, opt, p, w);
+        QApplication::style()->drawComplexControl(cc, opt, p, w);
     }
 
     int styleHint(StyleHint sh, const QStyleOption *opt = 0, const QWidget *w = 0, QStyleHintReturn *shret = 0) const
     {
         switch (sh) {
         case SH_ItemView_ShowDecorationSelected:
+            // We want the highlight to cover our thumbnail
             return true;
         case SH_ScrollView_FrameOnlyAroundContents:
+            // Ensure the frame does not include the scrollbar. This ensure the
+            // scrollbar touches the edge of the window and thus can touch the
+            // edge of the screen when maximized
             return false;
         default:
-            return QWindowsStyle::styleHint(sh, opt, w, shret);
+            return QApplication::style()->styleHint(sh, opt, w, shret);
         }
     }
 
     void polish(QApplication* application)
     {
-        mBaseStyle->polish(application);
+        QApplication::style()->polish(application);
     }
 
     void polish(QPalette& palette)
     {
-        mBaseStyle->polish(palette);
+        QApplication::style()->polish(palette);
     }
 
     void polish(QWidget* widget)
     {
-        mBaseStyle->polish(widget);
+        QApplication::style()->polish(widget);
     }
 
     void unpolish(QWidget* widget)
     {
-        mBaseStyle->unpolish(widget);
+        QApplication::style()->unpolish(widget);
     }
 
     void unpolish(QApplication* application)
     {
-        mBaseStyle->unpolish(application);
+        QApplication::style()->unpolish(application);
     }
 
     int pixelMetric(PixelMetric pm, const QStyleOption* opt, const QWidget* widget) const
     {
         switch (pm) {
         case PM_MaximumDragDistance:
+            // Ensure the fullscreen thumbnailbar does not go away while
+            // dragging the scrollbar if the mouse cursor is too far away from
+            // the widget
             return -1;
         default:
-            return QWindowsStyle::pixelMetric(pm, opt, widget);
+            return QApplication::style()->pixelMetric(pm, opt, widget);
         }
     }
-
-private:
-    QStyle* mBaseStyle;
 };
 
 typedef int (QSize::*QSizeDimension)() const;
@@ -407,11 +413,18 @@ struct ThumbnailBarViewPrivate
             --widgetSize;
         }
 
-        int gridSize = (widgetSize - scrollBarSize - 2 * q->frameWidth()) / mRowCount;
-        if (q->thumbnailScaleMode() == ThumbnailView::ScaleToFit) {
-            q->setGridSize(QSize(gridSize, gridSize));
+        int gridWidth, gridHeight;
+        if (mOrientation == Qt::Horizontal) {
+            gridHeight = (widgetSize - scrollBarSize - 2 * q->frameWidth()) / mRowCount;
+            gridWidth = qRound(gridHeight * q->thumbnailAspectRatio());
+        } else {
+            gridWidth = (widgetSize - scrollBarSize - 2 * q->frameWidth()) / mRowCount;
+            gridHeight = qRound(gridWidth / q->thumbnailAspectRatio());
         }
-        q->setThumbnailSize(gridSize - ITEM_MARGIN * 2);
+        if (q->thumbnailScaleMode() == ThumbnailView::ScaleToFit) {
+            q->setGridSize(QSize(gridWidth, gridHeight));
+        }
+        q->setThumbnailWidth(gridWidth - ITEM_MARGIN * 2);
     }
 };
 
@@ -431,7 +444,7 @@ ThumbnailBarView::ThumbnailBarView(QWidget* parent)
     setObjectName(QLatin1String("thumbnailBarView"));
     setWrapping(true);
 
-    d->mStyle = new ProxyStyle(style());
+    d->mStyle = new ProxyStyle;
     setStyle(d->mStyle);
 }
 

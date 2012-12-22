@@ -43,7 +43,7 @@ public:
     virtual QSize sizeHint() const;
 
 public Q_SLOTS:
-    void setSourceUrl(const KUrl&);
+    void setSourceUrl(const KUrl&, const QString& deviceUdi);
 
 private Q_SLOTS:
     void startImport();
