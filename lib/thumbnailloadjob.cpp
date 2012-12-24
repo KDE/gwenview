@@ -259,12 +259,10 @@ bool ThumbnailThread::loadThumbnail(bool* needCaching)
     // Generate thumbnail from full image
     QSize originalSize = reader.size();
     if (originalSize.isValid() && reader.supportsOption(QImageIOHandler::ScaledSize)) {
-        int scale;
-        const int maxSize = qMax(originalSize.width(), originalSize.height());
-        for (scale = 1; pixelSize*scale * 2 <= maxSize && scale <= 8; scale *= 2) {}
-        const QSize scaledSize = originalSize / scale;
+        QSizeF scaledSize = originalSize;
+        scaledSize.scale(pixelSize, pixelSize, Qt::KeepAspectRatio);
         if (!scaledSize.isEmpty()) {
-            reader.setScaledSize(scaledSize);
+            reader.setScaledSize(scaledSize.toSize());
         }
     }
 
