@@ -198,8 +198,9 @@ static bool loadJpeg(QImage* image, QIODevice* ioDevice, QSize scaledSize)
         expand24to32bpp(image);
     }
 
-    if (scaledSize.isValid()) {
-        *image = image->scaled(scaledSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    const QSize actualSize(cinfo.output_width, cinfo.output_height);
+    if (scaledSize.isValid() && actualSize != scaledSize) {
+        *image = image->scaled(scaledSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     }
 
     jpeg_finish_decompress(&cinfo);
