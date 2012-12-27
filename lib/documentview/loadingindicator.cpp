@@ -75,8 +75,10 @@ void LoadingIndicator::paint(QPainter* painter, const QStyleOptionGraphicsItem*,
 
 void LoadingIndicator::showNextFrame()
 {
-    d->mIndex = (d->mIndex + 1) % d->mSequence.frameCount();
-    update();
+    if (d->mSequence.frameCount() > 0) {
+        d->mIndex = (d->mIndex + 1) % d->mSequence.frameCount();
+        update();
+    }
 }
 
 QVariant LoadingIndicator::itemChange(GraphicsItemChange change, const QVariant& value)
