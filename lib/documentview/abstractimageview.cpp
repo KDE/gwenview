@@ -55,7 +55,8 @@ struct AbstractImageViewPrivate
     bool mZoomToFit;
     QPointF mImageOffset;
     QPointF mScrollPos;
-    QPointF mLastDragPos;
+    QPointF mStartDragPos;
+    QPoint mScreenCenter;
 
     void adjustImageOffset(Verbosity verbosity = Notify)
     {
@@ -298,51 +299,39 @@ void AbstractImageView::mousePressEvent(QGraphicsSceneMouseEvent* event)
         }
     }
 
-    d->mLastDragPos = event->pos();
+    if (visibleImageSize() != documentSize() * zoom() && event->button() == Qt::LeftButton) {
+        d->mStartDragPos = QCursor::pos();
+        QPointF screenCenter = event->screenPos() - event->pos() + QPointF(boundingRect().width()/2., boundingRect().height()/2.);
+        d->mScreenCenter = screenCenter.toPoint();
+        QCursor::setPos(d->mScreenCenter);
+    }
     updateCursor();
 }
 
 void AbstractImageView::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 {
     QGraphicsItem::mouseMoveEvent(event);
+    updateCursor();
 
-    QPointF mousePos = event->pos();
-    QPointF newScrollPos = d->mScrollPos + d->mLastDragPos - mousePos;
-
-    // Wrap mouse pos
-    qreal maxWidth = boundingRect().width();
-    qreal maxHeight = boundingRect().height();
-    // We need a margin because if the window is maximized, the mouse may not
-    // be able to go past the bounding rect.
-    // The mouse get placed 1 pixel before/after the margin to avoid getting
-    // considered as needing to wrap the other way in next mouseMoveEvent
-    // (because we don't check the move vector)
-    const int margin = 5;
-    if (mousePos.x() <= margin) {
-        mousePos.setX(maxWidth - margin - 1);
-    } else if (mousePos.x() >= maxWidth - margin) {
-        mousePos.setX(margin + 1);
-    }
-    if (mousePos.y() <= margin) {
-        mousePos.setY(maxHeight - margin - 1);
-    } else if (mousePos.y() >= maxHeight - margin) {
-        mousePos.setY(margin + 1);
+    if (visibleImageSize() == documentSize() * zoom()) {
+        return;
     }
 
-    // Set mouse pos (Hackish translation to screen coords!)
-    QPointF screenDelta = event->screenPos() - event->pos();
-    QCursor::setPos((mousePos + screenDelta).toPoint());
+    // delta has to be a QPoint (not a QPointF)
+    // otherwise d->setScrollPos will be slow.
+    QPoint delta = d->mScreenCenter - QCursor::pos();
+    QPointF newScrollPos = d->mScrollPos + delta;
+    QCursor::setPos(d->mScreenCenter);
 
-    d->mLastDragPos = mousePos;
     d->setScrollPos(newScrollPos);
-
 }
 
 void AbstractImageView::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 {
     QGraphicsItem::mouseReleaseEvent(event);
-    if (!d->mLastDragPos.isNull()) {
-        d->mLastDragPos = QPointF();
+    if (!d->mStartDragPos.isNull()) {
+        QCursor::setPos(d->mStartDragPos.toPoint());
+        d->mStartDragPos = QPointF();
     }
     updateCursor();
 }
@@ -496,10 +485,14 @@ void AbstractImageView::updateCursor()
     if (d->mModifierKeyInfo->isKeyPressed(Qt::Key_Control)) {
         setCursor(d->mZoomCursor);
     } else {
-        if (d->mLastDragPos.isNull()) {
+        if (d->mStartDragPos.isNull()) {
             setCursor(Qt::OpenHandCursor);
         } else {
-            setCursor(Qt::ClosedHandCursor);
+            if (visibleImageSize() == documentSize() * zoom()) {
+                setCursor(Qt::ClosedHandCursor);
+            } else {
+                setCursor(Qt::BlankCursor);
+            }
         }
     }
 }
