@@ -694,7 +694,11 @@ void ViewMainPage::openUrls(const KUrl::List& allUrls, const KUrl& currentUrl)
 
 void ViewMainPage::reload()
 {
-    Document::Ptr doc = d->currentView()->document();
+    DocumentView *view = d->currentView();
+    if (!view) {
+        return;
+    }
+    Document::Ptr doc = view->document();
     if (!doc) {
         kWarning() << "!doc";
         return;
