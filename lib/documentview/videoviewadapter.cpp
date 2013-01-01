@@ -237,6 +237,11 @@ VideoViewAdapter::VideoViewAdapter()
 
 VideoViewAdapter::~VideoViewAdapter()
 {
+    // This prevents a memory leak that can occur after switching
+    // to the next/previous video. For details see:
+    // https://git.reviewboard.kde.org/r/108070/
+    d->mMediaObject->stop();
+
     delete d;
 }
 
