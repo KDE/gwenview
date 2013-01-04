@@ -347,7 +347,7 @@ struct ViewMainPagePrivate
         if (oldView) {
             oldView->setCurrent(false);
             Q_ASSERT(mActivityResources.contains(oldView));
-            mActivityResources[oldView]->notifyFocusedOut();
+            mActivityResources.value(oldView)->notifyFocusedOut();
         }
         view->setCurrent(true);
         mDocumentViewController->setView(view);
@@ -361,7 +361,7 @@ struct ViewMainPagePrivate
         mThumbnailBar->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Current);
 
         Q_ASSERT(mActivityResources.contains(view));
-        mActivityResources[view]->notifyFocusedIn();
+        mActivityResources.value(view)->notifyFocusedIn();
     }
 
     QModelIndex indexForView(DocumentView* view) const
@@ -671,7 +671,7 @@ void ViewMainPage::openUrls(const KUrl::List& allUrls, const KUrl& currentUrl)
         KUrl url = it.key();
         DocumentView* view = it.value();
         view->openUrl(url, setup);
-        d->mActivityResources[view]->setUri(url);
+        d->mActivityResources.value(view)->setUri(url);
     }
 
     // Init views
