@@ -32,11 +32,28 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QCursor>
 #include <QGraphicsSceneMouseEvent>
+#include <QApplication>
 
 namespace Gwenview
 {
 
 static const int UNIT_STEP = 16;
+
+static void restoreAndSetOverrideCursor(const Qt::CursorShape& newShape)
+{
+    if (!QApplication::overrideCursor()) {
+        QApplication::setOverrideCursor(newShape);
+        return;
+    }
+    const Qt::CursorShape currentShape = QApplication::overrideCursor()->shape();
+    if (newShape == currentShape) {
+        return;
+    }
+    while (QApplication::overrideCursor()) {
+        QApplication::restoreOverrideCursor();
+    }
+    QApplication::setOverrideCursor(newShape);
+}
 
 struct AbstractImageViewPrivate
 {
@@ -299,12 +316,14 @@ void AbstractImageView::mousePressEvent(QGraphicsSceneMouseEvent* event)
         }
     }
 
+    // Start panning if image is only partially visible and left mouse button is pressed
     if (visibleImageSize() != documentSize() * zoom() && event->button() == Qt::LeftButton) {
         d->mStartDragPos = QCursor::pos();
         QPointF screenCenter = event->screenPos() - event->pos() + QPointF(boundingRect().width()/2., boundingRect().height()/2.);
         d->mScreenCenter = screenCenter.toPoint();
         QCursor::setPos(d->mScreenCenter);
     }
+
     updateCursor();
 }
 
@@ -313,7 +332,13 @@ void AbstractImageView::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
     QGraphicsItem::mouseMoveEvent(event);
     updateCursor();
 
+    // Don't pan if whole image is visible
     if (visibleImageSize() == documentSize() * zoom()) {
+        return;
+    }
+
+    // Don't pan if Ctrl key is pressed
+    if (event->modifiers() & Qt::ControlModifier) {
         return;
     }
 
@@ -396,6 +421,8 @@ void AbstractImageView::keyPressEvent(QKeyEvent* event)
         return;
     }
     d->setScrollPos(d->mScrollPos + delta);
+
+    updateCursor();
 }
 
 void AbstractImageView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
@@ -483,15 +510,19 @@ void AbstractImageView::setEnlargeSmallerImages(bool value)
 void AbstractImageView::updateCursor()
 {
     if (d->mModifierKeyInfo->isKeyPressed(Qt::Key_Control)) {
+        QApplication::restoreOverrideCursor();
         setCursor(d->mZoomCursor);
     } else {
         if (d->mStartDragPos.isNull()) {
-            setCursor(Qt::OpenHandCursor);
-        } else {
-            if (visibleImageSize() == documentSize() * zoom()) {
-                setCursor(Qt::ClosedHandCursor);
+            if (QApplication::mouseButtons() == Qt::LeftButton) {
+                restoreAndSetOverrideCursor(Qt::ClosedHandCursor);
             } else {
-                setCursor(Qt::BlankCursor);
+                QApplication::restoreOverrideCursor();
+                setCursor(Qt::OpenHandCursor);
+            }
+        } else {
+            if (visibleImageSize() != documentSize() * zoom()) {
+                restoreAndSetOverrideCursor(Qt::BlankCursor);
             }
         }
     }
