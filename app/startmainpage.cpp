@@ -207,6 +207,8 @@ StartMainPage::StartMainPage(QWidget* parent, GvCore* gvCore)
     d->updateHistoryTab();
     connect(GwenviewConfig::self(), SIGNAL(configChanged()),
             SLOT(loadConfig()));
+
+    d->mRecentFoldersView->setFocus();
 }
 
 StartMainPage::~StartMainPage()
@@ -273,6 +275,10 @@ void StartMainPage::showEvent(QShowEvent* event)
             d->mRecentFoldersView->setItemDelegate(delegate);
             d->mRecentFoldersView->setThumbnailWidth(128);
             d->mRecentFoldersView->setCreateThumbnailsForRemoteUrls(false);
+            QModelIndex index = d->mRecentFoldersView->model()->index(0, 0);
+            if (index.isValid()) {
+                d->mRecentFoldersView->setCurrentIndex(index);
+            }
         }
         if (!d->mRecentUrlsView->model()) {
             d->mRecentUrlsView->setModel(d->mGvCore->recentUrlsModel());
