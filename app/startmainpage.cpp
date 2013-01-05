@@ -272,6 +272,7 @@ void StartMainPage::showEvent(QShowEvent* event)
             delegate->setTextElideMode(Qt::ElideLeft);
             d->mRecentFoldersView->setItemDelegate(delegate);
             d->mRecentFoldersView->setThumbnailWidth(128);
+            d->mRecentFoldersView->setCreateThumbnailsForRemoteUrls(false);
         }
         if (!d->mRecentUrlsView->model()) {
             d->mRecentUrlsView->setModel(d->mGvCore->recentUrlsModel());

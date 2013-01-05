@@ -111,6 +111,8 @@ public:
 
     void updateThumbnailSize();
 
+    void setCreateThumbnailsForRemoteUrls(bool createRemoteThumbs);
+
 Q_SIGNALS:
     /**
      * It seems we can't use the 'activated()' signal for now because it does

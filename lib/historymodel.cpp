@@ -135,8 +135,9 @@ private:
         , mDateTime(dateTime)
         , mConfigPath(configPath) {
         mUrl.cleanPath();
-        mUrl.adjustPath(KUrl::RemoveTrailingSlash);
-        setText(mUrl.pathOrUrl());
+        KUrl urlForView = mUrl;
+        urlForView.adjustPath(KUrl::RemoveTrailingSlash);
+        setText(urlForView.pathOrUrl());
 
         QString iconName = KMimeType::iconNameForUrl(mUrl);
         setIcon(KIcon(iconName));

@@ -60,7 +60,7 @@ public:
     QAbstractItemModel* recentUrlsModel() const;
     AbstractSemanticInfoBackEnd* semanticInfoBackEnd() const;
 
-    void addUrlToRecentFolders(const KUrl&);
+    void addUrlToRecentFolders(KUrl);
     void addUrlToRecentUrls(const KUrl& url);
 
     /**

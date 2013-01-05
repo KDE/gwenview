@@ -186,13 +186,16 @@ AbstractSemanticInfoBackEnd* GvCore::semanticInfoBackEnd() const
     return d->mDirModel->semanticInfoBackEnd();
 }
 
-void GvCore::addUrlToRecentFolders(const KUrl& url)
+void GvCore::addUrlToRecentFolders(KUrl url)
 {
     if (!GwenviewConfig::historyEnabled()) {
         return;
     }
     if (!url.isValid()) {
         return;
+    }
+    if (url.path() != "") { // This check is a workaraound for bug #312060
+        url.adjustPath(KUrl::AddTrailingSlash);
     }
     recentFoldersModel();
     d->mRecentFoldersModel->addUrl(url);
