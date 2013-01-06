@@ -89,7 +89,13 @@ DocumentViewContainer::DocumentViewContainer(QWidget* parent)
     d->q = this;
     d->mScene = new QGraphicsScene(this);
     if (GwenviewConfig::animationMethod() == DocumentView::GLAnimation) {
-        setViewport(new QGLWidget);
+        QGLWidget* glWidget = new QGLWidget;
+        if (glWidget->isValid()) {
+            setViewport(glWidget);
+        } else {
+            kWarning() << "Failed to initialize OpenGL support!";
+            delete glWidget;
+        }
     }
     setScene(d->mScene);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
