@@ -27,12 +27,12 @@ For stable releases, GWENVIEW_VERSION should be "$major.$minor.$patch",
 matching KDE SC versions.
 
 For unstable releases, it should be "$major.$minor.$patch $suffix", where
-suffix is one of "alpha$N", "beta$N" or "rc$N".
+suffix is one of "pre", "alpha$N", "beta$N" or "rc$N".
 
 When you change GWENVIEW_VERSION, add the new version in Bugzilla as well:
 https://bugs.kde.org/editversions.cgi?product=gwenview
 
 */
-#define GWENVIEW_VERSION "4.10.0 rc3"
+#define GWENVIEW_VERSION "4.11.0 pre"
 
 #endif /* VERSION_H */
