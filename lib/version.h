@@ -1,7 +1,7 @@
 // vim: set tabstop=4 shiftwidth=4 expandtab:
 /*
 Gwenview: an image viewer
-Copyright 2010 Aurélien Gâteau <agateau@kde.org>
+Copyright 2010-2013 Aurélien Gâteau <agateau@kde.org>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -21,6 +21,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #ifndef VERSION_H
 #define VERSION_H
 
-#define GWENVIEW_VERSION "2.10.0"
+/*
+
+For stable releases, GWENVIEW_VERSION should be "$major.$minor.$patch",
+matching KDE SC versions.
+
+For unstable releases, it should be "$major.$minor.$patch $suffix", where
+suffix is one of "alpha$N", "beta$N" or "rc$N".
+
+When you change GWENVIEW_VERSION, add the new version in Bugzilla as well:
+https://bugs.kde.org/editversions.cgi?product=gwenview
+
+*/
+#define GWENVIEW_VERSION "4.10.0 rc3"
 
 #endif /* VERSION_H */
