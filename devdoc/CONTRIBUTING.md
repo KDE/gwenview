@@ -2,6 +2,14 @@
 
 Great to hear you want to contribute to Gwenview! Patches are always welcome.
 
+# Bug tracker
+
+Gwenview bugs are tracked on KDE Bugzilla (<http://bugs.kde.org>). They are
+assigned to a fake user by default: `gwenview-bugs-null@kde.org`. To get
+notified when new bugs are filed, add this user to the list of users you follow.
+You can do so from Bugzilla by editing your user preferences, then go in the
+"Email Preferences" tab (<https://bugs.kde.org/userprefs.cgi?tab=email>)
+
 # Code review
 
 Patches should be sent for review on <http://git.reviewboard.kde.org>. You will
