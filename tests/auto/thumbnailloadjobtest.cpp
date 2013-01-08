@@ -21,6 +21,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Qt
 #include <QDir>
+#include <QFile>
 #include <QImage>
 #include <QPainter>
 
@@ -34,6 +35,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "../lib/imageformats/imageformats.h"
 #include "../lib/thumbnailloadjob.h"
 #include "testutils.h"
+
+// libc
+#include <errno.h>
+#include <string.h>
 
 using namespace Gwenview;
 
@@ -141,6 +146,16 @@ void ThumbnailLoadJobTest::testLoadLocal()
 
         QSize originalSize = mSandBox.mSizeHash.value(item.url().fileName());
         uint mtime = item.time(KFileItem::ModificationTime).toTime_t();
+
+        if (mtime == uint(-1)) {
+            // This happens from time to time on build.kde.org, but I haven't
+            // been able to reproduce it locally, so let's try to gather more
+            // information.
+            kWarning() << "mtime == -1 for url" << url << ". This should not happen!";
+            kWarning() << "errno:" << errno << "message:" << strerror(errno);
+            kWarning() << "QFile::exists(" << url.toLocalFile() << "):" << QFile::exists(url.toLocalFile());
+            QFAIL("Invalid time for test KFileItem");
+        }
 
         QCOMPARE(thumb.text("Thumb::Image::Width"), QString::number(originalSize.width()));
         QCOMPARE(thumb.text("Thumb::Image::Height"), QString::number(originalSize.height()));
