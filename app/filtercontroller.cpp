@@ -53,7 +53,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KDE
 #include <kratingwidget.h>
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
-#include <nepomuk/resourcemanager.h>
+#include <nepomuk2/resourcemanager.h>
 #endif
 
 // Local
@@ -572,7 +572,7 @@ FilterController::FilterController(QFrame* frame, SortedDirModel* dirModel)
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
     // Only add filters if Nepomuk is running
-    if (Nepomuk::ResourceManager::instance()->init() == 0) {
+    if (Nepomuk2::ResourceManager::instance()->init() == 0) {
 #endif
         d->addAction(i18nc("@action:inmenu", "Filter by Rating"), SLOT(addFilterByRating()));
         d->addAction(i18nc("@action:inmenu", "Filter by Tag"), SLOT(addFilterByTag()));

@@ -76,7 +76,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #endif
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
-#include <nepomuk/resourcemanager.h>
+#include <nepomuk2/resourcemanager.h>
 #endif
 #include "semanticinfocontextmanageritem.h"
 #endif
@@ -487,7 +487,7 @@ struct MainWindow::Private
         // only if Nepomuk is available
         // When using Fake backend always create it
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
-        if (Nepomuk::ResourceManager::instance()->init() == 0) {
+        if (Nepomuk2::ResourceManager::instance()->init() == 0) {
 #endif
             semanticInfoItem = new SemanticInfoContextManagerItem(mContextManager, actionCollection, mViewMainPage);
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK

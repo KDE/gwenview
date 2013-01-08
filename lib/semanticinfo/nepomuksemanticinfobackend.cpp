@@ -33,10 +33,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KUrl>
 
 // Nepomuk
-#include <nepomuk/global.h>
-#include <nepomuk/resource.h>
-#include <nepomuk/resourcemanager.h>
-#include <nepomuk/tag.h>
+#include <nepomuk2/resource.h>
+#include <nepomuk2/resourcemanager.h>
+#include <nepomuk2/tag.h>
 
 // Local
 
@@ -63,13 +62,13 @@ struct RetrieveTask : public Task
 
     virtual void execute()
     {
-        Nepomuk::Resource resource(mUrl);
+        Nepomuk2::Resource resource(mUrl);
 
         SemanticInfo semanticInfo;
         semanticInfo.mRating = resource.rating();
         semanticInfo.mDescription = resource.description();
-        Q_FOREACH(const Nepomuk::Tag & tag, resource.tags()) {
-            semanticInfo.mTags << KUrl(tag.resourceUri()).url();
+        Q_FOREACH(const Nepomuk2::Tag & tag, resource.tags()) {
+            semanticInfo.mTags << KUrl(tag.uri()).url();
         }
         mBackEnd->emitSemanticInfoRetrieved(mUrl, semanticInfo);
     }
@@ -85,12 +84,12 @@ struct StoreTask : public Task
 
     virtual void execute()
     {
-        Nepomuk::Resource resource(mUrl);
+        Nepomuk2::Resource resource(mUrl);
         resource.setRating(mSemanticInfo.mRating);
         resource.setDescription(mSemanticInfo.mDescription);
-        QList<Nepomuk::Tag> tags;
+        QList<Nepomuk2::Tag> tags;
         Q_FOREACH(const SemanticInfoTag & uri, mSemanticInfo.mTags) {
-            tags << Nepomuk::Tag(KUrl(uri));
+            tags << Nepomuk2::Tag(KUrl(uri));
         }
         resource.setTags(tags);
     }
@@ -172,7 +171,7 @@ NepomukSemanticInfoBackEnd::NepomukSemanticInfoBackEnd(QObject* parent)
 , d(new NepomukSemanticInfoBackEndPrivate)
 {
     // FIXME: Check it returns 0
-    Nepomuk::ResourceManager::instance()->init();
+    Nepomuk2::ResourceManager::instance()->init();
 }
 
 NepomukSemanticInfoBackEnd::~NepomukSemanticInfoBackEnd()
@@ -191,8 +190,8 @@ TagSet NepomukSemanticInfoBackEnd::allTags() const
 void NepomukSemanticInfoBackEnd::refreshAllTags()
 {
     d->mAllTags.clear();
-    Q_FOREACH(const Nepomuk::Tag & tag, Nepomuk::Tag::allTags()) {
-        d->mAllTags << KUrl(tag.resourceUri()).url();
+    Q_FOREACH(const Nepomuk2::Tag & tag, Nepomuk2::Tag::allTags()) {
+        d->mAllTags << KUrl(tag.uri()).url();
     }
 }
 
@@ -216,7 +215,7 @@ void NepomukSemanticInfoBackEnd::emitSemanticInfoRetrieved(const KUrl& url, cons
 QString NepomukSemanticInfoBackEnd::labelForTag(const SemanticInfoTag& uriString) const
 {
     KUrl uri(uriString);
-    Nepomuk::Tag tag(uri);
+    Nepomuk2::Tag tag(uri);
     if (!tag.exists()) {
         kError() << "No tag for uri" << uri << ". This should not happen!";
         return QString();
@@ -226,14 +225,14 @@ QString NepomukSemanticInfoBackEnd::labelForTag(const SemanticInfoTag& uriString
 
 SemanticInfoTag NepomukSemanticInfoBackEnd::tagForLabel(const QString& label)
 {
-    Nepomuk::Tag tag(label);
+    Nepomuk2::Tag tag(label);
     SemanticInfoTag uri;
     if (tag.exists()) {
-        uri = KUrl(tag.resourceUri()).url();
+        uri = KUrl(tag.uri()).url();
     } else {
         // Not found, create the tag
         tag.setLabel(label);
-        uri = KUrl(tag.resourceUri()).url();
+        uri = KUrl(tag.uri()).url();
         d->mAllTags << uri;
         emit tagAdded(uri, label);
     }

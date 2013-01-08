@@ -45,9 +45,9 @@ find_package(LCMS2)
 macro_log_feature(LCMS2_FOUND "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "2.0" "Used for color management")
 
 if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
-    # We need Nepomuk widgets for all backends but "None"
-    find_package(Nepomuk)
-    macro_log_feature(Nepomuk_FOUND "Nepomuk" "Provides desktop-wide semantic information support" "http://www.kde.org" TRUE "" "")
+    # We need Nepomuk Core for all backends but "None"
+    find_package(NepomukCore)
+    macro_log_feature(NepomukCore_FOUND "Nepomuk Core Libraries" "Provides desktop-wide semantic information support" "http://www.kde.org" TRUE "" "")
 endif (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 
 find_package(LibKonq)

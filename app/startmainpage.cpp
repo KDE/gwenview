@@ -48,8 +48,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #endif
 
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
-#include <nepomuk/resourcemanager.h>
-#include <nepomuk/tag.h>
+#include <nepomuk2/resourcemanager.h>
+#include <nepomuk2/tag.h>
 #endif
 
 namespace Gwenview
@@ -107,7 +107,7 @@ struct StartMainPagePrivate : public Ui_StartMainPage
     void setupSearchUi()
     {
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
-        if (Nepomuk::ResourceManager::instance()->init() == 0) {
+        if (Nepomuk2::ResourceManager::instance()->init() == 0) {
             mTagView->setModel(TagModel::createAllTagsModel(mTagView, mGvCore->semanticInfoBackEnd()));
             mTagView->show();
             mTagLabel->hide();
@@ -221,8 +221,8 @@ void StartMainPage::slotTagViewClicked(const QModelIndex& index)
         return;
     }
     // FIXME: Check label encoding
-    Nepomuk::Tag tagr(index.data().toString());
-    KUrl url = KUrl(tagr.resourceUri()).url();
+    Nepomuk2::Tag tagr(index.data().toString());
+    KUrl url = KUrl(tagr.uri()).url();
     emit urlSelected(url);
 #endif
 }

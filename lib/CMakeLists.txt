@@ -222,7 +222,7 @@ endif( WIN32 )
 
 if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
     target_link_libraries(gwenviewlib
-        ${NEPOMUK_LIBRARIES}
+        ${NEPOMUK_CORE_LIBRARY}
         ${SOPRANO_LIBRARIES}
         )
 endif (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)

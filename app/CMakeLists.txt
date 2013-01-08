@@ -95,7 +95,7 @@ if (KIPI_FOUND)
 endif (KIPI_FOUND)
 
 if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
-    target_link_libraries(gwenview ${NEPOMUK_LIBRARIES})
+    target_link_libraries(gwenview ${NEPOMUK_CORE_LIBRARY})
 endif (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 
 install(TARGETS gwenview
