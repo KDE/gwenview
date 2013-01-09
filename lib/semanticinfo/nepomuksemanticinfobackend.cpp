@@ -33,9 +33,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KUrl>
 
 // Nepomuk
-#include <nepomuk2/resource.h>
-#include <nepomuk2/resourcemanager.h>
-#include <nepomuk2/tag.h>
+#include <Nepomuk2/Resource>
+#include <Nepomuk2/ResourceManager>
+#include <Nepomuk2/Tag>
 
 // Local
 

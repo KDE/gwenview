@@ -76,7 +76,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #endif
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
-#include <nepomuk2/resourcemanager.h>
+#include <Nepomuk2/ResourceManager>
 #endif
 #include "semanticinfocontextmanageritem.h"
 #endif
