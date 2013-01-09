@@ -47,6 +47,9 @@ macro_log_feature(LCMS2_FOUND "LittleCMS" "Color management engine" "http://www.
 if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
     # We need Nepomuk Core for all backends but "None"
     find_package(NepomukCore REQUIRED)
+    # Find Soprano because nepomuk Core does not automatically brings in the
+    # Soprano includes it needs
+    find_package(Soprano REQUIRED)
     macro_log_feature(NepomukCore_FOUND "Nepomuk Core Libraries" "Provides desktop-wide semantic information support" "http://www.kde.org" TRUE "" "")
 endif (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 
