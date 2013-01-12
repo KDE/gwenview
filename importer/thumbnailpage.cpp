@@ -82,11 +82,6 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
     ThumbnailPage* q;
     SerializedUrlMap mUrlMap;
 
-    ThumbnailPagePrivate()
-    {
-        mUrlMap.setConfigGroup(KConfigGroup(KGlobal::config(), URL_FOR_BASE_URL_GROUP));
-    }
-
     KIcon mSrcBaseIcon;
     QString mSrcBaseName;
     KUrl mSrcBaseUrl;
@@ -233,6 +228,7 @@ ThumbnailPage::ThumbnailPage()
 : d(new ThumbnailPagePrivate)
 {
     d->q = this;
+    d->mUrlMap.setConfigGroup(KConfigGroup(KGlobal::config(), URL_FOR_BASE_URL_GROUP));
     d->setupUi(this);
     d->setupIcons();
     d->setupDirModel();
