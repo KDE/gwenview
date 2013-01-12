@@ -347,10 +347,14 @@ void AbstractImageView::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
         return;
     }
 
+    int speed = 1;
+    if (event->modifiers() & Qt::ShiftModifier) {
+        speed = 4;
+    }
     // delta has to be a QPoint (not a QPointF)
     // otherwise d->setScrollPos will be slow.
     QPoint delta = d->mScreenCenter - QCursor::pos();
-    QPointF newScrollPos = d->mScrollPos + delta;
+    QPointF newScrollPos = d->mScrollPos + speed * delta;
     QCursor::setPos(d->mScreenCenter);
 
     d->setScrollPos(newScrollPos);
