@@ -392,6 +392,7 @@ void ThumbnailLoadJob::moveThumbnail(const KUrl& oldUrl, const KUrl& newUrl)
 ThumbnailLoadJob::ThumbnailLoadJob(const KFileItemList& items, ThumbnailGroup::Enum group)
 : KIO::Job()
 , mState(STATE_NEXTTHUMB)
+, mOriginalTime(0)
 , mThumbnailGroup(group)
 {
     LOG(this);
