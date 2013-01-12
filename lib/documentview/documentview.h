@@ -60,7 +60,11 @@ public:
     static const int AnimDuration;
 
     struct Setup {
-        Setup() : valid(false) {}
+        Setup()
+        : valid(false)
+        , zoomToFit(false)
+        , zoom(0)
+        {}
         bool valid:1;
         bool zoomToFit:1;
         qreal zoom;
