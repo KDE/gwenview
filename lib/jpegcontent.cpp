@@ -358,6 +358,8 @@ static QMatrix createScaleMatrix(int dx, int dy)
 struct OrientationInfo
 {
     OrientationInfo()
+    : orientation(NOT_AVAILABLE)
+    , jxform(JXFORM_NONE)
     {}
 
     OrientationInfo(Orientation o, QMatrix m, JXFORM_CODE j)
@@ -379,7 +381,7 @@ static const OrientationInfoList& orientationInfoList()
         QMatrix vflip = createScaleMatrix(1, -1);
 
         list
-                << OrientationInfo(NOT_AVAILABLE, QMatrix(), JXFORM_NONE)
+                << OrientationInfo()
                 << OrientationInfo(NORMAL, QMatrix(), JXFORM_NONE)
                 << OrientationInfo(HFLIP, hflip, JXFORM_FLIP_H)
                 << OrientationInfo(ROT_180, createRotMatrix(180), JXFORM_ROT_180)
