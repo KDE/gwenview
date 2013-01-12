@@ -745,19 +745,11 @@ void ViewMainPage::deselectView(DocumentView* view)
     if (view == d->currentView()) {
         // We need to find a new view to set as current
         int idx = d->mDocumentViews.indexOf(view);
-        // Look for the next visible view after the current one
-        for (int newIdx = idx + 1; newIdx < d->mDocumentViews.count(); ++newIdx) {
-            newCurrentView = d->mDocumentViews.at(newIdx);
-            break;
-        }
-        if (!newCurrentView) {
-            // No visible view found after the current one, look before
-            for (int newIdx = idx - 1; newIdx >= 0; --newIdx) {
-                newCurrentView = d->mDocumentViews.at(newIdx);
-                break;
-            }
-        }
-        if (!newCurrentView) {
+        if (idx + 1 < d->mDocumentViews.count()) {
+            newCurrentView = d->mDocumentViews.at(idx + 1);
+        } else if (idx > 0) {
+            newCurrentView = d->mDocumentViews.at(idx - 1);
+        } else {
             kWarning() << "No view found to set as current, this should not happen!";
         }
     }
