@@ -39,6 +39,10 @@ namespace FullScreenTheme
 
 struct RenderInfo
 {
+    RenderInfo()
+    : borderRadius(0)
+    , padding(0)
+    {}
     qreal borderRadius;
     QPen borderPen;
     QBrush bgBrush;
