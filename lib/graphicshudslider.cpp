@@ -356,6 +356,7 @@ void GraphicsHudSlider::doRepeatAction(int time)
     case QAbstractSlider::SliderSingleStepAdd:
     case QAbstractSlider::SliderSingleStepSub:
         step = d->mSingleStep;
+        break;
     case QAbstractSlider::SliderPageStepAdd:
     case QAbstractSlider::SliderPageStepSub:
         step = d->mPageStep;
