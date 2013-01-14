@@ -1541,7 +1541,12 @@ void MainWindow::preloadNextUrl()
         return;
     }
 
-    QModelIndex index = selection.indexes()[0];
+    QModelIndexList indexList = selection.indexes();
+    if (indexList.isEmpty()) {
+        return;
+    }
+
+    QModelIndex index = indexList.at(0);
     if (!index.isValid()) {
         return;
     }
