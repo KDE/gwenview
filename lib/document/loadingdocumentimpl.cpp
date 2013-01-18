@@ -192,8 +192,14 @@ struct LoadingDocumentImplPrivate
         LOG("mFormatHint" << mFormatHint);
         QImageReader reader(&buffer, mFormatHint);
         if (!reader.canRead()) {
-            kError() << "QImageReader::read() failed:" << reader.errorString();
-            return false;
+            kError() << "QImageReader::read() using format hint" << mFormatHint << "failed:" << reader.errorString();
+            reader.setFormat(QByteArray());
+            reader.setDevice(&buffer);
+            if (!reader.canRead()) {
+                kError() << "QImageReader::read() without format hint failed:" << reader.errorString();
+                return false;
+            }
+            kWarning() << "Image format is actually" << reader.format() << "not" << mFormatHint;
         }
         mFormat = reader.format();
         if (mFormat == "jpg") {
