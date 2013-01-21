@@ -246,6 +246,7 @@ struct ViewMainPagePrivate
         DocumentView* view = mDocumentViewContainer->createView();
 
         // Connect context menu
+        // If you need to connect another view signal, make sure it is disconnected in deleteDocumentView
         QObject::connect(view, SIGNAL(contextMenuRequested()),
                          q, SLOT(showContextMenu()));
 
@@ -280,6 +281,14 @@ struct ViewMainPagePrivate
         if (mDocumentViewController->view() == view) {
             mDocumentViewController->setView(0);
         }
+
+        // Make sure we do not get notified about this view while it is going away.
+        // mDocumentViewController->deleteView() animates the view deletion so
+        // the view still exists for a short while when we come back to the
+        // event loop)
+        QObject::disconnect(view, 0, q, 0);
+        QObject::disconnect(view, 0, mSlideShow, 0);
+
         mDocumentViews.removeOne(view);
         mActivityResources.remove(view);
         mDocumentViewContainer->deleteView(view);
@@ -347,7 +356,7 @@ struct ViewMainPagePrivate
         if (oldView) {
             oldView->setCurrent(false);
             Q_ASSERT(mActivityResources.contains(oldView));
-            mActivityResources[oldView]->notifyFocusedOut();
+            mActivityResources.value(oldView)->notifyFocusedOut();
         }
         view->setCurrent(true);
         mDocumentViewController->setView(view);
@@ -361,7 +370,7 @@ struct ViewMainPagePrivate
         mThumbnailBar->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Current);
 
         Q_ASSERT(mActivityResources.contains(view));
-        mActivityResources[view]->notifyFocusedIn();
+        mActivityResources.value(view)->notifyFocusedIn();
     }
 
     QModelIndex indexForView(DocumentView* view) const
@@ -671,7 +680,7 @@ void ViewMainPage::openUrls(const KUrl::List& allUrls, const KUrl& currentUrl)
         KUrl url = it.key();
         DocumentView* view = it.value();
         view->openUrl(url, setup);
-        d->mActivityResources[view]->setUri(url);
+        d->mActivityResources.value(view)->setUri(url);
     }
 
     // Init views
