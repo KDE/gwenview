@@ -193,6 +193,10 @@ struct LoadingDocumentImplPrivate
         QImageReader reader(&buffer, mFormatHint);
         if (!reader.canRead()) {
             kError() << "QImageReader::read() using format hint" << mFormatHint << "failed:" << reader.errorString();
+            if (buffer.pos() != 0) {
+                kWarning() << "A bad Qt image decoder moved the buffer to" << buffer.pos() << "in a call to canRead()! Rewinding.";
+                buffer.seek(0);
+            }
             reader.setFormat(QByteArray());
             reader.setDevice(&buffer);
             if (!reader.canRead()) {
