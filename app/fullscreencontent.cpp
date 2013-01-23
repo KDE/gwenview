@@ -323,6 +323,10 @@ ThumbnailBarView* FullScreenContent::thumbnailBar() const
 
 void FullScreenContent::setCurrentUrl(const KUrl& url)
 {
+    if (url.isEmpty()) {
+        return;
+    }
+
     d->mCurrentDocument = DocumentFactory::instance()->load(url);
     connect(d->mCurrentDocument.data(), SIGNAL(metaInfoUpdated()),
             SLOT(updateCurrentUrlWidgets()));
