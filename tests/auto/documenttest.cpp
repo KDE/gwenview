@@ -122,7 +122,7 @@ static void testLoad_newRow(
         << QByteArray(format)
         << int(kind)
         << isAnimated
-        << QImage(pathForTestFile(fileName))
+        << QImage(pathForTestFile(fileName), format)
         << maxHeight;
 }
 
@@ -143,6 +143,8 @@ void DocumentTest::testLoad_data()
     testLoad_newRow("test.xcf", "xcf");
     testLoad_newRow("188191_does_not_load.tga", "tga");
     testLoad_newRow("289819_does_not_load.png", "png");
+    testLoad_newRow("png-with-jpeg-extension.jpg", "png");
+    testLoad_newRow("jpg-with-gif-extension.gif", "jpeg");
 
     // SVG
     testLoad_newRow("test.svg", "", MimeTypeUtils::KIND_SVG_IMAGE);

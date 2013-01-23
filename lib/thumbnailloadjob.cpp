@@ -237,6 +237,11 @@ bool ThumbnailThread::loadThumbnail(bool* needCaching)
     Orientation orientation = NORMAL;
 
     QImageReader reader(mPixPath);
+    if (!reader.canRead()) {
+        reader.setDecideFormatFromContent(true);
+        // Set filename again, otherwise QImageReader won't restart from scratch
+        reader.setFileName(mPixPath);
+    }
     // If it's a Jpeg, try to load an embedded thumbnail, if available
     if (reader.format() == "jpeg") {
         JpegContent content;
