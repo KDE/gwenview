@@ -36,6 +36,10 @@ namespace ArchiveUtils
 bool fileItemIsArchive(const KFileItem& item)
 {
     KMimeType::Ptr mimeType = item.determineMimeType();
+    if (!mimeType) {
+        kWarning() << "determineMimeType() returned a null pointer";
+        return false;
+    }
     return !ArchiveUtils::protocolForMimeType(mimeType->name()).isEmpty();
 }
 
