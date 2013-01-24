@@ -46,18 +46,19 @@ macro_log_feature(LCMS2_FOUND "LittleCMS" "Color management engine" "http://www.
 
 if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
     # We need Nepomuk Core for all backends but "None"
-    find_package(NepomukCore REQUIRED)
+    find_package(NepomukCore)
+    macro_log_feature(NepomukCore_FOUND "Nepomuk Core Libraries" "Desktop-wide semantic information support" "https://projects.kde.org/projects/kde/kdelibs/nepomuk-core" TRUE)
     # Find Soprano because nepomuk Core does not automatically brings in the
     # Soprano includes it needs
-    find_package(Soprano REQUIRED)
-    macro_log_feature(NepomukCore_FOUND "Nepomuk Core Libraries" "Provides desktop-wide semantic information support" "http://www.kde.org" TRUE "" "")
+    find_package(Soprano)
+    macro_log_feature(Soprano_FOUND "Soprano libraries" "RDF storage, parsing, and serialization framework" "http://soprano.sourceforge.net/" TRUE "" "Required by Nepomuk Core Libraries")
 endif (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 
 find_package(LibKonq)
 macro_log_feature(LIBKONQ_FOUND "libkonq" "Provides file management features" "http://www.kde.org" TRUE "" "")
 
-find_package(KActivities 6.1.0 REQUIRED)
-macro_log_feature(KActivities_FOUND "KActivities" "Activities interface library" "https://projects.kde.org/projects/kde/kdelibs/    kactivities" FALSE "6.1.0" "Required for Activities integration.")
+find_package(KActivities 6.1.0)
+macro_log_feature(KActivities_FOUND "KActivities" "Activities interface library" "https://projects.kde.org/projects/kde/kdelibs/kactivities" TRUE "6.1.0")
 
 ## Global settings
 
