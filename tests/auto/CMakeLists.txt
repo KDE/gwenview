@@ -23,7 +23,7 @@ include_directories(
     ${gwenview_BINARY_DIR}
     )
 
-set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
 
 gv_add_unit_test(imagescalertest)
 gv_add_unit_test(paintutilstest)
@@ -32,7 +32,7 @@ gv_add_unit_test(transformimageoperationtest)
 gv_add_unit_test(jpegcontenttest)
 gv_add_unit_test(thumbnailloadjobtest testutils.cpp)
 if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
-gv_add_unit_test(semanticinfobackendtest)
+    gv_add_unit_test(semanticinfobackendtest)
 endif()
 gv_add_unit_test(timeutilstest)
 gv_add_unit_test(placetreemodeltest testutils.cpp)

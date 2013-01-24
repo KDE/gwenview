@@ -195,11 +195,13 @@ kde4_add_ui_files(gwenviewlib_SRCS
 kde4_add_kcfg_files(gwenviewlib_SRCS
     gwenviewconfig.kcfgc
     )
+
 kde4_add_library(gwenviewlib SHARED ${gwenviewlib_SRCS})
-set_target_properties(gwenviewlib PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION} )
-if(WIN32)
-    set_target_properties( gwenviewlib PROPERTIES COMPILE_FLAGS -DJPEG_STATIC )
+set_target_properties(gwenviewlib PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION})
+if (WIN32)
+    set_target_properties(gwenviewlib PROPERTIES COMPILE_FLAGS -DJPEG_STATIC)
 endif()
+
 target_link_libraries(gwenviewlib
     ${KDE4_KFILE_LIBS}
     ${KDE4_KIO_LIBS}
@@ -211,8 +213,8 @@ target_link_libraries(gwenviewlib
     ${PNG_LIBRARIES}
     ${LCMS2_LIBRARIES}
     )
-if( WIN32 )
-target_link_libraries( gwenviewlib ${EXPAT_LIBRARIES} )
+if (WIN32)
+    target_link_libraries(gwenviewlib ${EXPAT_LIBRARIES})
 endif()
 
 if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)

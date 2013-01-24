@@ -69,9 +69,9 @@ kde4_add_ui_files(gwenview_SRCS
     )
 
 if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
-kde4_add_ui_files(gwenview_SRCS
-    semanticinfosidebaritem.ui
-    )
+    kde4_add_ui_files(gwenview_SRCS
+        semanticinfosidebaritem.ui
+        )
 endif()
 
 kde4_add_app_icon(gwenview_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../icons/hi*-apps-gwenview.png")
@@ -91,7 +91,7 @@ target_link_libraries(gwenview
 target_link_libraries(gwenview LINK_INTERFACE_LIBRARIES ${KDE4_KIO_LIBS} ${QT_QTCORE_LIBRARY})
 
 if (KIPI_FOUND)
-  target_link_libraries(gwenview ${KIPI_LIBRARIES})
+    target_link_libraries(gwenview ${KIPI_LIBRARIES})
 endif()
 
 if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
@@ -107,4 +107,4 @@ install(FILES gwenviewui.rc
 install(PROGRAMS gwenview.desktop
     DESTINATION ${XDG_APPS_INSTALL_DIR})
 install(FILES slideshow.desktop
-    DESTINATION ${SERVICES_INSTALL_DIR}/ServiceMenus )
+    DESTINATION ${SERVICES_INSTALL_DIR}/ServiceMenus)
