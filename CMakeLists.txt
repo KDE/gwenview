@@ -29,20 +29,19 @@ endif (GWENVIEW_SEMANTICINFO_BACKEND STREQUAL "None")
 
 ## Dependencies
 find_package(JPEG)
-macro_log_feature(JPEG_FOUND "libjpeg" "Provides JPEG image manipulation support" "http://libjpeg.sourceforge.net/" TRUE "" "")
+macro_log_feature(JPEG_FOUND "libjpeg" "JPEG image manipulation support" "http://libjpeg.sourceforge.net/" TRUE)
 
 find_package(PNG)
-macro_log_feature(PNG_FOUND "libpng" "Provides PNG image manipulation support" "http://www.libpng.org" TRUE "" "")
+macro_log_feature(PNG_FOUND "libpng" "PNG image manipulation support" "http://www.libpng.org" TRUE)
 
-set(EXIV2_MIN_VERSION "0.19")
 find_package(Exiv2)
-macro_log_feature(EXIV2_FOUND "Exiv2" "Provides image metadata support" "http://www.exiv2.org" TRUE ${EXIV2_MIN_VERSION} "")
+macro_log_feature(EXIV2_FOUND "Exiv2" "Image metadata support" "http://www.exiv2.org" TRUE "0.19")
 
 macro_optional_find_package(Kipi)
-macro_log_feature(KIPI_FOUND "KIPI Plugins" "Provides various image manipulation and export features" "http://www.kipi-plugins.org" FALSE "" "")
+macro_log_feature(KIPI_FOUND "libkipi" "Provides various image manipulation and export features" "http://www.kipi-plugins.org" FALSE)
 
 find_package(LCMS2)
-macro_log_feature(LCMS2_FOUND "LittleCMS" "Color management engine" "http://www.littlecms.com" TRUE "2.0" "Used for color management")
+macro_log_feature(LCMS2_FOUND "LittleCMS" "Color management engine" "http://www.littlecms.com" TRUE "2.0")
 
 if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
     # We need Nepomuk Core for all backends but "None"
@@ -55,7 +54,7 @@ if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 endif (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 
 find_package(LibKonq)
-macro_log_feature(LIBKONQ_FOUND "libkonq" "Provides file management features" "http://www.kde.org" TRUE "" "")
+macro_log_feature(LIBKONQ_FOUND "libkonq" "Standard file management features" "http://www.kde.org" TRUE)
 
 find_package(KActivities 6.1.0)
 macro_log_feature(KActivities_FOUND "KActivities" "Activities interface library" "https://projects.kde.org/projects/kde/kdelibs/kactivities" TRUE "6.1.0")
