@@ -8,7 +8,7 @@ include_directories(
 
 if (KIPI_FOUND)
     include_directories(${KIPI_INCLUDE_DIR})
-endif (KIPI_FOUND)
+endif()
 
 # For lib/gwenviewconfig.h and config-gwenview.h
 include_directories(
@@ -46,7 +46,7 @@ if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
         ${gwenview_SRCS}
         semanticinfocontextmanageritem.cpp
         )
-endif (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
+endif()
 
 if (KIPI_FOUND)
     set (gwenview_SRCS
@@ -56,7 +56,7 @@ if (KIPI_FOUND)
         kipiinterface.cpp
         kipiuploadwidget.cpp
         )
-endif (KIPI_FOUND)
+endif()
 
 kde4_add_ui_files(gwenview_SRCS
     advancedconfigpage.ui
@@ -72,7 +72,7 @@ if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 kde4_add_ui_files(gwenview_SRCS
     semanticinfosidebaritem.ui
     )
-endif (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
+endif()
 
 kde4_add_app_icon(gwenview_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../icons/hi*-apps-gwenview.png")
 
@@ -92,11 +92,11 @@ target_link_libraries(gwenview LINK_INTERFACE_LIBRARIES ${KDE4_KIO_LIBS} ${QT_QT
 
 if (KIPI_FOUND)
   target_link_libraries(gwenview ${KIPI_LIBRARIES})
-endif (KIPI_FOUND)
+endif()
 
 if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
     target_link_libraries(gwenview ${NEPOMUK_CORE_LIBRARY})
-endif (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
+endif()
 
 install(TARGETS gwenview
     ${INSTALL_TARGETS_DEFAULT_ARGS})

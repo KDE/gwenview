@@ -19,13 +19,13 @@ set(GWENVIEW_SEMANTICINFO_BACKEND "Nepomuk" CACHE STRING "Semantic info backend 
 # Init GWENVIEW_SEMANTICINFO_BACKEND_* vars
 if (GWENVIEW_SEMANTICINFO_BACKEND STREQUAL "None")
     set(GWENVIEW_SEMANTICINFO_BACKEND_NONE ON)
-else (GWENVIEW_SEMANTICINFO_BACKEND STREQUAL "None")
+else()
     if (GWENVIEW_SEMANTICINFO_BACKEND STREQUAL "Fake")
         set(GWENVIEW_SEMANTICINFO_BACKEND_FAKE ON)
-    else (GWENVIEW_SEMANTICINFO_BACKEND STREQUAL "Fake")
+    else()
         set(GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK ON)
-    endif (GWENVIEW_SEMANTICINFO_BACKEND STREQUAL "Fake")
-endif (GWENVIEW_SEMANTICINFO_BACKEND STREQUAL "None")
+    endif()
+endif()
 
 ## Dependencies
 find_package(JPEG)
@@ -51,7 +51,7 @@ if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
     # Soprano includes it needs
     find_package(Soprano)
     macro_log_feature(Soprano_FOUND "Soprano libraries" "RDF storage, parsing, and serialization framework" "http://soprano.sourceforge.net/" TRUE "" "Required by Nepomuk Core Libraries")
-endif (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
+endif()
 
 find_package(LibKonq)
 macro_log_feature(LIBKONQ_FOUND "libkonq" "Standard file management features" "http://www.kde.org" TRUE)

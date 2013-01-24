@@ -16,25 +16,25 @@ if ("${jpeglib_version}" STREQUAL "")
         )
     if (NOT EXISTS "${JCONFIG_H}")
         message(FATAL_ERROR "Could not find jconfig.h. This file comes with libjpeg. You can specify its path with -DJCONFIG_H=/path/to/jconfig.h.")
-    endif (NOT EXISTS "${JCONFIG_H}")
+    endif()
     message(STATUS "Found jconfig.h: ${JCONFIG_H}")
     message(STATUS "Looking for libjpeg version in ${JCONFIG_H}")
     file(READ "${JCONFIG_H}" jconfig_h_content)
     string(REGEX MATCH "#define +JPEG_LIB_VERSION +([0-9]+)" "\\1" jpeglib_version "${jconfig_h_content}")
     set(jpeglib_version ${CMAKE_MATCH_1})
-endif ("${jpeglib_version}" STREQUAL "")
+endif()
 
 if ("${jpeglib_version}" LESS 80)
     set(GV_JPEG_DIR libjpeg-62)
-endif ("${jpeglib_version}" LESS 80)
+endif()
 
 if ("${jpeglib_version}" EQUAL 80)
     set(GV_JPEG_DIR libjpeg-80)
-endif ("${jpeglib_version}" EQUAL 80)
+endif()
 
 if ("${GV_JPEG_DIR}" STREQUAL "")
     message(FATAL_ERROR "Unknown libjpeg version: ${jpeglib_version}")
-endif ("${GV_JPEG_DIR}" STREQUAL "")
+endif()
 
 message(STATUS "libjpeg version: ${jpeglib_version}")
 
@@ -160,21 +160,21 @@ if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
         semanticinfo/tagmodel.cpp
         semanticinfo/tagwidget.cpp
         )
-endif (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
+endif()
 
 if (GWENVIEW_SEMANTICINFO_BACKEND_FAKE)
     set(gwenviewlib_SRCS
         ${gwenviewlib_SRCS}
         semanticinfo/fakesemanticinfobackend.cpp
         )
-endif (GWENVIEW_SEMANTICINFO_BACKEND_FAKE)
+endif()
 
 if (GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK)
     set(gwenviewlib_SRCS
         ${gwenviewlib_SRCS}
         semanticinfo/nepomuksemanticinfobackend.cpp
         )
-endif (GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK)
+endif()
 
 set_source_files_properties(
     exiv2imageloader.cpp
@@ -199,7 +199,7 @@ kde4_add_library(gwenviewlib SHARED ${gwenviewlib_SRCS})
 set_target_properties(gwenviewlib PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION} )
 if(WIN32)
     set_target_properties( gwenviewlib PROPERTIES COMPILE_FLAGS -DJPEG_STATIC )
-endif(WIN32)
+endif()
 target_link_libraries(gwenviewlib
     ${KDE4_KFILE_LIBS}
     ${KDE4_KIO_LIBS}
@@ -213,13 +213,13 @@ target_link_libraries(gwenviewlib
     )
 if( WIN32 )
 target_link_libraries( gwenviewlib ${EXPAT_LIBRARIES} )
-endif( WIN32 )
+endif()
 
 if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
     target_link_libraries(gwenviewlib
         ${NEPOMUK_CORE_LIBRARY}
         ${SOPRANO_LIBRARIES}
         )
-endif (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
+endif()
 
 install(TARGETS gwenviewlib ${INSTALL_TARGETS_DEFAULT_ARGS})
