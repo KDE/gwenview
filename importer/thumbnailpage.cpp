@@ -280,6 +280,7 @@ void ThumbnailPage::openUrl(const KUrl& url)
     if (path.isEmpty() || path == "./") {
         text = d->mSrcBaseName;
     } else {
+        path = QUrl::fromPercentEncoding(path.toUtf8());
         path.replace("/", QString::fromUtf8(" › "));
         text = QString::fromUtf8("%1 › %2").arg(d->mSrcBaseName).arg(path);
     }
