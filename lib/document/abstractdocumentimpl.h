@@ -28,7 +28,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // KDE
 
 // Local
-#include <config-gwenview.h>
 #include <lib/document/document.h>
 #include <lib/orientation.h>
 
@@ -111,10 +110,7 @@ protected:
     void setDocumentFormat(const QByteArray& format);
     void setDocumentExiv2Image(Exiv2::Image::AutoPtr);
     void setDocumentDownSampledImage(const QImage&, int invertedZoom);
-
-#ifdef LCMS2_FOUND
     void setDocumentCmsProfile(Cms::Profile::Ptr profile);
-#endif
     void setDocumentErrorString(const QString&);
     void switchToImpl(AbstractDocumentImpl*  impl);
 

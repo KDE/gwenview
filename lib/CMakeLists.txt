@@ -55,6 +55,9 @@ include_directories(
     )
 
 set(gwenviewlib_SRCS
+    cms/iccjpeg.c
+    cms/cmsprofile.cpp
+    cms/cmsprofile_png.cpp
     crop/cropwidget.cpp
     crop/cropimageoperation.cpp
     crop/croptool.cpp
@@ -173,15 +176,6 @@ if (GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK)
         )
 endif (GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK)
 
-if (LCMS2_FOUND)
-    set(gwenviewlib_SRCS
-        ${gwenviewlib_SRCS}
-        cms/iccjpeg.c
-        cms/cmsprofile.cpp
-        cms/cmsprofile_png.cpp
-        )
-endif()
-
 set_source_files_properties(
     exiv2imageloader.cpp
     imagemetainfomodel.cpp
@@ -215,6 +209,7 @@ target_link_libraries(gwenviewlib
     ${QT_QTOPENGL_LIBRARY}
     ${X11_X11_LIB}
     ${PNG_LIBRARIES}
+    ${LCMS2_LIBRARIES}
     )
 if( WIN32 )
 target_link_libraries( gwenviewlib ${EXPAT_LIBRARIES} )
@@ -226,11 +221,5 @@ if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
         ${SOPRANO_LIBRARIES}
         )
 endif (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
-
-if (LCMS2_FOUND)
-target_link_libraries(gwenviewlib
-    ${LCMS2_LIBRARIES}
-    )
-endif()
 
 install(TARGETS gwenviewlib ${INSTALL_TARGETS_DEFAULT_ARGS})
