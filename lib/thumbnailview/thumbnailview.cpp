@@ -50,6 +50,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mimetypeutils.h"
 #include "thumbnailloadjob.h"
 #include "urlutils.h"
+#include <lib/gvdebug.h>
 
 namespace Gwenview
 {
@@ -515,6 +516,7 @@ void ThumbnailView::dataChanged(const QModelIndex& topLeft, const QModelIndex& b
         KFileItem item = fileItemForIndex(index);
         if (item.isNull()) {
             kWarning() << "Invalid item for index" << index << ". This should not happen!";
+            GV_FATAL_FAILS;
             continue;
         }
 
@@ -933,20 +935,14 @@ void ThumbnailView::smoothNextThumbnail()
 
     KUrl url = d->mSmoothThumbnailQueue.dequeue();
     ThumbnailForUrl::Iterator it = d->mThumbnailForUrl.find(url);
-    if (it == d->mThumbnailForUrl.end()) {
-        kWarning() <<  url << " not in mThumbnailForUrl. This should not happen!";
-        return;
-    }
+    GV_RETURN_IF_FAIL2(it != d->mThumbnailForUrl.end(), url << "not in mThumbnailForUrl.");
 
     Thumbnail& thumbnail = it.value();
     thumbnail.mAdjustedPix = d->scale(thumbnail.mGroupPix, Qt::SmoothTransformation);
     thumbnail.mRough = false;
 
-    if (thumbnail.mIndex.isValid()) {
-        update(thumbnail.mIndex);
-    } else {
-        kWarning() << "index for" << url << "is invalid. This should not happen!";
-    }
+    GV_RETURN_IF_FAIL2(thumbnail.mIndex.isValid(), "index for" << url << "is invalid.");
+    update(thumbnail.mIndex);
 
     if (!d->mSmoothThumbnailQueue.isEmpty()) {
         d->mSmoothThumbnailTimer.start(0);

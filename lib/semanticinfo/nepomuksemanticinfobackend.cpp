@@ -21,6 +21,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Self
 #include "nepomuksemanticinfobackend.moc"
 
+// Local
+#include <lib/gvdebug.h>
+
 // Qt
 #include <QMutex>
 #include <QMutexLocker>
@@ -36,8 +39,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <Nepomuk2/Resource>
 #include <Nepomuk2/ResourceManager>
 #include <Nepomuk2/Tag>
-
-// Local
 
 namespace Gwenview
 {
@@ -216,10 +217,7 @@ QString NepomukSemanticInfoBackEnd::labelForTag(const SemanticInfoTag& uriString
 {
     KUrl uri(uriString);
     Nepomuk2::Tag tag(uri);
-    if (!tag.exists()) {
-        kError() << "No tag for uri" << uri << ". This should not happen!";
-        return QString();
-    }
+    GV_RETURN_VALUE_IF_FAIL2(tag.exists(), QString(), "No tag for uri" << uri);
     return tag.label();
 }
 

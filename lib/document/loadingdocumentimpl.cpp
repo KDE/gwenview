@@ -208,10 +208,7 @@ struct LoadingDocumentImplPrivate
             mFormat = "jpeg";
         }
         LOG("mFormat" << mFormat);
-        if (mFormat.isEmpty()) {
-            kError() << "mFormat.isEmpty(): this should not happen!";
-            return false;
-        }
+        GV_RETURN_VALUE_IF_FAIL(!mFormat.isEmpty(), false);
 
         Exiv2ImageLoader loader;
         if (loader.load(mData)) {

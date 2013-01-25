@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include <lib/documentview/documentview.h>
 #include <lib/graphicswidgetfloater.h>
+#include <lib/gvdebug.h>
 #include <lib/gwenviewconfig.h>
 
 // KDE
@@ -306,10 +307,7 @@ void DocumentViewContainer::slotConfigChanged()
 
 void DocumentViewContainer::showMessageWidget(QGraphicsWidget* widget, Qt::Alignment align)
 {
-    if (d->mViews.isEmpty()) {
-        kWarning() << "No view to show message on, this should not happen!";
-        return;
-    }
+    GV_RETURN_IF_FAIL(!d->mViews.isEmpty());
     DocumentView* view = *d->mViews.begin();
     widget->setParentItem(view);
     GraphicsWidgetFloater* floater = new GraphicsWidgetFloater(view);

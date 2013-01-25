@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/documentview/abstractrasterimageviewtool.h>
 #include <lib/imagescaler.h>
 #include <lib/cms/cmsprofile.h>
+#include <lib/gvdebug.h>
 
 // KDE
 #include <KDebug>
@@ -258,11 +259,7 @@ void RasterImageView::slotDocumentMetaInfoLoaded()
 
 void RasterImageView::finishSetDocument()
 {
-    if (!document()->size().isValid()) {
-        kError() << "No valid image size available, this should not happen!";
-        return;
-    }
-
+    GV_RETURN_IF_FAIL(document()->size().isValid());
     d->updateDisplayTransform();
 
     d->mScaler->setDocument(document());

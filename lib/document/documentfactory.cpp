@@ -29,6 +29,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KDebug>
 #include <KUrl>
 
+// Local
+#include <gvdebug.h>
+
 namespace Gwenview
 {
 
@@ -159,6 +162,7 @@ Document::Ptr DocumentFactory::getCachedDocument(const KUrl& url) const
 
 Document::Ptr DocumentFactory::load(const KUrl& url)
 {
+    GV_RETURN_VALUE_IF_FAIL(!url.isEmpty(), Document::Ptr());
     DocumentInfo* info = 0;
 
     DocumentMap::Iterator it = d->mDocumentMap.find(url);

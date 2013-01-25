@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "recursivedirmodel.moc"
 
 // Local
+#include <lib/gvdebug.h>
 
 // KDE
 #include <KDebug>
@@ -183,6 +184,7 @@ void RecursiveDirModel::slotItemsDeleted(const KFileItemList& list)
         int row = d->rowForUrl(item.url());
         if (row == -1) {
             kWarning() << "Received itemsDeleted for an unknown item: this should not happen!";
+            GV_FATAL_FAILS;
             continue;
         }
         beginRemoveRows(QModelIndex(), row, row);
