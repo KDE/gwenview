@@ -92,12 +92,6 @@ struct HistoryItem : public QStandardItem
             kError() << "Invalid dateTime" << dateTime;
             return 0;
         }
-        if (UrlUtils::urlIsFastLocalFile(url)) {
-            if (!QFile::exists(url.path())) {
-                kDebug() << "Skipping" << url.path() << "from recent folders. It does not exist anymore";
-                return 0;
-            }
-        }
 
         return new HistoryItem(url, dateTime, fileName);
     }
@@ -175,6 +169,17 @@ struct HistoryModelPrivate
             if (!item) {
                 continue;
             }
+
+            KUrl itemUrl = item->url();
+            if (UrlUtils::urlIsFastLocalFile(itemUrl)) {
+                if (!QFile::exists(itemUrl.path())) {
+                    kDebug() << "Removing" << itemUrl.path() << "from recent folders. It does not exist anymore";
+                    item->unlink();
+                    delete item;
+                    continue;
+                }
+            }
+
             HistoryItem* existingItem = mHistoryItemForUrl.value(item->url());
             if (existingItem) {
                 // We already know this url(!) update existing item dateTime
