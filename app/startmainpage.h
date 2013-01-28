@@ -38,6 +38,7 @@ namespace Gwenview
 {
 
 class GvCore;
+class ThumbnailView;
 
 class StartMainPagePrivate;
 class StartMainPage : public QFrame
@@ -48,6 +49,7 @@ public:
     ~StartMainPage();
 
     void applyPalette(const QPalette&);
+    ThumbnailView* recentFoldersView() const;
 
 Q_SIGNALS:
     void urlSelected(const KUrl& url);

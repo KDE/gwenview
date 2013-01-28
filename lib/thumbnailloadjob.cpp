@@ -148,104 +148,25 @@ bool ThumbnailCache::isEmpty() const
 
 //------------------------------------------------------------------------
 //
-// ThumbnailThread
+// ThumbnailContext
 //
 //------------------------------------------------------------------------
-ThumbnailThread::ThumbnailThread()
-: mCancel(false)
-{}
-
-void ThumbnailThread::load(
-    const QString& originalUri, time_t originalTime, int originalSize, const QString& originalMimeType,
-    const QString& pixPath,
-    const QString& thumbnailPath,
-    ThumbnailGroup::Enum group)
-{
-    QMutexLocker lock(&mMutex);
-    assert(mPixPath.isNull());
-
-    mOriginalUri = originalUri;
-    mOriginalTime = originalTime;
-    mOriginalSize = originalSize;
-    mOriginalMimeType = originalMimeType;
-    mPixPath = pixPath;
-    mThumbnailPath = thumbnailPath;
-    mThumbnailGroup = group;
-    if (!isRunning()) start();
-    mCond.wakeOne();
-}
-
-bool ThumbnailThread::testCancel()
-{
-    QMutexLocker lock(&mMutex);
-    return mCancel;
-}
-
-void ThumbnailThread::cancel()
-{
-    QMutexLocker lock(&mMutex);
-    mCancel = true;
-    mCond.wakeOne();
-}
-
-void ThumbnailThread::run()
-{
-    LOG("");
-    while (!testCancel()) {
-        {
-            QMutexLocker lock(&mMutex);
-            // empty mPixPath means nothing to do
-            LOG("Waiting for mPixPath");
-            if (mPixPath.isNull()) {
-                LOG("mPixPath.isNull");
-                mCond.wait(&mMutex);
-            }
-        }
-        if (testCancel()) {
-            return;
-        }
-        {
-            QMutexLocker lock(&mMutex);
-            Q_ASSERT(!mPixPath.isNull());
-            LOG("Loading" << mPixPath);
-            bool needCaching;
-            bool ok = loadThumbnail(&needCaching);
-            if (ok && needCaching) {
-                cacheThumbnail();
-            }
-            mPixPath.clear(); // done, ready for next
-        }
-        if (testCancel()) {
-            return;
-        }
-        {
-            QSize size(mOriginalWidth, mOriginalHeight);
-            LOG("emitting done signal, size=" << size);
-            QMutexLocker lock(&mMutex);
-            done(mImage, size);
-            LOG("Done");
-        }
-    }
-    LOG("Ending thread");
-}
-
-bool ThumbnailThread::loadThumbnail(bool* needCaching)
+bool ThumbnailContext::load(const QString &pixPath, int pixelSize)
 {
     mImage = QImage();
-    *needCaching = true;
-    int pixelSize = ThumbnailGroup::pixelSize(mThumbnailGroup);
+    mNeedCaching = true;
     Orientation orientation = NORMAL;
 
-    QImageReader reader(mPixPath);
+    QImageReader reader(pixPath);
     if (!reader.canRead()) {
         reader.setDecideFormatFromContent(true);
         // Set filename again, otherwise QImageReader won't restart from scratch
-        reader.setFileName(mPixPath);
+        reader.setFileName(pixPath);
     }
     // If it's a Jpeg, try to load an embedded thumbnail, if available
     if (reader.format() == "jpeg") {
         JpegContent content;
-        content.load(mPixPath);
+        content.load(pixPath);
         QImage thumbnail = content.thumbnail();
         orientation = content.orientation();
 
@@ -275,7 +196,6 @@ bool ThumbnailThread::loadThumbnail(bool* needCaching)
     // format() is empty after QImageReader::read() is called
     QByteArray format = reader.format();
     if (!reader.read(&originalImage)) {
-        kWarning() << "Could not generate thumbnail for file" << mOriginalUri;
         return false;
     }
     if (!originalSize.isValid()) {
@@ -286,7 +206,7 @@ bool ThumbnailThread::loadThumbnail(bool* needCaching)
 
     if (qMax(mOriginalWidth, mOriginalHeight) <= pixelSize) {
         mImage = originalImage;
-        *needCaching = format != "png";
+        mNeedCaching = format != "png";
     } else {
         mImage = originalImage.scaled(pixelSize, pixelSize, Qt::KeepAspectRatio);
     }
@@ -308,6 +228,125 @@ bool ThumbnailThread::loadThumbnail(bool* needCaching)
         }
     }
     return true;
+}
+
+//------------------------------------------------------------------------
+//
+// ThumbnailThread
+//
+//------------------------------------------------------------------------
+ThumbnailThread::ThumbnailThread()
+: mCancel(false)
+{}
+
+void ThumbnailThread::load(
+    const QString& originalUri, time_t originalTime, KIO::filesize_t originalSize, const QString& originalMimeType,
+    const QString& pixPath,
+    const QString& thumbnailPath,
+    ThumbnailGroup::Enum group)
+{
+    QMutexLocker lock(&mMutex);
+    assert(mPixPath.isNull());
+
+    mOriginalUri = originalUri;
+    mOriginalTime = originalTime;
+    mOriginalSize = originalSize;
+    mOriginalMimeType = originalMimeType;
+    mPixPath = pixPath;
+    mThumbnailPath = thumbnailPath;
+    mThumbnailGroup = group;
+    if (!isRunning()) start();
+    mCond.wakeOne();
+}
+
+QString ThumbnailThread::originalUri() const
+{
+    return mOriginalUri;
+}
+
+time_t ThumbnailThread::originalTime() const
+{
+    return mOriginalTime;
+}
+
+KIO::filesize_t ThumbnailThread::originalSize() const
+{
+    return mOriginalSize;
+}
+
+QString ThumbnailThread::originalMimeType() const
+{
+    return mOriginalMimeType;
+}
+
+bool ThumbnailThread::testCancel()
+{
+    QMutexLocker lock(&mMutex);
+    return mCancel;
+}
+
+void ThumbnailThread::cancel()
+{
+    QMutexLocker lock(&mMutex);
+    mCancel = true;
+    mCond.wakeOne();
+}
+
+void ThumbnailThread::run()
+{
+    LOG("");
+    while (!testCancel()) {
+        QString pixPath;
+        int pixelSize;
+        {
+            QMutexLocker lock(&mMutex);
+            // empty mPixPath means nothing to do
+            LOG("Waiting for mPixPath");
+            if (mPixPath.isNull()) {
+                LOG("mPixPath.isNull");
+                mCond.wait(&mMutex);
+            }
+        }
+        if (testCancel()) {
+            return;
+        }
+        {
+            QMutexLocker lock(&mMutex);
+            pixPath = mPixPath;
+            pixelSize = ThumbnailGroup::pixelSize(mThumbnailGroup);
+        }
+
+        Q_ASSERT(!pixPath.isNull());
+        LOG("Loading" << pixPath);
+        ThumbnailContext context;
+        bool ok = context.load(pixPath, pixelSize);
+
+        {
+            QMutexLocker lock(&mMutex);
+            if (ok) {
+                mImage = context.mImage;
+                mOriginalWidth = context.mOriginalWidth;
+                mOriginalHeight = context.mOriginalHeight;
+                if (context.mNeedCaching) {
+                    cacheThumbnail();
+                }
+            } else {
+                kWarning() << "Could not generate thumbnail for file" << mOriginalUri;
+            }
+            mPixPath.clear(); // done, ready for next
+        }
+        if (testCancel()) {
+            return;
+        }
+        {
+            QSize size(mOriginalWidth, mOriginalHeight);
+            LOG("emitting done signal, size=" << size);
+            QMutexLocker lock(&mMutex);
+            done(mImage, size);
+            LOG("Done");
+        }
+    }
+    LOG("Ending thread");
 }
 
 void ThumbnailThread::cacheThumbnail()
@@ -394,55 +433,54 @@ void ThumbnailLoadJob::moveThumbnail(const KUrl& oldUrl, const KUrl& newUrl)
 // ThumbnailLoadJob implementation
 //
 //------------------------------------------------------------------------
-ThumbnailLoadJob::ThumbnailLoadJob(const KFileItemList& items, ThumbnailGroup::Enum group)
+ThumbnailLoadJob::ThumbnailLoadJob()
 : KIO::Job()
 , mState(STATE_NEXTTHUMB)
 , mOriginalTime(0)
-, mThumbnailGroup(group)
 {
     LOG(this);
 
     // Make sure we have a place to store our thumbnails
-    QString thumbnailDir = ThumbnailLoadJob::thumbnailBaseDir(mThumbnailGroup);
-    KStandardDirs::makeDir(thumbnailDir, 0700);
+    QString thumbnailDirNormal = ThumbnailLoadJob::thumbnailBaseDir(ThumbnailGroup::Normal);
+    QString thumbnailDirLarge = ThumbnailLoadJob::thumbnailBaseDir(ThumbnailGroup::Large);
+    KStandardDirs::makeDir(thumbnailDirNormal, 0700);
+    KStandardDirs::makeDir(thumbnailDirLarge, 0700);
 
     // Look for images and store the items in our todo list
-    Q_ASSERT(!items.empty());
-    mItems = items;
     mCurrentItem = KFileItem();
-
-    connect(&mThumbnailThread, SIGNAL(done(QImage,QSize)),
-            SLOT(thumbnailReady(QImage,QSize)),
-            Qt::QueuedConnection);
-
-    connect(&mThumbnailThread, SIGNAL(thumbnailReadyToBeCached(QString,QImage)),
-            sThumbnailCache, SLOT(queueThumbnail(QString,QImage)),
-            Qt::QueuedConnection);
+    mThumbnailGroup = ThumbnailGroup::Large;
+    createNewThumbnailThread();
 }
 
 ThumbnailLoadJob::~ThumbnailLoadJob()
 {
     LOG(this);
-    if (hasSubjobs()) {
-        LOG("Killing subjob");
-        KJob* job = subjobs().first();
-        job->kill();
-        removeSubjob(job);
+    abortSubjob();
+    mThumbnailThread->cancel();
+    disconnect(mThumbnailThread, 0, this, 0);
+    disconnect(mThumbnailThread, 0, sThumbnailCache, 0);
+    connect(mThumbnailThread, SIGNAL(finished()), mThumbnailThread, SLOT(deleteLater()));
+    if (mPreviousThumbnailThread) {
+        disconnect(mPreviousThumbnailThread, 0, sThumbnailCache, 0);
     }
-    mThumbnailThread.cancel();
-    mThumbnailThread.wait();
     sThumbnailCache->wait();
 }
 
-void ThumbnailLoadJob::start()
+void ThumbnailLoadJob::stop()
 {
-    if (mItems.isEmpty()) {
-        LOG("Nothing to do");
-        emitResult();
-        return;
+    // Clear mItems and create a new ThumbnailThread if mThumbnailThread is running,
+    // but also make sure that at most two ThumbnailThreads are running.
+    // startCreatingThumbnail() will take care that these two threads won't work on the same item.
+    mItems.clear();
+    abortSubjob();
+    if (mThumbnailThread->isRunning() && !mPreviousThumbnailThread) {
+        mPreviousThumbnailThread = mThumbnailThread;
+        mPreviousThumbnailThread->cancel();
+        disconnect(mPreviousThumbnailThread, 0, this, 0);
+        connect(mPreviousThumbnailThread, SIGNAL(finished()), mPreviousThumbnailThread, SLOT(deleteLater()));
+        createNewThumbnailThread();
+        mCurrentItem = KFileItem();
     }
-
-    determineNextIcon();
 }
 
 const KFileItemList& ThumbnailLoadJob::pendingItems() const
@@ -455,29 +493,35 @@ void ThumbnailLoadJob::setThumbnailGroup(ThumbnailGroup::Enum group)
     mThumbnailGroup = group;
 }
 
-//-Internal--------------------------------------------------------------
-void ThumbnailLoadJob::appendItem(const KFileItem& item)
+void ThumbnailLoadJob::appendItems(const KFileItemList& items)
 {
-    if (!mItems.contains(item)) {
-        mItems.append(item);
+    if (!mItems.isEmpty()) {
+        Q_FOREACH(const KFileItem & item, items) {
+            if (!mItems.contains(item)) {
+                mItems.append(item);
+            }
+        }
+    } else {
+        mItems = items;
+    }
+
+    if (mCurrentItem.isNull()) {
+        determineNextIcon();
     }
 }
 
 void ThumbnailLoadJob::removeItems(const KFileItemList& itemList)
 {
+    if (mItems.isEmpty()) {
+        return;
+    }
     Q_FOREACH(const KFileItem & item, itemList) {
         // If we are removing the next item, update to be the item after or the
         // first if we removed the last item
         mItems.removeAll(item);
 
         if (item == mCurrentItem) {
-            // Abort current item
-            mCurrentItem = KFileItem();
-            if (hasSubjobs()) {
-                KJob* job = subjobs().first();
-                job->kill();
-                removeSubjob(job);
-            }
+            abortSubjob();
         }
     }
 
@@ -490,16 +534,35 @@ void ThumbnailLoadJob::removeItems(const KFileItemList& itemList)
 void ThumbnailLoadJob::removePendingItems()
 {
     mItems.clear();
+}
 
-    // Abort current item
-    mCurrentItem = KFileItem();
+bool ThumbnailLoadJob::isRunning() const
+{
+    return !mCurrentItem.isNull();
+}
+
+//-Internal--------------------------------------------------------------
+void ThumbnailLoadJob::createNewThumbnailThread()
+{
+    mThumbnailThread = new ThumbnailThread;
+    connect(mThumbnailThread, SIGNAL(done(QImage,QSize)),
+            SLOT(thumbnailReady(QImage,QSize)),
+            Qt::QueuedConnection);
+
+    connect(mThumbnailThread, SIGNAL(thumbnailReadyToBeCached(QString,QImage)),
+            sThumbnailCache, SLOT(queueThumbnail(QString,QImage)),
+            Qt::QueuedConnection);
+}
+
+void ThumbnailLoadJob::abortSubjob()
+{
     if (hasSubjobs()) {
+        LOG("Killing subjob");
         KJob* job = subjobs().first();
         job->kill();
         removeSubjob(job);
+        mCurrentItem = KFileItem();
     }
-
-    determineNextIcon();
 }
 
 void ThumbnailLoadJob::determineNextIcon()
@@ -509,9 +572,8 @@ void ThumbnailLoadJob::determineNextIcon()
 
     // No more items ?
     if (mItems.isEmpty()) {
-        // Done
-        LOG("emitting result");
-        emitResult();
+        LOG("No more items. Nothing to do");
+        mCurrentItem = KFileItem();
         return;
     }
 
@@ -647,7 +709,6 @@ void ThumbnailLoadJob::checkThumbnail()
         determineNextIcon();
         return;
     }
-    QSize imagesize;
 
     mOriginalUri = generateOriginalUri(mCurrentUrl);
     mThumbnailPath = generateThumbnailPath(mOriginalUri, mThumbnailGroup);
@@ -742,7 +803,21 @@ void ThumbnailLoadJob::checkThumbnail()
 void ThumbnailLoadJob::startCreatingThumbnail(const QString& pixPath)
 {
     LOG("Creating thumbnail from" << pixPath);
-    mThumbnailThread.load(mOriginalUri, mOriginalTime, mCurrentItem.size(),
+    // If mPreviousThumbnailThread is already working on our current item
+    // its thumbnail will be passed to sThumbnailCache when ready. So we
+    // connect mPreviousThumbnailThread's signal "finished" to determineNextIcon
+    // which will load the thumbnail from sThumbnailCache or from disk
+    // (because we re-add mCurrentItem to mItems).
+    if (mPreviousThumbnailThread && mPreviousThumbnailThread->isRunning() &&
+        mOriginalUri == mPreviousThumbnailThread->originalUri() &&
+        mOriginalTime == mPreviousThumbnailThread->originalTime() &&
+        mCurrentItem.size() == mPreviousThumbnailThread->originalSize() &&
+        mCurrentItem.mimetype() == mPreviousThumbnailThread->originalMimeType()) {
+            connect(mPreviousThumbnailThread, SIGNAL(finished()), SLOT(determineNextIcon()));
+            mItems.prepend(mCurrentItem);
+            return;
+    }
+    mThumbnailThread->load(mOriginalUri, mOriginalTime, mCurrentItem.size(),
                           mCurrentItem.mimetype(), pixPath, mThumbnailPath, mThumbnailGroup);
 }
 

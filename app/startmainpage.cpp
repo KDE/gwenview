@@ -340,4 +340,9 @@ void StartMainPage::loadConfig()
     applyPalette(d->mGvCore->palette(GvCore::NormalViewPalette));
 }
 
+ThumbnailView* StartMainPage::recentFoldersView() const
+{
+    return d->mRecentFoldersView;
+}
+
 } // namespace

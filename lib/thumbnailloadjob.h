@@ -32,6 +32,7 @@
 #include <QMutex>
 #include <QThread>
 #include <QWaitCondition>
+#include <QPointer>
 
 // KDE
 #include <KIO/Job>
@@ -42,6 +43,15 @@
 
 namespace Gwenview
 {
+struct ThumbnailContext {
+    QImage mImage;
+    int mOriginalWidth;
+    int mOriginalHeight;
+    bool mNeedCaching;
+
+    bool load(const QString &pixPath, int pixelSize);
+};
+
 class ThumbnailThread : public QThread
 {
     Q_OBJECT
@@ -51,7 +61,7 @@ public:
     void load(
         const QString& originalUri,
         time_t originalTime,
-        int originalSize,
+        KIO::filesize_t originalSize,
         const QString& originalMimeType,
         const QString& pixPath,
         const QString& thumbnailPath,
@@ -59,6 +69,10 @@ public:
 
     void cancel();
 
+    QString originalUri() const;
+    time_t originalTime() const;
+    KIO::filesize_t originalSize() const;
+    QString originalMimeType() const;
 protected:
     virtual void run();
 
@@ -68,7 +82,6 @@ Q_SIGNALS:
 
 private:
     bool testCancel();
-    bool loadThumbnail(bool* needCaching);
     void cacheThumbnail();
     QImage mImage;
     QString mPixPath;
@@ -116,16 +129,10 @@ class GWENVIEWLIB_EXPORT ThumbnailLoadJob : public KIO::Job
 {
     Q_OBJECT
 public:
-    /**
-     * Create a job for determining the pixmaps of the images in the @p itemList
-     */
-    ThumbnailLoadJob(const KFileItemList& itemList, ThumbnailGroup::Enum);
+    ThumbnailLoadJob();
     virtual ~ThumbnailLoadJob();
 
-    /**
-     * Call this to get started
-     */
-    void start();
+    void stop();
 
     /**
      * To be called whenever items are removed from the view
@@ -143,14 +150,16 @@ public:
     const KFileItemList& pendingItems() const;
 
     /**
-     * Add an item to a running job
+     * Add items to the job
      */
-    void appendItem(const KFileItem& item);
+    void appendItems(const KFileItemList& items);
 
     /**
      * Defines size of thumbnails to generate
      */
     void setThumbnailGroup(ThumbnailGroup::Enum);
+
+    bool isRunning() const;
 
     /**
      * Returns the thumbnail base dir, independent of the thumbnail size
@@ -195,9 +204,10 @@ protected:
     virtual void slotResult(KJob *job);
 
 private Q_SLOTS:
+    void determineNextIcon();
     void slotGotPreview(const KFileItem&, const QPixmap&);
     void checkThumbnail();
-    void thumbnailReady(const QImage& im, const QSize&);
+    void thumbnailReady(const QImage&, const QSize&);
     void emitThumbnailLoadingFailed();
 
 private:
@@ -224,11 +234,13 @@ private:
     // Thumbnail group
     ThumbnailGroup::Enum mThumbnailGroup;
 
-    ThumbnailThread mThumbnailThread;
+    ThumbnailThread* mThumbnailThread;
+    QPointer<ThumbnailThread> mPreviousThumbnailThread;
 
     QStringList mPreviewPlugins;
 
-    void determineNextIcon();
+    void createNewThumbnailThread();
+    void abortSubjob();
     void startCreatingThumbnail(const QString& path);
 
     void emitThumbnailLoaded(const QImage& img, const QSize& size);

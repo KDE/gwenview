@@ -39,6 +39,7 @@ namespace Gwenview
 
 class AbstractDocumentInfoProvider;
 class AbstractThumbnailViewHelper;
+class ThumbnailLoadJob;
 
 struct ThumbnailViewPrivate;
 class GWENVIEWLIB_EXPORT ThumbnailView : public QListView
@@ -96,6 +97,8 @@ public:
     bool isBusy(const QModelIndex& index) const;
 
     virtual void setModel(QAbstractItemModel* model);
+
+    void setThumbnailLoadJob(ThumbnailLoadJob* thumbnailLoadJob);
 
     /**
      * Publish this method so that delegates can call it.

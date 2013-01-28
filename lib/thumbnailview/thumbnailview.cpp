@@ -217,18 +217,9 @@ struct ThumbnailViewPrivate
     void generateThumbnailsForItems(const KFileItemList& list)
     {
         ThumbnailGroup::Enum group = ThumbnailGroup::fromPixelSize(mThumbnailSize.width());
-        if (!mThumbnailLoadJob) {
-            mThumbnailLoadJob = new ThumbnailLoadJob(list, group);
-            QObject::connect(mThumbnailLoadJob, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize)),
-                             q, SLOT(setThumbnail(KFileItem,QPixmap,QSize)));
-            QObject::connect(mThumbnailLoadJob, SIGNAL(thumbnailLoadingFailed(KFileItem)),
-                             q, SLOT(setBrokenThumbnail(KFileItem)));
-            mThumbnailLoadJob->start();
-        } else {
+        if (mThumbnailLoadJob) {
             mThumbnailLoadJob->setThumbnailGroup(group);
-            Q_FOREACH(const KFileItem & item, list) {
-                mThumbnailLoadJob->appendItem(item);
-            }
+            mThumbnailLoadJob->appendItems(list);
         }
     }
 
@@ -291,6 +282,7 @@ ThumbnailView::ThumbnailView(QWidget* parent)
     d->mScaleMode = ScaleToFit;
     d->mThumbnailViewHelper = 0;
     d->mDocumentInfoProvider = 0;
+    d->mThumbnailLoadJob = 0;
     // Init to some stupid value so that the first call to setThumbnailSize()
     // is not ignored (do not use 0 in case someone try to divide by
     // mThumbnailSize...)
@@ -336,7 +328,6 @@ ThumbnailView::ThumbnailView(QWidget* parent)
 
 ThumbnailView::~ThumbnailView()
 {
-    delete d->mThumbnailLoadJob;
     delete d;
 }
 
@@ -359,6 +350,20 @@ void ThumbnailView::setModel(QAbstractItemModel* newModel)
     QListView::setModel(newModel);
     connect(model(), SIGNAL(rowsRemoved(QModelIndex,int,int)),
             SIGNAL(rowsRemovedSignal(QModelIndex,int,int)));
+}
+
+void ThumbnailView::setThumbnailLoadJob(ThumbnailLoadJob* thumbnailLoadJob)
+{
+    GV_RETURN_IF_FAIL(d->mThumbnailLoadJob != thumbnailLoadJob);
+    if (thumbnailLoadJob) {
+        connect(thumbnailLoadJob, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize)),
+                         SLOT(setThumbnail(KFileItem,QPixmap,QSize)));
+        connect(thumbnailLoadJob, SIGNAL(thumbnailLoadingFailed(KFileItem)),
+                         SLOT(setBrokenThumbnail(KFileItem)));
+    } else {
+        disconnect(d->mThumbnailLoadJob, 0 , this, 0);
+    }
+    d->mThumbnailLoadJob = thumbnailLoadJob;
 }
 
 void ThumbnailView::updateThumbnailSize()
@@ -927,7 +932,7 @@ void ThumbnailView::smoothNextThumbnail()
         return;
     }
 
-    if (d->mThumbnailLoadJob) {
+    if (d->mThumbnailLoadJob && d->mThumbnailLoadJob->isRunning()) {
         // give mThumbnailLoadJob priority over smoothing
         d->mSmoothThumbnailTimer.start(SMOOTH_DELAY);
         return;

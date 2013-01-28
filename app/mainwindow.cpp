@@ -165,8 +165,10 @@ struct MainWindow::Private
     ViewMainPage* mViewMainPage;
     KUrlNavigator* mUrlNavigator;
     ThumbnailView* mThumbnailView;
+    ThumbnailView* mActiveThumbnailView;
     DocumentInfoProvider* mDocumentInfoProvider;
     ThumbnailViewHelper* mThumbnailViewHelper;
+    QPointer<ThumbnailLoadJob> mThumbnailLoadJob;
     BrowseMainPage* mBrowseMainPage;
     StartMainPage* mStartMainPage;
     SideBar* mSideBar;
@@ -758,7 +760,7 @@ struct MainWindow::Private
     }
 
     const char* sideBarConfigGroupName() const
- {
+    {
         const char* name = 0;
         switch (mCurrentMainPageId) {
         case StartMainPageId:
@@ -809,6 +811,32 @@ struct MainWindow::Private
             mNotificationRestrictions = 0;
         }
     }
+
+    void assignThumbnailLoadJobToThumbnailView(ThumbnailView* thumbnailView)
+    {
+        GV_RETURN_IF_FAIL(thumbnailView);
+        if (mActiveThumbnailView) {
+            mActiveThumbnailView->setThumbnailLoadJob(0);
+        }
+        thumbnailView->setThumbnailLoadJob(mThumbnailLoadJob);
+        mActiveThumbnailView = thumbnailView;
+    }
+
+    void autoAssignThumbnailLoadJob()
+    {
+        mThumbnailLoadJob->stop();
+        if (mCurrentMainPageId == ViewMainPageId) {
+            if (q->windowState() & Qt::WindowFullScreen) {
+                assignThumbnailLoadJobToThumbnailView(mFullScreenContent->thumbnailBar());
+            } else {
+                assignThumbnailLoadJobToThumbnailView(mViewMainPage->thumbnailBar());
+            }
+        } else if (mCurrentMainPageId == BrowseMainPageId) {
+            assignThumbnailLoadJobToThumbnailView(mThumbnailView);
+        } else if (mCurrentMainPageId == StartMainPageId) {
+            assignThumbnailLoadJobToThumbnailView(mStartMainPage->recentFoldersView());
+        }
+    }
 };
 
 MainWindow::MainWindow()
@@ -821,6 +849,8 @@ MainWindow::MainWindow()
     d->mGvCore = new GvCore(this, d->mDirModel);
     d->mPreloader = new Preloader(this);
     d->mNotificationRestrictions = 0;
+    d->mThumbnailLoadJob = new ThumbnailLoadJob();
+    d->mActiveThumbnailView = 0;
     d->initDirModel();
     d->setupWidgets();
     d->setupActions();
@@ -846,6 +876,7 @@ MainWindow::MainWindow()
 
 MainWindow::~MainWindow()
 {
+    delete d->mThumbnailLoadJob;
     delete d;
 }
 
@@ -960,6 +991,7 @@ void MainWindow::setActiveViewModeAction(QAction* action)
         setCaption(QString());
     }
     d->loadSideBarConfig();
+    d->autoAssignThumbnailLoadJob();
 
     emit viewModeChanged();
 }
@@ -1071,6 +1103,8 @@ void MainWindow::showStartMainPage()
     d->updateActions();
     updatePreviousNextActions();
     d->updateContextDependentComponents();
+
+    d->autoAssignThumbnailLoadJob();
 }
 
 void MainWindow::slotStartMainPageUrlSelected(const KUrl& url)
@@ -1112,6 +1146,7 @@ void MainWindow::openDirUrl(const KUrl& url)
         urlToSelect.setPath(pathToSelect);
         d->setUrlToSelect(urlToSelect);
     }
+    d->mThumbnailLoadJob->stop();
     d->mDirModel->dirLister()->openUrl(url);
     d->spreadCurrentDirUrl(url);
     d->mGvCore->addUrlToRecentFolders(url);
@@ -1344,6 +1379,7 @@ void MainWindow::toggleFullScreen(bool checked)
         d->mFullScreenLeftAt = QDateTime::currentDateTime();
     }
     setUpdatesEnabled(true);
+    d->autoAssignThumbnailLoadJob();
 }
 
 void MainWindow::saveCurrent()
