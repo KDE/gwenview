@@ -53,7 +53,6 @@ struct GraphicsWidgetFloaterPrivate
         if (mInsideUpdateChildGeometry) {
             return;
         }
-        mInsideUpdateChildGeometry = true;
 
         int posX, posY;
         int childWidth, childHeight;
@@ -88,8 +87,8 @@ struct GraphicsWidgetFloaterPrivate
             posY = parentHeight - childHeight - mVerticalMargin;
         }
 
+        mInsideUpdateChildGeometry = true;
         mChild->setGeometry(posX, posY, childWidth, childHeight);
-
         mInsideUpdateChildGeometry = false;
     }
 };
