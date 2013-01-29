@@ -150,6 +150,13 @@ ThumbnailBarItemDelegate::ThumbnailBarItemDelegate(ThumbnailView* view)
     d->setupToggleSelectionButton();
     view->viewport()->installEventFilter(this);
 
+    // Set this attribute so that the viewport receives QEvent::HoverMove and
+    // QEvent::HoverLeave events. We use these events in the event filter
+    // installed on the viewport.
+    // Some styles set this attribute themselves (Oxygen and Skulpture do) but
+    // others do not (Plastique, Cleanlooks...)
+    view->viewport()->setAttribute(Qt::WA_Hover);
+
     d->mBorderColor = PaintUtils::alphaAdjustedF(QColor(Qt::white), 0.65);
 }
 
