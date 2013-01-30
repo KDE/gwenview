@@ -133,6 +133,11 @@ public:
     void removeItems(const KFileItemList& itemList);
 
     /**
+     * Remove all pending items
+     */
+    void removePendingItems();
+
+    /**
      * Returns the list of items waiting for a thumbnail
      */
     const KFileItemList& pendingItems() const;

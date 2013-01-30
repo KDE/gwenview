@@ -486,6 +486,21 @@ void ThumbnailLoadJob::removeItems(const KFileItemList& itemList)
     }
 }
 
+void ThumbnailLoadJob::removePendingItems()
+{
+    mItems.clear();
+
+    // Abort current item
+    mCurrentItem = KFileItem();
+    if (hasSubjobs()) {
+        KJob* job = subjobs().first();
+        job->kill();
+        removeSubjob(job);
+    }
+
+    determineNextIcon();
+}
+
 void ThumbnailLoadJob::determineNextIcon()
 {
     LOG(this);
