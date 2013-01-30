@@ -194,7 +194,7 @@ struct ThumbnailViewPrivate
     void scheduleThumbnailGenerationForVisibleItems()
     {
         if (mThumbnailLoadJob) {
-            mThumbnailLoadJob->removeItems(mThumbnailLoadJob->pendingItems());
+            mThumbnailLoadJob->removePendingItems();
         }
         mSmoothThumbnailQueue.clear();
         mScheduledThumbnailGenerationTimer.start();

@@ -575,6 +575,14 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
     d->q = this;
     d->mView = view;
     view->viewport()->installEventFilter(this);
+
+    // Set this attribute so that the viewport receives QEvent::HoverMove and
+    // QEvent::HoverLeave events. We use these events in the event filter
+    // installed on the viewport.
+    // Some styles set this attribute themselves (Oxygen and Skulpture do) but
+    // others do not (Plastique, Cleanlooks...)
+    view->viewport()->setAttribute(Qt::WA_Hover);
+
     d->mThumbnailSize = view->thumbnailSize();
     d->mDetails = FileNameDetail;
     d->mContextBarActions = SelectionAction | FullScreenAction | RotateAction;
