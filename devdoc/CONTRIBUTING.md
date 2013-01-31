@@ -2,6 +2,12 @@
 
 Great to hear you want to contribute to Gwenview! Patches are always welcome.
 
+# Mailing list
+
+If you want to discuss development of Gwenview, you can subscribe to
+gwenview-devel mailing list:
+<https://mail.kde.org/mailman/listinfo/gwenview-devel>.
+
 # Bug tracker
 
 Gwenview bugs are tracked on KDE Bugzilla (<http://bugs.kde.org>). They are
