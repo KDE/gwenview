@@ -49,6 +49,7 @@ extern "C" {
 #include "jpegerrormanager.h"
 #include "iodevicejpegsourcemanager.h"
 #include "exiv2imageloader.h"
+#include "gwenviewconfig.h"
 
 namespace Gwenview
 {
@@ -240,6 +241,10 @@ bool JpegContent::loadFromData(const QByteArray& data, Exiv2::Image* exiv2Image)
 
     d->mExifData = exiv2Image->exifData();
     d->mComment = QString::fromUtf8(exiv2Image->comment().c_str());
+
+    if (!GwenviewConfig::applyExifOrientation()) {
+        return true;
+    }
 
     // Adjust the size according to the orientation
     switch (orientation()) {

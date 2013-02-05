@@ -59,6 +59,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "svgdocumentloadedimpl.h"
 #include "urlutils.h"
 #include "videodocumentloadedimpl.h"
+#include "gwenviewconfig.h"
 
 namespace Gwenview
 {
@@ -267,7 +268,7 @@ struct LoadingDocumentImplPrivate
             return;
         }
 
-        if (mJpegContent.get()) {
+        if (mJpegContent.get() && GwenviewConfig::applyExifOrientation()) {
             Gwenview::Orientation orientation = mJpegContent->orientation();
             QMatrix matrix = ImageUtils::transformMatrix(orientation);
             mImage = mImage.transformed(matrix);

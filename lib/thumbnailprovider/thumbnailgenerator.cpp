@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include "imageutils.h"
 #include "jpegcontent.h"
+#include "gwenviewconfig.h"
 
 // KDE
 #include <KDebug>
@@ -61,8 +62,11 @@ bool ThumbnailContext::load(const QString &pixPath, int pixelSize)
         // Set filename again, otherwise QImageReader won't restart from scratch
         reader.setFileName(pixPath);
     }
-    // If it's a Jpeg, try to load an embedded thumbnail, if available
-    if (reader.format() == "jpeg") {
+    // If it's a Jpeg, try to load an embedded thumbnail, if available.
+    // If applyExifOrientation is not set, don't use the
+    // embedded thumbnail since it might be rotated differently
+    // than the actual image
+    if (reader.format() == "jpeg" && GwenviewConfig::applyExifOrientation()) {
         JpegContent content;
         content.load(pixPath);
         QImage thumbnail = content.thumbnail();
@@ -110,7 +114,7 @@ bool ThumbnailContext::load(const QString &pixPath, int pixelSize)
     }
 
     // Rotate if necessary
-    if (orientation != NORMAL && orientation != NOT_AVAILABLE) {
+    if (orientation != NORMAL && orientation != NOT_AVAILABLE && GwenviewConfig::applyExifOrientation()) {
         QMatrix matrix = ImageUtils::transformMatrix(orientation);
         mImage = mImage.transformed(matrix);
 
