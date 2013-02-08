@@ -121,10 +121,12 @@ void ContextManager::setCurrentUrl(const KUrl& currentUrl)
     }
 
     d->mCurrentUrl = currentUrl;
-    Document::Ptr doc = DocumentFactory::instance()->load(currentUrl);
-    QUndoGroup* undoGroup = DocumentFactory::instance()->undoGroup();
-    undoGroup->addStack(doc->undoStack());
-    undoGroup->setActiveStack(doc->undoStack());
+    if (!d->mCurrentUrl.isEmpty()) {
+        Document::Ptr doc = DocumentFactory::instance()->load(currentUrl);
+        QUndoGroup* undoGroup = DocumentFactory::instance()->undoGroup();
+        undoGroup->addStack(doc->undoStack());
+        undoGroup->setActiveStack(doc->undoStack());
+    }
 
     d->queueSignal("selectionChanged");
 }
