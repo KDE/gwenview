@@ -41,6 +41,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <lib/documentview/rasterimageview.h>
 #include "cropimageoperation.h"
 #include "cropwidget.h"
+#include "gwenviewconfig.h"
 
 static const int HANDLE_SIZE = 15;
 
@@ -398,10 +399,12 @@ void CropTool::hoverMoveEvent(QGraphicsSceneHoverEvent* event)
 void CropTool::toolActivated()
 {
     imageView()->setCursor(Qt::CrossCursor);
+    d->mCropWidget->setAdvancedSettingsEnabled(GwenviewConfig::cropAdvancedSettingsEnabled());
 }
 
 void CropTool::toolDeactivated()
 {
+    GwenviewConfig::setCropAdvancedSettingsEnabled(d->mCropWidget->advancedSettingsEnabled());
 }
 
 void CropTool::slotCropRequested()

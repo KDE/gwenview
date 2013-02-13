@@ -45,6 +45,9 @@ public:
     CropWidget(QWidget* parent, RasterImageView*, CropTool*);
     ~CropWidget();
 
+    void setAdvancedSettingsEnabled(bool enable);
+    bool advancedSettingsEnabled() const;
+
 Q_SIGNALS:
     void cropRequested();
     void done();

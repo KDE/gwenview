@@ -247,6 +247,16 @@ CropWidget::~CropWidget()
     delete d;
 }
 
+void CropWidget::setAdvancedSettingsEnabled(bool enable)
+{
+    d->advancedCheckBox->setChecked(enable);
+}
+
+bool CropWidget::advancedSettingsEnabled() const
+{
+    return d->advancedCheckBox->isChecked();
+}
+
 void CropWidget::setCropRect(const QRect& rect)
 {
     d->mUpdatingFromCropTool = true;
