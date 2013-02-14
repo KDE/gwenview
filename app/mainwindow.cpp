@@ -90,6 +90,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/archiveutils.h>
 #include <lib/document/documentfactory.h>
 #include <lib/eventwatcher.h>
+#include <lib/gvdebug.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/mimetypeutils.h>
 #include <lib/print/printhelper.h>
@@ -731,10 +732,7 @@ struct MainWindow::Private
 
     void setUrlToSelect(const KUrl& url)
     {
-        if (!url.isValid()) {
-            kWarning() << "called with an invalid url, this should not happen!";
-            return;
-        }
+        GV_RETURN_IF_FAIL(url.isValid());
         mUrlToSelect = url;
         updateContextDependentComponents();
         selectUrlToSelect();
@@ -764,8 +762,8 @@ struct MainWindow::Private
         const char* name = 0;
         switch (mCurrentMainPageId) {
         case StartMainPageId:
-            kWarning() << "Should not happen!";
-            // Fall through
+            GV_WARN_AND_RETURN_VALUE(BROWSE_MODE_SIDE_BAR_GROUP, "mCurrentMainPageId == 'StartMainPageId'");
+            break;
         case BrowseMainPageId:
             name = BROWSE_MODE_SIDE_BAR_GROUP;
             break;
@@ -1039,10 +1037,7 @@ void MainWindow::openSelectedDocuments()
     if (currentUrl.isEmpty()) {
         // Current index is not selected, or it is not a document: set
         // firstDocumentIndex as current
-        if (!firstDocumentIndex.isValid()) {
-            kWarning() << "firstDocumentIndex is invalid. This should not happen!";
-            return;
-        }
+        GV_RETURN_IF_FAIL(firstDocumentIndex.isValid());
         d->mThumbnailView->selectionModel()->setCurrentIndex(firstDocumentIndex, QItemSelectionModel::Current);
         currentUrl = urls.first();
     }

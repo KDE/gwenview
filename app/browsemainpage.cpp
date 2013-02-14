@@ -47,6 +47,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <gvcore.h>
 #include <fileoperations.h>
 #include <lib/document/documentfactory.h>
+#include <lib/gvdebug.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/semanticinfo/abstractsemanticinfobackend.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
@@ -337,10 +338,7 @@ void BrowseMainPage::slotDirModelReset()
 void BrowseMainPage::updateSortOrder()
 {
     const QAction* action = d->mSortAction->currentAction();
-    if (!action) {
-        kWarning() << "!action, this should not happen!";
-        return;
-    }
+    GV_RETURN_IF_FAIL(action);
 
     // This works because for now Sorting::Enum maps to KDirModel::ModelColumns
     d->mDirModel->setSortRole(sortingFromSortAction(action));

@@ -48,6 +48,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/documentview/documentviewcontainer.h>
 #include <lib/documentview/documentviewcontroller.h>
 #include <lib/documentview/documentviewsynchronizer.h>
+#include <lib/gvdebug.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/paintutils.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
@@ -759,7 +760,7 @@ void ViewMainPage::deselectView(DocumentView* view)
         } else if (idx > 0) {
             newCurrentView = d->mDocumentViews.at(idx - 1);
         } else {
-            kWarning() << "No view found to set as current, this should not happen!";
+            GV_WARN_AND_RETURN("No view found to set as current");
         }
     }
 

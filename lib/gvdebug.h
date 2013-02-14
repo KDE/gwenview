@@ -23,29 +23,82 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 #include <KDebug>
 
+/**
+ * Uses this macro if you want your code to abort when the GV_FATAL_FAILS
+ * environment variable is set.
+ * Most of the time you want to use the various GV_RETURN* macros instead,
+ * but this one can be handy in certain situations. For example in a switch
+ * case block:
+ *
+ * switch (state) {
+ * case State1:
+ *     ...
+ *     break;
+ * case State2:
+ *     ...
+ *     break;
+ * case State3:
+ *     kWarning() << "state should not be State3";
+ *     GV_FATAL_FAILS;
+ *     break;
+ * }
+ */
+#define GV_FATAL_FAILS \
+    do { \
+        if (!qgetenv("GV_FATAL_FAILS").isEmpty()) { \
+            kFatal() << "Aborting because environment variable 'GV_FATAL_FAILS' is set"; \
+        } \
+    } while (0)
+
 #define GV_RETURN_IF_FAIL(cond) \
-    if (!(cond)) { \
-        kWarning() << "Condition '" << #cond << "' failed"; \
-        return; \
-    }
+    do { \
+        if (!(cond)) { \
+            kWarning() << "Condition '" << #cond << "' failed"; \
+            GV_FATAL_FAILS; \
+            return; \
+        } \
+    } while (0)
 
 #define GV_RETURN_VALUE_IF_FAIL(cond, value) \
-    if (!(cond)) { \
-        kWarning() << "Condition '" << #cond << "' failed."; \
-        return value; \
-    }
+    do { \
+        if (!(cond)) { \
+            kWarning() << "Condition '" << #cond << "' failed."; \
+            GV_FATAL_FAILS; \
+            return value; \
+        } \
+    } while (0)
 
 #define GV_RETURN_IF_FAIL2(cond, msg) \
-    if (!(cond)) { \
-        kWarning() << "Condition '" << #cond << "' failed" << msg; \
-        return; \
-    }
+    do { \
+        if (!(cond)) { \
+            kWarning() << "Condition '" << #cond << "' failed" << msg; \
+            GV_FATAL_FAILS; \
+            return; \
+        } \
+    } while (0)
 
 #define GV_RETURN_VALUE_IF_FAIL2(cond, value, msg) \
-    if (!(cond)) { \
-        kWarning() << "Condition '" << #cond << "' failed." << msg; \
+    do { \
+        if (!(cond)) { \
+            kWarning() << "Condition '" << #cond << "' failed." << msg; \
+            GV_FATAL_FAILS; \
+            return value; \
+        } \
+    } while (0)
+
+#define GV_WARN_AND_RETURN(msg) \
+    do { \
+        kWarning() << msg; \
+        GV_FATAL_FAILS; \
+        return; \
+    } while (0)
+
+#define GV_WARN_AND_RETURN_VALUE(value, msg) \
+    do { \
+        kWarning() << msg; \
+        GV_FATAL_FAILS; \
         return value; \
-    }
+    } while (0)
 
 #define GV_LOG(var) kDebug() << #var << '=' << (var)
 

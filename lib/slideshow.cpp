@@ -36,6 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KLocale>
 
 // Local
+#include <lib/gvdebug.h>
 #include <gwenviewconfig.h>
 
 namespace Gwenview
@@ -102,10 +103,7 @@ struct SlideShowPrivate
     KUrl findNextOrderedUrl()
     {
         QVector<KUrl>::ConstIterator it = qFind(mUrls.constBegin(), mUrls.constEnd(), mCurrentUrl);
-        if (it == mUrls.constEnd()) {
-            kWarning() << "Current url not found in list. This should not happen.\n";
-            return KUrl();
-        }
+        GV_RETURN_VALUE_IF_FAIL2(it != mUrls.constEnd(), KUrl(), "Current url not found in list.");
 
         ++it;
         if (GwenviewConfig::loop()) {

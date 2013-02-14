@@ -36,6 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include "document/documentfactory.h"
 #include <qgraphicssceneevent.h>
+#include <lib/gvdebug.h>
 
 namespace Gwenview
 {
@@ -55,10 +56,7 @@ void SvgImageView::loadFromDocument()
     }
 
     QSvgRenderer* renderer = doc->svgRenderer();
-    if (!renderer) {
-        kWarning() << "No SVG renderer. This should not happen!";
-        return;
-    }
+    GV_RETURN_IF_FAIL(renderer);
     mSvgItem->setSharedRenderer(renderer);
     if (zoomToFit()) {
         setZoom(computeZoomToFit(), QPointF(-1, -1), ForceUpdate);

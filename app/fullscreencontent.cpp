@@ -324,19 +324,18 @@ ThumbnailBarView* FullScreenContent::thumbnailBar() const
 void FullScreenContent::setCurrentUrl(const KUrl& url)
 {
     if (url.isEmpty()) {
-        return;
+        d->mCurrentDocument = Document::Ptr();
+    } else {
+        d->mCurrentDocument = DocumentFactory::instance()->load(url);
+        connect(d->mCurrentDocument.data(), SIGNAL(metaInfoUpdated()),
+                SLOT(updateCurrentUrlWidgets()));
     }
-
-    d->mCurrentDocument = DocumentFactory::instance()->load(url);
-    connect(d->mCurrentDocument.data(), SIGNAL(metaInfoUpdated()),
-            SLOT(updateCurrentUrlWidgets()));
     updateCurrentUrlWidgets();
 }
 
 void FullScreenContent::updateInformationLabel()
 {
     if (!d->mCurrentDocument) {
-        kWarning() << "No document";
         return;
     }
 

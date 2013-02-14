@@ -21,3 +21,10 @@ test loading from remote urls.
 If not set, remote url tests are skipped.
 
 Should be set to something like `sftp://localhost/tmp`
+
+# `GV_FATAL_FAILS`
+
+If set, when a `GV_RETURN*_IF_FAIL` method fails, then `kFatal()` will be
+called, which makes it possible to stop at the place of the failure with the
+debugger and also makes it possible for users to report backtraces if they
+experiment those failures.

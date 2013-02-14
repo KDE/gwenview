@@ -56,6 +56,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/graphicshudbutton.h>
 #include <lib/graphicshudwidget.h>
 #include <lib/graphicswidgetfloater.h>
+#include <lib/gvdebug.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/mimetypeutils.h>
 #include <lib/signalblocker.h>
@@ -400,10 +401,7 @@ void DocumentView::finishOpenUrl()
 {
     disconnect(d->mDocument.data(), SIGNAL(kindDetermined(KUrl)),
                this, SLOT(finishOpenUrl()));
-    if (d->mDocument->loadingState() < Document::KindDetermined) {
-        kWarning() << "d->mDocument->loadingState() < Document::KindDetermined, this should not happen!";
-        return;
-    }
+    GV_RETURN_IF_FAIL(d->mDocument->loadingState() >= Document::KindDetermined);
 
     if (d->mDocument->loadingState() == Document::LoadingFailed) {
         slotLoadingFailed();
