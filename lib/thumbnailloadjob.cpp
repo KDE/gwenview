@@ -496,8 +496,13 @@ void ThumbnailLoadJob::setThumbnailGroup(ThumbnailGroup::Enum group)
 void ThumbnailLoadJob::appendItems(const KFileItemList& items)
 {
     if (!mItems.isEmpty()) {
+        QSet<QString> itemSet;
+        Q_FOREACH(const KFileItem & item, mItems) {
+            itemSet.insert(item.url().url());
+        }
+
         Q_FOREACH(const KFileItem & item, items) {
-            if (!mItems.contains(item)) {
+            if (!itemSet.contains(item.url().url())) {
                 mItems.append(item);
             }
         }
