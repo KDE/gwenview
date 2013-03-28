@@ -579,6 +579,7 @@ void ThumbnailLoadJob::determineNextIcon()
     if (mItems.isEmpty()) {
         LOG("No more items. Nothing to do");
         mCurrentItem = KFileItem();
+        finished();
         return;
     }
 

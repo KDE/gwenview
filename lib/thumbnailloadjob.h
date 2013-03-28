@@ -200,6 +200,11 @@ Q_SIGNALS:
 
     void thumbnailLoadingFailed(const KFileItem& item);
 
+    /**
+     * Queue is empty
+     */
+    void finished();
+
 protected:
     virtual void slotResult(KJob *job);
 

@@ -99,10 +99,16 @@ int main(int argc, char** argv)
 
     // Start the job
     QTime chrono;
-    ThumbnailLoadJob* job = new ThumbnailLoadJob(list, group);
+    ThumbnailLoadJob job;
+    job.setThumbnailGroup(group);
+    job.appendItems(list);
 
     chrono.start();
-    job->exec();
+
+    QEventLoop loop;
+    QObject::connect(&job, SIGNAL(finished()), &loop, SLOT(quit()));
+    loop.exec();
+
     kWarning() << "Time to generate thumbnails:" << chrono.restart();
 
     waitForDeferredDeletes();

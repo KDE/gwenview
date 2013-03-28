@@ -106,6 +106,13 @@ void ThumbnailLoadJobTest::init()
     mSandBox.fill();
 }
 
+static void syncRun(ThumbnailLoadJob *job)
+{
+    QEventLoop loop;
+    QObject::connect(job, SIGNAL(finished()), &loop, SLOT(quit()));
+    loop.exec();
+}
+
 void ThumbnailLoadJobTest::testLoadLocal()
 {
     QDir dir(mSandBox.mPath);
@@ -119,10 +126,11 @@ void ThumbnailLoadJobTest::testLoadLocal()
     }
 
     // Generate the thumbnails
-    ThumbnailLoadJob* job = new ThumbnailLoadJob(list, ThumbnailGroup::Normal);
-    QSignalSpy spy(job, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize)));
-    job->exec();
-    waitForDeferredDeletes();
+    ThumbnailLoadJob job;
+    job.setThumbnailGroup(ThumbnailGroup::Normal);
+    job.appendItems(list);
+    QSignalSpy spy(&job, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize)));
+    syncRun(&job);
     while (!ThumbnailLoadJob::isPendingThumbnailCacheEmpty()) {
         QTest::qWait(100);
     }
@@ -180,7 +188,6 @@ void ThumbnailLoadJobTest::testLoadLocal()
 void ThumbnailLoadJobTest::testUseEmbeddedOrNot()
 {
     QImage expectedThumbnail;
-    ThumbnailLoadJob* job;
     QPixmap thumbnailPix;
     SandBox sandBox;
     sandBox.initDir();
@@ -192,26 +199,32 @@ void ThumbnailLoadJobTest::testUseEmbeddedOrNot()
     list << KFileItem(KFileItem::Unknown, KFileItem::Unknown, url);
 
     // Loading a normal thumbnail should bring the white one
-    job = new ThumbnailLoadJob(list, ThumbnailGroup::Normal);
-    QSignalSpy spy1(job, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize)));
-    job->exec();
-    waitForDeferredDeletes();
+    {
+        ThumbnailLoadJob job;
+        job.setThumbnailGroup(ThumbnailGroup::Normal);
+        job.appendItems(list);
+        QSignalSpy spy(&job, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize)));
+        syncRun(&job);
 
-    QCOMPARE(spy1.count(), 1);
-    expectedThumbnail = createColoredImage(128, 64, Qt::white);
-    thumbnailPix = qvariant_cast<QPixmap>(spy1.at(0).at(1));
-    QVERIFY(fuzzyImageCompare(expectedThumbnail, thumbnailPix.toImage()));
+        QCOMPARE(spy.count(), 1);
+        expectedThumbnail = createColoredImage(128, 64, Qt::white);
+        thumbnailPix = qvariant_cast<QPixmap>(spy.at(0).at(1));
+        QVERIFY(fuzzyImageCompare(expectedThumbnail, thumbnailPix.toImage()));
+    }
 
     // Loading a large thumbnail should bring the red one
-    job = new ThumbnailLoadJob(list, ThumbnailGroup::Large);
-    QSignalSpy spy2(job, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize)));
-    job->exec();
-    waitForDeferredDeletes();
+    {
+        ThumbnailLoadJob job;
+        job.setThumbnailGroup(ThumbnailGroup::Large);
+        job.appendItems(list);
+        QSignalSpy spy(&job, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize)));
+        syncRun(&job);
 
-    QCOMPARE(spy2.count(), 1);
-    expectedThumbnail = createColoredImage(256, 128, Qt::red);
-    thumbnailPix = qvariant_cast<QPixmap>(spy2.at(0).at(1));
-    QVERIFY(fuzzyImageCompare(expectedThumbnail, thumbnailPix.toImage()));
+        QCOMPARE(spy.count(), 1);
+        expectedThumbnail = createColoredImage(256, 128, Qt::red);
+        thumbnailPix = qvariant_cast<QPixmap>(spy.at(0).at(1));
+        QVERIFY(fuzzyImageCompare(expectedThumbnail, thumbnailPix.toImage()));
+    }
 }
 
 void ThumbnailLoadJobTest::testLoadRemote()
@@ -226,9 +239,10 @@ void ThumbnailLoadJobTest::testLoadRemote()
     KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
     list << item;
 
-    ThumbnailLoadJob* job = new ThumbnailLoadJob(list, ThumbnailGroup::Normal);
-    job->exec();
-    waitForDeferredDeletes();
+    ThumbnailLoadJob job;
+    job.setThumbnailGroup(ThumbnailGroup::Normal);
+    job.appendItems(list);
+    syncRun(&job);
     while (!ThumbnailLoadJob::isPendingThumbnailCacheEmpty()) {
         QTest::qWait(100);
     }
@@ -251,12 +265,13 @@ void ThumbnailLoadJobTest::testRemoveItemsWhileGenerating()
     }
 
     // Start generating thumbnails for items
-    ThumbnailLoadJob* job = new ThumbnailLoadJob(list, ThumbnailGroup::Normal);
+    ThumbnailLoadJob job;
+    job.setThumbnailGroup(ThumbnailGroup::Normal);
+    job.appendItems(list);
     QEventLoop loop;
-    connect(job, SIGNAL(result(KJob*)), &loop, SLOT(quit()));
-    job->start();
+    connect(&job, SIGNAL(finished()), &loop, SLOT(quit()));
 
     // Remove items, it should not crash
-    job->removeItems(list);
+    job.removeItems(list);
     loop.exec();
 }
