@@ -92,7 +92,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/eventwatcher.h>
 #include <lib/gvdebug.h>
 #include <lib/gwenviewconfig.h>
-#include <lib/messagebubble.h>
+#include <lib/graphicshudlabel.h>
+#include <lib/graphicshudwidget.h>
 #include <lib/mimetypeutils.h>
 #include <lib/print/printhelper.h>
 #include <lib/slideshow.h>
@@ -630,9 +631,14 @@ struct MainWindow::Private
 
     void showMessageBubble(const QString &message)
     {
-        MessageBubble* bubble = new MessageBubble;
-        bubble->setText(message);
-        mViewMainPage->showMessageWidget(bubble);
+        GraphicsHudWidget* hud = new GraphicsHudWidget;
+        GraphicsHudLabel* label = new GraphicsHudLabel;
+        label->setText(message);
+        hud->init(label, GraphicsHudWidget::OptionNone);
+        hud->setAutoDeleteOnFadeout(true);
+        QTimer::singleShot(2000, hud, SLOT(fadeOut()));
+
+        mViewMainPage->showMessageWidget(hud);
     }
 
     void spreadCurrentDirUrl(const KUrl& url)
