@@ -307,8 +307,15 @@ void DocumentViewContainer::slotConfigChanged()
 
 void DocumentViewContainer::showMessageWidget(QGraphicsWidget* widget, Qt::Alignment align)
 {
-    GV_RETURN_IF_FAIL(!d->mViews.isEmpty());
-    DocumentView* view = *d->mViews.begin();
+    DocumentView* view = 0;
+    if (d->mViews.isEmpty()) {
+        GV_RETURN_IF_FAIL(!d->mAddedViews.isEmpty());
+        view = *d->mAddedViews.begin();
+    } else {
+        view = *d->mViews.begin();
+    }
+    GV_RETURN_IF_FAIL(view);
+
     widget->setParentItem(view);
     GraphicsWidgetFloater* floater = new GraphicsWidgetFloater(view);
     floater->setChildWidget(widget);
