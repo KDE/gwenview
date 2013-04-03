@@ -109,6 +109,8 @@ MessageBubble::MessageBubble(QGraphicsWidget* parent)
     connect(timeLine, SIGNAL(valueChanged(qreal)),
             SLOT(slotTimeLineChanged(qreal)));
     connect(timeLine, SIGNAL(finished()),
+            SLOT(fadeOut()));
+    connect(this, SIGNAL(fadedOut()),
             SLOT(deleteLater()));
     timeLine->start();
 
