@@ -639,7 +639,7 @@ struct MainWindow::Private
         hud->setAutoDeleteOnFadeout(true);
         QTimer::singleShot(2000, hud, SLOT(fadeOut()));
 
-        mViewMainPage->showMessageWidget(hud);
+        mViewMainPage->showMessageWidget(hud, Qt::AlignCenter);
     }
 
     void spreadCurrentDirUrl(const KUrl& url)
