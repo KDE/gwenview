@@ -635,6 +635,7 @@ struct MainWindow::Private
         GraphicsHudLabel* label = new GraphicsHudLabel;
         label->setText(message);
         hud->init(label, GraphicsHudWidget::OptionNone);
+        hud->setContentsMargins(6, 6, 6, 6);
         hud->setAutoDeleteOnFadeout(true);
         QTimer::singleShot(2000, hud, SLOT(fadeOut()));
 
