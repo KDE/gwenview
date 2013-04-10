@@ -600,8 +600,8 @@ struct MainWindow::Private
             if (mCurrentMainPageId == ViewMainPageId) {
                 showMessageBubble(
                     offset > 0
-                    ? i18n("Wrapped to first document")
-                    : i18n("Wrapped to last document")
+                    ? i18n("Last document reached, continuing on first document.")
+                    : i18n("First document reached, continuing on last document.")
                 );
             }
         }
