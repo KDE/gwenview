@@ -47,6 +47,7 @@ struct GraphicsHudWidgetPrivate
     QPropertyAnimation* mAnim;
     QGraphicsWidget* mMainWidget;
     GraphicsHudButton* mCloseButton;
+    bool mAutoDeleteOnFadeout;
 
     void fadeTo(qreal value)
     {
@@ -68,6 +69,7 @@ GraphicsHudWidget::GraphicsHudWidget(QGraphicsWidget* parent)
     d->mAnim = new QPropertyAnimation(this, "opacity", this);
     d->mMainWidget = 0;
     d->mCloseButton = 0;
+    d->mAutoDeleteOnFadeout = false;
 
     connect(d->mAnim, SIGNAL(finished()), SLOT(slotFadeAnimationFinished()));
 }
@@ -143,7 +145,15 @@ void GraphicsHudWidget::slotFadeAnimationFinished()
         fadedIn();
     } else {
         fadedOut();
+        if (d->mAutoDeleteOnFadeout) {
+            deleteLater();
+        }
     }
+}
+
+void GraphicsHudWidget::setAutoDeleteOnFadeout(bool value)
+{
+    d->mAutoDeleteOnFadeout = value;
 }
 
 } // namespace

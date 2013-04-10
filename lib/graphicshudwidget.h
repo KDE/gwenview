@@ -52,6 +52,8 @@ public:
     void init(QWidget*, Options options);
     void init(QGraphicsWidget*, Options options);
 
+    void setAutoDeleteOnFadeout(bool autoDelete);
+
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
 
 public Q_SLOTS:

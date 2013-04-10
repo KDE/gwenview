@@ -21,6 +21,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #ifndef GRAPHICSHUDLABEL_H
 #define GRAPHICSHUDLABEL_H
 
+#include <lib/gwenviewlib_export.h>
+
 // Local
 
 // KDE
@@ -35,7 +37,7 @@ class GraphicsHudLabelPrivate;
 /**
  *
  */
-class GraphicsHudLabel : public QGraphicsWidget
+class GWENVIEWLIB_EXPORT GraphicsHudLabel : public QGraphicsWidget
 {
     Q_OBJECT
 public:

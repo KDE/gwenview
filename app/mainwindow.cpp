@@ -92,6 +92,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/eventwatcher.h>
 #include <lib/gvdebug.h>
 #include <lib/gwenviewconfig.h>
+#include <lib/graphicshudlabel.h>
+#include <lib/graphicshudwidget.h>
 #include <lib/mimetypeutils.h>
 #include <lib/print/printhelper.h>
 #include <lib/slideshow.h>
@@ -589,11 +591,21 @@ struct MainWindow::Private
         mPreloadDirectionIsForward = offset > 0;
         QModelIndex index = currentIndex();
         index = mDirModel->index(index.row() + offset, 0);
-        if (!index.isValid()) {
-            return;
-        }
-        if (!indexIsDirOrArchive(index)) {
+        if (index.isValid() && !indexIsDirOrArchive(index)) {
             goTo(index);
+        } else {
+            if (offset > 0) {
+                goToFirstDocument();
+            } else {
+                goToLastDocument();
+            }
+            if (mCurrentMainPageId == ViewMainPageId) {
+                showMessageBubble(
+                    offset > 0
+                    ? i18n("Last document reached, continuing on first document.")
+                    : i18n("First document reached, continuing on last document.")
+                );
+            }
         }
     }
 
@@ -617,6 +629,19 @@ struct MainWindow::Private
     {
         QModelIndex index = mDirModel->index(mDirModel->rowCount() - 1, 0);
         goTo(index);
+    }
+
+    void showMessageBubble(const QString &message)
+    {
+        GraphicsHudWidget* hud = new GraphicsHudWidget;
+        GraphicsHudLabel* label = new GraphicsHudLabel;
+        label->setText(message);
+        hud->init(label, GraphicsHudWidget::OptionNone);
+        hud->setContentsMargins(6, 6, 6, 6);
+        hud->setAutoDeleteOnFadeout(true);
+        QTimer::singleShot(2000, hud, SLOT(fadeOut()));
+
+        mViewMainPage->showMessageWidget(hud, Qt::AlignCenter);
     }
 
     void spreadCurrentDirUrl(const KUrl& url)
@@ -1307,15 +1332,17 @@ void MainWindow::goToUrl(const KUrl& url)
 
 void MainWindow::updatePreviousNextActions()
 {
-    QModelIndex index = d->currentIndex();
+    int row = d->currentIndex().row();
+    QModelIndex prevIndex = d->mDirModel->index(row - 1, 0);
+    QModelIndex nextIndex = d->mDirModel->index(row + 1, 0);
+    bool hasPrevious = prevIndex.isValid() && !d->indexIsDirOrArchive(prevIndex);
+    bool hasNext = nextIndex.isValid() && !d->indexIsDirOrArchive(nextIndex);
+    bool canBrowse = hasPrevious | hasNext;
 
-    QModelIndex prevIndex = d->mDirModel->index(index.row() - 1, 0);
-    d->mGoToPreviousAction->setEnabled(prevIndex.isValid() && !d->indexIsDirOrArchive(prevIndex));
-    d->mGoToFirstAction->setEnabled(d->mGoToPreviousAction->isEnabled());
-
-    QModelIndex nextIndex = d->mDirModel->index(index.row() + 1, 0);
-    d->mGoToNextAction->setEnabled(nextIndex.isValid() && !d->indexIsDirOrArchive(nextIndex));
-    d->mGoToLastAction->setEnabled(d->mGoToNextAction->isEnabled());
+    d->mGoToPreviousAction->setEnabled(canBrowse);
+    d->mGoToNextAction->setEnabled(canBrowse);
+    d->mGoToFirstAction->setEnabled(hasPrevious);
+    d->mGoToLastAction->setEnabled(hasNext);
 }
 
 void MainWindow::leaveFullScreen()
