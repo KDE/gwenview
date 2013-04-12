@@ -43,60 +43,8 @@
 
 namespace Gwenview
 {
-struct ThumbnailContext {
-    QImage mImage;
-    int mOriginalWidth;
-    int mOriginalHeight;
-    bool mNeedCaching;
 
-    bool load(const QString &pixPath, int pixelSize);
-};
-
-class ThumbnailThread : public QThread
-{
-    Q_OBJECT
-public:
-    ThumbnailThread();
-
-    void load(
-        const QString& originalUri,
-        time_t originalTime,
-        KIO::filesize_t originalSize,
-        const QString& originalMimeType,
-        const QString& pixPath,
-        const QString& thumbnailPath,
-        ThumbnailGroup::Enum group);
-
-    void cancel();
-
-    QString originalUri() const;
-    time_t originalTime() const;
-    KIO::filesize_t originalSize() const;
-    QString originalMimeType() const;
-protected:
-    virtual void run();
-
-Q_SIGNALS:
-    void done(const QImage&, const QSize&);
-    void thumbnailReadyToBeCached(const QString& thumbnailPath, const QImage&);
-
-private:
-    bool testCancel();
-    void cacheThumbnail();
-    QImage mImage;
-    QString mPixPath;
-    QString mThumbnailPath;
-    QString mOriginalUri;
-    time_t mOriginalTime;
-    int mOriginalSize;
-    QString mOriginalMimeType;
-    int mOriginalWidth;
-    int mOriginalHeight;
-    QMutex mMutex;
-    QWaitCondition mCond;
-    ThumbnailGroup::Enum mThumbnailGroup;
-    bool mCancel;
-};
+class ThumbnailThread;
 
 /**
  * Store thumbnails to disk when done generating them
