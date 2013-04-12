@@ -29,9 +29,6 @@
 // Qt
 #include <QImage>
 #include <QPixmap>
-#include <QMutex>
-#include <QThread>
-#include <QWaitCondition>
 #include <QPointer>
 
 // KDE
@@ -45,30 +42,7 @@ namespace Gwenview
 {
 
 class ThumbnailGenerator;
-
-/**
- * Store thumbnails to disk when done generating them
- */
-class ThumbnailCache : public QThread
-{
-    Q_OBJECT
-public:
-    // Return thumbnail if it has still not been stored
-    QImage value(const QString&) const;
-
-    bool isEmpty() const;
-
-public Q_SLOTS:
-    void queueThumbnail(const QString&, const QImage&);
-
-protected:
-    void run();
-
-private:
-    typedef QHash<QString, QImage> Cache;
-    Cache mCache;
-    mutable QMutex mMutex;
-};
+class ThumbnailWriter;
 
 /**
  * A job that determines the thumbnails for the images in the current directory

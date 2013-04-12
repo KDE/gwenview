@@ -133,6 +133,7 @@ set(gwenviewlib_SRCS
     resize/resizeimagedialog.cpp
     thumbnailprovider/thumbnailgenerator.cpp
     thumbnailprovider/thumbnailprovider.cpp
+    thumbnailprovider/thumbnailwriter.cpp
     thumbnailview/abstractthumbnailviewhelper.cpp
     thumbnailview/abstractdocumentinfoprovider.cpp
     thumbnailview/contextbarbutton.cpp

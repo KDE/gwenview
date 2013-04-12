@@ -46,6 +46,7 @@
 
 // Local
 #include "mimetypeutils.h"
+#include "thumbnailwriter.h"
 #include "thumbnailgenerator.h"
 #include "urlutils.h"
 
@@ -61,6 +62,8 @@ namespace Gwenview
 #define LOG(x) ;
 #endif
 
+K_GLOBAL_STATIC(ThumbnailCache, sThumbnailCache)
+
 static QString generateOriginalUri(const KUrl& url_)
 {
     KUrl url = url_;
@@ -75,72 +78,6 @@ static QString generateThumbnailPath(const QString& uri, ThumbnailGroup::Enum gr
     QString baseDir = ThumbnailProvider::thumbnailBaseDir(group);
     return baseDir + QString(QFile::encodeName(md5.hexDigest())) + ".png";
 }
-
-//------------------------------------------------------------------------
-//
-// ThumbnailCache
-//
-//------------------------------------------------------------------------
-K_GLOBAL_STATIC(ThumbnailCache, sThumbnailCache)
-
-static void storeThumbnailToDiskCache(const QString& path, const QImage& image)
-{
-    LOG(path);
-    KTemporaryFile tmp;
-    tmp.setPrefix(path + ".gwenview.tmp");
-    tmp.setSuffix(".png");
-    if (!tmp.open()) {
-        kWarning() << "Could not create a temporary file.";
-        return;
-    }
-
-    if (!image.save(tmp.fileName(), "png")) {
-        kWarning() << "Could not save thumbnail";
-        return;
-    }
-
-    KDE_rename(QFile::encodeName(tmp.fileName()), QFile::encodeName(path));
-}
-
-void ThumbnailCache::queueThumbnail(const QString& path, const QImage& image)
-{
-    LOG(path);
-    QMutexLocker locker(&mMutex);
-    mCache.insert(path, image);
-    start();
-}
-
-void ThumbnailCache::run()
-{
-    QMutexLocker locker(&mMutex);
-    while (!mCache.isEmpty()) {
-        Cache::ConstIterator it = mCache.constBegin();
-        const QString path = it.key();
-        const QImage image = it.value();
-
-        // This part of the thread is the most time consuming but it does not
-        // depend on mCache so we can unlock here. This way other thumbnails
-        // can be added or queried
-        locker.unlock();
-        storeThumbnailToDiskCache(path, image);
-        locker.relock();
-
-        mCache.remove(path);
-    }
-}
-
-QImage ThumbnailCache::value(const QString& path) const
-{
-    QMutexLocker locker(&mMutex);
-    return mCache.value(path);
-}
-
-bool ThumbnailCache::isEmpty() const
-{
-    QMutexLocker locker(&mMutex);
-    return mCache.isEmpty();
-}
-
 
 //------------------------------------------------------------------------
 //
