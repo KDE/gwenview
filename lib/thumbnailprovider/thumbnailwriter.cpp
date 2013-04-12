@@ -62,7 +62,7 @@ static void storeThumbnailToDiskCache(const QString& path, const QImage& image)
     KDE_rename(QFile::encodeName(tmp.fileName()), QFile::encodeName(path));
 }
 
-void ThumbnailCache::queueThumbnail(const QString& path, const QImage& image)
+void ThumbnailWriter::queueThumbnail(const QString& path, const QImage& image)
 {
     LOG(path);
     QMutexLocker locker(&mMutex);
@@ -70,7 +70,7 @@ void ThumbnailCache::queueThumbnail(const QString& path, const QImage& image)
     start();
 }
 
-void ThumbnailCache::run()
+void ThumbnailWriter::run()
 {
     QMutexLocker locker(&mMutex);
     while (!mCache.isEmpty()) {
@@ -89,13 +89,13 @@ void ThumbnailCache::run()
     }
 }
 
-QImage ThumbnailCache::value(const QString& path) const
+QImage ThumbnailWriter::value(const QString& path) const
 {
     QMutexLocker locker(&mMutex);
     return mCache.value(path);
 }
 
-bool ThumbnailCache::isEmpty() const
+bool ThumbnailWriter::isEmpty() const
 {
     QMutexLocker locker(&mMutex);
     return mCache.isEmpty();

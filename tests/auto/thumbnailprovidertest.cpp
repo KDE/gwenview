@@ -131,7 +131,7 @@ void ThumbnailProviderTest::testLoadLocal()
     job.appendItems(list);
     QSignalSpy spy(&job, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize)));
     syncRun(&job);
-    while (!ThumbnailProvider::isPendingThumbnailCacheEmpty()) {
+    while (!ThumbnailProvider::isThumbnailWriterEmpty()) {
         QTest::qWait(100);
     }
 
@@ -243,7 +243,7 @@ void ThumbnailProviderTest::testLoadRemote()
     job.setThumbnailGroup(ThumbnailGroup::Normal);
     job.appendItems(list);
     syncRun(&job);
-    while (!ThumbnailProvider::isPendingThumbnailCacheEmpty()) {
+    while (!ThumbnailProvider::isThumbnailWriterEmpty()) {
         QTest::qWait(100);
     }
 

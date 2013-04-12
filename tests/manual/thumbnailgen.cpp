@@ -112,7 +112,7 @@ int main(int argc, char** argv)
     kWarning() << "Time to generate thumbnails:" << chrono.restart();
 
     waitForDeferredDeletes();
-    while (!ThumbnailProvider::isPendingThumbnailCacheEmpty()) {
+    while (!ThumbnailProvider::isThumbnailWriterEmpty()) {
         QCoreApplication::processEvents();
     }
     kWarning() << "Time to save pending thumbnails:" << chrono.restart();

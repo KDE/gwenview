@@ -38,7 +38,7 @@ namespace Gwenview
 /**
  * Store thumbnails to disk when done generating them
  */
-class ThumbnailCache : public QThread
+class ThumbnailWriter : public QThread
 {
     Q_OBJECT
 public:

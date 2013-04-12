@@ -112,7 +112,7 @@ public:
      * Returns true if all thumbnails have been written to disk. Useful for
      * unit-testing.
      */
-    static bool isPendingThumbnailCacheEmpty();
+    static bool isThumbnailWriterEmpty();
 
 Q_SIGNALS:
     /**

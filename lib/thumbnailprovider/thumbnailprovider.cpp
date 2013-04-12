@@ -62,7 +62,7 @@ namespace Gwenview
 #define LOG(x) ;
 #endif
 
-K_GLOBAL_STATIC(ThumbnailCache, sThumbnailCache)
+K_GLOBAL_STATIC(ThumbnailWriter, sThumbnailWriter)
 
 static QString generateOriginalUri(const KUrl& url_)
 {
@@ -175,12 +175,12 @@ ThumbnailProvider::~ThumbnailProvider()
     abortSubjob();
     mThumbnailGenerator->cancel();
     disconnect(mThumbnailGenerator, 0, this, 0);
-    disconnect(mThumbnailGenerator, 0, sThumbnailCache, 0);
+    disconnect(mThumbnailGenerator, 0, sThumbnailWriter, 0);
     connect(mThumbnailGenerator, SIGNAL(finished()), mThumbnailGenerator, SLOT(deleteLater()));
     if (mPreviousThumbnailGenerator) {
-        disconnect(mPreviousThumbnailGenerator, 0, sThumbnailCache, 0);
+        disconnect(mPreviousThumbnailGenerator, 0, sThumbnailWriter, 0);
     }
-    sThumbnailCache->wait();
+    sThumbnailWriter->wait();
 }
 
 void ThumbnailProvider::stop()
@@ -272,7 +272,7 @@ void ThumbnailProvider::createNewThumbnailGenerator()
             Qt::QueuedConnection);
 
     connect(mThumbnailGenerator, SIGNAL(thumbnailReadyToBeCached(QString,QImage)),
-            sThumbnailCache, SLOT(queueThumbnail(QString,QImage)),
+            sThumbnailWriter, SLOT(queueThumbnail(QString,QImage)),
             Qt::QueuedConnection);
 }
 
@@ -391,7 +391,7 @@ void ThumbnailProvider::thumbnailReady(const QImage& _img, const QSize& _size)
 
 QImage ThumbnailProvider::loadThumbnailFromCache() const
 {
-    QImage image = sThumbnailCache->value(mThumbnailPath);
+    QImage image = sThumbnailWriter->value(mThumbnailPath);
     if (!image.isNull()) {
         return image;
     }
@@ -410,7 +410,7 @@ QImage ThumbnailProvider::loadThumbnailFromCache() const
             QString text = largeImage.text(key);
             image.setText(key, text);
         }
-        sThumbnailCache->queueThumbnail(mThumbnailPath, image);
+        sThumbnailWriter->queueThumbnail(mThumbnailPath, image);
     }
 
     return image;
@@ -527,9 +527,9 @@ void ThumbnailProvider::startCreatingThumbnail(const QString& pixPath)
 {
     LOG("Creating thumbnail from" << pixPath);
     // If mPreviousThumbnailGenerator is already working on our current item
-    // its thumbnail will be passed to sThumbnailCache when ready. So we
+    // its thumbnail will be passed to sThumbnailWriter when ready. So we
     // connect mPreviousThumbnailGenerator's signal "finished" to determineNextIcon
-    // which will load the thumbnail from sThumbnailCache or from disk
+    // which will load the thumbnail from sThumbnailWriter or from disk
     // (because we re-add mCurrentItem to mItems).
     if (mPreviousThumbnailGenerator && mPreviousThumbnailGenerator->isRunning() &&
         mOriginalUri == mPreviousThumbnailGenerator->originalUri() &&
@@ -576,9 +576,9 @@ void ThumbnailProvider::emitThumbnailLoadingFailed()
     emit thumbnailLoadingFailed(mCurrentItem);
 }
 
-bool ThumbnailProvider::isPendingThumbnailCacheEmpty()
+bool ThumbnailProvider::isThumbnailWriterEmpty()
 {
-    return sThumbnailCache->isEmpty();
+    return sThumbnailWriter->isEmpty();
 }
 
 } // namespace
