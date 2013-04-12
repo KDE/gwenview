@@ -44,7 +44,7 @@
 namespace Gwenview
 {
 
-class ThumbnailThread;
+class ThumbnailGenerator;
 
 /**
  * Store thumbnails to disk when done generating them
@@ -187,12 +187,12 @@ private:
     // Thumbnail group
     ThumbnailGroup::Enum mThumbnailGroup;
 
-    ThumbnailThread* mThumbnailThread;
-    QPointer<ThumbnailThread> mPreviousThumbnailThread;
+    ThumbnailGenerator* mThumbnailGenerator;
+    QPointer<ThumbnailGenerator> mPreviousThumbnailGenerator;
 
     QStringList mPreviewPlugins;
 
-    void createNewThumbnailThread();
+    void createNewThumbnailGenerator();
     void abortSubjob();
     void startCreatingThumbnail(const QString& path);
 

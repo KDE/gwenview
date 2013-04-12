@@ -45,11 +45,11 @@ struct ThumbnailContext {
     bool load(const QString &pixPath, int pixelSize);
 };
 
-class ThumbnailThread : public QThread
+class ThumbnailGenerator : public QThread
 {
     Q_OBJECT
 public:
-    ThumbnailThread();
+    ThumbnailGenerator();
 
     void load(
         const QString& originalUri,

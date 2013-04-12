@@ -130,14 +130,14 @@ bool ThumbnailContext::load(const QString &pixPath, int pixelSize)
 
 //------------------------------------------------------------------------
 //
-// ThumbnailThread
+// ThumbnailGenerator
 //
 //------------------------------------------------------------------------
-ThumbnailThread::ThumbnailThread()
+ThumbnailGenerator::ThumbnailGenerator()
 : mCancel(false)
 {}
 
-void ThumbnailThread::load(
+void ThumbnailGenerator::load(
     const QString& originalUri, time_t originalTime, KIO::filesize_t originalSize, const QString& originalMimeType,
     const QString& pixPath,
     const QString& thumbnailPath,
@@ -157,40 +157,40 @@ void ThumbnailThread::load(
     mCond.wakeOne();
 }
 
-QString ThumbnailThread::originalUri() const
+QString ThumbnailGenerator::originalUri() const
 {
     return mOriginalUri;
 }
 
-time_t ThumbnailThread::originalTime() const
+time_t ThumbnailGenerator::originalTime() const
 {
     return mOriginalTime;
 }
 
-KIO::filesize_t ThumbnailThread::originalSize() const
+KIO::filesize_t ThumbnailGenerator::originalSize() const
 {
     return mOriginalSize;
 }
 
-QString ThumbnailThread::originalMimeType() const
+QString ThumbnailGenerator::originalMimeType() const
 {
     return mOriginalMimeType;
 }
 
-bool ThumbnailThread::testCancel()
+bool ThumbnailGenerator::testCancel()
 {
     QMutexLocker lock(&mMutex);
     return mCancel;
 }
 
-void ThumbnailThread::cancel()
+void ThumbnailGenerator::cancel()
 {
     QMutexLocker lock(&mMutex);
     mCancel = true;
     mCond.wakeOne();
 }
 
-void ThumbnailThread::run()
+void ThumbnailGenerator::run()
 {
     LOG("");
     while (!testCancel()) {
@@ -247,7 +247,7 @@ void ThumbnailThread::run()
     LOG("Ending thread");
 }
 
-void ThumbnailThread::cacheThumbnail()
+void ThumbnailGenerator::cacheThumbnail()
 {
     mImage.setText("Thumb::URI"          , 0, mOriginalUri);
     mImage.setText("Thumb::MTime"        , 0, QString::number(mOriginalTime));

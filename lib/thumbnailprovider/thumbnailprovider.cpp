@@ -229,36 +229,36 @@ ThumbnailProvider::ThumbnailProvider()
     // Look for images and store the items in our todo list
     mCurrentItem = KFileItem();
     mThumbnailGroup = ThumbnailGroup::Large;
-    createNewThumbnailThread();
+    createNewThumbnailGenerator();
 }
 
 ThumbnailProvider::~ThumbnailProvider()
 {
     LOG(this);
     abortSubjob();
-    mThumbnailThread->cancel();
-    disconnect(mThumbnailThread, 0, this, 0);
-    disconnect(mThumbnailThread, 0, sThumbnailCache, 0);
-    connect(mThumbnailThread, SIGNAL(finished()), mThumbnailThread, SLOT(deleteLater()));
-    if (mPreviousThumbnailThread) {
-        disconnect(mPreviousThumbnailThread, 0, sThumbnailCache, 0);
+    mThumbnailGenerator->cancel();
+    disconnect(mThumbnailGenerator, 0, this, 0);
+    disconnect(mThumbnailGenerator, 0, sThumbnailCache, 0);
+    connect(mThumbnailGenerator, SIGNAL(finished()), mThumbnailGenerator, SLOT(deleteLater()));
+    if (mPreviousThumbnailGenerator) {
+        disconnect(mPreviousThumbnailGenerator, 0, sThumbnailCache, 0);
     }
     sThumbnailCache->wait();
 }
 
 void ThumbnailProvider::stop()
 {
-    // Clear mItems and create a new ThumbnailThread if mThumbnailThread is running,
-    // but also make sure that at most two ThumbnailThreads are running.
+    // Clear mItems and create a new ThumbnailGenerator if mThumbnailGenerator is running,
+    // but also make sure that at most two ThumbnailGenerators are running.
     // startCreatingThumbnail() will take care that these two threads won't work on the same item.
     mItems.clear();
     abortSubjob();
-    if (mThumbnailThread->isRunning() && !mPreviousThumbnailThread) {
-        mPreviousThumbnailThread = mThumbnailThread;
-        mPreviousThumbnailThread->cancel();
-        disconnect(mPreviousThumbnailThread, 0, this, 0);
-        connect(mPreviousThumbnailThread, SIGNAL(finished()), mPreviousThumbnailThread, SLOT(deleteLater()));
-        createNewThumbnailThread();
+    if (mThumbnailGenerator->isRunning() && !mPreviousThumbnailGenerator) {
+        mPreviousThumbnailGenerator = mThumbnailGenerator;
+        mPreviousThumbnailGenerator->cancel();
+        disconnect(mPreviousThumbnailGenerator, 0, this, 0);
+        connect(mPreviousThumbnailGenerator, SIGNAL(finished()), mPreviousThumbnailGenerator, SLOT(deleteLater()));
+        createNewThumbnailGenerator();
         mCurrentItem = KFileItem();
     }
 }
@@ -327,14 +327,14 @@ bool ThumbnailProvider::isRunning() const
 }
 
 //-Internal--------------------------------------------------------------
-void ThumbnailProvider::createNewThumbnailThread()
+void ThumbnailProvider::createNewThumbnailGenerator()
 {
-    mThumbnailThread = new ThumbnailThread;
-    connect(mThumbnailThread, SIGNAL(done(QImage,QSize)),
+    mThumbnailGenerator = new ThumbnailGenerator;
+    connect(mThumbnailGenerator, SIGNAL(done(QImage,QSize)),
             SLOT(thumbnailReady(QImage,QSize)),
             Qt::QueuedConnection);
 
-    connect(mThumbnailThread, SIGNAL(thumbnailReadyToBeCached(QString,QImage)),
+    connect(mThumbnailGenerator, SIGNAL(thumbnailReadyToBeCached(QString,QImage)),
             sThumbnailCache, SLOT(queueThumbnail(QString,QImage)),
             Qt::QueuedConnection);
 }
@@ -589,21 +589,21 @@ void ThumbnailProvider::checkThumbnail()
 void ThumbnailProvider::startCreatingThumbnail(const QString& pixPath)
 {
     LOG("Creating thumbnail from" << pixPath);
-    // If mPreviousThumbnailThread is already working on our current item
+    // If mPreviousThumbnailGenerator is already working on our current item
     // its thumbnail will be passed to sThumbnailCache when ready. So we
-    // connect mPreviousThumbnailThread's signal "finished" to determineNextIcon
+    // connect mPreviousThumbnailGenerator's signal "finished" to determineNextIcon
     // which will load the thumbnail from sThumbnailCache or from disk
     // (because we re-add mCurrentItem to mItems).
-    if (mPreviousThumbnailThread && mPreviousThumbnailThread->isRunning() &&
-        mOriginalUri == mPreviousThumbnailThread->originalUri() &&
-        mOriginalTime == mPreviousThumbnailThread->originalTime() &&
-        mCurrentItem.size() == mPreviousThumbnailThread->originalSize() &&
-        mCurrentItem.mimetype() == mPreviousThumbnailThread->originalMimeType()) {
-            connect(mPreviousThumbnailThread, SIGNAL(finished()), SLOT(determineNextIcon()));
+    if (mPreviousThumbnailGenerator && mPreviousThumbnailGenerator->isRunning() &&
+        mOriginalUri == mPreviousThumbnailGenerator->originalUri() &&
+        mOriginalTime == mPreviousThumbnailGenerator->originalTime() &&
+        mCurrentItem.size() == mPreviousThumbnailGenerator->originalSize() &&
+        mCurrentItem.mimetype() == mPreviousThumbnailGenerator->originalMimeType()) {
+            connect(mPreviousThumbnailGenerator, SIGNAL(finished()), SLOT(determineNextIcon()));
             mItems.prepend(mCurrentItem);
             return;
     }
-    mThumbnailThread->load(mOriginalUri, mOriginalTime, mCurrentItem.size(),
+    mThumbnailGenerator->load(mOriginalUri, mOriginalTime, mCurrentItem.size(),
                           mCurrentItem.mimetype(), pixPath, mThumbnailPath, mThumbnailGroup);
 }
 
