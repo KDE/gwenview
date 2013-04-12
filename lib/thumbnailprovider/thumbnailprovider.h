@@ -21,8 +21,8 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#ifndef THUMBNAILLOADJOB_H
-#define THUMBNAILLOADJOB_H
+#ifndef THUMBNAILPROVIDER_H
+#define THUMBNAILPROVIDER_H
 
 #include <lib/gwenviewlib_export.h>
 
@@ -125,12 +125,12 @@ private:
 /**
  * A job that determines the thumbnails for the images in the current directory
  */
-class GWENVIEWLIB_EXPORT ThumbnailLoadJob : public KIO::Job
+class GWENVIEWLIB_EXPORT ThumbnailProvider : public KIO::Job
 {
     Q_OBJECT
 public:
-    ThumbnailLoadJob();
-    virtual ~ThumbnailLoadJob();
+    ThumbnailProvider();
+    virtual ~ThumbnailProvider();
 
     void stop();
 

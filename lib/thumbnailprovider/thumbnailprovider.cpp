@@ -21,7 +21,7 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
-#include "thumbnailloadjob.moc"
+#include "thumbnailprovider.moc"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -77,7 +77,7 @@ static QString generateOriginalUri(const KUrl& url_)
 static QString generateThumbnailPath(const QString& uri, ThumbnailGroup::Enum group)
 {
     KMD5 md5(QFile::encodeName(uri));
-    QString baseDir = ThumbnailLoadJob::thumbnailBaseDir(group);
+    QString baseDir = ThumbnailProvider::thumbnailBaseDir(group);
     return baseDir + QString(QFile::encodeName(md5.hexDigest())) + ".png";
 }
 
@@ -364,11 +364,11 @@ void ThumbnailThread::cacheThumbnail()
 
 //------------------------------------------------------------------------
 //
-// ThumbnailLoadJob static methods
+// ThumbnailProvider static methods
 //
 //------------------------------------------------------------------------
 static QString sThumbnailBaseDir;
-QString ThumbnailLoadJob::thumbnailBaseDir()
+QString ThumbnailProvider::thumbnailBaseDir()
 {
     if (sThumbnailBaseDir.isEmpty()) {
         const QByteArray customDir = qgetenv("GV_THUMBNAIL_DIR");
@@ -381,12 +381,12 @@ QString ThumbnailLoadJob::thumbnailBaseDir()
     return sThumbnailBaseDir;
 }
 
-void ThumbnailLoadJob::setThumbnailBaseDir(const QString& dir)
+void ThumbnailProvider::setThumbnailBaseDir(const QString& dir)
 {
     sThumbnailBaseDir = dir;
 }
 
-QString ThumbnailLoadJob::thumbnailBaseDir(ThumbnailGroup::Enum group)
+QString ThumbnailProvider::thumbnailBaseDir(ThumbnailGroup::Enum group)
 {
     QString dir = thumbnailBaseDir();
     switch (group) {
@@ -400,7 +400,7 @@ QString ThumbnailLoadJob::thumbnailBaseDir(ThumbnailGroup::Enum group)
     return dir;
 }
 
-void ThumbnailLoadJob::deleteImageThumbnail(const KUrl& url)
+void ThumbnailProvider::deleteImageThumbnail(const KUrl& url)
 {
     QString uri = generateOriginalUri(url);
     QFile::remove(generateThumbnailPath(uri, ThumbnailGroup::Normal));
@@ -420,7 +420,7 @@ static void moveThumbnailHelper(const QString& oldUri, const QString& newUri, Th
     QFile::remove(QFile::encodeName(oldPath));
 }
 
-void ThumbnailLoadJob::moveThumbnail(const KUrl& oldUrl, const KUrl& newUrl)
+void ThumbnailProvider::moveThumbnail(const KUrl& oldUrl, const KUrl& newUrl)
 {
     QString oldUri = generateOriginalUri(oldUrl);
     QString newUri = generateOriginalUri(newUrl);
@@ -430,10 +430,10 @@ void ThumbnailLoadJob::moveThumbnail(const KUrl& oldUrl, const KUrl& newUrl)
 
 //------------------------------------------------------------------------
 //
-// ThumbnailLoadJob implementation
+// ThumbnailProvider implementation
 //
 //------------------------------------------------------------------------
-ThumbnailLoadJob::ThumbnailLoadJob()
+ThumbnailProvider::ThumbnailProvider()
 : KIO::Job()
 , mState(STATE_NEXTTHUMB)
 , mOriginalTime(0)
@@ -441,8 +441,8 @@ ThumbnailLoadJob::ThumbnailLoadJob()
     LOG(this);
 
     // Make sure we have a place to store our thumbnails
-    QString thumbnailDirNormal = ThumbnailLoadJob::thumbnailBaseDir(ThumbnailGroup::Normal);
-    QString thumbnailDirLarge = ThumbnailLoadJob::thumbnailBaseDir(ThumbnailGroup::Large);
+    QString thumbnailDirNormal = ThumbnailProvider::thumbnailBaseDir(ThumbnailGroup::Normal);
+    QString thumbnailDirLarge = ThumbnailProvider::thumbnailBaseDir(ThumbnailGroup::Large);
     KStandardDirs::makeDir(thumbnailDirNormal, 0700);
     KStandardDirs::makeDir(thumbnailDirLarge, 0700);
 
@@ -452,7 +452,7 @@ ThumbnailLoadJob::ThumbnailLoadJob()
     createNewThumbnailThread();
 }
 
-ThumbnailLoadJob::~ThumbnailLoadJob()
+ThumbnailProvider::~ThumbnailProvider()
 {
     LOG(this);
     abortSubjob();
@@ -466,7 +466,7 @@ ThumbnailLoadJob::~ThumbnailLoadJob()
     sThumbnailCache->wait();
 }
 
-void ThumbnailLoadJob::stop()
+void ThumbnailProvider::stop()
 {
     // Clear mItems and create a new ThumbnailThread if mThumbnailThread is running,
     // but also make sure that at most two ThumbnailThreads are running.
@@ -483,17 +483,17 @@ void ThumbnailLoadJob::stop()
     }
 }
 
-const KFileItemList& ThumbnailLoadJob::pendingItems() const
+const KFileItemList& ThumbnailProvider::pendingItems() const
 {
     return mItems;
 }
 
-void ThumbnailLoadJob::setThumbnailGroup(ThumbnailGroup::Enum group)
+void ThumbnailProvider::setThumbnailGroup(ThumbnailGroup::Enum group)
 {
     mThumbnailGroup = group;
 }
 
-void ThumbnailLoadJob::appendItems(const KFileItemList& items)
+void ThumbnailProvider::appendItems(const KFileItemList& items)
 {
     if (!mItems.isEmpty()) {
         QSet<QString> itemSet;
@@ -515,7 +515,7 @@ void ThumbnailLoadJob::appendItems(const KFileItemList& items)
     }
 }
 
-void ThumbnailLoadJob::removeItems(const KFileItemList& itemList)
+void ThumbnailProvider::removeItems(const KFileItemList& itemList)
 {
     if (mItems.isEmpty()) {
         return;
@@ -536,18 +536,18 @@ void ThumbnailLoadJob::removeItems(const KFileItemList& itemList)
     }
 }
 
-void ThumbnailLoadJob::removePendingItems()
+void ThumbnailProvider::removePendingItems()
 {
     mItems.clear();
 }
 
-bool ThumbnailLoadJob::isRunning() const
+bool ThumbnailProvider::isRunning() const
 {
     return !mCurrentItem.isNull();
 }
 
 //-Internal--------------------------------------------------------------
-void ThumbnailLoadJob::createNewThumbnailThread()
+void ThumbnailProvider::createNewThumbnailThread()
 {
     mThumbnailThread = new ThumbnailThread;
     connect(mThumbnailThread, SIGNAL(done(QImage,QSize)),
@@ -559,7 +559,7 @@ void ThumbnailLoadJob::createNewThumbnailThread()
             Qt::QueuedConnection);
 }
 
-void ThumbnailLoadJob::abortSubjob()
+void ThumbnailProvider::abortSubjob()
 {
     if (hasSubjobs()) {
         LOG("Killing subjob");
@@ -570,7 +570,7 @@ void ThumbnailLoadJob::abortSubjob()
     }
 }
 
-void ThumbnailLoadJob::determineNextIcon()
+void ThumbnailProvider::determineNextIcon()
 {
     LOG(this);
     mState = STATE_NEXTTHUMB;
@@ -610,7 +610,7 @@ void ThumbnailLoadJob::determineNextIcon()
     LOG("/determineNextIcon" << this);
 }
 
-void ThumbnailLoadJob::slotResult(KJob * job)
+void ThumbnailProvider::slotResult(KJob * job)
 {
     LOG(mState);
     removeSubjob(job);
@@ -655,7 +655,7 @@ void ThumbnailLoadJob::slotResult(KJob * job)
     }
 }
 
-void ThumbnailLoadJob::thumbnailReady(const QImage& _img, const QSize& _size)
+void ThumbnailProvider::thumbnailReady(const QImage& _img, const QSize& _size)
 {
     QImage img = _img;
     QSize size = _size;
@@ -672,7 +672,7 @@ void ThumbnailLoadJob::thumbnailReady(const QImage& _img, const QSize& _size)
     determineNextIcon();
 }
 
-QImage ThumbnailLoadJob::loadThumbnailFromCache() const
+QImage ThumbnailProvider::loadThumbnailFromCache() const
 {
     QImage image = sThumbnailCache->value(mThumbnailPath);
     if (!image.isNull()) {
@@ -699,7 +699,7 @@ QImage ThumbnailLoadJob::loadThumbnailFromCache() const
     return image;
 }
 
-void ThumbnailLoadJob::checkThumbnail()
+void ThumbnailProvider::checkThumbnail()
 {
     if (mCurrentItem.isNull()) {
         // This can happen if current item has been removed by removeItems()
@@ -806,7 +806,7 @@ void ThumbnailLoadJob::checkThumbnail()
     }
 }
 
-void ThumbnailLoadJob::startCreatingThumbnail(const QString& pixPath)
+void ThumbnailProvider::startCreatingThumbnail(const QString& pixPath)
 {
     LOG("Creating thumbnail from" << pixPath);
     // If mPreviousThumbnailThread is already working on our current item
@@ -827,7 +827,7 @@ void ThumbnailLoadJob::startCreatingThumbnail(const QString& pixPath)
                           mCurrentItem.mimetype(), pixPath, mThumbnailPath, mThumbnailGroup);
 }
 
-void ThumbnailLoadJob::slotGotPreview(const KFileItem& item, const QPixmap& pixmap)
+void ThumbnailProvider::slotGotPreview(const KFileItem& item, const QPixmap& pixmap)
 {
     if (mCurrentItem.isNull()) {
         // This can happen if current item has been removed by removeItems()
@@ -838,7 +838,7 @@ void ThumbnailLoadJob::slotGotPreview(const KFileItem& item, const QPixmap& pixm
     emit thumbnailLoaded(item, pixmap, size);
 }
 
-void ThumbnailLoadJob::emitThumbnailLoaded(const QImage& img, const QSize& size)
+void ThumbnailProvider::emitThumbnailLoaded(const QImage& img, const QSize& size)
 {
     if (mCurrentItem.isNull()) {
         // This can happen if current item has been removed by removeItems()
@@ -849,7 +849,7 @@ void ThumbnailLoadJob::emitThumbnailLoaded(const QImage& img, const QSize& size)
     emit thumbnailLoaded(mCurrentItem, thumb, size);
 }
 
-void ThumbnailLoadJob::emitThumbnailLoadingFailed()
+void ThumbnailProvider::emitThumbnailLoadingFailed()
 {
     if (mCurrentItem.isNull()) {
         // This can happen if current item has been removed by removeItems()
@@ -859,7 +859,7 @@ void ThumbnailLoadJob::emitThumbnailLoadingFailed()
     emit thumbnailLoadingFailed(mCurrentItem);
 }
 
-bool ThumbnailLoadJob::isPendingThumbnailCacheEmpty()
+bool ThumbnailProvider::isPendingThumbnailCacheEmpty()
 {
     return sThumbnailCache->isEmpty();
 }

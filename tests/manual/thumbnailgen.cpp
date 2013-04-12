@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Local
-#include <lib/thumbnailloadjob.h>
+#include <lib/thumbnailprovider/thumbnailprovider.h>
 #include <../auto/testutils.h>
 
 // KDE
@@ -84,7 +84,7 @@ int main(int argc, char** argv)
         if (!thumbnailBaseDirName.endsWith("/")) {
             thumbnailBaseDirName += "/";
         }
-        ThumbnailLoadJob::setThumbnailBaseDir(thumbnailBaseDirName);
+        ThumbnailProvider::setThumbnailBaseDir(thumbnailBaseDirName);
     }
 
     // List dir
@@ -99,7 +99,7 @@ int main(int argc, char** argv)
 
     // Start the job
     QTime chrono;
-    ThumbnailLoadJob job;
+    ThumbnailProvider job;
     job.setThumbnailGroup(group);
     job.appendItems(list);
 
@@ -112,7 +112,7 @@ int main(int argc, char** argv)
     kWarning() << "Time to generate thumbnails:" << chrono.restart();
 
     waitForDeferredDeletes();
-    while (!ThumbnailLoadJob::isPendingThumbnailCacheEmpty()) {
+    while (!ThumbnailProvider::isPendingThumbnailCacheEmpty()) {
         QCoreApplication::processEvents();
     }
     kWarning() << "Time to save pending thumbnails:" << chrono.restart();

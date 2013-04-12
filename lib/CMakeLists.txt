@@ -131,7 +131,7 @@ set(gwenviewlib_SRCS
     redeyereduction/redeyereductiontool.cpp
     resize/resizeimageoperation.cpp
     resize/resizeimagedialog.cpp
-    thumbnailloadjob.cpp
+    thumbnailprovider/thumbnailprovider.cpp
     thumbnailview/abstractthumbnailviewhelper.cpp
     thumbnailview/abstractdocumentinfoprovider.cpp
     thumbnailview/contextbarbutton.cpp

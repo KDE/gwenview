@@ -99,9 +99,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/slideshow.h>
 #include <lib/signalblocker.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
+#include <lib/thumbnailprovider/thumbnailprovider.h>
 #include <lib/thumbnailview/thumbnailbarview.h>
 #include <lib/thumbnailview/thumbnailview.h>
-#include <lib/thumbnailloadjob.h>
 #include <lib/urlutils.h>
 
 namespace Gwenview
@@ -170,7 +170,7 @@ struct MainWindow::Private
     ThumbnailView* mActiveThumbnailView;
     DocumentInfoProvider* mDocumentInfoProvider;
     ThumbnailViewHelper* mThumbnailViewHelper;
-    QPointer<ThumbnailLoadJob> mThumbnailLoadJob;
+    QPointer<ThumbnailProvider> mThumbnailProvider;
     BrowseMainPage* mBrowseMainPage;
     StartMainPage* mStartMainPage;
     SideBar* mSideBar;
@@ -837,29 +837,29 @@ struct MainWindow::Private
         }
     }
 
-    void assignThumbnailLoadJobToThumbnailView(ThumbnailView* thumbnailView)
+    void assignThumbnailProviderToThumbnailView(ThumbnailView* thumbnailView)
     {
         GV_RETURN_IF_FAIL(thumbnailView);
         if (mActiveThumbnailView) {
-            mActiveThumbnailView->setThumbnailLoadJob(0);
+            mActiveThumbnailView->setThumbnailProvider(0);
         }
-        thumbnailView->setThumbnailLoadJob(mThumbnailLoadJob);
+        thumbnailView->setThumbnailProvider(mThumbnailProvider);
         mActiveThumbnailView = thumbnailView;
     }
 
-    void autoAssignThumbnailLoadJob()
+    void autoAssignThumbnailProvider()
     {
-        mThumbnailLoadJob->stop();
+        mThumbnailProvider->stop();
         if (mCurrentMainPageId == ViewMainPageId) {
             if (q->windowState() & Qt::WindowFullScreen) {
-                assignThumbnailLoadJobToThumbnailView(mFullScreenContent->thumbnailBar());
+                assignThumbnailProviderToThumbnailView(mFullScreenContent->thumbnailBar());
             } else {
-                assignThumbnailLoadJobToThumbnailView(mViewMainPage->thumbnailBar());
+                assignThumbnailProviderToThumbnailView(mViewMainPage->thumbnailBar());
             }
         } else if (mCurrentMainPageId == BrowseMainPageId) {
-            assignThumbnailLoadJobToThumbnailView(mThumbnailView);
+            assignThumbnailProviderToThumbnailView(mThumbnailView);
         } else if (mCurrentMainPageId == StartMainPageId) {
-            assignThumbnailLoadJobToThumbnailView(mStartMainPage->recentFoldersView());
+            assignThumbnailProviderToThumbnailView(mStartMainPage->recentFoldersView());
         }
     }
 };
@@ -874,7 +874,7 @@ MainWindow::MainWindow()
     d->mGvCore = new GvCore(this, d->mDirModel);
     d->mPreloader = new Preloader(this);
     d->mNotificationRestrictions = 0;
-    d->mThumbnailLoadJob = new ThumbnailLoadJob();
+    d->mThumbnailProvider = new ThumbnailProvider();
     d->mActiveThumbnailView = 0;
     d->initDirModel();
     d->setupWidgets();
@@ -901,7 +901,7 @@ MainWindow::MainWindow()
 
 MainWindow::~MainWindow()
 {
-    delete d->mThumbnailLoadJob;
+    delete d->mThumbnailProvider;
     delete d;
 }
 
@@ -1016,7 +1016,7 @@ void MainWindow::setActiveViewModeAction(QAction* action)
         setCaption(QString());
     }
     d->loadSideBarConfig();
-    d->autoAssignThumbnailLoadJob();
+    d->autoAssignThumbnailProvider();
 
     emit viewModeChanged();
 }
@@ -1129,7 +1129,7 @@ void MainWindow::showStartMainPage()
     updatePreviousNextActions();
     d->updateContextDependentComponents();
 
-    d->autoAssignThumbnailLoadJob();
+    d->autoAssignThumbnailProvider();
 }
 
 void MainWindow::slotStartMainPageUrlSelected(const KUrl& url)
@@ -1171,7 +1171,7 @@ void MainWindow::openDirUrl(const KUrl& url)
         urlToSelect.setPath(pathToSelect);
         d->setUrlToSelect(urlToSelect);
     }
-    d->mThumbnailLoadJob->stop();
+    d->mThumbnailProvider->stop();
     d->mDirModel->dirLister()->openUrl(url);
     d->spreadCurrentDirUrl(url);
     d->mGvCore->addUrlToRecentFolders(url);
@@ -1406,7 +1406,7 @@ void MainWindow::toggleFullScreen(bool checked)
         d->mFullScreenLeftAt = QDateTime::currentDateTime();
     }
     setUpdatesEnabled(true);
-    d->autoAssignThumbnailLoadJob();
+    d->autoAssignThumbnailProvider();
 }
 
 void MainWindow::saveCurrent()
@@ -1538,7 +1538,7 @@ bool MainWindow::queryClose()
 bool MainWindow::queryExit()
 {
     if (GwenviewConfig::deleteThumbnailCacheOnExit()) {
-        const QString dir = ThumbnailLoadJob::thumbnailBaseDir();
+        const QString dir = ThumbnailProvider::thumbnailBaseDir();
         if (QFile::exists(dir)) {
             KIO::NetAccess::del(KUrl::fromPath(dir), this);
         }
