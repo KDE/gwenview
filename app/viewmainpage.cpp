@@ -159,7 +159,6 @@ struct ViewMainPagePrivate
     QHash<DocumentView*, KActivities::ResourceInstance*> mActivityResources;
 
     bool mFullScreenMode;
-    QPalette mNormalPalette;
     bool mCompareMode;
     bool mThumbnailBarVisibleBeforeFullScreen;
 
@@ -174,9 +173,11 @@ struct ViewMainPagePrivate
 
     void setupThumbnailBarStyleSheet()
     {
+        QPalette pal = mGvCore->palette(GvCore::NormalViewPalette);
+        mThumbnailBar->setPalette(pal);
         Qt::Orientation orientation = mThumbnailBar->orientation();
-        QColor bgColor = mNormalPalette.color(QPalette::Normal, QPalette::Window);
-        QColor bgSelColor = mNormalPalette.color(QPalette::Normal, QPalette::Highlight);
+        QColor bgColor = pal.color(QPalette::Normal, QPalette::Base);
+        QColor bgSelColor = pal.color(QPalette::Normal, QPalette::Highlight);
 
         // Avoid dark and bright colors
         bgColor.setHsv(bgColor.hue(), bgColor.saturation(), (127 + 3 * bgColor.value()) / 4);
@@ -184,11 +185,6 @@ struct ViewMainPagePrivate
         QColor leftBorderColor = PaintUtils::adjustedHsv(bgColor, 0, 0, qMin(20, 255 - bgColor.value()));
         QColor rightBorderColor = PaintUtils::adjustedHsv(bgColor, 0, 0, -qMin(40, bgColor.value()));
         QColor borderSelColor = PaintUtils::adjustedHsv(bgSelColor, 0, 0, -qMin(60, bgSelColor.value()));
-
-        QString viewCss =
-            "#thumbnailBarView {"
-            "	background-color: rgba(0, 0, 0, 10%);"
-            "}";
 
         QString itemCss =
             "QListView::item {"
@@ -211,7 +207,7 @@ struct ViewMainPagePrivate
                          gradient(orientation, bgSelColor, 56),
                          rgba(borderSelColor));
 
-        QString css = viewCss + itemCss + itemSelCss;
+        QString css = itemCss + itemSelCss;
         if (orientation == Qt::Vertical) {
             css.replace("left", "top").replace("right", "bottom");
         }
