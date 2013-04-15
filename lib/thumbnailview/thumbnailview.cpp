@@ -352,18 +352,18 @@ void ThumbnailView::setModel(QAbstractItemModel* newModel)
             SIGNAL(rowsRemovedSignal(QModelIndex,int,int)));
 }
 
-void ThumbnailView::setThumbnailProvider(ThumbnailProvider* thumbnailLoadJob)
+void ThumbnailView::setThumbnailProvider(ThumbnailProvider* thumbnailProvider)
 {
-    GV_RETURN_IF_FAIL(d->mThumbnailProvider != thumbnailLoadJob);
-    if (thumbnailLoadJob) {
-        connect(thumbnailLoadJob, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize)),
+    GV_RETURN_IF_FAIL(d->mThumbnailProvider != thumbnailProvider);
+    if (thumbnailProvider) {
+        connect(thumbnailProvider, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize)),
                          SLOT(setThumbnail(KFileItem,QPixmap,QSize)));
-        connect(thumbnailLoadJob, SIGNAL(thumbnailLoadingFailed(KFileItem)),
+        connect(thumbnailProvider, SIGNAL(thumbnailLoadingFailed(KFileItem)),
                          SLOT(setBrokenThumbnail(KFileItem)));
     } else {
         disconnect(d->mThumbnailProvider, 0 , this, 0);
     }
-    d->mThumbnailProvider = thumbnailLoadJob;
+    d->mThumbnailProvider = thumbnailProvider;
 }
 
 void ThumbnailView::updateThumbnailSize()

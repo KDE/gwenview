@@ -98,7 +98,7 @@ public:
 
     virtual void setModel(QAbstractItemModel* model);
 
-    void setThumbnailProvider(ThumbnailProvider* thumbnailLoadJob);
+    void setThumbnailProvider(ThumbnailProvider* thumbnailProvider);
 
     /**
      * Publish this method so that delegates can call it.
