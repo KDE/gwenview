@@ -845,11 +845,14 @@ struct MainWindow::Private
         }
         thumbnailView->setThumbnailProvider(mThumbnailProvider);
         mActiveThumbnailView = thumbnailView;
+        if (mActiveThumbnailView->isVisible()) {
+            mThumbnailProvider->stop();
+            mActiveThumbnailView->generateThumbnailsForVisibleItems();
+        }
     }
 
     void autoAssignThumbnailProvider()
     {
-        mThumbnailProvider->stop();
         if (mCurrentMainPageId == ViewMainPageId) {
             if (q->windowState() & Qt::WindowFullScreen) {
                 assignThumbnailProviderToThumbnailView(mFullScreenContent->thumbnailBar());
