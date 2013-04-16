@@ -106,10 +106,10 @@ void ThumbnailProviderTest::init()
     mSandBox.fill();
 }
 
-static void syncRun(ThumbnailProvider *job)
+static void syncRun(ThumbnailProvider *provider)
 {
     QEventLoop loop;
-    QObject::connect(job, SIGNAL(finished()), &loop, SLOT(quit()));
+    QObject::connect(provider, SIGNAL(finished()), &loop, SLOT(quit()));
     loop.exec();
 }
 
@@ -126,11 +126,11 @@ void ThumbnailProviderTest::testLoadLocal()
     }
 
     // Generate the thumbnails
-    ThumbnailProvider job;
-    job.setThumbnailGroup(ThumbnailGroup::Normal);
-    job.appendItems(list);
-    QSignalSpy spy(&job, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize)));
-    syncRun(&job);
+    ThumbnailProvider provider;
+    provider.setThumbnailGroup(ThumbnailGroup::Normal);
+    provider.appendItems(list);
+    QSignalSpy spy(&provider, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize)));
+    syncRun(&provider);
     while (!ThumbnailProvider::isThumbnailWriterEmpty()) {
         QTest::qWait(100);
     }
@@ -200,11 +200,11 @@ void ThumbnailProviderTest::testUseEmbeddedOrNot()
 
     // Loading a normal thumbnail should bring the white one
     {
-        ThumbnailProvider job;
-        job.setThumbnailGroup(ThumbnailGroup::Normal);
-        job.appendItems(list);
-        QSignalSpy spy(&job, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize)));
-        syncRun(&job);
+        ThumbnailProvider provider;
+        provider.setThumbnailGroup(ThumbnailGroup::Normal);
+        provider.appendItems(list);
+        QSignalSpy spy(&provider, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize)));
+        syncRun(&provider);
 
         QCOMPARE(spy.count(), 1);
         expectedThumbnail = createColoredImage(128, 64, Qt::white);
@@ -214,11 +214,11 @@ void ThumbnailProviderTest::testUseEmbeddedOrNot()
 
     // Loading a large thumbnail should bring the red one
     {
-        ThumbnailProvider job;
-        job.setThumbnailGroup(ThumbnailGroup::Large);
-        job.appendItems(list);
-        QSignalSpy spy(&job, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize)));
-        syncRun(&job);
+        ThumbnailProvider provider;
+        provider.setThumbnailGroup(ThumbnailGroup::Large);
+        provider.appendItems(list);
+        QSignalSpy spy(&provider, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize)));
+        syncRun(&provider);
 
         QCOMPARE(spy.count(), 1);
         expectedThumbnail = createColoredImage(256, 128, Qt::red);
@@ -239,10 +239,10 @@ void ThumbnailProviderTest::testLoadRemote()
     KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
     list << item;
 
-    ThumbnailProvider job;
-    job.setThumbnailGroup(ThumbnailGroup::Normal);
-    job.appendItems(list);
-    syncRun(&job);
+    ThumbnailProvider provider;
+    provider.setThumbnailGroup(ThumbnailGroup::Normal);
+    provider.appendItems(list);
+    syncRun(&provider);
     while (!ThumbnailProvider::isThumbnailWriterEmpty()) {
         QTest::qWait(100);
     }
@@ -265,13 +265,13 @@ void ThumbnailProviderTest::testRemoveItemsWhileGenerating()
     }
 
     // Start generating thumbnails for items
-    ThumbnailProvider job;
-    job.setThumbnailGroup(ThumbnailGroup::Normal);
-    job.appendItems(list);
+    ThumbnailProvider provider;
+    provider.setThumbnailGroup(ThumbnailGroup::Normal);
+    provider.appendItems(list);
     QEventLoop loop;
-    connect(&job, SIGNAL(finished()), &loop, SLOT(quit()));
+    connect(&provider, SIGNAL(finished()), &loop, SLOT(quit()));
 
     // Remove items, it should not crash
-    job.removeItems(list);
+    provider.removeItems(list);
     loop.exec();
 }
