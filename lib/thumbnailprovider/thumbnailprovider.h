@@ -176,5 +176,4 @@ private:
 };
 
 } // namespace
-#endif
-
+#endif /* THUMBNAILPROVIDER_H */
