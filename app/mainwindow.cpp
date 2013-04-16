@@ -847,7 +847,7 @@ struct MainWindow::Private
         mActiveThumbnailView = thumbnailView;
         if (mActiveThumbnailView->isVisible()) {
             mThumbnailProvider->stop();
-            mActiveThumbnailView->generateThumbnailsForVisibleItems();
+            mActiveThumbnailView->generateThumbnailsForItems();
         }
     }
 

@@ -155,7 +155,7 @@ public Q_SLOTS:
 
     void scrollToSelectedIndex();
 
-    void generateThumbnailsForVisibleItems();
+    void generateThumbnailsForItems();
 
 protected:
     virtual void dragEnterEvent(QDragEnterEvent*);

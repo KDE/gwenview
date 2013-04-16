@@ -307,7 +307,7 @@ ThumbnailView::ThumbnailView(QWidget* parent)
     d->mScheduledThumbnailGenerationTimer.setSingleShot(true);
     d->mScheduledThumbnailGenerationTimer.setInterval(500);
     connect(&d->mScheduledThumbnailGenerationTimer, SIGNAL(timeout()),
-            SLOT(generateThumbnailsForVisibleItems()));
+            SLOT(generateThumbnailsForItems()));
 
     d->mSmoothThumbnailTimer.setSingleShot(true);
     connect(&d->mSmoothThumbnailTimer, SIGNAL(timeout()),
@@ -803,7 +803,7 @@ void ThumbnailView::scrollContentsBy(int dx, int dy)
     d->scheduleThumbnailGenerationForVisibleItems();
 }
 
-void ThumbnailView::generateThumbnailsForVisibleItems()
+void ThumbnailView::generateThumbnailsForItems()
 {
     if (!isVisible() || !model()) {
         return;
@@ -967,7 +967,7 @@ void ThumbnailView::reloadThumbnail(const QModelIndex& index)
         return;
     }
     d->mThumbnailForUrl.erase(it);
-    generateThumbnailsForVisibleItems();
+    generateThumbnailsForItems();
 }
 
 void ThumbnailView::setCreateThumbnailsForRemoteUrls(bool createRemoteThumbs)
