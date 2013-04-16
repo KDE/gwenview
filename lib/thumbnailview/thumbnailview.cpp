@@ -48,9 +48,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "archiveutils.h"
 #include "dragpixmapgenerator.h"
 #include "mimetypeutils.h"
-#include "thumbnailloadjob.h"
 #include "urlutils.h"
 #include <lib/gvdebug.h>
+#include <lib/thumbnailprovider/thumbnailprovider.h>
 
 namespace Gwenview
 {
@@ -173,7 +173,7 @@ struct ThumbnailViewPrivate
     QTimer mSmoothThumbnailTimer;
 
     QPixmap mWaitingThumbnail;
-    QPointer<ThumbnailLoadJob> mThumbnailLoadJob;
+    QPointer<ThumbnailProvider> mThumbnailProvider;
 
     PersistentModelIndexSet mBusyIndexSet;
     KPixmapSequence mBusySequence;
@@ -194,8 +194,8 @@ struct ThumbnailViewPrivate
 
     void scheduleThumbnailGenerationForVisibleItems()
     {
-        if (mThumbnailLoadJob) {
-            mThumbnailLoadJob->removePendingItems();
+        if (mThumbnailProvider) {
+            mThumbnailProvider->removePendingItems();
         }
         mSmoothThumbnailQueue.clear();
         mScheduledThumbnailGenerationTimer.start();
@@ -217,9 +217,9 @@ struct ThumbnailViewPrivate
     void generateThumbnailsForItems(const KFileItemList& list)
     {
         ThumbnailGroup::Enum group = ThumbnailGroup::fromPixelSize(mThumbnailSize.width());
-        if (mThumbnailLoadJob) {
-            mThumbnailLoadJob->setThumbnailGroup(group);
-            mThumbnailLoadJob->appendItems(list);
+        if (mThumbnailProvider) {
+            mThumbnailProvider->setThumbnailGroup(group);
+            mThumbnailProvider->appendItems(list);
         }
     }
 
@@ -282,7 +282,7 @@ ThumbnailView::ThumbnailView(QWidget* parent)
     d->mScaleMode = ScaleToFit;
     d->mThumbnailViewHelper = 0;
     d->mDocumentInfoProvider = 0;
-    d->mThumbnailLoadJob = 0;
+    d->mThumbnailProvider = 0;
     // Init to some stupid value so that the first call to setThumbnailSize()
     // is not ignored (do not use 0 in case someone try to divide by
     // mThumbnailSize...)
@@ -352,18 +352,18 @@ void ThumbnailView::setModel(QAbstractItemModel* newModel)
             SIGNAL(rowsRemovedSignal(QModelIndex,int,int)));
 }
 
-void ThumbnailView::setThumbnailLoadJob(ThumbnailLoadJob* thumbnailLoadJob)
+void ThumbnailView::setThumbnailProvider(ThumbnailProvider* thumbnailProvider)
 {
-    GV_RETURN_IF_FAIL(d->mThumbnailLoadJob != thumbnailLoadJob);
-    if (thumbnailLoadJob) {
-        connect(thumbnailLoadJob, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize)),
+    GV_RETURN_IF_FAIL(d->mThumbnailProvider != thumbnailProvider);
+    if (thumbnailProvider) {
+        connect(thumbnailProvider, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize)),
                          SLOT(setThumbnail(KFileItem,QPixmap,QSize)));
-        connect(thumbnailLoadJob, SIGNAL(thumbnailLoadingFailed(KFileItem)),
+        connect(thumbnailProvider, SIGNAL(thumbnailLoadingFailed(KFileItem)),
                          SLOT(setBrokenThumbnail(KFileItem)));
     } else {
-        disconnect(d->mThumbnailLoadJob, 0 , this, 0);
+        disconnect(d->mThumbnailProvider, 0 , this, 0);
     }
-    d->mThumbnailLoadJob = thumbnailLoadJob;
+    d->mThumbnailProvider = thumbnailProvider;
 }
 
 void ThumbnailView::updateThumbnailSize()
@@ -484,8 +484,8 @@ void ThumbnailView::rowsAboutToBeRemoved(const QModelIndex& parent, int start, i
         itemList.append(item);
     }
 
-    if (d->mThumbnailLoadJob) {
-        d->mThumbnailLoadJob->removeItems(itemList);
+    if (d->mThumbnailProvider) {
+        d->mThumbnailProvider->removeItems(itemList);
     }
 
     // Update current index if it is among the deleted rows
@@ -596,7 +596,7 @@ void ThumbnailView::setBrokenThumbnail(const KFileItem& item)
         QPixmap pix = item.pixmap(ThumbnailGroup::pixelSize(group));
         thumbnail.initAsIcon(pix);
     } else if (kind == MimeTypeUtils::KIND_DIR) {
-        // Special case for folders because ThumbnailLoadJob does not return a
+        // Special case for folders because ThumbnailProvider does not return a
         // thumbnail if there is no images
         thumbnail.mWaitingForThumbnail = false;
         return;
@@ -932,8 +932,8 @@ void ThumbnailView::smoothNextThumbnail()
         return;
     }
 
-    if (d->mThumbnailLoadJob && d->mThumbnailLoadJob->isRunning()) {
-        // give mThumbnailLoadJob priority over smoothing
+    if (d->mThumbnailProvider && d->mThumbnailProvider->isRunning()) {
+        // give mThumbnailProvider priority over smoothing
         d->mSmoothThumbnailTimer.start(SMOOTH_DELAY);
         return;
     }
@@ -961,7 +961,7 @@ void ThumbnailView::reloadThumbnail(const QModelIndex& index)
         kWarning() << "Invalid url for index" << index;
         return;
     }
-    ThumbnailLoadJob::deleteImageThumbnail(url);
+    ThumbnailProvider::deleteImageThumbnail(url);
     ThumbnailForUrl::Iterator it = d->mThumbnailForUrl.find(url);
     if (it == d->mThumbnailForUrl.end()) {
         return;

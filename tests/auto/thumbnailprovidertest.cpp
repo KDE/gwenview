@@ -17,7 +17,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
-#include "thumbnailloadjobtest.moc"
+#include "thumbnailprovidertest.moc"
 
 // Qt
 #include <QDir>
@@ -33,7 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Local
 #include "../lib/imageformats/imageformats.h"
-#include "../lib/thumbnailloadjob.h"
+#include "../lib/thumbnailprovider/thumbnailprovider.h"
 #include "testutils.h"
 
 // libc
@@ -42,7 +42,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 using namespace Gwenview;
 
-QTEST_KDEMAIN(ThumbnailLoadJobTest, GUI)
+QTEST_KDEMAIN(ThumbnailProviderTest, GUI)
 
 SandBox::SandBox()
 : mPath(QDir::currentPath() + "/sandbox")
@@ -94,26 +94,26 @@ void SandBox::createTestImage(const QString& name, int width, int height, const 
     mSizeHash.insert(name, QSize(width, height));
 }
 
-void ThumbnailLoadJobTest::initTestCase()
+void ThumbnailProviderTest::initTestCase()
 {
     qRegisterMetaType<KFileItem>("KFileItem");
     Gwenview::ImageFormats::registerPlugins();
 }
 
-void ThumbnailLoadJobTest::init()
+void ThumbnailProviderTest::init()
 {
-    ThumbnailLoadJob::setThumbnailBaseDir(mSandBox.mPath + "/thumbnails/");
+    ThumbnailProvider::setThumbnailBaseDir(mSandBox.mPath + "/thumbnails/");
     mSandBox.fill();
 }
 
-static void syncRun(ThumbnailLoadJob *job)
+static void syncRun(ThumbnailProvider *provider)
 {
     QEventLoop loop;
-    QObject::connect(job, SIGNAL(finished()), &loop, SLOT(quit()));
+    QObject::connect(provider, SIGNAL(finished()), &loop, SLOT(quit()));
     loop.exec();
 }
 
-void ThumbnailLoadJobTest::testLoadLocal()
+void ThumbnailProviderTest::testLoadLocal()
 {
     QDir dir(mSandBox.mPath);
 
@@ -126,17 +126,17 @@ void ThumbnailLoadJobTest::testLoadLocal()
     }
 
     // Generate the thumbnails
-    ThumbnailLoadJob job;
-    job.setThumbnailGroup(ThumbnailGroup::Normal);
-    job.appendItems(list);
-    QSignalSpy spy(&job, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize)));
-    syncRun(&job);
-    while (!ThumbnailLoadJob::isPendingThumbnailCacheEmpty()) {
+    ThumbnailProvider provider;
+    provider.setThumbnailGroup(ThumbnailGroup::Normal);
+    provider.appendItems(list);
+    QSignalSpy spy(&provider, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize)));
+    syncRun(&provider);
+    while (!ThumbnailProvider::isThumbnailWriterEmpty()) {
         QTest::qWait(100);
     }
 
     // Check we generated the correct number of thumbnails
-    QDir thumbnailDir = ThumbnailLoadJob::thumbnailBaseDir(ThumbnailGroup::Normal);
+    QDir thumbnailDir = ThumbnailProvider::thumbnailBaseDir(ThumbnailGroup::Normal);
     // There should be one file less because small.png is a png and is too
     // small to have a thumbnail
     QStringList entryList = thumbnailDir.entryList(QStringList("*.png"));
@@ -185,7 +185,7 @@ void ThumbnailLoadJobTest::testLoadLocal()
     }
 }
 
-void ThumbnailLoadJobTest::testUseEmbeddedOrNot()
+void ThumbnailProviderTest::testUseEmbeddedOrNot()
 {
     QImage expectedThumbnail;
     QPixmap thumbnailPix;
@@ -200,11 +200,11 @@ void ThumbnailLoadJobTest::testUseEmbeddedOrNot()
 
     // Loading a normal thumbnail should bring the white one
     {
-        ThumbnailLoadJob job;
-        job.setThumbnailGroup(ThumbnailGroup::Normal);
-        job.appendItems(list);
-        QSignalSpy spy(&job, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize)));
-        syncRun(&job);
+        ThumbnailProvider provider;
+        provider.setThumbnailGroup(ThumbnailGroup::Normal);
+        provider.appendItems(list);
+        QSignalSpy spy(&provider, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize)));
+        syncRun(&provider);
 
         QCOMPARE(spy.count(), 1);
         expectedThumbnail = createColoredImage(128, 64, Qt::white);
@@ -214,11 +214,11 @@ void ThumbnailLoadJobTest::testUseEmbeddedOrNot()
 
     // Loading a large thumbnail should bring the red one
     {
-        ThumbnailLoadJob job;
-        job.setThumbnailGroup(ThumbnailGroup::Large);
-        job.appendItems(list);
-        QSignalSpy spy(&job, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize)));
-        syncRun(&job);
+        ThumbnailProvider provider;
+        provider.setThumbnailGroup(ThumbnailGroup::Large);
+        provider.appendItems(list);
+        QSignalSpy spy(&provider, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize)));
+        syncRun(&provider);
 
         QCOMPARE(spy.count(), 1);
         expectedThumbnail = createColoredImage(256, 128, Qt::red);
@@ -227,7 +227,7 @@ void ThumbnailLoadJobTest::testUseEmbeddedOrNot()
     }
 }
 
-void ThumbnailLoadJobTest::testLoadRemote()
+void ThumbnailProviderTest::testLoadRemote()
 {
     KUrl url = setUpRemoteTestDir("test.png");
     if (!url.isValid()) {
@@ -239,20 +239,20 @@ void ThumbnailLoadJobTest::testLoadRemote()
     KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
     list << item;
 
-    ThumbnailLoadJob job;
-    job.setThumbnailGroup(ThumbnailGroup::Normal);
-    job.appendItems(list);
-    syncRun(&job);
-    while (!ThumbnailLoadJob::isPendingThumbnailCacheEmpty()) {
+    ThumbnailProvider provider;
+    provider.setThumbnailGroup(ThumbnailGroup::Normal);
+    provider.appendItems(list);
+    syncRun(&provider);
+    while (!ThumbnailProvider::isThumbnailWriterEmpty()) {
         QTest::qWait(100);
     }
 
-    QDir thumbnailDir = ThumbnailLoadJob::thumbnailBaseDir(ThumbnailGroup::Normal);
+    QDir thumbnailDir = ThumbnailProvider::thumbnailBaseDir(ThumbnailGroup::Normal);
     QStringList entryList = thumbnailDir.entryList(QStringList("*.png"));
     QCOMPARE(entryList.count(), 1);
 }
 
-void ThumbnailLoadJobTest::testRemoveItemsWhileGenerating()
+void ThumbnailProviderTest::testRemoveItemsWhileGenerating()
 {
     QDir dir(mSandBox.mPath);
 
@@ -265,13 +265,13 @@ void ThumbnailLoadJobTest::testRemoveItemsWhileGenerating()
     }
 
     // Start generating thumbnails for items
-    ThumbnailLoadJob job;
-    job.setThumbnailGroup(ThumbnailGroup::Normal);
-    job.appendItems(list);
+    ThumbnailProvider provider;
+    provider.setThumbnailGroup(ThumbnailGroup::Normal);
+    provider.appendItems(list);
     QEventLoop loop;
-    connect(&job, SIGNAL(finished()), &loop, SLOT(quit()));
+    connect(&provider, SIGNAL(finished()), &loop, SLOT(quit()));
 
     // Remove items, it should not crash
-    job.removeItems(list);
+    provider.removeItems(list);
     loop.exec();
 }

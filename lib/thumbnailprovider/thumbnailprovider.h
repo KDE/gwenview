@@ -21,17 +21,14 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#ifndef THUMBNAILLOADJOB_H
-#define THUMBNAILLOADJOB_H
+#ifndef THUMBNAILPROVIDER_H
+#define THUMBNAILPROVIDER_H
 
 #include <lib/gwenviewlib_export.h>
 
 // Qt
 #include <QImage>
 #include <QPixmap>
-#include <QMutex>
-#include <QThread>
-#include <QWaitCondition>
 #include <QPointer>
 
 // KDE
@@ -43,94 +40,19 @@
 
 namespace Gwenview
 {
-struct ThumbnailContext {
-    QImage mImage;
-    int mOriginalWidth;
-    int mOriginalHeight;
-    bool mNeedCaching;
 
-    bool load(const QString &pixPath, int pixelSize);
-};
-
-class ThumbnailThread : public QThread
-{
-    Q_OBJECT
-public:
-    ThumbnailThread();
-
-    void load(
-        const QString& originalUri,
-        time_t originalTime,
-        KIO::filesize_t originalSize,
-        const QString& originalMimeType,
-        const QString& pixPath,
-        const QString& thumbnailPath,
-        ThumbnailGroup::Enum group);
-
-    void cancel();
-
-    QString originalUri() const;
-    time_t originalTime() const;
-    KIO::filesize_t originalSize() const;
-    QString originalMimeType() const;
-protected:
-    virtual void run();
-
-Q_SIGNALS:
-    void done(const QImage&, const QSize&);
-    void thumbnailReadyToBeCached(const QString& thumbnailPath, const QImage&);
-
-private:
-    bool testCancel();
-    void cacheThumbnail();
-    QImage mImage;
-    QString mPixPath;
-    QString mThumbnailPath;
-    QString mOriginalUri;
-    time_t mOriginalTime;
-    int mOriginalSize;
-    QString mOriginalMimeType;
-    int mOriginalWidth;
-    int mOriginalHeight;
-    QMutex mMutex;
-    QWaitCondition mCond;
-    ThumbnailGroup::Enum mThumbnailGroup;
-    bool mCancel;
-};
-
-/**
- * Store thumbnails to disk when done generating them
- */
-class ThumbnailCache : public QThread
-{
-    Q_OBJECT
-public:
-    // Return thumbnail if it has still not been stored
-    QImage value(const QString&) const;
-
-    bool isEmpty() const;
-
-public Q_SLOTS:
-    void queueThumbnail(const QString&, const QImage&);
-
-protected:
-    void run();
-
-private:
-    typedef QHash<QString, QImage> Cache;
-    Cache mCache;
-    mutable QMutex mMutex;
-};
+class ThumbnailGenerator;
+class ThumbnailWriter;
 
 /**
  * A job that determines the thumbnails for the images in the current directory
  */
-class GWENVIEWLIB_EXPORT ThumbnailLoadJob : public KIO::Job
+class GWENVIEWLIB_EXPORT ThumbnailProvider : public KIO::Job
 {
     Q_OBJECT
 public:
-    ThumbnailLoadJob();
-    virtual ~ThumbnailLoadJob();
+    ThumbnailProvider();
+    virtual ~ThumbnailProvider();
 
     void stop();
 
@@ -190,7 +112,7 @@ public:
      * Returns true if all thumbnails have been written to disk. Useful for
      * unit-testing.
      */
-    static bool isPendingThumbnailCacheEmpty();
+    static bool isThumbnailWriterEmpty();
 
 Q_SIGNALS:
     /**
@@ -239,12 +161,12 @@ private:
     // Thumbnail group
     ThumbnailGroup::Enum mThumbnailGroup;
 
-    ThumbnailThread* mThumbnailThread;
-    QPointer<ThumbnailThread> mPreviousThumbnailThread;
+    ThumbnailGenerator* mThumbnailGenerator;
+    QPointer<ThumbnailGenerator> mPreviousThumbnailGenerator;
 
     QStringList mPreviewPlugins;
 
-    void createNewThumbnailThread();
+    void createNewThumbnailGenerator();
     void abortSubjob();
     void startCreatingThumbnail(const QString& path);
 
@@ -254,5 +176,4 @@ private:
 };
 
 } // namespace
-#endif
-
+#endif /* THUMBNAILPROVIDER_H */

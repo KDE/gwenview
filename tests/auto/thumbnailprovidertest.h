@@ -17,8 +17,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
-#ifndef THUMBNAILLOADJOBTEST_H
-#define THUMBNAILLOADJOBTEST_H
+#ifndef THUMBNAILPROVIDERTEST_H
+#define THUMBNAILPROVIDERTEST_H
 
 // Qt
 #include <QColor>
@@ -39,7 +39,7 @@ public:
     QString mPath;
 };
 
-class ThumbnailLoadJobTest : public QObject
+class ThumbnailProviderTest : public QObject
 {
     Q_OBJECT
 
@@ -55,4 +55,4 @@ private:
     SandBox mSandBox;
 };
 
-#endif // THUMBNAILLOADJOBTEST_H
+#endif // THUMBNAILPROVIDERTEST_H

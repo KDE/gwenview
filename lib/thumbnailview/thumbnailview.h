@@ -39,7 +39,7 @@ namespace Gwenview
 
 class AbstractDocumentInfoProvider;
 class AbstractThumbnailViewHelper;
-class ThumbnailLoadJob;
+class ThumbnailProvider;
 
 struct ThumbnailViewPrivate;
 class GWENVIEWLIB_EXPORT ThumbnailView : public QListView
@@ -98,7 +98,7 @@ public:
 
     virtual void setModel(QAbstractItemModel* model);
 
-    void setThumbnailLoadJob(ThumbnailLoadJob* thumbnailLoadJob);
+    void setThumbnailProvider(ThumbnailProvider* thumbnailProvider);
 
     /**
      * Publish this method so that delegates can call it.
