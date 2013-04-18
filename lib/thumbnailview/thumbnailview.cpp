@@ -192,7 +192,7 @@ struct ThumbnailViewPrivate
                          q, SLOT(updateBusyIndexes()));
     }
 
-    void scheduleThumbnailGenerationForVisibleItems()
+    void scheduleThumbnailGeneration()
     {
         if (mThumbnailProvider) {
             mThumbnailProvider->removePendingItems();
@@ -214,10 +214,10 @@ struct ThumbnailViewPrivate
         q->setThumbnail(item, pix, fullSize);
     }
 
-    void generateThumbnailsForItems(const KFileItemList& list)
+    void appendItemsToThumbnailProvider(const KFileItemList& list)
     {
-        ThumbnailGroup::Enum group = ThumbnailGroup::fromPixelSize(mThumbnailSize.width());
         if (mThumbnailProvider) {
+            ThumbnailGroup::Enum group = ThumbnailGroup::fromPixelSize(mThumbnailSize.width());
             mThumbnailProvider->setThumbnailGroup(group);
             mThumbnailProvider->appendItems(list);
         }
@@ -402,7 +402,7 @@ void ThumbnailView::updateThumbnailSize()
     if (d->mScaleMode != ScaleToFit) {
         scheduleDelayedItemsLayout();
     }
-    d->scheduleThumbnailGenerationForVisibleItems();
+    d->scheduleThumbnailGeneration();
 }
 
 void ThumbnailView::setThumbnailWidth(int width)
@@ -756,13 +756,13 @@ void ThumbnailView::keyPressEvent(QKeyEvent* event)
 void ThumbnailView::resizeEvent(QResizeEvent* event)
 {
     QListView::resizeEvent(event);
-    d->scheduleThumbnailGenerationForVisibleItems();
+    d->scheduleThumbnailGeneration();
 }
 
 void ThumbnailView::showEvent(QShowEvent* event)
 {
     QListView::showEvent(event);
-    d->scheduleThumbnailGenerationForVisibleItems();
+    d->scheduleThumbnailGeneration();
     QTimer::singleShot(0, this, SLOT(scrollToSelectedIndex()));
 }
 
@@ -800,7 +800,7 @@ void ThumbnailView::selectionChanged(const QItemSelection& selected, const QItem
 void ThumbnailView::scrollContentsBy(int dx, int dy)
 {
     QListView::scrollContentsBy(dx, dy);
-    d->scheduleThumbnailGenerationForVisibleItems();
+    d->scheduleThumbnailGeneration();
 }
 
 void ThumbnailView::generateThumbnailsForItems()
@@ -880,7 +880,7 @@ void ThumbnailView::generateThumbnailsForItems()
     }
 
     if (!itemMap.isEmpty()) {
-        d->generateThumbnailsForItems(itemMap.values());
+        d->appendItemsToThumbnailProvider(itemMap.values());
     }
 }
 
@@ -893,7 +893,7 @@ void ThumbnailView::updateThumbnail(const QModelIndex& index)
     } else {
         KFileItemList list;
         list << item;
-        d->generateThumbnailsForItems(list);
+        d->appendItemsToThumbnailProvider(list);
     }
 }
 
