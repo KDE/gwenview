@@ -25,7 +25,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 #include <KDebug>
-#include <KModifierKeyInfo>
 #include <KStandardDirs>
 #include <KUrl>
 
@@ -62,10 +61,10 @@ struct AbstractImageViewPrivate
         Notify
     };
     AbstractImageView* q;
-    KModifierKeyInfo* mModifierKeyInfo;
     QCursor mZoomCursor;
     Document::Ptr mDocument;
 
+    bool mControlKeyIsDown;
     bool mEnlargeSmallerImages;
 
     qreal mZoom;
@@ -135,13 +134,12 @@ AbstractImageView::AbstractImageView(QGraphicsItem* parent)
 , d(new AbstractImageViewPrivate)
 {
     d->q = this;
+    d->mControlKeyIsDown = false;
     d->mEnlargeSmallerImages = false;
     d->mZoom = 1;
     d->mZoomToFit = true;
     d->mImageOffset = QPointF(0, 0);
     d->mScrollPos = QPointF(0, 0);
-    d->mModifierKeyInfo = new KModifierKeyInfo(this);
-    connect(d->mModifierKeyInfo, SIGNAL(keyPressed(Qt::Key,bool)), SLOT(updateCursor()));
     setFocusPolicy(Qt::WheelFocus);
     setFlag(ItemIsSelectable);
     setAcceptHoverEvents(true);
@@ -372,6 +370,11 @@ void AbstractImageView::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 
 void AbstractImageView::keyPressEvent(QKeyEvent* event)
 {
+    if (event->key() == Qt::Key_Control) {
+        d->mControlKeyIsDown = true;
+        updateCursor();
+        return;
+    }
     if (zoomToFit() || qFuzzyCompare(computeZoomToFit(), zoom())) {
         if (event->modifiers() != Qt::NoModifier) {
             return;
@@ -432,6 +435,14 @@ void AbstractImageView::keyPressEvent(QKeyEvent* event)
     d->setScrollPos(d->mScrollPos + delta);
 
     updateCursor();
+}
+
+void AbstractImageView::keyReleaseEvent(QKeyEvent* event)
+{
+    if (event->key() == Qt::Key_Control) {
+        d->mControlKeyIsDown = false;
+        updateCursor();
+    }
 }
 
 void AbstractImageView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
@@ -518,7 +529,7 @@ void AbstractImageView::setEnlargeSmallerImages(bool value)
 
 void AbstractImageView::updateCursor()
 {
-    if (d->mModifierKeyInfo->isKeyPressed(Qt::Key_Control)) {
+    if (d->mControlKeyIsDown) {
         QApplication::restoreOverrideCursor();
         setCursor(d->mZoomCursor);
     } else {
