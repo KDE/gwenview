@@ -35,7 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KActionCategory>
 #include <KDebug>
 #include <KFileItem>
-#include <KFileItemListProperties>
+#include <KFileItemActions>
 #include <kio/paste.h>
 #include <KLocale>
 #include <KMimeTypeTrader>
@@ -51,6 +51,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // Local
 #include <lib/eventwatcher.h>
+#include <lib/gvdebug.h>
 #include "contextmanager.h"
 #include "fileoperations.h"
 #include "sidebar.h"
@@ -79,7 +80,7 @@ struct FileOpsContextManagerItemPrivate
     KAction* mOpenWithAction;
     QList<QAction*> mRegularFileActionList;
     QList<QAction*> mTrashFileActionList;
-    QMap<QString, KService::Ptr> mServiceForName;
+    KService::List mServiceList;
     bool mInTrash;
 
     KUrl::List urlList() const
@@ -97,7 +98,7 @@ struct FileOpsContextManagerItemPrivate
         return urlList;
     }
 
-    void updateServiceForName()
+    void updateServiceList()
     {
         // This code is inspired from
         // kdebase/apps/lib/konq/konq_menuactions.cpp
@@ -112,22 +113,7 @@ struct FileOpsContextManagerItemPrivate
         }
 
         // Query trader
-        const QString firstMimeType = mimeTypes.takeFirst();
-        const QString constraintTemplate = "'%1' in ServiceTypes";
-        QStringList constraints;
-        Q_FOREACH(const QString & mimeType, mimeTypes) {
-            constraints << constraintTemplate.arg(mimeType);
-        }
-
-        KService::List services = KMimeTypeTrader::self()->query(
-                                      firstMimeType, "Application",
-                                      constraints.join(" and "));
-
-        // Update map
-        mServiceForName.clear();
-        Q_FOREACH(const KService::Ptr & service, services) {
-            mServiceForName[service->name()] = service;
-        }
+        mServiceList = KFileItemActions::associatedApplications(mimeTypes, QString());
     }
 
     QMimeData* selectionMimeData()
@@ -409,17 +395,20 @@ void FileOpsContextManagerItem::populateOpenMenu()
     QMenu* openMenu = d->mOpenWithAction->menu();
     qDeleteAll(openMenu->actions());
 
-    d->updateServiceForName();
+    d->updateServiceList();
 
-    Q_FOREACH(const KService::Ptr & service, d->mServiceForName) {
+    int idx = 0;
+    Q_FOREACH(const KService::Ptr & service, d->mServiceList) {
         QString text = service->name().replace('&', "&&");
         QAction* action = openMenu->addAction(text);
         action->setIcon(KIcon(service->icon()));
-        action->setData(service->name());
+        action->setData(idx);
+        ++idx;
     }
 
     openMenu->addSeparator();
-    openMenu->addAction(i18n("Other Application..."));
+    QAction* action = openMenu->addAction(i18n("Other Application..."));
+    action->setData(-1);
 }
 
 void FileOpsContextManagerItem::openWith(QAction* action)
@@ -428,8 +417,10 @@ void FileOpsContextManagerItem::openWith(QAction* action)
     KService::Ptr service;
     KUrl::List list = d->urlList();
 
-    QString name = action->data().toString();
-    if (name.isEmpty()) {
+    bool ok;
+    int idx = action->data().toInt(&ok);
+    GV_RETURN_IF_FAIL(ok);
+    if (idx == -1) {
         // Other Application...
         KOpenWithDialog dlg(list, d->mGroup);
         if (!dlg.exec()) {
@@ -444,7 +435,7 @@ void FileOpsContextManagerItem::openWith(QAction* action)
             return;
         }
     } else {
-        service = d->mServiceForName[name];
+        service = d->mServiceList.at(idx);
     }
 
     Q_ASSERT(service);
