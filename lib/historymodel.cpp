@@ -236,6 +236,7 @@ void HistoryModel::addUrl(const KUrl& url, const QDateTime& _dateTime)
             kError() << "Could not save history for url" << url;
             return;
         }
+        d->mHistoryItemForUrl.insert(url, historyItem);
         appendRow(historyItem);
         sort(0);
         d->garbageCollect();
