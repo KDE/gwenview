@@ -86,8 +86,8 @@ void ThreadedDocumentJob::doStart()
 {
     QFuture<void> future = QtConcurrent::run(this, &ThreadedDocumentJob::threadedStart);
     QFutureWatcher<void>* watcher = new QFutureWatcher<void>(this);
-    watcher->setFuture(future);
     connect(watcher, SIGNAL(finished()), SLOT(emitResult()));
+    watcher->setFuture(future);
 }
 
 } // namespace
