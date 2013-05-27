@@ -54,7 +54,7 @@ public:
     void load(
         const QString& originalUri,
         time_t originalTime,
-        KIO::filesize_t originalSize,
+        KIO::filesize_t originalFileSize,
         const QString& originalMimeType,
         const QString& pixPath,
         const QString& thumbnailPath,
@@ -64,7 +64,7 @@ public:
 
     QString originalUri() const;
     time_t originalTime() const;
-    KIO::filesize_t originalSize() const;
+    KIO::filesize_t originalFileSize() const;
     QString originalMimeType() const;
 protected:
     virtual void run();
@@ -81,7 +81,7 @@ private:
     QString mThumbnailPath;
     QString mOriginalUri;
     time_t mOriginalTime;
-    int mOriginalSize;
+    KIO::filesize_t mOriginalFileSize;
     QString mOriginalMimeType;
     int mOriginalWidth;
     int mOriginalHeight;

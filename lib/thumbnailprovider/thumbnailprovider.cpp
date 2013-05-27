@@ -537,7 +537,7 @@ void ThumbnailProvider::startCreatingThumbnail(const QString& pixPath)
     if (mPreviousThumbnailGenerator && mPreviousThumbnailGenerator->isRunning() &&
         mOriginalUri == mPreviousThumbnailGenerator->originalUri() &&
         mOriginalTime == mPreviousThumbnailGenerator->originalTime() &&
-        mOriginalFileSize == mPreviousThumbnailGenerator->originalSize() &&
+        mOriginalFileSize == mPreviousThumbnailGenerator->originalFileSize() &&
         mCurrentItem.mimetype() == mPreviousThumbnailGenerator->originalMimeType()) {
             connect(mPreviousThumbnailGenerator, SIGNAL(finished()), SLOT(determineNextIcon()));
             mItems.prepend(mCurrentItem);

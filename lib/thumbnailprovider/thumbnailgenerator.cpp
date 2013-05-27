@@ -142,7 +142,7 @@ ThumbnailGenerator::ThumbnailGenerator()
 {}
 
 void ThumbnailGenerator::load(
-    const QString& originalUri, time_t originalTime, KIO::filesize_t originalSize, const QString& originalMimeType,
+    const QString& originalUri, time_t originalTime, KIO::filesize_t originalFileSize, const QString& originalMimeType,
     const QString& pixPath,
     const QString& thumbnailPath,
     ThumbnailGroup::Enum group)
@@ -152,7 +152,7 @@ void ThumbnailGenerator::load(
 
     mOriginalUri = originalUri;
     mOriginalTime = originalTime;
-    mOriginalSize = originalSize;
+    mOriginalFileSize = originalFileSize;
     mOriginalMimeType = originalMimeType;
     mPixPath = pixPath;
     mThumbnailPath = thumbnailPath;
@@ -171,9 +171,9 @@ time_t ThumbnailGenerator::originalTime() const
     return mOriginalTime;
 }
 
-KIO::filesize_t ThumbnailGenerator::originalSize() const
+KIO::filesize_t ThumbnailGenerator::originalFileSize() const
 {
-    return mOriginalSize;
+    return mOriginalFileSize;
 }
 
 QString ThumbnailGenerator::originalMimeType() const
@@ -255,7 +255,7 @@ void ThumbnailGenerator::cacheThumbnail()
 {
     mImage.setText("Thumb::URI"          , 0, mOriginalUri);
     mImage.setText("Thumb::MTime"        , 0, QString::number(mOriginalTime));
-    mImage.setText("Thumb::Size"         , 0, QString::number(mOriginalSize));
+    mImage.setText("Thumb::Size"         , 0, QString::number(mOriginalFileSize));
     mImage.setText("Thumb::Mimetype"     , 0, mOriginalMimeType);
     mImage.setText("Thumb::Image::Width" , 0, QString::number(mOriginalWidth));
     mImage.setText("Thumb::Image::Height", 0, QString::number(mOriginalHeight));
