@@ -307,6 +307,7 @@ void ThumbnailProvider::determineNextIcon()
     mState = STATE_STATORIG;
     mCurrentUrl = mCurrentItem.url();
     mCurrentUrl.cleanPath();
+    mOriginalFileSize = mCurrentItem.size();
 
     // Do direct stat instead of using KIO if the file is local (faster)
     bool directStatOk = false;
@@ -439,9 +440,11 @@ void ThumbnailProvider::checkThumbnail()
     LOG("Stat thumb" << mThumbnailPath);
 
     QImage thumb = loadThumbnailFromCache();
+    KIO::filesize_t fileSize = thumb.text("Thumb::Size", 0).toULongLong();
     if (!thumb.isNull()) {
         if (thumb.text("Thumb::URI", 0) == mOriginalUri &&
-                thumb.text("Thumb::MTime", 0).toInt() == mOriginalTime) {
+                thumb.text("Thumb::MTime", 0).toInt() == mOriginalTime &&
+                 (fileSize == 0 || fileSize == mOriginalFileSize)) {
             int width = 0, height = 0;
             QSize size;
             bool ok;
@@ -534,13 +537,13 @@ void ThumbnailProvider::startCreatingThumbnail(const QString& pixPath)
     if (mPreviousThumbnailGenerator && mPreviousThumbnailGenerator->isRunning() &&
         mOriginalUri == mPreviousThumbnailGenerator->originalUri() &&
         mOriginalTime == mPreviousThumbnailGenerator->originalTime() &&
-        mCurrentItem.size() == mPreviousThumbnailGenerator->originalSize() &&
+        mOriginalFileSize == mPreviousThumbnailGenerator->originalSize() &&
         mCurrentItem.mimetype() == mPreviousThumbnailGenerator->originalMimeType()) {
             connect(mPreviousThumbnailGenerator, SIGNAL(finished()), SLOT(determineNextIcon()));
             mItems.prepend(mCurrentItem);
             return;
     }
-    mThumbnailGenerator->load(mOriginalUri, mOriginalTime, mCurrentItem.size(),
+    mThumbnailGenerator->load(mOriginalUri, mOriginalTime, mOriginalFileSize,
                           mCurrentItem.mimetype(), pixPath, mThumbnailPath, mThumbnailGroup);
 }
 
@@ -552,7 +555,7 @@ void ThumbnailProvider::slotGotPreview(const KFileItem& item, const QPixmap& pix
     }
     LOG(mCurrentItem.url());
     QSize size;
-    emit thumbnailLoaded(item, pixmap, size);
+    emit thumbnailLoaded(item, pixmap, size, mOriginalFileSize);
 }
 
 void ThumbnailProvider::emitThumbnailLoaded(const QImage& img, const QSize& size)
@@ -563,7 +566,7 @@ void ThumbnailProvider::emitThumbnailLoaded(const QImage& img, const QSize& size
     }
     LOG(mCurrentItem.url());
     QPixmap thumb = QPixmap::fromImage(img);
-    emit thumbnailLoaded(mCurrentItem, thumb, size);
+    emit thumbnailLoaded(mCurrentItem, thumb, size, mOriginalFileSize);
 }
 
 void ThumbnailProvider::emitThumbnailLoadingFailed()

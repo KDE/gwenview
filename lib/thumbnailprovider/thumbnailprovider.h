@@ -118,7 +118,7 @@ Q_SIGNALS:
     /**
      * Emitted when the thumbnail for the @p item has been loaded
      */
-    void thumbnailLoaded(const KFileItem& item, const QPixmap&, const QSize&);
+    void thumbnailLoaded(const KFileItem& item, const QPixmap&, const QSize&, const qulonglong&);
 
     void thumbnailLoadingFailed(const KFileItem& item);
 
@@ -151,6 +151,9 @@ private:
 
     // The modification time of the original image
     time_t mOriginalTime;
+
+    // The file size of the original image
+    KIO::filesize_t mOriginalFileSize;
 
     // The thumbnail path
     QString mThumbnailPath;

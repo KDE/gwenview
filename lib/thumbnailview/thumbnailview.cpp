@@ -90,11 +90,13 @@ struct Thumbnail
     Thumbnail(const QPersistentModelIndex& index_, const KDateTime& mtime)
         : mIndex(index_)
         , mModificationTime(mtime)
+        , mFileSize(0)
         , mRough(true)
         , mWaitingForThumbnail(true) {}
 
     Thumbnail()
-        : mRough(true)
+        : mFileSize(0)
+        , mRough(true)
         , mWaitingForThumbnail(true) {}
 
     /**
@@ -128,6 +130,7 @@ struct Thumbnail
     void prepareForRefresh(const KDateTime& mtime)
     {
         mModificationTime = mtime;
+        mFileSize = 0;
         mGroupPix = QPixmap();
         mAdjustedPix = QPixmap();
         mFullSize = QSize();
@@ -147,8 +150,10 @@ struct Thumbnail
     /// Real size of the full image, invalid unless the thumbnail
     /// represents a raster image (not an icon)
     QSize mRealFullSize;
+    /// File size of the full image
+    KIO::filesize_t mFileSize;
     /// Whether mAdjustedPix represents has been scaled using fast or smooth
-    //transformation
+    /// transformation
     bool mRough;
     /// Set to true if mGroupPix should be replaced with a real thumbnail
     bool mWaitingForThumbnail;
@@ -211,7 +216,7 @@ struct ThumbnailViewPrivate
         QSize fullSize;
         mDocumentInfoProvider->thumbnailForDocument(url, group, &pix, &fullSize);
         mThumbnailForUrl[url] = Thumbnail(QPersistentModelIndex(index), KDateTime::currentLocalDateTime());
-        q->setThumbnail(item, pix, fullSize);
+        q->setThumbnail(item, pix, fullSize, 0);
     }
 
     void appendItemsToThumbnailProvider(const KFileItemList& list)
@@ -356,8 +361,8 @@ void ThumbnailView::setThumbnailProvider(ThumbnailProvider* thumbnailProvider)
 {
     GV_RETURN_IF_FAIL(d->mThumbnailProvider != thumbnailProvider);
     if (thumbnailProvider) {
-        connect(thumbnailProvider, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize)),
-                         SLOT(setThumbnail(KFileItem,QPixmap,QSize)));
+        connect(thumbnailProvider, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize,qulonglong)),
+                         SLOT(setThumbnail(KFileItem,QPixmap,QSize,qulonglong)));
         connect(thumbnailProvider, SIGNAL(thumbnailLoadingFailed(KFileItem)),
                          SLOT(setBrokenThumbnail(KFileItem)));
     } else {
@@ -533,7 +538,7 @@ void ThumbnailView::dataChanged(const QModelIndex& topLeft, const QModelIndex& b
             // currently visible, and do not yet have a thumbnail for the
             // modified url.
             KDateTime mtime = item.time(KFileItem::ModificationTime);
-            if (it->mModificationTime != mtime) {
+            if (it->mModificationTime != mtime || it->mFileSize != item.size()) {
                 // dataChanged() is called when the file changes but also when
                 // the model fetched additional data such as semantic info. To
                 // avoid needless refreshes, we only trigger a refresh if the
@@ -560,7 +565,7 @@ void ThumbnailView::emitIndexActivatedIfNoModifiers(const QModelIndex& index)
     }
 }
 
-void ThumbnailView::setThumbnail(const KFileItem& item, const QPixmap& pixmap, const QSize& size)
+void ThumbnailView::setThumbnail(const KFileItem& item, const QPixmap& pixmap, const QSize& size, const qulonglong& fileSize)
 {
     ThumbnailForUrl::iterator it = d->mThumbnailForUrl.find(item.url());
     if (it == d->mThumbnailForUrl.end()) {
@@ -573,6 +578,7 @@ void ThumbnailView::setThumbnail(const KFileItem& item, const QPixmap& pixmap, c
     thumbnail.mFullSize = size.isValid() ? size : QSize(largeGroupSize, largeGroupSize);
     thumbnail.mRealFullSize = size;
     thumbnail.mWaitingForThumbnail = false;
+    thumbnail.mFileSize = fileSize;
 
     update(thumbnail.mIndex);
     if (d->mScaleMode != ScaleToFit) {
