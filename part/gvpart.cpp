@@ -129,7 +129,7 @@ KAboutData* GVPart::createAboutData()
         GWENVIEW_VERSION);       /* version */
     aboutData->setShortDescription(ki18n("An Image Viewer"));
     aboutData->setLicense(KAboutData::License_GPL);
-    aboutData->setCopyrightStatement(ki18n("Copyright 2000-2012 Aurélien Gâteau"));
+    aboutData->setCopyrightStatement(ki18n("Copyright 2000-2013 Aurélien Gâteau"));
     aboutData->addAuthor(
         ki18n("Aurélien Gâteau"),
         ki18n("Main developer"),
