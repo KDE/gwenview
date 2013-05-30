@@ -38,8 +38,8 @@
 </copyright>
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2012-01-28</date>
-<releaseinfo>2.8 (&kde; 4.8)</releaseinfo>
+<date>2013-05-28</date>
+<releaseinfo>4.11 (&kde; 4.11)</releaseinfo>
 <abstract>
 <para>&kappname; is an image viewer for &kde;.</para>
 </abstract>
@@ -52,7 +52,8 @@
 <keyword>picture</keyword>
 </keywordset>
 </bookinfo>
-
+<!--FIXME Read devels blog on http://agateau.com/ 
+-->
 <chapter id="introduction">
 <title>Introduction</title>
 
@@ -63,8 +64,9 @@
 &kappname; is a fast and easy to use image and video viewer for KDE.
 </para>
 
-<para>
-Gwenview features three main modes: Browse, View, and Full Screen. Browse Mode
+ <para> 
+Gwenview features two main modes: Browse and View. Both modes can be used 
+in a normal application window and Full Screen. Browse Mode
 lets you navigate through your computer showing thumbnails of your images, View
 Mode lets you view images one at a time, and Full Screen lets you make quick
 slideshows.  There is also a start screen that displays a list of recently opened
@@ -78,11 +80,29 @@ with an alpha channel (transparency) as well as animations.</para>
 <para>&kappname; supports the displaying and editing of EXIF comments in JPEG
 images. Lossless JPEG transforms such as rotations and mirroring are also supported.</para>
 
+<para>&kappname; can read embedded color profiles from PNG and JPEG files.
+It can use the image color profile together with the display color profile 
+to output correct colors on the screen.</para>
 </sect1>
+
 </chapter>
 
 <chapter id="interface">
-<title>The interface</title>
+<title>The Interface</title>
+
+<sect1 id='start_page'><title>Start Page</title>
+<para>The start page lists recently opened folders and &URL;s on the left side,
+and your places and tags on the right side.</para>
+
+<screenshot>
+  <screeninfo>Start Page Screenshot</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="start-page.png" format="PNG" />
+    </imageobject>
+  </mediaobject>
+</screenshot>
+</sect1>
 
 <sect1 id='image_operations'><title>Image Operations</title>
 <para>&kappname; has a few features which are available in both Browse, View, and
@@ -134,8 +154,12 @@ reflection along the horizontal axis)</para></listitem>
 This operation will allow you to shrink or expand the image. Note that if you
 increase the size of an image, it may appear
 blurry and/or pixelated.</para></listitem>
-
+ <!-- Crop + Red Eye Reduction are discussed in View mode sect-->
 </itemizedlist>
+
+<para>These actions are also available on the <guilabel>Operations</guilabel> tab of the sidebar.</para>
+
+<!--FIXME all actions also available context menus, where to add that info -->
 
 <tip><para>If you have installed the Kipi Plugins, a <guimenu>Plugins</guimenu>
 menu will be available that will allow you to perform many additional operations
@@ -143,17 +167,11 @@ on your images.  For more information, see the
 <ulink url="help:kipi-plugins">Kipi Plugins documentation</ulink>.</para></tip>
 </sect1>
 
-<sect1 id='start_page'><title>Start Page</title>
-<para>The start page lists recently opened files and &URL;s on the left side,
-and your places and tags on the right side.</para>
-</sect1>
-
 <sect1 id='browse_mode'><title>Browse Mode</title>
 
 <para>When in Browse Mode, you can easily navigate through your files and folders.
   The preview window shows thumbnails of the images in the current folder, as
   well as subfolders. </para>
-
 
 <screenshot>
   <screeninfo>Browse Mode Screenshot</screeninfo>
@@ -166,14 +184,17 @@ and your places and tags on the right side.</para>
 
 <para>
 Moving the mouse over an image shows buttons to select or rotate the image as well as
-a button to enter Fullscreen Mode. Clicking on an image takes you into View
+a button to enter Fullscreen Mode. 
+Modified images are indicated by an icon down right, click it to save the changed image.
+Clicking on an image takes you into View
 Mode.  You may select multiple images and switch to View Mode to view them side-by-side.</para>
 
 <para>The slider at the bottom right allows you to change the size of the images. 
 You can also filter the images by filename, date, tag or rating using the box on the
-lower left. The toolbar (left) appears in both Browse mode as well as View
+lower left. The toolbar appears in both Browse mode as well as View
 mode and contains the most commonly used actions. </para>
 <itemizedlist>
+<listitem><para><guiicon>Start Page</guiicon>: Open the start page.</para></listitem>
 <listitem><para><guiicon>Browse</guiicon>: Switches to Browse Mode.</para></listitem>
 <listitem><para><guiicon>View</guiicon>: Switches to View Mode.</para></listitem>
 <listitem><para><guiicon>Full Screen</guiicon>: Switches to Full Screen Mode.</para></listitem>
@@ -185,7 +206,7 @@ the next image in the folder.</para></listitem>
 
 <listitem><para>Rotate Left/Right: Same as discussed in
 Image Operations</para></listitem>
-
+<!--FIXME missing Share -->
 </itemizedlist>
 
 </sect1>
@@ -234,7 +255,8 @@ image with the arrow keys. When you zoom in, arrow keys are used to scroll the i
 This is very similar to the behavior provided by phones or digital cameras.</para>
 
 <para>When an image is zoomed in, a bird-eye view appears and lets you scroll 
-the image using the mouse and the arrow keys.</para>
+the image using the mouse and the arrow keys. The bird-eye view automatically hides 
+itself after a short delay, showing back only while zooming or scrolling.</para>
 
 <tip><para>You can start directly in View mode by starting &kappname; from a
 context menu like <guimenuitem>Open With</guimenuitem> in another program or by
@@ -266,11 +288,10 @@ launching it from the command line with an image as an argument.</para> </tip>
 
 </sect1>
 
-<sect1 id='fullscreen_mode'><title>Full Screen Mode</title>
+<sect1 id='fullscreen_mode'>
+<title>Full Screen Modes</title>
 
-<para>The Full Screen Mode shows a slideshow of your images. Access Full Screen
-Mode by clicking on the button that appears when you move the mouse over the
-thumbnails in Browse Mode, by pressing the <guiicon>Full Screen</guiicon>
+<para>Access Full Screen by pressing the <guiicon>Full Screen</guiicon>
 button on the taskbar, or by
   <menuchoice>
     <shortcut>
@@ -278,16 +299,54 @@ button on the taskbar, or by
     </shortcut>
     <guimenu>View</guimenu>
     <guimenuitem>Full Screen Mode</guimenuitem>
-  </menuchoice>.</para>
+  </menuchoice>.
+  <menuchoice>
+    <shortcut>
+<keycombo action="simul">&Ctrl;&Shift;<keycap>F</keycap></keycombo>
+    </shortcut>
+    <guimenu>View</guimenu>
+    <guimenuitem>Full Screen Mode</guimenuitem>
+  </menuchoice>.
+</para>
+<para>To leave this mode press the &Esc; button.</para>
 
+<sect2>
+<title>Browse Mode Full Screen</title>
+
+<para>In Browse Mode you can switch to fillscreen also by clicking on the button that 
+appears when you move the mouse over the thumbnails in. 
+</para>
 <screenshot>
-  <screeninfo>Full Screen Mode Screenshot</screeninfo>
+  <screeninfo>Full Screen View Mode Screenshot</screeninfo>
   <mediaobject>
     <imageobject>
-      <imagedata fileref="fullscreen_mode.png" format="PNG" />
+      <imagedata fileref="fullscreen-browse.png" format="PNG" />
     </imageobject>
   </mediaobject>
 </screenshot>
+<para>Going fullscreen while browsing gives you a more immersive experience while 
+you go through your pictures. It is quite nice on your regular computer, but makes 
+even more sense when you connect your laptop to the big TV in the living room to show 
+pictures to your guests.
+</para>
+</sect2>
+
+<sect2>
+<title>View Mode Full Screen</title>
+<para>The full screen View Mode shows a slideshow of your images. Access Full Screen
+Mode by clicking on the button that appears when you move the mouse over the
+thumbnails in Browse Mode, by pressing the <guiicon>Full Screen</guiicon>
+button on the taskbar, or by
+
+<screenshot>
+  <screeninfo>Full Screen Browse Mode Screenshot</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="fullscreen-view.png" format="PNG" />
+    </imageobject>
+  </mediaobject>
+</screenshot>
+</para>
 
 <para>The top bar will hide itself automatically; to show it simply move the
 mouse to the top of the screen. If the mouse cursor is over the top bar, it
@@ -308,11 +367,9 @@ slideshow. The slideshow controls there are: </para>
     <listitem><para>If the <guilabel>Random</guilabel> checkbox is checked,
     instead of progressing through the folder alphabetically, images will be
     shown in random order.</para></listitem>
-    <listitem><para><guibutton>Configure Displayed Metadata</guibutton> allows
+    <listitem><para><guibutton>Select Image Information to Display</guibutton> allows
     you to define what metadata is displayed under the buttons on the toolbar.
     </para></listitem>
-    <listitem><para><guilabel>Appearance</guilabel> allows you to select a theme
-    for the Full Screen View.</para></listitem>
     <listitem><para>If the <guilabel>Show thumbnails</guilabel> checkbox is checked,
     thumbnails for all images in the current folder will be displayed to the right of
     the toolbar.</para></listitem>
@@ -322,13 +379,13 @@ slideshow. The slideshow controls there are: </para>
 
 <para>If enabled, an area that shows you the other images in the current folder will
 be shown on the top bar. Clicking on one will display it.</para>
-
+</sect2>
 </sect1>
 
 <sect1 id="sidebar">
 <title>Sidebar</title>
 
-<para>The sidebar on the left is available in the Browse and View modes, but does
+ <para>The sidebar on the left is available in the Browse and View <!--FIXME not in Full Screen-->modes, but does
 not appear by default in Browse Mode.  Its appearance can be toggled using
 <menuchoice>
 <shortcut>
@@ -381,6 +438,28 @@ copying, renaming, deleting, and creating new folders.</para></listitem>
 removable media.  To launch it, select <guilabel>Download Photos with &kappname;</guilabel>
 in the &kde; Device Notifier after connecting a supported device.</para>
 
+<para>When you plugin a device the &kappname; importer recursively lists all images and videos.
+</para>
+<para>This is not always what you expect, e.g. plugging a smartphone you do not want to list all medias 
+of the device; but only the pictures you took, which are usually in a special subfolder.
+</para>
+
+<screenshot>
+  <screeninfo>Root Folder Picking</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="importer-picking-root-folder.png" format="PNG" />
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>It is possible to select the root folder to list, and &kappname; Importer will remember the 
+last root folder for each device. This way, next time you plug a device in, only the relevant 
+pictures and videos should be listed.
+</para>
+
+<sect2>
+<title>Importing Images</title>
+
 <screenshot>
   <screeninfo>&kappname; Importer Screenshot</screeninfo>
   <mediaobject>
@@ -390,22 +469,16 @@ in the &kde; Device Notifier after connecting a supported device.</para>
   </mediaobject>
 </screenshot>
 
-</sect1>
-
-<sect1>
-<title>Importing Images</title>
 <para>If you wish, you may select the images you want to import under
 <guilabel>Select the documents to import</guilabel> by pressing the <guiicon>+</guiicon>
 button that appears when hovering over an image.  You may also select the folder
-that images are imported to in the text box at the bottom of the window. To browse
-for folders on your system, click the <guiicon>Open file dialog</guiicon>
-button to the right of the text box.  When you are done, click the
+that images are imported to in the text box at the bottom of the window. When you are done, click the
 <guibutton>Import Selected</guibutton> button to import only the images you have
 selected, or click <guibutton>Import All</guibutton> to import all images found
 on the device.</para>
-</sect1>
+</sect2>
 
-<sect1>
+<sect2>
 <title>Automatic Renaming</title>
 <para>&kappname; Importer can rename your files according to a specified pattern.
 To configure this, select the <guibutton>Settings</guibutton> in the lower left
@@ -414,6 +487,7 @@ corner.  You may turn this feature on or off using the checkbox at the top.  The
 be replaced by metadata such as the date the image was created or its filename.
 They are listed below the text box.  You may either click on the parameter name to
 enter it into the text box or type one manually.</para>
+</sect2>
 </sect1>
 
 </chapter>
@@ -557,7 +631,36 @@ Pressing this shortcut toggles zoom-to-fit on and off.</para></listitem>
 
 <listitem><para><keycap>P</keycap>:
 Viewing a video this shortcut toggles playback on and off.</para></listitem>
+
+<listitem><para><keycombo
+action="simul">&Ctrl;<keycap>T</keycap></keycombo>:
+Edit tags.</para></listitem>
+
+<listitem><para><keycombo
+action="simul">&Ctrl;<keycap>F2</keycap></keycombo>:
+Rename an image inline.</para></listitem>
+
+<listitem><para><keycap>Del</keycap>:
+Move an image to the trash.</para></listitem>
+
+<listitem><para><keycombo
+action="simul">&Shift;<keycap>Del</keycap></keycombo>:
+Delete an image.</para></listitem>
+
+<listitem><para><keycombo
+action="simul">&Ctrl;<keycap>F7</keycap></keycombo>:
+Copy an image.</para></listitem>
+
+<listitem><para><keycombo
+action="simul">&Ctrl;<keycap>F8</keycap></keycombo>:
+Move an image.</para></listitem>
+
+<listitem><para><keycombo
+action="simul">&Ctrl;<keycap>F9</keycap></keycombo>:
+Link an image.</para></listitem>
+
 </itemizedlist>
+
 </sect1>
 <sect1 id="advanced-configuration">
     <title>Advanced Configuration Options</title>
