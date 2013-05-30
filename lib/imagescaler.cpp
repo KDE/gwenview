@@ -101,6 +101,11 @@ void ImageScaler::setDestinationRegion(const QRegion& region)
 
 void ImageScaler::doScale()
 {
+    if (d->mDocument->isBusy()) {
+        LOG("Document is busy, waiting");
+        QMetaObject::invokeMethod(this, "doScale", Qt::QueuedConnection);
+        return;
+    }
     if (d->mZoom < Document::maxDownSampledZoom()) {
         if (!d->mDocument->prepareDownSampledImageForZoom(d->mZoom)) {
             LOG("Asked for a down sampled image");
