@@ -215,7 +215,7 @@ void DocumentTest::testLoadDownSampled()
     QImage downSampledImage = doc->downSampledImageForZoom(0.2);
     QVERIFY2(!downSampledImage.isNull(), "Down sampled image should not be null");
 
-    QSize expectedSize = doc->size() / 4;
+    QSize expectedSize = doc->size() / 2;
     if (expectedSize.isEmpty()) {
         expectedSize = image.size();
     }

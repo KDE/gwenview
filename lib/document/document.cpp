@@ -131,7 +131,7 @@ const QImage& Document::image() const
 inline int invertedZoomForZoom(qreal zoom)
 {
     int invertedZoom;
-    for (invertedZoom = 1; zoom < 1. / (invertedZoom * 2); invertedZoom *= 2) {}
+    for (invertedZoom = 1; zoom < 1. / (invertedZoom * 4); invertedZoom *= 2) {}
     return invertedZoom;
 }
 
