@@ -64,7 +64,7 @@ public:
 protected Q_SLOTS:
     /**
      * Implement this method to provide the task behavior.
-     * You *must* emit the done() signal when your work is finished, but it
+     * You *must* emit the result() signal when your work is finished, but it
      * does not have to be finished when run() returns.
      * If you are not emitting it from the GUI thread, then use a queued
      * connection to emit it.
