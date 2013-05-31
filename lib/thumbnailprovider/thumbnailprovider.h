@@ -118,7 +118,7 @@ Q_SIGNALS:
     /**
      * Emitted when the thumbnail for the @p item has been loaded
      */
-    void thumbnailLoaded(const KFileItem& item, const QPixmap&, const QSize&, const qulonglong&);
+    void thumbnailLoaded(const KFileItem& item, const QPixmap&, const QSize&, qulonglong);
 
     void thumbnailLoadingFailed(const KFileItem& item);
 

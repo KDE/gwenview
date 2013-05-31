@@ -565,7 +565,7 @@ void ThumbnailView::emitIndexActivatedIfNoModifiers(const QModelIndex& index)
     }
 }
 
-void ThumbnailView::setThumbnail(const KFileItem& item, const QPixmap& pixmap, const QSize& size, const qulonglong& fileSize)
+void ThumbnailView::setThumbnail(const KFileItem& item, const QPixmap& pixmap, const QSize& size, qulonglong fileSize)
 {
     ThumbnailForUrl::iterator it = d->mThumbnailForUrl.find(item.url());
     if (it == d->mThumbnailForUrl.end()) {
