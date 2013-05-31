@@ -300,21 +300,14 @@ button on the taskbar, or by
     <guimenu>View</guimenu>
     <guimenuitem>Full Screen Mode</guimenuitem>
   </menuchoice>.
-  <menuchoice>
-    <shortcut>
-<keycombo action="simul">&Ctrl;&Shift;<keycap>F</keycap></keycombo>
-    </shortcut>
-    <guimenu>View</guimenu>
-    <guimenuitem>Full Screen Mode</guimenuitem>
-  </menuchoice>.
 </para>
-<para>To leave this mode press the &Esc; button.</para>
+<para>To leave this mode press the &Esc; key.</para>
 
 <sect2>
 <title>Browse Mode Full Screen</title>
 
 <para>In Browse Mode you can switch to fillscreen also by clicking on the button that 
-appears when you move the mouse over the thumbnails in. 
+appears when you move the mouse over the thumbnails.
 </para>
 <screenshot>
   <screeninfo>Full Screen View Mode Screenshot</screeninfo>
@@ -336,7 +329,7 @@ pictures to your guests.
 <para>The full screen View Mode shows a slideshow of your images. Access Full Screen
 Mode by clicking on the button that appears when you move the mouse over the
 thumbnails in Browse Mode, by pressing the <guiicon>Full Screen</guiicon>
-button on the taskbar, or by
+button on the taskbar.
 
 <screenshot>
   <screeninfo>Full Screen Browse Mode Screenshot</screeninfo>
@@ -438,9 +431,9 @@ copying, renaming, deleting, and creating new folders.</para></listitem>
 removable media.  To launch it, select <guilabel>Download Photos with &kappname;</guilabel>
 in the &kde; Device Notifier after connecting a supported device.</para>
 
-<para>When you plugin a device the &kappname; importer recursively lists all images and videos.
+<para>When you plug in a device the &kappname; importer recursively lists all images and videos.
 </para>
-<para>This is not always what you expect, e.g. plugging a smartphone you do not want to list all medias 
+<para>This is not always what you expect, &eg; plugging a smartphone you do not want to list all medias 
 of the device; but only the pictures you took, which are usually in a special subfolder.
 </para>
 
