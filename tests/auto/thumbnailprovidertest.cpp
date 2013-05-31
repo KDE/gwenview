@@ -129,7 +129,7 @@ void ThumbnailProviderTest::testLoadLocal()
     ThumbnailProvider provider;
     provider.setThumbnailGroup(ThumbnailGroup::Normal);
     provider.appendItems(list);
-    QSignalSpy spy(&provider, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize)));
+    QSignalSpy spy(&provider, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize,qulonglong)));
     syncRun(&provider);
     while (!ThumbnailProvider::isThumbnailWriterEmpty()) {
         QTest::qWait(100);
@@ -203,7 +203,7 @@ void ThumbnailProviderTest::testUseEmbeddedOrNot()
         ThumbnailProvider provider;
         provider.setThumbnailGroup(ThumbnailGroup::Normal);
         provider.appendItems(list);
-        QSignalSpy spy(&provider, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize)));
+        QSignalSpy spy(&provider, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize,qulonglong)));
         syncRun(&provider);
 
         QCOMPARE(spy.count(), 1);
@@ -217,7 +217,7 @@ void ThumbnailProviderTest::testUseEmbeddedOrNot()
         ThumbnailProvider provider;
         provider.setThumbnailGroup(ThumbnailGroup::Large);
         provider.appendItems(list);
-        QSignalSpy spy(&provider, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize)));
+        QSignalSpy spy(&provider, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize,qulonglong)));
         syncRun(&provider);
 
         QCOMPARE(spy.count(), 1);
