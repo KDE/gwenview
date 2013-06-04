@@ -225,11 +225,13 @@ private Q_SLOTS:
     void emitLoadingFailed();
     void slotUndoIndexChanged();
     void slotSaveResult(KJob*);
-    void slotJobDestroyed(QObject*);
+    void slotJobFinished(KJob*);
 
 private:
-    friend class DocumentFactory;
     friend class AbstractDocumentImpl;
+    friend class DocumentFactory;
+    friend class DocumentPrivate;
+    friend class DownSamplingJob;
 
     void setImageInternal(const QImage&);
     void setKind(MimeTypeUtils::Kind);

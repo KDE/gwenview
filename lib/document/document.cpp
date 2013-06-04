@@ -18,6 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
 #include "document.moc"
+#include "document_p.moc"
 
 // Qt
 #include <QApplication>
@@ -35,6 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Local
 #include "documentjob.h"
 #include "emptydocumentimpl.h"
+#include "gvdebug.h"
 #include "imagemetainfomodel.h"
 #include "loadingdocumentimpl.h"
 #include "loadingjob.h"
@@ -43,37 +45,104 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 namespace Gwenview
 {
 
-struct DocumentPrivate
+#undef ENABLE_LOG
+#undef LOG
+//#define ENABLE_LOG
+#ifdef ENABLE_LOG
+#define LOG(x) kDebug() << x
+#else
+#define LOG(x) ;
+#endif
+
+#ifdef ENABLE_LOG
+
+static void logQueue(DocumentPrivate* d)
 {
-    AbstractDocumentImpl* mImpl;
-    KUrl mUrl;
-    bool mKeepRawData;
-    QQueue<DocumentJob*> mJobQueue;
-
-    /**
-     * @defgroup imagedata should be reset in reload()
-     * @{
-     */
-    QSize mSize;
-    QImage mImage;
-    QMap<int, QImage> mDownSampledImageMap;
-    Exiv2::Image::AutoPtr mExiv2Image;
-    MimeTypeUtils::Kind mKind;
-    QByteArray mFormat;
-    ImageMetaInfoModel mImageMetaInfoModel;
-    QUndoStack mUndoStack;
-    QString mErrorString;
-    Cms::Profile::Ptr mCmsProfile;
-    /** @} */
-
-    void scheduleImageLoading(int invertedZoom)
-    {
-        LoadingDocumentImpl* impl = qobject_cast<LoadingDocumentImpl*>(mImpl);
-        Q_ASSERT(impl);
-        impl->loadImage(invertedZoom);
+#define PREFIX "  QUEUE: "
+    if (!d->mCurrentJob) {
+        Q_ASSERT(d->mJobQueue.isEmpty());
+        qDebug(PREFIX "No current job, no pending jobs");
+        return;
     }
+    qDebug() << PREFIX "Current job:" << d->mCurrentJob.data();
+    if (d->mJobQueue.isEmpty()) {
+        qDebug(PREFIX "No pending jobs");
+        return;
+    }
+    qDebug(PREFIX "%d pending job(s):", d->mJobQueue.size());
+    Q_FOREACH(DocumentJob* job, d->mJobQueue) {
+        Q_ASSERT(job);
+        qDebug() << PREFIX "-" << job;
+    }
+#undef PREFIX
+}
+
+#define LOG_QUEUE(msg, d) \
+    LOG(msg); \
+    logQueue(d)
+
+#else
+
+#define LOG_QUEUE(msg, d)
+
+#endif
+
+//- DocumentPrivate ---------------------------------------
+void DocumentPrivate::scheduleImageLoading(int invertedZoom)
+{
+    LoadingDocumentImpl* impl = qobject_cast<LoadingDocumentImpl*>(mImpl);
+    Q_ASSERT(impl);
+    impl->loadImage(invertedZoom);
+}
+
+void DocumentPrivate::scheduleImageDownSampling(int invertedZoom)
+{
+    LOG("invertedZoom=" << invertedZoom);
+    DownSamplingJob* job = qobject_cast<DownSamplingJob*>(mCurrentJob.data());
+    if (job && job->mInvertedZoom == invertedZoom) {
+        LOG("Current job is already doing it");
+        return;
+    }
+
+    // Remove any previously scheduled downsampling job
+    DocumentJobQueue::Iterator it;
+    for (it = mJobQueue.begin(); it != mJobQueue.end(); ++it) {
+        DownSamplingJob* job = qobject_cast<DownSamplingJob*>(*it);
+        if (!job) {
+            continue;
+        }
+        if (job->mInvertedZoom == invertedZoom) {
+            // Already scheduled, nothing to do
+            LOG("Already scheduled");
+            return;
+        } else {
+            LOG("Removing downsampling job");
+            mJobQueue.erase(it);
+            delete job;
+        }
+    }
+    q->enqueueJob(new DownSamplingJob(invertedZoom));
+}
+
+void DocumentPrivate::downSampleImage(int invertedZoom)
+{
+    mDownSampledImageMap[invertedZoom] = mImage.scaled(mImage.size() / invertedZoom, Qt::KeepAspectRatio, Qt::FastTransformation);
+    if (mDownSampledImageMap[invertedZoom].size().isEmpty()) {
+        mDownSampledImageMap[invertedZoom] = mImage;
+    }
+    q->downSampledImageReady();
 };
 
+//- DownSamplingJob ---------------------------------------
+void DownSamplingJob::doStart()
+{
+    DocumentPrivate* d = document()->d;
+    d->downSampleImage(mInvertedZoom);
+    setError(NoError);
+    emitResult();
+}
+
+//- Document ----------------------------------------------
 qreal Document::maxDownSampledZoom()
 {
     return 0.5;
@@ -83,6 +152,7 @@ Document::Document(const KUrl& url)
 : QObject()
 , d(new DocumentPrivate)
 {
+    d->q = this;
     d->mImpl = 0;
     d->mUrl = url;
     d->mKeepRawData = false;
@@ -375,24 +445,17 @@ bool Document::prepareDownSampledImageForZoom(qreal zoom)
 
     int invertedZoom = invertedZoomForZoom(zoom);
     if (d->mDownSampledImageMap.contains(invertedZoom)) {
+        LOG("downSampledImageForZoom=" << zoom << "invertedZoom=" << invertedZoom << "ready");
         return true;
     }
 
+    LOG("downSampledImageForZoom=" << zoom << "invertedZoom=" << invertedZoom << "not ready");
     if (loadingState() == LoadingFailed) {
         kWarning() << "Image has failed to load, not doing anything";
         return false;
     } else if (loadingState() == Loaded) {
-        // Resample image from the full one
-        if (isBusy()) {
-            return false;
-        }
-        d->mDownSampledImageMap[invertedZoom] = d->mImage.scaled(d->mImage.size() / invertedZoom, Qt::KeepAspectRatio, Qt::FastTransformation);
-        if (d->mDownSampledImageMap[invertedZoom].size().isEmpty()) {
-            d->mDownSampledImageMap[invertedZoom] = d->mImage;
-            return true;
-        }
-
-        return true;
+        d->scheduleImageDownSampling(invertedZoom);
+        return false;
     }
 
     // Schedule down sampled image loading
@@ -455,32 +518,37 @@ void Document::stopAnimation()
 
 void Document::enqueueJob(DocumentJob* job)
 {
-    d->mJobQueue.enqueue(job);
+    LOG("job=" << job);
     job->setDocument(Ptr(this));
-    connect(job, SIGNAL(destroyed(QObject*)),
-            SLOT(slotJobDestroyed(QObject*)));
-    if (d->mJobQueue.size() == 1) {
+    connect(job, SIGNAL(finished(KJob*)),
+            SLOT(slotJobFinished(KJob*)));
+    if (d->mCurrentJob) {
+        d->mJobQueue.enqueue(job);
+    } else {
+        d->mCurrentJob = job;
+        LOG("Starting first job");
         job->start();
         busyChanged(d->mUrl, true);
     }
+    LOG_QUEUE("Job added", d);
 }
 
-void Document::slotJobDestroyed(QObject* job)
+void Document::slotJobFinished(KJob* job)
 {
-    Q_ASSERT(!d->mJobQueue.isEmpty());
-    if (d->mJobQueue.head() != job) {
-        // Job was killed before it even got started, just remove it from the
-        // queue and move along
-        d->mJobQueue.removeAll(static_cast<DocumentJob*>(job));
-        return;
-    }
-    d->mJobQueue.dequeue();
+    LOG("job=" << job);
+    GV_RETURN_IF_FAIL(job == d->mCurrentJob.data());
+
     if (d->mJobQueue.isEmpty()) {
+        LOG("All done");
         busyChanged(d->mUrl, false);
         allTasksDone();
     } else {
-        d->mJobQueue.head()->start();
+        LOG("Starting next job");
+        d->mCurrentJob = d->mJobQueue.dequeue();
+        GV_RETURN_IF_FAIL(d->mCurrentJob);
+        d->mCurrentJob.data()->start();
     }
+    LOG_QUEUE("Removed done job", d);
 }
 
 bool Document::isBusy() const
