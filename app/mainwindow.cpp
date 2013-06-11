@@ -90,6 +90,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "browsemainpage.h"
 #include <lib/archiveutils.h>
 #include <lib/document/documentfactory.h>
+#include <lib/documentonlyproxymodel.h>
 #include <lib/eventwatcher.h>
 #include <lib/gvdebug.h>
 #include <lib/gwenviewconfig.h>
@@ -138,17 +139,6 @@ struct MainWindowState
 {
     bool mToolBarVisible;
     Qt::WindowStates mWindowState;
-};
-
-class DocumentOnlyProxyModel : public QSortFilterProxyModel
-{
-public:
-    DocumentOnlyProxyModel(QObject* parent)
-    : QSortFilterProxyModel(parent)
-    {
-        setDynamicSortFilter(true);
-        setFilterRegExp(QRegExp(".+\\..+"));
-    }
 };
 
 /*
