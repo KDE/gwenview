@@ -48,6 +48,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KMessageBox>
 #include <KNotificationRestrictions>
 #include <KProtocolManager>
+#include <KLinkItemSelectionModel>
 #include <KStatusBar>
 #include <KStandardDirs>
 #include <KStandardGuiItem>
@@ -139,6 +140,17 @@ struct MainWindowState
     Qt::WindowStates mWindowState;
 };
 
+class DocumentOnlyProxyModel : public QSortFilterProxyModel
+{
+public:
+    DocumentOnlyProxyModel(QObject* parent)
+    : QSortFilterProxyModel(parent)
+    {
+        setDynamicSortFilter(true);
+        setFilterRegExp(QRegExp(".+\\..+"));
+    }
+};
+
 /*
 
 Layout of the main window looks like this:
@@ -202,6 +214,8 @@ struct MainWindow::Private
 #endif
 
     SortedDirModel* mDirModel;
+    DocumentOnlyProxyModel* mThumbnailBarModel;
+    KLinkItemSelectionModel* mThumbnailBarSelectionModel;
     ContextManager* mContextManager;
 
     MainWindowState mStateBeforeFullScreen;
@@ -275,6 +289,8 @@ struct MainWindow::Private
         mThumbnailViewHelper = new ThumbnailViewHelper(mDirModel, q->actionCollection());
         mThumbnailView->setThumbnailViewHelper(mThumbnailViewHelper);
 
+        mThumbnailBarSelectionModel = new KLinkItemSelectionModel(mThumbnailBarModel, mThumbnailView->selectionModel(), q);
+
         // Connect thumbnail view
         connect(mThumbnailView, SIGNAL(indexActivated(QModelIndex)),
                 q, SLOT(slotThumbnailViewIndexActivated(QModelIndex)));
@@ -311,11 +327,19 @@ struct MainWindow::Private
         connect(mViewMainPage, SIGNAL(nextImageRequested()),
                 q, SLOT(goToNext()));
 
-        ThumbnailView* bar = mViewMainPage->thumbnailBar();
-        bar->setModel(mDirModel);
+        setupThumbnailBar(mViewMainPage->thumbnailBar());
+    }
+
+    void setupThumbnailBar(ThumbnailView* bar)
+    {
+        Q_ASSERT(mThumbnailBarModel);
+        Q_ASSERT(mThumbnailBarSelectionModel);
+        Q_ASSERT(mDocumentInfoProvider);
+        Q_ASSERT(mThumbnailViewHelper);
+        bar->setModel(mThumbnailBarModel);
+        bar->setSelectionModel(mThumbnailBarSelectionModel);
         bar->setDocumentInfoProvider(mDocumentInfoProvider);
         bar->setThumbnailViewHelper(mThumbnailViewHelper);
-        bar->setSelectionModel(mThumbnailView->selectionModel());
     }
 
     void setupStartMainPage(QWidget* parent)
@@ -540,10 +564,11 @@ struct MainWindow::Private
     void initDirModel()
     {
         mDirModel->setKindFilter(
-            MimeTypeUtils::KIND_RASTER_IMAGE
+            MimeTypeUtils::KIND_DIR
+            | MimeTypeUtils::KIND_ARCHIVE
+            | MimeTypeUtils::KIND_RASTER_IMAGE
             | MimeTypeUtils::KIND_SVG_IMAGE
             | MimeTypeUtils::KIND_VIDEO);
-        setDirModelShowDirs(true);
 
         connect(mDirModel, SIGNAL(rowsInserted(QModelIndex,int,int)),
                 q, SLOT(slotDirModelNewItems()));
@@ -559,9 +584,10 @@ struct MainWindow::Private
                 q, SLOT(slotDirListerRedirection(KUrl)));
     }
 
-    void setDirModelShowDirs(bool showDirs)
+    void setupThumbnailBarModel()
     {
-        mDirModel->adjustKindFilter(MimeTypeUtils::KIND_DIR | MimeTypeUtils::KIND_ARCHIVE, showDirs);
+        mThumbnailBarModel = new DocumentOnlyProxyModel(q);
+        mThumbnailBarModel->setSourceModel(mDirModel);
     }
 
     QModelIndex currentIndex() const
@@ -659,11 +685,7 @@ struct MainWindow::Private
     void setupFullScreenContent()
     {
         mFullScreenContent->init(q->actionCollection(), mViewMainPage, mSlideShow);
-        ThumbnailBarView* view = mFullScreenContent->thumbnailBar();
-        view->setModel(mDirModel);
-        view->setDocumentInfoProvider(mDocumentInfoProvider);
-        view->setThumbnailViewHelper(mThumbnailViewHelper);
-        view->setSelectionModel(mThumbnailView->selectionModel());
+        setupThumbnailBar(mFullScreenContent->thumbnailBar());
     }
 
     inline void setActionEnabled(const char* name, bool enabled)
@@ -874,6 +896,7 @@ MainWindow::MainWindow()
     d->q = this;
     d->mCurrentMainPageId = StartMainPageId;
     d->mDirModel = new SortedDirModel(this);
+    d->setupThumbnailBarModel();
     d->mGvCore = new GvCore(this, d->mDirModel);
     d->mPreloader = new Preloader(this);
     d->mNotificationRestrictions = 0;
@@ -995,7 +1018,6 @@ void MainWindow::setActiveViewModeAction(QAction* action)
     if (action == d->mViewAction) {
         d->mCurrentMainPageId = ViewMainPageId;
         // Switching to view mode
-        d->setDirModelShowDirs(false);
         d->mViewStackedWidget->setCurrentWidget(d->mViewMainPage);
         if (d->mViewMainPage->isEmpty()) {
             openSelectedDocuments();
@@ -1015,7 +1037,6 @@ void MainWindow::setActiveViewModeAction(QAction* action)
             // his image back.
             d->mViewMainPage->reset();
         }
-        d->setDirModelShowDirs(true);
         setCaption(QString());
     }
     d->loadSideBarConfig();
