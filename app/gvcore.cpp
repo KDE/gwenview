@@ -186,6 +186,11 @@ AbstractSemanticInfoBackEnd* GvCore::semanticInfoBackEnd() const
     return d->mDirModel->semanticInfoBackEnd();
 }
 
+SortedDirModel* GvCore::sortedDirModel() const
+{
+    return d->mDirModel;
+}
+
 void GvCore::addUrlToRecentFolders(KUrl url)
 {
     if (!GwenviewConfig::historyEnabled()) {

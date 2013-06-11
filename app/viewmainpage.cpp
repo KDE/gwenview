@@ -378,9 +378,7 @@ struct ViewMainPagePrivate
             return QModelIndex();
         }
 
-        // FIXME: Ugly coupling!
-        SortedDirModel* model = static_cast<SortedDirModel*>(mThumbnailBar->model());
-        return model->indexForUrl(url);
+        return mGvCore->sortedDirModel()->indexForUrl(url);
     }
 
     void applyPalette(bool fullScreenMode)

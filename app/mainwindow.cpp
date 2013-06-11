@@ -264,7 +264,7 @@ struct MainWindow::Private
 
     void setupThumbnailView(QWidget* parent)
     {
-        mBrowseMainPage = new BrowseMainPage(parent, mDirModel, q->actionCollection(), mGvCore);
+        mBrowseMainPage = new BrowseMainPage(parent, q->actionCollection(), mGvCore);
 
         mThumbnailView = mBrowseMainPage->thumbnailView();
         mUrlNavigator = mBrowseMainPage->urlNavigator();

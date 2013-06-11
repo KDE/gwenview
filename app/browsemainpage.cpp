@@ -221,15 +221,15 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
     }
 };
 
-BrowseMainPage::BrowseMainPage(QWidget* parent, SortedDirModel* dirModel, KActionCollection* actionCollection, GvCore* gvCore)
+BrowseMainPage::BrowseMainPage(QWidget* parent, KActionCollection* actionCollection, GvCore* gvCore)
 : QWidget(parent)
 , d(new BrowseMainPagePrivate)
 {
     d->q = this;
-    d->mDirModel = dirModel;
+    d->mGvCore = gvCore;
+    d->mDirModel = gvCore->sortedDirModel();
     d->mDocumentCount = 0;
     d->mActionCollection = actionCollection;
-    d->mGvCore = gvCore;
     d->setupWidgets();
     d->setupActions(actionCollection);
     d->setupFilterController();
