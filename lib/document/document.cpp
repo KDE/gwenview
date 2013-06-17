@@ -540,6 +540,7 @@ void Document::slotJobFinished(KJob* job)
 
     if (d->mJobQueue.isEmpty()) {
         LOG("All done");
+        d->mCurrentJob.clear();
         busyChanged(d->mUrl, false);
         allTasksDone();
     } else {
