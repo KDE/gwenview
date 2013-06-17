@@ -72,7 +72,11 @@ void ImageScaler::setDocument(Document::Ptr document)
         disconnect(d->mDocument.data(), 0, this, 0);
     }
     d->mDocument = document;
+    // Used when scaler asked for a down-sampled image
     connect(d->mDocument.data(), SIGNAL(downSampledImageReady()),
+            SLOT(doScale()));
+    // Used when scaler asked for a full image
+    connect(d->mDocument.data(), SIGNAL(loaded(KUrl)),
             SLOT(doScale()));
 }
 

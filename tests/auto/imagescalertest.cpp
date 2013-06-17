@@ -39,10 +39,8 @@ void ImageScalerTest::testScaleFullImage()
     KUrl url = urlForTestFile("test.png");
     Document::Ptr doc = DocumentFactory::instance()->load(url);
 
-    // FIXME: Load full image for now, because ImageScalerClient does not wait
-    // when ImageScaler request a full image to be loaded asynchronously.
-    doc->startLoadingFullImage();
-    while (doc->isBusy()) {
+    // Wait for meta info because we need the document size
+    while (doc->loadingState() < Document::MetaInfoLoaded) {
         QTest::qWait(500);
     }
 
@@ -53,8 +51,13 @@ void ImageScalerTest::testScaleFullImage()
 
     scaler.setDestinationRegion(QRect(QPoint(0, 0), doc->size() * zoom));
 
-    QImage scaledImage = client.createFullImage();
+    bool ok = QTest::kWaitForSignal(&scaler, SIGNAL(scaledRect(int,int,QImage)), 30);
+    QVERIFY2(ok, "ImageScaler did not emit scaledRect() signal in time");
+
+    // Document should be fully loaded by the time image scaler is done
     QCOMPARE(doc->loadingState(), Document::Loaded);
+
+    QImage scaledImage = client.createFullImage();
 
     QImage expectedImage = doc->image().scaled(doc->size() * zoom);
     QCOMPARE(scaledImage, expectedImage);
