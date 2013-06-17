@@ -73,6 +73,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}
     ${CMAKE_BINARY_DIR}
     ${KDE4_INCLUDES}
+    ${EXIV2_INCLUDE_DIR}
     ${NEPOMUK_CORE_INCLUDE_DIR}
     )
 
