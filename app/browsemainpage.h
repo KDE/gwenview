@@ -40,7 +40,6 @@ namespace Gwenview
 {
 
 class GvCore;
-class SortedDirModel;
 class ThumbnailView;
 
 struct BrowseMainPagePrivate;
@@ -52,7 +51,7 @@ class BrowseMainPage : public QWidget
 {
     Q_OBJECT
 public:
-    BrowseMainPage(QWidget* parent, SortedDirModel*, KActionCollection*, GvCore*);
+    BrowseMainPage(QWidget* parent, KActionCollection*, GvCore*);
     ~BrowseMainPage();
 
     void reload();

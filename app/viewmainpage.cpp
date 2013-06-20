@@ -35,6 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KLocale>
 #include <KMenu>
 #include <KMessageBox>
+#include <KModelIndexProxyMapper>
 #include <KToggleAction>
 #include <KActivities/ResourceInstance>
 
@@ -137,6 +138,7 @@ struct ViewMainPagePrivate
     SlideShow* mSlideShow;
     KActionCollection* mActionCollection;
     GvCore* mGvCore;
+    KModelIndexProxyMapper* mDirModelToBarModelProxyMapper;
     QSplitter *mThumbnailSplitter;
     QWidget* mAdapterContainer;
     DocumentViewController* mDocumentViewController;
@@ -378,9 +380,16 @@ struct ViewMainPagePrivate
             return QModelIndex();
         }
 
-        // FIXME: Ugly coupling!
-        SortedDirModel* model = static_cast<SortedDirModel*>(mThumbnailBar->model());
-        return model->indexForUrl(url);
+        SortedDirModel* dirModel = mGvCore->sortedDirModel();
+        QModelIndex srcIndex = dirModel->indexForUrl(url);
+        if (!mDirModelToBarModelProxyMapper) {
+            // Delay the initialization of the mapper to its first use because
+            // mThumbnailBar->model() is not set after ViewMainPage ctor is
+            // done.
+            const_cast<ViewMainPagePrivate*>(this)->mDirModelToBarModelProxyMapper = new KModelIndexProxyMapper(dirModel, mThumbnailBar->model(), q);
+        }
+        QModelIndex index = mDirModelToBarModelProxyMapper->mapLeftToRight(srcIndex);
+        return index;
     }
 
     void applyPalette(bool fullScreenMode)
@@ -395,6 +404,7 @@ ViewMainPage::ViewMainPage(QWidget* parent, SlideShow* slideShow, KActionCollect
 , d(new ViewMainPagePrivate)
 {
     d->q = this;
+    d->mDirModelToBarModelProxyMapper = 0; // Initialized later
     d->mSlideShow = slideShow;
     d->mActionCollection = actionCollection;
     d->mGvCore = gvCore;

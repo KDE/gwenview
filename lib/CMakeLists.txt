@@ -88,6 +88,7 @@ set(gwenviewlib_SRCS
     documentview/svgviewadapter.cpp
     documentview/videoviewadapter.cpp
     abstractimageoperation.cpp
+    documentonlyproxymodel.cpp
     documentview/documentviewcontainer.cpp
     binder.cpp
     eventwatcher.cpp

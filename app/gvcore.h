@@ -58,6 +58,7 @@ public:
 
     QAbstractItemModel* recentFoldersModel() const;
     QAbstractItemModel* recentUrlsModel() const;
+    SortedDirModel* sortedDirModel() const;
     AbstractSemanticInfoBackEnd* semanticInfoBackEnd() const;
 
     void addUrlToRecentFolders(KUrl);
