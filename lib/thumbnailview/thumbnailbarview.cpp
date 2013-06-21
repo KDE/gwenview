@@ -73,7 +73,7 @@ struct ThumbnailBarItemDelegatePrivate
     ContextBarButton* mToggleSelectionButton;
 
     QColor mBorderColor;
-    QModelIndex mIndexUnderCursor;
+    QPersistentModelIndex mIndexUnderCursor;
 
     void setupToggleSelectionButton()
     {

@@ -2,3 +2,9 @@ name: compare/resize
 description:
  1. Select two images => images are shown next to each others
  2. Go to fullscreen => images resize to fit the new screen size
+
+name: compare/view-mode
+description:
+ 1. Select one image in view mode
+ 2. Show the thumbnail bar
+ 3. Select another image => images are shown next to each others

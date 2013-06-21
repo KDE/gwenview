@@ -127,7 +127,7 @@ struct PreviewItemDelegatePrivate
     KRatingPainter mRatingPainter;
 #endif
 
-    QModelIndex mIndexUnderCursor;
+    QPersistentModelIndex mIndexUnderCursor;
     QSize mThumbnailSize;
     PreviewItemDelegate::ThumbnailDetails mDetails;
     PreviewItemDelegate::ContextBarActions mContextBarActions;
