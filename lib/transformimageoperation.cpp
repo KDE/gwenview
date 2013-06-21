@@ -29,7 +29,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // Local
 #include "document/abstractdocumenteditor.h"
-#include "document/documentjob.h"
 
 namespace Gwenview
 {
@@ -39,25 +38,20 @@ struct TransformImageOperationPrivate
     Orientation mOrientation;
 };
 
-class TransformJob : public ThreadedDocumentJob
+TransformJob::TransformJob(Orientation orientation)
+: mOrientation(orientation)
 {
-public:
-    TransformJob(Orientation orientation)
-        : mOrientation(orientation)
-    {}
 
-    virtual void threadedStart()
-    {
-        if (!checkDocumentEditor()) {
-            return;
-        }
-        document()->editor()->applyTransformation(mOrientation);
-        setError(NoError);
+}
+
+void TransformJob::threadedStart()
+{
+    if (!checkDocumentEditor()) {
+        return;
     }
-
-private:
-    Orientation mOrientation;
-};
+    document()->editor()->applyTransformation(mOrientation);
+    setError(NoError);
+}
 
 TransformImageOperation::TransformImageOperation(Orientation orientation)
 : d(new TransformImageOperationPrivate)

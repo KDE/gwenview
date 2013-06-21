@@ -29,11 +29,23 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // Local
 #include <lib/abstractimageoperation.h>
+#include <lib/document/documentjob.h>
 
 #include <lib/orientation.h>
 
 namespace Gwenview
 {
+
+class TransformJob : public ThreadedDocumentJob
+{
+    Q_OBJECT
+public:
+    TransformJob(Orientation orientation);
+    void threadedStart(); // reimp
+
+private:
+    Orientation mOrientation;
+};
 
 struct TransformImageOperationPrivate;
 class GWENVIEWLIB_EXPORT TransformImageOperation : public AbstractImageOperation
