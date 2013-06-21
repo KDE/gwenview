@@ -87,6 +87,7 @@ set(gwenviewlib_SRCS
     documentview/rasterimageviewadapter.cpp
     documentview/svgviewadapter.cpp
     documentview/videoviewadapter.cpp
+    about.cpp
     abstractimageoperation.cpp
     documentonlyproxymodel.cpp
     documentview/documentviewcontainer.cpp

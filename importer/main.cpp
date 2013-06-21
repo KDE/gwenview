@@ -18,6 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
 // Qt
+#include <QScopedPointer>
 
 // KDE
 #include <KAboutData>
@@ -28,26 +29,21 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KUrl>
 
 // Local
+#include <lib/about.h>
 #include <lib/imageformats/imageformats.h>
-#include <lib/version.h>
 #include "importdialog.h"
 
 int main(int argc, char *argv[])
 {
-    KAboutData aboutData(
-        "gwenview_importer",        /* appname */
-        "gwenview",                          /* catalogName */
-        ki18n("Gwenview Importer"), /* programName */
-        GWENVIEW_VERSION);          /* version */
-    aboutData.setShortDescription(ki18n("Photo Importer"));
-    aboutData.setLicense(KAboutData::License_GPL);
-    aboutData.setCopyrightStatement(ki18n("Copyright 2009-2010 Aurélien Gâteau"));
-    aboutData.addAuthor(
-        ki18n("Aurélien Gâteau"),
-        ki18n("Main developer"),
-        "agateau@kde.org");
+    QScopedPointer<KAboutData> aboutData(
+        Gwenview::createAboutData(
+            "gwenview_importer",       /* appname */
+            "gwenview",                /* catalogName */
+            ki18n("Gwenview Importer") /* programName */
+        ));
+    aboutData->setShortDescription(ki18n("Photo Importer"));
 
-    KCmdLineArgs::init(argc, argv, &aboutData);
+    KCmdLineArgs::init(argc, argv, aboutData.data());
 
     KCmdLineOptions options;
     options.add("+folder", ki18n("Source folder"));

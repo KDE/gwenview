@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <memory>
 
 // Qt
+#include <QScopedPointer>
 
 // KDE
 #include <KAboutData>
@@ -36,8 +37,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KUrl>
 
 // Local
+#include <lib/about.h>
 #include <lib/imageformats/imageformats.h>
-#include <lib/version.h>
 #include "mainwindow.h"
 
 class StartHelper
@@ -109,20 +110,15 @@ private:
 
 int main(int argc, char *argv[])
 {
-    KAboutData aboutData(
-        "gwenview",        /* appname */
-        0,                 /* catalogName */
-        ki18n("Gwenview"), /* programName */
-        GWENVIEW_VERSION); /* version */
-    aboutData.setShortDescription(ki18n("An Image Viewer"));
-    aboutData.setLicense(KAboutData::License_GPL);
-    aboutData.setCopyrightStatement(ki18n("Copyright 2000-2013 Aurélien Gâteau"));
-    aboutData.addAuthor(
-        ki18n("Aurélien Gâteau"),
-        ki18n("Main developer"),
-        "agateau@kde.org");
+    QScopedPointer<KAboutData> aboutData(
+        Gwenview::createAboutData(
+            "gwenview",       /* appname */
+            0,                /* catalogName */
+            ki18n("Gwenview") /* programName */
+        ));
+    aboutData->setShortDescription(ki18n("An Image Viewer"));
 
-    KCmdLineArgs::init(argc, argv, &aboutData);
+    KCmdLineArgs::init(argc, argv, aboutData.data());
 
     KCmdLineOptions options;
     options.add("f", ki18n("Start in fullscreen mode"));

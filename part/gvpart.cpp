@@ -38,6 +38,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KPropertiesDialog>
 
 // Local
+#include "../lib/about.h"
 #include "../lib/document/document.h"
 #include "../lib/document/documentfactory.h"
 #include "../lib/documentview/documentview.h"
@@ -45,7 +46,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "../lib/documentview/documentviewcontroller.h"
 #include "../lib/imageformats/imageformats.h"
 #include "../lib/urlutils.h"
-#include "../lib/version.h"
 #include "../lib/zoomwidget.h"
 #include "gvbrowserextension.h"
 
@@ -122,18 +122,12 @@ bool GVPart::openUrl(const KUrl& url)
 
 KAboutData* GVPart::createAboutData()
 {
-    KAboutData* aboutData = new KAboutData(
-        "gvpart",                /* appname */
-        "gwenview",              /* catalogName */
-        ki18n("Gwenview KPart"), /* programName */
-        GWENVIEW_VERSION);       /* version */
+    KAboutData* aboutData = Gwenview::createAboutData(
+        "gvpart",               /* appname */
+        "gwenview",             /* catalogName */
+        ki18n("Gwenview KPart") /* programName */
+        );
     aboutData->setShortDescription(ki18n("An Image Viewer"));
-    aboutData->setLicense(KAboutData::License_GPL);
-    aboutData->setCopyrightStatement(ki18n("Copyright 2000-2013 Aurélien Gâteau"));
-    aboutData->addAuthor(
-        ki18n("Aurélien Gâteau"),
-        ki18n("Main developer"),
-        "agateau@kde.org");
     return aboutData;
 }
 
