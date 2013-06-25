@@ -67,36 +67,42 @@ struct RasterImageViewPrivate
 
     QWeakPointer<AbstractRasterImageViewTool> mTool;
 
+    bool mApplyDisplayTransform; // Defaults to true. Can be set to false if there is no need or no way to apply color profile
     cmsHTRANSFORM mDisplayTransform;
 
-    void updateDisplayTransform()
+    void updateDisplayTransform(QImage::Format format)
     {
+        GV_RETURN_IF_FAIL(format != QImage::Format_Invalid);
+        mApplyDisplayTransform = false;
         if (mDisplayTransform) {
             cmsDeleteTransform(mDisplayTransform);
         }
         mDisplayTransform = 0;
+
         Cms::Profile::Ptr profile = q->document()->cmsProfile();
         if (!profile) {
             return;
         }
         Cms::Profile::Ptr monitorProfile = Cms::Profile::getMonitorProfile();
         if (!monitorProfile) {
+            kWarning() << "Could not get monitor color profile";
             return;
         }
 
         cmsUInt32Number cmsFormat = 0;
-        switch (q->document()->image().format()) {
+        switch (format) {
         case QImage::Format_RGB32:
         case QImage::Format_ARGB32:
             cmsFormat = TYPE_BGRA_8;
             break;
         default:
+            kWarning() << "This image has a color profile, but Gwenview can only apply color profile on RGB32 or ARGB32 images";
             return;
         }
-        // FIXME: Wrap cmsHTRANSFORM type?
         mDisplayTransform = cmsCreateTransform(profile->handle(), cmsFormat,
                                                monitorProfile->handle(), cmsFormat,
                                                INTENT_PERCEPTUAL, cmsFLAGS_BLACKPOINTCOMPENSATION);
+        mApplyDisplayTransform = true;
     }
 
     void createBackgroundTexture()
@@ -185,6 +191,7 @@ RasterImageView::RasterImageView(QGraphicsItem* parent)
 {
     d->q = this;
     d->mEmittedCompleted = false;
+    d->mApplyDisplayTransform = true;
     d->mDisplayTransform = 0;
 
     d->mAlphaBackgroundMode = AlphaBackgroundCheckBoard;
@@ -260,7 +267,6 @@ void RasterImageView::slotDocumentMetaInfoLoaded()
 void RasterImageView::finishSetDocument()
 {
     GV_RETURN_IF_FAIL(document()->size().isValid());
-    d->updateDisplayTransform();
 
     d->mScaler->setDocument(document());
     d->resizeBuffer();
@@ -302,9 +308,14 @@ void RasterImageView::slotDocumentIsAnimatedUpdated()
 
 void RasterImageView::updateFromScaler(int zoomedImageLeft, int zoomedImageTop, const QImage& image)
 {
-    if (d->mDisplayTransform) {
-        quint8 *bytes = const_cast<quint8*>(image.bits());
-        cmsDoTransform(d->mDisplayTransform, bytes, bytes, image.width() * image.height());
+    if (d->mApplyDisplayTransform) {
+        if (!d->mDisplayTransform) {
+            d->updateDisplayTransform(image.format());
+        }
+        if (d->mDisplayTransform) {
+            quint8 *bytes = const_cast<quint8*>(image.bits());
+            cmsDoTransform(d->mDisplayTransform, bytes, bytes, image.width() * image.height());
+        }
     }
 
     d->resizeBuffer();
