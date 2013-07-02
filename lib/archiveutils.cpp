@@ -56,6 +56,13 @@ QString protocolForMimeType(const QString& mimeType)
         return it.value();
     }
 
+    if (mimeType == "image/svg+xml-compressed") {
+        // We don't want .svgz to be considered as archives because QtSvg knows
+        // how to decode gzip-ed svg files
+        cache.insert(mimeType, QString());
+        return QString();
+    }
+
     QString protocol = KProtocolManager::protocolForArchiveMimetype(mimeType);
     if (protocol.isEmpty()) {
         // No protocol, try with mimeType parents. This is useful for .cbz for
