@@ -587,11 +587,7 @@ QSize ViewMainPage::sizeHint() const
 
 KUrl ViewMainPage::url() const
 {
-    if (!d->currentView()) {
-        LOG("!d->documentView()");
-        return KUrl();
-    }
-
+    GV_RETURN_VALUE_IF_FAIL(d->currentView(), KUrl());
     return d->currentView()->url();
 }
 
