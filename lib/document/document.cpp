@@ -237,6 +237,7 @@ Document::LoadingState Document::loadingState() const
 void Document::switchToImpl(AbstractDocumentImpl* impl)
 {
     Q_ASSERT(impl);
+    LOG("old impl:" << d->mImpl << "new impl:" << impl);
     if (d->mImpl) {
         d->mImpl->deleteLater();
     }
