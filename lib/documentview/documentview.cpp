@@ -392,7 +392,7 @@ void DocumentView::openUrl(const KUrl& url, const DocumentView::Setup& setup)
         connect(d->mDocument.data(), SIGNAL(kindDetermined(KUrl)),
                 SLOT(finishOpenUrl()));
     } else {
-        finishOpenUrl();
+        QMetaObject::invokeMethod(this, "finishOpenUrl", Qt::QueuedConnection);
     }
     d->setupBirdEyeView();
 }
