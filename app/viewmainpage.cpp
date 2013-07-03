@@ -362,11 +362,12 @@ struct ViewMainPagePrivate
         mSynchronizer->setCurrentView(view);
 
         QModelIndex index = indexForView(view);
-        if (!index.isValid()) {
-            kWarning() << "No index found for current view";
-            return;
+        if (index.isValid()) {
+            // Index may be invalid when Gwenview is started as
+            // `gwenview /foo/image.png` because in this situation it loads image.png
+            // *before* listing /foo (because it matters less to the user)
+            mThumbnailBar->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Current);
         }
-        mThumbnailBar->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Current);
 
         Q_ASSERT(mActivityResources.contains(view));
         mActivityResources.value(view)->notifyFocusedIn();
