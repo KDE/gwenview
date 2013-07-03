@@ -126,6 +126,8 @@ struct DocumentViewPrivate
                          q, SIGNAL(nextImageRequested()));
         QObject::connect(adapter, SIGNAL(toggleFullScreenRequested()),
                          q, SIGNAL(toggleFullScreenRequested()));
+        QObject::connect(adapter, SIGNAL(completed()),
+                         q, SLOT(slotCompleted()));
 
         adapter->loadConfig();
 
@@ -409,8 +411,6 @@ void DocumentView::finishOpenUrl()
     }
     createAdapterForDocument();
 
-    connect(d->mAdapter.data(), SIGNAL(completed()),
-            SLOT(slotCompleted()));
     connect(d->mDocument.data(), SIGNAL(loadingFailed(KUrl)),
             SLOT(slotLoadingFailed()));
     d->mAdapter->setDocument(d->mDocument);
