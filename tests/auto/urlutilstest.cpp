@@ -52,4 +52,6 @@ void UrlUtilsTest::testFixUserEnteredUrl_data()
     NEW_ROW("file://" + pwd + "/example.zip", "zip:" + pwd + "/example.zip");
     NEW_ROW("file://" + pwd + "/example.cbz", "zip:" + pwd + "/example.cbz");
     NEW_ROW("file://" + pwd + "/example.jpg", "file://" + pwd + "/example.jpg");
+    // Check it does not get turned into gzip://...
+    NEW_ROW("file://" + pwd + "/example.svgz", "file://" + pwd + "/example.svgz");
 }
