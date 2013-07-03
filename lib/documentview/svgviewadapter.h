@@ -49,6 +49,9 @@ protected:
     void onImageOffsetChanged();
     void onScrollPosChanged(const QPointF& oldPos);
 
+private Q_SLOTS:
+    void finishLoadFromDocument();
+
 private:
     QGraphicsSvgItem* mSvgItem;
     void adjustItemPos();
