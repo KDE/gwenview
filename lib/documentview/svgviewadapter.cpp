@@ -51,11 +51,19 @@ SvgImageView::SvgImageView(QGraphicsItem* parent)
 void SvgImageView::loadFromDocument()
 {
     Document::Ptr doc = document();
-    if (!doc) {
-        return;
-    }
+    GV_RETURN_IF_FAIL(doc);
 
-    QSvgRenderer* renderer = doc->svgRenderer();
+    if (doc->loadingState() < Document::Loaded) {
+        connect(doc.data(), SIGNAL(loaded(KUrl)),
+            SLOT(finishLoadFromDocument()));
+    } else {
+        QMetaObject::invokeMethod(this, "finishLoadFromDocument", Qt::QueuedConnection);
+    }
+}
+
+void SvgImageView::finishLoadFromDocument()
+{
+    QSvgRenderer* renderer = document()->svgRenderer();
     GV_RETURN_IF_FAIL(renderer);
     mSvgItem->setSharedRenderer(renderer);
     if (zoomToFit()) {
