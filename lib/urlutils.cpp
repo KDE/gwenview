@@ -31,6 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kde_file.h>
 #include <KIO/NetAccess>
 #include <kmountpoint.h>
+#include <KProtocolManager>
 #include <KUrl>
 
 // Local
@@ -101,8 +102,13 @@ KUrl fixUserEnteredUrl(const KUrl& in)
     QString mimeType = MimeTypeUtils::urlMimeType(out);
 
     const QString protocol = ArchiveUtils::protocolForMimeType(mimeType);
+
     if (!protocol.isEmpty()) {
-        out.setProtocol(protocol);
+        KUrl tmp = out;
+        tmp.setProtocol(protocol);
+        if (KProtocolManager::supportsListing(tmp)) {
+            out = tmp;
+        }
     }
     return out;
 }
