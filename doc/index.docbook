@@ -306,7 +306,7 @@ button on the taskbar, or by
 <sect2>
 <title>Browse Mode Full Screen</title>
 
-<para>In Browse Mode you can switch to fillscreen also by clicking on the button that 
+<para>In Browse Mode you can switch to fullscreen also by clicking on the button that 
 appears when you move the mouse over the thumbnails.
 </para>
 <screenshot>
@@ -518,7 +518,7 @@ enter it into the text box or type one manually.</para>
   <listitem><para>When in Browse mode, clicking an image switches into View mode and
   shows that image.</para></listitem>
   <listitem><para>When in Browse mode, scrolling the mouse wheel will scroll up
-  or down the thumbail view area.</para></listitem>
+  or down the thumbnail view area.</para></listitem>
   <listitem><para>If the <guilabel>Mouse Behavior</guilabel> option in
   <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure
   &kappname;</guimenuitem></menuchoice>
