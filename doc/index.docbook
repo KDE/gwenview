@@ -292,7 +292,7 @@ launching it from the command line with an image as an argument.</para> </tip>
 <title>Full Screen Modes</title>
 
 <para>Access Full Screen by pressing the <guiicon>Full Screen</guiicon>
-button on the taskbar, or by
+button on the toolbar, or by
   <menuchoice>
     <shortcut>
 <keycombo action="simul">&Ctrl;&Shift;<keycap>F</keycap></keycombo>
