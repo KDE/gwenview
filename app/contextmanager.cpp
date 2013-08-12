@@ -80,7 +80,7 @@ struct ContextManagerPrivate
     }
 };
 
-ContextManager::ContextManager(SortedDirModel* dirModel, QItemSelectionModel* selectionModel, QObject* parent)
+ContextManager::ContextManager(SortedDirModel* dirModel, QObject* parent)
 : QObject(parent)
 , d(new ContextManagerPrivate)
 {
@@ -94,7 +94,26 @@ ContextManager::ContextManager(SortedDirModel* dirModel, QItemSelectionModel* se
     connect(d->mDirModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
             SLOT(slotDirModelDataChanged(QModelIndex,QModelIndex)));
 
-    d->mSelectionModel = selectionModel;
+    /* HACK! In extended-selection mode, when the current index is removed,
+     * QItemSelectionModel selects the previous index if there is one, if not it
+     * selects the next index. This is not what we want: when the user removes
+     * an image, he expects to go to the next one, not the previous one.
+     *
+     * To overcome this, we must connect to the mDirModel.rowsAboutToBeRemoved()
+     * signal *before* QItemSelectionModel connects to it, so that our slot is
+     * called before QItemSelectionModel slot. This allows us to pick a new
+     * current index ourself, leaving QItemSelectionModel slot with nothing to
+     * do.
+     *
+     * This is the reason ContextManager creates a QItemSelectionModel itself:
+     * doing so ensures QItemSelectionModel cannot be connected to the
+     * mDirModel.rowsAboutToBeRemoved() signal before us.
+     */
+    connect(d->mDirModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)),
+            SLOT(slotRowsAboutToBeRemoved(QModelIndex,int,int)));
+
+    d->mSelectionModel = new QItemSelectionModel(d->mDirModel);
+
     connect(d->mSelectionModel, SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             SLOT(slotSelectionChanged()));
     connect(d->mSelectionModel, SIGNAL(currentChanged(QModelIndex,QModelIndex)),
@@ -107,6 +126,11 @@ ContextManager::~ContextManager()
 {
     qDeleteAll(d->mList);
     delete d;
+}
+
+QItemSelectionModel* ContextManager::selectionModel() const
+{
+    return d->mSelectionModel;
 }
 
 void ContextManager::addItem(AbstractContextManagerItem* item)
@@ -213,6 +237,26 @@ void ContextManager::emitQueuedSignals()
         QMetaObject::invokeMethod(this, signal.data());
     }
     d->mQueuedSignals.clear();
+}
+
+void Gwenview::ContextManager::slotRowsAboutToBeRemoved(const QModelIndex& /*parent*/, int start, int end)
+{
+    QModelIndex oldCurrent = d->mSelectionModel->currentIndex();
+    if (oldCurrent.row() < start || oldCurrent.row() > end) {
+        // currentIndex has not been removed
+        return;
+    }
+    QModelIndex newCurrent;
+    if (end + 1 < d->mDirModel->rowCount()) {
+        newCurrent = d->mDirModel->index(end + 1, 0);
+    } else if (start > 0) {
+        newCurrent = d->mDirModel->index(start - 1, 0);
+    } else {
+        // No index we can select, nothing to do
+        return;
+    }
+    d->mSelectionModel->select(oldCurrent, QItemSelectionModel::Deselect);
+    d->mSelectionModel->setCurrentIndex(newCurrent, QItemSelectionModel::Select);
 }
 
 } // namespace

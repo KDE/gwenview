@@ -268,9 +268,11 @@ struct MainWindow::Private
 
     void setupThumbnailView(QWidget* parent)
     {
+        Q_ASSERT(mContextManager);
         mBrowseMainPage = new BrowseMainPage(parent, q->actionCollection(), mGvCore);
 
         mThumbnailView = mBrowseMainPage->thumbnailView();
+        mThumbnailView->setSelectionModel(mContextManager->selectionModel());
         mUrlNavigator = mBrowseMainPage->urlNavigator();
 
         mDocumentInfoProvider = new DocumentInfoProvider(mDirModel);
@@ -279,7 +281,7 @@ struct MainWindow::Private
         mThumbnailViewHelper = new ThumbnailViewHelper(mDirModel, q->actionCollection());
         mThumbnailView->setThumbnailViewHelper(mThumbnailViewHelper);
 
-        mThumbnailBarSelectionModel = new KLinkItemSelectionModel(mThumbnailBarModel, mThumbnailView->selectionModel(), q);
+        mThumbnailBarSelectionModel = new KLinkItemSelectionModel(mThumbnailBarModel, mContextManager->selectionModel(), q);
 
         // Connect thumbnail view
         connect(mThumbnailView, SIGNAL(indexActivated(QModelIndex)),
@@ -485,11 +487,10 @@ struct MainWindow::Private
         edit->addAction(action->objectName(), action);
     }
 
-    void setupContextManager()
+    void setupContextManagerItems()
     {
+        Q_ASSERT(mContextManager);
         KActionCollection* actionCollection = q->actionCollection();
-
-        mContextManager = new ContextManager(mDirModel, mThumbnailView->selectionModel(), q);
 
         // Create context manager items
         FolderViewContextManagerItem* folderViewItem = new FolderViewContextManagerItem(mContextManager);
@@ -886,6 +887,7 @@ MainWindow::MainWindow()
     d->q = this;
     d->mCurrentMainPageId = StartMainPageId;
     d->mDirModel = new SortedDirModel(this);
+    d->mContextManager = new ContextManager(d->mDirModel, this);
     d->setupThumbnailBarModel();
     d->mGvCore = new GvCore(this, d->mDirModel);
     d->mPreloader = new Preloader(this);
@@ -896,7 +898,7 @@ MainWindow::MainWindow()
     d->setupWidgets();
     d->setupActions();
     d->setupUndoActions();
-    d->setupContextManager();
+    d->setupContextManagerItems();
     d->setupFullScreenContent();
     d->updateActions();
     updatePreviousNextActions();
