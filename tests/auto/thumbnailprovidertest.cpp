@@ -162,6 +162,7 @@ void ThumbnailProviderTest::testLoadLocal()
             kWarning() << "mtime == -1 for url" << url << ". This should not happen!";
             kWarning() << "errno:" << errno << "message:" << strerror(errno);
             kWarning() << "QFile::exists(" << url.toLocalFile() << "):" << QFile::exists(url.toLocalFile());
+            kWarning() << "Recalculating mtime" << item.time(KFileItem::ModificationTime).toTime_t();
             QFAIL("Invalid time for test KFileItem");
         }
 
