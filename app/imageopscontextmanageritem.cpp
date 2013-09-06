@@ -33,11 +33,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KActionCategory>
 
 // Local
-#include "contextmanager.h"
 #include "viewmainpage.h"
 #include "gvcore.h"
 #include "mainwindow.h"
 #include "sidebar.h"
+#include <lib/contextmanager.h>
 #include <lib/crop/croptool.h>
 #include <lib/document/documentfactory.h>
 #include <lib/documentview/rasterimageview.h>

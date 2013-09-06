@@ -62,7 +62,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Local
 #include "configdialog.h"
-#include "contextmanager.h"
 #include "documentinfoprovider.h"
 #include "viewmainpage.h"
 #include "fileopscontextmanageritem.h"
@@ -89,6 +88,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "thumbnailviewhelper.h"
 #include "browsemainpage.h"
 #include <lib/archiveutils.h>
+#include <lib/contextmanager.h>
 #include <lib/document/documentfactory.h>
 #include <lib/documentonlyproxymodel.h>
 #include <lib/eventwatcher.h>

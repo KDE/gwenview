@@ -58,6 +58,7 @@ set(gwenviewlib_SRCS
     cms/iccjpeg.c
     cms/cmsprofile.cpp
     cms/cmsprofile_png.cpp
+    contextmanager.cpp
     crop/cropwidget.cpp
     crop/cropimageoperation.cpp
     crop/croptool.cpp

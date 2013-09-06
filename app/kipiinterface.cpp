@@ -44,9 +44,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // local
 #include "mainwindow.h"
-#include "contextmanager.h"
 #include "kipiimagecollectionselector.h"
 #include "kipiuploadwidget.h"
+#include <lib/contextmanager.h>
 #include <lib/jpegcontent.h>
 #include <lib/mimetypeutils.h>
 #include <lib/timeutils.h>

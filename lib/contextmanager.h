@@ -20,6 +20,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifndef CONTEXTMANAGER_H
 #define CONTEXTMANAGER_H
 
+#include <lib/gwenviewlib_export.h>
+
 // Qt
 #include <QObject>
 
@@ -38,10 +40,10 @@ class SortedDirModel;
 struct ContextManagerPrivate;
 
 /**
- * Manage the update of the contextual parts of the applications,
- * like the sidebar or the context menu.
+ * Manages the state of the application.
+ * TODO: Most of GvCore should be merged in this class
  */
-class ContextManager : public QObject
+class GWENVIEWLIB_EXPORT ContextManager : public QObject
 {
     Q_OBJECT
 public:

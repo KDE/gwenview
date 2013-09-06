@@ -50,9 +50,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <konq_operations.h>
 
 // Local
+#include <lib/contextmanager.h>
 #include <lib/eventwatcher.h>
 #include <lib/gvdebug.h>
-#include "contextmanager.h"
 #include "fileoperations.h"
 #include "sidebar.h"
 

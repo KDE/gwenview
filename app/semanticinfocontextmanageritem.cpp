@@ -39,11 +39,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KRatingPainter>
 
 // Local
-#include "contextmanager.h"
 #include "viewmainpage.h"
 #include "sidebar.h"
 #include "ui_semanticinfosidebaritem.h"
 #include "ui_semanticinfodialog.h"
+#include <lib/contextmanager.h>
 #include <lib/documentview/documentview.h>
 #include <lib/eventwatcher.h>
 #include <lib/graphicshudwidget.h>

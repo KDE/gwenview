@@ -31,8 +31,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KLocale>
 
 // Local
+#include <lib/contextmanager.h>
 #include <lib/eventwatcher.h>
-#include "contextmanager.h"
 #include "sidebar.h"
 #include "fileoperations.h"
 

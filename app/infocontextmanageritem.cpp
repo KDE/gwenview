@@ -36,10 +36,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KSqueezedTextLabel>
 
 // Local
-#include "contextmanager.h"
 #include "imagemetainfodialog.h"
 #include "sidebar.h"
 #include <lib/archiveutils.h>
+#include <lib/contextmanager.h>
 #include <lib/eventwatcher.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/preferredimagemetainfomodel.h>
