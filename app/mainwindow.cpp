@@ -494,12 +494,10 @@ struct MainWindow::Private
 
         // Create context manager items
         FolderViewContextManagerItem* folderViewItem = new FolderViewContextManagerItem(mContextManager);
-        mContextManager->addItem(folderViewItem);
         connect(folderViewItem, SIGNAL(urlChanged(KUrl)),
                 q, SLOT(openDirUrl(KUrl)));
 
         InfoContextManagerItem* infoItem = new InfoContextManagerItem(mContextManager);
-        mContextManager->addItem(infoItem);
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
         SemanticInfoContextManagerItem* semanticInfoItem = 0;
@@ -513,17 +511,12 @@ struct MainWindow::Private
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
         }
 #endif
-        if (semanticInfoItem) {
-            mContextManager->addItem(semanticInfoItem);
-        }
 #endif
 
         ImageOpsContextManagerItem* imageOpsItem =
             new ImageOpsContextManagerItem(mContextManager, q);
-        mContextManager->addItem(imageOpsItem);
 
         FileOpsContextManagerItem* fileOpsItem = new FileOpsContextManagerItem(mContextManager, mThumbnailView, actionCollection, q);
-        mContextManager->addItem(fileOpsItem);
 
         // Fill sidebar
         SideBarPage* page;

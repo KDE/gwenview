@@ -35,8 +35,6 @@ namespace Gwenview
 
 class SortedDirModel;
 
-class AbstractContextManagerItem;
-
 struct ContextManagerPrivate;
 
 /**
@@ -50,8 +48,6 @@ public:
     ContextManager(SortedDirModel*, QObject* parent);
 
     ~ContextManager();
-
-    void addItem(AbstractContextManagerItem* item);
 
     KUrl currentUrl() const;
 

@@ -29,8 +29,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KFileItem>
 
 // Local
-#include "sidebar.h"
-#include "abstractcontextmanageritem.h"
 #include <lib/document/documentfactory.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
 
@@ -39,7 +37,6 @@ namespace Gwenview
 
 struct ContextManagerPrivate
 {
-    QList<AbstractContextManagerItem*> mList;
     SortedDirModel* mDirModel;
     QItemSelectionModel* mSelectionModel;
     KUrl mCurrentDirUrl;
@@ -124,18 +121,12 @@ ContextManager::ContextManager(SortedDirModel* dirModel, QObject* parent)
 
 ContextManager::~ContextManager()
 {
-    qDeleteAll(d->mList);
     delete d;
 }
 
 QItemSelectionModel* ContextManager::selectionModel() const
 {
     return d->mSelectionModel;
-}
-
-void ContextManager::addItem(AbstractContextManagerItem* item)
-{
-    d->mList << item;
 }
 
 void ContextManager::setCurrentUrl(const KUrl& currentUrl)
