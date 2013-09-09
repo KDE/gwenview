@@ -67,6 +67,10 @@ public:
 
     bool currentUrlIsRasterImage() const;
 
+    KUrl urlToSelect() const;
+
+    void setUrlToSelect(const KUrl&);
+
 Q_SIGNALS:
     void currentUrlChanged(const KUrl&);
     void selectionChanged();
@@ -79,6 +83,7 @@ private Q_SLOTS:
     void slotCurrentChanged(const QModelIndex&);
     void emitQueuedSignals();
     void slotRowsAboutToBeRemoved(const QModelIndex& /*parent*/, int start, int end);
+    void selectUrlToSelect();
 
 private:
     ContextManagerPrivate* const d;

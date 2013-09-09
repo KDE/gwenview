@@ -30,6 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Local
 #include <lib/document/documentfactory.h>
+#include <lib/gvdebug.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
 
 namespace Gwenview
@@ -41,6 +42,8 @@ struct ContextManagerPrivate
     QItemSelectionModel* mSelectionModel;
     KUrl mCurrentDirUrl;
     KUrl mCurrentUrl;
+
+    KUrl mUrlToSelect;
 
     bool mSelectedFileItemListNeedsUpdate;
     QSet<QByteArray> mQueuedSignals;
@@ -108,6 +111,9 @@ ContextManager::ContextManager(SortedDirModel* dirModel, QObject* parent)
      */
     connect(d->mDirModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)),
             SLOT(slotRowsAboutToBeRemoved(QModelIndex,int,int)));
+
+    connect(d->mDirModel, SIGNAL(rowsInserted(QModelIndex,int,int)),
+            SLOT(selectUrlToSelect()));
 
     d->mSelectionModel = new QItemSelectionModel(d->mDirModel);
 
@@ -254,6 +260,28 @@ void Gwenview::ContextManager::slotRowsAboutToBeRemoved(const QModelIndex& /*par
 bool ContextManager::currentUrlIsRasterImage() const
 {
     return MimeTypeUtils::urlKind(currentUrl()) == MimeTypeUtils::KIND_RASTER_IMAGE;
+}
+
+KUrl ContextManager::urlToSelect() const
+{
+    return d->mUrlToSelect;
+}
+
+void ContextManager::setUrlToSelect(const KUrl& url)
+{
+    GV_RETURN_IF_FAIL(url.isValid());
+    d->mUrlToSelect = url;
+    setCurrentUrl(url);
+    selectUrlToSelect();
+}
+
+void ContextManager::selectUrlToSelect()
+{
+    QModelIndex index = d->mDirModel->indexForUrl(d->mUrlToSelect);
+    if (index.isValid()) {
+        d->mSelectionModel->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect);
+        d->mUrlToSelect = KUrl();
+    }
 }
 
 } // namespace

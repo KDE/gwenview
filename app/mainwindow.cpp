@@ -210,8 +210,6 @@ struct MainWindow::Private
 
     MainWindowState mStateBeforeFullScreen;
 
-    KUrl mUrlToSelect;
-
     QString mCaption;
 
     MainPageId mCurrentMainPageId;
@@ -731,10 +729,11 @@ struct MainWindow::Private
             return KUrl();
         }
 
-        if (mUrlToSelect.isValid()) {
+        KUrl url = mContextManager->urlToSelect();
+        if (url.isValid()) {
             // We are supposed to select this url whenever it appears in the
             // dir model. For everyone it is as if it was already the current one
-            return mUrlToSelect;
+            return url;
         }
 
         // mBrowseMainPage and mViewMainPage urls are almost always synced, but
@@ -745,7 +744,7 @@ struct MainWindow::Private
         // which can't be listed: in this case mBrowseMainPage url is
         // empty.
         if (mCurrentMainPageId == ViewMainPageId && !mViewMainPage->isEmpty()) {
-            KUrl url = mViewMainPage->url();
+            url = mViewMainPage->url();
             if (!KProtocolManager::supportsListing(url)) {
                 return url;
             }
@@ -764,24 +763,6 @@ struct MainWindow::Private
         KFileItem item = mDirModel->itemForIndex(index);
         Q_ASSERT(!item.isNull());
         return item.url();
-    }
-
-    void setUrlToSelect(const KUrl& url)
-    {
-        GV_RETURN_IF_FAIL(url.isValid());
-        mUrlToSelect = url;
-        updateContextManagerUrl();
-        selectUrlToSelect();
-    }
-
-    void selectUrlToSelect()
-    {
-        QModelIndex index = mDirModel->indexForUrl(mUrlToSelect);
-        if (index.isValid()) {
-            // Note: calling setCurrentIndex also takes care of selecting the index
-            mThumbnailView->setCurrentIndex(index);
-            mUrlToSelect = KUrl();
-        }
     }
 
     void updateContextManagerUrl()
@@ -961,7 +942,7 @@ void MainWindow::setInitialUrl(const KUrl& _url)
     } else {
         d->mViewAction->trigger();
         d->mViewMainPage->openUrl(url);
-        d->setUrlToSelect(url);
+        d->mContextManager->setUrlToSelect(url);
     }
     d->updateContextManagerUrl();
 }
@@ -1158,7 +1139,7 @@ void MainWindow::openDirUrl(const KUrl& url)
         const QString pathToSelect = currentPath.section(separator, 0, slashCount + 1);
         KUrl urlToSelect = url;
         urlToSelect.setPath(pathToSelect);
-        d->setUrlToSelect(urlToSelect);
+        d->mContextManager->setUrlToSelect(urlToSelect);
     }
     d->mThumbnailProvider->stop();
     d->mDirModel->dirLister()->openUrl(url);
@@ -1256,9 +1237,6 @@ void MainWindow::slotSelectionChanged()
 
 void MainWindow::slotDirModelNewItems()
 {
-    if (d->mUrlToSelect.isValid()) {
-        d->selectUrlToSelect();
-    }
     if (d->mThumbnailView->selectionModel()->hasSelection()) {
         updatePreviousNextActions();
     }
@@ -1272,7 +1250,7 @@ void MainWindow::slotDirListerCompleted()
     }
     if (d->mThumbnailView->selectionModel()->hasSelection()) {
         updatePreviousNextActions();
-    } else if (!d->mUrlToSelect.isValid()) {
+    } else if (!d->mContextManager->urlToSelect().isValid()) {
         d->goToFirstDocument();
     }
     d->mThumbnailView->scrollToSelectedIndex();
@@ -1316,7 +1294,7 @@ void MainWindow::goToUrl(const KUrl& url)
         d->spreadCurrentDirUrl(dirUrl);
         d->mGvCore->addUrlToRecentFolders(dirUrl);
     }
-    d->setUrlToSelect(url);
+    d->mContextManager->setUrlToSelect(url);
 }
 
 void MainWindow::updatePreviousNextActions()
@@ -1434,14 +1412,14 @@ void MainWindow::openFile()
     KUrl url = dialog.selectedUrl();
     d->mViewAction->trigger();
     d->mViewMainPage->openUrl(url);
-    d->setUrlToSelect(url);
+    d->mContextManager->setUrlToSelect(url);
     d->updateContextManagerUrl();
 }
 
 void MainWindow::showDocumentInFullScreen(const KUrl& url)
 {
     d->mViewMainPage->openUrl(url);
-    d->setUrlToSelect(url);
+    d->mContextManager->setUrlToSelect(url);
     d->mFullScreenAction->trigger();
 }
 
