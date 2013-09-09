@@ -65,6 +65,8 @@ public:
 
     QItemSelectionModel* selectionModel() const;
 
+    bool currentUrlIsRasterImage() const;
+
 Q_SIGNALS:
     void selectionChanged();
     void selectionDataChanged();

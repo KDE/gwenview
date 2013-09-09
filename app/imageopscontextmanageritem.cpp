@@ -185,7 +185,7 @@ void ImageOpsContextManagerItem::updateSideBarContent()
 
 void ImageOpsContextManagerItem::updateActions()
 {
-    bool canModify = d->mMainWindow->currentDocumentIsRasterImage();
+    bool canModify = contextManager()->currentUrlIsRasterImage();
     bool viewMainPageIsVisible = d->mMainWindow->viewMainPage()->isVisible();
     if (!viewMainPageIsVisible) {
         // Since we only support image operations on one image for now,

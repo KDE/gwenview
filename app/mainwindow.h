@@ -53,8 +53,6 @@ public:
 
     ContextManager* contextManager() const;
 
-    bool currentDocumentIsRasterImage() const;
-
     void setDistractionFreeMode(bool);
 
 public Q_SLOTS:

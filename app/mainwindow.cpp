@@ -703,7 +703,7 @@ struct MainWindow::Private
         const KUrl url = currentUrl();
 
         if (url.isValid()) {
-            isRasterImage = q->currentDocumentIsRasterImage();
+            isRasterImage = mContextManager->currentUrlIsRasterImage();
             canSave = isRasterImage;
             isModified = DocumentFactory::instance()->load(url)->isModified();
             if (mCurrentMainPageId != ViewMainPageId) {
@@ -924,25 +924,6 @@ ContextManager* MainWindow::contextManager() const
 ViewMainPage* MainWindow::viewMainPage() const
 {
     return d->mViewMainPage;
-}
-
-bool MainWindow::currentDocumentIsRasterImage() const
-{
-    if (d->mCurrentMainPageId == ViewMainPageId) {
-        Document::Ptr doc = d->mViewMainPage->currentDocument();
-        if (!doc) {
-            return false;
-        }
-        return doc->kind() == MimeTypeUtils::KIND_RASTER_IMAGE;
-    } else {
-        QModelIndex index = d->mThumbnailView->currentIndex();
-        if (!index.isValid()) {
-            return false;
-        }
-        KFileItem item = d->mDirModel->itemForIndex(index);
-        Q_ASSERT(!item.isNull());
-        return MimeTypeUtils::fileItemKind(item) == MimeTypeUtils::KIND_RASTER_IMAGE;
-    }
 }
 
 void MainWindow::setCaption(const QString& caption)
@@ -1265,9 +1246,9 @@ void MainWindow::slotSelectionChanged()
     }
 
     // Update UI
+    d->updateContextDependentComponents();
     d->updateActions();
     updatePreviousNextActions();
-    d->updateContextDependentComponents();
 
     // Start preloading
     int preloadDelay = d->mCurrentMainPageId == ViewMainPageId ? VIEW_PRELOAD_DELAY : BROWSE_PRELOAD_DELAY;
@@ -1587,7 +1568,7 @@ void MainWindow::saveConfig()
 
 void MainWindow::print()
 {
-    if (!currentDocumentIsRasterImage()) {
+    if (!d->mContextManager->currentUrlIsRasterImage()) {
         return;
     }
 
