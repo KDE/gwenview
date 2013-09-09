@@ -577,7 +577,7 @@ struct MainWindow::Private
 
     QModelIndex currentIndex() const
     {
-        KUrl url = currentUrl();
+        KUrl url = mContextManager->currentUrl();
         return url.isValid() ? mDirModel->indexForUrl(url) : QModelIndex();
     }
 
@@ -701,7 +701,7 @@ struct MainWindow::Private
         bool isRasterImage = false;
         bool canSave = false;
         bool isModified = false;
-        const KUrl url = currentUrl();
+        const KUrl url = mContextManager->currentUrl();
 
         if (url.isValid()) {
             isRasterImage = mContextManager->currentUrlIsRasterImage();
@@ -1372,12 +1372,12 @@ void MainWindow::toggleFullScreen(bool checked)
 
 void MainWindow::saveCurrent()
 {
-    d->mGvCore->save(d->currentUrl());
+    d->mGvCore->save(d->mContextManager->currentUrl());
 }
 
 void MainWindow::saveCurrentAs()
 {
-    d->mGvCore->saveAs(d->currentUrl());
+    d->mGvCore->saveAs(d->mContextManager->currentUrl());
 }
 
 void MainWindow::reload()
@@ -1542,7 +1542,7 @@ void MainWindow::print()
         return;
     }
 
-    Document::Ptr doc = DocumentFactory::instance()->load(d->currentUrl());
+    Document::Ptr doc = DocumentFactory::instance()->load(d->mContextManager->currentUrl());
     PrintHelper printHelper(this);
     printHelper.print(doc);
 }
@@ -1623,7 +1623,7 @@ void MainWindow::setDistractionFreeMode(bool value)
 void MainWindow::saveProperties(KConfigGroup& group)
 {
     group.writeEntry(SESSION_CURRENT_PAGE_KEY, int(d->mCurrentMainPageId));
-    group.writeEntry(SESSION_URL_KEY, d->currentUrl());
+    group.writeEntry(SESSION_URL_KEY, d->mContextManager->currentUrl());
 }
 
 void MainWindow::readProperties(const KConfigGroup& group)
