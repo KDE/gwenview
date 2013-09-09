@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "imageopscontextmanageritem.moc"
 
 // Qt
+#include <QApplication>
 
 // KDE
 #include <KAction>
@@ -129,7 +130,18 @@ struct ImageOpsContextManagerItem::Private
     bool ensureEditable()
     {
         KUrl url = q->contextManager()->currentUrl();
-        return GvCore::ensureDocumentIsEditable(url);
+        Document::Ptr doc = DocumentFactory::instance()->load(url);
+        doc->startLoadingFullImage();
+        doc->waitUntilLoaded();
+        if (doc->isEditable()) {
+            return true;
+        }
+
+        KMessageBox::sorry(
+            QApplication::activeWindow(),
+            i18nc("@info", "Gwenview cannot edit this kind of image.")
+        );
+        return false;
     }
 };
 
