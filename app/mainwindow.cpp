@@ -222,6 +222,7 @@ struct MainWindow::Private
     void setupWidgets()
     {
         mFullScreenContent = new FullScreenContent(q);
+        connect(mContextManager, SIGNAL(currentUrlChanged(KUrl)), mFullScreenContent, SLOT(setCurrentUrl(KUrl)));
 
         mCentralSplitter = new Splitter(Qt::Horizontal, q);
         q->setCentralWidget(mCentralSplitter);
@@ -235,6 +236,7 @@ struct MainWindow::Private
         mContentWidget = new QWidget(mCentralSplitter);
 
         mSaveBar = new SaveBar(mContentWidget, q->actionCollection());
+        connect(mContextManager, SIGNAL(currentUrlChanged(KUrl)), mSaveBar, SLOT(setCurrentUrl(KUrl)));
         mViewStackedWidget = new QStackedWidget(mContentWidget);
         QVBoxLayout* layout = new QVBoxLayout(mContentWidget);
         layout->addWidget(mSaveBar);
@@ -245,6 +247,7 @@ struct MainWindow::Private
 
         mStartSlideShowWhenDirListerCompleted = false;
         mSlideShow = new SlideShow(q);
+        connect(mContextManager, SIGNAL(currentUrlChanged(KUrl)), mSlideShow, SLOT(setCurrentUrl(KUrl)));
 
         setupThumbnailView(mViewStackedWidget);
         setupViewMainPage(mViewStackedWidget);
@@ -767,7 +770,7 @@ struct MainWindow::Private
     {
         GV_RETURN_IF_FAIL(url.isValid());
         mUrlToSelect = url;
-        updateContextDependentComponents();
+        updateContextManagerUrl();
         selectUrlToSelect();
     }
 
@@ -781,13 +784,9 @@ struct MainWindow::Private
         }
     }
 
-    void updateContextDependentComponents()
+    void updateContextManagerUrl()
     {
-        KUrl url = currentUrl();
-        mContextManager->setCurrentUrl(url);
-        mSaveBar->setCurrentUrl(url);
-        mSlideShow->setCurrentUrl(url);
-        mFullScreenContent->setCurrentUrl(url);
+        mContextManager->setCurrentUrl(currentUrl());
     }
 
     const char* sideBarConfigGroupName() const
@@ -964,7 +963,7 @@ void MainWindow::setInitialUrl(const KUrl& _url)
         d->mViewMainPage->openUrl(url);
         d->setUrlToSelect(url);
     }
-    d->updateContextDependentComponents();
+    d->updateContextManagerUrl();
 }
 
 void MainWindow::startSlideShow()
@@ -1117,7 +1116,7 @@ void MainWindow::showStartMainPage()
 
     d->updateActions();
     updatePreviousNextActions();
-    d->updateContextDependentComponents();
+    d->updateContextManagerUrl();
 
     d->autoAssignThumbnailProvider();
 }
@@ -1246,7 +1245,7 @@ void MainWindow::slotSelectionChanged()
     }
 
     // Update UI
-    d->updateContextDependentComponents();
+    d->updateContextManagerUrl();
     d->updateActions();
     updatePreviousNextActions();
 
@@ -1436,7 +1435,7 @@ void MainWindow::openFile()
     d->mViewAction->trigger();
     d->mViewMainPage->openUrl(url);
     d->setUrlToSelect(url);
-    d->updateContextDependentComponents();
+    d->updateContextManagerUrl();
 }
 
 void MainWindow::showDocumentInFullScreen(const KUrl& url)

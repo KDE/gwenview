@@ -68,6 +68,7 @@ public:
     bool currentUrlIsRasterImage() const;
 
 Q_SIGNALS:
+    void currentUrlChanged(const KUrl&);
     void selectionChanged();
     void selectionDataChanged();
     void currentDirUrlChanged();

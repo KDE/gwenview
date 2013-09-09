@@ -51,10 +51,9 @@ public:
     /** @return true if the slideshow is running */
     bool isRunning() const;
 
-    void setCurrentUrl(const KUrl& url);
-
 public Q_SLOTS:
     void setInterval(int);
+    void setCurrentUrl(const KUrl& url);
 
     /**
      * Resume slideshow and go to next url.

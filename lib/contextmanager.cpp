@@ -143,6 +143,7 @@ void ContextManager::setCurrentUrl(const KUrl& currentUrl)
         undoGroup->setActiveStack(doc->undoStack());
     }
 
+    currentUrlChanged(currentUrl);
     d->queueSignal("selectionChanged");
 }
 
