@@ -765,11 +765,6 @@ struct MainWindow::Private
         return item.url();
     }
 
-    void updateContextManagerUrl()
-    {
-        mContextManager->setCurrentUrl(currentUrl());
-    }
-
     const char* sideBarConfigGroupName() const
     {
         const char* name = 0;
@@ -944,7 +939,6 @@ void MainWindow::setInitialUrl(const KUrl& _url)
         d->mViewMainPage->openUrl(url);
         d->mContextManager->setUrlToSelect(url);
     }
-    d->updateContextManagerUrl();
 }
 
 void MainWindow::startSlideShow()
@@ -1097,7 +1091,7 @@ void MainWindow::showStartMainPage()
 
     d->updateActions();
     updatePreviousNextActions();
-    d->updateContextManagerUrl();
+    d->mContextManager->setCurrentUrl(KUrl());
 
     d->autoAssignThumbnailProvider();
 }
@@ -1226,7 +1220,7 @@ void MainWindow::slotSelectionChanged()
     }
 
     // Update UI
-    d->updateContextManagerUrl();
+    d->mContextManager->setCurrentUrl(d->currentUrl());
     d->updateActions();
     updatePreviousNextActions();
 
@@ -1413,7 +1407,6 @@ void MainWindow::openFile()
     d->mViewAction->trigger();
     d->mViewMainPage->openUrl(url);
     d->mContextManager->setUrlToSelect(url);
-    d->updateContextManagerUrl();
 }
 
 void MainWindow::showDocumentInFullScreen(const KUrl& url)
