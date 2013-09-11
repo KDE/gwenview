@@ -83,6 +83,7 @@ private Q_SLOTS:
     void slotCurrentChanged(const QModelIndex&);
     void emitQueuedSignals();
     void slotRowsAboutToBeRemoved(const QModelIndex& /*parent*/, int start, int end);
+    void slotRowsInserted();
     void selectUrlToSelect();
 
 private:

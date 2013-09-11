@@ -113,7 +113,7 @@ ContextManager::ContextManager(SortedDirModel* dirModel, QObject* parent)
             SLOT(slotRowsAboutToBeRemoved(QModelIndex,int,int)));
 
     connect(d->mDirModel, SIGNAL(rowsInserted(QModelIndex,int,int)),
-            SLOT(selectUrlToSelect()));
+            SLOT(slotRowsInserted()));
 
     d->mSelectionModel = new QItemSelectionModel(d->mDirModel);
 
@@ -275,8 +275,23 @@ void ContextManager::setUrlToSelect(const KUrl& url)
     selectUrlToSelect();
 }
 
+void ContextManager::slotRowsInserted()
+{
+    // We reach this method when rows have been inserted in the model, but views
+    // may not have been updated yet and thus do not have the matching items.
+    // Delay the selection of mUrlToSelect so that the view items exist.
+    //
+    // Without this, when Gwenview is started with an image as argument and the
+    // thumbnail bar is visible, the image will not be selected in the thumbnail
+    // bar.
+    if (d->mUrlToSelect.isValid()) {
+        QMetaObject::invokeMethod(this, "selectUrlToSelect", Qt::QueuedConnection);
+    }
+}
+
 void ContextManager::selectUrlToSelect()
 {
+    GV_RETURN_IF_FAIL(d->mUrlToSelect.isValid());
     QModelIndex index = d->mDirModel->indexForUrl(d->mUrlToSelect);
     if (index.isValid()) {
         d->mSelectionModel->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect);
