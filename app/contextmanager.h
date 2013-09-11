@@ -47,7 +47,7 @@ class ContextManager : public QObject
 {
     Q_OBJECT
 public:
-    ContextManager(SortedDirModel*, QItemSelectionModel*, QObject* parent);
+    ContextManager(SortedDirModel*, QObject* parent);
 
     ~ContextManager();
 
@@ -65,6 +65,8 @@ public:
 
     SortedDirModel* dirModel() const;
 
+    QItemSelectionModel* selectionModel() const;
+
 Q_SIGNALS:
     void selectionChanged();
     void selectionDataChanged();
@@ -75,6 +77,7 @@ private Q_SLOTS:
     void slotSelectionChanged();
     void slotCurrentChanged(const QModelIndex&);
     void emitQueuedSignals();
+    void slotRowsAboutToBeRemoved(const QModelIndex& /*parent*/, int start, int end);
 
 private:
     ContextManagerPrivate* const d;

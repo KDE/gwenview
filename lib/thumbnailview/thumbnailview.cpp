@@ -493,18 +493,6 @@ void ThumbnailView::rowsAboutToBeRemoved(const QModelIndex& parent, int start, i
         d->mThumbnailProvider->removeItems(itemList);
     }
 
-    // Update current index if it is among the deleted rows
-    const int row = currentIndex().row();
-    if (start <= row && row <= end) {
-        QModelIndex index;
-        if (end < model()->rowCount() - 1) {
-            index = model()->index(end + 1, 0);
-        } else if (start > 0) {
-            index = model()->index(start - 1, 0);
-        }
-        setCurrentIndex(index);
-    }
-
     // Removing rows might make new images visible, make sure their thumbnail
     // is generated
     d->mScheduledThumbnailGenerationTimer.start();
