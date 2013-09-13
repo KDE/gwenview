@@ -575,12 +575,6 @@ struct MainWindow::Private
         mThumbnailBarModel->setSourceModel(mDirModel);
     }
 
-    QModelIndex currentIndex() const
-    {
-        KUrl url = mContextManager->currentUrl();
-        return url.isValid() ? mDirModel->indexForUrl(url) : QModelIndex();
-    }
-
     bool indexIsDirOrArchive(const QModelIndex& index) const
     {
         Q_ASSERT(index.isValid());
@@ -600,7 +594,7 @@ struct MainWindow::Private
     void goTo(int offset)
     {
         mPreloadDirectionIsForward = offset > 0;
-        QModelIndex index = currentIndex();
+        QModelIndex index = mContextManager->selectionModel()->currentIndex();
         index = mDirModel->index(index.row() + offset, 0);
         if (index.isValid() && !indexIsDirOrArchive(index)) {
             goTo(index);
@@ -1293,7 +1287,7 @@ void MainWindow::goToUrl(const KUrl& url)
 
 void MainWindow::updatePreviousNextActions()
 {
-    int row = d->currentIndex().row();
+    int row = d->mContextManager->selectionModel()->currentIndex().row();
     QModelIndex prevIndex = d->mDirModel->index(row - 1, 0);
     QModelIndex nextIndex = d->mDirModel->index(row + 1, 0);
     bool hasPrevious = prevIndex.isValid() && !d->indexIsDirOrArchive(prevIndex);
