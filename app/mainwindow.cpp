@@ -1015,7 +1015,7 @@ void MainWindow::openSelectedDocuments()
 void MainWindow::goUp()
 {
     if (d->mCurrentMainPageId == BrowseMainPageId) {
-        KUrl url = d->mDirModel->dirLister()->url();
+        KUrl url = d->mContextManager->currentDirUrl();
         url = url.upUrl();
         openDirUrl(url);
     } else {
@@ -1125,7 +1125,7 @@ void MainWindow::slotPartCompleted()
 
     KUrl dirUrl = url;
     dirUrl.setFileName(QString());
-    if (dirUrl.equals(d->mDirModel->dirLister()->url(), KUrl::CompareWithoutTrailingSlash)) {
+    if (dirUrl.equals(d->mContextManager->currentDirUrl(), KUrl::CompareWithoutTrailingSlash)) {
         QModelIndex index = d->mDirModel->indexForUrl(url);
         QItemSelectionModel* selectionModel = d->mThumbnailView->selectionModel();
         if (index.isValid() && !selectionModel->isSelected(index)) {
@@ -1338,7 +1338,7 @@ void MainWindow::reload()
 
 void MainWindow::openFile()
 {
-    KUrl dirUrl = d->mDirModel->dirLister()->url();
+    KUrl dirUrl = d->mContextManager->currentDirUrl();
 
     KFileDialog dialog(dirUrl, QString(), this);
     dialog.setCaption(i18nc("@title:window", "Open Image"));
