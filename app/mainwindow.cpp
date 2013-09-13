@@ -1030,13 +1030,13 @@ void MainWindow::showStartMainPage()
         d->mCurrentMainPageId = StartMainPageId;
     }
     d->setActionsDisabledOnStartMainPageEnabled(false);
-    d->mContextManager->setCurrentDirUrl(KUrl());
 
     d->mSideBar->hide();
     d->mViewStackedWidget->setCurrentWidget(d->mStartMainPage);
 
     d->updateActions();
     updatePreviousNextActions();
+    d->mContextManager->setCurrentDirUrl(KUrl());
     d->mContextManager->setCurrentUrl(KUrl());
 
     d->autoAssignThumbnailProvider();
@@ -1082,7 +1082,6 @@ void MainWindow::openDirUrl(const KUrl& url)
         d->mContextManager->setUrlToSelect(urlToSelect);
     }
     d->mThumbnailProvider->stop();
-    d->mDirModel->dirLister()->openUrl(url);
     d->mContextManager->setCurrentDirUrl(url);
     d->mGvCore->addUrlToRecentFolders(url);
     d->mViewMainPage->reset();
@@ -1134,7 +1133,6 @@ void MainWindow::slotPartCompleted()
             //selectionModel->select(index, QItemSelectionModel::SelectCurrent);
         }
     } else {
-        d->mDirModel->dirLister()->openUrl(dirUrl);
         d->mContextManager->setCurrentDirUrl(dirUrl);
         d->mGvCore->addUrlToRecentFolders(dirUrl);
     }
@@ -1234,7 +1232,6 @@ void MainWindow::goToUrl(const KUrl& url)
     KUrl dirUrl = url;
     dirUrl.setFileName("");
     if (!dirUrl.equals(d->mContextManager->currentDirUrl(), KUrl::CompareWithoutTrailingSlash)) {
-        d->mDirModel->dirLister()->openUrl(dirUrl);
         d->mContextManager->setCurrentDirUrl(dirUrl);
         d->mGvCore->addUrlToRecentFolders(dirUrl);
     }
