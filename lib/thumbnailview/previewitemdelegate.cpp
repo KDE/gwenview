@@ -65,6 +65,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QSettings>
 #endif
 
+//#define DEBUG_DRAW_BORDER
+//#define DEBUG_DRAW_CURRENT
+
 namespace Gwenview
 {
 
@@ -685,7 +688,7 @@ void PreviewItemDelegate::paint(QPainter * painter, const QStyleOptionViewItem &
     const bool underMouse = option.state & QStyle::State_MouseOver;
     const QWidget* viewport = d->mView->viewport();
 
-#ifdef DEBUG_RECT
+#ifdef DEBUG_DRAW_BORDER
     painter->setPen(Qt::red);
     painter->setBrush(Qt::NoBrush);
     painter->drawRect(rect);
@@ -816,6 +819,12 @@ void PreviewItemDelegate::paint(QPainter * painter, const QStyleOptionViewItem &
         d->drawRating(painter, rect, index.data(SemanticInfoDirModel::RatingRole));
 #endif
     }
+
+#ifdef DEBUG_DRAW_CURRENT
+    if (d->mView->currentIndex() == index) {
+        painter->fillRect(rect.left(), rect.top(), 12, 12, Qt::red);
+    }
+#endif
 }
 
 void PreviewItemDelegate::setThumbnailSize(const QSize& value)
