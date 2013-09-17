@@ -1240,11 +1240,19 @@ void MainWindow::goToUrl(const KUrl& url)
 
 void MainWindow::updatePreviousNextActions()
 {
-    int row = d->mContextManager->selectionModel()->currentIndex().row();
-    QModelIndex prevIndex = d->mDirModel->index(row - 1, 0);
-    QModelIndex nextIndex = d->mDirModel->index(row + 1, 0);
-    bool hasPrevious = prevIndex.isValid() && !d->indexIsDirOrArchive(prevIndex);
-    bool hasNext = nextIndex.isValid() && !d->indexIsDirOrArchive(nextIndex);
+    bool hasPrevious;
+    bool hasNext;
+    QModelIndex currentIndex = d->mContextManager->selectionModel()->currentIndex();
+    if (currentIndex.isValid() && !d->indexIsDirOrArchive(currentIndex)) {
+        int row = currentIndex.row();
+        QModelIndex prevIndex = d->mDirModel->index(row - 1, 0);
+        QModelIndex nextIndex = d->mDirModel->index(row + 1, 0);
+        hasPrevious = prevIndex.isValid() && !d->indexIsDirOrArchive(prevIndex);
+        hasNext = nextIndex.isValid() && !d->indexIsDirOrArchive(nextIndex);
+    } else {
+        hasPrevious = false;
+        hasNext = false;
+    }
     bool canBrowse = hasPrevious | hasNext;
 
     d->mGoToPreviousAction->setEnabled(canBrowse);
