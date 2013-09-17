@@ -50,9 +50,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <konq_operations.h>
 
 // Local
+#include <lib/contextmanager.h>
 #include <lib/eventwatcher.h>
 #include <lib/gvdebug.h>
-#include "contextmanager.h"
 #include "fileoperations.h"
 #include "sidebar.h"
 
@@ -159,7 +159,7 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, QL
 
     connect(contextManager(), SIGNAL(selectionChanged()),
             SLOT(updateActions()));
-    connect(contextManager(), SIGNAL(currentDirUrlChanged()),
+    connect(contextManager(), SIGNAL(currentDirUrlChanged(KUrl)),
             SLOT(updateActions()));
 
     KActionCategory* file = new KActionCategory(i18nc("@title actions category", "File"), actionCollection);

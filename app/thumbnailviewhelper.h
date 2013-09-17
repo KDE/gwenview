@@ -49,6 +49,7 @@ public:
 
     virtual void showMenuForUrlDroppedOnDir(QWidget* parent, const KUrl::List&, const KUrl&);
 
+public Q_SLOTS:
     void setCurrentDirUrl(const KUrl&);
 
 private:

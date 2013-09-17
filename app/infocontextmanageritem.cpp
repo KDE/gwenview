@@ -36,10 +36,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KSqueezedTextLabel>
 
 // Local
-#include "contextmanager.h"
 #include "imagemetainfodialog.h"
 #include "sidebar.h"
 #include <lib/archiveutils.h>
+#include <lib/contextmanager.h>
 #include <lib/eventwatcher.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/preferredimagemetainfomodel.h>
@@ -66,8 +66,8 @@ class FadingLabel : public QLabel
 {
 public:
     explicit FadingLabel(QWidget* parent = 0)
-        : QLabel(parent)
-        {
+    : QLabel(parent)
+    {
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         setTextInteractionFlags(Qt::TextBrowserInteraction);
     }
@@ -131,10 +131,12 @@ class KeyValueWidget : public QWidget
 {
     struct Row
     {
-        Row()
-        : keyLabel(new FadingLabel)
-        , valueLabel(new FadingLabel)
+        Row(QWidget* parent)
+        : keyLabel(new FadingLabel(parent))
+        , valueLabel(new FadingLabel(parent))
         {
+            keyLabel->show();
+            valueLabel->show();
             if (QApplication::isLeftToRight()) {
                 keyLabel->setAlignment(Qt::AlignRight);
             } else {
@@ -154,11 +156,7 @@ class KeyValueWidget : public QWidget
 public:
     KeyValueWidget(QWidget* parent)
     : QWidget(parent)
-    , mLayout(new QGridLayout(this))
     {
-        mLayout->setMargin(0);
-        mLayout->setVerticalSpacing(0);
-        mLayout->setHorizontalSpacing(4);
         setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     }
 
@@ -168,22 +166,6 @@ public:
         return QSize(150, height);
     }
 
-    void addRow(const QString& key, const QString& value)
-    {
-        Row* row = new Row;
-        row->keyLabel->setText(i18nc(
-                                   "@item:intext %1 is a key, we append a colon to it. A value is displayed after",
-                                   "%1:", key));
-        row->valueLabel->setText(value);
-        mRows.append(row);
-
-        int rowCount = mLayout->rowCount();
-        mLayout->addWidget(row->keyLabel, rowCount, 0);
-        mLayout->addWidget(row->valueLabel, rowCount, 1);
-        updateKeyColumnWidth();
-        updateGeometry();
-    }
-
     void clear()
     {
         qDeleteAll(mRows);
@@ -191,31 +173,64 @@ public:
         updateGeometry();
     }
 
-protected:
-    void resizeEvent(QResizeEvent* event)
+    void addRow(const QString& key, const QString& value)
     {
-        QWidget::resizeEvent(event);
-        updateKeyColumnWidth();
+        Row* row = new Row(this);
+        row->keyLabel->setText(i18nc(
+           "@item:intext %1 is a key, we append a colon to it. A value is displayed after",
+           "%1:", key));
+        row->valueLabel->setText(value);
+        mRows << row;
         updateGeometry();
     }
 
-private:
-    QList<Row*> mRows;
-    QGridLayout* mLayout;
+    void layoutRows()
+    {
+        const bool ltr = QApplication::isLeftToRight();
+        const int padding = 4;
+        const int keyWidth = computeKeyColumnWidth();
+        const int valueWidth = width() - keyWidth - padding;
+        const int rowHeight = fontMetrics().height();
+        int rowY = 0;
+        Q_FOREACH(Row* row, mRows) {
+            if (ltr) {
+                row->keyLabel->setGeometry(0, rowY, keyWidth, rowHeight);
+                row->valueLabel->setGeometry(keyWidth + padding, rowY, valueWidth, rowHeight);
+            } else {
+                row->valueLabel->setGeometry(0, rowY, valueWidth, rowHeight);
+                row->keyLabel->setGeometry(valueWidth + padding, rowY, keyWidth, rowHeight);
+            }
+            rowY += rowHeight;
+        }
+    }
 
-    void updateKeyColumnWidth()
+protected:
+    void showEvent(QShowEvent* event)
+    {
+        QWidget::showEvent(event);
+        layoutRows();
+    }
+
+    void resizeEvent(QResizeEvent* event)
+    {
+        QWidget::resizeEvent(event);
+        layoutRows();
+    }
+
+private:
+    QVector<Row*> mRows;
+
+    int computeKeyColumnWidth() const
     {
         const int maxWidth = width() / 2;
         int keyWidth = 0;
-        Q_FOREACH(Row * row, mRows) {
+        Q_FOREACH(Row* row, mRows) {
             int wantedWidth = row->keyLabel->sizeHint().width();
             if (wantedWidth > keyWidth) {
                 keyWidth = qMin(wantedWidth, maxWidth);
             }
         }
-        Q_FOREACH(Row * row, mRows) {
-            row->keyLabel->setFixedWidth(keyWidth);
-        }
+        return keyWidth;
     }
 };
 
@@ -371,9 +386,8 @@ void InfoContextManagerItem::updateOneFileInfo()
         return;
     }
 
-    QStringList list;
-    d->mKeyValueWidget->clear();
     ImageMetaInfoModel* metaInfoModel = d->mDocument->metaInfo();
+    d->mKeyValueWidget->clear();
     Q_FOREACH(const QString & key, GwenviewConfig::preferredMetaInfoKeyList()) {
         QString label;
         QString value;
@@ -383,8 +397,7 @@ void InfoContextManagerItem::updateOneFileInfo()
             d->mKeyValueWidget->addRow(label, value);
         }
     }
-
-    d->mKeyValueWidget->show();
+    d->mKeyValueWidget->layoutRows();
 }
 
 void InfoContextManagerItem::showMetaInfoDialog()

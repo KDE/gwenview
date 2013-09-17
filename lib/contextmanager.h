@@ -20,6 +20,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifndef CONTEXTMANAGER_H
 #define CONTEXTMANAGER_H
 
+#include <lib/gwenviewlib_export.h>
+
 // Qt
 #include <QObject>
 
@@ -35,23 +37,19 @@ namespace Gwenview
 
 class SortedDirModel;
 
-class AbstractContextManagerItem;
-
 struct ContextManagerPrivate;
 
 /**
- * Manage the update of the contextual parts of the applications,
- * like the sidebar or the context menu.
+ * Manages the state of the application.
+ * TODO: Most of GvCore should be merged in this class
  */
-class ContextManager : public QObject
+class GWENVIEWLIB_EXPORT ContextManager : public QObject
 {
     Q_OBJECT
 public:
     ContextManager(SortedDirModel*, QObject* parent);
 
     ~ContextManager();
-
-    void addItem(AbstractContextManagerItem* item);
 
     KUrl currentUrl() const;
 
@@ -67,10 +65,17 @@ public:
 
     QItemSelectionModel* selectionModel() const;
 
+    bool currentUrlIsRasterImage() const;
+
+    KUrl urlToSelect() const;
+
+    void setUrlToSelect(const KUrl&);
+
 Q_SIGNALS:
+    void currentDirUrlChanged(const KUrl&);
+    void currentUrlChanged(const KUrl&);
     void selectionChanged();
     void selectionDataChanged();
-    void currentDirUrlChanged();
 
 private Q_SLOTS:
     void slotDirModelDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
@@ -78,6 +83,9 @@ private Q_SLOTS:
     void slotCurrentChanged(const QModelIndex&);
     void emitQueuedSignals();
     void slotRowsAboutToBeRemoved(const QModelIndex& /*parent*/, int start, int end);
+    void slotRowsInserted();
+    void selectUrlToSelect();
+    void slotDirListerRedirection(const KUrl&);
 
 private:
     ContextManagerPrivate* const d;

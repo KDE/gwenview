@@ -26,12 +26,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // KDE
 #include <KDebug>
+#include <KDirLister>
 #include <KFileItem>
 
 // Local
-#include "sidebar.h"
-#include "abstractcontextmanageritem.h"
 #include <lib/document/documentfactory.h>
+#include <lib/gvdebug.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
 
 namespace Gwenview
@@ -39,11 +39,12 @@ namespace Gwenview
 
 struct ContextManagerPrivate
 {
-    QList<AbstractContextManagerItem*> mList;
     SortedDirModel* mDirModel;
     QItemSelectionModel* mSelectionModel;
     KUrl mCurrentDirUrl;
     KUrl mCurrentUrl;
+
+    KUrl mUrlToSelect;
 
     bool mSelectedFileItemListNeedsUpdate;
     QSet<QByteArray> mQueuedSignals;
@@ -112,6 +113,12 @@ ContextManager::ContextManager(SortedDirModel* dirModel, QObject* parent)
     connect(d->mDirModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)),
             SLOT(slotRowsAboutToBeRemoved(QModelIndex,int,int)));
 
+    connect(d->mDirModel, SIGNAL(rowsInserted(QModelIndex,int,int)),
+            SLOT(slotRowsInserted()));
+
+    connect(d->mDirModel->dirLister(), SIGNAL(redirection(KUrl)),
+            SLOT(slotDirListerRedirection(KUrl)));
+
     d->mSelectionModel = new QItemSelectionModel(d->mDirModel);
 
     connect(d->mSelectionModel, SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
@@ -124,18 +131,12 @@ ContextManager::ContextManager(SortedDirModel* dirModel, QObject* parent)
 
 ContextManager::~ContextManager()
 {
-    qDeleteAll(d->mList);
     delete d;
 }
 
 QItemSelectionModel* ContextManager::selectionModel() const
 {
     return d->mSelectionModel;
-}
-
-void ContextManager::addItem(AbstractContextManagerItem* item)
-{
-    d->mList << item;
 }
 
 void ContextManager::setCurrentUrl(const KUrl& currentUrl)
@@ -152,7 +153,7 @@ void ContextManager::setCurrentUrl(const KUrl& currentUrl)
         undoGroup->setActiveStack(doc->undoStack());
     }
 
-    d->queueSignal("selectionChanged");
+    currentUrlChanged(currentUrl);
 }
 
 KFileItemList ContextManager::selectedFileItemList() const
@@ -167,7 +168,8 @@ void ContextManager::setCurrentDirUrl(const KUrl& url)
         return;
     }
     d->mCurrentDirUrl = url;
-    currentDirUrlChanged();
+    d->mDirModel->dirLister()->openUrl(url);
+    currentDirUrlChanged(url);
 }
 
 KUrl ContextManager::currentDirUrl() const
@@ -222,6 +224,9 @@ void ContextManager::slotDirModelDataChanged(const QModelIndex& topLeft, const Q
 void ContextManager::slotSelectionChanged()
 {
     d->mSelectedFileItemListNeedsUpdate = true;
+    if (!d->mSelectionModel->hasSelection()) {
+        setCurrentUrl(KUrl());
+    }
     d->queueSignal("selectionChanged");
 }
 
@@ -258,5 +263,53 @@ void Gwenview::ContextManager::slotRowsAboutToBeRemoved(const QModelIndex& /*par
     d->mSelectionModel->select(oldCurrent, QItemSelectionModel::Deselect);
     d->mSelectionModel->setCurrentIndex(newCurrent, QItemSelectionModel::Select);
 }
+
+bool ContextManager::currentUrlIsRasterImage() const
+{
+    return MimeTypeUtils::urlKind(currentUrl()) == MimeTypeUtils::KIND_RASTER_IMAGE;
+}
+
+KUrl ContextManager::urlToSelect() const
+{
+    return d->mUrlToSelect;
+}
+
+void ContextManager::setUrlToSelect(const KUrl& url)
+{
+    GV_RETURN_IF_FAIL(url.isValid());
+    d->mUrlToSelect = url;
+    setCurrentUrl(url);
+    selectUrlToSelect();
+}
+
+void ContextManager::slotRowsInserted()
+{
+    // We reach this method when rows have been inserted in the model, but views
+    // may not have been updated yet and thus do not have the matching items.
+    // Delay the selection of mUrlToSelect so that the view items exist.
+    //
+    // Without this, when Gwenview is started with an image as argument and the
+    // thumbnail bar is visible, the image will not be selected in the thumbnail
+    // bar.
+    if (d->mUrlToSelect.isValid()) {
+        QMetaObject::invokeMethod(this, "selectUrlToSelect", Qt::QueuedConnection);
+    }
+}
+
+void ContextManager::selectUrlToSelect()
+{
+    GV_RETURN_IF_FAIL(d->mUrlToSelect.isValid());
+    QModelIndex index = d->mDirModel->indexForUrl(d->mUrlToSelect);
+    if (index.isValid()) {
+        d->mSelectionModel->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect);
+        d->mUrlToSelect = KUrl();
+    }
+}
+
+void ContextManager::slotDirListerRedirection(const KUrl& newUrl)
+{
+    setCurrentDirUrl(newUrl);
+}
+
 
 } // namespace

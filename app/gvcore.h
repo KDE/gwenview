@@ -64,13 +64,6 @@ public:
     void addUrlToRecentFolders(KUrl);
     void addUrlToRecentUrls(const KUrl& url);
 
-    /**
-     * Checks if the document referenced by url is editable, shows a sorry
-     * dialog if it's not.
-     * @return true if editable, false if not
-     */
-    static bool ensureDocumentIsEditable(const KUrl& url);
-
     QPalette palette(PaletteType type) const;
 
 public Q_SLOTS:

@@ -44,9 +44,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // local
 #include "mainwindow.h"
-#include "contextmanager.h"
 #include "kipiimagecollectionselector.h"
 #include "kipiuploadwidget.h"
+#include <lib/contextmanager.h>
 #include <lib/jpegcontent.h>
 #include <lib/mimetypeutils.h>
 #include <lib/timeutils.h>
@@ -252,7 +252,7 @@ KIPIInterface::KIPIInterface(MainWindow* mainWindow)
     d->setupPluginsMenu();
     QObject::connect(d->mMainWindow->contextManager(), SIGNAL(selectionChanged()),
                      this, SLOT(slotSelectionChanged()));
-    QObject::connect(d->mMainWindow->contextManager(), SIGNAL(currentDirUrlChanged()),
+    QObject::connect(d->mMainWindow->contextManager(), SIGNAL(currentDirUrlChanged(KUrl)),
                      this, SLOT(slotDirectoryChanged()));
 #if 0
 //TODO instead of delaying can we load them all at start-up to use actions somewhere else?

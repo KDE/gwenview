@@ -47,7 +47,7 @@ Q_SIGNALS:
     void urlChanged(const KUrl&);
 
 private Q_SLOTS:
-    void slotCurrentDirUrlChanged();
+    void slotCurrentDirUrlChanged(const KUrl&);
     void expandToSelectedUrl();
     void slotRowsInserted(const QModelIndex&, int start, int end);
     void slotActivated(const QModelIndex&);

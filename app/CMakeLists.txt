@@ -18,7 +18,6 @@ include_directories(
 set(gwenview_SRCS
     abstractcontextmanageritem.cpp
     configdialog.cpp
-    contextmanager.cpp
     gvcore.cpp
     documentinfoprovider.cpp
     viewmainpage.cpp

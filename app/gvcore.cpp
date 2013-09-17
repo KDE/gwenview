@@ -351,24 +351,6 @@ void GvCore::setRating(const KUrl& url, int rating)
     d->mDirModel->setData(index, rating, SemanticInfoDirModel::RatingRole);
 }
 
-bool GvCore::ensureDocumentIsEditable(const KUrl& url)
-{
-    // FIXME: Replace with a CheckEditableJob?
-    // This way we can factorize the error message
-    Document::Ptr doc = DocumentFactory::instance()->load(url);
-    doc->startLoadingFullImage();
-    doc->waitUntilLoaded();
-    if (doc->isEditable()) {
-        return true;
-    }
-
-    KMessageBox::sorry(
-        QApplication::activeWindow(),
-        i18nc("@info", "Gwenview cannot edit this kind of image.")
-    );
-    return false;
-}
-
 static void clearModel(QAbstractItemModel* model)
 {
     model->removeRows(0, model->rowCount());

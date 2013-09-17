@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "imageopscontextmanageritem.moc"
 
 // Qt
+#include <QApplication>
 
 // KDE
 #include <KAction>
@@ -33,11 +34,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KActionCategory>
 
 // Local
-#include "contextmanager.h"
 #include "viewmainpage.h"
 #include "gvcore.h"
 #include "mainwindow.h"
 #include "sidebar.h"
+#include <lib/contextmanager.h>
 #include <lib/crop/croptool.h>
 #include <lib/document/documentfactory.h>
 #include <lib/documentview/rasterimageview.h>
@@ -129,7 +130,18 @@ struct ImageOpsContextManagerItem::Private
     bool ensureEditable()
     {
         KUrl url = q->contextManager()->currentUrl();
-        return GvCore::ensureDocumentIsEditable(url);
+        Document::Ptr doc = DocumentFactory::instance()->load(url);
+        doc->startLoadingFullImage();
+        doc->waitUntilLoaded();
+        if (doc->isEditable()) {
+            return true;
+        }
+
+        KMessageBox::sorry(
+            QApplication::activeWindow(),
+            i18nc("@info", "Gwenview cannot edit this kind of image.")
+        );
+        return false;
     }
 };
 
@@ -173,7 +185,7 @@ void ImageOpsContextManagerItem::updateSideBarContent()
 
 void ImageOpsContextManagerItem::updateActions()
 {
-    bool canModify = d->mMainWindow->currentDocumentIsRasterImage();
+    bool canModify = contextManager()->currentUrlIsRasterImage();
     bool viewMainPageIsVisible = d->mMainWindow->viewMainPage()->isVisible();
     if (!viewMainPageIsVisible) {
         // Since we only support image operations on one image for now,

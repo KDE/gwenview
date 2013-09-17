@@ -31,8 +31,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KLocale>
 
 // Local
+#include <lib/contextmanager.h>
 #include <lib/eventwatcher.h>
-#include "contextmanager.h"
 #include "sidebar.h"
 #include "fileoperations.h"
 
@@ -222,8 +222,8 @@ FolderViewContextManagerItem::FolderViewContextManagerItem(ContextManager* manag
 
     d->setupView();
 
-    connect(contextManager(), SIGNAL(currentDirUrlChanged()),
-            SLOT(slotCurrentDirUrlChanged()));
+    connect(contextManager(), SIGNAL(currentDirUrlChanged(KUrl)),
+            SLOT(slotCurrentDirUrlChanged(KUrl)));
 }
 
 FolderViewContextManagerItem::~FolderViewContextManagerItem()
@@ -231,9 +231,8 @@ FolderViewContextManagerItem::~FolderViewContextManagerItem()
     delete d;
 }
 
-void FolderViewContextManagerItem::slotCurrentDirUrlChanged()
+void FolderViewContextManagerItem::slotCurrentDirUrlChanged(const KUrl& url)
 {
-    KUrl url = contextManager()->currentDirUrl();
     if (url.isValid() && d->mUrlToSelect != url) {
         d->mUrlToSelect = url;
         d->mUrlToSelect.cleanPath();

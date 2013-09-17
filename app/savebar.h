@@ -47,9 +47,10 @@ public:
      */
     void initActionDependentWidgets();
 
-    void setCurrentUrl(const KUrl&);
-
     void setFullScreenMode(bool);
+
+public Q_SLOTS:
+    void setCurrentUrl(const KUrl&);
 
 Q_SIGNALS:
     void requestSaveAll();

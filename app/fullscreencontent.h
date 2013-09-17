@@ -56,11 +56,12 @@ public:
 
     ThumbnailBarView* thumbnailBar() const;
 
-    void setCurrentUrl(const KUrl&);
-
     void setDistractionFreeMode(bool);
 
     void setFullScreenMode(bool);
+
+public Q_SLOTS:
+    void setCurrentUrl(const KUrl&);
 
 private Q_SLOTS:
     void updateCurrentUrlWidgets();

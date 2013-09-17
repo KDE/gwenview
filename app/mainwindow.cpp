@@ -62,7 +62,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Local
 #include "configdialog.h"
-#include "contextmanager.h"
 #include "documentinfoprovider.h"
 #include "viewmainpage.h"
 #include "fileopscontextmanageritem.h"
@@ -89,6 +88,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "thumbnailviewhelper.h"
 #include "browsemainpage.h"
 #include <lib/archiveutils.h>
+#include <lib/contextmanager.h>
 #include <lib/document/documentfactory.h>
 #include <lib/documentonlyproxymodel.h>
 #include <lib/eventwatcher.h>
@@ -210,8 +210,6 @@ struct MainWindow::Private
 
     MainWindowState mStateBeforeFullScreen;
 
-    KUrl mUrlToSelect;
-
     QString mCaption;
 
     MainPageId mCurrentMainPageId;
@@ -219,9 +217,19 @@ struct MainWindow::Private
     QDateTime mFullScreenLeftAt;
     KNotificationRestrictions* mNotificationRestrictions;
 
+    void setupContextManager()
+    {
+        mContextManager = new ContextManager(mDirModel, q);
+        connect(mContextManager, SIGNAL(selectionChanged()),
+            q, SLOT(slotSelectionChanged()));
+        connect(mContextManager, SIGNAL(currentDirUrlChanged(KUrl)),
+            q, SLOT(slotCurrentDirUrlChanged(KUrl)));
+    }
+
     void setupWidgets()
     {
         mFullScreenContent = new FullScreenContent(q);
+        connect(mContextManager, SIGNAL(currentUrlChanged(KUrl)), mFullScreenContent, SLOT(setCurrentUrl(KUrl)));
 
         mCentralSplitter = new Splitter(Qt::Horizontal, q);
         q->setCentralWidget(mCentralSplitter);
@@ -235,6 +243,7 @@ struct MainWindow::Private
         mContentWidget = new QWidget(mCentralSplitter);
 
         mSaveBar = new SaveBar(mContentWidget, q->actionCollection());
+        connect(mContextManager, SIGNAL(currentUrlChanged(KUrl)), mSaveBar, SLOT(setCurrentUrl(KUrl)));
         mViewStackedWidget = new QStackedWidget(mContentWidget);
         QVBoxLayout* layout = new QVBoxLayout(mContentWidget);
         layout->addWidget(mSaveBar);
@@ -245,6 +254,7 @@ struct MainWindow::Private
 
         mStartSlideShowWhenDirListerCompleted = false;
         mSlideShow = new SlideShow(q);
+        connect(mContextManager, SIGNAL(currentUrlChanged(KUrl)), mSlideShow, SLOT(setCurrentUrl(KUrl)));
 
         setupThumbnailView(mViewStackedWidget);
         setupViewMainPage(mViewStackedWidget);
@@ -279,15 +289,14 @@ struct MainWindow::Private
         mThumbnailView->setDocumentInfoProvider(mDocumentInfoProvider);
 
         mThumbnailViewHelper = new ThumbnailViewHelper(mDirModel, q->actionCollection());
-        mThumbnailView->setThumbnailViewHelper(mThumbnailViewHelper);
+        connect(mContextManager, SIGNAL(currentDirUrlChanged(KUrl)),
+            mThumbnailViewHelper, SLOT(setCurrentDirUrl(KUrl)));
 
         mThumbnailBarSelectionModel = new KLinkItemSelectionModel(mThumbnailBarModel, mContextManager->selectionModel(), q);
 
         // Connect thumbnail view
         connect(mThumbnailView, SIGNAL(indexActivated(QModelIndex)),
                 q, SLOT(slotThumbnailViewIndexActivated(QModelIndex)));
-        connect(mThumbnailView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-                q, SLOT(slotSelectionChanged()));
 
         // Connect delegate
         QAbstractItemDelegate* delegate = mThumbnailView->itemDelegate();
@@ -494,12 +503,10 @@ struct MainWindow::Private
 
         // Create context manager items
         FolderViewContextManagerItem* folderViewItem = new FolderViewContextManagerItem(mContextManager);
-        mContextManager->addItem(folderViewItem);
         connect(folderViewItem, SIGNAL(urlChanged(KUrl)),
                 q, SLOT(openDirUrl(KUrl)));
 
         InfoContextManagerItem* infoItem = new InfoContextManagerItem(mContextManager);
-        mContextManager->addItem(infoItem);
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
         SemanticInfoContextManagerItem* semanticInfoItem = 0;
@@ -513,17 +520,12 @@ struct MainWindow::Private
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
         }
 #endif
-        if (semanticInfoItem) {
-            mContextManager->addItem(semanticInfoItem);
-        }
 #endif
 
         ImageOpsContextManagerItem* imageOpsItem =
             new ImageOpsContextManagerItem(mContextManager, q);
-        mContextManager->addItem(imageOpsItem);
 
         FileOpsContextManagerItem* fileOpsItem = new FileOpsContextManagerItem(mContextManager, mThumbnailView, actionCollection, q);
-        mContextManager->addItem(fileOpsItem);
 
         // Fill sidebar
         SideBarPage* page;
@@ -571,20 +573,12 @@ struct MainWindow::Private
 
         connect(mDirModel->dirLister(), SIGNAL(completed()),
                 q, SLOT(slotDirListerCompleted()));
-        connect(mDirModel->dirLister(), SIGNAL(redirection(KUrl)),
-                q, SLOT(slotDirListerRedirection(KUrl)));
     }
 
     void setupThumbnailBarModel()
     {
         mThumbnailBarModel = new DocumentOnlyProxyModel(q);
         mThumbnailBarModel->setSourceModel(mDirModel);
-    }
-
-    QModelIndex currentIndex() const
-    {
-        KUrl url = currentUrl();
-        return url.isValid() ? mDirModel->indexForUrl(url) : QModelIndex();
     }
 
     bool indexIsDirOrArchive(const QModelIndex& index) const
@@ -606,7 +600,7 @@ struct MainWindow::Private
     void goTo(int offset)
     {
         mPreloadDirectionIsForward = offset > 0;
-        QModelIndex index = currentIndex();
+        QModelIndex index = mContextManager->selectionModel()->currentIndex();
         index = mDirModel->index(index.row() + offset, 0);
         if (index.isValid() && !indexIsDirOrArchive(index)) {
             goTo(index);
@@ -661,18 +655,6 @@ struct MainWindow::Private
         mViewMainPage->showMessageWidget(hud, Qt::AlignCenter);
     }
 
-    void spreadCurrentDirUrl(const KUrl& url)
-    {
-        mContextManager->setCurrentDirUrl(url);
-        mThumbnailViewHelper->setCurrentDirUrl(url);
-        if (url.isValid()) {
-            mUrlNavigator->setLocationUrl(url);
-            mGoUpAction->setEnabled(url.path() != "/");
-        } else {
-            mGoUpAction->setEnabled(false);
-        }
-    }
-
     void setupFullScreenContent()
     {
         mFullScreenContent->init(q->actionCollection(), mViewMainPage, mSlideShow);
@@ -707,10 +689,10 @@ struct MainWindow::Private
         bool isRasterImage = false;
         bool canSave = false;
         bool isModified = false;
-        const KUrl url = currentUrl();
+        const KUrl url = mContextManager->currentUrl();
 
         if (url.isValid()) {
-            isRasterImage = q->currentDocumentIsRasterImage();
+            isRasterImage = mContextManager->currentUrlIsRasterImage();
             canSave = isRasterImage;
             isModified = DocumentFactory::instance()->load(url)->isModified();
             if (mCurrentMainPageId != ViewMainPageId) {
@@ -727,74 +709,6 @@ struct MainWindow::Private
         actionCollection->action("file_save")->setEnabled(canSave && isModified);
         actionCollection->action("file_save_as")->setEnabled(canSave);
         actionCollection->action("file_print")->setEnabled(isRasterImage);
-    }
-
-    KUrl currentUrl() const
-    {
-        if (mCurrentMainPageId == StartMainPageId) {
-            return KUrl();
-        }
-
-        if (mUrlToSelect.isValid()) {
-            // We are supposed to select this url whenever it appears in the
-            // dir model. For everyone it is as if it was already the current one
-            return mUrlToSelect;
-        }
-
-        // mBrowseMainPage and mViewMainPage urls are almost always synced, but
-        // mBrowseMainPage can be more up-to-date because mViewMainPage
-        // url is only updated when the DocumentView starts to load the
-        // document.
-        // This is why we only thrust mViewMainPage url if it shows an url
-        // which can't be listed: in this case mBrowseMainPage url is
-        // empty.
-        if (mCurrentMainPageId == ViewMainPageId && !mViewMainPage->isEmpty()) {
-            KUrl url = mViewMainPage->url();
-            if (!KProtocolManager::supportsListing(url)) {
-                return url;
-            }
-        }
-
-        QModelIndex index = mThumbnailView->currentIndex();
-        if (!index.isValid()) {
-            return KUrl();
-        }
-        // Ignore the current index if it's not part of the selection. This
-        // situation can happen when you select an image, then click on the
-        // background of the thumbnail view.
-        if (mCurrentMainPageId == BrowseMainPageId && !mThumbnailView->selectionModel()->isSelected(index)) {
-            return KUrl();
-        }
-        KFileItem item = mDirModel->itemForIndex(index);
-        Q_ASSERT(!item.isNull());
-        return item.url();
-    }
-
-    void setUrlToSelect(const KUrl& url)
-    {
-        GV_RETURN_IF_FAIL(url.isValid());
-        mUrlToSelect = url;
-        updateContextDependentComponents();
-        selectUrlToSelect();
-    }
-
-    void selectUrlToSelect()
-    {
-        QModelIndex index = mDirModel->indexForUrl(mUrlToSelect);
-        if (index.isValid()) {
-            // Note: calling setCurrentIndex also takes care of selecting the index
-            mThumbnailView->setCurrentIndex(index);
-            mUrlToSelect = KUrl();
-        }
-    }
-
-    void updateContextDependentComponents()
-    {
-        KUrl url = currentUrl();
-        mContextManager->setCurrentUrl(url);
-        mSaveBar->setCurrentUrl(url);
-        mSlideShow->setCurrentUrl(url);
-        mFullScreenContent->setCurrentUrl(url);
     }
 
     const char* sideBarConfigGroupName() const
@@ -887,7 +801,7 @@ MainWindow::MainWindow()
     d->q = this;
     d->mCurrentMainPageId = StartMainPageId;
     d->mDirModel = new SortedDirModel(this);
-    d->mContextManager = new ContextManager(d->mDirModel, this);
+    d->setupContextManager();
     d->setupThumbnailBarModel();
     d->mGvCore = new GvCore(this, d->mDirModel);
     d->mPreloader = new Preloader(this);
@@ -933,25 +847,6 @@ ViewMainPage* MainWindow::viewMainPage() const
     return d->mViewMainPage;
 }
 
-bool MainWindow::currentDocumentIsRasterImage() const
-{
-    if (d->mCurrentMainPageId == ViewMainPageId) {
-        Document::Ptr doc = d->mViewMainPage->currentDocument();
-        if (!doc) {
-            return false;
-        }
-        return doc->kind() == MimeTypeUtils::KIND_RASTER_IMAGE;
-    } else {
-        QModelIndex index = d->mThumbnailView->currentIndex();
-        if (!index.isValid()) {
-            return false;
-        }
-        KFileItem item = d->mDirModel->itemForIndex(index);
-        Q_ASSERT(!item.isNull());
-        return MimeTypeUtils::fileItemKind(item) == MimeTypeUtils::KIND_RASTER_IMAGE;
-    }
-}
-
 void MainWindow::setCaption(const QString& caption)
 {
     // Keep a trace of caption to use it in slotModifiedDocumentListChanged()
@@ -988,9 +883,8 @@ void MainWindow::setInitialUrl(const KUrl& _url)
     } else {
         d->mViewAction->trigger();
         d->mViewMainPage->openUrl(url);
-        d->setUrlToSelect(url);
+        d->mContextManager->setUrlToSelect(url);
     }
-    d->updateContextDependentComponents();
 }
 
 void MainWindow::startSlideShow()
@@ -1121,7 +1015,7 @@ void MainWindow::openSelectedDocuments()
 void MainWindow::goUp()
 {
     if (d->mCurrentMainPageId == BrowseMainPageId) {
-        KUrl url = d->mDirModel->dirLister()->url();
+        KUrl url = d->mContextManager->currentDirUrl();
         url = url.upUrl();
         openDirUrl(url);
     } else {
@@ -1136,14 +1030,14 @@ void MainWindow::showStartMainPage()
         d->mCurrentMainPageId = StartMainPageId;
     }
     d->setActionsDisabledOnStartMainPageEnabled(false);
-    d->spreadCurrentDirUrl(KUrl());
 
     d->mSideBar->hide();
     d->mViewStackedWidget->setCurrentWidget(d->mStartMainPage);
 
     d->updateActions();
     updatePreviousNextActions();
-    d->updateContextDependentComponents();
+    d->mContextManager->setCurrentDirUrl(KUrl());
+    d->mContextManager->setCurrentUrl(KUrl());
 
     d->autoAssignThumbnailProvider();
 }
@@ -1185,11 +1079,10 @@ void MainWindow::openDirUrl(const KUrl& url)
         const QString pathToSelect = currentPath.section(separator, 0, slashCount + 1);
         KUrl urlToSelect = url;
         urlToSelect.setPath(pathToSelect);
-        d->setUrlToSelect(urlToSelect);
+        d->mContextManager->setUrlToSelect(urlToSelect);
     }
     d->mThumbnailProvider->stop();
-    d->mDirModel->dirLister()->openUrl(url);
-    d->spreadCurrentDirUrl(url);
+    d->mContextManager->setCurrentDirUrl(url);
     d->mGvCore->addUrlToRecentFolders(url);
     d->mViewMainPage->reset();
 }
@@ -1232,7 +1125,7 @@ void MainWindow::slotPartCompleted()
 
     KUrl dirUrl = url;
     dirUrl.setFileName(QString());
-    if (dirUrl.equals(d->mDirModel->dirLister()->url(), KUrl::CompareWithoutTrailingSlash)) {
+    if (dirUrl.equals(d->mContextManager->currentDirUrl(), KUrl::CompareWithoutTrailingSlash)) {
         QModelIndex index = d->mDirModel->indexForUrl(url);
         QItemSelectionModel* selectionModel = d->mThumbnailView->selectionModel();
         if (index.isValid() && !selectionModel->isSelected(index)) {
@@ -1240,8 +1133,7 @@ void MainWindow::slotPartCompleted()
             //selectionModel->select(index, QItemSelectionModel::SelectCurrent);
         }
     } else {
-        d->mDirModel->dirLister()->openUrl(dirUrl);
-        d->spreadCurrentDirUrl(dirUrl);
+        d->mContextManager->setCurrentDirUrl(dirUrl);
         d->mGvCore->addUrlToRecentFolders(dirUrl);
     }
 }
@@ -1274,18 +1166,24 @@ void MainWindow::slotSelectionChanged()
     // Update UI
     d->updateActions();
     updatePreviousNextActions();
-    d->updateContextDependentComponents();
 
     // Start preloading
     int preloadDelay = d->mCurrentMainPageId == ViewMainPageId ? VIEW_PRELOAD_DELAY : BROWSE_PRELOAD_DELAY;
     QTimer::singleShot(preloadDelay, this, SLOT(preloadNextUrl()));
 }
 
+void MainWindow::slotCurrentDirUrlChanged(const KUrl& url)
+{
+    if (url.isValid()) {
+        d->mUrlNavigator->setLocationUrl(url);
+        d->mGoUpAction->setEnabled(url.path() != "/");
+    } else {
+        d->mGoUpAction->setEnabled(false);
+    }
+}
+
 void MainWindow::slotDirModelNewItems()
 {
-    if (d->mUrlToSelect.isValid()) {
-        d->selectUrlToSelect();
-    }
     if (d->mThumbnailView->selectionModel()->hasSelection()) {
         updatePreviousNextActions();
     }
@@ -1299,16 +1197,11 @@ void MainWindow::slotDirListerCompleted()
     }
     if (d->mThumbnailView->selectionModel()->hasSelection()) {
         updatePreviousNextActions();
-    } else if (!d->mUrlToSelect.isValid()) {
+    } else if (!d->mContextManager->urlToSelect().isValid()) {
         d->goToFirstDocument();
     }
     d->mThumbnailView->scrollToSelectedIndex();
     d->mViewMainPage->thumbnailBar()->scrollToSelectedIndex();
-}
-
-void MainWindow::slotDirListerRedirection(const KUrl& newUrl)
-{
-    d->spreadCurrentDirUrl(newUrl);
 }
 
 void MainWindow::goToPrevious()
@@ -1339,20 +1232,27 @@ void MainWindow::goToUrl(const KUrl& url)
     KUrl dirUrl = url;
     dirUrl.setFileName("");
     if (!dirUrl.equals(d->mContextManager->currentDirUrl(), KUrl::CompareWithoutTrailingSlash)) {
-        d->mDirModel->dirLister()->openUrl(dirUrl);
-        d->spreadCurrentDirUrl(dirUrl);
+        d->mContextManager->setCurrentDirUrl(dirUrl);
         d->mGvCore->addUrlToRecentFolders(dirUrl);
     }
-    d->setUrlToSelect(url);
+    d->mContextManager->setUrlToSelect(url);
 }
 
 void MainWindow::updatePreviousNextActions()
 {
-    int row = d->currentIndex().row();
-    QModelIndex prevIndex = d->mDirModel->index(row - 1, 0);
-    QModelIndex nextIndex = d->mDirModel->index(row + 1, 0);
-    bool hasPrevious = prevIndex.isValid() && !d->indexIsDirOrArchive(prevIndex);
-    bool hasNext = nextIndex.isValid() && !d->indexIsDirOrArchive(nextIndex);
+    bool hasPrevious;
+    bool hasNext;
+    QModelIndex currentIndex = d->mContextManager->selectionModel()->currentIndex();
+    if (currentIndex.isValid() && !d->indexIsDirOrArchive(currentIndex)) {
+        int row = currentIndex.row();
+        QModelIndex prevIndex = d->mDirModel->index(row - 1, 0);
+        QModelIndex nextIndex = d->mDirModel->index(row + 1, 0);
+        hasPrevious = prevIndex.isValid() && !d->indexIsDirOrArchive(prevIndex);
+        hasNext = nextIndex.isValid() && !d->indexIsDirOrArchive(nextIndex);
+    } else {
+        hasPrevious = false;
+        hasNext = false;
+    }
     bool canBrowse = hasPrevious | hasNext;
 
     d->mGoToPreviousAction->setEnabled(canBrowse);
@@ -1427,12 +1327,12 @@ void MainWindow::toggleFullScreen(bool checked)
 
 void MainWindow::saveCurrent()
 {
-    d->mGvCore->save(d->currentUrl());
+    d->mGvCore->save(d->mContextManager->currentUrl());
 }
 
 void MainWindow::saveCurrentAs()
 {
-    d->mGvCore->saveAs(d->currentUrl());
+    d->mGvCore->saveAs(d->mContextManager->currentUrl());
 }
 
 void MainWindow::reload()
@@ -1446,7 +1346,7 @@ void MainWindow::reload()
 
 void MainWindow::openFile()
 {
-    KUrl dirUrl = d->mDirModel->dirLister()->url();
+    KUrl dirUrl = d->mContextManager->currentDirUrl();
 
     KFileDialog dialog(dirUrl, QString(), this);
     dialog.setCaption(i18nc("@title:window", "Open Image"));
@@ -1461,14 +1361,13 @@ void MainWindow::openFile()
     KUrl url = dialog.selectedUrl();
     d->mViewAction->trigger();
     d->mViewMainPage->openUrl(url);
-    d->setUrlToSelect(url);
-    d->updateContextDependentComponents();
+    d->mContextManager->setUrlToSelect(url);
 }
 
 void MainWindow::showDocumentInFullScreen(const KUrl& url)
 {
     d->mViewMainPage->openUrl(url);
-    d->setUrlToSelect(url);
+    d->mContextManager->setUrlToSelect(url);
     d->mFullScreenAction->trigger();
 }
 
@@ -1594,11 +1493,11 @@ void MainWindow::saveConfig()
 
 void MainWindow::print()
 {
-    if (!currentDocumentIsRasterImage()) {
+    if (!d->mContextManager->currentUrlIsRasterImage()) {
         return;
     }
 
-    Document::Ptr doc = DocumentFactory::instance()->load(d->currentUrl());
+    Document::Ptr doc = DocumentFactory::instance()->load(d->mContextManager->currentUrl());
     PrintHelper printHelper(this);
     printHelper.print(doc);
 }
@@ -1679,7 +1578,7 @@ void MainWindow::setDistractionFreeMode(bool value)
 void MainWindow::saveProperties(KConfigGroup& group)
 {
     group.writeEntry(SESSION_CURRENT_PAGE_KEY, int(d->mCurrentMainPageId));
-    group.writeEntry(SESSION_URL_KEY, d->currentUrl());
+    group.writeEntry(SESSION_URL_KEY, d->mContextManager->currentUrl());
 }
 
 void MainWindow::readProperties(const KConfigGroup& group)
