@@ -222,8 +222,8 @@ FolderViewContextManagerItem::FolderViewContextManagerItem(ContextManager* manag
 
     d->setupView();
 
-    connect(contextManager(), SIGNAL(currentDirUrlChanged()),
-            SLOT(slotCurrentDirUrlChanged()));
+    connect(contextManager(), SIGNAL(currentDirUrlChanged(KUrl)),
+            SLOT(slotCurrentDirUrlChanged(KUrl)));
 }
 
 FolderViewContextManagerItem::~FolderViewContextManagerItem()
@@ -231,9 +231,8 @@ FolderViewContextManagerItem::~FolderViewContextManagerItem()
     delete d;
 }
 
-void FolderViewContextManagerItem::slotCurrentDirUrlChanged()
+void FolderViewContextManagerItem::slotCurrentDirUrlChanged(const KUrl& url)
 {
-    KUrl url = contextManager()->currentDirUrl();
     if (url.isValid() && d->mUrlToSelect != url) {
         d->mUrlToSelect = url;
         d->mUrlToSelect.cleanPath();

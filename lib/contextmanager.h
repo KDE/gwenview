@@ -72,10 +72,10 @@ public:
     void setUrlToSelect(const KUrl&);
 
 Q_SIGNALS:
+    void currentDirUrlChanged(const KUrl&);
     void currentUrlChanged(const KUrl&);
     void selectionChanged();
     void selectionDataChanged();
-    void currentDirUrlChanged();
 
 private Q_SLOTS:
     void slotDirModelDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
@@ -85,6 +85,7 @@ private Q_SLOTS:
     void slotRowsAboutToBeRemoved(const QModelIndex& /*parent*/, int start, int end);
     void slotRowsInserted();
     void selectUrlToSelect();
+    void slotDirListerRedirection(const KUrl&);
 
 private:
     ContextManagerPrivate* const d;

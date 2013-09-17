@@ -26,6 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // KDE
 #include <KDebug>
+#include <KDirLister>
 #include <KFileItem>
 
 // Local
@@ -115,6 +116,9 @@ ContextManager::ContextManager(SortedDirModel* dirModel, QObject* parent)
     connect(d->mDirModel, SIGNAL(rowsInserted(QModelIndex,int,int)),
             SLOT(slotRowsInserted()));
 
+    connect(d->mDirModel->dirLister(), SIGNAL(redirection(KUrl)),
+            SLOT(slotDirListerRedirection(KUrl)));
+
     d->mSelectionModel = new QItemSelectionModel(d->mDirModel);
 
     connect(d->mSelectionModel, SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
@@ -164,7 +168,7 @@ void ContextManager::setCurrentDirUrl(const KUrl& url)
         return;
     }
     d->mCurrentDirUrl = url;
-    currentDirUrlChanged();
+    currentDirUrlChanged(url);
 }
 
 KUrl ContextManager::currentDirUrl() const
@@ -300,5 +304,11 @@ void ContextManager::selectUrlToSelect()
         d->mUrlToSelect = KUrl();
     }
 }
+
+void ContextManager::slotDirListerRedirection(const KUrl& newUrl)
+{
+    setCurrentDirUrl(newUrl);
+}
+
 
 } // namespace

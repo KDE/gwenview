@@ -94,9 +94,9 @@ private Q_SLOTS:
     void slotPartCompleted();
     void slotDirModelNewItems();
     void slotDirListerCompleted();
-    void slotDirListerRedirection(const KUrl& newUrl);
 
     void slotSelectionChanged();
+    void slotCurrentDirUrlChanged(const KUrl& url);
 
     void goToPrevious();
     void goToNext();

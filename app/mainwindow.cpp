@@ -222,6 +222,8 @@ struct MainWindow::Private
         mContextManager = new ContextManager(mDirModel, q);
         connect(mContextManager, SIGNAL(selectionChanged()),
             q, SLOT(slotSelectionChanged()));
+        connect(mContextManager, SIGNAL(currentDirUrlChanged(KUrl)),
+            q, SLOT(slotCurrentDirUrlChanged(KUrl)));
     }
 
     void setupWidgets()
@@ -287,7 +289,8 @@ struct MainWindow::Private
         mThumbnailView->setDocumentInfoProvider(mDocumentInfoProvider);
 
         mThumbnailViewHelper = new ThumbnailViewHelper(mDirModel, q->actionCollection());
-        mThumbnailView->setThumbnailViewHelper(mThumbnailViewHelper);
+        connect(mContextManager, SIGNAL(currentDirUrlChanged(KUrl)),
+            mThumbnailViewHelper, SLOT(setCurrentDirUrl(KUrl)));
 
         mThumbnailBarSelectionModel = new KLinkItemSelectionModel(mThumbnailBarModel, mContextManager->selectionModel(), q);
 
@@ -570,8 +573,6 @@ struct MainWindow::Private
 
         connect(mDirModel->dirLister(), SIGNAL(completed()),
                 q, SLOT(slotDirListerCompleted()));
-        connect(mDirModel->dirLister(), SIGNAL(redirection(KUrl)),
-                q, SLOT(slotDirListerRedirection(KUrl)));
     }
 
     void setupThumbnailBarModel()
@@ -652,18 +653,6 @@ struct MainWindow::Private
         QTimer::singleShot(2000, hud, SLOT(fadeOut()));
 
         mViewMainPage->showMessageWidget(hud, Qt::AlignCenter);
-    }
-
-    void spreadCurrentDirUrl(const KUrl& url)
-    {
-        mContextManager->setCurrentDirUrl(url);
-        mThumbnailViewHelper->setCurrentDirUrl(url);
-        if (url.isValid()) {
-            mUrlNavigator->setLocationUrl(url);
-            mGoUpAction->setEnabled(url.path() != "/");
-        } else {
-            mGoUpAction->setEnabled(false);
-        }
     }
 
     void setupFullScreenContent()
@@ -1041,7 +1030,7 @@ void MainWindow::showStartMainPage()
         d->mCurrentMainPageId = StartMainPageId;
     }
     d->setActionsDisabledOnStartMainPageEnabled(false);
-    d->spreadCurrentDirUrl(KUrl());
+    d->mContextManager->setCurrentDirUrl(KUrl());
 
     d->mSideBar->hide();
     d->mViewStackedWidget->setCurrentWidget(d->mStartMainPage);
@@ -1094,7 +1083,7 @@ void MainWindow::openDirUrl(const KUrl& url)
     }
     d->mThumbnailProvider->stop();
     d->mDirModel->dirLister()->openUrl(url);
-    d->spreadCurrentDirUrl(url);
+    d->mContextManager->setCurrentDirUrl(url);
     d->mGvCore->addUrlToRecentFolders(url);
     d->mViewMainPage->reset();
 }
@@ -1146,7 +1135,7 @@ void MainWindow::slotPartCompleted()
         }
     } else {
         d->mDirModel->dirLister()->openUrl(dirUrl);
-        d->spreadCurrentDirUrl(dirUrl);
+        d->mContextManager->setCurrentDirUrl(dirUrl);
         d->mGvCore->addUrlToRecentFolders(dirUrl);
     }
 }
@@ -1185,6 +1174,16 @@ void MainWindow::slotSelectionChanged()
     QTimer::singleShot(preloadDelay, this, SLOT(preloadNextUrl()));
 }
 
+void MainWindow::slotCurrentDirUrlChanged(const KUrl& url)
+{
+    if (url.isValid()) {
+        d->mUrlNavigator->setLocationUrl(url);
+        d->mGoUpAction->setEnabled(url.path() != "/");
+    } else {
+        d->mGoUpAction->setEnabled(false);
+    }
+}
+
 void MainWindow::slotDirModelNewItems()
 {
     if (d->mThumbnailView->selectionModel()->hasSelection()) {
@@ -1205,11 +1204,6 @@ void MainWindow::slotDirListerCompleted()
     }
     d->mThumbnailView->scrollToSelectedIndex();
     d->mViewMainPage->thumbnailBar()->scrollToSelectedIndex();
-}
-
-void MainWindow::slotDirListerRedirection(const KUrl& newUrl)
-{
-    d->spreadCurrentDirUrl(newUrl);
 }
 
 void MainWindow::goToPrevious()
@@ -1241,7 +1235,7 @@ void MainWindow::goToUrl(const KUrl& url)
     dirUrl.setFileName("");
     if (!dirUrl.equals(d->mContextManager->currentDirUrl(), KUrl::CompareWithoutTrailingSlash)) {
         d->mDirModel->dirLister()->openUrl(dirUrl);
-        d->spreadCurrentDirUrl(dirUrl);
+        d->mContextManager->setCurrentDirUrl(dirUrl);
         d->mGvCore->addUrlToRecentFolders(dirUrl);
     }
     d->mContextManager->setUrlToSelect(url);

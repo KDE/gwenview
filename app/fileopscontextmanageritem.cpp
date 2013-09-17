@@ -159,7 +159,7 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, QL
 
     connect(contextManager(), SIGNAL(selectionChanged()),
             SLOT(updateActions()));
-    connect(contextManager(), SIGNAL(currentDirUrlChanged()),
+    connect(contextManager(), SIGNAL(currentDirUrlChanged(KUrl)),
             SLOT(updateActions()));
 
     KActionCategory* file = new KActionCategory(i18nc("@title actions category", "File"), actionCollection);
