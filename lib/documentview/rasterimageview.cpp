@@ -254,7 +254,7 @@ void RasterImageView::loadFromDocument()
 void RasterImageView::slotDocumentMetaInfoLoaded()
 {
     if (document()->size().isValid()) {
-        finishSetDocument();
+        QMetaObject::invokeMethod(this, "finishSetDocument", Qt::QueuedConnection);
     } else {
         // Could not retrieve image size from meta info, we need to load the
         // full image now.
