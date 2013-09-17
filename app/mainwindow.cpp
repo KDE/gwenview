@@ -217,6 +217,13 @@ struct MainWindow::Private
     QDateTime mFullScreenLeftAt;
     KNotificationRestrictions* mNotificationRestrictions;
 
+    void setupContextManager()
+    {
+        mContextManager = new ContextManager(mDirModel, q);
+        connect(mContextManager, SIGNAL(selectionChanged()),
+            q, SLOT(slotSelectionChanged()));
+    }
+
     void setupWidgets()
     {
         mFullScreenContent = new FullScreenContent(q);
@@ -287,8 +294,6 @@ struct MainWindow::Private
         // Connect thumbnail view
         connect(mThumbnailView, SIGNAL(indexActivated(QModelIndex)),
                 q, SLOT(slotThumbnailViewIndexActivated(QModelIndex)));
-        connect(mThumbnailView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-                q, SLOT(slotSelectionChanged()));
 
         // Connect delegate
         QAbstractItemDelegate* delegate = mThumbnailView->itemDelegate();
@@ -717,48 +722,6 @@ struct MainWindow::Private
         actionCollection->action("file_print")->setEnabled(isRasterImage);
     }
 
-    KUrl currentUrl() const
-    {
-        if (mCurrentMainPageId == StartMainPageId) {
-            return KUrl();
-        }
-
-        KUrl url = mContextManager->urlToSelect();
-        if (url.isValid()) {
-            // We are supposed to select this url whenever it appears in the
-            // dir model. For everyone it is as if it was already the current one
-            return url;
-        }
-
-        // mBrowseMainPage and mViewMainPage urls are almost always synced, but
-        // mBrowseMainPage can be more up-to-date because mViewMainPage
-        // url is only updated when the DocumentView starts to load the
-        // document.
-        // This is why we only thrust mViewMainPage url if it shows an url
-        // which can't be listed: in this case mBrowseMainPage url is
-        // empty.
-        if (mCurrentMainPageId == ViewMainPageId && !mViewMainPage->isEmpty()) {
-            url = mViewMainPage->url();
-            if (!KProtocolManager::supportsListing(url)) {
-                return url;
-            }
-        }
-
-        QModelIndex index = mThumbnailView->currentIndex();
-        if (!index.isValid()) {
-            return KUrl();
-        }
-        // Ignore the current index if it's not part of the selection. This
-        // situation can happen when you select an image, then click on the
-        // background of the thumbnail view.
-        if (mCurrentMainPageId == BrowseMainPageId && !mThumbnailView->selectionModel()->isSelected(index)) {
-            return KUrl();
-        }
-        KFileItem item = mDirModel->itemForIndex(index);
-        Q_ASSERT(!item.isNull());
-        return item.url();
-    }
-
     const char* sideBarConfigGroupName() const
     {
         const char* name = 0;
@@ -849,7 +812,7 @@ MainWindow::MainWindow()
     d->q = this;
     d->mCurrentMainPageId = StartMainPageId;
     d->mDirModel = new SortedDirModel(this);
-    d->mContextManager = new ContextManager(d->mDirModel, this);
+    d->setupContextManager();
     d->setupThumbnailBarModel();
     d->mGvCore = new GvCore(this, d->mDirModel);
     d->mPreloader = new Preloader(this);
@@ -1214,7 +1177,6 @@ void MainWindow::slotSelectionChanged()
     }
 
     // Update UI
-    d->mContextManager->setCurrentUrl(d->currentUrl());
     d->updateActions();
     updatePreviousNextActions();
 

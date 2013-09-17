@@ -150,7 +150,6 @@ void ContextManager::setCurrentUrl(const KUrl& currentUrl)
     }
 
     currentUrlChanged(currentUrl);
-    d->queueSignal("selectionChanged");
 }
 
 KFileItemList ContextManager::selectedFileItemList() const
@@ -220,6 +219,9 @@ void ContextManager::slotDirModelDataChanged(const QModelIndex& topLeft, const Q
 void ContextManager::slotSelectionChanged()
 {
     d->mSelectedFileItemListNeedsUpdate = true;
+    if (!d->mSelectionModel->hasSelection()) {
+        setCurrentUrl(KUrl());
+    }
     d->queueSignal("selectionChanged");
 }
 
