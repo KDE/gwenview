@@ -291,6 +291,7 @@ struct MainWindow::Private
         mThumbnailViewHelper = new ThumbnailViewHelper(mDirModel, q->actionCollection());
         connect(mContextManager, SIGNAL(currentDirUrlChanged(KUrl)),
             mThumbnailViewHelper, SLOT(setCurrentDirUrl(KUrl)));
+        mThumbnailView->setThumbnailViewHelper(mThumbnailViewHelper);
 
         mThumbnailBarSelectionModel = new KLinkItemSelectionModel(mThumbnailBarModel, mContextManager->selectionModel(), q);
 
