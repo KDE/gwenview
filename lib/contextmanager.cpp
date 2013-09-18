@@ -168,7 +168,9 @@ void ContextManager::setCurrentDirUrl(const KUrl& url)
         return;
     }
     d->mCurrentDirUrl = url;
-    d->mDirModel->dirLister()->openUrl(url);
+    if (url.isValid()) {
+        d->mDirModel->dirLister()->openUrl(url);
+    }
     currentDirUrlChanged(url);
 }
 

@@ -32,6 +32,7 @@ class ContextManagerTest : public QObject
     Q_OBJECT
 private Q_SLOTS:
     void testRemove();
+    void testInvalidDirUrl();
 };
 
 #endif /* CONTEXTMANAGERTEST_H */

@@ -292,4 +292,9 @@ bool SortedDirModel::hasDocuments() const
     return false;
 }
 
+void SortedDirModel::setDirLister(KDirLister* dirLister)
+{
+    d->mSourceModel->setDirLister(dirLister);
+}
+
 } //namespace

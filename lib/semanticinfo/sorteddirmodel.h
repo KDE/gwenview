@@ -79,6 +79,10 @@ public:
     SortedDirModel(QObject* parent = 0);
     ~SortedDirModel();
     KDirLister* dirLister() const;
+    /**
+     * Redefines the dir lister, useful for debugging
+     */
+    void setDirLister(KDirLister*);
     KFileItem itemForIndex(const QModelIndex& index) const;
     KUrl urlForIndex(const QModelIndex& index) const;
     KFileItem itemForSourceIndex(const QModelIndex& sourceIndex) const;
