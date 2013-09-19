@@ -27,8 +27,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QPainter>
 #include <QPointer>
 #include <QPushButton>
+#include <QTextBrowser>
 #include <QToolTip>
 #include <QVBoxLayout>
+#include <QWebView>
 
 // KDE
 #include <KFileItem>
@@ -41,6 +43,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/archiveutils.h>
 #include <lib/contextmanager.h>
 #include <lib/eventwatcher.h>
+#include <lib/gvdebug.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/preferredimagemetainfomodel.h>
 #include <lib/document/document.h>
@@ -59,72 +62,6 @@ namespace Gwenview
 #endif
 
 /**
- * A label which fades out if its content does not fit. If the content is
- * cropped, a tooltip is shown when the mouse hovers the widget.
- */
-class FadingLabel : public QLabel
-{
-public:
-    explicit FadingLabel(QWidget* parent = 0)
-    : QLabel(parent)
-    {
-        setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        setTextInteractionFlags(Qt::TextBrowserInteraction);
-    }
-
-    QSize minimumSizeHint() const
-    {
-        return QSize();
-    }
-
-protected:
-    void paintEvent(QPaintEvent* event)
-    {
-        QLabel::paintEvent(event);
-        if (!isCropped()) {
-            return;
-        }
-
-        QLinearGradient gradient;
-        int gradientWidth = fontMetrics().averageCharWidth() * 4;
-        if (alignment() & Qt::AlignLeft) {
-            gradient.setStart(width() - gradientWidth, 0);
-            gradient.setFinalStop(width(), 0);
-            gradient.setColorAt(0, Qt::transparent);
-            gradient.setColorAt(1, palette().color(backgroundRole()));
-        } else {
-            gradient.setStart(0, 0);
-            gradient.setFinalStop(gradientWidth, 0);
-            gradient.setColorAt(0, palette().color(backgroundRole()));
-            gradient.setColorAt(1, Qt::transparent);
-        }
-        QPainter painter(this);
-        painter.fillRect(rect(), gradient);
-    }
-
-    bool event(QEvent* event)
-    {
-        if (event->type() == QEvent::ToolTip) {
-            // Show tooltip if cropped
-            QHelpEvent* helpEvent = static_cast<QHelpEvent*>(event);
-            if (isCropped()) {
-                QToolTip::showText(helpEvent->globalPos(), text());
-            } else {
-                QToolTip::hideText();
-                event->ignore();
-            }
-            return true;
-        }
-        return QLabel::event(event);
-    }
-
-    inline bool isCropped() const
- {
-        return sizeHint().width() > width();
-    }
-};
-
-/**
  * This widget is capable of showing multiple lines of key/value pairs.
  */
 class KeyValueWidget : public QWidget
@@ -132,16 +69,19 @@ class KeyValueWidget : public QWidget
     struct Row
     {
         Row(QWidget* parent)
-        : keyLabel(new FadingLabel(parent))
-        , valueLabel(new FadingLabel(parent))
+        : keyLabel(new QLabel(parent))
+        , valueLabel(new QLabel(parent))
         {
+            keyLabel->setWordWrap(true);
+            valueLabel->setWordWrap(true);
             keyLabel->show();
             valueLabel->show();
-            if (QApplication::isLeftToRight()) {
-                keyLabel->setAlignment(Qt::AlignRight);
-            } else {
-                valueLabel->setAlignment(Qt::AlignRight);
-            }
+
+            QFont font = keyLabel->font();
+            font.setBold(true);
+            keyLabel->setFont(font);
+
+            valueLabel->setIndent(12);
         }
 
         ~Row()
@@ -150,20 +90,49 @@ class KeyValueWidget : public QWidget
             delete valueLabel;
         }
 
-        FadingLabel* keyLabel;
-        FadingLabel* valueLabel;
+        int setLabelGeometries(int rowY, int labelWidth)
+        {
+            int labelHeight = keyLabel->heightForWidth(labelWidth);
+            keyLabel->setGeometry(0, rowY, labelWidth, labelHeight);
+            rowY += labelHeight;
+            labelHeight = valueLabel->heightForWidth(labelWidth);
+            kWarning() << valueLabel->text() << labelWidth << labelHeight;
+            valueLabel->setGeometry(0, rowY, labelWidth, labelHeight);
+            rowY += labelHeight;
+            return rowY;
+        }
+
+        int heightForWidth(int width) const
+        {
+            return keyLabel->heightForWidth(width) + valueLabel->heightForWidth(width);
+        }
+
+        QLabel* keyLabel;
+        QLabel* valueLabel;
     };
 public:
     KeyValueWidget(QWidget* parent)
     : QWidget(parent)
     {
-        setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+        QSizePolicy policy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+        policy.setHeightForWidth(true);
+        setSizePolicy(policy);
     }
 
     QSize sizeHint() const
     {
-        int height = fontMetrics().height() * mRows.count();
-        return QSize(150, height);
+        int width = 150;
+        int height = heightForWidth(width);
+        return QSize(width, height);
+    }
+
+    int heightForWidth(int w) const
+    {
+        int height = 0;
+        Q_FOREACH(Row* row, mRows) {
+             height += row->heightForWidth(w);
+        }
+        return height;
     }
 
     void clear()
@@ -186,6 +155,7 @@ public:
 
     void layoutRows()
     {
+        /*
         const bool ltr = QApplication::isLeftToRight();
         const int padding = 4;
         const int keyWidth = computeKeyColumnWidth();
@@ -201,6 +171,13 @@ public:
                 row->keyLabel->setGeometry(valueWidth + padding, rowY, keyWidth, rowHeight);
             }
             rowY += rowHeight;
+        }
+        */
+        int rowY = 0;
+        const int labelWidth = width();
+        GV_LOG(labelWidth);
+        Q_FOREACH(Row* row, mRows) {
+            rowY = row->setLabelGeometries(rowY, labelWidth);
         }
     }
 
@@ -219,7 +196,9 @@ protected:
 
 private:
     QVector<Row*> mRows;
+    //QVBoxLayout* mLayout;
 
+    /*
     int computeKeyColumnWidth() const
     {
         const int maxWidth = width() / 2;
@@ -232,8 +211,8 @@ private:
         }
         return keyWidth;
     }
+    */
 };
-
 struct InfoContextManagerItemPrivate
 {
     InfoContextManagerItem* q;
@@ -392,7 +371,6 @@ void InfoContextManagerItem::updateOneFileInfo()
         QString label;
         QString value;
         metaInfoModel->getInfoForKey(key, &label, &value);
-
         if (!label.isEmpty() && !value.isEmpty()) {
             d->mKeyValueWidget->addRow(label, value);
         }
