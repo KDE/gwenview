@@ -264,6 +264,10 @@ struct ImageMetaInfoModelPrivate
 
         for (; it != end; ++it) {
             try {
+                // Skip metadatum if its tag is an hex number
+                if (it->tagName().substr(0, 2) == "0x") {
+                    continue;
+                }
                 QString key = QString::fromUtf8(it->key().c_str());
                 QString label = QString::fromLocal8Bit(it->tagLabel().c_str());
                 std::ostringstream stream;
