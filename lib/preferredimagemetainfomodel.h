@@ -51,6 +51,9 @@ public:
 Q_SIGNALS:
     void preferredMetaInfoKeyListChanged(const QStringList&);
 
+protected:
+    bool lessThan(const QModelIndex& left, const QModelIndex& right) const;
+
 private:
     PreferredImageMetaInfoModelPrivate* const d;
     friend struct PreferredImageMetaInfoModelPrivate;
