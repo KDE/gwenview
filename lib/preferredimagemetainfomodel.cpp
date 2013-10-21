@@ -70,6 +70,8 @@ PreferredImageMetaInfoModel::PreferredImageMetaInfoModel(ImageMetaInfoModel* mod
 {
     d->mModel = model;
     setSourceModel(model);
+    sort(0);
+    setDynamicSortFilter(true);
     d->mPreferredMetaInfoKeyList = list;
 }
 
@@ -125,6 +127,17 @@ bool PreferredImageMetaInfoModel::setData(const QModelIndex& index, const QVaria
     emit preferredMetaInfoKeyListChanged(d->mPreferredMetaInfoKeyList);
     emit dataChanged(index, index);
     return true;
+}
+
+bool PreferredImageMetaInfoModel::lessThan(const QModelIndex& left, const QModelIndex& right) const
+{
+    if (!left.parent().isValid()) {
+        // Keep root entries in insertion order
+        return left.row() < right.row();
+    } else {
+        // Sort leaf entries alphabetically
+        return QSortFilterProxyModel::lessThan(left, right);
+    }
 }
 
 } // namespace
