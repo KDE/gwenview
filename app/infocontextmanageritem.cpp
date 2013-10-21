@@ -96,7 +96,6 @@ class KeyValueWidget : public QWidget
             keyLabel->setGeometry(0, rowY, labelWidth, labelHeight);
             rowY += labelHeight;
             labelHeight = valueLabel->heightForWidth(labelWidth);
-            kWarning() << valueLabel->text() << labelWidth << labelHeight;
             valueLabel->setGeometry(0, rowY, labelWidth, labelHeight);
             rowY += labelHeight;
             return rowY;
@@ -155,27 +154,8 @@ public:
 
     void layoutRows()
     {
-        /*
-        const bool ltr = QApplication::isLeftToRight();
-        const int padding = 4;
-        const int keyWidth = computeKeyColumnWidth();
-        const int valueWidth = width() - keyWidth - padding;
-        const int rowHeight = fontMetrics().height();
-        int rowY = 0;
-        Q_FOREACH(Row* row, mRows) {
-            if (ltr) {
-                row->keyLabel->setGeometry(0, rowY, keyWidth, rowHeight);
-                row->valueLabel->setGeometry(keyWidth + padding, rowY, valueWidth, rowHeight);
-            } else {
-                row->valueLabel->setGeometry(0, rowY, valueWidth, rowHeight);
-                row->keyLabel->setGeometry(valueWidth + padding, rowY, keyWidth, rowHeight);
-            }
-            rowY += rowHeight;
-        }
-        */
         int rowY = 0;
         const int labelWidth = width();
-        GV_LOG(labelWidth);
         Q_FOREACH(Row* row, mRows) {
             rowY = row->setLabelGeometries(rowY, labelWidth);
         }
@@ -196,23 +176,8 @@ protected:
 
 private:
     QVector<Row*> mRows;
-    //QVBoxLayout* mLayout;
-
-    /*
-    int computeKeyColumnWidth() const
-    {
-        const int maxWidth = width() / 2;
-        int keyWidth = 0;
-        Q_FOREACH(Row* row, mRows) {
-            int wantedWidth = row->keyLabel->sizeHint().width();
-            if (wantedWidth > keyWidth) {
-                keyWidth = qMin(wantedWidth, maxWidth);
-            }
-        }
-        return keyWidth;
-    }
-    */
 };
+
 struct InfoContextManagerItemPrivate
 {
     InfoContextManagerItem* q;
