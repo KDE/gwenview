@@ -72,16 +72,16 @@ class KeyValueWidget : public QWidget
         : keyLabel(new QLabel(parent))
         , valueLabel(new QLabel(parent))
         {
-            keyLabel->setWordWrap(true);
-            valueLabel->setWordWrap(true);
-            keyLabel->show();
-            valueLabel->show();
+            initLabel(keyLabel);
+            initLabel(valueLabel);
 
-            QFont font = keyLabel->font();
-            font.setBold(true);
-            keyLabel->setFont(font);
+            QPalette pal = keyLabel->palette();
+            QColor color = pal.color(QPalette::WindowText);
+            color.setAlphaF(0.65);
+            pal.setColor(QPalette::WindowText, color);
+            keyLabel->setPalette(pal);
 
-            valueLabel->setIndent(12);
+            valueLabel->setContentsMargins(6, 0, 0, 6);
         }
 
         ~Row()
@@ -104,6 +104,13 @@ class KeyValueWidget : public QWidget
         int heightForWidth(int width) const
         {
             return keyLabel->heightForWidth(width) + valueLabel->heightForWidth(width);
+        }
+
+        static void initLabel(QLabel* label)
+        {
+            label->setWordWrap(true);
+            label->show();
+            label->setTextInteractionFlags(Qt::TextSelectableByMouse | Qt::LinksAccessibleByMouse);
         }
 
         QLabel* keyLabel;
