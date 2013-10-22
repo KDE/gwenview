@@ -161,6 +161,9 @@ public:
 
     void layoutRows()
     {
+        // Layout labels manually: I tried to use a QVBoxLayout but for some
+        // reason when using software animations the widget blinks when going
+        // from one image to another
         int rowY = 0;
         const int labelWidth = width();
         Q_FOREACH(Row* row, mRows) {
