@@ -379,6 +379,9 @@ void DocumentView::createAdapterForDocument()
 void DocumentView::openUrl(const KUrl& url, const DocumentView::Setup& setup)
 {
     if (d->mDocument) {
+        if (url == d->mDocument->url()) {
+            return;
+        }
         disconnect(d->mDocument.data(), 0, this, 0);
     }
     d->mSetup = setup;
