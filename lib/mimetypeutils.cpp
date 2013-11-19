@@ -74,6 +74,20 @@ const QStringList& rasterImageMimeTypes()
             list.removeOne(mimeType);
         }
     }
+    // need to invent more intelligent way to whitelist raws
+    list += "image/x-nikon-nef";
+    list += "image/x-nikon-nrw";
+    list += "image/x-canon-cr2";
+    list += "image/x-canon-crw";
+    list += "image/x-pentax-pef";
+    list += "image/x-adobe-dng";
+    list += "image/x-sony-arw";
+    list += "image/x-minolta-mrw";
+    list += "image/x-panasonic-rw2";
+    list += "image/x-samsung-srw";
+    list += "image/x-olympus-orf";
+    list += "image/x-fuji-raf";
+
     return list;
 }
 

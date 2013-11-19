@@ -57,6 +57,9 @@ macro_log_feature(LIBKONQ_FOUND "libkonq" "Standard file management features" "h
 find_package(KActivities 6.1.0)
 macro_log_feature(KActivities_FOUND "KActivities" "Activities interface library" "https://projects.kde.org/projects/kde/kdelibs/kactivities" TRUE "6.1.0")
 
+find_package(Kdcraw 2.4.2)
+macro_log_feature(KDCRAW_FOUND "libkdcraw" "KDE Dcraw library" "http://www.kde.org" TRUE "2.4.2")
+
 ## Global settings
 
 # Avoid some build-time warnings in Nepomuk
@@ -75,6 +78,7 @@ include_directories(
     ${KDE4_INCLUDES}
     ${EXIV2_INCLUDE_DIR}
     ${NEPOMUK_CORE_INCLUDE_DIR}
+    ${KDCRAW_INCLUDE_DIR}
     )
 
 ## dirs to build

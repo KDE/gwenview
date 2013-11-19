@@ -217,6 +217,7 @@ target_link_libraries(gwenviewlib
     ${X11_X11_LIB}
     ${PNG_LIBRARIES}
     ${LCMS2_LIBRARIES}
+    ${KDCRAW_LIBRARIES}
     )
 if (WIN32)
     target_link_libraries(gwenviewlib ${EXPAT_LIBRARIES})

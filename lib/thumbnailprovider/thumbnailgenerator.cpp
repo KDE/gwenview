@@ -25,13 +25,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "imageutils.h"
 #include "jpegcontent.h"
 #include "gwenviewconfig.h"
+#include "exiv2imageloader.h"
 
 // KDE
 #include <KDebug>
+#include <libkdcraw/kdcraw.h>
 
 // Qt
 #include <QImageReader>
 #include <QMatrix>
+#include <QBuffer>
 
 namespace Gwenview
 {
@@ -45,6 +48,8 @@ namespace Gwenview
 #define LOG(x) ;
 #endif
 
+const int MIN_PREV_SIZE = 1000;
+
 //------------------------------------------------------------------------
 //
 // ThumbnailContext
@@ -55,20 +60,62 @@ bool ThumbnailContext::load(const QString &pixPath, int pixelSize)
     mImage = QImage();
     mNeedCaching = true;
     Orientation orientation = NORMAL;
+    QImage originalImage;
+    QSize originalSize;
 
+    QByteArray formatHint = pixPath.section('.', -1).toAscii().toLower();
     QImageReader reader(pixPath);
-    if (!reader.canRead()) {
-        reader.setDecideFormatFromContent(true);
-        // Set filename again, otherwise QImageReader won't restart from scratch
-        reader.setFileName(pixPath);
+
+    JpegContent content;
+    QByteArray format;
+    QByteArray data;
+    QBuffer buffer;
+    int previewRatio = 1;
+
+    // raw images deserve special treatment
+    if (KDcrawIface::KDcraw::rawFilesList().contains(QString(formatHint))) {
+        // use KDCraw to extract the preview
+        bool ret = KDcrawIface::KDcraw::loadEmbeddedPreview(data, pixPath);
+
+        // We need QImage. Loading JpegContent from QImage - exif lost
+        // Loading QImage from JpegContent - unimplemented, would go with loadFromData
+        if (!ret || !originalImage.loadFromData(data) || qMin(originalImage.width(), originalImage.height()) < MIN_PREV_SIZE) {
+            // if the emebedded preview loading failed or gets just a small image, load
+            // half preview instead. That's slower...
+            if (!KDcrawIface::KDcraw::loadHalfPreview(data, pixPath)) {
+                kWarning() << "unable to get preview for " << pixPath.toUtf8().constData();
+                return false;
+            }
+            previewRatio = 2;
+        }
+
+        // And we need JpegContent too because of EXIF (orientation!).
+        if (!content.loadFromData(data)) {
+            kWarning() << "unable to load preview for " << pixPath.toUtf8().constData();
+            return false;
+        }
+
+        buffer.setBuffer(&data);
+        buffer.open(QIODevice::ReadOnly);
+        reader.setDevice(&buffer);
+        reader.setFormat(formatHint);
+    } else {
+        if (!reader.canRead()) {
+            reader.setDecideFormatFromContent(true);
+            // Set filename again, otherwise QImageReader won't restart from scratch
+            reader.setFileName(pixPath);
+        }
+
+        if (reader.format() == "jpeg" && GwenviewConfig::applyExifOrientation()) {
+            content.load(pixPath);
+        }
     }
-    // If it's a Jpeg, try to load an embedded thumbnail, if available.
+
+    // If there's jpeg content (from jpg or raw files), try to load an embedded thumbnail, if available.
     // If applyExifOrientation is not set, don't use the
     // embedded thumbnail since it might be rotated differently
     // than the actual image
-    if (reader.format() == "jpeg" && GwenviewConfig::applyExifOrientation()) {
-        JpegContent content;
-        content.load(pixPath);
+    if (!content.rawData().isEmpty() && GwenviewConfig::applyExifOrientation()) {
         QImage thumbnail = content.thumbnail();
         orientation = content.orientation();
 
@@ -85,7 +132,7 @@ bool ThumbnailContext::load(const QString &pixPath, int pixelSize)
     }
 
     // Generate thumbnail from full image
-    QSize originalSize = reader.size();
+    originalSize = reader.size();
     if (originalSize.isValid() && reader.supportsOption(QImageIOHandler::ScaledSize)) {
         QSizeF scaledSize = originalSize;
         scaledSize.scale(pixelSize, pixelSize, Qt::KeepAspectRatio);
@@ -94,17 +141,17 @@ bool ThumbnailContext::load(const QString &pixPath, int pixelSize)
         }
     }
 
-    QImage originalImage;
     // format() is empty after QImageReader::read() is called
-    QByteArray format = reader.format();
+    format = reader.format();
     if (!reader.read(&originalImage)) {
         return false;
     }
+
     if (!originalSize.isValid()) {
         originalSize = originalImage.size();
     }
-    mOriginalWidth = originalSize.width();
-    mOriginalHeight = originalSize.height();
+    mOriginalWidth = originalSize.width() * previewRatio;
+    mOriginalHeight = originalSize.height() * previewRatio;
 
     if (qMax(mOriginalWidth, mOriginalHeight) <= pixelSize) {
         mImage = originalImage;
