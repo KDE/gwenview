@@ -155,6 +155,16 @@ public:
            "%1:", key));
         row->valueLabel->setText(value);
         mRows << row;
+    }
+
+    static bool rowsLessThan(const Row* row1, const Row* row2)
+    {
+        return row1->keyLabel->text() < row2->keyLabel->text();
+    }
+
+    void finishAddRows()
+    {
+        qSort(mRows.begin(), mRows.end(), KeyValueWidget::rowsLessThan);
         updateGeometry();
     }
 
@@ -349,6 +359,7 @@ void InfoContextManagerItem::updateOneFileInfo()
             d->mKeyValueWidget->addRow(label, value);
         }
     }
+    d->mKeyValueWidget->finishAddRows();
     d->mKeyValueWidget->layoutRows();
 }
 
