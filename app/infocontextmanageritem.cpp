@@ -27,6 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QPainter>
 #include <QPointer>
 #include <QPushButton>
+#include <QScrollArea>
 #include <QTextBrowser>
 #include <QToolTip>
 #include <QVBoxLayout>
@@ -116,7 +117,7 @@ class KeyValueWidget : public QWidget
         QLabel* valueLabel;
     };
 public:
-    KeyValueWidget(QWidget* parent)
+    KeyValueWidget(QWidget* parent = 0)
     : QWidget(parent)
     {
         QSizePolicy policy(QSizePolicy::Preferred, QSizePolicy::Fixed);
@@ -155,6 +156,16 @@ public:
            "%1:", key));
         row->valueLabel->setText(value);
         mRows << row;
+    }
+
+    static bool rowsLessThan(const Row* row1, const Row* row2)
+    {
+        return row1->keyLabel->text() < row2->keyLabel->text();
+    }
+
+    void finishAddRows()
+    {
+        qSort(mRows.begin(), mRows.end(), KeyValueWidget::rowsLessThan);
         updateGeometry();
     }
 
@@ -193,7 +204,7 @@ struct InfoContextManagerItemPrivate
     SideBarGroup* mGroup;
 
     // One selection fields
-    QWidget* mOneFileWidget;
+    QScrollArea* mOneFileWidget;
     KeyValueWidget* mKeyValueWidget;
     Document::Ptr mDocument;
 
@@ -213,19 +224,24 @@ struct InfoContextManagerItemPrivate
 
     void setupGroup()
     {
-        mOneFileWidget = new QWidget();
+        mOneFileWidget = new QScrollArea();
+        mOneFileWidget->setFrameStyle(QFrame::NoFrame);
+        mOneFileWidget->setWidgetResizable(true);
 
-        mKeyValueWidget = new KeyValueWidget(mOneFileWidget);
+        mKeyValueWidget = new KeyValueWidget;
 
         QLabel* moreLabel = new QLabel(mOneFileWidget);
         moreLabel->setText(QString("<a href='#'>%1</a>").arg(i18nc("@action show more image meta info", "More...")));
         moreLabel->setAlignment(Qt::AlignRight);
 
-        QVBoxLayout* layout = new QVBoxLayout(mOneFileWidget);
+        QWidget* content = new QWidget;
+        QVBoxLayout* layout = new QVBoxLayout(content);
         layout->setMargin(2);
         layout->setSpacing(2);
         layout->addWidget(mKeyValueWidget);
         layout->addWidget(moreLabel);
+
+        mOneFileWidget->setWidget(content);
 
         mMultipleFilesLabel = new QLabel();
 
@@ -349,6 +365,7 @@ void InfoContextManagerItem::updateOneFileInfo()
             d->mKeyValueWidget->addRow(label, value);
         }
     }
+    d->mKeyValueWidget->finishAddRows();
     d->mKeyValueWidget->layoutRows();
 }
 

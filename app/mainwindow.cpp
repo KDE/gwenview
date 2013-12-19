@@ -544,7 +544,6 @@ struct MainWindow::Private
             page->addWidget(semanticInfoItem->widget());
         }
 #endif
-        page->addStretch();
         mSideBar->addPage(page);
 
         page = new SideBarPage(i18n("Operations"));
