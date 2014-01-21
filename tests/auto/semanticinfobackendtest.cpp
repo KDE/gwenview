@@ -36,9 +36,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_FAKE
 #include <lib/semanticinfo/fakesemanticinfobackend.h>
 
-#elif defined(GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK)
-#include <Nepomuk2/ResourceManager>
-#include <lib/semanticinfo/nepomuksemanticinfobackend.h>
+#elif defined(GWENVIEW_SEMANTICINFO_BACKEND_BALOO)
+#include <lib/semanticinfo/baloosemanticinfobackend.h>
 
 #else
 #ifdef __GNUC__
@@ -65,11 +64,6 @@ void SemanticInfoBackEndClient::slotSemanticInfoRetrieved(const KUrl& url, const
 
 void SemanticInfoBackEndTest::initTestCase()
 {
-#ifdef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
-    if (Nepomuk2::ResourceManager::instance()->init() != 0) {
-        QSKIP("This test needs Nepomuk", SkipAll);
-    }
-#endif
     qRegisterMetaType<KUrl>("KUrl");
     qRegisterMetaType<QString>("SemanticInfoTag");
 }
@@ -78,8 +72,8 @@ void SemanticInfoBackEndTest::init()
 {
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_FAKE
     mBackEnd = new FakeSemanticInfoBackEnd(0, FakeSemanticInfoBackEnd::InitializeEmpty);
-#elif defined(GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK)
-    mBackEnd = new NepomukSemanticInfoBackEnd(0);
+#elif defined(GWENVIEW_SEMANTICINFO_BACKEND_BALOO)
+    mBackEnd = new BalooSemanticInfoBackend(0);
 #endif
 }
 

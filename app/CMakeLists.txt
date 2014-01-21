@@ -1,6 +1,5 @@
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/..
-    ${SOPRANO_INCLUDE_DIR}
     ${EXIV2_INCLUDE_DIR}
     ${LIBKONQ_INCLUDE_DIR}
     ${KACTIVITIES_INCLUDE_DIRS}
@@ -82,7 +81,6 @@ target_link_libraries(gwenview
     gwenviewlib
     ${KDE4_KIO_LIBS}
     ${LIBKONQ_LIBRARY}
-    ${SOPRANO_LIBRARIES}
     ${QT_QTCORE_LIBRARY}
     ${KACTIVITIES_LIBRARY}
     )
@@ -94,7 +92,7 @@ if (KIPI_FOUND)
 endif()
 
 if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
-    target_link_libraries(gwenview ${NEPOMUK_CORE_LIBRARY})
+    target_link_libraries(gwenview ${BALOO_LIBRARIES})
 endif()
 
 install(TARGETS gwenview

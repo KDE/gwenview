@@ -43,7 +43,6 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/${GV_JPEG_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/..
     ${CMAKE_CURRENT_BINARY_DIR}
-    ${SOPRANO_INCLUDE_DIR}
     ${EXIV2_INCLUDE_DIR}
     ${JPEG_INCLUDE_DIR}
     ${PNG_INCLUDE_DIRS}
@@ -174,10 +173,10 @@ if (GWENVIEW_SEMANTICINFO_BACKEND_FAKE)
         )
 endif()
 
-if (GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK)
+if (GWENVIEW_SEMANTICINFO_BACKEND_BALOO)
     set(gwenviewlib_SRCS
         ${gwenviewlib_SRCS}
-        semanticinfo/nepomuksemanticinfobackend.cpp
+        semanticinfo/baloosemanticinfobackend.cpp
         )
 endif()
 
@@ -225,8 +224,7 @@ endif()
 
 if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
     target_link_libraries(gwenviewlib
-        ${NEPOMUK_CORE_LIBRARY}
-        ${SOPRANO_LIBRARIES}
+        ${BALOO_LIBRARIES}
         )
 endif()
 
