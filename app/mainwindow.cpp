@@ -86,6 +86,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "browsemainpage.h"
 #include <lib/archiveutils.h>
 #include <lib/contextmanager.h>
+#include <lib/disabledactionshortcutmonitor.h>
 #include <lib/document/documentfactory.h>
 #include <lib/documentonlyproxymodel.h>
 #include <lib/eventwatcher.h>
@@ -348,6 +349,12 @@ struct MainWindow::Private
                 q, SLOT(slotStartMainPageUrlSelected(KUrl)));
     }
 
+    void installDisabledActionShortcutMonitor(QAction* action, const char* slot)
+    {
+        DisabledActionShortcutMonitor* monitor = new DisabledActionShortcutMonitor(action, q);
+        connect(monitor, SIGNAL(activated()), q, slot);
+    }
+
     void setupActions()
     {
         KActionCollection* actionCollection = q->actionCollection();
@@ -407,6 +414,7 @@ struct MainWindow::Private
         mGoToPreviousAction->setText(i18nc("@action Go to previous image", "Previous"));
         mGoToPreviousAction->setToolTip(i18nc("@info:tooltip", "Go to previous image"));
         mGoToPreviousAction->setShortcut(Qt::Key_Backspace);
+        installDisabledActionShortcutMonitor(mGoToPreviousAction, SLOT(showFirstDocumentReached()));
 
         mGoToNextAction = view->addAction("go_next", q, SLOT(goToNext()));
         mGoToNextAction->setPriority(QAction::LowPriority);
@@ -414,6 +422,7 @@ struct MainWindow::Private
         mGoToNextAction->setText(i18nc("@action Go to next image", "Next"));
         mGoToNextAction->setToolTip(i18nc("@info:tooltip", "Go to next image"));
         mGoToNextAction->setShortcut(Qt::Key_Space);
+        installDisabledActionShortcutMonitor(mGoToNextAction, SLOT(showLastDocumentReached()));
 
         mGoToFirstAction = view->addAction("go_first", q, SLOT(goToFirst()));
         mGoToFirstAction->setPriority(QAction::LowPriority);
@@ -592,19 +601,6 @@ struct MainWindow::Private
         index = mDirModel->index(index.row() + offset, 0);
         if (index.isValid() && !indexIsDirOrArchive(index)) {
             goTo(index);
-        } else {
-            if (offset > 0) {
-                goToFirstDocument();
-            } else {
-                goToLastDocument();
-            }
-            if (mCurrentMainPageId == ViewMainPageId) {
-                showMessageBubble(
-                    offset > 0
-                    ? i18n("Last document reached, continuing on first document.")
-                    : i18n("First document reached, continuing on last document.")
-                );
-            }
         }
     }
 
@@ -1241,10 +1237,9 @@ void MainWindow::updatePreviousNextActions()
         hasPrevious = false;
         hasNext = false;
     }
-    bool canBrowse = hasPrevious | hasNext;
 
-    d->mGoToPreviousAction->setEnabled(canBrowse);
-    d->mGoToNextAction->setEnabled(canBrowse);
+    d->mGoToPreviousAction->setEnabled(hasPrevious);
+    d->mGoToNextAction->setEnabled(hasNext);
     d->mGoToFirstAction->setEnabled(hasPrevious);
     d->mGoToLastAction->setEnabled(hasNext);
 }
@@ -1586,6 +1581,20 @@ void MainWindow::readProperties(const KConfigGroup& group)
         return;
     }
     goToUrl(url);
+}
+
+void MainWindow::showFirstDocumentReached()
+{
+    if (d->mCurrentMainPageId == ViewMainPageId) {
+        d->showMessageBubble(i18n("Already on first document"));
+    }
+}
+
+void MainWindow::showLastDocumentReached()
+{
+    if (d->mCurrentMainPageId == ViewMainPageId) {
+        d->showMessageBubble(i18n("Already on last document"));
+    }
 }
 
 } // namespace

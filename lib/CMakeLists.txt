@@ -89,6 +89,7 @@ set(gwenviewlib_SRCS
     documentview/videoviewadapter.cpp
     about.cpp
     abstractimageoperation.cpp
+    disabledactionshortcutmonitor.cpp
     documentonlyproxymodel.cpp
     documentview/documentviewcontainer.cpp
     binder.cpp

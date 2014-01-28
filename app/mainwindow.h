@@ -124,6 +124,9 @@ private Q_SLOTS:
 
     void toggleMenuBar();
 
+    void showFirstDocumentReached();
+    void showLastDocumentReached();
+
 private:
     struct Private;
     MainWindow::Private* const d;
