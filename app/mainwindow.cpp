@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QDateTime>
 #include <QDesktopWidget>
 #include <QLabel>
+#include <QPushButton>
 #include <QShortcut>
 #include <QSlider>
 #include <QSplitter>
@@ -84,6 +85,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "startmainpage.h"
 #include "thumbnailviewhelper.h"
 #include "browsemainpage.h"
+#include <lib/actiondialog.h>
 #include <lib/archiveutils.h>
 #include <lib/contextmanager.h>
 #include <lib/disabledactionshortcutmonitor.h>
@@ -624,19 +626,6 @@ struct MainWindow::Private
     {
         QModelIndex index = mDirModel->index(mDirModel->rowCount() - 1, 0);
         goTo(index);
-    }
-
-    void showMessageBubble(const QString &message)
-    {
-        GraphicsHudWidget* hud = new GraphicsHudWidget;
-        GraphicsHudLabel* label = new GraphicsHudLabel;
-        label->setText(message);
-        hud->init(label, GraphicsHudWidget::OptionNone);
-        hud->setContentsMargins(6, 6, 6, 6);
-        hud->setAutoDeleteOnFadeout(true);
-        QTimer::singleShot(2000, hud, SLOT(fadeOut()));
-
-        mViewMainPage->showMessageWidget(hud, Qt::AlignCenter);
     }
 
     void setupFullScreenContent()
@@ -1585,16 +1574,28 @@ void MainWindow::readProperties(const KConfigGroup& group)
 
 void MainWindow::showFirstDocumentReached()
 {
-    if (d->mCurrentMainPageId == ViewMainPageId) {
-        d->showMessageBubble(i18n("Already on first document"));
+    if (d->mCurrentMainPageId != ViewMainPageId) {
+        return;
     }
+    ActionDialog* dlg = new ActionDialog(this);
+    dlg->setText(i18n("You reached the first document, what do you want to do?"));
+    dlg->addButton(i18n("Stay There"))->setFocus();
+    dlg->addAction(d->mGoToLastAction, i18n("Go to the Last Document"));
+    dlg->addAction(d->mBrowseAction, i18n("Go Back to the Document List"));
+    dlg->exec();
 }
 
 void MainWindow::showLastDocumentReached()
 {
-    if (d->mCurrentMainPageId == ViewMainPageId) {
-        d->showMessageBubble(i18n("Already on last document"));
+    if (d->mCurrentMainPageId != ViewMainPageId) {
+        return;
     }
+    ActionDialog* dlg = new ActionDialog(this);
+    dlg->setText(i18n("You reached the last document, what do you want to do?"));
+    dlg->addButton(i18n("Stay There"))->setFocus();
+    dlg->addAction(d->mGoToFirstAction, i18n("Go to the First Document"));
+    dlg->addAction(d->mBrowseAction, i18n("Go Back to the Document List"));
+    dlg->exec();
 }
 
 } // namespace
