@@ -2,6 +2,7 @@
 /*
 Gwenview: an image viewer
 Copyright 2008 Aurélien Gâteau <agateau@kde.org>
+Copyright 2014 Vishesh Handa <me@vhanda.in>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -18,8 +19,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
-#ifndef NEPOMUKSEMANTICINFOBACKEND_H
-#define NEPOMUKSEMANTICINFOBACKEND_H
+#ifndef BALOOSEMANTICINFOBACKEND_H
+#define BALOOSEMANTICINFOBACKEND_H
 
 #include <lib/gwenviewlib_export.h>
 
@@ -30,20 +31,20 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include "abstractsemanticinfobackend.h"
 
+class KJob;
+
 namespace Gwenview
 {
 
-struct NepomukSemanticInfoBackEndPrivate;
-
 /**
- * A real metadata backend using Nepomuk to store and retrieve metadata.
+ * A real metadata backend using Baloo to store and retrieve metadata.
  */
-class GWENVIEWLIB_EXPORT NepomukSemanticInfoBackEnd : public AbstractSemanticInfoBackEnd
+class GWENVIEWLIB_EXPORT BalooSemanticInfoBackend : public AbstractSemanticInfoBackEnd
 {
     Q_OBJECT
 public:
-    NepomukSemanticInfoBackEnd(QObject* parent);
-    ~NepomukSemanticInfoBackEnd();
+    BalooSemanticInfoBackend(QObject* parent);
+    ~BalooSemanticInfoBackend();
 
     virtual TagSet allTags() const;
 
@@ -57,12 +58,14 @@ public:
 
     virtual SemanticInfoTag tagForLabel(const QString&);
 
-    void emitSemanticInfoRetrieved(const KUrl&, const SemanticInfo&);
+private Q_SLOTS:
+    void slotFetchFinished(KJob* job);
 
 private:
-    NepomukSemanticInfoBackEndPrivate* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace
 
-#endif /* NEPOMUKSEMANTICINFOBACKEND_H */
+#endif /* BALOOSEMANTICINFOBACKEND_H */

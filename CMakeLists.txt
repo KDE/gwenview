@@ -12,9 +12,9 @@ KDE4_NO_ENABLE_FINAL(gwenview)
 ## CMake options
 set(GWENVIEW_SEMANTICINFO_BACKEND_NONE OFF)
 set(GWENVIEW_SEMANTICINFO_BACKEND_FAKE OFF)
-set(GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK OFF)
+set(GWENVIEW_SEMANTICINFO_BACKEND_BALOO OFF)
 
-set(GWENVIEW_SEMANTICINFO_BACKEND "Nepomuk" CACHE STRING "Semantic info backend for Gwenview (Nepomuk/Fake/None)")
+set(GWENVIEW_SEMANTICINFO_BACKEND "Baloo" CACHE STRING "Semantic info backend for Gwenview (Baloo/Fake/None)")
 
 # Init GWENVIEW_SEMANTICINFO_BACKEND_* vars
 if (GWENVIEW_SEMANTICINFO_BACKEND STREQUAL "None")
@@ -22,7 +22,7 @@ if (GWENVIEW_SEMANTICINFO_BACKEND STREQUAL "None")
 elseif (GWENVIEW_SEMANTICINFO_BACKEND STREQUAL "Fake")
     set(GWENVIEW_SEMANTICINFO_BACKEND_FAKE ON)
 else()
-    set(GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK ON)
+    set(GWENVIEW_SEMANTICINFO_BACKEND_BALOO ON)
 endif()
 
 ## Dependencies
@@ -42,13 +42,9 @@ find_package(LCMS2)
 macro_log_feature(LCMS2_FOUND "LittleCMS" "Color management engine" "http://www.littlecms.com" TRUE "2.0")
 
 if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
-    # We need Nepomuk Core for all backends but "None"
-    find_package(NepomukCore)
-    macro_log_feature(NepomukCore_FOUND "Nepomuk Core Libraries" "Desktop-wide semantic information support" "https://projects.kde.org/projects/kde/kdelibs/nepomuk-core" TRUE)
-    # Find Soprano because nepomuk Core does not automatically brings in the
-    # Soprano includes it needs
-    find_package(Soprano)
-    macro_log_feature(Soprano_FOUND "Soprano libraries" "RDF storage, parsing, and serialization framework" "http://soprano.sourceforge.net/" TRUE "" "Required by Nepomuk Core Libraries")
+    # We need Baloo for all backends but "None"
+    find_package(Baloo)
+    macro_log_feature(Baloo_FOUND "Baloo Core Libraries" "Desktop-wide semantic information support" "https://projects.kde.org/projects/kde/kdelibs/baloo" TRUE)
 endif()
 
 find_package(LibKonq)
@@ -62,8 +58,6 @@ macro_log_feature(KDCRAW_FOUND "libkdcraw" "KDE Dcraw library" "http://www.kde.o
 
 ## Global settings
 
-# Avoid some build-time warnings in Nepomuk
-add_definitions(-DDISABLE_NEPOMUK_LEGACY)
 add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
 add_definitions(
     ${QT_DEFINITIONS}
@@ -77,7 +71,7 @@ include_directories(
     ${CMAKE_BINARY_DIR}
     ${KDE4_INCLUDES}
     ${EXIV2_INCLUDE_DIR}
-    ${NEPOMUK_CORE_INCLUDE_DIR}
+    ${BALOO_INCLUDE_DIR}
     ${KDCRAW_INCLUDE_DIR}
     )
 

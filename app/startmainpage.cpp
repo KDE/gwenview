@@ -47,11 +47,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/semanticinfo/tagmodel.h>
 #endif
 
-#ifdef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
-#include <Nepomuk2/ResourceManager>
-#include <Nepomuk2/Tag>
-#endif
-
 namespace Gwenview
 {
 
@@ -106,15 +101,10 @@ struct StartMainPagePrivate : public Ui_StartMainPage
 
     void setupSearchUi()
     {
-#ifdef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
-        if (Nepomuk2::ResourceManager::instance()->init() == 0) {
-            mTagView->setModel(TagModel::createAllTagsModel(mTagView, mGvCore->semanticInfoBackEnd()));
-            mTagView->show();
-            mTagLabel->hide();
-        } else {
-            mTagView->hide();
-            mTagLabel->show();
-        }
+#ifdef GWENVIEW_SEMANTICINFO_BACKEND_BALOO
+        mTagView->setModel(TagModel::createAllTagsModel(mTagView, mGvCore->semanticInfoBackEnd()));
+        mTagView->show();
+        mTagLabel->hide();
 #else
         mTagView->hide();
         mTagLabel->hide();
@@ -218,14 +208,13 @@ StartMainPage::~StartMainPage()
 
 void StartMainPage::slotTagViewClicked(const QModelIndex& index)
 {
-#ifdef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
+#ifdef GWENVIEW_SEMANTICINFO_BACKEND_BALOO
     if (!index.isValid()) {
         return;
     }
     // FIXME: Check label encoding
-    Nepomuk2::Tag tagr(index.data().toString());
-    KUrl url = KUrl(tagr.uri()).url();
-    emit urlSelected(url);
+    const QString tag = index.data().toString();
+    emit urlSelected(KUrl("tags:/" + tag));
 #endif
 }
 

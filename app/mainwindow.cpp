@@ -75,9 +75,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "kipiinterface.h"
 #endif
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-#ifdef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
-#include <Nepomuk2/ResourceManager>
-#endif
 #include "semanticinfocontextmanageritem.h"
 #endif
 #include "preloader.h"
@@ -511,16 +508,7 @@ struct MainWindow::Private
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
         SemanticInfoContextManagerItem* semanticInfoItem = 0;
-        // When using Nepomuk, create a SemanticInfoContextManagerItem instance
-        // only if Nepomuk is available
-        // When using Fake backend always create it
-#ifdef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
-        if (Nepomuk2::ResourceManager::instance()->init() == 0) {
-#endif
-            semanticInfoItem = new SemanticInfoContextManagerItem(mContextManager, actionCollection, mViewMainPage);
-#ifdef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
-        }
-#endif
+        semanticInfoItem = new SemanticInfoContextManagerItem(mContextManager, actionCollection, mViewMainPage);
 #endif
 
         ImageOpsContextManagerItem* imageOpsItem =

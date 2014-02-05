@@ -52,9 +52,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 // KDE
 #include <kratingwidget.h>
-#ifdef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
-#include <Nepomuk2/ResourceManager>
-#endif
 
 // Local
 #include <lib/semanticinfo/abstractsemanticinfobackend.h>
@@ -570,15 +567,8 @@ FilterController::FilterController(QFrame* frame, SortedDirModel* dirModel)
     d->addAction(i18nc("@action:inmenu", "Filter by Name"), SLOT(addFilterByName()));
     d->addAction(i18nc("@action:inmenu", "Filter by Date"), SLOT(addFilterByDate()));
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-#ifdef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
-    // Only add filters if Nepomuk is running
-    if (Nepomuk2::ResourceManager::instance()->init() == 0) {
-#endif
-        d->addAction(i18nc("@action:inmenu", "Filter by Rating"), SLOT(addFilterByRating()));
-        d->addAction(i18nc("@action:inmenu", "Filter by Tag"), SLOT(addFilterByTag()));
-#ifdef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
-    }
-#endif
+    d->addAction(i18nc("@action:inmenu", "Filter by Rating"), SLOT(addFilterByRating()));
+    d->addAction(i18nc("@action:inmenu", "Filter by Tag"), SLOT(addFilterByTag()));
 #endif
 }
 

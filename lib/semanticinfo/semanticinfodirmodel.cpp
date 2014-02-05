@@ -35,8 +35,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_FAKE
 #include "fakesemanticinfobackend.h"
 
-#elif defined(GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK)
-#include "nepomuksemanticinfobackend.h"
+#elif defined(GWENVIEW_SEMANTICINFO_BACKEND_BALOO)
+#include "baloosemanticinfobackend.h"
 
 #else
 #ifdef __GNUC__
@@ -71,8 +71,8 @@ SemanticInfoDirModel::SemanticInfoDirModel(QObject* parent)
 {
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_FAKE
     d->mBackEnd = new FakeSemanticInfoBackEnd(this, FakeSemanticInfoBackEnd::InitializeRandom);
-#elif defined(GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK)
-    d->mBackEnd = new NepomukSemanticInfoBackEnd(this);
+#elif defined(GWENVIEW_SEMANTICINFO_BACKEND_BALOO)
+    d->mBackEnd = new BalooSemanticInfoBackend(this);
 #endif
 
     connect(d->mBackEnd, SIGNAL(semanticInfoRetrieved(KUrl,SemanticInfo)),
