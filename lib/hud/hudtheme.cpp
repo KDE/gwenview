@@ -90,11 +90,11 @@ RenderInfo renderInfo(WidgetType widget, State state)
         frame.textPen = QPen(QColor("#ccc"));
         renderInfoMap[FrameWidget].infos[NormalState] = frame;
 
-        // CountDownWidget
+        // CountDown
         RenderInfo countDownWidget;
         countDownWidget.bgBrush = QColor::fromHsvF(0, 0, .5);
         countDownWidget.borderPen = QPen(QColor::fromHsvF(0, 0, .8));
-        renderInfoMap[CountDownWidget].infos[NormalState] = countDownWidget;
+        renderInfoMap[CountDown].infos[NormalState] = countDownWidget;
 
         // SliderWidgetHandle
         RenderInfo sliderWidgetHandle = button;

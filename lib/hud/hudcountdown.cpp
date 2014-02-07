@@ -1,0 +1,82 @@
+// vim: set tabstop=4 shiftwidth=4 expandtab:
+/*
+Gwenview: an image viewer
+Copyright 2014 Aurélien Gâteau <agateau@kde.org>
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+// Self
+#include <hudcountdown.moc>
+
+// Local
+#include <lib/hud/hudtheme.h>
+
+// KDE
+
+// Qt
+#include <QPainter>
+
+namespace Gwenview
+{
+
+struct HudCountDownPrivate
+{
+    qreal mValue;
+};
+
+HudCountDown::HudCountDown(QGraphicsWidget* parent)
+: QGraphicsWidget(parent)
+, d(new HudCountDownPrivate)
+{
+    d->mValue = 0;
+    // Use an odd value so that the vertical line is aligned to pixel
+    // boundaries
+    setMinimumSize(17, 17);
+}
+
+HudCountDown::~HudCountDown()
+{
+    delete d;
+}
+
+void HudCountDown::setValue(qreal value)
+{
+    d->mValue = value;
+    update();
+}
+
+void HudCountDown::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
+{
+    HudTheme::RenderInfo info = HudTheme::renderInfo(HudTheme::CountDown);
+    painter->setRenderHint(QPainter::Antialiasing);
+    const int circle = 5760;
+    const int start = circle / 4; // Start at 12h, not 3h
+    const int end = int(circle * d->mValue);
+    painter->setBrush(info.bgBrush);
+    painter->setPen(info.borderPen);
+
+    QRectF square = boundingRect().adjusted(.5, .5, -.5, -.5);
+    qreal width = square.width();
+    qreal height = square.height();
+    if (width < height) {
+        square.setHeight(width);
+        square.moveTop((height - width) / 2);
+    } else {
+        square.setWidth(height);
+        square.moveLeft((width - height) / 2);
+    }
+    painter->drawPie(square, start, end);
+}
+
+} // namespace

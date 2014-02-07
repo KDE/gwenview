@@ -61,7 +61,7 @@ enum WidgetType
 {
     ButtonWidget,
     FrameWidget,
-    CountDownWidget,
+    CountDown,
     SliderWidgetHandle,
     SliderWidgetGroove
 };

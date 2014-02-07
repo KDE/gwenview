@@ -102,6 +102,7 @@ set(gwenviewlib_SRCS
     fullscreenbar.cpp
     hud/hudbutton.cpp
     hud/hudbuttonbox.cpp
+    hud/hudcountdown.cpp
     hud/hudlabel.cpp
     hud/hudmessagebubble.cpp
     hud/hudslider.cpp
