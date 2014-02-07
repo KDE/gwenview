@@ -22,34 +22,39 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "gwenviewlib_export.h"
 
 // Local
+#include <lib/graphicshudwidget.h>
 
 // KDE
-#include <KDialog>
 
 // Qt
 
 class QAction;
-class QPushButton;
+class QGraphicsWidget;
 
 namespace Gwenview
 {
+
+class GraphicsHudButton;
 
 class ActionDialogPrivate;
 /**
  * A dialog which shows a list of actions
  */
-class GWENVIEWLIB_EXPORT ActionDialog : public KDialog
+class GWENVIEWLIB_EXPORT ActionDialog : public GraphicsHudWidget
 {
     Q_OBJECT
 public:
-    ActionDialog(QWidget* parent = 0);
+    ActionDialog(QGraphicsWidget* parent = 0);
     ~ActionDialog();
 
     void setText(const QString& text);
 
-    QPushButton* addButton(const QString& text);
+    GraphicsHudButton* addButton(const QString& text);
 
-    QPushButton* addAction(QAction* action, const QString& overrideText = QString());
+    GraphicsHudButton* addAction(QAction* action, const QString& overrideText = QString());
+
+protected:
+    void showEvent(QShowEvent* event);
 
 private:
     ActionDialogPrivate* const d;

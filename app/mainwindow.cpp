@@ -94,8 +94,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/eventwatcher.h>
 #include <lib/gvdebug.h>
 #include <lib/gwenviewconfig.h>
-#include <lib/graphicshudlabel.h>
-#include <lib/graphicshudwidget.h>
 #include <lib/mimetypeutils.h>
 #include <lib/print/printhelper.h>
 #include <lib/slideshow.h>
@@ -1577,12 +1575,12 @@ void MainWindow::showFirstDocumentReached()
     if (d->mCurrentMainPageId != ViewMainPageId) {
         return;
     }
-    ActionDialog* dlg = new ActionDialog(this);
+    ActionDialog* dlg = new ActionDialog;
     dlg->setText(i18n("You reached the first document, what do you want to do?"));
-    dlg->addButton(i18n("Stay There"))->setFocus();
+    dlg->addButton(i18n("Stay There"));
     dlg->addAction(d->mGoToLastAction, i18n("Go to the Last Document"));
     dlg->addAction(d->mBrowseAction, i18n("Go Back to the Document List"));
-    dlg->exec();
+    d->mViewMainPage->showMessageWidget(dlg, Qt::AlignCenter);
 }
 
 void MainWindow::showLastDocumentReached()
@@ -1590,12 +1588,12 @@ void MainWindow::showLastDocumentReached()
     if (d->mCurrentMainPageId != ViewMainPageId) {
         return;
     }
-    ActionDialog* dlg = new ActionDialog(this);
+    ActionDialog* dlg = new ActionDialog;
     dlg->setText(i18n("You reached the last document, what do you want to do?"));
-    dlg->addButton(i18n("Stay There"))->setFocus();
+    dlg->addButton(i18n("Stay There"));
     dlg->addAction(d->mGoToFirstAction, i18n("Go to the First Document"));
     dlg->addAction(d->mBrowseAction, i18n("Go Back to the Document List"));
-    dlg->exec();
+    d->mViewMainPage->showMessageWidget(dlg, Qt::AlignCenter);
 }
 
 } // namespace

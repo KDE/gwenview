@@ -20,35 +20,53 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <actiondialog.moc>
 
 // Local
+#include <graphicshudbutton.h>
+#include <graphicshudlabel.h>
 
 // KDE
+#include <kdebug.h>
 
 // Qt
 #include <QAction>
-#include <QLabel>
-#include <QPushButton>
-#include <QVBoxLayout>
+#include <QGraphicsLinearLayout>
+#include <QGraphicsWidget>
+#include <QTimer>
 
 namespace Gwenview
 {
 
 struct ActionDialogPrivate
 {
-    QVBoxLayout* mLayout;
-    QLabel* mLabel;
+    QGraphicsLinearLayout* mLayout;
+    GraphicsHudLabel* mLabel;
+    QList<GraphicsHudButton*> mButtonList;
+
+    void updateButtonWidths()
+    {
+        qreal minWidth = 0;
+        Q_FOREACH(GraphicsHudButton* button, mButtonList) {
+            minWidth = qMax(minWidth, button->preferredWidth());
+        }
+        Q_FOREACH(GraphicsHudButton* button, mButtonList) {
+            button->setMinimumWidth(minWidth);
+        }
+    }
 };
 
-ActionDialog::ActionDialog(QWidget* parent)
-: KDialog(parent)
+ActionDialog::ActionDialog(QGraphicsWidget* parent)
+: GraphicsHudWidget(parent)
 , d(new ActionDialogPrivate)
 {
-    setButtons(KDialog::None);
-    QWidget* content = new QWidget();
-    d->mLayout = new QVBoxLayout(content);
-    d->mLabel = new QLabel();
-    d->mLabel->setWordWrap(true);
-    d->mLayout->addWidget(d->mLabel);
-    setMainWidget(content);
+    QGraphicsWidget* content = new QGraphicsWidget();
+    d->mLayout = new QGraphicsLinearLayout(Qt::Vertical, content);
+    d->mLabel = new GraphicsHudLabel();
+    d->mLayout->addItem(d->mLabel);
+    d->mLayout->setItemSpacing(0, 24);
+    init(content, GraphicsHudWidget::OptionNone);
+
+    setContentsMargins(6, 6, 6, 6);
+    setAutoDeleteOnFadeout(true);
+    QTimer::singleShot(30000, this, SLOT(fadeOut()));
 }
 
 ActionDialog::~ActionDialog()
@@ -56,25 +74,36 @@ ActionDialog::~ActionDialog()
     delete d;
 }
 
-QPushButton* ActionDialog::addAction(QAction* action, const QString& overrideText)
+GraphicsHudButton* ActionDialog::addAction(QAction* action, const QString& overrideText)
 {
-    QPushButton* button = addButton(overrideText.isEmpty() ? action->text() : overrideText);
-    button->setIcon(action->icon());
+    QString text = overrideText.isEmpty() ? action->text() : overrideText;
+    GraphicsHudButton* button = addButton(text);
     connect(button, SIGNAL(clicked()), action, SLOT(trigger()));
     return button;
 }
 
-QPushButton* ActionDialog::addButton(const QString& text)
+GraphicsHudButton* ActionDialog::addButton(const QString& text)
 {
-    QPushButton* button = new QPushButton(text);
-    button->setMinimumHeight(button->sizeHint().height() * 2);
-    d->mLayout->addWidget(button);
-    connect(button, SIGNAL(clicked()), SLOT(accept()));
+    GraphicsHudButton* button = new GraphicsHudButton();
+    connect(button, SIGNAL(clicked()), SLOT(fadeOut()));
+    button->setText(text);
+    d->mLayout->addItem(button);
+    d->mLayout->setAlignment(button, Qt::AlignCenter);
+    d->mButtonList += button;
+
     return button;
 }
 
-void ActionDialog::setText(const QString& msg) {
+void ActionDialog::setText(const QString& msg)
+{
     d->mLabel->setText(msg);
 }
+
+void ActionDialog::showEvent(QShowEvent* event)
+{
+    GraphicsHudWidget::showEvent(event);
+    d->updateButtonWidths();
+}
+
 
 } // namespace
