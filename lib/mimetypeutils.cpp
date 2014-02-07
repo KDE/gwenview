@@ -100,6 +100,9 @@ const QStringList& imageMimeTypes()
 
 QString urlMimeType(const KUrl& url)
 {
+    if (url.isEmpty()) {
+        return "unknown";
+    }
     // Try a simple guess, using extension for remote urls
     QString mimeType = KMimeType::findByUrl(url)->name();
     if (mimeType == "application/octet-stream") {
