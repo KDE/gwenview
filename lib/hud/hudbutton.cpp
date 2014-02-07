@@ -22,7 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "hud/hudbutton.moc"
 
 // Local
-#include <fullscreentheme.h>
+#include <hud/hudtheme.h>
 
 // KDE
 #include <KDebug>
@@ -60,7 +60,7 @@ struct HudButtonPrivate
 
     void initLayoutInfo(LayoutInfo* info, const QSizeF& constraint)
     {
-        FullScreenTheme::RenderInfo renderInfo = FullScreenTheme::renderInfo(FullScreenTheme::ButtonWidget);
+        HudTheme::RenderInfo renderInfo = HudTheme::renderInfo(HudTheme::ButtonWidget);
         const int padding = renderInfo.padding;
         QSize minInnerSize = constraint.toSize() - QSize(2 * padding, 2 * padding);
 
@@ -121,13 +121,13 @@ void HudButton::setText(const QString& text)
 
 void HudButton::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget*)
 {
-    FullScreenTheme::State state;
+    HudTheme::State state;
     if (option->state.testFlag(QStyle::State_MouseOver)) {
-        state = d->mIsDown ? FullScreenTheme::DownState : FullScreenTheme::MouseOverState;
+        state = d->mIsDown ? HudTheme::DownState : HudTheme::MouseOverState;
     } else {
-        state = FullScreenTheme::NormalState;
+        state = HudTheme::NormalState;
     }
-    FullScreenTheme::RenderInfo renderInfo = FullScreenTheme::renderInfo(FullScreenTheme::ButtonWidget, state);
+    HudTheme::RenderInfo renderInfo = HudTheme::renderInfo(HudTheme::ButtonWidget, state);
 
     painter->setPen(renderInfo.borderPen);
     painter->setBrush(renderInfo.bgBrush);

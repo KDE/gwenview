@@ -22,7 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "hud/hudslider.moc"
 
 // Local
-#include <fullscreentheme.h>
+#include <hud/hudtheme.h>
 
 // KDE
 #include <KDebug>
@@ -61,7 +61,7 @@ struct HudSliderPrivate
 
     void updateHandleRect()
     {
-        static const FullScreenTheme::RenderInfo renderInfo = FullScreenTheme::renderInfo(FullScreenTheme::SliderWidgetHandle);
+        static const HudTheme::RenderInfo renderInfo = HudTheme::renderInfo(HudTheme::SliderWidgetHandle);
         static const int radius = renderInfo.borderRadius;
 
         const QRectF sliderRect = q->boundingRect();
@@ -72,7 +72,7 @@ struct HudSliderPrivate
 
     int positionForX(qreal x) const
     {
-        static const FullScreenTheme::RenderInfo renderInfo = FullScreenTheme::renderInfo(FullScreenTheme::SliderWidgetHandle);
+        static const HudTheme::RenderInfo renderInfo = HudTheme::renderInfo(HudTheme::SliderWidgetHandle);
         static const int radius = renderInfo.borderRadius;
 
         const qreal sliderWidth = q->boundingRect().width();
@@ -86,7 +86,7 @@ struct HudSliderPrivate
 
     qreal xForPosition(int pos) const
     {
-        static const FullScreenTheme::RenderInfo renderInfo = FullScreenTheme::renderInfo(FullScreenTheme::SliderWidgetHandle);
+        static const HudTheme::RenderInfo renderInfo = HudTheme::renderInfo(HudTheme::SliderWidgetHandle);
         static const int radius = renderInfo.borderRadius;
 
         const qreal sliderWidth = q->boundingRect().width();
@@ -124,18 +124,18 @@ HudSlider::~HudSlider()
 void HudSlider::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget*)
 {
     bool drawHandle = d->hasValidRange();
-    FullScreenTheme::State state;
+    HudTheme::State state;
     if (drawHandle && option->state.testFlag(QStyle::State_MouseOver)) {
-        state = d->mIsDown ? FullScreenTheme::DownState : FullScreenTheme::MouseOverState;
+        state = d->mIsDown ? HudTheme::DownState : HudTheme::MouseOverState;
     } else {
-        state = FullScreenTheme::NormalState;
+        state = HudTheme::NormalState;
     }
     painter->setRenderHint(QPainter::Antialiasing);
 
     const QRectF sliderRect = boundingRect();
 
     // Groove
-    FullScreenTheme::RenderInfo renderInfo = FullScreenTheme::renderInfo(FullScreenTheme::SliderWidgetGroove, state);
+    HudTheme::RenderInfo renderInfo = HudTheme::renderInfo(HudTheme::SliderWidgetGroove, state);
     painter->setPen(renderInfo.borderPen);
     painter->setBrush(renderInfo.bgBrush);
     qreal centerY = d->mHandleRect.center().y();
@@ -159,7 +159,7 @@ void HudSlider::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
     painter->setClipping(false);
 
     // Handle
-    renderInfo = FullScreenTheme::renderInfo(FullScreenTheme::SliderWidgetHandle, state);
+    renderInfo = HudTheme::renderInfo(HudTheme::SliderWidgetHandle, state);
     painter->setPen(renderInfo.borderPen);
     painter->setBrush(renderInfo.bgBrush);
     painter->drawRoundedRect(d->mHandleRect.adjusted(.5, .5, -.5, -.5), renderInfo.borderRadius, renderInfo.borderRadius);

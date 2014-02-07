@@ -22,7 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "hud/hudlabel.moc"
 
 // Local
-#include <fullscreentheme.h>
+#include <hud/hudtheme.h>
 
 // KDE
 #include <KDebug>
@@ -67,7 +67,7 @@ void HudLabel::setText(const QString& text)
 
 void HudLabel::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
 {
-    FullScreenTheme::RenderInfo info = FullScreenTheme::renderInfo(FullScreenTheme::FrameWidget);
+    HudTheme::RenderInfo info = HudTheme::renderInfo(HudTheme::FrameWidget);
     painter->setPen(info.textPen);
     painter->drawText(boundingRect(), Qt::AlignCenter, d->mText);
 }

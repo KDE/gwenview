@@ -34,7 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KGuiItem>
 
 // Local
-#include <lib/fullscreentheme.h>
+#include <lib/hud/hudtheme.h>
 #include <lib/hud/hudbutton.h>
 #include <lib/hud/hudlabel.h>
 
@@ -63,7 +63,7 @@ public:
 
     void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
     {
-        FullScreenTheme::RenderInfo info = FullScreenTheme::renderInfo(FullScreenTheme::CountDownWidget);
+        HudTheme::RenderInfo info = HudTheme::renderInfo(HudTheme::CountDownWidget);
         painter->setRenderHint(QPainter::Antialiasing);
         const int circle = 5760;
         const int start = circle / 4; // Start at 12h, not 3h

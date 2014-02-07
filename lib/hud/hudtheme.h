@@ -18,8 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
-#ifndef FULLSCREENTHEME_H
-#define FULLSCREENTHEME_H
+#ifndef HUDTHEME_H
+#define HUDTHEME_H
 
 #include <lib/gwenviewlib_export.h>
 
@@ -34,7 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 
-namespace FullScreenTheme
+namespace HudTheme
 {
 
 struct RenderInfo
@@ -68,8 +68,8 @@ enum WidgetType
 
 GWENVIEWLIB_EXPORT RenderInfo renderInfo(WidgetType, State = NormalState);
 
-} // FullScreenTheme namespace
+} // HudTheme namespace
 
 } // Gwenview namespace
 
-#endif /* FULLSCREENTHEME_H */
+#endif /* HUDTHEME_H */

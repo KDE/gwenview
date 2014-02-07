@@ -35,7 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KLocale>
 
 // Local
-#include <fullscreentheme.h>
+#include <hud/hudtheme.h>
 #include <hud/hudbutton.h>
 
 namespace Gwenview
@@ -122,7 +122,7 @@ void HudWidget::slotCloseButtonClicked()
 
 void HudWidget::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
 {
-    FullScreenTheme::RenderInfo renderInfo = FullScreenTheme::renderInfo(FullScreenTheme::FrameWidget);
+    HudTheme::RenderInfo renderInfo = HudTheme::renderInfo(HudTheme::FrameWidget);
     painter->setPen(renderInfo.borderPen);
     painter->setRenderHint(QPainter::Antialiasing);
     painter->setBrush(renderInfo.bgBrush);

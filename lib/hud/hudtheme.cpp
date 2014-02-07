@@ -19,24 +19,24 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "fullscreentheme.h"
+#include <hud/hudtheme.h>
 
 // Qt
+#include <QMap>
 
 // KDE
 
 // Local
-#include <lib/gwenviewconfig.h>
 
 namespace Gwenview
 {
 
-namespace FullScreenTheme
+namespace HudTheme
 {
 
 struct RenderInfoSet
 {
-    QMap<FullScreenTheme::State, FullScreenTheme::RenderInfo> infos;
+    QMap<HudTheme::State, HudTheme::RenderInfo> infos;
 };
 
 static QLinearGradient createGradient()
@@ -136,6 +136,6 @@ RenderInfo renderInfo(WidgetType widget, State state)
     }
 }
 
-} // FullScreenTheme namespace
+} // HudTheme namespace
 
 } // Gwenview namespace

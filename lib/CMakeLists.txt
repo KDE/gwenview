@@ -100,12 +100,12 @@ set(gwenviewlib_SRCS
     exiv2imageloader.cpp
     flowlayout.cpp
     fullscreenbar.cpp
-    fullscreentheme.cpp
     hud/hudbutton.cpp
     hud/hudbuttonbox.cpp
     hud/hudlabel.cpp
     hud/hudmessagebubble.cpp
     hud/hudslider.cpp
+    hud/hudtheme.cpp
     hud/hudwidget.cpp
     graphicswidgetfloater.cpp
     imageformats/imageformats.cpp
