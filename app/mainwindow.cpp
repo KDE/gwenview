@@ -1580,6 +1580,7 @@ void MainWindow::showFirstDocumentReached()
     dlg->addButton(i18n("Stay There"));
     dlg->addAction(d->mGoToLastAction, i18n("Go to the Last Document"));
     dlg->addAction(d->mBrowseAction, i18n("Go Back to the Document List"));
+    dlg->addCountDown(15000);
     d->mViewMainPage->showMessageWidget(dlg, Qt::AlignCenter);
 }
 
@@ -1593,6 +1594,7 @@ void MainWindow::showLastDocumentReached()
     dlg->addButton(i18n("Stay There"));
     dlg->addAction(d->mGoToFirstAction, i18n("Go to the First Document"));
     dlg->addAction(d->mBrowseAction, i18n("Go Back to the Document List"));
+    dlg->addCountDown(15000);
     d->mViewMainPage->showMessageWidget(dlg, Qt::AlignCenter);
 }
 

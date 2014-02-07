@@ -53,6 +53,8 @@ public:
 
     HudButton* addAction(QAction* action, const QString& overrideText = QString());
 
+    void addCountDown(qreal ms);
+
 protected:
     void showEvent(QShowEvent* event);
 

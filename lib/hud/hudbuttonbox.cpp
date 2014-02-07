@@ -21,7 +21,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Local
 #include <hud/hudbutton.h>
+#include <hud/hudcountdown.h>
 #include <hud/hudlabel.h>
+#include <graphicswidgetfloater.h>
 
 // KDE
 #include <kdebug.h>
@@ -40,6 +42,7 @@ struct HudButtonBoxPrivate
     QGraphicsLinearLayout* mLayout;
     HudLabel* mLabel;
     QList<HudButton*> mButtonList;
+    HudCountDown* mCountDown;
 
     void updateButtonWidths()
     {
@@ -57,6 +60,7 @@ HudButtonBox::HudButtonBox(QGraphicsWidget* parent)
 : HudWidget(parent)
 , d(new HudButtonBoxPrivate)
 {
+    d->mCountDown = 0;
     QGraphicsWidget* content = new QGraphicsWidget();
     d->mLayout = new QGraphicsLinearLayout(Qt::Vertical, content);
     d->mLabel = new HudLabel();
@@ -66,12 +70,26 @@ HudButtonBox::HudButtonBox(QGraphicsWidget* parent)
 
     setContentsMargins(6, 6, 6, 6);
     setAutoDeleteOnFadeout(true);
-    QTimer::singleShot(30000, this, SLOT(fadeOut()));
 }
 
 HudButtonBox::~HudButtonBox()
 {
     delete d;
+}
+
+void HudButtonBox::addCountDown(qreal ms)
+{
+    Q_ASSERT(!d->mCountDown);
+    d->mCountDown = new HudCountDown(this);
+    connect(d->mCountDown, SIGNAL(timeout()), SLOT(fadeOut()));
+
+    GraphicsWidgetFloater* floater = new GraphicsWidgetFloater(this);
+    floater->setChildWidget(d->mCountDown);
+    floater->setAlignment(Qt::AlignRight | Qt::AlignBottom);
+    floater->setHorizontalMargin(6);
+    floater->setVerticalMargin(6);
+
+    d->mCountDown->start(ms);
 }
 
 HudButton* HudButtonBox::addAction(QAction* action, const QString& overrideText)
