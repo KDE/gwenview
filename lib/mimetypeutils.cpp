@@ -103,6 +103,7 @@ QString urlMimeType(const KUrl& url)
     // Try a simple guess, using extension for remote urls
     QString mimeType = KMimeType::findByUrl(url)->name();
     if (mimeType == "application/octet-stream") {
+        kDebug() << "KMimeType::findByUrl() failed to find mimetype for" << url << ". Falling back to KIO::NetAccess::mimetype().";
         // No luck, look deeper. This can happens with http urls if the filename
         // does not provide any extension.
         mimeType = KIO::NetAccess::mimetype(url, KApplication::kApplication()->activeWindow());
