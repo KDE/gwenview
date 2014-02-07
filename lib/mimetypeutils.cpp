@@ -63,6 +63,23 @@ static void resolveAliasInList(QStringList* list)
     }
 }
 
+static void addRawMimeTypes(QStringList* list)
+{
+    // need to invent more intelligent way to whitelist raws
+    *list += "image/x-nikon-nef";
+    *list += "image/x-nikon-nrw";
+    *list += "image/x-canon-cr2";
+    *list += "image/x-canon-crw";
+    *list += "image/x-pentax-pef";
+    *list += "image/x-adobe-dng";
+    *list += "image/x-sony-arw";
+    *list += "image/x-minolta-mrw";
+    *list += "image/x-panasonic-rw2";
+    *list += "image/x-samsung-srw";
+    *list += "image/x-olympus-orf";
+    *list += "image/x-fuji-raf";
+}
+
 const QStringList& rasterImageMimeTypes()
 {
     static QStringList list;
@@ -73,21 +90,8 @@ const QStringList& rasterImageMimeTypes()
         Q_FOREACH(const QString& mimeType, svgImageMimeTypes()) {
             list.removeOne(mimeType);
         }
+        addRawMimeTypes(&list);
     }
-    // need to invent more intelligent way to whitelist raws
-    list += "image/x-nikon-nef";
-    list += "image/x-nikon-nrw";
-    list += "image/x-canon-cr2";
-    list += "image/x-canon-crw";
-    list += "image/x-pentax-pef";
-    list += "image/x-adobe-dng";
-    list += "image/x-sony-arw";
-    list += "image/x-minolta-mrw";
-    list += "image/x-panasonic-rw2";
-    list += "image/x-samsung-srw";
-    list += "image/x-olympus-orf";
-    list += "image/x-fuji-raf";
-
     return list;
 }
 
