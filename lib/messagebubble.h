@@ -28,20 +28,20 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KDE
 
 // Local
-#include <lib/graphicshudwidget.h>
+#include <lib/hud/hudwidget.h>
 
 class KGuiItem;
 
 namespace Gwenview
 {
-class GraphicsHudButton;
+class HudButton;
 
 struct MessageBubblePrivate;
 /**
  * Shows a bubble with a QLabel and optional buttons.
  * Automatically goes away after a while.
  */
-class GWENVIEWLIB_EXPORT MessageBubble : public GraphicsHudWidget
+class GWENVIEWLIB_EXPORT MessageBubble : public HudWidget
 {
     Q_OBJECT
 public:
@@ -50,7 +50,7 @@ public:
 
     void setText(const QString& text);
 
-    GraphicsHudButton* addButton(const KGuiItem&);
+    HudButton* addButton(const KGuiItem&);
 
 private Q_SLOTS:
     void slotTimeLineChanged(qreal);

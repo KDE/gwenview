@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "graphicshudbutton.moc"
+#include "hud/hudbutton.moc"
 
 // Local
 #include <fullscreentheme.h>
@@ -48,9 +48,9 @@ struct LayoutInfo
     QSize size;
 };
 
-struct GraphicsHudButtonPrivate
+struct HudButtonPrivate
 {
-    GraphicsHudButton* q;
+    HudButton* q;
     QAction* mAction;
 
     QIcon mIcon;
@@ -91,9 +91,9 @@ struct GraphicsHudButtonPrivate
     }
 };
 
-GraphicsHudButton::GraphicsHudButton(QGraphicsItem* parent)
+HudButton::HudButton(QGraphicsItem* parent)
 : QGraphicsWidget(parent)
-, d(new GraphicsHudButtonPrivate)
+, d(new HudButtonPrivate)
 {
     d->q = this;
     d->mAction = 0;
@@ -102,24 +102,24 @@ GraphicsHudButton::GraphicsHudButton(QGraphicsItem* parent)
     setAcceptHoverEvents(true);
 }
 
-GraphicsHudButton::~GraphicsHudButton()
+HudButton::~HudButton()
 {
     delete d;
 }
 
-void GraphicsHudButton::setIcon(const QIcon& icon)
+void HudButton::setIcon(const QIcon& icon)
 {
     d->mIcon = icon;
     updateGeometry();
 }
 
-void GraphicsHudButton::setText(const QString& text)
+void HudButton::setText(const QString& text)
 {
     d->mText = text;
     updateGeometry();
 }
 
-void GraphicsHudButton::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget*)
+void HudButton::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget*)
 {
     FullScreenTheme::State state;
     if (option->state.testFlag(QStyle::State_MouseOver)) {
@@ -152,7 +152,7 @@ void GraphicsHudButton::paint(QPainter* painter, const QStyleOptionGraphicsItem*
     }
 }
 
-QSizeF GraphicsHudButton::sizeHint(Qt::SizeHint which, const QSizeF& constraint) const
+QSizeF HudButton::sizeHint(Qt::SizeHint which, const QSizeF& constraint) const
 {
     LayoutInfo info;
     d->initLayoutInfo(&info, constraint);
@@ -163,13 +163,13 @@ QSizeF GraphicsHudButton::sizeHint(Qt::SizeHint which, const QSizeF& constraint)
     }
 }
 
-void GraphicsHudButton::mousePressEvent(QGraphicsSceneMouseEvent*)
+void HudButton::mousePressEvent(QGraphicsSceneMouseEvent*)
 {
     d->mIsDown = true;
     update();
 }
 
-void GraphicsHudButton::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
+void HudButton::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 {
     d->mIsDown = false;
     update();
@@ -178,7 +178,7 @@ void GraphicsHudButton::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
     }
 }
 
-void GraphicsHudButton::setDefaultAction(QAction* action)
+void HudButton::setDefaultAction(QAction* action)
 {
     if (action != d->mAction) {
         d->mAction = action;
@@ -191,7 +191,7 @@ void GraphicsHudButton::setDefaultAction(QAction* action)
     }
 }
 
-bool GraphicsHudButton::event(QEvent* event)
+bool HudButton::event(QEvent* event)
 {
     if (event->type() == QEvent::ActionChanged) {
         d->initFromAction();

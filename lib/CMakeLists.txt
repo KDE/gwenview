@@ -102,10 +102,10 @@ set(gwenviewlib_SRCS
     flowlayout.cpp
     fullscreenbar.cpp
     fullscreentheme.cpp
-    graphicshudbutton.cpp
-    graphicshudlabel.cpp
-    graphicshudslider.cpp
-    graphicshudwidget.cpp
+    hud/hudbutton.cpp
+    hud/hudlabel.cpp
+    hud/hudslider.cpp
+    hud/hudwidget.cpp
     graphicswidgetfloater.cpp
     imageformats/imageformats.cpp
     imageformats/jpegplugin.cpp

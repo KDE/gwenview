@@ -35,8 +35,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include <lib/fullscreentheme.h>
-#include <lib/graphicshudbutton.h>
-#include <lib/graphicshudlabel.h>
+#include <lib/hud/hudbutton.h>
+#include <lib/hud/hudlabel.h>
 
 namespace Gwenview
 {
@@ -93,17 +93,17 @@ struct MessageBubblePrivate
     QGraphicsWidget* mWidget;
     QGraphicsLinearLayout* mLayout;
     CountDownWidget* mCountDownWidget;
-    GraphicsHudLabel* mLabel;
+    HudLabel* mLabel;
 };
 
 MessageBubble::MessageBubble(QGraphicsWidget* parent)
-: GraphicsHudWidget(parent)
+: HudWidget(parent)
 , d(new MessageBubblePrivate)
 {
     d->mWidget = new QGraphicsWidget;
     d->mCountDownWidget = new CountDownWidget;
     d->mCountDownWidget->setValue(1);
-    d->mLabel = new GraphicsHudLabel;
+    d->mLabel = new HudLabel;
 
     QTimeLine* timeLine = new QTimeLine(TIMEOUT, this);
     connect(timeLine, SIGNAL(valueChanged(qreal)),
@@ -119,7 +119,7 @@ MessageBubble::MessageBubble(QGraphicsWidget* parent)
     d->mLayout->addItem(d->mCountDownWidget);
     d->mLayout->addItem(d->mLabel);
 
-    init(d->mWidget, GraphicsHudWidget::OptionCloseButton);
+    init(d->mWidget, HudWidget::OptionCloseButton);
 }
 
 MessageBubble::~MessageBubble()
@@ -132,9 +132,9 @@ void MessageBubble::setText(const QString& text)
     d->mLabel->setText(text);
 }
 
-GraphicsHudButton* MessageBubble::addButton(const KGuiItem& guiItem)
+HudButton* MessageBubble::addButton(const KGuiItem& guiItem)
 {
-    GraphicsHudButton* button = new GraphicsHudButton;
+    HudButton* button = new HudButton;
     button->setText(guiItem.text());
     button->setIcon(guiItem.icon());
     d->mLayout->addItem(button);

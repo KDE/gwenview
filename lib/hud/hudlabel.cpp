@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "graphicshudlabel.moc"
+#include "hud/hudlabel.moc"
 
 // Local
 #include <fullscreentheme.h>
@@ -37,25 +37,25 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 
-struct GraphicsHudLabelPrivate
+struct HudLabelPrivate
 {
     QString mText;
 };
 
-GraphicsHudLabel::GraphicsHudLabel(QGraphicsItem* parent)
+HudLabel::HudLabel(QGraphicsItem* parent)
 : QGraphicsWidget(parent)
-, d(new GraphicsHudLabelPrivate)
+, d(new HudLabelPrivate)
 {
     setCursor(Qt::ArrowCursor);
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 }
 
-GraphicsHudLabel::~GraphicsHudLabel()
+HudLabel::~HudLabel()
 {
     delete d;
 }
 
-void GraphicsHudLabel::setText(const QString& text)
+void HudLabel::setText(const QString& text)
 {
     d->mText = text;
     QFont font = KGlobalSettings::generalFont();
@@ -65,7 +65,7 @@ void GraphicsHudLabel::setText(const QString& text)
     setPreferredSize(minSize);
 }
 
-void GraphicsHudLabel::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
+void HudLabel::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
 {
     FullScreenTheme::RenderInfo info = FullScreenTheme::renderInfo(FullScreenTheme::FrameWidget);
     painter->setPen(info.textPen);

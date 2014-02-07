@@ -53,8 +53,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/documentview/rasterimageviewadapter.h>
 #include <lib/documentview/svgviewadapter.h>
 #include <lib/documentview/videoviewadapter.h>
-#include <lib/graphicshudbutton.h>
-#include <lib/graphicshudwidget.h>
+#include <lib/hud/hudbutton.h>
+#include <lib/hud/hudwidget.h>
 #include <lib/graphicswidgetfloater.h>
 #include <lib/gvdebug.h>
 #include <lib/gwenviewconfig.h>
@@ -85,7 +85,7 @@ struct DocumentViewPrivate
 {
     DocumentView* q;
     int mSortKey; // Used to sort views when displayed in compare mode
-    GraphicsHudWidget* mHud;
+    HudWidget* mHud;
     BirdEyeView* mBirdEyeView;
     QWeakPointer<QPropertyAnimation> mMoveAnimation;
     QWeakPointer<QPropertyAnimation> mFadeAnimation;
@@ -161,9 +161,9 @@ struct DocumentViewPrivate
         floater->setChildWidget(mLoadingIndicator);
     }
 
-    GraphicsHudButton* createHudButton(const QString& text, const char* iconName, bool showText)
+    HudButton* createHudButton(const QString& text, const char* iconName, bool showText)
     {
-        GraphicsHudButton* button = new GraphicsHudButton;
+        HudButton* button = new HudButton;
         if (showText) {
             button->setText(text);
         } else {
@@ -175,16 +175,16 @@ struct DocumentViewPrivate
 
     void setupHud()
     {
-        GraphicsHudButton* trashButton = createHudButton(i18nc("@info:tooltip", "Trash"), "user-trash", false);
-        GraphicsHudButton* deselectButton = createHudButton(i18nc("@action:button", "Deselect"), "list-remove", true);
+        HudButton* trashButton = createHudButton(i18nc("@info:tooltip", "Trash"), "user-trash", false);
+        HudButton* deselectButton = createHudButton(i18nc("@action:button", "Deselect"), "list-remove", true);
 
         QGraphicsWidget* content = new QGraphicsWidget;
         QGraphicsLinearLayout* layout = new QGraphicsLinearLayout(content);
         layout->addItem(trashButton);
         layout->addItem(deselectButton);
 
-        mHud = new GraphicsHudWidget(q);
-        mHud->init(content, GraphicsHudWidget::OptionNone);
+        mHud = new HudWidget(q);
+        mHud->init(content, HudWidget::OptionNone);
         GraphicsWidgetFloater* floater = new GraphicsWidgetFloater(q);
         floater->setChildWidget(mHud);
         floater->setAlignment(Qt::AlignBottom | Qt::AlignHCenter);

@@ -40,7 +40,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/document/documentfactory.h>
 #include <lib/document/documentjob.h>
 #include <lib/document/savejob.h>
-#include <lib/graphicshudbutton.h>
+#include <lib/hud/hudbutton.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/historymodel.h>
 #include <lib/messagebubble.h>
@@ -320,7 +320,7 @@ void GvCore::slotSaveResult(KJob* _job)
             bubble->setText(i18n("You are now viewing the new document."));
             KGuiItem item = KStandardGuiItem::back();
             item.setText(i18n("Go back to the original"));
-            GraphicsHudButton* button = bubble->addButton(item);
+            HudButton* button = bubble->addButton(item);
 
             BinderRef<MainWindow, KUrl>::bind(button, SIGNAL(clicked()), d->mMainWindow, &MainWindow::goToUrl, oldUrl);
             connect(button, SIGNAL(clicked()),

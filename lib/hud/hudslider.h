@@ -18,8 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
-#ifndef GRAPHICSHUDSLIDER_H
-#define GRAPHICSHUDSLIDER_H
+#ifndef HUDSLIDER_H
+#define HUDSLIDER_H
 
 // Local
 
@@ -32,17 +32,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 
-class GraphicsHudSliderPrivate;
+class HudSliderPrivate;
 /**
  * A QGraphicsView slider.
  * Provides more-or-less the same API as QSlider.
  */
-class GraphicsHudSlider : public QGraphicsWidget
+class HudSlider : public QGraphicsWidget
 {
     Q_OBJECT
 public:
-    GraphicsHudSlider(QGraphicsItem* parent = 0);
-    ~GraphicsHudSlider();
+    HudSlider(QGraphicsItem* parent = 0);
+    ~HudSlider();
 
     void setRange(int min, int max);
     void setPageStep(int step);
@@ -74,9 +74,9 @@ private Q_SLOTS:
     void doRepeatAction(int time = 50);
 
 private:
-    GraphicsHudSliderPrivate* const d;
+    HudSliderPrivate* const d;
 };
 
 } // namespace
 
-#endif /* GRAPHICSHUDSLIDER_H */
+#endif /* HUDSLIDER_H */

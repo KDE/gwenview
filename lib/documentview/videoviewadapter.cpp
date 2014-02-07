@@ -40,9 +40,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include <document/documentfactory.h>
-#include <graphicshudbutton.h>
-#include <graphicshudslider.h>
-#include <graphicshudwidget.h>
+#include <hud/hudbutton.h>
+#include <hud/hudslider.h>
+#include <hud/hudwidget.h>
 #include <graphicswidgetfloater.h>
 
 namespace Gwenview
@@ -54,16 +54,16 @@ struct VideoViewAdapterPrivate
     Phonon::MediaObject* mMediaObject;
     Phonon::VideoWidget* mVideoWidget;
     Phonon::AudioOutput* mAudioOutput;
-    GraphicsHudWidget* mHud;
+    HudWidget* mHud;
     GraphicsWidgetFloater* mFloater;
 
-    GraphicsHudSlider* mSeekSlider;
+    HudSlider* mSeekSlider;
     QTime mLastSeekSliderActionTime;
 
     QAction* mPlayPauseAction;
     QAction* mMuteAction;
 
-    GraphicsHudSlider* mVolumeSlider;
+    HudSlider* mVolumeSlider;
     QTime mLastVolumeSliderChangeTime;
 
     Document::Ptr mDocument;
@@ -88,11 +88,11 @@ struct VideoViewAdapterPrivate
     void setupHud(QGraphicsWidget* parent)
     {
         // Play/Pause
-        GraphicsHudButton* playPauseButton = new GraphicsHudButton;
+        HudButton* playPauseButton = new HudButton;
         playPauseButton->setDefaultAction(mPlayPauseAction);
 
         // Seek
-        mSeekSlider = new GraphicsHudSlider;
+        mSeekSlider = new HudSlider;
         mSeekSlider->setPageStep(5000);
         mSeekSlider->setSingleStep(200);
         QObject::connect(mSeekSlider, SIGNAL(actionTriggered(int)),
@@ -105,11 +105,11 @@ struct VideoViewAdapterPrivate
             q, SLOT(updatePlayUi()));
 
         // Mute
-        GraphicsHudButton* muteButton = new GraphicsHudButton;
+        HudButton* muteButton = new HudButton;
         muteButton->setDefaultAction(mMuteAction);
 
         // Volume
-        mVolumeSlider = new GraphicsHudSlider;
+        mVolumeSlider = new HudSlider;
         mVolumeSlider->setMinimumWidth(100);
         mVolumeSlider->setRange(0, 100);
         mVolumeSlider->setPageStep(5);
@@ -130,8 +130,8 @@ struct VideoViewAdapterPrivate
         layout->setStretchFactor(mVolumeSlider, 1);
 
         // Create hud
-        mHud = new GraphicsHudWidget(parent);
-        mHud->init(hudContent, GraphicsHudWidget::OptionNone);
+        mHud = new HudWidget(parent);
+        mHud->init(hudContent, HudWidget::OptionNone);
         mHud->setZValue(1);
 
         // Init floater

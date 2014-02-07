@@ -20,8 +20,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <hud/hudbuttonbox.moc>
 
 // Local
-#include <graphicshudbutton.h>
-#include <graphicshudlabel.h>
+#include <hud/hudbutton.h>
+#include <hud/hudlabel.h>
 
 // KDE
 #include <kdebug.h>
@@ -38,31 +38,31 @@ namespace Gwenview
 struct HudButtonBoxPrivate
 {
     QGraphicsLinearLayout* mLayout;
-    GraphicsHudLabel* mLabel;
-    QList<GraphicsHudButton*> mButtonList;
+    HudLabel* mLabel;
+    QList<HudButton*> mButtonList;
 
     void updateButtonWidths()
     {
         qreal minWidth = 0;
-        Q_FOREACH(GraphicsHudButton* button, mButtonList) {
+        Q_FOREACH(HudButton* button, mButtonList) {
             minWidth = qMax(minWidth, button->preferredWidth());
         }
-        Q_FOREACH(GraphicsHudButton* button, mButtonList) {
+        Q_FOREACH(HudButton* button, mButtonList) {
             button->setMinimumWidth(minWidth);
         }
     }
 };
 
 HudButtonBox::HudButtonBox(QGraphicsWidget* parent)
-: GraphicsHudWidget(parent)
+: HudWidget(parent)
 , d(new HudButtonBoxPrivate)
 {
     QGraphicsWidget* content = new QGraphicsWidget();
     d->mLayout = new QGraphicsLinearLayout(Qt::Vertical, content);
-    d->mLabel = new GraphicsHudLabel();
+    d->mLabel = new HudLabel();
     d->mLayout->addItem(d->mLabel);
     d->mLayout->setItemSpacing(0, 24);
-    init(content, GraphicsHudWidget::OptionNone);
+    init(content, HudWidget::OptionNone);
 
     setContentsMargins(6, 6, 6, 6);
     setAutoDeleteOnFadeout(true);
@@ -74,17 +74,17 @@ HudButtonBox::~HudButtonBox()
     delete d;
 }
 
-GraphicsHudButton* HudButtonBox::addAction(QAction* action, const QString& overrideText)
+HudButton* HudButtonBox::addAction(QAction* action, const QString& overrideText)
 {
     QString text = overrideText.isEmpty() ? action->text() : overrideText;
-    GraphicsHudButton* button = addButton(text);
+    HudButton* button = addButton(text);
     connect(button, SIGNAL(clicked()), action, SLOT(trigger()));
     return button;
 }
 
-GraphicsHudButton* HudButtonBox::addButton(const QString& text)
+HudButton* HudButtonBox::addButton(const QString& text)
 {
-    GraphicsHudButton* button = new GraphicsHudButton();
+    HudButton* button = new HudButton();
     connect(button, SIGNAL(clicked()), SLOT(fadeOut()));
     button->setText(text);
     d->mLayout->addItem(button);
@@ -101,7 +101,7 @@ void HudButtonBox::setText(const QString& msg)
 
 void HudButtonBox::showEvent(QShowEvent* event)
 {
-    GraphicsHudWidget::showEvent(event);
+    HudWidget::showEvent(event);
     d->updateButtonWidths();
 }
 

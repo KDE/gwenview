@@ -18,8 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
-#ifndef GRAPHICSHUDLABEL_H
-#define GRAPHICSHUDLABEL_H
+#ifndef HUDLABEL_H
+#define HUDLABEL_H
 
 #include <lib/gwenviewlib_export.h>
 
@@ -33,25 +33,25 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 
-class GraphicsHudLabelPrivate;
+class HudLabelPrivate;
 /**
  *
  */
-class GWENVIEWLIB_EXPORT GraphicsHudLabel : public QGraphicsWidget
+class GWENVIEWLIB_EXPORT HudLabel : public QGraphicsWidget
 {
     Q_OBJECT
 public:
-    GraphicsHudLabel(QGraphicsItem* parent = 0);
-    ~GraphicsHudLabel();
+    HudLabel(QGraphicsItem* parent = 0);
+    ~HudLabel();
 
     void setText(const QString&);
 
     void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*);
 
 private:
-    GraphicsHudLabelPrivate* const d;
+    HudLabelPrivate* const d;
 };
 
 } // namespace
 
-#endif /* GRAPHICSHUDLABEL_H */
+#endif /* HUDLABEL_H */

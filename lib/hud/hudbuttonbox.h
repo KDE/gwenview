@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <lib/gwenviewlib_export.h>
 
 // Local
-#include <lib/graphicshudwidget.h>
+#include <lib/hud/hudwidget.h>
 
 // KDE
 
@@ -34,13 +34,13 @@ class QGraphicsWidget;
 namespace Gwenview
 {
 
-class GraphicsHudButton;
+class HudButton;
 
 class HudButtonBoxPrivate;
 /**
  * A hud widget which shows a list of buttons
  */
-class GWENVIEWLIB_EXPORT HudButtonBox : public GraphicsHudWidget
+class GWENVIEWLIB_EXPORT HudButtonBox : public HudWidget
 {
     Q_OBJECT
 public:
@@ -49,9 +49,9 @@ public:
 
     void setText(const QString& text);
 
-    GraphicsHudButton* addButton(const QString& text);
+    HudButton* addButton(const QString& text);
 
-    GraphicsHudButton* addAction(QAction* action, const QString& overrideText = QString());
+    HudButton* addAction(QAction* action, const QString& overrideText = QString());
 
 protected:
     void showEvent(QShowEvent* event);
