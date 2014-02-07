@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "messagebubble.moc"
+#include "hudmessagebubble.moc"
 
 // Qt
 #include <QGraphicsLinearLayout>
@@ -88,7 +88,7 @@ private:
     qreal mValue;
 };
 
-struct MessageBubblePrivate
+struct HudMessageBubblePrivate
 {
     QGraphicsWidget* mWidget;
     QGraphicsLinearLayout* mLayout;
@@ -96,9 +96,9 @@ struct MessageBubblePrivate
     HudLabel* mLabel;
 };
 
-MessageBubble::MessageBubble(QGraphicsWidget* parent)
+HudMessageBubble::HudMessageBubble(QGraphicsWidget* parent)
 : HudWidget(parent)
-, d(new MessageBubblePrivate)
+, d(new HudMessageBubblePrivate)
 {
     d->mWidget = new QGraphicsWidget;
     d->mCountDownWidget = new CountDownWidget;
@@ -122,17 +122,17 @@ MessageBubble::MessageBubble(QGraphicsWidget* parent)
     init(d->mWidget, HudWidget::OptionCloseButton);
 }
 
-MessageBubble::~MessageBubble()
+HudMessageBubble::~HudMessageBubble()
 {
     delete d;
 }
 
-void MessageBubble::setText(const QString& text)
+void HudMessageBubble::setText(const QString& text)
 {
     d->mLabel->setText(text);
 }
 
-HudButton* MessageBubble::addButton(const KGuiItem& guiItem)
+HudButton* HudMessageBubble::addButton(const KGuiItem& guiItem)
 {
     HudButton* button = new HudButton;
     button->setText(guiItem.text());
@@ -141,7 +141,7 @@ HudButton* MessageBubble::addButton(const KGuiItem& guiItem)
     return button;
 }
 
-void MessageBubble::slotTimeLineChanged(qreal value)
+void HudMessageBubble::slotTimeLineChanged(qreal value)
 {
     d->mCountDownWidget->setValue(1 - value);
 }

@@ -43,7 +43,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/hud/hudbutton.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/historymodel.h>
-#include <lib/messagebubble.h>
+#include <lib/hud/hudmessagebubble.h>
 #include <lib/mimetypeutils.h>
 #include <lib/semanticinfo/semanticinfodirmodel.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
@@ -316,7 +316,7 @@ void GvCore::slotSaveResult(KJob* _job)
 
         ViewMainPage* page = d->mMainWindow->viewMainPage();
         if (page->isVisible()) {
-            MessageBubble* bubble = new MessageBubble();
+            HudMessageBubble* bubble = new HudMessageBubble();
             bubble->setText(i18n("You are now viewing the new document."));
             KGuiItem item = KStandardGuiItem::back();
             item.setText(i18n("Go back to the original"));

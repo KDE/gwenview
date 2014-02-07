@@ -18,8 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
-#ifndef MESSAGEBUBBLE_H
-#define MESSAGEBUBBLE_H
+#ifndef HUDMESSAGEBUBBLE_H
+#define HUDMESSAGEBUBBLE_H
 
 #include <lib/gwenviewlib_export.h>
 
@@ -36,17 +36,17 @@ namespace Gwenview
 {
 class HudButton;
 
-struct MessageBubblePrivate;
+struct HudMessageBubblePrivate;
 /**
  * Shows a bubble with a QLabel and optional buttons.
  * Automatically goes away after a while.
  */
-class GWENVIEWLIB_EXPORT MessageBubble : public HudWidget
+class GWENVIEWLIB_EXPORT HudMessageBubble : public HudWidget
 {
     Q_OBJECT
 public:
-    MessageBubble(QGraphicsWidget* parent = 0);
-    ~MessageBubble();
+    HudMessageBubble(QGraphicsWidget* parent = 0);
+    ~HudMessageBubble();
 
     void setText(const QString& text);
 
@@ -56,9 +56,9 @@ private Q_SLOTS:
     void slotTimeLineChanged(qreal);
 
 private:
-    MessageBubblePrivate* const d;
+    HudMessageBubblePrivate* const d;
 };
 
 } // namespace
 
-#endif /* MESSAGEBUBBLE_H */
+#endif /* HUDMESSAGEBUBBLE_H */
