@@ -18,8 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
-#ifndef GRAPHICSHUDBUTTON_H
-#define GRAPHICSHUDBUTTON_H
+#ifndef HUDBUTTON_H
+#define HUDBUTTON_H
 
 // Local
 
@@ -33,16 +33,16 @@ class QIcon;
 namespace Gwenview
 {
 
-class GraphicsHudButtonPrivate;
+class HudButtonPrivate;
 /**
  *
  */
-class GraphicsHudButton : public QGraphicsWidget
+class HudButton : public QGraphicsWidget
 {
     Q_OBJECT
 public:
-    GraphicsHudButton(QGraphicsItem* parent = 0);
-    ~GraphicsHudButton();
+    HudButton(QGraphicsItem* parent = 0);
+    ~HudButton();
 
     void setIcon(const QIcon&);
 
@@ -62,9 +62,9 @@ protected:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
 
 private:
-    GraphicsHudButtonPrivate* const d;
+    HudButtonPrivate* const d;
 };
 
 } // namespace
 
-#endif /* GRAPHICSHUDBUTTON_H */
+#endif /* HUDBUTTON_H */

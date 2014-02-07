@@ -37,7 +37,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KIconLoader>
 
 // Local
-#include "lib/fullscreentheme.h"
+#include "lib/hud/hudtheme.h"
 #include "lib/paintutils.h"
 #include "lib/thumbnailview/abstractthumbnailviewhelper.h"
 #include "lib/thumbnailview/contextbarbutton.h"

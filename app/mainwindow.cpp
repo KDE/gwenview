@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QDateTime>
 #include <QDesktopWidget>
 #include <QLabel>
+#include <QPushButton>
 #include <QShortcut>
 #include <QSlider>
 #include <QSplitter>
@@ -84,15 +85,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "startmainpage.h"
 #include "thumbnailviewhelper.h"
 #include "browsemainpage.h"
+#include <lib/hud/hudbuttonbox.h>
 #include <lib/archiveutils.h>
 #include <lib/contextmanager.h>
+#include <lib/disabledactionshortcutmonitor.h>
 #include <lib/document/documentfactory.h>
 #include <lib/documentonlyproxymodel.h>
 #include <lib/eventwatcher.h>
 #include <lib/gvdebug.h>
 #include <lib/gwenviewconfig.h>
-#include <lib/graphicshudlabel.h>
-#include <lib/graphicshudwidget.h>
 #include <lib/mimetypeutils.h>
 #include <lib/print/printhelper.h>
 #include <lib/slideshow.h>
@@ -348,6 +349,12 @@ struct MainWindow::Private
                 q, SLOT(slotStartMainPageUrlSelected(KUrl)));
     }
 
+    void installDisabledActionShortcutMonitor(QAction* action, const char* slot)
+    {
+        DisabledActionShortcutMonitor* monitor = new DisabledActionShortcutMonitor(action, q);
+        connect(monitor, SIGNAL(activated()), q, slot);
+    }
+
     void setupActions()
     {
         KActionCollection* actionCollection = q->actionCollection();
@@ -407,6 +414,7 @@ struct MainWindow::Private
         mGoToPreviousAction->setText(i18nc("@action Go to previous image", "Previous"));
         mGoToPreviousAction->setToolTip(i18nc("@info:tooltip", "Go to previous image"));
         mGoToPreviousAction->setShortcut(Qt::Key_Backspace);
+        installDisabledActionShortcutMonitor(mGoToPreviousAction, SLOT(showFirstDocumentReached()));
 
         mGoToNextAction = view->addAction("go_next", q, SLOT(goToNext()));
         mGoToNextAction->setPriority(QAction::LowPriority);
@@ -414,6 +422,7 @@ struct MainWindow::Private
         mGoToNextAction->setText(i18nc("@action Go to next image", "Next"));
         mGoToNextAction->setToolTip(i18nc("@info:tooltip", "Go to next image"));
         mGoToNextAction->setShortcut(Qt::Key_Space);
+        installDisabledActionShortcutMonitor(mGoToNextAction, SLOT(showLastDocumentReached()));
 
         mGoToFirstAction = view->addAction("go_first", q, SLOT(goToFirst()));
         mGoToFirstAction->setPriority(QAction::LowPriority);
@@ -592,19 +601,6 @@ struct MainWindow::Private
         index = mDirModel->index(index.row() + offset, 0);
         if (index.isValid() && !indexIsDirOrArchive(index)) {
             goTo(index);
-        } else {
-            if (offset > 0) {
-                goToFirstDocument();
-            } else {
-                goToLastDocument();
-            }
-            if (mCurrentMainPageId == ViewMainPageId) {
-                showMessageBubble(
-                    offset > 0
-                    ? i18n("Last document reached, continuing on first document.")
-                    : i18n("First document reached, continuing on last document.")
-                );
-            }
         }
     }
 
@@ -628,19 +624,6 @@ struct MainWindow::Private
     {
         QModelIndex index = mDirModel->index(mDirModel->rowCount() - 1, 0);
         goTo(index);
-    }
-
-    void showMessageBubble(const QString &message)
-    {
-        GraphicsHudWidget* hud = new GraphicsHudWidget;
-        GraphicsHudLabel* label = new GraphicsHudLabel;
-        label->setText(message);
-        hud->init(label, GraphicsHudWidget::OptionNone);
-        hud->setContentsMargins(6, 6, 6, 6);
-        hud->setAutoDeleteOnFadeout(true);
-        QTimer::singleShot(2000, hud, SLOT(fadeOut()));
-
-        mViewMainPage->showMessageWidget(hud, Qt::AlignCenter);
     }
 
     void setupFullScreenContent()
@@ -1241,10 +1224,9 @@ void MainWindow::updatePreviousNextActions()
         hasPrevious = false;
         hasNext = false;
     }
-    bool canBrowse = hasPrevious | hasNext;
 
-    d->mGoToPreviousAction->setEnabled(canBrowse);
-    d->mGoToNextAction->setEnabled(canBrowse);
+    d->mGoToPreviousAction->setEnabled(hasPrevious);
+    d->mGoToNextAction->setEnabled(hasNext);
     d->mGoToFirstAction->setEnabled(hasPrevious);
     d->mGoToLastAction->setEnabled(hasNext);
 }
@@ -1586,6 +1568,34 @@ void MainWindow::readProperties(const KConfigGroup& group)
         return;
     }
     goToUrl(url);
+}
+
+void MainWindow::showFirstDocumentReached()
+{
+    if (d->mCurrentMainPageId != ViewMainPageId) {
+        return;
+    }
+    HudButtonBox* dlg = new HudButtonBox;
+    dlg->setText(i18n("You reached the first document, what do you want to do?"));
+    dlg->addButton(i18n("Stay There"));
+    dlg->addAction(d->mGoToLastAction, i18n("Go to the Last Document"));
+    dlg->addAction(d->mBrowseAction, i18n("Go Back to the Document List"));
+    dlg->addCountDown(15000);
+    d->mViewMainPage->showMessageWidget(dlg, Qt::AlignCenter);
+}
+
+void MainWindow::showLastDocumentReached()
+{
+    if (d->mCurrentMainPageId != ViewMainPageId) {
+        return;
+    }
+    HudButtonBox* dlg = new HudButtonBox;
+    dlg->setText(i18n("You reached the last document, what do you want to do?"));
+    dlg->addButton(i18n("Stay There"));
+    dlg->addAction(d->mGoToFirstAction, i18n("Go to the First Document"));
+    dlg->addAction(d->mBrowseAction, i18n("Go Back to the Document List"));
+    dlg->addCountDown(15000);
+    d->mViewMainPage->showMessageWidget(dlg, Qt::AlignCenter);
 }
 
 } // namespace

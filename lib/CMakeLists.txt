@@ -89,6 +89,7 @@ set(gwenviewlib_SRCS
     documentview/videoviewadapter.cpp
     about.cpp
     abstractimageoperation.cpp
+    disabledactionshortcutmonitor.cpp
     documentonlyproxymodel.cpp
     documentview/documentviewcontainer.cpp
     binder.cpp
@@ -99,11 +100,14 @@ set(gwenviewlib_SRCS
     exiv2imageloader.cpp
     flowlayout.cpp
     fullscreenbar.cpp
-    fullscreentheme.cpp
-    graphicshudbutton.cpp
-    graphicshudlabel.cpp
-    graphicshudslider.cpp
-    graphicshudwidget.cpp
+    hud/hudbutton.cpp
+    hud/hudbuttonbox.cpp
+    hud/hudcountdown.cpp
+    hud/hudlabel.cpp
+    hud/hudmessagebubble.cpp
+    hud/hudslider.cpp
+    hud/hudtheme.cpp
+    hud/hudwidget.cpp
     graphicswidgetfloater.cpp
     imageformats/imageformats.cpp
     imageformats/jpegplugin.cpp
@@ -117,7 +121,6 @@ set(gwenviewlib_SRCS
     kindproxymodel.cpp
     semanticinfo/sorteddirmodel.cpp
     memoryutils.cpp
-    messagebubble.cpp
     mimetypeutils.cpp
     paintutils.cpp
     placetreemodel.cpp

@@ -46,7 +46,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/contextmanager.h>
 #include <lib/documentview/documentview.h>
 #include <lib/eventwatcher.h>
-#include <lib/graphicshudwidget.h>
+#include <lib/hud/hudwidget.h>
 #include <lib/signalblocker.h>
 #include <lib/widgetfloater.h>
 #include <lib/semanticinfo/abstractsemanticinfobackend.h>
@@ -110,11 +110,11 @@ private:
     QPixmap mPix;
 };
 
-class RatingIndicator : public GraphicsHudWidget
+class RatingIndicator : public HudWidget
 {
 public:
     RatingIndicator()
-    : GraphicsHudWidget()
+    : HudWidget()
     , mPixmapWidget(new GraphicsPixmapWidget)
     , mDeleteTimer(new QTimer(this))
     {

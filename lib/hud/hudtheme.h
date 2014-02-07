@@ -1,7 +1,7 @@
 // vim: set tabstop=4 shiftwidth=4 expandtab:
 /*
 Gwenview: an image viewer
-Copyright 2011 Aurélien Gâteau <agateau@kde.org>
+Copyright 2008 Aurélien Gâteau <agateau@kde.org>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -18,40 +18,58 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
-#ifndef GRAPHICSHUDLABEL_H
-#define GRAPHICSHUDLABEL_H
+#ifndef HUDTHEME_H
+#define HUDTHEME_H
 
 #include <lib/gwenviewlib_export.h>
 
-// Local
+// Qt
+#include <QBrush>
+#include <QPen>
 
 // KDE
 
-// Qt
-#include <QGraphicsWidget>
+// Local
 
 namespace Gwenview
 {
 
-class GraphicsHudLabelPrivate;
-/**
- *
- */
-class GWENVIEWLIB_EXPORT GraphicsHudLabel : public QGraphicsWidget
+namespace HudTheme
 {
-    Q_OBJECT
-public:
-    GraphicsHudLabel(QGraphicsItem* parent = 0);
-    ~GraphicsHudLabel();
 
-    void setText(const QString&);
-
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*);
-
-private:
-    GraphicsHudLabelPrivate* const d;
+struct RenderInfo
+{
+    RenderInfo()
+    : borderRadius(0)
+    , padding(0)
+    {}
+    qreal borderRadius;
+    QPen borderPen;
+    QBrush bgBrush;
+    qreal padding;
+    QPen textPen;
 };
 
-} // namespace
+enum State
+{
+    NormalState,
+    MouseOverState,
+    DownState
+};
 
-#endif /* GRAPHICSHUDLABEL_H */
+enum WidgetType
+{
+    ButtonWidget,
+    FrameWidget,
+    CountDown,
+    SliderWidgetHandle,
+    SliderWidgetGroove
+};
+
+GWENVIEWLIB_EXPORT RenderInfo renderInfo(WidgetType, State = NormalState);
+
+} // HudTheme namespace
+
+} // Gwenview namespace
+
+#endif /* HUDTHEME_H */

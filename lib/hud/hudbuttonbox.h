@@ -1,7 +1,7 @@
 // vim: set tabstop=4 shiftwidth=4 expandtab:
 /*
 Gwenview: an image viewer
-Copyright 2009 Aurélien Gâteau <agateau@kde.org>
+Copyright 2014 Aurélien Gâteau <agateau@kde.org>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -14,51 +14,54 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
-
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef MESSAGEBUBBLE_H
-#define MESSAGEBUBBLE_H
+#ifndef HUDBUTTONBOX_H
+#define HUDBUTTONBOX_H
 
 #include <lib/gwenviewlib_export.h>
 
-// Qt
+// Local
+#include <lib/hud/hudwidget.h>
 
 // KDE
 
-// Local
-#include <lib/graphicshudwidget.h>
+// Qt
 
-class KGuiItem;
+class QAction;
+class QGraphicsWidget;
 
 namespace Gwenview
 {
-class GraphicsHudButton;
 
-struct MessageBubblePrivate;
+class HudButton;
+
+class HudButtonBoxPrivate;
 /**
- * Shows a bubble with a QLabel and optional buttons.
- * Automatically goes away after a while.
+ * A hud widget which shows a list of buttons
  */
-class GWENVIEWLIB_EXPORT MessageBubble : public GraphicsHudWidget
+class GWENVIEWLIB_EXPORT HudButtonBox : public HudWidget
 {
     Q_OBJECT
 public:
-    MessageBubble(QGraphicsWidget* parent = 0);
-    ~MessageBubble();
+    HudButtonBox(QGraphicsWidget* parent = 0);
+    ~HudButtonBox();
 
     void setText(const QString& text);
 
-    GraphicsHudButton* addButton(const KGuiItem&);
+    HudButton* addButton(const QString& text);
 
-private Q_SLOTS:
-    void slotTimeLineChanged(qreal);
+    HudButton* addAction(QAction* action, const QString& overrideText = QString());
+
+    void addCountDown(qreal ms);
+
+protected:
+    void showEvent(QShowEvent* event);
 
 private:
-    MessageBubblePrivate* const d;
+    HudButtonBoxPrivate* const d;
 };
 
 } // namespace
 
-#endif /* MESSAGEBUBBLE_H */
+#endif /* HUDBUTTONBOX_H */

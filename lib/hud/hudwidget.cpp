@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "graphicshudwidget.moc"
+#include "hud/hudwidget.moc"
 
 // Qt
 #include <QGraphicsProxyWidget>
@@ -35,18 +35,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KLocale>
 
 // Local
-#include <fullscreentheme.h>
-#include <graphicshudbutton.h>
+#include <hud/hudtheme.h>
+#include <hud/hudbutton.h>
 
 namespace Gwenview
 {
 
-struct GraphicsHudWidgetPrivate
+struct HudWidgetPrivate
 {
-    GraphicsHudWidget* q;
+    HudWidget* q;
     QPropertyAnimation* mAnim;
     QGraphicsWidget* mMainWidget;
-    GraphicsHudButton* mCloseButton;
+    HudButton* mCloseButton;
     bool mAutoDeleteOnFadeout;
 
     void fadeTo(qreal value)
@@ -61,9 +61,9 @@ struct GraphicsHudWidgetPrivate
     }
 };
 
-GraphicsHudWidget::GraphicsHudWidget(QGraphicsWidget* parent)
+HudWidget::HudWidget(QGraphicsWidget* parent)
 : QGraphicsWidget(parent)
-, d(new GraphicsHudWidgetPrivate)
+, d(new HudWidgetPrivate)
 {
     d->q = this;
     d->mAnim = new QPropertyAnimation(this, "opacity", this);
@@ -74,19 +74,19 @@ GraphicsHudWidget::GraphicsHudWidget(QGraphicsWidget* parent)
     connect(d->mAnim, SIGNAL(finished()), SLOT(slotFadeAnimationFinished()));
 }
 
-GraphicsHudWidget::~GraphicsHudWidget()
+HudWidget::~HudWidget()
 {
     delete d;
 }
 
-void GraphicsHudWidget::init(QWidget* mainWidget, Options options)
+void HudWidget::init(QWidget* mainWidget, Options options)
 {
     QGraphicsProxyWidget* proxy = new QGraphicsProxyWidget(this);
     proxy->setWidget(mainWidget);
     init(proxy, options);
 }
 
-void GraphicsHudWidget::init(QGraphicsWidget* mainWidget, Options options)
+void HudWidget::init(QGraphicsWidget* mainWidget, Options options)
 {
     if (options & OptionOpaque) {
         setProperty("opaque", QVariant(true));
@@ -103,7 +103,7 @@ void GraphicsHudWidget::init(QGraphicsWidget* mainWidget, Options options)
     }
 
     if (options & OptionCloseButton) {
-        d->mCloseButton = new GraphicsHudButton(this);
+        d->mCloseButton = new HudButton(this);
         d->mCloseButton->setIcon(KIcon("window-close"));
         d->mCloseButton->setToolTip(i18nc("@info:tooltip", "Close"));
 
@@ -114,32 +114,32 @@ void GraphicsHudWidget::init(QGraphicsWidget* mainWidget, Options options)
     }
 }
 
-void GraphicsHudWidget::slotCloseButtonClicked()
+void HudWidget::slotCloseButtonClicked()
 {
     close();
     closed();
 }
 
-void GraphicsHudWidget::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
+void HudWidget::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
 {
-    FullScreenTheme::RenderInfo renderInfo = FullScreenTheme::renderInfo(FullScreenTheme::FrameWidget);
+    HudTheme::RenderInfo renderInfo = HudTheme::renderInfo(HudTheme::FrameWidget);
     painter->setPen(renderInfo.borderPen);
     painter->setRenderHint(QPainter::Antialiasing);
     painter->setBrush(renderInfo.bgBrush);
     painter->drawRoundedRect(boundingRect().adjusted(.5, .5, -.5, -.5), renderInfo.borderRadius, renderInfo.borderRadius);
 }
 
-void GraphicsHudWidget::fadeIn()
+void HudWidget::fadeIn()
 {
     d->fadeTo(1.);
 }
 
-void GraphicsHudWidget::fadeOut()
+void HudWidget::fadeOut()
 {
     d->fadeTo(0.);
 }
 
-void GraphicsHudWidget::slotFadeAnimationFinished()
+void HudWidget::slotFadeAnimationFinished()
 {
     if (qFuzzyCompare(opacity(), 1)) {
         fadedIn();
@@ -151,7 +151,7 @@ void GraphicsHudWidget::slotFadeAnimationFinished()
     }
 }
 
-void GraphicsHudWidget::setAutoDeleteOnFadeout(bool value)
+void HudWidget::setAutoDeleteOnFadeout(bool value)
 {
     d->mAutoDeleteOnFadeout = value;
 }

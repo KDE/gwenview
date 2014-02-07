@@ -18,8 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
-#ifndef GRAPHICSHUDWIDGET_H
-#define GRAPHICSHUDWIDGET_H
+#ifndef HUDWIDGET_H
+#define HUDWIDGET_H
 
 #include <lib/gwenviewlib_export.h>
 
@@ -34,8 +34,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 
-struct GraphicsHudWidgetPrivate;
-class GWENVIEWLIB_EXPORT GraphicsHudWidget : public QGraphicsWidget
+struct HudWidgetPrivate;
+class GWENVIEWLIB_EXPORT HudWidget : public QGraphicsWidget
 {
     Q_OBJECT
 public:
@@ -46,8 +46,8 @@ public:
     };
     Q_DECLARE_FLAGS(Options, Option)
 
-    GraphicsHudWidget(QGraphicsWidget* parent = 0);
-    ~GraphicsHudWidget();
+    HudWidget(QGraphicsWidget* parent = 0);
+    ~HudWidget();
 
     void init(QWidget*, Options options);
     void init(QGraphicsWidget*, Options options);
@@ -70,11 +70,11 @@ private Q_SLOTS:
     void slotFadeAnimationFinished();
 
 private:
-    GraphicsHudWidgetPrivate* const d;
+    HudWidgetPrivate* const d;
 };
 
 } // namespace
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(Gwenview::GraphicsHudWidget::Options)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Gwenview::HudWidget::Options)
 
-#endif /* GRAPHICSHUDWIDGET_H */
+#endif /* HUDWIDGET_H */

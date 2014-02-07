@@ -19,10 +19,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "graphicshudbutton.moc"
+#include "hud/hudbutton.moc"
 
 // Local
-#include <fullscreentheme.h>
+#include <hud/hudtheme.h>
 
 // KDE
 #include <KDebug>
@@ -48,9 +48,9 @@ struct LayoutInfo
     QSize size;
 };
 
-struct GraphicsHudButtonPrivate
+struct HudButtonPrivate
 {
-    GraphicsHudButton* q;
+    HudButton* q;
     QAction* mAction;
 
     QIcon mIcon;
@@ -58,20 +58,21 @@ struct GraphicsHudButtonPrivate
 
     bool mIsDown;
 
-    void initLayoutInfo(LayoutInfo* info)
+    void initLayoutInfo(LayoutInfo* info, const QSizeF& constraint)
     {
-        FullScreenTheme::RenderInfo renderInfo = FullScreenTheme::renderInfo(FullScreenTheme::ButtonWidget);
+        HudTheme::RenderInfo renderInfo = HudTheme::renderInfo(HudTheme::ButtonWidget);
         const int padding = renderInfo.padding;
+        QSize minInnerSize = constraint.toSize() - QSize(2 * padding, 2 * padding);
 
-        QSize sh;
         if (!mIcon.isNull()) {
             int size = KIconLoader::global()->currentSize(KIconLoader::Small);
-            info->iconRect = QRect(padding, padding, size, size);
+            info->iconRect = QRect(padding, padding, size, qMax(size, minInnerSize.height()));
+            minInnerSize.rwidth() -= size;
         }
         if (!mText.isEmpty()) {
             QFont font = KGlobalSettings::generalFont();
             QFontMetrics fm(font);
-            QSize size = fm.size(0, mText);
+            QSize size = fm.size(0, mText).expandedTo(minInnerSize);
             info->textRect = QRect(padding, padding, size.width(), size.height());
             if (!info->iconRect.isNull()) {
                 info->textRect.translate(info->iconRect.right(), 0);
@@ -90,9 +91,9 @@ struct GraphicsHudButtonPrivate
     }
 };
 
-GraphicsHudButton::GraphicsHudButton(QGraphicsItem* parent)
+HudButton::HudButton(QGraphicsItem* parent)
 : QGraphicsWidget(parent)
-, d(new GraphicsHudButtonPrivate)
+, d(new HudButtonPrivate)
 {
     d->q = this;
     d->mAction = 0;
@@ -101,32 +102,32 @@ GraphicsHudButton::GraphicsHudButton(QGraphicsItem* parent)
     setAcceptHoverEvents(true);
 }
 
-GraphicsHudButton::~GraphicsHudButton()
+HudButton::~HudButton()
 {
     delete d;
 }
 
-void GraphicsHudButton::setIcon(const QIcon& icon)
+void HudButton::setIcon(const QIcon& icon)
 {
     d->mIcon = icon;
     updateGeometry();
 }
 
-void GraphicsHudButton::setText(const QString& text)
+void HudButton::setText(const QString& text)
 {
     d->mText = text;
     updateGeometry();
 }
 
-void GraphicsHudButton::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget*)
+void HudButton::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget*)
 {
-    FullScreenTheme::State state;
+    HudTheme::State state;
     if (option->state.testFlag(QStyle::State_MouseOver)) {
-        state = d->mIsDown ? FullScreenTheme::DownState : FullScreenTheme::MouseOverState;
+        state = d->mIsDown ? HudTheme::DownState : HudTheme::MouseOverState;
     } else {
-        state = FullScreenTheme::NormalState;
+        state = HudTheme::NormalState;
     }
-    FullScreenTheme::RenderInfo renderInfo = FullScreenTheme::renderInfo(FullScreenTheme::ButtonWidget, state);
+    HudTheme::RenderInfo renderInfo = HudTheme::renderInfo(HudTheme::ButtonWidget, state);
 
     painter->setPen(renderInfo.borderPen);
     painter->setBrush(renderInfo.bgBrush);
@@ -134,7 +135,7 @@ void GraphicsHudButton::paint(QPainter* painter, const QStyleOptionGraphicsItem*
     painter->drawRoundedRect(boundingRect().adjusted(.5, .5, -.5, -.5), renderInfo.borderRadius, renderInfo.borderRadius);
 
     LayoutInfo info;
-    d->initLayoutInfo(&info);
+    d->initLayoutInfo(&info, size());
 
     if (!d->mIcon.isNull()) {
         painter->drawPixmap(
@@ -151,20 +152,24 @@ void GraphicsHudButton::paint(QPainter* painter, const QStyleOptionGraphicsItem*
     }
 }
 
-QSizeF GraphicsHudButton::sizeHint(Qt::SizeHint /*which*/, const QSizeF& /*constraint*/) const
+QSizeF HudButton::sizeHint(Qt::SizeHint which, const QSizeF& constraint) const
 {
     LayoutInfo info;
-    d->initLayoutInfo(&info);
-    return info.size;
+    d->initLayoutInfo(&info, constraint);
+    if (which == Qt::MinimumSize || which == Qt::PreferredSize) {
+        return info.size;
+    } else {
+        return constraint.expandedTo(info.size);
+    }
 }
 
-void GraphicsHudButton::mousePressEvent(QGraphicsSceneMouseEvent*)
+void HudButton::mousePressEvent(QGraphicsSceneMouseEvent*)
 {
     d->mIsDown = true;
     update();
 }
 
-void GraphicsHudButton::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
+void HudButton::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 {
     d->mIsDown = false;
     update();
@@ -173,7 +178,7 @@ void GraphicsHudButton::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
     }
 }
 
-void GraphicsHudButton::setDefaultAction(QAction* action)
+void HudButton::setDefaultAction(QAction* action)
 {
     if (action != d->mAction) {
         d->mAction = action;
@@ -186,7 +191,7 @@ void GraphicsHudButton::setDefaultAction(QAction* action)
     }
 }
 
-bool GraphicsHudButton::event(QEvent* event)
+bool HudButton::event(QEvent* event)
 {
     if (event->type() == QEvent::ActionChanged) {
         d->initFromAction();

@@ -19,10 +19,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "graphicshudslider.moc"
+#include "hud/hudslider.moc"
 
 // Local
-#include <fullscreentheme.h>
+#include <hud/hudtheme.h>
 
 // KDE
 #include <KDebug>
@@ -42,9 +42,9 @@ namespace Gwenview
 
 static const int FIRST_REPEAT_DELAY = 500;
 
-struct GraphicsHudSliderPrivate
+struct HudSliderPrivate
 {
-    GraphicsHudSlider* q;
+    HudSlider* q;
     int mMin, mMax, mPageStep, mSingleStep;
     int mSliderPosition;
     int mRepeatX;
@@ -61,7 +61,7 @@ struct GraphicsHudSliderPrivate
 
     void updateHandleRect()
     {
-        static const FullScreenTheme::RenderInfo renderInfo = FullScreenTheme::renderInfo(FullScreenTheme::SliderWidgetHandle);
+        static const HudTheme::RenderInfo renderInfo = HudTheme::renderInfo(HudTheme::SliderWidgetHandle);
         static const int radius = renderInfo.borderRadius;
 
         const QRectF sliderRect = q->boundingRect();
@@ -72,7 +72,7 @@ struct GraphicsHudSliderPrivate
 
     int positionForX(qreal x) const
     {
-        static const FullScreenTheme::RenderInfo renderInfo = FullScreenTheme::renderInfo(FullScreenTheme::SliderWidgetHandle);
+        static const HudTheme::RenderInfo renderInfo = HudTheme::renderInfo(HudTheme::SliderWidgetHandle);
         static const int radius = renderInfo.borderRadius;
 
         const qreal sliderWidth = q->boundingRect().width();
@@ -86,7 +86,7 @@ struct GraphicsHudSliderPrivate
 
     qreal xForPosition(int pos) const
     {
-        static const FullScreenTheme::RenderInfo renderInfo = FullScreenTheme::renderInfo(FullScreenTheme::SliderWidgetHandle);
+        static const HudTheme::RenderInfo renderInfo = HudTheme::renderInfo(HudTheme::SliderWidgetHandle);
         static const int radius = renderInfo.borderRadius;
 
         const qreal sliderWidth = q->boundingRect().width();
@@ -98,9 +98,9 @@ struct GraphicsHudSliderPrivate
     }
 };
 
-GraphicsHudSlider::GraphicsHudSlider(QGraphicsItem* parent)
+HudSlider::HudSlider(QGraphicsItem* parent)
 : QGraphicsWidget(parent)
-, d(new GraphicsHudSliderPrivate)
+, d(new HudSliderPrivate)
 {
     d->q = this;
     d->mMin = 0;
@@ -116,26 +116,26 @@ GraphicsHudSlider::GraphicsHudSlider(QGraphicsItem* parent)
     setFocusPolicy(Qt::WheelFocus);
 }
 
-GraphicsHudSlider::~GraphicsHudSlider()
+HudSlider::~HudSlider()
 {
     delete d;
 }
 
-void GraphicsHudSlider::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget*)
+void HudSlider::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget*)
 {
     bool drawHandle = d->hasValidRange();
-    FullScreenTheme::State state;
+    HudTheme::State state;
     if (drawHandle && option->state.testFlag(QStyle::State_MouseOver)) {
-        state = d->mIsDown ? FullScreenTheme::DownState : FullScreenTheme::MouseOverState;
+        state = d->mIsDown ? HudTheme::DownState : HudTheme::MouseOverState;
     } else {
-        state = FullScreenTheme::NormalState;
+        state = HudTheme::NormalState;
     }
     painter->setRenderHint(QPainter::Antialiasing);
 
     const QRectF sliderRect = boundingRect();
 
     // Groove
-    FullScreenTheme::RenderInfo renderInfo = FullScreenTheme::renderInfo(FullScreenTheme::SliderWidgetGroove, state);
+    HudTheme::RenderInfo renderInfo = HudTheme::renderInfo(HudTheme::SliderWidgetGroove, state);
     painter->setPen(renderInfo.borderPen);
     painter->setBrush(renderInfo.bgBrush);
     qreal centerY = d->mHandleRect.center().y();
@@ -159,13 +159,13 @@ void GraphicsHudSlider::paint(QPainter* painter, const QStyleOptionGraphicsItem*
     painter->setClipping(false);
 
     // Handle
-    renderInfo = FullScreenTheme::renderInfo(FullScreenTheme::SliderWidgetHandle, state);
+    renderInfo = HudTheme::renderInfo(HudTheme::SliderWidgetHandle, state);
     painter->setPen(renderInfo.borderPen);
     painter->setBrush(renderInfo.bgBrush);
     painter->drawRoundedRect(d->mHandleRect.adjusted(.5, .5, -.5, -.5), renderInfo.borderRadius, renderInfo.borderRadius);
 }
 
-void GraphicsHudSlider::mousePressEvent(QGraphicsSceneMouseEvent* event)
+void HudSlider::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
     if (!d->hasValidRange()) {
         return;
@@ -193,7 +193,7 @@ void GraphicsHudSlider::mousePressEvent(QGraphicsSceneMouseEvent* event)
     update();
 }
 
-void GraphicsHudSlider::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
+void HudSlider::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 {
     if (!d->hasValidRange()) {
         return;
@@ -205,7 +205,7 @@ void GraphicsHudSlider::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
     }
 }
 
-void GraphicsHudSlider::mouseReleaseEvent(QGraphicsSceneMouseEvent* /*event*/)
+void HudSlider::mouseReleaseEvent(QGraphicsSceneMouseEvent* /*event*/)
 {
     if (!d->hasValidRange()) {
         return;
@@ -215,7 +215,7 @@ void GraphicsHudSlider::mouseReleaseEvent(QGraphicsSceneMouseEvent* /*event*/)
     update();
 }
 
-void GraphicsHudSlider::wheelEvent(QGraphicsSceneWheelEvent* event)
+void HudSlider::wheelEvent(QGraphicsSceneWheelEvent* event)
 {
     if (!d->hasValidRange()) {
         return;
@@ -228,7 +228,7 @@ void GraphicsHudSlider::wheelEvent(QGraphicsSceneWheelEvent* event)
     triggerAction(QAbstractSlider::SliderMove);
 }
 
-void GraphicsHudSlider::keyPressEvent(QKeyEvent* event)
+void HudSlider::keyPressEvent(QKeyEvent* event)
 {
     if (!d->hasValidRange()) {
         return;
@@ -259,7 +259,7 @@ void GraphicsHudSlider::keyPressEvent(QKeyEvent* event)
     }
 }
 
-void GraphicsHudSlider::keyReleaseEvent(QKeyEvent* /*event*/)
+void HudSlider::keyReleaseEvent(QKeyEvent* /*event*/)
 {
     if (!d->hasValidRange()) {
         return;
@@ -267,7 +267,7 @@ void GraphicsHudSlider::keyReleaseEvent(QKeyEvent* /*event*/)
     d->mRepeatAction = QAbstractSlider::SliderNoAction;
 }
 
-void GraphicsHudSlider::setRange(int min, int max)
+void HudSlider::setRange(int min, int max)
 {
     if (min == d->mMin && max == d->mMax) {
         return;
@@ -279,17 +279,17 @@ void GraphicsHudSlider::setRange(int min, int max)
     update();
 }
 
-void GraphicsHudSlider::setPageStep(int step)
+void HudSlider::setPageStep(int step)
 {
     d->mPageStep = step;
 }
 
-void GraphicsHudSlider::setSingleStep(int step)
+void HudSlider::setSingleStep(int step)
 {
     d->mSingleStep = step;
 }
 
-void GraphicsHudSlider::setValue(int value)
+void HudSlider::setValue(int value)
 {
     value = qBound(d->mMin, value, d->mMax);
     if (value != d->mValue) {
@@ -300,12 +300,12 @@ void GraphicsHudSlider::setValue(int value)
     }
 }
 
-int GraphicsHudSlider::sliderPosition() const
+int HudSlider::sliderPosition() const
 {
     return d->mSliderPosition;
 }
 
-void GraphicsHudSlider::setSliderPosition(int pos)
+void HudSlider::setSliderPosition(int pos)
 {
     pos = qBound(d->mMin, pos, d->mMax);
     if (pos != d->mSliderPosition) {
@@ -315,12 +315,12 @@ void GraphicsHudSlider::setSliderPosition(int pos)
     }
 }
 
-bool GraphicsHudSlider::isSliderDown() const
+bool HudSlider::isSliderDown() const
 {
     return d->mIsDown;
 }
 
-void GraphicsHudSlider::triggerAction(QAbstractSlider::SliderAction action)
+void HudSlider::triggerAction(QAbstractSlider::SliderAction action)
 {
     switch (action) {
     case QAbstractSlider::SliderSingleStepAdd:
@@ -349,7 +349,7 @@ void GraphicsHudSlider::triggerAction(QAbstractSlider::SliderAction action)
     setValue(d->mSliderPosition);
 }
 
-void GraphicsHudSlider::doRepeatAction(int time)
+void HudSlider::doRepeatAction(int time)
 {
     int step = 0;
     switch (d->mRepeatAction) {
