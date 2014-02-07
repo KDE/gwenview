@@ -58,20 +58,21 @@ struct GraphicsHudButtonPrivate
 
     bool mIsDown;
 
-    void initLayoutInfo(LayoutInfo* info)
+    void initLayoutInfo(LayoutInfo* info, const QSizeF& constraint)
     {
         FullScreenTheme::RenderInfo renderInfo = FullScreenTheme::renderInfo(FullScreenTheme::ButtonWidget);
         const int padding = renderInfo.padding;
+        QSize minInnerSize = constraint.toSize() - QSize(2 * padding, 2 * padding);
 
-        QSize sh;
         if (!mIcon.isNull()) {
             int size = KIconLoader::global()->currentSize(KIconLoader::Small);
-            info->iconRect = QRect(padding, padding, size, size);
+            info->iconRect = QRect(padding, padding, size, qMax(size, minInnerSize.height()));
+            minInnerSize.rwidth() -= size;
         }
         if (!mText.isEmpty()) {
             QFont font = KGlobalSettings::generalFont();
             QFontMetrics fm(font);
-            QSize size = fm.size(0, mText);
+            QSize size = fm.size(0, mText).expandedTo(minInnerSize);
             info->textRect = QRect(padding, padding, size.width(), size.height());
             if (!info->iconRect.isNull()) {
                 info->textRect.translate(info->iconRect.right(), 0);
@@ -134,7 +135,7 @@ void GraphicsHudButton::paint(QPainter* painter, const QStyleOptionGraphicsItem*
     painter->drawRoundedRect(boundingRect().adjusted(.5, .5, -.5, -.5), renderInfo.borderRadius, renderInfo.borderRadius);
 
     LayoutInfo info;
-    d->initLayoutInfo(&info);
+    d->initLayoutInfo(&info, size());
 
     if (!d->mIcon.isNull()) {
         painter->drawPixmap(
@@ -151,11 +152,15 @@ void GraphicsHudButton::paint(QPainter* painter, const QStyleOptionGraphicsItem*
     }
 }
 
-QSizeF GraphicsHudButton::sizeHint(Qt::SizeHint /*which*/, const QSizeF& /*constraint*/) const
+QSizeF GraphicsHudButton::sizeHint(Qt::SizeHint which, const QSizeF& constraint) const
 {
     LayoutInfo info;
-    d->initLayoutInfo(&info);
-    return info.size;
+    d->initLayoutInfo(&info, constraint);
+    if (which == Qt::MinimumSize || which == Qt::PreferredSize) {
+        return info.size;
+    } else {
+        return constraint.expandedTo(info.size);
+    }
 }
 
 void GraphicsHudButton::mousePressEvent(QGraphicsSceneMouseEvent*)
