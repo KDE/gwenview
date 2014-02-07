@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 // Self
-#include <actiondialog.moc>
+#include <hud/hudbuttonbox.moc>
 
 // Local
 #include <graphicshudbutton.h>
@@ -35,7 +35,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 namespace Gwenview
 {
 
-struct ActionDialogPrivate
+struct HudButtonBoxPrivate
 {
     QGraphicsLinearLayout* mLayout;
     GraphicsHudLabel* mLabel;
@@ -53,9 +53,9 @@ struct ActionDialogPrivate
     }
 };
 
-ActionDialog::ActionDialog(QGraphicsWidget* parent)
+HudButtonBox::HudButtonBox(QGraphicsWidget* parent)
 : GraphicsHudWidget(parent)
-, d(new ActionDialogPrivate)
+, d(new HudButtonBoxPrivate)
 {
     QGraphicsWidget* content = new QGraphicsWidget();
     d->mLayout = new QGraphicsLinearLayout(Qt::Vertical, content);
@@ -69,12 +69,12 @@ ActionDialog::ActionDialog(QGraphicsWidget* parent)
     QTimer::singleShot(30000, this, SLOT(fadeOut()));
 }
 
-ActionDialog::~ActionDialog()
+HudButtonBox::~HudButtonBox()
 {
     delete d;
 }
 
-GraphicsHudButton* ActionDialog::addAction(QAction* action, const QString& overrideText)
+GraphicsHudButton* HudButtonBox::addAction(QAction* action, const QString& overrideText)
 {
     QString text = overrideText.isEmpty() ? action->text() : overrideText;
     GraphicsHudButton* button = addButton(text);
@@ -82,7 +82,7 @@ GraphicsHudButton* ActionDialog::addAction(QAction* action, const QString& overr
     return button;
 }
 
-GraphicsHudButton* ActionDialog::addButton(const QString& text)
+GraphicsHudButton* HudButtonBox::addButton(const QString& text)
 {
     GraphicsHudButton* button = new GraphicsHudButton();
     connect(button, SIGNAL(clicked()), SLOT(fadeOut()));
@@ -94,12 +94,12 @@ GraphicsHudButton* ActionDialog::addButton(const QString& text)
     return button;
 }
 
-void ActionDialog::setText(const QString& msg)
+void HudButtonBox::setText(const QString& msg)
 {
     d->mLabel->setText(msg);
 }
 
-void ActionDialog::showEvent(QShowEvent* event)
+void HudButtonBox::showEvent(QShowEvent* event)
 {
     GraphicsHudWidget::showEvent(event);
     d->updateButtonWidths();

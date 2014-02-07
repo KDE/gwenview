@@ -85,7 +85,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "startmainpage.h"
 #include "thumbnailviewhelper.h"
 #include "browsemainpage.h"
-#include <lib/actiondialog.h>
+#include <lib/hud/hudbuttonbox.h>
 #include <lib/archiveutils.h>
 #include <lib/contextmanager.h>
 #include <lib/disabledactionshortcutmonitor.h>
@@ -1575,7 +1575,7 @@ void MainWindow::showFirstDocumentReached()
     if (d->mCurrentMainPageId != ViewMainPageId) {
         return;
     }
-    ActionDialog* dlg = new ActionDialog;
+    HudButtonBox* dlg = new HudButtonBox;
     dlg->setText(i18n("You reached the first document, what do you want to do?"));
     dlg->addButton(i18n("Stay There"));
     dlg->addAction(d->mGoToLastAction, i18n("Go to the Last Document"));
@@ -1588,7 +1588,7 @@ void MainWindow::showLastDocumentReached()
     if (d->mCurrentMainPageId != ViewMainPageId) {
         return;
     }
-    ActionDialog* dlg = new ActionDialog;
+    HudButtonBox* dlg = new HudButtonBox;
     dlg->setText(i18n("You reached the last document, what do you want to do?"));
     dlg->addButton(i18n("Stay There"));
     dlg->addAction(d->mGoToFirstAction, i18n("Go to the First Document"));

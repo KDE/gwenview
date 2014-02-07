@@ -16,10 +16,10 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef ACTIONDIALOG_H
-#define ACTIONDIALOG_H
+#ifndef HUDBUTTONBOX_H
+#define HUDBUTTONBOX_H
 
-#include "gwenviewlib_export.h"
+#include <lib/gwenviewlib_export.h>
 
 // Local
 #include <lib/graphicshudwidget.h>
@@ -36,16 +36,16 @@ namespace Gwenview
 
 class GraphicsHudButton;
 
-class ActionDialogPrivate;
+class HudButtonBoxPrivate;
 /**
- * A dialog which shows a list of actions
+ * A hud widget which shows a list of buttons
  */
-class GWENVIEWLIB_EXPORT ActionDialog : public GraphicsHudWidget
+class GWENVIEWLIB_EXPORT HudButtonBox : public GraphicsHudWidget
 {
     Q_OBJECT
 public:
-    ActionDialog(QGraphicsWidget* parent = 0);
-    ~ActionDialog();
+    HudButtonBox(QGraphicsWidget* parent = 0);
+    ~HudButtonBox();
 
     void setText(const QString& text);
 
@@ -57,9 +57,9 @@ protected:
     void showEvent(QShowEvent* event);
 
 private:
-    ActionDialogPrivate* const d;
+    HudButtonBoxPrivate* const d;
 };
 
 } // namespace
 
-#endif /* ACTIONDIALOG_H */
+#endif /* HUDBUTTONBOX_H */
