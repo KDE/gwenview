@@ -26,20 +26,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Qt
 #include <QPainter>
+#include <QTimeLine>
 
 namespace Gwenview
 {
 
 struct HudCountDownPrivate
 {
-    qreal mValue;
+    QTimeLine* mTimeLine;
 };
 
 HudCountDown::HudCountDown(QGraphicsWidget* parent)
 : QGraphicsWidget(parent)
 , d(new HudCountDownPrivate)
 {
-    d->mValue = 0;
+    d->mTimeLine = new QTimeLine(0, this);
+    d->mTimeLine->setDirection(QTimeLine::Backward);
+    connect(d->mTimeLine, SIGNAL(valueChanged(qreal)), SLOT(doUpdate()));
+    connect(d->mTimeLine, SIGNAL(finished()), SIGNAL(timeout()));
+
     // Use an odd value so that the vertical line is aligned to pixel
     // boundaries
     setMinimumSize(17, 17);
@@ -50,9 +55,10 @@ HudCountDown::~HudCountDown()
     delete d;
 }
 
-void HudCountDown::setValue(qreal value)
+void HudCountDown::start(qreal ms)
 {
-    d->mValue = value;
+    d->mTimeLine->setDuration(ms);
+    d->mTimeLine->start();
     update();
 }
 
@@ -62,7 +68,7 @@ void HudCountDown::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWi
     painter->setRenderHint(QPainter::Antialiasing);
     const int circle = 5760;
     const int start = circle / 4; // Start at 12h, not 3h
-    const int end = int(circle * d->mValue);
+    const int end = int(circle * d->mTimeLine->currentValue());
     painter->setBrush(info.bgBrush);
     painter->setPen(info.borderPen);
 
@@ -77,6 +83,11 @@ void HudCountDown::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWi
         square.moveLeft((width - height) / 2);
     }
     painter->drawPie(square, start, end);
+}
+
+void HudCountDown::doUpdate()
+{
+    update();
 }
 
 } // namespace

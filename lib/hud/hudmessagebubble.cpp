@@ -23,7 +23,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QGraphicsLinearLayout>
-#include <QTimeLine>
 
 // KDE
 #include <KDebug>
@@ -54,17 +53,10 @@ HudMessageBubble::HudMessageBubble(QGraphicsWidget* parent)
 {
     d->mWidget = new QGraphicsWidget;
     d->mCountDown = new HudCountDown;
-    d->mCountDown->setValue(1);
     d->mLabel = new HudLabel;
 
-    QTimeLine* timeLine = new QTimeLine(TIMEOUT, this);
-    connect(timeLine, SIGNAL(valueChanged(qreal)),
-            SLOT(slotTimeLineChanged(qreal)));
-    connect(timeLine, SIGNAL(finished()),
-            SLOT(fadeOut()));
-    connect(this, SIGNAL(fadedOut()),
-            SLOT(deleteLater()));
-    timeLine->start();
+    connect(d->mCountDown, SIGNAL(timeout()), SLOT(fadeOut()));
+    connect(this, SIGNAL(fadedOut()), SLOT(deleteLater()));
 
     d->mLayout = new QGraphicsLinearLayout(d->mWidget);
     d->mLayout->setContentsMargins(0, 0, 0, 0);
@@ -72,6 +64,7 @@ HudMessageBubble::HudMessageBubble(QGraphicsWidget* parent)
     d->mLayout->addItem(d->mLabel);
 
     init(d->mWidget, HudWidget::OptionCloseButton);
+    d->mCountDown->start(TIMEOUT);
 }
 
 HudMessageBubble::~HudMessageBubble()
@@ -91,11 +84,6 @@ HudButton* HudMessageBubble::addButton(const KGuiItem& guiItem)
     button->setIcon(guiItem.icon());
     d->mLayout->addItem(button);
     return button;
-}
-
-void HudMessageBubble::slotTimeLineChanged(qreal value)
-{
-    d->mCountDown->setValue(1 - value);
 }
 
 } // namespace

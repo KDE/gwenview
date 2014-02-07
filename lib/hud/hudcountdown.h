@@ -41,9 +41,15 @@ public:
     HudCountDown(QGraphicsWidget* parent = 0);
     ~HudCountDown();
 
-    void setValue(qreal value);
+    void start(qreal ms);
 
     void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*);
+
+Q_SIGNALS:
+    void timeout();
+
+private Q_SLOTS:
+    void doUpdate();
 
 private:
     HudCountDownPrivate* const d;

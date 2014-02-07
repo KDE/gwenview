@@ -52,9 +52,6 @@ public:
 
     HudButton* addButton(const KGuiItem&);
 
-private Q_SLOTS:
-    void slotTimeLineChanged(qreal);
-
 private:
     HudMessageBubblePrivate* const d;
 };
