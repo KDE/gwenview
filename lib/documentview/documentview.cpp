@@ -201,6 +201,7 @@ struct DocumentViewPrivate
             delete mBirdEyeView;
         }
         mBirdEyeView = new BirdEyeView(q);
+        mBirdEyeView->setZValue(1);
     }
 
     void updateCaption()
