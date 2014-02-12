@@ -112,6 +112,7 @@ private Q_SLOTS:
     void saveCurrent();
     void saveCurrentAs();
     void openFile();
+    void openUrl(const KUrl& url);
     void reload();
 
     void showDocumentInFullScreen(const KUrl&);

@@ -50,6 +50,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KNotificationRestrictions>
 #include <KProtocolManager>
 #include <KLinkItemSelectionModel>
+#include <KRecentFilesAction>
 #include <KStatusBar>
 #include <KStandardDirs>
 #include <KStandardGuiItem>
@@ -186,6 +187,7 @@ struct MainWindow::Private
 #endif
 
     QActionGroup* mViewModeActionGroup;
+    KRecentFilesAction* mFileOpenRecentAction;
     KAction* mBrowseAction;
     KAction* mViewAction;
     KAction* mGoUpAction;
@@ -364,6 +366,8 @@ struct MainWindow::Private
         file->addAction(KStandardAction::Save, q, SLOT(saveCurrent()));
         file->addAction(KStandardAction::SaveAs, q, SLOT(saveCurrentAs()));
         file->addAction(KStandardAction::Open, q, SLOT(openFile()));
+        mFileOpenRecentAction = KStandardAction::openRecent(q, SLOT(openUrl(KUrl)), q);
+        file->addAction("file_open_recent", mFileOpenRecentAction);
         file->addAction(KStandardAction::Print, q, SLOT(print()));
         file->addAction(KStandardAction::Quit, KApplication::kApplication(), SLOT(closeAllWindows()));
 
@@ -1090,6 +1094,10 @@ void MainWindow::slotPartCompleted()
 {
     d->updateActions();
     KUrl url = d->mViewMainPage->url();
+    //  remember the opened file
+    if (!url.isEmpty()) {
+        d->mFileOpenRecentAction->addUrl(url);
+    }
     if (!KProtocolManager::supportsListing(url)) {
         return;
     }
@@ -1327,8 +1335,12 @@ void MainWindow::openFile()
         return;
     }
 
+    openUrl(dialog.selectedUrl());
+}
+
+void MainWindow::openUrl(const KUrl& url)
+{
     d->setActionsDisabledOnStartMainPageEnabled(true);
-    KUrl url = dialog.selectedUrl();
     d->mViewAction->trigger();
     d->mViewMainPage->openUrl(url);
     d->mContextManager->setUrlToSelect(url);
@@ -1450,6 +1462,7 @@ void MainWindow::loadConfig()
     d->mDirModel->setBlackListedExtensions(GwenviewConfig::blackListedExtensions());
     d->mDirModel->adjustKindFilter(MimeTypeUtils::KIND_VIDEO, GwenviewConfig::listVideos());
 
+    d->mFileOpenRecentAction->loadEntries(KConfigGroup(KGlobal::config(), "Recent Files"));
     d->mStartMainPage->loadConfig();
     d->mViewMainPage->loadConfig();
     d->mBrowseMainPage->loadConfig();
@@ -1457,6 +1470,7 @@ void MainWindow::loadConfig()
 
 void MainWindow::saveConfig()
 {
+    d->mFileOpenRecentAction->saveEntries(KConfigGroup(KGlobal::config(), "Recent Files"));
     d->mViewMainPage->saveConfig();
     d->mBrowseMainPage->saveConfig();
 }
