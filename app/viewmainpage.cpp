@@ -635,6 +635,9 @@ void ViewMainPage::openUrls(const KUrl::List& allUrls, const KUrl& currentUrl)
     typedef QMap<KUrl, DocumentView*> ViewForUrlMap;
     ViewForUrlMap viewForUrlMap;
 
+    if (!d->mDocumentViews.isEmpty()) {
+        d->mDocumentViewContainer->updateSetup(d->mDocumentViews.last());
+    }
     if (!d->mDocumentViews.isEmpty() && d->mZoomWidget->isZoomLocked()) {
         setup = d->mDocumentViews.last()->setup();
     } else {
@@ -683,7 +686,8 @@ void ViewMainPage::openUrls(const KUrl::List& allUrls, const KUrl& currentUrl)
     for (; it != end; ++it) {
         KUrl url = it.key();
         DocumentView* view = it.value();
-        view->openUrl(url, setup);
+        DocumentView::Setup savedSetup = d->mDocumentViewContainer->savedSetup(url);
+        view->openUrl(url, savedSetup.valid ? savedSetup : setup);
         d->mActivityResources.value(view)->setUri(url);
     }
 

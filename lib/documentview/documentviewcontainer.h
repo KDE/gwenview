@@ -24,8 +24,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/gwenviewlib_export.h>
 
 // Local
+#include <lib/documentview/documentview.h>
 
 // KDE
+#include <KUrl>
 
 // Qt
 #include <QGraphicsView>
@@ -62,6 +64,16 @@ public:
      * Immediately delete all views
      */
     void reset();
+
+    /**
+     * Returns saved Setup configuration for a previously viewed document
+     */
+    DocumentView::Setup savedSetup(const KUrl& url) const;
+
+    /**
+     * Updates setupForUrl hash with latest setup values
+     */
+    void updateSetup(DocumentView* view);
 
     void showMessageWidget(QGraphicsWidget*, Qt::Alignment);
 

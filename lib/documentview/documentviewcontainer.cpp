@@ -45,11 +45,13 @@ namespace Gwenview
 {
 
 typedef QSet<DocumentView*> DocumentViewSet;
+typedef QHash<KUrl, DocumentView::Setup> SetupForUrl;
 
 struct DocumentViewContainerPrivate
 {
     DocumentViewContainer* q;
     QGraphicsScene* mScene;
+    SetupForUrl mSetupForUrl;
     DocumentViewSet mViews;
     DocumentViewSet mAddedViews;
     DocumentViewSet mRemovedViews;
@@ -135,6 +137,16 @@ void DocumentViewContainer::deleteView(DocumentView* view)
         return;
     }
     d->removeFromSet(view, &d->mAddedViews);
+}
+
+DocumentView::Setup DocumentViewContainer::savedSetup(const KUrl& url) const
+{
+    return d->mSetupForUrl.value(url);
+}
+
+void DocumentViewContainer::updateSetup(DocumentView* view)
+{
+    d->mSetupForUrl[view->url()] = view->setup();
 }
 
 void DocumentViewContainer::reset()
