@@ -45,6 +45,9 @@ if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
     # We need Baloo for all backends but "None"
     find_package(Baloo)
     macro_log_feature(Baloo_FOUND "Baloo Core Libraries" "Desktop-wide semantic information support" "https://projects.kde.org/projects/kde/kdelibs/baloo" TRUE)
+
+    find_package(KFileMetaData CONFIG)
+    macro_log_feature(KFileMetaData_FOUND "KFileMetaData Library" "A library for extracting file metadata" "https://projects.kde.org/kfilemetadata" TRUE)
 endif()
 
 find_package(LibKonq)
