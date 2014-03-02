@@ -34,7 +34,7 @@ class KUrl;
 namespace Gwenview
 {
 
-class SaveBarPrivate;
+struct SaveBarPrivate;
 class SaveBar : public SlideContainer
 {
     Q_OBJECT

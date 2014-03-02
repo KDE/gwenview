@@ -33,7 +33,7 @@ namespace Gwenview
 
 class SortedDirModel;
 
-class DocumentInfoProviderPrivate;
+struct DocumentInfoProviderPrivate;
 class DocumentInfoProvider : public AbstractDocumentInfoProvider
 {
     Q_OBJECT

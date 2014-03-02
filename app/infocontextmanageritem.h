@@ -52,7 +52,7 @@ private:
 
     void fillMultipleItemsGroup(const KFileItemList& itemList);
 
-    friend class InfoContextManagerItemPrivate;
+    friend struct InfoContextManagerItemPrivate;
     InfoContextManagerItemPrivate* const d;
 };
 

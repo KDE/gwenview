@@ -33,7 +33,7 @@ namespace Gwenview
 
 class KIPIInterface;
 
-class KIPIExportActionPrivate;
+struct KIPIExportActionPrivate;
 class KIPIExportAction : public KToolBarPopupAction
 {
     Q_OBJECT

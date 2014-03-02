@@ -34,7 +34,7 @@ class KJob;
 namespace Gwenview
 {
 
-class ImporterPrivate;
+struct ImporterPrivate;
 class Importer : public QObject
 {
     Q_OBJECT

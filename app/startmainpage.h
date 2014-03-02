@@ -40,7 +40,7 @@ namespace Gwenview
 class GvCore;
 class ThumbnailView;
 
-class StartMainPagePrivate;
+struct StartMainPagePrivate;
 class StartMainPage : public QFrame
 {
     Q_OBJECT

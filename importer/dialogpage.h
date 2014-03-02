@@ -33,7 +33,7 @@ class KGuiItem;
 namespace Gwenview
 {
 
-class DialogPagePrivate;
+struct DialogPagePrivate;
 class DialogPage : public QWidget
 {
     Q_OBJECT

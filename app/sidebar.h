@@ -29,7 +29,7 @@ namespace Gwenview
 
 class SideBar;
 
-class SideBarGroupPrivate;
+struct SideBarGroupPrivate;
 class SideBarGroup : public QFrame
 {
     Q_OBJECT
@@ -48,7 +48,7 @@ private:
     SideBarGroupPrivate* const d;
 };
 
-class SideBarPagePrivate;
+struct SideBarPagePrivate;
 class SideBarPage : public QWidget
 {
     Q_OBJECT
@@ -64,7 +64,7 @@ private:
     SideBarPagePrivate* const d;
 };
 
-class SideBarPrivate;
+struct SideBarPrivate;
 class SideBar : public QTabWidget
 {
     Q_OBJECT

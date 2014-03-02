@@ -35,7 +35,7 @@ class KUrl;
 namespace Gwenview
 {
 
-class PreloaderPrivate;
+struct PreloaderPrivate;
 
 /**
  * This class preloads a document to fit a specific size.

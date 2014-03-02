@@ -57,7 +57,7 @@ private Q_SLOTS:
     void showSemanticInfoDialog();
 
 private:
-    friend class SemanticInfoContextManagerItemPrivate;
+    friend struct SemanticInfoContextManagerItemPrivate;
     SemanticInfoContextManagerItemPrivate* const d;
 };
 
