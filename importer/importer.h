@@ -81,7 +81,7 @@ private Q_SLOTS:
     void emitProgressChanged();
 
 private:
-    friend class ImporterPrivate;
+    friend struct ImporterPrivate;
     ImporterPrivate* const d;
     void advance();
     void finalizeImport();

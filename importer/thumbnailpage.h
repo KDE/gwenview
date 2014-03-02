@@ -70,7 +70,7 @@ private Q_SLOTS:
     void slotSrcUrlModelExpand(const QModelIndex& index);
 
 private:
-    friend class ThumbnailPagePrivate;
+    friend struct ThumbnailPagePrivate;
     ThumbnailPagePrivate* const d;
     void importList(const QModelIndexList&);
 };
