@@ -33,7 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 
-class ResizeImageDialogPrivate;
+struct ResizeImageDialogPrivate;
 class GWENVIEWLIB_EXPORT ResizeImageDialog : public KDialog
 {
     Q_OBJECT

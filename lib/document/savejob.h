@@ -38,7 +38,7 @@ namespace Gwenview
 
 class DocumentLoadedImpl;
 
-class SaveJobPrivate;
+struct SaveJobPrivate;
 class GWENVIEWLIB_EXPORT SaveJob : public DocumentJob
 {
     Q_OBJECT

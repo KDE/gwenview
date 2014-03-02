@@ -35,7 +35,7 @@ class KUrl;
 namespace Gwenview
 {
 
-class RecursiveDirModelPrivate;
+struct RecursiveDirModelPrivate;
 /**
  * Recursively list content of a dir
  */

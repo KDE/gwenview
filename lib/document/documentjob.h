@@ -34,7 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 
-class DocumentJobPrivate;
+struct DocumentJobPrivate;
 
 /**
  * Represent an asynchronous task to be executed on a document

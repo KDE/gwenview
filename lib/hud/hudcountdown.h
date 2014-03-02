@@ -29,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 namespace Gwenview
 {
 
-class HudCountDownPrivate;
+struct HudCountDownPrivate;
 
 /**
  * Displays a count-down pie-chart

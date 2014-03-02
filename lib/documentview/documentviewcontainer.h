@@ -37,7 +37,7 @@ namespace Gwenview
 
 class DocumentView;
 
-class DocumentViewContainerPrivate;
+struct DocumentViewContainerPrivate;
 /**
  * A container for DocumentViews which will arrange them to make best use of
  * available space.

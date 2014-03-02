@@ -35,7 +35,7 @@ namespace Gwenview
 
 class AbstractRasterImageViewTool;
 
-class RasterImageViewPrivate;
+struct RasterImageViewPrivate;
 class GWENVIEWLIB_EXPORT RasterImageView : public AbstractImageView
 {
     Q_OBJECT

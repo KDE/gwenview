@@ -45,7 +45,7 @@ namespace Gwenview
 namespace Cms
 {
 
-class ProfilePrivate;
+struct ProfilePrivate;
 /**
  * Wrapper for lcms color profile
  */

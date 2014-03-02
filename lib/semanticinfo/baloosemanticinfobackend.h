@@ -62,7 +62,7 @@ private Q_SLOTS:
     void slotFetchFinished(KJob* job);
 
 private:
-    class Private;
+    struct Private;
     Private* const d;
 };
 

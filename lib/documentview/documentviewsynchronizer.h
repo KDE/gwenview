@@ -37,7 +37,7 @@ namespace Gwenview
 
 class DocumentView;
 
-class DocumentViewSynchronizerPrivate;
+struct DocumentViewSynchronizerPrivate;
 /**
  * A class to synchronize zoom and scroll of DocumentViews
  */
