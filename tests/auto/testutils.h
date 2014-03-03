@@ -85,7 +85,7 @@ inline bool fuzzyImageCompare(const QImage& img1, const QImage& img2)
 
     for (int posY = 0; posY < img1.height(); ++posY) {
         for (int posX = 0; posX < img2.width(); ++posX) {
-            if (!(int)abs((double)img1.pixel(posX, posY) - img2.pixel(posX, posY)) > 2) {
+            if (qAbs(img1.pixel(posX, posY) - img2.pixel(posX, posY)) > 2) {
                 kWarning() << "Different at" << QPoint(posX, posY);
                 return false;
             }
