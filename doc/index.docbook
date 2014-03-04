@@ -274,6 +274,15 @@ launching it from the command line with an image as an argument.</para> </tip>
   <guimenuitem>Crop</guimenuitem>
  </menuchoice>:
  This operation lets you discard parts of the image you don't want.
+</para>
+<para>
+    You can access the advanced cropping parameters by ticking <guilabel>Advanced settings</guilabel> check box on the bottom popup pane. Use the corresponding fields to tune up the cropping operation.
+</para>
+<para>
+    It is also possible to adjust the cropped area by dragging the gray square handles on the borders of the image.
+</para>
+<para>
+    Press the <guibutton>Crop</guibutton> button to see the results when you are ready. Use the upper popup pane to save the results or undo/redo the operation.
 </para></listitem>
 
 <listitem><para>
@@ -354,16 +363,16 @@ slideshow. The slideshow controls there are: </para>
 <itemizedlist>
     <listitem><para>The <guilabel>Interval</guilabel> slider controls how long
     &kappname; will show an image before it move to the next one.</para></listitem>
-    <listitem><para>If the <guilabel>Loop</guilabel> checkbox is checked, when the
+    <listitem><para>If the <guilabel>Loop</guilabel> check box is checked, when the
     end of the slideshow is reached, it will continue from the beginning instead
     of stopping. </para></listitem>
-    <listitem><para>If the <guilabel>Random</guilabel> checkbox is checked,
+    <listitem><para>If the <guilabel>Random</guilabel> check box is checked,
     instead of progressing through the folder alphabetically, images will be
     shown in random order.</para></listitem>
     <listitem><para><guibutton>Select Image Information to Display</guibutton> allows
     you to define what metadata is displayed under the buttons on the toolbar.
     </para></listitem>
-    <listitem><para>If the <guilabel>Show thumbnails</guilabel> checkbox is checked,
+    <listitem><para>If the <guilabel>Show thumbnails</guilabel> check box is checked,
     thumbnails for all images in the current folder will be displayed to the right of
     the toolbar.</para></listitem>
     <listitem><para>The <guilabel>Height</guilabel> slider changes the size of the
@@ -475,7 +484,7 @@ on the device.</para>
 <title>Automatic Renaming</title>
 <para>&kappname; Importer can rename your files according to a specified pattern.
 To configure this, select the <guibutton>Settings</guibutton> in the lower left
-corner.  You may turn this feature on or off using the checkbox at the top.  The
+corner.  You may turn this feature on or off using the check box at the top.  The
 <guilabel>Rename Format</guilabel> supports several special parameters, which will
 be replaced by metadata such as the date the image was created or its filename.
 They are listed below the text box.  You may either click on the parameter name to
