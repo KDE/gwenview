@@ -279,7 +279,7 @@ launching it from the command line with an image as an argument.</para> </tip>
     You can access the advanced cropping parameters by ticking <guilabel>Advanced settings</guilabel> check box on the bottom popup pane. Use the corresponding fields to tune up the cropping operation.
 </para>
 <para>
-    It is also possible to adjust the cropped area by dragging the gray square handles on the borders of the image.
+    It is also possible to adjust the cropped area by dragging the gray square handles on the borders of the image. You can move the cropped area by clicking and holding the &LMB; and drag it with the mouse pointer.
 </para>
 <para>
     Press the <guibutton>Crop</guibutton> button to see the results when you are ready. Use the upper popup pane to save the results or undo/redo the operation.
