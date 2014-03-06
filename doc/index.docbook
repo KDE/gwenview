@@ -391,7 +391,7 @@ be shown on the top bar. Clicking on one will display it.</para>
 not appear by default in Browse Mode.  Its appearance can be toggled using
 <menuchoice>
 <shortcut>
-    <keycap>F11</keycap>
+    <keycap>F4</keycap>
 </shortcut>
 <guimenu>View</guimenu>
 <guimenuitem>Sidebar</guimenuitem>
@@ -574,7 +574,7 @@ Show or hide the menubar.</para></listitem>
 action="simul">&Ctrl;<keycap>B</keycap></keycombo>:
 Show or hide the Thumbnail bar.</para></listitem>
 
-<listitem><para><keycap>F11</keycap>:
+<listitem><para><keycap>F4</keycap>:
 Show or hide the Sidebar.</para></listitem>
 
 <listitem><para><keycap>F6</keycap>:
