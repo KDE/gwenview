@@ -38,8 +38,8 @@
 </copyright>
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2013-05-28</date>
-<releaseinfo>4.11 (&kde; 4.11)</releaseinfo>
+<date>2014-03-06</date>
+<releaseinfo>4.13 (&kde; 4.13)</releaseinfo>
 <abstract>
 <para>&kappname; is an image viewer for &kde;.</para>
 </abstract>
@@ -158,6 +158,20 @@ blurry and/or pixelated.</para></listitem>
 </itemizedlist>
 
 <para>These actions are also available on the <guilabel>Operations</guilabel> tab of the sidebar.</para>
+
+<para>If you have edited one or more images a bar with additional actions is displayed at the top of the image.
+You can undo oder redo your changes, go to the previous oder next modified image and there are three options to save
+the changed images.
+</para>
+
+<screenshot>
+  <screeninfo>Browse Mode Screenshot</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="modified-bar.png" format="PNG" />
+    </imageobject>
+  </mediaobject>
+</screenshot>
 
 <!--FIXME all actions also available context menus, where to add that info -->
 
