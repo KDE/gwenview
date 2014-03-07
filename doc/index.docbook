@@ -165,7 +165,7 @@ the changed images.
 </para>
 
 <screenshot>
-  <screeninfo>Browse Mode Screenshot</screeninfo>
+  <screeninfo>Actions bar for modified images</screeninfo>
   <mediaobject>
     <imageobject>
       <imagedata fileref="modified-bar.png" format="PNG" />
