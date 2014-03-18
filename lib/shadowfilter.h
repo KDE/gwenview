@@ -36,7 +36,7 @@ class QWidget;
 namespace Gwenview
 {
 
-class ShadowFilterPrivate;
+struct ShadowFilterPrivate;
 /**
  * Paint shadows on widget edges
  */

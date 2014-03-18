@@ -71,7 +71,7 @@ private:
 };
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-class RatingWidgetPrivate;
+struct RatingWidgetPrivate;
 class RatingFilterWidget : public QWidget
 {
     Q_OBJECT
@@ -87,7 +87,7 @@ private:
     RatingWidgetPrivate* const d;
 };
 
-class TagFilterWidgetPrivate;
+struct TagFilterWidgetPrivate;
 class TagFilterWidget : public QWidget
 {
     Q_OBJECT
@@ -103,7 +103,7 @@ private:
 };
 #endif
 
-class FilterControllerPrivate;
+struct FilterControllerPrivate;
 /**
  * This class manages the filter widgets in the filter frame and assign the
  * corresponding filters to the SortedDirModel

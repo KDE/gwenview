@@ -230,7 +230,7 @@ private Q_SLOTS:
 private:
     friend class AbstractDocumentImpl;
     friend class DocumentFactory;
-    friend class DocumentPrivate;
+    friend struct DocumentPrivate;
     friend class DownSamplingJob;
 
     void setImageInternal(const QImage&);

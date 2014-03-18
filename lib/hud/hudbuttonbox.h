@@ -36,7 +36,7 @@ namespace Gwenview
 
 class HudButton;
 
-class HudButtonBoxPrivate;
+struct HudButtonBoxPrivate;
 /**
  * A hud widget which shows a list of buttons
  */

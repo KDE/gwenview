@@ -32,7 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 
-class DocumentDirFinderPrivate;
+struct DocumentDirFinderPrivate;
 
 /**
  * This class is a worker which tries to find the document dir given a root

@@ -33,7 +33,7 @@ class KJob;
 namespace Gwenview
 {
 
-class SaveAllHelperPrivate;
+struct SaveAllHelperPrivate;
 class SaveAllHelper : public QObject
 {
     Q_OBJECT

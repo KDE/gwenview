@@ -33,7 +33,7 @@ namespace Gwenview
 
 class DocumentView;
 
-class BirdEyeViewPrivate;
+struct BirdEyeViewPrivate;
 /**
  * Shows a bird-eye view of the current document. Makes it possible to scroll
  * through the document.

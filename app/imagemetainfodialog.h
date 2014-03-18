@@ -33,7 +33,7 @@ namespace Gwenview
 
 class ImageMetaInfoModel;
 
-class ImageMetaInfoDialogPrivate;
+struct ImageMetaInfoDialogPrivate;
 class ImageMetaInfoDialog : public KDialog
 {
     Q_OBJECT

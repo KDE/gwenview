@@ -32,7 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 
-class DocumentOnlyProxyModelPrivate;
+struct DocumentOnlyProxyModelPrivate;
 /**
  * A proxy model which lists items which are neither dirs nor archives.
  * Only works with models which expose a KDirModel::FileItemRole.

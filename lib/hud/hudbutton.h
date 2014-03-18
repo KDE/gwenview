@@ -33,7 +33,7 @@ class QIcon;
 namespace Gwenview
 {
 
-class HudButtonPrivate;
+struct HudButtonPrivate;
 /**
  *
  */

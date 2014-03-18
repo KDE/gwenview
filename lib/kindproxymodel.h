@@ -34,7 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 
-class KindProxyModelPrivate;
+struct KindProxyModelPrivate;
 /**
  * A simple proxy model allowing only objects of a certain kind
  */

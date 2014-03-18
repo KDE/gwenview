@@ -39,7 +39,7 @@ class DocumentView;
 class SlideContainer;
 class ZoomWidget;
 
-class DocumentViewControllerPrivate;
+struct DocumentViewControllerPrivate;
 
 /**
  * Handles all DocumentView specific actions like zooming. Calls the

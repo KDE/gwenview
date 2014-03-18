@@ -41,7 +41,7 @@ class AbstractSemanticInfoBackEnd;
 class MainWindow;
 class SortedDirModel;
 
-class GvCorePrivate;
+struct GvCorePrivate;
 class GvCore : public QObject
 {
     Q_OBJECT

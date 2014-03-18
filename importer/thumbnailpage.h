@@ -34,7 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 
-class ThumbnailPagePrivate;
+struct ThumbnailPagePrivate;
 class ThumbnailPage : public QWidget
 {
     Q_OBJECT
@@ -70,7 +70,7 @@ private Q_SLOTS:
     void slotSrcUrlModelExpand(const QModelIndex& index);
 
 private:
-    friend class ThumbnailPagePrivate;
+    friend struct ThumbnailPagePrivate;
     ThumbnailPagePrivate* const d;
     void importList(const QModelIndexList&);
 };

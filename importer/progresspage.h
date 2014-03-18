@@ -34,7 +34,7 @@ namespace Gwenview
 
 class Importer;
 
-class ProgressPagePrivate;
+struct ProgressPagePrivate;
 class ProgressPage : public QWidget
 {
     Q_OBJECT

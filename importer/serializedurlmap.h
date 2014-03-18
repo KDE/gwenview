@@ -33,7 +33,7 @@ class KUrl;
 namespace Gwenview
 {
 
-class SerializedUrlMapPrivate;
+struct SerializedUrlMapPrivate;
 /**
  * A map-like KUrl=>KUrl object, serialized in a KConfigGroup
  */

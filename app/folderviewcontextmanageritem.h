@@ -53,7 +53,7 @@ private Q_SLOTS:
     void slotActivated(const QModelIndex&);
 
 private:
-    friend class FolderViewContextManagerItemPrivate;
+    friend struct FolderViewContextManagerItemPrivate;
     FolderViewContextManagerItemPrivate* const d;
 };
 

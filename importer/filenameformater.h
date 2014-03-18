@@ -36,7 +36,7 @@ class KUrl;
 namespace Gwenview
 {
 
-class FileNameFormaterPrivate;
+struct FileNameFormaterPrivate;
 class FileNameFormater
 {
 public:
