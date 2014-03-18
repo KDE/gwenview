@@ -33,6 +33,6 @@ When you change GWENVIEW_VERSION, add the new version in Bugzilla as well:
 https://bugs.kde.org/editversions.cgi?product=gwenview
 
 */
-#define GWENVIEW_VERSION "4.13.0 pre"
+#define GWENVIEW_VERSION "4.13.0 beta3"
 
 #endif /* VERSION_H */
