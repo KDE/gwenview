@@ -65,7 +65,9 @@ private Q_SLOTS:
     void init();
     void cleanup();
     void testRating();
+    #if 0
     void testTagForLabel();
+    #endif
 
 private:
     AbstractSemanticInfoBackEnd* mBackEnd;
