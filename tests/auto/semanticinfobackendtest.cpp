@@ -107,6 +107,9 @@ void SemanticInfoBackEndTest::testRating()
     mBackEnd->storeSemanticInfo(url, semanticInfo);
 }
 
+#if 0
+// Disabled because Baloo does not work like Nepomuk: it does not create tags
+// independently of files.
 void SemanticInfoBackEndTest::testTagForLabel()
 {
     QSignalSpy spy(mBackEnd, SIGNAL(tagAdded(SemanticInfoTag,QString)));
@@ -129,5 +132,6 @@ void SemanticInfoBackEndTest::testTagForLabel()
     QString label2 = mBackEnd->labelForTag(tag2);
     QCOMPARE(label, label2);
 }
+#endif
 
 } // namespace
