@@ -10,6 +10,7 @@ macro(gv_add_unit_test _test)
         ${QT_QTTEST_LIBRARY}
         ${QT_QTCORE_LIBRARY}
         ${QT_QTGUI_LIBRARY}
+        ${KDCRAW_LIBRARIES}
         gwenviewlib)
 endmacro(gv_add_unit_test)
 

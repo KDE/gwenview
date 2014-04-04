@@ -27,6 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KJobUiDelegate>
 #include <KIO/NetAccess>
 #include <qtest_kde.h>
+#include <libkdcraw/kdcraw.h>
 
 // Local
 #include "../lib/abstractimageoperation.h"
@@ -82,6 +83,16 @@ void DocumentTest::testLoad()
     MimeTypeUtils::Kind expectedKind = MimeTypeUtils::Kind(expectedKindInt);
 
     KUrl url = urlForTestFile(fileName);
+
+    // testing RAW loading. For raw, QImage directly won't work -> load it using KDCRaw
+    QByteArray mFormatHint = url.fileName().section('.', -1).toAscii().toLower();
+    if (KDcrawIface::KDcraw::rawFilesList().contains(QString(mFormatHint))) {
+        if (!KDcrawIface::KDcraw::loadEmbeddedPreview(expectedImage, url.toLocalFile())) {
+            QSKIP("Not running this test: failed to get expectedImage. Try running ./fetch_testing_raw.sh\
+ in the tests/data directory and then rerun the tests.", SkipSingle);
+        }
+    }
+
     if (expectedKind != MimeTypeUtils::KIND_SVG_IMAGE) {
         if (expectedImage.isNull()) {
             QSKIP("Not running this test: QImage failed to load the test image", SkipSingle);
@@ -145,6 +156,10 @@ void DocumentTest::testLoad_data()
     testLoad_newRow("289819_does_not_load.png", "png");
     testLoad_newRow("png-with-jpeg-extension.jpg", "png");
     testLoad_newRow("jpg-with-gif-extension.gif", "jpeg");
+
+    // RAW preview
+    testLoad_newRow("CANON-EOS350D-02.CR2", "cr2", MimeTypeUtils::KIND_RASTER_IMAGE, false);
+    testLoad_newRow("dsc_0093.nef", "nef", MimeTypeUtils::KIND_RASTER_IMAGE, false);
 
     // SVG
     testLoad_newRow("test.svg", "", MimeTypeUtils::KIND_SVG_IMAGE);
@@ -351,6 +366,20 @@ void DocumentTest::testLoadRotated()
     image = image.transformed(matrix);
 
     Document::Ptr doc = DocumentFactory::instance()->load(url);
+    doc->startLoadingFullImage();
+    doc->waitUntilLoaded();
+    QCOMPARE(image, doc->image());
+
+    // RAW preview on rotated image
+    url = urlForTestFile("dsd_1838.nef");
+    if (!KDcrawIface::KDcraw::loadEmbeddedPreview(image, url.toLocalFile())) {
+        QSKIP("Not running this test: failed to get image. Try running ./fetch_testing_raw.sh\
+ in the tests/data directory and then rerun the tests.", SkipSingle);
+    }
+    matrix = ImageUtils::transformMatrix(ROT_270);
+    image = image.transformed(matrix);
+
+    doc = DocumentFactory::instance()->load(url);
     doc->startLoadingFullImage();
     doc->waitUntilLoaded();
     QCOMPARE(image, doc->image());
