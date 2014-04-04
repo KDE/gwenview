@@ -74,10 +74,13 @@ static void addRawMimeTypes(QStringList* list)
     *list += "image/x-adobe-dng";
     *list += "image/x-sony-arw";
     *list += "image/x-minolta-mrw";
-    *list += "image/x-panasonic-rw2";
+    *list += "image/x-panasonic-raw";
+    *list += "image/x-panasonic-raw2";
     *list += "image/x-samsung-srw";
     *list += "image/x-olympus-orf";
     *list += "image/x-fuji-raf";
+    *list += "image/x-kodak-dcr";
+    *list += "image/x-sigma-x3f";
 }
 
 const QStringList& rasterImageMimeTypes()
