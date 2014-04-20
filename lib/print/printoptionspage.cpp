@@ -139,7 +139,7 @@ PrintOptionsPage::~PrintOptionsPage()
 Qt::Alignment PrintOptionsPage::alignment() const
 {
     int id = d->mPositionGroup.checkedId();
-    kWarning() << "alignment=" << id;
+    kDebug() << "alignment=" << id;
     return Qt::Alignment(id);
 }
 
