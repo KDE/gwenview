@@ -136,5 +136,11 @@ int main(int argc, char *argv[])
     } else {
         startHelper.createMainWindow();
     }
+
+    // Workaround for QTBUG-38613
+    // Another solution would be to port BalooSemanticInfoBackend::refreshAllTags
+    // to be async rather than using exec().
+    qApp->sendPostedEvents(0, QEvent::DeferredDelete);
+
     return app.exec();
 }
