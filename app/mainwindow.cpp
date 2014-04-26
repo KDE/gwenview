@@ -808,6 +808,12 @@ MainWindow::MainWindow()
 
 MainWindow::~MainWindow()
 {
+    if (GwenviewConfig::deleteThumbnailCacheOnExit()) {
+        const QString dir = ThumbnailProvider::thumbnailBaseDir();
+        if (QFile::exists(dir)) {
+            KIO::NetAccess::del(KUrl::fromPath(dir), this);
+        }
+    }
     delete d->mThumbnailProvider;
     delete d;
 }
@@ -1430,17 +1436,6 @@ bool MainWindow::queryClose()
     default: // cancel
         return false;
     }
-}
-
-bool MainWindow::queryExit()
-{
-    if (GwenviewConfig::deleteThumbnailCacheOnExit()) {
-        const QString dir = ThumbnailProvider::thumbnailBaseDir();
-        if (QFile::exists(dir)) {
-            KIO::NetAccess::del(KUrl::fromPath(dir), this);
-        }
-    }
-    return true;
 }
 
 void MainWindow::showConfigDialog()
