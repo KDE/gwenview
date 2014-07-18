@@ -222,9 +222,9 @@ void ThumbnailProviderTest::testUseEmbeddedOrNot()
         syncRun(&provider);
 
         QCOMPARE(spy.count(), 1);
-        expectedThumbnail = createColoredImage(256, 128, Qt::red);
+        expectedThumbnail = createColoredImage(256, 128, QColor(254, 0, 0));
         thumbnailPix = qvariant_cast<QPixmap>(spy.at(0).at(1));
-        QVERIFY(fuzzyImageCompare(expectedThumbnail, thumbnailPix.toImage()));
+        QVERIFY(TestUtils::imageCompare(expectedThumbnail, thumbnailPix.toImage()));
     }
 }
 
