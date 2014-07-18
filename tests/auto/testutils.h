@@ -72,28 +72,6 @@ inline bool waitForSignal(const QSignalSpy& spy, int timeout = 5)
     return false;
 }
 
-inline bool fuzzyImageCompare(const QImage& img1, const QImage& img2)
-{
-    if (img1.size() != img2.size()) {
-        kWarning() << "Different sizes" << img1.size() << img2.size();
-        return false;
-    }
-    if (img1.format() != img2.format()) {
-        kWarning() << "Different formats" << img1.format() << img2.format();
-        return false;
-    }
-
-    for (int posY = 0; posY < img1.height(); ++posY) {
-        for (int posX = 0; posX < img2.width(); ++posX) {
-            if (qAbs(img1.pixel(posX, posY) - img2.pixel(posX, posY)) > 2) {
-                kWarning() << "Different at" << QPoint(posX, posY);
-                return false;
-            }
-        }
-    }
-    return true;
-}
-
 void createEmptyFile(const QString& path);
 
 /**
@@ -112,6 +90,10 @@ void waitForDeferredDeletes();
 // FIXME: Top-level functions should move to the TestUtils namespace
 namespace TestUtils
 {
+
+bool fuzzyImageCompare(const QImage& img1, const QImage& img2, int delta = 2);
+
+bool imageCompare(const QImage& img1, const QImage& img2);
 
 void purgeUserConfiguration();
 
@@ -144,5 +126,11 @@ private:
 };
 
 } // namespace
+
+inline bool fuzzyImageCompare(const QImage& img1, const QImage& img2)
+{
+    return TestUtils::fuzzyImageCompare(img1, img2);
+}
+
 
 #endif /* TESTUTILS_H */

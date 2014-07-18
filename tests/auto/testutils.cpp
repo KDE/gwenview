@@ -104,6 +104,58 @@ void purgeUserConfiguration()
     kClearDebugConfig();
 }
 
+static QImage simplifyFormats(const QImage& img)
+{
+    switch (img.format()) {
+    case QImage::Format_RGB32:
+    case QImage::Format_ARGB32_Premultiplied:
+        return img.convertToFormat(QImage::Format_ARGB32);
+    default:
+        return img;
+    }
+}
+
+inline bool fuzzyColorComponentCompare(int c1, int c2, int delta)
+{
+    return qAbs(c1 - c2) < delta;
+}
+
+bool fuzzyImageCompare(const QImage& img1_, const QImage& img2_, int delta)
+{
+    if (img1_.size() != img2_.size()) {
+        kWarning() << "Different sizes" << img1_.size() << "!=" << img2_.size();
+        return false;
+    }
+    QImage img1 = simplifyFormats(img1_);
+    QImage img2 = simplifyFormats(img2_);
+    if (img1.format() != img2.format()) {
+        kWarning() << "Different formats" << img1.format() << "!=" << img2.format();
+        return false;
+    }
+
+    for (int posY = 0; posY < img1.height(); ++posY) {
+        for (int posX = 0; posX < img2.width(); ++posX) {
+            QColor col1 = img1.pixel(posX, posY);
+            QColor col2 = img2.pixel(posX, posY);
+            bool ok =
+                fuzzyColorComponentCompare(col1.red(), col2.red(), delta)
+                && fuzzyColorComponentCompare(col1.green(), col2.green(), delta)
+                && fuzzyColorComponentCompare(col1.blue(), col2.blue(), delta)
+                && fuzzyColorComponentCompare(col1.alpha(), col2.alpha(), delta);
+            if (!ok) {
+                kWarning() << "Different at" << QPoint(posX, posY) << col1.name() << "!=" << col2.name();
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+bool imageCompare(const QImage& img1, const QImage& img2)
+{
+    return fuzzyImageCompare(img1, img2, 1);
+}
+
 SandBoxDir::SandBoxDir()
 : mTempDir(QDir::currentPath() + "/sandbox-")
 {
