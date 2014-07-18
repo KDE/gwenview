@@ -192,7 +192,7 @@ void ThumbnailProviderTest::testUseEmbeddedOrNot()
     QPixmap thumbnailPix;
     SandBox sandBox;
     sandBox.initDir();
-    // This image is red and 256x128 but contains a white 128x64 thumbnail
+    // This image is red (0xfe0000) and 256x128 but contains a white 128x64 thumbnail
     sandBox.copyTestImage("embedded-thumbnail.jpg", 256, 128);
 
     KFileItemList list;
@@ -210,7 +210,7 @@ void ThumbnailProviderTest::testUseEmbeddedOrNot()
         QCOMPARE(spy.count(), 1);
         expectedThumbnail = createColoredImage(128, 64, Qt::white);
         thumbnailPix = qvariant_cast<QPixmap>(spy.at(0).at(1));
-        QVERIFY(fuzzyImageCompare(expectedThumbnail, thumbnailPix.toImage()));
+        QVERIFY(TestUtils::imageCompare(expectedThumbnail, thumbnailPix.toImage()));
     }
 
     // Loading a large thumbnail should bring the red one

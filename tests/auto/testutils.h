@@ -127,10 +127,4 @@ private:
 
 } // namespace
 
-inline bool fuzzyImageCompare(const QImage& img1, const QImage& img2)
-{
-    return TestUtils::fuzzyImageCompare(img1, img2);
-}
-
-
 #endif /* TESTUTILS_H */
