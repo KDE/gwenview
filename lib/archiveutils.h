@@ -58,4 +58,3 @@ GWENVIEWLIB_EXPORT QString protocolForMimeType(const QString& mimeType);
 
 } // namespace Gwenview
 #endif
-

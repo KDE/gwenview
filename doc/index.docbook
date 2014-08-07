@@ -52,7 +52,7 @@
 <keyword>picture</keyword>
 </keywordset>
 </bookinfo>
-<!--FIXME Read devels blog on http://agateau.com/ 
+<!--FIXME Read devels blog on http://agateau.com/
 -->
 <chapter id="introduction">
 <title>Introduction</title>
@@ -64,8 +64,8 @@
 &kappname; is a fast and easy to use image and video viewer for KDE.
 </para>
 
- <para> 
-Gwenview features two main modes: Browse and View. Both modes can be used 
+ <para>
+Gwenview features two main modes: Browse and View. Both modes can be used
 in a normal application window and Full Screen. Browse Mode
 lets you navigate through your computer showing thumbnails of your images, View
 Mode lets you view images one at a time, and Full Screen lets you make quick
@@ -81,7 +81,7 @@ with an alpha channel (transparency) as well as animations.</para>
 images. Lossless JPEG transforms such as rotations and mirroring are also supported.</para>
 
 <para>&kappname; can read embedded color profiles from PNG and JPEG files.
-It can use the image color profile together with the display color profile 
+It can use the image color profile together with the display color profile
 to output correct colors on the screen.</para>
 </sect1>
 
@@ -198,12 +198,12 @@ on your images.  For more information, see the
 
 <para>
 Moving the mouse over an image shows buttons to select or rotate the image as well as
-a button to enter Fullscreen Mode. 
+a button to enter Fullscreen Mode.
 Modified images are indicated by an icon down right, click it to save the changed image.
 Clicking on an image takes you into View
 Mode.  You may select multiple images and switch to View Mode to view them side-by-side.</para>
 
-<para>The slider at the bottom right allows you to change the size of the images. 
+<para>The slider at the bottom right allows you to change the size of the images.
 You can also filter the images by filename, date, tag or rating using the box on the
 lower left. The toolbar appears in both Browse mode as well as View
 mode and contains the most commonly used actions. </para>
@@ -264,12 +264,12 @@ button are next to the zoom slider and are two preset zoom levels. The
 of the window, and the <guibutton>100%</guibutton> button zooms the image to
 the actual pixel size. The shortcut <keycap>F</keycap> toggles between both view modes.</para>
 
-<para>When an image is in zoom-to-fit mode, you can go to the previous and next 
-image with the arrow keys. When you zoom in, arrow keys are used to scroll the image. 
+<para>When an image is in zoom-to-fit mode, you can go to the previous and next
+image with the arrow keys. When you zoom in, arrow keys are used to scroll the image.
 This is very similar to the behavior provided by phones or digital cameras.</para>
 
-<para>When an image is zoomed in, a bird-eye view appears and lets you scroll 
-the image using the mouse and the arrow keys. The bird-eye view automatically hides 
+<para>When an image is zoomed in, a bird-eye view appears and lets you scroll
+the image using the mouse and the arrow keys. The bird-eye view automatically hides
 itself after a short delay, showing back only while zooming or scrolling.</para>
 
 <tip><para>You can start directly in View mode by starting &kappname; from a
@@ -329,7 +329,7 @@ button on the toolbar, or by
 <sect2>
 <title>Browse Mode Full Screen</title>
 
-<para>In Browse Mode you can switch to fullscreen also by clicking on the button that 
+<para>In Browse Mode you can switch to fullscreen also by clicking on the button that
 appears when you move the mouse over the thumbnails.
 </para>
 <screenshot>
@@ -340,9 +340,9 @@ appears when you move the mouse over the thumbnails.
     </imageobject>
   </mediaobject>
 </screenshot>
-<para>Going fullscreen while browsing gives you a more immersive experience while 
-you go through your pictures. It is quite nice on your regular computer, but makes 
-even more sense when you connect your laptop to the big TV in the living room to show 
+<para>Going fullscreen while browsing gives you a more immersive experience while
+you go through your pictures. It is quite nice on your regular computer, but makes
+even more sense when you connect your laptop to the big TV in the living room to show
 pictures to your guests.
 </para>
 </sect2>
@@ -410,8 +410,8 @@ not appear by default in Browse Mode.  Its appearance can be toggled using
 <guimenu>View</guimenu>
 <guimenuitem>Sidebar</guimenuitem>
 </menuchoice>
-or using the <guiicon>▮←</guiicon> / <guiicon>▮→</guiicon> button at the left side 
-of the statusbar. When clicked it collapses or expands the sidebar. 
+or using the <guiicon>▮←</guiicon> / <guiicon>▮→</guiicon> button at the left side
+of the statusbar. When clicked it collapses or expands the sidebar.
 The sidebar contains several tabs:</para>
 
 <variablelist>
@@ -456,7 +456,7 @@ in the &kde; Device Notifier after connecting a supported device.</para>
 
 <para>When you plug in a device the &kappname; importer recursively lists all images and videos.
 </para>
-<para>This is not always what you expect, &eg; plugging a smartphone you do not want to list all medias 
+<para>This is not always what you expect, &eg; plugging a smartphone you do not want to list all medias
 of the device; but only the pictures you took, which are usually in a special subfolder.
 </para>
 
@@ -468,8 +468,8 @@ of the device; but only the pictures you took, which are usually in a special su
     </imageobject>
   </mediaobject>
 </screenshot>
-<para>It is possible to select the root folder to list, and &kappname; Importer will remember the 
-last root folder for each device. This way, next time you plug a device in, only the relevant 
+<para>It is possible to select the root folder to list, and &kappname; Importer will remember the
+last root folder for each device. This way, next time you plug a device in, only the relevant
 pictures and videos should be listed.
 </para>
 

@@ -30,7 +30,7 @@ find_path(LCMS2_INCLUDE_DIR lcms2.h
 )
 
 find_library(LCMS2_LIBRARIES NAMES lcms2 liblcms2 lcms-2 liblcms-2
-   PATHS     
+   PATHS
    ${PC_LCMS2_LIBDIR}
    ${PC_LCMS2_LIBRARY_DIRS}
    PATH_SUFFIXES lcms2
@@ -69,4 +69,3 @@ else()
 endif()
 
 mark_as_advanced(LCMS2_INCLUDE_DIR LCMS2_LIBRARIES LCMS2_VERSION)
-

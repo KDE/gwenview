@@ -146,7 +146,11 @@ struct DocumentViewPrivate
         q->adapterChanged();
         q->positionChanged();
         if (adapter->canZoom()) {
-            q->zoomToFitChanged(adapter->zoomToFit());
+            if (adapter->zoomToFit()) {
+                q->zoomToFitChanged(true);
+            } else {
+                q->zoomChanged(adapter->zoom());
+            }
         }
         if (adapter->rasterImageView()) {
             QObject::connect(adapter->rasterImageView(), SIGNAL(currentToolChanged(AbstractRasterImageViewTool*)),

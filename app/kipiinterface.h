@@ -116,4 +116,3 @@ private:
 
 } // namespace
 #endif /* KIPIINTERFACE_H */
-

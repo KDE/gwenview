@@ -41,6 +41,7 @@ struct ConfigDialogPrivate
     InvisibleButtonGroup* mAlphaBackgroundModeGroup;
     InvisibleButtonGroup* mWheelBehaviorGroup;
     InvisibleButtonGroup* mAnimationMethodGroup;
+    InvisibleButtonGroup* mZoomModeGroup;
     InvisibleButtonGroup* mThumbnailBarOrientationGroup;
     Ui_GeneralConfigPage mGeneralConfigPage;
     Ui_ImageViewConfigPage mImageViewConfigPage;
@@ -91,6 +92,12 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     d->mAnimationMethodGroup->addButton(d->mImageViewConfigPage.glAnimationRadioButton, int(DocumentView::GLAnimation));
     d->mAnimationMethodGroup->addButton(d->mImageViewConfigPage.softwareAnimationRadioButton, int(DocumentView::SoftwareAnimation));
     d->mAnimationMethodGroup->addButton(d->mImageViewConfigPage.noAnimationRadioButton, int(DocumentView::NoAnimation));
+
+    d->mZoomModeGroup = new InvisibleButtonGroup(widget);
+    d->mZoomModeGroup->setObjectName(QLatin1String("kcfg_ZoomMode"));
+    d->mZoomModeGroup->addButton(d->mImageViewConfigPage.autofitZoomModeRadioButton, int(ZoomMode::Autofit));
+    d->mZoomModeGroup->addButton(d->mImageViewConfigPage.keepSameZoomModeRadioButton, int(ZoomMode::KeepSame));
+    d->mZoomModeGroup->addButton(d->mImageViewConfigPage.individualZoomModeRadioButton, int(ZoomMode::Individual));
 
     d->mThumbnailBarOrientationGroup = new InvisibleButtonGroup(widget);
     d->mThumbnailBarOrientationGroup->setObjectName(QLatin1String("kcfg_ThumbnailBarOrientation"));

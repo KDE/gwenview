@@ -6,6 +6,7 @@
                         http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
     <kcfgfile name="gwenviewrc"/>
     <include>lib/sorting.h</include>
+    <include>lib/zoommode.h</include>
     <include>lib/mousewheelbehavior.h</include>
     <include>lib/documentview/documentview.h</include>
     <include>lib/documentview/rasterimageview.h</include>
@@ -129,14 +130,24 @@
             <default>DocumentView::SoftwareAnimation</default>
         </entry>
 
-        <entry name="ShowLockZoomButton" type="Bool">
-            <default>false</default>
-        </entry>
-
-        <entry name="LockZoom" type="Bool">
-            <default>false</default>
-            <whatsthis>Defines what happens when going to image B after having zoomed an area of image A.
-                When true: zoom and position is kept. When false: image B is zoomed out to fit the screen.</whatsthis>
+        <entry name="ZoomMode" type="Enum">
+                <choices name="Gwenview::ZoomMode::Enum">
+                <choice name="ZoomMode::Autofit"/>
+                <choice name="ZoomMode::KeepSame"/>
+                <choice name="ZoomMode::Individual"/>
+            </choices>
+            <default>ZoomMode::Autofit</default>
+            <whatsthis>Defines what happens when going to image B after
+            having zoomed in on an area of image A.  If set to Autofit,
+            image B is zoomed out to fit the screen.  If set to KeepSame,
+            all images share the same zoom and position: image B is set
+            to the same zoom parameters as image A (and if these are
+            changed, image A will then be displayed with the updated zoom
+            and position).  If set to Individual, all images remember
+            their own zoom and position: image B is initially set to the
+            same zoom parameters as image A, but will then remember its
+            own zoom and position (if these are changed, image A will NOT
+            be displayed with the updated zoom and position).</whatsthis>
         </entry>
     </group>
 
@@ -251,4 +262,3 @@
     </group>
 
 </kcfg>
-

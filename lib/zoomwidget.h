@@ -45,11 +45,6 @@ public:
 
     void setActions(QAction* zoomToFitAction, QAction* actualSizeAction, QAction* zoomInAction, QAction* zoomOutAction);
 
-    bool isZoomLocked() const;
-    void setZoomLocked(bool);
-
-    void setLockZoomButtonVisible(bool);
-
 public Q_SLOTS:
     void setZoom(qreal zoom);
 
@@ -61,7 +56,6 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void slotZoomSliderActionTriggered();
-    void updateLockZoomButton();
 
 private:
     friend struct ZoomWidgetPrivate;

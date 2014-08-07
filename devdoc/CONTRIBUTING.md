@@ -43,4 +43,3 @@ is required to make it easy to rollback the merge if need be.
     git merge --no-ff origin/KDE/4.x
     # Check merge is correct
     git push
-

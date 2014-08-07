@@ -58,6 +58,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/statusbartoolbutton.h>
 #include <lib/thumbnailview/thumbnailbarview.h>
 #include <lib/zoomwidget.h>
+#include <lib/zoommode.h>
 
 namespace Gwenview
 {
@@ -163,6 +164,7 @@ struct ViewMainPagePrivate
     bool mFullScreenMode;
     bool mCompareMode;
     bool mThumbnailBarVisibleBeforeFullScreen;
+    ZoomMode::Enum mZoomMode;
 
     void setupThumbnailBar()
     {
@@ -489,20 +491,13 @@ void ViewMainPage::loadConfig()
         d->mThumbnailBar->setUpdatesEnabled(true);
     }
 
-    if (GwenviewConfig::showLockZoomButton()) {
-        d->mZoomWidget->setZoomLocked(GwenviewConfig::lockZoom());
-    } else {
-        d->mZoomWidget->setLockZoomButtonVisible(false);
-    }
+    d->mZoomMode = GwenviewConfig::zoomMode();
 }
 
 void ViewMainPage::saveConfig()
 {
     d->saveSplitterConfig();
     GwenviewConfig::setThumbnailBarIsVisible(d->mToggleThumbnailBarAction->isChecked());
-    if (GwenviewConfig::showLockZoomButton()) {
-        GwenviewConfig::setLockZoom(d->mZoomWidget->isZoomLocked());
-    }
 }
 
 void ViewMainPage::setThumbnailBarVisibility(bool visible)
@@ -638,11 +633,11 @@ void ViewMainPage::openUrls(const KUrl::List& allUrls, const KUrl& currentUrl)
     if (!d->mDocumentViews.isEmpty()) {
         d->mDocumentViewContainer->updateSetup(d->mDocumentViews.last());
     }
-    if (!d->mDocumentViews.isEmpty() && d->mZoomWidget->isZoomLocked()) {
-        setup = d->mDocumentViews.last()->setup();
-    } else {
+    if (d->mDocumentViews.isEmpty() || d->mZoomMode == ZoomMode::Autofit) {
         setup.valid = true;
         setup.zoomToFit = true;
+    } else {
+        setup = d->mDocumentViews.last()->setup();
     }
     // Destroy views which show urls we don't care about, remove from "urls" the
     // urls which already have a view.
@@ -687,7 +682,7 @@ void ViewMainPage::openUrls(const KUrl::List& allUrls, const KUrl& currentUrl)
         KUrl url = it.key();
         DocumentView* view = it.value();
         DocumentView::Setup savedSetup = d->mDocumentViewContainer->savedSetup(url);
-        view->openUrl(url, savedSetup.valid ? savedSetup : setup);
+        view->openUrl(url, d->mZoomMode == ZoomMode::Individual && savedSetup.valid ? savedSetup : setup);
         d->mActivityResources.value(view)->setUri(url);
     }
 
