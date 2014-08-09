@@ -79,7 +79,7 @@ find_package(Kdcraw 2.4.2)
 # macro_log_feature(KDCRAW_FOUND "libkdcraw" "KDE Dcraw library" "http://www.kde.org" TRUE "2.4.2")
 
 ## dirs to build
-# add_subdirectory(lib)
+add_subdirectory(lib)
 add_subdirectory(app)
 # add_subdirectory(importer)
 # add_subdirectory(part)
