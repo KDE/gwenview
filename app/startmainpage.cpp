@@ -32,7 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KDE
 #include <KFilePlacesModel>
 #include <KGlobalSettings>
-#include <KIcon>
+#include <QIcon>
 #include <KMimeType>
 
 // Local
@@ -293,10 +293,10 @@ void StartMainPage::showRecentFoldersViewContextMenu(const QPoint& pos)
     // Create menu
     QMenu menu(this);
     bool fromRecentUrls = view == d->mRecentUrlsView;
-    QAction* addToPlacesAction = fromRecentUrls ? 0 : menu.addAction(KIcon("bookmark-new"), i18n("Add to Places"));
-    QAction* removeAction = menu.addAction(KIcon("edit-delete"), fromRecentUrls ? i18n("Forget this URL") : i18n("Forget this Folder"));
+    QAction* addToPlacesAction = fromRecentUrls ? 0 : menu.addAction(QIcon::fromTheme("bookmark-new"), i18n("Add to Places"));
+    QAction* removeAction = menu.addAction(QIcon::fromTheme("edit-delete"), fromRecentUrls ? i18n("Forget this URL") : i18n("Forget this Folder"));
     menu.addSeparator();
-    QAction* clearAction = menu.addAction(KIcon("edit-delete-all"), i18n("Forget All"));
+    QAction* clearAction = menu.addAction(QIcon::fromTheme("edit-delete-all"), i18n("Forget All"));
 
     if (!index.isValid()) {
         if (addToPlacesAction) {

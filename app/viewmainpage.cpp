@@ -434,7 +434,7 @@ ViewMainPage::ViewMainPage(QWidget* parent, SlideShow* slideShow, KActionCollect
 
     d->mToggleThumbnailBarAction = view->add<KToggleAction>(QString("toggle_thumbnailbar"));
     d->mToggleThumbnailBarAction->setText(i18n("Thumbnail Bar"));
-    d->mToggleThumbnailBarAction->setIcon(KIcon("folder-image"));
+    d->mToggleThumbnailBarAction->setIcon(QIcon::fromTheme("folder-image"));
     d->mToggleThumbnailBarAction->setShortcut(Qt::CTRL | Qt::Key_B);
     d->mToggleThumbnailBarAction->setChecked(GwenviewConfig::thumbnailBarIsVisible());
     connect(d->mToggleThumbnailBarAction, SIGNAL(triggered(bool)),

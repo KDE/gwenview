@@ -31,7 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KActionCollection>
 #include <KColorScheme>
 #include <KDebug>
-#include <KIcon>
+#include <QIcon>
 #include <KIconLoader>
 #include <KLocale>
 #include <KUrl>
@@ -300,7 +300,7 @@ void SaveBar::initActionDependentWidgets()
 
     // FIXME: Not using an action for now
     d->mSaveAllButton->setText(i18n("Save All"));
-    d->mSaveAllButton->setIcon(KIcon("document-save-all"));
+    d->mSaveAllButton->setIcon(QIcon::fromTheme("document-save-all"));
     connect(d->mSaveAllButton, SIGNAL(clicked()),
             SIGNAL(requestSaveAll()));
 

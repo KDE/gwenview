@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // KDE
 #include <KGlobalSettings>
+#include <KLocalizedString>
 
 // Local
 #include "ui_generalconfigpage.h"
@@ -73,7 +74,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     // General
     widget = setupPage(d->mGeneralConfigPage);
     pageItem = addPage(widget, i18n("General"));
-    pageItem->setIcon(KIcon("gwenview"));
+    pageItem->setIcon(QIcon::fromTheme("gwenview"));
     connect(d->mGeneralConfigPage.kcfg_ViewBackgroundValue, SIGNAL(valueChanged(int)), SLOT(updateViewBackgroundFrame()));
 
     // Image View
@@ -107,12 +108,12 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     d->mThumbnailBarOrientationGroup->addButton(d->mImageViewConfigPage.verticalRadioButton, int(Qt::Vertical));
 
     pageItem = addPage(widget, i18n("Image View"));
-    pageItem->setIcon(KIcon("view-preview"));
+    pageItem->setIcon(QIcon::fromTheme("view-preview"));
 
     // Advanced
     widget = setupPage(d->mAdvancedConfigPage);
     pageItem = addPage(widget, i18n("Advanced"));
-    pageItem->setIcon(KIcon("preferences-other"));
+    pageItem->setIcon(QIcon::fromTheme("preferences-other"));
     d->mAdvancedConfigPage.cacheHelpLabel->setFont(KGlobalSettings::smallestReadableFont());
 
     updateViewBackgroundFrame();

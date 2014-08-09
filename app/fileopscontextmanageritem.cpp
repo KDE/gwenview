@@ -195,12 +195,12 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, QL
 
     d->mTrashAction = file->addAction("file_trash", this, SLOT(trash()));
     d->mTrashAction->setText(i18nc("Verb", "Trash"));
-    d->mTrashAction->setIcon(KIcon("user-trash"));
+    d->mTrashAction->setIcon(QIcon::fromTheme("user-trash"));
     d->mTrashAction->setShortcut(Qt::Key_Delete);
 
     d->mDelAction = file->addAction("file_delete", this, SLOT(del()));
     d->mDelAction->setText(i18n("Delete"));
-    d->mDelAction->setIcon(KIcon("edit-delete"));
+    d->mDelAction->setIcon(QIcon::fromTheme("edit-delete"));
     d->mDelAction->setShortcut(QKeySequence(Qt::ShiftModifier | Qt::Key_Delete));
 
     d->mRestoreAction = file->addAction("file_restore", this, SLOT(restore()));
@@ -208,11 +208,11 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, QL
 
     d->mShowPropertiesAction = file->addAction("file_show_properties", this, SLOT(showProperties()));
     d->mShowPropertiesAction->setText(i18n("Properties"));
-    d->mShowPropertiesAction->setIcon(KIcon("document-properties"));
+    d->mShowPropertiesAction->setIcon(QIcon::fromTheme("document-properties"));
 
     d->mCreateFolderAction = file->addAction("file_create_folder", this, SLOT(createFolder()));
     d->mCreateFolderAction->setText(i18n("Create Folder..."));
-    d->mCreateFolderAction->setIcon(KIcon("folder-new"));
+    d->mCreateFolderAction->setIcon(QIcon::fromTheme("folder-new"));
 
     d->mOpenWithAction = file->addAction("file_open_with");
     d->mOpenWithAction->setText(i18n("Open With"));
@@ -401,7 +401,7 @@ void FileOpsContextManagerItem::populateOpenMenu()
     Q_FOREACH(const KService::Ptr & service, d->mServiceList) {
         QString text = service->name().replace('&', "&&");
         QAction* action = openMenu->addAction(text);
-        action->setIcon(KIcon(service->icon()));
+        action->setIcon(QIcon::fromTheme(service->icon()));
         action->setData(idx);
         ++idx;
     }

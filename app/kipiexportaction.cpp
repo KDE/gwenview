@@ -69,7 +69,7 @@ struct KIPIExportActionPrivate
 };
 
 KIPIExportAction::KIPIExportAction(QObject* parent)
-: KToolBarPopupAction(KIcon("document-share"), i18nc("@action", "Share"), parent)
+: KToolBarPopupAction(QIcon::fromTheme("document-share"), i18nc("@action", "Share"), parent)
 , d(new KIPIExportActionPrivate)
 {
     d->q = this;

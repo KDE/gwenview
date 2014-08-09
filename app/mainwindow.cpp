@@ -373,14 +373,14 @@ struct MainWindow::Private
 
         KAction* action = file->addAction("reload", q, SLOT(reload()));
         action->setText(i18nc("@action reload the currently viewed image", "Reload"));
-        action->setIcon(KIcon("view-refresh"));
+        action->setIcon(QIcon::fromTheme("view-refresh"));
         action->setShortcut(Qt::Key_F5);
 
         mBrowseAction = view->addAction("browse");
         mBrowseAction->setText(i18nc("@action:intoolbar Switch to file list", "Browse"));
         mBrowseAction->setToolTip(i18nc("@info:tooltip", "Browse folders for images"));
         mBrowseAction->setCheckable(true);
-        mBrowseAction->setIcon(KIcon("view-list-icons"));
+        mBrowseAction->setIcon(QIcon::fromTheme("view-list-icons"));
         mBrowseAction->setShortcut(Qt::Key_Escape);
         connect(mViewMainPage, SIGNAL(goToBrowseModeRequested()),
             mBrowseAction, SLOT(trigger()));
@@ -388,7 +388,7 @@ struct MainWindow::Private
         mViewAction = view->addAction("view");
         mViewAction->setText(i18nc("@action:intoolbar Switch to image view", "View"));
         mViewAction->setToolTip(i18nc("@info:tooltip", "View selected images"));
-        mViewAction->setIcon(KIcon("view-preview"));
+        mViewAction->setIcon(QIcon::fromTheme("view-preview"));
         mViewAction->setCheckable(true);
 
         mViewModeActionGroup = new QActionGroup(q);
@@ -408,13 +408,13 @@ struct MainWindow::Private
                 mFullScreenAction, SLOT(trigger()));
 
         KAction* leaveFullScreenAction = view->addAction("leave_fullscreen", q, SLOT(leaveFullScreen()));
-        leaveFullScreenAction->setIcon(KIcon("view-restore"));
+        leaveFullScreenAction->setIcon(QIcon::fromTheme("view-restore"));
         leaveFullScreenAction->setPriority(QAction::LowPriority);
         leaveFullScreenAction->setText(i18nc("@action", "Leave Fullscreen Mode"));
 
         mGoToPreviousAction = view->addAction("go_previous", q, SLOT(goToPrevious()));
         mGoToPreviousAction->setPriority(QAction::LowPriority);
-        mGoToPreviousAction->setIcon(KIcon("media-skip-backward"));
+        mGoToPreviousAction->setIcon(QIcon::fromTheme("media-skip-backward"));
         mGoToPreviousAction->setText(i18nc("@action Go to previous image", "Previous"));
         mGoToPreviousAction->setToolTip(i18nc("@info:tooltip", "Go to previous image"));
         mGoToPreviousAction->setShortcut(Qt::Key_Backspace);
@@ -422,7 +422,7 @@ struct MainWindow::Private
 
         mGoToNextAction = view->addAction("go_next", q, SLOT(goToNext()));
         mGoToNextAction->setPriority(QAction::LowPriority);
-        mGoToNextAction->setIcon(KIcon("media-skip-forward"));
+        mGoToNextAction->setIcon(QIcon::fromTheme("media-skip-forward"));
         mGoToNextAction->setText(i18nc("@action Go to next image", "Next"));
         mGoToNextAction->setToolTip(i18nc("@info:tooltip", "Go to next image"));
         mGoToNextAction->setShortcut(Qt::Key_Space);
@@ -446,14 +446,14 @@ struct MainWindow::Private
 
         action = view->addAction("go_start_page", q, SLOT(showStartMainPage()));
         action->setPriority(QAction::LowPriority);
-        action->setIcon(KIcon("go-home"));
+        action->setIcon(QIcon::fromTheme("go-home"));
         action->setText(i18nc("@action", "Start Page"));
         action->setToolTip(i18nc("@info:tooltip", "Open the start page"));
 
         mToggleSideBarAction = view->add<KToggleAction>("toggle_sidebar");
         connect(mToggleSideBarAction, SIGNAL(toggled(bool)),
                 q, SLOT(toggleSideBar(bool)));
-        mToggleSideBarAction->setIcon(KIcon("view-sidetree"));
+        mToggleSideBarAction->setIcon(QIcon::fromTheme("view-sidetree"));
         mToggleSideBarAction->setShortcut(Qt::Key_F4);
         mToggleSideBarAction->setText(i18nc("@action", "Sidebar"));
         connect(mBrowseMainPage->toggleSideBarButton(), SIGNAL(clicked()),
@@ -494,14 +494,14 @@ struct MainWindow::Private
 
         action = undoGroup->createRedoAction(actionCollection);
         action->setObjectName(KStandardAction::name(KStandardAction::Redo));
-        action->setIcon(KIcon("edit-redo"));
+        action->setIcon(QIcon::fromTheme("edit-redo"));
         action->setIconText(i18n("Redo"));
         action->setShortcuts(KStandardShortcut::redo());
         edit->addAction(action->objectName(), action);
 
         action = undoGroup->createUndoAction(actionCollection);
         action->setObjectName(KStandardAction::name(KStandardAction::Undo));
-        action->setIcon(KIcon("edit-undo"));
+        action->setIcon(QIcon::fromTheme("edit-undo"));
         action->setIconText(i18n("Undo"));
         action->setShortcuts(KStandardShortcut::undo());
         edit->addAction(action->objectName(), action);
@@ -1394,10 +1394,10 @@ void MainWindow::updateSlideShowAction()
 {
     if (d->mSlideShow->isRunning()) {
         d->mToggleSlideShowAction->setText(i18n("Stop Slideshow"));
-        d->mToggleSlideShowAction->setIcon(KIcon("media-playback-pause"));
+        d->mToggleSlideShowAction->setIcon(QIcon::fromTheme("media-playback-pause"));
     } else {
         d->mToggleSlideShowAction->setText(i18n("Start Slideshow"));
-        d->mToggleSlideShowAction->setIcon(KIcon("media-playback-start"));
+        d->mToggleSlideShowAction->setIcon(QIcon::fromTheme("media-playback-start"));
     }
 }
 

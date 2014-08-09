@@ -37,7 +37,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KComboBox>
 #include <KDebug>
 #include <KFileItem>
-#include <KIcon>
+#include <QIcon>
 #include <KIconLoader>
 #include <KLineEdit>
 #include <KLocale>
@@ -494,7 +494,7 @@ public:
     void setFilterWidget(QWidget* widget)
     {
         QToolButton* closeButton = new QToolButton;
-        closeButton->setIcon(KIcon("window-close"));
+        closeButton->setIcon(QIcon::fromTheme("window-close"));
         closeButton->setAutoRaise(true);
         closeButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
         int size = IconSize(KIconLoader::Small);

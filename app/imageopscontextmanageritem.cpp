@@ -84,37 +84,37 @@ struct ImageOpsContextManagerItem::Private
         mRotateLeftAction->setPriority(QAction::LowPriority);
         mRotateLeftAction->setText(i18n("Rotate Left"));
         mRotateLeftAction->setToolTip(i18nc("@info:tooltip", "Rotate image to the left"));
-        mRotateLeftAction->setIcon(KIcon("object-rotate-left"));
+        mRotateLeftAction->setIcon(QIcon::fromTheme("object-rotate-left"));
         mRotateLeftAction->setShortcut(Qt::CTRL + Qt::Key_L);
 
         mRotateRightAction = edit->addAction("rotate_right", q, SLOT(rotateRight()));
         mRotateRightAction->setPriority(QAction::LowPriority);
         mRotateRightAction->setText(i18n("Rotate Right"));
         mRotateRightAction->setToolTip(i18nc("@info:tooltip", "Rotate image to the right"));
-        mRotateRightAction->setIcon(KIcon("object-rotate-right"));
+        mRotateRightAction->setIcon(QIcon::fromTheme("object-rotate-right"));
         mRotateRightAction->setShortcut(Qt::CTRL + Qt::Key_R);
 
         mMirrorAction = edit->addAction("mirror", q, SLOT(mirror()));
         mMirrorAction->setText(i18n("Mirror"));
-        mMirrorAction->setIcon(KIcon("object-flip-horizontal"));
+        mMirrorAction->setIcon(QIcon::fromTheme("object-flip-horizontal"));
 
         mFlipAction = edit->addAction("flip", q, SLOT(flip()));
         mFlipAction->setText(i18n("Flip"));
-        mFlipAction->setIcon(KIcon("object-flip-vertical"));
+        mFlipAction->setIcon(QIcon::fromTheme("object-flip-vertical"));
 
         mResizeAction = edit->addAction("resize", q, SLOT(resizeImage()));
         mResizeAction->setText(i18n("Resize"));
-        mResizeAction->setIcon(KIcon("transform-scale"));
+        mResizeAction->setIcon(QIcon::fromTheme("transform-scale"));
         mResizeAction->setShortcut(Qt::SHIFT + Qt::Key_R);
 
         mCropAction = edit->addAction("crop", q, SLOT(crop()));
         mCropAction->setText(i18n("Crop"));
-        mCropAction->setIcon(KIcon("transform-crop-and-resize"));
+        mCropAction->setIcon(QIcon::fromTheme("transform-crop-and-resize"));
         mCropAction->setShortcut(Qt::SHIFT + Qt::Key_C);
 
         mRedEyeReductionAction = edit->addAction("red_eye_reduction", q, SLOT(startRedEyeReduction()));
         mRedEyeReductionAction->setText(i18n("Red Eye Reduction"));
-        //mRedEyeReductionAction->setIcon(KIcon("transform-crop-and-resize"));
+        //mRedEyeReductionAction->setIcon(QIcon::fromTheme("transform-crop-and-resize"));
 
         mActionList
                 << mRotateLeftAction
