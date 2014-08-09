@@ -211,6 +211,7 @@ endif()
 
 target_link_libraries(gwenviewlib
    KF5::KDELibs4Support
+   Qt5::Concurrent
     )
 if (WIN32)
     target_link_libraries(gwenviewlib ${EXPAT_LIBRARIES})
