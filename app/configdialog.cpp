@@ -62,8 +62,10 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 , d(new ConfigDialogPrivate)
 {
     setFaceType(KPageDialog::List);
-    setButtons(KDialog::Ok | KDialog::Cancel | KDialog::Apply | KDialog::Default);
-    showButtonSeparator(true);
+
+    //KF5 TODO KConfigDialog no longer inherits from KDialog
+//     setButtons(KDialog::Ok | KDialog::Cancel | KDialog::Apply | KDialog::Default);
+//     showButtonSeparator(true);
 
     QWidget* widget;
     KPageWidgetItem* pageItem;
