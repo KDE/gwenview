@@ -38,8 +38,8 @@
 </copyright>
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2014-03-06</date>
-<releaseinfo>4.13 (&kde; 4.13)</releaseinfo>
+<date>2014-08-09</date>
+<releaseinfo>4.14 (&kde; 4.14)</releaseinfo>
 <abstract>
 <para>&kappname; is an image viewer for &kde;.</para>
 </abstract>
@@ -271,6 +271,14 @@ This is very similar to the behavior provided by phones or digital cameras.</par
 <para>When an image is zoomed in, a bird-eye view appears and lets you scroll
 the image using the mouse and the arrow keys. The bird-eye view automatically hides
 itself after a short delay, showing back only while zooming or scrolling.</para>
+
+<para>You can define what happens when going to image B after having zoomed in on an area of image A using the options in the <guilabel>Zoom mode</guilabel> on the <guimenuitem>Image View</guimenuitem> of the &kappname; configuration window which can be reached using the <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure &kappname;...</guimenuitem></menuchoice>.</para>
+
+<itemizedlist>
+    <listitem><para>If set to <guilabel>Autofit each image</guilabel>, image B is zoomed out to fit the screen.</para></listitem>
+    <listitem><para>If set to <guilabel>Keep same zoom and position</guilabel>, all images share the same zoom and position: image B is set to the same zoom parameters as image A (and if these are changed, image A will then be displayed with the updated zoom and position).</para></listitem>
+    <listitem><para>If set to <guilabel>Per image zoom and position</guilabel>, all images remember their own zoom and position: image B is initially set to the same zoom parameters as image A, but will then remember its own zoom and position (if these are changed, image A will <emphasis>not</emphasis> be displayed with the updated zoom and position).</para></listitem>
+</itemizedlist>
 
 <tip><para>You can start directly in View mode by starting &kappname; from a
 context menu like <guimenuitem>Open With</guimenuitem> in another program or by
