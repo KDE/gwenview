@@ -345,7 +345,7 @@ void GvCore::setRating(const KUrl& url, int rating)
 {
     QModelIndex index = d->mDirModel->indexForUrl(url);
     if (!index.isValid()) {
-        kWarning() << "invalid index!";
+        qWarning() << "invalid index!";
         return;
     }
     d->mDirModel->setData(index, rating, SemanticInfoDirModel::RatingRole);
