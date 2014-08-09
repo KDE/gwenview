@@ -29,7 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 #include <KDebug>
-#include <KIcon>
+#include <QIcon>
 
 // Local
 
@@ -54,7 +54,7 @@ struct ZoomSliderPrivate
 static QToolButton* createZoomButton(const char* iconName)
 {
     QToolButton* button = new QToolButton;
-    button->setIcon(KIcon(iconName));
+    button->setIcon(QIcon::fromTheme(iconName));
     button->setAutoRaise(true);
     button->setAutoRepeat(true);
     return button;

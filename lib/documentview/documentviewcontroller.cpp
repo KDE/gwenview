@@ -96,11 +96,11 @@ struct DocumentViewControllerPrivate
         mZoomToFitAction->setCheckable(true);
         mZoomToFitAction->setChecked(true);
         mZoomToFitAction->setText(i18n("Zoom to Fit"));
-        mZoomToFitAction->setIcon(KIcon("zoom-fit-best"));
+        mZoomToFitAction->setIcon(QIcon::fromTheme("zoom-fit-best"));
         mZoomToFitAction->setIconText(i18nc("@action:button Zoom to fit, shown in status bar, keep it short please", "Fit"));
 
         mActualSizeAction = view->addAction(KStandardAction::ActualSize);
-        mActualSizeAction->setIcon(KIcon("zoom-original"));
+        mActualSizeAction->setIcon(QIcon::fromTheme("zoom-original"));
         mActualSizeAction->setIconText(i18nc("@action:button Zoom to original size, shown in status bar, keep it short please", "100%"));
 
         mZoomInAction = view->addAction(KStandardAction::ZoomIn);

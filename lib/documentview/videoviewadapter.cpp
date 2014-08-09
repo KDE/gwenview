@@ -35,7 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 #include <KDebug>
-#include <KIcon>
+#include <QIcon>
 #include <KUrl>
 
 // Local
@@ -293,9 +293,9 @@ bool VideoViewAdapter::eventFilter(QObject*, QEvent* event)
 void VideoViewAdapter::updatePlayUi()
 {
     if (d->isPlaying()) {
-        d->mPlayPauseAction->setIcon(KIcon("media-playback-pause"));
+        d->mPlayPauseAction->setIcon(QIcon::fromTheme("media-playback-pause"));
     } else {
-        d->mPlayPauseAction->setIcon(KIcon("media-playback-start"));
+        d->mPlayPauseAction->setIcon(QIcon::fromTheme("media-playback-start"));
     }
 
     d->mLastSeekSliderActionTime.restart();
@@ -319,7 +319,7 @@ void VideoViewAdapter::updatePlayUi()
 void VideoViewAdapter::updateMuteAction()
 {
     d->mMuteAction->setIcon(
-        KIcon(d->mAudioOutput->isMuted() ? "player-volume-muted" : "player-volume")
+        QIcon::fromTheme(d->mAudioOutput->isMuted() ? "player-volume-muted" : "player-volume")
         );
 }
 

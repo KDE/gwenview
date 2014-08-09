@@ -188,7 +188,7 @@ struct CropWidgetPrivate : public Ui_CropWidget
     void initDialogButtonBox()
     {
         QPushButton* cropButton = dialogButtonBox->button(QDialogButtonBox::Ok);
-        cropButton->setIcon(KIcon("transform-crop-and-resize"));
+        cropButton->setIcon(QIcon::fromTheme("transform-crop-and-resize"));
         cropButton->setText(i18n("Crop"));
 
         QObject::connect(dialogButtonBox, SIGNAL(accepted()),

@@ -134,7 +134,7 @@ private:
         setText(urlForView.pathOrUrl());
 
         QString iconName = KMimeType::iconNameForUrl(mUrl);
-        setIcon(KIcon(iconName));
+        setIcon(QIcon::fromTheme(iconName));
 
         setData(QVariant(mUrl), KFilePlacesModel::UrlRole);
 

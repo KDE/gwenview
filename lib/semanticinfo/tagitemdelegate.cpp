@@ -62,13 +62,13 @@ QList<QWidget*> TagItemDelegate::createItemWidgets() const
 
     QToolButton* assignToAllButton = new QToolButton;
     initButton(assignToAllButton);
-    assignToAllButton->setIcon(KIcon("fill-color")); /* FIXME: Probably not the appropriate icon */
+    assignToAllButton->setIcon(QIcon::fromTheme("fill-color")); /* FIXME: Probably not the appropriate icon */
     assignToAllButton->setToolTip(i18nc("@info:tooltip", "Assign this tag to all selected images"));
     connect(assignToAllButton, SIGNAL(clicked()), SLOT(slotAssignToAllButtonClicked()));
 
     QToolButton* removeButton = new QToolButton;
     initButton(removeButton);
-    removeButton->setIcon(KIcon("list-remove"));
+    removeButton->setIcon(QIcon::fromTheme("list-remove"));
     connect(removeButton, SIGNAL(clicked()), SLOT(slotRemoveButtonClicked()));
 
 #undef initButton
