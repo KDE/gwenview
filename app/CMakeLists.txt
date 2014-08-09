@@ -1,12 +1,10 @@
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/..
-    ${EXIV2_INCLUDE_DIR}
-    ${KACTIVITIES_INCLUDE_DIRS}
     )
 
-if (KIPI_FOUND)
-    include_directories(${KIPI_INCLUDE_DIR})
-endif()
+# if (KIPI_FOUND)
+#     include_directories(${KIPI_INCLUDE_DIR})
+# endif()
 
 # For lib/gwenviewconfig.h and config-gwenview.h
 include_directories(
@@ -78,7 +76,7 @@ add_executable(gwenview ${gwenview_SRCS})
 target_link_libraries(gwenview
     KF5::KDELibs4Support
     KF5::Konq
-    gwenviewlib
+#     gwenviewlib
 #     ${KACTIVITIES_LIBRARY}
     )
 
