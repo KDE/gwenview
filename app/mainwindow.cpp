@@ -1259,7 +1259,8 @@ void MainWindow::toggleFullScreen(bool checked)
     if (checked) {
         // Save MainWindow config now, this way if we quit while in
         // fullscreen, we are sure latest MainWindow changes are remembered.
-        saveMainWindowSettings(autoSaveConfigGroup());
+        KConfigGroup saveConfigGroup = autoSaveConfigGroup();
+        saveMainWindowSettings(saveConfigGroup);
         resetAutoSaveSettings();
 
         // Save state
