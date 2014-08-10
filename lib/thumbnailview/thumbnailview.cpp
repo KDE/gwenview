@@ -218,7 +218,7 @@ struct ThumbnailViewPrivate
         QPixmap pix;
         QSize fullSize;
         mDocumentInfoProvider->thumbnailForDocument(url, group, &pix, &fullSize);
-        mThumbnailForUrl[url] = Thumbnail(QPersistentModelIndex(index), QDateTime::currentLocalDateTime());
+        mThumbnailForUrl[url] = Thumbnail(QPersistentModelIndex(index), QDateTime::currentDateTime());
         q->setThumbnail(item, pix, fullSize, 0);
     }
 
