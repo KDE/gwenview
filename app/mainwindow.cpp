@@ -1040,7 +1040,7 @@ void MainWindow::openDirUrl(const QUrl &url)
 {
     const QUrl currentUrl = d->mContextManager->currentDirUrl();
 
-    if (url.equals(currentUrl, QUrl::CompareWithoutTrailingSlash)) {
+    if (url == currentUrl) {
         return;
     }
 
@@ -1217,7 +1217,7 @@ void MainWindow::goToUrl(const QUrl &url)
     QUrl dirUrl = url;
     dirUrl = dirUrl.adjusted(QUrl::RemoveFilename);
     dirUrl.setPath(dirUrl.path() + "");
-    if (!dirUrl.equals(d->mContextManager->currentDirUrl(), QUrl::CompareWithoutTrailingSlash)) {
+    if (dirUrl != d->mContextManager->currentDirUrl()) {
         d->mContextManager->setCurrentDirUrl(dirUrl);
         d->mGvCore->addUrlToRecentFolders(dirUrl);
     }
