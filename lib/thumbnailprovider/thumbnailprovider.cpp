@@ -43,6 +43,7 @@
 #include <KIO/PreviewJob>
 #include <KStandardDirs>
 #include <KTemporaryFile>
+#include <KJobWidgets>
 
 // Local
 #include "mimetypeutils.h"
@@ -321,7 +322,7 @@ void ThumbnailProvider::determineNextIcon()
     }
     if (!directStatOk) {
         KIO::Job* job = KIO::stat(mCurrentUrl, KIO::HideProgressInfo);
-        job->ui()->setWindow(KApplication::kApplication()->activeWindow());
+        KJobWidgets::setWindow(job, KApplication::kApplication()->activeWindow());
         LOG("KIO::stat orig" << mCurrentUrl.url());
         addSubjob(job);
     }
