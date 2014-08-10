@@ -321,7 +321,7 @@ struct MainWindow::Private
     {
         mViewMainPage = new ViewMainPage(parent, mSlideShow, q->actionCollection(), mGvCore);
         connect(mViewMainPage, SIGNAL(captionUpdateRequested(QString)),
-                q, SLOT(setCaption(QString)));
+                q, SLOT(setWindowTitle(QString)));
         connect(mViewMainPage, SIGNAL(completed()),
                 q, SLOT(slotPartCompleted()));
         connect(mViewMainPage, SIGNAL(previousImageRequested()),
