@@ -403,7 +403,6 @@ struct MainWindow::Private
         shortcuts.append(QKeySequence(Qt::Key_F11));
         mFullScreenAction->setShortcuts(shortcuts);
 
-        mFullScreenAction->setShortcut(shortcut);
         connect(mViewMainPage, SIGNAL(toggleFullScreenRequested()),
                 mFullScreenAction, SLOT(trigger()));
 
