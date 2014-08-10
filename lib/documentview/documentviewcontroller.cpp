@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/zoomwidget.h>
 
 // KDE
-#include <KAction>
+#include <QAction>
 #include <KActionCategory>
 #include <KDebug>
 #include <KLocale>
@@ -81,11 +81,11 @@ struct DocumentViewControllerPrivate
     SlideContainer* mToolContainer;
     ToolContainerContent* mToolContainerContent;
 
-    KAction* mZoomToFitAction;
-    KAction* mActualSizeAction;
-    KAction* mZoomInAction;
-    KAction* mZoomOutAction;
-    QList<KAction*> mActions;
+    QAction * mZoomToFitAction;
+    QAction * mActualSizeAction;
+    QAction * mZoomInAction;
+    QAction * mZoomOutAction;
+    QList<QAction *> mActions;
 
     void setupActions()
     {
