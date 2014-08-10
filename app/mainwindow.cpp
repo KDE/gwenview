@@ -1333,7 +1333,7 @@ void MainWindow::openFile()
     KUrl dirUrl = d->mContextManager->currentDirUrl();
 
     KFileDialog dialog(dirUrl, QString(), this);
-    dialog.setCaption(i18nc("@title:window", "Open Image"));
+    dialog.setWindowTitle(i18nc("@title:window", "Open Image"));
     const QStringList mimeFilter = MimeTypeUtils::imageMimeTypes();
     dialog.setMimeFilter(mimeFilter);
     dialog.setOperationMode(KFileDialog::Opening);
