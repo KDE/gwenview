@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QScopedPointer>
 
 // KDE
-#include <KAboutData>
+#include <K4AboutData>
 #include <KActionCollection>
 #include <KApplication>
 #include <KCmdLineArgs>
@@ -110,7 +110,7 @@ private:
 
 int main(int argc, char *argv[])
 {
-    QScopedPointer<KAboutData> aboutData(
+    QScopedPointer<K4AboutData> aboutData(
         Gwenview::createAboutData(
             "gwenview",       /* appname */
             0,                /* catalogName */
