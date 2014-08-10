@@ -26,7 +26,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QListView>
 #include <QMenu>
+
+#ifdef GTK_WORKAROUND_BROKE_IN_KF5_PORT
 #include <QPlastiqueStyle>
+#endif
+
 #include <QStyledItemDelegate>
 
 // KDE
@@ -148,12 +152,15 @@ StartMainPage::StartMainPage(QWidget* parent, GvCore* gvCore)
 
     d->setupUi(this);
     if (styleIsGtkBased()) {
+        #ifdef GTK_WORKAROUND_BROKE_IN_KF5_PORT
+
         // Gtk-based styles do not apply the correct background color on tabs.
         // As a workaround, use the Plastique style instead.
         QStyle* fix = new QPlastiqueStyle();
         fix->setParent(this);
         d->mHistoryWidget->tabBar()->setStyle(fix);
         d->mPlacesTagsWidget->tabBar()->setStyle(fix);
+        #endif
     }
     setFrameStyle(QFrame::NoFrame);
 
