@@ -33,6 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QPointer>
 #include <QPropertyAnimation>
 #include <QSequentialAnimationGroup>
+#include <QUrl>
 
 // KDE
 #include <KDebug>
@@ -42,7 +43,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KLocale>
 #include <KDateTime>
 #include <KIconLoader>
-#include <QUrl>
+#include <KGlobal>
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 #include <kratingpainter.h>
