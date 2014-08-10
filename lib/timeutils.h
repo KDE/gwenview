@@ -39,7 +39,7 @@ enum CachePolicy
     UseCache
 };
 
-QDateTime dateTimeForFileItem(const KFileItem& fileItem, Gwenview::TimeUtils::CachePolicy cachePolicy = UseCache);
+QDateTime GWENVIEWLIB_EXPORT dateTimeForFileItem(const KFileItem& fileItem, Gwenview::TimeUtils::CachePolicy cachePolicy = UseCache);
 
 } // namespace
 
