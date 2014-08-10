@@ -71,14 +71,11 @@ find_package(LCMS2)
 
 if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
     # We need Baloo for all backends but "None"
-    find_package(Baloo)
+    find_package(KF5Baloo)
 #     macro_log_feature(Baloo_FOUND "Baloo Core Libraries" "Desktop-wide semantic information support" "https://projects.kde.org/projects/kde/kdelibs/baloo" TRUE)
 endif()
 
 # macro_log_feature(LIBKONQ_FOUND "libkonq" "Standard file management features" "http://www.kde.org" TRUE)
-
-find_package(KActivities 6.1.0)
-# macro_log_feature(KActivities_FOUND "KActivities" "Activities interface library" "https://projects.kde.org/projects/kde/kdelibs/kactivities" TRUE "6.1.0")
 
 find_package(Kdcraw 2.4.2)
 # macro_log_feature(KDCRAW_FOUND "libkdcraw" "KDE Dcraw library" "http://www.kde.org" TRUE "2.4.2")
