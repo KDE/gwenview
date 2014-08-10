@@ -629,7 +629,7 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index, QSize* fullSi
     if (kind == MimeTypeUtils::KIND_ARCHIVE || kind == MimeTypeUtils::KIND_DIR) {
         int groupSize = ThumbnailGroup::pixelSize(ThumbnailGroup::fromPixelSize(d->mThumbnailSize.height()));
         if (thumbnail.mGroupPix.isNull() || thumbnail.mGroupPix.height() < groupSize) {
-            QPixmap pix = KIconLoader::global()->loadMimeTypeIcon(item.iconName(), KIconLoader::Desktop, size);
+            QPixmap pix = KIconLoader::global()->loadMimeTypeIcon(item.iconName(), KIconLoader::Desktop);
 
             thumbnail.initAsIcon(pix);
             if (kind == MimeTypeUtils::KIND_ARCHIVE) {
