@@ -173,7 +173,8 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, QL
     // Copied from Dolphin:
     // need to remove shift+del from cut action, else the shortcut for deletejob
     // doesn't work
-    d->mCopyAction->setShortcut(QKeySequence());
+    //KF5TODO
+//     d->mCopyAction->setShortcut(QKeySequence());
 
     d->mCopyAction = edit->addAction(KStandardAction::Copy, this, SLOT(copy()));
     d->mPasteAction = edit->addAction(KStandardAction::Paste, this, SLOT(paste()));
