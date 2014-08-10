@@ -132,7 +132,7 @@ struct GvCorePrivate
             config = KSharedConfig::openConfig(name);
         } else {
             // Standard KDE color scheme
-            config = KSharedConfig::openConfig(QString("color-schemes/%1.colors").arg(name), KConfig::FullConfig, "data");
+            config = KSharedConfig::openConfig(QString("color-schemes/%1.colors").arg(name), KConfig::FullConfig, QStandardPaths::DataLocation);
         }
         mPalettes[GvCore::FullScreenPalette] = KGlobalSettings::createApplicationPalette(config);
 
