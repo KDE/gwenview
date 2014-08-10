@@ -213,6 +213,7 @@ target_link_libraries(gwenviewlib
    KF5::KDELibs4Support
    Qt5::Concurrent
    Qt5::Svg
+   Qt5::OpenGL
     )
 if (WIN32)
     target_link_libraries(gwenviewlib ${EXPAT_LIBRARIES})

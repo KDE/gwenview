@@ -39,7 +39,7 @@ else()
     set(GWENVIEW_SEMANTICINFO_BACKEND_BALOO ON)
 endif()
 
-find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Core DBus Widgets Script Test Concurrent Svg)
+find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Core DBus Widgets Script Test Concurrent Svg OpenGL)
 
 find_package(Phonon4Qt5 4.6.60 NO_MODULE)
 include_directories(BEFORE ${PHONON_INCLUDES})
