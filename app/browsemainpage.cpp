@@ -307,7 +307,7 @@ void BrowseMainPage::addFolderToPlaces()
     QUrl url = d->mUrlNavigator->locationUrl();
     QString text = url.fileName();
     if (text.isEmpty()) {
-        text = url.pathOrUrl();
+        text = url.toDisplayString();
     }
     d->mFilePlacesModel->addPlace(text, url);
 }

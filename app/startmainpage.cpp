@@ -321,7 +321,7 @@ void StartMainPage::showRecentFoldersViewContextMenu(const QPoint& pos)
     if (action == addToPlacesAction) {
         QString text = url.fileName();
         if (text.isEmpty()) {
-            text = url.pathOrUrl();
+            text = url.toDisplayString();
         }
         d->mBookmarksModel->addPlace(text, url);
     } else if (action == removeAction) {
