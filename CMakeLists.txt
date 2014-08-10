@@ -43,6 +43,7 @@ find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Core DBus Widgets Script Test
 
 find_package(KF5 CONFIG REQUIRED
     KDELibs4Support
+    Activities
 )
 find_package(KF5Konq CONFIG REQUIRED)
 

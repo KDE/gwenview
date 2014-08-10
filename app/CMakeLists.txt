@@ -77,8 +77,8 @@ target_link_libraries(gwenview
     KF5::KDELibs4Support
     KF5::ItemModels
     KF5::Konq
+    KF5::Activities
 #     gwenviewlib
-#     ${KACTIVITIES_LIBRARY}
     )
 
 target_link_libraries(gwenview LINK_INTERFACE_LIBRARIES ${KDE4_KIO_LIBS} ${QT_QTCORE_LIBRARY})
