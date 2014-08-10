@@ -130,7 +130,7 @@ struct Thumbnail
         return groupSize == qMax(mFullSize.width(), mFullSize.height());
     }
 
-    void prepareForRefresh(const KDateTime& mtime)
+    void prepareForRefresh(const QDateTime& mtime)
     {
         mModificationTime = mtime;
         mFileSize = 0;
