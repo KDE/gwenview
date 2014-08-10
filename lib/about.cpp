@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <version.h>
 
 // KDE
-#include <KAboutData>
+#include <K4AboutData>
 #include <KLocalizedString>
 
 // Qt
@@ -31,10 +31,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 namespace Gwenview
 {
 
-KAboutData* createAboutData(const QByteArray& appName, const QByteArray& catalogName, const KLocalizedString& programName)
+K4AboutData* createAboutData(const QByteArray& appName, const QByteArray& catalogName, const KLocalizedString& programName)
 {
-    KAboutData* data = new KAboutData(appName, catalogName, programName, GWENVIEW_VERSION);
-    data->setLicense(KAboutData::License_GPL);
+    K4AboutData* data = new K4AboutData(appName, catalogName, programName, GWENVIEW_VERSION);
+    data->setLicense(K4AboutData::License_GPL);
     data->setCopyrightStatement(ki18n("Copyright 2000-2013 Gwenview authors"));
     data->addAuthor(
         ki18n("Aurélien Gâteau"),
