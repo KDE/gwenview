@@ -59,15 +59,15 @@ static void copyMoveOrLink(KonqOperations::Operation operation, const KUrl::List
     dialog.setOperationMode(KFileDialog::Saving);
     switch (operation) {
     case KonqOperations::COPY:
-        dialog.setCaption(i18nc("@title:window", "Copy To"));
+        dialog.setWindowTitle(i18nc("@title:window", "Copy To"));
         dialog.okButton()->setText(i18nc("@action:button", "Copy"));
         break;
     case KonqOperations::MOVE:
-        dialog.setCaption(i18nc("@title:window", "Move To"));
+        dialog.setWindowTitle(i18nc("@title:window", "Move To"));
         dialog.okButton()->setText(i18nc("@action:button", "Move"));
         break;
     case KonqOperations::LINK:
-        dialog.setCaption(i18nc("@title:window", "Link To"));
+        dialog.setWindowTitle(i18nc("@title:window", "Link To"));
         dialog.okButton()->setText(i18nc("@action:button", "Link"));
         break;
     default:
