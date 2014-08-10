@@ -41,7 +41,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KGlobalSettings>
 #include <KLineEdit>
 #include <KLocale>
-#include <KDateTime>
+#include <QDateTime>
 #include <KIconLoader>
 #include <KGlobal>
 
@@ -404,7 +404,7 @@ struct PreviewItemDelegatePrivate
         const bool isDirOrArchive = ArchiveUtils::fileItemIsDirOrArchive(fileItem);
         if (mDetails & PreviewItemDelegate::DateDetail) {
             if (!ArchiveUtils::fileItemIsDirOrArchive(fileItem)) {
-                const KDateTime dt = TimeUtils::dateTimeForFileItem(fileItem);
+                const QDateTime dt = TimeUtils::dateTimeForFileItem(fileItem);
                 const QString text = KGlobal::locale()->formatDateTime(dt);
                 elided |= isTextElided(text);
                 textList << text;
@@ -796,7 +796,7 @@ void PreviewItemDelegate::paint(QPainter * painter, const QStyleOptionViewItem &
     }
 
     if (!isDirOrArchive && (d->mDetails & PreviewItemDelegate::DateDetail)) {
-        const KDateTime dt = TimeUtils::dateTimeForFileItem(fileItem);
+        const QDateTime dt = TimeUtils::dateTimeForFileItem(fileItem);
         d->drawText(painter, textRect, fgColor, KGlobal::locale()->formatDateTime(dt));
         textRect.moveTop(textRect.bottom());
     }

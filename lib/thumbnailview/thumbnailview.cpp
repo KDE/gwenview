@@ -43,7 +43,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KIconLoader>
 #include <KGlobalSettings>
 #include <KPixmapSequence>
-#include <KDateTime>
+#include <QDateTime>
 
 // Local
 #include "abstractdocumentinfoprovider.h"
@@ -90,7 +90,7 @@ static QUrl urlForIndex(const QModelIndex& index)
 
 struct Thumbnail
 {
-    Thumbnail(const QPersistentModelIndex& index_, const KDateTime& mtime)
+    Thumbnail(const QPersistentModelIndex& index_, const QDateTime& mtime)
         : mIndex(index_)
         , mModificationTime(mtime)
         , mFileSize(0)
@@ -143,7 +143,7 @@ struct Thumbnail
     }
 
     QPersistentModelIndex mIndex;
-    KDateTime mModificationTime;
+    QDateTime mModificationTime;
     /// The pix loaded from .thumbnails/{large,normal}
     QPixmap mGroupPix;
     /// Scaled version of mGroupPix, adjusted to ThumbnailView::thumbnailSize
@@ -218,7 +218,7 @@ struct ThumbnailViewPrivate
         QPixmap pix;
         QSize fullSize;
         mDocumentInfoProvider->thumbnailForDocument(url, group, &pix, &fullSize);
-        mThumbnailForUrl[url] = Thumbnail(QPersistentModelIndex(index), KDateTime::currentLocalDateTime());
+        mThumbnailForUrl[url] = Thumbnail(QPersistentModelIndex(index), QDateTime::currentLocalDateTime());
         q->setThumbnail(item, pix, fullSize, 0);
     }
 

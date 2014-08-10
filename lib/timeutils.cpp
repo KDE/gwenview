@@ -23,9 +23,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QFile>
+#include <QDateTime>
 
 // KDE
-#include <KDateTime>
 #include <QDebug>
 #include <KFileItem>
 
@@ -134,7 +134,7 @@ struct CacheItem
 
 typedef QHash<QUrl, CacheItem> Cache;
 
-KDateTime dateTimeForFileItem(const KFileItem& fileItem, CachePolicy cachePolicy)
+QDateTime dateTimeForFileItem(const KFileItem& fileItem, CachePolicy cachePolicy)
 {
     if (cachePolicy == SkipCache) {
         CacheItem item;
