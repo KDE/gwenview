@@ -238,7 +238,7 @@ void FolderViewContextManagerItem::slotCurrentDirUrlChanged(const QUrl &url)
 {
     if (url.isValid() && d->mUrlToSelect != url) {
         d->mUrlToSelect = QDir::cleanPath(url.path());
-        d->mUrlToSelect.mUrlToSelect = mUrlToSelect.adjusted(QUrl::StripTrailingSlash));
+        d->mUrlToSelect = d->mUrlToSelect.adjusted(QUrl::StripTrailingSlash);
         d->mExpandingIndex = QModelIndex();
     }
     if (!d->mView->isVisible()) {
