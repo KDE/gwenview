@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 */
 // Self
-#include "thumbnailviewhelper.moc"
+#include "thumbnailviewhelper.h"
 
 #include <config-gwenview.h>
 

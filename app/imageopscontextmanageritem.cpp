@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 */
 // Self
-#include "imageopscontextmanageritem.moc"
+#include "imageopscontextmanageritem.h"
 
 // Qt
 #include <QApplication>
