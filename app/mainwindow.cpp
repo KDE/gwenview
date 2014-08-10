@@ -1571,7 +1571,7 @@ void MainWindow::readProperties(const KConfigGroup& group)
     } else {
         d->mViewAction->trigger();
     }
-    KUrl url = group.readEntry(SESSION_URL_KEY, KUrl());
+    QUrl url = group.readEntry(SESSION_URL_KEY, QUrl());
     if (!url.isValid()) {
         qWarning() << "Invalid url!";
         return;
