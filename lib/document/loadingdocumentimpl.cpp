@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 */
 // Self
-#include "loadingdocumentimpl.moc"
+#include "loadingdocumentimpl.h"
 
 // STL
 #include <memory>
@@ -43,7 +43,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KMimeType>
 #include <KProtocolInfo>
 #include <KUrl>
+
+#ifdef KDCRAW_FOUND
 #include <libkdcraw/kdcraw.h>
+#endif
 
 // Local
 #include "animateddocumentloadedimpl.h"
@@ -190,6 +193,7 @@ struct LoadingDocumentImplPrivate
         buffer.setBuffer(&mData);
         buffer.open(QIODevice::ReadOnly);
 
+#ifdef KDCRAW_FOUND
         if (KDcrawIface::KDcraw::rawFilesList().contains(QString(mFormatHint))) {
             QByteArray previewData;
 
@@ -219,6 +223,9 @@ struct LoadingDocumentImplPrivate
             // need to fill mFormat so gwenview can tell the type when trying to save
             mFormat = mFormatHint;
         } else {
+#else
+{
+#endif
             QImageReader reader(&buffer, mFormatHint);
             mImageSize = reader.size();
 
