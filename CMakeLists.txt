@@ -41,6 +41,10 @@ endif()
 
 find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Core DBus Widgets Script Test Concurrent Svg)
 
+find_package(Phonon4Qt5 4.6.60 NO_MODULE)
+include_directories(BEFORE ${PHONON_INCLUDES})
+add_definitions(-DPHONON_LIB_SONAME=\"${PHONON_LIB_SONAME}\")
+
 find_package(KF5 CONFIG REQUIRED
     KDELibs4Support
     Activities
