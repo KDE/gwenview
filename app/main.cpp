@@ -127,7 +127,8 @@ int main(int argc, char *argv[])
     KCmdLineArgs::addCmdLineOptions(options);
 
     KApplication app;
-    Gwenview::ImageFormats::registerPlugins();
+    //KF5 TODO
+//     Gwenview::ImageFormats::registerPlugins();
 
     // startHelper must live for the whole life of the application
     StartHelper startHelper;
