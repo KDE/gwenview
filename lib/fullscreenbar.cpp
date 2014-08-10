@@ -258,7 +258,7 @@ bool FullScreenBar::eventFilter(QObject* object, QEvent* event)
         QToolButton* button = qobject_cast<QToolButton*>(object);
         if (button && !button->actions().isEmpty()) {
             QAction* action = button->actions().first();
-            QString toolTip = KGlobal::locale()->removeAcceleratorMarker(action->toolTip());
+            QString toolTip = KLocalizedString::removeAcceleratorMarker(action->toolTip());
             // Filtering message requested by translators (scripting).
             button->setToolTip(i18nc("@info:tooltip of custom toolbar button", "%1", toolTip));
         }
