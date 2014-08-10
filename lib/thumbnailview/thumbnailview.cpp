@@ -527,7 +527,7 @@ void ThumbnailView::dataChanged(const QModelIndex& topLeft, const QModelIndex& b
             // result this method will also be called for views which are not
             // currently visible, and do not yet have a thumbnail for the
             // modified url.
-            KDateTime mtime = item.time(KFileItem::ModificationTime);
+            QDateTime mtime = item.time(KFileItem::ModificationTime);
             if (it->mModificationTime != mtime || it->mFileSize != item.size()) {
                 // dataChanged() is called when the file changes but also when
                 // the model fetched additional data such as semantic info. To

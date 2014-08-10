@@ -64,12 +64,12 @@ static Exiv2::ExifData::const_iterator findDateTimeKey(const Exiv2::ExifData& ex
 
 struct CacheItem
 {
-    KDateTime fileMTime;
-    KDateTime realTime;
+    QDateTime fileMTime;
+    QDateTime realTime;
 
     void update(const KFileItem& fileItem)
     {
-        KDateTime time = fileItem.time(KFileItem::ModificationTime);
+        QDateTime time = fileItem.time(KFileItem::ModificationTime);
         if (fileMTime == time) {
             return;
         }
@@ -117,7 +117,7 @@ struct CacheItem
             stream << *it;
             QString value = QString::fromLocal8Bit(stream.str().c_str());
 
-            KDateTime dt = KDateTime::fromString(value, "%Y:%m:%d %H:%M:%S");
+            QDateTime dt = QDateTime::fromString(value, "%Y:%m:%d %H:%M:%S");
             if (!dt.isValid()) {
                 qWarning() << "Invalid date in exif header of" << path;
                 return false;
