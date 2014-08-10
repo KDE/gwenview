@@ -52,7 +52,7 @@ struct HistoryItem : public QStandardItem
     {
         KConfig config(mConfigPath, KConfig::SimpleConfig);
         KConfigGroup group(&config, "general");
-        group.writeEntry("url", mUrl);
+        group.writeEntry("url", mUrl.toString());
         group.writeEntry("dateTime", mDateTime.toString(Qt::ISODate));
         config.sync();
     }
