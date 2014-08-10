@@ -50,7 +50,7 @@ TagItemDelegate::TagItemDelegate(QAbstractItemView* view)
     mButtonSize = qMax(sz.width(), sz.height());
 }
 
-QList<QWidget*> TagItemDelegate::createItemWidgets() const
+QList<QWidget*> TagItemDelegate::createItemWidgets(const QModelIndex &index) const
 {
 
 #define initButton(x) \
