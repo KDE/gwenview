@@ -63,7 +63,7 @@ bool urlIsFastLocalFile(const QUrl &url)
 
 bool urlIsDirectory(const QUrl &url)
 {
-    if (url.fileName(QUrl::ObeyTrailingSlash).isEmpty()) {
+    if (url.fileName().isEmpty()) {
         return true; // file:/somewhere/<nothing here>
     }
 
