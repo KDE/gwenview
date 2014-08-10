@@ -272,7 +272,7 @@ This is very similar to the behavior provided by phones or digital cameras.</par
 the image using the mouse and the arrow keys. The bird-eye view automatically hides
 itself after a short delay, showing back only while zooming or scrolling.</para>
 
-<para>You can define what happens when going to image B after having zoomed in on an area of image A using the options in the <guilabel>Zoom mode</guilabel> on the <guimenuitem>Image View</guimenuitem> of the &kappname; configuration window which can be reached using the <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure &kappname;...</guimenuitem></menuchoice>.</para>
+<para>You can define what happens when going to image B after having zoomed in on an area of image A using the options in the <guilabel>Zoom mode</guilabel> group on the <guimenuitem>Image View</guimenuitem> page of the &kappname; configuration window which can be reached using the <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure &kappname;...</guimenuitem></menuchoice>.</para>
 
 <itemizedlist>
     <listitem><para>If set to <guilabel>Autofit each image</guilabel>, image B is zoomed out to fit the screen.</para></listitem>
