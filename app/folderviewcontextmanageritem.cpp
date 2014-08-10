@@ -171,7 +171,9 @@ struct FolderViewContextManagerItemPrivate
 
         bool isParent;
         QUrl url = mModel->urlForIndex(index);
-        QString relativePath = QUrl::relativePath(url.path(), wantedUrl.path(), &isParent);
+        //KF5 TODO
+        QString relativePath = url.path();
+//         QString relativePath = QUrl::relativePath(url.path(), wantedUrl.path(), &isParent);
         if (!isParent) {
             qWarning() << url << "is not a parent of" << wantedUrl << "!";
             return QModelIndex();
