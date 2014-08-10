@@ -47,7 +47,8 @@ void registerPlugins()
         return;
     }
     sPluginsRegistered = true;
-    qRegisterStaticPluginInstanceFunction(qt_plugin_instance_JpegPlugin);
+    //KF5 TODO, lets just use Qt's JPEG Plugin for now..
+//     qRegisterStaticPluginInstanceFunction(qt_plugin_instance_JpegPlugin);
 }
 
 } // namespace
