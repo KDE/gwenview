@@ -41,7 +41,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KMenu>
 #include <KToolBar>
 #include <KIconLoader>
-#include <KAction>
+#include <QAction>
 
 // Local
 #include "imagemetainfodialog.h"
@@ -133,7 +133,7 @@ struct FullScreenContentPrivate
     Document::Ptr mCurrentDocument;
     QPointer<ImageMetaInfoDialog> mImageMetaInfoDialog;
     QPointer<FullScreenConfigWidget> mConfigWidget;
-    KAction* mOptionsAction;
+    QAction * mOptionsAction;
 
     bool mFullScreenMode;
     bool mViewPageVisible;
@@ -149,7 +149,7 @@ struct FullScreenContentPrivate
         // menu should not be aligned to the right edge of the screen because
         // if the mode is changed to thumbnail-mode, we want the option button
         // to remain visible
-        mOptionsAction = new KAction(q);
+        mOptionsAction = new QAction(q);
         mOptionsAction->setPriority(QAction::LowPriority);
         mOptionsAction->setIcon(QIcon::fromTheme("configure"));
         mOptionsAction->setToolTip(i18nc("@info:tooltip", "Configure full screen mode"));

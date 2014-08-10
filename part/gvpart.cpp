@@ -23,7 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // KDE
 #include <KAboutData>
-#include <KAction>
+#include <QAction>
 #include <KActionCollection>
 #include <KDebug>
 #include <KFileDialog>
@@ -76,7 +76,7 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QVariantList& /*arg
     DocumentViewController* documentViewController = new DocumentViewController(actionCollection(), this);
     documentViewController->setView(mDocumentView);
 
-    KAction* action = new KAction(actionCollection());
+    QAction * action = new QAction(actionCollection());
     action->setText(i18nc("@action", "Properties"));
     connect(action, SIGNAL(triggered()), SLOT(showProperties()));
     actionCollection()->addAction("file_show_properties", action);

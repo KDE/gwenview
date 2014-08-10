@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QTimer>
 
 // KDE
-#include <KAction>
+#include <QAction>
 #include <KActionCategory>
 #include <KActionCollection>
 #include <QDebug>
@@ -162,10 +162,10 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
     ViewMainPage* mViewMainPage;
     QPointer<SemanticInfoDialog> mSemanticInfoDialog;
     TagInfo mTagInfo;
-    KAction* mEditTagsAction;
+    QAction * mEditTagsAction;
     QSignalMapper* mRatingMapper;
     /** A list of all actions, so that we can disable them when necessary */
-    QList<KAction*> mActions;
+    QList<QAction *> mActions;
     QPointer<RatingIndicator> mRatingIndicator;
 
     void setupGroup()
@@ -203,7 +203,7 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
 
         mRatingMapper = new QSignalMapper(q);
         for (int rating = 0; rating <= 5; ++rating) {
-            KAction* action = edit->addAction(QString("rate_%1").arg(rating));
+            QAction * action = edit->addAction(QString("rate_%1").arg(rating));
             if (rating == 0) {
                 action->setText(i18nc("@action Rating value of zero", "Zero"));
             } else {
@@ -356,7 +356,7 @@ void SemanticInfoContextManagerItem::update()
     }
 
     bool enabled = !contextManager()->selectedFileItemList().isEmpty();
-    Q_FOREACH(KAction * action, d->mActions) {
+    Q_FOREACH(QAction * action, d->mActions) {
         action->setEnabled(enabled);
     }
     d->updateTagLabel();

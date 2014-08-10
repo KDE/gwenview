@@ -115,7 +115,7 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
     void setupActions(KActionCollection* actionCollection)
     {
         KActionCategory* view = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface", "View"), actionCollection);
-        KAction* action = view->addAction("edit_location", q, SLOT(editLocation()));
+        QAction * action = view->addAction("edit_location", q, SLOT(editLocation()));
         action->setText(i18nc("@action:inmenu Navigation Bar", "Edit Location"));
         action->setShortcut(Qt::Key_F6);
 
@@ -135,7 +135,7 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
         KActionMenu* thumbnailDetailsAction = view->add<KActionMenu>("thumbnail_details");
         thumbnailDetailsAction->setText(i18nc("@action:inmenu", "Thumbnail Details"));
 #define addAction(text, detail) \
-    action = new KAction(q); \
+    action = new QAction(q); \
     thumbnailDetailsAction->addAction(action); \
     action->setText(text); \
     action->setCheckable(true); \

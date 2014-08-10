@@ -27,7 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QRegExp>
 
 // KDE
-#include <KAction>
+#include <QAction>
 #include <KActionCollection>
 #include <QDebug>
 #include <KUrl>
@@ -218,8 +218,8 @@ struct KIPIInterfacePrivate
     KIPI::PluginLoader* mPluginLoader;
     KIPI::PluginLoader::PluginList mPluginQueue;
     MenuInfoMap mMenuInfoMap;
-    KAction* mLoadingAction;
-    KAction* mNoPluginAction;
+    QAction * mLoadingAction;
+    QAction * mNoPluginAction;
 
     void setupPluginsMenu()
     {
@@ -229,9 +229,9 @@ struct KIPIInterfacePrivate
                          q, SLOT(loadPlugins()));
     }
 
-    KAction* createDummyPluginAction(const QString& text)
+    QAction * createDummyPluginAction(const QString& text)
     {
-        KAction* action = new KAction(q);
+        QAction * action = new QAction(q);
         action->setText(text);
         action->setShortcutConfigurable(false);
         action->setEnabled(false);
@@ -314,8 +314,8 @@ void KIPIInterface::loadOnePlugin()
         }
 
         plugin->setup(d->mMainWindow);
-        QList<KAction*> actions = plugin->actions();
-        Q_FOREACH(KAction * action, actions) {
+        QList<QAction *> actions = plugin->actions();
+        Q_FOREACH(QAction * action, actions) {
             KIPI::Category category = plugin->category(action);
 
             if (!d->mMenuInfoMap.contains(category)) {

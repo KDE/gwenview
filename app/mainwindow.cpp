@@ -38,7 +38,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KIO/NetAccess>
 #include <KActionCategory>
 #include <KActionCollection>
-#include <KAction>
+#include <QAction>
 #include <KApplication>
 #include <KDirLister>
 #include <KEditToolBar>
@@ -188,16 +188,16 @@ struct MainWindow::Private
 
     QActionGroup* mViewModeActionGroup;
     KRecentFilesAction* mFileOpenRecentAction;
-    KAction* mBrowseAction;
-    KAction* mViewAction;
-    KAction* mGoUpAction;
-    KAction* mGoToPreviousAction;
-    KAction* mGoToNextAction;
-    KAction* mGoToFirstAction;
-    KAction* mGoToLastAction;
+    QAction * mBrowseAction;
+    QAction * mViewAction;
+    QAction * mGoUpAction;
+    QAction * mGoToPreviousAction;
+    QAction * mGoToNextAction;
+    QAction * mGoToFirstAction;
+    QAction * mGoToLastAction;
     KToggleAction* mToggleSideBarAction;
     KToggleFullScreenAction* mFullScreenAction;
-    KAction* mToggleSlideShowAction;
+    QAction * mToggleSlideShowAction;
     KToggleAction* mShowMenuBarAction;
 #ifdef KIPI_FOUND
     KIPIExportAction* mKIPIExportAction;
@@ -371,7 +371,7 @@ struct MainWindow::Private
         file->addAction(KStandardAction::Print, q, SLOT(print()));
         file->addAction(KStandardAction::Quit, KApplication::kApplication(), SLOT(closeAllWindows()));
 
-        KAction* action = file->addAction("reload", q, SLOT(reload()));
+        QAction * action = file->addAction("reload", q, SLOT(reload()));
         action->setText(i18nc("@action reload the currently viewed image", "Reload"));
         action->setIcon(QIcon::fromTheme("view-refresh"));
         action->setShortcut(Qt::Key_F5);
@@ -407,7 +407,7 @@ struct MainWindow::Private
         connect(mViewMainPage, SIGNAL(toggleFullScreenRequested()),
                 mFullScreenAction, SLOT(trigger()));
 
-        KAction* leaveFullScreenAction = view->addAction("leave_fullscreen", q, SLOT(leaveFullScreen()));
+        QAction * leaveFullScreenAction = view->addAction("leave_fullscreen", q, SLOT(leaveFullScreen()));
         leaveFullScreenAction->setIcon(QIcon::fromTheme("view-restore"));
         leaveFullScreenAction->setPriority(QAction::LowPriority);
         leaveFullScreenAction->setText(i18nc("@action", "Leave Fullscreen Mode"));
