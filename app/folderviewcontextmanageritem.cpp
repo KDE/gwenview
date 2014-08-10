@@ -26,6 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QHeaderView>
 #include <QTreeView>
 #include <QMimeData>
+#include <QDir>
 
 // KDE
 #include <QDebug>
@@ -235,8 +236,7 @@ FolderViewContextManagerItem::~FolderViewContextManagerItem()
 void FolderViewContextManagerItem::slotCurrentDirUrlChanged(const QUrl &url)
 {
     if (url.isValid() && d->mUrlToSelect != url) {
-        d->mUrlToSelect = url;
-        d->mUrlToSelect.cleanPath();
+        d->mUrlToSelect = QDir::cleanPath(url.path())
         d->mUrlToSelect.mUrlToSelect = mUrlToSelect.adjusted(QUrl::StripTrailingSlash));
         d->mExpandingIndex = QModelIndex();
     }

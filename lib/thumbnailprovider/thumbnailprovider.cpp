@@ -308,8 +308,7 @@ void ThumbnailProvider::determineNextIcon()
 
     // First, stat the orig file
     mState = STATE_STATORIG;
-    mCurrentUrl = mCurrentItem.url();
-    mCurrentUrl.cleanPath();
+    mCurrentUrl = QDir::cleanPath(mCurrentItem.url().path());
     mOriginalFileSize = mCurrentItem.size();
 
     // Do direct stat instead of using KIO if the file is local (faster)
