@@ -34,11 +34,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KIO/JobUiDelegate>
 #include <KIO/NetAccess>
 #include <KLocale>
+#include <KJobWidgets>
 #include <konq_operations.h>
 
 // Local
 #include <lib/document/documentfactory.h>
 #include <lib/thumbnailprovider/thumbnailprovider.h>
+#include <KJobWidgets/KJobWidgets>
 
 namespace Gwenview
 {
@@ -112,7 +114,7 @@ static void delOrTrash(KonqOperations::Operation operation, const KUrl::List& ur
         return;
     }
     Q_ASSERT(job);
-    job->ui()->setWindow(parent);
+    KJobWidgets::setWindow(job,parent);
 
     Q_FOREACH(const KUrl & url, urlList) {
         DocumentFactory::instance()->forget(url);
@@ -184,8 +186,7 @@ void showMenuForDroppedUrls(QWidget* parent, const KUrl::List& urlList, const KU
         return;
     }
     Q_ASSERT(job);
-    job->ui()->setWindow(parent);
-}
+    KJobWidgets::setWindow(job, parent);
 
 void rename(const KUrl& oldUrl, QWidget* parent)
 {
