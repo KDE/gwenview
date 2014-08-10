@@ -135,7 +135,8 @@ void SaveJob::finishSave()
         emitResult();
     } else {
         KIO::Job* job = KIO::copy(KUrl::fromPath(d->mTemporaryFile->fileName()), d->mNewUrl);
-        job->ui()->setWindow(KApplication::kApplication()->activeWindow());
+        //KF5 TODO
+//         job->ui()->setWindow(KApplication::kApplication()->activeWindow());
         addSubjob(job);
     }
 }

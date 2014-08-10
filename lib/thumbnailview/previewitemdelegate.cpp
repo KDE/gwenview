@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "previewitemdelegate.moc"
+#include "previewitemdelegate.h"
 #include <config-gwenview.h>
 
 // Qt

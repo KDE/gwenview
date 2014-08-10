@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "rasterimageview.moc"
+#include "rasterimageview.h"
 
 // Local
 #include <lib/documentview/abstractrasterimageviewtool.h>

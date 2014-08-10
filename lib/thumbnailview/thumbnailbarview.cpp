@@ -20,7 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "thumbnailbarview.moc"
+#include "thumbnailbarview.h"
 
 // Qt
 #include <QApplication>
