@@ -399,10 +399,10 @@ struct MainWindow::Private
                 q, SLOT(setActiveViewModeAction(QAction*)));
 
         mFullScreenAction = static_cast<KToggleFullScreenAction*>(view->addAction(KStandardAction::FullScreen, q, SLOT(toggleFullScreen(bool))));
-        KShortcut shortcut = mFullScreenAction->shortcut();
-        if (shortcut.alternate().isEmpty()) {
-            shortcut.setAlternate(Qt::Key_F11);
-        }
+        QList<QKeySequence> shortcuts = mFullScreenAction->shortcuts();
+        shortcuts.append(QKeySequence(Qt::Key_F11));
+        mFullScreenAction->setShortcuts(shortcuts);
+
         mFullScreenAction->setShortcut(shortcut);
         connect(mViewMainPage, SIGNAL(toggleFullScreenRequested()),
                 mFullScreenAction, SLOT(trigger()));
