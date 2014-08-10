@@ -1557,7 +1557,7 @@ void MainWindow::setDistractionFreeMode(bool value)
 void MainWindow::saveProperties(KConfigGroup& group)
 {
     group.writeEntry(SESSION_CURRENT_PAGE_KEY, int(d->mCurrentMainPageId));
-    group.writeEntry(SESSION_URL_KEY, d->mContextManager->currentUrl());
+    group.writeEntry(SESSION_URL_KEY, d->mContextManager->currentUrl().toString());
 }
 
 void MainWindow::readProperties(const KConfigGroup& group)
