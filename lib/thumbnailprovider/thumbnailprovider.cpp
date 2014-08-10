@@ -44,6 +44,8 @@
 #include <KStandardDirs>
 #include <KTemporaryFile>
 #include <KJobWidgets>
+#include <KFileMetaInfo>
+#include <kmd5.h>
 
 // Local
 #include "mimetypeutils.h"
