@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QApplication>
 
 // KDE
-#include <KAction>
+#include <QAction>
 #include <KDebug>
 #include <KInputDialog>
 #include <KLocale>
@@ -67,14 +67,14 @@ struct ImageOpsContextManagerItem::Private
     MainWindow* mMainWindow;
     SideBarGroup* mGroup;
 
-    KAction* mRotateLeftAction;
-    KAction* mRotateRightAction;
-    KAction* mMirrorAction;
-    KAction* mFlipAction;
-    KAction* mResizeAction;
-    KAction* mCropAction;
-    KAction* mRedEyeReductionAction;
-    QList<KAction*> mActionList;
+    QAction * mRotateLeftAction;
+    QAction * mRotateRightAction;
+    QAction * mMirrorAction;
+    QAction * mFlipAction;
+    QAction * mResizeAction;
+    QAction * mCropAction;
+    QAction * mRedEyeReductionAction;
+    QList<QAction *> mActionList;
 
     void setupActions()
     {
@@ -176,7 +176,7 @@ void ImageOpsContextManagerItem::updateSideBarContent()
     }
 
     d->mGroup->clear();
-    Q_FOREACH(KAction * action, d->mActionList) {
+    Q_FOREACH(QAction * action, d->mActionList) {
         if (action->isEnabled() && action->priority() != QAction::LowPriority) {
             d->mGroup->addAction(action);
         }
