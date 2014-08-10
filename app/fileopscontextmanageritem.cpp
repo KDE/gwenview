@@ -122,7 +122,8 @@ struct FileOpsContextManagerItemPrivate
     {
         QMimeData* mimeData = new QMimeData;
         KFileItemList list = q->contextManager()->selectedFileItemList();
-        list.urlList().populateMimeData(mimeData);
+        //TODO KF5
+//         list.urlList().populateMimeData(mimeData);
         return mimeData;
     }
 
