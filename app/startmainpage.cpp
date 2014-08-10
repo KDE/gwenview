@@ -31,13 +31,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QPlastiqueStyle>
 #endif
 
+#include <QIcon>
 #include <QStyledItemDelegate>
 
 // KDE
 #include <KFilePlacesModel>
 #include <KGlobalSettings>
-#include <QIcon>
 #include <KMimeType>
+#include <KLocalizedString>
 
 // Local
 #include <gvcore.h>
