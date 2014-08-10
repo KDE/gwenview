@@ -269,7 +269,7 @@ void FileOpsContextManagerItem::updateActions()
     const bool urlIsValid = contextManager()->currentUrl().isValid();
     const bool dirUrlIsValid = contextManager()->currentDirUrl().isValid();
 
-    d->mInTrash = contextManager()->currentDirUrl().protocol() == "trash";
+    d->mInTrash = contextManager()->currentDirUrl().scheme() == "trash";
 
     d->mCutAction->setEnabled(selectionNotEmpty);
     d->mCopyAction->setEnabled(selectionNotEmpty);
