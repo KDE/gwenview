@@ -139,7 +139,7 @@ PrintOptionsPage::~PrintOptionsPage()
 Qt::Alignment PrintOptionsPage::alignment() const
 {
     int id = d->mPositionGroup.checkedId();
-    kDebug() << "alignment=" << id;
+    qWarning() << "alignment=" << id;
     return Qt::Alignment(id);
 }
 
@@ -198,14 +198,14 @@ void PrintOptionsPage::loadConfig()
     if (button) {
         button->setChecked(true);
     } else {
-        kWarning() << "Unknown button for position group";
+        qWarning() << "Unknown button for position group";
     }
 
     button = d->mScaleGroup.button(GwenviewConfig::printScaleMode());
     if (button) {
         button->setChecked(true);
     } else {
-        kWarning() << "Unknown button for scale group";
+        qWarning() << "Unknown button for scale group";
     }
 
     d->mConfigDialogManager->updateWidgets();
