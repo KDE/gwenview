@@ -33,6 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QTimeLine>
 #include <QTimer>
 #include <QToolTip>
+#include <QDrag>
 
 // KDE
 #include <KDebug>
@@ -41,6 +42,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KIconLoader>
 #include <KGlobalSettings>
 #include <KPixmapSequence>
+#include <KDateTime>
 
 // Local
 #include "abstractdocumentinfoprovider.h"
