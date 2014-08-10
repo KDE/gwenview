@@ -214,6 +214,13 @@ target_link_libraries(gwenviewlib
    Qt5::Concurrent
    Qt5::Svg
    Qt5::OpenGL
+    ${JPEG_LIBRARY}
+    ${EXIV2_LIBRARIES}
+    ${QT_QTOPENGL_LIBRARY}
+    ${X11_X11_LIB}
+    ${PNG_LIBRARIES}
+    ${LCMS2_LIBRARIES}
+    ${PHONON_LIBRARY}
     )
 if (WIN32)
     target_link_libraries(gwenviewlib ${EXPAT_LIBRARIES})
