@@ -503,7 +503,7 @@ void ThumbnailProvider::checkThumbnail()
             QUrl url;
             url.setPath(mTempPath);
             KIO::Job* job = KIO::file_copy(mCurrentUrl, url, -1, KIO::Overwrite | KIO::HideProgressInfo);
-            job->ui()->setWindow(KApplication::kApplication()->activeWindow());
+            KJobWidgets::setWindow(job, KApplication::kApplication()->activeWindow());
             LOG("Download remote file" << mCurrentUrl.toDisplayString() << "to" << url.pathOrUrl());
             addSubjob(job);
         }
