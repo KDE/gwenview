@@ -39,7 +39,7 @@ else()
     set(GWENVIEW_SEMANTICINFO_BACKEND_BALOO ON)
 endif()
 
-find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Core DBus Widgets Script Test Concurrent)
+find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Core DBus Widgets Script Test Concurrent Svg)
 
 find_package(KF5 CONFIG REQUIRED
     KDELibs4Support
