@@ -590,7 +590,7 @@ void ThumbnailView::setBrokenThumbnail(const KFileItem& item)
         // support for video thumbnails so we show the mimetype icon instead of
         // a broken image icon
         ThumbnailGroup::Enum group = ThumbnailGroup::fromPixelSize(d->mThumbnailSize.height());
-        QPixmap pix = item.pixmap(ThumbnailGroup::pixelSize(group));
+        QPixmap pix = KIconLoader::global()->loadMimeTypeIcon(item.iconName(), KIconLoader::Desktop, size, state);
         thumbnail.initAsIcon(pix);
     } else if (kind == MimeTypeUtils::KIND_DIR) {
         // Special case for folders because ThumbnailProvider does not return a
@@ -629,7 +629,8 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index, QSize* fullSi
     if (kind == MimeTypeUtils::KIND_ARCHIVE || kind == MimeTypeUtils::KIND_DIR) {
         int groupSize = ThumbnailGroup::pixelSize(ThumbnailGroup::fromPixelSize(d->mThumbnailSize.height()));
         if (thumbnail.mGroupPix.isNull() || thumbnail.mGroupPix.height() < groupSize) {
-            QPixmap pix = item.pixmap(groupSize);
+            QPixmap pix = KIconLoader::global()->loadMimeTypeIcon(item.iconName(), KIconLoader::Desktop, size, state);
+
             thumbnail.initAsIcon(pix);
             if (kind == MimeTypeUtils::KIND_ARCHIVE) {
                 // No thumbnails for archives
