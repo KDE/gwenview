@@ -91,7 +91,7 @@ protected:
 
     void dropEvent(QDropEvent* event)
     {
-        const QUrl::List urlList = QUrl::List::fromMimeData(event->mimeData());
+        const QList<QUrl> urlList = QList<QUrl>::fromMimeData(event->mimeData());
         const QModelIndex index = indexAt(event->pos());
         if (!index.isValid()) {
             qWarning() << "Invalid index!";

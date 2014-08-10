@@ -48,7 +48,7 @@ namespace Gwenview
 namespace FileOperations
 {
 
-static void copyMoveOrLink(KonqOperations::Operation operation, const QUrl::List& urlList, QWidget* parent)
+static void copyMoveOrLink(KonqOperations::Operation operation, const QList<QUrl>& urlList, QWidget* parent)
 {
     Q_ASSERT(urlList.count() > 0);
 
@@ -87,7 +87,7 @@ static void copyMoveOrLink(KonqOperations::Operation operation, const QUrl::List
     KonqOperations::copy(parent, operation, urlList, destUrl);
 }
 
-static void delOrTrash(KonqOperations::Operation operation, const QUrl::List& urlList, QWidget* parent)
+static void delOrTrash(KonqOperations::Operation operation, const QList<QUrl>& urlList, QWidget* parent)
 {
     Q_ASSERT(urlList.count() > 0);
 
@@ -121,32 +121,32 @@ static void delOrTrash(KonqOperations::Operation operation, const QUrl::List& ur
     }
 }
 
-void copyTo(const QUrl::List& urlList, QWidget* parent)
+void copyTo(const QList<QUrl>& urlList, QWidget* parent)
 {
     copyMoveOrLink(KonqOperations::COPY, urlList, parent);
 }
 
-void moveTo(const QUrl::List& urlList, QWidget* parent)
+void moveTo(const QList<QUrl>& urlList, QWidget* parent)
 {
     copyMoveOrLink(KonqOperations::MOVE, urlList, parent);
 }
 
-void linkTo(const QUrl::List& urlList, QWidget* parent)
+void linkTo(const QList<QUrl>& urlList, QWidget* parent)
 {
     copyMoveOrLink(KonqOperations::LINK, urlList, parent);
 }
 
-void trash(const QUrl::List& urlList, QWidget* parent)
+void trash(const QList<QUrl>& urlList, QWidget* parent)
 {
     delOrTrash(KonqOperations::TRASH, urlList, parent);
 }
 
-void del(const QUrl::List& urlList, QWidget* parent)
+void del(const QList<QUrl>& urlList, QWidget* parent)
 {
     delOrTrash(KonqOperations::DEL, urlList, parent);
 }
 
-void showMenuForDroppedUrls(QWidget* parent, const QUrl::List& urlList, const QUrl &destUrl)
+void showMenuForDroppedUrls(QWidget* parent, const QList<QUrl>& urlList, const QUrl &destUrl)
 {
     if (urlList.isEmpty()) {
         qWarning() << "urlList is empty!";

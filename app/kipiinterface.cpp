@@ -396,7 +396,7 @@ KIPI::ImageCollection KIPIInterface::currentAlbum()
     const QUrl url = contextManager->currentDirUrl();
     const SortedDirModel* model = contextManager->dirModel();
 
-    QUrl::List list;
+    QList<QUrl> list;
     const int count = model->rowCount();
     for (int row = 0; row < count; ++row) {
         const QModelIndex& index = model->index(row, 0);
@@ -414,7 +414,7 @@ KIPI::ImageCollection KIPIInterface::currentSelection()
     LOG("");
 
     KFileItemList fileList = d->mMainWindow->contextManager()->selectedFileItemList();
-    QUrl::List list = fileList.urlList();
+    QList<QUrl> list = fileList.urlList();
     QUrl url = d->mMainWindow->contextManager()->currentUrl();
 
     return KIPI::ImageCollection(new ImageCollection(url, url.fileName(), list));
@@ -455,7 +455,7 @@ void KIPIInterface::delImage(const QUrl&)
 //TODO
 }
 
-void KIPIInterface::refreshImages(const QUrl::List&)
+void KIPIInterface::refreshImages(const QList<QUrl>&)
 {
 // TODO
 }

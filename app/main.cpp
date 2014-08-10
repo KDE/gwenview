@@ -61,7 +61,7 @@ public:
             // Createa a temp dir containing links to url args
             mMultipleUrlsDir.reset(new KTempDir);
             mUrl = QUrl::fromLocalFile(mMultipleUrlsDir->name());
-            QUrl::List list;
+            QList<QUrl> list;
             for (int pos = 0; pos < args->count(); ++pos) {
                 list << args->url(pos);
             }

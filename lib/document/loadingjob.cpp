@@ -54,7 +54,7 @@ void LoadingJob::slotLoaded()
 void LoadingJob::slotLoadingFailed()
 {
     setError(UserDefinedError + 1);
-    setErrorText(i18n("Could not load document %1", document()->url().pathOrUrl()));
+    setErrorText(i18n("Could not load document %1", document()->url().toDisplayString()));
     emitResult();
 }
 

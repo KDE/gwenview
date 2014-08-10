@@ -76,7 +76,7 @@ private Q_SLOTS:
     void updateSortOrder();
     void updateThumbnailDetails();
     void slotUrlsDropped(const QUrl &destUrl, QDropEvent*);
-    void showMenuForDroppedUrls(const QUrl::List&, const QUrl &destUrl);
+    void showMenuForDroppedUrls(const QList<QUrl>&, const QUrl &destUrl);
 
 private:
     BrowseMainPagePrivate* const d;

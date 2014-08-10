@@ -45,9 +45,9 @@ public:
 
     virtual void showContextMenu(QWidget* parent) = 0;
 
-    virtual void showMenuForUrlDroppedOnViewport(QWidget* parent, const QUrl::List&) = 0;
+    virtual void showMenuForUrlDroppedOnViewport(QWidget* parent, const QList<QUrl>&) = 0;
 
-    virtual void showMenuForUrlDroppedOnDir(QWidget* parent, const QUrl::List&, const QUrl&) = 0;
+    virtual void showMenuForUrlDroppedOnDir(QWidget* parent, const QList<QUrl>&, const QUrl&) = 0;
 };
 
 } // namespace

@@ -954,7 +954,7 @@ void MainWindow::openSelectedDocuments()
 
     int count = 0;
 
-    QUrl::List urls;
+    QList<QUrl> urls;
     QUrl currentUrl;
     QModelIndex firstDocumentIndex;
     QModelIndexList list = d->mThumbnailView->selectionModel()->selectedIndexes();

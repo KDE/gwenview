@@ -85,9 +85,9 @@ struct FileOpsContextManagerItemPrivate
     KService::List mServiceList;
     bool mInTrash;
 
-    QUrl::List urlList() const
+    QList<QUrl> urlList() const
     {
-        QUrl::List urlList;
+        QList<QUrl> urlList;
 
         KFileItemList list = q->contextManager()->selectedFileItemList();
         if (list.count() > 0) {
@@ -416,7 +416,7 @@ void FileOpsContextManagerItem::openWith(QAction* action)
 {
     Q_ASSERT(action);
     KService::Ptr service;
-    QUrl::List list = d->urlList();
+    QList<QUrl> list = d->urlList();
 
     bool ok;
     int idx = action->data().toInt(&ok);

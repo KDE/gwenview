@@ -103,7 +103,7 @@ void SaveJob::doStart()
         dirUrl = dirUrl.adjusted(QUrl::RemoveFilename);
         dirUrl.setPath(dirUrl.path() + QString());
         setError(UserDefinedError + 1);
-        setErrorText(i18nc("@info", "Could not open file for writing, check that you have the necessary rights in <filename>%1</filename>.", dirUrl.pathOrUrl()));
+        setErrorText(i18nc("@info", "Could not open file for writing, check that you have the necessary rights in <filename>%1</filename>.", dirUrl.toDisplayString()));
         emitResult();
         return;
     }
@@ -127,7 +127,7 @@ void SaveJob::finishSave()
     }
 
     if (!d->mSaveFile->finalize()) {
-        setErrorText(i18nc("@info", "Could not overwrite file, check that you have the necessary rights to write in <filename>%1</filename>.", d->mNewUrl.pathOrUrl()));
+        setErrorText(i18nc("@info", "Could not overwrite file, check that you have the necessary rights to write in <filename>%1</filename>.", d->mNewUrl.toString()));
         setError(UserDefinedError + 3);
         return;
     }

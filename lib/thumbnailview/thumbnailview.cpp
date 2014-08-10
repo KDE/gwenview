@@ -716,7 +716,7 @@ void ThumbnailView::dragMoveEvent(QDragMoveEvent* event)
 
 void ThumbnailView::dropEvent(QDropEvent* event)
 {
-    const QUrl::List urlList = QUrl::List::fromMimeData(event->mimeData());
+    const QList<QUrl> urlList = QList<QUrl>::fromMimeData(event->mimeData());
     if (urlList.isEmpty()) {
         return;
     }

@@ -31,14 +31,14 @@ namespace Gwenview
 namespace FileOperations
 {
 
-void copyTo(const QUrl::List& urlList, QWidget* parent);
-void moveTo(const QUrl::List& urlList, QWidget* parent);
-void linkTo(const QUrl::List& urlList, QWidget* parent);
-void trash(const QUrl::List& urlList, QWidget* parent);
-void del(const QUrl::List& urlList, QWidget* parent);
+void copyTo(const QList<QUrl>& urlList, QWidget* parent);
+void moveTo(const QList<QUrl>& urlList, QWidget* parent);
+void linkTo(const QList<QUrl>& urlList, QWidget* parent);
+void trash(const QList<QUrl>& urlList, QWidget* parent);
+void del(const QList<QUrl>& urlList, QWidget* parent);
 void rename(const QUrl &url, QWidget* parent);
 
-void showMenuForDroppedUrls(QWidget* parent, const QUrl::List& urlList, const QUrl &destUrl);
+void showMenuForDroppedUrls(QWidget* parent, const QList<QUrl>& urlList, const QUrl &destUrl);
 
 } // namespace
 

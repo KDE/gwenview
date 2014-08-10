@@ -128,10 +128,8 @@ private:
         : mUrl(url)
         , mDateTime(dateTime)
         , mConfigPath(configPath) {
-        mUrl.cleanPath();
         QUrl urlForView = mUrl;
-        urlForView.urlForView = urlForView.adjusted(QUrl::StripTrailingSlash));
-        setText(urlForView.pathOrUrl());
+        setText(urlForView.toDisplayString());
 
         QString iconName = KMimeType::iconNameForUrl(mUrl);
         setIcon(QIcon::fromTheme(iconName));

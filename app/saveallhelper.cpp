@@ -67,7 +67,7 @@ SaveAllHelper::~SaveAllHelper()
 
 void SaveAllHelper::save()
 {
-    QUrl::List list = DocumentFactory::instance()->modifiedDocumentList();
+    QList<QUrl> list = DocumentFactory::instance()->modifiedDocumentList();
     d->mProgressDialog->progressBar()->setRange(0, list.size());
     d->mProgressDialog->progressBar()->setValue(0);
     Q_FOREACH(const QUrl &url, list) {

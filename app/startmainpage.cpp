@@ -66,11 +66,11 @@ public:
     {
     }
 
-    virtual void showMenuForUrlDroppedOnViewport(QWidget*, const QUrl::List&)
+    virtual void showMenuForUrlDroppedOnViewport(QWidget*, const QList<QUrl>&)
     {
     }
 
-    virtual void showMenuForUrlDroppedOnDir(QWidget*, const QUrl::List&, const QUrl&)
+    virtual void showMenuForUrlDroppedOnDir(QWidget*, const QList<QUrl>&, const QUrl&)
     {
     }
 };

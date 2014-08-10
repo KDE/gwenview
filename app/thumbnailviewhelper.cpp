@@ -104,12 +104,12 @@ void ThumbnailViewHelper::showContextMenu(QWidget* parent)
     popup.exec(QCursor::pos());
 }
 
-void ThumbnailViewHelper::showMenuForUrlDroppedOnViewport(QWidget* parent, const QUrl::List& lst)
+void ThumbnailViewHelper::showMenuForUrlDroppedOnViewport(QWidget* parent, const QList<QUrl>& lst)
 {
     showMenuForUrlDroppedOnDir(parent, lst, d->mCurrentDirUrl);
 }
 
-void ThumbnailViewHelper::showMenuForUrlDroppedOnDir(QWidget* parent, const QUrl::List& urlList, const QUrl &destUrl)
+void ThumbnailViewHelper::showMenuForUrlDroppedOnDir(QWidget* parent, const QList<QUrl>& urlList, const QUrl &destUrl)
 {
     FileOperations::showMenuForDroppedUrls(parent, urlList, destUrl);
 }

@@ -45,9 +45,9 @@ public:
 
     virtual void showContextMenu(QWidget* parent);
 
-    virtual void showMenuForUrlDroppedOnViewport(QWidget* parent, const QUrl::List&);
+    virtual void showMenuForUrlDroppedOnViewport(QWidget* parent, const QList<QUrl>&);
 
-    virtual void showMenuForUrlDroppedOnDir(QWidget* parent, const QUrl::List&, const QUrl&);
+    virtual void showMenuForUrlDroppedOnDir(QWidget* parent, const QList<QUrl>&, const QUrl&);
 
 public Q_SLOTS:
     void setCurrentDirUrl(const QUrl&);

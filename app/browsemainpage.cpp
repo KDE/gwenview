@@ -379,7 +379,7 @@ void BrowseMainPage::setFullScreenMode(bool fullScreen)
 
 void BrowseMainPage::slotUrlsDropped(const QUrl &destUrl, QDropEvent* event)
 {
-    const QUrl::List urlList = QUrl::List::fromMimeData(event->mimeData());
+    const QList<QUrl> urlList = QList<QUrl>::fromMimeData(event->mimeData());
     if (urlList.isEmpty()) {
         return;
     }
@@ -388,10 +388,10 @@ void BrowseMainPage::slotUrlsDropped(const QUrl &destUrl, QDropEvent* event)
     // We can't call FileOperations::showMenuForDroppedUrls() directly because
     // we need the slot to return so that the drop event is accepted. Otherwise
     // the drop cursor is still visible when the menu is shown.
-    QMetaObject::invokeMethod(this, "showMenuForDroppedUrls", Qt::QueuedConnection, Q_ARG(QUrl::List, urlList), Q_ARG(QUrl, destUrl));
+    QMetaObject::invokeMethod(this, "showMenuForDroppedUrls", Qt::QueuedConnection, Q_ARG(QList<QUrl>, urlList), Q_ARG(QUrl, destUrl));
 }
 
-void BrowseMainPage::showMenuForDroppedUrls(const QUrl::List& urlList, const QUrl &destUrl)
+void BrowseMainPage::showMenuForDroppedUrls(const QList<QUrl>& urlList, const QUrl &destUrl)
 {
     FileOperations::showMenuForDroppedUrls(d->mUrlNavigator, urlList, destUrl);
 }

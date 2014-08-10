@@ -51,7 +51,7 @@ public:
     int features() const;
     virtual bool addImage(const QUrl&, QString& err);
     virtual void delImage(const QUrl&);
-    virtual void refreshImages(const QUrl::List& urls);
+    virtual void refreshImages(const QList<QUrl>& urls);
 
     virtual KIPI::ImageCollectionSelector* imageCollectionSelector(QWidget *parent);
     virtual KIPI::UploadWidget* uploadWidget(QWidget *parent);
@@ -79,7 +79,7 @@ private:
 class ImageCollection : public KIPI::ImageCollectionShared
 {
 public:
-    ImageCollection(QUrl dirURL, const QString& name, const QUrl::List& images)
+    ImageCollection(QUrl dirURL, const QString& name, const QList<QUrl>& images)
         : KIPI::ImageCollectionShared()
         , mDirURL(dirURL)
         , mName(name)
@@ -91,7 +91,7 @@ public:
     QString comment()        {
         return QString();
     }
-    QUrl::List images()      {
+    QList<QUrl> images()      {
         return mImages;
     }
     QUrl uploadRoot()        {
@@ -111,7 +111,7 @@ public:
 private:
     QUrl mDirURL;
     QString mName;
-    QUrl::List mImages;
+    QList<QUrl> mImages;
 };
 
 } // namespace

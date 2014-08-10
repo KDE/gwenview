@@ -123,7 +123,7 @@ Q_SIGNALS:
      * signal replaces it.
      */
     void indexActivated(const QModelIndex&);
-    void urlListDropped(const QUrl::List& lst, const QUrl &destination);
+    void urlListDropped(const QList<QUrl>& lst, const QUrl &destination);
 
     void thumbnailSizeChanged(const QSize&);
     void thumbnailWidthChanged(int);

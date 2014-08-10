@@ -273,7 +273,7 @@ void GvCore::saveAs(const QUrl &url)
     Document::Ptr doc = DocumentFactory::instance()->load(url);
     KJob* job = doc->save(saveAsUrl, format.data());
     if (!job) {
-        const QString name = saveAsUrl.fileName().isEmpty() ? saveAsUrl.pathOrUrl() : saveAsUrl.fileName();
+        const QString name = saveAsUrl.fileName().isEmpty() ? saveAsUrl.toDisplayString() : saveAsUrl.fileName();
         const QString msg = i18nc("@info", "<b>Saving <filename>%1</filename> failed:</b><br>%2",
                                   name, doc->errorString());
         KMessageBox::sorry(QApplication::activeWindow(), msg);
@@ -296,7 +296,7 @@ void GvCore::slotSaveResult(KJob* _job)
     QUrl newUrl = job->newUrl();
 
     if (job->error()) {
-        QString name = newUrl.fileName().isEmpty() ? newUrl.pathOrUrl() : newUrl.fileName();
+        QString name = newUrl.fileName().isEmpty() ? newUrl.toDisplayString() : newUrl.fileName();
         QString msg = i18nc("@info", "<b>Saving <filename>%1</filename> failed:</b><br>%2",
                             name, job->errorString());
 
