@@ -31,6 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // KDE
 #include <QDebug>
 #include <KLocale>
+#include <KUrlMimeData>
 
 // Local
 #include <lib/contextmanager.h>
@@ -92,7 +93,7 @@ protected:
 
     void dropEvent(QDropEvent* event)
     {
-        const QList<QUrl> urlList = QList<QUrl>::fromMimeData(event->mimeData());
+        const QList<QUrl> urlList = KUrlMimeData::urlsFromMimeData(event->mimeData());
         const QModelIndex index = indexAt(event->pos());
         if (!index.isValid()) {
             qWarning() << "Invalid index!";

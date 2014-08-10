@@ -42,6 +42,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KToggleAction>
 #include <KIconLoader>
 #include <KUrlNavigator>
+#include <KUrlMimeData>
 
 // Local
 #include <filtercontroller.h>
@@ -379,7 +380,7 @@ void BrowseMainPage::setFullScreenMode(bool fullScreen)
 
 void BrowseMainPage::slotUrlsDropped(const QUrl &destUrl, QDropEvent* event)
 {
-    const QList<QUrl> urlList = QList<QUrl>::fromMimeData(event->mimeData());
+    const QList<QUrl> urlList = KUrlMimeData::urlsFromMimeData(event->mimeData());
     if (urlList.isEmpty()) {
         return;
     }

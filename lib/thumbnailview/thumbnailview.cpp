@@ -43,6 +43,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KIconLoader>
 #include <KGlobalSettings>
 #include <KPixmapSequence>
+#include <KUrlMimeData>
 #include <QDateTime>
 
 // Local
@@ -590,7 +591,7 @@ void ThumbnailView::setBrokenThumbnail(const KFileItem& item)
         // support for video thumbnails so we show the mimetype icon instead of
         // a broken image icon
         ThumbnailGroup::Enum group = ThumbnailGroup::fromPixelSize(d->mThumbnailSize.height());
-        QPixmap pix = KIconLoader::global()->loadMimeTypeIcon(item.iconName(), KIconLoader::Desktop, size, state);
+        QPixmap pix = KIconLoader::global()->loadMimeTypeIcon(item.iconName(), KIconLoader::Desktop);
         thumbnail.initAsIcon(pix);
     } else if (kind == MimeTypeUtils::KIND_DIR) {
         // Special case for folders because ThumbnailProvider does not return a
@@ -720,7 +721,7 @@ void ThumbnailView::dragMoveEvent(QDragMoveEvent* event)
 
 void ThumbnailView::dropEvent(QDropEvent* event)
 {
-    const QList<QUrl> urlList = QList<QUrl>::fromMimeData(event->mimeData());
+    const QList<QUrl> urlList = KUrlMimeData::urlsFromMimeData(event->mimeData());
     if (urlList.isEmpty()) {
         return;
     }
