@@ -81,7 +81,7 @@ struct CacheItem
         }
     }
 
-    bool updateFromExif(const KUrl& url)
+    bool updateFromExif(const QUrl &url)
     {
         if (!UrlUtils::urlIsFastLocalFile(url)) {
             return false;
@@ -132,7 +132,7 @@ struct CacheItem
     }
 };
 
-typedef QHash<KUrl, CacheItem> Cache;
+typedef QHash<QUrl, CacheItem> Cache;
 
 KDateTime dateTimeForFileItem(const KFileItem& fileItem, CachePolicy cachePolicy)
 {
@@ -143,7 +143,7 @@ KDateTime dateTimeForFileItem(const KFileItem& fileItem, CachePolicy cachePolicy
     }
 
     static Cache cache;
-    const KUrl url = fileItem.targetUrl();
+    const QUrl url = fileItem.targetUrl();
 
     Cache::iterator it = cache.find(url);
     if (it == cache.end()) {

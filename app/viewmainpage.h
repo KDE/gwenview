@@ -24,7 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/document/document.h>
 
 // KDE
-#include <KUrl>
+#include <QUrl>
 
 // Qt
 #include <QToolButton>
@@ -80,14 +80,14 @@ public:
     /**
      * Returns the url of the current document, or an invalid url if unknown
      */
-    KUrl url() const;
+    QUrl url() const;
 
-    void openUrl(const KUrl& url);
+    void openUrl(const QUrl &url);
 
     /**
      * Opens up to MaxViewCount urls, and set currentUrl as the current one
      */
-    void openUrls(const KUrl::List& urls, const KUrl& currentUrl);
+    void openUrls(const QList<QUrl>& urls, const QUrl &currentUrl);
 
     void reload();
 

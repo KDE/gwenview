@@ -33,7 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KIO/JobClasses>
 #include <KIO/NetAccess>
 #include <KMimeType>
-#include <KUrl>
+#include <QUrl>
 
 #include <KImageIO>
 
@@ -119,7 +119,7 @@ const QStringList& imageMimeTypes()
     return list;
 }
 
-QString urlMimeType(const KUrl& url)
+QString urlMimeType(const QUrl &url)
 {
     if (url.isEmpty()) {
         return "unknown";
@@ -135,7 +135,7 @@ QString urlMimeType(const KUrl& url)
     return mimeType;
 }
 
-QString urlMimeTypeByContent(const KUrl& url)
+QString urlMimeTypeByContent(const QUrl &url)
 {
     const int HEADER_SIZE = 30;
     if (url.isLocalFile()) {
@@ -177,7 +177,7 @@ Kind fileItemKind(const KFileItem& item)
     return mimeTypeKind(item.mimetype());
 }
 
-Kind urlKind(const KUrl& url)
+Kind urlKind(const QUrl &url)
 {
     return mimeTypeKind(urlMimeType(url));
 }

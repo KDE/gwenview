@@ -31,7 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KFileItem>
 #include <KJobUiDelegate>
 #include <KLocale>
-#include <KUrl>
+#include <QUrl>
 
 // Local
 #include "documentjob.h"
@@ -148,7 +148,7 @@ qreal Document::maxDownSampledZoom()
     return 0.5;
 }
 
-Document::Document(const KUrl& url)
+Document::Document(const QUrl &url)
 : QObject()
 , d(new DocumentPrivate)
 {
@@ -266,7 +266,7 @@ void Document::setImageInternal(const QImage& image)
     setSize(d->mImage.size());
 }
 
-KUrl Document::url() const
+QUrl Document::url() const
 {
     return d->mUrl;
 }
@@ -298,7 +298,7 @@ void Document::waitUntilLoaded()
     }
 }
 
-DocumentJob* Document::save(const KUrl& url, const QByteArray& format)
+DocumentJob* Document::save(const QUrl &url, const QByteArray& format)
 {
     waitUntilLoaded();
     DocumentJob* job = d->mImpl->save(url, format);

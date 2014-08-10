@@ -267,7 +267,7 @@ SemanticInfoContextManagerItem::SemanticInfoContextManagerItem(ContextManager* m
             SLOT(slotSelectionChanged()));
     connect(contextManager(), SIGNAL(selectionDataChanged()),
             SLOT(update()));
-    connect(contextManager(), SIGNAL(currentDirUrlChanged(KUrl)),
+    connect(contextManager(), SIGNAL(currentDirUrlChanged(QUrl)),
             SLOT(update()));
 
     d->setupActions();

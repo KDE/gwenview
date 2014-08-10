@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QAbstractListModel>
 
-class KUrl;
+class QUrl;
 
 namespace Gwenview
 {
@@ -46,8 +46,8 @@ public:
     RecursiveDirModel(QObject* parent = 0);
     ~RecursiveDirModel();
 
-    KUrl url() const;
-    void setUrl(const KUrl&);
+    QUrl url() const;
+    void setUrl(const QUrl&);
 
     int rowCount(const QModelIndex&) const; // reimp
     QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const; // reimp
@@ -56,9 +56,9 @@ Q_SIGNALS:
     void completed();
 
 private Q_SLOTS:
-    void slotItemsAdded(const KUrl& dirUrl, const KFileItemList&);
+    void slotItemsAdded(const QUrl &dirUrl, const KFileItemList&);
     void slotItemsDeleted(const KFileItemList&);
-    void slotDirCleared(const KUrl&);
+    void slotDirCleared(const QUrl&);
     void slotCleared();
 private:
     RecursiveDirModelPrivate* const d;

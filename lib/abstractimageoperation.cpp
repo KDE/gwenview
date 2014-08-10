@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // KDE
 #include <KJob>
-#include <KUrl>
+#include <QUrl>
 
 // Local
 #include "document/documentfactory.h"
@@ -58,7 +58,7 @@ private:
 struct AbstractImageOperationPrivate
 {
     QString mText;
-    KUrl mUrl;
+    QUrl mUrl;
 };
 
 AbstractImageOperation::AbstractImageOperation()

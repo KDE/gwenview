@@ -85,15 +85,15 @@ struct FileOpsContextManagerItemPrivate
     KService::List mServiceList;
     bool mInTrash;
 
-    KUrl::List urlList() const
+    QUrl::List urlList() const
     {
-        KUrl::List urlList;
+        QUrl::List urlList;
 
         KFileItemList list = q->contextManager()->selectedFileItemList();
         if (list.count() > 0) {
             urlList = list.urlList();
         } else {
-            KUrl url = q->contextManager()->currentUrl();
+            QUrl url = q->contextManager()->currentUrl();
             Q_ASSERT(url.isValid());
             urlList << url;
         }
@@ -127,7 +127,7 @@ struct FileOpsContextManagerItemPrivate
         return mimeData;
     }
 
-    KUrl pasteTargetUrl() const
+    QUrl pasteTargetUrl() const
     {
         // If only one folder is selected, paste inside it, otherwise paste in
         // current
@@ -162,7 +162,7 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, QL
 
     connect(contextManager(), SIGNAL(selectionChanged()),
             SLOT(updateActions()));
-    connect(contextManager(), SIGNAL(currentDirUrlChanged(KUrl)),
+    connect(contextManager(), SIGNAL(currentDirUrlChanged(QUrl)),
             SLOT(updateActions()));
 
     KActionCategory* file = new KActionCategory(i18nc("@title actions category", "File"), actionCollection);
@@ -320,7 +320,7 @@ void FileOpsContextManagerItem::showProperties()
     if (list.count() > 0) {
         KPropertiesDialog::showDialog(list, d->mGroup);
     } else {
-        KUrl url = contextManager()->currentDirUrl();
+        QUrl url = contextManager()->currentDirUrl();
         KPropertiesDialog::showDialog(url, d->mGroup);
     }
 }
@@ -387,7 +387,7 @@ void FileOpsContextManagerItem::rename()
 
 void FileOpsContextManagerItem::createFolder()
 {
-    KUrl url = contextManager()->currentDirUrl();
+    QUrl url = contextManager()->currentDirUrl();
     KonqOperations::newDir(d->mGroup, url);
 }
 
@@ -416,7 +416,7 @@ void FileOpsContextManagerItem::openWith(QAction* action)
 {
     Q_ASSERT(action);
     KService::Ptr service;
-    KUrl::List list = d->urlList();
+    QUrl::List list = d->urlList();
 
     bool ok;
     int idx = action->data().toInt(&ok);

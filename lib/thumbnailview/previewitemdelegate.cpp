@@ -40,7 +40,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KGlobalSettings>
 #include <KLineEdit>
 #include <KLocale>
-#include <KUrl>
+#include <QUrl>
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 #include <kratingpainter.h>
 #endif
@@ -99,7 +99,7 @@ static KFileItem fileItemForIndex(const QModelIndex& index)
     return qvariant_cast<KFileItem>(data);
 }
 
-static KUrl urlForIndex(const QModelIndex& index)
+static QUrl urlForIndex(const QModelIndex& index)
 {
     KFileItem item = fileItemForIndex(index);
     return item.url();

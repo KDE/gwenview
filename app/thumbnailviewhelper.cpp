@@ -43,7 +43,7 @@ namespace Gwenview
 struct ThumbnailViewHelperPrivate
 {
     KActionCollection* mActionCollection;
-    KUrl mCurrentDirUrl;
+    QUrl mCurrentDirUrl;
 
     void addActionToMenu(KMenu& popup, const char* name)
     {
@@ -70,7 +70,7 @@ ThumbnailViewHelper::~ThumbnailViewHelper()
     delete d;
 }
 
-void ThumbnailViewHelper::setCurrentDirUrl(const KUrl& url)
+void ThumbnailViewHelper::setCurrentDirUrl(const QUrl &url)
 {
     d->mCurrentDirUrl = url;
 }
@@ -78,7 +78,7 @@ void ThumbnailViewHelper::setCurrentDirUrl(const KUrl& url)
 void ThumbnailViewHelper::showContextMenu(QWidget* parent)
 {
     KMenu popup(parent);
-    if (d->mCurrentDirUrl.protocol() == "trash") {
+    if (d->mCurrentDirUrl.scheme() == "trash") {
         d->addActionToMenu(popup, "file_restore");
         d->addActionToMenu(popup, "file_delete");
         popup.addSeparator();
@@ -104,12 +104,12 @@ void ThumbnailViewHelper::showContextMenu(QWidget* parent)
     popup.exec(QCursor::pos());
 }
 
-void ThumbnailViewHelper::showMenuForUrlDroppedOnViewport(QWidget* parent, const KUrl::List& lst)
+void ThumbnailViewHelper::showMenuForUrlDroppedOnViewport(QWidget* parent, const QUrl::List& lst)
 {
     showMenuForUrlDroppedOnDir(parent, lst, d->mCurrentDirUrl);
 }
 
-void ThumbnailViewHelper::showMenuForUrlDroppedOnDir(QWidget* parent, const KUrl::List& urlList, const KUrl& destUrl)
+void ThumbnailViewHelper::showMenuForUrlDroppedOnDir(QWidget* parent, const QUrl::List& urlList, const QUrl &destUrl)
 {
     FileOperations::showMenuForDroppedUrls(parent, urlList, destUrl);
 }

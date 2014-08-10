@@ -32,7 +32,7 @@ class QModelIndex;
 class QPalette;
 class QShowEvent;
 
-class KUrl;
+class QUrl;
 
 namespace Gwenview
 {
@@ -52,7 +52,7 @@ public:
     ThumbnailView* recentFoldersView() const;
 
 Q_SIGNALS:
-    void urlSelected(const KUrl& url);
+    void urlSelected(const QUrl &url);
 
 public Q_SLOTS:
     void loadConfig();

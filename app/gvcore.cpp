@@ -33,7 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KLocale>
 #include <KMessageBox>
 #include <KStandardDirs>
-#include <KUrl>
+#include <QUrl>
 
 // Local
 #include <lib/binder.h>
@@ -64,7 +64,7 @@ struct GvCorePrivate
     HistoryModel* mRecentUrlsModel;
     QPalette mPalettes[4];
 
-    bool showSaveAsDialog(const KUrl& url, KUrl* outUrl, QByteArray* format)
+    bool showSaveAsDialog(const QUrl &url, QUrl* outUrl, QByteArray* format)
     {
         KFileDialog dialog(url, QString(), mMainWindow);
         dialog.setOperationMode(KFileDialog::Saving);
@@ -191,7 +191,7 @@ SortedDirModel* GvCore::sortedDirModel() const
     return d->mDirModel;
 }
 
-void GvCore::addUrlToRecentFolders(KUrl url)
+void GvCore::addUrlToRecentFolders(QUrl url)
 {
     if (!GwenviewConfig::historyEnabled()) {
         return;
@@ -200,13 +200,13 @@ void GvCore::addUrlToRecentFolders(KUrl url)
         return;
     }
     if (url.path() != "") { // This check is a workaraound for bug #312060
-        url.adjustPath(KUrl::AddTrailingSlash);
+        url.setPath(url.path()+'/');
     }
     recentFoldersModel();
     d->mRecentFoldersModel->addUrl(url);
 }
 
-void GvCore::addUrlToRecentUrls(const KUrl& url)
+void GvCore::addUrlToRecentUrls(const QUrl &url)
 {
     if (!GwenviewConfig::historyEnabled()) {
         return;
@@ -221,7 +221,7 @@ void GvCore::saveAll()
     helper.save();
 }
 
-void GvCore::save(const KUrl& url)
+void GvCore::save(const QUrl &url)
 {
     Document::Ptr doc = DocumentFactory::instance()->load(url);
     QByteArray format = doc->format();
@@ -246,10 +246,10 @@ void GvCore::save(const KUrl& url)
     }
 }
 
-void GvCore::saveAs(const KUrl& url)
+void GvCore::saveAs(const QUrl &url)
 {
     QByteArray format;
-    KUrl saveAsUrl;
+    QUrl saveAsUrl;
     if (!d->showSaveAsDialog(url, &saveAsUrl, &format)) {
         return;
     }
@@ -282,7 +282,7 @@ void GvCore::saveAs(const KUrl& url)
     }
 }
 
-static void applyTransform(const KUrl& url, Orientation orientation)
+static void applyTransform(const QUrl &url, Orientation orientation)
 {
     TransformImageOperation* op = new TransformImageOperation(orientation);
     Document::Ptr doc = DocumentFactory::instance()->load(url);
@@ -292,8 +292,8 @@ static void applyTransform(const KUrl& url, Orientation orientation)
 void GvCore::slotSaveResult(KJob* _job)
 {
     SaveJob* job = static_cast<SaveJob*>(_job);
-    KUrl oldUrl = job->oldUrl();
-    KUrl newUrl = job->newUrl();
+    QUrl oldUrl = job->oldUrl();
+    QUrl newUrl = job->newUrl();
 
     if (job->error()) {
         QString name = newUrl.fileName().isEmpty() ? newUrl.pathOrUrl() : newUrl.fileName();
@@ -322,7 +322,7 @@ void GvCore::slotSaveResult(KJob* _job)
             item.setText(i18n("Go back to the original"));
             HudButton* button = bubble->addButton(item);
 
-            BinderRef<MainWindow, KUrl>::bind(button, SIGNAL(clicked()), d->mMainWindow, &MainWindow::goToUrl, oldUrl);
+            BinderRef<MainWindow, QUrl>::bind(button, SIGNAL(clicked()), d->mMainWindow, &MainWindow::goToUrl, oldUrl);
             connect(button, SIGNAL(clicked()),
                 bubble, SLOT(deleteLater()));
 
@@ -331,17 +331,17 @@ void GvCore::slotSaveResult(KJob* _job)
     }
 }
 
-void GvCore::rotateLeft(const KUrl& url)
+void GvCore::rotateLeft(const QUrl &url)
 {
     applyTransform(url, ROT_270);
 }
 
-void GvCore::rotateRight(const KUrl& url)
+void GvCore::rotateRight(const QUrl &url)
 {
     applyTransform(url, ROT_90);
 }
 
-void GvCore::setRating(const KUrl& url, int rating)
+void GvCore::setRating(const QUrl &url, int rating)
 {
     QModelIndex index = d->mDirModel->indexForUrl(url);
     if (!index.isValid()) {

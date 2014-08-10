@@ -50,9 +50,9 @@ public:
 
     virtual void refreshAllTags();
 
-    virtual void storeSemanticInfo(const KUrl&, const SemanticInfo&);
+    virtual void storeSemanticInfo(const QUrl&, const SemanticInfo&);
 
-    virtual void retrieveSemanticInfo(const KUrl&);
+    virtual void retrieveSemanticInfo(const QUrl&);
 
     virtual QString labelForTag(const SemanticInfoTag&) const;
 

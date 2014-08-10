@@ -29,7 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
-class KUrl;
+class QUrl;
 
 namespace Gwenview
 {
@@ -41,17 +41,17 @@ namespace UrlUtils
  * Returns whether the url is a local file, and it's not on a slow device like
  * an nfs export.
  */
-GWENVIEWLIB_EXPORT bool urlIsFastLocalFile(const KUrl& url);
+GWENVIEWLIB_EXPORT bool urlIsFastLocalFile(const QUrl &url);
 
 /**
  * Returns whether the url is a directory.
  */
-GWENVIEWLIB_EXPORT bool urlIsDirectory(const KUrl& url);
+GWENVIEWLIB_EXPORT bool urlIsDirectory(const QUrl &url);
 
 /**
  * Returns a fixed version of a user entered url
  */
-GWENVIEWLIB_EXPORT KUrl fixUserEnteredUrl(const KUrl& url);
+GWENVIEWLIB_EXPORT QUrl fixUserEnteredUrl(const QUrl &url);
 
 } // namespace
 

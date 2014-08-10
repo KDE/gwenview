@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 class QModelIndex;
 
-class KUrl;
+class QUrl;
 
 namespace Gwenview
 {
@@ -44,10 +44,10 @@ public:
     ~FolderViewContextManagerItem();
 
 Q_SIGNALS:
-    void urlChanged(const KUrl&);
+    void urlChanged(const QUrl&);
 
 private Q_SLOTS:
-    void slotCurrentDirUrlChanged(const KUrl&);
+    void slotCurrentDirUrlChanged(const QUrl&);
     void expandToSelectedUrl();
     void slotRowsInserted(const QModelIndex&, int start, int end);
     void slotActivated(const QModelIndex&);

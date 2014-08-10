@@ -129,7 +129,7 @@ struct ImageOpsContextManagerItem::Private
 
     bool ensureEditable()
     {
-        KUrl url = q->contextManager()->currentUrl();
+        QUrl url = q->contextManager()->currentUrl();
         Document::Ptr doc = DocumentFactory::instance()->load(url);
         doc->startLoadingFullImage();
         doc->waitUntilLoaded();
@@ -290,7 +290,7 @@ void ImageOpsContextManagerItem::startRedEyeReduction()
 void ImageOpsContextManagerItem::applyImageOperation(AbstractImageOperation* op)
 {
     // For now, we only support operations on one image
-    KUrl url = contextManager()->currentUrl();
+    QUrl url = contextManager()->currentUrl();
 
     Document::Ptr doc = DocumentFactory::instance()->load(url);
     op->applyToDocument(doc);

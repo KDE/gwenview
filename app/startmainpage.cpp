@@ -66,11 +66,11 @@ public:
     {
     }
 
-    virtual void showMenuForUrlDroppedOnViewport(QWidget*, const KUrl::List&)
+    virtual void showMenuForUrlDroppedOnViewport(QWidget*, const QUrl::List&)
     {
     }
 
-    virtual void showMenuForUrlDroppedOnDir(QWidget*, const KUrl::List&, const KUrl&)
+    virtual void showMenuForUrlDroppedOnDir(QWidget*, const QUrl::List&, const QUrl&)
     {
     }
 };
@@ -171,8 +171,8 @@ StartMainPage::StartMainPage(QWidget* parent, GvCore* gvCore)
     d->mBookmarksView->setModel(d->mBookmarksModel);
     d->mBookmarksView->setAutoResizeItemsEnabled(false);
 
-    connect(d->mBookmarksView, SIGNAL(urlChanged(KUrl)),
-            SIGNAL(urlSelected(KUrl)));
+    connect(d->mBookmarksView, SIGNAL(urlChanged(QUrl)),
+            SIGNAL(urlSelected(QUrl)));
 
     // Tag view
     connect(d->mTagView, SIGNAL(clicked(QModelIndex)),
@@ -222,7 +222,7 @@ void StartMainPage::slotTagViewClicked(const QModelIndex& index)
     }
     // FIXME: Check label encoding
     const QString tag = index.data().toString();
-    emit urlSelected(KUrl("tags:/" + tag));
+    emit urlSelected(QUrl("tags:/" + tag));
 #endif
 }
 
@@ -250,7 +250,7 @@ void StartMainPage::slotListViewActivated(const QModelIndex& index)
         return;
     }
     QVariant data = index.data(KFilePlacesModel::UrlRole);
-    KUrl url = data.toUrl();
+    QUrl url = data.toUrl();
 
     // Prevent dir lister error
     if (!url.isValid()) {
@@ -291,7 +291,7 @@ void StartMainPage::showEvent(QShowEvent* event)
 void StartMainPage::showRecentFoldersViewContextMenu(const QPoint& pos)
 {
     QAbstractItemView* view = qobject_cast<QAbstractItemView*>(sender());
-    KUrl url;
+    QUrl url;
     QModelIndex index = view->indexAt(pos);
     if (index.isValid()) {
         QVariant data = index.data(KFilePlacesModel::UrlRole);

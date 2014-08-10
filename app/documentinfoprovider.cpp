@@ -43,11 +43,11 @@ DocumentInfoProvider::DocumentInfoProvider(SortedDirModel* model)
 , d(new DocumentInfoProviderPrivate)
 {
     d->mDirModel = model;
-    connect(DocumentFactory::instance(), SIGNAL(documentBusyStateChanged(KUrl,bool)),
-            SLOT(emitBusyStateChanged(KUrl,bool)));
+    connect(DocumentFactory::instance(), SIGNAL(documentBusyStateChanged(QUrl,bool)),
+            SLOT(emitBusyStateChanged(QUrl,bool)));
 
-    connect(DocumentFactory::instance(), SIGNAL(documentChanged(KUrl)),
-            SLOT(emitDocumentChanged(KUrl)));
+    connect(DocumentFactory::instance(), SIGNAL(documentChanged(QUrl)),
+            SLOT(emitDocumentChanged(QUrl)));
 }
 
 DocumentInfoProvider::~DocumentInfoProvider()
@@ -55,7 +55,7 @@ DocumentInfoProvider::~DocumentInfoProvider()
     delete d;
 }
 
-void DocumentInfoProvider::thumbnailForDocument(const KUrl& url, ThumbnailGroup::Enum group, QPixmap* outPix, QSize* outFullSize) const
+void DocumentInfoProvider::thumbnailForDocument(const QUrl &url, ThumbnailGroup::Enum group, QPixmap* outPix, QSize* outFullSize) const
 {
     Q_ASSERT(outPix);
     Q_ASSERT(outFullSize);
@@ -80,7 +80,7 @@ void DocumentInfoProvider::thumbnailForDocument(const KUrl& url, ThumbnailGroup:
     *outFullSize = doc->size();
 }
 
-bool DocumentInfoProvider::isModified(const KUrl& url)
+bool DocumentInfoProvider::isModified(const QUrl &url)
 {
     Document::Ptr doc = DocumentFactory::instance()->getCachedDocument(url);
     if (doc) {
@@ -90,7 +90,7 @@ bool DocumentInfoProvider::isModified(const KUrl& url)
     }
 }
 
-bool DocumentInfoProvider::isBusy(const KUrl& url)
+bool DocumentInfoProvider::isBusy(const QUrl &url)
 {
     Document::Ptr doc = DocumentFactory::instance()->getCachedDocument(url);
     if (doc) {
@@ -100,7 +100,7 @@ bool DocumentInfoProvider::isBusy(const KUrl& url)
     }
 }
 
-void DocumentInfoProvider::emitBusyStateChanged(const KUrl& url, bool busy)
+void DocumentInfoProvider::emitBusyStateChanged(const QUrl &url, bool busy)
 {
     QModelIndex index = d->mDirModel->indexForUrl(url);
     if (!index.isValid()) {
@@ -109,7 +109,7 @@ void DocumentInfoProvider::emitBusyStateChanged(const KUrl& url, bool busy)
     busyStateChanged(index, busy);
 }
 
-void DocumentInfoProvider::emitDocumentChanged(const KUrl& url)
+void DocumentInfoProvider::emitDocumentChanged(const QUrl &url)
 {
     QModelIndex index = d->mDirModel->indexForUrl(url);
     if (!index.isValid()) {

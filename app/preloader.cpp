@@ -68,7 +68,7 @@ Preloader::~Preloader()
     delete d;
 }
 
-void Preloader::preload(const KUrl& url, const QSize& size)
+void Preloader::preload(const QUrl &url, const QSize& size)
 {
     LOG("url=" << url);
     if (d->mDocument) {

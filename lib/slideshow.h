@@ -27,7 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QObject>
 
 // KDE
-#include <KUrl>
+#include <QUrl>
 
 class QAction;
 
@@ -42,7 +42,7 @@ public:
     SlideShow(QObject* parent);
     virtual ~SlideShow();
 
-    void start(const QList<KUrl>& urls);
+    void start(const QList<QUrl>& urls);
     void stop();
 
     QAction* loopAction() const;
@@ -53,7 +53,7 @@ public:
 
 public Q_SLOTS:
     void setInterval(int);
-    void setCurrentUrl(const KUrl& url);
+    void setCurrentUrl(const QUrl &url);
 
     /**
      * Resume slideshow and go to next url.
@@ -61,7 +61,7 @@ public Q_SLOTS:
     void resumeAndGoToNextUrl();
 
 Q_SIGNALS:
-    void goToUrl(const KUrl&);
+    void goToUrl(const QUrl&);
     /**
      * Slideshow has been started or stopped
      */

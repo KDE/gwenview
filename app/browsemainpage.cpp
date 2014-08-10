@@ -97,13 +97,13 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
         // mUrlNavigator (use stupid layouting code because KUrlNavigator ctor
         // can't be used directly from Designer)
         mFilePlacesModel = new KFilePlacesModel(q);
-        mUrlNavigator = new KUrlNavigator(mFilePlacesModel, KUrl(), mUrlNavigatorContainer);
+        mUrlNavigator = new KUrlNavigator(mFilePlacesModel, QUrl(), mUrlNavigatorContainer);
         mUrlNavigatorContainer->setAutoFillBackground(true);
         QVBoxLayout* layout = new QVBoxLayout(mUrlNavigatorContainer);
         layout->setMargin(0);
         layout->addWidget(mUrlNavigator);
-        QObject::connect(mUrlNavigator, SIGNAL(urlsDropped(KUrl,QDropEvent*)),
-                         q, SLOT(slotUrlsDropped(KUrl,QDropEvent*)));
+        QObject::connect(mUrlNavigator, SIGNAL(urlsDropped(QUrl,QDropEvent*)),
+                         q, SLOT(slotUrlsDropped(QUrl,QDropEvent*)));
         updateUrlNavigatorBackgroundColor();
 
         // Thumbnail slider
@@ -304,7 +304,7 @@ void BrowseMainPage::editLocation()
 
 void BrowseMainPage::addFolderToPlaces()
 {
-    KUrl url = d->mUrlNavigator->locationUrl();
+    QUrl url = d->mUrlNavigator->locationUrl();
     QString text = url.fileName();
     if (text.isEmpty()) {
         text = url.pathOrUrl();
@@ -377,9 +377,9 @@ void BrowseMainPage::setFullScreenMode(bool fullScreen)
     }
 }
 
-void BrowseMainPage::slotUrlsDropped(const KUrl& destUrl, QDropEvent* event)
+void BrowseMainPage::slotUrlsDropped(const QUrl &destUrl, QDropEvent* event)
 {
-    const KUrl::List urlList = KUrl::List::fromMimeData(event->mimeData());
+    const QUrl::List urlList = QUrl::List::fromMimeData(event->mimeData());
     if (urlList.isEmpty()) {
         return;
     }
@@ -388,10 +388,10 @@ void BrowseMainPage::slotUrlsDropped(const KUrl& destUrl, QDropEvent* event)
     // We can't call FileOperations::showMenuForDroppedUrls() directly because
     // we need the slot to return so that the drop event is accepted. Otherwise
     // the drop cursor is still visible when the menu is shown.
-    QMetaObject::invokeMethod(this, "showMenuForDroppedUrls", Qt::QueuedConnection, Q_ARG(KUrl::List, urlList), Q_ARG(KUrl, destUrl));
+    QMetaObject::invokeMethod(this, "showMenuForDroppedUrls", Qt::QueuedConnection, Q_ARG(QUrl::List, urlList), Q_ARG(QUrl, destUrl));
 }
 
-void BrowseMainPage::showMenuForDroppedUrls(const KUrl::List& urlList, const KUrl& destUrl)
+void BrowseMainPage::showMenuForDroppedUrls(const QUrl::List& urlList, const QUrl &destUrl)
 {
     FileOperations::showMenuForDroppedUrls(d->mUrlNavigator, urlList, destUrl);
 }

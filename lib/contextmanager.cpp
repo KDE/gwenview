@@ -29,7 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QDebug>
 #include <KDirLister>
 #include <KFileItem>
-#include <KUrl>
+#include <QUrl>
 
 // Local
 #include <lib/document/documentfactory.h>
@@ -43,10 +43,10 @@ struct ContextManagerPrivate
 {
     SortedDirModel* mDirModel;
     QItemSelectionModel* mSelectionModel;
-    KUrl mCurrentDirUrl;
-    KUrl mCurrentUrl;
+    QUrl mCurrentDirUrl;
+    QUrl mCurrentUrl;
 
-    KUrl mUrlToSelect;
+    QUrl mUrlToSelect;
 
     bool mSelectedFileItemListNeedsUpdate;
     QSet<QByteArray> mQueuedSignals;
@@ -118,8 +118,8 @@ ContextManager::ContextManager(SortedDirModel* dirModel, QObject* parent)
     connect(d->mDirModel, SIGNAL(rowsInserted(QModelIndex,int,int)),
             SLOT(slotRowsInserted()));
 
-    connect(d->mDirModel->dirLister(), SIGNAL(redirection(KUrl)),
-            SLOT(slotDirListerRedirection(KUrl)));
+    connect(d->mDirModel->dirLister(), SIGNAL(redirection(QUrl)),
+            SLOT(slotDirListerRedirection(QUrl)));
 
     d->mSelectionModel = new QItemSelectionModel(d->mDirModel);
 
@@ -141,7 +141,7 @@ QItemSelectionModel* ContextManager::selectionModel() const
     return d->mSelectionModel;
 }
 
-void ContextManager::setCurrentUrl(const KUrl& currentUrl)
+void ContextManager::setCurrentUrl(const QUrl &currentUrl)
 {
     if (d->mCurrentUrl == currentUrl) {
         return;
@@ -164,9 +164,9 @@ KFileItemList ContextManager::selectedFileItemList() const
     return d->mSelectedFileItemList;
 }
 
-void ContextManager::setCurrentDirUrl(const KUrl& url)
+void ContextManager::setCurrentDirUrl(const QUrl &url)
 {
-    if (url.equals(d->mCurrentDirUrl, KUrl::CompareWithoutTrailingSlash)) {
+    if (url == d->mCurrentDirUrl) {
         return;
     }
     d->mCurrentDirUrl = url;
@@ -176,12 +176,12 @@ void ContextManager::setCurrentDirUrl(const KUrl& url)
     currentDirUrlChanged(url);
 }
 
-KUrl ContextManager::currentDirUrl() const
+QUrl ContextManager::currentDirUrl() const
 {
     return d->mCurrentDirUrl;
 }
 
-KUrl ContextManager::currentUrl() const
+QUrl ContextManager::currentUrl() const
 {
     return d->mCurrentUrl;
 }
@@ -229,14 +229,14 @@ void ContextManager::slotSelectionChanged()
 {
     d->mSelectedFileItemListNeedsUpdate = true;
     if (!d->mSelectionModel->hasSelection()) {
-        setCurrentUrl(KUrl());
+        setCurrentUrl(QUrl());
     }
     d->queueSignal("selectionChanged");
 }
 
 void Gwenview::ContextManager::slotCurrentChanged(const QModelIndex& index)
 {
-    KUrl url = d->mDirModel->urlForIndex(index);
+    QUrl url = d->mDirModel->urlForIndex(index);
     setCurrentUrl(url);
 }
 
@@ -273,12 +273,12 @@ bool ContextManager::currentUrlIsRasterImage() const
     return MimeTypeUtils::urlKind(currentUrl()) == MimeTypeUtils::KIND_RASTER_IMAGE;
 }
 
-KUrl ContextManager::urlToSelect() const
+QUrl ContextManager::urlToSelect() const
 {
     return d->mUrlToSelect;
 }
 
-void ContextManager::setUrlToSelect(const KUrl& url)
+void ContextManager::setUrlToSelect(const QUrl &url)
 {
     GV_RETURN_IF_FAIL(url.isValid());
     d->mUrlToSelect = url;
@@ -306,11 +306,11 @@ void ContextManager::selectUrlToSelect()
     QModelIndex index = d->mDirModel->indexForUrl(d->mUrlToSelect);
     if (index.isValid()) {
         d->mSelectionModel->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect);
-        d->mUrlToSelect = KUrl();
+        d->mUrlToSelect = QUrl();
     }
 }
 
-void ContextManager::slotDirListerRedirection(const KUrl& newUrl)
+void ContextManager::slotDirListerRedirection(const QUrl &newUrl)
 {
     setCurrentDirUrl(newUrl);
 }

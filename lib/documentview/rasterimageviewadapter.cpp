@@ -27,7 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/gwenviewconfig.h>
 
 // KDE
-#include <KUrl>
+#include <QUrl>
 
 // Qt
 
@@ -77,7 +77,7 @@ void RasterImageViewAdapter::setDocument(Document::Ptr doc)
 {
     d->mView->setDocument(doc);
 
-    connect(doc.data(), SIGNAL(loadingFailed(KUrl)), SLOT(slotLoadingFailed()));
+    connect(doc.data(), SIGNAL(loadingFailed(QUrl)), SLOT(slotLoadingFailed()));
     if (doc->loadingState() == Document::LoadingFailed) {
         slotLoadingFailed();
     }

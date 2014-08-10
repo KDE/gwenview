@@ -42,7 +42,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KLocale>
 #include <KMimeType>
 #include <KProtocolInfo>
-#include <KUrl>
+#include <QUrl>
 
 #ifdef KDCRAW_FOUND
 #include <libkdcraw/kdcraw.h>
@@ -114,8 +114,8 @@ struct LoadingDocumentImplPrivate
     bool determineKind()
     {
         QString mimeType;
-        const KUrl& url = q->document()->url();
-        if (KProtocolInfo::determineMimetypeFromExtension(url.protocol())) {
+        const QUrl &url = q->document()->url();
+        if (KProtocolInfo::determineMimetypeFromExtension(url.scheme())) {
             mimeType = KMimeType::findByNameAndContent(url.fileName(), mData)->name();
         } else {
             mimeType = KMimeType::findByContent(mData)->name();
@@ -385,7 +385,7 @@ LoadingDocumentImpl::~LoadingDocumentImpl()
 
 void LoadingDocumentImpl::init()
 {
-    KUrl url = document()->url();
+    QUrl url = document()->url();
 
     if (UrlUtils::urlIsFastLocalFile(url)) {
         // Load file content directly

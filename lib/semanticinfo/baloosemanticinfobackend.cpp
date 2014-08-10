@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 #include <KDebug>
-#include <KUrl>
+#include <QUrl>
 
 // Baloo
 #include <baloo/file.h>
@@ -76,7 +76,7 @@ void BalooSemanticInfoBackend::refreshAllTags()
     }
 }
 
-void BalooSemanticInfoBackend::storeSemanticInfo(const KUrl& url, const SemanticInfo& semanticInfo)
+void BalooSemanticInfoBackend::storeSemanticInfo(const QUrl &url, const SemanticInfo& semanticInfo)
 {
     Baloo::File file(url.toLocalFile());
     file.setRating(semanticInfo.mRating);
@@ -87,7 +87,7 @@ void BalooSemanticInfoBackend::storeSemanticInfo(const KUrl& url, const Semantic
     job->start();
 }
 
-void BalooSemanticInfoBackend::retrieveSemanticInfo(const KUrl& url)
+void BalooSemanticInfoBackend::retrieveSemanticInfo(const QUrl &url)
 {
     Baloo::FileFetchJob* job = new Baloo::FileFetchJob(url.toLocalFile());
     connect(job, SIGNAL(finished(KJob*)), this, SLOT(slotFetchFinished(KJob*)));
@@ -105,7 +105,7 @@ void BalooSemanticInfoBackend::slotFetchFinished(KJob* job)
     si.mDescription = file.userComment();
     si.mTags = file.tags().toSet();
 
-    emit semanticInfoRetrieved(KUrl::fromLocalFile(file.url()), si);
+    emit semanticInfoRetrieved(QUrl::fromLocalFile(file.url()), si);
 }
 
 QString BalooSemanticInfoBackend::labelForTag(const SemanticInfoTag& uriString) const

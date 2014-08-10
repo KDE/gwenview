@@ -32,7 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 class QByteArray;
 class QIODevice;
 
-class KUrl;
+class QUrl;
 
 namespace Gwenview
 {
@@ -51,7 +51,7 @@ public:
     // AbstractDocumentImpl
     virtual void init();
     virtual Document::LoadingState loadingState() const;
-    virtual DocumentJob* save(const KUrl&, const QByteArray& format);
+    virtual DocumentJob* save(const QUrl&, const QByteArray& format);
     virtual AbstractDocumentEditor* editor();
     virtual QByteArray rawData() const;
     virtual bool isEditable() const;

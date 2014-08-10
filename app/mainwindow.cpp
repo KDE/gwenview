@@ -57,7 +57,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KStandardShortcut>
 #include <KToggleFullScreenAction>
 #include <KToolBar>
-#include <KUrl>
+#include <QUrl>
 #include <KUrlNavigator>
 #include <KXMLGUIFactory>
 #include <KWindowSystem>
@@ -223,14 +223,14 @@ struct MainWindow::Private
         mContextManager = new ContextManager(mDirModel, q);
         connect(mContextManager, SIGNAL(selectionChanged()),
             q, SLOT(slotSelectionChanged()));
-        connect(mContextManager, SIGNAL(currentDirUrlChanged(KUrl)),
-            q, SLOT(slotCurrentDirUrlChanged(KUrl)));
+        connect(mContextManager, SIGNAL(currentDirUrlChanged(QUrl)),
+            q, SLOT(slotCurrentDirUrlChanged(QUrl)));
     }
 
     void setupWidgets()
     {
         mFullScreenContent = new FullScreenContent(q);
-        connect(mContextManager, SIGNAL(currentUrlChanged(KUrl)), mFullScreenContent, SLOT(setCurrentUrl(KUrl)));
+        connect(mContextManager, SIGNAL(currentUrlChanged(QUrl)), mFullScreenContent, SLOT(setCurrentUrl(QUrl)));
 
         mCentralSplitter = new Splitter(Qt::Horizontal, q);
         q->setCentralWidget(mCentralSplitter);
@@ -244,7 +244,7 @@ struct MainWindow::Private
         mContentWidget = new QWidget(mCentralSplitter);
 
         mSaveBar = new SaveBar(mContentWidget, q->actionCollection());
-        connect(mContextManager, SIGNAL(currentUrlChanged(KUrl)), mSaveBar, SLOT(setCurrentUrl(KUrl)));
+        connect(mContextManager, SIGNAL(currentUrlChanged(QUrl)), mSaveBar, SLOT(setCurrentUrl(QUrl)));
         mViewStackedWidget = new QStackedWidget(mContentWidget);
         QVBoxLayout* layout = new QVBoxLayout(mContentWidget);
         layout->addWidget(mSaveBar);
@@ -255,7 +255,7 @@ struct MainWindow::Private
 
         mStartSlideShowWhenDirListerCompleted = false;
         mSlideShow = new SlideShow(q);
-        connect(mContextManager, SIGNAL(currentUrlChanged(KUrl)), mSlideShow, SLOT(setCurrentUrl(KUrl)));
+        connect(mContextManager, SIGNAL(currentUrlChanged(QUrl)), mSlideShow, SLOT(setCurrentUrl(QUrl)));
 
         setupThumbnailView(mViewStackedWidget);
         setupViewMainPage(mViewStackedWidget);
@@ -270,11 +270,11 @@ struct MainWindow::Private
 
         connect(mSaveBar, SIGNAL(requestSaveAll()),
                 mGvCore, SLOT(saveAll()));
-        connect(mSaveBar, SIGNAL(goToUrl(KUrl)),
-                q, SLOT(goToUrl(KUrl)));
+        connect(mSaveBar, SIGNAL(goToUrl(QUrl)),
+                q, SLOT(goToUrl(QUrl)));
 
-        connect(mSlideShow, SIGNAL(goToUrl(KUrl)),
-                q, SLOT(goToUrl(KUrl)));
+        connect(mSlideShow, SIGNAL(goToUrl(QUrl)),
+                q, SLOT(goToUrl(QUrl)));
     }
 
     void setupThumbnailView(QWidget* parent)
@@ -290,8 +290,8 @@ struct MainWindow::Private
         mThumbnailView->setDocumentInfoProvider(mDocumentInfoProvider);
 
         mThumbnailViewHelper = new ThumbnailViewHelper(mDirModel, q->actionCollection());
-        connect(mContextManager, SIGNAL(currentDirUrlChanged(KUrl)),
-            mThumbnailViewHelper, SLOT(setCurrentDirUrl(KUrl)));
+        connect(mContextManager, SIGNAL(currentDirUrlChanged(QUrl)),
+            mThumbnailViewHelper, SLOT(setCurrentDirUrl(QUrl)));
         mThumbnailView->setThumbnailViewHelper(mThumbnailViewHelper);
 
         mThumbnailBarSelectionModel = new KLinkItemSelectionModel(mThumbnailBarModel, mContextManager->selectionModel(), q);
@@ -302,20 +302,20 @@ struct MainWindow::Private
 
         // Connect delegate
         QAbstractItemDelegate* delegate = mThumbnailView->itemDelegate();
-        connect(delegate, SIGNAL(saveDocumentRequested(KUrl)),
-                mGvCore, SLOT(save(KUrl)));
-        connect(delegate, SIGNAL(rotateDocumentLeftRequested(KUrl)),
-                mGvCore, SLOT(rotateLeft(KUrl)));
-        connect(delegate, SIGNAL(rotateDocumentRightRequested(KUrl)),
-                mGvCore, SLOT(rotateRight(KUrl)));
-        connect(delegate, SIGNAL(showDocumentInFullScreenRequested(KUrl)),
-                q, SLOT(showDocumentInFullScreen(KUrl)));
-        connect(delegate, SIGNAL(setDocumentRatingRequested(KUrl,int)),
-                mGvCore, SLOT(setRating(KUrl,int)));
+        connect(delegate, SIGNAL(saveDocumentRequested(QUrl)),
+                mGvCore, SLOT(save(QUrl)));
+        connect(delegate, SIGNAL(rotateDocumentLeftRequested(QUrl)),
+                mGvCore, SLOT(rotateLeft(QUrl)));
+        connect(delegate, SIGNAL(rotateDocumentRightRequested(QUrl)),
+                mGvCore, SLOT(rotateRight(QUrl)));
+        connect(delegate, SIGNAL(showDocumentInFullScreenRequested(QUrl)),
+                q, SLOT(showDocumentInFullScreen(QUrl)));
+        connect(delegate, SIGNAL(setDocumentRatingRequested(QUrl,int)),
+                mGvCore, SLOT(setRating(QUrl,int)));
 
         // Connect url navigator
-        connect(mUrlNavigator, SIGNAL(urlChanged(KUrl)),
-                q, SLOT(openDirUrl(KUrl)));
+        connect(mUrlNavigator, SIGNAL(urlChanged(QUrl)),
+                q, SLOT(openDirUrl(QUrl)));
     }
 
     void setupViewMainPage(QWidget* parent)
@@ -348,8 +348,8 @@ struct MainWindow::Private
     void setupStartMainPage(QWidget* parent)
     {
         mStartMainPage = new StartMainPage(parent, mGvCore);
-        connect(mStartMainPage, SIGNAL(urlSelected(KUrl)),
-                q, SLOT(slotStartMainPageUrlSelected(KUrl)));
+        connect(mStartMainPage, SIGNAL(urlSelected(QUrl)),
+                q, SLOT(slotStartMainPageUrlSelected(QUrl)));
     }
 
     void installDisabledActionShortcutMonitor(QAction* action, const char* slot)
@@ -514,8 +514,8 @@ struct MainWindow::Private
 
         // Create context manager items
         FolderViewContextManagerItem* folderViewItem = new FolderViewContextManagerItem(mContextManager);
-        connect(folderViewItem, SIGNAL(urlChanged(KUrl)),
-                q, SLOT(openDirUrl(KUrl)));
+        connect(folderViewItem, SIGNAL(urlChanged(QUrl)),
+                q, SLOT(openDirUrl(QUrl)));
 
         InfoContextManagerItem* infoItem = new InfoContextManagerItem(mContextManager);
 
@@ -664,7 +664,7 @@ struct MainWindow::Private
         bool isRasterImage = false;
         bool canSave = false;
         bool isModified = false;
-        const KUrl url = mContextManager->currentUrl();
+        const QUrl url = mContextManager->currentUrl();
 
         if (url.isValid()) {
             isRasterImage = mContextManager->currentUrlIsRasterImage();
@@ -811,7 +811,7 @@ MainWindow::~MainWindow()
     if (GwenviewConfig::deleteThumbnailCacheOnExit()) {
         const QString dir = ThumbnailProvider::thumbnailBaseDir();
         if (QFile::exists(dir)) {
-            KIO::NetAccess::del(KUrl::fromPath(dir), this);
+            KIO::NetAccess::del(QUrl::fromLocalFile(dir), this);
         }
     }
     delete d->mThumbnailProvider;
@@ -846,16 +846,16 @@ void MainWindow::slotModifiedDocumentListChanged()
     d->updateActions();
 
     // Update caption
-    QList<KUrl> list = DocumentFactory::instance()->modifiedDocumentList();
+    QList<QUrl> list = DocumentFactory::instance()->modifiedDocumentList();
     bool modified = list.count() > 0;
     setCaption(d->mCaption, modified);
 }
 
-void MainWindow::setInitialUrl(const KUrl& _url)
+void MainWindow::setInitialUrl(const QUrl &_url)
 {
     Q_ASSERT(_url.isValid());
-    KUrl url = UrlUtils::fixUserEnteredUrl(_url);
-    if (url.protocol() == "http" || url.protocol() == "https") {
+    QUrl url = UrlUtils::fixUserEnteredUrl(_url);
+    if (url.scheme() == "http" || url.scheme() == "https") {
         d->mGvCore->addUrlToRecentUrls(url);
     }
     if (UrlUtils::urlIsDirectory(url)) {
@@ -926,8 +926,8 @@ void MainWindow::slotThumbnailViewIndexActivated(const QModelIndex& index)
         QString protocol = ArchiveUtils::protocolForMimeType(item.mimetype());
         if (!protocol.isEmpty()) {
             // Item is an archive, tweak url then open it
-            KUrl url = item.url();
-            url.setProtocol(protocol);
+            QUrl url = item.url();
+            url.setScheme(protocol);
             openDirUrl(url);
         } else {
             // Item is a document, switch to view mode
@@ -954,8 +954,8 @@ void MainWindow::openSelectedDocuments()
 
     int count = 0;
 
-    KUrl::List urls;
-    KUrl currentUrl;
+    QUrl::List urls;
+    QUrl currentUrl;
     QModelIndex firstDocumentIndex;
     QModelIndexList list = d->mThumbnailView->selectionModel()->selectedIndexes();
     // Make 'list' follow the same order as 'mThumbnailView'
@@ -964,7 +964,7 @@ void MainWindow::openSelectedDocuments()
     Q_FOREACH(const QModelIndex& index, list) {
         KFileItem item = d->mDirModel->itemForIndex(index);
         if (!item.isNull() && !ArchiveUtils::fileItemIsDirOrArchive(item)) {
-            KUrl url = item.url();
+            QUrl url = item.url();
             if (!firstDocumentIndex.isValid()) {
                 firstDocumentIndex = index;
             }
@@ -996,7 +996,7 @@ void MainWindow::openSelectedDocuments()
 void MainWindow::goUp()
 {
     if (d->mCurrentMainPageId == BrowseMainPageId) {
-        KUrl url = d->mContextManager->currentDirUrl();
+        QUrl url = d->mContextManager->currentDirUrl();
         url = url.upUrl();
         openDirUrl(url);
     } else {
@@ -1017,13 +1017,13 @@ void MainWindow::showStartMainPage()
 
     d->updateActions();
     updatePreviousNextActions();
-    d->mContextManager->setCurrentDirUrl(KUrl());
-    d->mContextManager->setCurrentUrl(KUrl());
+    d->mContextManager->setCurrentDirUrl(QUrl());
+    d->mContextManager->setCurrentUrl(QUrl());
 
     d->autoAssignThumbnailProvider();
 }
 
-void MainWindow::slotStartMainPageUrlSelected(const KUrl& url)
+void MainWindow::slotStartMainPageUrlSelected(const QUrl &url)
 {
     d->setActionsDisabledOnStartMainPageEnabled(true);
 
@@ -1036,11 +1036,11 @@ void MainWindow::slotStartMainPageUrlSelected(const KUrl& url)
     setInitialUrl(url);
 }
 
-void MainWindow::openDirUrl(const KUrl& url)
+void MainWindow::openDirUrl(const QUrl &url)
 {
-    const KUrl currentUrl = d->mContextManager->currentDirUrl();
+    const QUrl currentUrl = d->mContextManager->currentDirUrl();
 
-    if (url.equals(currentUrl, KUrl::CompareWithoutTrailingSlash)) {
+    if (url.equals(currentUrl, QUrl::CompareWithoutTrailingSlash)) {
         return;
     }
 
@@ -1050,15 +1050,15 @@ void MainWindow::openDirUrl(const KUrl& url)
         // and wantedPath is      "/home/user/photos"
         // pathToSelect should be "/home/user/photos/2008"
 
-        // To anyone considering using KUrl::toLocalFile() instead of
-        // KUrl::path() here. Please don't, using KUrl::path() is the right
+        // To anyone considering using QUrl::toLocalFile() instead of
+        // QUrl::path() here. Please don't, using QUrl::path() is the right
         // thing to do here.
-        const QString currentPath = QDir::cleanPath(currentUrl.path(KUrl::RemoveTrailingSlash));
-        const QString wantedPath  = QDir::cleanPath(url.path(KUrl::RemoveTrailingSlash));
+        const QString currentPath = QDir::cleanPath(currentUrl.adjusted(QUrl::StripTrailingSlash).path());
+        const QString wantedPath  = QDir::cleanPath(url.adjusted(QUrl::StripTrailingSlash).path());
         const QChar separator('/');
         const int slashCount = wantedPath.count(separator);
         const QString pathToSelect = currentPath.section(separator, 0, slashCount + 1);
-        KUrl urlToSelect = url;
+        QUrl urlToSelect = url;
         urlToSelect.setPath(pathToSelect);
         d->mContextManager->setUrlToSelect(urlToSelect);
     }
@@ -1099,8 +1099,7 @@ void MainWindow::updateToggleSideBarAction()
 void MainWindow::slotPartCompleted()
 {
     d->updateActions();
-    KUrl url = d->mViewMainPage->url();
-    //  remember the opened file
+    QUrl url = d->mViewMainPage->url();
     if (!url.isEmpty()) {
         d->mFileOpenRecentAction->addUrl(url);
     }
@@ -1108,9 +1107,10 @@ void MainWindow::slotPartCompleted()
         return;
     }
 
-    KUrl dirUrl = url;
-    dirUrl.setFileName(QString());
-    if (dirUrl.equals(d->mContextManager->currentDirUrl(), KUrl::CompareWithoutTrailingSlash)) {
+    QUrl dirUrl = url;
+    dirUrl = dirUrl.adjusted(QUrl::RemoveFilename);
+    dirUrl.setPath(dirUrl.path() + QString());
+    if (dirUrl.equals(d->mContextManager->currentDirUrl(), QUrl::CompareWithoutTrailingSlash)) {
         QModelIndex index = d->mDirModel->indexForUrl(url);
         QItemSelectionModel* selectionModel = d->mThumbnailView->selectionModel();
         if (index.isValid() && !selectionModel->isSelected(index)) {
@@ -1139,7 +1139,7 @@ void MainWindow::slotSelectionChanged()
         }
         QUndoGroup* undoGroup = DocumentFactory::instance()->undoGroup();
         if (!item.isNull() && !ArchiveUtils::fileItemIsDirOrArchive(item)) {
-            KUrl url = item.url();
+            QUrl url = item.url();
             Document::Ptr doc = DocumentFactory::instance()->load(url);
             undoGroup->addStack(doc->undoStack());
             undoGroup->setActiveStack(doc->undoStack());
@@ -1157,7 +1157,7 @@ void MainWindow::slotSelectionChanged()
     QTimer::singleShot(preloadDelay, this, SLOT(preloadNextUrl()));
 }
 
-void MainWindow::slotCurrentDirUrlChanged(const KUrl& url)
+void MainWindow::slotCurrentDirUrlChanged(const QUrl &url)
 {
     if (url.isValid()) {
         d->mUrlNavigator->setLocationUrl(url);
@@ -1209,14 +1209,15 @@ void MainWindow::goToLast()
     d->goToLastDocument();
 }
 
-void MainWindow::goToUrl(const KUrl& url)
+void MainWindow::goToUrl(const QUrl &url)
 {
     if (d->mCurrentMainPageId == ViewMainPageId) {
         d->mViewMainPage->openUrl(url);
     }
-    KUrl dirUrl = url;
-    dirUrl.setFileName("");
-    if (!dirUrl.equals(d->mContextManager->currentDirUrl(), KUrl::CompareWithoutTrailingSlash)) {
+    QUrl dirUrl = url;
+    dirUrl = dirUrl.adjusted(QUrl::RemoveFilename);
+    dirUrl.setPath(dirUrl.path() + "");
+    if (!dirUrl.equals(d->mContextManager->currentDirUrl(), QUrl::CompareWithoutTrailingSlash)) {
         d->mContextManager->setCurrentDirUrl(dirUrl);
         d->mGvCore->addUrlToRecentFolders(dirUrl);
     }
@@ -1331,7 +1332,7 @@ void MainWindow::reload()
 
 void MainWindow::openFile()
 {
-    KUrl dirUrl = d->mContextManager->currentDirUrl();
+    QUrl dirUrl = d->mContextManager->currentDirUrl();
 
     KFileDialog dialog(dirUrl, QString(), this);
     dialog.setWindowTitle(i18nc("@title:window", "Open Image"));
@@ -1345,7 +1346,7 @@ void MainWindow::openFile()
     openUrl(dialog.selectedUrl());
 }
 
-void MainWindow::openUrl(const KUrl& url)
+void MainWindow::openUrl(const QUrl& url)
 {
     d->setActionsDisabledOnStartMainPageEnabled(true);
     d->mViewAction->trigger();
@@ -1353,7 +1354,7 @@ void MainWindow::openUrl(const KUrl& url)
     d->mContextManager->setUrlToSelect(url);
 }
 
-void MainWindow::showDocumentInFullScreen(const KUrl& url)
+void MainWindow::showDocumentInFullScreen(const QUrl &url)
 {
     d->mViewMainPage->openUrl(url);
     d->mContextManager->setUrlToSelect(url);
@@ -1371,7 +1372,7 @@ void MainWindow::toggleSlideShow()
         if (!d->mFullScreenAction->isChecked()) {
             d->mFullScreenAction->trigger();
         }
-        QList<KUrl> list;
+        QList<QUrl> list;
         for (int pos = 0; pos < d->mDirModel->rowCount(); ++pos) {
             QModelIndex index = d->mDirModel->index(pos, 0);
             KFileItem item = d->mDirModel->itemForIndex(index);
@@ -1406,7 +1407,7 @@ bool MainWindow::queryClose()
 {
     saveConfig();
     d->saveSideBarConfig();
-    QList<KUrl> list = DocumentFactory::instance()->modifiedDocumentList();
+    QList<QUrl> list = DocumentFactory::instance()->modifiedDocumentList();
     if (list.size() == 0) {
         return true;
     }
@@ -1516,7 +1517,7 @@ void MainWindow::preloadNextUrl()
 
     KFileItem item = d->mDirModel->itemForIndex(index);
     if (!ArchiveUtils::fileItemIsDirOrArchive(item)) {
-        KUrl url = item.url();
+        QUrl url = item.url();
         if (url.isLocalFile()) {
             QSize size = d->mViewStackedWidget->size();
             d->mPreloader->preload(url, size);

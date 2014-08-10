@@ -29,7 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <lib/slidecontainer.h>
 
 class KActionCollection;
-class KUrl;
+class QUrl;
 
 namespace Gwenview
 {
@@ -50,11 +50,11 @@ public:
     void setFullScreenMode(bool);
 
 public Q_SLOTS:
-    void setCurrentUrl(const KUrl&);
+    void setCurrentUrl(const QUrl&);
 
 Q_SIGNALS:
     void requestSaveAll();
-    void goToUrl(const KUrl&);
+    void goToUrl(const QUrl&);
 
 private:
     SaveBarPrivate* const d;

@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
-class KUrl;
+class QUrl;
 
 namespace Gwenview
 {
@@ -67,13 +67,13 @@ public:
     AbstractSemanticInfoBackEnd* semanticInfoBackEnd() const;
 
 Q_SIGNALS:
-    void semanticInfoRetrieved(const KUrl&, const SemanticInfo&);
+    void semanticInfoRetrieved(const QUrl&, const SemanticInfo&);
 
 private:
     SemanticInfoDirModelPrivate* const d;
 
 private Q_SLOTS:
-    void slotSemanticInfoRetrieved(const KUrl& url, const SemanticInfo&);
+    void slotSemanticInfoRetrieved(const QUrl &url, const SemanticInfo&);
 
     void slotRowsAboutToBeRemoved(const QModelIndex&, int, int);
     void slotModelAboutToBeReset();

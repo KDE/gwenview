@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QListView>
 
 // KDE
-#include <KUrl>
+#include <QUrl>
 
 class KFileItem;
 class QDragEnterEvent;
@@ -123,7 +123,7 @@ Q_SIGNALS:
      * signal replaces it.
      */
     void indexActivated(const QModelIndex&);
-    void urlListDropped(const KUrl::List& lst, const KUrl& destination);
+    void urlListDropped(const QUrl::List& lst, const QUrl &destination);
 
     void thumbnailSizeChanged(const QSize&);
     void thumbnailWidthChanged(int);

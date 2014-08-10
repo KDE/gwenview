@@ -323,7 +323,7 @@ ThumbnailBarView* FullScreenContent::thumbnailBar() const
     return d->mThumbnailBar;
 }
 
-void FullScreenContent::setCurrentUrl(const KUrl& url)
+void FullScreenContent::setCurrentUrl(const QUrl &url)
 {
     if (url.isEmpty()) {
         d->mCurrentDocument = Document::Ptr();

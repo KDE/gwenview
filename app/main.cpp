@@ -34,7 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KLocale>
 #include <KMessageBox>
 #include <KTempDir>
-#include <KUrl>
+#include <QUrl>
 
 // Local
 #include <lib/about.h>
@@ -60,8 +60,8 @@ public:
         if (args->count() > 1) {
             // Createa a temp dir containing links to url args
             mMultipleUrlsDir.reset(new KTempDir);
-            mUrl = KUrl::fromPath(mMultipleUrlsDir->name());
-            KUrl::List list;
+            mUrl = QUrl::fromLocalFile(mMultipleUrlsDir->name());
+            QUrl::List list;
             for (int pos = 0; pos < args->count(); ++pos) {
                 list << args->url(pos);
             }
@@ -101,7 +101,7 @@ public:
     }
 
 private:
-    KUrl mUrl;
+    QUrl mUrl;
     bool mFullScreen;
     bool mSlideShow;
     std::auto_ptr<KTempDir> mMultipleUrlsDir;

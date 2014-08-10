@@ -45,12 +45,12 @@ public:
 
     virtual void showContextMenu(QWidget* parent);
 
-    virtual void showMenuForUrlDroppedOnViewport(QWidget* parent, const KUrl::List&);
+    virtual void showMenuForUrlDroppedOnViewport(QWidget* parent, const QUrl::List&);
 
-    virtual void showMenuForUrlDroppedOnDir(QWidget* parent, const KUrl::List&, const KUrl&);
+    virtual void showMenuForUrlDroppedOnDir(QWidget* parent, const QUrl::List&, const QUrl&);
 
 public Q_SLOTS:
-    void setCurrentDirUrl(const KUrl&);
+    void setCurrentDirUrl(const QUrl&);
 
 private:
     ThumbnailViewHelperPrivate* const d;

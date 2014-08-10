@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QWidget>
 
 // KDE
-#include <KUrl>
+#include <QUrl>
 
 // Local
 
@@ -75,8 +75,8 @@ private Q_SLOTS:
     void slotDirModelReset();
     void updateSortOrder();
     void updateThumbnailDetails();
-    void slotUrlsDropped(const KUrl& destUrl, QDropEvent*);
-    void showMenuForDroppedUrls(const KUrl::List&, const KUrl& destUrl);
+    void slotUrlsDropped(const QUrl &destUrl, QDropEvent*);
+    void showMenuForDroppedUrls(const QUrl::List&, const QUrl &destUrl);
 
 private:
     BrowseMainPagePrivate* const d;

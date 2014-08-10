@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 class QSize;
 
-class KUrl;
+class QUrl;
 
 namespace Gwenview
 {
@@ -47,7 +47,7 @@ public:
     Preloader(QObject* parent);
     ~Preloader();
 
-    void preload(const KUrl&, const QSize&);
+    void preload(const QUrl&, const QSize&);
 
 private Q_SLOTS:
     void doPreload();

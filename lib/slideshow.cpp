@@ -82,16 +82,16 @@ struct SlideShowPrivate
 {
     QTimer* mTimer;
     State mState;
-    QVector<KUrl> mUrls;
-    QVector<KUrl> mShuffledUrls;
-    QVector<KUrl>::ConstIterator mStartIt;
-    KUrl mCurrentUrl;
-    KUrl mLastShuffledUrl;
+    QVector<QUrl> mUrls;
+    QVector<QUrl> mShuffledUrls;
+    QVector<QUrl>::ConstIterator mStartIt;
+    QUrl mCurrentUrl;
+    QUrl mLastShuffledUrl;
 
     QAction* mLoopAction;
     QAction* mRandomAction;
 
-    KUrl findNextUrl()
+    QUrl findNextUrl()
     {
         if (GwenviewConfig::random()) {
             return findNextRandomUrl();
@@ -100,10 +100,10 @@ struct SlideShowPrivate
         }
     }
 
-    KUrl findNextOrderedUrl()
+    QUrl findNextOrderedUrl()
     {
-        QVector<KUrl>::ConstIterator it = qFind(mUrls.constBegin(), mUrls.constEnd(), mCurrentUrl);
-        GV_RETURN_VALUE_IF_FAIL2(it != mUrls.constEnd(), KUrl(), "Current url not found in list.");
+        QVector<QUrl>::ConstIterator it = qFind(mUrls.constBegin(), mUrls.constEnd(), mCurrentUrl);
+        GV_RETURN_VALUE_IF_FAIL2(it != mUrls.constEnd(), QUrl(), "Current url not found in list.");
 
         ++it;
         if (GwenviewConfig::loop()) {
@@ -122,7 +122,7 @@ struct SlideShowPrivate
         if (it != mUrls.constEnd()) {
             return *it;
         } else {
-            return KUrl();
+            return QUrl();
         }
     }
 
@@ -139,17 +139,17 @@ struct SlideShowPrivate
         mLastShuffledUrl = mShuffledUrls.last();
     }
 
-    KUrl findNextRandomUrl()
+    QUrl findNextRandomUrl()
     {
         if (mShuffledUrls.empty()) {
             if (GwenviewConfig::loop()) {
                 initShuffledUrls();
             } else {
-                return KUrl();
+                return QUrl();
             }
         }
 
-        KUrl url = mShuffledUrls.last();
+        QUrl url = mShuffledUrls.last();
         mShuffledUrls.pop_back();
 
         return url;
@@ -216,7 +216,7 @@ QAction* SlideShow::randomAction() const
     return d->mRandomAction;
 }
 
-void SlideShow::start(const QList<KUrl>& urls)
+void SlideShow::start(const QList<QUrl>& urls)
 {
     d->mUrls.resize(urls.size());
     qCopy(urls.begin(), urls.end(), d->mUrls.begin());
@@ -262,7 +262,7 @@ void SlideShow::resumeAndGoToNextUrl()
 void SlideShow::goToNextUrl()
 {
     LOG("");
-    KUrl url = d->findNextUrl();
+    QUrl url = d->findNextUrl();
     LOG("url:" << url);
     if (!url.isValid()) {
         stop();
@@ -271,7 +271,7 @@ void SlideShow::goToNextUrl()
     goToUrl(url);
 }
 
-void SlideShow::setCurrentUrl(const KUrl& url)
+void SlideShow::setCurrentUrl(const QUrl &url)
 {
     LOG(url);
     if (d->mCurrentUrl == url) {

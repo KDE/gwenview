@@ -79,10 +79,10 @@ static KFileItem fileItemForIndex(const QModelIndex& index)
     return qvariant_cast<KFileItem>(data);
 }
 
-static KUrl urlForIndex(const QModelIndex& index)
+static QUrl urlForIndex(const QModelIndex& index)
 {
     KFileItem item = fileItemForIndex(index);
-    return item.isNull() ? KUrl() : item.url();
+    return item.isNull() ? QUrl() : item.url();
 }
 
 struct Thumbnail
@@ -160,7 +160,7 @@ struct Thumbnail
 };
 
 typedef QHash<QUrl, Thumbnail> ThumbnailForUrl;
-typedef QQueue<KUrl> UrlQueue;
+typedef QQueue<QUrl> UrlQueue;
 typedef QSet<QPersistentModelIndex> PersistentModelIndexSet;
 
 struct ThumbnailViewPrivate
@@ -210,7 +210,7 @@ struct ThumbnailViewPrivate
     {
         Q_ASSERT(mDocumentInfoProvider);
         KFileItem item = fileItemForIndex(index);
-        KUrl url = item.url();
+        QUrl url = item.url();
         ThumbnailGroup::Enum group = ThumbnailGroup::fromPixelSize(mThumbnailSize.width());
         QPixmap pix;
         QSize fullSize;
@@ -247,7 +247,7 @@ struct ThumbnailViewPrivate
         const int thumbCount = qMin(indexes.count(), int(DragPixmapGenerator::MaxCount));
         QList<QPixmap> lst;
         for (int row = 0; row < thumbCount; ++row) {
-            const KUrl url = urlForIndex(indexes[row]);
+            const QUrl url = urlForIndex(indexes[row]);
             lst << mThumbnailForUrl.value(url).mAdjustedPix;
         }
         DragPixmapGenerator::DragPixmap dragPixmap = DragPixmapGenerator::generate(lst, indexes.count());
@@ -611,7 +611,7 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index, QSize* fullSi
         }
         return QPixmap();
     }
-    KUrl url = item.url();
+    QUrl url = item.url();
 
     // Find or create Thumbnail instance
     ThumbnailForUrl::Iterator it = d->mThumbnailForUrl.find(url);
@@ -674,7 +674,7 @@ bool ThumbnailView::isModified(const QModelIndex& index) const
     if (!d->mDocumentInfoProvider) {
         return false;
     }
-    KUrl url = urlForIndex(index);
+    QUrl url = urlForIndex(index);
     return d->mDocumentInfoProvider->isModified(url);
 }
 
@@ -683,7 +683,7 @@ bool ThumbnailView::isBusy(const QModelIndex& index) const
     if (!d->mDocumentInfoProvider) {
         return false;
     }
-    KUrl url = urlForIndex(index);
+    QUrl url = urlForIndex(index);
     return d->mDocumentInfoProvider->isBusy(url);
 }
 
@@ -716,7 +716,7 @@ void ThumbnailView::dragMoveEvent(QDragMoveEvent* event)
 
 void ThumbnailView::dropEvent(QDropEvent* event)
 {
-    const KUrl::List urlList = KUrl::List::fromMimeData(event->mimeData());
+    const QUrl::List urlList = QUrl::List::fromMimeData(event->mimeData());
     if (urlList.isEmpty()) {
         return;
     }
@@ -725,7 +725,7 @@ void ThumbnailView::dropEvent(QDropEvent* event)
     if (destIndex.isValid()) {
         KFileItem item = fileItemForIndex(destIndex);
         if (item.isDir()) {
-            KUrl destUrl = item.url();
+            QUrl destUrl = item.url();
             d->mThumbnailViewHelper->showMenuForUrlDroppedOnDir(this, urlList, destUrl);
             return;
         }
@@ -881,7 +881,7 @@ void ThumbnailView::generateThumbnailsForItems()
 void ThumbnailView::updateThumbnail(const QModelIndex& index)
 {
     KFileItem item = fileItemForIndex(index);
-    KUrl url = item.url();
+    QUrl url = item.url();
     if (d->mDocumentInfoProvider && d->mDocumentInfoProvider->isModified(url)) {
         d->updateThumbnailForModifiedDocument(index);
     } else {
@@ -932,7 +932,7 @@ void ThumbnailView::smoothNextThumbnail()
         return;
     }
 
-    KUrl url = d->mSmoothThumbnailQueue.dequeue();
+    QUrl url = d->mSmoothThumbnailQueue.dequeue();
     ThumbnailForUrl::Iterator it = d->mThumbnailForUrl.find(url);
     GV_RETURN_IF_FAIL2(it != d->mThumbnailForUrl.end(), url << "not in mThumbnailForUrl.");
 
@@ -950,7 +950,7 @@ void ThumbnailView::smoothNextThumbnail()
 
 void ThumbnailView::reloadThumbnail(const QModelIndex& index)
 {
-    KUrl url = urlForIndex(index);
+    QUrl url = urlForIndex(index);
     if (!url.isValid()) {
         kWarning() << "Invalid url for index" << index;
         return;

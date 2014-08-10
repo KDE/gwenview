@@ -101,12 +101,12 @@ public:
     /**
      * Delete the thumbnail for the @p url
      */
-    static void deleteImageThumbnail(const KUrl& url);
+    static void deleteImageThumbnail(const QUrl &url);
 
     /**
      * Move a thumbnail to match a file move
      */
-    static void moveThumbnail(const KUrl& oldUrl, const KUrl& newUrl);
+    static void moveThumbnail(const QUrl &oldUrl, const QUrl& newUrl);
 
     /**
      * Returns true if all thumbnails have been written to disk. Useful for
@@ -144,7 +144,7 @@ private:
     KFileItem mCurrentItem;
 
     // The Url of the current item (always equivalent to m_items.first()->item()->url())
-    KUrl mCurrentUrl;
+    QUrl mCurrentUrl;
 
     // The Uri of the original image (might be different from mCurrentUrl.url())
     QString mOriginalUri;

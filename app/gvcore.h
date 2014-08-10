@@ -29,7 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 
 class KJob;
-class KUrl;
+class QUrl;
 
 class QAbstractItemModel;
 class QPalette;
@@ -61,18 +61,18 @@ public:
     SortedDirModel* sortedDirModel() const;
     AbstractSemanticInfoBackEnd* semanticInfoBackEnd() const;
 
-    void addUrlToRecentFolders(KUrl);
-    void addUrlToRecentUrls(const KUrl& url);
+    void addUrlToRecentFolders(QUrl);
+    void addUrlToRecentUrls(const QUrl &url);
 
     QPalette palette(PaletteType type) const;
 
 public Q_SLOTS:
     void saveAll();
-    void save(const KUrl&);
-    void saveAs(const KUrl&);
-    void rotateLeft(const KUrl&);
-    void rotateRight(const KUrl&);
-    void setRating(const KUrl&, int);
+    void save(const QUrl&);
+    void saveAs(const QUrl&);
+    void rotateLeft(const QUrl&);
+    void rotateRight(const QUrl&);
+    void setRating(const QUrl&, int);
 
 private Q_SLOTS:
     void slotConfigChanged();

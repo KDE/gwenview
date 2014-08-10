@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QAction>
 #include <KActionCollection>
 #include <QDebug>
-#include <KUrl>
+#include <QUrl>
 #include <KXMLGUIFactory>
 #include <KDirLister>
 
@@ -68,7 +68,7 @@ class KIPIImageInfo : public KIPI::ImageInfoShared
 {
     static const QRegExp sExtensionRE;
 public:
-    KIPIImageInfo(KIPI::Interface* interface, const KUrl& url)
+    KIPIImageInfo(KIPI::Interface* interface, const QUrl &url)
     : KIPI::ImageInfoShared(interface, url)
     {
         KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
@@ -252,7 +252,7 @@ KIPIInterface::KIPIInterface(MainWindow* mainWindow)
     d->setupPluginsMenu();
     QObject::connect(d->mMainWindow->contextManager(), SIGNAL(selectionChanged()),
                      this, SLOT(slotSelectionChanged()));
-    QObject::connect(d->mMainWindow->contextManager(), SIGNAL(currentDirUrlChanged(KUrl)),
+    QObject::connect(d->mMainWindow->contextManager(), SIGNAL(currentDirUrlChanged(QUrl)),
                      this, SLOT(slotDirectoryChanged()));
 #if 0
 //TODO instead of delaying can we load them all at start-up to use actions somewhere else?
@@ -393,10 +393,10 @@ KIPI::ImageCollection KIPIInterface::currentAlbum()
 {
     LOG("");
     const ContextManager* contextManager = d->mMainWindow->contextManager();
-    const KUrl url = contextManager->currentDirUrl();
+    const QUrl url = contextManager->currentDirUrl();
     const SortedDirModel* model = contextManager->dirModel();
 
-    KUrl::List list;
+    QUrl::List list;
     const int count = model->rowCount();
     for (int row = 0; row < count; ++row) {
         const QModelIndex& index = model->index(row, 0);
@@ -414,8 +414,8 @@ KIPI::ImageCollection KIPIInterface::currentSelection()
     LOG("");
 
     KFileItemList fileList = d->mMainWindow->contextManager()->selectedFileItemList();
-    KUrl::List list = fileList.urlList();
-    KUrl url = d->mMainWindow->contextManager()->currentUrl();
+    QUrl::List list = fileList.urlList();
+    QUrl url = d->mMainWindow->contextManager()->currentUrl();
 
     return KIPI::ImageCollection(new ImageCollection(url, url.fileName(), list));
 }
@@ -428,7 +428,7 @@ QList<KIPI::ImageCollection> KIPIInterface::allAlbums()
     return list;
 }
 
-KIPI::ImageInfo KIPIInterface::info(const KUrl& url)
+KIPI::ImageInfo KIPIInterface::info(const QUrl &url)
 {
     LOG("");
     return KIPI::ImageInfo(new KIPIImageInfo(this, url));
@@ -443,19 +443,19 @@ int KIPIInterface::features() const
  * KDirLister will pick up the image if necessary, so no updating is needed
  * here, it is however necessary to discard caches if the plugin preserves timestamp
  */
-bool KIPIInterface::addImage(const KUrl&, QString&)
+bool KIPIInterface::addImage(const QUrl&, QString&)
 {
-//TODO  setContext(const KUrl& currentUrl, const KFileItemList& selection)?
+//TODO  setContext(const QUrl &currentUrl, const KFileItemList& selection)?
     //Cache::instance()->invalidate( url );
     return true;
 }
 
-void KIPIInterface::delImage(const KUrl&)
+void KIPIInterface::delImage(const QUrl&)
 {
 //TODO
 }
 
-void KIPIInterface::refreshImages(const KUrl::List&)
+void KIPIInterface::refreshImages(const QUrl::List&)
 {
 // TODO
 }

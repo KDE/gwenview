@@ -315,7 +315,7 @@ ImageMetaInfoModel::~ImageMetaInfoModel()
     delete d;
 }
 
-void ImageMetaInfoModel::setUrl(const KUrl& url)
+void ImageMetaInfoModel::setUrl(const QUrl &url)
 {
     KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
     QString sizeString = KGlobal::locale()->formatByteSize(item.size());
