@@ -187,6 +187,7 @@ void showMenuForDroppedUrls(QWidget* parent, const KUrl::List& urlList, const KU
     }
     Q_ASSERT(job);
     KJobWidgets::setWindow(job, parent);
+}
 
 void rename(const KUrl& oldUrl, QWidget* parent)
 {
