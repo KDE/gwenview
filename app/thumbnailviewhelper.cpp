@@ -29,7 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // KDE
 #include <KActionCollection>
-#include <KDebug>
+#include <QDebug>
 #include <KLocale>
 #include <KMenu>
 
@@ -49,7 +49,7 @@ struct ThumbnailViewHelperPrivate
     {
         QAction* action = mActionCollection->action(name);
         if (!action) {
-            kWarning() << "Unknown action" << name;
+            qWarning() << "Unknown action" << name;
             return;
         }
         if (action->isEnabled()) {

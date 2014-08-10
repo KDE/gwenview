@@ -112,7 +112,7 @@ namespace Gwenview
 #undef LOG
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
-#define LOG(x) kDebug() << x
+#define LOG(x) qDebug() << x
 #else
 #define LOG(x) ;
 #endif
@@ -642,7 +642,7 @@ struct MainWindow::Private
         if (action) {
             action->setEnabled(enabled);
         } else {
-            kWarning() << "Action" << name << "not found";
+            qWarning() << "Action" << name << "not found";
         }
     }
 
@@ -1485,7 +1485,7 @@ void MainWindow::preloadNextUrl()
 {
     static bool disablePreload = qgetenv("GV_MAX_UNREFERENCED_IMAGES") == "0";
     if (disablePreload) {
-        kDebug() << "Preloading disabled";
+        qDebug() << "Preloading disabled";
         return;
     }
     QItemSelection selection = d->mThumbnailView->selectionModel()->selection();
@@ -1573,7 +1573,7 @@ void MainWindow::readProperties(const KConfigGroup& group)
     }
     KUrl url = group.readEntry(SESSION_URL_KEY, KUrl());
     if (!url.isValid()) {
-        kWarning() << "Invalid url!";
+        qWarning() << "Invalid url!";
         return;
     }
     goToUrl(url);

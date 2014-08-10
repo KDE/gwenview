@@ -483,14 +483,14 @@ void FullScreenContent::showOptionsMenu()
     QPoint pos;
     QWidget* button = d->mOptionsAction->associatedWidgets().first();
     Q_ASSERT(button);
-    kWarning() << button << button->geometry();
+    qWarning() << button << button->geometry();
     if (QApplication::isRightToLeft()) {
         pos = button->mapToGlobal(button->rect().bottomLeft());
     } else {
         pos = button->mapToGlobal(button->rect().bottomRight());
         pos.rx() -= menu.sizeHint().width();
     }
-    kWarning() << pos;
+    qWarning() << pos;
     menu.exec(pos);
 }
 

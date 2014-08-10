@@ -27,7 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 #include <KDatePicker>
-#include <KDebug>
+#include <QDebug>
 #include <KIconLoader>
 #include <KLocale>
 #include <KGlobal>

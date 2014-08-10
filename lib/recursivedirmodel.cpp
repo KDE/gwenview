@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/gvdebug.h>
 
 // KDE
-#include <KDebug>
+#include <QDebug>
 #include <KDirLister>
 #include <KDirModel>
 
@@ -131,7 +131,7 @@ QVariant RecursiveDirModel::data(const QModelIndex& index, int role) const
     }
     KFileItem item = d->list().value(index.row());
     if (item.isNull()) {
-        kWarning() << "Invalid row" << index.row();
+        qWarning() << "Invalid row" << index.row();
         return QVariant();
     }
     switch (role) {
@@ -142,7 +142,7 @@ QVariant RecursiveDirModel::data(const QModelIndex& index, int role) const
     case KDirModel::FileItemRole:
         return QVariant(item);
     default:
-        kWarning() << "Unhandled role" << role;
+        qWarning() << "Unhandled role" << role;
         break;
     }
     return QVariant();
@@ -183,7 +183,7 @@ void RecursiveDirModel::slotItemsDeleted(const KFileItemList& list)
         }
         int row = d->rowForUrl(item.url());
         if (row == -1) {
-            kWarning() << "Received itemsDeleted for an unknown item: this should not happen!";
+            qWarning() << "Received itemsDeleted for an unknown item: this should not happen!";
             GV_FATAL_FAILS;
             continue;
         }

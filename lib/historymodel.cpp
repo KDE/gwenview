@@ -29,7 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KDE
 #include <KConfig>
 #include <KConfigGroup>
-#include <KDebug>
+#include <QDebug>
 #include <KDirModel>
 #include <KFileItem>
 #include <KFilePlacesModel>
@@ -60,7 +60,7 @@ struct HistoryItem : public QStandardItem
     static HistoryItem* create(const KUrl& url, const QDateTime& dateTime, const QString& storageDir)
     {
         if (!KStandardDirs::makeDir(storageDir, 0600)) {
-            kError() << "Could not create history dir" << storageDir;
+            qCritical() << "Could not create history dir" << storageDir;
             return 0;
         }
         KTemporaryFile file;
@@ -68,7 +68,7 @@ struct HistoryItem : public QStandardItem
         file.setPrefix(storageDir);
         file.setSuffix("rc");
         if (!file.open()) {
-            kError() << "Could not create history file";
+            qCritical() << "Could not create history file";
             return 0;
         }
 
@@ -84,12 +84,12 @@ struct HistoryItem : public QStandardItem
 
         KUrl url(group.readEntry("url"));
         if (!url.isValid()) {
-            kError() << "Invalid url" << url;
+            qCritical() << "Invalid url" << url;
             return 0;
         }
         QDateTime dateTime = QDateTime::fromString(group.readEntry("dateTime"), Qt::ISODate);
         if (!dateTime.isValid()) {
-            kError() << "Invalid dateTime" << dateTime;
+            qCritical() << "Invalid dateTime" << dateTime;
             return 0;
         }
 
@@ -173,7 +173,7 @@ struct HistoryModelPrivate
             KUrl itemUrl = item->url();
             if (UrlUtils::urlIsFastLocalFile(itemUrl)) {
                 if (!QFile::exists(itemUrl.path())) {
-                    kDebug() << "Removing" << itemUrl.path() << "from recent folders. It does not exist anymore";
+                    qDebug() << "Removing" << itemUrl.path() << "from recent folders. It does not exist anymore";
                     item->unlink();
                     delete item;
                     continue;
@@ -233,7 +233,7 @@ void HistoryModel::addUrl(const KUrl& url, const QDateTime& _dateTime)
     } else {
         historyItem = HistoryItem::create(url, dateTime, d->mStorageDir);
         if (!historyItem) {
-            kError() << "Could not save history for url" << url;
+            qCritical() << "Could not save history for url" << url;
             return;
         }
         d->mHistoryItemForUrl.insert(url, historyItem);

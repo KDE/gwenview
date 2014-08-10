@@ -32,7 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KActionCollection>
 #include <KActionCategory>
 #include <KActionMenu>
-#include <KDebug>
+#include <QDebug>
 #include <KFileItem>
 #include <KFilePlacesModel>
 #include <KLineEdit>

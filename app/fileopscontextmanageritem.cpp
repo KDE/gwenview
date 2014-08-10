@@ -33,7 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KAction>
 #include <KActionCollection>
 #include <KActionCategory>
-#include <KDebug>
+#include <QDebug>
 #include <KFileItem>
 #include <KFileItemActions>
 #include <kio/paste.h>

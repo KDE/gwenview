@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // KDE
 #include <QAction>
-#include <KDebug>
+#include <QDebug>
 #include <KInputDialog>
 #include <KLocale>
 #include <KMessageBox>
@@ -56,7 +56,7 @@ namespace Gwenview
 #undef LOG
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
-#define LOG(x) kDebug() << x
+#define LOG(x) qDebug() << x
 #else
 #define LOG(x) ;
 #endif
@@ -254,7 +254,7 @@ void ImageOpsContextManagerItem::crop()
     }
     RasterImageView* imageView = d->mMainWindow->viewMainPage()->imageView();
     if (!imageView) {
-        kError() << "No ImageView available!";
+        qCritical() << "No ImageView available!";
         return;
     }
     CropTool* tool = new CropTool(imageView);
@@ -274,7 +274,7 @@ void ImageOpsContextManagerItem::startRedEyeReduction()
     }
     RasterImageView* view = d->mMainWindow->viewMainPage()->imageView();
     if (!view) {
-        kError() << "No RasterImageView available!";
+        qCritical() << "No RasterImageView available!";
         return;
     }
     RedEyeReductionTool* tool = new RedEyeReductionTool(view);
@@ -300,7 +300,7 @@ void ImageOpsContextManagerItem::restoreDefaultImageViewTool()
 {
     RasterImageView* imageView = d->mMainWindow->viewMainPage()->imageView();
     if (!imageView) {
-        kError() << "No RasterImageView available!";
+        qCritical() << "No RasterImageView available!";
         return;
     }
 

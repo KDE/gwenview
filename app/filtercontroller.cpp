@@ -36,7 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KDE
 #include <KDateTime>
 #include <KComboBox>
-#include <KDebug>
+#include <QDebug>
 #include <KFileItem>
 #include <QIcon>
 #include <KIconLoader>
@@ -468,7 +468,7 @@ void TagFilterWidget::updateTagSetFilter()
 {
     QModelIndex index = d->mTagComboBox->model()->index(d->mTagComboBox->currentIndex(), 0);
     if (!index.isValid()) {
-        kWarning() << "Invalid index";
+        qWarning() << "Invalid index";
         return;
     }
     SemanticInfoTag tag = index.data(TagModel::TagRole).toString();

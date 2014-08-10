@@ -22,7 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "archiveutils.h"
 
 // KDE
-#include <KDebug>
+#include <QDebug>
 #include <KFileItem>
 #include <KMimeType>
 #include <KProtocolManager>
@@ -37,7 +37,7 @@ bool fileItemIsArchive(const KFileItem& item)
 {
     QMimeType mimeType = item.determineMimeType();
     if (!mimeType.isValid()) {
-        kWarning() << "determineMimeType() returned a null pointer";
+        qWarning() << "determineMimeType() returned a null pointer";
         return false;
     }
     return !ArchiveUtils::protocolForMimeType(mimeType.name()).isEmpty();

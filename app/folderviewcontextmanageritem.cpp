@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QMimeData>
 
 // KDE
-#include <KDebug>
+#include <QDebug>
 #include <KLocale>
 
 // Local
@@ -94,7 +94,7 @@ protected:
         const KUrl::List urlList = KUrl::List::fromMimeData(event->mimeData());
         const QModelIndex index = indexAt(event->pos());
         if (!index.isValid()) {
-            kWarning() << "Invalid index!";
+            qWarning() << "Invalid index!";
             return;
         }
         const KUrl destUrl = static_cast<MODEL_CLASS*>(model())->urlForIndex(index);
@@ -171,7 +171,7 @@ struct FolderViewContextManagerItemPrivate
         KUrl url = mModel->urlForIndex(index);
         QString relativePath = KUrl::relativePath(url.path(), wantedUrl.path(), &isParent);
         if (!isParent) {
-            kWarning() << url << "is not a parent of" << wantedUrl << "!";
+            qWarning() << url << "is not a parent of" << wantedUrl << "!";
             return QModelIndex();
         }
 
@@ -208,7 +208,7 @@ struct FolderViewContextManagerItemPrivate
             }
         }
         if (!matchIndex.isValid()) {
-            kWarning() << "Found no root index for" << wantedUrl;
+            qWarning() << "Found no root index for" << wantedUrl;
         }
         return matchIndex;
     }

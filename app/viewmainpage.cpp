@@ -31,7 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KDE
 #include <KActionCollection>
 #include <KActionCategory>
-#include <KDebug>
+#include <QDebug>
 #include <KLocale>
 #include <KMenu>
 #include <KMessageBox>
@@ -67,7 +67,7 @@ namespace Gwenview
 #undef LOG
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
-#define LOG(x) kDebug() << x
+#define LOG(x) qDebug() << x
 #else
 #define LOG(x) ;
 #endif
@@ -379,7 +379,7 @@ struct ViewMainPagePrivate
     {
         KUrl url = view->url();
         if (!url.isValid()) {
-            kWarning() << "View does not display any document!";
+            qWarning() << "View does not display any document!";
             return QModelIndex();
         }
 
@@ -656,7 +656,7 @@ void ViewMainPage::openUrls(const KUrl::List& allUrls, const KUrl& currentUrl)
     // Create view for remaining urls
     Q_FOREACH(const KUrl & url, urls) {
         if (d->mDocumentViews.count() >= MaxViewCount) {
-            kWarning() << "Too many documents to show";
+            qWarning() << "Too many documents to show";
             break;
         }
         DocumentView* view = d->createDocumentView();
@@ -712,7 +712,7 @@ void ViewMainPage::reload()
     }
     Document::Ptr doc = view->document();
     if (!doc) {
-        kWarning() << "!doc";
+        qWarning() << "!doc";
         return;
     }
     if (doc->isModified()) {

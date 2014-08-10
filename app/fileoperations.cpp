@@ -22,7 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "fileoperations.h"
 
 // KDE
-#include <KDebug>
+#include <QDebug>
 #include <KFileDialog>
 #include <KFileItem>
 #include <KMenu>
@@ -110,7 +110,7 @@ static void delOrTrash(KonqOperations::Operation operation, const KUrl::List& ur
         break;
 
     default:
-        kWarning() << "Unknown operation" << operation;
+        qWarning() << "Unknown operation" << operation;
         return;
     }
     Q_ASSERT(job);
@@ -149,12 +149,12 @@ void del(const KUrl::List& urlList, QWidget* parent)
 void showMenuForDroppedUrls(QWidget* parent, const KUrl::List& urlList, const KUrl& destUrl)
 {
     if (urlList.isEmpty()) {
-        kWarning() << "urlList is empty!";
+        qWarning() << "urlList is empty!";
         return;
     }
 
     if (!destUrl.isValid()) {
-        kWarning() << "destUrl is not valid!";
+        qWarning() << "destUrl is not valid!";
         return;
     }
 

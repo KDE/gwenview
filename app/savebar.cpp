@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // KDE
 #include <KActionCollection>
 #include <KColorScheme>
-#include <KDebug>
+#include <QDebug>
 #include <QIcon>
 #include <KIconLoader>
 #include <KLocale>
@@ -362,7 +362,7 @@ void SaveBar::triggerAction(const QString& action)
         Q_ASSERT(pos < lst.size());
         goToUrl(lst[pos]);
     } else {
-        kWarning() << "Unknown action: " << action ;
+        qWarning() << "Unknown action: " << action ;
     }
 }
 

@@ -246,7 +246,7 @@ void StartMainPage::slotListViewActivated(const QModelIndex& index)
 
     // Prevent dir lister error
     if (!url.isValid()) {
-        kError() << "Tried to open an invalid url";
+        qCritical() << "Tried to open an invalid url";
         return;
     }
     emit urlSelected(url);

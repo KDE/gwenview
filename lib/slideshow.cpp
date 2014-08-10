@@ -31,7 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // KDE
 #include <KConfig>
-#include <KDebug>
+#include <QDebug>
 #include <QIcon>
 #include <KLocale>
 
@@ -46,7 +46,7 @@ namespace Gwenview
 #undef LOG
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
-#define LOG(x) kDebug() << x
+#define LOG(x) qDebug() << x
 #else
 #define LOG(x) ;
 #endif
@@ -223,7 +223,7 @@ void SlideShow::start(const QList<KUrl>& urls)
 
     d->mStartIt = qFind(d->mUrls.constBegin(), d->mUrls.constEnd(), d->mCurrentUrl);
     if (d->mStartIt == d->mUrls.constEnd()) {
-        kWarning() << "Current url not found in list, aborting.\n";
+        qWarning() << "Current url not found in list, aborting.\n";
         return;
     }
 

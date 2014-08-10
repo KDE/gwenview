@@ -29,7 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KDE
 #include <KAction>
 #include <KActionCollection>
-#include <KDebug>
+#include <QDebug>
 #include <KUrl>
 #include <KXMLGUIFactory>
 #include <KDirLister>
@@ -59,7 +59,7 @@ namespace Gwenview
 
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
-#define LOG(x) kDebug() << x
+#define LOG(x) qDebug() << x
 #else
 #define LOG(x) ;
 #endif
@@ -183,11 +183,11 @@ private:
         case VFLIP:
         case TRANSPOSE:
         case TRANSVERSE:
-            kWarning() << "Can't represent an orientation value of" << orientation << "as an angle (" << _url << ')';
+            qWarning() << "Can't represent an orientation value of" << orientation << "as an angle (" << _url << ')';
             return 0;
         }
 
-        kWarning() << "Don't know how to handle an orientation value of" << orientation << '(' << _url << ')';
+        qWarning() << "Don't know how to handle an orientation value of" << orientation << '(' << _url << ')';
         return 0;
     }
 
@@ -309,7 +309,7 @@ void KIPIInterface::loadOnePlugin()
 
         KIPI::Plugin* plugin = pluginInfo->plugin();
         if (!plugin) {
-            kWarning() << "Plugin from library" << pluginInfo->library() << "failed to load";
+            qWarning() << "Plugin from library" << pluginInfo->library() << "failed to load";
             continue;
         }
 
@@ -319,7 +319,7 @@ void KIPIInterface::loadOnePlugin()
             KIPI::Category category = plugin->category(action);
 
             if (!d->mMenuInfoMap.contains(category)) {
-                kWarning() << "Unknown category '" << category;
+                qWarning() << "Unknown category '" << category;
                 continue;
             }
 

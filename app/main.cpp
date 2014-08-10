@@ -29,7 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KActionCollection>
 #include <KApplication>
 #include <KCmdLineArgs>
-#include <KDebug>
+#include <QDebug>
 #include <KIO/CopyJob>
 #include <KLocale>
 #include <KMessageBox>
