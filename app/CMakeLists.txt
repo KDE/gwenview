@@ -75,6 +75,7 @@ add_executable(gwenview ${gwenview_SRCS})
 
 target_link_libraries(gwenview
     KF5::KDELibs4Support
+    KF5::ItemModels
     KF5::Konq
 #     gwenviewlib
 #     ${KACTIVITIES_LIBRARY}
