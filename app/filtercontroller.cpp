@@ -40,7 +40,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KFileItem>
 #include <QIcon>
 #include <KIconLoader>
-#include <KLineEdit>
+#include <QLineEdit>
 #include <KLocale>
 
 // Local
@@ -117,7 +117,7 @@ struct NameFilterWidgetPrivate
 {
     QPointer<NameFilter> mFilter;
     KComboBox* mModeComboBox;
-    KLineEdit* mLineEdit;
+    QLineEdit* mLineEdit;
 };
 
 NameFilterWidget::NameFilterWidget(SortedDirModel* model)
@@ -129,7 +129,7 @@ NameFilterWidget::NameFilterWidget(SortedDirModel* model)
     d->mModeComboBox->addItem(i18n("Name contains"), QVariant(NameFilter::Contains));
     d->mModeComboBox->addItem(i18n("Name does not contain"), QVariant(NameFilter::DoesNotContain));
 
-    d->mLineEdit = new KLineEdit;
+    d->mLineEdit = new QLineEdit;
 
     QHBoxLayout* layout = new QHBoxLayout(this);
     layout->setMargin(0);

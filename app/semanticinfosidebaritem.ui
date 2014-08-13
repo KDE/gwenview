@@ -72,7 +72,7 @@
      <property name="acceptRichText">
       <bool>false</bool>
      </property>
-     <property name="clickMessage">
+     <property name="placeholderText">
       <string>Description</string>
      </property>
      <property name="checkSpellingEnabled">
