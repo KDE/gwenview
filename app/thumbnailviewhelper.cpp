@@ -31,7 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KActionCollection>
 #include <QDebug>
 #include <KLocale>
-#include <KMenu>
+#include <QMenu>
 
 // Local
 #include <lib/document/documentfactory.h>
@@ -45,7 +45,7 @@ struct ThumbnailViewHelperPrivate
     KActionCollection* mActionCollection;
     QUrl mCurrentDirUrl;
 
-    void addActionToMenu(KMenu& popup, const char* name)
+    void addActionToMenu(QMenu& popup, const char* name)
     {
         QAction* action = mActionCollection->action(name);
         if (!action) {
@@ -77,7 +77,7 @@ void ThumbnailViewHelper::setCurrentDirUrl(const QUrl &url)
 
 void ThumbnailViewHelper::showContextMenu(QWidget* parent)
 {
-    KMenu popup(parent);
+    QMenu popup(parent);
     if (d->mCurrentDirUrl.scheme() == "trash") {
         d->addActionToMenu(popup, "file_restore");
         d->addActionToMenu(popup, "file_delete");

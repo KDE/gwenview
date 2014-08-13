@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 #include <QDebug>
-#include <KMenu>
+#include <QMenu>
 #include <KLocale>
 
 // Local
@@ -45,7 +45,7 @@ struct KIPIExportActionPrivate
 
     void updateMenu()
     {
-        KMenu* menu = static_cast<KMenu*>(q->menu());
+        QMenu* menu = static_cast<QMenu*>(q->menu());
         menu->clear();
 
         if (mDefaultAction) {

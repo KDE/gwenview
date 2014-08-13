@@ -33,7 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KActionCategory>
 #include <QDebug>
 #include <KLocale>
-#include <KMenu>
+#include <QMenu>
 #include <KMessageBox>
 #include <KModelIndexProxyMapper>
 #include <KToggleAction>
@@ -540,7 +540,7 @@ ThumbnailBarView* ViewMainPage::thumbnailBar() const
     return d->mThumbnailBar;
 }
 
-inline void addActionToMenu(KMenu* menu, KActionCollection* actionCollection, const char* name)
+inline void addActionToMenu(QMenu* menu, KActionCollection* actionCollection, const char* name)
 {
     QAction* action = actionCollection->action(name);
     if (action) {
@@ -550,7 +550,7 @@ inline void addActionToMenu(KMenu* menu, KActionCollection* actionCollection, co
 
 void ViewMainPage::showContextMenu()
 {
-    KMenu menu(this);
+    QMenu menu(this);
     addActionToMenu(&menu, d->mActionCollection, "fullscreen");
     menu.addSeparator();
     addActionToMenu(&menu, d->mActionCollection, "go_previous");

@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QDebug>
 #include <KFileDialog>
 #include <KFileItem>
-#include <KMenu>
+#include <QMenu>
 #include <KInputDialog>
 #include <KPushButton>
 #include <KIO/CopyJob>
@@ -158,7 +158,7 @@ void showMenuForDroppedUrls(QWidget* parent, const QList<QUrl>& urlList, const Q
         return;
     }
 
-    KMenu menu(parent);
+    QMenu menu(parent);
     QAction* moveAction = menu.addAction(
                               QIcon::fromTheme("go-jump"),
                               i18n("Move Here"));
