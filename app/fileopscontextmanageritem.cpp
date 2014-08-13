@@ -37,7 +37,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QDebug>
 #include <KFileItem>
 #include <KFileItemActions>
-#include <kio/paste.h>
+#include <KIO/Paste>
 #include <KLocale>
 #include <KMimeTypeTrader>
 #include <KOpenWithDialog>
@@ -48,7 +48,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KXMLGUIClient>
 
 // libkonq
-#include <konqmimedata.h>
 #include <konq_operations.h>
 
 // Local
@@ -122,8 +121,7 @@ struct FileOpsContextManagerItemPrivate
     {
         QMimeData* mimeData = new QMimeData;
         KFileItemList list = q->contextManager()->selectedFileItemList();
-        //TODO KF5
-//         list.urlList().populateMimeData(mimeData);
+        mimeData->setUrls(list.urlList());
         return mimeData;
     }
 
@@ -329,20 +327,20 @@ void FileOpsContextManagerItem::showProperties()
 void FileOpsContextManagerItem::cut()
 {
     QMimeData* mimeData = d->selectionMimeData();
-    KonqMimeData::addIsCutSelection(mimeData, true);
+    KIO::setClipboardDataCut(mimeData, true);
     QApplication::clipboard()->setMimeData(mimeData);
 }
 
 void FileOpsContextManagerItem::copy()
 {
     QMimeData* mimeData = d->selectionMimeData();
-    KonqMimeData::addIsCutSelection(mimeData, false);
+    KIO::setClipboardDataCut(mimeData, false);
     QApplication::clipboard()->setMimeData(mimeData);
 }
 
 void FileOpsContextManagerItem::paste()
 {
-    const bool move = KonqMimeData::decodeIsCutSelection(QApplication::clipboard()->mimeData());
+    const bool move = KIO::isClipboardDataCut(QApplication::clipboard()->mimeData());
     KIO::pasteClipboard(d->pasteTargetUrl(), d->mGroup, move);
 }
 
