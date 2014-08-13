@@ -103,5 +103,7 @@ install(FILES gwenviewui.rc
 
 install(PROGRAMS gwenview.desktop
     DESTINATION ${XDG_APPS_INSTALL_DIR})
+install(FILES gwenview.appdata.xml
+    DESTINATION ${DATA_INSTALL_DIR}/appdata)
 install(FILES slideshow.desktop
     DESTINATION ${SERVICES_INSTALL_DIR}/ServiceMenus)
