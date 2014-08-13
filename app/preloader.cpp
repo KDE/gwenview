@@ -19,12 +19,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "preloader.moc"
+#include "preloader.h"
 
 // Qt
 
 // KDE
-#include <KDebug>
+#include <QDebug>
 
 // Local
 #include <lib/document/documentfactory.h>
@@ -36,7 +36,7 @@ namespace Gwenview
 #undef LOG
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
-#define LOG(x) kDebug() << x
+#define LOG(x) qDebug() << x
 #else
 #define LOG(x) ;
 #endif
@@ -68,7 +68,7 @@ Preloader::~Preloader()
     delete d;
 }
 
-void Preloader::preload(const KUrl& url, const QSize& size)
+void Preloader::preload(const QUrl &url, const QSize& size)
 {
     LOG("url=" << url);
     if (d->mDocument) {

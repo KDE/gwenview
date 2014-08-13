@@ -19,7 +19,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
-#include "kipiinterface.moc"
+#include "kipiinterface.h"
 
 // Qt
 #include <QList>
@@ -27,10 +27,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QRegExp>
 
 // KDE
-#include <KAction>
+#include <QAction>
 #include <KActionCollection>
-#include <KDebug>
-#include <KUrl>
+#include <QDebug>
+#include <QUrl>
 #include <KXMLGUIFactory>
 #include <KDirLister>
 
@@ -59,7 +59,7 @@ namespace Gwenview
 
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
-#define LOG(x) kDebug() << x
+#define LOG(x) qDebug() << x
 #else
 #define LOG(x) ;
 #endif
@@ -68,7 +68,7 @@ class KIPIImageInfo : public KIPI::ImageInfoShared
 {
     static const QRegExp sExtensionRE;
 public:
-    KIPIImageInfo(KIPI::Interface* interface, const KUrl& url)
+    KIPIImageInfo(KIPI::Interface* interface, const QUrl &url)
     : KIPI::ImageInfoShared(interface, url)
     {
         KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
@@ -183,11 +183,11 @@ private:
         case VFLIP:
         case TRANSPOSE:
         case TRANSVERSE:
-            kWarning() << "Can't represent an orientation value of" << orientation << "as an angle (" << _url << ')';
+            qWarning() << "Can't represent an orientation value of" << orientation << "as an angle (" << _url << ')';
             return 0;
         }
 
-        kWarning() << "Don't know how to handle an orientation value of" << orientation << '(' << _url << ')';
+        qWarning() << "Don't know how to handle an orientation value of" << orientation << '(' << _url << ')';
         return 0;
     }
 
@@ -218,8 +218,8 @@ struct KIPIInterfacePrivate
     KIPI::PluginLoader* mPluginLoader;
     KIPI::PluginLoader::PluginList mPluginQueue;
     MenuInfoMap mMenuInfoMap;
-    KAction* mLoadingAction;
-    KAction* mNoPluginAction;
+    QAction * mLoadingAction;
+    QAction * mNoPluginAction;
 
     void setupPluginsMenu()
     {
@@ -229,9 +229,9 @@ struct KIPIInterfacePrivate
                          q, SLOT(loadPlugins()));
     }
 
-    KAction* createDummyPluginAction(const QString& text)
+    QAction * createDummyPluginAction(const QString& text)
     {
-        KAction* action = new KAction(q);
+        QAction * action = new QAction(q);
         action->setText(text);
         action->setShortcutConfigurable(false);
         action->setEnabled(false);
@@ -252,7 +252,7 @@ KIPIInterface::KIPIInterface(MainWindow* mainWindow)
     d->setupPluginsMenu();
     QObject::connect(d->mMainWindow->contextManager(), SIGNAL(selectionChanged()),
                      this, SLOT(slotSelectionChanged()));
-    QObject::connect(d->mMainWindow->contextManager(), SIGNAL(currentDirUrlChanged(KUrl)),
+    QObject::connect(d->mMainWindow->contextManager(), SIGNAL(currentDirUrlChanged(QUrl)),
                      this, SLOT(slotDirectoryChanged()));
 #if 0
 //TODO instead of delaying can we load them all at start-up to use actions somewhere else?
@@ -309,17 +309,17 @@ void KIPIInterface::loadOnePlugin()
 
         KIPI::Plugin* plugin = pluginInfo->plugin();
         if (!plugin) {
-            kWarning() << "Plugin from library" << pluginInfo->library() << "failed to load";
+            qWarning() << "Plugin from library" << pluginInfo->library() << "failed to load";
             continue;
         }
 
         plugin->setup(d->mMainWindow);
-        QList<KAction*> actions = plugin->actions();
-        Q_FOREACH(KAction * action, actions) {
+        QList<QAction *> actions = plugin->actions();
+        Q_FOREACH(QAction * action, actions) {
             KIPI::Category category = plugin->category(action);
 
             if (!d->mMenuInfoMap.contains(category)) {
-                kWarning() << "Unknown category '" << category;
+                qWarning() << "Unknown category '" << category;
                 continue;
             }
 
@@ -393,10 +393,10 @@ KIPI::ImageCollection KIPIInterface::currentAlbum()
 {
     LOG("");
     const ContextManager* contextManager = d->mMainWindow->contextManager();
-    const KUrl url = contextManager->currentDirUrl();
+    const QUrl url = contextManager->currentDirUrl();
     const SortedDirModel* model = contextManager->dirModel();
 
-    KUrl::List list;
+    QList<QUrl> list;
     const int count = model->rowCount();
     for (int row = 0; row < count; ++row) {
         const QModelIndex& index = model->index(row, 0);
@@ -414,8 +414,8 @@ KIPI::ImageCollection KIPIInterface::currentSelection()
     LOG("");
 
     KFileItemList fileList = d->mMainWindow->contextManager()->selectedFileItemList();
-    KUrl::List list = fileList.urlList();
-    KUrl url = d->mMainWindow->contextManager()->currentUrl();
+    QList<QUrl> list = fileList.urlList();
+    QUrl url = d->mMainWindow->contextManager()->currentUrl();
 
     return KIPI::ImageCollection(new ImageCollection(url, url.fileName(), list));
 }
@@ -428,7 +428,7 @@ QList<KIPI::ImageCollection> KIPIInterface::allAlbums()
     return list;
 }
 
-KIPI::ImageInfo KIPIInterface::info(const KUrl& url)
+KIPI::ImageInfo KIPIInterface::info(const QUrl &url)
 {
     LOG("");
     return KIPI::ImageInfo(new KIPIImageInfo(this, url));
@@ -443,19 +443,19 @@ int KIPIInterface::features() const
  * KDirLister will pick up the image if necessary, so no updating is needed
  * here, it is however necessary to discard caches if the plugin preserves timestamp
  */
-bool KIPIInterface::addImage(const KUrl&, QString&)
+bool KIPIInterface::addImage(const QUrl&, QString&)
 {
-//TODO  setContext(const KUrl& currentUrl, const KFileItemList& selection)?
+//TODO  setContext(const QUrl &currentUrl, const KFileItemList& selection)?
     //Cache::instance()->invalidate( url );
     return true;
 }
 
-void KIPIInterface::delImage(const KUrl&)
+void KIPIInterface::delImage(const QUrl&)
 {
 //TODO
 }
 
-void KIPIInterface::refreshImages(const KUrl::List&)
+void KIPIInterface::refreshImages(const QList<QUrl>&)
 {
 // TODO
 }

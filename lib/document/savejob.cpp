@@ -34,7 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KLocale>
 #include <KSaveFile>
 #include <KTemporaryFile>
-#include <KUrl>
+#include <QUrl>
 
 // Local
 #include "documentloadedimpl.h"
@@ -45,8 +45,8 @@ namespace Gwenview
 struct SaveJobPrivate
 {
     DocumentLoadedImpl* mImpl;
-    KUrl mOldUrl;
-    KUrl mNewUrl;
+    QUrl mOldUrl;
+    QUrl mNewUrl;
     QByteArray mFormat;
     QScopedPointer<KTemporaryFile> mTemporaryFile;
     QScopedPointer<KSaveFile> mSaveFile;
@@ -55,7 +55,7 @@ struct SaveJobPrivate
     bool mKillReceived;
 };
 
-SaveJob::SaveJob(DocumentLoadedImpl* impl, const KUrl& url, const QByteArray& format)
+SaveJob::SaveJob(DocumentLoadedImpl* impl, const QUrl &url, const QByteArray& format)
 : d(new SaveJobPrivate)
 {
     d->mImpl = impl;
@@ -99,10 +99,11 @@ void SaveJob::doStart()
     d->mSaveFile.reset(new KSaveFile(fileName));
 
     if (!d->mSaveFile->open()) {
-        KUrl dirUrl = d->mNewUrl;
-        dirUrl.setFileName(QString());
+        QUrl dirUrl = d->mNewUrl;
+        dirUrl = dirUrl.adjusted(QUrl::RemoveFilename);
+        dirUrl.setPath(dirUrl.path() + QString());
         setError(UserDefinedError + 1);
-        setErrorText(i18nc("@info", "Could not open file for writing, check that you have the necessary rights in <filename>%1</filename>.", dirUrl.pathOrUrl()));
+        setErrorText(i18nc("@info", "Could not open file for writing, check that you have the necessary rights in <filename>%1</filename>.", dirUrl.toDisplayString()));
         emitResult();
         return;
     }
@@ -126,7 +127,7 @@ void SaveJob::finishSave()
     }
 
     if (!d->mSaveFile->finalize()) {
-        setErrorText(i18nc("@info", "Could not overwrite file, check that you have the necessary rights to write in <filename>%1</filename>.", d->mNewUrl.pathOrUrl()));
+        setErrorText(i18nc("@info", "Could not overwrite file, check that you have the necessary rights to write in <filename>%1</filename>.", d->mNewUrl.toString()));
         setError(UserDefinedError + 3);
         return;
     }
@@ -134,8 +135,9 @@ void SaveJob::finishSave()
     if (d->mNewUrl.isLocalFile()) {
         emitResult();
     } else {
-        KIO::Job* job = KIO::copy(KUrl::fromPath(d->mTemporaryFile->fileName()), d->mNewUrl);
-        job->ui()->setWindow(KApplication::kApplication()->activeWindow());
+        KIO::Job* job = KIO::copy(QUrl::fromLocalFile(d->mTemporaryFile->fileName()), d->mNewUrl);
+        //KF5 TODO
+//         job->ui()->setWindow(KApplication::kApplication()->activeWindow());
         addSubjob(job);
     }
 }
@@ -148,12 +150,12 @@ void SaveJob::slotResult(KJob* job)
     }
 }
 
-KUrl SaveJob::oldUrl() const
+QUrl SaveJob::oldUrl() const
 {
     return d->mOldUrl;
 }
 
-KUrl SaveJob::newUrl() const
+QUrl SaveJob::newUrl() const
 {
     return d->mNewUrl;
 }

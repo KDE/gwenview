@@ -38,7 +38,7 @@ extern "C" {
 #include <QMatrix>
 
 // KDE
-#include <KDebug>
+#include <QDebug>
 #include <KLocale>
 
 // Exiv2
@@ -67,10 +67,10 @@ struct inmem_dest_mgr : public jpeg_destination_mgr
 
     void dump()
     {
-        kDebug() << "dest_mgr:\n";
-        kDebug() << "- next_output_byte: " << next_output_byte;
-        kDebug() << "- free_in_buffer: " << free_in_buffer;
-        kDebug() << "- output size: " << mOutput->size();
+        qDebug() << "dest_mgr:\n";
+        qDebug() << "- next_output_byte: " << next_output_byte;
+        qDebug() << "- free_in_buffer: " << free_in_buffer;
+        qDebug() << "- output size: " << mOutput->size();
     }
 };
 
@@ -152,7 +152,7 @@ struct JpegContent::Private
         srcinfo.err = &errorManager;
         jpeg_create_decompress(&srcinfo);
         if (setjmp(errorManager.jmp_buffer)) {
-            kError() << "libjpeg fatal error\n";
+            qCritical() << "libjpeg fatal error\n";
             return false;
         }
 
@@ -165,7 +165,7 @@ struct JpegContent::Private
         jcopy_markers_setup(&srcinfo, JCOPYOPT_ALL);
         int result = jpeg_read_header(&srcinfo, true);
         if (result != JPEG_HEADER_OK) {
-            kError() << "Could not read jpeg header\n";
+            qCritical() << "Could not read jpeg header\n";
             jpeg_destroy_decompress(&srcinfo);
             return false;
         }
@@ -208,7 +208,7 @@ bool JpegContent::load(const QString& path)
 {
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly)) {
-        kError() << "Could not open '" << path << "' for reading\n";
+        qCritical() << "Could not open '" << path << "' for reading\n";
         return false;
     }
     return loadFromData(file.readAll());
@@ -219,7 +219,7 @@ bool JpegContent::loadFromData(const QByteArray& data)
     Exiv2::Image::AutoPtr image;
     Exiv2ImageLoader loader;
     if (!loader.load(data)) {
-        kError() << "Could not load image with Exiv2, reported error:" << loader.errorMessage();
+        qCritical() << "Could not load image with Exiv2, reported error:" << loader.errorMessage();
     }
     image = loader.popImage();
 
@@ -233,7 +233,7 @@ bool JpegContent::loadFromData(const QByteArray& data, Exiv2::Image* exiv2Image)
 
     d->mRawData = data;
     if (d->mRawData.size() == 0) {
-        kError() << "No data\n";
+        qCritical() << "No data\n";
         return false;
     }
 
@@ -412,7 +412,7 @@ void JpegContent::transform(Orientation orientation)
             }
         }
         if (it == end) {
-            kWarning() << "Could not find matrix for orientation\n";
+            qWarning() << "Could not find matrix for orientation\n";
         }
     }
 }
@@ -420,9 +420,9 @@ void JpegContent::transform(Orientation orientation)
 #if 0
 static void dumpMatrix(const QMatrix& matrix)
 {
-    kDebug() << "matrix | " << matrix.m11() << ", " << matrix.m12() << " |\n";
-    kDebug() << "       | " << matrix.m21() << ", " << matrix.m22() << " |\n";
-    kDebug() << "       ( " << matrix.dx()  << ", " << matrix.dy()  << " )\n";
+    qDebug() << "matrix | " << matrix.m11() << ", " << matrix.m12() << " |\n";
+    qDebug() << "       | " << matrix.m21() << ", " << matrix.m22() << " |\n";
+    qDebug() << "       ( " << matrix.dx()  << ", " << matrix.dy()  << " )\n";
 }
 #endif
 
@@ -444,14 +444,14 @@ static JXFORM_CODE findJxform(const QMatrix& matrix)
             return (*it).jxform;
         }
     }
-    kWarning() << "findJxform: failed\n";
+    qWarning() << "findJxform: failed\n";
     return JXFORM_NONE;
 }
 
 void JpegContent::applyPendingTransformation()
 {
     if (d->mRawData.size() == 0) {
-        kError() << "No data loaded\n";
+        qCritical() << "No data loaded\n";
         return;
     }
 
@@ -468,7 +468,7 @@ void JpegContent::applyPendingTransformation()
     srcinfo.err = &srcErrorManager;
     jpeg_create_decompress(&srcinfo);
     if (setjmp(srcErrorManager.jmp_buffer)) {
-        kError() << "libjpeg error in src\n";
+        qCritical() << "libjpeg error in src\n";
         return;
     }
 
@@ -477,7 +477,7 @@ void JpegContent::applyPendingTransformation()
     dstinfo.err = &dstErrorManager;
     jpeg_create_compress(&dstinfo);
     if (setjmp(dstErrorManager.jmp_buffer)) {
-        kError() << "libjpeg error in dst\n";
+        qCritical() << "libjpeg error in dst\n";
         return;
     }
 
@@ -562,7 +562,7 @@ void JpegContent::setThumbnail(const QImage& thumbnail)
     buffer.open(QIODevice::WriteOnly);
     QImageWriter writer(&buffer, "JPEG");
     if (!writer.write(thumbnail)) {
-        kError() << "Could not write thumbnail\n";
+        qCritical() << "Could not write thumbnail\n";
         return;
     }
 

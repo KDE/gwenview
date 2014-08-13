@@ -44,7 +44,7 @@ class QSvgRenderer;
 class QUndoStack;
 
 class KJob;
-class KUrl;
+class QUrl;
 
 namespace Gwenview
 {
@@ -128,9 +128,9 @@ public:
      */
     AbstractDocumentEditor* editor();
 
-    KUrl url() const;
+    QUrl url() const;
 
-    DocumentJob* save(const KUrl& url, const QByteArray& format);
+    DocumentJob* save(const QUrl &url, const QByteArray& format);
 
     QByteArray format() const;
 
@@ -208,15 +208,15 @@ public:
 Q_SIGNALS:
     void downSampledImageReady();
     void imageRectUpdated(const QRect&);
-    void kindDetermined(const KUrl&);
-    void metaInfoLoaded(const KUrl&);
-    void loaded(const KUrl&);
-    void loadingFailed(const KUrl&);
-    void saved(const KUrl& oldUrl, const KUrl& newUrl);
-    void modified(const KUrl&);
+    void kindDetermined(const QUrl&);
+    void metaInfoLoaded(const QUrl&);
+    void loaded(const QUrl&);
+    void loadingFailed(const QUrl&);
+    void saved(const QUrl &oldUrl, const QUrl& newUrl);
+    void modified(const QUrl&);
     void metaInfoUpdated();
     void isAnimatedUpdated();
-    void busyChanged(const KUrl&, bool);
+    void busyChanged(const QUrl&, bool);
     void allTasksDone();
 
 private Q_SLOTS:
@@ -243,7 +243,7 @@ private:
     void setErrorString(const QString&);
     void setCmsProfile(Cms::Profile::Ptr);
 
-    Document(const KUrl&);
+    Document(const QUrl&);
     DocumentPrivate * const d;
 };
 

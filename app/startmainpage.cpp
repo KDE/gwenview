@@ -19,21 +19,26 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "startmainpage.moc"
+#include "startmainpage.h"
 
 #include <config-gwenview.h>
 
 // Qt
 #include <QListView>
 #include <QMenu>
+
+#ifdef GTK_WORKAROUND_BROKE_IN_KF5_PORT
 #include <QPlastiqueStyle>
+#endif
+
+#include <QIcon>
 #include <QStyledItemDelegate>
 
 // KDE
 #include <KFilePlacesModel>
 #include <KGlobalSettings>
-#include <KIcon>
 #include <KMimeType>
+#include <KLocalizedString>
 
 // Local
 #include <gvcore.h>
@@ -61,11 +66,11 @@ public:
     {
     }
 
-    virtual void showMenuForUrlDroppedOnViewport(QWidget*, const KUrl::List&)
+    virtual void showMenuForUrlDroppedOnViewport(QWidget*, const QList<QUrl>&)
     {
     }
 
-    virtual void showMenuForUrlDroppedOnDir(QWidget*, const KUrl::List&, const KUrl&)
+    virtual void showMenuForUrlDroppedOnDir(QWidget*, const QList<QUrl>&, const QUrl&)
     {
     }
 };
@@ -148,12 +153,15 @@ StartMainPage::StartMainPage(QWidget* parent, GvCore* gvCore)
 
     d->setupUi(this);
     if (styleIsGtkBased()) {
+        #ifdef GTK_WORKAROUND_BROKE_IN_KF5_PORT
+
         // Gtk-based styles do not apply the correct background color on tabs.
         // As a workaround, use the Plastique style instead.
         QStyle* fix = new QPlastiqueStyle();
         fix->setParent(this);
         d->mHistoryWidget->tabBar()->setStyle(fix);
         d->mPlacesTagsWidget->tabBar()->setStyle(fix);
+        #endif
     }
     setFrameStyle(QFrame::NoFrame);
 
@@ -163,8 +171,8 @@ StartMainPage::StartMainPage(QWidget* parent, GvCore* gvCore)
     d->mBookmarksView->setModel(d->mBookmarksModel);
     d->mBookmarksView->setAutoResizeItemsEnabled(false);
 
-    connect(d->mBookmarksView, SIGNAL(urlChanged(KUrl)),
-            SIGNAL(urlSelected(KUrl)));
+    connect(d->mBookmarksView, SIGNAL(urlChanged(QUrl)),
+            SIGNAL(urlSelected(QUrl)));
 
     // Tag view
     connect(d->mTagView, SIGNAL(clicked(QModelIndex)),
@@ -214,7 +222,7 @@ void StartMainPage::slotTagViewClicked(const QModelIndex& index)
     }
     // FIXME: Check label encoding
     const QString tag = index.data().toString();
-    emit urlSelected(KUrl("tags:/" + tag));
+    emit urlSelected(QUrl("tags:/" + tag));
 #endif
 }
 
@@ -242,11 +250,11 @@ void StartMainPage::slotListViewActivated(const QModelIndex& index)
         return;
     }
     QVariant data = index.data(KFilePlacesModel::UrlRole);
-    KUrl url = data.toUrl();
+    QUrl url = data.toUrl();
 
     // Prevent dir lister error
     if (!url.isValid()) {
-        kError() << "Tried to open an invalid url";
+        qCritical() << "Tried to open an invalid url";
         return;
     }
     emit urlSelected(url);
@@ -283,7 +291,7 @@ void StartMainPage::showEvent(QShowEvent* event)
 void StartMainPage::showRecentFoldersViewContextMenu(const QPoint& pos)
 {
     QAbstractItemView* view = qobject_cast<QAbstractItemView*>(sender());
-    KUrl url;
+    QUrl url;
     QModelIndex index = view->indexAt(pos);
     if (index.isValid()) {
         QVariant data = index.data(KFilePlacesModel::UrlRole);
@@ -293,10 +301,10 @@ void StartMainPage::showRecentFoldersViewContextMenu(const QPoint& pos)
     // Create menu
     QMenu menu(this);
     bool fromRecentUrls = view == d->mRecentUrlsView;
-    QAction* addToPlacesAction = fromRecentUrls ? 0 : menu.addAction(KIcon("bookmark-new"), i18n("Add to Places"));
-    QAction* removeAction = menu.addAction(KIcon("edit-delete"), fromRecentUrls ? i18n("Forget this URL") : i18n("Forget this Folder"));
+    QAction* addToPlacesAction = fromRecentUrls ? 0 : menu.addAction(QIcon::fromTheme("bookmark-new"), i18n("Add to Places"));
+    QAction* removeAction = menu.addAction(QIcon::fromTheme("edit-delete"), fromRecentUrls ? i18n("Forget this URL") : i18n("Forget this Folder"));
     menu.addSeparator();
-    QAction* clearAction = menu.addAction(KIcon("edit-delete-all"), i18n("Forget All"));
+    QAction* clearAction = menu.addAction(QIcon::fromTheme("edit-delete-all"), i18n("Forget All"));
 
     if (!index.isValid()) {
         if (addToPlacesAction) {
@@ -313,7 +321,7 @@ void StartMainPage::showRecentFoldersViewContextMenu(const QPoint& pos)
     if (action == addToPlacesAction) {
         QString text = url.fileName();
         if (text.isEmpty()) {
-            text = url.pathOrUrl();
+            text = url.toDisplayString();
         }
         d->mBookmarksModel->addPlace(text, url);
     } else if (action == removeAction) {

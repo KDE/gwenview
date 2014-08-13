@@ -56,7 +56,7 @@ struct JPEGErrorManager : public jpeg_error_mgr
         JPEGErrorManager* myerr = static_cast<JPEGErrorManager*>(cinfo->err);
         char buffer[JMSG_LENGTH_MAX];
         (*cinfo->err->format_message)(cinfo, buffer);
-        kWarning() << buffer ;
+        qWarning() << buffer ;
         longjmp(myerr->jmp_buffer, 1);
     }
 };

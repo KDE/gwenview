@@ -19,14 +19,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "loadingjob.moc"
+#include "loadingjob.h"
 
 // Qt
 
 // KDE
 #include <KDebug>
 #include <KLocale>
-#include <KUrl>
+#include <QUrl>
 
 // Local
 
@@ -40,8 +40,8 @@ void LoadingJob::doStart()
         setError(NoError);
         emitResult();
     } else {
-        connect(document().data(), SIGNAL(loaded(KUrl)), SLOT(slotLoaded()));
-        connect(document().data(), SIGNAL(loadingFailed(KUrl)), SLOT(slotLoadingFailed()));
+        connect(document().data(), SIGNAL(loaded(QUrl)), SLOT(slotLoaded()));
+        connect(document().data(), SIGNAL(loadingFailed(QUrl)), SLOT(slotLoadingFailed()));
     }
 }
 
@@ -54,7 +54,7 @@ void LoadingJob::slotLoaded()
 void LoadingJob::slotLoadingFailed()
 {
     setError(UserDefinedError + 1);
-    setErrorText(i18n("Could not load document %1", document()->url().pathOrUrl()));
+    setErrorText(i18n("Could not load document %1", document()->url().toDisplayString()));
     emitResult();
 }
 

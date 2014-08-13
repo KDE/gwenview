@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "zoomwidget.moc"
+#include "zoomwidget.h"
 
 // stdc++
 #include <cmath>
@@ -32,8 +32,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QSlider>
 
 // KDE
-#include <KDebug>
-#include <KIcon>
+#include <QDebug>
+#include <QIcon>
 
 // Local
 #include "zoomslider.h"

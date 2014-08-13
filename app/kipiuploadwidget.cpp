@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "kipiuploadwidget.moc"
+#include "kipiuploadwidget.h"
 
 // Qt
 #include <QLabel>
@@ -39,8 +39,8 @@ KIPIUploadWidget::KIPIUploadWidget(KIPIInterface* interface, QWidget* parent)
 , mInterface(interface)
 {
     QLabel* label = new QLabel(this);
-    KUrl url = mInterface->currentAlbum().uploadPath();
-    label->setText(i18n("Images will be uploaded here:\n%1", url.pathOrUrl()));
+    QUrl url = mInterface->currentAlbum().uploadPath();
+    label->setText(i18n("Images will be uploaded here:\n%1", url.toDisplayString()));
     label->setWordWrap(true);
 
     QVBoxLayout* layout = new QVBoxLayout(this);

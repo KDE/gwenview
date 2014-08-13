@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
 #include "mimetypeutils.h"
-#include "mimetypeutils_p.moc"
+#include "mimetypeutils_p.h"
 
 // Qt
 #include <QApplication>
@@ -27,13 +27,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // KDE
 #include <KApplication>
-#include <KDebug>
+#include <QDebug>
 #include <KFileItem>
 #include <KIO/Job>
 #include <KIO/JobClasses>
 #include <KIO/NetAccess>
 #include <KMimeType>
-#include <KUrl>
+#include <QUrl>
 
 #include <KImageIO>
 
@@ -119,7 +119,7 @@ const QStringList& imageMimeTypes()
     return list;
 }
 
-QString urlMimeType(const KUrl& url)
+QString urlMimeType(const QUrl &url)
 {
     if (url.isEmpty()) {
         return "unknown";
@@ -127,7 +127,7 @@ QString urlMimeType(const KUrl& url)
     // Try a simple guess, using extension for remote urls
     QString mimeType = KMimeType::findByUrl(url)->name();
     if (mimeType == "application/octet-stream") {
-        kDebug() << "KMimeType::findByUrl() failed to find mimetype for" << url << ". Falling back to KIO::NetAccess::mimetype().";
+        qDebug() << "KMimeType::findByUrl() failed to find mimetype for" << url << ". Falling back to KIO::NetAccess::mimetype().";
         // No luck, look deeper. This can happens with http urls if the filename
         // does not provide any extension.
         mimeType = KIO::NetAccess::mimetype(url, KApplication::kApplication()->activeWindow());
@@ -135,7 +135,7 @@ QString urlMimeType(const KUrl& url)
     return mimeType;
 }
 
-QString urlMimeTypeByContent(const KUrl& url)
+QString urlMimeTypeByContent(const QUrl &url)
 {
     const int HEADER_SIZE = 30;
     if (url.isLocalFile()) {
@@ -177,7 +177,7 @@ Kind fileItemKind(const KFileItem& item)
     return mimeTypeKind(item.mimetype());
 }
 
-Kind urlKind(const KUrl& url)
+Kind urlKind(const QUrl &url)
 {
     return mimeTypeKind(urlMimeType(url));
 }

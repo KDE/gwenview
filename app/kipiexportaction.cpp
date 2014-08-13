@@ -19,13 +19,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "kipiexportaction.moc"
+#include "kipiexportaction.h"
 
 // Qt
 #include <QMenu>
 
 // KDE
-#include <KDebug>
+#include <QDebug>
 #include <KMenu>
 #include <KLocale>
 
@@ -69,7 +69,7 @@ struct KIPIExportActionPrivate
 };
 
 KIPIExportAction::KIPIExportAction(QObject* parent)
-: KToolBarPopupAction(KIcon("document-share"), i18nc("@action", "Share"), parent)
+: KToolBarPopupAction(QIcon::fromTheme("document-share"), i18nc("@action", "Share"), parent)
 , d(new KIPIExportActionPrivate)
 {
     d->q = this;

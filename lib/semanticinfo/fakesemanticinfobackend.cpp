@@ -19,13 +19,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "fakesemanticinfobackend.moc"
+#include "fakesemanticinfobackend.h"
 
 // Qt
 #include <QStringList>
 
 // KDE
-#include <KUrl>
+#include <QUrl>
 
 // Local
 
@@ -43,7 +43,7 @@ FakeSemanticInfoBackEnd::FakeSemanticInfoBackEnd(QObject* parent, InitializeMode
             ;
 }
 
-void FakeSemanticInfoBackEnd::storeSemanticInfo(const KUrl& url, const SemanticInfo& semanticInfo)
+void FakeSemanticInfoBackEnd::storeSemanticInfo(const QUrl &url, const SemanticInfo& semanticInfo)
 {
     mSemanticInfoForUrl[url] = semanticInfo;
     mergeTagsWithAllTags(semanticInfo.mTags);
@@ -67,7 +67,7 @@ void FakeSemanticInfoBackEnd::refreshAllTags()
 {
 }
 
-void FakeSemanticInfoBackEnd::retrieveSemanticInfo(const KUrl& url)
+void FakeSemanticInfoBackEnd::retrieveSemanticInfo(const QUrl &url)
 {
     if (!mSemanticInfoForUrl.contains(url)) {
         QString urlString = url.url();

@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "documentviewcontainer.moc"
+#include "documentviewcontainer.h"
 
 // Local
 #include <lib/documentview/documentview.h>
@@ -29,7 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 #include <KDebug>
-#include <KUrl>
+#include <QUrl>
 
 // Qt
 #include <QEvent>

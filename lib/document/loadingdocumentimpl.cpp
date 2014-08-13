@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 */
 // Self
-#include "loadingdocumentimpl.moc"
+#include "loadingdocumentimpl.h"
 
 // STL
 #include <memory>
@@ -42,8 +42,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KLocale>
 #include <KMimeType>
 #include <KProtocolInfo>
-#include <KUrl>
+#include <QUrl>
+
+#ifdef KDCRAW_FOUND
 #include <libkdcraw/kdcraw.h>
+#endif
 
 // Local
 #include "animateddocumentloadedimpl.h"
@@ -111,8 +114,8 @@ struct LoadingDocumentImplPrivate
     bool determineKind()
     {
         QString mimeType;
-        const KUrl& url = q->document()->url();
-        if (KProtocolInfo::determineMimetypeFromExtension(url.protocol())) {
+        const QUrl &url = q->document()->url();
+        if (KProtocolInfo::determineMimetypeFromExtension(url.scheme())) {
             mimeType = KMimeType::findByNameAndContent(url.fileName(), mData)->name();
         } else {
             mimeType = KMimeType::findByContent(mData)->name();
@@ -190,6 +193,7 @@ struct LoadingDocumentImplPrivate
         buffer.setBuffer(&mData);
         buffer.open(QIODevice::ReadOnly);
 
+#ifdef KDCRAW_FOUND
         if (KDcrawIface::KDcraw::rawFilesList().contains(QString(mFormatHint))) {
             QByteArray previewData;
 
@@ -219,6 +223,9 @@ struct LoadingDocumentImplPrivate
             // need to fill mFormat so gwenview can tell the type when trying to save
             mFormat = mFormatHint;
         } else {
+#else
+{
+#endif
             QImageReader reader(&buffer, mFormatHint);
             mImageSize = reader.size();
 
@@ -378,7 +385,7 @@ LoadingDocumentImpl::~LoadingDocumentImpl()
 
 void LoadingDocumentImpl::init()
 {
-    KUrl url = document()->url();
+    QUrl url = document()->url();
 
     if (UrlUtils::urlIsFastLocalFile(url)) {
         // Load file content directly

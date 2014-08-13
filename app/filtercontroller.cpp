@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "filtercontroller.moc"
+#include "filtercontroller.h"
 
 #include <config-gwenview.h>
 
@@ -34,10 +34,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QToolButton>
 
 // KDE
+#include <QDateTime>
 #include <KComboBox>
-#include <KDebug>
+#include <QDebug>
 #include <KFileItem>
-#include <KIcon>
+#include <QIcon>
 #include <KIconLoader>
 #include <KLineEdit>
 #include <KLocale>
@@ -467,7 +468,7 @@ void TagFilterWidget::updateTagSetFilter()
 {
     QModelIndex index = d->mTagComboBox->model()->index(d->mTagComboBox->currentIndex(), 0);
     if (!index.isValid()) {
-        kWarning() << "Invalid index";
+        qWarning() << "Invalid index";
         return;
     }
     SemanticInfoTag tag = index.data(TagModel::TagRole).toString();
@@ -494,7 +495,7 @@ public:
     void setFilterWidget(QWidget* widget)
     {
         QToolButton* closeButton = new QToolButton;
-        closeButton->setIcon(KIcon("window-close"));
+        closeButton->setIcon(QIcon::fromTheme("window-close"));
         closeButton->setAutoRaise(true);
         closeButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
         int size = IconSize(KIconLoader::Small);

@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 */
 // Self
-#include "savebar.moc"
+#include "savebar.h"
 
 // Qt
 #include <QHBoxLayout>
@@ -30,11 +30,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // KDE
 #include <KActionCollection>
 #include <KColorScheme>
-#include <KDebug>
-#include <KIcon>
+#include <QDebug>
+#include <QIcon>
 #include <KIconLoader>
 #include <KLocale>
-#include <KUrl>
+#include <QUrl>
 
 // Local
 #include "lib/document/documentfactory.h"
@@ -68,7 +68,7 @@ struct SaveBarPrivate
     QLabel* mMessageLabel;
     QLabel* mActionsLabel;
     QFrame* mTooManyChangesFrame;
-    KUrl mCurrentUrl;
+    QUrl mCurrentUrl;
     bool mFullScreenMode;
 
     void createTooManyChangesFrame()
@@ -154,12 +154,12 @@ struct SaveBarPrivate
         mSaveBarWidget->setStyleSheet(css);
     }
 
-    void updateTooManyChangesFrame(const QList<KUrl>& list)
+    void updateTooManyChangesFrame(const QList<QUrl>& list)
     {
         qreal maxPercentageOfMemoryUsage = GwenviewConfig::percentageOfMemoryUsageWarning();
         qulonglong maxMemoryUsage = MemoryUtils::getTotalMemory() * maxPercentageOfMemoryUsage;
         qulonglong memoryUsage = 0;
-        Q_FOREACH(const KUrl & url, list) {
+        Q_FOREACH(const QUrl &url, list) {
             Document::Ptr doc = DocumentFactory::instance()->load(url);
             memoryUsage += doc->memoryUsage();
         }
@@ -167,7 +167,7 @@ struct SaveBarPrivate
         mTooManyChangesFrame->setVisible(memoryUsage > maxMemoryUsage);
     }
 
-    void updateTopRowWidget(const QList<KUrl>& lst)
+    void updateTopRowWidget(const QList<QUrl>& lst)
     {
         QStringList links;
         QString message;
@@ -300,7 +300,7 @@ void SaveBar::initActionDependentWidgets()
 
     // FIXME: Not using an action for now
     d->mSaveAllButton->setText(i18n("Save All"));
-    d->mSaveAllButton->setIcon(KIcon("document-save-all"));
+    d->mSaveAllButton->setIcon(QIcon::fromTheme("document-save-all"));
     connect(d->mSaveAllButton, SIGNAL(clicked()),
             SIGNAL(requestSaveAll()));
 
@@ -327,7 +327,7 @@ void SaveBar::setFullScreenMode(bool value)
 
 void SaveBar::updateContent()
 {
-    QList<KUrl> lst = DocumentFactory::instance()->modifiedDocumentList();
+    QList<QUrl> lst = DocumentFactory::instance()->modifiedDocumentList();
 
     if (d->mFullScreenMode) {
         d->mTopRowWidget->hide();
@@ -348,7 +348,7 @@ void SaveBar::updateContent()
 
 void SaveBar::triggerAction(const QString& action)
 {
-    QList<KUrl> lst = DocumentFactory::instance()->modifiedDocumentList();
+    QList<QUrl> lst = DocumentFactory::instance()->modifiedDocumentList();
     if (action == "first") {
         goToUrl(lst[0]);
     } else if (action == "previous") {
@@ -362,11 +362,11 @@ void SaveBar::triggerAction(const QString& action)
         Q_ASSERT(pos < lst.size());
         goToUrl(lst[pos]);
     } else {
-        kWarning() << "Unknown action: " << action ;
+        qWarning() << "Unknown action: " << action ;
     }
 }
 
-void SaveBar::setCurrentUrl(const KUrl& url)
+void SaveBar::setCurrentUrl(const QUrl &url)
 {
     d->mCurrentUrl = url;
     updateContent();

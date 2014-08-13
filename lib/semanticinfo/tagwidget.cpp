@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "tagwidget.moc"
+#include "tagwidget.h"
 
 // Qt
 #include <QComboBox>
@@ -147,7 +147,7 @@ struct TagWidgetPrivate
         mComboBox->setModel(mTagCompleterModel);
 
         mAddButton = new KPushButton;
-        mAddButton->setIcon(KIcon("list-add"));
+        mAddButton->setIcon(QIcon::fromTheme("list-add"));
         mAddButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         QObject::connect(mAddButton, SIGNAL(clicked()),
                          q, SLOT(addTagFromComboBox()));

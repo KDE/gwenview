@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include <lib/gwenviewlib_export.h>
 
-class KUrl;
+class QUrl;
 
 namespace Gwenview
 {
@@ -48,7 +48,7 @@ public:
     HistoryModel(QObject* parent, const QString& storageDir, int maxCount = 20);
     ~HistoryModel();
 
-    void addUrl(const KUrl&, const QDateTime& dateTime = QDateTime());
+    void addUrl(const QUrl&, const QDateTime& dateTime = QDateTime());
 
     virtual bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex());
 

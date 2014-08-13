@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "semanticinfodirmodel.moc"
+#include "semanticinfodirmodel.h"
 #include <config-gwenview.h>
 
 // Qt
@@ -57,7 +57,7 @@ struct SemanticInfoCacheItem
     SemanticInfo mInfo;
 };
 
-typedef QHash<KUrl, SemanticInfoCacheItem> SemanticInfoCache;
+typedef QHash<QUrl, SemanticInfoCacheItem> SemanticInfoCache;
 
 struct SemanticInfoDirModelPrivate
 {
@@ -75,8 +75,8 @@ SemanticInfoDirModel::SemanticInfoDirModel(QObject* parent)
     d->mBackEnd = new BalooSemanticInfoBackend(this);
 #endif
 
-    connect(d->mBackEnd, SIGNAL(semanticInfoRetrieved(KUrl,SemanticInfo)),
-            SLOT(slotSemanticInfoRetrieved(KUrl,SemanticInfo)),
+    connect(d->mBackEnd, SIGNAL(semanticInfoRetrieved(QUrl,SemanticInfo)),
+            SLOT(slotSemanticInfoRetrieved(QUrl,SemanticInfo)),
             Qt::QueuedConnection);
 
     connect(this, SIGNAL(modelAboutToBeReset()),
@@ -186,7 +186,7 @@ bool SemanticInfoDirModel::setData(const QModelIndex& index, const QVariant& dat
             kWarning() << "no item found for this index";
             return false;
         }
-        KUrl url = item.targetUrl();
+        QUrl url = item.targetUrl();
         SemanticInfoCache::iterator it = d->mSemanticInfoCache.find(url);
         if (it == d->mSemanticInfoCache.end()) {
             kWarning() << "No index for" << url;
@@ -216,7 +216,7 @@ bool SemanticInfoDirModel::setData(const QModelIndex& index, const QVariant& dat
     }
 }
 
-void SemanticInfoDirModel::slotSemanticInfoRetrieved(const KUrl& url, const SemanticInfo& semanticInfo)
+void SemanticInfoDirModel::slotSemanticInfoRetrieved(const QUrl &url, const SemanticInfo& semanticInfo)
 {
     SemanticInfoCache::iterator it = d->mSemanticInfoCache.find(url);
     if (it == d->mSemanticInfoCache.end()) {

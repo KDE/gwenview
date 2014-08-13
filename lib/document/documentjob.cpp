@@ -91,5 +91,3 @@ void ThreadedDocumentJob::doStart()
 }
 
 } // namespace
-
-#include <documentjob.moc>

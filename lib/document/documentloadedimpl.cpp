@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // KDE
 #include <KDebug>
 #include <KLocale>
-#include <KUrl>
+#include <QUrl>
 
 // Local
 #include "documentjob.h"
@@ -91,7 +91,7 @@ bool DocumentLoadedImpl::saveInternal(QIODevice* device, const QByteArray& forma
     return ok;
 }
 
-DocumentJob* DocumentLoadedImpl::save(const KUrl& url, const QByteArray& format)
+DocumentJob* DocumentLoadedImpl::save(const QUrl &url, const QByteArray& format)
 {
     return new SaveJob(this, url, format);
 }

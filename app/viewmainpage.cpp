@@ -17,7 +17,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
-#include "viewmainpage.moc"
+#include "viewmainpage.h"
 
 // Qt
 #include <QApplication>
@@ -31,7 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KDE
 #include <KActionCollection>
 #include <KActionCategory>
-#include <KDebug>
+#include <QDebug>
 #include <KLocale>
 #include <KMenu>
 #include <KMessageBox>
@@ -67,7 +67,7 @@ namespace Gwenview
 #undef LOG
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
-#define LOG(x) kDebug() << x
+#define LOG(x) qDebug() << x
 #else
 #define LOG(x) ;
 #endif
@@ -377,9 +377,9 @@ struct ViewMainPagePrivate
 
     QModelIndex indexForView(DocumentView* view) const
     {
-        KUrl url = view->url();
+        QUrl url = view->url();
         if (!url.isValid()) {
-            kWarning() << "View does not display any document!";
+            qWarning() << "View does not display any document!";
             return QModelIndex();
         }
 
@@ -434,7 +434,7 @@ ViewMainPage::ViewMainPage(QWidget* parent, SlideShow* slideShow, KActionCollect
 
     d->mToggleThumbnailBarAction = view->add<KToggleAction>(QString("toggle_thumbnailbar"));
     d->mToggleThumbnailBarAction->setText(i18n("Thumbnail Bar"));
-    d->mToggleThumbnailBarAction->setIcon(KIcon("folder-image"));
+    d->mToggleThumbnailBarAction->setIcon(QIcon::fromTheme("folder-image"));
     d->mToggleThumbnailBarAction->setShortcut(Qt::CTRL | Qt::Key_B);
     d->mToggleThumbnailBarAction->setChecked(GwenviewConfig::thumbnailBarIsVisible());
     connect(d->mToggleThumbnailBarAction, SIGNAL(triggered(bool)),
@@ -581,9 +581,9 @@ QSize ViewMainPage::sizeHint() const
     return QSize(400, 300);
 }
 
-KUrl ViewMainPage::url() const
+QUrl ViewMainPage::url() const
 {
-    GV_RETURN_VALUE_IF_FAIL(d->currentView(), KUrl());
+    GV_RETURN_VALUE_IF_FAIL(d->currentView(), QUrl());
     return d->currentView()->url();
 }
 
@@ -615,19 +615,19 @@ DocumentView* ViewMainPage::documentView() const
     return d->currentView();
 }
 
-void ViewMainPage::openUrl(const KUrl& url)
+void ViewMainPage::openUrl(const QUrl &url)
 {
-    openUrls(KUrl::List() << url, url);
+    openUrls(QList<QUrl>() << url, url);
 }
 
-void ViewMainPage::openUrls(const KUrl::List& allUrls, const KUrl& currentUrl)
+void ViewMainPage::openUrls(const QList<QUrl>& allUrls, const QUrl &currentUrl)
 {
     DocumentView::Setup setup;
 
-    QSet<KUrl> urls = allUrls.toSet();
+    QSet<QUrl> urls = allUrls.toSet();
     d->mCompareMode = urls.count() > 1;
 
-    typedef QMap<KUrl, DocumentView*> ViewForUrlMap;
+    typedef QMap<QUrl, DocumentView*> ViewForUrlMap;
     ViewForUrlMap viewForUrlMap;
 
     if (!d->mDocumentViews.isEmpty()) {
@@ -642,7 +642,7 @@ void ViewMainPage::openUrls(const KUrl::List& allUrls, const KUrl& currentUrl)
     // Destroy views which show urls we don't care about, remove from "urls" the
     // urls which already have a view.
     Q_FOREACH(DocumentView * view, d->mDocumentViews) {
-        KUrl url = view->url();
+        QUrl url = view->url();
         if (urls.contains(url)) {
             // view displays an url we must display, keep it
             urls.remove(url);
@@ -654,9 +654,9 @@ void ViewMainPage::openUrls(const KUrl::List& allUrls, const KUrl& currentUrl)
     }
 
     // Create view for remaining urls
-    Q_FOREACH(const KUrl & url, urls) {
+    Q_FOREACH(const QUrl &url, urls) {
         if (d->mDocumentViews.count() >= MaxViewCount) {
-            kWarning() << "Too many documents to show";
+            qWarning() << "Too many documents to show";
             break;
         }
         DocumentView* view = d->createDocumentView();
@@ -665,7 +665,7 @@ void ViewMainPage::openUrls(const KUrl::List& allUrls, const KUrl& currentUrl)
 
     // Set sortKey to match url order
     int sortKey = 0;
-    Q_FOREACH(const KUrl& url, allUrls) {
+    Q_FOREACH(const QUrl &url, allUrls) {
         viewForUrlMap[url]->setSortKey(sortKey);
         ++sortKey;
     }
@@ -679,7 +679,7 @@ void ViewMainPage::openUrls(const KUrl::List& allUrls, const KUrl& currentUrl)
         it = viewForUrlMap.constBegin(),
         end = viewForUrlMap.constEnd();
     for (; it != end; ++it) {
-        KUrl url = it.key();
+        QUrl url = it.key();
         DocumentView* view = it.value();
         DocumentView::Setup savedSetup = d->mDocumentViewContainer->savedSetup(url);
         view->openUrl(url, d->mZoomMode == ZoomMode::Individual && savedSetup.valid ? savedSetup : setup);
@@ -712,7 +712,7 @@ void ViewMainPage::reload()
     }
     Document::Ptr doc = view->document();
     if (!doc) {
-        kWarning() << "!doc";
+        qWarning() << "!doc";
         return;
     }
     if (doc->isModified()) {
@@ -746,9 +746,9 @@ void ViewMainPage::slotViewFocused(DocumentView* view)
 
 void ViewMainPage::trashView(DocumentView* view)
 {
-    KUrl url = view->url();
+    QUrl url = view->url();
     deselectView(view);
-    FileOperations::trash(KUrl::List() << url, this);
+    FileOperations::trash(QList<QUrl>() << url, this);
 }
 
 void ViewMainPage::deselectView(DocumentView* view)

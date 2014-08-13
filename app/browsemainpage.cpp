@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "browsemainpage.moc"
+#include "browsemainpage.h"
 
 // Qt
 #include <QDropEvent>
@@ -32,7 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KActionCollection>
 #include <KActionCategory>
 #include <KActionMenu>
-#include <KDebug>
+#include <QDebug>
 #include <KFileItem>
 #include <KFilePlacesModel>
 #include <KLineEdit>
@@ -40,7 +40,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KSelectAction>
 #include <KStatusBar>
 #include <KToggleAction>
+#include <KIconLoader>
 #include <KUrlNavigator>
+#include <KUrlMimeData>
 
 // Local
 #include <filtercontroller.h>
@@ -96,13 +98,13 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
         // mUrlNavigator (use stupid layouting code because KUrlNavigator ctor
         // can't be used directly from Designer)
         mFilePlacesModel = new KFilePlacesModel(q);
-        mUrlNavigator = new KUrlNavigator(mFilePlacesModel, KUrl(), mUrlNavigatorContainer);
+        mUrlNavigator = new KUrlNavigator(mFilePlacesModel, QUrl(), mUrlNavigatorContainer);
         mUrlNavigatorContainer->setAutoFillBackground(true);
         QVBoxLayout* layout = new QVBoxLayout(mUrlNavigatorContainer);
         layout->setMargin(0);
         layout->addWidget(mUrlNavigator);
-        QObject::connect(mUrlNavigator, SIGNAL(urlsDropped(KUrl,QDropEvent*)),
-                         q, SLOT(slotUrlsDropped(KUrl,QDropEvent*)));
+        QObject::connect(mUrlNavigator, SIGNAL(urlsDropped(QUrl,QDropEvent*)),
+                         q, SLOT(slotUrlsDropped(QUrl,QDropEvent*)));
         updateUrlNavigatorBackgroundColor();
 
         // Thumbnail slider
@@ -115,7 +117,7 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
     void setupActions(KActionCollection* actionCollection)
     {
         KActionCategory* view = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface", "View"), actionCollection);
-        KAction* action = view->addAction("edit_location", q, SLOT(editLocation()));
+        QAction * action = view->addAction("edit_location", q, SLOT(editLocation()));
         action->setText(i18nc("@action:inmenu Navigation Bar", "Edit Location"));
         action->setShortcut(Qt::Key_F6);
 
@@ -135,7 +137,7 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
         KActionMenu* thumbnailDetailsAction = view->add<KActionMenu>("thumbnail_details");
         thumbnailDetailsAction->setText(i18nc("@action:inmenu", "Thumbnail Details"));
 #define addAction(text, detail) \
-    action = new KAction(q); \
+    action = new QAction(q); \
     thumbnailDetailsAction->addAction(action); \
     action->setText(text); \
     action->setCheckable(true); \
@@ -303,10 +305,10 @@ void BrowseMainPage::editLocation()
 
 void BrowseMainPage::addFolderToPlaces()
 {
-    KUrl url = d->mUrlNavigator->locationUrl();
+    QUrl url = d->mUrlNavigator->locationUrl();
     QString text = url.fileName();
     if (text.isEmpty()) {
-        text = url.pathOrUrl();
+        text = url.toDisplayString();
     }
     d->mFilePlacesModel->addPlace(text, url);
 }
@@ -376,9 +378,9 @@ void BrowseMainPage::setFullScreenMode(bool fullScreen)
     }
 }
 
-void BrowseMainPage::slotUrlsDropped(const KUrl& destUrl, QDropEvent* event)
+void BrowseMainPage::slotUrlsDropped(const QUrl &destUrl, QDropEvent* event)
 {
-    const KUrl::List urlList = KUrl::List::fromMimeData(event->mimeData());
+    const QList<QUrl> urlList = KUrlMimeData::urlsFromMimeData(event->mimeData());
     if (urlList.isEmpty()) {
         return;
     }
@@ -387,10 +389,10 @@ void BrowseMainPage::slotUrlsDropped(const KUrl& destUrl, QDropEvent* event)
     // We can't call FileOperations::showMenuForDroppedUrls() directly because
     // we need the slot to return so that the drop event is accepted. Otherwise
     // the drop cursor is still visible when the menu is shown.
-    QMetaObject::invokeMethod(this, "showMenuForDroppedUrls", Qt::QueuedConnection, Q_ARG(KUrl::List, urlList), Q_ARG(KUrl, destUrl));
+    QMetaObject::invokeMethod(this, "showMenuForDroppedUrls", Qt::QueuedConnection, Q_ARG(QList<QUrl>, urlList), Q_ARG(QUrl, destUrl));
 }
 
-void BrowseMainPage::showMenuForDroppedUrls(const KUrl::List& urlList, const KUrl& destUrl)
+void BrowseMainPage::showMenuForDroppedUrls(const QList<QUrl>& urlList, const QUrl &destUrl)
 {
     FileOperations::showMenuForDroppedUrls(d->mUrlNavigator, urlList, destUrl);
 }

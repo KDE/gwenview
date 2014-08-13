@@ -109,9 +109,9 @@ set(gwenviewlib_SRCS
     hud/hudtheme.cpp
     hud/hudwidget.cpp
     graphicswidgetfloater.cpp
-    imageformats/imageformats.cpp
-    imageformats/jpegplugin.cpp
-    imageformats/jpeghandler.cpp
+#     imageformats/imageformats.cpp
+#     imageformats/jpegplugin.cpp
+#     imageformats/jpeghandler.cpp
     imagemetainfomodel.cpp
     imagescaler.cpp
     imageutils.cpp
@@ -191,7 +191,7 @@ set_source_files_properties(
     COMPILE_FLAGS "${KDE4_ENABLE_EXCEPTIONS}"
     )
 
-kde4_add_ui_files(gwenviewlib_SRCS
+qt5_wrap_ui(gwenviewlib_SRCS
     crop/cropwidget.ui
     documentview/messageview.ui
     print/printoptionspage.ui
@@ -199,27 +199,28 @@ kde4_add_ui_files(gwenviewlib_SRCS
     resize/resizeimagewidget.ui
     )
 
-kde4_add_kcfg_files(gwenviewlib_SRCS
+kconfig_add_kcfg_files(gwenviewlib_SRCS
     gwenviewconfig.kcfgc
     )
 
-kde4_add_library(gwenviewlib SHARED ${gwenviewlib_SRCS})
+add_library(gwenviewlib SHARED ${gwenviewlib_SRCS})
 set_target_properties(gwenviewlib PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION})
 if (WIN32)
     set_target_properties(gwenviewlib PROPERTIES COMPILE_FLAGS -DJPEG_STATIC)
 endif()
 
 target_link_libraries(gwenviewlib
-    ${KDE4_KFILE_LIBS}
-    ${KDE4_KIO_LIBS}
-    ${KDE4_PHONON_LIBS}
+   KF5::KDELibs4Support
+   Qt5::Concurrent
+   Qt5::Svg
+   Qt5::OpenGL
     ${JPEG_LIBRARY}
     ${EXIV2_LIBRARIES}
     ${QT_QTOPENGL_LIBRARY}
     ${X11_X11_LIB}
     ${PNG_LIBRARIES}
     ${LCMS2_LIBRARIES}
-    ${KDCRAW_LIBRARIES}
+    ${PHONON_LIBRARY}
     )
 if (WIN32)
     target_link_libraries(gwenviewlib ${EXPAT_LIBRARIES})

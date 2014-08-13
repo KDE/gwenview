@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "hud/hudwidget.moc"
+#include "hud/hudwidget.h"
 
 // Qt
 #include <QGraphicsProxyWidget>
@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QToolButton>
 
 // KDE
-#include <KIcon>
+#include <QIcon>
 #include <KIconLoader>
 #include <KLocale>
 
@@ -104,7 +104,7 @@ void HudWidget::init(QGraphicsWidget* mainWidget, Options options)
 
     if (options & OptionCloseButton) {
         d->mCloseButton = new HudButton(this);
-        d->mCloseButton->setIcon(KIcon("window-close"));
+        d->mCloseButton->setIcon(QIcon::fromTheme("window-close"));
         d->mCloseButton->setToolTip(i18nc("@info:tooltip", "Close"));
 
         layout->addItem(d->mCloseButton);

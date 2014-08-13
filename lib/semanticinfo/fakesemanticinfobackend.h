@@ -27,7 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QHash>
 
 // KDE
-#include <KUrl>
+#include <QUrl>
 
 // Local
 #include "abstractsemanticinfobackend.h"
@@ -50,9 +50,9 @@ public:
 
     virtual void refreshAllTags();
 
-    virtual void storeSemanticInfo(const KUrl&, const SemanticInfo&);
+    virtual void storeSemanticInfo(const QUrl&, const SemanticInfo&);
 
-    virtual void retrieveSemanticInfo(const KUrl&);
+    virtual void retrieveSemanticInfo(const QUrl&);
 
     virtual QString labelForTag(const SemanticInfoTag&) const;
 
@@ -61,7 +61,7 @@ public:
 private:
     void mergeTagsWithAllTags(const TagSet&);
 
-    QHash<KUrl, SemanticInfo> mSemanticInfoForUrl;
+    QHash<QUrl, SemanticInfo> mSemanticInfoForUrl;
     InitializeMode mInitializeMode;
     TagSet mAllTags;
 };

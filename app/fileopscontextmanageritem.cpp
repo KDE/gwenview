@@ -28,12 +28,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QListView>
 #include <QMenu>
 #include <QMimeData>
+#include <QShortcut>
 
 // KDE
-#include <KAction>
+#include <QAction>
 #include <KActionCollection>
 #include <KActionCategory>
-#include <KDebug>
+#include <QDebug>
 #include <KFileItem>
 #include <KFileItemActions>
 #include <kio/paste.h>
@@ -43,6 +44,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KPropertiesDialog>
 #include <KRun>
 #include <KService>
+#include <KShortcut>
 #include <KXMLGUIClient>
 
 // libkonq
@@ -65,33 +67,33 @@ struct FileOpsContextManagerItemPrivate
     QListView* mThumbnailView;
     KXMLGUIClient* mXMLGUIClient;
     SideBarGroup* mGroup;
-    KAction* mCutAction;
-    KAction* mCopyAction;
-    KAction* mPasteAction;
-    KAction* mCopyToAction;
-    KAction* mMoveToAction;
-    KAction* mLinkToAction;
-    KAction* mRenameAction;
-    KAction* mTrashAction;
-    KAction* mDelAction;
-    KAction* mRestoreAction;
-    KAction* mShowPropertiesAction;
-    KAction* mCreateFolderAction;
-    KAction* mOpenWithAction;
+    QAction * mCutAction;
+    QAction * mCopyAction;
+    QAction * mPasteAction;
+    QAction * mCopyToAction;
+    QAction * mMoveToAction;
+    QAction * mLinkToAction;
+    QAction * mRenameAction;
+    QAction * mTrashAction;
+    QAction * mDelAction;
+    QAction * mRestoreAction;
+    QAction * mShowPropertiesAction;
+    QAction * mCreateFolderAction;
+    QAction * mOpenWithAction;
     QList<QAction*> mRegularFileActionList;
     QList<QAction*> mTrashFileActionList;
     KService::List mServiceList;
     bool mInTrash;
 
-    KUrl::List urlList() const
+    QList<QUrl> urlList() const
     {
-        KUrl::List urlList;
+        QList<QUrl> urlList;
 
         KFileItemList list = q->contextManager()->selectedFileItemList();
         if (list.count() > 0) {
             urlList = list.urlList();
         } else {
-            KUrl url = q->contextManager()->currentUrl();
+            QUrl url = q->contextManager()->currentUrl();
             Q_ASSERT(url.isValid());
             urlList << url;
         }
@@ -120,11 +122,12 @@ struct FileOpsContextManagerItemPrivate
     {
         QMimeData* mimeData = new QMimeData;
         KFileItemList list = q->contextManager()->selectedFileItemList();
-        list.urlList().populateMimeData(mimeData);
+        //TODO KF5
+//         list.urlList().populateMimeData(mimeData);
         return mimeData;
     }
 
-    KUrl pasteTargetUrl() const
+    QUrl pasteTargetUrl() const
     {
         // If only one folder is selected, paste inside it, otherwise paste in
         // current
@@ -139,7 +142,7 @@ struct FileOpsContextManagerItemPrivate
 
 static QAction* createSeparator(QObject* parent)
 {
-    QAction* action = new KAction(parent);
+    QAction* action = new QAction(parent);
     action->setSeparator(true);
     return action;
 }
@@ -159,7 +162,7 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, QL
 
     connect(contextManager(), SIGNAL(selectionChanged()),
             SLOT(updateActions()));
-    connect(contextManager(), SIGNAL(currentDirUrlChanged(KUrl)),
+    connect(contextManager(), SIGNAL(currentDirUrlChanged(QUrl)),
             SLOT(updateActions()));
 
     KActionCategory* file = new KActionCategory(i18nc("@title actions category", "File"), actionCollection);
@@ -170,9 +173,8 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, QL
     // Copied from Dolphin:
     // need to remove shift+del from cut action, else the shortcut for deletejob
     // doesn't work
-    KShortcut cutShortcut = d->mCutAction->shortcut();
-    cutShortcut.remove(Qt::SHIFT + Qt::Key_Delete, KShortcut::KeepEmpty);
-    d->mCutAction->setShortcut(cutShortcut);
+    //KF5TODO
+//     d->mCopyAction->setShortcut(QKeySequence());
 
     d->mCopyAction = edit->addAction(KStandardAction::Copy, this, SLOT(copy()));
     d->mPasteAction = edit->addAction(KStandardAction::Paste, this, SLOT(paste()));
@@ -195,12 +197,12 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, QL
 
     d->mTrashAction = file->addAction("file_trash", this, SLOT(trash()));
     d->mTrashAction->setText(i18nc("Verb", "Trash"));
-    d->mTrashAction->setIcon(KIcon("user-trash"));
+    d->mTrashAction->setIcon(QIcon::fromTheme("user-trash"));
     d->mTrashAction->setShortcut(Qt::Key_Delete);
 
     d->mDelAction = file->addAction("file_delete", this, SLOT(del()));
     d->mDelAction->setText(i18n("Delete"));
-    d->mDelAction->setIcon(KIcon("edit-delete"));
+    d->mDelAction->setIcon(QIcon::fromTheme("edit-delete"));
     d->mDelAction->setShortcut(QKeySequence(Qt::ShiftModifier | Qt::Key_Delete));
 
     d->mRestoreAction = file->addAction("file_restore", this, SLOT(restore()));
@@ -208,11 +210,11 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, QL
 
     d->mShowPropertiesAction = file->addAction("file_show_properties", this, SLOT(showProperties()));
     d->mShowPropertiesAction->setText(i18n("Properties"));
-    d->mShowPropertiesAction->setIcon(KIcon("document-properties"));
+    d->mShowPropertiesAction->setIcon(QIcon::fromTheme("document-properties"));
 
     d->mCreateFolderAction = file->addAction("file_create_folder", this, SLOT(createFolder()));
     d->mCreateFolderAction->setText(i18n("Create Folder..."));
-    d->mCreateFolderAction->setIcon(KIcon("folder-new"));
+    d->mCreateFolderAction->setIcon(QIcon::fromTheme("folder-new"));
 
     d->mOpenWithAction = file->addAction("file_open_with");
     d->mOpenWithAction->setText(i18n("Open With"));
@@ -268,7 +270,7 @@ void FileOpsContextManagerItem::updateActions()
     const bool urlIsValid = contextManager()->currentUrl().isValid();
     const bool dirUrlIsValid = contextManager()->currentDirUrl().isValid();
 
-    d->mInTrash = contextManager()->currentDirUrl().protocol() == "trash";
+    d->mInTrash = contextManager()->currentDirUrl().scheme() == "trash";
 
     d->mCutAction->setEnabled(selectionNotEmpty);
     d->mCopyAction->setEnabled(selectionNotEmpty);
@@ -319,7 +321,7 @@ void FileOpsContextManagerItem::showProperties()
     if (list.count() > 0) {
         KPropertiesDialog::showDialog(list, d->mGroup);
     } else {
-        KUrl url = contextManager()->currentDirUrl();
+        QUrl url = contextManager()->currentDirUrl();
         KPropertiesDialog::showDialog(url, d->mGroup);
     }
 }
@@ -386,7 +388,7 @@ void FileOpsContextManagerItem::rename()
 
 void FileOpsContextManagerItem::createFolder()
 {
-    KUrl url = contextManager()->currentDirUrl();
+    QUrl url = contextManager()->currentDirUrl();
     KonqOperations::newDir(d->mGroup, url);
 }
 
@@ -401,7 +403,7 @@ void FileOpsContextManagerItem::populateOpenMenu()
     Q_FOREACH(const KService::Ptr & service, d->mServiceList) {
         QString text = service->name().replace('&', "&&");
         QAction* action = openMenu->addAction(text);
-        action->setIcon(KIcon(service->icon()));
+        action->setIcon(QIcon::fromTheme(service->icon()));
         action->setData(idx);
         ++idx;
     }
@@ -415,7 +417,7 @@ void FileOpsContextManagerItem::openWith(QAction* action)
 {
     Q_ASSERT(action);
     KService::Ptr service;
-    KUrl::List list = d->urlList();
+    QList<QUrl> list = d->urlList();
 
     bool ok;
     int idx = action->data().toInt(&ok);

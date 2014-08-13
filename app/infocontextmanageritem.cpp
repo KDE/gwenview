@@ -17,7 +17,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
-#include "infocontextmanageritem.moc"
+#include "infocontextmanageritem.h"
 
 // Qt
 #include <QApplication>
@@ -56,7 +56,7 @@ namespace Gwenview
 #undef LOG
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
-#define LOG(x) kDebug() << x
+#define LOG(x) qDebug() << x
 #else
 #define LOG(x) ;
 #endif

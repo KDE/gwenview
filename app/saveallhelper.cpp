@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "saveallhelper.moc"
+#include "saveallhelper.h"
 
 // Qt
 #include <QFuture>
@@ -31,7 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KLocale>
 #include <KMessageBox>
 #include <KProgressDialog>
-#include <KUrl>
+#include <QUrl>
 
 // Local
 #include <lib/document/document.h>
@@ -67,10 +67,10 @@ SaveAllHelper::~SaveAllHelper()
 
 void SaveAllHelper::save()
 {
-    KUrl::List list = DocumentFactory::instance()->modifiedDocumentList();
+    QList<QUrl> list = DocumentFactory::instance()->modifiedDocumentList();
     d->mProgressDialog->progressBar()->setRange(0, list.size());
     d->mProgressDialog->progressBar()->setValue(0);
-    Q_FOREACH(const KUrl & url, list) {
+    Q_FOREACH(const QUrl &url, list) {
         Document::Ptr doc = DocumentFactory::instance()->load(url);
         DocumentJob* job = doc->save(url, doc->format());
         connect(job, SIGNAL(result(KJob*)), SLOT(slotResult(KJob*)));
@@ -102,8 +102,8 @@ void SaveAllHelper::slotResult(KJob* _job)
 {
     DocumentJob* job = static_cast<DocumentJob*>(_job);
     if (job->error()) {
-        KUrl url = job->document()->url();
-        QString name = url.fileName().isEmpty() ? url.pathOrUrl() : url.fileName();
+        QUrl url = job->document()->url();
+        QString name = url.fileName().isEmpty() ? url.toDisplayString() : url.fileName();
         d->mErrorList << i18nc("@info %1 is the name of the document which failed to save, %2 is the reason for the failure",
                                "<filename>%1</filename>: %2", name, job->errorString());
     }

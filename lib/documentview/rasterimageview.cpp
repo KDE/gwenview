@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "rasterimageview.moc"
+#include "rasterimageview.h"
 
 // Local
 #include <lib/documentview/abstractrasterimageviewtool.h>
@@ -240,7 +240,7 @@ void RasterImageView::loadFromDocument()
         return;
     }
 
-    connect(doc.data(), SIGNAL(metaInfoLoaded(KUrl)),
+    connect(doc.data(), SIGNAL(metaInfoLoaded(QUrl)),
             SLOT(slotDocumentMetaInfoLoaded()));
     connect(doc.data(), SIGNAL(isAnimatedUpdated()),
             SLOT(slotDocumentIsAnimatedUpdated()));
@@ -258,7 +258,7 @@ void RasterImageView::slotDocumentMetaInfoLoaded()
     } else {
         // Could not retrieve image size from meta info, we need to load the
         // full image now.
-        connect(document().data(), SIGNAL(loaded(KUrl)),
+        connect(document().data(), SIGNAL(loaded(QUrl)),
                 SLOT(finishSetDocument()));
         document()->startLoadingFullImage();
     }

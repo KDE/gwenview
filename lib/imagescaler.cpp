@@ -17,14 +17,14 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
-#include "imagescaler.moc"
+#include "imagescaler.h"
 
 // Qt
 #include <QImage>
 #include <QRegion>
 
 // KDE
-#include <KDebug>
+#include <QDebug>
 
 // Local
 #include <lib/document/document.h>
@@ -34,7 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #undef LOG
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
-#define LOG(x) kDebug() << x
+#define LOG(x) qDebug() << x
 #else
 #define LOG(x) ;
 #endif
@@ -76,7 +76,7 @@ void ImageScaler::setDocument(Document::Ptr document)
     connect(d->mDocument.data(), SIGNAL(downSampledImageReady()),
             SLOT(doScale()));
     // Used when scaler asked for a full image
-    connect(d->mDocument.data(), SIGNAL(loaded(KUrl)),
+    connect(d->mDocument.data(), SIGNAL(loaded(QUrl)),
             SLOT(doScale()));
 }
 

@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "semanticinfocontextmanageritem.moc"
+#include "semanticinfocontextmanageritem.h"
 
 // Qt
 #include <QEvent>
@@ -30,13 +30,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QTimer>
 
 // KDE
-#include <KAction>
+#include <QAction>
 #include <KActionCategory>
 #include <KActionCollection>
-#include <KDebug>
+#include <QDebug>
 #include <KDialog>
 #include <KLocale>
 #include <KRatingPainter>
+#include <KGlobal>
+#include <KIconLoader>
 
 // Local
 #include "viewmainpage.h"
@@ -162,10 +164,10 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
     ViewMainPage* mViewMainPage;
     QPointer<SemanticInfoDialog> mSemanticInfoDialog;
     TagInfo mTagInfo;
-    KAction* mEditTagsAction;
+    QAction * mEditTagsAction;
     QSignalMapper* mRatingMapper;
     /** A list of all actions, so that we can disable them when necessary */
-    QList<KAction*> mActions;
+    QList<QAction *> mActions;
     QPointer<RatingIndicator> mRatingIndicator;
 
     void setupGroup()
@@ -203,7 +205,7 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
 
         mRatingMapper = new QSignalMapper(q);
         for (int rating = 0; rating <= 5; ++rating) {
-            KAction* action = edit->addAction(QString("rate_%1").arg(rating));
+            QAction * action = edit->addAction(QString("rate_%1").arg(rating));
             if (rating == 0) {
                 action->setText(i18nc("@action Rating value of zero", "Zero"));
             } else {
@@ -265,7 +267,7 @@ SemanticInfoContextManagerItem::SemanticInfoContextManagerItem(ContextManager* m
             SLOT(slotSelectionChanged()));
     connect(contextManager(), SIGNAL(selectionDataChanged()),
             SLOT(update()));
-    connect(contextManager(), SIGNAL(currentDirUrlChanged(KUrl)),
+    connect(contextManager(), SIGNAL(currentDirUrlChanged(QUrl)),
             SLOT(update()));
 
     d->setupActions();
@@ -356,7 +358,7 @@ void SemanticInfoContextManagerItem::update()
     }
 
     bool enabled = !contextManager()->selectedFileItemList().isEmpty();
-    Q_FOREACH(KAction * action, d->mActions) {
+    Q_FOREACH(QAction * action, d->mActions) {
         action->setEnabled(enabled);
     }
     d->updateTagLabel();

@@ -22,9 +22,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "imagemetainfomodel.h"
 
 // Qt
+#include <QSize>
 
 // KDE
-#include <KDebug>
+#include <QDebug>
 #include <KFileItem>
 #include <KGlobal>
 #include <KLocale>
@@ -207,7 +208,7 @@ struct ImageMetaInfoModelPrivate
         MetaInfoGroup* group = mMetaInfoGroupVector[groupRow];
         int entryRow = group->getRowForKey(key);
         if (entryRow == MetaInfoGroup::InvalidRow) {
-            kWarning() << "No row for key" << key;
+            qWarning() << "No row for key" << key;
             return;
         }
         group->setValueForKeyAt(entryRow, value);
@@ -281,7 +282,7 @@ struct ImageMetaInfoModelPrivate
                     hash.insert(key, new MetaInfoGroup::Entry(key, label, value));
                 }
             } catch (const Exiv2::Error& error) {
-                kWarning() << "Failed to read some meta info:" << error.what();
+                qWarning() << "Failed to read some meta info:" << error.what();
             }
         }
 
@@ -314,7 +315,7 @@ ImageMetaInfoModel::~ImageMetaInfoModel()
     delete d;
 }
 
-void ImageMetaInfoModel::setUrl(const KUrl& url)
+void ImageMetaInfoModel::setUrl(const QUrl &url)
 {
     KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
     QString sizeString = KGlobal::locale()->formatByteSize(item.size());
@@ -392,7 +393,7 @@ void ImageMetaInfoModel::getInfoForKey(const QString& key, QString* label, QStri
     } else if (key.startsWith(QLatin1String("Xmp"))) {
         group = d->mMetaInfoGroupVector[XmpGroup];
     } else {
-        kWarning() << "Unknown metainfo key" << key;
+        qWarning() << "Unknown metainfo key" << key;
         return;
     }
     group->getInfoForKey(key, label, value);
@@ -489,7 +490,7 @@ QVariant ImageMetaInfoModel::headerData(int section, Qt::Orientation orientation
     } else if (section == 1) {
         caption = i18nc("@title:column", "Value");
     } else {
-        kWarning() << "Unknown section" << section;
+        qWarning() << "Unknown section" << section;
     }
 
     return QVariant(caption);

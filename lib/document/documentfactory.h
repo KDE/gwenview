@@ -27,7 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class QUndoGroup;
 
-class KUrl;
+class QUrl;
 
 namespace Gwenview
 {
@@ -53,17 +53,17 @@ public:
      * instance of Document::Ptr if there is any.
      * This method updates the last-access timestamp.
      */
-    Document::Ptr load(const KUrl& url);
+    Document::Ptr load(const QUrl &url);
 
     /**
      * Returns a document if it has already been loaded once with load().
      * This method does not update the last-access timestamp.
      */
-    Document::Ptr getCachedDocument(const KUrl&) const;
+    Document::Ptr getCachedDocument(const QUrl&) const;
 
-    QList<KUrl> modifiedDocumentList() const;
+    QList<QUrl> modifiedDocumentList() const;
 
-    bool hasUrl(const KUrl&) const;
+    bool hasUrl(const QUrl&) const;
 
     void clearCache();
 
@@ -73,18 +73,18 @@ public:
      * Do not keep document whose url is @url in cache even if it has been
      * modified
      */
-    void forget(const KUrl& url);
+    void forget(const QUrl &url);
 
 Q_SIGNALS:
     void modifiedDocumentListChanged();
-    void documentChanged(const KUrl&);
-    void documentBusyStateChanged(const KUrl&, bool);
+    void documentChanged(const QUrl&);
+    void documentBusyStateChanged(const QUrl&, bool);
 
 private Q_SLOTS:
-    void slotLoaded(const KUrl&);
-    void slotSaved(const KUrl&, const KUrl&);
-    void slotModified(const KUrl&);
-    void slotBusyChanged(const KUrl&, bool);
+    void slotLoaded(const QUrl&);
+    void slotSaved(const QUrl&, const QUrl&);
+    void slotModified(const QUrl&);
+    void slotBusyChanged(const QUrl&, bool);
 
 private:
     DocumentFactory();

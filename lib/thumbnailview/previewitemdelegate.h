@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
-class KUrl;
+class QUrl;
 
 namespace Gwenview
 {
@@ -93,11 +93,11 @@ public:
     virtual QSize sizeHint(const QStyleOptionViewItem & /*option*/, const QModelIndex & /*index*/) const;
 
 Q_SIGNALS:
-    void saveDocumentRequested(const KUrl&);
-    void rotateDocumentLeftRequested(const KUrl&);
-    void rotateDocumentRightRequested(const KUrl&);
-    void showDocumentInFullScreenRequested(const KUrl&);
-    void setDocumentRatingRequested(const KUrl&, int rating);
+    void saveDocumentRequested(const QUrl&);
+    void rotateDocumentLeftRequested(const QUrl&);
+    void rotateDocumentRightRequested(const QUrl&);
+    void showDocumentInFullScreenRequested(const QUrl&);
+    void setDocumentRatingRequested(const QUrl&, int rating);
 
 private Q_SLOTS:
     void setThumbnailSize(const QSize&);

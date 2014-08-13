@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QObject>
 
 // KDE
-#include <KUrl>
+#include <QUrl>
 
 // Local
 
@@ -45,9 +45,9 @@ public:
 
     virtual void showContextMenu(QWidget* parent) = 0;
 
-    virtual void showMenuForUrlDroppedOnViewport(QWidget* parent, const KUrl::List&) = 0;
+    virtual void showMenuForUrlDroppedOnViewport(QWidget* parent, const QList<QUrl>&) = 0;
 
-    virtual void showMenuForUrlDroppedOnDir(QWidget* parent, const KUrl::List&, const KUrl&) = 0;
+    virtual void showMenuForUrlDroppedOnDir(QWidget* parent, const QList<QUrl>&, const QUrl&) = 0;
 };
 
 } // namespace

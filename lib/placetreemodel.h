@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
-class KUrl;
+class QUrl;
 
 namespace Gwenview
 {
@@ -52,7 +52,7 @@ public:
     virtual bool canFetchMore(const QModelIndex& parent) const;
     virtual void fetchMore(const QModelIndex& parent);
 
-    KUrl urlForIndex(const QModelIndex&) const;
+    QUrl urlForIndex(const QModelIndex&) const;
 
 private Q_SLOTS:
     void slotPlacesRowsInserted(const QModelIndex&, int start, int end);

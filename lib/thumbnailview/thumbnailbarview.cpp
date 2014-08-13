@@ -20,7 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "thumbnailbarview.moc"
+#include "thumbnailbarview.h"
 
 // Qt
 #include <QApplication>
@@ -30,7 +30,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QPainter>
 #include <QTimeLine>
 #include <QToolTip>
+
+#ifdef WINDOWS_PROXY_STYLE
 #include <QWindowsStyle>
+#endif
 
 // KDE
 #include <KDebug>
@@ -247,6 +250,9 @@ ThumbnailBarItemDelegate::~ThumbnailBarItemDelegate()
     delete d;
 }
 
+//this is disabled by David Edmundson as I can't figure out how to port it
+//I hope with breeze being the default we don't want to start making our own styles anyway
+#ifdef WINDOWS_PROXY_STYLE
 /**
  * This proxy style makes it possible to override the value returned by
  * styleHint() which leads to not-so-nice results with some styles.
@@ -330,6 +336,7 @@ public:
         }
     }
 };
+#endif// WINDOWS_PROXY_STYLE
 
 typedef int (QSize::*QSizeDimension)() const;
 
@@ -451,8 +458,10 @@ ThumbnailBarView::ThumbnailBarView(QWidget* parent)
     setObjectName(QLatin1String("thumbnailBarView"));
     setWrapping(true);
 
+    #ifdef WINDOWS_PROXY_STYLE
     d->mStyle = new ProxyStyle;
     setStyle(d->mStyle);
+    #endif
 }
 
 ThumbnailBarView::~ThumbnailBarView()

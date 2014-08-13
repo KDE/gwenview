@@ -17,15 +17,17 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
-#include "sorteddirmodel.moc"
+#include "sorteddirmodel.h"
 #include <config-gwenview.h>
 
 // Qt
+#include <QTimer>
 
 // KDE
 #include <KDebug>
 #include <KDateTime>
 #include <KDirLister>
+#include <QUrl>
 
 // Local
 #include <lib/archiveutils.h>
@@ -154,10 +156,10 @@ KFileItem SortedDirModel::itemForIndex(const QModelIndex& index) const
     return d->mSourceModel->itemForIndex(sourceIndex);
 }
 
-KUrl SortedDirModel::urlForIndex(const QModelIndex& index) const
+QUrl SortedDirModel::urlForIndex(const QModelIndex& index) const
 {
     KFileItem item = itemForIndex(index);
-    return item.isNull() ? KUrl() : item.url();
+    return item.isNull() ? QUrl() : item.url();
 }
 
 KFileItem SortedDirModel::itemForSourceIndex(const QModelIndex& sourceIndex) const
@@ -178,7 +180,7 @@ QModelIndex SortedDirModel::indexForItem(const KFileItem& item) const
     return mapFromSource(sourceIndex);
 }
 
-QModelIndex SortedDirModel::indexForUrl(const KUrl& url) const
+QModelIndex SortedDirModel::indexForUrl(const QUrl &url) const
 {
     if (!url.isValid()) {
         return QModelIndex();
@@ -270,8 +272,8 @@ bool SortedDirModel::lessThan(const QModelIndex& left, const QModelIndex& right)
         return KDirSortFilterProxyModel::lessThan(left, right);
     }
 
-    const KDateTime leftDate = TimeUtils::dateTimeForFileItem(leftItem);
-    const KDateTime rightDate = TimeUtils::dateTimeForFileItem(rightItem);
+    const QDateTime leftDate = TimeUtils::dateTimeForFileItem(leftItem);
+    const QDateTime rightDate = TimeUtils::dateTimeForFileItem(rightItem);
 
     return leftDate < rightDate;
 }

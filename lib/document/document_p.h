@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <document/documentjob.h>
 
 // KDE
-#include <KUrl>
+#include <QUrl>
 
 // Qt
 #include <QImage>
@@ -43,7 +43,7 @@ struct DocumentPrivate
 {
     Document* q;
     AbstractDocumentImpl* mImpl;
-    KUrl mUrl;
+    QUrl mUrl;
     bool mKeepRawData;
     QWeakPointer<DocumentJob> mCurrentJob;
     DocumentJobQueue mJobQueue;

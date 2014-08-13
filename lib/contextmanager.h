@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QObject>
 
 // KDE
-#include <KUrl>
+#include <QUrl>
 #include <KFileItem>
 
 class QItemSelectionModel;
@@ -51,13 +51,13 @@ public:
 
     ~ContextManager();
 
-    KUrl currentUrl() const;
+    QUrl currentUrl() const;
 
-    void setCurrentDirUrl(const KUrl&);
+    void setCurrentDirUrl(const QUrl&);
 
-    KUrl currentDirUrl() const;
+    QUrl currentDirUrl() const;
 
-    void setCurrentUrl(const KUrl& currentUrl);
+    void setCurrentUrl(const QUrl &currentUrl);
 
     KFileItemList selectedFileItemList() const;
 
@@ -67,13 +67,13 @@ public:
 
     bool currentUrlIsRasterImage() const;
 
-    KUrl urlToSelect() const;
+    QUrl urlToSelect() const;
 
-    void setUrlToSelect(const KUrl&);
+    void setUrlToSelect(const QUrl&);
 
 Q_SIGNALS:
-    void currentDirUrlChanged(const KUrl&);
-    void currentUrlChanged(const KUrl&);
+    void currentDirUrlChanged(const QUrl&);
+    void currentUrlChanged(const QUrl&);
     void selectionChanged();
     void selectionDataChanged();
 
@@ -85,7 +85,7 @@ private Q_SLOTS:
     void slotRowsAboutToBeRemoved(const QModelIndex& /*parent*/, int start, int end);
     void slotRowsInserted();
     void selectUrlToSelect();
-    void slotDirListerRedirection(const KUrl&);
+    void slotDirListerRedirection(const QUrl&);
 
 private:
     ContextManagerPrivate* const d;

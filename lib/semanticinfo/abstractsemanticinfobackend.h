@@ -31,7 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
-class KUrl;
+class QUrl;
 
 namespace Gwenview
 {
@@ -78,9 +78,9 @@ public:
 
     virtual void refreshAllTags() = 0;
 
-    virtual void storeSemanticInfo(const KUrl&, const SemanticInfo&) = 0;
+    virtual void storeSemanticInfo(const QUrl&, const SemanticInfo&) = 0;
 
-    virtual void retrieveSemanticInfo(const KUrl&) = 0;
+    virtual void retrieveSemanticInfo(const QUrl&) = 0;
 
     virtual QString labelForTag(const SemanticInfoTag&) const = 0;
 
@@ -91,7 +91,7 @@ public:
     virtual SemanticInfoTag tagForLabel(const QString&) = 0;
 
 Q_SIGNALS:
-    void semanticInfoRetrieved(const KUrl&, const SemanticInfo&);
+    void semanticInfoRetrieved(const QUrl&, const SemanticInfo&);
 
     /**
      * Emitted whenever a new tag is added to allTags()

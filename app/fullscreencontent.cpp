@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "fullscreencontent.moc"
+#include "fullscreencontent.h"
 
 // Qt
 #include <QAction>
@@ -40,6 +40,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KLocale>
 #include <KMenu>
 #include <KToolBar>
+#include <KIconLoader>
+#include <QAction>
 
 // Local
 #include "imagemetainfodialog.h"
@@ -131,7 +133,7 @@ struct FullScreenContentPrivate
     Document::Ptr mCurrentDocument;
     QPointer<ImageMetaInfoDialog> mImageMetaInfoDialog;
     QPointer<FullScreenConfigWidget> mConfigWidget;
-    KAction* mOptionsAction;
+    QAction * mOptionsAction;
 
     bool mFullScreenMode;
     bool mViewPageVisible;
@@ -147,9 +149,9 @@ struct FullScreenContentPrivate
         // menu should not be aligned to the right edge of the screen because
         // if the mode is changed to thumbnail-mode, we want the option button
         // to remain visible
-        mOptionsAction = new KAction(q);
+        mOptionsAction = new QAction(q);
         mOptionsAction->setPriority(QAction::LowPriority);
-        mOptionsAction->setIcon(KIcon("configure"));
+        mOptionsAction->setIcon(QIcon::fromTheme("configure"));
         mOptionsAction->setToolTip(i18nc("@info:tooltip", "Configure full screen mode"));
         QObject::connect(mOptionsAction, SIGNAL(triggered()), q, SLOT(showOptionsMenu()));
     }
@@ -321,7 +323,7 @@ ThumbnailBarView* FullScreenContent::thumbnailBar() const
     return d->mThumbnailBar;
 }
 
-void FullScreenContent::setCurrentUrl(const KUrl& url)
+void FullScreenContent::setCurrentUrl(const QUrl &url)
 {
     if (url.isEmpty()) {
         d->mCurrentDocument = Document::Ptr();
@@ -481,14 +483,14 @@ void FullScreenContent::showOptionsMenu()
     QPoint pos;
     QWidget* button = d->mOptionsAction->associatedWidgets().first();
     Q_ASSERT(button);
-    kWarning() << button << button->geometry();
+    qWarning() << button << button->geometry();
     if (QApplication::isRightToLeft()) {
         pos = button->mapToGlobal(button->rect().bottomLeft());
     } else {
         pos = button->mapToGlobal(button->rect().bottomRight());
         pos.rx() -= menu.sizeHint().width();
     }
-    kWarning() << pos;
+    qWarning() << pos;
     menu.exec(pos);
 }
 

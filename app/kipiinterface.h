@@ -47,11 +47,11 @@ public:
     KIPI::ImageCollection currentAlbum();
     KIPI::ImageCollection currentSelection();
     QList<KIPI::ImageCollection> allAlbums();
-    KIPI::ImageInfo info(const KUrl& url);
+    KIPI::ImageInfo info(const QUrl &url);
     int features() const;
-    virtual bool addImage(const KUrl&, QString& err);
-    virtual void delImage(const KUrl&);
-    virtual void refreshImages(const KUrl::List& urls);
+    virtual bool addImage(const QUrl&, QString& err);
+    virtual void delImage(const QUrl&);
+    virtual void refreshImages(const QList<QUrl>& urls);
 
     virtual KIPI::ImageCollectionSelector* imageCollectionSelector(QWidget *parent);
     virtual KIPI::UploadWidget* uploadWidget(QWidget *parent);
@@ -79,7 +79,7 @@ private:
 class ImageCollection : public KIPI::ImageCollectionShared
 {
 public:
-    ImageCollection(KUrl dirURL, const QString& name, const KUrl::List& images)
+    ImageCollection(QUrl dirURL, const QString& name, const QList<QUrl>& images)
         : KIPI::ImageCollectionShared()
         , mDirURL(dirURL)
         , mName(name)
@@ -91,13 +91,13 @@ public:
     QString comment()        {
         return QString();
     }
-    KUrl::List images()      {
+    QList<QUrl> images()      {
         return mImages;
     }
-    KUrl uploadRoot()        {
-        return KUrl("/");
+    QUrl uploadRoot()        {
+        return QUrl("/");
     }
-    KUrl uploadPath()        {
+    QUrl uploadPath()        {
         return mDirURL;
     }
     QString uploadRootName()
@@ -109,9 +109,9 @@ public:
     }
 
 private:
-    KUrl mDirURL;
+    QUrl mDirURL;
     QString mName;
-    KUrl::List mImages;
+    QList<QUrl> mImages;
 };
 
 } // namespace

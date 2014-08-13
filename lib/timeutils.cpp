@@ -23,10 +23,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QFile>
+#include <QDateTime>
 
 // KDE
-#include <KDateTime>
-#include <KDebug>
+#include <QDebug>
 #include <KFileItem>
 
 // Exiv2
@@ -64,12 +64,12 @@ static Exiv2::ExifData::const_iterator findDateTimeKey(const Exiv2::ExifData& ex
 
 struct CacheItem
 {
-    KDateTime fileMTime;
-    KDateTime realTime;
+    QDateTime fileMTime;
+    QDateTime realTime;
 
     void update(const KFileItem& fileItem)
     {
-        KDateTime time = fileItem.time(KFileItem::ModificationTime);
+        QDateTime time = fileItem.time(KFileItem::ModificationTime);
         if (fileMTime == time) {
             return;
         }
@@ -81,7 +81,7 @@ struct CacheItem
         }
     }
 
-    bool updateFromExif(const KUrl& url)
+    bool updateFromExif(const QUrl &url)
     {
         if (!UrlUtils::urlIsFastLocalFile(url)) {
             return false;
@@ -92,7 +92,7 @@ struct CacheItem
         {
             QFile file(path);
             if (!file.open(QIODevice::ReadOnly)) {
-                kWarning() << "Could not open" << path << "for reading";
+                qWarning() << "Could not open" << path << "for reading";
                 return false;
             }
             header = file.read(65536); // FIXME: Is this big enough?
@@ -109,7 +109,7 @@ struct CacheItem
             }
             Exiv2::ExifData::const_iterator it = findDateTimeKey(exifData);
             if (it == exifData.end()) {
-                kWarning() << "No date in exif header of" << path;
+                qWarning() << "No date in exif header of" << path;
                 return false;
             }
 
@@ -117,24 +117,24 @@ struct CacheItem
             stream << *it;
             QString value = QString::fromLocal8Bit(stream.str().c_str());
 
-            KDateTime dt = KDateTime::fromString(value, "%Y:%m:%d %H:%M:%S");
+            QDateTime dt = QDateTime::fromString(value, "%Y:%m:%d %H:%M:%S");
             if (!dt.isValid()) {
-                kWarning() << "Invalid date in exif header of" << path;
+                qWarning() << "Invalid date in exif header of" << path;
                 return false;
             }
 
             realTime = dt;
             return true;
         } catch (const Exiv2::Error& error) {
-            kWarning() << "Failed to read date from exif header of" << path << ". Error:" << error.what();
+            qWarning() << "Failed to read date from exif header of" << path << ". Error:" << error.what();
             return false;
         }
     }
 };
 
-typedef QHash<KUrl, CacheItem> Cache;
+typedef QHash<QUrl, CacheItem> Cache;
 
-KDateTime dateTimeForFileItem(const KFileItem& fileItem, CachePolicy cachePolicy)
+QDateTime dateTimeForFileItem(const KFileItem& fileItem, CachePolicy cachePolicy)
 {
     if (cachePolicy == SkipCache) {
         CacheItem item;
@@ -143,7 +143,7 @@ KDateTime dateTimeForFileItem(const KFileItem& fileItem, CachePolicy cachePolicy
     }
 
     static Cache cache;
-    const KUrl url = fileItem.targetUrl();
+    const QUrl url = fileItem.targetUrl();
 
     Cache::iterator it = cache.find(url);
     if (it == cache.end()) {

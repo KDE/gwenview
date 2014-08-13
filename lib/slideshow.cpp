@@ -17,7 +17,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
-#include "slideshow.moc"
+#include "slideshow.h"
 
 // libc
 #include <time.h>
@@ -31,8 +31,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // KDE
 #include <KConfig>
-#include <KDebug>
-#include <KIcon>
+#include <QDebug>
+#include <QIcon>
 #include <KLocale>
 
 // Local
@@ -46,7 +46,7 @@ namespace Gwenview
 #undef LOG
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
-#define LOG(x) kDebug() << x
+#define LOG(x) qDebug() << x
 #else
 #define LOG(x) ;
 #endif
@@ -82,16 +82,16 @@ struct SlideShowPrivate
 {
     QTimer* mTimer;
     State mState;
-    QVector<KUrl> mUrls;
-    QVector<KUrl> mShuffledUrls;
-    QVector<KUrl>::ConstIterator mStartIt;
-    KUrl mCurrentUrl;
-    KUrl mLastShuffledUrl;
+    QVector<QUrl> mUrls;
+    QVector<QUrl> mShuffledUrls;
+    QVector<QUrl>::ConstIterator mStartIt;
+    QUrl mCurrentUrl;
+    QUrl mLastShuffledUrl;
 
     QAction* mLoopAction;
     QAction* mRandomAction;
 
-    KUrl findNextUrl()
+    QUrl findNextUrl()
     {
         if (GwenviewConfig::random()) {
             return findNextRandomUrl();
@@ -100,10 +100,10 @@ struct SlideShowPrivate
         }
     }
 
-    KUrl findNextOrderedUrl()
+    QUrl findNextOrderedUrl()
     {
-        QVector<KUrl>::ConstIterator it = qFind(mUrls.constBegin(), mUrls.constEnd(), mCurrentUrl);
-        GV_RETURN_VALUE_IF_FAIL2(it != mUrls.constEnd(), KUrl(), "Current url not found in list.");
+        QVector<QUrl>::ConstIterator it = qFind(mUrls.constBegin(), mUrls.constEnd(), mCurrentUrl);
+        GV_RETURN_VALUE_IF_FAIL2(it != mUrls.constEnd(), QUrl(), "Current url not found in list.");
 
         ++it;
         if (GwenviewConfig::loop()) {
@@ -122,7 +122,7 @@ struct SlideShowPrivate
         if (it != mUrls.constEnd()) {
             return *it;
         } else {
-            return KUrl();
+            return QUrl();
         }
     }
 
@@ -139,17 +139,17 @@ struct SlideShowPrivate
         mLastShuffledUrl = mShuffledUrls.last();
     }
 
-    KUrl findNextRandomUrl()
+    QUrl findNextRandomUrl()
     {
         if (mShuffledUrls.empty()) {
             if (GwenviewConfig::loop()) {
                 initShuffledUrls();
             } else {
-                return KUrl();
+                return QUrl();
             }
         }
 
-        KUrl url = mShuffledUrls.last();
+        QUrl url = mShuffledUrls.last();
         mShuffledUrls.pop_back();
 
         return url;
@@ -216,14 +216,14 @@ QAction* SlideShow::randomAction() const
     return d->mRandomAction;
 }
 
-void SlideShow::start(const QList<KUrl>& urls)
+void SlideShow::start(const QList<QUrl>& urls)
 {
     d->mUrls.resize(urls.size());
     qCopy(urls.begin(), urls.end(), d->mUrls.begin());
 
     d->mStartIt = qFind(d->mUrls.constBegin(), d->mUrls.constEnd(), d->mCurrentUrl);
     if (d->mStartIt == d->mUrls.constEnd()) {
-        kWarning() << "Current url not found in list, aborting.\n";
+        qWarning() << "Current url not found in list, aborting.\n";
         return;
     }
 
@@ -262,7 +262,7 @@ void SlideShow::resumeAndGoToNextUrl()
 void SlideShow::goToNextUrl()
 {
     LOG("");
-    KUrl url = d->findNextUrl();
+    QUrl url = d->findNextUrl();
     LOG("url:" << url);
     if (!url.isValid()) {
         stop();
@@ -271,7 +271,7 @@ void SlideShow::goToNextUrl()
     goToUrl(url);
 }
 
-void SlideShow::setCurrentUrl(const KUrl& url)
+void SlideShow::setCurrentUrl(const QUrl &url)
 {
     LOG(url);
     if (d->mCurrentUrl == url) {

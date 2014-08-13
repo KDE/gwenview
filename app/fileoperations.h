@@ -21,7 +21,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #ifndef FILEOPERATIONS_H
 #define FILEOPERATIONS_H
 
-#include <KUrl>
+#include <QUrl>
 
 class QWidget;
 
@@ -31,14 +31,14 @@ namespace Gwenview
 namespace FileOperations
 {
 
-void copyTo(const KUrl::List& urlList, QWidget* parent);
-void moveTo(const KUrl::List& urlList, QWidget* parent);
-void linkTo(const KUrl::List& urlList, QWidget* parent);
-void trash(const KUrl::List& urlList, QWidget* parent);
-void del(const KUrl::List& urlList, QWidget* parent);
-void rename(const KUrl& url, QWidget* parent);
+void copyTo(const QList<QUrl>& urlList, QWidget* parent);
+void moveTo(const QList<QUrl>& urlList, QWidget* parent);
+void linkTo(const QList<QUrl>& urlList, QWidget* parent);
+void trash(const QList<QUrl>& urlList, QWidget* parent);
+void del(const QList<QUrl>& urlList, QWidget* parent);
+void rename(const QUrl &url, QWidget* parent);
 
-void showMenuForDroppedUrls(QWidget* parent, const KUrl::List& urlList, const KUrl& destUrl);
+void showMenuForDroppedUrls(QWidget* parent, const QList<QUrl>& urlList, const QUrl &destUrl);
 
 } // namespace
 

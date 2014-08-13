@@ -33,7 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/document/document.h>
 
 class QPropertyAnimation;
-class KUrl;
+class QUrl;
 
 namespace Gwenview
 {
@@ -86,9 +86,9 @@ public:
 
     Document::Ptr document() const;
 
-    KUrl url() const;
+    QUrl url() const;
 
-    void openUrl(const KUrl&, const Setup&);
+    void openUrl(const QUrl&, const Setup&);
 
     Setup setup() const;
 
@@ -207,7 +207,7 @@ private Q_SLOTS:
 
     void slotZoomChanged(qreal);
 
-    void slotBusyChanged(const KUrl&, bool);
+    void slotBusyChanged(const QUrl&, bool);
 
     void emitHudTrashClicked();
     void emitHudDeselectClicked();

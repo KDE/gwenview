@@ -34,7 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class KDirLister;
 class KFileItem;
-class KUrl;
+class QUrl;
 
 namespace Gwenview
 {
@@ -84,10 +84,10 @@ public:
      */
     void setDirLister(KDirLister*);
     KFileItem itemForIndex(const QModelIndex& index) const;
-    KUrl urlForIndex(const QModelIndex& index) const;
+    QUrl urlForIndex(const QModelIndex& index) const;
     KFileItem itemForSourceIndex(const QModelIndex& sourceIndex) const;
     QModelIndex indexForItem(const KFileItem& item) const;
-    QModelIndex indexForUrl(const KUrl& url) const;
+    QModelIndex indexForUrl(const QUrl &url) const;
 
     void setKindFilter(MimeTypeUtils::Kinds);
     MimeTypeUtils::Kinds kindFilter() const;

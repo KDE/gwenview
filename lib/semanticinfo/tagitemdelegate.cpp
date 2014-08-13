@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include <tagitemdelegate.moc>
+#include "tagitemdelegate.h"
 
 // Qt
 #include <QAbstractItemView>
@@ -50,7 +50,7 @@ TagItemDelegate::TagItemDelegate(QAbstractItemView* view)
     mButtonSize = qMax(sz.width(), sz.height());
 }
 
-QList<QWidget*> TagItemDelegate::createItemWidgets() const
+QList<QWidget*> TagItemDelegate::createItemWidgets(const QModelIndex &index) const
 {
 
 #define initButton(x) \
@@ -62,13 +62,13 @@ QList<QWidget*> TagItemDelegate::createItemWidgets() const
 
     QToolButton* assignToAllButton = new QToolButton;
     initButton(assignToAllButton);
-    assignToAllButton->setIcon(KIcon("fill-color")); /* FIXME: Probably not the appropriate icon */
+    assignToAllButton->setIcon(QIcon::fromTheme("fill-color")); /* FIXME: Probably not the appropriate icon */
     assignToAllButton->setToolTip(i18nc("@info:tooltip", "Assign this tag to all selected images"));
     connect(assignToAllButton, SIGNAL(clicked()), SLOT(slotAssignToAllButtonClicked()));
 
     QToolButton* removeButton = new QToolButton;
     initButton(removeButton);
-    removeButton->setIcon(KIcon("list-remove"));
+    removeButton->setIcon(QIcon::fromTheme("list-remove"));
     connect(removeButton, SIGNAL(clicked()), SLOT(slotRemoveButtonClicked()));
 
 #undef initButton

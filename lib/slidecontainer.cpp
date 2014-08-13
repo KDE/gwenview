@@ -18,10 +18,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
 // Self
-#include "slidecontainer.moc"
+#include "slidecontainer.h"
 
 // KDE
-#include <KDebug>
+#include <QDebug>
 
 // Qt
 #include <QEvent>

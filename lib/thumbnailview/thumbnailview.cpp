@@ -17,7 +17,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
-#include "thumbnailview.moc"
+#include "thumbnailview.h"
 
 // Std
 #include <math.h>
@@ -33,14 +33,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QTimeLine>
 #include <QTimer>
 #include <QToolTip>
+#include <QDrag>
+#include <QMimeData>
 
 // KDE
 #include <KDebug>
 #include <KDirModel>
-#include <KIcon>
+#include <QIcon>
 #include <KIconLoader>
 #include <KGlobalSettings>
 #include <KPixmapSequence>
+#include <KUrlMimeData>
+#include <QDateTime>
 
 // Local
 #include "abstractdocumentinfoprovider.h"
@@ -79,15 +83,15 @@ static KFileItem fileItemForIndex(const QModelIndex& index)
     return qvariant_cast<KFileItem>(data);
 }
 
-static KUrl urlForIndex(const QModelIndex& index)
+static QUrl urlForIndex(const QModelIndex& index)
 {
     KFileItem item = fileItemForIndex(index);
-    return item.isNull() ? KUrl() : item.url();
+    return item.isNull() ? QUrl() : item.url();
 }
 
 struct Thumbnail
 {
-    Thumbnail(const QPersistentModelIndex& index_, const KDateTime& mtime)
+    Thumbnail(const QPersistentModelIndex& index_, const QDateTime& mtime)
         : mIndex(index_)
         , mModificationTime(mtime)
         , mFileSize(0)
@@ -127,7 +131,7 @@ struct Thumbnail
         return groupSize == qMax(mFullSize.width(), mFullSize.height());
     }
 
-    void prepareForRefresh(const KDateTime& mtime)
+    void prepareForRefresh(const QDateTime& mtime)
     {
         mModificationTime = mtime;
         mFileSize = 0;
@@ -140,7 +144,7 @@ struct Thumbnail
     }
 
     QPersistentModelIndex mIndex;
-    KDateTime mModificationTime;
+    QDateTime mModificationTime;
     /// The pix loaded from .thumbnails/{large,normal}
     QPixmap mGroupPix;
     /// Scaled version of mGroupPix, adjusted to ThumbnailView::thumbnailSize
@@ -160,7 +164,7 @@ struct Thumbnail
 };
 
 typedef QHash<QUrl, Thumbnail> ThumbnailForUrl;
-typedef QQueue<KUrl> UrlQueue;
+typedef QQueue<QUrl> UrlQueue;
 typedef QSet<QPersistentModelIndex> PersistentModelIndexSet;
 
 struct ThumbnailViewPrivate
@@ -210,12 +214,12 @@ struct ThumbnailViewPrivate
     {
         Q_ASSERT(mDocumentInfoProvider);
         KFileItem item = fileItemForIndex(index);
-        KUrl url = item.url();
+        QUrl url = item.url();
         ThumbnailGroup::Enum group = ThumbnailGroup::fromPixelSize(mThumbnailSize.width());
         QPixmap pix;
         QSize fullSize;
         mDocumentInfoProvider->thumbnailForDocument(url, group, &pix, &fullSize);
-        mThumbnailForUrl[url] = Thumbnail(QPersistentModelIndex(index), KDateTime::currentLocalDateTime());
+        mThumbnailForUrl[url] = Thumbnail(QPersistentModelIndex(index), QDateTime::currentDateTime());
         q->setThumbnail(item, pix, fullSize, 0);
     }
 
@@ -247,7 +251,7 @@ struct ThumbnailViewPrivate
         const int thumbCount = qMin(indexes.count(), int(DragPixmapGenerator::MaxCount));
         QList<QPixmap> lst;
         for (int row = 0; row < thumbCount; ++row) {
-            const KUrl url = urlForIndex(indexes[row]);
+            const QUrl url = urlForIndex(indexes[row]);
             lst << mThumbnailForUrl.value(url).mAdjustedPix;
         }
         DragPixmapGenerator::DragPixmap dragPixmap = DragPixmapGenerator::generate(lst, indexes.count());
@@ -525,7 +529,7 @@ void ThumbnailView::dataChanged(const QModelIndex& topLeft, const QModelIndex& b
             // result this method will also be called for views which are not
             // currently visible, and do not yet have a thumbnail for the
             // modified url.
-            KDateTime mtime = item.time(KFileItem::ModificationTime);
+            QDateTime mtime = item.time(KFileItem::ModificationTime);
             if (it->mModificationTime != mtime || it->mFileSize != item.size()) {
                 // dataChanged() is called when the file changes but also when
                 // the model fetched additional data such as semantic info. To
@@ -587,7 +591,7 @@ void ThumbnailView::setBrokenThumbnail(const KFileItem& item)
         // support for video thumbnails so we show the mimetype icon instead of
         // a broken image icon
         ThumbnailGroup::Enum group = ThumbnailGroup::fromPixelSize(d->mThumbnailSize.height());
-        QPixmap pix = item.pixmap(ThumbnailGroup::pixelSize(group));
+        QPixmap pix = KIconLoader::global()->loadMimeTypeIcon(item.iconName(), KIconLoader::Desktop, d->mThumbnailSize.height());
         thumbnail.initAsIcon(pix);
     } else if (kind == MimeTypeUtils::KIND_DIR) {
         // Special case for folders because ThumbnailProvider does not return a
@@ -611,7 +615,7 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index, QSize* fullSi
         }
         return QPixmap();
     }
-    KUrl url = item.url();
+    QUrl url = item.url();
 
     // Find or create Thumbnail instance
     ThumbnailForUrl::Iterator it = d->mThumbnailForUrl.find(url);
@@ -626,7 +630,8 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index, QSize* fullSi
     if (kind == MimeTypeUtils::KIND_ARCHIVE || kind == MimeTypeUtils::KIND_DIR) {
         int groupSize = ThumbnailGroup::pixelSize(ThumbnailGroup::fromPixelSize(d->mThumbnailSize.height()));
         if (thumbnail.mGroupPix.isNull() || thumbnail.mGroupPix.height() < groupSize) {
-            QPixmap pix = item.pixmap(groupSize);
+            QPixmap pix = KIconLoader::global()->loadMimeTypeIcon(item.iconName(), KIconLoader::Desktop, d->mThumbnailSize.height());
+
             thumbnail.initAsIcon(pix);
             if (kind == MimeTypeUtils::KIND_ARCHIVE) {
                 // No thumbnails for archives
@@ -674,7 +679,7 @@ bool ThumbnailView::isModified(const QModelIndex& index) const
     if (!d->mDocumentInfoProvider) {
         return false;
     }
-    KUrl url = urlForIndex(index);
+    QUrl url = urlForIndex(index);
     return d->mDocumentInfoProvider->isModified(url);
 }
 
@@ -683,7 +688,7 @@ bool ThumbnailView::isBusy(const QModelIndex& index) const
     if (!d->mDocumentInfoProvider) {
         return false;
     }
-    KUrl url = urlForIndex(index);
+    QUrl url = urlForIndex(index);
     return d->mDocumentInfoProvider->isBusy(url);
 }
 
@@ -716,7 +721,7 @@ void ThumbnailView::dragMoveEvent(QDragMoveEvent* event)
 
 void ThumbnailView::dropEvent(QDropEvent* event)
 {
-    const KUrl::List urlList = KUrl::List::fromMimeData(event->mimeData());
+    const QList<QUrl> urlList = KUrlMimeData::urlsFromMimeData(event->mimeData());
     if (urlList.isEmpty()) {
         return;
     }
@@ -725,7 +730,7 @@ void ThumbnailView::dropEvent(QDropEvent* event)
     if (destIndex.isValid()) {
         KFileItem item = fileItemForIndex(destIndex);
         if (item.isDir()) {
-            KUrl destUrl = item.url();
+            QUrl destUrl = item.url();
             d->mThumbnailViewHelper->showMenuForUrlDroppedOnDir(this, urlList, destUrl);
             return;
         }
@@ -881,7 +886,7 @@ void ThumbnailView::generateThumbnailsForItems()
 void ThumbnailView::updateThumbnail(const QModelIndex& index)
 {
     KFileItem item = fileItemForIndex(index);
-    KUrl url = item.url();
+    QUrl url = item.url();
     if (d->mDocumentInfoProvider && d->mDocumentInfoProvider->isModified(url)) {
         d->updateThumbnailForModifiedDocument(index);
     } else {
@@ -932,7 +937,7 @@ void ThumbnailView::smoothNextThumbnail()
         return;
     }
 
-    KUrl url = d->mSmoothThumbnailQueue.dequeue();
+    QUrl url = d->mSmoothThumbnailQueue.dequeue();
     ThumbnailForUrl::Iterator it = d->mThumbnailForUrl.find(url);
     GV_RETURN_IF_FAIL2(it != d->mThumbnailForUrl.end(), url << "not in mThumbnailForUrl.");
 
@@ -950,7 +955,7 @@ void ThumbnailView::smoothNextThumbnail()
 
 void ThumbnailView::reloadThumbnail(const QModelIndex& index)
 {
-    KUrl url = urlForIndex(index);
+    QUrl url = urlForIndex(index);
     if (!url.isValid()) {
         kWarning() << "Invalid url for index" << index;
         return;

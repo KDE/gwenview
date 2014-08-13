@@ -27,14 +27,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Qt
 
-class KAboutData;
+class K4AboutData;
 class QByteArray;
 class KLocalizedString;
 
 namespace Gwenview
 {
 
-GWENVIEWLIB_EXPORT KAboutData* createAboutData(const QByteArray& appName, const QByteArray& catalogName, const KLocalizedString& programName);
+GWENVIEWLIB_EXPORT K4AboutData* createAboutData(const QByteArray& appName, const QByteArray& catalogName, const KLocalizedString& programName);
 
 } // namespace
 

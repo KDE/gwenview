@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include <thumbnailgenerator.moc>
+#include "thumbnailgenerator.h"
 
 // Local
 #include "imageutils.h"
@@ -29,7 +29,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 #include <KDebug>
+#ifdef KDCRAW_FOUND
 #include <libkdcraw/kdcraw.h>
+#endif
 
 // Qt
 #include <QImageReader>
@@ -72,6 +74,7 @@ bool ThumbnailContext::load(const QString &pixPath, int pixelSize)
     QBuffer buffer;
     int previewRatio = 1;
 
+#ifdef KDCRAW_FOUND
     // raw images deserve special treatment
     if (KDcrawIface::KDcraw::rawFilesList().contains(QString(formatHint))) {
         // use KDCraw to extract the preview
@@ -100,6 +103,9 @@ bool ThumbnailContext::load(const QString &pixPath, int pixelSize)
         reader.setDevice(&buffer);
         reader.setFormat(formatHint);
     } else {
+#else
+    {
+#endif
         if (!reader.canRead()) {
             reader.setDecideFormatFromContent(true);
             // Set filename again, otherwise QImageReader won't restart from scratch

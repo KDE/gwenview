@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 */
 // Self
-#include "thumbnailviewhelper.moc"
+#include "thumbnailviewhelper.h"
 
 #include <config-gwenview.h>
 
@@ -29,7 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // KDE
 #include <KActionCollection>
-#include <KDebug>
+#include <QDebug>
 #include <KLocale>
 #include <KMenu>
 
@@ -43,13 +43,13 @@ namespace Gwenview
 struct ThumbnailViewHelperPrivate
 {
     KActionCollection* mActionCollection;
-    KUrl mCurrentDirUrl;
+    QUrl mCurrentDirUrl;
 
     void addActionToMenu(KMenu& popup, const char* name)
     {
         QAction* action = mActionCollection->action(name);
         if (!action) {
-            kWarning() << "Unknown action" << name;
+            qWarning() << "Unknown action" << name;
             return;
         }
         if (action->isEnabled()) {
@@ -70,7 +70,7 @@ ThumbnailViewHelper::~ThumbnailViewHelper()
     delete d;
 }
 
-void ThumbnailViewHelper::setCurrentDirUrl(const KUrl& url)
+void ThumbnailViewHelper::setCurrentDirUrl(const QUrl &url)
 {
     d->mCurrentDirUrl = url;
 }
@@ -78,7 +78,7 @@ void ThumbnailViewHelper::setCurrentDirUrl(const KUrl& url)
 void ThumbnailViewHelper::showContextMenu(QWidget* parent)
 {
     KMenu popup(parent);
-    if (d->mCurrentDirUrl.protocol() == "trash") {
+    if (d->mCurrentDirUrl.scheme() == "trash") {
         d->addActionToMenu(popup, "file_restore");
         d->addActionToMenu(popup, "file_delete");
         popup.addSeparator();
@@ -104,12 +104,12 @@ void ThumbnailViewHelper::showContextMenu(QWidget* parent)
     popup.exec(QCursor::pos());
 }
 
-void ThumbnailViewHelper::showMenuForUrlDroppedOnViewport(QWidget* parent, const KUrl::List& lst)
+void ThumbnailViewHelper::showMenuForUrlDroppedOnViewport(QWidget* parent, const QList<QUrl>& lst)
 {
     showMenuForUrlDroppedOnDir(parent, lst, d->mCurrentDirUrl);
 }
 
-void ThumbnailViewHelper::showMenuForUrlDroppedOnDir(QWidget* parent, const KUrl::List& urlList, const KUrl& destUrl)
+void ThumbnailViewHelper::showMenuForUrlDroppedOnDir(QWidget* parent, const QList<QUrl>& urlList, const QUrl &destUrl)
 {
     FileOperations::showMenuForDroppedUrls(parent, urlList, destUrl);
 }

@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 */
 // Self
-#include "fullscreenbar.moc"
+#include "fullscreenbar.h"
 
 // Qt
 #include <QAction>
@@ -34,7 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QToolButton>
 
 // KDE
-#include <KDebug>
+#include <QDebug>
 #include <KLocale>
 #include <KGlobal>
 
@@ -258,7 +258,7 @@ bool FullScreenBar::eventFilter(QObject* object, QEvent* event)
         QToolButton* button = qobject_cast<QToolButton*>(object);
         if (button && !button->actions().isEmpty()) {
             QAction* action = button->actions().first();
-            QString toolTip = KGlobal::locale()->removeAcceleratorMarker(action->toolTip());
+            QString toolTip = KLocalizedString::removeAcceleratorMarker(action->toolTip());
             // Filtering message requested by translators (scripting).
             button->setToolTip(i18nc("@info:tooltip of custom toolbar button", "%1", toolTip));
         }

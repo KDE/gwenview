@@ -35,7 +35,7 @@ class QModelIndex;
 class QPixmap;
 class QSize;
 
-class KUrl;
+class QUrl;
 
 namespace Gwenview
 {
@@ -50,11 +50,11 @@ public:
      * Returns true if the document is currently busy (loading, saving,
      * rotating...)
      */
-    virtual bool isBusy(const KUrl& url) = 0;
+    virtual bool isBusy(const QUrl &url) = 0;
 
-    virtual bool isModified(const KUrl& url) = 0;
+    virtual bool isModified(const QUrl &url) = 0;
 
-    virtual void thumbnailForDocument(const KUrl& url, ThumbnailGroup::Enum, QPixmap* outPix, QSize* outFullSize) const = 0;
+    virtual void thumbnailForDocument(const QUrl &url, ThumbnailGroup::Enum, QPixmap* outPix, QSize* outFullSize) const = 0;
 
 Q_SIGNALS:
     void busyStateChanged(const QModelIndex&, bool);

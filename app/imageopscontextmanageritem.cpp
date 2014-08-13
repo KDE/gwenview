@@ -19,14 +19,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 */
 // Self
-#include "imageopscontextmanageritem.moc"
+#include "imageopscontextmanageritem.h"
 
 // Qt
 #include <QApplication>
 
 // KDE
-#include <KAction>
-#include <KDebug>
+#include <QAction>
+#include <QDebug>
 #include <KInputDialog>
 #include <KLocale>
 #include <KMessageBox>
@@ -56,7 +56,7 @@ namespace Gwenview
 #undef LOG
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
-#define LOG(x) kDebug() << x
+#define LOG(x) qDebug() << x
 #else
 #define LOG(x) ;
 #endif
@@ -67,14 +67,14 @@ struct ImageOpsContextManagerItem::Private
     MainWindow* mMainWindow;
     SideBarGroup* mGroup;
 
-    KAction* mRotateLeftAction;
-    KAction* mRotateRightAction;
-    KAction* mMirrorAction;
-    KAction* mFlipAction;
-    KAction* mResizeAction;
-    KAction* mCropAction;
-    KAction* mRedEyeReductionAction;
-    QList<KAction*> mActionList;
+    QAction * mRotateLeftAction;
+    QAction * mRotateRightAction;
+    QAction * mMirrorAction;
+    QAction * mFlipAction;
+    QAction * mResizeAction;
+    QAction * mCropAction;
+    QAction * mRedEyeReductionAction;
+    QList<QAction *> mActionList;
 
     void setupActions()
     {
@@ -84,37 +84,37 @@ struct ImageOpsContextManagerItem::Private
         mRotateLeftAction->setPriority(QAction::LowPriority);
         mRotateLeftAction->setText(i18n("Rotate Left"));
         mRotateLeftAction->setToolTip(i18nc("@info:tooltip", "Rotate image to the left"));
-        mRotateLeftAction->setIcon(KIcon("object-rotate-left"));
+        mRotateLeftAction->setIcon(QIcon::fromTheme("object-rotate-left"));
         mRotateLeftAction->setShortcut(Qt::CTRL + Qt::Key_L);
 
         mRotateRightAction = edit->addAction("rotate_right", q, SLOT(rotateRight()));
         mRotateRightAction->setPriority(QAction::LowPriority);
         mRotateRightAction->setText(i18n("Rotate Right"));
         mRotateRightAction->setToolTip(i18nc("@info:tooltip", "Rotate image to the right"));
-        mRotateRightAction->setIcon(KIcon("object-rotate-right"));
+        mRotateRightAction->setIcon(QIcon::fromTheme("object-rotate-right"));
         mRotateRightAction->setShortcut(Qt::CTRL + Qt::Key_R);
 
         mMirrorAction = edit->addAction("mirror", q, SLOT(mirror()));
         mMirrorAction->setText(i18n("Mirror"));
-        mMirrorAction->setIcon(KIcon("object-flip-horizontal"));
+        mMirrorAction->setIcon(QIcon::fromTheme("object-flip-horizontal"));
 
         mFlipAction = edit->addAction("flip", q, SLOT(flip()));
         mFlipAction->setText(i18n("Flip"));
-        mFlipAction->setIcon(KIcon("object-flip-vertical"));
+        mFlipAction->setIcon(QIcon::fromTheme("object-flip-vertical"));
 
         mResizeAction = edit->addAction("resize", q, SLOT(resizeImage()));
         mResizeAction->setText(i18n("Resize"));
-        mResizeAction->setIcon(KIcon("transform-scale"));
+        mResizeAction->setIcon(QIcon::fromTheme("transform-scale"));
         mResizeAction->setShortcut(Qt::SHIFT + Qt::Key_R);
 
         mCropAction = edit->addAction("crop", q, SLOT(crop()));
         mCropAction->setText(i18n("Crop"));
-        mCropAction->setIcon(KIcon("transform-crop-and-resize"));
+        mCropAction->setIcon(QIcon::fromTheme("transform-crop-and-resize"));
         mCropAction->setShortcut(Qt::SHIFT + Qt::Key_C);
 
         mRedEyeReductionAction = edit->addAction("red_eye_reduction", q, SLOT(startRedEyeReduction()));
         mRedEyeReductionAction->setText(i18n("Red Eye Reduction"));
-        //mRedEyeReductionAction->setIcon(KIcon("transform-crop-and-resize"));
+        //mRedEyeReductionAction->setIcon(QIcon::fromTheme("transform-crop-and-resize"));
 
         mActionList
                 << mRotateLeftAction
@@ -129,7 +129,7 @@ struct ImageOpsContextManagerItem::Private
 
     bool ensureEditable()
     {
-        KUrl url = q->contextManager()->currentUrl();
+        QUrl url = q->contextManager()->currentUrl();
         Document::Ptr doc = DocumentFactory::instance()->load(url);
         doc->startLoadingFullImage();
         doc->waitUntilLoaded();
@@ -176,7 +176,7 @@ void ImageOpsContextManagerItem::updateSideBarContent()
     }
 
     d->mGroup->clear();
-    Q_FOREACH(KAction * action, d->mActionList) {
+    Q_FOREACH(QAction * action, d->mActionList) {
         if (action->isEnabled() && action->priority() != QAction::LowPriority) {
             d->mGroup->addAction(action);
         }
@@ -254,7 +254,7 @@ void ImageOpsContextManagerItem::crop()
     }
     RasterImageView* imageView = d->mMainWindow->viewMainPage()->imageView();
     if (!imageView) {
-        kError() << "No ImageView available!";
+        qCritical() << "No ImageView available!";
         return;
     }
     CropTool* tool = new CropTool(imageView);
@@ -274,7 +274,7 @@ void ImageOpsContextManagerItem::startRedEyeReduction()
     }
     RasterImageView* view = d->mMainWindow->viewMainPage()->imageView();
     if (!view) {
-        kError() << "No RasterImageView available!";
+        qCritical() << "No RasterImageView available!";
         return;
     }
     RedEyeReductionTool* tool = new RedEyeReductionTool(view);
@@ -290,7 +290,7 @@ void ImageOpsContextManagerItem::startRedEyeReduction()
 void ImageOpsContextManagerItem::applyImageOperation(AbstractImageOperation* op)
 {
     // For now, we only support operations on one image
-    KUrl url = contextManager()->currentUrl();
+    QUrl url = contextManager()->currentUrl();
 
     Document::Ptr doc = DocumentFactory::instance()->load(url);
     op->applyToDocument(doc);
@@ -300,7 +300,7 @@ void ImageOpsContextManagerItem::restoreDefaultImageViewTool()
 {
     RasterImageView* imageView = d->mMainWindow->viewMainPage()->imageView();
     if (!imageView) {
-        kError() << "No RasterImageView available!";
+        qCritical() << "No RasterImageView available!";
         return;
     }
 

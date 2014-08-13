@@ -21,7 +21,7 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
-#include "thumbnailprovider.moc"
+#include "thumbnailprovider.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -43,6 +43,9 @@
 #include <KIO/PreviewJob>
 #include <KStandardDirs>
 #include <KTemporaryFile>
+#include <KJobWidgets>
+#include <KFileMetaInfo>
+#include <kmd5.h>
 
 // Local
 #include "mimetypeutils.h"
@@ -64,11 +67,11 @@ namespace Gwenview
 
 K_GLOBAL_STATIC(ThumbnailWriter, sThumbnailWriter)
 
-static QString generateOriginalUri(const KUrl& url_)
+static QString generateOriginalUri(const QUrl &url_)
 {
-    KUrl url = url_;
+    QUrl url = url_;
     // Don't include the password if any
-    url.setPass(QString::null); //krazy:exclude=nullstrassign for old broken gcc
+    url.setPassword(QString::null); //krazy:exclude=nullstrassign for old broken gcc
     return url.url();
 }
 
@@ -117,7 +120,7 @@ QString ThumbnailProvider::thumbnailBaseDir(ThumbnailGroup::Enum group)
     return dir;
 }
 
-void ThumbnailProvider::deleteImageThumbnail(const KUrl& url)
+void ThumbnailProvider::deleteImageThumbnail(const QUrl &url)
 {
     QString uri = generateOriginalUri(url);
     QFile::remove(generateThumbnailPath(uri, ThumbnailGroup::Normal));
@@ -137,7 +140,7 @@ static void moveThumbnailHelper(const QString& oldUri, const QString& newUri, Th
     QFile::remove(QFile::encodeName(oldPath));
 }
 
-void ThumbnailProvider::moveThumbnail(const KUrl& oldUrl, const KUrl& newUrl)
+void ThumbnailProvider::moveThumbnail(const QUrl &oldUrl, const QUrl& newUrl)
 {
     QString oldUri = generateOriginalUri(oldUrl);
     QString newUri = generateOriginalUri(newUrl);
@@ -305,8 +308,7 @@ void ThumbnailProvider::determineNextIcon()
 
     // First, stat the orig file
     mState = STATE_STATORIG;
-    mCurrentUrl = mCurrentItem.url();
-    mCurrentUrl.cleanPath();
+    mCurrentUrl = QDir::cleanPath(mCurrentItem.url().path());
     mOriginalFileSize = mCurrentItem.size();
 
     // Do direct stat instead of using KIO if the file is local (faster)
@@ -321,7 +323,7 @@ void ThumbnailProvider::determineNextIcon()
     }
     if (!directStatOk) {
         KIO::Job* job = KIO::stat(mCurrentUrl, KIO::HideProgressInfo);
-        job->ui()->setWindow(KApplication::kApplication()->activeWindow());
+        KJobWidgets::setWindow(job, KApplication::kApplication()->activeWindow());
         LOG("KIO::stat orig" << mCurrentUrl.url());
         addSubjob(job);
     }
@@ -427,7 +429,7 @@ void ThumbnailProvider::checkThumbnail()
 
     // If we are in the thumbnail dir, just load the file
     if (mCurrentUrl.isLocalFile()
-            && mCurrentUrl.directory().startsWith(thumbnailBaseDir())) {
+            && mCurrentUrl.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path().startsWith(thumbnailBaseDir())) {
         QImage image(mCurrentUrl.toLocalFile());
         emitThumbnailLoaded(image, image.size());
         determineNextIcon();
@@ -492,18 +494,18 @@ void ThumbnailProvider::checkThumbnail()
             KTemporaryFile tempFile;
             tempFile.setAutoRemove(false);
             if (!tempFile.open()) {
-                kWarning() << "Couldn't create temp file to download " << mCurrentUrl.prettyUrl();
+                kWarning() << "Couldn't create temp file to download " << mCurrentUrl.toDisplayString();
                 emitThumbnailLoadingFailed();
                 determineNextIcon();
                 return;
             }
             mTempPath = tempFile.fileName();
 
-            KUrl url;
+            QUrl url;
             url.setPath(mTempPath);
             KIO::Job* job = KIO::file_copy(mCurrentUrl, url, -1, KIO::Overwrite | KIO::HideProgressInfo);
-            job->ui()->setWindow(KApplication::kApplication()->activeWindow());
-            LOG("Download remote file" << mCurrentUrl.prettyUrl() << "to" << url.pathOrUrl());
+            KJobWidgets::setWindow(job, KApplication::kApplication()->activeWindow());
+            LOG("Download remote file" << mCurrentUrl.toDisplayString() << "to" << url.pathOrUrl());
             addSubjob(job);
         }
     } else {

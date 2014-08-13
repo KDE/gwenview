@@ -31,7 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/document/documentjob.h>
 
 class QByteArray;
-class KUrl;
+class QUrl;
 
 namespace Gwenview
 {
@@ -43,12 +43,12 @@ class GWENVIEWLIB_EXPORT SaveJob : public DocumentJob
 {
     Q_OBJECT
 public:
-    SaveJob(DocumentLoadedImpl* impl, const KUrl& url, const QByteArray& format);
+    SaveJob(DocumentLoadedImpl* impl, const QUrl &url, const QByteArray& format);
     ~SaveJob();
     void saveInternal();
 
-    KUrl oldUrl() const;
-    KUrl newUrl() const;
+    QUrl oldUrl() const;
+    QUrl newUrl() const;
 
 protected Q_SLOTS:
     virtual void doStart();

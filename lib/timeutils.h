@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/gwenviewlib_export.h>
 
 class KFileItem;
-class KDateTime;
+class QDateTime;
 
 namespace Gwenview
 {
@@ -39,7 +39,7 @@ enum CachePolicy
     UseCache
 };
 
-GWENVIEWLIB_EXPORT KDateTime dateTimeForFileItem(const KFileItem&, CachePolicy cachePolicy = UseCache);
+QDateTime GWENVIEWLIB_EXPORT dateTimeForFileItem(const KFileItem& fileItem, Gwenview::TimeUtils::CachePolicy cachePolicy = UseCache);
 
 } // namespace
 

@@ -22,7 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "fileoperations.h"
 
 // KDE
-#include <KDebug>
+#include <QDebug>
 #include <KFileDialog>
 #include <KFileItem>
 #include <KMenu>
@@ -34,11 +34,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KIO/JobUiDelegate>
 #include <KIO/NetAccess>
 #include <KLocale>
+#include <KJobWidgets>
 #include <konq_operations.h>
 
 // Local
 #include <lib/document/documentfactory.h>
 #include <lib/thumbnailprovider/thumbnailprovider.h>
+#include <KJobWidgets/KJobWidgets>
 
 namespace Gwenview
 {
@@ -46,26 +48,26 @@ namespace Gwenview
 namespace FileOperations
 {
 
-static void copyMoveOrLink(KonqOperations::Operation operation, const KUrl::List& urlList, QWidget* parent)
+static void copyMoveOrLink(KonqOperations::Operation operation, const QList<QUrl>& urlList, QWidget* parent)
 {
     Q_ASSERT(urlList.count() > 0);
 
     KFileDialog dialog(
-        KUrl("kfiledialog:///<copyMoveOrLink>"),
+        QUrl("kfiledialog:///<copyMoveOrLink>"),
         QString() /* filter */,
         parent);
     dialog.setOperationMode(KFileDialog::Saving);
     switch (operation) {
     case KonqOperations::COPY:
-        dialog.setCaption(i18nc("@title:window", "Copy To"));
+        dialog.setWindowTitle(i18nc("@title:window", "Copy To"));
         dialog.okButton()->setText(i18nc("@action:button", "Copy"));
         break;
     case KonqOperations::MOVE:
-        dialog.setCaption(i18nc("@title:window", "Move To"));
+        dialog.setWindowTitle(i18nc("@title:window", "Move To"));
         dialog.okButton()->setText(i18nc("@action:button", "Move"));
         break;
     case KonqOperations::LINK:
-        dialog.setCaption(i18nc("@title:window", "Link To"));
+        dialog.setWindowTitle(i18nc("@title:window", "Link To"));
         dialog.okButton()->setText(i18nc("@action:button", "Link"));
         break;
     default:
@@ -81,11 +83,11 @@ static void copyMoveOrLink(KonqOperations::Operation operation, const KUrl::List
         return;
     }
 
-    KUrl destUrl = dialog.selectedUrl();
+    QUrl destUrl = dialog.selectedUrl();
     KonqOperations::copy(parent, operation, urlList, destUrl);
 }
 
-static void delOrTrash(KonqOperations::Operation operation, const KUrl::List& urlList, QWidget* parent)
+static void delOrTrash(KonqOperations::Operation operation, const QList<QUrl>& urlList, QWidget* parent)
 {
     Q_ASSERT(urlList.count() > 0);
 
@@ -108,67 +110,67 @@ static void delOrTrash(KonqOperations::Operation operation, const KUrl::List& ur
         break;
 
     default:
-        kWarning() << "Unknown operation" << operation;
+        qWarning() << "Unknown operation" << operation;
         return;
     }
     Q_ASSERT(job);
-    job->ui()->setWindow(parent);
+    KJobWidgets::setWindow(job,parent);
 
-    Q_FOREACH(const KUrl & url, urlList) {
+    Q_FOREACH(const QUrl &url, urlList) {
         DocumentFactory::instance()->forget(url);
     }
 }
 
-void copyTo(const KUrl::List& urlList, QWidget* parent)
+void copyTo(const QList<QUrl>& urlList, QWidget* parent)
 {
     copyMoveOrLink(KonqOperations::COPY, urlList, parent);
 }
 
-void moveTo(const KUrl::List& urlList, QWidget* parent)
+void moveTo(const QList<QUrl>& urlList, QWidget* parent)
 {
     copyMoveOrLink(KonqOperations::MOVE, urlList, parent);
 }
 
-void linkTo(const KUrl::List& urlList, QWidget* parent)
+void linkTo(const QList<QUrl>& urlList, QWidget* parent)
 {
     copyMoveOrLink(KonqOperations::LINK, urlList, parent);
 }
 
-void trash(const KUrl::List& urlList, QWidget* parent)
+void trash(const QList<QUrl>& urlList, QWidget* parent)
 {
     delOrTrash(KonqOperations::TRASH, urlList, parent);
 }
 
-void del(const KUrl::List& urlList, QWidget* parent)
+void del(const QList<QUrl>& urlList, QWidget* parent)
 {
     delOrTrash(KonqOperations::DEL, urlList, parent);
 }
 
-void showMenuForDroppedUrls(QWidget* parent, const KUrl::List& urlList, const KUrl& destUrl)
+void showMenuForDroppedUrls(QWidget* parent, const QList<QUrl>& urlList, const QUrl &destUrl)
 {
     if (urlList.isEmpty()) {
-        kWarning() << "urlList is empty!";
+        qWarning() << "urlList is empty!";
         return;
     }
 
     if (!destUrl.isValid()) {
-        kWarning() << "destUrl is not valid!";
+        qWarning() << "destUrl is not valid!";
         return;
     }
 
     KMenu menu(parent);
     QAction* moveAction = menu.addAction(
-                              KIcon("go-jump"),
+                              QIcon::fromTheme("go-jump"),
                               i18n("Move Here"));
     QAction* copyAction = menu.addAction(
-                              KIcon("edit-copy"),
+                              QIcon::fromTheme("edit-copy"),
                               i18n("Copy Here"));
     QAction* linkAction = menu.addAction(
-                              KIcon("edit-link"),
+                              QIcon::fromTheme("edit-link"),
                               i18n("Link Here"));
     menu.addSeparator();
     menu.addAction(
-        KIcon("process-stop"),
+        QIcon::fromTheme("process-stop"),
         i18n("Cancel"));
 
     QAction* action = menu.exec(QCursor::pos());
@@ -184,10 +186,10 @@ void showMenuForDroppedUrls(QWidget* parent, const KUrl::List& urlList, const KU
         return;
     }
     Q_ASSERT(job);
-    job->ui()->setWindow(parent);
+    KJobWidgets::setWindow(job, parent);
 }
 
-void rename(const KUrl& oldUrl, QWidget* parent)
+void rename(const QUrl &oldUrl, QWidget* parent)
 {
     QString name = KInputDialog::getText(
                        i18nc("@title:window", "Rename") /* caption */,
@@ -200,8 +202,9 @@ void rename(const KUrl& oldUrl, QWidget* parent)
         return;
     }
 
-    KUrl newUrl = oldUrl;
-    newUrl.setFileName(name);
+    QUrl newUrl = oldUrl;
+    newUrl = newUrl.adjusted(QUrl::RemoveFilename);
+    newUrl.setPath(newUrl.path() + name);
     KIO::SimpleJob* job = KIO::rename(oldUrl, newUrl, KIO::HideProgressInfo);
     if (!KIO::NetAccess::synchronousRun(job, parent)) {
         job->ui()->showErrorMessage();

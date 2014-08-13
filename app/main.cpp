@@ -25,16 +25,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QScopedPointer>
 
 // KDE
-#include <KAboutData>
+#include <K4AboutData>
 #include <KActionCollection>
 #include <KApplication>
 #include <KCmdLineArgs>
-#include <KDebug>
+#include <QDebug>
 #include <KIO/CopyJob>
 #include <KLocale>
 #include <KMessageBox>
 #include <KTempDir>
-#include <KUrl>
+#include <QUrl>
 
 // Local
 #include <lib/about.h>
@@ -60,8 +60,8 @@ public:
         if (args->count() > 1) {
             // Createa a temp dir containing links to url args
             mMultipleUrlsDir.reset(new KTempDir);
-            mUrl = KUrl::fromPath(mMultipleUrlsDir->name());
-            KUrl::List list;
+            mUrl = QUrl::fromLocalFile(mMultipleUrlsDir->name());
+            QList<QUrl> list;
             for (int pos = 0; pos < args->count(); ++pos) {
                 list << args->url(pos);
             }
@@ -101,7 +101,7 @@ public:
     }
 
 private:
-    KUrl mUrl;
+    QUrl mUrl;
     bool mFullScreen;
     bool mSlideShow;
     std::auto_ptr<KTempDir> mMultipleUrlsDir;
@@ -110,7 +110,7 @@ private:
 
 int main(int argc, char *argv[])
 {
-    QScopedPointer<KAboutData> aboutData(
+    QScopedPointer<K4AboutData> aboutData(
         Gwenview::createAboutData(
             "gwenview",       /* appname */
             0,                /* catalogName */
@@ -127,7 +127,8 @@ int main(int argc, char *argv[])
     KCmdLineArgs::addCmdLineOptions(options);
 
     KApplication app;
-    Gwenview::ImageFormats::registerPlugins();
+    //KF5 TODO
+//     Gwenview::ImageFormats::registerPlugins();
 
     // startHelper must live for the whole life of the application
     StartHelper startHelper;

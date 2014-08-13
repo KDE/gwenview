@@ -17,7 +17,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
-#include "documentfactory.moc"
+#include "documentfactory.h"
 
 // Qt
 #include <QByteArray>
@@ -27,7 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // KDE
 #include <KDebug>
-#include <KUrl>
+#include <QUrl>
 
 // Local
 #include <gvdebug.h>
@@ -75,7 +75,7 @@ struct DocumentInfo
  * altering DocumentInfo::mDocument refcount, since we rely on it to garbage
  * collect documents.
  */
-typedef QMap<KUrl, DocumentInfo*> DocumentMap;
+typedef QMap<QUrl, DocumentInfo*> DocumentMap;
 
 struct DocumentFactoryPrivate
 {
@@ -90,7 +90,7 @@ struct DocumentFactoryPrivate
         // Build a map of all unreferenced images. We use a MultiMap because in
         // rare cases documents may get accessed at the same millisecond.
         // See https://bugs.kde.org/show_bug.cgi?id=296401
-        typedef QMultiMap<QDateTime, KUrl> UnreferencedImages;
+        typedef QMultiMap<QDateTime, QUrl> UnreferencedImages;
         UnreferencedImages unreferencedImages;
 
         DocumentMap::Iterator it = map.begin(), end = map.end();
@@ -108,7 +108,7 @@ struct DocumentFactoryPrivate
             unreferencedImages.count() > MAX_UNREFERENCED_IMAGES;
             unreferencedIt = unreferencedImages.erase(unreferencedIt))
         {
-            KUrl url = unreferencedIt.value();
+            QUrl url = unreferencedIt.value();
             LOG("Collecting" << url);
             it = map.find(url);
             Q_ASSERT(it != map.end());
@@ -134,7 +134,7 @@ struct DocumentFactoryPrivate
         }
     }
 
-    QList<KUrl> mModifiedDocumentList;
+    QList<QUrl> mModifiedDocumentList;
 };
 
 DocumentFactory::DocumentFactory()
@@ -154,13 +154,13 @@ DocumentFactory* DocumentFactory::instance()
     return &factory;
 }
 
-Document::Ptr DocumentFactory::getCachedDocument(const KUrl& url) const
+Document::Ptr DocumentFactory::getCachedDocument(const QUrl &url) const
 {
     const DocumentInfo* info = d->mDocumentMap.value(url);
     return info ? info->mDocument : Document::Ptr();
 }
 
-Document::Ptr DocumentFactory::load(const KUrl& url)
+Document::Ptr DocumentFactory::load(const QUrl &url)
 {
     GV_RETURN_VALUE_IF_FAIL(!url.isEmpty(), Document::Ptr());
     DocumentInfo* info = 0;
@@ -179,14 +179,14 @@ Document::Ptr DocumentFactory::load(const KUrl& url)
     // Start loading the document
     LOG(url.fileName() << "loading");
     Document* doc = new Document(url);
-    connect(doc, SIGNAL(loaded(KUrl)),
-            SLOT(slotLoaded(KUrl)));
-    connect(doc, SIGNAL(saved(KUrl,KUrl)),
-            SLOT(slotSaved(KUrl,KUrl)));
-    connect(doc, SIGNAL(modified(KUrl)),
-            SLOT(slotModified(KUrl)));
-    connect(doc, SIGNAL(busyChanged(KUrl,bool)),
-            SLOT(slotBusyChanged(KUrl,bool)));
+    connect(doc, SIGNAL(loaded(QUrl)),
+            SLOT(slotLoaded(QUrl)));
+    connect(doc, SIGNAL(saved(QUrl,QUrl)),
+            SLOT(slotSaved(QUrl,QUrl)));
+    connect(doc, SIGNAL(modified(QUrl)),
+            SLOT(slotModified(QUrl)));
+    connect(doc, SIGNAL(busyChanged(QUrl,bool)),
+            SLOT(slotBusyChanged(QUrl,bool)));
 
     // Create DocumentInfo instance
     info = new DocumentInfo;
@@ -202,12 +202,12 @@ Document::Ptr DocumentFactory::load(const KUrl& url)
     return docPtr;
 }
 
-QList<KUrl> DocumentFactory::modifiedDocumentList() const
+QList<QUrl> DocumentFactory::modifiedDocumentList() const
 {
     return d->mModifiedDocumentList;
 }
 
-bool DocumentFactory::hasUrl(const KUrl& url) const
+bool DocumentFactory::hasUrl(const QUrl &url) const
 {
     return d->mDocumentMap.contains(url);
 }
@@ -219,7 +219,7 @@ void DocumentFactory::clearCache()
     d->mModifiedDocumentList.clear();
 }
 
-void DocumentFactory::slotLoaded(const KUrl& url)
+void DocumentFactory::slotLoaded(const QUrl &url)
 {
     if (d->mModifiedDocumentList.contains(url)) {
         d->mModifiedDocumentList.removeAll(url);
@@ -228,7 +228,7 @@ void DocumentFactory::slotLoaded(const KUrl& url)
     }
 }
 
-void DocumentFactory::slotSaved(const KUrl& oldUrl, const KUrl& newUrl)
+void DocumentFactory::slotSaved(const QUrl &oldUrl, const QUrl& newUrl)
 {
     bool oldIsNew = oldUrl == newUrl;
     bool oldUrlWasModified = d->mModifiedDocumentList.removeOne(oldUrl);
@@ -250,7 +250,7 @@ void DocumentFactory::slotSaved(const KUrl& oldUrl, const KUrl& newUrl)
     }
 }
 
-void DocumentFactory::slotModified(const KUrl& url)
+void DocumentFactory::slotModified(const QUrl &url)
 {
     if (!d->mModifiedDocumentList.contains(url)) {
         d->mModifiedDocumentList << url;
@@ -259,7 +259,7 @@ void DocumentFactory::slotModified(const KUrl& url)
     emit documentChanged(url);
 }
 
-void DocumentFactory::slotBusyChanged(const KUrl& url, bool busy)
+void DocumentFactory::slotBusyChanged(const QUrl &url, bool busy)
 {
     emit documentBusyStateChanged(url, busy);
 }
@@ -269,7 +269,7 @@ QUndoGroup* DocumentFactory::undoGroup()
     return &d->mUndoGroup;
 }
 
-void DocumentFactory::forget(const KUrl& url)
+void DocumentFactory::forget(const QUrl &url)
 {
     DocumentInfo* info = d->mDocumentMap.take(url);
     if (!info) {

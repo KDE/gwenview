@@ -27,12 +27,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QFileInfo>
 
 // KDE
-#include <KDebug>
+#include <QDebug>
 #include <kde_file.h>
 #include <KIO/NetAccess>
 #include <kmountpoint.h>
 #include <KProtocolManager>
-#include <KUrl>
+#include <QUrl>
 
 // Local
 #include <archiveutils.h>
@@ -44,7 +44,7 @@ namespace Gwenview
 namespace UrlUtils
 {
 
-bool urlIsFastLocalFile(const KUrl& url)
+bool urlIsFastLocalFile(const QUrl &url)
 {
     if (!url.isLocalFile()) {
         return false;
@@ -61,9 +61,9 @@ bool urlIsFastLocalFile(const KUrl& url)
     return !mountPoint->probablySlow();
 }
 
-bool urlIsDirectory(const KUrl& url)
+bool urlIsDirectory(const QUrl &url)
 {
-    if (url.fileName(KUrl::ObeyTrailingSlash).isEmpty()) {
+    if (url.fileName().isEmpty()) {
         return true; // file:/somewhere/<nothing here>
     }
 
@@ -89,7 +89,7 @@ bool urlIsDirectory(const KUrl& url)
     return false;
 }
 
-KUrl fixUserEnteredUrl(const KUrl& in)
+QUrl fixUserEnteredUrl(const QUrl &in)
 {
     if (!in.isRelative() && !in.isLocalFile()) {
         return in;
@@ -98,14 +98,14 @@ KUrl fixUserEnteredUrl(const KUrl& in)
     QFileInfo info(in.toLocalFile());
     QString path = info.absoluteFilePath();
 
-    KUrl out = KUrl::fromPath(path);
+    QUrl out = QUrl::fromLocalFile(path);
     QString mimeType = MimeTypeUtils::urlMimeType(out);
 
     const QString protocol = ArchiveUtils::protocolForMimeType(mimeType);
 
     if (!protocol.isEmpty()) {
-        KUrl tmp = out;
-        tmp.setProtocol(protocol);
+        QUrl tmp = out;
+        tmp.setScheme(protocol);
         if (KProtocolManager::supportsListing(tmp)) {
             out = tmp;
         }

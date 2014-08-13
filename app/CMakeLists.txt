@@ -1,13 +1,10 @@
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/..
-    ${EXIV2_INCLUDE_DIR}
-    ${LIBKONQ_INCLUDE_DIR}
-    ${KACTIVITIES_INCLUDE_DIRS}
     )
 
-if (KIPI_FOUND)
-    include_directories(${KIPI_INCLUDE_DIR})
-endif()
+# if (KIPI_FOUND)
+#     include_directories(${KIPI_INCLUDE_DIR})
+# endif()
 
 # For lib/gwenviewconfig.h and config-gwenview.h
 include_directories(
@@ -56,7 +53,7 @@ if (KIPI_FOUND)
         )
 endif()
 
-kde4_add_ui_files(gwenview_SRCS
+qt5_wrap_ui(gwenview_SRCS
     advancedconfigpage.ui
     fullscreenconfigwidget.ui
     generalconfigpage.ui
@@ -67,22 +64,21 @@ kde4_add_ui_files(gwenview_SRCS
     )
 
 if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
-    kde4_add_ui_files(gwenview_SRCS
+    qt5_wrap_ui(gwenview_SRCS
         semanticinfosidebaritem.ui
         )
 endif()
 
 kde4_add_app_icon(gwenview_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../icons/hi*-apps-gwenview.png")
 
-kde4_add_executable(gwenview ${gwenview_SRCS})
+add_executable(gwenview ${gwenview_SRCS})
 
 target_link_libraries(gwenview
-    ${KDE4_KFILE_LIBS}
+    KF5::KDELibs4Support
+    KF5::ItemModels
+    KF5::Konq
+    KF5::Activities
     gwenviewlib
-    ${KDE4_KIO_LIBS}
-    ${LIBKONQ_LIBRARY}
-    ${QT_QTCORE_LIBRARY}
-    ${KACTIVITIES_LIBRARY}
     )
 
 target_link_libraries(gwenview LINK_INTERFACE_LIBRARIES ${KDE4_KIO_LIBS} ${QT_QTCORE_LIBRARY})

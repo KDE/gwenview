@@ -57,7 +57,7 @@ public:
 
     virtual Document::LoadingState loadingState() const = 0;
 
-    virtual DocumentJob* save(const KUrl&, const QByteArray& /*format*/)
+    virtual DocumentJob* save(const QUrl&, const QByteArray& /*format*/)
     {
         return 0;
     }

@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "previewitemdelegate.moc"
+#include "previewitemdelegate.h"
 #include <config-gwenview.h>
 
 // Qt
@@ -33,6 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QPointer>
 #include <QPropertyAnimation>
 #include <QSequentialAnimationGroup>
+#include <QUrl>
 
 // KDE
 #include <KDebug>
@@ -40,7 +41,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KGlobalSettings>
 #include <KLineEdit>
 #include <KLocale>
-#include <KUrl>
+#include <QDateTime>
+#include <KIconLoader>
+#include <KGlobal>
+
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 #include <kratingpainter.h>
 #endif
@@ -99,7 +103,7 @@ static KFileItem fileItemForIndex(const QModelIndex& index)
     return qvariant_cast<KFileItem>(data);
 }
 
-static KUrl urlForIndex(const QModelIndex& index)
+static QUrl urlForIndex(const QModelIndex& index)
 {
     KFileItem item = fileItemForIndex(index);
     return item.url();
@@ -400,7 +404,7 @@ struct PreviewItemDelegatePrivate
         const bool isDirOrArchive = ArchiveUtils::fileItemIsDirOrArchive(fileItem);
         if (mDetails & PreviewItemDelegate::DateDetail) {
             if (!ArchiveUtils::fileItemIsDirOrArchive(fileItem)) {
-                const KDateTime dt = TimeUtils::dateTimeForFileItem(fileItem);
+                const QDateTime dt = TimeUtils::dateTimeForFileItem(fileItem);
                 const QString text = KGlobal::locale()->formatDateTime(dt);
                 elided |= isTextElided(text);
                 textList << text;
@@ -792,7 +796,7 @@ void PreviewItemDelegate::paint(QPainter * painter, const QStyleOptionViewItem &
     }
 
     if (!isDirOrArchive && (d->mDetails & PreviewItemDelegate::DateDetail)) {
-        const KDateTime dt = TimeUtils::dateTimeForFileItem(fileItem);
+        const QDateTime dt = TimeUtils::dateTimeForFileItem(fileItem);
         d->drawText(painter, textRect, fgColor, KGlobal::locale()->formatDateTime(dt));
         textRect.moveTop(textRect.bottom());
     }

@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "svgviewadapter.moc"
+#include "svgviewadapter.h"
 
 // Qt
 #include <QCursor>
@@ -54,7 +54,7 @@ void SvgImageView::loadFromDocument()
     GV_RETURN_IF_FAIL(doc);
 
     if (doc->loadingState() < Document::Loaded) {
-        connect(doc.data(), SIGNAL(loaded(KUrl)),
+        connect(doc.data(), SIGNAL(loaded(QUrl)),
             SLOT(finishLoadFromDocument()));
     } else {
         QMetaObject::invokeMethod(this, "finishLoadFromDocument", Qt::QueuedConnection);
