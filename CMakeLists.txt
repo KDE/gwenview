@@ -19,7 +19,6 @@ include(ECMGenerateHeaders)
 include(GenerateExportHeader)
 include(FeatureSummary)
 
-
 #KF5TODO
 # KDE4_NO_ENABLE_FINAL(gwenview)
 
@@ -54,31 +53,28 @@ find_package(KF5Konq CONFIG REQUIRED)
 
 ## Dependencies
 find_package(JPEG)
-#KF5 TODO port to set_package_properties
-# macro_log_feature(JPEG_FOUND "libjpeg" "JPEG image manipulation support" "http://libjpeg.sourceforge.net/" TRUE)
+set_package_properties(JPEG PROPERTIES URL "http://libjpeg.sourceforge.net/" DESCRIPTION "JPEG image manipulation support" TYPE REQUIRED)
 
 find_package(PNG)
-# macro_log_feature(PNG_FOUND "libpng" "PNG image manipulation support" "http://www.libpng.org" TRUE)
+set_package_properties(PNG PROPERTIES URL "http://www.libpng.org" DESCRIPTION "PNG image manipulation support" TYPE REQUIRED)
 
 find_package(Exiv2)
-# macro_log_feature(EXIV2_FOUND "Exiv2" "Image metadata support" "http://www.exiv2.org" TRUE "0.19")
+set_package_properties(EXIV2 PROPERTIES URL "http://www.exiv2.org" DESCRIPTION "image metadata support" TYPE REQUIRED)
 
 # macro_optional_find_package(Kipi)
-# macro_log_feature(KIPI_FOUND "libkipi" "Provides various image manipulation and export features" "http://www.kipi-plugins.org" FALSE)
+# set_package_properties(Kipi PROPERTIES URL"http://www.kipi-plugins.org" DESCRIPTION "Provides various image manipulation and export features" TYPE OPTIONAL)
 
 find_package(LCMS2)
-# macro_log_feature(LCMS2_FOUND "LittleCMS" "Color management engine" "http://www.littlecms.com" TRUE "2.0")
+set_package_properties(LCMS2 PROPERTIES URL "http://www.littlecms.com" DESCRIPTION "Color management engine" TYPE REQUIRED)
 
 if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
     # We need Baloo for all backends but "None"
     find_package(KF5Baloo)
-#     macro_log_feature(Baloo_FOUND "Baloo Core Libraries" "Desktop-wide semantic information support" "https://projects.kde.org/projects/kde/kdelibs/baloo" TRUE)
+    set_package_properties(KF5Baloo PROPERTIES URL "https://projects.kde.org/projects/kde/kdelibs/baloo" DESCRIPTION "Desktop-wide semantic information support" TYPE OPTIONAL)
 endif()
 
-# macro_log_feature(LIBKONQ_FOUND "libkonq" "Standard file management features" "http://www.kde.org" TRUE)
-
 find_package(Kdcraw 2.4.2)
-# macro_log_feature(KDCRAW_FOUND "libkdcraw" "KDE Dcraw library" "http://www.kde.org" TRUE "2.4.2")
+set_package_properties(KDCRAW_FOUND PROPERTIES URL "http://www.kde.org" DESCRIPTION "KDE Dcraw library" TYPE OPTIONAL)
 
 ## dirs to build
 add_subdirectory(lib)
