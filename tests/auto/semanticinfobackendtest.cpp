@@ -53,18 +53,18 @@ namespace Gwenview
 SemanticInfoBackEndClient::SemanticInfoBackEndClient(AbstractSemanticInfoBackEnd* backEnd)
 : mBackEnd(backEnd)
 {
-    connect(backEnd, SIGNAL(semanticInfoRetrieved(KUrl,SemanticInfo)),
-            SLOT(slotSemanticInfoRetrieved(KUrl,SemanticInfo)));
+    connect(backEnd, SIGNAL(semanticInfoRetrieved(QUrl,SemanticInfo)),
+            SLOT(slotSemanticInfoRetrieved(QUrl,SemanticInfo)));
 }
 
-void SemanticInfoBackEndClient::slotSemanticInfoRetrieved(const KUrl& url, const SemanticInfo& semanticInfo)
+void SemanticInfoBackEndClient::slotSemanticInfoRetrieved(const QUrl &url, const SemanticInfo& semanticInfo)
 {
     mSemanticInfoForUrl[url] = semanticInfo;
 }
 
 void SemanticInfoBackEndTest::initTestCase()
 {
-    qRegisterMetaType<KUrl>("KUrl");
+    qRegisterMetaType<QUrl>("QUrl");
     qRegisterMetaType<QString>("SemanticInfoTag");
 }
 
@@ -92,11 +92,11 @@ void SemanticInfoBackEndTest::testRating()
     temp.setSuffix(".metadatabackendtest");
     QVERIFY(temp.open());
 
-    KUrl url;
+    QUrl url;
     url.setPath(temp.fileName());
 
     SemanticInfoBackEndClient client(mBackEnd);
-    QSignalSpy spy(mBackEnd, SIGNAL(semanticInfoRetrieved(KUrl,SemanticInfo)));
+    QSignalSpy spy(mBackEnd, SIGNAL(semanticInfoRetrieved(QUrl,SemanticInfo)));
     mBackEnd->retrieveSemanticInfo(url);
     QVERIFY(waitForSignal(spy));
 

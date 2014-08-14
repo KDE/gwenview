@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // KDE
 #include <KTempDir>
-#include <KUrl>
+#include <QUrl>
 
 class ImporterTest : public QObject
 {
@@ -47,7 +47,7 @@ private Q_SLOTS:
 
 private:
     std::auto_ptr<KTempDir> mTempDir;
-    KUrl::List mDocumentList;
+    QUrl::List mDocumentList;
 };
 
 #endif /* IMPORTERTEST_H */

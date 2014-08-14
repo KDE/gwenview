@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // KDE
 #include <KTempDir>
-#include <KUrl>
+#include <QUrl>
 
 class PlaceTreeModelTest : public QObject
 {
@@ -39,7 +39,7 @@ private Q_SLOTS:
     void testListUrl1();
 
 private:
-    KUrl mUrl1, mUrl2;
+    QUrl mUrl1, mUrl2;
     QStringList mUrl1Dirs;
     KTempDir mTempDir;
 };

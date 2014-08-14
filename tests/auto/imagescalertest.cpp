@@ -36,7 +36,7 @@ using namespace Gwenview;
 void ImageScalerTest::testScaleFullImage()
 {
     const qreal zoom = 2;
-    KUrl url = urlForTestFile("test.png");
+    QUrl url = urlForTestFile("test.png");
     Document::Ptr doc = DocumentFactory::instance()->load(url);
 
     // Wait for meta info because we need the document size

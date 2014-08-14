@@ -51,7 +51,7 @@ void TimeUtilsTest::testBasic_data()
     NEW_ROW("date/exif-datetimeoriginal.jpg", KDateTime::fromString("2003-03-10T17:45:21"));
     NEW_ROW("date/exif-datetime-only.jpg", KDateTime::fromString("2003-03-25T02:02:21"));
 
-    KUrl url = urlForTestFile("test.png");
+    QUrl url = urlForTestFile("test.png");
     KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
     NEW_ROW("test.png", item.time(KFileItem::ModificationTime));
 }
@@ -61,7 +61,7 @@ void TimeUtilsTest::testBasic()
     QFETCH(QString, fileName);
     QFETCH(KDateTime, expectedDateTime);
     KDateTime dateTime;
-    KUrl url = urlForTestFile(fileName);
+    QUrl url = urlForTestFile(fileName);
     KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
 
     dateTime = TimeUtils::dateTimeForFileItem(item);
@@ -75,7 +75,7 @@ void TimeUtilsTest::testCache()
 {
     KTemporaryFile tempFile;
     QVERIFY(tempFile.open());
-    KUrl url = KUrl::fromLocalFile(tempFile.fileName());
+    QUrl url = QUrl::fromLocalFile(tempFile.fileName());
     KFileItem item1(KFileItem::Unknown, KFileItem::Unknown, url);
     KDateTime dateTime1 = TimeUtils::dateTimeForFileItem(item1);
     QCOMPARE(dateTime1, item1.time(KFileItem::ModificationTime));

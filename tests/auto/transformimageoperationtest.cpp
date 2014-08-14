@@ -39,7 +39,7 @@ using namespace Gwenview;
 
 void TransformImageOperationTest::initTestCase()
 {
-    qRegisterMetaType<KUrl>("KUrl");
+    qRegisterMetaType<QUrl>("QUrl");
 }
 
 void TransformImageOperationTest::init()
@@ -49,7 +49,7 @@ void TransformImageOperationTest::init()
 
 void TransformImageOperationTest::testRotate90()
 {
-    KUrl url = urlForTestFile("test.png");
+    QUrl url = urlForTestFile("test.png");
     QImage image;
 
     bool ok = image.load(url.toLocalFile());

@@ -34,17 +34,17 @@ using namespace Gwenview;
 
 void UrlUtilsTest::testFixUserEnteredUrl()
 {
-    QFETCH(KUrl, in);
-    QFETCH(KUrl, expected);
-    KUrl out = UrlUtils::fixUserEnteredUrl(in);
+    QFETCH(QUrl, in);
+    QFETCH(QUrl, expected);
+    QUrl out = UrlUtils::fixUserEnteredUrl(in);
     QCOMPARE(out.url(), expected.url());
 }
 
-#define NEW_ROW(in, expected) QTest::newRow(QString(in).toLocal8Bit().data()) << KUrl(in) << KUrl(expected)
+#define NEW_ROW(in, expected) QTest::newRow(QString(in).toLocal8Bit().data()) << QUrl(in) << QUrl(expected)
 void UrlUtilsTest::testFixUserEnteredUrl_data()
 {
-    QTest::addColumn<KUrl>("in");
-    QTest::addColumn<KUrl>("expected");
+    QTest::addColumn<QUrl>("in");
+    QTest::addColumn<QUrl>("expected");
 
     QString pwd = QDir::currentPath();
 

@@ -63,7 +63,7 @@ static bool waitUntilJobIsDone(DocumentJob* job)
 
 void DocumentTest::initTestCase()
 {
-    qRegisterMetaType<KUrl>("KUrl");
+    qRegisterMetaType<QUrl>("QUrl");
 }
 
 void DocumentTest::init()
@@ -82,7 +82,7 @@ void DocumentTest::testLoad()
 
     MimeTypeUtils::Kind expectedKind = MimeTypeUtils::Kind(expectedKindInt);
 
-    KUrl url = urlForTestFile(fileName);
+    QUrl url = urlForTestFile(fileName);
 
     // testing RAW loading. For raw, QImage directly won't work -> load it using KDCRaw
     QByteArray mFormatHint = url.fileName().section('.', -1).toAscii().toLower();
@@ -174,7 +174,7 @@ void DocumentTest::testLoad_data()
 
 void DocumentTest::testLoadTwoPasses()
 {
-    KUrl url = urlForTestFile("test.png");
+    QUrl url = urlForTestFile("test.png");
     QImage image;
     bool ok = image.load(url.toLocalFile());
     QVERIFY2(ok, "Could not load 'test.png'");
@@ -189,7 +189,7 @@ void DocumentTest::testLoadTwoPasses()
 
 void DocumentTest::testLoadEmpty()
 {
-    KUrl url = urlForTestFile("empty.png");
+    QUrl url = urlForTestFile("empty.png");
     Document::Ptr doc = DocumentFactory::instance()->load(url);
     while (doc->loadingState() <= Document::KindDetermined) {
         QTest::qWait(100);
@@ -212,15 +212,15 @@ void DocumentTest::testLoadDownSampled()
     // Note: for now we only support down sampling on jpeg, do not use test.png
     // here
     QFETCH(QString, fileName);
-    KUrl url = urlForTestFile(fileName);
+    QUrl url = urlForTestFile(fileName);
     QImage image;
     bool ok = image.load(url.toLocalFile());
     QVERIFY2(ok, "Could not load test image");
     Document::Ptr doc = DocumentFactory::instance()->load(url);
 
     QSignalSpy downSampledImageReadySpy(doc.data(), SIGNAL(downSampledImageReady()));
-    QSignalSpy loadingFailedSpy(doc.data(), SIGNAL(loadingFailed(KUrl)));
-    QSignalSpy loadedSpy(doc.data(), SIGNAL(loaded(KUrl)));
+    QSignalSpy loadingFailedSpy(doc.data(), SIGNAL(loadingFailed(QUrl)));
+    QSignalSpy loadedSpy(doc.data(), SIGNAL(loaded(QUrl)));
     bool ready = doc->prepareDownSampledImageForZoom(0.2);
     QVERIFY2(!ready, "There should not be a down sampled image at this point");
 
@@ -243,14 +243,14 @@ void DocumentTest::testLoadDownSampled()
  */
 void DocumentTest::testLoadDownSampledPng()
 {
-    KUrl url = urlForTestFile("test.png");
+    QUrl url = urlForTestFile("test.png");
     QImage image;
     bool ok = image.load(url.toLocalFile());
     QVERIFY2(ok, "Could not load test image");
     Document::Ptr doc = DocumentFactory::instance()->load(url);
 
     LoadingStateSpy stateSpy(doc);
-    connect(doc.data(), SIGNAL(loaded(KUrl)), &stateSpy, SLOT(readState()));
+    connect(doc.data(), SIGNAL(loaded(QUrl)), &stateSpy, SLOT(readState()));
 
     bool ready = doc->prepareDownSampledImageForZoom(0.2);
     QVERIFY2(!ready, "There should not be a down sampled image at this point");
@@ -263,11 +263,12 @@ void DocumentTest::testLoadDownSampledPng()
 
 void DocumentTest::testLoadRemote()
 {
-    KUrl url = setUpRemoteTestDir("test.png");
+    QUrl url = setUpRemoteTestDir("test.png");
     if (!url.isValid()) {
         return;
     }
-    url.addPath("test.png");
+    url = url.adjusted(QUrl::StripTrailingSlash);
+    url.setPath(url.path() + '/' + "test.png");
 
     QVERIFY2(KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, 0), "test url not found");
 
@@ -281,7 +282,7 @@ void DocumentTest::testLoadRemote()
 
 void DocumentTest::testLoadAnimated()
 {
-    KUrl srcUrl = urlForTestFile("40frames.gif");
+    QUrl srcUrl = urlForTestFile("40frames.gif");
     Document::Ptr doc = DocumentFactory::instance()->load(srcUrl);
     QSignalSpy spy(doc.data(), SIGNAL(imageRectUpdated(QRect)));
     doc->startLoadingFullImage();
@@ -312,7 +313,7 @@ void DocumentTest::testLoadAnimated()
 
 void DocumentTest::testPrepareDownSampledAfterFailure()
 {
-    KUrl url = urlForTestFile("empty.png");
+    QUrl url = urlForTestFile("empty.png");
     Document::Ptr doc = DocumentFactory::instance()->load(url);
 
     doc->startLoadingFullImage();
@@ -325,17 +326,18 @@ void DocumentTest::testPrepareDownSampledAfterFailure()
 
 void DocumentTest::testSaveRemote()
 {
-    KUrl dstUrl = setUpRemoteTestDir();
+    QUrl dstUrl = setUpRemoteTestDir();
     if (!dstUrl.isValid()) {
         return;
     }
 
-    KUrl srcUrl = urlForTestFile("test.png");
+    QUrl srcUrl = urlForTestFile("test.png");
     Document::Ptr doc = DocumentFactory::instance()->load(srcUrl);
     doc->startLoadingFullImage();
     doc->waitUntilLoaded();
 
-    dstUrl.addPath("testSaveRemote.png");
+    dstUrl = dstUrl.adjusted(QUrl::StripTrailingSlash);
+    dstUrl.setPath(dstUrl.path() + '/' + "testSaveRemote.png");
     QVERIFY(waitUntilJobIsDone(doc->save(dstUrl, "png")));
 }
 
@@ -345,7 +347,7 @@ void DocumentTest::testSaveRemote()
 void DocumentTest::testDeleteWhileLoading()
 {
     {
-        KUrl url = urlForTestFile("test.png");
+        QUrl url = urlForTestFile("test.png");
         QImage image;
         bool ok = image.load(url.toLocalFile());
         QVERIFY2(ok, "Could not load 'test.png'");
@@ -358,7 +360,7 @@ void DocumentTest::testDeleteWhileLoading()
 
 void DocumentTest::testLoadRotated()
 {
-    KUrl url = urlForTestFile("orient6.jpg");
+    QUrl url = urlForTestFile("orient6.jpg");
     QImage image;
     bool ok = image.load(url.toLocalFile());
     QVERIFY2(ok, "Could not load 'orient6.jpg'");
@@ -391,7 +393,7 @@ void DocumentTest::testLoadRotated()
  */
 void DocumentTest::testMultipleLoads()
 {
-    KUrl url = urlForTestFile("orient6.jpg");
+    QUrl url = urlForTestFile("orient6.jpg");
     Document::Ptr doc1 = DocumentFactory::instance()->load(url);
     Document::Ptr doc2 = DocumentFactory::instance()->load(url);
 
@@ -400,15 +402,15 @@ void DocumentTest::testMultipleLoads()
 
 void DocumentTest::testSaveAs()
 {
-    KUrl url = urlForTestFile("orient6.jpg");
+    QUrl url = urlForTestFile("orient6.jpg");
     DocumentFactory* factory = DocumentFactory::instance();
     Document::Ptr doc = factory->load(url);
-    QSignalSpy savedSpy(doc.data(), SIGNAL(saved(KUrl,KUrl)));
+    QSignalSpy savedSpy(doc.data(), SIGNAL(saved(QUrl,QUrl)));
     QSignalSpy modifiedDocumentListChangedSpy(factory, SIGNAL(modifiedDocumentListChanged()));
-    QSignalSpy documentChangedSpy(factory, SIGNAL(documentChanged(KUrl)));
+    QSignalSpy documentChangedSpy(factory, SIGNAL(documentChanged(QUrl)));
     doc->startLoadingFullImage();
 
-    KUrl destUrl = urlForTestOutputFile("result.png");
+    QUrl destUrl = urlForTestOutputFile("result.png");
     QVERIFY(waitUntilJobIsDone(doc->save(destUrl, "png")));
     QCOMPARE(doc->format().data(), "png");
     QCOMPARE(doc->url(), destUrl);
@@ -421,8 +423,8 @@ void DocumentTest::testSaveAs()
     QTest::qWait(100); // saved() is emitted asynchronously
     QCOMPARE(savedSpy.count(), 1);
     QVariantList args = savedSpy.takeFirst();
-    QCOMPARE(args.at(0).value<KUrl>(), url);
-    QCOMPARE(args.at(1).value<KUrl>(), destUrl);
+    QCOMPARE(args.at(0).value<QUrl>(), url);
+    QCOMPARE(args.at(1).value<QUrl>(), destUrl);
 
     QImage image("result.png", "png");
     QCOMPARE(doc->image(), image);
@@ -434,16 +436,16 @@ void DocumentTest::testSaveAs()
 
     QCOMPARE(documentChangedSpy.count(), 1);
     args = documentChangedSpy.takeFirst();
-    QCOMPARE(args.at(0).value<KUrl>(), destUrl);
+    QCOMPARE(args.at(0).value<QUrl>(), destUrl);
 }
 
 void DocumentTest::testLosslessSave()
 {
-    KUrl url1 = urlForTestFile("orient6.jpg");
+    QUrl url1 = urlForTestFile("orient6.jpg");
     Document::Ptr doc = DocumentFactory::instance()->load(url1);
     doc->startLoadingFullImage();
 
-    KUrl url2 = urlForTestOutputFile("orient1.jpg");
+    QUrl url2 = urlForTestOutputFile("orient1.jpg");
     QVERIFY(waitUntilJobIsDone(doc->save(url2, "jpeg")));
 
     QImage image1;
@@ -467,7 +469,7 @@ void DocumentTest::testLosslessRotate()
         painter.fillRect(image1.rect(), gradient);
     }
 
-    KUrl url1 = urlForTestOutputFile("lossless1.jpg");
+    QUrl url1 = urlForTestOutputFile("lossless1.jpg");
     QVERIFY(image1.save(url1.toLocalFile(), "jpeg"));
 
     // Load it as a Gwenview document
@@ -480,7 +482,7 @@ void DocumentTest::testLosslessRotate()
     doc->editor()->applyTransformation(ROT_90);
 
     // Save it
-    KUrl url2 = urlForTestOutputFile("lossless2.jpg");
+    QUrl url2 = urlForTestOutputFile("lossless2.jpg");
     waitUntilJobIsDone(doc->save(url2, "jpeg"));
 
     // Load the saved image
@@ -515,13 +517,13 @@ void DocumentTest::testModifyAndSaveAs()
             finish(true);
         }
     };
-    KUrl url = urlForTestFile("orient6.jpg");
+    QUrl url = urlForTestFile("orient6.jpg");
     DocumentFactory* factory = DocumentFactory::instance();
     Document::Ptr doc = factory->load(url);
 
-    QSignalSpy savedSpy(doc.data(), SIGNAL(saved(KUrl,KUrl)));
+    QSignalSpy savedSpy(doc.data(), SIGNAL(saved(QUrl,QUrl)));
     QSignalSpy modifiedDocumentListChangedSpy(factory, SIGNAL(modifiedDocumentListChanged()));
-    QSignalSpy documentChangedSpy(factory, SIGNAL(documentChanged(KUrl)));
+    QSignalSpy documentChangedSpy(factory, SIGNAL(documentChanged(QUrl)));
 
     doc->startLoadingFullImage();
     doc->waitUntilLoaded();
@@ -535,15 +537,15 @@ void DocumentTest::testModifyAndSaveAs()
     QVERIFY(doc->isModified());
     QCOMPARE(modifiedDocumentListChangedSpy.count(), 1);
     modifiedDocumentListChangedSpy.clear();
-    QList<KUrl> lst = factory->modifiedDocumentList();
+    QList<QUrl> lst = factory->modifiedDocumentList();
     QCOMPARE(lst.count(), 1);
     QCOMPARE(lst.first(), url);
     QCOMPARE(documentChangedSpy.count(), 1);
     args = documentChangedSpy.takeFirst();
-    QCOMPARE(args.at(0).value<KUrl>(), url);
+    QCOMPARE(args.at(0).value<QUrl>(), url);
 
     // Save it under a new name
-    KUrl destUrl = urlForTestOutputFile("modify.png");
+    QUrl destUrl = urlForTestOutputFile("modify.png");
     QVERIFY(waitUntilJobIsDone(doc->save(destUrl, "png")));
 
     // Wait a bit because save() will clear the undo stack when back to the
@@ -557,14 +559,14 @@ void DocumentTest::testModifyAndSaveAs()
     QVERIFY(DocumentFactory::instance()->modifiedDocumentList().isEmpty());
 
     QCOMPARE(documentChangedSpy.count(), 2);
-    KUrl::List modifiedUrls = KUrl::List() << url << destUrl;
+    QUrl::List modifiedUrls = QUrl::List() << url << destUrl;
     QVERIFY(modifiedUrls.contains(url));
     QVERIFY(modifiedUrls.contains(destUrl));
 }
 
 void DocumentTest::testMetaInfoJpeg()
 {
-    KUrl url = urlForTestFile("orient6.jpg");
+    QUrl url = urlForTestFile("orient6.jpg");
     Document::Ptr doc = DocumentFactory::instance()->load(url);
 
     // We cleared the cache, so the document should not be loaded
@@ -583,7 +585,7 @@ void DocumentTest::testMetaInfoJpeg()
 
 void DocumentTest::testMetaInfoBmp()
 {
-    KUrl url = urlForTestOutputFile("metadata.bmp");
+    QUrl url = urlForTestOutputFile("metadata.bmp");
     const int width = 200;
     const int height = 100;
     QImage image(width, height, QImage::Format_ARGB32);
@@ -604,7 +606,7 @@ void DocumentTest::testMetaInfoBmp()
 void DocumentTest::testForgetModifiedDocument()
 {
     QSignalSpy spy(DocumentFactory::instance(), SIGNAL(modifiedDocumentListChanged()));
-    DocumentFactory::instance()->forget(KUrl("file://does/not/exist.png"));
+    DocumentFactory::instance()->forget(QUrl("file://does/not/exist.png"));
     QCOMPARE(spy.count(), 0);
 
     // Generate test image
@@ -617,7 +619,7 @@ void DocumentTest::testForgetModifiedDocument()
         painter.fillRect(image1.rect(), gradient);
     }
 
-    KUrl url = urlForTestOutputFile("testForgetModifiedDocument.png");
+    QUrl url = urlForTestOutputFile("testForgetModifiedDocument.png");
     QVERIFY(image1.save(url.toLocalFile(), "png"));
 
     // Load it as a Gwenview document
@@ -632,7 +634,7 @@ void DocumentTest::testForgetModifiedDocument()
 
     QCOMPARE(spy.count(), 1);
 
-    QList<KUrl> lst = DocumentFactory::instance()->modifiedDocumentList();
+    QList<QUrl> lst = DocumentFactory::instance()->modifiedDocumentList();
     QCOMPARE(lst.length(), 1);
     QCOMPARE(lst.first(), url);
 
@@ -648,10 +650,10 @@ void DocumentTest::testModifiedAndSavedSignals()
 {
     TransformImageOperation* op;
 
-    KUrl url = urlForTestFile("orient6.jpg");
+    QUrl url = urlForTestFile("orient6.jpg");
     Document::Ptr doc = DocumentFactory::instance()->load(url);
-    QSignalSpy modifiedSpy(doc.data(), SIGNAL(modified(KUrl)));
-    QSignalSpy savedSpy(doc.data(), SIGNAL(saved(KUrl,KUrl)));
+    QSignalSpy modifiedSpy(doc.data(), SIGNAL(modified(QUrl)));
+    QSignalSpy savedSpy(doc.data(), SIGNAL(saved(QUrl,QUrl)));
     doc->startLoadingFullImage();
     doc->waitUntilLoaded();
 
@@ -697,9 +699,9 @@ private:
 
 void DocumentTest::testJobQueue()
 {
-    KUrl url = urlForTestFile("orient6.jpg");
+    QUrl url = urlForTestFile("orient6.jpg");
     Document::Ptr doc = DocumentFactory::instance()->load(url);
-    QSignalSpy spy(doc.data(), SIGNAL(busyChanged(KUrl,bool)));
+    QSignalSpy spy(doc.data(), SIGNAL(busyChanged(QUrl,bool)));
 
     QString str;
     doc->enqueueJob(new TestJob(&str, 'a'));
@@ -713,10 +715,10 @@ void DocumentTest::testJobQueue()
     QVERIFY(!doc->isBusy());
     QCOMPARE(spy.count(), 2);
     QVariantList row = spy.takeFirst();
-    QCOMPARE(row.at(0).value<KUrl>(), url);
+    QCOMPARE(row.at(0).value<QUrl>(), url);
     QVERIFY(row.at(1).toBool());
     row = spy.takeFirst();
-    QCOMPARE(row.at(0).value<KUrl>(), url);
+    QCOMPARE(row.at(0).value<QUrl>(), url);
     QVERIFY(!row.at(1).toBool());
     QCOMPARE(str, QString("abc"));
 }

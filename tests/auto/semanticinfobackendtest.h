@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QObject>
 
 // KDE
-#include <KUrl>
+#include <QUrl>
 
 // Local
 #include <lib/semanticinfo/abstractsemanticinfobackend.h>
@@ -43,16 +43,16 @@ class SemanticInfoBackEndClient : public QObject
 public:
     SemanticInfoBackEndClient(AbstractSemanticInfoBackEnd*);
 
-    SemanticInfo semanticInfoForUrl(const KUrl& url) const
+    SemanticInfo semanticInfoForUrl(const QUrl &url) const
     {
         return mSemanticInfoForUrl.value(url);
     }
 
 private Q_SLOTS:
-    void slotSemanticInfoRetrieved(const KUrl&, const SemanticInfo&);
+    void slotSemanticInfoRetrieved(const QUrl&, const SemanticInfo&);
 
 private:
-    QHash<KUrl, SemanticInfo> mSemanticInfoForUrl;
+    QHash<QUrl, SemanticInfo> mSemanticInfoForUrl;
     AbstractSemanticInfoBackEnd* mBackEnd;
 };
 

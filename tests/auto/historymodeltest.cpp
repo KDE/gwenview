@@ -35,10 +35,10 @@ QTEST_KDEMAIN(HistoryModelTest, GUI)
 
 using namespace Gwenview;
 
-void testModel(const HistoryModel& model, const KUrl& u1, const KUrl& u2)
+void testModel(const HistoryModel& model, const QUrl &u1, const QUrl& u2)
 {
     QModelIndex index;
-    KUrl url;
+    QUrl url;
     QCOMPARE(model.rowCount(), 2);
 
     index = model.index(0, 0);
@@ -55,9 +55,9 @@ void testModel(const HistoryModel& model, const KUrl& u1, const KUrl& u2)
 
 void HistoryModelTest::testAddUrl()
 {
-    KUrl u1 = KUrl::fromPath("/home");
+    QUrl u1 = QUrl::fromLocalFile("/home");
     QDateTime d1 = QDateTime::fromString("2008-02-03T12:34:56", Qt::ISODate);
-    KUrl u2 = KUrl::fromPath("/root");
+    QUrl u2 = QUrl::fromLocalFile("/root");
     QDateTime d2 = QDateTime::fromString("2009-01-29T23:01:47", Qt::ISODate);
     KTempDir dir;
     {
@@ -78,11 +78,11 @@ void HistoryModelTest::testAddUrl()
 
 void HistoryModelTest::testGarbageCollect()
 {
-    KUrl u1 = KUrl::fromPath("/home");
+    QUrl u1 = QUrl::fromLocalFile("/home");
     QDateTime d1 = QDateTime::fromString("2008-02-03T12:34:56", Qt::ISODate);
-    KUrl u2 = KUrl::fromPath("/root");
+    QUrl u2 = QUrl::fromLocalFile("/root");
     QDateTime d2 = QDateTime::fromString("2009-01-29T23:01:47", Qt::ISODate);
-    KUrl u3 = KUrl::fromPath("/usr");
+    QUrl u3 = QUrl::fromLocalFile("/usr");
     QDateTime d3 = QDateTime::fromString("2009-03-24T22:42:15", Qt::ISODate);
 
     KTempDir dir;
@@ -103,9 +103,9 @@ void HistoryModelTest::testGarbageCollect()
 
 void HistoryModelTest::testRemoveRows()
 {
-    KUrl u1 = KUrl::fromPath("/home");
+    QUrl u1 = QUrl::fromLocalFile("/home");
     QDateTime d1 = QDateTime::fromString("2008-02-03T12:34:56", Qt::ISODate);
-    KUrl u2 = KUrl::fromPath("/root");
+    QUrl u2 = QUrl::fromLocalFile("/root");
     QDateTime d2 = QDateTime::fromString("2009-01-29T23:01:47", Qt::ISODate);
 
     KTempDir dir;

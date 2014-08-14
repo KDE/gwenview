@@ -17,7 +17,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
-#include <testutils.moc>
+#include "testutils.h"
 
 // Qt
 #include <QDir>
@@ -28,17 +28,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KIO/NetAccess>
 #include <KStandardDirs>
 
-KUrl setUpRemoteTestDir(const QString& testFile)
+QUrl setUpRemoteTestDir(const QString& testFile)
 {
     QWidget* authWindow = 0;
     bool ok;
     if (qgetenv("GV_REMOTE_TESTS_BASE_URL").isEmpty()) {
         kWarning() << "Environment variable GV_REMOTE_TESTS_BASE_URL not set: remote tests disabled";
-        return KUrl();
+        return QUrl();
     }
 
-    KUrl baseUrl = QString::fromLocal8Bit(qgetenv("GV_REMOTE_TESTS_BASE_URL"));
-    baseUrl.addPath("gwenview-remote-tests");
+    QUrl baseUrl = QString::fromLocal8Bit(qgetenv("GV_REMOTE_TESTS_BASE_URL"));
+    baseUrl = baseUrl.adjusted(QUrl::StripTrailingSlash);
+    baseUrl.setPath(baseUrl.path() + '/' + "gwenview-remote-tests");
 
     if (KIO::NetAccess::exists(baseUrl, KIO::NetAccess::DestinationSide, authWindow)) {
         KIO::NetAccess::del(baseUrl, authWindow);
@@ -46,16 +47,17 @@ KUrl setUpRemoteTestDir(const QString& testFile)
     ok = KIO::NetAccess::mkdir(baseUrl, authWindow);
     if (!ok) {
         kFatal() << "Could not create dir" << baseUrl << ":" << KIO::NetAccess::lastErrorString();
-        return KUrl();
+        return QUrl();
     }
 
     if (!testFile.isEmpty()) {
-        KUrl dstUrl = baseUrl;
-        dstUrl.addPath(testFile);
+        QUrl dstUrl = baseUrl;
+        dstUrl = dstUrl.adjusted(QUrl::StripTrailingSlash);
+        dstUrl.setPath(dstUrl.path() + '/' + testFile);
         ok = KIO::NetAccess::file_copy(urlForTestFile(testFile), dstUrl, authWindow);
         if (!ok) {
             kFatal() << "Could not copy" << testFile << "to" << dstUrl << ":" << KIO::NetAccess::lastErrorString();
-            return KUrl();
+            return QUrl();
         }
     }
 
@@ -87,7 +89,7 @@ void purgeUserConfiguration()
     QString confDir = qgetenv("KDEHOME");
     QVERIFY(confDir.endsWith(".kde-unit-test")); // Better safe than sorry
     if (QFileInfo(confDir).isDir()) {
-        bool ok = KIO::NetAccess::del(KUrl::fromPath(confDir), 0);
+        bool ok = KIO::NetAccess::del(QUrl::fromLocalFile(confDir), 0);
         QVERIFY(ok);
     }
 

@@ -86,9 +86,9 @@ void RecursiveDirModelTest::testBasic_data()
 #undef NEW_ROW
 }
 
-static QList<KUrl> listModelUrls(QAbstractItemModel* model)
+static QList<QUrl> listModelUrls(QAbstractItemModel* model)
 {
-    QList<KUrl> out;
+    QList<QUrl> out;
     for (int row = 0; row < model->rowCount(QModelIndex()); ++row) {
         QModelIndex index = model->index(row, 0);
         KFileItem item = index.data(KDirModel::FileItemRole).value<KFileItem>();
@@ -98,20 +98,20 @@ static QList<KUrl> listModelUrls(QAbstractItemModel* model)
     return out;
 }
 
-static QList<KUrl> listExpectedUrls(const QDir& dir, const QStringList& files)
+static QList<QUrl> listExpectedUrls(const QDir& dir, const QStringList& files)
 {
-    QList<KUrl> lst;
+    QList<QUrl> lst;
     Q_FOREACH(const QString &name, files) {
-        KUrl url(dir.absoluteFilePath(name));
+        QUrl url(dir.absoluteFilePath(name));
         lst << url;
     }
     qSort(lst);
     return lst;
 }
 
-void logLst(const QList<KUrl>& lst)
+void logLst(const QList<QUrl>& lst)
 {
-    Q_FOREACH(const KUrl& url, lst) {
+    Q_FOREACH(const QUrl &url, lst) {
         kWarning() << url.fileName();
     }
 }
@@ -132,8 +132,8 @@ void RecursiveDirModelTest::testBasic()
     model.setUrl(sandBoxDir.absolutePath());
     loop.exec();
 
-    QList<KUrl> out = listModelUrls(&model);
-    QList<KUrl> expected = listExpectedUrls(sandBoxDir, initialFiles);
+    QList<QUrl> out = listModelUrls(&model);
+    QList<QUrl> expected = listExpectedUrls(sandBoxDir, initialFiles);
     QCOMPARE(out, expected);
 
     // Test adding new files
@@ -154,7 +154,7 @@ void RecursiveDirModelTest::testBasic()
     Q_FOREACH(const QString &name, removedFiles) {
         bool ok = sandBoxDir.remove(name);
         Q_ASSERT(ok);
-        expected.removeOne(KUrl(sandBoxDir.absoluteFilePath(name)));
+        expected.removeOne(QUrl(sandBoxDir.absoluteFilePath(name)));
     }
     QTime chrono;
     chrono.start();

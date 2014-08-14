@@ -27,11 +27,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <testutils.h>
 
 // KDE
-#include <qtest_kde.h>
+#include <qtest.h>
 
 // Qt
 
-QTEST_KDEMAIN(CmsProfileTest, GUI)
+QTEST_MAIN(CmsProfileTest)
 
 using namespace Gwenview;
 

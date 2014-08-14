@@ -66,7 +66,7 @@ void SortedDirModelTest::testHasDocuments()
 {
     QFETCH(QString, dir);
     QFETCH(bool, hasDocuments);
-    KUrl url = KUrl::fromPath(dir);
+    QUrl url = QUrl::fromLocalFile(dir);
 
     SortedDirModel model;
     QEventLoop loop;

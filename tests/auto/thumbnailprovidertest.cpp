@@ -53,7 +53,7 @@ void SandBox::initDir()
     KIO::Job* job;
     QDir dir(mPath);
     if (dir.exists()) {
-        KUrl sandBoxUrl("file://" + mPath);
+        QUrl sandBoxUrl("file://" + mPath);
         job = KIO::del(sandBoxUrl);
         QVERIFY2(job->exec(), "Couldn't delete sandbox");
     }
@@ -74,7 +74,7 @@ void SandBox::fill()
 void SandBox::copyTestImage(const QString& testFileName, int width, int height)
 {
     QString testPath = pathForTestFile(testFileName);
-    KIO::Job* job = KIO::copy(testPath, KUrl(mPath + '/' + testFileName));
+    KIO::Job* job = KIO::copy(testPath, QUrl(mPath + '/' + testFileName));
     QVERIFY2(job->exec(), "Couldn't copy test image");
     mSizeHash.insert(testFileName, QSize(width, height));
 }
@@ -120,7 +120,7 @@ void ThumbnailProviderTest::testLoadLocal()
     // Create a list of items which will be thumbnailed
     KFileItemList list;
     Q_FOREACH(const QFileInfo & info, dir.entryInfoList(QDir::Files)) {
-        KUrl url("file://" + info.absoluteFilePath());
+        QUrl url("file://" + info.absoluteFilePath());
         KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
         list << item;
     }
@@ -148,7 +148,7 @@ void ThumbnailProviderTest::testLoadLocal()
         QImage thumb;
         QVERIFY(thumb.load(thumbnailDir.filePath(name)));
 
-        KUrl url(thumb.text("Thumb::URI"));
+        QUrl url(thumb.text("Thumb::URI"));
         KFileItem item = list.findByUrl(url);
         QVERIFY(!item.isNull());
 
@@ -196,7 +196,7 @@ void ThumbnailProviderTest::testUseEmbeddedOrNot()
     sandBox.copyTestImage("embedded-thumbnail.jpg", 256, 128);
 
     KFileItemList list;
-    KUrl url("file://" + QDir(sandBox.mPath).absoluteFilePath("embedded-thumbnail.jpg"));
+    QUrl url("file://" + QDir(sandBox.mPath).absoluteFilePath("embedded-thumbnail.jpg"));
     list << KFileItem(KFileItem::Unknown, KFileItem::Unknown, url);
 
     // Loading a normal thumbnail should bring the white one
@@ -230,11 +230,12 @@ void ThumbnailProviderTest::testUseEmbeddedOrNot()
 
 void ThumbnailProviderTest::testLoadRemote()
 {
-    KUrl url = setUpRemoteTestDir("test.png");
+    QUrl url = setUpRemoteTestDir("test.png");
     if (!url.isValid()) {
         return;
     }
-    url.addPath("test.png");
+    url = url.adjusted(QUrl::StripTrailingSlash);
+    url.setPath(url.path() + '/' + "test.png");
 
     KFileItemList list;
     KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
@@ -260,7 +261,7 @@ void ThumbnailProviderTest::testRemoveItemsWhileGenerating()
     // Create a list of items which will be thumbnailed
     KFileItemList list;
     Q_FOREACH(const QFileInfo & info, dir.entryInfoList(QDir::Files)) {
-        KUrl url("file://" + info.absoluteFilePath());
+        QUrl url("file://" + info.absoluteFilePath());
         KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
         list << item;
     }

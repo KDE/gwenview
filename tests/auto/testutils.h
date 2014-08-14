@@ -31,7 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KDE
 #include <KDebug>
 #include <KTempDir>
-#include <KUrl>
+#include <QUrl>
 
 /*
  * This file contains simple helpers to access test files
@@ -42,9 +42,9 @@ inline QString pathForTestFile(const QString& name)
     return QDir::cleanPath(QString("%1/../data/%2").arg(KDESRCDIR).arg(name));
 }
 
-inline KUrl urlForTestFile(const QString& name)
+inline QUrl urlForTestFile(const QString& name)
 {
-    KUrl url;
+    QUrl url;
     url.setPath(pathForTestFile(name));
     return url;
 }
@@ -54,9 +54,9 @@ inline QString pathForTestOutputFile(const QString& name)
     return QString("%1/%2").arg(QDir::currentPath()).arg(name);
 }
 
-inline KUrl urlForTestOutputFile(const QString& name)
+inline QUrl urlForTestOutputFile(const QString& name)
 {
-    KUrl url;
+    QUrl url;
     url.setPath(pathForTestOutputFile(name));
     return url;
 }
@@ -79,7 +79,7 @@ void createEmptyFile(const QString& path);
  * set up.
  * If testFile is valid, it is copied into the test dir.
  */
-KUrl setUpRemoteTestDir(const QString& testFile = QString());
+QUrl setUpRemoteTestDir(const QString& testFile = QString());
 
 /**
  * Make sure all objects on which deleteLater() have been called have been

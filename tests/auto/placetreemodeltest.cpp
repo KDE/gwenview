@@ -76,12 +76,12 @@ void PlaceTreeModelTest::initTestCase()
     const bool dir1created = dir.mkdir("url1");
     Q_ASSERT(dir1created);
     Q_UNUSED(dir1created);
-    mUrl1 = KUrl::fromPath(dir.filePath("url1"));
+    mUrl1 = QUrl::fromLocalFile(dir.filePath("url1"));
 
     const bool dir2created = dir.mkdir("url2");
     Q_ASSERT(dir2created);
     Q_UNUSED(dir2created);
-    mUrl2 = KUrl::fromPath(dir.filePath("url2"));
+    mUrl2 = QUrl::fromLocalFile(dir.filePath("url2"));
 
     mUrl1Dirs << "aaa" << "zzz" << "bbb";
     Q_FOREACH(const QString & dirName, mUrl1Dirs) {

@@ -47,7 +47,7 @@ void ContextManagerTest::testRemove()
 
     SandBoxDir sandBox;
     sandBox.fill(QStringList() << "a" << "b" << "c");
-    KUrl dirUrl = KUrl::fromPath(sandBox.absolutePath());
+    QUrl dirUrl = QUrl::fromLocalFile(sandBox.absolutePath());
 
     SortedDirModel dirModel;
     {
@@ -97,7 +97,7 @@ void ContextManagerTest::testInvalidDirUrl()
             setAutoErrorHandlingEnabled(false, 0);
         }
 
-        bool openUrl(const KUrl& url, OpenUrlFlags flags = NoFlags)
+        bool openUrl(const QUrl &url, OpenUrlFlags flags = NoFlags)
         {
             mOpenUrlCalled = true;
             return KDirLister::openUrl(url, flags);
@@ -111,7 +111,7 @@ void ContextManagerTest::testInvalidDirUrl()
     dirModel.setDirLister(dirLister);
     ContextManager manager(&dirModel, 0);
 
-    manager.setCurrentDirUrl(KUrl());
+    manager.setCurrentDirUrl(QUrl());
     QVERIFY(!dirLister->mOpenUrlCalled);
 }
 
