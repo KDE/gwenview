@@ -76,6 +76,9 @@ endif()
 find_package(Kdcraw 2.4.2)
 set_package_properties(KDCRAW_FOUND PROPERTIES URL "http://www.kde.org" DESCRIPTION "KDE Dcraw library" TYPE OPTIONAL)
 
+configure_file(config-gwenview.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-gwenview.h)
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
+
 ## dirs to build
 add_subdirectory(lib)
 add_subdirectory(app)
@@ -88,5 +91,3 @@ add_subdirectory(cursors)
 add_subdirectory(color-schemes)
 # add_subdirectory(doc)
 
-configure_file(config-gwenview.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-gwenview.h)
-include_directories(${CMAKE_CURRENT_BINARY_DIR})

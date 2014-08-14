@@ -1,23 +1,32 @@
 include_directories(
     ${gwenview_SOURCE_DIR}
     )
+
 # SlideContainer
 set(slidecontainertest_SRCS
     slidecontainertest.cpp
     )
 
-kde4_add_executable(slidecontainertest TEST ${slidecontainertest_SRCS})
+add_executable(slidecontainertest ${slidecontainertest_SRCS})
+ecm_mark_as_test(slidecontainertest)
 
-target_link_libraries(slidecontainertest ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} gwenviewlib)
+target_link_libraries(slidecontainertest
+    Qt5::Test
+    KF5::KDELibs4Support
+    gwenviewlib)
 
 # imageloadbench
 set(imageloadbench_SRCS
     imageloadbench.cpp
     )
 
-kde4_add_executable(imageloadbench TEST ${imageloadbench_SRCS})
+add_executable(imageloadbench ${imageloadbench_SRCS})
+ecm_mark_as_test(imageloadbench)
 
-target_link_libraries(imageloadbench ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} gwenviewlib)
+target_link_libraries(imageloadbench
+    Qt5::Test
+    KF5::KDELibs4Support
+    gwenviewlib)
 
 # thumbnailgen
 set(thumbnailgen_SRCS
@@ -25,12 +34,10 @@ set(thumbnailgen_SRCS
     ../auto/testutils.cpp # FIXME: Move testutils.cpp to test/
     )
 
-kde4_add_executable(thumbnailgen TEST ${thumbnailgen_SRCS})
+add_executable(thumbnailgen ${thumbnailgen_SRCS})
+ecm_mark_as_test(thumbnailgen)
 
 target_link_libraries(thumbnailgen
-    ${QT_QTCORE_LIBRARY}
-    ${QT_QTGUI_LIBRARY}
-    ${QT_QTTEST_LIBRARY}
-    ${KDE4_KIO_LIBS}
-    ${KDE4_KDEUI_LIBS}
+    Qt5::Test
+    KF5::KDELibs4Support
     gwenviewlib)

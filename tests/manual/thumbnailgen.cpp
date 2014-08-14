@@ -23,7 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <../auto/testutils.h>
 
 // KDE
-#include <KAboutData>
+#include <K4AboutData>
 #include <KApplication>
 #include <KCmdLineArgs>
 #include <KDebug>
@@ -36,7 +36,7 @@ using namespace Gwenview;
 
 int main(int argc, char** argv)
 {
-    KAboutData aboutData(
+    K4AboutData aboutData(
         "thumbnailgen", // appName
         0,     // catalogName
         ki18n("thumbnailgen"), // programName
@@ -91,7 +91,7 @@ int main(int argc, char** argv)
     QDir dir(imageDirName);
     KFileItemList list;
     Q_FOREACH(const QString &name, dir.entryList()) {
-        KUrl url = KUrl::fromLocalFile(dir.absoluteFilePath(name));
+        QUrl url = QUrl::fromLocalFile(dir.absoluteFilePath(name));
         KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
         list << item;
     }
