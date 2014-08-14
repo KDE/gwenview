@@ -541,7 +541,7 @@
    <item row="20" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout_14">
      <item>
-      <widget class="KIntSpinBox" name="kcfg_ThumbnailBarRowCount">
+      <widget class="QSpinBox" name="kcfg_ThumbnailBarRowCount">
        <property name="minimum">
         <number>1</number>
        </property>
@@ -587,7 +587,7 @@
    <header>kcolorbutton.h</header>
   </customwidget>
   <customwidget>
-   <class>KIntSpinBox</class>
+   <class>QSpinBox</class>
    <extends>QSpinBox</extends>
    <header>knuminput.h</header>
   </customwidget>
