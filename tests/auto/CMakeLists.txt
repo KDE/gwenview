@@ -1,16 +1,19 @@
+include(ECMAddTests)
+
+find_package(Qt5Test ${REQUIRED_QT_VERSION} CONFIG QUIET)
+
+if(NOT Qt5Test_FOUND)
+    message(STATUS "Qt5Test not found, autotests will not be built.")
+    return()
+endif()
+
 macro(gv_add_unit_test _test)
     set(_src ${_test}.cpp ${ARGN})
-    qt4_automoc(${_src})
-    kde4_add_unit_test(${_test} ${_src})
+    add_executable(${_test} ${_src})
+    ecm_mark_as_test(${_test})
     target_link_libraries(${_test}
-        ${BALOO_LIBRARIES}
-        ${KDE4_KIO_LIBS}
-        ${KDE4_KDEUI_LIBS}
-        ${KDE4_KDECORE_LIBS}
-        ${QT_QTTEST_LIBRARY}
-        ${QT_QTCORE_LIBRARY}
-        ${QT_QTGUI_LIBRARY}
-        ${KDCRAW_LIBRARIES}
+        KF5::KDELibs4Support
+        Qt5::Test
         gwenviewlib)
 endmacro(gv_add_unit_test)
 
@@ -39,11 +42,11 @@ gv_add_unit_test(timeutilstest)
 gv_add_unit_test(placetreemodeltest testutils.cpp)
 gv_add_unit_test(urlutilstest)
 gv_add_unit_test(historymodeltest)
-gv_add_unit_test(importertest
-    ${importer_SOURCE_DIR}/importer.cpp
-    ${importer_SOURCE_DIR}/fileutils.cpp
-    ${importer_SOURCE_DIR}/filenameformater.cpp
-    )
+# gv_add_unit_test(importertest
+#     ${importer_SOURCE_DIR}/importer.cpp
+#     ${importer_SOURCE_DIR}/fileutils.cpp
+#     ${importer_SOURCE_DIR}/filenameformater.cpp
+#     )
 gv_add_unit_test(sorteddirmodeltest testutils.cpp)
 gv_add_unit_test(slidecontainerautotest slidecontainerautotest.cpp)
 gv_add_unit_test(imagemetainfomodeltest testutils.cpp)
