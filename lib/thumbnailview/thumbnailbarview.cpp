@@ -466,7 +466,9 @@ ThumbnailBarView::ThumbnailBarView(QWidget* parent)
 
 ThumbnailBarView::~ThumbnailBarView()
 {
+    #ifdef WINDOWS_PROXY_STYLE
     delete d->mStyle;
+    #endif
     delete d;
 }
 
