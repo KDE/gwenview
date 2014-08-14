@@ -19,14 +19,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 #include <qtest_kde.h>
 
-#include "imagescalertest.moc"
+#include "imagescalertest.h"
 
 #include "../lib/imagescaler.h"
 #include "../lib/document/documentfactory.h"
 
 #include "testutils.h"
 
-QTEST_KDEMAIN(ImageScalerTest, GUI)
+QTEST_MAIN(ImageScalerTest)
 
 using namespace Gwenview;
 

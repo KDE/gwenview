@@ -21,9 +21,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include "../lib/paintutils.h"
 
-#include "paintutilstest.moc"
+#include "paintutilstest.h"
 
-QTEST_KDEMAIN(PaintUtilsTest, GUI)
+QTEST_MAIN(PaintUtilsTest)
 
 void PaintUtilsTest::testScaledRect_data()
 {

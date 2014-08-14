@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
 // Self
-#include <recursivedirmodeltest.moc>
+#include "recursivedirmodeltest.h"
 
 // Local
 #include <testutils.h>
@@ -33,7 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 using namespace Gwenview;
 
-QTEST_KDEMAIN(RecursiveDirModelTest, GUI)
+QTEST_MAIN(RecursiveDirModelTest)
 
 void RecursiveDirModelTest::testBasic_data()
 {

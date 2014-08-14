@@ -18,7 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
 // Local
-#include "semanticinfobackendtest.moc"
+#include "semanticinfobackendtest.h"
 
 // Qt
 #include <QSignalSpy>
@@ -45,7 +45,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #endif
 #endif
 
-QTEST_KDEMAIN(Gwenview::SemanticInfoBackEndTest, GUI)
+QTEST_MAIN(Gwenview::SemanticInfoBackEndTest)
 
 namespace Gwenview
 {

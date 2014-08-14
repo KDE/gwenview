@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include <exiv2/exif.hpp>
 
-#include "imagemetainfomodeltest.moc"
+#include "imagemetainfomodeltest.h"
 
 QTEST_KDEMAIN(ImageMetaInfoModelTest, GUI)
 

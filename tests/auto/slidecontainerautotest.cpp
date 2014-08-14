@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "slidecontainerautotest.moc"
+#include "slidecontainerautotest.h"
 
 // Local
 #include <lib/slidecontainer.h>
@@ -32,7 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QTextEdit>
 #include <QVBoxLayout>
 
-QTEST_KDEMAIN(SlideContainerAutoTest, GUI)
+QTEST_MAIN(SlideContainerAutoTest)
 
 using namespace Gwenview;
 
