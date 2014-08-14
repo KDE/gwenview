@@ -33,13 +33,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KTempDir>
 #include <QUrl>
 
+#include "config-gwenview.h"
+
 /*
  * This file contains simple helpers to access test files
  */
 
 inline QString pathForTestFile(const QString& name)
 {
-    return QDir::cleanPath(QString("%1/../data/%2").arg(KDESRCDIR).arg(name));
+    return QDir::cleanPath(QString("%1/%2").arg(GV_TEST_DATA_DIR).arg(name));
 }
 
 inline QUrl urlForTestFile(const QString& name)
