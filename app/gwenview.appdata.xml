@@ -1,19 +1,75 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <component type="desktop">
   <id>gwenview.desktop</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
   <name>Gwenview</name>
+  <name xml:lang="ca">Gwenview</name>
+  <name xml:lang="es">Gwenview</name>
+  <name xml:lang="nds">Gwenview</name>
+  <name xml:lang="nl">Gwenview</name>
+  <name xml:lang="pl">Gwenview</name>
+  <name xml:lang="sv">Gwenview</name>
+  <name xml:lang="uk">Gwenview</name>
+  <name xml:lang="x-test">xxGwenviewxx</name>
   <description>
     <p>
       Gwenview is a fast and easy to use image viewer for KDE.
     </p>
+    <p xml:lang="ca">El Gwenview és un visor d'imatges ràpid i senzill pel KDE.</p>
+    <p xml:lang="es">Gwenview es un visor de imágenes de KDE rápido y fácil de usar.</p>
+    <p xml:lang="nds">Gwenview is en gau Bildkieker för KDE, de sik eenfach bruken lett.</p>
+    <p xml:lang="nl">Gwenview is een snelle en gemakkelijk te gebruiken viewer voor afbeeldingen van KDE</p>
+    <p xml:lang="pl">Gwenview to szybka i łatwa w użyciu przeglądarka obrazów dla KDE.</p>
+    <p xml:lang="sv">Gwenview är en snabb och lättanvänd bild- och videovisare för KDE.</p>
+    <p xml:lang="uk">Gwenview — швидка і проста у користування програма для перегляду зображень у KDE.</p>
+    <p xml:lang="x-test">xxGwenview is a fast and easy to use image viewer for KDE.xx</p>
     <p>Features:</p>
+    <p xml:lang="ca">Característiques:</p>
+    <p xml:lang="es">Funcionalidades:</p>
+    <p xml:lang="nds">Markmalen:</p>
+    <p xml:lang="nl">Mogelijkheden:</p>
+    <p xml:lang="pl">Możliwości:</p>
+    <p xml:lang="sv">Funktioner:</p>
+    <p xml:lang="uk">Можливості:</p>
+    <p xml:lang="x-test">xxFeatures:xx</p>
     <ul>
       <li>Supports simple image manipulations: rotate, mirror, flip, and resize</li>
+      <li xml:lang="ca">Implementa la manipulació d'imatges simples: gira, mirall, inverteix i canvia la mida</li>
+      <li xml:lang="es">Permite manipulaciones simples de imágenes: rotar, reflejar, invertir y cambiar de tamaño</li>
+      <li xml:lang="nds">Ünnerstütt eenfach Bildbewerken: Dreihen, Spegeln, Ümdreihen und Grött topassen</li>
+      <li xml:lang="nl">Ondersteunt eenvoudige bewerking van afbeeldingen: roteren, spiegelen, omdraaien en grootte wijzigen</li>
+      <li xml:lang="pl">Obsługa prostych działań na obrazach: obrót, odbicie w poziomie, odbicie w pionie oraz zmiana rozmiaru</li>
+      <li xml:lang="sv">Stöder enkla bildändringar: Rotera, spegla, vänd och ändra storlek</li>
+      <li xml:lang="uk">підтримка обробки зображень: обертання, віддзеркалення, перевертання та зміни розмірів;</li>
+      <li xml:lang="x-test">xxSupports simple image manipulations: rotate, mirror, flip, and resizexx</li>
       <li>Supports basic file management actions such as copy, move, delete, and others</li>
+      <li xml:lang="ca">Implementa les accions bàsiques per a la gestió de fitxers com copia, mou, esborra i altres</li>
+      <li xml:lang="es">Permite acciones básicas de gestión de archivos, como copiar, mover y borrar, entre otras</li>
+      <li xml:lang="nds">Ünnerstütt eenfach Dateipleegakschonen as Koperen, Verschuven, Wegdoon un en poor anner.</li>
+      <li xml:lang="nl">Ondersteunt acties voor basis bestandsbeheer zoals kopiëren, verplaatsen, verwijderen en andere</li>
+      <li xml:lang="pl">Możliwość wykonywania prostych działań plikowych takich jak kopiuj, przenieś, usuń i innych</li>
+      <li xml:lang="sv">Stöder grundläggande filhanteringsåtgärder som kopiera, flytta, ta bort, med mera</li>
+      <li xml:lang="uk">підтримка базових дій з керування файлами: копіювання, пересування, вилучення тощо;</li>
+      <li xml:lang="x-test">xxSupports basic file management actions such as copy, move, delete, and othersxx</li>
       <li>Functions both as a standalone application and an embedded viewer in the Konqueror web browser</li>
+      <li xml:lang="ca">Funciona tant com una aplicació independent i un visor incrustat al navegador web Konqueror</li>
+      <li xml:lang="es">Funciona como aplicación independiente o como visor integrado en el navegador web Konqueror</li>
+      <li xml:lang="nds">Funkscheneert för sik oder inbett na den Nettkieker Konqueror</li>
+      <li xml:lang="nl">Functies zowel als een alleenstaande toepassing als een ingebedde viewer in de webbrowser Konqueror</li>
+      <li xml:lang="pl">Możliwość działania jako samodzielny program lub jako osadzona przeglądarka w przeglądarce sieciowej Konqueror</li>
+      <li xml:lang="sv">Fungerar både som ett fristående program och för inbäddad visning i webbläsaren Konqueror</li>
+      <li xml:lang="uk">можливість роботи у режимі окремої програми та вбудованого переглядача у програмі для керування файлами Konqueror;</li>
+      <li xml:lang="x-test">xxFunctions both as a standalone application and an embedded viewer in the Konqueror web browserxx</li>
       <li>Can be extended using KIPI plugins.</li>
+      <li xml:lang="ca">Es pot estendre emprant els connectors KIPI</li>
+      <li xml:lang="es">Se puede extender usando complementos de KIPI.</li>
+      <li xml:lang="nds">Laat sik mit KIPI-Modulen verwiedern</li>
+      <li xml:lang="nl">Kan uitgebreid worden met KIPI-plug-ins.</li>
+      <li xml:lang="pl">Możliwość poszerzenia możliwości przez wtyczki KIPI.</li>
+      <li xml:lang="sv">Kan utökas med KIPI-insticksprogram</li>
+      <li xml:lang="uk">можливість розширення переліку можливостей за допомогою додатків KIPI.</li>
+      <li xml:lang="x-test">xxCan be extended using KIPI plugins.xx</li>
     </ul>
   </description>
   <url type="homepage">http://gwenview.sourceforge.net/</url>
