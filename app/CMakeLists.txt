@@ -53,7 +53,7 @@ if (KIPI_FOUND)
         )
 endif()
 
-qt5_wrap_ui(gwenview_SRCS
+ki18n_wrap_ui(gwenview_SRCS
     advancedconfigpage.ui
     fullscreenconfigwidget.ui
     generalconfigpage.ui
@@ -64,7 +64,7 @@ qt5_wrap_ui(gwenview_SRCS
     )
 
 if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
-    qt5_wrap_ui(gwenview_SRCS
+    ki18n_wrap_ui(gwenview_SRCS
         semanticinfosidebaritem.ui
         )
 endif()

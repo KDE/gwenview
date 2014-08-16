@@ -191,7 +191,7 @@ set_source_files_properties(
     COMPILE_FLAGS "${KDE4_ENABLE_EXCEPTIONS}"
     )
 
-qt5_wrap_ui(gwenviewlib_SRCS
+ki18n_wrap_ui(gwenviewlib_SRCS
     crop/cropwidget.ui
     documentview/messageview.ui
     print/printoptionspage.ui

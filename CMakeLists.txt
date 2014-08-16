@@ -79,6 +79,8 @@ set_package_properties(KDCRAW_FOUND PROPERTIES URL "http://www.kde.org" DESCRIPT
 configure_file(config-gwenview.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-gwenview.h)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
+add_definitions(-DTRANSLATION_DOMAIN="gwenview")
+
 ## dirs to build
 add_subdirectory(lib)
 add_subdirectory(app)
