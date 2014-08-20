@@ -13,6 +13,7 @@
   <name xml:lang="nl">Gwenview</name>
   <name xml:lang="pl">Gwenview</name>
   <name xml:lang="sk">Gwenview</name>
+  <name xml:lang="sl">Gwenview</name>
   <name xml:lang="sr">Гвенвју</name>
   <name xml:lang="sr-Latn">GwenView</name>
   <name xml:lang="sr-ijekavian">Гвенвју</name>
@@ -32,6 +33,7 @@
     <p xml:lang="nl">Gwenview is een snelle en gemakkelijk te gebruiken viewer voor afbeeldingen van KDE</p>
     <p xml:lang="pl">Gwenview to szybka i łatwa w użyciu przeglądarka obrazów dla KDE.</p>
     <p xml:lang="sk">Gwenview je rýchly a jednoducho použiteľný prehliadač obrázkov pre KDE.</p>
+    <p xml:lang="sl">Gwenview je hiter in enostaven pregledovalnik slik za KDE.</p>
     <p xml:lang="sr">Гвенвју је брз и лак за употребу приказивач слика за КДЕ.</p>
     <p xml:lang="sr-Latn">GwenView je brz i lak za upotrebu prikazivač slika za KDE.</p>
     <p xml:lang="sr-ijekavian">Гвенвју је брз и лак за употребу приказивач слика за КДЕ.</p>
@@ -49,6 +51,7 @@
     <p xml:lang="nl">Mogelijkheden:</p>
     <p xml:lang="pl">Możliwości:</p>
     <p xml:lang="sk">Funkcie:</p>
+    <p xml:lang="sl">Zmožnosti:</p>
     <p xml:lang="sr">Могућности:</p>
     <p xml:lang="sr-Latn">Mogućnosti:</p>
     <p xml:lang="sr-ijekavian">Могућности:</p>
@@ -66,6 +69,7 @@
       <li xml:lang="nl">Ondersteunt eenvoudige bewerking van afbeeldingen: roteren, spiegelen, omdraaien en grootte wijzigen</li>
       <li xml:lang="pl">Obsługa prostych działań na obrazach: obrót, odbicie w poziomie, odbicie w pionie oraz zmiana rozmiaru</li>
       <li xml:lang="sk">Podporuje jednoduché manipulácie s obrázkami: otáčanie, zrkadlenie, prevrátenie a zmenu veľkosti</li>
+      <li xml:lang="sl">Podpira preproste spremembe slik: vrtenje, zrcaljenje, obračanje in spreminjanje velikosti</li>
       <li xml:lang="sr">Једноставне обраде слике: обртање, пресликавање, превртање и промена величине.</li>
       <li xml:lang="sr-Latn">Jednostavne obrade slike: obrtanje, preslikavanje, prevrtanje i promena veličine.</li>
       <li xml:lang="sr-ijekavian">Једноставне обраде слике: обртање, пресликавање, превртање и промена величине.</li>
@@ -82,6 +86,7 @@
       <li xml:lang="nl">Ondersteunt acties voor basis bestandsbeheer zoals kopiëren, verplaatsen, verwijderen en andere</li>
       <li xml:lang="pl">Możliwość wykonywania prostych działań plikowych takich jak kopiuj, przenieś, usuń i innych</li>
       <li xml:lang="sk">Podporuje základné akcie správy súborov ako kopírovanie, presúvanie, mazanie a iné</li>
+      <li xml:lang="sl">Podpira osnovne ukaze za delo z datotekami: kopiranje, premikanje, brisanje, itd.</li>
       <li xml:lang="sr">Основне радње управљања фајловима, попут копирања, премештања, брисања, итд.</li>
       <li xml:lang="sr-Latn">Osnovne radnje upravljanja fajlovima, poput kopiranja, premeštanja, brisanja, itd.</li>
       <li xml:lang="sr-ijekavian">Основне радње управљања фајловима, попут копирања, премештања, брисања, итд.</li>
@@ -98,6 +103,7 @@
       <li xml:lang="nl">Functies zowel als een alleenstaande toepassing als een ingebedde viewer in de webbrowser Konqueror</li>
       <li xml:lang="pl">Możliwość działania jako samodzielny program lub jako osadzona przeglądarka w przeglądarce sieciowej Konqueror</li>
       <li xml:lang="sk">Funguje tak ako samostatná aplikácia, ako aj vstavaný prehliadač vo webovom prehliadači Konqueror</li>
+      <li xml:lang="sl">Deluje tako kot samostojen program, kot tudi v brskalnik Konqueror vgrajen pregledovalnik</li>
       <li xml:lang="sr">Ради и као самосталан програм и као угнежђени приказивач у К‑освајачу.</li>
       <li xml:lang="sr-Latn">Radi i kao samostalan program i kao ugnežđeni prikazivač u K‑osvajaču.</li>
       <li xml:lang="sr-ijekavian">Ради и као самосталан програм и као угнежђени приказивач у К‑освајачу.</li>
@@ -114,6 +120,7 @@
       <li xml:lang="nl">Kan uitgebreid worden met KIPI-plug-ins.</li>
       <li xml:lang="pl">Możliwość poszerzenia możliwości przez wtyczki KIPI.</li>
       <li xml:lang="sk">Môže sa rozšíriť pomocou KIPI pluginov.</li>
+      <li xml:lang="sl">Lahko ga razširite s pomočjo vstavkov KIPI.</li>
       <li xml:lang="sr">Може се проширивати КИПИ‑јевим прикључцима.</li>
       <li xml:lang="sr-Latn">Može se proširivati KIPI‑jevim priključcima.</li>
       <li xml:lang="sr-ijekavian">Може се проширивати КИПИ‑јевим прикључцима.</li>
