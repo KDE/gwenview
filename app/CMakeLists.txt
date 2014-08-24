@@ -95,7 +95,7 @@ install(TARGETS gwenview
     ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(FILES gwenviewui.rc
-    DESTINATION ${DATA_INSTALL_DIR}/gwenview)
+    DESTINATION ${KXMLGUI_INSTALL_DIR}/gwenview)
 
 install(PROGRAMS gwenview.desktop
     DESTINATION ${XDG_APPS_INSTALL_DIR})
