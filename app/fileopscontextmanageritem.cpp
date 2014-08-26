@@ -38,6 +38,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KFileItem>
 #include <KFileItemActions>
 #include <KIO/Paste>
+#include <KIO/RestoreJob>
+#include <KIO/JobUiDelegate>
+#include <KJobWidgets>
 #include <KLocale>
 #include <KMimeTypeTrader>
 #include <KOpenWithDialog>
@@ -356,7 +359,9 @@ void FileOpsContextManagerItem::del()
 
 void FileOpsContextManagerItem::restore()
 {
-    KonqOperations::restoreTrashedItems(d->urlList(), d->mGroup);
+    KIO::RestoreJob *job = KIO::restoreFromTrash(d->urlList());
+    KJobWidgets::setWindow(job, d->mGroup);
+    job->uiDelegate()->setAutoErrorHandlingEnabled(true);
 }
 
 void FileOpsContextManagerItem::copyTo()

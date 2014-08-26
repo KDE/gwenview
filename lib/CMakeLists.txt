@@ -1,5 +1,7 @@
 project(gwenviewlib)
 
+set(LIBGWENVIEW_VERSION "4.97.0")
+
 # Extract version of libjpeg so that we can use the appropriate dir
 # See bug #227313
 message(STATUS "Looking for libjpeg version in ${JPEG_INCLUDE_DIR}/jpeglib.h")
@@ -204,7 +206,7 @@ kconfig_add_kcfg_files(gwenviewlib_SRCS
     )
 
 add_library(gwenviewlib SHARED ${gwenviewlib_SRCS})
-set_target_properties(gwenviewlib PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION})
+set_target_properties(gwenviewlib PROPERTIES VERSION ${LIBGWENVIEW_VERSION} SOVERSION 5 )
 if (WIN32)
     set_target_properties(gwenviewlib PROPERTIES COMPILE_FLAGS -DJPEG_STATIC)
 endif()

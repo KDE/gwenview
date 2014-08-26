@@ -84,31 +84,44 @@ static void copyMoveOrLink(KonqOperations::Operation operation, const QList<QUrl
     }
 
     QUrl destUrl = dialog.selectedUrl();
-    KonqOperations::copy(parent, operation, urlList, destUrl);
+    KIO::CopyJob* job = 0;
+    switch (operation) {
+    case KonqOperations::COPY:
+        job = KIO::copy(urlList, destUrl);
+        break;
+    case KonqOperations::MOVE:
+        job = KIO::move(urlList, destUrl);
+        break;
+    case KonqOperations::LINK:
+        job = KIO::link(urlList, destUrl);
+        break;
+    default:
+        Q_ASSERT(0);
+    }
+    KJobWidgets::setWindow(job, parent);
+    job->ui()->setAutoErrorHandlingEnabled(true);
 }
 
 static void delOrTrash(KonqOperations::Operation operation, const QList<QUrl>& urlList, QWidget* parent)
 {
     Q_ASSERT(urlList.count() > 0);
 
-    if (!KonqOperations::askDeleteConfirmation(urlList, operation, KonqOperations::DEFAULT_CONFIRMATION, parent)) {
-        return;
-    }
-
+    KIO::JobUiDelegate uiDelegate;
+    uiDelegate.setWindow(parent);
     KIO::Job* job = 0;
-    // KonqOperations::delOrTrash() handles the confirmation and does not provide
-    // a way to know if the deletion has been accepted.
-    // We need to know about the confirmation so that DocumentFactory can forget
-    // about the deleted urls. That's why we can't use KonqOperations::delOrTrash()
     switch (operation) {
     case KonqOperations::TRASH:
+        if (!uiDelegate.askDeleteConfirmation(urlList, KIO::JobUiDelegate::Trash, KIO::JobUiDelegate::DefaultConfirmation)) {
+            return;
+        }
         job = KIO::trash(urlList);
         break;
-
     case KonqOperations::DEL:
+        if (!uiDelegate.askDeleteConfirmation(urlList, KIO::JobUiDelegate::Delete, KIO::JobUiDelegate::DefaultConfirmation)) {
+            return;
+        }
         job = KIO::del(urlList);
         break;
-
     default:
         qWarning() << "Unknown operation" << operation;
         return;
