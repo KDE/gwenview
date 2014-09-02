@@ -87,10 +87,6 @@ if (KIPI_FOUND)
     target_link_libraries(gwenview ${KIPI_LIBRARIES})
 endif()
 
-if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
-    target_link_libraries(gwenview ${BALOO_LIBRARIES})
-endif()
-
 install(TARGETS gwenview
     ${INSTALL_TARGETS_DEFAULT_ARGS})
 

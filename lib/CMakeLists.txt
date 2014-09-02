@@ -230,7 +230,7 @@ endif()
 
 if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
     target_link_libraries(gwenviewlib
-        ${BALOO_LIBRARIES}
+        KF5::BalooFiles
         )
 endif()
 
