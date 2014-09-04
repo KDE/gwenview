@@ -32,6 +32,10 @@ if ("${jpeglib_version}" EQUAL 80)
     set(GV_JPEG_DIR libjpeg-80)
 endif()
 
+if ("${jpeglib_version}" EQUAL 90)
+    set(GV_JPEG_DIR libjpeg-90)
+endif()
+
 if ("${GV_JPEG_DIR}" STREQUAL "")
     message(FATAL_ERROR "Unknown libjpeg version: ${jpeglib_version}")
 endif()
