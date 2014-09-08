@@ -6,6 +6,7 @@
   <name>Gwenview</name>
   <name xml:lang="ca">Gwenview</name>
   <name xml:lang="cs">Gwenview</name>
+  <name xml:lang="de">Gwenview</name>
   <name xml:lang="en-GB">Gwenview</name>
   <name xml:lang="es">Gwenview</name>
   <name xml:lang="fi">Gwenview</name>
@@ -30,6 +31,7 @@
       Gwenview is a fast and easy to use image viewer for KDE.
     </p>
     <p xml:lang="ca">El Gwenview és un visor d'imatges ràpid i senzill pel KDE.</p>
+    <p xml:lang="de">Gwenview ist ein schneller und einfach zu verwendender Bildbetrachter für KDE.</p>
     <p xml:lang="en-GB">Gwenview is a fast and easy to use image viewer for KDE.</p>
     <p xml:lang="es">Gwenview es un visor de imágenes de KDE rápido y fácil de usar.</p>
     <p xml:lang="fi">Gwenview on nopea ja helppokäyttöinen kuvakatselin KDE:lle</p>
