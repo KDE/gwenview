@@ -57,10 +57,8 @@ struct DateWidgetPrivate
         mDatePicker->hide();
         mDatePicker->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
 
-        QObject::connect(mDatePicker, SIGNAL(dateEntered(QDate)),
-                         q, SLOT(slotDatePickerModified(QDate)));
-        QObject::connect(mDatePicker, SIGNAL(dateSelected(QDate)),
-                         q, SLOT(slotDatePickerModified(QDate)));
+        QObject::connect(mDatePicker, &KDatePicker::dateEntered, q, &DateWidget::slotDatePickerModified);
+        QObject::connect(mDatePicker, &KDatePicker::dateSelected, q, &DateWidget::slotDatePickerModified);
     }
 
     void updateButton()
@@ -88,16 +86,16 @@ DateWidget::DateWidget(QWidget* parent)
     d->mPreviousButton->setGroupPosition(StatusBarToolButton::GroupLeft);
     // FIXME: RTL
     d->mPreviousButton->setIcon(SmallIcon("go-previous"));
-    connect(d->mPreviousButton, SIGNAL(clicked()), SLOT(goToPrevious()));
+    connect(d->mPreviousButton, &StatusBarToolButton::clicked, this, &DateWidget::goToPrevious);
 
     d->mDateButton = new StatusBarToolButton;
     d->mDateButton->setGroupPosition(StatusBarToolButton::GroupCenter);
-    connect(d->mDateButton, SIGNAL(clicked()), SLOT(showDatePicker()));
+    connect(d->mDateButton, &StatusBarToolButton::clicked, this, &DateWidget::showDatePicker);
 
     d->mNextButton = new StatusBarToolButton;
     d->mNextButton->setGroupPosition(StatusBarToolButton::GroupRight);
     d->mNextButton->setIcon(SmallIcon("go-next"));
-    connect(d->mNextButton, SIGNAL(clicked()), SLOT(goToNext()));
+    connect(d->mNextButton, &StatusBarToolButton::clicked, this, &DateWidget::goToNext);
 
     QHBoxLayout* layout = new QHBoxLayout(this);
     layout->setMargin(0);

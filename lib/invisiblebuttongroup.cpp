@@ -45,7 +45,7 @@ InvisibleButtonGroup::InvisibleButtonGroup(QWidget* parent)
     hide();
     d->mGroup = new QButtonGroup(this);
     d->mGroup->setExclusive(true);
-    connect(d->mGroup, SIGNAL(buttonClicked(int)), SIGNAL(selectionChanged(int)));
+    connect(d->mGroup, static_cast<void (QButtonGroup::*)(int)>(&QButtonGroup::buttonClicked), this, &InvisibleButtonGroup::selectionChanged);
     const QString name = metaObject()->className();
     if (!KConfigDialogManager::propertyMap()->contains(name)) {
         KConfigDialogManager::propertyMap()->insert(name, "current");

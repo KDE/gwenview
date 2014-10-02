@@ -42,7 +42,7 @@ DisabledActionShortcutMonitor::DisabledActionShortcutMonitor(QAction* action, QW
 , d(new DisabledActionShortcutMonitorPrivate)
 {
     d->mShortcut = new QShortcut(parent);
-    connect(d->mShortcut, SIGNAL(activated()), SIGNAL(activated()));
+    connect(d->mShortcut, &QShortcut::activated, this, &DisabledActionShortcutMonitor::activated);
     action->installEventFilter(this);
 }
 

@@ -68,7 +68,7 @@ void SlideContainer::animTo(int newHeight)
     anim->setStartValue(slideHeight());
     anim->setEndValue(newHeight);
     anim->start(QAbstractAnimation::DeleteWhenStopped);
-    connect(anim, SIGNAL(finished()), SLOT(slotAnimFinished()));
+    connect(anim, &QPropertyAnimation::finished, this, &SlideContainer::slotAnimFinished);
     mAnim = anim;
 }
 

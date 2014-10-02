@@ -90,7 +90,7 @@ void BalooSemanticInfoBackend::storeSemanticInfo(const QUrl &url, const Semantic
 void BalooSemanticInfoBackend::retrieveSemanticInfo(const QUrl &url)
 {
     Baloo::FileFetchJob* job = new Baloo::FileFetchJob(url.toLocalFile());
-    connect(job, SIGNAL(finished(KJob*)), this, SLOT(slotFetchFinished(KJob*)));
+    connect(job, &Baloo::FileFetchJob::finished, this, &BalooSemanticInfoBackend::slotFetchFinished);
 
     job->start();
 }

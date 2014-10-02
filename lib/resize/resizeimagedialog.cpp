@@ -58,8 +58,8 @@ ResizeImageDialog::ResizeImageDialog(QWidget* parent)
     QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
     okButton->setDefault(true);
     okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &ResizeImageDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &ResizeImageDialog::reject);
     mainLayout->addWidget(buttonBox);
 
     content->layout()->setMargin(0);
@@ -67,9 +67,9 @@ ResizeImageDialog::ResizeImageDialog(QWidget* parent)
     setWindowTitle(content->windowTitle());
     d->mWidthSpinBox->setFocus();
 
-    connect(d->mWidthSpinBox, SIGNAL(valueChanged(int)), SLOT(slotWidthChanged(int)));
-    connect(d->mHeightSpinBox, SIGNAL(valueChanged(int)), SLOT(slotHeightChanged(int)));
-    connect(d->mKeepAspectCheckBox, SIGNAL(toggled(bool)), SLOT(slotKeepAspectChanged(bool)));
+    connect(d->mWidthSpinBox, static_cast<void (KIntSpinBox::*)(int)>(&KIntSpinBox::valueChanged), this, &ResizeImageDialog::slotWidthChanged);
+    connect(d->mHeightSpinBox, static_cast<void (KIntSpinBox::*)(int)>(&KIntSpinBox::valueChanged), this, &ResizeImageDialog::slotHeightChanged);
+    connect(d->mKeepAspectCheckBox, &QCheckBox::toggled, this, &ResizeImageDialog::slotKeepAspectChanged);
 }
 
 ResizeImageDialog::~ResizeImageDialog()

@@ -110,9 +110,9 @@ DocumentViewContainer::DocumentViewContainer(QWidget* parent)
     d->mLayoutUpdateTimer = new QTimer(this);
     d->mLayoutUpdateTimer->setInterval(0);
     d->mLayoutUpdateTimer->setSingleShot(true);
-    connect(d->mLayoutUpdateTimer, SIGNAL(timeout()), SLOT(updateLayout()));
+    connect(d->mLayoutUpdateTimer, &QTimer::timeout, this, &DocumentViewContainer::updateLayout);
 
-    connect(GwenviewConfig::self(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
+    connect(GwenviewConfig::self(), &GwenviewConfig::configChanged, this, &DocumentViewContainer::slotConfigChanged);
 }
 
 DocumentViewContainer::~DocumentViewContainer()
@@ -125,8 +125,7 @@ DocumentView* DocumentViewContainer::createView()
     DocumentView* view = new DocumentView(d->mScene);
     d->mAddedViews << view;
     view->show();
-    connect(view, SIGNAL(fadeInFinished(DocumentView*)),
-            SLOT(slotFadeInFinished(DocumentView*)));
+    connect(view, &DocumentView::fadeInFinished, this, &DocumentViewContainer::slotFadeInFinished);
     d->scheduleLayoutUpdate();
     return view;
 }
@@ -194,7 +193,7 @@ void DocumentViewContainer::updateLayout()
         QPropertyAnimation* anim = newView->fadeIn();
 
         oldView->setZValue(-1);
-        connect(anim, SIGNAL(finished()), oldView, SLOT(hideAndDeleteLater()));
+        connect(anim, &QPropertyAnimation::finished, oldView, &DocumentView::hideAndDeleteLater);
         d->mRemovedViews.clear();
 
         return;

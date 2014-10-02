@@ -120,8 +120,7 @@ struct RasterImageViewPrivate
         mUpdateTimer = new QTimer(q);
         mUpdateTimer->setInterval(500);
         mUpdateTimer->setSingleShot(true);
-        QObject::connect(mUpdateTimer, SIGNAL(timeout()),
-                         q, SLOT(updateBuffer()));
+        QObject::connect(mUpdateTimer, SIGNAL(timeout()), q, SLOT(updateBuffer()));
     }
 
     void startAnimationIfNecessary()
@@ -200,8 +199,7 @@ RasterImageView::RasterImageView(QGraphicsItem* parent)
 
     d->mBufferIsEmpty = true;
     d->mScaler = new ImageScaler(this);
-    connect(d->mScaler, SIGNAL(scaledRect(int,int,QImage)),
-            SLOT(updateFromScaler(int,int,QImage)));
+    connect(d->mScaler, &ImageScaler::scaledRect, this, &RasterImageView::updateFromScaler);
 
     d->createBackgroundTexture();
     d->setupUpdateTimer();

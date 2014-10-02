@@ -71,7 +71,7 @@ HudWidget::HudWidget(QGraphicsWidget* parent)
     d->mCloseButton = 0;
     d->mAutoDeleteOnFadeout = false;
 
-    connect(d->mAnim, SIGNAL(finished()), SLOT(slotFadeAnimationFinished()));
+    connect(d->mAnim, &QPropertyAnimation::finished, this, &HudWidget::slotFadeAnimationFinished);
 }
 
 HudWidget::~HudWidget()
@@ -110,7 +110,7 @@ void HudWidget::init(QGraphicsWidget* mainWidget, Options options)
         layout->addItem(d->mCloseButton);
         layout->setAlignment(d->mCloseButton, Qt::AlignTop | Qt::AlignHCenter);
 
-        connect(d->mCloseButton, SIGNAL(clicked()), SLOT(slotCloseButtonClicked()));
+        connect(d->mCloseButton, &HudButton::clicked, this, &HudWidget::slotCloseButtonClicked);
     }
 }
 

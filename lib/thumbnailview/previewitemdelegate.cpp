@@ -489,7 +489,7 @@ struct PreviewItemDelegatePrivate
         anim->addAnimation(fadeOut);
         mToolTipAnimation.reset(anim);
         mToolTipAnimation->start();
-        QObject::connect(anim, SIGNAL(finished()), mToolTip, SLOT(deleteLater()));
+        QObject::connect(anim, &QSequentialAnimationGroup::finished, mToolTip.data(), &ToolTipWidget::deleteLater);
     }
 
     int itemWidth() const
@@ -614,20 +614,16 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
     d->mContextBar->hide();
 
     d->mToggleSelectionButton = new ContextBarButton("list-add");
-    connect(d->mToggleSelectionButton, SIGNAL(clicked()),
-            SLOT(slotToggleSelectionClicked()));
+    connect(d->mToggleSelectionButton, &QToolButton::clicked, this, &PreviewItemDelegate::slotToggleSelectionClicked);
 
     d->mFullScreenButton = new ContextBarButton("view-fullscreen");
-    connect(d->mFullScreenButton, SIGNAL(clicked()),
-            SLOT(slotFullScreenClicked()));
+    connect(d->mFullScreenButton, &QToolButton::clicked, this, &PreviewItemDelegate::slotFullScreenClicked);
 
     d->mRotateLeftButton = new ContextBarButton("object-rotate-left");
-    connect(d->mRotateLeftButton, SIGNAL(clicked()),
-            SLOT(slotRotateLeftClicked()));
+    connect(d->mRotateLeftButton, &QToolButton::clicked, this, &PreviewItemDelegate::slotRotateLeftClicked);
 
     d->mRotateRightButton = new ContextBarButton("object-rotate-right");
-    connect(d->mRotateRightButton, SIGNAL(clicked()),
-            SLOT(slotRotateRightClicked()));
+    connect(d->mRotateRightButton, &QToolButton::clicked, this, &PreviewItemDelegate::slotRotateRightClicked);
 
     QHBoxLayout* layout = new QHBoxLayout(d->mContextBar);
     layout->setMargin(2);
@@ -640,8 +636,7 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
     // Save button
     d->mSaveButton = new ContextBarButton("document-save", d->mView->viewport());
     d->mSaveButton->hide();
-    connect(d->mSaveButton, SIGNAL(clicked()),
-            SLOT(slotSaveClicked()));
+    connect(d->mSaveButton, &QToolButton::clicked, this, &PreviewItemDelegate::slotSaveClicked);
 }
 
 PreviewItemDelegate::~PreviewItemDelegate()

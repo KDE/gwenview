@@ -82,7 +82,7 @@ struct ThumbnailBarItemDelegatePrivate
     {
         mToggleSelectionButton = new ContextBarButton("list-add", mView->viewport());
         mToggleSelectionButton->hide();
-        QObject::connect(mToggleSelectionButton, SIGNAL(clicked(bool)), q, SLOT(toggleSelection()));
+        QObject::connect(mToggleSelectionButton, &ContextBarButton::clicked, q, &ThumbnailBarItemDelegate::toggleSelection);
     }
 
     void showToolTip(QHelpEvent* helpEvent)
@@ -448,8 +448,7 @@ ThumbnailBarView::ThumbnailBarView(QWidget* parent)
 {
     d->q = this;
     d->mTimeLine = new QTimeLine(SMOOTH_SCROLL_DURATION, this);
-    connect(d->mTimeLine, SIGNAL(frameChanged(int)),
-            SLOT(slotFrameChanged(int)));
+    connect(d->mTimeLine, &QTimeLine::frameChanged, this, &ThumbnailBarView::slotFrameChanged);
 
     d->mRowCount = 1;
     d->mOrientation = Qt::Vertical; // To pass value-has-changed check in setOrientation()

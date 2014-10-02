@@ -182,19 +182,18 @@ SlideShow::SlideShow(QObject* parent)
     d->mState = Stopped;
 
     d->mTimer = new QTimer(this);
-    connect(d->mTimer, SIGNAL(timeout()),
-            this, SLOT(goToNextUrl()));
+    connect(d->mTimer, &QTimer::timeout, this, &SlideShow::goToNextUrl);
 
     d->mLoopAction = new QAction(this);
     d->mLoopAction->setText(i18nc("@item:inmenu toggle loop in slideshow", "Loop"));
     d->mLoopAction->setCheckable(true);
-    connect(d->mLoopAction, SIGNAL(triggered()), SLOT(updateConfig()));
+    connect(d->mLoopAction, &QAction::triggered, this, &SlideShow::updateConfig);
 
     d->mRandomAction = new QAction(this);
     d->mRandomAction->setText(i18nc("@item:inmenu toggle random order in slideshow", "Random"));
     d->mRandomAction->setCheckable(true);
-    connect(d->mRandomAction, SIGNAL(toggled(bool)), SLOT(slotRandomActionToggled(bool)));
-    connect(d->mRandomAction, SIGNAL(triggered()), SLOT(updateConfig()));
+    connect(d->mRandomAction, &QAction::toggled, this, &SlideShow::slotRandomActionToggled);
+    connect(d->mRandomAction, &QAction::triggered, this, &SlideShow::updateConfig);
 
     d->mLoopAction->setChecked(GwenviewConfig::loop());
     d->mRandomAction->setChecked(GwenviewConfig::random());

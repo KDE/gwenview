@@ -121,17 +121,17 @@ FullScreenBar::FullScreenBar(QWidget* parent)
     setObjectName(QLatin1String("fullScreenBar"));
 
     d->mTimeLine = new QTimeLine(SLIDE_DURATION, this);
-    connect(d->mTimeLine, SIGNAL(valueChanged(qreal)), SLOT(moveBar(qreal)));
+    connect(d->mTimeLine, &QTimeLine::valueChanged, this, &FullScreenBar::moveBar);
 
     d->mAutoHideCursorTimer = new QTimer(this);
     d->mAutoHideCursorTimer->setInterval(AUTO_HIDE_CURSOR_TIMEOUT);
     d->mAutoHideCursorTimer->setSingleShot(true);
-    connect(d->mAutoHideCursorTimer, SIGNAL(timeout()), SLOT(slotAutoHideCursorTimeout()));
+    connect(d->mAutoHideCursorTimer, &QTimer::timeout, this, &FullScreenBar::slotAutoHideCursorTimeout);
 
     d->mInitialHideTimer = new QTimer(this);
     d->mInitialHideTimer->setInterval(INITIAL_HIDE_TIMEOUT);
     d->mInitialHideTimer->setSingleShot(true);
-    connect(d->mInitialHideTimer, SIGNAL(timeout()), SLOT(slideOut()));
+    connect(d->mInitialHideTimer, &QTimer::timeout, this, &FullScreenBar::slideOut);
 
     hide();
 }

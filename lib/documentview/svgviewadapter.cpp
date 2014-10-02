@@ -107,15 +107,15 @@ SvgViewAdapter::SvgViewAdapter()
 {
     d->mView = new SvgImageView;
     setWidget(d->mView);
-    connect(d->mView, SIGNAL(zoomChanged(qreal)), SIGNAL(zoomChanged(qreal)));
-    connect(d->mView, SIGNAL(zoomToFitChanged(bool)), SIGNAL(zoomToFitChanged(bool)));
-    connect(d->mView, SIGNAL(zoomInRequested(QPointF)), SIGNAL(zoomInRequested(QPointF)));
-    connect(d->mView, SIGNAL(zoomOutRequested(QPointF)), SIGNAL(zoomOutRequested(QPointF)));
-    connect(d->mView, SIGNAL(scrollPosChanged()), SIGNAL(scrollPosChanged()));
-    connect(d->mView, SIGNAL(completed()), SIGNAL(completed()));
-    connect(d->mView, SIGNAL(previousImageRequested()), SIGNAL(previousImageRequested()));
-    connect(d->mView, SIGNAL(nextImageRequested()), SIGNAL(nextImageRequested()));
-    connect(d->mView, SIGNAL(toggleFullScreenRequested()), SIGNAL(toggleFullScreenRequested()));
+    connect(d->mView, &SvgImageView::zoomChanged, this, &SvgViewAdapter::zoomChanged);
+    connect(d->mView, &SvgImageView::zoomToFitChanged, this, &SvgViewAdapter::zoomToFitChanged);
+    connect(d->mView, &SvgImageView::zoomInRequested, this, &SvgViewAdapter::zoomInRequested);
+    connect(d->mView, &SvgImageView::zoomOutRequested, this, &SvgViewAdapter::zoomOutRequested);
+    connect(d->mView, &SvgImageView::scrollPosChanged, this, &SvgViewAdapter::scrollPosChanged);
+    connect(d->mView, &SvgImageView::completed, this, &SvgViewAdapter::completed);
+    connect(d->mView, &SvgImageView::previousImageRequested, this, &SvgViewAdapter::previousImageRequested);
+    connect(d->mView, &SvgImageView::nextImageRequested, this, &SvgViewAdapter::nextImageRequested);
+    connect(d->mView, &SvgImageView::toggleFullScreenRequested, this, &SvgViewAdapter::toggleFullScreenRequested);
 }
 
 SvgViewAdapter::~SvgViewAdapter()

@@ -179,14 +179,10 @@ Document::Ptr DocumentFactory::load(const QUrl &url)
     // Start loading the document
     LOG(url.fileName() << "loading");
     Document* doc = new Document(url);
-    connect(doc, SIGNAL(loaded(QUrl)),
-            SLOT(slotLoaded(QUrl)));
-    connect(doc, SIGNAL(saved(QUrl,QUrl)),
-            SLOT(slotSaved(QUrl,QUrl)));
-    connect(doc, SIGNAL(modified(QUrl)),
-            SLOT(slotModified(QUrl)));
-    connect(doc, SIGNAL(busyChanged(QUrl,bool)),
-            SLOT(slotBusyChanged(QUrl,bool)));
+    connect(doc, &Document::loaded, this, &DocumentFactory::slotLoaded);
+    connect(doc, &Document::saved, this, &DocumentFactory::slotSaved);
+    connect(doc, &Document::modified, this, &DocumentFactory::slotModified);
+    connect(doc, &Document::busyChanged, this, &DocumentFactory::slotBusyChanged);
 
     // Create DocumentInfo instance
     info = new DocumentInfo;

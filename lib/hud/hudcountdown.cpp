@@ -42,8 +42,8 @@ HudCountDown::HudCountDown(QGraphicsWidget* parent)
 {
     d->mTimeLine = new QTimeLine(0, this);
     d->mTimeLine->setDirection(QTimeLine::Backward);
-    connect(d->mTimeLine, SIGNAL(valueChanged(qreal)), SLOT(doUpdate()));
-    connect(d->mTimeLine, SIGNAL(finished()), SIGNAL(timeout()));
+    connect(d->mTimeLine, &QTimeLine::valueChanged, this, &HudCountDown::doUpdate);
+    connect(d->mTimeLine, &QTimeLine::finished, this, &HudCountDown::timeout);
 
     // Use an odd value so that the vertical line is aligned to pixel
     // boundaries

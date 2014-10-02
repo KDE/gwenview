@@ -309,7 +309,7 @@ DocumentJob* Document::save(const QUrl &url, const QByteArray& format)
     }
     job->setProperty("oldUrl", d->mUrl);
     job->setProperty("newUrl", url);
-    connect(job, SIGNAL(result(KJob*)), SLOT(slotSaveResult(KJob*)));
+    connect(job, &DocumentJob::result, this, &Document::slotSaveResult);
     enqueueJob(job);
     return job;
 }
@@ -521,8 +521,7 @@ void Document::enqueueJob(DocumentJob* job)
 {
     LOG("job=" << job);
     job->setDocument(Ptr(this));
-    connect(job, SIGNAL(finished(KJob*)),
-            SLOT(slotJobFinished(KJob*)));
+    connect(job, &LoadingJob::finished, this, &Document::slotJobFinished);
     if (d->mCurrentJob) {
         d->mJobQueue.enqueue(job);
     } else {

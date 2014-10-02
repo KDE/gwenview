@@ -55,8 +55,8 @@ HudMessageBubble::HudMessageBubble(QGraphicsWidget* parent)
     d->mCountDown = new HudCountDown;
     d->mLabel = new HudLabel;
 
-    connect(d->mCountDown, SIGNAL(timeout()), SLOT(fadeOut()));
-    connect(this, SIGNAL(fadedOut()), SLOT(deleteLater()));
+    connect(d->mCountDown, &HudCountDown::timeout, this, &HudMessageBubble::fadeOut);
+    connect(this, &HudMessageBubble::fadedOut, this, &HudMessageBubble::deleteLater);
 
     d->mLayout = new QGraphicsLinearLayout(d->mWidget);
     d->mLayout->setContentsMargins(0, 0, 0, 0);

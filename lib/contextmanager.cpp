@@ -90,12 +90,10 @@ ContextManager::ContextManager(SortedDirModel* dirModel, QObject* parent)
     d->mQueuedSignalsTimer = new QTimer(this);
     d->mQueuedSignalsTimer->setInterval(100);
     d->mQueuedSignalsTimer->setSingleShot(true);
-    connect(d->mQueuedSignalsTimer, SIGNAL(timeout()),
-            SLOT(emitQueuedSignals()));
+    connect(d->mQueuedSignalsTimer, &QTimer::timeout, this, &ContextManager::emitQueuedSignals);
 
     d->mDirModel = dirModel;
-    connect(d->mDirModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
-            SLOT(slotDirModelDataChanged(QModelIndex,QModelIndex)));
+    connect(d->mDirModel, &SortedDirModel::dataChanged, this, &ContextManager::slotDirModelDataChanged);
 
     /* HACK! In extended-selection mode, when the current index is removed,
      * QItemSelectionModel selects the previous index if there is one, if not it
@@ -112,21 +110,17 @@ ContextManager::ContextManager(SortedDirModel* dirModel, QObject* parent)
      * doing so ensures QItemSelectionModel cannot be connected to the
      * mDirModel.rowsAboutToBeRemoved() signal before us.
      */
-    connect(d->mDirModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)),
-            SLOT(slotRowsAboutToBeRemoved(QModelIndex,int,int)));
+    connect(d->mDirModel, &SortedDirModel::rowsAboutToBeRemoved, this, &ContextManager::slotRowsAboutToBeRemoved);
 
-    connect(d->mDirModel, SIGNAL(rowsInserted(QModelIndex,int,int)),
-            SLOT(slotRowsInserted()));
+    connect(d->mDirModel, &SortedDirModel::rowsInserted, this, &ContextManager::slotRowsInserted);
 
     connect(d->mDirModel->dirLister(), SIGNAL(redirection(QUrl)),
             SLOT(slotDirListerRedirection(QUrl)));
 
     d->mSelectionModel = new QItemSelectionModel(d->mDirModel);
 
-    connect(d->mSelectionModel, SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-            SLOT(slotSelectionChanged()));
-    connect(d->mSelectionModel, SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-            SLOT(slotCurrentChanged(QModelIndex)));
+    connect(d->mSelectionModel, &QItemSelectionModel::selectionChanged, this, &ContextManager::slotSelectionChanged);
+    connect(d->mSelectionModel, &QItemSelectionModel::currentChanged, this, &ContextManager::slotCurrentChanged);
 
     d->mSelectedFileItemListNeedsUpdate = false;
 }

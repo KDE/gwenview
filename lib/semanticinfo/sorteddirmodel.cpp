@@ -83,7 +83,7 @@ SortedDirModel::SortedDirModel(QObject* parent)
     setSourceModel(d->mSourceModel);
     d->mDelayedApplyFiltersTimer.setInterval(0);
     d->mDelayedApplyFiltersTimer.setSingleShot(true);
-    connect(&d->mDelayedApplyFiltersTimer, SIGNAL(timeout()), SLOT(doApplyFilters()));
+    connect(&d->mDelayedApplyFiltersTimer, &QTimer::timeout, this, &SortedDirModel::doApplyFilters);
 }
 
 SortedDirModel::~SortedDirModel()

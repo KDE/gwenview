@@ -79,15 +79,11 @@ ZoomSlider::ZoomSlider(QWidget* parent)
     layout->addWidget(d->mSlider);
     layout->addWidget(d->mZoomInButton);
 
-    connect(d->mSlider, SIGNAL(actionTriggered(int)),
-            SLOT(slotActionTriggered(int)));
-    connect(d->mSlider, SIGNAL(valueChanged(int)),
-            SIGNAL(valueChanged(int)));
+    connect(d->mSlider, &QSlider::actionTriggered, this, &ZoomSlider::slotActionTriggered);
+    connect(d->mSlider, &QSlider::valueChanged, this, &ZoomSlider::valueChanged);
 
-    connect(d->mZoomOutButton, SIGNAL(clicked()),
-            SLOT(zoomOut()));
-    connect(d->mZoomInButton, SIGNAL(clicked()),
-            SLOT(zoomIn()));
+    connect(d->mZoomOutButton, &QToolButton::clicked, this, &ZoomSlider::zoomOut);
+    connect(d->mZoomInButton, &QToolButton::clicked, this, &ZoomSlider::zoomIn);
 }
 
 ZoomSlider::~ZoomSlider()

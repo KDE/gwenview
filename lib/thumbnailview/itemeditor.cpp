@@ -45,7 +45,7 @@ ItemEditor::ItemEditor(QWidget* parent)
 , d(new ItemEditorPrivate)
 {
     setPalette(QApplication::palette());
-    connect(this, SIGNAL(textChanged(QString)), SLOT(resizeToContents()));
+    connect(this, &ItemEditor::textChanged, this, &ItemEditor::resizeToContents);
     setTrapReturnKey(true);
 }
 

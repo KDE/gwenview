@@ -115,13 +115,10 @@ struct DocumentViewControllerPrivate
             return;
         }
 
-        QObject::connect(mZoomWidget, SIGNAL(zoomChanged(qreal)),
-                         mView, SLOT(setZoom(qreal)));
+        QObject::connect(mZoomWidget, &ZoomWidget::zoomChanged, mView, &DocumentView::setZoom);
 
-        QObject::connect(mView, SIGNAL(minimumZoomChanged(qreal)),
-                         mZoomWidget, SLOT(setMinimumZoom(qreal)));
-        QObject::connect(mView, SIGNAL(zoomChanged(qreal)),
-                         mZoomWidget, SLOT(setZoom(qreal)));
+        QObject::connect(mView, &DocumentView::minimumZoomChanged, mZoomWidget, &ZoomWidget::setMinimumZoom);
+        QObject::connect(mView, &DocumentView::zoomChanged, mZoomWidget, &ZoomWidget::setZoom);
 
         mZoomWidget->setMinimumZoom(mView->minimumZoom());
         mZoomWidget->setZoom(mView->zoom());
@@ -179,12 +176,9 @@ void DocumentViewController::setView(DocumentView* view)
     if (!d->mView) {
         return;
     }
-    connect(d->mView, SIGNAL(adapterChanged()),
-            SLOT(slotAdapterChanged()));
-    connect(d->mView, SIGNAL(zoomToFitChanged(bool)),
-            SLOT(updateZoomToFitActionFromView()));
-    connect(d->mView, SIGNAL(currentToolChanged(AbstractRasterImageViewTool*)),
-            SLOT(updateTool()));
+    connect(d->mView, &DocumentView::adapterChanged, this, &DocumentViewController::slotAdapterChanged);
+    connect(d->mView, &DocumentView::zoomToFitChanged, this, &DocumentViewController::updateZoomToFitActionFromView);
+    connect(d->mView, &DocumentView::currentToolChanged, this, &DocumentViewController::updateTool);
 
     connect(d->mZoomToFitAction, SIGNAL(toggled(bool)),
             d->mView, SLOT(setZoomToFit(bool)));
@@ -252,9 +246,7 @@ void DocumentViewController::updateTool()
     if (tool && tool->widget()) {
         // Use a QueuedConnection to ensure the size of the view has been
         // updated by the time the slot is called.
-        connect(d->mToolContainer, SIGNAL(slidedIn()),
-            tool, SLOT(onWidgetSlidedIn()),
-            Qt::QueuedConnection);
+        connect(d->mToolContainer, &SlideContainer::slidedIn, tool, &AbstractRasterImageViewTool::onWidgetSlidedIn, Qt::QueuedConnection);
         d->mToolContainerContent->setToolWidget(tool->widget());
         d->mToolContainer->slideIn();
     } else {

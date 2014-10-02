@@ -75,15 +75,11 @@ SemanticInfoDirModel::SemanticInfoDirModel(QObject* parent)
     d->mBackEnd = new BalooSemanticInfoBackend(this);
 #endif
 
-    connect(d->mBackEnd, SIGNAL(semanticInfoRetrieved(QUrl,SemanticInfo)),
-            SLOT(slotSemanticInfoRetrieved(QUrl,SemanticInfo)),
-            Qt::QueuedConnection);
+    connect(d->mBackEnd, &AbstractSemanticInfoBackEnd::semanticInfoRetrieved, this, &SemanticInfoDirModel::slotSemanticInfoRetrieved, Qt::QueuedConnection);
 
-    connect(this, SIGNAL(modelAboutToBeReset()),
-            SLOT(slotModelAboutToBeReset()));
+    connect(this, &SemanticInfoDirModel::modelAboutToBeReset, this, &SemanticInfoDirModel::slotModelAboutToBeReset);
 
-    connect(this, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)),
-            SLOT(slotRowsAboutToBeRemoved(QModelIndex,int,int)));
+    connect(this, &SemanticInfoDirModel::rowsAboutToBeRemoved, this, &SemanticInfoDirModel::slotRowsAboutToBeRemoved);
 }
 
 SemanticInfoDirModel::~SemanticInfoDirModel()

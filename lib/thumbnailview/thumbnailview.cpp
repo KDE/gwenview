@@ -197,8 +197,7 @@ struct ThumbnailViewPrivate
         mBusyAnimationTimeLine->setCurveShape(QTimeLine::LinearCurve);
         mBusyAnimationTimeLine->setEndFrame(mBusySequence.frameCount() - 1);
         mBusyAnimationTimeLine->setLoopCount(0);
-        QObject::connect(mBusyAnimationTimeLine, SIGNAL(frameChanged(int)),
-                         q, SLOT(updateBusyIndexes()));
+        QObject::connect(mBusyAnimationTimeLine, &QTimeLine::frameChanged, q, &ThumbnailView::updateBusyIndexes);
     }
 
     void scheduleThumbnailGeneration()
@@ -315,23 +314,18 @@ ThumbnailView::ThumbnailView(QWidget* parent)
 
     d->mScheduledThumbnailGenerationTimer.setSingleShot(true);
     d->mScheduledThumbnailGenerationTimer.setInterval(500);
-    connect(&d->mScheduledThumbnailGenerationTimer, SIGNAL(timeout()),
-            SLOT(generateThumbnailsForItems()));
+    connect(&d->mScheduledThumbnailGenerationTimer, &QTimer::timeout, this, &ThumbnailView::generateThumbnailsForItems);
 
     d->mSmoothThumbnailTimer.setSingleShot(true);
-    connect(&d->mSmoothThumbnailTimer, SIGNAL(timeout()),
-            SLOT(smoothNextThumbnail()));
+    connect(&d->mSmoothThumbnailTimer, &QTimer::timeout, this, &ThumbnailView::smoothNextThumbnail);
 
     setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(this, SIGNAL(customContextMenuRequested(QPoint)),
-            SLOT(showContextMenu()));
+    connect(this, &ThumbnailView::customContextMenuRequested, this, &ThumbnailView::showContextMenu);
 
     if (KGlobalSettings::singleClick()) {
-        connect(this, SIGNAL(clicked(QModelIndex)),
-                SLOT(emitIndexActivatedIfNoModifiers(QModelIndex)));
+        connect(this, &ThumbnailView::clicked, this, &ThumbnailView::emitIndexActivatedIfNoModifiers);
     } else {
-        connect(this, SIGNAL(doubleClicked(QModelIndex)),
-                SLOT(emitIndexActivatedIfNoModifiers(QModelIndex)));
+        connect(this, &ThumbnailView::doubleClicked, this, &ThumbnailView::emitIndexActivatedIfNoModifiers);
     }
 }
 

@@ -116,7 +116,7 @@ BirdEyeView::BirdEyeView(DocumentView* docView)
     d->mAutoHideTimer = new QTimer(this);
     d->mAutoHideTimer->setSingleShot(true);
     d->mAutoHideTimer->setInterval(AUTOHIDE_DELAY);
-    connect(d->mAutoHideTimer, SIGNAL(timeout()), SLOT(slotAutoHideTimeout()));
+    connect(d->mAutoHideTimer, &QTimer::timeout, this, &BirdEyeView::slotAutoHideTimeout);
 
     // Hide ourself by default, to avoid startup flashes (if we let updateOpacity
     // update opacity, it will do so through an animation)

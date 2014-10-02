@@ -46,15 +46,15 @@ RasterImageViewAdapter::RasterImageViewAdapter()
 {
     d->q = this;
     d->mView = new RasterImageView;
-    connect(d->mView, SIGNAL(zoomChanged(qreal)), SIGNAL(zoomChanged(qreal)));
-    connect(d->mView, SIGNAL(zoomToFitChanged(bool)), SIGNAL(zoomToFitChanged(bool)));
-    connect(d->mView, SIGNAL(zoomInRequested(QPointF)), SIGNAL(zoomInRequested(QPointF)));
-    connect(d->mView, SIGNAL(zoomOutRequested(QPointF)), SIGNAL(zoomOutRequested(QPointF)));
-    connect(d->mView, SIGNAL(scrollPosChanged()), SIGNAL(scrollPosChanged()));
-    connect(d->mView, SIGNAL(completed()), SIGNAL(completed()));
-    connect(d->mView, SIGNAL(previousImageRequested()), SIGNAL(previousImageRequested()));
-    connect(d->mView, SIGNAL(nextImageRequested()), SIGNAL(nextImageRequested()));
-    connect(d->mView, SIGNAL(toggleFullScreenRequested()), SIGNAL(toggleFullScreenRequested()));
+    connect(d->mView, &RasterImageView::zoomChanged, this, &RasterImageViewAdapter::zoomChanged);
+    connect(d->mView, &RasterImageView::zoomToFitChanged, this, &RasterImageViewAdapter::zoomToFitChanged);
+    connect(d->mView, &RasterImageView::zoomInRequested, this, &RasterImageViewAdapter::zoomInRequested);
+    connect(d->mView, &RasterImageView::zoomOutRequested, this, &RasterImageViewAdapter::zoomOutRequested);
+    connect(d->mView, &RasterImageView::scrollPosChanged, this, &RasterImageViewAdapter::scrollPosChanged);
+    connect(d->mView, &RasterImageView::completed, this, &RasterImageViewAdapter::completed);
+    connect(d->mView, &RasterImageView::previousImageRequested, this, &RasterImageViewAdapter::previousImageRequested);
+    connect(d->mView, &RasterImageView::nextImageRequested, this, &RasterImageViewAdapter::nextImageRequested);
+    connect(d->mView, &RasterImageView::toggleFullScreenRequested, this, &RasterImageViewAdapter::toggleFullScreenRequested);
     setWidget(d->mView);
 }
 

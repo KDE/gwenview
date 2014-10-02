@@ -47,7 +47,7 @@ AnimatedDocumentLoadedImpl::AnimatedDocumentLoadedImpl(Document* document, const
 {
     d->mRawData = rawData;
 
-    connect(&d->mMovie, SIGNAL(frameChanged(int)), SLOT(slotFrameChanged(int)));
+    connect(&d->mMovie, &QMovie::frameChanged, this, &AnimatedDocumentLoadedImpl::slotFrameChanged);
 
     d->mMovieBuffer.setBuffer(&d->mRawData);
     d->mMovieBuffer.open(QIODevice::ReadOnly);

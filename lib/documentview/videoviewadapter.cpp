@@ -72,17 +72,13 @@ struct VideoViewAdapterPrivate
     {
         mPlayPauseAction = new QAction(q);
         mPlayPauseAction->setShortcut(Qt::Key_P);
-        QObject::connect(mPlayPauseAction, SIGNAL(triggered()),
-                         q, SLOT(slotPlayPauseClicked()));
-        QObject::connect(mMediaObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)),
-                         q, SLOT(updatePlayUi()));
+        QObject::connect(mPlayPauseAction, &QAction::triggered, q, &VideoViewAdapter::slotPlayPauseClicked);
+        QObject::connect(mMediaObject, &Phonon::MediaObject::stateChanged, q, &VideoViewAdapter::updatePlayUi);
 
         mMuteAction = new QAction(q);
         mMuteAction->setShortcut(Qt::Key_M);
-        QObject::connect(mMuteAction, SIGNAL(triggered()),
-            q, SLOT(slotMuteClicked()));
-        QObject::connect(mAudioOutput, SIGNAL(mutedChanged(bool)),
-            q, SLOT(updateMuteAction()));
+        QObject::connect(mMuteAction, &QAction::triggered, q, &VideoViewAdapter::slotMuteClicked);
+        QObject::connect(mAudioOutput, &Phonon::AudioOutput::mutedChanged, q, &VideoViewAdapter::updateMuteAction);
     }
 
     void setupHud(QGraphicsWidget* parent)
@@ -95,14 +91,10 @@ struct VideoViewAdapterPrivate
         mSeekSlider = new HudSlider;
         mSeekSlider->setPageStep(5000);
         mSeekSlider->setSingleStep(200);
-        QObject::connect(mSeekSlider, SIGNAL(actionTriggered(int)),
-            q, SLOT(slotSeekSliderActionTriggered(int)));
-        QObject::connect(mMediaObject, SIGNAL(tick(qint64)),
-            q, SLOT(slotTicked(qint64)));
-        QObject::connect(mMediaObject, SIGNAL(totalTimeChanged(qint64)),
-            q, SLOT(updatePlayUi()));
-        QObject::connect(mMediaObject, SIGNAL(seekableChanged(bool)),
-            q, SLOT(updatePlayUi()));
+        QObject::connect(mSeekSlider, &HudSlider::actionTriggered, q, &VideoViewAdapter::slotSeekSliderActionTriggered);
+        QObject::connect(mMediaObject, &Phonon::MediaObject::tick, q, &VideoViewAdapter::slotTicked);
+        QObject::connect(mMediaObject, &Phonon::MediaObject::totalTimeChanged, q, &VideoViewAdapter::updatePlayUi);
+        QObject::connect(mMediaObject, &Phonon::MediaObject::seekableChanged, q, &VideoViewAdapter::updatePlayUi);
 
         // Mute
         HudButton* muteButton = new HudButton;
@@ -114,10 +106,8 @@ struct VideoViewAdapterPrivate
         mVolumeSlider->setRange(0, 100);
         mVolumeSlider->setPageStep(5);
         mVolumeSlider->setSingleStep(1);
-        QObject::connect(mVolumeSlider, SIGNAL(valueChanged(int)),
-            q, SLOT(slotVolumeSliderChanged(int)));
-        QObject::connect(mAudioOutput, SIGNAL(volumeChanged(qreal)),
-            q, SLOT(slotOutputVolumeChanged(qreal)));
+        QObject::connect(mVolumeSlider, &HudSlider::valueChanged, q, &VideoViewAdapter::slotVolumeSliderChanged);
+        QObject::connect(mAudioOutput, &Phonon::AudioOutput::volumeChanged, q, &VideoViewAdapter::slotOutputVolumeChanged);
 
         // Layout
         QGraphicsWidget* hudContent = new QGraphicsWidget;
@@ -210,7 +200,7 @@ VideoViewAdapter::VideoViewAdapter()
     d->q = this;
     d->mMediaObject = new Phonon::MediaObject(this);
     d->mMediaObject->setTickInterval(350);
-    connect(d->mMediaObject, SIGNAL(finished()), SIGNAL(videoFinished()));
+    connect(d->mMediaObject, &Phonon::MediaObject::finished, this, &VideoViewAdapter::videoFinished);
 
     d->mVideoWidget = new Phonon::VideoWidget;
     d->mVideoWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);

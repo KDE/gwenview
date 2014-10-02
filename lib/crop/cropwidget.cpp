@@ -191,10 +191,8 @@ struct CropWidgetPrivate : public Ui_CropWidget
         cropButton->setIcon(QIcon::fromTheme("transform-crop-and-resize"));
         cropButton->setText(i18n("Crop"));
 
-        QObject::connect(dialogButtonBox, SIGNAL(accepted()),
-                         q, SIGNAL(cropRequested()));
-        QObject::connect(dialogButtonBox, SIGNAL(rejected()),
-                         q, SIGNAL(done()));
+        QObject::connect(dialogButtonBox, &KDialogButtonBox::accepted, q, &CropWidget::cropRequested);
+        QObject::connect(dialogButtonBox, &KDialogButtonBox::rejected, q, &CropWidget::done);
     }
 };
 
@@ -219,22 +217,16 @@ CropWidget::CropWidget(QWidget* parent, RasterImageView* imageView, CropTool* cr
 
     d->initRatioComboBox();
 
-    connect(d->mCropTool, SIGNAL(rectUpdated(QRect)),
-            SLOT(setCropRect(QRect)));
+    connect(d->mCropTool, &CropTool::rectUpdated, this, &CropWidget::setCropRect);
 
-    connect(d->leftSpinBox, SIGNAL(valueChanged(int)),
-            SLOT(slotPositionChanged()));
-    connect(d->topSpinBox, SIGNAL(valueChanged(int)),
-            SLOT(slotPositionChanged()));
-    connect(d->widthSpinBox, SIGNAL(valueChanged(int)),
-            SLOT(slotWidthChanged()));
-    connect(d->heightSpinBox, SIGNAL(valueChanged(int)),
-            SLOT(slotHeightChanged()));
+    connect(d->leftSpinBox, static_cast<void (KIntSpinBox::*)(int)>(&KIntSpinBox::valueChanged), this, &CropWidget::slotPositionChanged);
+    connect(d->topSpinBox, static_cast<void (KIntSpinBox::*)(int)>(&KIntSpinBox::valueChanged), this, &CropWidget::slotPositionChanged);
+    connect(d->widthSpinBox, static_cast<void (KIntSpinBox::*)(int)>(&KIntSpinBox::valueChanged), this, &CropWidget::slotWidthChanged);
+    connect(d->heightSpinBox, static_cast<void (KIntSpinBox::*)(int)>(&KIntSpinBox::valueChanged), this, &CropWidget::slotHeightChanged);
 
     d->initDialogButtonBox();
 
-    connect(d->ratioComboBox, SIGNAL(editTextChanged(QString)),
-            SLOT(slotRatioComboBoxEditTextChanged()));
+    connect(d->ratioComboBox, &KComboBox::editTextChanged, this, &CropWidget::slotRatioComboBoxEditTextChanged);
 
     // Don't do this before signals are connected, otherwise the tool won't get
     // initialized

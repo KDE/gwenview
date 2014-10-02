@@ -154,10 +154,8 @@ PlaceTreeModel::PlaceTreeModel(QObject* parent)
     d->q = this;
 
     d->mPlacesModel = new KFilePlacesModel(this);
-    connect(d->mPlacesModel, SIGNAL(rowsInserted(QModelIndex,int,int)),
-            SLOT(slotPlacesRowsInserted(QModelIndex,int,int)));
-    connect(d->mPlacesModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)),
-            SLOT(slotPlacesRowsAboutToBeRemoved(QModelIndex,int,int)));
+    connect(d->mPlacesModel, &KFilePlacesModel::rowsInserted, this, &PlaceTreeModel::slotPlacesRowsInserted);
+    connect(d->mPlacesModel, &KFilePlacesModel::rowsAboutToBeRemoved, this, &PlaceTreeModel::slotPlacesRowsAboutToBeRemoved);
 
     // Bootstrap
     slotPlacesRowsInserted(QModelIndex(), 0, d->mPlacesModel->rowCount() - 1);
@@ -302,14 +300,10 @@ void PlaceTreeModel::slotPlacesRowsInserted(const QModelIndex& /*parent*/, int s
     beginInsertRows(QModelIndex(), start, end);
     for (int row = start; row <= end; ++row) {
         SortedDirModel* dirModel = new SortedDirModel(this);
-        connect(dirModel, SIGNAL(rowsAboutToBeInserted(QModelIndex,int,int)),
-                SLOT(slotDirRowsAboutToBeInserted(QModelIndex,int,int)));
-        connect(dirModel, SIGNAL(rowsInserted(QModelIndex,int,int)),
-                SLOT(slotDirRowsInserted(QModelIndex,int,int)));
-        connect(dirModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)),
-                SLOT(slotDirRowsAboutToBeRemoved(QModelIndex,int,int)));
-        connect(dirModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)),
-                SLOT(slotDirRowsRemoved(QModelIndex,int,int)));
+        connect(dirModel, &SortedDirModel::rowsAboutToBeInserted, this, &PlaceTreeModel::slotDirRowsAboutToBeInserted);
+        connect(dirModel, &SortedDirModel::rowsInserted, this, &PlaceTreeModel::slotDirRowsInserted);
+        connect(dirModel, &SortedDirModel::rowsAboutToBeRemoved, this, &PlaceTreeModel::slotDirRowsAboutToBeRemoved);
+        connect(dirModel, &SortedDirModel::rowsAboutToBeRemoved, this, &PlaceTreeModel::slotDirRowsRemoved);
 
         d->mDirModels.insert(row, dirModel);
         KDirLister* lister = dirModel->dirLister();
