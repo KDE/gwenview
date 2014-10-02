@@ -34,6 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <exiv2/exif.hpp>
 #include <exiv2/image.hpp>
 #include <exiv2/iptc.hpp>
+#include <KFormat>
 
 // Local
 
@@ -318,7 +319,7 @@ ImageMetaInfoModel::~ImageMetaInfoModel()
 void ImageMetaInfoModel::setUrl(const QUrl &url)
 {
     KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
-    QString sizeString = KGlobal::locale()->formatByteSize(item.size());
+    QString sizeString = KFormat().formatByteSize(item.size());
 
     d->setGroupEntryValue(GeneralGroup, "General.Name", item.name());
     d->setGroupEntryValue(GeneralGroup, "General.Size", sizeString);

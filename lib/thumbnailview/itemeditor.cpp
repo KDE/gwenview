@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KDE
 #include <KDebug>
 #include <KMimeType>
+#include <QMimeDatabase>
 
 // Local
 
@@ -56,7 +57,8 @@ ItemEditor::~ItemEditor()
 void ItemEditor::showEvent(QShowEvent* event)
 {
     // We can't do this in PreviewItemDelegate::updateEditorGeometry() because QAbstractItemView outsmarts us by calling selectAll() on the editor if it is a QLineEdit
-    const QString extension = KMimeType::extractKnownExtension(text());
+    QMimeDatabase db;
+    const QString extension = db.suffixForFileName(text());
     if (!extension.isEmpty()) {
         // The filename contains an extension. Assure that only the filename
         // gets selected.

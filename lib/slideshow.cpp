@@ -202,7 +202,7 @@ SlideShow::SlideShow(QObject* parent)
 
 SlideShow::~SlideShow()
 {
-    GwenviewConfig::self()->writeConfig();
+    GwenviewConfig::self()->save();
     delete d;
 }
 

@@ -33,6 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QPainter>
 #include <QStyle>
 #include <QStyleOptionGraphicsItem>
+#include <QFontDatabase>
 
 namespace Gwenview
 {
@@ -58,7 +59,7 @@ HudLabel::~HudLabel()
 void HudLabel::setText(const QString& text)
 {
     d->mText = text;
-    QFont font = KGlobalSettings::generalFont();
+    QFont font = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
     QFontMetrics fm(font);
     QSize minSize = fm.size(0, d->mText);
     setMinimumSize(minSize);

@@ -405,7 +405,7 @@ struct PreviewItemDelegatePrivate
         if (mDetails & PreviewItemDelegate::DateDetail) {
             if (!ArchiveUtils::fileItemIsDirOrArchive(fileItem)) {
                 const QDateTime dt = TimeUtils::dateTimeForFileItem(fileItem);
-                const QString text = KGlobal::locale()->formatDateTime(dt);
+                const QString text = KLocale::global()->formatDateTime(dt);
                 elided |= isTextElided(text);
                 textList << text;
             }
@@ -797,7 +797,7 @@ void PreviewItemDelegate::paint(QPainter * painter, const QStyleOptionViewItem &
 
     if (!isDirOrArchive && (d->mDetails & PreviewItemDelegate::DateDetail)) {
         const QDateTime dt = TimeUtils::dateTimeForFileItem(fileItem);
-        d->drawText(painter, textRect, fgColor, KGlobal::locale()->formatDateTime(dt));
+        d->drawText(painter, textRect, fgColor, KLocale::global()->formatDateTime(dt));
         textRect.moveTop(textRect.bottom());
     }
 

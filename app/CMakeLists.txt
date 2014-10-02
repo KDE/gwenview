@@ -81,7 +81,7 @@ target_link_libraries(gwenview
     gwenviewlib
     )
 
-target_link_libraries(gwenview LINK_INTERFACE_LIBRARIES ${KDE4_KIO_LIBS} ${QT_QTCORE_LIBRARY})
+target_link_libraries(gwenview LINK_INTERFACE_LIBRARIES KF5::KIOCore Qt5::Core)
 
 if (KIPI_FOUND)
     target_link_libraries(gwenview ${KIPI_LIBRARIES})

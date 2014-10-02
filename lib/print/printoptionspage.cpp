@@ -225,7 +225,7 @@ void PrintOptionsPage::saveConfig()
 
     d->mConfigDialogManager->updateSettings();
 
-    GwenviewConfig::self()->writeConfig();
+    GwenviewConfig::self()->save();
 }
 
 } // namespace
