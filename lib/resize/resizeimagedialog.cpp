@@ -28,6 +28,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include <ui_resizeimagewidget.h>
+#include <KConfigGroup>
+#include <KGuiItem>
+#include <QDialogButtonBox>
+#include <QPushButton>
+
 
 namespace Gwenview
 {
@@ -39,17 +44,26 @@ struct ResizeImageDialogPrivate : public Ui_ResizeImageWidget
 };
 
 ResizeImageDialog::ResizeImageDialog(QWidget* parent)
-: KDialog(parent)
+: QDialog(parent)
 , d(new ResizeImageDialogPrivate)
 {
     d->mUpdateFromRatio = false;
 
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    setLayout(mainLayout);
     QWidget* content = new QWidget(this);
     d->setupUi(content);
+    mainLayout->addWidget(content);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setDefault(true);
+    okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    mainLayout->addWidget(buttonBox);
+
     content->layout()->setMargin(0);
-    setMainWidget(content);
-    showButtonSeparator(true);
-    setButtonGuiItem(Ok, KGuiItem(i18n("Resize"), "transform-scale"));
+    KGuiItem::assign(okButton, KGuiItem(i18n("Resize"), "transform-scale"));
     setWindowTitle(content->windowTitle());
     d->mWidthSpinBox->setFocus();
 

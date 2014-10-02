@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 
 // KDE
-#include <KDialog>
+#include <QDialog>
 
 // Local
 
@@ -34,7 +34,7 @@ namespace Gwenview
 {
 
 struct ResizeImageDialogPrivate;
-class GWENVIEWLIB_EXPORT ResizeImageDialog : public KDialog
+class GWENVIEWLIB_EXPORT ResizeImageDialog : public QDialog
 {
     Q_OBJECT
 public:
