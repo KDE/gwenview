@@ -110,6 +110,7 @@ private:
 
 int main(int argc, char *argv[])
 {
+    KLocalizedString::setApplicationDomain("gwenview");
     QScopedPointer<K4AboutData> aboutData(
         Gwenview::createAboutData(
             "gwenview",       /* appname */

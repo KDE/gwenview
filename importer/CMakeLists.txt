@@ -20,7 +20,7 @@ set(importer_SRCS
     thumbnailpage.cpp
     )
 
-kde4_add_ui_files(importer_SRCS
+ki18n_wrap_ui(importer_SRCS
     dialogpage.ui
     importerconfigdialog.ui
     progresspage.ui
@@ -29,25 +29,22 @@ kde4_add_ui_files(importer_SRCS
 
 kde4_add_app_icon(importer_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../icons/hi*-apps-gwenview-importer.png")
 
-kde4_add_kcfg_files(importer_SRCS
+kconfig_add_kcfg_files(importer_SRCS
     importerconfig.kcfgc
     )
 
-kde4_add_executable(gwenview_importer ${importer_SRCS})
+add_executable(gwenview_importer ${importer_SRCS})
 
 target_link_libraries(gwenview_importer
-    ${KDE4_KFILE_LIBS}
     gwenviewlib
-    ${KDE4_KIO_LIBS}
-    ${KDE4_SOLID_LIBS}
-    ${QT_QTCORE_LIBRARY}
+    KF5::KIOCore
+    Qt5::Core
     )
 
 target_link_libraries(gwenview_importer
     LINK_INTERFACE_LIBRARIES
-    ${KDE4_KIO_LIBS}
-    ${KDE4_SOLID_LIBS}
-    ${QT_QTCORE_LIBRARY}
+    KF5::KIOCore
+    Qt5::Core
     )
 
 install(TARGETS gwenview_importer
