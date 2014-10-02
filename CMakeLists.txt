@@ -5,7 +5,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake )
 cmake_minimum_required (VERSION 2.8.12 FATAL_ERROR)
 set (QT_MIN_VERSION "5.2.0")
 
-find_package(ECM 0.0.9 REQUIRED NO_MODULE)
+find_package(ECM 1.2.0 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
 include(KDEInstallDirs)
@@ -19,8 +19,6 @@ include(ECMGenerateHeaders)
 include(GenerateExportHeader)
 include(FeatureSummary)
 
-#KF5TODO
-# KDE4_NO_ENABLE_FINAL(gwenview)
 
 ## CMake options
 set(GWENVIEW_SEMANTICINFO_BACKEND_NONE OFF)
@@ -91,5 +89,5 @@ add_subdirectory(icons)
 add_subdirectory(images)
 add_subdirectory(cursors)
 add_subdirectory(color-schemes)
-# add_subdirectory(doc)
+add_subdirectory(doc)
 
