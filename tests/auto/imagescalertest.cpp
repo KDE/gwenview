@@ -17,7 +17,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
-#include <qtest_kde.h>
+#include <qtest.h>
 
 #include "imagescalertest.h"
 
@@ -51,7 +51,9 @@ void ImageScalerTest::testScaleFullImage()
 
     scaler.setDestinationRegion(QRect(QPoint(0, 0), doc->size() * zoom));
 
-    bool ok = QTest::kWaitForSignal(&scaler, SIGNAL(scaledRect(int,int,QImage)), 30);
+    QSignalSpy spy(&scaler, SIGNAL(scaledRect(int,int,QImage)));
+
+    bool ok = spy.wait(30);
     QVERIFY2(ok, "ImageScaler did not emit scaledRect() signal in time");
 
     // Document should be fully loaded by the time image scaler is done

@@ -28,13 +28,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 
 // KDE
-#include <qtest_kde.h>
+#include <qtest.h>
 #include <KDirLister>
 #include <KTempDir>
 
 using namespace Gwenview;
 
-QTEST_KDEMAIN(SortedDirModelTest, GUI)
+QTEST_MAIN(SortedDirModelTest)
 
 void SortedDirModelTest::initTestCase()
 {

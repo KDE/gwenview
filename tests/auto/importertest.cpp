@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KDE
 #include <QDateTime>
 #include <KDebug>
-#include <qtest_kde.h>
+#include <qtest.h>
 
 // Local
 #include "../importer/fileutils.h"
@@ -36,7 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "../importer/filenameformater.h"
 #include "testutils.h"
 
-QTEST_KDEMAIN(ImporterTest, GUI)
+QTEST_MAIN(ImporterTest)
 
 using namespace Gwenview;
 

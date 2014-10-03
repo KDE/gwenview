@@ -29,7 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // KDE
 #include <KDirModel>
-#include <qtest_kde.h>
+#include <qtest.h>
 
 using namespace Gwenview;
 

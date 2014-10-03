@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QPainter>
 
 // KDE
-#include <qtest_kde.h>
+#include <qtest.h>
 #include <KDebug>
 #include <KIO/CopyJob>
 #include <KIO/DeleteJob>
@@ -42,7 +42,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 using namespace Gwenview;
 
-QTEST_KDEMAIN(ThumbnailProviderTest, GUI)
+QTEST_MAIN(ThumbnailProviderTest)
 
 SandBox::SandBox()
 : mPath(QDir::currentPath() + "/sandbox")

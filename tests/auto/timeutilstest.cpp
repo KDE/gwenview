@@ -26,14 +26,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KDE
 #include <KFileItem>
 #include <KTemporaryFile>
-#include <qtest_kde.h>
+#include <qtest.h>
 
 // Local
 #include "../lib/timeutils.h"
 
 #include "testutils.h"
 
-QTEST_KDEMAIN(TimeUtilsTest, GUI)
+QTEST_MAIN(TimeUtilsTest)
 
 using namespace Gwenview;
 

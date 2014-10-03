@@ -33,12 +33,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KDE
 #include <KDebug>
 #include <KDirLister>
-#include <qtest_kde.h>
+#include <qtest.h>
 
 using namespace Gwenview;
 using namespace TestUtils;
 
-QTEST_KDEMAIN(ContextManagerTest, GUI)
+QTEST_MAIN(ContextManagerTest)
 
 void ContextManagerTest::testRemove()
 {

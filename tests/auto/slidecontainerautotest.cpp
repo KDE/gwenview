@@ -25,12 +25,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/slidecontainer.h>
 
 // KDE
-#include <qtest_kde.h>
-#include <KDebug>
+#include <qtest.h>
 
 // Qt
 #include <QTextEdit>
 #include <QVBoxLayout>
+#include <QSignalSpy>
 
 QTEST_MAIN(SlideContainerAutoTest)
 

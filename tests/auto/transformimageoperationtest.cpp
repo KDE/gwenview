@@ -23,7 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // KDE
 #include <KDebug>
-#include <qtest_kde.h>
+#include <qtest.h>
 
 // Local
 #include "../lib/document/documentfactory.h"
@@ -33,7 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include "transformimageoperationtest.h"
 
-QTEST_KDEMAIN(TransformImageOperationTest, GUI)
+QTEST_MAIN(TransformImageOperationTest)
 
 using namespace Gwenview;
 

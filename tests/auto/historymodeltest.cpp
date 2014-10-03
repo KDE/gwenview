@@ -26,12 +26,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KDebug>
 #include <KFilePlacesModel>
 #include <KTempDir>
-#include <qtest_kde.h>
+#include <qtest.h>
 
 // Local
 #include "../lib/historymodel.h"
 
-QTEST_KDEMAIN(HistoryModelTest, GUI)
+QTEST_MAIN(HistoryModelTest)
 
 using namespace Gwenview;
 

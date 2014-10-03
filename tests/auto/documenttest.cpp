@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KDebug>
 #include <KJobUiDelegate>
 #include <KIO/NetAccess>
-#include <qtest_kde.h>
+#include <qtest.h>
 #include <libkdcraw/kdcraw.h>
 
 // Local
@@ -43,7 +43,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include "documenttest.h"
 
-QTEST_KDEMAIN(DocumentTest, GUI)
+QTEST_MAIN(DocumentTest)
 
 using namespace Gwenview;
 

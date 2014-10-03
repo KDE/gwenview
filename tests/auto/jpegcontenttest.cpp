@@ -27,7 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QString>
 
 // KDE
-#include <qtest_kde.h>
+#include <qtest.h>
 #include <KDebug>
 #include <KFileMetaInfo>
 
@@ -48,7 +48,7 @@ const int ORIENT6_WIDTH = 128; // This size is the size *after* orientation
 const int ORIENT6_HEIGHT = 256; // has been applied
 const QString ORIENT6_COMMENT = "a comment";
 
-QTEST_KDEMAIN(JpegContentTest, GUI)
+QTEST_MAIN(JpegContentTest)
 
 void JpegContentTest::initTestCase()
 {

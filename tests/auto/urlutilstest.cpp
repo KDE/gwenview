@@ -22,13 +22,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 
 // KDE
-#include <KDebug>
-#include <qtest_kde.h>
+#include <qtest.h>
+#include <QDir>
 
 // Local
 #include "../lib/urlutils.h"
 
-QTEST_KDEMAIN(UrlUtilsTest, GUI)
+QTEST_MAIN(UrlUtilsTest)
 
 using namespace Gwenview;
 

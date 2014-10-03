@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KDE
 #include <KDebug>
 #include <KStandardDirs>
-#include <qtest_kde.h>
+#include <qtest.h>
 
 // Local
 #include "../lib/placetreemodel.h"

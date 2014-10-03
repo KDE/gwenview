@@ -21,7 +21,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // KDE
 #include <KDebug>
-#include <qtest_kde.h>
+#include <qtest.h>
 
 // Local
 #include "../lib/exiv2imageloader.h"
@@ -32,7 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include "imagemetainfomodeltest.h"
 
-QTEST_KDEMAIN(ImageMetaInfoModelTest, GUI)
+QTEST_MAIN(ImageMetaInfoModelTest)
 
 using namespace Gwenview;
 
