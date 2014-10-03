@@ -37,7 +37,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QAction>
-#include <QEvent>
 #include <QHBoxLayout>
 
 namespace Gwenview

@@ -33,7 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QImage>
 #include <QImageReader>
 #include <QPointer>
-#include <QtConcurrentRun>
+#include <QtConcurrent>
 
 // KDE
 #include <KDebug>

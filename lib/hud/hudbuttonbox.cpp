@@ -32,7 +32,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QAction>
 #include <QGraphicsLinearLayout>
 #include <QGraphicsWidget>
-#include <QTimer>
 
 namespace Gwenview
 {

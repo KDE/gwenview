@@ -25,7 +25,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <thumbnailview/thumbnailview.h>
 
 // Qt
-#include <QSlider>
 #include <QToolTip>
 
 // KDE

@@ -32,14 +32,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QScrollBar>
 #include <QTimeLine>
 #include <QTimer>
-#include <QToolTip>
 #include <QDrag>
 #include <QMimeData>
 
 // KDE
 #include <KDebug>
 #include <KDirModel>
-#include <QIcon>
 #include <KIconLoader>
 #include <KGlobalSettings>
 #include <KPixmapSequence>

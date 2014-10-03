@@ -25,8 +25,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QHash>
 #include <QHBoxLayout>
-#include <QHelpEvent>
-#include <QLabel>
 #include <QPainter>
 #include <QPainterPath>
 #include <QParallelAnimationGroup>
@@ -34,12 +32,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QPropertyAnimation>
 #include <QSequentialAnimationGroup>
 #include <QUrl>
+#include <QEvent>
+#include <QHoverEvent>
 
 // KDE
 #include <KDebug>
 #include <KDirModel>
 #include <KGlobalSettings>
-#include <KLineEdit>
 #include <KLocale>
 #include <QDateTime>
 #include <KIconLoader>

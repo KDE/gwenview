@@ -22,18 +22,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "documentview.h"
 
 // Qt
-#include <QAbstractScrollArea>
 #include <QApplication>
 #include <QGraphicsLinearLayout>
 #include <QGraphicsProxyWidget>
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsSceneWheelEvent>
-#include <QMouseEvent>
 #include <QPainter>
 #include <QPropertyAnimation>
-#include <QScrollBar>
-#include <QVBoxLayout>
 #include <QWeakPointer>
 
 // KDE

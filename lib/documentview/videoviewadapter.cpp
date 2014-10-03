@@ -29,14 +29,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QAction>
 #include <QGraphicsLinearLayout>
 #include <QGraphicsProxyWidget>
-#include <QHBoxLayout>
 #include <QMouseEvent>
 #include <QTime>
 
 // KDE
 #include <KDebug>
 #include <QIcon>
-#include <QUrl>
 
 // Local
 #include <document/documentfactory.h>

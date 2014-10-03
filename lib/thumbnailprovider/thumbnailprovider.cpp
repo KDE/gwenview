@@ -35,7 +35,6 @@
 
 // KDE
 #include <KApplication>
-#include <KCodecs>
 #include <KDebug>
 #include <kde_file.h>
 #include <KFileItem>

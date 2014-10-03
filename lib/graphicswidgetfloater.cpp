@@ -27,7 +27,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QPointer>
 
 // KDE
-#include <QDebug>
 #include <KDialog>
 
 // Local

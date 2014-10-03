@@ -23,15 +23,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QApplication>
 #include <QImage>
-#include <QQueue>
 #include <QUndoStack>
 
 // KDE
 #include <KDebug>
-#include <KFileItem>
-#include <KJobUiDelegate>
 #include <KLocale>
 #include <QUrl>
+#include <KJobUiDelegate>
 
 // Local
 #include "documentjob.h"

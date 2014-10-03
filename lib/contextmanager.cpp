@@ -26,7 +26,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QUndoGroup>
 
 // KDE
-#include <QDebug>
 #include <KDirLister>
 #include <KFileItem>
 #include <QUrl>

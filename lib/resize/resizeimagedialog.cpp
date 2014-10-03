@@ -28,7 +28,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include <ui_resizeimagewidget.h>
-#include <KConfigGroup>
 #include <KGuiItem>
 #include <QDialogButtonBox>
 #include <QPushButton>
