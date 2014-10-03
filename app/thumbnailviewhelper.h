@@ -33,7 +33,6 @@ class KActionCollection;
 namespace Gwenview
 {
 
-class SortedDirModel;
 
 struct ThumbnailViewHelperPrivate;
 class ThumbnailViewHelper : public AbstractThumbnailViewHelper

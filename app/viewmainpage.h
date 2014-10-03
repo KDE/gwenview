@@ -31,7 +31,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QWidget>
 
 class QGraphicsWidget;
-class QPalette;
 
 class KActionCollection;
 

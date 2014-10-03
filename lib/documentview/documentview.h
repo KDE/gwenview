@@ -40,8 +40,6 @@ namespace Gwenview
 
 class AbstractRasterImageViewTool;
 class RasterImageView;
-class SlideShow;
-class ZoomWidget;
 
 struct DocumentViewPrivate;
 
