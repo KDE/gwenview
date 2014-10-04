@@ -108,7 +108,7 @@ void KIPIExportAction::init()
         disconnect(menu(), SIGNAL(aboutToShow()), this, SLOT(init()));
     } else {
         // Loading is in progress, come back when it is done
-        connect(d->mKIPIInterface, SIGNAL(loadingFinished()), SLOT(init()));
+        connect(d->mKIPIInterface, &KIPIInterface::loadingFinished, this, &KIPIExportAction::init);
     }
     d->updateMenu();
 }

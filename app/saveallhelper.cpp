@@ -54,7 +54,7 @@ SaveAllHelper::SaveAllHelper(QWidget* parent)
 {
     d->mParent = parent;
     d->mProgressDialog = new KProgressDialog(parent);
-    connect(d->mProgressDialog, SIGNAL(cancelClicked()), SLOT(slotCanceled()));
+    connect(d->mProgressDialog, &KProgressDialog::cancelClicked, this, &SaveAllHelper::slotCanceled);
     d->mProgressDialog->setLabelText(i18nc("@info:progress saving all image changes", "Saving..."));
     d->mProgressDialog->setButtonText(i18n("&Stop"));
     d->mProgressDialog->progressBar()->setMinimum(0);
@@ -73,7 +73,7 @@ void SaveAllHelper::save()
     Q_FOREACH(const QUrl &url, list) {
         Document::Ptr doc = DocumentFactory::instance()->load(url);
         DocumentJob* job = doc->save(url, doc->format());
-        connect(job, SIGNAL(result(KJob*)), SLOT(slotResult(KJob*)));
+        connect(job, &DocumentJob::result, this, &SaveAllHelper::slotResult);
         d->mJobSet << job;
     }
 

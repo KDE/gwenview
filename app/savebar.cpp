@@ -282,8 +282,7 @@ SaveBar::SaveBar(QWidget* parent, KActionCollection* actionCollection)
     connect(DocumentFactory::instance(), SIGNAL(modifiedDocumentListChanged()),
             SLOT(updateContent()));
 
-    connect(d->mActionsLabel, SIGNAL(linkActivated(QString)),
-            SLOT(triggerAction(QString)));
+    connect(d->mActionsLabel, &QLabel::linkActivated, this, &SaveBar::triggerAction);
 }
 
 SaveBar::~SaveBar()
@@ -301,12 +300,10 @@ void SaveBar::initActionDependentWidgets()
     // FIXME: Not using an action for now
     d->mSaveAllButton->setText(i18n("Save All"));
     d->mSaveAllButton->setIcon(QIcon::fromTheme("document-save-all"));
-    connect(d->mSaveAllButton, SIGNAL(clicked()),
-            SIGNAL(requestSaveAll()));
+    connect(d->mSaveAllButton, &QToolButton::clicked, this, &SaveBar::requestSaveAll);
 
     d->mSaveAllFullScreenButton->setText(i18n("Save All"));
-    connect(d->mSaveAllFullScreenButton, SIGNAL(clicked()),
-            SIGNAL(requestSaveAll()));
+    connect(d->mSaveAllFullScreenButton, &QToolButton::clicked, this, &SaveBar::requestSaveAll);
 
     int height = d->mUndoButton->sizeHint().height();
     d->mTopRowWidget->setFixedHeight(height);

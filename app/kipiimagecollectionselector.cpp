@@ -58,8 +58,7 @@ KIPIImageCollectionSelector::KIPIImageCollectionSelector(KIPIInterface* interfac
         item->setData(Qt::UserRole, name);
     }
 
-    connect(d->mListWidget, SIGNAL(currentRowChanged(int)),
-            SIGNAL(selectionChanged()));
+    connect(d->mListWidget, &QListWidget::currentRowChanged, this, &KIPIImageCollectionSelector::selectionChanged);
 
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->addWidget(d->mListWidget);

@@ -252,8 +252,7 @@ struct InfoContextManagerItemPrivate
 
         EventWatcher::install(mGroup, QEvent::Show, q, SLOT(updateSideBarContent()));
 
-        QObject::connect(moreLabel, SIGNAL(linkActivated(QString)),
-                         q, SLOT(showMetaInfoDialog()));
+        QObject::connect(moreLabel, &QLabel::linkActivated, q, &InfoContextManagerItem::showMetaInfoDialog);
     }
 
     void forgetCurrentDocument()

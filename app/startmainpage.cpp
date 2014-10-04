@@ -171,40 +171,32 @@ StartMainPage::StartMainPage(QWidget* parent, GvCore* gvCore)
     d->mBookmarksView->setModel(d->mBookmarksModel);
     d->mBookmarksView->setAutoResizeItemsEnabled(false);
 
-    connect(d->mBookmarksView, SIGNAL(urlChanged(QUrl)),
-            SIGNAL(urlSelected(QUrl)));
+    connect(d->mBookmarksView, &KFilePlacesView::urlChanged, this, &StartMainPage::urlSelected);
 
     // Tag view
-    connect(d->mTagView, SIGNAL(clicked(QModelIndex)),
-            SLOT(slotTagViewClicked(QModelIndex)));
+    connect(d->mTagView, &QListView::clicked, this, &StartMainPage::slotTagViewClicked);
 
     // Recent folder view
-    connect(d->mRecentFoldersView, SIGNAL(indexActivated(QModelIndex)),
-            SLOT(slotListViewActivated(QModelIndex)));
+    connect(d->mRecentFoldersView, &Gwenview::ThumbnailView::indexActivated, this, &StartMainPage::slotListViewActivated);
 
-    connect(d->mRecentFoldersView, SIGNAL(customContextMenuRequested(QPoint)),
-            SLOT(showRecentFoldersViewContextMenu(QPoint)));
+    connect(d->mRecentFoldersView, &Gwenview::ThumbnailView::customContextMenuRequested, this, &StartMainPage::showRecentFoldersViewContextMenu);
 
     // Url bag view
     d->mRecentUrlsView->setItemDelegate(new HistoryViewDelegate(d->mRecentUrlsView));
 
-    connect(d->mRecentUrlsView, SIGNAL(customContextMenuRequested(QPoint)),
-            SLOT(showRecentFoldersViewContextMenu(QPoint)));
+    connect(d->mRecentUrlsView, &QListView::customContextMenuRequested, this, &StartMainPage::showRecentFoldersViewContextMenu);
 
     if (KGlobalSettings::singleClick()) {
         if (KGlobalSettings::changeCursorOverIcon()) {
             d->mRecentUrlsView->setCursor(Qt::PointingHandCursor);
         }
-        connect(d->mRecentUrlsView, SIGNAL(clicked(QModelIndex)),
-                SLOT(slotListViewActivated(QModelIndex)));
+        connect(d->mRecentUrlsView, &QListView::clicked, this, &StartMainPage::slotListViewActivated);
     } else {
-        connect(d->mRecentUrlsView, SIGNAL(doubleClicked(QModelIndex)),
-                SLOT(slotListViewActivated(QModelIndex)));
+        connect(d->mRecentUrlsView, &QListView::doubleClicked, this, &StartMainPage::slotListViewActivated);
     }
 
     d->updateHistoryTab();
-    connect(GwenviewConfig::self(), SIGNAL(configChanged()),
-            SLOT(loadConfig()));
+    connect(GwenviewConfig::self(), &GwenviewConfig::configChanged, this, &StartMainPage::loadConfig);
 
     d->mRecentFoldersView->setFocus();
 }

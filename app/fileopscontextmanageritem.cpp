@@ -221,10 +221,8 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, QL
     d->mOpenWithAction->setText(i18n("Open With"));
     QMenu* menu = new QMenu;
     d->mOpenWithAction->setMenu(menu);
-    connect(menu, SIGNAL(aboutToShow()),
-            SLOT(populateOpenMenu()));
-    connect(menu, SIGNAL(triggered(QAction*)),
-            SLOT(openWith(QAction*)));
+    connect(menu, &QMenu::aboutToShow, this, &FileOpsContextManagerItem::populateOpenMenu);
+    connect(menu, &QMenu::triggered, this, &FileOpsContextManagerItem::openWith);
 
     d->mRegularFileActionList
             << d->mRenameAction

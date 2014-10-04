@@ -248,28 +248,18 @@ struct ViewMainPagePrivate
 
         // Connect context menu
         // If you need to connect another view signal, make sure it is disconnected in deleteDocumentView
-        QObject::connect(view, SIGNAL(contextMenuRequested()),
-                         q, SLOT(showContextMenu()));
+        QObject::connect(view, &DocumentView::contextMenuRequested, q, &ViewMainPage::showContextMenu);
 
-        QObject::connect(view, SIGNAL(completed()),
-                         q, SIGNAL(completed()));
-        QObject::connect(view, SIGNAL(previousImageRequested()),
-                         q, SIGNAL(previousImageRequested()));
-        QObject::connect(view, SIGNAL(nextImageRequested()),
-                         q, SIGNAL(nextImageRequested()));
-        QObject::connect(view, SIGNAL(captionUpdateRequested(QString)),
-                         q, SIGNAL(captionUpdateRequested(QString)));
-        QObject::connect(view, SIGNAL(toggleFullScreenRequested()),
-                         q, SIGNAL(toggleFullScreenRequested()));
-        QObject::connect(view, SIGNAL(focused(DocumentView*)),
-                         q, SLOT(slotViewFocused(DocumentView*)));
-        QObject::connect(view, SIGNAL(hudTrashClicked(DocumentView*)),
-                         q, SLOT(trashView(DocumentView*)));
-        QObject::connect(view, SIGNAL(hudDeselectClicked(DocumentView*)),
-                         q, SLOT(deselectView(DocumentView*)));
+        QObject::connect(view, &DocumentView::completed, q, &ViewMainPage::completed);
+        QObject::connect(view, &DocumentView::previousImageRequested, q, &ViewMainPage::previousImageRequested);
+        QObject::connect(view, &DocumentView::nextImageRequested, q, &ViewMainPage::nextImageRequested);
+        QObject::connect(view, &DocumentView::captionUpdateRequested, q, &ViewMainPage::captionUpdateRequested);
+        QObject::connect(view, &DocumentView::toggleFullScreenRequested, q, &ViewMainPage::toggleFullScreenRequested);
+        QObject::connect(view, &DocumentView::focused, q, &ViewMainPage::slotViewFocused);
+        QObject::connect(view, &DocumentView::hudTrashClicked, q, &ViewMainPage::trashView);
+        QObject::connect(view, &DocumentView::hudDeselectClicked, q, &ViewMainPage::deselectView);
 
-        QObject::connect(view, SIGNAL(videoFinished()),
-                         mSlideShow, SLOT(resumeAndGoToNextUrl()));
+        QObject::connect(view, &DocumentView::videoFinished, mSlideShow, &SlideShow::resumeAndGoToNextUrl);
 
         mDocumentViews << view;
         mActivityResources.insert(view, new KActivities::ResourceInstance(q->window()->winId(), view));
@@ -417,7 +407,7 @@ ViewMainPage::ViewMainPage(QWidget* parent, SlideShow* slideShow, KActionCollect
 
     QShortcut* goToBrowseModeShortcut = new QShortcut(this);
     goToBrowseModeShortcut->setKey(Qt::Key_Return);
-    connect(goToBrowseModeShortcut, SIGNAL(activated()), SIGNAL(goToBrowseModeRequested()));
+    connect(goToBrowseModeShortcut, &QShortcut::activated, this, &ViewMainPage::goToBrowseModeRequested);
 
     d->setupToolContainer();
     d->setupStatusBar();
@@ -437,8 +427,7 @@ ViewMainPage::ViewMainPage(QWidget* parent, SlideShow* slideShow, KActionCollect
     d->mToggleThumbnailBarAction->setIcon(QIcon::fromTheme("folder-image"));
     d->mToggleThumbnailBarAction->setShortcut(Qt::CTRL | Qt::Key_B);
     d->mToggleThumbnailBarAction->setChecked(GwenviewConfig::thumbnailBarIsVisible());
-    connect(d->mToggleThumbnailBarAction, SIGNAL(triggered(bool)),
-            this, SLOT(setThumbnailBarVisibility(bool)));
+    connect(d->mToggleThumbnailBarAction, &KToggleAction::triggered, this, &ViewMainPage::setThumbnailBarVisibility);
     d->mToggleThumbnailBarButton->setDefaultAction(d->mToggleThumbnailBarAction);
 
     d->mSynchronizeAction = view->add<KToggleAction>("synchronize_views");

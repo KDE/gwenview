@@ -126,8 +126,7 @@ struct FolderViewContextManagerItemPrivate
         }
         mModel->dirLister()->openUrl(QUrl("/"));
 #endif
-        QObject::connect(mModel, SIGNAL(rowsInserted(QModelIndex,int,int)),
-                         q, SLOT(slotRowsInserted(QModelIndex,int,int)));
+        QObject::connect(mModel, &MODEL_CLASS::rowsInserted, q, &FolderViewContextManagerItem::slotRowsInserted);
     }
 
     void setupView()
@@ -153,8 +152,7 @@ struct FolderViewContextManagerItemPrivate
         mView->header()->setResizeMode(QHeaderView::ResizeToContents);
 
         q->setWidget(mView);
-        QObject::connect(mView, SIGNAL(activated(QModelIndex)),
-                         q, SLOT(slotActivated(QModelIndex)));
+        QObject::connect(mView, &QTreeView::activated, q, &FolderViewContextManagerItem::slotActivated);
         EventWatcher::install(mView, QEvent::Show, q, SLOT(expandToSelectedUrl()));
     }
 

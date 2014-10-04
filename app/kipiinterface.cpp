@@ -225,8 +225,7 @@ struct KIPIInterfacePrivate
     {
         mPluginMenu = static_cast<QMenu*>(
                           mMainWindow->factory()->container("plugins", mMainWindow));
-        QObject::connect(mPluginMenu, SIGNAL(aboutToShow()),
-                         q, SLOT(loadPlugins()));
+        QObject::connect(mPluginMenu, &QMenu::aboutToShow, q, &KIPIInterface::loadPlugins);
     }
 
     QAction * createDummyPluginAction(const QString& text)
