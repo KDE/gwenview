@@ -383,7 +383,7 @@ void InfoContextManagerItem::showMetaInfoDialog()
 void InfoContextManagerItem::slotPreferredMetaInfoKeyListChanged(const QStringList& list)
 {
     GwenviewConfig::setPreferredMetaInfoKeyList(list);
-    GwenviewConfig::self()->writeConfig();
+    GwenviewConfig::self()->save();
     updateOneFileInfo();
 }
 

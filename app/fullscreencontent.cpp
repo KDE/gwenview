@@ -395,7 +395,7 @@ void FullScreenContent::showImageMetaInfoDialog()
 void FullScreenContent::slotPreferredMetaInfoKeyListChanged(const QStringList& list)
 {
     GwenviewConfig::setFullScreenPreferredMetaInfoKeyList(list);
-    GwenviewConfig::self()->writeConfig();
+    GwenviewConfig::self()->save();
     updateInformationLabel();
 }
 
@@ -513,7 +513,7 @@ void FullScreenContent::slotImageMetaInfoDialogClosed()
 void FullScreenContent::slotShowThumbnailsToggled(bool value)
 {
     GwenviewConfig::setShowFullScreenThumbnails(value);
-    GwenviewConfig::self()->writeConfig();
+    GwenviewConfig::self()->save();
     d->mThumbnailBar->setVisible(value);
     d->updateLayout();
     d->mContent->adjustSize();

@@ -715,7 +715,7 @@ struct MainWindow::Private
         }
 
         const char* name = sideBarConfigGroupName();
-        KConfigGroup group(KGlobal::config(), name);
+        KConfigGroup group(KSharedConfig::openConfig(), name);
         mSideBar->setVisible(group.readEntry(SIDE_BAR_IS_VISIBLE_KEY, defaultVisibility[name]));
         mSideBar->setCurrentPage(GwenviewConfig::sideBarPage());
         q->updateToggleSideBarAction();
@@ -723,7 +723,7 @@ struct MainWindow::Private
 
     void saveSideBarConfig() const
     {
-        KConfigGroup group(KGlobal::config(), sideBarConfigGroupName());
+        KConfigGroup group(KSharedConfig::openConfig(), sideBarConfigGroupName());
         group.writeEntry(SIDE_BAR_IS_VISIBLE_KEY, mSideBar->isVisible());
         GwenviewConfig::setSideBarPage(mSideBar->currentPage());
     }
@@ -1459,7 +1459,7 @@ void MainWindow::loadConfig()
     d->mDirModel->setBlackListedExtensions(GwenviewConfig::blackListedExtensions());
     d->mDirModel->adjustKindFilter(MimeTypeUtils::KIND_VIDEO, GwenviewConfig::listVideos());
 
-    d->mFileOpenRecentAction->loadEntries(KConfigGroup(KGlobal::config(), "Recent Files"));
+    d->mFileOpenRecentAction->loadEntries(KConfigGroup(KSharedConfig::openConfig(), "Recent Files"));
     d->mStartMainPage->loadConfig();
     d->mViewMainPage->loadConfig();
     d->mBrowseMainPage->loadConfig();
@@ -1467,7 +1467,7 @@ void MainWindow::loadConfig()
 
 void MainWindow::saveConfig()
 {
-    d->mFileOpenRecentAction->saveEntries(KConfigGroup(KGlobal::config(), "Recent Files"));
+    d->mFileOpenRecentAction->saveEntries(KConfigGroup(KSharedConfig::openConfig(), "Recent Files"));
     d->mViewMainPage->saveConfig();
     d->mBrowseMainPage->saveConfig();
 }

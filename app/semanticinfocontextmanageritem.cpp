@@ -83,7 +83,7 @@ struct SemanticInfoDialog : public KDialog, public Ui_SemanticInfoDialog
 
     KConfigGroup configGroup() const
     {
-        KSharedConfigPtr config = KGlobal::config();
+        KSharedConfigPtr config = KSharedConfig::openConfig();
         return KConfigGroup(config, "SemanticInfoDialog");
     }
 };

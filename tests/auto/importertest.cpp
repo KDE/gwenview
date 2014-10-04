@@ -81,7 +81,7 @@ void ImporterTest::testContentsAreIdentical()
 
 void ImporterTest::testSuccessfulImport()
 {
-    KUrl destUrl = KUrl::fromPath(mTempDir->name() + "/foo");
+    KUrl destUrl = QUrl::fromLocalFile(mTempDir->name() + "/foo");
 
     Importer importer(0);
     QSignalSpy maximumChangedSpy(&importer, SIGNAL(maximumChanged(int)));
@@ -112,7 +112,7 @@ void ImporterTest::testSuccessfulImport()
 
 void ImporterTest::testSkippedUrlList()
 {
-    KUrl destUrl = KUrl::fromPath(mTempDir->name() + "/foo");
+    KUrl destUrl = QUrl::fromLocalFile(mTempDir->name() + "/foo");
 
     Importer importer(0);
 
@@ -140,7 +140,7 @@ void ImporterTest::testSkippedUrlList()
 
 void ImporterTest::testRenamedCount()
 {
-    KUrl destUrl = KUrl::fromPath(mTempDir->name() + "/foo");
+    KUrl destUrl = QUrl::fromLocalFile(mTempDir->name() + "/foo");
 
     Importer importer(0);
 
@@ -212,7 +212,7 @@ void ImporterTest::testAutoRenameFormat()
                         << "2009-10-01_21-15-27";
     QCOMPARE(dates.count(), mDocumentList.count());
 
-    KUrl destUrl = KUrl::fromPath(mTempDir->name() + "foo");
+    KUrl destUrl = QUrl::fromLocalFile(mTempDir->name() + "foo");
 
     Importer importer(0);
     importer.setAutoRenameFormat("{date}_{time}.{ext}");
@@ -236,7 +236,7 @@ void ImporterTest::testAutoRenameFormat()
 
 void ImporterTest::testReadOnlyDestination()
 {
-    KUrl destUrl = KUrl::fromPath(mTempDir->name() + "/foo");
+    KUrl destUrl = QUrl::fromLocalFile(mTempDir->name() + "/foo");
     chmod(QFile::encodeName(mTempDir->name()), 0555);
 
     Importer importer(0);
