@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/gvdebug.h>
 
 // KDE
-#include <KDebug>
+#include <QDebug>
 
 // Qt
 #include <QGraphicsSceneMouseEvent>
@@ -85,7 +85,7 @@ struct RasterImageViewPrivate
         }
         Cms::Profile::Ptr monitorProfile = Cms::Profile::getMonitorProfile();
         if (!monitorProfile) {
-            kWarning() << "Could not get monitor color profile";
+            qWarning() << "Could not get monitor color profile";
             return;
         }
 
@@ -96,7 +96,7 @@ struct RasterImageViewPrivate
             cmsFormat = TYPE_BGRA_8;
             break;
         default:
-            kWarning() << "This image has a color profile, but Gwenview can only apply color profile on RGB32 or ARGB32 images";
+            qWarning() << "This image has a color profile, but Gwenview can only apply color profile on RGB32 or ARGB32 images";
             return;
         }
         mDisplayTransform = cmsCreateTransform(profile->handle(), cmsFormat,

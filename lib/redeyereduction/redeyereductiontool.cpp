@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QRect>
 
 // KDE
-#include <KDebug>
+#include <QDebug>
 
 // Local
 #include <lib/documentview/rasterimageview.h>
@@ -167,7 +167,7 @@ void RedEyeReductionTool::slotApplyClicked()
 {
     QRectF docRectF = d->rectF();
     if (!docRectF.isValid()) {
-        kWarning() << "invalid rect";
+        qWarning() << "invalid rect";
         return;
     }
     RedEyeReductionImageOperation* op = new RedEyeReductionImageOperation(docRectF);

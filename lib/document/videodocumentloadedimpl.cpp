@@ -24,7 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 
 // KDE
-#include <KDebug>
+#include <QDebug>
 
 // Local
 
@@ -58,7 +58,7 @@ Document::LoadingState VideoDocumentLoadedImpl::loadingState() const
 
 void VideoDocumentLoadedImpl::setImage(const QImage&)
 {
-    kWarning() << "Should not be called";
+    qWarning() << "Should not be called";
 }
 
 } // namespace

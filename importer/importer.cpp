@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 #include <KDateTime>
-#include <KDebug>
+#include <QDebug>
 #include <KFileItem>
 #include <KLocale>
 #include <KUrl>
@@ -139,7 +139,7 @@ struct ImporterPrivate
             mSkippedUrlList << mCurrentUrl;
             break;
         case FileUtils::RenameFailed:
-            kWarning() << "Rename failed for" << mCurrentUrl;
+            qWarning() << "Rename failed for" << mCurrentUrl;
         }
         q->advance();
         importNext();
@@ -181,7 +181,7 @@ void Importer::start(const KUrl::List& list, const KUrl& destination)
     maximumChanged(d->mUrlList.count() * 100);
 
     if (!d->createImportDir(destination)) {
-        kWarning() << "Could not create import dir";
+        qWarning() << "Could not create import dir";
         return;
     }
     d->importNext();
@@ -192,7 +192,7 @@ void Importer::slotCopyDone(KJob* _job)
     KIO::CopyJob* job = static_cast<KIO::CopyJob*>(_job);
     KUrl url = job->destUrl();
     if (job->error()) {
-        kWarning() << "FIXME: What do we do with failed urls?";
+        qWarning() << "FIXME: What do we do with failed urls?";
         advance();
         d->importNext();
         return;

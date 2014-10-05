@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QImage>
 
 // KDE
-#include <KDebug>
+#include <QDebug>
 #include <KLocale>
 
 // Local
@@ -85,7 +85,7 @@ void ResizeImageOperation::redo()
 void ResizeImageOperation::undo()
 {
     if (!document()->editor()) {
-        kWarning() << "!document->editor()";
+        qWarning() << "!document->editor()";
         return;
     }
     document()->editor()->setImage(d->mOriginalImage);

@@ -27,7 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QMovie>
 
 // KDE
-#include <KDebug>
+#include <QDebug>
 
 // Local
 
@@ -98,8 +98,8 @@ void AnimatedDocumentLoadedImpl::startAnimation()
     d->mMovie.start();
     if (d->mMovie.state() == QMovie::NotRunning) {
         // This is true with qt-copy as of 2008.08.23
-        kDebug() << "QMovie didn't start. This can happen in some cases when starting for the second time.";
-        kDebug() << "Trying to start again, it usually fixes the bug.";
+        //qDebug() << "QMovie didn't start. This can happen in some cases when starting for the second time.";
+        //qDebug() << "Trying to start again, it usually fixes the bug.";
         d->mMovie.start();
     }
 }

@@ -30,6 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KDE
 #include <KDirModel>
 #include <qtest.h>
+#include <QDebug>
 
 using namespace Gwenview;
 
@@ -112,7 +113,7 @@ static QList<QUrl> listExpectedUrls(const QDir& dir, const QStringList& files)
 void logLst(const QList<QUrl>& lst)
 {
     Q_FOREACH(const QUrl &url, lst) {
-        kWarning() << url.fileName();
+        qWarning() << url.fileName();
     }
 }
 
@@ -164,9 +165,9 @@ void RecursiveDirModelTest::testBasic()
 
     out = listModelUrls(&model);
     if (out != expected) {
-        kWarning() << "out:";
+        qWarning() << "out:";
         logLst(out);
-        kWarning() << "expected:";
+        qWarning() << "expected:";
         logLst(expected);
     }
     QCOMPARE(out, expected);

@@ -29,7 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QPainter>
 
 // KDE
-#include <KDebug>
+#include <QDebug>
 #include <KLocale>
 
 // Local
@@ -93,7 +93,7 @@ void RedEyeReductionImageOperation::redo()
 void RedEyeReductionImageOperation::undo()
 {
     if (!document()->editor()) {
-        kWarning() << "!document->editor()";
+        qWarning() << "!document->editor()";
         return;
     }
     QImage img = document()->image();

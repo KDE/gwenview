@@ -27,7 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QStackedWidget>
 
 // KDE
-#include <KDebug>
+#include <QDebug>
 #include <KGlobalSettings>
 #include <KIO/DeleteJob>
 #include <KIO/NetAccess>
@@ -145,7 +145,7 @@ public:
     {
         KService::Ptr service = KService::serviceByDesktopName("gwenview");
         if (!service) {
-            kError() << "Could not find gwenview";
+            qCritical() << "Could not find gwenview";
         } else {
             KRun::run(*service, KUrl::List() << mThumbnailPage->destinationUrl(), 0 /* window */);
         }

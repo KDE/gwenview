@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QFileInfo>
 
 // KDE
-#include <KDebug>
+#include <QDebug>
 #include <KFileItem>
 #include <KIO/CopyJob>
 #include <KIO/Job>
@@ -51,14 +51,14 @@ bool contentsAreIdentical(const KUrl& url1, const KUrl& url2, QWidget* authWindo
     QFile file1(KIO::NetAccess::mostLocalUrl(url1, authWindow).toLocalFile());
     if (!file1.open(QIODevice::ReadOnly)) {
         // Can't read url1, assume it's different from url2
-        kWarning() << "Can't read" << url1;
+        qWarning() << "Can't read" << url1;
         return false;
     }
 
     QFile file2(KIO::NetAccess::mostLocalUrl(url2, authWindow).toLocalFile());
     if (!file2.open(QIODevice::ReadOnly)) {
         // Can't read url2, assume it's different from url1
-        kWarning() << "Can't read" << url2;
+        qWarning() << "Can't read" << url2;
         return false;
     }
 
@@ -74,7 +74,7 @@ bool contentsAreIdentical(const KUrl& url1, const KUrl& url2, QWidget* authWindo
     if (file1.atEnd() && file2.atEnd()) {
         return true;
     } else {
-        kWarning() << "One file ended before the other";
+        qWarning() << "One file ended before the other";
         return false;
     }
 }

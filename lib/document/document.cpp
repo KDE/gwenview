@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QUndoStack>
 
 // KDE
-#include <KDebug>
+#include <QDebug>
 #include <KLocale>
 #include <QUrl>
 #include <KJobUiDelegate>
@@ -47,7 +47,7 @@ namespace Gwenview
 #undef LOG
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
-#define LOG(x) kDebug() << x
+#define LOG(x) //qDebug() << x
 #else
 #define LOG(x) ;
 #endif
@@ -301,7 +301,7 @@ DocumentJob* Document::save(const QUrl &url, const QByteArray& format)
     waitUntilLoaded();
     DocumentJob* job = d->mImpl->save(url, format);
     if (!job) {
-        kWarning() << "Implementation does not support saving!";
+        qWarning() << "Implementation does not support saving!";
         setErrorString(i18nc("@info", "Gwenview cannot save this kind of documents."));
         return 0;
     }
@@ -431,14 +431,14 @@ void Document::startLoadingFullImage()
     } else if (state == Loaded) {
         return;
     } else if (state == LoadingFailed) {
-        kWarning() << "Can't load full image: loading has already failed";
+        qWarning() << "Can't load full image: loading has already failed";
     }
 }
 
 bool Document::prepareDownSampledImageForZoom(qreal zoom)
 {
     if (zoom >= maxDownSampledZoom()) {
-        kWarning() << "No need to call prepareDownSampledImageForZoom if zoom >= " << maxDownSampledZoom();
+        qWarning() << "No need to call prepareDownSampledImageForZoom if zoom >= " << maxDownSampledZoom();
         return true;
     }
 
@@ -450,7 +450,7 @@ bool Document::prepareDownSampledImageForZoom(qreal zoom)
 
     LOG("downSampledImageForZoom=" << zoom << "invertedZoom=" << invertedZoom << "not ready");
     if (loadingState() == LoadingFailed) {
-        kWarning() << "Image has failed to load, not doing anything";
+        qWarning() << "Image has failed to load, not doing anything";
         return false;
     } else if (loadingState() == Loaded) {
         d->scheduleImageDownSampling(invertedZoom);

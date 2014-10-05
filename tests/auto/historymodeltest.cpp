@@ -23,7 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QDir>
 
 // KDE
-#include <KDebug>
+#include <QDebug>
 #include <KFilePlacesModel>
 #include <KTempDir>
 #include <qtest.h>

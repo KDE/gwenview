@@ -32,7 +32,7 @@ Copyright (C) 1992-2008 Trolltech ASA. All rights reserved.
 #include <QVariant>
 
 // KDE
-#include <KDebug>
+#include <QDebug>
 
 // libjpeg
 #include <setjmp.h>
@@ -51,7 +51,7 @@ namespace Gwenview
 #undef LOG
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
-#define LOG(x) kDebug() << x
+#define LOG(x) //qDebug() << x
 #else
 #define LOG(x) ;
 #endif
@@ -190,7 +190,7 @@ static bool loadJpeg(QImage* image, QIODevice* ioDevice, QSize scaledSize)
     case JCS_GRAYSCALE:
         break;
     default:
-        kWarning() << "Unhandled JPEG colorspace" << cinfo.out_color_space;
+        qWarning() << "Unhandled JPEG colorspace" << cinfo.out_color_space;
         break;
     }
 
@@ -481,7 +481,7 @@ bool JpegHandler::canRead() const
 bool JpegHandler::canRead(QIODevice* device)
 {
     if (!device) {
-        kWarning() << "called with no device";
+        qWarning() << "called with no device";
         return false;
     }
 

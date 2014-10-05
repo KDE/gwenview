@@ -27,7 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // KDE
 #include <qtest.h>
-#include <KDebug>
+#include <QDebug>
 #include <KIO/CopyJob>
 #include <KIO/DeleteJob>
 
@@ -159,10 +159,10 @@ void ThumbnailProviderTest::testLoadLocal()
             // This happens from time to time on build.kde.org, but I haven't
             // been able to reproduce it locally, so let's try to gather more
             // information.
-            kWarning() << "mtime == -1 for url" << url << ". This should not happen!";
-            kWarning() << "errno:" << errno << "message:" << strerror(errno);
-            kWarning() << "QFile::exists(" << url.toLocalFile() << "):" << QFile::exists(url.toLocalFile());
-            kWarning() << "Recalculating mtime" << item.time(KFileItem::ModificationTime).toTime_t();
+            qWarning() << "mtime == -1 for url" << url << ". This should not happen!";
+            qWarning() << "errno:" << errno << "message:" << strerror(errno);
+            qWarning() << "QFile::exists(" << url.toLocalFile() << "):" << QFile::exists(url.toLocalFile());
+            qWarning() << "Recalculating mtime" << item.time(KFileItem::ModificationTime).toTime_t();
             QFAIL("Invalid time for test KFileItem");
         }
 

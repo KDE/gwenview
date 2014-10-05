@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "exiv2imageloader.h"
 
 // KDE
-#include <KDebug>
+#include <QDebug>
 #ifdef KDCRAW_FOUND
 #include <libkdcraw/kdcraw.h>
 #endif
@@ -45,7 +45,7 @@ namespace Gwenview
 #undef LOG
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
-#define LOG(x) kDebug() << x
+#define LOG(x) //qDebug() << x
 #else
 #define LOG(x) ;
 #endif
@@ -86,7 +86,7 @@ bool ThumbnailContext::load(const QString &pixPath, int pixelSize)
             // if the emebedded preview loading failed or gets just a small image, load
             // half preview instead. That's slower...
             if (!KDcrawIface::KDcraw::loadHalfPreview(data, pixPath)) {
-                kWarning() << "unable to get preview for " << pixPath.toUtf8().constData();
+                qWarning() << "unable to get preview for " << pixPath.toUtf8().constData();
                 return false;
             }
             previewRatio = 2;
@@ -94,7 +94,7 @@ bool ThumbnailContext::load(const QString &pixPath, int pixelSize)
 
         // And we need JpegContent too because of EXIF (orientation!).
         if (!content.loadFromData(data)) {
-            kWarning() << "unable to load preview for " << pixPath.toUtf8().constData();
+            qWarning() << "unable to load preview for " << pixPath.toUtf8().constData();
             return false;
         }
 
@@ -286,7 +286,7 @@ void ThumbnailGenerator::run()
                     cacheThumbnail();
                 }
             } else {
-                kWarning() << "Could not generate thumbnail for file" << mOriginalUri;
+                qWarning() << "Could not generate thumbnail for file" << mOriginalUri;
             }
             mPixPath.clear(); // done, ready for next
         }

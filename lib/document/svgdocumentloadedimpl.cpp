@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QSvgRenderer>
 
 // KDE
-#include <KDebug>
+#include <QDebug>
 
 // Local
 
@@ -65,7 +65,7 @@ Document::LoadingState SvgDocumentLoadedImpl::loadingState() const
 
 void SvgDocumentLoadedImpl::setImage(const QImage&)
 {
-    kWarning() << "Should not be called";
+    qWarning() << "Should not be called";
 }
 
 QByteArray SvgDocumentLoadedImpl::rawData() const

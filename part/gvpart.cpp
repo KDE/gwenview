@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KAboutData>
 #include <QAction>
 #include <KActionCollection>
-#include <KDebug>
+#include <QDebug>
 #include <KFileDialog>
 #include <KIcon>
 #include <KIconLoader>
@@ -178,7 +178,7 @@ void GVPart::showJobError(KJob* job)
     if (job->error() != 0) {
         KIO::JobUiDelegate* ui = static_cast<KIO::Job*>(job)->ui();
         if (!ui) {
-            kError() << "Saving failed. job->ui() is null.";
+            qCritical() << "Saving failed. job->ui() is null.";
             return;
         }
         ui->setWindow(widget());

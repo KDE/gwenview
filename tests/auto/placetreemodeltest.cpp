@@ -24,7 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QFile>
 
 // KDE
-#include <KDebug>
+#include <QDebug>
 #include <KStandardDirs>
 #include <qtest.h>
 
@@ -90,7 +90,7 @@ void PlaceTreeModelTest::initTestCase()
 
 #ifdef KEEP_TEMP_DIR
     mTempDir.setAutoRemove(false);
-    kDebug() << "mTempDir:" << mTempDir.name();
+    //qDebug() << "mTempDir:" << mTempDir.name();
 #endif
 }
 
@@ -111,7 +111,7 @@ void PlaceTreeModelTest::init()
 
 #ifdef KEEP_TEMP_DIR
     mTempDir.setAutoRemove(false);
-    kDebug() << "mTempDir:" << mTempDir.name();
+    //qDebug() << "mTempDir:" << mTempDir.name();
 #endif
 }
 

@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <gvdebug.h>
 
 // KDE
-#include <KDebug>
+#include <QDebug>
 
 // Qt
 #include <QBuffer>
@@ -69,21 +69,21 @@ cmsHPROFILE loadFromPngData(const QByteArray& data)
     png_infop info_ptr = png_create_info_struct(png_ptr);
     if (!info_ptr) {
         png_destroy_read_struct(&png_ptr, (png_infopp)NULL, (png_infopp)NULL);
-        kWarning() << "Could not create info_struct";
+        qWarning() << "Could not create info_struct";
         return 0;
     }
 
     png_infop end_info = png_create_info_struct(png_ptr);
     if (!end_info) {
         png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
-        kWarning() << "Could not create info_struct2";
+        qWarning() << "Could not create info_struct2";
         return 0;
     }
 
     // Catch errors
     if (setjmp(png_jmpbuf(png_ptr))) {
         png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
-        kWarning() << "Error decoding png file";
+        qWarning() << "Error decoding png file";
         return 0;
     }
 

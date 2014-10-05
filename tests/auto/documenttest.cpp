@@ -23,7 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QPainter>
 
 // KDE
-#include <KDebug>
+#include <QDebug>
 #include <KJobUiDelegate>
 #include <KIO/NetAccess>
 #include <qtest.h>
@@ -756,7 +756,7 @@ public:
 
     virtual void showErrorMessage()
     {
-        kDebug();
+        //qDebug();
         *mShowErrorMessageCalled = true;
     }
 

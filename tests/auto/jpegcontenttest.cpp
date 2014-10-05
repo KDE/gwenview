@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // KDE
 #include <qtest.h>
-#include <KDebug>
+#include <QDebug>
 #include <KFileMetaInfo>
 
 // Local
@@ -258,9 +258,9 @@ void JpegContentTest::testLoadTruncated()
     QCOMPARE(int(content.orientation()), 6);
     QCOMPARE(content.comment() , ORIENT6_COMMENT);
     content.transform(Gwenview::VFLIP);
-    kWarning() << "# Next function should output errors about incomplete image" ;
+    qWarning() << "# Next function should output errors about incomplete image" ;
     content.save(TMP_FILE);
-    kWarning() << "#" ;
+    qWarning() << "#" ;
 }
 
 void JpegContentTest::testRawData()

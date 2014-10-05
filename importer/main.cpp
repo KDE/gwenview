@@ -24,7 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KAboutData>
 #include <KApplication>
 #include <KCmdLineArgs>
-#include <KDebug>
+#include <QDebug>
 #include <KLocale>
 #include <KUrl>
 
@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
     }
     KUrl url = args->url(0);
     if (!url.isValid()) {
-        kError() << "Invalid source folder."; // FIXME 2.11 Add i18n() call
+        qCritical() << "Invalid source folder."; // FIXME 2.11 Add i18n() call
         return 1;
     }
     QString deviceUdi = args->isSet("udi") ? args->getOption("udi") : QString();

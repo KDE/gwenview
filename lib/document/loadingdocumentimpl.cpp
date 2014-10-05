@@ -36,7 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QtConcurrent>
 
 // KDE
-#include <KDebug>
+#include <QDebug>
 #include <KIO/Job>
 #include <KIO/JobClasses>
 #include <KLocale>
@@ -72,7 +72,7 @@ namespace Gwenview
 #undef LOG
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
-#define LOG(x) kDebug() << x
+#define LOG(x) //qDebug() << x
 #else
 #define LOG(x) ;
 #endif
@@ -171,7 +171,7 @@ struct LoadingDocumentImplPrivate
             break;
 
         default:
-            kWarning() << "We should not reach this point!";
+            qWarning() << "We should not reach this point!";
             break;
         }
     }
@@ -210,7 +210,7 @@ struct LoadingDocumentImplPrivate
                 // half preview instead. That's slower but it works even for images containing
                 // small (160x120px) or none embedded preview.
                 if (!KDcrawIface::KDcraw::loadHalfPreview(previewData, buffer)) {
-                    kWarning() << "unable to get half preview for " << q->document()->url().fileName();
+                    qWarning() << "unable to get half preview for " << q->document()->url().fileName();
                     return false;
                 }
             }
@@ -230,19 +230,19 @@ struct LoadingDocumentImplPrivate
             mImageSize = reader.size();
 
             if (!reader.canRead()) {
-                kWarning() << "QImageReader::read() using format hint" << mFormatHint << "failed:" << reader.errorString();
+                qWarning() << "QImageReader::read() using format hint" << mFormatHint << "failed:" << reader.errorString();
                 if (buffer.pos() != 0) {
-                    kWarning() << "A bad Qt image decoder moved the buffer to" << buffer.pos() << "in a call to canRead()! Rewinding.";
+                    qWarning() << "A bad Qt image decoder moved the buffer to" << buffer.pos() << "in a call to canRead()! Rewinding.";
                     buffer.seek(0);
                 }
                 reader.setFormat(QByteArray());
                 // Set buffer again, otherwise QImageReader won't restart from scratch
                 reader.setDevice(&buffer);
                 if (!reader.canRead()) {
-                    kWarning() << "QImageReader::read() without format hint failed:" << reader.errorString();
+                    qWarning() << "QImageReader::read() without format hint failed:" << reader.errorString();
                     return false;
                 }
-                kWarning() << "Image format is actually" << reader.format() << "not" << mFormatHint;
+                qWarning() << "Image format is actually" << reader.format() << "not" << mFormatHint;
             }
 
             mFormat = reader.format();
@@ -269,7 +269,7 @@ struct LoadingDocumentImplPrivate
         if (mJpegContent.get()) {
             if (!mJpegContent->loadFromData(mData, mExiv2Image.get()) &&
                 !mJpegContent->loadFromData(mData)) {
-                kWarning() << "Unable to use preview of " << q->document()->url().fileName();
+                qWarning() << "Unable to use preview of " << q->document()->url().fileName();
                 return false;
             }
             // Use the size from JpegContent, as its correctly transposed if the
@@ -344,7 +344,7 @@ struct LoadingDocumentImplPrivate
                 LOG("Really an animated image (more than one frame)");
                 mAnimated = true;
             } else {
-                kWarning() << q->document()->url() << "is not really an animated image (only one frame)";
+                qWarning() << q->document()->url() << "is not really an animated image (only one frame)";
             }
         }
     }

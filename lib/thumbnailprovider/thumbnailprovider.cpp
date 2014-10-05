@@ -35,7 +35,7 @@
 
 // KDE
 #include <KApplication>
-#include <KDebug>
+#include <QDebug>
 #include <kde_file.h>
 #include <KFileItem>
 #include <KIO/JobUiDelegate>
@@ -59,7 +59,7 @@ namespace Gwenview
 #undef LOG
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
-#define LOG(x) kDebug() << x
+#define LOG(x) //qDebug() << x
 #else
 #define LOG(x) ;
 #endif
@@ -455,7 +455,7 @@ void ThumbnailProvider::checkThumbnail()
             if (ok) {
                 size = QSize(width, height);
             } else {
-                kWarning() << "Thumbnail for" << mOriginalUri << "does not contain correct image size information";
+                qWarning() << "Thumbnail for" << mOriginalUri << "does not contain correct image size information";
                 // Don't try to determine the size of a video, it probably won't work and
                 // will cause high I/O usage with big files (bug #307007).
                 if (MimeTypeUtils::urlKind(mCurrentUrl) == MimeTypeUtils::KIND_VIDEO) {
@@ -469,10 +469,10 @@ void ThumbnailProvider::checkThumbnail()
                     if (item.isValid()) {
                         size = item.value().toSize();
                     } else {
-                        kWarning() << "KFileMetaInfoItem for" << mOriginalUri << "did not get image size information";
+                        qWarning() << "KFileMetaInfoItem for" << mOriginalUri << "did not get image size information";
                     }
                 } else {
-                    kWarning() << "Could not get a valid KFileMetaInfo instance for" << mOriginalUri;
+                    qWarning() << "Could not get a valid KFileMetaInfo instance for" << mOriginalUri;
                 }
             }
             emitThumbnailLoaded(thumb, size);
@@ -493,7 +493,7 @@ void ThumbnailProvider::checkThumbnail()
             KTemporaryFile tempFile;
             tempFile.setAutoRemove(false);
             if (!tempFile.open()) {
-                kWarning() << "Couldn't create temp file to download " << mCurrentUrl.toDisplayString();
+                qWarning() << "Couldn't create temp file to download " << mCurrentUrl.toDisplayString();
                 emitThumbnailLoadingFailed();
                 determineNextIcon();
                 return;

@@ -27,7 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QToolButton>
 
 // KDE
-#include <KDebug>
+#include <QDebug>
 #include <KIconLoader>
 #include <KLocale>
 
@@ -131,7 +131,7 @@ void TagItemDelegate::slotRemoveButtonClicked()
 {
     const QModelIndex index = focusedIndex();
     if (!index.isValid()) {
-        kWarning() << "!index.isValid()";
+        qWarning() << "!index.isValid()";
         return;
     }
     emit removeTagRequested(index.data(TagModel::TagRole).toString());
@@ -141,7 +141,7 @@ void TagItemDelegate::slotAssignToAllButtonClicked()
 {
     const QModelIndex index = focusedIndex();
     if (!index.isValid()) {
-        kWarning() << "!index.isValid()";
+        qWarning() << "!index.isValid()";
         return;
     }
     emit assignTagToAllRequested(index.data(TagModel::TagRole).toString());

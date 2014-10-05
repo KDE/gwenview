@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/gwenviewconfig.h>
 
 // KDE
-#include <KDebug>
+#include <QDebug>
 
 // Qt
 #include <QGLWidget>
@@ -94,7 +94,7 @@ DocumentViewContainer::DocumentViewContainer(QWidget* parent)
         if (glWidget->isValid()) {
             setViewport(glWidget);
         } else {
-            kWarning() << "Failed to initialize OpenGL support!";
+            qWarning() << "Failed to initialize OpenGL support!";
             delete glWidget;
         }
     }

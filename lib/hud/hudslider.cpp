@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <hud/hudtheme.h>
 
 // KDE
-#include <KDebug>
+#include <QDebug>
 
 // Qt
 #include <QApplication>
@@ -362,7 +362,7 @@ void HudSlider::doRepeatAction(int time)
     case QAbstractSlider::SliderToMinimum:
     case QAbstractSlider::SliderToMaximum:
     case QAbstractSlider::SliderMove:
-        kWarning() << "Not much point in repeating action of type" << d->mRepeatAction;
+        qWarning() << "Not much point in repeating action of type" << d->mRepeatAction;
         return;
     case QAbstractSlider::SliderNoAction:
         return;
