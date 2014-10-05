@@ -85,16 +85,11 @@ RecursiveDirModel::RecursiveDirModel(QObject* parent)
 , d(new RecursiveDirModelPrivate)
 {
     d->mDirLister = new KDirLister(this);
-    connect(d->mDirLister, SIGNAL(itemsAdded(QUrl, KFileItemList)),
-        SLOT(slotItemsAdded(QUrl, KFileItemList)));
-    connect(d->mDirLister, SIGNAL(itemsDeleted(KFileItemList)),
-        SLOT(slotItemsDeleted(KFileItemList)));
-    connect(d->mDirLister, SIGNAL(completed()),
-        SIGNAL(completed()));
-    connect(d->mDirLister, SIGNAL(clear()),
-        SLOT(slotCleared()));
-    connect(d->mDirLister, SIGNAL(clear(QUrl)),
-        SLOT(slotDirCleared(QUrl)));
+    connect(d->mDirLister, &KDirLister::itemsAdded, this, &RecursiveDirModel::slotItemsAdded);
+    connect(d->mDirLister, &KDirLister::itemsDeleted, this, &RecursiveDirModel::slotItemsDeleted);
+    connect(d->mDirLister, static_cast<void (KDirLister::*)()>(&KDirLister::completed), this, &RecursiveDirModel::completed);
+    connect(d->mDirLister, static_cast<void (KDirLister::*)()>(&KDirLister::clear), this, &RecursiveDirModel::slotCleared);
+    connect(d->mDirLister, static_cast<void (KDirLister::*)(const QUrl &)>(&KDirLister::clear), this, &RecursiveDirModel::slotDirCleared);
 }
 
 RecursiveDirModel::~RecursiveDirModel()
