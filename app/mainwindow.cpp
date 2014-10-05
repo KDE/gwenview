@@ -367,7 +367,7 @@ struct MainWindow::Private
         file->addAction(KStandardAction::Save, q, SLOT(saveCurrent()));
         file->addAction(KStandardAction::SaveAs, q, SLOT(saveCurrentAs()));
         file->addAction(KStandardAction::Open, q, SLOT(openFile()));
-        mFileOpenRecentAction = KStandardAction::openRecent(q, SLOT(openUrl(KUrl)), q);
+        mFileOpenRecentAction = KStandardAction::openRecent(q, SLOT(openUrl(QUrl)), q);
         file->addAction("file_open_recent", mFileOpenRecentAction);
         file->addAction(KStandardAction::Print, q, SLOT(print()));
         file->addAction(KStandardAction::Quit, KApplication::kApplication(), SLOT(closeAllWindows()));
