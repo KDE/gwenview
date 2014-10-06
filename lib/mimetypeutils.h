@@ -22,13 +22,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #define MIMETYPEUTILS_H
 
 #include <lib/gwenviewlib_export.h>
-
+#include <QString>
 // Local
 class QStringList;
 
 class KFileItem;
 class QUrl;
-
+class QString;
 namespace Gwenview
 {
 

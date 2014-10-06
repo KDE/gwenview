@@ -210,6 +210,7 @@ kconfig_add_kcfg_files(gwenviewlib_SRCS
     )
 
 add_library(gwenviewlib SHARED ${gwenviewlib_SRCS})
+generate_export_header(gwenviewlib BASE_NAME gwenviewlib)
 set_target_properties(gwenviewlib PROPERTIES VERSION ${LIBGWENVIEW_VERSION} SOVERSION 5 )
 if (WIN32)
     set_target_properties(gwenviewlib PROPERTIES COMPILE_FLAGS -DJPEG_STATIC)

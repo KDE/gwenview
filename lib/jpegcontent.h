@@ -24,7 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Local
 #include <lib/orientation.h>
 #include <lib/gwenviewlib_export.h>
-
+#include <QByteArray>
 class QImage;
 class QSize;
 class QString;
