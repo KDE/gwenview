@@ -32,19 +32,19 @@
 #include <QFile>
 #include <QImage>
 #include <QPixmap>
+#include <QCryptographicHash>
+#include <QDebug>
+#include <QTemporaryFile>
 
 // KDE
 #include <KApplication>
-#include <QDebug>
 #include <kde_file.h>
 #include <KFileItem>
 #include <KIO/JobUiDelegate>
 #include <KIO/PreviewJob>
 #include <KStandardDirs>
-#include <KTemporaryFile>
 #include <KJobWidgets>
 #include <KFileMetaInfo>
-#include <kmd5.h>
 
 // Local
 #include "mimetypeutils.h"
@@ -59,26 +59,25 @@ namespace Gwenview
 #undef LOG
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
-#define LOG(x) //qDebug() << x
+#define LOG(x) qDebug() << x
 #else
 #define LOG(x) ;
 #endif
 
-K_GLOBAL_STATIC(ThumbnailWriter, sThumbnailWriter)
+Q_GLOBAL_STATIC(ThumbnailWriter, sThumbnailWriter)
 
 static QString generateOriginalUri(const QUrl &url_)
 {
     QUrl url = url_;
-    // Don't include the password if any
-    url.setPassword(QString::null); //krazy:exclude=nullstrassign for old broken gcc
-    return url.url();
+    return url.adjusted(QUrl::RemovePassword).url();
 }
 
 static QString generateThumbnailPath(const QString& uri, ThumbnailGroup::Enum group)
 {
-    KMD5 md5(QFile::encodeName(uri));
     QString baseDir = ThumbnailProvider::thumbnailBaseDir(group);
-    return baseDir + QString(QFile::encodeName(md5.hexDigest())) + ".png";
+    QCryptographicHash md5(QCryptographicHash::Md5);
+    md5.addData(QFile::encodeName(uri));
+    return baseDir + QFile::encodeName(md5.result().toHex()) + ".png";
 }
 
 //------------------------------------------------------------------------
@@ -92,9 +91,9 @@ QString ThumbnailProvider::thumbnailBaseDir()
     if (sThumbnailBaseDir.isEmpty()) {
         const QByteArray customDir = qgetenv("GV_THUMBNAIL_DIR");
         if (customDir.isEmpty()) {
-            sThumbnailBaseDir = QDir::homePath() + "/.thumbnails/";
+            sThumbnailBaseDir = QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation) + QStringLiteral("/thumbnails/");
         } else {
-            sThumbnailBaseDir = QString::fromLocal8Bit(customDir.constData()) + '/';
+            sThumbnailBaseDir = QFile::decodeName(customDir) + '/';
         }
     }
     return sThumbnailBaseDir;
@@ -134,7 +133,7 @@ static void moveThumbnailHelper(const QString& oldUri, const QString& newUri, Th
     if (!thumb.load(oldPath)) {
         return;
     }
-    thumb.setText("Thumb::URI", 0, newUri);
+    thumb.setText("Thumb::URI", newUri);
     thumb.save(newPath, "png");
     QFile::remove(QFile::encodeName(oldPath));
 }
@@ -307,7 +306,7 @@ void ThumbnailProvider::determineNextIcon()
 
     // First, stat the orig file
     mState = STATE_STATORIG;
-    mCurrentUrl = QDir::cleanPath(mCurrentItem.url().path());
+    mCurrentUrl = mCurrentItem.url().adjusted(QUrl::NormalizePathSegments);
     mOriginalFileSize = mCurrentItem.size();
 
     // Do direct stat instead of using KIO if the file is local (faster)
@@ -490,7 +489,7 @@ void ThumbnailProvider::checkThumbnail()
             // Original is remote, download it
             mState = STATE_DOWNLOADORIG;
 
-            KTemporaryFile tempFile;
+            QTemporaryFile tempFile;
             tempFile.setAutoRemove(false);
             if (!tempFile.open()) {
                 qWarning() << "Couldn't create temp file to download " << mCurrentUrl.toDisplayString();
@@ -500,11 +499,10 @@ void ThumbnailProvider::checkThumbnail()
             }
             mTempPath = tempFile.fileName();
 
-            QUrl url;
-            url.setPath(mTempPath);
+            QUrl url = QUrl::fromLocalFile(mTempPath);
             KIO::Job* job = KIO::file_copy(mCurrentUrl, url, -1, KIO::Overwrite | KIO::HideProgressInfo);
-            KJobWidgets::setWindow(job, KApplication::kApplication()->activeWindow());
-            LOG("Download remote file" << mCurrentUrl.toDisplayString() << "to" << url.pathOrUrl());
+            KJobWidgets::setWindow(job, qApp->activeWindow());
+            LOG("Download remote file" << mCurrentUrl.toDisplayString() << "to" << url.toDisplayString());
             addSubjob(job);
         }
     } else {
@@ -518,7 +516,7 @@ void ThumbnailProvider::checkThumbnail()
             mPreviewPlugins = KIO::PreviewJob::availablePlugins();
         }
         KIO::Job* job = KIO::filePreview(list, QSize(pixelSize, pixelSize), &mPreviewPlugins);
-        //job->ui()->setWindow(KApplication::kApplication()->activeWindow());
+        //KJobWidgets::setWindow(job, qApp->activeWindow());
         connect(job, SIGNAL(gotPreview(KFileItem,QPixmap)),
                 this, SLOT(slotGotPreview(KFileItem,QPixmap)));
         connect(job, SIGNAL(failed(KFileItem)),
