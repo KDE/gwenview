@@ -24,22 +24,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QDropEvent>
 #include <QMenu>
-#include <QSlider>
-#include <QToolTip>
 #include <QVBoxLayout>
 
 // KDE
 #include <KActionCollection>
 #include <KActionCategory>
 #include <KActionMenu>
-#include <QDebug>
 #include <KFileItem>
 #include <KFilePlacesModel>
-#include <QLineEdit>
 #include <KLocale>
 #include <KSelectAction>
-#include <KStatusBar>
-#include <KToggleAction>
 #include <KIconLoader>
 #include <KUrlNavigator>
 #include <KUrlMimeData>

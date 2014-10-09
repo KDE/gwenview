@@ -24,7 +24,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KDE
 #include <QDebug>
 #include <KFileDialog>
-#include <KFileItem>
 #include <QMenu>
 #include <KInputDialog>
 #include <KPushButton>

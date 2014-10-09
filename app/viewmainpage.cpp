@@ -20,10 +20,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "viewmainpage.h"
 
 // Qt
-#include <QApplication>
 #include <QCheckBox>
 #include <QItemSelectionModel>
-#include <QLabel>
 #include <QShortcut>
 #include <QToolButton>
 #include <QVBoxLayout>
@@ -38,7 +36,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KModelIndexProxyMapper>
 #include <KToggleAction>
 #include <KActivities/ResourceInstance>
-
 // Local
 #include "fileoperations.h"
 #include <gvcore.h>

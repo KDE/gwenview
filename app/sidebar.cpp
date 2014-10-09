@@ -21,22 +21,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Qt
 #include <QAction>
-#include <QApplication>
 #include <QLabel>
 #include <QPainter>
 #include <QStyle>
-#include <QStyleOptionTabV3>
-#include <QStylePainter>
 #include <QTabBar>
 #include <QToolButton>
 #include <QVBoxLayout>
 
 // KDE
-#include <QDebug>
 #include <QIcon>
 #include <KIconLoader>
 #include <KGlobalSettings>
-#include <KWordWrap>
 
 // Local
 

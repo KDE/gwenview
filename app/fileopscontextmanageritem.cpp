@@ -34,7 +34,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QAction>
 #include <KActionCollection>
 #include <KActionCategory>
-#include <QDebug>
 #include <KFileItem>
 #include <KFileItemActions>
 #include <KIO/Paste>
@@ -42,7 +41,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KIO/JobUiDelegate>
 #include <KJobWidgets>
 #include <KLocale>
-#include <KMimeTypeTrader>
 #include <KOpenWithDialog>
 #include <KPropertiesDialog>
 #include <KRun>

@@ -26,10 +26,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QApplication>
 #include <QCheckBox>
 #include <QEvent>
-#include <QGridLayout>
 #include <QLabel>
 #include <QMenu>
-#include <QPainter>
 #include <QPointer>
 #include <QToolButton>
 #include <QWidgetAction>
@@ -39,7 +37,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KActionMenu>
 #include <KLocale>
 #include <QMenu>
-#include <KToolBar>
 #include <KIconLoader>
 #include <QAction>
 

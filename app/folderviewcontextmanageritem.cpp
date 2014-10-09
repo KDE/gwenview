@@ -25,12 +25,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QDragEnterEvent>
 #include <QHeaderView>
 #include <QTreeView>
-#include <QMimeData>
 #include <QDir>
+#include <QMimeData>
 
 // KDE
 #include <QDebug>
-#include <KLocale>
 #include <KUrlMimeData>
 
 // Local
@@ -44,7 +43,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <lib/placetreemodel.h>
 #define MODEL_CLASS PlaceTreeModel
 #else
-#include <KDirLister>
 #include <lib/semanticinfo/sorteddirmodel.h>
 #define MODEL_CLASS SortedDirModel
 #endif

@@ -20,22 +20,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "infocontextmanageritem.h"
 
 // Qt
-#include <QApplication>
-#include <QGridLayout>
-#include <QHelpEvent>
 #include <QLabel>
-#include <QPainter>
 #include <QPointer>
 #include <QPushButton>
 #include <QScrollArea>
-#include <QTextBrowser>
-#include <QToolTip>
 #include <QVBoxLayout>
 
 // KDE
 #include <KFileItem>
 #include <KLocale>
-#include <KSqueezedTextLabel>
 
 // Local
 #include "imagemetainfodialog.h"

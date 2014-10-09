@@ -23,16 +23,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QApplication>
 #include <QDateTime>
-#include <QDesktopWidget>
-#include <QLabel>
 #include <QPushButton>
 #include <QShortcut>
-#include <QSlider>
 #include <QSplitter>
 #include <QStackedWidget>
 #include <QTimer>
 #include <QUndoGroup>
 #include <QVBoxLayout>
+#include <QMenuBar>
+
 
 // KDE
 #include <KIO/NetAccess>
@@ -40,28 +39,21 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KActionCollection>
 #include <QAction>
 #include <KApplication>
-#include <KDirLister>
-#include <KEditToolBar>
 #include <KFileDialog>
 #include <KFileItem>
 #include <KLocale>
-#include <KMenuBar>
 #include <KMessageBox>
 #include <KNotificationRestrictions>
 #include <KProtocolManager>
 #include <KLinkItemSelectionModel>
 #include <KRecentFilesAction>
-#include <KStatusBar>
-#include <KStandardDirs>
-#include <KStandardGuiItem>
 #include <KStandardShortcut>
 #include <KToggleFullScreenAction>
-#include <KToolBar>
 #include <QUrl>
 #include <KUrlNavigator>
+#include <KToolBar>
 #include <KXMLGUIFactory>
-#include <KWindowSystem>
-#include <KGlobal>
+#include <KDirLister>
 
 // Local
 #include "configdialog.h"

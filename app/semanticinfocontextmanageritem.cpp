@@ -33,11 +33,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QAction>
 #include <KActionCategory>
 #include <KActionCollection>
-#include <QDebug>
 #include <KDialog>
 #include <KLocale>
 #include <KRatingPainter>
-#include <KGlobal>
 #include <KIconLoader>
 
 // Local
