@@ -94,11 +94,6 @@ void GVPart::showProperties()
     KPropertiesDialog::showDialog(url(), widget());
 }
 
-bool GVPart::openFile()
-{
-    return false;
-}
-
 bool GVPart::openUrl(const QUrl& url)
 {
     if (!url.isValid()) {
