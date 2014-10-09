@@ -17,32 +17,33 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 // Self
-#include <about.h>
+#include "about.h"
 
 // Local
 #include <version.h>
 
 // KDE
-#include <K4AboutData>
+#include <KAboutData>
 #include <KLocalizedString>
 
 // Qt
+#include <QString>
 
 namespace Gwenview
 {
 
-K4AboutData* createAboutData(const QByteArray& appName, const QByteArray& catalogName, const KLocalizedString& programName)
+KAboutData* createAboutData(const QString& appName, const QString& programName)
 {
-    K4AboutData* data = new K4AboutData(appName, catalogName, programName, GWENVIEW_VERSION);
-    data->setLicense(K4AboutData::License_GPL);
-    data->setCopyrightStatement(ki18n("Copyright 2000-2013 Gwenview authors"));
+    KAboutData* data = new KAboutData(appName, programName, GWENVIEW_VERSION);
+    data->setLicense(KAboutLicense::GPL);
+    data->setCopyrightStatement(i18n("Copyright 2000-2014 Gwenview authors"));
     data->addAuthor(
-        ki18n("Aurélien Gâteau"),
-        ki18n("Main developer"),
+        i18n("Aurélien Gâteau"),
+        i18n("Main developer"),
         "agateau@kde.org");
     data->addAuthor(
-        ki18n("Benjamin Löwe"),
-        ki18n("Developer"),
+        i18n("Benjamin Löwe"),
+        i18n("Developer"),
         "benni@mytum.de");
     return data;
 }

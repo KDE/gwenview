@@ -35,9 +35,10 @@
 #include <QCryptographicHash>
 #include <QDebug>
 #include <QTemporaryFile>
+#include <QApplication>
+#include <QStandardPaths>
 
 // KDE
-#include <KApplication>
 #include <kde_file.h>
 #include <KFileItem>
 #include <KIO/JobUiDelegate>
@@ -321,7 +322,7 @@ void ThumbnailProvider::determineNextIcon()
     }
     if (!directStatOk) {
         KIO::Job* job = KIO::stat(mCurrentUrl, KIO::HideProgressInfo);
-        KJobWidgets::setWindow(job, KApplication::kApplication()->activeWindow());
+        KJobWidgets::setWindow(job, qApp->activeWindow());
         LOG("KIO::stat orig" << mCurrentUrl.url());
         addSubjob(job);
     }

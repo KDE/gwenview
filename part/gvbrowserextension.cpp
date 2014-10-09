@@ -19,12 +19,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "gvbrowserextension.moc"
+#include "gvbrowserextension.h"
 
 // Qt
 
 // KDE
-#include <KParts/Part>
+#include <KParts/ReadOnlyPart>
 #include <KIconLoader>
 
 // Local
@@ -45,8 +45,8 @@ GVBrowserExtension::GVBrowserExtension(KParts::ReadOnlyPart* part)
 {
     d->mPart = part;
     emit enableAction("print", true);
-    QString iconPath = KIconLoader::global()->iconPath("image-x-generic", KIconLoader::SizeSmall);
-    emit setIconUrl(KUrl::fromPath(iconPath));
+    const QString iconPath = KIconLoader::global()->iconPath("image-x-generic", KIconLoader::SizeSmall);
+    emit setIconUrl(QUrl::fromLocalFile(iconPath));
 }
 
 GVBrowserExtension::~GVBrowserExtension()

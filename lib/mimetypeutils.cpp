@@ -26,7 +26,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QStringList>
 
 // KDE
-#include <KApplication>
 #include <QDebug>
 #include <KFileItem>
 #include <KIO/Job>
@@ -130,7 +129,7 @@ QString urlMimeType(const QUrl &url)
         qDebug() << "KMimeType::findByUrl() failed to find mimetype for" << url << ". Falling back to KIO::NetAccess::mimetype().";
         // No luck, look deeper. This can happens with http urls if the filename
         // does not provide any extension.
-        mimeType = KIO::NetAccess::mimetype(url, KApplication::kApplication()->activeWindow());
+        mimeType = KIO::NetAccess::mimetype(url, qApp->activeWindow());
     }
     return mimeType;
 }

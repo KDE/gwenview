@@ -26,15 +26,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QFutureWatcher>
 #include <QScopedPointer>
 #include <QtConcurrentRun>
+#include <QUrl>
+#include <QApplication>
 
 // KDE
-#include <KApplication>
 #include <KIO/CopyJob>
 #include <KIO/JobUiDelegate>
-#include <KLocale>
+#include <KLocalizedString>
 #include <KSaveFile>
 #include <KTemporaryFile>
-#include <QUrl>
+#include <KJobWidgets>
 
 // Local
 #include "documentloadedimpl.h"
@@ -136,8 +137,7 @@ void SaveJob::finishSave()
         emitResult();
     } else {
         KIO::Job* job = KIO::copy(QUrl::fromLocalFile(d->mTemporaryFile->fileName()), d->mNewUrl);
-        //KF5 TODO
-//         job->ui()->setWindow(KApplication::kApplication()->activeWindow());
+        KJobWidgets::setWindow(job, qApp->activeWindow());
         addSubjob(job);
     }
 }

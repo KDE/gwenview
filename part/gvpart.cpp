@@ -17,25 +17,25 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
-#include "gvpart.moc"
-
 // Qt
+#include <QUrl>
+#include <QAction>
+#include <QDebug>
+#include <QMenu>
 
 // KDE
 #include <KAboutData>
-#include <QAction>
 #include <KActionCollection>
-#include <QDebug>
 #include <KFileDialog>
 #include <KIcon>
 #include <KIconLoader>
 #include <KIO/Job>
 #include <KIO/JobUiDelegate>
-#include <KLocale>
-#include <KMenu>
+#include <KLocalizedString>
 #include <KStandardAction>
 #include <KPluginFactory>
 #include <KPropertiesDialog>
+#include <KJobWidgets>
 
 // Local
 #include "../lib/about.h"
@@ -48,10 +48,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "../lib/urlutils.h"
 #include "../lib/zoomwidget.h"
 #include "gvbrowserextension.h"
+#include "gvpart.h"
 
 //Factory Code
 K_PLUGIN_FACTORY(GVPartFactory, registerPlugin<Gwenview::GVPart>();)
-K_EXPORT_PLUGIN(GVPartFactory)
 
 namespace Gwenview
 {
@@ -59,7 +59,6 @@ namespace Gwenview
 GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QVariantList& /*args*/)
 : KParts::ReadOnlyPart(parent)
 {
-    KGlobal::locale()->insertCatalog("gwenview");
     DocumentViewContainer* container = new DocumentViewContainer(parentWidget);
     setWidget(container);
     mDocumentView = container->createView();
@@ -83,7 +82,8 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QVariantList& /*arg
 
     KStandardAction::saveAs(this, SLOT(saveAs()), actionCollection());
 
-    Gwenview::ImageFormats::registerPlugins();
+    // KF5 TODO, also disabled in main.cpp
+    //Gwenview::ImageFormats::registerPlugins();
     new GVBrowserExtension(this);
 
     setXMLFile("gvpart/gvpart.rc");
@@ -99,7 +99,7 @@ bool GVPart::openFile()
     return false;
 }
 
-bool GVPart::openUrl(const KUrl& url)
+bool GVPart::openUrl(const QUrl& url)
 {
     if (!url.isValid()) {
         return false;
@@ -123,15 +123,14 @@ bool GVPart::openUrl(const KUrl& url)
 KAboutData* GVPart::createAboutData()
 {
     KAboutData* aboutData = Gwenview::createAboutData(
-        "gvpart",               /* appname */
-        "gwenview",             /* catalogName */
-        ki18n("Gwenview KPart") /* programName */
+        QStringLiteral("gvpart"), /* appname */
+        i18n("Gwenview KPart")    /* programName */
         );
-    aboutData->setShortDescription(ki18n("An Image Viewer"));
+    aboutData->setShortDescription(i18n("An Image Viewer"));
     return aboutData;
 }
 
-inline void addActionToMenu(KMenu* menu, KActionCollection* actionCollection, const char* name)
+inline void addActionToMenu(QMenu* menu, KActionCollection* actionCollection, const char* name)
 {
     QAction* action = actionCollection->action(name);
     if (action) {
@@ -141,7 +140,7 @@ inline void addActionToMenu(KMenu* menu, KActionCollection* actionCollection, co
 
 void GVPart::showContextMenu()
 {
-    KMenu menu(widget());
+    QMenu menu(widget());
     addActionToMenu(&menu, actionCollection(), "file_save_as");
     menu.addSeparator();
     addActionToMenu(&menu, actionCollection(), "view_actual_size");
@@ -155,8 +154,8 @@ void GVPart::showContextMenu()
 
 void GVPart::saveAs()
 {
-    KUrl srcUrl = url();
-    KUrl dstUrl = KFileDialog::getSaveUrl(srcUrl.fileName(), QString(), widget());
+    const QUrl srcUrl = url();
+    const QUrl dstUrl = KFileDialog::getSaveUrl(srcUrl, QString(), widget());
     if (!dstUrl.isValid()) {
         return;
     }
@@ -176,14 +175,16 @@ void GVPart::saveAs()
 void GVPart::showJobError(KJob* job)
 {
     if (job->error() != 0) {
-        KIO::JobUiDelegate* ui = static_cast<KIO::Job*>(job)->ui();
+        KJobUiDelegate* ui = static_cast<KIO::Job*>(job)->uiDelegate();
         if (!ui) {
             qCritical() << "Saving failed. job->ui() is null.";
             return;
         }
-        ui->setWindow(widget());
+        KJobWidgets::setWindow(job, widget());
         ui->showErrorMessage();
     }
 }
 
 } // namespace
+
+#include "gvpart.moc"

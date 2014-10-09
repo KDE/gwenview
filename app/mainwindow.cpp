@@ -38,7 +38,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KActionCategory>
 #include <KActionCollection>
 #include <QAction>
-#include <KApplication>
 #include <KFileDialog>
 #include <KFileItem>
 #include <KLocale>
@@ -362,7 +361,7 @@ struct MainWindow::Private
         mFileOpenRecentAction = KStandardAction::openRecent(q, SLOT(openUrl(QUrl)), q);
         file->addAction("file_open_recent", mFileOpenRecentAction);
         file->addAction(KStandardAction::Print, q, SLOT(print()));
-        file->addAction(KStandardAction::Quit, KApplication::kApplication(), SLOT(closeAllWindows()));
+        file->addAction(KStandardAction::Quit, qApp, SLOT(closeAllWindows()));
 
         QAction * action = file->addAction("reload", q, SLOT(reload()));
         action->setText(i18nc("@action reload the currently viewed image", "Reload"));

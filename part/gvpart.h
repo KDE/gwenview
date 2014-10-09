@@ -21,10 +21,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #define GVPART_H
 
 // Qt
-#include <QPoint>
 
 // KDE
-#include <KParts/Part>
+#include <KParts/ReadOnlyPart>
 
 // Local
 #include <lib/document/document.h>
@@ -45,8 +44,8 @@ public:
     static KAboutData* createAboutData();
 
 protected:
-    virtual bool openFile();
-    virtual bool openUrl(const KUrl&);
+    virtual bool openFile() Q_DECL_OVERRIDE;
+    virtual bool openUrl(const QUrl &url) Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
     void showContextMenu();

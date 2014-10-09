@@ -25,9 +25,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QFuture>
 #include <QFutureWatcher>
 #include <QtConcurrentRun>
+#include <QApplication>
 
 // KDE
-#include <KApplication>
 #include <QDebug>
 #include <kdialogjobuidelegate.h>
 #include <KLocale>
@@ -47,7 +47,7 @@ DocumentJob::DocumentJob()
 , d(new DocumentJobPrivate)
 {
     KDialogJobUiDelegate* delegate = new KDialogJobUiDelegate;
-    delegate->setWindow(KApplication::kApplication()->activeWindow());
+    delegate->setWindow(qApp->activeWindow());
     delegate->setAutoErrorHandlingEnabled(true);
     setUiDelegate(delegate);
 }

@@ -23,16 +23,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Qt
 #include <QScopedPointer>
+#include <QUrl>
+#include <QTemporaryDir>
+#include <QApplication>
+#include <QStringList>
+#include <QCommandLineParser>
 
 // KDE
-#include <K4AboutData>
+#include <KAboutData>
 #include <KActionCollection>
-#include <KApplication>
-#include <KCmdLineArgs>
 #include <KIO/CopyJob>
-#include <KLocale>
-#include <KTempDir>
-#include <QUrl>
+#include <KLocalizedString>
 
 // Local
 #include <lib/about.h>
@@ -42,36 +43,35 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 class StartHelper
 {
 public:
-    StartHelper()
+    StartHelper(const QStringList & args, bool fullscreen, bool slideshow)
     : mFullScreen(false)
     , mSlideShow(false)
     {
-        KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
-        if (args->count() > 0) {
-            parseArgs(args);
+        if (!args.isEmpty()) {
+            parseArgs(args, fullscreen, slideshow);
         }
-        args->clear();
     }
 
-    void parseArgs(KCmdLineArgs* args)
+    void parseArgs(const QStringList &args, bool fullscreen, bool slideshow)
     {
-        if (args->count() > 1) {
-            // Createa a temp dir containing links to url args
-            mMultipleUrlsDir.reset(new KTempDir);
-            mUrl = QUrl::fromLocalFile(mMultipleUrlsDir->name());
+        if (args.count() > 1) {
+            // Create a temp dir containing links to url args
+            mMultipleUrlsDir.reset(new QTemporaryDir);
+            mUrl = QUrl::fromLocalFile(mMultipleUrlsDir->path());
             QList<QUrl> list;
-            for (int pos = 0; pos < args->count(); ++pos) {
-                list << args->url(pos);
+            foreach(const QString & url, args) {
+                list << QUrl::fromUserInput(url);
             }
+
             KIO::CopyJob* job = KIO::link(list, mUrl);
             job->exec();
         } else {
-            mUrl = args->url(0);
+            mUrl = QUrl::fromUserInput(args.first());
         }
 
-        if (mUrl.isValid() && (args->isSet("f") || args->isSet("s"))) {
+        if (mUrl.isValid() && (fullscreen || slideshow)) {
             mFullScreen = true;
-            if (args->isSet("s")) {
+            if (slideshow) {
                 mSlideShow = true;
             }
         }
@@ -102,35 +102,46 @@ private:
     QUrl mUrl;
     bool mFullScreen;
     bool mSlideShow;
-    std::auto_ptr<KTempDir> mMultipleUrlsDir;
+    std::auto_ptr<QTemporaryDir> mMultipleUrlsDir;
     std::auto_ptr<Gwenview::MainWindow> mMainWindow;
 };
 
 int main(int argc, char *argv[])
 {
     KLocalizedString::setApplicationDomain("gwenview");
-    QScopedPointer<K4AboutData> aboutData(
+    QScopedPointer<KAboutData> aboutData(
         Gwenview::createAboutData(
-            "gwenview",       /* appname */
-            0,                /* catalogName */
-            ki18n("Gwenview") /* programName */
+            QStringLiteral("gwenview"), /* component name */
+            i18n("Gwenview")            /* display name */
         ));
-    aboutData->setShortDescription(ki18n("An Image Viewer"));
+    aboutData->setShortDescription(i18n("An Image Viewer"));
 
-    KCmdLineArgs::init(argc, argv, aboutData.data());
+    QApplication app(argc, argv);
+    KAboutData::setApplicationData(*aboutData);
+    app.setApplicationName(aboutData.data()->componentName());
+    app.setApplicationDisplayName(aboutData.data()->displayName());
+    app.setOrganizationDomain(aboutData.data()->organizationDomain());
+    QApplication::setWindowIcon(QIcon::fromTheme(QStringLiteral("gwenview")));
 
-    KCmdLineOptions options;
-    options.add("f", ki18n("Start in fullscreen mode"));
-    options.add("s", ki18n("Start in slideshow mode"));
-    options.add("+[file or folder]", ki18n("A starting file or folder"));
-    KCmdLineArgs::addCmdLineOptions(options);
+    QCommandLineParser parser;
+    aboutData.data()->setupCommandLine(&parser);
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("f") << QStringLiteral("fullscreen"),
+                                        i18n("Start in fullscreen mode")));
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("s") << QStringLiteral("slideshow"),
+                                        i18n("Start in slideshow mode")));
+    parser.addHelpOption();
+    parser.addVersionOption();
+    parser.addPositionalArgument("url", i18n("A starting file or folder"));
+    parser.process(app);
+    aboutData.data()->processCommandLine(&parser);
 
-    KApplication app;
     //KF5 TODO
-//     Gwenview::ImageFormats::registerPlugins();
+    //Gwenview::ImageFormats::registerPlugins();
 
     // startHelper must live for the whole life of the application
-    StartHelper startHelper;
+    StartHelper startHelper(parser.positionalArguments(),
+                            parser.isSet(QStringLiteral("f")),
+                            parser.isSet(QStringLiteral("s")));
     if (app.isSessionRestored()) {
         kRestoreMainWindows<Gwenview::MainWindow>();
     } else {
