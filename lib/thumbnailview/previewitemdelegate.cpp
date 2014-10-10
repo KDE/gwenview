@@ -34,15 +34,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QUrl>
 #include <QEvent>
 #include <QHoverEvent>
+#include <QDateTime>
+#include <QDebug>
 
 // KDE
-#include <QDebug>
 #include <KDirModel>
 #include <KGlobalSettings>
-#include <KLocale>
-#include <QDateTime>
 #include <KIconLoader>
-#include <KGlobal>
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 #include <kratingpainter.h>
@@ -404,7 +402,7 @@ struct PreviewItemDelegatePrivate
         if (mDetails & PreviewItemDelegate::DateDetail) {
             if (!ArchiveUtils::fileItemIsDirOrArchive(fileItem)) {
                 const QDateTime dt = TimeUtils::dateTimeForFileItem(fileItem);
-                const QString text = KLocale::global()->formatDateTime(dt);
+                const QString text = QLocale().toString(dt, QLocale::ShortFormat);
                 elided |= isTextElided(text);
                 textList << text;
             }
@@ -791,7 +789,7 @@ void PreviewItemDelegate::paint(QPainter * painter, const QStyleOptionViewItem &
 
     if (!isDirOrArchive && (d->mDetails & PreviewItemDelegate::DateDetail)) {
         const QDateTime dt = TimeUtils::dateTimeForFileItem(fileItem);
-        d->drawText(painter, textRect, fgColor, KLocale::global()->formatDateTime(dt));
+        d->drawText(painter, textRect, fgColor, QLocale().toString(dt, QLocale::ShortFormat));
         textRect.moveTop(textRect.bottom());
     }
 
