@@ -798,9 +798,9 @@ MainWindow::MainWindow()
 MainWindow::~MainWindow()
 {
     if (GwenviewConfig::deleteThumbnailCacheOnExit()) {
-        const QString dir = ThumbnailProvider::thumbnailBaseDir();
-        if (QFile::exists(dir)) {
-            KIO::NetAccess::del(QUrl::fromLocalFile(dir), this);
+        QDir dir(ThumbnailProvider::thumbnailBaseDir());
+        if (dir.exists()) {
+            dir.removeRecursively();
         }
     }
     delete d->mThumbnailProvider;
