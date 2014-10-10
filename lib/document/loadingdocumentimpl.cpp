@@ -404,7 +404,7 @@ void LoadingDocumentImpl::init()
         d->startLoading();
     } else {
         // Transfer file via KIO
-        d->mTransferJob = KIO::get(document()->url());
+        d->mTransferJob = KIO::get(document()->url(), KIO::NoReload, KIO::HideProgressInfo);
         connect(d->mTransferJob, SIGNAL(data(KIO::Job*,QByteArray)),
                 SLOT(slotDataReceived(KIO::Job*,QByteArray)));
         connect(d->mTransferJob, SIGNAL(result(KJob*)),
