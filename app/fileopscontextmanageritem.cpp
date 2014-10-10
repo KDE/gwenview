@@ -180,29 +180,29 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, QL
 
     d->mCopyToAction = file->addAction("file_copy_to", this, SLOT(copyTo()));
     d->mCopyToAction->setText(i18nc("Verb", "Copy To..."));
-    d->mCopyToAction->setShortcut(Qt::Key_F7);
+    actionCollection->setDefaultShortcut(d->mCopyAction, Qt::Key_F7);
 
     d->mMoveToAction = file->addAction("file_move_to", this, SLOT(moveTo()));
     d->mMoveToAction->setText(i18nc("Verb", "Move To..."));
-    d->mMoveToAction->setShortcut(Qt::Key_F8);
+    actionCollection->setDefaultShortcut(d->mMoveToAction, Qt::Key_F8);
 
     d->mLinkToAction = file->addAction("file_link_to", this, SLOT(linkTo()));
     d->mLinkToAction->setText(i18nc("Verb: create link to the file where user wants", "Link To..."));
-    d->mLinkToAction->setShortcut(Qt::Key_F9);
+    actionCollection->setDefaultShortcut(d->mLinkToAction, Qt::Key_F9);
 
     d->mRenameAction = file->addAction("file_rename", this, SLOT(rename()));
     d->mRenameAction->setText(i18nc("Verb", "Rename..."));
-    d->mRenameAction->setShortcut(Qt::Key_F2);
+    actionCollection->setDefaultShortcut(d->mRenameAction, Qt::Key_F2);
 
     d->mTrashAction = file->addAction("file_trash", this, SLOT(trash()));
     d->mTrashAction->setText(i18nc("Verb", "Trash"));
     d->mTrashAction->setIcon(QIcon::fromTheme("user-trash"));
-    d->mTrashAction->setShortcut(Qt::Key_Delete);
+    actionCollection->setDefaultShortcut(d->mTrashAction, Qt::Key_Delete);
 
     d->mDelAction = file->addAction("file_delete", this, SLOT(del()));
     d->mDelAction->setText(i18n("Delete"));
     d->mDelAction->setIcon(QIcon::fromTheme("edit-delete"));
-    d->mDelAction->setShortcut(QKeySequence(Qt::ShiftModifier | Qt::Key_Delete));
+    actionCollection->setDefaultShortcut(d->mDelAction, QKeySequence(Qt::ShiftModifier | Qt::Key_Delete));
 
     d->mRestoreAction = file->addAction("file_restore", this, SLOT(restore()));
     d->mRestoreAction->setText(i18n("Restore"));

@@ -196,7 +196,7 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
 
         mEditTagsAction = edit->addAction("edit_tags");
         mEditTagsAction->setText(i18nc("@action", "Edit Tags"));
-        mEditTagsAction->setShortcut(Qt::CTRL | Qt::Key_T);
+        mActionCollection->setDefaultShortcut(mEditTagsAction, Qt::CTRL + Qt::Key_T);
         QObject::connect(mEditTagsAction, SIGNAL(triggered()),
                          q, SLOT(showSemanticInfoDialog()));
         mActions << mEditTagsAction;

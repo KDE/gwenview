@@ -113,7 +113,7 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
         KActionCategory* view = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface", "View"), actionCollection);
         QAction * action = view->addAction("edit_location", q, SLOT(editLocation()));
         action->setText(i18nc("@action:inmenu Navigation Bar", "Edit Location"));
-        action->setShortcut(Qt::Key_F6);
+        actionCollection->setDefaultShortcut(action, Qt::Key_F6);
 
         mSortAction = view->add<KSelectAction>("sort_order");
         mSortAction->setText(i18nc("@action:inmenu", "Sort By"));

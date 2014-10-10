@@ -364,14 +364,14 @@ struct MainWindow::Private
         QAction * action = file->addAction("reload", q, SLOT(reload()));
         action->setText(i18nc("@action reload the currently viewed image", "Reload"));
         action->setIcon(QIcon::fromTheme("view-refresh"));
-        action->setShortcut(Qt::Key_F5);
+        actionCollection->setDefaultShortcuts(action, KStandardShortcut::reload());
 
         mBrowseAction = view->addAction("browse");
         mBrowseAction->setText(i18nc("@action:intoolbar Switch to file list", "Browse"));
         mBrowseAction->setToolTip(i18nc("@info:tooltip", "Browse folders for images"));
         mBrowseAction->setCheckable(true);
         mBrowseAction->setIcon(QIcon::fromTheme("view-list-icons"));
-        mBrowseAction->setShortcut(Qt::Key_Escape);
+        actionCollection->setDefaultShortcut(mBrowseAction, Qt::Key_Escape);
         connect(mViewMainPage, SIGNAL(goToBrowseModeRequested()),
             mBrowseAction, SLOT(trigger()));
 
@@ -391,7 +391,7 @@ struct MainWindow::Private
         mFullScreenAction = static_cast<KToggleFullScreenAction*>(view->addAction(KStandardAction::FullScreen, q, SLOT(toggleFullScreen(bool))));
         QList<QKeySequence> shortcuts = mFullScreenAction->shortcuts();
         shortcuts.append(QKeySequence(Qt::Key_F11));
-        mFullScreenAction->setShortcuts(shortcuts);
+        actionCollection->setDefaultShortcuts(mFullScreenAction, shortcuts);
 
         connect(mViewMainPage, SIGNAL(toggleFullScreenRequested()),
                 mFullScreenAction, SLOT(trigger()));
@@ -406,7 +406,7 @@ struct MainWindow::Private
         mGoToPreviousAction->setIcon(QIcon::fromTheme("media-skip-backward"));
         mGoToPreviousAction->setText(i18nc("@action Go to previous image", "Previous"));
         mGoToPreviousAction->setToolTip(i18nc("@info:tooltip", "Go to previous image"));
-        mGoToPreviousAction->setShortcut(Qt::Key_Backspace);
+        actionCollection->setDefaultShortcut(mGoToPreviousAction, Qt::Key_Backspace);
         installDisabledActionShortcutMonitor(mGoToPreviousAction, SLOT(showFirstDocumentReached()));
 
         mGoToNextAction = view->addAction("go_next", q, SLOT(goToNext()));
@@ -414,20 +414,20 @@ struct MainWindow::Private
         mGoToNextAction->setIcon(QIcon::fromTheme("media-skip-forward"));
         mGoToNextAction->setText(i18nc("@action Go to next image", "Next"));
         mGoToNextAction->setToolTip(i18nc("@info:tooltip", "Go to next image"));
-        mGoToNextAction->setShortcut(Qt::Key_Space);
+        actionCollection->setDefaultShortcut(mGoToNextAction, Qt::Key_Space);
         installDisabledActionShortcutMonitor(mGoToNextAction, SLOT(showLastDocumentReached()));
 
         mGoToFirstAction = view->addAction("go_first", q, SLOT(goToFirst()));
         mGoToFirstAction->setPriority(QAction::LowPriority);
         mGoToFirstAction->setText(i18nc("@action Go to first image", "First"));
         mGoToFirstAction->setToolTip(i18nc("@info:tooltip", "Go to first image"));
-        mGoToFirstAction->setShortcut(Qt::Key_Home);
+        actionCollection->setDefaultShortcut(mGoToFirstAction, Qt::Key_Home);
 
         mGoToLastAction = view->addAction("go_last", q, SLOT(goToLast()));
         mGoToLastAction->setPriority(QAction::LowPriority);
         mGoToLastAction->setText(i18nc("@action Go to last image", "Last"));
         mGoToLastAction->setToolTip(i18nc("@info:tooltip", "Go to last image"));
-        mGoToLastAction->setShortcut(Qt::Key_End);
+        actionCollection->setDefaultShortcut(mGoToLastAction, Qt::Key_End);
 
         mPreloadDirectionIsForward = true;
 
@@ -443,7 +443,7 @@ struct MainWindow::Private
         connect(mToggleSideBarAction, SIGNAL(toggled(bool)),
                 q, SLOT(toggleSideBar(bool)));
         mToggleSideBarAction->setIcon(QIcon::fromTheme("view-sidetree"));
-        mToggleSideBarAction->setShortcut(Qt::Key_F4);
+        actionCollection->setDefaultShortcut(mToggleSideBarAction, Qt::Key_F4);
         mToggleSideBarAction->setText(i18nc("@action", "Sidebar"));
         connect(mBrowseMainPage->toggleSideBarButton(), SIGNAL(clicked()),
                 mToggleSideBarAction, SLOT(trigger()));
@@ -485,14 +485,15 @@ struct MainWindow::Private
         action->setObjectName(KStandardAction::name(KStandardAction::Redo));
         action->setIcon(QIcon::fromTheme("edit-redo"));
         action->setIconText(i18n("Redo"));
-        action->setShortcuts(KStandardShortcut::redo());
+        actionCollection->setDefaultShortcuts(action, KStandardShortcut::redo());
+
         edit->addAction(action->objectName(), action);
 
         action = undoGroup->createUndoAction(actionCollection);
         action->setObjectName(KStandardAction::name(KStandardAction::Undo));
         action->setIcon(QIcon::fromTheme("edit-undo"));
         action->setIconText(i18n("Undo"));
-        action->setShortcuts(KStandardShortcut::undo());
+        actionCollection->setDefaultShortcuts(action, KStandardShortcut::undo());
         edit->addAction(action->objectName(), action);
     }
 

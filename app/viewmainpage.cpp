@@ -422,14 +422,14 @@ ViewMainPage::ViewMainPage(QWidget* parent, SlideShow* slideShow, KActionCollect
     d->mToggleThumbnailBarAction = view->add<KToggleAction>(QString("toggle_thumbnailbar"));
     d->mToggleThumbnailBarAction->setText(i18n("Thumbnail Bar"));
     d->mToggleThumbnailBarAction->setIcon(QIcon::fromTheme("folder-image"));
-    d->mToggleThumbnailBarAction->setShortcut(Qt::CTRL | Qt::Key_B);
+    actionCollection->setDefaultShortcut(d->mToggleThumbnailBarAction, Qt::CTRL + Qt::Key_B);
     d->mToggleThumbnailBarAction->setChecked(GwenviewConfig::thumbnailBarIsVisible());
     connect(d->mToggleThumbnailBarAction, &KToggleAction::triggered, this, &ViewMainPage::setThumbnailBarVisibility);
     d->mToggleThumbnailBarButton->setDefaultAction(d->mToggleThumbnailBarAction);
 
     d->mSynchronizeAction = view->add<KToggleAction>("synchronize_views");
     d->mSynchronizeAction->setText(i18n("Synchronize"));
-    d->mSynchronizeAction->setShortcut(Qt::CTRL | Qt::Key_Y);
+    actionCollection->setDefaultShortcut(d->mSynchronizeAction, Qt::CTRL + Qt::Key_Y);
     connect(d->mSynchronizeAction, SIGNAL(toggled(bool)),
             d->mSynchronizer, SLOT(setActive(bool)));
     // Ensure mSynchronizeAction and mSynchronizeCheckBox are in sync

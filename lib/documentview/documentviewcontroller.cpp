@@ -91,7 +91,7 @@ struct DocumentViewControllerPrivate
         KActionCategory* view = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface", "View"), mActionCollection);
 
         mZoomToFitAction = view->addAction("view_zoom_to_fit");
-        mZoomToFitAction->setShortcut(Qt::Key_F);
+        view->collection()->setDefaultShortcut(mZoomToFitAction, Qt::Key_F);
         mZoomToFitAction->setCheckable(true);
         mZoomToFitAction->setChecked(true);
         mZoomToFitAction->setText(i18n("Zoom to Fit"));
