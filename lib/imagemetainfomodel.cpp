@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Qt
 #include <QSize>
 #include <QDebug>
+#include <QLocale>
 
 // KDE
 #include <KFileItem>
@@ -317,12 +318,13 @@ ImageMetaInfoModel::~ImageMetaInfoModel()
 
 void ImageMetaInfoModel::setUrl(const QUrl &url)
 {
-    KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
-    QString sizeString = KFormat().formatByteSize(item.size());
+    KFileItem item(url);
+    const QString sizeString = KFormat().formatByteSize(item.size());
+    const QString timeString = QLocale().toString(item.time(KFileItem::ModificationTime), QLocale::LongFormat);
 
     d->setGroupEntryValue(GeneralGroup, "General.Name", item.name());
     d->setGroupEntryValue(GeneralGroup, "General.Size", sizeString);
-    d->setGroupEntryValue(GeneralGroup, "General.Time", item.timeString());
+    d->setGroupEntryValue(GeneralGroup, "General.Time", timeString);
 }
 
 void ImageMetaInfoModel::setImageSize(const QSize& size)
