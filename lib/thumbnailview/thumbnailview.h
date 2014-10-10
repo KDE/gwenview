@@ -177,10 +177,11 @@ protected:
     virtual void startDrag(Qt::DropActions);
 
 protected Q_SLOTS:
-    virtual void rowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
-    virtual void rowsInserted(const QModelIndex& parent, int start, int end);
-    virtual void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
-    virtual void dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
+    virtual void rowsAboutToBeRemoved(const QModelIndex& parent, int start, int end) Q_DECL_OVERRIDE;
+    virtual void rowsInserted(const QModelIndex& parent, int start, int end) Q_DECL_OVERRIDE;
+    virtual void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected) Q_DECL_OVERRIDE;
+    virtual void dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight,
+                             const QVector<int> &roles = QVector<int>()) Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
     void showContextMenu();

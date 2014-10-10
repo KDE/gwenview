@@ -501,9 +501,9 @@ void ThumbnailView::rowsInserted(const QModelIndex& parent, int start, int end)
     rowsInsertedSignal(parent, start, end);
 }
 
-void ThumbnailView::dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
+void ThumbnailView::dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight, const QVector<int> &roles)
 {
-    QListView::dataChanged(topLeft, bottomRight);
+    QListView::dataChanged(topLeft, bottomRight, roles);
     bool thumbnailsNeedRefresh = false;
     for (int row = topLeft.row(); row <= bottomRight.row(); ++row) {
         QModelIndex index = model()->index(row, 0);
