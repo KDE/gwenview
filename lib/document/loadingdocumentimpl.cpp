@@ -34,15 +34,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QImageReader>
 #include <QPointer>
 #include <QtConcurrent>
+#include <QUrl>
 
 // KDE
 #include <QDebug>
 #include <KIO/Job>
 #include <KIO/JobClasses>
-#include <KLocale>
+#include <KLocalizedString>
 #include <KMimeType>
 #include <KProtocolInfo>
-#include <QUrl>
 
 #ifdef KDCRAW_FOUND
 #include <libkdcraw/kdcraw.h>

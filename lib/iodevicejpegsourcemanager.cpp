@@ -23,9 +23,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QIODevice>
+#include <QDebug>
 
 // KDE
-#include <QDebug>
 
 // libjpeg
 #include <stdio.h>

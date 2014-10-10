@@ -22,11 +22,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "loadingjob.h"
 
 // Qt
+#include <QDebug>
+#include <QUrl>
 
 // KDE
-#include <QDebug>
-#include <KLocale>
-#include <QUrl>
+
+#include <KLocalizedString>
 
 // Local
 

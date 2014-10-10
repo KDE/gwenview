@@ -22,11 +22,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "placetreemodel.h"
 
 // Qt
+#include <QUrl>
 
 // KDE
 #include <KDirLister>
 #include <KFilePlacesModel>
-#include <QUrl>
 
 // Local
 #include <lib/semanticinfo/sorteddirmodel.h>

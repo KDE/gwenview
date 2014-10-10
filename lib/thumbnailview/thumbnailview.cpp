@@ -34,15 +34,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QTimer>
 #include <QDrag>
 #include <QMimeData>
+#include <QDebug>
+#include <QDateTime>
 
 // KDE
-#include <QDebug>
 #include <KDirModel>
 #include <KIconLoader>
 #include <KGlobalSettings>
 #include <KPixmapSequence>
 #include <KUrlMimeData>
-#include <QDateTime>
 
 // Local
 #include "abstractdocumentinfoprovider.h"

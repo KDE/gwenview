@@ -25,13 +25,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QApplication>
 #include <QFile>
 #include <QFileInfo>
+#include <QUrl>
 
 // KDE
 #include <kde_file.h>
 #include <KIO/NetAccess>
 #include <kmountpoint.h>
 #include <KProtocolManager>
-#include <QUrl>
 
 // Local
 #include <archiveutils.h>

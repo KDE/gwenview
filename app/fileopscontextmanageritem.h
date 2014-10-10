@@ -30,7 +30,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 class QAction;
 class QListView;
-class KAction;
 class KActionCollection;
 class KXMLGUIClient;
 

@@ -27,10 +27,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QLayout>
 #include <QPainter>
 #include <QPropertyAnimation>
+#include <QIcon>
 
 // KDE
-#include <QIcon>
-#include <KLocale>
+#include <KLocalizedString>
 
 // Local
 #include <hud/hudtheme.h>

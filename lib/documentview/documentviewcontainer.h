@@ -27,10 +27,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/documentview/documentview.h>
 
 // KDE
-#include <KUrl>
 
 // Qt
 #include <QGraphicsView>
+#include <QUrl>
 
 namespace Gwenview
 {
@@ -68,7 +68,7 @@ public:
     /**
      * Returns saved Setup configuration for a previously viewed document
      */
-    DocumentView::Setup savedSetup(const KUrl& url) const;
+    DocumentView::Setup savedSetup(const QUrl &url) const;
 
     /**
      * Updates setupForUrl hash with latest setup values

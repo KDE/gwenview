@@ -31,7 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QPrintDialog>
 
 // KDE
-#include <KLocale>
+#include <KLocalizedString>
 #include <kdeprintdialog.h>
 
 // Local

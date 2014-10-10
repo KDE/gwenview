@@ -26,10 +26,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/gvdebug.h>
 
 // Qt
-
-// KDE
 #include <QDebug>
 #include <QUrl>
+
+// KDE
 
 // Baloo
 #include <baloo/file.h>

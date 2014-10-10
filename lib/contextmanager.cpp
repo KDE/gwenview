@@ -24,11 +24,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QItemSelectionModel>
 #include <QTimer>
 #include <QUndoGroup>
+#include <QUrl>
 
 // KDE
 #include <KDirLister>
 #include <KFileItem>
-#include <QUrl>
 
 // Local
 #include <lib/document/documentfactory.h>

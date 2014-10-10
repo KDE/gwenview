@@ -26,9 +26,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QPainter>
 #include <QPushButton>
 #include <QRect>
+#include <QDebug>
 
 // KDE
-#include <QDebug>
 
 // Local
 #include <lib/documentview/rasterimageview.h>

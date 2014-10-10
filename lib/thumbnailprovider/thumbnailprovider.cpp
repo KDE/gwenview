@@ -40,7 +40,6 @@
 
 // KDE
 #include <kde_file.h>
-#include <KFileItem>
 #include <KIO/JobUiDelegate>
 #include <KIO/PreviewJob>
 #include <KStandardDirs>

@@ -30,14 +30,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/zoomwidget.h>
 
 // KDE
-#include <QAction>
 #include <KActionCategory>
-#include <QDebug>
-#include <KLocale>
+#include <KLocalizedString>
 
 // Qt
 #include <QAction>
 #include <QHBoxLayout>
+#include <QDebug>
+#include <QAction>
 
 namespace Gwenview
 {

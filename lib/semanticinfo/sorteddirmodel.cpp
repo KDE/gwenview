@@ -22,11 +22,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Qt
 #include <QTimer>
+#include <QDebug>
+#include <QUrl>
 
 // KDE
-#include <QDebug>
 #include <KDirLister>
-#include <QUrl>
+
 
 // Local
 #include <lib/archiveutils.h>

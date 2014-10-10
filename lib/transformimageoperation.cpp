@@ -24,7 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Qt
 
 // KDE
-#include <KLocale>
+#include <KLocalizedString>
 
 // Local
 #include "document/abstractdocumenteditor.h"

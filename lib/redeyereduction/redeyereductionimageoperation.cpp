@@ -27,10 +27,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Qt
 #include <QImage>
 #include <QPainter>
+#include <QDebug>
 
 // KDE
-#include <QDebug>
-#include <KLocale>
+#include <KLocalizedString>
 
 // Local
 #include "ramp.h"

@@ -31,10 +31,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QSortFilterProxyModel>
 #include <QTimer>
 #include <QVBoxLayout>
+#include <QDebug>
+#include <QPushButton>
 
 // KDE
-#include <QDebug>
-#include <KPushButton>
 
 // Local
 #include <lib/semanticinfo/tagitemdelegate.h>
@@ -118,7 +118,7 @@ struct TagWidgetPrivate
     TagInfo mTagInfo;
     QListView* mListView;
     QComboBox* mComboBox;
-    KPushButton* mAddButton;
+    QPushButton* mAddButton;
     AbstractSemanticInfoBackEnd* mBackEnd;
     TagCompleterModel* mTagCompleterModel;
     TagModel* mAssignedTagModel;
@@ -146,7 +146,7 @@ struct TagWidgetPrivate
 
         mComboBox->setModel(mTagCompleterModel);
 
-        mAddButton = new KPushButton;
+        mAddButton = new QPushButton;
         mAddButton->setIcon(QIcon::fromTheme("list-add"));
         mAddButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         QObject::connect(mAddButton, SIGNAL(clicked()),

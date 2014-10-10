@@ -19,17 +19,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 */
 // Self
-#include "croptool.moc"
 #include "croptool.h"
 
 // Qt
-#include <qmath.h>
+#include <QtMath>
 #include <QGraphicsSceneMouseEvent>
 #include <QPainter>
 #include <QRect>
+#include <QDebug>
 
 // KDE
-#include <QDebug>
 
 // Local
 #include <lib/documentview/rasterimageview.h>

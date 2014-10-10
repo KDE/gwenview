@@ -23,17 +23,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // Qt
 #include <QSize>
+#include <QDebug>
 
 // KDE
-#include <QDebug>
 #include <KFileItem>
-#include <KLocale>
+#include <KLocalizedString>
+#include <KFormat>
 
 // Exiv2
 #include <exiv2/exif.hpp>
 #include <exiv2/image.hpp>
 #include <exiv2/iptc.hpp>
-#include <KFormat>
 
 // Local
 
@@ -77,12 +77,12 @@ public:
             return mValue;
         }
         void setValue(const QString& value)
-    {
+        {
             mValue = value.trimmed();
         }
 
         void appendValue(const QString& value)
-    {
+        {
             if (mValue.length() > 0) {
                 mValue += '\n';
             }
@@ -228,7 +228,7 @@ struct ImageMetaInfoModelPrivate
         }
 
         if (index.internalId() == NoGroupSpace) {
-            return QVariant(QString());
+            return QString();
         }
 
         MetaInfoGroup* group = mMetaInfoGroupVector[index.internalId()];

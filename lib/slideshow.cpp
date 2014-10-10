@@ -28,10 +28,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QAction>
 #include <QTimer>
+#include <QDebug>
 
 // KDE
-#include <QDebug>
-#include <KLocale>
+#include <KLocalizedString>
 
 // Local
 #include <lib/gvdebug.h>

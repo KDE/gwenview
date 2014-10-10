@@ -36,10 +36,10 @@ extern "C" {
 #include <QImage>
 #include <QImageWriter>
 #include <QMatrix>
+#include <QDebug>
 
 // KDE
-#include <QDebug>
-#include <KLocale>
+#include <KLocalizedString>
 
 // Exiv2
 #include <exiv2/exif.hpp>

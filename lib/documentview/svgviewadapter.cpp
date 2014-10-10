@@ -27,9 +27,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QGraphicsTextItem>
 #include <QGraphicsWidget>
 #include <QSvgRenderer>
+#include <QDebug>
 
 // KDE
-#include <QDebug>
 
 // Local
 #include "document/documentfactory.h"

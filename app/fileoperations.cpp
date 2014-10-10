@@ -21,25 +21,26 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Self
 #include "fileoperations.h"
 
-// KDE
-#include <QDebug>
-#include <KFileDialog>
+// Qt
 #include <QMenu>
+#include <QDebug>
+#include <QPushButton>
+
+// KDE
+#include <KFileDialog>
 #include <KInputDialog>
-#include <KPushButton>
 #include <KIO/CopyJob>
 #include <KIO/DeleteJob>
 #include <KIO/Job>
 #include <KIO/JobUiDelegate>
 #include <KIO/NetAccess>
-#include <KLocale>
+#include <KLocalizedString>
 #include <KJobWidgets>
 #include <konq_operations.h>
 
 // Local
 #include <lib/document/documentfactory.h>
 #include <lib/thumbnailprovider/thumbnailprovider.h>
-#include <KJobWidgets/KJobWidgets>
 
 namespace Gwenview
 {

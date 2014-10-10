@@ -25,7 +25,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <hud/hudtheme.h>
 
 // KDE
-#include <QDebug>
 
 // Qt
 #include <QApplication>
@@ -34,6 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QStyle>
 #include <QStyleOptionGraphicsItem>
 #include <QTimer>
+#include <QDebug>
 
 namespace Gwenview
 {

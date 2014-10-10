@@ -19,20 +19,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 */
 // Self
-#include "cropwidget.moc"
 
 // Qt
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QPushButton>
-#include <QtCore/qmath.h>
+#include <QtMath>
+#include <QDebug>
 
 // KDE
-#include <QDebug>
 #include <KDialog>
 #include <KGlobalSettings>
 #include <KLineEdit>
-#include <KLocale>
+#include <KLocalizedString>
 
 // Local
 #include <lib/documentview/rasterimageview.h>

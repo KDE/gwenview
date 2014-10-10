@@ -31,10 +31,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QGraphicsProxyWidget>
 #include <QMouseEvent>
 #include <QTime>
-
-// KDE
 #include <QDebug>
 #include <QIcon>
+
+// KDE
 
 // Local
 #include <document/documentfactory.h>

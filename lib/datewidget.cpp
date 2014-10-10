@@ -24,11 +24,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QDate>
 #include <QHBoxLayout>
+#include <QLocale>
 
 // KDE
 #include <KDatePicker>
 #include <KIconLoader>
-#include <KLocale>
 
 // Local
 #include <lib/statusbartoolbutton.h>
@@ -61,7 +61,7 @@ struct DateWidgetPrivate
 
     void updateButton()
     {
-        mDateButton->setText(KLocale::global()->formatDate(mDate, KLocale::ShortDate));
+        mDateButton->setText(QLocale().toString(mDate, QLocale::ShortFormat));
     }
 
     void adjustDate(int delta)

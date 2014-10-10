@@ -24,9 +24,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QObject>
 
 // KDE
-#include <KSharedPtr>
 
+// local
 #include <lib/gwenviewlib_export.h>
+#include <document/document.h>
 
 class QImage;
 class QRect;
@@ -44,7 +45,7 @@ class GWENVIEWLIB_EXPORT ImageScaler : public QObject
 public:
     ImageScaler(QObject* parent = 0);
     ~ImageScaler();
-    void setDocument(KSharedPtr<Document>);
+    void setDocument(Document::Ptr);
     void setZoom(qreal);
     void setDestinationRegion(const QRegion&);
 

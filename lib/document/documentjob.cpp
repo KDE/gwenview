@@ -26,11 +26,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QFutureWatcher>
 #include <QtConcurrentRun>
 #include <QApplication>
+#include <QDebug>
 
 // KDE
-#include <QDebug>
-#include <kdialogjobuidelegate.h>
-#include <KLocale>
+#include <KDialogJobUiDelegate>
+#include <KLocalizedString>
 
 // Local
 

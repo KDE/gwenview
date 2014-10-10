@@ -23,16 +23,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QApplication>
+#include <QUrl>
 
 // KDE
 #include <KFileDialog>
 #include <KGlobalSettings>
 #include <KImageIO>
 #include <KIO/NetAccess>
-#include <KLocale>
+#include <KLocalizedString>
 #include <KMessageBox>
 #include <KStandardDirs>
-#include <QUrl>
 
 // Local
 #include <lib/binder.h>

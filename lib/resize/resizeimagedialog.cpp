@@ -22,16 +22,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "resizeimagedialog.h"
 
 // Qt
-
-// KDE
-#include <KLocalizedString>
-
-// Local
-#include <ui_resizeimagewidget.h>
-#include <KGuiItem>
 #include <QDialogButtonBox>
 #include <QPushButton>
 
+// KDE
+#include <KLocalizedString>
+#include <KGuiItem>
+
+// Local
+#include <ui_resizeimagewidget.h>
 
 namespace Gwenview
 {

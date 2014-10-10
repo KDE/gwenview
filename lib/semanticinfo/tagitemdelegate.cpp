@@ -25,11 +25,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QAbstractItemView>
 #include <QPainter>
 #include <QToolButton>
+#include <QDebug>
 
 // KDE
-#include <QDebug>
 #include <KIconLoader>
-#include <KLocale>
+#include <KLocalizedString>
 
 // Local
 #include <lib/semanticinfo/tagmodel.h>

@@ -24,16 +24,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QApplication>
 #include <QStringList>
+#include <QDebug>
+#include <QUrl>
 
 // KDE
-#include <QDebug>
 #include <KFileItem>
 #include <KIO/Job>
 #include <KIO/JobClasses>
 #include <KIO/NetAccess>
 #include <KMimeType>
-#include <QUrl>
-
 #include <KImageIO>
 
 // Local

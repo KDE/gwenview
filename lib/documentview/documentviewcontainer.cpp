@@ -28,22 +28,20 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/gwenviewconfig.h>
 
 // KDE
-#include <QDebug>
 
 // Qt
 #include <QGLWidget>
 #include <QGraphicsScene>
 #include <QPropertyAnimation>
 #include <QTimer>
-
-// libc
-#include <qmath.h>
+#include <QDebug>
+#include <QtMath>
 
 namespace Gwenview
 {
 
 typedef QSet<DocumentView*> DocumentViewSet;
-typedef QHash<KUrl, DocumentView::Setup> SetupForUrl;
+typedef QHash<QUrl, DocumentView::Setup> SetupForUrl;
 
 struct DocumentViewContainerPrivate
 {
@@ -136,7 +134,7 @@ void DocumentViewContainer::deleteView(DocumentView* view)
     d->removeFromSet(view, &d->mAddedViews);
 }
 
-DocumentView::Setup DocumentViewContainer::savedSetup(const KUrl& url) const
+DocumentView::Setup DocumentViewContainer::savedSetup(const QUrl& url) const
 {
     return d->mSetupForUrl.value(url);
 }

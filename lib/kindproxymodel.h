@@ -21,9 +21,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #ifndef KINDPROXYMODEL_H
 #define KINDPROXYMODEL_H
 
-#include <lib/gwenviewlib_export.h>
-
 // Local
+#include <lib/gwenviewlib_export.h>
 #include <lib/mimetypeutils.h>
 
 // KDE

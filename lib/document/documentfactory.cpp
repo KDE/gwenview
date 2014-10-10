@@ -24,10 +24,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QDateTime>
 #include <QMap>
 #include <QUndoGroup>
+#include <QUrl>
 
 // KDE
 #include <KDebug>
-#include <QUrl>
 
 // Local
 #include <gvdebug.h>

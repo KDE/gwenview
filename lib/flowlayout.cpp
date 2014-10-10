@@ -37,8 +37,6 @@
 
 #include "flowlayout.h"
 
-#include <QLayout>
-
 FlowLayout::FlowLayout(QWidget *parent, int margin, int spacing)
 : QLayout(parent)
 {

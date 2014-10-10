@@ -31,16 +31,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QUndoGroup>
 #include <QVBoxLayout>
 #include <QMenuBar>
-
+#include <QUrl>
 
 // KDE
 #include <KIO/NetAccess>
 #include <KActionCategory>
 #include <KActionCollection>
-#include <QAction>
 #include <KFileDialog>
 #include <KFileItem>
-#include <KLocale>
+#include <KLocalizedString>
 #include <KMessageBox>
 #include <KNotificationRestrictions>
 #include <KProtocolManager>
@@ -48,7 +47,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KRecentFilesAction>
 #include <KStandardShortcut>
 #include <KToggleFullScreenAction>
-#include <QUrl>
 #include <KUrlNavigator>
 #include <KToolBar>
 #include <KXMLGUIFactory>

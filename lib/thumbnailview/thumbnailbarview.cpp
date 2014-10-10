@@ -30,13 +30,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QPainter>
 #include <QTimeLine>
 #include <QToolTip>
+#include <QDebug>
 
 #ifdef WINDOWS_PROXY_STYLE
 #include <QWindowsStyle>
 #endif
 
 // KDE
-#include <QDebug>
 #include <KIconLoader>
 
 // Local

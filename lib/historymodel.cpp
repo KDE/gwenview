@@ -22,23 +22,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "historymodel.h"
 
 // Qt
-#include <QDateTime>
 #include <QDir>
 #include <QFile>
+#include <QDebug>
+#include <QUrl>
 
 // KDE
 #include <KConfig>
 #include <KConfigGroup>
-#include <QDebug>
 #include <KDirModel>
 #include <KFileItem>
 #include <KFilePlacesModel>
 #include <KGlobal>
-#include <KLocale>
+#include <KLocalizedString>
 #include <KMimeType>
 #include <KStandardDirs>
 #include <KTemporaryFile>
-#include <QUrl>
 
 // Local
 #include <lib/urlutils.h>
