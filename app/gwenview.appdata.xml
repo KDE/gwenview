@@ -58,6 +58,7 @@
     <p>Features:</p>
     <p xml:lang="ca">Característiques:</p>
     <p xml:lang="cs">Vlastnosti:</p>
+    <p xml:lang="de">Funktionen:</p>
     <p xml:lang="en-GB">Features:</p>
     <p xml:lang="es">Funcionalidades:</p>
     <p xml:lang="fi">Ominaisuudet:</p>
@@ -82,6 +83,7 @@
     <ul>
       <li>Supports simple image manipulations: rotate, mirror, flip, and resize</li>
       <li xml:lang="ca">Implementa la manipulació d'imatges simples: gira, mirall, inverteix i canvia la mida</li>
+      <li xml:lang="de">Unterstützt einfache Bildbearbeitung wie Drehen, Spiegeln waagerecht und senkrecht und Größenänderung</li>
       <li xml:lang="en-GB">Supports simple image manipulations: rotate, mirror, flip, and resize</li>
       <li xml:lang="es">Permite manipulaciones simples de imágenes: rotar, reflejar, invertir y cambiar de tamaño</li>
       <li xml:lang="fi">Tukee yksinkertaista kuvien manipulointia: kiertämistä, kääntämistä, peilaamista ja koon muuttamista</li>
@@ -105,6 +107,7 @@
       <li xml:lang="zh-TW">支援簡單影像處理：旋轉、鏡射、翻轉與調整大小</li>
       <li>Supports basic file management actions such as copy, move, delete, and others</li>
       <li xml:lang="ca">Implementa les accions bàsiques per a la gestió de fitxers com copia, mou, esborra i altres</li>
+      <li xml:lang="de">Grundlegende Dateiverwaltungsaktionen wie Kopieren, Verschieben, Löschen und weitere Aktionen</li>
       <li xml:lang="en-GB">Supports basic file management actions such as copy, move, delete, and others</li>
       <li xml:lang="es">Permite acciones básicas de gestión de archivos, como copiar, mover y borrar, entre otras</li>
       <li xml:lang="fi">Tukee tiedostonhallinnan perusasioita kuten kopiointia, siirtämistä, poistamista ynnä muuta</li>
