@@ -41,11 +41,6 @@ GWENVIEWLIB_EXPORT const QStringList& imageMimeTypes();
 
 GWENVIEWLIB_EXPORT QString urlMimeType(const QUrl&);
 
-/**
- * Finds mimetype by downloading the beginning of the url
- */
-GWENVIEWLIB_EXPORT QString urlMimeTypeByContent(const QUrl&);
-
 enum Kind {
     KIND_UNKNOWN      = 0,
     KIND_DIR          = 1,

@@ -26,13 +26,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QStringList>
 #include <QDebug>
 #include <QUrl>
+#include <QMimeDatabase>
 
 // KDE
 #include <KFileItem>
 #include <KIO/Job>
 #include <KIO/JobClasses>
 #include <KIO/NetAccess>
-#include <KMimeType>
 #include <KImageIO>
 
 // Local
@@ -47,8 +47,8 @@ namespace MimeTypeUtils
 
 static inline QString resolveAlias(const QString& name)
 {
-    KMimeType::Ptr ptr = KMimeType::mimeType(name, KMimeType::ResolveAliases);
-    return ptr.isNull() ? name : ptr->name();
+    QMimeDatabase db;
+    return db.mimeTypeForName(name).name();
 }
 
 static void resolveAliasInList(QStringList* list)
@@ -122,30 +122,9 @@ QString urlMimeType(const QUrl &url)
     if (url.isEmpty()) {
         return "unknown";
     }
-    // Try a simple guess, using extension for remote urls
-    QString mimeType = KMimeType::findByUrl(url)->name();
-    if (mimeType == "application/octet-stream") {
-        qDebug() << "KMimeType::findByUrl() failed to find mimetype for" << url << ". Falling back to KIO::NetAccess::mimetype().";
-        // No luck, look deeper. This can happens with http urls if the filename
-        // does not provide any extension.
-        mimeType = KIO::NetAccess::mimetype(url, qApp->activeWindow());
-    }
-    return mimeType;
-}
 
-QString urlMimeTypeByContent(const QUrl &url)
-{
-    const int HEADER_SIZE = 30;
-    if (url.isLocalFile()) {
-        return KMimeType::findByFileContent(url.toLocalFile())->name();
-    }
-
-    KIO::TransferJob* job = KIO::get(url);
-    DataAccumulator accumulator(job);
-    while (!accumulator.finished() && accumulator.data().size() < HEADER_SIZE) {
-        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
-    }
-    return KMimeType::findByContent(accumulator.data())->name();
+    QMimeDatabase db;
+    return db.mimeTypeForUrl(url).name();
 }
 
 Kind mimeTypeKind(const QString& mimeType)
