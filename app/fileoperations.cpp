@@ -102,29 +102,25 @@ static void copyMoveOrLink(KonqOperations::Operation operation, const QList<QUrl
     job->ui()->setAutoErrorHandlingEnabled(true);
 }
 
-static void delOrTrash(KonqOperations::Operation operation, const QList<QUrl>& urlList, QWidget* parent)
+static void delOrTrash(KIO::JobUiDelegate::DeletionType deletionType, const QList<QUrl>& urlList, QWidget* parent)
 {
     Q_ASSERT(urlList.count() > 0);
 
     KIO::JobUiDelegate uiDelegate;
     uiDelegate.setWindow(parent);
-    KIO::Job* job = 0;
-    switch (operation) {
-    case KonqOperations::TRASH:
-        if (!uiDelegate.askDeleteConfirmation(urlList, KIO::JobUiDelegate::Trash, KIO::JobUiDelegate::DefaultConfirmation)) {
-            return;
-        }
-        job = KIO::trash(urlList);
-        break;
-    case KonqOperations::DEL:
-        if (!uiDelegate.askDeleteConfirmation(urlList, KIO::JobUiDelegate::Delete, KIO::JobUiDelegate::DefaultConfirmation)) {
-            return;
-        }
-        job = KIO::del(urlList);
-        break;
-    default:
-        qWarning() << "Unknown operation" << operation;
+    if (!uiDelegate.askDeleteConfirmation(urlList, deletionType, KIO::JobUiDelegate::DefaultConfirmation)) {
         return;
+    }
+    KIO::Job* job = 0;
+    switch (deletionType) {
+        case KIO::JobUiDelegate::Trash:
+            job = KIO::trash(urlList);
+            break;
+        case KIO::JobUiDelegate::Delete:
+            job = KIO::del(urlList);
+            break;
+        default: // e.g. EmptyTrash
+            return;
     }
     Q_ASSERT(job);
     KJobWidgets::setWindow(job,parent);
@@ -151,12 +147,12 @@ void linkTo(const QList<QUrl>& urlList, QWidget* parent)
 
 void trash(const QList<QUrl>& urlList, QWidget* parent)
 {
-    delOrTrash(KonqOperations::TRASH, urlList, parent);
+    delOrTrash(KIO::JobUiDelegate::Trash, urlList, parent);
 }
 
 void del(const QList<QUrl>& urlList, QWidget* parent)
 {
-    delOrTrash(KonqOperations::DEL, urlList, parent);
+    delOrTrash(KIO::JobUiDelegate::Delete, urlList, parent);
 }
 
 void showMenuForDroppedUrls(QWidget* parent, const QList<QUrl>& urlList, const QUrl &destUrl)
