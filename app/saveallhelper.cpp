@@ -27,11 +27,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QSet>
 #include <QStringList>
 #include <QUrl>
+#include <QProgressDialog>
 
 // KDE
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KProgressDialog>
 
 // Local
 #include <lib/document/document.h>
@@ -44,7 +44,7 @@ namespace Gwenview
 struct SaveAllHelperPrivate
 {
     QWidget* mParent;
-    KProgressDialog* mProgressDialog;
+    QProgressDialog* mProgressDialog;
     QSet<DocumentJob*> mJobSet;
     QStringList mErrorList;
 };
@@ -53,11 +53,11 @@ SaveAllHelper::SaveAllHelper(QWidget* parent)
 : d(new SaveAllHelperPrivate)
 {
     d->mParent = parent;
-    d->mProgressDialog = new KProgressDialog(parent);
-    connect(d->mProgressDialog, &KProgressDialog::cancelClicked, this, &SaveAllHelper::slotCanceled);
+    d->mProgressDialog = new QProgressDialog(parent);
+    connect(d->mProgressDialog, &QProgressDialog::canceled, this, &SaveAllHelper::slotCanceled);
     d->mProgressDialog->setLabelText(i18nc("@info:progress saving all image changes", "Saving..."));
-    d->mProgressDialog->setButtonText(i18n("&Stop"));
-    d->mProgressDialog->progressBar()->setMinimum(0);
+    d->mProgressDialog->setCancelButtonText(i18n("&Stop"));
+    d->mProgressDialog->setMinimum(0);
 }
 
 SaveAllHelper::~SaveAllHelper()
@@ -68,8 +68,8 @@ SaveAllHelper::~SaveAllHelper()
 void SaveAllHelper::save()
 {
     QList<QUrl> list = DocumentFactory::instance()->modifiedDocumentList();
-    d->mProgressDialog->progressBar()->setRange(0, list.size());
-    d->mProgressDialog->progressBar()->setValue(0);
+    d->mProgressDialog->setRange(0, list.size());
+    d->mProgressDialog->setValue(0);
     Q_FOREACH(const QUrl &url, list) {
         Document::Ptr doc = DocumentFactory::instance()->load(url);
         DocumentJob* job = doc->save(url, doc->format());
@@ -108,8 +108,7 @@ void SaveAllHelper::slotResult(KJob* _job)
                                "<filename>%1</filename>: %2", name, job->errorString());
     }
     d->mJobSet.remove(job);
-    QProgressBar* bar = d->mProgressDialog->progressBar();
-    bar->setValue(bar->value() + 1);
+    d->mProgressDialog->setValue(d->mProgressDialog->value() + 1);
 }
 
 } // namespace
