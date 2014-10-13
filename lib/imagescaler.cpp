@@ -22,9 +22,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QImage>
 #include <QRegion>
+#include <QDebug>
 
 // KDE
-#include <QDebug>
 
 // Local
 #include <lib/document/document.h>

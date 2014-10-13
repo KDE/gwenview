@@ -320,11 +320,7 @@ ThumbnailView::ThumbnailView(QWidget* parent)
     setContextMenuPolicy(Qt::CustomContextMenu);
     connect(this, &ThumbnailView::customContextMenuRequested, this, &ThumbnailView::showContextMenu);
 
-    if (KGlobalSettings::singleClick()) {
-        connect(this, &ThumbnailView::clicked, this, &ThumbnailView::emitIndexActivatedIfNoModifiers);
-    } else {
-        connect(this, &ThumbnailView::doubleClicked, this, &ThumbnailView::emitIndexActivatedIfNoModifiers);
-    }
+    connect(this, &ThumbnailView::activated, this, &ThumbnailView::emitIndexActivatedIfNoModifiers);
 }
 
 ThumbnailView::~ThumbnailView()
