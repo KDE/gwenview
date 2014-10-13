@@ -26,6 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QFile>
 #include <QDebug>
 #include <QUrl>
+#include <QMimeDatabase>
 
 // KDE
 #include <KConfig>
@@ -33,11 +34,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KDirModel>
 #include <KFileItem>
 #include <KFilePlacesModel>
-#include <KGlobal>
 #include <KLocalizedString>
-#include <KMimeType>
-#include <KStandardDirs>
 #include <KTemporaryFile>
+#include <KFormat>
 
 // Local
 #include <lib/urlutils.h>
@@ -58,7 +57,7 @@ struct HistoryItem : public QStandardItem
 
     static HistoryItem* create(const QUrl &url, const QDateTime& dateTime, const QString& storageDir)
     {
-        if (!KStandardDirs::makeDir(storageDir, 0600)) {
+        if (!QDir().mkpath(storageDir)) {
             qCritical() << "Could not create history dir" << storageDir;
             return 0;
         }
@@ -130,16 +129,17 @@ private:
         QUrl urlForView = mUrl;
         setText(urlForView.toDisplayString());
 
-        QString iconName = KMimeType::iconNameForUrl(mUrl);
+        QMimeDatabase db;
+        const QString iconName = db.mimeTypeForUrl(mUrl).iconName();
         setIcon(QIcon::fromTheme(iconName));
 
-        setData(QVariant(mUrl), KFilePlacesModel::UrlRole);
+        setData(mUrl, KFilePlacesModel::UrlRole);
 
-        KFileItem fileItem(KFileItem::Unknown, KFileItem::Unknown, mUrl);
+        KFileItem fileItem(mUrl);
         setData(QVariant(fileItem), KDirModel::FileItemRole);
 
-        QString date = KGlobal::locale()->formatDateTime(mDateTime, KLocale::FancyLongDate);
-        setData(QVariant(i18n("Last visited: %1", date)), Qt::ToolTipRole);
+        const QString date = KFormat().formatRelativeDateTime(mDateTime, QLocale::LongFormat);
+        setData(i18n("Last visited: %1", date), Qt::ToolTipRole);
     }
 
     bool operator<(const QStandardItem& other) const {

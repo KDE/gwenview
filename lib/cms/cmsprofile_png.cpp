@@ -25,10 +25,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <gvdebug.h>
 
 // KDE
-#include <QDebug>
 
 // Qt
 #include <QBuffer>
+#include <QDebug>
 
 // lcms
 #include <lcms2.h>

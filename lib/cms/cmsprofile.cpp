@@ -32,10 +32,11 @@ extern "C" {
 }
 
 // KDE
-#include <QDebug>
 
 // Qt
 #include <QBuffer>
+#include <QDebug>
+#include <QtGlobal>
 
 // lcms
 #include <lcms2.h>
