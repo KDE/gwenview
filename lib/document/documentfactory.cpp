@@ -25,9 +25,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QMap>
 #include <QUndoGroup>
 #include <QUrl>
+#include <QDebug>
 
 // KDE
-#include <KDebug>
 
 // Local
 #include <gvdebug.h>
@@ -39,7 +39,7 @@ namespace Gwenview
 #undef LOG
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
-#define LOG(x) kDebug() << x
+#define LOG(x) qDebug() << x
 #else
 #define LOG(x) ;
 #endif
@@ -51,7 +51,7 @@ inline int getMaxUnreferencedImages()
     if (ba.isEmpty()) {
         return defaultValue;
     }
-    kDebug() << "Custom value for max unreferenced images:" << ba;
+    LOG("Custom value for max unreferenced images:" << ba);
     bool ok;
     int value = ba.toInt(&ok);
     return ok ? value : defaultValue;
@@ -123,14 +123,14 @@ struct DocumentFactoryPrivate
 
     void logDocumentMap(const DocumentMap& map)
     {
-        kDebug() << "map:";
+        LOG("map:");
         DocumentMap::ConstIterator
         it = map.constBegin(),
         end = map.constEnd();
         for (; it != end; ++it) {
-            kDebug() << "-" << it.key()
-                     << "refCount=" << it.value()->mDocument.count()
-                     << "lastAccess=" << it.value()->mLastAccess;
+            LOG("-" << it.key()
+                << "refCount=" << it.value()->mDocument.count()
+                << "lastAccess=" << it.value()->mLastAccess);
         }
     }
 

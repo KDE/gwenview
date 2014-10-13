@@ -35,13 +35,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QPointer>
 #include <QtConcurrent>
 #include <QUrl>
+#include <QDebug>
 
 // KDE
-#include <QDebug>
 #include <KIO/Job>
 #include <KIO/JobClasses>
 #include <KLocalizedString>
-#include <KMimeType>
 #include <KProtocolInfo>
 
 #ifdef KDCRAW_FOUND
@@ -115,10 +114,11 @@ struct LoadingDocumentImplPrivate
     {
         QString mimeType;
         const QUrl &url = q->document()->url();
+        QMimeDatabase db;
         if (KProtocolInfo::determineMimetypeFromExtension(url.scheme())) {
-            mimeType = KMimeType::findByNameAndContent(url.fileName(), mData)->name();
+            mimeType = db.mimeTypeForFileNameAndData(url.fileName(), mData).name();
         } else {
-            mimeType = KMimeType::findByContent(mData)->name();
+            mimeType = db.mimeTypeForData(mData).name();
         }
         MimeTypeUtils::Kind kind = MimeTypeUtils::mimeTypeKind(mimeType);
         LOG("mimeType:" << mimeType);

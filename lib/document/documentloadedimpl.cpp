@@ -26,10 +26,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QImage>
 #include <QImageWriter>
 #include <QMatrix>
-
-// KDE
 #include <QDebug>
 #include <QUrl>
+
+// KDE
 
 // Local
 #include "documentjob.h"

@@ -24,12 +24,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 
 // KDE
-#include <KStandardDirs>
 
 // Qt
 #include <QDebug>
 #include <QCursor>
 #include <QGraphicsSceneMouseEvent>
+#include <QStandardPaths>
 
 namespace Gwenview
 {
@@ -104,7 +104,7 @@ struct AbstractImageViewPrivate
     {
         // We do not use "appdata" here because that does not work when this
         // code is called from a KPart.
-        QString path = KStandardDirs::locate("data", "gwenview/cursors/zoom.png");
+        const QString path = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral("gwenview/cursors/zoom.png"));
         QPixmap cursorPixmap = QPixmap(path);
         mZoomCursor = QCursor(cursorPixmap, 11, 11);
     }
