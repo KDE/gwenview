@@ -185,14 +185,10 @@ StartMainPage::StartMainPage(QWidget* parent, GvCore* gvCore)
 
     connect(d->mRecentUrlsView, &QListView::customContextMenuRequested, this, &StartMainPage::showRecentFoldersViewContextMenu);
 
-    if (KGlobalSettings::singleClick()) {
-        if (KGlobalSettings::changeCursorOverIcon()) {
-            d->mRecentUrlsView->setCursor(Qt::PointingHandCursor);
-        }
-        connect(d->mRecentUrlsView, &QListView::clicked, this, &StartMainPage::slotListViewActivated);
-    } else {
-        connect(d->mRecentUrlsView, &QListView::doubleClicked, this, &StartMainPage::slotListViewActivated);
+    if (KGlobalSettings::changeCursorOverIcon()) {
+        d->mRecentUrlsView->setCursor(Qt::PointingHandCursor);
     }
+    connect(d->mRecentUrlsView, &QListView::activated, this, &StartMainPage::slotListViewActivated);
 
     d->updateHistoryTab();
     connect(GwenviewConfig::self(), &GwenviewConfig::configChanged, this, &StartMainPage::loadConfig);
