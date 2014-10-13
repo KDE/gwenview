@@ -31,7 +31,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QShortcut>
 
 // KDE
-#include <QAction>
 #include <KActionCollection>
 #include <KActionCategory>
 #include <KFileItem>
@@ -40,7 +39,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KIO/RestoreJob>
 #include <KIO/JobUiDelegate>
 #include <KJobWidgets>
-#include <KLocale>
+#include <KLocalizedString>
 #include <KOpenWithDialog>
 #include <KPropertiesDialog>
 #include <KRun>

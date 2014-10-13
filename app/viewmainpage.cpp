@@ -25,17 +25,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QShortcut>
 #include <QToolButton>
 #include <QVBoxLayout>
+#include <QDebug>
+#include <QMenu>
 
 // KDE
 #include <KActionCollection>
 #include <KActionCategory>
-#include <QDebug>
-#include <KLocale>
-#include <QMenu>
+#include <KLocalizedString>
 #include <KMessageBox>
 #include <KModelIndexProxyMapper>
 #include <KToggleAction>
 #include <KActivities/ResourceInstance>
+
 // Local
 #include "fileoperations.h"
 #include <gvcore.h>

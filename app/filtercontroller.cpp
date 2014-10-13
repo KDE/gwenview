@@ -32,15 +32,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QPainterPath>
 #include <QTimer>
 #include <QToolButton>
+#include <QDebug>
+#include <QIcon>
 
 // KDE
 #include <KComboBox>
-#include <QDebug>
 #include <KFileItem>
-#include <QIcon>
 #include <KIconLoader>
 #include <QLineEdit>
-#include <KLocale>
+#include <KLocalizedString>
 
 // Local
 #include <lib/datewidget.h>

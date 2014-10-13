@@ -26,11 +26,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Qt
 #include <QAction>
 #include <QCursor>
+#include <QDebug>
+#include <QMenu>
 
 // KDE
 #include <KActionCollection>
-#include <QDebug>
-#include <QMenu>
 
 // Local
 #include <lib/document/documentfactory.h>

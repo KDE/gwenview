@@ -26,12 +26,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QFutureWatcher>
 #include <QSet>
 #include <QStringList>
+#include <QUrl>
 
 // KDE
-#include <KLocale>
+#include <KLocalizedString>
 #include <KMessageBox>
 #include <KProgressDialog>
-#include <QUrl>
 
 // Local
 #include <lib/document/document.h>

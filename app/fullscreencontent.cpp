@@ -35,10 +35,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KDE
 #include <KActionCollection>
 #include <KActionMenu>
-#include <KLocale>
-#include <QMenu>
+#include <KLocalizedString>
 #include <KIconLoader>
-#include <QAction>
 
 // Local
 #include "imagemetainfodialog.h"

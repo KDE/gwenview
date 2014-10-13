@@ -23,11 +23,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // Qt
 #include <QApplication>
-
-// KDE
 #include <QAction>
 #include <QDebug>
-#include <KLocale>
+
+// KDE
+#include <KLocalizedString>
 #include <KMessageBox>
 #include <KActionCollection>
 #include <KActionCategory>

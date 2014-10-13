@@ -26,15 +26,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QLabel>
 #include <QToolButton>
 #include <QToolTip>
+#include <QDebug>
+#include <QIcon>
+#include <QUrl>
 
 // KDE
 #include <KActionCollection>
 #include <KColorScheme>
-#include <QDebug>
-#include <QIcon>
 #include <KIconLoader>
-#include <KLocale>
-#include <QUrl>
+#include <KLocalizedString>
 
 // Local
 #include "lib/document/documentfactory.h"

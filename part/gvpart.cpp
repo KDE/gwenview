@@ -27,7 +27,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KAboutData>
 #include <KActionCollection>
 #include <KFileDialog>
-#include <KIcon>
 #include <KIconLoader>
 #include <KIO/Job>
 #include <KIO/JobUiDelegate>

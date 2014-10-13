@@ -28,15 +28,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QSignalMapper>
 #include <QStyle>
 #include <QTimer>
+#include <QAction>
 
 // KDE
-#include <QAction>
 #include <KActionCategory>
 #include <KActionCollection>
 #include <KDialog>
-#include <KLocale>
+#include <KLocalizedString>
 #include <KRatingPainter>
 #include <KIconLoader>
+#include <KSharedConfig>
 
 // Local
 #include "viewmainpage.h"
