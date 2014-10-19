@@ -201,7 +201,7 @@ void rename(const QUrl &oldUrl, QWidget* parent)
 {
     QString name = KInputDialog::getText(
                        i18nc("@title:window", "Rename") /* caption */,
-                       i18n("Rename <filename>%1</filename> to:", oldUrl.fileName()) /* label */,
+                       xi18n("Rename <filename>%1</filename> to:", oldUrl.fileName()) /* label */,
                        oldUrl.fileName() /* value */,
                        0 /* ok */,
                        parent

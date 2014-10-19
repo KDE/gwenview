@@ -464,7 +464,7 @@ void DocumentView::slotLoadingFailed()
     d->hideLoadingIndicator();
     MessageViewAdapter* adapter = new MessageViewAdapter;
     adapter->setDocument(d->mDocument);
-    QString message = i18n("Loading <filename>%1</filename> failed", d->mDocument->url().fileName());
+    QString message = xi18n("Loading <filename>%1</filename> failed", d->mDocument->url().fileName());
     adapter->setErrorMessage(message, d->mDocument->errorString());
     d->setCurrentAdapter(adapter);
     emit completed();

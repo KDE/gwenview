@@ -104,8 +104,8 @@ void SaveAllHelper::slotResult(KJob* _job)
     if (job->error()) {
         QUrl url = job->document()->url();
         QString name = url.fileName().isEmpty() ? url.toDisplayString() : url.fileName();
-        d->mErrorList << i18nc("@info %1 is the name of the document which failed to save, %2 is the reason for the failure",
-                               "<filename>%1</filename>: %2", name, job->errorString());
+        d->mErrorList << xi18nc("@info %1 is the name of the document which failed to save, %2 is the reason for the failure",
+                                "<filename>%1</filename>: %2", name, job->errorString());
     }
     d->mJobSet.remove(job);
     d->mProgressDialog->setValue(d->mProgressDialog->value() + 1);

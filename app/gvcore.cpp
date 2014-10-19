@@ -198,7 +198,7 @@ void GvCore::addUrlToRecentFolders(QUrl url)
     if (!url.isValid()) {
         return;
     }
-    if (url.path() != "") { // This check is a workaraound for bug #312060
+    if (url.path() != "") { // This check is a workaround for bug #312060
         url.setPath(url.path()+'/');
     }
     recentFoldersModel();
@@ -257,10 +257,10 @@ void GvCore::saveAs(const QUrl &url)
     if (KIO::NetAccess::exists(saveAsUrl, KIO::NetAccess::DestinationSide, d->mMainWindow)) {
         int answer = KMessageBox::warningContinueCancel(
                          d->mMainWindow,
-                         i18nc("@info",
-                               "A file named <filename>%1</filename> already exists.\n"
-                               "Are you sure you want to overwrite it?",
-                               saveAsUrl.fileName()),
+                         xi18nc("@info",
+                                "A file named <filename>%1</filename> already exists.\n"
+                                "Are you sure you want to overwrite it?",
+                                saveAsUrl.fileName()),
                          QString(),
                          KStandardGuiItem::overwrite());
         if (answer == KMessageBox::Cancel) {
@@ -273,8 +273,8 @@ void GvCore::saveAs(const QUrl &url)
     KJob* job = doc->save(saveAsUrl, format.data());
     if (!job) {
         const QString name = saveAsUrl.fileName().isEmpty() ? saveAsUrl.toDisplayString() : saveAsUrl.fileName();
-        const QString msg = i18nc("@info", "<b>Saving <filename>%1</filename> failed:</b><br>%2",
-                                  name, doc->errorString());
+        const QString msg = xi18nc("@info", "<b>Saving <filename>%1</filename> failed:</b><br>%2",
+                                   name, doc->errorString());
         KMessageBox::sorry(QApplication::activeWindow(), msg);
     } else {
         connect(job, SIGNAL(result(KJob*)), SLOT(slotSaveResult(KJob*)));
@@ -296,8 +296,8 @@ void GvCore::slotSaveResult(KJob* _job)
 
     if (job->error()) {
         QString name = newUrl.fileName().isEmpty() ? newUrl.toDisplayString() : newUrl.fileName();
-        QString msg = i18nc("@info", "<b>Saving <filename>%1</filename> failed:</b><br>%2",
-                            name, job->errorString());
+        QString msg = xi18nc("@info", "<b>Saving <filename>%1</filename> failed:</b><br>%2",
+                             name, job->errorString());
 
         int result = KMessageBox::warningContinueCancel(
                          d->mMainWindow, msg,
