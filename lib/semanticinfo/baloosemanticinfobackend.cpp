@@ -78,33 +78,38 @@ void BalooSemanticInfoBackend::refreshAllTags()
 void BalooSemanticInfoBackend::storeSemanticInfo(const QUrl &url, const SemanticInfo& semanticInfo)
 {
     Baloo::File file(url.toLocalFile());
-    file.setRating(semanticInfo.mRating);
-    file.setUserComment(semanticInfo.mDescription);
-    file.setTags(semanticInfo.mTags.toList());
-
+    //PORT BALOO file.setRating(semanticInfo.mRating);
+    //PORT BALOO file.setUserComment(semanticInfo.mDescription);
+    //PORT BALOO file.setTags(semanticInfo.mTags.toList());
+#if 0 //PORT BALOO
     Baloo::FileModifyJob* job = new Baloo::FileModifyJob(file);
     job->start();
+#endif
 }
 
 void BalooSemanticInfoBackend::retrieveSemanticInfo(const QUrl &url)
 {
+#if 0 //PORT BALOO
     Baloo::FileFetchJob* job = new Baloo::FileFetchJob(url.toLocalFile());
     connect(job, &Baloo::FileFetchJob::finished, this, &BalooSemanticInfoBackend::slotFetchFinished);
 
     job->start();
+#endif
 }
 
 void BalooSemanticInfoBackend::slotFetchFinished(KJob* job)
 {
+#if 0 //PORT BALOO
     Baloo::FileFetchJob* fjob = static_cast<Baloo::FileFetchJob*>(job);
     Baloo::File file = fjob->file();
 
     SemanticInfo si;
-    si.mRating = file.rating();
-    si.mDescription = file.userComment();
-    si.mTags = file.tags().toSet();
+    //PORT BALOO si.mRating = file.rating();
+    //PORT BALOO si.mDescription = file.userComment();
+    //PORT BALOO si.mTags = file.tags().toSet();
 
-    emit semanticInfoRetrieved(QUrl::fromLocalFile(file.url()), si);
+    //PORT BALOO emit semanticInfoRetrieved(QUrl::fromLocalFile(file.url()), si);
+#endif
 }
 
 QString BalooSemanticInfoBackend::labelForTag(const SemanticInfoTag& uriString) const

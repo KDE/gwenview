@@ -234,8 +234,8 @@ endif()
 
 if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
     target_link_libraries(gwenviewlib
-        KF5::BalooFiles
-        )
+        KF5::Baloo
+        ) 
 endif()
 
 install(TARGETS gwenviewlib ${INSTALL_TARGETS_DEFAULT_ARGS})
