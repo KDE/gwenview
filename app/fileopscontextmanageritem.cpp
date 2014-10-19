@@ -98,7 +98,7 @@ struct FileOpsContextManagerItemPrivate
             canPasteData = KIO::canPasteMimeData(mimeData);
             urls = KUrlMimeData::urlsFromMimeData(mimeData);
         } else {
-            qWarning(1203) << "QApplication::clipboard()->mimeData() is 0!";
+            qWarning() << "QApplication::clipboard()->mimeData() is 0!";
         }
 
         if (!urls.isEmpty() || canPasteData) {
