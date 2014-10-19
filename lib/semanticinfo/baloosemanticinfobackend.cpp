@@ -33,8 +33,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Baloo
 #include <baloo/file.h>
-#include <baloo/filefetchjob.h>
-#include <baloo/filemodifyjob.h>
+//#include <baloo/filefetchjob.h>
+//#include <baloo/filemodifyjob.h>
 #include <baloo/taglistjob.h>
 
 namespace Gwenview
