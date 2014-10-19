@@ -38,6 +38,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KIO/Paste>
 #include <KIO/RestoreJob>
 #include <KIO/JobUiDelegate>
+#include <KIOCore/KFileItemListProperties>
 #include <KJobWidgets>
 #include <KLocalizedString>
 #include <KNewFileMenu>
@@ -332,7 +333,7 @@ void FileOpsContextManagerItem::updateActions()
 
 void FileOpsContextManagerItem::updatePasteAction()
 {
-    QPair<bool, QString> info = pasteInfo(d->pasteTargetUrl());
+    QPair<bool, QString> info = d->pasteInfo(d->pasteTargetUrl());
     d->mPasteAction->setEnabled(info.first);
     d->mPasteAction->setText(info.second);
 }
