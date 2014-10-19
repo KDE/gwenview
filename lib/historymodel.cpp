@@ -27,6 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QDebug>
 #include <QUrl>
 #include <QMimeDatabase>
+#include <QTemporaryFile>
 
 // KDE
 #include <KConfig>
@@ -35,7 +36,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KFileItem>
 #include <KFilePlacesModel>
 #include <KLocalizedString>
-#include <KTemporaryFile>
 #include <KFormat>
 
 // Local
@@ -61,10 +61,8 @@ struct HistoryItem : public QStandardItem
             qCritical() << "Could not create history dir" << storageDir;
             return 0;
         }
-        KTemporaryFile file;
+        QTemporaryFile file(storageDir + QStringLiteral("/gvhistoryXXXXXXrc"));
         file.setAutoRemove(false);
-        file.setPrefix(storageDir);
-        file.setSuffix("rc");
         if (!file.open()) {
             qCritical() << "Could not create history file";
             return 0;

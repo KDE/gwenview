@@ -28,13 +28,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QtConcurrentRun>
 #include <QUrl>
 #include <QApplication>
+#include <QTemporaryFile>
+#include <QSaveFile>
 
 // KDE
 #include <KIO/CopyJob>
 #include <KIO/JobUiDelegate>
 #include <KLocalizedString>
-#include <KSaveFile>
-#include <KTemporaryFile>
 #include <KJobWidgets>
 
 // Local
@@ -49,8 +49,8 @@ struct SaveJobPrivate
     QUrl mOldUrl;
     QUrl mNewUrl;
     QByteArray mFormat;
-    QScopedPointer<KTemporaryFile> mTemporaryFile;
-    QScopedPointer<KSaveFile> mSaveFile;
+    QScopedPointer<QTemporaryFile> mTemporaryFile;
+    QScopedPointer<QSaveFile> mSaveFile;
     QScopedPointer<QFutureWatcher<void> > mInternalSaveWatcher;
 
     bool mKillReceived;
@@ -75,7 +75,7 @@ SaveJob::~SaveJob()
 void SaveJob::saveInternal()
 {
     if (!d->mImpl->saveInternal(d->mSaveFile.data(), d->mFormat)) {
-        d->mSaveFile->abort();
+        d->mSaveFile->cancelWriting();
         setError(UserDefinedError + 2);
         setErrorText(d->mImpl->document()->errorString());
     }
@@ -91,20 +91,21 @@ void SaveJob::doStart()
     if (d->mNewUrl.isLocalFile()) {
         fileName = d->mNewUrl.toLocalFile();
     } else {
-        d->mTemporaryFile.reset(new KTemporaryFile);
+        d->mTemporaryFile.reset(new QTemporaryFile);
         d->mTemporaryFile->setAutoRemove(true);
         d->mTemporaryFile->open();
         fileName = d->mTemporaryFile->fileName();
     }
 
-    d->mSaveFile.reset(new KSaveFile(fileName));
+    d->mSaveFile.reset(new QSaveFile(fileName));
 
-    if (!d->mSaveFile->open()) {
+    if (!d->mSaveFile->open(QSaveFile::WriteOnly)) {
         QUrl dirUrl = d->mNewUrl;
         dirUrl = dirUrl.adjusted(QUrl::RemoveFilename);
         dirUrl.setPath(dirUrl.path() + QString());
         setError(UserDefinedError + 1);
-        setErrorText(i18nc("@info", "Could not open file for writing, check that you have the necessary rights in <filename>%1</filename>.", dirUrl.toDisplayString()));
+        setErrorText(xi18nc("@info", "Could not open file for writing, check that you have the necessary rights in <filename>%1</filename>.",
+                            dirUrl.toDisplayString()));
         emitResult();
         return;
     }
@@ -127,8 +128,9 @@ void SaveJob::finishSave()
         return;
     }
 
-    if (!d->mSaveFile->finalize()) {
-        setErrorText(i18nc("@info", "Could not overwrite file, check that you have the necessary rights to write in <filename>%1</filename>.", d->mNewUrl.toString()));
+    if (!d->mSaveFile->commit()) {
+        setErrorText(xi18nc("@info", "Could not overwrite file, check that you have the necessary rights to write in <filename>%1</filename>.",
+                            d->mNewUrl.toString()));
         setError(UserDefinedError + 3);
         return;
     }

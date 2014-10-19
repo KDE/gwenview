@@ -24,12 +24,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 
 // KDE
-#include <QDebug>
-#include <KTemporaryFile>
 #include <kde_file.h>
 
 // Qt
 #include <QImage>
+#include <QDebug>
+#include <QTemporaryFile>
 
 namespace Gwenview
 {
@@ -46,9 +46,7 @@ namespace Gwenview
 static void storeThumbnailToDiskCache(const QString& path, const QImage& image)
 {
     LOG(path);
-    KTemporaryFile tmp;
-    tmp.setPrefix(path + ".gwenview.tmp");
-    tmp.setSuffix(".png");
+    QTemporaryFile tmp(path + QStringLiteral("/.gwenview.tmpXXXXXX.png"));
     if (!tmp.open()) {
         qWarning() << "Could not create a temporary file.";
         return;
