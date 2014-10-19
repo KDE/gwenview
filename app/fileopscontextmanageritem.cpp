@@ -40,6 +40,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KIO/JobUiDelegate>
 #include <KJobWidgets>
 #include <KLocalizedString>
+#include <KNewFileMenu>
 #include <KOpenWithDialog>
 #include <KPropertiesDialog>
 #include <KRun>
@@ -82,6 +83,7 @@ struct FileOpsContextManagerItemPrivate
     QList<QAction*> mRegularFileActionList;
     QList<QAction*> mTrashFileActionList;
     KService::List mServiceList;
+    KNewFileMenu * mNewFileMenu;
     bool mInTrash;
 
     QList<QUrl> urlList() const
@@ -157,6 +159,7 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, QL
     EventWatcher::install(d->mGroup, QEvent::Show, this, SLOT(updateSideBarContent()));
 
     d->mInTrash = false;
+    d->mNewFileMenu = new KNewFileMenu(Q_NULLPTR, QString(), this);
 
     connect(contextManager(), SIGNAL(selectionChanged()),
             SLOT(updateActions()));
@@ -387,7 +390,9 @@ void FileOpsContextManagerItem::rename()
 void FileOpsContextManagerItem::createFolder()
 {
     QUrl url = contextManager()->currentDirUrl();
-    KonqOperations::newDir(d->mGroup, url);
+    d->mNewFileMenu->setParentWidget(d->mGroup);
+    d->mNewFileMenu->setPopupFiles(QList<QUrl>() << url);
+    d->mNewFileMenu->createDirectory();
 }
 
 void FileOpsContextManagerItem::populateOpenMenu()
