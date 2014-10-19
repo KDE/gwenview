@@ -47,9 +47,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KService>
 #include <KShortcut>
 #include <KXMLGUIClient>
-
-// libkonq
-#include <konq_operations.h>
+#include <KUrlMimeData>
 
 // Local
 #include <lib/contextmanager.h>
@@ -85,6 +83,46 @@ struct FileOpsContextManagerItemPrivate
     KService::List mServiceList;
     KNewFileMenu * mNewFileMenu;
     bool mInTrash;
+
+    QPair<bool, QString> pasteInfo(const QUrl& targetUrl)
+    {
+        QPair<bool, QString> ret;
+        QClipboard* clipboard = QApplication::clipboard();
+        const QMimeData* mimeData = clipboard->mimeData();
+
+        bool canPasteData = false;
+        QList<QUrl> urls;
+
+        // mimeData can be 0 according to https://bugs.kde.org/show_bug.cgi?id=335053
+        if (mimeData) {
+            canPasteData = KIO::canPasteMimeData(mimeData);
+            urls = KUrlMimeData::urlsFromMimeData(mimeData);
+        } else {
+            qWarning(1203) << "QApplication::clipboard()->mimeData() is 0!";
+        }
+
+        if (!urls.isEmpty() || canPasteData) {
+            // disable the paste action if no writing is supported
+            KFileItem item(KFileItem::Unknown, KFileItem::Unknown, targetUrl);
+            ret.first = KFileItemListProperties(KFileItemList() << item).supportsWriting();
+
+            if (urls.count() == 1) {
+                const KFileItem item(KFileItem::Unknown, KFileItem::Unknown, urls.first(), true);
+                ret.second = item.isDir() ? i18nc("@action:inmenu", "Paste One Folder") :
+                                            i18nc("@action:inmenu", "Paste One File");
+
+            } else if (!urls.isEmpty()) {
+                ret.second = i18ncp("@action:inmenu", "Paste One Item", "Paste %1 Items", urls.count());
+            } else {
+                ret.second = i18nc("@action:inmenu", "Paste Clipboard Contents...");
+            }
+        } else {
+            ret.first = false;
+            ret.second = i18nc("@action:inmenu", "Paste");
+        }
+
+        return ret;
+    }
 
     QList<QUrl> urlList() const
     {
@@ -294,7 +332,7 @@ void FileOpsContextManagerItem::updateActions()
 
 void FileOpsContextManagerItem::updatePasteAction()
 {
-    QPair<bool, QString> info = KonqOperations::pasteInfo(d->pasteTargetUrl());
+    QPair<bool, QString> info = pasteInfo(d->pasteTargetUrl());
     d->mPasteAction->setEnabled(info.first);
     d->mPasteAction->setText(info.second);
 }

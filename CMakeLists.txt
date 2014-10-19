@@ -46,8 +46,6 @@ find_package(KF5 REQUIRED COMPONENTS
     KDELibs4Support
     Activities
 )
-find_package(KF5Konq CONFIG REQUIRED)
-
 
 ## Dependencies
 find_package(JPEG)

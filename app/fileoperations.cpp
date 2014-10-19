@@ -36,7 +36,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KIO/NetAccess>
 #include <KLocalizedString>
 #include <KJobWidgets>
-#include <konq_operations.h>
 
 // Local
 #include <lib/document/documentfactory.h>
@@ -48,7 +47,7 @@ namespace Gwenview
 namespace FileOperations
 {
 
-static void copyMoveOrLink(KonqOperations::Operation operation, const QList<QUrl>& urlList, QWidget* parent)
+static void copyMoveOrLink(Operation operation, const QList<QUrl>& urlList, QWidget* parent)
 {
     Q_ASSERT(urlList.count() > 0);
 
@@ -58,15 +57,15 @@ static void copyMoveOrLink(KonqOperations::Operation operation, const QList<QUrl
         parent);
     dialog.setOperationMode(KFileDialog::Saving);
     switch (operation) {
-    case KonqOperations::COPY:
+    case COPY:
         dialog.setWindowTitle(i18nc("@title:window", "Copy To"));
         dialog.okButton()->setText(i18nc("@action:button", "Copy"));
         break;
-    case KonqOperations::MOVE:
+    case MOVE:
         dialog.setWindowTitle(i18nc("@title:window", "Move To"));
         dialog.okButton()->setText(i18nc("@action:button", "Move"));
         break;
-    case KonqOperations::LINK:
+    case LINK:
         dialog.setWindowTitle(i18nc("@title:window", "Link To"));
         dialog.okButton()->setText(i18nc("@action:button", "Link"));
         break;
@@ -86,13 +85,13 @@ static void copyMoveOrLink(KonqOperations::Operation operation, const QList<QUrl
     QUrl destUrl = dialog.selectedUrl();
     KIO::CopyJob* job = 0;
     switch (operation) {
-    case KonqOperations::COPY:
+    case COPY:
         job = KIO::copy(urlList, destUrl);
         break;
-    case KonqOperations::MOVE:
+    case MOVE:
         job = KIO::move(urlList, destUrl);
         break;
-    case KonqOperations::LINK:
+    case LINK:
         job = KIO::link(urlList, destUrl);
         break;
     default:
@@ -132,17 +131,17 @@ static void delOrTrash(KIO::JobUiDelegate::DeletionType deletionType, const QLis
 
 void copyTo(const QList<QUrl>& urlList, QWidget* parent)
 {
-    copyMoveOrLink(KonqOperations::COPY, urlList, parent);
+    copyMoveOrLink(COPY, urlList, parent);
 }
 
 void moveTo(const QList<QUrl>& urlList, QWidget* parent)
 {
-    copyMoveOrLink(KonqOperations::MOVE, urlList, parent);
+    copyMoveOrLink(MOVE, urlList, parent);
 }
 
 void linkTo(const QList<QUrl>& urlList, QWidget* parent)
 {
-    copyMoveOrLink(KonqOperations::LINK, urlList, parent);
+    copyMoveOrLink(LINK, urlList, parent);
 }
 
 void trash(const QList<QUrl>& urlList, QWidget* parent)
