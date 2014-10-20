@@ -306,13 +306,13 @@ void ThumbnailGenerator::run()
 
 void ThumbnailGenerator::cacheThumbnail()
 {
-    mImage.setText("Thumb::URI"          , 0, mOriginalUri);
-    mImage.setText("Thumb::MTime"        , 0, QString::number(mOriginalTime));
-    mImage.setText("Thumb::Size"         , 0, QString::number(mOriginalFileSize));
-    mImage.setText("Thumb::Mimetype"     , 0, mOriginalMimeType);
-    mImage.setText("Thumb::Image::Width" , 0, QString::number(mOriginalWidth));
-    mImage.setText("Thumb::Image::Height", 0, QString::number(mOriginalHeight));
-    mImage.setText("Software"            , 0, "Gwenview");
+    mImage.setText("Thumb::URI"          , mOriginalUri);
+    mImage.setText("Thumb::MTime"        , QString::number(mOriginalTime));
+    mImage.setText("Thumb::Size"         , QString::number(mOriginalFileSize));
+    mImage.setText("Thumb::Mimetype"     , mOriginalMimeType);
+    mImage.setText("Thumb::Image::Width" , QString::number(mOriginalWidth));
+    mImage.setText("Thumb::Image::Height", QString::number(mOriginalHeight));
+    mImage.setText("Software"            , QStringLiteral("Gwenview"));
 
     emit thumbnailReadyToBeCached(mThumbnailPath, mImage);
 }
