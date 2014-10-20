@@ -46,7 +46,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KPropertiesDialog>
 #include <KRun>
 #include <KService>
-#include <KShortcut>
 #include <KXMLGUIClient>
 #include <KUrlMimeData>
 #include <KFileItemActions>

@@ -65,8 +65,8 @@ ResizeImageDialog::ResizeImageDialog(QWidget* parent)
     setWindowTitle(content->windowTitle());
     d->mWidthSpinBox->setFocus();
 
-    connect(d->mWidthSpinBox, static_cast<void (KIntSpinBox::*)(int)>(&KIntSpinBox::valueChanged), this, &ResizeImageDialog::slotWidthChanged);
-    connect(d->mHeightSpinBox, static_cast<void (KIntSpinBox::*)(int)>(&KIntSpinBox::valueChanged), this, &ResizeImageDialog::slotHeightChanged);
+    connect(d->mWidthSpinBox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &ResizeImageDialog::slotWidthChanged);
+    connect(d->mHeightSpinBox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &ResizeImageDialog::slotHeightChanged);
     connect(d->mKeepAspectCheckBox, &QCheckBox::toggled, this, &ResizeImageDialog::slotKeepAspectChanged);
 }
 

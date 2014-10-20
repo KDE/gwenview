@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>248</width>
+    <width>269</width>
     <height>155</height>
    </rect>
   </property>
@@ -85,7 +85,7 @@
    <item row="2" column="0">
     <widget class="QLabel" name="label_2">
      <property name="text">
-      <string>New Size:</string>
+      <string>New Si&amp;ze:</string>
      </property>
      <property name="buddy">
       <cstring>mWidthSpinBox</cstring>
@@ -95,13 +95,7 @@
    <item row="2" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
-      <widget class="KIntSpinBox" name="mWidthSpinBox">
-       <property name="readOnly">
-        <bool>false</bool>
-       </property>
-       <property name="buttonSymbols">
-        <enum>QAbstractSpinBox::UpDownArrows</enum>
-       </property>
+      <widget class="QSpinBox" name="mWidthSpinBox">
        <property name="minimum">
         <number>1</number>
        </property>
@@ -118,7 +112,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KIntSpinBox" name="mHeightSpinBox">
+      <widget class="QSpinBox" name="mHeightSpinBox">
        <property name="minimum">
         <number>1</number>
        </property>
@@ -141,13 +135,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>KIntSpinBox</class>
-   <extends>QSpinBox</extends>
-   <header>knuminput.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

@@ -218,10 +218,10 @@ CropWidget::CropWidget(QWidget* parent, RasterImageView* imageView, CropTool* cr
 
     connect(d->mCropTool, &CropTool::rectUpdated, this, &CropWidget::setCropRect);
 
-    connect(d->leftSpinBox, static_cast<void (KIntSpinBox::*)(int)>(&KIntSpinBox::valueChanged), this, &CropWidget::slotPositionChanged);
-    connect(d->topSpinBox, static_cast<void (KIntSpinBox::*)(int)>(&KIntSpinBox::valueChanged), this, &CropWidget::slotPositionChanged);
-    connect(d->widthSpinBox, static_cast<void (KIntSpinBox::*)(int)>(&KIntSpinBox::valueChanged), this, &CropWidget::slotWidthChanged);
-    connect(d->heightSpinBox, static_cast<void (KIntSpinBox::*)(int)>(&KIntSpinBox::valueChanged), this, &CropWidget::slotHeightChanged);
+    connect(d->leftSpinBox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &CropWidget::slotPositionChanged);
+    connect(d->topSpinBox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &CropWidget::slotPositionChanged);
+    connect(d->widthSpinBox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &CropWidget::slotWidthChanged);
+    connect(d->heightSpinBox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &CropWidget::slotHeightChanged);
 
     d->initDialogButtonBox();
 
