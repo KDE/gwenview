@@ -58,9 +58,6 @@ public:
 
     virtual SemanticInfoTag tagForLabel(const QString&);
 
-private Q_SLOTS:
-    void slotFetchFinished(KJob* job);
-
 private:
     struct Private;
     Private* const d;

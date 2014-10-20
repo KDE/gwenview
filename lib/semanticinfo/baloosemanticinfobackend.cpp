@@ -32,10 +32,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KDE
 
 // Baloo
-#include <baloo/file.h>
-//#include <baloo/filefetchjob.h>
-//#include <baloo/filemodifyjob.h>
-#include <baloo/taglistjob.h>
+#include <Baloo/TagListJob>
+#include <KFileMetaData/UserMetaData>
 
 namespace Gwenview
 {
@@ -77,39 +75,22 @@ void BalooSemanticInfoBackend::refreshAllTags()
 
 void BalooSemanticInfoBackend::storeSemanticInfo(const QUrl &url, const SemanticInfo& semanticInfo)
 {
-    Baloo::File file(url.toLocalFile());
-    //PORT BALOO file.setRating(semanticInfo.mRating);
-    //PORT BALOO file.setUserComment(semanticInfo.mDescription);
-    //PORT BALOO file.setTags(semanticInfo.mTags.toList());
-#if 0 //PORT BALOO
-    Baloo::FileModifyJob* job = new Baloo::FileModifyJob(file);
-    job->start();
-#endif
+    KFileMetaData::UserMetaData md(url.toLocalFile());
+    md.setRating(semanticInfo.mRating);
+    md.setUserComment(semanticInfo.mDescription);
+    md.setTags(semanticInfo.mTags.toList());
 }
 
 void BalooSemanticInfoBackend::retrieveSemanticInfo(const QUrl &url)
 {
-#if 0 //PORT BALOO
-    Baloo::FileFetchJob* job = new Baloo::FileFetchJob(url.toLocalFile());
-    connect(job, &Baloo::FileFetchJob::finished, this, &BalooSemanticInfoBackend::slotFetchFinished);
-
-    job->start();
-#endif
-}
-
-void BalooSemanticInfoBackend::slotFetchFinished(KJob* job)
-{
-#if 0 //PORT BALOO
-    Baloo::FileFetchJob* fjob = static_cast<Baloo::FileFetchJob*>(job);
-    Baloo::File file = fjob->file();
+    KFileMetaData::UserMetaData md(url.toLocalFile());
 
     SemanticInfo si;
-    //PORT BALOO si.mRating = file.rating();
-    //PORT BALOO si.mDescription = file.userComment();
-    //PORT BALOO si.mTags = file.tags().toSet();
+    si.mRating = md.rating();
+    si.mDescription = md.userComment();
+    si.mTags = md.tags().toSet();
 
-    //PORT BALOO emit semanticInfoRetrieved(QUrl::fromLocalFile(file.url()), si);
-#endif
+    emit semanticInfoRetrieved(url, si);
 }
 
 QString BalooSemanticInfoBackend::labelForTag(const SemanticInfoTag& uriString) const
