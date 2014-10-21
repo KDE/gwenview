@@ -165,18 +165,15 @@ struct FolderViewContextManagerItemPrivate
             }
         }
 
-        bool isParent;
         QUrl url = mModel->urlForIndex(index);
-        //KF5 TODO
-        QString relativePath = url.path();
-//         QString relativePath = QUrl::relativePath(url.path(), wantedUrl.path(), &isParent);
-        if (!isParent) {
+        if (!url.isParentOf(wantedUrl)) {
             qWarning() << url << "is not a parent of" << wantedUrl << "!";
             return QModelIndex();
         }
 
+        QString relativePath = QDir(url.path()).relativeFilePath(wantedUrl.path());
         QModelIndex lastFoundIndex = index;
-        Q_FOREACH(const QString & pathPart, relativePath.mid(1).split('/', QString::SkipEmptyParts)) {
+        Q_FOREACH(const QString & pathPart, relativePath.split(QDir::separator(), QString::SkipEmptyParts)) {
             bool found = false;
             for (int row = 0; row < mModel->rowCount(lastFoundIndex); ++row) {
                 QModelIndex index = mModel->index(row, 0, lastFoundIndex);
