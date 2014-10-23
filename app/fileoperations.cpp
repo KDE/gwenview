@@ -25,9 +25,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QMenu>
 #include <QDebug>
 #include <QPushButton>
+#include <QFileDialog>
 
 // KDE
-#include <KFileDialog>
 #include <KInputDialog>
 #include <KIO/CopyJob>
 #include <KIO/DeleteJob>
@@ -49,40 +49,42 @@ namespace FileOperations
 
 static void copyMoveOrLink(Operation operation, const QList<QUrl>& urlList, QWidget* parent)
 {
-    Q_ASSERT(urlList.count() > 0);
+    Q_ASSERT(!urlList.isEmpty());
 
-    KFileDialog dialog(
-        QUrl("kfiledialog:///<copyMoveOrLink>"),
-        QString() /* filter */,
-        parent);
-    dialog.setOperationMode(KFileDialog::Saving);
+    QFileDialog dialog(parent, QString(), "kfiledialog:///<copyMoveOrLink>");
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
+
     switch (operation) {
     case COPY:
         dialog.setWindowTitle(i18nc("@title:window", "Copy To"));
-        dialog.okButton()->setText(i18nc("@action:button", "Copy"));
+        dialog.setLabelText(QFileDialog::DialogLabel::Accept, i18nc("@action:button", "Copy"));
         break;
     case MOVE:
         dialog.setWindowTitle(i18nc("@title:window", "Move To"));
-        dialog.okButton()->setText(i18nc("@action:button", "Move"));
+        dialog.setLabelText(QFileDialog::DialogLabel::Accept, i18nc("@action:button", "Move"));
         break;
     case LINK:
         dialog.setWindowTitle(i18nc("@title:window", "Link To"));
-        dialog.okButton()->setText(i18nc("@action:button", "Link"));
+        dialog.setLabelText(QFileDialog::DialogLabel::Accept, i18nc("@action:button", "Link"));
         break;
     default:
         Q_ASSERT(0);
     }
+
     if (urlList.count() == 1) {
-        dialog.setMode(KFile::File);
-        dialog.setSelection(urlList[0].fileName());
+        dialog.setFileMode(QFileDialog::AnyFile);
+        dialog.selectUrl(urlList.first());
     } else {
-        dialog.setMode(KFile::ExistingOnly | KFile::Directory);
+        dialog.setFileMode(QFileDialog::Directory);
+        dialog.setOption(QFileDialog::ShowDirsOnly, true);
+        dialog.setDirectoryUrl(urlList.first().adjusted(QUrl::RemoveFilename));
     }
+
     if (!dialog.exec()) {
         return;
     }
 
-    QUrl destUrl = dialog.selectedUrl();
+    QUrl destUrl = dialog.selectedUrls().first();
     KIO::CopyJob* job = 0;
     switch (operation) {
     case COPY:
