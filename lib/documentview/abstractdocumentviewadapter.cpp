@@ -39,7 +39,7 @@ AbstractDocumentViewAdapter::AbstractDocumentViewAdapter()
 
 AbstractDocumentViewAdapter::~AbstractDocumentViewAdapter()
 {
-    delete mWidget;
+    mWidget->deleteLater();
 }
 
 QCursor AbstractDocumentViewAdapter::cursor() const
