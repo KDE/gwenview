@@ -194,6 +194,7 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, QL
 
     d->mRenameAction = file->addAction("file_rename", this, SLOT(rename()));
     d->mRenameAction->setText(i18nc("Verb", "Rename..."));
+    d->mRenameAction->setIcon(QIcon::fromTheme("edit-rename"));
     actionCollection->setDefaultShortcut(d->mRenameAction, Qt::Key_F2);
 
     d->mTrashAction = file->addAction("file_trash", this, SLOT(trash()));

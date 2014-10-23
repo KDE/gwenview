@@ -35,6 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QPushButton>
 
 // KDE
+#include <KLocalizedString>
 
 // Local
 #include <lib/semanticinfo/tagitemdelegate.h>
@@ -148,6 +149,7 @@ struct TagWidgetPrivate
 
         mAddButton = new QPushButton;
         mAddButton->setIcon(QIcon::fromTheme("list-add"));
+        mAddButton->setToolTip(i18n("Add tag"));
         mAddButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         QObject::connect(mAddButton, SIGNAL(clicked()),
                          q, SLOT(addTagFromComboBox()));

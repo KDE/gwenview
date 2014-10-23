@@ -44,7 +44,7 @@ static QStandardItem* createItem(const SemanticInfoTag& tag, const QString& labe
     item->setData(tag, TagModel::TagRole);
     item->setData(label.toLower(), TagModel::SortRole);
     item->setData(status, TagModel::AssignmentStatusRole);
-    item->setData(QIcon::fromTheme("mail-tagged.png"), Qt::DecorationRole);
+    item->setData(QIcon::fromTheme("mail-tagged"), Qt::DecorationRole);
     return item;
 }
 

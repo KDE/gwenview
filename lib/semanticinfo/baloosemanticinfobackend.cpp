@@ -56,7 +56,7 @@ BalooSemanticInfoBackend::~BalooSemanticInfoBackend()
 
 TagSet BalooSemanticInfoBackend::allTags() const
 {
-    if (d->mAllTags.empty()) {
+    if (d->mAllTags.isEmpty()) {
         const_cast<BalooSemanticInfoBackend*>(this)->refreshAllTags();
     }
     return d->mAllTags;
