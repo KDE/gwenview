@@ -37,8 +37,8 @@ public:
     EmptyDocumentImpl(Document*);
     ~EmptyDocumentImpl();
 
-    virtual void init();
-    virtual Document::LoadingState loadingState() const;
+    virtual void init() Q_DECL_OVERRIDE;
+    virtual Document::LoadingState loadingState() const Q_DECL_OVERRIDE;
 };
 
 } // namespace

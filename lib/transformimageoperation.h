@@ -41,7 +41,7 @@ class TransformJob : public ThreadedDocumentJob
     Q_OBJECT
 public:
     TransformJob(Orientation orientation);
-    void threadedStart(); // reimp
+    void threadedStart() Q_DECL_OVERRIDE;
 
 private:
     Orientation mOrientation;
@@ -54,8 +54,8 @@ public:
     TransformImageOperation(Orientation);
     ~TransformImageOperation();
 
-    virtual void redo();
-    virtual void undo();
+    virtual void redo() Q_DECL_OVERRIDE;
+    virtual void undo() Q_DECL_OVERRIDE;
 
 private:
     TransformImageOperationPrivate* const d;

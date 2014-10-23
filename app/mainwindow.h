@@ -67,17 +67,17 @@ Q_SIGNALS:
     void viewModeChanged();
 
 public Q_SLOTS:
-    virtual void setCaption(const QString&);
+    virtual void setCaption(const QString&) Q_DECL_OVERRIDE;
 
-    virtual void setCaption(const QString&, bool modified);
+    virtual void setCaption(const QString&, bool modified) Q_DECL_OVERRIDE;
 
 protected:
-    virtual bool queryClose();
-    virtual QSize sizeHint() const;
-    virtual void showEvent(QShowEvent*);
-    virtual void resizeEvent(QResizeEvent*);
-    virtual void saveProperties(KConfigGroup&);
-    virtual void readProperties(const KConfigGroup&);
+    virtual bool queryClose() Q_DECL_OVERRIDE;
+    virtual QSize sizeHint() const Q_DECL_OVERRIDE;
+    virtual void showEvent(QShowEvent*) Q_DECL_OVERRIDE;
+    virtual void resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
+    virtual void saveProperties(KConfigGroup&) Q_DECL_OVERRIDE;
+    virtual void readProperties(const KConfigGroup&) Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
     void setActiveViewModeAction(QAction* action);

@@ -45,7 +45,7 @@ public:
     BirdEyeView(DocumentView* docView);
     ~BirdEyeView();
 
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0); // reimp
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0) Q_DECL_OVERRIDE;
 
     // Called by DocumentView when it detects mouse movements
     // We cannot use a sceneEventFilter because QGraphicsSceneHoverEvent are not
@@ -57,12 +57,12 @@ public Q_SLOTS:
     void slotZoomOrSizeChanged();
 
 protected:
-    void mousePressEvent(QGraphicsSceneMouseEvent* event);
-    void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
-    void hoverEnterEvent(QGraphicsSceneHoverEvent* event);
-    void hoverMoveEvent(QGraphicsSceneHoverEvent* event);
-    void hoverLeaveEvent(QGraphicsSceneHoverEvent* event);
+    void mousePressEvent(QGraphicsSceneMouseEvent* event) Q_DECL_OVERRIDE;
+    void mouseMoveEvent(QGraphicsSceneMouseEvent* event) Q_DECL_OVERRIDE;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) Q_DECL_OVERRIDE;
+    void hoverEnterEvent(QGraphicsSceneHoverEvent* event) Q_DECL_OVERRIDE;
+    void hoverMoveEvent(QGraphicsSceneHoverEvent* event) Q_DECL_OVERRIDE;
+    void hoverLeaveEvent(QGraphicsSceneHoverEvent* event) Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
     void slotAutoHideTimeout();

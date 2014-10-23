@@ -43,14 +43,14 @@ public:
     PlaceTreeModel(QObject*);
     ~PlaceTreeModel();
 
-    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
-    virtual QModelIndex parent(const QModelIndex& index) const;
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
-    virtual bool hasChildren(const QModelIndex& parent) const;
-    virtual bool canFetchMore(const QModelIndex& parent) const;
-    virtual void fetchMore(const QModelIndex& parent);
+    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
+    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
+    virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
+    virtual QModelIndex parent(const QModelIndex& index) const Q_DECL_OVERRIDE;
+    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
+    virtual bool hasChildren(const QModelIndex& parent) const Q_DECL_OVERRIDE;
+    virtual bool canFetchMore(const QModelIndex& parent) const Q_DECL_OVERRIDE;
+    virtual void fetchMore(const QModelIndex& parent) Q_DECL_OVERRIDE;
 
     QUrl urlForIndex(const QModelIndex&) const;
 

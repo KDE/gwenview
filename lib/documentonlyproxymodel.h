@@ -45,7 +45,7 @@ public:
     ~DocumentOnlyProxyModel();
 
 protected:
-    bool filterAcceptsRow(int row, const QModelIndex& parent) const; // reimp
+    bool filterAcceptsRow(int row, const QModelIndex& parent) const Q_DECL_OVERRIDE;
 
 private:
     DocumentOnlyProxyModelPrivate* const d;

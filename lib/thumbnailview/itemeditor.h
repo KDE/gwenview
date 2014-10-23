@@ -40,7 +40,7 @@ public:
     ~ItemEditor();
 
 protected:
-    virtual void showEvent(QShowEvent*);
+    virtual void showEvent(QShowEvent*) Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
     void resizeToContents();

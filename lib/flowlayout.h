@@ -50,16 +50,16 @@ public:
     FlowLayout(int spacing = -1);
     ~FlowLayout();
 
-    void addItem(QLayoutItem *item);
-    Qt::Orientations expandingDirections() const;
-    bool hasHeightForWidth() const;
-    int heightForWidth(int) const;
-    int count() const;
-    QLayoutItem *itemAt(int index) const;
-    QSize minimumSize() const;
-    void setGeometry(const QRect &rect);
-    QSize sizeHint() const;
-    QLayoutItem *takeAt(int index);
+    void addItem(QLayoutItem *item) Q_DECL_OVERRIDE;
+    Qt::Orientations expandingDirections() const Q_DECL_OVERRIDE;
+    bool hasHeightForWidth() const Q_DECL_OVERRIDE;
+    int heightForWidth(int) const Q_DECL_OVERRIDE;
+    int count() const Q_DECL_OVERRIDE;
+    QLayoutItem *itemAt(int index) const Q_DECL_OVERRIDE;
+    QSize minimumSize() const Q_DECL_OVERRIDE;
+    void setGeometry(const QRect &rect) Q_DECL_OVERRIDE;
+    QSize sizeHint() const Q_DECL_OVERRIDE;
+    QLayoutItem *takeAt(int index) Q_DECL_OVERRIDE;
 
 private:
     int doLayout(const QRect &rect, bool testOnly) const;

@@ -121,14 +121,14 @@ protected:
      */
     virtual void onScrollPosChanged(const QPointF& oldPos) = 0;
 
-    void resizeEvent(QGraphicsSceneResizeEvent* event);
+    void resizeEvent(QGraphicsSceneResizeEvent* event) Q_DECL_OVERRIDE;
 
-    void keyPressEvent(QKeyEvent* event);
-    void keyReleaseEvent(QKeyEvent* event);
-    void mousePressEvent(QGraphicsSceneMouseEvent* event);
-    void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
-    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event);
+    void keyPressEvent(QKeyEvent* event) Q_DECL_OVERRIDE;
+    void keyReleaseEvent(QKeyEvent* event) Q_DECL_OVERRIDE;
+    void mousePressEvent(QGraphicsSceneMouseEvent* event) Q_DECL_OVERRIDE;
+    void mouseMoveEvent(QGraphicsSceneMouseEvent* event) Q_DECL_OVERRIDE;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) Q_DECL_OVERRIDE;
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) Q_DECL_OVERRIDE;
 
 private:
     friend struct AbstractImageViewPrivate;

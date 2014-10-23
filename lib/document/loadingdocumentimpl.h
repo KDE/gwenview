@@ -45,9 +45,9 @@ public:
     LoadingDocumentImpl(Document*);
     ~LoadingDocumentImpl();
 
-    virtual void init();
-    virtual Document::LoadingState loadingState() const;
-    virtual bool isEditable() const;
+    virtual void init() Q_DECL_OVERRIDE;
+    virtual Document::LoadingState loadingState() const Q_DECL_OVERRIDE;
+    virtual bool isEditable() const Q_DECL_OVERRIDE;
 
     void loadImage(int invertedZoom);
 

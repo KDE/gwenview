@@ -49,20 +49,20 @@ public:
     ~DocumentLoadedImpl();
 
     // AbstractDocumentImpl
-    virtual void init();
-    virtual Document::LoadingState loadingState() const;
-    virtual DocumentJob* save(const QUrl&, const QByteArray& format);
-    virtual AbstractDocumentEditor* editor();
-    virtual QByteArray rawData() const;
-    virtual bool isEditable() const;
+    virtual void init() Q_DECL_OVERRIDE;
+    virtual Document::LoadingState loadingState() const Q_DECL_OVERRIDE;
+    virtual DocumentJob* save(const QUrl&, const QByteArray& format) Q_DECL_OVERRIDE;
+    virtual AbstractDocumentEditor* editor() Q_DECL_OVERRIDE;
+    virtual QByteArray rawData() const Q_DECL_OVERRIDE;
+    virtual bool isEditable() const Q_DECL_OVERRIDE;
     //
 
 protected:
     virtual bool saveInternal(QIODevice* device, const QByteArray& format);
 
     // AbstractDocumentEditor
-    virtual void setImage(const QImage&);
-    virtual void applyTransformation(Orientation orientation);
+    virtual void setImage(const QImage&) Q_DECL_OVERRIDE;
+    virtual void applyTransformation(Orientation orientation) Q_DECL_OVERRIDE;
     //
 
 private:

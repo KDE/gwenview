@@ -54,7 +54,7 @@ public:
 
     void setAutoDeleteOnFadeout(bool autoDelete);
 
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) Q_DECL_OVERRIDE;
 
 public Q_SLOTS:
     void fadeIn();

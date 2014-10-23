@@ -51,20 +51,20 @@ public:
     void setRect(const QRect&);
     QRect rect() const;
 
-    virtual void paint(QPainter*);
+    virtual void paint(QPainter*) Q_DECL_OVERRIDE;
 
-    virtual void mousePressEvent(QGraphicsSceneMouseEvent*);
-    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent*);
-    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
-    virtual void hoverMoveEvent(QGraphicsSceneHoverEvent*);
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent*) Q_DECL_OVERRIDE;
+    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent*) Q_DECL_OVERRIDE;
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*) Q_DECL_OVERRIDE;
+    virtual void hoverMoveEvent(QGraphicsSceneHoverEvent*) Q_DECL_OVERRIDE;
 
-    virtual void toolActivated();
-    virtual void toolDeactivated();
+    virtual void toolActivated() Q_DECL_OVERRIDE;
+    virtual void toolDeactivated() Q_DECL_OVERRIDE;
 
-    virtual QWidget* widget() const;
+    virtual QWidget* widget() const Q_DECL_OVERRIDE;
 
 public Q_SLOTS:
-    void onWidgetSlidedIn(); // reimp
+    void onWidgetSlidedIn() Q_DECL_OVERRIDE;
 
 Q_SIGNALS:
     void rectUpdated(const QRect&);

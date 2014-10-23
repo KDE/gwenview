@@ -42,18 +42,15 @@ public:
     LoadingIndicator(QGraphicsItem* parent = 0);
     ~LoadingIndicator();
 
-    // reimp
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0) Q_DECL_OVERRIDE;
 
-    // reimp
-    QRectF boundingRect() const;
+    QRectF boundingRect() const Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
     void showNextFrame();
 
 protected:
-    // reimp
-    QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+    QVariant itemChange(GraphicsItemChange change, const QVariant &value) Q_DECL_OVERRIDE;
 
 private:
     LoadingIndicatorPrivate* const d;

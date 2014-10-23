@@ -128,7 +128,7 @@ Q_SIGNALS:
     void finished();
 
 protected:
-    virtual void slotResult(KJob *job);
+    virtual void slotResult(KJob *job) Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
     void determineNextIcon();

@@ -42,11 +42,11 @@ public:
     ThumbnailViewHelper(QObject* parent, KActionCollection*);
     ~ThumbnailViewHelper();
 
-    virtual void showContextMenu(QWidget* parent);
+    virtual void showContextMenu(QWidget* parent) Q_DECL_OVERRIDE;
 
-    virtual void showMenuForUrlDroppedOnViewport(QWidget* parent, const QList<QUrl>&);
+    virtual void showMenuForUrlDroppedOnViewport(QWidget* parent, const QList<QUrl>&) Q_DECL_OVERRIDE;
 
-    virtual void showMenuForUrlDroppedOnDir(QWidget* parent, const QList<QUrl>&, const QUrl&);
+    virtual void showMenuForUrlDroppedOnDir(QWidget* parent, const QList<QUrl>&, const QUrl&) Q_DECL_OVERRIDE;
 
 public Q_SLOTS:
     void setCurrentDirUrl(const QUrl&);

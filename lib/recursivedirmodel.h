@@ -49,8 +49,8 @@ public:
     QUrl url() const;
     void setUrl(const QUrl&);
 
-    int rowCount(const QModelIndex&) const; // reimp
-    QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const; // reimp
+    int rowCount(const QModelIndex&) const Q_DECL_OVERRIDE;
+    QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
 
 Q_SIGNALS:
     void completed();

@@ -124,7 +124,7 @@ public:
     void fadeOut();
     void fakeFadeOut();
 
-    void setGeometry(const QRectF& rect); // reimp
+    void setGeometry(const QRectF& rect) Q_DECL_OVERRIDE;
 
     int sortKey() const;
     void setSortKey(int sortKey);
@@ -186,11 +186,11 @@ Q_SIGNALS:
     void isAnimatedChanged();
 
 protected:
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0) Q_DECL_OVERRIDE;
 
-    void wheelEvent(QGraphicsSceneWheelEvent* event);
-    void contextMenuEvent(QGraphicsSceneContextMenuEvent* event);
-    bool sceneEventFilter(QGraphicsItem*, QEvent*);
+    void wheelEvent(QGraphicsSceneWheelEvent* event) Q_DECL_OVERRIDE;
+    void contextMenuEvent(QGraphicsSceneContextMenuEvent* event) Q_DECL_OVERRIDE;
+    bool sceneEventFilter(QGraphicsItem*, QEvent*) Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
     void finishOpenUrl();

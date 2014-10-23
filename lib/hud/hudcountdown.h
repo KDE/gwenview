@@ -43,7 +43,7 @@ public:
 
     void start(qreal ms);
 
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*);
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) Q_DECL_OVERRIDE;
 
 Q_SIGNALS:
     void timeout();

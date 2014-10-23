@@ -40,8 +40,8 @@ public:
     ResizeImageOperation(const QSize& size);
     ~ResizeImageOperation();
 
-    virtual void redo();
-    virtual void undo();
+    virtual void redo() Q_DECL_OVERRIDE;
+    virtual void undo() Q_DECL_OVERRIDE;
 
 private:
     ResizeImageOperationPrivate* const d;

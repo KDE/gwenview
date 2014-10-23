@@ -59,7 +59,7 @@ public:
 
     Document::Ptr document() const;
 
-    virtual void start();
+    virtual void start() Q_DECL_OVERRIDE;
 
 protected Q_SLOTS:
     /**
@@ -108,7 +108,7 @@ public:
     virtual void threadedStart() = 0;
 
 protected:
-    virtual void doStart();
+    virtual void doStart() Q_DECL_OVERRIDE;
 };
 
 } // namespace

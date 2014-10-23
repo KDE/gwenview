@@ -56,7 +56,7 @@ public:
     void addCountDown(qreal ms);
 
 protected:
-    void showEvent(QShowEvent* event);
+    void showEvent(QShowEvent* event) Q_DECL_OVERRIDE;
 
 private:
     HudButtonBoxPrivate* const d;

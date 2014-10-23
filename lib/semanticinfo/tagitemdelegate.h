@@ -36,17 +36,17 @@ public:
     TagItemDelegate(QAbstractItemView* view);
 
 protected:
-    virtual QList<QWidget*> createItemWidgets(const QModelIndex &index) const;
+    virtual QList<QWidget*> createItemWidgets(const QModelIndex &index) const Q_DECL_OVERRIDE;
 
     virtual void updateItemWidgets(const QList<QWidget*> widgets,
                                    const QStyleOptionViewItem& option,
-                                   const QPersistentModelIndex& /*index*/) const;
+                                   const QPersistentModelIndex& /*index*/) const Q_DECL_OVERRIDE;
 
     virtual void paint(QPainter *painter, const QStyleOptionViewItem &option,
-                       const QModelIndex &index) const;
+                       const QModelIndex &index) const Q_DECL_OVERRIDE;
 
     virtual QSize sizeHint(const QStyleOptionViewItem &/*option*/,
-                           const QModelIndex &/*index*/) const;
+                           const QModelIndex &/*index*/) const Q_DECL_OVERRIDE;
 
 Q_SIGNALS:
     void removeTagRequested(const SemanticInfoTag& tag);

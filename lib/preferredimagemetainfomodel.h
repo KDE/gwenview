@@ -44,15 +44,15 @@ public:
     PreferredImageMetaInfoModel(ImageMetaInfoModel* model, const QStringList& list);
     ~PreferredImageMetaInfoModel();
 
-    virtual QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const;
-    virtual bool setData(const QModelIndex& index, const QVariant& value, int role);
-    virtual Qt::ItemFlags flags(const QModelIndex& index) const;
+    virtual QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
+    virtual bool setData(const QModelIndex& index, const QVariant& value, int role) Q_DECL_OVERRIDE;
+    virtual Qt::ItemFlags flags(const QModelIndex& index) const Q_DECL_OVERRIDE;
 
 Q_SIGNALS:
     void preferredMetaInfoKeyListChanged(const QStringList&);
 
 protected:
-    bool lessThan(const QModelIndex& left, const QModelIndex& right) const;
+    bool lessThan(const QModelIndex& left, const QModelIndex& right) const Q_DECL_OVERRIDE;
 
 private:
     PreferredImageMetaInfoModelPrivate* const d;

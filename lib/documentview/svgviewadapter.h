@@ -44,10 +44,10 @@ public:
     SvgImageView(QGraphicsItem* parent = 0);
 
 protected:
-    void loadFromDocument();
-    void onZoomChanged();
-    void onImageOffsetChanged();
-    void onScrollPosChanged(const QPointF& oldPos);
+    void loadFromDocument() Q_DECL_OVERRIDE;
+    void onZoomChanged() Q_DECL_OVERRIDE;
+    void onImageOffsetChanged() Q_DECL_OVERRIDE;
+    void onScrollPosChanged(const QPointF& oldPos) Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
     void finishLoadFromDocument();
@@ -65,36 +65,36 @@ public:
     SvgViewAdapter();
     ~SvgViewAdapter();
 
-    virtual QCursor cursor() const;
+    virtual QCursor cursor() const Q_DECL_OVERRIDE;
 
-    virtual void setCursor(const QCursor&);
+    virtual void setCursor(const QCursor&) Q_DECL_OVERRIDE;
 
-    virtual void setDocument(Document::Ptr);
+    virtual void setDocument(Document::Ptr) Q_DECL_OVERRIDE;
 
-    virtual Document::Ptr document() const;
+    virtual Document::Ptr document() const Q_DECL_OVERRIDE;
 
-    virtual MimeTypeUtils::Kind kind() const
+    virtual MimeTypeUtils::Kind kind() const Q_DECL_OVERRIDE
     {
         return MimeTypeUtils::KIND_SVG_IMAGE;
     }
 
-    virtual bool canZoom() const
+    virtual bool canZoom() const Q_DECL_OVERRIDE
     {
         return true;
     }
 
-    virtual void setZoomToFit(bool);
+    virtual void setZoomToFit(bool) Q_DECL_OVERRIDE;
 
-    virtual bool zoomToFit() const;
+    virtual bool zoomToFit() const Q_DECL_OVERRIDE;
 
-    virtual qreal zoom() const;
+    virtual qreal zoom() const Q_DECL_OVERRIDE;
 
-    virtual void setZoom(qreal /*zoom*/, const QPointF& /*center*/ = QPointF(-1, -1));
+    virtual void setZoom(qreal /*zoom*/, const QPointF& /*center*/ = QPointF(-1, -1)) Q_DECL_OVERRIDE;
 
-    virtual qreal computeZoomToFit() const;
+    virtual qreal computeZoomToFit() const Q_DECL_OVERRIDE;
 
-    virtual QPointF scrollPos() const;
-    virtual void setScrollPos(const QPointF& pos);
+    virtual QPointF scrollPos() const Q_DECL_OVERRIDE;
+    virtual void setScrollPos(const QPointF& pos) Q_DECL_OVERRIDE;
 
 private:
     SvgViewAdapterPrivate* const d;

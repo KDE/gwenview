@@ -41,11 +41,11 @@ public:
     DocumentInfoProvider(SortedDirModel* model);
     ~DocumentInfoProvider();
 
-    virtual bool isBusy(const QUrl &url);
+    virtual bool isBusy(const QUrl &url) Q_DECL_OVERRIDE;
 
-    virtual bool isModified(const QUrl &url);
+    virtual bool isModified(const QUrl &url) Q_DECL_OVERRIDE;
 
-    virtual void thumbnailForDocument(const QUrl &url, ThumbnailGroup::Enum group, QPixmap* outPix, QSize* outFullSize) const;
+    virtual void thumbnailForDocument(const QUrl &url, ThumbnailGroup::Enum group, QPixmap* outPix, QSize* outFullSize) const Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
     void emitBusyStateChanged(const QUrl&, bool);

@@ -45,7 +45,7 @@ public:
     ~SemanticInfoContextManagerItem();
 
 protected:
-    virtual bool eventFilter(QObject*, QEvent*);
+    virtual bool eventFilter(QObject*, QEvent*) Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
     void slotSelectionChanged();

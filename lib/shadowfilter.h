@@ -57,7 +57,7 @@ public:
     void reset();
 
 protected:
-    bool eventFilter(QObject*, QEvent*); // reimp
+    bool eventFilter(QObject*, QEvent*) Q_DECL_OVERRIDE;
 
 private:
     ShadowFilterPrivate* const d;

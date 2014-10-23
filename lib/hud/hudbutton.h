@@ -48,7 +48,7 @@ public:
 
     void setText(const QString&);
 
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*);
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) Q_DECL_OVERRIDE;
 
     void setDefaultAction(QAction*);
 
@@ -56,10 +56,10 @@ Q_SIGNALS:
     void clicked();
 
 protected:
-    bool event(QEvent* event);
-    QSizeF sizeHint(Qt::SizeHint which, const QSizeF& constraint = QSizeF()) const;
-    void mousePressEvent(QGraphicsSceneMouseEvent* event);
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
+    bool event(QEvent* event) Q_DECL_OVERRIDE;
+    QSizeF sizeHint(Qt::SizeHint which, const QSizeF& constraint = QSizeF()) const Q_DECL_OVERRIDE;
+    void mousePressEvent(QGraphicsSceneMouseEvent* event) Q_DECL_OVERRIDE;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) Q_DECL_OVERRIDE;
 
 private:
     HudButtonPrivate* const d;

@@ -81,8 +81,8 @@ public Q_SLOTS:
     void updateLayout();
 
 protected:
-    void showEvent(QShowEvent*);
-    void resizeEvent(QResizeEvent*);
+    void showEvent(QShowEvent*) Q_DECL_OVERRIDE;
+    void resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
 
 private:
     friend class ViewItem;

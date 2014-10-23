@@ -39,12 +39,12 @@ public:
     AnimatedDocumentLoadedImpl(Document*, const QByteArray&);
     ~AnimatedDocumentLoadedImpl();
 
-    virtual void init();
-    virtual Document::LoadingState loadingState() const;
-    virtual QByteArray rawData() const;
-    virtual bool isAnimated() const;
-    virtual void startAnimation();
-    virtual void stopAnimation();
+    virtual void init() Q_DECL_OVERRIDE;
+    virtual Document::LoadingState loadingState() const Q_DECL_OVERRIDE;
+    virtual QByteArray rawData() const Q_DECL_OVERRIDE;
+    virtual bool isAnimated() const Q_DECL_OVERRIDE;
+    virtual void startAnimation() Q_DECL_OVERRIDE;
+    virtual void stopAnimation() Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
     void slotFrameChanged(int frameNumber);

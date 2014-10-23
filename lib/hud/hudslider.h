@@ -54,7 +54,7 @@ public:
 
     bool isSliderDown() const;
 
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*);
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) Q_DECL_OVERRIDE;
 
     void triggerAction(QAbstractSlider::SliderAction);
 
@@ -63,12 +63,12 @@ Q_SIGNALS:
     void actionTriggered(int);
 
 protected:
-    void mousePressEvent(QGraphicsSceneMouseEvent* event);
-    void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
-    void wheelEvent(QGraphicsSceneWheelEvent* event);
-    void keyPressEvent(QKeyEvent* event);
-    void keyReleaseEvent(QKeyEvent* event);
+    void mousePressEvent(QGraphicsSceneMouseEvent* event) Q_DECL_OVERRIDE;
+    void mouseMoveEvent(QGraphicsSceneMouseEvent* event) Q_DECL_OVERRIDE;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) Q_DECL_OVERRIDE;
+    void wheelEvent(QGraphicsSceneWheelEvent* event) Q_DECL_OVERRIDE;
+    void keyPressEvent(QKeyEvent* event) Q_DECL_OVERRIDE;
+    void keyReleaseEvent(QKeyEvent* event) Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
     void doRepeatAction(int time = 50);

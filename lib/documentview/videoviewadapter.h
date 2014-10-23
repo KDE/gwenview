@@ -41,20 +41,20 @@ public:
     VideoViewAdapter();
     ~VideoViewAdapter();
 
-    virtual MimeTypeUtils::Kind kind() const
+    virtual MimeTypeUtils::Kind kind() const Q_DECL_OVERRIDE
     {
         return MimeTypeUtils::KIND_VIDEO;
     }
 
-    virtual Document::Ptr document() const;
+    virtual Document::Ptr document() const Q_DECL_OVERRIDE;
 
-    virtual void setDocument(Document::Ptr);
+    virtual void setDocument(Document::Ptr) Q_DECL_OVERRIDE;
 
 Q_SIGNALS:
     void videoFinished();
 
 protected:
-    bool eventFilter(QObject*, QEvent*);
+    bool eventFilter(QObject*, QEvent*) Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
     void slotPlayPauseClicked();

@@ -46,7 +46,7 @@ public:
 
     void setText(const QString&);
 
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*);
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) Q_DECL_OVERRIDE;
 
 private:
     HudLabelPrivate* const d;

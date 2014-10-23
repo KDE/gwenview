@@ -58,7 +58,7 @@ public Q_SLOTS:
     void loadConfig();
 
 protected:
-    virtual void showEvent(QShowEvent*);
+    virtual void showEvent(QShowEvent*) Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
     void slotListViewActivated(const QModelIndex& index);

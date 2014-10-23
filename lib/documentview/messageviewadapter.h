@@ -39,21 +39,21 @@ public:
     MessageViewAdapter();
     ~MessageViewAdapter();
 
-    virtual MimeTypeUtils::Kind kind() const
+    virtual MimeTypeUtils::Kind kind() const Q_DECL_OVERRIDE
     {
         return MimeTypeUtils::KIND_UNKNOWN;
     }
 
-    virtual Document::Ptr document() const;
+    virtual Document::Ptr document() const Q_DECL_OVERRIDE;
 
-    virtual void setDocument(Document::Ptr);
+    virtual void setDocument(Document::Ptr) Q_DECL_OVERRIDE;
 
     void setInfoMessage(const QString&);
 
     void setErrorMessage(const QString& main, const QString& detail = QString());
 
 protected:
-    bool eventFilter(QObject*, QEvent*);
+    bool eventFilter(QObject*, QEvent*) Q_DECL_OVERRIDE;
 
 private:
     MessageViewAdapterPrivate* const d;

@@ -48,7 +48,7 @@ public:
     MimeTypeUtils::Kinds kindFilter() const;
 
 protected:
-    bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const; // reimp
+    bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const Q_DECL_OVERRIDE;
 
 private:
     KindProxyModelPrivate* const d;

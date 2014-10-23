@@ -50,7 +50,7 @@ public:
 
     void addUrl(const QUrl&, const QDateTime& dateTime = QDateTime());
 
-    virtual bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex());
+    virtual bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex()) Q_DECL_OVERRIDE;
 
 private:
     HistoryModelPrivate* const d;

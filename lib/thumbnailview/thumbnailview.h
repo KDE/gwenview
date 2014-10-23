@@ -96,7 +96,7 @@ public:
      */
     bool isBusy(const QModelIndex& index) const;
 
-    virtual void setModel(QAbstractItemModel* model);
+    virtual void setModel(QAbstractItemModel* model) Q_DECL_OVERRIDE;
 
     void setThumbnailProvider(ThumbnailProvider* thumbnailProvider);
 
@@ -158,23 +158,23 @@ public Q_SLOTS:
     void generateThumbnailsForItems();
 
 protected:
-    virtual void dragEnterEvent(QDragEnterEvent*);
+    virtual void dragEnterEvent(QDragEnterEvent*) Q_DECL_OVERRIDE;
 
-    virtual void dragMoveEvent(QDragMoveEvent*);
+    virtual void dragMoveEvent(QDragMoveEvent*) Q_DECL_OVERRIDE;
 
-    virtual void dropEvent(QDropEvent*);
+    virtual void dropEvent(QDropEvent*) Q_DECL_OVERRIDE;
 
-    virtual void keyPressEvent(QKeyEvent*);
+    virtual void keyPressEvent(QKeyEvent*) Q_DECL_OVERRIDE;
 
-    virtual void resizeEvent(QResizeEvent*);
+    virtual void resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
 
-    virtual void scrollContentsBy(int dx, int dy);
+    virtual void scrollContentsBy(int dx, int dy) Q_DECL_OVERRIDE;
 
-    virtual void showEvent(QShowEvent*);
+    virtual void showEvent(QShowEvent*) Q_DECL_OVERRIDE;
 
-    virtual void wheelEvent(QWheelEvent*);
+    virtual void wheelEvent(QWheelEvent*) Q_DECL_OVERRIDE;
 
-    virtual void startDrag(Qt::DropActions);
+    virtual void startDrag(Qt::DropActions) Q_DECL_OVERRIDE;
 
 protected Q_SLOTS:
     virtual void rowsAboutToBeRemoved(const QModelIndex& parent, int start, int end) Q_DECL_OVERRIDE;

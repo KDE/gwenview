@@ -51,11 +51,11 @@ public:
     QUrl newUrl() const;
 
 protected Q_SLOTS:
-    virtual void doStart();
-    virtual void slotResult(KJob*);
+    virtual void doStart() Q_DECL_OVERRIDE;
+    virtual void slotResult(KJob*) Q_DECL_OVERRIDE;
 
 protected:
-    virtual bool doKill();
+    virtual bool doKill() Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
     void finishSave();

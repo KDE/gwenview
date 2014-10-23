@@ -46,7 +46,7 @@ public:
      */
     void setMetaInfo(ImageMetaInfoModel*, const QStringList& list);
 
-    virtual QSize sizeHint() const;
+    virtual QSize sizeHint() const Q_DECL_OVERRIDE;
 
 Q_SIGNALS:
     void preferredMetaInfoKeyListChanged(const QStringList&);

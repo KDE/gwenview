@@ -39,15 +39,15 @@ public:
     SvgDocumentLoadedImpl(Document*, const QByteArray&);
     ~SvgDocumentLoadedImpl();
 
-    virtual void init();
+    virtual void init() Q_DECL_OVERRIDE;
 
-    virtual Document::LoadingState loadingState() const;
+    virtual Document::LoadingState loadingState() const Q_DECL_OVERRIDE;
 
     virtual void setImage(const QImage&);
 
-    QByteArray rawData() const;
+    QByteArray rawData() const Q_DECL_OVERRIDE;
 
-    QSvgRenderer* svgRenderer() const;
+    QSvgRenderer* svgRenderer() const Q_DECL_OVERRIDE;
 
 private:
     SvgDocumentLoadedImplPrivate* const d;

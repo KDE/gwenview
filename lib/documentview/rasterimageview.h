@@ -48,7 +48,7 @@ public:
     RasterImageView(QGraphicsItem* parent = 0);
     ~RasterImageView();
 
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) Q_DECL_OVERRIDE;
 
     void setCurrentTool(AbstractRasterImageViewTool* tool);
     AbstractRasterImageViewTool* currentTool() const;
@@ -60,18 +60,18 @@ Q_SIGNALS:
     void currentToolChanged(AbstractRasterImageViewTool*);
 
 protected:
-    void loadFromDocument();
-    void onZoomChanged();
-    void onImageOffsetChanged();
-    void onScrollPosChanged(const QPointF& oldPos);
-    void resizeEvent(QGraphicsSceneResizeEvent* event);
-    void mousePressEvent(QGraphicsSceneMouseEvent* event);
-    void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
-    void wheelEvent(QGraphicsSceneWheelEvent* event);
-    void keyPressEvent(QKeyEvent* event);
-    void keyReleaseEvent(QKeyEvent* event);
-    void hoverMoveEvent(QGraphicsSceneHoverEvent*);
+    void loadFromDocument() Q_DECL_OVERRIDE;
+    void onZoomChanged() Q_DECL_OVERRIDE;
+    void onImageOffsetChanged() Q_DECL_OVERRIDE;
+    void onScrollPosChanged(const QPointF& oldPos) Q_DECL_OVERRIDE;
+    void resizeEvent(QGraphicsSceneResizeEvent* event) Q_DECL_OVERRIDE;
+    void mousePressEvent(QGraphicsSceneMouseEvent* event) Q_DECL_OVERRIDE;
+    void mouseMoveEvent(QGraphicsSceneMouseEvent* event) Q_DECL_OVERRIDE;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) Q_DECL_OVERRIDE;
+    void wheelEvent(QGraphicsSceneWheelEvent* event) Q_DECL_OVERRIDE;
+    void keyPressEvent(QKeyEvent* event) Q_DECL_OVERRIDE;
+    void keyReleaseEvent(QKeyEvent* event) Q_DECL_OVERRIDE;
+    void hoverMoveEvent(QGraphicsSceneHoverEvent*) Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
     void slotDocumentMetaInfoLoaded();

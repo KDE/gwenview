@@ -43,7 +43,7 @@ public:
     ~ContextBarButton();
 
 protected:
-    void paintEvent(QPaintEvent*);
+    void paintEvent(QPaintEvent*) Q_DECL_OVERRIDE;
 
 private:
     ContextBarButtonPrivate* const d;

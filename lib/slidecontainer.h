@@ -53,9 +53,9 @@ public:
      */
     void setContent(QWidget* content);
 
-    virtual QSize sizeHint() const;
+    virtual QSize sizeHint() const Q_DECL_OVERRIDE;
 
-    virtual QSize minimumSizeHint() const;
+    virtual QSize minimumSizeHint() const Q_DECL_OVERRIDE;
 
     int slideHeight() const;
 
@@ -79,8 +79,8 @@ Q_SIGNALS:
     void slidedOut();
 
 protected:
-    void resizeEvent(QResizeEvent*);
-    bool eventFilter(QObject*, QEvent* event);
+    void resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
+    bool eventFilter(QObject*, QEvent* event) Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
     void slotAnimFinished();

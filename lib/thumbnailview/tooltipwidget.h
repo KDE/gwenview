@@ -50,10 +50,10 @@ public:
     QString text() const;
     void setText(const QString& text);
 
-    virtual QSize sizeHint() const;
+    virtual QSize sizeHint() const Q_DECL_OVERRIDE;
 
 protected:
-    virtual void paintEvent(QPaintEvent*);
+    virtual void paintEvent(QPaintEvent*) Q_DECL_OVERRIDE;
 
 private:
     ToolTipWidgetPrivate* const d;
