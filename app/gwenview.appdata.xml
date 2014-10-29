@@ -186,7 +186,7 @@
       <li xml:lang="zh-TW">可以使用 KIPI 外掛程式。</li>
     </ul>
   </description>
-  <url type="homepage">http://gwenview.sourceforge.net/</url>
+  <url type="homepage">http://gwenview.kde.org/</url>
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=gwenview</url>
   <url type="help">http://docs.kde.org/stable/en/kdegraphics/gwenview/index.html</url>
   <screenshots>
