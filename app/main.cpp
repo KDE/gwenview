@@ -66,7 +66,17 @@ public:
             KIO::CopyJob* job = KIO::link(list, mUrl);
             job->exec();
         } else {
-            mUrl = QUrl::fromUserInput(args.first());
+            QString tmpArg = args.first();
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 4, 0))
+            mUrl = QUrl::fromUserInput(tmpArg, QDir::currentPath());
+#else
+            QUrl tmpUrl = QUrl(tmpArg);
+            if (tmpUrl.scheme().isEmpty() && !tmpArg.startsWith(QLatin1Char('/'))) {
+                mUrl = QUrl::fromLocalFile(tmpArg);
+            } else {
+                mUrl = QUrl::fromUserInput(tmpArg);
+            }
+#endif
         }
 
         if (mUrl.isValid() && (fullscreen || slideshow)) {
@@ -131,7 +141,7 @@ int main(int argc, char *argv[])
                                         i18n("Start in slideshow mode")));
     parser.addHelpOption();
     parser.addVersionOption();
-    parser.addPositionalArgument("url", i18n("A starting file or folder"));
+    parser.addPositionalArgument("url", i18n("A starting file or folders"));
     parser.process(app);
     aboutData.data()->processCommandLine(&parser);
 
