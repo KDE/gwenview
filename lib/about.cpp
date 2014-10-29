@@ -38,11 +38,15 @@ KAboutData* createAboutData(const QString& appName, const QString& programName)
     data->setLicense(KAboutLicense::GPL);
     data->setCopyrightStatement(i18n("Copyright 2000-2014 Gwenview authors"));
     data->addAuthor(
-        i18n("Aurélien Gâteau"),
-        i18n("Main developer"),
+        QStringLiteral("Lukáš Tinkl"),
+        i18n("Current Maintainer"),
+        "ltinkl@redhat.com");
+    data->addAuthor(
+        QStringLiteral("Aurélien Gâteau"),
+        i18n("Developer"),
         "agateau@kde.org");
     data->addAuthor(
-        i18n("Benjamin Löwe"),
+        QStringLiteral("Benjamin Löwe"),
         i18n("Developer"),
         "benni@mytum.de");
     return data;
