@@ -129,7 +129,7 @@ void DocumentPrivate::downSampleImage(int invertedZoom)
         mDownSampledImageMap[invertedZoom] = mImage;
     }
     q->downSampledImageReady();
-};
+}
 
 //- DownSamplingJob ---------------------------------------
 void DownSamplingJob::doStart()

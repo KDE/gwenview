@@ -173,7 +173,7 @@
          </widget>
         </item>
         <item row="0" column="4">
-         <widget class="KComboBox" name="kcfg_PrintUnit">
+         <widget class="QComboBox" name="kcfg_PrintUnit">
           <property name="enabled">
            <bool>false</bool>
           </property>
@@ -263,19 +263,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
-  </customwidget>
- </customwidgets>
- <includes>
-  <include location="local">kcombobox.h</include>
-  <include location="local">knuminput.h</include>
-  <include location="local">knuminput.h</include>
-  <include location="local">kcombobox.h</include>
- </includes>
  <resources/>
  <connections>
   <connection>

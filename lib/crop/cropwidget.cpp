@@ -26,11 +26,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QPushButton>
 #include <QtMath>
 #include <QDebug>
+#include <QLineEdit>
 
 // KDE
 #include <KDialog>
 #include <KGlobalSettings>
-#include <KLineEdit>
 #include <KLocalizedString>
 
 // Local
@@ -157,11 +157,11 @@ struct CropWidgetPrivate : public Ui_CropWidget
         ratioComboBox->setMaxVisibleItems(ratioComboBox->count());
         ratioComboBox->clearEditText();
 
-        KLineEdit* edit = qobject_cast<KLineEdit*>(ratioComboBox->lineEdit());
+        QLineEdit* edit = qobject_cast<QLineEdit*>(ratioComboBox->lineEdit());
         Q_ASSERT(edit);
         // Do not use i18n("%1:%2") because ':' should not be translated, it is
         // used to parse the ratio string.
-        edit->setClickMessage(QString("%1:%2").arg(i18n("Width")).arg(i18n("Height")));
+        edit->setPlaceholderText(QString("%1:%2").arg(i18n("Width")).arg(i18n("Height")));
     }
 
     QRect cropRect() const
@@ -190,8 +190,8 @@ struct CropWidgetPrivate : public Ui_CropWidget
         cropButton->setIcon(QIcon::fromTheme("transform-crop-and-resize"));
         cropButton->setText(i18n("Crop"));
 
-        QObject::connect(dialogButtonBox, &KDialogButtonBox::accepted, q, &CropWidget::cropRequested);
-        QObject::connect(dialogButtonBox, &KDialogButtonBox::rejected, q, &CropWidget::done);
+        QObject::connect(dialogButtonBox, &QDialogButtonBox::accepted, q, &CropWidget::cropRequested);
+        QObject::connect(dialogButtonBox, &QDialogButtonBox::rejected, q, &CropWidget::done);
     }
 };
 
@@ -225,7 +225,7 @@ CropWidget::CropWidget(QWidget* parent, RasterImageView* imageView, CropTool* cr
 
     d->initDialogButtonBox();
 
-    connect(d->ratioComboBox, &KComboBox::editTextChanged, this, &CropWidget::slotRatioComboBoxEditTextChanged);
+    connect(d->ratioComboBox, &QComboBox::editTextChanged, this, &CropWidget::slotRatioComboBoxEditTextChanged);
 
     // Don't do this before signals are connected, otherwise the tool won't get
     // initialized
