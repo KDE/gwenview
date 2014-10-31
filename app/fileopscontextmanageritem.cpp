@@ -36,6 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KFileItem>
 #include <KFileItemActions>
 #include <KIO/Paste>
+#include <KIO/PasteJob>
 #include <KIO/RestoreJob>
 #include <KIO/JobUiDelegate>
 #include <KIOCore/KFileItemListProperties>
@@ -345,8 +346,8 @@ void FileOpsContextManagerItem::copy()
 
 void FileOpsContextManagerItem::paste()
 {
-    const bool move = KIO::isClipboardDataCut(QApplication::clipboard()->mimeData());
-    KIO::pasteClipboard(d->pasteTargetUrl(), d->mGroup, move);
+    KIO::Job *job = KIO::paste(QApplication::clipboard()->mimeData(), d->pasteTargetUrl());
+    KJobWidgets::setWindow(job, d->mGroup);
 }
 
 void FileOpsContextManagerItem::trash()
