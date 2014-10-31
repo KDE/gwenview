@@ -155,7 +155,7 @@ struct CropWidgetPrivate : public Ui_CropWidget
         addRatioToComboBox(QSizeF(8.5, 11), i18n("US Letter"));
 
         ratioComboBox->setMaxVisibleItems(ratioComboBox->count());
-        ratioComboBox->setEditText(QString());
+        ratioComboBox->clearEditText();
 
         KLineEdit* edit = qobject_cast<KLineEdit*>(ratioComboBox->lineEdit());
         Q_ASSERT(edit);

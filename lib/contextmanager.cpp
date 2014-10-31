@@ -74,7 +74,7 @@ struct ContextManagerPrivate
         // the list if we are viewing a non-browsable url, for example
         // using http protocol)
         if (mSelectedFileItemList.isEmpty() && mCurrentUrl.isValid()) {
-            KFileItem item(KFileItem::Unknown, KFileItem::Unknown, mCurrentUrl);
+            KFileItem item(mCurrentUrl);
             mSelectedFileItemList << item;
         }
 

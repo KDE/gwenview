@@ -26,11 +26,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <K4AboutData>
 #include <KApplication>
 #include <KCmdLineArgs>
-#include <KDebug>
 
 // Qt
 #include <QDir>
 #include <QTime>
+#include <QtDebug>
 
 using namespace Gwenview;
 
@@ -56,7 +56,7 @@ int main(int argc, char** argv)
     // Read cmdline options
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
     if (args->count() != 2) {
-        kFatal() << "Wrong number of arguments";
+        qFatal("Wrong number of arguments");
         return 1;
     }
     QString imageDirName = args->arg(0);
@@ -66,7 +66,7 @@ int main(int argc, char** argv)
     } else if (args->arg(1) == "normal") {
         // group is already set to the right value
     } else {
-        kFatal() << "Invalid thumbnail size:" << args->arg(1);
+        qFatal("Invalid thumbnail size: %s", qPrintable(args->arg(1)));
     }
     QString thumbnailBaseDirName = args->isSet("thumbnail-dir") ? args->getOption("thumbnail-dir") : QString();
 
@@ -77,7 +77,7 @@ int main(int argc, char** argv)
         if (!dir.exists()) {
             bool ok = QDir::root().mkpath(thumbnailBaseDirName);
             if (!ok) {
-                kFatal() << "Could not create" << thumbnailBaseDirName;
+                qFatal("Could not create %s", qPrintable(thumbnailBaseDirName));
                 return 1;
             }
         }
@@ -92,10 +92,10 @@ int main(int argc, char** argv)
     KFileItemList list;
     Q_FOREACH(const QString &name, dir.entryList()) {
         QUrl url = QUrl::fromLocalFile(dir.absoluteFilePath(name));
-        KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
+        KFileItem item(url);
         list << item;
     }
-    kWarning() << "Generating thumbnails for" << list.count() << "files";
+    qWarning() << "Generating thumbnails for" << list.count() << "files";
 
     // Start the job
     QTime chrono;
@@ -109,13 +109,13 @@ int main(int argc, char** argv)
     QObject::connect(&job, SIGNAL(finished()), &loop, SLOT(quit()));
     loop.exec();
 
-    kWarning() << "Time to generate thumbnails:" << chrono.restart();
+    qWarning() << "Time to generate thumbnails:" << chrono.restart();
 
     waitForDeferredDeletes();
     while (!ThumbnailProvider::isThumbnailWriterEmpty()) {
         QCoreApplication::processEvents();
     }
-    kWarning() << "Time to save pending thumbnails:" << chrono.restart();
+    qWarning() << "Time to save pending thumbnails:" << chrono.restart();
 
     return 0;
 }
