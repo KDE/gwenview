@@ -306,6 +306,7 @@ void AbstractImageView::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
     QPointF mousePos = event->pos();
     QPointF newScrollPos = d->mScrollPos + d->mLastDragPos - mousePos;
 
+#if 0 // commented out due to mouse pointer warping around, bug in Qt?
     // Wrap mouse pos
     qreal maxWidth = boundingRect().width();
     qreal maxHeight = boundingRect().height();
@@ -329,10 +330,10 @@ void AbstractImageView::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
     // Set mouse pos (Hackish translation to screen coords!)
     QPointF screenDelta = event->screenPos() - event->pos();
     QCursor::setPos((mousePos + screenDelta).toPoint());
+#endif
 
     d->mLastDragPos = mousePos;
     d->setScrollPos(newScrollPos);
-
 }
 
 void AbstractImageView::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
