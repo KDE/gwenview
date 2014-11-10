@@ -845,9 +845,6 @@ void MainWindow::setInitialUrl(const QUrl &_url)
 {
     Q_ASSERT(_url.isValid());
     QUrl url = UrlUtils::fixUserEnteredUrl(_url);
-    if (url.scheme() == "http" || url.scheme() == "https") {
-        d->mGvCore->addUrlToRecentUrls(url);
-    }
     if (UrlUtils::urlIsDirectory(url)) {
         d->mBrowseAction->trigger();
         openDirUrl(url);
@@ -1092,6 +1089,7 @@ void MainWindow::slotPartCompleted()
     QUrl url = d->mViewMainPage->url();
     if (!url.isEmpty()) {
         d->mFileOpenRecentAction->addUrl(url);
+        d->mGvCore->addUrlToRecentFiles(url);
     }
     if (!KProtocolManager::supportsListing(url)) {
         return;
@@ -1450,6 +1448,9 @@ void MainWindow::loadConfig()
     d->mDirModel->adjustKindFilter(MimeTypeUtils::KIND_VIDEO, GwenviewConfig::listVideos());
 
     d->mFileOpenRecentAction->loadEntries(KConfigGroup(KSharedConfig::openConfig(), "Recent Files"));
+    foreach(QUrl url, d->mFileOpenRecentAction->urls()) {
+        d->mGvCore->addUrlToRecentFiles(url);
+    }
     d->mStartMainPage->loadConfig();
     d->mViewMainPage->loadConfig();
     d->mBrowseMainPage->loadConfig();

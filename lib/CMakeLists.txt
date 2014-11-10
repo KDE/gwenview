@@ -101,6 +101,7 @@ set(gwenviewlib_SRCS
     binder.cpp
     eventwatcher.cpp
     historymodel.cpp
+    recentfilesmodel.cpp
     archiveutils.cpp
     datewidget.cpp
     exiv2imageloader.cpp

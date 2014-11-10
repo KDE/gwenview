@@ -57,12 +57,12 @@ public:
     };
 
     QAbstractItemModel* recentFoldersModel() const;
-    QAbstractItemModel* recentUrlsModel() const;
+    QAbstractItemModel* recentFilesModel() const;
     SortedDirModel* sortedDirModel() const;
     AbstractSemanticInfoBackEnd* semanticInfoBackEnd() const;
 
     void addUrlToRecentFolders(QUrl);
-    void addUrlToRecentUrls(const QUrl &url);
+    void addUrlToRecentFiles(const QUrl &);
 
     QPalette palette(PaletteType type) const;
 

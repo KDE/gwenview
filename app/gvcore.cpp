@@ -44,6 +44,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/historymodel.h>
 #include <lib/hud/hudmessagebubble.h>
 #include <lib/mimetypeutils.h>
+#include <lib/recentfilesmodel.h>
 #include <lib/semanticinfo/semanticinfodirmodel.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
 #include <lib/transformimageoperation.h>
@@ -60,7 +61,7 @@ struct GvCorePrivate
     MainWindow* mMainWindow;
     SortedDirModel* mDirModel;
     HistoryModel* mRecentFoldersModel;
-    HistoryModel* mRecentUrlsModel;
+    RecentFilesModel* mRecentFilesModel;
     QPalette mPalettes[4];
 
     bool showSaveAsDialog(const QUrl &url, QUrl* outUrl, QByteArray* format)
@@ -151,7 +152,7 @@ GvCore::GvCore(MainWindow* mainWindow, SortedDirModel* dirModel)
     d->mMainWindow = mainWindow;
     d->mDirModel = dirModel;
     d->mRecentFoldersModel = 0;
-    d->mRecentUrlsModel = 0;
+    d->mRecentFilesModel = 0;
 
     d->setupPalettes();
 
@@ -172,12 +173,12 @@ QAbstractItemModel* GvCore::recentFoldersModel() const
     return d->mRecentFoldersModel;
 }
 
-QAbstractItemModel* GvCore::recentUrlsModel() const
+QAbstractItemModel* GvCore::recentFilesModel() const
 {
-    if (!d->mRecentUrlsModel) {
-        d->mRecentUrlsModel = new HistoryModel(const_cast<GvCore*>(this), KStandardDirs::locateLocal("appdata", "recenturls/"));
+    if (!d->mRecentFilesModel) {
+        d->mRecentFilesModel = new RecentFilesModel(const_cast<GvCore*>(this));
     }
-    return d->mRecentUrlsModel;
+    return d->mRecentFilesModel;
 }
 
 AbstractSemanticInfoBackEnd* GvCore::semanticInfoBackEnd() const
@@ -205,13 +206,13 @@ void GvCore::addUrlToRecentFolders(QUrl url)
     d->mRecentFoldersModel->addUrl(url);
 }
 
-void GvCore::addUrlToRecentUrls(const QUrl &url)
+void GvCore::addUrlToRecentFiles(const QUrl &url)
 {
     if (!GwenviewConfig::historyEnabled()) {
         return;
     }
-    recentUrlsModel();
-    d->mRecentUrlsModel->addUrl(url);
+    recentFilesModel();
+    d->mRecentFilesModel->addUrl(url);
 }
 
 void GvCore::saveAll()
@@ -359,7 +360,7 @@ void GvCore::slotConfigChanged()
 {
     if (!GwenviewConfig::historyEnabled()) {
         clearModel(recentFoldersModel());
-        clearModel(recentUrlsModel());
+        clearModel(recentFilesModel());
     }
     d->setupPalettes();
 }

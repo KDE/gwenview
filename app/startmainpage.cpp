@@ -46,6 +46,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/gwenviewconfig.h>
 #include <lib/thumbnailview/abstractthumbnailviewhelper.h>
 #include <lib/thumbnailview/previewitemdelegate.h>
+#include <lib/thumbnailprovider/thumbnailprovider.h>
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 #include <lib/semanticinfo/tagmodel.h>
@@ -74,33 +75,12 @@ public:
     }
 };
 
-/**
- * Inherit from QStyledItemDelegate to match KFilePlacesViewDelegate sizeHint
- * height.
- */
-class HistoryViewDelegate : public QStyledItemDelegate
-{
-public:
-    HistoryViewDelegate(QObject* parent = 0)
-        : QStyledItemDelegate(parent)
-        {}
-
-    virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
-    {
-        QSize sh = QStyledItemDelegate::sizeHint(option, index);
-        int iconSize = static_cast<QAbstractItemView*>(parent())->iconSize().height();
-        // Copied from KFilePlacesViewDelegate::sizeHint()
-        int height = option.fontMetrics.height() / 2 + qMax(iconSize, option.fontMetrics.height());
-        sh.setHeight(qMax(sh.height(), height));
-        return sh;
-    }
-};
-
 struct StartMainPagePrivate : public Ui_StartMainPage
 {
     StartMainPage* q;
     GvCore* mGvCore;
     KFilePlacesModel* mBookmarksModel;
+    ThumbnailProvider *mRecentFilesThumbnailProvider;
     bool mSearchUiInitialized;
 
     void setupSearchUi()
@@ -120,6 +100,22 @@ struct StartMainPagePrivate : public Ui_StartMainPage
         mHistoryWidget->setVisible(GwenviewConfig::historyEnabled());
         mHistoryDisabledLabel->setVisible(!GwenviewConfig::historyEnabled());
     }
+
+    void setupHistoryView(ThumbnailView *view)
+    {
+        view->setThumbnailViewHelper(new HistoryThumbnailViewHelper(view));
+        PreviewItemDelegate* delegate = new PreviewItemDelegate(view);
+        delegate->setContextBarActions(PreviewItemDelegate::NoAction);
+        delegate->setTextElideMode(Qt::ElideLeft);
+        view->setItemDelegate(delegate);
+        view->setThumbnailWidth(128);
+        view->setCreateThumbnailsForRemoteUrls(false);
+        QModelIndex index = view->model()->index(0, 0);
+        if (index.isValid()) {
+            view->setCurrentIndex(index);
+        }
+    }
+
 };
 
 static void initViewPalette(QAbstractItemView* view, const QColor& fgColor)
@@ -146,6 +142,7 @@ StartMainPage::StartMainPage(QWidget* parent, GvCore* gvCore)
 : QFrame(parent)
 , d(new StartMainPagePrivate)
 {
+    d->mRecentFilesThumbnailProvider = 0;
     d->q = this;
     d->mGvCore = gvCore;
     d->mSearchUiInitialized = false;
@@ -180,15 +177,7 @@ StartMainPage::StartMainPage(QWidget* parent, GvCore* gvCore)
 
     connect(d->mRecentFoldersView, &Gwenview::ThumbnailView::customContextMenuRequested, this, &StartMainPage::showRecentFoldersViewContextMenu);
 
-    // Url bag view
-    d->mRecentUrlsView->setItemDelegate(new HistoryViewDelegate(d->mRecentUrlsView));
-
-    connect(d->mRecentUrlsView, &QListView::customContextMenuRequested, this, &StartMainPage::showRecentFoldersViewContextMenu);
-
-    if (KGlobalSettings::changeCursorOverIcon()) {
-        d->mRecentUrlsView->setCursor(Qt::PointingHandCursor);
-    }
-    connect(d->mRecentUrlsView, &QListView::activated, this, &StartMainPage::slotListViewActivated);
+    connect(d->mRecentFilesView, &Gwenview::ThumbnailView::indexActivated, this, &StartMainPage::slotListViewActivated);
 
     d->updateHistoryTab();
     connect(GwenviewConfig::self(), &GwenviewConfig::configChanged, this, &StartMainPage::loadConfig);
@@ -198,6 +187,7 @@ StartMainPage::StartMainPage(QWidget* parent, GvCore* gvCore)
 
 StartMainPage::~StartMainPage()
 {
+    delete d->mRecentFilesThumbnailProvider;
     delete d;
 }
 
@@ -228,7 +218,7 @@ void StartMainPage::applyPalette(const QPalette& newPalette)
     initViewPalette(d->mBookmarksView, fgColor);
     initViewPalette(d->mTagView, fgColor);
     initViewPalette(d->mRecentFoldersView, fgColor);
-    initViewPalette(d->mRecentUrlsView, fgColor);
+    initViewPalette(d->mRecentFilesView, fgColor);
 }
 
 void StartMainPage::slotListViewActivated(const QModelIndex& index)
@@ -251,21 +241,14 @@ void StartMainPage::showEvent(QShowEvent* event)
 {
     if (GwenviewConfig::historyEnabled()) {
         if (!d->mRecentFoldersView->model()) {
-            d->mRecentFoldersView->setThumbnailViewHelper(new HistoryThumbnailViewHelper(d->mRecentFoldersView));
             d->mRecentFoldersView->setModel(d->mGvCore->recentFoldersModel());
-            PreviewItemDelegate* delegate = new PreviewItemDelegate(d->mRecentFoldersView);
-            delegate->setContextBarActions(PreviewItemDelegate::NoAction);
-            delegate->setTextElideMode(Qt::ElideLeft);
-            d->mRecentFoldersView->setItemDelegate(delegate);
-            d->mRecentFoldersView->setThumbnailWidth(128);
-            d->mRecentFoldersView->setCreateThumbnailsForRemoteUrls(false);
-            QModelIndex index = d->mRecentFoldersView->model()->index(0, 0);
-            if (index.isValid()) {
-                d->mRecentFoldersView->setCurrentIndex(index);
-            }
+            d->setupHistoryView(d->mRecentFoldersView);
         }
-        if (!d->mRecentUrlsView->model()) {
-            d->mRecentUrlsView->setModel(d->mGvCore->recentUrlsModel());
+        if (!d->mRecentFilesView->model()) {
+            d->mRecentFilesView->setModel(d->mGvCore->recentFilesModel());
+            d->mRecentFilesThumbnailProvider = new ThumbnailProvider();
+            d->mRecentFilesView->setThumbnailProvider(d->mRecentFilesThumbnailProvider);
+            d->setupHistoryView(d->mRecentFilesView);
         }
     }
     if (!d->mSearchUiInitialized) {
@@ -287,9 +270,8 @@ void StartMainPage::showRecentFoldersViewContextMenu(const QPoint& pos)
 
     // Create menu
     QMenu menu(this);
-    bool fromRecentUrls = view == d->mRecentUrlsView;
-    QAction* addToPlacesAction = fromRecentUrls ? 0 : menu.addAction(QIcon::fromTheme("bookmark-new"), i18n("Add to Places"));
-    QAction* removeAction = menu.addAction(QIcon::fromTheme("edit-delete"), fromRecentUrls ? i18n("Forget this URL") : i18n("Forget this Folder"));
+    QAction* addToPlacesAction = menu.addAction(QIcon::fromTheme("bookmark-new"), i18n("Add to Places"));
+    QAction* removeAction = menu.addAction(QIcon::fromTheme("edit-delete"), i18n("Forget this Folder"));
     menu.addSeparator();
     QAction* clearAction = menu.addAction(QIcon::fromTheme("edit-delete-all"), i18n("Forget All"));
 
