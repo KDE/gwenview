@@ -28,9 +28,9 @@ set(GWENVIEW_SEMANTICINFO_BACKEND_BALOO OFF)
 set(GWENVIEW_SEMANTICINFO_BACKEND "None" CACHE STRING "Semantic info backend for Gwenview (Baloo/Fake/None)")
 
 # Init GWENVIEW_SEMANTICINFO_BACKEND_* vars
-if (GWENVIEW_SEMANTICINFO_BACKEND STREQUAL "None")
+if(GWENVIEW_SEMANTICINFO_BACKEND STREQUAL "None")
     set(GWENVIEW_SEMANTICINFO_BACKEND_NONE ON)
-elseif (GWENVIEW_SEMANTICINFO_BACKEND STREQUAL "Fake")
+elseif(GWENVIEW_SEMANTICINFO_BACKEND STREQUAL "Fake")
     set(GWENVIEW_SEMANTICINFO_BACKEND_FAKE ON)
 else()
     set(GWENVIEW_SEMANTICINFO_BACKEND_BALOO ON)
@@ -74,6 +74,13 @@ endif()
 find_package(Kdcraw 2.4.2)
 set_package_properties(KDCRAW_FOUND PROPERTIES URL "http://www.kde.org" DESCRIPTION "KDE Dcraw library" TYPE OPTIONAL)
 
+
+find_package(X11)
+if(X11_FOUND)
+   find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED X11Extras)
+   set(HAVE_X11 1)
+endif()
+
 configure_file(config-gwenview.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-gwenview.h)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
@@ -90,3 +97,5 @@ add_subdirectory(images)
 add_subdirectory(cursors)
 add_subdirectory(color-schemes)
 add_subdirectory(doc)
+
+feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
