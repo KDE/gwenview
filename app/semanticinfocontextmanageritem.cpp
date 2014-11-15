@@ -210,7 +210,7 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
             } else {
                 action->setText(QString(rating, QChar(0x22C6))); /* 0x22C6 is the 'star' character */
             }
-            action->setShortcut(Qt::Key_0 + rating);
+            mActionCollection->setDefaultShortcut(action, Qt::Key_0 + rating);
             QObject::connect(action, SIGNAL(triggered()), mRatingMapper, SLOT(map()));
             mRatingMapper->setMapping(action, rating * 2);
             mActions << action;
