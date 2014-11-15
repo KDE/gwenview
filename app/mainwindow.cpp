@@ -1448,7 +1448,7 @@ void MainWindow::loadConfig()
     d->mDirModel->adjustKindFilter(MimeTypeUtils::KIND_VIDEO, GwenviewConfig::listVideos());
 
     d->mFileOpenRecentAction->loadEntries(KConfigGroup(KSharedConfig::openConfig(), "Recent Files"));
-    foreach(QUrl url, d->mFileOpenRecentAction->urls()) {
+    foreach(const QUrl &url, d->mFileOpenRecentAction->urls()) {
         d->mGvCore->addUrlToRecentFiles(url);
     }
     d->mStartMainPage->loadConfig();

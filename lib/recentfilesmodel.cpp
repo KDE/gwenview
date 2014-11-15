@@ -49,8 +49,7 @@ struct RecentFilesItem : public QStandardItem
 
     RecentFilesItem(const QUrl &url)
         : mUrl(url) {
-        QUrl urlForView = mUrl;
-        setText(urlForView.toDisplayString());
+        setText(mUrl.toDisplayString());
 
         QMimeDatabase db;
         const QString iconName = db.mimeTypeForUrl(mUrl).iconName();
