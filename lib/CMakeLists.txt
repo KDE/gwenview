@@ -232,7 +232,7 @@ if (WIN32)
     target_link_libraries(gwenviewlib ${EXPAT_LIBRARIES})
 endif()
 
-if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
+if (GWENVIEW_SEMANTICINFO_BACKEND_BALOO)
     target_link_libraries(gwenviewlib
         KF5::Baloo
         KF5::FileMetaData
