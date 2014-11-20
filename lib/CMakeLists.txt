@@ -235,7 +235,7 @@ if (HAVE_X11)
     target_link_libraries(gwenviewlib Qt5::X11Extras ${X11_X11_LIB})
 endif()
 
-if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
+if (GWENVIEW_SEMANTICINFO_BACKEND_BALOO)
     target_link_libraries(gwenviewlib
         KF5::Baloo
         KF5::FileMetaData
