@@ -92,7 +92,7 @@ install(TARGETS gwenview
 install(FILES gwenviewui.rc
     DESTINATION ${KXMLGUI_INSTALL_DIR}/gwenview)
 
-install(PROGRAMS gwenview.desktop
+install(PROGRAMS org.kde.gwenview.desktop
     DESTINATION ${XDG_APPS_INSTALL_DIR})
 install(FILES gwenview.appdata.xml
     DESTINATION ${SHARE_INSTALL_PREFIX}/appdata)
