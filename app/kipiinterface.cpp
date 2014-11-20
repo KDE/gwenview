@@ -35,12 +35,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KDirLister>
 
 // KIPI
-#include <libkipi/imagecollectionshared.h>
-#include <libkipi/imageinfo.h>
-#include <libkipi/imageinfoshared.h>
-#include <libkipi/plugin.h>
-#include <libkipi/pluginloader.h>
-#include <libkipi/version.h>
+#include <kipi/imagecollectionshared.h>
+#include <kipi/imageinfo.h>
+#include <kipi/imageinfoshared.h>
+#include <kipi/plugin.h>
+#include <kipi/pluginloader.h>
+#include <kipi/version.h>
 
 // local
 #include "mainwindow.h"
