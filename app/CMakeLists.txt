@@ -2,10 +2,6 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/..
     )
 
-# if (KIPI_FOUND)
-#     include_directories(${KIPI_INCLUDE_DIR})
-# endif()
-
 # For lib/gwenviewconfig.h and config-gwenview.h
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}/..

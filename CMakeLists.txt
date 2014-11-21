@@ -60,7 +60,9 @@ find_package(Exiv2)
 set_package_properties(EXIV2 PROPERTIES URL "http://www.exiv2.org" DESCRIPTION "image metadata support" TYPE REQUIRED)
 
 find_package(KF5Kipi)
-# macro_optional_find_package(Kipi)
+if (KF5Kipi_FOUND)
+   set(KIPI_FOUND true)
+endif()
 # set_package_properties(Kipi PROPERTIES URL"http://www.kipi-plugins.org" DESCRIPTION "Provides various image manipulation and export features" TYPE OPTIONAL)
 
 find_package(LCMS2)
@@ -75,8 +77,11 @@ if (NOT KF5Baloo_FOUND AND GWENVIEW_SEMANTICINFO_BACKEND_BALOO)
     set(GWENVIEW_SEMANTICINFO_BACKEND_NONE ON)
 endif ()
 
-find_package(Kdcraw 2.4.2)
-set_package_properties(KDCRAW_FOUND PROPERTIES URL "http://www.kde.org" DESCRIPTION "KDE Dcraw library" TYPE OPTIONAL)
+find_package(KF5KDcraw)
+if (KF5KDcraw_FOUND)
+   add_definitions(-DKDCRAW_FOUND)
+endif()
+#set_package_properties(KDCRAW_FOUND PROPERTIES URL "http://www.kde.org" DESCRIPTION "KDE Dcraw library" TYPE OPTIONAL)
 
 
 find_package(X11)
