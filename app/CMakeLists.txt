@@ -43,7 +43,7 @@ if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
         )
 endif()
 
-if (KIPI_FOUND)
+if (KF5Kipi_FOUND)
     set (gwenview_SRCS
         ${gwenview_SRCS}
         kipiexportaction.cpp
@@ -82,8 +82,8 @@ target_link_libraries(gwenview
 
 target_link_libraries(gwenview LINK_INTERFACE_LIBRARIES KF5::KIOCore Qt5::Core)
 
-if (KIPI_FOUND)
-    target_link_libraries(gwenview ${KIPI_LIBRARIES})
+if (KF5Kipi_FOUND)
+    target_link_libraries(gwenview KF5::Kipi)
 endif()
 
 install(TARGETS gwenview

@@ -59,6 +59,7 @@ set_package_properties(PNG PROPERTIES URL "http://www.libpng.org" DESCRIPTION "P
 find_package(Exiv2)
 set_package_properties(EXIV2 PROPERTIES URL "http://www.exiv2.org" DESCRIPTION "image metadata support" TYPE REQUIRED)
 
+find_package(KF5Kipi)
 # macro_optional_find_package(Kipi)
 # set_package_properties(Kipi PROPERTIES URL"http://www.kipi-plugins.org" DESCRIPTION "Provides various image manipulation and export features" TYPE OPTIONAL)
 

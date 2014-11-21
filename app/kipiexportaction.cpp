@@ -48,9 +48,9 @@ struct KIPIExportActionPrivate
         menu->clear();
 
         if (mDefaultAction) {
-            menu->addTitle(i18n("Last Used Plugin"));
+            menu->addSection(i18n("Last Used Plugin"));
             menu->addAction(mDefaultAction);
-            menu->addTitle(i18n("Other Plugins"));
+            menu->addSection(i18n("Other Plugins"));
         }
         Q_FOREACH(QAction * action, mExportActionList) {
             action->setIconVisibleInMenu(true);
