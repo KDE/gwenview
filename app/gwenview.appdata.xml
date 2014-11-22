@@ -7,6 +7,7 @@
   <name xml:lang="ca">Gwenview</name>
   <name xml:lang="cs">Gwenview</name>
   <name xml:lang="de">Gwenview</name>
+  <name xml:lang="el">Gwenview</name>
   <name xml:lang="en-GB">Gwenview</name>
   <name xml:lang="es">Gwenview</name>
   <name xml:lang="fi">Gwenview</name>
@@ -36,6 +37,7 @@
     </p>
     <p xml:lang="ca">El Gwenview és un visor d'imatges ràpid i senzill pel KDE.</p>
     <p xml:lang="de">Gwenview ist ein schneller und einfach zu verwendender Bildbetrachter für KDE.</p>
+    <p xml:lang="el">Το Gwenview είναι ένας γρήγορος και εύχρηστος προβολέας εγγράφων για το KDE.</p>
     <p xml:lang="en-GB">Gwenview is a fast and easy to use image viewer for KDE.</p>
     <p xml:lang="es">Gwenview es un visor de imágenes de KDE rápido y fácil de usar.</p>
     <p xml:lang="fi">Gwenview on nopea ja helppokäyttöinen kuvakatselin KDE:lle</p>
@@ -63,6 +65,7 @@
     <p xml:lang="ca">Característiques:</p>
     <p xml:lang="cs">Vlastnosti:</p>
     <p xml:lang="de">Funktionen:</p>
+    <p xml:lang="el">Χαρακτηριστικά:</p>
     <p xml:lang="en-GB">Features:</p>
     <p xml:lang="es">Funcionalidades:</p>
     <p xml:lang="fi">Ominaisuudet:</p>
@@ -90,6 +93,7 @@
       <li>Supports simple image manipulations: rotate, mirror, flip, and resize</li>
       <li xml:lang="ca">Implementa la manipulació d'imatges simples: gira, mirall, inverteix i canvia la mida</li>
       <li xml:lang="de">Unterstützt einfache Bildbearbeitung wie Drehen, Spiegeln waagerecht und senkrecht und Größenänderung</li>
+      <li xml:lang="el">Υποστηρίζει απλές λειτουργίες διαχείρισης εικόνας: περιστροφή, καθρεπτισμό, αναστροφή και αλλαγή μεγέθους</li>
       <li xml:lang="en-GB">Supports simple image manipulations: rotate, mirror, flip, and resize</li>
       <li xml:lang="es">Permite manipulaciones simples de imágenes: rotar, reflejar, invertir y cambiar de tamaño</li>
       <li xml:lang="fi">Tukee yksinkertaista kuvien manipulointia: kiertämistä, kääntämistä, peilaamista ja koon muuttamista</li>
@@ -116,6 +120,7 @@
       <li>Supports basic file management actions such as copy, move, delete, and others</li>
       <li xml:lang="ca">Implementa les accions bàsiques per a la gestió de fitxers com copia, mou, suprimeix i altres</li>
       <li xml:lang="de">Grundlegende Dateiverwaltungsaktionen wie Kopieren, Verschieben, Löschen und weitere Aktionen</li>
+      <li xml:lang="el">Υποστηρίζει βασικές ενέργειες διαχείρισης αρχείων όπως αντιγραφή, μετακίνηση, διαγραφή κ.α.</li>
       <li xml:lang="en-GB">Supports basic file management actions such as copy, move, delete, and others</li>
       <li xml:lang="es">Permite acciones básicas de gestión de archivos, como copiar, mover y borrar, entre otras</li>
       <li xml:lang="fi">Tukee tiedostonhallinnan perusasioita kuten kopiointia, siirtämistä, poistamista ynnä muuta</li>
@@ -142,6 +147,7 @@
       <li>Functions both as a standalone application and an embedded viewer in the Konqueror web browser</li>
       <li xml:lang="ca">Funciona tant com una aplicació independent i un visor incrustat al navegador web Konqueror</li>
       <li xml:lang="de">Funktioniert sowohl als eigenständiges Programm als auch als eingebetteter Betrachter im Webbrowser Konqueror.</li>
+      <li xml:lang="el">Λειτουργεί και ως αυτόνομη εφαρμογή και ως ενσωματωμένος προβολέας στον περιηγητή ιστού Konqueror</li>
       <li xml:lang="en-GB">Functions both as a standalone application and an embedded viewer in the Konqueror web browser</li>
       <li xml:lang="es">Funciona como aplicación independiente o como visor integrado en el navegador web Konqueror</li>
       <li xml:lang="fi">Toimii sekä erillisenä ohjelmana että upotettuna katselimena Konqueror-verkkoselaimessa</li>
@@ -168,6 +174,7 @@
       <li>Can be extended using KIPI plugins.</li>
       <li xml:lang="ca">Es pot estendre emprant els connectors KIPI</li>
       <li xml:lang="de">Kann durch KIPI-Module erweitert werden.</li>
+      <li xml:lang="el">Μπορεί να επεκταθεί με πρόσθετα KIPI.</li>
       <li xml:lang="en-GB">Can be extended using KIPI plugins.</li>
       <li xml:lang="es">Se puede extender usando complementos de KIPI.</li>
       <li xml:lang="fi">Sitä voi laajentaa KIPI-liitännäisillä.</li>
