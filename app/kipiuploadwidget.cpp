@@ -39,7 +39,7 @@ KIPIUploadWidget::KIPIUploadWidget(KIPIInterface* interface, QWidget* parent)
 , mInterface(interface)
 {
     QLabel* label = new QLabel(this);
-    QUrl url = mInterface->currentAlbum().uploadPath();
+    QUrl url = mInterface->currentAlbum().uploadUrl();
     label->setText(i18n("Images will be uploaded here:\n%1", url.toDisplayString()));
     label->setWordWrap(true);
 
