@@ -59,20 +59,29 @@ set_package_properties(PNG PROPERTIES URL "http://www.libpng.org" DESCRIPTION "P
 find_package(Exiv2)
 set_package_properties(EXIV2 PROPERTIES URL "http://www.exiv2.org" DESCRIPTION "image metadata support" TYPE REQUIRED)
 
-# macro_optional_find_package(Kipi)
+find_package(KF5Kipi)
+if (KF5Kipi_FOUND)
+   set(KIPI_FOUND true)
+endif()
 # set_package_properties(Kipi PROPERTIES URL"http://www.kipi-plugins.org" DESCRIPTION "Provides various image manipulation and export features" TYPE OPTIONAL)
 
 find_package(LCMS2)
 set_package_properties(LCMS2 PROPERTIES URL "http://www.littlecms.com" DESCRIPTION "Color management engine" TYPE REQUIRED)
 
-if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
-    # We need Baloo for all backends but "None"
-    find_package(KF5Baloo)
-    set_package_properties(KF5Baloo PROPERTIES URL "https://projects.kde.org/projects/kde/kdelibs/baloo" DESCRIPTION "Desktop-wide semantic information support" TYPE OPTIONAL)
-endif()
+find_package(KF5Baloo 5.1.90)
+set_package_properties(KF5Baloo PROPERTIES URL "https://projects.kde.org/projects/kde/kdelibs/baloo" DESCRIPTION "Desktop-wide semantic information support" TYPE OPTIONAL)
 
-find_package(Kdcraw 2.4.2)
-set_package_properties(KDCRAW_FOUND PROPERTIES URL "http://www.kde.org" DESCRIPTION "KDE Dcraw library" TYPE OPTIONAL)
+if (NOT KF5Baloo_FOUND AND GWENVIEW_SEMANTICINFO_BACKEND_BALOO)
+    message (STATUS "You have selected Baloo for semantic backend, but required version was not found. Overriding the backend to None")
+    unset(GWENVIEW_SEMANTICINFO_BACKEND_BALOO)
+    set(GWENVIEW_SEMANTICINFO_BACKEND_NONE ON)
+endif ()
+
+find_package(KF5KDcraw)
+if (KF5KDcraw_FOUND)
+   add_definitions(-DKDCRAW_FOUND)
+endif()
+#set_package_properties(KDCRAW_FOUND PROPERTIES URL "http://www.kde.org" DESCRIPTION "KDE Dcraw library" TYPE OPTIONAL)
 
 
 find_package(X11)

@@ -185,3 +185,4 @@ X-DocPath=gwenview/index.html
 # primary application associated with images, but less than Konqueror or Dolphin
 # so that Gwenview is not the primary applications for folders.
 InitialPreference=8
+X-DBUS-ServiceName=org.kde.gwenview

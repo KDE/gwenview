@@ -23,9 +23,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #define KIPIINTERFACE_H
 
 // KIPI
-#include <libkipi/interface.h>
-#include <libkipi/imagecollectionshared.h>
-#include <libkipi/plugin.h>
+#include <kipi/interface.h>
+#include <kipi/imagecollectionshared.h>
+#include <kipi/plugin.h>
 
 class QAction;
 

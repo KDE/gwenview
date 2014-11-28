@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KDE
 #include <QDebug>
 #ifdef KDCRAW_FOUND
-#include <libkdcraw/kdcraw.h>
+#include <kdcraw/kdcraw.h>
 #endif
 
 // Qt

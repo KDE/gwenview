@@ -33,14 +33,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QUrl>
 #include <KXMLGUIFactory>
 #include <KDirLister>
+#include <KLocalizedString>
 
 // KIPI
-#include <libkipi/imagecollectionshared.h>
-#include <libkipi/imageinfo.h>
-#include <libkipi/imageinfoshared.h>
-#include <libkipi/plugin.h>
-#include <libkipi/pluginloader.h>
-#include <libkipi/version.h>
+#include <kipi/imagecollectionshared.h>
+#include <kipi/imageinfo.h>
+#include <kipi/imageinfoshared.h>
+#include <kipi/plugin.h>
+#include <kipi/pluginloader.h>
+//#include <kipi/version.h>
 
 // local
 #include "mainwindow.h"
@@ -75,7 +76,7 @@ public:
 
         mAttributes.insert("name", url.fileName());
         mAttributes.insert("comment", comment());
-        mAttributes.insert("date", TimeUtils::dateTimeForFileItem(item).dateTime());
+        mAttributes.insert("date", TimeUtils::dateTimeForFileItem(item));
         mAttributes.insert("orientation", orientation());
         mAttributes.insert("title", prettyFileName());
         int size = item.size();
@@ -83,26 +84,6 @@ public:
             mAttributes.insert("filesize", size);
         }
     }
-
-#if (KIPI_VERSION < 0x020000)
-    QString name()
-    {
-        return mAttributes.value("name").toString();
-    }
-
-    QString description()
-    {
-        return mAttributes.value("comment").toString();
-    }
-
-    void setDescription(const QString&)
-    {}
-
-    int angle()
-    {
-        return mAttributes.value("angle").toInt();
-    }
-#endif
 
     QMap<QString, QVariant> attributes() {
         return mAttributes;
@@ -152,6 +133,7 @@ private:
 
     int orientation() const
     {
+#if 0 //PORT QT5
         KFileMetaInfo metaInfo(_url);
 
         if (!metaInfo.isValid()) {
@@ -186,8 +168,8 @@ private:
             qWarning() << "Can't represent an orientation value of" << orientation << "as an angle (" << _url << ')';
             return 0;
         }
-
-        qWarning() << "Don't know how to handle an orientation value of" << orientation << '(' << _url << ')';
+#endif
+        //qWarning() << "Don't know how to handle an orientation value of" << orientation << '(' << _url << ')';
         return 0;
     }
 
@@ -232,7 +214,7 @@ struct KIPIInterfacePrivate
     {
         QAction * action = new QAction(q);
         action->setText(text);
-        action->setShortcutConfigurable(false);
+        //PORT QT5 action->setShortcutConfigurable(false);
         action->setEnabled(false);
         return action;
     }
@@ -286,13 +268,9 @@ void KIPIInterface::loadPlugins()
     d->mMenuInfoMap[KIPI::BatchPlugin]       = MenuInfo(i18nc("@title:menu", "Batch Processing"));
     d->mMenuInfoMap[KIPI::CollectionsPlugin] = MenuInfo(i18nc("@title:menu", "Collections"));
 
-#if (KIPI_VERSION >= 0x020000)
     d->mPluginLoader = new KIPI::PluginLoader();
     d->mPluginLoader->setInterface(this);
     d->mPluginLoader->init();
-#else
-    d->mPluginLoader = new KIPI::PluginLoader(QStringList(), this);
-#endif
     d->mPluginQueue = d->mPluginLoader->pluginList();
     d->mPluginMenu->addAction(d->mLoadingAction);
     loadOnePlugin();

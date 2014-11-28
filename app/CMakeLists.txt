@@ -2,10 +2,6 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/..
     )
 
-# if (KIPI_FOUND)
-#     include_directories(${KIPI_INCLUDE_DIR})
-# endif()
-
 # For lib/gwenviewconfig.h and config-gwenview.h
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}/..
@@ -43,7 +39,7 @@ if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
         )
 endif()
 
-if (KIPI_FOUND)
+if (KF5Kipi_FOUND)
     set (gwenview_SRCS
         ${gwenview_SRCS}
         kipiexportaction.cpp
@@ -82,8 +78,8 @@ target_link_libraries(gwenview
 
 target_link_libraries(gwenview LINK_INTERFACE_LIBRARIES KF5::KIOCore Qt5::Core)
 
-if (KIPI_FOUND)
-    target_link_libraries(gwenview ${KIPI_LIBRARIES})
+if (KF5Kipi_FOUND)
+    target_link_libraries(gwenview KF5::Kipi)
 endif()
 
 install(TARGETS gwenview
@@ -92,7 +88,7 @@ install(TARGETS gwenview
 install(FILES gwenviewui.rc
     DESTINATION ${KXMLGUI_INSTALL_DIR}/gwenview)
 
-install(PROGRAMS gwenview.desktop
+install(PROGRAMS org.kde.gwenview.desktop
     DESTINATION ${XDG_APPS_INSTALL_DIR})
 install(FILES gwenview.appdata.xml
     DESTINATION ${SHARE_INSTALL_PREFIX}/appdata)

@@ -26,8 +26,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KDE
 
 // KIPI
-#include <libkipi/imagecollection.h>
-#include <libkipi/imagecollectionselector.h>
+#include <kipi/imagecollection.h>
+#include <kipi/imagecollectionselector.h>
 
 // Local
 #include "kipiinterface.h"
