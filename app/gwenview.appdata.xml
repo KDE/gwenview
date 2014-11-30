@@ -13,6 +13,7 @@
   <name xml:lang="es">Gwenview</name>
   <name xml:lang="fi">Gwenview</name>
   <name xml:lang="hu">Gwenview</name>
+  <name xml:lang="id">Gwenview</name>
   <name xml:lang="ko">Gwenview</name>
   <name xml:lang="lt">Gwenview</name>
   <name xml:lang="nds">Gwenview</name>
@@ -43,6 +44,7 @@
     <p xml:lang="es">Gwenview es un visor de imágenes de KDE rápido y fácil de usar.</p>
     <p xml:lang="fi">Gwenview on nopea ja helppokäyttöinen kuvakatselin KDE:lle</p>
     <p xml:lang="hu">A Gwenview egy gyors és egyszerűen használható képmegjelenítő a KDE-hez.</p>
+    <p xml:lang="id">Gwenview adalah sebuah penampil gambar cepat dan mudah untuk KDE.</p>
     <p xml:lang="ko">Gwenview는 KDE용 빠르고 사용하기 편한 그림 뷰어입니다.</p>
     <p xml:lang="lt">Gwenview yra greita ir lengva naudoti paveikslėlių žiūryklė skirta KDE.</p>
     <p xml:lang="nds">Gwenview is en gau Bildkieker för KDE, de sik eenfach bruken lett.</p>
@@ -71,6 +73,7 @@
     <p xml:lang="es">Funcionalidades:</p>
     <p xml:lang="fi">Ominaisuudet:</p>
     <p xml:lang="hu">Szolgáltatások:</p>
+    <p xml:lang="id">Fitur:</p>
     <p xml:lang="ko">기능:</p>
     <p xml:lang="lt">Galimybės:</p>
     <p xml:lang="nds">Markmalen:</p>
@@ -99,6 +102,7 @@
       <li xml:lang="es">Permite manipulaciones simples de imágenes: rotar, reflejar, invertir y cambiar de tamaño</li>
       <li xml:lang="fi">Tukee yksinkertaista kuvien manipulointia: kiertämistä, kääntämistä, peilaamista ja koon muuttamista</li>
       <li xml:lang="hu">Egyszerű képműveletek támogatása: forgatás, tükrözés, átméretezés</li>
+      <li xml:lang="id">Mendukung manipulasi gambar sederhana: rotasi, cermin, balik, dan merubah ukuran</li>
       <li xml:lang="ko">간단한 그림 조작: 회전, 대칭, 반전, 크기 조정</li>
       <li xml:lang="lt">Palaiko paprastas paveikslėlių manipuliacijas: pasukimas, veidrodis, apvertimas ir dydžio keitimą</li>
       <li xml:lang="nds">Ünnerstütt eenfach Bildbewerken: Dreihen, Spegeln, Ümdreihen und Grött topassen</li>
@@ -126,6 +130,7 @@
       <li xml:lang="es">Permite acciones básicas de gestión de archivos, como copiar, mover y borrar, entre otras</li>
       <li xml:lang="fi">Tukee tiedostonhallinnan perusasioita kuten kopiointia, siirtämistä, poistamista ynnä muuta</li>
       <li xml:lang="hu">Egyszerű fájlművelet, mint például másolás, áthelyezés, törlés támogatása</li>
+      <li xml:lang="id">Mendukung aksi managemen berkas dasar seperti salin, pindah, hapus, dan lain-lain</li>
       <li xml:lang="ko">파일 복사, 이동, 삭제와 같은 기본 파일 관리 작업</li>
       <li xml:lang="lt">Palaiko paprastą failų tvarkymo veiksmus kaip kopijavimą, perkėlimą, trynimą ir kitus</li>
       <li xml:lang="nds">Ünnerstütt eenfach Dateipleegakschonen as Koperen, Verschuven, Wegdoon un en poor anner.</li>
@@ -153,6 +158,7 @@
       <li xml:lang="es">Funciona como aplicación independiente o como visor integrado en el navegador web Konqueror</li>
       <li xml:lang="fi">Toimii sekä erillisenä ohjelmana että upotettuna katselimena Konqueror-verkkoselaimessa</li>
       <li xml:lang="hu">Önálló alkalmazásként és a Konqueror webböngészőbe épített képmegjelenítőként is működik</li>
+      <li xml:lang="id">Fungsi sebagai aplikasi mandiri dan penampil tertanam dalam peramban web Konqueror</li>
       <li xml:lang="ko">단독 프로그램 및 Konqueror 웹 브라우저의 플러그인으로 작동</li>
       <li xml:lang="lt">Veikia kaip pavienė programa ir kaip įterpta žiūryklė Konqueror naršyklėje</li>
       <li xml:lang="nds">Funkscheneert för sik oder inbett na den Nettkieker Konqueror</li>
@@ -180,6 +186,7 @@
       <li xml:lang="es">Se puede extender usando complementos de KIPI.</li>
       <li xml:lang="fi">Sitä voi laajentaa KIPI-liitännäisillä.</li>
       <li xml:lang="hu">KIPI bővítményekkel bővíthető.</li>
+      <li xml:lang="id">Dapat diekstensi menggunakan plugin KIPI.</li>
       <li xml:lang="ko">KIPI 플러그인을 통한 확장성 제공.</li>
       <li xml:lang="lt">Gali būti praplėsta naudojant KIPI priedus.</li>
       <li xml:lang="nds">Laat sik mit KIPI-Modulen verwiedern</li>
