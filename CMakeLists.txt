@@ -65,13 +65,14 @@ set_package_properties(EXIV2 PROPERTIES URL "http://www.exiv2.org" DESCRIPTION "
 find_package(LCMS2)
 set_package_properties(LCMS2 PROPERTIES URL "http://www.littlecms.com" DESCRIPTION "Color management engine" TYPE REQUIRED)
 
-find_package(KF5Baloo 5.1.90)
-set_package_properties(KF5Baloo PROPERTIES URL "https://projects.kde.org/projects/kde/kdelibs/baloo" DESCRIPTION "Desktop-wide semantic information support" TYPE OPTIONAL)
-
-if (NOT KF5Baloo_FOUND AND GWENVIEW_SEMANTICINFO_BACKEND_BALOO)
-    message (STATUS "You have selected Baloo for semantic backend, but required version was not found. Overriding the backend to None")
-    unset(GWENVIEW_SEMANTICINFO_BACKEND_BALOO)
-    set(GWENVIEW_SEMANTICINFO_BACKEND_NONE ON)
+if (GWENVIEW_SEMANTICINFO_BACKEND_BALOO)
+    find_package(KF5Baloo 5.1.90)
+    set_package_properties(KF5Baloo PROPERTIES URL "https://projects.kde.org/projects/kde/kdelibs/baloo" DESCRIPTION "Desktop-wide semantic information support" TYPE OPTIONAL)
+    if (NOT KF5Baloo_FOUND)
+        message (STATUS "You have selected Baloo for semantic backend, but required version was not found. Overriding the backend to None")
+        unset(GWENVIEW_SEMANTICINFO_BACKEND_BALOO)
+        set(GWENVIEW_SEMANTICINFO_BACKEND_NONE ON)
+    endif ()
 endif ()
 
 find_package(Kdcraw 2.4.2)
