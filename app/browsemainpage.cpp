@@ -337,7 +337,7 @@ void BrowseMainPage::updateSortOrder()
     GV_RETURN_IF_FAIL(action);
 
     // This works because for now Sorting::Enum maps to KDirModel::ModelColumns
-    d->mDirModel->setSortRole(sortingFromSortAction(action));
+    d->mDirModel->sort(sortingFromSortAction(action));
 }
 
 void BrowseMainPage::updateThumbnailDetails()

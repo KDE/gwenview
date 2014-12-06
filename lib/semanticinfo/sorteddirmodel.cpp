@@ -268,7 +268,7 @@ bool SortedDirModel::lessThan(const QModelIndex& left, const QModelIndex& right)
         return leftIsDirOrArchive;
     }
 
-    if (sortRole() != KDirModel::ModifiedTime) {
+    if (sortColumn() != KDirModel::ModifiedTime) {
         return KDirSortFilterProxyModel::lessThan(left, right);
     }
 
