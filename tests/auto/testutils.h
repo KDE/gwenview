@@ -46,9 +46,7 @@ inline QString pathForTestFile(const QString& name)
 
 inline QUrl urlForTestFile(const QString& name)
 {
-    QUrl url;
-    url.setPath(pathForTestFile(name));
-    return url;
+    return QUrl::fromLocalFile(pathForTestFile(name));
 }
 
 inline QString pathForTestOutputFile(const QString& name)
@@ -58,9 +56,7 @@ inline QString pathForTestOutputFile(const QString& name)
 
 inline QUrl urlForTestOutputFile(const QString& name)
 {
-    QUrl url;
-    url.setPath(pathForTestOutputFile(name));
-    return url;
+    return QUrl::fromLocalFile(pathForTestOutputFile(name));
 }
 
 inline bool waitForSignal(const QSignalSpy& spy, int timeout = 5)

@@ -22,6 +22,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Qt
 #include <QObject>
+#include <QDebug>
+#include <QApplication>
 
 // KDE
 #include <KJob>
@@ -86,7 +88,7 @@ private Q_SLOTS:
 
     void slotDestroyed()
     {
-        kWarning() << "Destroyed";
+        qWarning() << "Destroyed";
         mError = -1;
         mDone = true;
     }

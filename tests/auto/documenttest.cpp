@@ -27,7 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KJobUiDelegate>
 #include <KIO/NetAccess>
 #include <qtest.h>
-#include <libkdcraw/kdcraw.h>
+#include <KDCRAW/KDcraw>
 
 // Local
 #include "../lib/abstractimageoperation.h"
@@ -559,7 +559,7 @@ void DocumentTest::testModifyAndSaveAs()
     QVERIFY(DocumentFactory::instance()->modifiedDocumentList().isEmpty());
 
     QCOMPARE(documentChangedSpy.count(), 2);
-    QUrl::List modifiedUrls = QUrl::List() << url << destUrl;
+    QList<QUrl> modifiedUrls = QList<QUrl>() << url << destUrl;
     QVERIFY(modifiedUrls.contains(url));
     QVERIFY(modifiedUrls.contains(destUrl));
 }
