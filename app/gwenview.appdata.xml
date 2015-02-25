@@ -5,6 +5,7 @@
   <project_license>GPL-2.0+</project_license>
   <name>Gwenview</name>
   <name xml:lang="ar">جونفيو</name>
+  <name xml:lang="bs">Gwenview</name>
   <name xml:lang="ca">Gwenview</name>
   <name xml:lang="cs">Gwenview</name>
   <name xml:lang="da">Gwenview</name>
@@ -72,6 +73,7 @@
     <p xml:lang="zh-TW">Gwenview 是 KDE 裡一套快速並簡易使用的影像檢視器。</p>
     <p>Features:</p>
     <p xml:lang="ar">الميزات:</p>
+    <p xml:lang="bs">Svojstva:</p>
     <p xml:lang="ca">Característiques:</p>
     <p xml:lang="cs">Vlastnosti:</p>
     <p xml:lang="de">Funktionen:</p>
