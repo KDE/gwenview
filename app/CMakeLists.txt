@@ -65,7 +65,8 @@ if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
         )
 endif()
 
-kde4_add_app_icon(gwenview_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../icons/hi*-apps-gwenview.png")
+file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../icons/hi*-apps-gwenview.png")
+ecm_add_app_icon(gwenview_SRCS ICONS ${ICONS_SRCS})
 
 add_executable(gwenview ${gwenview_SRCS})
 

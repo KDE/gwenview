@@ -27,7 +27,8 @@ ki18n_wrap_ui(importer_SRCS
     thumbnailpage.ui
     )
 
-kde4_add_app_icon(importer_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../icons/hi*-apps-gwenview-importer.png")
+file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../icons/hi*-apps-gwenview-importer.png")
+ecm_add_app_icon(importer_SRCS ICONS ${ICONS_SRCS})
 
 kconfig_add_kcfg_files(importer_SRCS
     importerconfig.kcfgc
