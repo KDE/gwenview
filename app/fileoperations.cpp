@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QFileDialog>
 
 // KDE
-#include <KInputDialog>
+#include <QInputDialog>
 #include <KIO/CopyJob>
 #include <KIO/DeleteJob>
 #include <KIO/Job>
@@ -201,12 +201,10 @@ void showMenuForDroppedUrls(QWidget* parent, const QList<QUrl>& urlList, const Q
 
 void rename(const QUrl &oldUrl, QWidget* parent)
 {
-    QString name = KInputDialog::getText(
+    QString name = QInputDialog::getText(parent, 
                        i18nc("@title:window", "Rename") /* caption */,
                        xi18n("Rename <filename>%1</filename> to:", oldUrl.fileName()) /* label */,
-                       oldUrl.fileName() /* value */,
-                       0 /* ok */,
-                       parent
+                       QLineEdit::Normal, oldUrl.fileName() /* value */
                    );
     if (name.isEmpty() || name == oldUrl.fileName()) {
         return;
