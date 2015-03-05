@@ -48,7 +48,7 @@ void ImporterTest::init()
                     << urlForTestFile("import/pict0003.jpg")
                     ;
 
-    mTempDir.reset(new KTempDir());
+    mTempDir.reset(new QTemporaryDir());
 }
 
 void ImporterTest::testContentsAreIdentical()

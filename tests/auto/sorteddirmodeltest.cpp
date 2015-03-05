@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KDE
 #include <qtest.h>
 #include <KDirLister>
-#include <KTempDir>
+#include <QTemporaryDir>
 
 using namespace Gwenview;
 

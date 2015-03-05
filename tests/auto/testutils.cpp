@@ -161,7 +161,7 @@ bool imageCompare(const QImage& img1, const QImage& img2)
 SandBoxDir::SandBoxDir()
 : mTempDir(QDir::currentPath() + "/sandbox-")
 {
-    setPath(mTempDir.name());
+    setPath(mTempDir.path());
 }
 
 void SandBoxDir::fill(const QStringList& filePaths)

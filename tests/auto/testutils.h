@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // KDE
 #include <QDebug>
-#include <KTempDir>
+#include <QTemporaryDir>
 #include <QUrl>
 
 #include "config-gwenview.h"
@@ -102,7 +102,7 @@ public:
     void fill(const QStringList& files);
 
 private:
-    KTempDir mTempDir;
+    QTemporaryDir mTempDir;
 };
 
 /**

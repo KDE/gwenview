@@ -71,7 +71,7 @@ const char* BOOKMARKS_XML =
 void PlaceTreeModelTest::initTestCase()
 {
     Q_ASSERT(mTempDir.exists());
-    QDir dir(mTempDir.name());
+    QDir dir(mTempDir.path());
 
     const bool dir1created = dir.mkdir("url1");
     Q_ASSERT(dir1created);

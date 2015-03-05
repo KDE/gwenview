@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KDE
 #include <QDebug>
 #include <KFilePlacesModel>
-#include <KTempDir>
+#include <QTemporaryDir>
 #include <qtest.h>
 
 // Local
@@ -59,15 +59,15 @@ void HistoryModelTest::testAddUrl()
     QDateTime d1 = QDateTime::fromString("2008-02-03T12:34:56", Qt::ISODate);
     QUrl u2 = QUrl::fromLocalFile("/root");
     QDateTime d2 = QDateTime::fromString("2009-01-29T23:01:47", Qt::ISODate);
-    KTempDir dir;
+    QTemporaryDir dir;
     {
-        HistoryModel model(0, dir.name());
+        HistoryModel model(0, dir.path());
         model.addUrl(u1, d1);
         model.addUrl(u2, d2);
         testModel(model, u2, u1);
     }
 
-    HistoryModel model(0, dir.name());
+    HistoryModel model(0, dir.path());
     testModel(model, u2, u1);
 
     // Make u1 the most recent
@@ -85,9 +85,9 @@ void HistoryModelTest::testGarbageCollect()
     QUrl u3 = QUrl::fromLocalFile("/usr");
     QDateTime d3 = QDateTime::fromString("2009-03-24T22:42:15", Qt::ISODate);
 
-    KTempDir dir;
+    QTemporaryDir dir;
     {
-        HistoryModel model(0, dir.name(), 2);
+        HistoryModel model(0, dir.path(), 2);
         model.addUrl(u1, d1);
         model.addUrl(u2, d2);
         testModel(model, u2, u1);
@@ -97,7 +97,7 @@ void HistoryModelTest::testGarbageCollect()
     // Create a model with a larger history so that if garbage collecting fails
     // to remove the collected url, the size of the model won't pass
     // testModel()
-    HistoryModel model(0, dir.name(), 10);
+    HistoryModel model(0, dir.path(), 10);
     testModel(model, u3, u2);
 }
 
@@ -108,12 +108,12 @@ void HistoryModelTest::testRemoveRows()
     QUrl u2 = QUrl::fromLocalFile("/root");
     QDateTime d2 = QDateTime::fromString("2009-01-29T23:01:47", Qt::ISODate);
 
-    KTempDir dir;
-    HistoryModel model(0, dir.name(), 2);
+    QTemporaryDir dir;
+    HistoryModel model(0, dir.path(), 2);
     model.addUrl(u1, d1);
     model.addUrl(u2, d2);
     model.removeRows(0, 1);
     QCOMPARE(model.rowCount(), 1);
-    QDir qDir(dir.name());
+    QDir qDir(dir.path());
     QCOMPARE(qDir.entryList(QDir::Files | QDir::NoDotAndDotDot).count(), 1);
 }
