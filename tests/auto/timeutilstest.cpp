@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // KDE
 #include <KFileItem>
-#include <KTemporaryFile>
+#include <QTemporaryFile>
 #include <qtest.h>
 
 // Local
@@ -73,7 +73,7 @@ void TimeUtilsTest::testBasic()
 
 void TimeUtilsTest::testCache()
 {
-    KTemporaryFile tempFile;
+    QTemporaryFile tempFile;
     QVERIFY(tempFile.open());
     QUrl url = QUrl::fromLocalFile(tempFile.fileName());
     KFileItem item1(KFileItem::Unknown, KFileItem::Unknown, url);
