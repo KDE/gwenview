@@ -10,6 +10,7 @@ endif()
 macro(gv_add_unit_test _test)
     set(_src ${_test}.cpp ${ARGN})
     add_executable(${_test} ${_src})
+    add_test( ${_test} ${_test} )
     ecm_mark_as_test(${_test})
     target_link_libraries(${_test}
         KF5::KDELibs4Support
