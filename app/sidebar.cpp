@@ -32,6 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KDE
 #include <KGlobalSettings>
 #include <KIconLoader>
+#include <QFontDatabase>
 
 // Local
 
@@ -206,7 +207,7 @@ SideBar::SideBar(QWidget* parent)
 : QTabWidget(parent)
 , d(new SideBarPrivate)
 {
-    setFont(KGlobalSettings::smallestReadableFont());
+    setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
     tabBar()->setDocumentMode(true);
     tabBar()->setUsesScrollButtons(false);
     tabBar()->setFocusPolicy(Qt::NoFocus);

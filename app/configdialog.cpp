@@ -33,6 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "ui_advancedconfigpage.h"
 #include <lib/gwenviewconfig.h>
 #include <lib/invisiblebuttongroup.h>
+#include <QFontDatabase>
 
 namespace Gwenview
 {
@@ -110,7 +111,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     widget = setupPage(d->mAdvancedConfigPage);
     pageItem = addPage(widget, i18n("Advanced"));
     pageItem->setIcon(QIcon::fromTheme("preferences-other"));
-    d->mAdvancedConfigPage.cacheHelpLabel->setFont(KGlobalSettings::smallestReadableFont());
+    d->mAdvancedConfigPage.cacheHelpLabel->setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
 
     updateViewBackgroundFrame();
 }

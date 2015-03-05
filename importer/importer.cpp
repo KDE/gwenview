@@ -43,6 +43,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <fileutils.h>
 #include <filenameformater.h>
 #include <lib/timeutils.h>
+#include <QDir>
 
 namespace Gwenview
 {
@@ -76,7 +77,7 @@ struct ImporterPrivate
         Q_ASSERT(url.isLocalFile());
         // FIXME: Support remote urls
 
-        if (!KStandardDirs::makeDir(url.toLocalFile())) {
+        if (!QDir().mkpath(url.toLocalFile())) {
             emitError(i18n("Could not create destination folder."));
             return false;
         }

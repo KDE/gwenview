@@ -51,7 +51,7 @@ struct ImporterConfigDialogPrivate : public Ui_ImporterConfigDialog
         end = map.constEnd();
         for (; it != end; ++it) {
             QString keyword = '{' + it.key() + '}';
-            QString explanation = Qt::escape(it.value());
+            QString explanation = it.value().toHtmlEscaped();
             QString link = QString("<a href='%1'>%1</a>").arg(keyword);
             helpText += "<li>" + i18nc("%1 is the importer keyword, %2 is keyword explanation", "%1: %2", link, explanation) + "</li>";
         }
@@ -96,7 +96,7 @@ void ImporterConfigDialog::slotHelpLinkActivated(const QString& keyword)
 void ImporterConfigDialog::updatePreview()
 {
     FileNameFormater formater(d->kcfg_AutoRenameFormat->text());
-    d->mPreviewOutputLabel->setText(formater.format(KUrl::fromPath('/' + PREVIEW_FILENAME), PREVIEW_DATETIME));
+    d->mPreviewOutputLabel->setText(formater.format(QUrl::fromLocalFile('/' + PREVIEW_FILENAME), PREVIEW_DATETIME));
 }
 
 } // namespace

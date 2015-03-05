@@ -38,6 +38,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KService>
 #include <KStandardGuiItem>
 #include <Solid/Device>
+#include <QStandardPaths>
 
 // Local
 #include "dialogpage.h"
@@ -183,7 +184,7 @@ ImportDialog::ImportDialog()
 
     KUrl url = ImporterConfig::destinationUrl();
     if (!url.isValid()) {
-        url = KUrl::fromPath(KGlobalSettings::picturesPath());
+        url = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
         int year = QDate::currentDate().year();
         url.addPath(QString::number(year));
     }
@@ -243,7 +244,7 @@ void ImportDialog::startImport()
 {
     KUrl url = d->mThumbnailPage->destinationUrl();
     ImporterConfig::setDestinationUrl(url);
-    ImporterConfig::self()->writeConfig();
+    ImporterConfig::self()->save();
 
     d->mCentralWidget->setCurrentWidget(d->mProgressPage);
     d->mImporter->setAutoRenameFormat(

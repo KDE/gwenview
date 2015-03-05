@@ -35,6 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // Local
 #include <lib/documentview/rasterimageview.h>
+#include <QFontDatabase>
 #include "croptool.h"
 #include "signalblocker.h"
 #include "ui_cropwidget.h"
@@ -205,7 +206,7 @@ CropWidget::CropWidget(QWidget* parent, RasterImageView* imageView, CropTool* cr
     d->mUpdatingFromCropTool = false;
     d->mCropTool = cropTool;
     d->setupUi(this);
-    setFont(KGlobalSettings::smallestReadableFont());
+    setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
     layout()->setMargin(KDialog::marginHint());
     layout()->setSizeConstraint(QLayout::SetFixedSize);
 
