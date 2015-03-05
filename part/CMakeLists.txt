@@ -12,7 +12,7 @@ add_library(gvpart MODULE ${gvpart_SRCS})
 
 target_link_libraries(gvpart KF5::Parts gwenviewlib)
 
-install(TARGETS gvpart DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES gvpart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(TARGETS gvpart DESTINATION ${KDE_INSTALL_PLUGINDIR})
+install(FILES gvpart.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR})
 install(FILES gvpart.rc
-    DESTINATION ${DATA_INSTALL_DIR}/gvpart)
+    DESTINATION ${KDE_INSTALL_DATADIR}/gvpart)

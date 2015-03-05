@@ -49,8 +49,8 @@ target_link_libraries(gwenview_importer
     )
 
 install(TARGETS gwenview_importer
-    ${INSTALL_TARGETS_DEFAULT_ARGS})
+    ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(FILES gwenview_importer.desktop
     gwenview_importer_camera.desktop
-    DESTINATION ${DATA_INSTALL_DIR}/solid/actions/)
+    DESTINATION ${KDE_INSTALL_DATADIR}/solid/actions/)

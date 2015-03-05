@@ -1,4 +1,4 @@
 install(
     FILES fullscreen.colors
-    DESTINATION ${DATA_INSTALL_DIR}/gwenview/color-schemes/
+    DESTINATION ${KDE_INSTALL_DATADIR}/gwenview/color-schemes/
     )

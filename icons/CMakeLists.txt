@@ -10,4 +10,4 @@ hi48-actions-document-share.png
 hi48-apps-gwenview.png
 hi64-actions-document-share.png
 hi64-apps-gwenview.png
-DESTINATION ${ICON_INSTALL_DIR} )
+DESTINATION ${KDE_INSTALL_ICONDIR} )

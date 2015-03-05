@@ -84,14 +84,14 @@ if (KF5Kipi_FOUND)
 endif()
 
 install(TARGETS gwenview
-    ${INSTALL_TARGETS_DEFAULT_ARGS})
+    ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(FILES gwenviewui.rc
-    DESTINATION ${KXMLGUI_INSTALL_DIR}/gwenview)
+    DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/gwenview)
 
 install(PROGRAMS org.kde.gwenview.desktop
-    DESTINATION ${XDG_APPS_INSTALL_DIR})
+    DESTINATION ${KDE_INSTALL_APPDIR})
 install(FILES gwenview.appdata.xml
-    DESTINATION ${SHARE_INSTALL_PREFIX}/appdata)
+    DESTINATION ${KDE_INSTALL_DATAROOTDIR}/appdata)
 install(FILES slideshow.desktop
-    DESTINATION ${SERVICES_INSTALL_DIR}/ServiceMenus)
+    DESTINATION ${KDE_INSTALL_KSERVICES5DIR}/ServiceMenus)

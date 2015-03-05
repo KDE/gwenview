@@ -1,3 +1,3 @@
 install(FILES background.png
-    DESTINATION ${DATA_INSTALL_DIR}/gwenview/images/
+    DESTINATION ${KDE_INSTALL_DATADIR}/gwenview/images/
     )
