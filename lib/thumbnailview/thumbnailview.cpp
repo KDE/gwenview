@@ -189,7 +189,7 @@ struct ThumbnailViewPrivate
 
     void setupBusyAnimation()
     {
-        mBusySequence = KPixmapSequence("process-working", 22);
+        mBusySequence = KIconLoader::global()->loadPixmapSequence(QStringLiteral("process-working"), 22);
         mBusyAnimationTimeLine = new QTimeLine(100 * mBusySequence.frameCount(), q);
         mBusyAnimationTimeLine->setCurveShape(QTimeLine::LinearCurve);
         mBusyAnimationTimeLine->setEndFrame(mBusySequence.frameCount() - 1);
