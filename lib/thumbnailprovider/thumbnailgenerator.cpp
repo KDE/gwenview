@@ -102,6 +102,7 @@ bool ThumbnailContext::load(const QString &pixPath, int pixelSize)
         buffer.open(QIODevice::ReadOnly);
         reader.setDevice(&buffer);
         reader.setFormat(formatHint);
+        mIsRawImage = true;
     } else {
 #else
     {
@@ -121,7 +122,7 @@ bool ThumbnailContext::load(const QString &pixPath, int pixelSize)
     // If applyExifOrientation is not set, don't use the
     // embedded thumbnail since it might be rotated differently
     // than the actual image
-    if (!content.rawData().isEmpty() && GwenviewConfig::applyExifOrientation()) {
+    if (!content.rawData().isEmpty() && GwenviewConfig::applyExifOrientation() && !mIsRawImage) {
         QImage thumbnail = content.thumbnail();
         orientation = content.orientation();
 

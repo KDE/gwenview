@@ -41,6 +41,7 @@ struct ThumbnailContext {
     int mOriginalWidth;
     int mOriginalHeight;
     bool mNeedCaching;
+    bool mIsRawImage = false;
 
     bool load(const QString &pixPath, int pixelSize);
 };

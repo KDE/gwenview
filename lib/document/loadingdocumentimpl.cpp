@@ -104,6 +104,7 @@ struct LoadingDocumentImplPrivate
     std::auto_ptr<JpegContent> mJpegContent;
     QImage mImage;
     Cms::Profile::Ptr mCmsProfile;
+    bool mIsRawImage = false;
 
     /**
      * Determine kind of document and switch to an implementation if it is not
@@ -222,6 +223,8 @@ struct LoadingDocumentImplPrivate
 
             // need to fill mFormat so gwenview can tell the type when trying to save
             mFormat = mFormatHint;
+
+            mIsRawImage = true;
         } else {
 #else
 {
@@ -318,7 +321,7 @@ struct LoadingDocumentImplPrivate
             return;
         }
 
-        if (mJpegContent.get() && GwenviewConfig::applyExifOrientation()) {
+        if (mJpegContent.get() && GwenviewConfig::applyExifOrientation() && !mIsRawImage) {
             Gwenview::Orientation orientation = mJpegContent->orientation();
             QMatrix matrix = ImageUtils::transformMatrix(orientation);
             mImage = mImage.transformed(matrix);
