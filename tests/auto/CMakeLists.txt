@@ -21,6 +21,7 @@ endmacro(gv_add_unit_test)
 include_directories(
     ${gwenview_SOURCE_DIR}
     ${importer_SOURCE_DIR}
+    ${EXIV2_INCLUDE_DIR}
     )
 
 # For config-gwenview.h
