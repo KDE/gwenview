@@ -67,6 +67,7 @@ public:
     static Profile::Ptr loadFromImageData(const QByteArray& data, const QByteArray& format);
     static Profile::Ptr loadFromExiv2Image(const Exiv2::Image* image);
     static Profile::Ptr getMonitorProfile();
+    static Profile::Ptr getSRgbProfile();
 
 private:
     Profile(cmsHPROFILE);

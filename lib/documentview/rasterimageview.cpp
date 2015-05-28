@@ -81,7 +81,9 @@ struct RasterImageViewPrivate
 
         Cms::Profile::Ptr profile = q->document()->cmsProfile();
         if (!profile) {
-            return;
+            // The assumption that something unmarked is *probably* sRGB is better than failing to apply any transform when one
+            // has a wide-gamut screen.
+            profile = Cms::Profile::getSRgbProfile();
         }
         Cms::Profile::Ptr monitorProfile = Cms::Profile::getMonitorProfile();
         if (!monitorProfile) {
@@ -96,7 +98,7 @@ struct RasterImageViewPrivate
             cmsFormat = TYPE_BGRA_8;
             break;
         default:
-            qWarning() << "This image has a color profile, but Gwenview can only apply color profile on RGB32 or ARGB32 images";
+            qWarning() << "Gwenview can only apply color profile on RGB32 or ARGB32 images";
             return;
         }
         mDisplayTransform = cmsCreateTransform(profile->handle(), cmsFormat,

@@ -241,9 +241,14 @@ Profile::Ptr Profile::getMonitorProfile()
     }
 #endif
     if (!hProfile) {
-        hProfile = cmsCreate_sRGBProfile();
+        return getSRgbProfile();
     }
     return Profile::Ptr(new Profile(hProfile));
+}
+
+Profile::Ptr Profile::getSRgbProfile()
+{
+    return Profile::Ptr(new Profile(cmsCreate_sRGBProfile()));
 }
 
 } // namespace Cms
