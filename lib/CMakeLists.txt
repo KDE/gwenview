@@ -5,25 +5,26 @@ set(LIBGWENVIEW_VERSION "4.97.0")
 # Extract version of libjpeg so that we can use the appropriate dir
 # See bug #227313
 message(STATUS "Looking for libjpeg version in ${JPEG_INCLUDE_DIR}/jpeglib.h")
-file(READ "${JPEG_INCLUDE_DIR}/jpeglib.h" jpeglib_h_content)
-string(REGEX MATCH "#define +JPEG_LIB_VERSION +([0-9]+)" "\\1" jpeglib_version "${jpeglib_h_content}")
-set(jpeglib_version ${CMAKE_MATCH_1})
 
-if ("${jpeglib_version}" STREQUAL "")
-    message(STATUS "No version defined in ${JPEG_INCLUDE_DIR}/jpeglib.h, looking for jconfig.h")
-    # libjpeg-turbo keeps JPEG_LIB_VERSION in jconfig.h, not jpeglib.h :/
-    find_file(JCONFIG_H jconfig.h
-        PATHS "${JPEG_INCLUDE_DIR}"
-        PATH_SUFFIXES "${CMAKE_LIBRARY_ARCHITECTURE}"
-        )
-    if (NOT EXISTS "${JCONFIG_H}")
-        message(FATAL_ERROR "Could not find jconfig.h. This file comes with libjpeg. You can specify its path with -DJCONFIG_H=/path/to/jconfig.h.")
-    endif()
-    message(STATUS "Found jconfig.h: ${JCONFIG_H}")
-    message(STATUS "Looking for libjpeg version in ${JCONFIG_H}")
-    file(READ "${JCONFIG_H}" jconfig_h_content)
-    string(REGEX MATCH "#define +JPEG_LIB_VERSION +([0-9]+)" "\\1" jpeglib_version "${jconfig_h_content}")
-    set(jpeglib_version ${CMAKE_MATCH_1})
+# Due to the large variety of different headers the version data might be
+# found in (between libjpeg, libjpeg-turbo and various multilib header
+# forwarding schemes seen in distros), have a simple program print out the
+# right version.
+set(JPEGLIB_VERSION_CHECK_PATH "${CMAKE_CURRENT_BINARY_DIR}/jpeglib-version-check.c")
+file(WRITE ${JPEGLIB_VERSION_CHECK_PATH} "
+#include <stdio.h>
+#include <stdlib.h>
+#include <jpeglib.h>
+
+int main(void) { printf(\"%d\\\n\", JPEG_LIB_VERSION); }
+")
+
+try_run(JPEGLIB_RUN_RESULT JPEGLIB_COMPILE_RESULT
+    ${CMAKE_CURRENT_BINARY_DIR} ${JPEGLIB_VERSION_CHECK_PATH}
+    RUN_OUTPUT_VARIABLE jpeglib_version)
+
+if ((${JPEGLIB_COMPILE_RESULT} EQUAL FALSE) OR ("${JPEGLIB_RUN_RESULT}" EQUAL FAILED_TO_RUN) OR "${jpeglib_version}" STREQUAL "")
+    message(FATAL_ERROR "Could not find jpeglib.h. This file comes with libjpeg.")
 endif()
 
 if ("${jpeglib_version}" LESS 80)
