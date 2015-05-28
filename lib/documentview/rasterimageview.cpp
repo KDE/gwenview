@@ -97,6 +97,9 @@ struct RasterImageViewPrivate
         case QImage::Format_ARGB32:
             cmsFormat = TYPE_BGRA_8;
             break;
+        case QImage::Format_Grayscale8:
+            cmsFormat = TYPE_GRAY_8;
+            break;
         default:
             qWarning() << "Gwenview can only apply color profile on RGB32 or ARGB32 images";
             return;
