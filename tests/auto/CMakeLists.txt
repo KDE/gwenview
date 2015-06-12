@@ -1,12 +1,5 @@
 include(ECMAddTests)
 
-find_package(Qt5Test ${REQUIRED_QT_VERSION} CONFIG QUIET)
-
-if(NOT Qt5Test_FOUND)
-    message(STATUS "Qt5Test not found, autotests will not be built.")
-    return()
-endif()
-
 macro(gv_add_unit_test _test)
     set(_src ${_test}.cpp ${ARGN})
     add_executable(${_test} ${_src})
