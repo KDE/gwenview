@@ -46,7 +46,7 @@ namespace Gwenview
 static void storeThumbnailToDiskCache(const QString& path, const QImage& image)
 {
     LOG(path);
-    QTemporaryFile tmp(path + QStringLiteral("/.gwenview.tmpXXXXXX.png"));
+    QTemporaryFile tmp(path + QStringLiteral(".gwenview.tmpXXXXXX.png"));
     if (!tmp.open()) {
         qWarning() << "Could not create a temporary file.";
         return;
