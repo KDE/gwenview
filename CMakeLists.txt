@@ -1,5 +1,11 @@
 project(gwenview)
 
+# KDE Application Version, managed by release script
+set (KDE_APPLICATIONS_VERSION_MAJOR "15")
+set (KDE_APPLICATIONS_VERSION_MINOR "07")
+set (KDE_APPLICATIONS_VERSION_MICRO "80")
+set (KDE_APPLICATIONS_VERSION "${KDE_APPLICATIONS_VERSION_MAJOR}.${KDE_APPLICATIONS_VERSION_MINOR}.${KDE_APPLICATIONS_VERSION_MICRO}")
+
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake )
 
 cmake_minimum_required (VERSION 2.8.12 FATAL_ERROR)
@@ -20,6 +26,11 @@ include(ECMAddAppIcon)
 include(GenerateExportHeader)
 include(FeatureSummary)
 
+## Generate header with version number
+ecm_setup_version(${KDE_APPLICATIONS_VERSION}
+                  VARIABLE_PREFIX GWENVIEW
+                  VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/lib/gwenview_version.h"
+)
 
 ## CMake options
 set(GWENVIEW_SEMANTICINFO_BACKEND_NONE OFF)

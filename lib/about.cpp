@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "about.h"
 
 // Local
-#include <version.h>
+#include "gwenview_version.h"
 
 // KDE
 #include <KAboutData>
@@ -34,7 +34,7 @@ namespace Gwenview
 
 KAboutData* createAboutData(const QString& appName, const QString& programName)
 {
-    KAboutData* data = new KAboutData(appName, programName, GWENVIEW_VERSION);
+    KAboutData* data = new KAboutData(appName, programName, QStringLiteral(GWENVIEW_VERSION_STRING));
     data->setLicense(KAboutLicense::GPL);
     data->setCopyrightStatement(i18n("Copyright 2000-2014 Gwenview authors"));
     data->addAuthor(
