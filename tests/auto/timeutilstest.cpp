@@ -48,8 +48,8 @@ void TimeUtilsTest::testBasic_data()
     QTest::addColumn<QString>("fileName");
     QTest::addColumn<QDateTime>("expectedDateTime");
 
-    NEW_ROW("date/exif-datetimeoriginal.jpg", QDateTime::fromString("2003-03-10T17:45:21"));
-    NEW_ROW("date/exif-datetime-only.jpg", QDateTime::fromString("2003-03-25T02:02:21"));
+    NEW_ROW("date/exif-datetimeoriginal.jpg", QDateTime::fromString("2003-03-10T17:45:21", Qt::ISODate));
+    NEW_ROW("date/exif-datetime-only.jpg", QDateTime::fromString("2003-03-25T02:02:21", Qt::ISODate));
 
     QUrl url = urlForTestFile("test.png");
     KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
