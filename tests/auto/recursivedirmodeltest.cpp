@@ -103,8 +103,7 @@ static QList<QUrl> listExpectedUrls(const QDir& dir, const QStringList& files)
 {
     QList<QUrl> lst;
     Q_FOREACH(const QString &name, files) {
-        QUrl url(dir.absoluteFilePath(name));
-        lst << url;
+        lst << QUrl::fromLocalFile(dir.absoluteFilePath(name));
     }
     qSort(lst);
     return lst;
@@ -130,19 +129,24 @@ void RecursiveDirModelTest::testBasic()
 
     // Test initial files
     sandBoxDir.fill(initialFiles);
-    model.setUrl(sandBoxDir.absolutePath());
-    loop.exec();
+    model.setUrl(QUrl::fromLocalFile(sandBoxDir.absolutePath()));
 
-    QList<QUrl> out = listModelUrls(&model);
-    QList<QUrl> expected = listExpectedUrls(sandBoxDir, initialFiles);
+    QList<QUrl> out, expected;
+    do {
+        loop.exec();
+        out = listModelUrls(&model);
+        expected = listExpectedUrls(sandBoxDir, initialFiles);
+    } while (out.size() != expected.size());
     QCOMPARE(out, expected);
 
     // Test adding new files
     sandBoxDir.fill(addedFiles);
-    loop.exec();
 
-    out = listModelUrls(&model);
-    expected = listExpectedUrls(sandBoxDir, initialFiles + addedFiles);
+    do {
+        loop.exec();
+        out = listModelUrls(&model);
+        expected = listExpectedUrls(sandBoxDir, initialFiles + addedFiles);
+    } while (out.size() != expected.size());
     QCOMPARE(out, expected);
 
 # if 0
@@ -191,11 +195,11 @@ void RecursiveDirModelTest::testSetNewUrl()
     TestUtils::TimedEventLoop loop;
     connect(&model, SIGNAL(completed()), &loop, SLOT(quit()));
 
-    model.setUrl(sandBoxDir.absoluteFilePath("d1"));
+    model.setUrl(QUrl::fromLocalFile(sandBoxDir.absoluteFilePath("d1")));
     loop.exec();
     QCOMPARE(model.rowCount(QModelIndex()), 4);
 
-    model.setUrl(sandBoxDir.absoluteFilePath("d2"));
+    model.setUrl(QUrl::fromLocalFile(sandBoxDir.absoluteFilePath("d2")));
     loop.exec();
     QCOMPARE(model.rowCount(QModelIndex()), 2);
 }
