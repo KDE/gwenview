@@ -27,6 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KDebug>
 #include <KIO/NetAccess>
 #include <KStandardDirs>
+#include <QStandardPaths>
 
 QUrl setUpRemoteTestDir(const QString& testFile)
 {
@@ -86,8 +87,8 @@ namespace TestUtils
 
 void purgeUserConfiguration()
 {
-    QString confDir = qgetenv("KDEHOME");
-    QVERIFY(confDir.endsWith(".kde-unit-test")); // Better safe than sorry
+    QString confDir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
+    QVERIFY(confDir.endsWith(".qttest/share")); // Better safe than sorry
     if (QFileInfo(confDir).isDir()) {
         bool ok = KIO::NetAccess::del(QUrl::fromLocalFile(confDir), 0);
         QVERIFY(ok);

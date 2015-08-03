@@ -26,6 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KDE
 #include <QDebug>
 #include <KStandardDirs>
+#include <QStandardPaths>
 #include <qtest.h>
 
 // Local
@@ -96,16 +97,20 @@ void PlaceTreeModelTest::initTestCase()
 
 void PlaceTreeModelTest::init()
 {
+    QStandardPaths::setTestModeEnabled(true);
+
     TestUtils::purgeUserConfiguration();
 
-    QFile bookmark(KStandardDirs::locateLocal("data", "kfileplaces/bookmarks.xml"));
+    const QString confDir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
+    QDir().mkpath(confDir);
+    QFile bookmark(confDir + "/user-places.xbel");
     const bool bookmarkOpened = bookmark.open(QIODevice::WriteOnly);
     Q_ASSERT(bookmarkOpened);
     Q_UNUSED(bookmarkOpened);
 
     QString xml = QString(BOOKMARKS_XML)
-                  .arg(mUrl1.toLocalFile())
-                  .arg(mUrl2.toLocalFile())
+                  .arg(mUrl1.url())
+                  .arg(mUrl2.url())
                   ;
     bookmark.write(xml.toUtf8());
 
