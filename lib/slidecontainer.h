@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Qt
 #include <QWeakPointer>
+#include <QPointer>
 #include <QFrame>
 
 #include <lib/gwenviewlib_export.h>
@@ -86,7 +87,7 @@ private Q_SLOTS:
     void slotAnimFinished();
 
 private:
-    QWidget* mContent;
+    QPointer<QWidget> mContent;
     QWeakPointer<QPropertyAnimation> mAnim;
     bool mSlidingOut;
 
