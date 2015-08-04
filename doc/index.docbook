@@ -2,7 +2,6 @@
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN"
 "dtd/kdedbx45.dtd" [
   <!ENTITY kappname "<application>Gwenview</application>">
-  <!ENTITY package "kdegraphics">
   <!ENTITY % addindex "IGNORE">
   <!ENTITY % English "INCLUDE"><!-- change language only here -->
 ]>
@@ -38,10 +37,10 @@
 </copyright>
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2014-08-09</date>
-<releaseinfo>4.14 (&kde; 4.14)</releaseinfo>
+<date>2015-08-04</date>
+<releaseinfo>Applications 15.08</releaseinfo>
 <abstract>
-<para>&kappname; is an image viewer for &kde;.</para>
+<para>&kappname; is an image and video viewer.</para>
 </abstract>
 <keywordset>
 <keyword>KDE</keyword>
@@ -61,7 +60,7 @@
 <title>What is &kappname;</title>
 
 <para>
-&kappname; is a fast and easy to use image and video viewer for KDE.
+&kappname; is a fast and easy to use image and video viewer.
 </para>
 
  <para>
@@ -452,7 +451,7 @@ copying, renaming, deleting, and creating new folders.</para></listitem>
 </sect1>
 
 </chapter>
-
+<!--FIXME no importer in kf5
 <chapter id="importer">
 <title>&kappname; Importer</title>
 
@@ -515,7 +514,7 @@ enter it into the text box or type one manually.</para>
 </sect1>
 
 </chapter>
-
+-->
 <chapter id="tips">
 <title>Tips</title>
 <sect1 id='mouse'><title>Using the mouse</title>
@@ -621,7 +620,7 @@ Crop the current image.</para></listitem>
 <listitem><para><keycombo action="simul">&Ctrl;<keycap>Y</keycap></keycombo>:
 When multiple images are displayed in View Mode, this synchronizes their views.
 </para></listitem>
-
+<!--FIXME not in kf5
 <listitem><para><keycombo action="simul">&Tab;</keycombo>:
 When multiple images are displayed in View Mode, this switched to the image to
 the right of the currently selected image.</para></listitem>
@@ -629,7 +628,7 @@ the right of the currently selected image.</para></listitem>
 <listitem><para><keycombo action="simul">&Shift;&Tab;</keycombo>:
 When multiple images are displayed in View Mode, this switched to the image to
 the left of the currently selected image.</para></listitem>
-
+-->
 <listitem><para><keycombo
 action="simul">&Ctrl;<keycap>S</keycap></keycombo>:
 Save any changes made to the image.</para></listitem>
@@ -660,8 +659,7 @@ Viewing a video this shortcut toggles playback on and off.</para></listitem>
 action="simul">&Ctrl;<keycap>T</keycap></keycombo>:
 Edit tags.</para></listitem>
 
-<listitem><para><keycombo
-action="simul">&Ctrl;<keycap>F2</keycap></keycombo>:
+<listitem><para><keycap>F2</keycap>:
 Rename an image inline.</para></listitem>
 
 <listitem><para><keycap>Del</keycap>:
