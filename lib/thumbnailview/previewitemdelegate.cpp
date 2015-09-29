@@ -194,7 +194,7 @@ struct PreviewItemDelegatePrivate
         mIndexUnderCursor = index;
         mView->update(oldIndex);
 
-        if (KGlobalSettings::singleClick() && KGlobalSettings::changeCursorOverIcon()) {
+        if (KGlobalSettings::singleClick()) {
             mView->setCursor(mIndexUnderCursor.isValid() ? Qt::PointingHandCursor : Qt::ArrowCursor);
         }
 
