@@ -37,6 +37,7 @@ KAboutData* createAboutData(const QString& appName, const QString& programName)
     KAboutData* data = new KAboutData(appName, programName, QStringLiteral(GWENVIEW_VERSION_STRING));
     data->setLicense(KAboutLicense::GPL);
     data->setCopyrightStatement(i18n("Copyright 2000-2014 Gwenview authors"));
+    data->setProductName("gwenview");
     data->addAuthor(
         QStringLiteral("Lukáš Tinkl"),
         i18n("Current Maintainer"),
