@@ -139,7 +139,9 @@ bool ThumbnailContext::load(const QString &pixPath, int pixelSize)
 
     // Generate thumbnail from full image
     originalSize = reader.size();
-    if (originalSize.isValid() && reader.supportsOption(QImageIOHandler::ScaledSize)) {
+    if (originalSize.isValid() && reader.supportsOption(QImageIOHandler::ScaledSize)
+        && qMax(originalSize.width(), originalSize.height()) >= pixelSize)
+    {
         QSizeF scaledSize = originalSize;
         scaledSize.scale(pixelSize, pixelSize, Qt::KeepAspectRatio);
         if (!scaledSize.isEmpty()) {
