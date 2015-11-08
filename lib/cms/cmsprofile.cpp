@@ -212,32 +212,33 @@ Profile::Ptr Profile::getMonitorProfile()
     // Get the profile from you config file if the user has set it.
     // if the user allows override through the atom, do this:
 #ifdef HAVE_X11
+    if (QX11Info::isPlatformX11()) {
+        // get the current screen...
+        int screen = -1;
 
-    // get the current screen...
-    int screen = -1;
+        Atom type;
+        int format;
+        unsigned long nitems;
+        unsigned long bytes_after;
+        quint8 *str;
 
-    Atom type;
-    int format;
-    unsigned long nitems;
-    unsigned long bytes_after;
-    quint8 *str;
+        static Atom icc_atom = XInternAtom(QX11Info::display(), "_ICC_PROFILE", True);
 
-    static Atom icc_atom = XInternAtom(QX11Info::display(), "_ICC_PROFILE", True);
-
-    if (XGetWindowProperty(QX11Info::display(),
-                           QX11Info::appRootWindow(screen),
-                           icc_atom,
-                           0,
-                           INT_MAX,
-                           False,
-                           XA_CARDINAL,
-                           &type,
-                           &format,
-                           &nitems,
-                           &bytes_after,
-                           (unsigned char **) &str) == Success
-            ) {
-        hProfile = cmsOpenProfileFromMem((void*)str, nitems);
+        if (XGetWindowProperty(QX11Info::display(),
+                               QX11Info::appRootWindow(screen),
+                               icc_atom,
+                               0,
+                               INT_MAX,
+                               False,
+                               XA_CARDINAL,
+                               &type,
+                               &format,
+                               &nitems,
+                               &bytes_after,
+                               (unsigned char **) &str) == Success
+                ) {
+            hProfile = cmsOpenProfileFromMem((void*)str, nitems);
+        }
     }
 #endif
     if (!hProfile) {
