@@ -94,6 +94,7 @@ install(FILES gwenviewui.rc
 install(PROGRAMS org.kde.gwenview.desktop
     DESTINATION ${KDE_INSTALL_APPDIR})
 install(FILES gwenview.appdata.xml
-    DESTINATION ${KDE_INSTALL_DATAROOTDIR}/appdata)
+    DESTINATION ${KDE_INSTALL_DATAROOTDIR}/appdata
+    RENAME org.kde.gwenview.appdata.xml)
 install(FILES slideshow.desktop
     DESTINATION ${KDE_INSTALL_KSERVICES5DIR}/ServiceMenus)
