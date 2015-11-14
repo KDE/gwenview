@@ -457,4 +457,22 @@ void KIPIInterface::slotDirectoryChanged()
     emit currentAlbumChanged(true);
 }
 
+#ifdef GWENVIEW_KIPI_WITH_CREATE_METHODS
+KIPI::FileReadWriteLock* KIPIInterface::createReadWriteLock(const QUrl& url) const
+{
+    return NULL;
+}
+
+KIPI::MetadataProcessor* KIPIInterface::createMetadataProcessor() const
+{
+    return NULL;
+}
+
+KIPI::RawProcessor* KIPIInterface::createRawProcessor() const
+{
+    return NULL;
+}
+#endif
+
+
 } //namespace

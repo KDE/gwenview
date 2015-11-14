@@ -26,8 +26,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kipi/interface.h>
 #include <kipi/imagecollectionshared.h>
 #include <kipi/plugin.h>
+#include <libkipi_version.h>
 
 class QAction;
+
+#ifndef KIPI_VERSION_MAJOR
+#error KIPI_VERSION_MAJOR should be provided.
+#endif
+#if KIPI_VERSION_MAJOR >= 5
+#define GWENVIEW_KIPI_WITH_CREATE_METHODS
+#endif
 
 namespace Gwenview
 {
@@ -59,6 +67,12 @@ public:
     QList<QAction*> pluginActions(KIPI::Category) const;
 
     bool isLoadingFinished() const;
+
+#ifdef GWENVIEW_KIPI_WITH_CREATE_METHODS
+    virtual KIPI::FileReadWriteLock* createReadWriteLock(const QUrl& url) const;
+    virtual KIPI::MetadataProcessor* createMetadataProcessor() const;
+    virtual KIPI::RawProcessor* createRawProcessor() const;
+#endif
 
 Q_SIGNALS:
     void loadingFinished();
