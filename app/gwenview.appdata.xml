@@ -26,6 +26,7 @@
   <name xml:lang="nb">Gwenview</name>
   <name xml:lang="nds">Gwenview</name>
   <name xml:lang="nl">Gwenview</name>
+  <name xml:lang="nn">Gwenview</name>
   <name xml:lang="pl">Gwenview</name>
   <name xml:lang="pt">Gwenview</name>
   <name xml:lang="pt-BR">Gwenview</name>
@@ -65,6 +66,7 @@
     <p xml:lang="nb">Gwenview er en rask bildeviser for KDE, som er lett å bruke.</p>
     <p xml:lang="nds">Gwenview is en gau Bildkieker för KDE, de sik eenfach bruken lett.</p>
     <p xml:lang="nl">Gwenview is een snelle en gemakkelijk te gebruiken viewer voor afbeeldingen van KDE</p>
+    <p xml:lang="nn">Gwenview er ein biletvisar for KDE som er både rask og lett å bruka.</p>
     <p xml:lang="pl">Gwenview to szybka i łatwa w użyciu przeglądarka obrazów dla KDE.</p>
     <p xml:lang="pt">O Gwenview é um visualizador de imagens rápido e simples de usar para o KDE.</p>
     <p xml:lang="pt-BR">Gwenview é um visualizador de imagens rápido e fácil de usar para o KDE.</p>
@@ -103,6 +105,7 @@
     <p xml:lang="nb">Funksjoner:</p>
     <p xml:lang="nds">Markmalen:</p>
     <p xml:lang="nl">Mogelijkheden:</p>
+    <p xml:lang="nn">Funksjonar:</p>
     <p xml:lang="pl">Możliwości:</p>
     <p xml:lang="pt">Funcionalidades:</p>
     <p xml:lang="pt-BR">Funcionalidades:</p>
@@ -140,6 +143,7 @@
       <li xml:lang="nb">Støtter enkle bildemanipuleringer: rotere, speilvende, snu om og endre størrelse</li>
       <li xml:lang="nds">Ünnerstütt eenfach Bildbewerken: Dreihen, Spegeln, Ümdreihen und Grött topassen</li>
       <li xml:lang="nl">Ondersteunt eenvoudige bewerking van afbeeldingen: roteren, spiegelen, omdraaien en grootte wijzigen</li>
+      <li xml:lang="nn">Støttar enkel biletmanipulering: rotering, spegelvending og endring av biletstorleik</li>
       <li xml:lang="pl">Obsługa prostych działań na obrazach: obrót, odbicie w poziomie, odbicie w pionie oraz zmiana rozmiaru</li>
       <li xml:lang="pt">Suporta as manipulações simples de imagens: rotação, espelho, inversão e dimensionamento</li>
       <li xml:lang="pt-BR">Suporte a manipulações simples de imagens: rotação, espelho, inversão e redimensionamento</li>
@@ -176,6 +180,7 @@
       <li xml:lang="nb">Støtter enkle filhandlinger som kopiere, flytte, slette og andre</li>
       <li xml:lang="nds">Ünnerstütt eenfach Dateipleegakschonen as Koperen, Verschuven, Wegdoon un en poor anner.</li>
       <li xml:lang="nl">Ondersteunt acties voor basis bestandsbeheer zoals kopiëren, verplaatsen, verwijderen en andere</li>
+      <li xml:lang="nn">Støtter enkle filhandlingar, som kopiering, flytting og sletting</li>
       <li xml:lang="pl">Możliwość wykonywania prostych działań plikowych takich jak kopiuj, przenieś, usuń i innych</li>
       <li xml:lang="pt">Suporta as acções básicas de gestão de ficheiros, como a cópia, movimentação, remoção, entre outras</li>
       <li xml:lang="pt-BR">Suporta a ações básicas de gerenciamento de arquivos, como cópia, movimentação, exclusão, entre outras</li>
@@ -212,6 +217,7 @@
       <li xml:lang="nb">Virker både som et frittstående program og som innebygget viser i nettleseren Konqueror</li>
       <li xml:lang="nds">Funkscheneert för sik oder inbett na den Nettkieker Konqueror</li>
       <li xml:lang="nl">Functies zowel als een alleenstaande toepassing als een ingebedde viewer in de webbrowser Konqueror</li>
+      <li xml:lang="nn">Kan brukast både som eit frittståande program og som innebygd biletviser i nettlesaren Konqueror</li>
       <li xml:lang="pl">Możliwość działania jako samodzielny program lub jako osadzona przeglądarka w przeglądarce sieciowej Konqueror</li>
       <li xml:lang="pt">Funciona tanto como uma aplicação independente como um visualizador incorporado no navegador Web Konqueror</li>
       <li xml:lang="pt-BR">Funciona como um aplicativo independente e também como visualizador incorporado no navegador Web Konqueror</li>
@@ -247,6 +253,7 @@
       <li xml:lang="nb">Kan utvides med KIPI programtillegg.</li>
       <li xml:lang="nds">Laat sik mit KIPI-Modulen verwiedern</li>
       <li xml:lang="nl">Kan uitgebreid worden met KIPI-plug-ins.</li>
+      <li xml:lang="nn">Kan utvidast med KIPI-programtillegg.</li>
       <li xml:lang="pl">Możliwość poszerzenia możliwości przez wtyczki KIPI.</li>
       <li xml:lang="pt">Pode ser alargado com os 'plugins' do KIPI.</li>
       <li xml:lang="pt-BR">Pode ter suas funcionalidades ampliadas com os plugins do KIPI.</li>
