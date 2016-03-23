@@ -71,7 +71,9 @@ public:
 #ifdef GWENVIEW_KIPI_WITH_CREATE_METHODS
     virtual KIPI::FileReadWriteLock* createReadWriteLock(const QUrl& url) const;
     virtual KIPI::MetadataProcessor* createMetadataProcessor() const;
+#if KIPI_VERSION_MAJOR == 5 && KIPI_VERSION_MINOR == 0
     virtual KIPI::RawProcessor* createRawProcessor() const;
+#endif
 #endif
 
 Q_SIGNALS:
