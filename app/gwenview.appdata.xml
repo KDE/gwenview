@@ -15,7 +15,6 @@
   <name xml:lang="el">Gwenview</name>
   <name xml:lang="en-GB">Gwenview</name>
   <name xml:lang="es">Gwenview</name>
-  <name xml:lang="et">Gwenview</name>
   <name xml:lang="fi">Gwenview</name>
   <name xml:lang="gl">Gwenview</name>
   <name xml:lang="hu">Gwenview</name>
@@ -55,7 +54,6 @@
     <p xml:lang="el">Το Gwenview είναι ένας γρήγορος και εύχρηστος προβολέας εγγράφων για το KDE.</p>
     <p xml:lang="en-GB">Gwenview is a fast and easy to use image viewer for KDE.</p>
     <p xml:lang="es">Gwenview es un visor de imágenes de KDE rápido y fácil de usar.</p>
-    <p xml:lang="et">Gwenview on KDE kiire ja kasutajasõbralik piltide näitaja.</p>
     <p xml:lang="fi">Gwenview on nopea ja helppokäyttöinen kuvakatselin KDE:lle</p>
     <p xml:lang="gl">Gwenview é un visor de imaxes para KDE rápido e doado de utilizar.</p>
     <p xml:lang="hu">A Gwenview egy gyors és egyszerűen használható képmegjelenítő a KDE-hez.</p>
@@ -94,7 +92,6 @@
     <p xml:lang="el">Χαρακτηριστικά:</p>
     <p xml:lang="en-GB">Features:</p>
     <p xml:lang="es">Funcionalidades:</p>
-    <p xml:lang="et">Omadused:</p>
     <p xml:lang="fi">Ominaisuudet:</p>
     <p xml:lang="gl">Funcionalidades:</p>
     <p xml:lang="hu">Szolgáltatások:</p>
@@ -132,7 +129,6 @@
       <li xml:lang="el">Υποστηρίζει απλές λειτουργίες διαχείρισης εικόνας: περιστροφή, καθρεπτισμό, αναστροφή και αλλαγή μεγέθους</li>
       <li xml:lang="en-GB">Supports simple image manipulations: rotate, mirror, flip, and resize</li>
       <li xml:lang="es">Permite manipulaciones simples de imágenes: rotar, reflejar, invertir y cambiar de tamaño</li>
-      <li xml:lang="et">Toetab lihtsaid pilditöötlusvõimalusi: pööramine, peegeldamine ja suuruse muutmine</li>
       <li xml:lang="fi">Tukee yksinkertaista kuvien manipulointia: kiertämistä, kääntämistä, peilaamista ja koon muuttamista</li>
       <li xml:lang="gl">Permite manipulacións sinxelas de imaxes de maneira individual: rotar, reflectir, inverter e cambiar o tamaño.</li>
       <li xml:lang="hu">Egyszerű képműveletek támogatása: forgatás, tükrözés, átméretezés</li>
@@ -169,7 +165,6 @@
       <li xml:lang="el">Υποστηρίζει βασικές ενέργειες διαχείρισης αρχείων όπως αντιγραφή, μετακίνηση, διαγραφή κ.α.</li>
       <li xml:lang="en-GB">Supports basic file management actions such as copy, move, delete, and others</li>
       <li xml:lang="es">Permite acciones básicas de gestión de archivos, como copiar, mover y borrar, entre otras</li>
-      <li xml:lang="et">Toetab lihtsamaid failihaldusvõimalusi: kopeerimine, liigutamine, kustutamine jms</li>
       <li xml:lang="fi">Tukee tiedostonhallinnan perusasioita kuten kopiointia, siirtämistä, poistamista ynnä muuta</li>
       <li xml:lang="gl">Permite realizar accións básicas de xestión de ficheiros como copiar, mover, eliminar, etc.</li>
       <li xml:lang="hu">Egyszerű fájlművelet, mint például másolás, áthelyezés, törlés támogatása</li>
@@ -206,7 +201,6 @@
       <li xml:lang="el">Λειτουργεί και ως αυτόνομη εφαρμογή και ως ενσωματωμένος προβολέας στον περιηγητή ιστού Konqueror</li>
       <li xml:lang="en-GB">Functions both as a standalone application and an embedded viewer in the Konqueror web browser</li>
       <li xml:lang="es">Funciona como aplicación independiente o como visor integrado en el navegador web Konqueror</li>
-      <li xml:lang="et">Töötab nii eraldi rakendusena kui ka põimituna veebibrauserisse Konqueror</li>
       <li xml:lang="fi">Toimii sekä erillisenä ohjelmana että upotettuna katselimena Konqueror-verkkoselaimessa</li>
       <li xml:lang="gl">Pode usarse como un programa autónomo e tamén como un visor incrustado no navegador web Konqueror.</li>
       <li xml:lang="hu">Önálló alkalmazásként és a Konqueror webböngészőbe épített képmegjelenítőként is működik</li>
@@ -242,7 +236,6 @@
       <li xml:lang="el">Μπορεί να επεκταθεί με πρόσθετα KIPI.</li>
       <li xml:lang="en-GB">Can be extended using KIPI plugins.</li>
       <li xml:lang="es">Se puede extender usando complementos de KIPI.</li>
-      <li xml:lang="et">Saab laiendada KIPI pluginate abil</li>
       <li xml:lang="fi">Sitä voi laajentaa KIPI-liitännäisillä.</li>
       <li xml:lang="gl">Poden ampliarse as súas funcionalidades mediante complementos KIPI.</li>
       <li xml:lang="hu">KIPI bővítményekkel bővíthető.</li>
