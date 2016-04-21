@@ -468,7 +468,7 @@ KIPI::MetadataProcessor* KIPIInterface::createMetadataProcessor() const
     return NULL;
 }
 
-#if Kipi_LIB_VERSION_MAJOR == 5 && Kipi_VERSION_MINOR == 0
+#ifdef GWENVIEW_KIPI_WITH_CREATE_RAW_PROCESSOR
 KIPI::RawProcessor* KIPIInterface::createRawProcessor() const
 {
     return NULL;

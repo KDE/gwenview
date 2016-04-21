@@ -35,6 +35,9 @@ class QAction;
 #endif
 #if KIPI_VERSION_MAJOR >= 5
 #define GWENVIEW_KIPI_WITH_CREATE_METHODS
+#if KIPI_VERSION_MINOR == 0
+# define GWENVIEW_KIPI_WITH_CREATE_RAW_PROCESSOR
+#endif
 #endif
 
 namespace Gwenview
@@ -71,7 +74,7 @@ public:
 #ifdef GWENVIEW_KIPI_WITH_CREATE_METHODS
     virtual KIPI::FileReadWriteLock* createReadWriteLock(const QUrl& url) const;
     virtual KIPI::MetadataProcessor* createMetadataProcessor() const;
-#if Kipi_VERSION_MAJOR == 5 && Kipi_VERSION_MINOR == 0
+#ifdef GWENVIEW_KIPI_WITH_CREATE_RAW_PROCESSOR
     virtual KIPI::RawProcessor* createRawProcessor() const;
 #endif
 #endif
