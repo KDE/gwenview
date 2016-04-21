@@ -8,6 +8,7 @@ set(slidecontainertest_SRCS
     )
 
 add_executable(slidecontainertest ${slidecontainertest_SRCS})
+add_dependencies(buildtests slidecontainertest)
 ecm_mark_as_test(slidecontainertest)
 
 target_link_libraries(slidecontainertest
@@ -21,6 +22,7 @@ set(imageloadbench_SRCS
     )
 
 add_executable(imageloadbench ${imageloadbench_SRCS})
+add_dependencies(buildtests imageloadbench)
 ecm_mark_as_test(imageloadbench)
 
 target_link_libraries(imageloadbench
@@ -35,6 +37,7 @@ set(thumbnailgen_SRCS
     )
 
 add_executable(thumbnailgen ${thumbnailgen_SRCS})
+add_dependencies(buildtests thumbnailgen)
 ecm_mark_as_test(thumbnailgen)
 
 target_link_libraries(thumbnailgen

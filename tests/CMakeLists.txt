@@ -5,6 +5,8 @@ if(NOT Qt5Test_FOUND)
     return()
 endif()
 
+add_custom_target(buildtests)
+
 add_subdirectory(auto)
 add_subdirectory(manual)
 
