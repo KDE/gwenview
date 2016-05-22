@@ -127,6 +127,7 @@ int main(int argc, char *argv[])
     aboutData->setShortDescription(i18n("An Image Viewer"));
 
     QApplication app(argc, argv);
+    app.setAttribute(Qt::AA_UseHighDpiPixmaps, true);
     KAboutData::setApplicationData(*aboutData);
     app.setApplicationName(aboutData.data()->componentName());
     app.setApplicationDisplayName(aboutData.data()->displayName());
