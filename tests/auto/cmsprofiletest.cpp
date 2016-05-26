@@ -47,7 +47,7 @@ void CmsProfileTest::testLoadFromImageData()
         data = file.readAll();
     }
     Cms::Profile::Ptr ptr = Cms::Profile::loadFromImageData(data, format);
-    QVERIFY(!ptr.isNull());
+    QVERIFY(ptr);
 }
 
 #define NEW_ROW(fileName, format) QTest::newRow(fileName) << fileName << QByteArray(format)

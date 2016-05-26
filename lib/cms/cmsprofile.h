@@ -25,10 +25,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
-// KDE
-#include <KSharedPtr>
-
 // Qt
+#include <QExplicitlySharedDataPointer>
 #include <QSharedData>
 
 // Exiv2
@@ -52,7 +50,7 @@ struct ProfilePrivate;
 class GWENVIEWLIB_EXPORT Profile : public QSharedData
 {
 public:
-    typedef KSharedPtr<Profile> Ptr;
+    typedef QExplicitlySharedDataPointer<Profile> Ptr;
 
     Profile();
     ~Profile();
