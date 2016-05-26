@@ -38,6 +38,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KRatingPainter>
 #include <KIconLoader>
 #include <KSharedConfig>
+#include <KWindowConfig>
 
 // Local
 #include "viewmainpage.h"
@@ -71,13 +72,13 @@ struct SemanticInfoDialog : public KDialog, public Ui_SemanticInfoDialog
         mainWidget->layout()->setMargin(0);
         setWindowTitle(mainWidget->windowTitle());
 
-        restoreDialogSize(configGroup());
+        KWindowConfig::restoreWindowSize(windowHandle(), configGroup());
     }
 
     ~SemanticInfoDialog()
     {
         KConfigGroup group = configGroup();
-        saveDialogSize(group);
+        KWindowConfig::saveWindowSize(windowHandle(), group);
     }
 
     KConfigGroup configGroup() const
