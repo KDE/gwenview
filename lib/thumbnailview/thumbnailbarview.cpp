@@ -123,7 +123,6 @@ struct ThumbnailBarItemDelegatePrivate
 
     void updateHoverUi(const QModelIndex& index)
     {
-        QModelIndex oldIndex = mIndexUnderCursor;
         mIndexUnderCursor = index;
 
         if (mIndexUnderCursor.isValid()) {
