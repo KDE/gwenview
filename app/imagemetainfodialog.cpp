@@ -111,7 +111,7 @@ private:
 
 struct ImageMetaInfoDialogPrivate
 {
-    std::auto_ptr<PreferredImageMetaInfoModel> mModel;
+    std::unique_ptr<PreferredImageMetaInfoModel> mModel;
     QTreeView* mTreeView;
 };
 

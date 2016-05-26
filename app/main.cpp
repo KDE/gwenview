@@ -112,8 +112,8 @@ private:
     QUrl mUrl;
     bool mFullScreen;
     bool mSlideShow;
-    std::auto_ptr<QTemporaryDir> mMultipleUrlsDir;
-    std::auto_ptr<Gwenview::MainWindow> mMainWindow;
+    std::unique_ptr<QTemporaryDir> mMultipleUrlsDir;
+    std::unique_ptr<Gwenview::MainWindow> mMainWindow;
 };
 
 int main(int argc, char *argv[])

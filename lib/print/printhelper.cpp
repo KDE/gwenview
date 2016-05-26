@@ -123,7 +123,7 @@ void PrintHelper::print(Document::Ptr doc)
     PrintOptionsPage* optionsPage = new PrintOptionsPage(doc->size());
     optionsPage->loadConfig();
 
-    std::auto_ptr<QPrintDialog> dialog(
+    std::unique_ptr<QPrintDialog> dialog(
         KdePrint::createPrintDialog(&printer,
                                     QList<QWidget*>() << optionsPage,
                                     d->mParent)

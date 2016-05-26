@@ -101,7 +101,7 @@ struct LoadingDocumentImplPrivate
     QByteArray mFormat;
     QSize mImageSize;
     Exiv2::Image::AutoPtr mExiv2Image;
-    std::auto_ptr<JpegContent> mJpegContent;
+    std::unique_ptr<JpegContent> mJpegContent;
     QImage mImage;
     Cms::Profile::Ptr mCmsProfile;
 
