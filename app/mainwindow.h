@@ -78,6 +78,7 @@ protected:
     virtual void resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
     virtual void saveProperties(KConfigGroup&) Q_DECL_OVERRIDE;
     virtual void readProperties(const KConfigGroup&) Q_DECL_OVERRIDE;
+    bool eventFilter(QObject *, QEvent *);
 
 private Q_SLOTS:
     void setActiveViewModeAction(QAction* action);

@@ -132,7 +132,7 @@ int main(int argc, char *argv[])
     app.setApplicationName(aboutData.data()->componentName());
     app.setApplicationDisplayName(aboutData.data()->displayName());
     app.setOrganizationDomain(aboutData.data()->organizationDomain());
-    QApplication::setWindowIcon(QIcon::fromTheme(QStringLiteral("gwenview")));
+    QApplication::setWindowIcon(QIcon::fromTheme(QStringLiteral("gwenview"), app.windowIcon()));
 
     QCommandLineParser parser;
     aboutData.data()->setupCommandLine(&parser);

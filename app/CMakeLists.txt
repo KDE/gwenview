@@ -84,6 +84,22 @@ if (KF5Kipi_FOUND)
     target_link_libraries(gwenview KF5::Kipi)
 endif()
 
+if (APPLE)
+    # own plist template
+    set_target_properties (gwenview PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/MacOSXBundleInfo.plist.in)
+    # the MacOSX bundle display name property (CFBundleDisplayName) is not currently supported by cmake,
+    # so has to be set for all targets in this cmake file
+    set(MACOSX_BUNDLE_DISPLAY_NAME Gwenview5)
+    set_target_properties(gwenview PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.kde.gwenview")
+    set_target_properties(gwenview PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Gwenview5")
+    set_target_properties(gwenview PROPERTIES MACOSX_BUNDLE_DISPLAY_NAME "Gwenview5")
+    set_target_properties(gwenview PROPERTIES MACOSX_BUNDLE_INFO_STRING "Gwenview, KDE Image Viewer")
+    set_target_properties(gwenview PROPERTIES MACOSX_BUNDLE_LONG_VERSION_STRING "Gwenview ${KDE_APPLICATIONS_VERSION}")
+    set_target_properties(gwenview PROPERTIES MACOSX_BUNDLE_SHORT_VERSION_STRING "${KDE_APPLICATIONS_VERSION_MAJOR}.${KDE_APPLICATIONS_VERSION_MINOR}")
+    set_target_properties(gwenview PROPERTIES MACOSX_BUNDLE_BUNDLE_VERSION "${KDE_APPLICATIONS_VERSION}")
+    set_target_properties(gwenview PROPERTIES MACOSX_BUNDLE_COPYRIGHT "2002-2016 The Gwenview Authors")
+endif (APPLE)
+
 install(TARGETS gwenview
     ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 

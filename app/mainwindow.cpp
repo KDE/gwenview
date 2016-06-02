@@ -32,6 +32,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QVBoxLayout>
 #include <QMenuBar>
 #include <QUrl>
+#ifdef Q_OS_OSX
+#include <QFileOpenEvent>
+#endif
 
 // KDE
 #include <KIO/NetAccess>
@@ -794,6 +797,9 @@ MainWindow::MainWindow()
     d->mKIPIExportAction->setKIPIInterface(d->mKIPIInterface);
 #endif
     setAutoSaveSettings();
+#ifdef Q_OS_OSX
+    qApp->installEventFilter(this);
+#endif
 }
 
 MainWindow::~MainWindow()
@@ -1540,6 +1546,21 @@ void MainWindow::resizeEvent(QResizeEvent* event)
         }
         d->mFullScreenLeftAt = QDateTime();
     }
+}
+
+bool MainWindow::eventFilter(QObject *obj, QEvent *event)
+{
+#ifdef Q_OS_OSX
+    /**
+    * handle Mac OS X file open events (only exist on OS X)
+    */
+    if (event->type() == QEvent::FileOpen) {
+        QFileOpenEvent *fileOpenEvent = static_cast<QFileOpenEvent*>(event);
+        openUrl(fileOpenEvent->url());
+        return true;
+    }
+#endif
+    return false;
 }
 
 void MainWindow::setDistractionFreeMode(bool value)
