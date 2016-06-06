@@ -123,8 +123,8 @@
       <li>Supports simple image manipulations: rotate, mirror, flip, and resize</li>
       <li xml:lang="ar">دعم التّلاعب البسيط بالصّورة: التّدوير، والعكس، والقلب وتغيير الحجم</li>
       <li xml:lang="ast">Sofita manipulación simple d'imaxen: rotar, espeyar, voltiar y redimensionar</li>
-      <li xml:lang="ca">Implementa la manipulació d'imatges simples: gira, mirall, inverteix i canvia la mida</li>
-      <li xml:lang="ca-valencia">Implementa la manipulació d'imatges simples: gira, mirall, inverteix i canvia la mida</li>
+      <li xml:lang="ca">Permet la manipulació senzilla d'imatges: gira, mirall, inverteix i canvia la mida</li>
+      <li xml:lang="ca-valencia">Permet la manipulació senzilla d'imatges: gira, mirall, inverteix i canvia la mida</li>
       <li xml:lang="de">Unterstützt einfache Bildbearbeitung wie Drehen, Spiegeln waagerecht und senkrecht und Größenänderung</li>
       <li xml:lang="el">Υποστηρίζει απλές λειτουργίες διαχείρισης εικόνας: περιστροφή, καθρεπτισμό, αναστροφή και αλλαγή μεγέθους</li>
       <li xml:lang="en-GB">Supports simple image manipulations: rotate, mirror, flip, and resize</li>
@@ -159,8 +159,8 @@
       <li>Supports basic file management actions such as copy, move, delete, and others</li>
       <li xml:lang="ar">دعم إجراءات إدارة الملفّات البسيطة كالنّسخ، والنّقل، والحذف وغيرها</li>
       <li xml:lang="ast">Sofita la xestión básica de ficheros como copiar, mover, desaniciar y otros</li>
-      <li xml:lang="ca">Implementa les accions bàsiques per a la gestió de fitxers com copia, mou, suprimeix i altres</li>
-      <li xml:lang="ca-valencia">Implementa les accions bàsiques per a la gestió de fitxers com copia, mou, suprimeix i altres</li>
+      <li xml:lang="ca">Permet les accions bàsiques per a la gestió de fitxers com copia, mou, suprimeix i altres</li>
+      <li xml:lang="ca-valencia">Permet les accions bàsiques per a la gestió de fitxers com copia, mou, suprimeix i altres</li>
       <li xml:lang="de">Grundlegende Dateiverwaltungsaktionen wie Kopieren, Verschieben, Löschen und weitere Aktionen</li>
       <li xml:lang="el">Υποστηρίζει βασικές ενέργειες διαχείρισης αρχείων όπως αντιγραφή, μετακίνηση, διαγραφή κ.α.</li>
       <li xml:lang="en-GB">Supports basic file management actions such as copy, move, delete, and others</li>
