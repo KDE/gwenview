@@ -107,6 +107,7 @@ configure_file(config-gwenview.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-gwenvi
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 add_definitions(-DTRANSLATION_DOMAIN="gwenview")
+add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
 
 ## dirs to build
 add_subdirectory(lib)

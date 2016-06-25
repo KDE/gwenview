@@ -38,9 +38,9 @@ QUrl setUpRemoteTestDir(const QString& testFile)
         return QUrl();
     }
 
-    QUrl baseUrl = QString::fromLocal8Bit(qgetenv("GV_REMOTE_TESTS_BASE_URL"));
+    QUrl baseUrl(QString::fromLocal8Bit(qgetenv("GV_REMOTE_TESTS_BASE_URL")));
     baseUrl = baseUrl.adjusted(QUrl::StripTrailingSlash);
-    baseUrl.setPath(baseUrl.path() + '/' + "gwenview-remote-tests");
+    baseUrl.setPath(baseUrl.path() + "/gwenview-remote-tests");
 
     if (KIO::NetAccess::exists(baseUrl, KIO::NetAccess::DestinationSide, authWindow)) {
         KIO::NetAccess::del(baseUrl, authWindow);
