@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN"
 "dtd/kdedbx45.dtd" [
-  <!ENTITY kappname "<application>Gwenview</application>">
   <!ENTITY % addindex "IGNORE">
   <!ENTITY % English "INCLUDE"><!-- change language only here -->
 ]>
@@ -40,7 +39,7 @@
 <date>2015-08-04</date>
 <releaseinfo>Applications 15.08</releaseinfo>
 <abstract>
-<para>&kappname; is an image and video viewer.</para>
+<para>&gwenview; is an image and video viewer.</para>
 </abstract>
 <keywordset>
 <keyword>KDE</keyword>
@@ -57,14 +56,14 @@
 <title>Introduction</title>
 
 <sect1 id="what-is-gwenview">
-<title>What is &kappname;</title>
+<title>What is &gwenview;</title>
 
 <para>
-&kappname; is a fast and easy to use image and video viewer.
+&gwenview; is a fast and easy to use image and video viewer.
 </para>
 
  <para>
-Gwenview features two main modes: Browse and View. Both modes can be used
+&gwenview; features two main modes: Browse and View. Both modes can be used
 in a normal application window and Full Screen. Browse Mode
 lets you navigate through your computer showing thumbnails of your images, View
 Mode lets you view images one at a time, and Full Screen lets you make quick
@@ -72,14 +71,14 @@ slideshows.  There is also a start screen that displays a list of recently opene
 folders and &URL;s as well as your places and tags.
 </para>
 
-<para>Image loading is handled by the Qt library, so &kappname; supports all
-image formats your Qt installation supports. &kappname; correctly displays images
+<para>Image loading is handled by the &Qt; library, so &gwenview; supports all
+image formats your &Qt; installation supports. &gwenview; correctly displays images
 with an alpha channel (transparency) as well as animations.</para>
 
-<para>&kappname; supports the displaying and editing of EXIF comments in JPEG
+<para>&gwenview; supports the displaying and editing of EXIF comments in JPEG
 images. Lossless JPEG transforms such as rotations and mirroring are also supported.</para>
 
-<para>&kappname; can read embedded color profiles from PNG and JPEG files.
+<para>&gwenview; can read embedded color profiles from PNG and JPEG files.
 It can use the image color profile together with the display color profile
 to output correct colors on the screen.</para>
 </sect1>
@@ -104,8 +103,8 @@ and your places and tags on the right side.</para>
 </sect1>
 
 <sect1 id='image_operations'><title>Image Operations</title>
-<para>&kappname; has a few features which are available in both Browse, View, and
-Full Screen view. &kappname; has the capability to do basic alteration of your
+<para>&gwenview; has a few features which are available in both Browse, View, and
+Full Screen view. &gwenview; has the capability to do basic alteration of your
 images.</para>
 <itemizedlist>
 <listitem><para>Rotate: A rotate operation will rotate the image either to the left
@@ -271,7 +270,7 @@ This is very similar to the behavior provided by phones or digital cameras.</par
 the image using the mouse and the arrow keys. The bird-eye view automatically hides
 itself after a short delay, showing back only while zooming or scrolling.</para>
 
-<para>You can define what happens when going to image B after having zoomed in on an area of image A using the options in the <guilabel>Zoom mode</guilabel> group on the <guimenuitem>Image View</guimenuitem> page of the &kappname; configuration window which can be reached using the <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure &kappname;...</guimenuitem></menuchoice>.</para>
+<para>You can define what happens when going to image B after having zoomed in on an area of image A using the options in the <guilabel>Zoom mode</guilabel> group on the <guimenuitem>Image View</guimenuitem> page of the &gwenview; configuration window which can be reached using the <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure &gwenview;...</guimenuitem></menuchoice>.</para>
 
 <itemizedlist>
     <listitem><para>If set to <guilabel>Autofit each image</guilabel>, image B is zoomed out to fit the screen.</para></listitem>
@@ -279,7 +278,7 @@ itself after a short delay, showing back only while zooming or scrolling.</para>
     <listitem><para>If set to <guilabel>Per image zoom and position</guilabel>, all images remember their own zoom and position: image B is initially set to the same zoom parameters as image A, but will then remember its own zoom and position (if these are changed, image A will <emphasis>not</emphasis> be displayed with the updated zoom and position).</para></listitem>
 </itemizedlist>
 
-<tip><para>You can start directly in View mode by starting &kappname; from a
+<tip><para>You can start directly in View mode by starting &gwenview; from a
 context menu like <guimenuitem>Open With</guimenuitem> in another program or by
 launching it from the command line with an image as an argument.</para> </tip>
 
@@ -375,7 +374,7 @@ button on the taskbar.
 mouse to the top of the screen. If the mouse cursor is over the top bar, it
 will not autohide. Most of the buttons on the bar are the same as the ones on
 the toolbar in Browse or View Modes, except for the <guiicon>Exit Full
-Screen Mode</guiicon> button which returns you to the &kappname; window, the
+Screen Mode</guiicon> button which returns you to the &gwenview; window, the
 <guiicon>Start/Stop Slideshow</guiicon> button, and the
 <guiicon>Configure Full Screen Mode</guiicon> button which shows a
 small settings dialog that allows you to easily and quickly configure the
@@ -383,7 +382,7 @@ slideshow. The slideshow controls there are: </para>
 
 <itemizedlist>
     <listitem><para>The <guilabel>Interval</guilabel> slider controls how long
-    &kappname; will show an image before it move to the next one.</para></listitem>
+    &gwenview; will show an image before it move to the next one.</para></listitem>
     <listitem><para>If the <guilabel>Loop</guilabel> check box is checked, when the
     end of the slideshow is reached, it will continue from the beginning instead
     of stopping. </para></listitem>
@@ -453,15 +452,15 @@ copying, renaming, deleting, and creating new folders.</para></listitem>
 </chapter>
 <!--FIXME no importer in kf5
 <chapter id="importer">
-<title>&kappname; Importer</title>
+<title>&gwenview; Importer</title>
 
 <sect1>
 <title>Introduction</title>
-<para>The &kappname; Importer allows you to import images from a digital camera or
-removable media.  To launch it, select <guilabel>Download Photos with &kappname;</guilabel>
+<para>The &gwenview; Importer allows you to import images from a digital camera or
+removable media.  To launch it, select <guilabel>Download Photos with &gwenview;</guilabel>
 in the &kde; Device Notifier after connecting a supported device.</para>
 
-<para>When you plug in a device the &kappname; importer recursively lists all images and videos.
+<para>When you plug in a device the &gwenview; importer recursively lists all images and videos.
 </para>
 <para>This is not always what you expect, &eg; plugging a smartphone you do not want to list all medias
 of the device; but only the pictures you took, which are usually in a special subfolder.
@@ -475,7 +474,7 @@ of the device; but only the pictures you took, which are usually in a special su
     </imageobject>
   </mediaobject>
 </screenshot>
-<para>It is possible to select the root folder to list, and &kappname; Importer will remember the
+<para>It is possible to select the root folder to list, and &gwenview; Importer will remember the
 last root folder for each device. This way, next time you plug a device in, only the relevant
 pictures and videos should be listed.
 </para>
@@ -484,7 +483,7 @@ pictures and videos should be listed.
 <title>Importing Images</title>
 
 <screenshot>
-  <screeninfo>&kappname; Importer Screenshot</screeninfo>
+  <screeninfo>&gwenview; Importer Screenshot</screeninfo>
   <mediaobject>
     <imageobject>
       <imagedata fileref="importer.png" format="PNG" />
@@ -503,7 +502,7 @@ on the device.</para>
 
 <sect2>
 <title>Automatic Renaming</title>
-<para>&kappname; Importer can rename your files according to a specified pattern.
+<para>&gwenview; Importer can rename your files according to a specified pattern.
 To configure this, select the <guibutton>Settings</guibutton> in the lower left
 corner.  You may turn this feature on or off using the check box at the top.  The
 <guilabel>Rename Format</guilabel> supports several special parameters, which will
@@ -551,7 +550,7 @@ enter it into the text box or type one manually.</para>
   or down the thumbnail view area.</para></listitem>
   <listitem><para>If the <guilabel>Mouse Behavior</guilabel> option in
   <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure
-  &kappname;</guimenuitem></menuchoice>
+  &gwenview;</guimenuitem></menuchoice>
   is set to Browse, scrolling the mouse wheel while in View Mode will
   move you through the images in the folder.</para></listitem>
 </itemizedlist>
@@ -560,7 +559,7 @@ enter it into the text box or type one manually.</para>
 
 <sect1 id="keybindings"> <title>Key bindings</title>
 
-<para>&kappname; comes with a range of keyboard shortcuts, all of which can be
+<para>&gwenview; comes with a range of keyboard shortcuts, all of which can be
 viewed and remapped by selecting
 <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure
 Shortcuts...</guimenuitem></menuchoice>. Note that in the Files and Folders
@@ -687,13 +686,13 @@ Link an image.</para></listitem>
 <sect1 id="advanced-configuration">
     <title>Advanced Configuration Options</title>
     <para>
-        Some notes on hidden &kappname; options can be found on
+        Some notes on hidden &gwenview; options can be found on
         <ulink url="http://userbase.kde.org/Special:myLanguage/Gwenview/Hidden_Configuration_Options">this page</ulink>.
     </para>
     <important>
         <para>
             The options described on the above-mentioned page may help you
-            tune &kappname; for specific needs, but please keep in mind
+            tune &gwenview; for specific needs, but please keep in mind
             there is no warranty they will continue working from one
             version to another.
         </para>
@@ -704,7 +703,7 @@ Link an image.</para></listitem>
 <chapter id="credits">
 <title>Credits and Copyright</title>
 
-<para>&kappname; is currently maintained by Aurélien Gâteau</para>
+<para>&gwenview; is currently maintained by Aurélien Gâteau</para>
 
 <para>This document was written by Christopher Martin</para>
 
