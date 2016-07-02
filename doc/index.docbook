@@ -176,7 +176,7 @@ the changed images.
 <tip><para>If you have installed the Kipi Plugins, a <guimenu>Plugins</guimenu>
 menu will be available that will allow you to perform many additional operations
 on your images.  For more information, see the
-<ulink url="help:kipi-plugins">Kipi Plugins documentation</ulink>.</para></tip>
+<ulink url="help:/kipi-plugins">Kipi Plugins documentation</ulink>.</para></tip>
 </sect1>
 
 <sect1 id='browse_mode'><title>Browse Mode</title>
