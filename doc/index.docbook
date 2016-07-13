@@ -548,7 +548,7 @@ enter it into the text box or type one manually.</para>
   shows that image.</para></listitem>
   <listitem><para>When in Browse mode, scrolling the mouse wheel will scroll up
   or down the thumbnail view area.</para></listitem>
-  <listitem><para>If the <guilabel>Mouse Behavior</guilabel> option in
+  <listitem><para>If the <guilabel>Mouse wheel behavior</guilabel> option in
   <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure
   &gwenview;</guimenuitem></menuchoice>
   is set to Browse, scrolling the mouse wheel while in View Mode will
