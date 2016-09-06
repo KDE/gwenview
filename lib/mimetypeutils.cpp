@@ -27,13 +27,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QDebug>
 #include <QUrl>
 #include <QMimeDatabase>
+#include <QImageReader>
 
 // KDE
 #include <KFileItem>
 #include <KIO/Job>
 #include <KIO/JobClasses>
 #include <KIO/NetAccess>
-#include <KImageIO>
 
 // Local
 #include <archiveutils.h>
@@ -85,8 +85,10 @@ const QStringList& rasterImageMimeTypes()
 {
     static QStringList list;
     if (list.isEmpty()) {
-        list = KImageIO::mimeTypes(KImageIO::Reading);
-        resolveAliasInList(&list);
+        auto supported = QImageReader::supportedMimeTypes();
+        for (auto mime: qAsConst(supported)) {
+            list << resolveAlias(QString::fromUtf8(mime));
+        }
         // We don't want svg images to be considered as raster images
         Q_FOREACH(const QString& mimeType, svgImageMimeTypes()) {
             list.removeOne(mimeType);
