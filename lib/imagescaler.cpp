@@ -206,7 +206,7 @@ void ImageScaler::scaleRect(const QRect& rect)
               );
     }
 
-    scaledRect(destRect.left() + destLeftMargin, destRect.top() + destTopMargin, tmp);
+    emit scaledRect(destRect.left() + destLeftMargin, destRect.top() + destTopMargin, tmp);
 }
 
 } // namespace
