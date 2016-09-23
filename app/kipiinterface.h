@@ -28,9 +28,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kipi/plugin.h>
 #include <libkipi_version.h>
 
-//TODO if packagekit
+#ifdef KIPI_INSTALLER
 #include <PackageKit/Daemon>
 #include <PackageKit/Transaction>
+#endif
 
 class QAction;
 
@@ -92,9 +93,11 @@ public Q_SLOTS:
 private Q_SLOTS:
     void slotSelectionChanged();
     void slotDirectoryChanged();
+#ifdef KIPI_INSTALLER
     void slotInstallPlugins(bool checked);
     void packageInstall(PackageKit::Transaction::Info, QString, QString);
     void packageFinished(PackageKit::Transaction::Exit, uint);
+#endif
     void init();
     void loadOnePlugin();
 

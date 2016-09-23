@@ -339,15 +339,18 @@ void KIPIInterface::loadOnePlugin()
     d->mPluginMenu->removeAction(d->mLoadingAction);
     if (d->mPluginMenu->isEmpty()) {
         d->mPluginMenu->addAction(d->mNoPluginAction);
+#ifdef KIPI_INSTALLER
         d->mPluginMenu->addAction(d->mInstallPluginAction);
         d->mInstallPluginAction->setEnabled(true);
         QObject::connect(d->mInstallPluginAction, SIGNAL(triggered(bool)),
                          this, SLOT(slotInstallPlugins(bool)));
+#endif
     }
 
     loadingFinished();
 }
 
+#ifdef KIPI_INSTALLER
 void KIPIInterface::slotInstallPlugins(bool checked) {
     Q_UNUSED(checked);
     qDebug() << "slotInstallPlugins()" << endl;
@@ -382,13 +385,22 @@ void KIPIInterface::packageFinished(PackageKit::Transaction::Exit status, uint r
     qDebug() << "packageFinished() status: " << status << endl; 
     qDebug() << "packageFinished() no of seconds: " << runtime << endl; 
     if (status == PackageKit::Transaction::Exit::ExitSuccess) {
-        d->installDialog->setLabelText("installed!");
+        d->installDialog->setLabelText("Image plugins have been installed.");
+        d->installDialog->setAutoClose(false);
+        d->installDialog->setMaximum(100);
+        d->installDialog->setValue(100);
+        d->installDialog->setCancelButtonText("&Close");
         d->mPluginLoader = 0;
         loadPlugins();
+        d->mPluginMenu->removeAction(d->mInstallPluginAction);
+        d->mPluginMenu->removeAction(d->mNoPluginAction);
     } else {
-        d->installDialog->setLabelText("failed to install :(");
+        d->installDialog->setLabelText("Could not install plugins.");
+        d->installDialog->setMaximum(100);
+        d->installDialog->setCancelButtonText("&Close");
     } 
 }
+#endif
 
 QList<QAction*> KIPIInterface::pluginActions(KIPI::Category category) const
 {

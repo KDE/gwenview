@@ -107,15 +107,20 @@ find_package(PackageKitQt5 0.9.5)
 set_package_properties(PackageKitQt5
     PROPERTIES DESCRIPTION "Software Manager integration"
     TYPE OPTIONAL
-    PURPOSE "Needed to automatically install the samba package."
+    PURPOSE "Needed to automatically install KIPI Plugins."
 )
 
 find_package(AppstreamQt 0.9.8)
 set_package_properties(AppstreamQt
     PROPERTIES DESCRIPTION "Appstream"
     TYPE OPTIONAL
-    PURPOSE "Needed to find KIPI plugins."
+    PURPOSE "Needed to find KIPI Plugins."
 )
+
+if (KF5Kipi_FOUND AND PackageKitQt5_FOUND AND AppstreamQt_FOUND)
+    set(KIPI_INSTALLER true)
+    add_definitions(-DKIPI_INSTALLER)
+endif()
 
 configure_file(config-gwenview.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-gwenview.h)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
