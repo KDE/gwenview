@@ -28,6 +28,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kipi/plugin.h>
 #include <libkipi_version.h>
 
+//TODO if packagekit
+#include <PackageKit/Daemon>
+#include <PackageKit/Transaction>
+
 class QAction;
 
 #ifndef KIPI_VERSION_MAJOR
@@ -88,6 +92,9 @@ public Q_SLOTS:
 private Q_SLOTS:
     void slotSelectionChanged();
     void slotDirectoryChanged();
+    void slotInstallPlugins(bool checked);
+    void packageInstall(PackageKit::Transaction::Info, QString, QString);
+    void packageFinished(PackageKit::Transaction::Exit, uint);
     void init();
     void loadOnePlugin();
 

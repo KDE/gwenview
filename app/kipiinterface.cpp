@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QList>
 #include <QMenu>
 #include <QRegExp>
+#include <QProgressDialog>
 
 // KDE
 #include <QAction>
@@ -42,6 +43,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kipi/plugin.h>
 #include <kipi/pluginloader.h>
 //#include <kipi/version.h>
+
+//Appstream, TODO add an If installed here
+#include <AppstreamQt/database.h>
+#include <AppstreamQt/component.h>
 
 // local
 #include "mainwindow.h"
@@ -202,6 +207,8 @@ struct KIPIInterfacePrivate
     MenuInfoMap mMenuInfoMap;
     QAction * mLoadingAction;
     QAction * mNoPluginAction;
+    QAction * mInstallPluginAction;
+    QProgressDialog * installDialog;
 
     void setupPluginsMenu()
     {
@@ -228,7 +235,8 @@ KIPIInterface::KIPIInterface(MainWindow* mainWindow)
     d->mMainWindow = mainWindow;
     d->mPluginLoader = 0;
     d->mLoadingAction = d->createDummyPluginAction(i18n("Loading..."));
-    d->mNoPluginAction = d->createDummyPluginAction(i18n("No Plugin Found"));
+    d->mNoPluginAction = d->createDummyPluginAction(i18n("YYYNo Plugin Found"));
+    d->mInstallPluginAction = d->createDummyPluginAction(i18n("Install Plugins"));
 
     d->setupPluginsMenu();
     QObject::connect(d->mMainWindow->contextManager(), SIGNAL(selectionChanged()),
@@ -331,9 +339,55 @@ void KIPIInterface::loadOnePlugin()
     d->mPluginMenu->removeAction(d->mLoadingAction);
     if (d->mPluginMenu->isEmpty()) {
         d->mPluginMenu->addAction(d->mNoPluginAction);
+        d->mPluginMenu->addAction(d->mInstallPluginAction);
+        d->mInstallPluginAction->setEnabled(true);
+        QObject::connect(d->mInstallPluginAction, SIGNAL(triggered(bool)),
+                         this, SLOT(slotInstallPlugins(bool)));
     }
 
     loadingFinished();
+}
+
+void KIPIInterface::slotInstallPlugins(bool checked) {
+    Q_UNUSED(checked);
+    qDebug() << "slotInstallPlugins()" << endl;
+    d->installDialog = new QProgressDialog(i18n("Installing Plugins..."), i18n("Cancel"), 0, 0);
+    d->installDialog->setWindowModality(Qt::WindowModal);
+    
+    Appstream::Database* appstreamDatabase = new Appstream::Database();
+    appstreamDatabase->open();
+    Appstream::Component kipiPlugins = appstreamDatabase->componentById("photolayoutseditor.desktop");
+    qDebug() << "The Package: " << kipiPlugins.packageNames()[0] << endl;
+    QString package = kipiPlugins.packageNames()[0];
+    
+    PackageKit::Transaction *transaction = PackageKit::Daemon::resolve(package,
+                                                   PackageKit::Transaction::FilterArch);
+    connect(transaction,
+            SIGNAL(package(PackageKit::Transaction::Info,QString,QString)),
+            SLOT(packageInstall(PackageKit::Transaction::Info,QString,QString)));
+    
+    d->installDialog->show();
+}
+
+void KIPIInterface::packageInstall(PackageKit::Transaction::Info, QString packageID, QString summary) {
+    qDebug() << "packageInstall()" << packageID << endl; 
+    qDebug() << "packageInstall()" << summary << endl; 
+    PackageKit::Transaction *installTransaction = PackageKit::Daemon::installPackage(packageID);
+    connect(installTransaction,
+            SIGNAL(finished(PackageKit::Transaction::Exit, uint)),
+            SLOT(packageFinished(PackageKit::Transaction::Exit, uint)));
+}
+
+void KIPIInterface::packageFinished(PackageKit::Transaction::Exit status, uint runtime) {
+    qDebug() << "packageFinished() status: " << status << endl; 
+    qDebug() << "packageFinished() no of seconds: " << runtime << endl; 
+    if (status == PackageKit::Transaction::Exit::ExitSuccess) {
+        d->installDialog->setLabelText("installed!");
+        d->mPluginLoader = 0;
+        loadPlugins();
+    } else {
+        d->installDialog->setLabelText("failed to install :(");
+    } 
 }
 
 QList<QAction*> KIPIInterface::pluginActions(KIPI::Category category) const

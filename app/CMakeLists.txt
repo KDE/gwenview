@@ -82,6 +82,11 @@ target_link_libraries(gwenview LINK_INTERFACE_LIBRARIES KF5::KIOCore Qt5::Core)
 
 if (KF5Kipi_FOUND)
     target_link_libraries(gwenview KF5::Kipi)
+
+    # TODO Add if (packagekit) and if (appstream)
+    target_link_libraries(gwenview PK::packagekitqt5)
+    target_link_libraries(gwenview AppstreamQt)
+
 endif()
 
 if (APPLE)

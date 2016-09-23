@@ -103,6 +103,20 @@ if(X11_FOUND)
    set(HAVE_X11 1)
 endif()
 
+find_package(PackageKitQt5 0.9.5)
+set_package_properties(PackageKitQt5
+    PROPERTIES DESCRIPTION "Software Manager integration"
+    TYPE OPTIONAL
+    PURPOSE "Needed to automatically install the samba package."
+)
+
+find_package(AppstreamQt 0.9.8)
+set_package_properties(AppstreamQt
+    PROPERTIES DESCRIPTION "Appstream"
+    TYPE OPTIONAL
+    PURPOSE "Needed to find KIPI plugins."
+)
+
 configure_file(config-gwenview.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-gwenview.h)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
