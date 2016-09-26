@@ -357,18 +357,18 @@ void KIPIInterface::slotInstallPlugins(bool checked) {
     Q_UNUSED(checked);
     d->installDialog = new QProgressDialog(i18n("Installing Plugins..."), i18n("Cancel"), 0, 0);
     d->installDialog->setWindowModality(Qt::WindowModal);
-    
+
     Appstream::Database appstreamDatabase;
     appstreamDatabase.open();
     Appstream::Component kipiPlugins = appstreamDatabase.componentById("photolayoutseditor.desktop");
     QString package = kipiPlugins.packageNames()[0];
-    
+
     PackageKit::Transaction *transaction = PackageKit::Daemon::resolve(package,
                                                    PackageKit::Transaction::FilterArch);
     connect(transaction,
             SIGNAL(package(PackageKit::Transaction::Info,QString,QString)),
             SLOT(packageInstall(PackageKit::Transaction::Info,QString,QString)));
-    
+
     d->installDialog->show();
 }
 
@@ -394,7 +394,7 @@ void KIPIInterface::packageFinished(PackageKit::Transaction::Exit status, uint r
         d->installDialog->setLabelText("Could not install plugins.");
         d->installDialog->setMaximum(100);
         d->installDialog->setCancelButtonText("&Close");
-    } 
+    }
 }
 #endif
 
