@@ -35,6 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KXMLGUIFactory>
 #include <KDirLister>
 #include <KLocalizedString>
+#include <KMessageBox>
 
 // KIPI
 #include <kipi/imagecollectionshared.h>
@@ -356,7 +357,7 @@ void KIPIInterface::loadOnePlugin()
 void KIPIInterface::slotInstallPlugins(bool checked) {
     Q_UNUSED(checked);
     m_installTransaction = 0;
-    d->installDialog = new QProgressDialog(i18n("Installing Plugins..."), i18n("Cancel"), 0, 100);
+    d->installDialog = new QProgressDialog(i18n("Installing Plugins..."), i18n("Cancel"), 0, 100, d->mMainWindow);
     d->installDialog->setWindowModality(Qt::WindowModal);
     d->installDialog->setAutoClose(false);
     connect(d->installDialog, SIGNAL(canceled()), SLOT(cancelInstall()));
@@ -364,7 +365,13 @@ void KIPIInterface::slotInstallPlugins(bool checked) {
     Appstream::Database appstreamDatabase;
     appstreamDatabase.open();
     Appstream::Component kipiPlugins = appstreamDatabase.componentById("photolayoutseditor.desktop");
-    QString package = kipiPlugins.packageNames()[0]; //TODO check
+    QString package;
+    if (kipiPlugins.packageNames().length() > 0) {
+        package = kipiPlugins.packageNames()[0];
+    } else {
+        KMessageBox::sorry(d->mMainWindow, i18n("Could not install plugins."));
+        return;
+    }
 
     PackageKit::Transaction *transaction = PackageKit::Daemon::resolve(package,
                                                    PackageKit::Transaction::FilterArch);
@@ -387,7 +394,7 @@ void KIPIInterface::packageInstall(PackageKit::Transaction::Info, QString packag
 
 void KIPIInterface::packageFinished(PackageKit::Transaction::Exit status, uint runtime) {
     if (status == PackageKit::Transaction::Exit::ExitSuccess) {
-        d->installDialog->setLabelText("Image plugins have been installed.");
+        d->installDialog->setLabelText(i18n("Image plugins have been installed."));
         d->installDialog->setValue(100);
         d->installDialog->setCancelButtonText("&Close");
         d->mPluginLoader = 0;
