@@ -355,7 +355,7 @@ void KIPIInterface::loadOnePlugin()
 #ifdef KIPI_INSTALLER
 void KIPIInterface::slotInstallPlugins(bool checked) {
     Q_UNUSED(checked);
-    d->installDialog = new QProgressDialog(i18n("Installing Plugins..."), i18n("Cancel"), 0, 0);
+    d->installDialog = new QProgressDialog(i18n("Installing Plugins..."), i18n("Cancel"), 0, 100);
     d->installDialog->setWindowModality(Qt::WindowModal);
 
     Appstream::Database appstreamDatabase;
@@ -373,17 +373,19 @@ void KIPIInterface::slotInstallPlugins(bool checked) {
 }
 
 void KIPIInterface::packageInstall(PackageKit::Transaction::Info, QString packageID, QString summary) {
-    PackageKit::Transaction *installTransaction = PackageKit::Daemon::installPackage(packageID);
-    connect(installTransaction,
+    m_installTransaction = PackageKit::Daemon::installPackage(packageID);
+    connect(m_installTransaction,
             SIGNAL(finished(PackageKit::Transaction::Exit, uint)),
             SLOT(packageFinished(PackageKit::Transaction::Exit, uint)));
+    connect(m_installTransaction,
+            SIGNAL(percentageChanged()),
+            SLOT(percentageChanged()));
 }
 
 void KIPIInterface::packageFinished(PackageKit::Transaction::Exit status, uint runtime) {
     if (status == PackageKit::Transaction::Exit::ExitSuccess) {
         d->installDialog->setLabelText("Image plugins have been installed.");
         d->installDialog->setAutoClose(false);
-        d->installDialog->setMaximum(100);
         d->installDialog->setValue(100);
         d->installDialog->setCancelButtonText("&Close");
         d->mPluginLoader = 0;
@@ -392,9 +394,12 @@ void KIPIInterface::packageFinished(PackageKit::Transaction::Exit status, uint r
         d->mPluginMenu->removeAction(d->mNoPluginAction);
     } else {
         d->installDialog->setLabelText("Could not install plugins.");
-        d->installDialog->setMaximum(100);
         d->installDialog->setCancelButtonText("&Close");
     }
+}
+
+void KIPIInterface::percentageChanged() {
+    d->installDialog->setValue(m_installTransaction->percentage());
 }
 #endif
 

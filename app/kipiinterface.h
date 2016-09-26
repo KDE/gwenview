@@ -97,12 +97,14 @@ private Q_SLOTS:
     void slotInstallPlugins(bool checked);
     void packageInstall(PackageKit::Transaction::Info, QString, QString);
     void packageFinished(PackageKit::Transaction::Exit, uint);
+    void percentageChanged();
 #endif
     void init();
     void loadOnePlugin();
 
 private:
     KIPIInterfacePrivate* const d;
+    PackageKit::Transaction* m_installTransaction;
 };
 
 class ImageCollection : public KIPI::ImageCollectionShared
