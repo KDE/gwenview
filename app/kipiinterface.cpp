@@ -353,14 +353,12 @@ void KIPIInterface::loadOnePlugin()
 #ifdef KIPI_INSTALLER
 void KIPIInterface::slotInstallPlugins(bool checked) {
     Q_UNUSED(checked);
-    qDebug() << "slotInstallPlugins()" << endl;
     d->installDialog = new QProgressDialog(i18n("Installing Plugins..."), i18n("Cancel"), 0, 0);
     d->installDialog->setWindowModality(Qt::WindowModal);
     
     Appstream::Database appstreamDatabase;
     appstreamDatabase.open();
     Appstream::Component kipiPlugins = appstreamDatabase.componentById("photolayoutseditor.desktop");
-    qDebug() << "The Package: " << kipiPlugins.packageNames()[0] << endl;
     QString package = kipiPlugins.packageNames()[0];
     
     PackageKit::Transaction *transaction = PackageKit::Daemon::resolve(package,
@@ -373,8 +371,6 @@ void KIPIInterface::slotInstallPlugins(bool checked) {
 }
 
 void KIPIInterface::packageInstall(PackageKit::Transaction::Info, QString packageID, QString summary) {
-    qDebug() << "packageInstall()" << packageID << endl; 
-    qDebug() << "packageInstall()" << summary << endl; 
     PackageKit::Transaction *installTransaction = PackageKit::Daemon::installPackage(packageID);
     connect(installTransaction,
             SIGNAL(finished(PackageKit::Transaction::Exit, uint)),
@@ -382,8 +378,6 @@ void KIPIInterface::packageInstall(PackageKit::Transaction::Info, QString packag
 }
 
 void KIPIInterface::packageFinished(PackageKit::Transaction::Exit status, uint runtime) {
-    qDebug() << "packageFinished() status: " << status << endl; 
-    qDebug() << "packageFinished() no of seconds: " << runtime << endl; 
     if (status == PackageKit::Transaction::Exit::ExitSuccess) {
         d->installDialog->setLabelText("Image plugins have been installed.");
         d->installDialog->setAutoClose(false);
