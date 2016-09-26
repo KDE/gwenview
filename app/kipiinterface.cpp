@@ -359,7 +359,6 @@ void KIPIInterface::slotInstallPlugins(bool checked) {
     m_installTransaction = 0;
     d->installDialog = new QProgressDialog(i18n("Installing Plugins..."), i18n("Cancel"), 0, 100, d->mMainWindow);
     d->installDialog->setWindowModality(Qt::WindowModal);
-    d->installDialog->setAutoClose(false);
     connect(d->installDialog, SIGNAL(canceled()), SLOT(cancelInstall()));
 
     Appstream::Database appstreamDatabase;
@@ -396,14 +395,14 @@ void KIPIInterface::packageFinished(PackageKit::Transaction::Exit status, uint r
     if (status == PackageKit::Transaction::Exit::ExitSuccess) {
         d->installDialog->setLabelText(i18n("Image plugins have been installed."));
         d->installDialog->setValue(100);
-        d->installDialog->setCancelButtonText("&Close");
+        KMessageBox::information(d->mMainWindow, i18n("Image plugins have been installed."));
         d->mPluginLoader = 0;
         loadPlugins();
         d->mPluginMenu->removeAction(d->mInstallPluginAction);
         d->mPluginMenu->removeAction(d->mNoPluginAction);
     } else {
-        d->installDialog->setLabelText("Could not install plugins.");
-        d->installDialog->setCancelButtonText("&Close");
+        d->installDialog->setValue(100);
+        KMessageBox::information(d->mMainWindow, i18n("Could not install plugins."));
     }
 }
 
