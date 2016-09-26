@@ -44,9 +44,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kipi/pluginloader.h>
 //#include <kipi/version.h>
 
-//Appstream, TODO add an If installed here
+//Appstream
+#ifdef KIPI_INSTALLER
 #include <AppstreamQt/database.h>
 #include <AppstreamQt/component.h>
+#endif
 
 // local
 #include "mainwindow.h"
