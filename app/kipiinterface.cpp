@@ -357,9 +357,9 @@ void KIPIInterface::slotInstallPlugins(bool checked) {
     d->installDialog = new QProgressDialog(i18n("Installing Plugins..."), i18n("Cancel"), 0, 0);
     d->installDialog->setWindowModality(Qt::WindowModal);
     
-    Appstream::Database* appstreamDatabase = new Appstream::Database();
-    appstreamDatabase->open();
-    Appstream::Component kipiPlugins = appstreamDatabase->componentById("photolayoutseditor.desktop");
+    Appstream::Database appstreamDatabase;
+    appstreamDatabase.open();
+    Appstream::Component kipiPlugins = appstreamDatabase.componentById("photolayoutseditor.desktop");
     qDebug() << "The Package: " << kipiPlugins.packageNames()[0] << endl;
     QString package = kipiPlugins.packageNames()[0];
     
