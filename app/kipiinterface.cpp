@@ -355,13 +355,16 @@ void KIPIInterface::loadOnePlugin()
 #ifdef KIPI_INSTALLER
 void KIPIInterface::slotInstallPlugins(bool checked) {
     Q_UNUSED(checked);
+    m_installTransaction = 0;
     d->installDialog = new QProgressDialog(i18n("Installing Plugins..."), i18n("Cancel"), 0, 100);
     d->installDialog->setWindowModality(Qt::WindowModal);
+    d->installDialog->setAutoClose(false);
+    connect(d->installDialog, SIGNAL(canceled()), SLOT(cancelInstall()));
 
     Appstream::Database appstreamDatabase;
     appstreamDatabase.open();
     Appstream::Component kipiPlugins = appstreamDatabase.componentById("photolayoutseditor.desktop");
-    QString package = kipiPlugins.packageNames()[0];
+    QString package = kipiPlugins.packageNames()[0]; //TODO check
 
     PackageKit::Transaction *transaction = PackageKit::Daemon::resolve(package,
                                                    PackageKit::Transaction::FilterArch);
@@ -385,7 +388,6 @@ void KIPIInterface::packageInstall(PackageKit::Transaction::Info, QString packag
 void KIPIInterface::packageFinished(PackageKit::Transaction::Exit status, uint runtime) {
     if (status == PackageKit::Transaction::Exit::ExitSuccess) {
         d->installDialog->setLabelText("Image plugins have been installed.");
-        d->installDialog->setAutoClose(false);
         d->installDialog->setValue(100);
         d->installDialog->setCancelButtonText("&Close");
         d->mPluginLoader = 0;
@@ -400,6 +402,14 @@ void KIPIInterface::packageFinished(PackageKit::Transaction::Exit status, uint r
 
 void KIPIInterface::percentageChanged() {
     d->installDialog->setValue(m_installTransaction->percentage());
+}
+
+void KIPIInterface::cancelInstall() {
+    if (m_installTransaction) {
+        if (m_installTransaction->allowCancel()) {
+            m_installTransaction->cancel();
+        }
+    }
 }
 #endif
 
