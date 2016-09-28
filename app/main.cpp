@@ -59,24 +59,17 @@ public:
             mMultipleUrlsDir.reset(new QTemporaryDir);
             mUrl = QUrl::fromLocalFile(mMultipleUrlsDir->path());
             QList<QUrl> list;
-            foreach(const QString & url, args) {
-                list << QUrl::fromUserInput(url);
+            QStringList tmpArgs = args;
+            tmpArgs.removeDuplicates();
+            foreach(const QString & url, tmpArgs) {
+                list << QUrl::fromUserInput(url, QDir::currentPath(), QUrl::AssumeLocalFile);
             }
 
             KIO::CopyJob* job = KIO::link(list, mUrl);
             job->exec();
         } else {
             QString tmpArg = args.first();
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 4, 0))
-            mUrl = QUrl::fromUserInput(tmpArg, QDir::currentPath());
-#else
-            QUrl tmpUrl = QUrl(tmpArg);
-            if (tmpUrl.scheme().isEmpty() && !tmpArg.startsWith(QLatin1Char('/'))) {
-                mUrl = QUrl::fromLocalFile(tmpArg);
-            } else {
-                mUrl = QUrl::fromUserInput(tmpArg);
-            }
-#endif
+            mUrl = QUrl::fromUserInput(tmpArg, QDir::currentPath(), QUrl::AssumeLocalFile);
         }
 
         if (mUrl.isValid() && (fullscreen || slideshow)) {
