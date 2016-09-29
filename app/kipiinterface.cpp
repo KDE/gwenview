@@ -25,7 +25,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QList>
 #include <QMenu>
 #include <QRegExp>
-#include <QProgressDialog>
 #include <QDesktopServices>
 #include <QFileSystemWatcher>
 #include <QTimer>
@@ -38,7 +37,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KXMLGUIFactory>
 #include <KDirLister>
 #include <KLocalizedString>
-#include <KMessageBox>
 
 // KIPI
 #include <kipi/imagecollectionshared.h>

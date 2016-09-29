@@ -103,7 +103,7 @@ if(X11_FOUND)
    set(HAVE_X11 1)
 endif()
 
-option(KIPI_INSTALLER "Build with Kipi Installer menu option (requires Plasma Discover built with Appstream" ON)
+option(KIPI_INSTALLER "Build with Kipi Installer menu option (requires Plasma Discover or another handler for Appstream URLs" ON)
 if (KIPI_INSTALLER)
     add_definitions(-DKIPI_INSTALLER)
 endif()
