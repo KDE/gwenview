@@ -84,11 +84,6 @@ if (KF5Kipi_FOUND)
     target_link_libraries(gwenview KF5::Kipi)
 endif()
 
-if (KIPI_INSTALLER)
-    target_link_libraries(gwenview PK::packagekitqt5)
-    target_link_libraries(gwenview AppstreamQt)
-endif()
-
 if (APPLE)
     # own plist template
     set_target_properties (gwenview PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/MacOSXBundleInfo.plist.in)

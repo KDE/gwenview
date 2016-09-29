@@ -28,12 +28,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kipi/plugin.h>
 #include <libkipi_version.h>
 
-#ifdef KIPI_INSTALLER
-#include <PackageKit/Daemon>
-#include <PackageKit/Transaction>
-#endif
-
 class QAction;
+class QFileSystemWatcher;
 
 #ifndef KIPI_VERSION_MAJOR
 #error KIPI_VERSION_MAJOR should be provided.
@@ -95,19 +91,13 @@ private Q_SLOTS:
     void slotDirectoryChanged();
 #ifdef KIPI_INSTALLER
     void slotInstallPlugins(bool checked);
-    void packageInstall(PackageKit::Transaction::Info, QString, QString);
-    void packageFinished(PackageKit::Transaction::Exit, uint);
-    void percentageChanged();
-    void cancelInstall();
+    void packageFinished();
 #endif
     void init();
     void loadOnePlugin();
 
 private:
     KIPIInterfacePrivate* const d;
-#ifdef KIPI_INSTALLER
-    PackageKit::Transaction* m_installTransaction;
-#endif
 };
 
 class ImageCollection : public KIPI::ImageCollectionShared
