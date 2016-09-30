@@ -343,8 +343,8 @@ void KIPIInterface::loadOnePlugin()
         if (KIO::DesktopExecParser::hasSchemeHandler(QUrl("appstream://photolayoutseditor.desktop"))) {
             d->mPluginMenu->addAction(d->mInstallPluginAction);
             d->mInstallPluginAction->setEnabled(true);
-            QObject::connect(d->mInstallPluginAction, SIGNAL(triggered(bool)),
-                            this, SLOT(slotInstallPlugins(bool)));
+            QObject::connect(d->mInstallPluginAction, &QAction::triggered,
+                            this, &KIPIInterface::slotInstallPlugins);
             d->mPluginWatcher = new QFileSystemWatcher(d->mMainWindow);
             d->mPluginWatcher->addPaths(QCoreApplication::libraryPaths());
             connect(d->mPluginWatcher, SIGNAL(directoryChanged(QString)), SLOT(packageFinished()));
