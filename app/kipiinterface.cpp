@@ -362,7 +362,7 @@ void KIPIInterface::slotInstallPlugins(bool checked) {
 void KIPIInterface::packageFinished() {
     if (d->mPluginLoader) {
         delete d->mPluginLoader;
-        d->mPluginLoader = 0;
+        d->mPluginLoader = nullptr;
     }
     if (d->mPluginWatcher) {
         delete d->mPluginWatcher;
