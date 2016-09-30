@@ -89,10 +89,8 @@ public Q_SLOTS:
 private Q_SLOTS:
     void slotSelectionChanged();
     void slotDirectoryChanged();
-#ifdef KIPI_INSTALLER
     void slotInstallPlugins(bool checked);
     void packageFinished();
-#endif
     void init();
     void loadOnePlugin();
 

@@ -37,6 +37,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KXMLGUIFactory>
 #include <KDirLister>
 #include <KLocalizedString>
+#include <KIO/DesktopExecParser>
 
 // KIPI
 #include <kipi/imagecollectionshared.h>
@@ -339,21 +340,20 @@ void KIPIInterface::loadOnePlugin()
     d->mPluginMenu->removeAction(d->mLoadingAction);
     if (d->mPluginMenu->isEmpty()) {
         d->mPluginMenu->addAction(d->mNoPluginAction);
-#ifdef KIPI_INSTALLER
-        d->mPluginMenu->addAction(d->mInstallPluginAction);
-        d->mInstallPluginAction->setEnabled(true);
-        QObject::connect(d->mInstallPluginAction, SIGNAL(triggered(bool)),
-                         this, SLOT(slotInstallPlugins(bool)));
-        d->mPluginWatcher = new QFileSystemWatcher(d->mMainWindow);
-        d->mPluginWatcher->addPaths(QCoreApplication::libraryPaths());
-        connect(d->mPluginWatcher, SIGNAL(directoryChanged(QString)), SLOT(packageFinished()));
-#endif
+        if (KIO::DesktopExecParser::hasSchemeHandler(QUrl("appstream://photolayoutseditor.desktop"))) {
+            d->mPluginMenu->addAction(d->mInstallPluginAction);
+            d->mInstallPluginAction->setEnabled(true);
+            QObject::connect(d->mInstallPluginAction, SIGNAL(triggered(bool)),
+                            this, SLOT(slotInstallPlugins(bool)));
+            d->mPluginWatcher = new QFileSystemWatcher(d->mMainWindow);
+            d->mPluginWatcher->addPaths(QCoreApplication::libraryPaths());
+            connect(d->mPluginWatcher, SIGNAL(directoryChanged(QString)), SLOT(packageFinished()));
+        }
     }
 
     loadingFinished();
 }
 
-#ifdef KIPI_INSTALLER
 void KIPIInterface::slotInstallPlugins(bool checked) {
     Q_UNUSED(checked);
     QDesktopServices::openUrl(QUrl("appstream://photolayoutseditor.desktop"));
@@ -371,8 +371,6 @@ void KIPIInterface::packageFinished() {
     d->mPluginMenu->removeAction(d->mNoPluginAction);
     QTimer::singleShot(5000, this, SLOT(loadPlugins()));
 }
-
-#endif
 
 QList<QAction*> KIPIInterface::pluginActions(KIPI::Category category) const
 {
