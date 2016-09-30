@@ -57,6 +57,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/timeutils.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
 
+#define KIPI_PLUGINS_URL "appstream://photolayoutseditor.desktop"
+
 namespace Gwenview
 {
 #undef ENABLE_LOG
@@ -336,11 +338,10 @@ void KIPIInterface::loadOnePlugin()
         }
     }
 
-
     d->mPluginMenu->removeAction(d->mLoadingAction);
     if (d->mPluginMenu->isEmpty()) {
         d->mPluginMenu->addAction(d->mNoPluginAction);
-        if (KIO::DesktopExecParser::hasSchemeHandler(QUrl("appstream://photolayoutseditor.desktop"))) {
+        if (KIO::DesktopExecParser::hasSchemeHandler(QUrl(KIPI_PLUGINS_URL))) {
             d->mPluginMenu->addAction(d->mInstallPluginAction);
             d->mInstallPluginAction->setEnabled(true);
             QObject::connect(d->mInstallPluginAction, &QAction::triggered,
@@ -356,7 +357,7 @@ void KIPIInterface::loadOnePlugin()
 
 void KIPIInterface::slotInstallPlugins(bool checked) {
     Q_UNUSED(checked);
-    QDesktopServices::openUrl(QUrl("appstream://photolayoutseditor.desktop"));
+    QDesktopServices::openUrl(QUrl(KIPI_PLUGINS_URL));
 }
 
 void KIPIInterface::packageFinished() {
