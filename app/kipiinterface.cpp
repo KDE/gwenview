@@ -206,8 +206,7 @@ struct KIPIInterfacePrivate
     QAction * mLoadingAction;
     QAction * mNoPluginAction;
     QAction * mInstallPluginAction;
-    QProgressDialog * installDialog;
-    QFileSystemWatcher * mPluginWatcher;
+    QPointer<QFileSystemWatcher> mPluginWatcher;
 
     void setupPluginsMenu()
     {
@@ -338,7 +337,6 @@ void KIPIInterface::loadOnePlugin()
 
     if (d->mPluginWatcher) {
         delete d->mPluginWatcher;
-        d->mPluginWatcher = 0;
     }
     d->mPluginMenu->removeAction(d->mLoadingAction);
     if (d->mPluginMenu->isEmpty()) {
