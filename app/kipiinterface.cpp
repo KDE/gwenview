@@ -335,9 +335,7 @@ void KIPIInterface::loadOnePlugin()
         }
     }
 
-    if (d->mPluginWatcher) {
-        delete d->mPluginWatcher;
-    }
+
     d->mPluginMenu->removeAction(d->mLoadingAction);
     if (d->mPluginMenu->isEmpty()) {
         d->mPluginMenu->addAction(d->mNoPluginAction);
@@ -364,8 +362,11 @@ void KIPIInterface::slotInstallPlugins(bool checked) {
 void KIPIInterface::packageFinished() {
     if (d->mPluginLoader) {
         delete d->mPluginLoader;
+        d->mPluginLoader = 0;
     }
-    d->mPluginLoader = 0;
+    if (d->mPluginWatcher) {
+        delete d->mPluginWatcher;
+    }
     d->mPluginMenu->removeAction(d->mInstallPluginAction);
     d->mPluginMenu->removeAction(d->mNoPluginAction);
     QTimer::singleShot(5000, this, SLOT(loadPlugins()));
