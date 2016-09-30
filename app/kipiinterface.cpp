@@ -231,8 +231,8 @@ KIPIInterface::KIPIInterface(MainWindow* mainWindow)
 {
     d->q = this;
     d->mMainWindow = mainWindow;
-    d->mPluginLoader = 0;
-    d->mPluginWatcher = 0;
+    d->mPluginLoader = nullptr;
+    d->mPluginWatcher = nullptr;
     d->mLoadingAction = d->createDummyPluginAction(i18n("Loading..."));
     d->mNoPluginAction = d->createDummyPluginAction(i18n("No Plugin Found"));
     d->mInstallPluginAction = d->createDummyPluginAction(i18n("Install Plugins"));
