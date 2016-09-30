@@ -236,7 +236,7 @@ KIPIInterface::KIPIInterface(MainWindow* mainWindow)
     d->mPluginWatcher = nullptr;
     d->mLoadingAction = d->createDummyPluginAction(i18n("Loading..."));
     d->mNoPluginAction = d->createDummyPluginAction(i18n("No Plugin Found"));
-    d->mInstallPluginAction = d->createDummyPluginAction(i18n("Install Plugins"));
+    d->mInstallPluginAction = d->createDummyPluginAction(i18nc("Menu item to install Kipi Plugins with Plasma Discover", "Install Plugins"));
 
     d->setupPluginsMenu();
     QObject::connect(d->mMainWindow->contextManager(), SIGNAL(selectionChanged()),
