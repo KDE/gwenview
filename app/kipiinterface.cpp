@@ -362,7 +362,9 @@ void KIPIInterface::slotInstallPlugins(bool checked) {
 }
 
 void KIPIInterface::packageFinished() {
-    qDebug() << "packageFinished()" << endl;
+    if (d->mPluginLoader) {
+        delete d->mPluginLoader;
+    }
     d->mPluginLoader = 0;
     d->mPluginMenu->removeAction(d->mInstallPluginAction);
     d->mPluginMenu->removeAction(d->mNoPluginAction);
