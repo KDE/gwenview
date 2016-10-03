@@ -210,7 +210,7 @@ struct KIPIInterfacePrivate
     QAction * mNoPluginAction;
     QAction * mInstallPluginAction;
     QPointer<QFileSystemWatcher> mPluginWatcher;
-    QTimer * mTimer;
+    QTimer mPluginLoadTimer;
 
     void setupPluginsMenu()
     {
@@ -239,8 +239,7 @@ KIPIInterface::KIPIInterface(MainWindow* mainWindow)
     d->mLoadingAction = d->createDummyPluginAction(i18n("Loading..."));
     d->mNoPluginAction = d->createDummyPluginAction(i18n("No Plugin Found"));
     d->mInstallPluginAction = d->createDummyPluginAction(i18nc("@item:inmenu", "Install Plugins"));
-    d->mTimer = new QTimer();
-    connect(d->mTimer, &QTimer::timeout, this, &KIPIInterface::loadPlugins);
+    connect(&d->mPluginLoadTimer, &QTimer::timeout, this, &KIPIInterface::loadPlugins);
 
     d->setupPluginsMenu();
     QObject::connect(d->mMainWindow->contextManager(), SIGNAL(selectionChanged()),
@@ -365,7 +364,7 @@ void KIPIInterface::packageFinished() {
     }
     d->mPluginMenu->removeAction(d->mInstallPluginAction);
     d->mPluginMenu->removeAction(d->mNoPluginAction);
-    d->mTimer->start(1000);
+    d->mPluginLoadTimer.start(1000);
 }
 
 QList<QAction*> KIPIInterface::pluginActions(KIPI::Category category) const
