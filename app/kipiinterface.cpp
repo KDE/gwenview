@@ -351,7 +351,7 @@ void KIPIInterface::loadOnePlugin()
                             this, &KIPIInterface::slotInstallPlugins);
             d->mPluginWatcher = new QFileSystemWatcher(d->mMainWindow);
             d->mPluginWatcher->addPaths(QCoreApplication::libraryPaths());
-            connect(d->mPluginWatcher, SIGNAL(directoryChanged(QString)), SLOT(packageFinished()));
+            connect(d->mPluginWatcher, &QFileSystemWatcher::directoryChanged, this, &KIPIInterface::packageFinished);
         }
     }
 
