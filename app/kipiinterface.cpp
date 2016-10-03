@@ -57,7 +57,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/timeutils.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
 
-#define KIPI_PLUGINS_URL "appstream://photolayoutseditor.desktop"
+#define KIPI_PLUGINS_URL QStringLiteral("appstream://photolayoutseditor.desktop")
 
 namespace Gwenview
 {
@@ -210,6 +210,7 @@ struct KIPIInterfacePrivate
     QAction * mNoPluginAction;
     QAction * mInstallPluginAction;
     QPointer<QFileSystemWatcher> mPluginWatcher;
+    QTimer * mTimer;
 
     void setupPluginsMenu()
     {
@@ -235,10 +236,11 @@ KIPIInterface::KIPIInterface(MainWindow* mainWindow)
     d->q = this;
     d->mMainWindow = mainWindow;
     d->mPluginLoader = nullptr;
-    d->mPluginWatcher = nullptr;
     d->mLoadingAction = d->createDummyPluginAction(i18n("Loading..."));
     d->mNoPluginAction = d->createDummyPluginAction(i18n("No Plugin Found"));
     d->mInstallPluginAction = d->createDummyPluginAction(i18nc("@item:inmenu", "Install Plugins"));
+    d->mTimer = new QTimer();
+    connect(d->mTimer, &QTimer::timeout, this, &KIPIInterface::loadPlugins);
 
     d->setupPluginsMenu();
     QObject::connect(d->mMainWindow->contextManager(), SIGNAL(selectionChanged()),
@@ -270,6 +272,7 @@ void KIPIInterface::loadPlugins()
     if (d->mPluginLoader) {
         return;
     }
+    delete d->mPluginWatcher;
 
     d->mMenuInfoMap[KIPI::ImagesPlugin]      = MenuInfo(i18nc("@title:menu", "Images"));
     d->mMenuInfoMap[KIPI::ToolsPlugin]       = MenuInfo(i18nc("@title:menu", "Tools"));
@@ -365,12 +368,9 @@ void KIPIInterface::packageFinished() {
         delete d->mPluginLoader;
         d->mPluginLoader = nullptr;
     }
-    if (d->mPluginWatcher) {
-        delete d->mPluginWatcher;
-    }
     d->mPluginMenu->removeAction(d->mInstallPluginAction);
     d->mPluginMenu->removeAction(d->mNoPluginAction);
-    QTimer::singleShot(5000, this, SLOT(loadPlugins()));
+    d->mTimer->start(1000);
 }
 
 QList<QAction*> KIPIInterface::pluginActions(KIPI::Category category) const
