@@ -348,7 +348,7 @@ void KIPIInterface::loadOnePlugin()
             d->mPluginMenu->addAction(d->mInstallPluginAction);
             d->mInstallPluginAction->setEnabled(true);
             QObject::connect(d->mInstallPluginAction, &QAction::triggered,
-                            this, &KIPIInterface::slotInstallPlugins);
+                            this, [=](){QDesktopServices::openUrl(QUrl(KIPI_PLUGINS_URL));});
             d->mPluginWatcher = new QFileSystemWatcher(d->mMainWindow);
             d->mPluginWatcher->addPaths(QCoreApplication::libraryPaths());
             connect(d->mPluginWatcher, &QFileSystemWatcher::directoryChanged, this, &KIPIInterface::packageFinished);
@@ -356,10 +356,6 @@ void KIPIInterface::loadOnePlugin()
     }
 
     loadingFinished();
-}
-
-void KIPIInterface::slotInstallPlugins() {
-    QDesktopServices::openUrl(QUrl(KIPI_PLUGINS_URL));
 }
 
 void KIPIInterface::packageFinished() {
