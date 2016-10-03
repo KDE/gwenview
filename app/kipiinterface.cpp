@@ -358,8 +358,7 @@ void KIPIInterface::loadOnePlugin()
     loadingFinished();
 }
 
-void KIPIInterface::slotInstallPlugins(bool checked) {
-    Q_UNUSED(checked);
+void KIPIInterface::slotInstallPlugins() {
     QDesktopServices::openUrl(QUrl(KIPI_PLUGINS_URL));
 }
 

@@ -89,7 +89,7 @@ public Q_SLOTS:
 private Q_SLOTS:
     void slotSelectionChanged();
     void slotDirectoryChanged();
-    void slotInstallPlugins(bool checked);
+    void slotInstallPlugins();
     void packageFinished();
     void init();
     void loadOnePlugin();
