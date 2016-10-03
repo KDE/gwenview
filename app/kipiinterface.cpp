@@ -216,7 +216,7 @@ struct KIPIInterfacePrivate
     {
         mPluginMenu = static_cast<QMenu*>(
                           mMainWindow->factory()->container("plugins", mMainWindow));
-        QObject::connect(mPluginMenu, &QMenu::aboutToShow, q, &KIPIInterface::loadPlugins);
+        connect(mPluginMenu, &QMenu::aboutToShow, q, &KIPIInterface::loadPlugins);
     }
 
     QAction * createDummyPluginAction(const QString& text)
@@ -342,7 +342,6 @@ void KIPIInterface::loadOnePlugin()
 
     d->mPluginMenu->removeAction(d->mLoadingAction);
     if (d->mPluginMenu->isEmpty()) {
-        d->mPluginMenu->addAction(d->mNoPluginAction);
         if (KIO::DesktopExecParser::hasSchemeHandler(QUrl(KIPI_PLUGINS_URL))) {
             d->mPluginMenu->addAction(d->mInstallPluginAction);
             d->mInstallPluginAction->setEnabled(true);
@@ -351,6 +350,8 @@ void KIPIInterface::loadOnePlugin()
             d->mPluginWatcher = new QFileSystemWatcher(d->mMainWindow);
             d->mPluginWatcher->addPaths(QCoreApplication::libraryPaths());
             connect(d->mPluginWatcher, &QFileSystemWatcher::directoryChanged, this, &KIPIInterface::packageFinished);
+        } else {
+            d->mPluginMenu->addAction(d->mNoPluginAction);
         }
     }
 
