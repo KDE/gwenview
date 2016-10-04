@@ -25,6 +25,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QList>
 #include <QMenu>
 #include <QRegExp>
+#include <QDesktopServices>
+#include <QFileSystemWatcher>
+#include <QTimer>
 
 // KDE
 #include <QAction>
@@ -34,6 +37,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KXMLGUIFactory>
 #include <KDirLister>
 #include <KLocalizedString>
+#include <KIO/DesktopExecParser>
 
 // KIPI
 #include <kipi/imagecollectionshared.h>
@@ -52,6 +56,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/mimetypeutils.h>
 #include <lib/timeutils.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
+
+#define KIPI_PLUGINS_URL QStringLiteral("appstream://photolayoutseditor.desktop")
 
 namespace Gwenview
 {
@@ -202,6 +208,9 @@ struct KIPIInterfacePrivate
     MenuInfoMap mMenuInfoMap;
     QAction * mLoadingAction;
     QAction * mNoPluginAction;
+    QAction * mInstallPluginAction;
+    QFileSystemWatcher mPluginWatcher;
+    QTimer mPluginLoadTimer;
 
     void setupPluginsMenu()
     {
@@ -226,9 +235,11 @@ KIPIInterface::KIPIInterface(MainWindow* mainWindow)
 {
     d->q = this;
     d->mMainWindow = mainWindow;
-    d->mPluginLoader = 0;
+    d->mPluginLoader = nullptr;
     d->mLoadingAction = d->createDummyPluginAction(i18n("Loading..."));
     d->mNoPluginAction = d->createDummyPluginAction(i18n("No Plugin Found"));
+    d->mInstallPluginAction = d->createDummyPluginAction(i18nc("@item:inmenu", "Install Plugins"));
+    connect(&d->mPluginLoadTimer, &QTimer::timeout, this, &KIPIInterface::loadPlugins);
 
     d->setupPluginsMenu();
     QObject::connect(d->mMainWindow->contextManager(), SIGNAL(selectionChanged()),
@@ -330,10 +341,29 @@ void KIPIInterface::loadOnePlugin()
 
     d->mPluginMenu->removeAction(d->mLoadingAction);
     if (d->mPluginMenu->isEmpty()) {
-        d->mPluginMenu->addAction(d->mNoPluginAction);
+        if (KIO::DesktopExecParser::hasSchemeHandler(QUrl(KIPI_PLUGINS_URL))) {
+            d->mPluginMenu->addAction(d->mInstallPluginAction);
+            d->mInstallPluginAction->setEnabled(true);
+            QObject::connect(d->mInstallPluginAction, &QAction::triggered,
+                            this, [=](){QDesktopServices::openUrl(QUrl(KIPI_PLUGINS_URL));});
+            d->mPluginWatcher.addPaths(QCoreApplication::libraryPaths());
+            connect(&d->mPluginWatcher, &QFileSystemWatcher::directoryChanged, this, &KIPIInterface::packageFinished);
+        } else {
+            d->mPluginMenu->addAction(d->mNoPluginAction);
+        }
     }
 
     loadingFinished();
+}
+
+void KIPIInterface::packageFinished() {
+    if (d->mPluginLoader) {
+        delete d->mPluginLoader;
+        d->mPluginLoader = nullptr;
+    }
+    d->mPluginMenu->removeAction(d->mInstallPluginAction);
+    d->mPluginMenu->removeAction(d->mNoPluginAction);
+    d->mPluginLoadTimer.start(1000);
 }
 
 QList<QAction*> KIPIInterface::pluginActions(KIPI::Category category) const
