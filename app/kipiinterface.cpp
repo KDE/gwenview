@@ -346,7 +346,6 @@ void KIPIInterface::loadOnePlugin()
             d->mInstallPluginAction->setEnabled(true);
             QObject::connect(d->mInstallPluginAction, &QAction::triggered,
                             this, [=](){QDesktopServices::openUrl(QUrl(KIPI_PLUGINS_URL));});
-            d->mPluginWatcher.setParent(d->mMainWindow);
             d->mPluginWatcher.addPaths(QCoreApplication::libraryPaths());
             connect(&d->mPluginWatcher, &QFileSystemWatcher::directoryChanged, this, &KIPIInterface::packageFinished);
         } else {
