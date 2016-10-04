@@ -29,7 +29,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <libkipi_version.h>
 
 class QAction;
-class QFileSystemWatcher;
 
 #ifndef KIPI_VERSION_MAJOR
 #error KIPI_VERSION_MAJOR should be provided.
