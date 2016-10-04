@@ -216,7 +216,7 @@ struct KIPIInterfacePrivate
     {
         mPluginMenu = static_cast<QMenu*>(
                           mMainWindow->factory()->container("plugins", mMainWindow));
-        connect(mPluginMenu, &QMenu::aboutToShow, q, &KIPIInterface::loadPlugins);
+        QObject::connect(mPluginMenu, &QMenu::aboutToShow, q, &KIPIInterface::loadPlugins);
     }
 
     QAction * createDummyPluginAction(const QString& text)
@@ -271,7 +271,6 @@ void KIPIInterface::loadPlugins()
     if (d->mPluginLoader) {
         return;
     }
-    delete d->mPluginWatcher;
 
     d->mMenuInfoMap[KIPI::ImagesPlugin]      = MenuInfo(i18nc("@title:menu", "Images"));
     d->mMenuInfoMap[KIPI::ToolsPlugin]       = MenuInfo(i18nc("@title:menu", "Tools"));
