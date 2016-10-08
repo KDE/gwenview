@@ -24,19 +24,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Qt
 
 // KDE
+#include <KNewFileMenu>
+#include <KService>
 
 // Local
 #include "abstractcontextmanageritem.h"
 
 class QAction;
+class QMimeData;
 class QListView;
 class KActionCollection;
 class KXMLGUIClient;
 
 namespace Gwenview
 {
+class SideBarGroup;
 
-struct FileOpsContextManagerItemPrivate;
 class FileOpsContextManagerItem : public AbstractContextManagerItem
 {
     Q_OBJECT
@@ -65,7 +68,32 @@ private Q_SLOTS:
     void openWith(QAction* action);
 
 private:
-    FileOpsContextManagerItemPrivate* const d;
+    QList<QUrl> urlList() const;
+    void updateServiceList();
+    QMimeData* selectionMimeData();
+    QUrl pasteTargetUrl() const;
+
+    QListView* mThumbnailView;
+    KXMLGUIClient* mXMLGUIClient;
+    SideBarGroup* mGroup;
+    QAction * mCutAction;
+    QAction * mCopyAction;
+    QAction * mPasteAction;
+    QAction * mCopyToAction;
+    QAction * mMoveToAction;
+    QAction * mLinkToAction;
+    QAction * mRenameAction;
+    QAction * mTrashAction;
+    QAction * mDelAction;
+    QAction * mRestoreAction;
+    QAction * mShowPropertiesAction;
+    QAction * mCreateFolderAction;
+    QAction * mOpenWithAction;
+    QList<QAction*> mRegularFileActionList;
+    QList<QAction*> mTrashFileActionList;
+    KService::List mServiceList;
+    KNewFileMenu * mNewFileMenu;
+    bool mInTrash;
 };
 
 } // namespace
