@@ -1550,6 +1550,8 @@ void MainWindow::resizeEvent(QResizeEvent* event)
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 {
+    Q_UNUSED(obj);
+    Q_UNUSED(event);
 #ifdef Q_OS_OSX
     /**
     * handle Mac OS X file open events (only exist on OS X)
