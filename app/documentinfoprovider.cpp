@@ -33,26 +33,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 
-struct DocumentInfoProviderPrivate
-{
-    SortedDirModel* mDirModel;
-};
-
 DocumentInfoProvider::DocumentInfoProvider(SortedDirModel* model)
 : AbstractDocumentInfoProvider(model)
-, d(new DocumentInfoProviderPrivate)
 {
-    d->mDirModel = model;
+    mDirModel = model;
     connect(DocumentFactory::instance(), SIGNAL(documentBusyStateChanged(QUrl,bool)),
             SLOT(emitBusyStateChanged(QUrl,bool)));
 
     connect(DocumentFactory::instance(), SIGNAL(documentChanged(QUrl)),
             SLOT(emitDocumentChanged(QUrl)));
-}
-
-DocumentInfoProvider::~DocumentInfoProvider()
-{
-    delete d;
 }
 
 void DocumentInfoProvider::thumbnailForDocument(const QUrl &url, ThumbnailGroup::Enum group, QPixmap* outPix, QSize* outFullSize) const
@@ -102,7 +91,7 @@ bool DocumentInfoProvider::isBusy(const QUrl &url)
 
 void DocumentInfoProvider::emitBusyStateChanged(const QUrl &url, bool busy)
 {
-    QModelIndex index = d->mDirModel->indexForUrl(url);
+    QModelIndex index = mDirModel->indexForUrl(url);
     if (!index.isValid()) {
         return;
     }
@@ -111,7 +100,7 @@ void DocumentInfoProvider::emitBusyStateChanged(const QUrl &url, bool busy)
 
 void DocumentInfoProvider::emitDocumentChanged(const QUrl &url)
 {
-    QModelIndex index = d->mDirModel->indexForUrl(url);
+    QModelIndex index = mDirModel->indexForUrl(url);
     if (!index.isValid()) {
         return;
     }

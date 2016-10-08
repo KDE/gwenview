@@ -33,13 +33,11 @@ namespace Gwenview
 
 class SortedDirModel;
 
-struct DocumentInfoProviderPrivate;
 class DocumentInfoProvider : public AbstractDocumentInfoProvider
 {
     Q_OBJECT
 public:
     DocumentInfoProvider(SortedDirModel* model);
-    ~DocumentInfoProvider();
 
     virtual bool isBusy(const QUrl &url) Q_DECL_OVERRIDE;
 
@@ -52,7 +50,7 @@ private Q_SLOTS:
     void emitDocumentChanged(const QUrl&);
 
 private:
-    DocumentInfoProviderPrivate* const d;
+    SortedDirModel* mDirModel;
 };
 
 } // namespace
