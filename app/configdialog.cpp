@@ -27,27 +27,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KLocalizedString>
 
 // Local
-#include "ui_generalconfigpage.h"
-#include "ui_imageviewconfigpage.h"
-#include "ui_advancedconfigpage.h"
 #include <lib/gwenviewconfig.h>
-#include <lib/invisiblebuttongroup.h>
 #include <QFontDatabase>
 
 namespace Gwenview
 {
-
-struct ConfigDialogPrivate
-{
-    InvisibleButtonGroup* mAlphaBackgroundModeGroup;
-    InvisibleButtonGroup* mWheelBehaviorGroup;
-    InvisibleButtonGroup* mAnimationMethodGroup;
-    InvisibleButtonGroup* mZoomModeGroup;
-    InvisibleButtonGroup* mThumbnailBarOrientationGroup;
-    Ui_GeneralConfigPage mGeneralConfigPage;
-    Ui_ImageViewConfigPage mImageViewConfigPage;
-    Ui_AdvancedConfigPage mAdvancedConfigPage;
-};
 
 template <class Ui>
 QWidget* setupPage(Ui& ui)
@@ -60,7 +44,6 @@ QWidget* setupPage(Ui& ui)
 
 ConfigDialog::ConfigDialog(QWidget* parent)
 : KConfigDialog(parent, "Settings", GwenviewConfig::self())
-, d(new ConfigDialogPrivate)
 {
     setFaceType(KPageDialog::List);
 
@@ -68,61 +51,56 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     KPageWidgetItem* pageItem;
 
     // General
-    widget = setupPage(d->mGeneralConfigPage);
+    widget = setupPage(mGeneralConfigPage);
     pageItem = addPage(widget, i18n("General"));
     pageItem->setIcon(QIcon::fromTheme("gwenview"));
-    connect(d->mGeneralConfigPage.kcfg_ViewBackgroundValue, SIGNAL(valueChanged(int)), SLOT(updateViewBackgroundFrame()));
+    connect(mGeneralConfigPage.kcfg_ViewBackgroundValue, SIGNAL(valueChanged(int)), SLOT(updateViewBackgroundFrame()));
 
     // Image View
-    widget = setupPage(d->mImageViewConfigPage);
+    widget = setupPage(mImageViewConfigPage);
 
-    d->mAlphaBackgroundModeGroup = new InvisibleButtonGroup(widget);
-    d->mAlphaBackgroundModeGroup->setObjectName(QLatin1String("kcfg_AlphaBackgroundMode"));
-    d->mAlphaBackgroundModeGroup->addButton(d->mImageViewConfigPage.checkBoardRadioButton, int(RasterImageView::AlphaBackgroundCheckBoard));
-    d->mAlphaBackgroundModeGroup->addButton(d->mImageViewConfigPage.solidColorRadioButton, int(RasterImageView::AlphaBackgroundSolid));
+    mAlphaBackgroundModeGroup = new InvisibleButtonGroup(widget);
+    mAlphaBackgroundModeGroup->setObjectName(QLatin1String("kcfg_AlphaBackgroundMode"));
+    mAlphaBackgroundModeGroup->addButton(mImageViewConfigPage.checkBoardRadioButton, int(RasterImageView::AlphaBackgroundCheckBoard));
+    mAlphaBackgroundModeGroup->addButton(mImageViewConfigPage.solidColorRadioButton, int(RasterImageView::AlphaBackgroundSolid));
 
-    d->mWheelBehaviorGroup = new InvisibleButtonGroup(widget);
-    d->mWheelBehaviorGroup->setObjectName(QLatin1String("kcfg_MouseWheelBehavior"));
-    d->mWheelBehaviorGroup->addButton(d->mImageViewConfigPage.mouseWheelScrollRadioButton, int(MouseWheelBehavior::Scroll));
-    d->mWheelBehaviorGroup->addButton(d->mImageViewConfigPage.mouseWheelBrowseRadioButton, int(MouseWheelBehavior::Browse));
+    mWheelBehaviorGroup = new InvisibleButtonGroup(widget);
+    mWheelBehaviorGroup->setObjectName(QLatin1String("kcfg_MouseWheelBehavior"));
+    mWheelBehaviorGroup->addButton(mImageViewConfigPage.mouseWheelScrollRadioButton, int(MouseWheelBehavior::Scroll));
+    mWheelBehaviorGroup->addButton(mImageViewConfigPage.mouseWheelBrowseRadioButton, int(MouseWheelBehavior::Browse));
 
-    d->mAnimationMethodGroup = new InvisibleButtonGroup(widget);
-    d->mAnimationMethodGroup->setObjectName(QLatin1String("kcfg_AnimationMethod"));
-    d->mAnimationMethodGroup->addButton(d->mImageViewConfigPage.glAnimationRadioButton, int(DocumentView::GLAnimation));
-    d->mAnimationMethodGroup->addButton(d->mImageViewConfigPage.softwareAnimationRadioButton, int(DocumentView::SoftwareAnimation));
-    d->mAnimationMethodGroup->addButton(d->mImageViewConfigPage.noAnimationRadioButton, int(DocumentView::NoAnimation));
+    mAnimationMethodGroup = new InvisibleButtonGroup(widget);
+    mAnimationMethodGroup->setObjectName(QLatin1String("kcfg_AnimationMethod"));
+    mAnimationMethodGroup->addButton(mImageViewConfigPage.glAnimationRadioButton, int(DocumentView::GLAnimation));
+    mAnimationMethodGroup->addButton(mImageViewConfigPage.softwareAnimationRadioButton, int(DocumentView::SoftwareAnimation));
+    mAnimationMethodGroup->addButton(mImageViewConfigPage.noAnimationRadioButton, int(DocumentView::NoAnimation));
 
-    d->mZoomModeGroup = new InvisibleButtonGroup(widget);
-    d->mZoomModeGroup->setObjectName(QLatin1String("kcfg_ZoomMode"));
-    d->mZoomModeGroup->addButton(d->mImageViewConfigPage.autofitZoomModeRadioButton, int(ZoomMode::Autofit));
-    d->mZoomModeGroup->addButton(d->mImageViewConfigPage.keepSameZoomModeRadioButton, int(ZoomMode::KeepSame));
-    d->mZoomModeGroup->addButton(d->mImageViewConfigPage.individualZoomModeRadioButton, int(ZoomMode::Individual));
+    mZoomModeGroup = new InvisibleButtonGroup(widget);
+    mZoomModeGroup->setObjectName(QLatin1String("kcfg_ZoomMode"));
+    mZoomModeGroup->addButton(mImageViewConfigPage.autofitZoomModeRadioButton, int(ZoomMode::Autofit));
+    mZoomModeGroup->addButton(mImageViewConfigPage.keepSameZoomModeRadioButton, int(ZoomMode::KeepSame));
+    mZoomModeGroup->addButton(mImageViewConfigPage.individualZoomModeRadioButton, int(ZoomMode::Individual));
 
-    d->mThumbnailBarOrientationGroup = new InvisibleButtonGroup(widget);
-    d->mThumbnailBarOrientationGroup->setObjectName(QLatin1String("kcfg_ThumbnailBarOrientation"));
-    d->mThumbnailBarOrientationGroup->addButton(d->mImageViewConfigPage.horizontalRadioButton, int(Qt::Horizontal));
-    d->mThumbnailBarOrientationGroup->addButton(d->mImageViewConfigPage.verticalRadioButton, int(Qt::Vertical));
+    mThumbnailBarOrientationGroup = new InvisibleButtonGroup(widget);
+    mThumbnailBarOrientationGroup->setObjectName(QLatin1String("kcfg_ThumbnailBarOrientation"));
+    mThumbnailBarOrientationGroup->addButton(mImageViewConfigPage.horizontalRadioButton, int(Qt::Horizontal));
+    mThumbnailBarOrientationGroup->addButton(mImageViewConfigPage.verticalRadioButton, int(Qt::Vertical));
 
     pageItem = addPage(widget, i18n("Image View"));
     pageItem->setIcon(QIcon::fromTheme("view-preview"));
 
     // Advanced
-    widget = setupPage(d->mAdvancedConfigPage);
+    widget = setupPage(mAdvancedConfigPage);
     pageItem = addPage(widget, i18n("Advanced"));
     pageItem->setIcon(QIcon::fromTheme("preferences-other"));
-    d->mAdvancedConfigPage.cacheHelpLabel->setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
+    mAdvancedConfigPage.cacheHelpLabel->setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
 
     updateViewBackgroundFrame();
 }
 
-ConfigDialog::~ConfigDialog()
-{
-    delete d;
-}
-
 void ConfigDialog::updateViewBackgroundFrame()
 {
-    QColor color = QColor::fromHsv(0, 0, d->mGeneralConfigPage.kcfg_ViewBackgroundValue->value());
+    QColor color = QColor::fromHsv(0, 0, mGeneralConfigPage.kcfg_ViewBackgroundValue->value());
     QString css =
         QString(
             "background-color: %1;"
@@ -132,7 +110,7 @@ void ConfigDialog::updateViewBackgroundFrame()
     // When using Oxygen, setting the background color via palette causes the
     // pixels outside the frame to be painted with the new background color as
     // well. Using CSS works more like expected.
-    d->mGeneralConfigPage.backgroundValueFrame->setStyleSheet(css);
+    mGeneralConfigPage.backgroundValueFrame->setStyleSheet(css);
 }
 
 } // namespace

@@ -27,23 +27,32 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KConfigDialog>
 
 // Local
+#include "ui_generalconfigpage.h"
+#include "ui_imageviewconfigpage.h"
+#include "ui_advancedconfigpage.h"
+#include <lib/invisiblebuttongroup.h>
 
 namespace Gwenview
 {
 
-struct ConfigDialogPrivate;
 class ConfigDialog : public KConfigDialog
 {
     Q_OBJECT
 public:
     ConfigDialog(QWidget* parent);
-    ~ConfigDialog();
 
 private Q_SLOTS:
     void updateViewBackgroundFrame();
 
 private:
-    ConfigDialogPrivate* const d;
+    InvisibleButtonGroup* mAlphaBackgroundModeGroup;
+    InvisibleButtonGroup* mWheelBehaviorGroup;
+    InvisibleButtonGroup* mAnimationMethodGroup;
+    InvisibleButtonGroup* mZoomModeGroup;
+    InvisibleButtonGroup* mThumbnailBarOrientationGroup;
+    Ui_GeneralConfigPage mGeneralConfigPage;
+    Ui_ImageViewConfigPage mImageViewConfigPage;
+    Ui_AdvancedConfigPage mAdvancedConfigPage;
 };
 
 } // namespace
