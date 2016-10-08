@@ -108,6 +108,19 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
                          mThumbnailSlider, SLOT(setValue(int)));
     }
 
+    QAction *thumbnailDetailAction(const QString &text, PreviewItemDelegate::ThumbnailDetail detail)
+    {
+        QAction *action = new QAction(q);
+        action->setText(text);
+        action->setCheckable(true);
+        action->setChecked(GwenviewConfig::thumbnailDetails() & detail);
+        action->setData(QVariant(detail));
+        mThumbnailDetailsActionGroup->addAction(action);
+        QObject::connect(action, SIGNAL(triggered(bool)),
+            q, SLOT(updateThumbnailDetails()));
+        return action;
+    }
+
     void setupActions(KActionCollection* actionCollection)
     {
         KActionCategory* view = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface", "View"), actionCollection);
@@ -130,24 +143,13 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
         mThumbnailDetailsActionGroup->setExclusive(false);
         KActionMenu* thumbnailDetailsAction = view->add<KActionMenu>("thumbnail_details");
         thumbnailDetailsAction->setText(i18nc("@action:inmenu", "Thumbnail Details"));
-#define addAction(text, detail) \
-    action = new QAction(q); \
-    thumbnailDetailsAction->addAction(action); \
-    action->setText(text); \
-    action->setCheckable(true); \
-    action->setChecked(GwenviewConfig::thumbnailDetails() & detail); \
-    action->setData(QVariant(detail)); \
-    mThumbnailDetailsActionGroup->addAction(action); \
-    QObject::connect(action, SIGNAL(triggered(bool)), \
-                     q, SLOT(updateThumbnailDetails()));
-        addAction(i18nc("@action:inmenu", "Filename"), PreviewItemDelegate::FileNameDetail);
-        addAction(i18nc("@action:inmenu", "Date"), PreviewItemDelegate::DateDetail);
-        addAction(i18nc("@action:inmenu", "Image Size"), PreviewItemDelegate::ImageSizeDetail);
-        addAction(i18nc("@action:inmenu", "File Size"), PreviewItemDelegate::FileSizeDetail);
+        thumbnailDetailsAction->addAction(thumbnailDetailAction(i18nc("@action:inmenu", "Filename"), PreviewItemDelegate::FileNameDetail));
+        thumbnailDetailsAction->addAction(thumbnailDetailAction(i18nc("@action:inmenu", "Date"), PreviewItemDelegate::DateDetail));
+        thumbnailDetailsAction->addAction(thumbnailDetailAction(i18nc("@action:inmenu", "Image Size"), PreviewItemDelegate::ImageSizeDetail));
+        thumbnailDetailsAction->addAction(thumbnailDetailAction(i18nc("@action:inmenu", "File Size"), PreviewItemDelegate::FileSizeDetail));
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-        addAction(i18nc("@action:inmenu", "Rating"), PreviewItemDelegate::RatingDetail);
+        thumbnailDetailsAction->addAction(thumbnailDetailAction(i18nc("@action:inmenu", "Rating"), PreviewItemDelegate::RatingDetail));
 #endif
-#undef addAction
 
         KActionCategory* file = new KActionCategory(i18nc("@title actions category", "File"), actionCollection);
         action = file->addAction("add_folder_to_places", q, SLOT(addFolderToPlaces()));
