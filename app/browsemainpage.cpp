@@ -170,10 +170,8 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
     {
         mFullScreenToolBar->setIconDimensions(KIconLoader::SizeMedium);
         mFullScreenToolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
-        #define addAction(name) mFullScreenToolBar->addAction(mActionCollection->action(name))
-        addAction("browse");
-        addAction("view");
-        #undef addAction
+        mFullScreenToolBar->addAction(mActionCollection->action("browse"));
+        mFullScreenToolBar->addAction(mActionCollection->action("view"));
 
         mFullScreenToolBar2->setIconDimensions(KIconLoader::SizeMedium);
         mFullScreenToolBar2->setToolButtonStyle(Qt::ToolButtonIconOnly);
