@@ -22,26 +22,33 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #define FOLDERVIEWCONTEXTMANAGERITEM_H
 
 // Qt
+#include <QUrl>
 
 // KDE
 
 // Local
 #include "abstractcontextmanageritem.h"
 
-class QModelIndex;
+#define USE_PLACETREE
+#ifdef USE_PLACETREE
+#include <lib/placetreemodel.h>
+#define MODEL_CLASS PlaceTreeModel
+#else
+#include <lib/semanticinfo/sorteddirmodel.h>
+#define MODEL_CLASS SortedDirModel
+#endif
 
-class QUrl;
+class QModelIndex;
+class QTreeView;
 
 namespace Gwenview
 {
 
-struct FolderViewContextManagerItemPrivate;
 class FolderViewContextManagerItem : public AbstractContextManagerItem
 {
     Q_OBJECT
 public:
     FolderViewContextManagerItem(ContextManager*);
-    ~FolderViewContextManagerItem();
 
 Q_SIGNALS:
     void urlChanged(const QUrl&);
@@ -53,8 +60,16 @@ private Q_SLOTS:
     void slotActivated(const QModelIndex&);
 
 private:
-    friend struct FolderViewContextManagerItemPrivate;
-    FolderViewContextManagerItemPrivate* const d;
+    MODEL_CLASS* mModel;
+    QTreeView* mView;
+
+    QUrl mUrlToSelect;
+    QPersistentModelIndex mExpandingIndex;
+
+    void setupModel();
+    void setupView();
+    QModelIndex findClosestIndex(const QModelIndex& parent, const QUrl &wantedUrl);
+    QModelIndex findRootIndex(const QUrl &wantedUrl);
 };
 
 } // namespace
