@@ -65,7 +65,7 @@ class ImageMetaInfoModel;
  * It is capable of loading down sampled versions of an image using
  * prepareDownSampledImageForZoom() and downSampledImageForZoom(). Down sampled
  * images load much faster than the full image but you need to load the full
- * image to manipulate it( use startLoadingFullImage() to do so).
+ * image to manipulate it (use startLoadingFullImage() to do so).
  *
  * To get a Document instance for url, ask for one with
  * DocumentFactory::instance()->load(url);
