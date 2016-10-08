@@ -22,11 +22,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #define FULLSCREENCONTENT_H
 
 // Qt
+#include <QPointer>
 #include <QWidget>
 
 // KDE
 
 // Local
+#include "ui_fullscreenconfigwidget.h"
+#include "imagemetainfodialog.h"
+#include <lib/document/document.h>
 
 class QStringList;
 
@@ -37,11 +41,24 @@ namespace Gwenview
 {
 
 class FullScreenBar;
+class FullScreenToolBar;
+class ShadowFilter;
 class SlideShow;
 
 class ThumbnailBarView;
 
-struct FullScreenContentPrivate;
+
+class FullScreenConfigWidget : public QWidget, public Ui_FullScreenConfigWidget
+{
+public:
+    FullScreenConfigWidget(QWidget* parent=0)
+    : QWidget(parent)
+    {
+        setupUi(this);
+    }
+};
+
+
 /**
  * The content of the fullscreen bar
  */
@@ -50,7 +67,6 @@ class FullScreenContent : public QObject
     Q_OBJECT
 public:
     FullScreenContent(QObject* parent);
-    ~FullScreenContent();
 
     void init(KActionCollection*, QWidget* autoHideParentWidget, SlideShow*);
 
@@ -78,7 +94,28 @@ private Q_SLOTS:
     void slotViewModeActionToggled(bool value);
 
 private:
-    FullScreenContentPrivate* const d;
+    KActionCollection* mActionCollection;
+    FullScreenBar* mAutoHideContainer;
+    SlideShow* mSlideShow;
+    QWidget* mContent;
+    FullScreenToolBar* mToolBar;
+    FullScreenToolBar* mRightToolBar;
+    ThumbnailBarView* mThumbnailBar;
+    QLabel* mInformationLabel;
+    ShadowFilter* mToolBarShadow;
+    ShadowFilter* mRightToolBarShadow;
+    ShadowFilter* mInformationLabelShadow;
+    Document::Ptr mCurrentDocument;
+    QPointer<ImageMetaInfoDialog> mImageMetaInfoDialog;
+    QPointer<FullScreenConfigWidget> mConfigWidget;
+    QAction * mOptionsAction;
+
+    bool mFullScreenMode;
+    bool mViewPageVisible;
+
+    void createOptionsAction();
+    void updateContainerAppearance();
+    void updateLayout();
 };
 
 } // namespace
