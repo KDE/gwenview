@@ -50,7 +50,7 @@ endif()
 
 find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Core Widgets Concurrent Svg OpenGL)
 
-find_package(Phonon4Qt5 4.6.60 NO_MODULE)
+find_package(Phonon4Qt5 4.6.60 NO_MODULE REQUIRED)
 include_directories(BEFORE ${PHONON_INCLUDES})
 add_definitions(-DPHONON_LIB_SONAME=\"${PHONON_LIB_SONAME}\")
 
@@ -69,7 +69,7 @@ find_package(PNG)
 set_package_properties(PNG PROPERTIES URL "http://www.libpng.org" DESCRIPTION "PNG image manipulation support" TYPE REQUIRED)
 
 find_package(Exiv2)
-set_package_properties(EXIV2 PROPERTIES URL "http://www.exiv2.org" DESCRIPTION "image metadata support" TYPE REQUIRED)
+set_package_properties(Exiv2 PROPERTIES URL "http://www.exiv2.org" DESCRIPTION "image metadata support" TYPE REQUIRED)
 
 find_package(KF5Kipi)
 if (KF5Kipi_FOUND)
