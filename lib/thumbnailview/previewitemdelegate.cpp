@@ -23,6 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <config-gwenview.h>
 
 // Qt
+#include <QApplication>
 #include <QHash>
 #include <QHBoxLayout>
 #include <QPainter>
@@ -39,7 +40,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 #include <KDirModel>
-#include <KGlobalSettings>
 #include <KIconLoader>
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
@@ -194,7 +194,7 @@ struct PreviewItemDelegatePrivate
         mIndexUnderCursor = index;
         mView->update(oldIndex);
 
-        if (KGlobalSettings::singleClick()) {
+        if (QApplication::style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick, 0, mView)) {
             mView->setCursor(mIndexUnderCursor.isValid() ? Qt::PointingHandCursor : Qt::ArrowCursor);
         }
 

@@ -27,7 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 #include <KFileDialog>
-#include <KGlobalSettings>
+#include <KColorScheme>
 #include <KImageIO>
 #include <KIO/NetAccess>
 #include <KLocalizedString>
@@ -113,7 +113,8 @@ struct GvCorePrivate
         QColor fgColor = value > 128 ? Qt::black : Qt::white;
 
         // Normal
-        mPalettes[GvCore::NormalPalette] = KGlobalSettings::createApplicationPalette();
+        KSharedConfigPtr config = KSharedConfig::openConfig();
+        mPalettes[GvCore::NormalPalette] = KColorScheme::createApplicationPalette(config);
 
         pal = mPalettes[GvCore::NormalPalette];
         pal.setColor(QPalette::Base, QColor::fromHsv(0, 0, value));
@@ -121,7 +122,6 @@ struct GvCorePrivate
         mPalettes[GvCore::NormalViewPalette] = pal;
 
         // Fullscreen
-        KSharedConfigPtr config;
         QString name = GwenviewConfig::fullScreenColorScheme();
         if (name.isEmpty()) {
             // Default color scheme
@@ -134,7 +134,7 @@ struct GvCorePrivate
             // Standard KDE color scheme
             config = KSharedConfig::openConfig(QString("color-schemes/%1.colors").arg(name), KConfig::FullConfig, QStandardPaths::DataLocation);
         }
-        mPalettes[GvCore::FullScreenPalette] = KGlobalSettings::createApplicationPalette(config);
+        mPalettes[GvCore::FullScreenPalette] = KColorScheme::createApplicationPalette(config);
 
         pal = mPalettes[GvCore::FullScreenPalette];
         QString path = KStandardDirs::locate("data", "gwenview/images/background.png");
