@@ -39,7 +39,6 @@
 #include <QStandardPaths>
 
 // KDE
-#include <kde_file.h>
 #include <KIO/JobUiDelegate>
 #include <KIO/PreviewJob>
 #include <KStandardDirs>
@@ -161,8 +160,10 @@ ThumbnailProvider::ThumbnailProvider()
     // Make sure we have a place to store our thumbnails
     QString thumbnailDirNormal = ThumbnailProvider::thumbnailBaseDir(ThumbnailGroup::Normal);
     QString thumbnailDirLarge = ThumbnailProvider::thumbnailBaseDir(ThumbnailGroup::Large);
-    KStandardDirs::makeDir(thumbnailDirNormal, 0700);
-    KStandardDirs::makeDir(thumbnailDirLarge, 0700);
+    QDir().mkpath(thumbnailDirNormal);
+    QDir().mkpath(thumbnailDirLarge);
+    QFile::setPermissions(thumbnailDirNormal, QFileDevice::WriteOwner | QFileDevice::ReadOwner | QFileDevice::ExeOwner);
+    QFile::setPermissions(thumbnailDirLarge, QFileDevice::WriteOwner | QFileDevice::ReadOwner | QFileDevice::ExeOwner);
 
     // Look for images and store the items in our todo list
     mCurrentItem = KFileItem();
@@ -310,16 +311,11 @@ void ThumbnailProvider::determineNextIcon()
     mOriginalFileSize = mCurrentItem.size();
 
     // Do direct stat instead of using KIO if the file is local (faster)
-    bool directStatOk = false;
     if (UrlUtils::urlIsFastLocalFile(mCurrentUrl)) {
-        KDE_struct_stat buff;
-        if (KDE::stat(mCurrentUrl.toLocalFile(), &buff) == 0)  {
-            directStatOk = true;
-            mOriginalTime = buff.st_mtime;
-            QMetaObject::invokeMethod(this, "checkThumbnail", Qt::QueuedConnection);
-        }
-    }
-    if (!directStatOk) {
+        QFileInfo fileInfo(mCurrentUrl.toLocalFile());
+        mOriginalTime = fileInfo.lastModified().toTime_t();
+        QMetaObject::invokeMethod(this, "checkThumbnail", Qt::QueuedConnection);
+    } else {
         KIO::Job* job = KIO::stat(mCurrentUrl, KIO::HideProgressInfo);
         KJobWidgets::setWindow(job, qApp->activeWindow());
         LOG("KIO::stat orig" << mCurrentUrl.url());

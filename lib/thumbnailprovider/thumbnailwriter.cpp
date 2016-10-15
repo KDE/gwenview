@@ -23,9 +23,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
-// KDE
-#include <kde_file.h>
-
 // Qt
 #include <QImage>
 #include <QDebug>
@@ -57,7 +54,7 @@ static void storeThumbnailToDiskCache(const QString& path, const QImage& image)
         return;
     }
 
-    KDE_rename(QFile::encodeName(tmp.fileName()), QFile::encodeName(path));
+    QFile::rename(tmp.fileName(), path);
 }
 
 void ThumbnailWriter::queueThumbnail(const QString& path, const QImage& image)
