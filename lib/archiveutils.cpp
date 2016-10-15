@@ -24,7 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KDE
 #include <QDebug>
 #include <KFileItem>
-#include <KMimeType>
+#include <QMimeDatabase>
 #include <KProtocolManager>
 
 namespace Gwenview
@@ -67,13 +67,11 @@ QString protocolForMimeType(const QString& mimeType)
     if (protocol.isEmpty()) {
         // No protocol, try with mimeType parents. This is useful for .cbz for
         // example
-        KMimeType::Ptr ptr = KMimeType::mimeType(mimeType);
-        if (ptr) {
-            Q_FOREACH(const QString & parentMimeType, ptr->allParentMimeTypes()) {
-                protocol = KProtocolManager::protocolForArchiveMimetype(parentMimeType);
-                if (!protocol.isEmpty()) {
-                    break;
-                }
+        QMimeType mime = QMimeDatabase().mimeTypeForName(mimeType);
+        for(const QString & parentMimeType : mime.allAncestors()) {
+            protocol = KProtocolManager::protocolForArchiveMimetype(parentMimeType);
+            if (!protocol.isEmpty()) {
+                break;
             }
         }
     }
