@@ -90,7 +90,7 @@ public:
         LoadingFailed   ///< Image loading has failed
     };
 
-    typedef KSharedPtr<Document> Ptr;
+    typedef QExplicitlySharedDataPointer<Document> Ptr;
     ~Document();
 
     /**

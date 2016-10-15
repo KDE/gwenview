@@ -96,7 +96,7 @@ struct DocumentFactoryPrivate
         DocumentMap::Iterator it = map.begin(), end = map.end();
         for (; it != end; ++it) {
             DocumentInfo* info = it.value();
-            if (info->mDocument.count() == 1 && !info->mDocument->isModified()) {
+            if (info->mDocument->ref == 1 && !info->mDocument->isModified()) {
                 unreferencedImages.insert(info->mLastAccess, it.key());
             }
         }
