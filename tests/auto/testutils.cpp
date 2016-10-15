@@ -25,14 +25,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // KDE
 #include <KDebug>
-#include <KIO/NetAccess>
+#include <KIO/StatJob>
+#include <KIO/DeleteJob>
+#include <KIO/MkdirJob>
+#include <KIO/FileCopyJob>
+#include <KJobWidgets>
 #include <KStandardDirs>
 #include <QStandardPaths>
 
 QUrl setUpRemoteTestDir(const QString& testFile)
 {
     QWidget* authWindow = 0;
-    bool ok;
     if (qgetenv("GV_REMOTE_TESTS_BASE_URL").isEmpty()) {
         kWarning() << "Environment variable GV_REMOTE_TESTS_BASE_URL not set: remote tests disabled";
         return QUrl();
@@ -42,12 +45,19 @@ QUrl setUpRemoteTestDir(const QString& testFile)
     baseUrl = baseUrl.adjusted(QUrl::StripTrailingSlash);
     baseUrl.setPath(baseUrl.path() + "/gwenview-remote-tests");
 
-    if (KIO::NetAccess::exists(baseUrl, KIO::NetAccess::DestinationSide, authWindow)) {
-        KIO::NetAccess::del(baseUrl, authWindow);
+    KIO::StatJob *statJob = KIO::stat(baseUrl, KIO::StatJob::DestinationSide, 0);
+    KJobWidgets::setWindow(statJob, authWindow);
+
+    if (statJob->exec()) {
+        KIO::DeleteJob *deleteJob = KIO::del(baseUrl);
+        KJobWidgets::setWindow(deleteJob, authWindow);
+        deleteJob->exec();
     }
-    ok = KIO::NetAccess::mkdir(baseUrl, authWindow);
-    if (!ok) {
-        kFatal() << "Could not create dir" << baseUrl << ":" << KIO::NetAccess::lastErrorString();
+
+    KIO::MkdirJob *mkdirJob = KIO::mkdir(baseUrl);
+    KJobWidgets::setWindow(mkdirJob, authWindow);
+    if (!mkdirJob->exec()) {
+        kFatal() << "Could not create dir" << baseUrl << ":" << mkdirJob->errorString();
         return QUrl();
     }
 
@@ -55,9 +65,10 @@ QUrl setUpRemoteTestDir(const QString& testFile)
         QUrl dstUrl = baseUrl;
         dstUrl = dstUrl.adjusted(QUrl::StripTrailingSlash);
         dstUrl.setPath(dstUrl.path() + '/' + testFile);
-        ok = KIO::NetAccess::file_copy(urlForTestFile(testFile), dstUrl, authWindow);
-        if (!ok) {
-            kFatal() << "Could not copy" << testFile << "to" << dstUrl << ":" << KIO::NetAccess::lastErrorString();
+        KIO::FileCopyJob *copyJob = KIO::file_copy(urlForTestFile(testFile), dstUrl);
+        KJobWidgets::setWindow(copyJob, authWindow);
+        if (!copyJob->exec()) {
+            kFatal() << "Could not copy" << testFile << "to" << dstUrl << ":" << copyJob->errorString();
             return QUrl();
         }
     }
@@ -90,8 +101,8 @@ void purgeUserConfiguration()
     QString confDir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
     QVERIFY(confDir.endsWith(".qttest/share")); // Better safe than sorry
     if (QFileInfo(confDir).isDir()) {
-        bool ok = KIO::NetAccess::del(QUrl::fromLocalFile(confDir), 0);
-        QVERIFY(ok);
+        KIO::DeleteJob *deleteJob = KIO::del(QUrl::fromLocalFile(confDir));
+        QVERIFY(deleteJob->exec());
     }
 
     QFile kdebugrc(KStandardDirs::locateLocal("config", "kdebugrc"));

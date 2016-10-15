@@ -33,7 +33,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KFileItem>
 #include <KIO/Job>
 #include <KIO/JobClasses>
-#include <KIO/NetAccess>
 
 // Local
 #include <archiveutils.h>

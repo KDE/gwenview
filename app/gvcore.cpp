@@ -29,7 +29,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KFileDialog>
 #include <KColorScheme>
 #include <KImageIO>
-#include <KIO/NetAccess>
+#include <KIO/StatJob>
+#include <KJobWidgets>
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KStandardDirs>
@@ -255,7 +256,9 @@ void GvCore::saveAs(const QUrl &url)
     }
 
     // Check for overwrite
-    if (KIO::NetAccess::exists(saveAsUrl, KIO::NetAccess::DestinationSide, d->mMainWindow)) {
+    KIO::StatJob *statJob = KIO::stat(saveAsUrl, KIO::StatJob::DestinationSide, 0);
+    KJobWidgets::setWindow(statJob, d->mMainWindow);
+    if (statJob->exec()) {
         int answer = KMessageBox::warningContinueCancel(
                          d->mMainWindow,
                          xi18nc("@info",

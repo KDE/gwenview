@@ -33,7 +33,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KIO/DeleteJob>
 #include <KIO/Job>
 #include <KIO/JobUiDelegate>
-#include <KIO/NetAccess>
 #include <KLocalizedString>
 #include <KJobWidgets>
 
@@ -214,7 +213,8 @@ void rename(const QUrl &oldUrl, QWidget* parent)
     newUrl = newUrl.adjusted(QUrl::RemoveFilename);
     newUrl.setPath(newUrl.path() + name);
     KIO::SimpleJob* job = KIO::rename(oldUrl, newUrl, KIO::HideProgressInfo);
-    if (!KIO::NetAccess::synchronousRun(job, parent)) {
+    KJobWidgets::setWindow(job, parent);
+    if (!job->exec()) {
         job->ui()->showErrorMessage();
         return;
     }
