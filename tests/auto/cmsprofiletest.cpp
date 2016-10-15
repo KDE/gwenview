@@ -73,7 +73,7 @@ void CmsProfileTest::testLoadFromExiv2Image()
     {
         QByteArray data;
         QString path = pathForTestFile(fileName);
-        kWarning() << path;
+        qWarning() << path;
         QFile file(path);
         QVERIFY(file.open(QIODevice::ReadOnly));
         data = file.readAll();

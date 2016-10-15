@@ -24,7 +24,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QTimer>
 
 // KDE
-#include <KDebug>
 #include <KIO/StatJob>
 #include <KIO/DeleteJob>
 #include <KIO/MkdirJob>
@@ -37,7 +36,7 @@ QUrl setUpRemoteTestDir(const QString& testFile)
 {
     QWidget* authWindow = 0;
     if (qgetenv("GV_REMOTE_TESTS_BASE_URL").isEmpty()) {
-        kWarning() << "Environment variable GV_REMOTE_TESTS_BASE_URL not set: remote tests disabled";
+        qWarning() << "Environment variable GV_REMOTE_TESTS_BASE_URL not set: remote tests disabled";
         return QUrl();
     }
 
@@ -57,7 +56,7 @@ QUrl setUpRemoteTestDir(const QString& testFile)
     KIO::MkdirJob *mkdirJob = KIO::mkdir(baseUrl);
     KJobWidgets::setWindow(mkdirJob, authWindow);
     if (!mkdirJob->exec()) {
-        kFatal() << "Could not create dir" << baseUrl << ":" << mkdirJob->errorString();
+        qCritical() << "Could not create dir" << baseUrl << ":" << mkdirJob->errorString();
         return QUrl();
     }
 
@@ -68,7 +67,7 @@ QUrl setUpRemoteTestDir(const QString& testFile)
         KIO::FileCopyJob *copyJob = KIO::file_copy(urlForTestFile(testFile), dstUrl);
         KJobWidgets::setWindow(copyJob, authWindow);
         if (!copyJob->exec()) {
-            kFatal() << "Could not copy" << testFile << "to" << dstUrl << ":" << copyJob->errorString();
+            qCritical() << "Could not copy" << testFile << "to" << dstUrl << ":" << copyJob->errorString();
             return QUrl();
         }
     }
@@ -104,18 +103,6 @@ void purgeUserConfiguration()
         KIO::DeleteJob *deleteJob = KIO::del(QUrl::fromLocalFile(confDir));
         QVERIFY(deleteJob->exec());
     }
-
-    QFile kdebugrc(KStandardDirs::locateLocal("config", "kdebugrc"));
-    QVERIFY(kdebugrc.open(QIODevice::WriteOnly));
-    kdebugrc.write(
-        "DisableAll=true\n"
-        "InfoOutput=4\n"
-        "[gwenview]\n"
-        "InfoOutput=2\n"
-        "[gwenview_importer]\n"
-        "InfoOutput=2\n"
-        );
-    kClearDebugConfig();
 }
 
 static QImage simplifyFormats(const QImage& img)
@@ -137,13 +124,13 @@ inline bool fuzzyColorComponentCompare(int c1, int c2, int delta)
 bool fuzzyImageCompare(const QImage& img1_, const QImage& img2_, int delta)
 {
     if (img1_.size() != img2_.size()) {
-        kWarning() << "Different sizes" << img1_.size() << "!=" << img2_.size();
+        qWarning() << "Different sizes" << img1_.size() << "!=" << img2_.size();
         return false;
     }
     QImage img1 = simplifyFormats(img1_);
     QImage img2 = simplifyFormats(img2_);
     if (img1.format() != img2.format()) {
-        kWarning() << "Different formats" << img1.format() << "!=" << img2.format();
+        qWarning() << "Different formats" << img1.format() << "!=" << img2.format();
         return false;
     }
 
@@ -157,7 +144,7 @@ bool fuzzyImageCompare(const QImage& img1_, const QImage& img2_, int delta)
                 && fuzzyColorComponentCompare(col1.blue(), col2.blue(), delta)
                 && fuzzyColorComponentCompare(col1.alpha(), col2.alpha(), delta);
             if (!ok) {
-                kWarning() << "Different at" << QPoint(posX, posY) << col1.name() << "!=" << col2.name();
+                qWarning() << "Different at" << QPoint(posX, posY) << col1.name() << "!=" << col2.name();
                 return false;
             }
         }
