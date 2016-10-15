@@ -81,7 +81,7 @@ public:
 
     void addSeparator()
     {
-        mLayout->addSpacing(KDialog::spacingHint());
+        mLayout->addSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     }
 
     void addStretch()

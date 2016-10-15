@@ -22,12 +22,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "graphicswidgetfloater.h"
 
 // Qt
+#include <QApplication>
 #include <QEvent>
 #include <QGraphicsWidget>
 #include <QPointer>
-
-// KDE
-#include <KDialog>
+#include <QStyle>
 
 // Local
 
@@ -101,8 +100,8 @@ GraphicsWidgetFloater::GraphicsWidgetFloater(QGraphicsWidget* parent)
     d->mParent->installEventFilter(this);
     d->mChild = 0;
     d->mAlignment = Qt::AlignCenter;
-    d->mHorizontalMargin = KDialog::marginHint();
-    d->mVerticalMargin = KDialog::marginHint();
+    d->mHorizontalMargin = QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin);
+    d->mVerticalMargin = d->mHorizontalMargin;
     d->mInsideUpdateChildGeometry = false;
 }
 

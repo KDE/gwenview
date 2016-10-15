@@ -199,7 +199,7 @@ void ThumbnailBarItemDelegate::paint(QPainter * painter, const QStyleOptionViewI
     QPixmap thumbnailPix = d->mView->thumbnailForIndex(index);
     QRect rect = option.rect;
 
-    QStyleOptionViewItemV4 opt = option;
+    QStyleOptionViewItem opt = option;
     const QWidget* widget = opt.widget;
     QStyle* style = widget ? widget->style() : QApplication::style();
     if (isSelected && !isCurrent) {

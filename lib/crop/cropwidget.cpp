@@ -29,7 +29,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QLineEdit>
 
 // KDE
-#include <KDialog>
 #include <KLocalizedString>
 
 // Local
@@ -206,7 +205,6 @@ CropWidget::CropWidget(QWidget* parent, RasterImageView* imageView, CropTool* cr
     d->mCropTool = cropTool;
     d->setupUi(this);
     setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
-    layout()->setMargin(KDialog::marginHint());
     layout()->setSizeConstraint(QLayout::SetFixedSize);
 
     connect(d->advancedCheckBox, SIGNAL(toggled(bool)),

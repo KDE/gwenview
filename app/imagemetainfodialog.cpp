@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "imagemetainfodialog.h"
 
 // Qt
+#include <QApplication>
 #include <QHeaderView>
 #include <QPainter>
 #include <QStyledItemDelegate>
@@ -49,7 +50,7 @@ public:
 protected:
     virtual void paint(QPainter* painter, const QStyleOptionViewItem& _option, const QModelIndex& index) const
     {
-        QStyleOptionViewItemV4 option = _option;
+        QStyleOptionViewItem option = _option;
         if (!index.parent().isValid()) {
             option.displayAlignment = Qt::AlignCenter | Qt::AlignBottom;
             option.font.setBold(true);
@@ -144,7 +145,8 @@ void ImageMetaInfoDialog::setMetaInfo(ImageMetaInfoModel* model, const QStringLi
     }
     d->mTreeView->setModel(d->mModel.get());
 
-    d->mTreeView->header()->resizeSection(0, sizeHint().width() / 2 - KDialog::marginHint() * 2);
+    const int marginSize = QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin);
+    d->mTreeView->header()->resizeSection(0, sizeHint().width() / 2 - marginSize * 2);
 }
 
 QSize ImageMetaInfoDialog::sizeHint() const
