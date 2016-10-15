@@ -24,11 +24,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QApplication>
 #include <QUrl>
+#include <QImageWriter>
+#include <QMimeDatabase>
 
 // KDE
 #include <KFileDialog>
 #include <KColorScheme>
-#include <KImageIO>
 #include <KIO/StatJob>
 #include <KJobWidgets>
 #include <KLocalizedString>
@@ -70,8 +71,14 @@ struct GvCorePrivate
         KFileDialog dialog(url, QString(), mMainWindow);
         dialog.setOperationMode(KFileDialog::Saving);
         dialog.setSelection(url.fileName());
+
+        QStringList supportedMimetypes;
+        for (const QByteArray &mimeName : QImageWriter::supportedMimeTypes()) {
+            supportedMimetypes.append(QString::fromLocal8Bit(mimeName));
+        }
+
         dialog.setMimeFilter(
-            KImageIO::mimeTypes(KImageIO::Writing), // List
+            supportedMimetypes,
             MimeTypeUtils::urlMimeType(url)         // Default
         );
 
@@ -91,7 +98,7 @@ struct GvCorePrivate
                 continue;
             }
 
-            const QStringList typeList = KImageIO::typeForMime(mimeType);
+            const QStringList typeList = QMimeDatabase().mimeTypeForName(mimeType).suffixes();
             if (typeList.count() > 0) {
                 *format = typeList[0].toAscii();
                 break;
@@ -226,8 +233,8 @@ void GvCore::save(const QUrl &url)
 {
     Document::Ptr doc = DocumentFactory::instance()->load(url);
     QByteArray format = doc->format();
-    const QStringList availableTypes = KImageIO::types(KImageIO::Writing);
-    if (availableTypes.contains(QString(format))) {
+    const QByteArrayList availableTypes = QImageWriter::supportedImageFormats();
+    if (availableTypes.contains(format)) {
         DocumentJob* job = doc->save(url, format);
         connect(job, SIGNAL(result(KJob*)), SLOT(slotSaveResult(KJob*)));
     } else {
