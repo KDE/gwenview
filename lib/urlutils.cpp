@@ -28,8 +28,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QUrl>
 
 // KDE
-#include <kde_file.h>
-#include <KIO/NetAccess>
+#include <KIO/StatJob>
+#include <KJobWidgets>
 #include <kmountpoint.h>
 #include <KProtocolManager>
 
@@ -68,10 +68,7 @@ bool urlIsDirectory(const QUrl &url)
 
     // Do direct stat instead of using KIO if the file is local (faster)
     if (UrlUtils::urlIsFastLocalFile(url)) {
-        KDE_struct_stat buff;
-        if (KDE_stat(QFile::encodeName(url.toLocalFile()), &buff) == 0)  {
-            return S_ISDIR(buff.st_mode);
-        }
+        return QFileInfo(url.toLocalFile()).isDir();
     }
 
     QWidgetList list = QApplication::topLevelWidgets();
@@ -81,9 +78,10 @@ bool urlIsDirectory(const QUrl &url)
     } else {
         parent = 0;
     }
-    KIO::UDSEntry entry;
-    if (KIO::NetAccess::stat(url, entry, parent)) {
-        return entry.isDir();
+    KIO::StatJob *job = KIO::stat(url);
+    KJobWidgets::setWindow(job, parent);
+    if (job->exec()) {
+        return job->statResult().isDir();
     }
     return false;
 }
