@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "importerconfigdialog.moc"
+#include "importerconfigdialog.h"
 
 // Qt
 #include <QTextDocument>
@@ -36,7 +36,7 @@ namespace Gwenview
 {
 
 static const QString PREVIEW_FILENAME = "PICT0012.JPG";
-static const KDateTime PREVIEW_DATETIME = KDateTime(QDate(2009, 10, 25), QTime(17, 51, 18));
+static const QDateTime PREVIEW_DATETIME = QDateTime(QDate(2009, 10, 25), QTime(17, 51, 18));
 
 struct ImporterConfigDialogPrivate : public Ui_ImporterConfigDialog
 {
@@ -71,9 +71,10 @@ ImporterConfigDialog::ImporterConfigDialog(QWidget* parent)
     QWidget* widget = new QWidget;
     d->setupUi(widget);
     setFaceType(KPageDialog::Plain);
+    /* KF5 FIXME
     // Hide help button until there is actual documentation to show
     showButton(KDialog::Help, false);
-    showButtonSeparator(true);
+    */
     addPage(widget, QString());
 
     connect(d->kcfg_AutoRenameFormat, SIGNAL(textChanged(QString)),

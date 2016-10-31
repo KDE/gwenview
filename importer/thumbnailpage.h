@@ -23,10 +23,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QModelIndex>
+#include <QUrl>
 #include <QWidget>
 
 // KDE
-#include <KUrl>
 
 // Local
 #include "documentdirfinder.h"
@@ -46,12 +46,12 @@ public:
      * Returns the list of urls to import
      * Only valid after importRequested() has been emitted
      */
-    KUrl::List urlList() const;
+    QList<QUrl> urlList() const;
 
-    KUrl destinationUrl() const;
-    void setDestinationUrl(const KUrl&);
+    QUrl destinationUrl() const;
+    void setDestinationUrl(const QUrl&);
 
-    void setSourceUrl(const KUrl&, const QString& icon, const QString& label);
+    void setSourceUrl(const QUrl&, const QString& icon, const QString& label);
 
 Q_SIGNALS:
     void importRequested();
@@ -61,8 +61,8 @@ private Q_SLOTS:
     void slotImportSelected();
     void slotImportAll();
     void updateImportButtons();
-    void openUrl(const KUrl&);
-    void slotDocumentDirFinderDone(const KUrl& url, DocumentDirFinder::Status status);
+    void openUrl(const QUrl&);
+    void slotDocumentDirFinderDone(const QUrl& url, DocumentDirFinder::Status status);
     void showConfigDialog();
     void openUrlFromIndex(const QModelIndex& index);
     void setupSrcUrlTreeView();

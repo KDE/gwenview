@@ -27,24 +27,28 @@ ki18n_wrap_ui(importer_SRCS
     thumbnailpage.ui
     )
 
-file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../icons/hi*-apps-gwenview-importer.png")
+file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../icons/*-apps-gwenview.png")
 ecm_add_app_icon(importer_SRCS ICONS ${ICONS_SRCS})
 
 kconfig_add_kcfg_files(importer_SRCS
     importerconfig.kcfgc
     )
 
+add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
+
 add_executable(gwenview_importer ${importer_SRCS})
 
 target_link_libraries(gwenview_importer
     gwenviewlib
     KF5::KIOCore
+    KF5::ItemModels
     Qt5::Core
     )
 
 target_link_libraries(gwenview_importer
     LINK_INTERFACE_LIBRARIES
     KF5::KIOCore
+    KF5::ItemModels
     Qt5::Core
     )
 

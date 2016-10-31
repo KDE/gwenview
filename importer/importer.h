@@ -23,9 +23,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QObject>
+#include <QUrl>
 
 // KDE
-#include <KUrl>
 
 // Local
 
@@ -48,14 +48,14 @@ public:
      */
     void setAutoRenameFormat(const QString&);
 
-    void start(const KUrl::List& list, const KUrl& destUrl);
+    void start(const QList<QUrl>& list, const QUrl& destUrl);
 
-    KUrl::List importedUrlList() const;
+    QList<QUrl> importedUrlList() const;
 
     /**
      * Documents which have been skipped during import
      */
-    KUrl::List skippedUrlList() const;
+    QList<QUrl> skippedUrlList() const;
 
     /**
      * How many documents have been renamed during import

@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QFile>
 #include <QFileInfo>
+#include <QUrl>
 
 // KDE
 #include <QDebug>
@@ -33,7 +34,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KIO/JobClasses>
 #include <KIO/JobUiDelegate>
 #include <KIO/NetAccess>
-#include <KUrl>
 
 // libc
 #include <errno.h>
@@ -45,7 +45,7 @@ namespace Gwenview
 namespace FileUtils
 {
 
-bool contentsAreIdentical(const KUrl& url1, const KUrl& url2, QWidget* authWindow)
+bool contentsAreIdentical(const QUrl& url1, const QUrl& url2, QWidget* authWindow)
 {
     // FIXME: Support remote urls
     QFile file1(KIO::NetAccess::mostLocalUrl(url1, authWindow).toLocalFile());
@@ -79,9 +79,9 @@ bool contentsAreIdentical(const KUrl& url1, const KUrl& url2, QWidget* authWindo
     }
 }
 
-RenameResult rename(const KUrl& src, const KUrl& dst_, QWidget* authWindow)
+RenameResult rename(const QUrl& src, const QUrl& dst_, QWidget* authWindow)
 {
-    KUrl dst = dst_;
+    QUrl dst = dst_;
     RenameResult result = RenamedOK;
     int count = 1;
 
@@ -104,15 +104,18 @@ RenameResult rename(const KUrl& src, const KUrl& dst_, QWidget* authWindow)
         if (srcSize == dstSize && contentsAreIdentical(src, dst, authWindow)) {
             // Already imported, skip it
             KIO::Job* job = KIO::file_delete(src, KIO::HideProgressInfo);
+            // FIXME KF5
+            /*
             if (job->ui()) {
                 job->ui()->setWindow(authWindow);
             }
+            */
 
             return Skipped;
         }
         result = RenamedUnderNewName;
 
-        dst.setFileName(prefix + QString::number(count) + suffix);
+        dst.setPath(dst.path() + '/' + prefix + QString::number(count) + suffix);
         ++count;
     }
 

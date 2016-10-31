@@ -19,16 +19,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "importer.moc"
+#include "importer.h"
 
 // Qt
+#include <QDateTime>
+#include <QDebug>
+#include <QUrl>
 
 // KDE
-#include <KDateTime>
-#include <QDebug>
 #include <KFileItem>
 #include <KLocale>
-#include <KUrl>
 #include <KIO/CopyJob>
 #include <KIO/DeleteJob>
 #include <KIO/Job>
@@ -53,26 +53,26 @@ struct ImporterPrivate
     Importer* q;
     QWidget* mAuthWindow;
     std::auto_ptr<FileNameFormater> mFileNameFormater;
-    KUrl mTempImportDir;
+    QUrl mTempImportDirUrl;
 
     /* @defgroup reset Should be reset in start()
      * @{ */
-    KUrl::List mUrlList;
-    KUrl::List mImportedUrlList;
-    KUrl::List mSkippedUrlList;
+    QList<QUrl> mUrlList;
+    QList<QUrl> mImportedUrlList;
+    QList<QUrl> mSkippedUrlList;
     int mRenamedCount;
     int mProgress;
     int mJobProgress;
     /* @} */
 
-    KUrl mCurrentUrl;
+    QUrl mCurrentUrl;
 
     void emitError(const QString& message)
     {
         QMetaObject::invokeMethod(q, "error", Q_ARG(QString, message));
     }
 
-    bool createImportDir(const KUrl url)
+    bool createImportDir(const QUrl url)
     {
         Q_ASSERT(url.isLocalFile());
         // FIXME: Support remote urls
@@ -82,8 +82,9 @@ struct ImporterPrivate
             return false;
         }
         QString message;
-        mTempImportDir = FileUtils::createTempDir(url.toLocalFile(), ".gwenview_importer-", &message);
-        if (mTempImportDir.isEmpty()) {
+        QString dir = FileUtils::createTempDir(url.toLocalFile(), ".gwenview_importer-", &message);
+        mTempImportDirUrl = QUrl::fromLocalFile(dir);
+        if (mTempImportDirUrl.isEmpty()) {
             emitError(i18n("Could not create temporary upload folder:\n%1", message));
             return false;
         }
@@ -97,22 +98,23 @@ struct ImporterPrivate
             return;
         }
         mCurrentUrl = mUrlList.takeFirst();
-        KUrl dst = mTempImportDir;
-        dst.addPath(mCurrentUrl.fileName());
+        QUrl dst = mTempImportDirUrl;
+        dst.setPath(dst.path() + '/' + mCurrentUrl.fileName());
         KIO::Job* job = KIO::copy(mCurrentUrl, dst, KIO::HideProgressInfo);
+        /* KF5 FIXME
         if (job->ui()) {
             job->ui()->setWindow(mAuthWindow);
         }
+        */
         QObject::connect(job, SIGNAL(result(KJob*)),
                          q, SLOT(slotCopyDone(KJob*)));
         QObject::connect(job, SIGNAL(percent(KJob*,ulong)),
                          q, SLOT(slotPercent(KJob*,ulong)));
     }
 
-    void renameImportedUrl(const KUrl& src)
+    void renameImportedUrl(const QUrl& src)
     {
-        KUrl dst = src;
-        dst.cd("..");
+        QUrl dst = src.resolved(QUrl(".."));
         QString fileName;
         if (mFileNameFormater.get()) {
             KFileItem item(KFileItem::Unknown, KFileItem::Unknown, src, true /* delayedMimeTypes */);
@@ -120,12 +122,12 @@ struct ImporterPrivate
             // 'src' url is temporary: if we import "foo/image.jpg" and
             // "bar/image.jpg", both images will be temporarily saved in the
             // 'src' url.
-            KDateTime dateTime = TimeUtils::dateTimeForFileItem(item, TimeUtils::SkipCache);
+            QDateTime dateTime = TimeUtils::dateTimeForFileItem(item, TimeUtils::SkipCache);
             fileName = mFileNameFormater->format(src, dateTime);
         } else {
             fileName = src.fileName();
         }
-        dst.setFileName(fileName);
+        dst.setPath(dst.path() + '/' + fileName);
 
         FileUtils::RenameResult result = FileUtils::rename(src, dst, mAuthWindow);
         switch (result) {
@@ -169,7 +171,7 @@ void Importer::setAutoRenameFormat(const QString& format)
     }
 }
 
-void Importer::start(const KUrl::List& list, const KUrl& destination)
+void Importer::start(const QList<QUrl>& list, const QUrl& destination)
 {
     d->mUrlList = list;
     d->mImportedUrlList.clear();
@@ -191,7 +193,7 @@ void Importer::start(const KUrl::List& list, const KUrl& destination)
 void Importer::slotCopyDone(KJob* _job)
 {
     KIO::CopyJob* job = static_cast<KIO::CopyJob*>(_job);
-    KUrl url = job->destUrl();
+    QUrl url = job->destUrl();
     if (job->error()) {
         qWarning() << "FIXME: What do we do with failed urls?";
         advance();
@@ -204,10 +206,12 @@ void Importer::slotCopyDone(KJob* _job)
 
 void Importer::finalizeImport()
 {
-    KIO::Job* job = KIO::del(d->mTempImportDir, KIO::HideProgressInfo);
+    KIO::Job* job = KIO::del(d->mTempImportDirUrl, KIO::HideProgressInfo);
+    /* KF5 FIXME
     if (job->ui()) {
         job->ui()->setWindow(d->mAuthWindow);
     }
+    */
     importFinished();
 }
 
@@ -229,12 +233,12 @@ void Importer::emitProgressChanged()
     progressChanged(d->mProgress * 100 + d->mJobProgress);
 }
 
-KUrl::List Importer::importedUrlList() const
+QList<QUrl> Importer::importedUrlList() const
 {
     return d->mImportedUrlList;
 }
 
-KUrl::List Importer::skippedUrlList() const
+QList<QUrl> Importer::skippedUrlList() const
 {
     return d->mSkippedUrlList;
 }

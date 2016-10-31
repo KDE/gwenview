@@ -59,6 +59,7 @@ find_package(KF5KIO 5.4 REQUIRED)
 find_package(KF5 REQUIRED COMPONENTS
     KDELibs4Support
     Activities
+    ItemModels
 )
 
 ## Dependencies
@@ -111,7 +112,7 @@ add_definitions(-DTRANSLATION_DOMAIN="gwenview")
 ## dirs to build
 add_subdirectory(lib)
 add_subdirectory(app)
-# add_subdirectory(importer)
+add_subdirectory(importer)
 add_subdirectory(part)
 add_subdirectory(tests)
 add_subdirectory(icons)
