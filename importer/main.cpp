@@ -56,8 +56,12 @@ int main(int argc, char *argv[])
     parser.process(app);
     aboutData.data()->processCommandLine(&parser);
 
-    if (parser.positionalArguments().count() != 1) {
+    if (parser.positionalArguments().count() == 0) {
         KCmdLineArgs::usageError(i18n("Missing required source folder argument."));
+        return 1;
+    }
+    if (parser.positionalArguments().count() > 1) {
+        KCmdLineArgs::usageError(i18n("Too many arguments."));
         return 1;
     }
     QString urlString = parser.positionalArguments().first();
