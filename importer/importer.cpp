@@ -34,6 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KIO/Job>
 #include <KIO/JobUiDelegate>
 #include <KIO/NetAccess>
+#include <KJobWidgets>
 #include <KStandardDirs>
 
 // stdc++
@@ -101,11 +102,7 @@ struct ImporterPrivate
         QUrl dst = mTempImportDirUrl;
         dst.setPath(dst.path() + '/' + mCurrentUrl.fileName());
         KIO::Job* job = KIO::copy(mCurrentUrl, dst, KIO::HideProgressInfo);
-        /* KF5 FIXME
-        if (job->ui()) {
-            job->ui()->setWindow(mAuthWindow);
-        }
-        */
+        KJobWidgets::setWindow(job, mAuthWindow);
         QObject::connect(job, SIGNAL(result(KJob*)),
                          q, SLOT(slotCopyDone(KJob*)));
         QObject::connect(job, SIGNAL(percent(KJob*,ulong)),
@@ -207,11 +204,7 @@ void Importer::slotCopyDone(KJob* _job)
 void Importer::finalizeImport()
 {
     KIO::Job* job = KIO::del(d->mTempImportDirUrl, KIO::HideProgressInfo);
-    /* KF5 FIXME
-    if (job->ui()) {
-        job->ui()->setWindow(d->mAuthWindow);
-    }
-    */
+    KJobWidgets::setWindow(job, d->mAuthWindow);
     importFinished();
 }
 
