@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "thumbnailpage.h"
 
 // Qt
+#include <QDebug>
 #include <QDir>
 #include <QIcon>
 #include <QPushButton>
@@ -29,7 +30,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 #include <KAcceleratorManager>
-#include <QDebug>
 #include <KDirLister>
 #include <KDirModel>
 #include <KIconLoader>
@@ -253,7 +253,7 @@ ThumbnailPage::~ThumbnailPage()
 
 void ThumbnailPage::setSourceUrl(const QUrl& srcBaseUrl, const QString& iconName, const QString& name)
 {
-    d->mSrcBaseIcon = QIcon(iconName);
+    d->mSrcBaseIcon = QIcon::fromTheme(iconName);
     d->mSrcBaseName = name;
 
     const int size = KIconLoader::SizeHuge;
