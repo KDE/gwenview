@@ -37,6 +37,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 int main(int argc, char *argv[])
 {
+    QApplication app(argc, argv);
+
     QScopedPointer<KAboutData> aboutData(
         Gwenview::createAboutData(
             QStringLiteral("org.kde.gwenview"), /* component name */
@@ -44,7 +46,6 @@ int main(int argc, char *argv[])
         ));
     aboutData->setShortDescription(i18n("Photo Importer"));
 
-    QApplication app(argc, argv);
     KAboutData::setApplicationData(*aboutData);
 
     QCommandLineParser parser;
