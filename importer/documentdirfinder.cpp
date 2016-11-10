@@ -97,7 +97,7 @@ void DocumentDirFinder::slotCompleted()
 {
     if (d->mFoundDirUrl.isValid()) {
         QUrl url = d->mFoundDirUrl;
-        d->mFoundDirUrl = QUrl();
+        d->mFoundDirUrl.clear();
         d->mDirLister->openUrl(url);
     } else {
         finish(d->mRootUrl, NoDocumentFound);
