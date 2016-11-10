@@ -73,7 +73,7 @@ struct ImporterPrivate
         QMetaObject::invokeMethod(q, "error", Q_ARG(QString, message));
     }
 
-    bool createImportDir(const QUrl url)
+    bool createImportDir(const QUrl& url)
     {
         Q_ASSERT(url.isLocalFile());
         // FIXME: Support remote urls
