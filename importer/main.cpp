@@ -18,15 +18,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
 // Qt
+#include <QApplication>
+#include <QDebug>
+#include <QDir>
+#include <QCommandLineParser>
 #include <QScopedPointer>
+#include <QUrl>
 
 // KDE
 #include <KAboutData>
-#include <KApplication>
 #include <KCmdLineArgs>
-#include <QDebug>
 #include <KLocale>
-#include <KUrl>
 
 // Local
 #include <lib/about.h>
@@ -35,40 +37,47 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 int main(int argc, char *argv[])
 {
+    KLocalizedString::setApplicationDomain("gwenview");
+    QApplication app(argc, argv);
+
     QScopedPointer<KAboutData> aboutData(
         Gwenview::createAboutData(
-            "gwenview_importer",       /* appname */
-            "gwenview",                /* catalogName */
-            ki18n("Gwenview Importer") /* programName */
+            QStringLiteral("org.kde.gwenview"), /* component name */
+            i18n("Gwenview Importer")  /* programName */
         ));
-    aboutData->setShortDescription(ki18n("Photo Importer"));
+    aboutData->setShortDescription(i18n("Photo Importer"));
 
-    KCmdLineArgs::init(argc, argv, aboutData.data());
+    KAboutData::setApplicationData(*aboutData);
 
-    KCmdLineOptions options;
-    options.add("+folder", ki18n("Source folder"));
-    options.add("udi <device-udi>", ki18n("Device UDI"));
-    KCmdLineArgs::addCmdLineOptions(options);
+    QCommandLineParser parser;
+    aboutData.data()->setupCommandLine(&parser);
+    parser.addOption(QCommandLineOption({QStringLiteral("udi")}, i18n("The device UDI, used to retrieve information about the device (name, icon...)"), i18n("Device UDI")));
+    parser.addHelpOption();
+    parser.addVersionOption();
+    parser.addPositionalArgument("folder", i18n("Source folder"));
+    parser.process(app);
+    aboutData.data()->processCommandLine(&parser);
 
-    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-    KApplication app;
-
-    if (args->count() != 1) {
-        KCmdLineArgs::usageError("Missing required source folder argument."); // FIXME 2.11 Add i18n() call
+    if (parser.positionalArguments().count() == 0) {
+        KCmdLineArgs::usageError(i18n("Missing required source folder argument."));
         return 1;
     }
-    KUrl url = args->url(0);
+    if (parser.positionalArguments().count() > 1) {
+        KCmdLineArgs::usageError(i18n("Too many arguments."));
+        return 1;
+    }
+    QString urlString = parser.positionalArguments().first();
+    QUrl url = QUrl::fromUserInput(urlString, QDir::currentPath(), QUrl::AssumeLocalFile);
     if (!url.isValid()) {
-        qCritical() << "Invalid source folder."; // FIXME 2.11 Add i18n() call
+        qCritical() << i18n("Invalid source folder.");
         return 1;
     }
-    QString deviceUdi = args->isSet("udi") ? args->getOption("udi") : QString();
-    args->clear();
+    QString deviceUdi = parser.isSet("udi") ? parser.value("udi") : QString();
 
     Gwenview::ImageFormats::registerPlugins();
 
     Gwenview::ImportDialog* dialog = new Gwenview::ImportDialog();
     dialog->show();
-    QMetaObject::invokeMethod(dialog, "setSourceUrl", Qt::QueuedConnection, Q_ARG(KUrl, url), Q_ARG(QString, deviceUdi));
+    QMetaObject::invokeMethod(dialog, "setSourceUrl", Qt::QueuedConnection, Q_ARG(QUrl, url), Q_ARG(QString, deviceUdi));
     return app.exec();
 }

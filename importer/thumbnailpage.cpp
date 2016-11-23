@@ -19,19 +19,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "thumbnailpage.moc"
+#include "thumbnailpage.h"
 
 // Qt
+#include <QDebug>
+#include <QDir>
+#include <QIcon>
 #include <QPushButton>
 #include <QTreeView>
 
 // KDE
 #include <KAcceleratorManager>
-#include <QDebug>
 #include <KDirLister>
 #include <KDirModel>
 #include <KIconLoader>
 #include <KIO/NetAccess>
+#include <kio/global.h>
 #include <kmodelindexproxymapper.h>
 
 // Local
@@ -66,10 +69,10 @@ public:
     void showContextMenu(QWidget*)
     {}
 
-    void showMenuForUrlDroppedOnViewport(QWidget*, const KUrl::List&)
+    void showMenuForUrlDroppedOnViewport(QWidget*, const QList<QUrl>&)
     {}
 
-    void showMenuForUrlDroppedOnDir(QWidget*, const KUrl::List&, const KUrl&)
+    void showMenuForUrlDroppedOnDir(QWidget*, const QList<QUrl>&, const QUrl&)
     {}
 };
 
@@ -83,10 +86,10 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
     ThumbnailPage* q;
     SerializedUrlMap mUrlMap;
 
-    KIcon mSrcBaseIcon;
+    QIcon mSrcBaseIcon;
     QString mSrcBaseName;
-    KUrl mSrcBaseUrl;
-    KUrl mSrcUrl;
+    QUrl mSrcBaseUrl;
+    QUrl mSrcUrl;
     KModelIndexProxyMapper* mSrcUrlModelProxyMapper;
 
     RecursiveDirModel* mRecursiveDirModel;
@@ -96,7 +99,7 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
 
     QPushButton* mImportSelectedButton;
     QPushButton* mImportAllButton;
-    KUrl::List mUrlList;
+    QList<QUrl> mUrlList;
 
     void setupDirModel()
     {
@@ -206,23 +209,23 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
             q, SIGNAL(rejected()));
     }
 
-    KUrl urlForBaseUrl() const
+    QUrl urlForBaseUrl() const
     {
-        KUrl url = mUrlMap.value(mSrcBaseUrl);
+        QUrl url = mUrlMap.value(mSrcBaseUrl);
         if (!url.isValid()) {
-            return KUrl();
+            return QUrl();
         }
 
         KIO::UDSEntry entry;
         bool ok = KIO::NetAccess::stat(url, entry, q);
         if (!ok) {
-            return KUrl();
+            return QUrl();
         }
         KFileItem item(entry, url, true /* delayedMimeTypes */);
-        return item.isDir() ? url : KUrl();
+        return item.isDir() ? url : QUrl();
     }
 
-    void rememberUrl(const KUrl& url)
+    void rememberUrl(const QUrl& url)
     {
         mUrlMap.insert(mSrcBaseUrl, url);
     }
@@ -248,40 +251,42 @@ ThumbnailPage::~ThumbnailPage()
     delete d;
 }
 
-void ThumbnailPage::setSourceUrl(const KUrl& srcBaseUrl, const QString& iconName, const QString& name)
+void ThumbnailPage::setSourceUrl(const QUrl& srcBaseUrl, const QString& iconName, const QString& name)
 {
-    d->mSrcBaseIcon = KIcon(iconName);
+    d->mSrcBaseIcon = QIcon::fromTheme(iconName);
     d->mSrcBaseName = name;
 
     const int size = KIconLoader::SizeHuge;
     d->mSrcIconLabel->setPixmap(d->mSrcBaseIcon.pixmap(size));
 
     d->mSrcBaseUrl = srcBaseUrl;
-    d->mSrcBaseUrl.adjustPath(KUrl::AddTrailingSlash);
-    KUrl url = d->urlForBaseUrl();
+    if (!d->mSrcBaseUrl.path().endsWith('/')) {
+        d->mSrcBaseUrl.setPath(d->mSrcBaseUrl.path() + '/');
+    }
+    QUrl url = d->urlForBaseUrl();
 
     if (url.isValid()) {
         openUrl(url);
     } else {
         DocumentDirFinder* finder = new DocumentDirFinder(srcBaseUrl);
-        connect(finder, SIGNAL(done(KUrl,DocumentDirFinder::Status)),
-                SLOT(slotDocumentDirFinderDone(KUrl,DocumentDirFinder::Status)));
+        connect(finder, SIGNAL(done(QUrl,DocumentDirFinder::Status)),
+                SLOT(slotDocumentDirFinderDone(QUrl,DocumentDirFinder::Status)));
         finder->start();
     }
 }
 
-void ThumbnailPage::slotDocumentDirFinderDone(const KUrl& url, DocumentDirFinder::Status /*status*/)
+void ThumbnailPage::slotDocumentDirFinderDone(const QUrl& url, DocumentDirFinder::Status /*status*/)
 {
     d->rememberUrl(url);
     openUrl(url);
 }
 
-void ThumbnailPage::openUrl(const KUrl& url)
+void ThumbnailPage::openUrl(const QUrl& url)
 {
     d->mSrcUrl = url;
-    QString path = KUrl::relativeUrl(d->mSrcBaseUrl, d->mSrcUrl);
+    QString path = QDir(d->mSrcBaseUrl.path()).relativeFilePath(d->mSrcUrl.path());
     QString text;
-    if (path.isEmpty() || path == "./") {
+    if (path.isEmpty() || path == ".") {
         text = d->mSrcBaseName;
     } else {
         path = QUrl::fromPercentEncoding(path.toUtf8());
@@ -292,17 +297,17 @@ void ThumbnailPage::openUrl(const KUrl& url)
     d->mRecursiveDirModel->setUrl(url);
 }
 
-KUrl::List ThumbnailPage::urlList() const
+QList<QUrl> ThumbnailPage::urlList() const
 {
     return d->mUrlList;
 }
 
-void ThumbnailPage::setDestinationUrl(const KUrl& url)
+void ThumbnailPage::setDestinationUrl(const QUrl& url)
 {
     d->mDstUrlRequester->setUrl(url);
 }
 
-KUrl ThumbnailPage::destinationUrl() const
+QUrl ThumbnailPage::destinationUrl() const
 {
     return d->mDstUrlRequester->url();
 }
@@ -355,7 +360,7 @@ void ThumbnailPage::showConfigDialog()
 class OnlyBaseUrlProxyModel : public QSortFilterProxyModel
 {
 public:
-    OnlyBaseUrlProxyModel(const KUrl& url, const KIcon& icon, const QString& name, QObject* parent)
+    OnlyBaseUrlProxyModel(const QUrl& url, const QIcon& icon, const QString& name, QObject* parent)
     : QSortFilterProxyModel(parent)
     , mUrl(url)
     , mIcon(icon)
@@ -369,7 +374,7 @@ public:
         }
         QModelIndex index = sourceModel()->index(sourceRow, 0);
         KFileItem item = itemForIndex(index);
-        return item.url().equals(mUrl, KUrl::CompareWithoutTrailingSlash);
+        return item.url().matches(mUrl, QUrl::StripTrailingSlash);
     }
 
     QVariant data(const QModelIndex& index, int role) const // reimp
@@ -383,15 +388,15 @@ public:
         case Qt::DecorationRole:
             return mIcon;
         case Qt::ToolTipRole:
-            return mUrl.pathOrUrl();
+            return mUrl.toDisplayString(QUrl::PreferLocalFile);
         default:
             return QSortFilterProxyModel::data(index, role);
         }
     }
 
 private:
-    KUrl mUrl;
-    KIcon mIcon;
+    QUrl mUrl;
+    QIcon mIcon;
     QString mName;
 };
 
@@ -403,7 +408,7 @@ void ThumbnailPage::setupSrcUrlTreeView()
     }
     KDirModel* dirModel = new KDirModel(this);
     dirModel->dirLister()->setDirOnlyMode(true);
-    dirModel->dirLister()->openUrl(d->mSrcBaseUrl.upUrl());
+    dirModel->dirLister()->openUrl(KIO::upUrl(d->mSrcBaseUrl));
 
     OnlyBaseUrlProxyModel* onlyBaseUrlModel = new OnlyBaseUrlProxyModel(d->mSrcBaseUrl, d->mSrcBaseIcon, d->mSrcBaseName, this);
     onlyBaseUrlModel->setSourceModel(dirModel);
@@ -447,7 +452,7 @@ void ThumbnailPage::openUrlFromIndex(const QModelIndex& index)
     if (item.isNull()) {
         return;
     }
-    KUrl url = item.url();
+    QUrl url = item.url();
     d->rememberUrl(url);
     openUrl(url);
 }

@@ -28,10 +28,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
+class QDateTime;
 class QString;
-
-class KDateTime;
-class KUrl;
+class QUrl;
 
 namespace Gwenview
 {
@@ -49,7 +48,7 @@ public:
      * Given an url and its dateTime, returns a filename according to the
      * format passed to the constructor
      */
-    QString format(const KUrl& url, const KDateTime& dateTime);
+    QString format(const QUrl& url, const QDateTime& dateTime);
 
     /**
      * Returns a map whose keys are the available keywords and values are the

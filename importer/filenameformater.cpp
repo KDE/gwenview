@@ -22,12 +22,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "filenameformater.h"
 
 // Qt
+#include <QDateTime>
 #include <QFileInfo>
+#include <QUrl>
 
 // KDE
-#include <KDateTime>
 #include <KLocale>
-#include <KUrl>
 
 // Local
 
@@ -52,14 +52,14 @@ FileNameFormater::~FileNameFormater()
     delete d;
 }
 
-QString FileNameFormater::format(const KUrl& url, const KDateTime& dateTime)
+QString FileNameFormater::format(const QUrl& url, const QDateTime& dateTime)
 {
     QFileInfo info(url.fileName());
 
     // Keep in sync with helpMap()
     Dict dict;
-    dict["date"]       = dateTime.toString("%Y-%m-%d");
-    dict["time"]       = dateTime.toString("%H-%M-%S");
+    dict["date"]       = dateTime.toString("yyyy-MM-dd");
+    dict["time"]       = dateTime.toString("HH-mm-ss");
     dict["ext"]        = info.suffix();
     dict["ext.lower"]  = info.suffix().toLower();
     dict["name"]       = info.completeBaseName();

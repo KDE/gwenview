@@ -23,7 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 class QString;
 class QWidget;
-class KUrl;
+class QUrl;
 
 namespace Gwenview
 {
@@ -41,12 +41,12 @@ enum RenameResult {
 /**
  * Compare content of two urls, returns whether they are the same
  */
-bool contentsAreIdentical(const KUrl& url1, const KUrl& url2, QWidget* authWindow = 0);
+bool contentsAreIdentical(const QUrl& url1, const QUrl& url2, QWidget* authWindow = 0);
 
 /**
  * Rename src to dst, returns RenameResult
  */
-RenameResult rename(const KUrl& src, const KUrl& dst, QWidget* authWindow = 0);
+RenameResult rename(const QUrl& src, const QUrl& dst, QWidget* authWindow = 0);
 
 /**
  * Create a temp dir in baseDir, starting with prefix.  If successful returns

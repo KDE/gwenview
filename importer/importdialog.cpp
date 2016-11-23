@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "importdialog.moc"
+#include "importdialog.h"
 
 // Qt
 #include <QApplication>
@@ -61,8 +61,8 @@ public:
 
     void deleteImportedUrls()
     {
-        KUrl::List importedUrls = mImporter->importedUrlList();
-        KUrl::List skippedUrls = mImporter->skippedUrlList();
+        QList<QUrl> importedUrls = mImporter->importedUrlList();
+        QList<QUrl> skippedUrls = mImporter->skippedUrlList();
         int importedCount = importedUrls.count();
         int skippedCount = skippedUrls.count();
 
@@ -119,7 +119,7 @@ public:
         if (answer != KMessageBox::Yes) {
             return;
         }
-        KUrl::List urls = importedUrls + skippedUrls;
+        QList<QUrl> urls = importedUrls + skippedUrls;
         while (true) {
             KIO::Job* job = KIO::del(urls);
             if (KIO::NetAccess::synchronousRun(job, q)) {
@@ -143,11 +143,11 @@ public:
 
     void startGwenview()
     {
-        KService::Ptr service = KService::serviceByDesktopName("gwenview");
+        KService::Ptr service = KService::serviceByDesktopName("org.kde.gwenview");
         if (!service) {
             qCritical() << "Could not find gwenview";
         } else {
-            KRun::run(*service, KUrl::List() << mThumbnailPage->destinationUrl(), 0 /* window */);
+            KRun::run(*service, {mThumbnailPage->destinationUrl()}, 0 /* window */);
         }
     }
 
@@ -181,11 +181,11 @@ ImportDialog::ImportDialog()
             SLOT(showImportError(QString)));
     d->mThumbnailPage = new ThumbnailPage;
 
-    KUrl url = ImporterConfig::destinationUrl();
+    QUrl url = ImporterConfig::destinationUrl();
     if (!url.isValid()) {
         url = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
         int year = QDate::currentDate().year();
-        url.addPath(QString::number(year));
+        url.setPath(url.path() + '/' + QString::number(year));
     }
     d->mThumbnailPage->setDestinationUrl(url);
 
@@ -208,7 +208,7 @@ ImportDialog::ImportDialog()
 
     d->mCentralWidget->setCurrentWidget(d->mThumbnailPage);
 
-    setWindowIcon(KIcon("gwenview"));
+    setWindowIcon(QIcon::fromTheme("gwenview"));
     setAutoSaveSettings();
 }
 
@@ -222,12 +222,12 @@ QSize ImportDialog::sizeHint() const
     return QSize(700, 500);
 }
 
-void ImportDialog::setSourceUrl(const KUrl& url, const QString& deviceUdi)
+void ImportDialog::setSourceUrl(const QUrl& url, const QString& deviceUdi)
 {
     QString name, iconName;
     if (deviceUdi.isEmpty()) {
-        name = url.pathOrUrl();
-        iconName = KProtocolInfo::icon(url.protocol());
+        name = url.url(QUrl::PreferLocalFile);
+        iconName = KProtocolInfo::icon(url.scheme());
         if (iconName.isEmpty()) {
             iconName = "folder";
         }
@@ -241,7 +241,7 @@ void ImportDialog::setSourceUrl(const KUrl& url, const QString& deviceUdi)
 
 void ImportDialog::startImport()
 {
-    KUrl url = d->mThumbnailPage->destinationUrl();
+    QUrl url = d->mThumbnailPage->destinationUrl();
     ImporterConfig::setDestinationUrl(url);
     ImporterConfig::self()->save();
 

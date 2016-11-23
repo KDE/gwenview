@@ -25,9 +25,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 #include <KConfigGroup>
-#include <KUrl>
 
 // Qt
+#include <QUrl>
 
 namespace Gwenview
 {
@@ -35,17 +35,17 @@ namespace Gwenview
 static const char* KEY_SUFFIX = "key";
 static const char* VALUE_SUFFIX = "value";
 
-static KUrl stripPass(const KUrl &url_)
+static QUrl stripPass(const QUrl &url_)
 {
-    KUrl url = url_;
-    url.setPass(QString());
+    QUrl url = url_;
+    url.setPassword(QString());
     return url;
 }
 
 struct SerializedUrlMapPrivate
 {
     KConfigGroup mGroup;
-    QMap<KUrl, KUrl> mMap;
+    QMap<QUrl, QUrl> mMap;
 
     void read()
     {
@@ -56,21 +56,21 @@ struct SerializedUrlMapPrivate
             if (!mGroup.hasKey(key)) {
                 break;
             }
-            QString keyUrl = mGroup.readEntry(key);
-            QString valueUrl = mGroup.readEntry(idxString + QLatin1String(VALUE_SUFFIX));
-            mMap.insert(keyUrl, valueUrl);
+            QVariant keyUrl = mGroup.readEntry(key, QVariant());
+            QVariant valueUrl = mGroup.readEntry(idxString + QLatin1String(VALUE_SUFFIX), QVariant());
+            mMap.insert(keyUrl.toUrl(), valueUrl.toUrl());
         }
     }
 
     void write()
     {
         mGroup.deleteGroup();
-        QMap<KUrl, KUrl>::ConstIterator it = mMap.constBegin(), end = mMap.constEnd();
+        QMap<QUrl, QUrl>::ConstIterator it = mMap.constBegin(), end = mMap.constEnd();
         int idx = 0;
         for (; it != end; ++it, ++idx) {
             QString idxString = QString::number(idx);
-            mGroup.writeEntry(idxString + QLatin1String(KEY_SUFFIX), it.key().url());
-            mGroup.writeEntry(idxString + QLatin1String(VALUE_SUFFIX), it.value().url());
+            mGroup.writeEntry(idxString + QLatin1String(KEY_SUFFIX), QVariant(it.key()));
+            mGroup.writeEntry(idxString + QLatin1String(VALUE_SUFFIX), QVariant(it.value()));
         }
         mGroup.sync();
     }
@@ -92,16 +92,16 @@ void SerializedUrlMap::setConfigGroup(const KConfigGroup& group)
     d->read();
 }
 
-KUrl SerializedUrlMap::value(const KUrl& key_) const
+QUrl SerializedUrlMap::value(const QUrl& key_) const
 {
-    QString pass = key_.pass();
-    KUrl key = stripPass(key_);
-    KUrl url = d->mMap.value(key);
-    url.setPass(pass);
+    QString pass = key_.password();
+    QUrl key = stripPass(key_);
+    QUrl url = d->mMap.value(key);
+    url.setPassword(pass);
     return url;
 }
 
-void SerializedUrlMap::insert(const KUrl& key, const KUrl& value)
+void SerializedUrlMap::insert(const QUrl& key, const QUrl& value)
 {
     d->mMap.insert(stripPass(key), stripPass(value));
     d->write();

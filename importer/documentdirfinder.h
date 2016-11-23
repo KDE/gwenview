@@ -55,21 +55,21 @@ public:
         MultipleDirsFound
     };
 
-    DocumentDirFinder(const KUrl& rootUrl);
+    DocumentDirFinder(const QUrl& rootUrl);
     ~DocumentDirFinder();
 
     void start();
 
 Q_SIGNALS:
-    void done(const KUrl&, DocumentDirFinder::Status);
+    void done(const QUrl&, DocumentDirFinder::Status);
 
 private Q_SLOTS:
-    void slotItemsAdded(const KUrl&, const KFileItemList&);
+    void slotItemsAdded(const QUrl&, const KFileItemList&);
     void slotCompleted();
 
 private:
     DocumentDirFinderPrivate* const d;
-    void finish(const KUrl&, Status);
+    void finish(const QUrl&, Status);
 };
 
 } // namespace

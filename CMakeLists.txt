@@ -59,6 +59,7 @@ find_package(KF5KIO 5.4 REQUIRED)
 find_package(KF5 REQUIRED COMPONENTS
     KDELibs4Support
     Activities
+    ItemModels
 )
 
 ## Dependencies
@@ -112,7 +113,7 @@ add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
 ## dirs to build
 add_subdirectory(lib)
 add_subdirectory(app)
-# add_subdirectory(importer)
+add_subdirectory(importer)
 add_subdirectory(part)
 add_subdirectory(tests)
 add_subdirectory(icons)

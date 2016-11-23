@@ -28,14 +28,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 
 class KConfigGroup;
-class KUrl;
+class QUrl;
 
 namespace Gwenview
 {
 
 struct SerializedUrlMapPrivate;
 /**
- * A map-like KUrl=>KUrl object, serialized in a KConfigGroup
+ * A map-like QUrl=>QUrl object, serialized in a KConfigGroup
  */
 class SerializedUrlMap
 {
@@ -45,9 +45,9 @@ public:
 
     void setConfigGroup(const KConfigGroup&);
 
-    KUrl value(const KUrl&) const;
+    QUrl value(const QUrl&) const;
 
-    void insert(const KUrl& key, const KUrl& value);
+    void insert(const QUrl& key, const QUrl& value);
 
 private:
     SerializedUrlMapPrivate* const d;

@@ -22,9 +22,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #define IMPORTDIALOG_H
 
 // Qt
+#include <QUrl>
 
 // KDE
-#include <KUrl>
 #include <KMainWindow>
 
 // Local
@@ -43,7 +43,7 @@ public:
     virtual QSize sizeHint() const;
 
 public Q_SLOTS:
-    void setSourceUrl(const KUrl&, const QString& deviceUdi);
+    void setSourceUrl(const QUrl&, const QString& deviceUdi);
 
 private Q_SLOTS:
     void startImport();
