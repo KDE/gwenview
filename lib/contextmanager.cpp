@@ -295,6 +295,12 @@ void ContextManager::slotRowsInserted()
 
 void ContextManager::selectUrlToSelect()
 {
+    // Because of the queued connection above we might be called several times in a row
+    // In this case we don't want the warning below
+    if (d->mUrlToSelect.isEmpty()) {
+        return;
+    }
+
     GV_RETURN_IF_FAIL(d->mUrlToSelect.isValid());
     QModelIndex index = d->mDirModel->indexForUrl(d->mUrlToSelect);
     if (index.isValid()) {
