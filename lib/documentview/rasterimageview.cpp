@@ -314,9 +314,7 @@ void RasterImageView::slotDocumentIsAnimatedUpdated()
 void RasterImageView::updateFromScaler(int zoomedImageLeft, int zoomedImageTop, const QImage& image)
 {
     if (d->mApplyDisplayTransform) {
-        if (!d->mDisplayTransform) {
-            d->updateDisplayTransform(image.format());
-        }
+        d->updateDisplayTransform(image.format());
         if (d->mDisplayTransform) {
             quint8 *bytes = const_cast<quint8*>(image.bits());
             cmsDoTransform(d->mDisplayTransform, bytes, bytes, image.width() * image.height());
