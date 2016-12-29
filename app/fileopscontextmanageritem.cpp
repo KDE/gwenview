@@ -142,10 +142,6 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, QL
     KActionCategory* edit = new KActionCategory(i18nc("@title actions category", "Edit"), actionCollection);
 
     mCutAction = edit->addAction(KStandardAction::Cut, this, SLOT(cut()));
-    QList<QKeySequence> cutActionShortcuts = mCutAction->shortcuts();
-    cutActionShortcuts.removeAll(QKeySequence(Qt::ShiftModifier | Qt::Key_Delete));
-    actionCollection->setDefaultShortcuts(mCutAction, cutActionShortcuts);
-
     mCopyAction = edit->addAction(KStandardAction::Copy, this, SLOT(copy()));
     mPasteAction = edit->addAction(KStandardAction::Paste, this, SLOT(paste()));
 
@@ -171,10 +167,7 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, QL
     mTrashAction->setIcon(QIcon::fromTheme("user-trash"));
     actionCollection->setDefaultShortcut(mTrashAction, Qt::Key_Delete);
 
-    mDelAction = file->addAction("file_delete", this, SLOT(del()));
-    mDelAction->setText(i18n("Delete"));
-    mDelAction->setIcon(QIcon::fromTheme("edit-delete"));
-    actionCollection->setDefaultShortcut(mDelAction, QKeySequence(Qt::ShiftModifier | Qt::Key_Delete));
+    mDelAction = file->addAction(KStandardAction::DeleteFile, this, SLOT(del()));
 
     mRestoreAction = file->addAction("file_restore", this, SLOT(restore()));
     mRestoreAction->setText(i18n("Restore"));

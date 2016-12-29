@@ -54,9 +54,8 @@ find_package(Phonon4Qt5 4.6.60 NO_MODULE REQUIRED)
 include_directories(BEFORE ${PHONON_INCLUDES})
 add_definitions(-DPHONON_LIB_SONAME=\"${PHONON_LIB_SONAME}\")
 
-find_package(KF5KIO 5.4 REQUIRED)
-
-find_package(KF5 REQUIRED COMPONENTS
+find_package(KF5 5.25 REQUIRED COMPONENTS
+    KIO
     KDELibs4Support
     Activities
     ItemModels

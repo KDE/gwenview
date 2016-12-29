@@ -79,7 +79,7 @@ void ThumbnailViewHelper::showContextMenu(QWidget* parent)
     QMenu popup(parent);
     if (d->mCurrentDirUrl.scheme() == "trash") {
         d->addActionToMenu(popup, "file_restore");
-        d->addActionToMenu(popup, "file_delete");
+        d->addActionToMenu(popup, "deletefile");
         popup.addSeparator();
         d->addActionToMenu(popup, "file_show_properties");
     } else {
@@ -87,7 +87,7 @@ void ThumbnailViewHelper::showContextMenu(QWidget* parent)
         popup.addSeparator();
         d->addActionToMenu(popup, "file_rename");
         d->addActionToMenu(popup, "file_trash");
-        d->addActionToMenu(popup, "file_delete");
+        d->addActionToMenu(popup, "deletefile");
         popup.addSeparator();
         d->addActionToMenu(popup, "file_copy_to");
         d->addActionToMenu(popup, "file_move_to");
