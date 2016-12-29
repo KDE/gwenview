@@ -142,12 +142,9 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, QL
     KActionCategory* edit = new KActionCategory(i18nc("@title actions category", "Edit"), actionCollection);
 
     mCutAction = edit->addAction(KStandardAction::Cut, this, SLOT(cut()));
-
-    // Copied from Dolphin:
-    // need to remove shift+del from cut action, else the shortcut for deletejob
-    // doesn't work
-    //KF5TODO
-//     mCopyAction->setShortcut(QKeySequence());
+    QList<QKeySequence> cutActionShortcuts = mCutAction->shortcuts();
+    cutActionShortcuts.removeAll(QKeySequence(Qt::ShiftModifier | Qt::Key_Delete));
+    actionCollection->setDefaultShortcuts(mCutAction, cutActionShortcuts);
 
     mCopyAction = edit->addAction(KStandardAction::Copy, this, SLOT(copy()));
     mPasteAction = edit->addAction(KStandardAction::Paste, this, SLOT(paste()));
