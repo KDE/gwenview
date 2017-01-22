@@ -207,7 +207,7 @@ void FolderViewContextManagerItem::setupView()
     // Stretch (we still want the column to take the full width of the
     // widget).
     mView->header()->setStretchLastSection(false);
-    mView->header()->setResizeMode(QHeaderView::ResizeToContents);
+    mView->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
     setWidget(mView);
     QObject::connect(mView, &QTreeView::activated, this, &FolderViewContextManagerItem::slotActivated);
