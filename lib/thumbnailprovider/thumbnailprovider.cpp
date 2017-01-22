@@ -41,9 +41,7 @@
 // KDE
 #include <KIO/JobUiDelegate>
 #include <KIO/PreviewJob>
-#include <KStandardDirs>
 #include <KJobWidgets>
-#include <KFileMetaInfo>
 
 // Local
 #include "mimetypeutils.h"
@@ -457,17 +455,6 @@ void ThumbnailProvider::checkThumbnail()
                     emitThumbnailLoaded(thumb, QSize());
                     determineNextIcon();
                     return;
-                }
-                KFileMetaInfo fmi(mCurrentUrl);
-                if (fmi.isValid()) {
-                    KFileMetaInfoItem item = fmi.item("Dimensions");
-                    if (item.isValid()) {
-                        size = item.value().toSize();
-                    } else {
-                        qWarning() << "KFileMetaInfoItem for" << mOriginalUri << "did not get image size information";
-                    }
-                } else {
-                    qWarning() << "Could not get a valid KFileMetaInfo instance for" << mOriginalUri;
                 }
             }
             emitThumbnailLoaded(thumb, size);
