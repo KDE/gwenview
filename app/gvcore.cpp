@@ -34,7 +34,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KJobWidgets>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KStandardDirs>
 
 // Local
 #include <lib/binder.h>
@@ -128,19 +127,19 @@ struct GvCorePrivate
         QString name = GwenviewConfig::fullScreenColorScheme();
         if (name.isEmpty()) {
             // Default color scheme
-            QString path = KStandardDirs::locate("data", "gwenview/color-schemes/fullscreen.colors");
+            QString path = QStandardPaths::locate(QStandardPaths::AppDataLocation, "color-schemes/fullscreen.colors");
             config = KSharedConfig::openConfig(path);
         } else if (name.contains('/')) {
             // Full path to a .colors file
             config = KSharedConfig::openConfig(name);
         } else {
             // Standard KDE color scheme
-            config = KSharedConfig::openConfig(QString("color-schemes/%1.colors").arg(name), KConfig::FullConfig, QStandardPaths::DataLocation);
+            config = KSharedConfig::openConfig(QString("color-schemes/%1.colors").arg(name), KConfig::FullConfig, QStandardPaths::AppDataLocation);
         }
         mPalettes[GvCore::FullScreenPalette] = KColorScheme::createApplicationPalette(config);
 
         pal = mPalettes[GvCore::FullScreenPalette];
-        QString path = KStandardDirs::locate("data", "gwenview/images/background.png");
+        QString path = QStandardPaths::locate(QStandardPaths::AppDataLocation, "images/background.png");
         QPixmap bgTexture(path);
         pal.setBrush(QPalette::Base, bgTexture);
         mPalettes[GvCore::FullScreenViewPalette] = pal;
@@ -171,7 +170,7 @@ GvCore::~GvCore()
 QAbstractItemModel* GvCore::recentFoldersModel() const
 {
     if (!d->mRecentFoldersModel) {
-        d->mRecentFoldersModel = new HistoryModel(const_cast<GvCore*>(this), KStandardDirs::locateLocal("appdata", "recentfolders/"));
+        d->mRecentFoldersModel = new HistoryModel(const_cast<GvCore*>(this), QStandardPaths::locate(QStandardPaths::AppLocalDataLocation, "recentfolders/"));
     }
     return d->mRecentFoldersModel;
 }

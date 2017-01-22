@@ -29,7 +29,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KIO/MkdirJob>
 #include <KIO/FileCopyJob>
 #include <KJobWidgets>
-#include <KStandardDirs>
 #include <QStandardPaths>
 
 QUrl setUpRemoteTestDir(const QString& testFile)
