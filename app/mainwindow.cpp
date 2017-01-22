@@ -39,7 +39,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KDE
 #include <KActionCategory>
 #include <KActionCollection>
-#include <KFileDialog>
+#include <QFileDialog>
 #include <KFileItem>
 #include <KLocalizedString>
 #include <KMessageBox>
@@ -1327,16 +1327,19 @@ void MainWindow::openFile()
 {
     QUrl dirUrl = d->mContextManager->currentDirUrl();
 
-    KFileDialog dialog(dirUrl, QString(), this);
+    QFileDialog dialog(this);
+    dialog.selectUrl(dirUrl);
     dialog.setWindowTitle(i18nc("@title:window", "Open Image"));
     const QStringList mimeFilter = MimeTypeUtils::imageMimeTypes();
-    dialog.setMimeFilter(mimeFilter);
-    dialog.setOperationMode(KFileDialog::Opening);
+    dialog.setMimeTypeFilters(mimeFilter);
+    dialog.setAcceptMode(QFileDialog::AcceptOpen);
     if (!dialog.exec()) {
         return;
     }
 
-    openUrl(dialog.selectedUrl());
+    if (!dialog.selectedUrls().isEmpty()) {
+        openUrl(dialog.selectedUrls().first());
+    }
 }
 
 void MainWindow::openUrl(const QUrl& url)

@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KDE
 #include <KAboutData>
 #include <KActionCollection>
-#include <KFileDialog>
+#include <QFileDialog>
 #include <KIconLoader>
 #include <KIO/Job>
 #include <KIO/JobUiDelegate>
@@ -149,7 +149,7 @@ void GVPart::showContextMenu()
 void GVPart::saveAs()
 {
     const QUrl srcUrl = url();
-    const QUrl dstUrl = KFileDialog::getSaveUrl(srcUrl, QString(), widget());
+    const QUrl dstUrl = QFileDialog::getSaveFileUrl(widget(), QString(), srcUrl);
     if (!dstUrl.isValid()) {
         return;
     }

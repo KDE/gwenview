@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QMimeDatabase>
 
 // KDE
-#include <KFileDialog>
+#include <QFileDialog>
 #include <KColorScheme>
 #include <KIO/StatJob>
 #include <KJobWidgets>
@@ -68,19 +68,17 @@ struct GvCorePrivate
 
     bool showSaveAsDialog(const QUrl &url, QUrl* outUrl, QByteArray* format)
     {
-        KFileDialog dialog(url, QString(), mMainWindow);
-        dialog.setOperationMode(KFileDialog::Saving);
-        dialog.setSelection(url.fileName());
+        QFileDialog dialog(mMainWindow);
+        dialog.setAcceptMode(QFileDialog::AcceptSave);
+        dialog.selectUrl(url);
 
         QStringList supportedMimetypes;
         for (const QByteArray &mimeName : QImageWriter::supportedMimeTypes()) {
             supportedMimetypes.append(QString::fromLocal8Bit(mimeName));
         }
 
-        dialog.setMimeFilter(
-            supportedMimetypes,
-            MimeTypeUtils::urlMimeType(url)         // Default
-        );
+        dialog.setMimeTypeFilters(supportedMimetypes);
+        dialog.selectMimeTypeFilter(MimeTypeUtils::urlMimeType(url));
 
         // Show dialog
         do {
@@ -88,29 +86,26 @@ struct GvCorePrivate
                 return false;
             }
 
-            const QString mimeType = dialog.currentMimeFilter();
-            if (mimeType.isEmpty()) {
-                KMessageBox::sorry(
-                    mMainWindow,
-                    i18nc("@info",
-                          "No image format selected.")
-                );
-                continue;
+            QList<QUrl> files = dialog.selectedUrls();
+            if (files.isEmpty()) {
+                return false;
             }
 
-            const QStringList typeList = QMimeDatabase().mimeTypeForName(mimeType).suffixes();
+            QString filename = files.first().fileName();
+
+            const QStringList typeList = QMimeDatabase().mimeTypeForName(filename).suffixes();
             if (typeList.count() > 0) {
-                *format = typeList[0].toAscii();
+                *format = typeList.first().toLocal8Bit();
                 break;
             }
             KMessageBox::sorry(
                 mMainWindow,
                 i18nc("@info",
-                      "Gwenview cannot save images as %1.", mimeType)
+                      "Gwenview cannot save images as %1.", QFileInfo(filename).suffix())
             );
         } while (true);
 
-        *outUrl = dialog.selectedUrl();
+        *outUrl = dialog.selectedUrls().first();
         return true;
     }
 
