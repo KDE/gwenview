@@ -32,7 +32,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // KDE
 #include <KLocalizedString>
-#include <kdeprintdialog.h>
 
 // Local
 #include "printoptionspage.h"
@@ -123,11 +122,13 @@ void PrintHelper::print(Document::Ptr doc)
     PrintOptionsPage* optionsPage = new PrintOptionsPage(doc->size());
     optionsPage->loadConfig();
 
-    std::unique_ptr<QPrintDialog> dialog(
-        KdePrint::createPrintDialog(&printer,
-                                    QList<QWidget*>() << optionsPage,
-                                    d->mParent)
-    );
+    QScopedPointer<QPrintDialog> dialog(new QPrintDialog(&printer, d->mParent));
+#if defined (Q_OS_UNIX) && !defined(Q_OS_DARWIN)
+    dialog->setOptionTabs(QList<QWidget*>() << optionsPage);
+#else
+    optionsPage->setParent(dialog.data());
+#endif
+
     dialog->setWindowTitle(i18n("Print Image"));
     bool wantToPrint = dialog->exec();
 
