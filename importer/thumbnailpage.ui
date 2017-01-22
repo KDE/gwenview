@@ -187,7 +187,7 @@ QLabel[isIcon=true] {
       </widget>
      </item>
      <item>
-      <widget class="KDialogButtonBox" name="mButtonBox">
+      <widget class="QDialogButtonBox" name="mButtonBox">
        <property name="standardButtons">
         <set>QDialogButtonBox::Cancel</set>
        </property>
@@ -225,7 +225,7 @@ QLabel[isIcon=true] {
        </widget>
       </item>
       <item>
-       <widget class="KPushButton" name="mSrcUrlButton"/>
+       <widget class="QPushButton" name="mSrcUrlButton"/>
       </item>
       <item>
        <spacer name="horizontalSpacer_2">
@@ -246,16 +246,6 @@ QLabel[isIcon=true] {
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>KDialogButtonBox</class>
-   <extends>QDialogButtonBox</extends>
-   <header>kdialogbuttonbox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KPushButton</class>
-   <extends>QPushButton</extends>
-   <header>kpushbutton.h</header>
-  </customwidget>
   <customwidget>
    <class>KUrlRequester</class>
    <extends>QFrame</extends>
