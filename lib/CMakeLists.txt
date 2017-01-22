@@ -192,12 +192,10 @@ if (GWENVIEW_SEMANTICINFO_BACKEND_BALOO)
         )
 endif()
 
-set_source_files_properties(
+kde_source_files_enable_exceptions(
     exiv2imageloader.cpp
     imagemetainfomodel.cpp
     timeutils.cpp
-    PROPERTIES
-    COMPILE_FLAGS "${KDE4_ENABLE_EXCEPTIONS}"
     )
 
 ki18n_wrap_ui(gwenviewlib_SRCS
@@ -220,7 +218,6 @@ if (WIN32)
 endif()
 
 target_link_libraries(gwenviewlib
-   KF5::KDELibs4Support
    Qt5::Concurrent
    Qt5::Svg
    Qt5::OpenGL
