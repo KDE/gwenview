@@ -436,17 +436,17 @@ void ThumbnailProvider::checkThumbnail()
     LOG("Stat thumb" << mThumbnailPath);
 
     QImage thumb = loadThumbnailFromCache();
-    KIO::filesize_t fileSize = thumb.text("Thumb::Size", 0).toULongLong();
+    KIO::filesize_t fileSize = thumb.text("Thumb::Size").toULongLong();
     if (!thumb.isNull()) {
-        if (thumb.text("Thumb::URI", 0) == mOriginalUri &&
-                thumb.text("Thumb::MTime", 0).toInt() == mOriginalTime &&
+        if (thumb.text("Thumb::URI") == mOriginalUri &&
+                thumb.text("Thumb::MTime").toInt() == mOriginalTime &&
                  (fileSize == 0 || fileSize == mOriginalFileSize)) {
             int width = 0, height = 0;
             QSize size;
             bool ok;
 
-            width = thumb.text("Thumb::Image::Width", 0).toInt(&ok);
-            if (ok) height = thumb.text("Thumb::Image::Height", 0).toInt(&ok);
+            width = thumb.text("Thumb::Image::Width").toInt(&ok);
+            if (ok) height = thumb.text("Thumb::Image::Height").toInt(&ok);
             if (ok) {
                 size = QSize(width, height);
             } else {
