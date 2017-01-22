@@ -26,9 +26,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QList>
 #include <QSignalMapper>
 #include <QVBoxLayout>
+#include <QPushButton>
 
 // KDE
-#include <KPushButton>
+#include <KGuiItem>
 
 // Local
 #include <ui_dialogpage.h>
@@ -39,7 +40,7 @@ namespace Gwenview
 struct DialogPagePrivate : public Ui_DialogPage
 {
     QVBoxLayout* mLayout;
-    QList<KPushButton*> mButtons;
+    QList<QPushButton*> mButtons;
     QSignalMapper* mMapper;
     QEventLoop* mEventLoop;
 };
@@ -73,7 +74,8 @@ void DialogPage::setText(const QString& text)
 int DialogPage::addButton(const KGuiItem& item)
 {
     int id = d->mButtons.size();
-    KPushButton* button = new KPushButton(item);
+    QPushButton* button = new QPushButton;
+    KGuiItem::assign(button, item);
     button->setFixedHeight(button->sizeHint().height() * 2);
 
     connect(button, SIGNAL(clicked()), d->mMapper, SLOT(map()));
