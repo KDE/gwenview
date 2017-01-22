@@ -27,6 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KDE
 
 // Qt
+#include <QPointer>
 
 namespace Gwenview
 {
@@ -35,7 +36,7 @@ struct DocumentViewSynchronizerPrivate
 {
     DocumentViewSynchronizer* q;
     const QList<DocumentView*>* mViews;
-    QWeakPointer<DocumentView> mCurrentView;
+    QPointer<DocumentView> mCurrentView;
     bool mActive;
     QPoint mOldPosition;
 

@@ -33,7 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QGraphicsSceneMouseEvent>
 #include <QPainter>
 #include <QTimer>
-#include <QWeakPointer>
+#include <QPointer>
 #include <QDebug>
 
 // LCMS2
@@ -65,7 +65,7 @@ struct RasterImageViewPrivate
 
     QTimer* mUpdateTimer;
 
-    QWeakPointer<AbstractRasterImageViewTool> mTool;
+    QPointer<AbstractRasterImageViewTool> mTool;
 
     bool mApplyDisplayTransform; // Defaults to true. Can be set to false if there is no need or no way to apply color profile
     cmsHTRANSFORM mDisplayTransform;

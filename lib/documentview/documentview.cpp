@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QGraphicsSceneWheelEvent>
 #include <QPainter>
 #include <QPropertyAnimation>
-#include <QWeakPointer>
+#include <QPointer>
 #include <QDebug>
 #include <QIcon>
 #include <QUrl>
@@ -83,8 +83,8 @@ struct DocumentViewPrivate
     int mSortKey; // Used to sort views when displayed in compare mode
     HudWidget* mHud;
     BirdEyeView* mBirdEyeView;
-    QWeakPointer<QPropertyAnimation> mMoveAnimation;
-    QWeakPointer<QPropertyAnimation> mFadeAnimation;
+    QPointer<QPropertyAnimation> mMoveAnimation;
+    QPointer<QPropertyAnimation> mFadeAnimation;
 
     LoadingIndicator* mLoadingIndicator;
 

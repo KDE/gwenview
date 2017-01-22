@@ -32,7 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QImage>
 #include <QQueue>
 #include <QUndoStack>
-#include <QWeakPointer>
+#include <QPointer>
 
 namespace Gwenview
 {
@@ -44,7 +44,7 @@ struct DocumentPrivate
     AbstractDocumentImpl* mImpl;
     QUrl mUrl;
     bool mKeepRawData;
-    QWeakPointer<DocumentJob> mCurrentJob;
+    QPointer<DocumentJob> mCurrentJob;
     DocumentJobQueue mJobQueue;
 
     /**

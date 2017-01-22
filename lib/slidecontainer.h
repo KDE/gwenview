@@ -21,7 +21,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #define SLIDECONTAINER_H
 
 // Qt
-#include <QWeakPointer>
+#include <QPointer>
 #include <QPointer>
 #include <QFrame>
 
@@ -88,7 +88,7 @@ private Q_SLOTS:
 
 private:
     QPointer<QWidget> mContent;
-    QWeakPointer<QPropertyAnimation> mAnim;
+    QPointer<QPropertyAnimation> mAnim;
     bool mSlidingOut;
 
     void adjustContentGeometry();
