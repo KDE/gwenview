@@ -39,7 +39,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KTabWidget" name="mHistoryWidget">
+      <widget class="QTabWidget" name="mHistoryWidget">
        <property name="currentIndex">
         <number>0</number>
        </property>
@@ -79,7 +79,7 @@
     </layout>
    </item>
    <item>
-    <widget class="KTabWidget" name="mPlacesTagsWidget">
+    <widget class="QTabWidget" name="mPlacesTagsWidget">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
        <horstretch>0</horstretch>
@@ -156,12 +156,6 @@
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>KTabWidget</class>
-   <extends>QTabWidget</extends>
-   <header>ktabwidget.h</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>KFilePlacesView</class>
    <extends>QListView</extends>

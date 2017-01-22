@@ -65,7 +65,7 @@
     </layout>
    </item>
    <item>
-    <widget class="KTextEdit" name="mDescriptionTextEdit">
+    <widget class="QTextEdit" name="mDescriptionTextEdit">
      <property name="focusPolicy">
       <enum>Qt::ClickFocus</enum>
      </property>
@@ -75,19 +75,11 @@
      <property name="placeholderText">
       <string>Description</string>
      </property>
-     <property name="checkSpellingEnabled">
-      <bool>true</bool>
-     </property>
     </widget>
    </item>
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>KTextEdit</class>
-   <extends>QTextEdit</extends>
-   <header>ktextedit.h</header>
-  </customwidget>
   <customwidget>
    <class>KRatingWidget</class>
    <extends>QFrame</extends>
