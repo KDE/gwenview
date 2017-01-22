@@ -114,7 +114,7 @@ int main(int argc, char *argv[])
     KLocalizedString::setApplicationDomain("gwenview");
     QScopedPointer<KAboutData> aboutData(
         Gwenview::createAboutData(
-            QStringLiteral("org.kde.gwenview"), /* component name */
+            QStringLiteral("gwenview"), /* component name */
             i18n("Gwenview")                    /* display name */
         ));
     aboutData->setShortDescription(i18n("An Image Viewer"));
