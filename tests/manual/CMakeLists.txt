@@ -13,7 +13,6 @@ ecm_mark_as_test(slidecontainertest)
 
 target_link_libraries(slidecontainertest
     Qt5::Test
-    KF5::KDELibs4Support
     gwenviewlib)
 
 # imageloadbench
@@ -27,7 +26,6 @@ ecm_mark_as_test(imageloadbench)
 
 target_link_libraries(imageloadbench
     Qt5::Test
-    KF5::KDELibs4Support
     gwenviewlib)
 
 # thumbnailgen
@@ -42,5 +40,4 @@ ecm_mark_as_test(thumbnailgen)
 
 target_link_libraries(thumbnailgen
     Qt5::Test
-    KF5::KDELibs4Support
     gwenviewlib)

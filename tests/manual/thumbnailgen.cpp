@@ -21,54 +21,61 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include <lib/thumbnailprovider/thumbnailprovider.h>
 #include <../auto/testutils.h>
+#include <lib/about.h>
 
 // KDE
-#include <K4AboutData>
-#include <KApplication>
-#include <KCmdLineArgs>
+#include <KAboutData>
+#include <KLocalizedString>
 
 // Qt
 #include <QDir>
 #include <QTime>
 #include <QtDebug>
+#include <QCommandLineParser>
 
 using namespace Gwenview;
 
 int main(int argc, char** argv)
 {
-    K4AboutData aboutData(
-        "thumbnailgen", // appName
-        0,     // catalogName
-        ki18n("thumbnailgen"), // programName
-        "0.0.0");
+    KLocalizedString::setApplicationDomain("thumbnailgen");
+    QScopedPointer<KAboutData> aboutData(
+        Gwenview::createAboutData(
+            QStringLiteral("thumbnailgen"), /* component name */
+            i18n("thumbnailgen")                    /* display name */
+        ));
 
-    // Parser init
-    KCmdLineArgs::init(argc, argv, &aboutData);
+    QApplication app(argc, argv);
 
-    KCmdLineOptions options;
-    options.add("+image-dir", ki18n("Image dir to open"));
-    options.add("+size", ki18n("What size of thumbnails to generate. Can be either 'normal' or 'large'"));
-    options.add("t").add("thumbnail-dir <dir>", ki18n("Use <dir> instead of ~/.thumbnails to store thumbnails"));
-    KCmdLineArgs::addCmdLineOptions(options);
+    QCommandLineParser parser;
+    aboutData->setupCommandLine(&parser);
+    parser.addHelpOption();
+    parser.addVersionOption();
+    parser.addPositionalArgument("image-dir", i18n("Image dir to open"));
+    parser.addPositionalArgument("size", i18n("What size of thumbnails to generate. Can be either 'normal' or 'large'"));
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("t") << QStringLiteral("thumbnail-dir"),
+                                        i18n("Use <dir> instead of ~/.thumbnails to store thumbnails"), "thumbnail-dir"));
+    parser.process(app);
+    aboutData->processCommandLine(&parser);
 
-    KApplication app;
+
+
 
     // Read cmdline options
-    KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
-    if (args->count() != 2) {
+    QStringList args = parser.positionalArguments();
+    if (args.count() != 2) {
         qFatal("Wrong number of arguments");
         return 1;
     }
-    QString imageDirName = args->arg(0);
+    QString imageDirName = args.first();
     ThumbnailGroup::Enum group = ThumbnailGroup::Normal;
-    if (args->arg(1) == "large") {
+    if (args.last() == "large") {
         group = ThumbnailGroup::Large;
-    } else if (args->arg(1) == "normal") {
+    } else if (args.last() == "normal") {
         // group is already set to the right value
     } else {
-        qFatal("Invalid thumbnail size: %s", qPrintable(args->arg(1)));
+        qFatal("Invalid thumbnail size: %s", qPrintable(args.last()));
     }
-    QString thumbnailBaseDirName = args->isSet("thumbnail-dir") ? args->getOption("thumbnail-dir") : QString();
+    QString thumbnailBaseDirName = parser.value("thumbnail-dir");
 
     // Set up thumbnail base dir
     if (!thumbnailBaseDirName.isEmpty()) {
