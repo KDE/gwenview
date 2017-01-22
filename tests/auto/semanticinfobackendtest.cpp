@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KDE
 #include <QDebug>
 #include <KRandom>
-#include <KTemporaryFile>
+#include <QTemporaryFile>
 #include <qtest.h>
 
 // Local
@@ -88,8 +88,7 @@ void SemanticInfoBackEndTest::cleanup()
  */
 void SemanticInfoBackEndTest::testRating()
 {
-    KTemporaryFile temp;
-    temp.setSuffix(".metadatabackendtest");
+    QTemporaryFile temp("XXXXXX.metadatabackendtest");
     QVERIFY(temp.open());
 
     QUrl url;
