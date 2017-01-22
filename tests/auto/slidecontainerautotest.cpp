@@ -136,7 +136,7 @@ void SlideContainerAutoTest::testHiddenContentResize()
     // Resizing content should not trigger a slide if it is not visible.
     TestWindow window;
     window.show();
-    QTest::qWaitForWindowShown(&window);
+    QTest::qWaitForWindowExposed(&window);
 
     window.mContent->show();
     window.mContent->setFixedSize(150, 80);
