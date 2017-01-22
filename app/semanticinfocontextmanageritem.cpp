@@ -29,11 +29,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QStyle>
 #include <QTimer>
 #include <QAction>
+#include <QVBoxLayout>
 
 // KDE
 #include <KActionCategory>
 #include <KActionCollection>
-#include <KDialog>
+#include <QDialog>
 #include <KLocalizedString>
 #include <KRatingPainter>
 #include <KIconLoader>
@@ -60,14 +61,14 @@ namespace Gwenview
 
 static const int RATING_INDICATOR_HIDE_DELAY = 2000;
 
-struct SemanticInfoDialog : public KDialog, public Ui_SemanticInfoDialog
+struct SemanticInfoDialog : public QDialog, public Ui_SemanticInfoDialog
 {
     SemanticInfoDialog(QWidget* parent)
-    : KDialog(parent)
+    : QDialog(parent)
     {
-        setButtons(None);
+        setLayout(new QVBoxLayout);
         QWidget* mainWidget = new QWidget;
-        setMainWidget(mainWidget);
+        layout()->addWidget(mainWidget);
         setupUi(mainWidget);
         mainWidget->layout()->setMargin(0);
         setWindowTitle(mainWidget->windowTitle());
