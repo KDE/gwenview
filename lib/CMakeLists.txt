@@ -224,6 +224,13 @@ target_link_libraries(gwenviewlib
    Qt5::Concurrent
    Qt5::Svg
    Qt5::OpenGL
+   Qt5::PrintSupport
+   KF5::KIOCore
+   KF5::KIOWidgets
+   KF5::KIOFileWidgets
+   KF5::I18n
+   KF5::WindowSystem
+   KF5::IconThemes
     ${JPEG_LIBRARY}
     ${EXIV2_LIBRARIES}
     ${PNG_LIBRARIES}

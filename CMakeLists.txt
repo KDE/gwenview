@@ -48,7 +48,7 @@ else()
     set(GWENVIEW_SEMANTICINFO_BACKEND_BALOO ON)
 endif()
 
-find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Core Widgets Concurrent Svg OpenGL)
+find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Core Widgets Concurrent Svg OpenGL PrintSupport)
 
 find_package(Phonon4Qt5 4.6.60 NO_MODULE REQUIRED)
 include_directories(BEFORE ${PHONON_INCLUDES})
@@ -59,6 +59,12 @@ find_package(KF5 5.25 REQUIRED COMPONENTS
     KDELibs4Support
     Activities
     ItemModels
+    I18n
+    DocTools
+    Parts
+    WindowSystem
+    IconThemes
+    Notifications
 )
 
 ## Dependencies

@@ -75,6 +75,7 @@ target_link_libraries(gwenview
     KF5::KDELibs4Support
     KF5::ItemModels
     KF5::Activities
+    KF5::Notifications
     gwenviewlib
     )
 
