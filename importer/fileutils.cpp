@@ -33,7 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KIO/Job>
 #include <kio/jobclasses.h>
 #include <KIO/JobUiDelegate>
-#include <KIO/NetAccess>
+#include <KJobWidgets>
 
 // libc
 #include <errno.h>
@@ -48,14 +48,27 @@ namespace FileUtils
 bool contentsAreIdentical(const QUrl& url1, const QUrl& url2, QWidget* authWindow)
 {
     // FIXME: Support remote urls
-    QFile file1(KIO::NetAccess::mostLocalUrl(url1, authWindow).toLocalFile());
+    KIO::StatJob *statJob = KIO::mostLocalUrl(url1);
+    KJobWidgets::setWindow(statJob, authWindow);
+    if (!statJob->exec()) {
+        qWarning() << "Unable to stat" << url1;
+        return false;
+    }
+    QFile file1(statJob->mostLocalUrl().toLocalFile());
     if (!file1.open(QIODevice::ReadOnly)) {
         // Can't read url1, assume it's different from url2
         qWarning() << "Can't read" << url1;
         return false;
     }
 
-    QFile file2(KIO::NetAccess::mostLocalUrl(url2, authWindow).toLocalFile());
+    statJob = KIO::mostLocalUrl(url2);
+    KJobWidgets::setWindow(statJob, authWindow);
+    if (!statJob->exec()) {
+        qWarning() << "Unable to stat" << url2;
+        return false;
+    }
+
+    QFile file2(statJob->mostLocalUrl().toLocalFile());
     if (!file2.open(QIODevice::ReadOnly)) {
         // Can't read url2, assume it's different from url1
         qWarning() << "Can't read" << url2;
@@ -90,26 +103,26 @@ RenameResult rename(const QUrl& src, const QUrl& dst_, QWidget* authWindow)
     QString suffix = '.' + fileInfo.suffix();
 
     // Get src size
-    KIO::UDSEntry udsEntry;
-    KIO::NetAccess::stat(src, udsEntry, authWindow);
-    KFileItem item(udsEntry, src, true /* delayedMimeTypes */);
+    KIO::StatJob *sourceStat = KIO::stat(src);
+    KJobWidgets::setWindow(sourceStat, authWindow);
+    if (!sourceStat->exec()) {
+        return RenameFailed;
+    }
+    KFileItem item(sourceStat->statResult(), src, true /* delayedMimeTypes */);
     KIO::filesize_t srcSize = item.size();
 
     // Find unique name
-    while (KIO::NetAccess::stat(dst, udsEntry, authWindow)) {
+    KIO::StatJob *statJob = KIO::stat(dst);
+    KJobWidgets::setWindow(statJob, authWindow);
+    while (statJob->exec()) {
         // File exists. If it's not the same, try to create a new name
-        item = KFileItem(udsEntry, dst, true /* delayedMimeTypes */);
+        item = KFileItem(statJob->statResult(), dst, true /* delayedMimeTypes */);
         KIO::filesize_t dstSize = item.size();
 
         if (srcSize == dstSize && contentsAreIdentical(src, dst, authWindow)) {
             // Already imported, skip it
             KIO::Job* job = KIO::file_delete(src, KIO::HideProgressInfo);
-            // FIXME KF5
-            /*
-            if (job->ui()) {
-                job->ui()->setWindow(authWindow);
-            }
-            */
+            KJobWidgets::setWindow(job, authWindow);
 
             return Skipped;
         }
@@ -121,7 +134,8 @@ RenameResult rename(const QUrl& src, const QUrl& dst_, QWidget* authWindow)
 
     // Rename
     KIO::Job* job = KIO::rename(src, dst, KIO::HideProgressInfo);
-    if (!KIO::NetAccess::synchronousRun(job, authWindow)) {
+    KJobWidgets::setWindow(job, authWindow);
+    if (!job->exec()) {
         result = RenameFailed;
     }
     return result;

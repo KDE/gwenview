@@ -29,8 +29,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KDE
 #include <QDebug>
 #include <KIO/DeleteJob>
-#include <KIO/NetAccess>
-#include <KLocale>
 #include <KMessageBox>
 #include <KProtocolInfo>
 #include <KRun>
@@ -123,7 +121,7 @@ public:
         QList<QUrl> urls = importedUrls + skippedUrls;
         while (true) {
             KIO::Job* job = KIO::del(urls);
-            if (KIO::NetAccess::synchronousRun(job, q)) {
+            if (!job->exec()) {
                 break;
             }
             // Deleting failed
