@@ -27,8 +27,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // KDE
 #include <KAboutData>
-#include <KCmdLineArgs>
-#include <KLocale>
+#include <QCommandLineParser>
+#include <KLocalizedString>
+#include <QLocale>
 
 // Local
 #include <lib/about.h>
@@ -59,12 +60,12 @@ int main(int argc, char *argv[])
     aboutData.data()->processCommandLine(&parser);
 
     if (parser.positionalArguments().count() == 0) {
-        KCmdLineArgs::usageError(i18n("Missing required source folder argument."));
-        return 1;
+        qWarning() << i18n("Missing required source folder argument.");
+        parser.showHelp();
     }
     if (parser.positionalArguments().count() > 1) {
-        KCmdLineArgs::usageError(i18n("Too many arguments."));
-        return 1;
+        qWarning() << i18n("Too many arguments.");
+        parser.showHelp();
     }
     QString urlString = parser.positionalArguments().first();
     QUrl url = QUrl::fromUserInput(urlString, QDir::currentPath(), QUrl::AssumeLocalFile);
