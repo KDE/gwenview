@@ -74,7 +74,7 @@ const int ViewMainPage::MaxViewCount = 6;
 
 static QString rgba(const QColor &color)
 {
-    return QString::fromAscii("rgba(%1, %2, %3, %4)")
+    return QString::fromLocal8Bit("rgba(%1, %2, %3, %4)")
            .arg(color.red())
            .arg(color.green())
            .arg(color.blue())
