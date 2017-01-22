@@ -298,7 +298,7 @@ int JpegContent::dotsPerMeter(const QString& keyName) const
     }
     int res = it->toLong();
     QString keyVal = "Exif.Image." + keyName;
-    Exiv2::ExifKey keyResolution(keyVal.toAscii().data());
+    Exiv2::ExifKey keyResolution(keyVal.toLocal8Bit().data());
     it = d->mExifData.findKey(keyResolution);
     if (it == d->mExifData.end()) {
         return 0;
@@ -607,7 +607,7 @@ bool JpegContent::save(QIODevice* device)
 
     // Store Exif info
     image->setExifData(d->mExifData);
-    image->setComment(d->mComment.toUtf8().data());
+    image->setComment(d->mComment.toUtf8().toStdString());
     image->writeMetadata();
 
     // Update mRawData
