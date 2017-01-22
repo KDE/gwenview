@@ -65,7 +65,7 @@ bool ThumbnailContext::load(const QString &pixPath, int pixelSize)
     QImage originalImage;
     QSize originalSize;
 
-    QByteArray formatHint = pixPath.section('.', -1).toAscii().toLower();
+    QByteArray formatHint = pixPath.section('.', -1).toLocal8Bit().toLower();
     QImageReader reader(pixPath);
 
     JpegContent content;

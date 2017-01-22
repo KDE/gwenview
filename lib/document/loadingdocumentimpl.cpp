@@ -158,7 +158,7 @@ struct LoadingDocumentImplPrivate
             //   https://bugs.kde.org/show_bug.cgi?id=289819
             //
             mFormatHint = q->document()->url().fileName()
-                .section('.', -1).toAscii().toLower();
+                .section('.', -1).toLocal8Bit().toLower();
             mMetaInfoFuture = QtConcurrent::run(this, &LoadingDocumentImplPrivate::loadMetaInfo);
             mMetaInfoFutureWatcher.setFuture(mMetaInfoFuture);
             break;
