@@ -27,6 +27,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QPainter>
 #include <QStyledItemDelegate>
 #include <QTreeView>
+#include <QVBoxLayout>
+#include <QDialogButtonBox>
+#include <QPushButton>
 
 // KDE
 #include <KLocalizedString>
@@ -117,16 +120,21 @@ struct ImageMetaInfoDialogPrivate
 };
 
 ImageMetaInfoDialog::ImageMetaInfoDialog(QWidget* parent)
-: KDialog(parent)
+: QDialog(parent)
 , d(new ImageMetaInfoDialogPrivate)
 {
     d->mTreeView = new ExpandedTreeView(this);
     d->mTreeView->setRootIsDecorated(false);
     d->mTreeView->setIndentation(0);
     d->mTreeView->setItemDelegate(new MetaInfoDelegate(d->mTreeView));
-    setMainWidget(d->mTreeView);
-    setCaption(i18nc("@title:window", "Image Information"));
-    setButtons(KDialog::Close);
+    setWindowTitle(i18nc("@title:window", "Image Information"));
+
+    setLayout(new QVBoxLayout);
+    layout()->addWidget(d->mTreeView);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Close);
+    layout()->addWidget(buttonBox);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 ImageMetaInfoDialog::~ImageMetaInfoDialog()

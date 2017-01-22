@@ -24,7 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Qt
 
 // KDE
-#include <KDialog>
+#include <QDialog>
 
 // Local
 
@@ -34,7 +34,7 @@ namespace Gwenview
 class ImageMetaInfoModel;
 
 struct ImageMetaInfoDialogPrivate;
-class ImageMetaInfoDialog : public KDialog
+class ImageMetaInfoDialog : public QDialog
 {
     Q_OBJECT
 public:
