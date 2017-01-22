@@ -32,7 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KDE
 #include <KFileItem>
 #include <KIO/Job>
-#include <KIO/JobClasses>
+#include <kio/jobclasses.h>
 
 // Local
 #include <archiveutils.h>
