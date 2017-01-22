@@ -7,7 +7,6 @@ macro(gv_add_unit_test _test)
     add_test( ${_test} ${_test} )
     ecm_mark_as_test(${_test})
     target_link_libraries(${_test}
-        KF5::KDELibs4Support
         Qt5::Test
         gwenviewlib)
 endmacro(gv_add_unit_test)

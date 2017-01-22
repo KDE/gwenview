@@ -56,7 +56,6 @@ add_definitions(-DPHONON_LIB_SONAME=\"${PHONON_LIB_SONAME}\")
 
 find_package(KF5 5.25 REQUIRED COMPONENTS
     KIO
-    KDELibs4Support
     Activities
     ItemModels
     I18n

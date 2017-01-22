@@ -72,7 +72,6 @@ ecm_add_app_icon(gwenview_SRCS ICONS ${ICONS_SRCS})
 add_executable(gwenview ${gwenview_SRCS})
 
 target_link_libraries(gwenview
-    KF5::KDELibs4Support
     KF5::ItemModels
     KF5::Activities
     KF5::Notifications
