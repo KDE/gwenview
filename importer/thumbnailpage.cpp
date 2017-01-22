@@ -33,9 +33,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KDirLister>
 #include <KDirModel>
 #include <KIconLoader>
-#include <KIO/NetAccess>
 #include <kio/global.h>
 #include <kmodelindexproxymapper.h>
+#include <KJobWidgets>
 
 // Local
 #include <lib/archiveutils.h>
@@ -196,13 +196,11 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
         QObject::connect(mConfigureButton, SIGNAL(clicked()),
                          q, SLOT(showConfigDialog()));
 
-        mImportSelectedButton = mButtonBox->addButton(
-                                    i18n("Import Selected"), QDialogButtonBox::AcceptRole,
-                                    q, SLOT(slotImportSelected()));
+        mImportSelectedButton = mButtonBox->addButton(i18n("Import Selected"), QDialogButtonBox::AcceptRole);
+        QObject::connect(mImportSelectedButton, SIGNAL(clicked(bool)), q, SLOT(slotImportSelected()));
 
-        mImportAllButton = mButtonBox->addButton(
-                               i18n("Import All"), QDialogButtonBox::AcceptRole,
-                               q, SLOT(slotImportAll()));
+        mImportAllButton = mButtonBox->addButton(i18n("Import All"), QDialogButtonBox::AcceptRole);
+        QObject::connect(mImportAllButton, SIGNAL(clicked(bool)), q, SLOT(slotImportAll()));
 
         QObject::connect(
             mButtonBox, SIGNAL(rejected()),
@@ -216,12 +214,12 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
             return QUrl();
         }
 
-        KIO::UDSEntry entry;
-        bool ok = KIO::NetAccess::stat(url, entry, q);
-        if (!ok) {
+        KIO::StatJob *job = KIO::stat(url);
+        KJobWidgets::setWindow(job, q);
+        if (!job->exec()) {
             return QUrl();
         }
-        KFileItem item(entry, url, true /* delayedMimeTypes */);
+        KFileItem item(job->statResult(), url, true /* delayedMimeTypes */);
         return item.isDir() ? url : QUrl();
     }
 
