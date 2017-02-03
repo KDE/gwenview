@@ -92,9 +92,9 @@ struct GvCorePrivate
 
             QString filename = files.first().fileName();
 
-            const QStringList typeList = QMimeDatabase().mimeTypeForName(filename).suffixes();
-            if (typeList.count() > 0) {
-                *format = typeList.first().toLocal8Bit();
+            const QMimeType mimeType = QMimeDatabase().mimeTypeForFile(filename, QMimeDatabase::MatchExtension);
+            if (mimeType.isValid()) {
+                *format = mimeType.preferredSuffix().toLocal8Bit();
                 break;
             }
             KMessageBox::sorry(
