@@ -51,6 +51,7 @@ struct AbstractImageViewPrivate
 
     qreal mZoom;
     bool mZoomToFit;
+    bool mZoomToFitWidth;
     QPointF mImageOffset;
     QPointF mScrollPos;
     QPointF mLastDragPos;
@@ -119,6 +120,7 @@ AbstractImageView::AbstractImageView(QGraphicsItem* parent)
     d->mEnlargeSmallerImages = false;
     d->mZoom = 1;
     d->mZoomToFit = true;
+    d->mZoomToFitWidth = false;
     d->mImageOffset = QPointF(0, 0);
     d->mScrollPos = QPointF(0, 0);
     setFocusPolicy(Qt::WheelFocus);
@@ -226,6 +228,11 @@ bool AbstractImageView::zoomToFit() const
     return d->mZoomToFit;
 }
 
+bool AbstractImageView::zoomToFitWidth() const
+{
+    return d->mZoomToFitWidth;
+}
+
 void AbstractImageView::setZoomToFit(bool on)
 {
     d->mZoomToFit = on;
@@ -238,6 +245,18 @@ void AbstractImageView::setZoomToFit(bool on)
     zoomToFitChanged(d->mZoomToFit);
 }
 
+void AbstractImageView::setZoomToFitWidth(bool on)
+{
+    d->mZoomToFitWidth = on;
+    if (on) {
+        setZoom(computeZoomToFitWidth());
+    }
+    // We do not set zoom to 1 if zoomToFit is off, this is up to the code
+    // calling us. It may went to zoom to some other level and/or to zoom on
+    // a particular position
+    zoomToFitWidthChanged(d->mZoomToFitWidth);
+}
+
 void AbstractImageView::resizeEvent(QGraphicsSceneResizeEvent* event)
 {
     QGraphicsWidget::resizeEvent(event);
@@ -246,6 +265,13 @@ void AbstractImageView::resizeEvent(QGraphicsSceneResizeEvent* event)
         // If the view is resized but does not cause a zoom change, we call
         // adjustImageOffset() ourself.
         const qreal newZoom = computeZoomToFit();
+        if (qFuzzyCompare(zoom(), newZoom)) {
+            d->adjustImageOffset(AbstractImageViewPrivate::Notify);
+        } else {
+            setZoom(newZoom);
+        }
+    } else if (d->mZoomToFitWidth) {
+        const qreal newZoom = computeZoomToFitWidth();
         if (qFuzzyCompare(zoom(), newZoom)) {
             d->adjustImageOffset(AbstractImageViewPrivate::Notify);
         } else {
@@ -271,6 +297,20 @@ qreal AbstractImageView::computeZoomToFit() const
         fit = qMin(fit, qreal(1.));
     }
     return fit;
+}
+
+qreal AbstractImageView::computeZoomToFitWidth() const
+{
+    QSizeF docSize = documentSize();
+    if (docSize.isEmpty()) {
+        return 1;
+    }
+    QSizeF viewSize = boundingRect().size();
+    qreal fitWidth = viewSize.width() / docSize.width();
+    if (!d->mEnlargeSmallerImages) {
+        fitWidth = qMin(fitWidth, qreal(1.));
+    }
+    return fitWidth;
 }
 
 void AbstractImageView::mousePressEvent(QGraphicsSceneMouseEvent* event)

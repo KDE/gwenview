@@ -66,6 +66,8 @@ void SvgImageView::finishLoadFromDocument()
     mSvgItem->setSharedRenderer(renderer);
     if (zoomToFit()) {
         setZoom(computeZoomToFit(), QPointF(-1, -1), ForceUpdate);
+    } else if (zoomToFitWidth()) {
+        setZoom(computeZoomToFitWidth(), QPointF(-1, -1), ForceUpdate);
     } else {
         mSvgItem->setScale(zoom());
     }
@@ -107,6 +109,7 @@ SvgViewAdapter::SvgViewAdapter()
     setWidget(d->mView);
     connect(d->mView, &SvgImageView::zoomChanged, this, &SvgViewAdapter::zoomChanged);
     connect(d->mView, &SvgImageView::zoomToFitChanged, this, &SvgViewAdapter::zoomToFitChanged);
+    connect(d->mView, &SvgImageView::zoomToFitWidthChanged, this, &SvgViewAdapter::zoomToFitWidthChanged);
     connect(d->mView, &SvgImageView::zoomInRequested, this, &SvgViewAdapter::zoomInRequested);
     connect(d->mView, &SvgImageView::zoomOutRequested, this, &SvgViewAdapter::zoomOutRequested);
     connect(d->mView, &SvgImageView::scrollPosChanged, this, &SvgViewAdapter::scrollPosChanged);
@@ -146,9 +149,19 @@ void SvgViewAdapter::setZoomToFit(bool on)
     d->mView->setZoomToFit(on);
 }
 
+void SvgViewAdapter::setZoomToFitWidth(bool on)
+{
+    d->mView->setZoomToFitWidth(on);
+}
+
 bool SvgViewAdapter::zoomToFit() const
 {
     return d->mView->zoomToFit();
+}
+
+bool SvgViewAdapter::zoomToFitWidth() const
+{
+    return d->mView->zoomToFitWidth();
 }
 
 qreal SvgViewAdapter::zoom() const
@@ -164,6 +177,11 @@ void SvgViewAdapter::setZoom(qreal zoom, const QPointF& center)
 qreal SvgViewAdapter::computeZoomToFit() const
 {
     return d->mView->computeZoomToFit();
+}
+
+qreal SvgViewAdapter::computeZoomToFitWidth() const
+{
+    return d->mView->computeZoomToFitWidth();
 }
 
 QPointF SvgViewAdapter::scrollPos() const

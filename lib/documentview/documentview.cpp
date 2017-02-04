@@ -113,6 +113,8 @@ struct DocumentViewPrivate
                              q, SLOT(zoomOut(QPointF)));
             QObject::connect(adapter, SIGNAL(zoomToFitChanged(bool)),
                              q, SIGNAL(zoomToFitChanged(bool)));
+            QObject::connect(adapter, SIGNAL(zoomToFitWidthChanged(bool)),
+                             q, SIGNAL(zoomToFitWidthChanged(bool)));
         }
         QObject::connect(adapter, SIGNAL(scrollPosChanged()),
                          q, SIGNAL(positionChanged()));
@@ -134,7 +136,8 @@ struct DocumentViewPrivate
 
         if (mSetup.valid && adapter->canZoom()) {
             adapter->setZoomToFit(mSetup.zoomToFit);
-            if (!mSetup.zoomToFit) {
+            adapter->setZoomToFitWidth(mSetup.zoomToFitWidth);
+            if (!mSetup.zoomToFit && !mSetup.zoomToFitWidth) {
                 adapter->setZoom(mSetup.zoom);
                 adapter->setScrollPos(mSetup.position);
             }
@@ -144,6 +147,8 @@ struct DocumentViewPrivate
         if (adapter->canZoom()) {
             if (adapter->zoomToFit()) {
                 q->zoomToFitChanged(true);
+            } else if (adapter->zoomToFitWidth()) {
+                q->zoomToFitWidthChanged(true);
             } else {
                 q->zoomChanged(adapter->zoom());
             }
@@ -237,9 +242,17 @@ struct DocumentViewPrivate
         }
     }
 
+    void uncheckZoomToFitWidth()
+    {
+        if (mAdapter->zoomToFitWidth()) {
+            mAdapter->setZoomToFitWidth(false);
+        }
+    }
+
     void setZoom(qreal zoom, const QPointF& center = QPointF(-1, -1))
     {
         uncheckZoomToFit();
+        uncheckZoomToFitWidth();
         zoom = qBound(q->minimumZoom(), zoom, MAXIMUM_ZOOM_VALUE);
         mAdapter->setZoom(zoom, center);
     }
@@ -441,6 +454,11 @@ void DocumentView::slotCompleted()
         if (d->mAdapter->zoom() < min) {
             d->mAdapter->setZoom(min);
         }
+    } else if (!d->mAdapter->zoomToFitWidth()) {
+        qreal min = minimumZoom();
+        if (d->mAdapter->zoom() < min) {
+            d->mAdapter->setZoom(min);
+        }
     }
     emit completed();
 }
@@ -451,7 +469,8 @@ DocumentView::Setup DocumentView::setup() const
     if (d->mAdapter->canZoom()) {
         setup.valid = true;
         setup.zoomToFit = zoomToFit();
-        if (!setup.zoomToFit) {
+        setup.zoomToFitWidth = zoomToFitWidth();
+        if (!setup.zoomToFit && !setup.zoomToFitWidth) {
             setup.zoom = zoom();
             setup.position = position();
         }
@@ -481,9 +500,14 @@ void DocumentView::setZoomToFit(bool on)
         return;
     }
     d->mAdapter->setZoomToFit(on);
-    if (!on) {
-        d->mAdapter->setZoom(1.);
+}
+
+void DocumentView::setZoomToFitWidth(bool on)
+{
+    if (on == d->mAdapter->zoomToFitWidth()) {
+        return;
     }
+    d->mAdapter->setZoomToFitWidth(on);
 }
 
 bool DocumentView::zoomToFit() const
@@ -491,9 +515,15 @@ bool DocumentView::zoomToFit() const
     return d->mAdapter->zoomToFit();
 }
 
+bool DocumentView::zoomToFitWidth() const
+{
+    return d->mAdapter->zoomToFitWidth();
+}
+
 void DocumentView::zoomActualSize()
 {
     d->uncheckZoomToFit();
+    d->uncheckZoomToFitWidth();
     d->mAdapter->setZoom(1.);
 }
 

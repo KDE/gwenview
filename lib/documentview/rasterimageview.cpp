@@ -284,6 +284,8 @@ void RasterImageView::finishSetDocument()
         // Force the update otherwise if computeZoomToFit() returns 1, setZoom()
         // will think zoom has not changed and won't update the image
         setZoom(computeZoomToFit(), QPointF(-1, -1), ForceUpdate);
+    } else if (zoomToFitWidth()) {
+        setZoom(computeZoomToFitWidth(), QPointF(-1, -1), ForceUpdate);
     } else {
         updateBuffer();
     }
@@ -301,7 +303,10 @@ void RasterImageView::updateImageRect(const QRect& imageRect)
 
     if (zoomToFit()) {
         setZoom(computeZoomToFit());
+    } else if (zoomToFitWidth()) {
+        setZoom(computeZoomToFitWidth());
     }
+
     d->setScalerRegionToVisibleRect();
     update();
 }
@@ -424,11 +429,15 @@ void RasterImageView::resizeEvent(QGraphicsSceneResizeEvent* event)
     // will trigger an immediate update unless the mUpdateTimer is active.
     if (zoomToFit() && !d->mBufferIsEmpty) {
         d->mUpdateTimer->start();
+    } else if (zoomToFitWidth() && !d->mBufferIsEmpty) {
+        d->mUpdateTimer->start();
     }
     AbstractImageView::resizeEvent(event);
     if (!zoomToFit()) {
         // Only update buffer if we are not in zoomToFit mode: if we are
         // onZoomChanged() will have already updated the buffer.
+        updateBuffer();
+    } else if (!zoomToFitWidth()) {
         updateBuffer();
     }
 }

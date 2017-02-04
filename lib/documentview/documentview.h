@@ -51,6 +51,7 @@ class GWENVIEWLIB_EXPORT DocumentView : public QGraphicsWidget
     Q_OBJECT
     Q_PROPERTY(qreal zoom READ zoom WRITE setZoom NOTIFY zoomChanged)
     Q_PROPERTY(bool zoomToFit READ zoomToFit WRITE setZoomToFit NOTIFY zoomToFitChanged)
+    Q_PROPERTY(bool zoomToFitWidth READ zoomToFitWidth WRITE setZoomToFitWidth NOTIFY zoomToFitWidthChanged)
     Q_PROPERTY(QPoint position READ position WRITE setPosition NOTIFY positionChanged)
 public:
     static const int MaximumZoom;
@@ -59,11 +60,13 @@ public:
     struct Setup {
         Setup()
         : valid(false)
-        , zoomToFit(false)
+        , zoomToFit(true)
+        , zoomToFitWidth(false)
         , zoom(0)
         {}
         bool valid:1;
         bool zoomToFit:1;
+        bool zoomToFitWidth:1;
         qreal zoom;
         QPointF position;
     };
@@ -109,6 +112,8 @@ public:
 
     bool zoomToFit() const;
 
+    bool zoomToFitWidth() const;
+
     QPoint position() const;
 
     /**
@@ -142,6 +147,8 @@ public Q_SLOTS:
 
     void setZoomToFit(bool);
 
+    void setZoomToFitWidth(bool);
+
     void setPosition(const QPoint&);
 
     void hideAndDeleteLater();
@@ -171,6 +178,8 @@ Q_SIGNALS:
     void focused(DocumentView*);
 
     void zoomToFitChanged(bool);
+
+    void zoomToFitWidthChanged(bool);
 
     void positionChanged();
 

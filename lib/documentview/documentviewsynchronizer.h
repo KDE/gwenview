@@ -57,6 +57,7 @@ public Q_SLOTS:
 private Q_SLOTS:
     void setZoom(qreal zoom);
     void setZoomToFit(bool);
+    void setZoomToFitWidth(bool);
     void updatePosition();
 
 private:

@@ -92,6 +92,15 @@ public:
         return false;
     }
 
+    // Implementation must emit zoomToFitWidthChanged()
+    virtual void setZoomToFitWidth(bool)
+    {}
+
+    virtual bool zoomToFitWidth() const
+    {
+        return false;
+    }
+
     virtual qreal zoom() const
     {
         return 0;
@@ -101,6 +110,11 @@ public:
     {}
 
     virtual qreal computeZoomToFit() const
+    {
+        return 1.;
+    }
+
+    virtual qreal computeZoomToFitWidth() const
     {
         return 1.;
     }
@@ -139,6 +153,8 @@ Q_SIGNALS:
     void zoomChanged(qreal);
 
     void zoomToFitChanged(bool);
+
+    void zoomToFitWidthChanged(bool);
 
     void zoomInRequested(const QPointF&);
 

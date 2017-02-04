@@ -53,13 +53,19 @@ public:
 
     bool zoomToFit() const;
 
+    bool zoomToFitWidth() const;
+
     virtual void setZoomToFit(bool value);
+
+    virtual void setZoomToFitWidth(bool value);
 
     virtual void setDocument(Document::Ptr doc);
 
     Document::Ptr document() const;
 
     qreal computeZoomToFit() const;
+
+    qreal computeZoomToFitWidth() const;
 
     QSizeF documentSize() const;
 
@@ -98,6 +104,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void zoomToFitChanged(bool);
+    void zoomToFitWidthChanged(bool);
     void zoomChanged(qreal);
     void zoomInRequested(const QPointF&);
     void zoomOutRequested(const QPointF&);

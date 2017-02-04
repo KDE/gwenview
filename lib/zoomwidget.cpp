@@ -60,10 +60,12 @@ struct ZoomWidgetPrivate
 
     StatusBarToolButton* mZoomToFitButton;
     StatusBarToolButton* mActualSizeButton;
+    StatusBarToolButton* mZoomToFitWidthButton;
     QLabel* mZoomLabel;
     ZoomSlider* mZoomSlider;
     QAction* mZoomToFitAction;
     QAction* mActualSizeAction;
+    QAction* mZoomToFitWidthAction;
 
     bool mZoomUpdatedBySlider;
 
@@ -90,12 +92,19 @@ ZoomWidget::ZoomWidget(QWidget* parent)
 
     d->mZoomToFitButton = new StatusBarToolButton;
     d->mActualSizeButton = new StatusBarToolButton;
+    d->mZoomToFitWidthButton = new StatusBarToolButton;
+    d->mZoomToFitButton->setCheckable(true);
+    d->mActualSizeButton->setCheckable(true);
+    d->mZoomToFitWidthButton->setCheckable(true);
+    d->mZoomToFitButton->setChecked(true);
 
     if (QApplication::isLeftToRight()) {
         d->mZoomToFitButton->setGroupPosition(StatusBarToolButton::GroupLeft);
+        d->mZoomToFitWidthButton->setGroupPosition(StatusBarToolButton::GroupCenter);
         d->mActualSizeButton->setGroupPosition(StatusBarToolButton::GroupRight);
     } else {
         d->mActualSizeButton->setGroupPosition(StatusBarToolButton::GroupLeft);
+        d->mZoomToFitWidthButton->setGroupPosition(StatusBarToolButton::GroupCenter);
         d->mZoomToFitButton->setGroupPosition(StatusBarToolButton::GroupRight);
     }
 
@@ -114,6 +123,7 @@ ZoomWidget::ZoomWidget(QWidget* parent)
     layout->setMargin(0);
     layout->setSpacing(0);
     layout->addWidget(d->mZoomToFitButton);
+    layout->addWidget(d->mZoomToFitWidthButton);
     layout->addWidget(d->mActualSizeButton);
     layout->addWidget(d->mZoomSlider);
     layout->addWidget(d->mZoomLabel);
@@ -124,21 +134,30 @@ ZoomWidget::~ZoomWidget()
     delete d;
 }
 
-void ZoomWidget::setActions(QAction* zoomToFitAction, QAction* actualSizeAction, QAction* zoomInAction, QAction* zoomOutAction)
+void ZoomWidget::setActions(QAction* zoomToFitAction, QAction* actualSizeAction, QAction* zoomInAction, QAction* zoomOutAction, QAction* zoomToFitWidthAction)
 {
     d->mZoomToFitAction = zoomToFitAction;
     d->mActualSizeAction = actualSizeAction;
+    d->mZoomToFitWidthAction = zoomToFitWidthAction;
 
     d->mZoomToFitButton->setDefaultAction(zoomToFitAction);
     d->mActualSizeButton->setDefaultAction(actualSizeAction);
+    d->mZoomToFitWidthButton->setDefaultAction(zoomToFitWidthAction);
 
     d->mZoomSlider->setZoomInAction(zoomInAction);
     d->mZoomSlider->setZoomOutAction(zoomOutAction);
+
+    QActionGroup *actionGroup = new QActionGroup(d->q);
+    actionGroup->addAction(d->mZoomToFitAction);
+    actionGroup->addAction(d->mZoomToFitWidthAction);
+    actionGroup->addAction(d->mActualSizeAction);
+    actionGroup->setExclusive(true);
 
     // Adjust sizes
     int width = qMax(d->mZoomToFitButton->sizeHint().width(), d->mActualSizeButton->sizeHint().width());
     d->mZoomToFitButton->setFixedWidth(width);
     d->mActualSizeButton->setFixedWidth(width);
+    d->mZoomToFitWidthButton->setFixedWidth(width);
 }
 
 void ZoomWidget::slotZoomSliderActionTriggered()
