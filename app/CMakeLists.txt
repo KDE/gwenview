@@ -104,8 +104,7 @@ install(TARGETS gwenview
     ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(FILES gwenviewui.rc
-    DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/org.kde.gwenview
-    RENAME org.kde.gwenviewui.rc)
+    DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/gwenview)
 
 install(PROGRAMS org.kde.gwenview.desktop
     DESTINATION ${KDE_INSTALL_APPDIR})
