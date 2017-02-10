@@ -151,7 +151,7 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, QL
 
     mCopyToAction = file->addAction("file_copy_to", this, SLOT(copyTo()));
     mCopyToAction->setText(i18nc("Verb", "Copy To..."));
-    actionCollection->setDefaultShortcut(mCopyAction, Qt::Key_F7);
+    actionCollection->setDefaultShortcut(mCopyToAction, Qt::Key_F7);
 
     mMoveToAction = file->addAction("file_move_to", this, SLOT(moveTo()));
     mMoveToAction->setText(i18nc("Verb", "Move To..."));
