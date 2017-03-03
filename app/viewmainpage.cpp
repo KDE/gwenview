@@ -498,6 +498,11 @@ int ViewMainPage::statusBarHeight() const
     return d->mStatusBarContainer->height();
 }
 
+void ViewMainPage::setStatusBarVisible(bool visible)
+{
+    d->mStatusBarContainer->setVisible(visible);
+}
+
 void ViewMainPage::setFullScreenMode(bool fullScreenMode)
 {
     d->mFullScreenMode = fullScreenMode;

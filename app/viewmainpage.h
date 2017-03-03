@@ -130,6 +130,9 @@ Q_SIGNALS:
 
     void captionUpdateRequested(const QString&);
 
+public Q_SLOTS:
+    void setStatusBarVisible(bool);
+
 private Q_SLOTS:
     void setThumbnailBarVisibility(bool visible);
 

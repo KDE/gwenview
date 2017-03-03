@@ -63,6 +63,7 @@ public:
     void saveConfig() const;
 
     void setFullScreenMode(bool);
+    void setStatusBarVisible(bool);
 
     QToolButton* toggleSideBarButton() const;
 

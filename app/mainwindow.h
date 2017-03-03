@@ -124,6 +124,7 @@ private Q_SLOTS:
     void preloadNextUrl();
 
     void toggleMenuBar();
+    void toggleStatusBar();
 
     void showFirstDocumentReached();
     void showLastDocumentReached();

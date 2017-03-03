@@ -372,6 +372,11 @@ void BrowseMainPage::setFullScreenMode(bool fullScreen)
     }
 }
 
+void BrowseMainPage::setStatusBarVisible(bool visible)
+{
+    d->mStatusBarContainer->setVisible(visible);
+}
+
 void BrowseMainPage::slotUrlsDropped(const QUrl &destUrl, QDropEvent* event)
 {
     const QList<QUrl> urlList = KUrlMimeData::urlsFromMimeData(event->mimeData());

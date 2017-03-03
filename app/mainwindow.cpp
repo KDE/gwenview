@@ -191,6 +191,7 @@ struct MainWindow::Private
     KToggleFullScreenAction* mFullScreenAction;
     QAction * mToggleSlideShowAction;
     KToggleAction* mShowMenuBarAction;
+    KToggleAction* mShowStatusBarAction;
 #ifdef KIPI_FOUND
     KIPIExportAction* mKIPIExportAction;
 #endif
@@ -458,6 +459,7 @@ struct MainWindow::Private
                 q, SLOT(updateSlideShowAction()));
 
         mShowMenuBarAction = static_cast<KToggleAction*>(view->addAction(KStandardAction::ShowMenubar, q, SLOT(toggleMenuBar())));
+        mShowStatusBarAction = static_cast<KToggleAction*>(view->addAction(KStandardAction::ShowStatusbar, q, SLOT(toggleStatusBar())));
 
         view->addAction(KStandardAction::KeyBindings, q->guiFactory(),
                         SLOT(configureShortcuts()));
@@ -643,6 +645,7 @@ struct MainWindow::Private
         mBrowseAction->setEnabled(enabled);
         mViewAction->setEnabled(enabled);
         mToggleSideBarAction->setEnabled(enabled);
+        mShowStatusBarAction->setEnabled(enabled);
         mFullScreenAction->setEnabled(enabled);
         mToggleSlideShowAction->setEnabled(enabled);
 
@@ -1065,6 +1068,12 @@ void MainWindow::toggleSideBar(bool on)
     d->mSideBar->setVisible(on);
 }
 
+void MainWindow::toggleStatusBar()
+{
+    d->mViewMainPage->setStatusBarVisible(d->mShowStatusBarAction->isChecked());
+    d->mBrowseMainPage->setStatusBarVisible(d->mShowStatusBarAction->isChecked());
+}
+
 void MainWindow::updateToggleSideBarAction()
 {
     SignalBlocker blocker(d->mToggleSideBarAction);
@@ -1289,6 +1298,7 @@ void MainWindow::toggleFullScreen(bool checked)
         d->mSaveBar->setFullScreenMode(false);
         setWindowState(d->mStateBeforeFullScreen.mWindowState);
         menuBar()->setVisible(d->mShowMenuBarAction->isChecked());
+        toggleStatusBar();
         toolBar()->setVisible(d->mStateBeforeFullScreen.mToolBarVisible);
 
         d->setScreenSaverEnabled(true);
@@ -1467,6 +1477,7 @@ void MainWindow::loadConfig()
 void MainWindow::saveConfig()
 {
     d->mFileOpenRecentAction->saveEntries(KConfigGroup(KSharedConfig::openConfig(), "Recent Files"));
+    GwenviewConfig::setStatusBarIsVisible(d->mShowStatusBarAction->isChecked());
     d->mViewMainPage->saveConfig();
     d->mBrowseMainPage->saveConfig();
 }
