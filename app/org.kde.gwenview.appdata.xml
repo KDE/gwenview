@@ -45,6 +45,13 @@
   <name xml:lang="zh-CN">Gwenview</name>
   <name xml:lang="zh-TW">影像檢視_Gwenview</name>
   <summary>Image Viewer</summary>
+  <summary xml:lang="ca">Visor d'imatges</summary>
+  <summary xml:lang="cs">Prohlížeč obrázků</summary>
+  <summary xml:lang="nl">Afbeeldingenviewer</summary>
+  <summary xml:lang="pt">Visualizador de Imagens</summary>
+  <summary xml:lang="sv">Bildvisare</summary>
+  <summary xml:lang="uk">Програма для перегляду зображень</summary>
+  <summary xml:lang="x-test">xxImage Viewerxx</summary>
   <description>
     <p>
       Gwenview is a fast and easy to use image viewer by KDE, ideal for browsing and displaying a collection of images.
