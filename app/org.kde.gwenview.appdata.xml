@@ -47,6 +47,7 @@
   <summary>Image Viewer</summary>
   <summary xml:lang="ca">Visor d'imatges</summary>
   <summary xml:lang="cs">Prohlížeč obrázků</summary>
+  <summary xml:lang="it">Visualizzatore di immagini</summary>
   <summary xml:lang="nl">Afbeeldingenviewer</summary>
   <summary xml:lang="pt">Visualizador de Imagens</summary>
   <summary xml:lang="sv">Bildvisare</summary>
@@ -58,6 +59,7 @@
     </p>
     <p xml:lang="ca">El Gwenview és un visor d'imatges ràpid i senzill d'ús pel KDE, ideal per navegar i visualitzar col·leccions d'imatges.</p>
     <p xml:lang="ca-valencia">El Gwenview és un visor d'imatges ràpid i senzill d'ús pel KDE, ideal per navegar i visualitzar col·leccions d'imatges.</p>
+    <p xml:lang="cs">Gwenview je jednoduchý a rychlý prohlížeč obrázků od KDE. Ideální pro procházení a prohlížení sbírek obrázků.</p>
     <p xml:lang="el">Το Gwenview είναι ένας γρήγορος και εύχρηστος προβολέας εικόνων για το KDE, ιδανικός για περιήγηση και εμφάνιση συλλογών από εικόνες.</p>
     <p xml:lang="en-GB">Gwenview is a fast and easy to use image viewer by KDE, ideal for browsing and displaying a collection of images.</p>
     <p xml:lang="es">Gwenview es un visor de imágenes rápido y fácil de usar creado por KDE, ideal para explorar y mostrar una colección de imágenes.</p>
@@ -120,6 +122,7 @@
       <li xml:lang="ar">دعم التّلاعب البسيط بالصّورة: التّدوير، والعكس، والقلب وتغيير الحجم</li>
       <li xml:lang="ca">Permet la manipulació senzilla d'imatges: gira, mirall, inverteix i canvia la mida</li>
       <li xml:lang="ca-valencia">Permet la manipulació senzilla d'imatges: gira, mirall, inverteix i canvia la mida</li>
+      <li xml:lang="cs">Podporuje základní nástroje pro manipulaci s obrázky: Otočení, zrcadlení, převrácení a změnu velikosti</li>
       <li xml:lang="de">Unterstützt einfache Bildbearbeitung wie Drehen, Spiegeln waagerecht und senkrecht und Größenänderung</li>
       <li xml:lang="el">Υποστηρίζει απλές λειτουργίες διαχείρισης εικόνας: περιστροφή, καθρεπτισμό, αναστροφή και αλλαγή μεγέθους</li>
       <li xml:lang="en-GB">Supports simple image manipulations: rotate, mirror, flip, and resize</li>
@@ -157,6 +160,7 @@
       <li xml:lang="ar">دعم إجراءات إدارة الملفّات البسيطة كالنّسخ، والنّقل، والحذف وغيرها</li>
       <li xml:lang="ca">Permet les accions bàsiques per a la gestió de fitxers com copia, mou, suprimeix i altres</li>
       <li xml:lang="ca-valencia">Permet les accions bàsiques per a la gestió de fitxers com copia, mou, suprimeix i altres</li>
+      <li xml:lang="cs">Podporuje běžnou správu souborů, jako například kopírování, přesun, vymazání a podobně</li>
       <li xml:lang="de">Grundlegende Dateiverwaltungsaktionen wie Kopieren, Verschieben, Löschen und weitere Aktionen</li>
       <li xml:lang="el">Υποστηρίζει βασικές ενέργειες διαχείρισης αρχείων όπως αντιγραφή, μετακίνηση, διαγραφή κ.α.</li>
       <li xml:lang="en-GB">Supports basic file management actions such as copy, move, delete, and others</li>
@@ -194,6 +198,7 @@
       <li xml:lang="ar">يعمل كتطبيق مستقلّ وعارض مضمّن في متصفّح الوِبّ كنكر</li>
       <li xml:lang="ca">Funciona tant com una aplicació independent o un visor incrustat al navegador web Konqueror</li>
       <li xml:lang="ca-valencia">Funciona tant com una aplicació independent o un visor incrustat al navegador web Konqueror</li>
+      <li xml:lang="cs">Pracuje jako samostatná aplikace i jako vložená komponenta ve webovém prohlížeči Konqueror</li>
       <li xml:lang="de">Funktioniert sowohl als eigenständiges Programm als auch als eingebetteter Betrachter im Webbrowser Konqueror.</li>
       <li xml:lang="el">Λειτουργεί και ως αυτόνομη εφαρμογή και ως ενσωματωμένος προβολέας στον περιηγητή ιστού Konqueror</li>
       <li xml:lang="en-GB">Functions both as a standalone application and an embedded viewer in the Konqueror web browser</li>
@@ -230,6 +235,7 @@
       <li>Can be extended using KIPI plugins.</li>
       <li xml:lang="ca">Es pot estendre emprant els connectors KIPI.</li>
       <li xml:lang="ca-valencia">Es pot estendre emprant els connectors KIPI.</li>
+      <li xml:lang="cs">Možnosti lze rozšířit moduly KIPI.</li>
       <li xml:lang="de">Kann durch KIPI-Module erweitert werden.</li>
       <li xml:lang="el">Μπορεί να επεκταθεί με πρόσθετα KIPI.</li>
       <li xml:lang="en-GB">Can be extended using KIPI plugins.</li>
