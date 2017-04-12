@@ -122,9 +122,6 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     app.setAttribute(Qt::AA_UseHighDpiPixmaps, true);
     KAboutData::setApplicationData(*aboutData);
-    app.setApplicationName(aboutData.data()->componentName());
-    app.setApplicationDisplayName(aboutData.data()->displayName());
-    app.setOrganizationDomain(aboutData.data()->organizationDomain());
     QApplication::setWindowIcon(QIcon::fromTheme(QStringLiteral("gwenview"), app.windowIcon()));
 
     QCommandLineParser parser;
