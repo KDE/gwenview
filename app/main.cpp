@@ -111,6 +111,7 @@ private:
 
 int main(int argc, char *argv[])
 {
+    QApplication app(argc, argv);
     KLocalizedString::setApplicationDomain("gwenview");
     QScopedPointer<KAboutData> aboutData(
         Gwenview::createAboutData(
@@ -119,7 +120,6 @@ int main(int argc, char *argv[])
         ));
     aboutData->setShortDescription(i18n("An Image Viewer"));
 
-    QApplication app(argc, argv);
     app.setAttribute(Qt::AA_UseHighDpiPixmaps, true);
     KAboutData::setApplicationData(*aboutData);
     QApplication::setWindowIcon(QIcon::fromTheme(QStringLiteral("gwenview"), app.windowIcon()));

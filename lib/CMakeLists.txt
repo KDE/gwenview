@@ -1,5 +1,7 @@
 project(gwenviewlib)
 
+add_definitions(-DTRANSLATION_DOMAIN="gwenview")
+
 set(LIBGWENVIEW_VERSION "4.97.0")
 
 # Extract version of libjpeg so that we can use the appropriate dir
