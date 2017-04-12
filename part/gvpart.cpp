@@ -58,6 +58,9 @@ namespace Gwenview
 GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QVariantList& /*args*/)
 : KParts::ReadOnlyPart(parent)
 {
+    QScopedPointer<KAboutData> aboutData(createAboutData());
+    setComponentData(*aboutData, false);
+
     DocumentViewContainer* container = new DocumentViewContainer(parentWidget);
     setWidget(container);
     mDocumentView = container->createView();
@@ -85,7 +88,7 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QVariantList& /*arg
     //Gwenview::ImageFormats::registerPlugins();
     new GVBrowserExtension(this);
 
-    setXMLFile("gvpart/gvpart.rc");
+    setXMLFile(QStringLiteral("gvpart.rc"), true);
 }
 
 void GVPart::showProperties()
