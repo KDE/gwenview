@@ -98,7 +98,7 @@ struct ImporterPrivate
         }
         mCurrentUrl = mUrlList.takeFirst();
         QUrl dst = mTempImportDirUrl;
-        dst.setPath(dst.path() + '/' + mCurrentUrl.fileName());
+        dst.setPath(dst.path() + mCurrentUrl.fileName());
         KIO::Job* job = KIO::copy(mCurrentUrl, dst, KIO::HideProgressInfo);
         KJobWidgets::setWindow(job, mAuthWindow);
         QObject::connect(job, SIGNAL(result(KJob*)),
@@ -122,7 +122,7 @@ struct ImporterPrivate
         } else {
             fileName = src.fileName();
         }
-        dst.setPath(dst.path() + '/' + fileName);
+        dst.setPath(dst.path() + fileName);
 
         FileUtils::RenameResult result = FileUtils::rename(src, dst, mAuthWindow);
         switch (result) {

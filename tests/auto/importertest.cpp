@@ -42,7 +42,7 @@ using namespace Gwenview;
 
 void ImporterTest::init()
 {
-    mDocumentList = KUrl::List()
+    mDocumentList = QList<QUrl>()
                     << urlForTestFile("import/pict0001.jpg")
                     << urlForTestFile("import/pict0002.jpg")
                     << urlForTestFile("import/pict0003.jpg")
@@ -56,8 +56,8 @@ void ImporterTest::testContentsAreIdentical()
     QVERIFY(!FileUtils::contentsAreIdentical(mDocumentList[0], mDocumentList[1]));
     QVERIFY(FileUtils::contentsAreIdentical(mDocumentList[0], mDocumentList[0]));
 
-    KUrl url1 = mDocumentList[0];
-    KUrl url2 = urlForTestOutputFile("foo");
+    QUrl url1 = mDocumentList[0];
+    QUrl url2 = urlForTestOutputFile("foo");
 
     // Test on a copy of a file
     QFile::remove(url2.toLocalFile());
@@ -81,13 +81,13 @@ void ImporterTest::testContentsAreIdentical()
 
 void ImporterTest::testSuccessfulImport()
 {
-    KUrl destUrl = QUrl::fromLocalFile(mTempDir->name() + "/foo");
+    QUrl destUrl = QUrl::fromLocalFile(mTempDir->path() + "/foo");
 
     Importer importer(0);
     QSignalSpy maximumChangedSpy(&importer, SIGNAL(maximumChanged(int)));
     QSignalSpy errorSpy(&importer, SIGNAL(error(QString)));
 
-    KUrl::List list = mDocumentList;
+    QList<QUrl> list = mDocumentList;
 
     QEventLoop loop;
     connect(&importer, SIGNAL(importFinished()), &loop, SLOT(quit()));
@@ -103,20 +103,20 @@ void ImporterTest::testSuccessfulImport()
     QCOMPARE(importer.skippedUrlList().count(), 0);
     QCOMPARE(importer.renamedCount(), 0);
 
-    Q_FOREACH(const KUrl & src, list) {
-        KUrl dst = destUrl;
-        dst.addPath(src.fileName());
+    Q_FOREACH(const QUrl & src, list) {
+        QUrl dst = destUrl;
+        dst.setPath(dst.path() + '/' + src.fileName());
         QVERIFY(FileUtils::contentsAreIdentical(src, dst));
     }
 }
 
 void ImporterTest::testSkippedUrlList()
 {
-    KUrl destUrl = QUrl::fromLocalFile(mTempDir->name() + "/foo");
+    QUrl destUrl = QUrl::fromLocalFile(mTempDir->path() + "/foo");
 
     Importer importer(0);
 
-    KUrl::List list = mDocumentList.mid(0, 1);
+    QList<QUrl> list = mDocumentList.mid(0, 1);
 
     QEventLoop loop;
     connect(&importer, SIGNAL(importFinished()), &loop, SLOT(quit()));
@@ -127,8 +127,8 @@ void ImporterTest::testSkippedUrlList()
     QCOMPARE(importer.importedUrlList(), list);
 
     list = mDocumentList;
-    KUrl::List expectedImportedList = mDocumentList.mid(1);
-    KUrl::List expectedSkippedList = mDocumentList.mid(0, 1);
+    QList<QUrl> expectedImportedList = mDocumentList.mid(1);
+    QList<QUrl> expectedSkippedList = mDocumentList.mid(0, 1);
     importer.start(list, destUrl);
     loop.exec();
 
@@ -140,11 +140,11 @@ void ImporterTest::testSkippedUrlList()
 
 void ImporterTest::testRenamedCount()
 {
-    KUrl destUrl = QUrl::fromLocalFile(mTempDir->name() + "/foo");
+    QUrl destUrl = QUrl::fromLocalFile(mTempDir->path() + "/foo");
 
     Importer importer(0);
 
-    KUrl::List list;
+    QList<QUrl> list;
     list << mDocumentList.first();
 
     QEventLoop loop;
@@ -157,8 +157,8 @@ void ImporterTest::testRenamedCount()
 
     // Modify imported document so that next import does not skip it
     {
-        KUrl url = destUrl;
-        url.addPath(mDocumentList.first().fileName());
+        QUrl url = destUrl;
+        url.setPath(url.path() + '/' + mDocumentList.first().fileName());
         QFile file(url.toLocalFile());
         QVERIFY(file.open(QIODevice::Append));
         file.write("foo");
@@ -181,9 +181,9 @@ void ImporterTest::testFileNameFormater()
     QFETCH(QString, format);
     QFETCH(QString, expected);
 
-    KUrl url = KUrl("file://foo/bar/" + fileName);
+    QUrl url = QUrl("file://foo/bar/" + fileName);
     FileNameFormater fileNameFormater(format);
-    QCOMPARE(fileNameFormater.format(url, QDateTime::fromString(dateTime)), expected);
+    QCOMPARE(fileNameFormater.format(url, QDateTime::fromString(dateTime, Qt::ISODate)), expected);
 }
 
 #define NEW_ROW(fileName, dateTime, format, expected) QTest::newRow(fileName) << fileName << dateTime << format << expected
@@ -194,14 +194,14 @@ void ImporterTest::testFileNameFormater_data()
     QTest::addColumn<QString>("format");
     QTest::addColumn<QString>("expected");
 
-    NEW_ROW("PICT0001.JPG", "20091024T225049", "{date}_{time}.{ext}", "2009-10-24_22-50-49.JPG");
-    NEW_ROW("PICT0001.JPG", "20091024T225049", "{date}_{time}.{ext.lower}", "2009-10-24_22-50-49.jpg");
-    NEW_ROW("2009.10.24.JPG", "20091024T225049", "{date}_{time}.{ext.lower}", "2009-10-24_22-50-49.jpg");
-    NEW_ROW("PICT0001.JPG", "20091024T225049", "{name}.{ext}", "PICT0001.JPG");
-    NEW_ROW("PICT0001.JPG", "20091024T225049", "{name.lower}.{ext.lower}", "pict0001.jpg");
-    NEW_ROW("iLikeCurlies", "20091024T225049", "{{{name}}", "{iLikeCurlies}");
-    NEW_ROW("UnknownKeyword", "20091024T225049", "foo{unknown}bar", "foobar");
-    NEW_ROW("MissingClosingCurly", "20091024T225049", "foo{date", "foo");
+    NEW_ROW("PICT0001.JPG", "2009-10-24T22:50:49", "{date}_{time}.{ext}", "2009-10-24_22-50-49.JPG");
+    NEW_ROW("PICT0001.JPG", "2009-10-24T22:50:49", "{date}_{time}.{ext.lower}", "2009-10-24_22-50-49.jpg");
+    NEW_ROW("2009.10.24.JPG", "2009-10-24T22:50:49", "{date}_{time}.{ext.lower}", "2009-10-24_22-50-49.jpg");
+    NEW_ROW("PICT0001.JPG", "2009-10-24T22:50:49", "{name}.{ext}", "PICT0001.JPG");
+    NEW_ROW("PICT0001.JPG", "2009-10-24T22:50:49", "{name.lower}.{ext.lower}", "pict0001.jpg");
+    NEW_ROW("iLikeCurlies", "2009-10-24T22:50:49", "{{{name}}", "{iLikeCurlies}");
+    NEW_ROW("UnknownKeyword", "2009-10-24T22:50:49", "foo{unknown}bar", "foobar");
+    NEW_ROW("MissingClosingCurly", "2009-10-24T22:50:49", "foo{date", "foo");
 }
 
 void ImporterTest::testAutoRenameFormat()
@@ -212,11 +212,11 @@ void ImporterTest::testAutoRenameFormat()
                         << "2009-10-01_21-15-27";
     QCOMPARE(dates.count(), mDocumentList.count());
 
-    KUrl destUrl = QUrl::fromLocalFile(mTempDir->name() + "foo");
+    QUrl destUrl = QUrl::fromLocalFile(mTempDir->path() + "foo");
 
     Importer importer(0);
     importer.setAutoRenameFormat("{date}_{time}.{ext}");
-    KUrl::List list = mDocumentList;
+    QList<QUrl> list = mDocumentList;
 
     QEventLoop loop;
     connect(&importer, SIGNAL(importFinished()), &loop, SLOT(quit()));
@@ -227,17 +227,17 @@ void ImporterTest::testAutoRenameFormat()
     QCOMPARE(importer.importedUrlList(), list);
 
     for (int pos = 0; pos < dates.count(); ++pos) {
-        KUrl src = list[pos];
-        KUrl dst = destUrl;
-        dst.addPath(dates[pos] + ".jpg");
+        QUrl src = list[pos];
+        QUrl dst = destUrl;
+        dst.setPath(dst.path() + '/' + dates[pos] + ".jpg");
         QVERIFY(FileUtils::contentsAreIdentical(src, dst));
     }
 }
 
 void ImporterTest::testReadOnlyDestination()
 {
-    KUrl destUrl = QUrl::fromLocalFile(mTempDir->name() + "/foo");
-    chmod(QFile::encodeName(mTempDir->name()), 0555);
+    QUrl destUrl = QUrl::fromLocalFile(mTempDir->path() + "/foo");
+    chmod(QFile::encodeName(mTempDir->path()), 0555);
 
     Importer importer(0);
     QSignalSpy errorSpy(&importer, SIGNAL(error(QString)));

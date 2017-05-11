@@ -47,7 +47,7 @@ private Q_SLOTS:
 
 private:
     std::auto_ptr<QTemporaryDir> mTempDir;
-    QUrl::List mDocumentList;
+    QList<QUrl> mDocumentList;
 };
 
 #endif /* IMPORTERTEST_H */
