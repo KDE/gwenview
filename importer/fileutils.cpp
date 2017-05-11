@@ -128,7 +128,10 @@ RenameResult rename(const QUrl& src, const QUrl& dst_, QWidget* authWindow)
         }
         result = RenamedUnderNewName;
 
-        dst.setPath(dst.path() + '/' + prefix + QString::number(count) + suffix);
+        dst.setPath(dst.adjusted(QUrl::RemoveFilename).path() + prefix + QString::number(count) + suffix);
+        statJob = KIO::stat(dst);
+        KJobWidgets::setWindow(statJob, authWindow);
+
         ++count;
     }
 

@@ -121,7 +121,7 @@ public:
         QList<QUrl> urls = importedUrls + skippedUrls;
         while (true) {
             KIO::Job* job = KIO::del(urls);
-            if (!job->exec()) {
+            if (job->exec()) {
                 break;
             }
             // Deleting failed
