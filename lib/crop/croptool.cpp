@@ -91,7 +91,7 @@ struct CropToolPrivate
 
     QRect viewportCropRect() const
     {
-        return q->imageView()->mapToView(mRect.adjusted(0, 0, 1, 1));
+        return q->imageView()->mapToView(mRect);
     }
 
     QRect handleViewportRect(CropHandle handle)
@@ -102,7 +102,7 @@ struct CropToolPrivate
         if (handle & CH_Top) {
             top = rect.top();
         } else if (handle & CH_Bottom) {
-            top = rect.bottom() - HANDLE_SIZE;
+            top = rect.bottom() + 1 - HANDLE_SIZE;
         } else {
             top = rect.top() + (rect.height() - HANDLE_SIZE) / 2;
             top = qBound(0, top, viewportSize.height() - HANDLE_SIZE);
@@ -111,7 +111,7 @@ struct CropToolPrivate
         if (handle & CH_Left) {
             left = rect.left();
         } else if (handle & CH_Right) {
-            left = rect.right() - HANDLE_SIZE;
+            left = rect.right() + 1 - HANDLE_SIZE;
         } else {
             left = rect.left() + (rect.width() - HANDLE_SIZE) / 2;
             left = qBound(0, left, viewportSize.width() - HANDLE_SIZE);
@@ -270,7 +270,6 @@ void CropTool::paint(QPainter* painter)
 
     painter->setPen(borderColor);
 
-    rect.adjust(0, 0, -1, -1);
     painter->drawRect(rect);
 
     if (d->mMovingHandle == CH_None) {
