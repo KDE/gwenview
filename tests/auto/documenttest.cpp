@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KDE
 #include <QDebug>
 #include <KJobUiDelegate>
-#include <KIO/NetAccess>
+#include <KIO/StatJob>
 #include <qtest.h>
 #include <KDCRAW/KDcraw>
 
@@ -85,17 +85,17 @@ void DocumentTest::testLoad()
     QUrl url = urlForTestFile(fileName);
 
     // testing RAW loading. For raw, QImage directly won't work -> load it using KDCRaw
-    QByteArray mFormatHint = url.fileName().section('.', -1).toAscii().toLower();
+    QByteArray mFormatHint = url.fileName().section('.', -1).toLocal8Bit().toLower();
     if (KDcrawIface::KDcraw::rawFilesList().contains(QString(mFormatHint))) {
         if (!KDcrawIface::KDcraw::loadEmbeddedPreview(expectedImage, url.toLocalFile())) {
             QSKIP("Not running this test: failed to get expectedImage. Try running ./fetch_testing_raw.sh\
- in the tests/data directory and then rerun the tests.", SkipSingle);
+ in the tests/data directory and then rerun the tests.");
         }
     }
 
     if (expectedKind != MimeTypeUtils::KIND_SVG_IMAGE) {
         if (expectedImage.isNull()) {
-            QSKIP("Not running this test: QImage failed to load the test image", SkipSingle);
+            QSKIP("Not running this test: QImage failed to load the test image");
         }
     }
 
@@ -265,12 +265,12 @@ void DocumentTest::testLoadRemote()
 {
     QUrl url = setUpRemoteTestDir("test.png");
     if (!url.isValid()) {
-        return;
+        QSKIP("Not running this test: failed to setup remote test dir.");
     }
     url = url.adjusted(QUrl::StripTrailingSlash);
     url.setPath(url.path() + '/' + "test.png");
 
-    QVERIFY2(KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, 0), "test url not found");
+    QVERIFY2(KIO::stat(url, KIO::StatJob::SourceSide, 0)->exec(), "test url not found");
 
     Document::Ptr doc = DocumentFactory::instance()->load(url);
     doc->startLoadingFullImage();
@@ -328,7 +328,7 @@ void DocumentTest::testSaveRemote()
 {
     QUrl dstUrl = setUpRemoteTestDir();
     if (!dstUrl.isValid()) {
-        return;
+        QSKIP("Not running this test: failed to setup remote test dir.");
     }
 
     QUrl srcUrl = urlForTestFile("test.png");
@@ -376,7 +376,7 @@ void DocumentTest::testLoadRotated()
     url = urlForTestFile("dsd_1838.nef");
     if (!KDcrawIface::KDcraw::loadEmbeddedPreview(image, url.toLocalFile())) {
         QSKIP("Not running this test: failed to get image. Try running ./fetch_testing_raw.sh\
- in the tests/data directory and then rerun the tests.", SkipSingle);
+ in the tests/data directory and then rerun the tests.");
     }
     matrix = ImageUtils::transformMatrix(ROT_270);
     image = image.transformed(matrix);

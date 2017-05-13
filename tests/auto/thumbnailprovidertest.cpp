@@ -73,8 +73,9 @@ void SandBox::fill()
 
 void SandBox::copyTestImage(const QString& testFileName, int width, int height)
 {
-    QString testPath = pathForTestFile(testFileName);
-    KIO::Job* job = KIO::copy(testPath, QUrl(mPath + '/' + testFileName));
+    QUrl testPath = urlForTestFile(testFileName);
+    QUrl testDest = QUrl("file://" + mPath + '/' + testFileName);
+    KIO::Job* job = KIO::copy(testPath, testDest);
     QVERIFY2(job->exec(), "Couldn't copy test image");
     mSizeHash.insert(testFileName, QSize(width, height));
 }
@@ -232,7 +233,7 @@ void ThumbnailProviderTest::testLoadRemote()
 {
     QUrl url = setUpRemoteTestDir("test.png");
     if (!url.isValid()) {
-        return;
+        QSKIP("Not running this test: failed to setup remote test dir.");
     }
     url = url.adjusted(QUrl::StripTrailingSlash);
     url.setPath(url.path() + '/' + "test.png");
