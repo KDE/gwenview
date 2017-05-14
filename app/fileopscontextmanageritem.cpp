@@ -409,7 +409,7 @@ void FileOpsContextManagerItem::openWith(QAction* action)
     }
 
     Q_ASSERT(service);
-    KRun::run(*service, list, mGroup);
+    KRun::runService(*service, list, mGroup);
 }
 
 } // namespace

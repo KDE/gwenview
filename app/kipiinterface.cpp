@@ -78,7 +78,7 @@ public:
     KIPIImageInfo(KIPI::Interface* interface, const QUrl &url)
     : KIPI::ImageInfoShared(interface, url)
     {
-        KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
+        KFileItem item(url);
 
         mAttributes.insert("name", url.fileName());
         mAttributes.insert("comment", comment());

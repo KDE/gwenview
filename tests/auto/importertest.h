@@ -46,7 +46,7 @@ private Q_SLOTS:
     void testRenamedCount();
 
 private:
-    std::auto_ptr<QTemporaryDir> mTempDir;
+    std::unique_ptr<QTemporaryDir> mTempDir;
     QList<QUrl> mDocumentList;
 };
 

@@ -146,7 +146,7 @@ public:
         if (!service) {
             qCritical() << "Could not find gwenview";
         } else {
-            KRun::run(*service, {mThumbnailPage->destinationUrl()}, 0 /* window */);
+            KRun::runService(*service, {mThumbnailPage->destinationUrl()}, 0 /* window */);
         }
     }
 

@@ -51,7 +51,7 @@ struct ImporterPrivate
 {
     Importer* q;
     QWidget* mAuthWindow;
-    std::auto_ptr<FileNameFormater> mFileNameFormater;
+    std::unique_ptr<FileNameFormater> mFileNameFormater;
     QUrl mTempImportDirUrl;
 
     /* @defgroup reset Should be reset in start()
@@ -112,7 +112,8 @@ struct ImporterPrivate
         QUrl dst = src.resolved(QUrl(".."));
         QString fileName;
         if (mFileNameFormater.get()) {
-            KFileItem item(KFileItem::Unknown, KFileItem::Unknown, src, true /* delayedMimeTypes */);
+            KFileItem item(src);
+            item.setDelayedMimeTypes(true);
             // Get the document time, but do not cache the result because the
             // 'src' url is temporary: if we import "foo/image.jpg" and
             // "bar/image.jpg", both images will be temporarily saved in the

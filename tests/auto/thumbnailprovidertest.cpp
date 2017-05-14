@@ -122,7 +122,7 @@ void ThumbnailProviderTest::testLoadLocal()
     KFileItemList list;
     Q_FOREACH(const QFileInfo & info, dir.entryInfoList(QDir::Files)) {
         QUrl url("file://" + info.absoluteFilePath());
-        KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
+        KFileItem item(url);
         list << item;
     }
 
@@ -198,7 +198,7 @@ void ThumbnailProviderTest::testUseEmbeddedOrNot()
 
     KFileItemList list;
     QUrl url("file://" + QDir(sandBox.mPath).absoluteFilePath("embedded-thumbnail.jpg"));
-    list << KFileItem(KFileItem::Unknown, KFileItem::Unknown, url);
+    list << KFileItem(url);
 
     // Loading a normal thumbnail should bring the white one
     {
@@ -239,7 +239,7 @@ void ThumbnailProviderTest::testLoadRemote()
     url.setPath(url.path() + '/' + "test.png");
 
     KFileItemList list;
-    KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
+    KFileItem item(url);
     list << item;
 
     ThumbnailProvider provider;
@@ -263,7 +263,7 @@ void ThumbnailProviderTest::testRemoveItemsWhileGenerating()
     KFileItemList list;
     Q_FOREACH(const QFileInfo & info, dir.entryInfoList(QDir::Files)) {
         QUrl url("file://" + info.absoluteFilePath());
-        KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
+        KFileItem item(url);
         list << item;
     }
 
