@@ -63,6 +63,7 @@
   <summary xml:lang="sv">Bildvisare</summary>
   <summary xml:lang="uk">Програма для перегляду зображень</summary>
   <summary xml:lang="x-test">xxImage Viewerxx</summary>
+  <summary xml:lang="zh-CN">图像查看器</summary>
   <summary xml:lang="zh-TW">影像檢視器</summary>
   <description>
     <p>
@@ -89,6 +90,7 @@
     <p xml:lang="tr">Gwenview, KDE için hızlı ve kolay kullanılır bir resim görüntüleyicisidir. Resim koleksiyonu içinde gezinmek ve görüntülemek için idealdir.</p>
     <p xml:lang="uk">Gwenview — швидка і проста у користування програма для перегляду зображень від KDE, ідеальна для навігації збіркою зображень та показу зображень.</p>
     <p xml:lang="x-test">xxGwenview is a fast and easy to use image viewer by KDE, ideal for browsing and displaying a collection of images.xx</p>
+    <p xml:lang="zh-CN">Gwenview 是快速易用的 KDE 图像查看器，浏览和显示的图像集合的理想选择。</p>
     <p xml:lang="zh-TW">Gwenview 是 KDE 裡一套快速並簡易使用的影像檢視器，用來瀏覽與顯示圖片集相當理想。</p>
     <p>Features:</p>
     <p xml:lang="ar">الميزات:</p>
