@@ -458,6 +458,8 @@ struct MainWindow::Private
         connect(mSlideShow, SIGNAL(stateChanged(bool)),
                 q, SLOT(updateSlideShowAction()));
 
+        q->setStandardToolBarMenuEnabled(true);
+
         mShowMenuBarAction = static_cast<KToggleAction*>(view->addAction(KStandardAction::ShowMenubar, q, SLOT(toggleMenuBar())));
         mShowStatusBarAction = static_cast<KToggleAction*>(view->addAction(KStandardAction::ShowStatusbar, q, SLOT(toggleStatusBar())));
 

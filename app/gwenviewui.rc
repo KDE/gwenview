@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="gwenview" version="56">
+<kpartgui name="gwenview" version="57">
 
 <MenuBar>
     <Menu name="file" >
@@ -82,6 +82,7 @@
         here, since it is already in the "view" menu.
         -->
         <Action name="options_show_menubar"/>
+        <Merge name="StandardToolBarMenuHandler"/>
         <Action name="options_show_statusbar"/>
         <Action name="options_configure_keybinding"/>
         <Action name="options_configure_toolbars"/>
