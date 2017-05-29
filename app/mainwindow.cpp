@@ -461,6 +461,8 @@ struct MainWindow::Private
         mShowMenuBarAction = static_cast<KToggleAction*>(view->addAction(KStandardAction::ShowMenubar, q, SLOT(toggleMenuBar())));
         mShowStatusBarAction = static_cast<KToggleAction*>(view->addAction(KStandardAction::ShowStatusbar, q, SLOT(toggleStatusBar())));
 
+        actionCollection->setDefaultShortcut(mShowStatusBarAction, Qt::Key_F3);
+
         view->addAction(KStandardAction::KeyBindings, q->guiFactory(),
                         SLOT(configureShortcuts()));
 
