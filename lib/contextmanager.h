@@ -71,6 +71,10 @@ public:
 
     void setUrlToSelect(const QUrl&);
 
+    QUrl targetUrl() const;
+
+    void setTargetUrl(const QUrl&);
+
 Q_SIGNALS:
     void currentDirUrlChanged(const QUrl&);
     void currentUrlChanged(const QUrl&);
@@ -86,6 +90,7 @@ private Q_SLOTS:
     void slotRowsInserted();
     void selectUrlToSelect();
     void slotDirListerRedirection(const QUrl&);
+    
 
 private:
     ContextManagerPrivate* const d;

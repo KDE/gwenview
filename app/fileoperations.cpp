@@ -39,18 +39,21 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include <lib/document/documentfactory.h>
 #include <lib/thumbnailprovider/thumbnailprovider.h>
-
+#include <lib/thumbnailprovider/thumbnailprovider.h>
+#include <lib/contextmanager.h>
 namespace Gwenview
 {
 
 namespace FileOperations
 {
 
-static void copyMoveOrLink(Operation operation, const QList<QUrl>& urlList, QWidget* parent)
+static void copyMoveOrLink(Operation operation, const QList<QUrl>& urlList, QWidget* parent, ContextManager* contextManager)
 {
     Q_ASSERT(!urlList.isEmpty());
 
-    QFileDialog dialog(parent, QString(), "kfiledialog:///<copyMoveOrLink>");
+  
+    
+    QFileDialog dialog(parent->nativeParentWidget(), QString());
     dialog.setAcceptMode(QFileDialog::AcceptSave);
 
     switch (operation) {
@@ -76,14 +79,16 @@ static void copyMoveOrLink(Operation operation, const QList<QUrl>& urlList, QWid
     } else {
         dialog.setFileMode(QFileDialog::Directory);
         dialog.setOption(QFileDialog::ShowDirsOnly, true);
-        dialog.setDirectoryUrl(urlList.first().adjusted(QUrl::RemoveFilename));
     }
 
+    dialog.setDirectoryUrl(contextManager->targetUrl().adjusted(QUrl::RemoveFilename));
     if (!dialog.exec()) {
         return;
     }
 
     QUrl destUrl = dialog.selectedUrls().first();
+    contextManager->setTargetUrl(destUrl);
+    
     KIO::CopyJob* job = 0;
     switch (operation) {
     case COPY:
@@ -130,19 +135,19 @@ static void delOrTrash(KIO::JobUiDelegate::DeletionType deletionType, const QLis
     }
 }
 
-void copyTo(const QList<QUrl>& urlList, QWidget* parent)
+void copyTo(const QList<QUrl>& urlList, QWidget* parent, ContextManager* contextManager)
 {
-    copyMoveOrLink(COPY, urlList, parent);
+    copyMoveOrLink(COPY, urlList, parent, contextManager);
 }
 
-void moveTo(const QList<QUrl>& urlList, QWidget* parent)
+void moveTo(const QList<QUrl>& urlList, QWidget* parent, ContextManager* contextManager)
 {
-    copyMoveOrLink(MOVE, urlList, parent);
+    copyMoveOrLink(MOVE, urlList, parent, contextManager);
 }
 
-void linkTo(const QList<QUrl>& urlList, QWidget* parent)
+void linkTo(const QList<QUrl>& urlList, QWidget* parent, ContextManager* contextManager)
 {
-    copyMoveOrLink(LINK, urlList, parent);
+    copyMoveOrLink(LINK, urlList, parent, contextManager);
 }
 
 void trash(const QList<QUrl>& urlList, QWidget* parent)
