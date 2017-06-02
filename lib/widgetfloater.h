@@ -58,7 +58,7 @@ public:
     int verticalMargin() const;
 
 protected:
-    bool eventFilter(QObject*, QEvent*);
+    bool eventFilter(QObject*, QEvent*) Q_DECL_OVERRIDE;
 
 private:
     WidgetFloaterPrivate* const d;

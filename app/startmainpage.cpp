@@ -61,15 +61,15 @@ public:
         : AbstractThumbnailViewHelper(parent)
     {}
 
-    virtual void showContextMenu(QWidget*)
+    void showContextMenu(QWidget*) Q_DECL_OVERRIDE
     {
     }
 
-    virtual void showMenuForUrlDroppedOnViewport(QWidget*, const QList<QUrl>&)
+    void showMenuForUrlDroppedOnViewport(QWidget*, const QList<QUrl>&) Q_DECL_OVERRIDE
     {
     }
 
-    virtual void showMenuForUrlDroppedOnDir(QWidget*, const QList<QUrl>&, const QUrl&)
+    void showMenuForUrlDroppedOnDir(QWidget*, const QList<QUrl>&, const QUrl&) Q_DECL_OVERRIDE
     {
     }
 };

@@ -118,14 +118,14 @@ public:
         setSizePolicy(policy);
     }
 
-    QSize sizeHint() const
+    QSize sizeHint() const Q_DECL_OVERRIDE
     {
         int width = 150;
         int height = heightForWidth(width);
         return QSize(width, height);
     }
 
-    int heightForWidth(int w) const
+    int heightForWidth(int w) const Q_DECL_OVERRIDE
     {
         int height = 0;
         Q_FOREACH(Row* row, mRows) {
@@ -175,13 +175,13 @@ public:
     }
 
 protected:
-    void showEvent(QShowEvent* event)
+    void showEvent(QShowEvent* event) Q_DECL_OVERRIDE
     {
         QWidget::showEvent(event);
         layoutRows();
     }
 
-    void resizeEvent(QResizeEvent* event)
+    void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE
     {
         QWidget::resizeEvent(event);
         layoutRows();

@@ -74,7 +74,7 @@ public:
 
     int statusBarHeight() const;
 
-    virtual QSize sizeHint() const;
+    QSize sizeHint() const Q_DECL_OVERRIDE;
 
     /**
      * Returns the url of the current document, or an invalid url if unknown

@@ -101,7 +101,7 @@ public:
         setMinimumSize(pix.size());
     }
 
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) Q_DECL_OVERRIDE
     {
         painter->drawPixmap(
             (size().width() - mPix.width()) / 2,

@@ -72,7 +72,7 @@ public:
     }
 
 protected:
-    virtual bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
+    bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const Q_DECL_OVERRIDE
     {
         QModelIndex sourceIndex = sourceModel()->index(sourceRow, 0, sourceParent);
         SemanticInfoTag tag = sourceIndex.data(TagModel::TagRole).toString();
@@ -97,7 +97,7 @@ public:
     {}
 
 protected:
-    virtual bool eventFilter(QObject*, QEvent* event)
+    bool eventFilter(QObject*, QEvent* event) Q_DECL_OVERRIDE
     {
         if (event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease) {
             QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);

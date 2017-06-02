@@ -97,7 +97,7 @@ void ContextManagerTest::testInvalidDirUrl()
             setAutoErrorHandlingEnabled(false, 0);
         }
 
-        bool openUrl(const QUrl &url, OpenUrlFlags flags = NoFlags)
+        bool openUrl(const QUrl &url, OpenUrlFlags flags = NoFlags) Q_DECL_OVERRIDE
         {
             mOpenUrlCalled = true;
             return KDirLister::openUrl(url, flags);

@@ -49,7 +49,7 @@ public:
         : mSize(size)
     {}
 
-    virtual void threadedStart()
+    void threadedStart() Q_DECL_OVERRIDE
     {
         if (!checkDocumentEditor()) {
             return;

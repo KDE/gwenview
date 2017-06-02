@@ -47,7 +47,7 @@ public:
 
     void setAutoHidingEnabled(bool);
 
-    virtual QSize sizeHint() const;
+    QSize sizeHint() const Q_DECL_OVERRIDE;
 
 public Q_SLOTS:
     void slideIn();
@@ -59,7 +59,7 @@ private Q_SLOTS:
     void delayedInstallEventFilter();
 
 protected:
-    virtual bool eventFilter(QObject*, QEvent*);
+    bool eventFilter(QObject*, QEvent*) Q_DECL_OVERRIDE;
 
 private:
     FullScreenBarPrivate* const d;

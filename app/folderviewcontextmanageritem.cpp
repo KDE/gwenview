@@ -52,7 +52,7 @@ public:
         {}
 
 protected:
-    void dragEnterEvent(QDragEnterEvent* event)
+    void dragEnterEvent(QDragEnterEvent* event) Q_DECL_OVERRIDE
     {
         QAbstractItemView::dragEnterEvent(event);
         setDirtyRegion(mDropRect);
@@ -61,7 +61,7 @@ protected:
         }
     }
 
-    void dragMoveEvent(QDragMoveEvent* event)
+    void dragMoveEvent(QDragMoveEvent* event) Q_DECL_OVERRIDE
     {
         QAbstractItemView::dragMoveEvent(event);
 
@@ -80,7 +80,7 @@ protected:
         }
     }
 
-    void dropEvent(QDropEvent* event)
+    void dropEvent(QDropEvent* event) Q_DECL_OVERRIDE
     {
         const QList<QUrl> urlList = KUrlMimeData::urlsFromMimeData(event->mimeData());
         const QModelIndex index = indexAt(event->pos());

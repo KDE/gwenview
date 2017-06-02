@@ -42,7 +42,7 @@ public:
     void clear();
 
 protected:
-    virtual void paintEvent(QPaintEvent*);
+    void paintEvent(QPaintEvent*) Q_DECL_OVERRIDE;
 
 private:
     SideBarGroupPrivate* const d;
@@ -77,7 +77,7 @@ public:
     QString currentPage() const;
     void setCurrentPage(const QString& name);
 
-    virtual QSize sizeHint() const;
+    QSize sizeHint() const Q_DECL_OVERRIDE;
 
 private:
     SideBarPrivate* const d;

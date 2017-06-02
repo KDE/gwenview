@@ -45,13 +45,13 @@ namespace Gwenview
 class SideBarButton : public QToolButton
 {
 protected:
-    virtual void paintEvent(QPaintEvent* event)
+    void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE
     {
         forceIcon();
         QToolButton::paintEvent(event);
     }
 
-    virtual QSize sizeHint() const
+    QSize sizeHint() const Q_DECL_OVERRIDE
     {
         const_cast<SideBarButton*>(this)->forceIcon();
         return QToolButton::sizeHint();

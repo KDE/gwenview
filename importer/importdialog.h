@@ -40,7 +40,7 @@ public:
     ImportDialog();
     ~ImportDialog();
 
-    virtual QSize sizeHint() const;
+    QSize sizeHint() const Q_DECL_OVERRIDE;
 
 public Q_SLOTS:
     void setSourceUrl(const QUrl&, const QString& deviceUdi);

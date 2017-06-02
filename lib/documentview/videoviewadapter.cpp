@@ -186,7 +186,7 @@ struct VideoViewAdapterPrivate
 class DoubleClickableProxyWidget : public QGraphicsProxyWidget
 {
 protected:
-    void mousePressEvent(QGraphicsSceneMouseEvent* event)
+    void mousePressEvent(QGraphicsSceneMouseEvent* event) Q_DECL_OVERRIDE
     {
         QGraphicsWidget::mousePressEvent(event);
     }

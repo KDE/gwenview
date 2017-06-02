@@ -35,7 +35,7 @@ public:
         {}
 
 protected:
-    virtual void paintEvent(QPaintEvent* event)
+    void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE
     {
         QSplitterHandle::paintEvent(event);
 
@@ -65,7 +65,7 @@ public:
     }
 
 protected:
-    virtual QSplitterHandle* createHandle()
+    QSplitterHandle* createHandle() Q_DECL_OVERRIDE
     {
         return new SplitterHandle(orientation(), this);
     }

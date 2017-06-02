@@ -73,9 +73,9 @@ public:
     void setRowCount(int);
 
 protected:
-    virtual void resizeEvent(QResizeEvent * event);
-    virtual void wheelEvent(QWheelEvent* event);
-    virtual void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
+    void resizeEvent(QResizeEvent * event) Q_DECL_OVERRIDE;
+    void wheelEvent(QWheelEvent* event) Q_DECL_OVERRIDE;
+    void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected) Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
     void slotFrameChanged(int);

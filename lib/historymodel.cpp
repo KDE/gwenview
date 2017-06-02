@@ -139,7 +139,7 @@ private:
         setData(i18n("Last visited: %1", date), Qt::ToolTipRole);
     }
 
-    bool operator<(const QStandardItem& other) const {
+    bool operator<(const QStandardItem& other) const Q_DECL_OVERRIDE {
         return mDateTime > static_cast<const HistoryItem*>(&other)->mDateTime;
     }
 };
