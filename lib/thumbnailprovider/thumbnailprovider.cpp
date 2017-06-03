@@ -448,7 +448,7 @@ void ThumbnailProvider::checkThumbnail()
             if (ok) {
                 size = QSize(width, height);
             } else {
-                qWarning() << "Thumbnail for" << mOriginalUri << "does not contain correct image size information";
+                LOG("Thumbnail for" << mOriginalUri << "does not contain correct image size information");
                 // Don't try to determine the size of a video, it probably won't work and
                 // will cause high I/O usage with big files (bug #307007).
                 if (MimeTypeUtils::urlKind(mCurrentUrl) == MimeTypeUtils::KIND_VIDEO) {
