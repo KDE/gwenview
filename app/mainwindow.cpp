@@ -374,7 +374,6 @@ struct MainWindow::Private
         mBrowseAction->setToolTip(i18nc("@info:tooltip", "Browse folders for images"));
         mBrowseAction->setCheckable(true);
         mBrowseAction->setIcon(QIcon::fromTheme("view-list-icons"));
-        actionCollection->setDefaultShortcut(mBrowseAction, Qt::Key_Escape);
         connect(mViewMainPage, SIGNAL(goToBrowseModeRequested()),
             mBrowseAction, SLOT(trigger()));
 
@@ -462,6 +461,8 @@ struct MainWindow::Private
 
         mShowMenuBarAction = static_cast<KToggleAction*>(view->addAction(KStandardAction::ShowMenubar, q, SLOT(toggleMenuBar())));
         mShowStatusBarAction = static_cast<KToggleAction*>(view->addAction(KStandardAction::ShowStatusbar, q, SLOT(toggleStatusBar())));
+
+        actionCollection->setDefaultShortcut(mShowStatusBarAction, Qt::Key_F3);
 
         view->addAction(KStandardAction::KeyBindings, q->guiFactory(),
                         SLOT(configureShortcuts()));
@@ -1474,6 +1475,9 @@ void MainWindow::loadConfig()
     d->mStartMainPage->loadConfig();
     d->mViewMainPage->loadConfig();
     d->mBrowseMainPage->loadConfig();
+
+    d->mShowStatusBarAction->setChecked(GwenviewConfig::statusBarIsVisible());
+    toggleStatusBar();
 }
 
 void MainWindow::saveConfig()

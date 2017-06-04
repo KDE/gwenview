@@ -140,6 +140,9 @@ private Q_SLOTS:
 
     void slotViewFocused(DocumentView*);
 
+    void slotEnterPressed();
+    void slotEscapePressed();
+
     void trashView(DocumentView*);
     void deselectView(DocumentView*);
 

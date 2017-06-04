@@ -43,6 +43,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "splitter.h"
 #include <lib/document/document.h>
 #include <lib/documentview/abstractdocumentviewadapter.h>
+#include <lib/documentview/abstractrasterimageviewtool.h>
 #include <lib/documentview/documentview.h>
 #include <lib/documentview/documentviewcontainer.h>
 #include <lib/documentview/documentviewcontroller.h>
@@ -403,9 +404,10 @@ ViewMainPage::ViewMainPage(QWidget* parent, SlideShow* slideShow, KActionCollect
     d->mCompareMode = false;
     d->mThumbnailBarVisibleBeforeFullScreen = false;
 
-    QShortcut* goToBrowseModeShortcut = new QShortcut(this);
-    goToBrowseModeShortcut->setKey(Qt::Key_Return);
-    connect(goToBrowseModeShortcut, &QShortcut::activated, this, &ViewMainPage::goToBrowseModeRequested);
+    QShortcut* enterKeyShortcut = new QShortcut(Qt::Key_Return, this);
+    connect(enterKeyShortcut, &QShortcut::activated, this, &ViewMainPage::slotEnterPressed);
+    QShortcut* escapeKeyShortcut = new QShortcut(Qt::Key_Escape, this);
+    connect(escapeKeyShortcut, &QShortcut::activated, this, &ViewMainPage::slotEscapePressed);
 
     d->setupToolContainer();
     d->setupStatusBar();
@@ -734,6 +736,38 @@ void ViewMainPage::reset()
 void ViewMainPage::slotViewFocused(DocumentView* view)
 {
     d->setCurrentView(view);
+}
+
+void ViewMainPage::slotEnterPressed()
+{
+    DocumentView *view = d->currentView();
+    if (view) {
+        AbstractRasterImageViewTool *tool = view->currentTool();
+        if (tool) {
+            QKeyEvent event(QEvent::KeyPress, Qt::Key_Return, Qt::NoModifier);
+            tool->keyPressEvent(&event);
+            if (event.isAccepted()) {
+                return;
+            }
+        }
+    }
+    emit goToBrowseModeRequested();
+}
+
+void ViewMainPage::slotEscapePressed()
+{
+    DocumentView *view = d->currentView();
+    if (view) {
+        AbstractRasterImageViewTool *tool = view->currentTool();
+        if (tool) {
+            QKeyEvent event(QEvent::KeyPress, Qt::Key_Escape, Qt::NoModifier);
+            tool->keyPressEvent(&event);
+            if (event.isAccepted()) {
+                return;
+            }
+        }
+    }
+    emit goToBrowseModeRequested();
 }
 
 void ViewMainPage::trashView(DocumentView* view)
