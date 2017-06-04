@@ -54,6 +54,7 @@ public:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent*) Q_DECL_OVERRIDE;
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent*) Q_DECL_OVERRIDE;
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*) Q_DECL_OVERRIDE;
+    virtual void keyPressEvent(QKeyEvent*) Q_DECL_OVERRIDE;
 
     virtual void toolActivated() Q_DECL_OVERRIDE;
 

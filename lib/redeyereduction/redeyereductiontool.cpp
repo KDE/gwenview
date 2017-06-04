@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "redeyereductiontool.h"
 
 // Qt
+#include <QDialogButtonBox>
 #include <QGraphicsSceneMouseEvent>
 #include <QPainter>
 #include <QPushButton>
@@ -156,6 +157,24 @@ void RedEyeReductionTool::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 {
     // Just prevent the event from reaching the image view
     event->accept();
+}
+
+void RedEyeReductionTool::keyPressEvent(QKeyEvent* event)
+{
+    QDialogButtonBox *buttons = d->mToolWidget->findChild<QDialogButtonBox *>();
+    switch (event->key()) {
+    case Qt::Key_Escape:
+        event->accept();
+        buttons->rejected();
+        break;
+    case Qt::Key_Return:
+    case Qt::Key_Enter:
+        event->accept();
+        buttons->accepted();
+        break;
+    default:
+        break;
+    }
 }
 
 void RedEyeReductionTool::toolActivated()

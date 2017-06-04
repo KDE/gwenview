@@ -23,6 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // Qt
 #include <QtMath>
+#include <QDialogButtonBox>
 #include <QGraphicsSceneMouseEvent>
 #include <QPainter>
 #include <QRect>
@@ -386,6 +387,24 @@ void CropTool::hoverMoveEvent(QGraphicsSceneHoverEvent* event)
     // Make sure cursor is updated when moving over handles
     CropHandle handle = d->handleAt(event->lastPos());
     d->updateCursor(handle, false /* buttonDown */);
+}
+
+void CropTool::keyPressEvent(QKeyEvent* event)
+{
+    QDialogButtonBox *buttons = d->mCropWidget->findChild<QDialogButtonBox *>();
+    switch (event->key()) {
+    case Qt::Key_Escape:
+        event->accept();
+        buttons->rejected();
+        break;
+    case Qt::Key_Return:
+    case Qt::Key_Enter:
+        event->accept();
+        buttons->accepted();
+        break;
+    default:
+        break;
+    }
 }
 
 void CropTool::toolActivated()
