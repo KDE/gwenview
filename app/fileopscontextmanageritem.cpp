@@ -329,17 +329,17 @@ void FileOpsContextManagerItem::restore()
 
 void FileOpsContextManagerItem::copyTo()
 {
-    FileOperations::copyTo(urlList(), mGroup);
+    FileOperations::copyTo(urlList(), widget(), contextManager());
 }
 
 void FileOpsContextManagerItem::moveTo()
 {
-    FileOperations::moveTo(urlList(), mGroup);
+    FileOperations::moveTo(urlList(), widget(), contextManager());
 }
 
 void FileOpsContextManagerItem::linkTo()
 {
-    FileOperations::linkTo(urlList(), mGroup);
+    FileOperations::linkTo(urlList(), widget(), contextManager());
 }
 
 void FileOpsContextManagerItem::rename()
