@@ -157,7 +157,9 @@ PlaceTreeModel::PlaceTreeModel(QObject* parent)
     connect(d->mPlacesModel, &KFilePlacesModel::rowsAboutToBeRemoved, this, &PlaceTreeModel::slotPlacesRowsAboutToBeRemoved);
 
     // Bootstrap
-    slotPlacesRowsInserted(QModelIndex(), 0, d->mPlacesModel->rowCount() - 1);
+    if (d->mPlacesModel->rowCount() > 0) {
+        slotPlacesRowsInserted(QModelIndex(), 0, d->mPlacesModel->rowCount() - 1);
+    }
 }
 
 PlaceTreeModel::~PlaceTreeModel()
