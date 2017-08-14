@@ -123,6 +123,11 @@ set(gwenviewlib_SRCS
     imageformats/imageformats.cpp
 #     imageformats/jpegplugin.cpp
 #     imageformats/jpeghandler.cpp
+    imageformats/fitsplugin.cpp
+    imageformats/fitsplugin.h
+    imageformats/fitshandler.cpp
+    imageformats/fitsformat/bayer.c
+    imageformats/fitsformat/fitsdata.cpp
     imagemetainfomodel.cpp
     imagescaler.cpp
     imageutils.cpp
@@ -235,6 +240,7 @@ target_link_libraries(gwenviewlib
     ${PNG_LIBRARIES}
     ${LCMS2_LIBRARIES}
     ${PHONON_LIBRARY}
+    ${CFITSIO_LIBRARIES}
     )
 if (WIN32)
     target_link_libraries(gwenviewlib ${EXPAT_LIBRARIES})

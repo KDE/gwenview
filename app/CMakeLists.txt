@@ -3,6 +3,17 @@ include_directories(
     ${EXIV2_INCLUDE_DIR}
     )
 
+# This hack is needed to include the fitsplugin moc file in main.cpp
+# Otherwise the linker complains about: undefined reference to `qt_static_plugin_FitsPlugin()'
+# This symbol is defined in the moc file, but it is not a visible symbol after libgwenview is linked.
+# If Q_IMPORT_PLUGIN(FitsPlugin) is moved to the library, gwenview crashes on the first call to FitsPlugin()
+# when the vtable is looked up in the plugin registration.
+# The json and include files must be copied here locally otherwise the moc complains about these "missing files".
+IF (UNIX AND NOT APPLE)
+    FILE(COPY ${CMAKE_SOURCE_DIR}/lib/imageformats/fitsplugin.json DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/)
+    FILE(COPY ${CMAKE_SOURCE_DIR}/lib/imageformats/fitsplugin.h DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/)
+ENDIF ()
+
 # For lib/gwenviewconfig.h and config-gwenview.h
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}/..

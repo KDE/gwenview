@@ -21,6 +21,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Self
 #include "imagemetainfomodel.h"
 
+#include "imageformats/fitsformat/fitsdata.h"
+
 // Qt
 #include <QSize>
 #include <QDebug>
@@ -37,6 +39,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <exiv2/iptc.hpp>
 
 // Local
+#include "urlutils.h"
 
 namespace Gwenview
 {
@@ -46,6 +49,7 @@ enum GroupRow {
     NoGroup = -1,
     GeneralGroup,
     ExifGroup,
+    FitsGroup,
     IptcGroup,
     XmpGroup
 };
@@ -302,9 +306,10 @@ ImageMetaInfoModel::ImageMetaInfoModel()
 : d(new ImageMetaInfoModelPrivate)
 {
     d->q = this;
-    d->mMetaInfoGroupVector.resize(4);
+    d->mMetaInfoGroupVector.resize(5);
     d->mMetaInfoGroupVector[GeneralGroup] = new MetaInfoGroup(i18nc("@title:group General info about the image", "General"));
     d->mMetaInfoGroupVector[ExifGroup] = new MetaInfoGroup("EXIF");
+    d->mMetaInfoGroupVector[FitsGroup] = new MetaInfoGroup("FITS");
     d->mMetaInfoGroupVector[IptcGroup] = new MetaInfoGroup("IPTC");
     d->mMetaInfoGroupVector[XmpGroup]  = new MetaInfoGroup("XMP");
     d->initGeneralGroup();
@@ -325,6 +330,61 @@ void ImageMetaInfoModel::setUrl(const QUrl &url)
     d->setGroupEntryValue(GeneralGroup, "General.Name", item.name());
     d->setGroupEntryValue(GeneralGroup, "General.Size", sizeString);
     d->setGroupEntryValue(GeneralGroup, "General.Time", timeString);
+
+    if (UrlUtils::urlIsFastLocalFile(url) && (url.fileName().endsWith(".fit", Qt::CaseInsensitive) ||
+        url.fileName().endsWith(".fits", Qt::CaseInsensitive))) {
+        FITSData fitsLoader;
+        MetaInfoGroup* group = d->mMetaInfoGroupVector[FitsGroup];
+        QFile file(url.toLocalFile());
+
+        if (!file.open(QIODevice::ReadOnly)) {
+            return;
+        }
+
+        if (fitsLoader.loadFITS(file)) {
+            QString recordList;
+            int nkeys = 0;
+
+            fitsLoader.getFITSRecord(recordList, nkeys);
+            for (int i = 0; i < nkeys; i++)
+            {
+                QString record = recordList.mid(i * 80, 80);
+                QString key;
+                QString keyStr;
+                QString value;
+
+                if (!record.contains("=")) {
+                    key = record.section(' ', 0, 0).simplified();
+                    keyStr = key;
+                    value = record.section(' ', 1, -1).simplified();
+                } else {
+                    key = record.section('=', 0, 0).simplified();
+                    if (record.contains('/')) {
+                        keyStr = record.section('/', -1, -1).simplified();
+                        value = record.section('=', 1, -1).section('/', 0, 0);
+                    } else {
+                        keyStr = key;
+                        value = record.section('=', 1, -1);
+                    }
+                    value.remove("\'");
+                    value = value.simplified();
+                }
+                if (value.isEmpty()) {
+                    continue;
+                }
+
+                // Check if the value is a number and make it more readable
+                bool ok = false;
+                float number = value.toFloat(&ok);
+
+                if (ok) {
+                    value = QString::number(number);
+                }
+
+                group->addEntry("Fits."+key, keyStr, value);
+            }
+        }
+    }
 }
 
 void ImageMetaInfoModel::setImageSize(const QSize& size)
@@ -390,6 +450,8 @@ void ImageMetaInfoModel::getInfoForKey(const QString& key, QString* label, QStri
         group = d->mMetaInfoGroupVector[GeneralGroup];
     } else if (key.startsWith(QLatin1String("Exif"))) {
         group = d->mMetaInfoGroupVector[ExifGroup];
+    } else if (key.startsWith(QLatin1String("Fits"))) {
+        group = d->mMetaInfoGroupVector[FitsGroup];
     } else if (key.startsWith(QLatin1String("Iptc"))) {
         group = d->mMetaInfoGroupVector[IptcGroup];
     } else if (key.startsWith(QLatin1String("Xmp"))) {

@@ -40,6 +40,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/imageformats/imageformats.h>
 #include "mainwindow.h"
 
+#if defined(Q_OS_LINUX)
+#include <lib/moc_fitsplugin.cpp>
+#endif
+
 class StartHelper
 {
 public:
@@ -157,3 +161,5 @@ int main(int argc, char *argv[])
 
     return app.exec();
 }
+
+Q_IMPORT_PLUGIN(FitsPlugin)
