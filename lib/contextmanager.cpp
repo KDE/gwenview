@@ -46,6 +46,7 @@ struct ContextManagerPrivate
     QUrl mCurrentUrl;
 
     QUrl mUrlToSelect;
+    QUrl mTargetUrl;
 
     bool mSelectedFileItemListNeedsUpdate;
     QSet<QByteArray> mQueuedSignals;
@@ -277,6 +278,17 @@ void ContextManager::setUrlToSelect(const QUrl &url)
     d->mUrlToSelect = url;
     setCurrentUrl(url);
     selectUrlToSelect();
+}
+
+QUrl ContextManager::targetUrl() const
+{
+    return d->mTargetUrl;
+}
+
+void ContextManager::setTargetUrl(const QUrl &url)
+{
+    GV_RETURN_IF_FAIL(url.isValid());
+    d->mTargetUrl = url;
 }
 
 void ContextManager::slotRowsInserted()
