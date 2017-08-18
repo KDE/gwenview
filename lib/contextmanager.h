@@ -71,6 +71,10 @@ public:
 
     void setUrlToSelect(const QUrl&);
 
+    QUrl targetUrl() const;
+
+    void setTargetUrl(const QUrl&);
+
 Q_SIGNALS:
     void currentDirUrlChanged(const QUrl&);
     void currentUrlChanged(const QUrl&);

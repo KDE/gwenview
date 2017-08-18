@@ -22,8 +22,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #define FILEOPERATIONS_H
 
 #include <QUrl>
+#include <QWidget>
 
 class QWidget;
+class ContextManager;
 
 namespace Gwenview
 {
@@ -33,9 +35,9 @@ namespace FileOperations
 
 enum Operation { TRASH, COPY, MOVE, LINK, UNKNOWN, PUT };
 
-void copyTo(const QList<QUrl>& urlList, QWidget* parent);
-void moveTo(const QList<QUrl>& urlList, QWidget* parent);
-void linkTo(const QList<QUrl>& urlList, QWidget* parent);
+void copyTo(const QList<QUrl>& urlList, QWidget* parent, ContextManager* contextManager);
+void moveTo(const QList<QUrl>& urlList, QWidget* parent, ContextManager* contextManager);
+void linkTo(const QList<QUrl>& urlList, QWidget* parent, ContextManager* contextManager);
 void trash(const QList<QUrl>& urlList, QWidget* parent);
 void del(const QList<QUrl>& urlList, QWidget* parent);
 void rename(const QUrl &url, QWidget* parent);
