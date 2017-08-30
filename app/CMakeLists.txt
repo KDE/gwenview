@@ -60,6 +60,9 @@ ki18n_wrap_ui(gwenview_SRCS
     browsemainpage.ui
     )
 
+qt5_add_resources(gwenview_SRCS gwenview.qrc)
+
+
 if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
     ki18n_wrap_ui(gwenview_SRCS
         semanticinfosidebaritem.ui
@@ -102,9 +105,6 @@ endif (APPLE)
 
 install(TARGETS gwenview
     ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
-
-install(FILES gwenviewui.rc
-    DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/gwenview)
 
 install(PROGRAMS org.kde.gwenview.desktop
     DESTINATION ${KDE_INSTALL_APPDIR})

@@ -11,7 +11,17 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake )
 cmake_minimum_required (VERSION 2.8.12 FATAL_ERROR)
 set (QT_MIN_VERSION "5.6.0")
 
-find_package(ECM 1.7.0 REQUIRED NO_MODULE)
+option(RUN_UNINSTALL "test run uninstalled apps (experimental)" FALSE)
+
+set(ECM_VERSION 1.7.0)
+# ECM setup
+if (RUN_UNINSTALL)
+   set(ECM_VERSION "5.38.0")
+endif()
+
+
+
+find_package(ECM ${ECM_VERSION} REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
 include(KDEInstallDirs)
