@@ -102,7 +102,7 @@ static void copyMoveOrLink(Operation operation, const QList<QUrl>& urlList, QWid
         Q_ASSERT(0);
     }
     KJobWidgets::setWindow(job, parent);
-    job->ui()->setAutoErrorHandlingEnabled(true);
+    job->uiDelegate()->setAutoErrorHandlingEnabled(true);
 }
 
 static void delOrTrash(KIO::JobUiDelegate::DeletionType deletionType, const QList<QUrl>& urlList, QWidget* parent)
@@ -218,7 +218,7 @@ void rename(const QUrl &oldUrl, QWidget* parent)
     KIO::SimpleJob* job = KIO::rename(oldUrl, newUrl, KIO::HideProgressInfo);
     KJobWidgets::setWindow(job, parent);
     if (!job->exec()) {
-        job->ui()->showErrorMessage();
+        job->uiDelegate()->showErrorMessage();
         return;
     }
     ThumbnailProvider::moveThumbnail(oldUrl, newUrl);
