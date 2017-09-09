@@ -131,6 +131,7 @@ struct CropWidgetPrivate : public Ui_CropWidget
         QList<QSizeF> ratioList;
         const qreal sqrt2 = qSqrt(2.);
         ratioList
+                << QSizeF(16, 9)
                 << QSizeF(7, 5)
                 << QSizeF(3, 2)
                 << QSizeF(4, 3)
