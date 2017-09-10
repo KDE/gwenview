@@ -88,17 +88,8 @@ struct CacheItem
         }
         QString path = url.path();
         Exiv2ImageLoader loader;
-        QByteArray header;
-        {
-            QFile file(path);
-            if (!file.open(QIODevice::ReadOnly)) {
-                qWarning() << "Could not open" << path << "for reading";
-                return false;
-            }
-            header = file.read(65536); // FIXME: Is this big enough?
-        }
 
-        if (!loader.load(header)) {
+        if (!loader.load(path)) {
             return false;
         }
         Exiv2::Image::AutoPtr img = loader.popImage();

@@ -51,6 +51,7 @@ public:
     Exiv2ImageLoader();
     ~Exiv2ImageLoader();
 
+    bool load(const QString&);
     bool load(const QByteArray&);
     QString errorMessage() const;
     Exiv2::Image::AutoPtr popImage();
