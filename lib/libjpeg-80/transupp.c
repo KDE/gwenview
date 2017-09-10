@@ -1543,6 +1543,7 @@ EXTERN(void)
 jcopy_markers_execute (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 		       JCOPY_OPTION option)
 {
+  (void)option; /* Suppress compiler unused parameter warning. */
   jpeg_saved_marker_ptr marker;
 
   /* In the current implementation, we don't actually need to examine the
