@@ -490,6 +490,7 @@ void KIPIInterface::slotDirectoryChanged()
 #ifdef GWENVIEW_KIPI_WITH_CREATE_METHODS
 KIPI::FileReadWriteLock* KIPIInterface::createReadWriteLock(const QUrl& url) const
 {
+    Q_UNUSED(url);
     return NULL;
 }
 

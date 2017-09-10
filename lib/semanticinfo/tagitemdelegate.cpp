@@ -59,6 +59,8 @@ QList<QWidget*> TagItemDelegate::createItemWidgets(const QModelIndex &index) con
                          << QEvent::MouseButtonRelease \
                          << QEvent::MouseButtonDblClick);
 
+    Q_UNUSED(index);
+
     QToolButton* assignToAllButton = new QToolButton;
     initButton(assignToAllButton);
     assignToAllButton->setIcon(QIcon::fromTheme("fill-color")); /* FIXME: Probably not the appropriate icon */
