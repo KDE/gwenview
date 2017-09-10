@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Qt
 #include <QByteArray>
 #include <QString>
+#include <QFile>
 
 // KDE
 
@@ -52,22 +53,26 @@ Exiv2ImageLoader::~Exiv2ImageLoader()
     delete d;
 }
 
+bool Exiv2ImageLoader::load(const QString& filePath)
+{
+    QByteArray filePathByteArray = QFile::encodeName(filePath);
+    try {
+        d->mImage = Exiv2::ImageFactory::open(filePathByteArray.constData());
+        d->mImage->readMetadata();
+    } catch (const Exiv2::Error& error) {
+        d->mErrorMessage = error.what();
+        return false;
+    }
+    return true;
+}
+
 bool Exiv2ImageLoader::load(const QByteArray& data)
 {
     try {
         d->mImage = Exiv2::ImageFactory::open((unsigned char*)data.constData(), data.size());
         d->mImage->readMetadata();
-#if EXIV2_VERSION >= EXIV2_MAKE_VERSION(0, 14, 0)
-        // For some unknown reason, trying to catch Exiv2::Error fails with Exiv2
-        // >=0.14. For now, just catch std::exception. I would welcome any
-        // explanation.
-    } catch (const std::exception& error) {
-        d->mErrorMessage = error.what();
-#else
-        // In libexiv2 0.12, Exiv2::Error::what() returns an std::string.
     } catch (const Exiv2::Error& error) {
-        d->mErrorMessage = error.what().c_str();
-#endif
+        d->mErrorMessage = error.what();
         return false;
     }
     return true;
