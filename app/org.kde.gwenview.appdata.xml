@@ -52,6 +52,7 @@
   <summary xml:lang="el">Προβολέας εικόνων</summary>
   <summary xml:lang="en-GB">Image Viewer</summary>
   <summary xml:lang="es">Visor de imágenes</summary>
+  <summary xml:lang="fr">Afficheur d'image</summary>
   <summary xml:lang="it">Visualizzatore di immagini</summary>
   <summary xml:lang="nl">Afbeeldingenviewer</summary>
   <summary xml:lang="nn">Biletvisar</summary>
@@ -80,6 +81,7 @@
     <p xml:lang="el">Το Gwenview είναι ένας γρήγορος και εύχρηστος προβολέας εικόνων για το KDE, ιδανικός για περιήγηση και εμφάνιση συλλογών από εικόνες.</p>
     <p xml:lang="en-GB">Gwenview is a fast and easy to use image viewer by KDE, ideal for browsing and displaying a collection of images.</p>
     <p xml:lang="es">Gwenview es un visor de imágenes rápido y fácil de usar creado por KDE, ideal para explorar y mostrar una colección de imágenes.</p>
+    <p xml:lang="fr">Gwenview est un afficheur d'images rapide et facile à utiliser pour KDE, idéal pour parcourir et afficher une collection d'images.</p>
     <p xml:lang="it">Gwenview è un visore di immagini veloce e semplice da usare di KDE, ideale per sfogliare e visualizzare una collezione di immagini.</p>
     <p xml:lang="nl">Gwenview is een snelle en gemakkelijk te gebruiken viewer voor afbeeldingen door KDE, ideaal voor bladeren door en weergeven van een verzameling afbeeldingen.</p>
     <p xml:lang="nn">Gwenview er ein biletvisar frå KDE. Han passar svært godt for å bla gjennom og visa ei samling med bilete.</p>
