@@ -69,6 +69,7 @@ struct GvCorePrivate
     {
         QFileDialog dialog(mMainWindow);
         dialog.setAcceptMode(QFileDialog::AcceptSave);
+        dialog.setWindowTitle(i18nc("@title:window", "Save Image"));
         dialog.selectUrl(url);
 
         QStringList supportedMimetypes;
