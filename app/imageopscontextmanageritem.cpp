@@ -79,15 +79,14 @@ struct ImageOpsContextManagerItem::Private
     {
         KActionCollection* actionCollection = mMainWindow->actionCollection();
         KActionCategory* edit = new KActionCategory(i18nc("@title actions category - means actions changing image", "Edit"), actionCollection);
+
         mRotateLeftAction = edit->addAction("rotate_left", q, SLOT(rotateLeft()));
-        mRotateLeftAction->setPriority(QAction::LowPriority);
         mRotateLeftAction->setText(i18n("Rotate Left"));
         mRotateLeftAction->setToolTip(i18nc("@info:tooltip", "Rotate image to the left"));
         mRotateLeftAction->setIcon(QIcon::fromTheme("object-rotate-left"));
         actionCollection->setDefaultShortcut(mRotateLeftAction, Qt::CTRL + Qt::Key_L);
 
         mRotateRightAction = edit->addAction("rotate_right", q, SLOT(rotateRight()));
-        mRotateRightAction->setPriority(QAction::LowPriority);
         mRotateRightAction->setText(i18n("Rotate Right"));
         mRotateRightAction->setToolTip(i18nc("@info:tooltip", "Rotate image to the right"));
         mRotateRightAction->setIcon(QIcon::fromTheme("object-rotate-right"));
