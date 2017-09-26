@@ -25,7 +25,7 @@ Gwenview: an image viewer
 #include <QApplication>
 #include <QImage>
 
-#include <float.h>
+#include <math.h>
 
 FITSData::FITSData()
 {

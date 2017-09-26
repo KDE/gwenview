@@ -40,9 +40,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/imageformats/imageformats.h>
 #include "mainwindow.h"
 
-#if defined(Q_OS_LINUX)
-#include <lib/moc_fitsplugin.cpp>
-#endif
+// This hack is needed to include the fitsplugin moc file in main.cpp
+// Otherwise the linker complains about: undefined reference to `qt_static_plugin_FitsPlugin()'
+// This symbol is defined in the moc file, but it is not a visible symbol after libgwenview is linked.
+// If Q_IMPORT_PLUGIN(FitsPlugin) is moved to the library, gwenview crashes on the first call to FitsPlugin()
+// when the vtable is looked up in the plugin registration.
+#include <../lib/imageformats/moc_fitsplugin.cpp>
 
 class StartHelper
 {

@@ -56,6 +56,7 @@ include_directories(
     ${EXIV2_INCLUDE_DIR}
     ${JPEG_INCLUDE_DIR}
     ${PNG_INCLUDE_DIRS}
+    ${CFITSIO_INCLUDE_DIR}
     )
 
 # For config-gwenview.h
