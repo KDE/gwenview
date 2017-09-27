@@ -18,6 +18,17 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
+
+/*
+   *****************************************************
+   ******************************************************
+   **** NOTE: This class is deprecated. Do not use it. **
+   ****   It will be removed in the QT 6 timeframe.    **
+   ******************************************************
+   ******************************************************
+*/
+
+
 #ifndef CONTEXTBARBUTTON_H
 #define CONTEXTBARBUTTON_H
 

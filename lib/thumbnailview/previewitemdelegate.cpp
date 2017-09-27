@@ -37,6 +37,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QHoverEvent>
 #include <QDateTime>
 #include <QDebug>
+#include <QToolButton>
 
 // KDE
 #include <KDirModel>
@@ -48,7 +49,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include "archiveutils.h"
-#include "contextbarbutton.h"
 #include "itemeditor.h"
 #include "paintutils.h"
 #include "thumbnailview.h"
@@ -610,16 +610,20 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
     d->mContextBar = new QWidget(d->mView->viewport());
     d->mContextBar->hide();
 
-    d->mToggleSelectionButton = new ContextBarButton("list-add");
+    d->mToggleSelectionButton = new QToolButton;
+    d->mToggleSelectionButton->setIcon(SmallIcon("list-add"));
     connect(d->mToggleSelectionButton, &QToolButton::clicked, this, &PreviewItemDelegate::slotToggleSelectionClicked);
 
-    d->mFullScreenButton = new ContextBarButton("view-fullscreen");
+    d->mFullScreenButton = new QToolButton;
+    d->mFullScreenButton->setIcon(SmallIcon("view-fullscreen"));
     connect(d->mFullScreenButton, &QToolButton::clicked, this, &PreviewItemDelegate::slotFullScreenClicked);
 
-    d->mRotateLeftButton = new ContextBarButton("object-rotate-left");
+    d->mRotateLeftButton = new QToolButton;
+    d->mRotateLeftButton->setIcon(SmallIcon("object-rotate-left"));
     connect(d->mRotateLeftButton, &QToolButton::clicked, this, &PreviewItemDelegate::slotRotateLeftClicked);
 
-    d->mRotateRightButton = new ContextBarButton("object-rotate-right");
+    d->mRotateRightButton = new QToolButton;
+    d->mRotateRightButton->setIcon(SmallIcon("object-rotate-right"));
     connect(d->mRotateRightButton, &QToolButton::clicked, this, &PreviewItemDelegate::slotRotateRightClicked);
 
     QHBoxLayout* layout = new QHBoxLayout(d->mContextBar);
@@ -631,7 +635,8 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
     layout->addWidget(d->mRotateRightButton);
 
     // Save button
-    d->mSaveButton = new ContextBarButton("document-save", d->mView->viewport());
+    d->mSaveButton = new QToolButton(d->mView->viewport());
+    d->mSaveButton->setIcon(SmallIcon("document-save"));
     d->mSaveButton->hide();
     connect(d->mSaveButton, &QToolButton::clicked, this, &PreviewItemDelegate::slotSaveClicked);
 }
