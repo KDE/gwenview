@@ -1278,7 +1278,9 @@ void MainWindow::toggleFullScreen(bool checked)
         menuBar()->hide();
         toolBar()->hide();
 
+        qApp->setProperty("KDE_COLOR_SCHEME_PATH", d->mGvCore->fullScreenPaletteName());
         QApplication::setPalette(d->mGvCore->palette(GvCore::FullScreenPalette));
+
         d->mFullScreenContent->setFullScreenMode(true);
         d->mBrowseMainPage->setFullScreenMode(true);
         d->mViewMainPage->setFullScreenMode(true);
@@ -1293,7 +1295,9 @@ void MainWindow::toggleFullScreen(bool checked)
         setAutoSaveSettings();
 
         // Back to normal
+        qApp->setProperty("KDE_COLOR_SCHEME_PATH", QVariant());
         QApplication::setPalette(d->mGvCore->palette(GvCore::NormalPalette));
+
         d->mFullScreenContent->setFullScreenMode(false);
         d->mBrowseMainPage->setFullScreenMode(false);
         d->mViewMainPage->setFullScreenMode(false);

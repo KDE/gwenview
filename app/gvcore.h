@@ -33,6 +33,7 @@ class QUrl;
 
 class QAbstractItemModel;
 class QPalette;
+class QString;
 
 namespace Gwenview
 {
@@ -65,6 +66,7 @@ public:
     void addUrlToRecentFiles(const QUrl &);
 
     QPalette palette(PaletteType type) const;
+    QString fullScreenPaletteName() const;
 
 public Q_SLOTS:
     void saveAll();

@@ -64,6 +64,7 @@ struct GvCorePrivate
     HistoryModel* mRecentFoldersModel;
     RecentFilesModel* mRecentFilesModel;
     QPalette mPalettes[4];
+    QString mFullScreenPaletteName;
 
     bool showSaveAsDialog(const QUrl &url, QUrl* outUrl, QByteArray* format)
     {
@@ -128,14 +129,16 @@ struct GvCorePrivate
         QString name = GwenviewConfig::fullScreenColorScheme();
         if (name.isEmpty()) {
             // Default color scheme
-            QString path = QStandardPaths::locate(QStandardPaths::AppDataLocation, "color-schemes/fullscreen.colors");
-            config = KSharedConfig::openConfig(path);
+            mFullScreenPaletteName = QStandardPaths::locate(QStandardPaths::AppDataLocation, "color-schemes/fullscreen.colors");
+            config = KSharedConfig::openConfig(mFullScreenPaletteName);
         } else if (name.contains('/')) {
             // Full path to a .colors file
-            config = KSharedConfig::openConfig(name);
+            mFullScreenPaletteName = name;
+            config = KSharedConfig::openConfig(mFullScreenPaletteName);
         } else {
             // Standard KDE color scheme
-            config = KSharedConfig::openConfig(QString("color-schemes/%1.colors").arg(name), KConfig::FullConfig, QStandardPaths::AppDataLocation);
+            mFullScreenPaletteName = QString("color-schemes/%1.colors").arg(name);
+            config = KSharedConfig::openConfig(mFullScreenPaletteName, KConfig::FullConfig, QStandardPaths::AppDataLocation);
         }
         mPalettes[GvCore::FullScreenPalette] = KColorScheme::createApplicationPalette(config);
 
@@ -373,6 +376,11 @@ void GvCore::slotConfigChanged()
 QPalette GvCore::palette(GvCore::PaletteType type) const
 {
     return d->mPalettes[type];
+}
+
+QString GvCore::fullScreenPaletteName() const
+{
+    return d->mFullScreenPaletteName;
 }
 
 } // namespace
