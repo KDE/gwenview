@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QScrollBar>
 #include <QPainter>
 #include <QTimeLine>
+#include <QToolButton>
 #include <QToolTip>
 #include <QDebug>
 
@@ -43,7 +44,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "lib/hud/hudtheme.h"
 #include "lib/paintutils.h"
 #include "lib/thumbnailview/abstractthumbnailviewhelper.h"
-#include "lib/thumbnailview/contextbarbutton.h"
 
 namespace Gwenview
 {
@@ -73,16 +73,17 @@ struct ThumbnailBarItemDelegatePrivate
 
     ThumbnailBarItemDelegate* q;
     ThumbnailView* mView;
-    ContextBarButton* mToggleSelectionButton;
+    QToolButton* mToggleSelectionButton;
 
     QColor mBorderColor;
     QPersistentModelIndex mIndexUnderCursor;
 
     void setupToggleSelectionButton()
     {
-        mToggleSelectionButton = new ContextBarButton("list-add", mView->viewport());
+        mToggleSelectionButton = new QToolButton(mView->viewport());
+        mToggleSelectionButton->setIcon(SmallIcon("list-add"));
         mToggleSelectionButton->hide();
-        QObject::connect(mToggleSelectionButton, &ContextBarButton::clicked, q, &ThumbnailBarItemDelegate::toggleSelection);
+        QObject::connect(mToggleSelectionButton, &QToolButton::clicked, q, &ThumbnailBarItemDelegate::toggleSelection);
     }
 
     void showToolTip(QHelpEvent* helpEvent)
