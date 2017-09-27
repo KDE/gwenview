@@ -27,28 +27,17 @@ else (CFITSIO_INCLUDE_DIR AND CFITSIO_LIBRARIES)
         endif (PKG_CONFIG_FOUND)
     endif (NOT WIN32)
 
-    if(ANDROID)
-        find_path(CFITSIO_INCLUDE_DIR fitsio.h
-                ${BUILD_KSTARSLITE_DIR}/include
-                NO_DEFAULT_PATH
-                )
-    else(ANDROID)
-        find_path(CFITSIO_INCLUDE_DIR fitsio.h
-                ${PC_CFITSIO_INCLUDE_DIRS}
-                ${_obIncDir}
-                ${GNUWIN32_DIR}/include
-                )
-    endif(ANDROID)
+    find_path(CFITSIO_INCLUDE_DIR fitsio.h
+            ${PC_CFITSIO_INCLUDE_DIRS}
+            ${_obIncDir}
+            ${GNUWIN32_DIR}/include
+            )
 
     find_library(CFITSIO_LIBRARIES NAMES cfitsio libcfitsio
             PATHS
-            if(ANDROID)
-            ${BUILD_KSTARSLITE_DIR}/android_libs/${ANDROID_ARCHITECTURE}
-            else(ANDROID)
             ${PC_CFITSIO_LIBRARY_DIRS}
             ${_obIncDir}
             ${GNUWIN32_DIR}/include
-            endif(ANDROID)
             )
 
     if(CFITSIO_INCLUDE_DIR AND CFITSIO_LIBRARIES)
