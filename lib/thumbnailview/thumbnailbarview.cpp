@@ -81,7 +81,7 @@ struct ThumbnailBarItemDelegatePrivate
     void setupToggleSelectionButton()
     {
         mToggleSelectionButton = new QToolButton(mView->viewport());
-        mToggleSelectionButton->setIcon(SmallIcon("list-add"));
+        mToggleSelectionButton->setIcon(QIcon::fromTheme("list-add"));
         mToggleSelectionButton->hide();
         QObject::connect(mToggleSelectionButton, &QToolButton::clicked, q, &ThumbnailBarItemDelegate::toggleSelection);
     }
@@ -140,7 +140,7 @@ struct ThumbnailBarItemDelegatePrivate
     void updateToggleSelectionButton()
     {
         bool isSelected = mView->selectionModel()->isSelected(mIndexUnderCursor);
-        mToggleSelectionButton->setIcon(SmallIcon(isSelected ? "list-remove" : "list-add"));
+        mToggleSelectionButton->setIcon(QIcon::fromTheme(isSelected ? "list-remove" : "list-add"));
     }
 };
 
