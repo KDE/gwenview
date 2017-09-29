@@ -537,7 +537,7 @@ struct PreviewItemDelegatePrivate
 
     void updateToggleSelectionButton()
     {
-        mToggleSelectionButton->setIcon(SmallIcon(
+        mToggleSelectionButton->setIcon(QIcon::fromTheme(
                                             mView->selectionModel()->isSelected(mIndexUnderCursor) ? "list-remove" : "list-add"
                                         ));
     }
@@ -611,19 +611,19 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
     d->mContextBar->hide();
 
     d->mToggleSelectionButton = new QToolButton;
-    d->mToggleSelectionButton->setIcon(SmallIcon("list-add"));
+    d->mToggleSelectionButton->setIcon(QIcon::fromTheme("list-add"));
     connect(d->mToggleSelectionButton, &QToolButton::clicked, this, &PreviewItemDelegate::slotToggleSelectionClicked);
 
     d->mFullScreenButton = new QToolButton;
-    d->mFullScreenButton->setIcon(SmallIcon("view-fullscreen"));
+    d->mFullScreenButton->setIcon(QIcon::fromTheme("view-fullscreen"));
     connect(d->mFullScreenButton, &QToolButton::clicked, this, &PreviewItemDelegate::slotFullScreenClicked);
 
     d->mRotateLeftButton = new QToolButton;
-    d->mRotateLeftButton->setIcon(SmallIcon("object-rotate-left"));
+    d->mRotateLeftButton->setIcon(QIcon::fromTheme("object-rotate-left"));
     connect(d->mRotateLeftButton, &QToolButton::clicked, this, &PreviewItemDelegate::slotRotateLeftClicked);
 
     d->mRotateRightButton = new QToolButton;
-    d->mRotateRightButton->setIcon(SmallIcon("object-rotate-right"));
+    d->mRotateRightButton->setIcon(QIcon::fromTheme("object-rotate-right"));
     connect(d->mRotateRightButton, &QToolButton::clicked, this, &PreviewItemDelegate::slotRotateRightClicked);
 
     QHBoxLayout* layout = new QHBoxLayout(d->mContextBar);
@@ -636,7 +636,7 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
 
     // Save button
     d->mSaveButton = new QToolButton(d->mView->viewport());
-    d->mSaveButton->setIcon(SmallIcon("document-save"));
+    d->mSaveButton->setIcon(QIcon::fromTheme("document-save"));
     d->mSaveButton->hide();
     connect(d->mSaveButton, &QToolButton::clicked, this, &PreviewItemDelegate::slotSaveClicked);
 }
