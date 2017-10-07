@@ -21,6 +21,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Self
 #include "documentview.h"
 
+// C++ Standard library
+#include <cmath>
+
 // Qt
 #include <QApplication>
 #include <QGraphicsLinearLayout>
@@ -71,6 +74,8 @@ namespace Gwenview
 
 static const qreal REAL_DELTA = 0.001;
 static const qreal MAXIMUM_ZOOM_VALUE = qreal(DocumentView::MaximumZoom);
+static const auto MINSTEP = sqrt(0.5);
+static const auto MAXSTEP = sqrt(2.0);
 
 static const int COMPARE_MARGIN = 4;
 
@@ -263,18 +268,17 @@ struct DocumentViewPrivate
         qreal min = q->minimumZoom();
 
         mZoomSnapValues.clear();
-        if (min < 1.) {
-            mZoomSnapValues << min;
-            for (qreal invZoom = 16.; invZoom > 1.; invZoom /= 2.) {
-                qreal zoom = 1. / invZoom;
-                if (zoom > min) {
-                    mZoomSnapValues << zoom;
-                }
-            }
-        }
-        for (qreal zoom = 1; zoom <= MAXIMUM_ZOOM_VALUE ; zoom += 1.) {
+        for (qreal zoom = MINSTEP; zoom > min; zoom *= MINSTEP) {
             mZoomSnapValues << zoom;
         }
+        mZoomSnapValues << min;
+
+        std::reverse(mZoomSnapValues.begin(), mZoomSnapValues.end());
+
+        for (qreal zoom = 1; zoom < MAXIMUM_ZOOM_VALUE; zoom *= MAXSTEP) {
+            mZoomSnapValues << zoom;
+        }
+        mZoomSnapValues << MAXIMUM_ZOOM_VALUE;
 
         q->minimumZoomChanged(min);
     }
@@ -570,6 +574,12 @@ void DocumentView::setZoom(qreal zoom)
 qreal DocumentView::zoom() const
 {
     return d->mAdapter->zoom();
+}
+
+void DocumentView::resizeEvent(QGraphicsSceneResizeEvent *event)
+{
+    d->updateZoomSnapValues();
+    QGraphicsWidget::resizeEvent(event);
 }
 
 void DocumentView::wheelEvent(QGraphicsSceneWheelEvent* event)
