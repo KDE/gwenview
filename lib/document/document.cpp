@@ -352,6 +352,11 @@ QSize Document::size() const
     return d->mSize;
 }
 
+QSize Document::scaledSize() const
+{
+    return d->mSize / qApp->devicePixelRatio();
+}
+
 bool Document::hasAlphaChannel() const
 {
     if (d->mImage.isNull()) {

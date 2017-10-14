@@ -35,6 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QTimer>
 #include <QPointer>
 #include <QDebug>
+#include <QApplication>
 
 // LCMS2
 #include <lcms2.h>
@@ -140,7 +141,7 @@ struct RasterImageViewPrivate
     QRectF mapViewportToZoomedImage(const QRectF& viewportRect) const
     {
         return QRectF(
-                   viewportRect.topLeft() - q->imageOffset() + q->scrollPos(),
+                   viewportRect.topLeft() - (q->imageOffset() / qApp->devicePixelRatio()) + q->scrollPos(),
                    viewportRect.size()
                );
     }
@@ -163,7 +164,8 @@ struct RasterImageViewPrivate
             return;
         }
 
-        mAlternateBuffer = QPixmap(size);
+        mAlternateBuffer = QPixmap(size * qApp->devicePixelRatio());
+        mAlternateBuffer.setDevicePixelRatio(qApp->devicePixelRatio());
         mAlternateBuffer.fill(Qt::transparent);
         {
             QPainter painter(&mAlternateBuffer);
@@ -377,6 +379,7 @@ void RasterImageView::onScrollPosChanged(const QPointF& oldPos)
     {
         if (d->mAlternateBuffer.size() != d->mCurrentBuffer.size()) {
             d->mAlternateBuffer = QPixmap(d->mCurrentBuffer.size());
+            d->mAlternateBuffer.setDevicePixelRatio(d->mCurrentBuffer.devicePixelRatio());
         }
         QPainter painter(&d->mAlternateBuffer);
         painter.drawPixmap(-delta, d->mCurrentBuffer);
@@ -384,7 +387,12 @@ void RasterImageView::onScrollPosChanged(const QPointF& oldPos)
     qSwap(d->mCurrentBuffer, d->mAlternateBuffer);
 
     // Scale missing parts
-    QRegion bufferRegion = QRegion(d->mCurrentBuffer.rect().translated(scrollPos().toPoint()));
+    const qreal dpr = qApp->devicePixelRatio();
+    QRect scaledCurrentBufferRect(QRectF(d->mCurrentBuffer.rect().x() / dpr,
+                                         d->mCurrentBuffer.rect().y() / dpr,
+                                         d->mCurrentBuffer.rect().width() / dpr,
+                                         d->mCurrentBuffer.rect().height() / dpr).toAlignedRect());
+    QRegion bufferRegion = QRegion(scaledCurrentBufferRect.translated(scrollPos().toPoint()));
     QRegion updateRegion = bufferRegion - bufferRegion.translated(-delta.toPoint());
     updateBuffer(updateRegion);
     update();
@@ -392,12 +400,14 @@ void RasterImageView::onScrollPosChanged(const QPointF& oldPos)
 
 void RasterImageView::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/)
 {
+    d->mCurrentBuffer.setDevicePixelRatio(qApp->devicePixelRatio());
+
     QPointF topLeft = imageOffset();
     if (zoomToFit()) {
         // In zoomToFit mode, scale crudely the buffer to fit the screen. This
         // provide an approximate rendered which will be replaced when the scheduled
         // proper scale is ready.
-        QSizeF size = documentSize() * zoom();
+        QSizeF size = scaledDocumentSize() * zoom();
         painter->drawPixmap(topLeft.x(), topLeft.y(), size.width(), size.height(), d->mCurrentBuffer);
     } else {
         painter->drawPixmap(topLeft, d->mCurrentBuffer);

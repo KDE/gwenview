@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QMatrix>
 #include <QDebug>
 #include <QUrl>
+#include <QApplication>
 
 // KDE
 
@@ -63,7 +64,12 @@ DocumentLoadedImpl::~DocumentLoadedImpl()
 void DocumentLoadedImpl::init()
 {
     if (!d->mQuietInit) {
-        emit imageRectUpdated(document()->image().rect());
+        const qreal dpr = qApp->devicePixelRatio();
+        QRect imageRect = QRectF(document()->image().rect().x() / dpr,
+                                 document()->image().rect().y() / dpr,
+                                 document()->image().rect().width() / dpr,
+                                 document()->image().rect().height() / dpr).toAlignedRect();
+        emit imageRectUpdated(imageRect);
         emit loaded();
     }
 }
@@ -103,7 +109,12 @@ AbstractDocumentEditor* DocumentLoadedImpl::editor()
 void DocumentLoadedImpl::setImage(const QImage& image)
 {
     setDocumentImage(image);
-    imageRectUpdated(image.rect());
+    const qreal dpr = qApp->devicePixelRatio();
+    QRect imageRect = QRectF(image.rect().x() / dpr,
+                             image.rect().y() / dpr,
+                             image.rect().width() / dpr,
+                             image.rect().height() / dpr).toAlignedRect();
+    imageRectUpdated(imageRect);
 }
 
 void DocumentLoadedImpl::applyTransformation(Orientation orientation)
@@ -112,7 +123,12 @@ void DocumentLoadedImpl::applyTransformation(Orientation orientation)
     QMatrix matrix = ImageUtils::transformMatrix(orientation);
     image = image.transformed(matrix);
     setDocumentImage(image);
-    imageRectUpdated(image.rect());
+    const qreal dpr = qApp->devicePixelRatio();
+    QRect imageRect = QRectF(image.rect().x() / dpr,
+                             image.rect().y() / dpr,
+                             image.rect().width() / dpr,
+                             image.rect().height() / dpr).toAlignedRect();
+    imageRectUpdated(imageRect);
 }
 
 QByteArray DocumentLoadedImpl::rawData() const

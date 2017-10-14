@@ -67,14 +67,31 @@ public:
 
     qreal computeZoomToFitWidth() const;
 
+    /**
+     * Returns the size of the loaded document
+     * This value is NOT adjusted for HiDPI rendering -
+     * meaning that the real size of the image will be returned
+    */
     QSizeF documentSize() const;
 
+    /**
+     * Returns the size of the loaded document
+     * This value is adjusted for HiDPI rendering -
+     * meaning that the scaled size of the image will be returned
+    */
+    QSizeF scaledDocumentSize() const;
+
+    /*
+     * The size of the image that is currently visible,
+     * in HiDPI-scaled coordinates
+     */
     QSizeF visibleImageSize() const;
 
     /**
      * If the image is smaller than the view, imageOffset is the distance from
      * the topleft corner of the view to the topleft corner of the image.
      * Neither x nor y can be negative.
+     * This is in image coordinats and NOT adjusted for HiDPI rendering.
      */
     QPointF imageOffset() const;
 

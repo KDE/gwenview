@@ -23,6 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QImage>
 #include <QRegion>
 #include <QDebug>
+#include <QApplication>
 
 // KDE
 
@@ -126,9 +127,13 @@ void ImageScaler::doScale()
 
 void ImageScaler::scaleRect(const QRect& rect)
 {
+    const qreal dpr = qApp->devicePixelRatio();
+    const QRect dRect = QRectF(rect.x() * dpr, rect.y() * dpr, rect.width() * dpr, rect.height() * dpr).toAlignedRect();
+
     const qreal REAL_DELTA = 0.001;
     if (qAbs(d->mZoom - 1.0) < REAL_DELTA) {
-        QImage tmp = d->mDocument->image().copy(rect);
+        QImage tmp = d->mDocument->image().copy(dRect);
+        tmp.setDevicePixelRatio(dpr);
         scaledRect(rect.left(), rect.top(), tmp);
         return;
     }
@@ -144,6 +149,10 @@ void ImageScaler::scaleRect(const QRect& rect)
         image = d->mDocument->image();
         zoom = d->mZoom;
     }
+    const QRect imageRect = QRectF(image.rect().x() / dpr,
+                                   image.rect().y() / dpr,
+                                   image.rect().width() / dpr,
+                                   image.rect().height() / dpr).toAlignedRect();
     // If rect contains "half" pixels, make sure sourceRect includes them
     QRectF sourceRectF(
         rect.left() / zoom,
@@ -151,7 +160,7 @@ void ImageScaler::scaleRect(const QRect& rect)
         rect.width() / zoom,
         rect.height() / zoom);
 
-    sourceRectF = sourceRectF.intersected(image.rect());
+    sourceRectF = sourceRectF.intersected(imageRect);
     QRect sourceRect = PaintUtils::containingRect(sourceRectF);
     if (sourceRect.isEmpty()) {
         return;
@@ -165,8 +174,8 @@ void ImageScaler::scaleRect(const QRect& rect)
     if (needsSmoothMargins) {
         sourceLeftMargin = qMin(sourceRect.left(), SMOOTH_MARGIN);
         sourceTopMargin = qMin(sourceRect.top(), SMOOTH_MARGIN);
-        sourceRightMargin = qMin(image.rect().right() - sourceRect.right(), SMOOTH_MARGIN);
-        sourceBottomMargin = qMin(image.rect().bottom() - sourceRect.bottom(), SMOOTH_MARGIN);
+        sourceRightMargin = qMin(imageRect.right() - sourceRect.right(), SMOOTH_MARGIN);
+        sourceBottomMargin = qMin(imageRect.bottom() - sourceRect.bottom(), SMOOTH_MARGIN);
         sourceRect.adjust(
             -sourceLeftMargin,
             -sourceTopMargin,
@@ -190,22 +199,32 @@ void ImageScaler::scaleRect(const QRect& rect)
                        );
     QRect destRect = PaintUtils::containingRect(destRectF);
 
+    QRect dSourceRect = QRectF(sourceRect.x() * dpr, sourceRect.y() * dpr, sourceRect.width() * dpr, sourceRect.height() * dpr).toAlignedRect();
+    QRectF dDestRectF = QRectF(
+                           dSourceRect.left() * zoom,
+                           dSourceRect.top() * zoom,
+                           dSourceRect.width() * zoom,
+                           dSourceRect.height() * zoom
+                       );
+    QRect dDestRect = PaintUtils::containingRect(dDestRectF);
+
     QImage tmp;
-    tmp = image.copy(sourceRect);
+    tmp = image.copy(dSourceRect);
     tmp = tmp.scaled(
-              destRect.width(),
-              destRect.height(),
+              dDestRect.width(),
+              dDestRect.height(),
               Qt::IgnoreAspectRatio, // Do not use KeepAspectRatio, it can lead to skipped rows or columns
               d->mTransformationMode);
 
     if (needsSmoothMargins) {
         tmp = tmp.copy(
-                  destLeftMargin, destTopMargin,
-                  destRect.width() - (destLeftMargin + destRightMargin),
-                  destRect.height() - (destTopMargin + destBottomMargin)
+                  destLeftMargin*dpr, destTopMargin*dpr,
+                  dDestRect.width() - (destLeftMargin + destRightMargin)*dpr,
+                  dDestRect.height() - (destTopMargin + destBottomMargin)*dpr
               );
     }
 
+    tmp.setDevicePixelRatio(dpr);
     emit scaledRect(destRect.left() + destLeftMargin, destRect.top() + destTopMargin, tmp);
 }
 

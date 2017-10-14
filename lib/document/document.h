@@ -133,13 +133,35 @@ public:
 
     void waitUntilLoaded();
 
+    /**
+     * Returns the size of the loaded document
+     * This value is NOT adjusted for HiDPI rendering -
+     * meaning that the real size of the image will be returned
+    */
     QSize size() const;
 
+    /**
+     * Returns the size of the loaded document
+     * This value is  adjusted for HiDPI rendering -
+     * meaning that the scaled size of the image will be returned
+    */
+    QSize scaledSize() const;
+
+    /**
+     * Returns the width of the loaded document
+     * This value is NOT adjusted for HiDPI rendering -
+     * meaning that the real size of the image will be returned
+    */
     int width() const
     {
         return size().width();
     }
 
+    /**
+     * Returns the height of the loaded document
+     * This value is NOT adjusted for HiDPI rendering -
+     * meaning that the real size of the image will be returned
+    */
     int height() const
     {
         return size().height();
