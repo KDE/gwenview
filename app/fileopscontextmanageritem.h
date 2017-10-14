@@ -66,6 +66,7 @@ private Q_SLOTS:
     void createFolder();
     void populateOpenMenu();
     void openWith(QAction* action);
+    void openContainingFolder();
 
 private:
     QList<QUrl> urlList() const;
@@ -89,6 +90,7 @@ private:
     QAction * mShowPropertiesAction;
     QAction * mCreateFolderAction;
     QAction * mOpenWithAction;
+    QAction * mOpenContainingFolderAction;
     QList<QAction*> mRegularFileActionList;
     QList<QAction*> mTrashFileActionList;
     KService::List mServiceList;

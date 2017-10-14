@@ -567,6 +567,8 @@ void ViewMainPage::showContextMenu()
     addActionToMenu(&menu, d->mActionCollection, "file_link_to");
     menu.addSeparator();
     addActionToMenu(&menu, d->mActionCollection, "file_open_with");
+    addActionToMenu(&menu, d->mActionCollection, "file_open_containing_folder");
+    
     menu.exec(QCursor::pos());
 }
 

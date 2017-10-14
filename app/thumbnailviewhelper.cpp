@@ -94,6 +94,7 @@ void ThumbnailViewHelper::showContextMenu(QWidget* parent)
         d->addActionToMenu(popup, "file_link_to");
         popup.addSeparator();
         d->addActionToMenu(popup, "file_open_with");
+        d->addActionToMenu(popup, "file_open_containing_folder");
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
         d->addActionToMenu(popup, "edit_tags");
 #endif

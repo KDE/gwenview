@@ -49,6 +49,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KUrlMimeData>
 #include <KFileItemActions>
 #include <KFileItemListProperties>
+#include <KIO/OpenFileManagerWindowJob>
 
 // Local
 #include <lib/contextmanager.h>
@@ -187,6 +188,9 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, QL
     connect(menu, &QMenu::aboutToShow, this, &FileOpsContextManagerItem::populateOpenMenu);
     connect(menu, &QMenu::triggered, this, &FileOpsContextManagerItem::openWith);
 
+    mOpenContainingFolderAction = file->addAction("file_open_containing_folder", this, SLOT(openContainingFolder()));
+    mOpenContainingFolderAction->setText(i18n("Open Containing Folder"));
+
     mRegularFileActionList
             << mRenameAction
             << mTrashAction
@@ -197,6 +201,7 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, QL
             << mLinkToAction
             << createSeparator(this)
             << mOpenWithAction
+            << mOpenContainingFolderAction
             << mShowPropertiesAction
             << createSeparator(this)
             << mCreateFolderAction
@@ -243,6 +248,7 @@ void FileOpsContextManagerItem::updateActions()
     mDelAction->setEnabled(selectionNotEmpty);
     mOpenWithAction->setEnabled(selectionNotEmpty);
     mRenameAction->setEnabled(count == 1);
+    mOpenContainingFolderAction->setEnabled(selectionNotEmpty);
 
     mCreateFolderAction->setEnabled(dirUrlIsValid);
     mShowPropertiesAction->setEnabled(dirUrlIsValid || urlIsValid);
@@ -410,6 +416,11 @@ void FileOpsContextManagerItem::openWith(QAction* action)
 
     Q_ASSERT(service);
     KRun::runService(*service, list, mGroup);
+}
+
+void FileOpsContextManagerItem::openContainingFolder()
+{
+    KIO::highlightInFileManager(urlList());
 }
 
 } // namespace
