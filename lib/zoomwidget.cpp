@@ -157,7 +157,6 @@ void ZoomWidget::setActions(QAction* zoomToFitAction, QAction* actualSizeAction,
     int width = qMax(d->mZoomToFitButton->sizeHint().width(), d->mActualSizeButton->sizeHint().width());
     d->mZoomToFitButton->setFixedWidth(width);
     d->mActualSizeButton->setFixedWidth(width);
-    d->mZoomToFitWidthButton->setFixedWidth(width);
 }
 
 void ZoomWidget::slotZoomSliderActionTriggered()
