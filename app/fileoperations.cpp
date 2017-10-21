@@ -50,30 +50,45 @@ namespace FileOperations
 static void copyMoveOrLink(Operation operation, const QList<QUrl>& urlList, QWidget* parent, ContextManager* contextManager)
 {
     Q_ASSERT(!urlList.isEmpty());
+    const int numberOfImages = urlList.count();
 
     QFileDialog dialog(parent->nativeParentWidget(), QString());
     dialog.setAcceptMode(QFileDialog::AcceptSave);
 
+    // Figure out what the window title and buttons should say,
+    // depending on the operation and how many images are selected
     switch (operation) {
     case COPY:
-        dialog.setWindowTitle(i18nc("@title:window", "Copy To"));
+        if (numberOfImages == 1) {
+            dialog.setWindowTitle(i18nc("@title:window %1 file name", "Copy %1", urlList.constFirst().fileName()));
+        } else {
+            dialog.setWindowTitle(i18ncp("@title:window %1 number of images", "Copy %1 image", "Copy %1 images", numberOfImages));
+        }
         dialog.setLabelText(QFileDialog::DialogLabel::Accept, i18nc("@action:button", "Copy"));
         break;
     case MOVE:
-        dialog.setWindowTitle(i18nc("@title:window", "Move To"));
+        if (numberOfImages == 1) {
+            dialog.setWindowTitle(i18nc("@title:window %1 file name", "Move %1", urlList.constFirst().fileName()));
+        } else {
+            dialog.setWindowTitle(i18ncp("@title:window %1 number of images", "Move %1 image", "Move %1 images", numberOfImages));
+        }
         dialog.setLabelText(QFileDialog::DialogLabel::Accept, i18nc("@action:button", "Move"));
         break;
     case LINK:
-        dialog.setWindowTitle(i18nc("@title:window", "Link To"));
+        if (numberOfImages == 1) {
+            dialog.setWindowTitle(i18nc("@title:window %1 file name", "Link %1", urlList.constFirst().fileName()));
+        } else {
+            dialog.setWindowTitle(i18ncp("@title:window %1 number of images", "Link %1 image", "Link %1 images", numberOfImages));
+        }
         dialog.setLabelText(QFileDialog::DialogLabel::Accept, i18nc("@action:button", "Link"));
         break;
     default:
         Q_ASSERT(0);
     }
 
-    if (urlList.count() == 1) {
+    if (numberOfImages == 1) {
         dialog.setFileMode(QFileDialog::AnyFile);
-        dialog.selectUrl(urlList.first());
+        dialog.selectUrl(urlList.constFirst());
     } else {
         dialog.setFileMode(QFileDialog::Directory);
         dialog.setOption(QFileDialog::ShowDirsOnly, true);
