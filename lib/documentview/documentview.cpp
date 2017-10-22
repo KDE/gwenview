@@ -578,6 +578,7 @@ qreal DocumentView::zoom() const
 
 void DocumentView::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
+    d->resizeAdapterWidget();
     d->updateZoomSnapValues();
     QGraphicsWidget::resizeEvent(event);
 }
@@ -667,7 +668,6 @@ qreal DocumentView::minimumZoom() const
 void DocumentView::setCompareMode(bool compare)
 {
     d->mCompareMode = compare;
-    d->resizeAdapterWidget();
     if (compare) {
         d->mHud->show();
         d->mHud->setZValue(1);
@@ -729,7 +729,6 @@ void DocumentView::emitFocused()
 void DocumentView::setGeometry(const QRectF& rect)
 {
     QGraphicsWidget::setGeometry(rect);
-    d->resizeAdapterWidget();
     if (d->mBirdEyeView) {
         d->mBirdEyeView->slotZoomOrSizeChanged();
     }

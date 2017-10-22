@@ -45,8 +45,11 @@ struct ZoomSliderPrivate
 
     void updateButtons()
     {
-        mZoomOutButton->setEnabled(mSlider->value() > mSlider->minimum());
-        mZoomInButton->setEnabled(mSlider->value() < mSlider->maximum());
+        // Use QSlider::sliderPosition(), not QSlider::value() because when we are
+        // called from slotZoomSliderActionTriggered(), QSlider::value() has not
+        // been updated yet.
+        mZoomOutButton->setEnabled(mSlider->sliderPosition() > mSlider->minimum());
+        mZoomInButton->setEnabled(mSlider->sliderPosition() < mSlider->maximum());
     }
 };
 
