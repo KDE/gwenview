@@ -20,8 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 // Self
 #include "imagemetainfomodel.h"
-
-#include "imageformats/fitsformat/fitsdata.h"
+#include "config-gwenview.h"
 
 // Qt
 #include <QSize>
@@ -39,7 +38,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <exiv2/iptc.hpp>
 
 // Local
+#ifdef HAVE_FITS
+#include "imageformats/fitsformat/fitsdata.h"
 #include "urlutils.h"
+#endif
 
 namespace Gwenview
 {
@@ -49,7 +51,9 @@ enum GroupRow {
     NoGroup = -1,
     GeneralGroup,
     ExifGroup,
+#ifdef HAVE_FITS
     FitsGroup,
+#endif
     IptcGroup,
     XmpGroup
 };
@@ -306,10 +310,16 @@ ImageMetaInfoModel::ImageMetaInfoModel()
 : d(new ImageMetaInfoModelPrivate)
 {
     d->q = this;
+#ifdef HAVE_FITS
     d->mMetaInfoGroupVector.resize(5);
+#else
+    d->mMetaInfoGroupVector.resize(4);
+#endif
     d->mMetaInfoGroupVector[GeneralGroup] = new MetaInfoGroup(i18nc("@title:group General info about the image", "General"));
     d->mMetaInfoGroupVector[ExifGroup] = new MetaInfoGroup("EXIF");
+#ifdef HAVE_FITS
     d->mMetaInfoGroupVector[FitsGroup] = new MetaInfoGroup("FITS");
+#endif
     d->mMetaInfoGroupVector[IptcGroup] = new MetaInfoGroup("IPTC");
     d->mMetaInfoGroupVector[XmpGroup]  = new MetaInfoGroup("XMP");
     d->initGeneralGroup();
@@ -331,6 +341,7 @@ void ImageMetaInfoModel::setUrl(const QUrl &url)
     d->setGroupEntryValue(GeneralGroup, "General.Size", sizeString);
     d->setGroupEntryValue(GeneralGroup, "General.Time", timeString);
 
+#ifdef HAVE_FITS
     if (UrlUtils::urlIsFastLocalFile(url) && (url.fileName().endsWith(".fit", Qt::CaseInsensitive) ||
         url.fileName().endsWith(".fits", Qt::CaseInsensitive))) {
         FITSData fitsLoader;
@@ -385,6 +396,7 @@ void ImageMetaInfoModel::setUrl(const QUrl &url)
             }
         }
     }
+#endif
 }
 
 void ImageMetaInfoModel::setImageSize(const QSize& size)
@@ -450,8 +462,10 @@ void ImageMetaInfoModel::getInfoForKey(const QString& key, QString* label, QStri
         group = d->mMetaInfoGroupVector[GeneralGroup];
     } else if (key.startsWith(QLatin1String("Exif"))) {
         group = d->mMetaInfoGroupVector[ExifGroup];
+#ifdef HAVE_FITS
     } else if (key.startsWith(QLatin1String("Fits"))) {
         group = d->mMetaInfoGroupVector[FitsGroup];
+#endif
     } else if (key.startsWith(QLatin1String("Iptc"))) {
         group = d->mMetaInfoGroupVector[IptcGroup];
     } else if (key.startsWith(QLatin1String("Xmp"))) {

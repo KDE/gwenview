@@ -4,3 +4,4 @@
 #cmakedefine KIPI_FOUND 1
 #define GV_TEST_DATA_DIR "@CMAKE_CURRENT_SOURCE_DIR@/tests/data"
 #cmakedefine HAVE_X11 ${HAVE_X11}
+#cmakedefine HAVE_FITS ${HAVE_FITS}

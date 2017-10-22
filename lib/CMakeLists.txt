@@ -56,8 +56,13 @@ include_directories(
     ${EXIV2_INCLUDE_DIR}
     ${JPEG_INCLUDE_DIR}
     ${PNG_INCLUDE_DIRS}
-    ${CFITSIO_INCLUDE_DIR}
     )
+
+if(HAVE_FITS)
+    include_directories(
+        ${CFITSIO_INCLUDE_DIR}
+        )
+endif()
 
 # For config-gwenview.h
 include_directories(
@@ -124,11 +129,6 @@ set(gwenviewlib_SRCS
     imageformats/imageformats.cpp
 #     imageformats/jpegplugin.cpp
 #     imageformats/jpeghandler.cpp
-    imageformats/fitsplugin.cpp
-    imageformats/fitsplugin.h
-    imageformats/fitshandler.cpp
-    imageformats/fitsformat/bayer.c
-    imageformats/fitsformat/fitsdata.cpp
     imagemetainfomodel.cpp
     imagescaler.cpp
     imageutils.cpp
@@ -174,6 +174,16 @@ set(gwenviewlib_SRCS
     zoomwidget.cpp
     ${GV_JPEG_DIR}/transupp.c
     )
+
+if(HAVE_FITS)
+    set(gwenviewlib_SRCS
+        ${gwenviewlib_SRCS}
+        imageformats/fitsplugin.cpp
+        imageformats/fitshandler.cpp
+        imageformats/fitsformat/bayer.c
+        imageformats/fitsformat/fitsdata.cpp
+        )
+endif()
 
 if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
     set(gwenviewlib_SRCS
@@ -241,8 +251,12 @@ target_link_libraries(gwenviewlib
     ${PNG_LIBRARIES}
     ${LCMS2_LIBRARIES}
     ${PHONON_LIBRARY}
-    ${CFITSIO_LIBRARIES}
     )
+
+if(HAVE_FITS)
+    target_link_libraries(gwenviewlib ${CFITSIO_LIBRARIES})
+endif()
+
 if (WIN32)
     target_link_libraries(gwenviewlib ${EXPAT_LIBRARIES})
 endif()
