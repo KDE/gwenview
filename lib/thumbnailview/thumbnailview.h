@@ -153,6 +153,11 @@ public Q_SLOTS:
      */
     void setThumbnailAspectRatio(qreal ratio);
 
+    /**
+     * Sets the device pixel ratio for HiDPI rendering.
+     */
+    void setThumbnailDevicePixelRatio(qreal dpr);
+    
     void scrollToSelectedIndex();
 
     void generateThumbnailsForItems();

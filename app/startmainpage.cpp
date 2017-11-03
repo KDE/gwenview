@@ -107,7 +107,7 @@ struct StartMainPagePrivate : public Ui_StartMainPage
         delegate->setContextBarActions(PreviewItemDelegate::NoAction);
         delegate->setTextElideMode(Qt::ElideLeft);
         view->setItemDelegate(delegate);
-        view->setThumbnailWidth(128);
+        view->setThumbnailWidth(128 * qApp->devicePixelRatio());
         view->setCreateThumbnailsForRemoteUrls(false);
         QModelIndex index = view->model()->index(0, 0);
         if (index.isValid()) {

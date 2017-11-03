@@ -204,6 +204,7 @@ struct PreviewItemDelegatePrivate
 
             const QRect rect = mView->visualRect(mIndexUnderCursor);
             const QPixmap thumbnailPix = mView->thumbnailForIndex(index);
+            qDebug() << "THUMB thumbnailPix dpr" << thumbnailPix.devicePixelRatio();
             showContextBar(rect, thumbnailPix);
             if (mView->isModified(mIndexUnderCursor)) {
                 showSaveButton(rect);

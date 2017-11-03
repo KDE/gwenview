@@ -254,6 +254,7 @@ void BrowseMainPage::loadConfig()
     // won't be updated. That's why we do it ourself.
     d->mThumbnailView->setThumbnailAspectRatio(GwenviewConfig::thumbnailAspectRatio());
     d->mThumbnailView->setThumbnailWidth(GwenviewConfig::thumbnailSize());
+    d->mThumbnailView->setThumbnailDevicePixelRatio(qApp->devicePixelRatio());
 
     Q_FOREACH(QAction * action, d->mSortAction->actions()) {
         if (sortingFromSortAction(action) == GwenviewConfig::sorting()) {

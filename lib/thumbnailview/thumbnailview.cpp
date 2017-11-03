@@ -170,6 +170,7 @@ struct ThumbnailViewPrivate
     ThumbnailView::ThumbnailScaleMode mScaleMode;
     QSize mThumbnailSize;
     qreal mThumbnailAspectRatio;
+    qreal mThumbnailDevicePixelRatio;
     AbstractDocumentInfoProvider* mDocumentInfoProvider;
     AbstractThumbnailViewHelper* mThumbnailViewHelper;
     ThumbnailForUrl mThumbnailForUrl;
@@ -211,8 +212,9 @@ struct ThumbnailViewPrivate
         Q_ASSERT(mDocumentInfoProvider);
         KFileItem item = fileItemForIndex(index);
         QUrl url = item.url();
-        ThumbnailGroup::Enum group = ThumbnailGroup::fromPixelSize(mThumbnailSize.width());
+        ThumbnailGroup::Enum group = ThumbnailGroup::fromPixelSize(mThumbnailSize.width() * mThumbnailDevicePixelRatio);
         QPixmap pix;
+        pix.setDevicePixelRatio(mThumbnailDevicePixelRatio);
         QSize fullSize;
         mDocumentInfoProvider->thumbnailForDocument(url, group, &pix, &fullSize);
         mThumbnailForUrl[url] = Thumbnail(QPersistentModelIndex(index), QDateTime::currentDateTime());
@@ -222,7 +224,7 @@ struct ThumbnailViewPrivate
     void appendItemsToThumbnailProvider(const KFileItemList& list)
     {
         if (mThumbnailProvider) {
-            ThumbnailGroup::Enum group = ThumbnailGroup::fromPixelSize(mThumbnailSize.width());
+            ThumbnailGroup::Enum group = ThumbnailGroup::fromPixelSize(mThumbnailSize.width() * mThumbnailDevicePixelRatio);
             mThumbnailProvider->setThumbnailGroup(group);
             mThumbnailProvider->appendItems(list);
         }
@@ -233,11 +235,13 @@ struct ThumbnailViewPrivate
         const QPixmap& mGroupPix = thumbnail->mGroupPix;
         const int groupSize = qMax(mGroupPix.width(), mGroupPix.height());
         const int fullSize = qMax(thumbnail->mFullSize.width(), thumbnail->mFullSize.height());
-        if (fullSize == groupSize && mGroupPix.height() <= mThumbnailSize.height() && mGroupPix.width() <= mThumbnailSize.width()) {
+        if (fullSize == groupSize && mGroupPix.height() <= (mThumbnailSize.height() * mThumbnailDevicePixelRatio) && mGroupPix.width() <= (mThumbnailSize.width() * mThumbnailDevicePixelRatio)) {
             thumbnail->mAdjustedPix = mGroupPix;
+            thumbnail->mAdjustedPix.setDevicePixelRatio(mThumbnailDevicePixelRatio);
             thumbnail->mRough = false;
         } else {
             thumbnail->mAdjustedPix = scale(mGroupPix, Qt::FastTransformation);
+            thumbnail->mAdjustedPix.setDevicePixelRatio(mThumbnailDevicePixelRatio);
             thumbnail->mRough = true;
         }
     }
@@ -257,25 +261,26 @@ struct ThumbnailViewPrivate
 
     QPixmap scale(const QPixmap& pix, Qt::TransformationMode transformationMode)
     {
+        QPixmap scaledPix = QPixmap();
         switch (mScaleMode) {
         case ThumbnailView::ScaleToFit:
-            return pix.scaled(mThumbnailSize.width(), mThumbnailSize.height(), Qt::KeepAspectRatio, transformationMode);
+            scaledPix = pix.scaled(mThumbnailSize.width() * mThumbnailDevicePixelRatio, mThumbnailSize.height() * mThumbnailDevicePixelRatio, Qt::KeepAspectRatio, transformationMode);
             break;
         case ThumbnailView::ScaleToSquare: {
             int minSize = qMin(pix.width(), pix.height());
             QPixmap pix2 = pix.copy((pix.width() - minSize) / 2, (pix.height() - minSize) / 2, minSize, minSize);
-            return pix2.scaled(mThumbnailSize.width(), mThumbnailSize.height(), Qt::KeepAspectRatio, transformationMode);
+            scaledPix = pix2.scaled(mThumbnailSize.width() * mThumbnailDevicePixelRatio, mThumbnailSize.height() * mThumbnailDevicePixelRatio, Qt::KeepAspectRatio, transformationMode);
+            break;
         }
         case ThumbnailView::ScaleToHeight:
-            return pix.scaledToHeight(mThumbnailSize.height(), transformationMode);
+            scaledPix = pix.scaledToHeight(mThumbnailSize.height() * mThumbnailDevicePixelRatio, transformationMode);
             break;
         case ThumbnailView::ScaleToWidth:
-            return pix.scaledToWidth(mThumbnailSize.width(), transformationMode);
+            scaledPix = pix.scaledToWidth(mThumbnailSize.width() * mThumbnailDevicePixelRatio, transformationMode);
             break;
         }
-        // Keep compiler happy
-        Q_ASSERT(0);
-        return QPixmap();
+        scaledPix.setDevicePixelRatio(mThumbnailDevicePixelRatio);
+        return scaledPix;
     }
 };
 
@@ -293,6 +298,7 @@ ThumbnailView::ThumbnailView(QWidget* parent)
     // mThumbnailSize...)
     d->mThumbnailSize = QSize(1, 1);
     d->mThumbnailAspectRatio = 1;
+    d->mThumbnailDevicePixelRatio = 1;
     d->mCreateThumbnailsForRemoteUrls = true;
 
     setFrameShape(QFrame::NoFrame);
@@ -374,6 +380,7 @@ void ThumbnailView::updateThumbnailSize()
     }
     QPixmap icon = DesktopIcon("chronometer", waitingThumbnailSize);
     QPixmap pix(value);
+    pix.setDevicePixelRatio(d->mThumbnailDevicePixelRatio);
     pix.fill(Qt::transparent);
     QPainter painter(&pix);
     painter.setOpacity(0.5);
@@ -420,6 +427,12 @@ void ThumbnailView::setThumbnailAspectRatio(qreal ratio)
     int width = d->mThumbnailSize.width();
     int height = round((qreal)width / d->mThumbnailAspectRatio);
     d->mThumbnailSize = QSize(width, height);
+    updateThumbnailSize();
+}
+
+void ThumbnailView::setThumbnailDevicePixelRatio(qreal dpr)
+{
+    d->mThumbnailDevicePixelRatio = dpr;
     updateThumbnailSize();
 }
 
@@ -614,9 +627,10 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index, QSize* fullSi
     // If dir or archive, generate a thumbnail from fileitem pixmap
     MimeTypeUtils::Kind kind = MimeTypeUtils::fileItemKind(item);
     if (kind == MimeTypeUtils::KIND_ARCHIVE || kind == MimeTypeUtils::KIND_DIR) {
-        int groupSize = ThumbnailGroup::pixelSize(ThumbnailGroup::fromPixelSize(d->mThumbnailSize.height()));
+        int groupSize = ThumbnailGroup::pixelSize(ThumbnailGroup::fromPixelSize(d->mThumbnailSize.height() * d->mThumbnailDevicePixelRatio));
         if (thumbnail.mGroupPix.isNull() || thumbnail.mGroupPix.height() < groupSize) {
-            QPixmap pix = KIconLoader::global()->loadMimeTypeIcon(item.iconName(), KIconLoader::Desktop, d->mThumbnailSize.height());
+            QPixmap pix = KIconLoader::global()->loadMimeTypeIcon(item.iconName(), KIconLoader::Desktop, d->mThumbnailSize.height() * d->mThumbnailDevicePixelRatio);
+            pix.setDevicePixelRatio(d->mThumbnailDevicePixelRatio);
 
             thumbnail.initAsIcon(pix);
             if (kind == MimeTypeUtils::KIND_ARCHIVE) {
@@ -641,14 +655,17 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index, QSize* fullSi
         if (fullSize) {
             *fullSize = QSize();
         }
+        qDebug() << "waiting thumbnail";
         return d->mWaitingThumbnail;
     }
 
     // Adjust thumbnail
     if (thumbnail.mAdjustedPix.isNull()) {
+        qDebug() << "roughAdjustThumbnail";
         d->roughAdjustThumbnail(&thumbnail);
     }
     if (thumbnail.mRough && !d->mSmoothThumbnailQueue.contains(url)) {
+        qDebug() << "mSmoothThumbnailQueue.enqueue";
         d->mSmoothThumbnailQueue.enqueue(url);
         if (!d->mSmoothThumbnailTimer.isActive()) {
             d->mSmoothThumbnailTimer.start(SMOOTH_DELAY);
@@ -928,6 +945,7 @@ void ThumbnailView::smoothNextThumbnail()
     GV_RETURN_IF_FAIL2(it != d->mThumbnailForUrl.end(), url << "not in mThumbnailForUrl.");
 
     Thumbnail& thumbnail = it.value();
+    qDebug() << "scale to " << d->mThumbnailSize.width() << "*" << d->mThumbnailDevicePixelRatio;
     thumbnail.mAdjustedPix = d->scale(thumbnail.mGroupPix, Qt::SmoothTransformation);
     thumbnail.mRough = false;
 

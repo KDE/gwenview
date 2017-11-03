@@ -184,6 +184,7 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
         mSlider->updateToolTip();
         mThumbnailView->setThumbnailAspectRatio(DEFAULT_THUMBNAIL_ASPECT_RATIO);
         mThumbnailView->setThumbnailWidth(thumbnailSize);
+        mThumbnailView->setThumbnailDevicePixelRatio(qApp->devicePixelRatio());
         mThumbnailView->setThumbnailProvider(&mThumbnailProvider);
 
         QObject::connect(

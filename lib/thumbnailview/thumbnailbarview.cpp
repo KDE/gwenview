@@ -195,9 +195,15 @@ bool ThumbnailBarItemDelegate::eventFilter(QObject*, QEvent* event)
 
 void ThumbnailBarItemDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const
 {
+    static int ct = 0;
+    ct++;
+    
     bool isSelected = option.state & QStyle::State_Selected;
     bool isCurrent = d->mView->selectionModel()->currentIndex() == index;
     QPixmap thumbnailPix = d->mView->thumbnailForIndex(index);
+    qDebug() << "THUMB " << ct;
+    qDebug() << "THUMB ThumbnailBarItemDelegate::paint dpr" << thumbnailPix.devicePixelRatio();
+    thumbnailPix.save("/tmp/gv/thumb_" + QString::number(index.row()) + "_" + QString::number(index.column()) + "_" + QString::number(ct) + ".png");
     QRect rect = option.rect;
 
     QStyleOptionViewItem opt = option;
@@ -216,8 +222,8 @@ void ThumbnailBarItemDelegate::paint(QPainter * painter, const QStyleOptionViewI
         QRect thumbnailRect = QRect(
                                   rect.left() + (rect.width() - thumbnailPix.width()) / 2,
                                   rect.top() + (rect.height() - thumbnailPix.height()) / 2 - 1,
-                                  thumbnailPix.width(),
-                                  thumbnailPix.height());
+                                  thumbnailPix.width() * thumbnailPix.devicePixelRatio(),
+                                  thumbnailPix.height() * thumbnailPix.devicePixelRatio());
 
         if (!thumbnailPix.hasAlphaChannel()) {
             d->drawShadow(painter, thumbnailRect);
@@ -438,7 +444,11 @@ struct ThumbnailBarViewPrivate
         if (q->thumbnailScaleMode() == ThumbnailView::ScaleToFit) {
             q->setGridSize(QSize(gridWidth, gridHeight));
         }
+        qDebug() << "widgetSize" << widgetSize;
+        qDebug() << "setThumbnailWidth" << gridHeight;
+        qDebug() << "setThumbnailheight" << (gridWidth - ITEM_MARGIN * 2);
         q->setThumbnailWidth(gridWidth - ITEM_MARGIN * 2);
+        q->setThumbnailDevicePixelRatio(qApp->devicePixelRatio());
     }
 };
 
