@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KDE
 #include <KDirLister>
 #include <KFileItem>
+#include <KProtocolManager>
 
 // Local
 #include <lib/document/documentfactory.h>
@@ -52,6 +53,7 @@ struct ContextManagerPrivate
     QSet<QByteArray> mQueuedSignals;
     KFileItemList mSelectedFileItemList;
 
+    bool mDirListerFinished = false;
     QTimer* mQueuedSignalsTimer;
 
     void queueSignal(const QByteArray& signal)
@@ -117,6 +119,8 @@ ContextManager::ContextManager(SortedDirModel* dirModel, QObject* parent)
     connect(d->mDirModel->dirLister(), SIGNAL(redirection(QUrl)),
             SLOT(slotDirListerRedirection(QUrl)));
 
+    connect(d->mDirModel->dirLister(), static_cast<void (KDirLister::*)()>(&KDirLister::completed), this, &ContextManager::slotDirListerCompleted);
+
     d->mSelectionModel = new QItemSelectionModel(d->mDirModel);
 
     connect(d->mSelectionModel, &QItemSelectionModel::selectionChanged, this, &ContextManager::slotSelectionChanged);
@@ -149,6 +153,7 @@ void ContextManager::setCurrentUrl(const QUrl &currentUrl)
         undoGroup->setActiveStack(doc->undoStack());
     }
 
+    d->mSelectedFileItemListNeedsUpdate = true;
     currentUrlChanged(currentUrl);
 }
 
@@ -163,9 +168,14 @@ void ContextManager::setCurrentDirUrl(const QUrl &url)
     if (url == d->mCurrentDirUrl) {
         return;
     }
-    d->mCurrentDirUrl = url;
-    if (url.isValid()) {
+
+    if (url.isValid() && KProtocolManager::supportsListing(url)) {
+        d->mCurrentDirUrl = url;
         d->mDirModel->dirLister()->openUrl(url);
+        d->mDirListerFinished = false;
+    } else {
+        d->mCurrentDirUrl.clear();
+        d->mDirModel->dirLister()->clear();
     }
     currentDirUrlChanged(url);
 }
@@ -276,6 +286,7 @@ void ContextManager::setUrlToSelect(const QUrl &url)
 {
     GV_RETURN_IF_FAIL(url.isValid());
     d->mUrlToSelect = url;
+    setCurrentDirUrl(url.adjusted(QUrl::RemoveFilename));
     setCurrentUrl(url);
     selectUrlToSelect();
 }
@@ -318,12 +329,24 @@ void ContextManager::selectUrlToSelect()
     if (index.isValid()) {
         d->mSelectionModel->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect);
         d->mUrlToSelect = QUrl();
+    } else if (d->mDirListerFinished) {
+        // Desired URL cannot be found in the directory
+        // Clear the selection to avoid dragging any local files into context
+        // and manually set current URL
+        d->mSelectionModel->clearSelection();
+        setCurrentUrl(d->mUrlToSelect);
+        d->mUrlToSelect.clear();
     }
 }
 
 void ContextManager::slotDirListerRedirection(const QUrl &newUrl)
 {
     setCurrentDirUrl(newUrl);
+}
+
+void ContextManager::slotDirListerCompleted()
+{
+    d->mDirListerFinished = true;
 }
 
 

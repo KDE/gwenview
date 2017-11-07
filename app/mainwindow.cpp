@@ -668,13 +668,10 @@ struct MainWindow::Private
             isRasterImage = mContextManager->currentUrlIsRasterImage();
             canSave = isRasterImage;
             isModified = DocumentFactory::instance()->load(url)->isModified();
-            if (mCurrentMainPageId != ViewMainPageId) {
+            if (mCurrentMainPageId != ViewMainPageId
+                    && mContextManager->selectedFileItemList().count() != 1) {
                 // Saving only makes sense if exactly one image is selected
-                QItemSelection selection = mThumbnailView->selectionModel()->selection();
-                QModelIndexList indexList = selection.indexes();
-                if (indexList.count() != 1) {
-                    canSave = false;
-                }
+                canSave = false;
             }
         }
 
@@ -860,9 +857,7 @@ void MainWindow::setInitialUrl(const QUrl &_url)
         d->mBrowseAction->trigger();
         openDirUrl(url);
     } else {
-        d->mViewAction->trigger();
-        d->mViewMainPage->openUrl(url);
-        d->mContextManager->setUrlToSelect(url);
+        openUrl(url);
     }
 }
 
@@ -884,9 +879,7 @@ void MainWindow::setActiveViewModeAction(QAction* action)
         d->mCurrentMainPageId = ViewMainPageId;
         // Switching to view mode
         d->mViewStackedWidget->setCurrentWidget(d->mViewMainPage);
-        if (d->mViewMainPage->isEmpty()) {
-            openSelectedDocuments();
-        }
+        openSelectedDocuments();
         d->mPreloadDirectionIsForward = true;
         QTimer::singleShot(VIEW_PRELOAD_DELAY, this, SLOT(preloadNextUrl()));
     } else {
@@ -934,57 +927,38 @@ void MainWindow::slotThumbnailViewIndexActivated(const QModelIndex& index)
     }
 }
 
-static bool indexRowLessThan(const QModelIndex& i1, const QModelIndex& i2)
-{
-    return i1.row() < i2.row();
-}
-
 void MainWindow::openSelectedDocuments()
 {
     if (d->mCurrentMainPageId != ViewMainPageId) {
         return;
     }
 
-    QModelIndex currentIndex = d->mThumbnailView->currentIndex();
-    if (!currentIndex.isValid()) {
-        return;
-    }
-
     int count = 0;
-
     QList<QUrl> urls;
-    QUrl currentUrl;
-    QModelIndex firstDocumentIndex;
-    QModelIndexList list = d->mThumbnailView->selectionModel()->selectedIndexes();
-    // Make 'list' follow the same order as 'mThumbnailView'
-    qSort(list.begin(), list.end(), indexRowLessThan);
-
-    Q_FOREACH(const QModelIndex& index, list) {
-        KFileItem item = d->mDirModel->itemForIndex(index);
+    const auto list = d->mContextManager->selectedFileItemList();
+    for (const auto &item : list) {
         if (!item.isNull() && !ArchiveUtils::fileItemIsDirOrArchive(item)) {
-            QUrl url = item.url();
-            if (!firstDocumentIndex.isValid()) {
-                firstDocumentIndex = index;
-            }
-            urls << url;
-            if (index == currentIndex) {
-                currentUrl = url;
-            }
+            urls << item.url();
+
             ++count;
             if (count == ViewMainPage::MaxViewCount) {
                 break;
             }
         }
     }
+
     if (urls.isEmpty()) {
-        // No image to display
+        // Selection contains no fitting items
+        // Switch back to browsing mode
+        d->mBrowseAction->trigger();
+        d->mViewMainPage->reset();
         return;
     }
-    if (currentUrl.isEmpty()) {
-        // Current index is not selected, or it is not a document: set
-        // firstDocumentIndex as current
-        GV_RETURN_IF_FAIL(firstDocumentIndex.isValid());
-        d->mThumbnailView->selectionModel()->setCurrentIndex(firstDocumentIndex, QItemSelectionModel::Current);
+
+    QUrl currentUrl = d->mContextManager->currentUrl();
+    if (currentUrl.isEmpty() || !urls.contains(currentUrl)) {
+        // There is no current URL or it doesn't belong to selection
+        // This can happen when user manually selects a group of items
         currentUrl = urls.first();
     }
 
@@ -1103,27 +1077,14 @@ void MainWindow::updateToggleSideBarAction()
 void MainWindow::slotPartCompleted()
 {
     d->updateActions();
-    QUrl url = d->mViewMainPage->url();
+    const QUrl url = d->mContextManager->currentUrl();
     if (!url.isEmpty()) {
         d->mFileOpenRecentAction->addUrl(url);
         d->mGvCore->addUrlToRecentFiles(url);
     }
-    if (!KProtocolManager::supportsListing(url)) {
-        return;
-    }
 
-    QUrl dirUrl = url;
-    dirUrl = dirUrl.adjusted(QUrl::RemoveFilename);
-    dirUrl.setPath(dirUrl.path() + QString());
-    if (dirUrl.matches(d->mContextManager->currentDirUrl(), QUrl::StripTrailingSlash)) {
-        QModelIndex index = d->mDirModel->indexForUrl(url);
-        QItemSelectionModel* selectionModel = d->mThumbnailView->selectionModel();
-        if (index.isValid() && !selectionModel->isSelected(index)) {
-            // FIXME: QGV Reactivating this line prevents navigation to prev/next image
-            //selectionModel->select(index, QItemSelectionModel::SelectCurrent);
-        }
-    } else {
-        d->mContextManager->setCurrentDirUrl(dirUrl);
+    if (KProtocolManager::supportsListing(url)) {
+        const QUrl dirUrl = d->mContextManager->currentDirUrl();
         d->mGvCore->addUrlToRecentFolders(dirUrl);
     }
 }
@@ -1149,7 +1110,7 @@ void MainWindow::slotSelectionChanged()
             undoGroup->addStack(doc->undoStack());
             undoGroup->setActiveStack(doc->undoStack());
         } else {
-            undoGroup->setActiveStack(0);
+            undoGroup->setActiveStack(nullptr);
         }
     }
 
@@ -1174,7 +1135,7 @@ void MainWindow::slotCurrentDirUrlChanged(const QUrl &url)
 
 void MainWindow::slotDirModelNewItems()
 {
-    if (d->mThumbnailView->selectionModel()->hasSelection()) {
+    if (d->mContextManager->selectionModel()->hasSelection()) {
         updatePreviousNextActions();
     }
 }
@@ -1185,10 +1146,8 @@ void MainWindow::slotDirListerCompleted()
         d->mStartSlideShowWhenDirListerCompleted = false;
         QTimer::singleShot(0, d->mToggleSlideShowAction, SLOT(trigger()));
     }
-    if (d->mThumbnailView->selectionModel()->hasSelection()) {
+    if (d->mContextManager->selectionModel()->hasSelection()) {
         updatePreviousNextActions();
-    } else if (!d->mContextManager->urlToSelect().isValid()) {
-        d->goToFirstDocument();
     }
     d->mThumbnailView->scrollToSelectedIndex();
     d->mViewMainPage->thumbnailBar()->scrollToSelectedIndex();
@@ -1362,14 +1321,12 @@ void MainWindow::openFile()
 void MainWindow::openUrl(const QUrl& url)
 {
     d->setActionsDisabledOnStartMainPageEnabled(true);
-    d->mViewAction->trigger();
-    d->mViewMainPage->openUrl(url);
     d->mContextManager->setUrlToSelect(url);
+    d->mViewAction->trigger();
 }
 
 void MainWindow::showDocumentInFullScreen(const QUrl &url)
 {
-    d->mViewMainPage->openUrl(url);
     d->mContextManager->setUrlToSelect(url);
     d->mFullScreenAction->trigger();
 }
@@ -1510,7 +1467,7 @@ void MainWindow::preloadNextUrl()
         qDebug() << "Preloading disabled";
         return;
     }
-    QItemSelection selection = d->mThumbnailView->selectionModel()->selection();
+    QItemSelection selection = d->mContextManager->selectionModel()->selection();
     if (selection.size() != 1) {
         return;
     }

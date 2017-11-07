@@ -64,17 +64,7 @@ namespace Gwenview
 
 QList<QUrl> FileOpsContextManagerItem::urlList() const
 {
-    QList<QUrl> urlList;
-
-    KFileItemList list = contextManager()->selectedFileItemList();
-    if (list.count() > 0) {
-        urlList = list.urlList();
-    } else {
-        QUrl url = contextManager()->currentUrl();
-        Q_ASSERT(url.isValid());
-        urlList << url;
-    }
-    return urlList;
+    return contextManager()->selectedFileItemList().urlList();
 }
 
 void FileOpsContextManagerItem::updateServiceList()

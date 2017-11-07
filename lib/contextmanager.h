@@ -90,6 +90,7 @@ private Q_SLOTS:
     void slotRowsInserted();
     void selectUrlToSelect();
     void slotDirListerRedirection(const QUrl&);
+    void slotDirListerCompleted();
 
 private:
     ContextManagerPrivate* const d;
