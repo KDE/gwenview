@@ -64,7 +64,6 @@ Name[vi]=Bộ xem ảnh Gwenview
 Name[x-test]=xxGwenview Image Viewerxx
 Name[zh_CN]=Gwenview 图像查看器
 Name[zh_TW]=Gwenview 影像檢視程式
-# TODO: what is image/x-krl? Please register this mimetype at freedesktop.org if you need it
 MimeType=image/gif;image/jpeg;image/jp2;image/png;image/bmp;image/x-eps;image/x-icns;image/x-ico;image/x-portable-bitmap;image/x-portable-pixmap;image/x-xbitmap;image/x-xpixmap;image/x-webp;image/webp;
 X-KDE-ServiceTypes=KParts/ReadOnlyPart
 X-KDE-Library=gvpart
