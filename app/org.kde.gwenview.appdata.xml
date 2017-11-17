@@ -63,6 +63,7 @@
   <summary xml:lang="pl">Przeglądarka obrazów</summary>
   <summary xml:lang="pt">Visualizador de Imagens</summary>
   <summary xml:lang="pt-BR">Visualizador de imagens</summary>
+  <summary xml:lang="ru">Программа просмотра изображений</summary>
   <summary xml:lang="sk">Prehliadač obrázkov</summary>
   <summary xml:lang="sl">Pregledovalnik slik</summary>
   <summary xml:lang="sr">Приказивач слика</summary>
@@ -95,6 +96,7 @@
     <p xml:lang="pl">Gwenview to szybka i łatwa w użyciu przeglądarka obrazów dla KDE. Świetnie nadaje się do przeglądania i wyświetlania zbiorów obrazów.</p>
     <p xml:lang="pt">O Gwenview é um visualizador de imagens rápido e simples de usar do KDE, ideal para a navegação e apresentação de uma colecção de imagens.</p>
     <p xml:lang="pt-BR">Gwenview é um visualizador de imagens rápido e fácil de usar do KDE, ideal para navegar e exibir uma coleção de imagens.</p>
+    <p xml:lang="ru">Gwenview — быстрая и простая в использовании программа просмотра изображений от KDE.</p>
     <p xml:lang="sk">Gwenview je rýchly a jednoducho použiteľný prehliadač obrázkov pre KDE, ideálny na prehliadanie a zobrazenie kolekcie obrázkov.</p>
     <p xml:lang="sl">Gwenview je hiter in enostaven pregledovalnik slik za KDE. Idealen je za brskanje po in prikazovanje zbirk slik.</p>
     <p xml:lang="sr">Гвенвју је брз и лак за употребу приказивач слика од КДЕ‑а, идеалан за прегледање збирки слика.</p>
