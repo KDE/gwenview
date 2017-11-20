@@ -34,6 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Local
 #include <lib/document/documentfactory.h>
 #include <lib/gvdebug.h>
+#include <lib/gwenviewconfig.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
 
 namespace Gwenview
@@ -132,6 +133,16 @@ ContextManager::ContextManager(SortedDirModel* dirModel, QObject* parent)
 ContextManager::~ContextManager()
 {
     delete d;
+}
+
+void ContextManager::loadConfig()
+{
+    setTargetUrl(QUrl(GwenviewConfig::lastTargetDir()));
+}
+
+void ContextManager::saveConfig() const
+{
+    GwenviewConfig::setLastTargetDir(targetUrl().toString());
 }
 
 QItemSelectionModel* ContextManager::selectionModel() const

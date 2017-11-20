@@ -1436,6 +1436,7 @@ void MainWindow::loadConfig()
     d->mStartMainPage->loadConfig();
     d->mViewMainPage->loadConfig();
     d->mBrowseMainPage->loadConfig();
+    d->mContextManager->loadConfig();
 
     d->mShowStatusBarAction->setChecked(GwenviewConfig::statusBarIsVisible());
     toggleStatusBar();
@@ -1447,6 +1448,7 @@ void MainWindow::saveConfig()
     GwenviewConfig::setStatusBarIsVisible(d->mShowStatusBarAction->isChecked());
     d->mViewMainPage->saveConfig();
     d->mBrowseMainPage->saveConfig();
+    d->mContextManager->saveConfig();
 }
 
 void MainWindow::print()

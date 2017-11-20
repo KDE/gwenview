@@ -45,6 +45,12 @@
             <default>true</default>
         </entry>
 
+        <entry name="LastTargetDir" type="Path">
+            <default code="true">
+                QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation)).toString()
+            </default>
+        </entry>
+
         <entry name="ThumbnailBarOrientation" type="Enum">
             <choices name="Qt::Orientation">
                 <!-- Enum entries do not support enums with arbitrary values.

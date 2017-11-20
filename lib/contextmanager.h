@@ -51,6 +51,9 @@ public:
 
     ~ContextManager();
 
+    void loadConfig();
+    void saveConfig() const;
+
     QUrl currentUrl() const;
 
     void setCurrentDirUrl(const QUrl&);
