@@ -94,12 +94,15 @@ static void copyMoveOrLink(Operation operation, const QList<QUrl>& urlList, QWid
         dialog.setOption(QFileDialog::ShowDirsOnly, true);
     }
 
-    dialog.setDirectoryUrl(contextManager->targetUrl().adjusted(QUrl::RemoveFilename));
+    dialog.setDirectoryUrl(contextManager->targetUrl());
     if (!dialog.exec()) {
         return;
     }
 
     QUrl destUrl = dialog.selectedUrls().first();
+    if (numberOfImages == 1) {
+        destUrl = destUrl.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash);
+    }
     contextManager->setTargetUrl(destUrl);
 
     KIO::CopyJob* job = 0;
