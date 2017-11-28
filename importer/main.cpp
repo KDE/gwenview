@@ -40,6 +40,7 @@ int main(int argc, char *argv[])
 {
     KLocalizedString::setApplicationDomain("gwenview");
     QApplication app(argc, argv);
+    app.setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 
     QScopedPointer<KAboutData> aboutData(
         Gwenview::createAboutData(

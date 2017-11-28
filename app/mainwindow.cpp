@@ -260,6 +260,8 @@ struct MainWindow::Private
         mCentralSplitter->setStretchFactor(0, 0);
         mCentralSplitter->setStretchFactor(1, 1);
 
+        mThumbnailView->setFocus();
+
         connect(mSaveBar, SIGNAL(requestSaveAll()),
                 mGvCore, SLOT(saveAll()));
         connect(mSaveBar, SIGNAL(goToUrl(QUrl)),
@@ -1148,6 +1150,11 @@ void MainWindow::slotDirListerCompleted()
     }
     if (d->mContextManager->selectionModel()->hasSelection()) {
         updatePreviousNextActions();
+    } else {
+        QModelIndex index = d->mThumbnailView->model()->index(0, 0);
+        if (index.isValid()) {
+            d->mThumbnailView->setCurrentIndex(index);
+        }
     }
     d->mThumbnailView->scrollToSelectedIndex();
     d->mViewMainPage->thumbnailBar()->scrollToSelectedIndex();
