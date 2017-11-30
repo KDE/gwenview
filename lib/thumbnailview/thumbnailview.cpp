@@ -105,8 +105,10 @@ struct Thumbnail
      */
     void initAsIcon(const QPixmap& pix)
     {
+        qreal dpr = qApp->devicePixelRatio();
         mGroupPix = pix;
-        int largeGroupSize = ThumbnailGroup::pixelSize(ThumbnailGroup::Large);
+        mGroupPix.setDevicePixelRatio(dpr);
+        int largeGroupSize = ThumbnailGroup::pixelSize(ThumbnailGroup::Large) * dpr;
         mFullSize = QSize(largeGroupSize, largeGroupSize);
     }
 
@@ -230,10 +232,11 @@ struct ThumbnailViewPrivate
 
     void roughAdjustThumbnail(Thumbnail* thumbnail)
     {
+        qreal dpr = qApp->devicePixelRatio();
         const QPixmap& mGroupPix = thumbnail->mGroupPix;
         const int groupSize = qMax(mGroupPix.width(), mGroupPix.height());
         const int fullSize = qMax(thumbnail->mFullSize.width(), thumbnail->mFullSize.height());
-        if (fullSize == groupSize && mGroupPix.height() <= mThumbnailSize.height() && mGroupPix.width() <= mThumbnailSize.width()) {
+        if (fullSize == groupSize && mGroupPix.height() <= mThumbnailSize.height() * dpr && mGroupPix.width() <= mThumbnailSize.width() * dpr) {
             thumbnail->mAdjustedPix = mGroupPix;
             thumbnail->mRough = false;
         } else {
@@ -257,25 +260,22 @@ struct ThumbnailViewPrivate
 
     QPixmap scale(const QPixmap& pix, Qt::TransformationMode transformationMode)
     {
+        qreal dpr = qApp->devicePixelRatio();
         switch (mScaleMode) {
         case ThumbnailView::ScaleToFit:
-            return pix.scaled(mThumbnailSize.width(), mThumbnailSize.height(), Qt::KeepAspectRatio, transformationMode);
-            break;
+            return pix.scaled(mThumbnailSize.width() * dpr, mThumbnailSize.height() * dpr, Qt::KeepAspectRatio, transformationMode);
         case ThumbnailView::ScaleToSquare: {
             int minSize = qMin(pix.width(), pix.height());
             QPixmap pix2 = pix.copy((pix.width() - minSize) / 2, (pix.height() - minSize) / 2, minSize, minSize);
-            return pix2.scaled(mThumbnailSize.width(), mThumbnailSize.height(), Qt::KeepAspectRatio, transformationMode);
+            return pix2.scaled(mThumbnailSize.width() * dpr, mThumbnailSize.height() * dpr, Qt::KeepAspectRatio, transformationMode);
         }
         case ThumbnailView::ScaleToHeight:
-            return pix.scaledToHeight(mThumbnailSize.height(), transformationMode);
-            break;
+            return pix.scaledToHeight(mThumbnailSize.height() * dpr, transformationMode);
         case ThumbnailView::ScaleToWidth:
-            return pix.scaledToWidth(mThumbnailSize.width(), transformationMode);
-            break;
+            return pix.scaledToWidth(mThumbnailSize.width() * dpr, transformationMode);
+        default:
+            return QPixmap();
         }
-        // Keep compiler happy
-        Q_ASSERT(0);
-        return QPixmap();
     }
 };
 
@@ -364,20 +364,23 @@ void ThumbnailView::setThumbnailProvider(ThumbnailProvider* thumbnailProvider)
 
 void ThumbnailView::updateThumbnailSize()
 {
-    QSize value = d->mThumbnailSize;
+    QSize thumbnailSize = d->mThumbnailSize;
     // mWaitingThumbnail
     int waitingThumbnailSize;
-    if (value.width() > 64) {
+    if (thumbnailSize.width() > 64) {
         waitingThumbnailSize = 48;
     } else {
         waitingThumbnailSize = 32;
     }
-    QPixmap icon = DesktopIcon("chronometer", waitingThumbnailSize);
-    QPixmap pix(value);
+    qreal dpr = qApp->devicePixelRatio();
+    QPixmap icon = DesktopIcon("chronometer", waitingThumbnailSize * dpr);
+    icon.setDevicePixelRatio(dpr);
+    QPixmap pix(thumbnailSize * dpr);
+    pix.setDevicePixelRatio(dpr);
     pix.fill(Qt::transparent);
     QPainter painter(&pix);
     painter.setOpacity(0.5);
-    painter.drawPixmap((value.width() - icon.width()) / 2, (value.height() - icon.height()) / 2, icon);
+    painter.drawPixmap((thumbnailSize.width() - icon.width() / dpr) / 2, (thumbnailSize.height() - icon.height() / dpr) / 2, icon);
     painter.end();
     d->mWaitingThumbnail = pix;
 
@@ -393,8 +396,8 @@ void ThumbnailView::updateThumbnailSize()
         it.value().mAdjustedPix = QPixmap();
     }
 
-    thumbnailSizeChanged(value);
-    thumbnailWidthChanged(value.width());
+    thumbnailSizeChanged(thumbnailSize);
+    thumbnailWidthChanged(thumbnailSize.width());
     if (d->mScaleMode != ScaleToFit) {
         scheduleDelayedItemsLayout();
     }
@@ -552,8 +555,10 @@ void ThumbnailView::setThumbnail(const KFileItem& item, const QPixmap& pixmap, c
     }
     Thumbnail& thumbnail = it.value();
     thumbnail.mGroupPix = pixmap;
+    qreal dpr = qApp->devicePixelRatio();
+    thumbnail.mGroupPix.setDevicePixelRatio(dpr);
     thumbnail.mAdjustedPix = QPixmap();
-    int largeGroupSize = ThumbnailGroup::pixelSize(ThumbnailGroup::Large);
+    int largeGroupSize = ThumbnailGroup::pixelSize(ThumbnailGroup::Large) * dpr;
     thumbnail.mFullSize = size.isValid() ? size : QSize(largeGroupSize, largeGroupSize);
     thumbnail.mRealFullSize = size;
     thumbnail.mWaitingForThumbnail = false;
@@ -567,6 +572,7 @@ void ThumbnailView::setThumbnail(const KFileItem& item, const QPixmap& pixmap, c
 
 void ThumbnailView::setBrokenThumbnail(const KFileItem& item)
 {
+    qreal dpr = qApp->devicePixelRatio();
     ThumbnailForUrl::iterator it = d->mThumbnailForUrl.find(item.url());
     if (it == d->mThumbnailForUrl.end()) {
         return;
@@ -577,7 +583,7 @@ void ThumbnailView::setBrokenThumbnail(const KFileItem& item)
         // Special case for videos because our kde install may come without
         // support for video thumbnails so we show the mimetype icon instead of
         // a broken image icon
-        QPixmap pix = KIconLoader::global()->loadMimeTypeIcon(item.iconName(), KIconLoader::Desktop, d->mThumbnailSize.height());
+        QPixmap pix = KIconLoader::global()->loadMimeTypeIcon(item.iconName(), KIconLoader::Desktop, d->mThumbnailSize.height() * dpr);
         thumbnail.initAsIcon(pix);
     } else if (kind == MimeTypeUtils::KIND_DIR) {
         // Special case for folders because ThumbnailProvider does not return a
@@ -614,9 +620,10 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index, QSize* fullSi
     // If dir or archive, generate a thumbnail from fileitem pixmap
     MimeTypeUtils::Kind kind = MimeTypeUtils::fileItemKind(item);
     if (kind == MimeTypeUtils::KIND_ARCHIVE || kind == MimeTypeUtils::KIND_DIR) {
-        int groupSize = ThumbnailGroup::pixelSize(ThumbnailGroup::fromPixelSize(d->mThumbnailSize.height()));
+        qreal dpr = qApp->devicePixelRatio();
+        int groupSize = ThumbnailGroup::pixelSize(ThumbnailGroup::fromPixelSize(d->mThumbnailSize.height())) * dpr;
         if (thumbnail.mGroupPix.isNull() || thumbnail.mGroupPix.height() < groupSize) {
-            QPixmap pix = KIconLoader::global()->loadMimeTypeIcon(item.iconName(), KIconLoader::Desktop, d->mThumbnailSize.height());
+            QPixmap pix = KIconLoader::global()->loadMimeTypeIcon(item.iconName(), KIconLoader::Desktop, d->mThumbnailSize.height() * dpr);
 
             thumbnail.initAsIcon(pix);
             if (kind == MimeTypeUtils::KIND_ARCHIVE) {
@@ -824,7 +831,8 @@ void ThumbnailView::generateThumbnailsForItems()
 
         // Filter out items which already have a thumbnail
         ThumbnailForUrl::ConstIterator it = d->mThumbnailForUrl.constFind(url);
-        if (it != d->mThumbnailForUrl.constEnd() && it.value().isGroupPixAdaptedForSize(d->mThumbnailSize.height())) {
+        qreal dpr = qApp->devicePixelRatio();
+        if (it != d->mThumbnailForUrl.constEnd() && it.value().isGroupPixAdaptedForSize(d->mThumbnailSize.height() * dpr)) {
             continue;
         }
 

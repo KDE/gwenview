@@ -34,6 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #endif
 
 // Qt
+#include <QApplication>
 #include <QImageReader>
 #include <QMatrix>
 #include <QBuffer>
@@ -270,7 +271,8 @@ void ThumbnailGenerator::run()
         {
             QMutexLocker lock(&mMutex);
             pixPath = mPixPath;
-            pixelSize = ThumbnailGroup::pixelSize(mThumbnailGroup);
+            qreal dpr = qApp->devicePixelRatio();
+            pixelSize = ThumbnailGroup::pixelSize(mThumbnailGroup) * dpr;
         }
 
         Q_ASSERT(!pixPath.isNull());

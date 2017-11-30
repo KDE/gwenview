@@ -718,11 +718,12 @@ void PreviewItemDelegate::paint(QPainter * painter, const QStyleOptionViewItem &
     fgColor = viewport->palette().color(viewport->foregroundRole());
 
     // Compute thumbnailRect
+    qreal dpr = qApp->devicePixelRatio();
     QRect thumbnailRect = QRect(
-                              rect.left() + (rect.width() - thumbnailPix.width()) / 2,
-                              rect.top() + (thumbnailHeight - thumbnailPix.height()) + ITEM_MARGIN,
-                              thumbnailPix.width(),
-                              thumbnailPix.height());
+                              rect.left() + (rect.width() - thumbnailPix.width() / dpr) / 2,
+                              rect.top() + (thumbnailHeight - thumbnailPix.height() / dpr) + ITEM_MARGIN,
+                              thumbnailPix.width() / dpr,
+                              thumbnailPix.height() / dpr);
 
     // Draw background
     const QRect backgroundRect = thumbnailRect.adjusted(-ITEM_MARGIN, -ITEM_MARGIN, ITEM_MARGIN, ITEM_MARGIN);

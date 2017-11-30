@@ -399,7 +399,8 @@ QImage ThumbnailProvider::loadThumbnailFromCache() const
         if (largeImage.isNull()) {
             return image;
         }
-        int size = ThumbnailGroup::pixelSize(ThumbnailGroup::Normal);
+        qreal dpr = qApp->devicePixelRatio();
+        int size = ThumbnailGroup::pixelSize(ThumbnailGroup::Normal) * dpr;
         image = largeImage.scaled(size, size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         Q_FOREACH(const QString& key, largeImage.textKeys()) {
             QString text = largeImage.text(key);
@@ -494,7 +495,8 @@ void ThumbnailProvider::checkThumbnail()
         mState = STATE_PREVIEWJOB;
         KFileItemList list;
         list.append(mCurrentItem);
-        const int pixelSize = ThumbnailGroup::pixelSize(mThumbnailGroup);
+        qreal dpr = qApp->devicePixelRatio();
+        const int pixelSize = ThumbnailGroup::pixelSize(mThumbnailGroup) * dpr;
         if (mPreviewPlugins.isEmpty()) {
             mPreviewPlugins = KIO::PreviewJob::availablePlugins();
         }

@@ -23,7 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QPixmap>
-
+#include <QApplication>
 // KDE
 
 // Local
@@ -50,7 +50,8 @@ void DocumentInfoProvider::thumbnailForDocument(const QUrl &url, ThumbnailGroup:
     Q_ASSERT(outFullSize);
     *outPix = QPixmap();
     *outFullSize = QSize();
-    const int pixelSize = ThumbnailGroup::pixelSize(group);
+    qreal dpr = qApp->devicePixelRatio();
+    const int pixelSize = ThumbnailGroup::pixelSize(group) * dpr;
 
     Document::Ptr doc = DocumentFactory::instance()->getCachedDocument(url);
     if (!doc) {
