@@ -305,12 +305,12 @@
       <li xml:lang="zh-TW">可以使用 KIPI 外掛程式。</li>
     </ul>
   </description>
-  <url type="homepage">http://gwenview.kde.org/</url>
+  <url type="homepage">https://gwenview.kde.org/</url>
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=gwenview</url>
-  <url type="help">http://docs.kde.org/stable/en/kdegraphics/gwenview/index.html</url>
+  <url type="help">https://docs.kde.org/?application=gwenview</url>
   <screenshots>
     <screenshot type="default">
-      <image>http://kde.org/images/screenshots/gwenview.png</image>
+      <image>https://kde.org/images/screenshots/gwenview.png</image>
     </screenshot>
   </screenshots>
   <project_group>KDE</project_group>
