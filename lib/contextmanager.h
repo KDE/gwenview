@@ -84,9 +84,11 @@ Q_SIGNALS:
     void selectionChanged();
     void selectionDataChanged();
 
+public Q_SLOTS:
+    void slotSelectionChanged();
+
 private Q_SLOTS:
     void slotDirModelDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
-    void slotSelectionChanged();
     void slotCurrentChanged(const QModelIndex&);
     void emitQueuedSignals();
     void slotRowsAboutToBeRemoved(const QModelIndex& /*parent*/, int start, int end);
