@@ -345,6 +345,7 @@ void FileOpsContextManagerItem::rename()
         mThumbnailView->edit(index);
     } else {
         FileOperations::rename(urlList().first(), mGroup);
+        contextManager()->slotSelectionChanged();
     }
 }
 
