@@ -83,14 +83,16 @@ struct SideBarGroupPrivate
 {
     QFrame* mContainer;
     QLabel* mTitleLabel;
+    bool mDefaultContainerMarginEnabled;
 };
 
-SideBarGroup::SideBarGroup(const QString& title)
+SideBarGroup::SideBarGroup(const QString& title, bool defaultContainerMarginEnabled)
 : QFrame()
 , d(new SideBarGroupPrivate)
 {
     d->mContainer = 0;
     d->mTitleLabel = new QLabel(this);
+    d->mDefaultContainerMarginEnabled = defaultContainerMarginEnabled;
     d->mTitleLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     d->mTitleLabel->setFixedHeight(d->mTitleLabel->sizeHint().height() * 3 / 2);
     QFont font(d->mTitleLabel->font());
@@ -103,6 +105,7 @@ SideBarGroup::SideBarGroup(const QString& title)
     layout->setSpacing(0);
 
     layout->addWidget(d->mTitleLabel);
+    d->mTitleLabel->setContentsMargins(DEFAULT_LAYOUT_MARGIN, 0, 0, 0);
 
     clear();
 }
@@ -142,6 +145,9 @@ void SideBarGroup::clear()
     containerLayout->setSpacing(0);
 
     layout()->addWidget(d->mContainer);
+    if(d->mDefaultContainerMarginEnabled) {
+        d->mContainer->layout()->setContentsMargins(DEFAULT_LAYOUT_MARGIN, 0, 0, 0);
+    }
 }
 
 void SideBarGroup::addAction(QAction* action)

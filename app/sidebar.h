@@ -27,6 +27,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 namespace Gwenview
 {
 
+static const int DEFAULT_LAYOUT_MARGIN = 6;
+
 class SideBar;
 
 struct SideBarGroupPrivate;
@@ -34,7 +36,7 @@ class SideBarGroup : public QFrame
 {
     Q_OBJECT
 public:
-    SideBarGroup(const QString& title);
+    SideBarGroup(const QString& title, bool defaultContainerMarginEnabled = true);
     ~SideBarGroup();
 
     void addWidget(QWidget*);
