@@ -91,6 +91,7 @@ private Q_SLOTS:
     void toggleSideBar(bool visible);
     void updateToggleSideBarAction();
     void slotModifiedDocumentListChanged();
+    void slotUpdateCaption(const QString& caption);
     void slotPartCompleted();
     void slotDirModelNewItems();
     void slotDirListerCompleted();

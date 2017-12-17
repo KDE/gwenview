@@ -316,7 +316,7 @@ struct MainWindow::Private
     {
         mViewMainPage = new ViewMainPage(parent, mSlideShow, q->actionCollection(), mGvCore);
         connect(mViewMainPage, SIGNAL(captionUpdateRequested(QString)),
-                q, SLOT(setWindowTitle(QString)));
+                q, SLOT(slotUpdateCaption(QString)));
         connect(mViewMainPage, SIGNAL(completed()),
                 q, SLOT(slotPartCompleted()));
         connect(mViewMainPage, SIGNAL(previousImageRequested()),
@@ -841,14 +841,17 @@ void MainWindow::setCaption(const QString& caption, bool modified)
     KXmlGuiWindow::setCaption(caption, modified);
 }
 
+void MainWindow::slotUpdateCaption(const QString& caption)
+{
+    const QUrl url = d->mContextManager->currentUrl();
+    const QList<QUrl> list = DocumentFactory::instance()->modifiedDocumentList();
+    setCaption(caption, list.contains(url));
+}
+
 void MainWindow::slotModifiedDocumentListChanged()
 {
     d->updateActions();
-
-    // Update caption
-    QList<QUrl> list = DocumentFactory::instance()->modifiedDocumentList();
-    bool modified = list.count() > 0;
-    setCaption(d->mCaption, modified);
+    slotUpdateCaption(d->mCaption);
 }
 
 void MainWindow::setInitialUrl(const QUrl &_url)
