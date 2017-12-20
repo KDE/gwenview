@@ -289,7 +289,11 @@ void PlaceTreeModel::fetchMore(const QModelIndex& parent)
     const Node node = d->nodeForIndex(parent);
     if (!node.model->dirLister()->url().isValid()) {
         QModelIndex placeIndex = d->mPlacesModel->index(parent.row(), parent.column());
+#if KIO_VERSION >= QT_VERSION_CHECK(5, 41, 0)
+        QUrl url = KFilePlacesModel::convertedUrl(d->mPlacesModel->url(placeIndex));
+#else
         QUrl url = d->mPlacesModel->url(placeIndex);
+#endif
         node.model->dirLister()->openUrl(url, KDirLister::Keep);
         return;
     }
