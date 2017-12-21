@@ -27,6 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KDE
 #include <KDirLister>
 #include <KFilePlacesModel>
+#include <kio_version.h>
 
 // Local
 #include <lib/semanticinfo/sorteddirmodel.h>
@@ -288,7 +289,11 @@ void PlaceTreeModel::fetchMore(const QModelIndex& parent)
     const Node node = d->nodeForIndex(parent);
     if (!node.model->dirLister()->url().isValid()) {
         QModelIndex placeIndex = d->mPlacesModel->index(parent.row(), parent.column());
+#if KIO_VERSION >= QT_VERSION_CHECK(5, 41, 0)
+        QUrl url = KFilePlacesModel::convertedUrl(d->mPlacesModel->url(placeIndex));
+#else
         QUrl url = d->mPlacesModel->url(placeIndex);
+#endif
         node.model->dirLister()->openUrl(url, KDirLister::Keep);
         return;
     }
@@ -365,7 +370,11 @@ QUrl PlaceTreeModel::urlForIndex(const QModelIndex& index) const
     const Node node = d->nodeForIndex(index);
     if (node.isPlace()) {
         QModelIndex placeIndex = d->mPlacesModel->index(index.row(), 0);
+#if KIO_VERSION >= QT_VERSION_CHECK(5, 41, 0)
+        return KFilePlacesModel::convertedUrl(d->mPlacesModel->url(placeIndex));
+#else
         return d->mPlacesModel->url(placeIndex);
+#endif
     }
 
     const QModelIndex parentDirIndex = node.model->indexForUrl(node.parentUrl);
