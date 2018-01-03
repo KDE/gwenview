@@ -73,6 +73,8 @@ static void addRawMimeTypes(QStringList* list)
     *list += "image/x-minolta-mrw";
     *list += "image/x-panasonic-raw";
     *list += "image/x-panasonic-raw2";
+    *list += "image/x-panasonic-rw";
+    *list += "image/x-panasonic-rw2";
     *list += "image/x-samsung-srw";
     *list += "image/x-olympus-orf";
     *list += "image/x-fuji-raf";
