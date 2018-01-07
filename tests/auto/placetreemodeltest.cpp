@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QStandardPaths>
 #include <QStandardPaths>
 #include <qtest.h>
+#include <kio_version.h>
 
 // Local
 #include "../lib/placetreemodel.h"
@@ -123,7 +124,12 @@ void PlaceTreeModelTest::init()
 void PlaceTreeModelTest::testListPlaces()
 {
     PlaceTreeModel model(0);
+
+#if KIO_VERSION >= QT_VERSION_CHECK(5, 41, 0)
+    QCOMPARE(model.rowCount(), 10);
+#else
     QCOMPARE(model.rowCount(), 2);
+#endif
 
     QModelIndex index;
     index = model.index(0, 0);
