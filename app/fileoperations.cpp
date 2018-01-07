@@ -100,10 +100,6 @@ static void copyMoveOrLink(Operation operation, const QList<QUrl>& urlList, QWid
     }
 
     QUrl destUrl = dialog.selectedUrls().first();
-    if (numberOfImages == 1) {
-        destUrl = destUrl.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash);
-    }
-    contextManager->setTargetUrl(destUrl);
 
     KIO::CopyJob* job = 0;
     switch (operation) {
@@ -121,6 +117,11 @@ static void copyMoveOrLink(Operation operation, const QList<QUrl>& urlList, QWid
     }
     KJobWidgets::setWindow(job, parent);
     job->uiDelegate()->setAutoErrorHandlingEnabled(true);
+
+    if (numberOfImages == 1) {
+        destUrl = destUrl.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash);
+    }
+    contextManager->setTargetUrl(destUrl);
 }
 
 static void delOrTrash(KIO::JobUiDelegate::DeletionType deletionType, const QList<QUrl>& urlList, QWidget* parent)
