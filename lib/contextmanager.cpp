@@ -48,7 +48,7 @@ struct ContextManagerPrivate
     QUrl mCurrentUrl;
 
     QUrl mUrlToSelect;
-    QUrl mTargetUrl;
+    QUrl mTargetDirUrl;
 
     bool mSelectedFileItemListNeedsUpdate;
     QSet<QByteArray> mQueuedSignals;
@@ -137,12 +137,12 @@ ContextManager::~ContextManager()
 
 void ContextManager::loadConfig()
 {
-    setTargetUrl(QUrl(GwenviewConfig::lastTargetDir()));
+    setTargetDirUrl(QUrl(GwenviewConfig::lastTargetDir()));
 }
 
 void ContextManager::saveConfig() const
 {
-    GwenviewConfig::setLastTargetDir(targetUrl().toString());
+    GwenviewConfig::setLastTargetDir(targetDirUrl().toString());
 }
 
 QItemSelectionModel* ContextManager::selectionModel() const
@@ -302,15 +302,15 @@ void ContextManager::setUrlToSelect(const QUrl &url)
     selectUrlToSelect();
 }
 
-QUrl ContextManager::targetUrl() const
+QUrl ContextManager::targetDirUrl() const
 {
-    return d->mTargetUrl;
+    return d->mTargetDirUrl;
 }
 
-void ContextManager::setTargetUrl(const QUrl &url)
+void ContextManager::setTargetDirUrl(const QUrl &url)
 {
     GV_RETURN_IF_FAIL(url.isValid());
-    d->mTargetUrl = url;
+    d->mTargetDirUrl = url;
 }
 
 void ContextManager::slotRowsInserted()

@@ -94,7 +94,7 @@ static void copyMoveOrLink(Operation operation, const QList<QUrl>& urlList, QWid
         dialog.setOption(QFileDialog::ShowDirsOnly, true);
     }
 
-    dialog.setDirectoryUrl(contextManager->targetUrl());
+    dialog.setDirectoryUrl(contextManager->targetDirUrl());
     if (!dialog.exec()) {
         return;
     }
@@ -121,7 +121,7 @@ static void copyMoveOrLink(Operation operation, const QList<QUrl>& urlList, QWid
     if (numberOfImages == 1) {
         destUrl = destUrl.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash);
     }
-    contextManager->setTargetUrl(destUrl);
+    contextManager->setTargetDirUrl(destUrl);
 }
 
 static void delOrTrash(KIO::JobUiDelegate::DeletionType deletionType, const QList<QUrl>& urlList, QWidget* parent)
