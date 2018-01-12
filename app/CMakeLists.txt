@@ -25,6 +25,7 @@ set(gwenview_SRCS
     main.cpp
     mainwindow.cpp
     preloader.cpp
+    renamedialog.cpp
     saveallhelper.cpp
     savebar.cpp
     sidebar.cpp
@@ -55,6 +56,7 @@ ki18n_wrap_ui(gwenview_SRCS
     fullscreenconfigwidget.ui
     generalconfigpage.ui
     imageviewconfigpage.ui
+    renamedialog.ui
     semanticinfodialog.ui
     startmainpage.ui
     browsemainpage.ui

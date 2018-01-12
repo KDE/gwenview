@@ -38,6 +38,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KJobWidgets>
 
 // Local
+#include "renamedialog.h"
 #include <lib/document/documentfactory.h>
 #include <lib/thumbnailprovider/thumbnailprovider.h>
 #include <lib/contextmanager.h>
@@ -223,11 +224,13 @@ void showMenuForDroppedUrls(QWidget* parent, const QList<QUrl>& urlList, const Q
 
 void rename(const QUrl &oldUrl, QWidget* parent)
 {
-    QString name = QInputDialog::getText(parent,
-                       i18nc("@title:window", "Rename") /* caption */,
-                       xi18n("Rename <filename>%1</filename> to:", oldUrl.fileName()) /* label */,
-                       QLineEdit::Normal, oldUrl.fileName() /* value */
-                   );
+    const DialogGuard<RenameDialog> dialog(parent);
+    dialog->setFilename(oldUrl.fileName());
+    if (!dialog->exec()) {
+        return;
+    }
+
+    const QString name = dialog->filename();
     if (name.isEmpty() || name == oldUrl.fileName()) {
         return;
     }
