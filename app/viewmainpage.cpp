@@ -406,8 +406,6 @@ ViewMainPage::ViewMainPage(QWidget* parent, SlideShow* slideShow, KActionCollect
 
     QShortcut* enterKeyShortcut = new QShortcut(Qt::Key_Return, this);
     connect(enterKeyShortcut, &QShortcut::activated, this, &ViewMainPage::slotEnterPressed);
-    QShortcut* escapeKeyShortcut = new QShortcut(Qt::Key_Escape, this);
-    connect(escapeKeyShortcut, &QShortcut::activated, this, &ViewMainPage::slotEscapePressed);
 
     d->setupToolContainer();
     d->setupStatusBar();
@@ -440,6 +438,8 @@ ViewMainPage::ViewMainPage(QWidget* parent, SlideShow* slideShow, KActionCollect
             d->mSynchronizeCheckBox, SLOT(setChecked(bool)));
     connect(d->mSynchronizeCheckBox, SIGNAL(toggled(bool)),
             d->mSynchronizeAction, SLOT(setChecked(bool)));
+
+    installEventFilter(this);
 }
 
 ViewMainPage::~ViewMainPage()
@@ -756,20 +756,26 @@ void ViewMainPage::slotEnterPressed()
     emit goToBrowseModeRequested();
 }
 
-void ViewMainPage::slotEscapePressed()
+bool ViewMainPage::eventFilter(QObject* watched, QEvent* event)
 {
-    DocumentView *view = d->currentView();
-    if (view) {
-        AbstractRasterImageViewTool *tool = view->currentTool();
-        if (tool) {
-            QKeyEvent event(QEvent::KeyPress, Qt::Key_Escape, Qt::NoModifier);
-            tool->keyPressEvent(&event);
-            if (event.isAccepted()) {
-                return;
+    if (event->type() == QEvent::ShortcutOverride) {
+        const QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
+        if (keyEvent->key() == Qt::Key_Escape) {
+            const DocumentView* view = d->currentView();
+            if (view) {
+                AbstractRasterImageViewTool* tool = view->currentTool();
+                if (tool) {
+                    QKeyEvent toolKeyEvent(QEvent::KeyPress, Qt::Key_Escape, Qt::NoModifier);
+                    tool->keyPressEvent(&toolKeyEvent);
+                    if (toolKeyEvent.isAccepted()) {
+                        event->accept();
+                    }
+                }
             }
         }
     }
-    emit goToBrowseModeRequested();
+    
+    return QWidget::eventFilter(watched, event);
 }
 
 void ViewMainPage::trashView(DocumentView* view)

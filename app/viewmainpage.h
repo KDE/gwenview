@@ -141,10 +141,12 @@ private Q_SLOTS:
     void slotViewFocused(DocumentView*);
 
     void slotEnterPressed();
-    void slotEscapePressed();
 
     void trashView(DocumentView*);
     void deselectView(DocumentView*);
+
+protected:
+    bool eventFilter(QObject* watched, QEvent* event) Q_DECL_OVERRIDE;
 
 private:
     friend struct ViewMainPagePrivate;

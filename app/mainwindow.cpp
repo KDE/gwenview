@@ -376,6 +376,7 @@ struct MainWindow::Private
         mBrowseAction->setToolTip(i18nc("@info:tooltip", "Browse folders for images"));
         mBrowseAction->setCheckable(true);
         mBrowseAction->setIcon(QIcon::fromTheme("view-list-icons"));
+        actionCollection->setDefaultShortcut(mBrowseAction, Qt::Key_Escape);
         connect(mViewMainPage, SIGNAL(goToBrowseModeRequested()),
             mBrowseAction, SLOT(trigger()));
 
