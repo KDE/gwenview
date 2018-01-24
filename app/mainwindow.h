@@ -136,6 +136,8 @@ private:
 
     void openSelectedDocuments();
     void saveConfig();
+
+    void folderViewUrlChanged(const QUrl &url);
 };
 
 } // namespace

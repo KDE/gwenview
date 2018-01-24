@@ -514,8 +514,8 @@ struct MainWindow::Private
 
         // Create context manager items
         FolderViewContextManagerItem* folderViewItem = new FolderViewContextManagerItem(mContextManager);
-        connect(folderViewItem, SIGNAL(urlChanged(QUrl)),
-                q, SLOT(openDirUrl(QUrl)));
+        connect(folderViewItem, &FolderViewContextManagerItem::urlChanged,
+                q, &MainWindow::folderViewUrlChanged);
 
         InfoContextManagerItem* infoItem = new InfoContextManagerItem(mContextManager);
 
@@ -1046,6 +1046,25 @@ void MainWindow::openDirUrl(const QUrl &url)
     d->mViewMainPage->reset();
 }
 
+void MainWindow::folderViewUrlChanged(const QUrl &url) {
+    const QUrl currentUrl = d->mContextManager->currentDirUrl();
+
+    if (url == currentUrl) {
+        switch (d->mCurrentMainPageId) {
+        case ViewMainPageId:
+            d->mBrowseAction->trigger();
+            break;
+        case BrowseMainPageId:
+            d->mViewAction->trigger();
+            break;
+        case StartMainPageId:
+            break;
+        }
+    } else {
+        openDirUrl(url);
+    }
+}
+
 void MainWindow::toggleSideBar(bool on)
 {
     d->mSideBar->setVisible(on);
@@ -1155,9 +1174,13 @@ void MainWindow::slotDirListerCompleted()
     if (d->mContextManager->selectionModel()->hasSelection()) {
         updatePreviousNextActions();
     } else {
-        QModelIndex index = d->mThumbnailView->model()->index(0, 0);
-        if (index.isValid()) {
-            d->mThumbnailView->setCurrentIndex(index);
+        d->goToFirstDocument();
+
+        if (!d->mContextManager->selectionModel()->hasSelection()) {
+            const QModelIndex index = d->mThumbnailView->model()->index(0, 0);
+            if (index.isValid()) {
+                d->mThumbnailView->setCurrentIndex(index);
+            }
         }
     }
     d->mThumbnailView->scrollToSelectedIndex();

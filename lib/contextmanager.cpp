@@ -174,8 +174,9 @@ KFileItemList ContextManager::selectedFileItemList() const
     return d->mSelectedFileItemList;
 }
 
-void ContextManager::setCurrentDirUrl(const QUrl &url)
+void ContextManager::setCurrentDirUrl(const QUrl &_url)
 {
+    const QUrl url = _url.adjusted(QUrl::StripTrailingSlash);
     if (url == d->mCurrentDirUrl) {
         return;
     }

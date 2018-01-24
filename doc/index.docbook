@@ -428,7 +428,8 @@ The sidebar contains several tabs:</para>
 switch between them.  In Browse Mode thumbnails from the folder will be displayed,
 while in View Mode the first image in the folder will appear, from which you can
 browse through the folder using the <guibutton>Previous</guibutton> and
-<guibutton>Next</guibutton> buttons or shortcuts.</para></listitem>
+<guibutton>Next</guibutton> buttons or shortcuts. Clicking on a folder multiple
+times toggles between View Mode and Browse Mode.</para></listitem>
 </varlistentry>
 
 <varlistentry>
