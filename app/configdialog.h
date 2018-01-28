@@ -50,6 +50,7 @@ private:
     InvisibleButtonGroup* mAnimationMethodGroup;
     InvisibleButtonGroup* mZoomModeGroup;
     InvisibleButtonGroup* mThumbnailBarOrientationGroup;
+    InvisibleButtonGroup* mRenderingIntentGroup;
     Ui_GeneralConfigPage mGeneralConfigPage;
     Ui_ImageViewConfigPage mImageViewConfigPage;
     Ui_AdvancedConfigPage mAdvancedConfigPage;

@@ -11,6 +11,7 @@
     <include>lib/documentview/documentview.h</include>
     <include>lib/documentview/rasterimageview.h</include>
     <include>lib/print/printoptionspage.h</include>
+    <include>lib/renderingintent.h</include>
     <group name="SideBar">
         <entry name="PreferredMetaInfoKeyList" type="StringList">
         <default>General.Name,General.ImageSize,Exif.Photo.ExposureTime,Exif.Photo.Flash</default>
@@ -157,6 +158,20 @@
             same zoom parameters as image A, but will then remember its
             own zoom and position (if these are changed, image A will NOT
             be displayed with the updated zoom and position).</whatsthis>
+        </entry>
+
+        <entry name="RenderingIntent" type="Enum">
+                <choices name="Gwenview::RenderingIntent::Enum">
+                <choice name="RenderingIntent::Perceptual"/>
+                <choice name="RenderingIntent::Relative"/>
+            </choices>
+            <default>RenderingIntent::Perceptual</default>
+            <whatsthis>Defines how colors are rendered when your display
+            uses an ICC color profile and an image has colors that do not
+            fit within the profile's color gamut. "Perceptual" will scale
+            the colors of the entire image so that they all fit within the
+            display's capabilities. "Relative" will squash only the colors
+            that cannot be displayed, and leave the other colors alone.</whatsthis>
         </entry>
     </group>
 

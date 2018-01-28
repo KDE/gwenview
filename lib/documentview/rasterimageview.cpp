@@ -26,6 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/imagescaler.h>
 #include <lib/cms/cmsprofile.h>
 #include <lib/gvdebug.h>
+#include <lib/gwenviewconfig.h>
 
 // KDE
 
@@ -106,9 +107,19 @@ struct RasterImageViewPrivate
             qWarning() << "Gwenview can only apply color profile on RGB32 or ARGB32 images";
             return;
         }
+
+        cmsUInt32Number renderingIntent = 0;
+        switch (GwenviewConfig::renderingIntent()) {
+        case RenderingIntent::Perceptual:
+            renderingIntent = INTENT_PERCEPTUAL;
+            break;
+        case RenderingIntent::Relative:
+            renderingIntent = INTENT_RELATIVE_COLORIMETRIC;
+            break;
+        }
         mDisplayTransform = cmsCreateTransform(profile->handle(), cmsFormat,
                                                monitorProfile->handle(), cmsFormat,
-                                               INTENT_PERCEPTUAL, cmsFLAGS_BLACKPOINTCOMPENSATION);
+                                               renderingIntent, cmsFLAGS_BLACKPOINTCOMPENSATION);
         mApplyDisplayTransform = true;
     }
 

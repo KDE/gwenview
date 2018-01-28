@@ -91,9 +91,17 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 
     // Advanced
     widget = setupPage(mAdvancedConfigPage);
+
+    mRenderingIntentGroup = new InvisibleButtonGroup(widget);
+    mRenderingIntentGroup->setObjectName(QLatin1String("kcfg_RenderingIntent"));
+    mRenderingIntentGroup->addButton(mAdvancedConfigPage.relativeRenderingIntentRadioButton, int(RenderingIntent::Relative));
+    mRenderingIntentGroup->addButton(mAdvancedConfigPage.perceptualRenderingIntentRadioButton, int(RenderingIntent::Perceptual));
+
     pageItem = addPage(widget, i18n("Advanced"));
     pageItem->setIcon(QIcon::fromTheme("preferences-other"));
     mAdvancedConfigPage.cacheHelpLabel->setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
+    mAdvancedConfigPage.perceptualHelpLabel->setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
+    mAdvancedConfigPage.relativeHelpLabel->setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
 
     updateViewBackgroundFrame();
 }
