@@ -26,7 +26,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/imagescaler.h>
 #include <lib/cms/cmsprofile.h>
 #include <lib/gvdebug.h>
-#include <lib/gwenviewconfig.h>
 
 // KDE
 
@@ -36,9 +35,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QTimer>
 #include <QPointer>
 #include <QDebug>
-
-// LCMS2
-#include <lcms2.h>
 
 
 namespace Gwenview
@@ -54,6 +50,7 @@ struct RasterImageViewPrivate
     // Config
     RasterImageView::AlphaBackgroundMode mAlphaBackgroundMode;
     QColor mAlphaBackgroundColor;
+    cmsUInt32Number mRenderingIntent;
     bool mEnlargeSmallerImages;
     // /Config
 
@@ -108,18 +105,9 @@ struct RasterImageViewPrivate
             return;
         }
 
-        cmsUInt32Number renderingIntent = 0;
-        switch (GwenviewConfig::renderingIntent()) {
-        case RenderingIntent::Perceptual:
-            renderingIntent = INTENT_PERCEPTUAL;
-            break;
-        case RenderingIntent::Relative:
-            renderingIntent = INTENT_RELATIVE_COLORIMETRIC;
-            break;
-        }
         mDisplayTransform = cmsCreateTransform(profile->handle(), cmsFormat,
                                                monitorProfile->handle(), cmsFormat,
-                                               renderingIntent, cmsFLAGS_BLACKPOINTCOMPENSATION);
+                                               mRenderingIntent, cmsFLAGS_BLACKPOINTCOMPENSATION);
         mApplyDisplayTransform = true;
     }
 
@@ -213,6 +201,7 @@ RasterImageView::RasterImageView(QGraphicsItem* parent)
 
     d->mAlphaBackgroundMode = AlphaBackgroundCheckBoard;
     d->mAlphaBackgroundColor = Qt::black;
+    d->mRenderingIntent = INTENT_PERCEPTUAL;
     d->mEnlargeSmallerImages = false;
 
     d->mBufferIsEmpty = true;
@@ -245,6 +234,14 @@ void RasterImageView::setAlphaBackgroundColor(const QColor& color)
     d->mAlphaBackgroundColor = color;
     if (document() && document()->hasAlphaChannel()) {
         d->mCurrentBuffer = QPixmap();
+        updateBuffer();
+    }
+}
+
+void RasterImageView::setRenderingIntent(const RenderingIntent::Enum& renderingIntent)
+{
+    if (d->mRenderingIntent != renderingIntent) {
+        d->mRenderingIntent = renderingIntent;
         updateBuffer();
     }
 }

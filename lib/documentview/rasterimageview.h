@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include <lib/documentview/abstractimageview.h>
+#include <lib/renderingintent.h>
 
 // KDE
 
@@ -55,6 +56,7 @@ public:
 
     void setAlphaBackgroundMode(AlphaBackgroundMode mode);
     void setAlphaBackgroundColor(const QColor& color);
+    void setRenderingIntent(const RenderingIntent::Enum& renderingIntent);
 
 Q_SIGNALS:
     void currentToolChanged(AbstractRasterImageViewTool*);

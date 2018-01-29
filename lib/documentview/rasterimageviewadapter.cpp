@@ -138,6 +138,7 @@ void RasterImageViewAdapter::loadConfig()
 {
     d->mView->setAlphaBackgroundMode(GwenviewConfig::alphaBackgroundMode());
     d->mView->setAlphaBackgroundColor(GwenviewConfig::alphaBackgroundColor());
+    d->mView->setRenderingIntent(GwenviewConfig::renderingIntent());
     d->mView->setEnlargeSmallerImages(GwenviewConfig::enlargeSmallerImages());
 }
 

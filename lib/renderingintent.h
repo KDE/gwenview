@@ -21,11 +21,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #ifndef RENDERINGINTENT_H
 #define RENDERINGINTENT_H
 
-// Qt
-
-// KDE
-
-// Local
+#include <lcms2.h>
 
 namespace Gwenview
 {
@@ -35,9 +31,9 @@ namespace RenderingIntent
 /**
  * This enum represents the different color rendering modes
  */
-enum Enum {
-    Perceptual,
-    Relative
+enum Enum : cmsUInt32Number {
+    Perceptual = INTENT_PERCEPTUAL,
+    Relative = INTENT_RELATIVE_COLORIMETRIC
 };
 
 } // namespace RenderingIntent
