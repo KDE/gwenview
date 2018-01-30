@@ -20,6 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 // Self
 #include "printhelper.h"
+#include "dialogguard.h"
 
 // STD
 #include <memory>
@@ -122,7 +123,7 @@ void PrintHelper::print(Document::Ptr doc)
     PrintOptionsPage* optionsPage = new PrintOptionsPage(doc->size());
     optionsPage->loadConfig();
 
-    QScopedPointer<QPrintDialog> dialog(new QPrintDialog(&printer, d->mParent));
+    DialogGuard<QPrintDialog> dialog(&printer, d->mParent);
 #if defined (Q_OS_UNIX) && !defined(Q_OS_DARWIN)
     dialog->setOptionTabs(QList<QWidget*>() << optionsPage);
 #else

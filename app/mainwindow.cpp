@@ -19,6 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 #include "mainwindow.h"
 #include <config-gwenview.h>
+#include "dialogguard.h"
 
 // Qt
 #include <QApplication>
@@ -1337,18 +1338,18 @@ void MainWindow::openFile()
 {
     QUrl dirUrl = d->mContextManager->currentDirUrl();
 
-    QFileDialog dialog(this);
-    dialog.selectUrl(dirUrl);
-    dialog.setWindowTitle(i18nc("@title:window", "Open Image"));
+    DialogGuard<QFileDialog> dialog(this);
+    dialog->selectUrl(dirUrl);
+    dialog->setWindowTitle(i18nc("@title:window", "Open Image"));
     const QStringList mimeFilter = MimeTypeUtils::imageMimeTypes();
-    dialog.setMimeTypeFilters(mimeFilter);
-    dialog.setAcceptMode(QFileDialog::AcceptOpen);
-    if (!dialog.exec()) {
+    dialog->setMimeTypeFilters(mimeFilter);
+    dialog->setAcceptMode(QFileDialog::AcceptOpen);
+    if (!dialog->exec()) {
         return;
     }
 
-    if (!dialog.selectedUrls().isEmpty()) {
-        openUrl(dialog.selectedUrls().first());
+    if (!dialog->selectedUrls().isEmpty()) {
+        openUrl(dialog->selectedUrls().first());
     }
 }
 
@@ -1446,9 +1447,9 @@ bool MainWindow::queryClose()
 
 void MainWindow::showConfigDialog()
 {
-    ConfigDialog dialog(this);
-    connect(&dialog, SIGNAL(settingsChanged(QString)), SLOT(loadConfig()));
-    dialog.exec();
+    DialogGuard<ConfigDialog> dialog(this);
+    connect(dialog.data(), SIGNAL(settingsChanged(QString)), SLOT(loadConfig()));
+    dialog->exec();
 }
 
 void MainWindow::toggleMenuBar()

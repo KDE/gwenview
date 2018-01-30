@@ -20,6 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 */
 // Self
 #include "thumbnailpage.h"
+#include "dialogguard.h"
 
 // Qt
 #include <QDebug>
@@ -346,8 +347,8 @@ void ThumbnailPage::updateImportButtons()
 
 void ThumbnailPage::showConfigDialog()
 {
-    ImporterConfigDialog dialog(this);
-    dialog.exec();
+    DialogGuard<ImporterConfigDialog> dialog(this);
+    dialog->exec();
 }
 
 /**

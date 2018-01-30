@@ -20,6 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 */
 // Self
 #include "fileoperations.h"
+#include "dialogguard.h"
 
 // Qt
 #include <QMenu>
@@ -52,54 +53,54 @@ static void copyMoveOrLink(Operation operation, const QList<QUrl>& urlList, QWid
     Q_ASSERT(!urlList.isEmpty());
     const int numberOfImages = urlList.count();
 
-    QFileDialog dialog(parent->nativeParentWidget(), QString());
-    dialog.setAcceptMode(QFileDialog::AcceptSave);
+    DialogGuard<QFileDialog> dialog(parent->nativeParentWidget(), QString());
+    dialog->setAcceptMode(QFileDialog::AcceptSave);
 
     // Figure out what the window title and buttons should say,
     // depending on the operation and how many images are selected
     switch (operation) {
     case COPY:
         if (numberOfImages == 1) {
-            dialog.setWindowTitle(i18nc("@title:window %1 file name", "Copy %1", urlList.constFirst().fileName()));
+            dialog->setWindowTitle(i18nc("@title:window %1 file name", "Copy %1", urlList.constFirst().fileName()));
         } else {
-            dialog.setWindowTitle(i18ncp("@title:window %1 number of images", "Copy %1 image", "Copy %1 images", numberOfImages));
+            dialog->setWindowTitle(i18ncp("@title:window %1 number of images", "Copy %1 image", "Copy %1 images", numberOfImages));
         }
-        dialog.setLabelText(QFileDialog::DialogLabel::Accept, i18nc("@action:button", "Copy"));
+        dialog->setLabelText(QFileDialog::DialogLabel::Accept, i18nc("@action:button", "Copy"));
         break;
     case MOVE:
         if (numberOfImages == 1) {
-            dialog.setWindowTitle(i18nc("@title:window %1 file name", "Move %1", urlList.constFirst().fileName()));
+            dialog->setWindowTitle(i18nc("@title:window %1 file name", "Move %1", urlList.constFirst().fileName()));
         } else {
-            dialog.setWindowTitle(i18ncp("@title:window %1 number of images", "Move %1 image", "Move %1 images", numberOfImages));
+            dialog->setWindowTitle(i18ncp("@title:window %1 number of images", "Move %1 image", "Move %1 images", numberOfImages));
         }
-        dialog.setLabelText(QFileDialog::DialogLabel::Accept, i18nc("@action:button", "Move"));
+        dialog->setLabelText(QFileDialog::DialogLabel::Accept, i18nc("@action:button", "Move"));
         break;
     case LINK:
         if (numberOfImages == 1) {
-            dialog.setWindowTitle(i18nc("@title:window %1 file name", "Link %1", urlList.constFirst().fileName()));
+            dialog->setWindowTitle(i18nc("@title:window %1 file name", "Link %1", urlList.constFirst().fileName()));
         } else {
-            dialog.setWindowTitle(i18ncp("@title:window %1 number of images", "Link %1 image", "Link %1 images", numberOfImages));
+            dialog->setWindowTitle(i18ncp("@title:window %1 number of images", "Link %1 image", "Link %1 images", numberOfImages));
         }
-        dialog.setLabelText(QFileDialog::DialogLabel::Accept, i18nc("@action:button", "Link"));
+        dialog->setLabelText(QFileDialog::DialogLabel::Accept, i18nc("@action:button", "Link"));
         break;
     default:
         Q_ASSERT(0);
     }
 
     if (numberOfImages == 1) {
-        dialog.setFileMode(QFileDialog::AnyFile);
-        dialog.selectUrl(urlList.constFirst());
+        dialog->setFileMode(QFileDialog::AnyFile);
+        dialog->selectUrl(urlList.constFirst());
     } else {
-        dialog.setFileMode(QFileDialog::Directory);
-        dialog.setOption(QFileDialog::ShowDirsOnly, true);
+        dialog->setFileMode(QFileDialog::Directory);
+        dialog->setOption(QFileDialog::ShowDirsOnly, true);
     }
 
-    dialog.setDirectoryUrl(contextManager->targetDirUrl());
-    if (!dialog.exec()) {
+    dialog->setDirectoryUrl(contextManager->targetDirUrl());
+    if (!dialog->exec()) {
         return;
     }
 
-    QUrl destUrl = dialog.selectedUrls().first();
+    QUrl destUrl = dialog->selectedUrls().first();
 
     KIO::CopyJob* job = 0;
     switch (operation) {
@@ -222,7 +223,7 @@ void showMenuForDroppedUrls(QWidget* parent, const QList<QUrl>& urlList, const Q
 
 void rename(const QUrl &oldUrl, QWidget* parent)
 {
-    QString name = QInputDialog::getText(parent, 
+    QString name = QInputDialog::getText(parent,
                        i18nc("@title:window", "Rename") /* caption */,
                        xi18n("Rename <filename>%1</filename> to:", oldUrl.fileName()) /* label */,
                        QLineEdit::Normal, oldUrl.fileName() /* value */

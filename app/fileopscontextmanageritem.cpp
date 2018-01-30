@@ -20,6 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 // Self
 #include "fileopscontextmanageritem.h"
+#include "dialogguard.h"
 
 // Qt
 #include <QAction>
@@ -389,16 +390,16 @@ void FileOpsContextManagerItem::openWith(QAction* action)
     GV_RETURN_IF_FAIL(ok);
     if (idx == -1) {
         // Other Application...
-        KOpenWithDialog dlg(list, mGroup);
-        if (!dlg.exec()) {
+        DialogGuard<KOpenWithDialog> dlg(list, mGroup);
+        if (!dlg->exec()) {
             return;
         }
-        service = dlg.service();
+        service = dlg->service();
 
         if (!service) {
             // User entered a custom command
-            Q_ASSERT(!dlg.text().isEmpty());
-            KRun::run(dlg.text(), list, mGroup);
+            Q_ASSERT(!dlg->text().isEmpty());
+            KRun::run(dlg->text(), list, mGroup);
             return;
         }
     } else {

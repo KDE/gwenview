@@ -20,6 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 // Self
 #include "imageopscontextmanageritem.h"
+#include "dialogguard.h"
 
 // Qt
 #include <QApplication>
@@ -236,12 +237,12 @@ void ImageOpsContextManagerItem::resizeImage()
     }
     Document::Ptr doc = DocumentFactory::instance()->load(contextManager()->currentUrl());
     doc->startLoadingFullImage();
-    ResizeImageDialog dialog(d->mMainWindow);
-    dialog.setOriginalSize(doc->size());
-    if (!dialog.exec()) {
+    DialogGuard<ResizeImageDialog> dialog(d->mMainWindow);
+    dialog->setOriginalSize(doc->size());
+    if (!dialog->exec()) {
         return;
     }
-    ResizeImageOperation* op = new ResizeImageOperation(dialog.size());
+    ResizeImageOperation* op = new ResizeImageOperation(dialog->size());
     applyImageOperation(op);
 }
 

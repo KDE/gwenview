@@ -20,6 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 */
 // Self
 #include "gvcore.h"
+#include "dialogguard.h"
 
 // Qt
 #include <QApplication>
@@ -68,26 +69,26 @@ struct GvCorePrivate
 
     bool showSaveAsDialog(const QUrl &url, QUrl* outUrl, QByteArray* format)
     {
-        QFileDialog dialog(mMainWindow);
-        dialog.setAcceptMode(QFileDialog::AcceptSave);
-        dialog.setWindowTitle(i18nc("@title:window", "Save Image"));
-        dialog.selectUrl(url);
+        DialogGuard<QFileDialog> dialog(mMainWindow);
+        dialog->setAcceptMode(QFileDialog::AcceptSave);
+        dialog->setWindowTitle(i18nc("@title:window", "Save Image"));
+        dialog->selectUrl(url);
 
         QStringList supportedMimetypes;
         for (const QByteArray &mimeName : QImageWriter::supportedMimeTypes()) {
             supportedMimetypes.append(QString::fromLocal8Bit(mimeName));
         }
 
-        dialog.setMimeTypeFilters(supportedMimetypes);
-        dialog.selectMimeTypeFilter(MimeTypeUtils::urlMimeType(url));
+        dialog->setMimeTypeFilters(supportedMimetypes);
+        dialog->selectMimeTypeFilter(MimeTypeUtils::urlMimeType(url));
 
         // Show dialog
         do {
-            if (!dialog.exec()) {
+            if (!dialog->exec()) {
                 return false;
             }
 
-            QList<QUrl> files = dialog.selectedUrls();
+            QList<QUrl> files = dialog->selectedUrls();
             if (files.isEmpty()) {
                 return false;
             }
@@ -106,7 +107,7 @@ struct GvCorePrivate
             );
         } while (true);
 
-        *outUrl = dialog.selectedUrls().first();
+        *outUrl = dialog->selectedUrls().first();
         return true;
     }
 
