@@ -76,6 +76,7 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
     KSelectAction* mSortAction;
     QActionGroup* mThumbnailDetailsActionGroup;
     PreviewItemDelegate* mDelegate;
+    bool mFullScreenMode;
 
     void setupWidgets()
     {
@@ -226,6 +227,7 @@ BrowseMainPage::BrowseMainPage(QWidget* parent, KActionCollection* actionCollect
     d->mDirModel = gvCore->sortedDirModel();
     d->mDocumentCount = 0;
     d->mActionCollection = actionCollection;
+    d->mFullScreenMode = false;
     d->setupWidgets();
     d->setupActions(actionCollection);
     d->setupFilterController();
@@ -233,6 +235,8 @@ BrowseMainPage::BrowseMainPage(QWidget* parent, KActionCollection* actionCollect
     loadConfig();
     updateSortOrder();
     updateThumbnailDetails();
+
+    installEventFilter(this);
 }
 
 BrowseMainPage::~BrowseMainPage()
@@ -270,6 +274,19 @@ void BrowseMainPage::saveConfig() const
     GwenviewConfig::setThumbnailSize(d->mThumbnailSlider->value());
     GwenviewConfig::setSorting(sortingFromSortAction(d->mSortAction->currentAction()));
     GwenviewConfig::setThumbnailDetails(d->mDelegate->thumbnailDetails());
+}
+
+bool BrowseMainPage::eventFilter(QObject* watched, QEvent* event)
+{
+    if (d->mFullScreenMode && event->type() == QEvent::ShortcutOverride) {
+        const QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
+        if (keyEvent->key() == Qt::Key_Escape) {
+           d->mActionCollection->action("leave_fullscreen")->trigger();
+           event->accept();
+        }
+    }
+
+    return QWidget::eventFilter(watched, event);
 }
 
 ThumbnailView* BrowseMainPage::thumbnailView() const
@@ -353,6 +370,7 @@ void BrowseMainPage::updateThumbnailDetails()
 
 void BrowseMainPage::setFullScreenMode(bool fullScreen)
 {
+    d->mFullScreenMode = fullScreen;
     setPalette(d->mGvCore->palette(fullScreen ? GvCore::FullScreenPalette : GvCore::NormalPalette));
     d->mThumbnailView->setPalette(d->mGvCore->palette(fullScreen ? GvCore::FullScreenViewPalette : GvCore::NormalViewPalette));
     d->updateUrlNavigatorBackgroundColor();

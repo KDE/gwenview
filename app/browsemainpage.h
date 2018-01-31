@@ -79,6 +79,9 @@ private Q_SLOTS:
     void slotUrlsDropped(const QUrl &destUrl, QDropEvent*);
     void showMenuForDroppedUrls(const QList<QUrl>&, const QUrl &destUrl);
 
+protected:
+    bool eventFilter(QObject* watched, QEvent* event) Q_DECL_OVERRIDE;
+
 private:
     BrowseMainPagePrivate* const d;
 };
