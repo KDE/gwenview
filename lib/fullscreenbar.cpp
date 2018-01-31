@@ -147,8 +147,7 @@ QSize FullScreenBar::sizeHint() const
     }
 
     if (layout()->expandingDirections() & Qt::Horizontal) {
-        int width = QApplication::desktop()->screenGeometry(window()).width();
-        sh.setWidth(width);
+        sh.setWidth(parentWidget()->width());
     }
     return sh;
 }
