@@ -120,6 +120,8 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
     layout->setMargin(0);
     layout->setSpacing(0);
 
+    EventWatcher::install(autoHideParentWidget, QEvent::Resize, this, SLOT(adjustSize()));
+
     // mContent
     mContent = new QWidget;
     mContent->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -349,6 +351,12 @@ void FullScreenContent::updateContainerAppearance()
     mAutoHideContainer->setActivated(true);
 }
 
+void FullScreenContent::adjustSize()
+{
+    if (mFullScreenMode && mViewPageVisible) {
+        mAutoHideContainer->adjustSize();
+    }
+}
 
 void FullScreenContent::createOptionsAction()
 {

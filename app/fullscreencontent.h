@@ -92,6 +92,7 @@ private Q_SLOTS:
     void setFullScreenBarHeight(int value);
     void slotShowThumbnailsToggled(bool value);
     void slotViewModeActionToggled(bool value);
+    void adjustSize();
 
 private:
     KActionCollection* mActionCollection;
