@@ -1261,6 +1261,7 @@ void MainWindow::toggleFullScreen(bool checked)
         // fullscreen, we are sure latest MainWindow changes are remembered.
         KConfigGroup saveConfigGroup = autoSaveConfigGroup();
         saveMainWindowSettings(saveConfigGroup);
+        setAutoSaveSettings(saveConfigGroup, false);
         resetAutoSaveSettings();
 
         // Save state
