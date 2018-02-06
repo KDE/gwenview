@@ -130,7 +130,6 @@ enum MainPageId {
 struct MainWindowState
 {
     bool mToolBarVisible;
-    Qt::WindowStates mWindowState;
 };
 
 /*
@@ -189,7 +188,7 @@ struct MainWindow::Private
     QAction * mGoToFirstAction;
     QAction * mGoToLastAction;
     KToggleAction* mToggleSideBarAction;
-    KToggleFullScreenAction* mFullScreenAction;
+    QAction* mFullScreenAction;
     QAction * mToggleSlideShowAction;
     KToggleAction* mShowMenuBarAction;
     KToggleAction* mShowStatusBarAction;
@@ -394,7 +393,7 @@ struct MainWindow::Private
         connect(mViewModeActionGroup, SIGNAL(triggered(QAction*)),
                 q, SLOT(setActiveViewModeAction(QAction*)));
 
-        mFullScreenAction = static_cast<KToggleFullScreenAction*>(view->addAction(KStandardAction::FullScreen, q, SLOT(toggleFullScreen(bool))));
+        mFullScreenAction = KStandardAction::fullScreen(q, &MainWindow::toggleFullScreen, q, actionCollection);
         QList<QKeySequence> shortcuts = mFullScreenAction->shortcuts();
         shortcuts.append(QKeySequence(Qt::Key_F11));
         actionCollection->setDefaultShortcuts(mFullScreenAction, shortcuts);
@@ -1260,16 +1259,16 @@ void MainWindow::toggleFullScreen(bool checked)
         // Save MainWindow config now, this way if we quit while in
         // fullscreen, we are sure latest MainWindow changes are remembered.
         KConfigGroup saveConfigGroup = autoSaveConfigGroup();
-        saveMainWindowSettings(saveConfigGroup);
+        if (!isFullScreen()) {
+            // Save state if window manager did not already switch to fullscreen.
+            saveMainWindowSettings(saveConfigGroup);
+            d->mStateBeforeFullScreen.mToolBarVisible = toolBar()->isVisible();
+        }
         setAutoSaveSettings(saveConfigGroup, false);
         resetAutoSaveSettings();
 
-        // Save state
-        d->mStateBeforeFullScreen.mToolBarVisible = toolBar()->isVisible();
-        d->mStateBeforeFullScreen.mWindowState = windowState();
-
         // Go full screen
-        setWindowState(windowState() | Qt::WindowFullScreen);
+        KToggleFullScreenAction::setFullScreen(this, true);
         menuBar()->hide();
         toolBar()->hide();
 
@@ -1298,7 +1297,7 @@ void MainWindow::toggleFullScreen(bool checked)
         d->mViewMainPage->setFullScreenMode(false);
         d->mSlideShow->stop();
         d->mSaveBar->setFullScreenMode(false);
-        setWindowState(d->mStateBeforeFullScreen.mWindowState);
+        KToggleFullScreenAction::setFullScreen(this, false);
         menuBar()->setVisible(d->mShowMenuBarAction->isChecked());
         toggleStatusBar();
         toolBar()->setVisible(d->mStateBeforeFullScreen.mToolBarVisible);
