@@ -102,7 +102,6 @@ private:
 FullScreenContent::FullScreenContent(QObject* parent)
 : QObject(parent)
 {
-    mFullScreenMode = false;
     mViewPageVisible = false;
 }
 
@@ -341,7 +340,7 @@ void FullScreenContent::updateLayout()
 
 void FullScreenContent::updateContainerAppearance()
 {
-    if (!mFullScreenMode || !mViewPageVisible) {
+    if (!mContent->window()->isFullScreen() || !mViewPageVisible) {
         mAutoHideContainer->setActivated(false);
         return;
     }
@@ -353,7 +352,7 @@ void FullScreenContent::updateContainerAppearance()
 
 void FullScreenContent::adjustSize()
 {
-    if (mFullScreenMode && mViewPageVisible) {
+    if (mContent->window()->isFullScreen() && mViewPageVisible) {
         mAutoHideContainer->adjustSize();
     }
 }
@@ -460,7 +459,7 @@ void FullScreenContent::showOptionsMenu()
 
 void FullScreenContent::setFullScreenMode(bool fullScreenMode)
 {
-    mFullScreenMode = fullScreenMode;
+    Q_UNUSED(fullScreenMode);
     updateContainerAppearance();
 }
 

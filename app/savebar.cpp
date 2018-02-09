@@ -69,7 +69,6 @@ struct SaveBarPrivate
     QLabel* mActionsLabel;
     QFrame* mTooManyChangesFrame;
     QUrl mCurrentUrl;
-    bool mFullScreenMode;
 
     void createTooManyChangesFrame()
     {
@@ -215,7 +214,7 @@ struct SaveBarPrivate
     void updateWidgetSizes()
     {
         QVBoxLayout* layout = static_cast<QVBoxLayout*>(mSaveBarWidget->layout());
-        int topRowHeight = mFullScreenMode ? 0 : mTopRowWidget->height();
+        int topRowHeight = q->window()->isFullScreen() ? 0 : mTopRowWidget->height();
         int bottomRowHeight = mTooManyChangesFrame->isVisibleTo(mSaveBarWidget) ? mTooManyChangesFrame->sizeHint().height() : 0;
 
         int height = 2 * layout->margin() + topRowHeight + bottomRowHeight;
@@ -231,7 +230,6 @@ SaveBar::SaveBar(QWidget* parent, KActionCollection* actionCollection)
 , d(new SaveBarPrivate)
 {
     d->q = this;
-    d->mFullScreenMode = false;
     d->mActionCollection = actionCollection;
     d->mSaveBarWidget = new QWidget();
     d->mSaveBarWidget->setObjectName(QLatin1String("saveBarWidget"));
@@ -310,11 +308,10 @@ void SaveBar::initActionDependentWidgets()
     d->updateWidgetSizes();
 }
 
-void SaveBar::setFullScreenMode(bool value)
+void SaveBar::setFullScreenMode(bool isFullScreen)
 {
-    d->mFullScreenMode = value;
-    d->mSaveAllFullScreenButton->setVisible(value);
-    if (value) {
+    d->mSaveAllFullScreenButton->setVisible(isFullScreen);
+    if (isFullScreen) {
         d->applyFullScreenStyleSheet();
     } else {
         d->applyNormalStyleSheet();
@@ -326,7 +323,7 @@ void SaveBar::updateContent()
 {
     QList<QUrl> lst = DocumentFactory::instance()->modifiedDocumentList();
 
-    if (d->mFullScreenMode) {
+    if (window()->isFullScreen()) {
         d->mTopRowWidget->hide();
     } else {
         d->mTopRowWidget->show();
@@ -336,7 +333,7 @@ void SaveBar::updateContent()
     d->updateTooManyChangesFrame(lst);
 
     d->updateWidgetSizes();
-    if (lst.isEmpty() || (d->mFullScreenMode && !d->mTooManyChangesFrame->isVisibleTo(d->mSaveBarWidget))) {
+    if (lst.isEmpty() || (window()->isFullScreen() && !d->mTooManyChangesFrame->isVisibleTo(d->mSaveBarWidget))) {
         slideOut();
     } else {
         slideIn();

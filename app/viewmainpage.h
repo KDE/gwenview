@@ -70,8 +70,6 @@ public:
 
     void setFullScreenMode(bool fullScreen);
 
-    bool isFullScreenMode() const;
-
     int statusBarHeight() const;
 
     QSize sizeHint() const Q_DECL_OVERRIDE;

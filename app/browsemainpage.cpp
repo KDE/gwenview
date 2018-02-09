@@ -76,7 +76,6 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
     KSelectAction* mSortAction;
     QActionGroup* mThumbnailDetailsActionGroup;
     PreviewItemDelegate* mDelegate;
-    bool mFullScreenMode;
 
     void setupWidgets()
     {
@@ -227,7 +226,6 @@ BrowseMainPage::BrowseMainPage(QWidget* parent, KActionCollection* actionCollect
     d->mDirModel = gvCore->sortedDirModel();
     d->mDocumentCount = 0;
     d->mActionCollection = actionCollection;
-    d->mFullScreenMode = false;
     d->setupWidgets();
     d->setupActions(actionCollection);
     d->setupFilterController();
@@ -278,7 +276,7 @@ void BrowseMainPage::saveConfig() const
 
 bool BrowseMainPage::eventFilter(QObject* watched, QEvent* event)
 {
-    if (d->mFullScreenMode && event->type() == QEvent::ShortcutOverride) {
+    if (window()->isFullScreen() && event->type() == QEvent::ShortcutOverride) {
         const QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
         if (keyEvent->key() == Qt::Key_Escape) {
            d->mActionCollection->action("leave_fullscreen")->trigger();
@@ -370,7 +368,6 @@ void BrowseMainPage::updateThumbnailDetails()
 
 void BrowseMainPage::setFullScreenMode(bool fullScreen)
 {
-    d->mFullScreenMode = fullScreen;
     setPalette(d->mGvCore->palette(fullScreen ? GvCore::FullScreenPalette : GvCore::NormalPalette));
     d->mThumbnailView->setPalette(d->mGvCore->palette(fullScreen ? GvCore::FullScreenViewPalette : GvCore::NormalViewPalette));
     d->updateUrlNavigatorBackgroundColor();

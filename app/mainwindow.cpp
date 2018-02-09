@@ -695,7 +695,7 @@ struct MainWindow::Private
             name = BROWSE_MODE_SIDE_BAR_GROUP;
             break;
         case ViewMainPageId:
-            name = mViewMainPage->isFullScreenMode()
+            name = q->isFullScreen()
                    ? FULLSCREEN_MODE_SIDE_BAR_GROUP
                    : VIEW_MODE_SIDE_BAR_GROUP;
             break;
@@ -1275,16 +1275,7 @@ void MainWindow::toggleFullScreen(bool checked)
         qApp->setProperty("KDE_COLOR_SCHEME_PATH", d->mGvCore->fullScreenPaletteName());
         QApplication::setPalette(d->mGvCore->palette(GvCore::FullScreenPalette));
 
-        d->mFullScreenContent->setFullScreenMode(true);
-        d->mBrowseMainPage->setFullScreenMode(true);
-        d->mViewMainPage->setFullScreenMode(true);
-        d->mSaveBar->setFullScreenMode(true);
         d->setScreenSaverEnabled(false);
-
-        // HACK: Only load sidebar config now, because it looks at
-        // ViewMainPage fullScreenMode property to determine the sidebar
-        // config group.
-        d->loadSideBarConfig();
     } else {
         setAutoSaveSettings();
 
@@ -1292,11 +1283,7 @@ void MainWindow::toggleFullScreen(bool checked)
         qApp->setProperty("KDE_COLOR_SCHEME_PATH", QVariant());
         QApplication::setPalette(d->mGvCore->palette(GvCore::NormalPalette));
 
-        d->mFullScreenContent->setFullScreenMode(false);
-        d->mBrowseMainPage->setFullScreenMode(false);
-        d->mViewMainPage->setFullScreenMode(false);
         d->mSlideShow->stop();
-        d->mSaveBar->setFullScreenMode(false);
         KToggleFullScreenAction::setFullScreen(this, false);
         menuBar()->setVisible(d->mShowMenuBarAction->isChecked());
         toggleStatusBar();
@@ -1304,13 +1291,17 @@ void MainWindow::toggleFullScreen(bool checked)
 
         d->setScreenSaverEnabled(true);
 
-        // Keep this after mViewMainPage->setFullScreenMode(false).
-        // See call to loadSideBarConfig() above.
-        d->loadSideBarConfig();
-
         // See resizeEvent
         d->mFullScreenLeftAt = QDateTime::currentDateTime();
     }
+
+    d->mFullScreenContent->setFullScreenMode(checked);
+    d->mBrowseMainPage->setFullScreenMode(checked);
+    d->mViewMainPage->setFullScreenMode(checked);
+    d->mSaveBar->setFullScreenMode(checked);
+
+    d->loadSideBarConfig();
+
     setUpdatesEnabled(true);
     d->autoAssignThumbnailProvider();
 }

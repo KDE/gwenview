@@ -111,7 +111,6 @@ private:
     QPointer<FullScreenConfigWidget> mConfigWidget;
     QAction * mOptionsAction;
 
-    bool mFullScreenMode;
     bool mViewPageVisible;
 
     void createOptionsAction();

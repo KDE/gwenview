@@ -160,7 +160,6 @@ struct ViewMainPagePrivate
     // that use this KPart
     QHash<DocumentView*, KActivities::ResourceInstance*> mActivityResources;
 
-    bool mFullScreenMode;
     bool mCompareMode;
     bool mThumbnailBarVisibleBeforeFullScreen;
     ZoomMode::Enum mZoomMode;
@@ -400,7 +399,6 @@ ViewMainPage::ViewMainPage(QWidget* parent, SlideShow* slideShow, KActionCollect
     d->mSlideShow = slideShow;
     d->mActionCollection = actionCollection;
     d->mGvCore = gvCore;
-    d->mFullScreenMode = false;
     d->mCompareMode = false;
     d->mThumbnailBarVisibleBeforeFullScreen = false;
 
@@ -507,7 +505,6 @@ void ViewMainPage::setStatusBarVisible(bool visible)
 
 void ViewMainPage::setFullScreenMode(bool fullScreenMode)
 {
-    d->mFullScreenMode = fullScreenMode;
     d->mStatusBarContainer->setVisible(!fullScreenMode);
 
     if (fullScreenMode) {
@@ -522,11 +519,6 @@ void ViewMainPage::setFullScreenMode(bool fullScreenMode)
     }
     d->applyPalette(fullScreenMode);
     d->mToggleThumbnailBarAction->setEnabled(!fullScreenMode);
-}
-
-bool ViewMainPage::isFullScreenMode() const
-{
-    return d->mFullScreenMode;
 }
 
 ThumbnailBarView* ViewMainPage::thumbnailBar() const
