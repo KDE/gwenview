@@ -48,6 +48,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/documentview/documentviewcontainer.h>
 #include <lib/documentview/documentviewcontroller.h>
 #include <lib/documentview/documentviewsynchronizer.h>
+#include <lib/fullscreenbar.h>
 #include <lib/gvdebug.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/paintutils.h>
@@ -567,6 +568,26 @@ void ViewMainPage::showContextMenu()
 QSize ViewMainPage::sizeHint() const
 {
     return QSize(400, 300);
+}
+
+QSize ViewMainPage::minimumSizeHint() const {
+    if (!layout()) {
+        return QSize();
+    }
+
+    QSize minimumSize = layout()->minimumSize();
+    if (window()->isFullScreen()) {
+        // Check minimum width of the overlay fullscreen bar
+        // since there is no layout link which could do this
+        const FullScreenBar* fullScreenBar = findChild<FullScreenBar*>();
+        if (fullScreenBar && fullScreenBar->layout()) {
+            const int fullScreenBarWidth = fullScreenBar->layout()->minimumSize().width();
+            if (fullScreenBarWidth > minimumSize.width()) {
+                minimumSize.setWidth(fullScreenBarWidth);
+            }
+        }
+    }
+    return minimumSize;
 }
 
 QUrl ViewMainPage::url() const

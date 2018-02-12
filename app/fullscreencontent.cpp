@@ -151,7 +151,7 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
     mInformationLabel = new QLabel;
     mInformationLabel->setWordWrap(true);
     mInformationLabel->setContentsMargins(6, 0, 6, 0);
-    mInformationLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
+    mInformationLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
     mInformationLabel->setAutoFillBackground(true);
     mInformationLabelShadow = new ShadowFilter(mInformationLabel);
 
@@ -323,7 +323,7 @@ void FullScreenContent::updateLayout()
         layout->addWidget(mInformationLabel);
         layout->addWidget(mRightToolBar);
 
-        mAutoHideContainer->setFixedHeight(mContent->sizeHint().height());
+        mAutoHideContainer->setFixedHeight(mToolBar->sizeHint().height());
 
         // Shadows
         mToolBarShadow->reset();
