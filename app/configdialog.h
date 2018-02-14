@@ -48,6 +48,7 @@ private:
     InvisibleButtonGroup* mAlphaBackgroundModeGroup;
     InvisibleButtonGroup* mWheelBehaviorGroup;
     InvisibleButtonGroup* mAnimationMethodGroup;
+    InvisibleButtonGroup* mThumbnailActionsGroup;
     InvisibleButtonGroup* mZoomModeGroup;
     InvisibleButtonGroup* mThumbnailBarOrientationGroup;
     InvisibleButtonGroup* mRenderingIntentGroup;

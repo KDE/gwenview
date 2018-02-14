@@ -44,6 +44,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "lib/hud/hudtheme.h"
 #include "lib/paintutils.h"
 #include "lib/thumbnailview/abstractthumbnailviewhelper.h"
+#include "gwenviewconfig.h"
 
 namespace Gwenview
 {
@@ -126,7 +127,7 @@ struct ThumbnailBarItemDelegatePrivate
     {
         mIndexUnderCursor = index;
 
-        if (mIndexUnderCursor.isValid()) {
+        if (mIndexUnderCursor.isValid() && GwenviewConfig::thumbnailActions() != ThumbnailActions::None) {
             updateToggleSelectionButton();
 
             const QRect rect = mView->visualRect(mIndexUnderCursor);

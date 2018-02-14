@@ -7,6 +7,7 @@
     <kcfgfile name="gwenviewrc"/>
     <include>lib/sorting.h</include>
     <include>lib/zoommode.h</include>
+    <include>lib/thumbnailactions.h</include>
     <include>lib/mousewheelbehavior.h</include>
     <include>lib/documentview/documentview.h</include>
     <include>lib/documentview/rasterimageview.h</include>
@@ -81,6 +82,15 @@
 
         <entry name="SideBarPage" type="String">
             <default>information</default>
+        </entry>
+        
+        <entry name="ThumbnailActions" type="Enum">
+            <choices name="Gwenview::ThumbnailActions::Enum">
+                <choice name="ThumbnailActions::AllButtons"/>
+                <choice name="ThumbnailActions::ShowSelectionButtonOnly"/>
+                <choice name="ThumbnailActions::None"/>
+            </choices>
+            <default>ThumbnailActions::AllButtons</default>
         </entry>
     </group>
 

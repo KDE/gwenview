@@ -215,6 +215,28 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
        pal.setColor(QPalette::Window, pal.color(QPalette::Window).dark(110));
        mUrlNavigatorContainer->setPalette(pal);
     }
+
+    void updateContextBarActions()
+    {
+        PreviewItemDelegate::ContextBarActions actions;
+        switch (GwenviewConfig::thumbnailActions())
+        {
+            case ThumbnailActions::None:
+                actions = PreviewItemDelegate::NoAction;
+                break;
+            case ThumbnailActions::ShowSelectionButtonOnly:
+                actions = PreviewItemDelegate::SelectionAction;
+                break;
+            case ThumbnailActions::AllButtons:
+            default:
+                actions = PreviewItemDelegate::SelectionAction | PreviewItemDelegate::RotateAction;
+                if (!q->window()->isFullScreen()) {
+                    actions |= PreviewItemDelegate::FullScreenAction;
+                }
+                break;
+        }
+        mDelegate->setContextBarActions(actions);
+    }
 };
 
 BrowseMainPage::BrowseMainPage(QWidget* parent, KActionCollection* actionCollection, GvCore* gvCore)
@@ -263,6 +285,8 @@ void BrowseMainPage::loadConfig()
             break;
         }
     }
+
+    d->updateContextBarActions();
 }
 
 void BrowseMainPage::saveConfig() const
@@ -374,11 +398,7 @@ void BrowseMainPage::setFullScreenMode(bool fullScreen)
     d->mUrlNavigatorContainer->setContentsMargins(
         fullScreen ? 6 : 0,
         0, 0, 0);
-    PreviewItemDelegate::ContextBarActions actions = PreviewItemDelegate::SelectionAction | PreviewItemDelegate::RotateAction;
-    if (!fullScreen) {
-        actions |= PreviewItemDelegate::FullScreenAction;
-    }
-    d->mDelegate->setContextBarActions(actions);
+    d->updateContextBarActions();
 
     d->mFullScreenToolBar->setVisible(fullScreen);
     d->mFullScreenToolBar2->setVisible(fullScreen);

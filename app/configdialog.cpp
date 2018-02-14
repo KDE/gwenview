@@ -52,6 +52,13 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 
     // General
     widget = setupPage(mGeneralConfigPage);
+    
+    mThumbnailActionsGroup = new InvisibleButtonGroup(widget);
+    mThumbnailActionsGroup->setObjectName(QLatin1String("kcfg_ThumbnailActions"));
+    mThumbnailActionsGroup->addButton(mGeneralConfigPage.allButtonsThumbnailActionsRadioButton, int(ThumbnailActions::AllButtons));
+    mThumbnailActionsGroup->addButton(mGeneralConfigPage.selectionOnlyThumbnailActionsRadioButton, int(ThumbnailActions::ShowSelectionButtonOnly));
+    mThumbnailActionsGroup->addButton(mGeneralConfigPage.noneThumbnailActionsRadioButton, int(ThumbnailActions::None));
+
     pageItem = addPage(widget, i18n("General"));
     pageItem->setIcon(QIcon::fromTheme("gwenview"));
     connect(mGeneralConfigPage.kcfg_ViewBackgroundValue, SIGNAL(valueChanged(int)), SLOT(updateViewBackgroundFrame()));

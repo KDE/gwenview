@@ -162,7 +162,18 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
 
         PreviewItemDelegate* delegate = new PreviewItemDelegate(mThumbnailView);
         delegate->setThumbnailDetails(PreviewItemDelegate::FileNameDetail);
-        delegate->setContextBarActions(PreviewItemDelegate::SelectionAction);
+        PreviewItemDelegate::ContextBarActions actions;
+        switch (GwenviewConfig::thumbnailActions())
+        {
+            case ThumbnailActions::None:
+                actions = PreviewItemDelegate::NoAction;
+                break;
+            case ThumbnailActions::ShowSelectionButtonOnly:
+            case ThumbnailActions::AllButtons:
+                actions = PreviewItemDelegate::SelectionAction;
+                break;
+        }
+        delegate->setContextBarActions(actions);
         mThumbnailView->setItemDelegate(delegate);
 
         // Colors

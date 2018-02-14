@@ -189,7 +189,7 @@ struct ViewMainPagePrivate
         QColor borderSelColor = PaintUtils::adjustedHsv(bgSelColor, 0, 0, -qMin(60, bgSelColor.value()));
 
         QString itemCss =
-            "QListView::item {"
+            "QListView::item:!hover {"
             "	background-color: %1;"
             "	border-left: 1px solid %2;"
             "	border-right: 1px solid %3;"
