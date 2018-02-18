@@ -1423,6 +1423,9 @@ bool MainWindow::queryClose()
 
 void MainWindow::showConfigDialog()
 {
+    // Save first so changes like thumbnail zoom level are not lost when reloading config
+    saveConfig();
+
     ConfigDialog dialog(this);
     connect(&dialog, SIGNAL(settingsChanged(QString)), SLOT(loadConfig()));
     dialog.exec();
