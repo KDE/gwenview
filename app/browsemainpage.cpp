@@ -237,6 +237,12 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
         }
         mDelegate->setContextBarActions(actions);
     }
+    
+    void applyPalette(bool fullScreenmode)
+    {
+        q->setPalette(mGvCore->palette(fullScreenmode ? GvCore::FullScreenPalette : GvCore::NormalPalette));
+        mThumbnailView->setPalette(mGvCore->palette(fullScreenmode ? GvCore::FullScreenViewPalette : GvCore::NormalViewPalette));
+    }
 };
 
 BrowseMainPage::BrowseMainPage(QWidget* parent, KActionCollection* actionCollection, GvCore* gvCore)
@@ -266,8 +272,7 @@ BrowseMainPage::~BrowseMainPage()
 
 void BrowseMainPage::loadConfig()
 {
-    setPalette(d->mGvCore->palette(GvCore::NormalPalette));
-    d->mThumbnailView->setPalette(d->mGvCore->palette(GvCore::NormalViewPalette));
+    d->applyPalette(window()->isFullScreen());
     d->mUrlNavigator->setUrlEditable(GwenviewConfig::urlNavigatorIsEditable());
     d->mUrlNavigator->setShowFullPath(GwenviewConfig::urlNavigatorShowFullPath());
 
@@ -392,8 +397,7 @@ void BrowseMainPage::updateThumbnailDetails()
 
 void BrowseMainPage::setFullScreenMode(bool fullScreen)
 {
-    setPalette(d->mGvCore->palette(fullScreen ? GvCore::FullScreenPalette : GvCore::NormalPalette));
-    d->mThumbnailView->setPalette(d->mGvCore->palette(fullScreen ? GvCore::FullScreenViewPalette : GvCore::NormalViewPalette));
+    d->applyPalette(fullScreen);
     d->updateUrlNavigatorBackgroundColor();
     d->mUrlNavigatorContainer->setContentsMargins(
         fullScreen ? 6 : 0,

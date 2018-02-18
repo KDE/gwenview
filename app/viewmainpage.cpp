@@ -448,7 +448,7 @@ ViewMainPage::~ViewMainPage()
 
 void ViewMainPage::loadConfig()
 {
-    d->applyPalette(false /* fullScreenMode */);
+    d->applyPalette(window()->isFullScreen());
 
     // FIXME: Not symetric with saveConfig(). Check if it matters.
     Q_FOREACH(DocumentView * view, d->mDocumentViews) {
