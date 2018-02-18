@@ -492,8 +492,6 @@ void ViewMainPage::setStatusBarVisible(bool visible)
 
 void ViewMainPage::setFullScreenMode(bool fullScreenMode)
 {
-    d->mStatusBarContainer->setVisible(!fullScreenMode);
-
     if (fullScreenMode) {
         d->mThumbnailBarVisibleBeforeFullScreen = d->mToggleThumbnailBarAction->isChecked();
         if (d->mThumbnailBarVisibleBeforeFullScreen) {

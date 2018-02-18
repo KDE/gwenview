@@ -463,7 +463,7 @@ struct MainWindow::Private
         q->setStandardToolBarMenuEnabled(true);
 
         mShowMenuBarAction = static_cast<KToggleAction*>(view->addAction(KStandardAction::ShowMenubar, q, SLOT(toggleMenuBar())));
-        mShowStatusBarAction = static_cast<KToggleAction*>(view->addAction(KStandardAction::ShowStatusbar, q, SLOT(toggleStatusBar())));
+        mShowStatusBarAction = static_cast<KToggleAction*>(view->addAction(KStandardAction::ShowStatusbar, q, SLOT(toggleStatusBar(bool))));
 
         actionCollection->setDefaultShortcut(mShowStatusBarAction, Qt::Key_F3);
 
@@ -726,6 +726,42 @@ struct MainWindow::Private
         GwenviewConfig::setSideBarPage(mSideBar->currentPage());
     }
 
+    bool statusBarVisibility() const
+    {
+        switch (mCurrentMainPageId) {
+        case StartMainPageId:
+            GV_WARN_AND_RETURN_VALUE(false, "Statusbar not implemented on start page");
+            break;
+        case BrowseMainPageId:
+            return GwenviewConfig::statusBarVisibleBrowseMode();
+            break;
+        case ViewMainPageId:
+            return q->isFullScreen()
+                ? GwenviewConfig::statusBarVisibleViewModeFullScreen()
+                : GwenviewConfig::statusBarVisibleViewMode();
+            break;
+        }
+
+        return false;
+    }
+
+    void setStatusBarVisibility(const bool visible)
+    {
+        switch (mCurrentMainPageId) {
+        case StartMainPageId:
+            GV_WARN_AND_RETURN("Statusbar not implemented on start page");
+            break;
+        case BrowseMainPageId:
+            GwenviewConfig::setStatusBarVisibleBrowseMode(visible);
+            break;
+        case ViewMainPageId:
+            q->isFullScreen()
+                ? GwenviewConfig::setStatusBarVisibleViewModeFullScreen(visible)
+                : GwenviewConfig::setStatusBarVisibleViewMode(visible);
+            break;
+        }
+    }
+
     void setScreenSaverEnabled(bool enabled)
     {
         // Always delete mNotificationRestrictions, it does not hurt
@@ -905,6 +941,7 @@ void MainWindow::setActiveViewModeAction(QAction* action)
     }
     d->loadSideBarConfig();
     d->autoAssignThumbnailProvider();
+    toggleStatusBar(d->statusBarVisibility());
 
     emit viewModeChanged();
 }
@@ -1070,10 +1107,13 @@ void MainWindow::toggleSideBar(bool on)
     d->mSideBar->setVisible(on);
 }
 
-void MainWindow::toggleStatusBar()
+void MainWindow::toggleStatusBar(bool visible)
 {
-    d->mViewMainPage->setStatusBarVisible(d->mShowStatusBarAction->isChecked());
-    d->mBrowseMainPage->setStatusBarVisible(d->mShowStatusBarAction->isChecked());
+    d->mShowStatusBarAction->setChecked(visible);
+    d->setStatusBarVisibility(visible);
+
+    d->mViewMainPage->setStatusBarVisible(visible);
+    d->mBrowseMainPage->setStatusBarVisible(visible);
 }
 
 void MainWindow::updateToggleSideBarAction()
@@ -1286,7 +1326,6 @@ void MainWindow::toggleFullScreen(bool checked)
         d->mSlideShow->stop();
         KToggleFullScreenAction::setFullScreen(this, false);
         menuBar()->setVisible(d->mShowMenuBarAction->isChecked());
-        toggleStatusBar();
         toolBar()->setVisible(d->mStateBeforeFullScreen.mToolBarVisible);
 
         d->setScreenSaverEnabled(true);
@@ -1301,6 +1340,7 @@ void MainWindow::toggleFullScreen(bool checked)
     d->mSaveBar->setFullScreenMode(checked);
 
     d->loadSideBarConfig();
+    toggleStatusBar(d->statusBarVisibility());
 
     setUpdatesEnabled(true);
     d->autoAssignThumbnailProvider();
@@ -1466,15 +1506,11 @@ void MainWindow::loadConfig()
     d->mViewMainPage->loadConfig();
     d->mBrowseMainPage->loadConfig();
     d->mContextManager->loadConfig();
-
-    d->mShowStatusBarAction->setChecked(GwenviewConfig::statusBarIsVisible());
-    toggleStatusBar();
 }
 
 void MainWindow::saveConfig()
 {
     d->mFileOpenRecentAction->saveEntries(KConfigGroup(KSharedConfig::openConfig(), "Recent Files"));
-    GwenviewConfig::setStatusBarIsVisible(d->mShowStatusBarAction->isChecked());
     d->mViewMainPage->saveConfig();
     d->mBrowseMainPage->saveConfig();
     d->mContextManager->saveConfig();

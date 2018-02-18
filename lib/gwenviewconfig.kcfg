@@ -43,9 +43,6 @@
         <entry name="ThumbnailBarIsVisible" type="Bool">
             <default>false</default>
         </entry>
-        <entry name="StatusBarIsVisible" type="Bool">
-            <default>true</default>
-        </entry>
 
         <entry name="LastTargetDir" type="Path">
             <default code="true">
@@ -295,4 +292,15 @@
         </entry>
     </group>
 
+    <group name="StatusBar">
+        <entry name="StatusBarVisibleBrowseMode" key="IsVisible BrowseMode" type="Bool">
+            <default>true</default>
+        </entry>
+        <entry name="StatusBarVisibleViewMode" key="IsVisible ViewMode" type="Bool">
+            <default>true</default>
+        </entry>
+        <entry name="StatusBarVisibleViewModeFullScreen" key="IsVisible ViewMode FullScreen" type="Bool">
+            <default>false</default>
+        </entry>
+    </group>
 </kcfg>
