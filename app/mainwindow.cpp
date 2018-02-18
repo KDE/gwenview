@@ -1438,6 +1438,9 @@ bool MainWindow::queryClose()
 
 void MainWindow::showConfigDialog()
 {
+    // Save first so changes like thumbnail zoom level are not lost when reloading config
+    saveConfig();
+    
     DialogGuard<ConfigDialog> dialog(this);
     connect(dialog.data(), SIGNAL(settingsChanged(QString)), SLOT(loadConfig()));
     dialog->exec();
