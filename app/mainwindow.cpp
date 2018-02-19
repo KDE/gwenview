@@ -1394,6 +1394,7 @@ void MainWindow::openUrl(const QUrl& url)
 void MainWindow::showDocumentInFullScreen(const QUrl &url)
 {
     d->mContextManager->setUrlToSelect(url);
+    d->mViewAction->trigger();
     d->mFullScreenAction->trigger();
 }
 
