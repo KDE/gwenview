@@ -149,6 +149,7 @@ set(gwenviewlib_SRCS
     slidecontainer.cpp
     slideshow.cpp
     statusbartoolbutton.cpp
+    stylesheetutils.cpp
     redeyereduction/redeyereductionimageoperation.cpp
     redeyereduction/redeyereductiontool.cpp
     resize/resizeimageoperation.cpp

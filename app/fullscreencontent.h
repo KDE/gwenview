@@ -44,7 +44,7 @@ class FullScreenBar;
 class FullScreenToolBar;
 class ShadowFilter;
 class SlideShow;
-
+class GvCore;
 class ThumbnailBarView;
 
 
@@ -66,7 +66,7 @@ class FullScreenContent : public QObject
 {
     Q_OBJECT
 public:
-    FullScreenContent(QObject* parent);
+    FullScreenContent(QObject* parent, GvCore* gvCore);
 
     void init(KActionCollection*, QWidget* autoHideParentWidget, SlideShow*);
 
@@ -110,12 +110,14 @@ private:
     QPointer<ImageMetaInfoDialog> mImageMetaInfoDialog;
     QPointer<FullScreenConfigWidget> mConfigWidget;
     QAction * mOptionsAction;
+    GvCore* mGvCore;
 
     bool mViewPageVisible;
 
     void createOptionsAction();
     void updateContainerAppearance();
     void updateLayout();
+    void setupThumbnailBarStyleSheet();
 };
 
 } // namespace

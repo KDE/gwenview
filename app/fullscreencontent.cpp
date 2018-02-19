@@ -47,6 +47,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/thumbnailview/thumbnailbarview.h>
 #include <lib/shadowfilter.h>
 #include <lib/slideshow.h>
+#include <gvcore.h>
+#include <lib/stylesheetutils.h>
 
 namespace Gwenview
 {
@@ -99,9 +101,10 @@ private:
 };
 
 
-FullScreenContent::FullScreenContent(QObject* parent)
+FullScreenContent::FullScreenContent(QObject* parent, GvCore* gvCore)
 : QObject(parent)
 {
+    mGvCore = gvCore;
     mViewPageVisible = false;
 }
 
@@ -461,6 +464,7 @@ void FullScreenContent::setFullScreenMode(bool fullScreenMode)
 {
     Q_UNUSED(fullScreenMode);
     updateContainerAppearance();
+    setupThumbnailBarStyleSheet();
 }
 
 void FullScreenContent::setDistractionFreeMode(bool distractionFreeMode)
@@ -487,6 +491,42 @@ void FullScreenContent::slotViewModeActionToggled(bool value)
 {
     mViewPageVisible = value;
     updateContainerAppearance();
+}
+
+void FullScreenContent::setupThumbnailBarStyleSheet()
+{
+    const QPalette pal = mGvCore->palette(GvCore::NormalPalette);
+    const QPalette fsPal = mGvCore->palette(GvCore::FullScreenPalette);
+    QColor bgColor = fsPal.color(QPalette::Normal, QPalette::Base);
+    QColor bgSelColor = pal.color(QPalette::Normal, QPalette::Highlight);
+    QColor bgHovColor = pal.color(QPalette::Normal, QPalette::Highlight);
+    
+    // Darken the select color a little to suit dark theme of fullscreen mode
+    bgSelColor.setHsv(bgSelColor.hue(), bgSelColor.saturation(), (bgSelColor.value() * 0.8));
+    
+    // Calculate hover color based on background color in case it changes (matches ViewMainPage thumbnail bar)
+    bgHovColor.setHsv(bgHovColor.hue(), (bgHovColor.saturation() / 2), ((bgHovColor.value() + bgColor.value()) / 2));
+    
+    QString genCss = 
+        "QListView {"
+        "  background-color: %1;"
+        "}";
+    genCss = genCss.arg(StyleSheetUtils::rgba(bgColor));
+    
+    QString itemSelCss = 
+        "QListView::item:selected {"
+        "  background-color: %1;"
+        "}";
+    itemSelCss = itemSelCss.arg(StyleSheetUtils::rgba(bgSelColor));
+    
+    QString itemHovCss = 
+        "QListView::item:hover:!selected {"
+        "  background-color: %1;"
+        "}";
+    itemHovCss = itemHovCss.arg(StyleSheetUtils::rgba(bgHovColor));
+    
+    QString css = genCss + itemSelCss + itemHovCss;
+    mThumbnailBar->setStyleSheet(css);
 }
 
 } // namespace

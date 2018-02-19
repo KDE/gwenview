@@ -221,7 +221,7 @@ struct MainWindow::Private
 
     void setupWidgets()
     {
-        mFullScreenContent = new FullScreenContent(q);
+        mFullScreenContent = new FullScreenContent(q, mGvCore);
         connect(mContextManager, SIGNAL(currentUrlChanged(QUrl)), mFullScreenContent, SLOT(setCurrentUrl(QUrl)));
 
         mCentralSplitter = new Splitter(Qt::Horizontal, q);

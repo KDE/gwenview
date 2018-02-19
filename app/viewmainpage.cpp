@@ -59,6 +59,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/thumbnailview/thumbnailbarview.h>
 #include <lib/zoomwidget.h>
 #include <lib/zoommode.h>
+#include <lib/stylesheetutils.h>
 
 namespace Gwenview
 {
@@ -73,36 +74,6 @@ namespace Gwenview
 #endif
 
 const int ViewMainPage::MaxViewCount = 6;
-
-static QString rgba(const QColor &color)
-{
-    return QString::fromLocal8Bit("rgba(%1, %2, %3, %4)")
-           .arg(color.red())
-           .arg(color.green())
-           .arg(color.blue())
-           .arg(color.alpha());
-}
-
-static QString gradient(Qt::Orientation orientation, const QColor &color, int value)
-{
-    int x2, y2;
-    if (orientation == Qt::Horizontal) {
-        x2 = 0;
-        y2 = 1;
-    } else {
-        x2 = 1;
-        y2 = 0;
-    }
-    QString grad =
-        "qlineargradient(x1:0, y1:0, x2:%1, y2:%2,"
-        "stop:0 %3, stop: 1 %4)";
-    return grad
-           .arg(x2)
-           .arg(y2)
-           .arg(rgba(PaintUtils::adjustedHsv(color, 0, 0, qMin(255 - color.value(), value / 2))))
-           .arg(rgba(PaintUtils::adjustedHsv(color, 0, 0, -qMin(color.value(), value / 2))))
-           ;
-}
 
 /*
  * Layout of mThumbnailSplitter is:
@@ -181,24 +152,28 @@ struct ViewMainPagePrivate
         Qt::Orientation orientation = mThumbnailBar->orientation();
         QColor bgColor = pal.color(QPalette::Normal, QPalette::Base);
         QColor bgSelColor = pal.color(QPalette::Normal, QPalette::Highlight);
-
+        QColor bgHovColor = pal.color(QPalette::Normal, QPalette::Highlight);
+        
         // Avoid dark and bright colors
         bgColor.setHsv(bgColor.hue(), bgColor.saturation(), (127 + 3 * bgColor.value()) / 4);
+        
+        // Hover uses lighter/faded version of select color. Combine with bgColor to adapt to different backgrounds
+        bgHovColor.setHsv(bgHovColor.hue(), (bgHovColor.saturation() / 2), ((bgHovColor.value() + bgColor.value()) / 2));
 
         QColor leftBorderColor = PaintUtils::adjustedHsv(bgColor, 0, 0, qMin(20, 255 - bgColor.value()));
         QColor rightBorderColor = PaintUtils::adjustedHsv(bgColor, 0, 0, -qMin(40, bgColor.value()));
         QColor borderSelColor = PaintUtils::adjustedHsv(bgSelColor, 0, 0, -qMin(60, bgSelColor.value()));
 
         QString itemCss =
-            "QListView::item:!hover {"
+            "QListView::item {"
             "	background-color: %1;"
             "	border-left: 1px solid %2;"
             "	border-right: 1px solid %3;"
             "}";
         itemCss = itemCss.arg(
-                      gradient(orientation, bgColor, 46),
-                      gradient(orientation, leftBorderColor, 36),
-                      gradient(orientation, rightBorderColor, 26));
+                      StyleSheetUtils::gradient(orientation, bgColor, 46),
+                      StyleSheetUtils::gradient(orientation, leftBorderColor, 36),
+                      StyleSheetUtils::gradient(orientation, rightBorderColor, 26));
 
         QString itemSelCss =
             "QListView::item:selected {"
@@ -207,10 +182,21 @@ struct ViewMainPagePrivate
             "	border-right: 1px solid %2;"
             "}";
         itemSelCss = itemSelCss.arg(
-                         gradient(orientation, bgSelColor, 56),
-                         rgba(borderSelColor));
+                         StyleSheetUtils::gradient(orientation, bgSelColor, 56),
+                         StyleSheetUtils::rgba(borderSelColor));
+        
+        QString itemHovCss =
+            "QListView::item:hover:!selected {"
+            "  background-color: %1;"
+            "  border-left: 1px solid %2;"
+            "  border-right: 1px solid %3;"
+            "}";
+        itemHovCss = itemHovCss.arg(
+                         StyleSheetUtils::gradient(orientation, bgHovColor, 56),
+                         StyleSheetUtils::rgba(leftBorderColor),
+                         StyleSheetUtils::rgba(rightBorderColor));
 
-        QString css = itemCss + itemSelCss;
+        QString css = itemCss + itemSelCss + itemHovCss;
         if (orientation == Qt::Vertical) {
             css.replace("left", "top").replace("right", "bottom");
         }
