@@ -34,6 +34,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QFontDatabase>
 
 // Local
+#include <lib/gwenviewconfig.h>
+#include <lib/signalblocker.h>
 
 namespace Gwenview
 {
@@ -218,6 +220,10 @@ SideBar::SideBar(QWidget* parent)
     tabBar()->setFocusPolicy(Qt::NoFocus);
     setTabPosition(QTabWidget::South);
     setElideMode(Qt::ElideRight);
+
+    connect(tabBar(), &QTabBar::currentChanged, [=]() {
+        GwenviewConfig::setSideBarPage(currentPage());
+    });
 }
 
 SideBar::~SideBar()
@@ -232,6 +238,8 @@ QSize SideBar::sizeHint() const
 
 void SideBar::addPage(SideBarPage* page)
 {
+    // Prevent emitting currentChanged() while populating pages
+    SignalBlocker blocker(tabBar());
     addTab(page, page->title());
 }
 
@@ -247,6 +255,11 @@ void SideBar::setCurrentPage(const QString& name)
             setCurrentIndex(index);
         }
     }
+}
+
+void SideBar::loadConfig()
+{
+    setCurrentPage(GwenviewConfig::sideBarPage());
 }
 
 } // namespace

@@ -79,6 +79,8 @@ public:
     QString currentPage() const;
     void setCurrentPage(const QString& name);
 
+    void loadConfig();
+
     QSize sizeHint() const Q_DECL_OVERRIDE;
 
 private:

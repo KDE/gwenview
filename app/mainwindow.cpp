@@ -85,7 +85,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/disabledactionshortcutmonitor.h>
 #include <lib/document/documentfactory.h>
 #include <lib/documentonlyproxymodel.h>
-#include <lib/eventwatcher.h>
 #include <lib/gvdebug.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/mimetypeutils.h>
@@ -112,11 +111,6 @@ namespace Gwenview
 
 static const int BROWSE_PRELOAD_DELAY = 1000;
 static const int VIEW_PRELOAD_DELAY = 100;
-
-static const char* BROWSE_MODE_SIDE_BAR_GROUP = "SideBar-BrowseMode";
-static const char* VIEW_MODE_SIDE_BAR_GROUP = "SideBar-ViewMode";
-static const char* FULLSCREEN_MODE_SIDE_BAR_GROUP = "SideBar-FullScreenMode";
-static const char* SIDE_BAR_IS_VISIBLE_KEY = "IsVisible";
 
 static const char* SESSION_CURRENT_PAGE_KEY = "Page";
 static const char* SESSION_URL_KEY = "Url";
@@ -229,8 +223,6 @@ struct MainWindow::Private
 
         // Left side of splitter
         mSideBar = new SideBar(mCentralSplitter);
-        EventWatcher::install(mSideBar, QList<QEvent::Type>() << QEvent::Show << QEvent::Hide,
-                              q, SLOT(updateToggleSideBarAction()));
 
         // Right side of splitter
         mContentWidget = new QWidget(mCentralSplitter);
@@ -445,8 +437,7 @@ struct MainWindow::Private
         action->setToolTip(i18nc("@info:tooltip", "Open the start page"));
 
         mToggleSideBarAction = view->add<KToggleAction>("toggle_sidebar");
-        connect(mToggleSideBarAction, SIGNAL(toggled(bool)),
-                q, SLOT(toggleSideBar(bool)));
+        connect(mToggleSideBarAction, &KToggleAction::triggered, q, &MainWindow::toggleSideBar);
         mToggleSideBarAction->setIcon(QIcon::fromTheme("view-sidetree"));
         actionCollection->setDefaultShortcut(mToggleSideBarAction, Qt::Key_F4);
         mToggleSideBarAction->setText(i18nc("@action", "Sidebar"));
@@ -684,46 +675,40 @@ struct MainWindow::Private
         actionCollection->action("file_print")->setEnabled(isRasterImage);
     }
 
-    const char* sideBarConfigGroupName() const
+    bool sideBarVisibility() const
     {
-        const char* name = 0;
         switch (mCurrentMainPageId) {
         case StartMainPageId:
-            GV_WARN_AND_RETURN_VALUE(BROWSE_MODE_SIDE_BAR_GROUP, "mCurrentMainPageId == 'StartMainPageId'");
+            GV_WARN_AND_RETURN_VALUE(false, "Sidebar not implemented on start page");
             break;
         case BrowseMainPageId:
-            name = BROWSE_MODE_SIDE_BAR_GROUP;
+            return GwenviewConfig::sideBarVisibleBrowseMode();
             break;
         case ViewMainPageId:
-            name = q->isFullScreen()
-                   ? FULLSCREEN_MODE_SIDE_BAR_GROUP
-                   : VIEW_MODE_SIDE_BAR_GROUP;
+            return q->isFullScreen()
+                ? GwenviewConfig::sideBarVisibleViewModeFullScreen()
+                : GwenviewConfig::sideBarVisibleViewMode();
             break;
         }
-        return name;
+
+        return false;
     }
 
-    void loadSideBarConfig()
+    void saveSideBarVisibility(const bool visible)
     {
-        static QMap<const char*, bool> defaultVisibility;
-        if (defaultVisibility.isEmpty()) {
-            defaultVisibility[BROWSE_MODE_SIDE_BAR_GROUP]     = true;
-            defaultVisibility[VIEW_MODE_SIDE_BAR_GROUP]       = true;
-            defaultVisibility[FULLSCREEN_MODE_SIDE_BAR_GROUP] = false;
+        switch (mCurrentMainPageId) {
+        case StartMainPageId:
+            GV_WARN_AND_RETURN("Sidebar not implemented on start page");
+            break;
+        case BrowseMainPageId:
+            GwenviewConfig::setSideBarVisibleBrowseMode(visible);
+            break;
+        case ViewMainPageId:
+            q->isFullScreen()
+                ? GwenviewConfig::setSideBarVisibleViewModeFullScreen(visible)
+                : GwenviewConfig::setSideBarVisibleViewMode(visible);
+            break;
         }
-
-        const char* name = sideBarConfigGroupName();
-        KConfigGroup group(KSharedConfig::openConfig(), name);
-        mSideBar->setVisible(group.readEntry(SIDE_BAR_IS_VISIBLE_KEY, defaultVisibility[name]));
-        mSideBar->setCurrentPage(GwenviewConfig::sideBarPage());
-        q->updateToggleSideBarAction();
-    }
-
-    void saveSideBarConfig() const
-    {
-        KConfigGroup group(KSharedConfig::openConfig(), sideBarConfigGroupName());
-        group.writeEntry(SIDE_BAR_IS_VISIBLE_KEY, mSideBar->isVisible());
-        GwenviewConfig::setSideBarPage(mSideBar->currentPage());
     }
 
     bool statusBarVisibility() const
@@ -914,9 +899,6 @@ void MainWindow::startSlideShow()
 
 void MainWindow::setActiveViewModeAction(QAction* action)
 {
-    if (d->mCurrentMainPageId != StartMainPageId) {
-        d->saveSideBarConfig();
-    }
     if (action == d->mViewAction) {
         d->mCurrentMainPageId = ViewMainPageId;
         // Switching to view mode
@@ -939,8 +921,8 @@ void MainWindow::setActiveViewModeAction(QAction* action)
         }
         setCaption(QString());
     }
-    d->loadSideBarConfig();
     d->autoAssignThumbnailProvider();
+    toggleSideBar(d->sideBarVisibility()); 
     toggleStatusBar(d->statusBarVisibility());
 
     emit viewModeChanged();
@@ -1021,10 +1003,7 @@ void MainWindow::goUp()
 
 void MainWindow::showStartMainPage()
 {
-    if (d->mCurrentMainPageId != StartMainPageId) {
-        d->saveSideBarConfig();
-        d->mCurrentMainPageId = StartMainPageId;
-    }
+    d->mCurrentMainPageId = StartMainPageId;
     d->setActionsDisabledOnStartMainPageEnabled(false);
 
     d->mSideBar->hide();
@@ -1102,9 +1081,27 @@ void MainWindow::folderViewUrlChanged(const QUrl &url) {
     }
 }
 
-void MainWindow::toggleSideBar(bool on)
+void MainWindow::toggleSideBar(bool visible)
 {
-    d->mSideBar->setVisible(on);
+    d->mToggleSideBarAction->setChecked(visible);
+    d->saveSideBarVisibility(visible);
+    d->mSideBar->setVisible(visible);
+
+    const QString text = QApplication::isRightToLeft()
+        ? QString::fromUtf8(visible ? "▮→" : "▮←")
+        : QString::fromUtf8(visible ? "▮←" : "▮→");
+    const QString toolTip = visible
+        ? i18nc("@info:tooltip", "Hide sidebar")
+        : i18nc("@info:tooltip", "Show sidebar");
+
+    const QList<QToolButton*> buttonList {
+        d->mBrowseMainPage->toggleSideBarButton(),
+        d->mViewMainPage->toggleSideBarButton()
+    };
+    for (auto button : buttonList) {
+        button->setText(text);
+        button->setToolTip(toolTip);
+    }
 }
 
 void MainWindow::toggleStatusBar(bool visible)
@@ -1114,29 +1111,6 @@ void MainWindow::toggleStatusBar(bool visible)
 
     d->mViewMainPage->setStatusBarVisible(visible);
     d->mBrowseMainPage->setStatusBarVisible(visible);
-}
-
-void MainWindow::updateToggleSideBarAction()
-{
-    SignalBlocker blocker(d->mToggleSideBarAction);
-    bool visible = d->mSideBar->isVisible();
-    d->mToggleSideBarAction->setChecked(visible);
-
-    QString text;
-    if (QApplication::isRightToLeft()) {
-        text = QString::fromUtf8(visible ? "▮→" : "▮←");
-    } else {
-        text = QString::fromUtf8(visible ? "▮←" : "▮→");
-    }
-    QString toolTip = visible ? i18nc("@info:tooltip", "Hide sidebar") : i18nc("@info:tooltip", "Show sidebar");
-
-    QList<QToolButton*> lst;
-    lst << d->mBrowseMainPage->toggleSideBarButton()
-        << d->mViewMainPage->toggleSideBarButton();
-    Q_FOREACH(QToolButton * button, lst) {
-        button->setText(text);
-        button->setToolTip(toolTip);
-    }
 }
 
 void MainWindow::slotPartCompleted()
@@ -1294,7 +1268,6 @@ void MainWindow::leaveFullScreen()
 void MainWindow::toggleFullScreen(bool checked)
 {
     setUpdatesEnabled(false);
-    d->saveSideBarConfig();
     if (checked) {
         // Save MainWindow config now, this way if we quit while in
         // fullscreen, we are sure latest MainWindow changes are remembered.
@@ -1339,7 +1312,7 @@ void MainWindow::toggleFullScreen(bool checked)
     d->mViewMainPage->setFullScreenMode(checked);
     d->mSaveBar->setFullScreenMode(checked);
 
-    d->loadSideBarConfig();
+    toggleSideBar(d->sideBarVisibility());
     toggleStatusBar(d->statusBarVisibility());
 
     setUpdatesEnabled(true);
@@ -1443,7 +1416,6 @@ void MainWindow::updateSlideShowAction()
 bool MainWindow::queryClose()
 {
     saveConfig();
-    d->saveSideBarConfig();
     QList<QUrl> list = DocumentFactory::instance()->modifiedDocumentList();
     if (list.size() == 0) {
         return true;
@@ -1507,6 +1479,7 @@ void MainWindow::loadConfig()
     d->mViewMainPage->loadConfig();
     d->mBrowseMainPage->loadConfig();
     d->mContextManager->loadConfig();
+    d->mSideBar->loadConfig();
 }
 
 void MainWindow::saveConfig()

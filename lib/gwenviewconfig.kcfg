@@ -17,6 +17,16 @@
         <entry name="PreferredMetaInfoKeyList" type="StringList">
         <default>General.Name,General.ImageSize,Exif.Photo.ExposureTime,Exif.Photo.Flash</default>
         </entry>
+
+        <entry name="SideBarVisibleBrowseMode" key="IsVisible BrowseMode" type="Bool">
+            <default>true</default>
+        </entry>
+        <entry name="SideBarVisibleViewMode" key="IsVisible ViewMode" type="Bool">
+            <default>true</default>
+        </entry>
+        <entry name="SideBarVisibleViewModeFullScreen" key="IsVisible ViewMode FullScreen" type="Bool">
+            <default>false</default>
+        </entry>
     </group>
 
     <group name="General">
