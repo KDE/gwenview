@@ -730,7 +730,7 @@ struct MainWindow::Private
         return false;
     }
 
-    void setStatusBarVisibility(const bool visible)
+    void saveStatusBarVisibility(const bool visible)
     {
         switch (mCurrentMainPageId) {
         case StartMainPageId:
@@ -1107,7 +1107,7 @@ void MainWindow::toggleSideBar(bool visible)
 void MainWindow::toggleStatusBar(bool visible)
 {
     d->mShowStatusBarAction->setChecked(visible);
-    d->setStatusBarVisibility(visible);
+    d->saveStatusBarVisibility(visible);
 
     d->mViewMainPage->setStatusBarVisible(visible);
     d->mBrowseMainPage->setStatusBarVisible(visible);
