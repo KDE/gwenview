@@ -112,7 +112,7 @@ struct ImageOpsContextManagerItem::Private
 
         mRedEyeReductionAction = edit->addAction("red_eye_reduction", q, SLOT(startRedEyeReduction()));
         mRedEyeReductionAction->setText(i18n("Red Eye Reduction"));
-        //mRedEyeReductionAction->setIcon(QIcon::fromTheme("transform-crop-and-resize"));
+        mRedEyeReductionAction->setIcon(QIcon::fromTheme("redeyes"));
 
         mActionList
                 << mRotateLeftAction

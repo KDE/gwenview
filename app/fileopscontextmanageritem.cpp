@@ -138,14 +138,17 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, QL
 
     mCopyToAction = file->addAction("file_copy_to", this, SLOT(copyTo()));
     mCopyToAction->setText(i18nc("Verb", "Copy To..."));
+    mCopyToAction->setIcon(QIcon::fromTheme("edit-copy"));
     actionCollection->setDefaultShortcut(mCopyToAction, Qt::Key_F7);
 
     mMoveToAction = file->addAction("file_move_to", this, SLOT(moveTo()));
     mMoveToAction->setText(i18nc("Verb", "Move To..."));
+    mMoveToAction->setIcon(QIcon::fromTheme("go-jump"));
     actionCollection->setDefaultShortcut(mMoveToAction, Qt::Key_F8);
 
     mLinkToAction = file->addAction("file_link_to", this, SLOT(linkTo()));
     mLinkToAction->setText(i18nc("Verb: create link to the file where user wants", "Link To..."));
+    mLinkToAction->setIcon(QIcon::fromTheme("link"));
     actionCollection->setDefaultShortcut(mLinkToAction, Qt::Key_F9);
 
     mRenameAction = file->addAction("file_rename", this, SLOT(rename()));
@@ -155,13 +158,14 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, QL
 
     mTrashAction = file->addAction("file_trash", this, SLOT(trash()));
     mTrashAction->setText(i18nc("Verb", "Trash"));
-    mTrashAction->setIcon(QIcon::fromTheme("user-trash"));
+    mTrashAction->setIcon(QIcon::fromTheme("user-trash-symbolic"));
     actionCollection->setDefaultShortcut(mTrashAction, Qt::Key_Delete);
 
     mDelAction = file->addAction(KStandardAction::DeleteFile, this, SLOT(del()));
 
     mRestoreAction = file->addAction("file_restore", this, SLOT(restore()));
     mRestoreAction->setText(i18n("Restore"));
+    mRestoreAction->setIcon(QIcon::fromTheme("edit-undo"));
 
     mShowPropertiesAction = file->addAction("file_show_properties", this, SLOT(showProperties()));
     mShowPropertiesAction->setText(i18n("Properties"));
@@ -180,6 +184,7 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, QL
 
     mOpenContainingFolderAction = file->addAction("file_open_containing_folder", this, SLOT(openContainingFolder()));
     mOpenContainingFolderAction->setText(i18n("Open Containing Folder"));
+    mOpenContainingFolderAction->setIcon(QIcon::fromTheme("folder-open-symbolic"));
 
     mRegularFileActionList
             << mRenameAction
