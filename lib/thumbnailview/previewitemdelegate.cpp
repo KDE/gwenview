@@ -479,7 +479,9 @@ struct PreviewItemDelegatePrivate
             return;
         }
         QSequentialAnimationGroup* anim = new QSequentialAnimationGroup();
-        anim->addPause(500);
+        if (mToolTipAnimation->state() == QPropertyAnimation::Stopped) {
+            anim->addPause(500);
+        }
         QPropertyAnimation* fadeOut = new QPropertyAnimation(mToolTip, "opacity");
         fadeOut->setStartValue(mToolTip->opacity());
         fadeOut->setEndValue(0.);
