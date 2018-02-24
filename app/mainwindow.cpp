@@ -1491,6 +1491,7 @@ void MainWindow::saveConfig()
     d->mViewMainPage->saveConfig();
     d->mBrowseMainPage->saveConfig();
     d->mContextManager->saveConfig();
+    GwenviewConfig::setFullScreenModeActive(isFullScreen());
 }
 
 void MainWindow::print()

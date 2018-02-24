@@ -38,6 +38,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Local
 #include <lib/about.h>
 #include <lib/imageformats/imageformats.h>
+#include <lib/gwenviewconfig.h>
 #include "mainwindow.h"
 
 #ifdef HAVE_FITS
@@ -151,7 +152,9 @@ int main(int argc, char *argv[])
 
     // startHelper must live for the whole life of the application
     StartHelper startHelper(parser.positionalArguments(),
-                            parser.isSet(QStringLiteral("f")),
+                            parser.isSet(QStringLiteral("f"))
+                                ? true
+                                : Gwenview::GwenviewConfig::fullScreenModeActive(),
                             parser.isSet(QStringLiteral("s")));
     if (app.isSessionRestored()) {
         kRestoreMainWindows<Gwenview::MainWindow>();
