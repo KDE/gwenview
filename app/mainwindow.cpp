@@ -1161,6 +1161,7 @@ void MainWindow::slotDirListerCompleted()
     }
     d->mThumbnailView->scrollToSelectedIndex();
     d->mViewMainPage->thumbnailBar()->scrollToSelectedIndex();
+    d->mFullScreenContent->thumbnailBar()->scrollToSelectedIndex();
 }
 
 void MainWindow::goToPrevious()
