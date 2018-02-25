@@ -222,7 +222,7 @@ void showMenuForDroppedUrls(QWidget* parent, const QList<QUrl>& urlList, const Q
     KJobWidgets::setWindow(job, parent);
 }
 
-void rename(const QUrl &oldUrl, QWidget* parent)
+void rename(const QUrl &oldUrl, QWidget* parent, ContextManager* contextManager)
 {
     const DialogGuard<RenameDialog> dialog(parent);
     dialog->setFilename(oldUrl.fileName());
@@ -244,6 +244,7 @@ void rename(const QUrl &oldUrl, QWidget* parent)
         job->uiDelegate()->showErrorMessage();
         return;
     }
+    contextManager->setCurrentUrl(newUrl);
     ThumbnailProvider::moveThumbnail(oldUrl, newUrl);
 }
 
