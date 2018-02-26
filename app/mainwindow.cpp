@@ -400,7 +400,7 @@ struct MainWindow::Private
 
         mGoToPreviousAction = view->addAction("go_previous", q, SLOT(goToPrevious()));
         mGoToPreviousAction->setPriority(QAction::LowPriority);
-        mGoToPreviousAction->setIcon(QIcon::fromTheme("media-skip-backward"));
+        mGoToPreviousAction->setIcon(QIcon::fromTheme("go-previous-view"));
         mGoToPreviousAction->setText(i18nc("@action Go to previous image", "Previous"));
         mGoToPreviousAction->setToolTip(i18nc("@info:tooltip", "Go to previous image"));
         actionCollection->setDefaultShortcut(mGoToPreviousAction, Qt::Key_Backspace);
@@ -408,7 +408,7 @@ struct MainWindow::Private
 
         mGoToNextAction = view->addAction("go_next", q, SLOT(goToNext()));
         mGoToNextAction->setPriority(QAction::LowPriority);
-        mGoToNextAction->setIcon(QIcon::fromTheme("media-skip-forward"));
+        mGoToNextAction->setIcon(QIcon::fromTheme("go-next-view"));
         mGoToNextAction->setText(i18nc("@action Go to next image", "Next"));
         mGoToNextAction->setToolTip(i18nc("@info:tooltip", "Go to next image"));
         actionCollection->setDefaultShortcut(mGoToNextAction, Qt::Key_Space);
@@ -416,12 +416,14 @@ struct MainWindow::Private
 
         mGoToFirstAction = view->addAction("go_first", q, SLOT(goToFirst()));
         mGoToFirstAction->setPriority(QAction::LowPriority);
+        mGoToFirstAction->setIcon(QIcon::fromTheme("go-first-view"));
         mGoToFirstAction->setText(i18nc("@action Go to first image", "First"));
         mGoToFirstAction->setToolTip(i18nc("@info:tooltip", "Go to first image"));
         actionCollection->setDefaultShortcut(mGoToFirstAction, Qt::Key_Home);
 
         mGoToLastAction = view->addAction("go_last", q, SLOT(goToLast()));
         mGoToLastAction->setPriority(QAction::LowPriority);
+        mGoToLastAction->setIcon(QIcon::fromTheme("go-last-view"));
         mGoToLastAction->setText(i18nc("@action Go to last image", "Last"));
         mGoToLastAction->setToolTip(i18nc("@info:tooltip", "Go to last image"));
         actionCollection->setDefaultShortcut(mGoToLastAction, Qt::Key_End);
@@ -1423,7 +1425,7 @@ bool MainWindow::queryClose()
     }
 
     KGuiItem yes(i18n("Save All Changes"), "document-save-all");
-    KGuiItem no(i18n("Discard Changes"));
+    KGuiItem no(i18n("Discard Changes"), "delete");
     QString msg = i18np("One image has been modified.", "%1 images have been modified.", list.size())
                   + '\n'
                   + i18n("If you quit now, your changes will be lost.");
