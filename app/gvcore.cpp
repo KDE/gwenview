@@ -143,11 +143,106 @@ struct GvCorePrivate
         }
         mPalettes[GvCore::FullScreenPalette] = KColorScheme::createApplicationPalette(config);
 
+        // If we are using the default palette, adjust it to match the system color scheme
+        if (name.isEmpty()) {
+            adjustDefaultFullScreenPalette();
+        }
+
+        // FullScreenView has textured background
         pal = mPalettes[GvCore::FullScreenPalette];
         QString path = QStandardPaths::locate(QStandardPaths::AppDataLocation, "images/background.png");
         QPixmap bgTexture(path);
         pal.setBrush(QPalette::Base, bgTexture);
         mPalettes[GvCore::FullScreenViewPalette] = pal;
+    }
+
+    void adjustDefaultFullScreenPalette()
+    {
+        // The Fullscreen palette by default does not use the system color scheme, and therefore uses an 'accent' color
+        // of blue. So for every color group/role combination that uses the accent color, we use a muted version of the
+        // Normal palette. We also use the normal HighlightedText color so it properly contrasts with Highlight.
+        const QPalette normalPal = mPalettes[GvCore::NormalPalette];
+        QPalette fullscreenPal = mPalettes[GvCore::FullScreenPalette];
+
+        // Colors from the normal palette (source of the system theme's accent color)
+        const QColor normalToolTipBase             = normalPal.color(QPalette::Normal,   QPalette::ToolTipBase);
+        const QColor normalToolTipText             = normalPal.color(QPalette::Normal,   QPalette::ToolTipText);
+        const QColor normalHighlight               = normalPal.color(QPalette::Normal,   QPalette::Highlight);
+        const QColor normalHighlightedText         = normalPal.color(QPalette::Normal,   QPalette::HighlightedText);
+        const QColor normalLink                    = normalPal.color(QPalette::Normal,   QPalette::Link);
+        const QColor normalActiveToolTipBase       = normalPal.color(QPalette::Active,   QPalette::ToolTipBase);
+        const QColor normalActiveToolTipText       = normalPal.color(QPalette::Active,   QPalette::ToolTipText);
+        const QColor normalActiveHighlight         = normalPal.color(QPalette::Active,   QPalette::Highlight);
+        const QColor normalActiveHighlightedText   = normalPal.color(QPalette::Active,   QPalette::HighlightedText);
+        const QColor normalActiveLink              = normalPal.color(QPalette::Active,   QPalette::Link);
+        const QColor normalDisabledToolTipBase     = normalPal.color(QPalette::Disabled, QPalette::ToolTipBase);
+        const QColor normalDisabledToolTipText     = normalPal.color(QPalette::Disabled, QPalette::ToolTipText);
+        // Note: Disabled Highlight missing as they do not use the accent color
+        const QColor normalDisabledLink            = normalPal.color(QPalette::Disabled, QPalette::Link);
+        const QColor normalInactiveToolTipBase     = normalPal.color(QPalette::Inactive, QPalette::ToolTipBase);
+        const QColor normalInactiveToolTipText     = normalPal.color(QPalette::Inactive, QPalette::ToolTipText);
+        const QColor normalInactiveHighlight       = normalPal.color(QPalette::Inactive, QPalette::Highlight);
+        const QColor normalInactiveHighlightedText = normalPal.color(QPalette::Inactive, QPalette::HighlightedText);
+        const QColor normalInactiveLink            = normalPal.color(QPalette::Inactive, QPalette::Link);
+
+        // Colors of the fullscreen palette which we will be modifying
+        QColor fullScreenToolTipBase         = fullscreenPal.color(QPalette::Normal,   QPalette::ToolTipBase);
+        QColor fullScreenToolTipText         = fullscreenPal.color(QPalette::Normal,   QPalette::ToolTipText);
+        QColor fullScreenHighlight           = fullscreenPal.color(QPalette::Normal,   QPalette::Highlight);
+        QColor fullScreenLink                = fullscreenPal.color(QPalette::Normal,   QPalette::Link);
+        QColor fullScreenActiveToolTipBase   = fullscreenPal.color(QPalette::Active,   QPalette::ToolTipBase);
+        QColor fullScreenActiveToolTipText   = fullscreenPal.color(QPalette::Active,   QPalette::ToolTipText);
+        QColor fullScreenActiveHighlight     = fullscreenPal.color(QPalette::Active,   QPalette::Highlight);
+        QColor fullScreenActiveLink          = fullscreenPal.color(QPalette::Active,   QPalette::Link);
+        QColor fullScreenDisabledToolTipBase = fullscreenPal.color(QPalette::Disabled, QPalette::ToolTipBase);
+        QColor fullScreenDisabledToolTipText = fullscreenPal.color(QPalette::Disabled, QPalette::ToolTipText);
+        QColor fullScreenDisabledLink        = fullscreenPal.color(QPalette::Disabled, QPalette::Link);
+        QColor fullScreenInactiveToolTipBase = fullscreenPal.color(QPalette::Inactive, QPalette::ToolTipBase);
+        QColor fullScreenInactiveToolTipText = fullscreenPal.color(QPalette::Inactive, QPalette::ToolTipText);
+        QColor fullScreenInactiveHighlight   = fullscreenPal.color(QPalette::Inactive, QPalette::Highlight);
+        QColor fullScreenInactiveLink        = fullscreenPal.color(QPalette::Inactive, QPalette::Link);
+
+        // Adjust the value of the normal color so it's not too dark/bright, and apply to the respective fullscreen color
+        fullScreenToolTipBase        .setHsv(normalToolTipBase.hue(),         normalToolTipBase.saturation(),         (127 + 2 * normalToolTipBase.value()) / 3);
+        fullScreenToolTipText        .setHsv(normalToolTipText.hue(),         normalToolTipText.saturation(),         (127 + 2 * normalToolTipText.value()) / 3);
+        fullScreenHighlight          .setHsv(normalHighlight.hue(),           normalHighlight.saturation(),           (127 + 2 * normalHighlight.value()) / 3);
+        fullScreenLink               .setHsv(normalLink.hue(),                normalLink.saturation(),                (127 + 2 * normalLink.value()) / 3);
+        fullScreenActiveToolTipBase  .setHsv(normalActiveToolTipBase.hue(),   normalActiveToolTipBase.saturation(),   (127 + 2 * normalActiveToolTipBase.value()) / 3);
+        fullScreenActiveToolTipText  .setHsv(normalActiveToolTipText.hue(),   normalActiveToolTipText.saturation(),   (127 + 2 * normalActiveToolTipText.value()) / 3);
+        fullScreenActiveHighlight    .setHsv(normalActiveHighlight.hue(),     normalActiveHighlight.saturation(),     (127 + 2 * normalActiveHighlight.value()) / 3);
+        fullScreenActiveLink         .setHsv(normalActiveLink.hue(),          normalActiveLink.saturation(),          (127 + 2 * normalActiveLink.value()) / 3);
+        fullScreenDisabledToolTipBase.setHsv(normalDisabledToolTipBase.hue(), normalDisabledToolTipBase.saturation(), (127 + 2 * normalDisabledToolTipBase.value()) / 3);
+        fullScreenDisabledToolTipText.setHsv(normalDisabledToolTipText.hue(), normalDisabledToolTipText.saturation(), (127 + 2 * normalDisabledToolTipText.value()) / 3);
+        fullScreenDisabledLink       .setHsv(normalDisabledLink.hue(),        normalDisabledLink.saturation(),        (127 + 2 * normalDisabledLink.value()) / 3);
+        fullScreenInactiveToolTipBase.setHsv(normalInactiveToolTipBase.hue(), normalInactiveToolTipBase.saturation(), (127 + 2 * normalInactiveToolTipBase.value()) / 3);
+        fullScreenInactiveToolTipText.setHsv(normalInactiveToolTipText.hue(), normalInactiveToolTipText.saturation(), (127 + 2 * normalInactiveToolTipText.value()) / 3);
+        fullScreenInactiveHighlight  .setHsv(normalInactiveHighlight.hue(),   normalInactiveHighlight.saturation(),   (127 + 2 * normalInactiveHighlight.value()) / 3);
+        fullScreenInactiveLink       .setHsv(normalInactiveLink.hue(),        normalInactiveLink.saturation(),        (127 + 2 * normalInactiveLink.value()) / 3);
+
+        // Apply the modified colors to the fullscreen palette
+        fullscreenPal.setColor(QPalette::Normal,   QPalette::ToolTipBase, fullScreenToolTipBase);
+        fullscreenPal.setColor(QPalette::Normal,   QPalette::ToolTipText, fullScreenToolTipText);
+        fullscreenPal.setColor(QPalette::Normal,   QPalette::Highlight,   fullScreenHighlight);
+        fullscreenPal.setColor(QPalette::Normal,   QPalette::Link,        fullScreenLink);
+        fullscreenPal.setColor(QPalette::Active,   QPalette::ToolTipBase, fullScreenActiveToolTipBase);
+        fullscreenPal.setColor(QPalette::Active,   QPalette::ToolTipText, fullScreenActiveToolTipText);
+        fullscreenPal.setColor(QPalette::Active,   QPalette::Highlight,   fullScreenActiveHighlight);
+        fullscreenPal.setColor(QPalette::Active,   QPalette::Link,        fullScreenActiveLink);
+        fullscreenPal.setColor(QPalette::Disabled, QPalette::ToolTipBase, fullScreenDisabledToolTipBase);
+        fullscreenPal.setColor(QPalette::Disabled, QPalette::ToolTipText, fullScreenDisabledToolTipText);
+        fullscreenPal.setColor(QPalette::Disabled, QPalette::Link,        fullScreenDisabledLink);
+        fullscreenPal.setColor(QPalette::Inactive, QPalette::ToolTipBase, fullScreenInactiveToolTipBase);
+        fullscreenPal.setColor(QPalette::Inactive, QPalette::ToolTipText, fullScreenInactiveToolTipText);
+        fullscreenPal.setColor(QPalette::Inactive, QPalette::Highlight,   fullScreenInactiveHighlight);
+        fullscreenPal.setColor(QPalette::Inactive, QPalette::Link,        fullScreenInactiveLink);
+        
+        // Since we use an adjusted version of the normal highlight color, we need to use the normal version of the
+        // text color so it contrasts
+        fullscreenPal.setColor(QPalette::Normal,     QPalette::HighlightedText,   normalHighlightedText);
+        fullscreenPal.setColor(QPalette::Active,     QPalette::HighlightedText,   normalActiveHighlightedText);
+        fullscreenPal.setColor(QPalette::Inactive,   QPalette::HighlightedText,   normalInactiveHighlightedText);
+
+        mPalettes[GvCore::FullScreenPalette] = fullscreenPal;
     }
 };
 
