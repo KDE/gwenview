@@ -129,7 +129,6 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
     mContent->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     mContent->setAutoFillBackground(true);
     EventWatcher::install(mContent, QEvent::Show, this, SLOT(updateCurrentUrlWidgets()));
-    EventWatcher::install(mContent, QEvent::PaletteChange, this, SLOT(slotPaletteChanged()));
     layout->addWidget(mContent);
 
     createOptionsAction();
@@ -156,6 +155,7 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
     mInformationLabel->setContentsMargins(6, 0, 6, 0);
     mInformationLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
     mInformationLabel->setAutoFillBackground(true);
+    mInformationLabel->setBackgroundRole(QPalette::Mid);
     mInformationLabelShadow = new ShadowFilter(mInformationLabel);
 
     // Thumbnail bar
@@ -217,13 +217,6 @@ void FullScreenContent::updateInformationLabel()
     QString text = valueList.join(i18nc("@item:intext fullscreen meta info separator", ", "));
 
     mInformationLabel->setText(text);
-}
-
-void FullScreenContent::slotPaletteChanged()
-{
-    QPalette pal = mContent->palette();
-    pal.setColor(QPalette::Window, pal.color(QPalette::Window).dark(110));
-    mInformationLabel->setPalette(pal);
 }
 
 void FullScreenContent::updateCurrentUrlWidgets()

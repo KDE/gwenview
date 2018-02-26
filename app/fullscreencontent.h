@@ -84,7 +84,6 @@ private Q_SLOTS:
     void updateInformationLabel();
     void updateMetaInfoDialog();
     void showImageMetaInfoDialog();
-    void slotPaletteChanged();
     void slotImageMetaInfoDialogClosed();
     void slotPreferredMetaInfoKeyListChanged(const QStringList& list);
     void showOptionsMenu();
