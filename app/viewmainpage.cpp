@@ -133,7 +133,6 @@ struct ViewMainPagePrivate
     QHash<DocumentView*, KActivities::ResourceInstance*> mActivityResources;
 
     bool mCompareMode;
-    bool mThumbnailBarVisibleBeforeFullScreen;
     ZoomMode::Enum mZoomMode;
 
     void setupThumbnailBar()
@@ -387,7 +386,6 @@ ViewMainPage::ViewMainPage(QWidget* parent, SlideShow* slideShow, KActionCollect
     d->mActionCollection = actionCollection;
     d->mGvCore = gvCore;
     d->mCompareMode = false;
-    d->mThumbnailBarVisibleBeforeFullScreen = false;
 
     QShortcut* enterKeyShortcut = new QShortcut(Qt::Key_Return, this);
     connect(enterKeyShortcut, &QShortcut::activated, this, &ViewMainPage::slotEnterPressed);
@@ -409,7 +407,6 @@ ViewMainPage::ViewMainPage(QWidget* parent, SlideShow* slideShow, KActionCollect
     d->mToggleThumbnailBarAction->setText(i18n("Thumbnail Bar"));
     d->mToggleThumbnailBarAction->setIcon(QIcon::fromTheme("folder-image"));
     actionCollection->setDefaultShortcut(d->mToggleThumbnailBarAction, Qt::CTRL + Qt::Key_B);
-    d->mToggleThumbnailBarAction->setChecked(GwenviewConfig::thumbnailBarIsVisible());
     connect(d->mToggleThumbnailBarAction, &KToggleAction::triggered, this, &ViewMainPage::setThumbnailBarVisibility);
     d->mToggleThumbnailBarButton->setDefaultAction(d->mToggleThumbnailBarAction);
 
@@ -445,6 +442,8 @@ void ViewMainPage::loadConfig()
     d->mThumbnailSplitter->setOrientation(orientation == Qt::Horizontal ? Qt::Vertical : Qt::Horizontal);
     d->mThumbnailBar->setOrientation(orientation);
     d->setupThumbnailBarStyleSheet();
+    d->mThumbnailBar->setVisible(GwenviewConfig::thumbnailBarIsVisible());
+    d->mToggleThumbnailBarAction->setChecked(GwenviewConfig::thumbnailBarIsVisible());
 
     int oldRowCount = d->mThumbnailBar->rowCount();
     int newRowCount = GwenviewConfig::thumbnailBarRowCount();
@@ -493,14 +492,9 @@ void ViewMainPage::setStatusBarVisible(bool visible)
 void ViewMainPage::setFullScreenMode(bool fullScreenMode)
 {
     if (fullScreenMode) {
-        d->mThumbnailBarVisibleBeforeFullScreen = d->mToggleThumbnailBarAction->isChecked();
-        if (d->mThumbnailBarVisibleBeforeFullScreen) {
-            d->mToggleThumbnailBarAction->trigger();
-        }
+        d->mThumbnailBar->setVisible(false);
     } else {
-        if (d->mThumbnailBarVisibleBeforeFullScreen) {
-            d->mToggleThumbnailBarAction->trigger();
-        }
+        d->mThumbnailBar->setVisible(d->mToggleThumbnailBarAction->isChecked());
     }
     d->applyPalette(fullScreenMode);
     d->mToggleThumbnailBarAction->setEnabled(!fullScreenMode);
