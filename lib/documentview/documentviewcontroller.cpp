@@ -56,9 +56,7 @@ public:
     {
         mLayout->setMargin(0);
         setAutoFillBackground(true);
-        QPalette pal = palette();
-        pal.setColor(QPalette::Window, pal.color(QPalette::Window).dark(120));
-        setPalette(pal);
+        setBackgroundRole(QPalette::Mid);
     }
 
     void setToolWidget(QWidget* widget)
