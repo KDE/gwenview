@@ -462,7 +462,7 @@ void FullScreenContent::setFullScreenMode(bool fullScreenMode)
 
 void FullScreenContent::setDistractionFreeMode(bool distractionFreeMode)
 {
-    mAutoHideContainer->setAutoHidingEnabled(!distractionFreeMode);
+    mAutoHideContainer->setEdgeTriggerEnabled(!distractionFreeMode);
 }
 
 void FullScreenContent::slotImageMetaInfoDialogClosed()
