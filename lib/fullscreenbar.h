@@ -46,6 +46,7 @@ public:
     void setActivated(bool);
 
     void setAutoHidingEnabled(bool);
+    void setEdgeTriggerEnabled(bool);
 
     QSize sizeHint() const Q_DECL_OVERRIDE;
 

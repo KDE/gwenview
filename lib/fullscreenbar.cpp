@@ -57,6 +57,7 @@ struct FullScreenBarPrivate
     QTimeLine* mTimeLine;
     QTimer* mAutoHideCursorTimer;
     bool mAutoHidingEnabled;
+    bool mEdgeTriggerEnabled;
     QTimer* mInitialHideTimer;
 
     void startTimeLine()
@@ -116,6 +117,7 @@ FullScreenBar::FullScreenBar(QWidget* parent)
 {
     d->q = this;
     d->mAutoHidingEnabled = true;
+    d->mEdgeTriggerEnabled = true;
     setObjectName(QLatin1String("fullScreenBar"));
 
     d->mTimeLine = new QTimeLine(SLIDE_DURATION, this);
@@ -227,7 +229,7 @@ bool FullScreenBar::eventFilter(QObject* object, QEvent* event)
             }
         } else {
             QMouseEvent* mouseEvent = static_cast<QMouseEvent *>(event);
-            if (mouseEvent->buttons() == 0 && d->slideInTriggerRect().contains(QCursor::pos())) {
+            if (d->mEdgeTriggerEnabled && mouseEvent->buttons() == 0 && d->slideInTriggerRect().contains(QCursor::pos())) {
                 slideIn();
             }
         }
@@ -267,6 +269,11 @@ bool FullScreenBar::eventFilter(QObject* object, QEvent* event)
 void FullScreenBar::setAutoHidingEnabled(bool value)
 {
     d->mAutoHidingEnabled = value;
+}
+
+void FullScreenBar::setEdgeTriggerEnabled(bool value)
+{
+    d->mEdgeTriggerEnabled = value;
 }
 
 } // namespace
