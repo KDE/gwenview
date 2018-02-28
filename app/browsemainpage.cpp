@@ -101,6 +101,10 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
                          q, SLOT(slotUrlsDropped(QUrl,QDropEvent*)));
         updateUrlNavigatorBackgroundColor();
 
+        // FullScreen Toolbar
+        mFullScreenToolBar->setVisible(false);
+        mFullScreenToolBar2->setVisible(false);
+
         // Thumbnail slider
         QObject::connect(mThumbnailSlider, SIGNAL(valueChanged(int)),
                          mThumbnailView, SLOT(setThumbnailWidth(int)));
