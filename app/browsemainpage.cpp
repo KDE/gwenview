@@ -94,16 +94,20 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
         mFilePlacesModel = new KFilePlacesModel(q);
         mUrlNavigator = new KUrlNavigator(mFilePlacesModel, QUrl(), mUrlNavigatorContainer);
         mUrlNavigatorContainer->setAutoFillBackground(true);
+        mUrlNavigatorContainer->setBackgroundRole(QPalette::Mid);
         QVBoxLayout* layout = new QVBoxLayout(mUrlNavigatorContainer);
         layout->setMargin(0);
         layout->addWidget(mUrlNavigator);
         QObject::connect(mUrlNavigator, SIGNAL(urlsDropped(QUrl,QDropEvent*)),
                          q, SLOT(slotUrlsDropped(QUrl,QDropEvent*)));
-        updateUrlNavigatorBackgroundColor();
 
         // FullScreen Toolbar
         mFullScreenToolBar->setVisible(false);
         mFullScreenToolBar2->setVisible(false);
+        mFullScreenToolBar->setAutoFillBackground(true);
+        mFullScreenToolBar2->setAutoFillBackground(true);
+        mFullScreenToolBar->setBackgroundRole(QPalette::Mid);
+        mFullScreenToolBar2->setBackgroundRole(QPalette::Mid);
 
         // Thumbnail slider
         QObject::connect(mThumbnailSlider, SIGNAL(valueChanged(int)),
@@ -211,13 +215,6 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
             }
         }
         return count;
-    }
-
-    void updateUrlNavigatorBackgroundColor()
-    {
-       QPalette pal(q->palette());
-       pal.setColor(QPalette::Window, pal.color(QPalette::Window).dark(110));
-       mUrlNavigatorContainer->setPalette(pal);
     }
 
     void updateContextBarActions()
@@ -402,7 +399,6 @@ void BrowseMainPage::updateThumbnailDetails()
 void BrowseMainPage::setFullScreenMode(bool fullScreen)
 {
     d->applyPalette(fullScreen);
-    d->updateUrlNavigatorBackgroundColor();
     d->mUrlNavigatorContainer->setContentsMargins(
         fullScreen ? 6 : 0,
         0, 0, 0);
