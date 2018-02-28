@@ -63,7 +63,7 @@ public:
 private Q_SLOTS:
     void slotAdapterChanged();
     void updateZoomToFitActionFromView();
-    void updateZoomToFitWidthActionFromView();
+    void updateZoomToFillActionFromView();
     void updateTool();
 
 private:

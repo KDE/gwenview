@@ -57,11 +57,11 @@ public:
 
     virtual void setZoomToFit(bool) Q_DECL_OVERRIDE;
 
-    virtual void setZoomToFitWidth(bool) Q_DECL_OVERRIDE;
+    virtual void setZoomToFill(bool) Q_DECL_OVERRIDE;
 
     virtual bool zoomToFit() const Q_DECL_OVERRIDE;
 
-    virtual bool zoomToFitWidth() const Q_DECL_OVERRIDE;
+    virtual bool zoomToFill() const Q_DECL_OVERRIDE;
 
     virtual qreal zoom() const Q_DECL_OVERRIDE;
 
@@ -69,7 +69,7 @@ public:
 
     virtual qreal computeZoomToFit() const Q_DECL_OVERRIDE;
 
-    virtual qreal computeZoomToFitWidth() const Q_DECL_OVERRIDE;
+    virtual qreal computeZoomToFill() const Q_DECL_OVERRIDE;
 
     virtual Document::Ptr document() const Q_DECL_OVERRIDE;
 

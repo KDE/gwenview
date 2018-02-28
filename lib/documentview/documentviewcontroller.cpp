@@ -79,7 +79,7 @@ struct DocumentViewControllerPrivate
     ToolContainerContent* mToolContainerContent;
 
     QAction * mZoomToFitAction;
-    QAction * mZoomToFitWidthAction;
+    QAction * mZoomToFillAction;
     QAction * mActualSizeAction;
     QAction * mZoomInAction;
     QAction * mZoomOutAction;
@@ -93,28 +93,28 @@ struct DocumentViewControllerPrivate
         view->collection()->setDefaultShortcut(mZoomToFitAction, Qt::Key_F);
         mZoomToFitAction->setCheckable(true);
         mZoomToFitAction->setChecked(true);
-        mZoomToFitAction->setText(i18n("Zoom to Fit"));
+        mZoomToFitAction->setText(i18n("Zoom to fit"));
         mZoomToFitAction->setIcon(QIcon::fromTheme("zoom-fit-best"));
         mZoomToFitAction->setIconText(i18nc("@action:button Zoom to fit, shown in status bar, keep it short please", "Fit"));
 
-        mZoomToFitWidthAction = view->addAction("view_zoom_to_fit_width");
-        //view->collection()->setDefaultShortcuts(mZoomToFitWidthAction, Qt::Key_W); ??
-        mZoomToFitWidthAction->setCheckable(true);
-        mZoomToFitWidthAction->setChecked(false);
-        mZoomToFitWidthAction->setText(i18n("Zoom to Fit Width"));
-        mZoomToFitWidthAction->setIcon(QIcon::fromTheme("zoom-fit-best"));
-        mZoomToFitWidthAction->setIconText(i18nc("@action:button Zoom to fit width, shown in status bar, keep it short please", "Fit Width"));
+        mZoomToFillAction = view->addAction("view_zoom_to_fill");
+        //view->collection()->setDefaultShortcuts(mZoomToFillAction, Qt::Key_W); ??
+        mZoomToFillAction->setCheckable(true);
+        mZoomToFillAction->setChecked(false);
+        mZoomToFillAction->setText(i18n("Zoom to fill window by fitting to width or height"));
+        mZoomToFillAction->setIcon(QIcon::fromTheme("zoom-fit-best"));
+        mZoomToFillAction->setIconText(i18nc("@action:button Zoom to fill (fit width or height), shown in status bar, keep it short please", "Fill"));
 
         mActualSizeAction = view->addAction(KStandardAction::ActualSize);
         mActualSizeAction->setCheckable(true);
-        mZoomToFitWidthAction->setChecked(false);
+        mZoomToFillAction->setChecked(false);
         mActualSizeAction->setIcon(QIcon::fromTheme("zoom-original"));
         mActualSizeAction->setIconText(i18nc("@action:button Zoom to original size, shown in status bar, keep it short please", "100%"));
 
         mZoomInAction = view->addAction(KStandardAction::ZoomIn);
         mZoomOutAction = view->addAction(KStandardAction::ZoomOut);
 
-        mActions << mZoomToFitAction << mActualSizeAction << mZoomInAction << mZoomOutAction << mZoomToFitWidthAction;
+        mActions << mZoomToFitAction << mActualSizeAction << mZoomInAction << mZoomOutAction << mZoomToFillAction;
     }
 
     void connectZoomWidget()
@@ -186,13 +186,13 @@ void DocumentViewController::setView(DocumentView* view)
     }
     connect(d->mView, &DocumentView::adapterChanged, this, &DocumentViewController::slotAdapterChanged);
     connect(d->mView, &DocumentView::zoomToFitChanged, this, &DocumentViewController::updateZoomToFitActionFromView);
-    connect(d->mView, &DocumentView::zoomToFitWidthChanged, this, &DocumentViewController::updateZoomToFitWidthActionFromView);
+    connect(d->mView, &DocumentView::zoomToFillChanged, this, &DocumentViewController::updateZoomToFillActionFromView);
     connect(d->mView, &DocumentView::currentToolChanged, this, &DocumentViewController::updateTool);
 
     connect(d->mZoomToFitAction, SIGNAL(toggled(bool)),
             d->mView, SLOT(setZoomToFit(bool)));
-    connect(d->mZoomToFitWidthAction, SIGNAL(toggled(bool)),
-            d->mView, SLOT(setZoomToFitWidth(bool)));
+    connect(d->mZoomToFillAction, SIGNAL(toggled(bool)),
+            d->mView, SLOT(setZoomToFill(bool)));
     connect(d->mActualSizeAction, SIGNAL(triggered()),
             d->mView, SLOT(zoomActualSize()));
     connect(d->mZoomInAction, SIGNAL(triggered()),
@@ -202,7 +202,7 @@ void DocumentViewController::setView(DocumentView* view)
 
     d->updateActions();
     updateZoomToFitActionFromView();
-    updateZoomToFitWidthActionFromView();
+    updateZoomToFillActionFromView();
     updateTool();
 
     // Sync zoom widget
@@ -224,7 +224,7 @@ void DocumentViewController::setZoomWidget(ZoomWidget* widget)
         d->mActualSizeAction,
         d->mZoomInAction,
         d->mZoomOutAction,
-        d->mZoomToFitWidthAction
+        d->mZoomToFillAction
     );
 
     d->mZoomWidget->setMaximumZoom(qreal(DocumentView::MaximumZoom));
@@ -250,10 +250,10 @@ void DocumentViewController::updateZoomToFitActionFromView()
     d->mZoomToFitAction->setChecked(d->mView->zoomToFit());
 }
 
-void DocumentViewController::updateZoomToFitWidthActionFromView()
+void DocumentViewController::updateZoomToFillActionFromView()
 {
-    SignalBlocker blocker(d->mZoomToFitWidthAction);
-    d->mZoomToFitWidthAction->setChecked(d->mView->zoomToFitWidth());
+    SignalBlocker blocker(d->mZoomToFillAction);
+    d->mZoomToFillAction->setChecked(d->mView->zoomToFill());
 }
 
 void DocumentViewController::updateTool()

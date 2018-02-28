@@ -51,7 +51,7 @@ struct AbstractImageViewPrivate
 
     qreal mZoom;
     bool mZoomToFit;
-    bool mZoomToFitWidth;
+    bool mZoomToFill;
     QPointF mImageOffset;
     QPointF mScrollPos;
     QPointF mLastDragPos;
@@ -120,7 +120,7 @@ AbstractImageView::AbstractImageView(QGraphicsItem* parent)
     d->mEnlargeSmallerImages = false;
     d->mZoom = 1;
     d->mZoomToFit = true;
-    d->mZoomToFitWidth = false;
+    d->mZoomToFill = false;
     d->mImageOffset = QPointF(0, 0);
     d->mScrollPos = QPointF(0, 0);
     setFocusPolicy(Qt::WheelFocus);
@@ -228,9 +228,9 @@ bool AbstractImageView::zoomToFit() const
     return d->mZoomToFit;
 }
 
-bool AbstractImageView::zoomToFitWidth() const
+bool AbstractImageView::zoomToFill() const
 {
-    return d->mZoomToFitWidth;
+    return d->mZoomToFill;
 }
 
 void AbstractImageView::setZoomToFit(bool on)
@@ -245,16 +245,16 @@ void AbstractImageView::setZoomToFit(bool on)
     zoomToFitChanged(d->mZoomToFit);
 }
 
-void AbstractImageView::setZoomToFitWidth(bool on)
+void AbstractImageView::setZoomToFill(bool on)
 {
-    d->mZoomToFitWidth = on;
+    d->mZoomToFill = on;
     if (on) {
-        setZoom(computeZoomToFitWidth());
+        setZoom(computeZoomToFill());
     }
     // We do not set zoom to 1 if zoomToFit is off, this is up to the code
     // calling us. It may went to zoom to some other level and/or to zoom on
     // a particular position
-    zoomToFitWidthChanged(d->mZoomToFitWidth);
+    zoomToFillChanged(d->mZoomToFill);
 }
 
 void AbstractImageView::resizeEvent(QGraphicsSceneResizeEvent* event)
@@ -270,8 +270,8 @@ void AbstractImageView::resizeEvent(QGraphicsSceneResizeEvent* event)
         } else {
             setZoom(newZoom);
         }
-    } else if (d->mZoomToFitWidth) {
-        const qreal newZoom = computeZoomToFitWidth();
+    } else if (d->mZoomToFill) {
+        const qreal newZoom = computeZoomToFill();
         if (qFuzzyCompare(zoom(), newZoom)) {
             d->adjustImageOffset(AbstractImageViewPrivate::Notify);
         } else {
@@ -299,7 +299,7 @@ qreal AbstractImageView::computeZoomToFit() const
     return fit;
 }
 
-qreal AbstractImageView::computeZoomToFitWidth() const
+qreal AbstractImageView::computeZoomToFill() const
 {
     QSizeF docSize = documentSize();
     if (docSize.isEmpty()) {
@@ -307,10 +307,12 @@ qreal AbstractImageView::computeZoomToFitWidth() const
     }
     QSizeF viewSize = boundingRect().size();
     qreal fitWidth = viewSize.width() / docSize.width();
+    qreal fitHeight = viewSize.height() / docSize.height();
+    qreal fill = qMax(fitWidth, fitHeight);
     if (!d->mEnlargeSmallerImages) {
-        fitWidth = qMin(fitWidth, qreal(1.));
+        fill = qMin(fill, qreal(1.));
     }
-    return fitWidth;
+    return fill;
 }
 
 void AbstractImageView::mousePressEvent(QGraphicsSceneMouseEvent* event)

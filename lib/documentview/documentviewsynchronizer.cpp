@@ -54,8 +54,8 @@ struct DocumentViewSynchronizerPrivate
                          q, SLOT(setZoom(qreal)));
         QObject::connect(mCurrentView.data(), SIGNAL(zoomToFitChanged(bool)),
                          q, SLOT(setZoomToFit(bool)));
-        QObject::connect(mCurrentView.data(), SIGNAL(zoomToFitWidthChanged(bool)),
-                         q, SLOT(setZoomToFitWidth(bool)));
+        QObject::connect(mCurrentView.data(), SIGNAL(zoomToFillChanged(bool)),
+                         q, SLOT(setZoomToFill(bool)));
         QObject::connect(mCurrentView.data(), SIGNAL(positionChanged()),
                          q, SLOT(updatePosition()));
 
@@ -65,7 +65,7 @@ struct DocumentViewSynchronizerPrivate
             }
             view->setZoom(mCurrentView.data()->zoom());
             view->setZoomToFit(mCurrentView.data()->zoomToFit());
-            view->setZoomToFitWidth(mCurrentView.data()->zoomToFitWidth());
+            view->setZoomToFill(mCurrentView.data()->zoomToFill());
         }
     }
 
@@ -130,13 +130,13 @@ void DocumentViewSynchronizer::setZoomToFit(bool fit)
     d->updateOldPosition();
 }
 
-void DocumentViewSynchronizer::setZoomToFitWidth(bool fit)
+void DocumentViewSynchronizer::setZoomToFill(bool fit)
 {
     Q_FOREACH(DocumentView* view, *d->mViews) {
         if (view == d->mCurrentView.data()) {
             continue;
         }
-        view->setZoomToFitWidth(fit);
+        view->setZoomToFill(fit);
     }
     d->updateOldPosition();
 }

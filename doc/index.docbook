@@ -256,11 +256,12 @@ on the left, press <keycombo action="simul">&Shift;&Tab;</keycombo>.</para>
 </screenshot>
 
 <para>The slider at the bottom right controls the zoom of the image. The
-<guibutton>Fit</guibutton> button and the <guibutton>100%</guibutton>
-button are next to the zoom slider and are two preset zoom levels. The
+<guibutton>Fit</guibutton>, <guibutton>Fill</guibutton> and <guibutton>100%</guibutton>
+buttons are next to the zoom slider and are three preset zoom levels. The
 <guibutton>Fit</guibutton> button zooms the current image to fit the size
-of the window, and the <guibutton>100%</guibutton> button zooms the image to
-the actual pixel size. The shortcut <keycap>F</keycap> toggles between both view modes.</para>
+of the window, the <guibutton>Fill</guibutton> button zooms the image to fill the window 
+by fitting width or height and the <guibutton>100%</guibutton> button zooms the image to
+the actual pixel size. The shortcut <keycap>F</keycap> switches to fit mode.</para>
 
 <para>When an image is in zoom-to-fit mode, you can go to the previous and next
 image with the arrow keys. When you zoom in, arrow keys are used to scroll the image.

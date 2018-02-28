@@ -48,7 +48,7 @@ RasterImageViewAdapter::RasterImageViewAdapter()
     d->mView = new RasterImageView;
     connect(d->mView, &RasterImageView::zoomChanged, this, &RasterImageViewAdapter::zoomChanged);
     connect(d->mView, &RasterImageView::zoomToFitChanged, this, &RasterImageViewAdapter::zoomToFitChanged);
-    connect(d->mView, &RasterImageView::zoomToFitWidthChanged, this, &RasterImageViewAdapter::zoomToFitWidthChanged);
+    connect(d->mView, &RasterImageView::zoomToFillChanged, this, &RasterImageViewAdapter::zoomToFillChanged);
     connect(d->mView, &RasterImageView::zoomInRequested, this, &RasterImageViewAdapter::zoomInRequested);
     connect(d->mView, &RasterImageView::zoomOutRequested, this, &RasterImageViewAdapter::zoomOutRequested);
     connect(d->mView, &RasterImageView::scrollPosChanged, this, &RasterImageViewAdapter::scrollPosChanged);
@@ -94,9 +94,9 @@ void RasterImageViewAdapter::setZoomToFit(bool on)
     d->mView->setZoomToFit(on);
 }
 
-void RasterImageViewAdapter::setZoomToFitWidth(bool on)
+void RasterImageViewAdapter::setZoomToFill(bool on)
 {
-    d->mView->setZoomToFitWidth(on);
+    d->mView->setZoomToFill(on);
 }
 
 bool RasterImageViewAdapter::zoomToFit() const
@@ -104,9 +104,9 @@ bool RasterImageViewAdapter::zoomToFit() const
     return d->mView->zoomToFit();
 }
 
-bool RasterImageViewAdapter::zoomToFitWidth() const
+bool RasterImageViewAdapter::zoomToFill() const
 {
-    return d->mView->zoomToFitWidth();
+    return d->mView->zoomToFill();
 }
 
 void RasterImageViewAdapter::setZoom(qreal zoom, const QPointF& center)
@@ -119,9 +119,9 @@ qreal RasterImageViewAdapter::computeZoomToFit() const
     return d->mView->computeZoomToFit();
 }
 
-qreal RasterImageViewAdapter::computeZoomToFitWidth() const
+qreal RasterImageViewAdapter::computeZoomToFill() const
 {
-    return d->mView->computeZoomToFitWidth();
+    return d->mView->computeZoomToFill();
 }
 
 Document::Ptr RasterImageViewAdapter::document() const

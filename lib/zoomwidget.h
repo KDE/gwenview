@@ -43,7 +43,7 @@ public:
     ZoomWidget(QWidget* parent = 0);
     ~ZoomWidget();
 
-    void setActions(QAction* zoomToFitAction, QAction* actualSizeAction, QAction* zoomInAction, QAction* zoomOutAction, QAction* zoomToFitWidthAction);
+    void setActions(QAction* zoomToFitAction, QAction* actualSizeAction, QAction* zoomInAction, QAction* zoomOutAction, QAction* zoomToFillAction);
 
 public Q_SLOTS:
     void setZoom(qreal zoom);

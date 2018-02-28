@@ -66,8 +66,8 @@ void SvgImageView::finishLoadFromDocument()
     mSvgItem->setSharedRenderer(renderer);
     if (zoomToFit()) {
         setZoom(computeZoomToFit(), QPointF(-1, -1), ForceUpdate);
-    } else if (zoomToFitWidth()) {
-        setZoom(computeZoomToFitWidth(), QPointF(-1, -1), ForceUpdate);
+    } else if (zoomToFill()) {
+        setZoom(computeZoomToFill(), QPointF(-1, -1), ForceUpdate);
     } else {
         mSvgItem->setScale(zoom());
     }
@@ -109,7 +109,7 @@ SvgViewAdapter::SvgViewAdapter()
     setWidget(d->mView);
     connect(d->mView, &SvgImageView::zoomChanged, this, &SvgViewAdapter::zoomChanged);
     connect(d->mView, &SvgImageView::zoomToFitChanged, this, &SvgViewAdapter::zoomToFitChanged);
-    connect(d->mView, &SvgImageView::zoomToFitWidthChanged, this, &SvgViewAdapter::zoomToFitWidthChanged);
+    connect(d->mView, &SvgImageView::zoomToFillChanged, this, &SvgViewAdapter::zoomToFillChanged);
     connect(d->mView, &SvgImageView::zoomInRequested, this, &SvgViewAdapter::zoomInRequested);
     connect(d->mView, &SvgImageView::zoomOutRequested, this, &SvgViewAdapter::zoomOutRequested);
     connect(d->mView, &SvgImageView::scrollPosChanged, this, &SvgViewAdapter::scrollPosChanged);
@@ -149,9 +149,9 @@ void SvgViewAdapter::setZoomToFit(bool on)
     d->mView->setZoomToFit(on);
 }
 
-void SvgViewAdapter::setZoomToFitWidth(bool on)
+void SvgViewAdapter::setZoomToFill(bool on)
 {
-    d->mView->setZoomToFitWidth(on);
+    d->mView->setZoomToFill(on);
 }
 
 bool SvgViewAdapter::zoomToFit() const
@@ -159,9 +159,9 @@ bool SvgViewAdapter::zoomToFit() const
     return d->mView->zoomToFit();
 }
 
-bool SvgViewAdapter::zoomToFitWidth() const
+bool SvgViewAdapter::zoomToFill() const
 {
-    return d->mView->zoomToFitWidth();
+    return d->mView->zoomToFill();
 }
 
 qreal SvgViewAdapter::zoom() const
@@ -179,9 +179,9 @@ qreal SvgViewAdapter::computeZoomToFit() const
     return d->mView->computeZoomToFit();
 }
 
-qreal SvgViewAdapter::computeZoomToFitWidth() const
+qreal SvgViewAdapter::computeZoomToFill() const
 {
-    return d->mView->computeZoomToFitWidth();
+    return d->mView->computeZoomToFill();
 }
 
 QPointF SvgViewAdapter::scrollPos() const
