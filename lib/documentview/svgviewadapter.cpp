@@ -35,6 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "document/documentfactory.h"
 #include <qgraphicssceneevent.h>
 #include <lib/gvdebug.h>
+#include <lib/gwenviewconfig.h>
 
 namespace Gwenview
 {
@@ -142,6 +143,11 @@ void SvgViewAdapter::setDocument(Document::Ptr doc)
 Document::Ptr SvgViewAdapter::document() const
 {
     return d->mView->document();
+}
+
+void SvgViewAdapter::loadConfig()
+{
+    d->mView->setEnlargeSmallerImages(GwenviewConfig::enlargeSmallerImages());
 }
 
 void SvgViewAdapter::setZoomToFit(bool on)
