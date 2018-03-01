@@ -73,6 +73,8 @@ public:
 
     virtual Document::Ptr document() const Q_DECL_OVERRIDE;
 
+    virtual void loadConfig() Q_DECL_OVERRIDE;
+
     virtual MimeTypeUtils::Kind kind() const Q_DECL_OVERRIDE
     {
         return MimeTypeUtils::KIND_SVG_IMAGE;
