@@ -18,10 +18,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
 #include <config-gwenview.h>
-// STL
-#include <memory>
 
 // Qt
+#include <QPointer>
 #include <QScopedPointer>
 #include <QUrl>
 #include <QTemporaryDir>
@@ -92,22 +91,22 @@ public:
 
     void createMainWindow()
     {
-        Gwenview::MainWindow* window = new Gwenview::MainWindow();
+        mMainWindow = new Gwenview::MainWindow();
         if (mUrl.isValid()) {
-            window->setInitialUrl(mUrl);
+            mMainWindow->setInitialUrl(mUrl);
         } else {
-            window->showStartMainPage();
+            mMainWindow->showStartMainPage();
         }
 
-        window->show();
+        mMainWindow->show();
         if (mFullScreen) {
-            window->actionCollection()->action("fullscreen")->trigger();
+            mMainWindow->actionCollection()->action("fullscreen")->trigger();
         } else {
-            window->show();
+            mMainWindow->show();
         }
 
         if (mSlideShow) {
-            window->startSlideShow();
+            mMainWindow->startSlideShow();
         }
     }
 
@@ -115,8 +114,8 @@ private:
     QUrl mUrl;
     bool mFullScreen;
     bool mSlideShow;
-    std::unique_ptr<QTemporaryDir> mMultipleUrlsDir;
-    std::unique_ptr<Gwenview::MainWindow> mMainWindow;
+    QScopedPointer<QTemporaryDir> mMultipleUrlsDir;
+    QPointer<Gwenview::MainWindow> mMainWindow;
 };
 
 int main(int argc, char *argv[])
