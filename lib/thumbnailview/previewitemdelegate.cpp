@@ -80,6 +80,7 @@ const int ITEM_MARGIN = 5;
 
 /** How darker is the border line around selection */
 const int SELECTION_BORDER_DARKNESS = 140;
+const int FOCUS_BORDER_DARKNESS = 200;
 
 /** Radius of the selection rounded corners, in pixels */
 const int SELECTION_RADIUS = 5;
@@ -689,6 +690,8 @@ void PreviewItemDelegate::paint(QPainter * painter, const QStyleOptionViewItem &
     QRect rect = option.rect;
     const bool selected = option.state & QStyle::State_Selected;
     const bool underMouse = option.state & QStyle::State_MouseOver;
+    const bool hasFocus = option.state & QStyle::State_HasFocus;
+
     const QWidget* viewport = d->mView->viewport();
 
 #ifdef DEBUG_DRAW_BORDER
@@ -710,14 +713,25 @@ void PreviewItemDelegate::paint(QPainter * painter, const QStyleOptionViewItem &
 
     // Select colors
     QColor bgColor, borderColor, fgColor;
+
+    fgColor = viewport->palette().color(viewport->foregroundRole());
+
     if (selected || underMouse) {
         bgColor = option.palette.color(cg, QPalette::Highlight);
-        borderColor = bgColor.dark(SELECTION_BORDER_DARKNESS);
+
+        if (hasFocus) {
+            borderColor = bgColor.dark(FOCUS_BORDER_DARKNESS);
+        } else {
+            borderColor = bgColor.dark(SELECTION_BORDER_DARKNESS);
+        }
     } else {
         bgColor = viewport->palette().color(viewport->backgroundRole());
-        borderColor = bgColor.light(200);
+        if (hasFocus) {
+            borderColor = fgColor;
+        } else {
+            borderColor = bgColor.light(200);
+        }
     }
-    fgColor = viewport->palette().color(viewport->foregroundRole());
 
     // Compute thumbnailRect
     QRect thumbnailRect = QRect(
@@ -744,6 +758,12 @@ void PreviewItemDelegate::paint(QPainter * painter, const QStyleOptionViewItem &
         painter->setRenderHint(QPainter::Antialiasing, false);
         QRect borderRect = thumbnailRect.adjusted(-1, -1, 0, 0);
         painter->drawRect(borderRect);
+    } else if (hasFocus && !selected) {
+        painter->setPen(option.palette.color(cg, QPalette::Highlight));
+        painter->setRenderHint(QPainter::Antialiasing, false);
+        QLine underLine = QLine(thumbnailRect.bottomLeft(), thumbnailRect.bottomRight());
+        underLine.translate(0, 3);
+        painter->drawLine(underLine);
     }
     painter->drawPixmap(thumbnailRect.left(), thumbnailRect.top(), thumbnailPix);
 
