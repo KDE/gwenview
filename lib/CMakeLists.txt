@@ -176,6 +176,18 @@ set(gwenviewlib_SRCS
     ${GV_JPEG_DIR}/transupp.c
     )
 
+if(HAVE_QTDBUS)
+    set(gwenviewlib_SRCS
+        ${gwenviewlib_SRCS}
+        mpris2/lockscreenwatcher.cpp
+        mpris2/dbusabstractadaptor.cpp
+        mpris2/mpris2service.cpp
+        mpris2/mprismediaplayer2.cpp
+        mpris2/mprismediaplayer2player.cpp
+        )
+    qt5_add_dbus_interface(gwenviewlib_SRCS mpris2/org.freedesktop.ScreenSaver.xml screensaverdbusinterface)
+endif()
+
 if(HAVE_FITS)
     set(gwenviewlib_SRCS
         ${gwenviewlib_SRCS}
@@ -254,6 +266,9 @@ target_link_libraries(gwenviewlib
     ${PHONON_LIBRARY}
     )
 
+if(HAVE_QTDBUS)
+    target_link_libraries(gwenviewlib Qt5::DBus)
+endif()
 if(HAVE_FITS)
     target_link_libraries(gwenviewlib ${CFITSIO_LIBRARIES})
 endif()

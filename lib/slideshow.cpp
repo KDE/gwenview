@@ -240,6 +240,11 @@ void SlideShow::setInterval(int intervalInSeconds)
     d->updateTimerInterval();
 }
 
+int SlideShow::interval() const
+{
+    return GwenviewConfig::interval();
+}
+
 void SlideShow::stop()
 {
     LOG("Stopping timer");

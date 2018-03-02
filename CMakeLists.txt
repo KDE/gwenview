@@ -71,6 +71,8 @@ else()
 endif()
 
 find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Core Widgets Concurrent Svg OpenGL PrintSupport)
+find_package(Qt5DBus ${QT_MIN_VERSION} CONFIG QUIET)
+set(HAVE_QTDBUS ${Qt5DBus_FOUND})
 
 find_package(Phonon4Qt5 4.6.60 NO_MODULE REQUIRED)
 include_directories(BEFORE ${PHONON_INCLUDES})

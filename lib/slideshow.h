@@ -51,6 +51,8 @@ public:
     /** @return true if the slideshow is running */
     bool isRunning() const;
 
+    int interval() const;
+
 public Q_SLOTS:
     void setInterval(int);
     void setCurrentUrl(const QUrl &url);

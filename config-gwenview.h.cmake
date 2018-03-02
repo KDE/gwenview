@@ -5,3 +5,4 @@
 #define GV_TEST_DATA_DIR "@CMAKE_CURRENT_SOURCE_DIR@/tests/data"
 #cmakedefine HAVE_X11 ${HAVE_X11}
 #cmakedefine HAVE_FITS ${HAVE_FITS}
+#cmakedefine HAVE_QTDBUS ${HAVE_QTDBUS}

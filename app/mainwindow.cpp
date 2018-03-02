@@ -88,6 +88,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/gvdebug.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/mimetypeutils.h>
+#ifdef HAVE_QTDBUS
+#include <lib/mpris2/mpris2service.h>
+#endif
 #include <lib/print/printhelper.h>
 #include <lib/slideshow.h>
 #include <lib/signalblocker.h>
@@ -166,6 +169,9 @@ struct MainWindow::Private
     SaveBar* mSaveBar;
     bool mStartSlideShowWhenDirListerCompleted;
     SlideShow* mSlideShow;
+#ifdef HAVE_QTDBUS
+    Mpris2Service* mMpris2Service;
+#endif
     Preloader* mPreloader;
     bool mPreloadDirectionIsForward;
 #ifdef KIPI_FOUND
@@ -810,6 +816,13 @@ MainWindow::MainWindow()
     d->setupUndoActions();
     d->setupContextManagerItems();
     d->setupFullScreenContent();
+
+#ifdef HAVE_QTDBUS
+    d->mMpris2Service = new Mpris2Service(d->mSlideShow, d->mContextManager,
+                                          d->mToggleSlideShowAction, d->mFullScreenAction,
+                                          d->mGoToPreviousAction, d->mGoToNextAction, this);
+#endif
+
     d->updateActions();
     updatePreviousNextActions();
     d->mSaveBar->initActionDependentWidgets();
