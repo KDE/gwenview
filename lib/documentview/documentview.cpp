@@ -594,11 +594,14 @@ void DocumentView::wheelEvent(QGraphicsSceneWheelEvent* event)
     }
     if (GwenviewConfig::mouseWheelBehavior() == MouseWheelBehavior::Browse
         && event->modifiers() == Qt::NoModifier) {
+        d->controlWheelAccumulatedDelta += event->delta();
         // Browse with mouse wheel
-        if (event->delta() > 0) {
+        if (d->controlWheelAccumulatedDelta >= QWheelEvent::DefaultDeltasPerStep) {
             previousImageRequested();
-        } else {
+            d->controlWheelAccumulatedDelta = 0;
+        } else if (d->controlWheelAccumulatedDelta <= -QWheelEvent::DefaultDeltasPerStep) {
             nextImageRequested();
+            d->controlWheelAccumulatedDelta = 0;
         }
         return;
     }
