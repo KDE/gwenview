@@ -96,7 +96,12 @@ static void copyMoveOrLink(Operation operation, const QList<QUrl>& urlList, QWid
         dialog->setOption(QFileDialog::ShowDirsOnly, true);
     }
 
-    dialog->setDirectoryUrl(contextManager->targetDirUrl());
+    QUrl dirUrl = contextManager->targetDirUrl();
+    if (!dirUrl.isValid()) {
+        dirUrl = urlList.constFirst().adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash);
+    }
+    dialog->setDirectoryUrl(dirUrl);
+
     if (!dialog->exec()) {
         return;
     }

@@ -55,9 +55,6 @@
         </entry>
 
         <entry name="LastTargetDir" type="Path">
-            <default code="true">
-                QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation)).toString()
-            </default>
         </entry>
 
         <entry name="ThumbnailBarOrientation" type="Enum">
