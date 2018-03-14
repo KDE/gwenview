@@ -322,7 +322,7 @@ void AbstractImageView::mousePressEvent(QGraphicsSceneMouseEvent* event)
         bool value = !zoomToFit();
         setZoomToFit(value);
         if (!value) {
-            setZoom(1.);
+            setZoom(1., event->pos());
         }
         return;
     }
