@@ -1119,7 +1119,7 @@ void MainWindow::slotPartCompleted()
 {
     d->updateActions();
     const QUrl url = d->mContextManager->currentUrl();
-    if (!url.isEmpty()) {
+    if (!url.isEmpty() && GwenviewConfig::historyEnabled()) {
         d->mFileOpenRecentAction->addUrl(url);
         d->mGvCore->addUrlToRecentFiles(url);
     }
@@ -1474,10 +1474,16 @@ void MainWindow::loadConfig()
     d->mDirModel->setBlackListedExtensions(GwenviewConfig::blackListedExtensions());
     d->mDirModel->adjustKindFilter(MimeTypeUtils::KIND_VIDEO, GwenviewConfig::listVideos());
 
-    d->mFileOpenRecentAction->loadEntries(KConfigGroup(KSharedConfig::openConfig(), "Recent Files"));
-    foreach(const QUrl &url, d->mFileOpenRecentAction->urls()) {
-        d->mGvCore->addUrlToRecentFiles(url);
+    if (GwenviewConfig::historyEnabled()) {
+        d->mFileOpenRecentAction->loadEntries(KConfigGroup(KSharedConfig::openConfig(), "Recent Files"));
+        foreach(const QUrl& url, d->mFileOpenRecentAction->urls()) {
+            d->mGvCore->addUrlToRecentFiles(url);
+        }
+    } else {
+        d->mFileOpenRecentAction->clear();
     }
+    d->mFileOpenRecentAction->setVisible(GwenviewConfig::historyEnabled());
+
     d->mStartMainPage->loadConfig();
     d->mViewMainPage->loadConfig();
     d->mBrowseMainPage->loadConfig();

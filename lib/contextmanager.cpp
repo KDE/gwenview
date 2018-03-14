@@ -311,7 +311,8 @@ QUrl ContextManager::targetDirUrl() const
 void ContextManager::setTargetDirUrl(const QUrl &url)
 {
     GV_RETURN_IF_FAIL(url.isEmpty() || url.isValid());
-    d->mTargetDirUrl = url;
+    d->mTargetDirUrl = GwenviewConfig::historyEnabled() ? url
+                                                        : QUrl();
 }
 
 void ContextManager::slotRowsInserted()
