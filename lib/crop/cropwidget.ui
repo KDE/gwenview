@@ -81,39 +81,6 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string>Position:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-        <property name="buddy">
-         <cstring>leftSpinBox</cstring>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSpinBox" name="leftSpinBox">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>1</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSpinBox" name="topSpinBox">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-          <horstretch>1</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_3">
-        <property name="text">
          <string>Size:</string>
         </property>
         <property name="alignment">
@@ -127,7 +94,7 @@
       <item>
        <widget class="QSpinBox" name="widthSpinBox">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
           <horstretch>1</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -136,6 +103,39 @@
       </item>
       <item>
        <widget class="QSpinBox" name="heightSpinBox">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>1</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>Position:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>leftSpinBox</cstring>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="leftSpinBox">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>1</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="topSpinBox">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
           <horstretch>1</horstretch>
@@ -171,10 +171,10 @@
  </widget>
  <tabstops>
   <tabstop>ratioComboBox</tabstop>
-  <tabstop>leftSpinBox</tabstop>
-  <tabstop>topSpinBox</tabstop>
   <tabstop>widthSpinBox</tabstop>
   <tabstop>heightSpinBox</tabstop>
+  <tabstop>leftSpinBox</tabstop>
+  <tabstop>topSpinBox</tabstop>
  </tabstops>
  <resources/>
  <connections/>
