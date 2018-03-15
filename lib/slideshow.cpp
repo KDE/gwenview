@@ -238,11 +238,30 @@ void SlideShow::setInterval(int intervalInSeconds)
 {
     GwenviewConfig::setInterval(double(intervalInSeconds));
     d->updateTimerInterval();
+    emit intervalChanged(intervalInSeconds);
 }
 
 int SlideShow::interval() const
 {
     return GwenviewConfig::interval();
+}
+
+int SlideShow::position() const
+{
+    // TODO: also support videos
+
+    // QTimer::remainingTime() returns -1 if inactive
+    // and there are moments where mState == Started but timer already done but not yet next url reached
+    // so handle that
+    if (d->mState == Started) {
+        if (d->mTimer->isActive()) {
+            return interval() * 1000 - d->mTimer->remainingTime();
+        }
+        // already timeout reached, but not yet progressed to next url
+        return interval();
+    }
+
+    return 0;
 }
 
 void SlideShow::stop()

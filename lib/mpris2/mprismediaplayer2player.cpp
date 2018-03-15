@@ -65,6 +65,8 @@ MprisMediaPlayer2Player::MprisMediaPlayer2Player(const QString &objectDBusPath,
 
     connect(mSlideShow, &SlideShow::stateChanged,
             this, &MprisMediaPlayer2Player::onSlideShowStateChanged);
+    connect(mSlideShow, &SlideShow::intervalChanged,
+            this, &MprisMediaPlayer2Player::onMetaInfoUpdated);
     connect(mContextManager, &ContextManager::currentUrlChanged,
             this, &MprisMediaPlayer2Player::onCurrentUrlChanged);
     connect(mSlideShow->randomAction(), &QAction::toggled,
@@ -184,7 +186,8 @@ QVariantMap MprisMediaPlayer2Player::metadata() const
 
 qlonglong MprisMediaPlayer2Player::position() const
 {
-    return 0;
+    // milliseconds -> microseconds
+    return mSlideShow->position() * 1000;
 }
 
 double MprisMediaPlayer2Player::rate() const
@@ -245,6 +248,7 @@ void MprisMediaPlayer2Player::onSlideShowStateChanged()
         return;
     }
 
+    signalPropertyChange("Position", position());
     signalPropertyChange("PlaybackStatus", mPlaybackStatus);
 }
 
@@ -259,6 +263,7 @@ void MprisMediaPlayer2Player::onCurrentUrlChanged(const QUrl& url)
     }
 
     onMetaInfoUpdated();
+    signalPropertyChange("Position", position());
 }
 
 void MprisMediaPlayer2Player::onMetaInfoUpdated()
@@ -280,10 +285,9 @@ void MprisMediaPlayer2Player::onMetaInfoUpdated()
 
         // TODO: for videos also get and report the length
         if (MimeTypeUtils::urlKind(url) != MimeTypeUtils::KIND_VIDEO) {
-            // TODO: implement other MPRIS API for position
             // convert seconds in microseconds
-            // const qlonglong duration = qlonglong(mSlideShow->interval() * 1000000);
-            // updatedMetaData.insert(QStringLiteral("mpris:length"), duration);
+            const qlonglong duration = qlonglong(mSlideShow->interval() * 1000000);
+            updatedMetaData.insert(QStringLiteral("mpris:length"), duration);
         }
 
         // TODO: update on metadata changes, given user can edit most of this data
@@ -329,6 +333,7 @@ void MprisMediaPlayer2Player::onFullScreenActionToggled()
         return;
     }
 
+    signalPropertyChange("Position", position());
     signalPropertyChange("PlaybackStatus", mPlaybackStatus);
 }
 
@@ -346,6 +351,7 @@ void MprisMediaPlayer2Player::onToggleSlideShowActionChanged()
     signalPropertyChange("CanPlay", mSlideShowEnabled);
     signalPropertyChange("CanPause", mSlideShowEnabled);
     if (playbackStatusChanged) {
+        signalPropertyChange("Position", position());
         signalPropertyChange("PlaybackStatus", mPlaybackStatus);
     }
 }

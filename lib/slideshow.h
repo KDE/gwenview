@@ -51,7 +51,14 @@ public:
     /** @return true if the slideshow is running */
     bool isRunning() const;
 
+    /**
+     * @return interval in seconds
+     */
     int interval() const;
+    /**
+     * @return position in time slot for current image in milliseconds
+     */
+    int position() const;
 
 public Q_SLOTS:
     void setInterval(int);
@@ -68,6 +75,11 @@ Q_SIGNALS:
      * Slideshow has been started or stopped
      */
     void stateChanged(bool running);
+    /**
+     * Emitted when interval has been changed
+     * @param interval  interval in seconds
+     */
+    void intervalChanged(int interval);
 
 private Q_SLOTS:
     void goToNextUrl();
