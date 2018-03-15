@@ -140,8 +140,6 @@ int main(int argc, char *argv[])
                                         i18n("Start in fullscreen mode")));
     parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("s") << QStringLiteral("slideshow"),
                                         i18n("Start in slideshow mode")));
-    parser.addHelpOption();
-    parser.addVersionOption();
     parser.addPositionalArgument("url", i18n("A starting file or folders"));
     parser.process(app);
     aboutData.data()->processCommandLine(&parser);
