@@ -360,6 +360,12 @@ struct MainWindow::Private
         file->addAction(KStandardAction::SaveAs, q, SLOT(saveCurrentAs()));
         file->addAction(KStandardAction::Open, q, SLOT(openFile()));
         mFileOpenRecentAction = KStandardAction::openRecent(q, SLOT(openUrl(QUrl)), q);
+        connect(mFileOpenRecentAction, &KRecentFilesAction::recentListCleared,
+                mGvCore, &GvCore::clearRecentFilesAndFolders);
+        QAction* clearAction = mFileOpenRecentAction->menu()->findChild<QAction*>("clear_action");
+        if (clearAction) {
+            clearAction->setText(i18nc("@action Open Recent menu", "Forget All Files && Folders"));
+        }
         file->addAction("file_open_recent", mFileOpenRecentAction);
         file->addAction(KStandardAction::Print, q, SLOT(print()));
         file->addAction(KStandardAction::Quit, qApp, SLOT(closeAllWindows()));

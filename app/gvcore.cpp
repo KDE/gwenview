@@ -460,11 +460,15 @@ static void clearModel(QAbstractItemModel* model)
     model->removeRows(0, model->rowCount());
 }
 
+void GvCore::clearRecentFilesAndFolders() {
+    clearModel(recentFilesModel());
+    clearModel(recentFoldersModel());
+}
+
 void GvCore::slotConfigChanged()
 {
     if (!GwenviewConfig::historyEnabled()) {
-        clearModel(recentFoldersModel());
-        clearModel(recentFilesModel());
+        clearRecentFilesAndFolders();
     }
     d->setupPalettes();
 }
