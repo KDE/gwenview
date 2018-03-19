@@ -43,7 +43,7 @@ public:
     virtual ~SlideShow();
 
     void start(const QList<QUrl>& urls);
-    void stop();
+    void pause();
 
     QAction* loopAction() const;
     QAction* randomAction() const;
@@ -72,7 +72,7 @@ public Q_SLOTS:
 Q_SIGNALS:
     void goToUrl(const QUrl&);
     /**
-     * Slideshow has been started or stopped
+     * Slideshow has been started or paused
      */
     void stateChanged(bool running);
     /**

@@ -1324,7 +1324,7 @@ void MainWindow::toggleFullScreen(bool checked)
         qApp->setProperty("KDE_COLOR_SCHEME_PATH", QVariant());
         QApplication::setPalette(d->mGvCore->palette(GvCore::NormalPalette));
 
-        d->mSlideShow->stop();
+        d->mSlideShow->pause();
         KToggleFullScreenAction::setFullScreen(this, false);
         menuBar()->setVisible(d->mShowMenuBarAction->isChecked());
         toolBar()->setVisible(d->mStateBeforeFullScreen.mToolBarVisible);
@@ -1402,7 +1402,7 @@ void MainWindow::showDocumentInFullScreen(const QUrl &url)
 void MainWindow::toggleSlideShow()
 {
     if (d->mSlideShow->isRunning()) {
-        d->mSlideShow->stop();
+        d->mSlideShow->pause();
     } else {
         if (!d->mViewAction->isChecked()) {
             d->mViewAction->trigger();
@@ -1433,10 +1433,11 @@ void MainWindow::toggleSlideShow()
 void MainWindow::updateSlideShowAction()
 {
     if (d->mSlideShow->isRunning()) {
-        d->mToggleSlideShowAction->setText(i18n("Stop Slideshow"));
+        d->mToggleSlideShowAction->setText(i18n("Pause Slideshow"));
         d->mToggleSlideShowAction->setIcon(QIcon::fromTheme("media-playback-pause"));
     } else {
-        d->mToggleSlideShowAction->setText(i18n("Start Slideshow"));
+        d->mToggleSlideShowAction->setText(d->mFullScreenAction->isChecked() ? i18n("Resume Slideshow")
+                                                                             : i18n("Start Slideshow"));
         d->mToggleSlideShowAction->setIcon(QIcon::fromTheme("media-playback-start"));
     }
 }

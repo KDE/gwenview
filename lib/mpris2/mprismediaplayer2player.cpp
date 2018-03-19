@@ -136,7 +136,7 @@ bool MprisMediaPlayer2Player::canPause() const
 
 void MprisMediaPlayer2Player::Pause()
 {
-    mSlideShow->stop();
+    mSlideShow->pause();
 }
 
 void MprisMediaPlayer2Player::PlayPause()
