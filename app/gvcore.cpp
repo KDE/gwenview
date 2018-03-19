@@ -301,9 +301,12 @@ void GvCore::addUrlToRecentFolders(QUrl url)
     if (!url.isValid()) {
         return;
     }
-    if (url.path() != "") { // This check is a workaround for bug #312060
-        url.setPath(url.path()+'/');
+
+    // For "sftp://localhost", "/" is a different path than "" (bug #312060)
+    if (!url.path().isEmpty() && !url.path().endsWith('/')) {
+        url.setPath(url.path() + '/');
     }
+
     recentFoldersModel();
     d->mRecentFoldersModel->addUrl(url);
 }
