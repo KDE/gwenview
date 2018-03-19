@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QUrl>
 #include <QMimeDatabase>
 #include <QTemporaryFile>
+#include <QRegularExpression>
 
 // KDE
 #include <KConfig>
@@ -124,7 +125,15 @@ private:
         : mUrl(url)
         , mDateTime(dateTime)
         , mConfigPath(configPath) {
-        setText(mUrl.toDisplayString());
+
+        QString text(mUrl.toDisplayString(QUrl::PreferLocalFile));
+#ifdef Q_OS_UNIX
+        // shorten home directory, but avoid showing a cryptic "~/"
+        if (text.length() > QDir::homePath().length() + 1) {
+            text.replace(QRegularExpression('^' + QDir::homePath()), "~");
+        }
+#endif
+        setText(text);
 
         QMimeDatabase db;
         const QString iconName = db.mimeTypeForUrl(mUrl).iconName();

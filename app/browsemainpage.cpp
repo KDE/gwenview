@@ -345,7 +345,7 @@ void BrowseMainPage::editLocation()
 void BrowseMainPage::addFolderToPlaces()
 {
     QUrl url = d->mUrlNavigator->locationUrl();
-    QString text = url.fileName();
+    QString text = url.adjusted(QUrl::StripTrailingSlash).fileName();
     if (text.isEmpty()) {
         text = url.toDisplayString();
     }

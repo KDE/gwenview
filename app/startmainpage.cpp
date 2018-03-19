@@ -287,7 +287,7 @@ void StartMainPage::showRecentFoldersViewContextMenu(const QPoint& pos)
         return;
     }
     if (action == addToPlacesAction) {
-        QString text = url.fileName();
+        QString text = url.adjusted(QUrl::StripTrailingSlash).fileName();
         if (text.isEmpty()) {
             text = url.toDisplayString();
         }
