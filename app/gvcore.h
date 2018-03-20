@@ -64,6 +64,7 @@ public:
 
     void addUrlToRecentFolders(QUrl);
     void addUrlToRecentFiles(const QUrl &);
+    void clearRecentFilesAndFolders();
 
     QPalette palette(PaletteType type) const;
     QString fullScreenPaletteName() const;
