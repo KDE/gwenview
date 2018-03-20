@@ -41,7 +41,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include <gvcore.h>
 #include <ui_startmainpage.h>
+#include <lib/dialogguard.h>
 #include <lib/flowlayout.h>
+#include <lib/gvdebug.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/thumbnailview/abstractthumbnailviewhelper.h>
 #include <lib/thumbnailview/previewitemdelegate.h>
@@ -171,12 +173,17 @@ StartMainPage::StartMainPage(QWidget* parent, GvCore* gvCore)
     // Tag view
     connect(d->mTagView, &QListView::clicked, this, &StartMainPage::slotTagViewClicked);
 
-    // Recent folder view
-    connect(d->mRecentFoldersView, &Gwenview::ThumbnailView::indexActivated, this, &StartMainPage::slotListViewActivated);
+    // Recent folders view
+    connect(d->mRecentFoldersView, &Gwenview::ThumbnailView::indexActivated,
+            this, &StartMainPage::slotListViewActivated);
+    connect(d->mRecentFoldersView, &Gwenview::ThumbnailView::customContextMenuRequested,
+            this, &StartMainPage::showContextMenu);
 
-    connect(d->mRecentFoldersView, &Gwenview::ThumbnailView::customContextMenuRequested, this, &StartMainPage::showRecentFoldersViewContextMenu);
-
-    connect(d->mRecentFilesView, &Gwenview::ThumbnailView::indexActivated, this, &StartMainPage::slotListViewActivated);
+    // Recent files view
+    connect(d->mRecentFilesView, &Gwenview::ThumbnailView::indexActivated,
+            this, &StartMainPage::slotListViewActivated);
+    connect(d->mRecentFilesView, &Gwenview::ThumbnailView::customContextMenuRequested,
+            this, &StartMainPage::showContextMenu);
 
     d->updateHistoryTab();
     connect(GwenviewConfig::self(), &GwenviewConfig::configChanged, this, &StartMainPage::loadConfig);
@@ -257,45 +264,60 @@ void StartMainPage::showEvent(QShowEvent* event)
     QFrame::showEvent(event);
 }
 
-void StartMainPage::showRecentFoldersViewContextMenu(const QPoint& pos)
+void StartMainPage::showContextMenu(const QPoint& pos)
 {
-    QAbstractItemView* view = qobject_cast<QAbstractItemView*>(sender());
-    QUrl url;
-    QModelIndex index = view->indexAt(pos);
-    if (index.isValid()) {
-        QVariant data = index.data(KFilePlacesModel::UrlRole);
-        url = data.toUrl();
-    }
-
     // Create menu
-    QMenu menu(this);
-    QAction* addToPlacesAction = menu.addAction(QIcon::fromTheme("bookmark-new"), i18n("Add to Places"));
-    QAction* removeAction = menu.addAction(QIcon::fromTheme("edit-delete"), i18n("Forget this Folder"));
-    menu.addSeparator();
-    QAction* clearAction = menu.addAction(QIcon::fromTheme("edit-delete-all"), i18n("Forget All"));
+    DialogGuard<QMenu> menu(this);
 
-    if (!index.isValid()) {
-        if (addToPlacesAction) {
-            addToPlacesAction->setEnabled(false);
-        }
-        removeAction->setEnabled(false);
+    QAction* addAction = menu->addAction(QIcon::fromTheme("bookmark-new"), QString());
+    QAction* forgetAction = menu->addAction(QIcon::fromTheme("edit-delete"), QString());
+    menu->addSeparator();
+    QAction* forgetAllAction = menu->addAction(QIcon::fromTheme("edit-delete-all"), QString());
+
+    if (d->mHistoryWidget->currentWidget() == d->mRecentFoldersTab) {
+        addAction->setText(i18nc("@action Recent Folders view", "Add Folder to Places"));
+        forgetAction->setText(i18nc("@action Recent Folders view", "Forget This Folder"));
+        forgetAllAction->setText(i18nc("@action Recent Folders view", "Forget All Folders"));
+    } else if (d->mHistoryWidget->currentWidget() == d->mRecentFilesTab) {
+        addAction->setText(i18nc("@action Recent Files view", "Add Containing Folder to Places"));
+        forgetAction->setText(i18nc("@action Recent Files view", "Forget This File"));
+        forgetAllAction->setText(i18nc("@action Recent Files view", "Forget All Files"));
+    } else {
+        GV_WARN_AND_RETURN("Context menu not implemented on this tab page");
     }
+
+    const QAbstractItemView* view = qobject_cast<QAbstractItemView*>(sender());
+    const QModelIndex index = view->indexAt(pos);
+    addAction->setEnabled(index.isValid());
+    forgetAction->setEnabled(index.isValid());
 
     // Handle menu
-    QAction* action = menu.exec(view->mapToGlobal(pos));
+    const QAction* action = menu->exec(view->mapToGlobal(pos));
     if (!action) {
         return;
     }
-    if (action == addToPlacesAction) {
+
+    const QVariant data = index.data(KFilePlacesModel::UrlRole);
+    QUrl url = data.toUrl();
+    if (action == addAction) {
+        if (d->mHistoryWidget->currentWidget() == d->mRecentFilesTab) {
+            url = url.adjusted(QUrl::RemoveFilename);
+        }
         QString text = url.adjusted(QUrl::StripTrailingSlash).fileName();
         if (text.isEmpty()) {
             text = url.toDisplayString();
         }
         d->mBookmarksModel->addPlace(text, url);
-    } else if (action == removeAction) {
+    } else if (action == forgetAction) {
         view->model()->removeRow(index.row());
-    } else if (action == clearAction) {
+        if (d->mHistoryWidget->currentWidget() == d->mRecentFilesTab) {
+            emit recentFileRemoved(url);
+        }
+    } else if (action == forgetAllAction) {
         view->model()->removeRows(0, view->model()->rowCount());
+        if (d->mHistoryWidget->currentWidget() == d->mRecentFilesTab) {
+            emit recentFilesCleared();
+        }
     }
 }
 

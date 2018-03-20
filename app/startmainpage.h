@@ -53,6 +53,8 @@ public:
 
 Q_SIGNALS:
     void urlSelected(const QUrl &url);
+    void recentFileRemoved(const QUrl& url);
+    void recentFilesCleared();
 
 public Q_SLOTS:
     void loadConfig();
@@ -62,11 +64,12 @@ protected:
 
 private Q_SLOTS:
     void slotListViewActivated(const QModelIndex& index);
-    void showRecentFoldersViewContextMenu(const QPoint& pos);
     void slotTagViewClicked(const QModelIndex& index);
 
 private:
     StartMainPagePrivate* const d;
+
+    void showContextMenu(const QPoint& pos);
 };
 
 } // namespace
