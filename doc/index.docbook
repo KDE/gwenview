@@ -376,7 +376,7 @@ mouse to the top of the screen. If the mouse cursor is over the top bar, it
 will not autohide. Most of the buttons on the bar are the same as the ones on
 the toolbar in Browse or View Modes, except for the <guiicon>Exit Full
 Screen Mode</guiicon> button which returns you to the &gwenview; window, the
-<guiicon>Start/Stop Slideshow</guiicon> button, and the
+<guiicon>Pause/Resume Slideshow</guiicon> button, and the
 <guiicon>Configure Full Screen Mode</guiicon> button which shows a
 small settings dialog that allows you to easily and quickly configure the
 slideshow. The slideshow controls there are: </para>

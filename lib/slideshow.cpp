@@ -50,7 +50,7 @@ namespace Gwenview
 #endif
 
 enum State {
-    Stopped,
+    Paused,
     Started,
     WaitForEndOfUrl
 };
@@ -177,7 +177,7 @@ SlideShow::SlideShow(QObject* parent)
 : QObject(parent)
 , d(new SlideShowPrivate)
 {
-    d->mState = Stopped;
+    d->mState = Paused;
 
     d->mTimer = new QTimer(this);
     connect(d->mTimer, &QTimer::timeout, this, &SlideShow::goToNextUrl);
@@ -264,11 +264,11 @@ int SlideShow::position() const
     return 0;
 }
 
-void SlideShow::stop()
+void SlideShow::pause()
 {
     LOG("Stopping timer");
     d->mTimer->stop();
-    d->mState = Stopped;
+    d->mState = Paused;
     stateChanged(false);
 }
 
@@ -286,7 +286,7 @@ void SlideShow::goToNextUrl()
     QUrl url = d->findNextUrl();
     LOG("url:" << url);
     if (!url.isValid()) {
-        stop();
+        pause();
         return;
     }
     goToUrl(url);
@@ -301,14 +301,14 @@ void SlideShow::setCurrentUrl(const QUrl &url)
     d->mCurrentUrl = url;
     // Restart timer to avoid showing new url for the remaining time of the old
     // url
-    if (d->mState != Stopped) {
+    if (d->mState != Paused) {
         d->doStart();
     }
 }
 
 bool SlideShow::isRunning() const
 {
-    return d->mState != Stopped;
+    return d->mState != Paused;
 }
 
 void SlideShow::updateConfig()
@@ -319,7 +319,7 @@ void SlideShow::updateConfig()
 
 void SlideShow::slotRandomActionToggled(bool on)
 {
-    if (on && d->mState != Stopped) {
+    if (on && d->mState != Paused) {
         d->initShuffledUrls();
     }
 }
