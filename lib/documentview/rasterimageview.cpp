@@ -214,6 +214,9 @@ RasterImageView::RasterImageView(QGraphicsItem* parent)
 
 RasterImageView::~RasterImageView()
 {
+    if (d->mTool) {
+        d->mTool.data()->toolDeactivated();
+    }
     if (d->mDisplayTransform) {
         cmsDeleteTransform(d->mDisplayTransform);
     }
