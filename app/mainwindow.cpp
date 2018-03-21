@@ -342,6 +342,12 @@ struct MainWindow::Private
         mStartMainPage = new StartMainPage(parent, mGvCore);
         connect(mStartMainPage, SIGNAL(urlSelected(QUrl)),
                 q, SLOT(slotStartMainPageUrlSelected(QUrl)));
+        connect(mStartMainPage, &StartMainPage::recentFileRemoved, [this](const QUrl& url) {
+            mFileOpenRecentAction->removeUrl(url);
+        });
+        connect(mStartMainPage, &StartMainPage::recentFilesCleared, [this]() {
+            mFileOpenRecentAction->clear();
+        });
     }
 
     void installDisabledActionShortcutMonitor(QAction* action, const char* slot)

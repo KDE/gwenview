@@ -46,7 +46,7 @@
        <property name="documentMode">
         <bool>true</bool>
        </property>
-       <widget class="QWidget" name="tab">
+       <widget class="QWidget" name="mRecentFoldersTab">
         <attribute name="title">
          <string>Recent Folders</string>
         </attribute>
@@ -60,7 +60,7 @@
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="tab_2">
+       <widget class="QWidget" name="mRecentFilesTab">
         <attribute name="title">
          <string>Recent Files</string>
         </attribute>
