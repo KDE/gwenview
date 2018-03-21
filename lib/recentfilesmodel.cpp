@@ -26,6 +26,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QDebug>
 #include <QUrl>
 #include <QMimeDatabase>
+#include <QRegularExpression>
+#include <QDir>
 
 // KDE
 #include <KDirModel>
@@ -49,7 +51,11 @@ struct RecentFilesItem : public QStandardItem
 
     RecentFilesItem(const QUrl &url)
         : mUrl(url) {
-        setText(mUrl.toDisplayString());
+        QString text(mUrl.toDisplayString(QUrl::PreferLocalFile));
+#ifdef Q_OS_UNIX
+        text.replace(QRegularExpression('^' + QDir::homePath()), "~");
+#endif
+        setText(text);
 
         QMimeDatabase db;
         const QString iconName = db.mimeTypeForUrl(mUrl).iconName();
