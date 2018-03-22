@@ -161,7 +161,7 @@
     </spacer>
    </item>
    <item>
-    <widget class="QCheckBox" name="restrictToImageRatioCheckBox">
+    <widget class="QCheckBox" name="preserveAspectRatioCheckBox">
      <property name="text">
       <string>Preserve aspect ratio</string>
      </property>

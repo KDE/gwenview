@@ -427,7 +427,7 @@ void CropTool::toolActivated()
 {
     imageView()->setCursor(Qt::CrossCursor);
     d->mCropWidget->setAdvancedSettingsEnabled(GwenviewConfig::cropAdvancedSettingsEnabled());
-    d->mCropWidget->setRestrictToImageRatio(GwenviewConfig::cropRestrictToImageRatio());
+    d->mCropWidget->setPreserveAspectRatio(GwenviewConfig::cropPreserveAspectRatio());
     const int index = GwenviewConfig::cropRatioIndex();
     if (index >= 0) {
         // Preset ratio
@@ -442,7 +442,7 @@ void CropTool::toolActivated()
 void CropTool::toolDeactivated()
 {
     GwenviewConfig::setCropAdvancedSettingsEnabled(d->mCropWidget->advancedSettingsEnabled());
-    GwenviewConfig::setCropRestrictToImageRatio(d->mCropWidget->restrictToImageRatio());
+    GwenviewConfig::setCropPreserveAspectRatio(d->mCropWidget->preserveAspectRatio());
     GwenviewConfig::setCropRatioIndex(d->mCropWidget->cropRatioIndex());
     const QSizeF ratio = d->mCropWidget->cropRatio();
     GwenviewConfig::setCropRatioWidth(ratio.width());

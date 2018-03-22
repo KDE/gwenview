@@ -137,7 +137,7 @@ struct CropWidgetPrivate : public Ui_CropWidget
             return size.height() / size.width();
         }
 
-        if (q->restrictToImageRatio()) {
+        if (q->preserveAspectRatio()) {
             QSizeF size = ratio(mDocument->size());
             return size.height() / size.width();
         }
@@ -267,7 +267,7 @@ CropWidget::CropWidget(QWidget* parent, RasterImageView* imageView, CropTool* cr
     d->advancedWidget->setVisible(false);
     d->advancedWidget->layout()->setMargin(0);
 
-    connect(d->restrictToImageRatioCheckBox, &QCheckBox::toggled, this, &CropWidget::applyRatioConstraint);
+    connect(d->preserveAspectRatioCheckBox, &QCheckBox::toggled, this, &CropWidget::applyRatioConstraint);
 
     d->initRatioComboBox();
 
@@ -309,14 +309,14 @@ bool CropWidget::advancedSettingsEnabled() const
     return d->advancedCheckBox->isChecked();
 }
 
-void CropWidget::setRestrictToImageRatio(bool restrict)
+void CropWidget::setPreserveAspectRatio(bool preserve)
 {
-    d->restrictToImageRatioCheckBox->setChecked(restrict);
+    d->preserveAspectRatioCheckBox->setChecked(preserve);
 }
 
-bool CropWidget::restrictToImageRatio() const
+bool CropWidget::preserveAspectRatio() const
 {
-    return d->restrictToImageRatioCheckBox->isChecked();
+    return d->preserveAspectRatioCheckBox->isChecked();
 }
 
 void CropWidget::setCropRatio(QSizeF size)
@@ -405,7 +405,7 @@ void CropWidget::applyRatioConstraint()
 void CropWidget::slotAdvancedCheckBoxToggled(bool checked)
 {
     d->advancedWidget->setVisible(checked);
-    d->restrictToImageRatioCheckBox->setVisible(!checked);
+    d->preserveAspectRatioCheckBox->setVisible(!checked);
     applyRatioConstraint();
 }
 
@@ -439,7 +439,7 @@ void CropWidget::updateCropRatio()
     d->ratioComboBox->setItemData(d->mCurrentImageComboBoxIndex, QVariant(ratio(d->mDocument->size())));
 
     // Always re-apply the constraint, even though we only need to when the user has "Current Image"
-    // selected or the "Restrict to current image" checked, since there's no harm
+    // selected or the "Preserve aspect ratio" checked, since there's no harm
     applyRatioConstraint();
     // If the ratio is unrestricted, calling applyRatioConstraint doesn't update the rect, so we call
     // this manually to make sure the rect is adjusted to fit within the image

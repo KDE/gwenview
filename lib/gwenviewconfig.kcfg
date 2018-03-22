@@ -300,7 +300,7 @@
         <entry name="CropAdvancedSettingsEnabled" type="Bool">
             <default>false</default>
         </entry>
-        <entry name="CropRestrictToImageRatio" type="Bool">
+        <entry name="CropPreserveAspectRatio" type="Bool">
             <label>Restrict crop to image ratio when Advanced Settings disabled</label>
             <default>false</default>
         </entry>
