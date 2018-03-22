@@ -280,7 +280,12 @@ CropWidget::CropWidget(QWidget* parent, RasterImageView* imageView, CropTool* cr
 
     d->initDialogButtonBox();
 
-    connect(d->ratioComboBox, &QComboBox::editTextChanged, this, &CropWidget::slotRatioComboBoxEditTextChanged);
+    // We need to listen for both signals because the combobox is multi-function:
+    // Text Changed: required so that manual ratio entry is detected (index doesn't change)
+    // Index Changed: required so that choosing an item with the same text is detected (e.g. going from US Letter portrait
+    // to US Letter landscape)
+    connect(d->ratioComboBox, &QComboBox::editTextChanged, this, &CropWidget::slotRatioComboBoxChanged);
+    connect(d->ratioComboBox, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &CropWidget::slotRatioComboBoxChanged);
 
     // Don't do this before signals are connected, otherwise the tool won't get
     // initialized
@@ -404,8 +409,10 @@ void CropWidget::slotAdvancedCheckBoxToggled(bool checked)
     applyRatioConstraint();
 }
 
-void CropWidget::slotRatioComboBoxEditTextChanged(const QString &text)
+void CropWidget::slotRatioComboBoxChanged()
 {
+    const QString text = d->ratioComboBox->currentText();
+
     // If text cleared, clear the current item as well
     if (text.isEmpty()) {
         d->ratioComboBox->setCurrentIndex(-1);

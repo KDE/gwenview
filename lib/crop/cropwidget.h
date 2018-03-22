@@ -68,7 +68,7 @@ private Q_SLOTS:
     void setCropRect(const QRect& rect);
 
     void slotAdvancedCheckBoxToggled(bool checked);
-    void slotRatioComboBoxEditTextChanged(const QString &text);
+    void slotRatioComboBoxChanged();
     void applyRatioConstraint();
 
 private:
