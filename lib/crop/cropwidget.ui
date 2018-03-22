@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>824</width>
+    <width>1006</width>
     <height>66</height>
    </rect>
   </property>
@@ -159,6 +159,13 @@
       </size>
      </property>
     </spacer>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="restrictToImageRatioCheckBox">
+     <property name="text">
+      <string>Restrict to image ratio</string>
+     </property>
+    </widget>
    </item>
    <item>
     <widget class="QDialogButtonBox" name="dialogButtonBox">

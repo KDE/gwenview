@@ -320,6 +320,7 @@ void RasterImageView::updateImageRect(const QRect& imageRect)
 
     d->setScalerRegionToVisibleRect();
     update();
+    emit imageRectUpdated();
 }
 
 void RasterImageView::slotDocumentIsAnimatedUpdated()
