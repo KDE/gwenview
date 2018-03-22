@@ -414,11 +414,26 @@ void CropTool::toolActivated()
 {
     imageView()->setCursor(Qt::CrossCursor);
     d->mCropWidget->setAdvancedSettingsEnabled(GwenviewConfig::cropAdvancedSettingsEnabled());
+    d->mCropWidget->setRestrictToImageRatio(GwenviewConfig::cropRestrictToImageRatio());
+    const int index = GwenviewConfig::cropRatioIndex();
+    if (index >= 0) {
+        // Preset ratio
+        d->mCropWidget->setCropRatioIndex(index);
+    } else {
+        // Must be a custom ratio, or blank
+        const QSizeF ratio = QSizeF(GwenviewConfig::cropRatioWidth(), GwenviewConfig::cropRatioHeight());
+        d->mCropWidget->setCropRatio(ratio);
+    }
 }
 
 void CropTool::toolDeactivated()
 {
     GwenviewConfig::setCropAdvancedSettingsEnabled(d->mCropWidget->advancedSettingsEnabled());
+    GwenviewConfig::setCropRestrictToImageRatio(d->mCropWidget->restrictToImageRatio());
+    GwenviewConfig::setCropRatioIndex(d->mCropWidget->cropRatioIndex());
+    const QSizeF ratio = d->mCropWidget->cropRatio();
+    GwenviewConfig::setCropRatioWidth(ratio.width());
+    GwenviewConfig::setCropRatioHeight(ratio.height());
 }
 
 void CropTool::slotCropRequested()
@@ -431,11 +446,6 @@ void CropTool::slotCropRequested()
 QWidget* CropTool::widget() const
 {
     return d->mCropWidget;
-}
-
-void CropTool::onWidgetSlidedIn()
-{
-    setRect(d->computeVisibleImageRect());
 }
 
 } // namespace

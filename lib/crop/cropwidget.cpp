@@ -64,44 +64,80 @@ struct CropWidgetPrivate : public Ui_CropWidget
     CropTool* mCropTool;
     bool mUpdatingFromCropTool;
     int mCurrentImageComboBoxIndex;
+    int mCropRatioComboBoxCurrentIndex;
 
     bool ratioIsConstrained() const
     {
         return cropRatio() > 0;
     }
 
+    QSizeF chosenRatio() const
+    {
+        // A size of 0 represents no ratio, i.e. the combobox is empty
+        if (ratioComboBox->currentText().isEmpty()) {
+            return QSizeF(0, 0);
+        }
+
+        // A preset ratio is selected
+        const int index = ratioComboBox->currentIndex();
+        if (index != -1 && ratioComboBox->currentText() == ratioComboBox->itemText(index)) {
+            return ratioComboBox->currentData().toSizeF();
+        }
+
+        // A custom ratio has been entered, extract ratio from the text
+        // If invalid, return zero size instead
+        const QStringList lst = ratioComboBox->currentText().split(':');
+        if (lst.size() != 2) {
+            return QSizeF(0, 0);
+        }
+        bool ok;
+        const double width = lst[0].toDouble(&ok);
+        if (!ok) {
+            return QSizeF(0, 0);
+        }
+        const double height = lst[1].toDouble(&ok);
+        if (!ok) {
+            return QSizeF(0, 0);
+        }
+
+        // Valid custom value
+        return QSizeF(width, height);
+    }
+
+    void setChosenRatio(QSizeF size) const
+    {
+        // Size matches preset ratio, let's set the combobox to that
+        const int index = ratioComboBox->findData(size);
+        if (index >= 0) {
+            ratioComboBox->setCurrentIndex(index);
+            return;
+        }
+
+        // Deselect whatever was selected if anything
+        ratioComboBox->setCurrentIndex(-1);
+
+        // If size is 0 (represents blank combobox, i.e., unrestricted)
+        if (size.isEmpty()) {
+            ratioComboBox->clearEditText();
+            return;
+        }
+
+        // Size must be custom ratio, convert to text and add to combobox
+        QString ratioString = QString("%1:%2").arg(size.width()).arg(size.height());
+        ratioComboBox->setCurrentText(ratioString);
+    }
+
     double cropRatio() const
     {
         if (q->advancedSettingsEnabled()) {
-            int index = ratioComboBox->currentIndex();
-            if (index != -1 && ratioComboBox->currentText() == ratioComboBox->itemText(index)) {
-                // Get ratio from predefined value
-                // Note: We check currentText is itemText(currentIndex) because
-                // currentIndex is not reset to -1 when text is edited by hand.
-                QSizeF size = ratioComboBox->itemData(index).toSizeF();
-                return size.height() / size.width();
-            }
-
-            // Not a predefined value, extract ratio from the combobox text
-            const QStringList lst = ratioComboBox->currentText().split(':');
-            if (lst.size() != 2) {
+            QSizeF size = chosenRatio();
+            if (size.isEmpty()) {
                 return 0;
             }
-
-            bool ok;
-            const double width = lst[0].toDouble(&ok);
-            if (!ok) {
-                return 0;
-            }
-            const double height = lst[1].toDouble(&ok);
-            if (!ok) {
-                return 0;
-            }
-
-            return height / width;
+            return size.height() / size.width();
         }
 
-        if (restrictToImageRatioCheckBox->isChecked()) {
+        if (q->restrictToImageRatio()) {
             QSizeF size = ratio(mDocument->size());
             return size.height() / size.width();
         }
@@ -244,7 +280,7 @@ CropWidget::CropWidget(QWidget* parent, RasterImageView* imageView, CropTool* cr
 
     d->initDialogButtonBox();
 
-    connect(d->ratioComboBox, &QComboBox::editTextChanged, this, &CropWidget::applyRatioConstraint);
+    connect(d->ratioComboBox, &QComboBox::editTextChanged, this, &CropWidget::slotRatioComboBoxEditTextChanged);
 
     // Don't do this before signals are connected, otherwise the tool won't get
     // initialized
@@ -266,6 +302,36 @@ void CropWidget::setAdvancedSettingsEnabled(bool enable)
 bool CropWidget::advancedSettingsEnabled() const
 {
     return d->advancedCheckBox->isChecked();
+}
+
+void CropWidget::setRestrictToImageRatio(bool restrict)
+{
+    d->restrictToImageRatioCheckBox->setChecked(restrict);
+}
+
+bool CropWidget::restrictToImageRatio() const
+{
+    return d->restrictToImageRatioCheckBox->isChecked();
+}
+
+void CropWidget::setCropRatio(QSizeF size)
+{
+    d->setChosenRatio(size);
+}
+
+QSizeF CropWidget::cropRatio() const
+{
+    return d->chosenRatio();
+}
+
+void CropWidget::setCropRatioIndex(int index)
+{
+    d->ratioComboBox->setCurrentIndex(index);
+}
+
+int CropWidget::cropRatioIndex() const
+{
+    return d->mCropRatioComboBoxCurrentIndex;
 }
 
 void CropWidget::setCropRect(const QRect& rect)
@@ -335,6 +401,28 @@ void CropWidget::slotAdvancedCheckBoxToggled(bool checked)
 {
     d->advancedWidget->setVisible(checked);
     d->restrictToImageRatioCheckBox->setVisible(!checked);
+    applyRatioConstraint();
+}
+
+void CropWidget::slotRatioComboBoxEditTextChanged(const QString &text)
+{
+    // If text cleared, clear the current item as well
+    if (text.isEmpty()) {
+        d->ratioComboBox->setCurrentIndex(-1);
+    }
+
+    // We want to keep track of the selected ratio, including when the user has entered a custom ratio
+    // or cleared the text. We can't simply use currentIndex() because this stays >= 0 when the user manually
+    // enters text. We also can't set the current index to -1 when there is no match like above because that
+    // interferes when manually entering text.
+    // Furthermore, since there can be duplicate text items, we can't rely on findText() as it will stop on
+    // the first match it finds. Therefore we must check if there's a match, and if so, get the index directly.
+    if (d->ratioComboBox->findText(text) >= 0) {
+        d->mCropRatioComboBoxCurrentIndex = d->ratioComboBox->currentIndex();
+    } else {
+        d->mCropRatioComboBoxCurrentIndex = -1;
+    }
+
     applyRatioConstraint();
 }
 
