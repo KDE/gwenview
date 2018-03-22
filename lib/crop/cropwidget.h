@@ -47,8 +47,8 @@ public:
 
     void setAdvancedSettingsEnabled(bool enable);
     bool advancedSettingsEnabled() const;
-    void setRestrictToImageRatio(bool restrict);
-    bool restrictToImageRatio() const;
+    void setPreserveAspectRatio(bool preserve);
+    bool preserveAspectRatio() const;
     void setCropRatio(QSizeF size);
     int cropRatioIndex() const;
     void setCropRatioIndex(int index);
