@@ -52,7 +52,7 @@
       <item>
        <widget class="QLabel" name="label_6">
         <property name="text">
-         <string>Ratio:</string>
+         <string>Aspect ratio:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -163,7 +163,7 @@
    <item>
     <widget class="QCheckBox" name="restrictToImageRatioCheckBox">
      <property name="text">
-      <string>Restrict to image ratio</string>
+      <string>Preserve aspect ratio</string>
      </property>
     </widget>
    </item>
