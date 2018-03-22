@@ -52,13 +52,16 @@ Q_SIGNALS:
     void cropRequested();
     void done();
 
+public Q_SLOTS:
+    void updateCropRatio();
+
 private Q_SLOTS:
     void slotPositionChanged();
     void slotWidthChanged();
     void slotHeightChanged();
     void setCropRect(const QRect& rect);
 
-    void slotRatioComboBoxEditTextChanged();
+    void slotAdvancedCheckBoxToggled(bool checked);
     void applyRatioConstraint();
 
 private:

@@ -60,6 +60,7 @@ public:
 
 Q_SIGNALS:
     void currentToolChanged(AbstractRasterImageViewTool*);
+    void imageRectUpdated();
 
 protected:
     void loadFromDocument() Q_DECL_OVERRIDE;

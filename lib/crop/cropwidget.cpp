@@ -50,13 +50,10 @@ static int gcd(int a, int b)
     return b == 0 ? a : gcd(b, a % b);
 }
 
-static QSize screenRatio()
+static QSize ratio(const QSize &size)
 {
-    const QRect rect = QApplication::desktop()->screenGeometry();
-    const int width = rect.width();
-    const int height = rect.height();
-    const int divisor = gcd(width, height);
-    return QSize(width / divisor, height / divisor);
+    const int divisor = gcd(size.width(), size.height());
+    return size / divisor;
 }
 
 struct CropWidgetPrivate : public Ui_CropWidget
@@ -66,6 +63,7 @@ struct CropWidgetPrivate : public Ui_CropWidget
     Document::Ptr mDocument;
     CropTool* mCropTool;
     bool mUpdatingFromCropTool;
+    int mCurrentImageComboBoxIndex;
 
     bool ratioIsConstrained() const
     {
@@ -74,32 +72,41 @@ struct CropWidgetPrivate : public Ui_CropWidget
 
     double cropRatio() const
     {
-        int index = ratioComboBox->currentIndex();
-        if (index != -1 && ratioComboBox->currentText() == ratioComboBox->itemText(index)) {
-            // Get ratio from predefined value
-            // Note: We check currentText is itemText(currentIndex) because
-            // currentIndex is not reset to -1 when text is edited by hand.
-            QSizeF size = ratioComboBox->itemData(index).toSizeF();
+        if (q->advancedSettingsEnabled()) {
+            int index = ratioComboBox->currentIndex();
+            if (index != -1 && ratioComboBox->currentText() == ratioComboBox->itemText(index)) {
+                // Get ratio from predefined value
+                // Note: We check currentText is itemText(currentIndex) because
+                // currentIndex is not reset to -1 when text is edited by hand.
+                QSizeF size = ratioComboBox->itemData(index).toSizeF();
+                return size.height() / size.width();
+            }
+
+            // Not a predefined value, extract ratio from the combobox text
+            const QStringList lst = ratioComboBox->currentText().split(':');
+            if (lst.size() != 2) {
+                return 0;
+            }
+
+            bool ok;
+            const double width = lst[0].toDouble(&ok);
+            if (!ok) {
+                return 0;
+            }
+            const double height = lst[1].toDouble(&ok);
+            if (!ok) {
+                return 0;
+            }
+
+            return height / width;
+        }
+
+        if (restrictToImageRatioCheckBox->isChecked()) {
+            QSizeF size = ratio(mDocument->size());
             return size.height() / size.width();
         }
 
-        // Not a predefined value, extract ratio from the combobox text
-        const QStringList lst = ratioComboBox->currentText().split(':');
-        if (lst.size() != 2) {
-            return 0;
-        }
-
-        bool ok;
-        const double width = lst[0].toDouble(&ok);
-        if (!ok) {
-            return 0;
-        }
-        const double height = lst[1].toDouble(&ok);
-        if (!ok) {
-            return 0;
-        }
-
-        return height / width;
+        return 0;
     }
 
     void addRatioToComboBox(const QSizeF& size, const QString& label = QString())
@@ -137,8 +144,11 @@ struct CropWidgetPrivate : public Ui_CropWidget
                 << QSizeF(4, 3)
                 << QSizeF(5, 4);
 
+        addRatioToComboBox(ratio(mDocument->size()), i18n("Current Image"));
+        mCurrentImageComboBoxIndex = ratioComboBox->count() - 1; // We need to refer to this ratio later
+
         addRatioToComboBox(QSizeF(1, 1), i18n("Square"));
-        addRatioToComboBox(screenRatio(), i18n("This Screen"));
+        addRatioToComboBox(ratio(QApplication::desktop()->screenGeometry().size()), i18n("This Screen"));
         addSectionHeaderToComboBox(i18n("Landscape"));
 
         Q_FOREACH(const QSizeF& size, ratioList) {
@@ -162,6 +172,15 @@ struct CropWidgetPrivate : public Ui_CropWidget
         // Do not use i18n("%1:%2") because ':' should not be translated, it is
         // used to parse the ratio string.
         edit->setPlaceholderText(QString("%1:%2").arg(i18n("Width")).arg(i18n("Height")));
+
+        // Enable clear button
+        edit->setClearButtonEnabled(true);
+        // Must manually adjust minimum width because the auto size adjustment doesn't take the
+        // clear button into account
+        const int width = ratioComboBox->minimumSizeHint().width();
+        ratioComboBox->setMinimumWidth(width + 24);
+
+        ratioComboBox->setCurrentIndex(-1);
     }
 
     QRect cropRect() const
@@ -208,10 +227,11 @@ CropWidget::CropWidget(QWidget* parent, RasterImageView* imageView, CropTool* cr
     setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
     layout()->setSizeConstraint(QLayout::SetFixedSize);
 
-    connect(d->advancedCheckBox, SIGNAL(toggled(bool)),
-            d->advancedWidget, SLOT(setVisible(bool)));
+    connect(d->advancedCheckBox, &QCheckBox::toggled, this, &CropWidget::slotAdvancedCheckBoxToggled);
     d->advancedWidget->setVisible(false);
     d->advancedWidget->layout()->setMargin(0);
+
+    connect(d->restrictToImageRatioCheckBox, &QCheckBox::toggled, this, &CropWidget::applyRatioConstraint);
 
     d->initRatioComboBox();
 
@@ -224,7 +244,7 @@ CropWidget::CropWidget(QWidget* parent, RasterImageView* imageView, CropTool* cr
 
     d->initDialogButtonBox();
 
-    connect(d->ratioComboBox, &QComboBox::editTextChanged, this, &CropWidget::slotRatioComboBoxEditTextChanged);
+    connect(d->ratioComboBox, &QComboBox::editTextChanged, this, &CropWidget::applyRatioConstraint);
 
     // Don't do this before signals are connected, otherwise the tool won't get
     // initialized
@@ -311,9 +331,24 @@ void CropWidget::applyRatioConstraint()
     d->mCropTool->setRect(rect);
 }
 
-void CropWidget::slotRatioComboBoxEditTextChanged()
+void CropWidget::slotAdvancedCheckBoxToggled(bool checked)
 {
+    d->advancedWidget->setVisible(checked);
+    d->restrictToImageRatioCheckBox->setVisible(!checked);
     applyRatioConstraint();
+}
+
+void CropWidget::updateCropRatio()
+{
+    // First we need to re-calculate the "Current Image" ratio in case the user rotated the image
+    d->ratioComboBox->setItemData(d->mCurrentImageComboBoxIndex, QVariant(ratio(d->mDocument->size())));
+
+    // Always re-apply the constraint, even though we only need to when the user has "Current Image"
+    // selected or the "Restrict to current image" checked, since there's no harm
+    applyRatioConstraint();
+    // If the ratio is unrestricted, calling applyRatioConstraint doesn't update the rect, so we call
+    // this manually to make sure the rect is adjusted to fit within the image
+    d->mCropTool->setRect(d->mCropTool->rect());
 }
 
 } // namespace
