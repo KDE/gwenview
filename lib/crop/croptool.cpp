@@ -88,6 +88,7 @@ struct CropToolPrivate
     CropHandle mMovingHandle;
     QPoint mLastMouseMovePos;
     double mCropRatio;
+    double mLockedCropRatio;
     CropWidget* mCropWidget;
 
     QRect viewportCropRect() const
@@ -223,6 +224,7 @@ CropTool::CropTool(RasterImageView* view)
     d->mCropHandleList << CH_Left << CH_Right << CH_Top << CH_Bottom << CH_TopLeft << CH_TopRight << CH_BottomLeft << CH_BottomRight;
     d->mMovingHandle = CH_None;
     d->mCropRatio = 0.;
+    d->mLockedCropRatio = 0.;
     d->mRect = d->computeVisibleImageRect();
     d->setupWidget();
 }
@@ -342,23 +344,29 @@ void CropTool::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
     }
     d->mRect = d->mRect.normalized();
 
-    // Enforce ratio
-    if (d->mCropRatio > 0.) {
+    // Enforce ratio:
+    double ratioToEnforce = d->mCropRatio;
+    //  - if user is holding down Ctrl/Shift when resizing rect, lock to current rect ratio
+    if (event->modifiers() & (Qt::ControlModifier | Qt::ShiftModifier) && d->mLockedCropRatio > 0) {
+        ratioToEnforce = d->mLockedCropRatio;
+    }
+    //  - if user has restricted the ratio via the GUI
+    if (ratioToEnforce > 0.) {
         if (d->mMovingHandle == CH_Top || d->mMovingHandle == CH_Bottom) {
             // Top or bottom
-            int width = int(d->mRect.height() / d->mCropRatio);
+            int width = int(d->mRect.height() / ratioToEnforce);
             d->mRect.setWidth(width);
         } else if (d->mMovingHandle == CH_Left || d->mMovingHandle == CH_Right) {
             // Left or right
-            int height = int(d->mRect.width() * d->mCropRatio);
+            int height = int(d->mRect.width() * ratioToEnforce);
             d->mRect.setHeight(height);
         } else if (d->mMovingHandle & CH_Top) {
             // Top left or top right
-            int height = int(d->mRect.width() * d->mCropRatio);
+            int height = int(d->mRect.width() * ratioToEnforce);
             d->mRect.setTop(d->mRect.bottom() - height);
         } else if (d->mMovingHandle & CH_Bottom) {
             // Bottom left or bottom right
-            int height = int(d->mRect.width() * d->mCropRatio);
+            int height = int(d->mRect.width() * ratioToEnforce);
             d->mRect.setHeight(height);
         }
     }
@@ -394,6 +402,11 @@ void CropTool::hoverMoveEvent(QGraphicsSceneHoverEvent* event)
 
 void CropTool::keyPressEvent(QKeyEvent* event)
 {
+    // Lock crop ratio to current rect when user presses Control or Shift
+    if (event->key() == Qt::Key_Control || event->key() == Qt::Key_Shift) {
+        d->mLockedCropRatio = 1. * d->mRect.height() / d->mRect.width();
+    }
+
     QDialogButtonBox *buttons = d->mCropWidget->findChild<QDialogButtonBox *>();
     switch (event->key()) {
     case Qt::Key_Escape:
@@ -414,11 +427,26 @@ void CropTool::toolActivated()
 {
     imageView()->setCursor(Qt::CrossCursor);
     d->mCropWidget->setAdvancedSettingsEnabled(GwenviewConfig::cropAdvancedSettingsEnabled());
+    d->mCropWidget->setRestrictToImageRatio(GwenviewConfig::cropRestrictToImageRatio());
+    const int index = GwenviewConfig::cropRatioIndex();
+    if (index >= 0) {
+        // Preset ratio
+        d->mCropWidget->setCropRatioIndex(index);
+    } else {
+        // Must be a custom ratio, or blank
+        const QSizeF ratio = QSizeF(GwenviewConfig::cropRatioWidth(), GwenviewConfig::cropRatioHeight());
+        d->mCropWidget->setCropRatio(ratio);
+    }
 }
 
 void CropTool::toolDeactivated()
 {
     GwenviewConfig::setCropAdvancedSettingsEnabled(d->mCropWidget->advancedSettingsEnabled());
+    GwenviewConfig::setCropRestrictToImageRatio(d->mCropWidget->restrictToImageRatio());
+    GwenviewConfig::setCropRatioIndex(d->mCropWidget->cropRatioIndex());
+    const QSizeF ratio = d->mCropWidget->cropRatio();
+    GwenviewConfig::setCropRatioWidth(ratio.width());
+    GwenviewConfig::setCropRatioHeight(ratio.height());
 }
 
 void CropTool::slotCropRequested()
@@ -431,11 +459,6 @@ void CropTool::slotCropRequested()
 QWidget* CropTool::widget() const
 {
     return d->mCropWidget;
-}
-
-void CropTool::onWidgetSlidedIn()
-{
-    setRect(d->computeVisibleImageRect());
 }
 
 } // namespace

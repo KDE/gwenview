@@ -47,6 +47,12 @@ public:
 
     void setAdvancedSettingsEnabled(bool enable);
     bool advancedSettingsEnabled() const;
+    void setRestrictToImageRatio(bool restrict);
+    bool restrictToImageRatio() const;
+    void setCropRatio(QSizeF size);
+    int cropRatioIndex() const;
+    void setCropRatioIndex(int index);
+    QSizeF cropRatio() const;
 
 Q_SIGNALS:
     void cropRequested();
@@ -62,6 +68,7 @@ private Q_SLOTS:
     void setCropRect(const QRect& rect);
 
     void slotAdvancedCheckBoxToggled(bool checked);
+    void slotRatioComboBoxChanged();
     void applyRatioConstraint();
 
 private:

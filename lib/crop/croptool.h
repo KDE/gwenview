@@ -64,9 +64,6 @@ public:
 
     virtual QWidget* widget() const Q_DECL_OVERRIDE;
 
-public Q_SLOTS:
-    void onWidgetSlidedIn() Q_DECL_OVERRIDE;
-
 Q_SIGNALS:
     void rectUpdated(const QRect&);
     void done();

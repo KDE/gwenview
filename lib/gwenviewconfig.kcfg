@@ -300,6 +300,22 @@
         <entry name="CropAdvancedSettingsEnabled" type="Bool">
             <default>false</default>
         </entry>
+        <entry name="CropRestrictToImageRatio" type="Bool">
+            <label>Restrict crop to image ratio when Advanced Settings disabled</label>
+            <default>false</default>
+        </entry>
+        <entry name="CropRatioIndex" type="Int">
+            <label>Index representing selected ratio in the Advanced settings combobox</label>
+            <default>-1</default>
+        </entry>
+        <entry name="CropRatioWidth" type="Double">
+            <label>Last used crop ratio width when Advanced Settings enabled</label>
+            <default>0</default>
+        </entry>
+        <entry name="CropRatioHeight" type="Double">
+            <label>Last used crop ratio height when Advanced Settings enabled</label>
+            <default>0</default>
+        </entry>
     </group>
 
     <group name="StatusBar">
