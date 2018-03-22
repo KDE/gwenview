@@ -190,14 +190,14 @@ struct CropWidgetPrivate : public Ui_CropWidget
         Q_FOREACH(const QSizeF& size, ratioList) {
             addRatioToComboBox(size);
         }
-        addRatioToComboBox(QSizeF(sqrt2, 1), i18n("ISO Size (A4, A3...)"));
+        addRatioToComboBox(QSizeF(sqrt2, 1), i18n("ISO (A4, A3...)"));
         addRatioToComboBox(QSizeF(11, 8.5), i18n("US Letter"));
         addSectionHeaderToComboBox(i18n("Portrait"));
         Q_FOREACH(QSizeF size, ratioList) {
             size.transpose();
             addRatioToComboBox(size);
         }
-        addRatioToComboBox(QSizeF(1, sqrt2), i18n("ISO Size (A4, A3...)"));
+        addRatioToComboBox(QSizeF(1, sqrt2), i18n("ISO (A4, A3...)"));
         addRatioToComboBox(QSizeF(8.5, 11), i18n("US Letter"));
 
         ratioComboBox->setMaxVisibleItems(ratioComboBox->count());
