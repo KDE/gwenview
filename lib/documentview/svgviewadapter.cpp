@@ -123,6 +123,10 @@ void SvgImageView::drawAlphaBackground(QPainter* painter)
     const QRectF imageRect = QRectF(imageOffset(), visibleImageSize());
 
     switch (mAlphaBackgroundMode) {
+        case AbstractImageView::AlphaBackgroundNone:
+            // Unlike RasterImageView, SVGs are rendered directly on the image view,
+            // therefore we can simply not draw a background
+            break;
         case AbstractImageView::AlphaBackgroundCheckBoard:
             painter->drawTiledPixmap(imageRect, alphaBackgroundTexture(), scrollPos());
             break;

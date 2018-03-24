@@ -45,6 +45,7 @@ public:
         ForceUpdate
     };
     enum AlphaBackgroundMode {
+        AlphaBackgroundNone,
         AlphaBackgroundCheckBoard,
         AlphaBackgroundSolid
     };

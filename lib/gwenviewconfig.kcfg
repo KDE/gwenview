@@ -119,10 +119,11 @@
     <group name="ImageView">
         <entry name="AlphaBackgroundMode" type="Enum">
             <choices name="Gwenview::AbstractImageView::AlphaBackgroundMode">
+                <choice name="AbstractImageView::AlphaBackgroundNone"/>
                 <choice name="AbstractImageView::AlphaBackgroundCheckBoard"/>
                 <choice name="AbstractImageView::AlphaBackgroundSolid"/>
             </choices>
-            <default>AbstractImageView::AlphaBackgroundCheckBoard</default>
+            <default>AbstractImageView::AlphaBackgroundNone</default>
         </entry>
         <entry name="AlphaBackgroundColor" type="Color">
             <default>#ffffff</default>
