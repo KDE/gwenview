@@ -37,11 +37,10 @@ DocumentInfoProvider::DocumentInfoProvider(SortedDirModel* model)
 : AbstractDocumentInfoProvider(model)
 {
     mDirModel = model;
-    connect(DocumentFactory::instance(), SIGNAL(documentBusyStateChanged(QUrl,bool)),
-            SLOT(emitBusyStateChanged(QUrl,bool)));
-
-    connect(DocumentFactory::instance(), SIGNAL(documentChanged(QUrl)),
-            SLOT(emitDocumentChanged(QUrl)));
+    connect(DocumentFactory::instance(), &DocumentFactory::documentBusyStateChanged,
+            this, &AbstractDocumentInfoProvider::busyStateChanged);
+    connect(DocumentFactory::instance(), &DocumentFactory::documentChanged,
+            this, &AbstractDocumentInfoProvider::documentChanged);
 }
 
 void DocumentInfoProvider::thumbnailForDocument(const QUrl &url, ThumbnailGroup::Enum group, QPixmap* outPix, QSize* outFullSize) const
@@ -87,24 +86,6 @@ bool DocumentInfoProvider::isBusy(const QUrl &url)
     } else {
         return false;
     }
-}
-
-void DocumentInfoProvider::emitBusyStateChanged(const QUrl &url, bool busy)
-{
-    QModelIndex index = mDirModel->indexForUrl(url);
-    if (!index.isValid()) {
-        return;
-    }
-    busyStateChanged(index, busy);
-}
-
-void DocumentInfoProvider::emitDocumentChanged(const QUrl &url)
-{
-    QModelIndex index = mDirModel->indexForUrl(url);
-    if (!index.isValid()) {
-        return;
-    }
-    documentChanged(index);
 }
 
 } // namespace

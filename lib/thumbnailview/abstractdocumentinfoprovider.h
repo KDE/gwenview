@@ -57,8 +57,8 @@ public:
     virtual void thumbnailForDocument(const QUrl &url, ThumbnailGroup::Enum, QPixmap* outPix, QSize* outFullSize) const = 0;
 
 Q_SIGNALS:
-    void busyStateChanged(const QModelIndex&, bool);
-    void documentChanged(const QModelIndex&);
+    void busyStateChanged(const QUrl& url, bool busy);
+    void documentChanged(const QUrl& url);
 };
 
 } // namespace
