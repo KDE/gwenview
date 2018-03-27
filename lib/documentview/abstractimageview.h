@@ -44,6 +44,11 @@ public:
         UpdateIfNecessary,
         ForceUpdate
     };
+    enum AlphaBackgroundMode {
+        AlphaBackgroundCheckBoard,
+        AlphaBackgroundSolid
+    };
+
     AbstractImageView(QGraphicsItem* parent);
     ~AbstractImageView();
 
@@ -115,6 +120,10 @@ Q_SIGNALS:
     void toggleFullScreenRequested();
 
 protected:
+    virtual void setAlphaBackgroundMode(AlphaBackgroundMode mode) = 0;
+    virtual void setAlphaBackgroundColor(const QColor& color) = 0;
+    const QPixmap& alphaBackgroundTexture() const;
+
     virtual void loadFromDocument() = 0;
     virtual void onZoomChanged() = 0;
     /**

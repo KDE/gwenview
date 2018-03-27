@@ -26,6 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QGraphicsSvgItem>
 #include <QGraphicsTextItem>
 #include <QGraphicsWidget>
+#include <QPainter>
 #include <QSvgRenderer>
 #include <QDebug>
 
@@ -44,7 +45,12 @@ namespace Gwenview
 SvgImageView::SvgImageView(QGraphicsItem* parent)
 : AbstractImageView(parent)
 , mSvgItem(new QGraphicsSvgItem(this))
+, mAlphaBackgroundMode(AbstractImageView::AlphaBackgroundCheckBoard)
+, mAlphaBackgroundColor(Qt::black)
+, mImageFullyLoaded(false)
 {
+    // So we aren't unnecessarily drawing the background for every paint()
+    setCacheMode(QGraphicsItem::DeviceCoordinateCache);
 }
 
 void SvgImageView::loadFromDocument()
@@ -74,6 +80,7 @@ void SvgImageView::finishLoadFromDocument()
     }
     applyPendingScrollPos();
     completed();
+    mImageFullyLoaded = true;
 }
 
 void SvgImageView::onZoomChanged()
@@ -96,6 +103,42 @@ void SvgImageView::onScrollPosChanged(const QPointF& /* oldPos */)
 void SvgImageView::adjustItemPos()
 {
     mSvgItem->setPos(imageOffset() - scrollPos());
+    update();
+}
+
+void SvgImageView::setAlphaBackgroundMode(AbstractImageView::AlphaBackgroundMode mode)
+{
+    mAlphaBackgroundMode = mode;
+    update();
+}
+
+void SvgImageView::setAlphaBackgroundColor(const QColor& color)
+{
+    mAlphaBackgroundColor = color;
+    update();
+}
+
+void SvgImageView::drawAlphaBackground(QPainter* painter)
+{
+    const QRectF imageRect = QRectF(imageOffset(), visibleImageSize());
+
+    switch (mAlphaBackgroundMode) {
+        case AbstractImageView::AlphaBackgroundCheckBoard:
+            painter->drawTiledPixmap(imageRect, alphaBackgroundTexture(), scrollPos());
+            break;
+        case AbstractImageView::AlphaBackgroundSolid:
+            painter->fillRect(imageRect, mAlphaBackgroundColor);
+            break;
+        default:
+            Q_ASSERT(0);
+    }
+}
+
+void SvgImageView::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/)
+{
+    if (mImageFullyLoaded) {
+        drawAlphaBackground(painter);
+    }
 }
 
 //// SvgViewAdapter ////
@@ -148,6 +191,8 @@ Document::Ptr SvgViewAdapter::document() const
 
 void SvgViewAdapter::loadConfig()
 {
+    d->mView->setAlphaBackgroundMode(GwenviewConfig::alphaBackgroundMode());
+    d->mView->setAlphaBackgroundColor(GwenviewConfig::alphaBackgroundColor());
     d->mView->setEnlargeSmallerImages(GwenviewConfig::enlargeSmallerImages());
 }
 

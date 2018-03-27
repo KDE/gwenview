@@ -30,6 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QCursor>
 #include <QGraphicsSceneMouseEvent>
 #include <QStandardPaths>
+#include <QPainter>
 
 namespace Gwenview
 {
@@ -55,6 +56,8 @@ struct AbstractImageViewPrivate
     QPointF mImageOffset;
     QPointF mScrollPos;
     QPointF mLastDragPos;
+
+    const QPixmap mAlphaBackgroundTexture = createAlphaBackgroundTexture();
 
     void adjustImageOffset(Verbosity verbosity = Notify)
     {
@@ -108,6 +111,17 @@ struct AbstractImageViewPrivate
         const QString path = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral("gwenview/cursors/zoom.png"));
         QPixmap cursorPixmap = QPixmap(path);
         mZoomCursor = QCursor(cursorPixmap, 11, 11);
+    }
+
+    QPixmap createAlphaBackgroundTexture()
+    {
+        QPixmap pix = QPixmap(32, 32);
+        QPainter painter(&pix);
+        painter.fillRect(pix.rect(), QColor(128, 128, 128));
+        const QColor light = QColor(192, 192, 192);
+        painter.fillRect(0, 0, 16, 16, light);
+        painter.fillRect(16, 16, 16, 16, light);
+        return pix;
     }
 };
 
@@ -256,6 +270,11 @@ void AbstractImageView::setZoomToFill(bool on)
     // calling us. It may went to zoom to some other level and/or to zoom on
     // a particular position
     zoomToFillChanged(d->mZoomToFill);
+}
+
+const QPixmap& AbstractImageView::alphaBackgroundTexture() const
+{
+    return d->mAlphaBackgroundTexture;
 }
 
 void AbstractImageView::resizeEvent(QGraphicsSceneResizeEvent* event)

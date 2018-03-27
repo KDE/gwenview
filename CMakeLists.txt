@@ -154,5 +154,6 @@ add_subdirectory(images)
 add_subdirectory(cursors)
 add_subdirectory(color-schemes)
 add_subdirectory(doc)
+add_subdirectory(kconf_update)
 
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)

@@ -42,6 +42,8 @@ class SvgImageView : public AbstractImageView
     Q_OBJECT
 public:
     SvgImageView(QGraphicsItem* parent = 0);
+    void setAlphaBackgroundMode(AlphaBackgroundMode mode) Q_DECL_OVERRIDE;
+    void setAlphaBackgroundColor(const QColor& color) Q_DECL_OVERRIDE;
 
 protected:
     void loadFromDocument() Q_DECL_OVERRIDE;
@@ -54,7 +56,13 @@ private Q_SLOTS:
 
 private:
     QGraphicsSvgItem* mSvgItem;
+    AbstractImageView::AlphaBackgroundMode mAlphaBackgroundMode;
+    QColor mAlphaBackgroundColor;
+    bool mImageFullyLoaded;
+
     void adjustItemPos();
+    void drawAlphaBackground(QPainter* painter);
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
 };
 
 struct SvgViewAdapterPrivate;

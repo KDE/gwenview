@@ -44,11 +44,10 @@ struct RasterImageViewPrivate
 {
     RasterImageView* q;
     ImageScaler* mScaler;
-    QPixmap mBackgroundTexture;
     bool mEmittedCompleted;
 
     // Config
-    RasterImageView::AlphaBackgroundMode mAlphaBackgroundMode;
+    AbstractImageView::AlphaBackgroundMode mAlphaBackgroundMode;
     QColor mAlphaBackgroundColor;
     cmsUInt32Number mRenderingIntent;
     bool mEnlargeSmallerImages;
@@ -111,16 +110,6 @@ struct RasterImageViewPrivate
         mApplyDisplayTransform = true;
     }
 
-    void createBackgroundTexture()
-    {
-        mBackgroundTexture = QPixmap(32, 32);
-        QPainter painter(&mBackgroundTexture);
-        painter.fillRect(mBackgroundTexture.rect(), QColor(128, 128, 128));
-        QColor light = QColor(192, 192, 192);
-        painter.fillRect(0, 0, 16, 16, light);
-        painter.fillRect(16, 16, 16, 16, light);
-    }
-
     void setupUpdateTimer()
     {
         mUpdateTimer = new QTimer(q);
@@ -173,16 +162,16 @@ struct RasterImageViewPrivate
         mAlternateBuffer = QPixmap();
     }
 
-    void drawAlphaBackground(QPainter* painter, const QRect& viewportRect, const QPoint& zoomedImageTopLeft)
+    void drawAlphaBackground(QPainter* painter, const QRect& viewportRect, const QPoint& zoomedImageTopLeft, QPixmap texture)
     {
-        if (mAlphaBackgroundMode == RasterImageView::AlphaBackgroundCheckBoard) {
+        if (mAlphaBackgroundMode == AbstractImageView::AlphaBackgroundCheckBoard) {
             QPoint textureOffset(
-                zoomedImageTopLeft.x() % mBackgroundTexture.width(),
-                zoomedImageTopLeft.y() % mBackgroundTexture.height()
+                zoomedImageTopLeft.x() % texture.width(),
+                zoomedImageTopLeft.y() % texture.height()
             );
             painter->drawTiledPixmap(
                 viewportRect,
-                mBackgroundTexture,
+                texture,
                 textureOffset);
         } else {
             painter->fillRect(viewportRect, mAlphaBackgroundColor);
@@ -208,7 +197,6 @@ RasterImageView::RasterImageView(QGraphicsItem* parent)
     d->mScaler = new ImageScaler(this);
     connect(d->mScaler, &ImageScaler::scaledRect, this, &RasterImageView::updateFromScaler);
 
-    d->createBackgroundTexture();
     d->setupUpdateTimer();
 }
 
@@ -347,7 +335,8 @@ void RasterImageView::updateFromScaler(int zoomedImageLeft, int zoomedImageTop, 
         if (document()->hasAlphaChannel()) {
             d->drawAlphaBackground(
                 &painter, QRect(viewportLeft, viewportTop, image.width(), image.height()),
-                QPoint(zoomedImageLeft, zoomedImageTop)
+                QPoint(zoomedImageLeft, zoomedImageTop),
+                alphaBackgroundTexture()
             );
         } else {
             painter.setCompositionMode(QPainter::CompositionMode_Source);

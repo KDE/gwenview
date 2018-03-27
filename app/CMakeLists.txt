@@ -114,5 +114,3 @@ install(FILES org.kde.gwenview.appdata.xml
     DESTINATION ${KDE_INSTALL_METAINFODIR})
 install(FILES slideshow.desktop
     DESTINATION ${KDE_INSTALL_KSERVICES5DIR}/ServiceMenus)
-install(FILES gwenview.upd
-    DESTINATION ${KDE_INSTALL_KCONFUPDATEDIR})

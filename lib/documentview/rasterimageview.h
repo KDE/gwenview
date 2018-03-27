@@ -41,11 +41,6 @@ class GWENVIEWLIB_EXPORT RasterImageView : public AbstractImageView
 {
     Q_OBJECT
 public:
-    enum AlphaBackgroundMode {
-        AlphaBackgroundCheckBoard,
-        AlphaBackgroundSolid
-    };
-
     RasterImageView(QGraphicsItem* parent = 0);
     ~RasterImageView();
 
@@ -54,8 +49,8 @@ public:
     void setCurrentTool(AbstractRasterImageViewTool* tool);
     AbstractRasterImageViewTool* currentTool() const;
 
-    void setAlphaBackgroundMode(AlphaBackgroundMode mode);
-    void setAlphaBackgroundColor(const QColor& color);
+    void setAlphaBackgroundMode(AlphaBackgroundMode mode) override;
+    void setAlphaBackgroundColor(const QColor& color) override;
     void setRenderingIntent(const RenderingIntent::Enum& renderingIntent);
 
 Q_SIGNALS:

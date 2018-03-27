@@ -1,4 +1,6 @@
 Version=5
+
+
 Id=SideBar_StatusBar_Rename
 File=gwenviewrc
 
@@ -18,3 +20,10 @@ Group=General,StatusBar
 Key=StatusBarIsVisible,IsVisible BrowseMode
 Key=StatusBarIsVisible,IsVisible ViewMode
 RemoveKey=StatusBarIsVisible
+
+
+Id=ImageView_AlphaBackgroundMode_Update
+File=gwenviewrc
+Options=overwrite
+Group=ImageView
+Script=gwenview-imageview-alphabackgroundmode-update.pl,perl
