@@ -80,6 +80,7 @@ void SvgImageView::onZoomChanged()
 {
     mSvgItem->setScale(zoom());
     adjustItemPos();
+    update();
 }
 
 void SvgImageView::onImageOffsetChanged()
@@ -198,6 +199,11 @@ QPointF SvgViewAdapter::scrollPos() const
 void SvgViewAdapter::setScrollPos(const QPointF& pos)
 {
     d->mView->setScrollPos(pos);
+}
+
+QRectF SvgViewAdapter::visibleDocumentRect() const
+{
+    return QRectF(d->mView->imageOffset(), d->mView->visibleImageSize());
 }
 
 } // namespace

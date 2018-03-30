@@ -104,6 +104,8 @@ public:
     virtual QPointF scrollPos() const Q_DECL_OVERRIDE;
     virtual void setScrollPos(const QPointF& pos) Q_DECL_OVERRIDE;
 
+    virtual QRectF visibleDocumentRect() const override;
+
 private:
     SvgViewAdapterPrivate* const d;
 };
