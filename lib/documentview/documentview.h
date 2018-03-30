@@ -134,13 +134,13 @@ public:
     int sortKey() const;
     void setSortKey(int sortKey);
 
-    /**
-     * If true, areas around the document will be painted with the default brush.
-     * If false they will be kept transparent.
-     */
-    void setEraseBorders(bool);
-
     bool isAnimated() const;
+
+    /**
+     * Sets the opacity on the installed QGraphicsOpacityEffect.
+     * Use this instead of setOpacity().
+     */
+    void setGraphicsEffectOpacity(qreal opacity);
 
 public Q_SLOTS:
     void setZoom(qreal);

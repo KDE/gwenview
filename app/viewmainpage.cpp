@@ -374,7 +374,7 @@ struct ViewMainPagePrivate
 
     void applyPalette(bool fullScreenMode)
     {
-        mDocumentViewContainer->setPalette(mGvCore->palette(fullScreenMode ? GvCore::FullScreenViewPalette : GvCore::NormalViewPalette));
+        mDocumentViewContainer->applyPalette(mGvCore->palette(fullScreenMode ? GvCore::FullScreenViewPalette : GvCore::NormalViewPalette));
         setupThumbnailBarStyleSheet();
     }
 };

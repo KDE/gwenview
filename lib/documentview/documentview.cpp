@@ -31,6 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsSceneWheelEvent>
+#include <QGraphicsOpacityEffect>
 #include <QPainter>
 #include <QPropertyAnimation>
 #include <QPointer>
@@ -90,6 +91,7 @@ struct DocumentViewPrivate
     BirdEyeView* mBirdEyeView;
     QPointer<QPropertyAnimation> mMoveAnimation;
     QPointer<QPropertyAnimation> mFadeAnimation;
+    QGraphicsOpacityEffect* mOpacityEffect;
 
     LoadingIndicator* mLoadingIndicator;
 
@@ -99,7 +101,6 @@ struct DocumentViewPrivate
     DocumentView::Setup mSetup;
     bool mCurrent;
     bool mCompareMode;
-    bool mEraseBorders;
     int controlWheelAccumulatedDelta;
 
     void setCurrentAdapter(AbstractDocumentViewAdapter* adapter)
@@ -322,8 +323,8 @@ struct DocumentViewPrivate
             }
         }
         // Create a new fade animation
-        QPropertyAnimation* anim = new QPropertyAnimation(q, "opacity");
-        anim->setStartValue(q->opacity());
+        QPropertyAnimation* anim = new QPropertyAnimation(mOpacityEffect, "opacity");
+        anim->setStartValue(mOpacityEffect->opacity());
         anim->setEndValue(value);
         if (qFuzzyCompare(value, 1)) {
             QObject::connect(anim, SIGNAL(finished()),
@@ -349,10 +350,16 @@ DocumentView::DocumentView(QGraphicsScene* scene)
     d->mBirdEyeView = 0;
     d->mCurrent = false;
     d->mCompareMode = false;
-    d->mEraseBorders = false;
     d->controlWheelAccumulatedDelta = 0;
 
-    setOpacity(0);
+    // We use an opacity effect instead of using the opacity property directly, because the latter operates at
+    // the painter level, which means if you draw multiple layers in paint(), all layers get the specified
+    // opacity, resulting in all layers being visible when 0 < opacity < 1.
+    // QGraphicsEffects on the other hand, operate after all painting is done, therefore 'flattening' all layers.
+    // This is important for fade effects, where we don't want any background layers visible during the fade.
+    d->mOpacityEffect = new QGraphicsOpacityEffect(this);
+    d->mOpacityEffect->setOpacity(0);
+    setGraphicsEffect(d->mOpacityEffect);
 
     scene->addItem(this);
 
@@ -630,16 +637,13 @@ void DocumentView::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
 
 void DocumentView::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/)
 {
-    QRectF visibleRect = mapRectFromItem(d->mAdapter->widget(), d->mAdapter->visibleDocumentRect());
-    if (d->mEraseBorders) {
-        QRegion borders = QRegion(boundingRect().toRect())
-            - QRegion(visibleRect.toRect());
-        Q_FOREACH(const QRect& rect, borders.rects()) {
-            painter->eraseRect(rect);
-        }
-    }
+    // Fill background manually, because setAutoFillBackground(true) fill with QPalette::Window,
+    // but our palettes use QPalette::Base for the background color/texture
+    painter->fillRect(rect(), palette().base());
 
+    // Selection indicator/highlight
     if (d->mCompareMode && d->mCurrent) {
+        QRectF visibleRect = mapRectFromItem(d->mAdapter->widget(), d->mAdapter->visibleDocumentRect());
         painter->save();
         painter->setBrush(Qt::NoBrush);
         painter->setPen(QPen(palette().highlight().color(), 2));
@@ -805,15 +809,15 @@ void DocumentView::setSortKey(int sortKey)
     d->mSortKey = sortKey;
 }
 
-void DocumentView::setEraseBorders(bool value)
-{
-    d->mEraseBorders = value;
-}
-
 void DocumentView::hideAndDeleteLater()
 {
     hide();
     deleteLater();
+}
+
+void DocumentView::setGraphicsEffectOpacity(qreal opacity)
+{
+    d->mOpacityEffect->setOpacity(opacity);
 }
 
 } // namespace

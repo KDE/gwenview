@@ -77,6 +77,11 @@ public:
 
     void showMessageWidget(QGraphicsWidget*, Qt::Alignment);
 
+    /**
+     * Set palette on this and all document views
+     */
+    void applyPalette(const QPalette& palette);
+
 public Q_SLOTS:
     void updateLayout();
 

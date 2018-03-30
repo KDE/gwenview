@@ -119,6 +119,7 @@ DocumentViewContainer::~DocumentViewContainer()
 DocumentView* DocumentViewContainer::createView()
 {
     DocumentView* view = new DocumentView(d->mScene);
+    view->setPalette(palette());
     d->mAddedViews << view;
     view->show();
     connect(view, &DocumentView::fadeInFinished, this, &DocumentViewContainer::slotFadeInFinished);
@@ -185,7 +186,6 @@ void DocumentViewContainer::updateLayout()
         DocumentView* newView = *d->mAddedViews.begin();
 
         newView->setGeometry(rect());
-        newView->setEraseBorders(true);
         QPropertyAnimation* anim = newView->fadeIn();
 
         oldView->setZValue(-1);
@@ -256,7 +256,7 @@ void DocumentViewContainer::updateLayout()
             } else {
                 // Not animated, set final geometry and opacity now
                 view->setGeometry(rect);
-                view->setOpacity(1);
+                view->setGraphicsEffectOpacity(1);
             }
 
             ++col;
@@ -300,7 +300,6 @@ void DocumentViewContainer::slotFadeInFinished(DocumentView* view)
     }
     d->mAddedViews.remove(view);
     d->mViews.insert(view);
-    view->setEraseBorders(false);
 }
 
 void DocumentViewContainer::slotConfigChanged()
@@ -329,6 +328,14 @@ void DocumentViewContainer::showMessageWidget(QGraphicsWidget* widget, Qt::Align
     floater->setAlignment(align);
     widget->show();
     widget->setZValue(1);
+}
+
+void DocumentViewContainer::applyPalette(const QPalette& palette)
+{
+    setPalette(palette);
+    for (DocumentView* view : d->mViews | d->mAddedViews) {
+        view->setPalette(palette);
+    }
 }
 
 } // namespace
