@@ -68,7 +68,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 
     mAlphaBackgroundModeGroup = new InvisibleButtonGroup(widget);
     mAlphaBackgroundModeGroup->setObjectName(QLatin1String("kcfg_AlphaBackgroundMode"));
-    mAlphaBackgroundModeGroup->addButton(mImageViewConfigPage.noBackgroundRadioButton, int(AbstractImageView::AlphaBackgroundNone));
+    mAlphaBackgroundModeGroup->addButton(mImageViewConfigPage.surroundingRadioButton, int(AbstractImageView::AlphaBackgroundNone));
     mAlphaBackgroundModeGroup->addButton(mImageViewConfigPage.checkBoardRadioButton, int(AbstractImageView::AlphaBackgroundCheckBoard));
     mAlphaBackgroundModeGroup->addButton(mImageViewConfigPage.solidColorRadioButton, int(AbstractImageView::AlphaBackgroundSolid));
 

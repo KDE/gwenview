@@ -14,13 +14,13 @@
    <item row="0" column="0">
     <widget class="QLabel" name="label_1">
      <property name="text">
-      <string>Transparent background:</string>
+      <string>Show transparency with:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
      <property name="buddy">
-      <cstring>checkBoardRadioButton</cstring>
+      <cstring>surroundingRadioButton</cstring>
      </property>
     </widget>
    </item>
@@ -33,9 +33,9 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QRadioButton" name="noBackgroundRadioButton">
+      <widget class="QRadioButton" name="surroundingRadioButton">
        <property name="text">
-        <string>None</string>
+        <string>Surrounding background</string>
        </property>
        <property name="checked">
         <bool>true</bool>
@@ -68,7 +68,7 @@
      <item>
       <widget class="QRadioButton" name="checkBoardRadioButton">
        <property name="text">
-        <string>&amp;Check board</string>
+        <string>&amp;Checkerboard background</string>
        </property>
        <property name="checked">
         <bool>false</bool>
@@ -101,7 +101,7 @@
      <item>
       <widget class="QRadioButton" name="solidColorRadioButton">
        <property name="text">
-        <string>&amp;Solid color:</string>
+        <string>&amp;Solid color background:</string>
        </property>
       </widget>
      </item>
