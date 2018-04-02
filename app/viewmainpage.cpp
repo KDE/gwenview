@@ -239,6 +239,8 @@ struct ViewMainPagePrivate
         QObject::connect(view, &DocumentView::completed, q, &ViewMainPage::completed);
         QObject::connect(view, &DocumentView::previousImageRequested, q, &ViewMainPage::previousImageRequested);
         QObject::connect(view, &DocumentView::nextImageRequested, q, &ViewMainPage::nextImageRequested);
+        QObject::connect(view, &DocumentView::openUrlRequested, q, &ViewMainPage::openUrlRequested);
+        QObject::connect(view, &DocumentView::openDirUrlRequested, q, &ViewMainPage::openDirUrlRequested);
         QObject::connect(view, &DocumentView::captionUpdateRequested, q, &ViewMainPage::captionUpdateRequested);
         QObject::connect(view, &DocumentView::toggleFullScreenRequested, q, &ViewMainPage::toggleFullScreenRequested);
         QObject::connect(view, &DocumentView::focused, q, &ViewMainPage::slotViewFocused);

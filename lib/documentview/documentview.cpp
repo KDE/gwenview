@@ -38,6 +38,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QDebug>
 #include <QIcon>
 #include <QUrl>
+#include <QMimeData>
 
 // KDE
 #include <KLocalizedString>
@@ -60,6 +61,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/gwenviewconfig.h>
 #include <lib/mimetypeutils.h>
 #include <lib/signalblocker.h>
+#include <lib/urlutils.h>
 
 namespace Gwenview
 {
@@ -365,6 +367,8 @@ DocumentView::DocumentView(QGraphicsScene* scene)
 
     d->setupHud();
     d->setCurrentAdapter(new EmptyAdapter);
+
+    setAcceptDrops(true);
 }
 
 DocumentView::~DocumentView()
@@ -825,6 +829,24 @@ void DocumentView::hideAndDeleteLater()
 void DocumentView::setGraphicsEffectOpacity(qreal opacity)
 {
     d->mOpacityEffect->setOpacity(opacity);
+}
+
+void DocumentView::dragEnterEvent(QGraphicsSceneDragDropEvent* event)
+{
+    QGraphicsWidget::dragEnterEvent(event);
+    event->setAccepted(event->mimeData()->hasUrls());
+}
+
+void DocumentView::dropEvent(QGraphicsSceneDragDropEvent* event)
+{
+    QGraphicsWidget::dropEvent(event);
+    // Since we're capturing drops in View mode, we only support one url
+    const QUrl url = event->mimeData()->urls().first();
+    if (UrlUtils::urlIsDirectory(url)) {
+        emit openDirUrlRequested(url);
+    } else {
+        emit openUrlRequested(url);
+    }
 }
 
 } // namespace

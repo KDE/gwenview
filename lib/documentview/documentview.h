@@ -163,6 +163,10 @@ Q_SIGNALS:
 
     void nextImageRequested();
 
+    void openUrlRequested(const QUrl&);
+
+    void openDirUrlRequested(const QUrl&);
+
     void captionUpdateRequested(const QString&);
 
     void toggleFullScreenRequested();
@@ -201,6 +205,8 @@ protected:
     void wheelEvent(QGraphicsSceneWheelEvent* event) Q_DECL_OVERRIDE;
     void contextMenuEvent(QGraphicsSceneContextMenuEvent* event) Q_DECL_OVERRIDE;
     bool sceneEventFilter(QGraphicsItem*, QEvent*) Q_DECL_OVERRIDE;
+    void dragEnterEvent(QGraphicsSceneDragDropEvent* event) override;
+    void dropEvent(QGraphicsSceneDragDropEvent* event) override;
 
 private Q_SLOTS:
     void finishOpenUrl();

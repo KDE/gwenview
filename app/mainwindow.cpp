@@ -322,6 +322,10 @@ struct MainWindow::Private
                 q, SLOT(goToPrevious()));
         connect(mViewMainPage, SIGNAL(nextImageRequested()),
                 q, SLOT(goToNext()));
+        connect(mViewMainPage, &ViewMainPage::openUrlRequested,
+                q, &MainWindow::openUrl);
+        connect(mViewMainPage, &ViewMainPage::openDirUrlRequested,
+                q, &MainWindow::openDirUrl);
 
         setupThumbnailBar(mViewMainPage->thumbnailBar());
     }

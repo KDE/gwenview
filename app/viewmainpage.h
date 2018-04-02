@@ -124,6 +124,10 @@ Q_SIGNALS:
 
     void nextImageRequested();
 
+    void openUrlRequested(const QUrl&);
+
+    void openDirUrlRequested(const QUrl&);
+
     void toggleFullScreenRequested();
 
     void goToBrowseModeRequested();
