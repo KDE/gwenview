@@ -37,6 +37,7 @@ class KActionCollection;
 namespace Gwenview
 {
 
+class AbstractRasterImageViewTool;
 class DocumentView;
 class GvCore;
 class RasterImageView;
@@ -150,6 +151,8 @@ protected:
 private:
     friend struct ViewMainPagePrivate;
     ViewMainPagePrivate* const d;
+
+    void updateFocus(const AbstractRasterImageViewTool* tool);
 };
 
 } // namespace

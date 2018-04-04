@@ -347,6 +347,9 @@ struct ViewMainPagePrivate
 
         Q_ASSERT(mActivityResources.contains(view));
         mActivityResources.value(view)->notifyFocusedIn();
+
+        QObject::connect(view, &DocumentView::currentToolChanged,
+                         q, &ViewMainPage::updateFocus);
     }
 
     QModelIndex indexForView(DocumentView* view) const
@@ -808,6 +811,13 @@ QToolButton* ViewMainPage::toggleSideBarButton() const
 void ViewMainPage::showMessageWidget(QGraphicsWidget* widget, Qt::Alignment align)
 {
     d->mDocumentViewContainer->showMessageWidget(widget, align);
+}
+
+void ViewMainPage::updateFocus(const AbstractRasterImageViewTool* tool)
+{
+    if (!tool) {
+        d->mDocumentViewContainer->setFocus();
+    }
 }
 
 } // namespace
