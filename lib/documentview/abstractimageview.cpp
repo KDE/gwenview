@@ -125,6 +125,7 @@ AbstractImageView::AbstractImageView(QGraphicsItem* parent)
     d->mScrollPos = QPointF(0, 0);
     setFocusPolicy(Qt::WheelFocus);
     setFlag(ItemIsSelectable);
+    setFlag(ItemClipsChildrenToShape);
     setAcceptHoverEvents(true);
     d->setupZoomCursor();
     updateCursor();
