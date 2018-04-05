@@ -217,6 +217,9 @@ struct DocumentViewPrivate
 
     void updateCaption()
     {
+        if (!mCurrent) {
+            return;
+        }
         QString caption;
 
         Document::Ptr doc = mAdapter->document();
@@ -679,6 +682,7 @@ void DocumentView::setCurrent(bool value)
     d->mCurrent = value;
     if (value) {
         d->mAdapter->widget()->setFocus();
+        d->updateCaption();
     }
     update();
 }
