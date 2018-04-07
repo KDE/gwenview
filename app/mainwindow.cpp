@@ -478,8 +478,8 @@ struct MainWindow::Private
 
         actionCollection->setDefaultShortcut(mShowStatusBarAction, Qt::Key_F3);
 
-        view->addAction(KStandardAction::KeyBindings, q->guiFactory(),
-                        SLOT(configureShortcuts()));
+        view->addAction(KStandardAction::name(KStandardAction::KeyBindings),
+                        KStandardAction::keyBindings(q, &MainWindow::configureShortcuts, actionCollection));
 
         view->addAction(KStandardAction::Preferences, q,
                         SLOT(showConfigDialog()));
@@ -1486,6 +1486,12 @@ void MainWindow::showConfigDialog()
     DialogGuard<ConfigDialog> dialog(this);
     connect(dialog.data(), SIGNAL(settingsChanged(QString)), SLOT(loadConfig()));
     dialog->exec();
+}
+
+void MainWindow::configureShortcuts()
+{
+    guiFactory()->configureShortcuts();
+    guiFactory()->refreshActionProperties();
 }
 
 void MainWindow::toggleMenuBar()
