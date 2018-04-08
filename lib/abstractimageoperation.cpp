@@ -23,6 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // Qt
 #include <QUrl>
+#include <QTimer>
 
 // KDE
 #include <KJob>
@@ -90,6 +91,7 @@ void AbstractImageOperation::finish(bool ok)
         ImageOperationCommand* command = new ImageOperationCommand(this);
         command->setText(d->mText);
         document()->undoStack()->push(command);
+        document()->imageOperationCompleted();
     } else {
         deleteLater();
     }
@@ -98,6 +100,13 @@ void AbstractImageOperation::finish(bool ok)
 void AbstractImageOperation::finishFromKJob(KJob* job)
 {
     finish(job->error() == KJob::NoError);
+}
+
+void AbstractImageOperation::finishUndoJob()
+{
+    // Give QUndoStack time to update in case the undo is executed immediately
+    // (e.g. undo crop just sets the previous image)
+    QTimer::singleShot(0, document().data(), &Document::imageOperationCompleted);
 }
 
 void AbstractImageOperation::setText(const QString& text)

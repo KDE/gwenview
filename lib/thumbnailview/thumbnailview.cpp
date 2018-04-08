@@ -876,7 +876,7 @@ void ThumbnailView::updateThumbnail(const QUrl& url)
         return;
     }
 
-    if (d->mDocumentInfoProvider && d->mDocumentInfoProvider->isModified(url)) {
+    if (d->mDocumentInfoProvider) {
         d->updateThumbnailForModifiedDocument(it->mIndex);
     } else {
         const KFileItem item = fileItemForIndex(it->mIndex);

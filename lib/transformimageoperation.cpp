@@ -101,7 +101,10 @@ void TransformImageOperation::undo()
         orientation = d->mOrientation;
         break;
     }
-    document()->enqueueJob(new TransformJob(orientation));
+
+    TransformJob* job = new TransformJob(orientation);
+    connect(job, &TransformJob::result, this, &AbstractImageOperation::finishUndoJob);
+    document()->enqueueJob(job);
 }
 
 } // namespace

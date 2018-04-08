@@ -58,6 +58,8 @@ public:
     void applyToDocument(Document::Ptr);
     Document::Ptr document() const;
 
+    void finishUndoJob();
+
 protected:
     virtual void redo() = 0;
     virtual void undo()

@@ -89,6 +89,7 @@ void ResizeImageOperation::undo()
         return;
     }
     document()->editor()->setImage(d->mOriginalImage);
+    finishUndoJob();
 }
 
 } // namespace
