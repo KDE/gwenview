@@ -190,14 +190,14 @@ private Q_SLOTS:
     void setBrokenThumbnail(const KFileItem&);
 
     /**
-     * Generate thumbnail for @a index.
+     * Generate thumbnail for url.
      */
-    void updateThumbnail(const QModelIndex& index);
+    void updateThumbnail(const QUrl& url);
 
     /**
-     * Tells the view the busy state of the document pointed by the index has changed.
+     * Tells the view the busy state of the document pointed by the url has changed.
      */
-    void updateThumbnailBusyState(const QModelIndex& index, bool);
+    void updateThumbnailBusyState(const QUrl& url, bool);
 
     /*
      * Cause a repaint of all busy indexes

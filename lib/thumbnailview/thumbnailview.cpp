@@ -447,10 +447,10 @@ void ThumbnailView::setDocumentInfoProvider(AbstractDocumentInfoProvider* provid
 {
     d->mDocumentInfoProvider = provider;
     if (provider) {
-        connect(provider, SIGNAL(busyStateChanged(QModelIndex,bool)),
-                SLOT(updateThumbnailBusyState(QModelIndex,bool)));
-        connect(provider, SIGNAL(documentChanged(QModelIndex)),
-                SLOT(updateThumbnail(QModelIndex)));
+        connect(provider, &AbstractDocumentInfoProvider::busyStateChanged,
+                this, &ThumbnailView::updateThumbnailBusyState);
+        connect(provider, &AbstractDocumentInfoProvider::documentChanged,
+                this, &ThumbnailView::updateThumbnail);
     }
 }
 
@@ -869,22 +869,29 @@ void ThumbnailView::generateThumbnailsForItems()
     }
 }
 
-void ThumbnailView::updateThumbnail(const QModelIndex& index)
+void ThumbnailView::updateThumbnail(const QUrl& url)
 {
-    KFileItem item = fileItemForIndex(index);
-    QUrl url = item.url();
+    const ThumbnailForUrl::Iterator it = d->mThumbnailForUrl.find(url);
+    if (it == d->mThumbnailForUrl.end()) {
+        return;
+    }
+
     if (d->mDocumentInfoProvider && d->mDocumentInfoProvider->isModified(url)) {
-        d->updateThumbnailForModifiedDocument(index);
+        d->updateThumbnailForModifiedDocument(it->mIndex);
     } else {
-        KFileItemList list;
-        list << item;
-        d->appendItemsToThumbnailProvider(list);
+        const KFileItem item = fileItemForIndex(it->mIndex);
+        d->appendItemsToThumbnailProvider(KFileItemList({ item }));
     }
 }
 
-void ThumbnailView::updateThumbnailBusyState(const QModelIndex& _index, bool busy)
+void ThumbnailView::updateThumbnailBusyState(const QUrl& url, bool busy)
 {
-    QPersistentModelIndex index(_index);
+    const ThumbnailForUrl::Iterator it = d->mThumbnailForUrl.find(url);
+    if (it == d->mThumbnailForUrl.end()) {
+        return;
+    }
+
+    QPersistentModelIndex index(it->mIndex);
     if (busy && !d->mBusyIndexSet.contains(index)) {
         d->mBusyIndexSet << index;
         update(index);

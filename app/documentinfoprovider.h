@@ -45,10 +45,6 @@ public:
 
     virtual void thumbnailForDocument(const QUrl &url, ThumbnailGroup::Enum group, QPixmap* outPix, QSize* outFullSize) const Q_DECL_OVERRIDE;
 
-private Q_SLOTS:
-    void emitBusyStateChanged(const QUrl&, bool);
-    void emitDocumentChanged(const QUrl&);
-
 private:
     SortedDirModel* mDirModel;
 };
