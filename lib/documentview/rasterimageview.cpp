@@ -409,10 +409,11 @@ void RasterImageView::paint(QPainter* painter, const QStyleOptionGraphicsItem* /
         // In zoomToFit mode, scale crudely the buffer to fit the screen. This
         // provide an approximate rendered which will be replaced when the scheduled
         // proper scale is ready.
-        QSizeF size = documentSize() * zoom();
-        painter->drawPixmap(topLeft.x(), topLeft.y(), size.width(), size.height(), d->mCurrentBuffer);
+        // Round point and size independently, to keep consistency with the below (non zoomToFit) painting
+        const QRect rect = QRect(topLeft.toPoint(), (documentSize() * zoom()).toSize());
+        painter->drawPixmap(rect, d->mCurrentBuffer);
     } else {
-        painter->drawPixmap(topLeft, d->mCurrentBuffer);
+        painter->drawPixmap(topLeft.toPoint(), d->mCurrentBuffer);
     }
 
     if (d->mTool) {

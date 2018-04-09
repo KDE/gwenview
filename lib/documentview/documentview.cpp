@@ -643,12 +643,16 @@ void DocumentView::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*op
 
     // Selection indicator/highlight
     if (d->mCompareMode && d->mCurrent) {
-        QRectF visibleRect = mapRectFromItem(d->mAdapter->widget(), d->mAdapter->visibleDocumentRect());
         painter->save();
         painter->setBrush(Qt::NoBrush);
         painter->setPen(QPen(palette().highlight().color(), 2));
         painter->setRenderHint(QPainter::Antialiasing);
-        QRectF selectionRect = visibleRect.adjusted(-2, -2, 2, 2);
+        const QRectF visibleRectF = mapRectFromItem(d->mAdapter->widget(), d->mAdapter->visibleDocumentRect());
+        // Round the point and size independently. This is different than calling toRect(),
+        // and is necessary to keep consistent rects, otherwise the selection rect can be
+        // drawn 1 pixel too big or small.
+        const QRect visibleRect = QRect(visibleRectF.topLeft().toPoint(), visibleRectF.size().toSize());
+        const QRect selectionRect = visibleRect.adjusted(-1, -1, 1, 1);
         painter->drawRoundedRect(selectionRect, 3, 3);
         painter->restore();
     }
