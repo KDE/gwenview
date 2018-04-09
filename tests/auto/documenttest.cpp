@@ -671,9 +671,11 @@ void DocumentTest::testModifiedAndSavedSignals()
     QCOMPARE(modifiedSpy.count(), 2);
 
     doc->undoStack()->undo();
+    QTest::qWait(100);
     QCOMPARE(modifiedSpy.count(), 3);
 
     doc->undoStack()->undo();
+    QTest::qWait(100);
     QCOMPARE(savedSpy.count(), 1);
 }
 

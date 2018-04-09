@@ -154,7 +154,6 @@ Document::Document(const QUrl &url)
     d->mImpl = 0;
     d->mUrl = url;
     d->mKeepRawData = false;
-    connect(&d->mUndoStack, SIGNAL(indexChanged(int)), SLOT(slotUndoIndexChanged()));
 
     reload();
 }
@@ -483,7 +482,7 @@ QUndoStack* Document::undoStack() const
     return &d->mUndoStack;
 }
 
-void Document::slotUndoIndexChanged()
+void Document::imageOperationCompleted()
 {
     if (d->mUndoStack.isClean()) {
         // If user just undid all his changes this does not really correspond

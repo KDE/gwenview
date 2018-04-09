@@ -197,6 +197,8 @@ public:
 
     void enqueueJob(DocumentJob*);
 
+    void imageOperationCompleted();
+
     /**
      * Returns true if there are queued tasks for this document.
      */
@@ -220,7 +222,6 @@ private Q_SLOTS:
     void emitMetaInfoLoaded();
     void emitLoaded();
     void emitLoadingFailed();
-    void slotUndoIndexChanged();
     void slotSaveResult(KJob*);
     void slotJobFinished(KJob*);
 
