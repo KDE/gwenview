@@ -87,7 +87,6 @@ void SvgImageView::onZoomChanged()
 {
     mSvgItem->setScale(zoom());
     adjustItemPos();
-    update();
 }
 
 void SvgImageView::onImageOffsetChanged()
