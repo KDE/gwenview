@@ -135,6 +135,7 @@ private:
 
     void openSelectedDocuments();
     void saveConfig();
+    void configureShortcuts();
 
     void folderViewUrlChanged(const QUrl &url);
 };
