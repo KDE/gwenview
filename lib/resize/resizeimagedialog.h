@@ -47,6 +47,8 @@ public:
 private Q_SLOTS:
     void slotWidthChanged(int);
     void slotHeightChanged(int);
+    void slotWidthPercentChanged(double);
+    void slotHeightPercentChanged(double);
     void slotKeepAspectChanged(bool);
 
 private:
