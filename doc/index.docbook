@@ -36,8 +36,8 @@
 </copyright>
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2018-02-28</date>
-<releaseinfo>Applications 18.04</releaseinfo>
+<date>2018-04-09</date>
+<releaseinfo>Applications 18.08</releaseinfo>
 <abstract>
 <para>&gwenview; is an image and video viewer.</para>
 </abstract>
@@ -173,10 +173,9 @@ the changed images.
 
 <!--FIXME all actions also available context menus, where to add that info -->
 
-<tip><para>If you have installed the Kipi Plugins, a <guimenu>Plugins</guimenu>
+<tip><para>If you have installed the KIPI Plugins, a <guimenu>Plugins</guimenu>
 menu will be available that will allow you to perform many additional operations
-on your images.  For more information, see the
-<ulink url="help:/kipi-plugins">Kipi Plugins documentation</ulink>.</para></tip>
+on your images.</para></tip>
 </sect1>
 
 <sect1 id='browse_mode'><title>Browse Mode</title>
@@ -216,9 +215,12 @@ to the previous image in the folder.</para></listitem>
 <listitem><para><guiicon>Next</guiicon>: Clicking this button will go to
 the next image in the folder.</para></listitem>
 
-<listitem><para>Rotate Left/Right: Same as discussed in
+<listitem><para><guiicon>Rotate Left/Right</guiicon>: Same as discussed in
 Image Operations</para></listitem>
-<!--FIXME missing Share -->
+
+<listitem><para><guiicon>Share</guiicon>: Clicking this button opens an export menu to share your images through social
+media and image collection web services. This functionality depends on the list of installed
+KIPI plugins.</para></listitem>
 </itemizedlist>
 
 </sect1>
@@ -452,7 +454,6 @@ copying, renaming, deleting, and creating new folders.</para></listitem>
 </sect1>
 
 </chapter>
-<!--FIXME no importer in kf5
 <chapter id="importer">
 <title>&gwenview; Importer</title>
 
@@ -515,7 +516,6 @@ enter it into the text box or type one manually.</para>
 </sect1>
 
 </chapter>
--->
 <chapter id="tips">
 <title>Tips</title>
 <sect1 id='mouse'><title>Using the mouse</title>
@@ -565,7 +565,7 @@ enter it into the text box or type one manually.</para>
 viewed and remapped by selecting
 <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure
 Shortcuts...</guimenuitem></menuchoice>. Note that in the Files and Folders
-windows, all the normal KDE shortcuts are functional, unless otherwise
+windows, all the normal &plasma; shortcuts are functional, unless otherwise
 remapped.</para>
 
 <para>A few of the most useful default bindings are:</para>
@@ -685,8 +685,193 @@ Link an image.</para></listitem>
 </itemizedlist>
 
 </sect1>
-<sect1 id="advanced-configuration">
-    <title>Advanced Configuration Options</title>
+</chapter>
+
+<chapter id="configure">
+    <title>Configuring &gwenview;</title>
+    <sect1 id="configindex">
+        <title>Configuration overview</title>
+        <para>
+            You can configure &gwenview; by choosing <menuchoice><guimenu>Settings</guimenu>
+                <guimenuitem>Configure &gwenview;...</guimenuitem></menuchoice>.
+            The configuration dialog is split into three sections. This chapter describes the available
+            options in detail.
+        </para>
+        <itemizedlist>
+            <listitem>
+                <para><link linkend="configgeneral">General</link></para>
+            </listitem>
+            <listitem>
+                <para><link linkend="configview">Image View</link></para>
+            </listitem>
+            <listitem>
+                <para><link linkend="configadvanced">Advanced</link></para>
+            </listitem>
+        </itemizedlist>
+    </sect1>
+    <sect1 id="configgeneral">
+        <title>General</title>
+        <variablelist>
+            <varlistentry>
+                <term><guilabel>Videos</guilabel></term>
+                <listitem>
+                    <para>Check the <guilabel>Show videos</guilabel> checkbox to allow &gwenview; to show videos among the images.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><guilabel>Background color</guilabel></term>
+                <listitem>
+                    <para>Move the slider to change the color of the gray background in Browse and View mode from black (the leftmost position) to white (the rightmost position).</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><guilabel>Thumbnail actions</guilabel></term>
+                <listitem>
+                    <para>Whether the thumbnail action buttons should be shown as overlays above image thumbnails.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para><guilabel>All buttons</guilabel> &mdash; Show all buttons</para>
+                        </listitem>
+                        <listitem>
+                            <para><guilabel>Show selection buttons</guilabel> &mdash; Show select/unselect button only</para>
+                        </listitem>
+                        <listitem>
+                            <para><guilabel>None</guilabel> &mdash; Do not show any thumbnail button</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </sect1>
+        <sect1 id="configview">
+        <title>Image View</title>
+        <variablelist>
+            <varlistentry>
+                <term><guilabel>Show transparency with</guilabel></term>
+                <listitem>
+                    <para>Choose how the background of transparent raster or <abbrev>SVG</abbrev> images is rendered.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para><guilabel>Surrounding background</guilabel> &mdash; Use background color from the <link linkend="configgeneral">General page</link>.</para>
+                        </listitem>
+                        <listitem>
+                            <para><guilabel>Checkerboard background</guilabel> &mdash; Use the traditional checkerboard background.</para>
+                        </listitem>
+                        <listitem>
+                            <para><guilabel>Solid color background</guilabel> &mdash; Use a color that can be chosen using the <ulink url="help:/fundamentals/colors.html">color selector</ulink>.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><guilabel>Mouse wheel behavior</guilabel></term>
+                <listitem>
+                    <para>Select how scrolling over an image in View mode behaves.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para><guilabel>Scroll</guilabel> &mdash; When zoomed in, pan the image vertically. Otherwise, nothing will happen.</para>
+                        </listitem>
+                        <listitem>
+                            <para><guilabel>Browse</guilabel> &mdash; Switch to the next or the previous image.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><guilabel>Zoom mode</guilabel></term>
+                <listitem>
+                    <para>Allows choosing how zooming in View mode works.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para><guilabel>Autofit each image</guilabel> &mdash; Automatically resize images to the view pane.</para>
+                        </listitem>
+                        <listitem>
+                            <para><guilabel>Keep same zoom and position</guilabel> &mdash; Use the same zoom level for all images.</para>
+                        </listitem>
+                        <listitem>
+                            <para><guilabel>Per image zoom and position</guilabel> &mdash; Use individual zoom levels for each image.</para>
+                        </listitem>
+                        <listitem>
+                            <para><guilabel>Enlarge smaller images</guilabel> &mdash; check this item to make &gwenview; enlarge smaller images in View mode.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><guilabel>Animations</guilabel></term>
+                <listitem>
+                    <para>Allows choosing how fading between images is done in View mode.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para><guilabel>OpenGL</guilabel> &mdash; Use hardware accelerated animations.</para>
+                        </listitem>
+                        <listitem>
+                            <para><guilabel>Software</guilabel> &mdash; Do not use hardware accelerated animations. Select this option if <guilabel>OpenGL</guilabel> does not work satisfactory, but you still want to fade between images.</para>
+                        </listitem>
+                        <listitem>
+                            <para><guilabel>None</guilabel> &mdash; Do not use animations when switching between images.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><guilabel>Thumbnail Bar</guilabel></term>
+                <listitem>
+                    <para>Allows configuring the thumbnail bar.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para><guilabel>Orientation</guilabel></para>
+                            <itemizedlist>
+                                <listitem>
+                                    <para><guilabel>Horizontal</guilabel> &mdash; Show a horizontal thumbnail strip below the image.</para>
+                                </listitem>
+                                <listitem>
+                                    <para><guilabel>Vertical</guilabel> &mdash; Show a vertical thumbnail strip to the right of the image.</para>
+                                </listitem>
+                            </itemizedlist>
+                        </listitem>
+                        <listitem>
+                            <para><guilabel>Row count</guilabel> &mdash; Use the spin box to change the number of rows on the thumbnail bar</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </sect1>
+        <sect1 id="configadvanced">
+        <title>Advanced</title>
+        <variablelist>
+            <varlistentry>
+                <term><guilabel>Cache</guilabel></term>
+                <listitem>
+                    <para>Enable the <guilabel>Delete thumbnail cache folder on exit</guilabel> option if you do not have a lot of disk space.</para>
+                    <para>Be careful: This will delete the folder named <filename>.thumbnails</filename> in your home folder, deleting all thumbnails previously generated by &gwenview; and other applications.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><guilabel>History</guilabel></term>
+                <listitem>
+                    <para>Check the <guilabel>Remember folders and URLs</guilabel> to make &gwenview; remember visited folders and &URL;s and show them on the <guilabel>Recent Folders</guilabel> pane.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><guilabel>Rendering intent</guilabel></term>
+                <listitem>
+                    <para>Allows choosing the <ulink url="https://en.wikipedia.org/wiki/Color_management#Rendering_intent">rendering intent</ulink> for showing images.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para><guilabel>Perceptual</guilabel> &mdash; scale all colors equally to fit them within the active color profile's color gamut</para>
+                        </listitem>
+                        <listitem>
+                            <para><guilabel>Relative Colorimetric</guilabel> &mdash; squash colors that don't fit within the active color profile's color gamut, leaving other colors untouched</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </sect1>
+    <sect1 id="hidden-configuration">
+    <title>Hidden Configuration Options</title>
     <para>
         Some notes on hidden &gwenview; options can be found on
         <ulink url="http://userbase.kde.org/Special:myLanguage/Gwenview/Hidden_Configuration_Options">this page</ulink>.
@@ -699,7 +884,7 @@ Link an image.</para></listitem>
             version to another.
         </para>
     </important>
-</sect1>
+    </sect1>
 </chapter>
 
 <chapter id="credits">
