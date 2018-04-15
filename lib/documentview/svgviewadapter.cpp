@@ -52,12 +52,14 @@ void SvgImageView::loadFromDocument()
     Document::Ptr doc = document();
     GV_RETURN_IF_FAIL(doc);
 
-    if (doc->loadingState() < Document::Loaded) {
-        connect(doc.data(), SIGNAL(loaded(QUrl)),
-            SLOT(finishLoadFromDocument()));
-    } else {
+    if (doc->loadingState() == Document::Loaded) {
         QMetaObject::invokeMethod(this, "finishLoadFromDocument", Qt::QueuedConnection);
     }
+
+    // Ensure finishLoadFromDocument is also called when
+    // - loadFromDocument was called before the document was fully loaded
+    // - reloading is triggered (e.g. via F5)
+    connect(doc.data(), &Document::loaded, this, &SvgImageView::finishLoadFromDocument);
 }
 
 void SvgImageView::finishLoadFromDocument()
