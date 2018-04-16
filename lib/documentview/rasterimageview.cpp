@@ -313,6 +313,8 @@ void RasterImageView::updateImageRect(const QRect& imageRect)
         setZoom(computeZoomToFit());
     } else if (zoomToFill()) {
         setZoom(computeZoomToFill());
+    } else {
+        applyPendingScrollPos();
     }
 
     d->setScalerRegionToVisibleRect();

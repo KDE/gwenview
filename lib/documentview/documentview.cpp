@@ -417,6 +417,9 @@ void DocumentView::openUrl(const QUrl &url, const DocumentView::Setup& setup)
     d->mSetup = setup;
     d->mDocument = DocumentFactory::instance()->load(url);
     connect(d->mDocument.data(), SIGNAL(busyChanged(QUrl,bool)), SLOT(slotBusyChanged(QUrl,bool)));
+    connect(d->mDocument.data(), &Document::modified, this, [this]() {
+        d->updateZoomSnapValues();
+    });
 
     if (d->mDocument->loadingState() < Document::KindDetermined) {
         MessageViewAdapter* messageViewAdapter = qobject_cast<MessageViewAdapter*>(d->mAdapter.data());
