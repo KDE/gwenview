@@ -1641,6 +1641,11 @@ void MainWindow::saveProperties(KConfigGroup& group)
 
 void MainWindow::readProperties(const KConfigGroup& group)
 {
+    const QUrl url = group.readEntry(SESSION_URL_KEY, QUrl());
+    if (url.isValid()) {
+        goToUrl(url);
+    }
+
     MainPageId pageId = MainPageId(group.readEntry(SESSION_CURRENT_PAGE_KEY, int(StartMainPageId)));
     if (pageId == StartMainPageId) {
         d->mCurrentMainPageId = StartMainPageId;
@@ -1650,12 +1655,6 @@ void MainWindow::readProperties(const KConfigGroup& group)
     } else {
         d->mViewAction->trigger();
     }
-    QUrl url = group.readEntry(SESSION_URL_KEY, QUrl());
-    if (!url.isValid()) {
-        qWarning() << "Invalid url!";
-        return;
-    }
-    goToUrl(url);
 }
 
 void MainWindow::showFirstDocumentReached()
