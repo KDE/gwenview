@@ -56,6 +56,7 @@ struct AbstractImageViewPrivate
     QPointF mImageOffset;
     QPointF mScrollPos;
     QPointF mLastDragPos;
+    QSizeF mDocumentSize;
 
     const QPixmap mAlphaBackgroundTexture = createAlphaBackgroundTexture();
 
@@ -183,11 +184,14 @@ void AbstractImageView::setZoom(qreal zoom, const QPointF& _center, AbstractImag
         d->mZoom = zoom;
         return;
     }
-    if (updateType == UpdateIfNecessary && qFuzzyCompare(zoom, d->mZoom)) {
+
+    if (updateType == UpdateIfNecessary
+            && qFuzzyCompare(zoom, d->mZoom) && documentSize() == d->mDocumentSize) {
         return;
     }
     qreal oldZoom = d->mZoom;
     d->mZoom = zoom;
+    d->mDocumentSize = documentSize();
 
     QPointF center;
     if (_center == QPointF(-1, -1)) {
