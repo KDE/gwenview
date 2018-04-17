@@ -37,6 +37,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KIconLoader>
 #include <KUrlNavigator>
 #include <KUrlMimeData>
+#include <KFormat>
 
 // Local
 #include <filtercontroller.h>
@@ -53,6 +54,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/thumbnailview/previewitemdelegate.h>
 #include <lib/thumbnailview/thumbnailview.h>
 #include <ui_browsemainpage.h>
+#include <mimetypeutils.h>
 
 namespace Gwenview
 {
@@ -70,7 +72,9 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
     KFilePlacesModel* mFilePlacesModel;
     KUrlNavigator* mUrlNavigator;
     SortedDirModel* mDirModel;
-    int mDocumentCount;
+    int mDocumentCountImages;
+    int mDocumentCountVideos;
+    KFileItemList* mSelectedMediaItems;
     KActionCollection* mActionCollection;
     FilterController* mFilterController;
     KSelectAction* mSortAction;
@@ -114,6 +118,12 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
                          mThumbnailView, SLOT(setThumbnailWidth(int)));
         QObject::connect(mThumbnailView, SIGNAL(thumbnailWidthChanged(int)),
                          mThumbnailSlider, SLOT(setValue(int)));
+
+        // Document count label
+        QMargins labelMargins = mDocumentCountLabel->contentsMargins();
+        labelMargins.setLeft(15);
+        labelMargins.setRight(15);
+        mDocumentCountLabel->setContentsMargins(labelMargins);
     }
 
     QAction *thumbnailDetailAction(const QString &text, PreviewItemDelegate::ThumbnailDetail detail)
@@ -186,35 +196,64 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
         mFullScreenToolBar2->addAction(mActionCollection->action("leave_fullscreen"));
     }
 
+    void updateSelectedMediaItems(const QItemSelection& selected, const QItemSelection& deselected)
+    {
+        for (auto index : selected.indexes()) {
+            KFileItem item = mDirModel->itemForIndex(index);
+            if (!ArchiveUtils::fileItemIsDirOrArchive(item)) {
+                mSelectedMediaItems->append(item);
+            }
+        }
+        for (auto index : deselected.indexes()) {
+            KFileItem item = mDirModel->itemForIndex(index);
+            mSelectedMediaItems->removeOne(item);
+        }
+    }
+
     void updateDocumentCountLabel()
     {
-        QString text = i18ncp("@label", "%1 document", "%1 documents", mDocumentCount);
-        mDocumentCountLabel->setText(text);
+        if (mSelectedMediaItems->count() > 1) {
+            KIO::filesize_t totalSize = 0;
+            for (auto item : *mSelectedMediaItems) {
+                totalSize += item.size();
+            }
+            const QString text = i18nc("@info:status %1 number of selected documents, %2 total number of documents, %3 total filesize of selected documents",
+                                       "Selected %1 of %2 (%3)",
+                                       mSelectedMediaItems->count(),
+                                       mDocumentCountImages + mDocumentCountVideos,
+                                       KFormat().formatByteSize(totalSize));
+            mDocumentCountLabel->setText(text);
+        } else {
+            const QString imageText = i18ncp("@info:status Image files", "%1 image", "%1 images", mDocumentCountImages);
+            const QString videoText = i18ncp("@info:status Video files", "%1 video", "%1 videos", mDocumentCountVideos);
+            QString labelText;
+            if (mDocumentCountImages > 0 && mDocumentCountVideos == 0) {
+                labelText = imageText;
+            } else if (mDocumentCountImages == 0 && mDocumentCountVideos > 0) {
+                labelText = videoText;
+            } else {
+                labelText = i18nc("@info:status images, videos", "%1, %2", imageText, videoText);
+            }
+            mDocumentCountLabel->setText(labelText);
+        }
     }
 
-    void setupDocumentCountConnections()
+    void documentCountsForIndexRange(const QModelIndex& parent, int start, int end, int& imageCountOut, int& videoCountOut)
     {
-        QObject::connect(mDirModel, SIGNAL(rowsInserted(QModelIndex,int,int)),
-                         q, SLOT(slotDirModelRowsInserted(QModelIndex,int,int)));
-
-        QObject::connect(mDirModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)),
-                         q, SLOT(slotDirModelRowsAboutToBeRemoved(QModelIndex,int,int)));
-
-        QObject::connect(mDirModel, SIGNAL(modelReset()),
-                         q, SLOT(slotDirModelReset()));
-    }
-
-    int documentCountInIndexRange(const QModelIndex& parent, int start, int end)
-    {
-        int count = 0;
+        imageCountOut = 0;
+        videoCountOut = 0;
         for (int row = start; row <= end; ++row) {
             QModelIndex index = mDirModel->index(row, 0, parent);
             KFileItem item = mDirModel->itemForIndex(index);
             if (!ArchiveUtils::fileItemIsDirOrArchive(item)) {
-                ++count;
+                MimeTypeUtils::Kind kind = MimeTypeUtils::mimeTypeKind(item.mimetype());
+                if (kind == MimeTypeUtils::KIND_RASTER_IMAGE || kind == MimeTypeUtils::KIND_SVG_IMAGE) {
+                    imageCountOut++;
+                } else if (kind == MimeTypeUtils::KIND_VIDEO) {
+                    videoCountOut++;
+                }
             }
         }
-        return count;
     }
 
     void updateContextBarActions()
@@ -253,15 +292,26 @@ BrowseMainPage::BrowseMainPage(QWidget* parent, KActionCollection* actionCollect
     d->q = this;
     d->mGvCore = gvCore;
     d->mDirModel = gvCore->sortedDirModel();
-    d->mDocumentCount = 0;
+    d->mDocumentCountImages = 0;
+    d->mDocumentCountVideos = 0;
+    d->mSelectedMediaItems = new KFileItemList;
     d->mActionCollection = actionCollection;
     d->setupWidgets();
     d->setupActions(actionCollection);
     d->setupFilterController();
-    d->setupDocumentCountConnections();
     loadConfig();
     updateSortOrder();
     updateThumbnailDetails();
+
+    // Set up connections for document count
+    connect(d->mDirModel, &SortedDirModel::rowsInserted,
+            this, &BrowseMainPage::slotDirModelRowsInserted);
+    connect(d->mDirModel, &SortedDirModel::rowsAboutToBeRemoved,
+            this, &BrowseMainPage::slotDirModelRowsAboutToBeRemoved);
+    connect(d->mDirModel, &SortedDirModel::modelReset,
+            this, &BrowseMainPage::slotDirModelReset);
+    connect(thumbnailView(), &ThumbnailView::selectionChangedSignal,
+            this, &BrowseMainPage::slotSelectionChanged);
 
     installEventFilter(this);
 }
@@ -354,25 +404,39 @@ void BrowseMainPage::addFolderToPlaces()
 
 void BrowseMainPage::slotDirModelRowsInserted(const QModelIndex& parent, int start, int end)
 {
-    int count = d->documentCountInIndexRange(parent, start, end);
-    if (count > 0) {
-        d->mDocumentCount += count;
+    int imageCount;
+    int videoCount;
+    d->documentCountsForIndexRange(parent, start, end, imageCount, videoCount);
+    if (imageCount > 0 || videoCount > 0) {
+        d->mDocumentCountImages += imageCount;
+        d->mDocumentCountVideos += videoCount;
         d->updateDocumentCountLabel();
     }
 }
 
 void BrowseMainPage::slotDirModelRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end)
 {
-    int count = d->documentCountInIndexRange(parent, start, end);
-    if (count > 0) {
-        d->mDocumentCount -= count;
+    int imageCount;
+    int videoCount;
+    d->documentCountsForIndexRange(parent, start, end, imageCount, videoCount);
+    if (imageCount > 0 || videoCount > 0) {
+        d->mDocumentCountImages -= imageCount;
+        d->mDocumentCountVideos -= videoCount;
         d->updateDocumentCountLabel();
     }
 }
 
 void BrowseMainPage::slotDirModelReset()
 {
-    d->mDocumentCount = 0;
+    d->mDocumentCountImages = 0;
+    d->mDocumentCountVideos = 0;
+    d->mSelectedMediaItems->clear();
+    d->updateDocumentCountLabel();
+}
+
+void BrowseMainPage::slotSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
+{
+    d->updateSelectedMediaItems(selected, deselected);
     d->updateDocumentCountLabel();
 }
 

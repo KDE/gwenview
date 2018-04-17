@@ -31,6 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QPointer>
 #include <QToolButton>
 #include <QWidgetAction>
+#include <QTimer>
 
 // KDE
 #include <KActionCollection>
@@ -152,11 +153,21 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
     // mInformationLabel
     mInformationLabel = new QLabel;
     mInformationLabel->setWordWrap(true);
-    mInformationLabel->setContentsMargins(6, 0, 6, 0);
-    mInformationLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-    mInformationLabel->setAutoFillBackground(true);
-    mInformationLabel->setBackgroundRole(QPalette::Mid);
-    mInformationLabelShadow = new ShadowFilter(mInformationLabel);
+    mInformationLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+
+    // mDocumentCountLabel
+    mDocumentCountLabel = new QLabel;
+
+
+    mInformationContainer = new QWidget;
+    mInformationContainer->setContentsMargins(6, 6, 6, 2);
+    mInformationContainer->setAutoFillBackground(true);
+    mInformationContainer->setBackgroundRole(QPalette::Mid);
+    mInformationContainerShadow = new ShadowFilter(mInformationContainer);
+    QHBoxLayout* hLayout = new QHBoxLayout(mInformationContainer);
+    hLayout->setMargin(0);
+    hLayout->addWidget(mInformationLabel);
+    hLayout->addWidget(mDocumentCountLabel);
 
     // Thumbnail bar
     mThumbnailBar = new ThumbnailBarView(mContent);
@@ -164,6 +175,14 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
     ThumbnailBarItemDelegate* delegate = new ThumbnailBarItemDelegate(mThumbnailBar);
     mThumbnailBar->setItemDelegate(delegate);
     mThumbnailBar->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    // Ensure document count is updated when items added/removed from folder
+    connect(mThumbnailBar, &ThumbnailBarView::rowsInsertedSignal,
+            this, &FullScreenContent::updateDocumentCountLabel);
+    connect(mThumbnailBar, &ThumbnailBarView::rowsRemovedSignal,
+            this, &FullScreenContent::updateDocumentCountLabel);
+    connect(mThumbnailBar, &ThumbnailBarView::indexActivated,
+            this, &FullScreenContent::updateDocumentCountLabel);
+
 
     // Right bar
     mRightToolBar = new FullScreenToolBar(mContent);
@@ -193,6 +212,9 @@ void FullScreenContent::setCurrentUrl(const QUrl &url)
                 SLOT(updateCurrentUrlWidgets()));
     }
     updateCurrentUrlWidgets();
+
+    // Give the thumbnail view time to update its "current index"
+    QTimer::singleShot(0, this, &FullScreenContent::updateDocumentCountLabel);
 }
 
 void FullScreenContent::updateInformationLabel()
@@ -281,7 +303,7 @@ void FullScreenContent::updateLayout()
         // First column
         vLayout = new QVBoxLayout;
         vLayout->addWidget(mToolBar);
-        vLayout->addWidget(mInformationLabel);
+        vLayout->addWidget(mInformationContainer);
         layout->addLayout(vLayout);
         // Second column
         layout->addSpacing(2);
@@ -292,19 +314,23 @@ void FullScreenContent::updateLayout()
         vLayout->addWidget(mRightToolBar);
         layout->addLayout(vLayout);
 
+        mInformationContainer->setMaximumWidth(mToolBar->sizeHint().width());
         mThumbnailBar->setFixedHeight(GwenviewConfig::fullScreenBarHeight());
         mAutoHideContainer->setFixedHeight(GwenviewConfig::fullScreenBarHeight());
+
+        mInformationLabel->setAlignment(Qt::AlignTop);
+        mDocumentCountLabel->setAlignment(Qt::AlignBottom | Qt::AlignRight);
 
         // Shadows
         mToolBarShadow->reset();
         mToolBarShadow->setShadow(ShadowFilter::RightEdge, QColor(0, 0, 0, 64));
         mToolBarShadow->setShadow(ShadowFilter::BottomEdge, QColor(255, 255, 255, 8));
 
-        mInformationLabelShadow->reset();
-        mInformationLabelShadow->setShadow(ShadowFilter::LeftEdge, QColor(0, 0, 0, 64));
-        mInformationLabelShadow->setShadow(ShadowFilter::TopEdge, QColor(0, 0, 0, 64));
-        mInformationLabelShadow->setShadow(ShadowFilter::RightEdge, QColor(0, 0, 0, 128));
-        mInformationLabelShadow->setShadow(ShadowFilter::BottomEdge, QColor(255, 255, 255, 8));
+        mInformationContainerShadow->reset();
+        mInformationContainerShadow->setShadow(ShadowFilter::LeftEdge, QColor(0, 0, 0, 64));
+        mInformationContainerShadow->setShadow(ShadowFilter::TopEdge, QColor(0, 0, 0, 64));
+        mInformationContainerShadow->setShadow(ShadowFilter::RightEdge, QColor(0, 0, 0, 128));
+        mInformationContainerShadow->setShadow(ShadowFilter::BottomEdge, QColor(255, 255, 255, 8));
 
         mRightToolBarShadow->reset();
         mRightToolBarShadow->setShadow(ShadowFilter::LeftEdge, QColor(0, 0, 0, 64));
@@ -316,17 +342,21 @@ void FullScreenContent::updateLayout()
         layout->setMargin(0);
         layout->setSpacing(0);
         layout->addWidget(mToolBar);
-        layout->addWidget(mInformationLabel);
+        layout->addWidget(mInformationContainer);
         layout->addWidget(mRightToolBar);
 
+        mInformationContainer->setMaximumWidth(QWIDGETSIZE_MAX);
         mAutoHideContainer->setFixedHeight(mToolBar->sizeHint().height());
+
+        mInformationLabel->setAlignment(Qt::AlignVCenter);
+        mDocumentCountLabel->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
 
         // Shadows
         mToolBarShadow->reset();
 
-        mInformationLabelShadow->reset();
-        mInformationLabelShadow->setShadow(ShadowFilter::LeftEdge, QColor(0, 0, 0, 64));
-        mInformationLabelShadow->setShadow(ShadowFilter::RightEdge, QColor(0, 0, 0, 32));
+        mInformationContainerShadow->reset();
+        mInformationContainerShadow->setShadow(ShadowFilter::LeftEdge, QColor(0, 0, 0, 64));
+        mInformationContainerShadow->setShadow(ShadowFilter::RightEdge, QColor(0, 0, 0, 32));
 
         mRightToolBarShadow->reset();
         mRightToolBarShadow->setShadow(ShadowFilter::LeftEdge, QColor(255, 255, 255, 8));
@@ -520,6 +550,14 @@ void FullScreenContent::setupThumbnailBarStyleSheet()
     
     QString css = genCss + itemSelCss + itemHovCss;
     mThumbnailBar->setStyleSheet(css);
+}
+
+void FullScreenContent::updateDocumentCountLabel()
+{
+    const int current = mThumbnailBar->currentIndex().row() + 1;
+    const int total = mThumbnailBar->model()->rowCount();
+    const QString text = i18nc("@info:status %1 current document index, %2 total documents", "%1 of %2", current, total);
+    mDocumentCountLabel->setText(text);
 }
 
 } // namespace

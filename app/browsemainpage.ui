@@ -93,18 +93,15 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="mDocumentCountLabel">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-          <horstretch>1</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
+       <widget class="KSqueezedTextLabel" name="mDocumentCountLabel">
         <property name="text">
          <string/>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
+        </property>
+        <property name="textElideMode">
+         <set>Qt::ElideRight</set>
         </property>
        </widget>
       </item>

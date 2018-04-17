@@ -36,6 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KModelIndexProxyMapper>
 #include <KToggleAction>
 #include <KActivities/ResourceInstance>
+#include <KSqueezedTextLabel>
 
 // Local
 #include "fileoperations.h"
@@ -126,6 +127,7 @@ struct ViewMainPagePrivate
     KToggleAction* mToggleThumbnailBarAction;
     KToggleAction* mSynchronizeAction;
     QCheckBox* mSynchronizeCheckBox;
+    KSqueezedTextLabel* mDocumentCountLabel;
 
     // Activity Resource events reporting needs to be above KPart,
     // in the shell itself, to avoid problems with other MDI applications
@@ -282,6 +284,13 @@ struct ViewMainPagePrivate
         mZoomWidget = new ZoomWidget;
         mSynchronizeCheckBox = new QCheckBox(i18n("Synchronize"));
         mSynchronizeCheckBox->hide();
+        mDocumentCountLabel = new KSqueezedTextLabel;
+        mDocumentCountLabel->setAlignment(Qt::AlignCenter);
+        mDocumentCountLabel->setTextElideMode(Qt::ElideRight);
+        QMargins labelMargins = mDocumentCountLabel->contentsMargins();
+        labelMargins.setLeft(15);
+        labelMargins.setRight(15);
+        mDocumentCountLabel->setContentsMargins(labelMargins);
 
         QHBoxLayout* layout = new QHBoxLayout(mStatusBarContainer);
         layout->setMargin(0);
@@ -290,6 +299,9 @@ struct ViewMainPagePrivate
         layout->addWidget(mToggleThumbnailBarButton);
         layout->addStretch();
         layout->addWidget(mSynchronizeCheckBox);
+        // Ensure document count label takes up all available space,
+        // so its autohide feature works properly (stretch factor = 1)
+        layout->addWidget(mDocumentCountLabel, 1);
         layout->addStretch();
         layout->addWidget(mZoomWidget);
     }
@@ -377,6 +389,14 @@ struct ViewMainPagePrivate
         mDocumentViewContainer->applyPalette(mGvCore->palette(fullScreenMode ? GvCore::FullScreenViewPalette : GvCore::NormalViewPalette));
         setupThumbnailBarStyleSheet();
     }
+
+    void updateDocumentCountLabel()
+    {
+        const int current = mThumbnailBar->currentIndex().row() + 1;  // zero-based
+        const int total = mThumbnailBar->model()->rowCount();
+        const QString text = i18nc("@info:status %1 current document index, %2 total documents", "%1 of %2", current, total);
+        mDocumentCountLabel->setText(text);
+    }
 };
 
 ViewMainPage::ViewMainPage(QWidget* parent, SlideShow* slideShow, KActionCollection* actionCollection, GvCore* gvCore)
@@ -423,6 +443,12 @@ ViewMainPage::ViewMainPage(QWidget* parent, SlideShow* slideShow, KActionCollect
             d->mSynchronizeCheckBox, SLOT(setChecked(bool)));
     connect(d->mSynchronizeCheckBox, SIGNAL(toggled(bool)),
             d->mSynchronizeAction, SLOT(setChecked(bool)));
+
+    // Connections for the document count
+    connect(d->mThumbnailBar, &ThumbnailBarView::rowsInsertedSignal,
+            this, &ViewMainPage::slotDirModelItemsAddedOrRemoved);
+    connect(d->mThumbnailBar, &ThumbnailBarView::rowsRemovedSignal,
+            this, &ViewMainPage::slotDirModelItemsAddedOrRemoved);
 
     installEventFilter(this);
 }
@@ -692,6 +718,9 @@ void ViewMainPage::openUrls(const QList<QUrl>& allUrls, const QUrl &currentUrl)
     } else {
         d->mSynchronizer->setActive(false);
     }
+
+    d->updateDocumentCountLabel();
+    d->mDocumentCountLabel->setVisible(!d->mCompareMode);
 }
 
 void ViewMainPage::reload()
@@ -818,6 +847,11 @@ void ViewMainPage::updateFocus(const AbstractRasterImageViewTool* tool)
     if (!tool) {
         d->mDocumentViewContainer->setFocus();
     }
+}
+
+void ViewMainPage::slotDirModelItemsAddedOrRemoved()
+{
+    d->updateDocumentCountLabel();
 }
 
 } // namespace

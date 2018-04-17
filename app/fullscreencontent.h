@@ -92,6 +92,7 @@ private Q_SLOTS:
     void slotShowThumbnailsToggled(bool value);
     void slotViewModeActionToggled(bool value);
     void adjustSize();
+    void updateDocumentCountLabel();
 
 private:
     KActionCollection* mActionCollection;
@@ -102,9 +103,11 @@ private:
     FullScreenToolBar* mRightToolBar;
     ThumbnailBarView* mThumbnailBar;
     QLabel* mInformationLabel;
+    QLabel* mDocumentCountLabel;
+    QWidget* mInformationContainer;
     ShadowFilter* mToolBarShadow;
     ShadowFilter* mRightToolBarShadow;
-    ShadowFilter* mInformationLabelShadow;
+    ShadowFilter* mInformationContainerShadow;
     Document::Ptr mCurrentDocument;
     QPointer<ImageMetaInfoDialog> mImageMetaInfoDialog;
     QPointer<FullScreenConfigWidget> mConfigWidget;

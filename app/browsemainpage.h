@@ -31,6 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 class QDropEvent;
 class QModelIndex;
+class QItemSelection;
 class QToolButton;
 
 class KActionCollection;
@@ -74,6 +75,7 @@ private Q_SLOTS:
     void slotDirModelRowsInserted(const QModelIndex& parent, int start, int end);
     void slotDirModelRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
     void slotDirModelReset();
+    void slotSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
     void updateSortOrder();
     void updateThumbnailDetails();
     void slotUrlsDropped(const QUrl &destUrl, QDropEvent*);

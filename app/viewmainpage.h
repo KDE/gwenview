@@ -145,6 +145,8 @@ private Q_SLOTS:
     void trashView(DocumentView*);
     void deselectView(DocumentView*);
 
+    void slotDirModelItemsAddedOrRemoved();
+
 protected:
     bool eventFilter(QObject* watched, QEvent* event) Q_DECL_OVERRIDE;
 
