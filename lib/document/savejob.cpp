@@ -106,7 +106,7 @@ void SaveJob::doStart()
         setError(UserDefinedError + 1);
         // Don't use xi18n* with markup substitution here, this is done in GvCore::slotSaveResult or SaveAllHelper::slotResult
         setErrorText(i18nc("@info", "Could not open file for writing, check that you have the necessary rights in <filename>%1</filename>.",
-                           dirUrl.toDisplayString()));
+                           dirUrl.toDisplayString(QUrl::PreferLocalFile)));
         uiDelegate()->setAutoErrorHandlingEnabled(false);
         uiDelegate()->setAutoWarningHandlingEnabled(false);
         emitResult();
