@@ -1648,7 +1648,6 @@ void MainWindow::readProperties(const KConfigGroup& group)
 
     MainPageId pageId = MainPageId(group.readEntry(SESSION_CURRENT_PAGE_KEY, int(StartMainPageId)));
     if (pageId == StartMainPageId) {
-        d->mCurrentMainPageId = StartMainPageId;
         showStartMainPage();
     } else if (pageId == BrowseMainPageId) {
         d->mBrowseAction->trigger();
