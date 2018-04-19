@@ -405,7 +405,7 @@ void GvCore::slotSaveResult(KJob* _job)
     if (job->error()) {
         QString name = newUrl.fileName().isEmpty() ? newUrl.toDisplayString() : newUrl.fileName();
         QString msg = xi18nc("@info", "<b>Saving <filename>%1</filename> failed:</b><br />%2",
-                             name, job->errorString());
+                             name, kxi18n(qPrintable(job->errorString())));
 
         int result = KMessageBox::warningContinueCancel(
                          d->mMainWindow, msg,

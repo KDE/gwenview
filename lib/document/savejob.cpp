@@ -104,8 +104,11 @@ void SaveJob::doStart()
         dirUrl = dirUrl.adjusted(QUrl::RemoveFilename);
         dirUrl.setPath(dirUrl.path() + QString());
         setError(UserDefinedError + 1);
-        setErrorText(xi18nc("@info", "Could not open file for writing, check that you have the necessary rights in <filename>%1</filename>.",
-                            dirUrl.toDisplayString()));
+        // Don't use xi18n* with markup substitution here, this is done in GvCore::slotSaveResult or SaveAllHelper::slotResult
+        setErrorText(i18nc("@info", "Could not open file for writing, check that you have the necessary rights in <filename>%1</filename>.",
+                           dirUrl.toDisplayString()));
+        uiDelegate()->setAutoErrorHandlingEnabled(false);
+        uiDelegate()->setAutoWarningHandlingEnabled(false);
         emitResult();
         return;
     }
