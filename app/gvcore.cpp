@@ -31,8 +31,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KDE
 #include <QFileDialog>
 #include <KColorScheme>
-#include <KIO/StatJob>
-#include <KJobWidgets>
 #include <KLocalizedString>
 #include <KMessageBox>
 
@@ -357,23 +355,6 @@ void GvCore::saveAs(const QUrl &url)
     QUrl saveAsUrl;
     if (!d->showSaveAsDialog(url, &saveAsUrl, &format)) {
         return;
-    }
-
-    // Check for overwrite
-    KIO::StatJob *statJob = KIO::stat(saveAsUrl, KIO::StatJob::DestinationSide, 0);
-    KJobWidgets::setWindow(statJob, d->mMainWindow);
-    if (statJob->exec()) {
-        int answer = KMessageBox::warningContinueCancel(
-                         d->mMainWindow,
-                         xi18nc("@info",
-                                "A file named <filename>%1</filename> already exists.\n"
-                                "Are you sure you want to overwrite it?",
-                                saveAsUrl.fileName()),
-                         QString(),
-                         KStandardGuiItem::overwrite());
-        if (answer == KMessageBox::Cancel) {
-            return;
-        }
     }
 
     // Start save
