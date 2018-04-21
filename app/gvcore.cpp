@@ -362,7 +362,7 @@ void GvCore::saveAs(const QUrl &url)
     KJob* job = doc->save(saveAsUrl, format.data());
     if (!job) {
         const QString name = saveAsUrl.fileName().isEmpty() ? saveAsUrl.toDisplayString() : saveAsUrl.fileName();
-        const QString msg = xi18nc("@info", "<b>Saving <filename>%1</filename> failed:</b><br />%2",
+        const QString msg = xi18nc("@info", "<emphasis strong='true'>Saving <filename>%1</filename> failed:</emphasis><nl />%2",
                                    name, doc->errorString());
         KMessageBox::sorry(QApplication::activeWindow(), msg);
     } else {
@@ -385,8 +385,8 @@ void GvCore::slotSaveResult(KJob* _job)
 
     if (job->error()) {
         QString name = newUrl.fileName().isEmpty() ? newUrl.toDisplayString() : newUrl.fileName();
-        QString msg = xi18nc("@info", "<b>Saving <filename>%1</filename> failed:</b><br />%2",
-                             name, kxi18n(qPrintable(job->errorString())));
+        const QString msg = xi18nc("@info", "<emphasis strong='true'>Saving <filename>%1</filename> failed:</emphasis><nl />%2",
+                                   name, kxi18n(qPrintable(job->errorString())));
 
         int result = KMessageBox::warningContinueCancel(
                          d->mMainWindow, msg,
