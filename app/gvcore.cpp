@@ -394,7 +394,7 @@ void GvCore::slotSaveResult(KJob* _job)
                          KStandardGuiItem::saveAs());
 
         if (result == KMessageBox::Continue) {
-            saveAs(newUrl);
+            saveAs(oldUrl);
         }
         return;
     }
