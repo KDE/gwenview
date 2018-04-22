@@ -158,9 +158,10 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
     // mDocumentCountLabel
     mDocumentCountLabel = new QLabel;
 
-
     mInformationContainer = new QWidget;
-    mInformationContainer->setContentsMargins(6, 6, 6, 2);
+    const int infoContainerTopMargin = 6;
+    const int infoContainerBottomMargin = 2;
+    mInformationContainer->setContentsMargins(6, infoContainerTopMargin, 6, infoContainerBottomMargin);
     mInformationContainer->setAutoFillBackground(true);
     mInformationContainer->setBackgroundRole(QPalette::Mid);
     mInformationContainerShadow = new ShadowFilter(mInformationContainer);
@@ -175,6 +176,12 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
     ThumbnailBarItemDelegate* delegate = new ThumbnailBarItemDelegate(mThumbnailBar);
     mThumbnailBar->setItemDelegate(delegate);
     mThumbnailBar->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    // Calculate minimum bar height to give mInformationLabel exactly two lines height
+    const int lineHeight = mInformationLabel->fontMetrics().lineSpacing();
+    mMinimumThumbnailBarHeight = mToolBar->sizeHint().height()
+                               + lineHeight * 2
+                               + infoContainerTopMargin + infoContainerBottomMargin;
+
     // Ensure document count is updated when items added/removed from folder
     connect(mThumbnailBar, &ThumbnailBarView::rowsInsertedSignal,
             this, &FullScreenContent::updateDocumentCountLabel);
@@ -315,8 +322,9 @@ void FullScreenContent::updateLayout()
         layout->addLayout(vLayout);
 
         mInformationContainer->setMaximumWidth(mToolBar->sizeHint().width());
-        mThumbnailBar->setFixedHeight(GwenviewConfig::fullScreenBarHeight());
-        mAutoHideContainer->setFixedHeight(GwenviewConfig::fullScreenBarHeight());
+        const int barHeight = qMax(GwenviewConfig::fullScreenBarHeight(), mMinimumThumbnailBarHeight);
+        mThumbnailBar->setFixedHeight(barHeight);
+        mAutoHideContainer->setFixedHeight(barHeight);
 
         mInformationLabel->setAlignment(Qt::AlignTop);
         mDocumentCountLabel->setAlignment(Qt::AlignBottom | Qt::AlignRight);
@@ -460,7 +468,7 @@ void FullScreenContent::showOptionsMenu()
     widget->mThumbnailGroupBox->setVisible(mViewPageVisible);
     if (mViewPageVisible) {
         widget->mShowThumbnailsCheckBox->setChecked(GwenviewConfig::showFullScreenThumbnails());
-        widget->mHeightSlider->setMinimum(mRightToolBar->sizeHint().height());
+        widget->mHeightSlider->setMinimum(mMinimumThumbnailBarHeight);
         widget->mHeightSlider->setValue(mThumbnailBar->height());
         connect(widget->mShowThumbnailsCheckBox, SIGNAL(toggled(bool)),
                 SLOT(slotShowThumbnailsToggled(bool)));

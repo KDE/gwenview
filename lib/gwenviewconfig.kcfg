@@ -106,7 +106,7 @@
             <default></default>
         </entry>
         <entry name="FullScreenBarHeight" type="Int">
-            <default>75</default>
+            <default></default>
         </entry>
         <entry name="ShowFullScreenThumbnails" type="Bool">
             <default>true</default>

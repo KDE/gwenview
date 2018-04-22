@@ -113,6 +113,7 @@ private:
     QPointer<FullScreenConfigWidget> mConfigWidget;
     QAction * mOptionsAction;
     GvCore* mGvCore;
+    int mMinimumThumbnailBarHeight;
 
     bool mViewPageVisible;
 
