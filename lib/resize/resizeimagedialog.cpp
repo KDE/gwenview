@@ -51,6 +51,8 @@ ResizeImageDialog::ResizeImageDialog(QWidget* parent)
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
     setLayout(mainLayout);
+    mainLayout->setSizeConstraint(QLayout::SetFixedSize);
+
     QWidget* content = new QWidget(this);
     d->setupUi(content);
     mainLayout->addWidget(content);
@@ -82,8 +84,8 @@ ResizeImageDialog::~ResizeImageDialog()
 void ResizeImageDialog::setOriginalSize(const QSize& size)
 {
     d->mOriginalSize = size;
-    d->mOriginalWidthLabel->setText(QString::number(size.width()));
-    d->mOriginalHeightLabel->setText(QString::number(size.height()));
+    d->mOriginalWidthLabel->setText(QString::number(size.width()) + QStringLiteral(" px"));
+    d->mOriginalHeightLabel->setText(QString::number(size.height()) + QStringLiteral(" px"));
     d->mWidthSpinBox->setValue(size.width());
     d->mHeightSpinBox->setValue(size.height());
 }
