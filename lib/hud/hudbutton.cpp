@@ -53,7 +53,9 @@ struct HudButtonPrivate
     HudButton* q;
     QAction* mAction;
 
-    QIcon mIcon;
+    QPalette mDarkPalette;
+    QPixmap mLightIcon;
+    KIconLoader::Group mIconGroup;
     QString mText;
 
     bool mIsDown;
@@ -64,8 +66,8 @@ struct HudButtonPrivate
         const int padding = renderInfo.padding;
         QSize minInnerSize = constraint.toSize() - QSize(2 * padding, 2 * padding);
 
-        if (!mIcon.isNull()) {
-            int size = KIconLoader::global()->currentSize(KIconLoader::Small);
+        if (!mLightIcon.isNull()) {
+            int size = KIconLoader::global()->currentSize(mIconGroup);
             info->iconRect = QRect(padding, padding, size, qMax(size, minInnerSize.height()));
             minInnerSize.rwidth() -= size;
         }
@@ -98,6 +100,12 @@ HudButton::HudButton(QGraphicsItem* parent)
     d->q = this;
     d->mAction = 0;
     d->mIsDown = false;
+
+    // Palette to use for generating light icon. All we need is a light foreground.
+    d->mDarkPalette = palette();
+    d->mDarkPalette.setColor(QPalette::Foreground, Qt::white);
+    d->mIconGroup = KIconLoader::Small;
+
     setCursor(Qt::ArrowCursor);
     setAcceptHoverEvents(true);
 }
@@ -109,7 +117,12 @@ HudButton::~HudButton()
 
 void HudButton::setIcon(const QIcon& icon)
 {
-    d->mIcon = icon;
+    // Since the HUD is always drawn with a dark theme, we need to make sure
+    // the icon is light, in order to contrast. We then cache this light icon
+    // to avoid setting a custom palette on KIconLoader repeatedly.
+    KIconLoader::global()->setCustomPalette(d->mDarkPalette);
+    d->mLightIcon = icon.pixmap(KIconLoader::global()->currentSize(d->mIconGroup));
+    KIconLoader::global()->resetPalette();
     updateGeometry();
 }
 
@@ -137,10 +150,10 @@ void HudButton::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
     LayoutInfo info;
     d->initLayoutInfo(&info, size());
 
-    if (!d->mIcon.isNull()) {
+    if (!d->mLightIcon.isNull()) {
         painter->drawPixmap(
             info.iconRect.topLeft(),
-            d->mIcon.pixmap(info.iconRect.size())
+            d->mLightIcon
         );
     }
     if (!d->mText.isEmpty()) {
