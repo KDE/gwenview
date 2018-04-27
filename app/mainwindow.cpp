@@ -768,6 +768,21 @@ struct MainWindow::Private
         }
     }
 
+    void loadSplitterConfig()
+    {
+        const QList<int> sizes = GwenviewConfig::sideBarSplitterSizes();
+        if (!sizes.isEmpty()) {
+            mCentralSplitter->setSizes(sizes);
+        }
+    }
+
+    void saveSplitterConfig()
+    {
+        if (mSideBar->isVisible()) {
+            GwenviewConfig::setSideBarSplitterSizes(mCentralSplitter->sizes());
+        }
+    }
+
     void setScreenSaverEnabled(bool enabled)
     {
         // Always delete mNotificationRestrictions, it does not hurt
@@ -1034,6 +1049,7 @@ void MainWindow::showStartMainPage()
     d->mCurrentMainPageId = StartMainPageId;
     d->setActionsDisabledOnStartMainPageEnabled(false);
 
+    d->saveSplitterConfig();
     d->mSideBar->hide();
     d->mViewStackedWidget->setCurrentWidget(d->mStartMainPage);
 
@@ -1111,6 +1127,7 @@ void MainWindow::folderViewUrlChanged(const QUrl &url) {
 
 void MainWindow::toggleSideBar(bool visible)
 {
+    d->saveSplitterConfig();
     d->mToggleSideBarAction->setChecked(visible);
     d->saveSideBarVisibility(visible);
     d->mSideBar->setVisible(visible);
@@ -1522,6 +1539,7 @@ void MainWindow::loadConfig()
     d->mBrowseMainPage->loadConfig();
     d->mContextManager->loadConfig();
     d->mSideBar->loadConfig();
+    d->loadSplitterConfig();
 }
 
 void MainWindow::saveConfig()
@@ -1530,6 +1548,7 @@ void MainWindow::saveConfig()
     d->mViewMainPage->saveConfig();
     d->mBrowseMainPage->saveConfig();
     d->mContextManager->saveConfig();
+    d->saveSplitterConfig();
     GwenviewConfig::setFullScreenModeActive(isFullScreen());
 }
 
