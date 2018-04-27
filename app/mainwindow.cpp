@@ -257,6 +257,7 @@ struct MainWindow::Private
 
         mCentralSplitter->setStretchFactor(0, 0);
         mCentralSplitter->setStretchFactor(1, 1);
+        mCentralSplitter->setChildrenCollapsible(false);
 
         mThumbnailView->setFocus();
 
