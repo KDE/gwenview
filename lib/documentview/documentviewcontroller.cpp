@@ -273,6 +273,12 @@ void DocumentViewController::updateTool()
     }
 }
 
+void DocumentViewController::reset()
+{
+    setView(0);
+    d->updateActions();
+}
+
 void DocumentViewController::setToolContainer(SlideContainer* container)
 {
     d->mToolContainer = container;
