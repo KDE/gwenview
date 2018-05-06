@@ -60,6 +60,8 @@ public:
 
     void setToolContainer(SlideContainer* container);
 
+    void reset();
+
 private Q_SLOTS:
     void slotAdapterChanged();
     void updateZoomToFitActionFromView();

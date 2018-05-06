@@ -753,7 +753,7 @@ void ViewMainPage::reload()
 
 void ViewMainPage::reset()
 {
-    d->mDocumentViewController->setView(0);
+    d->mDocumentViewController->reset();
     d->mDocumentViewContainer->reset();
     d->mDocumentViews.clear();
 }
