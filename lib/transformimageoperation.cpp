@@ -102,9 +102,7 @@ void TransformImageOperation::undo()
         break;
     }
 
-    TransformJob* job = new TransformJob(orientation);
-    connect(job, &TransformJob::result, this, &AbstractImageOperation::finishUndoJob);
-    document()->enqueueJob(job);
+    redoAsDocumentJob(new TransformJob(orientation));
 }
 
 } // namespace

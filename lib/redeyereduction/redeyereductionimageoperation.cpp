@@ -104,7 +104,7 @@ void RedEyeReductionImageOperation::undo()
         painter.drawImage(rect.topLeft(), d->mOriginalImage);
     }
     document()->editor()->setImage(img);
-    finishUndoJob();
+    finish(true);
 }
 
 /**

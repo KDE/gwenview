@@ -89,7 +89,7 @@ void CropImageOperation::undo()
         return;
     }
     document()->editor()->setImage(d->mOriginalImage);
-    finishUndoJob();
+    finish(true);
 }
 
 } // namespace
