@@ -52,6 +52,11 @@ public:
         mOp->undo();
     }
 
+    void redo() override
+    {
+        mOp->redo();
+    }
+
 private:
     AbstractImageOperation* mOp;
 };
@@ -60,6 +65,7 @@ struct AbstractImageOperationPrivate
 {
     QString mText;
     QUrl mUrl;
+    ImageOperationCommand* mCommand;
 };
 
 AbstractImageOperation::AbstractImageOperation()
@@ -75,7 +81,11 @@ AbstractImageOperation::~AbstractImageOperation()
 void AbstractImageOperation::applyToDocument(Document::Ptr doc)
 {
     d->mUrl = doc->url();
-    redo();
+
+    d->mCommand = new ImageOperationCommand(this);
+    d->mCommand->setText(d->mText);
+    // QUndoStack::push() executes command by calling its redo() function
+    doc->undoStack()->push(d->mCommand);
 }
 
 Document::Ptr AbstractImageOperation::document() const
@@ -88,12 +98,13 @@ Document::Ptr AbstractImageOperation::document() const
 void AbstractImageOperation::finish(bool ok)
 {
     if (ok) {
-        ImageOperationCommand* command = new ImageOperationCommand(this);
-        command->setText(d->mText);
-        document()->undoStack()->push(command);
-        document()->imageOperationCompleted();
+        finishUndoJob();
     } else {
-        deleteLater();
+#if QT_VERSION >= QT_VERSION_CHECK(5, 9, 0)
+        // Remove command from undo stack without executing undo()
+        d->mCommand->setObsolete(true);
+#endif
+        document()->undoStack()->undo();
     }
 }
 

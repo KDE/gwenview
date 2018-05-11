@@ -129,6 +129,7 @@ private Q_SLOTS:
     void testJobQueue();
     void testCheckDocumentEditor();
     void testUndoStackPush();
+    void testUndoRedo();
 
     void initTestCase();
     void init();

@@ -534,6 +534,7 @@ void DocumentTest::testModifyAndSaveAs()
     QVERIFY(doc->editor());
     TestOperation* op = new TestOperation;
     op->applyToDocument(doc);
+    QTest::qWait(100);
     QVERIFY(doc->isModified());
     QCOMPARE(modifiedDocumentListChangedSpy.count(), 1);
     modifiedDocumentListChangedSpy.clear();
@@ -839,5 +840,68 @@ void DocumentTest::testUndoStackPush()
     op = new FailureOperation;
     op->applyToDocument(doc);
     QTest::qWait(100);
+    QVERIFY(doc->undoStack()->isClean());
+}
+
+void DocumentTest::testUndoRedo()
+{
+    class SuccessOperation : public AbstractImageOperation
+    {
+    public:
+        int mRedoCount = 0;
+        int mUndoCount = 0;
+
+    protected:
+        virtual void redo()
+        {
+            mRedoCount++;
+            finish(true);
+        }
+
+        virtual void undo()
+        {
+            mUndoCount++;
+            finish(true);
+        }
+    };
+
+    Document::Ptr doc = DocumentFactory::instance()->load(urlForTestFile("orient6.jpg"));
+    QSignalSpy modifiedSpy(doc.data(), &Document::modified);
+    QSignalSpy savedSpy(doc.data(), &Document::saved);
+
+    SuccessOperation* op = new SuccessOperation;
+    QCOMPARE(op->mRedoCount, 0);
+    QCOMPARE(op->mUndoCount, 0);
+
+    // Apply (redo) operation
+    op->applyToDocument(doc);
+    QVERIFY(modifiedSpy.wait());
+    QCOMPARE(op->mRedoCount, 1);
+    QCOMPARE(op->mUndoCount, 0);
+    QCOMPARE(doc->undoStack()->count(), 1);
+    QVERIFY(!doc->undoStack()->isClean());
+
+    // Undo operation
+    doc->undoStack()->undo();
+    QVERIFY(savedSpy.wait());
+    QCOMPARE(op->mRedoCount, 1);
+    QCOMPARE(op->mUndoCount, 1);
+    QCOMPARE(doc->undoStack()->count(), 1);
+    QVERIFY(doc->undoStack()->isClean());
+
+    // Redo operation
+    doc->undoStack()->redo();
+    QVERIFY(modifiedSpy.wait());
+    QCOMPARE(op->mRedoCount, 2);
+    QCOMPARE(op->mUndoCount, 1);
+    QCOMPARE(doc->undoStack()->count(), 1);
+    QVERIFY(!doc->undoStack()->isClean());
+
+    // Undo operation again
+    doc->undoStack()->undo();
+    QVERIFY(savedSpy.wait());
+    QCOMPARE(op->mRedoCount, 2);
+    QCOMPARE(op->mUndoCount, 2);
+    QCOMPARE(doc->undoStack()->count(), 1);
     QVERIFY(doc->undoStack()->isClean());
 }
