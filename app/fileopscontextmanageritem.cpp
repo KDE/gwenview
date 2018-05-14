@@ -54,6 +54,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // Local
 #include <lib/contextmanager.h>
+#include <lib/document/documentfactory.h>
 #include <lib/eventwatcher.h>
 #include <lib/gvdebug.h>
 #include "fileoperations.h"
@@ -90,7 +91,29 @@ QMimeData* FileOpsContextManagerItem::selectionMimeData()
 {
     QMimeData* mimeData = new QMimeData;
     KFileItemList list = contextManager()->selectedFileItemList();
-    mimeData->setUrls(list.urlList());
+    const bool viewModeActive = !mThumbnailView->isVisible();
+
+    if (viewModeActive || list.count() == 1) {
+        // Copy the url and (possibly edited but unsaved) content of
+        // - the current image in View/Compare Mode
+        // - a single selected image in Browse Mode
+        const QUrl url = viewModeActive ? contextManager()->currentUrl() : list.first().url();
+        mimeData->setUrls({url});
+        const MimeTypeUtils::Kind mimeKind = MimeTypeUtils::urlKind(url);
+        if (mimeKind == MimeTypeUtils::KIND_RASTER_IMAGE || mimeKind == MimeTypeUtils::KIND_SVG_IMAGE) {
+            const Document::Ptr doc = DocumentFactory::instance()->load(url);
+            doc->waitUntilLoaded();
+            if (mimeKind == MimeTypeUtils::KIND_RASTER_IMAGE) {
+                mimeData->setImageData(doc->image());
+            } else {
+                mimeData->setData(MimeTypeUtils::urlMimeType(url), doc->rawData());
+            }
+            mimeData->setData(QStringLiteral("application/x-kde-suggestedfilename"), QFile::encodeName(url.fileName()));
+        }
+    } else {
+        mimeData->setUrls(list.urlList());
+    }
+
     return mimeData;
 }
 
