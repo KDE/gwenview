@@ -1235,6 +1235,7 @@ void MainWindow::slotDirListerCompleted()
     } else {
         d->goToFirstDocument();
 
+        // Try to select the first directory in case there are no images to select
         if (!d->mContextManager->selectionModel()->hasSelection()) {
             const QModelIndex index = d->mThumbnailView->model()->index(0, 0);
             if (index.isValid()) {
