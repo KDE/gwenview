@@ -101,7 +101,6 @@ void DocumentTest::testLoad()
 
     Document::Ptr doc = DocumentFactory::instance()->load(url);
     QSignalSpy spy(doc.data(), SIGNAL(isAnimatedUpdated()));
-    doc->startLoadingFullImage();
     doc->waitUntilLoaded();
     QCOMPARE(doc->loadingState(), Document::Loaded);
 
@@ -182,7 +181,6 @@ void DocumentTest::testLoadTwoPasses()
     waitUntilMetaInfoLoaded(doc);
     QVERIFY2(doc->image().isNull(), "Image shouldn't have been loaded at this time");
     QCOMPARE(doc->format().data(), "png");
-    doc->startLoadingFullImage();
     doc->waitUntilLoaded();
     QCOMPARE(image, doc->image());
 }
@@ -273,7 +271,6 @@ void DocumentTest::testLoadRemote()
     QVERIFY2(KIO::stat(url, KIO::StatJob::SourceSide, 0)->exec(), "test url not found");
 
     Document::Ptr doc = DocumentFactory::instance()->load(url);
-    doc->startLoadingFullImage();
     doc->waitUntilLoaded();
     QImage image = doc->image();
     QCOMPARE(image.width(), 150);
@@ -285,7 +282,6 @@ void DocumentTest::testLoadAnimated()
     QUrl srcUrl = urlForTestFile("40frames.gif");
     Document::Ptr doc = DocumentFactory::instance()->load(srcUrl);
     QSignalSpy spy(doc.data(), SIGNAL(imageRectUpdated(QRect)));
-    doc->startLoadingFullImage();
     doc->waitUntilLoaded();
     QVERIFY(doc->isAnimated());
 
@@ -316,7 +312,6 @@ void DocumentTest::testPrepareDownSampledAfterFailure()
     QUrl url = urlForTestFile("empty.png");
     Document::Ptr doc = DocumentFactory::instance()->load(url);
 
-    doc->startLoadingFullImage();
     doc->waitUntilLoaded();
     QCOMPARE(doc->loadingState(), Document::LoadingFailed);
 
@@ -333,7 +328,6 @@ void DocumentTest::testSaveRemote()
 
     QUrl srcUrl = urlForTestFile("test.png");
     Document::Ptr doc = DocumentFactory::instance()->load(srcUrl);
-    doc->startLoadingFullImage();
     doc->waitUntilLoaded();
 
     dstUrl = dstUrl.adjusted(QUrl::StripTrailingSlash);
@@ -368,7 +362,6 @@ void DocumentTest::testLoadRotated()
     image = image.transformed(matrix);
 
     Document::Ptr doc = DocumentFactory::instance()->load(url);
-    doc->startLoadingFullImage();
     doc->waitUntilLoaded();
     QCOMPARE(image, doc->image());
 
@@ -382,7 +375,6 @@ void DocumentTest::testLoadRotated()
     image = image.transformed(matrix);
 
     doc = DocumentFactory::instance()->load(url);
-    doc->startLoadingFullImage();
     doc->waitUntilLoaded();
     QCOMPARE(image, doc->image());
 }
@@ -474,7 +466,6 @@ void DocumentTest::testLosslessRotate()
 
     // Load it as a Gwenview document
     Document::Ptr doc = DocumentFactory::instance()->load(url1);
-    doc->startLoadingFullImage();
     doc->waitUntilLoaded();
 
     // Rotate one time
@@ -487,7 +478,6 @@ void DocumentTest::testLosslessRotate()
 
     // Load the saved image
     doc = DocumentFactory::instance()->load(url2);
-    doc->startLoadingFullImage();
     doc->waitUntilLoaded();
 
     // Rotate the other way
@@ -525,7 +515,6 @@ void DocumentTest::testModifyAndSaveAs()
     QSignalSpy modifiedDocumentListChangedSpy(factory, SIGNAL(modifiedDocumentListChanged()));
     QSignalSpy documentChangedSpy(factory, SIGNAL(documentChanged(QUrl)));
 
-    doc->startLoadingFullImage();
     doc->waitUntilLoaded();
     QVERIFY(!doc->isModified());
     QCOMPARE(modifiedDocumentListChangedSpy.count(), 0);
@@ -625,7 +614,6 @@ void DocumentTest::testForgetModifiedDocument()
 
     // Load it as a Gwenview document
     Document::Ptr doc = DocumentFactory::instance()->load(url);
-    doc->startLoadingFullImage();
     doc->waitUntilLoaded();
 
     // Modify it
@@ -655,7 +643,6 @@ void DocumentTest::testModifiedAndSavedSignals()
     Document::Ptr doc = DocumentFactory::instance()->load(url);
     QSignalSpy modifiedSpy(doc.data(), SIGNAL(modified(QUrl)));
     QSignalSpy savedSpy(doc.data(), SIGNAL(saved(QUrl,QUrl)));
-    doc->startLoadingFullImage();
     doc->waitUntilLoaded();
 
     QCOMPARE(modifiedSpy.count(), 0);

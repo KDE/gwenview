@@ -130,7 +130,6 @@ struct ImageOpsContextManagerItem::Private
     {
         QUrl url = q->contextManager()->currentUrl();
         Document::Ptr doc = DocumentFactory::instance()->load(url);
-        doc->startLoadingFullImage();
         doc->waitUntilLoaded();
         if (doc->isEditable()) {
             return true;
