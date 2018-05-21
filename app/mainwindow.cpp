@@ -456,6 +456,7 @@ struct MainWindow::Private
         action->setIcon(QIcon::fromTheme("go-home"));
         action->setText(i18nc("@action", "Start Page"));
         action->setToolTip(i18nc("@info:tooltip", "Open the start page"));
+        actionCollection->setDefaultShortcuts(action, KStandardShortcut::home());
 
         mToggleSideBarAction = view->add<KToggleAction>("toggle_sidebar");
         connect(mToggleSideBarAction, &KToggleAction::triggered, q, &MainWindow::toggleSideBar);
