@@ -26,6 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QAction>
 #include <QApplication>
 #include <QClipboard>
+#include <QFileInfo>
 #include <QListView>
 #include <QMenu>
 #include <QMimeData>
@@ -93,22 +94,41 @@ QMimeData* FileOpsContextManagerItem::selectionMimeData()
     KFileItemList list = contextManager()->selectedFileItemList();
     const bool viewModeActive = !mThumbnailView->isVisible();
 
+    // Return the URL and/or the (possibly edited but unsaved) image data of
+    // - the current image in View/Compare mode
+    // - a single selected image in Browse mode
+    // Otherwise, return a list of URLs for multiple selected images in Browse mode
     if (viewModeActive || list.count() == 1) {
-        // Copy the url and (possibly edited but unsaved) content of
-        // - the current image in View/Compare Mode
-        // - a single selected image in Browse Mode
         const QUrl url = viewModeActive ? contextManager()->currentUrl() : list.first().url();
-        mimeData->setUrls({url});
         const MimeTypeUtils::Kind mimeKind = MimeTypeUtils::urlKind(url);
+        bool documentIsModified = false;
+
         if (mimeKind == MimeTypeUtils::KIND_RASTER_IMAGE || mimeKind == MimeTypeUtils::KIND_SVG_IMAGE) {
             const Document::Ptr doc = DocumentFactory::instance()->load(url);
             doc->waitUntilLoaded();
+            documentIsModified = doc->isModified();
+
+            QString suggestedFileName;
+
             if (mimeKind == MimeTypeUtils::KIND_RASTER_IMAGE) {
                 mimeData->setImageData(doc->image());
+
+                // Set the filename extension to PNG, as it is the first
+                // entry in the combobox when pasting to Dolphin
+                suggestedFileName = QFileInfo(url.fileName()).completeBaseName() + QStringLiteral(".png");
             } else {
                 mimeData->setData(MimeTypeUtils::urlMimeType(url), doc->rawData());
+                suggestedFileName = url.fileName();
             }
-            mimeData->setData(QStringLiteral("application/x-kde-suggestedfilename"), QFile::encodeName(url.fileName()));
+
+            mimeData->setData(QStringLiteral("application/x-kde-suggestedfilename"),
+                              QFile::encodeName(suggestedFileName));
+        }
+
+        // Don't set the URL to support pasting edited images to
+        // applications preferring the URL otherwise, e.g. Dolphin
+        if (!documentIsModified) {
+            mimeData->setUrls({url});
         }
     } else {
         mimeData->setUrls(list.urlList());
