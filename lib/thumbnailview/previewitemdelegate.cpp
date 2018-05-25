@@ -599,6 +599,9 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
             SLOT(slotRowsChanged()));
     connect(view, SIGNAL(rowsInsertedSignal(QModelIndex,int,int)),
             SLOT(slotRowsChanged()));
+    connect(view, &ThumbnailView::selectionChangedSignal, [this]() {
+        d->updateToggleSelectionButton();
+    });
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
     d->mRatingPainter.setAlignment(Qt::AlignHCenter | Qt::AlignBottom);
@@ -883,7 +886,6 @@ void PreviewItemDelegate::slotFullScreenClicked()
 void PreviewItemDelegate::slotToggleSelectionClicked()
 {
     d->mView->selectionModel()->select(d->mIndexUnderCursor, QItemSelectionModel::Toggle);
-    d->updateToggleSelectionButton();
 }
 
 PreviewItemDelegate::ThumbnailDetails PreviewItemDelegate::thumbnailDetails() const
