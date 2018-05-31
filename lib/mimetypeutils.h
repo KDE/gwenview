@@ -27,8 +27,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 class QStringList;
 
 class KFileItem;
+class KFileItemList;
 class QUrl;
 class QString;
+class QMimeData;
+
 namespace Gwenview
 {
 
@@ -55,6 +58,13 @@ Q_DECLARE_FLAGS(Kinds, Kind)
 GWENVIEWLIB_EXPORT Kind fileItemKind(const KFileItem&);
 GWENVIEWLIB_EXPORT Kind urlKind(const QUrl&);
 GWENVIEWLIB_EXPORT Kind mimeTypeKind(const QString& mimeType);
+
+/**
+ * Returns the image data (and also the URL, unless the image
+ * is edited/unsaved) if there is a single image selected.
+ * Otherwise, returns a list of URLs for all selected images.
+ */
+GWENVIEWLIB_EXPORT QMimeData* selectionMimeData(const KFileItemList& selectedFiles);
 
 } // namespace MimeTypeUtils
 

@@ -26,10 +26,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QAction>
 #include <QApplication>
 #include <QClipboard>
-#include <QFileInfo>
 #include <QListView>
 #include <QMenu>
-#include <QMimeData>
 #include <QShortcut>
 
 // KDE
@@ -55,9 +53,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // Local
 #include <lib/contextmanager.h>
-#include <lib/document/documentfactory.h>
 #include <lib/eventwatcher.h>
 #include <lib/gvdebug.h>
+#include <lib/mimetypeutils.h>
 #include "fileoperations.h"
 #include "sidebar.h"
 
@@ -90,51 +88,16 @@ void FileOpsContextManagerItem::updateServiceList()
 
 QMimeData* FileOpsContextManagerItem::selectionMimeData()
 {
-    QMimeData* mimeData = new QMimeData;
-    KFileItemList list = contextManager()->selectedFileItemList();
-    const bool viewModeActive = !mThumbnailView->isVisible();
+    KFileItemList selectedFiles;
 
-    // Return the URL and/or the (possibly edited but unsaved) image data of
-    // - the current image in View/Compare mode
-    // - a single selected image in Browse mode
-    // Otherwise, return a list of URLs for multiple selected images in Browse mode
-    if (viewModeActive || list.count() == 1) {
-        const QUrl url = viewModeActive ? contextManager()->currentUrl() : list.first().url();
-        const MimeTypeUtils::Kind mimeKind = MimeTypeUtils::urlKind(url);
-        bool documentIsModified = false;
-
-        if (mimeKind == MimeTypeUtils::KIND_RASTER_IMAGE || mimeKind == MimeTypeUtils::KIND_SVG_IMAGE) {
-            const Document::Ptr doc = DocumentFactory::instance()->load(url);
-            doc->waitUntilLoaded();
-            documentIsModified = doc->isModified();
-
-            QString suggestedFileName;
-
-            if (mimeKind == MimeTypeUtils::KIND_RASTER_IMAGE) {
-                mimeData->setImageData(doc->image());
-
-                // Set the filename extension to PNG, as it is the first
-                // entry in the combobox when pasting to Dolphin
-                suggestedFileName = QFileInfo(url.fileName()).completeBaseName() + QStringLiteral(".png");
-            } else {
-                mimeData->setData(MimeTypeUtils::urlMimeType(url), doc->rawData());
-                suggestedFileName = url.fileName();
-            }
-
-            mimeData->setData(QStringLiteral("application/x-kde-suggestedfilename"),
-                              QFile::encodeName(suggestedFileName));
-        }
-
-        // Don't set the URL to support pasting edited images to
-        // applications preferring the URL otherwise, e.g. Dolphin
-        if (!documentIsModified) {
-            mimeData->setUrls({url});
-        }
+    // In Compare mode, restrict the returned mimedata to the focused image
+    if (!mThumbnailView->isVisible()) {
+        selectedFiles << KFileItem(contextManager()->currentUrl());
     } else {
-        mimeData->setUrls(list.urlList());
+        selectedFiles = contextManager()->selectedFileItemList();
     }
 
-    return mimeData;
+    return MimeTypeUtils::selectionMimeData(selectedFiles);
 }
 
 QUrl FileOpsContextManagerItem::pasteTargetUrl() const

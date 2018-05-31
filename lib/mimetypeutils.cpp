@@ -25,7 +25,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QApplication>
 #include <QStringList>
 #include <QDebug>
+#include <QFileInfo>
 #include <QUrl>
+#include <QMimeData>
 #include <QMimeDatabase>
 #include <QImageReader>
 
@@ -36,6 +38,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Local
 #include <archiveutils.h>
+#include <lib/document/documentfactory.h>
 #include <gvdebug.h>
 
 namespace Gwenview
@@ -160,6 +163,49 @@ Kind fileItemKind(const KFileItem& item)
 Kind urlKind(const QUrl &url)
 {
     return mimeTypeKind(urlMimeType(url));
+}
+
+QMimeData* selectionMimeData(const KFileItemList& selectedFiles)
+{
+    QMimeData* mimeData = new QMimeData;
+
+    if (selectedFiles.count() == 1) {
+        const QUrl url = selectedFiles.first().url();
+        const MimeTypeUtils::Kind mimeKind = MimeTypeUtils::urlKind(url);
+        bool documentIsModified = false;
+
+        if (mimeKind == MimeTypeUtils::KIND_RASTER_IMAGE || mimeKind == MimeTypeUtils::KIND_SVG_IMAGE) {
+            const Document::Ptr doc = DocumentFactory::instance()->load(url);
+            doc->waitUntilLoaded();
+            documentIsModified = doc->isModified();
+
+            QString suggestedFileName;
+
+            if (mimeKind == MimeTypeUtils::KIND_RASTER_IMAGE) {
+                mimeData->setImageData(doc->image());
+
+                // Set the filename extension to PNG, as it is the first
+                // entry in the combobox when pasting to Dolphin
+                suggestedFileName = QFileInfo(url.fileName()).completeBaseName() + QStringLiteral(".png");
+            } else {
+                mimeData->setData(MimeTypeUtils::urlMimeType(url), doc->rawData());
+                suggestedFileName = url.fileName();
+            }
+
+            mimeData->setData(QStringLiteral("application/x-kde-suggestedfilename"),
+                              QFile::encodeName(suggestedFileName));
+        }
+
+        // Don't set the URL to support pasting edited images to
+        // applications preferring the URL otherwise, e.g. Dolphin
+        if (!documentIsModified) {
+            mimeData->setUrls({url});
+        }
+    } else {
+        mimeData->setUrls(selectedFiles.urlList());
+    }
+
+    return mimeData;
 }
 
 DataAccumulator::DataAccumulator(KIO::TransferJob* job)
