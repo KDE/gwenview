@@ -680,12 +680,18 @@ bool ThumbnailView::isBusy(const QModelIndex& index) const
 
 void ThumbnailView::startDrag(Qt::DropActions supportedActions)
 {
-    QModelIndexList indexes = selectionModel()->selectedIndexes();
+    const QModelIndexList indexes = selectionModel()->selectedIndexes();
     if (indexes.isEmpty()) {
         return;
     }
+
+    KFileItemList selectedFiles;
+    for (const auto index : indexes) {
+        selectedFiles << fileItemForIndex(index);
+    }
+
     QDrag* drag = new QDrag(this);
-    drag->setMimeData(model()->mimeData(indexes));
+    drag->setMimeData(MimeTypeUtils::selectionMimeData(selectedFiles));
     d->initDragPixmap(drag, indexes);
     drag->exec(supportedActions, Qt::CopyAction);
 }
