@@ -344,10 +344,11 @@ void KIPIInterface::loadOnePlugin()
         if (KIO::DesktopExecParser::hasSchemeHandler(QUrl(KIPI_PLUGINS_URL))) {
             d->mPluginMenu->addAction(d->mInstallPluginAction);
             d->mInstallPluginAction->setEnabled(true);
-            QObject::connect(d->mInstallPluginAction, &QAction::triggered,
-                            this, [=](){QDesktopServices::openUrl(QUrl(KIPI_PLUGINS_URL));});
-            d->mPluginWatcher.addPaths(QCoreApplication::libraryPaths());
-            connect(&d->mPluginWatcher, &QFileSystemWatcher::directoryChanged, this, &KIPIInterface::packageFinished);
+            QObject::connect(d->mInstallPluginAction, &QAction::triggered, this, [&](){
+                QDesktopServices::openUrl(QUrl(KIPI_PLUGINS_URL));
+                d->mPluginWatcher.addPaths(QCoreApplication::libraryPaths());
+                connect(&d->mPluginWatcher, &QFileSystemWatcher::directoryChanged, this, &KIPIInterface::packageFinished);
+            });
         } else {
             d->mPluginMenu->addAction(d->mNoPluginAction);
         }
