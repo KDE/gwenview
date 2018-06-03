@@ -104,11 +104,11 @@ void KIPIExportAction::init()
         }
         // We are done, don't come back next time menu is shown
         disconnect(menu(), SIGNAL(aboutToShow()), this, SLOT(init()));
+        d->updateMenu();
     } else {
         // Loading is in progress, come back when it is done
         connect(d->mKIPIInterface, &KIPIInterface::loadingFinished, this, &KIPIExportAction::init);
     }
-    d->updateMenu();
 }
 
 void KIPIExportAction::setDefaultAction(QAction* action)
