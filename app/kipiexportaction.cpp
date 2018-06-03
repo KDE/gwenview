@@ -101,8 +101,8 @@ void KIPIExportAction::init()
         }
         // We are done, don't come back next time menu is shown
         disconnect(menu(), SIGNAL(aboutToShow()), this, SLOT(init()));
+        d->updateMenu();
     }
-    d->updateMenu();
 }
 
 void KIPIExportAction::setDefaultAction(QAction* action)
