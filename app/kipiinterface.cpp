@@ -374,7 +374,11 @@ QList<QAction*> KIPIInterface::pluginActions(KIPI::Category category) const
     if (isLoadingFinished()) {
         QList<QAction*> list = d->mMenuInfoMap.value(category).mActions;
         if (list.isEmpty()) {
-            list << d->mNoPluginAction;
+            if (KIO::DesktopExecParser::hasSchemeHandler(QUrl(KIPI_PLUGINS_URL))) {
+                list << d->mInstallPluginAction;
+            } else {
+                list << d->mNoPluginAction;
+            }
         }
         return list;
     } else {
