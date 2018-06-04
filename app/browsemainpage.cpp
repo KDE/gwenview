@@ -77,7 +77,8 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
     KFileItemList* mSelectedMediaItems;
     KActionCollection* mActionCollection;
     FilterController* mFilterController;
-    KSelectAction* mSortAction;
+    QActionGroup* mSortAction;
+    KToggleAction* mSortDescendingAction;
     QActionGroup* mThumbnailDetailsActionGroup;
     PreviewItemDelegate* mDelegate;
 
@@ -146,16 +147,32 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
         action->setText(i18nc("@action:inmenu Navigation Bar", "Edit Location"));
         actionCollection->setDefaultShortcut(action, Qt::Key_F6);
 
-        mSortAction = view->add<KSelectAction>("sort_order");
-        mSortAction->setText(i18nc("@action:inmenu", "Sort By"));
-        action = mSortAction->addAction(i18nc("@addAction:inmenu", "Name"));
+        KActionMenu* sortActionMenu = view->add<KActionMenu>("sort_by");
+        sortActionMenu->setText(i18nc("@action:inmenu", "Sort By"));
+        
+        mSortAction = new QActionGroup(actionCollection);
+        action = new QAction(i18nc("@addAction:inmenu", "Name"), mSortAction);
+        action->setCheckable(true);
         action->setData(QVariant(Sorting::Name));
-        action = mSortAction->addAction(i18nc("@addAction:inmenu", "Date"));
+        action = new QAction(i18nc("@addAction:inmenu", "Date"), mSortAction);
+        action->setCheckable(true);
         action->setData(QVariant(Sorting::Date));
-        action = mSortAction->addAction(i18nc("@addAction:inmenu", "Size"));
+        action = new QAction(i18nc("@addAction:inmenu", "Size"), mSortAction);
+        action->setCheckable(true);
         action->setData(QVariant(Sorting::Size));
         QObject::connect(mSortAction, SIGNAL(triggered(QAction*)),
                          q, SLOT(updateSortOrder()));
+                
+        mSortDescendingAction = view->add<KToggleAction>("sort_desc");
+        mSortDescendingAction->setText(i18nc("@action:inmenu Sort", "Descending"));
+        QObject::connect(mSortDescendingAction, SIGNAL(toggled(bool)),
+                         q, SLOT(updateSortOrder()));
+        
+        for(auto action : mSortAction->actions()) {
+            sortActionMenu->addAction(action);
+        }
+        sortActionMenu->addSeparator();
+        sortActionMenu->addAction(mSortDescendingAction);
 
         mThumbnailDetailsActionGroup = new QActionGroup(q);
         mThumbnailDetailsActionGroup->setExclusive(false);
@@ -337,11 +354,12 @@ void BrowseMainPage::loadConfig()
 
     Q_FOREACH(QAction * action, d->mSortAction->actions()) {
         if (sortingFromSortAction(action) == GwenviewConfig::sorting()) {
-            d->mSortAction->setCurrentAction(action);
+            action->setChecked(true);
             break;
         }
     }
-
+    d->mSortDescendingAction->setChecked(GwenviewConfig::sortDescending());
+    
     d->updateContextBarActions();
 }
 
@@ -350,7 +368,8 @@ void BrowseMainPage::saveConfig() const
     GwenviewConfig::setUrlNavigatorIsEditable(d->mUrlNavigator->isUrlEditable());
     GwenviewConfig::setUrlNavigatorShowFullPath(d->mUrlNavigator->showFullPath());
     GwenviewConfig::setThumbnailSize(d->mThumbnailSlider->value());
-    GwenviewConfig::setSorting(sortingFromSortAction(d->mSortAction->currentAction()));
+    GwenviewConfig::setSorting(sortingFromSortAction(d->mSortAction->checkedAction()));
+    GwenviewConfig::setSortDescending(d->mSortDescendingAction->isChecked());
     GwenviewConfig::setThumbnailDetails(d->mDelegate->thumbnailDetails());
 }
 
@@ -442,11 +461,13 @@ void BrowseMainPage::slotSelectionChanged(const QItemSelection& selected, const 
 
 void BrowseMainPage::updateSortOrder()
 {
-    const QAction* action = d->mSortAction->currentAction();
+    const QAction* action = d->mSortAction->checkedAction();
     GV_RETURN_IF_FAIL(action);
+    
+    const Qt::SortOrder order = d->mSortDescendingAction->isChecked() ? Qt::DescendingOrder : Qt::AscendingOrder;
 
     // This works because for now Sorting::Enum maps to KDirModel::ModelColumns
-    d->mDirModel->sort(sortingFromSortAction(action));
+    d->mDirModel->sort(sortingFromSortAction(action), order);
 }
 
 void BrowseMainPage::updateThumbnailDetails()

@@ -265,7 +265,7 @@ bool SortedDirModel::lessThan(const QModelIndex& left, const QModelIndex& right)
     const bool rightIsDirOrArchive = ArchiveUtils::fileItemIsDirOrArchive(rightItem);
 
     if (leftIsDirOrArchive != rightIsDirOrArchive) {
-        return leftIsDirOrArchive;
+        return sortOrder() == Qt::AscendingOrder ? leftIsDirOrArchive : rightIsDirOrArchive;
     }
 
     if (sortColumn() != KDirModel::ModifiedTime) {

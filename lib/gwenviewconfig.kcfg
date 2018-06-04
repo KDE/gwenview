@@ -217,6 +217,10 @@
             </choices>
             <default>Sorting::Name</default>
         </entry>
+        
+        <entry name="SortDescending" type="Bool">
+            <default>false</default>
+        </entry>
 
         <entry name="ThumbnailDetails" type="Int">
             <default>1</default>
