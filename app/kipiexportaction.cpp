@@ -101,8 +101,11 @@ void KIPIExportAction::init()
         }
         // We are done, don't come back next time menu is shown
         disconnect(menu(), SIGNAL(aboutToShow()), this, SLOT(init()));
+        // TODO: Temporary fix for the 'Share' menu not showing when updated
+        // the second time. See Bug 395034 and D13312
         d->updateMenu();
     }
+    d->updateMenu();
 }
 
 void KIPIExportAction::setDefaultAction(QAction* action)
