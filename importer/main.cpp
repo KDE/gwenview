@@ -54,8 +54,6 @@ int main(int argc, char *argv[])
     QCommandLineParser parser;
     aboutData.data()->setupCommandLine(&parser);
     parser.addOption(QCommandLineOption(QStringLiteral("udi"), i18n("The device UDI, used to retrieve information about the device (name, icon...)"), i18n("Device UDI")));
-    parser.addHelpOption();
-    parser.addVersionOption();
     parser.addPositionalArgument("folder", i18n("Source folder"));
     parser.process(app);
     aboutData.data()->processCommandLine(&parser);
