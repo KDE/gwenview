@@ -34,8 +34,6 @@ namespace Sorting
 {
 /**
  * This enum represents the different sorting orders.
- * For now it maps with KDirModel::ModelColumns, but in the future it may
- * be possible to add custom sort orders like Rating.
  */
 enum Enum {
     Name,

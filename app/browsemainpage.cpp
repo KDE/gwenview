@@ -38,6 +38,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KUrlNavigator>
 #include <KUrlMimeData>
 #include <KFormat>
+#include <KDirModel>
 
 // Local
 #include <filtercontroller.h>
@@ -465,9 +466,27 @@ void BrowseMainPage::updateSortOrder()
     GV_RETURN_IF_FAIL(action);
     
     const Qt::SortOrder order = d->mSortDescendingAction->isChecked() ? Qt::DescendingOrder : Qt::AscendingOrder;
+    KDirModel::ModelColumns column;
+    int sortRole;
 
-    // This works because for now Sorting::Enum maps to KDirModel::ModelColumns
-    d->mDirModel->sort(sortingFromSortAction(action), order);
+    // Map Sorting::Enum to model columns and sorting roles
+    switch (sortingFromSortAction(action)) {
+    case Sorting::Name:
+        column = KDirModel::Name;
+        sortRole = Qt::DisplayRole;
+        break;
+    case Sorting::Size:
+        column = KDirModel::Size;
+        sortRole = Qt::DisplayRole;
+        break;
+    case Sorting::Date:
+        column = KDirModel::ModifiedTime;
+        sortRole = Qt::DisplayRole;
+        break;
+    }
+
+    d->mDirModel->setSortRole(sortRole);
+    d->mDirModel->sort(column, order);
 }
 
 void BrowseMainPage::updateThumbnailDetails()
