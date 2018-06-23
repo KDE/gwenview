@@ -596,4 +596,10 @@ void AbstractImageView::applyPendingScrollPos()
     d->adjustScrollPos();
 }
 
+void AbstractImageView::resetDragCursor()
+{
+    d->mLastDragPos = QPointF();
+    updateCursor();
+}
+
 } // namespace

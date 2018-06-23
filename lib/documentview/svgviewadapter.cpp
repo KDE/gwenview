@@ -261,4 +261,9 @@ QRectF SvgViewAdapter::visibleDocumentRect() const
     return QRectF(d->mView->imageOffset(), d->mView->visibleImageSize());
 }
 
+AbstractImageView* SvgViewAdapter::imageView() const
+{
+    return d->mView;
+}
+
 } // namespace

@@ -228,6 +228,9 @@ private Q_SLOTS:
 
     void slotFadeInFinished();
 
+    void dragThumbnailLoaded(const KFileItem&, const QPixmap&);
+    void dragThumbnailLoadingFailed(const KFileItem&);
+
 private:
     friend struct DocumentViewPrivate;
     DocumentViewPrivate* const d;

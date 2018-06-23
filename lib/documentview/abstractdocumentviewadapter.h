@@ -39,7 +39,7 @@ class QRectF;
 namespace Gwenview
 {
 
-class ImageView;
+class AbstractImageView;
 class RasterImageView;
 
 /**
@@ -60,7 +60,7 @@ public:
 
     virtual MimeTypeUtils::Kind kind() const = 0;
 
-    virtual ImageView* imageView() const
+    virtual AbstractImageView* imageView() const
     {
         return 0;
     }

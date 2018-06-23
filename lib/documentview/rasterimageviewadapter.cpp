@@ -147,6 +147,11 @@ RasterImageView* RasterImageViewAdapter::rasterImageView() const
     return d->mView;
 }
 
+AbstractImageView* RasterImageViewAdapter::imageView() const
+{
+    return d->mView;
+}
+
 QPointF RasterImageViewAdapter::scrollPos() const
 {
     return d->mView->scrollPos();

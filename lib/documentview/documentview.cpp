@@ -38,10 +38,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QDebug>
 #include <QIcon>
 #include <QUrl>
+#include <QDrag>
 #include <QMimeData>
+#include <QStyleHints>
 
 // KDE
 #include <KLocalizedString>
+#include <KFileItem>
 
 // Local
 #include <lib/document/document.h>
@@ -62,6 +65,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/mimetypeutils.h>
 #include <lib/signalblocker.h>
 #include <lib/urlutils.h>
+#include <lib/thumbnailview/dragpixmapgenerator.h>
+#include <lib/thumbnailprovider/thumbnailprovider.h>
 
 namespace Gwenview
 {
@@ -104,6 +109,10 @@ struct DocumentViewPrivate
     bool mCurrent;
     bool mCompareMode;
     int controlWheelAccumulatedDelta;
+
+    QPointF mDragStartPosition;
+    QPointer<ThumbnailProvider> mDragThumbnailProvider;
+    QPointer<QDrag> mDrag;
 
     void setCurrentAdapter(AbstractDocumentViewAdapter* adapter)
     {
@@ -338,6 +347,75 @@ struct DocumentViewPrivate
         q->isAnimatedChanged();
         anim->start(QAbstractAnimation::DeleteWhenStopped);
     }
+
+    bool canPan() const
+    {
+        if (!q->canZoom()) {
+            return false;
+        }
+
+        const QSize zoomedImageSize = mDocument->size() * q->zoom();
+        const QSize viewPortSize = q->boundingRect().size().toSize();
+        const bool imageWiderThanViewport = zoomedImageSize.width() > viewPortSize.width();
+        const bool imageTallerThanViewport = zoomedImageSize.height() > viewPortSize.height();
+        return (imageWiderThanViewport || imageTallerThanViewport);
+    }
+
+    void setDragPixmap(const QPixmap& pix)
+    {
+        if (mDrag) {
+            DragPixmapGenerator::DragPixmap dragPixmap = DragPixmapGenerator::generate({pix}, 1);
+            mDrag->setPixmap(dragPixmap.pix);
+            mDrag->setHotSpot(dragPixmap.hotSpot);
+        }
+    }
+
+    void executeDrag()
+    {
+        if (mDrag) {
+            mDrag->exec();
+            if (mAdapter->imageView()) {
+                mAdapter->imageView()->resetDragCursor();
+            }
+        }
+    }
+
+    void initDragThumbnailProvider() {
+        mDragThumbnailProvider = new ThumbnailProvider();
+        QObject::connect(mDragThumbnailProvider, &ThumbnailProvider::thumbnailLoaded,
+                         q, &DocumentView::dragThumbnailLoaded);
+        QObject::connect(mDragThumbnailProvider, &ThumbnailProvider::thumbnailLoadingFailed,
+                         q, &DocumentView::dragThumbnailLoadingFailed);
+    }
+
+    void startDragIfSensible()
+    {
+        if (q->document()->loadingState() == Document::LoadingFailed) {
+            return;
+        }
+
+        if (q->currentTool()) {
+            return;
+        }
+
+        if (mDrag) {
+            mDrag->deleteLater();
+        }
+        mDrag = new QDrag(q);
+        const auto itemList = KFileItemList({q->document()->url()});
+        mDrag->setMimeData(MimeTypeUtils::selectionMimeData(itemList));
+
+        if (q->document()->isModified()) {
+            setDragPixmap(QPixmap::fromImage(q->document()->image()));
+            executeDrag();
+        } else {
+            // Drag is triggered on success or failure of thumbnail generation
+            if (mDragThumbnailProvider.isNull()) {
+                initDragThumbnailProvider();
+            }
+            mDragThumbnailProvider->appendItems(itemList);
+        }
+    }
 };
 
 DocumentView::DocumentView(QGraphicsScene* scene)
@@ -353,6 +431,8 @@ DocumentView::DocumentView(QGraphicsScene* scene)
     d->mCurrent = false;
     d->mCompareMode = false;
     d->controlWheelAccumulatedDelta = 0;
+    d->mDragStartPosition = QPointF(0, 0);
+    d->mDrag = nullptr;
 
     // We use an opacity effect instead of using the opacity property directly, because the latter operates at
     // the painter level, which means if you draw multiple layers in paint(), all layers get the specified
@@ -373,6 +453,8 @@ DocumentView::DocumentView(QGraphicsScene* scene)
 
 DocumentView::~DocumentView()
 {
+    delete d->mDragThumbnailProvider;
+    delete d->mDrag;
     delete d;
 }
 
@@ -796,10 +878,21 @@ bool DocumentView::isAnimated() const
 bool DocumentView::sceneEventFilter(QGraphicsItem*, QEvent* event)
 {
     if (event->type() == QEvent::GraphicsSceneMousePress) {
+        const QGraphicsSceneMouseEvent* mouseEvent = static_cast<QGraphicsSceneMouseEvent*>(event);
+        if (mouseEvent->button() == Qt::LeftButton) {
+            d->mDragStartPosition = mouseEvent->pos();
+        }
         QMetaObject::invokeMethod(this, "emitFocused", Qt::QueuedConnection);
     } else if (event->type() == QEvent::GraphicsSceneHoverMove) {
         if (d->mBirdEyeView) {
             d->mBirdEyeView->onMouseMoved();
+        }
+    } else if (event->type() == QEvent::GraphicsSceneMouseMove) {
+        const QGraphicsSceneMouseEvent* mouseEvent = static_cast<QGraphicsSceneMouseEvent*>(event);
+        const qreal dragDistance = (mouseEvent->pos() - d->mDragStartPosition).manhattanLength();
+        const qreal minDistanceToStartDrag = QGuiApplication::styleHints()->startDragDistance();
+        if (!d->canPan() && dragDistance >= minDistanceToStartDrag) {
+            d->startDragIfSensible();
         }
     }
     return false;
@@ -847,6 +940,19 @@ void DocumentView::dropEvent(QGraphicsSceneDragDropEvent* event)
     } else {
         emit openUrlRequested(url);
     }
+}
+
+void DocumentView::dragThumbnailLoaded(const KFileItem& item, const QPixmap& pix)
+{
+    d->setDragPixmap(pix);
+    d->executeDrag();
+    d->mDragThumbnailProvider->removeItems(KFileItemList({item}));
+}
+
+void DocumentView::dragThumbnailLoadingFailed(const KFileItem& item)
+{
+    d->executeDrag();
+    d->mDragThumbnailProvider->removeItems(KFileItemList({item}));
 }
 
 } // namespace

@@ -105,6 +105,8 @@ public:
 
     void applyPendingScrollPos();
 
+    void resetDragCursor();
+
 public Q_SLOTS:
     void updateCursor();
 

@@ -114,6 +114,8 @@ public:
 
     virtual QRectF visibleDocumentRect() const override;
 
+    virtual AbstractImageView* imageView() const override;
+
 private:
     SvgViewAdapterPrivate* const d;
 };
