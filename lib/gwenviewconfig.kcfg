@@ -214,6 +214,7 @@
                 <choice name="Sorting::Name"/>
                 <choice name="Sorting::Size"/>
                 <choice name="Sorting::Date"/>
+                <choice name="Sorting::Rating"/>
             </choices>
             <default>Sorting::Name</default>
         </entry>

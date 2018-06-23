@@ -38,7 +38,10 @@ namespace Sorting
 enum Enum {
     Name,
     Size,
-    Date
+    Date,
+#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
+    Rating
+#endif
 };
 
 } // namespace Sorting

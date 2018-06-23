@@ -56,6 +56,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/thumbnailview/thumbnailview.h>
 #include <ui_browsemainpage.h>
 #include <mimetypeutils.h>
+#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
+#include "lib/semanticinfo/semanticinfodirmodel.h"
+#endif
 
 namespace Gwenview
 {
@@ -161,6 +164,11 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
         action = new QAction(i18nc("@addAction:inmenu", "Size"), mSortAction);
         action->setCheckable(true);
         action->setData(QVariant(Sorting::Size));
+#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
+        action = new QAction(i18nc("@addAction:inmenu", "Rating"), mSortAction);
+        action->setCheckable(true);
+        action->setData(QVariant(Sorting::Rating));
+#endif
         QObject::connect(mSortAction, SIGNAL(triggered(QAction*)),
                          q, SLOT(updateSortOrder()));
                 
@@ -483,6 +491,12 @@ void BrowseMainPage::updateSortOrder()
         column = KDirModel::ModifiedTime;
         sortRole = Qt::DisplayRole;
         break;
+#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
+    case Sorting::Rating:
+        column = KDirModel::Name;
+        sortRole = SemanticInfoDirModel::RatingRole;
+        break;
+#endif
     }
 
     d->mDirModel->setSortRole(sortRole);
