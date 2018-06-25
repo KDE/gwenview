@@ -273,7 +273,9 @@ bool SortedDirModel::lessThan(const QModelIndex& left, const QModelIndex& right)
         const QDateTime leftDate = TimeUtils::dateTimeForFileItem(leftItem);
         const QDateTime rightDate = TimeUtils::dateTimeForFileItem(rightItem);
 
-        return leftDate < rightDate;
+        if (leftDate != rightDate) {
+            return leftDate < rightDate;
+        }
     }
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
     if (sortRole() == SemanticInfoDirModel::RatingRole) {
