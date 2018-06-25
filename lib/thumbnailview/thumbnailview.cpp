@@ -678,7 +678,7 @@ bool ThumbnailView::isBusy(const QModelIndex& index) const
     return d->mDocumentInfoProvider->isBusy(url);
 }
 
-void ThumbnailView::startDrag(Qt::DropActions supportedActions)
+void ThumbnailView::startDrag(Qt::DropActions)
 {
     const QModelIndexList indexes = selectionModel()->selectedIndexes();
     if (indexes.isEmpty()) {
@@ -693,7 +693,7 @@ void ThumbnailView::startDrag(Qt::DropActions supportedActions)
     QDrag* drag = new QDrag(this);
     drag->setMimeData(MimeTypeUtils::selectionMimeData(selectedFiles));
     d->initDragPixmap(drag, indexes);
-    drag->exec(supportedActions, Qt::CopyAction);
+    drag->exec(Qt::MoveAction | Qt::CopyAction | Qt::LinkAction, Qt::CopyAction);
 }
 
 void ThumbnailView::dragEnterEvent(QDragEnterEvent* event)

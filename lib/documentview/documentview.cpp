@@ -374,7 +374,7 @@ struct DocumentViewPrivate
     void executeDrag()
     {
         if (mDrag) {
-            mDrag->exec();
+            mDrag->exec(Qt::MoveAction | Qt::CopyAction | Qt::LinkAction, Qt::CopyAction);
             if (mAdapter->imageView()) {
                 mAdapter->imageView()->resetDragCursor();
             }
