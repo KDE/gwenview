@@ -269,24 +269,28 @@ bool SortedDirModel::lessThan(const QModelIndex& left, const QModelIndex& right)
         return sortOrder() == Qt::AscendingOrder ? leftIsDirOrArchive : rightIsDirOrArchive;
     }
 
-    if (sortColumn() == KDirModel::ModifiedTime) {
-        const QDateTime leftDate = TimeUtils::dateTimeForFileItem(leftItem);
-        const QDateTime rightDate = TimeUtils::dateTimeForFileItem(rightItem);
+    // Apply special sort handling only to images. For folders/archives or when
+    // a secondary criterion is needed, delegate sorting to the parent class.
+    if (!leftIsDirOrArchive) {
+        if (sortColumn() == KDirModel::ModifiedTime) {
+            const QDateTime leftDate = TimeUtils::dateTimeForFileItem(leftItem);
+            const QDateTime rightDate = TimeUtils::dateTimeForFileItem(rightItem);
 
-        if (leftDate != rightDate) {
-            return leftDate < rightDate;
+            if (leftDate != rightDate) {
+                return leftDate < rightDate;
+            }
         }
-    }
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-    if (sortRole() == SemanticInfoDirModel::RatingRole) {
-        const int leftRating = d->mSourceModel->data(left, SemanticInfoDirModel::RatingRole).toInt();
-        const int rightRating = d->mSourceModel->data(right, SemanticInfoDirModel::RatingRole).toInt();
+        if (sortRole() == SemanticInfoDirModel::RatingRole) {
+            const int leftRating = d->mSourceModel->data(left, SemanticInfoDirModel::RatingRole).toInt();
+            const int rightRating = d->mSourceModel->data(right, SemanticInfoDirModel::RatingRole).toInt();
 
-        if (leftRating != rightRating) {
-            return leftRating < rightRating;
+            if (leftRating != rightRating) {
+                return leftRating < rightRating;
+            }
         }
-    }
 #endif
+    }
 
     return KDirSortFilterProxyModel::lessThan(left, right);
 }
