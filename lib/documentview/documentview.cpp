@@ -45,6 +45,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KDE
 #include <KLocalizedString>
 #include <KFileItem>
+#include <KUrlMimeData>
 
 // Local
 #include <lib/document/document.h>
@@ -927,7 +928,14 @@ void DocumentView::setGraphicsEffectOpacity(qreal opacity)
 void DocumentView::dragEnterEvent(QGraphicsSceneDragDropEvent* event)
 {
     QGraphicsWidget::dragEnterEvent(event);
-    event->setAccepted(event->mimeData()->hasUrls());
+
+    const auto urls = KUrlMimeData::urlsFromMimeData(event->mimeData());
+    bool acceptDrag = !urls.isEmpty();
+    if (urls.size() == 1 && urls.first() == url()) {
+        // Do not allow dragging a single image onto itself
+        acceptDrag = false;
+    }
+    event->setAccepted(acceptDrag);
 }
 
 void DocumentView::dropEvent(QGraphicsSceneDragDropEvent* event)
