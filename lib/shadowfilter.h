@@ -51,7 +51,7 @@ public:
         BottomEdge
     };
     explicit ShadowFilter(QWidget* parent);
-    ~ShadowFilter();
+    ~ShadowFilter() Q_DECL_OVERRIDE;
 
     void setShadow(WidgetEdge edge, const QColor& color);
     void reset();

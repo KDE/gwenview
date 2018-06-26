@@ -52,7 +52,7 @@ class GWENVIEWLIB_EXPORT TransformImageOperation : public AbstractImageOperation
 {
 public:
     TransformImageOperation(Orientation);
-    ~TransformImageOperation();
+    ~TransformImageOperation() Q_DECL_OVERRIDE;
 
     void redo() Q_DECL_OVERRIDE;
     void undo() Q_DECL_OVERRIDE;

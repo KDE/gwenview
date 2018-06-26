@@ -43,8 +43,8 @@ class GWENVIEWLIB_EXPORT RecursiveDirModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    RecursiveDirModel(QObject* parent = 0);
-    ~RecursiveDirModel();
+    explicit RecursiveDirModel(QObject* parent = nullptr);
+    ~RecursiveDirModel() Q_DECL_OVERRIDE;
 
     QUrl url() const;
     void setUrl(const QUrl&);

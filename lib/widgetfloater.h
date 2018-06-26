@@ -44,8 +44,8 @@ class GWENVIEWLIB_EXPORT WidgetFloater : public QObject
 {
     Q_OBJECT
 public:
-    WidgetFloater(QWidget* parent);
-    ~WidgetFloater();
+    explicit WidgetFloater(QWidget* parent);
+    ~WidgetFloater() Q_DECL_OVERRIDE;
 
     void setChildWidget(QWidget*);
 

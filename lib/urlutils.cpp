@@ -73,10 +73,10 @@ bool urlIsDirectory(const QUrl &url)
 
     QWidgetList list = QApplication::topLevelWidgets();
     QWidget* parent;
-    if (list.count() > 0) {
+    if (!list.isEmpty()) {
         parent = list[0];
     } else {
-        parent = 0;
+        parent = nullptr;
     }
     KIO::StatJob *job = KIO::stat(url);
     KJobWidgets::setWindow(job, parent);
