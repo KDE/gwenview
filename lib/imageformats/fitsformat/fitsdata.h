@@ -38,7 +38,6 @@ typedef enum { FITS_NORMAL, FITS_FOCUS, FITS_GUIDE, FITS_CALIBRATE, FITS_ALIGN }
 #include <QRect>
 #include <QRectF>
 
-class QProgressDialog;
 
 class FITSData
 {
