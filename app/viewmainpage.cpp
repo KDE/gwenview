@@ -258,15 +258,15 @@ struct ViewMainPagePrivate
     void deleteDocumentView(DocumentView* view)
     {
         if (mDocumentViewController->view() == view) {
-            mDocumentViewController->setView(0);
+            mDocumentViewController->setView(nullptr);
         }
 
         // Make sure we do not get notified about this view while it is going away.
         // mDocumentViewController->deleteView() animates the view deletion so
         // the view still exists for a short while when we come back to the
         // event loop)
-        QObject::disconnect(view, 0, q, 0);
-        QObject::disconnect(view, 0, mSlideShow, 0);
+        QObject::disconnect(view, nullptr, q, nullptr);
+        QObject::disconnect(view, nullptr, mSlideShow, nullptr);
 
         mDocumentViews.removeOne(view);
         mActivityResources.remove(view);
@@ -406,7 +406,7 @@ ViewMainPage::ViewMainPage(QWidget* parent, SlideShow* slideShow, KActionCollect
 , d(new ViewMainPagePrivate)
 {
     d->q = this;
-    d->mDirModelToBarModelProxyMapper = 0; // Initialized later
+    d->mDirModelToBarModelProxyMapper = nullptr; // Initialized later
     d->mSlideShow = slideShow;
     d->mActionCollection = actionCollection;
     d->mGvCore = gvCore;
@@ -623,7 +623,7 @@ bool ViewMainPage::isEmpty() const
 RasterImageView* ViewMainPage::imageView() const
 {
     if (!d->currentView()) {
-        return 0;
+        return nullptr;
     }
     return d->currentView()->imageView();
 }
@@ -812,7 +812,7 @@ void ViewMainPage::trashView(DocumentView* view)
 
 void ViewMainPage::deselectView(DocumentView* view)
 {
-    DocumentView* newCurrentView = 0;
+    DocumentView* newCurrentView = nullptr;
     if (view == d->currentView()) {
         // We need to find a new view to set as current
         int idx = d->mDocumentViews.indexOf(view);

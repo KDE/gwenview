@@ -80,7 +80,7 @@ protected:
 class ExpandedTreeView : public QTreeView
 {
 public:
-    ExpandedTreeView(QWidget* parent)
+    explicit ExpandedTreeView(QWidget* parent)
         : QTreeView(parent)
         {}
 
@@ -149,7 +149,7 @@ void ImageMetaInfoDialog::setMetaInfo(ImageMetaInfoModel* model, const QStringLi
         connect(d->mModel.get(), SIGNAL(preferredMetaInfoKeyListChanged(QStringList)),
                 this, SIGNAL(preferredMetaInfoKeyListChanged(QStringList)));
     } else {
-        d->mModel.reset(0);
+        d->mModel.reset(nullptr);
     }
     d->mTreeView->setModel(d->mModel.get());
 

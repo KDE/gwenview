@@ -59,12 +59,12 @@ public:
 
     virtual DocumentJob* save(const QUrl&, const QByteArray& /*format*/)
     {
-        return 0;
+        return nullptr;
     }
 
     virtual AbstractDocumentEditor* editor()
     {
-        return 0;
+        return nullptr;
     }
 
     virtual QByteArray rawData() const
@@ -92,7 +92,7 @@ public:
 
     virtual QSvgRenderer* svgRenderer() const
     {
-        return 0;
+        return nullptr;
     }
 
 Q_SIGNALS:

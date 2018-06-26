@@ -38,10 +38,10 @@ class GWENVIEWLIB_EXPORT ResizeImageOperation : public AbstractImageOperation
 {
 public:
     ResizeImageOperation(const QSize& size);
-    ~ResizeImageOperation();
+    ~ResizeImageOperation() Q_DECL_OVERRIDE;
 
-    virtual void redo() Q_DECL_OVERRIDE;
-    virtual void undo() Q_DECL_OVERRIDE;
+    void redo() Q_DECL_OVERRIDE;
+    void undo() Q_DECL_OVERRIDE;
 
 private:
     ResizeImageOperationPrivate* const d;

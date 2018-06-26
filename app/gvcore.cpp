@@ -251,8 +251,8 @@ GvCore::GvCore(MainWindow* mainWindow, SortedDirModel* dirModel)
     d->q = this;
     d->mMainWindow = mainWindow;
     d->mDirModel = dirModel;
-    d->mRecentFoldersModel = 0;
-    d->mRecentFilesModel = 0;
+    d->mRecentFoldersModel = nullptr;
+    d->mRecentFilesModel = nullptr;
 
     d->setupPalettes();
 

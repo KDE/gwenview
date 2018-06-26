@@ -92,7 +92,7 @@ SideBarGroup::SideBarGroup(const QString& title, bool defaultContainerMarginEnab
 : QFrame()
 , d(new SideBarGroupPrivate)
 {
-    d->mContainer = 0;
+    d->mContainer = nullptr;
     d->mTitleLabel = new QLabel(this);
     d->mDefaultContainerMarginEnabled = defaultContainerMarginEnabled;
     d->mTitleLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);

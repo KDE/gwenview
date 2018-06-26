@@ -47,7 +47,7 @@ class GWENVIEWLIB_EXPORT GraphicsWidgetFloater : public QObject
     Q_OBJECT
 public:
     GraphicsWidgetFloater(QGraphicsWidget* parent);
-    ~GraphicsWidgetFloater();
+    ~GraphicsWidgetFloater() Q_DECL_OVERRIDE;
 
     void setChildWidget(QGraphicsWidget*);
 

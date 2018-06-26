@@ -41,8 +41,8 @@ class GWENVIEWLIB_EXPORT HudLabel : public QGraphicsWidget
 {
     Q_OBJECT
 public:
-    HudLabel(QGraphicsItem* parent = 0);
-    ~HudLabel();
+    explicit HudLabel(QGraphicsItem* parent = nullptr);
+    ~HudLabel() Q_DECL_OVERRIDE;
 
     void setText(const QString&);
 

@@ -56,7 +56,7 @@ public:
     static const int MaxViewCount;
 
     ViewMainPage(QWidget* parent, SlideShow*, KActionCollection*, GvCore*);
-    ~ViewMainPage();
+    ~ViewMainPage() Q_DECL_OVERRIDE;
 
     ThumbnailBarView* thumbnailBar() const;
 

@@ -39,16 +39,16 @@ class GWENVIEWLIB_EXPORT VideoViewAdapter : public AbstractDocumentViewAdapter
     Q_OBJECT
 public:
     VideoViewAdapter();
-    ~VideoViewAdapter();
+    ~VideoViewAdapter() Q_DECL_OVERRIDE;
 
-    virtual MimeTypeUtils::Kind kind() const Q_DECL_OVERRIDE
+    MimeTypeUtils::Kind kind() const Q_DECL_OVERRIDE
     {
         return MimeTypeUtils::KIND_VIDEO;
     }
 
-    virtual Document::Ptr document() const Q_DECL_OVERRIDE;
+    Document::Ptr document() const Q_DECL_OVERRIDE;
 
-    virtual void setDocument(Document::Ptr) Q_DECL_OVERRIDE;
+    void setDocument(Document::Ptr) Q_DECL_OVERRIDE;
 
 Q_SIGNALS:
     void videoFinished();

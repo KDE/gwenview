@@ -42,7 +42,7 @@ class GWENVIEWLIB_EXPORT TagWidget : public QWidget
 {
     Q_OBJECT
 public:
-    TagWidget(QWidget* parent = 0);
+    explicit TagWidget(QWidget* parent = nullptr);
     ~TagWidget();
     void setTagInfo(const TagInfo&);
     void setSemanticInfoBackEnd(AbstractSemanticInfoBackEnd*);

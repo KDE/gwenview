@@ -38,7 +38,7 @@ class ProgressPage : public QWidget
 {
     Q_OBJECT
 public:
-    ProgressPage(Importer*);
+    explicit ProgressPage(Importer*);
     ~ProgressPage();
 
 private:

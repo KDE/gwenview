@@ -151,7 +151,7 @@ Document::Document(const QUrl &url)
 , d(new DocumentPrivate)
 {
     d->q = this;
-    d->mImpl = 0;
+    d->mImpl = nullptr;
     d->mUrl = url;
     d->mKeepRawData = false;
 
@@ -162,7 +162,7 @@ Document::~Document()
 {
     // We do not want undo stack to emit signals, forcing us to emit signals
     // ourself while we are being destroyed.
-    disconnect(&d->mUndoStack, 0, this, 0);
+    disconnect(&d->mUndoStack, nullptr, this, nullptr);
 
     delete d->mImpl;
     delete d;
@@ -179,7 +179,7 @@ void Document::reload()
     d->mImageMetaInfoModel.setUrl(d->mUrl);
     d->mUndoStack.clear();
     d->mErrorString.clear();
-    d->mCmsProfile = 0;
+    d->mCmsProfile = nullptr;
 
     switchToImpl(new LoadingDocumentImpl(this));
 }
@@ -302,7 +302,7 @@ DocumentJob* Document::save(const QUrl &url, const QByteArray& format)
     if (!job) {
         qWarning() << "Implementation does not support saving!";
         setErrorString(i18nc("@info", "Gwenview cannot save this kind of documents."));
-        return 0;
+        return nullptr;
     }
     job->setProperty("oldUrl", d->mUrl);
     job->setProperty("newUrl", url);

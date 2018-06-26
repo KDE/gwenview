@@ -37,11 +37,11 @@ class VideoDocumentLoadedImpl : public AbstractDocumentImpl
     Q_OBJECT
 public:
     VideoDocumentLoadedImpl(Document*);
-    ~VideoDocumentLoadedImpl();
+    ~VideoDocumentLoadedImpl() Q_DECL_OVERRIDE;
 
-    virtual void init() Q_DECL_OVERRIDE;
+    void init() Q_DECL_OVERRIDE;
 
-    virtual Document::LoadingState loadingState() const Q_DECL_OVERRIDE;
+    Document::LoadingState loadingState() const Q_DECL_OVERRIDE;
 
     virtual void setImage(const QImage&);
 

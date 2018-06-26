@@ -51,7 +51,7 @@ class ThumbnailBarView;
 class FullScreenConfigWidget : public QWidget, public Ui_FullScreenConfigWidget
 {
 public:
-    FullScreenConfigWidget(QWidget* parent=0)
+    explicit FullScreenConfigWidget(QWidget* parent=nullptr)
     : QWidget(parent)
     {
         setupUi(this);

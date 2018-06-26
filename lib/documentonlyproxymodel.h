@@ -41,8 +41,8 @@ class GWENVIEWLIB_EXPORT DocumentOnlyProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 public:
-    DocumentOnlyProxyModel(QObject* parent = 0);
-    ~DocumentOnlyProxyModel();
+    explicit DocumentOnlyProxyModel(QObject* parent = nullptr);
+    ~DocumentOnlyProxyModel() Q_DECL_OVERRIDE;
 
 protected:
     bool filterAcceptsRow(int row, const QModelIndex& parent) const Q_DECL_OVERRIDE;

@@ -94,7 +94,7 @@ DocumentViewSynchronizer::~DocumentViewSynchronizer()
 void DocumentViewSynchronizer::setCurrentView(DocumentView* view)
 {
     if (d->mCurrentView) {
-        disconnect(d->mCurrentView.data(), 0, this, 0);
+        disconnect(d->mCurrentView.data(), nullptr, this, nullptr);
     }
     d->mCurrentView = view;
     d->updateOldPosition();

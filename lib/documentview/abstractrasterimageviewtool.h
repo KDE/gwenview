@@ -76,7 +76,7 @@ public:
 
     virtual QWidget* widget() const
     {
-        return 0;
+        return nullptr;
     }
 
 public Q_SLOTS:

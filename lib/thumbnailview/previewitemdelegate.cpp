@@ -195,7 +195,7 @@ struct PreviewItemDelegatePrivate
         mIndexUnderCursor = index;
         mView->update(oldIndex);
 
-        if (QApplication::style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick, 0, mView)) {
+        if (QApplication::style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick, nullptr, mView)) {
             mView->setCursor(mIndexUnderCursor.isValid() ? Qt::PointingHandCursor : Qt::ArrowCursor);
         }
 
@@ -501,8 +501,9 @@ struct PreviewItemDelegatePrivate
     {
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
         return qMax(mView->fontMetrics().ascent(), int(KIconLoader::SizeSmall));
-#endif
+#else
         return 0;
+#endif
     }
 
     int itemHeight() const

@@ -141,7 +141,7 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
 
     void setupSrcUrlWidgets()
     {
-        mSrcUrlModelProxyMapper = 0;
+        mSrcUrlModelProxyMapper = nullptr;
         QObject::connect(mSrcUrlButton, SIGNAL(clicked()), q, SLOT(setupSrcUrlTreeView()));
         QObject::connect(mSrcUrlButton, SIGNAL(clicked()), q, SLOT(toggleSrcUrlTreeView()));
         mSrcUrlTreeView->hide();

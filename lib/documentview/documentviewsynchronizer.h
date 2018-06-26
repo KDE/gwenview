@@ -46,7 +46,7 @@ class GWENVIEWLIB_EXPORT DocumentViewSynchronizer : public QObject
 public:
     // We pass a pointer to the view list because we don't want to maintain
     // a copy of the list itself
-    explicit DocumentViewSynchronizer(const QList<DocumentView*>* views, QObject* parent = 0);
+    explicit DocumentViewSynchronizer(const QList<DocumentView*>* views, QObject* parent = nullptr);
     ~DocumentViewSynchronizer();
 
     void setCurrentView(DocumentView* view);

@@ -40,17 +40,17 @@ class GWENVIEWLIB_EXPORT PlaceTreeModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:
-    PlaceTreeModel(QObject*);
-    ~PlaceTreeModel();
+    explicit PlaceTreeModel(QObject*);
+    ~PlaceTreeModel() Q_DECL_OVERRIDE;
 
-    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
-    virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
-    virtual QModelIndex parent(const QModelIndex& index) const Q_DECL_OVERRIDE;
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
-    virtual bool hasChildren(const QModelIndex& parent) const Q_DECL_OVERRIDE;
-    virtual bool canFetchMore(const QModelIndex& parent) const Q_DECL_OVERRIDE;
-    virtual void fetchMore(const QModelIndex& parent) Q_DECL_OVERRIDE;
+    int columnCount(const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
+    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
+    QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
+    QModelIndex parent(const QModelIndex& index) const Q_DECL_OVERRIDE;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
+    bool hasChildren(const QModelIndex& parent) const Q_DECL_OVERRIDE;
+    bool canFetchMore(const QModelIndex& parent) const Q_DECL_OVERRIDE;
+    void fetchMore(const QModelIndex& parent) Q_DECL_OVERRIDE;
 
     QUrl urlForIndex(const QModelIndex&) const;
 

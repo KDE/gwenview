@@ -72,7 +72,7 @@ class AbstractSemanticInfoBackEnd : public QObject
 {
     Q_OBJECT
 public:
-    AbstractSemanticInfoBackEnd(QObject* parent);
+    explicit AbstractSemanticInfoBackEnd(QObject* parent);
 
     virtual TagSet allTags() const = 0;
 

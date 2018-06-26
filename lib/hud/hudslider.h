@@ -41,8 +41,8 @@ class HudSlider : public QGraphicsWidget
 {
     Q_OBJECT
 public:
-    HudSlider(QGraphicsItem* parent = 0);
-    ~HudSlider();
+    explicit HudSlider(QGraphicsItem* parent = nullptr);
+    ~HudSlider() Q_DECL_OVERRIDE;
 
     void setRange(int min, int max);
     void setPageStep(int step);

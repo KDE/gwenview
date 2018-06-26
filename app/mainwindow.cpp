@@ -537,7 +537,7 @@ struct MainWindow::Private
         InfoContextManagerItem* infoItem = new InfoContextManagerItem(mContextManager);
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-        SemanticInfoContextManagerItem* semanticInfoItem = 0;
+        SemanticInfoContextManagerItem* semanticInfoItem = nullptr;
         semanticInfoItem = new SemanticInfoContextManagerItem(mContextManager, actionCollection, mViewMainPage);
 #endif
 
@@ -840,9 +840,9 @@ MainWindow::MainWindow()
     d->setupThumbnailBarModel();
     d->mGvCore = new GvCore(this, d->mDirModel);
     d->mPreloader = new Preloader(this);
-    d->mNotificationRestrictions = 0;
+    d->mNotificationRestrictions = nullptr;
     d->mThumbnailProvider = new ThumbnailProvider();
-    d->mActiveThumbnailView = 0;
+    d->mActiveThumbnailView = nullptr;
     d->initDirModel();
     d->setupWidgets();
     d->setupActions();

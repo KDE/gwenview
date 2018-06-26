@@ -62,12 +62,12 @@ public:
 
     virtual AbstractImageView* imageView() const
     {
-        return 0;
+        return nullptr;
     }
 
     virtual RasterImageView* rasterImageView() const
     {
-        return 0;
+        return nullptr;
     }
 
     virtual QCursor cursor() const;
@@ -186,15 +186,15 @@ class EmptyAdapter : public AbstractDocumentViewAdapter
     Q_OBJECT
 public:
     EmptyAdapter();
-    virtual MimeTypeUtils::Kind kind() const Q_DECL_OVERRIDE
+    MimeTypeUtils::Kind kind() const Q_DECL_OVERRIDE
     {
         return MimeTypeUtils::KIND_UNKNOWN;
     }
-    virtual Document::Ptr document() const Q_DECL_OVERRIDE
+    Document::Ptr document() const Q_DECL_OVERRIDE
     {
         return Document::Ptr();
     }
-    virtual void setDocument(Document::Ptr) Q_DECL_OVERRIDE
+    void setDocument(Document::Ptr) Q_DECL_OVERRIDE
     {}
 };
 

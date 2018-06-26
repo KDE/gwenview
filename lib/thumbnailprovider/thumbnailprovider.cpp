@@ -174,11 +174,11 @@ ThumbnailProvider::~ThumbnailProvider()
     LOG(this);
     abortSubjob();
     mThumbnailGenerator->cancel();
-    disconnect(mThumbnailGenerator, 0, this, 0);
-    disconnect(mThumbnailGenerator, 0, sThumbnailWriter, 0);
+    disconnect(mThumbnailGenerator, nullptr, this, nullptr);
+    disconnect(mThumbnailGenerator, nullptr, sThumbnailWriter, nullptr);
     connect(mThumbnailGenerator, SIGNAL(finished()), mThumbnailGenerator, SLOT(deleteLater()));
     if (mPreviousThumbnailGenerator) {
-        disconnect(mPreviousThumbnailGenerator, 0, sThumbnailWriter, 0);
+        disconnect(mPreviousThumbnailGenerator, nullptr, sThumbnailWriter, nullptr);
     }
     sThumbnailWriter->wait();
 }
@@ -193,7 +193,7 @@ void ThumbnailProvider::stop()
     if (mThumbnailGenerator->isRunning() && !mPreviousThumbnailGenerator) {
         mPreviousThumbnailGenerator = mThumbnailGenerator;
         mPreviousThumbnailGenerator->cancel();
-        disconnect(mPreviousThumbnailGenerator, 0, this, 0);
+        disconnect(mPreviousThumbnailGenerator, nullptr, this, nullptr);
         connect(mPreviousThumbnailGenerator, SIGNAL(finished()), mPreviousThumbnailGenerator, SLOT(deleteLater()));
         createNewThumbnailGenerator();
         mCurrentItem = KFileItem();

@@ -40,8 +40,8 @@ class GWENVIEWLIB_EXPORT FullScreenBar : public QFrame
 {
     Q_OBJECT
 public:
-    FullScreenBar(QWidget* parent);
-    ~FullScreenBar();
+    explicit FullScreenBar(QWidget* parent);
+    ~FullScreenBar() Q_DECL_OVERRIDE;
 
     void setActivated(bool);
 

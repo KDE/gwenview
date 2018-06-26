@@ -60,13 +60,13 @@ struct HistoryItem : public QStandardItem
     {
         if (!QDir().mkpath(storageDir)) {
             qCritical() << "Could not create history dir" << storageDir;
-            return 0;
+            return nullptr;
         }
         QTemporaryFile file(storageDir + QStringLiteral("/gvhistoryXXXXXXrc"));
         file.setAutoRemove(false);
         if (!file.open()) {
             qCritical() << "Could not create history file";
-            return 0;
+            return nullptr;
         }
 
         HistoryItem* item = new HistoryItem(url, dateTime, file.fileName());
@@ -82,12 +82,12 @@ struct HistoryItem : public QStandardItem
         QUrl url(group.readEntry("url"));
         if (!url.isValid()) {
             qCritical() << "Invalid url" << url;
-            return 0;
+            return nullptr;
         }
         QDateTime dateTime = QDateTime::fromString(group.readEntry("dateTime"), Qt::ISODate);
         if (!dateTime.isValid()) {
             qCritical() << "Invalid dateTime" << dateTime;
-            return 0;
+            return nullptr;
         }
 
         return new HistoryItem(url, dateTime, fileName);

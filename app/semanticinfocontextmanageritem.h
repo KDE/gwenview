@@ -42,10 +42,10 @@ class SemanticInfoContextManagerItem : public AbstractContextManagerItem
     Q_OBJECT
 public:
     SemanticInfoContextManagerItem(ContextManager*, KActionCollection*, ViewMainPage* viewMainPage);
-    ~SemanticInfoContextManagerItem();
+    ~SemanticInfoContextManagerItem() Q_DECL_OVERRIDE;
 
 protected:
-    virtual bool eventFilter(QObject*, QEvent*) Q_DECL_OVERRIDE;
+    bool eventFilter(QObject*, QEvent*) Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
     void slotSelectionChanged();

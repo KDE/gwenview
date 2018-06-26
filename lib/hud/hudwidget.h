@@ -46,8 +46,8 @@ public:
     };
     Q_DECLARE_FLAGS(Options, Option)
 
-    HudWidget(QGraphicsWidget* parent = 0);
-    ~HudWidget();
+    explicit HudWidget(QGraphicsWidget* parent = nullptr);
+    ~HudWidget() Q_DECL_OVERRIDE;
 
     void init(QWidget*, Options options);
     void init(QGraphicsWidget*, Options options);

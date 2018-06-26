@@ -47,7 +47,7 @@ namespace Gwenview
 class UrlDropTreeView : public QTreeView
 {
 public:
-    UrlDropTreeView(QWidget* parent = 0)
+    explicit UrlDropTreeView(QWidget* parent = nullptr)
         : QTreeView(parent)
         {}
 
@@ -100,7 +100,7 @@ private:
 FolderViewContextManagerItem::FolderViewContextManagerItem(ContextManager* manager)
 : AbstractContextManagerItem(manager)
 {
-    mModel = 0;
+    mModel = nullptr;
 
     setupView();
 

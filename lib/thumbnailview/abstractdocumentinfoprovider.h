@@ -44,7 +44,7 @@ class GWENVIEWLIB_EXPORT AbstractDocumentInfoProvider : public QObject
 {
     Q_OBJECT
 public:
-    AbstractDocumentInfoProvider(QObject* parent = 0);
+    explicit AbstractDocumentInfoProvider(QObject* parent = nullptr);
 
     /**
      * Returns true if the document is currently busy (loading, saving,

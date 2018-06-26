@@ -110,7 +110,7 @@ class KeyValueWidget : public QWidget
         QLabel* valueLabel;
     };
 public:
-    KeyValueWidget(QWidget* parent = 0)
+    explicit KeyValueWidget(QWidget* parent = nullptr)
     : QWidget(parent)
     {
         QSizePolicy policy(QSizePolicy::Preferred, QSizePolicy::Fixed);
@@ -211,7 +211,7 @@ struct InfoContextManagerItemPrivate
         if (!mImageMetaInfoDialog) {
             return;
         }
-        ImageMetaInfoModel* model = mDocument ? mDocument->metaInfo() : 0;
+        ImageMetaInfoModel* model = mDocument ? mDocument->metaInfo() : nullptr;
         mImageMetaInfoDialog->setMetaInfo(model, GwenviewConfig::preferredMetaInfoKeyList());
     }
 
@@ -251,9 +251,9 @@ struct InfoContextManagerItemPrivate
     void forgetCurrentDocument()
     {
         if (mDocument) {
-            QObject::disconnect(mDocument.data(), 0, q, 0);
+            QObject::disconnect(mDocument.data(), nullptr, q, nullptr);
             // "Garbage collect" document
-            mDocument = 0;
+            mDocument = nullptr;
         }
     }
 };

@@ -51,8 +51,8 @@ struct PreloaderPrivate
     {
         // Forget about the document. Keeping a reference to it would prevent it
         // from being garbage collected.
-        QObject::disconnect(mDocument.data(), 0, q, 0);
-        mDocument = 0;
+        QObject::disconnect(mDocument.data(), nullptr, q, nullptr);
+        mDocument = nullptr;
     }
 };
 
@@ -72,7 +72,7 @@ void Preloader::preload(const QUrl &url, const QSize& size)
 {
     LOG("url=" << url);
     if (d->mDocument) {
-        disconnect(d->mDocument.data(), 0, this, 0);
+        disconnect(d->mDocument.data(), nullptr, this, nullptr);
     }
 
     d->mDocument = DocumentFactory::instance()->load(url);

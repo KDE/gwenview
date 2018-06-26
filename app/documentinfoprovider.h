@@ -39,11 +39,11 @@ class DocumentInfoProvider : public AbstractDocumentInfoProvider
 public:
     DocumentInfoProvider(SortedDirModel* model);
 
-    virtual bool isBusy(const QUrl &url) Q_DECL_OVERRIDE;
+    bool isBusy(const QUrl &url) Q_DECL_OVERRIDE;
 
-    virtual bool isModified(const QUrl &url) Q_DECL_OVERRIDE;
+    bool isModified(const QUrl &url) Q_DECL_OVERRIDE;
 
-    virtual void thumbnailForDocument(const QUrl &url, ThumbnailGroup::Enum group, QPixmap* outPix, QSize* outFullSize) const Q_DECL_OVERRIDE;
+    void thumbnailForDocument(const QUrl &url, ThumbnailGroup::Enum group, QPixmap* outPix, QSize* outFullSize) const Q_DECL_OVERRIDE;
 
 private:
     SortedDirModel* mDirModel;

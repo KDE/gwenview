@@ -44,8 +44,8 @@ class GWENVIEWLIB_EXPORT HudButtonBox : public HudWidget
 {
     Q_OBJECT
 public:
-    HudButtonBox(QGraphicsWidget* parent = 0);
-    ~HudButtonBox();
+    HudButtonBox(QGraphicsWidget* parent = nullptr);
+    ~HudButtonBox() Q_DECL_OVERRIDE;
 
     void setText(const QString& text);
 

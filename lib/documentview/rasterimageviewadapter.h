@@ -39,51 +39,51 @@ class GWENVIEWLIB_EXPORT RasterImageViewAdapter : public AbstractDocumentViewAda
     Q_OBJECT
 public:
     RasterImageViewAdapter();
-    ~RasterImageViewAdapter();
+    ~RasterImageViewAdapter() Q_DECL_OVERRIDE;
 
-    virtual QCursor cursor() const Q_DECL_OVERRIDE;
+    QCursor cursor() const Q_DECL_OVERRIDE;
 
-    virtual void setCursor(const QCursor&) Q_DECL_OVERRIDE;
+    void setCursor(const QCursor&) Q_DECL_OVERRIDE;
 
-    virtual MimeTypeUtils::Kind kind() const Q_DECL_OVERRIDE
+    MimeTypeUtils::Kind kind() const Q_DECL_OVERRIDE
     {
         return MimeTypeUtils::KIND_RASTER_IMAGE;
     }
 
-    virtual bool canZoom() const Q_DECL_OVERRIDE
+    bool canZoom() const Q_DECL_OVERRIDE
     {
         return true;
     }
 
-    virtual void setZoomToFit(bool) Q_DECL_OVERRIDE;
+    void setZoomToFit(bool) Q_DECL_OVERRIDE;
 
-    virtual void setZoomToFill(bool) Q_DECL_OVERRIDE;
+    void setZoomToFill(bool) Q_DECL_OVERRIDE;
 
-    virtual bool zoomToFit() const Q_DECL_OVERRIDE;
+    bool zoomToFit() const Q_DECL_OVERRIDE;
 
-    virtual bool zoomToFill() const Q_DECL_OVERRIDE;
+    bool zoomToFill() const Q_DECL_OVERRIDE;
 
-    virtual qreal zoom() const Q_DECL_OVERRIDE;
+    qreal zoom() const Q_DECL_OVERRIDE;
 
-    virtual void setZoom(qreal zoom, const QPointF& center) Q_DECL_OVERRIDE;
+    void setZoom(qreal zoom, const QPointF& center) Q_DECL_OVERRIDE;
 
-    virtual qreal computeZoomToFit() const Q_DECL_OVERRIDE;
+    qreal computeZoomToFit() const Q_DECL_OVERRIDE;
 
-    virtual qreal computeZoomToFill() const Q_DECL_OVERRIDE;
+    qreal computeZoomToFill() const Q_DECL_OVERRIDE;
 
-    virtual Document::Ptr document() const Q_DECL_OVERRIDE;
+    Document::Ptr document() const Q_DECL_OVERRIDE;
 
-    virtual void setDocument(Document::Ptr) Q_DECL_OVERRIDE;
+    void setDocument(Document::Ptr) Q_DECL_OVERRIDE;
 
-    virtual void loadConfig() Q_DECL_OVERRIDE;
+    void loadConfig() Q_DECL_OVERRIDE;
 
-    virtual RasterImageView* rasterImageView() const Q_DECL_OVERRIDE;
+    RasterImageView* rasterImageView() const Q_DECL_OVERRIDE;
     virtual AbstractImageView* imageView() const override;
 
-    virtual QPointF scrollPos() const Q_DECL_OVERRIDE;
-    virtual void setScrollPos(const QPointF& pos) Q_DECL_OVERRIDE;
+    QPointF scrollPos() const Q_DECL_OVERRIDE;
+    void setScrollPos(const QPointF& pos) Q_DECL_OVERRIDE;
 
-    virtual QRectF visibleDocumentRect() const Q_DECL_OVERRIDE;
+    QRectF visibleDocumentRect() const Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
     void slotLoadingFailed();

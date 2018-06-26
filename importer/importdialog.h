@@ -38,7 +38,7 @@ class ImportDialog : public KMainWindow
     Q_OBJECT
 public:
     ImportDialog();
-    ~ImportDialog();
+    ~ImportDialog() Q_DECL_OVERRIDE;
 
     QSize sizeHint() const Q_DECL_OVERRIDE;
 

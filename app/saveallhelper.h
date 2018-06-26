@@ -38,7 +38,7 @@ class SaveAllHelper : public QObject
 {
     Q_OBJECT
 public:
-    SaveAllHelper(QWidget* parent);
+    explicit SaveAllHelper(QWidget* parent);
     ~SaveAllHelper();
 
     void save();

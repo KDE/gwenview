@@ -108,7 +108,7 @@ static void copyMoveOrLink(Operation operation, const QList<QUrl>& urlList, QWid
 
     QUrl destUrl = dialog->selectedUrls().first();
 
-    KIO::CopyJob* job = 0;
+    KIO::CopyJob* job = nullptr;
     switch (operation) {
     case COPY:
         job = KIO::copy(urlList, destUrl);
@@ -140,7 +140,7 @@ static void delOrTrash(KIO::JobUiDelegate::DeletionType deletionType, const QLis
     if (!uiDelegate.askDeleteConfirmation(urlList, deletionType, KIO::JobUiDelegate::DefaultConfirmation)) {
         return;
     }
-    KIO::Job* job = 0;
+    KIO::Job* job = nullptr;
     switch (deletionType) {
         case KIO::JobUiDelegate::Trash:
             job = KIO::trash(urlList);
@@ -213,7 +213,7 @@ void showMenuForDroppedUrls(QWidget* parent, const QList<QUrl>& urlList, const Q
 
     QAction* action = menu.exec(QCursor::pos());
 
-    KIO::Job* job = 0;
+    KIO::Job* job = nullptr;
     if (action == moveAction) {
         job = KIO::move(urlList, destUrl);
     } else if (action == copyAction) {

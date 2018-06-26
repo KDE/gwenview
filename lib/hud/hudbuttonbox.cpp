@@ -58,7 +58,7 @@ HudButtonBox::HudButtonBox(QGraphicsWidget* parent)
 : HudWidget(parent)
 , d(new HudButtonBoxPrivate)
 {
-    d->mCountDown = 0;
+    d->mCountDown = nullptr;
     QGraphicsWidget* content = new QGraphicsWidget();
     d->mLayout = new QGraphicsLinearLayout(Qt::Vertical, content);
     d->mLabel = new HudLabel();

@@ -53,7 +53,7 @@ class BrowseMainPage : public QWidget
     Q_OBJECT
 public:
     BrowseMainPage(QWidget* parent, KActionCollection*, GvCore*);
-    ~BrowseMainPage();
+    ~BrowseMainPage() Q_DECL_OVERRIDE;
 
     void reload();
 

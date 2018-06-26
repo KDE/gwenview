@@ -41,8 +41,8 @@ class ToolTipWidget : public QWidget
     Q_OBJECT
     Q_PROPERTY(qreal opacity READ opacity WRITE setOpacity)
 public:
-    ToolTipWidget(QWidget* parent = 0);
-    ~ToolTipWidget();
+    explicit ToolTipWidget(QWidget* parent = nullptr);
+    ~ToolTipWidget() Q_DECL_OVERRIDE;
 
     qreal opacity() const;
     void setOpacity(qreal);
@@ -50,10 +50,10 @@ public:
     QString text() const;
     void setText(const QString& text);
 
-    virtual QSize sizeHint() const Q_DECL_OVERRIDE;
+    QSize sizeHint() const Q_DECL_OVERRIDE;
 
 protected:
-    virtual void paintEvent(QPaintEvent*) Q_DECL_OVERRIDE;
+    void paintEvent(QPaintEvent*) Q_DECL_OVERRIDE;
 
 private:
     ToolTipWidgetPrivate* const d;

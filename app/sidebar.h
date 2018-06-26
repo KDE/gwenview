@@ -37,7 +37,7 @@ class SideBarGroup : public QFrame
     Q_OBJECT
 public:
     SideBarGroup(const QString& title, bool defaultContainerMarginEnabled = true);
-    ~SideBarGroup();
+    ~SideBarGroup() Q_DECL_OVERRIDE;
 
     void addWidget(QWidget*);
     void addAction(QAction*);
@@ -71,8 +71,8 @@ class SideBar : public QTabWidget
 {
     Q_OBJECT
 public:
-    SideBar(QWidget* parent);
-    ~SideBar();
+    explicit SideBar(QWidget* parent);
+    ~SideBar() Q_DECL_OVERRIDE;
 
     void addPage(SideBarPage*);
 

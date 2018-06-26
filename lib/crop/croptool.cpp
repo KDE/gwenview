@@ -197,7 +197,7 @@ struct CropToolPrivate
     void setupWidget()
     {
         RasterImageView* view = q->imageView();
-        mCropWidget = new CropWidget(0, view, q);
+        mCropWidget = new CropWidget(nullptr, view, q);
         QObject::connect(mCropWidget, SIGNAL(cropRequested()),
                          q, SLOT(slotCropRequested()));
         QObject::connect(mCropWidget, SIGNAL(done()),

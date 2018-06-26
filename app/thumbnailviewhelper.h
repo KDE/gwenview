@@ -40,13 +40,13 @@ class ThumbnailViewHelper : public AbstractThumbnailViewHelper
     Q_OBJECT
 public:
     ThumbnailViewHelper(QObject* parent, KActionCollection*);
-    ~ThumbnailViewHelper();
+    ~ThumbnailViewHelper() Q_DECL_OVERRIDE;
 
-    virtual void showContextMenu(QWidget* parent) Q_DECL_OVERRIDE;
+    void showContextMenu(QWidget* parent) Q_DECL_OVERRIDE;
 
-    virtual void showMenuForUrlDroppedOnViewport(QWidget* parent, const QList<QUrl>&) Q_DECL_OVERRIDE;
+    void showMenuForUrlDroppedOnViewport(QWidget* parent, const QList<QUrl>&) Q_DECL_OVERRIDE;
 
-    virtual void showMenuForUrlDroppedOnDir(QWidget* parent, const QList<QUrl>&, const QUrl&) Q_DECL_OVERRIDE;
+    void showMenuForUrlDroppedOnDir(QWidget* parent, const QList<QUrl>&, const QUrl&) Q_DECL_OVERRIDE;
 
 public Q_SLOTS:
     void setCurrentDirUrl(const QUrl&);

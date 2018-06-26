@@ -39,7 +39,7 @@ struct PrintHelperPrivate;
 class GWENVIEWLIB_EXPORT PrintHelper
 {
 public:
-    PrintHelper(QWidget* parent);
+    explicit PrintHelper(QWidget* parent);
     ~PrintHelper();
 
     void print(Document::Ptr);

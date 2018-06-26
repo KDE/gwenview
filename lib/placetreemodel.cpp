@@ -59,7 +59,7 @@ namespace Gwenview
 struct Node
 {
     Node()
-        : model(0)
+        : model(nullptr)
     {}
 
     Node(SortedDirModel* _model, const QUrl &_parentUrl)

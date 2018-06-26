@@ -68,7 +68,7 @@ namespace Cms
 //- JPEG -----------------------------------------------------------------------
 static cmsHPROFILE loadFromJpegData(const QByteArray& data)
 {
-    cmsHPROFILE profile = 0;
+    cmsHPROFILE profile = nullptr;
     struct jpeg_decompress_struct srcinfo;
 
     JPEGErrorManager srcErrorManager;
@@ -76,7 +76,7 @@ static cmsHPROFILE loadFromJpegData(const QByteArray& data)
     jpeg_create_decompress(&srcinfo);
     if (setjmp(srcErrorManager.jmp_buffer)) {
         qCritical() << "libjpeg error in src\n";
-        return 0;
+        return nullptr;
     }
 
     QBuffer buffer(const_cast<QByteArray*>(&data));
@@ -109,7 +109,7 @@ struct ProfilePrivate
         if (mProfile) {
             cmsCloseProfile(mProfile);
         }
-        mProfile = 0;
+        mProfile = nullptr;
     }
 
     QString readInfo(cmsInfoType info)
@@ -124,7 +124,7 @@ struct ProfilePrivate
 Profile::Profile()
 : d(new ProfilePrivate)
 {
-    d->mProfile = 0;
+    d->mProfile = nullptr;
 }
 
 Profile::Profile(cmsHPROFILE hProfile)
@@ -142,11 +142,10 @@ Profile::~Profile()
 Profile::Ptr Profile::loadFromImageData(const QByteArray& data, const QByteArray& format)
 {
     Profile::Ptr ptr;
-    cmsHPROFILE hProfile = 0;
+    cmsHPROFILE hProfile = nullptr;
     if (format == "png") {
         hProfile = loadFromPngData(data);
-    }
-    if (format == "jpeg") {
+    } else if (format == "jpeg") {
         hProfile = loadFromJpegData(data);
     }
     if (hProfile) {
@@ -158,7 +157,7 @@ Profile::Ptr Profile::loadFromImageData(const QByteArray& data, const QByteArray
 Profile::Ptr Profile::loadFromExiv2Image(const Exiv2::Image* image)
 {
     Profile::Ptr ptr;
-    cmsHPROFILE hProfile = 0;
+    cmsHPROFILE hProfile = nullptr;
 
     const Exiv2::ExifData& exifData = image->exifData();
     Exiv2::ExifKey key("Exif.Image.InterColorProfile");
@@ -208,7 +207,7 @@ QString Profile::model() const
 
 Profile::Ptr Profile::getMonitorProfile()
 {
-    cmsHPROFILE hProfile = 0;
+    cmsHPROFILE hProfile = nullptr;
     // Get the profile from you config file if the user has set it.
     // if the user allows override through the atom, do this:
 #ifdef HAVE_X11

@@ -38,8 +38,8 @@ class HudCountDown : public QGraphicsWidget
 {
     Q_OBJECT
 public:
-    HudCountDown(QGraphicsWidget* parent = 0);
-    ~HudCountDown();
+    explicit HudCountDown(QGraphicsWidget* parent = nullptr);
+    ~HudCountDown() Q_DECL_OVERRIDE;
 
     void start(qreal ms);
 

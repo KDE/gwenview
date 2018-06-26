@@ -52,7 +52,7 @@ TagModel::TagModel(QObject* parent)
 : QStandardItemModel(parent)
 , d(new TagModelPrivate)
 {
-    d->mBackEnd = 0;
+    d->mBackEnd = nullptr;
     setSortRole(SortRole);
 }
 

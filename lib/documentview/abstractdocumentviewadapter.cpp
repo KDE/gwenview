@@ -33,7 +33,7 @@ namespace Gwenview
 {
 
 AbstractDocumentViewAdapter::AbstractDocumentViewAdapter()
-: mWidget(0)
+: mWidget(nullptr)
 {
 }
 

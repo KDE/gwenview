@@ -50,7 +50,7 @@ namespace Gwenview
 class ToolContainerContent : public QWidget
 {
 public:
-    ToolContainerContent(QWidget* parent = 0)
+    explicit ToolContainerContent(QWidget* parent = nullptr)
     : QWidget(parent)
     , mLayout(new QHBoxLayout(this))
     {
@@ -155,9 +155,9 @@ DocumentViewController::DocumentViewController(KActionCollection* actionCollecti
 {
     d->q = this;
     d->mActionCollection = actionCollection;
-    d->mView = 0;
-    d->mZoomWidget = 0;
-    d->mToolContainer = 0;
+    d->mView = nullptr;
+    d->mZoomWidget = nullptr;
+    d->mToolContainer = nullptr;
     d->mToolContainerContent = new ToolContainerContent;
 
     d->setupActions();
@@ -172,11 +172,11 @@ void DocumentViewController::setView(DocumentView* view)
 {
     // Forget old view
     if (d->mView) {
-        disconnect(d->mView, 0, this, 0);
+        disconnect(d->mView, nullptr, this, nullptr);
         Q_FOREACH(QAction * action, d->mActions) {
-            disconnect(action, 0, d->mView, 0);
+            disconnect(action, nullptr, d->mView, nullptr);
         }
-        disconnect(d->mZoomWidget, 0, d->mView, 0);
+        disconnect(d->mZoomWidget, nullptr, d->mView, nullptr);
     }
 
     // Connect new view
@@ -275,7 +275,7 @@ void DocumentViewController::updateTool()
 
 void DocumentViewController::reset()
 {
-    setView(0);
+    setView(nullptr);
     d->updateActions();
 }
 

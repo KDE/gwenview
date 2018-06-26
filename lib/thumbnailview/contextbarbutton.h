@@ -50,8 +50,8 @@ class ContextBarButton : public QToolButton
 {
     Q_OBJECT
 public:
-    explicit ContextBarButton(const QString& iconName, QWidget* parent = 0);
-    ~ContextBarButton();
+    explicit ContextBarButton(const QString& iconName, QWidget* parent = nullptr);
+    ~ContextBarButton() Q_DECL_OVERRIDE;
 
 protected:
     void paintEvent(QPaintEvent*) Q_DECL_OVERRIDE;

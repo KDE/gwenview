@@ -41,7 +41,7 @@ class SvgImageView : public AbstractImageView
 {
     Q_OBJECT
 public:
-    SvgImageView(QGraphicsItem* parent = 0);
+    explicit SvgImageView(QGraphicsItem* parent = nullptr);
     void setAlphaBackgroundMode(AlphaBackgroundMode mode) Q_DECL_OVERRIDE;
     void setAlphaBackgroundColor(const QColor& color) Q_DECL_OVERRIDE;
 
@@ -73,44 +73,44 @@ public:
     SvgViewAdapter();
     ~SvgViewAdapter();
 
-    virtual QCursor cursor() const Q_DECL_OVERRIDE;
+    QCursor cursor() const Q_DECL_OVERRIDE;
 
-    virtual void setCursor(const QCursor&) Q_DECL_OVERRIDE;
+    void setCursor(const QCursor&) Q_DECL_OVERRIDE;
 
-    virtual void setDocument(Document::Ptr) Q_DECL_OVERRIDE;
+    void setDocument(Document::Ptr) Q_DECL_OVERRIDE;
 
-    virtual Document::Ptr document() const Q_DECL_OVERRIDE;
+    Document::Ptr document() const Q_DECL_OVERRIDE;
 
-    virtual void loadConfig() Q_DECL_OVERRIDE;
+    void loadConfig() Q_DECL_OVERRIDE;
 
-    virtual MimeTypeUtils::Kind kind() const Q_DECL_OVERRIDE
+    MimeTypeUtils::Kind kind() const Q_DECL_OVERRIDE
     {
         return MimeTypeUtils::KIND_SVG_IMAGE;
     }
 
-    virtual bool canZoom() const Q_DECL_OVERRIDE
+    bool canZoom() const Q_DECL_OVERRIDE
     {
         return true;
     }
 
-    virtual void setZoomToFit(bool) Q_DECL_OVERRIDE;
+    void setZoomToFit(bool) Q_DECL_OVERRIDE;
 
-    virtual void setZoomToFill(bool) Q_DECL_OVERRIDE;
+    void setZoomToFill(bool) Q_DECL_OVERRIDE;
 
-    virtual bool zoomToFit() const Q_DECL_OVERRIDE;
+    bool zoomToFit() const Q_DECL_OVERRIDE;
 
-    virtual bool zoomToFill() const Q_DECL_OVERRIDE;
+    bool zoomToFill() const Q_DECL_OVERRIDE;
 
-    virtual qreal zoom() const Q_DECL_OVERRIDE;
+    qreal zoom() const Q_DECL_OVERRIDE;
 
-    virtual void setZoom(qreal /*zoom*/, const QPointF& /*center*/ = QPointF(-1, -1)) Q_DECL_OVERRIDE;
+    void setZoom(qreal /*zoom*/, const QPointF& /*center*/ = QPointF(-1, -1)) Q_DECL_OVERRIDE;
 
-    virtual qreal computeZoomToFit() const Q_DECL_OVERRIDE;
+    qreal computeZoomToFit() const Q_DECL_OVERRIDE;
 
-    virtual qreal computeZoomToFill() const Q_DECL_OVERRIDE;
+    qreal computeZoomToFill() const Q_DECL_OVERRIDE;
 
-    virtual QPointF scrollPos() const Q_DECL_OVERRIDE;
-    virtual void setScrollPos(const QPointF& pos) Q_DECL_OVERRIDE;
+    QPointF scrollPos() const Q_DECL_OVERRIDE;
+    void setScrollPos(const QPointF& pos) Q_DECL_OVERRIDE;
 
     virtual QRectF visibleDocumentRect() const override;
 

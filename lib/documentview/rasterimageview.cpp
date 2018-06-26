@@ -74,7 +74,7 @@ struct RasterImageViewPrivate
         if (mDisplayTransform) {
             cmsDeleteTransform(mDisplayTransform);
         }
-        mDisplayTransform = 0;
+        mDisplayTransform = nullptr;
 
         Cms::Profile::Ptr profile = q->document()->cmsProfile();
         if (!profile) {
@@ -195,7 +195,7 @@ RasterImageView::RasterImageView(QGraphicsItem* parent)
     d->q = this;
     d->mEmittedCompleted = false;
     d->mApplyDisplayTransform = true;
-    d->mDisplayTransform = 0;
+    d->mDisplayTransform = nullptr;
 
     d->mAlphaBackgroundMode = AlphaBackgroundNone;
     d->mAlphaBackgroundColor = Qt::black;

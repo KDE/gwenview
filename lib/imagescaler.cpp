@@ -69,7 +69,7 @@ ImageScaler::~ImageScaler()
 void ImageScaler::setDocument(Document::Ptr document)
 {
     if (d->mDocument) {
-        disconnect(d->mDocument.data(), 0, this, 0);
+        disconnect(d->mDocument.data(), nullptr, this, nullptr);
     }
     d->mDocument = document;
     // Used when scaler asked for a down-sampled image

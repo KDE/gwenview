@@ -38,7 +38,7 @@ class GWENVIEWLIB_EXPORT ResizeImageDialog : public QDialog
 {
     Q_OBJECT
 public:
-    ResizeImageDialog(QWidget *parent);
+    explicit ResizeImageDialog(QWidget *parent);
     ~ResizeImageDialog();
 
     void setOriginalSize(const QSize&);

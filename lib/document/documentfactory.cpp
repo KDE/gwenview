@@ -163,7 +163,7 @@ Document::Ptr DocumentFactory::getCachedDocument(const QUrl &url) const
 Document::Ptr DocumentFactory::load(const QUrl &url)
 {
     GV_RETURN_VALUE_IF_FAIL(!url.isEmpty(), Document::Ptr());
-    DocumentInfo* info = 0;
+    DocumentInfo* info = nullptr;
 
     DocumentMap::Iterator it = d->mDocumentMap.find(url);
 

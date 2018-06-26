@@ -51,7 +51,7 @@ public:
     void setGroupPosition(StatusBarToolButton::GroupPosition groupPosition);
 
 protected:
-    virtual void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;
+    void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;
 
 private:
     GroupPosition mGroupPosition;

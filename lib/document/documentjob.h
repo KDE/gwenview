@@ -55,11 +55,11 @@ public:
         NoDocumentEditorError = UserDefinedError + 1
     };
     DocumentJob();
-    ~DocumentJob();
+    ~DocumentJob() Q_DECL_OVERRIDE;
 
     Document::Ptr document() const;
 
-    virtual void start() Q_DECL_OVERRIDE;
+    void start() Q_DECL_OVERRIDE;
 
 protected Q_SLOTS:
     /**
@@ -108,7 +108,7 @@ public:
     virtual void threadedStart() = 0;
 
 protected:
-    virtual void doStart() Q_DECL_OVERRIDE;
+    void doStart() Q_DECL_OVERRIDE;
 };
 
 } // namespace

@@ -313,7 +313,7 @@ void DocumentViewContainer::slotConfigChanged()
 
 void DocumentViewContainer::showMessageWidget(QGraphicsWidget* widget, Qt::Alignment align)
 {
-    DocumentView* view = 0;
+    DocumentView* view = nullptr;
     if (d->mViews.isEmpty()) {
         GV_RETURN_IF_FAIL(!d->mAddedViews.isEmpty());
         view = *d->mAddedViews.begin();

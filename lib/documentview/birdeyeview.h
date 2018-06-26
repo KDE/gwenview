@@ -42,10 +42,10 @@ class BirdEyeView : public QGraphicsWidget
 {
     Q_OBJECT
 public:
-    BirdEyeView(DocumentView* docView);
-    ~BirdEyeView();
+    explicit BirdEyeView(DocumentView* docView);
+    ~BirdEyeView() Q_DECL_OVERRIDE;
 
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0) Q_DECL_OVERRIDE;
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) Q_DECL_OVERRIDE;
 
     // Called by DocumentView when it detects mouse movements
     // We cannot use a sceneEventFilter because QGraphicsSceneHoverEvent are not

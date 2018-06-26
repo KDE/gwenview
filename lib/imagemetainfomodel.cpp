@@ -92,7 +92,7 @@ public:
 
         void appendValue(const QString& value)
         {
-            if (mValue.length() > 0) {
+            if (!mValue.isEmpty()) {
                 mValue += '\n';
             }
             mValue += value.trimmed();
@@ -188,7 +188,7 @@ private:
     {
         int row = getRowForKey(key);
         if (row == InvalidRow) {
-            return 0;
+            return nullptr;
         }
         return mList[row];
     }

@@ -48,7 +48,7 @@ class GWENVIEWLIB_EXPORT FlowLayout : public QLayout
 public:
     explicit FlowLayout(QWidget *parent, int margin = 0, int spacing = -1);
     FlowLayout(int spacing = -1);
-    ~FlowLayout();
+    ~FlowLayout() Q_DECL_OVERRIDE;
 
     void addItem(QLayoutItem *item) Q_DECL_OVERRIDE;
     Qt::Orientations expandingDirections() const Q_DECL_OVERRIDE;

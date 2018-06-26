@@ -43,20 +43,20 @@ class GWENVIEWLIB_EXPORT BalooSemanticInfoBackend : public AbstractSemanticInfoB
 {
     Q_OBJECT
 public:
-    BalooSemanticInfoBackend(QObject* parent);
-    ~BalooSemanticInfoBackend();
+    explicit BalooSemanticInfoBackend(QObject* parent);
+    ~BalooSemanticInfoBackend() Q_DECL_OVERRIDE;
 
-    virtual TagSet allTags() const Q_DECL_OVERRIDE;
+    TagSet allTags() const Q_DECL_OVERRIDE;
 
-    virtual void refreshAllTags() Q_DECL_OVERRIDE;
+    void refreshAllTags() Q_DECL_OVERRIDE;
 
-    virtual void storeSemanticInfo(const QUrl&, const SemanticInfo&) Q_DECL_OVERRIDE;
+    void storeSemanticInfo(const QUrl&, const SemanticInfo&) Q_DECL_OVERRIDE;
 
-    virtual void retrieveSemanticInfo(const QUrl&) Q_DECL_OVERRIDE;
+    void retrieveSemanticInfo(const QUrl&) Q_DECL_OVERRIDE;
 
-    virtual QString labelForTag(const SemanticInfoTag&) const Q_DECL_OVERRIDE;
+    QString labelForTag(const SemanticInfoTag&) const Q_DECL_OVERRIDE;
 
-    virtual SemanticInfoTag tagForLabel(const QString&) Q_DECL_OVERRIDE;
+    SemanticInfoTag tagForLabel(const QString&) Q_DECL_OVERRIDE;
 
 private:
     struct Private;

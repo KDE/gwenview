@@ -52,7 +52,7 @@ class GWENVIEWLIB_EXPORT ThumbnailProvider : public KIO::Job
     Q_OBJECT
 public:
     ThumbnailProvider();
-    virtual ~ThumbnailProvider();
+    ~ThumbnailProvider() Q_DECL_OVERRIDE;
 
     void stop();
 
@@ -128,7 +128,7 @@ Q_SIGNALS:
     void finished();
 
 protected:
-    virtual void slotResult(KJob *job) Q_DECL_OVERRIDE;
+    void slotResult(KJob *job) Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
     void determineNextIcon();

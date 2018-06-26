@@ -41,12 +41,12 @@ enum RenameResult {
 /**
  * Compare content of two urls, returns whether they are the same
  */
-bool contentsAreIdentical(const QUrl& url1, const QUrl& url2, QWidget* authWindow = 0);
+bool contentsAreIdentical(const QUrl& url1, const QUrl& url2, QWidget* authWindow = nullptr);
 
 /**
  * Rename src to dst, returns RenameResult
  */
-RenameResult rename(const QUrl& src, const QUrl& dst, QWidget* authWindow = 0);
+RenameResult rename(const QUrl& src, const QUrl& dst, QWidget* authWindow = nullptr);
 
 /**
  * Create a temp dir in baseDir, starting with prefix.  If successful returns

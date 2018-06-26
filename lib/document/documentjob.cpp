@@ -43,7 +43,7 @@ struct DocumentJobPrivate
 };
 
 DocumentJob::DocumentJob()
-: KCompositeJob(0)
+: KCompositeJob(nullptr)
 , d(new DocumentJobPrivate)
 {
     KDialogJobUiDelegate* delegate = new KDialogJobUiDelegate;

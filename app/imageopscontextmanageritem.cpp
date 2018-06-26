@@ -299,7 +299,7 @@ void ImageOpsContextManagerItem::restoreDefaultImageViewTool()
     }
 
     AbstractRasterImageViewTool* tool = imageView->currentTool();
-    imageView->setCurrentTool(0);
+    imageView->setCurrentTool(nullptr);
     tool->deleteLater();
     d->mMainWindow->setDistractionFreeMode(false);
 }

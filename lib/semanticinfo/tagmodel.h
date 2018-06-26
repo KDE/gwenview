@@ -43,7 +43,7 @@ class GWENVIEWLIB_EXPORT TagModel : public QStandardItemModel
 {
     Q_OBJECT
 public:
-    TagModel(QObject*);
+    explicit TagModel(QObject*);
     ~TagModel();
 
     enum {

@@ -43,7 +43,7 @@ class GWENVIEWLIB_EXPORT ImageScaler : public QObject
 {
     Q_OBJECT
 public:
-    ImageScaler(QObject* parent = 0);
+    explicit ImageScaler(QObject* parent = nullptr);
     ~ImageScaler();
     void setDocument(Document::Ptr);
     void setZoom(qreal);

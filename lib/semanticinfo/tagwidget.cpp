@@ -49,7 +49,7 @@ class TagCompleterModel : public QSortFilterProxyModel
 public:
     TagCompleterModel(QObject* parent)
         : QSortFilterProxyModel(parent)
-        {
+    {
     }
 
     void setTagInfo(const TagInfo& tagInfo)
@@ -92,7 +92,7 @@ private:
 class ReturnKeyEater : public QObject
 {
 public:
-    ReturnKeyEater(QObject* parent = 0)
+    explicit ReturnKeyEater(QObject* parent = nullptr)
         : QObject(parent)
     {}
 
@@ -193,7 +193,7 @@ TagWidget::TagWidget(QWidget* parent)
 , d(new TagWidgetPrivate)
 {
     d->q = this;
-    d->mBackEnd = 0;
+    d->mBackEnd = nullptr;
     d->mAssignedTagModel = new TagModel(this);
     d->setupWidgets();
     installEventFilter(new ReturnKeyEater(this));

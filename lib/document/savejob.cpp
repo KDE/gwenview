@@ -121,7 +121,7 @@ void SaveJob::doStart()
 
 void SaveJob::finishSave()
 {
-    d->mInternalSaveWatcher.reset(0);
+    d->mInternalSaveWatcher.reset(nullptr);
     if (d->mKillReceived) {
         return;
     }

@@ -45,7 +45,7 @@ class GWENVIEWLIB_EXPORT HudMessageBubble : public HudWidget
 {
     Q_OBJECT
 public:
-    HudMessageBubble(QGraphicsWidget* parent = 0);
+    explicit HudMessageBubble(QGraphicsWidget* parent = nullptr);
     ~HudMessageBubble();
 
     void setText(const QString& text);

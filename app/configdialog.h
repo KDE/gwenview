@@ -45,13 +45,13 @@ private Q_SLOTS:
     void updateViewBackgroundFrame();
 
 private:
-    InvisibleButtonGroup* mAlphaBackgroundModeGroup;
-    InvisibleButtonGroup* mWheelBehaviorGroup;
-    InvisibleButtonGroup* mAnimationMethodGroup;
-    InvisibleButtonGroup* mThumbnailActionsGroup;
-    InvisibleButtonGroup* mZoomModeGroup;
-    InvisibleButtonGroup* mThumbnailBarOrientationGroup;
-    InvisibleButtonGroup* mRenderingIntentGroup;
+    InvisibleButtonGroup* mAlphaBackgroundModeGroup = nullptr;
+    InvisibleButtonGroup* mWheelBehaviorGroup = nullptr;
+    InvisibleButtonGroup* mAnimationMethodGroup = nullptr;
+    InvisibleButtonGroup* mThumbnailActionsGroup = nullptr;
+    InvisibleButtonGroup* mZoomModeGroup = nullptr;
+    InvisibleButtonGroup* mThumbnailBarOrientationGroup = nullptr;
+    InvisibleButtonGroup* mRenderingIntentGroup = nullptr;
     Ui_GeneralConfigPage mGeneralConfigPage;
     Ui_ImageViewConfigPage mImageViewConfigPage;
     Ui_AdvancedConfigPage mAdvancedConfigPage;

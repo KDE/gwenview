@@ -42,11 +42,11 @@ class GWENVIEWLIB_EXPORT PreferredImageMetaInfoModel : public QSortFilterProxyMo
     Q_OBJECT
 public:
     PreferredImageMetaInfoModel(ImageMetaInfoModel* model, const QStringList& list);
-    ~PreferredImageMetaInfoModel();
+    ~PreferredImageMetaInfoModel() Q_DECL_OVERRIDE;
 
-    virtual QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
-    virtual bool setData(const QModelIndex& index, const QVariant& value, int role) Q_DECL_OVERRIDE;
-    virtual Qt::ItemFlags flags(const QModelIndex& index) const Q_DECL_OVERRIDE;
+    QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
+    bool setData(const QModelIndex& index, const QVariant& value, int role) Q_DECL_OVERRIDE;
+    Qt::ItemFlags flags(const QModelIndex& index) const Q_DECL_OVERRIDE;
 
 Q_SIGNALS:
     void preferredMetaInfoKeyListChanged(const QStringList&);

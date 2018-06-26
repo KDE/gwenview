@@ -40,7 +40,7 @@ class GWENVIEWLIB_EXPORT AbstractThumbnailViewHelper : public QObject
 {
     Q_OBJECT
 public:
-    AbstractThumbnailViewHelper(QObject* parent);
+    explicit AbstractThumbnailViewHelper(QObject* parent);
     virtual ~AbstractThumbnailViewHelper();
 
     virtual void showContextMenu(QWidget* parent) = 0;

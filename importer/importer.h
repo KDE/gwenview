@@ -39,7 +39,7 @@ class Importer : public QObject
 {
     Q_OBJECT
 public:
-    Importer(QWidget* authWindow);
+    explicit Importer(QWidget* authWindow);
     ~Importer();
 
     /**

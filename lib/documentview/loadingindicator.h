@@ -39,10 +39,10 @@ class LoadingIndicator : public QGraphicsWidget
 {
     Q_OBJECT
 public:
-    LoadingIndicator(QGraphicsItem* parent = 0);
-    ~LoadingIndicator();
+    explicit LoadingIndicator(QGraphicsItem* parent = nullptr);
+    ~LoadingIndicator() Q_DECL_OVERRIDE;
 
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0) Q_DECL_OVERRIDE;
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) Q_DECL_OVERRIDE;
 
     QRectF boundingRect() const Q_DECL_OVERRIDE;
 

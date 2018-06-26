@@ -38,7 +38,7 @@ AbstractContextManagerItem::AbstractContextManagerItem(ContextManager* manager)
 , d(new AbstractContextManagerItemPrivate)
 {
     d->mContextManager = manager;
-    d->mWidget = 0;
+    d->mWidget = nullptr;
 }
 
 AbstractContextManagerItem::~AbstractContextManagerItem()

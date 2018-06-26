@@ -81,8 +81,8 @@ public:
      * Create a new view attached to scene. We need the scene to be able to
      * install scene event filters.
      */
-    DocumentView(QGraphicsScene* scene);
-    ~DocumentView();
+    explicit DocumentView(QGraphicsScene* scene);
+    ~DocumentView() Q_DECL_OVERRIDE;
 
     Document::Ptr document() const;
 

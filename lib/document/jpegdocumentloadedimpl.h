@@ -41,15 +41,15 @@ class JpegDocumentLoadedImpl : public DocumentLoadedImpl
     Q_OBJECT
 public:
     JpegDocumentLoadedImpl(Document*, JpegContent*);
-    ~JpegDocumentLoadedImpl();
-    virtual QByteArray rawData() const Q_DECL_OVERRIDE;
+    ~JpegDocumentLoadedImpl() Q_DECL_OVERRIDE;
+    QByteArray rawData() const Q_DECL_OVERRIDE;
 
 protected:
-    virtual bool saveInternal(QIODevice* device, const QByteArray& format) Q_DECL_OVERRIDE;
+    bool saveInternal(QIODevice* device, const QByteArray& format) Q_DECL_OVERRIDE;
 
     // AbstractDocumentEditor
-    virtual void setImage(const QImage&) Q_DECL_OVERRIDE;
-    virtual void applyTransformation(Orientation orientation) Q_DECL_OVERRIDE;
+    void setImage(const QImage&) Q_DECL_OVERRIDE;
+    void applyTransformation(Orientation orientation) Q_DECL_OVERRIDE;
     //
 
 private:

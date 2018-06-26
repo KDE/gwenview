@@ -42,13 +42,13 @@ class GWENVIEWLIB_EXPORT ThumbnailBarItemDelegate : public QAbstractItemDelegate
     Q_OBJECT
 public:
     ThumbnailBarItemDelegate(ThumbnailView*);
-    ~ThumbnailBarItemDelegate();
+    ~ThumbnailBarItemDelegate() Q_DECL_OVERRIDE;
 
-    virtual void paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const Q_DECL_OVERRIDE;
-    virtual QSize sizeHint(const QStyleOptionViewItem & /*option*/, const QModelIndex & /*index*/) const Q_DECL_OVERRIDE;
+    void paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const Q_DECL_OVERRIDE;
+    QSize sizeHint(const QStyleOptionViewItem & /*option*/, const QModelIndex & /*index*/) const Q_DECL_OVERRIDE;
 
 protected:
-    virtual bool eventFilter(QObject*, QEvent*) Q_DECL_OVERRIDE;
+    bool eventFilter(QObject*, QEvent*) Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
     void toggleSelection();

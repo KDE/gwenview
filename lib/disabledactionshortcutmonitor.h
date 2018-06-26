@@ -46,7 +46,7 @@ public:
      * parent must be a widget because we need to create a QShortcut
      */
     DisabledActionShortcutMonitor(QAction* action, QWidget* parent);
-    ~DisabledActionShortcutMonitor();
+    ~DisabledActionShortcutMonitor() Q_DECL_OVERRIDE;
 
 Q_SIGNALS:
     void activated();

@@ -40,10 +40,10 @@ class GWENVIEWLIB_EXPORT RedEyeReductionImageOperation : public AbstractImageOpe
 {
 public:
     RedEyeReductionImageOperation(const QRectF&);
-    ~RedEyeReductionImageOperation();
+    ~RedEyeReductionImageOperation() Q_DECL_OVERRIDE;
 
-    virtual void redo() Q_DECL_OVERRIDE;
-    virtual void undo() Q_DECL_OVERRIDE;
+    void redo() Q_DECL_OVERRIDE;
+    void undo() Q_DECL_OVERRIDE;
 
     static void apply(QImage* img, const QRectF& rectF);
 

@@ -161,7 +161,7 @@ Importer::~Importer()
 void Importer::setAutoRenameFormat(const QString& format)
 {
     if (format.isEmpty()) {
-        d->mFileNameFormater.reset(0);
+        d->mFileNameFormater.reset(nullptr);
     } else {
         d->mFileNameFormater.reset(new FileNameFormater(format));
     }

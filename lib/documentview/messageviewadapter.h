@@ -37,16 +37,16 @@ class MessageViewAdapter : public AbstractDocumentViewAdapter
     Q_OBJECT
 public:
     MessageViewAdapter();
-    ~MessageViewAdapter();
+    ~MessageViewAdapter() Q_DECL_OVERRIDE;
 
-    virtual MimeTypeUtils::Kind kind() const Q_DECL_OVERRIDE
+    MimeTypeUtils::Kind kind() const Q_DECL_OVERRIDE
     {
         return MimeTypeUtils::KIND_UNKNOWN;
     }
 
-    virtual Document::Ptr document() const Q_DECL_OVERRIDE;
+    Document::Ptr document() const Q_DECL_OVERRIDE;
 
-    virtual void setDocument(Document::Ptr) Q_DECL_OVERRIDE;
+    void setDocument(Document::Ptr) Q_DECL_OVERRIDE;
 
     void setInfoMessage(const QString&);
 

@@ -426,8 +426,8 @@ DocumentView::DocumentView(QGraphicsScene* scene)
     setFlag(ItemClipsChildrenToShape);
 
     d->q = this;
-    d->mLoadingIndicator = 0;
-    d->mBirdEyeView = 0;
+    d->mLoadingIndicator = nullptr;
+    d->mBirdEyeView = nullptr;
     d->mCurrent = false;
     d->mCompareMode = false;
     d->controlWheelAccumulatedDelta = 0;
@@ -466,7 +466,7 @@ void DocumentView::createAdapterForDocument()
         LOG("Reusing current adapter");
         return;
     }
-    AbstractDocumentViewAdapter* adapter = 0;
+    AbstractDocumentViewAdapter* adapter = nullptr;
     switch (documentKind) {
     case MimeTypeUtils::KIND_RASTER_IMAGE:
         adapter = new RasterImageViewAdapter;
@@ -498,7 +498,7 @@ void DocumentView::openUrl(const QUrl &url, const DocumentView::Setup& setup)
         if (url == d->mDocument->url()) {
             return;
         }
-        disconnect(d->mDocument.data(), 0, this, 0);
+        disconnect(d->mDocument.data(), nullptr, this, nullptr);
     }
     d->mSetup = setup;
     d->mDocument = DocumentFactory::instance()->load(url);
@@ -900,7 +900,7 @@ bool DocumentView::sceneEventFilter(QGraphicsItem*, QEvent* event)
 
 AbstractRasterImageViewTool* DocumentView::currentTool() const
 {
-    return imageView() ? imageView()->currentTool() : 0;
+    return imageView() ? imageView()->currentTool() : nullptr;
 }
 
 int DocumentView::sortKey() const

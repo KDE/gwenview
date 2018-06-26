@@ -36,7 +36,7 @@ class ImporterConfigDialog : public KConfigDialog
 {
     Q_OBJECT
 public:
-    ImporterConfigDialog(QWidget*);
+    explicit ImporterConfigDialog(QWidget*);
     ~ImporterConfigDialog();
 
 private Q_SLOTS:

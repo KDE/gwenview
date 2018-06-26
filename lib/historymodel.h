@@ -46,11 +46,11 @@ class GWENVIEWLIB_EXPORT HistoryModel : public QStandardItemModel
     Q_OBJECT
 public:
     HistoryModel(QObject* parent, const QString& storageDir, int maxCount = 20);
-    ~HistoryModel();
+    ~HistoryModel() Q_DECL_OVERRIDE;
 
     void addUrl(const QUrl&, const QDateTime& dateTime = QDateTime());
 
-    virtual bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex()) Q_DECL_OVERRIDE;
+    bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex()) Q_DECL_OVERRIDE;
 
 private:
     HistoryModelPrivate* const d;

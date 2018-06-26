@@ -51,7 +51,7 @@ public:
     };
 
     AbstractImageView(QGraphicsItem* parent);
-    ~AbstractImageView();
+    ~AbstractImageView() Q_DECL_OVERRIDE;
 
     qreal zoom() const;
 

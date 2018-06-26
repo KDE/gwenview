@@ -41,8 +41,8 @@ class HudButton : public QGraphicsWidget
 {
     Q_OBJECT
 public:
-    HudButton(QGraphicsItem* parent = 0);
-    ~HudButton();
+    explicit HudButton(QGraphicsItem* parent = nullptr);
+    ~HudButton() Q_DECL_OVERRIDE;
 
     void setIcon(const QIcon&);
 

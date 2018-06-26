@@ -38,7 +38,7 @@ class DialogPage : public QWidget
 {
     Q_OBJECT
 public:
-    DialogPage(QWidget* parent = 0);
+    explicit DialogPage(QWidget* parent = nullptr);
     ~DialogPage();
 
     void removeButtons();

@@ -46,17 +46,17 @@ public:
         Adjusting
     };
 
-    RedEyeReductionTool(RasterImageView* parent);
-    ~RedEyeReductionTool();
+    explicit RedEyeReductionTool(RasterImageView* parent);
+    ~RedEyeReductionTool() Q_DECL_OVERRIDE;
 
-    virtual void paint(QPainter*) Q_DECL_OVERRIDE;
+    void paint(QPainter*) Q_DECL_OVERRIDE;
 
-    virtual void mousePressEvent(QGraphicsSceneMouseEvent*) Q_DECL_OVERRIDE;
-    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent*) Q_DECL_OVERRIDE;
-    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*) Q_DECL_OVERRIDE;
-    virtual void keyPressEvent(QKeyEvent*) Q_DECL_OVERRIDE;
+    void mousePressEvent(QGraphicsSceneMouseEvent*) Q_DECL_OVERRIDE;
+    void mouseMoveEvent(QGraphicsSceneMouseEvent*) Q_DECL_OVERRIDE;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent*) Q_DECL_OVERRIDE;
+    void keyPressEvent(QKeyEvent*) Q_DECL_OVERRIDE;
 
-    virtual void toolActivated() Q_DECL_OVERRIDE;
+    void toolActivated() Q_DECL_OVERRIDE;
 
     QWidget* widget() const Q_DECL_OVERRIDE;
 

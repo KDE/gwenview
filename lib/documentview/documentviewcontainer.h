@@ -46,7 +46,7 @@ class GWENVIEWLIB_EXPORT DocumentViewContainer : public QGraphicsView
 {
     Q_OBJECT
 public:
-    DocumentViewContainer(QWidget* parent = 0);
+    explicit DocumentViewContainer(QWidget* parent = nullptr);
     ~DocumentViewContainer();
 
     /**

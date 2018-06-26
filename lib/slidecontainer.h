@@ -54,9 +54,9 @@ public:
      */
     void setContent(QWidget* content);
 
-    virtual QSize sizeHint() const Q_DECL_OVERRIDE;
+    QSize sizeHint() const Q_DECL_OVERRIDE;
 
-    virtual QSize minimumSizeHint() const Q_DECL_OVERRIDE;
+    QSize minimumSizeHint() const Q_DECL_OVERRIDE;
 
     int slideHeight() const;
 

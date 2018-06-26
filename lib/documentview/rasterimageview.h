@@ -41,8 +41,8 @@ class GWENVIEWLIB_EXPORT RasterImageView : public AbstractImageView
 {
     Q_OBJECT
 public:
-    RasterImageView(QGraphicsItem* parent = 0);
-    ~RasterImageView();
+    explicit RasterImageView(QGraphicsItem* parent = nullptr);
+    ~RasterImageView() Q_DECL_OVERRIDE;
 
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) Q_DECL_OVERRIDE;
 
