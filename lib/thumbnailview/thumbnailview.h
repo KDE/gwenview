@@ -82,7 +82,7 @@ public:
      */
     qreal thumbnailAspectRatio() const;
 
-    QPixmap thumbnailForIndex(const QModelIndex&, QSize* fullSize = 0);
+    QPixmap thumbnailForIndex(const QModelIndex&, QSize* fullSize = nullptr);
 
     /**
      * Returns true if the document pointed by the index has been modified

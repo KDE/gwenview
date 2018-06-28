@@ -76,7 +76,7 @@ class GWENVIEWLIB_EXPORT SortedDirModel : public KDirSortFilterProxyModel
 {
     Q_OBJECT
 public:
-    SortedDirModel(QObject* parent = 0);
+    explicit SortedDirModel(QObject* parent = nullptr);
     ~SortedDirModel();
     KDirLister* dirLister() const;
     /**

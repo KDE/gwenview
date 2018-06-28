@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QButtonGroup>
 #include <QGridLayout>
 #include <QToolButton>
+#include <QDebug>
 
 // KDE
 #include <KConfigDialogManager>

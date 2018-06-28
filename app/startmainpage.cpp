@@ -143,7 +143,7 @@ StartMainPage::StartMainPage(QWidget* parent, GvCore* gvCore)
 : QFrame(parent)
 , d(new StartMainPagePrivate)
 {
-    d->mRecentFilesThumbnailProvider = 0;
+    d->mRecentFilesThumbnailProvider = nullptr;
     d->q = this;
     d->mGvCore = gvCore;
     d->mSearchUiInitialized = false;

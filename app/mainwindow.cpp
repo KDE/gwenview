@@ -795,7 +795,7 @@ struct MainWindow::Private
         if (!enabled) {
             mNotificationRestrictions = new KNotificationRestrictions(KNotificationRestrictions::ScreenSaver, q);
         } else {
-            mNotificationRestrictions = 0;
+            mNotificationRestrictions = nullptr;
         }
     }
 
@@ -803,7 +803,7 @@ struct MainWindow::Private
     {
         GV_RETURN_IF_FAIL(thumbnailView);
         if (mActiveThumbnailView) {
-            mActiveThumbnailView->setThumbnailProvider(0);
+            mActiveThumbnailView->setThumbnailProvider(nullptr);
         }
         thumbnailView->setThumbnailProvider(mThumbnailProvider);
         mActiveThumbnailView = thumbnailView;

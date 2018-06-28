@@ -80,7 +80,7 @@ void SemanticInfoBackEndTest::init()
 void SemanticInfoBackEndTest::cleanup()
 {
     delete mBackEnd;
-    mBackEnd = 0;
+    mBackEnd = nullptr;
 }
 
 /**

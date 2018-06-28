@@ -83,7 +83,7 @@ void ImporterTest::testSuccessfulImport()
 {
     QUrl destUrl = QUrl::fromLocalFile(mTempDir->path() + "/foo");
 
-    Importer importer(0);
+    Importer importer(nullptr);
     QSignalSpy maximumChangedSpy(&importer, SIGNAL(maximumChanged(int)));
     QSignalSpy errorSpy(&importer, SIGNAL(error(QString)));
 
@@ -114,7 +114,7 @@ void ImporterTest::testSkippedUrlList()
 {
     QUrl destUrl = QUrl::fromLocalFile(mTempDir->path() + "/foo");
 
-    Importer importer(0);
+    Importer importer(nullptr);
 
     QList<QUrl> list = mDocumentList.mid(0, 1);
 
@@ -142,7 +142,7 @@ void ImporterTest::testRenamedCount()
 {
     QUrl destUrl = QUrl::fromLocalFile(mTempDir->path() + "/foo");
 
-    Importer importer(0);
+    Importer importer(nullptr);
 
     QList<QUrl> list;
     list << mDocumentList.first();
@@ -214,7 +214,7 @@ void ImporterTest::testAutoRenameFormat()
 
     QUrl destUrl = QUrl::fromLocalFile(mTempDir->path() + "foo");
 
-    Importer importer(0);
+    Importer importer(nullptr);
     importer.setAutoRenameFormat("{date}_{time}.{ext}");
     QList<QUrl> list = mDocumentList;
 
@@ -239,7 +239,7 @@ void ImporterTest::testReadOnlyDestination()
     QUrl destUrl = QUrl::fromLocalFile(mTempDir->path() + "/foo");
     chmod(QFile::encodeName(mTempDir->path()), 0555);
 
-    Importer importer(0);
+    Importer importer(nullptr);
     QSignalSpy errorSpy(&importer, SIGNAL(error(QString)));
     importer.start(mDocumentList, destUrl);
 

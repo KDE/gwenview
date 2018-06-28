@@ -94,7 +94,7 @@ void ContextManagerTest::testInvalidDirUrl()
         DirLister()
         : mOpenUrlCalled(false)
         {
-            setAutoErrorHandlingEnabled(false, 0);
+            setAutoErrorHandlingEnabled(false, nullptr);
         }
 
         bool openUrl(const QUrl &url, OpenUrlFlags flags = NoFlags) Q_DECL_OVERRIDE
@@ -109,7 +109,7 @@ void ContextManagerTest::testInvalidDirUrl()
     SortedDirModel dirModel;
     DirLister* dirLister = new DirLister;
     dirModel.setDirLister(dirLister);
-    ContextManager manager(&dirModel, 0);
+    ContextManager manager(&dirModel, nullptr);
 
     manager.setCurrentDirUrl(QUrl());
     QVERIFY(!dirLister->mOpenUrlCalled);

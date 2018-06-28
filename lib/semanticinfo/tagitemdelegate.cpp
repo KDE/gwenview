@@ -45,7 +45,7 @@ TagItemDelegate::TagItemDelegate(QAbstractItemView* view)
     mSpacing    = pm(PM_ToolBarItemSpacing);
 #undef pm
     const int iconSize = KIconLoader::global()->currentSize(KIconLoader::Toolbar);
-    const QSize sz = view->style()->sizeFromContents(QStyle::CT_ToolButton, 0, QSize(iconSize, iconSize));
+    const QSize sz = view->style()->sizeFromContents(QStyle::CT_ToolButton, nullptr, QSize(iconSize, iconSize));
     mButtonSize = qMax(sz.width(), sz.height());
 }
 
@@ -106,7 +106,7 @@ void TagItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& optio
     const bool selected = option.state & QStyle::State_Selected;
     const bool fullyAssigned = index.data(TagModel::AssignmentStatusRole).toInt() == int(TagModel::FullyAssigned);
 
-    itemView()->style()->drawPrimitive(QStyle::PE_PanelItemViewItem, &option, painter, 0);
+    itemView()->style()->drawPrimitive(QStyle::PE_PanelItemViewItem, &option, painter, nullptr);
 
     QRect textRect = option.rect;
     textRect.setLeft(textRect.left() + mMargin);

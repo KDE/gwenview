@@ -114,7 +114,7 @@ void GraphicsWidgetFloater::setChildWidget(QGraphicsWidget* child)
 {
     if (d->mChild) {
         d->mChild->removeEventFilter(this);
-        disconnect(d->mChild, 0, this, 0);
+        disconnect(d->mChild, nullptr, this, nullptr);
     }
     d->mChild = child;
     d->mChild->setParent(d->mParent);

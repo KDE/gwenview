@@ -369,7 +369,7 @@ void InfoContextManagerItem::showMetaInfoDialog()
         connect(d->mImageMetaInfoDialog, SIGNAL(preferredMetaInfoKeyListChanged(QStringList)),
                 SLOT(slotPreferredMetaInfoKeyListChanged(QStringList)));
     }
-    d->mImageMetaInfoDialog->setMetaInfo(d->mDocument ? d->mDocument->metaInfo() : 0, GwenviewConfig::preferredMetaInfoKeyList());
+    d->mImageMetaInfoDialog->setMetaInfo(d->mDocument ? d->mDocument->metaInfo() : nullptr, GwenviewConfig::preferredMetaInfoKeyList());
     d->mImageMetaInfoDialog->show();
 }
 

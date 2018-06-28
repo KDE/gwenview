@@ -123,7 +123,7 @@ void PlaceTreeModelTest::init()
 
 void PlaceTreeModelTest::testListPlaces()
 {
-    PlaceTreeModel model(0);
+    PlaceTreeModel model(nullptr);
 
 #if KIO_VERSION >= QT_VERSION_CHECK(5, 45, 0)
     QCOMPARE(model.rowCount(), 8);
@@ -142,7 +142,7 @@ void PlaceTreeModelTest::testListPlaces()
 
 void PlaceTreeModelTest::testListUrl1()
 {
-    PlaceTreeModel model(0);
+    PlaceTreeModel model(nullptr);
 
     QModelIndex index = model.index(0, 0);
     QCOMPARE(model.urlForIndex(index), mUrl1);
