@@ -70,6 +70,9 @@ struct GvCorePrivate
         DialogGuard<QFileDialog> dialog(mMainWindow);
         dialog->setAcceptMode(QFileDialog::AcceptSave);
         dialog->setWindowTitle(i18nc("@title:window", "Save Image"));
+        // Temporary workaround for selectUrl() not setting the
+        // initial directory to url (removed in D4193)
+        dialog->setDirectoryUrl(url.adjusted(QUrl::RemoveFilename));
         dialog->selectUrl(url);
 
         QStringList supportedMimetypes;
