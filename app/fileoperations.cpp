@@ -245,8 +245,8 @@ void rename(const QUrl &oldUrl, QWidget* parent, ContextManager* contextManager)
     newUrl.setPath(newUrl.path() + name);
     KIO::SimpleJob* job = KIO::rename(oldUrl, newUrl, KIO::HideProgressInfo);
     KJobWidgets::setWindow(job, parent);
+    job->uiDelegate()->setAutoErrorHandlingEnabled(true);
     if (!job->exec()) {
-        job->uiDelegate()->showErrorMessage();
         return;
     }
     contextManager->setCurrentUrl(newUrl);
