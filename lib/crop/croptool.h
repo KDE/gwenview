@@ -36,7 +36,6 @@ namespace Gwenview
 {
 
 class AbstractImageOperation;
-class ImageView;
 
 struct CropToolPrivate;
 class GWENVIEWLIB_EXPORT CropTool : public AbstractRasterImageViewTool
