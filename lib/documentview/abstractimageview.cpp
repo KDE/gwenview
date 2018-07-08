@@ -354,8 +354,11 @@ void AbstractImageView::mousePressEvent(QGraphicsSceneMouseEvent* event)
         }
     }
 
-    d->mLastDragPos = event->pos();
-    updateCursor();
+    // Prepare for panning or dragging
+    if (event->button() == Qt::LeftButton) {
+        d->mLastDragPos = event->pos();
+        updateCursor();
+    }
 }
 
 void AbstractImageView::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
@@ -481,7 +484,7 @@ void AbstractImageView::keyReleaseEvent(QKeyEvent* event)
 
 void AbstractImageView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
 {
-    if (event->modifiers() == Qt::NoModifier) {
+    if (event->modifiers() == Qt::NoModifier && event->button() == Qt::LeftButton) {
         toggleFullScreenRequested();
     }
 }

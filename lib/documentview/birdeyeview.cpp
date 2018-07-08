@@ -239,7 +239,7 @@ void BirdEyeView::slotIsAnimatedChanged()
 
 void BirdEyeView::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
-    if (d->mVisibleRect.contains(event->pos())) {
+    if (d->mVisibleRect.contains(event->pos()) && event->button() == Qt::LeftButton) {
         setCursor(Qt::ClosedHandCursor);
         d->mStartDragMousePos = event->pos();
         d->mStartDragViewPos = d->mDocView->position();
