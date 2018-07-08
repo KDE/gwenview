@@ -829,12 +829,6 @@ MainWindow::MainWindow()
     d->setupContextManagerItems();
     d->setupFullScreenContent();
 
-#ifdef HAVE_QTDBUS
-    d->mMpris2Service = new Mpris2Service(d->mSlideShow, d->mContextManager,
-                                          d->mToggleSlideShowAction, d->mFullScreenAction,
-                                          d->mGoToPreviousAction, d->mGoToNextAction, this);
-#endif
-
     d->updateActions();
     updatePreviousNextActions();
     d->mSaveBar->initActionDependentWidgets();
@@ -844,6 +838,12 @@ MainWindow::MainWindow()
 
     connect(DocumentFactory::instance(), SIGNAL(modifiedDocumentListChanged()),
             SLOT(slotModifiedDocumentListChanged()));
+
+#ifdef HAVE_QTDBUS
+    d->mMpris2Service = new Mpris2Service(d->mSlideShow, d->mContextManager,
+                                          d->mToggleSlideShowAction, d->mFullScreenAction,
+                                          d->mGoToPreviousAction, d->mGoToNextAction, this);
+#endif
 
 #ifdef KIPI_FOUND
     d->mKIPIInterface = new KIPIInterface(this);
