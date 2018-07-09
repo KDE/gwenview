@@ -1395,7 +1395,7 @@ void MainWindow::openFile()
     QUrl dirUrl = d->mContextManager->currentDirUrl();
 
     DialogGuard<QFileDialog> dialog(this);
-    dialog->selectUrl(dirUrl);
+    dialog->setDirectoryUrl(dirUrl);
     dialog->setWindowTitle(i18nc("@title:window", "Open Image"));
     const QStringList mimeFilter = MimeTypeUtils::imageMimeTypes();
     dialog->setMimeTypeFilters(mimeFilter);
