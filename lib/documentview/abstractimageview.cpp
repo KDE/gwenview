@@ -27,6 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QDebug>
+#include <QGuiApplication>
 #include <QCursor>
 #include <QGraphicsSceneMouseEvent>
 #include <QStandardPaths>
@@ -284,6 +285,18 @@ void AbstractImageView::resizeEvent(QGraphicsSceneResizeEvent* event)
     } else {
         d->adjustImageOffset();
         d->adjustScrollPos();
+    }
+}
+
+void AbstractImageView::focusInEvent(QFocusEvent* event)
+{
+    QGraphicsWidget::focusInEvent(event);
+
+    // We might have missed a keyReleaseEvent for the control key, e.g. for Ctrl+O
+    const bool controlKeyIsCurrentlyDown = QGuiApplication::queryKeyboardModifiers() & Qt::ControlModifier;
+    if (d->mControlKeyIsDown != controlKeyIsCurrentlyDown) {
+        d->mControlKeyIsDown = controlKeyIsCurrentlyDown;
+        updateCursor();
     }
 }
 

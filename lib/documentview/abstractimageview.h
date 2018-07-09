@@ -129,6 +129,7 @@ protected:
     virtual void onScrollPosChanged(const QPointF& oldPos) = 0;
 
     void resizeEvent(QGraphicsSceneResizeEvent* event) Q_DECL_OVERRIDE;
+    void focusInEvent(QFocusEvent* event) Q_DECL_OVERRIDE;
 
     void keyPressEvent(QKeyEvent* event) Q_DECL_OVERRIDE;
     void keyReleaseEvent(QKeyEvent* event) Q_DECL_OVERRIDE;
