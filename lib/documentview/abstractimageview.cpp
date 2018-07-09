@@ -27,6 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QDebug>
+#include <QGuiApplication>
 #include <QCursor>
 #include <QGraphicsSceneMouseEvent>
 #include <QStandardPaths>
@@ -307,6 +308,18 @@ void AbstractImageView::resizeEvent(QGraphicsSceneResizeEvent* event)
     }
 }
 
+void AbstractImageView::focusInEvent(QFocusEvent* event)
+{
+    QGraphicsWidget::focusInEvent(event);
+
+    // We might have missed a keyReleaseEvent for the control key, e.g. for Ctrl+O
+    const bool controlKeyIsCurrentlyDown = QGuiApplication::queryKeyboardModifiers() & Qt::ControlModifier;
+    if (d->mControlKeyIsDown != controlKeyIsCurrentlyDown) {
+        d->mControlKeyIsDown = controlKeyIsCurrentlyDown;
+        updateCursor();
+    }
+}
+
 qreal AbstractImageView::computeZoomToFit() const
 {
     QSizeF docSize = documentSize();
@@ -361,8 +374,11 @@ void AbstractImageView::mousePressEvent(QGraphicsSceneMouseEvent* event)
         }
     }
 
-    d->mLastDragPos = event->pos();
-    updateCursor();
+    // Prepare for panning or dragging
+    if (event->button() == Qt::LeftButton) {
+        d->mLastDragPos = event->pos();
+        updateCursor();
+    }
 }
 
 void AbstractImageView::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
@@ -488,7 +504,7 @@ void AbstractImageView::keyReleaseEvent(QKeyEvent* event)
 
 void AbstractImageView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
 {
-    if (event->modifiers() == Qt::NoModifier) {
+    if (event->modifiers() == Qt::NoModifier && event->button() == Qt::LeftButton) {
         toggleFullScreenRequested();
     }
 }

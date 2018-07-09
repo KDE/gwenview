@@ -134,6 +134,9 @@ void RedEyeReductionTool::paint(QPainter* painter)
 void RedEyeReductionTool::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
     event->accept();
+    if (event->buttons() != Qt::LeftButton) {
+        return;
+    }
     if (d->mStatus == NotSet) {
         d->mToolWidget->diameterSpinBox->setValue(d->mDiameter);
         d->mToolWidget->showMainPage();
