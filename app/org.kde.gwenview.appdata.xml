@@ -312,6 +312,7 @@
   <url type="help">https://docs.kde.org/?application=gwenview</url>
   <screenshots>
     <screenshot type="default">
+      <caption>Gwenview displaying an image, with additional metadata shown in the sidebar</caption>
       <image>https://kde.org/images/screenshots/gwenview.png</image>
     </screenshot>
   </screenshots>
