@@ -313,6 +313,15 @@
   <screenshots>
     <screenshot type="default">
       <caption>Gwenview displaying an image, with additional metadata shown in the sidebar</caption>
+      <caption xml:lang="ca">El Gwenview mostra una imatge, i a la barra lateral es mostraran les metadades addicionals</caption>
+      <caption xml:lang="ca-valencia">El Gwenview mostra una imatge, i a la barra lateral es mostraran les metadades addicionals</caption>
+      <caption xml:lang="nl">Gwenview toont een afbeelding, met extra metagegevens getoond in de zijbalk</caption>
+      <caption xml:lang="nn">Gwenview som viser eit bilete, med metadata om biletet vist i sidestolpen</caption>
+      <caption xml:lang="pt">O Gwenview a mostrar uma imagem com os meta-dados adicionais visíveis na barra lateral</caption>
+      <caption xml:lang="sv">Gwenview som visar en bild, med ytterligare metadata visad i sidoraden</caption>
+      <caption xml:lang="uk">Gwenview із відкритим зображенням та додатковими метаданими, які показано на бічній панелі</caption>
+      <caption xml:lang="x-test">xxGwenview displaying an image, with additional metadata shown in the sidebarxx</caption>
+      <caption xml:lang="zh-TW">Gwenview 顯示圖片時，也在側邊欄顯示了額外的中繼資料</caption>
       <image>https://kde.org/images/screenshots/gwenview.png</image>
     </screenshot>
   </screenshots>
