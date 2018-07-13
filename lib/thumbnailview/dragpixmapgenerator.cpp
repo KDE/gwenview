@@ -42,7 +42,6 @@ namespace DragPixmapGenerator
 {
 
 const int DRAG_THUMB_SIZE = KIconLoader::SizeHuge;
-const int DRAG_THUMB_SPACING = 4;
 const int SPREAD_ANGLE = 30;
 
 DragPixmap generate(const QList<QPixmap>& pixmaps, int totalCount)
