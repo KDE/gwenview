@@ -36,7 +36,7 @@
 </copyright>
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2018-04-09</date>
+<date>2018-07-13</date>
 <releaseinfo>Applications 18.08</releaseinfo>
 <abstract>
 <para>&gwenview; is an image and video viewer.</para>
@@ -263,7 +263,7 @@ buttons are next to the zoom slider and are three preset zoom levels. The
 <guibutton>Fit</guibutton> button zooms the current image to fit the size
 of the window, the <guibutton>Fill</guibutton> button zooms the image to fill the window 
 by fitting width or height and the <guibutton>100%</guibutton> button zooms the image to
-the actual pixel size. The shortcut <keycap>F</keycap> switches to fit mode.</para>
+the actual pixel size. The shortcut <keycap>F</keycap> toggles between <guibutton>Fit</guibutton> mode and <guibutton>100%</guibutton>, pressing <keycombo action="simul">&Shift;<keycap>F</keycap></keycombo> will toggle <guibutton>Fill</guibutton> respectively.</para>
 
 <para>When an image is in zoom-to-fit mode, you can go to the previous and next
 image with the arrow keys. When you zoom in, arrow keys are used to scroll the image.
@@ -532,8 +532,7 @@ enter it into the text box or type one manually.</para>
 
 <sect2 id='mouse_zooming'><title>Zooming with the mouse</title>
 <itemizedlist>
-  <listitem><para>Clicking the middle mouse button will toggle the auto zoom
-      on/off.</para></listitem>
+  <listitem><para>Clicking the middle mouse button will toggle the <guibutton>Fit</guibutton> zoom button. Hold down the &Shift; key and middle-click to toggle the <guibutton>Fill</guibutton> zoom button.</para></listitem>
   <listitem><para>Hold down the &Ctrl; key, then either use the mouse wheel to
       zoom in and out or left click to zoom in and right click to zoom
       out.</para></listitem>

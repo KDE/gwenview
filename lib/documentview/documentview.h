@@ -204,6 +204,7 @@ protected:
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) Q_DECL_OVERRIDE;
 
     void resizeEvent(QGraphicsSceneResizeEvent* event) Q_DECL_OVERRIDE;
+    void mousePressEvent(QGraphicsSceneMouseEvent* event) Q_DECL_OVERRIDE;
     void wheelEvent(QGraphicsSceneWheelEvent* event) Q_DECL_OVERRIDE;
     void contextMenuEvent(QGraphicsSceneContextMenuEvent* event) Q_DECL_OVERRIDE;
     bool sceneEventFilter(QGraphicsItem*, QEvent*) Q_DECL_OVERRIDE;

@@ -708,6 +708,19 @@ void DocumentView::resizeEvent(QGraphicsSceneResizeEvent *event)
     QGraphicsWidget::resizeEvent(event);
 }
 
+void DocumentView::mousePressEvent(QGraphicsSceneMouseEvent* event)
+{
+    QGraphicsWidget::mousePressEvent(event);
+
+    if (d->mAdapter->canZoom() && event->button() == Qt::MiddleButton) {
+        if (event->modifiers() == Qt::NoModifier) {
+            toggleZoomToFit();
+        } else if (event->modifiers() == Qt::SHIFT) {
+            toggleZoomToFill();
+        }
+    }
+}
+
 void DocumentView::wheelEvent(QGraphicsSceneWheelEvent* event)
 {
     if (d->mAdapter->canZoom() && event->modifiers() & Qt::ControlModifier) {
