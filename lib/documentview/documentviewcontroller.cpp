@@ -25,7 +25,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "abstractdocumentviewadapter.h"
 #include "documentview.h"
 #include <lib/documentview/abstractrasterimageviewtool.h>
-#include <lib/signalblocker.h>
 #include <lib/slidecontainer.h>
 #include <lib/zoomwidget.h>
 
@@ -189,10 +188,8 @@ void DocumentViewController::setView(DocumentView* view)
     connect(d->mView, &DocumentView::zoomToFillChanged, this, &DocumentViewController::updateZoomToFillActionFromView);
     connect(d->mView, &DocumentView::currentToolChanged, this, &DocumentViewController::updateTool);
 
-    connect(d->mZoomToFitAction, SIGNAL(toggled(bool)),
-            d->mView, SLOT(setZoomToFit(bool)));
-    connect(d->mZoomToFillAction, SIGNAL(toggled(bool)),
-            d->mView, SLOT(setZoomToFill(bool)));
+    connect(d->mZoomToFitAction, &QAction::triggered, d->mView, &DocumentView::toggleZoomToFit);
+    connect(d->mZoomToFillAction, &QAction::triggered, d->mView, &DocumentView::toggleZoomToFill);
     connect(d->mActualSizeAction, SIGNAL(triggered()),
             d->mView, SLOT(zoomActualSize()));
     connect(d->mZoomInAction, SIGNAL(triggered()),
@@ -246,13 +243,11 @@ void DocumentViewController::slotAdapterChanged()
 
 void DocumentViewController::updateZoomToFitActionFromView()
 {
-    SignalBlocker blocker(d->mZoomToFitAction);
     d->mZoomToFitAction->setChecked(d->mView->zoomToFit());
 }
 
 void DocumentViewController::updateZoomToFillActionFromView()
 {
-    SignalBlocker blocker(d->mZoomToFillAction);
     d->mZoomToFillAction->setChecked(d->mView->zoomToFill());
 }
 

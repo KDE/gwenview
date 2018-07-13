@@ -146,8 +146,10 @@ public Q_SLOTS:
     void setZoom(qreal);
 
     void setZoomToFit(bool);
+    void toggleZoomToFit();
 
     void setZoomToFill(bool);
+    void toggleZoomToFill();
 
     void setPosition(const QPoint&);
 

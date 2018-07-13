@@ -32,6 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsSceneWheelEvent>
 #include <QGraphicsOpacityEffect>
+#include <QGraphicsView>
 #include <QPainter>
 #include <QPropertyAnimation>
 #include <QPointer>
@@ -417,6 +418,19 @@ struct DocumentViewPrivate
             mDragThumbnailProvider->appendItems(itemList);
         }
     }
+
+    QPointF cursorPosition() {
+        const QGraphicsScene* sc = q->scene();
+        if (sc) {
+            const auto views = sc->views();
+            for (const QGraphicsView* view : views) {
+                if (view->underMouse()) {
+                    return q->mapFromScene(view->mapFromGlobal(QCursor::pos()));
+                }
+            }
+        }
+        return QPointF(-1, -1);
+    }
 };
 
 DocumentView::DocumentView(QGraphicsScene* scene)
@@ -603,12 +617,28 @@ void DocumentView::setZoomToFit(bool on)
     d->mAdapter->setZoomToFit(on);
 }
 
+void DocumentView::toggleZoomToFit() {
+    const bool zoomToFitOn = d->mAdapter->zoomToFit();
+    d->mAdapter->setZoomToFit(!zoomToFitOn);
+    if (zoomToFitOn) {
+        d->setZoom(1., d->cursorPosition());
+    }
+}
+
 void DocumentView::setZoomToFill(bool on)
 {
     if (on == d->mAdapter->zoomToFill()) {
         return;
     }
     d->mAdapter->setZoomToFill(on);
+}
+
+void DocumentView::toggleZoomToFill() {
+    const bool zoomToFillOn = d->mAdapter->zoomToFill();
+    d->mAdapter->setZoomToFill(!zoomToFillOn);
+    if (zoomToFillOn) {
+        d->setZoom(1., d->cursorPosition());
+    }
 }
 
 bool DocumentView::zoomToFit() const

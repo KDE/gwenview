@@ -268,6 +268,7 @@ void AbstractImageView::setZoomToFit(bool on)
 {
     d->mZoomToFit = on;
     if (on) {
+        d->mZoomToFill = false;
         setZoom(computeZoomToFit());
     }
     // We do not set zoom to 1 if zoomToFit is off, this is up to the code
@@ -280,6 +281,7 @@ void AbstractImageView::setZoomToFill(bool on)
 {
     d->mZoomToFill = on;
     if (on) {
+        d->mZoomToFit = false;
         setZoom(computeZoomToFill());
     }
     // We do not set zoom to 1 if zoomToFit is off, this is up to the code
