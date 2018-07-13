@@ -98,7 +98,7 @@ struct DocumentViewControllerPrivate
         mZoomToFitAction->setIconText(i18nc("@action:button Zoom to fit, shown in status bar, keep it short please", "Fit"));
 
         mZoomToFillAction = view->addAction("view_zoom_to_fill");
-        //view->collection()->setDefaultShortcuts(mZoomToFillAction, Qt::Key_W); ??
+        view->collection()->setDefaultShortcut(mZoomToFillAction, Qt::SHIFT + Qt::Key_F);
         mZoomToFillAction->setCheckable(true);
         mZoomToFillAction->setChecked(false);
         mZoomToFillAction->setText(i18n("Zoom to fill window by fitting to width or height"));
