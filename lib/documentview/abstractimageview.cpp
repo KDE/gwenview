@@ -125,6 +125,17 @@ struct AbstractImageViewPrivate
         painter.fillRect(16, 16, 16, 16, light);
         return pix;
     }
+
+    void checkAndRequestZoomAction(const QGraphicsSceneMouseEvent* event)
+    {
+        if (event->modifiers() & Qt::ControlModifier) {
+            if (event->button() == Qt::LeftButton) {
+                q->zoomInRequested(event->pos());
+            } else if (event->button() == Qt::RightButton) {
+                q->zoomOutRequested(event->pos());
+            }
+        }
+    }
 };
 
 AbstractImageView::AbstractImageView(QGraphicsItem* parent)
@@ -364,15 +375,7 @@ void AbstractImageView::mousePressEvent(QGraphicsSceneMouseEvent* event)
         return;
     }
 
-    if (event->modifiers() & Qt::ControlModifier) {
-        if (event->button() == Qt::LeftButton) {
-            zoomInRequested(event->pos());
-            return;
-        } else if (event->button() == Qt::RightButton) {
-            zoomOutRequested(event->pos());
-            return;
-        }
-    }
+    d->checkAndRequestZoomAction(event);
 
     // Prepare for panning or dragging
     if (event->button() == Qt::LeftButton) {
@@ -507,6 +510,8 @@ void AbstractImageView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
     if (event->modifiers() == Qt::NoModifier && event->button() == Qt::LeftButton) {
         toggleFullScreenRequested();
     }
+
+    d->checkAndRequestZoomAction(event);
 }
 
 QPointF AbstractImageView::imageOffset() const
