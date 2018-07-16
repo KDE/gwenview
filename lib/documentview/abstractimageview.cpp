@@ -368,14 +368,6 @@ qreal AbstractImageView::computeZoomToFill() const
 void AbstractImageView::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
     QGraphicsItem::mousePressEvent(event);
-    if (event->button() == Qt::MiddleButton) {
-        bool value = !zoomToFit();
-        setZoomToFit(value);
-        if (!value) {
-            setZoom(1., event->pos());
-        }
-        return;
-    }
 
     d->checkAndRequestZoomAction(event);
 
