@@ -58,8 +58,7 @@ class JobWatcher : public QObject
     Q_OBJECT
 public:
     JobWatcher(KJob* job)
-        : mJob(job)
-        , mDone(false)
+        : mDone(false)
         , mError(0) {
         connect(job, SIGNAL(result(KJob*)),
                 SLOT(slotResult(KJob*)));
@@ -94,7 +93,6 @@ private Q_SLOTS:
     }
 
 private:
-    KJob* mJob;
     bool mDone;
     int mError;
 };
