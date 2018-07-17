@@ -211,9 +211,9 @@ void SvgViewAdapter::setZoomToFit(bool on)
     d->mView->setZoomToFit(on);
 }
 
-void SvgViewAdapter::setZoomToFill(bool on)
+void SvgViewAdapter::setZoomToFill(bool on, const QPointF& center)
 {
-    d->mView->setZoomToFill(on);
+    d->mView->setZoomToFill(on, center);
 }
 
 bool SvgViewAdapter::zoomToFit() const

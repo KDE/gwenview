@@ -95,7 +95,7 @@ public:
 
     void setZoomToFit(bool) Q_DECL_OVERRIDE;
 
-    void setZoomToFill(bool) Q_DECL_OVERRIDE;
+    void setZoomToFill(bool on, const QPointF& center) Q_DECL_OVERRIDE;
 
     bool zoomToFit() const Q_DECL_OVERRIDE;
 
