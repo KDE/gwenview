@@ -63,7 +63,7 @@ public:
 
     virtual void setZoomToFit(bool value);
 
-    virtual void setZoomToFill(bool value);
+    virtual void setZoomToFill(bool value, const QPointF& center = QPointF(-1, -1));
 
     virtual void setDocument(Document::Ptr doc);
 

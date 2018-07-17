@@ -630,12 +630,12 @@ void DocumentView::setZoomToFill(bool on)
     if (on == d->mAdapter->zoomToFill()) {
         return;
     }
-    d->mAdapter->setZoomToFill(on);
+    d->mAdapter->setZoomToFill(on, d->cursorPosition());
 }
 
 void DocumentView::toggleZoomToFill() {
     const bool zoomToFillOn = d->mAdapter->zoomToFill();
-    d->mAdapter->setZoomToFill(!zoomToFillOn);
+    d->mAdapter->setZoomToFill(!zoomToFillOn, d->cursorPosition());
     if (zoomToFillOn) {
         d->setZoom(1., d->cursorPosition());
     }
@@ -655,11 +655,14 @@ void DocumentView::zoomActualSize()
 {
     d->uncheckZoomToFit();
     d->uncheckZoomToFill();
-    d->mAdapter->setZoom(1.);
+    d->mAdapter->setZoom(1., d->cursorPosition());
 }
 
-void DocumentView::zoomIn(const QPointF& center)
+void DocumentView::zoomIn(QPointF center)
 {
+    if (center == QPointF(-1, -1)) {
+        center = d->cursorPosition();
+    }
     qreal currentZoom = d->mAdapter->zoom();
 
     Q_FOREACH(qreal zoom, d->mZoomSnapValues) {
@@ -670,8 +673,11 @@ void DocumentView::zoomIn(const QPointF& center)
     }
 }
 
-void DocumentView::zoomOut(const QPointF& center)
+void DocumentView::zoomOut(QPointF center)
 {
+    if (center == QPointF(-1, -1)) {
+        center = d->cursorPosition();
+    }
     qreal currentZoom = d->mAdapter->zoom();
 
     QListIterator<qreal> it(d->mZoomSnapValues);

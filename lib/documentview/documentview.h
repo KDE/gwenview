@@ -218,8 +218,8 @@ private Q_SLOTS:
 
     void zoomActualSize();
 
-    void zoomIn(const QPointF& center = QPointF(-1, -1));
-    void zoomOut(const QPointF& center = QPointF(-1, -1));
+    void zoomIn(QPointF center = QPointF(-1, -1));
+    void zoomOut(QPointF center = QPointF(-1, -1));
 
     void slotZoomChanged(qreal);
 

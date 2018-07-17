@@ -93,7 +93,7 @@ public:
     }
 
     // Implementation must emit zoomToFillChanged()
-    virtual void setZoomToFill(bool)
+    virtual void setZoomToFill(bool /*on*/, const QPointF& /*center*/ = QPointF(-1, -1))
     {}
 
     virtual bool zoomToFill() const

@@ -94,9 +94,9 @@ void RasterImageViewAdapter::setZoomToFit(bool on)
     d->mView->setZoomToFit(on);
 }
 
-void RasterImageViewAdapter::setZoomToFill(bool on)
+void RasterImageViewAdapter::setZoomToFill(bool on, const QPointF& center)
 {
-    d->mView->setZoomToFill(on);
+    d->mView->setZoomToFill(on, center);
 }
 
 bool RasterImageViewAdapter::zoomToFit() const

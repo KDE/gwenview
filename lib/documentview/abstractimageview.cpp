@@ -277,12 +277,12 @@ void AbstractImageView::setZoomToFit(bool on)
     zoomToFitChanged(d->mZoomToFit);
 }
 
-void AbstractImageView::setZoomToFill(bool on)
+void AbstractImageView::setZoomToFill(bool on, const QPointF& center)
 {
     d->mZoomToFill = on;
     if (on) {
         d->mZoomToFit = false;
-        setZoom(computeZoomToFill());
+        setZoom(computeZoomToFill(), center);
     }
     // We do not set zoom to 1 if zoomToFit is off, this is up to the code
     // calling us. It may went to zoom to some other level and/or to zoom on
