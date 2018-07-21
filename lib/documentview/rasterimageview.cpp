@@ -295,7 +295,7 @@ void RasterImageView::finishSetDocument()
     } else if (zoomToFill()) {
         setZoom(computeZoomToFill(), QPointF(-1, -1), ForceUpdate);
     } else {
-        updateBuffer();
+        onZoomChanged();
     }
 
     d->startAnimationIfNecessary();
