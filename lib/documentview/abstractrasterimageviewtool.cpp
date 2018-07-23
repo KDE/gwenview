@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "abstractrasterimageviewtool.h"
 
 // Qt
+#include <QGraphicsSceneWheelEvent>
 
 // KDE
 
@@ -51,6 +52,11 @@ AbstractRasterImageViewTool::~AbstractRasterImageViewTool()
 RasterImageView* AbstractRasterImageViewTool::imageView() const
 {
     return d->mRasterImageView;
+}
+
+void AbstractRasterImageViewTool::wheelEvent(QGraphicsSceneWheelEvent* event)
+{
+    event->ignore();
 }
 
 } // namespace

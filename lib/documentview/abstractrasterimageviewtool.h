@@ -62,8 +62,7 @@ public:
     {}
     virtual void hoverMoveEvent(QGraphicsSceneHoverEvent*)
     {}
-    virtual void wheelEvent(QGraphicsSceneWheelEvent*)
-    {}
+    virtual void wheelEvent(QGraphicsSceneWheelEvent* event);
     virtual void keyPressEvent(QKeyEvent*)
     {}
     virtual void keyReleaseEvent(QKeyEvent*)
