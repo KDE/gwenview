@@ -49,8 +49,6 @@ public:
     void setZoom(qreal);
     void setDestinationRegion(const QRegion&);
 
-    void setTransformationMode(Qt::TransformationMode);
-
 Q_SIGNALS:
     void scaledRect(int left, int top, const QImage&);
 

@@ -61,7 +61,8 @@ void ImageScalerTest::testScaleFullImage()
 
     QImage scaledImage = client.createFullImage();
 
-    QImage expectedImage = doc->image().scaled(doc->size() * zoom);
+    QImage expectedImage = doc->image().scaled(doc->size() * zoom,
+                                               Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     QVERIFY(TestUtils::imageCompare(scaledImage, expectedImage));
 }
 

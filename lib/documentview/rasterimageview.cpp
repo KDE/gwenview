@@ -295,6 +295,8 @@ void RasterImageView::finishSetDocument()
     } else if (zoomToFill()) {
         setZoom(computeZoomToFill(), QPointF(-1, -1), ForceUpdate);
     } else {
+        // Not only call updateBuffer, but also ensure the initial transformation mode
+        // of the image scaler is set correctly when zoom is unchanged (see Bug 396736).
         onZoomChanged();
     }
 
@@ -365,13 +367,7 @@ void RasterImageView::updateFromScaler(int zoomedImageLeft, int zoomedImageTop, 
 
 void RasterImageView::onZoomChanged()
 {
-    // If we zoom to 400% or more, then assume the user wants to see the real
-    // pixels, for example to fine tune a crop operation
-    if (zoom() < 4.) {
-        d->mScaler->setTransformationMode(Qt::SmoothTransformation);
-    } else {
-        d->mScaler->setTransformationMode(Qt::FastTransformation);
-    }
+    d->mScaler->setZoom(zoom());
     if (!d->mUpdateTimer->isActive()) {
         updateBuffer();
     }
@@ -460,7 +456,6 @@ void RasterImageView::resizeEvent(QGraphicsSceneResizeEvent* event)
 void RasterImageView::updateBuffer(const QRegion& region)
 {
     d->mUpdateTimer->stop();
-    d->mScaler->setZoom(zoom());
     if (region.isEmpty()) {
         d->setScalerRegionToVisibleRect();
     } else {

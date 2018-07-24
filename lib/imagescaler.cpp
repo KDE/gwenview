@@ -82,12 +82,12 @@ void ImageScaler::setDocument(Document::Ptr document)
 
 void ImageScaler::setZoom(qreal zoom)
 {
-    d->mZoom = zoom;
-}
+    // If we zoom to 400% or more, then assume the user wants to see the real
+    // pixels, for example to fine tune a crop operation
+    d->mTransformationMode = zoom < 4. ? Qt::SmoothTransformation
+                                       : Qt::FastTransformation;
 
-void ImageScaler::setTransformationMode(Qt::TransformationMode mode)
-{
-    d->mTransformationMode = mode;
+    d->mZoom = zoom;
 }
 
 void ImageScaler::setDestinationRegion(const QRegion& region)
