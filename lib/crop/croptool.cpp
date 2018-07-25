@@ -108,6 +108,7 @@ struct CropToolPrivate
         } else {
             top = rect.top() + (rect.height() - HANDLE_SIZE) / 2;
             top = qBound(0, top, viewportSize.height() - HANDLE_SIZE);
+            top = qBound(rect.top() + HANDLE_SIZE, top, rect.bottom() - 2 * HANDLE_SIZE);
         }
 
         if (handle & CH_Left) {
@@ -117,6 +118,7 @@ struct CropToolPrivate
         } else {
             left = rect.left() + (rect.width() - HANDLE_SIZE) / 2;
             left = qBound(0, left, viewportSize.width() - HANDLE_SIZE);
+            left = qBound(rect.left() + HANDLE_SIZE, left, rect.right() - 2 * HANDLE_SIZE);
         }
 
         return QRect(left, top, HANDLE_SIZE, HANDLE_SIZE);
