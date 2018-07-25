@@ -290,11 +290,19 @@ void CropTool::paint(QPainter* painter)
 
 void CropTool::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
-    event->accept();
     if (event->buttons() != Qt::LeftButton) {
+        event->ignore();
         return;
     }
-    d->mMovingHandle = d->handleAt(event->pos());
+    const CropHandle newMovingHandle = d->handleAt(event->pos());
+    if (event->modifiers() & Qt::ControlModifier
+        && !(newMovingHandle & (CH_Top | CH_Left | CH_Right | CH_Bottom))) {
+        event->ignore();
+        return;
+    }
+
+    event->accept();
+    d->mMovingHandle = newMovingHandle;
     d->updateCursor(d->mMovingHandle, true /* down */);
 
     if (d->mMovingHandle == CH_Content) {
