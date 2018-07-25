@@ -34,7 +34,7 @@
           <number>2</number>
          </property>
          <property name="maximum">
-          <number>40</number>
+          <number>99</number>
          </property>
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -45,6 +45,9 @@
         <widget class="QSpinBox" name="diameterSpinBox">
          <property name="minimum">
           <number>2</number>
+         </property>
+         <property name="maximum">
+          <number>99</number>
          </property>
         </widget>
        </item>
@@ -76,5 +79,38 @@
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>diameterSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>diameterSpinBox</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>96</x>
+     <y>27</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>183</x>
+     <y>27</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>diameterSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>diameterSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>183</x>
+     <y>27</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>96</x>
+     <y>27</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
