@@ -370,7 +370,7 @@ void ImageMetaInfoModel::setUrl(const QUrl &url)
                     value = record.section(QLatin1Char(' '), 1, -1).simplified();
                 } else {
                     key = record.section(QLatin1Char('='), 0, 0).simplified();
-                    if (record.contains(QLatin1Char('/')) {
+                    if (record.contains(QLatin1Char('/'))) {
                         keyStr = record.section(QLatin1Char('/'), -1, -1).simplified();
                         value = record.section(QLatin1Char('='), 1, -1).section(QLatin1Char('/'), 0, 0);
                     } else {
