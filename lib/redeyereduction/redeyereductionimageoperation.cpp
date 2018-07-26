@@ -74,7 +74,7 @@ RedEyeReductionImageOperation::RedEyeReductionImageOperation(const QRectF& rectF
 : d(new RedEyeReductionImageOperationPrivate)
 {
     d->mRectF = rectF;
-    setText(i18n("RedEyeReduction"));
+    setText(i18n("Reduce Red Eye"));
 }
 
 RedEyeReductionImageOperation::~RedEyeReductionImageOperation()
