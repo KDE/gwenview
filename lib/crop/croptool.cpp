@@ -433,7 +433,6 @@ void CropTool::keyPressEvent(QKeyEvent* event)
 
 void CropTool::toolActivated()
 {
-    imageView()->setCursor(Qt::CrossCursor);
     d->mCropWidget->setAdvancedSettingsEnabled(GwenviewConfig::cropAdvancedSettingsEnabled());
     d->mCropWidget->setPreserveAspectRatio(GwenviewConfig::cropPreserveAspectRatio());
     const int index = GwenviewConfig::cropRatioIndex();
