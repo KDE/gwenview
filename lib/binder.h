@@ -95,7 +95,7 @@ public:
     }
 
 protected:
-    void callMethod() Q_DECL_OVERRIDE
+    void callMethod() override
     {
         (mReceiver->*mMethod)(mArg);
     }

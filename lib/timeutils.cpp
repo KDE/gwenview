@@ -108,7 +108,7 @@ struct CacheItem
             stream << *it;
             QString value = QString::fromLocal8Bit(stream.str().c_str());
 
-            QDateTime dt = QDateTime::fromString(value, "yyyy:MM:dd hh:mm:ss");
+            QDateTime dt = QDateTime::fromString(value, QStringLiteral("yyyy:MM:dd hh:mm:ss"));
             if (!dt.isValid()) {
                 qWarning() << "Invalid date in exif header of" << path;
                 return false;

@@ -88,24 +88,24 @@ struct DocumentViewControllerPrivate
     {
         KActionCategory* view = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface", "View"), mActionCollection);
 
-        mZoomToFitAction = view->addAction("view_zoom_to_fit");
+        mZoomToFitAction = view->addAction(QStringLiteral("view_zoom_to_fit"));
         view->collection()->setDefaultShortcut(mZoomToFitAction, Qt::Key_F);
         mZoomToFitAction->setCheckable(true);
         mZoomToFitAction->setChecked(true);
         mZoomToFitAction->setText(i18n("Zoom to fit"));
-        mZoomToFitAction->setIcon(QIcon::fromTheme("zoom-fit-best"));
+        mZoomToFitAction->setIcon(QIcon::fromTheme(QStringLiteral("zoom-fit-best")));
         mZoomToFitAction->setIconText(i18nc("@action:button Zoom to fit, shown in status bar, keep it short please", "Fit"));
 
-        mZoomToFillAction = view->addAction("view_zoom_to_fill");
+        mZoomToFillAction = view->addAction(QStringLiteral("view_zoom_to_fill"));
         view->collection()->setDefaultShortcut(mZoomToFillAction, Qt::SHIFT + Qt::Key_F);
         mZoomToFillAction->setCheckable(true);
         mZoomToFillAction->setText(i18n("Zoom to fill window by fitting to width or height"));
-        mZoomToFillAction->setIcon(QIcon::fromTheme("zoom-fit-best"));
+        mZoomToFillAction->setIcon(QIcon::fromTheme(QStringLiteral("zoom-fit-best")));
         mZoomToFillAction->setIconText(i18nc("@action:button Zoom to fill (fit width or height), shown in status bar, keep it short please", "Fill"));
 
         mActualSizeAction = view->addAction(KStandardAction::ActualSize);
         mActualSizeAction->setCheckable(true);
-        mActualSizeAction->setIcon(QIcon::fromTheme("zoom-original"));
+        mActualSizeAction->setIcon(QIcon::fromTheme(QStringLiteral("zoom-original")));
         mActualSizeAction->setIconText(i18nc("@action:button Zoom to original size, shown in status bar, keep it short please", "100%"));
 
         mZoomInAction = view->addAction(KStandardAction::ZoomIn);

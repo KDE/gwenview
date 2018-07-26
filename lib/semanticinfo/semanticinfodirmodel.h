@@ -60,9 +60,9 @@ public:
 
     SemanticInfo semanticInfoForIndex(const QModelIndex&) const;
 
-    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
+    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
 
-    bool setData(const QModelIndex& index, const QVariant& data, int role = Qt::EditRole) Q_DECL_OVERRIDE;
+    bool setData(const QModelIndex& index, const QVariant& data, int role = Qt::EditRole) override;
 
     AbstractSemanticInfoBackEnd* semanticInfoBackEnd() const;
 

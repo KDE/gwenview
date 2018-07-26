@@ -47,18 +47,18 @@ public:
     };
 
     explicit RedEyeReductionTool(RasterImageView* parent);
-    ~RedEyeReductionTool() Q_DECL_OVERRIDE;
+    ~RedEyeReductionTool() override;
 
-    void paint(QPainter*) Q_DECL_OVERRIDE;
+    void paint(QPainter*) override;
 
-    void mousePressEvent(QGraphicsSceneMouseEvent*) Q_DECL_OVERRIDE;
-    void mouseMoveEvent(QGraphicsSceneMouseEvent*) Q_DECL_OVERRIDE;
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent*) Q_DECL_OVERRIDE;
-    void keyPressEvent(QKeyEvent*) Q_DECL_OVERRIDE;
+    void mousePressEvent(QGraphicsSceneMouseEvent*) override;
+    void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
+    void keyPressEvent(QKeyEvent*) override;
 
-    void toolActivated() Q_DECL_OVERRIDE;
+    void toolActivated() override;
 
-    QWidget* widget() const Q_DECL_OVERRIDE;
+    QWidget* widget() const override;
 
 Q_SIGNALS:
     void done();

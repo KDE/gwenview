@@ -45,7 +45,7 @@ class GWENVIEWLIB_EXPORT HudButtonBox : public HudWidget
     Q_OBJECT
 public:
     HudButtonBox(QGraphicsWidget* parent = nullptr);
-    ~HudButtonBox() Q_DECL_OVERRIDE;
+    ~HudButtonBox() override;
 
     void setText(const QString& text);
 
@@ -56,7 +56,7 @@ public:
     void addCountDown(qreal ms);
 
 protected:
-    void showEvent(QShowEvent* event) Q_DECL_OVERRIDE;
+    void showEvent(QShowEvent* event) override;
 
 private:
     HudButtonBoxPrivate* const d;

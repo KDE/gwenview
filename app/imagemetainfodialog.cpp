@@ -51,7 +51,7 @@ public:
     {}
 
 protected:
-    void paint(QPainter* painter, const QStyleOptionViewItem& _option, const QModelIndex& index) const Q_DECL_OVERRIDE
+    void paint(QPainter* painter, const QStyleOptionViewItem& _option, const QModelIndex& index) const override
     {
         QStyleOptionViewItem option = _option;
         if (!index.parent().isValid()) {
@@ -64,7 +64,7 @@ protected:
         }
     }
 
-    QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const Q_DECL_OVERRIDE
+    QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const override
     {
         QSize sh = QStyledItemDelegate::sizeHint(option, index);
         if (!index.parent().isValid()) {
@@ -85,7 +85,7 @@ public:
         {}
 
 protected:
-    void rowsInserted(const QModelIndex& parent, int start, int end) Q_DECL_OVERRIDE
+    void rowsInserted(const QModelIndex& parent, int start, int end) override
     {
         QTreeView::rowsInserted(parent, start, end);
         if (!parent.isValid()) {
@@ -95,7 +95,7 @@ protected:
         }
     }
 
-    void reset() Q_DECL_OVERRIDE
+    void reset() override
     {
         QTreeView::reset();
         if (model()) {

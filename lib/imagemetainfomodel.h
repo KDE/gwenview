@@ -46,7 +46,7 @@ class GWENVIEWLIB_EXPORT ImageMetaInfoModel : public QAbstractItemModel
     Q_OBJECT
 public:
     ImageMetaInfoModel();
-    ~ImageMetaInfoModel() Q_DECL_OVERRIDE;
+    ~ImageMetaInfoModel() override;
 
     void setUrl(const QUrl&);
     void setImageSize(const QSize&);
@@ -56,12 +56,12 @@ public:
     void getInfoForKey(const QString& key, QString* label, QString* value) const;
     QString getValueForKey(const QString& key) const;
 
-    QModelIndex index(int row, int col, const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
-    QModelIndex parent(const QModelIndex&) const Q_DECL_OVERRIDE;
-    int rowCount(const QModelIndex& = QModelIndex()) const Q_DECL_OVERRIDE;
-    int columnCount(const QModelIndex& = QModelIndex()) const Q_DECL_OVERRIDE;
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
-    QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
+    QModelIndex index(int row, int col, const QModelIndex& parent = QModelIndex()) const override;
+    QModelIndex parent(const QModelIndex&) const override;
+    int rowCount(const QModelIndex& = QModelIndex()) const override;
+    int columnCount(const QModelIndex& = QModelIndex()) const override;
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+    QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const override;
 
 private:
     ImageMetaInfoModelPrivate* const d;

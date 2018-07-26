@@ -73,12 +73,12 @@ public:
     , mMode(Contains)
     {}
 
-    bool needsSemanticInfo() const Q_DECL_OVERRIDE
+    bool needsSemanticInfo() const override
     {
         return false;
     }
 
-    bool acceptsIndex(const QModelIndex& index) const Q_DECL_OVERRIDE
+    bool acceptsIndex(const QModelIndex& index) const override
     {
         if (mText.isEmpty()) {
             return true;
@@ -141,12 +141,12 @@ public:
     , mMode(GreaterOrEqual)
     {}
 
-    bool needsSemanticInfo() const Q_DECL_OVERRIDE
+    bool needsSemanticInfo() const override
     {
         return false;
     }
 
-    bool acceptsIndex(const QModelIndex& index) const Q_DECL_OVERRIDE
+    bool acceptsIndex(const QModelIndex& index) const override
     {
         if (!mDate.isValid()) {
             return true;
@@ -215,12 +215,12 @@ public:
     , mRating(0)
     , mMode(GreaterOrEqual) {}
 
-    bool needsSemanticInfo() const Q_DECL_OVERRIDE
+    bool needsSemanticInfo() const override
     {
         return true;
     }
 
-    bool acceptsIndex(const QModelIndex& index) const Q_DECL_OVERRIDE
+    bool acceptsIndex(const QModelIndex& index) const override
     {
         SemanticInfo info = model()->semanticInfoForSourceIndex(index);
         switch (mMode) {
@@ -278,12 +278,12 @@ public:
     , mWantMatchingTag(true)
     {}
 
-    bool needsSemanticInfo() const Q_DECL_OVERRIDE
+    bool needsSemanticInfo() const override
     {
         return true;
     }
 
-    bool acceptsIndex(const QModelIndex& index) const Q_DECL_OVERRIDE
+    bool acceptsIndex(const QModelIndex& index) const override
     {
         if (mTag.isEmpty()) {
             return true;

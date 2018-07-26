@@ -101,7 +101,7 @@ public:
         setMinimumSize(pix.size());
     }
 
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) Q_DECL_OVERRIDE
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override
     {
         painter->drawPixmap(
             (size().width() - mPix.width()) / 2,
@@ -209,7 +209,7 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
 
         mRatingMapper = new QSignalMapper(q);
         for (int rating = 0; rating <= 5; ++rating) {
-            QAction * action = edit->addAction(QString("rate_%1").arg(rating));
+            QAction * action = edit->addAction(QStringLiteral("rate_%1").arg(rating));
             if (rating == 0) {
                 action->setText(i18nc("@action Rating value of zero", "Zero"));
             } else {
@@ -248,7 +248,7 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
         QStringList labels(labelMap.values());
 
         QString editLink = i18n("Edit");
-        QString text = labels.join(", ") + QString(" <a href='edit'>%1</a>").arg(editLink);
+        QString text = labels.join(", ") + QStringLiteral(" <a href='edit'>%1</a>").arg(editLink);
         mTagLabel->setText(text);
     }
 

@@ -52,7 +52,7 @@ struct ImporterConfigDialogPrivate : public Ui_ImporterConfigDialog
         for (; it != end; ++it) {
             QString keyword = '{' + it.key() + '}';
             QString explanation = it.value().toHtmlEscaped();
-            QString link = QString("<a href='%1'>%1</a>").arg(keyword);
+            QString link = QStringLiteral("<a href='%1'>%1</a>").arg(keyword);
             helpText += "<li>" + i18nc("%1 is the importer keyword, %2 is keyword explanation", "%1: %2", link, explanation) + "</li>";
         }
         helpText += "</ul>";

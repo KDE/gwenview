@@ -66,7 +66,7 @@ void ThumbnailSlider::updateToolTip()
 {
     // FIXME: i18n?
     const int size = slider()->sliderPosition();
-    const QString text = QString("%1 x %2").arg(size).arg(size);
+    const QString text = QStringLiteral("%1 x %2").arg(size).arg(size);
     slider()->setToolTip(text);
 }
 

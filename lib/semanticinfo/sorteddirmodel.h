@@ -77,7 +77,7 @@ class GWENVIEWLIB_EXPORT SortedDirModel : public KDirSortFilterProxyModel
     Q_OBJECT
 public:
     explicit SortedDirModel(QObject* parent = nullptr);
-    ~SortedDirModel();
+    ~SortedDirModel() override;
     KDirLister* dirLister() const;
     /**
      * Redefines the dir lister, useful for debugging
@@ -117,8 +117,8 @@ public Q_SLOTS:
     void applyFilters();
 
 protected:
-    bool filterAcceptsRow(int row, const QModelIndex& parent) const Q_DECL_OVERRIDE;
-    bool lessThan(const QModelIndex& left, const QModelIndex& right) const Q_DECL_OVERRIDE;
+    bool filterAcceptsRow(int row, const QModelIndex& parent) const override;
+    bool lessThan(const QModelIndex& left, const QModelIndex& right) const override;
 
 private Q_SLOTS:
     void doApplyFilters();

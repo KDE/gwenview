@@ -118,14 +118,14 @@ public:
         setSizePolicy(policy);
     }
 
-    QSize sizeHint() const Q_DECL_OVERRIDE
+    QSize sizeHint() const override
     {
         int width = 150;
         int height = heightForWidth(width);
         return QSize(width, height);
     }
 
-    int heightForWidth(int w) const Q_DECL_OVERRIDE
+    int heightForWidth(int w) const override
     {
         int height = 0;
         Q_FOREACH(Row* row, mRows) {
@@ -175,13 +175,13 @@ public:
     }
 
 protected:
-    void showEvent(QShowEvent* event) Q_DECL_OVERRIDE
+    void showEvent(QShowEvent* event) override
     {
         QWidget::showEvent(event);
         layoutRows();
     }
 
-    void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE
+    void resizeEvent(QResizeEvent* event) override
     {
         QWidget::resizeEvent(event);
         layoutRows();
@@ -224,7 +224,7 @@ struct InfoContextManagerItemPrivate
         mKeyValueWidget = new KeyValueWidget;
 
         QLabel* moreLabel = new QLabel(mOneFileWidget);
-        moreLabel->setText(QString("<a href='#'>%1</a>").arg(i18nc("@action show more image meta info", "More...")));
+        moreLabel->setText(QStringLiteral("<a href='#'>%1</a>").arg(i18nc("@action show more image meta info", "More...")));
         moreLabel->setAlignment(Qt::AlignRight);
 
         QWidget* content = new QWidget;

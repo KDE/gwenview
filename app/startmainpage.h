@@ -46,7 +46,7 @@ class StartMainPage : public QFrame
     Q_OBJECT
 public:
     explicit StartMainPage(QWidget* parent, GvCore*);
-    ~StartMainPage() Q_DECL_OVERRIDE;
+    ~StartMainPage() override;
 
     void applyPalette(const QPalette&);
     ThumbnailView* recentFoldersView() const;
@@ -60,7 +60,7 @@ public Q_SLOTS:
     void loadConfig();
 
 protected:
-    void showEvent(QShowEvent*) Q_DECL_OVERRIDE;
+    void showEvent(QShowEvent*) override;
 
 private Q_SLOTS:
     void slotListViewActivated(const QModelIndex& index);

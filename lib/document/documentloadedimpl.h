@@ -46,23 +46,23 @@ public:
      * @param quietInit set to true if init() should not emit any signal
      */
     DocumentLoadedImpl(Document*, const QByteArray&, bool quietInit = false);
-    ~DocumentLoadedImpl() Q_DECL_OVERRIDE;
+    ~DocumentLoadedImpl() override;
 
     // AbstractDocumentImpl
-    void init() Q_DECL_OVERRIDE;
-    Document::LoadingState loadingState() const Q_DECL_OVERRIDE;
-    DocumentJob* save(const QUrl&, const QByteArray& format) Q_DECL_OVERRIDE;
-    AbstractDocumentEditor* editor() Q_DECL_OVERRIDE;
-    QByteArray rawData() const Q_DECL_OVERRIDE;
-    bool isEditable() const Q_DECL_OVERRIDE;
+    void init() override;
+    Document::LoadingState loadingState() const override;
+    DocumentJob* save(const QUrl&, const QByteArray& format) override;
+    AbstractDocumentEditor* editor() override;
+    QByteArray rawData() const override;
+    bool isEditable() const override;
     //
 
 protected:
     virtual bool saveInternal(QIODevice* device, const QByteArray& format);
 
     // AbstractDocumentEditor
-    void setImage(const QImage&) Q_DECL_OVERRIDE;
-    void applyTransformation(Orientation orientation) Q_DECL_OVERRIDE;
+    void setImage(const QImage&) override;
+    void applyTransformation(Orientation orientation) override;
     //
 
 private:

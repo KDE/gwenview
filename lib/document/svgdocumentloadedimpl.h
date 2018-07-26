@@ -37,17 +37,17 @@ class SvgDocumentLoadedImpl : public AbstractDocumentImpl
     Q_OBJECT
 public:
     SvgDocumentLoadedImpl(Document*, const QByteArray&);
-    ~SvgDocumentLoadedImpl() Q_DECL_OVERRIDE;
+    ~SvgDocumentLoadedImpl() override;
 
-    void init() Q_DECL_OVERRIDE;
+    void init() override;
 
-    Document::LoadingState loadingState() const Q_DECL_OVERRIDE;
+    Document::LoadingState loadingState() const override;
 
     virtual void setImage(const QImage&);
 
-    QByteArray rawData() const Q_DECL_OVERRIDE;
+    QByteArray rawData() const override;
 
-    QSvgRenderer* svgRenderer() const Q_DECL_OVERRIDE;
+    QSvgRenderer* svgRenderer() const override;
 
 private:
     SvgDocumentLoadedImplPrivate* const d;

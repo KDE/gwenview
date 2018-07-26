@@ -39,22 +39,22 @@ class GWENVIEWLIB_EXPORT VideoViewAdapter : public AbstractDocumentViewAdapter
     Q_OBJECT
 public:
     VideoViewAdapter();
-    ~VideoViewAdapter() Q_DECL_OVERRIDE;
+    ~VideoViewAdapter() override;
 
-    MimeTypeUtils::Kind kind() const Q_DECL_OVERRIDE
+    MimeTypeUtils::Kind kind() const override
     {
         return MimeTypeUtils::KIND_VIDEO;
     }
 
-    Document::Ptr document() const Q_DECL_OVERRIDE;
+    Document::Ptr document() const override;
 
-    void setDocument(Document::Ptr) Q_DECL_OVERRIDE;
+    void setDocument(Document::Ptr) override;
 
 Q_SIGNALS:
     void videoFinished();
 
 protected:
-    bool eventFilter(QObject*, QEvent*) Q_DECL_OVERRIDE;
+    bool eventFilter(QObject*, QEvent*) override;
 
 private Q_SLOTS:
     void slotPlayPauseClicked();

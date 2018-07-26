@@ -66,23 +66,23 @@ static void resolveAliasInList(QStringList* list)
 static void addRawMimeTypes(QStringList* list)
 {
     // need to invent more intelligent way to whitelist raws
-    *list += "image/x-nikon-nef";
-    *list += "image/x-nikon-nrw";
-    *list += "image/x-canon-cr2";
-    *list += "image/x-canon-crw";
-    *list += "image/x-pentax-pef";
-    *list += "image/x-adobe-dng";
-    *list += "image/x-sony-arw";
-    *list += "image/x-minolta-mrw";
-    *list += "image/x-panasonic-raw";
-    *list += "image/x-panasonic-raw2";
-    *list += "image/x-panasonic-rw";
-    *list += "image/x-panasonic-rw2";
-    *list += "image/x-samsung-srw";
-    *list += "image/x-olympus-orf";
-    *list += "image/x-fuji-raf";
-    *list += "image/x-kodak-dcr";
-    *list += "image/x-sigma-x3f";
+    *list += QStringLiteral("image/x-nikon-nef");
+    *list += QStringLiteral("image/x-nikon-nrw");
+    *list += QStringLiteral("image/x-canon-cr2");
+    *list += QStringLiteral("image/x-canon-crw");
+    *list += QStringLiteral("image/x-pentax-pef");
+    *list += QStringLiteral("image/x-adobe-dng");
+    *list += QStringLiteral("image/x-sony-arw");
+    *list += QStringLiteral("image/x-minolta-mrw");
+    *list += QStringLiteral("image/x-panasonic-raw");
+    *list += QStringLiteral("image/x-panasonic-raw2");
+    *list += QStringLiteral("image/x-panasonic-rw");
+    *list += QStringLiteral("image/x-panasonic-rw2");
+    *list += QStringLiteral("image/x-samsung-srw");
+    *list += QStringLiteral("image/x-olympus-orf");
+    *list += QStringLiteral("image/x-fuji-raf");
+    *list += QStringLiteral("image/x-kodak-dcr");
+    *list += QStringLiteral("image/x-sigma-x3f");
 }
 
 const QStringList& rasterImageMimeTypes()
@@ -106,7 +106,7 @@ const QStringList& svgImageMimeTypes()
 {
     static QStringList list;
     if (list.isEmpty()) {
-        list << "image/svg+xml" << "image/svg+xml-compressed";
+        list << QStringLiteral("image/svg+xml") << QStringLiteral("image/svg+xml-compressed");
         resolveAliasInList(&list);
     }
     return list;
@@ -126,7 +126,7 @@ const QStringList& imageMimeTypes()
 QString urlMimeType(const QUrl &url)
 {
     if (url.isEmpty()) {
-        return "unknown";
+        return QStringLiteral("unknown");
     }
 
     QMimeDatabase db;

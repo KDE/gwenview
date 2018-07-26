@@ -589,7 +589,7 @@ void DocumentTest::testMetaInfoBmp()
     Q_ASSERT(metaInfoUpdatedSpy.count() >= 1);
 
     QString value = doc->metaInfo()->getValueForKey("General.ImageSize");
-    QString expectedValue = QString("%1x%2").arg(width).arg(height);
+    QString expectedValue = QStringLiteral("%1x%2").arg(width).arg(height);
     QCOMPARE(value, expectedValue);
 }
 
@@ -710,7 +710,7 @@ void DocumentTest::testJobQueue()
     row = spy.takeFirst();
     QCOMPARE(row.at(0).value<QUrl>(), url);
     QVERIFY(!row.at(1).toBool());
-    QCOMPARE(str, QString("abc"));
+    QCOMPARE(str, QStringLiteral("abc"));
 }
 
 class TestCheckDocumentEditorJob : public DocumentJob

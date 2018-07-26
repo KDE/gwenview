@@ -37,14 +37,14 @@ class AnimatedDocumentLoadedImpl : public AbstractDocumentImpl
     Q_OBJECT
 public:
     AnimatedDocumentLoadedImpl(Document*, const QByteArray&);
-    ~AnimatedDocumentLoadedImpl() Q_DECL_OVERRIDE;
+    ~AnimatedDocumentLoadedImpl() override;
 
-    void init() Q_DECL_OVERRIDE;
-    Document::LoadingState loadingState() const Q_DECL_OVERRIDE;
-    QByteArray rawData() const Q_DECL_OVERRIDE;
-    bool isAnimated() const Q_DECL_OVERRIDE;
-    void startAnimation() Q_DECL_OVERRIDE;
-    void stopAnimation() Q_DECL_OVERRIDE;
+    void init() override;
+    Document::LoadingState loadingState() const override;
+    QByteArray rawData() const override;
+    bool isAnimated() const override;
+    void startAnimation() override;
+    void stopAnimation() override;
 
 private Q_SLOTS:
     void slotFrameChanged(int frameNumber);

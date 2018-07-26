@@ -65,8 +65,8 @@ HudWidget::HudWidget(QGraphicsWidget* parent)
 {
     d->q = this;
     d->mAnim = new QPropertyAnimation(this, "opacity", this);
-    d->mMainWidget = 0;
-    d->mCloseButton = 0;
+    d->mMainWidget = nullptr;
+    d->mCloseButton = nullptr;
     d->mAutoDeleteOnFadeout = false;
 
     connect(d->mAnim, &QPropertyAnimation::finished, this, &HudWidget::slotFadeAnimationFinished);
@@ -102,7 +102,7 @@ void HudWidget::init(QGraphicsWidget* mainWidget, Options options)
 
     if (options & OptionCloseButton) {
         d->mCloseButton = new HudButton(this);
-        d->mCloseButton->setIcon(QIcon::fromTheme("window-close"));
+        d->mCloseButton->setIcon(QIcon::fromTheme(QStringLiteral("window-close")));
         d->mCloseButton->setToolTip(i18nc("@info:tooltip", "Close"));
 
         layout->addItem(d->mCloseButton);

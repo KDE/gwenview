@@ -59,7 +59,7 @@ struct PrintOptionsPagePrivate : public Ui_PrintOptionsPage
     void initPositionFrame()
     {
         mPositionFrame->setStyleSheet(
-            "QFrame {"
+            QStringLiteral("QFrame {"
             "	background-color: palette(mid);"
             "	border: 1px solid palette(dark);"
             "}"
@@ -73,7 +73,7 @@ struct PrintOptionsPagePrivate : public Ui_PrintOptionsPage
             "}"
             "QToolButton:checked {"
             "	background-color: palette(highlight);"
-            "}"
+            "}")
         );
 
         QGridLayout* layout = new QGridLayout(mPositionFrame);

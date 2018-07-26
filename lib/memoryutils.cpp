@@ -53,7 +53,7 @@ qulonglong getTotalMemory()
 
 #if defined(Q_OS_LINUX)
     // if /proc/meminfo doesn't exist, return 128MB
-    QFile memFile( "/proc/meminfo" );
+    QFile memFile( QStringLiteral("/proc/meminfo") );
     if ( !memFile.open( QIODevice::ReadOnly ) )
         return (cachedValue = 134217728);
 
@@ -62,8 +62,8 @@ qulonglong getTotalMemory()
     {
         QString entry = readStream.readLine();
         if ( entry.isNull() ) break;
-        if ( entry.startsWith( "MemTotal:" ) )
-            return (cachedValue = (Q_UINT64_C(1024) * entry.section( ' ', -2, -2 ).toULongLong()));
+        if ( entry.startsWith( QStringLiteral("MemTotal:") ) )
+            return (cachedValue = (Q_UINT64_C(1024) * entry.section( QLatin1Char(' '), -2, -2 ).toULongLong()));
     }
 #elif defined(Q_OS_FREEBSD)
     qulonglong physmem;
@@ -91,7 +91,7 @@ qulonglong getFreeMemory()
 
 #if defined(Q_OS_LINUX)
     // if /proc/meminfo doesn't exist, return MEMORY FULL
-    QFile memFile( "/proc/meminfo" );
+    QFile memFile( QStringLiteral("/proc/meminfo") );
     if ( !memFile.open( QIODevice::ReadOnly ) )
         return 0;
 
@@ -101,7 +101,7 @@ qulonglong getFreeMemory()
     QString entry;
     QTextStream readStream( &memFile );
     static const int nElems = 5;
-    QString names[nElems] = { "MemFree:", "Buffers:", "Cached:", "SwapFree:", "SwapTotal:" };
+    QString names[nElems] = { QStringLiteral("MemFree:"), QStringLiteral("Buffers:"), QStringLiteral("Cached:"), QStringLiteral("SwapFree:"), QStringLiteral("SwapTotal:") };
     qulonglong values[nElems] = { 0, 0, 0, 0, 0 };
     bool foundValues[nElems] = { false, false, false, false, false };
     while ( true )
@@ -112,7 +112,7 @@ qulonglong getFreeMemory()
         {
             if ( entry.startsWith( names[i] ) )
             {
-                values[i] = entry.section( ' ', -2, -2 ).toULongLong( &foundValues[i] );
+                values[i] = entry.section( QLatin1Char(' '), -2, -2 ).toULongLong( &foundValues[i] );
             }
         }
     }

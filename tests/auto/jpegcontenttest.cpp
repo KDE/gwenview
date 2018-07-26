@@ -108,7 +108,7 @@ void compareMetaInfo(const QString& path1, const QString& path2, const QStringLi
         if (ignoredKeys.contains(key)) continue;
 
         QString msg =
-            QString("Meta info differs for key '%1': v1=%2 v2=%3")
+            QStringLiteral("Meta info differs for key '%1': v1=%2 v2=%3")
             .arg(key)
             .arg(mim1[key])
             .arg(mim2[key]);

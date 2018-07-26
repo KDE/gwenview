@@ -49,7 +49,7 @@ Q_SIGNALS:
     void eventTriggered(QEvent*);
 
 protected:
-    bool eventFilter(QObject*, QEvent* event) Q_DECL_OVERRIDE;
+    bool eventFilter(QObject*, QEvent* event) override;
 
 private:
     QList<QEvent::Type> mEventTypes;

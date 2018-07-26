@@ -186,15 +186,15 @@ class EmptyAdapter : public AbstractDocumentViewAdapter
     Q_OBJECT
 public:
     EmptyAdapter();
-    MimeTypeUtils::Kind kind() const Q_DECL_OVERRIDE
+    MimeTypeUtils::Kind kind() const override
     {
         return MimeTypeUtils::KIND_UNKNOWN;
     }
-    Document::Ptr document() const Q_DECL_OVERRIDE
+    Document::Ptr document() const override
     {
         return Document::Ptr();
     }
-    void setDocument(Document::Ptr) Q_DECL_OVERRIDE
+    void setDocument(Document::Ptr) override
     {}
 };
 

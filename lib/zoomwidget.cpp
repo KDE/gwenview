@@ -109,7 +109,7 @@ ZoomWidget::ZoomWidget(QWidget* parent)
     }
 
     d->mZoomLabel = new QLabel;
-    d->mZoomLabel->setFixedWidth(d->mZoomLabel->fontMetrics().width(" 1000% "));
+    d->mZoomLabel->setFixedWidth(d->mZoomLabel->fontMetrics().width(QStringLiteral(" 1000% ")));
     d->mZoomLabel->setAlignment(Qt::AlignCenter);
 
     d->mZoomSlider = new ZoomSlider;
@@ -170,7 +170,7 @@ void ZoomWidget::slotZoomSliderActionTriggered()
 void ZoomWidget::setZoom(qreal zoom)
 {
     int intZoom = qRound(zoom * 100);
-    d->mZoomLabel->setText(QString("%1%").arg(intZoom));
+    d->mZoomLabel->setText(QStringLiteral("%1%").arg(intZoom));
 
     // Don't change slider value if we come here because the slider change,
     // avoids choppy sliding scroll.

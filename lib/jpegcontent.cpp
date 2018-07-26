@@ -281,12 +281,12 @@ Orientation JpegContent::orientation() const
 
 int JpegContent::dotsPerMeterX() const
 {
-    return dotsPerMeter("XResolution");
+    return dotsPerMeter(QStringLiteral("XResolution"));
 }
 
 int JpegContent::dotsPerMeterY() const
 {
-    return dotsPerMeter("YResolution");
+    return dotsPerMeter(QStringLiteral("YResolution"));
 }
 
 int JpegContent::dotsPerMeter(const QString& keyName) const
@@ -297,7 +297,7 @@ int JpegContent::dotsPerMeter(const QString& keyName) const
         return 0;
     }
     int res = it->toLong();
-    QString keyVal = "Exif.Image." + keyName;
+    QString keyVal = QStringLiteral("Exif.Image.") + keyName;
     Exiv2::ExifKey keyResolution(keyVal.toLocal8Bit().data());
     it = d->mExifData.findKey(keyResolution);
     if (it == d->mExifData.end()) {

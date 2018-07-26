@@ -186,7 +186,7 @@ struct VideoViewAdapterPrivate
 class DoubleClickableProxyWidget : public QGraphicsProxyWidget
 {
 protected:
-    void mousePressEvent(QGraphicsSceneMouseEvent* event) Q_DECL_OVERRIDE
+    void mousePressEvent(QGraphicsSceneMouseEvent* event) override
     {
         QGraphicsWidget::mousePressEvent(event);
     }
@@ -281,9 +281,9 @@ bool VideoViewAdapter::eventFilter(QObject*, QEvent* event)
 void VideoViewAdapter::updatePlayUi()
 {
     if (d->isPlaying()) {
-        d->mPlayPauseAction->setIcon(QIcon::fromTheme("media-playback-pause"));
+        d->mPlayPauseAction->setIcon(QIcon::fromTheme(QStringLiteral("media-playback-pause")));
     } else {
-        d->mPlayPauseAction->setIcon(QIcon::fromTheme("media-playback-start"));
+        d->mPlayPauseAction->setIcon(QIcon::fromTheme(QStringLiteral("media-playback-start")));
     }
 
     d->mLastSeekSliderActionTime.restart();
@@ -307,7 +307,7 @@ void VideoViewAdapter::updatePlayUi()
 void VideoViewAdapter::updateMuteAction()
 {
     d->mMuteAction->setIcon(
-        QIcon::fromTheme(d->mAudioOutput->isMuted() ? "player-volume-muted" : "player-volume")
+        QIcon::fromTheme(d->mAudioOutput->isMuted() ? QStringLiteral("player-volume-muted") : QStringLiteral("player-volume"))
         );
 }
 

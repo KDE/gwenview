@@ -201,7 +201,7 @@ bool SortedDirModel::filterAcceptsRow(int row, const QModelIndex& parent) const
     }
 
     if (kind != MimeTypeUtils::KIND_DIR && kind != MimeTypeUtils::KIND_ARCHIVE) {
-        int dotPos = fileItem.name().lastIndexOf('.');
+        int dotPos = fileItem.name().lastIndexOf(QLatin1Char('.'));
         if (dotPos >= 1) {
             QString extension = fileItem.name().mid(dotPos + 1).toLower();
             if (d->mBlackListedExtensions.contains(extension)) {

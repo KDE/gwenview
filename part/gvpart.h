@@ -44,7 +44,7 @@ public:
     static KAboutData* createAboutData();
 
 protected:
-    bool openUrl(const QUrl &url) Q_DECL_OVERRIDE;
+    bool openUrl(const QUrl &url) override;
 
 private Q_SLOTS:
     void showContextMenu();

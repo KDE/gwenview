@@ -53,7 +53,7 @@ class BrowseMainPage : public QWidget
     Q_OBJECT
 public:
     BrowseMainPage(QWidget* parent, KActionCollection*, GvCore*);
-    ~BrowseMainPage() Q_DECL_OVERRIDE;
+    ~BrowseMainPage() override;
 
     void reload();
 
@@ -82,7 +82,7 @@ private Q_SLOTS:
     void showMenuForDroppedUrls(const QList<QUrl>&, const QUrl &destUrl);
 
 protected:
-    bool eventFilter(QObject* watched, QEvent* event) Q_DECL_OVERRIDE;
+    bool eventFilter(QObject* watched, QEvent* event) override;
 
 private:
     BrowseMainPagePrivate* const d;

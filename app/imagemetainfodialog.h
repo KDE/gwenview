@@ -39,14 +39,14 @@ class ImageMetaInfoDialog : public QDialog
     Q_OBJECT
 public:
     explicit ImageMetaInfoDialog(QWidget* parent);
-    ~ImageMetaInfoDialog() Q_DECL_OVERRIDE;
+    ~ImageMetaInfoDialog() override;
 
     /**
      * Defines the image metainfo model and the preferred metainfo key list.
      */
     void setMetaInfo(ImageMetaInfoModel*, const QStringList& list);
 
-    QSize sizeHint() const Q_DECL_OVERRIDE;
+    QSize sizeHint() const override;
 
 Q_SIGNALS:
     void preferredMetaInfoKeyListChanged(const QStringList&);

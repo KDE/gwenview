@@ -74,7 +74,7 @@ static QString generateThumbnailPath(const QString& uri, ThumbnailGroup::Enum gr
     QString baseDir = ThumbnailProvider::thumbnailBaseDir(group);
     QCryptographicHash md5(QCryptographicHash::Md5);
     md5.addData(QFile::encodeName(uri));
-    return baseDir + QFile::encodeName(md5.result().toHex()) + ".png";
+    return baseDir + QFile::encodeName(QString::fromLatin1(md5.result().toHex())) + QStringLiteral(".png");
 }
 
 //------------------------------------------------------------------------
@@ -90,7 +90,7 @@ QString ThumbnailProvider::thumbnailBaseDir()
         if (customDir.isEmpty()) {
             sThumbnailBaseDir = QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation) + QStringLiteral("/thumbnails/");
         } else {
-            sThumbnailBaseDir = QFile::decodeName(customDir) + '/';
+            sThumbnailBaseDir = QFile::decodeName(customDir) + QLatin1Char('/');
         }
     }
     return sThumbnailBaseDir;
@@ -106,10 +106,10 @@ QString ThumbnailProvider::thumbnailBaseDir(ThumbnailGroup::Enum group)
     QString dir = thumbnailBaseDir();
     switch (group) {
     case ThumbnailGroup::Normal:
-        dir += "normal/";
+        dir += QStringLiteral("normal/");
         break;
     case ThumbnailGroup::Large:
-        dir += "large/";
+        dir += QStringLiteral("large/");
         break;
     }
     return dir;
@@ -130,7 +130,7 @@ static void moveThumbnailHelper(const QString& oldUri, const QString& newUri, Th
     if (!thumb.load(oldPath)) {
         return;
     }
-    thumb.setText("Thumb::URI", newUri);
+    thumb.setText(QStringLiteral("Thumb::URI"), newUri);
     thumb.save(newPath, "png");
     QFile::remove(QFile::encodeName(oldPath));
 }
@@ -434,17 +434,17 @@ void ThumbnailProvider::checkThumbnail()
     LOG("Stat thumb" << mThumbnailPath);
 
     QImage thumb = loadThumbnailFromCache();
-    KIO::filesize_t fileSize = thumb.text("Thumb::Size").toULongLong();
+    KIO::filesize_t fileSize = thumb.text(QStringLiteral("Thumb::Size")).toULongLong();
     if (!thumb.isNull()) {
-        if (thumb.text("Thumb::URI") == mOriginalUri &&
-                thumb.text("Thumb::MTime").toInt() == mOriginalTime &&
+        if (thumb.text(QStringLiteral("Thumb::URI")) == mOriginalUri &&
+                thumb.text(QStringLiteral("Thumb::MTime")).toInt() == mOriginalTime &&
                  (fileSize == 0 || fileSize == mOriginalFileSize)) {
             int width = 0, height = 0;
             QSize size;
             bool ok;
 
-            width = thumb.text("Thumb::Image::Width").toInt(&ok);
-            if (ok) height = thumb.text("Thumb::Image::Height").toInt(&ok);
+            width = thumb.text(QStringLiteral("Thumb::Image::Width")).toInt(&ok);
+            if (ok) height = thumb.text(QStringLiteral("Thumb::Image::Height")).toInt(&ok);
             if (ok) {
                 size = QSize(width, height);
             } else {

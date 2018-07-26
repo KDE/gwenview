@@ -67,7 +67,7 @@ public:
     KIO::filesize_t originalFileSize() const;
     QString originalMimeType() const;
 protected:
-    void run() Q_DECL_OVERRIDE;
+    void run() override;
 
 Q_SIGNALS:
     void done(const QImage&, const QSize&);

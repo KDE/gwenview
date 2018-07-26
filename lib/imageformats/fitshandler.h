@@ -31,11 +31,11 @@ namespace Gwenview
 class FitsHandler : public QImageIOHandler
 {
 public:
-    bool canRead() const Q_DECL_OVERRIDE;
-    bool read(QImage *image) Q_DECL_OVERRIDE;
+    bool canRead() const override;
+    bool read(QImage *image) override;
 
-    bool supportsOption(ImageOption option) const Q_DECL_OVERRIDE;
-    QVariant option(ImageOption option) const Q_DECL_OVERRIDE;
+    bool supportsOption(ImageOption option) const override;
+    QVariant option(ImageOption option) const override;
 };
 
 } // namespace

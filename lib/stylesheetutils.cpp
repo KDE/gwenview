@@ -54,8 +54,8 @@ QString gradient(Qt::Orientation orientation, const QColor &color, int value)
         y2 = 0;
     }
     QString grad =
-        "qlineargradient(x1:0, y1:0, x2:%1, y2:%2,"
-        "stop:0 %3, stop: 1 %4)";
+        QStringLiteral("qlineargradient(x1:0, y1:0, x2:%1, y2:%2,"
+        "stop:0 %3, stop: 1 %4)");
     return grad
             .arg(x2)
             .arg(y2)

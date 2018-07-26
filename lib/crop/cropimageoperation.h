@@ -42,8 +42,8 @@ public:
     CropImageOperation(const QRect&);
     ~CropImageOperation();
 
-    void redo() Q_DECL_OVERRIDE;
-    void undo() Q_DECL_OVERRIDE;
+    void redo() override;
+    void undo() override;
 
 private:
     CropImageOperationPrivate* const d;

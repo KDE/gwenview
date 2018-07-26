@@ -260,7 +260,6 @@ struct ThumbnailViewPrivate
         switch (mScaleMode) {
         case ThumbnailView::ScaleToFit:
             return pix.scaled(mThumbnailSize.width(), mThumbnailSize.height(), Qt::KeepAspectRatio, transformationMode);
-            break;
         case ThumbnailView::ScaleToSquare: {
             int minSize = qMin(pix.width(), pix.height());
             QPixmap pix2 = pix.copy((pix.width() - minSize) / 2, (pix.height() - minSize) / 2, minSize, minSize);
@@ -268,10 +267,8 @@ struct ThumbnailViewPrivate
         }
         case ThumbnailView::ScaleToHeight:
             return pix.scaledToHeight(mThumbnailSize.height(), transformationMode);
-            break;
         case ThumbnailView::ScaleToWidth:
             return pix.scaledToWidth(mThumbnailSize.width(), transformationMode);
-            break;
         }
         // Keep compiler happy
         Q_ASSERT(0);
@@ -285,9 +282,9 @@ ThumbnailView::ThumbnailView(QWidget* parent)
 {
     d->q = this;
     d->mScaleMode = ScaleToFit;
-    d->mThumbnailViewHelper = 0;
-    d->mDocumentInfoProvider = 0;
-    d->mThumbnailProvider = 0;
+    d->mThumbnailViewHelper = nullptr;
+    d->mDocumentInfoProvider = nullptr;
+    d->mThumbnailProvider = nullptr;
     // Init to some stupid value so that the first call to setThumbnailSize()
     // is not ignored (do not use 0 in case someone try to divide by
     // mThumbnailSize...)
@@ -341,7 +338,7 @@ void ThumbnailView::setThumbnailScaleMode(ThumbnailScaleMode mode)
 void ThumbnailView::setModel(QAbstractItemModel* newModel)
 {
     if (model()) {
-        disconnect(model(), 0, this, 0);
+        disconnect(model(), nullptr, this, nullptr);
     }
     QListView::setModel(newModel);
     connect(model(), SIGNAL(rowsRemoved(QModelIndex,int,int)),
@@ -357,7 +354,7 @@ void ThumbnailView::setThumbnailProvider(ThumbnailProvider* thumbnailProvider)
         connect(thumbnailProvider, SIGNAL(thumbnailLoadingFailed(KFileItem)),
                          SLOT(setBrokenThumbnail(KFileItem)));
     } else {
-        disconnect(d->mThumbnailProvider, 0 , this, 0);
+        disconnect(d->mThumbnailProvider, nullptr , this, nullptr);
     }
     d->mThumbnailProvider = thumbnailProvider;
 }
@@ -372,7 +369,7 @@ void ThumbnailView::updateThumbnailSize()
     } else {
         waitingThumbnailSize = 32;
     }
-    QPixmap icon = DesktopIcon("chronometer", waitingThumbnailSize);
+    QPixmap icon = DesktopIcon(QStringLiteral("chronometer"), waitingThumbnailSize);
     QPixmap pix(value);
     pix.fill(Qt::transparent);
     QPainter painter(&pix);
@@ -585,7 +582,7 @@ void ThumbnailView::setBrokenThumbnail(const KFileItem& item)
         thumbnail.mWaitingForThumbnail = false;
         return;
     } else {
-        thumbnail.initAsIcon(DesktopIcon("image-missing", 48));
+        thumbnail.initAsIcon(DesktopIcon(QStringLiteral("image-missing"), 48));
         thumbnail.mFullSize = thumbnail.mGroupPix.size();
     }
     update(thumbnail.mIndex);
@@ -627,7 +624,7 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index, QSize* fullSi
                 // "folder-remote" icon for remote folders, so that they do
                 // not look like regular folders
                 thumbnail.mWaitingForThumbnail = false;
-                thumbnail.initAsIcon(DesktopIcon("folder-remote", groupSize));
+                thumbnail.initAsIcon(DesktopIcon(QStringLiteral("folder-remote"), groupSize));
             } else {
                 // set mWaitingForThumbnail to true (necessary in the case
                 // 'thumbnail' already existed before, but with a too small
@@ -686,7 +683,7 @@ void ThumbnailView::startDrag(Qt::DropActions)
     }
 
     KFileItemList selectedFiles;
-    for (const auto index : indexes) {
+    for (const auto &index : indexes) {
         selectedFiles << fileItemForIndex(index);
     }
 

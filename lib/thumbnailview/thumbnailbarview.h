@@ -42,13 +42,13 @@ class GWENVIEWLIB_EXPORT ThumbnailBarItemDelegate : public QAbstractItemDelegate
     Q_OBJECT
 public:
     ThumbnailBarItemDelegate(ThumbnailView*);
-    ~ThumbnailBarItemDelegate() Q_DECL_OVERRIDE;
+    ~ThumbnailBarItemDelegate() override;
 
-    void paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const Q_DECL_OVERRIDE;
-    QSize sizeHint(const QStyleOptionViewItem & /*option*/, const QModelIndex & /*index*/) const Q_DECL_OVERRIDE;
+    void paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const override;
+    QSize sizeHint(const QStyleOptionViewItem & /*option*/, const QModelIndex & /*index*/) const override;
 
 protected:
-    bool eventFilter(QObject*, QEvent*) Q_DECL_OVERRIDE;
+    bool eventFilter(QObject*, QEvent*) override;
 
 private Q_SLOTS:
     void toggleSelection();
@@ -73,9 +73,9 @@ public:
     void setRowCount(int);
 
 protected:
-    void resizeEvent(QResizeEvent * event) Q_DECL_OVERRIDE;
-    void wheelEvent(QWheelEvent* event) Q_DECL_OVERRIDE;
-    void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected) Q_DECL_OVERRIDE;
+    void resizeEvent(QResizeEvent * event) override;
+    void wheelEvent(QWheelEvent* event) override;
+    void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected) override;
 
 private Q_SLOTS:
     void slotFrameChanged(int);

@@ -49,7 +49,7 @@ public:
         : mRectF(rectF)
     {}
 
-    void threadedStart() Q_DECL_OVERRIDE
+    void threadedStart() override
     {
         if (!checkDocumentEditor()) {
             return;

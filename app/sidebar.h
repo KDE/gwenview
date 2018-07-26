@@ -37,14 +37,14 @@ class SideBarGroup : public QFrame
     Q_OBJECT
 public:
     SideBarGroup(const QString& title, bool defaultContainerMarginEnabled = true);
-    ~SideBarGroup() Q_DECL_OVERRIDE;
+    ~SideBarGroup() override;
 
     void addWidget(QWidget*);
     void addAction(QAction*);
     void clear();
 
 protected:
-    void paintEvent(QPaintEvent*) Q_DECL_OVERRIDE;
+    void paintEvent(QPaintEvent*) override;
 
 private:
     SideBarGroupPrivate* const d;
@@ -72,7 +72,7 @@ class SideBar : public QTabWidget
     Q_OBJECT
 public:
     explicit SideBar(QWidget* parent);
-    ~SideBar() Q_DECL_OVERRIDE;
+    ~SideBar() override;
 
     void addPage(SideBarPage*);
 
@@ -81,7 +81,7 @@ public:
 
     void loadConfig();
 
-    QSize sizeHint() const Q_DECL_OVERRIDE;
+    QSize sizeHint() const override;
 
 private:
     SideBarPrivate* const d;

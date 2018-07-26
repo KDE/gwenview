@@ -58,7 +58,7 @@ public:
         ScaleToFit
     };
     explicit ThumbnailView(QWidget* parent);
-    ~ThumbnailView() Q_DECL_OVERRIDE;
+    ~ThumbnailView() override;
 
     void setThumbnailViewHelper(AbstractThumbnailViewHelper* helper);
 
@@ -96,7 +96,7 @@ public:
      */
     bool isBusy(const QModelIndex& index) const;
 
-    void setModel(QAbstractItemModel* model) Q_DECL_OVERRIDE;
+    void setModel(QAbstractItemModel* model) override;
 
     void setThumbnailProvider(ThumbnailProvider* thumbnailProvider);
 
@@ -158,30 +158,30 @@ public Q_SLOTS:
     void generateThumbnailsForItems();
 
 protected:
-    void dragEnterEvent(QDragEnterEvent*) Q_DECL_OVERRIDE;
+    void dragEnterEvent(QDragEnterEvent*) override;
 
-    void dragMoveEvent(QDragMoveEvent*) Q_DECL_OVERRIDE;
+    void dragMoveEvent(QDragMoveEvent*) override;
 
-    void dropEvent(QDropEvent*) Q_DECL_OVERRIDE;
+    void dropEvent(QDropEvent*) override;
 
-    void keyPressEvent(QKeyEvent*) Q_DECL_OVERRIDE;
+    void keyPressEvent(QKeyEvent*) override;
 
-    void resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
+    void resizeEvent(QResizeEvent*) override;
 
-    void scrollContentsBy(int dx, int dy) Q_DECL_OVERRIDE;
+    void scrollContentsBy(int dx, int dy) override;
 
-    void showEvent(QShowEvent*) Q_DECL_OVERRIDE;
+    void showEvent(QShowEvent*) override;
 
-    void wheelEvent(QWheelEvent*) Q_DECL_OVERRIDE;
+    void wheelEvent(QWheelEvent*) override;
 
-    void startDrag(Qt::DropActions) Q_DECL_OVERRIDE;
+    void startDrag(Qt::DropActions) override;
 
 protected Q_SLOTS:
-    void rowsAboutToBeRemoved(const QModelIndex& parent, int start, int end) Q_DECL_OVERRIDE;
-    void rowsInserted(const QModelIndex& parent, int start, int end) Q_DECL_OVERRIDE;
-    void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected) Q_DECL_OVERRIDE;
+    void rowsAboutToBeRemoved(const QModelIndex& parent, int start, int end) override;
+    void rowsInserted(const QModelIndex& parent, int start, int end) override;
+    void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected) override;
     virtual void dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight,
-                             const QVector<int> &roles = QVector<int>()) Q_DECL_OVERRIDE;
+                             const QVector<int> &roles = QVector<int>()) override;
 
 private Q_SLOTS:
     void showContextMenu();

@@ -43,11 +43,11 @@ class LoadingDocumentImpl : public AbstractDocumentImpl
     Q_OBJECT
 public:
     LoadingDocumentImpl(Document*);
-    ~LoadingDocumentImpl() Q_DECL_OVERRIDE;
+    ~LoadingDocumentImpl() override;
 
-    void init() Q_DECL_OVERRIDE;
-    Document::LoadingState loadingState() const Q_DECL_OVERRIDE;
-    bool isEditable() const Q_DECL_OVERRIDE;
+    void init() override;
+    Document::LoadingState loadingState() const override;
+    bool isEditable() const override;
 
     void loadImage(int invertedZoom);
 

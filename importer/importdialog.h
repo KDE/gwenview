@@ -38,9 +38,9 @@ class ImportDialog : public KMainWindow
     Q_OBJECT
 public:
     ImportDialog();
-    ~ImportDialog() Q_DECL_OVERRIDE;
+    ~ImportDialog() override;
 
-    QSize sizeHint() const Q_DECL_OVERRIDE;
+    QSize sizeHint() const override;
 
 public Q_SLOTS:
     void setSourceUrl(const QUrl&, const QString& deviceUdi);

@@ -77,7 +77,7 @@ public:
     : mInvertedZoom(invertedZoom)
     {}
 
-    void doStart() Q_DECL_OVERRIDE;
+    void doStart() override;
 
     int mInvertedZoom;
 };

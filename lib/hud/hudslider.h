@@ -42,7 +42,7 @@ class HudSlider : public QGraphicsWidget
     Q_OBJECT
 public:
     explicit HudSlider(QGraphicsItem* parent = nullptr);
-    ~HudSlider() Q_DECL_OVERRIDE;
+    ~HudSlider() override;
 
     void setRange(int min, int max);
     void setPageStep(int step);
@@ -54,7 +54,7 @@ public:
 
     bool isSliderDown() const;
 
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) Q_DECL_OVERRIDE;
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override;
 
     void triggerAction(QAbstractSlider::SliderAction);
 
@@ -63,12 +63,12 @@ Q_SIGNALS:
     void actionTriggered(int);
 
 protected:
-    void mousePressEvent(QGraphicsSceneMouseEvent* event) Q_DECL_OVERRIDE;
-    void mouseMoveEvent(QGraphicsSceneMouseEvent* event) Q_DECL_OVERRIDE;
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) Q_DECL_OVERRIDE;
-    void wheelEvent(QGraphicsSceneWheelEvent* event) Q_DECL_OVERRIDE;
-    void keyPressEvent(QKeyEvent* event) Q_DECL_OVERRIDE;
-    void keyReleaseEvent(QKeyEvent* event) Q_DECL_OVERRIDE;
+    void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
+    void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
+    void wheelEvent(QGraphicsSceneWheelEvent* event) override;
+    void keyPressEvent(QKeyEvent* event) override;
+    void keyReleaseEvent(QKeyEvent* event) override;
 
 private Q_SLOTS:
     void doRepeatAction(int time = 50);

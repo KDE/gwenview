@@ -41,7 +41,7 @@ class TransformJob : public ThreadedDocumentJob
     Q_OBJECT
 public:
     TransformJob(Orientation orientation);
-    void threadedStart() Q_DECL_OVERRIDE;
+    void threadedStart() override;
 
 private:
     Orientation mOrientation;
@@ -52,10 +52,10 @@ class GWENVIEWLIB_EXPORT TransformImageOperation : public AbstractImageOperation
 {
 public:
     TransformImageOperation(Orientation);
-    ~TransformImageOperation() Q_DECL_OVERRIDE;
+    ~TransformImageOperation() override;
 
-    void redo() Q_DECL_OVERRIDE;
-    void undo() Q_DECL_OVERRIDE;
+    void redo() override;
+    void undo() override;
 
 private:
     TransformImageOperationPrivate* const d;

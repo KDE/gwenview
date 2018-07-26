@@ -72,7 +72,7 @@ void ContextManagerTest::testRemove()
 
     QModelIndex currentIndex = manager.selectionModel()->currentIndex();
     QCOMPARE(currentIndex.row(), 1);
-    QCOMPARE(currentIndex.data(Qt::DisplayRole).toString(), QString("c"));
+    QCOMPARE(currentIndex.data(Qt::DisplayRole).toString(), QStringLiteral("c"));
 
     // Remove "c", `manager` should select "a"
     sandBox.remove("c");
@@ -83,7 +83,7 @@ void ContextManagerTest::testRemove()
 
     currentIndex = manager.selectionModel()->currentIndex();
     QCOMPARE(currentIndex.row(), 0);
-    QCOMPARE(currentIndex.data(Qt::DisplayRole).toString(), QString("a"));
+    QCOMPARE(currentIndex.data(Qt::DisplayRole).toString(), QStringLiteral("a"));
 }
 
 void ContextManagerTest::testInvalidDirUrl()
@@ -97,7 +97,7 @@ void ContextManagerTest::testInvalidDirUrl()
             setAutoErrorHandlingEnabled(false, nullptr);
         }
 
-        bool openUrl(const QUrl &url, OpenUrlFlags flags = NoFlags) Q_DECL_OVERRIDE
+        bool openUrl(const QUrl &url, OpenUrlFlags flags = NoFlags) override
         {
             mOpenUrlCalled = true;
             return KDirLister::openUrl(url, flags);

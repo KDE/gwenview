@@ -248,8 +248,8 @@ void MprisMediaPlayer2Player::onSlideShowStateChanged()
         return;
     }
 
-    signalPropertyChange("Position", position());
-    signalPropertyChange("PlaybackStatus", mPlaybackStatus);
+    signalPropertyChange(QStringLiteral("Position"), position());
+    signalPropertyChange(QStringLiteral("PlaybackStatus"), mPlaybackStatus);
 }
 
 void MprisMediaPlayer2Player::onCurrentUrlChanged(const QUrl& url)
@@ -263,7 +263,7 @@ void MprisMediaPlayer2Player::onCurrentUrlChanged(const QUrl& url)
     }
 
     onMetaInfoUpdated();
-    signalPropertyChange("Position", position());
+    signalPropertyChange(QStringLiteral("Position"), position());
 }
 
 void MprisMediaPlayer2Player::onMetaInfoUpdated()
@@ -318,13 +318,13 @@ void MprisMediaPlayer2Player::onMetaInfoUpdated()
     if (updatedMetaData != mMetaData) {
         mMetaData = updatedMetaData;
 
-        signalPropertyChange("Metadata", mMetaData);
+        signalPropertyChange(QStringLiteral("Metadata"), mMetaData);
     }
 }
 
 void MprisMediaPlayer2Player::onRandomActionToggled(bool checked)
 {
-    signalPropertyChange("Shuffle", checked);
+    signalPropertyChange(QStringLiteral("Shuffle"), checked);
 }
 
 void MprisMediaPlayer2Player::onFullScreenActionToggled()
@@ -333,8 +333,8 @@ void MprisMediaPlayer2Player::onFullScreenActionToggled()
         return;
     }
 
-    signalPropertyChange("Position", position());
-    signalPropertyChange("PlaybackStatus", mPlaybackStatus);
+    signalPropertyChange(QStringLiteral("Position"), position());
+    signalPropertyChange(QStringLiteral("PlaybackStatus"), mPlaybackStatus);
 }
 
 void MprisMediaPlayer2Player::onToggleSlideShowActionChanged()
@@ -348,11 +348,11 @@ void MprisMediaPlayer2Player::onToggleSlideShowActionChanged()
 
     const bool playbackStatusChanged = updatePlaybackStatus();
 
-    signalPropertyChange("CanPlay", mSlideShowEnabled);
-    signalPropertyChange("CanPause", mSlideShowEnabled);
+    signalPropertyChange(QStringLiteral("CanPlay"), mSlideShowEnabled);
+    signalPropertyChange(QStringLiteral("CanPause"), mSlideShowEnabled);
     if (playbackStatusChanged) {
-        signalPropertyChange("Position", position());
-        signalPropertyChange("PlaybackStatus", mPlaybackStatus);
+        signalPropertyChange(QStringLiteral("Position"), position());
+        signalPropertyChange(QStringLiteral("PlaybackStatus"), mPlaybackStatus);
     }
 }
 
@@ -365,7 +365,7 @@ void MprisMediaPlayer2Player::onNextActionChanged()
 
     mNextEnabled = isEnabled;
 
-    signalPropertyChange("CanGoNext", mNextEnabled);
+    signalPropertyChange(QStringLiteral("CanGoNext"), mNextEnabled);
 }
 
 
@@ -378,7 +378,7 @@ void MprisMediaPlayer2Player::onPreviousActionChanged()
 
     mPreviousEnabled = isEnabled;
 
-    signalPropertyChange("CanGoPrevious", mPreviousEnabled);
+    signalPropertyChange(QStringLiteral("CanGoPrevious"), mPreviousEnabled);
 }
 
 }

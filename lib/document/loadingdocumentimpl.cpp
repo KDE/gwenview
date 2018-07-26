@@ -158,7 +158,7 @@ struct LoadingDocumentImplPrivate
             //   https://bugs.kde.org/show_bug.cgi?id=289819
             //
             mFormatHint = q->document()->url().fileName()
-                .section('.', -1).toLocal8Bit().toLower();
+                .section(QLatin1Char('.'), -1).toLocal8Bit().toLower();
             mMetaInfoFuture = QtConcurrent::run(this, &LoadingDocumentImplPrivate::loadMetaInfo);
             mMetaInfoFutureWatcher.setFuture(mMetaInfoFuture);
             break;
@@ -194,7 +194,7 @@ struct LoadingDocumentImplPrivate
         buffer.open(QIODevice::ReadOnly);
 
 #ifdef KDCRAW_FOUND
-        if (KDcrawIface::KDcraw::rawFilesList().contains(QString(mFormatHint))) {
+        if (KDcrawIface::KDcraw::rawFilesList().contains(QString::fromLatin1(mFormatHint))) {
             QByteArray previewData;
 
             // if the image is in format supported by dcraw, fetch its embedded preview

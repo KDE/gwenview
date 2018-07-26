@@ -67,13 +67,13 @@ public:
         : AbstractThumbnailViewHelper(parent)
     {}
 
-    void showContextMenu(QWidget*) Q_DECL_OVERRIDE
+    void showContextMenu(QWidget*) override
     {}
 
-    void showMenuForUrlDroppedOnViewport(QWidget*, const QList<QUrl>&) Q_DECL_OVERRIDE
+    void showMenuForUrlDroppedOnViewport(QWidget*, const QList<QUrl>&) override
     {}
 
-    void showMenuForUrlDroppedOnDir(QWidget*, const QList<QUrl>&, const QUrl&) Q_DECL_OVERRIDE
+    void showMenuForUrlDroppedOnDir(QWidget*, const QList<QUrl>&, const QUrl&) override
     {}
 };
 
@@ -378,7 +378,7 @@ public:
     {}
 
     bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const // reimp
-    Q_DECL_OVERRIDE {
+    override {
         if (sourceParent.isValid()) {
             return true;
         }
@@ -388,7 +388,7 @@ public:
     }
 
     QVariant data(const QModelIndex& index, int role) const // reimp
-    Q_DECL_OVERRIDE {
+    override {
         if (index.parent().isValid()) {
             return QSortFilterProxyModel::data(index, role);
         }

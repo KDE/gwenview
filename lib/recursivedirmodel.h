@@ -44,13 +44,13 @@ class GWENVIEWLIB_EXPORT RecursiveDirModel : public QAbstractListModel
     Q_OBJECT
 public:
     explicit RecursiveDirModel(QObject* parent = nullptr);
-    ~RecursiveDirModel() Q_DECL_OVERRIDE;
+    ~RecursiveDirModel() override;
 
     QUrl url() const;
     void setUrl(const QUrl&);
 
-    int rowCount(const QModelIndex&) const Q_DECL_OVERRIDE;
-    QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
+    int rowCount(const QModelIndex&) const override;
+    QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const override;
 
 Q_SIGNALS:
     void completed();

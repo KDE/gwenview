@@ -42,11 +42,11 @@ class GWENVIEWLIB_EXPORT HudLabel : public QGraphicsWidget
     Q_OBJECT
 public:
     explicit HudLabel(QGraphicsItem* parent = nullptr);
-    ~HudLabel() Q_DECL_OVERRIDE;
+    ~HudLabel() override;
 
     void setText(const QString&);
 
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) Q_DECL_OVERRIDE;
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override;
 
 private:
     HudLabelPrivate* const d;

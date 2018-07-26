@@ -183,12 +183,12 @@ struct SaveBarPrivate
                 if (mCurrentUrl == lst[0]) {
                     links << previous;
                 } else {
-                    links << QString("<a href='previous'>%1</a>").arg(previous);
+                    links << QStringLiteral("<a href='previous'>%1</a>").arg(previous);
                 }
                 if (mCurrentUrl == lst[lst.size() - 1]) {
                     links << next;
                 } else {
-                    links << QString("<a href='next'>%1</a>").arg(next);
+                    links << QStringLiteral("<a href='next'>%1</a>").arg(next);
                 }
             }
         } else {
@@ -197,9 +197,9 @@ struct SaveBarPrivate
 
             message = i18np("One image modified", "%1 images modified", lst.size());
             if (lst.size() > 1) {
-                links << QString("<a href='first'>%1</a>").arg(i18n("Go to first modified image"));
+                links << QStringLiteral("<a href='first'>%1</a>").arg(i18n("Go to first modified image"));
             } else {
-                links << QString("<a href='first'>%1</a>").arg(i18n("Go to it"));
+                links << QStringLiteral("<a href='first'>%1</a>").arg(i18n("Go to it"));
             }
         }
 

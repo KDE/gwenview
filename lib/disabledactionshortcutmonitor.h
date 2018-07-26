@@ -46,13 +46,13 @@ public:
      * parent must be a widget because we need to create a QShortcut
      */
     DisabledActionShortcutMonitor(QAction* action, QWidget* parent);
-    ~DisabledActionShortcutMonitor() Q_DECL_OVERRIDE;
+    ~DisabledActionShortcutMonitor() override;
 
 Q_SIGNALS:
     void activated();
 
 protected:
-    bool eventFilter(QObject* object, QEvent* event) Q_DECL_OVERRIDE;
+    bool eventFilter(QObject* object, QEvent* event) override;
 
 private:
     DisabledActionShortcutMonitorPrivate* const d;

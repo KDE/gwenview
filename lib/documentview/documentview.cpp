@@ -186,7 +186,7 @@ struct DocumentViewPrivate
         floater->setChildWidget(mLoadingIndicator);
     }
 
-    HudButton* createHudButton(const QString& text, const char* iconName, bool showText)
+    HudButton* createHudButton(const QString& text, const QString &iconName, bool showText)
     {
         HudButton* button = new HudButton;
         if (showText) {
@@ -200,8 +200,8 @@ struct DocumentViewPrivate
 
     void setupHud()
     {
-        HudButton* trashButton = createHudButton(i18nc("@info:tooltip", "Trash"), "user-trash", false);
-        HudButton* deselectButton = createHudButton(i18nc("@action:button", "Deselect"), "list-remove", true);
+        HudButton* trashButton = createHudButton(i18nc("@info:tooltip", "Trash"), QStringLiteral("user-trash"), false);
+        HudButton* deselectButton = createHudButton(i18nc("@action:button", "Deselect"), QStringLiteral("list-remove"), true);
 
         QGraphicsWidget* content = new QGraphicsWidget;
         QGraphicsLinearLayout* layout = new QGraphicsLinearLayout(content);
@@ -246,12 +246,12 @@ struct DocumentViewPrivate
         QSize size = doc->size();
         if (size.isValid()) {
             caption +=
-                QString(" - %1x%2")
+                QStringLiteral(" - %1x%2")
                 .arg(size.width())
                 .arg(size.height());
             if (mAdapter->canZoom()) {
                 int intZoom = qRound(mAdapter->zoom() * 100);
-                caption += QString(" - %1%")
+                caption += QStringLiteral(" - %1%")
                            .arg(intZoom);
             }
         }

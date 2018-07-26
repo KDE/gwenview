@@ -65,7 +65,7 @@ ResizeImageDialog::ResizeImageDialog(QWidget* parent)
     mainLayout->addWidget(buttonBox);
 
     content->layout()->setMargin(0);
-    KGuiItem::assign(okButton, KGuiItem(i18n("Resize"), "transform-scale"));
+    KGuiItem::assign(okButton, KGuiItem(i18n("Resize"), QStringLiteral("transform-scale")));
     setWindowTitle(content->windowTitle());
     d->mWidthSpinBox->setFocus();
 

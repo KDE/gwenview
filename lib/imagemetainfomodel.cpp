@@ -93,7 +93,7 @@ public:
         void appendValue(const QString& value)
         {
             if (!mValue.isEmpty()) {
-                mValue += '\n';
+                mValue += QLatin1Char('\n');
             }
             mValue += value.trimmed();
         }
@@ -251,11 +251,11 @@ struct ImageMetaInfoModelPrivate
     void initGeneralGroup()
     {
         MetaInfoGroup* group = mMetaInfoGroupVector[GeneralGroup];
-        group->addEntry("General.Name", i18nc("@item:intable Image file name", "Name"), QString());
-        group->addEntry("General.Size", i18nc("@item:intable", "File Size"), QString());
-        group->addEntry("General.Time", i18nc("@item:intable", "File Time"), QString());
-        group->addEntry("General.ImageSize", i18nc("@item:intable", "Image Size"), QString());
-        group->addEntry("General.Comment", i18nc("@item:intable", "Comment"), QString());
+        group->addEntry(QStringLiteral("General.Name"), i18nc("@item:intable Image file name", "Name"), QString());
+        group->addEntry(QStringLiteral("General.Size"), i18nc("@item:intable", "File Size"), QString());
+        group->addEntry(QStringLiteral("General.Time"), i18nc("@item:intable", "File Time"), QString());
+        group->addEntry(QStringLiteral("General.ImageSize"), i18nc("@item:intable", "Image Size"), QString());
+        group->addEntry(QStringLiteral("General.Comment"), i18nc("@item:intable", "Comment"), QString());
     }
 
     template <class Container, class Iterator>
@@ -316,12 +316,12 @@ ImageMetaInfoModel::ImageMetaInfoModel()
     d->mMetaInfoGroupVector.resize(4);
 #endif
     d->mMetaInfoGroupVector[GeneralGroup] = new MetaInfoGroup(i18nc("@title:group General info about the image", "General"));
-    d->mMetaInfoGroupVector[ExifGroup] = new MetaInfoGroup("EXIF");
+    d->mMetaInfoGroupVector[ExifGroup] = new MetaInfoGroup(QStringLiteral("EXIF"));
 #ifdef HAVE_FITS
-    d->mMetaInfoGroupVector[FitsGroup] = new MetaInfoGroup("FITS");
+    d->mMetaInfoGroupVector[FitsGroup] = new MetaInfoGroup(QStringLiteral("FITS"));
 #endif
-    d->mMetaInfoGroupVector[IptcGroup] = new MetaInfoGroup("IPTC");
-    d->mMetaInfoGroupVector[XmpGroup]  = new MetaInfoGroup("XMP");
+    d->mMetaInfoGroupVector[IptcGroup] = new MetaInfoGroup(QStringLiteral("IPTC"));
+    d->mMetaInfoGroupVector[XmpGroup]  = new MetaInfoGroup(QStringLiteral("XMP"));
     d->initGeneralGroup();
 }
 
@@ -337,13 +337,13 @@ void ImageMetaInfoModel::setUrl(const QUrl &url)
     const QString sizeString = KFormat().formatByteSize(item.size());
     const QString timeString = QLocale().toString(item.time(KFileItem::ModificationTime), QLocale::LongFormat);
 
-    d->setGroupEntryValue(GeneralGroup, "General.Name", item.name());
-    d->setGroupEntryValue(GeneralGroup, "General.Size", sizeString);
-    d->setGroupEntryValue(GeneralGroup, "General.Time", timeString);
+    d->setGroupEntryValue(GeneralGroup, QStringLiteral("General.Name"), item.name());
+    d->setGroupEntryValue(GeneralGroup, QStringLiteral("General.Size"), sizeString);
+    d->setGroupEntryValue(GeneralGroup, QStringLiteral("General.Time"), timeString);
 
 #ifdef HAVE_FITS
-    if (UrlUtils::urlIsFastLocalFile(url) && (url.fileName().endsWith(".fit", Qt::CaseInsensitive) ||
-        url.fileName().endsWith(".fits", Qt::CaseInsensitive))) {
+    if (UrlUtils::urlIsFastLocalFile(url) && (url.fileName().endsWith(QStringLiteral(".fit"), Qt::CaseInsensitive) ||
+        url.fileName().endsWith(QStringLiteral(".fits"), Qt::CaseInsensitive))) {
         FITSData fitsLoader;
         MetaInfoGroup* group = d->mMetaInfoGroupVector[FitsGroup];
         QFile file(url.toLocalFile());
@@ -364,20 +364,20 @@ void ImageMetaInfoModel::setUrl(const QUrl &url)
                 QString keyStr;
                 QString value;
 
-                if (!record.contains("=")) {
-                    key = record.section(' ', 0, 0).simplified();
+                if (!record.contains(QStringLiteral("="))) {
+                    key = record.section(QLatin1Char(' '), 0, 0).simplified();
                     keyStr = key;
-                    value = record.section(' ', 1, -1).simplified();
+                    value = record.section(QLatin1Char(' '), 1, -1).simplified();
                 } else {
-                    key = record.section('=', 0, 0).simplified();
-                    if (record.contains('/')) {
-                        keyStr = record.section('/', -1, -1).simplified();
-                        value = record.section('=', 1, -1).section('/', 0, 0);
+                    key = record.section(QLatin1Char('='), 0, 0).simplified();
+                    if (record.contains(QLatin1Char('/')) {
+                        keyStr = record.section(QLatin1Char('/'), -1, -1).simplified();
+                        value = record.section(QLatin1Char('='), 1, -1).section(QLatin1Char('/'), 0, 0);
                     } else {
                         keyStr = key;
-                        value = record.section('=', 1, -1);
+                        value = record.section(QLatin1Char('='), 1, -1);
                     }
-                    value.remove("\'");
+                    value.remove(QStringLiteral("\'"));
                     value = value.simplified();
                 }
                 if (value.isEmpty()) {
@@ -392,7 +392,7 @@ void ImageMetaInfoModel::setUrl(const QUrl &url)
                     value = QString::number(number);
                 }
 
-                group->addEntry("Fits."+key, keyStr, value);
+                group->addEntry(QStringLiteral("Fits.")+key, keyStr, value);
             }
         }
     }
@@ -410,15 +410,15 @@ void ImageMetaInfoModel::setImageSize(const QSize& size)
         double megaPixels = size.width() * size.height() / 1000000.;
         if (megaPixels > 0.1) {
             QString megaPixelsString = QString::number(megaPixels, 'f', 1);
-            imageSize += ' ';
+            imageSize += QLatin1Char(' ');
             imageSize += i18nc(
                              "@item:intable %1 is number of millions of pixels in image",
                              "(%1MP)", megaPixelsString);
         }
     } else {
-        imageSize = '-';
+        imageSize = QLatin1Char('-');
     }
-    d->setGroupEntryValue(GeneralGroup, "General.ImageSize", imageSize);
+    d->setGroupEntryValue(GeneralGroup, QStringLiteral("General.ImageSize"), imageSize);
 }
 
 void ImageMetaInfoModel::setExiv2Image(const Exiv2::Image* image)
@@ -437,7 +437,7 @@ void ImageMetaInfoModel::setExiv2Image(const Exiv2::Image* image)
         return;
     }
 
-    d->setGroupEntryValue(GeneralGroup, "General.Comment", QString::fromUtf8(image->comment().c_str()));
+    d->setGroupEntryValue(GeneralGroup, QStringLiteral("General.Comment"), QString::fromUtf8(image->comment().c_str()));
 
     if (image->checkMode(Exiv2::mdExif) & Exiv2::amRead) {
         const Exiv2::ExifData& exifData = image->exifData();

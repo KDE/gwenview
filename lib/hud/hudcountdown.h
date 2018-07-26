@@ -39,11 +39,11 @@ class HudCountDown : public QGraphicsWidget
     Q_OBJECT
 public:
     explicit HudCountDown(QGraphicsWidget* parent = nullptr);
-    ~HudCountDown() Q_DECL_OVERRIDE;
+    ~HudCountDown() override;
 
     void start(qreal ms);
 
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) Q_DECL_OVERRIDE;
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override;
 
 Q_SIGNALS:
     void timeout();

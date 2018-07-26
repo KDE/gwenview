@@ -77,7 +77,7 @@ void MessageViewAdapter::setErrorMessage(const QString& main, const QString& det
     if (detail.isEmpty()) {
         message = main;
     } else {
-        message = QString("<b>%1</b><br>%2").arg(main).arg(detail);
+        message = QStringLiteral("<b>%1</b><br>%2").arg(main).arg(detail);
     }
     d->mMessageWidget->setText(message);
 }

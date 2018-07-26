@@ -130,7 +130,7 @@ private:
 #ifdef Q_OS_UNIX
         // shorten home directory, but avoid showing a cryptic "~/"
         if (text.length() > QDir::homePath().length() + 1) {
-            text.replace(QRegularExpression('^' + QDir::homePath()), "~");
+            text.replace(QRegularExpression('^' + QDir::homePath()), QStringLiteral("~"));
         }
 #endif
         setText(text);
@@ -148,7 +148,7 @@ private:
         setData(i18n("Last visited: %1", date), Qt::ToolTipRole);
     }
 
-    bool operator<(const QStandardItem& other) const Q_DECL_OVERRIDE {
+    bool operator<(const QStandardItem& other) const override {
         return mDateTime > static_cast<const HistoryItem*>(&other)->mDateTime;
     }
 };
@@ -167,7 +167,7 @@ struct HistoryModelPrivate
         if (!dir.exists()) {
             return;
         }
-        Q_FOREACH(const QString & name, dir.entryList(QStringList() << "*rc")) {
+        Q_FOREACH(const QString & name, dir.entryList(QStringList() << QStringLiteral("*rc"))) {
             HistoryItem* item = HistoryItem::load(dir.filePath(name));
             if (!item) {
                 continue;

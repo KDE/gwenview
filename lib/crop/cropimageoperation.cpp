@@ -43,7 +43,7 @@ public:
         : mRect(rect)
     {}
 
-    void threadedStart() Q_DECL_OVERRIDE
+    void threadedStart() override
     {
         if (!checkDocumentEditor()) {
             return;

@@ -45,7 +45,7 @@ class GWENVIEWLIB_EXPORT WidgetFloater : public QObject
     Q_OBJECT
 public:
     explicit WidgetFloater(QWidget* parent);
-    ~WidgetFloater() Q_DECL_OVERRIDE;
+    ~WidgetFloater() override;
 
     void setChildWidget(QWidget*);
 
@@ -58,7 +58,7 @@ public:
     int verticalMargin() const;
 
 protected:
-    bool eventFilter(QObject*, QEvent*) Q_DECL_OVERRIDE;
+    bool eventFilter(QObject*, QEvent*) override;
 
 private:
     WidgetFloaterPrivate* const d;

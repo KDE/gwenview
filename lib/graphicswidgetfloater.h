@@ -47,7 +47,7 @@ class GWENVIEWLIB_EXPORT GraphicsWidgetFloater : public QObject
     Q_OBJECT
 public:
     GraphicsWidgetFloater(QGraphicsWidget* parent);
-    ~GraphicsWidgetFloater() Q_DECL_OVERRIDE;
+    ~GraphicsWidgetFloater() override;
 
     void setChildWidget(QGraphicsWidget*);
 
@@ -60,7 +60,7 @@ public:
     int verticalMargin() const;
 
 protected:
-    bool eventFilter(QObject*, QEvent*) Q_DECL_OVERRIDE;
+    bool eventFilter(QObject*, QEvent*) override;
 
 private Q_SLOTS:
     void slotChildVisibilityChanged();

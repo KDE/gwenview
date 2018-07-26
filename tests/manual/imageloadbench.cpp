@@ -45,7 +45,7 @@ int main(int argc, char** argv)
 
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly)) {
-        qDebug() << QString("Could not open '%1'").arg(fileName);
+        qDebug() << QStringLiteral("Could not open '%1'").arg(fileName);
         return 2;
     }
     QByteArray data = file.readAll();

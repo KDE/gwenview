@@ -41,7 +41,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 inline QString pathForTestFile(const QString& name)
 {
-    return QDir::cleanPath(QString("%1/%2").arg(GV_TEST_DATA_DIR).arg(name));
+    return QDir::cleanPath(QStringLiteral("%1/%2").arg(GV_TEST_DATA_DIR).arg(name));
 }
 
 inline QUrl urlForTestFile(const QString& name)
@@ -51,7 +51,7 @@ inline QUrl urlForTestFile(const QString& name)
 
 inline QString pathForTestOutputFile(const QString& name)
 {
-    return QString("%1/%2").arg(QDir::currentPath()).arg(name);
+    return QStringLiteral("%1/%2").arg(QDir::currentPath()).arg(name);
 }
 
 inline QUrl urlForTestOutputFile(const QString& name)

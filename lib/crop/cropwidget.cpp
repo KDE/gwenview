@@ -86,7 +86,7 @@ struct CropWidgetPrivate : public Ui_CropWidget
 
         // A custom ratio has been entered, extract ratio from the text
         // If invalid, return zero size instead
-        const QStringList lst = ratioComboBox->currentText().split(':');
+        const QStringList lst = ratioComboBox->currentText().split(QLatin1Char(':'));
         if (lst.size() != 2) {
             return QSizeF(0, 0);
         }
@@ -123,7 +123,7 @@ struct CropWidgetPrivate : public Ui_CropWidget
         }
 
         // Size must be custom ratio, convert to text and add to combobox
-        QString ratioString = QString("%1:%2").arg(size.width()).arg(size.height());
+        QString ratioString = QStringLiteral("%1:%2").arg(size.width()).arg(size.height());
         ratioComboBox->setCurrentText(ratioString);
     }
 
@@ -148,7 +148,7 @@ struct CropWidgetPrivate : public Ui_CropWidget
     void addRatioToComboBox(const QSizeF& size, const QString& label = QString())
     {
         QString text = label.isEmpty()
-            ? QString("%1:%2").arg(size.width()).arg(size.height())
+            ? QStringLiteral("%1:%2").arg(size.width()).arg(size.height())
             : label;
         ratioComboBox->addItem(text, QVariant(size));
     }
@@ -207,7 +207,7 @@ struct CropWidgetPrivate : public Ui_CropWidget
         Q_ASSERT(edit);
         // Do not use i18n("%1:%2") because ':' should not be translated, it is
         // used to parse the ratio string.
-        edit->setPlaceholderText(QString("%1:%2").arg(i18n("Width")).arg(i18n("Height")));
+        edit->setPlaceholderText(QStringLiteral("%1:%2").arg(i18n("Width")).arg(i18n("Height")));
 
         // Enable clear button
         edit->setClearButtonEnabled(true);
@@ -242,7 +242,7 @@ struct CropWidgetPrivate : public Ui_CropWidget
     void initDialogButtonBox()
     {
         QPushButton* cropButton = dialogButtonBox->button(QDialogButtonBox::Ok);
-        cropButton->setIcon(QIcon::fromTheme("transform-crop-and-resize"));
+        cropButton->setIcon(QIcon::fromTheme(QStringLiteral("transform-crop-and-resize")));
         cropButton->setText(i18n("Crop"));
 
         QObject::connect(dialogButtonBox, &QDialogButtonBox::accepted, q, &CropWidget::cropRequested);

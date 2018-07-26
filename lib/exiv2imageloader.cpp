@@ -60,7 +60,7 @@ bool Exiv2ImageLoader::load(const QString& filePath)
         d->mImage = Exiv2::ImageFactory::open(filePathByteArray.constData());
         d->mImage->readMetadata();
     } catch (const Exiv2::Error& error) {
-        d->mErrorMessage = error.what();
+        d->mErrorMessage = QString::fromUtf8(error.what());
         return false;
     }
     return true;
@@ -72,7 +72,7 @@ bool Exiv2ImageLoader::load(const QByteArray& data)
         d->mImage = Exiv2::ImageFactory::open((unsigned char*)data.constData(), data.size());
         d->mImage->readMetadata();
     } catch (const Exiv2::Error& error) {
-        d->mErrorMessage = error.what();
+        d->mErrorMessage = QString::fromUtf8(error.what());
         return false;
     }
     return true;

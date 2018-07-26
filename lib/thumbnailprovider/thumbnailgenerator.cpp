@@ -65,7 +65,7 @@ bool ThumbnailContext::load(const QString &pixPath, int pixelSize)
     QImage originalImage;
     QSize originalSize;
 
-    QByteArray formatHint = pixPath.section('.', -1).toLocal8Bit().toLower();
+    QByteArray formatHint = pixPath.section(QLatin1Char('.'), -1).toLocal8Bit().toLower();
     QImageReader reader(pixPath);
 
     JpegContent content;
@@ -76,7 +76,7 @@ bool ThumbnailContext::load(const QString &pixPath, int pixelSize)
 
 #ifdef KDCRAW_FOUND
     // raw images deserve special treatment
-    if (KDcrawIface::KDcraw::rawFilesList().contains(QString(formatHint))) {
+    if (KDcrawIface::KDcraw::rawFilesList().contains(QString::fromLatin1(formatHint))) {
         // use KDCraw to extract the preview
         bool ret = KDcrawIface::KDcraw::loadEmbeddedPreview(data, pixPath);
 
@@ -308,13 +308,13 @@ void ThumbnailGenerator::run()
 
 void ThumbnailGenerator::cacheThumbnail()
 {
-    mImage.setText("Thumb::URI"          , mOriginalUri);
-    mImage.setText("Thumb::MTime"        , QString::number(mOriginalTime));
-    mImage.setText("Thumb::Size"         , QString::number(mOriginalFileSize));
-    mImage.setText("Thumb::Mimetype"     , mOriginalMimeType);
-    mImage.setText("Thumb::Image::Width" , QString::number(mOriginalWidth));
-    mImage.setText("Thumb::Image::Height", QString::number(mOriginalHeight));
-    mImage.setText("Software"            , QStringLiteral("Gwenview"));
+    mImage.setText(QStringLiteral("Thumb::URI")          , mOriginalUri);
+    mImage.setText(QStringLiteral("Thumb::MTime")        , QString::number(mOriginalTime));
+    mImage.setText(QStringLiteral("Thumb::Size")         , QString::number(mOriginalFileSize));
+    mImage.setText(QStringLiteral("Thumb::Mimetype")     , mOriginalMimeType);
+    mImage.setText(QStringLiteral("Thumb::Image::Width") , QString::number(mOriginalWidth));
+    mImage.setText(QStringLiteral("Thumb::Image::Height"), QString::number(mOriginalHeight));
+    mImage.setText(QStringLiteral("Software")            , QStringLiteral("Gwenview"));
 
     emit thumbnailReadyToBeCached(mThumbnailPath, mImage);
 }

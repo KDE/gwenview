@@ -36,20 +36,20 @@ KAboutData* createAboutData(const QString& appName, const QString& programName)
 {
     KAboutData* data = new KAboutData(appName, programName, QStringLiteral(GWENVIEW_VERSION_STRING));
     data->setLicense(KAboutLicense::GPL);
-    data->setCopyrightStatement(i18n("Copyright 2000-2014 Gwenview authors"));
+    data->setCopyrightStatement(i18n("Copyright 2000-2018 Gwenview authors"));
     data->setProductName("gwenview");
     data->addAuthor(
         QStringLiteral("Lukáš Tinkl"),
         i18n("Current Maintainer"),
-        "ltinkl@redhat.com");
+        QStringLiteral("ltinkl@redhat.com"));
     data->addAuthor(
         QStringLiteral("Aurélien Gâteau"),
         i18n("Developer"),
-        "agateau@kde.org");
+        QStringLiteral("agateau@kde.org"));
     data->addAuthor(
         QStringLiteral("Benjamin Löwe"),
         i18n("Developer"),
-        "benni@mytum.de");
+        QStringLiteral("benni@mytum.de"));
     return data;
 }
 

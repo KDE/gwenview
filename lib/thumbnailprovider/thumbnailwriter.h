@@ -51,7 +51,7 @@ public Q_SLOTS:
     void queueThumbnail(const QString&, const QImage&);
 
 protected:
-    void run() Q_DECL_OVERRIDE;
+    void run() override;
 
 private:
     typedef QHash<QString, QImage> Cache;

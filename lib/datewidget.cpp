@@ -83,7 +83,7 @@ DateWidget::DateWidget(QWidget* parent)
     d->mPreviousButton = new StatusBarToolButton;
     d->mPreviousButton->setGroupPosition(StatusBarToolButton::GroupLeft);
     // FIXME: RTL
-    d->mPreviousButton->setIcon(QIcon::fromTheme("go-previous"));
+    d->mPreviousButton->setIcon(QIcon::fromTheme(QStringLiteral("go-previous")));
     connect(d->mPreviousButton, &StatusBarToolButton::clicked, this, &DateWidget::goToPrevious);
 
     d->mDateButton = new StatusBarToolButton;
@@ -92,7 +92,7 @@ DateWidget::DateWidget(QWidget* parent)
 
     d->mNextButton = new StatusBarToolButton;
     d->mNextButton->setGroupPosition(StatusBarToolButton::GroupRight);
-    d->mNextButton->setIcon(QIcon::fromTheme("go-next"));
+    d->mNextButton->setIcon(QIcon::fromTheme(QStringLiteral("go-next")));
     connect(d->mNextButton, &StatusBarToolButton::clicked, this, &DateWidget::goToNext);
 
     QHBoxLayout* layout = new QHBoxLayout(this);

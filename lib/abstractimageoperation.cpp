@@ -47,7 +47,7 @@ public:
         delete mOp;
     }
 
-    void undo() Q_DECL_OVERRIDE
+    void undo() override
     {
         mOp->undo();
     }

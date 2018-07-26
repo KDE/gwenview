@@ -53,7 +53,7 @@ struct RecentFilesItem : public QStandardItem
         : mUrl(url) {
         QString text(mUrl.toDisplayString(QUrl::PreferLocalFile));
 #ifdef Q_OS_UNIX
-        text.replace(QRegularExpression('^' + QDir::homePath()), "~");
+        text.replace(QRegularExpression(QStringLiteral("^") + QDir::homePath()), QStringLiteral("~"));
 #endif
         setText(text);
 

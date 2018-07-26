@@ -40,17 +40,17 @@ class LoadingIndicator : public QGraphicsWidget
     Q_OBJECT
 public:
     explicit LoadingIndicator(QGraphicsItem* parent = nullptr);
-    ~LoadingIndicator() Q_DECL_OVERRIDE;
+    ~LoadingIndicator() override;
 
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) Q_DECL_OVERRIDE;
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) override;
 
-    QRectF boundingRect() const Q_DECL_OVERRIDE;
+    QRectF boundingRect() const override;
 
 private Q_SLOTS:
     void showNextFrame();
 
 protected:
-    QVariant itemChange(GraphicsItemChange change, const QVariant &value) Q_DECL_OVERRIDE;
+    QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 
 private:
     LoadingIndicatorPrivate* const d;
