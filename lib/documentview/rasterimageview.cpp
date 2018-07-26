@@ -469,11 +469,15 @@ void RasterImageView::setCurrentTool(AbstractRasterImageViewTool* tool)
         d->mTool.data()->toolDeactivated();
         d->mTool.data()->deleteLater();
     }
+
+    // Go back to default cursor when tool is deactivated. We need to call this here and
+    // not further below in case toolActivated wants to set its own new cursor afterwards.
+    updateCursor();
+
     d->mTool = tool;
     if (d->mTool) {
         d->mTool.data()->toolActivated();
     }
-    updateCursor();
     currentToolChanged(tool);
     update();
 }
