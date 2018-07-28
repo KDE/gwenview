@@ -47,15 +47,15 @@ namespace Gwenview
 {
 
 enum GroupRow {
-    NoGroupSpace = -2,
-    NoGroup = -1,
     GeneralGroup,
     ExifGroup,
 #ifdef HAVE_FITS
     FitsGroup,
 #endif
     IptcGroup,
-    XmpGroup
+    XmpGroup,
+    NoGroupSpace,   // second last entry
+    NoGroup         // last entry
 };
 
 class MetaInfoGroup
