@@ -114,6 +114,7 @@ struct ImageOpsContextManagerItem::Private
         mRedEyeReductionAction = edit->addAction("red_eye_reduction", q, SLOT(startRedEyeReduction()));
         mRedEyeReductionAction->setText(i18n("Reduce Red Eye"));
         mRedEyeReductionAction->setIcon(QIcon::fromTheme("redeyes"));
+        actionCollection->setDefaultShortcut(mRedEyeReductionAction, Qt::SHIFT + Qt::Key_E);
 
         mActionList
                 << mRotateLeftAction
