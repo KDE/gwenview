@@ -377,8 +377,8 @@ public:
     , mName(name)
     {}
 
-    bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const // reimp
-    override {
+    bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override
+    {
         if (sourceParent.isValid()) {
             return true;
         }
@@ -387,8 +387,8 @@ public:
         return item.url().matches(mUrl, QUrl::StripTrailingSlash);
     }
 
-    QVariant data(const QModelIndex& index, int role) const // reimp
-    override {
+    QVariant data(const QModelIndex& index, int role) const override
+    {
         if (index.parent().isValid()) {
             return QSortFilterProxyModel::data(index, role);
         }
