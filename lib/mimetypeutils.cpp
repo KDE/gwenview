@@ -165,11 +165,20 @@ Kind urlKind(const QUrl &url)
     return mimeTypeKind(urlMimeType(url));
 }
 
-QMimeData* selectionMimeData(const KFileItemList& selectedFiles)
+QMimeData* selectionMimeData(const KFileItemList& selectedFiles, const MimeTarget& mimeTarget)
 {
     QMimeData* mimeData = new QMimeData;
 
     if (selectedFiles.count() == 1) {
+
+        // When a single file is selected, there are a couple of cases:
+        // - Pasting unmodified images: Set both image data and URL
+        //   (since some apps only support either image data or URL)
+        // - Dragging unmodified images: Only set URL
+        //   (otherwise dragging to Chromium or the desktop fails, see https://phabricator.kde.org/D13249#300894)
+        // - Dragging or pasting modified images: Only set image data
+        //   (otherwise some apps prefer the URL, which would only contain the unmodified image)
+
         const QUrl url = selectedFiles.first().url();
         const MimeTypeUtils::Kind mimeKind = MimeTypeUtils::urlKind(url);
         bool documentIsModified = false;
@@ -179,25 +188,25 @@ QMimeData* selectionMimeData(const KFileItemList& selectedFiles)
             doc->waitUntilLoaded();
             documentIsModified = doc->isModified();
 
-            QString suggestedFileName;
+            if (mimeTarget == ClipboardTarget || (mimeTarget == DropTarget && documentIsModified)) {
+                QString suggestedFileName;
 
-            if (mimeKind == MimeTypeUtils::KIND_RASTER_IMAGE) {
-                mimeData->setImageData(doc->image());
+                if (mimeKind == MimeTypeUtils::KIND_RASTER_IMAGE) {
+                    mimeData->setImageData(doc->image());
 
-                // Set the filename extension to PNG, as it is the first
-                // entry in the combobox when pasting to Dolphin
-                suggestedFileName = QFileInfo(url.fileName()).completeBaseName() + QStringLiteral(".png");
-            } else {
-                mimeData->setData(MimeTypeUtils::urlMimeType(url), doc->rawData());
-                suggestedFileName = url.fileName();
+                    // Set the filename extension to PNG, as it is the first
+                    // entry in the combobox when pasting to Dolphin
+                    suggestedFileName = QFileInfo(url.fileName()).completeBaseName() + QStringLiteral(".png");
+                } else {
+                    mimeData->setData(MimeTypeUtils::urlMimeType(url), doc->rawData());
+                    suggestedFileName = url.fileName();
+                }
+
+                mimeData->setData(QStringLiteral("application/x-kde-suggestedfilename"),
+                                  QFile::encodeName(suggestedFileName));
             }
-
-            mimeData->setData(QStringLiteral("application/x-kde-suggestedfilename"),
-                              QFile::encodeName(suggestedFileName));
         }
 
-        // Don't set the URL to support pasting edited images to
-        // applications preferring the URL otherwise, e.g. Dolphin
         if (!documentIsModified) {
             mimeData->setUrls({url});
         }

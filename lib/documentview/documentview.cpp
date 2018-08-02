@@ -405,7 +405,7 @@ struct DocumentViewPrivate
         }
         mDrag = new QDrag(q);
         const auto itemList = KFileItemList({q->document()->url()});
-        mDrag->setMimeData(MimeTypeUtils::selectionMimeData(itemList));
+        mDrag->setMimeData(MimeTypeUtils::selectionMimeData(itemList, MimeTypeUtils::DropTarget));
 
         if (q->document()->isModified()) {
             setDragPixmap(QPixmap::fromImage(q->document()->image()));

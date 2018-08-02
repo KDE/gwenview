@@ -97,7 +97,7 @@ QMimeData* FileOpsContextManagerItem::selectionMimeData()
         selectedFiles = contextManager()->selectedFileItemList();
     }
 
-    return MimeTypeUtils::selectionMimeData(selectedFiles);
+    return MimeTypeUtils::selectionMimeData(selectedFiles, MimeTypeUtils::ClipboardTarget);
 }
 
 QUrl FileOpsContextManagerItem::pasteTargetUrl() const
