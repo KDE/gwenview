@@ -348,7 +348,6 @@ void ContextManager::selectUrlToSelect()
         // and manually set current URL
         d->mSelectionModel->clearSelection();
         setCurrentUrl(d->mUrlToSelect);
-        d->mUrlToSelect.clear();
     }
 }
 

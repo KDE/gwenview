@@ -464,6 +464,10 @@ DocumentView::DocumentView(QGraphicsScene* scene)
     d->setCurrentAdapter(new EmptyAdapter);
 
     setAcceptDrops(true);
+
+    connect(DocumentFactory::instance(), &DocumentFactory::documentChanged, this, [this]() {
+        d->updateCaption();
+    });
 }
 
 DocumentView::~DocumentView()
