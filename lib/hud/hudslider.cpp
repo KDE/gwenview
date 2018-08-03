@@ -108,10 +108,13 @@ HudSlider::HudSlider(QGraphicsItem* parent)
     d->mSliderPosition = d->mValue = 0;
     d->mIsDown = false;
     d->mRepeatAction = QAbstractSlider::SliderNoAction;
-    d->updateHandleRect();
     setCursor(Qt::ArrowCursor);
     setAcceptHoverEvents(true);
     setFocusPolicy(Qt::WheelFocus);
+
+    QTimer::singleShot(0, this, [this]() {
+        d->updateHandleRect();
+    });
 }
 
 HudSlider::~HudSlider()
