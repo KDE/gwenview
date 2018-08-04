@@ -45,7 +45,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kipi/imageinfoshared.h>
 #include <kipi/plugin.h>
 #include <kipi/pluginloader.h>
-//#include <kipi/version.h>
 
 // local
 #include "mainwindow.h"
