@@ -709,14 +709,11 @@ struct MainWindow::Private
             break;
         case BrowseMainPageId:
             return GwenviewConfig::sideBarVisibleBrowseMode();
-            break;
         case ViewMainPageId:
             return q->isFullScreen()
                 ? GwenviewConfig::sideBarVisibleViewModeFullScreen()
                 : GwenviewConfig::sideBarVisibleViewMode();
-            break;
         }
-
         return false;
     }
 
@@ -745,14 +742,11 @@ struct MainWindow::Private
             break;
         case BrowseMainPageId:
             return GwenviewConfig::statusBarVisibleBrowseMode();
-            break;
         case ViewMainPageId:
             return q->isFullScreen()
                 ? GwenviewConfig::statusBarVisibleViewModeFullScreen()
                 : GwenviewConfig::statusBarVisibleViewMode();
-            break;
         }
-
         return false;
     }
 
