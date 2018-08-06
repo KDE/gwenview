@@ -11,18 +11,11 @@ project(gwenview VERSION ${KDE_APPLICATIONS_VERSION})
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake )
 
 set (QT_MIN_VERSION "5.6.0")
+set (KF5_MIN_VERSION "5.39.0")
 
 option(RUN_UNINSTALL "test run uninstalled apps (experimental)" FALSE)
 
-set(ECM_VERSION 1.7.0)
-# ECM setup
-if (RUN_UNINSTALL)
-   set(ECM_VERSION "5.38.0")
-endif()
-
-
-
-find_package(ECM ${ECM_VERSION} REQUIRED NO_MODULE)
+find_package(ECM ${KF5_MIN_VERSION} REQUIRED NO_MODULE)
 
 # Ccache support
 if (UNIX OR APPLE)
@@ -78,7 +71,7 @@ find_package(Phonon4Qt5 4.6.60 NO_MODULE REQUIRED)
 include_directories(BEFORE ${PHONON_INCLUDES})
 add_definitions(-DPHONON_LIB_SONAME=\"${PHONON_LIB_SONAME}\")
 
-find_package(KF5 5.39 REQUIRED COMPONENTS
+find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
     KIO
     Activities
     ItemModels
