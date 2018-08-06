@@ -13,8 +13,6 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake )
 set (QT_MIN_VERSION "5.6.0")
 set (KF5_MIN_VERSION "5.39.0")
 
-option(RUN_UNINSTALL "test run uninstalled apps (experimental)" FALSE)
-
 find_package(ECM ${KF5_MIN_VERSION} REQUIRED NO_MODULE)
 
 # Ccache support
