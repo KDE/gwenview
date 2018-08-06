@@ -1274,7 +1274,6 @@ void MainWindow::goToUrl(const QUrl &url)
     }
     QUrl dirUrl = url;
     dirUrl = dirUrl.adjusted(QUrl::RemoveFilename);
-    dirUrl.setPath(dirUrl.path() + "");
     if (dirUrl != d->mContextManager->currentDirUrl()) {
         d->mContextManager->setCurrentDirUrl(dirUrl);
         d->mGvCore->addUrlToRecentFolders(dirUrl);
