@@ -436,17 +436,13 @@ void RasterImageView::resizeEvent(QGraphicsSceneResizeEvent* event)
     // mUpdateTimer must be started before calling AbstractImageView::resizeEvent()
     // because AbstractImageView::resizeEvent() will call onZoomChanged(), which
     // will trigger an immediate update unless the mUpdateTimer is active.
-    if (zoomToFit() && !d->mBufferIsEmpty) {
-        d->mUpdateTimer->start();
-    } else if (zoomToFill() && !d->mBufferIsEmpty) {
+    if ((zoomToFit() || zoomToFill()) && !d->mBufferIsEmpty) {
         d->mUpdateTimer->start();
     }
     AbstractImageView::resizeEvent(event);
-    if (!zoomToFit()) {
+    if (!zoomToFit() || !zoomToFill()) {
         // Only update buffer if we are not in zoomToFit mode: if we are
         // onZoomChanged() will have already updated the buffer.
-        updateBuffer();
-    } else if (!zoomToFill()) {
         updateBuffer();
     }
 }
