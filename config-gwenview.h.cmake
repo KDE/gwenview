@@ -6,3 +6,4 @@
 #cmakedefine HAVE_X11 ${HAVE_X11}
 #cmakedefine HAVE_FITS ${HAVE_FITS}
 #cmakedefine HAVE_QTDBUS ${HAVE_QTDBUS}
+#cmakedefine KF5Activities_FOUND 1

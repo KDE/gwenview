@@ -18,6 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
 #include "viewmainpage.h"
+#include "config-gwenview.h"
 
 // Qt
 #include <QCheckBox>
@@ -35,8 +36,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KMessageBox>
 #include <KModelIndexProxyMapper>
 #include <KToggleAction>
-#include <KActivities/ResourceInstance>
 #include <KSqueezedTextLabel>
+#ifdef KF5Activities_FOUND
+#include <KActivities/ResourceInstance>
+#endif
 
 // Local
 #include "fileoperations.h"
@@ -132,7 +135,9 @@ struct ViewMainPagePrivate
     // Activity Resource events reporting needs to be above KPart,
     // in the shell itself, to avoid problems with other MDI applications
     // that use this KPart
+#ifdef KF5Activities_FOUND
     QHash<DocumentView*, KActivities::ResourceInstance*> mActivityResources;
+#endif
 
     bool mCompareMode;
     ZoomMode::Enum mZoomMode;
@@ -250,7 +255,9 @@ struct ViewMainPagePrivate
         QObject::connect(view, &DocumentView::videoFinished, mSlideShow, &SlideShow::resumeAndGoToNextUrl);
 
         mDocumentViews << view;
+#ifdef KF5Activities_FOUND
         mActivityResources.insert(view, new KActivities::ResourceInstance(q->window()->winId(), view));
+#endif
 
         return view;
     }
@@ -269,7 +276,9 @@ struct ViewMainPagePrivate
         QObject::disconnect(view, nullptr, mSlideShow, nullptr);
 
         mDocumentViews.removeOne(view);
+#ifdef KF5Activities_FOUND
         mActivityResources.remove(view);
+#endif
         mDocumentViewContainer->deleteView(view);
     }
 
@@ -344,8 +353,10 @@ struct ViewMainPagePrivate
         }
         if (oldView) {
             oldView->setCurrent(false);
+#ifdef KF5Activities_FOUND
             Q_ASSERT(mActivityResources.contains(oldView));
             mActivityResources.value(oldView)->notifyFocusedOut();
+#endif
         }
         view->setCurrent(true);
         mDocumentViewController->setView(view);
@@ -358,10 +369,10 @@ struct ViewMainPagePrivate
             // *before* listing /foo (because it matters less to the user)
             mThumbnailBar->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Current);
         }
-
+#ifdef KF5Activities_FOUND
         Q_ASSERT(mActivityResources.contains(view));
         mActivityResources.value(view)->notifyFocusedIn();
-
+#endif
         QObject::connect(view, &DocumentView::currentToolChanged,
                          q, &ViewMainPage::updateFocus);
     }
@@ -701,7 +712,9 @@ void ViewMainPage::openUrls(const QList<QUrl>& allUrls, const QUrl &currentUrl)
         DocumentView* view = it.value();
         DocumentView::Setup savedSetup = d->mDocumentViewContainer->savedSetup(url);
         view->openUrl(url, d->mZoomMode == ZoomMode::Individual && savedSetup.valid ? savedSetup : setup);
+#ifdef KF5Activities_FOUND
         d->mActivityResources.value(view)->setUri(url);
+#endif
     }
 
     // Init views

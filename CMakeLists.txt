@@ -71,7 +71,6 @@ add_definitions(-DPHONON_LIB_SONAME=\"${PHONON_LIB_SONAME}\")
 
 find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
     KIO
-    Activities
     ItemModels
     I18n
     DocTools
@@ -79,6 +78,9 @@ find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
     WindowSystem
     IconThemes
     Notifications
+)
+find_package(KF5 ${KF5_MIN_VERSION} OPTIONAL_COMPONENTS
+    Activities
 )
 
 ## Dependencies

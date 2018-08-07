@@ -78,10 +78,13 @@ add_executable(gwenview ${gwenview_SRCS})
 
 target_link_libraries(gwenview
     KF5::ItemModels
-    KF5::Activities
     KF5::Notifications
     gwenviewlib
     )
+
+if (KF5Activities_FOUND)
+    target_link_libraries(gwenview KF5::Activities)
+endif()
 
 target_link_libraries(gwenview LINK_INTERFACE_LIBRARIES KF5::KIOCore Qt5::Core)
 
