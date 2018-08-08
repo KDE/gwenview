@@ -15,16 +15,6 @@ set (KF5_MIN_VERSION "5.39.0")
 
 find_package(ECM ${KF5_MIN_VERSION} REQUIRED NO_MODULE)
 
-# Ccache support
-if (UNIX OR APPLE)
-    find_program(CCACHE_FOUND ccache)
-    set(CCACHE_SUPPORT OFF CACHE BOOL "Enable ccache support")
-    if (CCACHE_FOUND AND CCACHE_SUPPORT MATCHES ON)
-        set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
-        set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
-    endif ()
-endif ()
-
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
 include(KDEInstallDirs)
