@@ -54,6 +54,11 @@ RasterImageView* AbstractRasterImageViewTool::imageView() const
     return d->mRasterImageView;
 }
 
+void AbstractRasterImageViewTool::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
+{
+    event->ignore();
+}
+
 void AbstractRasterImageViewTool::wheelEvent(QGraphicsSceneWheelEvent* event)
 {
     event->ignore();

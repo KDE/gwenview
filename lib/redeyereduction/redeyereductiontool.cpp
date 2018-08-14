@@ -164,6 +164,16 @@ void RedEyeReductionTool::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
     event->accept();
 }
 
+void RedEyeReductionTool::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
+{
+    if (event->buttons() != Qt::LeftButton) {
+        event->ignore();
+        return;
+    }
+    event->accept();
+    d->mToolWidget->dialogButtonBox->accepted();
+}
+
 void RedEyeReductionTool::keyPressEvent(QKeyEvent* event)
 {
     QDialogButtonBox *buttons = d->mToolWidget->findChild<QDialogButtonBox *>();

@@ -492,6 +492,17 @@ void RasterImageView::mousePressEvent(QGraphicsSceneMouseEvent* event)
     AbstractImageView::mousePressEvent(event);
 }
 
+void RasterImageView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
+{
+    if (d->mTool) {
+        d->mTool.data()->mouseDoubleClickEvent(event);
+        if (event->isAccepted()) {
+            return;
+        }
+    }
+    AbstractImageView::mouseDoubleClickEvent(event);
+}
+
 void RasterImageView::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 {
     if (d->mTool) {

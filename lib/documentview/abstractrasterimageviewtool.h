@@ -60,6 +60,7 @@ public:
     {}
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*)
     {}
+    virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event);
     virtual void hoverMoveEvent(QGraphicsSceneHoverEvent*)
     {}
     virtual void wheelEvent(QGraphicsSceneWheelEvent* event);

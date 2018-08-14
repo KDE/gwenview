@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>405</width>
+    <width>638</width>
     <height>56</height>
    </rect>
   </property>
@@ -61,7 +61,7 @@
        <item>
         <widget class="QLabel" name="label_2">
          <property name="text">
-          <string>Click on the red eye you want to fix</string>
+          <string>Click on a red eye and choose a size, or double-click to correct instantly.</string>
          </property>
         </widget>
        </item>

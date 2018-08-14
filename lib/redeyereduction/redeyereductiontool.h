@@ -54,6 +54,7 @@ public:
     void mousePressEvent(QGraphicsSceneMouseEvent*) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) override;
     void keyPressEvent(QKeyEvent*) override;
 
     void toolActivated() override;

@@ -402,6 +402,16 @@ void CropTool::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
     imageView()->update();
 }
 
+void CropTool::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
+{
+    if (event->buttons() != Qt::LeftButton || d->handleAt(event->pos()) == CH_None) {
+        event->ignore();
+        return;
+    }
+    event->accept();
+    d->mCropWidget->findChild<QDialogButtonBox *>()->accepted();
+}
+
 void CropTool::hoverMoveEvent(QGraphicsSceneHoverEvent* event)
 {
     event->accept();
