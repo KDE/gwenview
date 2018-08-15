@@ -26,13 +26,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class QAction;
 
-// Used QGuiApplication::desktopFileName() only available with Qt 5.7
-// DesktopEntry is an optional property for MPRIS MediaPlayer2,
-// so simply only supported for Qt 5.7 & later
-#if QT_VERSION >= QT_VERSION_CHECK(5, 7, 0)
-#define GV_SUPPORT_MPRIS_DESKTOPENTRY 1
-#endif
-
 namespace Gwenview
 {
 
@@ -47,9 +40,7 @@ class MprisMediaPlayer2 : public DBusAbstractAdaptor
     Q_PROPERTY(bool CanSetFullscreen READ canSetFullscreen CONSTANT)
 
     Q_PROPERTY(QString Identity READ identity CONSTANT)
-#ifdef GV_SUPPORT_MPRIS_DESKTOPENTRY
     Q_PROPERTY(QString DesktopEntry READ desktopEntry CONSTANT)
-#endif
 
     Q_PROPERTY(bool HasTrackList READ hasTrackList CONSTANT)
     Q_PROPERTY(bool Fullscreen READ isFullscreen WRITE setFullscreen)
@@ -72,9 +63,7 @@ private:
     bool hasTrackList() const;
 
     QString identity() const;
-#ifdef GV_SUPPORT_MPRIS_DESKTOPENTRY
     QString desktopEntry() const;
-#endif
     bool isFullscreen() const;
     void setFullscreen(bool isFullscreen);
 

@@ -127,10 +127,8 @@ void PlaceTreeModelTest::testListPlaces()
 
 #if KIO_VERSION >= QT_VERSION_CHECK(5, 45, 0)
     QCOMPARE(model.rowCount(), 8);
-#elif KIO_VERSION >= QT_VERSION_CHECK(5, 41, 0)
-    QCOMPARE(model.rowCount(), 10);
 #else
-    QCOMPARE(model.rowCount(), 2);
+    QCOMPARE(model.rowCount(), 10);
 #endif
 
     QModelIndex index;

@@ -102,10 +102,8 @@ void AbstractImageOperation::finish(bool ok)
         // (e.g. undo crop just sets the previous image)
         QTimer::singleShot(0, document().data(), &Document::imageOperationCompleted);
     } else {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 9, 0)
         // Remove command from undo stack without executing undo()
         d->mCommand->setObsolete(true);
-#endif
         document()->undoStack()->undo();
     }
 }

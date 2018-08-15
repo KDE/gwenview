@@ -77,12 +77,10 @@ QString MprisMediaPlayer2::identity() const
     return QGuiApplication::applicationDisplayName();
 }
 
-#ifdef GV_SUPPORT_MPRIS_DESKTOPENTRY
 QString MprisMediaPlayer2::desktopEntry() const
 {
     return QGuiApplication::desktopFileName();
 }
-#endif
 
 QStringList MprisMediaPlayer2::supportedUriSchemes() const
 {
