@@ -59,6 +59,8 @@ public:
 
     void toolActivated() override;
 
+    void slotApplyClicked();
+
     QWidget* widget() const override;
 
 Q_SIGNALS:
@@ -67,7 +69,6 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void setDiameter(int);
-    void slotApplyClicked();
 
 private:
     RedEyeReductionToolPrivate* const d;

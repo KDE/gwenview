@@ -46,17 +46,21 @@ struct RedEyeReductionWidget : public QWidget, public Ui_RedEyeReductionWidget
     RedEyeReductionWidget()
     {
         setupUi(this);
+        QPushButton* okButton = mainDialogButtonBox->button(QDialogButtonBox::Ok);
+        okButton->setIcon(QIcon::fromTheme(QStringLiteral("redeyes")));
+        okButton->setText(i18n("Reduce Red Eye"));
     }
 
     void showNotSetPage()
     {
-        dialogButtonBox->button(QDialogButtonBox::Ok)->hide();
+        // Prevent Close button from turning blue upon accepting
+        helpTextLabel->setFocus();
+
         stackedWidget->setCurrentWidget(notSetPage);
     }
 
     void showMainPage()
     {
-        dialogButtonBox->button(QDialogButtonBox::Ok)->show();
         stackedWidget->setCurrentWidget(mainPage);
     }
 };
@@ -75,10 +79,12 @@ struct RedEyeReductionToolPrivate
         mToolWidget->showNotSetPage();
         QObject::connect(mToolWidget->diameterSpinBox, SIGNAL(valueChanged(int)),
                          q, SLOT(setDiameter(int)));
-        QObject::connect(mToolWidget->dialogButtonBox, SIGNAL(accepted()),
-                         q, SLOT(slotApplyClicked()));
-        QObject::connect(mToolWidget->dialogButtonBox, SIGNAL(rejected()),
-                         q, SIGNAL(done()));
+        QObject::connect(mToolWidget->mainDialogButtonBox, &QDialogButtonBox::accepted,
+                         q, &RedEyeReductionTool::slotApplyClicked);
+        QObject::connect(mToolWidget->mainDialogButtonBox, &QDialogButtonBox::rejected,
+                         q, &RedEyeReductionTool::done);
+        QObject::connect(mToolWidget->helpDialogButtonBox, &QDialogButtonBox::rejected,
+                         q, &RedEyeReductionTool::done);
     }
 
     QRectF rectF() const
@@ -171,12 +177,12 @@ void RedEyeReductionTool::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
         return;
     }
     event->accept();
-    d->mToolWidget->dialogButtonBox->accepted();
+    d->mToolWidget->mainDialogButtonBox->accepted();
 }
 
 void RedEyeReductionTool::keyPressEvent(QKeyEvent* event)
 {
-    QDialogButtonBox *buttons = d->mToolWidget->findChild<QDialogButtonBox *>();
+    QDialogButtonBox *buttons = d->mToolWidget->mainDialogButtonBox;
     switch (event->key()) {
     case Qt::Key_Escape:
         event->accept();
@@ -185,7 +191,9 @@ void RedEyeReductionTool::keyPressEvent(QKeyEvent* event)
     case Qt::Key_Return:
     case Qt::Key_Enter:
         event->accept();
-        buttons->accepted();
+        if (d->mStatus == Adjusting) {
+            buttons->accepted();
+        }
         break;
     default:
         break;
