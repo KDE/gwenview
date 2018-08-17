@@ -237,6 +237,15 @@ struct CropWidgetPrivate : public Ui_CropWidget
         widthSpinBox->setMaximum(size.width());
         topSpinBox->setMaximum(size.height());
         heightSpinBox->setMaximum(size.height());
+
+        // When users change the crop rectangle, QSpinBox::setMaximum will be called
+        // again, which then adapts the sizeHint due to a different maximum number
+        // of digits, leading to horizontal movement in the layout. This can be
+        // avoided by setting the minimum width so it fits the largest value possible.
+        leftSpinBox->setMinimumWidth(leftSpinBox->sizeHint().width());
+        widthSpinBox->setMinimumWidth(widthSpinBox->sizeHint().width());
+        topSpinBox->setMinimumWidth(topSpinBox->sizeHint().width());
+        heightSpinBox->setMinimumWidth(heightSpinBox->sizeHint().width());
     }
 
     void initDialogButtonBox()
