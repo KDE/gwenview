@@ -64,7 +64,7 @@ void ContextManagerTest::testRemove()
     manager.selectionModel()->setCurrentIndex(dirModel.index(1, 0), QItemSelectionModel::Select);
 
     // Remove "b", `manager` should select "c"
-    sandBox.remove("b");
+    sandBox.remove('b');
     dirModel.dirLister()->updateDirectory(dirUrl);
     while (dirModel.rowCount() == 3) {
         QTest::qWait(100);
@@ -75,7 +75,7 @@ void ContextManagerTest::testRemove()
     QCOMPARE(currentIndex.data(Qt::DisplayRole).toString(), QStringLiteral("c"));
 
     // Remove "c", `manager` should select "a"
-    sandBox.remove("c");
+    sandBox.remove('c');
     dirModel.dirLister()->updateDirectory(dirUrl);
     while (dirModel.rowCount() == 2) {
         QTest::qWait(100);

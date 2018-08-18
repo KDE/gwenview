@@ -232,7 +232,7 @@ void ImportDialog::setSourceUrl(const QUrl& url, const QString& deviceUdi)
         }
     } else {
         Solid::Device device(deviceUdi);
-        name = device.vendor() + " " + device.product();
+        name = device.vendor() + ' ' + device.product();
         iconName = device.icon();
     }
     d->mThumbnailPage->setSourceUrl(url, iconName, name);

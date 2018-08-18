@@ -88,8 +88,8 @@ int main(int argc, char** argv)
                 return 1;
             }
         }
-        if (!thumbnailBaseDirName.endsWith("/")) {
-            thumbnailBaseDirName += "/";
+        if (!thumbnailBaseDirName.endsWith('/')) {
+            thumbnailBaseDirName += '/';
         }
         ThumbnailProvider::setThumbnailBaseDir(thumbnailBaseDirName);
     }

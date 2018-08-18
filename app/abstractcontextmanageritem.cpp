@@ -19,8 +19,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 #include "abstractcontextmanageritem.h"
 
-#include "abstractcontextmanageritem.h"
-
 // Local
 #include <lib/contextmanager.h>
 
