@@ -93,7 +93,7 @@ find_package(KF5Kipi)
 if (KF5Kipi_FOUND)
    set(KIPI_FOUND true)
 endif()
-# set_package_properties(Kipi PROPERTIES URL"http://www.kipi-plugins.org" DESCRIPTION "Provides various image manipulation and export features" TYPE OPTIONAL)
+set_package_properties(KF5Kipi PROPERTIES URL "https://phabricator.kde.org/source/kipi-plugins/" DESCRIPTION "Provides various image manipulation and export features" TYPE OPTIONAL)
 
 find_package(LCMS2)
 set_package_properties(LCMS2 PROPERTIES URL "http://www.littlecms.com" DESCRIPTION "Color management engine" TYPE REQUIRED)
@@ -112,7 +112,7 @@ find_package(KF5KDcraw)
 if (KF5KDcraw_FOUND)
    add_definitions(-DKDCRAW_FOUND)
 endif()
-#set_package_properties(KDCRAW_FOUND PROPERTIES URL "http://www.kde.org" DESCRIPTION "KDE Dcraw library" TYPE OPTIONAL)
+set_package_properties(KF5KDcraw PROPERTIES URL "https://phabricator.kde.org/source/libkdcraw/" DESCRIPTION "C++ interface around LibRaw library used to decode RAW picture files" TYPE OPTIONAL)
 
 
 find_package(X11)
