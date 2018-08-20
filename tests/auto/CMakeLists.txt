@@ -1,14 +1,12 @@
 include(ECMAddTests)
 
 macro(gv_add_unit_test _test)
-    set(_src ${_test}.cpp ${ARGN})
-    add_executable(${_test} ${_src})
+    ecm_add_test(
+        ${_test}.cpp ${ARGN}
+        TEST_NAME ${_test}
+        LINK_LIBRARIES Qt5::Test gwenviewlib
+        )
     add_dependencies(buildtests ${_test})
-    add_test( ${_test} ${_test} )
-    ecm_mark_as_test(${_test})
-    target_link_libraries(${_test}
-        Qt5::Test
-        gwenviewlib)
 endmacro(gv_add_unit_test)
 
 include_directories(
