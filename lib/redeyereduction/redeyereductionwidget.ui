@@ -74,6 +74,9 @@
        </item>
        <item>
         <widget class="QSpinBox" name="diameterSpinBox">
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
          <property name="minimum">
           <number>2</number>
          </property>
