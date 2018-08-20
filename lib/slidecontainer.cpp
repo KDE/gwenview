@@ -128,10 +128,17 @@ void SlideContainer::adjustContentGeometry()
 
 bool SlideContainer::eventFilter(QObject*, QEvent* event)
 {
-    if (event->type() == QEvent::Resize) {
+    switch (event->type()) {
+    case QEvent::Resize:
         if (!mSlidingOut && height() != 0) {
             animTo(mContent->height());
         }
+        break;
+    case QEvent::LayoutRequest:
+        updateGeometry();
+        break;
+    default:
+        break;
     }
     return false;
 }

@@ -208,6 +208,7 @@ struct SaveBarPrivate
         mSaveAllButton->setVisible(lst.size() >= 1);
 
         mMessageLabel->setText(message);
+        mMessageLabel->setMaximumWidth(mMessageLabel->minimumSizeHint().width());
         mActionsLabel->setText(links.join(" | "));
     }
 
@@ -236,7 +237,7 @@ SaveBar::SaveBar(QWidget* parent, KActionCollection* actionCollection)
     d->applyNormalStyleSheet();
 
     d->mMessageLabel = new QLabel;
-    d->mMessageLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+    d->mMessageLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
 
     d->mUndoButton = createToolButton();
     d->mRedoButton = createToolButton();
@@ -246,7 +247,7 @@ SaveBar::SaveBar(QWidget* parent, KActionCollection* actionCollection)
 
     d->mActionsLabel = new QLabel;
     d->mActionsLabel->setAlignment(Qt::AlignCenter);
-    d->mActionsLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    d->mActionsLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
 
     d->createTooManyChangesFrame();
 
@@ -254,6 +255,7 @@ SaveBar::SaveBar(QWidget* parent, KActionCollection* actionCollection)
     d->mTopRowWidget = new QWidget;
     QHBoxLayout* rowLayout = new QHBoxLayout(d->mTopRowWidget);
     rowLayout->addWidget(d->mMessageLabel);
+    rowLayout->setStretchFactor(d->mMessageLabel, 1);
     rowLayout->addWidget(d->mUndoButton);
     rowLayout->addWidget(d->mRedoButton);
     rowLayout->addWidget(d->mActionsLabel);
