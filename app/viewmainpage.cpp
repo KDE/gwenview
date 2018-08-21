@@ -797,13 +797,13 @@ void ViewMainPage::slotEnterPressed()
 bool ViewMainPage::eventFilter(QObject* watched, QEvent* event)
 {
     if (event->type() == QEvent::ShortcutOverride) {
-        const QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
-        if (keyEvent->key() == Qt::Key_Escape) {
+        const int key = static_cast<QKeyEvent*>(event)->key();
+        if (key == Qt::Key_Space || key == Qt::Key_Escape) {
             const DocumentView* view = d->currentView();
             if (view) {
                 AbstractRasterImageViewTool* tool = view->currentTool();
                 if (tool) {
-                    QKeyEvent toolKeyEvent(QEvent::KeyPress, Qt::Key_Escape, Qt::NoModifier);
+                    QKeyEvent toolKeyEvent(QEvent::KeyPress, key, Qt::NoModifier);
                     tool->keyPressEvent(&toolKeyEvent);
                     if (toolKeyEvent.isAccepted()) {
                         event->accept();
