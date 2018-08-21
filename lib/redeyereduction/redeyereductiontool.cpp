@@ -173,10 +173,16 @@ void RedEyeReductionTool::keyPressEvent(QKeyEvent* event)
         buttons->rejected();
         break;
     case Qt::Key_Return:
-    case Qt::Key_Enter:
+    case Qt::Key_Enter: {
         event->accept();
-        buttons->accepted();
+        auto focusButton = static_cast<QPushButton*>(buttons->focusWidget());
+        if (focusButton && buttons->buttonRole(focusButton) == QDialogButtonBox::RejectRole) {
+            buttons->rejected();
+        } else {
+            buttons->accepted();
+        }
         break;
+    }
     default:
         break;
     }
