@@ -216,7 +216,8 @@ struct CropWidgetPrivate : public Ui_CropWidget
         const int width = ratioComboBox->minimumSizeHint().width();
         ratioComboBox->setMinimumWidth(width + 24);
 
-        ratioComboBox->setCurrentIndex(-1);
+        mCropRatioComboBoxCurrentIndex = -1;
+        ratioComboBox->setCurrentIndex(mCropRatioComboBoxCurrentIndex);
     }
 
     QRect cropRect() const
