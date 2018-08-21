@@ -337,6 +337,7 @@
       <caption xml:lang="sv">Gwenview som visar en bild, med ytterligare metadata visad i sidoraden</caption>
       <caption xml:lang="uk">Gwenview із відкритим зображенням та додатковими метаданими, які показано на бічній панелі</caption>
       <caption xml:lang="x-test">xxGwenview displaying an image, with additional metadata shown in the sidebarxx</caption>
+      <caption xml:lang="zh-CN">Gwenview 显示图像，并在侧栏中显示额外的元数据</caption>
       <caption xml:lang="zh-TW">Gwenview 顯示圖片時，也在側邊欄顯示了額外的中繼資料</caption>
       <image>https://kde.org/images/screenshots/gwenview.png</image>
     </screenshot>
