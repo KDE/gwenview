@@ -182,7 +182,13 @@ void RedEyeReductionTool::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
 
 void RedEyeReductionTool::keyPressEvent(QKeyEvent* event)
 {
-    QDialogButtonBox *buttons = d->mToolWidget->mainDialogButtonBox;
+    QDialogButtonBox *buttons;
+    if (d->mStatus == Adjusting) {
+        buttons = d->mToolWidget->mainDialogButtonBox;
+    } else {
+        buttons = d->mToolWidget->helpDialogButtonBox;
+    }
+
     switch (event->key()) {
     case Qt::Key_Escape:
         event->accept();
@@ -194,7 +200,7 @@ void RedEyeReductionTool::keyPressEvent(QKeyEvent* event)
         auto focusButton = static_cast<QPushButton*>(buttons->focusWidget());
         if (focusButton && buttons->buttonRole(focusButton) == QDialogButtonBox::RejectRole) {
             buttons->rejected();
-        } else if (d->mStatus == Adjusting) {
+        } else {
             buttons->accepted();
         }
         break;
