@@ -43,7 +43,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "../lib/documentview/documentview.h"
 #include "../lib/documentview/documentviewcontainer.h"
 #include "../lib/documentview/documentviewcontroller.h"
-#include "../lib/imageformats/imageformats.h"
 #include "../lib/urlutils.h"
 #include "../lib/zoomwidget.h"
 #include "gvbrowserextension.h"
@@ -84,8 +83,6 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QVariantList& /*arg
 
     KStandardAction::saveAs(this, SLOT(saveAs()), actionCollection());
 
-    // KF5 TODO, also disabled in main.cpp
-    //Gwenview::ImageFormats::registerPlugins();
     new GVBrowserExtension(this);
 
     setXMLFile(QStringLiteral("gvpart.rc"), true);

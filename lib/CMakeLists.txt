@@ -126,9 +126,6 @@ set(gwenviewlib_SRCS
     hud/hudtheme.cpp
     hud/hudwidget.cpp
     graphicswidgetfloater.cpp
-    imageformats/imageformats.cpp
-#     imageformats/jpegplugin.cpp
-#     imageformats/jpeghandler.cpp
     imagemetainfomodel.cpp
     imagescaler.cpp
     imageutils.cpp

@@ -32,7 +32,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KIO/DeleteJob>
 
 // Local
-#include "../lib/imageformats/imageformats.h"
 #include "../lib/thumbnailprovider/thumbnailprovider.h"
 #include "testutils.h"
 
@@ -98,7 +97,6 @@ void SandBox::createTestImage(const QString& name, int width, int height, const 
 void ThumbnailProviderTest::initTestCase()
 {
     qRegisterMetaType<KFileItem>("KFileItem");
-    Gwenview::ImageFormats::registerPlugins();
 }
 
 void ThumbnailProviderTest::init()

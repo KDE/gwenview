@@ -36,7 +36,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Local
 #include <lib/about.h>
-#include <lib/imageformats/imageformats.h>
 #include <lib/gwenviewconfig.h>
 #include "mainwindow.h"
 
@@ -143,9 +142,6 @@ int main(int argc, char *argv[])
     parser.addPositionalArgument("url", i18n("A starting file or folders"));
     parser.process(app);
     aboutData.data()->processCommandLine(&parser);
-
-    //KF5 TODO
-    //Gwenview::ImageFormats::registerPlugins();
 
     // startHelper must live for the whole life of the application
     StartHelper startHelper(parser.positionalArguments(),
