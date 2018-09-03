@@ -25,7 +25,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QEvent>
 #include <QPainter>
 #include <QShortcut>
-#include <QSignalMapper>
 #include <QStyle>
 #include <QTimer>
 #include <QAction>
@@ -166,7 +165,6 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
     QPointer<SemanticInfoDialog> mSemanticInfoDialog;
     TagInfo mTagInfo;
     QAction * mEditTagsAction;
-    QSignalMapper* mRatingMapper;
     /** A list of all actions, so that we can disable them when necessary */
     QList<QAction *> mActions;
     QPointer<RatingIndicator> mRatingIndicator;
@@ -186,8 +184,6 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
 
         QObject::connect(mRatingWidget, SIGNAL(ratingChanged(int)),
                          q, SLOT(slotRatingChanged(int)));
-        QObject::connect(mRatingMapper, SIGNAL(mapped(int)),
-                         mRatingWidget, SLOT(setRating(int)));
 
         mDescriptionTextEdit->installEventFilter(q);
 
@@ -207,7 +203,6 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
                          q, SLOT(showSemanticInfoDialog()));
         mActions << mEditTagsAction;
 
-        mRatingMapper = new QSignalMapper(q);
         for (int rating = 0; rating <= 5; ++rating) {
             QAction * action = edit->addAction(QStringLiteral("rate_%1").arg(rating));
             if (rating == 0) {
@@ -216,11 +211,11 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
                 action->setText(QString(rating, QChar(0x22C6))); /* 0x22C6 is the 'star' character */
             }
             mActionCollection->setDefaultShortcut(action, Qt::Key_0 + rating);
-            QObject::connect(action, SIGNAL(triggered()), mRatingMapper, SLOT(map()));
-            mRatingMapper->setMapping(action, rating * 2);
+            QObject::connect(action, &QAction::triggered, q, [this, rating]() {
+                mRatingWidget->setRating(rating * 2);
+            });
             mActions << action;
         }
-        QObject::connect(mRatingMapper, SIGNAL(mapped(int)), q, SLOT(slotRatingChanged(int)));
     }
 
     void updateTagLabel()

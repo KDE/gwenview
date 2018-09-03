@@ -46,9 +46,6 @@ public:
     int addButton(const KGuiItem&);
     int exec();
 
-private Q_SLOTS:
-    void slotMapped(int);
-
 private:
     DialogPagePrivate* const d;
 };

@@ -24,7 +24,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QEventLoop>
 #include <QList>
-#include <QSignalMapper>
 #include <QVBoxLayout>
 #include <QPushButton>
 
@@ -41,7 +40,6 @@ struct DialogPagePrivate : public Ui_DialogPage
 {
     QVBoxLayout* mLayout;
     QList<QPushButton*> mButtons;
-    QSignalMapper* mMapper;
     QEventLoop* mEventLoop;
 };
 
@@ -51,8 +49,6 @@ DialogPage::DialogPage(QWidget* parent)
 {
     d->setupUi(this);
     d->mLayout = new QVBoxLayout(d->mButtonContainer);
-    d->mMapper = new QSignalMapper(this);
-    connect(d->mMapper, SIGNAL(mapped(int)), SLOT(slotMapped(int)));
 }
 
 DialogPage::~DialogPage()
@@ -78,9 +74,10 @@ int DialogPage::addButton(const KGuiItem& item)
     KGuiItem::assign(button, item);
     button->setFixedHeight(button->sizeHint().height() * 2);
 
-    connect(button, SIGNAL(clicked()), d->mMapper, SLOT(map()));
+    connect(button, &QAbstractButton::clicked, this, [this, id]() {
+        d->mEventLoop->exit(id);
+    });
     d->mLayout->addWidget(button);
-    d->mMapper->setMapping(button, id);
     d->mButtons << button;
     return id;
 }
@@ -90,11 +87,6 @@ int DialogPage::exec()
     QEventLoop loop;
     d->mEventLoop = &loop;
     return loop.exec();
-}
-
-void DialogPage::slotMapped(int value)
-{
-    d->mEventLoop->exit(value);
 }
 
 } // namespace
