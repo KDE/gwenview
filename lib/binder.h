@@ -39,7 +39,7 @@ class GWENVIEWLIB_EXPORT BinderInternal : public QObject
     Q_OBJECT
 public:
     explicit BinderInternal(QObject* parent);
-    ~BinderInternal();
+    ~BinderInternal() override;
 
 protected Q_SLOTS:
     virtual void callMethod()

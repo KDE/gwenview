@@ -45,7 +45,7 @@ class Preloader : public QObject
     Q_OBJECT
 public:
     explicit Preloader(QObject* parent);
-    ~Preloader();
+    ~Preloader() override;
 
     void preload(const QUrl&, const QSize&);
 

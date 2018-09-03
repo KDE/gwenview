@@ -48,7 +48,7 @@ class GvCore : public QObject
     Q_OBJECT
 public:
     GvCore(MainWindow* mainWindow, SortedDirModel*);
-    ~GvCore();
+    ~GvCore() override;
 
     enum PaletteType {
         NormalPalette = 0,

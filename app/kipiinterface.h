@@ -53,27 +53,27 @@ class KIPIInterface : public KIPI::Interface
 
 public:
     KIPIInterface(MainWindow*);
-    virtual ~KIPIInterface();
+    ~KIPIInterface() override;
 
-    KIPI::ImageCollection currentAlbum();
-    KIPI::ImageCollection currentSelection();
-    QList<KIPI::ImageCollection> allAlbums();
-    KIPI::ImageInfo info(const QUrl &url);
-    int features() const;
-    virtual bool addImage(const QUrl&, QString& err);
-    virtual void delImage(const QUrl&);
-    virtual void refreshImages(const QList<QUrl>& urls);
+    KIPI::ImageCollection currentAlbum() override;
+    KIPI::ImageCollection currentSelection() override;
+    QList<KIPI::ImageCollection> allAlbums() override;
+    KIPI::ImageInfo info(const QUrl &url) override;
+    int features() const override;
+    bool addImage(const QUrl&, QString& err) override;
+    void delImage(const QUrl&) override;
+    void refreshImages(const QList<QUrl>& urls) override;
 
-    virtual KIPI::ImageCollectionSelector* imageCollectionSelector(QWidget *parent);
-    virtual KIPI::UploadWidget* uploadWidget(QWidget *parent);
+    KIPI::ImageCollectionSelector* imageCollectionSelector(QWidget *parent) override;
+    KIPI::UploadWidget* uploadWidget(QWidget *parent) override;
 
     QList<QAction*> pluginActions(KIPI::Category) const;
 
     bool isLoadingFinished() const;
 
 #ifdef GWENVIEW_KIPI_WITH_CREATE_METHODS
-    virtual KIPI::FileReadWriteLock* createReadWriteLock(const QUrl& url) const;
-    virtual KIPI::MetadataProcessor* createMetadataProcessor() const;
+    KIPI::FileReadWriteLock* createReadWriteLock(const QUrl& url) const override;
+    KIPI::MetadataProcessor* createMetadataProcessor() const override;
 #ifdef GWENVIEW_KIPI_WITH_CREATE_RAW_PROCESSOR
     virtual KIPI::RawProcessor* createRawProcessor() const;
 #endif
@@ -105,26 +105,26 @@ public:
         , mName(name)
         , mImages(images) {}
 
-    QString name()           {
+    QString name() override {
         return mName;
     }
-    QString comment()        {
+    QString comment() override {
         return QString();
     }
-    QList<QUrl> images()      {
+    QList<QUrl> images() override {
         return mImages;
     }
-    QUrl uploadRoot()        {
+    QUrl uploadRoot() {
         return QUrl("/");
     }
-    QUrl uploadPath()        {
+    QUrl uploadPath() {
         return mDirURL;
     }
-    QString uploadRootName()
+    QString uploadRootName() override
     {
         return "/";
     }
-    bool isDirectory()       {
+    bool isDirectory() override {
         return true;
     }
 

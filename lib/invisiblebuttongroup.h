@@ -81,7 +81,7 @@ class GWENVIEWLIB_EXPORT InvisibleButtonGroup : public QWidget
     Q_PROPERTY(int current READ selected WRITE setSelected)
 public:
     explicit InvisibleButtonGroup(QWidget* parent = nullptr);
-    ~InvisibleButtonGroup();
+    ~InvisibleButtonGroup() override;
 
     int selected() const;
 

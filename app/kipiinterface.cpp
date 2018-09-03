@@ -90,23 +90,23 @@ public:
         }
     }
 
-    QMap<QString, QVariant> attributes() {
+    QMap<QString, QVariant> attributes() override {
         return mAttributes;
     }
 
-    void delAttributes(const QStringList& attributeNames)
+    void delAttributes(const QStringList& attributeNames) override
     {
         Q_FOREACH(const QString& name, attributeNames) {
             mAttributes.remove(name);
         }
     }
 
-    void clearAttributes()
+    void clearAttributes() override
     {
         mAttributes.clear();
     }
 
-    void addAttributes(const QVariantMap& attributes)
+    void addAttributes(const QVariantMap& attributes) override
     {
         QVariantMap::ConstIterator
             it = attributes.constBegin(),

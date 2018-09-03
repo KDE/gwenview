@@ -56,7 +56,7 @@ public:
     };
 
     DocumentDirFinder(const QUrl& rootUrl);
-    ~DocumentDirFinder();
+    ~DocumentDirFinder() override;
 
     void start();
 

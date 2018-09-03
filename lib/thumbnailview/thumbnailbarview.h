@@ -64,7 +64,7 @@ class GWENVIEWLIB_EXPORT ThumbnailBarView : public ThumbnailView
     Q_OBJECT
 public:
     ThumbnailBarView(QWidget* = 0);
-    ~ThumbnailBarView();
+    ~ThumbnailBarView() override;
 
     Qt::Orientation orientation() const;
     void setOrientation(Qt::Orientation);

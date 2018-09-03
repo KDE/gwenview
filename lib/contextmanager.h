@@ -49,7 +49,7 @@ class GWENVIEWLIB_EXPORT ContextManager : public QObject
 public:
     ContextManager(SortedDirModel*, QObject* parent);
 
-    ~ContextManager();
+    ~ContextManager() override;
 
     void loadConfig();
     void saveConfig() const;

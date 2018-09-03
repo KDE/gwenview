@@ -47,7 +47,7 @@ public:
     // We pass a pointer to the view list because we don't want to maintain
     // a copy of the list itself
     explicit DocumentViewSynchronizer(const QList<DocumentView*>* views, QObject* parent = nullptr);
-    ~DocumentViewSynchronizer();
+    ~DocumentViewSynchronizer() override;
 
     void setCurrentView(DocumentView* view);
 

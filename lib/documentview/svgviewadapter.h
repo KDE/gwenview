@@ -71,7 +71,7 @@ class GWENVIEWLIB_EXPORT SvgViewAdapter : public AbstractDocumentViewAdapter
     Q_OBJECT
 public:
     SvgViewAdapter();
-    ~SvgViewAdapter();
+    ~SvgViewAdapter() override;
 
     QCursor cursor() const override;
 
@@ -112,9 +112,9 @@ public:
     QPointF scrollPos() const override;
     void setScrollPos(const QPointF& pos) override;
 
-    virtual QRectF visibleDocumentRect() const override;
+    QRectF visibleDocumentRect() const override;
 
-    virtual AbstractImageView* imageView() const override;
+    AbstractImageView* imageView() const override;
 
 private:
     SvgViewAdapterPrivate* const d;

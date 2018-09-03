@@ -88,7 +88,7 @@ public:
     };
 
     typedef QExplicitlySharedDataPointer<Document> Ptr;
-    ~Document();
+    ~Document() override;
 
     /**
      * Returns a message for the last error which happened

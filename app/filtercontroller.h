@@ -113,7 +113,7 @@ class NameFilterWidget : public QWidget
     Q_OBJECT
 public:
     NameFilterWidget(SortedDirModel*);
-    ~NameFilterWidget();
+    ~NameFilterWidget() override;
 
 private Q_SLOTS:
     void applyNameFilter();
@@ -185,7 +185,7 @@ class DateFilterWidget : public QWidget
     Q_OBJECT
 public:
     DateFilterWidget(SortedDirModel*);
-    ~DateFilterWidget();
+    ~DateFilterWidget() override;
 
 private Q_SLOTS:
     void applyDateFilter();
@@ -255,7 +255,7 @@ class RatingFilterWidget : public QWidget
     Q_OBJECT
 public:
     RatingFilterWidget(SortedDirModel*);
-    ~RatingFilterWidget();
+    ~RatingFilterWidget() override;
 
 private Q_SLOTS:
     void slotRatingChanged(int value);
@@ -318,7 +318,7 @@ class TagFilterWidget : public QWidget
     Q_OBJECT
 public:
     TagFilterWidget(SortedDirModel*);
-    ~TagFilterWidget();
+    ~TagFilterWidget() override;
 
 private Q_SLOTS:
     void updateTagSetFilter();

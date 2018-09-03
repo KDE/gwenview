@@ -40,7 +40,7 @@ class ThumbnailPage : public QWidget
     Q_OBJECT
 public:
     ThumbnailPage();
-    ~ThumbnailPage();
+    ~ThumbnailPage() override;
 
     /**
      * Returns the list of urls to import

@@ -50,7 +50,7 @@ class GWENVIEWLIB_EXPORT DocumentViewController : public QObject
     Q_OBJECT
 public:
     explicit DocumentViewController(KActionCollection*, QObject* parent = nullptr);
-    ~DocumentViewController();
+    ~DocumentViewController() override;
 
     DocumentView* view() const;
     ZoomWidget* zoomWidget() const;

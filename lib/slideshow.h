@@ -40,7 +40,7 @@ class GWENVIEWLIB_EXPORT SlideShow : public QObject
     Q_OBJECT
 public:
     explicit SlideShow(QObject* parent);
-    virtual ~SlideShow();
+    ~SlideShow() override;
 
     void start(const QList<QUrl>& urls);
     void pause();

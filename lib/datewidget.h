@@ -41,7 +41,7 @@ class GWENVIEWLIB_EXPORT DateWidget : public QWidget
     Q_OBJECT
 public:
     explicit DateWidget(QWidget* parent = nullptr);
-    ~DateWidget();
+    ~DateWidget() override;
 
     QDate date() const;
 

@@ -41,7 +41,7 @@ class GWENVIEWLIB_EXPORT ZoomWidget : public QFrame
     Q_OBJECT
 public:
     explicit ZoomWidget(QWidget* parent = nullptr);
-    ~ZoomWidget();
+    ~ZoomWidget() override;
 
     void setActions(QAction* zoomToFitAction, QAction* actualSizeAction, QAction* zoomInAction, QAction* zoomOutAction, QAction* zoomToFillAction);
 

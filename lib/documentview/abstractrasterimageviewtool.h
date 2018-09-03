@@ -47,7 +47,7 @@ class GWENVIEWLIB_EXPORT AbstractRasterImageViewTool : public QObject
     Q_OBJECT
 public:
     AbstractRasterImageViewTool(RasterImageView* view);
-    virtual ~AbstractRasterImageViewTool();
+    ~AbstractRasterImageViewTool() override;
 
     RasterImageView* imageView() const;
 

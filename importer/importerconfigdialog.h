@@ -37,7 +37,7 @@ class ImporterConfigDialog : public KConfigDialog
     Q_OBJECT
 public:
     explicit ImporterConfigDialog(QWidget*);
-    ~ImporterConfigDialog();
+    ~ImporterConfigDialog() override;
 
 private Q_SLOTS:
     void slotHelpLinkActivated(const QString& keyword);

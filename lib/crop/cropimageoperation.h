@@ -40,7 +40,7 @@ class GWENVIEWLIB_EXPORT CropImageOperation : public AbstractImageOperation
 {
 public:
     CropImageOperation(const QRect&);
-    ~CropImageOperation();
+    ~CropImageOperation() override;
 
     void redo() override;
     void undo() override;

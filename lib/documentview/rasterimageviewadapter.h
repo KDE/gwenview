@@ -78,7 +78,7 @@ public:
     void loadConfig() override;
 
     RasterImageView* rasterImageView() const override;
-    virtual AbstractImageView* imageView() const override;
+    AbstractImageView* imageView() const override;
 
     QPointF scrollPos() const override;
     void setScrollPos(const QPointF& pos) override;

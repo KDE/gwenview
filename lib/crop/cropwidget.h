@@ -43,7 +43,7 @@ class GWENVIEWLIB_EXPORT CropWidget : public QWidget
     Q_OBJECT
 public:
     CropWidget(QWidget* parent, RasterImageView*, CropTool*);
-    ~CropWidget();
+    ~CropWidget() override;
 
     void setAdvancedSettingsEnabled(bool enable);
     bool advancedSettingsEnabled() const;

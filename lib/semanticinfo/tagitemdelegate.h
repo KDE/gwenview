@@ -38,15 +38,15 @@ public:
 protected:
     QList<QWidget*> createItemWidgets(const QModelIndex &index) const override;
 
-    virtual void updateItemWidgets(const QList<QWidget*> widgets,
-                                   const QStyleOptionViewItem& option,
-                                   const QPersistentModelIndex& /*index*/) const override;
+    void updateItemWidgets(const QList<QWidget*> widgets,
+                           const QStyleOptionViewItem& option,
+                           const QPersistentModelIndex& /*index*/) const override;
 
-    virtual void paint(QPainter *painter, const QStyleOptionViewItem &option,
-                       const QModelIndex &index) const override;
+    void paint(QPainter *painter, const QStyleOptionViewItem &option,
+               const QModelIndex &index) const override;
 
-    virtual QSize sizeHint(const QStyleOptionViewItem &/*option*/,
-                           const QModelIndex &/*index*/) const override;
+    QSize sizeHint(const QStyleOptionViewItem &/*option*/,
+                   const QModelIndex &/*index*/) const override;
 
 Q_SIGNALS:
     void removeTagRequested(const SemanticInfoTag& tag);

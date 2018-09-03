@@ -39,7 +39,7 @@ class ImageOpsContextManagerItem : public AbstractContextManagerItem
     Q_OBJECT
 public:
     ImageOpsContextManagerItem(ContextManager*, MainWindow*);
-    ~ImageOpsContextManagerItem();
+    ~ImageOpsContextManagerItem() override;
 
 private Q_SLOTS:
     void updateActions();

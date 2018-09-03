@@ -35,7 +35,7 @@ class AbstractContextManagerItem : public QObject
     Q_OBJECT
 public:
     AbstractContextManagerItem(ContextManager*);
-    virtual ~AbstractContextManagerItem();
+    ~AbstractContextManagerItem() override;
 
     QWidget* widget() const;
 

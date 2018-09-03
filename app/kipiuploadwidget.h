@@ -42,7 +42,7 @@ class KIPIUploadWidget : public KIPI::UploadWidget
 public:
     KIPIUploadWidget(KIPIInterface*, QWidget* parent);
 
-    virtual KIPI::ImageCollection selectedImageCollection() const;
+    KIPI::ImageCollection selectedImageCollection() const override;
 
 private:
     KIPIInterface* mInterface;

@@ -76,7 +76,7 @@ struct SemanticInfoDialog : public QDialog, public Ui_SemanticInfoDialog
         KWindowConfig::restoreWindowSize(windowHandle(), configGroup());
     }
 
-    ~SemanticInfoDialog()
+    ~SemanticInfoDialog() override
     {
         KConfigGroup group = configGroup();
         KWindowConfig::saveWindowSize(windowHandle(), group);

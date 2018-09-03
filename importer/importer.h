@@ -40,7 +40,7 @@ class Importer : public QObject
     Q_OBJECT
 public:
     explicit Importer(QWidget* authWindow);
-    ~Importer();
+    ~Importer() override;
 
     /**
      * Defines the auto-rename format applied to imported documents

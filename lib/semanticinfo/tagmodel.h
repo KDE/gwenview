@@ -44,7 +44,7 @@ class GWENVIEWLIB_EXPORT TagModel : public QStandardItemModel
     Q_OBJECT
 public:
     explicit TagModel(QObject*);
-    ~TagModel();
+    ~TagModel() override;
 
     enum {
         TagRole = Qt::UserRole,

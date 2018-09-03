@@ -499,7 +499,7 @@ void DocumentTest::testModifyAndSaveAs()
     class TestOperation : public AbstractImageOperation
     {
     public:
-        void redo()
+        void redo() override
     {
             QImage image(10, 10, QImage::Format_ARGB32);
             image.fill(QColor(Qt::white).rgb());
@@ -676,7 +676,7 @@ public:
     {}
 
 protected:
-    virtual void doStart()
+    void doStart() override
     {
         *mStr += mCh;
         emitResult();
@@ -723,7 +723,7 @@ public:
     }
 
 protected:
-    virtual void doStart()
+    void doStart() override
     {
         document()->waitUntilLoaded();
         *mHasEditor = checkDocumentEditor() ? 1 : 0;
@@ -744,7 +744,7 @@ public:
         *mShowErrorMessageCalled = false;
     }
 
-    virtual void showErrorMessage()
+    void showErrorMessage() override
     {
         //qDebug();
         *mShowErrorMessageCalled = true;
@@ -795,7 +795,7 @@ void DocumentTest::testUndoStackPush()
     class SuccessOperation : public AbstractImageOperation
     {
     protected:
-        virtual void redo()
+        void redo() override
     {
             QMetaObject::invokeMethod(this, "finish", Qt::QueuedConnection, Q_ARG(bool, true));
         }
@@ -804,7 +804,7 @@ void DocumentTest::testUndoStackPush()
     class FailureOperation : public AbstractImageOperation
     {
     protected:
-        virtual void redo()
+        void redo() override
     {
             QMetaObject::invokeMethod(this, "finish", Qt::QueuedConnection, Q_ARG(bool, false));
         }
@@ -839,13 +839,13 @@ void DocumentTest::testUndoRedo()
         int mUndoCount = 0;
 
     protected:
-        virtual void redo()
+        void redo() override
         {
             mRedoCount++;
             finish(true);
         }
 
-        virtual void undo()
+        void undo() override
         {
             mUndoCount++;
             finish(true);

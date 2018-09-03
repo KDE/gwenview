@@ -40,7 +40,7 @@ class SaveBar : public SlideContainer
     Q_OBJECT
 public:
     SaveBar(QWidget* parent, KActionCollection* collection);
-    ~SaveBar();
+    ~SaveBar() override;
 
     /**
      * Init widgets which depend on an initialized actionCollection

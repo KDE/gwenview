@@ -39,7 +39,7 @@ class DialogPage : public QWidget
     Q_OBJECT
 public:
     explicit DialogPage(QWidget* parent = nullptr);
-    ~DialogPage();
+    ~DialogPage() override;
 
     void removeButtons();
     void setText(const QString&);

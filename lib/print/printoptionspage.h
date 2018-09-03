@@ -50,7 +50,7 @@ public:
     };
 
     PrintOptionsPage(const QSize& imageSize);
-    ~PrintOptionsPage();
+    ~PrintOptionsPage() override;
 
     Qt::Alignment alignment() const;
     ScaleMode scaleMode() const;

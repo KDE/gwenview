@@ -51,7 +51,7 @@ class GWENVIEWLIB_EXPORT AbstractDocumentViewAdapter : public QObject
     Q_OBJECT
 public:
     AbstractDocumentViewAdapter();
-    virtual ~AbstractDocumentViewAdapter();
+    ~AbstractDocumentViewAdapter() override;
 
     QGraphicsWidget* widget() const
     {

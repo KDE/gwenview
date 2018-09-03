@@ -180,8 +180,8 @@ protected Q_SLOTS:
     void rowsAboutToBeRemoved(const QModelIndex& parent, int start, int end) override;
     void rowsInserted(const QModelIndex& parent, int start, int end) override;
     void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected) override;
-    virtual void dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight,
-                             const QVector<int> &roles = QVector<int>()) override;
+    void dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight,
+                     const QVector<int> &roles = QVector<int>()) override;
 
 private Q_SLOTS:
     void showContextMenu();

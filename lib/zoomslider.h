@@ -48,7 +48,7 @@ class GWENVIEWLIB_EXPORT ZoomSlider : public QWidget
     Q_OBJECT
 public:
     explicit ZoomSlider(QWidget* parent = nullptr);
-    ~ZoomSlider();
+    ~ZoomSlider() override;
 
     int value() const;
 

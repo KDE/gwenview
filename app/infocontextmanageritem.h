@@ -39,7 +39,7 @@ class InfoContextManagerItem : public AbstractContextManagerItem
     Q_OBJECT
 public:
     InfoContextManagerItem(ContextManager*);
-    ~InfoContextManagerItem();
+    ~InfoContextManagerItem() override;
 
 private Q_SLOTS:
     void updateSideBarContent();

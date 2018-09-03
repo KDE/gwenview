@@ -50,7 +50,7 @@ public:
         TagsRole = 0x0462F0A8
     };
     SemanticInfoDirModel(QObject* parent);
-    ~SemanticInfoDirModel();
+    ~SemanticInfoDirModel() override;
 
     void clearSemanticInfoCache();
 

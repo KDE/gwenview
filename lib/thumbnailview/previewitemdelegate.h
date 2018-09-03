@@ -48,7 +48,7 @@ class GWENVIEWLIB_EXPORT PreviewItemDelegate : public QItemDelegate
     Q_OBJECT
 public:
     PreviewItemDelegate(ThumbnailView*);
-    ~PreviewItemDelegate();
+    ~PreviewItemDelegate() override;
 
     enum ContextBarAction {
         NoAction         = 0,

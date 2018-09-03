@@ -38,7 +38,7 @@ class RenameDialog : public QDialog
     Q_OBJECT
 public:
     explicit RenameDialog(QWidget* parent);
-    ~RenameDialog();
+    ~RenameDialog() override;
 
     void setFilename(const QString& filename);
     QString filename() const;

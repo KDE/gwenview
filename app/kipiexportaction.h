@@ -39,7 +39,7 @@ class KIPIExportAction : public KToolBarPopupAction
     Q_OBJECT
 public:
     explicit KIPIExportAction(QObject* parent);
-    ~KIPIExportAction();
+    ~KIPIExportAction() override;
 
     void setKIPIInterface(KIPIInterface*);
 

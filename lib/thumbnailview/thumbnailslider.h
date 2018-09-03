@@ -43,7 +43,7 @@ class GWENVIEWLIB_EXPORT ThumbnailSlider : public ZoomSlider
     Q_OBJECT
 public:
     explicit ThumbnailSlider(QWidget* parent = nullptr);
-    ~ThumbnailSlider();
+    ~ThumbnailSlider() override;
 
     void updateToolTip();
 

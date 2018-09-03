@@ -45,7 +45,7 @@ class FileOpsContextManagerItem : public AbstractContextManagerItem
     Q_OBJECT
 public:
     FileOpsContextManagerItem(Gwenview::ContextManager* manager, QListView* thumbnailView, KActionCollection* actionCollection, KXMLGUIClient* client);
-    ~FileOpsContextManagerItem();
+    ~FileOpsContextManagerItem() override;
 
 private Q_SLOTS:
     void updateActions();

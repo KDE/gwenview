@@ -42,7 +42,7 @@ public:
         : mOp(op)
     {}
 
-    ~ImageOperationCommand()
+    ~ImageOperationCommand() override
     {
         delete mOp;
     }

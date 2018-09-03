@@ -47,7 +47,7 @@ class AbstractDocumentImpl : public QObject
     Q_OBJECT
 public:
     AbstractDocumentImpl(Document*);
-    virtual ~AbstractDocumentImpl();
+    ~AbstractDocumentImpl() override;
 
     /**
      * This method is called by Document::switchToImpl after it has connected

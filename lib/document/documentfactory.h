@@ -46,7 +46,7 @@ class GWENVIEWLIB_EXPORT DocumentFactory : public QObject
     Q_OBJECT
 public:
     static DocumentFactory* instance();
-    ~DocumentFactory();
+    ~DocumentFactory() override;
 
     /**
      * Loads the document associated with url, or returns an already cached

@@ -41,9 +41,9 @@ class KIPIImageCollectionSelector : public KIPI::ImageCollectionSelector
     Q_OBJECT
 public:
     KIPIImageCollectionSelector(KIPIInterface*, QWidget* parent);
-    ~KIPIImageCollectionSelector();
+    ~KIPIImageCollectionSelector() override;
 
-    virtual QList<KIPI::ImageCollection> selectedImageCollections() const;
+    QList<KIPI::ImageCollection> selectedImageCollections() const override;
 
 private:
     KIPIImageCollectionSelectorPrivate* const d;

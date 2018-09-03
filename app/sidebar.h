@@ -56,7 +56,7 @@ class SideBarPage : public QWidget
     Q_OBJECT
 public:
     SideBarPage(const QString& title);
-    ~SideBarPage();
+    ~SideBarPage() override;
     void addWidget(QWidget*);
     void addStretch();
 

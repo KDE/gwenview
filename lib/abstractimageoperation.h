@@ -53,7 +53,7 @@ class GWENVIEWLIB_EXPORT AbstractImageOperation : public QObject
     Q_OBJECT
 public:
     AbstractImageOperation();
-    virtual ~AbstractImageOperation();
+    ~AbstractImageOperation() override;
 
     void applyToDocument(Document::Ptr);
     Document::Ptr document() const;
