@@ -26,11 +26,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QImageIOHandler>
 #include <QtPlugin>
 
-QStringList FitsPlugin::keys() const
-{
-    return QStringList() << QLatin1String("fits") << QLatin1String("fit");
-}
-
 QImageIOPlugin::Capabilities FitsPlugin::capabilities(QIODevice *device, const QByteArray &format) const
 {
     if (format == "fits" || format == "fit") {
