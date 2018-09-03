@@ -312,16 +312,14 @@ struct LoadingDocumentImplPrivate
             }
         }
 
+        if (GwenviewConfig::applyExifOrientation()) {
+            reader.setAutoTransform(true);
+        }
+
         bool ok = reader.read(&mImage);
         if (!ok) {
             LOG("QImageReader::read() failed");
             return;
-        }
-
-        if (mJpegContent.get() && GwenviewConfig::applyExifOrientation()) {
-            Gwenview::Orientation orientation = mJpegContent->orientation();
-            QMatrix matrix = ImageUtils::transformMatrix(orientation);
-            mImage = mImage.transformed(matrix);
         }
 
         if (reader.supportsAnimation()

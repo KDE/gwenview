@@ -149,6 +149,11 @@ bool ThumbnailContext::load(const QString &pixPath, int pixelSize)
         }
     }
 
+    // Rotate if necessary
+    if (GwenviewConfig::applyExifOrientation()) {
+        reader.setAutoTransform(true);
+    }
+
     // format() is empty after QImageReader::read() is called
     format = reader.format();
     if (!reader.read(&originalImage)) {
@@ -168,22 +173,10 @@ bool ThumbnailContext::load(const QString &pixPath, int pixelSize)
         mImage = originalImage.scaled(pixelSize, pixelSize, Qt::KeepAspectRatio);
     }
 
-    // Rotate if necessary
-    if (orientation != NORMAL && orientation != NOT_AVAILABLE && GwenviewConfig::applyExifOrientation()) {
-        QMatrix matrix = ImageUtils::transformMatrix(orientation);
-        mImage = mImage.transformed(matrix);
-
-        switch (orientation) {
-        case TRANSPOSE:
-        case ROT_90:
-        case TRANSVERSE:
-        case ROT_270:
-            qSwap(mOriginalWidth, mOriginalHeight);
-            break;
-        default:
-            break;
-        }
+    if (reader.autoTransform() && (reader.transformation() & QImageIOHandler::TransformationRotate90)) {
+        qSwap(mOriginalWidth, mOriginalHeight);
     }
+
     return true;
 }
 
