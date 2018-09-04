@@ -870,6 +870,11 @@ MainWindow::MainWindow()
 #ifdef KIPI_FOUND
     d->mKIPIInterface = new KIPIInterface(this);
     d->mKIPIExportAction->setKIPIInterface(d->mKIPIInterface);
+#else
+    auto* pluginsMenu = static_cast<QMenu*>(guiFactory()->container("plugins", this));
+    if (pluginsMenu) {
+        pluginsMenu->menuAction()->setVisible(false);
+    }
 #endif
     setAutoSaveSettings();
 #ifdef Q_OS_OSX
