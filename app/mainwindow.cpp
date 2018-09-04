@@ -860,6 +860,13 @@ MainWindow::MainWindow()
                                           d->mGoToPreviousAction, d->mGoToNextAction, this);
 #endif
 
+#ifdef GWENVIEW_SEMANTICINFO_BACKEND_NONE
+    auto* ratingMenu = static_cast<QMenu*>(guiFactory()->container("rating", this));
+    if (ratingMenu) {
+        ratingMenu->menuAction()->setVisible(false);
+    }
+#endif
+
 #ifdef KIPI_FOUND
     d->mKIPIInterface = new KIPIInterface(this);
     d->mKIPIExportAction->setKIPIInterface(d->mKIPIInterface);
