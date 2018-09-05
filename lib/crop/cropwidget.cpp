@@ -282,10 +282,10 @@ CropWidget::CropWidget(QWidget* parent, RasterImageView* imageView, CropTool* cr
 
     connect(d->mCropTool, &CropTool::rectUpdated, this, &CropWidget::setCropRect);
 
-    connect(d->leftSpinBox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &CropWidget::slotPositionChanged);
-    connect(d->topSpinBox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &CropWidget::slotPositionChanged);
-    connect(d->widthSpinBox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &CropWidget::slotWidthChanged);
-    connect(d->heightSpinBox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &CropWidget::slotHeightChanged);
+    connect(d->leftSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &CropWidget::slotPositionChanged);
+    connect(d->topSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &CropWidget::slotPositionChanged);
+    connect(d->widthSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &CropWidget::slotWidthChanged);
+    connect(d->heightSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &CropWidget::slotHeightChanged);
 
     d->initDialogButtonBox();
 
@@ -294,7 +294,7 @@ CropWidget::CropWidget(QWidget* parent, RasterImageView* imageView, CropTool* cr
     // Index Changed: required so that choosing an item with the same text is detected (e.g. going from US Letter portrait
     // to US Letter landscape)
     connect(d->ratioComboBox, &QComboBox::editTextChanged, this, &CropWidget::slotRatioComboBoxChanged);
-    connect(d->ratioComboBox, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &CropWidget::slotRatioComboBoxChanged);
+    connect(d->ratioComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CropWidget::slotRatioComboBoxChanged);
 
     // Don't do this before signals are connected, otherwise the tool won't get
     // initialized

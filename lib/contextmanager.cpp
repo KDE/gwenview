@@ -119,7 +119,7 @@ ContextManager::ContextManager(SortedDirModel* dirModel, QObject* parent)
     connect(d->mDirModel->dirLister(), SIGNAL(redirection(QUrl)),
             SLOT(slotDirListerRedirection(QUrl)));
 
-    connect(d->mDirModel->dirLister(), static_cast<void (KDirLister::*)()>(&KDirLister::completed), this, &ContextManager::slotDirListerCompleted);
+    connect(d->mDirModel->dirLister(), QOverload<>::of(&KDirLister::completed), this, &ContextManager::slotDirListerCompleted);
 
     d->mSelectionModel = new QItemSelectionModel(d->mDirModel);
 

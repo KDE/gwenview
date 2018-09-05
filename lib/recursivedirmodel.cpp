@@ -87,9 +87,9 @@ RecursiveDirModel::RecursiveDirModel(QObject* parent)
     d->mDirLister = new KDirLister(this);
     connect(d->mDirLister, &KDirLister::itemsAdded, this, &RecursiveDirModel::slotItemsAdded);
     connect(d->mDirLister, &KDirLister::itemsDeleted, this, &RecursiveDirModel::slotItemsDeleted);
-    connect(d->mDirLister, static_cast<void (KDirLister::*)()>(&KDirLister::completed), this, &RecursiveDirModel::completed);
-    connect(d->mDirLister, static_cast<void (KDirLister::*)()>(&KDirLister::clear), this, &RecursiveDirModel::slotCleared);
-    connect(d->mDirLister, static_cast<void (KDirLister::*)(const QUrl &)>(&KDirLister::clear), this, &RecursiveDirModel::slotDirCleared);
+    connect(d->mDirLister, QOverload<>::of(&KDirLister::completed), this, &RecursiveDirModel::completed);
+    connect(d->mDirLister, QOverload<>::of(&KDirLister::clear), this, &RecursiveDirModel::slotCleared);
+    connect(d->mDirLister, QOverload<const QUrl &>::of(&KDirLister::clear), this, &RecursiveDirModel::slotDirCleared);
 }
 
 RecursiveDirModel::~RecursiveDirModel()
