@@ -65,7 +65,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/gvdebug.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/mimetypeutils.h>
-#include <lib/signalblocker.h>
 #include <lib/urlutils.h>
 #include <lib/thumbnailview/dragpixmapgenerator.h>
 #include <lib/thumbnailprovider/thumbnailprovider.h>
