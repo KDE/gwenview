@@ -300,7 +300,7 @@ void ThumbnailPage::openUrl(const QUrl& url)
         text = d->mSrcBaseName;
     } else {
         path = QUrl::fromPercentEncoding(path.toUtf8());
-        path.replace("/", QString::fromUtf8(" › "));
+        path.replace('/', QString::fromUtf8(" › "));
         text = QString::fromUtf8("%1 › %2").arg(d->mSrcBaseName).arg(path);
     }
     d->mSrcUrlButton->setText(text);
