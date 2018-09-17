@@ -55,7 +55,6 @@ JpegDocumentLoadedImpl::~JpegDocumentLoadedImpl()
 bool JpegDocumentLoadedImpl::saveInternal(QIODevice* device, const QByteArray& format)
 {
     if (format == "jpeg") {
-        d->mJpegContent->resetOrientation();
         if (!d->mJpegContent->thumbnail().isNull()) {
             QImage thumbnail = document()->image().scaled(128, 128, Qt::KeepAspectRatio);
             d->mJpegContent->setThumbnail(thumbnail);
@@ -80,6 +79,11 @@ void JpegDocumentLoadedImpl::setImage(const QImage& image)
 void JpegDocumentLoadedImpl::applyTransformation(Orientation orientation)
 {
     DocumentLoadedImpl::applyTransformation(orientation);
+
+    // Apply Exif transformation first to normalize image
+    d->mJpegContent->transform(d->mJpegContent->orientation());
+    d->mJpegContent->resetOrientation();
+
     d->mJpegContent->transform(orientation);
 }
 
