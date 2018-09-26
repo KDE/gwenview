@@ -1526,6 +1526,12 @@ void MainWindow::configureShortcuts()
 void MainWindow::toggleMenuBar()
 {
     if (!d->mFullScreenAction->isChecked()) {
+        if (!d->mShowMenuBarAction->isChecked()) {
+            const QString accel = d->mShowMenuBarAction->shortcut().toString();
+            KMessageBox::information(this, i18n("This will hide the menu bar completely."
+                                                " You can show it again by typing %1.", accel),
+                                     i18n("Hide menu bar"), QLatin1String("HideMenuBarWarning"));
+        }
         menuBar()->setVisible(d->mShowMenuBarAction->isChecked());
     }
 }
