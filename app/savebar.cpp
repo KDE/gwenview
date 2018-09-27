@@ -346,17 +346,17 @@ void SaveBar::triggerAction(const QString& action)
 {
     QList<QUrl> lst = DocumentFactory::instance()->modifiedDocumentList();
     if (action == "first") {
-        goToUrl(lst[0]);
+        emit goToUrl(lst[0]);
     } else if (action == "previous") {
         int pos = lst.indexOf(d->mCurrentUrl);
         --pos;
         Q_ASSERT(pos >= 0);
-        goToUrl(lst[pos]);
+        emit goToUrl(lst[pos]);
     } else if (action == "next") {
         int pos = lst.indexOf(d->mCurrentUrl);
         ++pos;
         Q_ASSERT(pos < lst.size());
-        goToUrl(lst[pos]);
+        emit goToUrl(lst[pos]);
     } else {
         qWarning() << "Unknown action: " << action ;
     }

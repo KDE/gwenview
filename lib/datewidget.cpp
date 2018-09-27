@@ -68,7 +68,7 @@ struct DateWidgetPrivate
     {
         mDate = mDate.addDays(delta);
         updateButton();
-        q->dateChanged(mDate);
+        emit q->dateChanged(mDate);
     }
 };
 

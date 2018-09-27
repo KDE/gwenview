@@ -359,7 +359,7 @@ void RasterImageView::updateFromScaler(int zoomedImageLeft, int zoomedImageTop, 
 
     if (!d->mEmittedCompleted) {
         d->mEmittedCompleted = true;
-        completed();
+        emit completed();
     }
 }
 
@@ -472,7 +472,7 @@ void RasterImageView::setCurrentTool(AbstractRasterImageViewTool* tool)
     if (d->mTool) {
         d->mTool.data()->toolActivated();
     }
-    currentToolChanged(tool);
+    emit currentToolChanged(tool);
     update();
 }
 

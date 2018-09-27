@@ -163,10 +163,10 @@ struct VideoViewAdapterPrivate
             mSeekSlider->triggerAction(QAbstractSlider::SliderSingleStepAdd);
             break;
         case Qt::Key_Up:
-            q->previousImageRequested();
+            emit q->previousImageRequested();
             break;
         case Qt::Key_Down:
-            q->nextImageRequested();
+            emit q->nextImageRequested();
             break;
         default:
             break;
@@ -272,7 +272,7 @@ bool VideoViewAdapter::eventFilter(QObject*, QEvent* event)
         d->keyPressEvent(static_cast<QKeyEvent*>(event));
     } else if (event->type() == QEvent::MouseButtonDblClick) {
         if (static_cast<QMouseEvent*>(event)->modifiers() == Qt::NoModifier) {
-            toggleFullScreenRequested();
+            emit toggleFullScreenRequested();
         }
     }
     return false;

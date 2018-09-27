@@ -129,7 +129,7 @@ void ImageScaler::scaleRect(const QRect& rect)
     const qreal REAL_DELTA = 0.001;
     if (qAbs(d->mZoom - 1.0) < REAL_DELTA) {
         QImage tmp = d->mDocument->image().copy(rect);
-        scaledRect(rect.left(), rect.top(), tmp);
+        emit scaledRect(rect.left(), rect.top(), tmp);
         return;
     }
 

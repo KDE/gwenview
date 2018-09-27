@@ -158,9 +158,9 @@ void SlideContainer::slotAnimFinished()
 {
     if (height() == 0) {
         mSlidingOut = false;
-        slidedOut();
+        emit slidedOut();
     } else {
-        slidedIn();
+        emit slidedIn();
     }
 }
 

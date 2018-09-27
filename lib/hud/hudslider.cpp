@@ -297,7 +297,7 @@ void HudSlider::setValue(int value)
         d->mValue = value;
         setSliderPosition(value);
         update();
-        valueChanged(d->mValue);
+        emit valueChanged(d->mValue);
     }
 }
 
@@ -346,7 +346,7 @@ void HudSlider::triggerAction(QAbstractSlider::SliderAction action)
     case QAbstractSlider::SliderNoAction:
         break;
     };
-    actionTriggered(action);
+    emit actionTriggered(action);
     setValue(d->mSliderPosition);
 }
 

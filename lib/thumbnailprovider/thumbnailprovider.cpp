@@ -296,7 +296,7 @@ void ThumbnailProvider::determineNextIcon()
     if (mItems.isEmpty()) {
         LOG("No more items. Nothing to do");
         mCurrentItem = KFileItem();
-        finished();
+        emit finished();
         return;
     }
 

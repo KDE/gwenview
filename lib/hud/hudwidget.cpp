@@ -115,7 +115,7 @@ void HudWidget::init(QGraphicsWidget* mainWidget, Options options)
 void HudWidget::slotCloseButtonClicked()
 {
     close();
-    closed();
+    emit closed();
 }
 
 void HudWidget::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
@@ -140,9 +140,9 @@ void HudWidget::fadeOut()
 void HudWidget::slotFadeAnimationFinished()
 {
     if (qFuzzyCompare(opacity(), 1)) {
-        fadedIn();
+        emit fadedIn();
     } else {
-        fadedOut();
+        emit fadedOut();
         if (d->mAutoDeleteOnFadeout) {
             deleteLater();
         }

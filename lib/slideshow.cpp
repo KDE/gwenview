@@ -231,7 +231,7 @@ void SlideShow::start(const QList<QUrl>& urls)
     d->updateTimerInterval();
     d->mTimer->setSingleShot(false);
     d->doStart();
-    stateChanged(true);
+    emit stateChanged(true);
 }
 
 void SlideShow::setInterval(int intervalInSeconds)
@@ -269,7 +269,7 @@ void SlideShow::pause()
     LOG("Stopping timer");
     d->mTimer->stop();
     d->mState = Paused;
-    stateChanged(false);
+    emit stateChanged(false);
 }
 
 void SlideShow::resumeAndGoToNextUrl()
@@ -289,7 +289,7 @@ void SlideShow::goToNextUrl()
         pause();
         return;
     }
-    goToUrl(url);
+    emit goToUrl(url);
 }
 
 void SlideShow::setCurrentUrl(const QUrl &url)

@@ -390,8 +390,8 @@ void ThumbnailView::updateThumbnailSize()
         it.value().mAdjustedPix = QPixmap();
     }
 
-    thumbnailSizeChanged(value);
-    thumbnailWidthChanged(value.width());
+    emit thumbnailSizeChanged(value);
+    emit thumbnailWidthChanged(value.width());
     if (d->mScaleMode != ScaleToFit) {
         scheduleDelayedItemsLayout();
     }
@@ -490,7 +490,7 @@ void ThumbnailView::rowsInserted(const QModelIndex& parent, int start, int end)
 {
     QListView::rowsInserted(parent, start, end);
     d->mScheduledThumbnailGenerationTimer.start();
-    rowsInsertedSignal(parent, start, end);
+    emit rowsInsertedSignal(parent, start, end);
 }
 
 void ThumbnailView::dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight, const QVector<int> &roles)

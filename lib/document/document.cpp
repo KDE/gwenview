@@ -128,7 +128,7 @@ void DocumentPrivate::downSampleImage(int invertedZoom)
     if (mDownSampledImageMap[invertedZoom].size().isEmpty()) {
         mDownSampledImageMap[invertedZoom] = mImage;
     }
-    q->downSampledImageReady();
+    emit q->downSampledImageReady();
 }
 
 //- DownSamplingJob ---------------------------------------
@@ -320,7 +320,7 @@ void Document::slotSaveResult(KJob* job)
         SaveJob* saveJob = static_cast<SaveJob*>(job);
         d->mUrl = saveJob->newUrl();
         d->mImageMetaInfoModel.setUrl(d->mUrl);
-        saved(saveJob->oldUrl(), d->mUrl);
+        emit saved(saveJob->oldUrl(), d->mUrl);
     }
 }
 
@@ -488,9 +488,9 @@ void Document::imageOperationCompleted()
         // If user just undid all his changes this does not really correspond
         // to a save, but it's similar enough as far as Document users are
         // concerned
-        saved(d->mUrl, d->mUrl);
+        emit saved(d->mUrl, d->mUrl);
     } else {
-        modified(d->mUrl);
+        emit modified(d->mUrl);
     }
 }
 
@@ -525,7 +525,7 @@ void Document::enqueueJob(DocumentJob* job)
         d->mCurrentJob = job;
         LOG("Starting first job");
         job->start();
-        busyChanged(d->mUrl, true);
+        emit busyChanged(d->mUrl, true);
     }
     LOG_QUEUE("Job added", d);
 }
@@ -538,8 +538,8 @@ void Document::slotJobFinished(KJob* job)
     if (d->mJobQueue.isEmpty()) {
         LOG("All done");
         d->mCurrentJob.clear();
-        busyChanged(d->mUrl, false);
-        allTasksDone();
+        emit busyChanged(d->mUrl, false);
+        emit allTasksDone();
     } else {
         LOG("Starting next job");
         d->mCurrentJob = d->mJobQueue.dequeue();

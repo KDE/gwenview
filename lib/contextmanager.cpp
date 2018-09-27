@@ -164,7 +164,7 @@ void ContextManager::setCurrentUrl(const QUrl &currentUrl)
     }
 
     d->mSelectedFileItemListNeedsUpdate = true;
-    currentUrlChanged(currentUrl);
+    emit currentUrlChanged(currentUrl);
 }
 
 KFileItemList ContextManager::selectedFileItemList() const
@@ -186,9 +186,9 @@ void ContextManager::setCurrentDirUrl(const QUrl &_url)
         d->mDirListerFinished = false;
     } else {
         d->mCurrentDirUrl.clear();
-        d->mDirModel->dirLister()->clear();
+        emit d->mDirModel->dirLister()->clear();
     }
-    currentDirUrlChanged(url);
+    emit currentDirUrlChanged(url);
 }
 
 QUrl ContextManager::currentDirUrl() const

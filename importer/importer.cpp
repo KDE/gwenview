@@ -177,7 +177,7 @@ void Importer::start(const QList<QUrl>& list, const QUrl& destination)
     d->mJobProgress = 0;
 
     emitProgressChanged();
-    maximumChanged(d->mUrlList.count() * 100);
+    emit maximumChanged(d->mUrlList.count() * 100);
 
     if (!d->createImportDir(destination)) {
         qWarning() << "Could not create import dir";
@@ -204,7 +204,7 @@ void Importer::finalizeImport()
 {
     KIO::Job* job = KIO::del(d->mTempImportDirUrl, KIO::HideProgressInfo);
     KJobWidgets::setWindow(job, d->mAuthWindow);
-    importFinished();
+    emit importFinished();
 }
 
 void Importer::advance()
@@ -222,7 +222,7 @@ void Importer::slotPercent(KJob*, unsigned long percent)
 
 void Importer::emitProgressChanged()
 {
-    progressChanged(d->mProgress * 100 + d->mJobProgress);
+    emit progressChanged(d->mProgress * 100 + d->mJobProgress);
 }
 
 QList<QUrl> Importer::importedUrlList() const

@@ -187,7 +187,7 @@ void HudButton::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
     d->mIsDown = false;
     update();
     if (boundingRect().contains(event->pos())) {
-        clicked();
+        emit clicked();
     }
 }
 

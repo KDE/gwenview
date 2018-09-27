@@ -292,7 +292,7 @@ void ThumbnailGenerator::run()
             QSize size(mOriginalWidth, mOriginalHeight);
             LOG("emitting done signal, size=" << size);
             QMutexLocker lock(&mMutex);
-            done(mImage, size);
+            emit done(mImage, size);
             LOG("Done");
         }
     }

@@ -161,15 +161,15 @@ struct DocumentViewPrivate
                 adapter->setScrollPos(mSetup.position);
             }
         }
-        q->adapterChanged();
-        q->positionChanged();
+        emit q->adapterChanged();
+        emit q->positionChanged();
         if (adapter->canZoom()) {
             if (adapter->zoomToFit()) {
-                q->zoomToFitChanged(true);
+                emit q->zoomToFitChanged(true);
             } else if (adapter->zoomToFill()) {
-                q->zoomToFillChanged(true);
+                emit q->zoomToFillChanged(true);
             } else {
-                q->zoomChanged(adapter->zoom());
+                emit q->zoomChanged(adapter->zoom());
             }
         }
         if (adapter->rasterImageView()) {
@@ -296,7 +296,7 @@ struct DocumentViewPrivate
         }
         mZoomSnapValues << MAXIMUM_ZOOM_VALUE;
 
-        q->minimumZoomChanged(min);
+        emit q->minimumZoomChanged(min);
     }
 
     void showLoadingIndicator()
@@ -345,7 +345,7 @@ struct DocumentViewPrivate
         QObject::connect(anim, SIGNAL(finished()), q, SIGNAL(isAnimatedChanged()));
         anim->setDuration(DocumentView::AnimDuration);
         mFadeAnimation = anim;
-        q->isAnimatedChanged();
+        emit q->isAnimatedChanged();
         anim->start(QAbstractAnimation::DeleteWhenStopped);
     }
 
@@ -697,7 +697,7 @@ void DocumentView::zoomOut(QPointF center)
 void DocumentView::slotZoomChanged(qreal zoom)
 {
     d->updateCaption();
-    zoomChanged(zoom);
+    emit zoomChanged(zoom);
 }
 
 void DocumentView::setZoom(qreal zoom)
@@ -749,10 +749,10 @@ void DocumentView::wheelEvent(QGraphicsSceneWheelEvent* event)
         d->controlWheelAccumulatedDelta += event->delta();
         // Browse with mouse wheel
         if (d->controlWheelAccumulatedDelta >= QWheelEvent::DefaultDeltasPerStep) {
-            previousImageRequested();
+            emit previousImageRequested();
             d->controlWheelAccumulatedDelta = 0;
         } else if (d->controlWheelAccumulatedDelta <= -QWheelEvent::DefaultDeltasPerStep) {
-            nextImageRequested();
+            emit nextImageRequested();
             d->controlWheelAccumulatedDelta = 0;
         }
         return;
@@ -773,7 +773,7 @@ void DocumentView::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
     // Filter out context menu if Ctrl is down to avoid showing it when
     // zooming out with Ctrl + Right button
     if (event->modifiers() != Qt::ControlModifier) {
-        contextMenuRequested();
+        emit contextMenuRequested();
     }
 }
 
@@ -865,17 +865,17 @@ QUrl DocumentView::url() const
 
 void DocumentView::emitHudDeselectClicked()
 {
-    hudDeselectClicked(this);
+    emit hudDeselectClicked(this);
 }
 
 void DocumentView::emitHudTrashClicked()
 {
-    hudTrashClicked(this);
+    emit hudTrashClicked(this);
 }
 
 void DocumentView::emitFocused()
 {
-    focused(this);
+    emit focused(this);
 }
 
 void DocumentView::setGeometry(const QRectF& rect)
@@ -903,7 +903,7 @@ void DocumentView::moveToAnimated(const QRect& rect)
     anim->setDuration(DocumentView::AnimDuration);
     connect(anim, SIGNAL(finished()), SIGNAL(isAnimatedChanged()));
     d->mMoveAnimation = anim;
-    isAnimatedChanged();
+    emit isAnimatedChanged();
     anim->start(QAbstractAnimation::DeleteWhenStopped);
 }
 
@@ -920,7 +920,7 @@ void DocumentView::fadeOut()
 
 void DocumentView::slotFadeInFinished()
 {
-    fadeInFinished(this);
+    emit fadeInFinished(this);
 }
 
 bool DocumentView::isAnimated() const

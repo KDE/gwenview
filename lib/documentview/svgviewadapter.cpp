@@ -85,7 +85,7 @@ void SvgImageView::finishLoadFromDocument()
         mSvgItem->setScale(zoom());
     }
     applyPendingScrollPos();
-    completed();
+    emit completed();
     mImageFullyLoaded = true;
 }
 
