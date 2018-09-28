@@ -240,7 +240,7 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
     {
         if (mSelectedMediaItems->count() > 1) {
             KIO::filesize_t totalSize = 0;
-            for (auto item : *mSelectedMediaItems) {
+            for (const auto &item : *mSelectedMediaItems) {
                 totalSize += item.size();
             }
             const QString text = i18nc("@info:status %1 number of selected documents, %2 total number of documents, %3 total filesize of selected documents",

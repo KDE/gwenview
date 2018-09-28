@@ -90,7 +90,7 @@ const QStringList& rasterImageMimeTypes()
     static QStringList list;
     if (list.isEmpty()) {
         const auto supported = QImageReader::supportedMimeTypes();
-        for (auto mime: supported) {
+        for (const auto &mime: supported) {
             list << resolveAlias(QString::fromUtf8(mime));
         }
         // We don't want svg images to be considered as raster images
