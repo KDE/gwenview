@@ -358,7 +358,7 @@ void FileOpsContextManagerItem::rename()
         QModelIndex index = mThumbnailView->currentIndex();
         mThumbnailView->edit(index);
     } else {
-        FileOperations::rename(urlList().first(), mGroup, contextManager());
+        FileOperations::rename(urlList().constFirst(), mGroup, contextManager());
         contextManager()->slotSelectionChanged();
     }
 }

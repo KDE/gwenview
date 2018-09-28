@@ -103,7 +103,7 @@ void StatusBarToolButton::paintEvent(QPaintEvent* event)
     // messages so that translators can use Transcript for custom removal.
     // """
     if (!actions().isEmpty()) {
-        QAction* action = actions().first();
+        QAction* action = actions().constFirst();
         setToolTip(i18nc("@info:tooltip of custom toolbar button", "%1", action->toolTip()));
     }
 }

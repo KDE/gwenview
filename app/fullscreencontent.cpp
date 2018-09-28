@@ -479,7 +479,7 @@ void FullScreenContent::showOptionsMenu()
 
     // Show menu below its button
     QPoint pos;
-    QWidget* button = mOptionsAction->associatedWidgets().first();
+    QWidget* button = mOptionsAction->associatedWidgets().constFirst();
     Q_ASSERT(button);
     qWarning() << button << button->geometry();
     if (QApplication::isRightToLeft()) {

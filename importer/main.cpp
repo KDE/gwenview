@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
         qWarning() << i18n("Too many arguments.");
         parser.showHelp();
     }
-    QString urlString = parser.positionalArguments().first();
+    QString urlString = parser.positionalArguments().constFirst();
     QUrl url = QUrl::fromUserInput(urlString, QDir::currentPath(), QUrl::AssumeLocalFile);
     if (!url.isValid()) {
         qCritical() << i18n("Invalid source folder.");
