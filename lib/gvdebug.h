@@ -45,7 +45,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
  */
 #define GV_FATAL_FAILS \
     do { \
-        if (!qgetenv("GV_FATAL_FAILS").isEmpty()) { \
+        if (!qEnvironmentVariableIsEmpty("GV_FATAL_FAILS")) { \
             qFatal("Aborting because environment variable 'GV_FATAL_FAILS' is set"); \
         } \
     } while (0)

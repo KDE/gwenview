@@ -34,7 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 QUrl setUpRemoteTestDir(const QString& testFile)
 {
     QWidget* authWindow = 0;
-    if (qgetenv("GV_REMOTE_TESTS_BASE_URL").isEmpty()) {
+    if (qEnvironmentVariableIsEmpty("GV_REMOTE_TESTS_BASE_URL")) {
         qWarning() << "Environment variable GV_REMOTE_TESTS_BASE_URL not set: remote tests disabled";
         return QUrl();
     }
