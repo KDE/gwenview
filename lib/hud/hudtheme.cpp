@@ -61,13 +61,13 @@ RenderInfo renderInfo(WidgetType widget, State state)
         gradient.setColorAt(0.5, QColor::fromHsvF(0, 0, 0, .66));
         button.bgBrush = gradient;
         button.padding = 6;
-        button.textPen = QPen(QColor("#ccc"));
+        button.textPen = QPen(QColor(0xcc, 0xcc, 0xcc));
         renderInfoMap[ButtonWidget].infos[NormalState] = button;
 
         // Button, over
         RenderInfo overButton = button;
         overButton.bgBrush = gradient;
-        overButton.borderPen = QPen(QColor("#ccc"));
+        overButton.borderPen = QPen(QColor(0xcc, 0xcc, 0xcc));
         renderInfoMap[ButtonWidget].infos[MouseOverState] = overButton;
 
         // Button, down
@@ -76,7 +76,7 @@ RenderInfo renderInfo(WidgetType widget, State state)
         gradient.setColorAt(0, QColor::fromHsvF(0, 0, .12));
         gradient.setColorAt(0.6, Qt::black);
         downButton.bgBrush = gradient;
-        downButton.borderPen = QPen(QColor("#444"));
+        downButton.borderPen = QPen(QColor(0x44, 0x44, 0x44));
         renderInfoMap[ButtonWidget].infos[DownState] = downButton;
 
         // Frame
@@ -87,7 +87,7 @@ RenderInfo renderInfo(WidgetType widget, State state)
         frame.bgBrush = gradient;
         frame.borderPen = QPen(QColor::fromHsvF(0, 0, .4, .6));
         frame.borderRadius = 8;
-        frame.textPen = QPen(QColor("#ccc"));
+        frame.textPen = QPen(QColor(0xcc, 0xcc, 0xcc));
         renderInfoMap[FrameWidget].infos[NormalState] = frame;
 
         // CountDown
@@ -98,13 +98,13 @@ RenderInfo renderInfo(WidgetType widget, State state)
 
         // SliderWidgetHandle
         RenderInfo sliderWidgetHandle = button;
-        sliderWidgetHandle.borderPen = QPen(QColor("#666"));
+        sliderWidgetHandle.borderPen = QPen(QColor(0x66, 0x66, 0x66));
         sliderWidgetHandle.borderRadius = 7;
         renderInfoMap[SliderWidgetHandle].infos[NormalState] = sliderWidgetHandle;
 
         // SliderWidgetHandle, over
         sliderWidgetHandle = overButton;
-        sliderWidgetHandle.borderPen = QPen(QColor("#ccc"));
+        sliderWidgetHandle.borderPen = QPen(QColor(0xcc, 0xcc, 0xcc));
         sliderWidgetHandle.borderRadius = 7;
         renderInfoMap[SliderWidgetHandle].infos[MouseOverState] = sliderWidgetHandle;
 
@@ -115,17 +115,17 @@ RenderInfo renderInfo(WidgetType widget, State state)
 
         // SliderWidgetGroove
         RenderInfo sliderWidgetGroove = button;
-        sliderWidgetGroove.borderPen = QPen(QColor("#666"));
+        sliderWidgetGroove.borderPen = QPen(QColor(0x66, 0x66, 0x66));
         gradient = createGradient();
         gradient.setColorAt(0, Qt::black);
-        gradient.setColorAt(1, QColor("#444"));
+        gradient.setColorAt(1, QColor(0x44, 0x44, 0x44));
         sliderWidgetGroove.bgBrush = gradient;
         sliderWidgetGroove.borderRadius = 3;
         renderInfoMap[SliderWidgetGroove].infos[NormalState] = sliderWidgetGroove;
 
         // SliderWidgetGroove, over
         RenderInfo overSliderWidgetGroove = sliderWidgetGroove;
-        overSliderWidgetGroove.borderPen = QPen(QColor("#ccc"));
+        overSliderWidgetGroove.borderPen = QPen(QColor(0xcc, 0xcc, 0xcc));
         renderInfoMap[SliderWidgetGroove].infos[MouseOverState] = overSliderWidgetGroove;
     }
     RenderInfo normalInfo = renderInfoMap[widget].infos.value(NormalState);
