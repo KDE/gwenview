@@ -113,11 +113,9 @@ struct SaveBarPrivate
             "	color: %3;"
             "}"
             ;
-        css = css
-              .arg(warningBackgroundColor.name())
-              .arg(warningBorderColor.name())
-              .arg(warningColor.name())
-              ;
+        css = css.arg(warningBackgroundColor.name(),
+                      warningBorderColor.name(),
+                      warningColor.name());
         mTooManyChangesFrame->setStyleSheet(css);
     }
 
@@ -136,11 +134,9 @@ struct SaveBarPrivate
             "}"
             ;
 
-        css = css
-              .arg(bgColor.name())
-              .arg(borderColor.name())
-              .arg(fgColor.name())
-              ;
+        css = css.arg(bgColor.name(),
+                      borderColor.name(),
+                      fgColor.name());
         mSaveBarWidget->setStyleSheet(css);
     }
 

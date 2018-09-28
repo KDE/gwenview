@@ -59,9 +59,8 @@ QString gradient(Qt::Orientation orientation, const QColor &color, int value)
     return grad
             .arg(x2)
             .arg(y2)
-            .arg(rgba(PaintUtils::adjustedHsv(color, 0, 0, qMin(255 - color.value(), value / 2))))
-            .arg(rgba(PaintUtils::adjustedHsv(color, 0, 0, -qMin(color.value(), value / 2))))
-            ;
+            .arg(rgba(PaintUtils::adjustedHsv(color, 0, 0, qMin(255 - color.value(), value / 2))),
+                 rgba(PaintUtils::adjustedHsv(color, 0, 0, -qMin(color.value(), value / 2))));
 }
 
 } // namespace

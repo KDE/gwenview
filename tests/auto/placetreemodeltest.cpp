@@ -108,10 +108,7 @@ void PlaceTreeModelTest::init()
     Q_ASSERT(bookmarkOpened);
     Q_UNUSED(bookmarkOpened);
 
-    QString xml = QString(BOOKMARKS_XML)
-                  .arg(mUrl1.url())
-                  .arg(mUrl2.url())
-                  ;
+    QString xml = QString(BOOKMARKS_XML).arg(mUrl1.url(), mUrl2.url());
     bookmark.write(xml.toUtf8());
 
 #ifdef KEEP_TEMP_DIR

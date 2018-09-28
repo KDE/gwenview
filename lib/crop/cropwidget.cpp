@@ -206,7 +206,7 @@ struct CropWidgetPrivate : public Ui_CropWidget
         Q_ASSERT(edit);
         // Do not use i18n("%1:%2") because ':' should not be translated, it is
         // used to parse the ratio string.
-        edit->setPlaceholderText(QStringLiteral("%1:%2").arg(i18n("Width")).arg(i18n("Height")));
+        edit->setPlaceholderText(QStringLiteral("%1:%2").arg(i18n("Width"), i18n("Height")));
 
         // Enable clear button
         edit->setClearButtonEnabled(true);
