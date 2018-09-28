@@ -43,12 +43,12 @@ void testModel(const HistoryModel& model, const QUrl &u1, const QUrl& u2)
 
     index = model.index(0, 0);
     QVERIFY(index.isValid());
-    url = model.data(index, KFilePlacesModel::UrlRole).value<QUrl>();
+    url = model.data(index, KFilePlacesModel::UrlRole).toUrl();
     QCOMPARE(url, u1);
 
     index = model.index(1, 0);
     QVERIFY(index.isValid());
-    url = model.data(index, KFilePlacesModel::UrlRole).value<QUrl>();
+    url = model.data(index, KFilePlacesModel::UrlRole).toUrl();
     QCOMPARE(url, u2);
 
 }

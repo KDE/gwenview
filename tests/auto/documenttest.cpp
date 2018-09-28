@@ -415,8 +415,8 @@ void DocumentTest::testSaveAs()
     QTest::qWait(100); // saved() is emitted asynchronously
     QCOMPARE(savedSpy.count(), 1);
     QVariantList args = savedSpy.takeFirst();
-    QCOMPARE(args.at(0).value<QUrl>(), url);
-    QCOMPARE(args.at(1).value<QUrl>(), destUrl);
+    QCOMPARE(args.at(0).toUrl(), url);
+    QCOMPARE(args.at(1).toUrl(), destUrl);
 
     QImage image("result.png", "png");
     QCOMPARE(doc->image(), image);
@@ -428,7 +428,7 @@ void DocumentTest::testSaveAs()
 
     QCOMPARE(documentChangedSpy.count(), 1);
     args = documentChangedSpy.takeFirst();
-    QCOMPARE(args.at(0).value<QUrl>(), destUrl);
+    QCOMPARE(args.at(0).toUrl(), destUrl);
 }
 
 void DocumentTest::testLosslessSave()
@@ -532,7 +532,7 @@ void DocumentTest::testModifyAndSaveAs()
     QCOMPARE(lst.first(), url);
     QCOMPARE(documentChangedSpy.count(), 1);
     args = documentChangedSpy.takeFirst();
-    QCOMPARE(args.at(0).value<QUrl>(), url);
+    QCOMPARE(args.at(0).toUrl(), url);
 
     // Save it under a new name
     QUrl destUrl = urlForTestOutputFile("modify.png");
@@ -705,10 +705,10 @@ void DocumentTest::testJobQueue()
     QVERIFY(!doc->isBusy());
     QCOMPARE(spy.count(), 2);
     QVariantList row = spy.takeFirst();
-    QCOMPARE(row.at(0).value<QUrl>(), url);
+    QCOMPARE(row.at(0).toUrl(), url);
     QVERIFY(row.at(1).toBool());
     row = spy.takeFirst();
-    QCOMPARE(row.at(0).value<QUrl>(), url);
+    QCOMPARE(row.at(0).toUrl(), url);
     QVERIFY(!row.at(1).toBool());
     QCOMPARE(str, QStringLiteral("abc"));
 }
