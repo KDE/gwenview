@@ -136,6 +136,7 @@
             <choices name="Gwenview::MouseWheelBehavior::Enum">
                 <choice name="MouseWheelBehavior::Scroll"/>
                 <choice name="MouseWheelBehavior::Browse"/>
+                <choice name="MouseWheelBehavior::Zoom"/>
             </choices>
             <default>MouseWheelBehavior::Scroll</default>
         </entry>

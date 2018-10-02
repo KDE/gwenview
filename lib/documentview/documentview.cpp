@@ -732,17 +732,21 @@ void DocumentView::mousePressEvent(QGraphicsSceneMouseEvent* event)
 
 void DocumentView::wheelEvent(QGraphicsSceneWheelEvent* event)
 {
-    if (d->mAdapter->canZoom() && event->modifiers() & Qt::ControlModifier) {
-        d->controlWheelAccumulatedDelta += event->delta();
-        // Ctrl + wheel => zoom in or out
-        if (d->controlWheelAccumulatedDelta >= QWheelEvent::DefaultDeltasPerStep) {
-            zoomIn(event->pos());
-            d->controlWheelAccumulatedDelta = 0;
-        } else if (d->controlWheelAccumulatedDelta <= -QWheelEvent::DefaultDeltasPerStep) {
-            zoomOut(event->pos());
-            d->controlWheelAccumulatedDelta = 0;
+    if (d->mAdapter->canZoom()) {
+        if ((event->modifiers() & Qt::ControlModifier) ||
+            (GwenviewConfig::mouseWheelBehavior() == MouseWheelBehavior::Zoom
+            && event->modifiers() == Qt::NoModifier)) {
+            d->controlWheelAccumulatedDelta += event->delta();
+            // Ctrl + wheel => zoom in or out
+            if (d->controlWheelAccumulatedDelta >= QWheelEvent::DefaultDeltasPerStep) {
+                zoomIn(event->pos());
+                d->controlWheelAccumulatedDelta = 0;
+            } else if (d->controlWheelAccumulatedDelta <= -QWheelEvent::DefaultDeltasPerStep) {
+                zoomOut(event->pos());
+                d->controlWheelAccumulatedDelta = 0;
+            }
+            return;
         }
-        return;
     }
     if (GwenviewConfig::mouseWheelBehavior() == MouseWheelBehavior::Browse
         && event->modifiers() == Qt::NoModifier) {

@@ -76,6 +76,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     mWheelBehaviorGroup->setObjectName(QLatin1String("kcfg_MouseWheelBehavior"));
     mWheelBehaviorGroup->addButton(mImageViewConfigPage.mouseWheelScrollRadioButton, int(MouseWheelBehavior::Scroll));
     mWheelBehaviorGroup->addButton(mImageViewConfigPage.mouseWheelBrowseRadioButton, int(MouseWheelBehavior::Browse));
+    mWheelBehaviorGroup->addButton(mImageViewConfigPage.mouseWheelZoomRadioButton, int(MouseWheelBehavior::Zoom));
 
     mAnimationMethodGroup = new InvisibleButtonGroup(widget);
     mAnimationMethodGroup->setObjectName(QLatin1String("kcfg_AnimationMethod"));

@@ -211,6 +211,30 @@
     </layout>
    </item>
    <item row="6" column="1">
+    <layout class="QHBoxLayout" name="horizontalLayout_16">
+     <item>
+      <widget class="QRadioButton" name="mouseWheelZoomRadioButton">
+       <property name="text">
+        <string comment="@option:radio action on mouse wheel">Zoom</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_16">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item row="7" column="1">
     <spacer name="verticalSpacer_2">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -226,7 +250,7 @@
      </property>
     </spacer>
    </item>
-   <item row="7" column="0">
+   <item row="8" column="0">
     <widget class="QLabel" name="label_3">
      <property name="text">
       <string>Zoom mode:</string>
@@ -239,7 +263,7 @@
      </property>
     </widget>
    </item>
-   <item row="7" column="1">
+   <item row="8" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout_5">
      <item>
       <widget class="QRadioButton" name="autofitZoomModeRadioButton">
@@ -266,7 +290,7 @@
      </item>
     </layout>
    </item>
-   <item row="8" column="1">
+   <item row="9" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout_6">
      <item>
       <widget class="QRadioButton" name="keepSameZoomModeRadioButton">
@@ -290,7 +314,7 @@
      </item>
     </layout>
    </item>
-   <item row="9" column="1">
+   <item row="10" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout_7">
      <item>
       <widget class="QRadioButton" name="individualZoomModeRadioButton">
@@ -314,7 +338,7 @@
      </item>
     </layout>
    </item>
-   <item row="10" column="1">
+   <item row="11" column="1">
     <spacer name="verticalSpacer_3">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -330,7 +354,7 @@
      </property>
     </spacer>
    </item>
-   <item row="11" column="1">
+   <item row="12" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout_8">
      <item>
       <widget class="QCheckBox" name="kcfg_EnlargeSmallerImages">
@@ -354,7 +378,7 @@
      </item>
     </layout>
    </item>
-   <item row="12" column="1">
+   <item row="13" column="1">
     <spacer name="verticalSpacer_4">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -370,7 +394,7 @@
      </property>
     </spacer>
    </item>
-   <item row="13" column="0">
+   <item row="14" column="0">
     <widget class="QLabel" name="label_4">
      <property name="text">
       <string>Animations:</string>
@@ -383,7 +407,7 @@
      </property>
     </widget>
    </item>
-   <item row="13" column="1">
+   <item row="14" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout_9">
      <item>
       <widget class="QRadioButton" name="glAnimationRadioButton">
@@ -410,7 +434,7 @@
      </item>
     </layout>
    </item>
-   <item row="14" column="1">
+   <item row="15" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout_10">
      <item>
       <widget class="QRadioButton" name="softwareAnimationRadioButton">
@@ -434,7 +458,7 @@
      </item>
     </layout>
    </item>
-   <item row="15" column="1">
+   <item row="16" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout_11">
      <item>
       <widget class="QRadioButton" name="noAnimationRadioButton">
@@ -458,7 +482,7 @@
      </item>
     </layout>
    </item>
-   <item row="16" column="1">
+   <item row="17" column="1">
     <spacer name="verticalSpacer_5">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -474,14 +498,14 @@
      </property>
     </spacer>
    </item>
-   <item row="17" column="0">
+   <item row="18" column="0">
     <widget class="QLabel" name="label_5">
      <property name="text">
       <string>&lt;b&gt;Thumbnail Bar&lt;/b&gt;</string>
      </property>
     </widget>
    </item>
-   <item row="18" column="1">
+   <item row="19" column="1">
     <spacer name="verticalSpacer_6">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -497,7 +521,7 @@
      </property>
     </spacer>
    </item>
-   <item row="19" column="0">
+   <item row="20" column="0">
     <widget class="QLabel" name="label_6">
      <property name="text">
       <string>Orientation:</string>
@@ -510,7 +534,7 @@
      </property>
     </widget>
    </item>
-   <item row="19" column="1">
+   <item row="20" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout_12">
      <item>
       <widget class="QRadioButton" name="horizontalRadioButton">
@@ -534,7 +558,7 @@
      </item>
     </layout>
    </item>
-   <item row="20" column="1">
+   <item row="21" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout_13">
      <item>
       <widget class="QRadioButton" name="verticalRadioButton">
@@ -558,7 +582,7 @@
      </item>
     </layout>
    </item>
-   <item row="21" column="0">
+   <item row="22" column="0">
     <widget class="QLabel" name="label_7">
      <property name="text">
       <string>Row count:</string>
@@ -571,7 +595,7 @@
      </property>
     </widget>
    </item>
-   <item row="21" column="1">
+   <item row="22" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout_14">
      <item>
       <widget class="QSpinBox" name="kcfg_ThumbnailBarRowCount">
@@ -598,7 +622,7 @@
      </item>
     </layout>
    </item>
-   <item row="22" column="1">
+   <item row="23" column="1">
     <spacer name="verticalSpacer_7">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -631,6 +655,7 @@
   <tabstop>kcfg_AlphaBackgroundColor</tabstop>
   <tabstop>mouseWheelScrollRadioButton</tabstop>
   <tabstop>mouseWheelBrowseRadioButton</tabstop>
+  <tabstop>mouseWheelZoomRadioButton</tabstop>
   <tabstop>kcfg_EnlargeSmallerImages</tabstop>
   <tabstop>glAnimationRadioButton</tabstop>
   <tabstop>softwareAnimationRadioButton</tabstop>
