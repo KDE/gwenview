@@ -4,7 +4,6 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
                         http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
-    <kcfgfile name="gwenviewrc"/>
     <include>lib/sorting.h</include>
     <include>lib/zoommode.h</include>
     <include>lib/thumbnailactions.h</include>
@@ -13,6 +12,7 @@
     <include>lib/documentview/rasterimageview.h</include>
     <include>lib/print/printoptionspage.h</include>
     <include>lib/renderingintent.h</include>
+    <kcfgfile name="gwenviewrc"/>
     <group name="SideBar">
         <entry name="PreferredMetaInfoKeyList" type="StringList">
         <default>General.Name,General.ImageSize,Exif.Photo.ExposureTime,Exif.Photo.Flash</default>
