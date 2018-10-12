@@ -66,25 +66,20 @@ struct ImporterPrivate
 
     QUrl mCurrentUrl;
 
-    void emitError(const QString& message)
-    {
-        QMetaObject::invokeMethod(q, "error", Q_ARG(QString, message));
-    }
-
     bool createImportDir(const QUrl& url)
     {
         Q_ASSERT(url.isLocalFile());
         // FIXME: Support remote urls
 
         if (!QDir().mkpath(url.toLocalFile())) {
-            emitError(i18n("Could not create destination folder."));
+            emit q->error(i18n("Could not create destination folder."));
             return false;
         }
         QString message;
         QString dir = FileUtils::createTempDir(url.toLocalFile(), ".gwenview_importer-", &message);
         mTempImportDirUrl = QUrl::fromLocalFile(dir);
         if (mTempImportDirUrl.isEmpty()) {
-            emitError(i18n("Could not create temporary upload folder:\n%1", message));
+            emit q->error(i18n("Could not create temporary upload folder:\n%1", message));
             return false;
         }
         return true;

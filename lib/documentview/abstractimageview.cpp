@@ -102,7 +102,7 @@ struct AbstractImageViewPrivate
             }
             // No verbosity test: we always notify the outside world about
             // scrollPos changes
-            QMetaObject::invokeMethod(q, "scrollPosChanged");
+            emit q->scrollPosChanged();
         }
     }
 
