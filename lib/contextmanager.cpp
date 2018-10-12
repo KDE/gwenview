@@ -50,15 +50,18 @@ struct ContextManagerPrivate
     QUrl mTargetDirUrl;
 
     bool mSelectedFileItemListNeedsUpdate;
-    QSet<QByteArray> mQueuedSignals;
+    using Signal = void (ContextManager::*)();
+    QVector<Signal> mQueuedSignals;
     KFileItemList mSelectedFileItemList;
 
     bool mDirListerFinished = false;
     QTimer* mQueuedSignalsTimer;
 
-    void queueSignal(const QByteArray& signal)
+    void queueSignal(Signal signal)
     {
-        mQueuedSignals << signal;
+        if (!mQueuedSignals.contains(signal)) {
+            mQueuedSignals << signal;
+        }
         mQueuedSignalsTimer->start();
     }
 
@@ -234,7 +237,7 @@ void ContextManager::slotDirModelDataChanged(const QModelIndex& topLeft, const Q
     Q_FOREACH(const QModelIndex & index, shortList) {
         if (longList.contains(index)) {
             d->mSelectedFileItemListNeedsUpdate = true;
-            d->queueSignal("selectionDataChanged");
+            d->queueSignal(&ContextManager::selectionDataChanged);
             return;
         }
     }
@@ -246,7 +249,7 @@ void ContextManager::slotSelectionChanged()
     if (!d->mSelectionModel->hasSelection()) {
         setCurrentUrl(QUrl());
     }
-    d->queueSignal("selectionChanged");
+    d->queueSignal(&ContextManager::selectionChanged);
 }
 
 void Gwenview::ContextManager::slotCurrentChanged(const QModelIndex& index)
@@ -257,8 +260,8 @@ void Gwenview::ContextManager::slotCurrentChanged(const QModelIndex& index)
 
 void ContextManager::emitQueuedSignals()
 {
-    Q_FOREACH(const QByteArray & signal, d->mQueuedSignals) {
-        QMetaObject::invokeMethod(this, signal.data());
+    Q_FOREACH(ContextManagerPrivate::Signal signal, d->mQueuedSignals) {
+        emit (this->*signal)();
     }
     d->mQueuedSignals.clear();
 }
