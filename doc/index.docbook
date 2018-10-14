@@ -36,8 +36,8 @@
 </copyright>
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2018-07-13</date>
-<releaseinfo>Applications 18.08</releaseinfo>
+<date>2018-10-14</date>
+<releaseinfo>Applications 18.12</releaseinfo>
 <abstract>
 <para>&gwenview; is an image and video viewer.</para>
 </abstract>
@@ -732,7 +732,7 @@ Link an image.</para></listitem>
                             <para><guilabel>All buttons</guilabel> &mdash; Show all buttons</para>
                         </listitem>
                         <listitem>
-                            <para><guilabel>Show selection buttons</guilabel> &mdash; Show select/unselect button only</para>
+                            <para><guilabel>Show selection button only</guilabel> &mdash; Show select/unselect button only</para>
                         </listitem>
                         <listitem>
                             <para><guilabel>None</guilabel> &mdash; Do not show any thumbnail button</para>
@@ -772,6 +772,9 @@ Link an image.</para></listitem>
                         </listitem>
                         <listitem>
                             <para><guilabel>Browse</guilabel> &mdash; Switch to the next or the previous image.</para>
+                        </listitem>
+                        <listitem>
+                            <para><guilabel>Zoom</guilabel> &mdash; Use mouse wheel to zoom in/out the current image.</para>
                         </listitem>
                     </itemizedlist>
                 </listitem>
