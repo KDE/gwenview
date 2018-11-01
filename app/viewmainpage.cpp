@@ -475,7 +475,7 @@ void ViewMainPage::loadConfig()
 {
     d->applyPalette(window()->isFullScreen());
 
-    // FIXME: Not symetric with saveConfig(). Check if it matters.
+    // FIXME: Not symmetric with saveConfig(). Check if it matters.
     Q_FOREACH(DocumentView * view, d->mDocumentViews) {
         view->loadAdapterConfig();
     }

@@ -83,7 +83,7 @@ bool ThumbnailContext::load(const QString &pixPath, int pixelSize)
         // We need QImage. Loading JpegContent from QImage - exif lost
         // Loading QImage from JpegContent - unimplemented, would go with loadFromData
         if (!ret || !originalImage.loadFromData(data) || qMin(originalImage.width(), originalImage.height()) < MIN_PREV_SIZE) {
-            // if the emebedded preview loading failed or gets just a small image, load
+            // if the embedded preview loading failed or gets just a small image, load
             // half preview instead. That's slower...
             if (!KDcrawIface::KDcraw::loadHalfPreview(data, pixPath)) {
                 qWarning() << "unable to get preview for " << pixPath.toUtf8().constData();

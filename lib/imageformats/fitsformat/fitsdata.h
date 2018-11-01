@@ -118,7 +118,7 @@ class FITSData
     /// Bayer parameters
     BayerParams debayerParams;
 
-    /// Stats struct to hold statisical data about the FITS data
+    /// Stats struct to hold statistical data about the FITS data
     struct
     {
         double min[3], max[3];
