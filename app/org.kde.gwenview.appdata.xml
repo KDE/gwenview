@@ -317,6 +317,7 @@
   <url type="homepage">https://gwenview.kde.org/</url>
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=gwenview</url>
   <url type="help">https://docs.kde.org/?application=gwenview</url>
+  <url type="donation">https://www.kde.org/community/donations/?app=gwenview&amp;source=appdata</url>
   <screenshots>
     <screenshot type="default">
       <caption>Gwenview displaying an image, with additional metadata shown in the sidebar</caption>
