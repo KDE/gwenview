@@ -26,11 +26,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QEvent>
 #include <QPropertyAnimation>
 #include <QResizeEvent>
+#include <QStyle>
 
 namespace Gwenview
 {
-
-static const int SLIDE_DURATION = 250;
 
 SlideContainer::SlideContainer(QWidget* parent)
 : QFrame(parent)
@@ -63,7 +62,8 @@ void SlideContainer::animTo(int newHeight)
 {
     delete mAnim.data();
     QPropertyAnimation* anim = new QPropertyAnimation(this, "slideHeight", this);
-    anim->setDuration(SLIDE_DURATION);
+    QVariant animVar = style()->styleHint(QStyle::SH_Widget_Animation_Duration, nullptr, this);
+    anim->setDuration(animVar.toInt());
     anim->setStartValue(slideHeight());
     anim->setEndValue(newHeight);
     anim->start(QAbstractAnimation::DeleteWhenStopped);

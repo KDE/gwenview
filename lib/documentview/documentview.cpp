@@ -42,6 +42,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QDrag>
 #include <QMimeData>
 #include <QStyleHints>
+#include <QStyle>
 
 // KDE
 #include <KLocalizedString>
@@ -89,7 +90,6 @@ static const auto MAXSTEP = sqrt(2.0);
 static const int COMPARE_MARGIN = 4;
 
 const int DocumentView::MaximumZoom = 16;
-const int DocumentView::AnimDuration = 250;
 
 struct DocumentViewPrivate
 {
@@ -343,7 +343,7 @@ struct DocumentViewPrivate
                             q, SLOT(slotFadeInFinished()));
         }
         QObject::connect(anim, SIGNAL(finished()), q, SIGNAL(isAnimatedChanged()));
-        anim->setDuration(DocumentView::AnimDuration);
+        anim->setDuration(q->style()->styleHint(QStyle::SH_Widget_Animation_Duration, nullptr, nullptr));
         mFadeAnimation = anim;
         emit q->isAnimatedChanged();
         anim->start(QAbstractAnimation::DeleteWhenStopped);
@@ -904,7 +904,7 @@ void DocumentView::moveToAnimated(const QRect& rect)
     QPropertyAnimation* anim = new QPropertyAnimation(this, "geometry");
     anim->setStartValue(geometry());
     anim->setEndValue(rect);
-    anim->setDuration(DocumentView::AnimDuration);
+    anim->setDuration(style()->styleHint(QStyle::SH_Widget_Animation_Duration, nullptr, nullptr));
     connect(anim, SIGNAL(finished()), SIGNAL(isAnimatedChanged()));
     d->mMoveAnimation = anim;
     emit isAnimatedChanged();

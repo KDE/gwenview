@@ -55,7 +55,6 @@ class GWENVIEWLIB_EXPORT DocumentView : public QGraphicsWidget
     Q_PROPERTY(QPoint position READ position WRITE setPosition NOTIFY positionChanged)
 public:
     static const int MaximumZoom;
-    static const int AnimDuration;
 
     struct Setup {
         Setup()

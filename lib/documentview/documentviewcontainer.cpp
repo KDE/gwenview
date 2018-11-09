@@ -36,6 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QTimer>
 #include <QDebug>
 #include <QtMath>
+#include <QStyle>
 
 namespace Gwenview
 {
@@ -271,7 +272,8 @@ void DocumentViewContainer::updateLayout()
     if (animated) {
         Q_FOREACH(DocumentView* view, d->mRemovedViews) {
             view->fadeOut();
-            QTimer::singleShot(DocumentView::AnimDuration, view, SLOT(deleteLater()));
+            QVariant durVar = style()->styleHint(QStyle::SH_Widget_Animation_Duration, nullptr, this);
+            QTimer::singleShot(durVar.toInt(), view, SLOT(deleteLater()));
         }
     } else {
         Q_FOREACH(DocumentView* view, d->mRemovedViews) {

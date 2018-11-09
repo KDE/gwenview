@@ -32,6 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QTimeLine>
 #include <QTimer>
 #include <QToolButton>
+#include <QStyle>
 
 // KDE
 #include <KLocalizedString>
@@ -41,7 +42,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 namespace Gwenview
 {
 
-static const int SLIDE_DURATION = 150;
 static const int AUTO_HIDE_CURSOR_TIMEOUT = 1000;
 
 // How long before the bar slide out after switching to fullscreen
@@ -120,7 +120,7 @@ FullScreenBar::FullScreenBar(QWidget* parent)
     d->mEdgeTriggerEnabled = true;
     setObjectName(QLatin1String("fullScreenBar"));
 
-    d->mTimeLine = new QTimeLine(SLIDE_DURATION, this);
+    d->mTimeLine = new QTimeLine(style()->styleHint(QStyle::SH_Widget_Animation_Duration, nullptr, this), this);
     connect(d->mTimeLine, &QTimeLine::valueChanged, this, &FullScreenBar::moveBar);
 
     d->mAutoHideCursorTimer = new QTimer(this);

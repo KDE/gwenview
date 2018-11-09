@@ -50,11 +50,6 @@ namespace Gwenview
 {
 
 /**
- * Duration in ms of the smooth scroll
- */
-const int SMOOTH_SCROLL_DURATION = 250;
-
-/**
  * Space between the item outer rect and the content, and between the
  * thumbnail and the caption
  */
@@ -451,7 +446,7 @@ ThumbnailBarView::ThumbnailBarView(QWidget* parent)
 , d(new ThumbnailBarViewPrivate)
 {
     d->q = this;
-    d->mTimeLine = new QTimeLine(SMOOTH_SCROLL_DURATION, this);
+    d->mTimeLine = new QTimeLine(style()->styleHint(QStyle::SH_Widget_Animation_Duration, nullptr, this), this);
     connect(d->mTimeLine, &QTimeLine::frameChanged, this, &ThumbnailBarView::slotFrameChanged);
 
     d->mRowCount = 1;
