@@ -176,6 +176,8 @@ protected:
 
     void startDrag(Qt::DropActions) override;
 
+    void mousePressEvent(QMouseEvent*) override;
+
 protected Q_SLOTS:
     void rowsAboutToBeRemoved(const QModelIndex& parent, int start, int end) override;
     void rowsInserted(const QModelIndex& parent, int start, int end) override;

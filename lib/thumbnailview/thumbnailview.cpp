@@ -771,6 +771,17 @@ void ThumbnailView::wheelEvent(QWheelEvent* event)
     }
 }
 
+void ThumbnailView::mousePressEvent(QMouseEvent* event)
+{
+    switch (event->button()) {
+    case Qt::ForwardButton:
+    case Qt::BackButton:
+        return;
+    default:
+        QListView::mousePressEvent(event);
+    }
+}
+
 void ThumbnailView::scrollToSelectedIndex()
 {
     QModelIndexList list = selectedIndexes();
