@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QList>
 #include <QObject>
 #include <QWidget>
+#include <QBitArray>
 
 // KDE
 #include <KFileItem>
@@ -197,6 +198,50 @@ private:
     DateWidget* mDateWidget;
 };
 
+/**
+ * An AbstractSortedDirModelFilter which filters on the file dates
+ */
+class DuplicateFilter : public AbstractSortedDirModelFilter
+{
+public:
+    DuplicateFilter(SortedDirModel* model)
+    : AbstractSortedDirModelFilter(model)
+    {}
+
+    bool needsSemanticInfo() const override
+    {
+        return false;
+    }
+
+    void setDuplicateUrls(const QList<QUrl> &urls)
+    {
+        mDuplicateUrls = urls.toSet();
+        model->reload();
+    }
+
+    bool acceptsIndex(const QModelIndex& index) const override
+    {
+        const QUrl url = model()->urlForIndex(index);
+        return mDuplicateUrls.contains(url);
+    }
+
+private:
+    QSet<QUrl> mDuplicateUrls;
+};
+
+class DuplicateFilterWidget : public QWidget
+{
+    Q_OBJECT
+public:
+    DuplicateFilterWidget(SortedDirModel*);
+    ~DuplicateFilterWidget() override;
+
+private Q_SLOTS:
+    void applyDuplicateFilter();
+
+private:
+    QPointer<DuplicateFilter> mFilter;
+};
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 /**
