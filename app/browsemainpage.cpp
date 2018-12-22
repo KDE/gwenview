@@ -344,6 +344,8 @@ BrowseMainPage::BrowseMainPage(QWidget* parent, KActionCollection* actionCollect
 
 BrowseMainPage::~BrowseMainPage()
 {
+    d->mSelectedMediaItems->clear();
+    delete d->mSelectedMediaItems;
     delete d;
 }
 
