@@ -43,11 +43,11 @@ DocumentInfoProvider::DocumentInfoProvider(SortedDirModel* model)
             this, &AbstractDocumentInfoProvider::documentChanged);
 }
 
-void DocumentInfoProvider::thumbnailForDocument(const QUrl &url, ThumbnailGroup::Enum group, QPixmap* outPix, QSize* outFullSize) const
+void DocumentInfoProvider::thumbnailForDocument(const QUrl &url, ThumbnailGroup::Enum group, QImage *outPix, QSize* outFullSize) const
 {
     Q_ASSERT(outPix);
     Q_ASSERT(outFullSize);
-    *outPix = QPixmap();
+    *outPix = QImage();
     *outFullSize = QSize();
     const int pixelSize = ThumbnailGroup::pixelSize(group);
 
@@ -64,7 +64,7 @@ void DocumentInfoProvider::thumbnailForDocument(const QUrl &url, ThumbnailGroup:
     if (image.width() > pixelSize || image.height() > pixelSize) {
         image = image.scaled(pixelSize, pixelSize, Qt::KeepAspectRatio);
     }
-    *outPix = QPixmap::fromImage(image);
+    *outPix = image;
     *outFullSize = doc->size();
 }
 

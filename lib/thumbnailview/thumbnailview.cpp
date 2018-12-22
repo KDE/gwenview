@@ -352,8 +352,8 @@ void ThumbnailView::setThumbnailProvider(ThumbnailProvider* thumbnailProvider)
 {
     GV_RETURN_IF_FAIL(d->mThumbnailProvider != thumbnailProvider);
     if (thumbnailProvider) {
-        connect(thumbnailProvider, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize,qulonglong)),
-                         SLOT(setThumbnail(KFileItem,QPixmap,QSize,qulonglong)));
+        connect(thumbnailProvider, SIGNAL(thumbnailLoaded(KFileItem,QImage,QSize,qulonglong)),
+                         SLOT(setThumbnail(KFileItem,QImage,QSize,qulonglong)));
         connect(thumbnailProvider, SIGNAL(thumbnailLoadingFailed(KFileItem)),
                          SLOT(setBrokenThumbnail(KFileItem)));
     } else {
@@ -559,8 +559,13 @@ void ThumbnailView::setThumbnail(const KFileItem& item, const QImage& pixmap, co
     thumbnail.mWaitingForThumbnail = false;
     thumbnail.mFileSize = fileSize;
 
-    const QByteArray encodedHash = thumbnail.text(QStringLiteral("Thumb::X-KDE-VisualHash")).tolat;
-    thumbnail.mHash;
+    const QByteArray visualHash = QByteArray::fromHex(pixmap.text(QStringLiteral("Thumb::X-KDE-VisualHash")).toLatin1());
+    if (!visualHash.isEmpty()) {
+        thumbnail.mHash = QBitArray::fromBits(visualHash.constData(), visualHash.size() * 8);
+    } else {
+        qWarning() << "Missing hash";
+    }
+    qDebug() << thumbnail.mHash;
 
     update(thumbnail.mIndex);
     if (d->mScaleMode != ScaleToFit) {

@@ -28,7 +28,6 @@
 
 // Qt
 #include <QImage>
-#include <QPixmap>
 #include <QPointer>
 
 // KDE
@@ -118,7 +117,7 @@ Q_SIGNALS:
     /**
      * Emitted when the thumbnail for the @p item has been loaded
      */
-    void thumbnailLoaded(const KFileItem& item, const QPixmap&, const QSize&, qulonglong);
+    void thumbnailLoaded(const KFileItem& item, const QImage&, const QSize&, qulonglong);
 
     void thumbnailLoadingFailed(const KFileItem& item);
 
@@ -132,7 +131,7 @@ protected:
 
 private Q_SLOTS:
     void determineNextIcon();
-    void slotGotPreview(const KFileItem&, const QPixmap&);
+    void slotGotPreview(const KFileItem&, const QPixmap &);
     void checkThumbnail();
     void thumbnailReady(const QImage&, const QSize&);
     void emitThumbnailLoadingFailed();

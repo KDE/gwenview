@@ -31,7 +31,6 @@
 #include <QDir>
 #include <QFile>
 #include <QImage>
-#include <QPixmap>
 #include <QCryptographicHash>
 #include <QDebug>
 #include <QTemporaryFile>
@@ -537,7 +536,7 @@ void ThumbnailProvider::startCreatingThumbnail(const QString& pixPath)
                           mCurrentItem.mimetype(), pixPath, mThumbnailPath, mThumbnailGroup);
 }
 
-void ThumbnailProvider::slotGotPreview(const KFileItem& item, const QPixmap& pixmap)
+void ThumbnailProvider::slotGotPreview(const KFileItem& item, const QPixmap &pixmap)
 {
     if (mCurrentItem.isNull()) {
         // This can happen if current item has been removed by removeItems()
@@ -545,7 +544,7 @@ void ThumbnailProvider::slotGotPreview(const KFileItem& item, const QPixmap& pix
     }
     LOG(mCurrentItem.url());
     QSize size;
-    emit thumbnailLoaded(item, pixmap, size, mOriginalFileSize);
+    emit thumbnailLoaded(item, pixmap.toImage(), size, mOriginalFileSize);
 }
 
 void ThumbnailProvider::emitThumbnailLoaded(const QImage& img, const QSize& size)
@@ -555,8 +554,7 @@ void ThumbnailProvider::emitThumbnailLoaded(const QImage& img, const QSize& size
         return;
     }
     LOG(mCurrentItem.url());
-    QPixmap thumb = QPixmap::fromImage(img);
-    emit thumbnailLoaded(mCurrentItem, thumb, size, mOriginalFileSize);
+    emit thumbnailLoaded(mCurrentItem, img, size, mOriginalFileSize);
 }
 
 void ThumbnailProvider::emitThumbnailLoadingFailed()

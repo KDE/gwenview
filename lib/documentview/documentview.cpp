@@ -1006,9 +1006,9 @@ void DocumentView::dropEvent(QGraphicsSceneDragDropEvent* event)
     }
 }
 
-void DocumentView::dragThumbnailLoaded(const KFileItem& item, const QPixmap& pix)
+void DocumentView::dragThumbnailLoaded(const KFileItem& item, const QImage& pix)
 {
-    d->setDragPixmap(pix);
+    d->setDragPixmap(QPixmap::fromImage(pix));
     d->executeDrag();
     d->mDragThumbnailProvider->removeItems(KFileItemList({item}));
 }

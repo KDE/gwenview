@@ -43,7 +43,7 @@ public:
 
     bool isModified(const QUrl &url) override;
 
-    void thumbnailForDocument(const QUrl &url, ThumbnailGroup::Enum group, QPixmap* outPix, QSize* outFullSize) const override;
+    void thumbnailForDocument(const QUrl &url, ThumbnailGroup::Enum group, QImage* outPix, QSize* outFullSize) const override;
 
 private:
     SortedDirModel* mDirModel;

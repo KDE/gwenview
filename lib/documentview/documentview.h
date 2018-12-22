@@ -230,7 +230,7 @@ private Q_SLOTS:
 
     void slotFadeInFinished();
 
-    void dragThumbnailLoaded(const KFileItem&, const QPixmap&);
+    void dragThumbnailLoaded(const KFileItem&, const QImage &);
     void dragThumbnailLoadingFailed(const KFileItem&);
 
 private:

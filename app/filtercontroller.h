@@ -51,6 +51,7 @@ class QFrame;
 class QLineEdit;
 class QComboBox;
 class KComboBox;
+class ThumbnailProvider;
 
 namespace Gwenview
 {

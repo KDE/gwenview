@@ -186,7 +186,7 @@ protected Q_SLOTS:
 private Q_SLOTS:
     void showContextMenu();
     void emitIndexActivatedIfNoModifiers(const QModelIndex&);
-    void setThumbnail(const KFileItem&, const QPixmap&, const QSize&, qulonglong fileSize);
+    void setThumbnail(const KFileItem&, const QImage&, const QSize&, qulonglong fileSize);
     void setBrokenThumbnail(const KFileItem&);
 
     /**
