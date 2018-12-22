@@ -435,10 +435,18 @@ void ThumbnailProvider::checkThumbnail()
 
     QImage thumb = loadThumbnailFromCache();
     KIO::filesize_t fileSize = thumb.text(QStringLiteral("Thumb::Size")).toULongLong();
+    const QString hashString = thumb.text(QStringLiteral("Thumb::X-KDE-VisualHash"));
+
+    const bool isNormalImage = MimeTypeUtils::fileItemKind(mCurrentItem) == MimeTypeUtils::KIND_RASTER_IMAGE;
+    if (isNormalImage && hashString.isEmpty()) {
+        thumb = QImage();
+        QFile::remove(mThumbnailPath);
+    }
     if (!thumb.isNull()) {
         if (thumb.text(QStringLiteral("Thumb::URI")) == mOriginalUri &&
                 thumb.text(QStringLiteral("Thumb::MTime")).toInt() == mOriginalTime &&
-                 (fileSize == 0 || fileSize == mOriginalFileSize)) {
+                 (fileSize == 0 || fileSize == mOriginalFileSize) &&
+                !thumb.text(QStringLiteral("Thumb::X-KDE-VisualHash")).isEmpty()) {
             int width = 0, height = 0;
             QSize size;
             bool ok;
@@ -464,7 +472,7 @@ void ThumbnailProvider::checkThumbnail()
     }
 
     // Thumbnail not found or not valid
-    if (MimeTypeUtils::fileItemKind(mCurrentItem) == MimeTypeUtils::KIND_RASTER_IMAGE) {
+    if (isNormalImage) {
         if (mCurrentUrl.isLocalFile()) {
             // Original is a local file, create the thumbnail
             startCreatingThumbnail(mCurrentUrl.toLocalFile());

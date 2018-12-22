@@ -53,7 +53,7 @@ public:
 
     virtual bool isModified(const QUrl &url) = 0;
 
-    virtual void thumbnailForDocument(const QUrl &url, ThumbnailGroup::Enum, QPixmap* outPix, QSize* outFullSize) const = 0;
+    virtual void thumbnailForDocument(const QUrl &url, ThumbnailGroup::Enum, QImage* outPix, QSize* outFullSize) const = 0;
 
 Q_SIGNALS:
     void busyStateChanged(const QUrl& url, bool busy);

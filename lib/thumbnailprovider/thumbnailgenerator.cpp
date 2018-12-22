@@ -37,6 +37,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QImageReader>
 #include <QMatrix>
 #include <QBuffer>
+#include <qmath.h>
 
 namespace Gwenview
 {
@@ -166,11 +167,26 @@ bool ThumbnailContext::load(const QString &pixPath, int pixelSize)
     mOriginalWidth = originalSize.width() * previewRatio;
     mOriginalHeight = originalSize.height() * previewRatio;
 
+    const QByteArray existingHash = QByteArray::fromHex(reader.text("Thumb::X-KDE-VisualHash").toLatin1());
     if (qMax(mOriginalWidth, mOriginalHeight) <= pixelSize) {
         mImage = originalImage;
-        mNeedCaching = format != "png";
+        mNeedCaching = format != "png" || existingHash.length() != 8;
     } else {
         mImage = originalImage.scaled(pixelSize, pixelSize, Qt::KeepAspectRatio);
+    }
+
+    if (existingHash.length() == 8) {
+        mImageHash = QBitArray::fromBits(existingHash.constData(), 64);
+    } else {
+        // Generate hash
+        QImage hashImage = mImage.scaled(9, 9).convertToFormat(QImage::Format_Grayscale8);
+        mImageHash = QBitArray(64);
+        for (int y=0; y<8; y++) {
+            const uchar *line = hashImage.scanLine(y);
+            for (int x=0; x<8; x++) {
+                mImageHash.setBit(y * 8 + x, line[x] > line[x+1]);
+            }
+        }
     }
 
     if (reader.autoTransform() && (reader.transformation() & QImageIOHandler::TransformationRotate90)) {
@@ -277,6 +293,7 @@ void ThumbnailGenerator::run()
                 mImage = context.mImage;
                 mOriginalWidth = context.mOriginalWidth;
                 mOriginalHeight = context.mOriginalHeight;
+                mImageHash = context.mImageHash;
                 if (context.mNeedCaching) {
                     cacheThumbnail();
                 }
@@ -308,6 +325,16 @@ void ThumbnailGenerator::cacheThumbnail()
     mImage.setText(QStringLiteral("Thumb::Image::Width") , QString::number(mOriginalWidth));
     mImage.setText(QStringLiteral("Thumb::Image::Height"), QString::number(mOriginalHeight));
     mImage.setText(QStringLiteral("Software")            , QStringLiteral("Gwenview"));
+
+    if (mImageHash.size() == 64) {
+        qDebug() << "Saving image hash";
+        QByteArray hash = QByteArray(mImageHash.bits(), 8).toHex();
+        qDebug() << QByteArray(mImageHash.bits(), 8) << mImageHash.size();
+        qDebug() << hash << QString::fromLatin1(hash);
+        mImage.setText(QStringLiteral("Thumb::X-KDE-VisualHash"), QString::fromLatin1(hash));
+    } else {
+        qWarning() << "empty image hash";
+    }
 
     emit thumbnailReadyToBeCached(mThumbnailPath, mImage);
 }

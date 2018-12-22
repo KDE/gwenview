@@ -32,6 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QMutex>
 #include <QThread>
 #include <QWaitCondition>
+#include <QBitArray>
 
 namespace Gwenview
 {
@@ -41,6 +42,7 @@ struct ThumbnailContext {
     int mOriginalWidth;
     int mOriginalHeight;
     bool mNeedCaching;
+    QBitArray mImageHash;
 
     bool load(const QString &pixPath, int pixelSize);
 };
@@ -85,6 +87,7 @@ private:
     QString mOriginalMimeType;
     int mOriginalWidth;
     int mOriginalHeight;
+    QBitArray mImageHash;
     QMutex mMutex;
     QWaitCondition mCond;
     ThumbnailGroup::Enum mThumbnailGroup;

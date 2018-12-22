@@ -36,6 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QMimeData>
 #include <QDebug>
 #include <QDateTime>
+#include <QBitArray>
 
 // KDE
 #include <KDirModel>
@@ -158,6 +159,8 @@ struct Thumbnail
     bool mRough;
     /// Set to true if mGroupPix should be replaced with a real thumbnail
     bool mWaitingForThumbnail;
+    /// Visual hash
+    QBitArray mHash;
 };
 
 typedef QHash<QUrl, Thumbnail> ThumbnailForUrl;
@@ -212,7 +215,7 @@ struct ThumbnailViewPrivate
         KFileItem item = fileItemForIndex(index);
         QUrl url = item.url();
         ThumbnailGroup::Enum group = ThumbnailGroup::fromPixelSize(mThumbnailSize.width());
-        QPixmap pix;
+        QImage pix;
         QSize fullSize;
         mDocumentInfoProvider->thumbnailForDocument(url, group, &pix, &fullSize);
         mThumbnailForUrl[url] = Thumbnail(QPersistentModelIndex(index), QDateTime::currentDateTime());
@@ -541,20 +544,23 @@ void ThumbnailView::emitIndexActivatedIfNoModifiers(const QModelIndex& index)
     }
 }
 
-void ThumbnailView::setThumbnail(const KFileItem& item, const QPixmap& pixmap, const QSize& size, qulonglong fileSize)
+void ThumbnailView::setThumbnail(const KFileItem& item, const QImage& pixmap, const QSize& size, qulonglong fileSize)
 {
     ThumbnailForUrl::iterator it = d->mThumbnailForUrl.find(item.url());
     if (it == d->mThumbnailForUrl.end()) {
         return;
     }
     Thumbnail& thumbnail = it.value();
-    thumbnail.mGroupPix = pixmap;
+    thumbnail.mGroupPix = QPixmap::fromImage(pixmap);
     thumbnail.mAdjustedPix = QPixmap();
     int largeGroupSize = ThumbnailGroup::pixelSize(ThumbnailGroup::Large);
     thumbnail.mFullSize = size.isValid() ? size : QSize(largeGroupSize, largeGroupSize);
     thumbnail.mRealFullSize = size;
     thumbnail.mWaitingForThumbnail = false;
     thumbnail.mFileSize = fileSize;
+
+    const QByteArray encodedHash = thumbnail.text(QStringLiteral("Thumb::X-KDE-VisualHash")).tolat;
+    thumbnail.mHash;
 
     update(thumbnail.mIndex);
     if (d->mScaleMode != ScaleToFit) {
