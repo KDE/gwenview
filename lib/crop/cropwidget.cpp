@@ -22,8 +22,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // Qt
 #include <QApplication>
+#include <QCheckBox>
+#include <QComboBox>
 #include <QDesktopWidget>
+#include <QDialogButtonBox>
+#include <QHBoxLayout>
+#include <QLabel>
 #include <QPushButton>
+#include <QSpinBox>
 #include <QtMath>
 #include <QDebug>
 #include <QLineEdit>
@@ -35,8 +41,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <lib/documentview/rasterimageview.h>
 #include <QFontDatabase>
 #include "croptool.h"
-#include "ui_cropwidget.h"
 #include "cropwidget.h"
+#include "flowlayout.h"
 
 namespace Gwenview
 {
@@ -55,9 +61,19 @@ static QSize ratio(const QSize &size)
     return size / divisor;
 }
 
-struct CropWidgetPrivate : public Ui_CropWidget
+struct CropWidgetPrivate : public QWidget
 {
     CropWidget* q;
+    QList<QWidget*> mAdvancedWidgets;
+    QWidget* mPreserveAspectRatioWidget;
+    QCheckBox* advancedCheckBox;
+    QComboBox* ratioComboBox;
+    QSpinBox* widthSpinBox;
+    QSpinBox* heightSpinBox;
+    QSpinBox* leftSpinBox;
+    QSpinBox* topSpinBox;
+    QCheckBox* preserveAspectRatioCheckBox;
+    QDialogButtonBox* dialogButtonBox;
 
     Document::Ptr mDocument;
     CropTool* mCropTool;
@@ -257,6 +273,102 @@ struct CropWidgetPrivate : public Ui_CropWidget
         QObject::connect(dialogButtonBox, &QDialogButtonBox::accepted, q, &CropWidget::cropRequested);
         QObject::connect(dialogButtonBox, &QDialogButtonBox::rejected, q, &CropWidget::done);
     }
+
+    QWidget* boxWidget(QWidget* parent = nullptr)
+    {
+        QWidget* widget = new QWidget(parent);
+        QHBoxLayout* layout = new QHBoxLayout(widget);
+        layout->setMargin(0);
+        layout->setSpacing(2);
+        return widget;
+    }
+
+    void setupUi(QWidget* cropWidget) {
+        cropWidget->setObjectName("CropWidget");
+
+        FlowLayout* flowLayout = new FlowLayout(cropWidget, 6, 0);
+        flowLayout->setObjectName("CropWidgetFlowLayout");
+        flowLayout->setAlignment(Qt::AlignCenter);
+        flowLayout->setVerticalSpacing(6);
+
+        // (1) Checkbox
+        QWidget* box = boxWidget(cropWidget);
+        advancedCheckBox = new QCheckBox(i18nc("@option:check", "Advanced settings"), box);
+        advancedCheckBox->setFocusPolicy(Qt::NoFocus);
+        box->layout()->addWidget(advancedCheckBox);
+        flowLayout->addWidget(box);
+        flowLayout->addSpacing(14);
+
+        // (2) Ratio combobox (Advanced settings)
+        box = boxWidget(cropWidget);
+        mAdvancedWidgets << box;
+        QLabel* label = new QLabel(i18nc("@label:listbox", "Aspect ratio:"), box);
+        label->setMargin(4);
+        box->layout()->addWidget(label);
+        ratioComboBox = new QComboBox(box);
+        ratioComboBox->setEditable(true);
+        ratioComboBox->setInsertPolicy(QComboBox::NoInsert);
+        box->layout()->addWidget(ratioComboBox);
+        flowLayout->addWidget(box);
+        flowLayout->addSpacing(8);
+
+        // (3) Size spinboxes (Advanced settings)
+        box = boxWidget(cropWidget);
+        mAdvancedWidgets << box;
+        label = new QLabel(i18nc("@label:spinbox", "Size:"), box);
+        label->setMargin(4);
+        box->layout()->addWidget(label);
+
+        QHBoxLayout* innerLayout = new QHBoxLayout();
+        innerLayout->setSpacing(3);
+
+        widthSpinBox = new QSpinBox(box);
+        widthSpinBox->setAlignment(Qt::AlignCenter);
+        innerLayout->addWidget(widthSpinBox);
+
+        heightSpinBox = new QSpinBox(box);
+        heightSpinBox->setAlignment(Qt::AlignCenter);
+        innerLayout->addWidget(heightSpinBox);
+
+        box->layout()->addItem(innerLayout);
+        flowLayout->addWidget(box);
+        flowLayout->addSpacing(8);
+
+        // (4) Position spinboxes (Advanced settings)
+        box = boxWidget(cropWidget);
+        mAdvancedWidgets << box;
+        label = new QLabel(i18nc("@label:spinbox", "Position:"), box);
+        label->setMargin(4);
+        box->layout()->addWidget(label);
+
+        innerLayout = new QHBoxLayout();
+        innerLayout->setSpacing(3);
+
+        leftSpinBox = new QSpinBox(box);
+        leftSpinBox->setAlignment(Qt::AlignCenter);
+        innerLayout->addWidget(leftSpinBox);
+
+        topSpinBox = new QSpinBox(box);
+        topSpinBox->setAlignment(Qt::AlignCenter);
+        innerLayout->addWidget(topSpinBox);
+
+        box->layout()->addItem(innerLayout);
+        flowLayout->addWidget(box);
+        flowLayout->addSpacing(18);
+
+        // (5) Preserve ratio checkbox
+        mPreserveAspectRatioWidget = boxWidget(cropWidget);
+        preserveAspectRatioCheckBox = new QCheckBox(i18nc("@option:check", "Preserve aspect ratio"), mPreserveAspectRatioWidget);
+        mPreserveAspectRatioWidget->layout()->addWidget(preserveAspectRatioCheckBox);
+        flowLayout->addWidget(mPreserveAspectRatioWidget);
+        flowLayout->addSpacing(18);
+
+        // (6) Dialog buttons
+        box = boxWidget(cropWidget);
+        dialogButtonBox = new QDialogButtonBox(QDialogButtonBox::Cancel | QDialogButtonBox::Ok, box);
+        box->layout()->addWidget(dialogButtonBox);
+        flowLayout->addWidget(box);
+    }
 };
 
 CropWidget::CropWidget(QWidget* parent, RasterImageView* imageView, CropTool* cropTool)
@@ -270,11 +382,11 @@ CropWidget::CropWidget(QWidget* parent, RasterImageView* imageView, CropTool* cr
     d->mCropTool = cropTool;
     d->setupUi(this);
     setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
-    layout()->setSizeConstraint(QLayout::SetFixedSize);
 
     connect(d->advancedCheckBox, &QCheckBox::toggled, this, &CropWidget::slotAdvancedCheckBoxToggled);
-    d->advancedWidget->setVisible(false);
-    d->advancedWidget->layout()->setMargin(0);
+    for (auto w : d->mAdvancedWidgets) {
+        w->setVisible(false);
+    }
 
     connect(d->preserveAspectRatioCheckBox, &QCheckBox::toggled, this, &CropWidget::applyRatioConstraint);
 
@@ -413,8 +525,10 @@ void CropWidget::applyRatioConstraint()
 
 void CropWidget::slotAdvancedCheckBoxToggled(bool checked)
 {
-    d->advancedWidget->setVisible(checked);
-    d->preserveAspectRatioCheckBox->setVisible(!checked);
+    for (auto w : d->mAdvancedWidgets) {
+        w->setVisible(checked);
+    }
+    d->mPreserveAspectRatioWidget->setVisible(!checked);
     applyRatioConstraint();
 }
 

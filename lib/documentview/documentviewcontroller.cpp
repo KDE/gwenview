@@ -40,33 +40,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 
-/**
- * A simple container which:
- * - Horizontally center the tool widget
- * - Provide a darker background
- */
-class ToolContainerContent : public QWidget
-{
-public:
-    explicit ToolContainerContent(QWidget* parent = nullptr)
-    : QWidget(parent)
-    , mLayout(new QHBoxLayout(this))
-    {
-        mLayout->setMargin(0);
-        setAutoFillBackground(true);
-        setBackgroundRole(QPalette::Mid);
-    }
-
-    void setToolWidget(QWidget* widget)
-    {
-        mLayout->addWidget(widget, 0, Qt::AlignCenter);
-        setFixedHeight(widget->sizeHint().height());
-    }
-
-private:
-    QHBoxLayout* mLayout;
-};
-
 struct DocumentViewControllerPrivate
 {
     DocumentViewController* q;
@@ -74,7 +47,6 @@ struct DocumentViewControllerPrivate
     DocumentView* mView;
     ZoomWidget* mZoomWidget;
     SlideContainer* mToolContainer;
-    ToolContainerContent* mToolContainerContent;
 
     QAction * mZoomToFitAction;
     QAction * mZoomToFillAction;
@@ -154,7 +126,6 @@ DocumentViewController::DocumentViewController(KActionCollection* actionCollecti
     d->mView = nullptr;
     d->mZoomWidget = nullptr;
     d->mToolContainer = nullptr;
-    d->mToolContainerContent = new ToolContainerContent;
 
     d->setupActions();
 }
@@ -258,7 +229,7 @@ void DocumentViewController::updateTool()
         // Use a QueuedConnection to ensure the size of the view has been
         // updated by the time the slot is called.
         connect(d->mToolContainer, &SlideContainer::slidedIn, tool, &AbstractRasterImageViewTool::onWidgetSlidedIn, Qt::QueuedConnection);
-        d->mToolContainerContent->setToolWidget(tool->widget());
+        d->mToolContainer->setContent(tool->widget());
         d->mToolContainer->slideIn();
     } else {
         d->mToolContainer->slideOut();
@@ -274,7 +245,6 @@ void DocumentViewController::reset()
 void DocumentViewController::setToolContainer(SlideContainer* container)
 {
     d->mToolContainer = container;
-    container->setContent(d->mToolContainerContent);
 }
 
 } // namespace

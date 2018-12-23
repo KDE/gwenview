@@ -50,6 +50,11 @@ public:
     FlowLayout(int spacing = -1);
     ~FlowLayout() override;
 
+    int horizontalSpacing() const;
+    void setHorizontalSpacing(const int spacing);
+    int verticalSpacing() const;
+    void setVerticalSpacing(const int spacing);
+
     void addItem(QLayoutItem *item) override;
     Qt::Orientations expandingDirections() const override;
     bool hasHeightForWidth() const override;
@@ -60,11 +65,14 @@ public:
     void setGeometry(const QRect &rect) override;
     QSize sizeHint() const override;
     QLayoutItem *takeAt(int index) override;
+    void addSpacing(const int size);
 
 private:
     int doLayout(const QRect &rect, bool testOnly) const;
 
     QList<QLayoutItem *> itemList;
+    int mHorizontalSpacing;
+    int mVerticalSpacing;
 };
 
 #endif

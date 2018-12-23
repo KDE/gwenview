@@ -227,7 +227,6 @@ kde_source_files_enable_exceptions(
     )
 
 ki18n_wrap_ui(gwenviewlib_SRCS
-    crop/cropwidget.ui
     documentview/messageview.ui
     print/printoptionspage.ui
     redeyereduction/redeyereductionwidget.ui

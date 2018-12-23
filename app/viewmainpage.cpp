@@ -285,6 +285,8 @@ struct ViewMainPagePrivate
     void setupToolContainer()
     {
         mToolContainer = new SlideContainer;
+        mToolContainer->setAutoFillBackground(true);
+        mToolContainer->setBackgroundRole(QPalette::Mid);
     }
 
     void setupStatusBar()

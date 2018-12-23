@@ -122,7 +122,10 @@ void SlideContainer::resizeEvent(QResizeEvent* event)
 void SlideContainer::adjustContentGeometry()
 {
     if (mContent) {
-        mContent->setGeometry(0, height() - mContent->height(), width(), mContent->height());
+        const int contentHeight = mContent->hasHeightForWidth()
+            ? mContent->heightForWidth(width())
+            : mContent->height();
+        mContent->setGeometry(0, height() - contentHeight, width(), contentHeight);
     }
 }
 
@@ -135,7 +138,7 @@ bool SlideContainer::eventFilter(QObject*, QEvent* event)
         }
         break;
     case QEvent::LayoutRequest:
-        updateGeometry();
+        mContent->adjustSize();
         break;
     default:
         break;
