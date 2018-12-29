@@ -224,6 +224,11 @@ kde_source_files_enable_exceptions(
     exiv2imageloader.cpp
     imagemetainfomodel.cpp
     timeutils.cpp
+    cms/cmsprofile.cpp
+    document/abstractdocumentimpl.cpp
+    document/document.cpp
+    document/loadingdocumentimpl.cpp
+    jpegcontent.cpp
     )
 
 ki18n_wrap_ui(gwenviewlib_SRCS
