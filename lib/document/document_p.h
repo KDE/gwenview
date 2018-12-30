@@ -21,6 +21,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #ifndef DOCUMENT_P_H
 #define DOCUMENT_P_H
 
+// STL
+#include <memory>
+
 // Local
 #include <imagemetainfomodel.h>
 #include <document/documentjob.h>
@@ -33,6 +36,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QQueue>
 #include <QUndoStack>
 #include <QPointer>
+
+namespace Exiv2
+{
+    class Image;
+}
 
 namespace Gwenview
 {
@@ -54,7 +62,7 @@ struct DocumentPrivate
     QSize mSize;
     QImage mImage;
     QMap<int, QImage> mDownSampledImageMap;
-    Exiv2::Image::AutoPtr mExiv2Image;
+    std::unique_ptr<Exiv2::Image> mExiv2Image;
     MimeTypeUtils::Kind mKind;
     QByteArray mFormat;
     ImageMetaInfoModel mImageMetaInfoModel;

@@ -34,6 +34,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 class QImage;
 class QRect;
 
+namespace Exiv2
+{
+    class Image;
+}
+
 namespace Gwenview
 {
 
@@ -108,7 +113,7 @@ protected:
     void setDocumentImageSize(const QSize& size);
     void setDocumentKind(MimeTypeUtils::Kind);
     void setDocumentFormat(const QByteArray& format);
-    void setDocumentExiv2Image(Exiv2::Image::AutoPtr);
+    void setDocumentExiv2Image(std::unique_ptr<Exiv2::Image>);
     void setDocumentDownSampledImage(const QImage&, int invertedZoom);
     void setDocumentCmsProfile(Cms::Profile::Ptr profile);
     void setDocumentErrorString(const QString&);

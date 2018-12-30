@@ -29,11 +29,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QExplicitlySharedDataPointer>
 #include <QSharedData>
 
-// Exiv2
-#include <exiv2/image.hpp>
-
 class QByteArray;
 class QString;
+
+namespace Exiv2
+{
+    class Image;
+}
 
 typedef void* cmsHPROFILE;
 

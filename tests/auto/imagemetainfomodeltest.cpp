@@ -17,6 +17,10 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
+
+// STL
+#include <memory>
+
 // Qt
 
 // KDE
@@ -28,7 +32,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "../lib/imagemetainfomodel.h"
 #include "testutils.h"
 
-#include <exiv2/exif.hpp>
+// Exiv2
+#include <exiv2/exiv2.hpp>
 
 #include "imagemetainfomodeltest.h"
 
@@ -46,7 +51,7 @@ void ImageMetaInfoModelTest::testCatchExiv2Errors()
         data = file.readAll();
     }
 
-    Exiv2::Image::AutoPtr image;
+    std::unique_ptr<Exiv2::Image> image;
     {
         Exiv2ImageLoader loader;
         QVERIFY(loader.load(data));

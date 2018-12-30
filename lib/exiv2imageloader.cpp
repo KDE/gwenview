@@ -29,8 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // KDE
 
 // Exiv2
-#include <exiv2/error.hpp>
-#include <exiv2/types.hpp>
+#include <exiv2/exiv2.hpp>
 
 // Local
 
@@ -39,7 +38,7 @@ namespace Gwenview
 
 struct Exiv2ImageLoaderPrivate
 {
-    Exiv2::Image::AutoPtr mImage;
+    std::unique_ptr<Exiv2::Image> mImage;
     QString mErrorMessage;
 };
 
@@ -57,7 +56,7 @@ bool Exiv2ImageLoader::load(const QString& filePath)
 {
     QByteArray filePathByteArray = QFile::encodeName(filePath);
     try {
-        d->mImage = Exiv2::ImageFactory::open(filePathByteArray.constData());
+        d->mImage.reset(Exiv2::ImageFactory::open(filePathByteArray.constData()).release());
         d->mImage->readMetadata();
     } catch (const Exiv2::Error& error) {
         d->mErrorMessage = QString::fromUtf8(error.what());
@@ -69,7 +68,7 @@ bool Exiv2ImageLoader::load(const QString& filePath)
 bool Exiv2ImageLoader::load(const QByteArray& data)
 {
     try {
-        d->mImage = Exiv2::ImageFactory::open((unsigned char*)data.constData(), data.size());
+        d->mImage.reset(Exiv2::ImageFactory::open((unsigned char*)data.constData(), data.size()).release());
         d->mImage->readMetadata();
     } catch (const Exiv2::Error& error) {
         d->mErrorMessage = QString::fromUtf8(error.what());
@@ -83,9 +82,9 @@ QString Exiv2ImageLoader::errorMessage() const
     return d->mErrorMessage;
 }
 
-Exiv2::Image::AutoPtr Exiv2ImageLoader::popImage()
+std::unique_ptr<Exiv2::Image> Exiv2ImageLoader::popImage()
 {
-    return d->mImage;
+    return std::move(d->mImage);
 }
 
 } // namespace

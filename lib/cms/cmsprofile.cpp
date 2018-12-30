@@ -42,6 +42,9 @@ extern "C" {
 // lcms
 #include <lcms2.h>
 
+// Exiv2
+#include <exiv2/exiv2.hpp>
+
 // X11
 #ifdef HAVE_X11
 #include <X11/Xlib.h>

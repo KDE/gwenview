@@ -21,6 +21,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Self
 #include "abstractdocumentimpl.h"
 
+#include <exiv2/exiv2.hpp>
 // Qt
 
 // KDE
@@ -77,9 +78,9 @@ void AbstractDocumentImpl::setDocumentKind(MimeTypeUtils::Kind kind)
     d->mDocument->setKind(kind);
 }
 
-void AbstractDocumentImpl::setDocumentExiv2Image(Exiv2::Image::AutoPtr image)
+void AbstractDocumentImpl::setDocumentExiv2Image(std::unique_ptr<Exiv2::Image> image)
 {
-    d->mDocument->setExiv2Image(image);
+    d->mDocument->setExiv2Image(std::move(image));
 }
 
 void AbstractDocumentImpl::setDocumentDownSampledImage(const QImage& image, int invertedZoom)

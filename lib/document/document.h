@@ -22,8 +22,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include <lib/gwenviewlib_export.h>
 
-#include <string.h>
-#include <exiv2/image.hpp>
+// STL
+#include <memory>
 
 // Qt
 #include <QObject>
@@ -42,6 +42,11 @@ class QUndoStack;
 
 class KJob;
 class QUrl;
+
+namespace Exiv2
+{
+    class Image;
+}
 
 namespace Gwenview
 {
@@ -235,7 +240,7 @@ private:
     void setKind(MimeTypeUtils::Kind);
     void setFormat(const QByteArray&);
     void setSize(const QSize&);
-    void setExiv2Image(Exiv2::Image::AutoPtr);
+    void setExiv2Image(std::unique_ptr<Exiv2::Image>);
     void setDownSampledImage(const QImage&, int invertedZoom);
     void switchToImpl(AbstractDocumentImpl* impl);
     void setErrorString(const QString&);

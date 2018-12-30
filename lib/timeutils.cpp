@@ -21,6 +21,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Self
 #include "timeutils.h"
 
+// STL
+#include <memory>
+
 // Qt
 #include <QFile>
 #include <QDateTime>
@@ -30,8 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KFileItem>
 
 // Exiv2
-#include <exiv2/exif.hpp>
-#include <exiv2/image.hpp>
+#include <exiv2/exiv2.hpp>
 
 // Local
 #include <lib/exiv2imageloader.h>
@@ -92,7 +94,7 @@ struct CacheItem
         if (!loader.load(path)) {
             return false;
         }
-        Exiv2::Image::AutoPtr img = loader.popImage();
+        std::unique_ptr<Exiv2::Image> img(loader.popImage().release());
         try {
             Exiv2::ExifData exifData = img->exifData();
             if (exifData.empty()) {

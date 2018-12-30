@@ -24,6 +24,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // STL
 #include <memory>
 
+// Exiv2
+#include <exiv2/exiv2.hpp>
+
 // Qt
 #include <QBuffer>
 #include <QByteArray>
@@ -100,7 +103,7 @@ struct LoadingDocumentImplPrivate
     QByteArray mData;
     QByteArray mFormat;
     QSize mImageSize;
-    Exiv2::Image::AutoPtr mExiv2Image;
+    std::unique_ptr<Exiv2::Image> mExiv2Image;
     std::unique_ptr<JpegContent> mJpegContent;
     QImage mImage;
     Cms::Profile::Ptr mCmsProfile;
@@ -486,7 +489,7 @@ void LoadingDocumentImpl::slotMetaInfoLoaded()
 
     setDocumentFormat(d->mFormat);
     setDocumentImageSize(d->mImageSize);
-    setDocumentExiv2Image(d->mExiv2Image);
+    setDocumentExiv2Image(std::move(d->mExiv2Image));
     setDocumentCmsProfile(d->mCmsProfile);
 
     d->mMetaInfoLoaded = true;

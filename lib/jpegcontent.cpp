@@ -42,8 +42,7 @@ extern "C" {
 #include <KLocalizedString>
 
 // Exiv2
-#include <exiv2/exif.hpp>
-#include <exiv2/image.hpp>
+#include <exiv2/exiv2.hpp>
 
 // Local
 #include "jpegerrormanager.h"
@@ -216,12 +215,12 @@ bool JpegContent::load(const QString& path)
 
 bool JpegContent::loadFromData(const QByteArray& data)
 {
-    Exiv2::Image::AutoPtr image;
+    std::unique_ptr<Exiv2::Image> image;
     Exiv2ImageLoader loader;
     if (!loader.load(data)) {
         qCritical() << "Could not load image with Exiv2, reported error:" << loader.errorMessage();
     }
-    image = loader.popImage();
+    image.reset(loader.popImage().release());
 
     return loadFromData(data, image.get());
 }
@@ -603,7 +602,8 @@ bool JpegContent::save(QIODevice* device)
         d->mPendingTransformation = false;
     }
 
-    Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((unsigned char*)d->mRawData.data(), d->mRawData.size());
+    std::unique_ptr<Exiv2::Image> image;
+    image.reset(Exiv2::ImageFactory::open((unsigned char*)d->mRawData.data(), d->mRawData.size()).release());
 
     // Store Exif info
     image->setExifData(d->mExifData);

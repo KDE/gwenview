@@ -23,13 +23,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 #include <lib/gwenviewlib_export.h>
 
+// STL
+#include <memory>
+
 // Qt
 
 // KDE
 
 // Exiv2
-#include <string.h>
-#include <exiv2/image.hpp>
+namespace Exiv2
+{
+    class Image;
+}
 
 // Local
 
@@ -54,7 +59,7 @@ public:
     bool load(const QString&);
     bool load(const QByteArray&);
     QString errorMessage() const;
-    Exiv2::Image::AutoPtr popImage();
+    std::unique_ptr<Exiv2::Image> popImage();
 
 private:
     Exiv2ImageLoaderPrivate* const d;

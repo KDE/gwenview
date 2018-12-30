@@ -69,7 +69,7 @@ void CmsProfileTest::testLoadFromImageData_data()
 void CmsProfileTest::testLoadFromExiv2Image()
 {
     QFETCH(QString, fileName);
-    Exiv2::Image::AutoPtr image;
+    std::unique_ptr<Exiv2::Image> image;
     {
         QByteArray data;
         QString path = pathForTestFile(fileName);
@@ -80,7 +80,7 @@ void CmsProfileTest::testLoadFromExiv2Image()
 
         Exiv2ImageLoader loader;
         QVERIFY(loader.load(data));
-        image = loader.popImage();
+        image.reset(loader.popImage().release());
     }
     Cms::Profile::Ptr ptr = Cms::Profile::loadFromExiv2Image(image.get());
     QVERIFY(!ptr.isNull());

@@ -31,6 +31,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KLocalizedString>
 #include <KJobUiDelegate>
 
+// Exiv2
+#include <exiv2/exiv2.hpp>
+
 // Local
 #include "documentjob.h"
 #include "emptydocumentimpl.h"
@@ -388,9 +391,9 @@ AbstractDocumentEditor* Document::editor()
     return d->mImpl->editor();
 }
 
-void Document::setExiv2Image(Exiv2::Image::AutoPtr image)
+void Document::setExiv2Image(std::unique_ptr<Exiv2::Image> image)
 {
-    d->mExiv2Image = image;
+    d->mExiv2Image = std::move(image);
     d->mImageMetaInfoModel.setExiv2Image(d->mExiv2Image.get());
     emit metaInfoUpdated();
 }
