@@ -277,7 +277,7 @@ void ThumbnailGenerator::run()
                 mImage = context.mImage;
                 mOriginalWidth = context.mOriginalWidth;
                 mOriginalHeight = context.mOriginalHeight;
-                if (context.mNeedCaching) {
+                if (context.mNeedCaching && mThumbnailGroup <= ThumbnailGroup::Large) {
                     cacheThumbnail();
                 }
             } else {

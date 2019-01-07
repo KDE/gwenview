@@ -550,7 +550,7 @@ void ThumbnailView::setThumbnail(const KFileItem& item, const QPixmap& pixmap, c
     Thumbnail& thumbnail = it.value();
     thumbnail.mGroupPix = pixmap;
     thumbnail.mAdjustedPix = QPixmap();
-    int largeGroupSize = ThumbnailGroup::pixelSize(ThumbnailGroup::Large);
+    int largeGroupSize = ThumbnailGroup::pixelSize(ThumbnailGroup::Large2x);
     thumbnail.mFullSize = size.isValid() ? size : QSize(largeGroupSize, largeGroupSize);
     thumbnail.mRealFullSize = size;
     thumbnail.mWaitingForThumbnail = false;

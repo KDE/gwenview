@@ -48,7 +48,7 @@ class GWENVIEWLIB_EXPORT ThumbnailView : public QListView
 public:
     enum {
         MinThumbnailSize = 48,
-        MaxThumbnailSize = 256
+        MaxThumbnailSize = 512
     };
 
     enum ThumbnailScaleMode {

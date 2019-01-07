@@ -111,6 +111,9 @@ QString ThumbnailProvider::thumbnailBaseDir(ThumbnailGroup::Enum group)
     case ThumbnailGroup::Large:
         dir += QStringLiteral("large/");
         break;
+    case ThumbnailGroup::Large2x:
+    default:
+        dir += "x-gwenview/"; // Should never be hit, but just in case
     }
     return dir;
 }
@@ -386,6 +389,10 @@ void ThumbnailProvider::thumbnailReady(const QImage& _img, const QSize& _size)
 
 QImage ThumbnailProvider::loadThumbnailFromCache() const
 {
+    if (mThumbnailGroup > ThumbnailGroup::Large) {
+        return QImage();
+    }
+
     QImage image = sThumbnailWriter->value(mThumbnailPath);
     if (!image.isNull()) {
         return image;
