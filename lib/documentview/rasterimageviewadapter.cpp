@@ -74,7 +74,7 @@ void RasterImageViewAdapter::setCursor(const QCursor& cursor)
     d->mView->setCursor(cursor);
 }
 
-void RasterImageViewAdapter::setDocument(Document::Ptr doc)
+void RasterImageViewAdapter::setDocument(const Document::Ptr &doc)
 {
     d->mView->setDocument(doc);
 

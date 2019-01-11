@@ -98,7 +98,7 @@ Document::Ptr MessageViewAdapter::document() const
     return d->mDocument;
 }
 
-void MessageViewAdapter::setDocument(Document::Ptr doc)
+void MessageViewAdapter::setDocument(const Document::Ptr &doc)
 {
     d->mDocument = doc;
 }

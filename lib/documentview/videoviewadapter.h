@@ -48,7 +48,7 @@ public:
 
     Document::Ptr document() const override;
 
-    void setDocument(Document::Ptr) override;
+    void setDocument(const Document::Ptr &) override;
 
 Q_SIGNALS:
     void videoFinished();

@@ -244,7 +244,7 @@ private:
     void setDownSampledImage(const QImage&, int invertedZoom);
     void switchToImpl(AbstractDocumentImpl* impl);
     void setErrorString(const QString&);
-    void setCmsProfile(Cms::Profile::Ptr);
+    void setCmsProfile(const Cms::Profile::Ptr&);
 
     Document(const QUrl&);
     DocumentPrivate * const d;

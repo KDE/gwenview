@@ -66,7 +66,7 @@ ImageScaler::~ImageScaler()
     delete d;
 }
 
-void ImageScaler::setDocument(Document::Ptr document)
+void ImageScaler::setDocument(const Document::Ptr &document)
 {
     if (d->mDocument) {
         disconnect(d->mDocument.data(), nullptr, this, nullptr);

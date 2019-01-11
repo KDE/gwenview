@@ -189,7 +189,7 @@ void SvgViewAdapter::setCursor(const QCursor& cursor)
     widget()->setCursor(cursor);
 }
 
-void SvgViewAdapter::setDocument(Document::Ptr doc)
+void SvgViewAdapter::setDocument(const Document::Ptr &doc)
 {
     d->mView->setDocument(doc);
 }

@@ -562,7 +562,7 @@ QSvgRenderer* Document::svgRenderer() const
     return d->mImpl->svgRenderer();
 }
 
-void Document::setCmsProfile(Cms::Profile::Ptr ptr)
+void Document::setCmsProfile(const Cms::Profile::Ptr &ptr)
 {
     d->mCmsProfile = ptr;
 }

@@ -233,7 +233,7 @@ VideoViewAdapter::~VideoViewAdapter()
     delete d;
 }
 
-void VideoViewAdapter::setDocument(Document::Ptr doc)
+void VideoViewAdapter::setDocument(const Document::Ptr &doc)
 {
     d->mHud->show();
     d->mDocument = doc;

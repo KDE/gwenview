@@ -366,7 +366,7 @@ struct OrientationInfo
     , jxform(JXFORM_NONE)
     {}
 
-    OrientationInfo(Orientation o, QMatrix m, JXFORM_CODE j)
+    OrientationInfo(Orientation o, const QMatrix &m, JXFORM_CODE j)
     : orientation(o), matrix(m), jxform(j)
     {}
 

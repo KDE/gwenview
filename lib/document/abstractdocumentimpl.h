@@ -115,7 +115,7 @@ protected:
     void setDocumentFormat(const QByteArray& format);
     void setDocumentExiv2Image(std::unique_ptr<Exiv2::Image>);
     void setDocumentDownSampledImage(const QImage&, int invertedZoom);
-    void setDocumentCmsProfile(Cms::Profile::Ptr profile);
+    void setDocumentCmsProfile(const Cms::Profile::Ptr &profile);
     void setDocumentErrorString(const QString&);
     void switchToImpl(AbstractDocumentImpl*  impl);
 

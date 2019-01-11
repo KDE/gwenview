@@ -121,7 +121,7 @@ public:
     /** @} */
 
     virtual Document::Ptr document() const = 0;
-    virtual void setDocument(Document::Ptr) = 0;
+    virtual void setDocument(const Document::Ptr &) = 0;
 
     virtual void loadConfig()
     {}
@@ -194,7 +194,7 @@ public:
     {
         return Document::Ptr();
     }
-    void setDocument(Document::Ptr) override
+    void setDocument(const Document::Ptr&) override
     {}
 };
 

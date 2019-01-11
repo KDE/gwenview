@@ -99,7 +99,7 @@ private:
 class ImageCollection : public KIPI::ImageCollectionShared
 {
 public:
-    ImageCollection(QUrl dirURL, const QString& name, const QList<QUrl>& images)
+    ImageCollection(const QUrl &dirURL, const QString& name, const QList<QUrl>& images)
         : KIPI::ImageCollectionShared()
         , mDirURL(dirURL)
         , mName(name)

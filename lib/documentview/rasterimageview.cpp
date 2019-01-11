@@ -160,7 +160,7 @@ struct RasterImageViewPrivate
         mAlternateBuffer = QPixmap();
     }
 
-    void drawAlphaBackground(QPainter* painter, const QRect& viewportRect, const QPoint& zoomedImageTopLeft, QPixmap texture)
+    void drawAlphaBackground(QPainter* painter, const QRect& viewportRect, const QPoint& zoomedImageTopLeft, const QPixmap &texture)
     {
         switch (mAlphaBackgroundMode) {
             case AbstractImageView::AlphaBackgroundNone:

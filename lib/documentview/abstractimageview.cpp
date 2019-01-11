@@ -171,7 +171,7 @@ Document::Ptr AbstractImageView::document() const
     return d->mDocument;
 }
 
-void AbstractImageView::setDocument(Document::Ptr doc)
+void AbstractImageView::setDocument(const Document::Ptr &doc)
 {
     if (d->mDocument) {
         disconnect(d->mDocument.data(), nullptr, this, nullptr);
