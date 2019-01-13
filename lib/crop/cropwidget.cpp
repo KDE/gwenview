@@ -284,10 +284,10 @@ struct CropWidgetPrivate : public QWidget
     }
 
     void setupUi(QWidget* cropWidget) {
-        cropWidget->setObjectName("CropWidget");
+        cropWidget->setObjectName(QStringLiteral("CropWidget"));
 
         FlowLayout* flowLayout = new FlowLayout(cropWidget, 6, 0);
-        flowLayout->setObjectName("CropWidgetFlowLayout");
+        flowLayout->setObjectName(QStringLiteral("CropWidgetFlowLayout"));
         flowLayout->setAlignment(Qt::AlignCenter);
         flowLayout->setVerticalSpacing(6);
 

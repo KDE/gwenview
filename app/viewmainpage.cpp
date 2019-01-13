@@ -451,13 +451,13 @@ ViewMainPage::ViewMainPage(QWidget* parent, SlideShow* slideShow, KActionCollect
     d->mSynchronizeAction = view->add<KToggleAction>("synchronize_views");
     d->mSynchronizeAction->setText(i18n("Synchronize"));
     actionCollection->setDefaultShortcut(d->mSynchronizeAction, Qt::CTRL + Qt::Key_Y);
-    connect(d->mSynchronizeAction, SIGNAL(toggled(bool)),
-            d->mSynchronizer, SLOT(setActive(bool)));
+    connect(d->mSynchronizeAction, &QAction::toggled,
+            d->mSynchronizer, &DocumentViewSynchronizer::setActive);
     // Ensure mSynchronizeAction and mSynchronizeCheckBox are in sync
-    connect(d->mSynchronizeAction, SIGNAL(toggled(bool)),
-            d->mSynchronizeCheckBox, SLOT(setChecked(bool)));
-    connect(d->mSynchronizeCheckBox, SIGNAL(toggled(bool)),
-            d->mSynchronizeAction, SLOT(setChecked(bool)));
+    connect(d->mSynchronizeAction, &QAction::toggled,
+            d->mSynchronizeCheckBox, &QAbstractButton::setChecked);
+    connect(d->mSynchronizeCheckBox, &QAbstractButton::toggled,
+            d->mSynchronizeAction, &QAction::setChecked);
 
     // Connections for the document count
     connect(d->mThumbnailBar, &ThumbnailBarView::rowsInsertedSignal,

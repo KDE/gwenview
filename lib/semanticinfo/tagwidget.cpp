@@ -198,8 +198,8 @@ TagWidget::TagWidget(QWidget* parent)
     d->setupWidgets();
     installEventFilter(new ReturnKeyEater(this));
 
-    connect(d->mComboBox->lineEdit(), SIGNAL(returnPressed()),
-            SLOT(addTagFromComboBox()));
+    connect(d->mComboBox->lineEdit(), &QLineEdit::returnPressed,
+            this, &TagWidget::addTagFromComboBox);
 }
 
 TagWidget::~TagWidget()
@@ -233,7 +233,7 @@ void TagWidget::addTagFromComboBox()
     // Use a QTimer because if the tag is new, it will be inserted in the model
     // and QComboBox will sometimes select it. At least it does so when the
     // model is empty.
-    QTimer::singleShot(0, d->mComboBox, SLOT(clearEditText()));
+    QTimer::singleShot(0, d->mComboBox, &QComboBox::clearEditText);
 }
 
 void TagWidget::assignTag(const SemanticInfoTag& tag)

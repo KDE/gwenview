@@ -41,10 +41,10 @@ ProgressPage::ProgressPage(Importer* importer)
     d->mImporter = importer;
     d->setupUi(this);
 
-    connect(d->mImporter, SIGNAL(progressChanged(int)),
-            d->mProgressBar, SLOT(setValue(int)));
-    connect(d->mImporter, SIGNAL(maximumChanged(int)),
-            d->mProgressBar, SLOT(setMaximum(int)));
+    connect(d->mImporter, &Importer::progressChanged,
+            d->mProgressBar, &QProgressBar::setValue);
+    connect(d->mImporter, &Importer::maximumChanged,
+            d->mProgressBar, &QProgressBar::setMaximum);
 }
 
 ProgressPage::~ProgressPage()

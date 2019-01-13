@@ -60,10 +60,10 @@ public:
     JobWatcher(KJob* job)
         : mDone(false)
         , mError(0) {
-        connect(job, SIGNAL(result(KJob*)),
-                SLOT(slotResult(KJob*)));
-        connect(job, SIGNAL(destroyed(QObject*)),
-                SLOT(slotDestroyed()));
+        connect(job, &KJob::result,
+                this, &JobWatcher::slotResult);
+        connect(job, &QObject::destroyed,
+                this, &JobWatcher::slotDestroyed);
     }
 
     void wait()

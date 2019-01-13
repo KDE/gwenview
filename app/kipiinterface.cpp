@@ -241,10 +241,10 @@ KIPIInterface::KIPIInterface(MainWindow* mainWindow)
     connect(&d->mPluginLoadTimer, &QTimer::timeout, this, &KIPIInterface::loadPlugins);
 
     d->setupPluginsMenu();
-    QObject::connect(d->mMainWindow->contextManager(), SIGNAL(selectionChanged()),
-                     this, SLOT(slotSelectionChanged()));
-    QObject::connect(d->mMainWindow->contextManager(), SIGNAL(currentDirUrlChanged(QUrl)),
-                     this, SLOT(slotDirectoryChanged()));
+    QObject::connect(d->mMainWindow->contextManager(), &ContextManager::selectionChanged,
+                     this, &KIPIInterface::slotSelectionChanged);
+    QObject::connect(d->mMainWindow->contextManager(), &ContextManager::currentDirUrlChanged,
+                     this, &KIPIInterface::slotDirectoryChanged);
 #if 0
 //TODO instead of delaying can we load them all at start-up to use actions somewhere else?
 // delay a bit, so that it's called after loadPlugins()

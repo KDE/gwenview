@@ -271,7 +271,7 @@ void DocumentViewContainer::updateLayout()
     if (animated) {
         Q_FOREACH(DocumentView* view, d->mRemovedViews) {
             view->fadeOut();
-            QTimer::singleShot(DocumentView::AnimDuration, view, SLOT(deleteLater()));
+            QTimer::singleShot(DocumentView::AnimDuration, view, &QObject::deleteLater);
         }
     } else {
         Q_FOREACH(DocumentView* view, d->mRemovedViews) {

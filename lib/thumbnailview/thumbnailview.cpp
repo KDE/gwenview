@@ -341,18 +341,18 @@ void ThumbnailView::setModel(QAbstractItemModel* newModel)
         disconnect(model(), nullptr, this, nullptr);
     }
     QListView::setModel(newModel);
-    connect(model(), SIGNAL(rowsRemoved(QModelIndex,int,int)),
-            SIGNAL(rowsRemovedSignal(QModelIndex,int,int)));
+    connect(model(), &QAbstractItemModel::rowsRemoved,
+            this, &ThumbnailView::rowsRemovedSignal);
 }
 
 void ThumbnailView::setThumbnailProvider(ThumbnailProvider* thumbnailProvider)
 {
     GV_RETURN_IF_FAIL(d->mThumbnailProvider != thumbnailProvider);
     if (thumbnailProvider) {
-        connect(thumbnailProvider, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize,qulonglong)),
-                         SLOT(setThumbnail(KFileItem,QPixmap,QSize,qulonglong)));
-        connect(thumbnailProvider, SIGNAL(thumbnailLoadingFailed(KFileItem)),
-                         SLOT(setBrokenThumbnail(KFileItem)));
+        connect(thumbnailProvider, &ThumbnailProvider::thumbnailLoaded,
+                         this, &ThumbnailView::setThumbnail);
+        connect(thumbnailProvider, &ThumbnailProvider::thumbnailLoadingFailed,
+                         this, &ThumbnailView::setBrokenThumbnail);
     } else {
         disconnect(d->mThumbnailProvider, nullptr , this, nullptr);
     }
@@ -751,7 +751,7 @@ void ThumbnailView::showEvent(QShowEvent* event)
 {
     QListView::showEvent(event);
     d->scheduleThumbnailGeneration();
-    QTimer::singleShot(0, this, SLOT(scrollToSelectedIndex()));
+    QTimer::singleShot(0, this, &ThumbnailView::scrollToSelectedIndex);
 }
 
 void ThumbnailView::wheelEvent(QWheelEvent* event)

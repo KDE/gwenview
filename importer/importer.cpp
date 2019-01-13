@@ -96,8 +96,8 @@ struct ImporterPrivate
         dst.setPath(dst.path() + mCurrentUrl.fileName());
         KIO::Job* job = KIO::copy(mCurrentUrl, dst, KIO::HideProgressInfo);
         KJobWidgets::setWindow(job, mAuthWindow);
-        QObject::connect(job, SIGNAL(result(KJob*)),
-                         q, SLOT(slotCopyDone(KJob*)));
+        QObject::connect(job, &KJob::result,
+                         q, &Importer::slotCopyDone);
         QObject::connect(job, SIGNAL(percent(KJob*,ulong)),
                          q, SLOT(slotPercent(KJob*,ulong)));
     }

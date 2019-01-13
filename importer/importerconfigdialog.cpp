@@ -73,8 +73,8 @@ ImporterConfigDialog::ImporterConfigDialog(QWidget* parent)
     setFaceType(KPageDialog::Plain);
     addPage(widget, QString());
 
-    connect(d->kcfg_AutoRenameFormat, SIGNAL(textChanged(QString)),
-            SLOT(updatePreview()));
+    connect(d->kcfg_AutoRenameFormat, &QLineEdit::textChanged,
+            this, &ImporterConfigDialog::updatePreview);
 
     d->setupHelpText();
     updatePreview();

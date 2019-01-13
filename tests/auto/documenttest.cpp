@@ -248,7 +248,7 @@ void DocumentTest::testLoadDownSampledPng()
     Document::Ptr doc = DocumentFactory::instance()->load(url);
 
     LoadingStateSpy stateSpy(doc);
-    connect(doc.data(), SIGNAL(loaded(QUrl)), &stateSpy, SLOT(readState()));
+    connect(doc.data(), &Document::loaded, &stateSpy, &LoadingStateSpy::readState);
 
     bool ready = doc->prepareDownSampledImageForZoom(0.2);
     QVERIFY2(!ready, "There should not be a down sampled image at this point");
@@ -699,8 +699,8 @@ void DocumentTest::testJobQueue()
     doc->enqueueJob(new TestJob(&str, 'c'));
     QVERIFY(doc->isBusy());
     QEventLoop loop;
-    connect(doc.data(), SIGNAL(allTasksDone()),
-            &loop, SLOT(quit()));
+    connect(doc.data(), &Document::allTasksDone,
+            &loop, &QEventLoop::quit);
     loop.exec();
     QVERIFY(!doc->isBusy());
     QCOMPARE(spy.count(), 2);
@@ -771,7 +771,7 @@ void DocumentTest::testCheckDocumentEditor()
     job = new TestCheckDocumentEditorJob(&hasEditor);
     job->setUiDelegate(new TestUiDelegate(&showErrorMessageCalled));
     doc->enqueueJob(job);
-    connect(doc.data(), SIGNAL(allTasksDone()), &loop, SLOT(quit()));
+    connect(doc.data(), &Document::allTasksDone, &loop, &QEventLoop::quit);
     loop.exec();
     QVERIFY(!showErrorMessageCalled);
     QCOMPARE(hasEditor, 1);
@@ -781,7 +781,7 @@ void DocumentTest::testCheckDocumentEditor()
     job = new TestCheckDocumentEditorJob(&hasEditor);
     job->setUiDelegate(new TestUiDelegate(&showErrorMessageCalled));
     doc->enqueueJob(job);
-    connect(doc.data(), SIGNAL(allTasksDone()), &loop, SLOT(quit()));
+    connect(doc.data(), &Document::allTasksDone, &loop, &QEventLoop::quit);
     loop.exec();
     QVERIFY(showErrorMessageCalled);
     QCOMPARE(hasEditor, 0);

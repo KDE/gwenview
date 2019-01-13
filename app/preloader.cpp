@@ -77,8 +77,8 @@ void Preloader::preload(const QUrl &url, const QSize& size)
 
     d->mDocument = DocumentFactory::instance()->load(url);
     d->mSize = size;
-    connect(d->mDocument.data(), SIGNAL(metaInfoUpdated()),
-            SLOT(doPreload()));
+    connect(d->mDocument.data(), &Document::metaInfoUpdated,
+            this, &Preloader::doPreload);
 
     if (d->mDocument->size().isValid()) {
         LOG("size is already available");

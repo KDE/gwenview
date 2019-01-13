@@ -458,7 +458,7 @@ ThumbnailBarView::ThumbnailBarView(QWidget* parent)
     d->mOrientation = Qt::Vertical; // To pass value-has-changed check in setOrientation()
     setOrientation(Qt::Horizontal);
 
-    setObjectName(QLatin1String("thumbnailBarView"));
+    setObjectName(QStringLiteral("thumbnailBarView"));
     setWrapping(true);
 
     #ifdef WINDOWS_PROXY_STYLE

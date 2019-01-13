@@ -155,12 +155,12 @@ ImageOpsContextManagerItem::ImageOpsContextManagerItem(ContextManager* manager, 
     EventWatcher::install(d->mGroup, QEvent::Show, this, SLOT(updateSideBarContent()));
     d->setupActions();
     updateActions();
-    connect(contextManager(), SIGNAL(selectionChanged()),
-            SLOT(updateActions()));
-    connect(mainWindow, SIGNAL(viewModeChanged()),
-            SLOT(updateActions()));
-    connect(mainWindow->viewMainPage(), SIGNAL(completed()),
-            SLOT(updateActions()));
+    connect(contextManager(), &ContextManager::selectionChanged,
+            this, &ImageOpsContextManagerItem::updateActions);
+    connect(mainWindow, &MainWindow::viewModeChanged,
+            this, &ImageOpsContextManagerItem::updateActions);
+    connect(mainWindow->viewMainPage(), &ViewMainPage::completed,
+            this, &ImageOpsContextManagerItem::updateActions);
 }
 
 ImageOpsContextManagerItem::~ImageOpsContextManagerItem()

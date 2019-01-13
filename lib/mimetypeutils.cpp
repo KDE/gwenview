@@ -221,10 +221,10 @@ DataAccumulator::DataAccumulator(KIO::TransferJob* job)
 : QObject()
 , mFinished(false)
 {
-    connect(job, SIGNAL(data(KIO::Job*,QByteArray)),
-            SLOT(slotDataReceived(KIO::Job*,QByteArray)));
-    connect(job, SIGNAL(result(KJob*)),
-            SLOT(slotFinished()));
+    connect(job, &KIO::TransferJob::data,
+            this, &DataAccumulator::slotDataReceived);
+    connect(job, &KJob::result,
+            this, &DataAccumulator::slotFinished);
 }
 
 void DataAccumulator::slotDataReceived(KIO::Job*, const QByteArray& data)

@@ -251,10 +251,10 @@ void RasterImageView::loadFromDocument()
         return;
     }
 
-    connect(doc.data(), SIGNAL(metaInfoLoaded(QUrl)),
-            SLOT(slotDocumentMetaInfoLoaded()));
-    connect(doc.data(), SIGNAL(isAnimatedUpdated()),
-            SLOT(slotDocumentIsAnimatedUpdated()));
+    connect(doc.data(), &Document::metaInfoLoaded,
+            this, &RasterImageView::slotDocumentMetaInfoLoaded);
+    connect(doc.data(), &Document::isAnimatedUpdated,
+            this, &RasterImageView::slotDocumentIsAnimatedUpdated);
 
     const Document::LoadingState state = doc->loadingState();
     if (state == Document::MetaInfoLoaded || state == Document::Loaded) {
@@ -269,8 +269,8 @@ void RasterImageView::slotDocumentMetaInfoLoaded()
     } else {
         // Could not retrieve image size from meta info, we need to load the
         // full image now.
-        connect(document().data(), SIGNAL(loaded(QUrl)),
-                SLOT(finishSetDocument()));
+        connect(document().data(), &Document::loaded,
+                this, &RasterImageView::finishSetDocument);
         document()->startLoadingFullImage();
     }
 }
@@ -283,8 +283,8 @@ void RasterImageView::finishSetDocument()
     d->resizeBuffer();
     applyPendingScrollPos();
 
-    connect(document().data(), SIGNAL(imageRectUpdated(QRect)),
-            SLOT(updateImageRect(QRect)));
+    connect(document().data(), &Document::imageRectUpdated,
+            this, &RasterImageView::updateImageRect);
 
     if (zoomToFit()) {
         // Force the update otherwise if computeZoomToFit() returns 1, setZoom()

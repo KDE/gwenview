@@ -133,8 +133,8 @@ ImageMetaInfoDialog::ImageMetaInfoDialog(QWidget* parent)
     layout()->addWidget(d->mTreeView);
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Close);
     layout()->addWidget(buttonBox);
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 }
 
 ImageMetaInfoDialog::~ImageMetaInfoDialog()
@@ -146,8 +146,8 @@ void ImageMetaInfoDialog::setMetaInfo(ImageMetaInfoModel* model, const QStringLi
 {
     if (model) {
         d->mModel.reset(new PreferredImageMetaInfoModel(model, list));
-        connect(d->mModel.get(), SIGNAL(preferredMetaInfoKeyListChanged(QStringList)),
-                this, SIGNAL(preferredMetaInfoKeyListChanged(QStringList)));
+        connect(d->mModel.get(), &PreferredImageMetaInfoModel::preferredMetaInfoKeyListChanged,
+                this, &ImageMetaInfoDialog::preferredMetaInfoKeyListChanged);
     } else {
         d->mModel.reset(nullptr);
     }

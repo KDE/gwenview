@@ -203,8 +203,8 @@ struct CropToolPrivate
         mCropWidget = new CropWidget(nullptr, view, q);
         QObject::connect(mCropWidget, SIGNAL(cropRequested()),
                          q, SLOT(slotCropRequested()));
-        QObject::connect(mCropWidget, SIGNAL(done()),
-                         q, SIGNAL(done()));
+        QObject::connect(mCropWidget, &CropWidget::done,
+                         q, &CropTool::done);
 
         // This is needed when crop ratio set to Current Image, and the image is rotated
         QObject::connect(view, &RasterImageView::imageRectUpdated, mCropWidget, &CropWidget::updateCropRatio);

@@ -120,7 +120,7 @@ void AbstractImageOperation::setText(const QString& text)
 
 void AbstractImageOperation::redoAsDocumentJob(DocumentJob* job)
 {
-    connect(job, SIGNAL(result(KJob*)), SLOT(finishFromKJob(KJob*)));
+    connect(job, &KJob::result, this, &AbstractImageOperation::finishFromKJob);
     document()->enqueueJob(job);
 }
 

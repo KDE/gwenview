@@ -35,8 +35,8 @@ class ImageScalerClient : public QObject
 public:
     ImageScalerClient(Gwenview::ImageScaler* scaler)
     {
-        connect(scaler, SIGNAL(scaledRect(int, int, const QImage&)),
-                SLOT(slotScaledRect(int, int, const QImage&)));
+        connect(scaler, &Gwenview::ImageScaler::scaledRect,
+                this, &ImageScalerClient::slotScaledRect);
     }
 
     struct ImageInfo

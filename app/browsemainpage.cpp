@@ -119,10 +119,10 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
         mFullScreenToolBar2->setBackgroundRole(QPalette::Mid);
 
         // Thumbnail slider
-        QObject::connect(mThumbnailSlider, SIGNAL(valueChanged(int)),
-                         mThumbnailView, SLOT(setThumbnailWidth(int)));
-        QObject::connect(mThumbnailView, SIGNAL(thumbnailWidthChanged(int)),
-                         mThumbnailSlider, SLOT(setValue(int)));
+        QObject::connect(mThumbnailSlider, &ZoomSlider::valueChanged,
+                         mThumbnailView, &ThumbnailView::setThumbnailWidth);
+        QObject::connect(mThumbnailView, &ThumbnailView::thumbnailWidthChanged,
+                         mThumbnailSlider, &ZoomSlider::setValue);
 
         // Document count label
         QMargins labelMargins = mDocumentCountLabel->contentsMargins();

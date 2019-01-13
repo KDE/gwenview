@@ -104,8 +104,8 @@ FolderViewContextManagerItem::FolderViewContextManagerItem(ContextManager* manag
 
     setupView();
 
-    connect(contextManager(), SIGNAL(currentDirUrlChanged(QUrl)),
-            SLOT(slotCurrentDirUrlChanged(QUrl)));
+    connect(contextManager(), &ContextManager::currentDirUrlChanged,
+            this, &FolderViewContextManagerItem::slotCurrentDirUrlChanged);
 }
 
 void FolderViewContextManagerItem::slotCurrentDirUrlChanged(const QUrl &url)

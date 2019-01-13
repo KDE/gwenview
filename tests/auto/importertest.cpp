@@ -90,7 +90,7 @@ void ImporterTest::testSuccessfulImport()
     QList<QUrl> list = mDocumentList;
 
     QEventLoop loop;
-    connect(&importer, SIGNAL(importFinished()), &loop, SLOT(quit()));
+    connect(&importer, &Importer::importFinished, &loop, &QEventLoop::quit);
     importer.start(list, destUrl);
     loop.exec();
 
@@ -119,7 +119,7 @@ void ImporterTest::testSkippedUrlList()
     QList<QUrl> list = mDocumentList.mid(0, 1);
 
     QEventLoop loop;
-    connect(&importer, SIGNAL(importFinished()), &loop, SLOT(quit()));
+    connect(&importer, &Importer::importFinished, &loop, &QEventLoop::quit);
     importer.start(list, destUrl);
     loop.exec();
 
@@ -148,7 +148,7 @@ void ImporterTest::testRenamedCount()
     list << mDocumentList.first();
 
     QEventLoop loop;
-    connect(&importer, SIGNAL(importFinished()), &loop, SLOT(quit()));
+    connect(&importer, &Importer::importFinished, &loop, &QEventLoop::quit);
     importer.start(list, destUrl);
     loop.exec();
 
@@ -219,7 +219,7 @@ void ImporterTest::testAutoRenameFormat()
     QList<QUrl> list = mDocumentList;
 
     QEventLoop loop;
-    connect(&importer, SIGNAL(importFinished()), &loop, SLOT(quit()));
+    connect(&importer, &Importer::importFinished, &loop, &QEventLoop::quit);
     importer.start(list, destUrl);
     loop.exec();
 

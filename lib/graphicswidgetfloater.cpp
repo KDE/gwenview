@@ -119,7 +119,7 @@ void GraphicsWidgetFloater::setChildWidget(QGraphicsWidget* child)
     d->mChild = child;
     d->mChild->setParent(d->mParent);
     d->mChild->installEventFilter(this);
-    connect(d->mChild, SIGNAL(visibleChanged()), SLOT(slotChildVisibilityChanged()));
+    connect(d->mChild.data(), &QGraphicsObject::visibleChanged, this, &GraphicsWidgetFloater::slotChildVisibilityChanged);
     d->updateChildGeometry();
     //d->mChild->raise();
     d->mChild->show();

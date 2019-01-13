@@ -72,8 +72,8 @@ KIPIExportAction::KIPIExportAction(QObject* parent)
     setToolTip(i18nc("@info:tooltip", "Share images using various services"));
 
     setDelayed(false);
-    connect(menu(), SIGNAL(aboutToShow()), SLOT(init()));
-    connect(menu(), SIGNAL(triggered(QAction*)), SLOT(slotPluginTriggered(QAction*)));
+    connect(menu(), &QMenu::aboutToShow, this, &KIPIExportAction::init);
+    connect(menu(), &QMenu::triggered, this, &KIPIExportAction::slotPluginTriggered);
 }
 
 KIPIExportAction::~KIPIExportAction()
@@ -100,7 +100,7 @@ void KIPIExportAction::init()
             }
         }
         // We are done, don't come back next time menu is shown
-        disconnect(menu(), SIGNAL(aboutToShow()), this, SLOT(init()));
+        disconnect(menu(), &QMenu::aboutToShow, this, &KIPIExportAction::init);
         // TODO: Temporary fix for the 'Share' menu not showing when updated
         // the second time. See Bug 395034 and D13312
         d->updateMenu();

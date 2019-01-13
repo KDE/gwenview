@@ -264,10 +264,10 @@ InfoContextManagerItem::InfoContextManagerItem(ContextManager* manager)
 {
     d->q = this;
     d->setupGroup();
-    connect(contextManager(), SIGNAL(selectionChanged()),
-            SLOT(updateSideBarContent()));
-    connect(contextManager(), SIGNAL(selectionDataChanged()),
-            SLOT(updateSideBarContent()));
+    connect(contextManager(), &ContextManager::selectionChanged,
+            this, &InfoContextManagerItem::updateSideBarContent);
+    connect(contextManager(), &ContextManager::selectionDataChanged,
+            this, &InfoContextManagerItem::updateSideBarContent);
 }
 
 InfoContextManagerItem::~InfoContextManagerItem()
@@ -309,8 +309,8 @@ void InfoContextManagerItem::fillOneFileGroup(const KFileItem& item)
 
     d->forgetCurrentDocument();
     d->mDocument = DocumentFactory::instance()->load(item.url());
-    connect(d->mDocument.data(), SIGNAL(metaInfoUpdated()),
-            SLOT(updateOneFileInfo()));
+    connect(d->mDocument.data(), &Document::metaInfoUpdated,
+            this, &InfoContextManagerItem::updateOneFileInfo);
 
     d->updateMetaInfoDialog();
     updateOneFileInfo();
@@ -366,8 +366,8 @@ void InfoContextManagerItem::showMetaInfoDialog()
     if (!d->mImageMetaInfoDialog) {
         d->mImageMetaInfoDialog = new ImageMetaInfoDialog(d->mOneFileWidget);
         d->mImageMetaInfoDialog->setAttribute(Qt::WA_DeleteOnClose, true);
-        connect(d->mImageMetaInfoDialog, SIGNAL(preferredMetaInfoKeyListChanged(QStringList)),
-                SLOT(slotPreferredMetaInfoKeyListChanged(QStringList)));
+        connect(d->mImageMetaInfoDialog.data(), &ImageMetaInfoDialog::preferredMetaInfoKeyListChanged,
+                this, &InfoContextManagerItem::slotPreferredMetaInfoKeyListChanged);
     }
     d->mImageMetaInfoDialog->setMetaInfo(d->mDocument ? d->mDocument->metaInfo() : nullptr, GwenviewConfig::preferredMetaInfoKeyList());
     d->mImageMetaInfoDialog->show();

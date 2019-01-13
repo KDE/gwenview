@@ -121,14 +121,14 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
         mFinalModel = sortModel;
 
         QObject::connect(
-            mFinalModel, SIGNAL(rowsInserted(QModelIndex,int,int)),
-            q, SLOT(updateImportButtons()));
+            mFinalModel, &QAbstractItemModel::rowsInserted,
+            q, &ThumbnailPage::updateImportButtons);
         QObject::connect(
-            mFinalModel, SIGNAL(rowsRemoved(QModelIndex,int,int)),
-            q, SLOT(updateImportButtons()));
+            mFinalModel, &QAbstractItemModel::rowsRemoved,
+            q, &ThumbnailPage::updateImportButtons);
         QObject::connect(
-            mFinalModel, SIGNAL(modelReset()),
-            q, SLOT(updateImportButtons()));
+            mFinalModel, &QAbstractItemModel::modelReset,
+            q, &ThumbnailPage::updateImportButtons);
     }
 
     void setupIcons()
@@ -142,8 +142,8 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
     void setupSrcUrlWidgets()
     {
         mSrcUrlModelProxyMapper = nullptr;
-        QObject::connect(mSrcUrlButton, SIGNAL(clicked()), q, SLOT(setupSrcUrlTreeView()));
-        QObject::connect(mSrcUrlButton, SIGNAL(clicked()), q, SLOT(toggleSrcUrlTreeView()));
+        QObject::connect(mSrcUrlButton, &QAbstractButton::clicked, q, &ThumbnailPage::setupSrcUrlTreeView);
+        QObject::connect(mSrcUrlButton, &QAbstractButton::clicked, q, &ThumbnailPage::toggleSrcUrlTreeView);
         mSrcUrlTreeView->hide();
         KAcceleratorManager::setNoAccel(mSrcUrlButton);
     }
@@ -187,10 +187,10 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
 
         mThumbnailView->setPalette(pal);
 
-        QObject::connect(mSlider, SIGNAL(valueChanged(int)),
-                         mThumbnailView, SLOT(setThumbnailWidth(int)));
-        QObject::connect(mThumbnailView, SIGNAL(thumbnailWidthChanged(int)),
-                         mSlider, SLOT(setValue(int)));
+        QObject::connect(mSlider, &ZoomSlider::valueChanged,
+                         mThumbnailView, &ThumbnailView::setThumbnailWidth);
+        QObject::connect(mThumbnailView, &ThumbnailView::thumbnailWidthChanged,
+                         mSlider, &ZoomSlider::setValue);
         int thumbnailSize = DEFAULT_THUMBNAIL_SIZE;
         mSlider->setValue(thumbnailSize);
         mSlider->updateToolTip();
@@ -199,24 +199,24 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
         mThumbnailView->setThumbnailProvider(&mThumbnailProvider);
 
         QObject::connect(
-            mThumbnailView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-            q, SLOT(updateImportButtons()));
+            mThumbnailView->selectionModel(), &QItemSelectionModel::selectionChanged,
+            q, &ThumbnailPage::updateImportButtons);
     }
 
     void setupButtonBox()
     {
-        QObject::connect(mConfigureButton, SIGNAL(clicked()),
-                         q, SLOT(showConfigDialog()));
+        QObject::connect(mConfigureButton, &QAbstractButton::clicked,
+                         q, &ThumbnailPage::showConfigDialog);
 
         mImportSelectedButton = mButtonBox->addButton(i18n("Import Selected"), QDialogButtonBox::AcceptRole);
-        QObject::connect(mImportSelectedButton, SIGNAL(clicked(bool)), q, SLOT(slotImportSelected()));
+        QObject::connect(mImportSelectedButton, &QAbstractButton::clicked, q, &ThumbnailPage::slotImportSelected);
 
         mImportAllButton = mButtonBox->addButton(i18n("Import All"), QDialogButtonBox::AcceptRole);
-        QObject::connect(mImportAllButton, SIGNAL(clicked(bool)), q, SLOT(slotImportAll()));
+        QObject::connect(mImportAllButton, &QAbstractButton::clicked, q, &ThumbnailPage::slotImportAll);
 
         QObject::connect(
-            mButtonBox, SIGNAL(rejected()),
-            q, SIGNAL(rejected()));
+            mButtonBox, &QDialogButtonBox::rejected,
+            q, &ThumbnailPage::rejected);
     }
 
     QUrl urlForBaseUrl() const
@@ -279,8 +279,8 @@ void ThumbnailPage::setSourceUrl(const QUrl& srcBaseUrl, const QString& iconName
         openUrl(url);
     } else {
         DocumentDirFinder* finder = new DocumentDirFinder(srcBaseUrl);
-        connect(finder, SIGNAL(done(QUrl,DocumentDirFinder::Status)),
-                SLOT(slotDocumentDirFinderDone(QUrl,DocumentDirFinder::Status)));
+        connect(finder, &DocumentDirFinder::done,
+                this, &ThumbnailPage::slotDocumentDirFinderDone);
         finder->start();
     }
 }
@@ -434,11 +434,11 @@ void ThumbnailPage::setupSrcUrlTreeView()
     for(int i = 1; i < dirModel->columnCount(); ++i) {
         d->mSrcUrlTreeView->hideColumn(i);
     }
-    connect(d->mSrcUrlTreeView, SIGNAL(activated(QModelIndex)), SLOT(openUrlFromIndex(QModelIndex)));
-    connect(d->mSrcUrlTreeView, SIGNAL(clicked(QModelIndex)), SLOT(openUrlFromIndex(QModelIndex)));
+    connect(d->mSrcUrlTreeView, &QAbstractItemView::activated, this, &ThumbnailPage::openUrlFromIndex);
+    connect(d->mSrcUrlTreeView, &QAbstractItemView::clicked, this, &ThumbnailPage::openUrlFromIndex);
 
     dirModel->expandToUrl(d->mSrcUrl);
-    connect(dirModel, SIGNAL(expand(QModelIndex)), SLOT(slotSrcUrlModelExpand(QModelIndex)));
+    connect(dirModel, &KDirModel::expand, this, &ThumbnailPage::slotSrcUrlModelExpand);
 }
 
 void ThumbnailPage::slotSrcUrlModelExpand(const QModelIndex& index)

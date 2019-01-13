@@ -64,13 +64,13 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QVariantList& /*arg
     setWidget(container);
     mDocumentView = container->createView();
 
-    connect(mDocumentView, SIGNAL(captionUpdateRequested(QString)),
-            SIGNAL(setWindowCaption(QString)));
+    connect(mDocumentView, &DocumentView::captionUpdateRequested,
+            this, &KParts::Part::setWindowCaption);
     connect(mDocumentView, SIGNAL(completed()),
             SIGNAL(completed()));
 
-    connect(mDocumentView, SIGNAL(contextMenuRequested()),
-            SLOT(showContextMenu()));
+    connect(mDocumentView, &DocumentView::contextMenuRequested,
+            this, &GVPart::showContextMenu);
 
     // Necessary to have zoom actions
     DocumentViewController* documentViewController = new DocumentViewController(actionCollection(), this);
@@ -78,7 +78,7 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QVariantList& /*arg
 
     QAction * action = new QAction(actionCollection());
     action->setText(i18nc("@action", "Properties"));
-    connect(action, SIGNAL(triggered()), SLOT(showProperties()));
+    connect(action, &QAction::triggered, this, &GVPart::showProperties);
     actionCollection()->addAction("file_show_properties", action);
 
     KStandardAction::saveAs(this, SLOT(saveAs()), actionCollection());
@@ -162,8 +162,8 @@ void GVPart::saveAs()
     } else {
         job = KIO::file_copy(srcUrl, dstUrl);
     }
-    connect(job, SIGNAL(result(KJob*)),
-            this, SLOT(showJobError(KJob*)));
+    connect(job, &KJob::result,
+            this, &GVPart::showJobError);
 }
 
 void GVPart::showJobError(KJob* job)

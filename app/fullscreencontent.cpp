@@ -114,8 +114,8 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
 {
     mSlideShow = slideShow;
     mActionCollection = actionCollection;
-    connect(actionCollection->action("view"), SIGNAL(toggled(bool)),
-        SLOT(slotViewModeActionToggled(bool)));
+    connect(actionCollection->action("view"), &QAction::toggled,
+        this, &FullScreenContent::slotViewModeActionToggled);
 
     // mAutoHideContainer
     mAutoHideContainer = new FullScreenBar(autoHideParentWidget);
@@ -216,8 +216,8 @@ void FullScreenContent::setCurrentUrl(const QUrl &url)
         mCurrentDocument = Document::Ptr();
     } else {
         mCurrentDocument = DocumentFactory::instance()->load(url);
-        connect(mCurrentDocument.data(), SIGNAL(metaInfoUpdated()),
-                SLOT(updateCurrentUrlWidgets()));
+        connect(mCurrentDocument.data(), &Document::metaInfoUpdated,
+                this, &FullScreenContent::updateCurrentUrlWidgets);
     }
     updateCurrentUrlWidgets();
 
@@ -263,10 +263,10 @@ void FullScreenContent::showImageMetaInfoDialog()
         // it's already quite complicated to create a theme
         mImageMetaInfoDialog->setStyle(QApplication::style());
         mImageMetaInfoDialog->setAttribute(Qt::WA_DeleteOnClose, true);
-        connect(mImageMetaInfoDialog, SIGNAL(preferredMetaInfoKeyListChanged(QStringList)),
-                SLOT(slotPreferredMetaInfoKeyListChanged(QStringList)));
-        connect(mImageMetaInfoDialog, SIGNAL(destroyed()),
-                SLOT(slotImageMetaInfoDialogClosed()));
+        connect(mImageMetaInfoDialog.data(), &ImageMetaInfoDialog::preferredMetaInfoKeyListChanged,
+                this, &FullScreenContent::slotPreferredMetaInfoKeyListChanged);
+        connect(mImageMetaInfoDialog.data(), &QObject::destroyed,
+                this, &FullScreenContent::slotImageMetaInfoDialogClosed);
     }
     if (mCurrentDocument) {
         mImageMetaInfoDialog->setMetaInfo(mCurrentDocument->metaInfo(), GwenviewConfig::fullScreenPreferredMetaInfoKeyList());
@@ -407,7 +407,7 @@ void FullScreenContent::createOptionsAction()
     mOptionsAction->setPriority(QAction::LowPriority);
     mOptionsAction->setIcon(QIcon::fromTheme("configure"));
     mOptionsAction->setToolTip(i18nc("@info:tooltip", "Configure full screen mode"));
-    QObject::connect(mOptionsAction, SIGNAL(triggered()), this, SLOT(showOptionsMenu()));
+    QObject::connect(mOptionsAction, &QAction::triggered, this, &FullScreenContent::showOptionsMenu);
 }
 
 
@@ -441,19 +441,19 @@ void FullScreenContent::showOptionsMenu()
 
     // Slideshow checkboxes
     widget->mSlideShowLoopCheckBox->setChecked(mSlideShow->loopAction()->isChecked());
-    connect(widget->mSlideShowLoopCheckBox, SIGNAL(toggled(bool)),
-            mSlideShow->loopAction(), SLOT(trigger()));
+    connect(widget->mSlideShowLoopCheckBox, &QAbstractButton::toggled,
+            mSlideShow->loopAction(), &QAction::trigger);
 
     widget->mSlideShowRandomCheckBox->setChecked(mSlideShow->randomAction()->isChecked());
-    connect(widget->mSlideShowRandomCheckBox, SIGNAL(toggled(bool)),
-            mSlideShow->randomAction(), SLOT(trigger()));
+    connect(widget->mSlideShowRandomCheckBox, &QAbstractButton::toggled,
+            mSlideShow->randomAction(), &QAction::trigger);
 
     // Interval slider
     widget->mSlideShowIntervalSlider->setValue(int(GwenviewConfig::interval()));
-    connect(widget->mSlideShowIntervalSlider, SIGNAL(valueChanged(int)),
-            mSlideShow, SLOT(setInterval(int)));
-    connect(widget->mSlideShowIntervalSlider, SIGNAL(valueChanged(int)),
-            SLOT(updateSlideShowIntervalLabel()));
+    connect(widget->mSlideShowIntervalSlider, &QAbstractSlider::valueChanged,
+            mSlideShow, &SlideShow::setInterval);
+    connect(widget->mSlideShowIntervalSlider, &QAbstractSlider::valueChanged,
+            this, &FullScreenContent::updateSlideShowIntervalLabel);
 
     // Interval label
     QString text = formatSlideShowIntervalText(88);
@@ -462,8 +462,8 @@ void FullScreenContent::showOptionsMenu()
     updateSlideShowIntervalLabel();
 
     // Image information
-    connect(widget->mConfigureDisplayedInformationButton, SIGNAL(clicked()),
-            SLOT(showImageMetaInfoDialog()));
+    connect(widget->mConfigureDisplayedInformationButton, &QAbstractButton::clicked,
+            this, &FullScreenContent::showImageMetaInfoDialog);
 
     // Thumbnails
     widget->mThumbnailGroupBox->setVisible(mViewPageVisible);
@@ -471,10 +471,10 @@ void FullScreenContent::showOptionsMenu()
         widget->mShowThumbnailsCheckBox->setChecked(GwenviewConfig::showFullScreenThumbnails());
         widget->mHeightSlider->setMinimum(mMinimumThumbnailBarHeight);
         widget->mHeightSlider->setValue(mThumbnailBar->height());
-        connect(widget->mShowThumbnailsCheckBox, SIGNAL(toggled(bool)),
-                SLOT(slotShowThumbnailsToggled(bool)));
-        connect(widget->mHeightSlider, SIGNAL(valueChanged(int)),
-                SLOT(setFullScreenBarHeight(int)));
+        connect(widget->mShowThumbnailsCheckBox, &QAbstractButton::toggled,
+                this, &FullScreenContent::slotShowThumbnailsToggled);
+        connect(widget->mHeightSlider, &QAbstractSlider::valueChanged,
+                this, &FullScreenContent::setFullScreenBarHeight);
     }
 
     // Show menu below its button

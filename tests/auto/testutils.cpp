@@ -176,7 +176,7 @@ TimedEventLoop::TimedEventLoop(int maxDuration)
 {
     mTimer->setSingleShot(true);
     mTimer->setInterval(maxDuration * 1000);
-    connect(mTimer, SIGNAL(timeout()), SLOT(fail()));
+    connect(mTimer, &QTimer::timeout, this, &TimedEventLoop::fail);
 }
 
 int TimedEventLoop::exec(ProcessEventsFlags flags)

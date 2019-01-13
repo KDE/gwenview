@@ -41,8 +41,8 @@ void LoadingJob::doStart()
         setError(NoError);
         emitResult();
     } else {
-        connect(document().data(), SIGNAL(loaded(QUrl)), SLOT(slotLoaded()));
-        connect(document().data(), SIGNAL(loadingFailed(QUrl)), SLOT(slotLoadingFailed()));
+        connect(document().data(), &Document::loaded, this, &LoadingJob::slotLoaded);
+        connect(document().data(), &Document::loadingFailed, this, &LoadingJob::slotLoadingFailed);
     }
 }
 

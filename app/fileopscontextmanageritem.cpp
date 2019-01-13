@@ -130,10 +130,10 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, QL
     mInTrash = false;
     mNewFileMenu = new KNewFileMenu(Q_NULLPTR, QString(), this);
 
-    connect(contextManager(), SIGNAL(selectionChanged()),
-            SLOT(updateActions()));
-    connect(contextManager(), SIGNAL(currentDirUrlChanged(QUrl)),
-            SLOT(updateActions()));
+    connect(contextManager(), &ContextManager::selectionChanged,
+            this, &FileOpsContextManagerItem::updateActions);
+    connect(contextManager(), &ContextManager::currentDirUrlChanged,
+            this, &FileOpsContextManagerItem::updateActions);
 
     KActionCategory* file = new KActionCategory(i18nc("@title actions category", "File"), actionCollection);
     KActionCategory* edit = new KActionCategory(i18nc("@title actions category", "Edit"), actionCollection);
@@ -218,8 +218,8 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, QL
             << mShowPropertiesAction
             ;
 
-    connect(QApplication::clipboard(), SIGNAL(dataChanged()),
-            SLOT(updatePasteAction()));
+    connect(QApplication::clipboard(), &QClipboard::dataChanged,
+            this, &FileOpsContextManagerItem::updatePasteAction);
 
     // Delay action update because it must happen *after* main window has called
     // createGUI(), otherwise calling mXMLGUIClient->plugActionList() will

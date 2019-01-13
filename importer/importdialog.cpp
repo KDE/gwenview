@@ -176,8 +176,8 @@ ImportDialog::ImportDialog()
 {
     d->q = this;
     d->mImporter = new Importer(this);
-    connect(d->mImporter, SIGNAL(error(QString)),
-            SLOT(showImportError(QString)));
+    connect(d->mImporter, &Importer::error,
+            this, &ImportDialog::showImportError);
     d->mThumbnailPage = new ThumbnailPage;
 
     QUrl url = ImporterConfig::destinationUrl();
@@ -198,12 +198,12 @@ ImportDialog::ImportDialog()
     d->mCentralWidget->addWidget(d->mProgressPage);
     d->mCentralWidget->addWidget(d->mDialogPage);
 
-    connect(d->mThumbnailPage, SIGNAL(importRequested()),
-            SLOT(startImport()));
-    connect(d->mThumbnailPage, SIGNAL(rejected()),
-            SLOT(close()));
-    connect(d->mImporter, SIGNAL(importFinished()),
-            SLOT(slotImportFinished()));
+    connect(d->mThumbnailPage, &ThumbnailPage::importRequested,
+            this, &ImportDialog::startImport);
+    connect(d->mThumbnailPage, &ThumbnailPage::rejected,
+            this, &QWidget::close);
+    connect(d->mImporter, &Importer::importFinished,
+            this, &ImportDialog::slotImportFinished);
 
     d->mCentralWidget->setCurrentWidget(d->mThumbnailPage);
 

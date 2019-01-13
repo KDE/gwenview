@@ -61,7 +61,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 
     pageItem = addPage(widget, i18n("General"));
     pageItem->setIcon(QIcon::fromTheme("gwenview"));
-    connect(mGeneralConfigPage.kcfg_ViewBackgroundValue, SIGNAL(valueChanged(int)), SLOT(updateViewBackgroundFrame()));
+    connect(mGeneralConfigPage.kcfg_ViewBackgroundValue, &QAbstractSlider::valueChanged, this, &ConfigDialog::updateViewBackgroundFrame);
 
     // Image View
     widget = setupPage(mImageViewConfigPage);

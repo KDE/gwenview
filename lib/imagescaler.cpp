@@ -73,11 +73,11 @@ void ImageScaler::setDocument(const Document::Ptr &document)
     }
     d->mDocument = document;
     // Used when scaler asked for a down-sampled image
-    connect(d->mDocument.data(), SIGNAL(downSampledImageReady()),
-            SLOT(doScale()));
+    connect(d->mDocument.data(), &Document::downSampledImageReady,
+            this, &ImageScaler::doScale);
     // Used when scaler asked for a full image
-    connect(d->mDocument.data(), SIGNAL(loaded(QUrl)),
-            SLOT(doScale()));
+    connect(d->mDocument.data(), &Document::loaded,
+            this, &ImageScaler::doScale);
 }
 
 void ImageScaler::setZoom(qreal zoom)

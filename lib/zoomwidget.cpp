@@ -116,7 +116,7 @@ ZoomWidget::ZoomWidget(QWidget* parent)
     d->mZoomSlider->setMinimumWidth(150);
     d->mZoomSlider->slider()->setSingleStep(int(PRECISION));
     d->mZoomSlider->slider()->setPageStep(3 * int(PRECISION));
-    connect(d->mZoomSlider->slider(), SIGNAL(actionTriggered(int)), SLOT(slotZoomSliderActionTriggered()));
+    connect(d->mZoomSlider->slider(), &QAbstractSlider::actionTriggered, this, &ZoomWidget::slotZoomSliderActionTriggered);
 
     // Layout
     QHBoxLayout* layout = new QHBoxLayout(this);

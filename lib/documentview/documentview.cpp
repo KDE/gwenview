@@ -124,27 +124,27 @@ struct DocumentViewPrivate
         resizeAdapterWidget();
 
         if (adapter->canZoom()) {
-            QObject::connect(adapter, SIGNAL(zoomChanged(qreal)),
-                             q, SLOT(slotZoomChanged(qreal)));
-            QObject::connect(adapter, SIGNAL(zoomInRequested(QPointF)),
-                             q, SLOT(zoomIn(QPointF)));
-            QObject::connect(adapter, SIGNAL(zoomOutRequested(QPointF)),
-                             q, SLOT(zoomOut(QPointF)));
-            QObject::connect(adapter, SIGNAL(zoomToFitChanged(bool)),
-                             q, SIGNAL(zoomToFitChanged(bool)));
-            QObject::connect(adapter, SIGNAL(zoomToFillChanged(bool)),
-                             q, SIGNAL(zoomToFillChanged(bool)));
+            QObject::connect(adapter, &AbstractDocumentViewAdapter::zoomChanged,
+                             q, &DocumentView::slotZoomChanged);
+            QObject::connect(adapter, &AbstractDocumentViewAdapter::zoomInRequested,
+                             q, &DocumentView::zoomIn);
+            QObject::connect(adapter, &AbstractDocumentViewAdapter::zoomOutRequested,
+                             q, &DocumentView::zoomOut);
+            QObject::connect(adapter, &AbstractDocumentViewAdapter::zoomToFitChanged,
+                             q, &DocumentView::zoomToFitChanged);
+            QObject::connect(adapter, &AbstractDocumentViewAdapter::zoomToFillChanged,
+                             q, &DocumentView::zoomToFillChanged);
         }
-        QObject::connect(adapter, SIGNAL(scrollPosChanged()),
-                         q, SIGNAL(positionChanged()));
-        QObject::connect(adapter, SIGNAL(previousImageRequested()),
-                         q, SIGNAL(previousImageRequested()));
-        QObject::connect(adapter, SIGNAL(nextImageRequested()),
-                         q, SIGNAL(nextImageRequested()));
-        QObject::connect(adapter, SIGNAL(toggleFullScreenRequested()),
-                         q, SIGNAL(toggleFullScreenRequested()));
-        QObject::connect(adapter, SIGNAL(completed()),
-                         q, SLOT(slotCompleted()));
+        QObject::connect(adapter, &AbstractDocumentViewAdapter::scrollPosChanged,
+                         q, &DocumentView::positionChanged);
+        QObject::connect(adapter, &AbstractDocumentViewAdapter::previousImageRequested,
+                         q, &DocumentView::previousImageRequested);
+        QObject::connect(adapter, &AbstractDocumentViewAdapter::nextImageRequested,
+                         q, &DocumentView::nextImageRequested);
+        QObject::connect(adapter, &AbstractDocumentViewAdapter::toggleFullScreenRequested,
+                         q, &DocumentView::toggleFullScreenRequested);
+        QObject::connect(adapter, &AbstractDocumentViewAdapter::completed,
+                         q, &DocumentView::slotCompleted);
 
         adapter->loadConfig();
 
@@ -173,8 +173,8 @@ struct DocumentViewPrivate
             }
         }
         if (adapter->rasterImageView()) {
-            QObject::connect(adapter->rasterImageView(), SIGNAL(currentToolChanged(AbstractRasterImageViewTool*)),
-                             q, SIGNAL(currentToolChanged(AbstractRasterImageViewTool*)));
+            QObject::connect(adapter->rasterImageView(), &RasterImageView::currentToolChanged,
+                             q, &DocumentView::currentToolChanged);
         }
     }
 
@@ -213,8 +213,8 @@ struct DocumentViewPrivate
         floater->setChildWidget(mHud);
         floater->setAlignment(Qt::AlignBottom | Qt::AlignHCenter);
 
-        QObject::connect(trashButton, SIGNAL(clicked()), q, SLOT(emitHudTrashClicked()));
-        QObject::connect(deselectButton, SIGNAL(clicked()), q, SLOT(emitHudDeselectClicked()));
+        QObject::connect(trashButton, &HudButton::clicked, q, &DocumentView::emitHudTrashClicked);
+        QObject::connect(deselectButton, &HudButton::clicked, q, &DocumentView::emitHudDeselectClicked);
 
         mHud->hide();
     }
@@ -339,10 +339,10 @@ struct DocumentViewPrivate
         anim->setStartValue(mOpacityEffect->opacity());
         anim->setEndValue(value);
         if (qFuzzyCompare(value, 1)) {
-            QObject::connect(anim, SIGNAL(finished()),
-                            q, SLOT(slotFadeInFinished()));
+            QObject::connect(anim, &QAbstractAnimation::finished,
+                            q, &DocumentView::slotFadeInFinished);
         }
-        QObject::connect(anim, SIGNAL(finished()), q, SIGNAL(isAnimatedChanged()));
+        QObject::connect(anim, &QAbstractAnimation::finished, q, &DocumentView::isAnimatedChanged);
         anim->setDuration(DocumentView::AnimDuration);
         mFadeAnimation = anim;
         emit q->isAnimatedChanged();
@@ -520,7 +520,7 @@ void DocumentView::openUrl(const QUrl &url, const DocumentView::Setup& setup)
     }
     d->mSetup = setup;
     d->mDocument = DocumentFactory::instance()->load(url);
-    connect(d->mDocument.data(), SIGNAL(busyChanged(QUrl,bool)), SLOT(slotBusyChanged(QUrl,bool)));
+    connect(d->mDocument.data(), &Document::busyChanged, this, &DocumentView::slotBusyChanged);
     connect(d->mDocument.data(), &Document::modified, this, [this]() {
         d->updateZoomSnapValues();
     });
@@ -531,8 +531,8 @@ void DocumentView::openUrl(const QUrl &url, const DocumentView::Setup& setup)
             messageViewAdapter->setInfoMessage(QString());
         }
         d->showLoadingIndicator();
-        connect(d->mDocument.data(), SIGNAL(kindDetermined(QUrl)),
-                SLOT(finishOpenUrl()));
+        connect(d->mDocument.data(), &Document::kindDetermined,
+                this, &DocumentView::finishOpenUrl);
     } else {
         QMetaObject::invokeMethod(this, "finishOpenUrl", Qt::QueuedConnection);
     }
@@ -541,8 +541,8 @@ void DocumentView::openUrl(const QUrl &url, const DocumentView::Setup& setup)
 
 void DocumentView::finishOpenUrl()
 {
-    disconnect(d->mDocument.data(), SIGNAL(kindDetermined(QUrl)),
-               this, SLOT(finishOpenUrl()));
+    disconnect(d->mDocument.data(), &Document::kindDetermined,
+               this, &DocumentView::finishOpenUrl);
     GV_RETURN_IF_FAIL(d->mDocument->loadingState() >= Document::KindDetermined);
 
     if (d->mDocument->loadingState() == Document::LoadingFailed) {
@@ -551,8 +551,8 @@ void DocumentView::finishOpenUrl()
     }
     createAdapterForDocument();
 
-    connect(d->mDocument.data(), SIGNAL(loadingFailed(QUrl)),
-            SLOT(slotLoadingFailed()));
+    connect(d->mDocument.data(), &Document::loadingFailed,
+            this, &DocumentView::slotLoadingFailed);
     d->mAdapter->setDocument(d->mDocument);
     d->updateCaption();
 }
@@ -905,7 +905,7 @@ void DocumentView::moveToAnimated(const QRect& rect)
     anim->setStartValue(geometry());
     anim->setEndValue(rect);
     anim->setDuration(DocumentView::AnimDuration);
-    connect(anim, SIGNAL(finished()), SIGNAL(isAnimatedChanged()));
+    connect(anim, &QAbstractAnimation::finished, this, &DocumentView::isAnimatedChanged);
     d->mMoveAnimation = anim;
     emit isAnimatedChanged();
     anim->start(QAbstractAnimation::DeleteWhenStopped);

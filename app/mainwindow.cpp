@@ -213,16 +213,16 @@ struct MainWindow::Private
     void setupContextManager()
     {
         mContextManager = new ContextManager(mDirModel, q);
-        connect(mContextManager, SIGNAL(selectionChanged()),
-            q, SLOT(slotSelectionChanged()));
-        connect(mContextManager, SIGNAL(currentDirUrlChanged(QUrl)),
-            q, SLOT(slotCurrentDirUrlChanged(QUrl)));
+        connect(mContextManager, &ContextManager::selectionChanged,
+            q, &MainWindow::slotSelectionChanged);
+        connect(mContextManager, &ContextManager::currentDirUrlChanged,
+            q, &MainWindow::slotCurrentDirUrlChanged);
     }
 
     void setupWidgets()
     {
         mFullScreenContent = new FullScreenContent(q, mGvCore);
-        connect(mContextManager, SIGNAL(currentUrlChanged(QUrl)), mFullScreenContent, SLOT(setCurrentUrl(QUrl)));
+        connect(mContextManager, &ContextManager::currentUrlChanged, mFullScreenContent, &FullScreenContent::setCurrentUrl);
 
         mCentralSplitter = new Splitter(Qt::Horizontal, q);
         q->setCentralWidget(mCentralSplitter);
@@ -234,7 +234,7 @@ struct MainWindow::Private
         mContentWidget = new QWidget(mCentralSplitter);
 
         mSaveBar = new SaveBar(mContentWidget, q->actionCollection());
-        connect(mContextManager, SIGNAL(currentUrlChanged(QUrl)), mSaveBar, SLOT(setCurrentUrl(QUrl)));
+        connect(mContextManager, &ContextManager::currentUrlChanged, mSaveBar, &SaveBar::setCurrentUrl);
         mViewStackedWidget = new QStackedWidget(mContentWidget);
         QVBoxLayout* layout = new QVBoxLayout(mContentWidget);
         layout->addWidget(mSaveBar);
@@ -245,7 +245,7 @@ struct MainWindow::Private
 
         mStartSlideShowWhenDirListerCompleted = false;
         mSlideShow = new SlideShow(q);
-        connect(mContextManager, SIGNAL(currentUrlChanged(QUrl)), mSlideShow, SLOT(setCurrentUrl(QUrl)));
+        connect(mContextManager, &ContextManager::currentUrlChanged, mSlideShow, &SlideShow::setCurrentUrl);
 
         setupThumbnailView(mViewStackedWidget);
         setupViewMainPage(mViewStackedWidget);
@@ -261,13 +261,13 @@ struct MainWindow::Private
 
         mThumbnailView->setFocus();
 
-        connect(mSaveBar, SIGNAL(requestSaveAll()),
-                mGvCore, SLOT(saveAll()));
-        connect(mSaveBar, SIGNAL(goToUrl(QUrl)),
-                q, SLOT(goToUrl(QUrl)));
+        connect(mSaveBar, &SaveBar::requestSaveAll,
+                mGvCore, &GvCore::saveAll);
+        connect(mSaveBar, &SaveBar::goToUrl,
+                q, &MainWindow::goToUrl);
 
-        connect(mSlideShow, SIGNAL(goToUrl(QUrl)),
-                q, SLOT(goToUrl(QUrl)));
+        connect(mSlideShow, &SlideShow::goToUrl,
+                q, &MainWindow::goToUrl);
     }
 
     void setupThumbnailView(QWidget* parent)
@@ -283,15 +283,15 @@ struct MainWindow::Private
         mThumbnailView->setDocumentInfoProvider(mDocumentInfoProvider);
 
         mThumbnailViewHelper = new ThumbnailViewHelper(mDirModel, q->actionCollection());
-        connect(mContextManager, SIGNAL(currentDirUrlChanged(QUrl)),
-            mThumbnailViewHelper, SLOT(setCurrentDirUrl(QUrl)));
+        connect(mContextManager, &ContextManager::currentDirUrlChanged,
+            mThumbnailViewHelper, &ThumbnailViewHelper::setCurrentDirUrl);
         mThumbnailView->setThumbnailViewHelper(mThumbnailViewHelper);
 
         mThumbnailBarSelectionModel = new KLinkItemSelectionModel(mThumbnailBarModel, mContextManager->selectionModel(), q);
 
         // Connect thumbnail view
-        connect(mThumbnailView, SIGNAL(indexActivated(QModelIndex)),
-                q, SLOT(slotThumbnailViewIndexActivated(QModelIndex)));
+        connect(mThumbnailView, &ThumbnailView::indexActivated,
+                q, &MainWindow::slotThumbnailViewIndexActivated);
 
         // Connect delegate
         QAbstractItemDelegate* delegate = mThumbnailView->itemDelegate();
@@ -307,21 +307,21 @@ struct MainWindow::Private
                 mGvCore, SLOT(setRating(QUrl,int)));
 
         // Connect url navigator
-        connect(mUrlNavigator, SIGNAL(urlChanged(QUrl)),
-                q, SLOT(openDirUrl(QUrl)));
+        connect(mUrlNavigator, &KUrlNavigator::urlChanged,
+                q, &MainWindow::openDirUrl);
     }
 
     void setupViewMainPage(QWidget* parent)
     {
         mViewMainPage = new ViewMainPage(parent, mSlideShow, q->actionCollection(), mGvCore);
-        connect(mViewMainPage, SIGNAL(captionUpdateRequested(QString)),
-                q, SLOT(slotUpdateCaption(QString)));
-        connect(mViewMainPage, SIGNAL(completed()),
-                q, SLOT(slotPartCompleted()));
-        connect(mViewMainPage, SIGNAL(previousImageRequested()),
-                q, SLOT(goToPrevious()));
-        connect(mViewMainPage, SIGNAL(nextImageRequested()),
-                q, SLOT(goToNext()));
+        connect(mViewMainPage, &ViewMainPage::captionUpdateRequested,
+                q, &MainWindow::slotUpdateCaption);
+        connect(mViewMainPage, &ViewMainPage::completed,
+                q, &MainWindow::slotPartCompleted);
+        connect(mViewMainPage, &ViewMainPage::previousImageRequested,
+                q, &MainWindow::goToPrevious);
+        connect(mViewMainPage, &ViewMainPage::nextImageRequested,
+                q, &MainWindow::goToNext);
         connect(mViewMainPage, &ViewMainPage::openUrlRequested,
                 q, &MainWindow::openUrl);
         connect(mViewMainPage, &ViewMainPage::openDirUrlRequested,
@@ -345,8 +345,8 @@ struct MainWindow::Private
     void setupStartMainPage(QWidget* parent)
     {
         mStartMainPage = new StartMainPage(parent, mGvCore);
-        connect(mStartMainPage, SIGNAL(urlSelected(QUrl)),
-                q, SLOT(slotStartMainPageUrlSelected(QUrl)));
+        connect(mStartMainPage, &StartMainPage::urlSelected,
+                q, &MainWindow::slotStartMainPageUrlSelected);
         connect(mStartMainPage, &StartMainPage::recentFileRemoved, [this](const QUrl& url) {
             mFileOpenRecentAction->removeUrl(url);
         });
@@ -392,8 +392,8 @@ struct MainWindow::Private
         mBrowseAction->setCheckable(true);
         mBrowseAction->setIcon(QIcon::fromTheme("view-list-icons"));
         actionCollection->setDefaultShortcut(mBrowseAction, Qt::Key_Escape);
-        connect(mViewMainPage, SIGNAL(goToBrowseModeRequested()),
-            mBrowseAction, SLOT(trigger()));
+        connect(mViewMainPage, &ViewMainPage::goToBrowseModeRequested,
+            mBrowseAction, &QAction::trigger);
 
         mViewAction = view->addAction("view");
         mViewAction->setText(i18nc("@action:intoolbar Switch to image view", "View"));
@@ -405,16 +405,16 @@ struct MainWindow::Private
         mViewModeActionGroup->addAction(mBrowseAction);
         mViewModeActionGroup->addAction(mViewAction);
 
-        connect(mViewModeActionGroup, SIGNAL(triggered(QAction*)),
-                q, SLOT(setActiveViewModeAction(QAction*)));
+        connect(mViewModeActionGroup, &QActionGroup::triggered,
+                q, &MainWindow::setActiveViewModeAction);
 
         mFullScreenAction = KStandardAction::fullScreen(q, &MainWindow::toggleFullScreen, q, actionCollection);
         QList<QKeySequence> shortcuts = mFullScreenAction->shortcuts();
         shortcuts.append(QKeySequence(Qt::Key_F11));
         actionCollection->setDefaultShortcuts(mFullScreenAction, shortcuts);
 
-        connect(mViewMainPage, SIGNAL(toggleFullScreenRequested()),
-                mFullScreenAction, SLOT(trigger()));
+        connect(mViewMainPage, &ViewMainPage::toggleFullScreenRequested,
+                mFullScreenAction, &QAction::trigger);
 
         QAction * leaveFullScreenAction = view->addAction("leave_fullscreen", q, SLOT(leaveFullScreen()));
         leaveFullScreenAction->setIcon(QIcon::fromTheme("view-restore"));
@@ -467,15 +467,15 @@ struct MainWindow::Private
         mToggleSideBarAction->setIcon(QIcon::fromTheme("view-sidetree"));
         actionCollection->setDefaultShortcut(mToggleSideBarAction, Qt::Key_F4);
         mToggleSideBarAction->setText(i18nc("@action", "Sidebar"));
-        connect(mBrowseMainPage->toggleSideBarButton(), SIGNAL(clicked()),
-                mToggleSideBarAction, SLOT(trigger()));
-        connect(mViewMainPage->toggleSideBarButton(), SIGNAL(clicked()),
-                mToggleSideBarAction, SLOT(trigger()));
+        connect(mBrowseMainPage->toggleSideBarButton(), &QAbstractButton::clicked,
+                mToggleSideBarAction, &QAction::trigger);
+        connect(mViewMainPage->toggleSideBarButton(), &QAbstractButton::clicked,
+                mToggleSideBarAction, &QAction::trigger);
 
         mToggleSlideShowAction = view->addAction("toggle_slideshow", q, SLOT(toggleSlideShow()));
         q->updateSlideShowAction();
-        connect(mSlideShow, SIGNAL(stateChanged(bool)),
-                q, SLOT(updateSlideShowAction()));
+        connect(mSlideShow, &SlideShow::stateChanged,
+                q, &MainWindow::updateSlideShowAction);
 
         q->setStandardToolBarMenuEnabled(true);
 
@@ -581,13 +581,13 @@ struct MainWindow::Private
             | MimeTypeUtils::KIND_SVG_IMAGE
             | MimeTypeUtils::KIND_VIDEO);
 
-        connect(mDirModel, SIGNAL(rowsInserted(QModelIndex,int,int)),
-                q, SLOT(slotDirModelNewItems()));
+        connect(mDirModel, &QAbstractItemModel::rowsInserted,
+                q, &MainWindow::slotDirModelNewItems);
 
-        connect(mDirModel, SIGNAL(rowsRemoved(QModelIndex,int,int)),
-                q, SLOT(updatePreviousNextActions()));
-        connect(mDirModel, SIGNAL(modelReset()),
-                q, SLOT(updatePreviousNextActions()));
+        connect(mDirModel, &QAbstractItemModel::rowsRemoved,
+                q, &MainWindow::updatePreviousNextActions);
+        connect(mDirModel, &QAbstractItemModel::modelReset,
+                q, &MainWindow::updatePreviousNextActions);
 
         connect(mDirModel->dirLister(), SIGNAL(completed()),
                 q, SLOT(slotDirListerCompleted()));
@@ -851,8 +851,8 @@ MainWindow::MainWindow()
     createGUI();
     loadConfig();
 
-    connect(DocumentFactory::instance(), SIGNAL(modifiedDocumentListChanged()),
-            SLOT(slotModifiedDocumentListChanged()));
+    connect(DocumentFactory::instance(), &DocumentFactory::modifiedDocumentListChanged,
+            this, &MainWindow::slotModifiedDocumentListChanged);
 
 #ifdef HAVE_QTDBUS
     d->mMpris2Service = new Mpris2Service(d->mSlideShow, d->mContextManager,
@@ -959,7 +959,7 @@ void MainWindow::setActiveViewModeAction(QAction* action)
         d->mViewStackedWidget->setCurrentWidget(d->mViewMainPage);
         openSelectedDocuments();
         d->mPreloadDirectionIsForward = true;
-        QTimer::singleShot(VIEW_PRELOAD_DELAY, this, SLOT(preloadNextUrl()));
+        QTimer::singleShot(VIEW_PRELOAD_DELAY, this, &MainWindow::preloadNextUrl);
     } else {
         d->mCurrentMainPageId = BrowseMainPageId;
         // Switching to browse mode
@@ -1215,7 +1215,7 @@ void MainWindow::slotSelectionChanged()
 
     // Start preloading
     int preloadDelay = d->mCurrentMainPageId == ViewMainPageId ? VIEW_PRELOAD_DELAY : BROWSE_PRELOAD_DELAY;
-    QTimer::singleShot(preloadDelay, this, SLOT(preloadNextUrl()));
+    QTimer::singleShot(preloadDelay, this, &MainWindow::preloadNextUrl);
 }
 
 void MainWindow::slotCurrentDirUrlChanged(const QUrl &url)
@@ -1239,7 +1239,7 @@ void MainWindow::slotDirListerCompleted()
 {
     if (d->mStartSlideShowWhenDirListerCompleted) {
         d->mStartSlideShowWhenDirListerCompleted = false;
-        QTimer::singleShot(0, d->mToggleSlideShowAction, SLOT(trigger()));
+        QTimer::singleShot(0, d->mToggleSlideShowAction, &QAction::trigger);
     }
     if (d->mContextManager->selectionModel()->hasSelection()) {
         updatePreviousNextActions();
@@ -1513,7 +1513,7 @@ void MainWindow::showConfigDialog()
     saveConfig();
     
     DialogGuard<ConfigDialog> dialog(this);
-    connect(dialog.data(), SIGNAL(settingsChanged(QString)), SLOT(loadConfig()));
+    connect(dialog.data(), &KConfigDialog::settingsChanged, this, &MainWindow::loadConfig);
     dialog->exec();
 }
 

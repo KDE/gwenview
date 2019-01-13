@@ -118,7 +118,7 @@ FullScreenBar::FullScreenBar(QWidget* parent)
     d->q = this;
     d->mAutoHidingEnabled = true;
     d->mEdgeTriggerEnabled = true;
-    setObjectName(QLatin1String("fullScreenBar"));
+    setObjectName(QStringLiteral("fullScreenBar"));
 
     d->mTimeLine = new QTimeLine(SLIDE_DURATION, this);
     connect(d->mTimeLine, &QTimeLine::valueChanged, this, &FullScreenBar::moveBar);
@@ -170,7 +170,7 @@ void FullScreenBar::setActivated(bool activated)
         // Delay installation of event filter because switching to fullscreen
         // cause a few window adjustments, which seems to generate unwanted
         // mouse events, which cause the bar to slide in.
-        QTimer::singleShot(500, this, SLOT(delayedInstallEventFilter()));
+        QTimer::singleShot(500, this, &FullScreenBar::delayedInstallEventFilter);
 
         adjustSize();
 

@@ -275,8 +275,8 @@ SaveBar::SaveBar(QWidget* parent, KActionCollection* actionCollection)
 
     setContent(d->mSaveBarWidget);
 
-    connect(DocumentFactory::instance(), SIGNAL(modifiedDocumentListChanged()),
-            SLOT(updateContent()));
+    connect(DocumentFactory::instance(), &DocumentFactory::modifiedDocumentListChanged,
+            this, &SaveBar::updateContent);
 
     connect(d->mActionsLabel, &QLabel::linkActivated, this, &SaveBar::triggerAction);
 }

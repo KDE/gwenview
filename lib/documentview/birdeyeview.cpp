@@ -122,10 +122,10 @@ BirdEyeView::BirdEyeView(DocumentView* docView)
     setOpacity(0);
     slotZoomOrSizeChanged();
 
-    connect(docView->document().data(), SIGNAL(metaInfoUpdated()), SLOT(slotZoomOrSizeChanged()));
-    connect(docView, SIGNAL(zoomChanged(qreal)), SLOT(slotZoomOrSizeChanged()));
-    connect(docView, SIGNAL(zoomToFitChanged(bool)), SLOT(slotZoomOrSizeChanged()));
-    connect(docView, SIGNAL(positionChanged()), SLOT(slotPositionChanged()));
+    connect(docView->document().data(), &Document::metaInfoUpdated, this, &BirdEyeView::slotZoomOrSizeChanged);
+    connect(docView, &DocumentView::zoomChanged, this, &BirdEyeView::slotZoomOrSizeChanged);
+    connect(docView, &DocumentView::zoomToFitChanged, this, &BirdEyeView::slotZoomOrSizeChanged);
+    connect(docView, &DocumentView::positionChanged, this, &BirdEyeView::slotPositionChanged);
 }
 
 BirdEyeView::~BirdEyeView()

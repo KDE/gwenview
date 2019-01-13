@@ -361,11 +361,11 @@ LoadingDocumentImpl::LoadingDocumentImpl(Document* document)
     d->mDownSampledImageLoaded = false;
     d->mImageDataInvertedZoom = 0;
 
-    connect(&d->mMetaInfoFutureWatcher, SIGNAL(finished()),
-            SLOT(slotMetaInfoLoaded()));
+    connect(&d->mMetaInfoFutureWatcher, &QFutureWatcherBase::finished,
+            this, &LoadingDocumentImpl::slotMetaInfoLoaded);
 
-    connect(&d->mImageDataFutureWatcher, SIGNAL(finished()),
-            SLOT(slotImageLoaded()));
+    connect(&d->mImageDataFutureWatcher, &QFutureWatcherBase::finished,
+            this, &LoadingDocumentImpl::slotImageLoaded);
 }
 
 LoadingDocumentImpl::~LoadingDocumentImpl()
@@ -406,10 +406,10 @@ void LoadingDocumentImpl::init()
     } else {
         // Transfer file via KIO
         d->mTransferJob = KIO::get(document()->url(), KIO::NoReload, KIO::HideProgressInfo);
-        connect(d->mTransferJob, SIGNAL(data(KIO::Job*,QByteArray)),
-                SLOT(slotDataReceived(KIO::Job*,QByteArray)));
-        connect(d->mTransferJob, SIGNAL(result(KJob*)),
-                SLOT(slotTransferFinished(KJob*)));
+        connect(d->mTransferJob.data(), &KIO::TransferJob::data,
+                this, &LoadingDocumentImpl::slotDataReceived);
+        connect(d->mTransferJob.data(), &KJob::result,
+                this, &LoadingDocumentImpl::slotTransferFinished);
         d->mTransferJob->start();
     }
 }

@@ -75,7 +75,7 @@ NameFilterWidget::NameFilterWidget(SortedDirModel* model)
     QTimer* timer = new QTimer(this);
     timer->setInterval(350);
     timer->setSingleShot(true);
-    connect(timer, SIGNAL(timeout()), SLOT(applyNameFilter()));
+    connect(timer, &QTimer::timeout, this, &NameFilterWidget::applyNameFilter);
 
     connect(mLineEdit, SIGNAL(textChanged(QString)),
             timer, SLOT(start()));
@@ -114,8 +114,8 @@ DateFilterWidget::DateFilterWidget(SortedDirModel* model)
     layout->addWidget(mModeComboBox);
     layout->addWidget(mDateWidget);
 
-    connect(mDateWidget, SIGNAL(dateChanged(QDate)),
-            SLOT(applyDateFilter()));
+    connect(mDateWidget, &DateWidget::dateChanged,
+            this, &DateFilterWidget::applyDateFilter);
     connect(mModeComboBox, SIGNAL(currentIndexChanged(int)),
             SLOT(applyDateFilter()));
 
@@ -255,7 +255,7 @@ public:
         closeButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
         int size = IconSize(KIconLoader::Small);
         closeButton->setIconSize(QSize(size, size));
-        connect(closeButton, SIGNAL(clicked()), SLOT(deleteLater()));
+        connect(closeButton, &QAbstractButton::clicked, this, &QObject::deleteLater);
         QHBoxLayout* layout = new QHBoxLayout(this);
         layout->setMargin(2);
         layout->setSpacing(2);
@@ -364,7 +364,7 @@ void FilterController::addFilter(QWidget* widget)
     mFrame->layout()->addWidget(container);
 
     mFilterWidgetCount++;
-    QObject::connect(container, SIGNAL(destroyed()), q, SLOT(slotFilterWidgetClosed()));
+    QObject::connect(container, &QObject::destroyed, q, &FilterController::slotFilterWidgetClosed);
 }
 
 } // namespace

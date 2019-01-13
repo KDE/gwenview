@@ -126,8 +126,8 @@ public:
 
         mDeleteTimer->setInterval(RATING_INDICATOR_HIDE_DELAY);
         mDeleteTimer->setSingleShot(true);
-        connect(mDeleteTimer, SIGNAL(timeout()), SLOT(fadeOut()));
-        connect(this, SIGNAL(fadedOut()), SLOT(deleteLater()));
+        connect(mDeleteTimer, &QTimer::timeout, this, &HudWidget::fadeOut);
+        connect(this, &HudWidget::fadedOut, this, &QObject::deleteLater);
     }
 
     void setRating(int rating)
@@ -187,8 +187,8 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
 
         mDescriptionTextEdit->installEventFilter(q);
 
-        QObject::connect(mTagLabel, SIGNAL(linkActivated(QString)),
-                         mEditTagsAction, SLOT(trigger()));
+        QObject::connect(mTagLabel, &QLabel::linkActivated,
+                         mEditTagsAction, &QAction::trigger);
     }
 
     void setupActions()
@@ -199,8 +199,8 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
         mEditTagsAction->setText(i18nc("@action", "Edit Tags"));
         mEditTagsAction->setIcon(QIcon::fromTheme("tag"));
         mActionCollection->setDefaultShortcut(mEditTagsAction, Qt::CTRL + Qt::Key_T);
-        QObject::connect(mEditTagsAction, SIGNAL(triggered()),
-                         q, SLOT(showSemanticInfoDialog()));
+        QObject::connect(mEditTagsAction, &QAction::triggered,
+                         q, &SemanticInfoContextManagerItem::showSemanticInfoDialog);
         mActions << mEditTagsAction;
 
         for (int rating = 0; rating <= 5; ++rating) {
@@ -262,12 +262,12 @@ SemanticInfoContextManagerItem::SemanticInfoContextManagerItem(ContextManager* m
     d->mActionCollection = actionCollection;
     d->mViewMainPage = viewMainPage;
 
-    connect(contextManager(), SIGNAL(selectionChanged()),
-            SLOT(slotSelectionChanged()));
-    connect(contextManager(), SIGNAL(selectionDataChanged()),
-            SLOT(update()));
-    connect(contextManager(), SIGNAL(currentDirUrlChanged(QUrl)),
-            SLOT(update()));
+    connect(contextManager(), &ContextManager::selectionChanged,
+            this, &SemanticInfoContextManagerItem::slotSelectionChanged);
+    connect(contextManager(), &ContextManager::selectionDataChanged,
+            this, &SemanticInfoContextManagerItem::update);
+    connect(contextManager(), &ContextManager::currentDirUrlChanged,
+            this, &SemanticInfoContextManagerItem::update);
 
     d->setupActions();
     d->setupGroup();
@@ -438,19 +438,19 @@ void SemanticInfoContextManagerItem::showSemanticInfoDialog()
         d->mSemanticInfoDialog = new SemanticInfoDialog(d->mGroup);
         d->mSemanticInfoDialog->setAttribute(Qt::WA_DeleteOnClose, true);
 
-        connect(d->mSemanticInfoDialog->mPreviousButton, SIGNAL(clicked()),
-                d->mActionCollection->action("go_previous"), SLOT(trigger()));
-        connect(d->mSemanticInfoDialog->mNextButton, SIGNAL(clicked()),
-                d->mActionCollection->action("go_next"), SLOT(trigger()));
-        connect(d->mSemanticInfoDialog->mButtonBox, SIGNAL(rejected()),
-                d->mSemanticInfoDialog, SLOT(close()));
+        connect(d->mSemanticInfoDialog->mPreviousButton, &QAbstractButton::clicked,
+                d->mActionCollection->action("go_previous"), &QAction::trigger);
+        connect(d->mSemanticInfoDialog->mNextButton, &QAbstractButton::clicked,
+                d->mActionCollection->action("go_next"), &QAction::trigger);
+        connect(d->mSemanticInfoDialog->mButtonBox, &QDialogButtonBox::rejected,
+                d->mSemanticInfoDialog.data(), &QWidget::close);
 
         AbstractSemanticInfoBackEnd* backEnd = contextManager()->dirModel()->semanticInfoBackEnd();
         d->mSemanticInfoDialog->mTagWidget->setSemanticInfoBackEnd(backEnd);
-        connect(d->mSemanticInfoDialog->mTagWidget, SIGNAL(tagAssigned(SemanticInfoTag)),
-                SLOT(assignTag(SemanticInfoTag)));
-        connect(d->mSemanticInfoDialog->mTagWidget, SIGNAL(tagRemoved(SemanticInfoTag)),
-                SLOT(removeTag(SemanticInfoTag)));
+        connect(d->mSemanticInfoDialog->mTagWidget, &TagWidget::tagAssigned,
+                this, &SemanticInfoContextManagerItem::assignTag);
+        connect(d->mSemanticInfoDialog->mTagWidget, &TagWidget::tagRemoved,
+                this, &SemanticInfoContextManagerItem::removeTag);
     }
     d->updateSemanticInfoDialog();
     d->mSemanticInfoDialog->show();

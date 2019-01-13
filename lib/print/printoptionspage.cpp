@@ -128,8 +128,8 @@ PrintOptionsPage::PrintOptionsPage(const QSize& imageSize)
     connect(d->kcfg_PrintHeight, SIGNAL(valueChanged(double)),
             SLOT(adjustWidthToRatio()));
 
-    connect(d->kcfg_PrintKeepRatio, SIGNAL(toggled(bool)),
-            SLOT(adjustHeightToRatio()));
+    connect(d->kcfg_PrintKeepRatio, &QAbstractButton::toggled,
+            this, &PrintOptionsPage::adjustHeightToRatio);
 }
 
 PrintOptionsPage::~PrintOptionsPage()

@@ -61,7 +61,7 @@ void TransformImageOperationTest::testRotate90()
 
     TransformImageOperation* op = new TransformImageOperation(ROT_90);
     QEventLoop loop;
-    connect(doc.data(), SIGNAL(allTasksDone()), &loop, SLOT(quit()));
+    connect(doc.data(), &Document::allTasksDone, &loop, &QEventLoop::quit);
     op->applyToDocument(doc);
     loop.exec();
 

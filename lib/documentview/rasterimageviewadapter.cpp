@@ -78,7 +78,7 @@ void RasterImageViewAdapter::setDocument(const Document::Ptr &doc)
 {
     d->mView->setDocument(doc);
 
-    connect(doc.data(), SIGNAL(loadingFailed(QUrl)), SLOT(slotLoadingFailed()));
+    connect(doc.data(), &Document::loadingFailed, this, &RasterImageViewAdapter::slotLoadingFailed);
     if (doc->loadingState() == Document::LoadingFailed) {
         slotLoadingFailed();
     }

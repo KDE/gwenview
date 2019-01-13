@@ -596,10 +596,10 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
     d->mContextBarActions = SelectionAction | FullScreenAction | RotateAction;
     d->mTextElideMode = Qt::ElideRight;
 
-    connect(view, SIGNAL(rowsRemovedSignal(QModelIndex,int,int)),
-            SLOT(slotRowsChanged()));
-    connect(view, SIGNAL(rowsInsertedSignal(QModelIndex,int,int)),
-            SLOT(slotRowsChanged()));
+    connect(view, &ThumbnailView::rowsRemovedSignal,
+            this, &PreviewItemDelegate::slotRowsChanged);
+    connect(view, &ThumbnailView::rowsInsertedSignal,
+            this, &PreviewItemDelegate::slotRowsChanged);
     connect(view, &ThumbnailView::selectionChangedSignal, [this]() {
         d->updateToggleSelectionButton();
     });
@@ -610,8 +610,8 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
     d->mRatingPainter.setMaxRating(10);
 #endif
 
-    connect(view, SIGNAL(thumbnailSizeChanged(QSize)),
-            SLOT(setThumbnailSize(QSize)));
+    connect(view, &ThumbnailView::thumbnailSizeChanged,
+            this, &PreviewItemDelegate::setThumbnailSize);
 
     // Button frame
     d->mContextBar = new QWidget(d->mView->viewport());

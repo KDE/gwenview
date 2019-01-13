@@ -114,7 +114,7 @@ void SaveJob::doStart()
 
     QFuture<void> future = QtConcurrent::run(this, &SaveJob::saveInternal);
     d->mInternalSaveWatcher.reset(new QFutureWatcher<void>(this));
-    connect(d->mInternalSaveWatcher.data(), SIGNAL(finished()), SLOT(finishSave()));
+    connect(d->mInternalSaveWatcher.data(), &QFutureWatcherBase::finished, this, &SaveJob::finishSave);
     d->mInternalSaveWatcher->setFuture(future);
 }
 

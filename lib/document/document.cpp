@@ -243,16 +243,16 @@ void Document::switchToImpl(AbstractDocumentImpl* impl)
     }
     d->mImpl = impl;
 
-    connect(d->mImpl, SIGNAL(metaInfoLoaded()),
-            this, SLOT(emitMetaInfoLoaded()));
-    connect(d->mImpl, SIGNAL(loaded()),
-            this, SLOT(emitLoaded()));
-    connect(d->mImpl, SIGNAL(loadingFailed()),
-            this, SLOT(emitLoadingFailed()));
-    connect(d->mImpl, SIGNAL(imageRectUpdated(QRect)),
-            this, SIGNAL(imageRectUpdated(QRect)));
-    connect(d->mImpl, SIGNAL(isAnimatedUpdated()),
-            this, SIGNAL(isAnimatedUpdated()));
+    connect(d->mImpl, &AbstractDocumentImpl::metaInfoLoaded,
+            this, &Document::emitMetaInfoLoaded);
+    connect(d->mImpl, &AbstractDocumentImpl::loaded,
+            this, &Document::emitLoaded);
+    connect(d->mImpl, &AbstractDocumentImpl::loadingFailed,
+            this, &Document::emitLoadingFailed);
+    connect(d->mImpl, &AbstractDocumentImpl::imageRectUpdated,
+            this, &Document::imageRectUpdated);
+    connect(d->mImpl, &AbstractDocumentImpl::isAnimatedUpdated,
+            this, &Document::isAnimatedUpdated);
     d->mImpl->init();
 }
 
