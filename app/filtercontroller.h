@@ -353,7 +353,7 @@ private Q_SLOTS:
     void slotFilterWidgetClosed();
 
 private:
-    void addAction(const QString& text, const char* slot);
+    void addAction(const QString& text, const char* slot, const QKeySequence shortcut);
     void addFilter(QWidget* widget);
 
     FilterController* q;

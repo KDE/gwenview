@@ -290,11 +290,22 @@ FilterController::FilterController(QFrame* frame, SortedDirModel* dirModel)
     FlowLayout* layout = new FlowLayout(mFrame);
     layout->setSpacing(2);
 
-    addAction(i18nc("@action:inmenu", "Filter by Name"), SLOT(addFilterByName()));
-    addAction(i18nc("@action:inmenu", "Filter by Date"), SLOT(addFilterByDate()));
+    addAction(i18nc("@action:inmenu", "Filter by Name"),
+              SLOT(addFilterByName()),
+              QKeySequence(Qt::CTRL + Qt::Key_I));
+
+    addAction(i18nc("@action:inmenu", "Filter by Date"),
+              SLOT(addFilterByDate()),
+              QKeySequence());
+
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-    addAction(i18nc("@action:inmenu", "Filter by Rating"), SLOT(addFilterByRating()));
-    addAction(i18nc("@action:inmenu", "Filter by Tag"), SLOT(addFilterByTag()));
+    addAction(i18nc("@action:inmenu", "Filter by Rating"),
+              SLOT(addFilterByRating()),
+              QKeySequence());
+
+    addAction(i18nc("@action:inmenu", "Filter by Tag"),
+              SLOT(addFilterByTag()),
+              QKeySequence());
 #endif
 }
 
@@ -334,9 +345,10 @@ void FilterController::slotFilterWidgetClosed()
 }
 
 
-void FilterController::addAction(const QString& text, const char* slot)
+void FilterController::addAction(const QString& text, const char* slot, const QKeySequence shortcut)
 {
     QAction* action = new QAction(text, q);
+    action->setShortcut(shortcut);
     QObject::connect(action, SIGNAL(triggered()), q, slot);
     mActionList << action;
 }
