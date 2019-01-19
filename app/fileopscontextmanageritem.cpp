@@ -164,10 +164,7 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, QL
 
     mTrashAction = file->addAction("file_trash", this, SLOT(trash()));
     mTrashAction->setText(i18nc("Verb", "Trash"));
-    // TODO: Remove trash-empty from the below line when a new user-trash icon
-    // is released by Breeze that adheres to monochrome on HiDPI scaled displays.
-    // See Bug #391078
-    mTrashAction->setIcon(QIcon::fromTheme("trash-empty", QIcon::fromTheme("user-trash")));
+    mTrashAction->setIcon(QIcon::fromTheme("user-trash"));
     actionCollection->setDefaultShortcut(mTrashAction, Qt::Key_Delete);
 
     mDelAction = file->addAction(KStandardAction::DeleteFile, this, SLOT(del()));
