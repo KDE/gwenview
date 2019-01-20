@@ -171,7 +171,7 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, QL
 
     mRestoreAction = file->addAction("file_restore", this, SLOT(restore()));
     mRestoreAction->setText(i18n("Restore"));
-    mRestoreAction->setIcon(QIcon::fromTheme("edit-undo"));
+    mRestoreAction->setIcon(QIcon::fromTheme("restoration"));
 
     mShowPropertiesAction = file->addAction("file_show_properties", this, SLOT(showProperties()));
     mShowPropertiesAction->setText(i18n("Properties"));
