@@ -85,7 +85,7 @@ struct ImageOpsContextManagerItem::Private
         mRotateLeftAction->setText(i18n("Rotate Left"));
         mRotateLeftAction->setToolTip(i18nc("@info:tooltip", "Rotate image to the left"));
         mRotateLeftAction->setIcon(QIcon::fromTheme("object-rotate-left"));
-        actionCollection->setDefaultShortcut(mRotateLeftAction, Qt::CTRL + Qt::Key_L);
+        actionCollection->setDefaultShortcut(mRotateLeftAction, Qt::CTRL + Qt::SHIFT + Qt::Key_R);
 
         mRotateRightAction = edit->addAction("rotate_right", q, SLOT(rotateRight()));
         mRotateRightAction->setText(i18n("Rotate Right"));

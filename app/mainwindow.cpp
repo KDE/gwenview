@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QApplication>
 #include <QDateTime>
+#include <QLineEdit>
 #include <QPushButton>
 #include <QShortcut>
 #include <QSplitter>
@@ -50,6 +51,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KRecentFilesAction>
 #include <KStandardShortcut>
 #include <KToggleFullScreenAction>
+#include <KUrlComboBox>
 #include <KUrlNavigator>
 #include <KToolBar>
 #include <KXMLGUIFactory>
@@ -373,7 +375,7 @@ struct MainWindow::Private
         mFileOpenRecentAction = KStandardAction::openRecent(q, SLOT(openUrl(QUrl)), q);
         connect(mFileOpenRecentAction, &KRecentFilesAction::recentListCleared,
                 mGvCore, &GvCore::clearRecentFilesAndFolders);
-        QAction* clearAction = mFileOpenRecentAction->menu()->findChild<QAction*>("clear_action");
+        QAction * clearAction = mFileOpenRecentAction->menu()->findChild<QAction*>("clear_action");
         if (clearAction) {
             clearAction->setText(i18nc("@action Open Recent menu", "Forget All Files && Folders"));
         }
@@ -385,6 +387,11 @@ struct MainWindow::Private
         action->setText(i18nc("@action reload the currently viewed image", "Reload"));
         action->setIcon(QIcon::fromTheme("view-refresh"));
         actionCollection->setDefaultShortcuts(action, KStandardShortcut::reload());
+        
+        QAction * replaceLocationAction = actionCollection->addAction(QStringLiteral("replace_location"));
+        replaceLocationAction->setText(i18nc("@action:inmenu Navigation Bar", "Replace Location"));
+        actionCollection->setDefaultShortcut(replaceLocationAction, Qt::CTRL + Qt::Key_L);
+        connect(replaceLocationAction, &QAction::triggered, q, &MainWindow::replaceLocation);
 
         mBrowseAction = view->addAction("browse");
         mBrowseAction->setText(i18nc("@action:intoolbar Switch to file list", "Browse"));
@@ -1719,6 +1726,23 @@ void MainWindow::showLastDocumentReached()
     dlg->addAction(d->mBrowseAction, i18n("Go Back to the Document List"));
     dlg->addCountDown(15000);
     d->mViewMainPage->showMessageWidget(dlg, Qt::AlignCenter);
+}
+
+void MainWindow::replaceLocation()
+{
+    QLineEdit* lineEdit = d->mUrlNavigator->editor()->lineEdit();
+
+    // If the text field currently has focus and everything is selected,
+    // pressing the keyboard shortcut returns the whole thing to breadcrumb mode
+    if (d->mUrlNavigator->isUrlEditable()
+        && lineEdit->hasFocus()
+        && lineEdit->selectedText() == lineEdit->text() ) {
+        d->mUrlNavigator->setUrlEditable(false);
+    } else {
+        d->mUrlNavigator->setUrlEditable(true);
+        d->mUrlNavigator->setFocus();
+        lineEdit->selectAll();
+    }
 }
 
 } // namespace
