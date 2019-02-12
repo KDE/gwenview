@@ -184,7 +184,7 @@ Terminal=false
 Icon=gwenview
 Type=Application
 Categories=Qt;KDE;Graphics;Viewer;Photography;
-MimeType=inode/directory;image/gif;image/jpeg;image/png;image/bmp;image/x-eps;image/x-icns;image/x-ico;image/x-portable-bitmap;image/x-portable-graymap;image/x-portable-pixmap;image/x-xbitmap;image/x-xpixmap;image/tiff;image/x-psd;image/x-webp;image/webp;image/x-tga;
+MimeType=inode/directory;image/gif;image/jpeg;image/png;image/bmp;image/x-eps;image/x-icns;image/x-ico;image/x-portable-bitmap;image/x-portable-graymap;image/x-portable-pixmap;image/x-xbitmap;image/x-xpixmap;image/tiff;image/x-psd;image/x-webp;image/webp;image/x-tga;${RAW_MIME_TYPES}
 X-DocPath=gwenview/index.html
 # InitialPreference should be greater than Okular so that Gwenview is the
 # primary application associated with images, but less than Konqueror or Dolphin
