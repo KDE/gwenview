@@ -108,10 +108,6 @@ if (APPLE)
     set_target_properties(gwenview PROPERTIES MACOSX_BUNDLE_COPYRIGHT "2002-2016 The Gwenview Authors")
 endif (APPLE)
 
-if (KF5KDcraw_FOUND)
-    set(RAW_MIME_TYPES "image/x-kde-raw;image/x-canon-cr2;image/x-canon-crw;image/x-kodak-dcr;image/x-adobe-dng;image/x-kodak-k25;image/x-kodak-kdc;image/x-minolta-mrw;image/x-nikon-nef;image/x-olympus-orf;image/x-pentax-pef;image/x-fuji-raf;image/x-panasonic-rw;image/x-sony-sr2;image/x-sony-srf;image/x-sigma-x3f;image/x-sony-arw;image/x-panasonic-rw2;")
-endif()
-
 configure_file(org.kde.gwenview.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/org.kde.gwenview.desktop)
 
 install(TARGETS gwenview

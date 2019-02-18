@@ -126,6 +126,54 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
 
+function(JoinListAsString VALUES GLUE OUTPUT)
+    string(REPLACE ";" "${GLUE}" _TMP_STR "${VALUES}")
+    set(${OUTPUT} "${_TMP_STR}" PARENT_SCOPE)
+endfunction()
+
+set(IMAGE_MIME_TYPES_LIST
+    image/gif
+    image/jpeg
+    image/png
+    image/bmp
+    image/x-eps
+    image/x-icns
+    image/x-ico
+    image/x-portable-bitmap
+    image/x-portable-graymap
+    image/x-portable-pixmap
+    image/x-xbitmap
+    image/x-xpixmap
+    image/tiff
+    image/x-psd
+    image/x-webp
+    image/webp
+    image/x-tga
+)
+if (KF5KDcraw_FOUND)
+    list(APPEND IMAGE_MIME_TYPES_LIST
+        image/x-kde-raw
+        image/x-canon-cr2
+        image/x-canon-crw
+        image/x-kodak-dcr
+        image/x-adobe-dng
+        image/x-kodak-k25
+        image/x-kodak-kdc
+        image/x-minolta-mrw
+        image/x-nikon-nef
+        image/x-olympus-orf
+        image/x-pentax-pef
+        image/x-fuji-raf
+        image/x-panasonic-rw
+        image/x-sony-sr2
+        image/x-sony-srf
+        image/x-sigma-x3f
+        image/x-sony-arw
+        image/x-panasonic-rw2
+    )
+endif()
+JoinListAsString("${IMAGE_MIME_TYPES_LIST}" ";" IMAGE_MIME_TYPES)
+
 ## dirs to build
 add_subdirectory(lib)
 add_subdirectory(app)
