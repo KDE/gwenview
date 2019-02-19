@@ -149,6 +149,7 @@ set(IMAGE_MIME_TYPES_LIST
     image/x-webp
     image/webp
     image/x-tga
+    application/x-krita
 )
 if (KF5KDcraw_FOUND)
     list(APPEND IMAGE_MIME_TYPES_LIST
