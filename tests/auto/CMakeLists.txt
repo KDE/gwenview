@@ -9,6 +9,11 @@ macro(gv_add_unit_test _test)
     add_dependencies(buildtests ${_test})
 endmacro(gv_add_unit_test)
 
+kde_source_files_enable_exceptions(
+    documenttest.cpp
+    imagemetainfomodeltest.cpp
+)
+
 include_directories(
     ${gwenview_SOURCE_DIR}
     ${importer_SOURCE_DIR}
