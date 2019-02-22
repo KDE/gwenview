@@ -30,6 +30,8 @@ class QModelIndex;
 
 class QUrl;
 
+class QMouseEvent;
+
 namespace Gwenview
 {
 
@@ -79,6 +81,8 @@ protected:
     void saveProperties(KConfigGroup&) override;
     void readProperties(const KConfigGroup&) override;
     bool eventFilter(QObject *, QEvent *) override;
+    void mousePressEvent(QMouseEvent *) override;
+    void mouseDoubleClickEvent(QMouseEvent *) override;
 
 private Q_SLOTS:
     void setActiveViewModeAction(QAction* action);
@@ -138,6 +142,8 @@ private:
     void openSelectedDocuments();
     void saveConfig();
     void configureShortcuts();
+
+    void mouseButtonNavigate(QMouseEvent *);
 
     void folderViewUrlChanged(const QUrl &url);
 };

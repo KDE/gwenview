@@ -83,6 +83,7 @@ private Q_SLOTS:
 
 protected:
     bool eventFilter(QObject* watched, QEvent* event) override;
+    void mousePressEvent(QMouseEvent*) override;
 
 private:
     BrowseMainPagePrivate* const d;

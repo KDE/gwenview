@@ -397,6 +397,17 @@ bool BrowseMainPage::eventFilter(QObject* watched, QEvent* event)
     return QWidget::eventFilter(watched, event);
 }
 
+void BrowseMainPage::mousePressEvent(QMouseEvent* event)
+{
+    switch (event->button()) {
+    case Qt::ForwardButton:
+    case Qt::BackButton:
+        return;
+    default:
+        QWidget::mousePressEvent(event);
+    }
+}
+
 ThumbnailView* BrowseMainPage::thumbnailView() const
 {
     return d->mThumbnailView;

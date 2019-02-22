@@ -34,6 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QVBoxLayout>
 #include <QMenuBar>
 #include <QUrl>
+#include <QMouseEvent>
 #ifdef Q_OS_OSX
 #include <QFileOpenEvent>
 #endif
@@ -278,6 +279,7 @@ struct MainWindow::Private
         mBrowseMainPage = new BrowseMainPage(parent, q->actionCollection(), mGvCore);
 
         mThumbnailView = mBrowseMainPage->thumbnailView();
+        mThumbnailView->viewport()->installEventFilter(q);
         mThumbnailView->setSelectionModel(mContextManager->selectionModel());
         mUrlNavigator = mBrowseMainPage->urlNavigator();
 
@@ -1669,7 +1671,47 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
         return true;
     }
 #endif
+    if (obj == d->mThumbnailView->viewport()) {
+        switch(event->type()) {
+        case QEvent::MouseButtonPress:
+        case QEvent::MouseButtonDblClick:
+            mouseButtonNavigate(static_cast<QMouseEvent*>(event));
+            break;
+        default: ;
+        }
+    }
     return false;
+}
+
+void MainWindow::mousePressEvent(QMouseEvent *event)
+{
+    mouseButtonNavigate(event);
+    KXmlGuiWindow::mousePressEvent(event);
+}
+
+void MainWindow::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    mouseButtonNavigate(event);
+    KXmlGuiWindow::mouseDoubleClickEvent(event);
+}
+
+void MainWindow::mouseButtonNavigate(QMouseEvent *event)
+{
+    switch(event->button()) {
+    case Qt::ForwardButton:
+        if (d->mGoToNextAction->isEnabled()) {
+            d->mGoToNextAction->trigger();
+            return;
+        }
+        break;
+    case Qt::BackButton:
+        if (d->mGoToPreviousAction->isEnabled()) {
+            d->mGoToPreviousAction->trigger();
+            return;
+        }
+        break;
+    default: ;
+    }
 }
 
 void MainWindow::setDistractionFreeMode(bool value)
