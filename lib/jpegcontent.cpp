@@ -35,7 +35,7 @@ extern "C" {
 #include <QFile>
 #include <QImage>
 #include <QImageWriter>
-#include <QMatrix>
+#include <QTransform>
 #include <QDebug>
 
 // KDE
@@ -117,7 +117,7 @@ struct JpegContent::Private
     QSize mSize;
     QString mComment;
     bool mPendingTransformation;
-    QMatrix mTransformMatrix;
+    QTransform mTransformMatrix;
     Exiv2::ExifData mExifData;
     QString mErrorString;
 
@@ -345,16 +345,16 @@ void JpegContent::setComment(const QString& comment)
     d->mComment = comment;
 }
 
-static QMatrix createRotMatrix(int angle)
+static QTransform createRotMatrix(int angle)
 {
-    QMatrix matrix;
+    QTransform matrix;
     matrix.rotate(angle);
     return matrix;
 }
 
-static QMatrix createScaleMatrix(int dx, int dy)
+static QTransform createScaleMatrix(int dx, int dy)
 {
-    QMatrix matrix;
+    QTransform matrix;
     matrix.scale(dx, dy);
     return matrix;
 }
@@ -366,12 +366,12 @@ struct OrientationInfo
     , jxform(JXFORM_NONE)
     {}
 
-    OrientationInfo(Orientation o, const QMatrix &m, JXFORM_CODE j)
+    OrientationInfo(Orientation o, const QTransform &m, JXFORM_CODE j)
     : orientation(o), matrix(m), jxform(j)
     {}
 
     Orientation orientation;
-    QMatrix matrix;
+    QTransform matrix;
     JXFORM_CODE jxform;
 };
 typedef QList<OrientationInfo> OrientationInfoList;
@@ -380,13 +380,13 @@ static const OrientationInfoList& orientationInfoList()
 {
     static OrientationInfoList list;
     if (list.size() == 0) {
-        QMatrix rot90 = createRotMatrix(90);
-        QMatrix hflip = createScaleMatrix(-1, 1);
-        QMatrix vflip = createScaleMatrix(1, -1);
+        QTransform rot90 = createRotMatrix(90);
+        QTransform hflip = createScaleMatrix(-1, 1);
+        QTransform vflip = createScaleMatrix(1, -1);
 
         list
                 << OrientationInfo()
-                << OrientationInfo(NORMAL, QMatrix(), JXFORM_NONE)
+                << OrientationInfo(NORMAL, QTransform(), JXFORM_NONE)
                 << OrientationInfo(HFLIP, hflip, JXFORM_FLIP_H)
                 << OrientationInfo(ROT_180, createRotMatrix(180), JXFORM_ROT_180)
                 << OrientationInfo(VFLIP, vflip, JXFORM_FLIP_V)
@@ -417,7 +417,7 @@ void JpegContent::transform(Orientation orientation)
 }
 
 #if 0
-static void dumpMatrix(const QMatrix& matrix)
+static void dumpMatrix(const QTransform& matrix)
 {
     qDebug() << "matrix | " << matrix.m11() << ", " << matrix.m12() << " |\n";
     qDebug() << "       | " << matrix.m21() << ", " << matrix.m22() << " |\n";
@@ -425,7 +425,7 @@ static void dumpMatrix(const QMatrix& matrix)
 }
 #endif
 
-static bool matricesAreSame(const QMatrix& m1, const QMatrix& m2, double tolerance)
+static bool matricesAreSame(const QTransform& m1, const QTransform& m2, double tolerance)
 {
     return fabs(m1.m11() - m2.m11()) < tolerance
            && fabs(m1.m12() - m2.m12()) < tolerance
@@ -435,7 +435,7 @@ static bool matricesAreSame(const QMatrix& m1, const QMatrix& m2, double toleran
            && fabs(m1.dy()  - m2.dy()) < tolerance;
 }
 
-static JXFORM_CODE findJxform(const QMatrix& matrix)
+static JXFORM_CODE findJxform(const QTransform& matrix)
 {
     OrientationInfoList::ConstIterator it(orientationInfoList().begin()), end(orientationInfoList().end());
     for (; it != end; ++it) {
@@ -638,7 +638,7 @@ void JpegContent::setImage(const QImage& image)
     resetOrientation();
 
     d->mPendingTransformation = false;
-    d->mTransformMatrix = QMatrix();
+    d->mTransformMatrix = QTransform();
 }
 
 } // namespace

@@ -38,7 +38,7 @@ QWidget* setupPage(Ui& ui)
 {
     QWidget* widget = new QWidget;
     ui.setupUi(widget);
-    widget->layout()->setMargin(0);
+    widget->layout()->setContentsMargins(0, 0, 0, 0);
     return widget;
 }
 

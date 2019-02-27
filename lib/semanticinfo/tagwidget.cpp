@@ -155,7 +155,7 @@ struct TagWidgetPrivate
                          q, SLOT(addTagFromComboBox()));
 
         QVBoxLayout* layout = new QVBoxLayout(q);
-        layout->setMargin(0);
+        layout->setContentsMargins(0, 0, 0, 0);
         layout->addWidget(mListView);
 
         QHBoxLayout* hLayout = new QHBoxLayout;

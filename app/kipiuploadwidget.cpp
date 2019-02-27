@@ -44,7 +44,7 @@ KIPIUploadWidget::KIPIUploadWidget(KIPIInterface* interface, QWidget* parent)
     label->setWordWrap(true);
 
     QVBoxLayout* layout = new QVBoxLayout(this);
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(label);
 }
 

@@ -69,7 +69,7 @@ public:
     {
         setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         mLayout->setSpacing(0);
-        mLayout->setMargin(0);
+        mLayout->setContentsMargins(0, 0, 0, 0);
     }
 
     void addAction(QAction* action)
@@ -121,7 +121,7 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
     mAutoHideContainer = new FullScreenBar(autoHideParentWidget);
     mAutoHideContainer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     QVBoxLayout* layout = new QVBoxLayout(mAutoHideContainer);
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
 
     EventWatcher::install(autoHideParentWidget, QEvent::Resize, this, SLOT(adjustSize()));
@@ -167,7 +167,7 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
     mInformationContainer->setBackgroundRole(QPalette::Mid);
     mInformationContainerShadow = new ShadowFilter(mInformationContainer);
     QHBoxLayout* hLayout = new QHBoxLayout(mInformationContainer);
-    hLayout->setMargin(0);
+    hLayout->setContentsMargins(0, 0, 0, 0);
     hLayout->addWidget(mInformationLabel);
     hLayout->addWidget(mDocumentCountLabel);
 
@@ -304,7 +304,7 @@ void FullScreenContent::updateLayout()
         mRightToolBar->setDirection(QBoxLayout::TopToBottom);
 
         QHBoxLayout* layout = new QHBoxLayout(mContent);
-        layout->setMargin(0);
+        layout->setContentsMargins(0, 0, 0, 0);
         layout->setSpacing(0);
         QVBoxLayout* vLayout;
 
@@ -348,7 +348,7 @@ void FullScreenContent::updateLayout()
         mRightToolBar->setDirection(QBoxLayout::RightToLeft);
 
         QHBoxLayout* layout = new QHBoxLayout(mContent);
-        layout->setMargin(0);
+        layout->setContentsMargins(0, 0, 0, 0);
         layout->setSpacing(0);
         layout->addWidget(mToolBar);
         layout->addWidget(mInformationContainer);

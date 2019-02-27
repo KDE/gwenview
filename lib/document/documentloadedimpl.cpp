@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QByteArray>
 #include <QImage>
 #include <QImageWriter>
-#include <QMatrix>
+#include <QTransform>
 #include <QDebug>
 #include <QUrl>
 
@@ -109,7 +109,7 @@ void DocumentLoadedImpl::setImage(const QImage& image)
 void DocumentLoadedImpl::applyTransformation(Orientation orientation)
 {
     QImage image = document()->image();
-    QMatrix matrix = ImageUtils::transformMatrix(orientation);
+    QTransform matrix = ImageUtils::transformMatrix(orientation);
     image = image.transformed(matrix);
     setDocumentImage(image);
     emit imageRectUpdated(image.rect());

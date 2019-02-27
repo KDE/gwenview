@@ -21,16 +21,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "imageutils.h"
 
 // Qt
-#include <QMatrix>
+#include <QTransform>
 
 namespace Gwenview
 {
 namespace ImageUtils
 {
 
-QMatrix transformMatrix(Orientation orientation)
+QTransform transformMatrix(Orientation orientation)
 {
-    QMatrix matrix;
+    QTransform matrix;
     switch (orientation) {
     case NOT_AVAILABLE:
     case NORMAL:

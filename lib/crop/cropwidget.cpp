@@ -278,7 +278,7 @@ struct CropWidgetPrivate : public QWidget
     {
         QWidget* widget = new QWidget(parent);
         QHBoxLayout* layout = new QHBoxLayout(widget);
-        layout->setMargin(0);
+        layout->setContentsMargins(0, 0, 0, 0);
         layout->setSpacing(2);
         return widget;
     }

@@ -35,7 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QImageReader>
-#include <QMatrix>
+#include <QTransform>
 #include <QBuffer>
 
 namespace Gwenview
@@ -128,7 +128,7 @@ bool ThumbnailContext::load(const QString &pixPath, int pixelSize)
         if (qMax(thumbnail.width(), thumbnail.height()) >= pixelSize) {
             mImage = thumbnail;
             if (orientation != NORMAL && orientation != NOT_AVAILABLE) {
-                QMatrix matrix = ImageUtils::transformMatrix(orientation);
+                QTransform matrix = ImageUtils::transformMatrix(orientation);
                 mImage = mImage.transformed(matrix);
             }
             mOriginalWidth = content.size().width();

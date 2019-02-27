@@ -89,7 +89,7 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
     void setupWidgets()
     {
         setupUi(q);
-        q->layout()->setMargin(0);
+        q->layout()->setContentsMargins(0, 0, 0, 0);
 
         // mThumbnailView
         mThumbnailView->setModel(mDirModel);
@@ -105,7 +105,7 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
         mUrlNavigatorContainer->setAutoFillBackground(true);
         mUrlNavigatorContainer->setBackgroundRole(QPalette::Mid);
         QVBoxLayout* layout = new QVBoxLayout(mUrlNavigatorContainer);
-        layout->setMargin(0);
+        layout->setContentsMargins(0, 0, 0, 0);
         layout->addWidget(mUrlNavigator);
         QObject::connect(mUrlNavigator, SIGNAL(urlsDropped(QUrl,QDropEvent*)),
                          q, SLOT(slotUrlsDropped(QUrl,QDropEvent*)));

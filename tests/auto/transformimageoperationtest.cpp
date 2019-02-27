@@ -54,7 +54,7 @@ void TransformImageOperationTest::testRotate90()
 
     bool ok = image.load(url.toLocalFile());
     QVERIFY2(ok, "Could not load 'test.png'");
-    QMatrix matrix = ImageUtils::transformMatrix(ROT_90);
+    QTransform matrix = ImageUtils::transformMatrix(ROT_90);
     image = image.transformed(matrix);
 
     Document::Ptr doc = DocumentFactory::instance()->load(url);

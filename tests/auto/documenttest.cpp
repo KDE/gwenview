@@ -358,7 +358,7 @@ void DocumentTest::testLoadRotated()
     QImage image;
     bool ok = image.load(url.toLocalFile());
     QVERIFY2(ok, "Could not load 'orient6.jpg'");
-    QMatrix matrix = ImageUtils::transformMatrix(ROT_90);
+    QTransform matrix = ImageUtils::transformMatrix(ROT_90);
     image = image.transformed(matrix);
 
     Document::Ptr doc = DocumentFactory::instance()->load(url);

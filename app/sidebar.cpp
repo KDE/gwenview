@@ -103,7 +103,7 @@ SideBarGroup::SideBarGroup(const QString& title, bool defaultContainerMarginEnab
     d->mTitleLabel->setText(title);
 
     QVBoxLayout* layout = new QVBoxLayout(this);
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
 
     layout->addWidget(d->mTitleLabel);
@@ -143,7 +143,7 @@ void SideBarGroup::clear()
 
     d->mContainer = new QFrame(this);
     QVBoxLayout* containerLayout = new QVBoxLayout(d->mContainer);
-    containerLayout->setMargin(0);
+    containerLayout->setContentsMargins(0, 0, 0, 0);
     containerLayout->setSpacing(0);
 
     layout()->addWidget(d->mContainer);
@@ -182,7 +182,7 @@ SideBarPage::SideBarPage(const QString& title)
     d->mTitle = title;
 
     d->mLayout = new QVBoxLayout(this);
-    d->mLayout->setMargin(0);
+    d->mLayout->setContentsMargins(0, 0, 0, 0);
 }
 
 SideBarPage::~SideBarPage()

@@ -242,7 +242,7 @@ struct MainWindow::Private
         QVBoxLayout* layout = new QVBoxLayout(mContentWidget);
         layout->addWidget(mSaveBar);
         layout->addWidget(mViewStackedWidget);
-        layout->setMargin(0);
+        layout->setContentsMargins(0, 0, 0, 0);
         layout->setSpacing(0);
         ////
 
@@ -560,7 +560,7 @@ struct MainWindow::Private
         page = new SideBarPage(i18n("Folders"));
         page->setObjectName(QLatin1String("folders"));
         page->addWidget(folderViewItem->widget());
-        page->layout()->setMargin(0);
+        page->layout()->setContentsMargins(0, 0, 0, 0);
         mSideBar->addPage(page);
 
         page = new SideBarPage(i18n("Information"));

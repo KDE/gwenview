@@ -96,7 +96,7 @@ DateWidget::DateWidget(QWidget* parent)
     connect(d->mNextButton, &StatusBarToolButton::clicked, this, &DateWidget::goToNext);
 
     QHBoxLayout* layout = new QHBoxLayout(this);
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     layout->addWidget(d->mPreviousButton);
     layout->addWidget(d->mDateButton);

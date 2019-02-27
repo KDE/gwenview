@@ -90,7 +90,7 @@ struct SaveBarPrivate
 
         // Layout
         QHBoxLayout* layout = new QHBoxLayout(mTooManyChangesFrame);
-        layout->setMargin(0);
+        layout->setContentsMargins(0, 0, 0, 0);
         layout->addWidget(iconLabel);
         layout->addWidget(textLabel);
         layout->addWidget(mSaveAllFullScreenButton);
@@ -258,7 +258,7 @@ SaveBar::SaveBar(QWidget* parent, KActionCollection* actionCollection)
     rowLayout->addWidget(d->mSaveCurrentUrlButton);
     rowLayout->addWidget(d->mSaveAsButton);
     rowLayout->addWidget(d->mSaveAllButton);
-    rowLayout->setMargin(0);
+    rowLayout->setContentsMargins(0, 0, 0, 0);
 
     // Setup bottom row
     QHBoxLayout* bottomRowLayout = new QHBoxLayout;

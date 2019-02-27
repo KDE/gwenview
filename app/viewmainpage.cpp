@@ -215,7 +215,7 @@ struct ViewMainPagePrivate
         mAdapterContainer = new QWidget;
 
         QVBoxLayout* layout = new QVBoxLayout(mAdapterContainer);
-        layout->setMargin(0);
+        layout->setContentsMargins(0, 0, 0, 0);
         layout->setSpacing(0);
         mDocumentViewContainer = new DocumentViewContainer;
         mDocumentViewContainer->setAutoFillBackground(true);
@@ -306,7 +306,7 @@ struct ViewMainPagePrivate
         mDocumentCountLabel->setContentsMargins(labelMargins);
 
         QHBoxLayout* layout = new QHBoxLayout(mStatusBarContainer);
-        layout->setMargin(0);
+        layout->setContentsMargins(0, 0, 0, 0);
         layout->setSpacing(0);
         layout->addWidget(mToggleSideBarButton);
         layout->addWidget(mToggleThumbnailBarButton);
@@ -331,7 +331,7 @@ struct ViewMainPagePrivate
         mThumbnailSplitter->setSizes(GwenviewConfig::thumbnailSplitterSizes());
 
         QVBoxLayout* layout = new QVBoxLayout(q);
-        layout->setMargin(0);
+        layout->setContentsMargins(0, 0, 0, 0);
         layout->addWidget(mThumbnailSplitter);
     }
 

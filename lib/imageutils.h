@@ -24,14 +24,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <lib/gwenviewlib_export.h>
 #include <lib/orientation.h>
 
-class QMatrix;
+class QTransform;
 
 namespace Gwenview
 {
 namespace ImageUtils
 {
 
-GWENVIEWLIB_EXPORT QMatrix transformMatrix(Orientation);
+GWENVIEWLIB_EXPORT QTransform transformMatrix(Orientation);
 
 } // namespace
 } // namespace

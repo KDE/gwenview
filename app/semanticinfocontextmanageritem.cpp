@@ -69,7 +69,7 @@ struct SemanticInfoDialog : public QDialog, public Ui_SemanticInfoDialog
         QWidget* mainWidget = new QWidget;
         layout()->addWidget(mainWidget);
         setupUi(mainWidget);
-        mainWidget->layout()->setMargin(0);
+        mainWidget->layout()->setContentsMargins(0, 0, 0, 0);
         setWindowTitle(mainWidget->windowTitle());
 
         KWindowConfig::restoreWindowSize(windowHandle(), configGroup());
@@ -177,7 +177,7 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
 
         QWidget* container = new QWidget;
         setupUi(container);
-        container->layout()->setMargin(0);
+        container->layout()->setContentsMargins(0, 0, 0, 0);
         mGroup->addWidget(container);
 
         formLayout->setContentsMargins(DEFAULT_LAYOUT_MARGIN, 0, 0, 0);

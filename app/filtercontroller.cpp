@@ -67,7 +67,7 @@ NameFilterWidget::NameFilterWidget(SortedDirModel* model)
     mLineEdit = new QLineEdit;
 
     QHBoxLayout* layout = new QHBoxLayout(this);
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(2);
     layout->addWidget(mModeComboBox);
     layout->addWidget(mLineEdit);
@@ -110,7 +110,7 @@ DateFilterWidget::DateFilterWidget(SortedDirModel* model)
     mDateWidget = new DateWidget;
 
     QHBoxLayout* layout = new QHBoxLayout(this);
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(mModeComboBox);
     layout->addWidget(mDateWidget);
 
@@ -147,7 +147,7 @@ RatingFilterWidget::RatingFilterWidget(SortedDirModel* model)
     mRatingWidget->setMaxRating(10);
 
     QHBoxLayout* layout = new QHBoxLayout(this);
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(mModeComboBox);
     layout->addWidget(mRatingWidget);
 
@@ -190,7 +190,7 @@ TagFilterWidget::TagFilterWidget(SortedDirModel* model)
     mTagComboBox = new QComboBox;
 
     QHBoxLayout* layout = new QHBoxLayout(this);
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(mModeComboBox);
     layout->addWidget(mTagComboBox);
 
