@@ -724,16 +724,16 @@ void PreviewItemDelegate::paint(QPainter * painter, const QStyleOptionViewItem &
         bgColor = option.palette.color(cg, QPalette::Highlight);
 
         if (hasFocus) {
-            borderColor = bgColor.dark(FOCUS_BORDER_DARKNESS);
+            borderColor = bgColor.darker(FOCUS_BORDER_DARKNESS);
         } else {
-            borderColor = bgColor.dark(SELECTION_BORDER_DARKNESS);
+            borderColor = bgColor.darker(SELECTION_BORDER_DARKNESS);
         }
     } else {
         bgColor = viewport->palette().color(viewport->backgroundRole());
         if (hasFocus) {
             borderColor = fgColor;
         } else {
-            borderColor = bgColor.light(200);
+            borderColor = bgColor.lighter(200);
         }
     }
 

@@ -84,12 +84,12 @@ void Gwenview::ContextBarButton::paintEvent(QPaintEvent*)
     initStyleOption(&opt);
 
     const QColor bgColor = palette().color(backgroundRole());
-    QColor color = bgColor.dark(CONTEXTBAR_BACKGROUND_DARKNESS);
-    QColor borderColor = bgColor.light(CONTEXTBAR_BORDER_LIGHTNESS);
+    QColor color = bgColor.darker(CONTEXTBAR_BACKGROUND_DARKNESS);
+    QColor borderColor = bgColor.lighter(CONTEXTBAR_BORDER_LIGHTNESS);
 
     if (opt.state & QStyle::State_MouseOver && opt.state & QStyle::State_Enabled) {
-        color = color.light(CONTEXTBAR_MOUSEOVER_LIGHTNESS);
-        borderColor = borderColor.light(CONTEXTBAR_MOUSEOVER_LIGHTNESS);
+        color = color.lighter(CONTEXTBAR_MOUSEOVER_LIGHTNESS);
+        borderColor = borderColor.lighter(CONTEXTBAR_MOUSEOVER_LIGHTNESS);
     }
 
     const QRectF rectF = QRectF(opt.rect).adjusted(0.5, 0.5, -0.5, -0.5);
