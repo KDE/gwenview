@@ -170,6 +170,14 @@ set(gwenviewlib_SRCS
     widgetfloater.cpp
     zoomslider.cpp
     zoomwidget.cpp
+    scrollerutils.cpp
+    touch/touch.cpp
+    touch/tapholdandmoving.cpp
+    touch/twofingerpan.cpp
+    touch/oneandtwofingerswipe.cpp
+    touch/doubletap.cpp
+    touch/twofingertap.cpp
+    touch/touch_helper.cpp
     ${GV_JPEG_DIR}/transupp.c
     )
 

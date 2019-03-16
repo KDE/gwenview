@@ -33,6 +33,10 @@ class QDragEnterEvent;
 class QDragMoveEvent;
 class QDropEvent;
 class QPixmap;
+class QGestureEvent;
+class QTapGesture;
+class QPinchGesture;
+class QGesture;
 
 namespace Gwenview
 {
@@ -186,6 +190,10 @@ protected Q_SLOTS:
                      const QVector<int> &roles = QVector<int>()) override;
 
 private Q_SLOTS:
+    void startDragFromTouch(const QPoint& pos);
+    void tapGesture(const QPoint& pos);
+    void setZoomParameter();
+    void zoomGesture(qreal newZoom, const QPoint& pos);
     void showContextMenu();
     void emitIndexActivatedIfNoModifiers(const QModelIndex&);
     void setThumbnail(const KFileItem&, const QPixmap&, const QSize&, qulonglong fileSize);

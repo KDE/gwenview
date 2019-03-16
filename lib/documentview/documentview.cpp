@@ -42,6 +42,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QDrag>
 #include <QMimeData>
 #include <QStyleHints>
+#include <QGestureEvent>
 
 // KDE
 #include <KLocalizedString>
@@ -68,6 +69,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/urlutils.h>
 #include <lib/thumbnailview/dragpixmapgenerator.h>
 #include <lib/thumbnailprovider/thumbnailprovider.h>
+#include <lib/touch/touch.h>
+#include <transformimageoperation.h>
 
 namespace Gwenview
 {
@@ -114,6 +117,8 @@ struct DocumentViewPrivate
     QPointF mDragStartPosition;
     QPointer<ThumbnailProvider> mDragThumbnailProvider;
     QPointer<QDrag> mDrag;
+
+    Touch* mTouch;
 
     void setCurrentAdapter(AbstractDocumentViewAdapter* adapter)
     {
@@ -448,6 +453,18 @@ DocumentView::DocumentView(QGraphicsScene* scene)
     d->mDragStartPosition = QPointF(0, 0);
     d->mDrag = nullptr;
 
+    d->mTouch = new Touch(this);
+    setAcceptTouchEvents (true);
+    connect(d->mTouch, &Touch::doubleTapTriggered, this, &DocumentView::toggleFullScreenRequested);
+    connect(d->mTouch, &Touch::twoFingerTapTriggered, this, &DocumentView::contextMenuRequested);
+    connect(d->mTouch, &Touch::pinchGestureStarted, this, &DocumentView::setPinchParameter);
+    connect(d->mTouch, &Touch::pinchZoomTriggered, this, &DocumentView::zoomGesture);
+    connect(d->mTouch, &Touch::pinchRotateTriggered, this, &DocumentView::rotationsGesture);
+    connect(d->mTouch, &Touch::swipeRightTriggered, this, &DocumentView::swipeRight);
+    connect(d->mTouch, &Touch::swipeLeftTriggered, this, &DocumentView::swipeLeft);
+    connect(d->mTouch, &Touch::PanTriggered, this, &DocumentView::panGesture);
+    connect(d->mTouch, &Touch::tapHoldAndMovingTriggered, this, &DocumentView::startDragFromTouch);
+
     // We use an opacity effect instead of using the opacity property directly, because the latter operates at
     // the painter level, which means if you draw multiple layers in paint(), all layers get the specified
     // opacity, resulting in all layers being visible when 0 < opacity < 1.
@@ -471,6 +488,7 @@ DocumentView::DocumentView(QGraphicsScene* scene)
 
 DocumentView::~DocumentView()
 {
+    delete d->mTouch;
     delete d->mDragThumbnailProvider;
     delete d->mDrag;
     delete d;
@@ -710,6 +728,61 @@ qreal DocumentView::zoom() const
     return d->mAdapter->zoom();
 }
 
+void DocumentView::setPinchParameter()
+{
+    const qreal sensitivityModifier = 0.85;
+    const qreal rotationThreshold = 40;
+    d->mTouch->setZoomParameter(sensitivityModifier, zoom());
+    d->mTouch->setRotationThreshold (rotationThreshold);
+}
+
+void DocumentView::zoomGesture(qreal zoom, const QPoint& zoomCenter)
+{
+    if (zoom >= 0.0 && d->mAdapter->canZoom()) {
+            d->setZoom(zoom, zoomCenter);
+        }
+}
+
+void DocumentView::rotationsGesture(qreal rotation)
+{
+    if (rotation > 0.0) {
+        TransformImageOperation* op = new TransformImageOperation(ROT_90);
+        op->applyToDocument(d->mDocument);
+    } else if (rotation < 0.0) {
+        TransformImageOperation* op = new TransformImageOperation(ROT_270);
+        op->applyToDocument(d->mDocument);
+    }
+}
+
+void DocumentView::swipeRight()
+{
+    const QPoint scrollPos = d->mAdapter->scrollPos().toPoint();
+    if (scrollPos.x() <= 1) {
+        emit d->mAdapter->previousImageRequested();
+    }
+}
+
+void DocumentView::swipeLeft()
+{
+    const QPoint scrollPos = d->mAdapter->scrollPos().toPoint();
+    const int width = d->mAdapter->document()->width() * d->mAdapter->zoom();
+    const QRect visibleRect = d->mAdapter->visibleDocumentRect().toRect();
+    const int x = scrollPos.x() + visibleRect.width();
+    if (x >= (width - 1)) {
+        emit d->mAdapter->nextImageRequested();
+    }
+}
+
+void DocumentView::panGesture(const QPointF& delta)
+{
+    d->mAdapter->setScrollPos(d->mAdapter->scrollPos() + delta);
+}
+
+void DocumentView::startDragFromTouch(const QPoint&)
+{
+    d->startDragIfSensible();
+}
+
 void DocumentView::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
     d->resizeAdapterWidget();
@@ -946,6 +1019,12 @@ bool DocumentView::sceneEventFilter(QGraphicsItem*, QEvent* event)
         }
     } else if (event->type() == QEvent::GraphicsSceneMouseMove) {
         const QGraphicsSceneMouseEvent* mouseEvent = static_cast<QGraphicsSceneMouseEvent*>(event);
+        //in some older version of Qt, Qt synthesize a mouse event from the touch event
+        //we need to suppress this.
+        //I need this for my working system (OpenSUSE Leap 15.0, Qt 5.9.4)
+        if (mouseEvent->source() == Qt::MouseEventSynthesizedByQt) {
+            return true;
+        }
         const qreal dragDistance = (mouseEvent->pos() - d->mDragStartPosition).manhattanLength();
         const qreal minDistanceToStartDrag = QGuiApplication::styleHints()->startDragDistance();
         if (!d->canPan() && dragDistance >= minDistanceToStartDrag) {

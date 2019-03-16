@@ -48,6 +48,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/thumbnailview/abstractthumbnailviewhelper.h>
 #include <lib/thumbnailview/previewitemdelegate.h>
 #include <lib/thumbnailprovider/thumbnailprovider.h>
+#include <lib/scrollerutils.h>
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 #include <lib/semanticinfo/tagmodel.h>
@@ -189,12 +190,26 @@ StartMainPage::StartMainPage(QWidget* parent, GvCore* gvCore)
     connect(GwenviewConfig::self(), &GwenviewConfig::configChanged, this, &StartMainPage::loadConfig);
 
     d->mRecentFoldersView->setFocus();
+
+    ScrollerUtils::setQScroller(d->mBookmarksView->viewport());
+    d->mBookmarksView->viewport()->installEventFilter(this);
 }
 
 StartMainPage::~StartMainPage()
 {
     delete d->mRecentFilesThumbnailProvider;
     delete d;
+}
+
+bool StartMainPage::eventFilter(QObject*, QEvent* event)
+{
+    if (event->type() == QEvent::MouseMove) {
+        QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
+        if (mouseEvent->source() == Qt::MouseEventSynthesizedByQt) {
+            return true;
+        }
+    }
+    return false;
 }
 
 void StartMainPage::slotTagViewClicked(const QModelIndex& index)

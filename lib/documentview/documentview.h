@@ -33,6 +33,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 class QPropertyAnimation;
 class QUrl;
+class QGestureEvent;
+class QTapGesture;
+class QPinchGesture;
+class QGesture;
 
 namespace Gwenview
 {
@@ -233,6 +237,13 @@ private Q_SLOTS:
 
     void dragThumbnailLoaded(const KFileItem&, const QPixmap&);
     void dragThumbnailLoadingFailed(const KFileItem&);
+    void setPinchParameter();
+    void zoomGesture(qreal newZoom, const QPoint& pos);
+    void rotationsGesture(qreal);
+    void swipeRight();
+    void swipeLeft();
+    void panGesture(const QPointF& delta);
+    void startDragFromTouch(const QPoint& pos);
 
 private:
     friend struct DocumentViewPrivate;

@@ -36,6 +36,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QMimeData>
 #include <QDebug>
 #include <QDateTime>
+#include <QGestureEvent>
+#include <QScroller>
 
 // KDE
 #include <KDirModel>
@@ -52,6 +54,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "urlutils.h"
 #include <lib/gvdebug.h>
 #include <lib/thumbnailprovider/thumbnailprovider.h>
+#include <lib/scrollerutils.h>
+#include <lib/touch/touch.h>
 
 namespace Gwenview
 {
@@ -187,6 +191,9 @@ struct ThumbnailViewPrivate
 
     bool mCreateThumbnailsForRemoteUrls;
 
+    QScroller* mScroller;
+    Touch* mTouch;
+
     void setupBusyAnimation()
     {
         mBusySequence = KIconLoader::global()->loadPixmapSequence(QStringLiteral("process-working"), 22);
@@ -317,10 +324,19 @@ ThumbnailView::ThumbnailView(QWidget* parent)
     connect(this, &ThumbnailView::customContextMenuRequested, this, &ThumbnailView::showContextMenu);
 
     connect(this, &ThumbnailView::activated, this, &ThumbnailView::emitIndexActivatedIfNoModifiers);
+
+    d->mScroller = ScrollerUtils::setQScroller(this->viewport());
+    d->mTouch = new Touch(viewport());
+    connect(d->mTouch, &Touch::twoFingerTapTriggered, this, &ThumbnailView::showContextMenu);
+    connect(d->mTouch, &Touch::pinchZoomTriggered, this, &ThumbnailView::zoomGesture);
+    connect(d->mTouch, &Touch::pinchGestureStarted, this, &ThumbnailView::setZoomParameter);
+    connect(d->mTouch, &Touch::tapTriggered, this, &ThumbnailView::tapGesture);
+    connect(d->mTouch, &Touch::tapHoldAndMovingTriggered, this, &ThumbnailView::startDragFromTouch);
 }
 
 ThumbnailView::~ThumbnailView()
 {
+    delete d->mTouch;
     delete d;
 }
 
@@ -691,6 +707,37 @@ void ThumbnailView::startDrag(Qt::DropActions)
     drag->setMimeData(MimeTypeUtils::selectionMimeData(selectedFiles, MimeTypeUtils::DropTarget));
     d->initDragPixmap(drag, indexes);
     drag->exec(Qt::MoveAction | Qt::CopyAction | Qt::LinkAction, Qt::CopyAction);
+}
+
+void ThumbnailView::setZoomParameter()
+{
+    const qreal sensitivityModifier = 0.25;
+    d->mTouch->setZoomParameter(sensitivityModifier, d->mThumbnailSize.width());
+}
+
+void ThumbnailView::zoomGesture(qreal newZoom, const QPoint&)
+{
+    if (newZoom >= 0.0) {
+        int width = qBound (int(MinThumbnailSize), static_cast<int>(newZoom), int(MaxThumbnailSize));
+        setThumbnailWidth(width);
+    }
+}
+
+void ThumbnailView::tapGesture(const QPoint& pos)
+{
+    const QRect rect = QRect(pos, QSize(1, 1));
+    setSelection(rect, QItemSelectionModel::ClearAndSelect);
+    emit activated(indexAt(pos));
+}
+
+void ThumbnailView::startDragFromTouch(const QPoint& pos)
+{
+    QModelIndex index = indexAt(pos);
+    if (index.isValid()) {
+        setCurrentIndex(index);
+        d->mScroller->stop();
+        startDrag(Qt::CopyAction);
+    }
 }
 
 void ThumbnailView::dragEnterEvent(QDragEnterEvent* event)

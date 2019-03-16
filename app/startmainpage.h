@@ -31,6 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 class QModelIndex;
 class QPalette;
 class QShowEvent;
+class QEvent;
 
 class QUrl;
 
@@ -61,6 +62,7 @@ public Q_SLOTS:
 
 protected:
     void showEvent(QShowEvent*) override;
+    bool eventFilter(QObject*, QEvent*) override;
 
 private Q_SLOTS:
     void slotListViewActivated(const QModelIndex& index);

@@ -28,6 +28,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QDir>
 #include <QMimeData>
 #include <QDebug>
+#include <QStyleHints>
+#include <QApplication>
 
 // KDE
 #include <KUrlMimeData>
@@ -37,6 +39,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <lib/eventwatcher.h>
 #include "sidebar.h"
 #include "fileoperations.h"
+#include <lib/scrollerutils.h>
+#include "lib/touch/touch_helper.h"
 
 namespace Gwenview
 {
@@ -92,6 +96,19 @@ protected:
         FileOperations::showMenuForDroppedUrls(this, urlList, destUrl);
     }
 
+    bool viewportEvent(QEvent* event) override
+    {
+        if (event->type() == QEvent::TouchBegin) {
+            return true;
+        }
+        const QPoint pos = Touch_Helper::simpleTapPosition(event);
+        if (pos != QPoint(-1, -1)) {
+            expand(indexAt(pos));
+            emit activated(indexAt(pos));
+        }
+
+        return QTreeView::viewportEvent(event);
+    }
 private:
     QRect mDropRect;
 };
@@ -208,6 +225,8 @@ void FolderViewContextManagerItem::setupView()
     // widget).
     mView->header()->setStretchLastSection(false);
     mView->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
+
+    ScrollerUtils::setQScroller(mView->viewport());
 
     setWidget(mView);
     QObject::connect(mView, &QTreeView::activated, this, &FolderViewContextManagerItem::slotActivated);
