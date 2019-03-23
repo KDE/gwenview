@@ -18,7 +18,7 @@ file(WRITE ${JPEGLIB_VERSION_CHECK_PATH} "
 #include <stdlib.h>
 #include <jpeglib.h>
 
-int main(void) { printf(\"%d\\\n\", JPEG_LIB_VERSION); }
+int main(void) { printf(\"%d\\\n\", JPEG_LIB_VERSION); return 0; }
 ")
 
 try_run(JPEGLIB_RUN_RESULT JPEGLIB_COMPILE_RESULT
