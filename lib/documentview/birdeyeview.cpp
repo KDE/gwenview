@@ -138,7 +138,7 @@ void BirdEyeView::adjustGeometry()
     if (!d->mDocView->canZoom() || d->mDocView->zoomToFit()) {
         return;
     }
-    QSizeF size = d->mDocView->document()->size();
+    QSizeF size = d->mDocView->document()->size() / qApp->devicePixelRatio();
     size.scale(MIN_SIZE, MIN_SIZE, Qt::KeepAspectRatioByExpanding);
     QRectF docViewRect = d->mDocView->boundingRect();
     int maxBevHeight = docViewRect.height() - 2 * VIEW_OFFSET;
@@ -163,7 +163,7 @@ void BirdEyeView::adjustGeometry()
 
 void BirdEyeView::adjustVisibleRect()
 {
-    QSizeF docSize = d->mDocView->document()->size();
+    QSizeF docSize = d->mDocView->document()->size() / qApp->devicePixelRatio();
     qreal viewZoom = d->mDocView->zoom();
     qreal bevZoom;
     if (docSize.height() > docSize.width()) {

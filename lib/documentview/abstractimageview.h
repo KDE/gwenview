@@ -75,12 +75,22 @@ public:
 
     QSizeF documentSize() const;
 
+    /**
+     * Returns the size of the loaded document in device independent pixels.
+    */
+    QSizeF dipDocumentSize() const;
+
+    /*
+     * The size of the image that is currently visible,
+     * in device independent pixels.
+     */
     QSizeF visibleImageSize() const;
 
     /**
      * If the image is smaller than the view, imageOffset is the distance from
      * the topleft corner of the view to the topleft corner of the image.
      * Neither x nor y can be negative.
+     * This is in device independent pixels.
      */
     QPointF imageOffset() const;
 
@@ -90,6 +100,8 @@ public:
      */
     QPointF scrollPos() const;
     void setScrollPos(const QPointF& pos);
+
+    qreal devicePixelRatio() const;
 
     QPointF mapToView(const QPointF& imagePos) const;
     QPoint mapToView(const QPoint& imagePos) const;

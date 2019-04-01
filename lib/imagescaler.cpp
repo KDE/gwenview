@@ -23,6 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QImage>
 #include <QRegion>
 #include <QDebug>
+#include <QApplication>
 
 // KDE
 
@@ -44,6 +45,19 @@ namespace Gwenview
 
 // Amount of pixels to keep so that smooth scale is correct
 static const int SMOOTH_MARGIN = 3;
+
+static inline QRectF scaledRect(const QRectF& rect, qreal factor)
+{
+    return QRectF(rect.x() * factor,
+                  rect.y() * factor,
+                  rect.width() * factor,
+                  rect.height() * factor);
+}
+
+static inline QRect scaledRect(const QRect& rect, qreal factor)
+{
+    return scaledRect(QRectF(rect), factor).toAlignedRect();
+}
 
 struct ImageScalerPrivate
 {
@@ -126,9 +140,15 @@ void ImageScaler::doScale()
 
 void ImageScaler::scaleRect(const QRect& rect)
 {
+    const qreal dpr = qApp->devicePixelRatio();
+
+    // variables prefixed with dp are in device pixels
+    const QRect dpRect = Gwenview::scaledRect(rect, dpr);
+
     const qreal REAL_DELTA = 0.001;
     if (qAbs(d->mZoom - 1.0) < REAL_DELTA) {
-        QImage tmp = d->mDocument->image().copy(rect);
+        QImage tmp = d->mDocument->image().copy(dpRect);
+        tmp.setDevicePixelRatio(dpr);
         emit scaledRect(rect.left(), rect.top(), tmp);
         return;
     }
@@ -144,14 +164,12 @@ void ImageScaler::scaleRect(const QRect& rect)
         image = d->mDocument->image();
         zoom = d->mZoom;
     }
-    // If rect contains "half" pixels, make sure sourceRect includes them
-    QRectF sourceRectF(
-        rect.left() / zoom,
-        rect.top() / zoom,
-        rect.width() / zoom,
-        rect.height() / zoom);
+    const QRect imageRect = Gwenview::scaledRect(image.rect(), 1.0 / dpr);
 
-    sourceRectF = sourceRectF.intersected(image.rect());
+    // If rect contains "half" pixels, make sure sourceRect includes them
+    QRectF sourceRectF = Gwenview::scaledRect(QRectF(rect), 1.0 / zoom);
+
+    sourceRectF = sourceRectF.intersected(imageRect);
     QRect sourceRect = PaintUtils::containingRect(sourceRectF);
     if (sourceRect.isEmpty()) {
         return;
@@ -165,8 +183,8 @@ void ImageScaler::scaleRect(const QRect& rect)
     if (needsSmoothMargins) {
         sourceLeftMargin = qMin(sourceRect.left(), SMOOTH_MARGIN);
         sourceTopMargin = qMin(sourceRect.top(), SMOOTH_MARGIN);
-        sourceRightMargin = qMin(image.rect().right() - sourceRect.right(), SMOOTH_MARGIN);
-        sourceBottomMargin = qMin(image.rect().bottom() - sourceRect.bottom(), SMOOTH_MARGIN);
+        sourceRightMargin = qMin(imageRect.right() - sourceRect.right(), SMOOTH_MARGIN);
+        sourceBottomMargin = qMin(imageRect.bottom() - sourceRect.bottom(), SMOOTH_MARGIN);
         sourceRect.adjust(
             -sourceLeftMargin,
             -sourceTopMargin,
@@ -182,30 +200,28 @@ void ImageScaler::scaleRect(const QRect& rect)
     }
 
     // destRect is almost like rect, but it contains only "full" pixels
-    QRectF destRectF = QRectF(
-                           sourceRect.left() * zoom,
-                           sourceRect.top() * zoom,
-                           sourceRect.width() * zoom,
-                           sourceRect.height() * zoom
-                       );
-    QRect destRect = PaintUtils::containingRect(destRectF);
+    QRect destRect = Gwenview::scaledRect(sourceRect, zoom);
+
+    QRect dpSourceRect = Gwenview::scaledRect(sourceRect, dpr);
+    QRect dpDestRect = Gwenview::scaledRect(dpSourceRect, zoom);
 
     QImage tmp;
-    tmp = image.copy(sourceRect);
+    tmp = image.copy(dpSourceRect);
     tmp = tmp.scaled(
-              destRect.width(),
-              destRect.height(),
+              dpDestRect.width(),
+              dpDestRect.height(),
               Qt::IgnoreAspectRatio, // Do not use KeepAspectRatio, it can lead to skipped rows or columns
               d->mTransformationMode);
 
     if (needsSmoothMargins) {
         tmp = tmp.copy(
-                  destLeftMargin, destTopMargin,
-                  destRect.width() - (destLeftMargin + destRightMargin),
-                  destRect.height() - (destTopMargin + destBottomMargin)
+                  destLeftMargin * dpr, destTopMargin * dpr,
+                  dpDestRect.width() - (destLeftMargin + destRightMargin) * dpr,
+                  dpDestRect.height() - (destTopMargin + destBottomMargin) * dpr
               );
     }
 
+    tmp.setDevicePixelRatio(dpr);
     emit scaledRect(destRect.left() + destLeftMargin, destRect.top() + destTopMargin, tmp);
 }
 
