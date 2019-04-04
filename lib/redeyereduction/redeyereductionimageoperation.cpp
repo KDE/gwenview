@@ -85,7 +85,7 @@ RedEyeReductionImageOperation::~RedEyeReductionImageOperation()
 void RedEyeReductionImageOperation::redo()
 {
     QImage img = document()->image();
-    QRect rect = PaintUtils::containingRect(d->mRectF);
+    QRect rect = d->mRectF.toAlignedRect();
     d->mOriginalImage = img.copy(rect);
     redoAsDocumentJob(new RedEyeReductionJob(d->mRectF));
 }
@@ -100,7 +100,7 @@ void RedEyeReductionImageOperation::undo()
     {
         QPainter painter(&img);
         painter.setCompositionMode(QPainter::CompositionMode_Source);
-        QRect rect = PaintUtils::containingRect(d->mRectF);
+        QRect rect = d->mRectF.toAlignedRect();
         painter.drawImage(rect.topLeft(), d->mOriginalImage);
     }
     document()->editor()->setImage(img);
@@ -130,7 +130,7 @@ inline qreal computeRedEyeAlpha(const QColor& src)
 
 void RedEyeReductionImageOperation::apply(QImage* img, const QRectF& rectF)
 {
-    const QRect rect = PaintUtils::containingRect(rectF);
+    const QRect rect = rectF.toAlignedRect();
     const qreal radius = rectF.width() / 2;
     const qreal centerX = rectF.x() + radius;
     const qreal centerY = rectF.y() + radius;

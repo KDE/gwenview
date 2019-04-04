@@ -170,7 +170,7 @@ void ImageScaler::scaleRect(const QRect& rect)
     QRectF sourceRectF = Gwenview::scaledRect(QRectF(rect), 1.0 / zoom);
 
     sourceRectF = sourceRectF.intersected(imageRect);
-    QRect sourceRect = PaintUtils::containingRect(sourceRectF);
+    QRect sourceRect = sourceRectF.toAlignedRect();
     if (sourceRect.isEmpty()) {
         return;
     }

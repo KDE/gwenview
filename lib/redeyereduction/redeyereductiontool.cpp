@@ -123,7 +123,7 @@ void RedEyeReductionTool::paint(QPainter* painter)
     QRectF docRectF = d->rectF();
     imageView()->document()->waitUntilLoaded();
 
-    QRect docRect = PaintUtils::containingRect(docRectF);
+    QRect docRect = docRectF.toAlignedRect();
     QImage img = imageView()->document()->image().copy(docRect);
     QRectF imgRectF(
         docRectF.left() - docRect.left(),

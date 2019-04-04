@@ -62,11 +62,6 @@ GWENVIEWLIB_EXPORT QColor adjustedHsv(const QColor& color, int deltaH, int delta
  */
 GWENVIEWLIB_EXPORT QColor alphaAdjustedF(const QColor& color, qreal alphaF);
 
-/**
- * Returns the smallest QRect which contains @p rectF
- */
-GWENVIEWLIB_EXPORT QRect containingRect(const QRectF& rectF);
-
 } // namespace
 
 } // namespace
