@@ -43,6 +43,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QMimeData>
 #include <QStyleHints>
 #include <QGestureEvent>
+#include <QLibraryInfo>
 
 // KDE
 #include <KLocalizedString>
@@ -472,7 +473,10 @@ DocumentView::DocumentView(QGraphicsScene* scene)
     // This is important for fade effects, where we don't want any background layers visible during the fade.
     d->mOpacityEffect = new QGraphicsOpacityEffect(this);
     d->mOpacityEffect->setOpacity(0);
-    setGraphicsEffect(d->mOpacityEffect);
+
+    // QTBUG-74963. QGraphicsOpacityEffect cause painting an image as non-highdpi.
+    if (qFuzzyCompare(qApp->devicePixelRatio(), 1.0) || QLibraryInfo::version() >= QVersionNumber(5, 12, 4))
+        setGraphicsEffect(d->mOpacityEffect);
 
     scene->addItem(this);
 

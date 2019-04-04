@@ -32,6 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QGraphicsSceneMouseEvent>
 #include <QStandardPaths>
 #include <QPainter>
+#include <QApplication>
 
 namespace Gwenview
 {
@@ -63,7 +64,7 @@ struct AbstractImageViewPrivate
 
     void adjustImageOffset(Verbosity verbosity = Notify)
     {
-        QSizeF zoomedDocSize = q->documentSize() * mZoom;
+        QSizeF zoomedDocSize = q->dipDocumentSize() * mZoom;
         QSizeF viewSize = q->boundingRect().size();
         QPointF offset(
             qMax((viewSize.width() - zoomedDocSize.width()) / 2, qreal(0.)),
@@ -88,7 +89,7 @@ struct AbstractImageViewPrivate
             mScrollPos = _newPos;
             return;
         }
-        QSizeF zoomedDocSize = q->documentSize() * mZoom;
+        QSizeF zoomedDocSize = q->dipDocumentSize() * mZoom;
         QSizeF viewSize = q->boundingRect().size();
         QPointF newPos(
             qBound(qreal(0.), _newPos.x(), zoomedDocSize.width() - viewSize.width()),
@@ -123,6 +124,7 @@ struct AbstractImageViewPrivate
         const QColor light = QColor(192, 192, 192);
         painter.fillRect(0, 0, 16, 16, light);
         painter.fillRect(16, 16, 16, 16, light);
+        pix.setDevicePixelRatio(q->devicePixelRatio());
         return pix;
     }
 
@@ -183,6 +185,11 @@ void AbstractImageView::setDocument(const Document::Ptr &doc)
 QSizeF AbstractImageView::documentSize() const
 {
     return d->mDocument ? d->mDocument->size() : QSizeF();
+}
+
+QSizeF AbstractImageView::dipDocumentSize() const
+{
+    return d->mDocument ? d->mDocument->size() / devicePixelRatio(): QSizeF();
 }
 
 qreal AbstractImageView::zoom() const
@@ -335,7 +342,7 @@ void AbstractImageView::focusInEvent(QFocusEvent* event)
 
 qreal AbstractImageView::computeZoomToFit() const
 {
-    QSizeF docSize = documentSize();
+    QSizeF docSize = dipDocumentSize();
     if (docSize.isEmpty()) {
         return 1;
     }
@@ -351,7 +358,7 @@ qreal AbstractImageView::computeZoomToFit() const
 
 qreal AbstractImageView::computeZoomToFill() const
 {
-    QSizeF docSize = documentSize();
+    QSizeF docSize = dipDocumentSize();
     if (docSize.isEmpty()) {
         return 1;
     }
@@ -483,7 +490,7 @@ void AbstractImageView::keyPressEvent(QKeyEvent* event)
         d->setScrollPos(QPointF(d->mScrollPos.x(), 0));
         return;
     case Qt::Key_End:
-        d->setScrollPos(QPointF(d->mScrollPos.x(), documentSize().height() * zoom()));
+        d->setScrollPos(QPointF(d->mScrollPos.x(), dipDocumentSize().height() * zoom()));
         return;
     default:
         return;
@@ -523,9 +530,14 @@ void AbstractImageView::setScrollPos(const QPointF& pos)
     d->setScrollPos(pos);
 }
 
+qreal AbstractImageView::devicePixelRatio() const
+{
+    return qApp->devicePixelRatio();
+}
+
 QPointF AbstractImageView::mapToView(const QPointF& imagePos) const
 {
-    return imagePos * d->mZoom + d->mImageOffset - d->mScrollPos;
+    return imagePos / devicePixelRatio() * d->mZoom + d->mImageOffset - d->mScrollPos;
 }
 
 QPoint AbstractImageView::mapToView(const QPoint& imagePos) const
@@ -537,7 +549,7 @@ QRectF AbstractImageView::mapToView(const QRectF& imageRect) const
 {
     return QRectF(
                mapToView(imageRect.topLeft()),
-               imageRect.size() * zoom()
+               imageRect.size() * zoom() / devicePixelRatio()
            );
 }
 
@@ -545,13 +557,13 @@ QRect AbstractImageView::mapToView(const QRect& imageRect) const
 {
     return QRect(
                mapToView(imageRect.topLeft()),
-               imageRect.size() * zoom()
+               imageRect.size() * zoom() / devicePixelRatio()
            );
 }
 
 QPointF AbstractImageView::mapToImage(const QPointF& viewPos) const
 {
-    return (viewPos - d->mImageOffset + d->mScrollPos) / d->mZoom;
+    return (viewPos - d->mImageOffset + d->mScrollPos) / d->mZoom * devicePixelRatio();
 }
 
 QPoint AbstractImageView::mapToImage(const QPoint& viewPos) const
@@ -563,7 +575,7 @@ QRectF AbstractImageView::mapToImage(const QRectF& viewRect) const
 {
     return QRectF(
                mapToImage(viewRect.topLeft()),
-               viewRect.size() / zoom()
+               viewRect.size() / zoom() * devicePixelRatio()
            );
 }
 
@@ -571,7 +583,7 @@ QRect AbstractImageView::mapToImage(const QRect& viewRect) const
 {
     return QRect(
                mapToImage(viewRect.topLeft()),
-               viewRect.size() / zoom()
+               viewRect.size() / zoom() * devicePixelRatio()
            );
 }
 
@@ -601,7 +613,7 @@ QSizeF AbstractImageView::visibleImageSize() const
     if (!document()) {
         return QSizeF();
     }
-    QSizeF size = documentSize() * zoom();
+    QSizeF size = dipDocumentSize() * zoom();
     return size.boundedTo(boundingRect().size());
 }
 
