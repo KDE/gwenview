@@ -102,13 +102,15 @@ struct ThumbnailBarItemDelegatePrivate
     {
         const QPoint shadowOffset(-SHADOW_SIZE, -SHADOW_SIZE + 1);
 
-        int key = rect.height() * 1000 + rect.width();
+        const auto dpr = painter->device()->devicePixelRatioF();
+        int key = qRound((rect.height() * 1000 + rect.width()) * dpr);
 
         ShadowCache::Iterator it = mShadowCache.find(key);
         if (it == mShadowCache.end()) {
             QSize size = QSize(rect.width() + 2 * SHADOW_SIZE, rect.height() + 2 * SHADOW_SIZE);
             QColor color(0, 0, 0, SHADOW_STRENGTH);
-            QPixmap shadow = PaintUtils::generateFuzzyRect(size, color, SHADOW_SIZE);
+            QPixmap shadow = PaintUtils::generateFuzzyRect(size * dpr, color, qRound(SHADOW_SIZE * dpr));
+            shadow.setDevicePixelRatio(dpr);
             it = mShadowCache.insert(key, shadow);
         }
         painter->drawPixmap(rect.topLeft() + shadowOffset, it.value());
@@ -175,7 +177,7 @@ QSize ThumbnailBarItemDelegate::sizeHint(const QStyleOptionViewItem & /*option*/
         size = d->mView->gridSize();
     } else {
         QPixmap thumbnailPix = d->mView->thumbnailForIndex(index);
-        size = thumbnailPix.size();
+        size = thumbnailPix.size() / thumbnailPix.devicePixelRatio();
         size.rwidth() += ITEM_MARGIN * 2;
         size.rheight() += ITEM_MARGIN * 2;
     }
@@ -203,6 +205,7 @@ void ThumbnailBarItemDelegate::paint(QPainter * painter, const QStyleOptionViewI
     bool isSelected = option.state & QStyle::State_Selected;
     bool isCurrent = d->mView->selectionModel()->currentIndex() == index;
     QPixmap thumbnailPix = d->mView->thumbnailForIndex(index);
+    QSize thumbnailSize = thumbnailPix.size() / thumbnailPix.devicePixelRatio();
     QRect rect = option.rect;
 
     QStyleOptionViewItem opt = option;
@@ -219,10 +222,10 @@ void ThumbnailBarItemDelegate::paint(QPainter * painter, const QStyleOptionViewI
     // Draw thumbnail
     if (!thumbnailPix.isNull()) {
         QRect thumbnailRect = QRect(
-                                  rect.left() + (rect.width() - thumbnailPix.width()) / 2,
-                                  rect.top() + (rect.height() - thumbnailPix.height()) / 2 - 1,
-                                  thumbnailPix.width(),
-                                  thumbnailPix.height());
+                                  rect.left() + (rect.width() - thumbnailSize.width()) / 2,
+                                  rect.top() + (rect.height() - thumbnailSize.height()) / 2 - 1,
+                                  thumbnailSize.width(),
+                                  thumbnailSize.height());
 
         if (!thumbnailPix.hasAlphaChannel()) {
             d->drawShadow(painter, thumbnailRect);

@@ -379,11 +379,12 @@ void ThumbnailView::updateThumbnailSize()
 {
     QSize value = d->mThumbnailSize;
     // mWaitingThumbnail
+    const auto dpr = devicePixelRatioF();
     int waitingThumbnailSize;
-    if (value.width() > 64) {
-        waitingThumbnailSize = 48;
+    if (value.width() > 64 * dpr) {
+        waitingThumbnailSize = qRound(48 * dpr);
     } else {
-        waitingThumbnailSize = 32;
+        waitingThumbnailSize = qRound(32 * dpr);
     }
     QPixmap icon = DesktopIcon(QStringLiteral("chronometer"), waitingThumbnailSize);
     QPixmap pix(value);
@@ -393,6 +394,7 @@ void ThumbnailView::updateThumbnailSize()
     painter.drawPixmap((value.width() - icon.width()) / 2, (value.height() - icon.height()) / 2, icon);
     painter.end();
     d->mWaitingThumbnail = pix;
+    d->mWaitingThumbnail.setDevicePixelRatio(dpr);
 
     // Stop smoothing
     d->mSmoothThumbnailTimer.stop();
@@ -406,8 +408,8 @@ void ThumbnailView::updateThumbnailSize()
         it.value().mAdjustedPix = QPixmap();
     }
 
-    emit thumbnailSizeChanged(value);
-    emit thumbnailWidthChanged(value.width());
+    emit thumbnailSizeChanged(value / dpr);
+    emit thumbnailWidthChanged(qRound(value.width() / dpr));
     if (d->mScaleMode != ScaleToFit) {
         scheduleDelayedItemsLayout();
     }
@@ -416,11 +418,14 @@ void ThumbnailView::updateThumbnailSize()
 
 void ThumbnailView::setThumbnailWidth(int width)
 {
-    if(d->mThumbnailSize.width() == width) {
+    const auto dpr = devicePixelRatioF();
+    const qreal newWidthF = width * dpr;
+    const int newWidth = qRound(newWidthF);
+    if(d->mThumbnailSize.width() == newWidth) {
         return;
     }
-    int height = round((qreal)width / d->mThumbnailAspectRatio);
-    d->mThumbnailSize = QSize(width, height);
+    int height = qRound(newWidthF / d->mThumbnailAspectRatio);
+    d->mThumbnailSize = QSize(newWidth, height);
     updateThumbnailSize();
 }
 
@@ -443,7 +448,7 @@ qreal ThumbnailView::thumbnailAspectRatio() const
 
 QSize ThumbnailView::thumbnailSize() const
 {
-    return d->mThumbnailSize;
+    return d->mThumbnailSize / devicePixelRatioF();
 }
 
 void ThumbnailView::setThumbnailViewHelper(AbstractThumbnailViewHelper* helper)
@@ -670,6 +675,7 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index, QSize* fullSi
     if (fullSize) {
         *fullSize = thumbnail.mRealFullSize;
     }
+    thumbnail.mAdjustedPix.setDevicePixelRatio(devicePixelRatioF());
     return thumbnail.mAdjustedPix;
 }
 
@@ -810,7 +816,7 @@ void ThumbnailView::wheelEvent(QWheelEvent* event)
     // setThumbnailSize() does not work
     //verticalScrollBar()->setSingleStep(d->mThumbnailSize / 5);
     if (event->modifiers() == Qt::ControlModifier) {
-        int width = d->mThumbnailSize.width() + (event->delta() > 0 ? 1 : -1) * WHEEL_ZOOM_MULTIPLIER;
+        int width = thumbnailSize().width() + (event->delta() > 0 ? 1 : -1) * WHEEL_ZOOM_MULTIPLIER;
         width = qMax(int(MinThumbnailSize), qMin(width, int(MaxThumbnailSize)));
         setThumbnailWidth(width);
     } else {

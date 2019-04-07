@@ -65,7 +65,7 @@ void ThumbnailSlider::slotActionTriggered(int actionTriggered)
 void ThumbnailSlider::updateToolTip()
 {
     // FIXME: i18n?
-    const int size = slider()->sliderPosition();
+    const int size = qRound(slider()->sliderPosition() * devicePixelRatioF());
     const QString text = QStringLiteral("%1 x %2").arg(size).arg(size);
     slider()->setToolTip(text);
 }
