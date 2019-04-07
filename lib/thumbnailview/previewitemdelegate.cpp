@@ -164,7 +164,8 @@ struct PreviewItemDelegatePrivate
         const int posX = mContextBarActions == PreviewItemDelegate::SelectionAction
             ? 0
             : (rect.width() - mContextBar->width()) / 2;
-        const int posY = qMax(CONTEXTBAR_MARGIN, mThumbnailSize.height() - thumbnailPix.height() - mContextBar->height());
+        const int thumbnailPixHeight = qRound(thumbnailPix.height() / thumbnailPix.devicePixelRatio());
+        const int posY = qMax(CONTEXTBAR_MARGIN, mThumbnailSize.height() - thumbnailPixHeight - mContextBar->height());
         mContextBar->move(rect.topLeft() + QPoint(posX, posY));
         mContextBar->show();
     }
@@ -317,13 +318,15 @@ struct PreviewItemDelegatePrivate
     {
         const QPoint shadowOffset(-SHADOW_SIZE, -SHADOW_SIZE + 1);
 
-        int key = rect.height() * 1000 + rect.width();
+        const auto dpr = painter->device()->devicePixelRatioF();
+        int key = qRound((rect.height() * 1000 + rect.width()) * dpr);
 
         ShadowCache::Iterator it = mShadowCache.find(key);
         if (it == mShadowCache.end()) {
             QSize size = QSize(rect.width() + 2 * SHADOW_SIZE, rect.height() + 2 * SHADOW_SIZE);
             QColor color(0, 0, 0, SHADOW_STRENGTH);
-            QPixmap shadow = PaintUtils::generateFuzzyRect(size, color, SHADOW_SIZE);
+            QPixmap shadow = PaintUtils::generateFuzzyRect(size * dpr, color, qRound(SHADOW_SIZE * dpr));
+            shadow.setDevicePixelRatio(dpr);
             it = mShadowCache.insert(key, shadow);
         }
         painter->drawPixmap(rect.topLeft() + shadowOffset, it.value());
@@ -688,6 +691,7 @@ void PreviewItemDelegate::paint(QPainter * painter, const QStyleOptionViewItem &
     int thumbnailHeight = d->mThumbnailSize.height();
     QSize fullSize;
     QPixmap thumbnailPix = d->mView->thumbnailForIndex(index, &fullSize);
+    QSize thumbnailSize = thumbnailPix.size() / thumbnailPix.devicePixelRatio();
     const KFileItem fileItem = fileItemForIndex(index);
     const bool opaque = !thumbnailPix.hasAlphaChannel();
     const bool isDirOrArchive = ArchiveUtils::fileItemIsDirOrArchive(fileItem);
@@ -739,10 +743,10 @@ void PreviewItemDelegate::paint(QPainter * painter, const QStyleOptionViewItem &
 
     // Compute thumbnailRect
     QRect thumbnailRect = QRect(
-                              rect.left() + (rect.width() - thumbnailPix.width()) / 2,
-                              rect.top() + (thumbnailHeight - thumbnailPix.height()) + ITEM_MARGIN,
-                              thumbnailPix.width(),
-                              thumbnailPix.height());
+                              rect.left() + (rect.width() - thumbnailSize.width()) / 2,
+                              rect.top() + (thumbnailHeight - thumbnailSize.height()) + ITEM_MARGIN,
+                              thumbnailSize.width(),
+                              thumbnailSize.height());
 
     // Draw background
     const QRect backgroundRect = thumbnailRect.adjusted(-ITEM_MARGIN, -ITEM_MARGIN, ITEM_MARGIN, ITEM_MARGIN);
