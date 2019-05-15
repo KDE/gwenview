@@ -540,6 +540,11 @@ void DocumentView::openUrl(const QUrl &url, const DocumentView::Setup& setup)
         }
         disconnect(d->mDocument.data(), nullptr, this, nullptr);
     }
+
+    // because some loading will be going on right now, also display the indicator right now
+    // it will be hidden again in slotBusyChanged()
+    d->showLoadingIndicator();
+
     d->mSetup = setup;
     d->mDocument = DocumentFactory::instance()->load(url);
     connect(d->mDocument.data(), &Document::busyChanged, this, &DocumentView::slotBusyChanged);
@@ -552,7 +557,6 @@ void DocumentView::openUrl(const QUrl &url, const DocumentView::Setup& setup)
         if (messageViewAdapter) {
             messageViewAdapter->setInfoMessage(QString());
         }
-        d->showLoadingIndicator();
         connect(d->mDocument.data(), &Document::kindDetermined,
                 this, &DocumentView::finishOpenUrl);
     } else {
