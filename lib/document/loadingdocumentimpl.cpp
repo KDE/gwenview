@@ -196,6 +196,11 @@ struct LoadingDocumentImplPrivate
         buffer.setBuffer(&mData);
         buffer.open(QIODevice::ReadOnly);
 
+        Exiv2ImageLoader loader;
+        if (loader.load(mData)) {
+            mExiv2Image = loader.popImage();
+        }
+
 #ifdef KDCRAW_FOUND
         if (KDcrawIface::KDcraw::rawFilesList().contains(QString::fromLatin1(mFormatHint))) {
             QByteArray previewData;
@@ -259,11 +264,6 @@ struct LoadingDocumentImplPrivate
 
         LOG("mFormat" << mFormat);
         GV_RETURN_VALUE_IF_FAIL(!mFormat.isEmpty(), false);
-
-        Exiv2ImageLoader loader;
-        if (loader.load(mData)) {
-            mExiv2Image = loader.popImage();
-        }
 
         if (mFormat == "jpeg" && mExiv2Image.get()) {
             mJpegContent.reset(new JpegContent());
