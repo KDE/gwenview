@@ -33,9 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KFormat>
 
 // Exiv2
-#include <exiv2/exif.hpp>
-#include <exiv2/image.hpp>
-#include <exiv2/iptc.hpp>
+#include <exiv2/exiv2.hpp>
 
 // Local
 #ifdef HAVE_FITS
