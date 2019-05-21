@@ -211,8 +211,7 @@ JpegContent::~JpegContent()
 
 bool JpegContent::load(const QString& path)
 {
-    if(d->mFile.isOpen())
-    {
+    if (d->mFile.isOpen()) {
         d->mFile.unmap(reinterpret_cast<unsigned char*>(d->mRawData.data()));
         d->mFile.close();
         d->mRawData.clear();
@@ -226,15 +225,14 @@ bool JpegContent::load(const QString& path)
 
     QByteArray rawData;
     uchar* mappedFile = d->mFile.map(0, d->mFile.size(), QFileDevice::MapPrivateOption);
-    if(mappedFile == nullptr) {
+    if (mappedFile == nullptr) {
         // process' mapping limit exceeded, file is sealed or filesystem doesn't support it, etc.
         qDebug() << "Could not mmap '" << path << "', falling back to QFile::readAll()\n";
 
         rawData = d->mFile.readAll();
         // all read in, no need to keep it open
         d->mFile.close();
-    }
-    else {
+    } else {
         rawData = QByteArray::fromRawData(reinterpret_cast<char*>(mappedFile), d->mFile.size());
     }
 
@@ -605,8 +603,7 @@ bool JpegContent::save(const QString& path)
 {
     // we need to take ownership of the input file's data
     // if the input file is still open, data is still only mem-mapped
-    if(d->mFile.isOpen())
-    {
+    if (d->mFile.isOpen()) {
         // backup the mmap() pointer
         auto* mappedFile = reinterpret_cast<unsigned char*>(d->mRawData.data());
         // read the file to memory
