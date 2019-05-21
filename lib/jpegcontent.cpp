@@ -113,7 +113,13 @@ struct JpegContent::Private
     // performed a lossy image manipulation, mRawData is cleared and the image
     // pixels are kept in mImage until updateRawDataFromImage() is called.
     QImage mImage;
+
+    // Store the input file, keep it open readOnly. This allows the file to be memory mapped
+    // (i.e. mRawData may point to mFile.map()) rather than completely read on load. Postpone
+    // QFile::readAll() as long as possible (currently in save()).
+    QFile mFile;
     QByteArray mRawData;
+
     QSize mSize;
     QString mComment;
     bool mPendingTransformation;
@@ -205,12 +211,34 @@ JpegContent::~JpegContent()
 
 bool JpegContent::load(const QString& path)
 {
-    QFile file(path);
-    if (!file.open(QIODevice::ReadOnly)) {
+    if(d->mFile.isOpen())
+    {
+        d->mFile.unmap(reinterpret_cast<unsigned char*>(d->mRawData.data()));
+        d->mFile.close();
+        d->mRawData.clear();
+    }
+    
+    d->mFile.setFileName(path);
+    if (!d->mFile.open(QIODevice::ReadOnly)) {
         qCritical() << "Could not open '" << path << "' for reading\n";
         return false;
     }
-    return loadFromData(file.readAll());
+
+    QByteArray rawData;
+    uchar* mappedFile = d->mFile.map(0, d->mFile.size(), QFileDevice::MapPrivateOption);
+    if(mappedFile == nullptr) {
+        // process' mapping limit exceeded, file is sealed or filesystem doesn't support it, etc.
+        qDebug() << "Could not mmap '" << path << "', falling back to QFile::readAll()\n";
+
+        rawData = d->mFile.readAll();
+        // all read in, no need to keep it open
+        d->mFile.close();
+    }
+    else {
+        rawData = QByteArray::fromRawData(reinterpret_cast<char*>(mappedFile), d->mFile.size());
+    }
+
+    return loadFromData(rawData);
 }
 
 bool JpegContent::loadFromData(const QByteArray& data)
@@ -575,6 +603,18 @@ void JpegContent::setThumbnail(const QImage& thumbnail)
 
 bool JpegContent::save(const QString& path)
 {
+    // we need to take ownership of the input file's data
+    // if the input file is still open, data is still only mem-mapped
+    if(d->mFile.isOpen())
+    {
+        // backup the mmap() pointer
+        auto* mappedFile = reinterpret_cast<unsigned char*>(d->mRawData.data());
+        // read the file to memory
+        d->mRawData = d->mFile.readAll();
+        d->mFile.unmap(mappedFile);
+        d->mFile.close();
+    }
+    
     QFile file(path);
     if (!file.open(QIODevice::WriteOnly)) {
         d->mErrorString = i18nc("@info", "Could not open file for writing.");
