@@ -36,6 +36,7 @@ Name[ko]=Gwenview 그림 뷰어
 Name[ku]=Gwenview Nîşanderê Wêneyan
 Name[lt]=Gwenview paveikslėlių žiūryklė
 Name[lv]=Gwenview attēlu skatītājs
+Name[ml]=ഗ്വെൻവ്യൂ ചിത്രദര്‍ശിനി
 Name[mr]=ग्वेनव्यु प्रतिमा प्रदर्शक
 Name[nb]=Bildeviseren Gwenview
 Name[nds]=Bildkieker Gwenview
