@@ -52,7 +52,6 @@ struct RasterImageViewPrivate
     AbstractImageView::AlphaBackgroundMode mAlphaBackgroundMode;
     QColor mAlphaBackgroundColor;
     cmsUInt32Number mRenderingIntent;
-    bool mEnlargeSmallerImages;
     // /Config
 
     bool mBufferIsEmpty;
@@ -202,7 +201,6 @@ RasterImageView::RasterImageView(QGraphicsItem* parent)
     d->mAlphaBackgroundMode = AlphaBackgroundNone;
     d->mAlphaBackgroundColor = Qt::black;
     d->mRenderingIntent = INTENT_PERCEPTUAL;
-    d->mEnlargeSmallerImages = false;
 
     d->mBufferIsEmpty = true;
     d->mScaler = new ImageScaler(this);
