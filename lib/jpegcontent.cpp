@@ -49,6 +49,7 @@ extern "C" {
 #include "iodevicejpegsourcemanager.h"
 #include "exiv2imageloader.h"
 #include "gwenviewconfig.h"
+#include "imageutils.h"
 
 namespace Gwenview
 {
@@ -216,7 +217,7 @@ bool JpegContent::load(const QString& path)
         d->mFile.close();
         d->mRawData.clear();
     }
-    
+
     d->mFile.setFileName(path);
     if (!d->mFile.open(QIODevice::ReadOnly)) {
         qCritical() << "Could not open '" << path << "' for reading\n";
@@ -572,6 +573,20 @@ QImage JpegContent::thumbnail() const
         Exiv2::DataBuf thumbnail = d->mExifData.copyThumbnail();
 #endif
         image.loadFromData(thumbnail.pData_, thumbnail.size_);
+
+        Exiv2::ExifKey key("Exif.Canon.ThumbnailImageValidArea");
+        Exiv2::ExifData::iterator it = d->mExifData.findKey(key);
+
+        // ensure ThumbnailImageValidArea actually specifies a rectangle, i.e. there must be 4 coordinates
+        if (it != d->mExifData.end() && it->count() == 4) {
+            QRect validArea(QPoint(it->toLong(0), it->toLong(2)), QPoint(it->toLong(1), it->toLong(3)));
+            image = image.copy(validArea);
+        }
+
+        Orientation o = orientation();
+        if (GwenviewConfig::applyExifOrientation() && o != NORMAL && o != NOT_AVAILABLE) {
+            image = image.transformed(ImageUtils::transformMatrix(o));
+        }
     }
     return image;
 }
@@ -611,7 +626,7 @@ bool JpegContent::save(const QString& path)
         d->mFile.unmap(mappedFile);
         d->mFile.close();
     }
-    
+
     QFile file(path);
     if (!file.open(QIODevice::WriteOnly)) {
         d->mErrorString = i18nc("@info", "Could not open file for writing.");

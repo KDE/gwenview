@@ -22,7 +22,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "thumbnailgenerator.h"
 
 // Local
-#include "imageutils.h"
 #include "jpegcontent.h"
 #include "gwenviewconfig.h"
 #include "exiv2imageloader.h"
@@ -61,7 +60,6 @@ bool ThumbnailContext::load(const QString &pixPath, int pixelSize)
 {
     mImage = QImage();
     mNeedCaching = true;
-    Orientation orientation = NORMAL;
     QImage originalImage;
     QSize originalSize;
 
@@ -118,19 +116,11 @@ bool ThumbnailContext::load(const QString &pixPath, int pixelSize)
     }
 
     // If there's jpeg content (from jpg or raw files), try to load an embedded thumbnail, if available.
-    // If applyExifOrientation is not set, don't use the
-    // embedded thumbnail since it might be rotated differently
-    // than the actual image
-    if (!content.rawData().isEmpty() && GwenviewConfig::applyExifOrientation()) {
+    if (!content.rawData().isEmpty()) {
         QImage thumbnail = content.thumbnail();
-        orientation = content.orientation();
 
         if (qMax(thumbnail.width(), thumbnail.height()) >= pixelSize) {
-            mImage = thumbnail;
-            if (orientation != NORMAL && orientation != NOT_AVAILABLE) {
-                QTransform matrix = ImageUtils::transformMatrix(orientation);
-                mImage = mImage.transformed(matrix);
-            }
+            mImage = std::move(thumbnail);
             mOriginalWidth = content.size().width();
             mOriginalHeight = content.size().height();
             return true;
