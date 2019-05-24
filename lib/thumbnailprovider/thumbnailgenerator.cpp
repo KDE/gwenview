@@ -271,6 +271,8 @@ void ThumbnailGenerator::run()
                     cacheThumbnail();
                 }
             } else {
+                // avoid emitting the thumb from the previous successful run
+                mImage = QImage();
                 qWarning() << "Could not generate thumbnail for file" << mOriginalUri;
             }
             mPixPath.clear(); // done, ready for next
