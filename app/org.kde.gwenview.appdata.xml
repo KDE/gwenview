@@ -320,6 +320,10 @@
   <url type="donation">https://www.kde.org/community/donations/?app=gwenview&amp;source=appdata</url>
   <screenshots>
     <screenshot type="default">
+      <caption>Gwenview</caption>
+      <image>https://cdn.kde.org/screenshots/gwenview/gwenview.png</image>
+    </screenshot>
+    <screenshot>
       <caption>Gwenview displaying an image, with additional metadata shown in the sidebar</caption>
       <caption xml:lang="ca">El Gwenview mostra una imatge, i a la barra lateral es mostraran les metadades addicionals</caption>
       <caption xml:lang="ca-valencia">El Gwenview mostra una imatge, i a la barra lateral es mostraran les metadades addicionals</caption>
