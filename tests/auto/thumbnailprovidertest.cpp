@@ -34,6 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Local
 #include "../lib/thumbnailprovider/thumbnailprovider.h"
 #include "testutils.h"
+#include "gwenviewconfig.h"
 
 // libc
 #include <errno.h>
@@ -212,7 +213,8 @@ void ThumbnailProviderTest::testUseEmbeddedOrNot()
         QVERIFY(TestUtils::imageCompare(expectedThumbnail, thumbnailPix.toImage()));
     }
 
-    // Loading a large thumbnail should bring the red one
+    // Loading a large thumbnail should bring the red one, unless thumbnails are deleted on exit,
+    // which should bring the white one
     {
         ThumbnailProvider provider;
         provider.setThumbnailGroup(ThumbnailGroup::Large);
@@ -221,7 +223,11 @@ void ThumbnailProviderTest::testUseEmbeddedOrNot()
         syncRun(&provider);
 
         QCOMPARE(spy.count(), 1);
-        expectedThumbnail = createColoredImage(256, 128, QColor(254, 0, 0));
+        if (GwenviewConfig::deleteThumbnailCacheOnExit()) {
+            expectedThumbnail = createColoredImage(128, 64, Qt::white);
+        } else {
+            expectedThumbnail = createColoredImage(256, 128, QColor(254, 0, 0));
+        }
         thumbnailPix = qvariant_cast<QPixmap>(spy.at(0).at(1));
         QVERIFY(TestUtils::imageCompare(expectedThumbnail, thumbnailPix.toImage()));
     }

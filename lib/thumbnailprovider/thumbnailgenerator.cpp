@@ -116,7 +116,11 @@ bool ThumbnailContext::load(const QString &pixPath, int pixelSize)
     if (!content.rawData().isEmpty()) {
         QImage thumbnail = content.thumbnail();
 
-        if (qMax(thumbnail.width(), thumbnail.height()) >= pixelSize) {
+        // If the user does not care about the generated thumbnails (by deleting them on exit), use ANY
+        // embedded thumnail, even if it's too small.
+        if (!thumbnail.isNull() &&
+            (GwenviewConfig::deleteThumbnailCacheOnExit() || qMax(thumbnail.width(), thumbnail.height()) >= pixelSize)
+        ) {
             mImage = std::move(thumbnail);
             mOriginalWidth = content.size().width();
             mOriginalHeight = content.size().height();
