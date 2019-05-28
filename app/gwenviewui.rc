@@ -106,7 +106,7 @@
     <Action name="rotate_left" />
     <Action name="rotate_right" />
     <Separator/>
-    <Action name="kipi_export" />
+    <Action name="share" />
 </ToolBar>
 
 </kpartgui>

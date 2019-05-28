@@ -38,6 +38,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifdef Q_OS_OSX
 #include <QFileOpenEvent>
 #endif
+#include <QJsonArray>
+#include <QJsonObject>
 
 // KDE
 #include <KActionCategory>
@@ -57,6 +59,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KToolBar>
 #include <KXMLGUIFactory>
 #include <KDirLister>
+#include <PurposeWidgets/Menu>
+#include <Purpose/AlternativesModel>
 
 // Local
 #include "configdialog.h"
@@ -195,6 +199,8 @@ struct MainWindow::Private
     QAction * mToggleSlideShowAction;
     KToggleAction* mShowMenuBarAction;
     KToggleAction* mShowStatusBarAction;
+    Purpose::Menu* mShareMenu;
+    KToolBarPopupAction* mShareAction;
 #ifdef KIPI_FOUND
     KIPIExportAction* mKIPIExportAction;
 #endif
@@ -504,8 +510,12 @@ struct MainWindow::Private
 
 #ifdef KIPI_FOUND
         mKIPIExportAction = new KIPIExportAction(q);
-        actionCollection->addAction("kipi_export", mKIPIExportAction);
 #endif
+
+        mShareAction = new KToolBarPopupAction(QIcon::fromTheme("document-share"), "Share", q);
+        actionCollection->addAction("share", mShareAction);
+        mShareMenu = new Purpose::Menu(q);
+        mShareAction->setMenu(mShareMenu);
     }
 
     void setupUndoActions()
@@ -708,6 +718,18 @@ struct MainWindow::Private
         actionCollection->action("file_save")->setEnabled(canSave && isModified);
         actionCollection->action("file_save_as")->setEnabled(canSave);
         actionCollection->action("file_print")->setEnabled(isRasterImage);
+
+        if (url.isEmpty()) {
+            mShareAction->setEnabled(false);
+        } else {
+            mShareAction->setEnabled(true);
+            mShareMenu->model()->setInputData(QJsonObject{
+                { QStringLiteral("mimeType"), MimeTypeUtils::urlMimeType(url) },
+                { QStringLiteral("urls"), QJsonArray{url.toString()} }
+            });
+            mShareMenu->model()->setPluginType( QStringLiteral("Export") );
+            mShareMenu->reload();
+        }
     }
 
     bool sideBarVisibility() const

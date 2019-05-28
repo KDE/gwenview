@@ -79,6 +79,7 @@ add_executable(gwenview ${gwenview_SRCS})
 target_link_libraries(gwenview
     KF5::ItemModels
     KF5::Notifications
+    KF5::PurposeWidgets
     gwenviewlib
     )
 
