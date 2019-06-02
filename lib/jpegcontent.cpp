@@ -574,13 +574,30 @@ QImage JpegContent::thumbnail() const
 #endif
         image.loadFromData(thumbnail.pData_, thumbnail.size_);
 
-        Exiv2::ExifKey key("Exif.Canon.ThumbnailImageValidArea");
-        Exiv2::ExifData::iterator it = d->mExifData.findKey(key);
-
+        Exiv2::ExifData::iterator it = d->mExifData.findKey(Exiv2::ExifKey("Exif.Canon.ThumbnailImageValidArea"));
         // ensure ThumbnailImageValidArea actually specifies a rectangle, i.e. there must be 4 coordinates
         if (it != d->mExifData.end() && it->count() == 4) {
             QRect validArea(QPoint(it->toLong(0), it->toLong(2)), QPoint(it->toLong(1), it->toLong(3)));
             image = image.copy(validArea);
+        } else {
+            // Unfortunately, Sony does not provide an exif tag that specifies the valid area of the 
+            // embedded thumbnail. Need to derive it from the size of the preview image instead.
+            it = d->mExifData.findKey(Exiv2::ExifKey("Exif.Sony1.PreviewImageSize"));
+            if (it != d->mExifData.end() && it->count() == 2) {
+                const long prevHeight = it->toLong(0);
+                const long prevWidth = it->toLong(1);
+
+                const double scale = prevWidth / image.width();
+
+                // the embedded thumb only needs to be cropped vertically
+                const long validThumbAreaHeight = ceil(prevHeight / scale);
+                const long totalHeightOfBlackArea = image.height() - validThumbAreaHeight;
+                // black bars on top and bottom should be equal in height
+                const long offsetFromTop = totalHeightOfBlackArea / 2;
+
+                const QRect validArea(QPoint(0, offsetFromTop), QSize(image.width(), validThumbAreaHeight));
+                image = image.copy(validArea);
+            }
         }
 
         Orientation o = orientation();
