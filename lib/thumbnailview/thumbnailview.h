@@ -33,10 +33,6 @@ class QDragEnterEvent;
 class QDragMoveEvent;
 class QDropEvent;
 class QPixmap;
-class QGestureEvent;
-class QTapGesture;
-class QPinchGesture;
-class QGesture;
 
 namespace Gwenview
 {

@@ -28,7 +28,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 class QImageIOHandler;
 class QIODevice;
-class QStringList;
 
 extern const QStaticPlugin qt_static_plugin_FitsPlugin();
 
