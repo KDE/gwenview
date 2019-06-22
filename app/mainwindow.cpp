@@ -513,6 +513,7 @@ struct MainWindow::Private
 #endif
 
         mShareAction = new KToolBarPopupAction(QIcon::fromTheme("document-share"), "Share", q);
+        mShareAction->setDelayed(false);
         actionCollection->addAction("share", mShareAction);
         mShareMenu = new Purpose::Menu(q);
         mShareAction->setMenu(mShareMenu);
