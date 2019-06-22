@@ -198,6 +198,7 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
         KActionCategory* file = new KActionCategory(i18nc("@title actions category", "File"), actionCollection);
         action = file->addAction("add_folder_to_places", q, SLOT(addFolderToPlaces()));
         action->setText(i18nc("@action:inmenu", "Add Folder to Places"));
+        action->setIcon(QIcon::fromTheme("bookmark-new"));
     }
 
     void setupFilterController()
