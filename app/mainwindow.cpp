@@ -869,8 +869,10 @@ MainWindow::MainWindow()
                                           d->mGoToPreviousAction, d->mGoToNextAction, this);
 #endif
 
-#ifdef GWENVIEW_SEMANTICINFO_BACKEND_NONE
+
     auto* ratingMenu = static_cast<QMenu*>(guiFactory()->container("rating", this));
+    ratingMenu->setIcon(QIcon::fromTheme(QStringLiteral("rating-unrated")));
+#ifdef GWENVIEW_SEMANTICINFO_BACKEND_NONE
     if (ratingMenu) {
         ratingMenu->menuAction()->setVisible(false);
     }
