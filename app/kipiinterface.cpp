@@ -187,12 +187,14 @@ struct MenuInfo
 {
     QString mName;
     QList<QAction*> mActions;
+    QString mIconName;
 
     MenuInfo()
     {}
 
-    MenuInfo(const QString& name)
+    MenuInfo(const QString& name, QString iconName)
     : mName(name)
+    , mIconName(iconName)
     {}
 };
 typedef QMap<KIPI::Category, MenuInfo> MenuInfoMap;
@@ -271,12 +273,12 @@ void KIPIInterface::loadPlugins()
         return;
     }
 
-    d->mMenuInfoMap[KIPI::ImagesPlugin]      = MenuInfo(i18nc("@title:menu", "Images"));
-    d->mMenuInfoMap[KIPI::ToolsPlugin]       = MenuInfo(i18nc("@title:menu", "Tools"));
-    d->mMenuInfoMap[KIPI::ImportPlugin]      = MenuInfo(i18nc("@title:menu", "Import"));
-    d->mMenuInfoMap[KIPI::ExportPlugin]      = MenuInfo(i18nc("@title:menu", "Export"));
-    d->mMenuInfoMap[KIPI::BatchPlugin]       = MenuInfo(i18nc("@title:menu", "Batch Processing"));
-    d->mMenuInfoMap[KIPI::CollectionsPlugin] = MenuInfo(i18nc("@title:menu", "Collections"));
+    d->mMenuInfoMap[KIPI::ImagesPlugin]      = MenuInfo(i18nc("@title:menu", "Images"), QStringLiteral("viewimage"));
+    d->mMenuInfoMap[KIPI::ToolsPlugin]       = MenuInfo(i18nc("@title:menu", "Tools"), QStringLiteral("tools"));
+    d->mMenuInfoMap[KIPI::ImportPlugin]      = MenuInfo(i18nc("@title:menu", "Import"), QStringLiteral("document-import"));
+    d->mMenuInfoMap[KIPI::ExportPlugin]      = MenuInfo(i18nc("@title:menu", "Export"), QStringLiteral("document-export"));
+    d->mMenuInfoMap[KIPI::BatchPlugin]       = MenuInfo(i18nc("@title:menu", "Batch Processing"), QStringLiteral("editimage"));
+    d->mMenuInfoMap[KIPI::CollectionsPlugin] = MenuInfo(i18nc("@title:menu", "Collections"), QStringLiteral("view-list-symbolic"));
 
     d->mPluginLoader = new KIPI::PluginLoader();
     d->mPluginLoader->setInterface(this);
@@ -331,6 +333,7 @@ void KIPIInterface::loadOnePlugin()
         MenuInfo& info = it.value();
         if (!info.mActions.isEmpty()) {
             QMenu* menu = d->mPluginMenu->addMenu(info.mName);
+            menu->setIcon(QIcon::fromTheme(info.mIconName));
             qSort(info.mActions.begin(), info.mActions.end(), actionLessThan);
             Q_FOREACH(QAction * action, info.mActions) {
                 menu->addAction(action);
