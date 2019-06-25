@@ -27,3 +27,10 @@ File=gwenviewrc
 Options=overwrite
 Group=ImageView
 Script=gwenview-imageview-alphabackgroundmode-update.pl,perl
+
+
+Id=DeleteThumbnailSetting_Rename
+File=gwenviewrc
+
+Group=ThumbnailView
+Key=DeleteThumbnailCacheOnExit,LowResourceUsageMode

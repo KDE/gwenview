@@ -223,7 +223,7 @@ void ThumbnailProviderTest::testUseEmbeddedOrNot()
         syncRun(&provider);
 
         QCOMPARE(spy.count(), 1);
-        if (GwenviewConfig::deleteThumbnailCacheOnExit()) {
+        if (GwenviewConfig::lowResourceUsageMode()) {
             expectedThumbnail = createColoredImage(128, 64, Qt::white);
         } else {
             expectedThumbnail = createColoredImage(256, 128, QColor(254, 0, 0));

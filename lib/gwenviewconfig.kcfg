@@ -206,7 +206,7 @@
         <default>3./2.</default>
         </entry>
 
-        <entry name="DeleteThumbnailCacheOnExit" type="Bool">
+        <entry name="LowResourceUsageMode" type="Bool">
             <default>false</default>
         </entry>
 
