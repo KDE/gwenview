@@ -57,6 +57,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KUrlComboBox>
 #include <KUrlNavigator>
 #include <KToolBar>
+#include <KToolBarPopupAction>
 #include <KXMLGUIFactory>
 #include <KDirLister>
 #include <PurposeWidgets/Menu>
