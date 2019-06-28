@@ -50,6 +50,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "abstractthumbnailviewhelper.h"
 #include "archiveutils.h"
 #include "dragpixmapgenerator.h"
+#include "gwenviewconfig.h"
 #include "mimetypeutils.h"
 #include "urlutils.h"
 #include <lib/gvdebug.h>
@@ -666,7 +667,7 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index, QSize* fullSi
     if (thumbnail.mAdjustedPix.isNull()) {
         d->roughAdjustThumbnail(&thumbnail);
     }
-    if (thumbnail.mRough && !d->mSmoothThumbnailQueue.contains(url)) {
+    if (GwenviewConfig::lowResourceUsageMode() && thumbnail.mRough && !d->mSmoothThumbnailQueue.contains(url)) {
         d->mSmoothThumbnailQueue.enqueue(url);
         if (!d->mSmoothThumbnailTimer.isActive()) {
             d->mSmoothThumbnailTimer.start(SMOOTH_DELAY);
