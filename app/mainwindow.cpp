@@ -60,8 +60,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KToolBarPopupAction>
 #include <KXMLGUIFactory>
 #include <KDirLister>
+#ifdef KF5Purpose_FOUND
 #include <PurposeWidgets/Menu>
 #include <Purpose/AlternativesModel>
+#endif
 
 // Local
 #include "configdialog.h"
@@ -200,8 +202,10 @@ struct MainWindow::Private
     QAction * mToggleSlideShowAction;
     KToggleAction* mShowMenuBarAction;
     KToggleAction* mShowStatusBarAction;
+#ifdef KF5Purpose_FOUND
     Purpose::Menu* mShareMenu;
     KToolBarPopupAction* mShareAction;
+#endif
 #ifdef KIPI_FOUND
     KIPIExportAction* mKIPIExportAction;
 #endif
@@ -513,11 +517,13 @@ struct MainWindow::Private
         mKIPIExportAction = new KIPIExportAction(q);
 #endif
 
+#ifdef KF5Purpose_FOUND
         mShareAction = new KToolBarPopupAction(QIcon::fromTheme("document-share"), "Share", q);
         mShareAction->setDelayed(false);
         actionCollection->addAction("share", mShareAction);
         mShareMenu = new Purpose::Menu(q);
         mShareAction->setMenu(mShareMenu);
+#endif
     }
 
     void setupUndoActions()
@@ -721,6 +727,7 @@ struct MainWindow::Private
         actionCollection->action("file_save_as")->setEnabled(canSave);
         actionCollection->action("file_print")->setEnabled(isRasterImage);
 
+#ifdef KF5Purpose_FOUND
         if (url.isEmpty()) {
             mShareAction->setEnabled(false);
         } else {
@@ -732,6 +739,7 @@ struct MainWindow::Private
             mShareMenu->model()->setPluginType( QStringLiteral("Export") );
             mShareMenu->reload();
         }
+#endif
     }
 
     bool sideBarVisibility() const
