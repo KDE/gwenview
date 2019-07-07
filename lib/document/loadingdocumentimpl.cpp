@@ -449,6 +449,12 @@ void LoadingDocumentImpl::slotTransferFinished(KJob* job)
         emit loadingFailed();
         switchToImpl(new EmptyDocumentImpl(document()));
         return;
+    } else if (document()->kind() == MimeTypeUtils::KIND_UNKNOWN) {
+        // Transfer finished. If the mime type is still unknown (e.g. for files < HEADER_SIZE)
+        // determine the kind again.
+        if (d->determineKind()) {
+            return;
+        }
     }
     d->startLoading();
 }
