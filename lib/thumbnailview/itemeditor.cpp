@@ -72,7 +72,7 @@ void ItemEditor::resizeToContents()
     if (d->mCenter.isNull()) {
         d->mCenter = geometry().center();
     }
-    int textWidth = fontMetrics().width("  " + text() + "  ");
+    int textWidth = fontMetrics().boundingRect("  " + text() + "  ").width();
     QRect rect = geometry();
     rect.setWidth(textWidth);
     rect.moveCenter(d->mCenter);

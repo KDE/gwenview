@@ -200,6 +200,9 @@ struct CropWidgetPrivate : public QWidget
 
         addRatioToComboBox(QSizeF(1, 1), i18n("Square"));
         addRatioToComboBox(ratio(QApplication::desktop()->screenGeometry().size()), i18n("This Screen"));
+        // The previous string should be changed to
+        // addRatioToComboBox(ratio(QGuiApplication::screenAt(QCursor::pos())->geometry().size()), i18n("This Screen"));
+        // after switching to Qt > 5.9
         addSectionHeaderToComboBox(i18n("Landscape"));
 
         Q_FOREACH(const QSizeF& size, ratioList) {

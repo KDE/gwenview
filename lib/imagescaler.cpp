@@ -131,7 +131,7 @@ void ImageScaler::doScale()
     }
 
     LOG("Starting");
-    Q_FOREACH(const QRect & rect, d->mRegion.rects()) {
+    for (const QRect &rect : qAsConst(d->mRegion)) {
         LOG(rect);
         scaleRect(rect);
     }

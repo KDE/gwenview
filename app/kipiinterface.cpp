@@ -334,7 +334,7 @@ void KIPIInterface::loadOnePlugin()
         if (!info.mActions.isEmpty()) {
             QMenu* menu = d->mPluginMenu->addMenu(info.mName);
             menu->setIcon(QIcon::fromTheme(info.mIconName));
-            qSort(info.mActions.begin(), info.mActions.end(), actionLessThan);
+            std::sort(info.mActions.begin(), info.mActions.end(), actionLessThan);
             Q_FOREACH(QAction * action, info.mActions) {
                 menu->addAction(action);
             }

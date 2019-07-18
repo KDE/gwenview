@@ -457,7 +457,7 @@ void FullScreenContent::showOptionsMenu()
 
     // Interval label
     QString text = formatSlideShowIntervalText(88);
-    int width = widget->mSlideShowIntervalLabel->fontMetrics().width(text);
+    int width = widget->mSlideShowIntervalLabel->fontMetrics().boundingRect(text).width();
     widget->mSlideShowIntervalLabel->setFixedWidth(width);
     updateSlideShowIntervalLabel();
 

@@ -350,7 +350,7 @@ struct PreviewItemDelegatePrivate
         int posX;
         if (text.length() == fullText.length()) {
             // Not elided, center text
-            posX = (rect.width() - fm.width(text)) / 2;
+            posX = (rect.width() - fm.boundingRect(text).width()) / 2;
         } else {
             // Elided, left align
             posX = 0;
@@ -961,7 +961,7 @@ void PreviewItemDelegate::updateEditorGeometry(QWidget* widget, const QStyleOpti
         return;
     }
     QString text = index.data().toString();
-    int textWidth = edit->fontMetrics().width(QStringLiteral("  ") + text + QStringLiteral("  "));
+    int textWidth = edit->fontMetrics().boundingRect(QStringLiteral("  ") + text + QStringLiteral("  ")).width();
     QRect textRect(
         option.rect.left() + (option.rect.width() - textWidth) / 2,
         option.rect.top() + 2 * ITEM_MARGIN + d->mThumbnailSize.height(),

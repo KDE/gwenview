@@ -100,7 +100,7 @@ struct SlideShowPrivate
 
     QUrl findNextOrderedUrl()
     {
-        QVector<QUrl>::ConstIterator it = qFind(mUrls.constBegin(), mUrls.constEnd(), mCurrentUrl);
+        QVector<QUrl>::ConstIterator it = std::find(mUrls.constBegin(), mUrls.constEnd(), mCurrentUrl);
         GV_RETURN_VALUE_IF_FAIL2(it != mUrls.constEnd(), QUrl(), "Current url not found in list.");
 
         ++it;
@@ -216,9 +216,9 @@ QAction* SlideShow::randomAction() const
 void SlideShow::start(const QList<QUrl>& urls)
 {
     d->mUrls.resize(urls.size());
-    qCopy(urls.begin(), urls.end(), d->mUrls.begin());
+    std::copy(urls.begin(), urls.end(), d->mUrls.begin());
 
-    d->mStartIt = qFind(d->mUrls.constBegin(), d->mUrls.constEnd(), d->mCurrentUrl);
+    d->mStartIt = std::find(d->mUrls.constBegin(), d->mUrls.constEnd(), d->mCurrentUrl);
     if (d->mStartIt == d->mUrls.constEnd()) {
         qWarning() << "Current url not found in list, aborting.\n";
         return;

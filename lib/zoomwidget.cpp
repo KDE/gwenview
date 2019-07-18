@@ -109,7 +109,7 @@ ZoomWidget::ZoomWidget(QWidget* parent)
     }
 
     d->mZoomLabel = new QLabel;
-    d->mZoomLabel->setFixedWidth(d->mZoomLabel->fontMetrics().width(QStringLiteral(" 1000% ")));
+    d->mZoomLabel->setFixedWidth(d->mZoomLabel->fontMetrics().boundingRect(QStringLiteral(" 1000% ")).width());
     d->mZoomLabel->setAlignment(Qt::AlignCenter);
 
     d->mZoomSlider = new ZoomSlider;

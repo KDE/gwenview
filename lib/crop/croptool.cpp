@@ -272,8 +272,8 @@ void CropTool::paint(QPainter* painter)
     static const QColor borderColor = QColor::fromHsvF(0, 0, 1.0);
     static const QColor fillColor   = QColor::fromHsvF(0, 0, 0.75, 0.66);
 
-    QRegion outerRegion = QRegion(imageRect) - QRegion(rect);
-    Q_FOREACH(const QRect & outerRect, outerRegion.rects()) {
+    const QRegion outerRegion = QRegion(imageRect) - QRegion(rect);
+    for (const QRect &outerRect : outerRegion) {
         painter->fillRect(outerRect, outerColor);
     }
 

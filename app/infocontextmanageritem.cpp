@@ -158,7 +158,7 @@ public:
 
     void finishAddRows()
     {
-        qSort(mRows.begin(), mRows.end(), KeyValueWidget::rowsLessThan);
+        std::sort(mRows.begin(), mRows.end(), KeyValueWidget::rowsLessThan);
         updateGeometry();
     }
 

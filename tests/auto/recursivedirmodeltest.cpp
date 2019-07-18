@@ -95,7 +95,7 @@ static QList<QUrl> listModelUrls(QAbstractItemModel* model)
         KFileItem item = index.data(KDirModel::FileItemRole).value<KFileItem>();
         out << item.url();
     }
-    qSort(out);
+    std::sort(out.begin(), out.end());
     return out;
 }
 
@@ -105,7 +105,7 @@ static QList<QUrl> listExpectedUrls(const QDir& dir, const QStringList& files)
     Q_FOREACH(const QString &name, files) {
         lst << QUrl::fromLocalFile(dir.absoluteFilePath(name));
     }
-    qSort(lst);
+    std::sort(lst.begin(), lst.end());
     return lst;
 }
 

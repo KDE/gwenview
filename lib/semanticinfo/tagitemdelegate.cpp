@@ -124,7 +124,7 @@ void TagItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& optio
 
 QSize TagItemDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
-    const int width  = option.fontMetrics.width(index.data().toString());
+    const int width  = option.fontMetrics.boundingRect(index.data().toString()).width();
     const int height = qMax(mButtonSize, option.fontMetrics.height());
     return QSize(width + 2 * mMargin, height + 2 * mMargin);
 }
