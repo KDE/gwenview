@@ -74,7 +74,8 @@ void FileOpsContextManagerItem::updateServiceList()
 
     // Get list of all distinct mimetypes in selection
     QStringList mimeTypes;
-    Q_FOREACH(const KFileItem & item, contextManager()->selectedFileItemList()) {
+    const auto selectedFileItemList = contextManager()->selectedFileItemList();
+    for (const KFileItem & item : selectedFileItemList) {
         const QString mimeType = item.mimetype();
         if (!mimeTypes.contains(mimeType)) {
             mimeTypes << mimeType;
@@ -279,7 +280,7 @@ void FileOpsContextManagerItem::updateSideBarContent()
 
     mGroup->clear();
     QList<QAction*>& list = mInTrash ? mTrashFileActionList : mRegularFileActionList;
-    Q_FOREACH(QAction * action, list) {
+    for (QAction * action : qAsConst(list)) {
         if (action->isEnabled() && !action->isSeparator()) {
             mGroup->addAction(action);
         }
@@ -376,7 +377,7 @@ void FileOpsContextManagerItem::populateOpenMenu()
     updateServiceList();
 
     int idx = 0;
-    Q_FOREACH(const KService::Ptr & service, mServiceList) {
+    for (const KService::Ptr & service : qAsConst(mServiceList)) {
         QString text = service->name().replace('&', "&&");
         QAction* action = openMenu->addAction(text);
         action->setIcon(QIcon::fromTheme(service->icon()));

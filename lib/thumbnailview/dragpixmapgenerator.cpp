@@ -67,7 +67,7 @@ DragPixmap generate(const QList<QPixmap>& pixmaps, int totalCount)
     painter.setRenderHint(QPainter::SmoothPixmapTransform);
     //int index = 0;
     int maxX = 0;
-    Q_FOREACH(const QPixmap& pix, pixmaps) {
+    for (const QPixmap& pix : pixmaps) {
         QPixmap pix2 = pix.scaled(DRAG_THUMB_SIZE - 2, DRAG_THUMB_SIZE - 2, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         QRect rect(-pix2.width() / 2, -pix2.height() - extraSpace, pix2.width(), pix2.height());
 

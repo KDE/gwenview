@@ -478,7 +478,7 @@ void ViewMainPage::loadConfig()
     d->applyPalette(window()->isFullScreen());
 
     // FIXME: Not symmetric with saveConfig(). Check if it matters.
-    Q_FOREACH(DocumentView * view, d->mDocumentViews) {
+    for (DocumentView * view : qAsConst(d->mDocumentViews)) {
         view->loadAdapterConfig();
     }
 
@@ -672,7 +672,7 @@ void ViewMainPage::openUrls(const QList<QUrl>& allUrls, const QUrl &currentUrl)
     }
     // Destroy views which show urls we don't care about, remove from "urls" the
     // urls which already have a view.
-    Q_FOREACH(DocumentView * view, d->mDocumentViews) {
+    for (DocumentView * view : qAsConst(d->mDocumentViews)) {
         QUrl url = view->url();
         if (urls.contains(url)) {
             // view displays an url we must display, keep it
@@ -685,7 +685,7 @@ void ViewMainPage::openUrls(const QList<QUrl>& allUrls, const QUrl &currentUrl)
     }
 
     // Create view for remaining urls
-    Q_FOREACH(const QUrl &url, urls) {
+    for (const QUrl &url : qAsConst(urls)) {
         if (d->mDocumentViews.count() >= MaxViewCount) {
             qWarning() << "Too many documents to show";
             break;
@@ -696,7 +696,7 @@ void ViewMainPage::openUrls(const QList<QUrl>& allUrls, const QUrl &currentUrl)
 
     // Set sortKey to match url order
     int sortKey = 0;
-    Q_FOREACH(const QUrl &url, allUrls) {
+    for (const QUrl &url : allUrls) {
         viewForUrlMap[url]->setSortKey(sortKey);
         ++sortKey;
     }
@@ -720,7 +720,7 @@ void ViewMainPage::openUrls(const QList<QUrl>& allUrls, const QUrl &currentUrl)
     }
 
     // Init views
-    Q_FOREACH(DocumentView * view, d->mDocumentViews) {
+    for (DocumentView * view : qAsConst(d->mDocumentViews)) {
         view->setCompareMode(d->mCompareMode);
         if (view->url() == currentUrl) {
             d->setCurrentView(view);

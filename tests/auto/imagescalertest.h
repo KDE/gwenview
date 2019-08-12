@@ -54,7 +54,7 @@ public:
 
         int imageWidth = 0;
         int imageHeight = 0;
-        Q_FOREACH(const ImageInfo & info, mImageInfoList) {
+        for (const ImageInfo & info : qAsConst(mImageInfoList)) {
             int right = info.left + info.image.width();
             int bottom = info.top + info.image.height();
             imageWidth = qMax(imageWidth, right);
@@ -64,7 +64,7 @@ public:
         QImage image(imageWidth, imageHeight, format);
         image.fill(0);
         QPainter painter(&image);
-        Q_FOREACH(const ImageInfo & info, mImageInfoList) {
+        for (const ImageInfo & info : qAsConst(mImageInfoList)) {
             painter.drawImage(info.left, info.top, info.image);
         }
         return image;

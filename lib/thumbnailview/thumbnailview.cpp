@@ -976,7 +976,7 @@ void ThumbnailView::updateThumbnailBusyState(const QUrl& url, bool busy)
 
 void ThumbnailView::updateBusyIndexes()
 {
-    Q_FOREACH(const QPersistentModelIndex & index, d->mBusyIndexSet) {
+    for (const QPersistentModelIndex & index : qAsConst(d->mBusyIndexSet)) {
         update(index);
     }
 }

@@ -205,13 +205,13 @@ struct CropWidgetPrivate : public QWidget
         // after switching to Qt > 5.9
         addSectionHeaderToComboBox(i18n("Landscape"));
 
-        Q_FOREACH(const QSizeF& size, ratioList) {
+        for (const QSizeF& size : qAsConst(ratioList)) {
             addRatioToComboBox(size);
         }
         addRatioToComboBox(QSizeF(sqrt2, 1), i18n("ISO (A4, A3...)"));
         addRatioToComboBox(QSizeF(11, 8.5), i18n("US Letter"));
         addSectionHeaderToComboBox(i18n("Portrait"));
-        Q_FOREACH(QSizeF size, ratioList) {
+        for (QSizeF size : qAsConst(ratioList)) {
             size.transpose();
             addRatioToComboBox(size);
         }

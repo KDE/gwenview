@@ -75,6 +75,11 @@ find_package(KF5 ${KF5_MIN_VERSION} OPTIONAL_COMPONENTS
     Purpose
 )
 
+if (KF5ConfigWidgets_VERSION VERSION_GREATER "5.56.0" AND ${Phonon4Qt5_VERSION} VERSION_GREATER "4.10.59")
+        add_definitions(-DQT_NO_FOREACH)
+        MESSAGE(STATUS "compile without foreach")
+endif()
+
 ## Dependencies
 find_package(JPEG)
 set_package_properties(JPEG PROPERTIES URL "http://libjpeg.sourceforge.net/" DESCRIPTION "JPEG image manipulation support" TYPE REQUIRED)

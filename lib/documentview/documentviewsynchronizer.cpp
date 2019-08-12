@@ -59,7 +59,7 @@ struct DocumentViewSynchronizerPrivate
         QObject::connect(mCurrentView.data(), SIGNAL(positionChanged()),
                          q, SLOT(updatePosition()));
 
-        Q_FOREACH(DocumentView* view, *mViews) {
+        for (DocumentView* view : qAsConst(*mViews)) {
             if (view == mCurrentView.data()) {
                 continue;
             }
@@ -110,7 +110,7 @@ void DocumentViewSynchronizer::setActive(bool active)
 
 void DocumentViewSynchronizer::setZoom(qreal zoom)
 {
-    Q_FOREACH(DocumentView* view, *d->mViews) {
+    for (DocumentView* view : qAsConst(*d->mViews)) {
         if (view == d->mCurrentView.data()) {
             continue;
         }
@@ -121,7 +121,7 @@ void DocumentViewSynchronizer::setZoom(qreal zoom)
 
 void DocumentViewSynchronizer::setZoomToFit(bool fit)
 {
-    Q_FOREACH(DocumentView* view, *d->mViews) {
+    for (DocumentView* view : qAsConst(*d->mViews)) {
         if (view == d->mCurrentView.data()) {
             continue;
         }
@@ -132,7 +132,7 @@ void DocumentViewSynchronizer::setZoomToFit(bool fit)
 
 void DocumentViewSynchronizer::setZoomToFill(bool fit)
 {
-    Q_FOREACH(DocumentView* view, *d->mViews) {
+    for (DocumentView* view : qAsConst(*d->mViews)) {
         if (view == d->mCurrentView.data()) {
             continue;
         }
@@ -146,7 +146,7 @@ void DocumentViewSynchronizer::updatePosition()
     QPoint pos = d->mCurrentView.data()->position();
     QPoint delta = pos - d->mOldPosition;
     d->mOldPosition = pos;
-    Q_FOREACH(DocumentView* view, *d->mViews) {
+    for (DocumentView* view : qAsConst(*d->mViews)) {
         if (view == d->mCurrentView.data()) {
             continue;
         }

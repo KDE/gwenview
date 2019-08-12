@@ -1586,7 +1586,8 @@ void MainWindow::loadConfig()
 
     if (GwenviewConfig::historyEnabled()) {
         d->mFileOpenRecentAction->loadEntries(KConfigGroup(KSharedConfig::openConfig(), "Recent Files"));
-        foreach(const QUrl& url, d->mFileOpenRecentAction->urls()) {
+        const auto mFileOpenRecentActionUrls = d->mFileOpenRecentAction->urls();
+        for (const QUrl& url : mFileOpenRecentActionUrls) {
             d->mGvCore->addUrlToRecentFiles(url);
         }
     } else {

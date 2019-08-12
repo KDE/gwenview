@@ -205,7 +205,8 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
     {
         QMenu* menu = new QMenu(mAddFilterButton);
         mFilterController = new FilterController(mFilterFrame, mDirModel);
-        Q_FOREACH(QAction * action, mFilterController->actionList()) {
+        const auto actionList = mFilterController->actionList();
+        for (QAction * action : actionList) {
             menu->addAction(action);
         }
         mAddFilterButton->setMenu(menu);
@@ -364,7 +365,8 @@ void BrowseMainPage::loadConfig()
     d->mThumbnailView->setThumbnailAspectRatio(GwenviewConfig::thumbnailAspectRatio());
     d->mThumbnailView->setThumbnailWidth(GwenviewConfig::thumbnailSize());
 
-    Q_FOREACH(QAction * action, d->mSortAction->actions()) {
+    const auto actionsList = d->mSortAction->actions();
+    for (QAction * action : actionsList) {
         if (sortingFromSortAction(action) == GwenviewConfig::sorting()) {
             action->setChecked(true);
             break;
@@ -421,8 +423,8 @@ KUrlNavigator* BrowseMainPage::urlNavigator() const
 
 void BrowseMainPage::reload()
 {
-    QModelIndexList list = d->mThumbnailView->selectionModel()->selectedIndexes();
-    Q_FOREACH(const QModelIndex & index, list) {
+    const QModelIndexList list = d->mThumbnailView->selectionModel()->selectedIndexes();
+    for (const QModelIndex & index : list) {
         d->mThumbnailView->reloadThumbnail(index);
     }
     d->mDirModel->reload();
@@ -520,7 +522,8 @@ void BrowseMainPage::updateSortOrder()
 void BrowseMainPage::updateThumbnailDetails()
 {
     PreviewItemDelegate::ThumbnailDetails details = 0;
-    Q_FOREACH(const QAction * action, d->mThumbnailDetailsActionGroup->actions()) {
+    const auto actionList = d->mThumbnailDetailsActionGroup->actions();
+    for (const QAction * action : actionList) {
         if (action->isChecked()) {
             details |= PreviewItemDelegate::ThumbnailDetail(action->data().toInt());
         }

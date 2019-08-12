@@ -127,7 +127,7 @@ struct CropToolPrivate
 
     CropHandle handleAt(const QPointF& pos)
     {
-        Q_FOREACH(const CropHandle & handle, mCropHandleList) {
+        for (const CropHandle & handle : qAsConst(mCropHandleList)) {
             QRectF rect = handleViewportRect(handle);
             if (rect.contains(pos)) {
                 return handle;
@@ -284,7 +284,7 @@ void CropTool::paint(QPainter* painter)
     if (d->mMovingHandle == CH_None) {
         // Only draw handles when user is not resizing
         painter->setBrush(fillColor);
-        Q_FOREACH(const CropHandle & handle, d->mCropHandleList) {
+        for (const CropHandle & handle : qAsConst(d->mCropHandleList)) {
             rect = d->handleViewportRect(handle);
             painter->drawRect(rect);
         }

@@ -340,7 +340,7 @@ void ThumbnailPage::slotImportAll()
 void ThumbnailPage::importList(const QModelIndexList& list)
 {
     d->mUrlList.clear();
-    Q_FOREACH(const QModelIndex & index, list) {
+    for (const QModelIndex & index : list) {
         KFileItem item = itemForIndex(index);
         if (!ArchiveUtils::fileItemIsDirOrArchive(item)) {
             d->mUrlList << item.url();

@@ -128,7 +128,7 @@ public:
     int heightForWidth(int w) const override
     {
         int height = 0;
-        Q_FOREACH(Row* row, mRows) {
+        for (Row* row : qAsConst(mRows)) {
              height += row->heightForWidth(w);
         }
         return height;
@@ -169,7 +169,7 @@ public:
         // from one image to another
         int rowY = 0;
         const int labelWidth = width();
-        Q_FOREACH(Row* row, mRows) {
+        for (Row* row : qAsConst(mRows)) {
             rowY = row->setLabelGeometries(rowY, labelWidth);
         }
     }
@@ -321,7 +321,7 @@ void InfoContextManagerItem::fillMultipleItemsGroup(const KFileItemList& itemLis
     d->forgetCurrentDocument();
 
     int folderCount = 0, fileCount = 0;
-    Q_FOREACH(const KFileItem & item, itemList) {
+    for (const KFileItem & item : itemList) {
         if (item.isDir()) {
             folderCount++;
         } else {
@@ -349,7 +349,8 @@ void InfoContextManagerItem::updateOneFileInfo()
 
     ImageMetaInfoModel* metaInfoModel = d->mDocument->metaInfo();
     d->mKeyValueWidget->clear();
-    Q_FOREACH(const QString & key, GwenviewConfig::preferredMetaInfoKeyList()) {
+    const QStringList preferredMetaInfoKeyList = GwenviewConfig::preferredMetaInfoKeyList();
+    for (const QString & key : preferredMetaInfoKeyList) {
         QString label;
         QString value;
         metaInfoModel->getInfoForKey(key, &label, &value);

@@ -252,7 +252,8 @@ QModelIndex FolderViewContextManagerItem::findClosestIndex(const QModelIndex& pa
 
     QString relativePath = QDir(url.path()).relativeFilePath(wantedUrl.path());
     QModelIndex lastFoundIndex = index;
-    Q_FOREACH(const QString & pathPart, relativePath.split(QDir::separator(), QString::SkipEmptyParts)) {
+    const QStringList relativePathList = relativePath.split(QDir::separator(), QString::SkipEmptyParts);
+    for (const QString & pathPart : relativePathList) {
         bool found = false;
         for (int row = 0; row < mModel->rowCount(lastFoundIndex); ++row) {
             QModelIndex index = mModel->index(row, 0, lastFoundIndex);

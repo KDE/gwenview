@@ -154,7 +154,7 @@ struct SaveBarPrivate
         qreal maxPercentageOfMemoryUsage = GwenviewConfig::percentageOfMemoryUsageWarning();
         qulonglong maxMemoryUsage = MemoryUtils::getTotalMemory() * maxPercentageOfMemoryUsage;
         qulonglong memoryUsage = 0;
-        Q_FOREACH(const QUrl &url, list) {
+        for (const QUrl &url : list) {
             Document::Ptr doc = DocumentFactory::instance()->load(url);
             memoryUsage += doc->memoryUsage();
         }

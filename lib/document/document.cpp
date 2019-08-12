@@ -71,7 +71,7 @@ static void logQueue(DocumentPrivate* d)
         return;
     }
     qDebug(PREFIX "%d pending job(s):", d->mJobQueue.size());
-    Q_FOREACH(DocumentJob* job, d->mJobQueue) {
+    for (DocumentJob* job : qAsConst(d->mJobQueue)) {
         Q_ASSERT(job);
         qDebug() << PREFIX "-" << job;
     }

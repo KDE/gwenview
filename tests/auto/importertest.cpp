@@ -103,7 +103,7 @@ void ImporterTest::testSuccessfulImport()
     QCOMPARE(importer.skippedUrlList().count(), 0);
     QCOMPARE(importer.renamedCount(), 0);
 
-    Q_FOREACH(const QUrl & src, list) {
+    for (const QUrl & src : qAsConst(list)) {
         QUrl dst = destUrl;
         dst.setPath(dst.path() + '/' + src.fileName());
         QVERIFY(FileUtils::contentsAreIdentical(src, dst));

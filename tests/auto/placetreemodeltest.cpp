@@ -85,7 +85,7 @@ void PlaceTreeModelTest::initTestCase()
     mUrl2 = QUrl::fromLocalFile(dir.filePath("url2"));
 
     mUrl1Dirs << "aaa" << "zzz" << "bbb";
-    Q_FOREACH(const QString & dirName, mUrl1Dirs) {
+    for (const QString & dirName : qAsConst(mUrl1Dirs)) {
         dir.mkdir("url1/" + dirName);
     }
 

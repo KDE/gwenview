@@ -147,7 +147,7 @@ void RecursiveDirModel::slotItemsAdded(const QUrl&, const KFileItemList& newList
 {
     QList<QUrl> dirUrls;
     KFileItemList fileList;
-    Q_FOREACH(const KFileItem& item, newList) {
+    for (const KFileItem& item : newList) {
         if (item.isFile()) {
             if (d->rowForUrl(item.url()) == -1) {
                 fileList << item;
@@ -159,20 +159,20 @@ void RecursiveDirModel::slotItemsAdded(const QUrl&, const KFileItemList& newList
 
     if (!fileList.isEmpty()) {
         beginInsertRows(QModelIndex(), d->list().count(), d->list().count() + fileList.count());
-        Q_FOREACH(const KFileItem& item, fileList) {
+        for (const KFileItem& item : qAsConst(fileList)) {
             d->addItem(item);
         }
         endInsertRows();
     }
 
-    Q_FOREACH(const QUrl &url, dirUrls) {
+    for (const QUrl &url : qAsConst(dirUrls)) {
         d->mDirLister->openUrl(url, KDirLister::Keep);
     }
 }
 
 void RecursiveDirModel::slotItemsDeleted(const KFileItemList& list)
 {
-    Q_FOREACH(const KFileItem& item, list) {
+    for (const KFileItem& item : list) {
         if (item.isDir()) {
             continue;
         }

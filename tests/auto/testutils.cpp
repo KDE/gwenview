@@ -164,7 +164,7 @@ SandBoxDir::SandBoxDir()
 
 void SandBoxDir::fill(const QStringList& filePaths)
 {
-    Q_FOREACH(const QString& filePath, filePaths) {
+    for (const QString& filePath : filePaths) {
         QFileInfo info(*this, filePath);
         mkpath(info.absolutePath());
         createEmptyFile(info.absoluteFilePath());

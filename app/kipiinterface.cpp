@@ -96,7 +96,7 @@ public:
 
     void delAttributes(const QStringList& attributeNames) override
     {
-        Q_FOREACH(const QString& name, attributeNames) {
+        for (const QString& name : attributeNames) {
             mAttributes.remove(name);
         }
     }
@@ -303,8 +303,8 @@ void KIPIInterface::loadOnePlugin()
         }
 
         plugin->setup(d->mMainWindow);
-        QList<QAction *> actions = plugin->actions();
-        Q_FOREACH(QAction * action, actions) {
+        const QList<QAction *> actions = plugin->actions();
+        for (QAction * action : actions) {
             KIPI::Category category = plugin->category(action);
 
             if (!d->mMenuInfoMap.contains(category)) {
@@ -335,7 +335,7 @@ void KIPIInterface::loadOnePlugin()
             QMenu* menu = d->mPluginMenu->addMenu(info.mName);
             menu->setIcon(QIcon::fromTheme(info.mIconName));
             std::sort(info.mActions.begin(), info.mActions.end(), actionLessThan);
-            Q_FOREACH(QAction * action, info.mActions) {
+            for (QAction * action : qAsConst(info.mActions)) {
                 menu->addAction(action);
             }
         }

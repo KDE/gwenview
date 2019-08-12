@@ -119,7 +119,8 @@ void ThumbnailProviderTest::testLoadLocal()
 
     // Create a list of items which will be thumbnailed
     KFileItemList list;
-    Q_FOREACH(const QFileInfo & info, dir.entryInfoList(QDir::Files)) {
+    const auto entryInfoList = dir.entryInfoList(QDir::Files);
+    for (const QFileInfo & info : entryInfoList) {
         QUrl url("file://" + info.absoluteFilePath());
         KFileItem item(url);
         list << item;
@@ -139,12 +140,12 @@ void ThumbnailProviderTest::testLoadLocal()
     QDir thumbnailDir = ThumbnailProvider::thumbnailBaseDir(ThumbnailGroup::Normal);
     // There should be one file less because small.png is a png and is too
     // small to have a thumbnail
-    QStringList entryList = thumbnailDir.entryList(QStringList("*.png"));
+    const QStringList entryList = thumbnailDir.entryList(QStringList("*.png"));
     QCOMPARE(entryList.count(), mSandBox.mSizeHash.size() - 1);
 
     // Check thumbnail keys
     QHash<KFileItem, QHash<QString, QString> > thumbnailHash;
-    Q_FOREACH(const QString& name, entryList) {
+    for (const QString& name : entryList) {
         QImage thumb;
         QVERIFY(thumb.load(thumbnailDir.filePath(name)));
 
@@ -265,7 +266,8 @@ void ThumbnailProviderTest::testRemoveItemsWhileGenerating()
 
     // Create a list of items which will be thumbnailed
     KFileItemList list;
-    Q_FOREACH(const QFileInfo & info, dir.entryInfoList(QDir::Files)) {
+    const auto entryInfoList = dir.entryInfoList(QDir::Files);
+    for (const QFileInfo & info : entryInfoList) {
         QUrl url("file://" + info.absoluteFilePath());
         KFileItem item(url);
         list << item;

@@ -175,7 +175,7 @@ void ImageOpsContextManagerItem::updateSideBarContent()
     }
 
     d->mGroup->clear();
-    Q_FOREACH(QAction * action, d->mActionList) {
+    for (QAction * action : qAsConst(d->mActionList)) {
         if (action->isEnabled() && action->priority() != QAction::LowPriority) {
             d->mGroup->addAction(action);
         }

@@ -238,9 +238,10 @@ void FullScreenContent::updateInformationLabel()
     ImageMetaInfoModel* model = mCurrentDocument->metaInfo();
 
     QStringList valueList;
-    Q_FOREACH(const QString & key, GwenviewConfig::fullScreenPreferredMetaInfoKeyList()) {
+    const QStringList fullScreenPreferredMetaInfoKeyList = GwenviewConfig::fullScreenPreferredMetaInfoKeyList();
+    for (const QString & key : fullScreenPreferredMetaInfoKeyList) {
         const QString value = model->getValueForKey(key);
-        if (value.length() > 0) {
+        if (!value.isEmpty()) {
             valueList << value;
         }
     }

@@ -69,7 +69,7 @@ public:
             QList<QUrl> list;
             QStringList tmpArgs = args;
             tmpArgs.removeDuplicates();
-            foreach(const QString & url, tmpArgs) {
+            for (const QString & url : qAsConst(tmpArgs)) {
                 list << QUrl::fromUserInput(url, QDir::currentPath(), QUrl::AssumeLocalFile);
             }
 

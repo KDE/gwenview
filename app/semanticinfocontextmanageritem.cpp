@@ -294,7 +294,7 @@ void SemanticInfoContextManagerItem::slotSelectionChanged()
 
 void SemanticInfoContextManagerItem::update()
 {
-    KFileItemList itemList = contextManager()->selectedFileItemList();
+    const KFileItemList itemList = contextManager()->selectedFileItemList();
 
     bool first = true;
     int rating = 0;
@@ -307,7 +307,7 @@ void SemanticInfoContextManagerItem::update()
     typedef QHash<QString, int> TagHash;
     TagHash tagHash;
 
-    Q_FOREACH(const KFileItem & item, itemList) {
+    for (const KFileItem & item : itemList) {
         QModelIndex index = dirModel->indexForItem(item);
 
         QVariant value = dirModel->data(index, SemanticInfoDirModel::RatingRole);
@@ -326,8 +326,8 @@ void SemanticInfoContextManagerItem::update()
         }
 
         // Fill tagHash, incrementing the tag count if it's already there
-        TagSet tagSet = TagSet::fromVariant(index.data(SemanticInfoDirModel::TagsRole));
-        Q_FOREACH(const QString & tag, tagSet) {
+        const TagSet tagSet = TagSet::fromVariant(index.data(SemanticInfoDirModel::TagsRole));
+        for (const QString & tag : tagSet) {
             TagHash::Iterator it = tagHash.find(tag);
             if (it == tagHash.end()) {
                 tagHash[tag] = 1;
@@ -357,7 +357,7 @@ void SemanticInfoContextManagerItem::update()
     }
 
     bool enabled = !contextManager()->selectedFileItemList().isEmpty();
-    Q_FOREACH(QAction * action, d->mActions) {
+    for (QAction * action : qAsConst(d->mActions)) {
         action->setEnabled(enabled);
     }
     d->updateTagLabel();
@@ -368,7 +368,7 @@ void SemanticInfoContextManagerItem::update()
 
 void SemanticInfoContextManagerItem::slotRatingChanged(int rating)
 {
-    KFileItemList itemList = contextManager()->selectedFileItemList();
+    const KFileItemList itemList = contextManager()->selectedFileItemList();
 
     // Show rating indicator in view mode, and only if sidebar is not visible
     if (d->mViewMainPage->isVisible() && !d->mRatingWidget->isVisible()) {
@@ -380,7 +380,7 @@ void SemanticInfoContextManagerItem::slotRatingChanged(int rating)
     }
 
     SortedDirModel* dirModel = contextManager()->dirModel();
-    Q_FOREACH(const KFileItem & item, itemList) {
+    for (const KFileItem & item : itemList) {
         QModelIndex index = dirModel->indexForItem(item);
         dirModel->setData(index, rating, SemanticInfoDirModel::RatingRole);
     }
@@ -393,10 +393,10 @@ void SemanticInfoContextManagerItem::storeDescription()
     }
     d->mDescriptionTextEdit->document()->setModified(false);
     QString description = d->mDescriptionTextEdit->toPlainText();
-    KFileItemList itemList = contextManager()->selectedFileItemList();
+    const KFileItemList itemList = contextManager()->selectedFileItemList();
 
     SortedDirModel* dirModel = contextManager()->dirModel();
-    Q_FOREACH(const KFileItem & item, itemList) {
+    for (const KFileItem & item : itemList) {
         QModelIndex index = dirModel->indexForItem(item);
         dirModel->setData(index, description, SemanticInfoDirModel::DescriptionRole);
     }
@@ -404,10 +404,10 @@ void SemanticInfoContextManagerItem::storeDescription()
 
 void SemanticInfoContextManagerItem::assignTag(const SemanticInfoTag& tag)
 {
-    KFileItemList itemList = contextManager()->selectedFileItemList();
+    const KFileItemList itemList = contextManager()->selectedFileItemList();
 
     SortedDirModel* dirModel = contextManager()->dirModel();
-    Q_FOREACH(const KFileItem & item, itemList) {
+    for (const KFileItem & item : itemList) {
         QModelIndex index = dirModel->indexForItem(item);
         TagSet tags = TagSet::fromVariant(dirModel->data(index, SemanticInfoDirModel::TagsRole));
         if (!tags.contains(tag)) {
@@ -419,10 +419,10 @@ void SemanticInfoContextManagerItem::assignTag(const SemanticInfoTag& tag)
 
 void SemanticInfoContextManagerItem::removeTag(const SemanticInfoTag& tag)
 {
-    KFileItemList itemList = contextManager()->selectedFileItemList();
+    const KFileItemList itemList = contextManager()->selectedFileItemList();
 
     SortedDirModel* dirModel = contextManager()->dirModel();
-    Q_FOREACH(const KFileItem & item, itemList) {
+    for (const KFileItem & item : itemList) {
         QModelIndex index = dirModel->indexForItem(item);
         TagSet tags = TagSet::fromVariant(dirModel->data(index, SemanticInfoDirModel::TagsRole));
         if (tags.contains(tag)) {

@@ -102,7 +102,7 @@ static QList<QUrl> listModelUrls(QAbstractItemModel* model)
 static QList<QUrl> listExpectedUrls(const QDir& dir, const QStringList& files)
 {
     QList<QUrl> lst;
-    Q_FOREACH(const QString &name, files) {
+    for (const QString &name : files) {
         lst << QUrl::fromLocalFile(dir.absoluteFilePath(name));
     }
     std::sort(lst.begin(), lst.end());
@@ -111,7 +111,7 @@ static QList<QUrl> listExpectedUrls(const QDir& dir, const QStringList& files)
 
 void logLst(const QList<QUrl>& lst)
 {
-    Q_FOREACH(const QUrl &url, lst) {
+    for (const QUrl &url : lst) {
         qWarning() << url.fileName();
     }
 }
@@ -156,7 +156,7 @@ void RecursiveDirModelTest::testBasic()
      */
 
     // Test removing files
-    Q_FOREACH(const QString &name, removedFiles) {
+    for (const QString &name : qAsConst(removedFiles)) {
         bool ok = sandBoxDir.remove(name);
         Q_ASSERT(ok);
         expected.removeOne(QUrl(sandBoxDir.absoluteFilePath(name)));

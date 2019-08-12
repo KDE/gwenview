@@ -97,7 +97,8 @@ int main(int argc, char** argv)
     // List dir
     QDir dir(imageDirName);
     KFileItemList list;
-    Q_FOREACH(const QString &name, dir.entryList()) {
+    const auto entryList = dir.entryList();
+    for (const QString &name : entryList) {
         QUrl url = QUrl::fromLocalFile(dir.absoluteFilePath(name));
         KFileItem item(url);
         list << item;

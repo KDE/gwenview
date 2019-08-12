@@ -69,7 +69,7 @@ void TagModel::setSemanticInfoBackEnd(AbstractSemanticInfoBackEnd* backEnd)
 void TagModel::setTagSet(const TagSet& set)
 {
     clear();
-    Q_FOREACH(const SemanticInfoTag & tag, set) {
+    for (const SemanticInfoTag & tag : set) {
         QString label = d->mBackEnd->labelForTag(tag);
         QStandardItem* item = createItem(tag, label, TagModel::FullyAssigned);
         appendRow(item);

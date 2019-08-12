@@ -53,7 +53,7 @@ struct KIPIExportActionPrivate
             menu->addAction(mDefaultAction);
             menu->addSection(i18n("Other Plugins"));
         }
-        Q_FOREACH(QAction * action, mExportActionList) {
+        for (QAction * action : qAsConst(mExportActionList)) {
             action->setIconVisibleInMenu(true);
             if (action != mDefaultAction) {
                 menu->addAction(action);
@@ -93,7 +93,7 @@ void KIPIExportAction::init()
     if (d->mKIPIInterface->isLoadingFinished()) {
         // Look for default action
         QString defaultActionText = GwenviewConfig::defaultExportPluginText();
-        Q_FOREACH(QAction* action, d->mExportActionList) {
+        for (QAction* action : qAsConst(d->mExportActionList)) {
             if (action->text() == defaultActionText) {
                 setDefaultAction(action);
                 break;

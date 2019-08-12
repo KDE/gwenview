@@ -65,7 +65,7 @@ void DocumentDirFinder::start()
 
 void DocumentDirFinder::slotItemsAdded(const QUrl& dir, const KFileItemList& list)
 {
-    Q_FOREACH(const KFileItem & item, list) {
+    for (const KFileItem & item : list) {
         MimeTypeUtils::Kind kind = MimeTypeUtils::fileItemKind(item);
         switch (kind) {
         case MimeTypeUtils::KIND_DIR:

@@ -217,11 +217,11 @@ void ThumbnailProvider::appendItems(const KFileItemList& items)
 {
     if (!mItems.isEmpty()) {
         QSet<QString> itemSet;
-        Q_FOREACH(const KFileItem & item, mItems) {
+        for (const KFileItem & item : qAsConst(mItems)) {
             itemSet.insert(item.url().url());
         }
 
-        Q_FOREACH(const KFileItem & item, items) {
+        for (const KFileItem & item : items) {
             if (!itemSet.contains(item.url().url())) {
                 mItems.append(item);
             }
@@ -240,7 +240,7 @@ void ThumbnailProvider::removeItems(const KFileItemList& itemList)
     if (mItems.isEmpty()) {
         return;
     }
-    Q_FOREACH(const KFileItem & item, itemList) {
+    for (const KFileItem & item : itemList) {
         // If we are removing the next item, update to be the item after or the
         // first if we removed the last item
         mItems.removeAll(item);
@@ -408,7 +408,8 @@ QImage ThumbnailProvider::loadThumbnailFromCache() const
         }
         int size = ThumbnailGroup::pixelSize(ThumbnailGroup::Normal);
         image = largeImage.scaled(size, size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-        Q_FOREACH(const QString& key, largeImage.textKeys()) {
+        const QStringList textKeys = largeImage.textKeys();
+        for (const QString& key : textKeys) {
             QString text = largeImage.text(key);
             image.setText(key, text);
         }

@@ -68,7 +68,8 @@ void BalooSemanticInfoBackend::refreshAllTags()
     job->exec();
 
     d->mAllTags.clear();
-    Q_FOREACH(const QString& tag, job->tags()) {
+    const QStringList tags = job->tags();
+    for (const QString& tag : tags) {
         d->mAllTags << tag;
     }
 }

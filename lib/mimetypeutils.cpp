@@ -94,7 +94,8 @@ const QStringList& rasterImageMimeTypes()
             list << resolveAlias(QString::fromUtf8(mime));
         }
         // We don't want svg images to be considered as raster images
-        Q_FOREACH(const QString& mimeType, svgImageMimeTypes()) {
+        const QStringList svgImageMimeTypesList = svgImageMimeTypes();
+        for (const QString& mimeType : svgImageMimeTypesList) {
             list.removeOne(mimeType);
         }
         addRawMimeTypes(&list);

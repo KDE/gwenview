@@ -111,7 +111,7 @@ struct DocumentViewControllerPrivate
     void updateActions()
     {
         const bool enabled = mView && mView->isVisible() && mView->canZoom();
-        Q_FOREACH(QAction * action, mActions) {
+        for (QAction * action : qAsConst(mActions)) {
             action->setEnabled(enabled);
         }
     }
@@ -140,7 +140,7 @@ void DocumentViewController::setView(DocumentView* view)
     // Forget old view
     if (d->mView) {
         disconnect(d->mView, nullptr, this, nullptr);
-        Q_FOREACH(QAction * action, d->mActions) {
+        for (QAction * action : qAsConst(d->mActions)) {
             disconnect(action, nullptr, d->mView, nullptr);
         }
         disconnect(d->mZoomWidget, nullptr, d->mView, nullptr);

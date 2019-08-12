@@ -67,10 +67,10 @@ SaveAllHelper::~SaveAllHelper()
 
 void SaveAllHelper::save()
 {
-    QList<QUrl> list = DocumentFactory::instance()->modifiedDocumentList();
+    const QList<QUrl> list = DocumentFactory::instance()->modifiedDocumentList();
     d->mProgressDialog->setRange(0, list.size());
     d->mProgressDialog->setValue(0);
-    Q_FOREACH(const QUrl &url, list) {
+    for (const QUrl &url : list) {
         Document::Ptr doc = DocumentFactory::instance()->load(url);
         DocumentJob* job = doc->save(url, doc->format());
         connect(job, &DocumentJob::result, this, &SaveAllHelper::slotResult);
@@ -83,7 +83,7 @@ void SaveAllHelper::save()
     if (d->mErrorList.count() > 0) {
         QString msg = i18ncp("@info", "One document could not be saved:", "%1 documents could not be saved:", d->mErrorList.count());
         msg += "<ul>";
-        Q_FOREACH(const QString & item, d->mErrorList) {
+        for (const QString & item : qAsConst(d->mErrorList)) {
             msg += "<li>" + item + "</li>";
         }
         msg += "</ul>";
@@ -93,7 +93,7 @@ void SaveAllHelper::save()
 
 void SaveAllHelper::slotCanceled()
 {
-    Q_FOREACH(DocumentJob * job, d->mJobSet) {
+    for (DocumentJob * job : qAsConst(d->mJobSet)) {
         job->kill();
     }
 }

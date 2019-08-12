@@ -167,7 +167,8 @@ struct HistoryModelPrivate
         if (!dir.exists()) {
             return;
         }
-        Q_FOREACH(const QString & name, dir.entryList(QStringList() << QStringLiteral("*rc"))) {
+        const QStringList rcFilesList = dir.entryList(QStringList() << QStringLiteral("*rc"));
+        for (const QString & name : rcFilesList) {
             HistoryItem* item = HistoryItem::load(dir.filePath(name));
             if (!item) {
                 continue;

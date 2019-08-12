@@ -297,7 +297,7 @@ struct ImageMetaInfoModelPrivate
             return;
         }
         q->beginInsertRows(parent, 0, hash.size() - 1);
-        Q_FOREACH(MetaInfoGroup::Entry * entry, hash) {
+        for (MetaInfoGroup::Entry * entry : qAsConst(hash)) {
             group->addEntry(entry);
         }
         q->endInsertRows();

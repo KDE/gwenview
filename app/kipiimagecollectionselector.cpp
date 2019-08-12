@@ -46,8 +46,8 @@ KIPIImageCollectionSelector::KIPIImageCollectionSelector(KIPIInterface* interfac
     d->mInterface = interface;
 
     d->mListWidget = new QListWidget;
-    QList<KIPI::ImageCollection> list = interface->allAlbums();
-    Q_FOREACH(const KIPI::ImageCollection & collection, list) {
+    const QList<KIPI::ImageCollection> list = interface->allAlbums();
+    for (const KIPI::ImageCollection & collection : list) {
         QListWidgetItem* item = new QListWidgetItem(d->mListWidget);
         QString name = collection.name();
         int imageCount = collection.images().size();
@@ -76,8 +76,8 @@ QList<KIPI::ImageCollection> KIPIImageCollectionSelector::selectedImageCollectio
     QList<KIPI::ImageCollection> selectedList;
     if (item) {
         QString name = item->data(Qt::UserRole).toString();
-        QList<KIPI::ImageCollection> list = d->mInterface->allAlbums();
-        Q_FOREACH(const KIPI::ImageCollection & collection, list) {
+        const QList<KIPI::ImageCollection> list = d->mInterface->allAlbums();
+        for (const KIPI::ImageCollection & collection : list) {
             if (collection.name() == name) {
                 selectedList << collection;
                 break;

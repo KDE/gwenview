@@ -75,8 +75,8 @@ void FakeSemanticInfoBackEnd::retrieveSemanticInfo(const QUrl &url)
         if (mInitializeMode == InitializeRandom) {
             semanticInfo.mRating = int(urlString.length()) % 6;
             semanticInfo.mDescription = url.fileName();
-            QStringList lst = url.path().split('/');
-            Q_FOREACH(const QString & token, lst) {
+            const QStringList lst = url.path().split('/');
+            for (const QString & token : lst) {
                 if (!token.isEmpty()) {
                     semanticInfo.mTags << '#' + token.toLower();
                 }

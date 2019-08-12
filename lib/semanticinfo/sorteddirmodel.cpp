@@ -210,7 +210,7 @@ bool SortedDirModel::filterAcceptsRow(int row, const QModelIndex& parent) const
         }
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
         if (!d->mSourceModel->semanticInfoAvailableForIndex(index)) {
-            Q_FOREACH(const AbstractSortedDirModelFilter * filter, d->mFilters) {
+            for (const AbstractSortedDirModelFilter * filter : qAsConst(d->mFilters)) {
                 // Make sure we have semanticinfo, otherwise retrieve it and
                 // return false, we will be called again later when it is
                 // there.
@@ -222,7 +222,7 @@ bool SortedDirModel::filterAcceptsRow(int row, const QModelIndex& parent) const
         }
 #endif
 
-        Q_FOREACH(const AbstractSortedDirModelFilter * filter, d->mFilters) {
+        for (const AbstractSortedDirModelFilter * filter : qAsConst(d->mFilters)) {
             if (!filter->acceptsIndex(index)) {
                 return false;
             }

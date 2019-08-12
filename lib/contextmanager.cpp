@@ -71,8 +71,8 @@ struct ContextManagerPrivate
             return;
         }
         mSelectedFileItemList.clear();
-        QItemSelection selection = mSelectionModel->selection();
-        Q_FOREACH(const QModelIndex & index, selection.indexes()) {
+        const QItemSelection selection = mSelectionModel->selection();
+        for (const QModelIndex & index : selection.indexes()) {
             mSelectedFileItemList << mDirModel->itemForIndex(index);
         }
 
@@ -234,7 +234,7 @@ void ContextManager::slotDirModelDataChanged(const QModelIndex& topLeft, const Q
     if (shortList.length() > longList.length()) {
         qSwap(shortList, longList);
     }
-    Q_FOREACH(const QModelIndex & index, shortList) {
+    for (const QModelIndex & index : qAsConst(shortList)) {
         if (longList.contains(index)) {
             d->mSelectedFileItemListNeedsUpdate = true;
             d->queueSignal(&ContextManager::selectionDataChanged);
@@ -260,7 +260,7 @@ void Gwenview::ContextManager::slotCurrentChanged(const QModelIndex& index)
 
 void ContextManager::emitQueuedSignals()
 {
-    Q_FOREACH(ContextManagerPrivate::Signal signal, d->mQueuedSignals) {
+    for (ContextManagerPrivate::Signal signal : qAsConst(d->mQueuedSignals)) {
         emit (this->*signal)();
     }
     d->mQueuedSignals.clear();
