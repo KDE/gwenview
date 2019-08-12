@@ -57,6 +57,10 @@
             <default>false</default>
         </entry>
 
+        <entry name="JPEGQuality" type="Int">
+            <default>90</default>
+        </entry>
+
         <entry name="LastTargetDir" type="Path">
         </entry>
 

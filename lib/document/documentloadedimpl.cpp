@@ -33,6 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // Local
 #include "documentjob.h"
+#include "gwenviewconfig.h"
 #include "imageutils.h"
 #include "savejob.h"
 
@@ -81,6 +82,10 @@ Document::LoadingState DocumentLoadedImpl::loadingState() const
 bool DocumentLoadedImpl::saveInternal(QIODevice* device, const QByteArray& format)
 {
     QImageWriter writer(device, format);
+    // If we're saving a non-JPEG image as a JPEG, respect the quality setting
+    if (format == QStringLiteral("jpeg")) {
+        writer.setQuality(GwenviewConfig::jPEGQuality());
+    }
     bool ok = writer.write(document()->image());
     if (ok) {
         setDocumentFormat(format);

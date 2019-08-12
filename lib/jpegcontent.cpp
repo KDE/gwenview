@@ -185,6 +185,7 @@ struct JpegContent::Private
     {
         QBuffer buffer;
         QImageWriter writer(&buffer, "jpeg");
+        writer.setQuality(GwenviewConfig::jPEGQuality());
         if (!writer.write(mImage)) {
             mErrorString = writer.errorString();
             return false;

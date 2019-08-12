@@ -25,13 +25,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QApplication>
 #include <QUrl>
+#include <QHBoxLayout>
 #include <QImageWriter>
+#include <QLabel>
 #include <QMimeDatabase>
 #include <QDebug>
+#include <QSpacerItem>
+#include <QSpinBox>
 
 // KDE
-#include <QFileDialog>
 #include <KColorScheme>
+#include <KFileCustomDialog>
+#include <KFileWidget>
 #include <KLocalizedString>
 #include <KMessageBox>
 
@@ -65,24 +70,64 @@ struct GvCorePrivate
     RecentFilesModel* mRecentFilesModel;
     QPalette mPalettes[4];
     QString mFullScreenPaletteName;
+    int configFileJPEGQualityValue;
 
     bool showSaveAsDialog(const QUrl &url, QUrl* outUrl, QByteArray* format)
     {
-        DialogGuard<QFileDialog> dialog(mMainWindow);
-        dialog->setAcceptMode(QFileDialog::AcceptSave);
+        // Build the JPEG quality chooser custom widget
+        QWidget* JPEGQualityChooserWidget = new QWidget;
+        JPEGQualityChooserWidget->setVisible(false); // shown only for JPEGs
+
+        QLabel* JPEGQualityChooserLabel = new QLabel;
+        JPEGQualityChooserLabel->setText(i18n("JPEG quality:"));
+        JPEGQualityChooserLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+        QSpinBox* JPEGQualityChooserSpinBox = new QSpinBox;
+        JPEGQualityChooserSpinBox->setMinimum(1);
+        JPEGQualityChooserSpinBox->setMaximum(100);
+        JPEGQualityChooserSpinBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        JPEGQualityChooserSpinBox->setSuffix(i18nc("Spinbox suffix; percentage 1 - 100", "%"));
+        configFileJPEGQualityValue = GwenviewConfig::jPEGQuality();
+        JPEGQualityChooserSpinBox->setValue(configFileJPEGQualityValue);
+
+        // Temporarily change JPEG quality value
+        QObject::connect(JPEGQualityChooserSpinBox,  QOverload<int>::of(&QSpinBox::valueChanged),
+                         JPEGQualityChooserSpinBox, [=](int value) {
+            GwenviewConfig::setJPEGQuality(value);
+        });
+
+        QSpacerItem* horizontalSpacer = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Fixed);
+
+        QHBoxLayout* JPEGQualityChooserLayout = new QHBoxLayout(JPEGQualityChooserWidget);
+        JPEGQualityChooserLayout->setContentsMargins(0,0,0,0);
+        JPEGQualityChooserLayout->addWidget(JPEGQualityChooserLabel);
+        JPEGQualityChooserLayout->addWidget(JPEGQualityChooserSpinBox);
+        JPEGQualityChooserLayout->addItem(horizontalSpacer);
+
+        // Set up the dialog
+        DialogGuard<KFileCustomDialog> dialog(mMainWindow);
+        KFileWidget* fileWidget = dialog->fileWidget();
+        dialog->setCustomWidget(JPEGQualityChooserWidget);
+        dialog->setOperationMode(KFileWidget::Saving);
         dialog->setWindowTitle(i18nc("@title:window", "Save Image"));
         // Temporary workaround for selectUrl() not setting the
         // initial directory to url (removed in D4193)
-        dialog->setDirectoryUrl(url.adjusted(QUrl::RemoveFilename));
-        dialog->selectUrl(url);
+        dialog->setUrl(url.adjusted(QUrl::RemoveFilename));
+        fileWidget->setSelectedUrl(url);
 
         QStringList supportedMimetypes;
         for (const QByteArray &mimeName : QImageWriter::supportedMimeTypes()) {
             supportedMimetypes.append(QString::fromLocal8Bit(mimeName));
         }
 
-        dialog->setMimeTypeFilters(supportedMimetypes);
-        dialog->selectMimeTypeFilter(MimeTypeUtils::urlMimeType(url));
+        fileWidget->setMimeFilter(supportedMimetypes,
+                                            MimeTypeUtils::urlMimeType(url));
+
+        // Only show the JPEG quality chooser when saving a JPEG image
+        QObject::connect(fileWidget, &KFileWidget::filterChanged,
+                         JPEGQualityChooserWidget, [=](const QString &filter) {
+            JPEGQualityChooserWidget->setVisible(filter.contains(QStringLiteral("jpeg")));
+        });
 
         // Show dialog
         do {
@@ -90,7 +135,7 @@ struct GvCorePrivate
                 return false;
             }
 
-            QList<QUrl> files = dialog->selectedUrls();
+            QList<QUrl> files = fileWidget->selectedUrls();
             if (files.isEmpty()) {
                 return false;
             }
@@ -109,7 +154,7 @@ struct GvCorePrivate
             );
         } while (true);
 
-        *outUrl = dialog->selectedUrls().first();
+        *outUrl = fileWidget->selectedUrls().first();
         return true;
     }
 
@@ -361,9 +406,16 @@ void GvCore::saveAs(const QUrl &url)
         return;
     }
 
+     if (format == "jpg") {
+         // Gwenview code assumes JPEG images have "jpeg" format, so if the
+         // dialog returned the format "jpg", use "jpeg" instead
+         // This does not affect the actual filename extension
+         format = "jpeg";
+    }
+
     // Start save
     Document::Ptr doc = DocumentFactory::instance()->load(url);
-    KJob* job = doc->save(saveAsUrl, format.data());
+    KJob* job = doc->save(saveAsUrl, format);
     if (!job) {
         const QString name = saveAsUrl.fileName().isEmpty() ? saveAsUrl.toDisplayString() : saveAsUrl.fileName();
         const QString msg = xi18nc("@info", "<emphasis strong='true'>Saving <filename>%1</filename> failed:</emphasis><nl />%2",
@@ -383,6 +435,12 @@ static void applyTransform(const QUrl &url, Orientation orientation)
 
 void GvCore::slotSaveResult(KJob* _job)
 {
+    // Regardless of job result, reset JPEG config value if it was changed by
+    // the Save As dialog
+    if (GwenviewConfig::jPEGQuality() != d->configFileJPEGQualityValue) {
+        GwenviewConfig::setJPEGQuality(d->configFileJPEGQualityValue);
+    }
+
     SaveJob* job = static_cast<SaveJob*>(_job);
     QUrl oldUrl = job->oldUrl();
     QUrl newUrl = job->newUrl();
