@@ -62,7 +62,7 @@ qulonglong getTotalMemory()
     {
         QString entry = readStream.readLine();
         if ( entry.isNull() ) break;
-        if ( entry.startsWith( QStringLiteral("MemTotal:") ) )
+        if ( entry.startsWith(QLatin1String("MemTotal:") ) )
             return (cachedValue = (Q_UINT64_C(1024) * entry.section( QLatin1Char(' '), -2, -2 ).toULongLong()));
     }
 #elif defined(Q_OS_FREEBSD)

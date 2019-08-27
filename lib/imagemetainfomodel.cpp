@@ -340,8 +340,8 @@ void ImageMetaInfoModel::setUrl(const QUrl &url)
     d->setGroupEntryValue(GeneralGroup, QStringLiteral("General.Time"), timeString);
 
 #ifdef HAVE_FITS
-    if (UrlUtils::urlIsFastLocalFile(url) && (url.fileName().endsWith(QStringLiteral(".fit"), Qt::CaseInsensitive) ||
-        url.fileName().endsWith(QStringLiteral(".fits"), Qt::CaseInsensitive))) {
+    if (UrlUtils::urlIsFastLocalFile(url) && (url.fileName().endsWith(QLatin1String(".fit"), Qt::CaseInsensitive) ||
+        url.fileName().endsWith(QLatin1String(".fits"), Qt::CaseInsensitive))) {
         FITSData fitsLoader;
         MetaInfoGroup* group = d->mMetaInfoGroupVector[FitsGroup];
         QFile file(url.toLocalFile());
@@ -362,7 +362,7 @@ void ImageMetaInfoModel::setUrl(const QUrl &url)
                 QString keyStr;
                 QString value;
 
-                if (!record.contains(QStringLiteral("="))) {
+                if (!record.contains(QLatin1String("="))) {
                     key = record.section(QLatin1Char(' '), 0, 0).simplified();
                     keyStr = key;
                     value = record.section(QLatin1Char(' '), 1, -1).simplified();

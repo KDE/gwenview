@@ -261,8 +261,8 @@ KIPIInterface::~KIPIInterface()
 
 static bool actionLessThan(QAction* a1, QAction* a2)
 {
-    QString a1Text = a1->text().replace('&', QString());
-    QString a2Text = a2->text().replace('&', QString());
+    QString a1Text = a1->text().remove('&');
+    QString a2Text = a2->text().remove('&');
     return QString::compare(a1Text, a2Text, Qt::CaseInsensitive) < 0;
 }
 
