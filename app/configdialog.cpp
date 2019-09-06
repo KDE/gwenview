@@ -96,7 +96,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     mThumbnailBarOrientationGroup->addButton(mImageViewConfigPage.verticalRadioButton, int(Qt::Vertical));
 
     pageItem = addPage(widget, i18n("Image View"));
-    pageItem->setIcon(QIcon::fromTheme("view-preview"));
+    pageItem->setIcon(QIcon::fromTheme("preferences-desktop-display-color"));
 
     // Advanced
     widget = setupPage(mAdvancedConfigPage);
