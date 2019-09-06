@@ -55,6 +55,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/fullscreenbar.h>
 #include <lib/gvdebug.h>
 #include <lib/gwenviewconfig.h>
+#include <lib/mimetypeutils.h>
 #include <lib/paintutils.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
 #include <lib/slidecontainer.h>
@@ -716,6 +717,7 @@ void ViewMainPage::openUrls(const QList<QUrl>& allUrls, const QUrl &currentUrl)
         view->openUrl(url, d->mZoomMode == ZoomMode::Individual && savedSetup.valid ? savedSetup : setup);
 #ifdef KF5Activities_FOUND
         d->mActivityResources.value(view)->setUri(url);
+        d->mActivityResources.value(view)->setMimetype(MimeTypeUtils::urlMimeType(url));
 #endif
     }
 
