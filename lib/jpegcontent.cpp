@@ -324,7 +324,7 @@ int JpegContent::dotsPerMeter(const QString& keyName) const
         return 0;
     }
     int res = it->toLong();
-    QString keyVal = QStringLiteral("Exif.Image.") + keyName;
+    QString keyVal = QLatin1String("Exif.Image.") + keyName;
     Exiv2::ExifKey keyResolution(keyVal.toLocal8Bit().data());
     it = d->mExifData.findKey(keyResolution);
     if (it == d->mExifData.end()) {

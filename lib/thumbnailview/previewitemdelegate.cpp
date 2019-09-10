@@ -961,7 +961,7 @@ void PreviewItemDelegate::updateEditorGeometry(QWidget* widget, const QStyleOpti
         return;
     }
     QString text = index.data().toString();
-    int textWidth = edit->fontMetrics().boundingRect(QStringLiteral("  ") + text + QStringLiteral("  ")).width();
+    int textWidth = edit->fontMetrics().boundingRect(QLatin1String("  ") + text + QLatin1String("  ")).width();
     QRect textRect(
         option.rect.left() + (option.rect.width() - textWidth) / 2,
         option.rect.top() + 2 * ITEM_MARGIN + d->mThumbnailSize.height(),

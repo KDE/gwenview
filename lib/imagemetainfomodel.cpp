@@ -362,7 +362,7 @@ void ImageMetaInfoModel::setUrl(const QUrl &url)
                 QString keyStr;
                 QString value;
 
-                if (!record.contains(QLatin1String("="))) {
+                if (!record.contains(QLatin1Char('='))) {
                     key = record.section(QLatin1Char(' '), 0, 0).simplified();
                     keyStr = key;
                     value = record.section(QLatin1Char(' '), 1, -1).simplified();

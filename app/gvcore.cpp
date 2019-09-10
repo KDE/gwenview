@@ -126,7 +126,7 @@ struct GvCorePrivate
         // Only show the JPEG quality chooser when saving a JPEG image
         QObject::connect(fileWidget, &KFileWidget::filterChanged,
                          JPEGQualityChooserWidget, [=](const QString &filter) {
-            JPEGQualityChooserWidget->setVisible(filter.contains(QStringLiteral("jpeg")));
+            JPEGQualityChooserWidget->setVisible(filter.contains(QLatin1String("jpeg")));
         });
 
         // Show dialog

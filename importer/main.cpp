@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
     parser.process(app);
     aboutData.data()->processCommandLine(&parser);
 
-    if (parser.positionalArguments().count() == 0) {
+    if (parser.positionalArguments().isEmpty()) {
         qWarning() << i18n("Missing required source folder argument.");
         parser.showHelp();
     }

@@ -222,7 +222,7 @@ void DocumentTest::testLoadDownSampled()
     bool ready = doc->prepareDownSampledImageForZoom(0.2);
     QVERIFY2(!ready, "There should not be a down sampled image at this point");
 
-    while (downSampledImageReadySpy.count() == 0 && loadingFailedSpy.count() == 0 && loadedSpy.count() == 0) {
+    while (downSampledImageReadySpy.isEmpty() && loadingFailedSpy.isEmpty() && loadedSpy.isEmpty()) {
         QTest::qWait(100);
     }
     QImage downSampledImage = doc->downSampledImageForZoom(0.2);
@@ -564,7 +564,7 @@ void DocumentTest::testMetaInfoJpeg()
 
     // Wait until we receive the metaInfoUpdated() signal
     QSignalSpy metaInfoUpdatedSpy(doc.data(), SIGNAL(metaInfoUpdated()));
-    while (metaInfoUpdatedSpy.count() == 0) {
+    while (metaInfoUpdatedSpy.isEmpty()) {
         QTest::qWait(100);
     }
 
