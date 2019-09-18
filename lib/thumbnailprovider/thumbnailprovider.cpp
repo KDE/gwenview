@@ -314,7 +314,7 @@ void ThumbnailProvider::determineNextIcon()
     // Do direct stat instead of using KIO if the file is local (faster)
     if (UrlUtils::urlIsFastLocalFile(mCurrentUrl)) {
         QFileInfo fileInfo(mCurrentUrl.toLocalFile());
-        mOriginalTime = fileInfo.lastModified().toTime_t();
+        mOriginalTime = fileInfo.lastModified().toSecsSinceEpoch();
         QMetaObject::invokeMethod(this, "checkThumbnail", Qt::QueuedConnection);
     } else {
         KIO::Job* job = KIO::stat(mCurrentUrl, KIO::HideProgressInfo);

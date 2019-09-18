@@ -306,7 +306,7 @@ struct CropWidgetPrivate : public QWidget
         box = boxWidget(cropWidget);
         mAdvancedWidgets << box;
         QLabel* label = new QLabel(i18nc("@label:listbox", "Aspect ratio:"), box);
-        label->setMargin(4);
+        label->setContentsMargins(4, 4, 4, 4);
         box->layout()->addWidget(label);
         ratioComboBox = new QComboBox(box);
         ratioComboBox->setEditable(true);
@@ -319,7 +319,7 @@ struct CropWidgetPrivate : public QWidget
         box = boxWidget(cropWidget);
         mAdvancedWidgets << box;
         label = new QLabel(i18nc("@label:spinbox", "Size:"), box);
-        label->setMargin(4);
+        label->setContentsMargins(4, 4, 4, 4);
         box->layout()->addWidget(label);
 
         QHBoxLayout* innerLayout = new QHBoxLayout();
@@ -341,7 +341,7 @@ struct CropWidgetPrivate : public QWidget
         box = boxWidget(cropWidget);
         mAdvancedWidgets << box;
         label = new QLabel(i18nc("@label:spinbox", "Position:"), box);
-        label->setMargin(4);
+        label->setContentsMargins(4, 4, 4, 4);
         box->layout()->addWidget(label);
 
         innerLayout = new QHBoxLayout();

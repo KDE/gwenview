@@ -4,14 +4,14 @@
 #include <QFile>
 #include <QImage>
 #include <QImageReader>
-#include <QTime>
+#include <QElapsedTimer>
 
 const int ITERATIONS = 2;
 const QSize SCALED_SIZE(1280, 800);
 
 static void bench(QIODevice* device, const QString& outputName)
 {
-    QTime chrono;
+    QElapsedTimer chrono;
     chrono.start();
     for (int iteration = 0; iteration < ITERATIONS; ++iteration) {
         qDebug() << "Iteration:" << iteration;

@@ -257,7 +257,7 @@ public:
         closeButton->setIconSize(QSize(size, size));
         connect(closeButton, &QAbstractButton::clicked, this, &QObject::deleteLater);
         QHBoxLayout* layout = new QHBoxLayout(this);
-        layout->setMargin(2);
+        layout->setContentsMargins(2, 2, 2, 2);
         layout->setSpacing(2);
         layout->addWidget(widget);
         layout->addWidget(closeButton);

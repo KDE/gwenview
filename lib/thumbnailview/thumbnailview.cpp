@@ -817,7 +817,7 @@ void ThumbnailView::wheelEvent(QWheelEvent* event)
     // setThumbnailSize() does not work
     //verticalScrollBar()->setSingleStep(d->mThumbnailSize / 5);
     if (event->modifiers() == Qt::ControlModifier) {
-        int width = thumbnailSize().width() + (event->delta() > 0 ? 1 : -1) * WHEEL_ZOOM_MULTIPLIER;
+        int width = thumbnailSize().width() + (event->angleDelta().y() > 0 ? 1 : -1) * WHEEL_ZOOM_MULTIPLIER;
         width = qMax(int(MinThumbnailSize), qMin(width, int(MaxThumbnailSize)));
         setThumbnailWidth(width);
     } else {

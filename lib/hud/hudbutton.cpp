@@ -103,7 +103,7 @@ HudButton::HudButton(QGraphicsItem* parent)
 
     // Palette to use for generating light icon. All we need is a light foreground.
     d->mDarkPalette = palette();
-    d->mDarkPalette.setColor(QPalette::Foreground, Qt::white);
+    d->mDarkPalette.setColor(QPalette::WindowText, Qt::white);
     d->mIconGroup = KIconLoader::Small;
 
     setCursor(Qt::ArrowCursor);

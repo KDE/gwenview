@@ -154,7 +154,7 @@ void ThumbnailProviderTest::testLoadLocal()
         QVERIFY(!item.isNull());
 
         QSize originalSize = mSandBox.mSizeHash.value(item.url().fileName());
-        uint mtime = item.time(KFileItem::ModificationTime).toTime_t();
+        uint mtime = item.time(KFileItem::ModificationTime).toSecsSinceEpoch();
 
         if (mtime == uint(-1)) {
             // This happens from time to time on build.kde.org, but I haven't
@@ -163,7 +163,7 @@ void ThumbnailProviderTest::testLoadLocal()
             qWarning() << "mtime == -1 for url" << url << ". This should not happen!";
             qWarning() << "errno:" << errno << "message:" << strerror(errno);
             qWarning() << "QFile::exists(" << url.toLocalFile() << "):" << QFile::exists(url.toLocalFile());
-            qWarning() << "Recalculating mtime" << item.time(KFileItem::ModificationTime).toTime_t();
+            qWarning() << "Recalculating mtime" << item.time(KFileItem::ModificationTime).toSecsSinceEpoch();
             QFAIL("Invalid time for test KFileItem");
         }
 

@@ -845,7 +845,7 @@ void DocumentView::wheelEvent(QGraphicsSceneWheelEvent* event)
     // Scroll
     qreal dx = 0;
     // 16 = pixels for one line
-    // 120: see QWheelEvent::delta() doc
+    // 120: see QWheelEvent::angleDelta().y() doc
     qreal dy = -qApp->wheelScrollLines() * 16 * event->delta() / 120;
     if (event->orientation() == Qt::Horizontal) {
         qSwap(dx, dy);

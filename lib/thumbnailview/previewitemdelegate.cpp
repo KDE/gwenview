@@ -637,7 +637,7 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
     connect(d->mRotateRightButton, &QToolButton::clicked, this, &PreviewItemDelegate::slotRotateRightClicked);
 
     QHBoxLayout* layout = new QHBoxLayout(d->mContextBar);
-    layout->setMargin(2);
+    layout->setContentsMargins(2, 2, 2, 2);
     layout->setSpacing(2);
     layout->addWidget(d->mToggleSelectionButton);
     layout->addWidget(d->mFullScreenButton);

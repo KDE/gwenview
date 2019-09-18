@@ -270,7 +270,7 @@ SaveBar::SaveBar(QWidget* parent, KActionCollection* actionCollection)
     QVBoxLayout* layout = new QVBoxLayout(d->mSaveBarWidget);
     layout->addWidget(d->mTopRowWidget);
     layout->addLayout(bottomRowLayout);
-    layout->setMargin(3);
+    layout->setContentsMargins(3, 3, 3, 3);
     layout->setSpacing(3);
 
     setContent(d->mSaveBarWidget);

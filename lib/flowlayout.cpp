@@ -44,7 +44,7 @@
 FlowLayout::FlowLayout(QWidget *parent, int margin, int spacing)
 : QLayout(parent)
 {
-    setMargin(margin);
+    setContentsMargins(margin, margin, margin, margin);
     setHorizontalSpacing(spacing);
     setVerticalSpacing(spacing);
 }

@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QGraphicsLinearLayout>
 #include <QGraphicsProxyWidget>
 #include <QMouseEvent>
-#include <QTime>
+#include <QElapsedTimer>
 #include <QDebug>
 #include <QIcon>
 
@@ -56,7 +56,7 @@ struct VideoViewAdapterPrivate
     GraphicsWidgetFloater* mFloater;
 
     HudSlider* mSeekSlider;
-    QTime mLastSeekSliderActionTime;
+    QElapsedTimer mLastSeekSliderActionTime;
 
     QAction* mPlayPauseAction;
     QAction* mMuteAction;

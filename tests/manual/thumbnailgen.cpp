@@ -106,7 +106,7 @@ int main(int argc, char** argv)
     qWarning() << "Generating thumbnails for" << list.count() << "files";
 
     // Start the job
-    QTime chrono;
+    QElapsedTimer chrono;
     ThumbnailProvider job;
     job.setThumbnailGroup(group);
     job.appendItems(list);

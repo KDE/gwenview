@@ -229,7 +229,7 @@ struct InfoContextManagerItemPrivate
 
         QWidget* content = new QWidget;
         QVBoxLayout* layout = new QVBoxLayout(content);
-        layout->setMargin(2);
+        layout->setContentsMargins(2, 2, 2, 2);
         layout->setSpacing(2);
         layout->addWidget(mKeyValueWidget);
         layout->addWidget(moreLabel);

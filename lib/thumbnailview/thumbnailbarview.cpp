@@ -531,7 +531,7 @@ void ThumbnailBarView::selectionChanged(const QItemSelection& selected, const QI
 
 void ThumbnailBarView::wheelEvent(QWheelEvent* event)
 {
-    d->scrollBar()->setValue(d->scrollBar()->value() - event->delta());
+    d->scrollBar()->setValue(d->scrollBar()->value() - event->angleDelta().y());
 }
 
 int ThumbnailBarView::rowCount() const
