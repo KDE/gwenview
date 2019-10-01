@@ -62,7 +62,11 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     pageItem = addPage(widget, i18n("General"));
     pageItem->setIcon(QIcon::fromTheme("gwenview"));
     connect(mGeneralConfigPage.kcfg_ViewBackgroundValue, &QAbstractSlider::valueChanged, this, &ConfigDialog::updateViewBackgroundFrame);
-
+    connect(mGeneralConfigPage.kcfg_JPEGQuality, &QAbstractSlider::valueChanged, this, [=] (int value) {mGeneralConfigPage.jpegQualitySpinner->setValue(value);});
+    connect(mGeneralConfigPage.jpegQualitySpinner, QOverload<int>::of(&QSpinBox::valueChanged), this, [=] (int value) {mGeneralConfigPage.kcfg_JPEGQuality->setValue(value);});
+    mGeneralConfigPage.jpegQualitySpinner->setValue(mGeneralConfigPage.kcfg_JPEGQuality->value());
+    mGeneralConfigPage.backgroundValueFrame->setMinimumWidth(mGeneralConfigPage.jpegQualitySpinner->width());
+    
     // Image View
     widget = setupPage(mImageViewConfigPage);
 
