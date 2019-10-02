@@ -374,7 +374,7 @@ void CropTool::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
         } else if (d->mMovingHandle & CH_Top) {
             // Top left or top right
             int height = int(d->mRect.width() * ratioToEnforce);
-            d->mRect.setTop(d->mRect.bottom() - height);
+            d->mRect.setTop(d->mRect.y() + d->mRect.height() - height);
         } else if (d->mMovingHandle & CH_Bottom) {
             // Bottom left or bottom right
             int height = int(d->mRect.width() * ratioToEnforce);
