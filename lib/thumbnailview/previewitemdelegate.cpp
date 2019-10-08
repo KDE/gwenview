@@ -164,7 +164,7 @@ struct PreviewItemDelegatePrivate
         const int posX = mContextBarActions == PreviewItemDelegate::SelectionAction
             ? 0
             : (rect.width() - mContextBar->width()) / 2;
-        const int thumbnailPixHeight = qRound(thumbnailPix.height() / thumbnailPix.devicePixelRatio());
+        const int thumbnailPixHeight = qRound(thumbnailPix.height() / thumbnailPix.devicePixelRatioF());
         const int posY = qMax(CONTEXTBAR_MARGIN, mThumbnailSize.height() - thumbnailPixHeight - mContextBar->height());
         mContextBar->move(rect.topLeft() + QPoint(posX, posY));
         mContextBar->show();
@@ -691,7 +691,7 @@ void PreviewItemDelegate::paint(QPainter * painter, const QStyleOptionViewItem &
     int thumbnailHeight = d->mThumbnailSize.height();
     QSize fullSize;
     QPixmap thumbnailPix = d->mView->thumbnailForIndex(index, &fullSize);
-    QSize thumbnailSize = thumbnailPix.size() / thumbnailPix.devicePixelRatio();
+    QSize thumbnailSize = thumbnailPix.size() / thumbnailPix.devicePixelRatioF();
     const KFileItem fileItem = fileItemForIndex(index);
     const bool opaque = !thumbnailPix.hasAlphaChannel();
     const bool isDirOrArchive = ArchiveUtils::fileItemIsDirOrArchive(fileItem);

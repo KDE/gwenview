@@ -177,7 +177,7 @@ QSize ThumbnailBarItemDelegate::sizeHint(const QStyleOptionViewItem & /*option*/
         size = d->mView->gridSize();
     } else {
         QPixmap thumbnailPix = d->mView->thumbnailForIndex(index);
-        size = thumbnailPix.size() / thumbnailPix.devicePixelRatio();
+        size = thumbnailPix.size() / thumbnailPix.devicePixelRatioF();
         size.rwidth() += ITEM_MARGIN * 2;
         size.rheight() += ITEM_MARGIN * 2;
     }
@@ -205,7 +205,7 @@ void ThumbnailBarItemDelegate::paint(QPainter * painter, const QStyleOptionViewI
     bool isSelected = option.state & QStyle::State_Selected;
     bool isCurrent = d->mView->selectionModel()->currentIndex() == index;
     QPixmap thumbnailPix = d->mView->thumbnailForIndex(index);
-    QSize thumbnailSize = thumbnailPix.size() / thumbnailPix.devicePixelRatio();
+    QSize thumbnailSize = thumbnailPix.size() / thumbnailPix.devicePixelRatioF();
     QRect rect = option.rect;
 
     QStyleOptionViewItem opt = option;
