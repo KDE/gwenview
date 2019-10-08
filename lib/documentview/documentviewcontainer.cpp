@@ -285,8 +285,9 @@ void DocumentViewContainer::updateLayout()
 void DocumentViewContainer::pretendFadeInFinished()
 {
     // Animations are disabled. Pretend all fade ins are finished so that added
-    // views are moved to mViews
-    for (DocumentView* view : qAsConst(d->mAddedViews)) {
+    // views are moved to mViews, will modify d->mAddedViews
+    const auto currentViews = d->mAddedViews;
+    for (DocumentView* view : currentViews) {
         slotFadeInFinished(view);
     }
 }
