@@ -32,6 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QTimeLine>
 #include <QTimer>
 #include <QToolButton>
+#include <QScreen>
 
 // KDE
 #include <KLocalizedString>
@@ -81,11 +82,7 @@ struct FullScreenBarPrivate
      */
     QRect slideInTriggerRect() const
     {
-        QRect rect = QApplication::desktop()->screenGeometry(QApplication::desktop()->screenNumber(q->parentWidget()));
-        // The previous string should be changed to
-        // QRect rect = QGuiApplication::screenAt(QCursor::pos())->geometry();
-        // after switching to Qt > 5.9
-
+        QRect rect = QGuiApplication::screenAt(QCursor::pos())->geometry();
         // Take parent widget position into account because it may not be at
         // the top of the screen, for example when the save bar warning is
         // shown.

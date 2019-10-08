@@ -33,6 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QtMath>
 #include <QDebug>
 #include <QLineEdit>
+#include <QScreen>
 
 // KDE
 #include <KLocalizedString>
@@ -199,10 +200,7 @@ struct CropWidgetPrivate : public QWidget
         mCurrentImageComboBoxIndex = ratioComboBox->count() - 1; // We need to refer to this ratio later
 
         addRatioToComboBox(QSizeF(1, 1), i18n("Square"));
-        addRatioToComboBox(ratio(QApplication::desktop()->screenGeometry().size()), i18n("This Screen"));
-        // The previous string should be changed to
-        // addRatioToComboBox(ratio(QGuiApplication::screenAt(QCursor::pos())->geometry().size()), i18n("This Screen"));
-        // after switching to Qt > 5.9
+        addRatioToComboBox(ratio(QGuiApplication::screenAt(QCursor::pos())->geometry().size()), i18n("This Screen"));
         addSectionHeaderToComboBox(i18n("Landscape"));
 
         for (const QSizeF& size : qAsConst(ratioList)) {
