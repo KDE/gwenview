@@ -386,7 +386,7 @@ void RasterImageView::onScrollPosChanged(const QPointF& oldPos)
     {
         if (d->mAlternateBuffer.size() != d->mCurrentBuffer.size()) {
             d->mAlternateBuffer = QPixmap(d->mCurrentBuffer.size());
-            d->mAlternateBuffer.setDevicePixelRatio(d->mCurrentBuffer.devicePixelRatioF());
+            d->mAlternateBuffer.setDevicePixelRatio(d->mCurrentBuffer.devicePixelRatio());
         }
         d->mAlternateBuffer.fill(Qt::transparent);
         QPainter painter(&d->mAlternateBuffer);
