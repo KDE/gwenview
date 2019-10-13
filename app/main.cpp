@@ -119,6 +119,12 @@ private:
 
 int main(int argc, char *argv[])
 {
+    /**
+     * enable high dpi support
+     */
+    QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling, true);
+
     QApplication app(argc, argv);
     KLocalizedString::setApplicationDomain("gwenview");
     QScopedPointer<KAboutData> aboutData(
@@ -128,7 +134,6 @@ int main(int argc, char *argv[])
         ));
     aboutData->setShortDescription(i18n("An Image Viewer"));
 
-    app.setAttribute(Qt::AA_UseHighDpiPixmaps, true);
     aboutData->setOrganizationDomain(QByteArray("kde.org"));
     KAboutData::setApplicationData(*aboutData);
     QApplication::setWindowIcon(QIcon::fromTheme(QStringLiteral("gwenview"), app.windowIcon()));
