@@ -212,7 +212,7 @@ void ImporterTest::testAutoRenameFormat()
                         << "2009-10-01_21-15-27";
     QCOMPARE(dates.count(), mDocumentList.count());
 
-    QUrl destUrl = QUrl::fromLocalFile(mTempDir->path() + "foo");
+    QUrl destUrl = QUrl::fromLocalFile(mTempDir->path() + "/foo");
 
     Importer importer(nullptr);
     importer.setAutoRenameFormat("{date}_{time}.{ext}");
