@@ -48,15 +48,6 @@ bool contentsAreIdentical(const QUrl& url1, const QUrl& url2, QWidget* authWindo
  */
 RenameResult rename(const QUrl& src, const QUrl& dst, QWidget* authWindow = nullptr);
 
-/**
- * Create a temp dir in baseDir, starting with prefix.  If successful returns
- * the created dir otherwise returns an empty string and writes the error message
- * in errorMessage.
- *
- * errorMessage must be a valid pointer.
- */
-QString createTempDir(const QString& baseDir, const QString& prefix, QString* errorMessage);
-
 } // namespace
 } // namespace
 

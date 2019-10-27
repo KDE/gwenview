@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QDateTime>
 #include <QDebug>
 #include <QUrl>
+#include <QTemporaryDir>
 
 // KDE
 #include <KFileItem>
@@ -53,6 +54,7 @@ struct ImporterPrivate
     QWidget* mAuthWindow;
     std::unique_ptr<FileNameFormater> mFileNameFormater;
     QUrl mTempImportDirUrl;
+    QTemporaryDir* mTempImportDir;
 
     /* @defgroup reset Should be reset in start()
      * @{ */
@@ -75,13 +77,21 @@ struct ImporterPrivate
             emit q->error(i18n("Could not create destination folder."));
             return false;
         }
-        QString message;
-        QString dir = FileUtils::createTempDir(url.toLocalFile(), ".gwenview_importer-", &message);
-        mTempImportDirUrl = QUrl::fromLocalFile(dir);
-        if (mTempImportDirUrl.isEmpty()) {
-            emit q->error(i18n("Could not create temporary upload folder:\n%1", message));
+        
+        QString tempDirPath = url.toLocalFile() + "/.gwenview_importer-XXXXXX";
+        mTempImportDir = new QTemporaryDir(tempDirPath);
+                    
+        if (!mTempImportDir->isValid()) {
+            emit q->error(i18n("Could not create temporary upload folder."));
             return false;
         }
+        
+        mTempImportDirUrl = QUrl::fromLocalFile(mTempImportDir->path() + '/');
+        if (!mTempImportDirUrl.isValid()) {
+            emit q->error(i18n("Could not create temporary upload folder."));
+            return false;
+        }         
+        
         return true;
     }
 
@@ -197,8 +207,7 @@ void Importer::slotCopyDone(KJob* _job)
 
 void Importer::finalizeImport()
 {
-    KIO::Job* job = KIO::del(d->mTempImportDirUrl, KIO::HideProgressInfo);
-    KJobWidgets::setWindow(job, d->mAuthWindow);
+    delete d->mTempImportDir;
     emit importFinished();
 }
 
