@@ -112,10 +112,10 @@ public:
         int answer = KMessageBox::questionYesNo(mCentralWidget,
                                                 "<qt>" + message.join("<br/>") + "</qt>",
                                                 i18nc("@title:window", "Import Finished"),
-                                                KStandardGuiItem::del(),
-                                                KGuiItem(i18n("Keep"))
+                                                KGuiItem(i18n("Keep")),
+                                                KStandardGuiItem::del()
                                                );
-        if (answer != KMessageBox::Yes) {
+        if (answer == KMessageBox::Yes) {
             return;
         }
         QList<QUrl> urls = importedUrls + skippedUrls;
