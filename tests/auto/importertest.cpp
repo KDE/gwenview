@@ -202,6 +202,7 @@ void ImporterTest::testFileNameFormater_data()
     NEW_ROW("iLikeCurlies", "2009-10-24T22:50:49", "{{{name}}", "{iLikeCurlies}");
     NEW_ROW("UnknownKeyword", "2009-10-24T22:50:49", "foo{unknown}bar", "foobar");
     NEW_ROW("MissingClosingCurly", "2009-10-24T22:50:49", "foo{date", "foo");
+    NEW_ROW("PICT0001.JPG", "2009-10-24T22:50:49", "{date}/{name}.{ext}", "2009-10-24/PICT0001.JPG");
 }
 
 void ImporterTest::testAutoRenameFormat()
@@ -210,7 +211,12 @@ void ImporterTest::testAutoRenameFormat()
                         << "1979-02-23_10-20-00"
                         << "2006-04-01_11-30-15"
                         << "2009-10-01_21-15-27";
+    QStringList dates2 = QStringList()
+                        << "1979-02-23/10-20-00"
+                        << "2006-04-01/11-30-15"
+                        << "2009-10-01/21-15-27";
     QCOMPARE(dates.count(), mDocumentList.count());
+    QCOMPARE(dates2.count(), mDocumentList.count());
 
     QUrl destUrl = QUrl::fromLocalFile(mTempDir->path() + "/foo");
 
@@ -230,6 +236,21 @@ void ImporterTest::testAutoRenameFormat()
         QUrl src = list[pos];
         QUrl dst = destUrl;
         dst.setPath(dst.path() + '/' + dates[pos] + ".jpg");
+        QVERIFY(FileUtils::contentsAreIdentical(src, dst));
+    }
+
+    // Test again with slashes in AutoRenameFormat
+    importer.setAutoRenameFormat("{date}/{time}.{ext}");
+    importer.start(list, destUrl);
+    loop.exec();
+
+    QCOMPARE(importer.importedUrlList().count(), list.count());
+    QCOMPARE(importer.importedUrlList(), list);
+
+    for (int pos = 0; pos < dates2.count(); ++pos) {
+        QUrl src = list[pos];
+        QUrl dst = destUrl;
+        dst.setPath(dst.path() + '/' + dates2[pos] + ".jpg");
         QVERIFY(FileUtils::contentsAreIdentical(src, dst));
     }
 }

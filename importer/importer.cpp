@@ -31,6 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KFileItem>
 #include <KIO/CopyJob>
 #include <KIO/DeleteJob>
+#include <KIO/MkpathJob>
 #include <KIO/Job>
 #include <KIO/JobUiDelegate>
 #include <KJobWidgets>
@@ -130,7 +131,18 @@ struct ImporterPrivate
         }
         dst.setPath(dst.path() + fileName);
 
-        FileUtils::RenameResult result = FileUtils::rename(src, dst, mAuthWindow);
+        FileUtils::RenameResult result;
+        // Create additional subfolders if needed (e.g. when extra slashes in FileNameFormater)
+        QUrl subFolder = dst.adjusted(QUrl::RemoveFilename);
+        KIO::Job* job = KIO::mkpath(subFolder, QUrl(), KIO::HideProgressInfo);
+        KJobWidgets::setWindow(job,mAuthWindow);
+        if (!job->exec()) { // if subfolder creation fails
+            qWarning() << "Could not create subfolder:" << subFolder;
+            result = FileUtils::RenameFailed;
+        } else { // if subfolder creation succeeds
+            result = FileUtils::rename(src, dst, mAuthWindow);
+        }
+
         switch (result) {
         case FileUtils::RenamedOK:
             mImportedUrlList << mCurrentUrl;
