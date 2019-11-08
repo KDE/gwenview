@@ -130,6 +130,10 @@ ContextManager::ContextManager(SortedDirModel* dirModel, QObject* parent)
     connect(d->mSelectionModel, &QItemSelectionModel::currentChanged, this, &ContextManager::slotCurrentChanged);
 
     d->mSelectedFileItemListNeedsUpdate = false;
+
+    connect(DocumentFactory::instance(), &DocumentFactory::readyForDirListerStart, [this](const QUrl &urlReady) {
+        setCurrentDirUrl(urlReady.adjusted(QUrl::RemoveFilename));
+    });
 }
 
 ContextManager::~ContextManager()
@@ -300,7 +304,7 @@ void ContextManager::setUrlToSelect(const QUrl &url)
 {
     GV_RETURN_IF_FAIL(url.isValid());
     d->mUrlToSelect = url;
-    setCurrentDirUrl(url.adjusted(QUrl::RemoveFilename));
+
     setCurrentUrl(url);
     selectUrlToSelect();
 }

@@ -184,6 +184,22 @@ Document::Ptr DocumentFactory::load(const QUrl &url)
     connect(doc, &Document::modified, this, &DocumentFactory::slotModified);
     connect(doc, &Document::busyChanged, this, &DocumentFactory::slotBusyChanged);
 
+    // Make sure that an url passed as command line argument is loaded
+    // and shown before a possibly long running dirlister on a slow
+    // network device is started. So start the dirlister after url is
+    // loaded or failed to load.
+    connect(doc, &Document::loaded, [this, url]() {
+        emit readyForDirListerStart(url);
+    });
+    connect(doc, &Document::loadingFailed, [this, url]() {
+        emit readyForDirListerStart(url);
+    });
+    connect(doc, &Document::downSampledImageReady, [this, url]() {
+        emit readyForDirListerStart(url);
+    });
+
+    doc->reload();
+
     // Create DocumentInfo instance
     info = new DocumentInfo;
     Document::Ptr docPtr(doc);

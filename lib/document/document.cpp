@@ -157,8 +157,6 @@ Document::Document(const QUrl &url)
     d->mImpl = nullptr;
     d->mUrl = url;
     d->mKeepRawData = false;
-
-    reload();
 }
 
 Document::~Document()

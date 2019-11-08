@@ -79,6 +79,7 @@ Q_SIGNALS:
     void modifiedDocumentListChanged();
     void documentChanged(const QUrl&);
     void documentBusyStateChanged(const QUrl&, bool);
+    void readyForDirListerStart(const QUrl &url);
 
 private Q_SLOTS:
     void slotLoaded(const QUrl&);
