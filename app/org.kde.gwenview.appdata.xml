@@ -53,6 +53,7 @@
   <summary xml:lang="el">Προβολέας εικόνων</summary>
   <summary xml:lang="en-GB">Image Viewer</summary>
   <summary xml:lang="es">Visor de imágenes</summary>
+  <summary xml:lang="et">Pildinäitaja</summary>
   <summary xml:lang="eu">Irudi erakuslea</summary>
   <summary xml:lang="fi">Kuvankatselin</summary>
   <summary xml:lang="fr">Afficheur d'image</summary>
@@ -90,6 +91,7 @@
     <p xml:lang="el">Το Gwenview είναι ένας γρήγορος και εύχρηστος προβολέας εικόνων για το KDE, ιδανικός για περιήγηση και εμφάνιση συλλογών από εικόνες.</p>
     <p xml:lang="en-GB">Gwenview is a fast and easy to use image viewer by KDE, ideal for browsing and displaying a collection of images.</p>
     <p xml:lang="es">Gwenview es un visor de imágenes rápido y fácil de usar creado por KDE, ideal para explorar y mostrar una colección de imágenes.</p>
+    <p xml:lang="et">Gwenview on KDE kiire ja kasutajasõbralik piltide näitaja, ideaale vahend pildikogude sirvimiseks ja kuvamiseks.</p>
     <p xml:lang="eu">Gwenview KDEk egindako irudi erakusle azkar eta erabilerraza da, irudi bilduma  bat arakatu eta bistaratzeko aproposa.</p>
     <p xml:lang="fi">Gwenview on KDE:n nopea ja helppokäyttöinen kuvakatselin, joka on ihanteellinen kuvakokoelmien selaukseen ja esittämiseen.</p>
     <p xml:lang="fr">Gwenview est un afficheur d'images rapide et facile à utiliser pour KDE, idéal pour parcourir et afficher une collection d'images.</p>
@@ -372,6 +374,7 @@
       <caption xml:lang="el">Το gwenview εμφανίζει μια εικόνα με επιπλέον μεταδεδομένα στην πλευρική γραμμή</caption>
       <caption xml:lang="en-GB">Gwenview displaying an image, with additional metadata shown in the sidebar</caption>
       <caption xml:lang="es">Gwenview mostrando una imagen, con metadatos adicionales en la barra lateral</caption>
+      <caption xml:lang="et">Gwenview pilti näitamas, külgribal lisaks metaandmed</caption>
       <caption xml:lang="eu">Gwenview irudi bat bistaratzen du, alboko-barran meta-datu osagarriak erakutsiz</caption>
       <caption xml:lang="fi">Gwenview näyttämässä kuvaa, sivupaneelissa näkyvät metatiedot</caption>
       <caption xml:lang="fr">Gwenview en train d'afficher une image, avec des métadonnées supplémentaires dans le panneau latéral.</caption>
