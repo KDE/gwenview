@@ -88,10 +88,10 @@ find_package(PNG)
 set_package_properties(PNG PROPERTIES URL "http://www.libpng.org" DESCRIPTION "PNG image manipulation support" TYPE REQUIRED)
 
 find_package(Exiv2)
-set_package_properties(Exiv2 PROPERTIES URL "http://www.exiv2.org" DESCRIPTION "image metadata support" TYPE REQUIRED)
+set_package_properties(Exiv2 PROPERTIES URL "https://www.exiv2.org" DESCRIPTION "image metadata support" TYPE REQUIRED)
 
 find_package(CFitsio)
-set_package_properties(CFitsio PROPERTIES URL "http://heasarc.gsfc.nasa.gov/fitsio/fitsio.html" DESCRIPTION "FITS format support" TYPE OPTIONAL)
+set_package_properties(CFitsio PROPERTIES URL "https://heasarc.gsfc.nasa.gov/fitsio/fitsio.html" DESCRIPTION "FITS format support" TYPE OPTIONAL)
 if(CFITSIO_FOUND)
     set(HAVE_FITS true)
 endif()

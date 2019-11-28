@@ -49,7 +49,7 @@ namespace Gwenview
 
 // Euclidean algorithm to compute the greatest common divisor of two integers.
 // Found at:
-// http://en.wikipedia.org/wiki/Euclidean_algorithm
+// https://en.wikipedia.org/wiki/Euclidean_algorithm
 static int gcd(int a, int b)
 {
     return b == 0 ? a : gcd(b, a % b);

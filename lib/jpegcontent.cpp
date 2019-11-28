@@ -299,7 +299,7 @@ Orientation JpegContent::orientation() const
     Exiv2::ExifData::iterator it = d->mExifData.findKey(key);
 
     // We do the same checks as in libexiv2's src/crwimage.cpp:
-    // http://dev.exiv2.org/projects/exiv2/repository/entry/trunk/src/crwimage.cpp?rev=2681#L1336
+    // https://github.com/Exiv2/exiv2/blob/0d397b95c7b4a10819c0ea0f36fa20943e6a4ea5/src/crwimage.cpp#L1336
     if (it == d->mExifData.end() || it->count() == 0 || it->typeId() != Exiv2::unsignedShort) {
         return NOT_AVAILABLE;
     }
