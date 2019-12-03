@@ -107,7 +107,7 @@ struct ImporterPrivate
         mCurrentUrl = mUrlList.takeFirst();
         QUrl dst = mTempImportDirUrl;
         dst.setPath(dst.path() + mCurrentUrl.fileName());
-        KIO::Job* job = KIO::copy(mCurrentUrl, dst, KIO::HideProgressInfo);
+        KIO::Job* job = KIO::copy(mCurrentUrl, dst, KIO::HideProgressInfo|KIO::Overwrite);
         KJobWidgets::setWindow(job, mAuthWindow);
         QObject::connect(job, &KJob::result,
                          q, &Importer::slotCopyDone);
