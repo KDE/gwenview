@@ -58,6 +58,16 @@ public:
     QList<QUrl> skippedUrlList() const;
 
     /**
+     * Documents which have failed during import
+     */
+    QList<QUrl> failedUrlList() const;
+
+    /**
+     * Subfolders which failed to create during import
+     */
+    QList<QUrl> failedSubFolderList() const;
+
+    /**
      * How many documents have been renamed during import
      */
     int renamedCount() const;

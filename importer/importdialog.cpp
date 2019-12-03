@@ -58,6 +58,25 @@ public:
     DialogPage* mDialogPage;
     Importer* mImporter;
 
+    void checkForFailedUrls()
+    {
+        // First check for errors on file imports or subfolder creation
+        QList<QUrl> failedUrls = mImporter->failedUrlList();
+        QList<QUrl> failedSubFolders = mImporter->failedSubFolderList();
+        int failedUrlCount = failedUrls.count();
+        int failedSubFolderCount = failedSubFolders.count();
+        if (failedUrlCount + failedSubFolderCount > 0) {
+            QStringList files, dirs;
+            for (int i=0; i<failedUrlCount; i++) {
+                files << failedUrls[i].toString(QUrl::PreferLocalFile);
+            }
+            for (int i=0; i<failedSubFolderCount; i++) {
+                dirs << failedSubFolders[i].toString(QUrl::PreferLocalFile);
+            }
+            emit q->showErrors(files, dirs);
+        }
+    }
+
     void deleteImportedUrls()
     {
         QList<QUrl> importedUrls = mImporter->importedUrlList();
@@ -204,6 +223,8 @@ ImportDialog::ImportDialog()
             this, &QWidget::close);
     connect(d->mImporter, &Importer::importFinished,
             this, &ImportDialog::slotImportFinished);
+    connect(this, &ImportDialog::showErrors,
+            d->mDialogPage, &DialogPage::slotShowErrors);
 
     d->mCentralWidget->setCurrentWidget(d->mThumbnailPage);
 
@@ -254,6 +275,7 @@ void ImportDialog::startImport()
 
 void ImportDialog::slotImportFinished()
 {
+    d->checkForFailedUrls();
     d->deleteImportedUrls();
     d->showWhatNext();
 }

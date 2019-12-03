@@ -26,12 +26,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QList>
 #include <QVBoxLayout>
 #include <QPushButton>
+#include <QAction>
 
 // KDE
 #include <KGuiItem>
+#include <KMessageBox>
 
 // Local
 #include <ui_dialogpage.h>
+#include "importdialog.h"
 
 namespace Gwenview
 {
@@ -41,14 +44,81 @@ struct DialogPagePrivate : public Ui_DialogPage
     QVBoxLayout* mLayout;
     QList<QPushButton*> mButtons;
     QEventLoop* mEventLoop;
+    DialogPage* q;
+    QStringList failedFileList;
+    QStringList failedDirList;
+    QAction* fileDetails;
+    QAction* dirDetails;
+
+    void setupFailedListActions()
+    {
+        fileDetails = new QAction(i18n("Show failed files..."));
+        mErrorMessageWidget->addAction(fileDetails);
+        QObject::connect(fileDetails, &QAction::triggered,
+                         q, &DialogPage::slotShowFailedFileDetails);
+        fileDetails->setVisible(false);
+
+        dirDetails  = new QAction(i18n("Show failed subfolders..."));
+        mErrorMessageWidget->addAction(dirDetails);
+        QObject::connect(dirDetails, &QAction::triggered,
+                         q, &DialogPage::slotShowFailedDirDetails);
+        dirDetails->setVisible(false);
+    }
+
+    void showErrors(const QStringList& files, const QStringList& dirs)
+    {
+        mErrorMessageWidget->setVisible(true);
+        failedFileList.clear();
+        failedDirList.clear();
+        QStringList message;
+        if (files.count() > 0) {
+            failedFileList = files;
+            message << i18np("Failed to import %1 document.",
+                             "Failed to import %1 documents.",
+                             files.count());
+            fileDetails->setVisible(true);
+        } else fileDetails->setVisible(false);
+
+        if (dirs.count() > 0) {
+            failedDirList = dirs;
+            message << i18np("Failed to create %1 destination subfolder.",
+                             "Failed to create %1 destination subfolders.",
+                             dirs.count());
+            dirDetails->setVisible(true);
+        } else dirDetails->setVisible(false);
+
+        mErrorMessageWidget->setText(message.join("<br/>"));
+        mErrorMessageWidget->animatedShow();
+    }
+
+    void showFailedFileDetails()
+    {
+        QString message = i18n("Failed to import documents:");
+        KMessageBox::errorList(q,
+                               message,
+                               failedFileList
+                              );
+    }
+
+    void showFailedDirDetails()
+    {
+        QString message = i18n("Failed to create subfolders:");
+        KMessageBox::errorList(q,
+                               message,
+                               failedDirList
+                              );
+    }
 };
 
 DialogPage::DialogPage(QWidget* parent)
 : QWidget(parent)
 , d(new DialogPagePrivate)
 {
+    d->q = this;
     d->setupUi(this);
     d->mLayout = new QVBoxLayout(d->mButtonContainer);
+    d->setupFailedListActions();
+    d->mErrorMessageWidget->hide();
 }
 
 DialogPage::~DialogPage()
@@ -80,6 +150,21 @@ int DialogPage::addButton(const KGuiItem& item)
     d->mLayout->addWidget(button);
     d->mButtons << button;
     return id;
+}
+
+void DialogPage::slotShowErrors(const QStringList& files, const QStringList& dirs)
+{
+    d->showErrors(files, dirs);
+}
+
+void DialogPage::slotShowFailedFileDetails()
+{
+    d->showFailedFileDetails();
+}
+
+void DialogPage::slotShowFailedDirDetails()
+{
+    d->showFailedDirDetails();
 }
 
 int DialogPage::exec()

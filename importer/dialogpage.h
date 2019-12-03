@@ -46,6 +46,11 @@ public:
     int addButton(const KGuiItem&);
     int exec();
 
+public Q_SLOTS:
+    void slotShowErrors(const QStringList&, const QStringList&);
+    void slotShowFailedFileDetails();
+    void slotShowFailedDirDetails();
+
 private:
     DialogPagePrivate* const d;
 };

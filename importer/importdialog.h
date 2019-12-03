@@ -50,6 +50,9 @@ private Q_SLOTS:
     void slotImportFinished();
     void showImportError(const QString&);
 
+Q_SIGNALS:
+    void showErrors(const QStringList&, const QStringList&);
+
 private:
     ImportDialogPrivate* const d;
 };

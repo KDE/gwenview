@@ -62,6 +62,8 @@ struct ImporterPrivate
     QList<QUrl> mUrlList;
     QList<QUrl> mImportedUrlList;
     QList<QUrl> mSkippedUrlList;
+    QList<QUrl> mFailedUrlList;
+    QList<QUrl> mFailedSubFolderList;
     int mRenamedCount;
     int mProgress;
     int mJobProgress;
@@ -138,6 +140,9 @@ struct ImporterPrivate
         KJobWidgets::setWindow(job,mAuthWindow);
         if (!job->exec()) { // if subfolder creation fails
             qWarning() << "Could not create subfolder:" << subFolder;
+            if (!mFailedSubFolderList.contains(subFolder)) {
+                mFailedSubFolderList << subFolder;
+            }
             result = FileUtils::RenameFailed;
         } else { // if subfolder creation succeeds
             result = FileUtils::rename(src, dst, mAuthWindow);
@@ -155,6 +160,7 @@ struct ImporterPrivate
             mSkippedUrlList << mCurrentUrl;
             break;
         case FileUtils::RenameFailed:
+            mFailedUrlList << mCurrentUrl;
             qWarning() << "Rename failed for" << mCurrentUrl;
         }
         q->advance();
@@ -189,6 +195,8 @@ void Importer::start(const QList<QUrl>& list, const QUrl& destination)
     d->mUrlList = list;
     d->mImportedUrlList.clear();
     d->mSkippedUrlList.clear();
+    d->mFailedUrlList.clear();
+    d->mFailedSubFolderList.clear();
     d->mRenamedCount = 0;
     d->mProgress = 0;
     d->mJobProgress = 0;
@@ -208,7 +216,8 @@ void Importer::slotCopyDone(KJob* _job)
     KIO::CopyJob* job = static_cast<KIO::CopyJob*>(_job);
     QUrl url = job->destUrl();
     if (job->error()) {
-        qWarning() << "FIXME: What do we do with failed urls?";
+        // Add document to failed url list and proceed with next one
+        d->mFailedUrlList << d->mCurrentUrl;
         advance();
         d->importNext();
         return;
@@ -249,6 +258,16 @@ QList<QUrl> Importer::importedUrlList() const
 QList<QUrl> Importer::skippedUrlList() const
 {
     return d->mSkippedUrlList;
+}
+
+QList<QUrl> Importer::failedUrlList() const
+{
+    return d->mFailedUrlList;
+}
+
+QList<QUrl> Importer::failedSubFolderList() const
+{
+    return d->mFailedSubFolderList;
 }
 
 int Importer::renamedCount() const
