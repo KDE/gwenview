@@ -387,7 +387,7 @@ void ThumbnailView::updateThumbnailSize()
     } else {
         waitingThumbnailSize = qRound(32 * dpr);
     }
-    QPixmap icon = DesktopIcon(QStringLiteral("chronometer"), waitingThumbnailSize);
+    QPixmap icon = QIcon::fromTheme(QStringLiteral("chronometer")).pixmap(waitingThumbnailSize);
     QPixmap pix(value);
     pix.fill(Qt::transparent);
     QPainter painter(&pix);
@@ -604,7 +604,7 @@ void ThumbnailView::setBrokenThumbnail(const KFileItem& item)
         thumbnail.mWaitingForThumbnail = false;
         return;
     } else {
-        thumbnail.initAsIcon(DesktopIcon(QStringLiteral("image-missing"), 48));
+        thumbnail.initAsIcon(QIcon::fromTheme(QStringLiteral("image-missing")).pixmap(48));
         thumbnail.mFullSize = thumbnail.mGroupPix.size();
     }
     update(thumbnail.mIndex);
@@ -646,7 +646,7 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index, QSize* fullSi
                 // "folder-remote" icon for remote folders, so that they do
                 // not look like regular folders
                 thumbnail.mWaitingForThumbnail = false;
-                thumbnail.initAsIcon(DesktopIcon(QStringLiteral("folder-remote"), groupSize));
+                thumbnail.initAsIcon(QIcon::fromTheme(QStringLiteral("folder-remote")).pixmap(groupSize));
             } else {
                 // set mWaitingForThumbnail to true (necessary in the case
                 // 'thumbnail' already existed before, but with a too small
