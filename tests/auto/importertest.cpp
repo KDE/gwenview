@@ -110,6 +110,62 @@ void ImporterTest::testSuccessfulImport()
     }
 }
 
+void ImporterTest::testSuccessfulImportRemote()
+{
+    // First test import from local to remote
+    QUrl remoteUrl = setUpRemoteTestDir();
+    if (!remoteUrl.isValid()) {
+        QSKIP("Not running this test: failed to setup remote test dir.");
+    }
+
+    Importer importer(nullptr);
+    QSignalSpy maximumChangedSpy(&importer, SIGNAL(maximumChanged(int)));
+    QSignalSpy errorSpy(&importer, SIGNAL(error(QString)));
+
+    QList<QUrl> list = mDocumentList;
+
+    QEventLoop loop;
+    connect(&importer, &Importer::importFinished, &loop, &QEventLoop::quit);
+    importer.start(list, remoteUrl);
+    loop.exec();
+
+    QCOMPARE(maximumChangedSpy.count(), 1);
+    QCOMPARE(maximumChangedSpy.takeFirst().at(0).toInt(), list.count() * 100);
+    QCOMPARE(errorSpy.count(), 0);
+
+    QCOMPARE(importer.importedUrlList().count(), list.count());
+    QCOMPARE(importer.importedUrlList(), list);
+    QCOMPARE(importer.skippedUrlList().count(), 0);
+    QCOMPARE(importer.renamedCount(), 0);
+
+    for (const QUrl & src : qAsConst(list)) {
+        QUrl dst = remoteUrl;
+        dst.setPath(dst.path() + '/' + src.fileName());
+        QVERIFY(FileUtils::contentsAreIdentical(src, dst));
+    }
+
+    // Secondly test import from remote back to local
+    QUrl localUrl = QUrl::fromLocalFile(mTempDir->path() + "/foo");
+
+    importer.start(list, localUrl);
+    loop.exec();
+
+    QCOMPARE(maximumChangedSpy.count(), 1);
+    QCOMPARE(maximumChangedSpy.takeFirst().at(0).toInt(), list.count() * 100);
+    QCOMPARE(errorSpy.count(), 0);
+
+    QCOMPARE(importer.importedUrlList().count(), list.count());
+    QCOMPARE(importer.importedUrlList(), list);
+    QCOMPARE(importer.skippedUrlList().count(), 0);
+    QCOMPARE(importer.renamedCount(), 0);
+
+    for (const QUrl & src : qAsConst(list)) {
+        QUrl dst = localUrl;
+        dst.setPath(dst.path() + '/' + src.fileName());
+        QVERIFY(FileUtils::contentsAreIdentical(src, dst));
+    }
+}
+
 void ImporterTest::testSkippedUrlList()
 {
     QUrl destUrl = QUrl::fromLocalFile(mTempDir->path() + "/foo");

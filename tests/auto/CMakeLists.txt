@@ -41,7 +41,7 @@ gv_add_unit_test(timeutilstest)
 gv_add_unit_test(placetreemodeltest testutils.cpp)
 gv_add_unit_test(urlutilstest)
 gv_add_unit_test(historymodeltest)
-gv_add_unit_test(importertest
+gv_add_unit_test(importertest testutils.cpp
     ${importer_SOURCE_DIR}/importer.cpp
     ${importer_SOURCE_DIR}/fileutils.cpp
     ${importer_SOURCE_DIR}/filenameformater.cpp

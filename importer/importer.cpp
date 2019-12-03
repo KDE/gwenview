@@ -33,6 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KIO/DeleteJob>
 #include <KIO/MkpathJob>
 #include <KIO/Job>
+#include <kio/jobclasses.h>
 #include <KIO/JobUiDelegate>
 #include <KJobWidgets>
 #include <KLocalizedString>
@@ -44,6 +45,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <fileutils.h>
 #include <filenameformater.h>
 #include <lib/timeutils.h>
+#include <lib/urlutils.h>
 #include <QDir>
 
 namespace Gwenview
@@ -56,6 +58,7 @@ struct ImporterPrivate
     std::unique_ptr<FileNameFormater> mFileNameFormater;
     QUrl mTempImportDirUrl;
     QTemporaryDir* mTempImportDir;
+    QUrl mDestinationDirUrl;
 
     /* @defgroup reset Should be reset in start()
      * @{ */
@@ -73,28 +76,34 @@ struct ImporterPrivate
 
     bool createImportDir(const QUrl& url)
     {
-        Q_ASSERT(url.isLocalFile());
-        // FIXME: Support remote urls
-
-        if (!QDir().mkpath(url.toLocalFile())) {
+        KIO::Job* job = KIO::mkpath(url, QUrl(), KIO::HideProgressInfo);
+        KJobWidgets::setWindow(job, mAuthWindow);
+        if (!job->exec()) {
             emit q->error(i18n("Could not create destination folder."));
             return false;
         }
-        
-        QString tempDirPath = url.toLocalFile() + "/.gwenview_importer-XXXXXX";
-        mTempImportDir = new QTemporaryDir(tempDirPath);
-                    
+
+        // Check if local and fast url. The check for fast url is needed because
+        // otherwise the retrieved date will not be correct: see implementation
+        // of TimeUtils::dateTimeForFileItem
+        if (UrlUtils::urlIsFastLocalFile(url)) {
+            QString tempDirPath = url.toLocalFile() + "/.gwenview_importer-XXXXXX";
+            mTempImportDir = new QTemporaryDir(tempDirPath);
+        } else {
+            mTempImportDir = new QTemporaryDir();
+        }
+
         if (!mTempImportDir->isValid()) {
             emit q->error(i18n("Could not create temporary upload folder."));
             return false;
         }
-        
+
         mTempImportDirUrl = QUrl::fromLocalFile(mTempImportDir->path() + '/');
         if (!mTempImportDirUrl.isValid()) {
             emit q->error(i18n("Could not create temporary upload folder."));
             return false;
-        }         
-        
+        }
+
         return true;
     }
 
@@ -117,7 +126,7 @@ struct ImporterPrivate
 
     void renameImportedUrl(const QUrl& src)
     {
-        QUrl dst = src.resolved(QUrl(".."));
+        QUrl dst = mDestinationDirUrl;
         QString fileName;
         if (mFileNameFormater.get()) {
             KFileItem item(src);
@@ -131,7 +140,7 @@ struct ImporterPrivate
         } else {
             fileName = src.fileName();
         }
-        dst.setPath(dst.path() + fileName);
+        dst.setPath(dst.path() + '/' + fileName);
 
         FileUtils::RenameResult result;
         // Create additional subfolders if needed (e.g. when extra slashes in FileNameFormater)
@@ -192,6 +201,7 @@ void Importer::setAutoRenameFormat(const QString& format)
 
 void Importer::start(const QList<QUrl>& list, const QUrl& destination)
 {
+    d->mDestinationDirUrl = destination;
     d->mUrlList = list;
     d->mImportedUrlList.clear();
     d->mSkippedUrlList.clear();

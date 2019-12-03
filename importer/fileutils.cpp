@@ -25,6 +25,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QFile>
 #include <QFileInfo>
 #include <QUrl>
+#include <QBuffer>
+#include <QScopedPointer>
 
 // KDE
 #include <QDebug>
@@ -42,44 +44,69 @@ namespace FileUtils
 
 bool contentsAreIdentical(const QUrl& url1, const QUrl& url2, QWidget* authWindow)
 {
-    // FIXME: Support remote urls
-    KIO::StatJob *statJob = KIO::mostLocalUrl(url1);
-    KJobWidgets::setWindow(statJob, authWindow);
-    if (!statJob->exec()) {
-        qWarning() << "Unable to stat" << url1;
-        return false;
+    KIO::StatJob *statJob;
+    KIO::StoredTransferJob *fileJob;
+    QScopedPointer<QIODevice> file1, file2;
+    QByteArray file1Bytes, file2Bytes;
+
+    if (url1.isLocalFile()) {
+        statJob = KIO::mostLocalUrl(url1);
+        KJobWidgets::setWindow(statJob, authWindow);
+        if (!statJob->exec()) {
+            qWarning() << "Unable to stat" << url1;
+            return false;
+        }
+        file1.reset(new QFile(statJob->mostLocalUrl().toLocalFile()));
+    } else { // file1 is remote
+        fileJob = KIO::storedGet(url1, KIO::NoReload ,KIO::HideProgressInfo);
+        KJobWidgets::setWindow(fileJob, authWindow);
+        if (!fileJob->exec()) {
+            qWarning() << "Can't read" << url1;
+            return false;
+        }
+        file1Bytes = QByteArray(fileJob->data());
+        file1.reset(new QBuffer(&file1Bytes));
     }
-    QFile file1(statJob->mostLocalUrl().toLocalFile());
-    if (!file1.open(QIODevice::ReadOnly)) {
+    if (!file1->open(QIODevice::ReadOnly)) {
         // Can't read url1, assume it's different from url2
         qWarning() << "Can't read" << url1;
         return false;
     }
 
-    statJob = KIO::mostLocalUrl(url2);
-    KJobWidgets::setWindow(statJob, authWindow);
-    if (!statJob->exec()) {
-        qWarning() << "Unable to stat" << url2;
-        return false;
+    if (url2.isLocalFile()) {
+        statJob = KIO::mostLocalUrl(url2);
+        KJobWidgets::setWindow(statJob, authWindow);
+        if (!statJob->exec()) {
+            qWarning() << "Unable to stat" << url2;
+            return false;
+        }
+        file2.reset(new QFile(statJob->mostLocalUrl().toLocalFile()));
+    } else { // file2 is remote
+        fileJob = KIO::storedGet(url2, KIO::NoReload, KIO::HideProgressInfo);
+        KJobWidgets::setWindow(fileJob, authWindow);
+        if (!fileJob->exec()) {
+            qWarning() << "Can't read" << url2;
+            return false;
+        }
+        file2Bytes = QByteArray(fileJob->data());
+        file2.reset(new QBuffer(&file2Bytes));
     }
-
-    QFile file2(statJob->mostLocalUrl().toLocalFile());
-    if (!file2.open(QIODevice::ReadOnly)) {
+    if (!file2->open(QIODevice::ReadOnly)) {
         // Can't read url2, assume it's different from url1
         qWarning() << "Can't read" << url2;
         return false;
     }
 
     const int CHUNK_SIZE = 4096;
-    while (!file1.atEnd() && !file2.atEnd()) {
-        QByteArray url1Array = file1.read(CHUNK_SIZE);
-        QByteArray url2Array = file2.read(CHUNK_SIZE);
+    while (!file1->atEnd() && !file2->atEnd()) {
+        QByteArray url1Array = file1->read(CHUNK_SIZE);
+        QByteArray url2Array = file2->read(CHUNK_SIZE);
 
         if (url1Array != url2Array) {
             return false;
         }
     }
-    if (file1.atEnd() && file2.atEnd()) {
+    if (file1->atEnd() && file2->atEnd()) {
         return true;
     } else {
         qWarning() << "One file ended before the other";
@@ -131,7 +158,7 @@ RenameResult rename(const QUrl& src, const QUrl& dst_, QWidget* authWindow)
     }
 
     // Rename
-    KIO::Job* job = KIO::rename(src, dst, KIO::HideProgressInfo);
+    KIO::Job* job = KIO::moveAs(src, dst, KIO::HideProgressInfo);
     KJobWidgets::setWindow(job, authWindow);
     if (!job->exec()) {
         result = RenameFailed;
