@@ -56,7 +56,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/timeutils.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
 
-#define KIPI_PLUGINS_URL QStringLiteral("appstream://photolayoutseditor.desktop")
+#define KIPI_PLUGINS_URL QStringLiteral("appstream://org.kde.kipi_plguins")
 
 namespace Gwenview
 {
