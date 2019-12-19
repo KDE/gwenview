@@ -79,7 +79,7 @@ void BalooSemanticInfoBackend::storeSemanticInfo(const QUrl &url, const Semantic
     KFileMetaData::UserMetaData md(url.toLocalFile());
     md.setRating(semanticInfo.mRating);
     md.setUserComment(semanticInfo.mDescription);
-    md.setTags(semanticInfo.mTags.toList());
+    md.setTags(semanticInfo.mTags.values());
 }
 
 void BalooSemanticInfoBackend::retrieveSemanticInfo(const QUrl &url)

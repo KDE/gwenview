@@ -175,7 +175,7 @@ void DocumentViewContainer::updateLayout()
     // Stop update timer: this is useful if updateLayout() is called directly
     // and not through scheduleLayoutUpdate()
     d->mLayoutUpdateTimer->stop();
-    QList<DocumentView*> views = (d->mViews | d->mAddedViews).toList();
+    QList<DocumentView*> views = (d->mViews | d->mAddedViews).values();
     std::sort(views.begin(), views.end(), viewLessThan);
 
     bool animated = GwenviewConfig::animationMethod() != DocumentView::NoAnimation;

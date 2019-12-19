@@ -40,7 +40,7 @@ TagSet::TagSet(const QSet<SemanticInfoTag>& set)
 
 QVariant TagSet::toVariant() const
 {
-    QStringList lst = toList();
+    QStringList lst = values();
     return QVariant(lst);
 }
 
