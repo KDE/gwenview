@@ -139,6 +139,8 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
     mToolBar = new FullScreenToolBar(mContent);
 
     #define addAction(name) mToolBar->addAction(actionCollection->action(name))
+    addAction("toggle_sidebar");
+    mToolBar->addSeparator();
     addAction("browse");
     addAction("view");
     mToolBar->addSeparator();
