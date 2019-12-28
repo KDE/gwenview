@@ -62,6 +62,7 @@
   <summary xml:lang="id">Penampil Citra</summary>
   <summary xml:lang="it">Visualizzatore di immagini</summary>
   <summary xml:lang="ko">그림 뷰어</summary>
+  <summary xml:lang="lt">Paveikslų žiūryklė</summary>
   <summary xml:lang="nl">Afbeeldingenviewer</summary>
   <summary xml:lang="nn">Biletvisar</summary>
   <summary xml:lang="pl">Przeglądarka obrazów</summary>
@@ -99,6 +100,7 @@
     <p xml:lang="id">Gwenview adalah cepat dan mudah untuk penggunaan penampil citra oleh KDE, sangat baik untuk menelusuri dan menampilkan citra dari sebuah koleksi.</p>
     <p xml:lang="it">Gwenview è un visore di immagini veloce e semplice da usare di KDE, ideale per sfogliare e visualizzare una collezione di immagini.</p>
     <p xml:lang="ko">Gwenview는 KDE의 빠르고 사용하기 편한 그림 뷰어입니다.</p>
+    <p xml:lang="lt">Gwenview yra greita ir lengva naudoti paveikslų žiūryklė pagal KDE, tobulai tinkanti naršyti ir atvaizduoti paveikslų kolekcijas.</p>
     <p xml:lang="nl">Gwenview is een snelle en gemakkelijk te gebruiken viewer voor afbeeldingen door KDE, ideaal voor bladeren door en weergeven van een verzameling afbeeldingen.</p>
     <p xml:lang="nn">Gwenview er ein biletvisar frå KDE. Han passar svært godt for å bla gjennom og visa ei samling med bilete.</p>
     <p xml:lang="pl">Gwenview to szybka i łatwa w użyciu przeglądarka obrazów dla KDE. Świetnie nadaje się do przeglądania i wyświetlania zbiorów obrazów.</p>
@@ -382,6 +384,7 @@
       <caption xml:lang="id">Gwenview mendisplai sebuah citra, dengan metadata tambahan yang ditampilkan di dalam bilah sisi</caption>
       <caption xml:lang="it">Gwenview mentre visualizza un'immagine, con ulteriori metadati mostrati nella barra laterale</caption>
       <caption xml:lang="ko">사진을 표시하는 Gwenview, 사이드바에 추가 메타데이터 표시</caption>
+      <caption xml:lang="lt">Gwenview atvaizduojanti paveikslą su šoninėje juostoje rodomais papildomais metaduomenimis</caption>
       <caption xml:lang="nl">Gwenview toont een afbeelding, met extra metagegevens getoond in de zijbalk</caption>
       <caption xml:lang="nn">Gwenview som viser eit bilete, med metadata om biletet vist i sidestolpen</caption>
       <caption xml:lang="pl">Gwenview wyświetla obraz z dodatkowymi metadanymi na pasku bocznym</caption>
