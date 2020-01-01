@@ -49,7 +49,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "gvpart.h"
 
 //Factory Code
-K_PLUGIN_FACTORY(GVPartFactory, registerPlugin<Gwenview::GVPart>();)
+K_PLUGIN_FACTORY_WITH_JSON(GVPartFactory, "gvpart.json", registerPlugin<Gwenview::GVPart>();)
 
 namespace Gwenview
 {
