@@ -1033,6 +1033,11 @@ bool DocumentView::sceneEventFilter(QGraphicsItem*, QEvent* event)
         if (mouseEvent->source() == Qt::MouseEventSynthesizedByQt) {
             return true;
         }
+        // We need to check if the Left mouse button is pressed, otherwise this can lead
+        // to starting a drag & drop sequence using the Forward/Backward mouse buttons
+        if (!mouseEvent->buttons().testFlag(Qt::LeftButton)) {
+            return false;
+        }
         const qreal dragDistance = (mouseEvent->pos() - d->mDragStartPosition).manhattanLength();
         const qreal minDistanceToStartDrag = QGuiApplication::styleHints()->startDragDistance();
         if (!d->canPan() && dragDistance >= minDistanceToStartDrag) {
