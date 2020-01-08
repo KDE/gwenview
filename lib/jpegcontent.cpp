@@ -588,16 +588,18 @@ QImage JpegContent::thumbnail() const
                 const long prevHeight = it->toLong(0);
                 const long prevWidth = it->toLong(1);
 
-                const double scale = prevWidth / image.width();
+                if (image.width() > 0 && prevWidth > 0 ) {
+                    const double scale = prevWidth / image.width();
 
-                // the embedded thumb only needs to be cropped vertically
-                const long validThumbAreaHeight = ceil(prevHeight / scale);
-                const long totalHeightOfBlackArea = image.height() - validThumbAreaHeight;
-                // black bars on top and bottom should be equal in height
-                const long offsetFromTop = totalHeightOfBlackArea / 2;
+                    // the embedded thumb only needs to be cropped vertically
+                    const long validThumbAreaHeight = ceil(prevHeight / scale);
+                    const long totalHeightOfBlackArea = image.height() - validThumbAreaHeight;
+                    // black bars on top and bottom should be equal in height
+                    const long offsetFromTop = totalHeightOfBlackArea / 2;
 
-                const QRect validArea(QPoint(0, offsetFromTop), QSize(image.width(), validThumbAreaHeight));
-                image = image.copy(validArea);
+                    const QRect validArea(QPoint(0, offsetFromTop), QSize(image.width(), validThumbAreaHeight));
+                    image = image.copy(validArea);
+                }
             }
         }
 
