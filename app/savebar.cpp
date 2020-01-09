@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QLabel>
 #include <QToolButton>
 #include <QToolTip>
-#include <QDebug>
+#include "gwenview_app_debug.h"
 #include <QIcon>
 #include <QUrl>
 
@@ -354,7 +354,7 @@ void SaveBar::triggerAction(const QString& action)
         Q_ASSERT(pos < lst.size());
         emit goToUrl(lst[pos]);
     } else {
-        qWarning() << "Unknown action: " << action ;
+        qCWarning(GWENVIEW_APP_LOG) << "Unknown action: " << action ;
     }
 }
 

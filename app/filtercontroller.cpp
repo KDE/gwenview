@@ -31,7 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QPainterPath>
 #include <QTimer>
 #include <QToolButton>
-#include <QDebug>
+#include "gwenview_app_debug.h"
 #include <QIcon>
 
 // KDE
@@ -223,7 +223,7 @@ void TagFilterWidget::updateTagSetFilter()
 {
     QModelIndex index = mTagComboBox->model()->index(mTagComboBox->currentIndex(), 0);
     if (!index.isValid()) {
-        qWarning() << "Invalid index";
+        qCWarning(GWENVIEW_APP_LOG) << "Invalid index";
         return;
     }
     SemanticInfoTag tag = index.data(TagModel::TagRole).toString();

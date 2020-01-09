@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QShortcut>
 #include <QToolButton>
 #include <QVBoxLayout>
-#include <QDebug>
+#include "gwenview_app_debug.h"
 #include <QMenu>
 
 // KDE
@@ -73,7 +73,7 @@ namespace Gwenview
 #undef LOG
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
-#define LOG(x) qDebug() << x
+#define LOG(x) qCDebug(GWENVIEW_APP_LOG) << x
 #else
 #define LOG(x) ;
 #endif
@@ -384,7 +384,7 @@ struct ViewMainPagePrivate
     {
         QUrl url = view->url();
         if (!url.isValid()) {
-            qWarning() << "View does not display any document!";
+            qCWarning(GWENVIEW_APP_LOG) << "View does not display any document!";
             return QModelIndex();
         }
 
@@ -688,7 +688,7 @@ void ViewMainPage::openUrls(const QList<QUrl>& allUrls, const QUrl &currentUrl)
     // Create view for remaining urls
     for (const QUrl &url : qAsConst(urls)) {
         if (d->mDocumentViews.count() >= MaxViewCount) {
-            qWarning() << "Too many documents to show";
+            qCWarning(GWENVIEW_APP_LOG) << "Too many documents to show";
             break;
         }
         DocumentView* view = d->createDocumentView();
@@ -750,7 +750,7 @@ void ViewMainPage::reload()
     }
     Document::Ptr doc = view->document();
     if (!doc) {
-        qWarning() << "!doc";
+        qCWarning(GWENVIEW_APP_LOG) << "!doc";
         return;
     }
     if (doc->isModified()) {

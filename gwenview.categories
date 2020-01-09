@@ -1,1 +1,3 @@
 org.kde.kdegraphics.gwenview.lib gwenview lib (kdegraphics) IDENTIFIER [GWENVIEW_LIB_LOG]
+org.kde.kdegraphics.gwenview.importer gwenview importer (kdegraphics) IDENTIFIER [GWENVIEW_IMPORTER_LOG]
+org.kde.kdegraphics.gwenview.app gwenview app (kdegraphics) IDENTIFIER [GWENVIEW_APP_LOG]

@@ -22,7 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "preloader.h"
 
 // Qt
-#include <QDebug>
+#include "gwenview_app_debug.h"
 
 // KDE
 
@@ -36,7 +36,7 @@ namespace Gwenview
 #undef LOG
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
-#define LOG(x) qDebug() << x
+#define LOG(x) qCDebug(GWENVIEW_APP_LOG) << x
 #else
 #define LOG(x) ;
 #endif

@@ -27,7 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QTreeView>
 #include <QDir>
 #include <QMimeData>
-#include <QDebug>
+#include "gwenview_app_debug.h"
 #include <QStyleHints>
 #include <QApplication>
 
@@ -89,7 +89,7 @@ protected:
         const QList<QUrl> urlList = KUrlMimeData::urlsFromMimeData(event->mimeData());
         const QModelIndex index = indexAt(event->pos());
         if (!index.isValid()) {
-            qWarning() << "Invalid index!";
+            qCWarning(GWENVIEW_APP_LOG) << "Invalid index!";
             return;
         }
         const QUrl destUrl = static_cast<MODEL_CLASS*>(model())->urlForIndex(index);
@@ -246,7 +246,7 @@ QModelIndex FolderViewContextManagerItem::findClosestIndex(const QModelIndex& pa
 
     QUrl url = mModel->urlForIndex(index);
     if (!url.isParentOf(wantedUrl)) {
-        qWarning() << url << "is not a parent of" << wantedUrl << "!";
+        qCWarning(GWENVIEW_APP_LOG) << url << "is not a parent of" << wantedUrl << "!";
         return QModelIndex();
     }
 
@@ -285,7 +285,7 @@ QModelIndex FolderViewContextManagerItem::findRootIndex(const QUrl& wantedUrl)
         }
     }
     if (!matchIndex.isValid()) {
-        qWarning() << "Found no root index for" << wantedUrl;
+        qCWarning(GWENVIEW_APP_LOG) << "Found no root index for" << wantedUrl;
     }
     return matchIndex;
 }

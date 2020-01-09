@@ -20,7 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 */
 // Self
 #include "startmainpage.h"
-
+#include "gwenview_app_debug.h"
 #include <config-gwenview.h>
 
 // Qt
@@ -252,7 +252,7 @@ void StartMainPage::slotListViewActivated(const QModelIndex& index)
 
     // Prevent dir lister error
     if (!url.isValid()) {
-        qCritical() << "Tried to open an invalid url";
+        qCCritical(GWENVIEW_APP_LOG) << "Tried to open an invalid url";
         return;
     }
     emit urlSelected(url);

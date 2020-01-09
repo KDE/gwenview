@@ -29,7 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QScopedPointer>
 
 // KDE
-#include <QDebug>
+#include "gwenview_importer_debug.h"
 #include <KFileItem>
 #include <KIO/CopyJob>
 #include <KIO/Job>
@@ -53,7 +53,7 @@ bool contentsAreIdentical(const QUrl& url1, const QUrl& url2, QWidget* authWindo
         statJob = KIO::mostLocalUrl(url1);
         KJobWidgets::setWindow(statJob, authWindow);
         if (!statJob->exec()) {
-            qWarning() << "Unable to stat" << url1;
+            qCWarning(GWENVIEW_IMPORTER_LOG) << "Unable to stat" << url1;
             return false;
         }
         file1.reset(new QFile(statJob->mostLocalUrl().toLocalFile()));
@@ -61,7 +61,7 @@ bool contentsAreIdentical(const QUrl& url1, const QUrl& url2, QWidget* authWindo
         fileJob = KIO::storedGet(url1, KIO::NoReload ,KIO::HideProgressInfo);
         KJobWidgets::setWindow(fileJob, authWindow);
         if (!fileJob->exec()) {
-            qWarning() << "Can't read" << url1;
+            qCWarning(GWENVIEW_IMPORTER_LOG) << "Can't read" << url1;
             return false;
         }
         file1Bytes = QByteArray(fileJob->data());
@@ -69,7 +69,7 @@ bool contentsAreIdentical(const QUrl& url1, const QUrl& url2, QWidget* authWindo
     }
     if (!file1->open(QIODevice::ReadOnly)) {
         // Can't read url1, assume it's different from url2
-        qWarning() << "Can't read" << url1;
+        qCWarning(GWENVIEW_IMPORTER_LOG) << "Can't read" << url1;
         return false;
     }
 
@@ -77,7 +77,7 @@ bool contentsAreIdentical(const QUrl& url1, const QUrl& url2, QWidget* authWindo
         statJob = KIO::mostLocalUrl(url2);
         KJobWidgets::setWindow(statJob, authWindow);
         if (!statJob->exec()) {
-            qWarning() << "Unable to stat" << url2;
+            qCWarning(GWENVIEW_IMPORTER_LOG) << "Unable to stat" << url2;
             return false;
         }
         file2.reset(new QFile(statJob->mostLocalUrl().toLocalFile()));
@@ -85,7 +85,7 @@ bool contentsAreIdentical(const QUrl& url1, const QUrl& url2, QWidget* authWindo
         fileJob = KIO::storedGet(url2, KIO::NoReload, KIO::HideProgressInfo);
         KJobWidgets::setWindow(fileJob, authWindow);
         if (!fileJob->exec()) {
-            qWarning() << "Can't read" << url2;
+            qCWarning(GWENVIEW_IMPORTER_LOG) << "Can't read" << url2;
             return false;
         }
         file2Bytes = QByteArray(fileJob->data());
@@ -93,7 +93,7 @@ bool contentsAreIdentical(const QUrl& url1, const QUrl& url2, QWidget* authWindo
     }
     if (!file2->open(QIODevice::ReadOnly)) {
         // Can't read url2, assume it's different from url1
-        qWarning() << "Can't read" << url2;
+        qCWarning(GWENVIEW_IMPORTER_LOG) << "Can't read" << url2;
         return false;
     }
 
@@ -109,7 +109,7 @@ bool contentsAreIdentical(const QUrl& url1, const QUrl& url2, QWidget* authWindo
     if (file1->atEnd() && file2->atEnd()) {
         return true;
     } else {
-        qWarning() << "One file ended before the other";
+        qCWarning(GWENVIEW_IMPORTER_LOG) << "One file ended before the other";
         return false;
     }
 }

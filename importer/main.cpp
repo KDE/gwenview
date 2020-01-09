@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 // Qt
 #include <QApplication>
-#include <QDebug>
+#include "gwenview_importer_debug.h"
 #include <QDir>
 #include <QCommandLineParser>
 #include <QScopedPointer>
@@ -57,17 +57,17 @@ int main(int argc, char *argv[])
     aboutData.data()->processCommandLine(&parser);
 
     if (parser.positionalArguments().isEmpty()) {
-        qWarning() << i18n("Missing required source folder argument.");
+        qCWarning(GWENVIEW_IMPORTER_LOG) << i18n("Missing required source folder argument.");
         parser.showHelp();
     }
     if (parser.positionalArguments().count() > 1) {
-        qWarning() << i18n("Too many arguments.");
+        qCWarning(GWENVIEW_IMPORTER_LOG) << i18n("Too many arguments.");
         parser.showHelp();
     }
     QString urlString = parser.positionalArguments().constFirst();
     QUrl url = QUrl::fromUserInput(urlString, QDir::currentPath(), QUrl::AssumeLocalFile);
     if (!url.isValid()) {
-        qCritical() << i18n("Invalid source folder.");
+        qCCritical(GWENVIEW_IMPORTER_LOG) << i18n("Invalid source folder.");
         return 1;
     }
     QString deviceUdi = parser.isSet("udi") ? parser.value("udi") : QString();

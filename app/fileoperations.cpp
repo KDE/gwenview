@@ -24,7 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QMenu>
-#include <QDebug>
+#include "gwenview_app_debug.h"
 #include <QPushButton>
 #include <QFileDialog>
 
@@ -187,12 +187,12 @@ void del(const QList<QUrl>& urlList, QWidget* parent)
 void showMenuForDroppedUrls(QWidget* parent, const QList<QUrl>& urlList, const QUrl &destUrl)
 {
     if (urlList.isEmpty()) {
-        qWarning() << "urlList is empty!";
+        qCWarning(GWENVIEW_APP_LOG) << "urlList is empty!";
         return;
     }
 
     if (!destUrl.isValid()) {
-        qWarning() << "destUrl is not valid!";
+        qCWarning(GWENVIEW_APP_LOG) << "destUrl is not valid!";
         return;
     }
 

@@ -29,7 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QImageWriter>
 #include <QLabel>
 #include <QMimeDatabase>
-#include <QDebug>
+#include "gwenview_app_debug.h"
 #include <QSpacerItem>
 #include <QSpinBox>
 
@@ -495,7 +495,7 @@ void GvCore::setRating(const QUrl &url, int rating)
 {
     QModelIndex index = d->mDirModel->indexForUrl(url);
     if (!index.isValid()) {
-        qWarning() << "invalid index!";
+        qCWarning(GWENVIEW_APP_LOG) << "invalid index!";
         return;
     }
     d->mDirModel->setData(index, rating, SemanticInfoDirModel::RatingRole);

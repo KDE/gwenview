@@ -19,7 +19,7 @@ set(importer_SRCS
     serializedurlmap.cpp
     thumbnailpage.cpp
     )
-
+ecm_qt_declare_logging_category(importer_SRCS HEADER gwenview_importer_debug.h IDENTIFIER GWENVIEW_IMPORTER_LOG CATEGORY_NAME org.kde.kdegraphics.gwenview.importer)
 ki18n_wrap_ui(importer_SRCS
     dialogpage.ui
     importerconfigdialog.ui

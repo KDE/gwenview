@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Qt
 #include <QAction>
 #include <QCursor>
-#include <QDebug>
+#include "gwenview_app_debug.h"
 #include <QMenu>
 
 // KDE
@@ -48,7 +48,7 @@ struct ThumbnailViewHelperPrivate
     {
         QAction* action = mActionCollection->action(name);
         if (!action) {
-            qWarning() << "Unknown action" << name;
+            qCWarning(GWENVIEW_APP_LOG) << "Unknown action" << name;
             return;
         }
         if (action->isEnabled()) {

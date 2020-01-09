@@ -32,7 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QToolButton>
 #include <QWidgetAction>
 #include <QTimer>
-#include <QDebug>
+#include "gwenview_app_debug.h"
 
 // KDE
 #include <KActionCollection>
@@ -484,14 +484,14 @@ void FullScreenContent::showOptionsMenu()
     QPoint pos;
     QWidget* button = mOptionsAction->associatedWidgets().constFirst();
     Q_ASSERT(button);
-    qWarning() << button << button->geometry();
+    qCWarning(GWENVIEW_APP_LOG) << button << button->geometry();
     if (QApplication::isRightToLeft()) {
         pos = button->mapToGlobal(button->rect().bottomLeft());
     } else {
         pos = button->mapToGlobal(button->rect().bottomRight());
         pos.rx() -= menu.sizeHint().width();
     }
-    qWarning() << pos;
+    qCWarning(GWENVIEW_APP_LOG) << pos;
     menu.exec(pos);
 }
 

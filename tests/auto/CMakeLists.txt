@@ -41,10 +41,13 @@ gv_add_unit_test(timeutilstest)
 gv_add_unit_test(placetreemodeltest testutils.cpp)
 gv_add_unit_test(urlutilstest)
 gv_add_unit_test(historymodeltest)
+set(import_debug_file_SRCS)
+ecm_qt_declare_logging_category(import_debug_file_SRCS HEADER gwenview_importer_debug.h IDENTIFIER GWENVIEW_IMPORTER_LOG CATEGORY_NAME org.kde.kdegraphics.gwenview.importer)
 gv_add_unit_test(importertest testutils.cpp
     ${importer_SOURCE_DIR}/importer.cpp
     ${importer_SOURCE_DIR}/fileutils.cpp
     ${importer_SOURCE_DIR}/filenameformater.cpp
+    ${import_debug_file_SRCS}
     )
 gv_add_unit_test(sorteddirmodeltest testutils.cpp)
 gv_add_unit_test(slidecontainerautotest slidecontainerautotest.cpp)

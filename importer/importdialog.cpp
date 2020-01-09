@@ -27,7 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QStackedWidget>
 
 // KDE
-#include <QDebug>
+#include "gwenview_importer_debug.h"
 #include <KIO/DeleteJob>
 #include <KMessageBox>
 #include <KProtocolInfo>
@@ -163,7 +163,7 @@ public:
     {
         KService::Ptr service = KService::serviceByDesktopName("org.kde.gwenview");
         if (!service) {
-            qCritical() << "Could not find gwenview";
+            qCCritical(GWENVIEW_IMPORTER_LOG) << "Could not find gwenview";
         } else {
             KRun::runService(*service, {mThumbnailPage->destinationUrl()}, nullptr /* window */);
         }

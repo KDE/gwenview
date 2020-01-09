@@ -49,7 +49,7 @@ namespace Gwenview
 #undef LOG
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
-#define LOG(x) qDebug() << x
+#define LOG(x) qCDebug(GWENVIEW_APP_LOG) << x
 #else
 #define LOG(x) ;
 #endif

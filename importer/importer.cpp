@@ -23,7 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QDateTime>
-#include <QDebug>
+#include "gwenview_importer_debug.h"
 #include <QUrl>
 #include <QTemporaryDir>
 
@@ -148,7 +148,7 @@ struct ImporterPrivate
         KIO::Job* job = KIO::mkpath(subFolder, QUrl(), KIO::HideProgressInfo);
         KJobWidgets::setWindow(job,mAuthWindow);
         if (!job->exec()) { // if subfolder creation fails
-            qWarning() << "Could not create subfolder:" << subFolder;
+            qCWarning(GWENVIEW_IMPORTER_LOG) << "Could not create subfolder:" << subFolder;
             if (!mFailedSubFolderList.contains(subFolder)) {
                 mFailedSubFolderList << subFolder;
             }
@@ -170,7 +170,7 @@ struct ImporterPrivate
             break;
         case FileUtils::RenameFailed:
             mFailedUrlList << mCurrentUrl;
-            qWarning() << "Rename failed for" << mCurrentUrl;
+            qCWarning(GWENVIEW_IMPORTER_LOG) << "Rename failed for" << mCurrentUrl;
         }
         q->advance();
         importNext();
@@ -215,7 +215,7 @@ void Importer::start(const QList<QUrl>& list, const QUrl& destination)
     emit maximumChanged(d->mUrlList.count() * 100);
 
     if (!d->createImportDir(destination)) {
-        qWarning() << "Could not create import dir";
+        qCWarning(GWENVIEW_IMPORTER_LOG) << "Could not create import dir";
         return;
     }
     d->importNext();

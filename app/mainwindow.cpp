@@ -18,6 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
 #include "mainwindow.h"
+#include "gwenview_app_debug.h"
 #include <config-gwenview.h>
 #include "dialogguard.h"
 
@@ -117,7 +118,7 @@ namespace Gwenview
 #undef LOG
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
-#define LOG(x) qDebug() << x
+#define LOG(x) qCDebug(GWENVIEW_APP_LOG) << x
 #else
 #define LOG(x) ;
 #endif
@@ -686,7 +687,7 @@ struct MainWindow::Private
         if (action) {
             action->setEnabled(enabled);
         } else {
-            qWarning() << "Action" << name << "not found";
+            qCWarning(GWENVIEW_APP_LOG) << "Action" << name << "not found";
         }
     }
 
@@ -1628,7 +1629,7 @@ void MainWindow::preloadNextUrl()
 {
     static bool disablePreload = qgetenv("GV_MAX_UNREFERENCED_IMAGES") == "0";
     if (disablePreload) {
-        qDebug() << "Preloading disabled";
+        qCDebug(GWENVIEW_APP_LOG) << "Preloading disabled";
         return;
     }
     QItemSelection selection = d->mContextManager->selectionModel()->selection();
