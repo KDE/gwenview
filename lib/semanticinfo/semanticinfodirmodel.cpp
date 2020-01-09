@@ -24,7 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QHash>
-#include <QDebug>
+#include "gwenview_lib_debug.h"
 
 // KDE
 
@@ -111,12 +111,12 @@ bool SemanticInfoDirModel::semanticInfoAvailableForIndex(const QModelIndex& inde
 SemanticInfo SemanticInfoDirModel::semanticInfoForIndex(const QModelIndex& index) const
 {
     if (!index.isValid()) {
-        qWarning() << "invalid index";
+        qCWarning(GWENVIEW_LIB_LOG) << "invalid index";
         return SemanticInfo();
     }
     KFileItem item = itemForIndex(index);
     if (item.isNull()) {
-        qWarning() << "no item for index";
+        qCWarning(GWENVIEW_LIB_LOG) << "no item for index";
         return SemanticInfo();
     }
     return d->mSemanticInfoCache.value(item.targetUrl()).mInfo;
@@ -129,7 +129,7 @@ void SemanticInfoDirModel::retrieveSemanticInfoForIndex(const QModelIndex& index
     }
     KFileItem item = itemForIndex(index);
     if (item.isNull()) {
-        qWarning() << "invalid item";
+        qCWarning(GWENVIEW_LIB_LOG) << "invalid item";
         return;
     }
     if (ArchiveUtils::fileItemIsDirOrArchive(item)) {
@@ -179,17 +179,17 @@ bool SemanticInfoDirModel::setData(const QModelIndex& index, const QVariant& dat
     if (role == RatingRole || role == DescriptionRole || role == TagsRole) {
         KFileItem item = itemForIndex(index);
         if (item.isNull()) {
-            qWarning() << "no item found for this index";
+            qCWarning(GWENVIEW_LIB_LOG) << "no item found for this index";
             return false;
         }
         QUrl url = item.targetUrl();
         SemanticInfoCache::iterator it = d->mSemanticInfoCache.find(url);
         if (it == d->mSemanticInfoCache.end()) {
-            qWarning() << "No index for" << url;
+            qCWarning(GWENVIEW_LIB_LOG) << "No index for" << url;
             return false;
         }
         if (!it.value().mValid) {
-            qWarning() << "Semantic info cache for" << url << "is invalid";
+            qCWarning(GWENVIEW_LIB_LOG) << "Semantic info cache for" << url << "is invalid";
             return false;
         }
         SemanticInfo& semanticInfo = it.value().mInfo;
@@ -216,12 +216,12 @@ void SemanticInfoDirModel::slotSemanticInfoRetrieved(const QUrl &url, const Sema
 {
     SemanticInfoCache::iterator it = d->mSemanticInfoCache.find(url);
     if (it == d->mSemanticInfoCache.end()) {
-        qWarning() << "No index for" << url;
+        qCWarning(GWENVIEW_LIB_LOG) << "No index for" << url;
         return;
     }
     SemanticInfoCacheItem& cacheItem = it.value();
     if (!cacheItem.mIndex.isValid()) {
-        qWarning() << "Index for" << url << "is invalid";
+        qCWarning(GWENVIEW_LIB_LOG) << "Index for" << url << "is invalid";
         return;
     }
     cacheItem.mInfo = semanticInfo;

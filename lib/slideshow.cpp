@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QAction>
 #include <QTimer>
-#include <QDebug>
+#include "gwenview_lib_debug.h"
 
 // KDE
 #include <KLocalizedString>
@@ -44,7 +44,7 @@ namespace Gwenview
 #undef LOG
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
-#define LOG(x) qDebug() << x
+#define LOG(x) qCDebug(GWENVIEW_LIB_LOG) << x
 #else
 #define LOG(x) ;
 #endif
@@ -220,7 +220,7 @@ void SlideShow::start(const QList<QUrl>& urls)
 
     d->mStartIt = std::find(d->mUrls.constBegin(), d->mUrls.constEnd(), d->mCurrentUrl);
     if (d->mStartIt == d->mUrls.constEnd()) {
-        qWarning() << "Current url not found in list, aborting.\n";
+        qCWarning(GWENVIEW_LIB_LOG) << "Current url not found in list, aborting.\n";
         return;
     }
 

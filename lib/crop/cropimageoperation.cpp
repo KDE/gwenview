@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QImage>
 
 // KDE
-#include <QDebug>
+#include "gwenview_lib_debug.h"
 #include <KLocalizedString>
 
 // Local
@@ -85,7 +85,7 @@ void CropImageOperation::redo()
 void CropImageOperation::undo()
 {
     if (!document()->editor()) {
-        qWarning() << "!document->editor()";
+        qCWarning(GWENVIEW_LIB_LOG) << "!document->editor()";
         return;
     }
     document()->editor()->setImage(d->mOriginalImage);

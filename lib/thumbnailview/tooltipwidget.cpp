@@ -24,7 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QPainter>
 #include <QPainterPath>
-#include <QDebug>
+#include "gwenview_lib_debug.h"
 
 // KDE
 #include <KColorScheme>

@@ -292,7 +292,7 @@ int FITSData::calculateMinMax(bool refresh)
         break;
     }
 
-    //qDebug() << "DATAMIN: " << stats.min << " - DATAMAX: " << stats.max;
+    //qCDebug(GWENVIEW_LIB_LOG) << "DATAMIN: " << stats.min << " - DATAMAX: " << stats.max;
     return 0;
 }
 

@@ -21,7 +21,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #ifndef GVDEBUG_H
 #define GVDEBUG_H
 
-#include <QDebug>
+#include "gwenview_lib_debug.h"
 
 /**
  * Uses this macro if you want your code to abort when the GV_FATAL_FAILS
@@ -38,7 +38,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
  *     ...
  *     break;
  * case State3:
- *     qWarning() << "state should not be State3";
+ *     qCWarning(GWENVIEW_LIB_LOG) << "state should not be State3";
  *     GV_FATAL_FAILS;
  *     break;
  * }
@@ -53,7 +53,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #define GV_RETURN_IF_FAIL(cond) \
     do { \
         if (!(cond)) { \
-            qWarning() << "Condition '" << #cond << "' failed"; \
+            qCWarning(GWENVIEW_LIB_LOG) << "Condition '" << #cond << "' failed"; \
             GV_FATAL_FAILS; \
             return; \
         } \
@@ -62,7 +62,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #define GV_RETURN_VALUE_IF_FAIL(cond, value) \
     do { \
         if (!(cond)) { \
-            qWarning() << "Condition '" << #cond << "' failed."; \
+            qCWarning(GWENVIEW_LIB_LOG) << "Condition '" << #cond << "' failed."; \
             GV_FATAL_FAILS; \
             return value; \
         } \
@@ -71,7 +71,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #define GV_RETURN_IF_FAIL2(cond, msg) \
     do { \
         if (!(cond)) { \
-            qWarning() << "Condition '" << #cond << "' failed" << msg; \
+            qCWarning(GWENVIEW_LIB_LOG) << "Condition '" << #cond << "' failed" << msg; \
             GV_FATAL_FAILS; \
             return; \
         } \
@@ -80,7 +80,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #define GV_RETURN_VALUE_IF_FAIL2(cond, value, msg) \
     do { \
         if (!(cond)) { \
-            qWarning() << "Condition '" << #cond << "' failed." << msg; \
+            qCWarning(GWENVIEW_LIB_LOG) << "Condition '" << #cond << "' failed." << msg; \
             GV_FATAL_FAILS; \
             return value; \
         } \
@@ -88,18 +88,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 #define GV_WARN_AND_RETURN(msg) \
     do { \
-        qWarning() << msg; \
+        qCWarning(GWENVIEW_LIB_LOG) << msg; \
         GV_FATAL_FAILS; \
         return; \
     } while (0)
 
 #define GV_WARN_AND_RETURN_VALUE(value, msg) \
     do { \
-        qWarning() << msg; \
+        qCWarning(GWENVIEW_LIB_LOG) << msg; \
         GV_FATAL_FAILS; \
         return value; \
     } while (0)
 
-#define GV_LOG(var) qDebug() << #var << '=' << (var)
+#define GV_LOG(var) qCDebug(GWENVIEW_LIB_LOG) << #var << '=' << (var)
 
 #endif // GVDEBUG_H

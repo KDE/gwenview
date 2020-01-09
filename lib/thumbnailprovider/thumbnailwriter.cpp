@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QImage>
-#include <QDebug>
+#include "gwenview_lib_debug.h"
 #include <QTemporaryFile>
 
 namespace Gwenview
@@ -35,7 +35,7 @@ namespace Gwenview
 #undef LOG
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
-#define LOG(x) //qDebug() << x
+#define LOG(x) //qCDebug(GWENVIEW_LIB_LOG) << x
 #else
 #define LOG(x) ;
 #endif
@@ -45,12 +45,12 @@ static void storeThumbnailToDiskCache(const QString& path, const QImage& image)
     LOG(path);
     QTemporaryFile tmp(path + QStringLiteral(".gwenview.tmpXXXXXX.png"));
     if (!tmp.open()) {
-        qWarning() << "Could not create a temporary file.";
+        qCWarning(GWENVIEW_LIB_LOG) << "Could not create a temporary file.";
         return;
     }
 
     if (!image.save(tmp.fileName(), "png")) {
-        qWarning() << "Could not save thumbnail";
+        qCWarning(GWENVIEW_LIB_LOG) << "Could not save thumbnail";
         return;
     }
 

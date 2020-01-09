@@ -34,7 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QTimer>
 #include <QDrag>
 #include <QMimeData>
-#include <QDebug>
+#include "gwenview_lib_debug.h"
 #include <QDateTime>
 #include <QGestureEvent>
 #include <QScroller>
@@ -65,7 +65,7 @@ namespace Gwenview
 #undef LOG
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
-#define LOG(x) //qDebug() << x
+#define LOG(x) //qCDebug(GWENVIEW_LIB_LOG) << x
 #else
 #define LOG(x) ;
 #endif
@@ -488,7 +488,7 @@ void ThumbnailView::rowsAboutToBeRemoved(const QModelIndex& parent, int start, i
         QModelIndex index = model()->index(pos, 0, parent);
         KFileItem item = fileItemForIndex(index);
         if (item.isNull()) {
-            //qDebug() << "Skipping invalid item!" << index.data().toString();
+            //qCDebug(GWENVIEW_LIB_LOG) << "Skipping invalid item!" << index.data().toString();
             continue;
         }
 
@@ -523,7 +523,7 @@ void ThumbnailView::dataChanged(const QModelIndex& topLeft, const QModelIndex& b
         QModelIndex index = model()->index(row, 0);
         KFileItem item = fileItemForIndex(index);
         if (item.isNull()) {
-            qWarning() << "Invalid item for index" << index << ". This should not happen!";
+            qCWarning(GWENVIEW_LIB_LOG) << "Invalid item for index" << index << ". This should not happen!";
             GV_FATAL_FAILS;
             continue;
         }
@@ -1018,7 +1018,7 @@ void ThumbnailView::reloadThumbnail(const QModelIndex& index)
 {
     QUrl url = urlForIndex(index);
     if (!url.isValid()) {
-        qWarning() << "Invalid url for index" << index;
+        qCWarning(GWENVIEW_LIB_LOG) << "Invalid url for index" << index;
         return;
     }
     ThumbnailProvider::deleteImageThumbnail(url);

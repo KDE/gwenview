@@ -28,7 +28,7 @@ include(ECMGenerateHeaders)
 include(ECMAddAppIcon)
 include(GenerateExportHeader)
 include(FeatureSummary)
-
+include(ECMQtDeclareLoggingCategory)
 ## Generate header with version number
 ecm_setup_version(${KDE_APPLICATIONS_VERSION}
                   VARIABLE_PREFIX GWENVIEW
@@ -194,5 +194,5 @@ add_subdirectory(cursors)
 add_subdirectory(color-schemes)
 add_subdirectory(doc)
 add_subdirectory(kconf_update)
-
+install(FILES gwenview.categories DESTINATION ${KDE_INSTALL_LOGGINGCATEGORIESDIR})
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)

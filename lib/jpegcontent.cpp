@@ -36,7 +36,7 @@ extern "C" {
 #include <QImage>
 #include <QImageWriter>
 #include <QTransform>
-#include <QDebug>
+#include "gwenview_lib_debug.h"
 
 // KDE
 #include <KLocalizedString>
@@ -67,10 +67,10 @@ struct inmem_dest_mgr : public jpeg_destination_mgr
 
     void dump()
     {
-        qDebug() << "dest_mgr:\n";
-        qDebug() << "- next_output_byte: " << next_output_byte;
-        qDebug() << "- free_in_buffer: " << free_in_buffer;
-        qDebug() << "- output size: " << mOutput->size();
+        qCDebug(GWENVIEW_LIB_LOG) << "dest_mgr:\n";
+        qCDebug(GWENVIEW_LIB_LOG) << "- next_output_byte: " << next_output_byte;
+        qCDebug(GWENVIEW_LIB_LOG) << "- free_in_buffer: " << free_in_buffer;
+        qCDebug(GWENVIEW_LIB_LOG) << "- output size: " << mOutput->size();
     }
 };
 
@@ -158,7 +158,7 @@ struct JpegContent::Private
         srcinfo.err = &errorManager;
         jpeg_create_decompress(&srcinfo);
         if (setjmp(errorManager.jmp_buffer)) {
-            qCritical() << "libjpeg fatal error\n";
+            qCCritical(GWENVIEW_LIB_LOG) << "libjpeg fatal error\n";
             return false;
         }
 
@@ -171,7 +171,7 @@ struct JpegContent::Private
         jcopy_markers_setup(&srcinfo, JCOPYOPT_ALL);
         int result = jpeg_read_header(&srcinfo, true);
         if (result != JPEG_HEADER_OK) {
-            qCritical() << "Could not read jpeg header\n";
+            qCCritical(GWENVIEW_LIB_LOG) << "Could not read jpeg header\n";
             jpeg_destroy_decompress(&srcinfo);
             return false;
         }
@@ -221,7 +221,7 @@ bool JpegContent::load(const QString& path)
 
     d->mFile.setFileName(path);
     if (!d->mFile.open(QIODevice::ReadOnly)) {
-        qCritical() << "Could not open '" << path << "' for reading\n";
+        qCCritical(GWENVIEW_LIB_LOG) << "Could not open '" << path << "' for reading\n";
         return false;
     }
 
@@ -229,7 +229,7 @@ bool JpegContent::load(const QString& path)
     uchar* mappedFile = d->mFile.map(0, d->mFile.size(), QFileDevice::MapPrivateOption);
     if (mappedFile == nullptr) {
         // process' mapping limit exceeded, file is sealed or filesystem doesn't support it, etc.
-        qDebug() << "Could not mmap '" << path << "', falling back to QFile::readAll()\n";
+        qCDebug(GWENVIEW_LIB_LOG) << "Could not mmap '" << path << "', falling back to QFile::readAll()\n";
 
         rawData = d->mFile.readAll();
         // all read in, no need to keep it open
@@ -246,7 +246,7 @@ bool JpegContent::loadFromData(const QByteArray& data)
     std::unique_ptr<Exiv2::Image> image;
     Exiv2ImageLoader loader;
     if (!loader.load(data)) {
-        qCritical() << "Could not load image with Exiv2, reported error:" << loader.errorMessage();
+        qCCritical(GWENVIEW_LIB_LOG) << "Could not load image with Exiv2, reported error:" << loader.errorMessage();
     }
     image.reset(loader.popImage().release());
 
@@ -260,7 +260,7 @@ bool JpegContent::loadFromData(const QByteArray& data, Exiv2::Image* exiv2Image)
 
     d->mRawData = data;
     if (d->mRawData.size() == 0) {
-        qCritical() << "No data\n";
+        qCCritical(GWENVIEW_LIB_LOG) << "No data\n";
         return false;
     }
 
@@ -439,7 +439,7 @@ void JpegContent::transform(Orientation orientation)
             }
         }
         if (it == end) {
-            qWarning() << "Could not find matrix for orientation\n";
+            qCWarning(GWENVIEW_LIB_LOG) << "Could not find matrix for orientation\n";
         }
     }
 }
@@ -447,9 +447,9 @@ void JpegContent::transform(Orientation orientation)
 #if 0
 static void dumpMatrix(const QTransform& matrix)
 {
-    qDebug() << "matrix | " << matrix.m11() << ", " << matrix.m12() << " |\n";
-    qDebug() << "       | " << matrix.m21() << ", " << matrix.m22() << " |\n";
-    qDebug() << "       ( " << matrix.dx()  << ", " << matrix.dy()  << " )\n";
+    qCDebug(GWENVIEW_LIB_LOG) << "matrix | " << matrix.m11() << ", " << matrix.m12() << " |\n";
+    qCDebug(GWENVIEW_LIB_LOG) << "       | " << matrix.m21() << ", " << matrix.m22() << " |\n";
+    qCDebug(GWENVIEW_LIB_LOG) << "       ( " << matrix.dx()  << ", " << matrix.dy()  << " )\n";
 }
 #endif
 
@@ -471,14 +471,14 @@ static JXFORM_CODE findJxform(const QTransform& matrix)
             return (*it).jxform;
         }
     }
-    qWarning() << "findJxform: failed\n";
+    qCWarning(GWENVIEW_LIB_LOG) << "findJxform: failed\n";
     return JXFORM_NONE;
 }
 
 void JpegContent::applyPendingTransformation()
 {
     if (d->mRawData.size() == 0) {
-        qCritical() << "No data loaded\n";
+        qCCritical(GWENVIEW_LIB_LOG) << "No data loaded\n";
         return;
     }
 
@@ -495,7 +495,7 @@ void JpegContent::applyPendingTransformation()
     srcinfo.err = &srcErrorManager;
     jpeg_create_decompress(&srcinfo);
     if (setjmp(srcErrorManager.jmp_buffer)) {
-        qCritical() << "libjpeg error in src\n";
+        qCCritical(GWENVIEW_LIB_LOG) << "libjpeg error in src\n";
         return;
     }
 
@@ -504,7 +504,7 @@ void JpegContent::applyPendingTransformation()
     dstinfo.err = &dstErrorManager;
     jpeg_create_compress(&dstinfo);
     if (setjmp(dstErrorManager.jmp_buffer)) {
-        qCritical() << "libjpeg error in dst\n";
+        qCCritical(GWENVIEW_LIB_LOG) << "libjpeg error in dst\n";
         return;
     }
 
@@ -620,7 +620,7 @@ void JpegContent::setThumbnail(const QImage& thumbnail)
     buffer.open(QIODevice::WriteOnly);
     QImageWriter writer(&buffer, "JPEG");
     if (!writer.write(thumbnail)) {
-        qCritical() << "Could not write thumbnail\n";
+        qCCritical(GWENVIEW_LIB_LOG) << "Could not write thumbnail\n";
         return;
     }
 

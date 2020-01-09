@@ -23,7 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QSvgRenderer>
-#include <QDebug>
+#include "gwenview_lib_debug.h"
 
 // KDE
 
@@ -65,7 +65,7 @@ Document::LoadingState SvgDocumentLoadedImpl::loadingState() const
 
 void SvgDocumentLoadedImpl::setImage(const QImage&)
 {
-    qWarning() << "Should not be called";
+    qCWarning(GWENVIEW_LIB_LOG) << "Should not be called";
 }
 
 QByteArray SvgDocumentLoadedImpl::rawData() const

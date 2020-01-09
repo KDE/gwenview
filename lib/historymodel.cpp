@@ -24,7 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QDir>
 #include <QFile>
-#include <QDebug>
+#include "gwenview_lib_debug.h"
 #include <QUrl>
 #include <QMimeDatabase>
 #include <QTemporaryFile>
@@ -59,13 +59,13 @@ struct HistoryItem : public QStandardItem
     static HistoryItem* create(const QUrl &url, const QDateTime& dateTime, const QString& storageDir)
     {
         if (!QDir().mkpath(storageDir)) {
-            qCritical() << "Could not create history dir" << storageDir;
+            qCCritical(GWENVIEW_LIB_LOG) << "Could not create history dir" << storageDir;
             return nullptr;
         }
         QTemporaryFile file(storageDir + QStringLiteral("/gvhistoryXXXXXXrc"));
         file.setAutoRemove(false);
         if (!file.open()) {
-            qCritical() << "Could not create history file";
+            qCCritical(GWENVIEW_LIB_LOG) << "Could not create history file";
             return nullptr;
         }
 
@@ -81,12 +81,12 @@ struct HistoryItem : public QStandardItem
 
         QUrl url(group.readEntry("url"));
         if (!url.isValid()) {
-            qCritical() << "Invalid url" << url;
+            qCCritical(GWENVIEW_LIB_LOG) << "Invalid url" << url;
             return nullptr;
         }
         QDateTime dateTime = QDateTime::fromString(group.readEntry("dateTime"), Qt::ISODate);
         if (!dateTime.isValid()) {
-            qCritical() << "Invalid dateTime" << dateTime;
+            qCCritical(GWENVIEW_LIB_LOG) << "Invalid dateTime" << dateTime;
             return nullptr;
         }
 
@@ -177,7 +177,7 @@ struct HistoryModelPrivate
             QUrl itemUrl = item->url();
             if (UrlUtils::urlIsFastLocalFile(itemUrl)) {
                 if (!QFile::exists(itemUrl.path())) {
-                    qDebug() << "Removing" << itemUrl.path() << "from recent folders. It does not exist anymore";
+                    qCDebug(GWENVIEW_LIB_LOG) << "Removing" << itemUrl.path() << "from recent folders. It does not exist anymore";
                     item->unlink();
                     delete item;
                     continue;
@@ -237,7 +237,7 @@ void HistoryModel::addUrl(const QUrl &url, const QDateTime& _dateTime)
     } else {
         historyItem = HistoryItem::create(url, dateTime, d->mStorageDir);
         if (!historyItem) {
-            qCritical() << "Could not save history for url" << url;
+            qCCritical(GWENVIEW_LIB_LOG) << "Could not save history for url" << url;
             return;
         }
         d->mHistoryItemForUrl.insert(url, historyItem);

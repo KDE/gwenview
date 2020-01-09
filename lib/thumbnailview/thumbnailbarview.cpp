@@ -31,7 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QTimeLine>
 #include <QToolButton>
 #include <QToolTip>
-#include <QDebug>
+#include "gwenview_lib_debug.h"
 
 #ifdef WINDOWS_PROXY_STYLE
 #include <QWindowsStyle>

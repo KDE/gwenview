@@ -31,7 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QPushButton>
 #include <QSpinBox>
 #include <QtMath>
-#include <QDebug>
+#include "gwenview_lib_debug.h"
 #include <QLineEdit>
 
 // KDE

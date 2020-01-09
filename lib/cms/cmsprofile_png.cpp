@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QBuffer>
-#include <QDebug>
+#include "gwenview_lib_debug.h"
 
 // lcms
 #include <lcms2.h>
@@ -69,21 +69,21 @@ cmsHPROFILE loadFromPngData(const QByteArray& data)
     png_infop info_ptr = png_create_info_struct(png_ptr);
     if (!info_ptr) {
         png_destroy_read_struct(&png_ptr, (png_infopp)NULL, (png_infopp)NULL);
-        qWarning() << "Could not create info_struct";
+        qCWarning(GWENVIEW_LIB_LOG) << "Could not create info_struct";
         return 0;
     }
 
     png_infop end_info = png_create_info_struct(png_ptr);
     if (!end_info) {
         png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
-        qWarning() << "Could not create info_struct2";
+        qCWarning(GWENVIEW_LIB_LOG) << "Could not create info_struct2";
         return 0;
     }
 
     // Catch errors
     if (setjmp(png_jmpbuf(png_ptr))) {
         png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
-        qWarning() << "Error decoding png file";
+        qCWarning(GWENVIEW_LIB_LOG) << "Error decoding png file";
         return 0;
     }
 

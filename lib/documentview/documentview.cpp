@@ -36,7 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QPainter>
 #include <QPropertyAnimation>
 #include <QPointer>
-#include <QDebug>
+#include "gwenview_lib_debug.h"
 #include <QIcon>
 #include <QUrl>
 #include <QDrag>
@@ -80,7 +80,7 @@ namespace Gwenview
 #undef LOG
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
-#define LOG(x) //qDebug() << x
+#define LOG(x) //qCDebug(GWENVIEW_LIB_LOG) << x
 #else
 #define LOG(x) ;
 #endif
@@ -524,7 +524,7 @@ void DocumentView::createAdapterForDocument()
         static_cast<MessageViewAdapter*>(adapter)->setErrorMessage(i18n("Gwenview does not know how to display this kind of document"));
         break;
     default:
-        qWarning() << "should not be called for documentKind=" << documentKind;
+        qCWarning(GWENVIEW_LIB_LOG) << "should not be called for documentKind=" << documentKind;
         adapter = new MessageViewAdapter;
         break;
     }

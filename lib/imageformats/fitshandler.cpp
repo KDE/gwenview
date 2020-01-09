@@ -23,7 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 #include "imageformats/fitsformat/fitsdata.h"
 
-#include <QDebug>
+#include "gwenview_lib_debug.h"
 #include <QImage>
 #include <QSize>
 #include <QVariant>

@@ -35,7 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QPainter>
 #include <QTimer>
 #include <QPointer>
-#include <QDebug>
+#include "gwenview_lib_debug.h"
 #include <QApplication>
 
 
@@ -85,7 +85,7 @@ struct RasterImageViewPrivate
         }
         Cms::Profile::Ptr monitorProfile = Cms::Profile::getMonitorProfile();
         if (!monitorProfile) {
-            qWarning() << "Could not get monitor color profile";
+            qCWarning(GWENVIEW_LIB_LOG) << "Could not get monitor color profile";
             return;
         }
 
@@ -99,7 +99,7 @@ struct RasterImageViewPrivate
             cmsFormat = TYPE_GRAY_8;
             break;
         default:
-            qWarning() << "Gwenview can only apply color profile on RGB32 or ARGB32 images";
+            qCWarning(GWENVIEW_LIB_LOG) << "Gwenview can only apply color profile on RGB32 or ARGB32 images";
             return;
         }
 

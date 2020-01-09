@@ -27,7 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QFile>
 #include <QDateTime>
-#include <QDebug>
+#include "gwenview_lib_debug.h"
 
 // KDE
 #include <KFileItem>
@@ -102,7 +102,7 @@ struct CacheItem
             }
             Exiv2::ExifData::const_iterator it = findDateTimeKey(exifData);
             if (it == exifData.end()) {
-                qWarning() << "No date in exif header of" << path;
+                qCWarning(GWENVIEW_LIB_LOG) << "No date in exif header of" << path;
                 return false;
             }
 
@@ -112,14 +112,14 @@ struct CacheItem
 
             QDateTime dt = QDateTime::fromString(value, QStringLiteral("yyyy:MM:dd hh:mm:ss"));
             if (!dt.isValid()) {
-                qWarning() << "Invalid date in exif header of" << path;
+                qCWarning(GWENVIEW_LIB_LOG) << "Invalid date in exif header of" << path;
                 return false;
             }
 
             realTime = dt;
             return true;
         } catch (const Exiv2::Error& error) {
-            qWarning() << "Failed to read date from exif header of" << path << ". Error:" << error.what();
+            qCWarning(GWENVIEW_LIB_LOG) << "Failed to read date from exif header of" << path << ". Error:" << error.what();
             return false;
         }
     }

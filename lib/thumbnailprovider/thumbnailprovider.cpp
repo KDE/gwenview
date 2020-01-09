@@ -33,7 +33,7 @@
 #include <QImage>
 #include <QPixmap>
 #include <QCryptographicHash>
-#include <QDebug>
+#include "gwenview_lib_debug.h"
 #include <QTemporaryFile>
 #include <QApplication>
 #include <QStandardPaths>
@@ -56,7 +56,7 @@ namespace Gwenview
 #undef LOG
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
-#define LOG(x) qDebug() << x
+#define LOG(x) qCDebug(GWENVIEW_LIB_LOG) << x
 #else
 #define LOG(x) ;
 #endif
@@ -483,7 +483,7 @@ void ThumbnailProvider::checkThumbnail()
             QTemporaryFile tempFile;
             tempFile.setAutoRemove(false);
             if (!tempFile.open()) {
-                qWarning() << "Couldn't create temp file to download " << mCurrentUrl.toDisplayString();
+                qCWarning(GWENVIEW_LIB_LOG) << "Couldn't create temp file to download " << mCurrentUrl.toDisplayString();
                 emitThumbnailLoadingFailed();
                 determineNextIcon();
                 return;

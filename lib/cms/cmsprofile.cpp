@@ -36,7 +36,7 @@ extern "C" {
 
 // Qt
 #include <QBuffer>
-#include <QDebug>
+#include "gwenview_lib_debug.h"
 #include <QtGlobal>
 
 // lcms
@@ -60,7 +60,7 @@ namespace Gwenview
 #undef LOG
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
-#define LOG(x) //qDebug() << x
+#define LOG(x) //qCDebug(GWENVIEW_LIB_LOG) << x
 #else
 #define LOG(x) ;
 #endif
@@ -78,7 +78,7 @@ static cmsHPROFILE loadFromJpegData(const QByteArray& data)
     srcinfo.err = &srcErrorManager;
     jpeg_create_decompress(&srcinfo);
     if (setjmp(srcErrorManager.jmp_buffer)) {
-        qCritical() << "libjpeg error in src\n";
+        qCCritical(GWENVIEW_LIB_LOG) << "libjpeg error in src\n";
         return nullptr;
     }
 

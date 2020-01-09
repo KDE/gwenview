@@ -27,7 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QPainter>
 #include <QPushButton>
 #include <QRect>
-#include <QDebug>
+#include "gwenview_lib_debug.h"
 
 // KDE
 
@@ -219,7 +219,7 @@ void RedEyeReductionTool::slotApplyClicked()
 {
     QRectF docRectF = d->rectF();
     if (!docRectF.isValid()) {
-        qWarning() << "invalid rect";
+        qCWarning(GWENVIEW_LIB_LOG) << "invalid rect";
         return;
     }
     RedEyeReductionImageOperation* op = new RedEyeReductionImageOperation(docRectF);

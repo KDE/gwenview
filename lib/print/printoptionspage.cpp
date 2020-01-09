@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QButtonGroup>
 #include <QGridLayout>
 #include <QToolButton>
-#include <QDebug>
+#include "gwenview_lib_debug.h"
 
 // KDE
 #include <KConfigDialogManager>
@@ -140,7 +140,7 @@ PrintOptionsPage::~PrintOptionsPage()
 Qt::Alignment PrintOptionsPage::alignment() const
 {
     int id = d->mPositionGroup.checkedId();
-    qWarning() << "alignment=" << id;
+    qCWarning(GWENVIEW_LIB_LOG) << "alignment=" << id;
     return Qt::Alignment(id);
 }
 
@@ -199,14 +199,14 @@ void PrintOptionsPage::loadConfig()
     if (button) {
         button->setChecked(true);
     } else {
-        qWarning() << "Unknown button for position group";
+        qCWarning(GWENVIEW_LIB_LOG) << "Unknown button for position group";
     }
 
     button = d->mScaleGroup.button(GwenviewConfig::printScaleMode());
     if (button) {
         button->setChecked(true);
     } else {
-        qWarning() << "Unknown button for scale group";
+        qCWarning(GWENVIEW_LIB_LOG) << "Unknown button for scale group";
     }
 
     d->mConfigDialogManager->updateWidgets();

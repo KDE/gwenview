@@ -22,7 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "videodocumentloadedimpl.h"
 
 // Qt
-#include <QDebug>
+#include "gwenview_lib_debug.h"
 
 // KDE
 
@@ -58,7 +58,7 @@ Document::LoadingState VideoDocumentLoadedImpl::loadingState() const
 
 void VideoDocumentLoadedImpl::setImage(const QImage&)
 {
-    qWarning() << "Should not be called";
+    qCWarning(GWENVIEW_LIB_LOG) << "Should not be called";
 }
 
 } // namespace

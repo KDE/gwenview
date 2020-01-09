@@ -24,7 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // Qt
 #include <QSize>
-#include <QDebug>
+#include "gwenview_lib_debug.h"
 #include <QLocale>
 
 // KDE
@@ -215,7 +215,7 @@ struct ImageMetaInfoModelPrivate
         MetaInfoGroup* group = mMetaInfoGroupVector[groupRow];
         int entryRow = group->getRowForKey(key);
         if (entryRow == MetaInfoGroup::InvalidRow) {
-            qWarning() << "No row for key" << key;
+            qCWarning(GWENVIEW_LIB_LOG) << "No row for key" << key;
             return;
         }
         group->setValueForKeyAt(entryRow, value);
@@ -289,7 +289,7 @@ struct ImageMetaInfoModelPrivate
                     hash.insert(key, new MetaInfoGroup::Entry(key, label, value));
                 }
             } catch (const Exiv2::Error& error) {
-                qWarning() << "Failed to read some meta info:" << error.what();
+                qCWarning(GWENVIEW_LIB_LOG) << "Failed to read some meta info:" << error.what();
             }
         }
 
@@ -469,7 +469,7 @@ void ImageMetaInfoModel::getInfoForKey(const QString& key, QString* label, QStri
     } else if (key.startsWith(QLatin1String("Xmp"))) {
         group = d->mMetaInfoGroupVector[XmpGroup];
     } else {
-        qWarning() << "Unknown metainfo key" << key;
+        qCWarning(GWENVIEW_LIB_LOG) << "Unknown metainfo key" << key;
         return;
     }
     group->getInfoForKey(key, label, value);
@@ -566,7 +566,7 @@ QVariant ImageMetaInfoModel::headerData(int section, Qt::Orientation orientation
     } else if (section == 1) {
         caption = i18nc("@title:column", "Value");
     } else {
-        qWarning() << "Unknown section" << section;
+        qCWarning(GWENVIEW_LIB_LOG) << "Unknown section" << section;
     }
 
     return QVariant(caption);

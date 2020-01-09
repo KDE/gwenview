@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QBuffer>
 #include <QImage>
 #include <QMovie>
-#include <QDebug>
+#include "gwenview_lib_debug.h"
 
 // KDE
 
@@ -98,8 +98,8 @@ void AnimatedDocumentLoadedImpl::startAnimation()
     d->mMovie.start();
     if (d->mMovie.state() == QMovie::NotRunning) {
         // This is true with qt-copy as of 2008.08.23
-        //qDebug() << "QMovie didn't start. This can happen in some cases when starting for the second time.";
-        //qDebug() << "Trying to start again, it usually fixes the bug.";
+        //qCDebug(GWENVIEW_LIB_LOG) << "QMovie didn't start. This can happen in some cases when starting for the second time.";
+        //qCDebug(GWENVIEW_LIB_LOG) << "Trying to start again, it usually fixes the bug.";
         d->mMovie.start();
     }
 }

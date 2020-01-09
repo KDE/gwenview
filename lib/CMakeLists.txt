@@ -180,6 +180,8 @@ set(gwenviewlib_SRCS
     ${GV_JPEG_DIR}/transupp.c
     )
 
+ecm_qt_declare_logging_category(gwenviewlib_SRCS HEADER gwenview_lib_debug.h IDENTIFIER GWENVIEW_LIB_LOG CATEGORY_NAME org.kde.kdegraphics.gwenview.lib)
+
 if(HAVE_QTDBUS)
     set(gwenviewlib_SRCS
         ${gwenviewlib_SRCS}

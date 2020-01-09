@@ -33,7 +33,8 @@ set(gwenview_SRCS
     thumbnailviewhelper.cpp
     browsemainpage.cpp
     )
-
+# need by GV_RETURN_VALUE_IF_FAIL
+ecm_qt_declare_logging_category(gwenview_SRCS HEADER gwenview_lib_debug.h IDENTIFIER GWENVIEW_LIB_LOG CATEGORY_NAME org.kde.kdegraphics.gwenview.lib)
 if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
     set (gwenview_SRCS
         ${gwenview_SRCS}

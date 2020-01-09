@@ -27,7 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Qt
 #include <QImage>
 #include <QPainter>
-#include <QDebug>
+#include "gwenview_lib_debug.h"
 
 // KDE
 #include <KLocalizedString>
@@ -93,7 +93,7 @@ void RedEyeReductionImageOperation::redo()
 void RedEyeReductionImageOperation::undo()
 {
     if (!document()->editor()) {
-        qWarning() << "!document->editor()";
+        qCWarning(GWENVIEW_LIB_LOG) << "!document->editor()";
         return;
     }
     QImage img = document()->image();

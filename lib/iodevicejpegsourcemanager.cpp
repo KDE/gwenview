@@ -23,7 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QIODevice>
-#include <QDebug>
+#include "gwenview_lib_debug.h"
 
 // KDE
 
@@ -62,7 +62,7 @@ static boolean fill_input_buffer(j_decompress_ptr cinfo)
          * in the libjpeg documentation.
          */
         static JOCTET fakeEOI[2] = { JOCTET(0xFF), JOCTET(JPEG_EOI)};
-        qWarning() << "Image is incomplete";
+        qCWarning(GWENVIEW_LIB_LOG) << "Image is incomplete";
         cinfo->src->next_input_byte = fakeEOI;
         cinfo->src->bytes_in_buffer = 2;
     }

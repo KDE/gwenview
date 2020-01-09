@@ -33,7 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QStyle>
 #include <QStyleOptionGraphicsItem>
 #include <QTimer>
-#include <QDebug>
+#include "gwenview_lib_debug.h"
 
 namespace Gwenview
 {
@@ -365,7 +365,7 @@ void HudSlider::doRepeatAction(int time)
     case QAbstractSlider::SliderToMinimum:
     case QAbstractSlider::SliderToMaximum:
     case QAbstractSlider::SliderMove:
-        qWarning() << "Not much point in repeating action of type" << d->mRepeatAction;
+        qCWarning(GWENVIEW_LIB_LOG) << "Not much point in repeating action of type" << d->mRepeatAction;
         return;
     case QAbstractSlider::SliderNoAction:
         return;

@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QTouchEvent>
 #include <QGraphicsWidget>
 #include <QCoreApplication>
-#include <QDebug>
+#include "gwenview_lib_debug.h"
 
 
 namespace Gwenview

@@ -34,7 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QGraphicsScene>
 #include <QPropertyAnimation>
 #include <QTimer>
-#include <QDebug>
+#include "gwenview_lib_debug.h"
 #include <QtMath>
 
 namespace Gwenview
@@ -92,7 +92,7 @@ DocumentViewContainer::DocumentViewContainer(QWidget* parent)
         if (glWidget->isValid()) {
             setViewport(glWidget);
         } else {
-            qWarning() << "Failed to initialize OpenGL support!";
+            qCWarning(GWENVIEW_LIB_LOG) << "Failed to initialize OpenGL support!";
             delete glWidget;
         }
     }
