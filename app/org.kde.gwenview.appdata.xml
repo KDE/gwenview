@@ -96,6 +96,7 @@
     <p xml:lang="fi">Gwenview on KDE:n nopea ja helppokäyttöinen kuvakatselin, joka on ihanteellinen kuvakokoelmien selaukseen ja esittämiseen.</p>
     <p xml:lang="fr">Gwenview est un afficheur d'images rapide et facile à utiliser pour KDE, idéal pour parcourir et afficher une collection d'images.</p>
     <p xml:lang="gl">Gwenview é un visor de imaxes por KDE rápido e doado de utilizar, ideal para examinar e mostrar unha colección de imaxes.</p>
+    <p xml:lang="ia">Gwenview es un visor  de imagine rapide e de facile usage per KDE, ideal per explorar e monstrar un collection de images.</p>
     <p xml:lang="id">Gwenview adalah cepat dan mudah untuk penggunaan penampil citra oleh KDE, sangat baik untuk menelusuri dan menampilkan citra dari sebuah koleksi.</p>
     <p xml:lang="it">Gwenview è un visore di immagini veloce e semplice da usare di KDE, ideale per sfogliare e visualizzare una collezione di immagini.</p>
     <p xml:lang="ko">Gwenview는 KDE의 빠르고 사용하기 편한 그림 뷰어입니다.</p>
@@ -174,6 +175,7 @@
       <li xml:lang="fr">Prise en charge des manipulations d'image simples : rotation, miroir, basculer, et redimensionner</li>
       <li xml:lang="gl">Permite manipulacións sinxelas de imaxes de maneira individual: rotar, reflectir, inverter e cambiar o tamaño.</li>
       <li xml:lang="hu">Egyszerű képműveletek támogatása: forgatás, tükrözés, átméretezés</li>
+      <li xml:lang="ia">Il support simple manipulationes de image: rotar, reflecter, reverter o volver, e redimensionar</li>
       <li xml:lang="id">Mendukung manipulasi citra sederhana: rotasi, cermin, jungkir, dan ubah ukuran</li>
       <li xml:lang="it">Supporta semplici operazioni di manipolazione di immagini: ruota, rispecchia, rifletti e ridimensioni</li>
       <li xml:lang="ko">간단한 그림 조작: 회전, 대칭, 반전, 크기 조정</li>
@@ -213,6 +215,7 @@
       <li xml:lang="fr">Prise en charge d'actions basiques de gestion de fichiers comme copier, déplacer, supprimer, et autres</li>
       <li xml:lang="gl">Permite realizar accións básicas de xestión de ficheiros como copiar, mover, eliminar, etc.</li>
       <li xml:lang="hu">Egyszerű fájlművelet, mint például másolás, áthelyezés, törlés támogatása</li>
+      <li xml:lang="ia">Il supporta actiones basic de gestion de files tal como copiar, mover, deler, e alteres</li>
       <li xml:lang="id">Mendukung aksi pengelolaan file dasar seperti salin, pindah, hapus, dan lainnya</li>
       <li xml:lang="it">Supporta semplici azioni di gestione file come copia, spostamento, eliminazione ed altre</li>
       <li xml:lang="ko">파일 복사, 이동, 삭제와 같은 기본 파일 관리 작업</li>
@@ -252,6 +255,7 @@
       <li xml:lang="fr">Fonctionne à la fois comme application autonome et comme afficheur embarqué dans le navigateur web Konqueror</li>
       <li xml:lang="gl">Pode usarse como unha aplicación autónoma e tamén como un visor incrustado no navegador web Konqueror.</li>
       <li xml:lang="hu">Önálló alkalmazásként és a Konqueror webböngészőbe épített képmegjelenítőként is működik</li>
+      <li xml:lang="ia">Il functiona sia como application autonome e un visor incorporate in le navigator web Konqueror</li>
       <li xml:lang="id">Fungsi sebagai aplikasi mandiri dan penampil tertanam dalam browser web Konqueror</li>
       <li xml:lang="it">Funziona sia come applicazione indipendente che come visore integrabile nel browser web Konqueror</li>
       <li xml:lang="ko">단독 프로그램 및 Konqueror 웹 브라우저의 플러그인으로 작동</li>
@@ -290,6 +294,7 @@
       <li xml:lang="fr">Peut être étendu en utilisant des modules KIPI.</li>
       <li xml:lang="gl">Poden ampliarse as súas funcionalidades mediante complementos KIPI.</li>
       <li xml:lang="hu">KIPI bővítményekkel bővíthető.</li>
+      <li xml:lang="ia">Pote essere extendite usante plugins de KIPI.</li>
       <li xml:lang="id">Dapat diekstensi menggunakan plugin KIPI.</li>
       <li xml:lang="it">Può essere esteso tramite estensioni Kipi.</li>
       <li xml:lang="ko">KIPI 플러그인을 통한 확장성 제공.</li>
@@ -379,6 +384,7 @@
       <caption xml:lang="fi">Gwenview näyttämässä kuvaa, sivupaneelissa näkyvät metatiedot</caption>
       <caption xml:lang="fr">Gwenview en train d'afficher une image, avec des métadonnées supplémentaires dans le panneau latéral.</caption>
       <caption xml:lang="gl">Gwenview mostrando unha imaxe, con metadatos adicionais mostrador na barra lateral.</caption>
+      <caption xml:lang="ia">Gwenview monstrante un image, con metadatos additional monstrate in le barra lateral</caption>
       <caption xml:lang="id">Gwenview mendisplai sebuah citra, dengan metadata tambahan yang ditampilkan di dalam bilah sisi</caption>
       <caption xml:lang="it">Gwenview mentre visualizza un'immagine, con ulteriori metadati mostrati nella barra laterale</caption>
       <caption xml:lang="ko">사진을 표시하는 Gwenview, 사이드바에 추가 메타데이터 표시</caption>
