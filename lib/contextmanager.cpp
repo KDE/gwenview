@@ -195,7 +195,7 @@ void ContextManager::setCurrentDirUrl(const QUrl &_url)
         d->mCurrentDirUrl.clear();
         emit d->mDirModel->dirLister()->clear();
     }
-    emit currentDirUrlChanged(url);
+    emit currentDirUrlChanged(d->mCurrentDirUrl);
 }
 
 QUrl ContextManager::currentDirUrl() const
