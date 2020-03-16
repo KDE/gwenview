@@ -219,6 +219,7 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, QL
     connect(QApplication::clipboard(), &QClipboard::dataChanged,
             this, &FileOpsContextManagerItem::updatePasteAction);
 
+    updatePasteAction();
     // Delay action update because it must happen *after* main window has called
     // createGUI(), otherwise calling mXMLGUIClient->plugActionList() will
     // fail.
@@ -259,7 +260,6 @@ void FileOpsContextManagerItem::updateActions()
     mXMLGUIClient->plugActionList("file_action_list", list);
 
     updateSideBarContent();
-    updatePasteAction();
 }
 
 void FileOpsContextManagerItem::updatePasteAction()
