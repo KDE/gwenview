@@ -439,8 +439,7 @@ struct MainWindow::Private
 
         QAction * leaveFullScreenAction = view->addAction("leave_fullscreen", q, SLOT(leaveFullScreen()));
         leaveFullScreenAction->setIcon(QIcon::fromTheme("view-restore"));
-        leaveFullScreenAction->setPriority(QAction::LowPriority);
-        leaveFullScreenAction->setText(i18nc("@action", "Leave Fullscreen Mode"));
+        leaveFullScreenAction->setText(i18nc("@action", "Exit Full Screen"));
 
         mGoToPreviousAction = view->addAction("go_previous", q, SLOT(goToPrevious()));
         mGoToPreviousAction->setPriority(QAction::LowPriority);
