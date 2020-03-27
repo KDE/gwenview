@@ -119,7 +119,7 @@ struct PreviewItemDelegatePrivate
     mutable ShadowCache mShadowCache;
 
     PreviewItemDelegate* q;
-    ThumbnailView* mView;
+    QPointer<ThumbnailView> mView;
     QWidget* mContextBar;
     QToolButton* mSaveButton;
     QPixmap mSaveButtonPixmap;
@@ -663,6 +663,10 @@ QSize PreviewItemDelegate::sizeHint(const QStyleOptionViewItem & /*option*/, con
 
 bool PreviewItemDelegate::eventFilter(QObject* object, QEvent* event)
 {
+    if (event->type() == QEvent::Destroy || event->type() == QEvent::ChildRemoved || !d->mView) {
+        return QItemDelegate::eventFilter(object, event);
+    }
+
     if (object == d->mView->viewport()) {
         switch (event->type()) {
         case QEvent::ToolTip:
