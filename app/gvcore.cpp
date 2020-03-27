@@ -70,7 +70,7 @@ struct GvCorePrivate
     RecentFilesModel* mRecentFilesModel;
     QPalette mPalettes[4];
     QString mFullScreenPaletteName;
-    int configFileJPEGQualityValue;
+    int configFileJPEGQualityValue = GwenviewConfig::jPEGQuality();
 
     bool showSaveAsDialog(const QUrl &url, QUrl* outUrl, QByteArray* format)
     {
