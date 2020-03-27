@@ -228,7 +228,7 @@
       <li xml:lang="pt-BR">Suporta a ações básicas de gerenciamento de arquivos, como cópia, movimentação, exclusão, entre outras</li>
       <li xml:lang="ru">Поддержка базовых действий с файлами: копирование, перемещение, удаление и другие</li>
       <li xml:lang="sk">Podporuje základné akcie správy súborov ako kopírovanie, presúvanie, mazanie a iné</li>
-      <li xml:lang="sl">Podpira osnovne ukaze za delo z datotekami: kopiranje, premikanje, brisanje, itd.</li>
+      <li xml:lang="sl">Podpira osnovne ukaze za delo z datotekami: kopiranje, premikanje, brisanje in drugo</li>
       <li xml:lang="sr">Основне радње управљања фајловима, попут копирања, премештања, брисања, итд.</li>
       <li xml:lang="sr-Latn">Osnovne radnje upravljanja fajlovima, poput kopiranja, premeštanja, brisanja, itd.</li>
       <li xml:lang="sr-ijekavian">Основне радње управљања фајловима, попут копирања, премештања, брисања, итд.</li>
@@ -392,6 +392,7 @@
       <caption xml:lang="pt-BR">O Gwenview exibindo uma imagem com os metadados adicionais visíveis na barra lateral</caption>
       <caption xml:lang="ru">Просмотр изображения и дополнительных метаданных, показанных на боковой панели в Gwenview</caption>
       <caption xml:lang="sk">Gwenview zobrazujúci obrázok, s ďalšími údajmi zobrazenými na bočnom paneli</caption>
+      <caption xml:lang="sl">Gwenview prikazuje sliko z dodatnimi metapodatki, prikazanimi v stranski vrstici</caption>
       <caption xml:lang="sv">Gwenview som visar en bild, med ytterligare metadata visad i sidoraden</caption>
       <caption xml:lang="uk">Gwenview із відкритим зображенням та додатковими метаданими, які показано на бічній панелі</caption>
       <caption xml:lang="x-test">xxGwenview displaying an image, with additional metadata shown in the sidebarxx</caption>
