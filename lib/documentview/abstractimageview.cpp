@@ -60,7 +60,7 @@ struct AbstractImageViewPrivate
     QPointF mLastDragPos;
     QSizeF mDocumentSize;
 
-    const QPixmap mAlphaBackgroundTexture = createAlphaBackgroundTexture();
+    const QPixmap mAlphaBackgroundTexture;
 
     void adjustImageOffset(Verbosity verbosity = Notify)
     {
@@ -128,6 +128,11 @@ struct AbstractImageViewPrivate
         return pix;
     }
 
+    AbstractImageViewPrivate(AbstractImageView *parent) :
+        q(parent),
+        mAlphaBackgroundTexture(createAlphaBackgroundTexture())
+    { }
+
     void checkAndRequestZoomAction(const QGraphicsSceneMouseEvent* event)
     {
         if (event->modifiers() & Qt::ControlModifier) {
@@ -142,9 +147,8 @@ struct AbstractImageViewPrivate
 
 AbstractImageView::AbstractImageView(QGraphicsItem* parent)
 : QGraphicsWidget(parent)
-, d(new AbstractImageViewPrivate)
+, d(new AbstractImageViewPrivate(this))
 {
-    d->q = this;
     d->mControlKeyIsDown = false;
     d->mEnlargeSmallerImages = false;
     d->mZoom = 1;
