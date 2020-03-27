@@ -51,6 +51,10 @@ class ThumbnailGenerator : public QThread
 public:
     ThumbnailGenerator();
 
+    // Because we override run(), like you're not really supposed to do, we
+    // can't trust isRunning()
+    bool isStopped();
+
     void load(
         const QString& originalUri,
         time_t originalTime,
@@ -89,6 +93,7 @@ private:
     QWaitCondition mCond;
     ThumbnailGroup::Enum mThumbnailGroup;
     bool mCancel;
+    bool mStopped = false;
 };
 
 } // namespace

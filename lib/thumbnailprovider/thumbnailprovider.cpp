@@ -175,11 +175,10 @@ ThumbnailProvider::ThumbnailProvider()
 ThumbnailProvider::~ThumbnailProvider()
 {
     LOG(this);
-    abortSubjob();
-    mThumbnailGenerator->cancel();
     disconnect(mThumbnailGenerator, nullptr, this, nullptr);
     disconnect(mThumbnailGenerator, nullptr, sThumbnailWriter, nullptr);
-    connect(mThumbnailGenerator, SIGNAL(finished()), mThumbnailGenerator, SLOT(deleteLater()));
+    abortSubjob();
+    mThumbnailGenerator->cancel();
     if (mPreviousThumbnailGenerator) {
         disconnect(mPreviousThumbnailGenerator, nullptr, sThumbnailWriter, nullptr);
     }
@@ -193,7 +192,7 @@ void ThumbnailProvider::stop()
     // startCreatingThumbnail() will take care that these two threads won't work on the same item.
     mItems.clear();
     abortSubjob();
-    if (mThumbnailGenerator->isRunning() && !mPreviousThumbnailGenerator) {
+    if (!mThumbnailGenerator->isStopped() && !mPreviousThumbnailGenerator) {
         mPreviousThumbnailGenerator = mThumbnailGenerator;
         mPreviousThumbnailGenerator->cancel();
         disconnect(mPreviousThumbnailGenerator, nullptr, this, nullptr);
@@ -524,7 +523,7 @@ void ThumbnailProvider::startCreatingThumbnail(const QString& pixPath)
     // connect mPreviousThumbnailGenerator's signal "finished" to determineNextIcon
     // which will load the thumbnail from sThumbnailWriter or from disk
     // (because we re-add mCurrentItem to mItems).
-    if (mPreviousThumbnailGenerator && mPreviousThumbnailGenerator->isRunning() &&
+    if (mPreviousThumbnailGenerator && !mPreviousThumbnailGenerator->isStopped() &&
         mOriginalUri == mPreviousThumbnailGenerator->originalUri() &&
         mOriginalTime == mPreviousThumbnailGenerator->originalTime() &&
         mOriginalFileSize == mPreviousThumbnailGenerator->originalFileSize() &&

@@ -36,6 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QImageReader>
 #include <QTransform>
 #include <QBuffer>
+#include <QCoreApplication>
 
 namespace Gwenview
 {
@@ -178,7 +179,12 @@ bool ThumbnailContext::load(const QString &pixPath, int pixelSize)
 //------------------------------------------------------------------------
 ThumbnailGenerator::ThumbnailGenerator()
 : mCancel(false)
-{}
+{
+    connect(qApp, &QCoreApplication::aboutToQuit, this, [=]() {
+        wait();
+    }, Qt::DirectConnection);
+    start();
+}
 
 void ThumbnailGenerator::load(
     const QString& originalUri, time_t originalTime, KIO::filesize_t originalFileSize, const QString& originalMimeType,
@@ -196,13 +202,18 @@ void ThumbnailGenerator::load(
     mPixPath = pixPath;
     mThumbnailPath = thumbnailPath;
     mThumbnailGroup = group;
-    if (!isRunning()) start();
     mCond.wakeOne();
 }
 
 QString ThumbnailGenerator::originalUri() const
 {
     return mOriginalUri;
+}
+
+bool ThumbnailGenerator::isStopped()
+{
+    QMutexLocker lock(&mMutex);
+    return mStopped;
 }
 
 time_t ThumbnailGenerator::originalTime() const
@@ -235,21 +246,18 @@ void ThumbnailGenerator::cancel()
 
 void ThumbnailGenerator::run()
 {
-    LOG("");
     while (!testCancel()) {
         QString pixPath;
         int pixelSize;
         {
             QMutexLocker lock(&mMutex);
             // empty mPixPath means nothing to do
-            LOG("Waiting for mPixPath");
             if (mPixPath.isNull()) {
-                LOG("mPixPath.isNull");
                 mCond.wait(&mMutex);
             }
         }
         if (testCancel()) {
-            return;
+            break;
         }
         {
             QMutexLocker lock(&mMutex);
@@ -279,7 +287,7 @@ void ThumbnailGenerator::run()
             mPixPath.clear(); // done, ready for next
         }
         if (testCancel()) {
-            return;
+            break;
         }
         {
             QSize size(mOriginalWidth, mOriginalHeight);
@@ -289,7 +297,12 @@ void ThumbnailGenerator::run()
             LOG("Done");
         }
     }
+
     LOG("Ending thread");
+
+    QMutexLocker lock(&mMutex);
+    mStopped = true;
+    deleteLater();
 }
 
 void ThumbnailGenerator::cacheThumbnail()
