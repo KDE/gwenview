@@ -117,6 +117,11 @@ public:
         policy.setHeightForWidth(true);
         setSizePolicy(policy);
     }
+    ~KeyValueWidget()
+    {
+        qDeleteAll(mRows);
+        mRows.clear();
+    }
 
     QSize sizeHint() const override
     {
