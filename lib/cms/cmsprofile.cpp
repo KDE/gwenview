@@ -98,6 +98,7 @@ static cmsHPROFILE loadFromJpegData(const QByteArray& data)
     }
 
     jpeg_destroy_decompress(&srcinfo);
+    free(profile_data);
 
     return profile;
 }
