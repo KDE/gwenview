@@ -927,12 +927,6 @@ MainWindow::MainWindow()
 
 MainWindow::~MainWindow()
 {
-    if (GwenviewConfig::lowResourceUsageMode()) {
-        QDir dir(ThumbnailProvider::thumbnailBaseDir());
-        if (dir.exists()) {
-            dir.removeRecursively();
-        }
-    }
     delete d->mThumbnailProvider;
     delete d;
 }

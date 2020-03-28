@@ -22,10 +22,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "thumbnailwriter.h"
 
 // Local
+#include "gwenview_lib_debug.h"
+#include "gwenviewconfig.h"
 
 // Qt
 #include <QImage>
-#include "gwenview_lib_debug.h"
 #include <QTemporaryFile>
 
 namespace Gwenview
@@ -42,6 +43,10 @@ namespace Gwenview
 
 static void storeThumbnailToDiskCache(const QString& path, const QImage& image)
 {
+    if (GwenviewConfig::lowResourceUsageMode()) {
+        return;
+    }
+
     LOG(path);
     QTemporaryFile tmp(path + QStringLiteral(".gwenview.tmpXXXXXX.png"));
     if (!tmp.open()) {
@@ -59,6 +64,10 @@ static void storeThumbnailToDiskCache(const QString& path, const QImage& image)
 
 void ThumbnailWriter::queueThumbnail(const QString& path, const QImage& image)
 {
+    if (GwenviewConfig::lowResourceUsageMode()) {
+        return;
+    }
+
     LOG(path);
     QMutexLocker locker(&mMutex);
     mCache.insert(path, image);
