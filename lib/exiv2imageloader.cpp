@@ -32,6 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <exiv2/exiv2.hpp>
 
 // Local
+#include "gwenview_exiv2_debug.h"
 
 namespace Gwenview
 {
@@ -42,9 +43,37 @@ struct Exiv2ImageLoaderPrivate
     QString mErrorMessage;
 };
 
+struct Exiv2LogHandler {
+    static void handleMessage(int level, const char *message) {
+        switch(level) {
+        case Exiv2::LogMsg::debug:
+            qCDebug(GWENVIEW_EXIV2_LOG) << message;
+            break;
+        case Exiv2::LogMsg::info:
+            qCInfo(GWENVIEW_EXIV2_LOG) << message;
+            break;
+        case Exiv2::LogMsg::warn:
+        case Exiv2::LogMsg::error:
+        case Exiv2::LogMsg::mute:
+            qCWarning(GWENVIEW_EXIV2_LOG) << message;
+            break;
+        default:
+            qCWarning(GWENVIEW_EXIV2_LOG) << "unhandled log level" << level << message;
+            break;
+        }
+    }
+
+    Exiv2LogHandler() {
+        Exiv2::LogMsg::setHandler(&Exiv2LogHandler::handleMessage);
+    }
+};
+
+
 Exiv2ImageLoader::Exiv2ImageLoader()
 : d(new Exiv2ImageLoaderPrivate)
 {
+    // This is a threadsafe way to ensure that we only register it once
+    static Exiv2LogHandler handler;
 }
 
 Exiv2ImageLoader::~Exiv2ImageLoader()

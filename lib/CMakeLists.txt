@@ -181,6 +181,7 @@ set(gwenviewlib_SRCS
     )
 
 ecm_qt_declare_logging_category(gwenviewlib_SRCS HEADER gwenview_lib_debug.h IDENTIFIER GWENVIEW_LIB_LOG CATEGORY_NAME org.kde.kdegraphics.gwenview.lib)
+ecm_qt_declare_logging_category(gwenviewlib_SRCS HEADER gwenview_exiv2_debug.h IDENTIFIER GWENVIEW_EXIV2_LOG CATEGORY_NAME org.kde.kdegraphics.gwenview.exiv2 DEFAULT_SEVERITY Critical)
 
 if(HAVE_QTDBUS)
     set(gwenviewlib_SRCS
