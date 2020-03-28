@@ -68,7 +68,7 @@ void ThumbnailWriter::queueThumbnail(const QString& path, const QImage& image)
 void ThumbnailWriter::run()
 {
     QMutexLocker locker(&mMutex);
-    while (!mCache.isEmpty()) {
+    while (!mCache.isEmpty() && !isInterruptionRequested()) {
         Cache::ConstIterator it = mCache.constBegin();
         const QString path = it.key();
         const QImage image = it.value();
