@@ -409,11 +409,7 @@ CropWidget::CropWidget(QWidget* parent, RasterImageView* imageView, CropTool* cr
     // Index Changed: required so that choosing an item with the same text is detected (e.g. going from US Letter portrait
     // to US Letter landscape)
     connect(d->ratioComboBox, &QComboBox::editTextChanged, this, &CropWidget::slotRatioComboBoxChanged);
-#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
     connect(d->ratioComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CropWidget::slotRatioComboBoxChanged);
-#else
-    connect(d->ratioComboBox, QOverload<int, const QString &>::of(&QComboBox::currentIndexChanged), this, &CropWidget::slotRatioComboBoxChanged);
-#endif
 
     // Don't do this before signals are connected, otherwise the tool won't get
     // initialized
