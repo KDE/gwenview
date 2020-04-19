@@ -66,6 +66,7 @@ public:
 
 Q_SIGNALS:
     void rectUpdated(const QRect&);
+    void rectReset();
     void done();
     void imageOperationRequested(AbstractImageOperation*);
 

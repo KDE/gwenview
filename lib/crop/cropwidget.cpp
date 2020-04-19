@@ -275,6 +275,8 @@ struct CropWidgetPrivate : public QWidget
 
         QObject::connect(dialogButtonBox, &QDialogButtonBox::accepted, q, &CropWidget::cropRequested);
         QObject::connect(dialogButtonBox, &QDialogButtonBox::rejected, q, &CropWidget::done);
+        QPushButton *resetButton = dialogButtonBox->button(QDialogButtonBox::Reset);
+        connect(resetButton, &QPushButton::clicked, q, &CropWidget::reset);
     }
 
     QWidget* boxWidget(QWidget* parent = nullptr)
@@ -368,7 +370,7 @@ struct CropWidgetPrivate : public QWidget
 
         // (6) Dialog buttons
         box = boxWidget(cropWidget);
-        dialogButtonBox = new QDialogButtonBox(QDialogButtonBox::Cancel | QDialogButtonBox::Ok, box);
+        dialogButtonBox = new QDialogButtonBox(QDialogButtonBox::Cancel | QDialogButtonBox::Reset | QDialogButtonBox::Ok, box);
         box->layout()->addWidget(dialogButtonBox);
         flowLayout->addWidget(box);
     }
@@ -451,6 +453,19 @@ void CropWidget::setCropRatio(QSizeF size)
 QSizeF CropWidget::cropRatio() const
 {
     return d->chosenRatio();
+}
+
+void CropWidget::reset()
+{
+    d->ratioComboBox->clearEditText();
+    d->ratioComboBox->setCurrentIndex(-1);
+
+    QSize size = d->mDocument->size();
+    d->leftSpinBox->setValue(0);
+    d->widthSpinBox->setValue(size.width());
+    d->topSpinBox->setValue(0);
+    d->heightSpinBox->setValue(size.height());
+    emit rectReset();
 }
 
 void CropWidget::setCropRatioIndex(int index)

@@ -53,10 +53,12 @@ public:
     int cropRatioIndex() const;
     void setCropRatioIndex(int index);
     QSizeF cropRatio() const;
+    void reset();
 
 Q_SIGNALS:
     void cropRequested();
     void done();
+    void rectReset();
 
 public Q_SLOTS:
     void updateCropRatio();

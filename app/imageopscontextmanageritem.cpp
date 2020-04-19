@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Qt
 #include <QApplication>
 #include <QAction>
+#include <QRect>
 #include "gwenview_app_debug.h"
 
 // KDE
@@ -66,6 +67,7 @@ struct ImageOpsContextManagerItem::Private
     ImageOpsContextManagerItem* q;
     MainWindow* mMainWindow;
     SideBarGroup* mGroup;
+    QRect* mCropStateRect;
 
     QAction * mRotateLeftAction;
     QAction * mRotateRightAction;
@@ -153,6 +155,7 @@ ImageOpsContextManagerItem::ImageOpsContextManagerItem(ContextManager* manager, 
     d->mGroup = new SideBarGroup(i18n("Image Operations"));
     setWidget(d->mGroup);
     EventWatcher::install(d->mGroup, QEvent::Show, this, SLOT(updateSideBarContent()));
+    d->mCropStateRect = new QRect;
     d->setupActions();
     updateActions();
     connect(contextManager(), &ContextManager::selectionChanged,
@@ -165,6 +168,7 @@ ImageOpsContextManagerItem::ImageOpsContextManagerItem(ContextManager* manager, 
 
 ImageOpsContextManagerItem::~ImageOpsContextManagerItem()
 {
+    delete d->mCropStateRect;
     delete d;
 }
 
@@ -256,12 +260,34 @@ void ImageOpsContextManagerItem::crop()
         qCCritical(GWENVIEW_APP_LOG) << "No ImageView available!";
         return;
     }
+
     CropTool* tool = new CropTool(imageView);
+    Document::Ptr doc = DocumentFactory::instance()->load(contextManager()->currentUrl());
+    QSize size = doc->size();
+    QRect sizeAsRect = QRect(0, 0, size.width(), size.height());
+
+    if (!d->mCropStateRect->isNull() && sizeAsRect.contains(*d->mCropStateRect)) {
+        tool->setRect(*d->mCropStateRect);
+    }
+
     connect(tool, &CropTool::imageOperationRequested, this, &ImageOpsContextManagerItem::applyImageOperation);
-    connect(tool, &CropTool::done, this, &ImageOpsContextManagerItem::restoreDefaultImageViewTool);
+    connect(tool, &CropTool::rectReset, this, [this](){
+            this->resetCropState();
+        });
+    connect(tool, &CropTool::done, this, [this, tool]() {
+            this->d->mCropStateRect->setTopLeft(tool->rect().topLeft());
+            this->d->mCropStateRect->setSize(tool->rect().size());
+            this->restoreDefaultImageViewTool();
+        });
 
     d->mMainWindow->setDistractionFreeMode(true);
     imageView->setCurrentTool(tool);
+}
+
+void ImageOpsContextManagerItem::resetCropState()
+{
+    // Set the rect to null (see QRect::isNull())
+    d->mCropStateRect->setRect(0, 0, -1, -1);
 }
 
 void ImageOpsContextManagerItem::startRedEyeReduction()
