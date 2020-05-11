@@ -176,6 +176,7 @@
       <li xml:lang="fr">Prise en charge des manipulations d'image simples : rotation, miroir, basculer, et redimensionner</li>
       <li xml:lang="gl">Permite manipulacións sinxelas de imaxes de maneira individual: rotar, reflectir, inverter e cambiar o tamaño.</li>
       <li xml:lang="hu">Egyszerű képműveletek támogatása: forgatás, tükrözés, átméretezés</li>
+      <li xml:lang="ia">Il supporta simple manipultiones de imagine: rotar, reflecter,  girar e redimensionar</li>
       <li xml:lang="id">Mendukung manipulasi citra sederhana: rotasi, cermin, jungkir, dan ubah ukuran</li>
       <li xml:lang="it">Supporta semplici operazioni di manipolazione di immagini: ruota, rispecchia, rifletti e ridimensioni</li>
       <li xml:lang="ko">간단한 그림 조작: 회전, 대칭, 반전, 크기 조정</li>
@@ -215,6 +216,7 @@
       <li xml:lang="fr">Prise en charge d'actions basiques de gestion de fichiers comme copier, déplacer, supprimer, et autres</li>
       <li xml:lang="gl">Permite realizar accións básicas de xestión de ficheiros como copiar, mover, eliminar, etc.</li>
       <li xml:lang="hu">Egyszerű fájlművelet, mint például másolás, áthelyezés, törlés támogatása</li>
+      <li xml:lang="ia">Il suppporta actiones de gestion de file basic tal como copiar,mover, deler, e alteres</li>
       <li xml:lang="id">Mendukung aksi pengelolaan file dasar seperti salin, pindah, hapus, dan lainnya</li>
       <li xml:lang="it">Supporta semplici azioni di gestione file come copia, spostamento, eliminazione ed altre</li>
       <li xml:lang="ko">파일 복사, 이동, 삭제와 같은 기본 파일 관리 작업</li>
@@ -254,6 +256,7 @@
       <li xml:lang="fr">Fonctionne à la fois comme application autonome et comme afficheur embarqué dans le navigateur web Konqueror</li>
       <li xml:lang="gl">Pode usarse como unha aplicación autónoma e tamén como un visor incrustado no navegador web Konqueror.</li>
       <li xml:lang="hu">Önálló alkalmazásként és a Konqueror webböngészőbe épített képmegjelenítőként is működik</li>
+      <li xml:lang="ia">Il functiona e como application per se mesme e un visor incorporate in le navigator web Konqueror</li>
       <li xml:lang="id">Fungsi sebagai aplikasi mandiri dan penampil tertanam dalam browser web Konqueror</li>
       <li xml:lang="it">Funziona sia come applicazione indipendente che come visore integrabile nel browser web Konqueror</li>
       <li xml:lang="ko">단독 프로그램 및 Konqueror 웹 브라우저의 플러그인으로 작동</li>
@@ -292,6 +295,7 @@
       <li xml:lang="fr">Peut être étendu en utilisant des modules KIPI.</li>
       <li xml:lang="gl">Poden ampliarse as súas funcionalidades mediante complementos KIPI.</li>
       <li xml:lang="hu">KIPI bővítményekkel bővíthető.</li>
+      <li xml:lang="ia">Pote esser extendite usnte le plugins de KIPI.</li>
       <li xml:lang="id">Dapat diekstensi menggunakan plugin KIPI.</li>
       <li xml:lang="it">Può essere esteso tramite estensioni Kipi.</li>
       <li xml:lang="ko">KIPI 플러그인을 통한 확장성 제공.</li>
@@ -381,6 +385,7 @@
       <caption xml:lang="fi">Gwenview näyttämässä kuvaa, sivupaneelissa näkyvät metatiedot</caption>
       <caption xml:lang="fr">Gwenview en train d'afficher une image, avec des métadonnées supplémentaires dans le panneau latéral.</caption>
       <caption xml:lang="gl">Gwenview mostrando unha imaxe, con metadatos adicionais mostrador na barra lateral.</caption>
+      <caption xml:lang="ia">Gwenview monstrante un image, con metadatos additional monstrate in le barra lateral</caption>
       <caption xml:lang="id">Gwenview mendisplai sebuah citra, dengan metadata tambahan yang ditampilkan di dalam bilah sisi</caption>
       <caption xml:lang="it">Gwenview mentre visualizza un'immagine, con ulteriori metadati mostrati nella barra laterale</caption>
       <caption xml:lang="ko">사진을 표시하는 Gwenview, 사이드바에 추가 메타데이터 표시</caption>
