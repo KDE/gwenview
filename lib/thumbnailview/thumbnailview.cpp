@@ -719,7 +719,7 @@ void ThumbnailView::startDrag(Qt::DropActions)
 void ThumbnailView::setZoomParameter()
 {
     const qreal sensitivityModifier = 0.25;
-    d->mTouch->setZoomParameter(sensitivityModifier, d->mThumbnailSize.width());
+    d->mTouch->setZoomParameter(sensitivityModifier, thumbnailSize().width());
 }
 
 void ThumbnailView::zoomGesture(qreal newZoom, const QPoint&)

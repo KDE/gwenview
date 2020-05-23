@@ -772,8 +772,9 @@ void DocumentView::swipeRight()
 
 void DocumentView::swipeLeft()
 {
+    const QSizeF dipSize = d->mAdapter->imageView()->dipDocumentSize();
     const QPoint scrollPos = d->mAdapter->scrollPos().toPoint();
-    const int width = d->mAdapter->document()->width() * d->mAdapter->zoom();
+    const int width = dipSize.width() * d->mAdapter->zoom();
     const QRect visibleRect = d->mAdapter->visibleDocumentRect().toRect();
     const int x = scrollPos.x() + visibleRect.width();
     if (x >= (width - 1)) {
