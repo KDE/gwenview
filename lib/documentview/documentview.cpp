@@ -120,6 +120,7 @@ struct DocumentViewPrivate
     QPointer<QDrag> mDrag;
 
     Touch* mTouch;
+    int mMinTimeBetweenPinch;
 
     void setCurrentAdapter(AbstractDocumentViewAdapter* adapter)
     {
@@ -736,19 +737,37 @@ qreal DocumentView::zoom() const
     return d->mAdapter->zoom();
 }
 
-void DocumentView::setPinchParameter()
+void DocumentView::setPinchParameter(qint64 timeStamp)
 {
+    Q_UNUSED (timeStamp);
     const qreal sensitivityModifier = 0.85;
     const qreal rotationThreshold = 40;
     d->mTouch->setZoomParameter(sensitivityModifier, zoom());
     d->mTouch->setRotationThreshold (rotationThreshold);
+    d->mMinTimeBetweenPinch = 0;
 }
 
-void DocumentView::zoomGesture(qreal zoom, const QPoint& zoomCenter)
+void DocumentView::zoomGesture(qreal zoom, const QPoint& zoomCenter, qint64 timeStamp)
 {
-    if (zoom >= 0.0 && d->mAdapter->canZoom()) {
+    qint64 now = QDateTime::currentMSecsSinceEpoch();
+    const qint64 diff = now - timeStamp;
+
+    // in Wayland we can get the gesture event more frequently, to reduce CPU power we don't use every event
+    // to calculate and paint a new image (mMinTimeBetweenPinch).To determine the exact minimum waiting time between two
+    // pinch events, we use the difference between the time stamps. If the difference is too high we increase the minimum waiting time.
+    // The maximal waiting time is 40 milliseconds, this is equal to 25 frames per second.
+    if (diff > 40) {
+        d->mMinTimeBetweenPinch = (d->mMinTimeBetweenPinch * 2) + 1;
+        if (d->mMinTimeBetweenPinch > 40) {
+            d->mMinTimeBetweenPinch = 40;
+        }
+    }
+
+    if (diff > d->mMinTimeBetweenPinch) {
+        if (zoom >= 0.0 && d->mAdapter->canZoom()) {
             d->setZoom(zoom, zoomCenter);
         }
+    }
 }
 
 void DocumentView::rotationsGesture(qreal rotation)

@@ -233,8 +233,8 @@ private Q_SLOTS:
 
     void dragThumbnailLoaded(const KFileItem&, const QPixmap&);
     void dragThumbnailLoadingFailed(const KFileItem&);
-    void setPinchParameter();
-    void zoomGesture(qreal newZoom, const QPoint& pos);
+    void setPinchParameter(qint64 timeStamp);
+    void zoomGesture(qreal newZoom, const QPoint& pos, qint64 timeStamp);
     void rotationsGesture(qreal);
     void swipeRight();
     void swipeLeft();

@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QStyleHints>
 #include <QGuiApplication>
 #include <QGraphicsWidget>
+#include <QDateTime>
 #include "touch_helper.h"
 
 
@@ -50,6 +51,7 @@ struct TouchPrivate
     qreal mStartZoom;
     qreal mZoomModifier;
     qreal mRotationThreshold;
+    qint64 mLastTouchTimeStamp;
 
     TapHoldAndMovingRecognizer* mTapHoldAndMovingRecognizer;
     Qt::GestureType mTapHoldAndMoving;
@@ -113,13 +115,15 @@ Touch::~Touch()
 bool Touch::eventFilter(QObject*, QEvent* event)
 {
     if (event->type() == QEvent::TouchBegin) {
-        //move mouse cursor to touchpoint
+        QTouchEvent* touchEvent = static_cast<QTouchEvent*>(event);
+        d->mLastTouchTimeStamp = QDateTime::currentMSecsSinceEpoch();
         const QPoint pos = Touch_Helper::simpleTouchPosition(event);
         touchToMouseMove(pos, event, Qt::NoButton);
         return true;
     }
     if (event->type() ==  QEvent::TouchUpdate) {
         QTouchEvent* touchEvent = static_cast<QTouchEvent*>(event);
+        d->mLastTouchTimeStamp = QDateTime::currentMSecsSinceEpoch();
         //because we suppress the making of mouse event through Qt, we need to make our own one finger panning
         //but only if no TapHoldandMovingGesture is active (Drag and Drop action)
         if (touchEvent->touchPoints().size() == 1 && !getTapHoldandMovingGestureActive()) {
@@ -127,6 +131,10 @@ bool Touch::eventFilter(QObject*, QEvent* event)
             emit PanTriggered(delta);
         }
         return true;
+    }
+    if (event->type() == QEvent::TouchEnd) {
+        QTouchEvent* touchEvent = static_cast<QTouchEvent*>(event);
+        d->mLastTouchTimeStamp = QDateTime::currentMSecsSinceEpoch();
     }
     if (event->type() == QEvent::Gesture) {
         gestureEvent(static_cast<QGestureEvent*>(event));
@@ -144,7 +152,7 @@ bool Touch::gestureEvent(QGestureEvent* event)
 
     if (checkPinchGesture(event)) {
         ret = true;
-        emit pinchZoomTriggered(getZoomFromPinchGesture(event), positionGesture(event));
+        emit pinchZoomTriggered(getZoomFromPinchGesture(event), positionGesture(event), d->mLastTouchTimeStamp);
         emit pinchRotateTriggered(getRotationFromPinchGesture(event));
     }
 
@@ -358,7 +366,7 @@ bool Touch::checkPinchGesture(QGestureEvent* event)
             event->accept();
             if (pinch->state() == Qt::GestureStarted) {
                 lastScaleFactor = 0;
-                emit pinchGestureStarted();
+                emit pinchGestureStarted(d->mLastTouchTimeStamp);
             } else if (pinch->state() == Qt::GestureUpdated) {
                 //Because of a bug in Qt in a gesture event in a graphicsview, all gestures are trigger twice
                 //https://bugreports.qt.io/browse/QTBUG-13103

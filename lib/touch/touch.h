@@ -83,9 +83,9 @@ signals:
     void doubleTapTriggered();
     void tapHoldAndMovingTriggered(const QPoint&);
     void tapTriggered(const QPoint&);
-    void pinchGestureStarted();
+    void pinchGestureStarted(qint64);
     void twoFingerTapTriggered();
-    void pinchZoomTriggered(qreal, const QPoint&);
+    void pinchZoomTriggered(qreal, const QPoint&, qint64);
     void pinchRotateTriggered(qreal);
 
 private:
