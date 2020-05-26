@@ -108,6 +108,7 @@ struct GvCorePrivate
         DialogGuard<KFileCustomDialog> dialog(mMainWindow);
         KFileWidget* fileWidget = dialog->fileWidget();
         dialog->setCustomWidget(JPEGQualityChooserWidget);
+        fileWidget->setConfirmOverwrite(true);
         dialog->setOperationMode(KFileWidget::Saving);
         dialog->setWindowTitle(i18nc("@title:window", "Save Image"));
         // Temporary workaround for selectUrl() not setting the
