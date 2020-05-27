@@ -143,55 +143,55 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, QL
     mCopyAction = edit->addAction(KStandardAction::Copy, this, SLOT(copy()));
     mPasteAction = edit->addAction(KStandardAction::Paste, this, SLOT(paste()));
 
-    mCopyToAction = file->addAction("file_copy_to", this, SLOT(copyTo()));
+    mCopyToAction = file->addAction(QStringLiteral("file_copy_to"), this, SLOT(copyTo()));
     mCopyToAction->setText(i18nc("Verb", "Copy To..."));
-    mCopyToAction->setIcon(QIcon::fromTheme("edit-copy"));
+    mCopyToAction->setIcon(QIcon::fromTheme(QStringLiteral("edit-copy")));
     actionCollection->setDefaultShortcut(mCopyToAction, Qt::Key_F7);
 
-    mMoveToAction = file->addAction("file_move_to", this, SLOT(moveTo()));
+    mMoveToAction = file->addAction(QStringLiteral("file_move_to"), this, SLOT(moveTo()));
     mMoveToAction->setText(i18nc("Verb", "Move To..."));
-    mMoveToAction->setIcon(QIcon::fromTheme("go-jump"));
+    mMoveToAction->setIcon(QIcon::fromTheme(QStringLiteral("go-jump")));
     actionCollection->setDefaultShortcut(mMoveToAction, Qt::Key_F8);
 
-    mLinkToAction = file->addAction("file_link_to", this, SLOT(linkTo()));
+    mLinkToAction = file->addAction(QStringLiteral("file_link_to"), this, SLOT(linkTo()));
     mLinkToAction->setText(i18nc("Verb: create link to the file where user wants", "Link To..."));
-    mLinkToAction->setIcon(QIcon::fromTheme("link"));
+    mLinkToAction->setIcon(QIcon::fromTheme(QStringLiteral("link")));
     actionCollection->setDefaultShortcut(mLinkToAction, Qt::Key_F9);
 
-    mRenameAction = file->addAction("file_rename", this, SLOT(rename()));
+    mRenameAction = file->addAction(QStringLiteral("file_rename"), this, SLOT(rename()));
     mRenameAction->setText(i18nc("Verb", "Rename..."));
-    mRenameAction->setIcon(QIcon::fromTheme("edit-rename"));
+    mRenameAction->setIcon(QIcon::fromTheme(QStringLiteral("edit-rename")));
     actionCollection->setDefaultShortcut(mRenameAction, Qt::Key_F2);
 
-    mTrashAction = file->addAction("file_trash", this, SLOT(trash()));
+    mTrashAction = file->addAction(QStringLiteral("file_trash"), this, SLOT(trash()));
     mTrashAction->setText(i18nc("Verb", "Trash"));
-    mTrashAction->setIcon(QIcon::fromTheme("user-trash"));
+    mTrashAction->setIcon(QIcon::fromTheme(QStringLiteral("user-trash")));
     actionCollection->setDefaultShortcut(mTrashAction, Qt::Key_Delete);
 
     mDelAction = file->addAction(KStandardAction::DeleteFile, this, SLOT(del()));
 
-    mRestoreAction = file->addAction("file_restore", this, SLOT(restore()));
+    mRestoreAction = file->addAction(QStringLiteral("file_restore"), this, SLOT(restore()));
     mRestoreAction->setText(i18n("Restore"));
-    mRestoreAction->setIcon(QIcon::fromTheme("restoration"));
+    mRestoreAction->setIcon(QIcon::fromTheme(QStringLiteral("restoration")));
 
-    mShowPropertiesAction = file->addAction("file_show_properties", this, SLOT(showProperties()));
+    mShowPropertiesAction = file->addAction(QStringLiteral("file_show_properties"), this, SLOT(showProperties()));
     mShowPropertiesAction->setText(i18n("Properties"));
-    mShowPropertiesAction->setIcon(QIcon::fromTheme("document-properties"));
+    mShowPropertiesAction->setIcon(QIcon::fromTheme(QStringLiteral("document-properties")));
 
-    mCreateFolderAction = file->addAction("file_create_folder", this, SLOT(createFolder()));
+    mCreateFolderAction = file->addAction(QStringLiteral("file_create_folder"), this, SLOT(createFolder()));
     mCreateFolderAction->setText(i18n("Create Folder..."));
-    mCreateFolderAction->setIcon(QIcon::fromTheme("folder-new"));
+    mCreateFolderAction->setIcon(QIcon::fromTheme(QStringLiteral("folder-new")));
 
-    mOpenWithAction = file->addAction("file_open_with");
+    mOpenWithAction = file->addAction(QStringLiteral("file_open_with"));
     mOpenWithAction->setText(i18n("Open With"));
     QMenu* menu = new QMenu;
     mOpenWithAction->setMenu(menu);
     connect(menu, &QMenu::aboutToShow, this, &FileOpsContextManagerItem::populateOpenMenu);
     connect(menu, &QMenu::triggered, this, &FileOpsContextManagerItem::openWith);
 
-    mOpenContainingFolderAction = file->addAction("file_open_containing_folder", this, SLOT(openContainingFolder()));
+    mOpenContainingFolderAction = file->addAction(QStringLiteral("file_open_containing_folder"), this, SLOT(openContainingFolder()));
     mOpenContainingFolderAction->setText(i18n("Open Containing Folder"));
-    mOpenContainingFolderAction->setIcon(QIcon::fromTheme("document-open-folder"));
+    mOpenContainingFolderAction->setIcon(QIcon::fromTheme(QStringLiteral("document-open-folder")));
 
     mRegularFileActionList
             << mRenameAction

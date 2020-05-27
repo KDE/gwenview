@@ -114,7 +114,7 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
 {
     mSlideShow = slideShow;
     mActionCollection = actionCollection;
-    connect(actionCollection->action("view"), &QAction::toggled,
+    connect(actionCollection->action(QStringLiteral("view")), &QAction::toggled,
         this, &FullScreenContent::slotViewModeActionToggled);
 
     // mAutoHideContainer
@@ -196,7 +196,7 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
 
     // Right bar
     mRightToolBar = new FullScreenToolBar(mContent);
-    mRightToolBar->addAction(mActionCollection->action("leave_fullscreen"), Qt::ToolButtonFollowStyle);
+    mRightToolBar->addAction(mActionCollection->action(QStringLiteral("leave_fullscreen")), Qt::ToolButtonFollowStyle);
     mRightToolBar->addAction(mOptionsAction, Qt::ToolButtonFollowStyle);
     mRightToolBar->addStretch();
     mRightToolBar->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
@@ -407,7 +407,7 @@ void FullScreenContent::createOptionsAction()
     // if the mode is changed to thumbnail-mode, we want the option button
     // to remain visible
     mOptionsAction = new QAction(this);
-    mOptionsAction->setIcon(QIcon::fromTheme("configure"));
+    mOptionsAction->setIcon(QIcon::fromTheme(QStringLiteral("configure")));
     mOptionsAction->setText(i18n("Configure"));
     mOptionsAction->setToolTip(i18nc("@info:tooltip", "Configure full screen mode"));
     QObject::connect(mOptionsAction, &QAction::triggered, this, &FullScreenContent::showOptionsMenu);

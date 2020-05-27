@@ -113,7 +113,7 @@ QString ThumbnailProvider::thumbnailBaseDir(ThumbnailGroup::Enum group)
         break;
     case ThumbnailGroup::Large2x:
     default:
-        dir += "x-gwenview/"; // Should never be hit, but just in case
+        dir += QLatin1String("x-gwenview/"); // Should never be hit, but just in case
     }
     return dir;
 }

@@ -35,7 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 
-static const QString PREVIEW_FILENAME = "PICT0012.JPG";
+static const QString PREVIEW_FILENAME = QStringLiteral("PICT0012.JPG");
 static const QDateTime PREVIEW_DATETIME = QDateTime(QDate(2009, 10, 25), QTime(17, 51, 18));
 
 struct ImporterConfigDialogPrivate : public Ui_ImporterConfigDialog
@@ -64,7 +64,7 @@ struct ImporterConfigDialogPrivate : public Ui_ImporterConfigDialog
 };
 
 ImporterConfigDialog::ImporterConfigDialog(QWidget* parent)
-: KConfigDialog(parent, "Importer Settings", ImporterConfig::self())
+: KConfigDialog(parent, QStringLiteral("Importer Settings"), ImporterConfig::self())
 , d(new ImporterConfigDialogPrivate)
 {
     d->q = this;

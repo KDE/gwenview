@@ -54,13 +54,13 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     widget = setupPage(mGeneralConfigPage);
     
     mThumbnailActionsGroup = new InvisibleButtonGroup(widget);
-    mThumbnailActionsGroup->setObjectName(QLatin1String("kcfg_ThumbnailActions"));
+    mThumbnailActionsGroup->setObjectName(QStringLiteral("kcfg_ThumbnailActions"));
     mThumbnailActionsGroup->addButton(mGeneralConfigPage.allButtonsThumbnailActionsRadioButton, int(ThumbnailActions::AllButtons));
     mThumbnailActionsGroup->addButton(mGeneralConfigPage.selectionOnlyThumbnailActionsRadioButton, int(ThumbnailActions::ShowSelectionButtonOnly));
     mThumbnailActionsGroup->addButton(mGeneralConfigPage.noneThumbnailActionsRadioButton, int(ThumbnailActions::None));
 
     pageItem = addPage(widget, i18n("General"));
-    pageItem->setIcon(QIcon::fromTheme("gwenview"));
+    pageItem->setIcon(QIcon::fromTheme(QStringLiteral("gwenview")));
     connect(mGeneralConfigPage.kcfg_ViewBackgroundValue, &QAbstractSlider::valueChanged, this, &ConfigDialog::updateViewBackgroundFrame);
     connect(mGeneralConfigPage.kcfg_JPEGQuality, &QAbstractSlider::valueChanged, this, [=] (int value) {mGeneralConfigPage.jpegQualitySpinner->setValue(value);});
     connect(mGeneralConfigPage.jpegQualitySpinner, QOverload<int>::of(&QSpinBox::valueChanged), this, [=] (int value) {mGeneralConfigPage.kcfg_JPEGQuality->setValue(value);});
@@ -71,47 +71,47 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     widget = setupPage(mImageViewConfigPage);
 
     mAlphaBackgroundModeGroup = new InvisibleButtonGroup(widget);
-    mAlphaBackgroundModeGroup->setObjectName(QLatin1String("kcfg_AlphaBackgroundMode"));
+    mAlphaBackgroundModeGroup->setObjectName(QStringLiteral("kcfg_AlphaBackgroundMode"));
     mAlphaBackgroundModeGroup->addButton(mImageViewConfigPage.surroundingRadioButton, int(AbstractImageView::AlphaBackgroundNone));
     mAlphaBackgroundModeGroup->addButton(mImageViewConfigPage.checkBoardRadioButton, int(AbstractImageView::AlphaBackgroundCheckBoard));
     mAlphaBackgroundModeGroup->addButton(mImageViewConfigPage.solidColorRadioButton, int(AbstractImageView::AlphaBackgroundSolid));
 
     mWheelBehaviorGroup = new InvisibleButtonGroup(widget);
-    mWheelBehaviorGroup->setObjectName(QLatin1String("kcfg_MouseWheelBehavior"));
+    mWheelBehaviorGroup->setObjectName(QStringLiteral("kcfg_MouseWheelBehavior"));
     mWheelBehaviorGroup->addButton(mImageViewConfigPage.mouseWheelScrollRadioButton, int(MouseWheelBehavior::Scroll));
     mWheelBehaviorGroup->addButton(mImageViewConfigPage.mouseWheelBrowseRadioButton, int(MouseWheelBehavior::Browse));
     mWheelBehaviorGroup->addButton(mImageViewConfigPage.mouseWheelZoomRadioButton, int(MouseWheelBehavior::Zoom));
 
     mAnimationMethodGroup = new InvisibleButtonGroup(widget);
-    mAnimationMethodGroup->setObjectName(QLatin1String("kcfg_AnimationMethod"));
+    mAnimationMethodGroup->setObjectName(QStringLiteral("kcfg_AnimationMethod"));
     mAnimationMethodGroup->addButton(mImageViewConfigPage.glAnimationRadioButton, int(DocumentView::GLAnimation));
     mAnimationMethodGroup->addButton(mImageViewConfigPage.softwareAnimationRadioButton, int(DocumentView::SoftwareAnimation));
     mAnimationMethodGroup->addButton(mImageViewConfigPage.noAnimationRadioButton, int(DocumentView::NoAnimation));
 
     mZoomModeGroup = new InvisibleButtonGroup(widget);
-    mZoomModeGroup->setObjectName(QLatin1String("kcfg_ZoomMode"));
+    mZoomModeGroup->setObjectName(QStringLiteral("kcfg_ZoomMode"));
     mZoomModeGroup->addButton(mImageViewConfigPage.autofitZoomModeRadioButton, int(ZoomMode::Autofit));
     mZoomModeGroup->addButton(mImageViewConfigPage.keepSameZoomModeRadioButton, int(ZoomMode::KeepSame));
     mZoomModeGroup->addButton(mImageViewConfigPage.individualZoomModeRadioButton, int(ZoomMode::Individual));
 
     mThumbnailBarOrientationGroup = new InvisibleButtonGroup(widget);
-    mThumbnailBarOrientationGroup->setObjectName(QLatin1String("kcfg_ThumbnailBarOrientation"));
+    mThumbnailBarOrientationGroup->setObjectName(QStringLiteral("kcfg_ThumbnailBarOrientation"));
     mThumbnailBarOrientationGroup->addButton(mImageViewConfigPage.horizontalRadioButton, int(Qt::Horizontal));
     mThumbnailBarOrientationGroup->addButton(mImageViewConfigPage.verticalRadioButton, int(Qt::Vertical));
 
     pageItem = addPage(widget, i18n("Image View"));
-    pageItem->setIcon(QIcon::fromTheme("preferences-desktop-display-color"));
+    pageItem->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-display-color")));
 
     // Advanced
     widget = setupPage(mAdvancedConfigPage);
 
     mRenderingIntentGroup = new InvisibleButtonGroup(widget);
-    mRenderingIntentGroup->setObjectName(QLatin1String("kcfg_RenderingIntent"));
+    mRenderingIntentGroup->setObjectName(QStringLiteral("kcfg_RenderingIntent"));
     mRenderingIntentGroup->addButton(mAdvancedConfigPage.relativeRenderingIntentRadioButton, int(RenderingIntent::Relative));
     mRenderingIntentGroup->addButton(mAdvancedConfigPage.perceptualRenderingIntentRadioButton, int(RenderingIntent::Perceptual));
 
     pageItem = addPage(widget, i18n("Advanced"));
-    pageItem->setIcon(QIcon::fromTheme("preferences-other"));
+    pageItem->setIcon(QIcon::fromTheme(QStringLiteral("preferences-other")));
     mAdvancedConfigPage.cacheHelpLabel->setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
     mAdvancedConfigPage.perceptualHelpLabel->setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
     mAdvancedConfigPage.relativeHelpLabel->setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
@@ -121,9 +121,9 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 
 void ConfigDialog::updateViewBackgroundFrame()
 {
-    QColor color = QColor::fromHsv(0, 0, mGeneralConfigPage.kcfg_ViewBackgroundValue->value());
-    QString css =
-        QString(
+    const QColor color = QColor::fromHsv(0, 0, mGeneralConfigPage.kcfg_ViewBackgroundValue->value());
+    const QString css =
+        QStringLiteral(
             "background-color: %1;"
             "border-radius: 5px;"
             "border: 1px solid %1;")

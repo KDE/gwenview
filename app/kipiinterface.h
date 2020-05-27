@@ -115,14 +115,14 @@ public:
         return mImages;
     }
     QUrl uploadRoot() {
-        return QUrl("/");
+        return QUrl(QStringLiteral("/"));
     }
     QUrl uploadPath() {
         return mDirURL;
     }
     QString uploadRootName() override
     {
-        return "/";
+        return QStringLiteral("/");
     }
     bool isDirectory() override {
         return true;

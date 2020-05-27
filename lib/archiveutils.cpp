@@ -67,8 +67,9 @@ QString protocolForMimeType(const QString& mimeType)
     if (protocol.isEmpty()) {
         // No protocol, try with mimeType parents. This is useful for .cbz for
         // example
-        QMimeType mime = QMimeDatabase().mimeTypeForName(mimeType);
-        for(const QString & parentMimeType : mime.allAncestors()) {
+        const QMimeType mime = QMimeDatabase().mimeTypeForName(mimeType);
+        const QStringList allAncestors = mime.allAncestors();
+        for(const QString & parentMimeType : allAncestors) {
             protocol = KProtocolManager::protocolForArchiveMimetype(parentMimeType);
             if (!protocol.isEmpty()) {
                 break;

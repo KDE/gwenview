@@ -131,7 +131,7 @@ ContextManager::ContextManager(SortedDirModel* dirModel, QObject* parent)
 
     d->mSelectedFileItemListNeedsUpdate = false;
 
-    connect(DocumentFactory::instance(), &DocumentFactory::readyForDirListerStart, [this](const QUrl &urlReady) {
+    connect(DocumentFactory::instance(), &DocumentFactory::readyForDirListerStart, this, [this](const QUrl &urlReady) {
         setCurrentDirUrl(urlReady.adjusted(QUrl::RemoveFilename));
     });
 }

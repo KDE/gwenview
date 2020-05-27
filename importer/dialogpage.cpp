@@ -87,7 +87,7 @@ struct DialogPagePrivate : public Ui_DialogPage
             dirDetails->setVisible(true);
         } else dirDetails->setVisible(false);
 
-        mErrorMessageWidget->setText(message.join("<br/>"));
+        mErrorMessageWidget->setText(message.join(QStringLiteral("<br/>")));
         mErrorMessageWidget->animatedShow();
     }
 

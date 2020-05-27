@@ -83,25 +83,25 @@ struct ImageOpsContextManagerItem::Private
         KActionCollection* actionCollection = mMainWindow->actionCollection();
         KActionCategory* edit = new KActionCategory(i18nc("@title actions category - means actions changing image", "Edit"), actionCollection);
 
-        mRotateLeftAction = edit->addAction("rotate_left", q, SLOT(rotateLeft()));
+        mRotateLeftAction = edit->addAction(QStringLiteral("rotate_left"), q, SLOT(rotateLeft()));
         mRotateLeftAction->setText(i18n("Rotate Left"));
         mRotateLeftAction->setToolTip(i18nc("@info:tooltip", "Rotate image to the left"));
-        mRotateLeftAction->setIcon(QIcon::fromTheme("object-rotate-left"));
+        mRotateLeftAction->setIcon(QIcon::fromTheme(QStringLiteral("object-rotate-left")));
         actionCollection->setDefaultShortcut(mRotateLeftAction, Qt::CTRL + Qt::SHIFT + Qt::Key_R);
 
-        mRotateRightAction = edit->addAction("rotate_right", q, SLOT(rotateRight()));
+        mRotateRightAction = edit->addAction(QStringLiteral("rotate_right"), q, SLOT(rotateRight()));
         mRotateRightAction->setText(i18n("Rotate Right"));
         mRotateRightAction->setToolTip(i18nc("@info:tooltip", "Rotate image to the right"));
-        mRotateRightAction->setIcon(QIcon::fromTheme("object-rotate-right"));
+        mRotateRightAction->setIcon(QIcon::fromTheme(QStringLiteral("object-rotate-right")));
         actionCollection->setDefaultShortcut(mRotateRightAction, Qt::CTRL + Qt::Key_R);
 
-        mMirrorAction = edit->addAction("mirror", q, SLOT(mirror()));
+        mMirrorAction = edit->addAction(QStringLiteral("mirror"), q, SLOT(mirror()));
         mMirrorAction->setText(i18n("Mirror"));
-        mMirrorAction->setIcon(QIcon::fromTheme("object-flip-horizontal"));
+        mMirrorAction->setIcon(QIcon::fromTheme(QStringLiteral("object-flip-horizontal")));
 
-        mFlipAction = edit->addAction("flip", q, SLOT(flip()));
+        mFlipAction = edit->addAction(QStringLiteral("flip"), q, SLOT(flip()));
         mFlipAction->setText(i18n("Flip"));
-        mFlipAction->setIcon(QIcon::fromTheme("object-flip-vertical"));
+        mFlipAction->setIcon(QIcon::fromTheme(QStringLiteral("object-flip-vertical")));
 
         mResizeAction = edit->addAction("resize", q, SLOT(resizeImage()));
         mResizeAction->setText(i18n("Resize"));

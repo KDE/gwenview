@@ -543,7 +543,7 @@ void CropWidget::applyRatioConstraint()
 
 void CropWidget::slotAdvancedCheckBoxToggled(bool checked)
 {
-    for (auto w : d->mAdvancedWidgets) {
+    for (auto w : qAsConst(d->mAdvancedWidgets)) {
         w->setVisible(checked);
     }
     d->mPreserveAspectRatioWidget->setVisible(!checked);

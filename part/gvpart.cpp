@@ -79,7 +79,7 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QVariantList& /*arg
     QAction * action = new QAction(actionCollection());
     action->setText(i18nc("@action", "Properties"));
     connect(action, &QAction::triggered, this, &GVPart::showProperties);
-    actionCollection()->addAction("file_show_properties", action);
+    actionCollection()->addAction(QStringLiteral("file_show_properties"), action);
 
     KStandardAction::saveAs(this, SLOT(saveAs()), actionCollection());
 

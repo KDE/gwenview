@@ -94,7 +94,7 @@ HudButton* HudButtonBox::addAction(QAction* action, const QString& overrideText)
 {
     QString text = overrideText.isEmpty() ? action->text() : overrideText;
     HudButton* button = addButton(text);
-    connect(button, SIGNAL(clicked()), action, SLOT(trigger()));
+    connect(button, &HudButton::clicked, action, &QAction::trigger);
     return button;
 }
 

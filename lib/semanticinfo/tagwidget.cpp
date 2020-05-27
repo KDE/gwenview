@@ -148,7 +148,7 @@ struct TagWidgetPrivate
         mComboBox->setModel(mTagCompleterModel);
 
         mAddButton = new QPushButton;
-        mAddButton->setIcon(QIcon::fromTheme("list-add"));
+        mAddButton->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
         mAddButton->setToolTip(i18n("Add tag"));
         mAddButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         QObject::connect(mAddButton, SIGNAL(clicked()),

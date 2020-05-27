@@ -51,7 +51,7 @@ inline QUrl urlForTestFile(const QString& name)
 
 inline QString pathForTestOutputFile(const QString& name)
 {
-    return QStringLiteral("%1/%2").arg(QDir::currentPath()).arg(name);
+    return QStringLiteral("%1/%2").arg(QDir::currentPath(), name);
 }
 
 inline QUrl urlForTestOutputFile(const QString& name)

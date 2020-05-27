@@ -166,7 +166,7 @@ Kind urlKind(const QUrl &url)
     return mimeTypeKind(urlMimeType(url));
 }
 
-QMimeData* selectionMimeData(const KFileItemList& selectedFiles, const MimeTarget& mimeTarget)
+QMimeData* selectionMimeData(const KFileItemList& selectedFiles, MimeTarget mimeTarget)
 {
     QMimeData* mimeData = new QMimeData;
 

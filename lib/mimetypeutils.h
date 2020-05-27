@@ -69,7 +69,7 @@ enum MimeTarget {
  * is edited/unsaved) if there is a single image selected.
  * Otherwise, returns a list of URLs for all selected images.
  */
-GWENVIEWLIB_EXPORT QMimeData* selectionMimeData(const KFileItemList& selectedFiles, const MimeTarget& mimeTarget);
+GWENVIEWLIB_EXPORT QMimeData* selectionMimeData(const KFileItemList& selectedFiles, MimeTarget mimeTarget);
 
 } // namespace MimeTypeUtils
 

@@ -198,17 +198,17 @@ void showMenuForDroppedUrls(QWidget* parent, const QList<QUrl>& urlList, const Q
 
     QMenu menu(parent);
     QAction* moveAction = menu.addAction(
-                              QIcon::fromTheme("go-jump"),
+                              QIcon::fromTheme(QStringLiteral("go-jump")),
                               i18n("Move Here"));
     QAction* copyAction = menu.addAction(
-                              QIcon::fromTheme("edit-copy"),
+                              QIcon::fromTheme(QStringLiteral("edit-copy")),
                               i18n("Copy Here"));
     QAction* linkAction = menu.addAction(
-                              QIcon::fromTheme("edit-link"),
+                              QIcon::fromTheme(QStringLiteral("edit-link")),
                               i18n("Link Here"));
     menu.addSeparator();
     menu.addAction(
-        QIcon::fromTheme("process-stop"),
+        QIcon::fromTheme(QStringLiteral("process-stop")),
         i18n("Cancel"));
 
     QAction* action = menu.exec(QCursor::pos());

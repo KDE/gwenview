@@ -250,7 +250,7 @@ public:
     void setFilterWidget(QWidget* widget)
     {
         QToolButton* closeButton = new QToolButton;
-        closeButton->setIcon(QIcon::fromTheme("window-close"));
+        closeButton->setIcon(QIcon::fromTheme(QStringLiteral("window-close")));
         closeButton->setAutoRaise(true);
         closeButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
         int size = IconSize(KIconLoader::Small);
@@ -345,7 +345,7 @@ void FilterController::slotFilterWidgetClosed()
 }
 
 
-void FilterController::addAction(const QString& text, const char* slot, const QKeySequence shortcut)
+void FilterController::addAction(const QString& text, const char* slot, const QKeySequence &shortcut)
 {
     QAction* action = new QAction(text, q);
     action->setShortcut(shortcut);

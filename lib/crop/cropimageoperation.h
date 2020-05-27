@@ -38,6 +38,7 @@ namespace Gwenview
 struct CropImageOperationPrivate;
 class GWENVIEWLIB_EXPORT CropImageOperation : public AbstractImageOperation
 {
+    Q_OBJECT
 public:
     CropImageOperation(const QRect&);
     ~CropImageOperation() override;

@@ -108,7 +108,7 @@ void MprisMediaPlayer2::setFullscreen(bool isFullscreen)
 
 void MprisMediaPlayer2::onFullScreenActionToggled(bool checked)
 {
-    signalPropertyChange("Fullscreen", checked);
+    signalPropertyChange(QStringLiteral("Fullscreen"), checked);
 }
 
 }
