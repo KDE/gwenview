@@ -246,6 +246,12 @@ void RasterImageView::setRenderingIntent(const RenderingIntent::Enum& renderingI
     }
 }
 
+void RasterImageView::resetMonitorICC()
+{
+    d->mApplyDisplayTransform = true;
+    updateBuffer();
+}
+
 void RasterImageView::loadFromDocument()
 {
     Document::Ptr doc = document();

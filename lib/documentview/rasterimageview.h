@@ -52,6 +52,7 @@ public:
     void setAlphaBackgroundMode(AlphaBackgroundMode mode) override;
     void setAlphaBackgroundColor(const QColor& color) override;
     void setRenderingIntent(const RenderingIntent::Enum& renderingIntent);
+    void resetMonitorICC();
 
 Q_SIGNALS:
     void currentToolChanged(AbstractRasterImageViewTool*);

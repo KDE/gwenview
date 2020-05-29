@@ -199,6 +199,10 @@
             display's capabilities. "Relative" will squash only the colors
             that cannot be displayed, and leave the other colors alone.</whatsthis>
         </entry>
+        
+        <entry name="NoMonitorICC" type="Bool">
+            <default>true</default>
+        </entry>
     </group>
 
     <group name="ThumbnailView">

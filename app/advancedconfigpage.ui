@@ -6,21 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>482</width>
-    <height>300</height>
+    <width>451</width>
+    <height>439</height>
    </rect>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string>Thumbnails:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-    </widget>
-   </item>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0,0,0,0,0,0,0,0,0,0,0">
+   <property name="sizeConstraint">
+    <enum>QLayout::SetDefaultConstraint</enum>
+   </property>
    <item row="0" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
@@ -45,15 +44,97 @@
      </item>
     </layout>
    </item>
+   <item row="7" column="0" colspan="2">
+    <spacer name="verticalSpacer_3">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>10</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
    <item row="1" column="1">
     <widget class="QLabel" name="cacheHelpLabel">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="text">
-         <string>Enable this option if you do not have a lot of disk space. This will avoid storing thumbnails on disk and will prefer embedded thumbnails of lower quality that are faster to load, if available.</string>
+      <string>Enable this option if you do not have a lot of disk space. This will avoid storing thumbnails on disk and will prefer embedded thumbnails of lower quality that are faster to load, if available.</string>
      </property>
      <property name="wordWrap">
       <bool>true</bool>
      </property>
     </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Thumbnails:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="1">
+    <widget class="QLabel" name="relativeHelpLabel">
+     <property name="text">
+      <string>Squash colors that don't fit within the active color profile's color gamut, leaving other colors untouched</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>History:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="1">
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QRadioButton" name="relativeRenderingIntentRadioButton">
+       <property name="text">
+        <string comment="@option:Relative Colorimetric rendering intent">Relative Colorimetric</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="10" column="0" colspan="2">
+    <spacer name="verticalSpacer_7">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>10</height>
+      </size>
+     </property>
+    </spacer>
    </item>
    <item row="2" column="0">
     <spacer name="verticalSpacer_1">
@@ -71,13 +152,40 @@
      </property>
     </spacer>
    </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="label_3">
+   <item row="5" column="1">
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <item>
+      <widget class="QRadioButton" name="perceptualRenderingIntentRadioButton">
+       <property name="text">
+        <string comment="@option:Perceptual rendering intent">Perceptual</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="6" column="1">
+    <widget class="QLabel" name="perceptualHelpLabel">
      <property name="text">
-      <string>History:</string>
+      <string>Scale all colors equally to fit them within the active color profile's color gamut</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="colorRenderingLabel">
+     <property name="text">
+      <string>Rendering intent:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buddy">
+      <cstring>relativeRenderingIntentRadioButton</cstring>
      </property>
     </widget>
    </item>
@@ -121,95 +229,55 @@
      </property>
     </spacer>
    </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="colorRenderingLabel">
-     <property name="text">
-      <string>Rendering intent:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-     <property name="buddy">
-      <cstring>relativeRenderingIntentRadioButton</cstring>
-     </property>
-    </widget>
-   </item>
-    <item row="5" column="1">
-    <layout class="QHBoxLayout" name="horizontalLayout_4">
+   <item row="11" column="1">
+    <layout class="QHBoxLayout" name="horizontalLayout_5">
      <item>
-      <widget class="QRadioButton" name="perceptualRenderingIntentRadioButton">
+      <widget class="QCheckBox" name="kcfg_NoMonitorICC">
+       <property name="toolTip">
+        <string/>
+       </property>
        <property name="text">
-        <string comment="@option:Perceptual rendering intent">Perceptual</string>
+        <string>Apply only the profile embedded in the image file</string>
        </property>
        <property name="checked">
         <bool>true</bool>
        </property>
       </widget>
      </item>
+     <item>
+      <spacer name="horizontalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
     </layout>
-  </item>
-  <item row="6" column="1">
-   <widget class="QLabel" name="perceptualHelpLabel">
-    <property name="text">
-        <string>Scale all colors equally to fit them within the active color profile's color gamut</string>
-    </property>
-    <property name="wordWrap">
-     <bool>true</bool>
-    </property>
-   </widget>
-  </item>
-  <item row="7" column="0" colspan="2">
-   <spacer name="verticalSpacer_3">
-    <property name="orientation">
-     <enum>Qt::Vertical</enum>
-    </property>
-    <property name="sizeType">
-     <enum>QSizePolicy::Fixed</enum>
-    </property>
-    <property name="sizeHint" stdset="0">
-     <size>
-      <width>20</width>
-      <height>10</height>
-     </size>
-    </property>
-   </spacer>
-  </item>
-  <item row="8" column="1">
-   <layout class="QHBoxLayout" name="horizontalLayout_3">
-    <item>
-     <widget class="QRadioButton" name="relativeRenderingIntentRadioButton">
-      <property name="text">
-       <string comment="@option:Relative Colorimetric rendering intent">Relative Colorimetric</string>
-      </property>
-      <property name="checked">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </item>
-  <item row="9" column="1">
-   <widget class="QLabel" name="relativeHelpLabel">
-    <property name="text">
-        <string>Squash colors that don't fit within the active color profile's color gamut, leaving other colors untouched</string>
-    </property>
-    <property name="wordWrap">
-     <bool>true</bool>
-    </property>
-   </widget>
-  </item>
-  <item row="10" column="1">
-    <spacer name="verticalSpacer_7">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
+   </item>
+   <item row="12" column="1">
+    <widget class="QLabel" name="colorProfileHelpLabel">
+     <property name="text">
+      <string>Assume that system-wide color correction already applies monitor profile.</string>
      </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>20</height>
-      </size>
+     <property name="wordWrap">
+      <bool>true</bool>
      </property>
-    </spacer>
+    </widget>
+   </item>
+   <item row="11" column="0">
+    <widget class="QLabel" name="colorProfileLabel">
+     <property name="text">
+      <string>Color profile:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

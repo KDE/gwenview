@@ -115,6 +115,8 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     mAdvancedConfigPage.cacheHelpLabel->setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
     mAdvancedConfigPage.perceptualHelpLabel->setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
     mAdvancedConfigPage.relativeHelpLabel->setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
+    mAdvancedConfigPage.colorProfileHelpLabel->setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
+
 
     updateViewBackgroundFrame();
 }
