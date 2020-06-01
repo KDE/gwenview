@@ -36,8 +36,8 @@
 </copyright>
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2019-08-25</date>
-<releaseinfo>Applications 19.12</releaseinfo>
+<date>2020-06-01</date>
+<releaseinfo>Applications 20.08</releaseinfo>
 <abstract>
 <para>&gwenview; is an image and video viewer.</para>
 </abstract>
@@ -874,6 +874,13 @@ Link an image.</para></listitem>
                             <para><guilabel>Relative Colorimetric</guilabel> &mdash; squash colors that don't fit within the active color profile's color gamut, leaving other colors untouched</para>
                         </listitem>
                     </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><guilabel>Color profile</guilabel></term>
+                <listitem>
+                    <para>Allows choosing if you want to additionally apply the system-wide <ulink url="https://en.wikipedia.org/wiki/ICC_profile">color profile</ulink> to the color profile from the image file.</para>
+                    <para>If the <guilabel>Apply only the profile embedded in the image file</guilabel> item is checked &gwenview; assumes that the system-wide color correction already applies monitor profile.</para>
                 </listitem>
             </varlistentry>
         </variablelist>
