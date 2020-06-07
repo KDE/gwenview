@@ -8,3 +8,4 @@
 #cmakedefine HAVE_QTDBUS ${HAVE_QTDBUS}
 #cmakedefine KF5Activities_FOUND 1
 #cmakedefine KF5Purpose_FOUND 1
+#cmakedefine HAVE_TIFF 1

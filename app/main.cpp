@@ -48,6 +48,29 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <../lib/imageformats/moc_fitsplugin.cpp>
 #endif
 
+
+// To shut up libtiff
+#ifdef HAVE_TIFF
+#include <QLoggingCategory>
+#include <tiffio.h>
+
+namespace {
+
+Q_DECLARE_LOGGING_CATEGORY(LibTiffLog)
+Q_LOGGING_CATEGORY(LibTiffLog, "gwenview.libtiff", QtWarningMsg)
+
+static void handleTiffWarning(const char* mod, const char* fmt, va_list ap) {
+    qCDebug(LibTiffLog) << "Warning:" << mod << QString::vasprintf(fmt, ap);
+}
+
+static void handleTiffError(const char* mod, const char* fmt, va_list ap) {
+    // Since we're doing thumbnails, we don't really care about warnings by default either
+    qCWarning(LibTiffLog) << "Error" << mod << QString::vasprintf(fmt, ap);
+}
+
+} // namespace
+#endif
+
 class StartHelper
 {
 public:
@@ -119,6 +142,11 @@ private:
 
 int main(int argc, char *argv[])
 {
+#ifdef HAVE_TIFF
+    TIFFSetWarningHandler(handleTiffWarning);
+    TIFFSetErrorHandler(handleTiffError);
+#endif
+
     /**
      * enable high dpi support
      */

@@ -96,6 +96,16 @@ if(CFITSIO_FOUND)
     set(HAVE_FITS true)
 endif()
 
+find_package(TIFF)
+set_package_properties(TIFF PROPERTIES DESCRIPTION "Library for reading TIFF files"
+                       URL "http://www.libtiff.org/"
+                       TYPE OPTIONAL
+                       PURPOSE "Disable uninteresting log messages from libtiff by default"
+                       )
+if (TIFF_FOUND)
+    set(HAVE_TIFF true)
+endif()
+
 find_package(KF5Kipi)
 if (KF5Kipi_FOUND)
    set(KIPI_FOUND true)
