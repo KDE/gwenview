@@ -177,7 +177,7 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, QL
     mShowPropertiesAction = file->addAction(QStringLiteral("file_show_properties"), this, SLOT(showProperties()));
     mShowPropertiesAction->setText(i18n("Properties"));
     mShowPropertiesAction->setIcon(QIcon::fromTheme(QStringLiteral("document-properties")));
-    mShowPropertiesAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_Return));
+    actionCollection->setDefaultShortcut(mShowPropertiesAction, QKeySequence(Qt::ALT + Qt::Key_Return));
 
     mCreateFolderAction = file->addAction(QStringLiteral("file_create_folder"), this, SLOT(createFolder()));
     mCreateFolderAction->setText(i18n("Create Folder..."));
