@@ -14,7 +14,6 @@ Name[en_GB]=Gwenview Image Viewer
 Name[eo]=Gwenview bildorigardilo
 Name[es]=Visor de imágenes Gwenview
 Name[et]=Gwenview pildinäitaja
-Name[eu]=Gwenview irudi erakuslea
 Name[fa]=مشاهده‌گر تصویر Gwenview
 Name[fi]=Gwenview-kuvankatselin
 Name[fr]=Afficheur d'images Gwenview
