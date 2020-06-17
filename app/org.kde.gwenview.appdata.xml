@@ -42,7 +42,6 @@
   <name xml:lang="sv">Gwenview</name>
   <name xml:lang="tr">Gwenview</name>
   <name xml:lang="uk">Gwenview</name>
-  <name xml:lang="x-test">xxGwenviewxx</name>
   <name xml:lang="zh-CN">Gwenview</name>
   <name xml:lang="zh-TW">影像檢視_Gwenview</name>
   <summary>Image Viewer</summary>
@@ -78,7 +77,6 @@
   <summary xml:lang="sv">Bildvisare</summary>
   <summary xml:lang="tr">Resim Görüntüleyici</summary>
   <summary xml:lang="uk">Програма для перегляду зображень</summary>
-  <summary xml:lang="x-test">xxImage Viewerxx</summary>
   <summary xml:lang="zh-CN">图像查看器</summary>
   <summary xml:lang="zh-TW">影像檢視器</summary>
   <description>
@@ -116,7 +114,6 @@
     <p xml:lang="sv">Gwenview är en snabb och lättanvänd bild- och videovisare av KDE, idealisk för att bläddra i och visa en bildsamling.</p>
     <p xml:lang="tr">Gwenview, KDE için hızlı ve kolay kullanılır bir resim görüntüleyicisidir. Resim koleksiyonu içinde gezinmek ve görüntülemek için idealdir.</p>
     <p xml:lang="uk">Gwenview — швидка і проста у користування програма для перегляду зображень від KDE, ідеальна для навігації збіркою зображень та показу зображень.</p>
-    <p xml:lang="x-test">xxGwenview is a fast and easy to use image viewer by KDE, ideal for browsing and displaying a collection of images.xx</p>
     <p xml:lang="zh-CN">Gwenview 是快速易用的 KDE 图像查看器，浏览和显示的图像集合的理想选择。</p>
     <p xml:lang="zh-TW">Gwenview 是 KDE 裡一套快速並簡易使用的影像檢視器，用來瀏覽與顯示圖片集相當理想。</p>
     <p>Features:</p>
@@ -157,7 +154,6 @@
     <p xml:lang="sv">Funktioner:</p>
     <p xml:lang="tr">Özellikleri:</p>
     <p xml:lang="uk">Можливості:</p>
-    <p xml:lang="x-test">xxFeatures:xx</p>
     <p xml:lang="zh-CN">功能：</p>
     <p xml:lang="zh-TW">功能：</p>
     <ul>
@@ -197,7 +193,6 @@
       <li xml:lang="sv">Stöder enkla bildändringar: Rotera, spegla, vänd och ändra storlek</li>
       <li xml:lang="tr">Basit resim işleme işlevlerini destekler: döndürme, aynalama, çevirme ve yeniden boyutlandırma</li>
       <li xml:lang="uk">підтримка обробки зображень: обертання, віддзеркалення, перевертання та зміни розмірів;</li>
-      <li xml:lang="x-test">xxSupports simple image manipulations: rotate, mirror, flip, and resizexx</li>
       <li xml:lang="zh-CN">支持简单的图片操作: 旋转、镜像、翻转和缩放</li>
       <li xml:lang="zh-TW">支援簡單影像處理：旋轉、鏡射、翻轉與調整大小</li>
       <li>Supports basic file management actions such as copy, move, delete, and others</li>
@@ -236,7 +231,6 @@
       <li xml:lang="sv">Stöder grundläggande filhanteringsåtgärder som kopiera, flytta, ta bort, med mera</li>
       <li xml:lang="tr">Kopyalama, taşıma, silme ve diğerleri gibi basit dosya yönetimi işlevlerini destekler</li>
       <li xml:lang="uk">підтримка базових дій з керування файлами: копіювання, пересування, вилучення тощо;</li>
-      <li xml:lang="x-test">xxSupports basic file management actions such as copy, move, delete, and othersxx</li>
       <li xml:lang="zh-CN">支持基本文件操作，例如复制、移动、删除等等</li>
       <li xml:lang="zh-TW">支援基本的管理動作，如複製、移動、刪除與其他</li>
       <li>Functions both as a standalone application and an embedded viewer in the Konqueror web browser</li>
@@ -275,7 +269,6 @@
       <li xml:lang="sv">Fungerar både som ett fristående program och för inbäddad visning i webbläsaren Konqueror</li>
       <li xml:lang="tr">Tek başına çalıştığında ve Konqueror web tarayısında gömülü olduğunda işlevleri</li>
       <li xml:lang="uk">можливість роботи у режимі окремої програми та вбудованого переглядача у програмі для керування файлами Konqueror;</li>
-      <li xml:lang="x-test">xxFunctions both as a standalone application and an embedded viewer in the Konqueror web browserxx</li>
       <li xml:lang="zh-CN">可以独立运行，也可以作为 Konqueror 的内嵌图片浏览器</li>
       <li xml:lang="zh-TW">可以是單獨的應用程式，也可以嵌入在 Konqueror 瀏覽器中</li>
       <li>Can be extended using KIPI plugins.</li>
@@ -313,7 +306,6 @@
       <li xml:lang="sv">Kan utökas med KIPI-insticksprogram</li>
       <li xml:lang="tr">KIPI eklentileri kullanılarak genişletilebilir.</li>
       <li xml:lang="uk">можливість розширення переліку можливостей за допомогою додатків KIPI.</li>
-      <li xml:lang="x-test">xxCan be extended using KIPI plugins.xx</li>
       <li xml:lang="zh-CN">可以通过 KIPI 插件扩展功能。</li>
       <li xml:lang="zh-TW">可以使用 KIPI 外掛程式。</li>
     </ul>
@@ -363,7 +355,6 @@
       <caption xml:lang="sv">Gwenview</caption>
       <caption xml:lang="tr">Gwenview</caption>
       <caption xml:lang="uk">Gwenview</caption>
-      <caption xml:lang="x-test">xxGwenviewxx</caption>
       <caption xml:lang="zh-CN">Gwenview</caption>
       <caption xml:lang="zh-TW">影像檢視_Gwenview</caption>
       <image>https://cdn.kde.org/screenshots/gwenview/gwenview.png</image>
@@ -394,7 +385,6 @@
       <caption xml:lang="sk">Gwenview zobrazujúci obrázok, s ďalšími údajmi zobrazenými na bočnom paneli</caption>
       <caption xml:lang="sv">Gwenview som visar en bild, med ytterligare metadata visad i sidoraden</caption>
       <caption xml:lang="uk">Gwenview із відкритим зображенням та додатковими метаданими, які показано на бічній панелі</caption>
-      <caption xml:lang="x-test">xxGwenview displaying an image, with additional metadata shown in the sidebarxx</caption>
       <caption xml:lang="zh-CN">Gwenview 显示图像，并在侧栏中显示额外的元数据</caption>
       <caption xml:lang="zh-TW">Gwenview 顯示圖片時，也在側邊欄顯示了額外的中繼資料</caption>
       <image>https://kde.org/images/screenshots/gwenview.png</image>
