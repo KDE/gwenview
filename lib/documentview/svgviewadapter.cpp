@@ -34,7 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include "document/documentfactory.h"
-#include <qgraphicssceneevent.h>
+#include <QGraphicsSceneEvent>
 #include <lib/gvdebug.h>
 #include <lib/gwenviewconfig.h>
 

@@ -27,7 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QDebug>
 #include <KRandom>
 #include <QTemporaryFile>
-#include <qtest.h>
+#include <QTest>
 
 // Local
 #include "testutils.h"

@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QDebug>
 #include <KJobUiDelegate>
 #include <KIO/StatJob>
-#include <qtest.h>
+#include <QTest>
 #include <KDCRAW/KDcraw>
 
 // Local

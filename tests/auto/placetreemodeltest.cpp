@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KDE
 #include <QDebug>
 #include <QStandardPaths>
-#include <qtest.h>
+#include <QTest>
 #include <kio_version.h>
 
 // Local

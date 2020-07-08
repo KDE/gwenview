@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QPainter>
 
 // KDE
-#include <qtest.h>
+#include <QTest>
 #include <QDebug>
 #include <KIO/CopyJob>
 #include <KIO/DeleteJob>

@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // KDE
 #include <QDebug>
-#include <qtest.h>
+#include <QTest>
 
 // Local
 #include "../lib/exiv2imageloader.h"
