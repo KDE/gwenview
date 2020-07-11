@@ -358,8 +358,13 @@ void ThumbnailView::setModel(QAbstractItemModel* newModel)
         disconnect(model(), nullptr, this, nullptr);
     }
     QListView::setModel(newModel);
-    connect(model(), &QAbstractItemModel::rowsRemoved,
-            this, &ThumbnailView::rowsRemovedSignal);
+
+    connect(model(), &QAbstractItemModel::rowsRemoved, this, [=](const QModelIndex &index, int first, int last) {
+        // Avoid the delegate doing a ton of work if we're not visible
+        if (isVisible()) {
+            emit rowsRemovedSignal(index, first, last);
+        }
+    });
 }
 
 void ThumbnailView::setThumbnailProvider(ThumbnailProvider* thumbnailProvider)
@@ -512,7 +517,10 @@ void ThumbnailView::rowsInserted(const QModelIndex& parent, int start, int end)
 {
     QListView::rowsInserted(parent, start, end);
     d->mScheduledThumbnailGenerationTimer.start();
-    emit rowsInsertedSignal(parent, start, end);
+
+    if (isVisible()) {
+        emit rowsInsertedSignal(parent, start, end);
+    }
 }
 
 void ThumbnailView::dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight, const QVector<int> &roles)

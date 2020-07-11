@@ -182,6 +182,7 @@ ThumbnailProvider::~ThumbnailProvider()
     if (mPreviousThumbnailGenerator) {
         disconnect(mPreviousThumbnailGenerator, nullptr, sThumbnailWriter, nullptr);
     }
+    sThumbnailWriter->requestInterruption();
     sThumbnailWriter->wait();
 }
 
