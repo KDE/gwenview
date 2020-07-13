@@ -320,7 +320,7 @@ void KIPIInterface::loadOnePlugin()
         // If we reach this point, we just loaded one plugin. Go back to the
         // event loop. We will come back to load the remaining plugins or create
         // the menu later
-        QMetaObject::invokeMethod(this, "loadOnePlugin", Qt::QueuedConnection);
+        QMetaObject::invokeMethod(this, &KIPIInterface::loadOnePlugin, Qt::QueuedConnection);
         return;
     }
 

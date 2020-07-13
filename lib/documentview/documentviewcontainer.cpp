@@ -277,7 +277,7 @@ void DocumentViewContainer::updateLayout()
         for (DocumentView* view : qAsConst(d->mRemovedViews)) {
             view->deleteLater();
         }
-        QMetaObject::invokeMethod(this, "pretendFadeInFinished", Qt::QueuedConnection);
+        QMetaObject::invokeMethod(this, &DocumentViewContainer::pretendFadeInFinished, Qt::QueuedConnection);
     }
     d->mRemovedViews.clear();
 }

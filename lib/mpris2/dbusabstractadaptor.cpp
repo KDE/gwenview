@@ -42,7 +42,7 @@ void DBusAbstractAdaptor::signalPropertyChange(const QString &propertyName, cons
 
     if (firstChange) {
         // trigger signal emission on next event loop
-        QMetaObject::invokeMethod(this, "emitPropertiesChangeDBusSignal", Qt::QueuedConnection);
+        QMetaObject::invokeMethod(this, &DBusAbstractAdaptor::emitPropertiesChangeDBusSignal, Qt::QueuedConnection);
     }
 }
 

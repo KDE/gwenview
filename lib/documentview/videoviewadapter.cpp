@@ -243,7 +243,7 @@ void VideoViewAdapter::setDocument(const Document::Ptr &doc)
     // If we do not use a queued connection, the signal arrives too early,
     // preventing the listing of the dir content when Gwenview is started with
     // a video as an argument.
-    QMetaObject::invokeMethod(this, "completed", Qt::QueuedConnection);
+    QMetaObject::invokeMethod(this, &VideoViewAdapter::completed, Qt::QueuedConnection);
 }
 
 Document::Ptr VideoViewAdapter::document() const

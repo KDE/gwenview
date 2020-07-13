@@ -315,7 +315,7 @@ void ThumbnailProvider::determineNextIcon()
     if (UrlUtils::urlIsFastLocalFile(mCurrentUrl)) {
         QFileInfo fileInfo(mCurrentUrl.toLocalFile());
         mOriginalTime = fileInfo.lastModified().toSecsSinceEpoch();
-        QMetaObject::invokeMethod(this, "checkThumbnail", Qt::QueuedConnection);
+        QMetaObject::invokeMethod(this, &ThumbnailProvider::checkThumbnail, Qt::QueuedConnection);
     } else {
         KIO::Job* job = KIO::stat(mCurrentUrl, KIO::HideProgressInfo);
         KJobWidgets::setWindow(job, qApp->activeWindow());

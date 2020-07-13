@@ -797,7 +797,7 @@ void DocumentTest::testUndoStackPush()
     protected:
         void redo() override
     {
-            QMetaObject::invokeMethod(this, "finish", Qt::QueuedConnection, Q_ARG(bool, true));
+            QMetaObject::invokeMethod(this, [this]() { finish(true); }, Qt::QueuedConnection);
         }
     };
 
@@ -806,7 +806,7 @@ void DocumentTest::testUndoStackPush()
     protected:
         void redo() override
     {
-            QMetaObject::invokeMethod(this, "finish", Qt::QueuedConnection, Q_ARG(bool, false));
+            QMetaObject::invokeMethod(this, [this]() { finish(false); }, Qt::QueuedConnection);
         }
     };
 

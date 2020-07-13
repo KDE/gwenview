@@ -177,7 +177,7 @@ void FolderViewContextManagerItem::slotRowsInserted(const QModelIndex& parentInd
     if (!parentIndex.isValid() || mModel->urlForIndex(parentIndex).isParentOf(mUrlToSelect)) {
         mExpandingIndex = parentIndex;
         // Hack because otherwise indexes are not in correct order!
-        QMetaObject::invokeMethod(this, "expandToSelectedUrl", Qt::QueuedConnection);
+        QMetaObject::invokeMethod(this, &FolderViewContextManagerItem::expandToSelectedUrl, Qt::QueuedConnection);
     }
 }
 

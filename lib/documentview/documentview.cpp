@@ -561,7 +561,7 @@ void DocumentView::openUrl(const QUrl &url, const DocumentView::Setup& setup)
         connect(d->mDocument.data(), &Document::kindDetermined,
                 this, &DocumentView::finishOpenUrl);
     } else {
-        QMetaObject::invokeMethod(this, "finishOpenUrl", Qt::QueuedConnection);
+        QMetaObject::invokeMethod(this, &DocumentView::finishOpenUrl, Qt::QueuedConnection);
     }
     d->setupBirdEyeView();
 }
@@ -1040,7 +1040,7 @@ bool DocumentView::sceneEventFilter(QGraphicsItem*, QEvent* event)
         if (mouseEvent->button() == Qt::LeftButton) {
             d->mDragStartPosition = mouseEvent->pos();
         }
-        QMetaObject::invokeMethod(this, "emitFocused", Qt::QueuedConnection);
+        QMetaObject::invokeMethod(this, &DocumentView::emitFocused, Qt::QueuedConnection);
     } else if (event->type() == QEvent::GraphicsSceneHoverMove) {
         if (d->mBirdEyeView) {
             d->mBirdEyeView->onMouseMoved();

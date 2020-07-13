@@ -74,6 +74,6 @@ int main(int argc, char *argv[])
 
     Gwenview::ImportDialog* dialog = new Gwenview::ImportDialog();
     dialog->show();
-    QMetaObject::invokeMethod(dialog, "setSourceUrl", Qt::QueuedConnection, Q_ARG(QUrl, url), Q_ARG(QString, deviceUdi));
+    QMetaObject::invokeMethod(dialog, [dialog, url, deviceUdi]() { dialog->setSourceUrl(url, deviceUdi); }, Qt::QueuedConnection);
     return app.exec();
 }

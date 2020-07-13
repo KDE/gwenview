@@ -63,7 +63,7 @@ void SvgImageView::loadFromDocument()
     GV_RETURN_IF_FAIL(doc);
 
     if (doc->loadingState() == Document::Loaded) {
-        QMetaObject::invokeMethod(this, "finishLoadFromDocument", Qt::QueuedConnection);
+        QMetaObject::invokeMethod(this, &SvgImageView::finishLoadFromDocument, Qt::QueuedConnection);
     }
 
     // Ensure finishLoadFromDocument is also called when

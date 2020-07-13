@@ -69,7 +69,7 @@ void DocumentJob::setDocument(const Document::Ptr& doc)
 
 void DocumentJob::start()
 {
-    QMetaObject::invokeMethod(this, "doStart", Qt::QueuedConnection);
+    QMetaObject::invokeMethod(this, &DocumentJob::doStart, Qt::QueuedConnection);
 }
 
 bool DocumentJob::checkDocumentEditor()

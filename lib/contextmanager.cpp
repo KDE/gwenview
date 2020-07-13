@@ -331,7 +331,7 @@ void ContextManager::slotRowsInserted()
     // thumbnail bar is visible, the image will not be selected in the thumbnail
     // bar.
     if (d->mUrlToSelect.isValid()) {
-        QMetaObject::invokeMethod(this, "selectUrlToSelect", Qt::QueuedConnection);
+        QMetaObject::invokeMethod(this, &ContextManager::selectUrlToSelect, Qt::QueuedConnection);
     }
 }
 

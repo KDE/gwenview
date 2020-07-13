@@ -561,7 +561,7 @@ void BrowseMainPage::slotUrlsDropped(const QUrl &destUrl, QDropEvent* event)
     // We can't call FileOperations::showMenuForDroppedUrls() directly because
     // we need the slot to return so that the drop event is accepted. Otherwise
     // the drop cursor is still visible when the menu is shown.
-    QMetaObject::invokeMethod(this, "showMenuForDroppedUrls", Qt::QueuedConnection, Q_ARG(QList<QUrl>, urlList), Q_ARG(QUrl, destUrl));
+    QMetaObject::invokeMethod(this, [this, urlList, destUrl]() { showMenuForDroppedUrls(urlList, destUrl); }, Qt::QueuedConnection);
 }
 
 void BrowseMainPage::showMenuForDroppedUrls(const QList<QUrl>& urlList, const QUrl &destUrl)

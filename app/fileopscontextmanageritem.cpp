@@ -224,7 +224,7 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, QL
     // Delay action update because it must happen *after* main window has called
     // createGUI(), otherwise calling mXMLGUIClient->plugActionList() will
     // fail.
-    QMetaObject::invokeMethod(this, "updateActions", Qt::QueuedConnection);
+    QMetaObject::invokeMethod(this, &FileOpsContextManagerItem::updateActions, Qt::QueuedConnection);
 }
 
 FileOpsContextManagerItem::~FileOpsContextManagerItem()
