@@ -391,7 +391,7 @@ struct MainWindow::Private
                 mGvCore, &GvCore::clearRecentFilesAndFolders);
         QAction * clearAction = mFileOpenRecentAction->menu()->findChild<QAction*>("clear_action");
         if (clearAction) {
-            clearAction->setText(i18nc("@action Open Recent menu", "Forget All Files && Folders"));
+            clearAction->setText(i18nc("@action Open Recent menu", "Clear List"));
         }
         file->addAction("file_open_recent", mFileOpenRecentAction);
         file->addAction(KStandardAction::Print, q, SLOT(print()));
