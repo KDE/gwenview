@@ -152,6 +152,8 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
 
         KActionMenu* sortActionMenu = view->add<KActionMenu>("sort_by");
         sortActionMenu->setText(i18nc("@action:inmenu", "Sort By"));
+        sortActionMenu->setIcon(QIcon::fromTheme(QStringLiteral("view-sort")));
+        sortActionMenu->setDelayed(false);
         
         mSortAction = new QActionGroup(actionCollection);
         action = new QAction(i18nc("@addAction:inmenu", "Name"), mSortAction);
