@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Gwenview
 Name[ar]=جوِينفيو
+Name[az]=Gwenview
 Name[be]=Gwenview
 Name[bg]=Gwenview
 Name[bs]=Gwenview
@@ -67,6 +68,7 @@ Name[zh_CN]=Gwenview
 Name[zh_TW]=影像檢視_Gwenview
 GenericName=KDE Image Viewer
 GenericName[ar]=عارض صور كدي
+GenericName[az]=KDE Şəkilə Baxış Vasitəsi
 GenericName[bg]=Преглед на изображения в KDE
 GenericName[bs]=KDE Prikazivač slika
 GenericName[ca]=Visor d'imatges del KDE
@@ -120,6 +122,7 @@ GenericName[zh_CN]=KDE 图像查看器
 GenericName[zh_TW]=KDE 影像檢視程式
 Comment=A simple image viewer
 Comment[ar]=عارض صور بسيط
+Comment[az]=Sadə şəkilə baxış vasitəsi
 Comment[bg]=Програма за преглед на изображения
 Comment[bs]=Jednostavan prikazivač slika
 Comment[ca]=Un visor d'imatges senzill
