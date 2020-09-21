@@ -185,6 +185,7 @@ struct TagWidgetPrivate
     void updateCompleterModel()
     {
         mTagCompleterModel->setTagInfo(mTagInfo);
+        mComboBox->setCurrentIndex(-1);
     }
 };
 
