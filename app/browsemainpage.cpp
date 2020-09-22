@@ -390,6 +390,7 @@ void BrowseMainPage::saveConfig() const
 
 bool BrowseMainPage::eventFilter(QObject* watched, QEvent* event)
 {
+    // Leave fullscreen when not viewing an image
     if (window()->isFullScreen() && event->type() == QEvent::ShortcutOverride) {
         const QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
         if (keyEvent->key() == Qt::Key_Escape) {
@@ -397,7 +398,6 @@ bool BrowseMainPage::eventFilter(QObject* watched, QEvent* event)
            event->accept();
         }
     }
-
     return QWidget::eventFilter(watched, event);
 }
 
