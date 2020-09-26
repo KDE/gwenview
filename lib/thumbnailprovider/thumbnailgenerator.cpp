@@ -181,6 +181,7 @@ ThumbnailGenerator::ThumbnailGenerator()
 : mCancel(false)
 {
     connect(qApp, &QCoreApplication::aboutToQuit, this, [=]() {
+        cancel();
         wait();
     }, Qt::DirectConnection);
     start();
