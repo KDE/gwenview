@@ -33,6 +33,7 @@
   <name xml:lang="pl">Gwenview</name>
   <name xml:lang="pt">Gwenview</name>
   <name xml:lang="pt-BR">Gwenview</name>
+  <name xml:lang="ro">Gwenview</name>
   <name xml:lang="ru">Gwenview</name>
   <name xml:lang="sk">Gwenview</name>
   <name xml:lang="sl">Gwenview</name>
@@ -71,6 +72,7 @@
   <summary xml:lang="pl">Przeglądarka obrazów</summary>
   <summary xml:lang="pt">Visualizador de Imagens</summary>
   <summary xml:lang="pt-BR">Visualizador de imagens</summary>
+  <summary xml:lang="ro">Vizualizor de imagini</summary>
   <summary xml:lang="ru">Программа просмотра изображений</summary>
   <summary xml:lang="sk">Prehliadač obrázkov</summary>
   <summary xml:lang="sl">Pregledovalnik slik</summary>
@@ -111,6 +113,7 @@
     <p xml:lang="pl">Gwenview to szybka i łatwa w użyciu przeglądarka obrazów dla KDE. Świetnie nadaje się do przeglądania i wyświetlania zbiorów obrazów.</p>
     <p xml:lang="pt">O Gwenview é um visualizador de imagens rápido e simples de usar do KDE, ideal para a navegação e apresentação de uma colecção de imagens.</p>
     <p xml:lang="pt-BR">Gwenview é um visualizador de imagens rápido e fácil de usar do KDE, ideal para navegar e exibir uma coleção de imagens.</p>
+    <p xml:lang="ro">Gwenview e un vizualizor de imagini rapid și ușor de folosit de la KDE, ideal pentru răsfoirea și afișarea unei colecții de imagini.</p>
     <p xml:lang="ru">Gwenview — быстрая и простая в использовании программа просмотра изображений от KDE.</p>
     <p xml:lang="sk">Gwenview je rýchly a jednoducho použiteľný prehliadač obrázkov pre KDE, ideálny na prehliadanie a zobrazenie kolekcie obrázkov.</p>
     <p xml:lang="sl">Gwenview je hiter in enostaven pregledovalnik slik za KDE. Idealen je za brskanje po in prikazovanje zbirk slik.</p>
@@ -154,6 +157,7 @@
     <p xml:lang="pl">Możliwości:</p>
     <p xml:lang="pt">Funcionalidades:</p>
     <p xml:lang="pt-BR">Funcionalidades:</p>
+    <p xml:lang="ro">Caracteristici:</p>
     <p xml:lang="ru">Возможности:</p>
     <p xml:lang="sk">Funkcie:</p>
     <p xml:lang="sl">Zmožnosti:</p>
@@ -197,6 +201,7 @@
       <li xml:lang="pl">Obsługa prostych działań na obrazach: obrót, odbicie w poziomie, odbicie w pionie oraz zmiana rozmiaru</li>
       <li xml:lang="pt">Suporta as manipulações simples de imagens: rotação, espelho, inversão e dimensionamento</li>
       <li xml:lang="pt-BR">Suporte a manipulações simples de imagens: rotação, espelho, inversão e redimensionamento</li>
+      <li xml:lang="ro">Susține manipulări simple ale imaginilor: rotire, oglindire, răsturnare și redimensionare</li>
       <li xml:lang="ru">Поддержка простых преобразований изображения: поворот, отражение, переворот и изменение размера</li>
       <li xml:lang="sk">Podporuje jednoduché manipulácie s obrázkami: otáčanie, zrkadlenie, prevrátenie a zmenu veľkosti</li>
       <li xml:lang="sl">Podpira preproste spremembe slik: vrtenje, zrcaljenje, obračanje in spreminjanje velikosti</li>
@@ -239,6 +244,7 @@
       <li xml:lang="pl">Możliwość wykonywania prostych działań plikowych takich jak kopiuj, przenieś, usuń i innych</li>
       <li xml:lang="pt">Suporta as acções básicas de gestão de ficheiros, como a cópia, movimentação, remoção, entre outras</li>
       <li xml:lang="pt-BR">Suporta a ações básicas de gerenciamento de arquivos, como cópia, movimentação, exclusão, entre outras</li>
+      <li xml:lang="ro">Susține acțiuni de bază pentru gestiunea fișierelor, cum ar fi copiere, mutare, ștergere, și altele</li>
       <li xml:lang="ru">Поддержка базовых действий с файлами: копирование, перемещение, удаление и другие</li>
       <li xml:lang="sk">Podporuje základné akcie správy súborov ako kopírovanie, presúvanie, mazanie a iné</li>
       <li xml:lang="sl">Podpira osnovne ukaze za delo z datotekami: kopiranje, premikanje, brisanje in drugo</li>
@@ -281,6 +287,7 @@
       <li xml:lang="pl">Możliwość działania jako samodzielny program lub jako osadzona przeglądarka w przeglądarce sieciowej Konqueror</li>
       <li xml:lang="pt">Funciona tanto como uma aplicação independente como um visualizador incorporado no navegador Web Konqueror</li>
       <li xml:lang="pt-BR">Funciona como um aplicativo independente e também como visualizador incorporado no navegador Web Konqueror</li>
+      <li xml:lang="ro">Funcționează atât ca aplicație de sine stătătoare, precum și ca vizualizor înglobat în navigatorul web Konqueror</li>
       <li xml:lang="ru">Доступен как отдельное приложение и как встроенный инструмент просмотра изображений в веб-браузере Konqueror</li>
       <li xml:lang="sk">Funguje tak ako samostatná aplikácia, ako aj vstavaný prehliadač vo webovom prehliadači Konqueror</li>
       <li xml:lang="sl">Deluje tako kot samostojen program, kot tudi v brskalnik Konqueror vgrajen pregledovalnik</li>
@@ -322,6 +329,7 @@
       <li xml:lang="pl">Możliwość poszerzenia możliwości przez wtyczki KIPI.</li>
       <li xml:lang="pt">Pode ser alargado com os 'plugins' do KIPI.</li>
       <li xml:lang="pt-BR">Pode ter suas funcionalidades ampliadas com os plugins do KIPI.</li>
+      <li xml:lang="ro">Poate fi extins folosind extensii KIPI.</li>
       <li xml:lang="ru">Посредством модулей KIPI могут быть добавлены дополнительные функции</li>
       <li xml:lang="sk">Môže sa rozšíriť pomocou KIPI pluginov.</li>
       <li xml:lang="sl">Lahko ga razširite s pomočjo vstavkov KIPI.</li>
@@ -373,6 +381,7 @@
       <caption xml:lang="pl">Gwenview</caption>
       <caption xml:lang="pt">Gwenview</caption>
       <caption xml:lang="pt-BR">Gwenview</caption>
+      <caption xml:lang="ro">Gwenview</caption>
       <caption xml:lang="ru">Gwenview</caption>
       <caption xml:lang="sk">Gwenview</caption>
       <caption xml:lang="sl">Gwenview</caption>
@@ -414,6 +423,7 @@
       <caption xml:lang="pl">Gwenview wyświetla obraz z dodatkowymi metadanymi na pasku bocznym</caption>
       <caption xml:lang="pt">O Gwenview a mostrar uma imagem com os meta-dados adicionais visíveis na barra lateral</caption>
       <caption xml:lang="pt-BR">O Gwenview exibindo uma imagem com os metadados adicionais visíveis na barra lateral</caption>
+      <caption xml:lang="ro">Gwenview afișând o imagine, cu metadate suplimentare arătate în bara laterală</caption>
       <caption xml:lang="ru">Просмотр изображения и дополнительных метаданных, показанных на боковой панели в Gwenview</caption>
       <caption xml:lang="sk">Gwenview zobrazujúci obrázok, s ďalšími údajmi zobrazenými na bočnom paneli</caption>
       <caption xml:lang="sl">Gwenview prikazuje sliko z dodatnimi metapodatki, prikazanimi v stranski vrstici</caption>
