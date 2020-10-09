@@ -240,6 +240,10 @@
         <entry name="ListVideos" type="Bool">
             <default>true</default>
         </entry>
+
+        <entry name="AutoplayVideos" type="Bool">
+            <default>false</default>
+        </entry>
     </group>
 
     <group name="Print">

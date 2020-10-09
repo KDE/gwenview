@@ -43,6 +43,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <hud/hudslider.h>
 #include <hud/hudwidget.h>
 #include <graphicswidgetfloater.h>
+#include <lib/gwenviewconfig.h>
 
 namespace Gwenview
 {
@@ -61,6 +62,7 @@ struct VideoViewAdapterPrivate
 
     QAction* mPlayPauseAction;
     QAction* mMuteAction;
+    QGraphicsProxyWidget* mProxy;
 
     HudSlider* mVolumeSlider;
     QTime mLastVolumeSliderChangeTime;
@@ -211,14 +213,14 @@ VideoViewAdapter::VideoViewAdapter()
     d->mAudioOutput = new Phonon::AudioOutput(Phonon::VideoCategory, this);
     Phonon::createPath(d->mMediaObject, d->mAudioOutput);
 
-    QGraphicsProxyWidget* proxy = new DoubleClickableProxyWidget;
-    proxy->setFlag(QGraphicsItem::ItemIsSelectable); // Needed for doubleclick to work
-    proxy->setWidget(d->mVideoWidget);
-    proxy->setAcceptHoverEvents(true);
-    setWidget(proxy);
+    d->mProxy = new DoubleClickableProxyWidget;
+    d->mProxy->setFlag(QGraphicsItem::ItemIsSelectable); // Needed for doubleclick to work
+    d->mProxy->setWidget(d->mVideoWidget);
+    d->mProxy->setAcceptHoverEvents(GwenviewConfig::autoplayVideos()); // Makes hud visible when autoplay is disabled
+    setWidget(d->mProxy);
 
     d->setupActions();
-    d->setupHud(proxy);
+    d->setupHud(d->mProxy);
 
     updatePlayUi();
     updateMuteAction();
@@ -239,7 +241,9 @@ void VideoViewAdapter::setDocument(const Document::Ptr &doc)
     d->mHud->show();
     d->mDocument = doc;
     d->mMediaObject->setCurrentSource(d->mDocument->url());
-    d->mMediaObject->play();
+    if (GwenviewConfig::autoplayVideos()) {
+        d->mMediaObject->play();
+    }
     // If we do not use a queued connection, the signal arrives too early,
     // preventing the listing of the dir content when Gwenview is started with
     // a video as an argument.
@@ -255,8 +259,11 @@ void VideoViewAdapter::slotPlayPauseClicked()
 {
     if (d->isPlaying()) {
         d->mMediaObject->pause();
+        d->mHud->fadeIn();
+        d->mProxy->setAcceptHoverEvents(false);
     } else {
         d->mMediaObject->play();
+        d->mProxy->setAcceptHoverEvents(true);
     }
 }
 

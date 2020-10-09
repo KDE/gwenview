@@ -67,6 +67,11 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     mGeneralConfigPage.jpegQualitySpinner->setValue(mGeneralConfigPage.kcfg_JPEGQuality->value());
     mGeneralConfigPage.backgroundValueFrame->setMinimumWidth(mGeneralConfigPage.jpegQualitySpinner->width());
     
+    mGeneralConfigPage.kcfg_AutoplayVideos->setEnabled(mGeneralConfigPage.kcfg_ListVideos->isChecked());
+    connect(mGeneralConfigPage.kcfg_ListVideos, &QCheckBox::stateChanged, [=](const int &state) {
+        mGeneralConfigPage.kcfg_AutoplayVideos->setEnabled(state == Qt::Checked);
+    });
+
     // Image View
     widget = setupPage(mImageViewConfigPage);
 
