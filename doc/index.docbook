@@ -36,8 +36,8 @@
 </copyright>
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2020-06-01</date>
-<releaseinfo>Applications 20.08</releaseinfo>
+<date>2020-10-10</date>
+<releaseinfo>Applications 20.12</releaseinfo>
 <abstract>
 <para>&gwenview; is an image and video viewer.</para>
 </abstract>
@@ -715,6 +715,7 @@ Link an image.</para></listitem>
                 <term><guilabel>Videos</guilabel></term>
                 <listitem>
                     <para>Check the <guilabel>Show videos</guilabel> checkbox to allow &gwenview; to show videos among the images.</para>
+                    <para>Uncheck the <guilabel>Automatically play</guilabel> checkbox to disable autoplaying videos. This prevents video from automatically starting when browsing.</para>
                 </listitem>
             </varlistentry>
             <varlistentry>
