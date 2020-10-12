@@ -148,7 +148,6 @@ struct ViewMainPagePrivate
         mThumbnailBar = new ThumbnailBarView;
         ThumbnailBarItemDelegate* delegate = new ThumbnailBarItemDelegate(mThumbnailBar);
         mThumbnailBar->setItemDelegate(delegate);
-        mThumbnailBar->setVisible(GwenviewConfig::thumbnailBarIsVisible());
         mThumbnailBar->setSelectionMode(QAbstractItemView::ExtendedSelection);
     }
 
@@ -330,6 +329,9 @@ struct ViewMainPagePrivate
         mThumbnailSplitter->addWidget(mAdapterContainer);
         mThumbnailSplitter->addWidget(mThumbnailBar);
         mThumbnailSplitter->setSizes(GwenviewConfig::thumbnailSplitterSizes());
+        // Show the thumbnail bar after setting the parent to avoid recreating
+        // the native window and to avoid QTBUG-87345.
+        mThumbnailBar->setVisible(GwenviewConfig::thumbnailBarIsVisible());
 
         QVBoxLayout* layout = new QVBoxLayout(q);
         layout->setContentsMargins(0, 0, 0, 0);
