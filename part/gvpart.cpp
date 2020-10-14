@@ -66,8 +66,8 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QVariantList& /*arg
 
     connect(mDocumentView, &DocumentView::captionUpdateRequested,
             this, &KParts::Part::setWindowCaption);
-    connect(mDocumentView, SIGNAL(completed()),
-            SIGNAL(completed()));
+    connect(mDocumentView, &DocumentView::completed,
+            this, QOverload<>::of(&KParts::ReadOnlyPart::completed));
 
     connect(mDocumentView, &DocumentView::contextMenuRequested,
             this, &GVPart::showContextMenu);
@@ -113,6 +113,7 @@ bool GVPart::openUrl(const QUrl& url)
     DocumentView::Setup setup;
     setup.zoomToFit = true;
     mDocumentView->openUrl(url, setup);
+    mDocumentView->setCurrent(true);
     return true;
 }
 
