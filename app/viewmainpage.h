@@ -104,10 +104,6 @@ public:
      */
     DocumentView* documentView() const;
 
-    /**
-     * Sets a widget to show at the bottom of the panel
-     */
-    void setToolWidget(QWidget* widget);
 
     QToolButton* toggleSideBarButton() const;
 
