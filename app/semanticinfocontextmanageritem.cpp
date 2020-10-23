@@ -51,7 +51,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/hud/hudwidget.h>
 #include <lib/signalblocker.h>
 #include <lib/widgetfloater.h>
-#include <lib/semanticinfo/abstractsemanticinfobackend.h>
 #include <lib/semanticinfo/semanticinfodirmodel.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
 

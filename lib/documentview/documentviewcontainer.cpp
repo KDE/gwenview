@@ -22,7 +22,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "documentviewcontainer.h"
 
 // Local
-#include <lib/documentview/documentview.h>
 #include <lib/graphicswidgetfloater.h>
 #include <lib/gvdebug.h>
 #include <lib/gwenviewconfig.h>

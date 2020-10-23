@@ -24,7 +24,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QCheckBox>
 #include <QItemSelectionModel>
 #include <QShortcut>
-#include <QToolButton>
 #include <QVBoxLayout>
 #include "gwenview_app_debug.h"
 #include <QMenu>
@@ -45,7 +44,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "fileoperations.h"
 #include <gvcore.h>
 #include "splitter.h"
-#include <lib/document/document.h>
 #include <lib/documentview/abstractdocumentviewadapter.h>
 #include <lib/documentview/abstractrasterimageviewtool.h>
 #include <lib/documentview/documentview.h>

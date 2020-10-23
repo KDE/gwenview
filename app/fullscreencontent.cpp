@@ -28,7 +28,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QEvent>
 #include <QLabel>
 #include <QMenu>
-#include <QPointer>
 #include <QToolButton>
 #include <QWidgetAction>
 #include <QTimer>

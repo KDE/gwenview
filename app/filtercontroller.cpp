@@ -21,7 +21,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Self
 #include "filtercontroller.h"
 
-#include <config-gwenview.h>
 
 // Qt
 #include <QAction>
@@ -40,17 +39,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KLocalizedString>
 
 // Local
-#include <lib/datewidget.h>
 #include <lib/flowlayout.h>
 #include <lib/paintutils.h>
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 // KDE
-#include <kratingwidget.h>
 
 // Local
-#include <lib/semanticinfo/abstractsemanticinfobackend.h>
-#include <lib/semanticinfo/tagmodel.h>
 #endif
 
 namespace Gwenview

@@ -18,7 +18,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
 #include "sorteddirmodel.h"
-#include <config-gwenview.h>
 
 // Qt
 #include <QTimer>

@@ -30,8 +30,6 @@
 // Qt
 #include <QDir>
 #include <QFile>
-#include <QImage>
-#include <QPixmap>
 #include <QCryptographicHash>
 #include "gwenview_lib_debug.h"
 #include <QTemporaryFile>
