@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Qt
 #include <QApplication>
+#include <QClipboard>
 #include <QDateTime>
 #include <QLineEdit>
 #include <QPushButton>
@@ -49,6 +50,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KFileItem>
 #include <KLocalizedString>
 #include <KMessageBox>
+#include <KMessageWidget>
 #include <KNotificationRestrictions>
 #include <KProtocolManager>
 #include <KLinkItemSelectionModel>
@@ -175,6 +177,7 @@ struct MainWindow::Private
     BrowseMainPage* mBrowseMainPage;
     StartMainPage* mStartMainPage;
     SideBar* mSideBar;
+    KMessageWidget* mSharedMessage;
     QStackedWidget* mViewStackedWidget;
     FullScreenContent* mFullScreenContent;
     SaveBar* mSaveBar;
@@ -248,10 +251,14 @@ struct MainWindow::Private
         // Right side of splitter
         mContentWidget = new QWidget(mCentralSplitter);
 
+        mSharedMessage = new KMessageWidget(mContentWidget);
+        mSharedMessage->setVisible(false);
+
         mSaveBar = new SaveBar(mContentWidget, q->actionCollection());
         connect(mContextManager, &ContextManager::currentUrlChanged, mSaveBar, &SaveBar::setCurrentUrl);
         mViewStackedWidget = new QStackedWidget(mContentWidget);
         QVBoxLayout* layout = new QVBoxLayout(mContentWidget);
+        layout->addWidget(mSharedMessage);
         layout->addWidget(mSaveBar);
         layout->addWidget(mViewStackedWidget);
         layout->setContentsMargins(0, 0, 0, 0);
@@ -523,6 +530,26 @@ struct MainWindow::Private
         actionCollection->addAction("share", mShareAction);
         mShareMenu = new Purpose::Menu(q);
         mShareAction->setMenu(mShareMenu);
+
+        connect(mShareMenu, &Purpose::Menu::finished, q, [this](const QJsonObject &output, int error, const QString &message) {
+
+            if (error && error != KIO::ERR_USER_CANCELED) {
+                mSharedMessage->setText(i18n("Error while sharing: %1", message));
+                mSharedMessage->setMessageType(KMessageWidget::MessageType::Error);
+                mSharedMessage->animatedShow();
+            } else {
+                const QString url = output[QStringLiteral("url")].toString();
+
+                if (!url.isEmpty()) {
+                    mSharedMessage->setText(i18n("The shared image link (<a href=\"%1\">%1</a>) has been copied to the clipboard.", url));
+                    mSharedMessage->setMessageType(KMessageWidget::MessageType::Positive);
+                    mSharedMessage->animatedShow();
+                    QApplication::clipboard()->setText(url);
+                } else {
+                    mSharedMessage->setVisible(false);
+                }
+            }
+        });
 #endif
     }
 
