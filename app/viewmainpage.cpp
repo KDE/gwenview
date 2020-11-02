@@ -716,8 +716,10 @@ void ViewMainPage::openUrls(const QList<QUrl>& allUrls, const QUrl &currentUrl)
         DocumentView::Setup savedSetup = d->mDocumentViewContainer->savedSetup(url);
         view->openUrl(url, d->mZoomMode == ZoomMode::Individual && savedSetup.valid ? savedSetup : setup);
 #ifdef KF5Activities_FOUND
-        d->mActivityResources.value(view)->setUri(url);
-        d->mActivityResources.value(view)->setMimetype(MimeTypeUtils::urlMimeType(url));
+        if (GwenviewConfig::historyEnabled()) {
+            d->mActivityResources.value(view)->setUri(url);
+            d->mActivityResources.value(view)->setMimetype(MimeTypeUtils::urlMimeType(url));
+        }
 #endif
     }
 
