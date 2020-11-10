@@ -128,5 +128,3 @@ install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/org.kde.gwenview.desktop
     DESTINATION ${KDE_INSTALL_APPDIR})
 install(FILES org.kde.gwenview.appdata.xml
     DESTINATION ${KDE_INSTALL_METAINFODIR})
-install(FILES slideshow.desktop
-    DESTINATION ${KDE_INSTALL_KSERVICES5DIR}/ServiceMenus)
