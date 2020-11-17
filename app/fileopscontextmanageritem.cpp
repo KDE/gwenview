@@ -30,6 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QShortcut>
 
 // KF
+#include <kio_version.h>
 #include <KActionCollection>
 #include <KActionCategory>
 #include <KFileItem>
@@ -43,11 +44,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KLocalizedString>
 #include <KOpenWithDialog>
 #include <KPropertiesDialog>
-#include <KRun>
 #include <KXMLGUIClient>
 #include <KUrlMimeData>
 #include <KFileItemListProperties>
 #include <KIO/OpenFileManagerWindowJob>
+#if KIO_VERSION >= QT_VERSION_CHECK(5, 71, 0)
+#include <KIO/ApplicationLauncherJob>
+#include <KIO/JobUiDelegate>
+#else
+#include <KRun>
+#endif
 
 // Local
 #include "dialogguard.h"
@@ -400,6 +406,16 @@ void FileOpsContextManagerItem::openWith(QAction* action)
     bool ok;
     int idx = action->data().toInt(&ok);
     GV_RETURN_IF_FAIL(ok);
+#if KIO_VERSION >= QT_VERSION_CHECK(5, 71, 0)
+    if (idx != -1) {
+        service = mServiceList.at(idx);
+    }
+    // If service is null, ApplicationLauncherJob will invoke the open-with dialog
+    auto *job = new KIO::ApplicationLauncherJob(service);
+    job->setUrls(list);
+    job->setUiDelegate(new KIO::JobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, mGroup));
+    job->start();
+#else
     if (idx == -1) {
         // Other Application...
         DialogGuard<KOpenWithDialog> dlg(list, mGroup);
@@ -420,6 +436,7 @@ void FileOpsContextManagerItem::openWith(QAction* action)
 
     Q_ASSERT(service);
     KRun::runService(*service, list, mGroup);
+#endif
 }
 
 void FileOpsContextManagerItem::openContainingFolder()
