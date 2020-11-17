@@ -89,7 +89,7 @@ void BalooSemanticInfoBackend::retrieveSemanticInfo(const QUrl &url)
     SemanticInfo si;
     si.mRating = md.rating();
     si.mDescription = md.userComment();
-    si.mTags = md.tags().toSet();
+    si.mTags = TagSet::fromList(md.tags());
 
     emit semanticInfoRetrieved(url, si);
 }

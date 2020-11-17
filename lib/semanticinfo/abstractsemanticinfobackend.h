@@ -52,6 +52,12 @@ public:
 
     QVariant toVariant() const;
     static TagSet fromVariant(const QVariant&);
+    static TagSet fromList(const QList<SemanticInfoTag>&);
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+private:
+    TagSet(const QList<SemanticInfoTag>&);
+#endif
 };
 
 /**
