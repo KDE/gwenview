@@ -39,7 +39,7 @@ class GWENVIEWLIB_EXPORT OneAndTwoFingerSwipe : public QGesture
     Q_PROPERTY(bool right READ right WRITE right)
 
 public:
-    explicit OneAndTwoFingerSwipe(QObject* parent = 0);
+    explicit OneAndTwoFingerSwipe(QObject* parent = nullptr);
 
 private:
     bool left;

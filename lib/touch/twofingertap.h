@@ -37,7 +37,7 @@ class GWENVIEWLIB_EXPORT TwoFingerTap : public QGesture
 {
 
 public:
-    explicit TwoFingerTap(QObject* parent = 0);
+    explicit TwoFingerTap(QObject* parent = nullptr);
 
 private:
 };

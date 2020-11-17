@@ -152,7 +152,7 @@ bool FITSData::loadFITS(QIODevice &buffer)
 
     long nelements = stats.samples_per_channel * channels;
 
-    if (fits_read_img(fptr, data_type, 1, nelements, 0, imageBuffer, &anynull, &status)) {
+    if (fits_read_img(fptr, data_type, 1, nelements, nullptr, imageBuffer, &anynull, &status)) {
         char errmsg[512];
         fits_get_errstatus(status, errmsg);
         errMessage = QString("Error reading image: %1").arg(errmsg);
@@ -432,7 +432,7 @@ bool FITSData::debayer()
 
         bayerBuffer = imageBuffer;
 
-        if (fits_read_img(fptr, data_type, 1, stats.samples_per_channel, 0, bayerBuffer, &anynull, &status)) {
+        if (fits_read_img(fptr, data_type, 1, stats.samples_per_channel, nullptr, bayerBuffer, &anynull, &status)) {
             char errmsg[512];
             fits_get_errstatus(status, errmsg);
             return false;

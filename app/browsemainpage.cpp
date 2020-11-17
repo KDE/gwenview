@@ -522,7 +522,7 @@ void BrowseMainPage::updateSortOrder()
 
 void BrowseMainPage::updateThumbnailDetails()
 {
-    PreviewItemDelegate::ThumbnailDetails details = 0;
+    PreviewItemDelegate::ThumbnailDetails details = {};
     const auto actionList = d->mThumbnailDetailsActionGroup->actions();
     for (const QAction * action : actionList) {
         if (action->isChecked()) {

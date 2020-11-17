@@ -38,10 +38,11 @@ using namespace Gwenview;
 
 struct TestWindow : public QWidget
 {
-    explicit TestWindow(QWidget* parent = 0)
+    explicit TestWindow(QWidget* parent = nullptr)
         : QWidget(parent)
         , mContainer(new SlideContainer)
-        , mContent(0) {
+        , mContent(nullptr)
+    {
         createContent();
 
         mMainWidget = new QTextEdit();

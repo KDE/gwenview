@@ -32,7 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 QUrl setUpRemoteTestDir(const QString& testFile)
 {
-    QWidget* authWindow = 0;
+    QWidget* authWindow = nullptr;
     if (qEnvironmentVariableIsEmpty("GV_REMOTE_TESTS_BASE_URL")) {
         qWarning() << "Environment variable GV_REMOTE_TESTS_BASE_URL not set: remote tests disabled";
         return QUrl();
@@ -85,7 +85,7 @@ void waitForDeferredDeletes()
 {
     while (QCoreApplication::hasPendingEvents()) {
         QCoreApplication::sendPostedEvents();
-        QCoreApplication::sendPostedEvents(0, QEvent::DeferredDelete);
+        QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
         QCoreApplication::processEvents();
     }
 }

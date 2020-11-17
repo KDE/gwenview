@@ -103,8 +103,8 @@ protected:
 private:
     BaseBinder(QObject* emitter)
     : BinderInternal(emitter)
-    , mReceiver(0)
-    , mMethod(0)
+    , mReceiver(nullptr)
+    , mMethod(nullptr)
     {}
 
     Receiver* mReceiver;

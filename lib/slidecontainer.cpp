@@ -35,7 +35,7 @@ static const int SLIDE_DURATION = 250;
 SlideContainer::SlideContainer(QWidget* parent)
 : QFrame(parent)
 {
-    mContent = 0;
+    mContent = nullptr;
     mSlidingOut = false;
     setFixedHeight(0);
 }
@@ -48,7 +48,7 @@ QWidget* SlideContainer::content() const
 void SlideContainer::setContent(QWidget* content)
 {
     if (mContent) {
-        mContent->setParent(0);
+        mContent->setParent(nullptr);
         mContent->removeEventFilter(this);
     }
     mContent = content;

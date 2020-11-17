@@ -98,7 +98,7 @@ HudButton::HudButton(QGraphicsItem* parent)
 , d(new HudButtonPrivate)
 {
     d->q = this;
-    d->mAction = 0;
+    d->mAction = nullptr;
     d->mIsDown = false;
 
     // Palette to use for generating light icon. All we need is a light foreground.

@@ -39,7 +39,7 @@ using namespace Gwenview;
 
 static void touchFile(const QString& path)
 {
-    utime(QFile::encodeName(path).data(), 0);
+    utime(QFile::encodeName(path).data(), nullptr);
 }
 
 #define NEW_ROW(fileName, dateTime) QTest::newRow(fileName) << fileName << dateTime

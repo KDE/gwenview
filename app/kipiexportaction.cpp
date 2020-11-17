@@ -67,8 +67,8 @@ KIPIExportAction::KIPIExportAction(QObject* parent)
 , d(new KIPIExportActionPrivate)
 {
     d->q = this;
-    d->mKIPIInterface = 0;
-    d->mDefaultAction = 0;
+    d->mKIPIInterface = nullptr;
+    d->mDefaultAction = nullptr;
     setToolTip(i18nc("@info:tooltip", "Share images using various services"));
 
     setDelayed(false);

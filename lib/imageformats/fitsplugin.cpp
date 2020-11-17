@@ -32,10 +32,10 @@ QImageIOPlugin::Capabilities FitsPlugin::capabilities(QIODevice *device, const Q
         return Capabilities(CanRead);
     }
     if (!format.isEmpty()) {
-        return 0;
+        return {};
     }
     if (!device->isOpen()) {
-        return 0;
+        return {};
     }
 
     Capabilities cap;

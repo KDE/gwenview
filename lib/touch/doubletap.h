@@ -37,7 +37,7 @@ class GWENVIEWLIB_EXPORT DoubleTap : public QGesture
 {
     Q_PROPERTY(QPointF pos READ pos WRITE pos)
 public:
-    explicit DoubleTap(QObject* parent = 0);
+    explicit DoubleTap(QObject* parent = nullptr);
 private:
     QPointF pos;
 };

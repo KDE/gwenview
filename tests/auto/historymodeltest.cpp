@@ -61,13 +61,13 @@ void HistoryModelTest::testAddUrl()
     QDateTime d2 = QDateTime::fromString("2009-01-29T23:01:47", Qt::ISODate);
     QTemporaryDir dir;
     {
-        HistoryModel model(0, dir.path());
+        HistoryModel model(nullptr, dir.path());
         model.addUrl(u1, d1);
         model.addUrl(u2, d2);
         testModel(model, u2, u1);
     }
 
-    HistoryModel model(0, dir.path());
+    HistoryModel model(nullptr, dir.path());
     testModel(model, u2, u1);
 
     // Make u1 the most recent
@@ -87,7 +87,7 @@ void HistoryModelTest::testGarbageCollect()
 
     QTemporaryDir dir;
     {
-        HistoryModel model(0, dir.path(), 2);
+        HistoryModel model(nullptr, dir.path(), 2);
         model.addUrl(u1, d1);
         model.addUrl(u2, d2);
         testModel(model, u2, u1);
@@ -97,7 +97,7 @@ void HistoryModelTest::testGarbageCollect()
     // Create a model with a larger history so that if garbage collecting fails
     // to remove the collected url, the size of the model won't pass
     // testModel()
-    HistoryModel model(0, dir.path(), 10);
+    HistoryModel model(nullptr, dir.path(), 10);
     testModel(model, u3, u2);
 }
 
@@ -109,7 +109,7 @@ void HistoryModelTest::testRemoveRows()
     QDateTime d2 = QDateTime::fromString("2009-01-29T23:01:47", Qt::ISODate);
 
     QTemporaryDir dir;
-    HistoryModel model(0, dir.path(), 2);
+    HistoryModel model(nullptr, dir.path(), 2);
     model.addUrl(u1, d1);
     model.addUrl(u2, d2);
     model.removeRows(0, 1);

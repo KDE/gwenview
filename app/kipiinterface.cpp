@@ -496,12 +496,12 @@ void KIPIInterface::slotDirectoryChanged()
 KIPI::FileReadWriteLock* KIPIInterface::createReadWriteLock(const QUrl& url) const
 {
     Q_UNUSED(url);
-    return NULL;
+    return nullptr;
 }
 
 KIPI::MetadataProcessor* KIPIInterface::createMetadataProcessor() const
 {
-    return NULL;
+    return nullptr;
 }
 
 #ifdef GWENVIEW_KIPI_WITH_CREATE_RAW_PROCESSOR

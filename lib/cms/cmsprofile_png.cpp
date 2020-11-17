@@ -63,28 +63,28 @@ cmsHPROFILE loadFromPngData(const QByteArray& data)
     buffer.open(QIODevice::ReadOnly);
 
     // Initialize the internal structures
-    png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, 0, 0, 0);
-    GV_RETURN_VALUE_IF_FAIL(png_ptr, 0);
+    png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
+    GV_RETURN_VALUE_IF_FAIL(png_ptr, nullptr);
 
     png_infop info_ptr = png_create_info_struct(png_ptr);
     if (!info_ptr) {
-        png_destroy_read_struct(&png_ptr, (png_infopp)NULL, (png_infopp)NULL);
+        png_destroy_read_struct(&png_ptr, (png_infopp)nullptr, (png_infopp)nullptr);
         qCWarning(GWENVIEW_LIB_LOG) << "Could not create info_struct";
-        return 0;
+        return nullptr;
     }
 
     png_infop end_info = png_create_info_struct(png_ptr);
     if (!end_info) {
-        png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
+        png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)nullptr);
         qCWarning(GWENVIEW_LIB_LOG) << "Could not create info_struct2";
-        return 0;
+        return nullptr;
     }
 
     // Catch errors
     if (setjmp(png_jmpbuf(png_ptr))) {
         png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
         qCWarning(GWENVIEW_LIB_LOG) << "Error decoding png file";
-        return 0;
+        return nullptr;
     }
 
     // Initialize the special
@@ -103,7 +103,7 @@ cmsHPROFILE loadFromPngData(const QByteArray& data)
     int compression_type;
     png_uint_32 proflen;
 
-    cmsHPROFILE profile = 0;
+    cmsHPROFILE profile = nullptr;
     if (png_get_iCCP(png_ptr, info_ptr, &profile_name, &compression_type, &profile_data, &proflen)) {
         profile = cmsOpenProfileFromMem(profile_data, proflen);
     }

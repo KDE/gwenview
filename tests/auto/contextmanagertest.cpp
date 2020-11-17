@@ -58,7 +58,7 @@ void ContextManagerTest::testRemove()
 
     QCOMPARE(dirModel.rowCount(), 3);
 
-    ContextManager manager(&dirModel, 0);
+    ContextManager manager(&dirModel, nullptr);
     // Select second row
     manager.selectionModel()->setCurrentIndex(dirModel.index(1, 0), QItemSelectionModel::Select);
 

@@ -63,7 +63,7 @@ class RandomNumberGenerator
 {
 public:
     RandomNumberGenerator()
-    : mSeed(time(0))
+    : mSeed(time(nullptr))
     {
     }
 

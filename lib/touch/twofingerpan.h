@@ -39,7 +39,7 @@ class GWENVIEWLIB_EXPORT TwoFingerPan : public QGesture
     Q_PROPERTY(bool delayActive READ getDelayActive WRITE setDelayActive)
 
 public:
-    explicit TwoFingerPan(QObject* parent = 0);
+    explicit TwoFingerPan(QObject* parent = nullptr);
     QPointF getDelta() {return delta;};
     void setDelta(QPointF _delta) {delta = _delta;};
     bool getDelayActive() {return delayActive;};

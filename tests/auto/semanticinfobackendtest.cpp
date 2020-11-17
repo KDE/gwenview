@@ -71,9 +71,9 @@ void SemanticInfoBackEndTest::initTestCase()
 void SemanticInfoBackEndTest::init()
 {
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_FAKE
-    mBackEnd = new FakeSemanticInfoBackEnd(0, FakeSemanticInfoBackEnd::InitializeEmpty);
+    mBackEnd = new FakeSemanticInfoBackEnd(nullptr, FakeSemanticInfoBackEnd::InitializeEmpty);
 #elif defined(GWENVIEW_SEMANTICINFO_BACKEND_BALOO)
-    mBackEnd = new BalooSemanticInfoBackend(0);
+    mBackEnd = new BalooSemanticInfoBackend(nullptr);
 #endif
 }
 

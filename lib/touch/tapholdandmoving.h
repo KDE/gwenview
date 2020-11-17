@@ -38,7 +38,7 @@ class GWENVIEWLIB_EXPORT TapHoldAndMoving : public QGesture
     Q_PROPERTY(QPoint pos READ getPos WRITE setPos)
 
 public:
-    explicit TapHoldAndMoving(QObject* parent = 0);
+    explicit TapHoldAndMoving(QObject* parent = nullptr);
     QPoint getPos() {return pos;};
     void setPos(QPoint _pos) {pos = _pos;};
 
