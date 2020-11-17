@@ -25,9 +25,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QAbstractButton>
 #include <QButtonGroup>
 
-// KDE
-#include <KConfigDialogManager>
-
 // Local
 
 namespace Gwenview
@@ -51,11 +48,6 @@ InvisibleButtonGroup::InvisibleButtonGroup(QWidget* parent)
     connect(d->mGroup, QOverload<int>::of(&QButtonGroup::buttonClicked),
 #endif
             this, &InvisibleButtonGroup::selectionChanged);
-    const QString name = QString::fromLatin1(metaObject()->className());
-    if (!KConfigDialogManager::propertyMap()->contains(name)) {
-        KConfigDialogManager::propertyMap()->insert(name, "current");
-        KConfigDialogManager::changedMap()->insert(name, SIGNAL(selectionChanged(int)));
-    }
 }
 
 InvisibleButtonGroup::~InvisibleButtonGroup()

@@ -78,7 +78,7 @@ struct InvisibleButtonGroupPrivate;
 class GWENVIEWLIB_EXPORT InvisibleButtonGroup : public QWidget
 {
     Q_OBJECT
-    Q_PROPERTY(int current READ selected WRITE setSelected)
+    Q_PROPERTY(int current READ selected WRITE setSelected NOTIFY selectionChanged USER true)
 public:
     explicit InvisibleButtonGroup(QWidget* parent = nullptr);
     ~InvisibleButtonGroup() override;
