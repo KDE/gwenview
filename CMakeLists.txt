@@ -56,7 +56,7 @@ find_package(Qt5DBus ${QT_MIN_VERSION} CONFIG QUIET)
 set(HAVE_QTDBUS ${Qt5DBus_FOUND})
 
 find_package(Phonon4Qt5 4.6.60 NO_MODULE REQUIRED)
-include_directories(BEFORE ${PHONON_INCLUDES})
+include_directories(BEFORE SYSTEM ${PHONON_INCLUDES})
 add_definitions(-DPHONON_LIB_SONAME=\"${PHONON_LIB_SONAME}\")
 
 find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
