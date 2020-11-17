@@ -21,12 +21,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QConicalGradient>
 #include <QImage>
 #include <QPainter>
+#include <QTest>
 
 // KF
 #include <kio_version.h>
 #include <KJobUiDelegate>
 #include <KIO/StatJob>
-#include <QTest>
+
+// KDCraw
 #include <KDCRAW/KDcraw>
 
 // Local

@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <hud/hudlabel.h>
 #include <graphicswidgetfloater.h>
 
-// KDE
+// KF
 
 // Qt
 #include <QAction>

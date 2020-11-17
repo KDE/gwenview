@@ -31,7 +31,7 @@
 #include <QPixmap>
 #include <QPointer>
 
-// KDE
+// KF
 #include <KIO/Job>
 #include <KFileItem>
 

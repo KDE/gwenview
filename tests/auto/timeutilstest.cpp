@@ -23,10 +23,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // libc
 #include <utime.h>
 
-// KDE
-#include <KFileItem>
+// Qt
 #include <QTemporaryFile>
 #include <QTest>
+
+// KF
+#include <KFileItem>
 
 // Local
 #include "../lib/timeutils.h"

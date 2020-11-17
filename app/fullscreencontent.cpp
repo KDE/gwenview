@@ -31,15 +31,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QToolButton>
 #include <QWidgetAction>
 #include <QTimer>
-#include "gwenview_app_debug.h"
 
-// KDE
+// KF
 #include <KActionCollection>
 #include <KActionMenu>
 #include <KLocalizedString>
 #include <KIconLoader>
 
 // Local
+#include "gwenview_app_debug.h"
 #include <lib/document/documentfactory.h>
 #include <lib/eventwatcher.h>
 #include <lib/fullscreenbar.h>

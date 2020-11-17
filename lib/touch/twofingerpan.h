@@ -21,11 +21,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #define TWOFINGERPAN_H
 
 #include <lib/gwenviewlib_export.h>
+
 // Qt
 #include <QGesture>
 #include <QGestureRecognizer>
 
-// KDE
+// KF
 
 // Local
 

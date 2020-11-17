@@ -23,7 +23,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QObject>
-// KDE
+
+// KF
 
 // Local
 #include <lib/gwenviewlib_export.h>

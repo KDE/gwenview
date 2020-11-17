@@ -22,12 +22,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Qt
 #include <QSignalSpy>
-
-// KDE
 #include <QDebug>
-#include <KRandom>
 #include <QTemporaryFile>
 #include <QTest>
+
+// KF
+#include <KRandom>
 
 // Local
 #include "testutils.h"

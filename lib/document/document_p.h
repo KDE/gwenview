@@ -28,10 +28,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <imagemetainfomodel.h>
 #include <document/documentjob.h>
 
-// KDE
-#include <QUrl>
+// KF
 
 // Qt
+#include <QUrl>
 #include <QImage>
 #include <QQueue>
 #include <QUndoStack>

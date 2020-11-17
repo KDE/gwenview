@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QString>
 #include <QFile>
 
-// KDE
+// KF
 
 // Exiv2
 #include <exiv2/exiv2.hpp>

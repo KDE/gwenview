@@ -27,13 +27,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QGraphicsTextItem>
 #include <QPainter>
 #include <QSvgRenderer>
-#include "gwenview_lib_debug.h"
+#include <QGraphicsSceneEvent>
 
-// KDE
+// KF
 
 // Local
+#include "gwenview_lib_debug.h"
 #include "document/documentfactory.h"
-#include <QGraphicsSceneEvent>
 #include <lib/gvdebug.h>
 #include <lib/gwenviewconfig.h>
 

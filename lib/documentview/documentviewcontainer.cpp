@@ -25,15 +25,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/graphicswidgetfloater.h>
 #include <lib/gvdebug.h>
 #include <lib/gwenviewconfig.h>
+#include "gwenview_lib_debug.h"
 
-// KDE
+// KF
 
 // Qt
 #include <QGLWidget>
 #include <QGraphicsScene>
 #include <QPropertyAnimation>
 #include <QTimer>
-#include "gwenview_lib_debug.h"
 #include <QtMath>
 
 namespace Gwenview

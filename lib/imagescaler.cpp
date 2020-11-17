@@ -22,12 +22,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QImage>
 #include <QRegion>
-#include "gwenview_lib_debug.h"
 #include <QApplication>
 
-// KDE
+// KF
 
 // Local
+#include "gwenview_lib_debug.h"
 #include <lib/document/document.h>
 #include <lib/paintutils.h>
 

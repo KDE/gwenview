@@ -24,16 +24,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include <lib/gvdebug.h>
+#include "gwenview_lib_debug.h"
 
 // Qt
-#include "gwenview_lib_debug.h"
 #include <QUrl>
 
-// KDE
-
-// Baloo
-#include <Baloo/TagListJob>
+// KF
 #include <KFileMetaData/UserMetaData>
+#include <Baloo/TagListJob>
 
 namespace Gwenview
 {

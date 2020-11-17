@@ -28,10 +28,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QToolButton>
 #include <QVBoxLayout>
 #include <QIcon>
-
-// KDE
-#include <KIconLoader>
 #include <QFontDatabase>
+
+// KF
+#include <KIconLoader>
 
 // Local
 #include <lib/gwenviewconfig.h>

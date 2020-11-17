@@ -29,7 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QUrl>
 #include <QProgressDialog>
 
-// KDE
+// KF
 #include <KLocalizedString>
 #include <KMessageBox>
 

@@ -36,10 +36,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QEvent>
 #include <QHoverEvent>
 #include <QDateTime>
-#include "gwenview_lib_debug.h"
 #include <QToolButton>
 
-// KDE
+// KF
 #include <KDirModel>
 #include <KIconLoader>
 
@@ -48,6 +47,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #endif
 
 // Local
+#include "gwenview_lib_debug.h"
 #include "archiveutils.h"
 #include "itemeditor.h"
 #include "paintutils.h"

@@ -23,7 +23,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 // Qt
 
-// KDE
+// KF
 
 // Local
 

@@ -21,18 +21,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Self
 #include "redeyereductionimageoperation.h"
 
-// Stdc
-#include <math.h>
+// STL
+#include <cmath>
 
 // Qt
 #include <QImage>
 #include <QPainter>
-#include "gwenview_lib_debug.h"
 
-// KDE
+// KF
 #include <KLocalizedString>
 
 // Local
+#include "gwenview_lib_debug.h"
 #include "ramp.h"
 #include "document/document.h"
 #include "document/documentjob.h"

@@ -24,10 +24,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // Qt
 #include <QSize>
-#include "gwenview_lib_debug.h"
 #include <QLocale>
 
-// KDE
+// KF
 #include <KFileItem>
 #include <KLocalizedString>
 #include <KFormat>
@@ -36,6 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <exiv2/exiv2.hpp>
 
 // Local
+#include "gwenview_lib_debug.h"
 #ifdef HAVE_FITS
 #include "imageformats/fitsformat/fitsdata.h"
 #include "urlutils.h"

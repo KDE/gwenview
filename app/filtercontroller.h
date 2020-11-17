@@ -29,7 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QObject>
 #include <QWidget>
 
-// KDE
+// KF
 #include <KFileItem>
 
 // Local
@@ -38,8 +38,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/timeutils.h>
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-// KDE
-#include <kratingwidget.h>
+// KF
+#include <KRatingWidget>
 
 // Local
 #include <lib/semanticinfo/abstractsemanticinfobackend.h>

@@ -27,15 +27,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/cms/cmsprofile.h>
 #include <lib/gvdebug.h>
 #include <lib/paintutils.h>
+#include "gwenview_lib_debug.h"
 
-// KDE
+// KF
 
 // Qt
 #include <QGraphicsSceneMouseEvent>
 #include <QPainter>
 #include <QTimer>
 #include <QPointer>
-#include "gwenview_lib_debug.h"
 #include <QApplication>
 
 

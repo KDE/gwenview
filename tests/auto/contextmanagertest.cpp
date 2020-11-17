@@ -28,11 +28,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QEventLoop>
 #include <QItemSelectionModel>
-
-// KDE
 #include <QDebug>
-#include <KDirLister>
 #include <QTest>
+
+// KF
+#include <KDirLister>
 
 using namespace Gwenview;
 using namespace TestUtils;

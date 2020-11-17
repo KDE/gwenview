@@ -38,9 +38,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QPointer>
 #include <QtConcurrent>
 #include <QUrl>
-#include "gwenview_lib_debug.h"
 
-// KDE
+// KF
 #include <KIO/Job>
 #include <kio/jobclasses.h>
 #include <KLocalizedString>
@@ -51,6 +50,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #endif
 
 // Local
+#include "gwenview_lib_debug.h"
 #include "animateddocumentloadedimpl.h"
 #include "cms/cmsprofile.h"
 #include "document.h"

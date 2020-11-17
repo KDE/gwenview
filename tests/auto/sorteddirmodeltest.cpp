@@ -25,11 +25,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/semanticinfo/sorteddirmodel.h>
 
 // Qt
-
-// KDE
 #include <QTest>
-#include <KDirLister>
 #include <QTemporaryDir>
+
+// KF
+#include <KDirLister>
 
 using namespace Gwenview;
 

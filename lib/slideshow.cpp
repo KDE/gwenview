@@ -19,21 +19,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 #include "slideshow.h"
 
-// libc
-#include <time.h>
-
 // STL
+#include <ctime>
 #include <algorithm>
 
 // Qt
 #include <QAction>
 #include <QTimer>
-#include "gwenview_lib_debug.h"
 
-// KDE
+// KF
 #include <KLocalizedString>
 
 // Local
+#include "gwenview_lib_debug.h"
 #include <lib/gvdebug.h>
 #include <gwenviewconfig.h>
 

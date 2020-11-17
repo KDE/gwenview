@@ -22,12 +22,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "tagmodel.h"
 
 // Qt
-
-// KDE
-#include "gwenview_lib_debug.h"
 #include <QIcon>
 
+// KF
+
 // Local
+#include "gwenview_lib_debug.h"
 #include "abstractsemanticinfobackend.h"
 
 namespace Gwenview

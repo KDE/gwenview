@@ -23,10 +23,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Local
 #include <lib/document/document.h>
 
-// KDE
-#include <QUrl>
+// KF
 
 // Qt
+#include <QUrl>
 #include <QToolButton>
 #include <QWidget>
 

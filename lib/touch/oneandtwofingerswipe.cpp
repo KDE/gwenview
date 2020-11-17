@@ -20,17 +20,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Self
 #include "oneandtwofingerswipe.h"
 
+// STL
+#include <cmath>
+
 // Qt
 #include <QTouchEvent>
-#include "gwenview_lib_debug.h"
 #include <QGraphicsWidget>
 
-// KDE
+// KF
 
 // Local
+#include "gwenview_lib_debug.h"
 #include "lib/touch/touch_helper.h"
 
-#include <math.h>
 
 namespace Gwenview
 {

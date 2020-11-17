@@ -20,7 +20,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 */
 // Self
 #include "startmainpage.h"
-#include "gwenview_app_debug.h"
 #include <config-gwenview.h>
 
 // Qt
@@ -34,11 +33,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QIcon>
 #include <QStyledItemDelegate>
 
-// KDE
+// KF
 #include <KFilePlacesModel>
 #include <KLocalizedString>
 
 // Local
+#include "gwenview_app_debug.h"
 #include <gvcore.h>
 #include <ui_startmainpage.h>
 #include <lib/dialogguard.h>

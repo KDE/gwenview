@@ -26,12 +26,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QImage>
 #include <QImageWriter>
 #include <QTransform>
-#include "gwenview_lib_debug.h"
 #include <QUrl>
 
-// KDE
+// KF
 
 // Local
+#include "gwenview_lib_debug.h"
 #include "documentjob.h"
 #include "gwenviewconfig.h"
 #include "imageutils.h"

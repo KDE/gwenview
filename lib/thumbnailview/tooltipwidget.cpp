@@ -24,12 +24,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QPainter>
 #include <QPainterPath>
-#include "gwenview_lib_debug.h"
 
-// KDE
+// KF
 #include <KColorScheme>
 
 // Local
+#include "gwenview_lib_debug.h"
 #include <lib/paintutils.h>
 
 static const int RADIUS = 5;

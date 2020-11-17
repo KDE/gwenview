@@ -25,9 +25,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QImage>
 #include <QPainter>
-
-// KDE
 #include <QDebug>
+
+// KF
 
 class ImageScalerClient : public QObject
 {

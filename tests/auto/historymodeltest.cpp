@@ -21,12 +21,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Qt
 #include <QDir>
-
-// KDE
 #include <QDebug>
-#include <KFilePlacesModel>
 #include <QTemporaryDir>
 #include <QTest>
+
+// KF
+#include <KFilePlacesModel>
 
 // Local
 #include "../lib/historymodel.h"

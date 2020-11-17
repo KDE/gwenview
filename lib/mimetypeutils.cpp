@@ -24,19 +24,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QApplication>
 #include <QStringList>
-#include "gwenview_lib_debug.h"
 #include <QFileInfo>
 #include <QUrl>
 #include <QMimeData>
 #include <QMimeDatabase>
 #include <QImageReader>
 
-// KDE
+// KF
 #include <KFileItem>
 #include <KIO/Job>
 #include <kio/jobclasses.h>
 
 // Local
+#include "gwenview_lib_debug.h"
 #include <archiveutils.h>
 #include <lib/document/documentfactory.h>
 #include <gvdebug.h>

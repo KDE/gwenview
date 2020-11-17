@@ -20,18 +20,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifndef TESTUTILS_H
 #define TESTUTILS_H
 
-#include <math.h>
+// STL
+#include <cmath>
 
 // Qt
 #include <QDir>
 #include <QImage>
 #include <QSignalSpy>
 #include <QTest>
-
-// KDE
 #include <QDebug>
 #include <QTemporaryDir>
 #include <QUrl>
+
+// KF
 
 #include "config-gwenview.h"
 

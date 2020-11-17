@@ -25,11 +25,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/recursivedirmodel.h>
 
 // Qt
-
-// KDE
-#include <KDirModel>
 #include <QTest>
 #include <QDebug>
+
+// KF
+#include <KDirModel>
 
 using namespace Gwenview;
 

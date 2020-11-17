@@ -19,18 +19,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 // Qt
 #include <QApplication>
-#include "gwenview_importer_debug.h"
 #include <QDir>
 #include <QCommandLineParser>
 #include <QScopedPointer>
 #include <QUrl>
-
-// KDE
-#include <KAboutData>
-#include <KLocalizedString>
 #include <QLocale>
 
+// KF
+#include <KAboutData>
+#include <KLocalizedString>
+
 // Local
+#include "gwenview_importer_debug.h"
 #include <lib/about.h>
 #include "importdialog.h"
 

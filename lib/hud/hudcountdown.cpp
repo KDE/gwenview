@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Local
 #include <lib/hud/hudtheme.h>
 
-// KDE
+// KF
 
 // Qt
 #include <QPainter>

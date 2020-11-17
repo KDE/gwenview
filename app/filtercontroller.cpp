@@ -21,7 +21,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Self
 #include "filtercontroller.h"
 
-
 // Qt
 #include <QAction>
 #include <QCompleter>
@@ -30,20 +29,20 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QPainterPath>
 #include <QTimer>
 #include <QToolButton>
-#include "gwenview_app_debug.h"
 #include <QIcon>
 
-// KDE
+// KF
 #include <KComboBox>
 #include <KIconLoader>
 #include <KLocalizedString>
 
 // Local
+#include "gwenview_app_debug.h"
 #include <lib/flowlayout.h>
 #include <lib/paintutils.h>
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-// KDE
+// KF
 
 // Local
 #endif

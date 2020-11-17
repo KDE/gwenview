@@ -20,7 +20,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 */
 // Self
 #include "gvcore.h"
-#include "dialogguard.h"
 
 // Qt
 #include <QApplication>
@@ -29,11 +28,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QImageWriter>
 #include <QLabel>
 #include <QMimeDatabase>
-#include "gwenview_app_debug.h"
 #include <QSpacerItem>
 #include <QSpinBox>
 
-// KDE
+// KF
 #include <KColorScheme>
 #include <KFileCustomDialog>
 #include <KFileWidget>
@@ -41,6 +39,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KMessageBox>
 
 // Local
+#include "gwenview_app_debug.h"
+#include "dialogguard.h"
 #include <lib/binder.h>
 #include <lib/document/documentfactory.h>
 #include <lib/document/documentjob.h>

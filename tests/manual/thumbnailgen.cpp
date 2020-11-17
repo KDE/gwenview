@@ -23,7 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <../auto/testutils.h>
 #include <lib/about.h>
 
-// KDE
+// KF
 #include <KAboutData>
 #include <KLocalizedString>
 

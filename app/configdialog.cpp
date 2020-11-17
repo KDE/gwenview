@@ -22,13 +22,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "configdialog.h"
 
 // Qt
+#include <QFontDatabase>
 
-// KDE
+// KF
 #include <KLocalizedString>
 
 // Local
 #include <lib/gwenviewconfig.h>
-#include <QFontDatabase>
 
 namespace Gwenview
 {

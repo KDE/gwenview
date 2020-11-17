@@ -23,11 +23,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QDateTime>
-#include "gwenview_importer_debug.h"
 #include <QUrl>
 #include <QTemporaryDir>
 
-// KDE
+// KF
 #include <KFileItem>
 #include <KIO/CopyJob>
 #include <KIO/DeleteJob>
@@ -42,6 +41,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <memory>
 
 // Local
+#include "gwenview_importer_debug.h"
 #include <fileutils.h>
 #include <filenameformater.h>
 #include <lib/timeutils.h>

@@ -32,11 +32,10 @@ extern "C" {
 #include <cms/iccjpeg.h>
 }
 
-// KDE
+// KF
 
 // Qt
 #include <QBuffer>
-#include "gwenview_lib_debug.h"
 #include <QtGlobal>
 
 // lcms
@@ -54,6 +53,7 @@ extern "C" {
 #endif
 
 // local
+#include "gwenview_lib_debug.h"
 #include <lib/gwenviewconfig.h>
 
 namespace Gwenview

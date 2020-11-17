@@ -20,8 +20,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Self
 #include "touch.h"
 
+// STL
+#include <cmath>
+
 // Qt
-#include "gwenview_lib_debug.h"
 #include <QWidget>
 #include <QCoreApplication>
 #include <QMouseEvent>
@@ -29,14 +31,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QGuiApplication>
 #include <QGraphicsWidget>
 #include <QDateTime>
-#include "touch_helper.h"
 
-
-// KDE
+// KF
 
 // Local
+#include "touch_helper.h"
+#include "gwenview_lib_debug.h"
 
-#include <math.h>
 
 namespace Gwenview
 {

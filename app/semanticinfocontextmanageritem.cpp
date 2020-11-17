@@ -29,11 +29,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QTimer>
 #include <QAction>
 #include <QVBoxLayout>
+#include <QDialog>
 
-// KDE
+// KF
 #include <KActionCategory>
 #include <KActionCollection>
-#include <QDialog>
 #include <KLocalizedString>
 #include <KRatingPainter>
 #include <KIconLoader>

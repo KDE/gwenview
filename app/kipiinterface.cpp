@@ -28,12 +28,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QDesktopServices>
 #include <QFileSystemWatcher>
 #include <QTimer>
-
-// KDE
 #include <QAction>
-#include <KActionCollection>
-#include "gwenview_app_debug.h"
 #include <QUrl>
+
+// KF
+#include <KActionCollection>
 #include <KXMLGUIFactory>
 #include <KDirLister>
 #include <KLocalizedString>
@@ -45,6 +44,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kipi/pluginloader.h>
 
 // local
+#include "gwenview_app_debug.h"
 #include "mainwindow.h"
 #include "kipiimagecollectionselector.h"
 #include "kipiuploadwidget.h"

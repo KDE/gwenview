@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QStringList>
 #include <QCommandLineParser>
 
-// KDE
+// KF
 #include <KAboutData>
 #include <KActionCollection>
 #include <KIO/CopyJob>

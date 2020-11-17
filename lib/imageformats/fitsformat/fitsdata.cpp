@@ -22,10 +22,12 @@ Gwenview: an image viewer
 
 #include "fitsdata.h"
 
+// Qt
 #include <QApplication>
 #include <QImage>
 
-#include <math.h>
+// STL
+#include <cmath>
 
 FITSData::FITSData()
 {

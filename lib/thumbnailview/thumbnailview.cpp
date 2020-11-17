@@ -19,8 +19,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 #include "thumbnailview.h"
 
-// Std
-#include <math.h>
+// STL
+#include <cmath>
 
 // Qt
 #include <QApplication>
@@ -34,18 +34,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QTimer>
 #include <QDrag>
 #include <QMimeData>
-#include "gwenview_lib_debug.h"
 #include <QDateTime>
 #include <QGestureEvent>
 #include <QScroller>
 
-// KDE
+// KF
 #include <KDirModel>
 #include <KIconLoader>
 #include <KPixmapSequence>
 #include <KUrlMimeData>
 
 // Local
+#include "gwenview_lib_debug.h"
 #include "abstractdocumentinfoprovider.h"
 #include "abstractthumbnailviewhelper.h"
 #include "archiveutils.h"

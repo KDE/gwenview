@@ -23,8 +23,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include <paintutils.h>
+#include "gwenview_lib_debug.h"
 
-// KDE
+// KF
 #include <KIconLoader>
 
 // Qt
@@ -33,7 +34,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QPalette>
 #include <QPixmap>
 #include <QtMath>
-#include "gwenview_lib_debug.h"
 
 namespace Gwenview
 {

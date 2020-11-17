@@ -20,16 +20,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 */
 // Self
 #include "thumbnailpage.h"
-#include "dialogguard.h"
 
 // Qt
-#include "gwenview_importer_debug.h"
 #include <QDir>
 #include <QIcon>
 #include <QPushButton>
 #include <QTreeView>
 
-// KDE
+// KF
 #include <KAcceleratorManager>
 #include <KDirLister>
 #include <KDirModel>
@@ -39,6 +37,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KJobWidgets>
 
 // Local
+#include "gwenview_importer_debug.h"
+#include "dialogguard.h"
 #include <lib/archiveutils.h>
 #include <lib/kindproxymodel.h>
 #include <lib/gwenviewconfig.h>

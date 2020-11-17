@@ -31,7 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QTemporaryFile>
 #include <QSaveFile>
 
-// KDE
+// KF
 #include <KIO/CopyJob>
 #include <KIO/JobUiDelegate>
 #include <KLocalizedString>

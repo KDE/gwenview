@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/documentview/rasterimageview.h>
 #include <lib/gwenviewconfig.h>
 
-// KDE
+// KF
 
 // Qt
 #include <QUrl>

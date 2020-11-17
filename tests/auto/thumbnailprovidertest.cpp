@@ -24,10 +24,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QFile>
 #include <QImage>
 #include <QPainter>
-
-// KDE
 #include <QTest>
 #include <QDebug>
+
+// KF
 #include <KIO/CopyJob>
 #include <KIO/DeleteJob>
 
@@ -37,8 +37,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "gwenviewconfig.h"
 
 // libc
-#include <errno.h>
-#include <string.h>
+#include <cerrno>
+#include <cstring>
 
 using namespace Gwenview;
 

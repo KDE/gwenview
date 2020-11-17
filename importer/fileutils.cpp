@@ -28,14 +28,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QBuffer>
 #include <QScopedPointer>
 
-// KDE
-#include "gwenview_importer_debug.h"
+// KF
 #include <KFileItem>
 #include <KIO/CopyJob>
 #include <KIO/Job>
 #include <kio/jobclasses.h>
 #include <KIO/JobUiDelegate>
 #include <KJobWidgets>
+
+// Local
+#include "gwenview_importer_debug.h"
 
 namespace Gwenview
 {

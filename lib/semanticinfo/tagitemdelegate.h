@@ -21,7 +21,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #ifndef TAGITEMDELEGATE_H
 #define TAGITEMDELEGATE_H
 
-// KDE
+// KF
 #include <KWidgetItemDelegate>
 
 namespace Gwenview

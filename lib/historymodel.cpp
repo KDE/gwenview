@@ -24,13 +24,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QDir>
 #include <QFile>
-#include "gwenview_lib_debug.h"
 #include <QUrl>
 #include <QMimeDatabase>
 #include <QTemporaryFile>
 #include <QRegularExpression>
 
-// KDE
+// KF
 #include <KConfig>
 #include <KConfigGroup>
 #include <KDirModel>
@@ -40,6 +39,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KFormat>
 
 // Local
+#include "gwenview_lib_debug.h"
 #include <lib/urlutils.h>
 
 namespace Gwenview

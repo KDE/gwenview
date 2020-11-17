@@ -20,7 +20,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 // Self
 #include "fileopscontextmanageritem.h"
-#include "dialogguard.h"
 
 // Qt
 #include <QAction>
@@ -30,7 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QMenu>
 #include <QShortcut>
 
-// KDE
+// KF
 #include <KActionCollection>
 #include <KActionCategory>
 #include <KFileItem>
@@ -51,6 +50,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KIO/OpenFileManagerWindowJob>
 
 // Local
+#include "dialogguard.h"
 #include <lib/contextmanager.h>
 #include <lib/eventwatcher.h>
 #include <lib/gvdebug.h>

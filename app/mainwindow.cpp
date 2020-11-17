@@ -18,9 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
 #include "mainwindow.h"
-#include "gwenview_app_debug.h"
 #include <config-gwenview.h>
-#include "dialogguard.h"
 
 // Qt
 #include <QApplication>
@@ -31,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QShortcut>
 #include <QSplitter>
 #include <QStackedWidget>
+#include <QFileDialog>
 #include <QTimer>
 #include <QUndoGroup>
 #include <QVBoxLayout>
@@ -43,10 +42,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QJsonArray>
 #include <QJsonObject>
 
-// KDE
+// KF
 #include <KActionCategory>
 #include <KActionCollection>
-#include <QFileDialog>
 #include <KFileItem>
 #include <KLocalizedString>
 #include <KMessageBox>
@@ -69,6 +67,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #endif
 
 // Local
+#include "gwenview_app_debug.h"
+#include "dialogguard.h"
 #include "configdialog.h"
 #include "documentinfoprovider.h"
 #include "viewmainpage.h"

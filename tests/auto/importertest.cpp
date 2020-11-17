@@ -24,11 +24,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Qt
 #include <QSignalSpy>
-
-// KDE
 #include <QDateTime>
 #include <QDebug>
 #include <QTest>
+
+// KF
 
 // Local
 #include "../importer/fileutils.h"

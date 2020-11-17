@@ -25,10 +25,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QItemSelectionModel>
 #include <QShortcut>
 #include <QVBoxLayout>
-#include "gwenview_app_debug.h"
 #include <QMenu>
 
-// KDE
+// KF
 #include <KActionCollection>
 #include <KActionCategory>
 #include <KLocalizedString>
@@ -41,6 +40,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #endif
 
 // Local
+#include "gwenview_app_debug.h"
 #include "fileoperations.h"
 #include <gvcore.h>
 #include "splitter.h"

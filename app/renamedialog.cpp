@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QPushButton>
 #include <QMimeDatabase>
 
-// KDE
+// KF
 #include <KLocalizedString>
 #include <KGuiItem>
 

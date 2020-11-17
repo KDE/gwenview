@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Local
 #include "gwenview_version.h"
 
-// KDE
+// KF
 #include <KAboutData>
 #include <KLocalizedString>
 

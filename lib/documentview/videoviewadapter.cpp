@@ -22,22 +22,24 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "videoviewadapter.h"
 
 // Qt
-#include <Phonon/AudioOutput>
-#include <Phonon/MediaObject>
-#include <Phonon/Path>
-#include <Phonon/VideoWidget>
 #include <QAction>
 #include <QGraphicsLinearLayout>
 #include <QGraphicsProxyWidget>
 #include <QMouseEvent>
 #include <QElapsedTimer>
-#include "gwenview_lib_debug.h"
 #include <QIcon>
 #include <QTime>
 
-// KDE
+// Phonon
+#include <Phonon/AudioOutput>
+#include <Phonon/MediaObject>
+#include <Phonon/Path>
+#include <Phonon/VideoWidget>
+
+// KF
 
 // Local
+#include "gwenview_lib_debug.h"
 #include <document/documentfactory.h>
 #include <hud/hudbutton.h>
 #include <hud/hudslider.h>

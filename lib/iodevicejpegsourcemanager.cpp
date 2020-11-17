@@ -23,9 +23,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QIODevice>
-#include "gwenview_lib_debug.h"
 
-// KDE
+// KF
 
 // libjpeg
 #include <stdio.h>
@@ -35,6 +34,7 @@ extern "C" {
 }
 
 // Local
+#include "gwenview_lib_debug.h"
 
 namespace Gwenview
 {

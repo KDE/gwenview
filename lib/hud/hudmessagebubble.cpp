@@ -23,12 +23,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QGraphicsLinearLayout>
-#include "gwenview_lib_debug.h"
 
-// KDE
+// KF
 #include <KGuiItem>
 
 // Local
+#include "gwenview_lib_debug.h"
 #include <lib/hud/hudbutton.h>
 #include <lib/hud/hudcountdown.h>
 #include <lib/hud/hudlabel.h>

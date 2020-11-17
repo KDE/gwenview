@@ -27,15 +27,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QFile>
 #include <QDateTime>
-#include "gwenview_lib_debug.h"
 
-// KDE
+// KF
 #include <KFileItem>
 
 // Exiv2
 #include <exiv2/exiv2.hpp>
 
 // Local
+#include "gwenview_lib_debug.h"
 #include <lib/exiv2imageloader.h>
 #include <lib/urlutils.h>
 

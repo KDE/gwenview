@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <config-gwenview.h>
 
 // lib
+#include "gwenview_lib_debug.h"
 #include <slideshow.h>
 #include <mimetypeutils.h>
 #include <contextmanager.h>
@@ -35,7 +36,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QDBusObjectPath>
 #include <QAction>
-#include "gwenview_lib_debug.h"
 
 namespace Gwenview
 {

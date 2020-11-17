@@ -21,11 +21,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Self
 #include "archiveutils.h"
 
-// KDE
-#include "gwenview_lib_debug.h"
-#include <KFileItem>
+// Qt
 #include <QMimeDatabase>
+
+// KF
+#include <KFileItem>
 #include <KProtocolManager>
+
+// Local
+#include "gwenview_lib_debug.h"
 
 namespace Gwenview
 {

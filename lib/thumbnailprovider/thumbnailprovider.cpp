@@ -31,17 +31,17 @@
 #include <QDir>
 #include <QFile>
 #include <QCryptographicHash>
-#include "gwenview_lib_debug.h"
 #include <QTemporaryFile>
 #include <QApplication>
 #include <QStandardPaths>
 
-// KDE
+// KF
 #include <KIO/JobUiDelegate>
 #include <KIO/PreviewJob>
 #include <KJobWidgets>
 
 // Local
+#include "gwenview_lib_debug.h"
 #include "mimetypeutils.h"
 #include "thumbnailwriter.h"
 #include "thumbnailgenerator.h"

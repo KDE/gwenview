@@ -22,11 +22,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QAction>
 #include <QDebug>
 #include <QMenu>
+#include <QFileDialog>
 
-// KDE
+// KF
 #include <KAboutData>
 #include <KActionCollection>
-#include <QFileDialog>
 #include <KIconLoader>
 #include <KIO/Job>
 #include <KIO/JobUiDelegate>

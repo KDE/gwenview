@@ -27,15 +27,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/documentview/abstractrasterimageviewtool.h>
 #include <lib/slidecontainer.h>
 #include <lib/zoomwidget.h>
+#include "gwenview_lib_debug.h"
 
-// KDE
+// KF
 #include <KActionCategory>
 #include <KLocalizedString>
 
 // Qt
 #include <QAction>
 #include <QHBoxLayout>
-#include "gwenview_lib_debug.h"
 
 namespace Gwenview
 {

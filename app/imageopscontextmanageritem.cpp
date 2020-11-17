@@ -20,21 +20,21 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 // Self
 #include "imageopscontextmanageritem.h"
-#include "dialogguard.h"
 
 // Qt
 #include <QApplication>
 #include <QAction>
 #include <QRect>
-#include "gwenview_app_debug.h"
 
-// KDE
+// KF
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KActionCollection>
 #include <KActionCategory>
 
 // Local
+#include "gwenview_app_debug.h"
+#include "dialogguard.h"
 #include "viewmainpage.h"
 #include "gvcore.h"
 #include "mainwindow.h"

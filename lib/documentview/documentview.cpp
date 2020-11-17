@@ -36,7 +36,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QPainter>
 #include <QPropertyAnimation>
 #include <QPointer>
-#include "gwenview_lib_debug.h"
 #include <QIcon>
 #include <QUrl>
 #include <QDrag>
@@ -45,12 +44,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QGestureEvent>
 #include <QLibraryInfo>
 
-// KDE
+// KF
 #include <KLocalizedString>
 #include <KFileItem>
 #include <KUrlMimeData>
 
 // Local
+#include "gwenview_lib_debug.h"
 #include <lib/document/documentfactory.h>
 #include <lib/documentview/abstractrasterimageviewtool.h>
 #include <lib/documentview/birdeyeview.h>

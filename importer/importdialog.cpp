@@ -25,9 +25,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QApplication>
 #include <QDate>
 #include <QStackedWidget>
+#include <QStandardPaths>
 
-// KDE
-#include "gwenview_importer_debug.h"
+// KF
 #include <KIO/DeleteJob>
 #include <KMessageBox>
 #include <KProtocolInfo>
@@ -35,10 +35,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KService>
 #include <KStandardGuiItem>
 #include <Solid/Device>
-#include <QStandardPaths>
 #include <KLocalizedString>
 
 // Local
+#include "gwenview_importer_debug.h"
 #include "dialogpage.h"
 #include "importer.h"
 #include "importerconfig.h"

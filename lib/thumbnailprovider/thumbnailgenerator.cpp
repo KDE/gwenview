@@ -25,12 +25,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "jpegcontent.h"
 #include "gwenviewconfig.h"
 #include "exiv2imageloader.h"
-
-// KDE
 #include "gwenview_lib_debug.h"
+
+// KDCRAW
 #ifdef KDCRAW_FOUND
-#include <kdcraw/kdcraw.h>
+#include <KDCRAW/KDcraw>
 #endif
+
+// KF
 
 // Qt
 #include <QImageReader>

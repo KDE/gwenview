@@ -24,8 +24,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include <lib/document/document.h>
 #include <lib/documentview/documentview.h>
+#include "gwenview_lib_debug.h"
 
-// KDE
+// KF
 
 // Qt
 #include <QApplication>
@@ -33,7 +34,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QPainter>
 #include <QPropertyAnimation>
 #include <QTimer>
-#include "gwenview_lib_debug.h"
 
 namespace Gwenview
 {

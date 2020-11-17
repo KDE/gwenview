@@ -21,19 +21,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Qt
 #include <QTimer>
-#include "gwenview_lib_debug.h"
 #include <QUrl>
 
-// KDE
+// KF
 #include <KDirLister>
-
-
-// Local
-#include <lib/archiveutils.h>
-#include <lib/timeutils.h>
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 #include <KDirModel>
-#else
+#endif
+// Local
+#include "gwenview_lib_debug.h"
+#include <lib/archiveutils.h>
+#include <lib/timeutils.h>
+#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 #include "abstractsemanticinfobackend.h"
 #include "semanticinfodirmodel.h"
 #include <lib/sorting.h>

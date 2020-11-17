@@ -28,11 +28,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QPainter>
 #include <QPushButton>
 #include <QRect>
-#include "gwenview_lib_debug.h"
 
-// KDE
+// KF
 
 // Local
+#include "gwenview_lib_debug.h"
 #include <lib/documentview/rasterimageview.h>
 #include "cropimageoperation.h"
 #include "cropwidget.h"

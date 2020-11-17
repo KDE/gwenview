@@ -26,17 +26,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QLabel>
 #include <QToolButton>
 #include <QToolTip>
-#include "gwenview_app_debug.h"
 #include <QIcon>
 #include <QUrl>
 
-// KDE
+// KF
 #include <KActionCollection>
 #include <KColorScheme>
 #include <KIconLoader>
 #include <KLocalizedString>
 
 // Local
+#include "gwenview_app_debug.h"
 #include "lib/document/documentfactory.h"
 #include "lib/gwenviewconfig.h"
 #include "lib/memoryutils.h"

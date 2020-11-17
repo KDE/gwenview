@@ -36,15 +36,15 @@ extern "C" {
 #include <QImage>
 #include <QImageWriter>
 #include <QTransform>
-#include "gwenview_lib_debug.h"
 
-// KDE
+// KF
 #include <KLocalizedString>
 
 // Exiv2
 #include <exiv2/exiv2.hpp>
 
 // Local
+#include "gwenview_lib_debug.h"
 #include "jpegerrormanager.h"
 #include "iodevicejpegsourcemanager.h"
 #include "exiv2imageloader.h"

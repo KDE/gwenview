@@ -25,9 +25,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QImage>
 #include <QUndoStack>
 #include <QUrl>
-#include "gwenview_lib_debug.h"
 
-// KDE
+// KF
 #include <KLocalizedString>
 #include <KJobUiDelegate>
 
@@ -35,6 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <exiv2/exiv2.hpp>
 
 // Local
+#include "gwenview_lib_debug.h"
 #include "documentjob.h"
 #include "emptydocumentimpl.h"
 #include "gvdebug.h"

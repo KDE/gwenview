@@ -25,11 +25,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QMap>
 #include <QUndoGroup>
 #include <QUrl>
-#include "gwenview_lib_debug.h"
 
-// KDE
+// KF
 
 // Local
+#include "gwenview_lib_debug.h"
 #include <gvdebug.h>
 
 namespace Gwenview

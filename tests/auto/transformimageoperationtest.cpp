@@ -20,10 +20,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QEventLoop>
 #include <QImage>
-
-// KDE
 #include <QDebug>
 #include <QTest>
+
+// KF
 
 // Local
 #include "../lib/document/documentfactory.h"

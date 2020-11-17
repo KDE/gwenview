@@ -20,16 +20,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 */
 // Self
 #include "fileoperations.h"
-#include "dialogguard.h"
 
 // Qt
 #include <QMenu>
-#include "gwenview_app_debug.h"
 #include <QPushButton>
 #include <QFileDialog>
-
-// KDE
 #include <QInputDialog>
+
+// KF
 #include <KIO/CopyJob>
 #include <KIO/DeleteJob>
 #include <KIO/Job>
@@ -38,6 +36,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KJobWidgets>
 
 // Local
+#include "gwenview_app_debug.h"
+#include "dialogguard.h"
 #include "renamedialog.h"
 #include <lib/document/documentfactory.h>
 #include <lib/thumbnailprovider/thumbnailprovider.h>

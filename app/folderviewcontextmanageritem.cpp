@@ -27,14 +27,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QTreeView>
 #include <QDir>
 #include <QMimeData>
-#include "gwenview_app_debug.h"
 #include <QStyleHints>
 #include <QApplication>
 
-// KDE
+// KF
 #include <KUrlMimeData>
 
 // Local
+#include "gwenview_app_debug.h"
 #include <lib/contextmanager.h>
 #include <lib/eventwatcher.h>
 #include "sidebar.h"
