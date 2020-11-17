@@ -22,7 +22,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QImage>
 #include <QPainter>
 
-// KDE
+// KF
+#include <kio_version.h>
 #include <KJobUiDelegate>
 #include <KIO/StatJob>
 #include <QTest>
@@ -267,7 +268,11 @@ void DocumentTest::testLoadRemote()
     url = url.adjusted(QUrl::StripTrailingSlash);
     url.setPath(url.path() + '/' + "test.png");
 
+#if KIO_VERSION >= QT_VERSION_CHECK(5, 69, 0)
+    QVERIFY2(KIO::statDetails(url, KIO::StatJob::SourceSide, KIO::StatNoDetails)->exec(), "test url not found");
+#else
     QVERIFY2(KIO::stat(url, KIO::StatJob::SourceSide, 0)->exec(), "test url not found");
+#endif
 
     Document::Ptr doc = DocumentFactory::instance()->load(url);
     doc->waitUntilLoaded();

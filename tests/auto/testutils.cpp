@@ -21,14 +21,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Qt
 #include <QTimer>
+#include <QStandardPaths>
 
-// KDE
+// KF
+#include <kio_version.h>
 #include <KIO/StatJob>
 #include <KIO/DeleteJob>
 #include <KIO/MkdirJob>
 #include <KIO/FileCopyJob>
 #include <KJobWidgets>
-#include <QStandardPaths>
 
 QUrl setUpRemoteTestDir(const QString& testFile)
 {
@@ -42,7 +43,11 @@ QUrl setUpRemoteTestDir(const QString& testFile)
     baseUrl = baseUrl.adjusted(QUrl::StripTrailingSlash);
     baseUrl.setPath(baseUrl.path() + "/gwenview-remote-tests");
 
+#if KIO_VERSION >= QT_VERSION_CHECK(5, 69, 0)
+    auto* statJob = KIO::statDetails(baseUrl, KIO::StatJob::DestinationSide, KIO::StatNoDetails);
+#else
     KIO::StatJob *statJob = KIO::stat(baseUrl, KIO::StatJob::DestinationSide, 0);
+#endif
     KJobWidgets::setWindow(statJob, authWindow);
 
     if (statJob->exec()) {
