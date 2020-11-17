@@ -115,7 +115,6 @@ Touch::~Touch()
 bool Touch::eventFilter(QObject*, QEvent* event)
 {
     if (event->type() == QEvent::TouchBegin) {
-        QTouchEvent* touchEvent = static_cast<QTouchEvent*>(event);
         d->mLastTouchTimeStamp = QDateTime::currentMSecsSinceEpoch();
         const QPoint pos = Touch_Helper::simpleTouchPosition(event);
         touchToMouseMove(pos, event, Qt::NoButton);
@@ -133,7 +132,6 @@ bool Touch::eventFilter(QObject*, QEvent* event)
         return true;
     }
     if (event->type() == QEvent::TouchEnd) {
-        QTouchEvent* touchEvent = static_cast<QTouchEvent*>(event);
         d->mLastTouchTimeStamp = QDateTime::currentMSecsSinceEpoch();
     }
     if (event->type() == QEvent::Gesture) {
