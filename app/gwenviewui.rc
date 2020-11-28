@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="gwenview" version="60">
+<!DOCTYPE gui SYSTEM "kpartgui.dtd">
+<gui name="gwenview" version="60">
 
 <MenuBar>
     <Menu name="file" >
@@ -109,4 +109,4 @@
     <Action name="share" />
 </ToolBar>
 
-</kpartgui>
+</gui>
