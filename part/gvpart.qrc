@@ -1,0 +1,5 @@
+<RCC>
+<qresource prefix="/kxmlgui5/gvpart">
+    <file>gvpart.rc</file>
+</qresource>
+</RCC>

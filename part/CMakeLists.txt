@@ -9,6 +9,7 @@ set(gvpart_SRCS
     gvbrowserextension.cpp
     gvpart.cpp
     )
+qt5_add_resources(gvpart_SRCS gvpart.qrc)
 
 add_library(gvpart MODULE ${gvpart_SRCS})
 
@@ -19,4 +20,3 @@ kcoreaddons_desktop_to_json(gvpart ${CMAKE_CURRENT_BINARY_DIR}/gvpart.desktop)
 
 install(TARGETS gvpart DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf5/parts)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/gvpart.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR})
-install(FILES gvpart.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/gvpart)
