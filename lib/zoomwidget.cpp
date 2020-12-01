@@ -27,10 +27,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QAction>
 #include <QApplication>
-#include <QLabel>
+#include <QSpinBox>
 #include <QHBoxLayout>
 #include <QSlider>
-
 // KF
 
 // Local
@@ -61,8 +60,8 @@ struct ZoomWidgetPrivate
     StatusBarToolButton* mZoomToFitButton;
     StatusBarToolButton* mActualSizeButton;
     StatusBarToolButton* mZoomToFillButton;
-    QLabel* mZoomLabel;
     ZoomSlider* mZoomSlider;
+    QSpinBox* mZoomSpinBox;
     QAction* mZoomToFitAction;
     QAction* mActualSizeAction;
     QAction* mZoomToFillAction;
@@ -108,15 +107,17 @@ ZoomWidget::ZoomWidget(QWidget* parent)
         d->mZoomToFitButton->setGroupPosition(StatusBarToolButton::GroupRight);
     }
 
-    d->mZoomLabel = new QLabel;
-    d->mZoomLabel->setFixedWidth(d->mZoomLabel->fontMetrics().boundingRect(QStringLiteral(" 1000% ")).width());
-    d->mZoomLabel->setAlignment(Qt::AlignCenter);
-
     d->mZoomSlider = new ZoomSlider;
     d->mZoomSlider->setMinimumWidth(150);
     d->mZoomSlider->slider()->setSingleStep(int(PRECISION));
     d->mZoomSlider->slider()->setPageStep(3 * int(PRECISION));
     connect(d->mZoomSlider->slider(), &QAbstractSlider::actionTriggered, this, &ZoomWidget::slotZoomSliderActionTriggered);
+
+    d->mZoomSpinBox = new QSpinBox;
+    d->mZoomSpinBox->setFixedWidth(d->mZoomSpinBox->fontMetrics().boundingRect(QStringLiteral("      1000%      ")).width());
+    d->mZoomSpinBox->setAlignment(Qt::AlignCenter);
+    d->mZoomSpinBox->setSuffix(QLatin1String("%"));
+    connect(d->mZoomSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), [=](int i){ setCustomZoomFromSpinBox(static_cast<qreal>(i)); });
 
     // Layout
     QHBoxLayout* layout = new QHBoxLayout(this);
@@ -126,7 +127,7 @@ ZoomWidget::ZoomWidget(QWidget* parent)
     layout->addWidget(d->mZoomToFillButton);
     layout->addWidget(d->mActualSizeButton);
     layout->addWidget(d->mZoomSlider);
-    layout->addWidget(d->mZoomLabel);
+    layout->addWidget(d->mZoomSpinBox);
 }
 
 ZoomWidget::~ZoomWidget()
@@ -169,8 +170,7 @@ void ZoomWidget::slotZoomSliderActionTriggered()
 
 void ZoomWidget::setZoom(qreal zoom)
 {
-    int intZoom = qRound(zoom * 100);
-    d->mZoomLabel->setText(QStringLiteral("%1%").arg(intZoom));
+    d->mZoomSpinBox->setValue(qRound(zoom * PRECISION));
 
     // Don't change slider value if we come here because the slider change,
     // avoids choppy sliding scroll.
@@ -188,14 +188,23 @@ void ZoomWidget::setZoom(qreal zoom)
     }
 }
 
+void ZoomWidget::setCustomZoomFromSpinBox(qreal zoom)
+{
+    setZoom(zoom / PRECISION);
+    d->emitZoomChanged();
+}
+
 void ZoomWidget::setMinimumZoom(qreal minimumZoom)
 {
     d->mZoomSlider->setMinimum(sliderValueForZoom(minimumZoom));
+    d->mZoomSpinBox->setMinimum(qRound(minimumZoom * PRECISION));
+    d->mZoomSpinBox->setValue(minimumZoom * PRECISION);
 }
 
 void ZoomWidget::setMaximumZoom(qreal zoom)
 {
     d->mZoomSlider->setMaximum(sliderValueForZoom(zoom));
+    d->mZoomSpinBox->setMaximum(qRound(zoom * PRECISION));
 }
 
 } // namespace
