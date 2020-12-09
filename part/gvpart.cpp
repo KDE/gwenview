@@ -78,7 +78,7 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QVariantList& /*arg
 
     QAction * action = new QAction(actionCollection());
     action->setText(i18nc("@action", "Properties"));
-    action->setShortcut(QKeySequence(Qt::ALT + Qt::Key_Return));
+    action->setShortcut(QKeySequence(Qt::ALT | Qt::Key_Return));
     connect(action, &QAction::triggered, this, &GVPart::showProperties);
     actionCollection()->addAction(QStringLiteral("file_show_properties"), action);
 

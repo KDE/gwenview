@@ -286,7 +286,7 @@ FilterController::FilterController(QFrame* frame, SortedDirModel* dirModel)
 
     addAction(i18nc("@action:inmenu", "Filter by Name"),
               SLOT(addFilterByName()),
-              QKeySequence(Qt::CTRL + Qt::Key_I));
+              QKeySequence(Qt::CTRL | Qt::Key_I));
 
     addAction(i18nc("@action:inmenu", "Filter by Date"),
               SLOT(addFilterByDate()),

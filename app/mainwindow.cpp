@@ -411,7 +411,7 @@ struct MainWindow::Private
         
         QAction * replaceLocationAction = actionCollection->addAction(QStringLiteral("replace_location"));
         replaceLocationAction->setText(i18nc("@action:inmenu Navigation Bar", "Replace Location"));
-        actionCollection->setDefaultShortcut(replaceLocationAction, Qt::CTRL + Qt::Key_L);
+        actionCollection->setDefaultShortcut(replaceLocationAction, Qt::CTRL | Qt::Key_L);
         connect(replaceLocationAction, &QAction::triggered, q, &MainWindow::replaceLocation);
 
         mBrowseAction = view->addAction("browse");

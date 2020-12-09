@@ -87,13 +87,13 @@ struct ImageOpsContextManagerItem::Private
         mRotateLeftAction->setText(i18n("Rotate Left"));
         mRotateLeftAction->setToolTip(i18nc("@info:tooltip", "Rotate image to the left"));
         mRotateLeftAction->setIcon(QIcon::fromTheme(QStringLiteral("object-rotate-left")));
-        actionCollection->setDefaultShortcut(mRotateLeftAction, Qt::CTRL + Qt::SHIFT + Qt::Key_R);
+        actionCollection->setDefaultShortcut(mRotateLeftAction, Qt::CTRL | Qt::SHIFT | Qt::Key_R);
 
         mRotateRightAction = edit->addAction(QStringLiteral("rotate_right"), q, SLOT(rotateRight()));
         mRotateRightAction->setText(i18n("Rotate Right"));
         mRotateRightAction->setToolTip(i18nc("@info:tooltip", "Rotate image to the right"));
         mRotateRightAction->setIcon(QIcon::fromTheme(QStringLiteral("object-rotate-right")));
-        actionCollection->setDefaultShortcut(mRotateRightAction, Qt::CTRL + Qt::Key_R);
+        actionCollection->setDefaultShortcut(mRotateRightAction, Qt::CTRL | Qt::Key_R);
 
         mMirrorAction = edit->addAction(QStringLiteral("mirror"), q, SLOT(mirror()));
         mMirrorAction->setText(i18n("Mirror"));
@@ -106,17 +106,17 @@ struct ImageOpsContextManagerItem::Private
         mResizeAction = edit->addAction("resize", q, SLOT(resizeImage()));
         mResizeAction->setText(i18n("Resize"));
         mResizeAction->setIcon(QIcon::fromTheme("transform-scale"));
-        actionCollection->setDefaultShortcut(mResizeAction, Qt::SHIFT + Qt::Key_R);
+        actionCollection->setDefaultShortcut(mResizeAction, Qt::SHIFT | Qt::Key_R);
 
         mCropAction = edit->addAction("crop", q, SLOT(crop()));
         mCropAction->setText(i18n("Crop"));
         mCropAction->setIcon(QIcon::fromTheme("transform-crop-and-resize"));
-        actionCollection->setDefaultShortcut(mCropAction, Qt::SHIFT + Qt::Key_C);
+        actionCollection->setDefaultShortcut(mCropAction, Qt::SHIFT | Qt::Key_C);
 
         mRedEyeReductionAction = edit->addAction("red_eye_reduction", q, SLOT(startRedEyeReduction()));
         mRedEyeReductionAction->setText(i18n("Reduce Red Eye"));
         mRedEyeReductionAction->setIcon(QIcon::fromTheme("redeyes"));
-        actionCollection->setDefaultShortcut(mRedEyeReductionAction, Qt::SHIFT + Qt::Key_E);
+        actionCollection->setDefaultShortcut(mRedEyeReductionAction, Qt::SHIFT | Qt::Key_E);
 
         mActionList
                 << mRotateLeftAction
