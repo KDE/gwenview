@@ -30,6 +30,7 @@
   <name xml:lang="nds">Gwenview</name>
   <name xml:lang="nl">Gwenview</name>
   <name xml:lang="nn">Gwenview</name>
+  <name xml:lang="pa">ਜੀਵੀਨ-ਵਿਊ</name>
   <name xml:lang="pl">Gwenview</name>
   <name xml:lang="pt">Gwenview</name>
   <name xml:lang="pt-BR">Gwenview</name>
@@ -69,6 +70,7 @@
   <summary xml:lang="lt">Paveikslų žiūryklė</summary>
   <summary xml:lang="nl">Afbeeldingenviewer</summary>
   <summary xml:lang="nn">Biletvisar</summary>
+  <summary xml:lang="pa">ਚਿੱਤਰ ਦਰਸ਼ਕ</summary>
   <summary xml:lang="pl">Przeglądarka obrazów</summary>
   <summary xml:lang="pt">Visualizador de Imagens</summary>
   <summary xml:lang="pt-BR">Visualizador de imagens</summary>
@@ -111,6 +113,7 @@
     <p xml:lang="lt">Gwenview yra greita ir lengva naudoti paveikslų žiūryklė pagal KDE, tobulai tinkanti naršyti ir atvaizduoti paveikslų kolekcijas.</p>
     <p xml:lang="nl">Gwenview is een snelle en gemakkelijk te gebruiken viewer voor afbeeldingen door KDE, ideaal voor bladeren door en weergeven van een verzameling afbeeldingen.</p>
     <p xml:lang="nn">Gwenview er ein biletvisar frå KDE. Han passar svært godt for å bla gjennom og visa ei samling med bilete.</p>
+    <p xml:lang="pa">ਜੀਵੀਨ-ਵਿਊ KDE ਲਈ ਤੇਜ਼ ਤੇ ਵਰਤਣ ਲਈ ਸੌਖਾ ਚਿੱਤਰ ਦਰਸ਼ਕ ਹੈ, ਜੋ ਕਿ ਚਿੱਤਰਾਂ ਦੇ ਭੰਡਾਰ ਨੂੰ ਬਰਾਊਜ਼ ਕਰਨ ਤੇ ਦਿਖਾਉਣ ਲਈ ਢੁੱਕਵਾਂ ਹੈ।</p>
     <p xml:lang="pl">Gwenview to szybka i łatwa w użyciu przeglądarka obrazów dla KDE. Świetnie nadaje się do przeglądania i wyświetlania zbiorów obrazów.</p>
     <p xml:lang="pt">O Gwenview é um visualizador de imagens rápido e simples de usar do KDE, ideal para a navegação e apresentação de uma colecção de imagens.</p>
     <p xml:lang="pt-BR">Gwenview é um visualizador de imagens rápido e fácil de usar do KDE, ideal para navegar e exibir uma coleção de imagens.</p>
@@ -155,6 +158,7 @@
     <p xml:lang="nds">Markmalen:</p>
     <p xml:lang="nl">Mogelijkheden:</p>
     <p xml:lang="nn">Funksjonar:</p>
+    <p xml:lang="pa">ਫੀਚਰ:</p>
     <p xml:lang="pl">Możliwości:</p>
     <p xml:lang="pt">Funcionalidades:</p>
     <p xml:lang="pt-BR">Funcionalidades:</p>
@@ -199,6 +203,7 @@
       <li xml:lang="nds">Ünnerstütt eenfach Bildbewerken: Dreihen, Spegeln, Ümdreihen und Grött topassen</li>
       <li xml:lang="nl">Ondersteunt eenvoudige bewerking van afbeeldingen: roteren, spiegelen, omdraaien en grootte wijzigen</li>
       <li xml:lang="nn">Støttar enkel biletmanipulering: rotering, spegelvending og endring av biletstorleik</li>
+      <li xml:lang="pa">ਸਧਾਰਨ ਚਿੱਤਰ ਤਬਦੀਲੀਆਂ ਲਈ ਸਹਾਇਕ ਹੈ: ਘੁੰਮਾਉਣਾ, ਮਿਰਰ ਕਰਨਾ, ਪਲਟਣਾ ਤੇ ਮੁੜ-ਆਕਾਰ ਦੇਣਾ</li>
       <li xml:lang="pl">Obsługa prostych działań na obrazach: obrót, odbicie w poziomie, odbicie w pionie oraz zmiana rozmiaru</li>
       <li xml:lang="pt">Suporta as manipulações simples de imagens: rotação, espelho, inversão e dimensionamento</li>
       <li xml:lang="pt-BR">Suporte a manipulações simples de imagens: rotação, espelho, inversão e redimensionamento</li>
@@ -242,6 +247,7 @@
       <li xml:lang="nds">Ünnerstütt eenfach Dateipleegakschonen as Koperen, Verschuven, Wegdoon un en poor anner.</li>
       <li xml:lang="nl">Ondersteunt acties voor basis bestandsbeheer zoals kopiëren, verplaatsen, verwijderen en andere</li>
       <li xml:lang="nn">Støtter enkle filhandlingar, som kopiering, flytting og sletting</li>
+      <li xml:lang="pa">ਮੁੱਢਲੇ ਫ਼ਾਈਲ ਇੰਤਜ਼ਾਮ ਕਾਰਵਾਈਆਂ ਜਿਵੇਂ ਕਿ ਕਾਪੀ ਕਰਨਾ, ਭੇਜਣਾ, ਹਟਾਉਣਾ ਤੇ ਹੋਰ ਲਈ ਸਹਾਇਕ ਹੈ</li>
       <li xml:lang="pl">Możliwość wykonywania prostych działań plikowych takich jak kopiuj, przenieś, usuń i innych</li>
       <li xml:lang="pt">Suporta as acções básicas de gestão de ficheiros, como a cópia, movimentação, remoção, entre outras</li>
       <li xml:lang="pt-BR">Suporta a ações básicas de gerenciamento de arquivos, como cópia, movimentação, exclusão, entre outras</li>
@@ -327,6 +333,7 @@
       <li xml:lang="nds">Laat sik mit KIPI-Modulen verwiedern</li>
       <li xml:lang="nl">Kan uitgebreid worden met KIPI-plug-ins.</li>
       <li xml:lang="nn">Kan utvidast med KIPI-programtillegg.</li>
+      <li xml:lang="pa">ਕੀਪੀ (KIPI) ਪਲੱਗਇਨਾਂ ਵਰਤ ਕੇ ਵਧਾਇਆ ਜਾ ਸਕਦਾ ਹੈ।</li>
       <li xml:lang="pl">Możliwość poszerzenia możliwości przez wtyczki KIPI.</li>
       <li xml:lang="pt">Pode ser alargado com os 'plugins' do KIPI.</li>
       <li xml:lang="pt-BR">Pode ter suas funcionalidades ampliadas com os plugins do KIPI.</li>
@@ -379,6 +386,7 @@
       <caption xml:lang="nds">Gwenview</caption>
       <caption xml:lang="nl">Gwenview</caption>
       <caption xml:lang="nn">Gwenview</caption>
+      <caption xml:lang="pa">ਜੀਵੀਨ-ਵਿਊ</caption>
       <caption xml:lang="pl">Gwenview</caption>
       <caption xml:lang="pt">Gwenview</caption>
       <caption xml:lang="pt-BR">Gwenview</caption>
