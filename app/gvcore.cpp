@@ -423,6 +423,10 @@ void GvCore::saveAs(const QUrl &url)
                                    name, doc->errorString());
         KMessageBox::sorry(QApplication::activeWindow(), msg);
     } else {
+        // Regardless of job result, reset JPEG config value if it was changed by
+        // the Save As dialog
+        if (GwenviewConfig::jPEGQuality() != d->configFileJPEGQualityValue)
+            GwenviewConfig::setJPEGQuality(d->configFileJPEGQualityValue);
         connect(job, SIGNAL(result(KJob*)), SLOT(slotSaveResult(KJob*)));
     }
 }
@@ -436,12 +440,6 @@ static void applyTransform(const QUrl &url, Orientation orientation)
 
 void GvCore::slotSaveResult(KJob* _job)
 {
-    // Regardless of job result, reset JPEG config value if it was changed by
-    // the Save As dialog
-    if (GwenviewConfig::jPEGQuality() != d->configFileJPEGQualityValue) {
-        GwenviewConfig::setJPEGQuality(d->configFileJPEGQualityValue);
-    }
-
     SaveJob* job = static_cast<SaveJob*>(_job);
     QUrl oldUrl = job->oldUrl();
     QUrl newUrl = job->newUrl();
