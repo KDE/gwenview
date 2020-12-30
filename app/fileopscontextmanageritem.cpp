@@ -156,7 +156,7 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, QL
 
     mMoveToAction = file->addAction(QStringLiteral("file_move_to"), this, SLOT(moveTo()));
     mMoveToAction->setText(i18nc("Verb", "Move To..."));
-    mMoveToAction->setIcon(QIcon::fromTheme(QStringLiteral("go-jump")));
+    mMoveToAction->setIcon(QIcon::fromTheme(QStringLiteral("edit-move"), QIcon::fromTheme(QStringLiteral("go-jump"))));
     actionCollection->setDefaultShortcut(mMoveToAction, Qt::Key_F8);
 
     mLinkToAction = file->addAction(QStringLiteral("file_link_to"), this, SLOT(linkTo()));

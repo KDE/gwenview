@@ -198,7 +198,7 @@ void showMenuForDroppedUrls(QWidget* parent, const QList<QUrl>& urlList, const Q
 
     QMenu menu(parent);
     QAction* moveAction = menu.addAction(
-                              QIcon::fromTheme(QStringLiteral("go-jump")),
+                              QIcon::fromTheme(QStringLiteral("edit-move"), QIcon::fromTheme(QStringLiteral("go-jump"))),
                               i18n("Move Here"));
     QAction* copyAction = menu.addAction(
                               QIcon::fromTheme(QStringLiteral("edit-copy")),
