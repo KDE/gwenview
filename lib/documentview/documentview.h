@@ -127,7 +127,6 @@ public:
     void moveToAnimated(const QRect&);
     QPropertyAnimation* fadeIn();
     void fadeOut();
-    void fakeFadeOut();
 
     void setGeometry(const QRectF& rect) override;
 

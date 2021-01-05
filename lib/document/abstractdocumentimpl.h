@@ -106,7 +106,6 @@ Q_SIGNALS:
     void loaded();
     void loadingFailed();
     void isAnimatedUpdated();
-    void editorUpdated();
 
 protected:
     void setDocumentImage(const QImage& image);
