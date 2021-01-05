@@ -33,9 +33,10 @@ set(gwenview_SRCS
     thumbnailviewhelper.cpp
     browsemainpage.cpp
     )
-ecm_qt_declare_logging_category(gwenview_SRCS HEADER gwenview_app_debug.h IDENTIFIER GWENVIEW_APP_LOG CATEGORY_NAME org.kde.kdegraphics.gwenview.app)
+ecm_qt_declare_logging_category(gwenview_SRCS HEADER gwenview_app_debug.h IDENTIFIER GWENVIEW_APP_LOG CATEGORY_NAME org.kde.kdegraphics.gwenview.app DESCRIPTION "gwenview app (kdegraphics)" EXPORT GWENVIEW)
 # need by GV_RETURN_VALUE_IF_FAIL
-ecm_qt_declare_logging_category(gwenview_SRCS HEADER gwenview_lib_debug.h IDENTIFIER GWENVIEW_LIB_LOG CATEGORY_NAME org.kde.kdegraphics.gwenview.lib)
+ecm_qt_declare_logging_category(gwenview_SRCS HEADER gwenview_lib_debug.h IDENTIFIER GWENVIEW_LIB_LOG CATEGORY_NAME org.kde.kdegraphics.gwenview.lib DESCRIPTION "gwenview lib (kdegraphics)" EXPORT GWENVIEW)
+
 if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
     set (gwenview_SRCS
         ${gwenview_SRCS}

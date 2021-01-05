@@ -10,8 +10,8 @@ project(gwenview VERSION ${RELEASE_SERVICE_VERSION})
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake )
 
-set (QT_MIN_VERSION "5.11.0")
-set (KF5_MIN_VERSION "5.61.0")
+set (QT_MIN_VERSION "5.12.0")
+set (KF5_MIN_VERSION "5.68.0")
 
 find_package(ECM ${KF5_MIN_VERSION} REQUIRED NO_MODULE)
 
@@ -204,5 +204,6 @@ add_subdirectory(cursors)
 add_subdirectory(color-schemes)
 add_subdirectory(doc)
 add_subdirectory(kconf_update)
-install(FILES gwenview.categories DESTINATION ${KDE_INSTALL_LOGGINGCATEGORIESDIR})
+ecm_qt_install_logging_categories(EXPORT GWENVIEW FILE gwenview.categories DESTINATION ${KDE_INSTALL_LOGGINGCATEGORIESDIR})
+
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
