@@ -196,10 +196,15 @@ struct GvCorePrivate
             adjustDefaultFullScreenPalette();
         }
 
-        // FullScreenView has textured background
+        // FullScreenView has either a solid black color or a textured background
         pal = mPalettes[GvCore::FullScreenPalette];
-        QString path = QStandardPaths::locate(QStandardPaths::AppDataLocation, "images/background.png");
-        QPixmap bgTexture(path);
+        QPixmap bgTexture(256,256);
+        if (Gwenview::GwenviewConfig::fullScreenBackground() == Gwenview::FullScreenBackground::Black) {
+            bgTexture.fill(Qt::black);
+        } else {
+            QString path = QStandardPaths::locate(QStandardPaths::AppDataLocation, "images/background.png");
+            bgTexture = path;
+        }
         pal.setBrush(QPalette::Base, bgTexture);
         mPalettes[GvCore::FullScreenViewPalette] = pal;
     }

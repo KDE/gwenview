@@ -725,6 +725,20 @@ Link an image.</para></listitem>
                 </listitem>
             </varlistentry>
             <varlistentry>
+                <term><guilabel>Fullscreen background</guilabel></term>
+                <listitem>
+                    <para>Move the slider to change the color of the gray background in Browse and View mode from black (the leftmost position) to white (the rightmost position).</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para><guilabel>Black</guilabel> &mdash; Set the background color in fullscreen mode to black.</para>
+                        </listitem>
+                        <listitem>
+                            <para><guilabel>Dark gray texture</guilabel> &mdash; Set the background in fullscreen mode to a dark gray texture.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
                 <term><guilabel>JPEG save quality</guilabel></term>
                 <listitem>
                     <para>JPEG save/compression quality setting, which can be temporarily overridden in the <guilabel>Save As</guilabel> dialog when saving a file as a JPEG. When saving an existing JPEG file with a new name or after performing a non-lossy edit (&eg; rotation, which only changes the EXIF rotation tag), the appearance of the file is not changed because no actual image manipulation is done.</para>

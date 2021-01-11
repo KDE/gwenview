@@ -48,6 +48,7 @@ private:
     InvisibleButtonGroup* mAlphaBackgroundModeGroup = nullptr;
     InvisibleButtonGroup* mWheelBehaviorGroup = nullptr;
     InvisibleButtonGroup* mAnimationMethodGroup = nullptr;
+    InvisibleButtonGroup* mFullScreenBackgroundGroup = nullptr;
     InvisibleButtonGroup* mThumbnailActionsGroup = nullptr;
     InvisibleButtonGroup* mZoomModeGroup = nullptr;
     InvisibleButtonGroup* mThumbnailBarOrientationGroup = nullptr;

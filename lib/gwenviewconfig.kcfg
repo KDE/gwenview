@@ -8,6 +8,7 @@
     <include>lib/zoommode.h</include>
     <include>lib/thumbnailactions.h</include>
     <include>lib/mousewheelbehavior.h</include>
+    <include>lib/fullscreenbackground.h</include>
     <include>lib/documentview/documentview.h</include>
     <include>lib/documentview/rasterimageview.h</include>
     <include>lib/print/printoptionspage.h</include>
@@ -94,7 +95,13 @@
         <entry name="SideBarPage" type="String">
             <default>information</default>
         </entry>
-        
+        <entry name="FullScreenBackground" type="Enum">
+            <choices name="Gwenview::FullScreenBackground::Enum">
+                <choice name="FullScreenBackground::Image"/>
+                <choice name="FullScreenBackground::Black"/>
+            </choices>
+            <default>FullScreenBackground::Image</default>
+        </entry>
         <entry name="ThumbnailActions" type="Enum">
             <choices name="Gwenview::ThumbnailActions::Enum">
                 <choice name="ThumbnailActions::AllButtons"/>

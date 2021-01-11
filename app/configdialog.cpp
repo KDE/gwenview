@@ -52,7 +52,12 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 
     // General
     widget = setupPage(mGeneralConfigPage);
-    
+
+    mFullScreenBackgroundGroup = new InvisibleButtonGroup(widget);
+    mFullScreenBackgroundGroup->setObjectName(QStringLiteral("kcfg_FullScreenBackground"));
+    mFullScreenBackgroundGroup->addButton(mGeneralConfigPage.fullscreenBackgroundBlackRadioButton, int(FullScreenBackground::Black));
+    mFullScreenBackgroundGroup->addButton(mGeneralConfigPage.fullscreenBackgroundImageRadioButton, int(FullScreenBackground::Image));
+
     mThumbnailActionsGroup = new InvisibleButtonGroup(widget);
     mThumbnailActionsGroup->setObjectName(QStringLiteral("kcfg_ThumbnailActions"));
     mThumbnailActionsGroup->addButton(mGeneralConfigPage.allButtonsThumbnailActionsRadioButton, int(ThumbnailActions::AllButtons));
