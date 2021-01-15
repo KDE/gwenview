@@ -1037,7 +1037,7 @@ void MainWindow::setActiveViewModeAction(QAction* action)
             // his image back.
             d->mViewMainPage->reset();
         }
-        setCaption(QString());
+        setCaption(d->mUrlNavigator->locationUrl().adjusted(QUrl::RemoveScheme).toString());
     }
     d->autoAssignThumbnailProvider();
     toggleSideBar(d->sideBarVisibility()); 
@@ -1287,6 +1287,9 @@ void MainWindow::slotCurrentDirUrlChanged(const QUrl &url)
     if (url.isValid()) {
         d->mUrlNavigator->setLocationUrl(url);
         d->mGoUpAction->setEnabled(url.path() != "/");
+        if (d->mCurrentMainPageId == BrowseMainPageId) {
+            setCaption(d->mUrlNavigator->locationUrl().adjusted(QUrl::RemoveScheme).toString());
+        }
     } else {
         d->mGoUpAction->setEnabled(false);
     }
