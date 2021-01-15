@@ -727,7 +727,6 @@ Link an image.</para></listitem>
             <varlistentry>
                 <term><guilabel>Fullscreen background</guilabel></term>
                 <listitem>
-                    <para>Move the slider to change the color of the gray background in Browse and View mode from black (the leftmost position) to white (the rightmost position).</para>
                     <itemizedlist>
                         <listitem>
                             <para><guilabel>Black</guilabel> &mdash; Set the background color in fullscreen mode to black.</para>
