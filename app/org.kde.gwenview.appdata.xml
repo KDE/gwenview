@@ -126,7 +126,7 @@
     <p xml:lang="tr">Gwenview, KDE için hızlı ve kolay kullanılır bir resim görüntüleyicisidir. Resim koleksiyonu içinde gezinmek ve görüntülemek için idealdir.</p>
     <p xml:lang="uk">Gwenview — швидка і проста у користування програма для перегляду зображень від KDE, ідеальна для навігації збіркою зображень та показу зображень.</p>
     <p xml:lang="x-test">xxGwenview is a fast and easy to use image viewer by KDE, ideal for browsing and displaying a collection of images.xx</p>
-    <p xml:lang="zh-CN">Gwenview 是快速易用的 KDE 图像查看器，浏览和显示的图像集合的理想选择。</p>
+    <p xml:lang="zh-CN">Gwenview 是一款便捷易用的 KDE 图像查看器，是浏览、显示一系列图像时的理想选择。</p>
     <p xml:lang="zh-TW">Gwenview 是 KDE 裡一套快速並簡易使用的影像檢視器，用來瀏覽與顯示圖片集相當理想。</p>
     <p>Features:</p>
     <p xml:lang="ar">الميزات:</p>
@@ -214,7 +214,7 @@
       <li xml:lang="tr">Basit resim işleme işlevlerini destekler: döndürme, aynalama, çevirme ve yeniden boyutlandırma</li>
       <li xml:lang="uk">підтримка обробки зображень: обертання, віддзеркалення, перевертання та зміни розмірів;</li>
       <li xml:lang="x-test">xxSupports simple image manipulations: rotate, mirror, flip, and resizexx</li>
-      <li xml:lang="zh-CN">支持简单的图片操作: 旋转、镜像、翻转和缩放</li>
+      <li xml:lang="zh-CN">支持简单的图片操作：旋转、镜像、翻转和缩放</li>
       <li xml:lang="zh-TW">支援簡單影像處理：旋轉、鏡射、翻轉與調整大小</li>
       <li>Supports basic file management actions such as copy, move, delete, and others</li>
       <li xml:lang="ar">دعم إجراءات إدارة الملفّات البسيطة كالنّسخ، والنّقل، والحذف وغيرها</li>
@@ -257,7 +257,7 @@
       <li xml:lang="tr">Kopyalama, taşıma, silme ve diğerleri gibi basit dosya yönetimi işlevlerini destekler</li>
       <li xml:lang="uk">підтримка базових дій з керування файлами: копіювання, пересування, вилучення тощо;</li>
       <li xml:lang="x-test">xxSupports basic file management actions such as copy, move, delete, and othersxx</li>
-      <li xml:lang="zh-CN">支持基本文件操作，例如复制、移动、删除等等</li>
+      <li xml:lang="zh-CN">支持基本文件管理操作，例如复制、移动、删除等</li>
       <li xml:lang="zh-TW">支援基本的管理動作，如複製、移動、刪除與其他</li>
       <li>Functions both as a standalone application and an embedded viewer in the Konqueror web browser</li>
       <li xml:lang="ar">يعمل كتطبيق مستقلّ وعارض مضمّن في متصفّح الوِبّ كنكر</li>
@@ -300,7 +300,7 @@
       <li xml:lang="tr">Tek başına çalıştığında ve Konqueror web tarayısında gömülü olduğunda işlevleri</li>
       <li xml:lang="uk">можливість роботи у режимі окремої програми та вбудованого переглядача у програмі для керування файлами Konqueror;</li>
       <li xml:lang="x-test">xxFunctions both as a standalone application and an embedded viewer in the Konqueror web browserxx</li>
-      <li xml:lang="zh-CN">可以独立运行，也可以作为 Konqueror 的内嵌图片浏览器</li>
+      <li xml:lang="zh-CN">既可以独立运行，也可以作为 Konqueror 网页浏览器的内建图片查看器使用。</li>
       <li xml:lang="zh-TW">可以是單獨的應用程式，也可以嵌入在 Konqueror 瀏覽器中</li>
       <li>Can be extended using KIPI plugins.</li>
       <li xml:lang="az">KIPI əlavələri istifadə edilərək funksiyalar genişləndirilə bilər</li>
@@ -431,7 +431,7 @@
       <caption xml:lang="sv">Gwenview som visar en bild, med ytterligare metadata visad i sidoraden</caption>
       <caption xml:lang="uk">Gwenview із відкритим зображенням та додатковими метаданими, які показано на бічній панелі</caption>
       <caption xml:lang="x-test">xxGwenview displaying an image, with additional metadata shown in the sidebarxx</caption>
-      <caption xml:lang="zh-CN">Gwenview 显示图像，并在侧栏中显示额外的元数据</caption>
+      <caption xml:lang="zh-CN">Gwenview 正在显示一张图像，它的侧栏正在显示额外的元数据</caption>
       <caption xml:lang="zh-TW">Gwenview 顯示圖片時，也在側邊欄顯示了額外的中繼資料</caption>
       <image>https://kde.org/images/screenshots/gwenview.png</image>
     </screenshot>
