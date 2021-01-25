@@ -63,6 +63,7 @@
   <summary xml:lang="fi">Kuvankatselin</summary>
   <summary xml:lang="fr">Afficheur d'image</summary>
   <summary xml:lang="gl">Visor de imaxes</summary>
+  <summary xml:lang="hu">Képmegjelenítő</summary>
   <summary xml:lang="ia">Visor de image</summary>
   <summary xml:lang="id">Penampil Citra</summary>
   <summary xml:lang="it">Visualizzatore di immagini</summary>
@@ -106,6 +107,7 @@
     <p xml:lang="fi">Gwenview on KDE:n nopea ja helppokäyttöinen kuvakatselin, joka on ihanteellinen kuvakokoelmien selaukseen ja esittämiseen.</p>
     <p xml:lang="fr">Gwenview est un afficheur d'images rapide et facile à utiliser pour KDE, idéal pour parcourir et afficher une collection d'images.</p>
     <p xml:lang="gl">Gwenview é un visor de imaxes por KDE rápido e doado de utilizar, ideal para examinar e mostrar unha colección de imaxes.</p>
+    <p xml:lang="hu">A Gwenview egy gyors és egyszerűen használható képmegjelenítő a KDE-hez, ideális képgyűjtemények böngészéséhez és megjelenítéséhez.</p>
     <p xml:lang="ia">Gwenview es un visor de imagine per KDE rapide e facile de usar, ideal per monstrar e navigar  in un colection de images.</p>
     <p xml:lang="id">Gwenview adalah cepat dan mudah untuk penggunaan penampil citra oleh KDE, sangat baik untuk menelusuri dan menampilkan citra dari sebuah koleksi.</p>
     <p xml:lang="it">Gwenview è un visore di immagini veloce e semplice da usare di KDE, ideale per sfogliare e visualizzare una collezione di immagini.</p>
@@ -421,6 +423,7 @@
       <caption xml:lang="fi">Gwenview näyttämässä kuvaa, sivupaneelissa näkyvät metatiedot</caption>
       <caption xml:lang="fr">Gwenview en train d'afficher une image, avec des métadonnées supplémentaires dans le panneau latéral.</caption>
       <caption xml:lang="gl">Gwenview mostrando unha imaxe, con metadatos adicionais mostrador na barra lateral.</caption>
+      <caption xml:lang="hu">A Gwenview egy kép megjelenítése közben, az oldalsávokan további metaadatokat mutatva</caption>
       <caption xml:lang="ia">Gwenview monstrante un image, con metadatos additional monstrate in le barra lateral</caption>
       <caption xml:lang="id">Gwenview mendisplai sebuah citra, dengan metadata tambahan yang ditampilkan di dalam bilah sisi</caption>
       <caption xml:lang="it">Gwenview mentre visualizza un'immagine, con ulteriori metadati mostrati nella barra laterale</caption>
