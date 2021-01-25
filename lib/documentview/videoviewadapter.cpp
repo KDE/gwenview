@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QElapsedTimer>
 #include <QIcon>
 #include <QTime>
+#include <QLabel>
 
 // Phonon
 #include <Phonon/AudioOutput>
@@ -61,6 +62,9 @@ struct VideoViewAdapterPrivate
 
     HudSlider* mSeekSlider;
     QElapsedTimer mLastSeekSliderActionTime;
+
+    QLabel *mCurrentTime;
+    QLabel *mRemainingTime;
 
     QAction* mPlayPauseAction;
     QAction* mMuteAction;
@@ -112,15 +116,38 @@ struct VideoViewAdapterPrivate
         QObject::connect(mVolumeSlider, &HudSlider::valueChanged, q, &VideoViewAdapter::slotVolumeSliderChanged);
         QObject::connect(mAudioOutput, &Phonon::AudioOutput::volumeChanged, q, &VideoViewAdapter::slotOutputVolumeChanged);
 
+        // Timestamps
+        mCurrentTime = new QLabel("--:--");
+        mCurrentTime->setAttribute(Qt::WA_TranslucentBackground);
+        mCurrentTime->setStyleSheet("QLabel { color : white; }");
+        mCurrentTime->setAlignment(Qt::AlignCenter);
+        mRemainingTime = new QLabel("--:--");
+        mRemainingTime->setAttribute(Qt::WA_TranslucentBackground);
+        mRemainingTime->setStyleSheet("QLabel { color : white; }");
+        mRemainingTime->setAlignment(Qt::AlignCenter);
+        QObject::connect(mMediaObject, &Phonon::MediaObject::stateChanged, q, &VideoViewAdapter::updateTimestamps);
+        QObject::connect(mMediaObject, &Phonon::MediaObject::tick, q, &VideoViewAdapter::updateTimestamps);
+
         // Layout
         QGraphicsWidget* hudContent = new QGraphicsWidget;
         QGraphicsLinearLayout* layout = new QGraphicsLinearLayout(hudContent);
+
+        QGraphicsProxyWidget *currentTimeProxy = new QGraphicsProxyWidget(hudContent);
+        currentTimeProxy->setWidget(mCurrentTime);
+
+        QGraphicsProxyWidget *remainingTimeProxy = new QGraphicsProxyWidget(hudContent);
+        remainingTimeProxy->setWidget(mRemainingTime);
+
         layout->addItem(playPauseButton);
+        layout->addItem(currentTimeProxy);
+        layout->setStretchFactor(currentTimeProxy, 1);
         layout->addItem(mSeekSlider);
-        layout->setStretchFactor(mSeekSlider, 5);
+        layout->setStretchFactor(mSeekSlider, 6);
+        layout->addItem(remainingTimeProxy);
+        layout->setStretchFactor(remainingTimeProxy, 1);
         layout->addItem(muteButton);
         layout->addItem(mVolumeSlider);
-        layout->setStretchFactor(mVolumeSlider, 1);
+        layout->setStretchFactor(mVolumeSlider, 2);
 
         // Create hud
         mHud = new HudWidget(parent);
@@ -339,6 +366,34 @@ void VideoViewAdapter::slotSeekSliderActionTriggered(int /*action*/)
 {
     d->mLastSeekSliderActionTime.restart();
     d->mMediaObject->seek(d->mSeekSlider->sliderPosition());
+}
+
+void VideoViewAdapter::updateTimestamps()
+{
+    QString currentTime("--:--");
+    QString remainingTime("--:--");
+
+    switch (d->mMediaObject->state()) {
+    case Phonon::PlayingState:
+    case Phonon::BufferingState:
+    case Phonon::PausedState:
+        qint64 current = d->mMediaObject->currentTime();
+        currentTime = QDateTime::fromSecsSinceEpoch(current/1000).toUTC().toString("h:mm:ss");
+        if (currentTime.startsWith("0:")) {
+            currentTime.remove(0, 2);
+        }
+
+        qint64 remaining = d->mMediaObject->remainingTime();
+        remainingTime = QDateTime::fromSecsSinceEpoch(remaining/1000).toUTC().toString("h:mm:ss");
+        if (remainingTime.startsWith("0:")) {
+            remainingTime.remove(0, 2);
+        }
+        remainingTime = "-" + remainingTime;
+        break;
+    }
+
+    d->mCurrentTime->setText(currentTime);
+    d->mRemainingTime->setText(remainingTime);
 }
 
 void VideoViewAdapter::slotTicked(qint64 value)

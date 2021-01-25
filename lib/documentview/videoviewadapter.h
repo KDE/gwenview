@@ -59,6 +59,7 @@ protected:
 private Q_SLOTS:
     void slotPlayPauseClicked();
     void updatePlayUi();
+    void updateTimestamps();
     void slotMuteClicked();
     void updateMuteAction();
     void slotVolumeSliderChanged(int);
