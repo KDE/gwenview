@@ -169,7 +169,7 @@
    <item row="8" column="0">
     <widget class="QLabel" name="label_4">
      <property name="text">
-      <string>JPEG save quality:</string>
+      <string>Lossy image save quality:</string>
      </property>
     </widget>
    </item>
@@ -232,6 +232,16 @@
     </layout>
    </item>
    <item row="9" column="1">
+    <widget class="QLabel" name="lossyImageFormatHelpLabel">
+     <property name="text">
+      <string>The quality level when saving images using lossy image formats such as JPEG, WEBP, AVIF, HEIF, and HEIC. Higher quality increases the file size.</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="1">
     <spacer name="verticalSpacer_3">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -247,28 +257,28 @@
      </property>
     </spacer>
    </item>
-   <item row="10" column="0">
+   <item row="11" column="0">
     <widget class="QLabel" name="label_5">
      <property name="text">
       <string>Thumbnail actions:</string>
      </property>
     </widget>
    </item>
-   <item row="10" column="1">
+   <item row="12" column="1">
     <widget class="QRadioButton" name="allButtonsThumbnailActionsRadioButton">
      <property name="text">
       <string>All buttons</string>
      </property>
     </widget>
    </item>
-   <item row="11" column="1">
+   <item row="13" column="1">
     <widget class="QRadioButton" name="selectionOnlyThumbnailActionsRadioButton">
      <property name="text">
       <string>Show selection button only</string>
      </property>
     </widget>
    </item>
-   <item row="12" column="1">
+   <item row="14" column="1">
     <widget class="QRadioButton" name="noneThumbnailActionsRadioButton">
      <property name="text">
       <string>None</string>

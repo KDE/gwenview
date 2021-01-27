@@ -739,9 +739,9 @@ Link an image.</para></listitem>
                 </listitem>
             </varlistentry>
             <varlistentry>
-                <term><guilabel>JPEG save quality</guilabel></term>
+                <term><guilabel>Lossy image save quality</guilabel></term>
                 <listitem>
-                    <para>JPEG save/compression quality setting, which can be temporarily overridden in the <guilabel>Save As</guilabel> dialog when saving a file as a JPEG. When saving an existing JPEG file with a new name or after performing a non-lossy edit (&eg; rotation, which only changes the EXIF rotation tag), the appearance of the file is not changed because no actual image manipulation is done.</para>
+                    <para>Save/compression quality setting for lossy image formats like JPEG, WEBP, AVIF, HEIF, and HEIC, which can be temporarily overridden in the <guilabel>Save As</guilabel> dialog when saving a file in a lossy image format. When saving an existing lossy image with a new name or after performing a non-lossy edit (&eg; rotation, which only changes the EXIF rotation tag), the appearance of the file is not changed because no actual image manipulation is done.</para>
                 </listitem>
             </varlistentry>
             <varlistentry>

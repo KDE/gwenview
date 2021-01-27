@@ -71,7 +71,8 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     connect(mGeneralConfigPage.jpegQualitySpinner, QOverload<int>::of(&QSpinBox::valueChanged), this, [=] (int value) {mGeneralConfigPage.kcfg_JPEGQuality->setValue(value);});
     mGeneralConfigPage.jpegQualitySpinner->setValue(mGeneralConfigPage.kcfg_JPEGQuality->value());
     mGeneralConfigPage.backgroundValueFrame->setMinimumWidth(mGeneralConfigPage.jpegQualitySpinner->width());
-    
+    mGeneralConfigPage.lossyImageFormatHelpLabel->setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
+
     mGeneralConfigPage.kcfg_AutoplayVideos->setEnabled(mGeneralConfigPage.kcfg_ListVideos->isChecked());
     connect(mGeneralConfigPage.kcfg_ListVideos, &QCheckBox::stateChanged, [=](const int &state) {
         mGeneralConfigPage.kcfg_AutoplayVideos->setEnabled(state == Qt::Checked);

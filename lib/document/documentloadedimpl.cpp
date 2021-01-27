@@ -83,7 +83,12 @@ bool DocumentLoadedImpl::saveInternal(QIODevice* device, const QByteArray& forma
 {
     QImageWriter writer(device, format);
     // If we're saving a non-JPEG image as a JPEG, respect the quality setting
-    if (format == QByteArrayLiteral("jpeg")) {
+    if (format == QByteArrayLiteral("jpeg") ||
+        format == QByteArrayLiteral("webp") ||
+        format == QByteArrayLiteral("avif") ||
+        format == QByteArrayLiteral("heif") ||
+        format == QByteArrayLiteral("heic")
+    ) {
         writer.setQuality(GwenviewConfig::jPEGQuality());
     }
     bool ok = writer.write(document()->image());

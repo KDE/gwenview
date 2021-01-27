@@ -79,7 +79,7 @@ struct GvCorePrivate
         JPEGQualityChooserWidget->setVisible(false); // shown only for JPEGs
 
         QLabel* JPEGQualityChooserLabel = new QLabel;
-        JPEGQualityChooserLabel->setText(i18n("JPEG quality:"));
+        JPEGQualityChooserLabel->setText(i18n("Image quality:"));
         JPEGQualityChooserLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
         QSpinBox* JPEGQualityChooserSpinBox = new QSpinBox;
@@ -124,10 +124,14 @@ struct GvCorePrivate
         fileWidget->setMimeFilter(supportedMimetypes,
                                             MimeTypeUtils::urlMimeType(url));
 
-        // Only show the JPEG quality chooser when saving a JPEG image
+        // Only show the lossy image quality chooser when saving a lossy image
         QObject::connect(fileWidget, &KFileWidget::filterChanged,
                          JPEGQualityChooserWidget, [=](const QString &filter) {
-            JPEGQualityChooserWidget->setVisible(filter.contains(QLatin1String("jpeg")));
+            JPEGQualityChooserWidget->setVisible(filter.contains(QLatin1String("jpeg")) ||
+                                                 filter.contains(QLatin1String("webp")) ||
+                                                 filter.contains(QLatin1String("avif")) ||
+                                                 filter.contains(QLatin1String("heif")) ||
+                                                 filter.contains(QLatin1String("heic")) );
         });
 
         // Show dialog
