@@ -191,7 +191,9 @@ void ZoomWidget::setZoom(qreal zoom)
 void ZoomWidget::setCustomZoomFromSpinBox(qreal zoom)
 {
     setZoom(zoom / PRECISION);
-    d->emitZoomChanged();
+    if (d->mZoomSpinBox->hasFocus()) {
+        d->emitZoomChanged();
+    }
 }
 
 void ZoomWidget::setMinimumZoom(qreal minimumZoom)
