@@ -163,7 +163,7 @@ struct RasterImageViewPrivate
         mAlternateBuffer = QPixmap();
     }
 
-    void drawAlphaBackground(QPainter* painter, const QRect& viewportRect, const QPoint& zoomedImageTopLeft, const QPixmap &texture)
+    void drawAlphaBackground(QPainter* painter, const QRectF& viewportRect, const QPoint& zoomedImageTopLeft, const QPixmap &texture)
     {
         switch (mAlphaBackgroundMode) {
             case AbstractImageView::AlphaBackgroundNone:
@@ -353,11 +353,11 @@ void RasterImageView::updateFromScaler(int zoomedImageLeft, int zoomedImageTop, 
         QPainter painter(&d->mCurrentBuffer);
         painter.setCompositionMode(QPainter::CompositionMode_Source);
         if (document()->hasAlphaChannel()) {
-            d->drawAlphaBackground(
-                &painter, QRect(viewportLeft, viewportTop, image.width(), image.height()),
-                QPoint(zoomedImageLeft, zoomedImageTop),
-                alphaBackgroundTexture()
-            );
+            const QRectF viewportRect(QPointF(viewportLeft, viewportTop),
+                                      QSizeF(image.size()) / devicePixelRatio());
+            d->drawAlphaBackground(&painter, viewportRect,
+                                   QPoint(zoomedImageLeft, zoomedImageTop),
+                                   alphaBackgroundTexture());
             // This is required so transparent pixels don't replace our background
             painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
         }
