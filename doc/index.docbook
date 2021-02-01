@@ -269,9 +269,10 @@ the actual pixel size. The shortcut <keycap>F</keycap> toggles between <guibutto
 image with the arrow keys. When you zoom in, arrow keys are used to scroll the image.
 This is very similar to the behavior provided by phones or digital cameras.</para>
 
-<para>When an image is zoomed in, a bird-eye view appears and lets you scroll
-the image using the mouse and the arrow keys. The bird-eye view automatically hides
-itself after a short delay, showing back only while zooming or scrolling.</para>
+<para>When an image is zoomed in, a bird's eye view appears and lets you scroll
+the image using the mouse and the arrow keys. The bird's eye view automatically hides
+itself after a short delay, showing back only while zooming or scrolling. The bird's eye view
+can be disabled from the right click context menu or from <menuchoice><guimenu>View</guimenu><guimenuitem>Show Bird's Eye View When Zoomed In</guimenuitem></menuchoice></para>
 
 <para>You can define what happens when going to image B after having zoomed in on an area of image A using the options in the <guilabel>Zoom mode</guilabel> group on the <guimenuitem>Image View</guimenuitem> page of the &gwenview; configuration window which can be reached using the <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure &gwenview;...</guimenuitem></menuchoice>.</para>
 

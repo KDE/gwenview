@@ -27,6 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/documentview/abstractrasterimageviewtool.h>
 #include <lib/slidecontainer.h>
 #include <lib/zoomwidget.h>
+#include <lib/gwenviewconfig.h>
 #include "gwenview_lib_debug.h"
 
 // KF
@@ -53,6 +54,7 @@ struct DocumentViewControllerPrivate
     QAction * mActualSizeAction;
     QAction * mZoomInAction;
     QAction * mZoomOutAction;
+    QAction * mToggleBirdEyeViewAction;
     QList<QAction *> mActions;
 
     void setupActions()
@@ -82,7 +84,14 @@ struct DocumentViewControllerPrivate
         mZoomInAction = view->addAction(KStandardAction::ZoomIn);
         mZoomOutAction = view->addAction(KStandardAction::ZoomOut);
 
-        mActions << mZoomToFitAction << mActualSizeAction << mZoomInAction << mZoomOutAction << mZoomToFillAction;
+        mToggleBirdEyeViewAction = view->addAction(QStringLiteral("view_toggle_birdeyeview"));
+        mToggleBirdEyeViewAction->setCheckable(true);
+        mToggleBirdEyeViewAction->setChecked(GwenviewConfig::birdEyeViewEnabled());
+        mToggleBirdEyeViewAction->setText(i18n("Show Bird's Eye View When Zoomed In"));
+        mToggleBirdEyeViewAction->setIcon(QIcon::fromTheme(QStringLiteral("zoom")));
+        mToggleBirdEyeViewAction->setEnabled(mView != nullptr);
+
+        mActions << mZoomToFitAction << mActualSizeAction << mZoomInAction << mZoomOutAction << mZoomToFillAction << mToggleBirdEyeViewAction;
     }
 
     void connectZoomWidget()
@@ -164,6 +173,8 @@ void DocumentViewController::setView(DocumentView* view)
             d->mView, SLOT(zoomIn()));
     connect(d->mZoomOutAction, SIGNAL(triggered()),
             d->mView, SLOT(zoomOut()));
+
+    connect(d->mToggleBirdEyeViewAction, &QAction::triggered, d->mView, &DocumentView::toggleBirdEyeView);
 
     d->updateActions();
     updateZoomToFitActionFromView();

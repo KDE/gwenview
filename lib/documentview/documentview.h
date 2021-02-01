@@ -149,6 +149,7 @@ public Q_SLOTS:
 
     void setZoomToFill(bool);
     void toggleZoomToFill();
+    void toggleBirdEyeView();
 
     void setPosition(const QPoint&);
 

@@ -562,7 +562,10 @@ void DocumentView::openUrl(const QUrl &url, const DocumentView::Setup& setup)
     } else {
         QMetaObject::invokeMethod(this, &DocumentView::finishOpenUrl, Qt::QueuedConnection);
     }
-    d->setupBirdEyeView();
+
+    if (GwenviewConfig::birdEyeViewEnabled()) {
+        d->setupBirdEyeView();
+    }
 }
 
 void DocumentView::finishOpenUrl()
@@ -668,6 +671,19 @@ void DocumentView::toggleZoomToFill() {
     if (zoomToFillOn) {
         d->setZoom(1., d->cursorPosition());
     }
+}
+
+void DocumentView::toggleBirdEyeView()
+{
+    if (d->mBirdEyeView) {
+       BirdEyeView* tmp = d->mBirdEyeView;
+       d->mBirdEyeView = nullptr;
+       delete tmp;
+    } else {
+        d->setupBirdEyeView();
+    }
+
+    GwenviewConfig::setBirdEyeViewEnabled(!GwenviewConfig::birdEyeViewEnabled());
 }
 
 bool DocumentView::zoomToFit() const

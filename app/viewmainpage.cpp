@@ -571,6 +571,7 @@ void ViewMainPage::showContextMenu()
         addActionToMenu(&menu, d->mActionCollection, "view_zoom_to_fit");
         addActionToMenu(&menu, d->mActionCollection, "view_zoom_in");
         addActionToMenu(&menu, d->mActionCollection, "view_zoom_out");
+        addActionToMenu(&menu, d->mActionCollection, "view_toggle_birdeyeview");
     }
     if (d->mCompareMode) {
         menu.addSeparator();

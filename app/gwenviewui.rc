@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE gui SYSTEM "kpartgui.dtd">
-<gui name="gwenview" version="60">
+<gui name="gwenview" version="61">
 
 <MenuBar>
     <Menu name="file" >
@@ -28,6 +28,7 @@
         <Action name="view_zoom_to_fit"/>
         <Action name="view_zoom_in"/>
         <Action name="view_zoom_out"/>
+        <Action name="view_toggle_birdeyeview"/>
         <Separator/>
         <Action name="sort_by"/>
         <Action name="thumbnail_details"/>
