@@ -687,8 +687,14 @@ bool JpegContent::save(QIODevice* device)
     d->mRawData.resize(io.size());
     io.read((unsigned char*)d->mRawData.data(), io.size());
 
-    QDataStream stream(device);
-    stream.writeRawData(d->mRawData.data(), d->mRawData.size());
+    QImage _image;
+    _image.loadFromData(d->mRawData);
+    QImageWriter writer(device, "jpeg");
+    writer.setQuality(GwenviewConfig::jPEGQuality());
+    if (!writer.write(_image)) {
+        d->mErrorString = writer.errorString();
+        return false;
+    }
 
     // Make sure we are up to date
     loadFromData(d->mRawData);

@@ -430,8 +430,10 @@ void GvCore::saveAs(const QUrl &url)
     } else {
         // Regardless of job result, reset JPEG config value if it was changed by
         // the Save As dialog
-        if (GwenviewConfig::jPEGQuality() != d->configFileJPEGQualityValue)
-            GwenviewConfig::setJPEGQuality(d->configFileJPEGQualityValue);
+        connect(job, &KJob::result, [=]() {
+            if (GwenviewConfig::jPEGQuality() != d->configFileJPEGQualityValue)
+                GwenviewConfig::setJPEGQuality(d->configFileJPEGQualityValue);
+        });
         connect(job, SIGNAL(result(KJob*)), SLOT(slotSaveResult(KJob*)));
     }
 }
