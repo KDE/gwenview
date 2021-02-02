@@ -129,5 +129,15 @@ install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/org.kde.gwenview.desktop
     DESTINATION ${KDE_INSTALL_APPDIR})
 install(FILES org.kde.gwenview.appdata.xml
     DESTINATION ${KDE_INSTALL_METAINFODIR})
-install(FILES slideshow.desktop
-    DESTINATION ${KDE_INSTALL_KSERVICES5DIR}/ServiceMenus)
+
+# slideshowfileitemaction plugin
+
+kcoreaddons_add_plugin(slideshowfileitemaction
+    SOURCES slideshowfileitemaction.cpp
+    JSON slideshowfileitemaction.json
+    INSTALL_NAMESPACE "kf5/kfileitemaction")
+
+target_link_libraries(slideshowfileitemaction
+    KF5::I18n
+    KF5::KIOWidgets
+    KF5::Notifications)

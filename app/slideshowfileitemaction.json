@@ -1,0 +1,15 @@
+{
+    "KPlugin": {
+        "Icon": "gwenview",
+        "MimeTypes": [
+            "application/octet-stream",
+            "inode/directory"
+        ],
+        "Name": "Start a Slideshow",
+        "ServiceTypes": [
+            "KFileItemAction/Plugin"
+        ]
+    },
+    "X-KDE-Require": "Read",
+    "X-KDE-Show-In-Submenu": true
+}
