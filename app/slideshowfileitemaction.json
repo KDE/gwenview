@@ -6,6 +6,14 @@
             "inode/directory"
         ],
         "Name": "Start a Slideshow",
+        "Name[ca@valencia]": "Inicia un passe de diapositives",
+        "Name[ca]": "Inicia un passi de diapositives",
+        "Name[es]": "Comenzar una presentación",
+        "Name[nl]": "Een diavoorstelling starten",
+        "Name[pt]": "Iniciar uma Apresentação",
+        "Name[sv]": "Starta ett bildspel",
+        "Name[uk]": "Розпочати показ слайдів",
+        "Name[x-test]": "xxStart a Slideshowxx",
         "ServiceTypes": [
             "KFileItemAction/Plugin"
         ]
