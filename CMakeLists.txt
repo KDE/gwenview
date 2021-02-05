@@ -51,7 +51,7 @@ else()
     set(GWENVIEW_SEMANTICINFO_BACKEND_BALOO ON)
 endif()
 
-find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Core Widgets Concurrent Svg OpenGL PrintSupport)
+find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Core Widgets Concurrent Svg PrintSupport)
 find_package(Qt5DBus ${QT_MIN_VERSION} CONFIG QUIET)
 set(HAVE_QTDBUS ${Qt5DBus_FOUND})
 
