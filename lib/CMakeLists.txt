@@ -262,7 +262,6 @@ endif()
 target_link_libraries(gwenviewlib
    Qt5::Concurrent
    Qt5::Svg
-   Qt5::OpenGL
    Qt5::PrintSupport
    KF5::KIOCore
    KF5::KIOWidgets

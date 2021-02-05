@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KF
 
 // Qt
-#include <QGLWidget>
+#include <QOpenGLWidget>
 #include <QGraphicsScene>
 #include <QPropertyAnimation>
 #include <QTimer>
@@ -87,13 +87,8 @@ DocumentViewContainer::DocumentViewContainer(QWidget* parent)
     d->q = this;
     d->mScene = new QGraphicsScene(this);
     if (GwenviewConfig::animationMethod() == DocumentView::GLAnimation) {
-        QGLWidget* glWidget = new QGLWidget;
-        if (glWidget->isValid()) {
-            setViewport(glWidget);
-        } else {
-            qCWarning(GWENVIEW_LIB_LOG) << "Failed to initialize OpenGL support!";
-            delete glWidget;
-        }
+        QOpenGLWidget* glWidget = new QOpenGLWidget;
+        setViewport(glWidget);
     }
     setScene(d->mScene);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -304,10 +299,10 @@ void DocumentViewContainer::slotFadeInFinished(DocumentView* view)
 
 void DocumentViewContainer::slotConfigChanged()
 {
-    bool currentlyGL = qobject_cast<QGLWidget*>(viewport());
+    bool currentlyGL = qobject_cast<QOpenGLWidget*>(viewport());
     bool wantGL = GwenviewConfig::animationMethod() == DocumentView::GLAnimation;
     if (currentlyGL != wantGL) {
-        setViewport(wantGL ? new QGLWidget() : new QWidget());
+        setViewport(wantGL ? new QOpenGLWidget() : new QWidget());
     }
 }
 
