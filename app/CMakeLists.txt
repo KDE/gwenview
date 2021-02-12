@@ -32,6 +32,7 @@ set(gwenview_SRCS
     startmainpage.cpp
     thumbnailviewhelper.cpp
     browsemainpage.cpp
+    gwenview.qrc
     )
 ecm_qt_declare_logging_category(gwenview_SRCS HEADER gwenview_app_debug.h IDENTIFIER GWENVIEW_APP_LOG CATEGORY_NAME org.kde.kdegraphics.gwenview.app DESCRIPTION "gwenview app (kdegraphics)" EXPORT GWENVIEW)
 # need by GV_RETURN_VALUE_IF_FAIL
@@ -64,9 +65,6 @@ ki18n_wrap_ui(gwenview_SRCS
     startmainpage.ui
     browsemainpage.ui
     )
-
-qt5_add_resources(gwenview_SRCS gwenview.qrc)
-
 
 if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
     ki18n_wrap_ui(gwenview_SRCS

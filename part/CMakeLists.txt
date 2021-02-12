@@ -8,8 +8,8 @@ include_directories(
 set(gvpart_SRCS
     gvbrowserextension.cpp
     gvpart.cpp
+    gvpart.qrc
     )
-qt5_add_resources(gvpart_SRCS gvpart.qrc)
 
 add_library(gvpart MODULE ${gvpart_SRCS})
 
