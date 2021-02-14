@@ -26,6 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // KF
 #include <KDirLister>
+#include <kio_version.h>
 #include <KProtocolManager>
 
 // Local
@@ -117,8 +118,14 @@ ContextManager::ContextManager(SortedDirModel* dirModel, QObject* parent)
 
     connect(d->mDirModel, &SortedDirModel::rowsInserted, this, &ContextManager::slotRowsInserted);
 
+#if KIO_VERSION < QT_VERSION_CHECK(5, 80, 0)
     connect(d->mDirModel->dirLister(), SIGNAL(redirection(QUrl)),
             SLOT(slotDirListerRedirection(QUrl)));
+#else
+    connect(d->mDirModel->dirLister(), QOverload<const QUrl &, const QUrl &>::of(&KDirLister::redirection), this, [this](const QUrl &, const QUrl &newUrl) {
+        slotDirListerRedirection(newUrl);
+    });
+#endif
 
     connect(d->mDirModel->dirLister(), QOverload<>::of(&KDirLister::completed), this, &ContextManager::slotDirListerCompleted);
 
