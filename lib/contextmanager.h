@@ -94,7 +94,6 @@ private Q_SLOTS:
     void slotRowsAboutToBeRemoved(const QModelIndex& /*parent*/, int start, int end);
     void slotRowsInserted();
     void selectUrlToSelect();
-    void slotDirListerRedirection(const QUrl&);
     void slotDirListerCompleted();
 
 private:
