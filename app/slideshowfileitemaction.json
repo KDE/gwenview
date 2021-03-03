@@ -25,6 +25,7 @@
         "Name[sv]": "Starta ett bildspel",
         "Name[uk]": "Розпочати показ слайдів",
         "Name[x-test]": "xxStart a Slideshowxx",
+        "Name[zh_CN]": "开始幻灯片放映",
         "ServiceTypes": [
             "KFileItemAction/Plugin"
         ]
