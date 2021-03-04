@@ -53,7 +53,6 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/${GV_JPEG_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/..
     ${CMAKE_CURRENT_BINARY_DIR}
-    ${EXIV2_INCLUDE_DIR}
     ${JPEG_INCLUDE_DIR}
     ${PNG_INCLUDE_DIRS}
     )
@@ -269,8 +268,8 @@ target_link_libraries(gwenviewlib
    KF5::I18n
    KF5::WindowSystem
    KF5::IconThemes
+   LibExiv2::LibExiv2
     ${JPEG_LIBRARY}
-    ${EXIV2_LIBRARIES}
     ${PNG_LIBRARIES}
     ${LCMS2_LIBRARIES}
     ${PHONON_LIBRARY}

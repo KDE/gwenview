@@ -2,7 +2,6 @@ add_definitions(-DTRANSLATION_DOMAIN="gwenview")
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/..
-    ${EXIV2_INCLUDE_DIR}
     )
 
 set(gvpart_SRCS

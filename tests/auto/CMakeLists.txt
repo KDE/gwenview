@@ -17,7 +17,6 @@ kde_source_files_enable_exceptions(
 include_directories(
     ${gwenview_SOURCE_DIR}
     ${importer_SOURCE_DIR}
-    ${EXIV2_INCLUDE_DIR}
     )
 
 # For config-gwenview.h

@@ -87,7 +87,7 @@ set_package_properties(JPEG PROPERTIES URL "http://libjpeg.sourceforge.net/" DES
 find_package(PNG)
 set_package_properties(PNG PROPERTIES URL "http://www.libpng.org" DESCRIPTION "PNG image manipulation support" TYPE REQUIRED)
 
-find_package(Exiv2)
+find_package(LibExiv2)
 set_package_properties(Exiv2 PROPERTIES URL "https://www.exiv2.org" DESCRIPTION "image metadata support" TYPE REQUIRED)
 
 find_package(CFitsio)
