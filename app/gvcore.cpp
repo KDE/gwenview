@@ -128,6 +128,7 @@ struct GvCorePrivate
         QObject::connect(fileWidget, &KFileWidget::filterChanged,
                          JPEGQualityChooserWidget, [=](const QString &filter) {
             JPEGQualityChooserWidget->setVisible(filter.contains(QLatin1String("jpeg")) ||
+                                                 filter.contains(QLatin1String("jxl"))  ||
                                                  filter.contains(QLatin1String("webp")) ||
                                                  filter.contains(QLatin1String("avif")) ||
                                                  filter.contains(QLatin1String("heif")) ||
