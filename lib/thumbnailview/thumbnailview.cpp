@@ -333,6 +333,12 @@ ThumbnailView::ThumbnailView(QWidget* parent)
     connect(d->mTouch, &Touch::pinchGestureStarted, this, &ThumbnailView::setZoomParameter);
     connect(d->mTouch, &Touch::tapTriggered, this, &ThumbnailView::tapGesture);
     connect(d->mTouch, &Touch::tapHoldAndMovingTriggered, this, &ThumbnailView::startDragFromTouch);
+
+    const QFontMetrics metrics(viewport()->font());
+    const int singleStep = metrics.height() * QApplication::wheelScrollLines();
+
+    verticalScrollBar()->setSingleStep(singleStep);
+    horizontalScrollBar()->setSingleStep(singleStep);
 }
 
 ThumbnailView::~ThumbnailView()
