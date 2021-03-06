@@ -92,8 +92,13 @@ public:
             QList<QUrl> list;
             QStringList tmpArgs = args;
             tmpArgs.removeDuplicates();
+            QStringList fileNames;
             for (const QString & url : qAsConst(tmpArgs)) {
-                list << QUrl::fromUserInput(url, QDir::currentPath(), QUrl::AssumeLocalFile);
+                QUrl fileUrl = QUrl::fromUserInput(url, QDir::currentPath(), QUrl::AssumeLocalFile);
+                if (!fileNames.contains(fileUrl.fileName())) {
+                    fileNames << fileUrl.fileName();
+                    list <<fileUrl;
+                }
             }
 
             KIO::CopyJob* job = KIO::link(list, mUrl);
@@ -159,7 +164,7 @@ int main(int argc, char *argv[])
     QScopedPointer<KAboutData> aboutData(
         Gwenview::createAboutData(
             QStringLiteral("gwenview"), /* component name */
-            i18n("Gwenview")                    /* display name */
+            i18n("Gwenview")            /* display name */
         ));
     aboutData->setShortDescription(i18n("An Image Viewer"));
 
