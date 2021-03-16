@@ -80,6 +80,11 @@ if (KF5ConfigWidgets_VERSION VERSION_GREATER "5.56.0" AND ${Phonon4Qt5_VERSION} 
         MESSAGE(STATUS "compile without foreach")
 endif()
 
+message(STATUS ${KF5KIO_VERSION})
+if (KF5KIO_VERSION VERSION_GREATER_EQUAL "5.82.0")
+    add_definitions(-DKIO_REQUEST_MIMETYPE)
+endif()
+
 ## Dependencies
 find_package(JPEG)
 set_package_properties(JPEG PROPERTIES URL "http://libjpeg.sourceforge.net/" DESCRIPTION "JPEG image manipulation support" TYPE REQUIRED)

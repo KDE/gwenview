@@ -80,6 +80,11 @@ SortedDirModel::SortedDirModel(QObject* parent)
     d->mSourceModel = new SemanticInfoDirModel(this);
 #endif
     setSourceModel(d->mSourceModel);
+
+#ifdef KIO_REQUEST_MIMETYPE
+    d->mSourceModel->dirLister()->setRequestMimeTypeWhileListing(true);
+#endif
+
     d->mDelayedApplyFiltersTimer.setInterval(0);
     d->mDelayedApplyFiltersTimer.setSingleShot(true);
     connect(&d->mDelayedApplyFiltersTimer, &QTimer::timeout, this, &SortedDirModel::doApplyFilters);
