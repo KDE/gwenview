@@ -214,13 +214,10 @@ void ThumbnailProvider::setThumbnailGroup(ThumbnailGroup::Enum group)
 void ThumbnailProvider::appendItems(const KFileItemList& items)
 {
     if (!mItems.isEmpty()) {
-        QSet<QString> itemSet;
-        for (const KFileItem & item : qAsConst(mItems)) {
-            itemSet.insert(item.url().url());
-        }
+        QSet<KFileItem> itemSet{mItems.begin(), mItems.end()};
 
         for (const KFileItem & item : items) {
-            if (!itemSet.contains(item.url().url())) {
+            if (!itemSet.contains(item)) {
                 mItems.append(item);
             }
         }
