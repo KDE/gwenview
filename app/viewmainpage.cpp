@@ -96,14 +96,13 @@ const int ViewMainPage::MaxViewCount = 6;
  * ||+-mToolContainer------------------------------------------------+||
  * |||                                                               |||
  * ||+---------------------------------------------------------------+||
- * ||+-mStatusBarContainer-------------------------------------------+||
- * |||[mToggleSideBarButton][mToggleThumbnailBarButton] [mZoomWidget]|||
- * ||+---------------------------------------------------------------+||
  * |+-----------------------------------------------------------------+|
  * |===================================================================|
  * |+-mThumbnailBar---------------------------------------------------+|
  * ||                                                                 ||
  * ||                                                                 ||
+ * |+-mStatusBarContainer---------------------------------------------+|
+ * ||[mToggleSideBarButton][mToggleThumbnailBarButton]   [mZoomWidget]||
  * |+-----------------------------------------------------------------+|
  * +-------------------------------------------------------------------+
  */
@@ -184,7 +183,6 @@ struct ViewMainPagePrivate
         mDocumentViewContainer->setBackgroundRole(QPalette::Base);
         adapterContainerLayout->addWidget(mDocumentViewContainer);
         adapterContainerLayout->addWidget(mToolContainer);
-        adapterContainerLayout->addWidget(mStatusBarContainer);
         //--
         mThumbnailBar = new ThumbnailBarView;
         ThumbnailBarItemDelegate* delegate = new ThumbnailBarItemDelegate(mThumbnailBar);
@@ -207,6 +205,7 @@ struct ViewMainPagePrivate
         viewMainPageLayout->setContentsMargins(0, 0, 0, 0);
         viewMainPageLayout->setSpacing(0);
         viewMainPageLayout->addWidget(mThumbnailSplitter);
+        viewMainPageLayout->addWidget(mStatusBarContainer);
         //--
         mDocumentViewController = new DocumentViewController(mActionCollection, q);
         mDocumentViewController->setZoomWidget(mZoomWidget);
