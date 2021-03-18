@@ -141,12 +141,77 @@ struct ViewMainPagePrivate
     bool mCompareMode;
     ZoomMode::Enum mZoomMode;
 
-    void setupThumbnailBar()
+    void setupWidgets()
     {
+        mToolContainer = new SlideContainer;
+        mToolContainer->setAutoFillBackground(true);
+        mToolContainer->setBackgroundRole(QPalette::Mid);
+        //--
+        mStatusBarContainer = new QWidget;
+        mToggleSideBarButton = new StatusBarToolButton;
+        mToggleThumbnailBarButton = new StatusBarToolButton;
+        mZoomWidget = new ZoomWidget;
+        mSynchronizeCheckBox = new QCheckBox(i18n("Synchronize"));
+        mSynchronizeCheckBox->hide();
+        mDocumentCountLabel = new KSqueezedTextLabel;
+        mDocumentCountLabel->setAlignment(Qt::AlignCenter);
+        mDocumentCountLabel->setTextElideMode(Qt::ElideRight);
+        QMargins labelMargins = mDocumentCountLabel->contentsMargins();
+        labelMargins.setLeft(15);
+        labelMargins.setRight(15);
+        mDocumentCountLabel->setContentsMargins(labelMargins);
+
+        QHBoxLayout* statusBarContainerLayout = new QHBoxLayout(mStatusBarContainer);
+        statusBarContainerLayout->setContentsMargins(0, 0, 0, 0);
+        statusBarContainerLayout->setSpacing(0);
+        statusBarContainerLayout->addWidget(mToggleSideBarButton);
+        statusBarContainerLayout->addWidget(mToggleThumbnailBarButton);
+        statusBarContainerLayout->addStretch();
+        statusBarContainerLayout->addWidget(mSynchronizeCheckBox);
+        // Ensure document count label takes up all available space,
+        // so its autohide feature works properly (stretch factor = 1)
+        statusBarContainerLayout->addWidget(mDocumentCountLabel, 1);
+        statusBarContainerLayout->addStretch();
+        statusBarContainerLayout->addWidget(mZoomWidget);
+        //--
+        mAdapterContainer = new QWidget;
+
+        QVBoxLayout* adapterContainerLayout = new QVBoxLayout(mAdapterContainer);
+        adapterContainerLayout->setContentsMargins(0, 0, 0, 0);
+        adapterContainerLayout->setSpacing(0);
+        mDocumentViewContainer = new DocumentViewContainer;
+        mDocumentViewContainer->setAutoFillBackground(true);
+        mDocumentViewContainer->setBackgroundRole(QPalette::Base);
+        adapterContainerLayout->addWidget(mDocumentViewContainer);
+        adapterContainerLayout->addWidget(mToolContainer);
+        adapterContainerLayout->addWidget(mStatusBarContainer);
+        //--
         mThumbnailBar = new ThumbnailBarView;
         ThumbnailBarItemDelegate* delegate = new ThumbnailBarItemDelegate(mThumbnailBar);
         mThumbnailBar->setItemDelegate(delegate);
         mThumbnailBar->setSelectionMode(QAbstractItemView::ExtendedSelection);
+        //--
+        Qt::Orientation orientation = GwenviewConfig::thumbnailBarOrientation();
+        mThumbnailSplitter = new Splitter(orientation == Qt::Horizontal ? Qt::Vertical : Qt::Horizontal, q);
+        mThumbnailBar->setOrientation(orientation);
+        mThumbnailBar->setThumbnailAspectRatio(GwenviewConfig::thumbnailAspectRatio());
+        mThumbnailBar->setRowCount(GwenviewConfig::thumbnailBarRowCount());
+        mThumbnailSplitter->addWidget(mAdapterContainer);
+        mThumbnailSplitter->addWidget(mThumbnailBar);
+        mThumbnailSplitter->setSizes(GwenviewConfig::thumbnailSplitterSizes());
+        // Show the thumbnail bar after setting the parent to avoid recreating
+        // the native window and to avoid QTBUG-87345.
+        mThumbnailBar->setVisible(GwenviewConfig::thumbnailBarIsVisible());
+
+        QVBoxLayout* viewMainPageLayout = new QVBoxLayout(q);
+        viewMainPageLayout->setContentsMargins(0, 0, 0, 0);
+        viewMainPageLayout->setSpacing(0);
+        viewMainPageLayout->addWidget(mThumbnailSplitter);
+        //--
+        mDocumentViewController = new DocumentViewController(mActionCollection, q);
+        mDocumentViewController->setZoomWidget(mZoomWidget);
+        mDocumentViewController->setToolContainer(mToolContainer);
+        mSynchronizer = new DocumentViewSynchronizer(&mDocumentViews, q);
     }
 
     void setupThumbnailBarStyleSheet()
@@ -208,29 +273,6 @@ struct ViewMainPagePrivate
         mThumbnailBar->setStyleSheet(css);
     }
 
-    void setupAdapterContainer()
-    {
-        mAdapterContainer = new QWidget;
-
-        QVBoxLayout* layout = new QVBoxLayout(mAdapterContainer);
-        layout->setContentsMargins(0, 0, 0, 0);
-        layout->setSpacing(0);
-        mDocumentViewContainer = new DocumentViewContainer;
-        mDocumentViewContainer->setAutoFillBackground(true);
-        mDocumentViewContainer->setBackgroundRole(QPalette::Base);
-        layout->addWidget(mDocumentViewContainer);
-        layout->addWidget(mToolContainer);
-        layout->addWidget(mStatusBarContainer);
-    }
-
-    void setupDocumentViewController()
-    {
-        mDocumentViewController = new DocumentViewController(mActionCollection, q);
-        mDocumentViewController->setZoomWidget(mZoomWidget);
-        mDocumentViewController->setToolContainer(mToolContainer);
-        mSynchronizer = new DocumentViewSynchronizer(&mDocumentViews, q);
-    }
-
     DocumentView* createDocumentView()
     {
         DocumentView* view = mDocumentViewContainer->createView();
@@ -278,62 +320,6 @@ struct ViewMainPagePrivate
         mActivityResources.remove(view);
 #endif
         mDocumentViewContainer->deleteView(view);
-    }
-
-    void setupToolContainer()
-    {
-        mToolContainer = new SlideContainer;
-        mToolContainer->setAutoFillBackground(true);
-        mToolContainer->setBackgroundRole(QPalette::Mid);
-    }
-
-    void setupStatusBar()
-    {
-        mStatusBarContainer = new QWidget;
-        mToggleSideBarButton = new StatusBarToolButton;
-        mToggleThumbnailBarButton = new StatusBarToolButton;
-        mZoomWidget = new ZoomWidget;
-        mSynchronizeCheckBox = new QCheckBox(i18n("Synchronize"));
-        mSynchronizeCheckBox->hide();
-        mDocumentCountLabel = new KSqueezedTextLabel;
-        mDocumentCountLabel->setAlignment(Qt::AlignCenter);
-        mDocumentCountLabel->setTextElideMode(Qt::ElideRight);
-        QMargins labelMargins = mDocumentCountLabel->contentsMargins();
-        labelMargins.setLeft(15);
-        labelMargins.setRight(15);
-        mDocumentCountLabel->setContentsMargins(labelMargins);
-
-        QHBoxLayout* layout = new QHBoxLayout(mStatusBarContainer);
-        layout->setContentsMargins(0, 0, 0, 0);
-        layout->setSpacing(0);
-        layout->addWidget(mToggleSideBarButton);
-        layout->addWidget(mToggleThumbnailBarButton);
-        layout->addStretch();
-        layout->addWidget(mSynchronizeCheckBox);
-        // Ensure document count label takes up all available space,
-        // so its autohide feature works properly (stretch factor = 1)
-        layout->addWidget(mDocumentCountLabel, 1);
-        layout->addStretch();
-        layout->addWidget(mZoomWidget);
-    }
-
-    void setupSplitter()
-    {
-        Qt::Orientation orientation = GwenviewConfig::thumbnailBarOrientation();
-        mThumbnailSplitter = new Splitter(orientation == Qt::Horizontal ? Qt::Vertical : Qt::Horizontal, q);
-        mThumbnailBar->setOrientation(orientation);
-        mThumbnailBar->setThumbnailAspectRatio(GwenviewConfig::thumbnailAspectRatio());
-        mThumbnailBar->setRowCount(GwenviewConfig::thumbnailBarRowCount());
-        mThumbnailSplitter->addWidget(mAdapterContainer);
-        mThumbnailSplitter->addWidget(mThumbnailBar);
-        mThumbnailSplitter->setSizes(GwenviewConfig::thumbnailSplitterSizes());
-        // Show the thumbnail bar after setting the parent to avoid recreating
-        // the native window and to avoid QTBUG-87345.
-        mThumbnailBar->setVisible(GwenviewConfig::thumbnailBarIsVisible());
-
-        QVBoxLayout* layout = new QVBoxLayout(q);
-        layout->setContentsMargins(0, 0, 0, 0);
-        layout->addWidget(mThumbnailSplitter);
     }
 
     void saveSplitterConfig()
@@ -429,16 +415,7 @@ ViewMainPage::ViewMainPage(QWidget* parent, SlideShow* slideShow, KActionCollect
     QShortcut* enterKeyShortcut = new QShortcut(Qt::Key_Return, this);
     connect(enterKeyShortcut, &QShortcut::activated, this, &ViewMainPage::slotEnterPressed);
 
-    d->setupToolContainer();
-    d->setupStatusBar();
-
-    d->setupAdapterContainer();
-
-    d->setupThumbnailBar();
-
-    d->setupSplitter();
-
-    d->setupDocumentViewController();
+    d->setupWidgets();
 
     KActionCategory* view = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface", "View"), actionCollection);
 
