@@ -885,6 +885,8 @@ void ThumbnailView::generateThumbnailsForItems()
     const QRect visibleRect = viewport()->rect();
     const int visibleSurface = visibleRect.width() * visibleRect.height();
     const QPoint origin = visibleRect.center();
+    // Keep thumbnails around that are at most two "screen heights" away.
+    const int discardDistance = visibleRect.bottomRight().manhattanLength() * 2;
 
     // distance => item
     QMultiMap<int, KFileItem> itemMap;
@@ -911,11 +913,7 @@ void ThumbnailView::generateThumbnailsForItems()
             continue;
         }
 
-        // Filter out items which already have a thumbnail
         ThumbnailForUrl::ConstIterator it = d->mThumbnailForUrl.constFind(url);
-        if (it != d->mThumbnailForUrl.constEnd() && it.value().isGroupPixAdaptedForSize(d->mThumbnailSize.height())) {
-            continue;
-        }
 
         // Compute distance
         int distance;
@@ -930,10 +928,33 @@ void ThumbnailView::generateThumbnailsForItems()
                 distance = distance + visibleSurface;
             }
         } else {
-            // Item is not visible, order thumbnails according to distance
-            // Start at 2 * visibleSurface to ensure invisible thumbnails are
-            // generated *after* visible thumbnails
-            distance = 2 * visibleSurface + (itemRect.center() - origin).manhattanLength();
+            // Calculate how far away the thumbnail is to determine if it could
+            // become visible soon.
+            qreal itemDistance = (itemRect.center() - origin).manhattanLength();
+
+            if (itemDistance < discardDistance) {
+                // Item is not visible but within an area that may potentially
+                // become visible soon, order thumbnails according to distance
+                // Start at 2 * visibleSurface to ensure invisible thumbnails are
+                // generated *after* visible thumbnails
+                distance = 2 * visibleSurface + itemDistance;
+            } else {
+                // Discard thumbnails that are too far away to prevent large
+                // directories from consuming massive amounts of RAM.
+                if (it != d->mThumbnailForUrl.constEnd()) {
+                    // Thumbnail exists for this item, discard it.
+                    const QUrl url = item.url();
+                    d->mThumbnailForUrl.remove(url);
+                    d->mSmoothThumbnailQueue.removeAll(url);
+                    d->mThumbnailProvider->removeItems({item});
+                }
+                continue;
+            }
+        }
+
+        // Filter out items which already have a thumbnail
+        if (it != d->mThumbnailForUrl.constEnd() && it.value().isGroupPixAdaptedForSize(d->mThumbnailSize.height())) {
+            continue;
         }
 
         // Add the item to our map
