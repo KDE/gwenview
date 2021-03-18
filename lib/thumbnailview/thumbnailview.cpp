@@ -211,7 +211,9 @@ struct ThumbnailViewPrivate
             mThumbnailProvider->removePendingItems();
         }
         mSmoothThumbnailQueue.clear();
-        mScheduledThumbnailGenerationTimer.start();
+        if (!mScheduledThumbnailGenerationTimer.isActive()) {
+            mScheduledThumbnailGenerationTimer.start();
+        }
     }
 
     void updateThumbnailForModifiedDocument(const QModelIndex& index)
@@ -516,13 +518,18 @@ void ThumbnailView::rowsAboutToBeRemoved(const QModelIndex& parent, int start, i
 
     // Removing rows might make new images visible, make sure their thumbnail
     // is generated
-    d->mScheduledThumbnailGenerationTimer.start();
+    if (!d->mScheduledThumbnailGenerationTimer.isActive()) {
+        d->mScheduledThumbnailGenerationTimer.start();
+    }
 }
 
 void ThumbnailView::rowsInserted(const QModelIndex& parent, int start, int end)
 {
     QListView::rowsInserted(parent, start, end);
-    d->mScheduledThumbnailGenerationTimer.start();
+
+    if (!d->mScheduledThumbnailGenerationTimer.isActive()) {
+        d->mScheduledThumbnailGenerationTimer.start();
+    }
 
     if (isVisible()) {
         emit rowsInsertedSignal(parent, start, end);
@@ -560,7 +567,7 @@ void ThumbnailView::dataChanged(const QModelIndex& topLeft, const QModelIndex& b
             }
         }
     }
-    if (thumbnailsNeedRefresh) {
+    if (thumbnailsNeedRefresh && !d->mScheduledThumbnailGenerationTimer.isActive()) {
         d->mScheduledThumbnailGenerationTimer.start();
     }
 }
