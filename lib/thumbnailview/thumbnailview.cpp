@@ -920,13 +920,7 @@ void ThumbnailView::generateThumbnailsForItems()
         // Compute distance
         int distance;
         const QRect itemRect = visualRect(index);
-        const qreal itemSurface = itemRect.width() * itemRect.height();
-        const QRect visibleItemRect = visibleRect.intersected(itemRect);
-        qreal visibleItemFract = 0;
-        if (itemSurface > 0) {
-            visibleItemFract = visibleItemRect.width() * visibleItemRect.height() / itemSurface;
-        }
-        if (visibleItemFract > 0.7) {
+        if (itemRect.isValid()) {
             // Item is visible, order thumbnails from left to right, top to bottom
             // Distance is computed so that it is between 0 and visibleSurface
             distance = itemRect.top() * visibleRect.width() + itemRect.left();
