@@ -53,8 +53,6 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/${GV_JPEG_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/..
     ${CMAKE_CURRENT_BINARY_DIR}
-    ${JPEG_INCLUDE_DIR}
-    ${PNG_INCLUDE_DIRS}
     )
 
 if(HAVE_FITS)
@@ -269,8 +267,8 @@ target_link_libraries(gwenviewlib
    KF5::WindowSystem
    KF5::IconThemes
    LibExiv2::LibExiv2
-    ${JPEG_LIBRARY}
-    ${PNG_LIBRARIES}
+   JPEG::JPEG
+   PNG::PNG
     ${LCMS2_LIBRARIES}
     ${PHONON_LIBRARY}
     )
@@ -291,7 +289,7 @@ if (KF5KDcraw_FOUND)
 endif()
 
 if (HAVE_X11)
-    target_link_libraries(gwenviewlib Qt5::X11Extras ${X11_X11_LIB})
+    target_link_libraries(gwenviewlib Qt5::X11Extras X11::X11)
 endif()
 
 if (GWENVIEW_SEMANTICINFO_BACKEND_BALOO)
