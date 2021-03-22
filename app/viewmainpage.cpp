@@ -161,6 +161,7 @@ struct ViewMainPagePrivate
         mDocumentCountLabel->setContentsMargins(labelMargins);
 
         QHBoxLayout* statusBarContainerLayout = new QHBoxLayout(mStatusBarContainer);
+        statusBarContainerLayout->setSizeConstraint(QLayout::SetFixedSize);
         statusBarContainerLayout->setContentsMargins(0, 0, 0, 0);
         statusBarContainerLayout->setSpacing(0);
         statusBarContainerLayout->addWidget(mToggleSideBarButton);
