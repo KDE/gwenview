@@ -147,6 +147,7 @@ struct ViewMainPagePrivate
         mToolContainer->setBackgroundRole(QPalette::Mid);
         //--
         mStatusBarContainer = new QWidget;
+        mStatusBarContainer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         mToggleSideBarButton = new StatusBarToolButton;
         mToggleThumbnailBarButton = new StatusBarToolButton;
         mZoomWidget = new ZoomWidget;
@@ -161,7 +162,6 @@ struct ViewMainPagePrivate
         mDocumentCountLabel->setContentsMargins(labelMargins);
 
         QHBoxLayout* statusBarContainerLayout = new QHBoxLayout(mStatusBarContainer);
-        statusBarContainerLayout->setSizeConstraint(QLayout::SetFixedSize);
         statusBarContainerLayout->setContentsMargins(0, 0, 0, 0);
         statusBarContainerLayout->setSpacing(0);
         statusBarContainerLayout->addWidget(mToggleSideBarButton);
