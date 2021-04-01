@@ -76,7 +76,7 @@ namespace Gwenview
  * Space between the item outer rect and the content, and between the
  * thumbnail and the caption
  */
-const int ITEM_MARGIN = 5;
+const int ITEM_MARGIN_DELEGATE = 5;
 
 /** How darker is the border line around selection */
 const int SELECTION_BORDER_DARKNESS = 140;
@@ -89,21 +89,21 @@ const int SELECTION_RADIUS = 5;
 const int CONTEXTBAR_MARGIN = 1;
 
 /** How dark is the shadow, 0 is invisible, 255 is as dark as possible */
-const int SHADOW_STRENGTH = 128;
+const int SHADOW_STRENGTH_DELEGATE = 128;
 
 /** How many pixels around the thumbnail are shadowed */
-const int SHADOW_SIZE = 4;
+const int SHADOW_SIZE_DELEGATE = 4;
 
-static KFileItem fileItemForIndex(const QModelIndex& index)
+static KFileItem fileItemForIndexThumbnailView(const QModelIndex& index)
 {
     Q_ASSERT(index.isValid());
     QVariant data = index.data(KDirModel::FileItemRole);
     return qvariant_cast<KFileItem>(data);
 }
 
-static QUrl urlForIndex(const QModelIndex& index)
+static QUrl urlForIndexThumbnailView(const QModelIndex& index)
 {
-    KFileItem item = fileItemForIndex(index);
+    KFileItem item = fileItemForIndexThumbnailView(index);
     return item.url();
 }
 
@@ -227,7 +227,7 @@ struct PreviewItemDelegatePrivate
     {
         return QRect(
                    rect.left(),
-                   rect.bottom() - ratingRowHeight() - ITEM_MARGIN,
+                   rect.bottom() - ratingRowHeight() - ITEM_MARGIN_DELEGATE,
                    rect.width(),
                    ratingRowHeight());
     }
@@ -249,7 +249,7 @@ struct PreviewItemDelegatePrivate
             return false;
         }
         if (type == QEvent::MouseButtonRelease) {
-            q->setDocumentRatingRequested(urlForIndex(mIndexUnderCursor) , rating);
+            q->setDocumentRatingRequested(urlForIndexThumbnailView(mIndexUnderCursor) , rating);
         }
         return true;
 #else
@@ -261,7 +261,7 @@ struct PreviewItemDelegatePrivate
     {
         QSize buttonSize = mSaveButton->sizeHint();
         int posX = itemRect.right() - buttonSize.width();
-        int posY = itemRect.top() + mThumbnailSize.height() + 2 * ITEM_MARGIN - buttonSize.height();
+        int posY = itemRect.top() + mThumbnailSize.height() + 2 * ITEM_MARGIN_DELEGATE - buttonSize.height();
 
         return QPoint(posX, posY);
     }
@@ -316,16 +316,16 @@ struct PreviewItemDelegatePrivate
 
     void drawShadow(QPainter* painter, const QRect& rect) const
     {
-        const QPoint shadowOffset(-SHADOW_SIZE, -SHADOW_SIZE + 1);
+        const QPoint shadowOffset(-SHADOW_SIZE_DELEGATE, -SHADOW_SIZE_DELEGATE + 1);
 
         const auto dpr = painter->device()->devicePixelRatioF();
         int key = qRound((rect.height() * 1000 + rect.width()) * dpr);
 
         ShadowCache::Iterator it = mShadowCache.find(key);
         if (it == mShadowCache.end()) {
-            QSize size = QSize(rect.width() + 2 * SHADOW_SIZE, rect.height() + 2 * SHADOW_SIZE);
-            QColor color(0, 0, 0, SHADOW_STRENGTH);
-            QPixmap shadow = PaintUtils::generateFuzzyRect(size * dpr, color, qRound(SHADOW_SIZE * dpr));
+            QSize size = QSize(rect.width() + 2 * SHADOW_SIZE_DELEGATE, rect.height() + 2 * SHADOW_SIZE_DELEGATE);
+            QColor color(0, 0, 0, SHADOW_STRENGTH_DELEGATE);
+            QPixmap shadow = PaintUtils::generateFuzzyRect(size * dpr, color, qRound(SHADOW_SIZE_DELEGATE * dpr));
             shadow.setDevicePixelRatio(dpr);
             it = mShadowCache.insert(key, shadow);
         }
@@ -401,7 +401,7 @@ struct PreviewItemDelegatePrivate
         }
 
         // FIXME: Duplicated from drawText
-        const KFileItem fileItem = fileItemForIndex(index);
+        const KFileItem fileItem = fileItemForIndexThumbnailView(index);
         const bool isDirOrArchive = ArchiveUtils::fileItemIsDirOrArchive(fileItem);
         if (mDetails & PreviewItemDelegate::DateDetail) {
             if (!ArchiveUtils::fileItemIsDirOrArchive(fileItem)) {
@@ -445,7 +445,7 @@ struct PreviewItemDelegatePrivate
 
         // Compute tip position
         QRect rect = mView->visualRect(index);
-        const int textY = ITEM_MARGIN + mThumbnailSize.height() + ITEM_MARGIN;
+        const int textY = ITEM_MARGIN_DELEGATE + mThumbnailSize.height() + ITEM_MARGIN_DELEGATE;
         const int spacing = 1;
         QRect geometry(
             QPoint(rect.topLeft() + QPoint((rect.width() - tipSize.width()) / 2, textY + spacing)),
@@ -497,7 +497,7 @@ struct PreviewItemDelegatePrivate
 
     int itemWidth() const
     {
-        return mThumbnailSize.width() + 2 * ITEM_MARGIN;
+        return mThumbnailSize.width() + 2 * ITEM_MARGIN_DELEGATE;
     }
 
     int ratingRowHeight() const
@@ -532,7 +532,7 @@ struct PreviewItemDelegatePrivate
             // Keep at least one row of text, so that we can show folder names
             textHeight = lineHeight;
         }
-        return mThumbnailSize.height() + textHeight + 3 * ITEM_MARGIN;
+        return mThumbnailSize.height() + textHeight + 3 * ITEM_MARGIN_DELEGATE;
     }
 
     void selectIndexUnderCursorIfNoMultiSelection()
@@ -551,7 +551,7 @@ struct PreviewItemDelegatePrivate
 
     void updateImageButtons()
     {
-        const KFileItem item = fileItemForIndex(mIndexUnderCursor);
+        const KFileItem item = fileItemForIndexThumbnailView(mIndexUnderCursor);
         const bool isImage = !ArchiveUtils::fileItemIsDirOrArchive(item);
         mFullScreenButton->setEnabled(isImage);
         mRotateLeftButton->setEnabled(isImage);
@@ -696,7 +696,7 @@ void PreviewItemDelegate::paint(QPainter * painter, const QStyleOptionViewItem &
     QSize fullSize;
     QPixmap thumbnailPix = d->mView->thumbnailForIndex(index, &fullSize);
     QSize thumbnailSize = thumbnailPix.size() / thumbnailPix.devicePixelRatio();
-    const KFileItem fileItem = fileItemForIndex(index);
+    const KFileItem fileItem = fileItemForIndexThumbnailView(index);
     const bool opaque = !thumbnailPix.hasAlphaChannel();
     const bool isDirOrArchive = ArchiveUtils::fileItemIsDirOrArchive(fileItem);
     QRect rect = option.rect;
@@ -748,12 +748,12 @@ void PreviewItemDelegate::paint(QPainter * painter, const QStyleOptionViewItem &
     // Compute thumbnailRect
     QRect thumbnailRect = QRect(
                               rect.left() + (rect.width() - thumbnailSize.width()) / 2,
-                              rect.top() + (thumbnailHeight - thumbnailSize.height()) + ITEM_MARGIN,
+                              rect.top() + (thumbnailHeight - thumbnailSize.height()) + ITEM_MARGIN_DELEGATE,
                               thumbnailSize.width(),
                               thumbnailSize.height());
 
     // Draw background
-    const QRect backgroundRect = thumbnailRect.adjusted(-ITEM_MARGIN, -ITEM_MARGIN, ITEM_MARGIN, ITEM_MARGIN);
+    const QRect backgroundRect = thumbnailRect.adjusted(-ITEM_MARGIN_DELEGATE, -ITEM_MARGIN_DELEGATE, ITEM_MARGIN_DELEGATE, ITEM_MARGIN_DELEGATE);
     if (selected) {
         d->drawBackground(painter, backgroundRect, bgColor, borderColor);
     } else if (underMouse) {
@@ -817,9 +817,9 @@ void PreviewItemDelegate::paint(QPainter * painter, const QStyleOptionViewItem &
     }
 
     QRect textRect(
-        rect.left() + ITEM_MARGIN,
-        rect.top() + 2 * ITEM_MARGIN + thumbnailHeight,
-        rect.width() - 2 * ITEM_MARGIN,
+        rect.left() + ITEM_MARGIN_DELEGATE,
+        rect.top() + 2 * ITEM_MARGIN_DELEGATE + thumbnailHeight,
+        rect.width() - 2 * ITEM_MARGIN_DELEGATE,
         d->mView->fontMetrics().height());
     if (isDirOrArchive || (d->mDetails & PreviewItemDelegate::FileNameDetail)) {
         d->drawText(painter, textRect, fgColor, index.data().toString());
@@ -872,24 +872,24 @@ void PreviewItemDelegate::setThumbnailSize(const QSize& value)
 
 void PreviewItemDelegate::slotSaveClicked()
 {
-    emit saveDocumentRequested(urlForIndex(d->mIndexUnderCursor));
+    emit saveDocumentRequested(urlForIndexThumbnailView(d->mIndexUnderCursor));
 }
 
 void PreviewItemDelegate::slotRotateLeftClicked()
 {
     d->selectIndexUnderCursorIfNoMultiSelection();
-    emit rotateDocumentLeftRequested(urlForIndex(d->mIndexUnderCursor));
+    emit rotateDocumentLeftRequested(urlForIndexThumbnailView(d->mIndexUnderCursor));
 }
 
 void PreviewItemDelegate::slotRotateRightClicked()
 {
     d->selectIndexUnderCursorIfNoMultiSelection();
-    emit rotateDocumentRightRequested(urlForIndex(d->mIndexUnderCursor));
+    emit rotateDocumentRightRequested(urlForIndexThumbnailView(d->mIndexUnderCursor));
 }
 
 void PreviewItemDelegate::slotFullScreenClicked()
 {
-    emit showDocumentInFullScreenRequested(urlForIndex(d->mIndexUnderCursor));
+    emit showDocumentInFullScreenRequested(urlForIndexThumbnailView(d->mIndexUnderCursor));
 }
 
 void PreviewItemDelegate::slotToggleSelectionClicked()
@@ -968,7 +968,7 @@ void PreviewItemDelegate::updateEditorGeometry(QWidget* widget, const QStyleOpti
     int textWidth = edit->fontMetrics().boundingRect(QLatin1String("  ") + text + QLatin1String("  ")).width();
     QRect textRect(
         option.rect.left() + (option.rect.width() - textWidth) / 2,
-        option.rect.top() + 2 * ITEM_MARGIN + d->mThumbnailSize.height(),
+        option.rect.top() + 2 * ITEM_MARGIN_DELEGATE + d->mThumbnailSize.height(),
         textWidth,
         edit->sizeHint().height());
 
