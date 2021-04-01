@@ -176,6 +176,8 @@ set(gwenviewlib_SRCS
     touch/touch_helper.cpp
     ${GV_JPEG_DIR}/transupp.c
     )
+set_source_files_properties(${GV_JPEG_DIR}/transupp.c PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON)
+
 
 ecm_qt_declare_logging_category(gwenviewlib_SRCS HEADER gwenview_lib_debug.h IDENTIFIER GWENVIEW_LIB_LOG CATEGORY_NAME org.kde.kdegraphics.gwenview.lib)
 ecm_qt_declare_logging_category(gwenviewlib_SRCS HEADER gwenview_exiv2_debug.h IDENTIFIER GWENVIEW_EXIV2_LOG CATEGORY_NAME org.kde.kdegraphics.gwenview.exiv2 DEFAULT_SEVERITY Critical DESCRIPTION "gwenview lib exiv2 (kdegraphics)" EXPORT GWENVIEW)
