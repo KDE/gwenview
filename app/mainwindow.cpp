@@ -919,6 +919,8 @@ MainWindow::MainWindow()
     createGUI();
     loadConfig();
 
+    // Set a sane initial window size
+    resize(1020, 700);
     connect(DocumentFactory::instance(), &DocumentFactory::modifiedDocumentListChanged,
             this, &MainWindow::slotModifiedDocumentListChanged);
 
