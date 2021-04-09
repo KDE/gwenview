@@ -29,7 +29,6 @@ class QStringList;
 class KFileItem;
 class KFileItemList;
 class QUrl;
-class QString;
 class QMimeData;
 
 namespace Gwenview
