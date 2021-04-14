@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Qt
 #include <QAction>
 #include <QStyleOptionToolButton>
+#include <QStyleOptionToolBar>
 #include <QStylePainter>
 
 // KF
@@ -76,17 +77,23 @@ void StatusBarToolButton::paintEvent(QPaintEvent* event)
     painter.drawPrimitive(QStyle::PE_PanelButtonTool, panelOpt);
 
     // Separator
-    const int y1 = opt.rect.top() + 6;
-    const int y2 = opt.rect.bottom() - 6;
+    QStyleOptionToolBar tbOpt;
+    tbOpt.palette = opt.palette;
+    tbOpt.state = QStyle::State_Horizontal;
+    const int width = style()->pixelMetric(QStyle::PM_ToolBarSeparatorExtent);
+    const int height = opt.rect.height() - 2;
+    const int y = opt.rect.y() + (opt.rect.height() - height) / 2;
     if (mGroupPosition & GroupRight) {
-        const int x = opt.rect.left();
-        painter.setPen(opt.palette.color(QPalette::Light));
-        painter.drawLine(x, y1, x, y2);
+        // Kinda hacky. This is needed because of the way toolbar separators are horizontally aligned.
+        // Tested with Breeze (width: 8), Fusion (width: 6) and Oxygen (width: 8)
+        const int x = opt.rect.left() - width/1.5;
+        tbOpt.rect = QRect(x,y,width,height);
+        painter.drawPrimitive(QStyle::PE_IndicatorToolBarSeparator, tbOpt);
     }
     if (mGroupPosition & GroupLeft) {
-        const int x = opt.rect.right();
-        painter.setPen(opt.palette.color(QPalette::Mid));
-        painter.drawLine(x, y1, x, y2);
+        const int x = opt.rect.right() - width/2;
+        tbOpt.rect = QRect(x,y,width,height);
+        painter.drawPrimitive(QStyle::PE_IndicatorToolBarSeparator, tbOpt);
     }
 
     // Text
