@@ -919,8 +919,6 @@ MainWindow::MainWindow()
     createGUI();
     loadConfig();
 
-    // Set a sane initial window size
-    resize(1020, 700);
     connect(DocumentFactory::instance(), &DocumentFactory::modifiedDocumentListChanged,
             this, &MainWindow::slotModifiedDocumentListChanged);
 
@@ -1692,9 +1690,10 @@ void MainWindow::preloadNextUrl()
     }
 }
 
+// Set a sane initial window size
 QSize MainWindow::sizeHint() const
 {
-    return KXmlGuiWindow::sizeHint().expandedTo(QSize(750, 500));
+    return KXmlGuiWindow::sizeHint().expandedTo(QSize(1020, 700));
 }
 
 void MainWindow::showEvent(QShowEvent *event)
