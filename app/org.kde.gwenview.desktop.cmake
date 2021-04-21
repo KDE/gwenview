@@ -177,6 +177,7 @@ Comment[sr@ijekavian]=Једноставан приказивач слика
 Comment[sr@ijekavianlatin]=Jednostavan prikazivač slika
 Comment[sr@latin]=Jednostavan prikazivač slika
 Comment[sv]=En enkel bildvisare
+Comment[ta]=ஓர் எளிய படக் காட்டி
 Comment[th]=เครื่องมือแสดงภาพแบบพื้นฐาน
 Comment[tr]=Basit bir resim gösterici
 Comment[ug]=ئاددىي سۈرەت كۆرگۈ
