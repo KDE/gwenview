@@ -1310,7 +1310,7 @@ void MainWindow::slotDirListerCompleted()
     }
     if (d->mContextManager->selectionModel()->hasSelection()) {
         updatePreviousNextActions();
-    } else {
+    } else if (!d->mContextManager->currentUrl().isValid()) {
         d->goToFirstDocument();
 
         // Try to select the first directory in case there are no images to select
