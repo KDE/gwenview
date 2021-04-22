@@ -252,7 +252,15 @@ void ContextManager::slotSelectionChanged()
 {
     d->mSelectedFileItemListNeedsUpdate = true;
     if (!d->mSelectionModel->hasSelection()) {
-        setCurrentUrl(QUrl());
+        // There is a chance that the URL that has been passed in from the command
+        // line is not shown by the thumbnail view. In that case, we will not have
+        // a selection but we also do not want to clear the current URL, as that
+        // would hide the image that was requested to be shown. So check to see if
+        // the current URL is in the thumbnail view, and only if it is, deselect
+        // it.
+        if (d->mDirModel->indexForUrl(d->mCurrentUrl).isValid()) {
+            setCurrentUrl(QUrl());
+        }
     }
     d->queueSignal(&ContextManager::selectionChanged);
 }
