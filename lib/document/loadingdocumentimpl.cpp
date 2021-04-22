@@ -116,11 +116,14 @@ struct LoadingDocumentImplPrivate
         QString mimeType;
         const QUrl &url = q->document()->url();
         QMimeDatabase db;
-        if (KProtocolInfo::determineMimetypeFromExtension(url.scheme())) {
-            mimeType = db.mimeTypeForFileNameAndData(url.fileName(), mData).name();
-        } else {
-            mimeType = db.mimeTypeForData(mData).name();
+
+        auto mime = db.mimeTypeForData(mData);
+        if (mime.isDefault() && KProtocolInfo::determineMimetypeFromExtension(url.scheme())) {
+            mime = db.mimeTypeForFileNameAndData(url.fileName(), mData);
         }
+
+        mimeType = mime.name();
+
         MimeTypeUtils::Kind kind = MimeTypeUtils::mimeTypeKind(mimeType);
         LOG("mimeType:" << mimeType);
         LOG("kind:" << kind);
