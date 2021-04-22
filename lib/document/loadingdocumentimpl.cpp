@@ -105,6 +105,7 @@ struct LoadingDocumentImplPrivate
     std::unique_ptr<JpegContent> mJpegContent;
     QImage mImage;
     Cms::Profile::Ptr mCmsProfile;
+    QMimeType mMimeType;
 
     /**
      * Determine kind of document and switch to an implementation if it is not
@@ -113,7 +114,6 @@ struct LoadingDocumentImplPrivate
      */
     bool determineKind()
     {
-        QString mimeType;
         const QUrl &url = q->document()->url();
         QMimeDatabase db;
 
@@ -122,10 +122,10 @@ struct LoadingDocumentImplPrivate
             mime = db.mimeTypeForFileNameAndData(url.fileName(), mData);
         }
 
-        mimeType = mime.name();
+        mMimeType = mime;
 
-        MimeTypeUtils::Kind kind = MimeTypeUtils::mimeTypeKind(mimeType);
-        LOG("mimeType:" << mimeType);
+        MimeTypeUtils::Kind kind = MimeTypeUtils::mimeTypeKind(mMimeType.name());
+        LOG("mimeType:" << mMimeType.name());
         LOG("kind:" << kind);
         q->setDocumentKind(kind);
 
@@ -140,7 +140,7 @@ struct LoadingDocumentImplPrivate
 
         default:
             q->setDocumentErrorString(
-                i18nc("@info", "Gwenview cannot display documents of type %1.", mimeType)
+                i18nc("@info", "Gwenview cannot display documents of type %1.", mMimeType.name())
             );
             emit q->loadingFailed();
             q->switchToImpl(new EmptyDocumentImpl(q->document()));
@@ -161,8 +161,7 @@ struct LoadingDocumentImplPrivate
             //   PNG were incorrectly identified as PCX! See:
             //   https://bugs.kde.org/show_bug.cgi?id=289819
             //
-            mFormatHint = q->document()->url().fileName()
-                .section(QLatin1Char('.'), -1).toLocal8Bit().toLower();
+            mFormatHint = mMimeType.preferredSuffix().toLocal8Bit().toLower();
             mMetaInfoFuture = QtConcurrent::run(this, &LoadingDocumentImplPrivate::loadMetaInfo);
             mMetaInfoFutureWatcher.setFuture(mMetaInfoFuture);
             break;
