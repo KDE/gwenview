@@ -76,8 +76,7 @@ struct SaveBarPrivate
 
         // Icon
         QLabel* iconLabel = new QLabel;
-        QPixmap pix = KIconLoader::global()->loadIcon(
-                          "dialog-warning", KIconLoader::Dialog, KIconLoader::SizeSmall);
+        QPixmap pix = QIcon::fromTheme(QStringLiteral("dialog-warning")).pixmap(KIconLoader::SizeSmall);
         iconLabel->setPixmap(pix);
 
         // Text label

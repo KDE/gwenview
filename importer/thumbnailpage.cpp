@@ -133,10 +133,9 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
 
     void setupIcons()
     {
-        const KIconLoader::Group group = KIconLoader::NoGroup;
         const int size = KIconLoader::SizeHuge;
-        mSrcIconLabel->setPixmap(KIconLoader::global()->loadIcon("camera-photo", group, size));
-        mDstIconLabel->setPixmap(KIconLoader::global()->loadIcon("computer", group, size));
+        mSrcIconLabel->setPixmap(QIcon::fromTheme(QStringLiteral("camera-photo")).pixmap(size));
+        mDstIconLabel->setPixmap(QIcon::fromTheme(QStringLiteral("computer")).pixmap(size));
     }
 
     void setupSrcUrlWidgets()
