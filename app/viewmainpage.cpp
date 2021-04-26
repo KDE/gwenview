@@ -162,8 +162,11 @@ struct ViewMainPagePrivate
         mDocumentCountLabel->setContentsMargins(labelMargins);
 
         QHBoxLayout* statusBarContainerLayout = new QHBoxLayout(mStatusBarContainer);
-        statusBarContainerLayout->setContentsMargins(0, 0, 0, 0);
-        statusBarContainerLayout->setSpacing(0);
+        // Use toolbar-like margins and spacing
+        int margins = q->style()->pixelMetric(QStyle::PM_ToolBarItemMargin)
+                    + q->style()->pixelMetric(QStyle::PM_ToolBarFrameWidth);
+        statusBarContainerLayout->setContentsMargins(margins, margins, margins, margins);
+        statusBarContainerLayout->setSpacing(q->style()->pixelMetric(QStyle::PM_ToolBarItemSpacing));
         statusBarContainerLayout->addWidget(mToggleSideBarButton);
         statusBarContainerLayout->addWidget(mToggleThumbnailBarButton);
         statusBarContainerLayout->addStretch();
