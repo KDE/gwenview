@@ -149,6 +149,7 @@ function(JoinListAsString VALUES GLUE OUTPUT)
 endfunction()
 
 set(IMAGE_MIME_TYPES_LIST
+    image/avif
     image/gif
     image/jpeg
     image/png
