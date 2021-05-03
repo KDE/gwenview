@@ -613,6 +613,10 @@ struct MainWindow::Private
         page->addWidget(infoItem->widget());
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
         if (semanticInfoItem) {
+            QFrame *separator = new QFrame;
+            separator->setFrameShape(QFrame::HLine);
+            separator->setLineWidth(1);
+            page->addWidget(separator);
             page->addWidget(semanticInfoItem->widget());
         }
 #endif
@@ -621,6 +625,10 @@ struct MainWindow::Private
         page = new SideBarPage(i18n("Operations"));
         page->setObjectName(QLatin1String("operations"));
         page->addWidget(imageOpsItem->widget());
+        QFrame *separator = new QFrame;
+        separator->setFrameShape(QFrame::HLine);
+        separator->setLineWidth(1);
+        page->addWidget(separator);
         page->addWidget(fileOpsItem->widget());
         page->addStretch();
         mSideBar->addPage(page);
