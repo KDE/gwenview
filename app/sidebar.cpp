@@ -85,30 +85,24 @@ struct SideBarGroupPrivate
 {
     QFrame* mContainer;
     QLabel* mTitleLabel;
-    bool mDefaultContainerMarginEnabled;
 };
 
-SideBarGroup::SideBarGroup(const QString& title, bool defaultContainerMarginEnabled)
+SideBarGroup::SideBarGroup(const QString& title)
 : QFrame()
 , d(new SideBarGroupPrivate)
 {
     d->mContainer = nullptr;
     d->mTitleLabel = new QLabel(this);
-    d->mDefaultContainerMarginEnabled = defaultContainerMarginEnabled;
     d->mTitleLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    d->mTitleLabel->setFixedHeight(d->mTitleLabel->sizeHint().height() * 3 / 2);
     QFont font(d->mTitleLabel->font());
-    font.setBold(true);
+    font.setPointSizeF(font.pointSizeF() + 1);
     d->mTitleLabel->setFont(font);
     d->mTitleLabel->setText(title);
+    d->mTitleLabel->setVisible(!d->mTitleLabel->text().isEmpty());
 
     QVBoxLayout* layout = new QVBoxLayout(this);
-    layout->setContentsMargins(0, 0, 0, 0);
-    layout->setSpacing(0);
-
     layout->addWidget(d->mTitleLabel);
-    d->mTitleLabel->setContentsMargins(DEFAULT_LAYOUT_MARGIN, 0, 0, 0);
-
+    layout->setContentsMargins(0, 0, 0, 0);
     clear();
 }
 
@@ -117,17 +111,6 @@ SideBarGroup::~SideBarGroup()
     delete d;
 }
 
-void SideBarGroup::paintEvent(QPaintEvent* event)
-{
-    QFrame::paintEvent(event);
-    if (parentWidget()->layout()->indexOf(this) != 0) {
-        // Draw a separator, but only if we are not the first group
-        QPainter painter(this);
-        QPen pen(palette().mid().color());
-        painter.setPen(pen);
-        painter.drawLine(rect().topLeft(), rect().topRight());
-    }
-}
 
 void SideBarGroup::addWidget(QWidget* widget)
 {
@@ -147,9 +130,6 @@ void SideBarGroup::clear()
     containerLayout->setSpacing(0);
 
     layout()->addWidget(d->mContainer);
-    if(d->mDefaultContainerMarginEnabled) {
-        d->mContainer->layout()->setContentsMargins(DEFAULT_LAYOUT_MARGIN, 0, 0, 0);
-    }
 }
 
 void SideBarGroup::addAction(QAction* action)
@@ -182,7 +162,9 @@ SideBarPage::SideBarPage(const QString& title)
     d->mTitle = title;
 
     d->mLayout = new QVBoxLayout(this);
-    d->mLayout->setContentsMargins(0, 0, 0, 0);
+    QMargins margins = d->mLayout->contentsMargins();
+    margins.setRight(qMax(0, margins.right() - style()->pixelMetric(QStyle::PM_SplitterWidth)));
+    d->mLayout->setContentsMargins(margins);
 }
 
 SideBarPage::~SideBarPage()
