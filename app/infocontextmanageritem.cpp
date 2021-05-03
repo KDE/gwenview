@@ -74,7 +74,7 @@ class KeyValueWidget : public QWidget
             pal.setColor(QPalette::WindowText, color);
             keyLabel->setPalette(pal);
 
-            valueLabel->setContentsMargins(6, 0, 0, 6);
+            valueLabel->setIndent(parent->fontInfo().pixelSize());
         }
 
         ~Row()
@@ -229,13 +229,13 @@ struct InfoContextManagerItemPrivate
         mKeyValueWidget = new KeyValueWidget;
 
         QLabel* moreLabel = new QLabel(mOneFileWidget);
-        moreLabel->setText(QStringLiteral("<a href='#'>%1</a>").arg(i18nc("@action show more image meta info", "More...")));
-        moreLabel->setAlignment(Qt::AlignRight);
+        moreLabel->setText(QStringLiteral("<a href='#'>%1</a>").arg(i18nc("@action show more image meta info", "Show more details...")));
+        // for some reason, this label appears much further down the page without the following line
+        moreLabel->setAlignment(Qt::AlignLeft);
 
         QWidget* content = new QWidget;
         QVBoxLayout* layout = new QVBoxLayout(content);
-        layout->setContentsMargins(2, 2, 2, 2);
-        layout->setSpacing(2);
+        layout->setContentsMargins(0, 0, 0, 0);
         layout->addWidget(mKeyValueWidget);
         layout->addWidget(moreLabel);
 
@@ -243,7 +243,7 @@ struct InfoContextManagerItemPrivate
 
         mMultipleFilesLabel = new QLabel();
 
-        mGroup = new SideBarGroup(i18nc("@title:group", "Meta Information"));
+        mGroup = new SideBarGroup(i18nc("@title:group", "Image Information"));
         q->setWidget(mGroup);
         mGroup->addWidget(mOneFileWidget);
         mGroup->addWidget(mMultipleFilesLabel);
