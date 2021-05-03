@@ -33,22 +33,6 @@ public:
     SplitterHandle(Qt::Orientation orientation, QSplitter* parent)
         : QSplitterHandle(orientation, parent)
         {}
-
-protected:
-    void paintEvent(QPaintEvent* event) override
-    {
-        QSplitterHandle::paintEvent(event);
-
-        QPainter painter(this);
-        painter.setPen(palette().mid().color());
-        if (orientation() == Qt::Vertical) {
-            painter.drawLine(rect().topLeft(), rect().topRight());
-            painter.drawLine(rect().bottomLeft(), rect().bottomRight());
-        } else {
-            //painter.drawLine(rect().topLeft(), rect().bottomLeft());
-            painter.drawLine(rect().topRight(), rect().bottomRight());
-        }
-    }
 };
 
 /**
@@ -60,8 +44,7 @@ class Splitter : public QSplitter
 public:
     Splitter(Qt::Orientation orientation, QWidget* parent)
         : QSplitter(orientation, parent)
-        {
-        setHandleWidth(handleWidth() + 2);
+    {
     }
 
 protected:
