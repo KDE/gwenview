@@ -170,7 +170,7 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
 
     void setupGroup()
     {
-        mGroup = new SideBarGroup(i18n("Semantic Information"), false);
+        mGroup = new SideBarGroup();
         q->setWidget(mGroup);
         EventWatcher::install(mGroup, QEvent::Show, q, SLOT(update()));
 
@@ -178,8 +178,6 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
         setupUi(container);
         container->layout()->setContentsMargins(0, 0, 0, 0);
         mGroup->addWidget(container);
-
-        formLayout->setContentsMargins(DEFAULT_LAYOUT_MARGIN, 0, 0, 0);
 
         QObject::connect(mRatingWidget, SIGNAL(ratingChanged(int)),
                          q, SLOT(slotRatingChanged(int)));
