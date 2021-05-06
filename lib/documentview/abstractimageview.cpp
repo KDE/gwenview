@@ -23,6 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include "gwenview_lib_debug.h"
+#include "alphabackgrounditem.h"
 
 // KF
 
@@ -60,7 +61,7 @@ struct AbstractImageViewPrivate
     QPointF mLastDragPos;
     QSizeF mDocumentSize;
 
-    const QPixmap mAlphaBackgroundTexture;
+    AlphaBackgroundItem* mBackgroundItem;
 
     void adjustImageOffset(Verbosity verbosity = Notify)
     {
@@ -70,8 +71,11 @@ struct AbstractImageViewPrivate
             qMax((viewSize.width() - zoomedDocSize.width()) / 2, qreal(0.)),
             qMax((viewSize.height() - zoomedDocSize.height()) / 2, qreal(0.))
         );
+
         if (offset != mImageOffset) {
             mImageOffset = offset;
+
+
             if (verbosity == Notify) {
                 q->onImageOffsetChanged();
             }
@@ -98,6 +102,8 @@ struct AbstractImageViewPrivate
         if (newPos != mScrollPos) {
             QPointF oldPos = mScrollPos;
             mScrollPos = newPos;
+
+
             if (verbosity == Notify) {
                 q->onScrollPosChanged(oldPos);
             }
@@ -116,22 +122,12 @@ struct AbstractImageViewPrivate
         mZoomCursor = QCursor(cursorPixmap, 11, 11);
     }
 
-    QPixmap createAlphaBackgroundTexture()
+    AbstractImageViewPrivate(AbstractImageView *parent)
+        : q(parent)
+        , mBackgroundItem(new AlphaBackgroundItem{q})
     {
-        QPixmap pix = QPixmap(32, 32);
-        QPainter painter(&pix);
-        painter.fillRect(pix.rect(), QColor(128, 128, 128));
-        const QColor light = QColor(192, 192, 192);
-        painter.fillRect(0, 0, 16, 16, light);
-        painter.fillRect(16, 16, 16, 16, light);
-        pix.setDevicePixelRatio(q->devicePixelRatio());
-        return pix;
+        mBackgroundItem->setVisible(false);
     }
-
-    AbstractImageViewPrivate(AbstractImageView *parent) :
-        q(parent),
-        mAlphaBackgroundTexture(createAlphaBackgroundTexture())
-    { }
 
     void checkAndRequestZoomAction(const QGraphicsSceneMouseEvent* event)
     {
@@ -183,6 +179,10 @@ void AbstractImageView::setDocument(const Document::Ptr &doc)
         disconnect(d->mDocument.data(), nullptr, this, nullptr);
     }
     d->mDocument = doc;
+    if (d->mDocument) {
+        connect(d->mDocument.data(), &Document::imageRectUpdated, this, &AbstractImageView::onImageRectUpdated);
+    }
+
     loadFromDocument();
 }
 
@@ -299,11 +299,6 @@ void AbstractImageView::setZoomToFill(bool on, const QPointF& center)
     // calling us. It may went to zoom to some other level and/or to zoom on
     // a particular position
     emit zoomToFillChanged(d->mZoomToFill);
-}
-
-const QPixmap& AbstractImageView::alphaBackgroundTexture() const
-{
-    return d->mAlphaBackgroundTexture;
 }
 
 void AbstractImageView::resizeEvent(QGraphicsSceneResizeEvent* event)
@@ -631,6 +626,24 @@ void AbstractImageView::resetDragCursor()
 {
     d->mLastDragPos = QPointF();
     updateCursor();
+}
+
+AlphaBackgroundItem* AbstractImageView::backgroundItem() const
+{
+    return d->mBackgroundItem;
+}
+
+void AbstractImageView::onImageRectUpdated()
+{
+    if (zoomToFit()) {
+        setZoom(computeZoomToFit());
+    } else if (zoomToFill()) {
+        setZoom(computeZoomToFill());
+    } else {
+        applyPendingScrollPos();
+    }
+
+    update();
 }
 
 } // namespace

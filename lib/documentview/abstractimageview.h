@@ -32,6 +32,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 
+class AlphaBackgroundItem;
+
 struct AbstractImageViewPrivate;
 /**
  *
@@ -119,6 +121,8 @@ public:
 
     void resetDragCursor();
 
+    AlphaBackgroundItem* backgroundItem() const;
+
 public Q_SLOTS:
     void updateCursor();
 
@@ -135,10 +139,6 @@ Q_SIGNALS:
     void toggleFullScreenRequested();
 
 protected:
-    virtual void setAlphaBackgroundMode(AlphaBackgroundMode mode) = 0;
-    virtual void setAlphaBackgroundColor(const QColor& color) = 0;
-    const QPixmap& alphaBackgroundTexture() const;
-
     virtual void loadFromDocument() = 0;
     virtual void onZoomChanged() = 0;
     /**
@@ -151,6 +151,8 @@ protected:
      * Note: to avoid multiple adjustments, this is not called if zoom changes!
      */
     virtual void onScrollPosChanged(const QPointF& oldPos) = 0;
+
+    void onImageRectUpdated();
 
     void resizeEvent(QGraphicsSceneResizeEvent* event) override;
     void focusInEvent(QFocusEvent* event) override;

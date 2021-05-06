@@ -44,13 +44,9 @@ public:
     explicit RasterImageView(QGraphicsItem* parent = nullptr);
     ~RasterImageView() override;
 
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
-
     void setCurrentTool(AbstractRasterImageViewTool* tool);
     AbstractRasterImageViewTool* currentTool() const;
 
-    void setAlphaBackgroundMode(AlphaBackgroundMode mode) override;
-    void setAlphaBackgroundColor(const QColor& color) override;
     void setRenderingIntent(const RenderingIntent::Enum& renderingIntent);
     void resetMonitorICC();
 
@@ -78,8 +74,6 @@ private Q_SLOTS:
     void finishSetDocument();
 
 private:
-    void drawAlphaBackground(QPainter* painter);
-
     RasterImageViewPrivate* const d;
 };
 

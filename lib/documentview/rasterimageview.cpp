@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/gvdebug.h>
 #include <lib/paintutils.h>
 #include "gwenview_lib_debug.h"
+#include "alphabackgrounditem.h"
 
 // KF
 
@@ -121,18 +122,12 @@ struct RasterImageViewPrivate
     QGraphicsItem* mImageItem;
     ToolPainter* mToolItem = nullptr;
 
-    // Config
-    AbstractImageView::AlphaBackgroundMode mAlphaBackgroundMode = AbstractImageView::AlphaBackgroundNone;
-    QColor mAlphaBackgroundColor = Qt::black;
-
     cmsUInt32Number mRenderingIntent = INTENT_PERCEPTUAL;
 
     QPointer<AbstractRasterImageViewTool> mTool;
 
     bool mApplyDisplayTransform = true; // Can be set to false if there is no need or no way to apply color profile
     cmsHTRANSFORM mDisplayTransform = nullptr;
-
-    bool mLoaded = false;
 
     void updateDisplayTransform(QImage::Format format)
     {
@@ -233,18 +228,6 @@ RasterImageView::~RasterImageView()
     delete d;
 }
 
-void RasterImageView::setAlphaBackgroundMode(AlphaBackgroundMode mode)
-{
-    d->mAlphaBackgroundMode = mode;
-    update();
-}
-
-void RasterImageView::setAlphaBackgroundColor(const QColor& color)
-{
-    d->mAlphaBackgroundColor = color;
-    update();
-}
-
 void RasterImageView::setRenderingIntent(const RenderingIntent::Enum& renderingIntent)
 {
     if (d->mRenderingIntent != renderingIntent) {
@@ -310,7 +293,7 @@ void RasterImageView::finishSetDocument()
     d->startAnimationIfNecessary();
     update();
 
-    d->mLoaded = true;
+    backgroundItem()->setVisible(true);
 
     Q_EMIT completed();
 }
@@ -335,13 +318,6 @@ void RasterImageView::onScrollPosChanged(const QPointF& oldPos)
 {
     Q_UNUSED(oldPos);
     d->adjustItemPosition();
-}
-
-void RasterImageView::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/)
-{
-    if (d->mLoaded) {
-        drawAlphaBackground(painter);
-    }
 }
 
 void RasterImageView::setCurrentTool(AbstractRasterImageViewTool* tool)
@@ -456,26 +432,6 @@ void RasterImageView::hoverMoveEvent(QGraphicsSceneHoverEvent* event)
         }
     }
     AbstractImageView::hoverMoveEvent(event);
-}
-
-void RasterImageView::drawAlphaBackground(QPainter* painter)
-{
-    const QRect imageRect = QRect(imageOffset().toPoint(), visibleImageSize().toSize());
-
-    switch (d->mAlphaBackgroundMode) {
-        case AbstractImageView::AlphaBackgroundNone:
-            break;
-        case AbstractImageView::AlphaBackgroundCheckBoard:
-        {
-            painter->drawTiledPixmap(imageRect, alphaBackgroundTexture(), scrollPos());
-            break;
-        }
-        case AbstractImageView::AlphaBackgroundSolid:
-            painter->fillRect(imageRect, d->mAlphaBackgroundColor);
-            break;
-        default:
-            Q_ASSERT(0);
-    }
 }
 
 } // namespace

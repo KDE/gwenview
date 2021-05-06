@@ -26,6 +26,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/documentview/rasterimageview.h>
 #include <lib/gwenviewconfig.h>
 
+#include "alphabackgrounditem.h"
+
 // KF
 
 // Qt
@@ -136,8 +138,8 @@ void RasterImageViewAdapter::slotLoadingFailed()
 
 void RasterImageViewAdapter::loadConfig()
 {
-    d->mView->setAlphaBackgroundMode(GwenviewConfig::alphaBackgroundMode());
-    d->mView->setAlphaBackgroundColor(GwenviewConfig::alphaBackgroundColor());
+    d->mView->backgroundItem()->setMode(GwenviewConfig::alphaBackgroundMode());
+    d->mView->backgroundItem()->setColor(GwenviewConfig::alphaBackgroundColor());
     d->mView->setRenderingIntent(GwenviewConfig::renderingIntent());
     d->mView->setEnlargeSmallerImages(GwenviewConfig::enlargeSmallerImages());
     d->mView->resetMonitorICC();

@@ -36,6 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "document/documentfactory.h"
 #include <lib/gvdebug.h>
 #include <lib/gwenviewconfig.h>
+#include "alphabackgrounditem.h"
 
 namespace Gwenview
 {
@@ -44,9 +45,6 @@ namespace Gwenview
 SvgImageView::SvgImageView(QGraphicsItem* parent)
 : AbstractImageView(parent)
 , mSvgItem(new QGraphicsSvgItem(this))
-, mAlphaBackgroundMode(AbstractImageView::AlphaBackgroundCheckBoard)
-, mAlphaBackgroundColor(Qt::black)
-, mImageFullyLoaded(false)
 {
     // At certain scales, the SVG can render outside its own bounds up to 1 pixel
     // This clips it so it isn't drawn outside the background or over the selection rect
@@ -85,7 +83,7 @@ void SvgImageView::finishLoadFromDocument()
     }
     applyPendingScrollPos();
     emit completed();
-    mImageFullyLoaded = true;
+    backgroundItem()->setVisible(true);
 }
 
 void SvgImageView::onZoomChanged()
@@ -108,46 +106,6 @@ void SvgImageView::adjustItemPos()
 {
     mSvgItem->setPos((imageOffset() - scrollPos()).toPoint());
     update();
-}
-
-void SvgImageView::setAlphaBackgroundMode(AbstractImageView::AlphaBackgroundMode mode)
-{
-    mAlphaBackgroundMode = mode;
-    update();
-}
-
-void SvgImageView::setAlphaBackgroundColor(const QColor& color)
-{
-    mAlphaBackgroundColor = color;
-    update();
-}
-
-void SvgImageView::drawAlphaBackground(QPainter* painter)
-{
-    // The point and size must be rounded to integers independently, to keep consistency with RasterImageView
-    const QRect imageRect = QRect(imageOffset().toPoint(), visibleImageSize().toSize());
-
-    switch (mAlphaBackgroundMode) {
-        case AbstractImageView::AlphaBackgroundNone:
-            // Unlike RasterImageView, SVGs are rendered directly on the image view,
-            // therefore we can simply not draw a background
-            break;
-        case AbstractImageView::AlphaBackgroundCheckBoard:
-            painter->drawTiledPixmap(imageRect, alphaBackgroundTexture(), scrollPos());
-            break;
-        case AbstractImageView::AlphaBackgroundSolid:
-            painter->fillRect(imageRect, mAlphaBackgroundColor);
-            break;
-        default:
-            Q_ASSERT(0);
-    }
-}
-
-void SvgImageView::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/)
-{
-    if (mImageFullyLoaded) {
-        drawAlphaBackground(painter);
-    }
 }
 
 //// SvgViewAdapter ////
@@ -200,8 +158,8 @@ Document::Ptr SvgViewAdapter::document() const
 
 void SvgViewAdapter::loadConfig()
 {
-    d->mView->setAlphaBackgroundMode(GwenviewConfig::alphaBackgroundMode());
-    d->mView->setAlphaBackgroundColor(GwenviewConfig::alphaBackgroundColor());
+    d->mView->backgroundItem()->setMode(GwenviewConfig::alphaBackgroundMode());
+    d->mView->backgroundItem()->setColor(GwenviewConfig::alphaBackgroundColor());
     d->mView->setEnlargeSmallerImages(GwenviewConfig::enlargeSmallerImages());
 }
 
