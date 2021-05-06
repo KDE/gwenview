@@ -63,7 +63,6 @@ protected:
     void onZoomChanged() override;
     void onImageOffsetChanged() override;
     void onScrollPosChanged(const QPointF& oldPos) override;
-    void resizeEvent(QGraphicsSceneResizeEvent* event) override;
     void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
@@ -77,11 +76,10 @@ private Q_SLOTS:
     void slotDocumentMetaInfoLoaded();
     void slotDocumentIsAnimatedUpdated();
     void finishSetDocument();
-    void updateFromScaler(int, int, const QImage&);
-    void updateImageRect(const QRect& imageRect);
-    void updateBuffer(const QRegion& region = QRegion());
 
 private:
+    void drawAlphaBackground(QPainter* painter);
+
     RasterImageViewPrivate* const d;
 };
 

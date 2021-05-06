@@ -42,31 +42,97 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 
+/*
+ * This is effectively QGraphicsPixmapItem that draws the document's QImage
+ * directly rather than going through a QPixmap intermediary. This avoids
+ * duplicating the image contents and the extra memory usage that comes from
+ * that.
+ */
+class RasterImageItem : public QGraphicsItem
+{
+public:
+    RasterImageItem(RasterImageView* parent)
+        : QGraphicsItem(parent)
+        , mParentView(parent)
+    {
+
+    }
+
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/) override
+    {
+        auto document = mParentView->document();
+
+        // We want nearest neighbour when zooming in since that provides the most
+        // accurate representation of pixels, but when zooming out it will actually
+        // not look very nice, so use smoothing when zooming out.
+        painter->setRenderHint(QPainter::SmoothPixmapTransform, mParentView->zoom() < 1.0);
+
+        painter->drawImage(QPointF{0, 0}, document->image());
+    }
+
+    QRectF boundingRect() const override
+    {
+        return QRectF{QPointF{0, 0}, mParentView->documentSize()};
+    }
+
+    RasterImageView* mParentView;
+};
+
+/*
+ * We need the tools to be painted on top of the image. However, since we are
+ * using RasterImageItem as a child of this item, the image gets painted on
+ * top of this item. To fix that, this custom item is stacked after the image
+ * item and will paint the tools, which will draw it on top of the image.
+ */
+class ToolPainter : public QGraphicsItem
+{
+public:
+    ToolPainter(AbstractRasterImageViewTool* tool, QGraphicsItem* parent = nullptr)
+        : QGraphicsItem(parent)
+        , mTool(tool)
+    {
+
+    }
+
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/) override
+    {
+        if (mTool) {
+            mTool->paint(painter);
+        }
+    }
+
+    QRectF boundingRect() const override
+    {
+        return parentItem()->boundingRect();
+    }
+
+    QPointer<AbstractRasterImageViewTool> mTool;
+};
+
 struct RasterImageViewPrivate
 {
+    RasterImageViewPrivate(RasterImageView* qq)
+        : q(qq)
+    {
+    }
+
     RasterImageView* q;
-    ImageScaler* mScaler;
-    bool mEmittedCompleted;
+
+    QGraphicsItem* mImageItem;
+    ToolPainter* mToolItem = nullptr;
 
     // Config
-    AbstractImageView::AlphaBackgroundMode mAlphaBackgroundMode;
-    QColor mAlphaBackgroundColor;
-    cmsUInt32Number mRenderingIntent;
-    // /Config
+    AbstractImageView::AlphaBackgroundMode mAlphaBackgroundMode = AbstractImageView::AlphaBackgroundNone;
+    QColor mAlphaBackgroundColor = Qt::black;
 
-    bool mBufferIsEmpty;
-    QPixmap mCurrentBuffer;
-    // The alternate buffer is useful when scrolling: existing content is copied
-    // to mAlternateBuffer and buffers are swapped. This avoids allocating a new
-    // QPixmap every time the image is scrolled.
-    QPixmap mAlternateBuffer;
-
-    QTimer* mUpdateTimer;
+    cmsUInt32Number mRenderingIntent = INTENT_PERCEPTUAL;
 
     QPointer<AbstractRasterImageViewTool> mTool;
 
-    bool mApplyDisplayTransform; // Defaults to true. Can be set to false if there is no need or no way to apply color profile
-    cmsHTRANSFORM mDisplayTransform;
+    bool mApplyDisplayTransform = true; // Can be set to false if there is no need or no way to apply color profile
+    cmsHTRANSFORM mDisplayTransform = nullptr;
+
+    bool mLoaded = false;
 
     void updateDisplayTransform(QImage::Format format)
     {
@@ -109,12 +175,23 @@ struct RasterImageViewPrivate
         mApplyDisplayTransform = true;
     }
 
-    void setupUpdateTimer()
+    void applyImageTransform()
     {
-        mUpdateTimer = new QTimer(q);
-        mUpdateTimer->setInterval(500);
-        mUpdateTimer->setSingleShot(true);
-        QObject::connect(mUpdateTimer, SIGNAL(timeout()), q, SLOT(updateBuffer()));
+        if (!q->document()) {
+            return;
+        }
+
+        auto image = q->document()->image();
+
+        if (mApplyDisplayTransform) {
+            updateDisplayTransform(image.format());
+            if (mDisplayTransform) {
+                quint8 *bytes = const_cast<quint8*>(image.bits());
+                cmsDoTransform(mDisplayTransform, bytes, bytes, image.width() * image.height());
+            }
+        }
+
+        q->update();
     }
 
     void startAnimationIfNecessary()
@@ -124,89 +201,24 @@ struct RasterImageViewPrivate
         }
     }
 
-    QRectF mapViewportToZoomedImage(const QRectF& viewportRect) const
+    void adjustItemPosition()
     {
-        return QRectF(
-                   viewportRect.topLeft() - q->imageOffset() + q->scrollPos(),
-                   viewportRect.size()
-               );
-    }
-
-    void setScalerRegionToVisibleRect()
-    {
-        QRectF rect = mapViewportToZoomedImage(q->boundingRect());
-        mScaler->setDestinationRegion(QRegion(rect.toRect()));
-    }
-
-    void resizeBuffer()
-    {
-        const auto dpr = q->devicePixelRatio();
-        QSize size = q->visibleImageSize().toSize();
-        if (size * dpr == mCurrentBuffer.size()) {
-            return;
-        }
-        if (!size.isValid()) {
-            mAlternateBuffer = QPixmap();
-            mCurrentBuffer = QPixmap();
-            return;
-        }
-
-        mAlternateBuffer = QPixmap(size * dpr);
-        mAlternateBuffer.setDevicePixelRatio(dpr);
-        mAlternateBuffer.fill(Qt::transparent);
-        {
-            QPainter painter(&mAlternateBuffer);
-            painter.drawPixmap(0, 0, mCurrentBuffer);
-        }
-        qSwap(mAlternateBuffer, mCurrentBuffer);
-
-        mAlternateBuffer = QPixmap();
-    }
-
-    void drawAlphaBackground(QPainter* painter, const QRectF& viewportRect, const QPoint& zoomedImageTopLeft, const QPixmap &texture)
-    {
-        switch (mAlphaBackgroundMode) {
-            case AbstractImageView::AlphaBackgroundNone:
-                painter->fillRect(viewportRect, Qt::transparent);
-                break;
-            case AbstractImageView::AlphaBackgroundCheckBoard:
-            {
-                const QPoint textureOffset(
-                    zoomedImageTopLeft.x() % texture.width(),
-                    zoomedImageTopLeft.y() % texture.height());
-                painter->drawTiledPixmap(
-                    viewportRect,
-                    texture,
-                    textureOffset);
-                break;
-            }
-            case AbstractImageView::AlphaBackgroundSolid:
-                painter->fillRect(viewportRect, mAlphaBackgroundColor);
-                break;
-            default:
-                Q_ASSERT(0);
-        }
+        mImageItem->setPos((q->imageOffset() - q->scrollPos()).toPoint());
+        q->update();
     }
 };
 
 RasterImageView::RasterImageView(QGraphicsItem* parent)
 : AbstractImageView(parent)
-, d(new RasterImageViewPrivate)
+, d(new RasterImageViewPrivate{this})
 {
-    d->q = this;
-    d->mEmittedCompleted = false;
-    d->mApplyDisplayTransform = true;
-    d->mDisplayTransform = nullptr;
+    d->mImageItem = new RasterImageItem{this};
 
-    d->mAlphaBackgroundMode = AlphaBackgroundNone;
-    d->mAlphaBackgroundColor = Qt::black;
-    d->mRenderingIntent = INTENT_PERCEPTUAL;
+    // Clip this item so we only render the visible part of the image when
+    // zoomed or when viewing a large image.
+    setFlag(QGraphicsItem::ItemClipsChildrenToShape);
 
-    d->mBufferIsEmpty = true;
-    d->mScaler = new ImageScaler(this);
-    connect(d->mScaler, &ImageScaler::scaledRect, this, &RasterImageView::updateFromScaler);
-
-    d->setupUpdateTimer();
+    setCacheMode(QGraphicsItem::DeviceCoordinateCache);
 }
 
 RasterImageView::~RasterImageView()
@@ -217,39 +229,34 @@ RasterImageView::~RasterImageView()
     if (d->mDisplayTransform) {
         cmsDeleteTransform(d->mDisplayTransform);
     }
+
     delete d;
 }
 
 void RasterImageView::setAlphaBackgroundMode(AlphaBackgroundMode mode)
 {
     d->mAlphaBackgroundMode = mode;
-    if (document() && document()->hasAlphaChannel()) {
-        d->mCurrentBuffer = QPixmap();
-        updateBuffer();
-    }
+    update();
 }
 
 void RasterImageView::setAlphaBackgroundColor(const QColor& color)
 {
     d->mAlphaBackgroundColor = color;
-    if (document() && document()->hasAlphaChannel()) {
-        d->mCurrentBuffer = QPixmap();
-        updateBuffer();
-    }
+    update();
 }
 
 void RasterImageView::setRenderingIntent(const RenderingIntent::Enum& renderingIntent)
 {
     if (d->mRenderingIntent != renderingIntent) {
         d->mRenderingIntent = renderingIntent;
-        updateBuffer();
+        d->applyImageTransform();
     }
 }
 
 void RasterImageView::resetMonitorICC()
 {
     d->mApplyDisplayTransform = true;
-    updateBuffer();
+    d->applyImageTransform();
 }
 
 void RasterImageView::loadFromDocument()
@@ -272,7 +279,7 @@ void RasterImageView::loadFromDocument()
 
 void RasterImageView::slotDocumentMetaInfoLoaded()
 {
-    if (document()->size().isValid()) {
+    if (document()->size().isValid() && document()->image().format() != QImage::Format_Invalid) {
         QMetaObject::invokeMethod(this, &RasterImageView::finishSetDocument, Qt::QueuedConnection);
     } else {
         // Could not retrieve image size from meta info, we need to load the
@@ -287,12 +294,7 @@ void RasterImageView::finishSetDocument()
 {
     GV_RETURN_IF_FAIL(document()->size().isValid());
 
-    d->mScaler->setDocument(document());
-    d->resizeBuffer();
-    applyPendingScrollPos();
-
-    connect(document().data(), &Document::imageRectUpdated,
-            this, &RasterImageView::updateImageRect);
+    d->applyImageTransform();
 
     if (zoomToFit()) {
         // Force the update otherwise if computeZoomToFit() returns 1, setZoom()
@@ -301,33 +303,16 @@ void RasterImageView::finishSetDocument()
     } else if (zoomToFill()) {
         setZoom(computeZoomToFill(), QPointF(-1, -1), ForceUpdate);
     } else {
-        // Not only call updateBuffer, but also ensure the initial transformation mode
-        // of the image scaler is set correctly when zoom is unchanged (see Bug 396736).
         onZoomChanged();
     }
 
+    applyPendingScrollPos();
     d->startAnimationIfNecessary();
     update();
-}
 
-void RasterImageView::updateImageRect(const QRect& imageRect)
-{
-    QRectF viewRect = mapToView(imageRect);
-    if (!viewRect.intersects(boundingRect())) {
-        return;
-    }
+    d->mLoaded = true;
 
-    if (zoomToFit()) {
-        setZoom(computeZoomToFit());
-    } else if (zoomToFill()) {
-        setZoom(computeZoomToFill());
-    } else {
-        applyPendingScrollPos();
-    }
-
-    d->setScalerRegionToVisibleRect();
-    update();
-    emit imageRectUpdated();
+    Q_EMIT completed();
 }
 
 void RasterImageView::slotDocumentIsAnimatedUpdated()
@@ -335,136 +320,27 @@ void RasterImageView::slotDocumentIsAnimatedUpdated()
     d->startAnimationIfNecessary();
 }
 
-void RasterImageView::updateFromScaler(int zoomedImageLeft, int zoomedImageTop, const QImage& image)
-{
-    if (d->mApplyDisplayTransform) {
-        d->updateDisplayTransform(image.format());
-        if (d->mDisplayTransform) {
-            quint8 *bytes = const_cast<quint8*>(image.bits());
-            cmsDoTransform(d->mDisplayTransform, bytes, bytes, image.width() * image.height());
-        }
-    }
-
-    d->resizeBuffer();
-    int viewportLeft = zoomedImageLeft - scrollPos().x();
-    int viewportTop = zoomedImageTop - scrollPos().y();
-    d->mBufferIsEmpty = false;
-    {
-        QPainter painter(&d->mCurrentBuffer);
-        painter.setCompositionMode(QPainter::CompositionMode_Source);
-        if (document()->hasAlphaChannel()) {
-            const QRectF viewportRect(QPointF(viewportLeft, viewportTop),
-                                      QSizeF(image.size()) / devicePixelRatio());
-            d->drawAlphaBackground(&painter, viewportRect,
-                                   QPoint(zoomedImageLeft, zoomedImageTop),
-                                   alphaBackgroundTexture());
-            // This is required so transparent pixels don't replace our background
-            painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
-        }
-        painter.drawImage(viewportLeft, viewportTop, image);
-    }
-    update();
-
-    if (!d->mEmittedCompleted) {
-        d->mEmittedCompleted = true;
-        emit completed();
-    }
-}
-
 void RasterImageView::onZoomChanged()
 {
-    d->mScaler->setZoom(zoom());
-    if (!d->mUpdateTimer->isActive()) {
-        updateBuffer();
-    }
+    d->mImageItem->setScale(zoom() / devicePixelRatio());
+    d->adjustItemPosition();
 }
 
 void RasterImageView::onImageOffsetChanged()
 {
-    update();
+    d->adjustItemPosition();
 }
 
 void RasterImageView::onScrollPosChanged(const QPointF& oldPos)
 {
-    QPointF delta = scrollPos() - oldPos;
-
-    // Scroll existing
-    {
-        if (d->mAlternateBuffer.size() != d->mCurrentBuffer.size()) {
-            d->mAlternateBuffer = QPixmap(d->mCurrentBuffer.size());
-            d->mAlternateBuffer.setDevicePixelRatio(d->mCurrentBuffer.devicePixelRatio());
-        }
-        d->mAlternateBuffer.fill(Qt::transparent);
-        QPainter painter(&d->mAlternateBuffer);
-        painter.drawPixmap(-delta, d->mCurrentBuffer);
-    }
-    qSwap(d->mCurrentBuffer, d->mAlternateBuffer);
-
-    // Scale missing parts
-    QRegion bufferRegion = QRect(scrollPos().toPoint(), d->mCurrentBuffer.size() / devicePixelRatio());
-    QRegion updateRegion = bufferRegion - bufferRegion.translated(-delta.toPoint());
-    updateBuffer(updateRegion);
-    update();
+    Q_UNUSED(oldPos);
+    d->adjustItemPosition();
 }
 
 void RasterImageView::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/)
 {
-    d->mCurrentBuffer.setDevicePixelRatio(devicePixelRatio());
-
-    QPointF topLeft = imageOffset();
-    if (zoomToFit()) {
-        // In zoomToFit mode, scale crudely the buffer to fit the screen. This
-        // provide an approximate rendered which will be replaced when the scheduled
-        // proper scale is ready.
-        // Round point and size independently, to keep consistency with the below (non zoomToFit) painting
-        const QRect rect = QRect(topLeft.toPoint(), (dipDocumentSize() * zoom()).toSize());
-        painter->drawPixmap(rect, d->mCurrentBuffer);
-    } else {
-        painter->drawPixmap(topLeft.toPoint(), d->mCurrentBuffer);
-    }
-
-    if (d->mTool) {
-        d->mTool.data()->paint(painter);
-    }
-
-    // Debug
-#if 0
-    QSizeF visibleSize = documentSize() * zoom();
-    painter->setPen(Qt::red);
-    painter->drawRect(topLeft.x(), topLeft.y(), visibleSize.width() - 1, visibleSize.height() - 1);
-
-    painter->setPen(Qt::blue);
-    painter->drawRect(topLeft.x(), topLeft.y(), d->mCurrentBuffer.width() - 1, d->mCurrentBuffer.height() - 1);
-#endif
-}
-
-void RasterImageView::resizeEvent(QGraphicsSceneResizeEvent* event)
-{
-    // If we are in zoomToFit mode and have something in our buffer, delay the
-    // update: paint() will paint a scaled version of the buffer until resizing
-    // is done. This is much faster than rescaling the whole image for each
-    // resize event we receive.
-    // mUpdateTimer must be started before calling AbstractImageView::resizeEvent()
-    // because AbstractImageView::resizeEvent() will call onZoomChanged(), which
-    // will trigger an immediate update unless the mUpdateTimer is active.
-    if ((zoomToFit() || zoomToFill()) && !d->mBufferIsEmpty) {
-        d->mUpdateTimer->start();
-    }
-    AbstractImageView::resizeEvent(event);
-    if (!zoomToFit() || !zoomToFill()) {
-        // Only update buffer if we are not in zoomToFit mode: if we are
-        // onZoomChanged() will have already updated the buffer.
-        updateBuffer();
-    }
-}
-
-void RasterImageView::updateBuffer(const QRegion& region)
-{
-    d->mUpdateTimer->stop();
-    if (region.isEmpty()) {
-        d->setScalerRegionToVisibleRect();
-    } else {
-        d->mScaler->setDestinationRegion(region);
+    if (d->mLoaded) {
+        drawAlphaBackground(painter);
     }
 }
 
@@ -473,6 +349,7 @@ void RasterImageView::setCurrentTool(AbstractRasterImageViewTool* tool)
     if (d->mTool) {
         d->mTool.data()->toolDeactivated();
         d->mTool.data()->deleteLater();
+        delete d->mToolItem;
     }
 
     // Go back to default cursor when tool is deactivated. We need to call this here and
@@ -482,6 +359,7 @@ void RasterImageView::setCurrentTool(AbstractRasterImageViewTool* tool)
     d->mTool = tool;
     if (d->mTool) {
         d->mTool.data()->toolActivated();
+        d->mToolItem = new ToolPainter{d->mTool, this};
     }
     emit currentToolChanged(tool);
     update();
@@ -578,6 +456,26 @@ void RasterImageView::hoverMoveEvent(QGraphicsSceneHoverEvent* event)
         }
     }
     AbstractImageView::hoverMoveEvent(event);
+}
+
+void RasterImageView::drawAlphaBackground(QPainter* painter)
+{
+    const QRect imageRect = QRect(imageOffset().toPoint(), visibleImageSize().toSize());
+
+    switch (d->mAlphaBackgroundMode) {
+        case AbstractImageView::AlphaBackgroundNone:
+            break;
+        case AbstractImageView::AlphaBackgroundCheckBoard:
+        {
+            painter->drawTiledPixmap(imageRect, alphaBackgroundTexture(), scrollPos());
+            break;
+        }
+        case AbstractImageView::AlphaBackgroundSolid:
+            painter->fillRect(imageRect, d->mAlphaBackgroundColor);
+            break;
+        default:
+            Q_ASSERT(0);
+    }
 }
 
 } // namespace
