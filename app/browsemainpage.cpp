@@ -91,6 +91,11 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
         setupUi(q);
         q->layout()->setContentsMargins(0, 0, 0, 0);
 
+        int margins = q->style()->pixelMetric(QStyle::PM_ToolBarItemMargin)
+                    + q->style()->pixelMetric(QStyle::PM_ToolBarFrameWidth);
+        mStatusBarContainer->layout()->setContentsMargins(margins, margins, margins, margins);
+        mStatusBarContainer->layout()->setSpacing(q->style()->pixelMetric(QStyle::PM_ToolBarItemSpacing));
+
         // mThumbnailView
         mThumbnailView->setModel(mDirModel);
 
