@@ -4,41 +4,15 @@ add_definitions(-DTRANSLATION_DOMAIN="gwenview")
 
 set(LIBGWENVIEW_VERSION "4.97.0")
 
-# Extract version of libjpeg so that we can use the appropriate dir
-# See bug #227313
-message(STATUS "Looking for libjpeg version in ${JPEG_INCLUDE_DIR}/jpeglib.h")
-
-# Due to the large variety of different headers the version data might be
-# found in (between libjpeg, libjpeg-turbo and various multilib header
-# forwarding schemes seen in distros), have a simple program print out the
-# right version.
-set(JPEGLIB_VERSION_CHECK_PATH "${CMAKE_CURRENT_BINARY_DIR}/jpeglib-version-check.c")
-file(WRITE ${JPEGLIB_VERSION_CHECK_PATH} "
-#include <stdio.h>
-#include <stdlib.h>
-#include <jpeglib.h>
-
-int main(void) { printf(\"%d\\\n\", JPEG_LIB_VERSION); return 0; }
-")
-
-try_run(JPEGLIB_RUN_RESULT JPEGLIB_COMPILE_RESULT
-    ${CMAKE_CURRENT_BINARY_DIR} ${JPEGLIB_VERSION_CHECK_PATH}
-    CMAKE_FLAGS -DINCLUDE_DIRECTORIES:PATH=${JPEG_INCLUDE_DIR}
-    RUN_OUTPUT_VARIABLE jpeglib_version)
-
-if ((${JPEGLIB_COMPILE_RESULT} EQUAL FALSE) OR ("${JPEGLIB_RUN_RESULT}" EQUAL FAILED_TO_RUN) OR "${jpeglib_version}" STREQUAL "")
-    message(FATAL_ERROR "Could not find jpeglib.h. This file comes with libjpeg.")
-endif()
-
-if ("${jpeglib_version}" LESS 80)
+if (${JPEG_VERSION} LESS 80)
     set(GV_JPEG_DIR libjpeg-62)
 endif()
 
-if ("${jpeglib_version}" EQUAL 80)
+if (${JPEG_VERSION} EQUAL 80)
     set(GV_JPEG_DIR libjpeg-80)
 endif()
 
-if ("${jpeglib_version}" EQUAL 90)
+if (${JPEG_VERSION} EQUAL 90)
     set(GV_JPEG_DIR libjpeg-90)
 endif()
 
@@ -46,7 +20,7 @@ if ("${GV_JPEG_DIR}" STREQUAL "")
     message(FATAL_ERROR "Unknown libjpeg version: ${jpeglib_version}")
 endif()
 
-message(STATUS "libjpeg version: ${jpeglib_version}")
+message(STATUS "libjpeg version: ${JPEG_VERSION}")
 
 add_definitions(-Dlibjpeg_EXPORTS)
 include_directories(
