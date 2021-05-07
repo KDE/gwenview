@@ -26,7 +26,6 @@ include_directories(
 
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
 
-gv_add_unit_test(imagescalertest testutils.cpp)
 if (KF5KDcraw_FOUND)
     gv_add_unit_test(documenttest testutils.cpp)
 endif()

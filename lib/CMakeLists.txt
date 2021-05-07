@@ -99,7 +99,6 @@ set(gwenviewlib_SRCS
     hud/hudwidget.cpp
     graphicswidgetfloater.cpp
     imagemetainfomodel.cpp
-    imagescaler.cpp
     imageutils.cpp
     invisiblebuttongroup.cpp
     iodevicejpegsourcemanager.cpp

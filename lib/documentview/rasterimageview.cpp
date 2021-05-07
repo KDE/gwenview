@@ -23,7 +23,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include <lib/documentview/abstractrasterimageviewtool.h>
-#include <lib/imagescaler.h>
 #include <lib/cms/cmsprofile.h>
 #include <lib/gvdebug.h>
 #include <lib/paintutils.h>
