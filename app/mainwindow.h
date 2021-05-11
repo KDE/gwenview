@@ -93,6 +93,7 @@ private Q_SLOTS:
 
     void goUp();
     void toggleSideBar(bool visible);
+    void toggleOperationsSideBar(bool visible);
     void slotModifiedDocumentListChanged();
     void slotUpdateCaption(const QString& caption);
     void slotPartCompleted();

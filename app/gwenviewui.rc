@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE gui SYSTEM "kpartgui.dtd">
-<gui name="gwenview" version="61">
+<gui name="gwenview" version="62">
 
 <MenuBar>
     <Menu name="file" >
@@ -98,16 +98,16 @@
     <Separator/>
     <Action name="browse" />
     <Action name="view" />
-    <Separator/>
-    <Action name="fullscreen" />
+    <Action name="align_with_sidebar" />
     <Separator/>
     <Action name="go_previous" />
     <Action name="go_next" />
-    <Separator/>
-    <Action name="rotate_left" />
-    <Action name="rotate_right" />
-    <Separator/>
+    <Action name="toggle_operations_sidebar" />
     <Action name="share" />
+    <Spacer/>
+    <Action name="fullscreen" />
 </ToolBar>
-
+<ActionProperties scheme="Default">
+    <Action priority="0" name="fullscreen"/>
+</ActionProperties>
 </gui>

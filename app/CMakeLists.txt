@@ -9,6 +9,7 @@ include_directories(
 
 set(gwenview_SRCS
     abstractcontextmanageritem.cpp
+    alignwithsidebarwidgetaction.cpp
     configdialog.cpp
     gvcore.cpp
     documentinfoprovider.cpp

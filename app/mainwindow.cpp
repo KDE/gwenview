@@ -69,6 +69,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Local
 #include "gwenview_app_debug.h"
 #include "dialogguard.h"
+#include "alignwithsidebarwidgetaction.h"
 #include "configdialog.h"
 #include "documentinfoprovider.h"
 #include "viewmainpage.h"
@@ -202,6 +203,7 @@ struct MainWindow::Private
     QAction * mGoToFirstAction;
     QAction * mGoToLastAction;
     KToggleAction* mToggleSideBarAction;
+    KToggleAction* mToggleOperationsSideBarAction;
     QAction* mFullScreenAction;
     QAction * mToggleSlideShowAction;
     KToggleAction* mShowMenuBarAction;
@@ -499,6 +501,18 @@ struct MainWindow::Private
         connect(mViewMainPage->toggleSideBarButton(), &QAbstractButton::clicked,
                 mToggleSideBarAction, &QAction::trigger);
 
+        mToggleOperationsSideBarAction = view->add<KToggleAction>("toggle_operations_sidebar");
+        mToggleOperationsSideBarAction->setText(i18nc("@action opens crop, rename, etc.",
+                                                      "Show Editing Tools"));
+        mToggleOperationsSideBarAction->setIcon(QIcon::fromTheme("document-edit"));
+        connect(mToggleOperationsSideBarAction, &KToggleAction::triggered,
+                q, &MainWindow::toggleOperationsSideBar);
+        connect(mSideBar, &QTabWidget::currentChanged,
+                mToggleOperationsSideBarAction, [=](){
+            mToggleOperationsSideBarAction->setChecked(
+                    mSideBar->isVisible() && mSideBar->currentPage() == QLatin1String("operations"));
+        });
+
         mToggleSlideShowAction = view->addAction("toggle_slideshow", q, SLOT(toggleSlideShow()));
         q->updateSlideShowAction();
         connect(mSlideShow, &SlideShow::stateChanged,
@@ -551,6 +565,10 @@ struct MainWindow::Private
             }
         });
 #endif
+
+        auto alignWithSideBarWidgetAction = new AlignWithSideBarWidgetAction();
+        alignWithSideBarWidgetAction->setSideBar(mSideBar);
+        actionCollection->addAction("align_with_sidebar", alignWithSideBarWidgetAction);
     }
 
     void setupUndoActions()
@@ -730,6 +748,7 @@ struct MainWindow::Private
         mBrowseAction->setEnabled(enabled);
         mViewAction->setEnabled(enabled);
         mToggleSideBarAction->setEnabled(enabled);
+        mToggleOperationsSideBarAction->setEnabled(enabled);
         mShowStatusBarAction->setEnabled(enabled);
         mFullScreenAction->setEnabled(enabled);
         mToggleSlideShowAction->setEnabled(enabled);
@@ -1212,6 +1231,8 @@ void MainWindow::toggleSideBar(bool visible)
 {
     d->saveSplitterConfig();
     d->mToggleSideBarAction->setChecked(visible);
+    d->mToggleOperationsSideBarAction->setChecked(visible
+            && d->mSideBar->currentPage() == QLatin1String("operations"));
     d->saveSideBarVisibility(visible);
     d->mSideBar->setVisible(visible);
 
@@ -1230,6 +1251,14 @@ void MainWindow::toggleSideBar(bool visible)
         button->setText(text);
         button->setToolTip(toolTip);
     }
+}
+
+void MainWindow::toggleOperationsSideBar(bool visible)
+{
+    if (visible) {
+        d->mSideBar->setCurrentPage(QLatin1String("operations"));
+    }
+    toggleSideBar(visible);
 }
 
 void MainWindow::toggleStatusBar(bool visible)
