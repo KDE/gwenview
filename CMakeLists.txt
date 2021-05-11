@@ -153,6 +153,9 @@ function(JoinListAsString VALUES GLUE OUTPUT)
     set(${OUTPUT} "${_TMP_STR}" PARENT_SCOPE)
 endfunction()
 
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
+
 set(IMAGE_MIME_TYPES_LIST
     image/avif
     image/gif
