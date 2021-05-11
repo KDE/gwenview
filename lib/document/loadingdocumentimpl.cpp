@@ -30,6 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Qt
 #include <QBuffer>
 #include <QByteArray>
+#include <QColorSpace>
 #include <QFile>
 #include <QFuture>
 #include <QFutureWatcher>
@@ -201,6 +202,8 @@ struct LoadingDocumentImplPrivate
             mExiv2Image = loader.popImage();
         }
 
+        QImageReader reader;
+
 #ifdef KDCRAW_FOUND
         if (KDcrawIface::KDcraw::rawFilesList().contains(QString::fromLatin1(mFormatHint))) {
             QByteArray previewData;
@@ -233,7 +236,8 @@ struct LoadingDocumentImplPrivate
 #else
 {
 #endif
-            QImageReader reader(&buffer, mFormatHint);
+            reader.setFormat(mFormatHint);
+            reader.setDevice(&buffer);
             mImageSize = reader.size();
 
             if (!reader.canRead()) {
@@ -286,6 +290,13 @@ struct LoadingDocumentImplPrivate
 
         if (!mCmsProfile) {
             mCmsProfile = Cms::Profile::loadFromImageData(mData, mFormat);
+        }
+
+        if (!mCmsProfile && reader.canRead()) {
+            const QImage qtimage = reader.read();
+            if (!qtimage.isNull()) {
+                mCmsProfile = Cms::Profile::loadFromICC(qtimage.colorSpace().iccProfile());
+            }
         }
 
         return true;

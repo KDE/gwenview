@@ -187,6 +187,22 @@ Profile::Ptr Profile::loadFromExiv2Image(const Exiv2::Image* image)
     return ptr;
 }
 
+Profile::Ptr Profile::loadFromICC(const QByteArray &data)
+{
+    Profile::Ptr ptr;
+    int size = data.size();
+
+    if (size > 0) {
+        cmsHPROFILE hProfile = cmsOpenProfileFromMem(data, size);
+
+        if (hProfile) {
+            ptr = new Profile(hProfile);
+        }
+    }
+
+    return ptr;
+}
+
 cmsHPROFILE Profile::handle() const
 {
     return d->mProfile;
