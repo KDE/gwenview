@@ -36,8 +36,8 @@
 </copyright>
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2020-10-10</date>
-<releaseinfo>Applications 20.12</releaseinfo>
+<date>2021-05-12</date>
+<releaseinfo>Applications 21.08</releaseinfo>
 <abstract>
 <para>&gwenview; is an image and video viewer.</para>
 </abstract>
@@ -119,7 +119,7 @@ or to the right, depending on whether you do
 or
   <menuchoice>
     <shortcut>
-<keycombo action="simul">&Ctrl;<keycap>L</keycap></keycombo>
+<keycombo action="simul">&Ctrl;&Shift;<keycap>R</keycap></keycombo>
     </shortcut>
     <guimenu>Edit</guimenu>
     <guimenuitem>Rotate Left</guimenuitem>
@@ -208,19 +208,19 @@ mode and contains the most commonly used actions. </para>
 <listitem><para><guiicon>Start Page</guiicon>: Open the start page.</para></listitem>
 <listitem><para><guiicon>Browse</guiicon>: Switches to Browse Mode.</para></listitem>
 <listitem><para><guiicon>View</guiicon>: Switches to View Mode.</para></listitem>
-<listitem><para><guiicon>Full Screen</guiicon>: Switches to Full Screen Mode.</para></listitem>
 <listitem><para><guiicon>Previous</guiicon>: Clicking this icon will go
 to the previous image in the folder.</para></listitem>
 
 <listitem><para><guiicon>Next</guiicon>: Clicking this button will go to
 the next image in the folder.</para></listitem>
 
-<listitem><para><guiicon>Rotate Left/Right</guiicon>: Same as discussed in
-Image Operations</para></listitem>
+<listitem><para><guiicon>Show Editing Tools</guiicon>: Clicking this button toggles
+the <link linkend="sidebar">Operations sidebar tab</link>.</para></listitem>
 
 <listitem><para><guiicon>Share</guiicon>: Clicking this button opens an export menu to share your images through social
 media and image collection web services. This functionality depends on the list of installed
 KIPI plugins.</para></listitem>
+<listitem><para><guiicon>Full Screen</guiicon>: Switches to Full Screen Mode.</para></listitem>
 </itemizedlist>
 
 </sect1>
@@ -229,9 +229,9 @@ KIPI plugins.</para></listitem>
 <para>View Mode displays full-size images.  The same
 <link linkend="sidebar">sidebar</link> available in Browse Mode is displayed on
 the left. At the bottom, there is the Thumbnail Bar, which allows you to scroll
-through the images in the current folder. The Thumbnail Bar can be minimized by
+through the images in the current folder. The Thumbnail Bar can be unfolded by
 clicking on the <guibutton>Thumbnail Bar</guibutton> button. Clicking again will
-restore it. To change the size of the thumbnails move the splitter with the &LMB;.</para>
+fold it. To change the size of the thumbnails move the splitter with the &LMB;.</para>
 
 <para>View Mode supports viewing multiple images side-by-side.  You may select
 multiple images in Browse Mode before switching to View Mode, or you may click the
@@ -312,7 +312,7 @@ launching it from the command line with an image as an argument.</para> </tip>
 <listitem><para>
  <menuchoice>
   <guimenu>Edit</guimenu>
-  <guimenuitem>Red Eye Reduction</guimenuitem>
+  <guimenuitem>Reduce Red Eye</guimenuitem>
  </menuchoice>:
  This operation reduces the "red eye" effect commonly found in photographs taken
  with a flash camera.
@@ -609,7 +609,7 @@ action="simul">&Ctrl;<keycap>R</keycap></keycombo>:
 Rotate the current image to the right.</para></listitem>
 
 <listitem><para><keycombo
-action="simul">&Ctrl;<keycap>L</keycap></keycombo>:
+action="simul">&Ctrl;&Shift;<keycap>R</keycap></keycombo>:
 Rotate the current image to the left.</para></listitem>
 
 <listitem><para><keycombo action="simul">&Shift;<keycap>R</keycap></keycombo>:
@@ -621,15 +621,7 @@ Crop the current image.</para></listitem>
 <listitem><para><keycombo action="simul">&Ctrl;<keycap>Y</keycap></keycombo>:
 When multiple images are displayed in View Mode, this synchronizes their views.
 </para></listitem>
-<!--FIXME not in kf5
-<listitem><para><keycombo action="simul">&Tab;</keycombo>:
-When multiple images are displayed in View Mode, this switched to the image to
-the right of the currently selected image.</para></listitem>
 
-<listitem><para><keycombo action="simul">&Shift;&Tab;</keycombo>:
-When multiple images are displayed in View Mode, this switched to the image to
-the left of the currently selected image.</para></listitem>
--->
 <listitem><para><keycombo
 action="simul">&Ctrl;<keycap>S</keycap></keycombo>:
 Save any changes made to the image.</para></listitem>
@@ -671,15 +663,15 @@ action="simul">&Shift;<keycap>Del</keycap></keycombo>:
 Delete an image.</para></listitem>
 
 <listitem><para><keycombo
-action="simul">&Ctrl;<keycap>F7</keycap></keycombo>:
+action="simul"><keycap>F7</keycap></keycombo>:
 Copy an image.</para></listitem>
 
 <listitem><para><keycombo
-action="simul">&Ctrl;<keycap>F8</keycap></keycombo>:
+action="simul"><keycap>F8</keycap></keycombo>:
 Move an image.</para></listitem>
 
 <listitem><para><keycombo
-action="simul">&Ctrl;<keycap>F9</keycap></keycombo>:
+action="simul"><keycap>F9</keycap></keycombo>:
 Link an image.</para></listitem>
 
 </itemizedlist>
@@ -865,7 +857,7 @@ Link an image.</para></listitem>
         <title>Advanced</title>
         <variablelist>
             <varlistentry>
-                <term><guilabel>Cache</guilabel></term>
+                <term><guilabel>Thumbnails</guilabel></term>
                 <listitem>
                     <para>Enable the <guilabel>Low resource usage mode</guilabel> option if you do not have a lot of disk space. This will avoid storing thumbnails on disk and will prefer embedded thumbnails of lower quality that are faster to load, if available.</para>
                     <para>Be careful: This will delete the folder named <filename>thumbnails</filename> in your <filename>.cache</filename> folder, removing all thumbnails previously generated by &gwenview; and other applications.</para>
