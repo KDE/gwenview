@@ -38,5 +38,5 @@
         ]
     },
     "X-KDE-Require": "Read",
-    "X-KDE-Show-In-Submenu": true
+    "X-KDE-Show-In-Submenu": "true"
 }
