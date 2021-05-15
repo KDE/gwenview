@@ -1236,9 +1236,9 @@ void MainWindow::toggleSideBar(bool visible)
     d->saveSideBarVisibility(visible);
     d->mSideBar->setVisible(visible);
 
-    const QString text = QApplication::isRightToLeft()
-        ? QString::fromUtf8(visible ? "▮→" : "▮←")
-        : QString::fromUtf8(visible ? "▮←" : "▮→");
+    const QString iconName = QApplication::isRightToLeft()
+        ? (visible ? "sidebar-collapse-right" : "sidebar-expand-right")
+        : (visible ? "sidebar-collapse-left" : "sidebar-expand-left");
     const QString toolTip = visible
         ? i18nc("@info:tooltip", "Hide sidebar")
         : i18nc("@info:tooltip", "Show sidebar");
@@ -1248,7 +1248,7 @@ void MainWindow::toggleSideBar(bool visible)
         d->mViewMainPage->toggleSideBarButton()
     };
     for (auto button : buttonList) {
-        button->setText(text);
+        button->setIcon(QIcon::fromTheme(iconName));
         button->setToolTip(toolTip);
     }
 }
