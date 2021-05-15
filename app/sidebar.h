@@ -23,6 +23,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QFrame>
 #include <QTabWidget>
+#include <QTabBar>
+#include <QStylePainter>
 
 namespace Gwenview
 {
@@ -50,15 +52,54 @@ class SideBarPage : public QWidget
 {
     Q_OBJECT
 public:
-    SideBarPage(const QString& title);
+    SideBarPage(const QIcon& icon, const QString& title);
     ~SideBarPage() override;
     void addWidget(QWidget*);
     void addStretch();
 
+    const QIcon& icon() const;
     const QString& title() const;
 
 private:
     SideBarPagePrivate* const d;
+};
+
+struct SideBarTabBarPrivate;
+class SideBarTabBar : public QTabBar
+{
+    Q_OBJECT
+public:
+    explicit SideBarTabBar(QWidget* parent);
+    ~SideBarTabBar() override;
+
+    enum TabButtonStyle {
+        TabButtonIconOnly,
+        TabButtonTextOnly,
+        TabButtonTextBesideIcon
+    };
+    Q_ENUM(TabButtonStyle)
+
+    TabButtonStyle tabButtonStyle() const;
+
+    QSize sizeHint() const override;
+
+    QSize minimumSizeHint() const override;
+
+protected:
+    QSize tabSizeHint(const int index) const override;
+    QSize minimumTabSizeHint(int index) const override;
+    // Switches the TabButtonStyle based on the width
+    void tabLayoutChange() override;
+    void paintEvent(QPaintEvent *event) override;
+private:
+    // Like sizeHint, but just for content size
+    QSize tabContentSize(const int index, const TabButtonStyle tabButtonStyle, const QStyleOptionTab& opt) const;
+    // Gets the tab size hint for the given TabButtonStyle
+    QSize tabSizeHint(const int index, const TabButtonStyle tabButtonStyle) const;
+    // Gets the size hint for the given TabButtonStyle
+    QSize sizeHint(const TabButtonStyle tabButtonStyle) const;
+    void drawTab(int index, QStylePainter &painter) const;
+    const std::unique_ptr<SideBarTabBarPrivate> d;
 };
 
 struct SideBarPrivate;

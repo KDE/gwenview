@@ -620,13 +620,13 @@ struct MainWindow::Private
 
         // Fill sidebar
         SideBarPage* page;
-        page = new SideBarPage(i18n("Folders"));
+        page = new SideBarPage(QIcon::fromTheme("folder"), i18n("Folders"));
         page->setObjectName(QLatin1String("folders"));
         page->addWidget(folderViewItem->widget());
         page->layout()->setContentsMargins(0, 0, 0, 0);
         mSideBar->addPage(page);
 
-        page = new SideBarPage(i18n("Information"));
+        page = new SideBarPage(QIcon::fromTheme("documentinfo"), i18n("Information"));
         page->setObjectName(QLatin1String("information"));
         page->addWidget(infoItem->widget());
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
@@ -640,7 +640,7 @@ struct MainWindow::Private
 #endif
         mSideBar->addPage(page);
 
-        page = new SideBarPage(i18n("Operations"));
+        page = new SideBarPage(QIcon::fromTheme("document-edit"), i18n("Operations"));
         page->setObjectName(QLatin1String("operations"));
         page->addWidget(imageOpsItem->widget());
         QFrame *separator = new QFrame;
