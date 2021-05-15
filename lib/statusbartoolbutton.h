@@ -48,6 +48,8 @@ public:
 
     explicit StatusBarToolButton(QWidget* parent = nullptr);
 
+    QSize sizeHint() const override;
+
     void setGroupPosition(StatusBarToolButton::GroupPosition groupPosition);
 
 protected:

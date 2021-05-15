@@ -42,6 +42,40 @@ StatusBarToolButton::StatusBarToolButton(QWidget* parent)
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 }
 
+QSize StatusBarToolButton::sizeHint() const
+{
+    QSize sizeHint = QToolButton::sizeHint();
+
+    QStyleOptionToolButton opt;
+    initStyleOption(&opt);
+
+    const bool isIconOnly = opt.toolButtonStyle == Qt::ToolButtonIconOnly
+            || (!opt.icon.isNull() && opt.text.isEmpty());
+    const bool isTextOnly = opt.toolButtonStyle == Qt::ToolButtonTextOnly
+            || (opt.icon.isNull() && !opt.text.isEmpty());
+
+    if (isIconOnly || isTextOnly) {
+        QSize contentSize;
+        if (isIconOnly) {
+            contentSize.setHeight(qMax(opt.iconSize.height(), opt.fontMetrics.height()));
+            contentSize.setWidth(contentSize.height());
+        } else if (isTextOnly) {
+            // copying the default text size behavior for text only QToolButtons
+            QSize textSize = opt.fontMetrics.size(Qt::TextShowMnemonic, opt.text);
+            // NOTE: QToolButton really does use horizontalAdvance() instead of boundingRect().width()
+            textSize.setWidth(textSize.width() + opt.fontMetrics.horizontalAdvance(QLatin1Char(' '))*2);
+            contentSize.setHeight(qMax(opt.iconSize.height(), textSize.height()));
+            contentSize.setWidth(textSize.width());
+        }
+        if (popupMode() == MenuButtonPopup) {
+            contentSize.setWidth(contentSize.width() + style()->pixelMetric(QStyle::PM_MenuButtonIndicator, &opt, this));
+        }
+        sizeHint = style()->sizeFromContents(QStyle::CT_ToolButton, &opt, contentSize, this);
+    }
+
+    return sizeHint;
+}
+
 void StatusBarToolButton::setGroupPosition(StatusBarToolButton::GroupPosition groupPosition)
 {
     mGroupPosition = groupPosition;
