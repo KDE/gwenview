@@ -21,10 +21,10 @@
         </entry>
 
         <entry name="SideBarVisibleBrowseMode" key="IsVisible BrowseMode" type="Bool">
-            <default>true</default>
+            <default>false</default>
         </entry>
         <entry name="SideBarVisibleViewMode" key="IsVisible ViewMode" type="Bool">
-            <default>true</default>
+            <default>false</default>
         </entry>
         <entry name="SideBarVisibleViewModeFullScreen" key="IsVisible ViewMode FullScreen" type="Bool">
             <default>false</default>
