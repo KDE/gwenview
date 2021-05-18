@@ -180,7 +180,11 @@ struct RasterImageViewPrivate
         if (mApplyDisplayTransform) {
             updateDisplayTransform(image.format());
             if (mDisplayTransform) {
-                quint8 *bytes = const_cast<quint8*>(image.bits());
+                // This is really ugly, but to correctly change the image data
+                // we need QImage to not detach. Simply using `image.bits()` will
+                // not do that, so we need to const_cast as `constBits()` avoids
+                // the detach.
+                quint8 *bytes = const_cast<quint8*>(image.constBits());
                 cmsDoTransform(mDisplayTransform, bytes, bytes, image.width() * image.height());
             }
         }
