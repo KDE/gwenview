@@ -48,11 +48,13 @@ public:
 public Q_SLOTS:
     void setZoom(qreal zoom);
 
+//     void setZoomRange(qreal min, qreal max);
     void setMinimumZoom(qreal zoom);
     void setMaximumZoom(qreal zoom);
 
 Q_SIGNALS:
-    void zoomChanged(qreal);
+    void zoomChanged(qreal zoom);
+//     void zoomRangeChanged(qreal min, qreal max);
 
 private Q_SLOTS:
     void slotZoomSliderActionTriggered();
