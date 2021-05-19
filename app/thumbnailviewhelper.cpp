@@ -89,6 +89,7 @@ void ThumbnailViewHelper::showContextMenu(QWidget* parent)
         d->addActionToMenu(popup, "file_trash");
         d->addActionToMenu(popup, "deletefile");
         popup.addSeparator();
+        d->addActionToMenu(popup, KStandardAction::name(KStandardAction::Copy));
         d->addActionToMenu(popup, "file_copy_to");
         d->addActionToMenu(popup, "file_move_to");
         d->addActionToMenu(popup, "file_link_to");

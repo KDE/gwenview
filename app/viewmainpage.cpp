@@ -559,6 +559,7 @@ void ViewMainPage::showContextMenu()
     }
 
     menu.addSeparator();
+    addActionToMenu(&menu, d->mActionCollection, KStandardAction::name(KStandardAction::Copy));
     addActionToMenu(&menu, d->mActionCollection, "file_copy_to");
     addActionToMenu(&menu, d->mActionCollection, "file_move_to");
     addActionToMenu(&menu, d->mActionCollection, "file_link_to");
