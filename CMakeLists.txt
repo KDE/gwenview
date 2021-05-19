@@ -75,10 +75,7 @@ find_package(KF5 ${KF5_MIN_VERSION} OPTIONAL_COMPONENTS
     Purpose
 )
 
-if (KF5ConfigWidgets_VERSION VERSION_GREATER "5.56.0" AND ${Phonon4Qt5_VERSION} VERSION_GREATER "4.10.59")
-        add_definitions(-DQT_NO_FOREACH)
-        MESSAGE(STATUS "compile without foreach")
-endif()
+add_definitions(-DQT_NO_FOREACH)
 
 message(STATUS ${KF5KIO_VERSION})
 if (KF5KIO_VERSION VERSION_GREATER_EQUAL "5.82.0")
