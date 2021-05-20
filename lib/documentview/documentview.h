@@ -181,7 +181,7 @@ Q_SIGNALS:
 
     void adapterChanged();
 
-    void focused(DocumentView*);
+    void focused(Gwenview::DocumentView*);
 
     void zoomToFitChanged(bool);
 
@@ -189,10 +189,10 @@ Q_SIGNALS:
 
     void positionChanged();
 
-    void hudTrashClicked(DocumentView*);
-    void hudDeselectClicked(DocumentView*);
+    void hudTrashClicked(Gwenview::DocumentView*);
+    void hudDeselectClicked(Gwenview::DocumentView*);
 
-    void fadeInFinished(DocumentView*);
+    void fadeInFinished(Gwenview::DocumentView*);
 
     void contextMenuRequested();
 

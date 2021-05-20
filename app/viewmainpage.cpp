@@ -804,7 +804,7 @@ bool ViewMainPage::eventFilter(QObject* watched, QEvent* event)
         }
         // Leave fullscreen when viewing an image
         if (window()->isFullScreen() && key == Qt::Key_Escape) {
-            d->mActionCollection->action("leave_fullscreen")->trigger();
+            d->mActionCollection->action(QStringLiteral("leave_fullscreen"))->trigger();
             event->accept();
         }
     }

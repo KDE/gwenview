@@ -75,7 +75,7 @@ int main(int argc, char** argv)
     } else {
         qFatal("Invalid thumbnail size: %s", qPrintable(args.last()));
     }
-    QString thumbnailBaseDirName = parser.value("thumbnail-dir");
+    QString thumbnailBaseDirName = parser.value(QStringLiteral("thumbnail-dir"));
 
     // Set up thumbnail base dir
     if (!thumbnailBaseDirName.isEmpty()) {
@@ -88,8 +88,8 @@ int main(int argc, char** argv)
                 return 1;
             }
         }
-        if (!thumbnailBaseDirName.endsWith('/')) {
-            thumbnailBaseDirName += '/';
+        if (!thumbnailBaseDirName.endsWith(QLatin1Char('/'))) {
+            thumbnailBaseDirName += QLatin1Char('/');
         }
         ThumbnailProvider::setThumbnailBaseDir(thumbnailBaseDirName);
     }

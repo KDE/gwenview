@@ -105,17 +105,17 @@ struct ImageOpsContextManagerItem::Private
 
         mResizeAction = edit->addAction("resize", q, SLOT(resizeImage()));
         mResizeAction->setText(i18n("Resize"));
-        mResizeAction->setIcon(QIcon::fromTheme("transform-scale"));
+        mResizeAction->setIcon(QIcon::fromTheme(QStringLiteral("transform-scale")));
         actionCollection->setDefaultShortcut(mResizeAction, Qt::SHIFT | Qt::Key_R);
 
         mCropAction = edit->addAction("crop", q, SLOT(crop()));
         mCropAction->setText(i18n("Crop"));
-        mCropAction->setIcon(QIcon::fromTheme("transform-crop-and-resize"));
+        mCropAction->setIcon(QIcon::fromTheme(QStringLiteral("transform-crop-and-resize")));
         actionCollection->setDefaultShortcut(mCropAction, Qt::SHIFT | Qt::Key_C);
 
         mRedEyeReductionAction = edit->addAction("red_eye_reduction", q, SLOT(startRedEyeReduction()));
         mRedEyeReductionAction->setText(i18n("Reduce Red Eye"));
-        mRedEyeReductionAction->setIcon(QIcon::fromTheme("redeyes"));
+        mRedEyeReductionAction->setIcon(QIcon::fromTheme(QStringLiteral("redeyes")));
         actionCollection->setDefaultShortcut(mRedEyeReductionAction, Qt::SHIFT | Qt::Key_E);
 
         mActionList

@@ -436,9 +436,9 @@ void SemanticInfoContextManagerItem::showSemanticInfoDialog()
         d->mSemanticInfoDialog->setAttribute(Qt::WA_DeleteOnClose, true);
 
         connect(d->mSemanticInfoDialog->mPreviousButton, &QAbstractButton::clicked,
-                d->mActionCollection->action("go_previous"), &QAction::trigger);
+                d->mActionCollection->action(QStringLiteral("go_previous")), &QAction::trigger);
         connect(d->mSemanticInfoDialog->mNextButton, &QAbstractButton::clicked,
-                d->mActionCollection->action("go_next"), &QAction::trigger);
+                d->mActionCollection->action(QStringLiteral("go_next")), &QAction::trigger);
         connect(d->mSemanticInfoDialog->mButtonBox, &QDialogButtonBox::rejected,
                 d->mSemanticInfoDialog.data(), &QWidget::close);
 

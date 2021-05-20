@@ -207,9 +207,9 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
 #endif
 
         KActionCategory* file = new KActionCategory(i18nc("@title actions category", "File"), actionCollection);
-        action = file->addAction("add_folder_to_places", q, SLOT(addFolderToPlaces()));
+        action = file->addAction(QStringLiteral("add_folder_to_places"), q, SLOT(addFolderToPlaces()));
         action->setText(i18nc("@action:inmenu", "Add Folder to Places"));
-        action->setIcon(QIcon::fromTheme("bookmark-new"));
+        action->setIcon(QIcon::fromTheme(QStringLiteral("bookmark-new")));
     }
 
     void setupFilterController()
@@ -227,12 +227,12 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
     {
         mFullScreenToolBar->setIconDimensions(KIconLoader::SizeMedium);
         mFullScreenToolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
-        mFullScreenToolBar->addAction(mActionCollection->action("browse"));
-        mFullScreenToolBar->addAction(mActionCollection->action("view"));
+        mFullScreenToolBar->addAction(mActionCollection->action(QStringLiteral("browse")));
+        mFullScreenToolBar->addAction(mActionCollection->action(QStringLiteral("view")));
 
         mFullScreenToolBar2->setIconDimensions(KIconLoader::SizeMedium);
         mFullScreenToolBar2->setToolButtonStyle(Qt::ToolButtonIconOnly);
-        mFullScreenToolBar2->addAction(mActionCollection->action("leave_fullscreen"));
+        mFullScreenToolBar2->addAction(mActionCollection->action(QStringLiteral("leave_fullscreen")));
     }
 
     void updateSelectedMediaItems(const QItemSelection& selected, const QItemSelection& deselected)
@@ -404,7 +404,7 @@ bool BrowseMainPage::eventFilter(QObject* watched, QEvent* event)
     if (window()->isFullScreen() && event->type() == QEvent::ShortcutOverride) {
         const QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
         if (keyEvent->key() == Qt::Key_Escape) {
-           d->mActionCollection->action("leave_fullscreen")->trigger();
+           d->mActionCollection->action(QStringLiteral("leave_fullscreen"))->trigger();
            event->accept();
         }
     }

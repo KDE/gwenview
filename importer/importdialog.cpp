@@ -167,7 +167,7 @@ public:
 
     void startGwenview()
     {
-        KService::Ptr service = KService::serviceByDesktopName("org.kde.gwenview");
+        KService::Ptr service = KService::serviceByDesktopName(QStringLiteral("org.kde.gwenview"));
         if (!service) {
             qCCritical(GWENVIEW_IMPORTER_LOG) << "Could not find gwenview";
         } else {
@@ -241,7 +241,7 @@ ImportDialog::ImportDialog()
 
     d->mCentralWidget->setCurrentWidget(d->mThumbnailPage);
 
-    setWindowIcon(QIcon::fromTheme("gwenview"));
+    setWindowIcon(QIcon::fromTheme(QStringLiteral("gwenview")));
     setAutoSaveSettings();
 }
 
@@ -262,11 +262,11 @@ void ImportDialog::setSourceUrl(const QUrl& url, const QString& deviceUdi)
         name = url.url(QUrl::PreferLocalFile);
         iconName = KProtocolInfo::icon(url.scheme());
         if (iconName.isEmpty()) {
-            iconName = "folder";
+            iconName = QStringLiteral("folder");
         }
     } else {
         Solid::Device device(deviceUdi);
-        name = device.vendor() + ' ' + device.product();
+        name = device.vendor() + QLatin1Char(' ') + device.product();
         iconName = device.icon();
     }
     d->mThumbnailPage->setSourceUrl(url, iconName, name);

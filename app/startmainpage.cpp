@@ -284,10 +284,10 @@ void StartMainPage::showContextMenu(const QPoint& pos)
     // Create menu
     DialogGuard<QMenu> menu(this);
 
-    QAction* addAction = menu->addAction(QIcon::fromTheme("bookmark-new"), QString());
-    QAction* forgetAction = menu->addAction(QIcon::fromTheme("edit-delete"), QString());
+    QAction* addAction = menu->addAction(QIcon::fromTheme(QStringLiteral("bookmark-new")), QString());
+    QAction* forgetAction = menu->addAction(QIcon::fromTheme(QStringLiteral("edit-delete")), QString());
     menu->addSeparator();
-    QAction* forgetAllAction = menu->addAction(QIcon::fromTheme("edit-delete-all"), QString());
+    QAction* forgetAllAction = menu->addAction(QIcon::fromTheme(QStringLiteral("edit-delete-all")), QString());
 
     if (d->mHistoryWidget->currentWidget() == d->mRecentFoldersTab) {
         addAction->setText(i18nc("@action Recent Folders view", "Add Folder to Places"));

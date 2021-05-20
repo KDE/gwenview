@@ -77,14 +77,14 @@ public:
     {
         KFileItem item(url);
 
-        mAttributes.insert("name", url.fileName());
-        mAttributes.insert("comment", comment());
-        mAttributes.insert("date", TimeUtils::dateTimeForFileItem(item));
-        mAttributes.insert("orientation", orientation());
-        mAttributes.insert("title", prettyFileName());
+        mAttributes.insert(QStringLiteral("name"), url.fileName());
+        mAttributes.insert(QStringLiteral("comment"), comment());
+        mAttributes.insert(QStringLiteral("date"), TimeUtils::dateTimeForFileItem(item));
+        mAttributes.insert(QStringLiteral("orientation"), orientation());
+        mAttributes.insert(QStringLiteral("title"), prettyFileName());
         int size = item.size();
         if (size > 0) {
-            mAttributes.insert("filesize", size);
+            mAttributes.insert(QStringLiteral("filesize"), size);
         }
     }
 
@@ -190,7 +190,7 @@ struct MenuInfo
     MenuInfo()
     {}
 
-    MenuInfo(const QString& name, QString iconName)
+    MenuInfo(const QString& name, const QString &iconName)
     : mName(name)
     , mIconName(iconName)
     {}

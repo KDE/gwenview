@@ -42,7 +42,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 inline QString pathForTestFile(const QString& name)
 {
-    return QDir::cleanPath(QStringLiteral("%1/%2").arg(GV_TEST_DATA_DIR).arg(name));
+    return QDir::cleanPath(QStringLiteral("%1/%2").arg(GV_TEST_DATA_DIR, name));
 }
 
 inline QUrl urlForTestFile(const QString& name)

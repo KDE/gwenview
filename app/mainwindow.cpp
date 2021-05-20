@@ -1567,11 +1567,11 @@ void MainWindow::updateSlideShowAction()
 {
     if (d->mSlideShow->isRunning()) {
         d->mToggleSlideShowAction->setText(i18n("Pause Slideshow"));
-        d->mToggleSlideShowAction->setIcon(QIcon::fromTheme("media-playback-pause"));
+        d->mToggleSlideShowAction->setIcon(QIcon::fromTheme(QStringLiteral("media-playback-pause")));
     } else {
         d->mToggleSlideShowAction->setText(d->mFullScreenAction->isChecked() ? i18n("Resume Slideshow")
                                                                              : i18n("Start Slideshow"));
-        d->mToggleSlideShowAction->setIcon(QIcon::fromTheme("media-playback-start"));
+        d->mToggleSlideShowAction->setIcon(QIcon::fromTheme(QStringLiteral("media-playback-start")));
     }
 }
 

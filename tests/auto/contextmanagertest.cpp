@@ -45,7 +45,7 @@ void ContextManagerTest::testRemove()
     // there is any, otherwise to the previous image.
 
     SandBoxDir sandBox;
-    sandBox.fill(QStringList() << "a" << "b" << "c");
+    sandBox.fill(QStringList() << QStringLiteral("a") << QStringLiteral("b") << QStringLiteral("c"));
     QUrl dirUrl = QUrl::fromLocalFile(sandBox.absolutePath());
 
     SortedDirModel dirModel;

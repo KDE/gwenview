@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
         qCCritical(GWENVIEW_IMPORTER_LOG) << i18n("Invalid source folder.");
         return 1;
     }
-    QString deviceUdi = parser.isSet("udi") ? parser.value("udi") : QString();
+    QString deviceUdi = parser.isSet(QStringLiteral("udi")) ? parser.value(QStringLiteral("udi")) : QString();
 
     Gwenview::ImportDialog* dialog = new Gwenview::ImportDialog();
     dialog->show();
