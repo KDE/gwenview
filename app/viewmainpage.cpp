@@ -417,8 +417,8 @@ ViewMainPage::ViewMainPage(QWidget* parent, SlideShow* slideShow, KActionCollect
     d->mGvCore = gvCore;
     d->mCompareMode = false;
 
-    QShortcut* enterKeyShortcut = new QShortcut(Qt::Key_Return, this);
-    connect(enterKeyShortcut, &QShortcut::activated, this, &ViewMainPage::slotEnterPressed);
+//     QShortcut* enterKeyShortcut = new QShortcut(Qt::Key_Return, this);
+//     connect(enterKeyShortcut, &QShortcut::activated, this, &ViewMainPage::slotEnterPressed);
 
     d->setupWidgets();
 

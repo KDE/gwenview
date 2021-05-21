@@ -102,6 +102,7 @@ set(gwenviewlib_SRCS
     imagemetainfomodel.cpp
     imageutils.cpp
     invisiblebuttongroup.cpp
+    intcombobox/intcombobox.cpp
     iodevicejpegsourcemanager.cpp
     jpegcontent.cpp
     kindproxymodel.cpp

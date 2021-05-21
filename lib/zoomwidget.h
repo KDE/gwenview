@@ -54,11 +54,10 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void zoomChanged(qreal zoom);
-//     void zoomRangeChanged(qreal min, qreal max);
 
 private Q_SLOTS:
-    void slotZoomSliderActionTriggered();
-    void setCustomZoomFromSpinBox(qreal zoom);
+    void setZoomFromSlider();
+    void setZoomFromComboBox();
 
 private:
     friend struct ZoomWidgetPrivate;
