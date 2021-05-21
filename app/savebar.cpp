@@ -294,6 +294,7 @@ void SaveBar::initActionDependentWidgets()
 
     // FIXME: Not using an action for now
     d->mSaveAllButton->setText(i18n("Save All"));
+    d->mSaveAllButton->setToolTip(i18nc("@info:tooltip", "Save all modified images"));
     d->mSaveAllButton->setIcon(QIcon::fromTheme("document-save-all"));
     connect(d->mSaveAllButton, &QToolButton::clicked, this, &SaveBar::requestSaveAll);
 
