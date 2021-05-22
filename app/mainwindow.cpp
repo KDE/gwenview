@@ -46,6 +46,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KActionCategory>
 #include <KActionCollection>
 #include <KFileItem>
+#include <KHamburgerMenu>
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KMessageWidget>
@@ -215,6 +216,7 @@ struct MainWindow::Private
 #ifdef KIPI_FOUND
     KIPIExportAction* mKIPIExportAction;
 #endif
+    KHamburgerMenu* mHamburgerMenu;
 
     SortedDirModel* mDirModel;
     DocumentOnlyProxyModel* mThumbnailBarModel;
@@ -569,6 +571,53 @@ struct MainWindow::Private
         auto alignWithSideBarWidgetAction = new AlignWithSideBarWidgetAction();
         alignWithSideBarWidgetAction->setSideBar(mSideBar);
         actionCollection->addAction("align_with_sidebar", alignWithSideBarWidgetAction);
+
+        mHamburgerMenu = KStandardAction::hamburgerMenu(nullptr, nullptr, actionCollection);
+        mHamburgerMenu->setShowMenuBarAction(mShowMenuBarAction);
+        mHamburgerMenu->setMenuBar(q->menuBar());
+        connect(mHamburgerMenu, &KHamburgerMenu::aboutToShowMenu, q, [this](){
+            this->updateHamburgerMenu();
+            // Immediately disconnect. We only need to run this once, but on demand.
+            // NOTE: The nullptr at the end disconnects all connections between
+            // q and mHamburgerMenu's aboutToShowMenu signal.
+            disconnect(mHamburgerMenu, &KHamburgerMenu::aboutToShowMenu, q, nullptr);
+        });
+    }
+
+    void updateHamburgerMenu()
+    {
+        KActionCollection* actionCollection = q->actionCollection();
+        QMenu *menu = new QMenu;
+        menu->addAction(actionCollection->action(KStandardAction::name(KStandardAction::Open)));
+        menu->addAction(actionCollection->action(KStandardAction::name(KStandardAction::OpenRecent)));
+        menu->addAction(actionCollection->action(KStandardAction::name(KStandardAction::Save)));
+        menu->addAction(actionCollection->action(KStandardAction::name(KStandardAction::SaveAs)));
+        menu->addAction(actionCollection->action(KStandardAction::name(KStandardAction::Print)));
+        menu->addSeparator();
+        menu->addAction(actionCollection->action(KStandardAction::name(KStandardAction::Copy)));
+        menu->addAction(actionCollection->action(QStringLiteral("file_trash")));
+        menu->addSeparator();
+        menu->addAction(mBrowseAction);
+        menu->addAction(mViewAction);
+        menu->addAction(actionCollection->action(QStringLiteral("sort_by")));
+        menu->addAction(mFullScreenAction);
+        menu->addAction(mToggleSlideShowAction);
+        menu->addSeparator();
+#ifdef KF5Purpose_FOUND
+        menu->addMenu(mShareMenu);
+#endif
+#ifdef KIPI_FOUND
+        QMenu *pluginsMenu = static_cast<QMenu*>(q->guiFactory()->container("plugins", q));
+        if (pluginsMenu) {
+            menu->addMenu(pluginsMenu);
+        }
+#endif
+        QMenu *configureMenu = new QMenu(i18nc("@title:menu submenu for actions that open configuration dialogs", "Configure"));
+        configureMenu->addAction(actionCollection->action(QStringLiteral("options_configure_keybinding")));
+        configureMenu->addAction(actionCollection->action(QStringLiteral("options_configure_toolbars")));
+        configureMenu->addAction(actionCollection->action(QStringLiteral("options_configure")));
+        menu->addMenu(configureMenu);
+        mHamburgerMenu->setMenu(menu);
     }
 
     void setupUndoActions()
@@ -1630,7 +1679,8 @@ void MainWindow::configureShortcuts()
 void MainWindow::toggleMenuBar()
 {
     if (!d->mFullScreenAction->isChecked()) {
-        if (!d->mShowMenuBarAction->isChecked()) {
+        if (!d->mShowMenuBarAction->isChecked()
+            && (!toolBar()->isVisible() || !toolBar()->actions().contains(d->mHamburgerMenu))) {
             const QString accel = d->mShowMenuBarAction->shortcut().toString();
             KMessageBox::information(this, i18n("This will hide the menu bar completely."
                                                 " You can show it again by typing %1.", accel),

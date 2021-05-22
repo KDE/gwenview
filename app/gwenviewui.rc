@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE gui SYSTEM "kpartgui.dtd">
-<gui name="gwenview" version="62">
+<gui name="gwenview" version="63">
 
 <MenuBar>
     <Menu name="file" >
@@ -106,6 +106,7 @@
     <Action name="share" />
     <Spacer/>
     <Action name="fullscreen" />
+    <Action name="hamburger_menu"/>
 </ToolBar>
 <ActionProperties scheme="Default">
     <Action priority="0" name="fullscreen"/>
