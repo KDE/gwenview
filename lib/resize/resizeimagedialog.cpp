@@ -22,14 +22,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "resizeimagedialog.h"
 
 // Qt
+#include <QBuffer>
 #include <QDialogButtonBox>
+#include <QFileInfo>
 #include <QPushButton>
+#include <QTimer>
 
 // KF
+#include <KFormat>
 #include <KGuiItem>
 #include <KLocalizedString>
 
 // Local
+#include <lib/gwenviewconfig.h>
 #include <ui_resizeimagewidget.h>
 
 namespace Gwenview
@@ -67,11 +72,23 @@ ResizeImageDialog::ResizeImageDialog(QWidget *parent)
     setWindowTitle(content->windowTitle());
     d->mWidthSpinBox->setFocus();
 
+    d->mEstimatedSizeLabel->setToolTip(i18nc("@action",
+                                             "Assuming that the image format won't be changed and\nfor lossy images using the "
+                                             "value set in 'Lossy image save quality'."));
+
     connect(d->mWidthSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &ResizeImageDialog::slotWidthChanged);
     connect(d->mHeightSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &ResizeImageDialog::slotHeightChanged);
     connect(d->mWidthPercentSpinBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &ResizeImageDialog::slotWidthPercentChanged);
     connect(d->mHeightPercentSpinBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &ResizeImageDialog::slotHeightPercentChanged);
+    connect(d->mWidthSpinBox, &QSpinBox::editingFinished, this, &ResizeImageDialog::slotCalculateImageSize);
+    connect(d->mHeightSpinBox, &QSpinBox::editingFinished, this, &ResizeImageDialog::slotCalculateImageSize);
+    connect(d->mWidthPercentSpinBox, &QSpinBox::editingFinished, this, &ResizeImageDialog::slotCalculateImageSize);
+    connect(d->mHeightPercentSpinBox, &QSpinBox::editingFinished, this, &ResizeImageDialog::slotCalculateImageSize);
     connect(d->mKeepAspectCheckBox, &QCheckBox::toggled, this, &ResizeImageDialog::slotKeepAspectChanged);
+
+    QTimer *timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, QOverload<>::of(&ResizeImageDialog::slotCalculateImageSize));
+    timer->start(2000);
 }
 
 ResizeImageDialog::~ResizeImageDialog()
@@ -88,6 +105,16 @@ void ResizeImageDialog::setOriginalSize(const QSize &size)
     d->mHeightSpinBox->setValue(size.height());
 }
 
+void ResizeImageDialog::setCurrentImageUrl(QUrl imageUrl)
+{
+    mCurrentImageUrl = imageUrl;
+
+    // mCurrentSize->setText has to be set after the mCurrentImageUrl has been set, otherwise it's -1
+    QFileInfo fileInfo(mCurrentImageUrl.toLocalFile());
+    d->mCurrentSize->setText(KFormat().formatByteSize(fileInfo.size()));
+    mValueChanged = false;
+}
+
 QSize ResizeImageDialog::size() const
 {
     return QSize(d->mWidthSpinBox->value(), d->mHeightSpinBox->value());
@@ -95,6 +122,7 @@ QSize ResizeImageDialog::size() const
 
 void ResizeImageDialog::slotWidthChanged(int width)
 {
+    mValueChanged = true;
     // Update width percentage to match width, only if this was a manual adjustment
     if (!d->mUpdateFromSizeOrPercentage && !d->mUpdateFromRatio) {
         d->mUpdateFromSizeOrPercentage = true;
@@ -114,6 +142,7 @@ void ResizeImageDialog::slotWidthChanged(int width)
 
 void ResizeImageDialog::slotHeightChanged(int height)
 {
+    mValueChanged = true;
     // Update height percentage to match height, only if this was a manual adjustment
     if (!d->mUpdateFromSizeOrPercentage && !d->mUpdateFromRatio) {
         d->mUpdateFromSizeOrPercentage = true;
@@ -133,6 +162,7 @@ void ResizeImageDialog::slotHeightChanged(int height)
 
 void ResizeImageDialog::slotWidthPercentChanged(double widthPercent)
 {
+    mValueChanged = true;
     // Update width to match width percentage, only if this was a manual adjustment
     if (!d->mUpdateFromSizeOrPercentage && !d->mUpdateFromRatio) {
         d->mUpdateFromSizeOrPercentage = true;
@@ -152,6 +182,7 @@ void ResizeImageDialog::slotWidthPercentChanged(double widthPercent)
 
 void ResizeImageDialog::slotHeightPercentChanged(double heightPercent)
 {
+    mValueChanged = true;
     // Update height to match height percentage, only if this was a manual adjustment
     if (!d->mUpdateFromSizeOrPercentage && !d->mUpdateFromRatio) {
         d->mUpdateFromSizeOrPercentage = true;
@@ -177,6 +208,51 @@ void ResizeImageDialog::slotKeepAspectChanged(bool value)
         slotWidthPercentChanged(d->mWidthPercentSpinBox->value());
         d->mUpdateFromSizeOrPercentage = false;
     }
+}
+
+void ResizeImageDialog::slotCalculateImageSize()
+{
+    qint64 size = calculateEstimatedImageSize();
+    if (size == -1) {
+        return;
+    } else if (size == -2) {
+        d->mEstimatedSize->setText(i18n("error"));
+    } else {
+        d->mEstimatedSize->setText(KFormat().formatByteSize(size));
+    }
+}
+
+qint64 ResizeImageDialog::calculateEstimatedImageSize()
+{
+    if (mValueChanged) {
+        QImage image(mCurrentImageUrl.toLocalFile());
+        if (image.isNull()) {
+            return -2;
+        }
+
+        QByteArray ba;
+        QBuffer buffer(&ba);
+        QFileInfo fileInfo(mCurrentImageUrl.toLocalFile());
+        QString suffix = fileInfo.suffix();
+
+        buffer.open(QIODevice::ReadWrite);
+        image = image.scaled(size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+
+        if (QString::compare(suffix, "jpg", Qt::CaseInsensitive) == 0 || QString::compare(suffix, "jpeg", Qt::CaseInsensitive) == 0
+            || QString::compare(suffix, "avif", Qt::CaseInsensitive) == 0 || QString::compare(suffix, "heic", Qt::CaseInsensitive) == 0
+            || QString::compare(suffix, "webp", Qt::CaseInsensitive) == 0) {
+            image.save(&buffer, suffix.toStdString().c_str(), GwenviewConfig::jPEGQuality());
+        } else {
+            image.save(&buffer, suffix.toStdString().c_str());
+        }
+
+        qint64 size = buffer.size();
+        buffer.close();
+
+        mValueChanged = false;
+        return size;
+    }
+    return -1;
 }
 
 } // namespace

@@ -231,6 +231,7 @@ void ImageOpsContextManagerItem::resizeImage()
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->setModal(true);
     dialog->setOriginalSize(doc->size());
+    dialog->setCurrentImageUrl(doc->url());
     connect(dialog, &QDialog::accepted, this, [this, dialog]() {
         applyImageOperation(new ResizeImageOperation(dialog->size()));
     });

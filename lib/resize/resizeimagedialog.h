@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QDialog>
+#include <QUrl>
 
 // KF
 
@@ -41,6 +42,7 @@ public:
     ~ResizeImageDialog() override;
 
     void setOriginalSize(const QSize &);
+    void setCurrentImageUrl(QUrl);
     QSize size() const;
 
 private Q_SLOTS:
@@ -49,9 +51,14 @@ private Q_SLOTS:
     void slotWidthPercentChanged(double);
     void slotHeightPercentChanged(double);
     void slotKeepAspectChanged(bool);
+    void slotCalculateImageSize();
+    qint64 calculateEstimatedImageSize();
 
 private:
     ResizeImageDialogPrivate *const d;
+    QUrl mCurrentImageUrl;
+
+    bool mValueChanged = false;
 };
 
 } // namespace
