@@ -39,7 +39,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "zoomslider.h"
 #include "signalblocker.h"
 #include "statusbartoolbutton.h"
-#include "intcombobox/intcombobox.h"
+#include "zoomcombobox/zoomcombobox.h"
 
 namespace Gwenview
 {
@@ -83,7 +83,7 @@ struct ZoomWidgetPrivate
     ZoomWidget* q;
 
     ZoomSlider* mZoomSlider;
-    IntComboBox* mZoomComboBox;
+    ZoomComboBox* mZoomComboBox;
     QAction* mZoomToFitAction;
     QAction* mActualSizeAction;
     QAction* mZoomToFillAction;
@@ -91,9 +91,9 @@ struct ZoomWidgetPrivate
     bool mZoomUpdatedBySlider = false;
     bool mZoomUpdatedByComboBox = false;
 
-    qreal mZoom = 1.0;
-    qreal mMinimumZoom = 0.0625;
-    qreal mMaximumZoom = 16.0;
+    qreal mZoom = -1;
+    qreal mMinimumZoom = -1;
+    qreal mMaximumZoom = -1;
 };
 
 ZoomWidget::ZoomWidget(QWidget* parent)
@@ -105,17 +105,16 @@ ZoomWidget::ZoomWidget(QWidget* parent)
 
     d->mZoomSlider = new ZoomSlider;
     d->mZoomSlider->setMinimumWidth(150);
-    d->mZoomSlider->slider()->setRange(sliderValueForZoom(d->mMinimumZoom),
-                                       sliderValueForZoom(d->mMaximumZoom));
+//     d->mZoomSlider->slider()->setRange(sliderValueForZoom(d->mMinimumZoom),
+//                                        sliderValueForZoom(d->mMaximumZoom));
     d->mZoomSlider->slider()->setSingleStep(int(PRECISION));
     d->mZoomSlider->slider()->setPageStep(3 * int(PRECISION));
     connect(d->mZoomSlider->slider(), &QAbstractSlider::actionTriggered,
             this, &ZoomWidget::setZoomFromSlider);
 
-    d->mZoomComboBox = new IntComboBox(this);
-    d->mZoomComboBox->setRange(comboBoxValueForZoom(d->mMinimumZoom),
-                               comboBoxValueForZoom(d->mMaximumZoom));
-    d->mZoomComboBox->setSuffix(locale().percent());
+    d->mZoomComboBox = new ZoomComboBox(this);
+//     d->mZoomComboBox->setRange(comboBoxValueForZoom(d->mMinimumZoom),
+//                                comboBoxValueForZoom(d->mMaximumZoom));
 
     // Layout
     QHBoxLayout* layout = new QHBoxLayout(this);
@@ -124,13 +123,14 @@ ZoomWidget::ZoomWidget(QWidget* parent)
     layout->addWidget(d->mZoomSlider);
     layout->addWidget(d->mZoomComboBox);
 
-    connect(d->mZoomComboBox->lineEdit(), &QLineEdit::editingFinished,
+    connect(d->mZoomComboBox->lineEdit(), &QLineEdit::textEdited,
             this, &ZoomWidget::setZoomFromComboBox);
     connect(d->mZoomComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this](int index){
-        if (index >= 0 && index < d->mZoomComboBox->actions().length()) {
+        if (index > -1 && index < d->mZoomComboBox->actions().length()) {
             auto action = d->mZoomComboBox->actions().at(index);
-            action->trigger();
-            d->mZoomComboBox->setCurrentText(action->iconText());
+            qDebug() << action->isChecked();
+            action->setChecked(false);
+            action->setChecked(true);
         }
     });
 }
@@ -145,10 +145,6 @@ void ZoomWidget::setActions(QAction* zoomToFitAction, QAction* actualSizeAction,
     d->mZoomToFitAction = zoomToFitAction;
     d->mZoomToFillAction = zoomToFillAction;
     d->mActualSizeAction = actualSizeAction;
-    d->mZoomComboBox->addActions({zoomToFitAction, zoomToFillAction, actualSizeAction});
-    d->mZoomComboBox->addItem(zoomToFitAction->iconText());
-    d->mZoomComboBox->addItem(zoomToFillAction->iconText());
-    d->mZoomComboBox->addItem(actualSizeAction->iconText());
 
     d->mZoomSlider->setZoomInAction(zoomInAction);
     d->mZoomSlider->setZoomOutAction(zoomOutAction);
@@ -158,6 +154,11 @@ void ZoomWidget::setActions(QAction* zoomToFitAction, QAction* actualSizeAction,
     actionGroup->addAction(d->mZoomToFillAction);
     actionGroup->addAction(d->mActualSizeAction);
     actionGroup->setExclusive(true);
+
+    d->mZoomComboBox->addActions(actionGroup->actions());
+    d->mZoomComboBox->addItem(zoomToFitAction->iconText());
+    d->mZoomComboBox->addItem(zoomToFillAction->iconText());
+    d->mZoomComboBox->addItem(actualSizeAction->iconText());
 }
 
 void ZoomWidget::setZoom(qreal zoom)
@@ -168,23 +169,14 @@ void ZoomWidget::setZoom(qreal zoom)
 
     d->mZoom = zoom;
 
-    if (!d->mZoomUpdatedByComboBox) {
-        d->mZoomComboBox->setValue(comboBoxValueForZoom(zoom));
-    }
-
     // Don't change slider value if we come here because the slider change,
     // avoids choppy sliding scroll.
     if (!d->mZoomUpdatedBySlider) {
-//         QSlider* slider = d->mZoomSlider->slider();
-//         const QSignalBlocker blocker(slider);
-//         int value = sliderValueForZoom(zoom);
-// 
-//         if (value < slider->minimum()) {
-//             // It is possible that we are called *before* setMinimumZoom() as
-//             // been called. In this case, define the minimum ourself.
-//             d->mZoomSlider->setMinimum(value);
-//         }
         d->mZoomSlider->setValue(sliderValueForZoom(zoom));
+    }
+
+    if (!d->mZoomUpdatedByComboBox) {
+        d->mZoomComboBox->setValue(comboBoxValueForZoom(zoom));
     }
 
     if(d->mZoomUpdatedByComboBox || d->mZoomUpdatedBySlider) {
@@ -204,7 +196,7 @@ void ZoomWidget::setZoomFromSlider()
 void ZoomWidget::setZoomFromComboBox()
 {
     d->mZoomUpdatedByComboBox = true;
-    d->mZoomComboBox->setValue(d->mZoomComboBox->cleanText());
+    d->mZoomComboBox->setCurrentText(d->mZoomComboBox->currentText());
     setZoom(zoomForComboBoxValue(d->mZoomComboBox->value()));
     d->mZoomUpdatedByComboBox = false;
 }
@@ -215,8 +207,11 @@ void ZoomWidget::setMinimumZoom(qreal minimumZoom)
         return;
     }
     d->mMinimumZoom = minimumZoom;
-    d->mZoomComboBox->setMinimum(comboBoxValueForZoom(minimumZoom));
     d->mZoomSlider->setMinimum(sliderValueForZoom(minimumZoom));
+    d->mZoomComboBox->setMinimum(comboBoxValueForZoom(minimumZoom));
+    if (minimumZoom > d->mZoom) {
+        setZoom(minimumZoom);
+    }
 }
 
 void ZoomWidget::setMaximumZoom(qreal maximumZoom)
@@ -225,8 +220,11 @@ void ZoomWidget::setMaximumZoom(qreal maximumZoom)
         return;
     }
     d->mMaximumZoom = maximumZoom;
-    d->mZoomComboBox->setMaximum(comboBoxValueForZoom(maximumZoom));
     d->mZoomSlider->setMaximum(sliderValueForZoom(maximumZoom));
+    d->mZoomComboBox->setMaximum(comboBoxValueForZoom(maximumZoom));
+    if (maximumZoom < d->mZoom) {
+        setZoom(maximumZoom);
+    }
 }
 
 } // namespace
