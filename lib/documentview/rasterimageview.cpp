@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/paintutils.h>
 #include "gwenview_lib_debug.h"
 #include "alphabackgrounditem.h"
+#include "rasterimageitem.h"
 
 // KF
 
@@ -38,46 +39,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QPointer>
 #include <QApplication>
 
+#include <QCryptographicHash>
+#include <QColorSpace>
 
 namespace Gwenview
 {
-
-/*
- * This is effectively QGraphicsPixmapItem that draws the document's QImage
- * directly rather than going through a QPixmap intermediary. This avoids
- * duplicating the image contents and the extra memory usage that comes from
- * that.
- */
-class RasterImageItem : public QGraphicsItem
-{
-public:
-    RasterImageItem(RasterImageView* parent)
-        : QGraphicsItem(parent)
-        , mParentView(parent)
-    {
-
-    }
-
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/) override
-    {
-        auto document = mParentView->document();
-
-        // We want nearest neighbour when zooming in since that provides the most
-        // accurate representation of pixels, but when zooming out it will actually
-        // not look very nice, so use smoothing when zooming out.
-        painter->setRenderHint(QPainter::SmoothPixmapTransform, mParentView->zoom() < 1.0);
-
-        painter->drawImage(QPointF{0, 0}, document->image());
-    }
-
-    QRectF boundingRect() const override
-    {
-        return QRectF{QPointF{0, 0}, mParentView->documentSize()};
-    }
-
-    RasterImageView* mParentView;
-};
-
 /*
  * We need the tools to be painted on top of the image. However, since we are
  * using RasterImageItem as a child of this item, the image gets painted on
@@ -118,75 +84,10 @@ struct RasterImageViewPrivate
 
     RasterImageView* q;
 
-    QGraphicsItem* mImageItem;
+    RasterImageItem* mImageItem;
     ToolPainter* mToolItem = nullptr;
 
-    cmsUInt32Number mRenderingIntent = INTENT_PERCEPTUAL;
-
     QPointer<AbstractRasterImageViewTool> mTool;
-
-    bool mApplyDisplayTransform = true; // Can be set to false if there is no need or no way to apply color profile
-    cmsHTRANSFORM mDisplayTransform = nullptr;
-
-    void updateDisplayTransform(QImage::Format format)
-    {
-        GV_RETURN_IF_FAIL(format != QImage::Format_Invalid);
-        mApplyDisplayTransform = false;
-        if (mDisplayTransform) {
-            cmsDeleteTransform(mDisplayTransform);
-        }
-        mDisplayTransform = nullptr;
-
-        Cms::Profile::Ptr profile = q->document()->cmsProfile();
-        if (!profile) {
-            // The assumption that something unmarked is *probably* sRGB is better than failing to apply any transform when one
-            // has a wide-gamut screen.
-            profile = Cms::Profile::getSRgbProfile();
-        }
-        Cms::Profile::Ptr monitorProfile = Cms::Profile::getMonitorProfile();
-        if (!monitorProfile) {
-            qCWarning(GWENVIEW_LIB_LOG) << "Could not get monitor color profile";
-            return;
-        }
-
-        cmsUInt32Number cmsFormat = 0;
-        switch (format) {
-        case QImage::Format_RGB32:
-        case QImage::Format_ARGB32:
-            cmsFormat = TYPE_BGRA_8;
-            break;
-        case QImage::Format_Grayscale8:
-            cmsFormat = TYPE_GRAY_8;
-            break;
-        default:
-            qCWarning(GWENVIEW_LIB_LOG) << "Gwenview can only apply color profile on RGB32 or ARGB32 images";
-            return;
-        }
-
-        mDisplayTransform = cmsCreateTransform(profile->handle(), cmsFormat,
-                                               monitorProfile->handle(), cmsFormat,
-                                               mRenderingIntent, cmsFLAGS_BLACKPOINTCOMPENSATION);
-        mApplyDisplayTransform = true;
-    }
-
-    void applyImageTransform()
-    {
-        if (!q->document()) {
-            return;
-        }
-
-        auto image = q->document()->image();
-
-        if (mApplyDisplayTransform) {
-            updateDisplayTransform(image.format());
-            if (mDisplayTransform) {
-                quint8 *bytes = const_cast<quint8*>(image.bits());
-                cmsDoTransform(mDisplayTransform, bytes, bytes, image.width() * image.height());
-            }
-        }
-
-        q->update();
-    }
 
     void startAnimationIfNecessary()
     {
@@ -211,8 +112,6 @@ RasterImageView::RasterImageView(QGraphicsItem* parent)
     // Clip this item so we only render the visible part of the image when
     // zoomed or when viewing a large image.
     setFlag(QGraphicsItem::ItemClipsChildrenToShape);
-
-    setCacheMode(QGraphicsItem::DeviceCoordinateCache);
 }
 
 RasterImageView::~RasterImageView()
@@ -220,25 +119,18 @@ RasterImageView::~RasterImageView()
     if (d->mTool) {
         d->mTool.data()->toolDeactivated();
     }
-    if (d->mDisplayTransform) {
-        cmsDeleteTransform(d->mDisplayTransform);
-    }
 
     delete d;
 }
 
 void RasterImageView::setRenderingIntent(const RenderingIntent::Enum& renderingIntent)
 {
-    if (d->mRenderingIntent != renderingIntent) {
-        d->mRenderingIntent = renderingIntent;
-        d->applyImageTransform();
-    }
+    d->mImageItem->setRenderingIntent(renderingIntent);
 }
 
 void RasterImageView::resetMonitorICC()
 {
-    d->mApplyDisplayTransform = true;
-    d->applyImageTransform();
+    update();
 }
 
 void RasterImageView::loadFromDocument()
@@ -252,6 +144,8 @@ void RasterImageView::loadFromDocument()
             this, &RasterImageView::slotDocumentMetaInfoLoaded);
     connect(doc.data(), &Document::isAnimatedUpdated,
             this, &RasterImageView::slotDocumentIsAnimatedUpdated);
+    connect(doc.data(), &Document::imageRectUpdated,
+            this, [this]() { d->mImageItem->updateCache(); });
 
     const Document::LoadingState state = doc->loadingState();
     if (state == Document::MetaInfoLoaded || state == Document::Loaded) {
@@ -276,8 +170,6 @@ void RasterImageView::finishSetDocument()
 {
     GV_RETURN_IF_FAIL(document()->size().isValid());
 
-    d->applyImageTransform();
-
     if (zoomToFit()) {
         // Force the update otherwise if computeZoomToFit() returns 1, setZoom()
         // will think zoom has not changed and won't update the image
@@ -292,6 +184,8 @@ void RasterImageView::finishSetDocument()
     d->startAnimationIfNecessary();
     update();
 
+    d->mImageItem->updateCache();
+
     backgroundItem()->setVisible(true);
 
     Q_EMIT completed();
@@ -304,7 +198,6 @@ void RasterImageView::slotDocumentIsAnimatedUpdated()
 
 void RasterImageView::onZoomChanged()
 {
-    d->mImageItem->setScale(zoom() / devicePixelRatio());
     d->adjustItemPosition();
 }
 

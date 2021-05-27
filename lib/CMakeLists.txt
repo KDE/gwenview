@@ -73,6 +73,7 @@ set(gwenviewlib_SRCS
     documentview/messageviewadapter.cpp
     documentview/rasterimageview.cpp
     documentview/rasterimageviewadapter.cpp
+    documentview/rasterimageitem.cpp
     documentview/svgviewadapter.cpp
     documentview/videoviewadapter.cpp
     about.cpp
