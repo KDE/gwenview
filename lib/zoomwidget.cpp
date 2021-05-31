@@ -109,8 +109,6 @@ ZoomWidget::ZoomWidget(QWidget* parent)
 //                                        sliderValueForZoom(d->mMaximumZoom));
     d->mZoomSlider->slider()->setSingleStep(int(PRECISION));
     d->mZoomSlider->slider()->setPageStep(3 * int(PRECISION));
-    connect(d->mZoomSlider->slider(), &QAbstractSlider::actionTriggered,
-            this, &ZoomWidget::setZoomFromSlider);
 
     d->mZoomComboBox = new ZoomComboBox(this);
 //     d->mZoomComboBox->setRange(comboBoxValueForZoom(d->mMinimumZoom),
@@ -123,14 +121,13 @@ ZoomWidget::ZoomWidget(QWidget* parent)
     layout->addWidget(d->mZoomSlider);
     layout->addWidget(d->mZoomComboBox);
 
-    connect(d->mZoomComboBox->lineEdit(), &QLineEdit::textEdited,
-            this, &ZoomWidget::setZoomFromComboBox);
+    connect(d->mZoomSlider->slider(), &QAbstractSlider::actionTriggered,
+            this, &ZoomWidget::setZoomFromSlider);
+    connect(d->mZoomComboBox, &ZoomComboBox::editTextChanged, this, &ZoomWidget::setZoomFromComboBox);
     connect(d->mZoomComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this](int index){
         if (index > -1 && index < d->mZoomComboBox->actions().length()) {
             auto action = d->mZoomComboBox->actions().at(index);
-            qDebug() << action->isChecked();
-            action->setChecked(false);
-            action->setChecked(true);
+            action->trigger();
         }
     });
 }
@@ -149,7 +146,7 @@ void ZoomWidget::setActions(QAction* zoomToFitAction, QAction* actualSizeAction,
     d->mZoomSlider->setZoomInAction(zoomInAction);
     d->mZoomSlider->setZoomOutAction(zoomOutAction);
 
-    QActionGroup *actionGroup = new QActionGroup(d->q);
+    QActionGroup *actionGroup = new QActionGroup(d->mZoomComboBox);
     actionGroup->addAction(d->mZoomToFitAction);
     actionGroup->addAction(d->mZoomToFillAction);
     actionGroup->addAction(d->mActualSizeAction);
