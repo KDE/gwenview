@@ -123,7 +123,7 @@ ZoomWidget::ZoomWidget(QWidget* parent)
 
     connect(d->mZoomSlider->slider(), &QAbstractSlider::actionTriggered,
             this, &ZoomWidget::setZoomFromSlider);
-    connect(d->mZoomComboBox, &ZoomComboBox::editTextChanged, this, &ZoomWidget::setZoomFromComboBox);
+    connect(d->mZoomComboBox, &ZoomComboBox::valueChanged, this, &ZoomWidget::setZoomFromComboBox);
     connect(d->mZoomComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this](int index){
         if (index > -1 && index < d->mZoomComboBox->actions().length()) {
             auto action = d->mZoomComboBox->actions().at(index);
@@ -193,7 +193,6 @@ void ZoomWidget::setZoomFromSlider()
 void ZoomWidget::setZoomFromComboBox()
 {
     d->mZoomUpdatedByComboBox = true;
-    d->mZoomComboBox->setCurrentText(d->mZoomComboBox->currentText());
     setZoom(zoomForComboBoxValue(d->mZoomComboBox->value()));
     d->mZoomUpdatedByComboBox = false;
 }

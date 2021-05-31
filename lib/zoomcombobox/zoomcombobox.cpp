@@ -64,47 +64,48 @@ QString ZoomValidator::percentSymbol() const
 
 QValidator::State ZoomValidator::validate(QString& input, int& pos) const
 {
-    if (input.isEmpty()) {
-        return QValidator::Invalid;
-    }
-    if (m_zoomComboBoxPrivate->currentTextIndex() > -1) {
+    if (m_zoomComboBoxPrivate->getTextIndex(input) > -1) {
         return QValidator::Acceptable;
     }
-    input = input.trimmed();
-    const QString groupSeparator = locale().groupSeparator();
-    const QString percent = locale().percent();
-    input.remove(groupSeparator);
-    input.remove(percent);
+    QString temp = input.trimmed();
+    temp.remove(m_groupSeparator);
+    temp.remove(m_percentSymbol);
     bool ok;
-    int value = locale().toInt(input, &ok);
+    int value = locale().toInt(temp, &ok);
+    qDebug() << input << temp << value;
     if (!ok || value < m_minimum || value > m_maximum) {
-        return QValidator::Invalid;
-    }
-    if (!input.endsWith(percent)) {
         return QValidator::Intermediate;
     }
+
     input = locale().toString(value);
     pos = qMin(pos, input.length());
-    input.append(percent);
-    return QValidator::Acceptable;//m_zoomComboBox->validate(input, pos);
+    input.append(m_percentSymbol);
+    return QValidator::Acceptable;
 }
 
 void ZoomValidator::fixup(QString& input) const
 {
     input = input.trimmed();
+    if (m_zoomComboBoxPrivate->getTextIndex(input) > -1) {
+        return;
+    }
+    int value = qBound(m_minimum, locale().toInt(input), m_maximum);
+    input = locale().toString(value);
     if(!input.endsWith(m_percentSymbol)) {
         input.append(m_percentSymbol);
     }
-//     m_zoomComboBox->fixup(input);
 }
 
 bool ZoomValidator::event(QEvent* event)
 {
     if (event->type() == QEvent::LocaleChange) {
+        const QString groupSeparator = locale().groupSeparator();
         const QString percentSymbol = locale().percent();
-        if (m_percentSymbol != percentSymbol) {
+        if (m_groupSeparator != groupSeparator
+            || m_percentSymbol != percentSymbol) {
+            m_groupSeparator = groupSeparator;
             m_percentSymbol = percentSymbol;
-            Q_EMIT percentSymbolChanged(m_percentSymbol);
+            Q_EMIT changed();
         }
     }
     return QValidator::event(event);
@@ -121,28 +122,31 @@ void Gwenview::ZoomComboBoxPrivate::updateLineEdit()
 {
     Q_Q(ZoomComboBox);
     // only run this for custom input
-    if (currentTextIndex() > -1) {
+    if (getTextIndex() > -1) {
         return;
     }
     const QSignalBlocker blocker(lineEdit);
     int cursorPosition = lineEdit->cursorPosition();
     const int selectionLength = lineEdit->selectionLength();
     QString text = q->textFromValue(value);
-    QValidator::State state = validator->validate(text, cursorPosition);
-    if (state == QValidator::Acceptable) {
-        validator->fixup(text);
-        q->setEditText(text);
-        if (selectionLength > 0) {
-            lineEdit->setSelection(cursorPosition, selectionLength);
-        }
-        q->update();
-    }
+//     QValidator::State state = validator->validate(text, cursorPosition);
+//     if (state == QValidator::Acceptable) {
+//         validator->fixup(text);
+//         q->setEditText(text);
+//         if (selectionLength > 0) {
+//             lineEdit->setSelection(cursorPosition, selectionLength);
+//         }
+//         q->update();
+//     }
 }
 
-int Gwenview::ZoomComboBoxPrivate::currentTextIndex() const
+int Gwenview::ZoomComboBoxPrivate::getTextIndex(const QString &text) const
 {
     Q_Q(const ZoomComboBox);
-    return q->findText(q->currentText(), Qt::MatchFixedString);
+    if(text.isEmpty()) {
+        return q->findText(q->currentText(), Qt::MatchFixedString);
+    }
+    return q->findText(text, Qt::MatchFixedString);
 }
 
 
@@ -173,9 +177,9 @@ ZoomComboBox::ZoomComboBox(QWidget* parent)
 //     connect(d->lineEdit, &QLineEdit::textChanged, this, [this, d](const QString &text){
 //         d->updateLineEdit();
 //     });
-//     connect(d->lineEdit, &QLineEdit::textEdited, this, [this, d](const QString &text){
-//         setCurrentText(text);
-//     });
+    connect(d->lineEdit, &QLineEdit::textEdited, this, [this, d](const QString &text){
+        setCurrentText(text);
+    });
 }
 
 ZoomComboBox::~ZoomComboBox() noexcept
@@ -243,7 +247,7 @@ void ZoomComboBox::setCurrentText(const QString& text)
     if (text.isEmpty()) {
         return;
     }
-    const int i = d->currentTextIndex();
+    const int i = d->getTextIndex();
     if (i > -1) {
         setCurrentIndex(i);
     } else if (lineEdit()->hasAcceptableInput()) {
@@ -257,9 +261,9 @@ int ZoomComboBox::valueFromText(const QString& text) const
     QString copy = text;
     int pos = lineEdit()->cursorPosition();
     qDebug() << "before validate()" << copy;
-    qDebug() << "index in validate()" << d->currentTextIndex();
-    QValidator::State state = d->validator->validate(copy, pos);
-    qDebug() << "after validate()" << copy << state;
+    qDebug() << "index in validate()" << d->getTextIndex();
+//     QValidator::State state = d->validator->validate(copy, pos);
+//     qDebug() << "after validate()" << copy << state;
     return locale().toInt(copy);
 }
 
@@ -267,7 +271,7 @@ QString ZoomComboBox::textFromValue(const int value) const
 {
     Q_D(const ZoomComboBox);
     QString text = locale().toString(value);
-    d->validator->fixup(text);
+//     d->validator->fixup(text);
     return text;
 }
 

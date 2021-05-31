@@ -21,7 +21,7 @@ public:
     void updateCursorPosition();
     void updateText();
     void updateLineEdit();
-    int currentTextIndex() const;
+    int getTextIndex(const QString &text = QStringLiteral("")) const;
 
     int value = 0;
     QLineEdit *lineEdit = nullptr;
@@ -60,7 +60,8 @@ protected:
 private:
     int m_minimum;
     int m_maximum;
-    // Using QString because QLocale::percent() will return a QString in Qt 6.
+    // Using QString because these will return a QString in Qt 6.
+    QString m_groupSeparator;
     QString m_percentSymbol;
     ZoomComboBox *m_zoomComboBox;
     ZoomComboBoxPrivate *m_zoomComboBoxPrivate;
