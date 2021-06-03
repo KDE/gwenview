@@ -45,6 +45,7 @@ private Q_SLOTS:
     void updateViewBackgroundFrame();
 
 private:
+    InvisibleButtonGroup* mWrapNavigationBehaviorGroup = nullptr;
     InvisibleButtonGroup* mAlphaBackgroundModeGroup = nullptr;
     InvisibleButtonGroup* mWheelBehaviorGroup = nullptr;
     InvisibleButtonGroup* mAnimationMethodGroup = nullptr;

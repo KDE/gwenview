@@ -444,10 +444,22 @@ void AbstractImageView::keyPressEvent(QKeyEvent* event)
 
         switch (event->key()) {
         case Qt::Key_Left:
+            if (QApplication::isRightToLeft()) {
+                emit nextImageRequested();
+            } else {
+                emit previousImageRequested();
+            }
+            break;
         case Qt::Key_Up:
             emit previousImageRequested();
             break;
         case Qt::Key_Right:
+            if (QApplication::isRightToLeft()) {
+                emit previousImageRequested();
+            } else {
+                emit nextImageRequested();
+            }
+            break;
         case Qt::Key_Down:
             emit nextImageRequested();
             break;

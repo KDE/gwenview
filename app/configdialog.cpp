@@ -53,6 +53,12 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     // General
     widget = setupPage(mGeneralConfigPage);
 
+    mWrapNavigationBehaviorGroup = new InvisibleButtonGroup(widget);
+    mWrapNavigationBehaviorGroup->setObjectName(QStringLiteral("kcfg_NavigationEndNotification"));
+    mWrapNavigationBehaviorGroup->addButton(mGeneralConfigPage.neverShowWrapNoticeRadioButton, int(SlideShow::NavigationEndNotification::NeverWarn));
+    mWrapNavigationBehaviorGroup->addButton(mGeneralConfigPage.wrapNoticeOnSlideshowRadioButton, int(SlideShow::NavigationEndNotification::WarnOnSlideshow));
+    mWrapNavigationBehaviorGroup->addButton(mGeneralConfigPage.alwaysShowWrapNoticeRadioButton, int(SlideShow::NavigationEndNotification::AlwaysWarn));
+
     mFullScreenBackgroundGroup = new InvisibleButtonGroup(widget);
     mFullScreenBackgroundGroup->setObjectName(QStringLiteral("kcfg_FullScreenBackground"));
     mFullScreenBackgroundGroup->addButton(mGeneralConfigPage.fullscreenBackgroundBlackRadioButton, int(FullScreenBackground::Black));

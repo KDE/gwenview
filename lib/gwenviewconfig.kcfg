@@ -6,6 +6,7 @@
                         http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
     <include>lib/sorting.h</include>
     <include>lib/zoommode.h</include>
+    <include>lib/slideshow.h</include>
     <include>lib/thumbnailactions.h</include>
     <include>lib/mousewheelbehavior.h</include>
     <include>lib/fullscreenbackground.h</include>
@@ -213,6 +214,15 @@
         
         <entry name="NoMonitorICC" type="Bool">
             <default>true</default>
+        </entry>
+
+        <entry name="NavigationEndNotification" type="Enum">
+            <choices name="Gwenview::SlideShow::NavigationEndNotification">
+                <choice name="NavigationEndNotification::NeverWarn"/>
+                <choice name="NavigationEndNotification::WarnOnSlideshow"/>
+                <choice name="NavigationEndNotification::AlwaysWarn"/>
+            </choices>
+            <default>Gwenview::SlideShow::NavigationEndNotification::WarnOnSlideshow</default>
         </entry>
     </group>
 

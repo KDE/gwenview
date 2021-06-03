@@ -39,6 +39,13 @@ class GWENVIEWLIB_EXPORT SlideShow : public QObject
 {
     Q_OBJECT
 public:
+    enum NavigationEndNotification {
+        NeverWarn,
+        WarnOnSlideshow,
+        AlwaysWarn
+    };
+    Q_ENUM(NavigationEndNotification)
+
     explicit SlideShow(QObject* parent);
     ~SlideShow() override;
 

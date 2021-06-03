@@ -807,13 +807,28 @@ void ThumbnailView::dropEvent(QDropEvent* event)
 
 void ThumbnailView::keyPressEvent(QKeyEvent* event)
 {
-    QListView::keyPressEvent(event);
     if (event->key() == Qt::Key_Return) {
         const QModelIndex index = selectionModel()->currentIndex();
         if (index.isValid() && selectionModel()->selectedIndexes().count() == 1) {
             emit indexActivated(index);
         }
+    } else if (event->key() == Qt::Key_Left && event->modifiers() == Qt::NoModifier) {
+        if (flow() == LeftToRight && QApplication::isRightToLeft()) {
+            setCurrentIndex(moveCursor(QAbstractItemView::MoveRight, Qt::NoModifier));
+        } else {
+            setCurrentIndex(moveCursor(QAbstractItemView::MoveLeft, Qt::NoModifier));
+        }
+        return;
+    } else if (event->key() == Qt::Key_Right && event->modifiers() == Qt::NoModifier) {
+        if (flow() == LeftToRight && QApplication::isRightToLeft()) {
+            setCurrentIndex(moveCursor(QAbstractItemView::MoveLeft, Qt::NoModifier));
+        } else {
+            setCurrentIndex(moveCursor(QAbstractItemView::MoveRight, Qt::NoModifier));
+        }
+        return;
     }
+
+    QListView::keyPressEvent(event);
 }
 
 void ThumbnailView::resizeEvent(QResizeEvent* event)

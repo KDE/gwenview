@@ -21,6 +21,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "config-gwenview.h"
 
 // Qt
+#include <QApplication>
 #include <QCheckBox>
 #include <QItemSelectionModel>
 #include <QShortcut>
@@ -204,6 +205,7 @@ struct ViewMainPagePrivate
         // Show the thumbnail bar after setting the parent to avoid recreating
         // the native window and to avoid QTBUG-87345.
         mThumbnailBar->setVisible(GwenviewConfig::thumbnailBarIsVisible());
+        mThumbnailBar->installEventFilter(q);
 
         QVBoxLayout* viewMainPageLayout = new QVBoxLayout(q);
         viewMainPageLayout->setContentsMargins(0, 0, 0, 0);
@@ -788,7 +790,33 @@ void ViewMainPage::slotEnterPressed()
 
 bool ViewMainPage::eventFilter(QObject* watched, QEvent* event)
 {
-    if (event->type() == QEvent::ShortcutOverride) {
+    if (watched == d->mThumbnailBar && event->type() == QEvent::KeyPress) {
+        QKeyEvent *ke = static_cast<QKeyEvent*>(event);
+        switch (ke->key()) {
+        case Qt::Key_Left:
+            if (QApplication::isRightToLeft()) {
+                emit nextImageRequested();
+            } else {
+                emit previousImageRequested();
+            }
+            return true;
+        case Qt::Key_Up:
+            emit previousImageRequested();
+            return true;
+        case Qt::Key_Right:
+            if (QApplication::isRightToLeft()) {
+                emit previousImageRequested();
+            } else {
+                emit nextImageRequested();
+            }
+            return true;
+        case Qt::Key_Down:
+            emit nextImageRequested();
+            return true;
+        default:
+            break;
+        }
+    } else if (event->type() == QEvent::ShortcutOverride) {
         const int key = static_cast<QKeyEvent*>(event)->key();
         if (key == Qt::Key_Space || key == Qt::Key_Escape) {
             const DocumentView* view = d->currentView();

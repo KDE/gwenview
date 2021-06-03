@@ -45,6 +45,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KF
 #include <KActionCategory>
 #include <KActionCollection>
+#include <KDirModel>
 #include <KFileItem>
 #include <KHamburgerMenu>
 #include <KLocalizedString>
@@ -209,6 +210,7 @@ struct MainWindow::Private
     QAction * mToggleSlideShowAction;
     KToggleAction* mShowMenuBarAction;
     KToggleAction* mShowStatusBarAction;
+    QPointer<HudButtonBox> hudButtonBox;
 #ifdef KF5Purpose_FOUND
     Purpose::Menu* mShareMenu;
     KToolBarPopupAction* mShareAction;
@@ -1414,12 +1416,58 @@ void MainWindow::slotDirListerCompleted()
 
 void MainWindow::goToPrevious()
 {
-    d->goTo(-1);
+    const QModelIndex currentIndex = d->mContextManager->selectionModel()->currentIndex();
+    QModelIndex previousIndex = d->mDirModel->index(currentIndex.row(), 0);
+
+    KFileItem fileItem;
+
+    // Besides images also folders and archives are listed as well,
+    // we need to skip them in the slideshow
+    do {
+        previousIndex = d->mDirModel->index(previousIndex.row() - 1, 0);
+        fileItem = previousIndex.data(KDirModel::FileItemRole).value<KFileItem>();
+    } while (previousIndex.isValid()
+             && !MimeTypeUtils::imageMimeTypes().contains(fileItem.currentMimeType().name()));
+
+    if (!previousIndex.isValid()
+        && (GwenviewConfig::navigationEndNotification() == SlideShow::NeverWarn
+            || (GwenviewConfig::navigationEndNotification() == SlideShow::WarnOnSlideshow
+                && !d->mSlideShow->isRunning() && !d->mFullScreenAction->isChecked())
+            || d->hudButtonBox)) {
+        d->goToLastDocument();
+    } else if (!previousIndex.isValid()) {
+        showFirstDocumentReached();
+    } else {
+        d->goTo(-1);
+    }
 }
 
 void MainWindow::goToNext()
 {
-    d->goTo(1);
+    const QModelIndex currentIndex = d->mContextManager->selectionModel()->currentIndex();
+    QModelIndex nextIndex = d->mDirModel->index(currentIndex.row(), 0);
+
+    KFileItem fileItem;
+
+    // Besides images also folders and archives are listed as well,
+    // we need to skip them in the slideshow
+    do {
+        nextIndex = d->mDirModel->index(nextIndex.row() + 1, 0);
+        fileItem = nextIndex.data(KDirModel::FileItemRole).value<KFileItem>();
+    } while (nextIndex.isValid()
+             && !MimeTypeUtils::imageMimeTypes().contains(fileItem.currentMimeType().name()));
+
+    if (!nextIndex.isValid()
+        && (GwenviewConfig::navigationEndNotification() == SlideShow::NeverWarn
+            || (GwenviewConfig::navigationEndNotification() == SlideShow::WarnOnSlideshow
+                && !d->mSlideShow->isRunning() && !d->mFullScreenAction->isChecked())
+            || d->hudButtonBox)) {
+        d->goToFirstDocument();
+    } else if (!nextIndex.isValid()) {
+        showLastDocumentReached();
+    } else {
+        d->goTo(1);
+    }
 }
 
 void MainWindow::goToFirst()
@@ -1455,11 +1503,11 @@ void MainWindow::updatePreviousNextActions()
         int row = currentIndex.row();
         QModelIndex prevIndex = d->mDirModel->index(row - 1, 0);
         QModelIndex nextIndex = d->mDirModel->index(row + 1, 0);
-        hasPrevious = prevIndex.isValid() && !d->indexIsDirOrArchive(prevIndex);
-        hasNext = nextIndex.isValid() && !d->indexIsDirOrArchive(nextIndex);
+        hasPrevious = GwenviewConfig::navigationEndNotification() != SlideShow::AlwaysWarn || (prevIndex.isValid() && !d->indexIsDirOrArchive(prevIndex));
+        hasNext     = GwenviewConfig::navigationEndNotification() != SlideShow::AlwaysWarn || (nextIndex.isValid() && !d->indexIsDirOrArchive(nextIndex));
     } else {
         hasPrevious = false;
-        hasNext = false;
+        hasNext     = false;
     }
 
     d->mGoToPreviousAction->setEnabled(hasPrevious);
@@ -1891,30 +1939,30 @@ void MainWindow::readProperties(const KConfigGroup& group)
 
 void MainWindow::showFirstDocumentReached()
 {
-    if (d->mCurrentMainPageId != ViewMainPageId) {
+    if (d->hudButtonBox || d->mCurrentMainPageId != ViewMainPageId) {
         return;
     }
-    HudButtonBox* dlg = new HudButtonBox;
-    dlg->setText(i18n("You reached the first document, what do you want to do?"));
-    dlg->addButton(i18n("Stay There"));
-    dlg->addAction(d->mGoToLastAction, i18n("Go to the Last Document"));
-    dlg->addAction(d->mBrowseAction, i18n("Go Back to the Document List"));
-    dlg->addCountDown(15000);
-    d->mViewMainPage->showMessageWidget(dlg, Qt::AlignCenter);
+    d->hudButtonBox = new HudButtonBox;
+    d->hudButtonBox->setText(i18n("You reached the first document, what do you want to do?"));
+    d->hudButtonBox->addButton(i18n("Stay There"));
+    d->hudButtonBox->addAction(d->mGoToLastAction, i18n("Go to the Last Document"));
+    d->hudButtonBox->addAction(d->mBrowseAction, i18n("Go Back to the Document List"));
+    d->hudButtonBox->addCountDown(15000);
+    d->mViewMainPage->showMessageWidget(d->hudButtonBox, Qt::AlignCenter);
 }
 
 void MainWindow::showLastDocumentReached()
 {
-    if (d->mCurrentMainPageId != ViewMainPageId) {
+    if (d->hudButtonBox || d->mCurrentMainPageId != ViewMainPageId) {
         return;
     }
-    HudButtonBox* dlg = new HudButtonBox;
-    dlg->setText(i18n("You reached the last document, what do you want to do?"));
-    dlg->addButton(i18n("Stay There"));
-    dlg->addAction(d->mGoToFirstAction, i18n("Go to the First Document"));
-    dlg->addAction(d->mBrowseAction, i18n("Go Back to the Document List"));
-    dlg->addCountDown(15000);
-    d->mViewMainPage->showMessageWidget(dlg, Qt::AlignCenter);
+    d->hudButtonBox = new HudButtonBox;
+    d->hudButtonBox->setText(i18n("You reached the last document, what do you want to do?"));
+    d->hudButtonBox->addButton(i18n("Stay There"));
+    d->hudButtonBox->addAction(d->mGoToFirstAction, i18n("Go to the First Document"));
+    d->hudButtonBox->addAction(d->mBrowseAction, i18n("Go Back to the Document List"));
+    d->hudButtonBox->addCountDown(15000);
+    d->mViewMainPage->showMessageWidget(d->hudButtonBox, Qt::AlignCenter);
 }
 
 void MainWindow::replaceLocation()
