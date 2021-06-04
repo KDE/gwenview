@@ -35,10 +35,10 @@ public:
     int maximum() const;
     void setMaximum(const int maximum);
 
-    void setCurrentText(const QString &text);
+//     void setCurrentText(const QString &text);
 
     /// Gets an integer value from text.
-    int valueFromText(const QString &text) const;
+    int valueFromText(const QString &text, bool *ok = nullptr) const;
 
     /// Gets appropriately decorated text from an integer value.
     QString textFromValue(const int value) const;

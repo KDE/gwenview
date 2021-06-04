@@ -126,8 +126,10 @@ ZoomWidget::ZoomWidget(QWidget* parent)
     connect(d->mZoomComboBox, &ZoomComboBox::valueChanged, this, &ZoomWidget::setZoomFromComboBox);
     connect(d->mZoomComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this](int index){
         if (index > -1 && index < d->mZoomComboBox->actions().length()) {
+            d->mZoomUpdatedByComboBox = true;
             auto action = d->mZoomComboBox->actions().at(index);
             action->trigger();
+            d->mZoomUpdatedByComboBox = false;
         }
     });
 }

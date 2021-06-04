@@ -9,31 +9,12 @@
 
 namespace Gwenview {
 
-class ZoomValidator;
-
-class ZoomComboBoxPrivate
-{
-    Q_DECLARE_PUBLIC(ZoomComboBox)
-public:
-    ZoomComboBoxPrivate(ZoomComboBox *q);
-    ZoomComboBox *const q_ptr;
-
-    void updateCursorPosition();
-    void updateText();
-    void updateLineEdit();
-    int getTextIndex(const QString &text = QStringLiteral("")) const;
-
-    int value = 0;
-    QLineEdit *lineEdit = nullptr;
-    ZoomValidator *validator = nullptr;
-};
-
 class ZoomValidator : public QValidator
 {
     Q_OBJECT
-    Q_PROPERTY(int minimum READ minimum WRITE setMinimum NOTIFY minimumChanged)
-    Q_PROPERTY(int maximum READ maximum WRITE setMaximum NOTIFY maximumChanged)
-    Q_PROPERTY(QString percentSymbol READ percentSymbol NOTIFY percentSymbolChanged)
+    Q_PROPERTY(int minimum READ minimum WRITE setMinimum NOTIFY changed)
+    Q_PROPERTY(int maximum READ maximum WRITE setMaximum NOTIFY changed)
+    Q_PROPERTY(QString percentSymbol READ percentSymbol NOTIFY changed)
 public:
     explicit ZoomValidator(int minimum, int maximum, ZoomComboBox *q, ZoomComboBoxPrivate *d, QWidget* parent = nullptr);
     ~ZoomValidator() override;
@@ -49,11 +30,6 @@ public:
     QValidator::State validate(QString &input, int &pos) const override;
     void fixup(QString &input) const override;
 
-Q_SIGNALS:
-    void minimumChanged(int minimum);
-    void maximumChanged(int maximum);
-    void percentSymbolChanged(const QString& percentSymbol);
-
 protected:
     bool event(QEvent *event) override;
 
@@ -66,6 +42,25 @@ private:
     ZoomComboBox *m_zoomComboBox;
     ZoomComboBoxPrivate *m_zoomComboBoxPrivate;
     Q_DISABLE_COPY(ZoomValidator)
+};
+
+class ZoomComboBoxPrivate
+{
+    Q_DECLARE_PUBLIC(ZoomComboBox)
+public:
+    ZoomComboBoxPrivate(ZoomComboBox *q);
+    ZoomComboBox *const q_ptr;
+
+    void updateCursorPosition();
+    void updateTextFromValue(const int value);
+    void updateValueFromText(const QString &text);
+    void updateLineEdit();
+    int getTextIndex(const QString &text) const;
+
+    int value = 0;
+    QLineEdit *lineEdit = nullptr;
+    ZoomValidator *validator = nullptr;
+    int textIndex = -1;
 };
 
 }
