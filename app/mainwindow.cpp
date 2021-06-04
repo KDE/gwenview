@@ -36,6 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QMenuBar>
 #include <QUrl>
 #include <QMouseEvent>
+
 #ifdef Q_OS_OSX
 #include <QFileOpenEvent>
 #endif
@@ -63,6 +64,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KToolBarPopupAction>
 #include <KXMLGUIFactory>
 #include <KDirLister>
+#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
+#include "lib/semanticinfo/semanticinfodirmodel.h"
+#endif
 #ifdef KF5Purpose_FOUND
 #include <PurposeWidgets/Menu>
 #include <Purpose/AlternativesModel>
@@ -106,6 +110,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/mimetypeutils.h>
 #ifdef HAVE_QTDBUS
 #include <lib/mpris2/mpris2service.h>
+#include <QDBusPendingReply>
 #endif
 #include <lib/print/printhelper.h>
 #include <lib/slideshow.h>
@@ -1076,6 +1081,57 @@ void MainWindow::setInitialUrl(const QUrl &_url)
 {
     Q_ASSERT(_url.isValid());
     QUrl url = UrlUtils::fixUserEnteredUrl(_url);
+#ifdef HAVE_QTDBUS
+    QDBusMessage message = QDBusMessage::createMethodCall(QStringLiteral("org.freedesktop.FileManager1"),
+                                                          QStringLiteral("/org/freedesktop/FileManager1"),
+                                                          QStringLiteral("org.freedesktop.FileManager1"),
+                                                          QStringLiteral("SortOrderForUrl"));
+
+    QUrl dirUrl = url;
+    dirUrl = dirUrl.adjusted(QUrl::RemoveFilename);
+    message << dirUrl.toString();
+
+    QDBusPendingCall call = QDBusConnection::sessionBus().asyncCall(message);
+    QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(call, this);
+
+    connect(watcher, &QDBusPendingCallWatcher::finished,
+            this, [this](QDBusPendingCallWatcher *call) {
+                QDBusPendingReply<QString, QString> reply = *call;
+                // Fail silently
+                if (!reply.isError()) {
+                    QString columnName = reply.argumentAt<0>();
+                    QString orderName = reply.argumentAt<1>();
+
+                    int column = -1;
+                    int sortRole = -1;
+                    Qt::SortOrder order = orderName == QStringLiteral("descending") ? Qt::DescendingOrder : Qt::AscendingOrder;
+
+                    if (columnName == "text") {
+                        column = KDirModel::Name;
+                        sortRole = Qt::DisplayRole;
+                    } else if (columnName == "modificationtime") {
+                        column = KDirModel::ModifiedTime;
+                        sortRole = Qt::DisplayRole;
+                    } else if (columnName == "size") {
+                        column = KDirModel::Size;
+                        sortRole = Qt::DisplayRole;
+#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
+                    } else if (columnName == "rating") {
+                        column = KDirModel::Name;
+                        sortRole = SemanticInfoDirModel::RatingRole;
+#endif
+                    }
+
+                    if (column >= 0 && sortRole >= 0) {
+                        d->mDirModel->setSortRole(sortRole);
+                        d->mDirModel->sort(column, order);
+                    }
+                    
+                }
+                call->deleteLater();
+            });
+#endif
+
     if (UrlUtils::urlIsDirectory(url)) {
         d->mBrowseAction->trigger();
         openDirUrl(url);
