@@ -36,8 +36,8 @@
 </copyright>
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2021-05-12</date>
-<releaseinfo>Applications 21.08</releaseinfo>
+<date>2021-06-04</date>
+<releaseinfo>KDE Gear 21.08</releaseinfo>
 <abstract>
 <para>&gwenview; is an image and video viewer.</para>
 </abstract>
@@ -357,7 +357,7 @@ pictures to your guests.
 </para>
 </sect2>
 
-<sect2>
+<sect2 id="fullscreen">
 <title>View Mode Full Screen</title>
 <para>The full screen View Mode shows a slideshow of your images. Access Full Screen
 Mode by clicking on the button that appears when you move the mouse over the
@@ -709,6 +709,14 @@ Link an image.</para></listitem>
                 <listitem>
                     <para>Check the <guilabel>Show videos</guilabel> checkbox to allow &gwenview; to show videos among the images.</para>
                     <para>Uncheck the <guilabel>Automatically play</guilabel> checkbox to disable autoplaying videos. This prevents video from automatically starting when browsing.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><guilabel>Notify after reaching the last image</guilabel></term>
+                <listitem>
+                    <para>Select the <guilabel>Never</guilabel> item to allow &gwenview; looping through the list of images without additional notifications.</para>
+                    <para>Select the <guilabel>Only during slideshows</guilabel> item if notifications about reaching the list end should be shown only in <link linkend="fullscreen">the slideshow mode</link>.</para>
+                    <para>Select the <guilabel>Always</guilabel> item if you want to receive the notifications unconditionally.</para>
                 </listitem>
             </varlistentry>
             <varlistentry>
