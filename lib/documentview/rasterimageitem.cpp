@@ -185,8 +185,25 @@ void RasterImageItem::updateDisplayTransform(QImage::Format format)
     case QImage::Format_Grayscale8:
         cmsFormat = TYPE_GRAY_8;
         break;
+    case QImage::Format_RGB888:
+        cmsFormat = TYPE_RGB_8;
+        break;
+    case QImage::Format_RGBX8888:
+    case QImage::Format_RGBA8888:
+        cmsFormat = TYPE_RGBA_8;
+        break;
+    case QImage::Format_Grayscale16:
+        cmsFormat = TYPE_GRAY_16;
+        break;
+    case QImage::Format_RGBA64:
+    case QImage::Format_RGBX64:
+        cmsFormat = TYPE_RGBA_16;
+        break;
+    case QImage::Format_BGR888:
+        cmsFormat = TYPE_BGR_8;
+        break;
     default:
-        qCWarning(GWENVIEW_LIB_LOG) << "Gwenview can only apply color profile on RGB32 or ARGB32 images";
+        qCWarning(GWENVIEW_LIB_LOG) << "Gwenview cannot apply color profile on" << format << "images";
         return;
     }
 
