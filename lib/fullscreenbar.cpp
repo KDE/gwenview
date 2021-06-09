@@ -35,6 +35,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // KF
 #include <KLocalizedString>
+#include <chrono>
+
+using namespace std::chrono_literals;
 
 // Local
 
@@ -174,7 +177,7 @@ void FullScreenBar::setActivated(bool activated)
         // Delay installation of event filter because switching to fullscreen
         // cause a few window adjustments, which seems to generate unwanted
         // mouse events, which cause the bar to slide in.
-        QTimer::singleShot(500, this, &FullScreenBar::delayedInstallEventFilter);
+        QTimer::singleShot(500ms, this, &FullScreenBar::delayedInstallEventFilter);
 
         adjustSize();
 
