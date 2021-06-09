@@ -39,7 +39,7 @@ namespace ArchiveUtils
 
 bool fileItemIsArchive(const KFileItem& item)
 {
-    QMimeType mimeType = item.determineMimeType();
+    const QMimeType mimeType = item.determineMimeType();
     if (!mimeType.isValid()) {
         qCWarning(GWENVIEW_LIB_LOG) << "determineMimeType() returned a null pointer";
         return false;

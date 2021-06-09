@@ -58,7 +58,7 @@ public:
     }
 
 private:
-    AbstractImageOperation* mOp;
+    AbstractImageOperation* const mOp;
 };
 
 struct AbstractImageOperationPrivate
