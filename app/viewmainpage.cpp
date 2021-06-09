@@ -640,11 +640,7 @@ void ViewMainPage::openUrls(const QList<QUrl>& allUrls, const QUrl &currentUrl)
 {
     DocumentView::Setup setup;
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
     QSet<QUrl> urls(allUrls.begin(), allUrls.end());
-#else
-    QSet<QUrl> urls = allUrls.toSet();
-#endif
     d->mCompareMode = urls.count() > 1;
 
     typedef QMap<QUrl, DocumentView*> ViewForUrlMap;

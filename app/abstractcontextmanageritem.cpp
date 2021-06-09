@@ -27,8 +27,8 @@ namespace Gwenview
 
 struct AbstractContextManagerItemPrivate
 {
-    ContextManager* mContextManager;
-    QWidget* mWidget;
+    ContextManager* mContextManager = nullptr;
+    QWidget* mWidget = nullptr;
 };
 
 AbstractContextManagerItem::AbstractContextManagerItem(ContextManager* manager)

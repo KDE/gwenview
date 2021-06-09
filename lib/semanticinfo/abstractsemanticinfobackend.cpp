@@ -38,12 +38,10 @@ TagSet::TagSet()
 TagSet::TagSet(const QSet<SemanticInfoTag>& set)
 : QSet<QString>(set) {}
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
 TagSet::TagSet(const QList<SemanticInfoTag>& list)
 : QSet(list.begin(), list.end())
 {
 }
-#endif
 
 QVariant TagSet::toVariant() const
 {
@@ -59,11 +57,7 @@ TagSet TagSet::fromVariant(const QVariant& variant)
 
 TagSet TagSet::fromList(const QList<SemanticInfoTag>& list)
 {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
     return TagSet(list);
-#else
-    return QSet<SemanticInfoTag>::fromList(lst);
-#endif
 }
 
 AbstractSemanticInfoBackEnd::AbstractSemanticInfoBackEnd(QObject* parent)

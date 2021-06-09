@@ -121,11 +121,7 @@ void PlaceTreeModelTest::testListPlaces()
 {
     PlaceTreeModel model(nullptr);
 
-#if KIO_VERSION >= QT_VERSION_CHECK(5, 45, 0)
     QCOMPARE(model.rowCount(), 8);
-#else
-    QCOMPARE(model.rowCount(), 10);
-#endif
 
     QModelIndex index;
     index = model.index(0, 0);

@@ -69,7 +69,7 @@ protected:
     {
         QAbstractItemView::dragMoveEvent(event);
 
-        QModelIndex index = indexAt(event->pos());
+        const QModelIndex index = indexAt(event->pos());
 
         // This code has been copied from Dolphin
         // (panels/folders/paneltreeview.cpp)
@@ -148,7 +148,7 @@ void FolderViewContextManagerItem::expandToSelectedUrl()
         setupModel();
     }
 
-    QModelIndex index = findClosestIndex(mExpandingIndex, mUrlToSelect);
+    const QModelIndex index = findClosestIndex(mExpandingIndex, mUrlToSelect);
     if (!index.isValid()) {
         return;
     }
@@ -252,11 +252,7 @@ QModelIndex FolderViewContextManagerItem::findClosestIndex(const QModelIndex& pa
 
     QString relativePath = QDir(url.path()).relativeFilePath(wantedUrl.path());
     QModelIndex lastFoundIndex = index;
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
    const QStringList relativePathList = relativePath.split(QDir::separator(), Qt::SkipEmptyParts);
-#else
-    const QStringList relativePathList = relativePath.split(QDir::separator(), QString::SkipEmptyParts);
-#endif
     for (const QString & pathPart : relativePathList) {
         bool found = false;
         for (int row = 0; row < mModel->rowCount(lastFoundIndex); ++row) {

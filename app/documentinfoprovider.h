@@ -46,7 +46,7 @@ public:
     void thumbnailForDocument(const QUrl &url, ThumbnailGroup::Enum group, QPixmap* outPix, QSize* outFullSize) const override;
 
 private:
-    SortedDirModel* mDirModel;
+    SortedDirModel *const mDirModel;
 };
 
 } // namespace

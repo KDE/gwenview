@@ -35,8 +35,8 @@ namespace Gwenview
 
 DocumentInfoProvider::DocumentInfoProvider(SortedDirModel* model)
 : AbstractDocumentInfoProvider(model)
+, mDirModel(model)
 {
-    mDirModel = model;
     connect(DocumentFactory::instance(), &DocumentFactory::documentBusyStateChanged,
             this, &AbstractDocumentInfoProvider::busyStateChanged);
     connect(DocumentFactory::instance(), &DocumentFactory::documentChanged,
