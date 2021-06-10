@@ -76,7 +76,7 @@ void RasterImageItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* /
     }
 
     const auto dpr = mParentView->devicePixelRatio();
-    const auto zoom = mParentView->zoom() / dpr;
+    const auto zoom = mParentView->zoom();
 
     // This assumes we always have at least a single view of the graphics scene,
     // which should be true when painting a graphics item.
@@ -126,9 +126,11 @@ void RasterImageItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* /
     applyDisplayTransform(image);
 
     const auto destinationRect = QRect{
-        // Ceil the top left corner to avoid pixel alignment issues on higher DPI
-        QPoint{int(std::ceil(imageRect.left() * zoom)), int(std::ceil(imageRect.top() * zoom))},
-        image.size()
+        // Ceil the top left corner to avoid pixel alignment issues on higher DPI because QPoint/QSize/QRect
+        // round instead of flooring when converting from float to int.
+        QPoint{int(std::ceil(imageRect.left() * (zoom / dpr))), int(std::ceil(imageRect.top() * (zoom / dpr)))},
+        // Floor the size, similarly to above.
+        QSize{int(image.size().width() / dpr), int(image.size().height() / dpr)}
     };
 
     painter->drawImage(destinationRect, image);
