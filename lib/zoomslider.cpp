@@ -55,7 +55,7 @@ struct ZoomSliderPrivate
 
 static QToolButton* createZoomButton(const QString &iconName)
 {
-    QToolButton* button = new QToolButton;
+    auto* button = new QToolButton;
     button->setIcon(QIcon::fromTheme(iconName));
     button->setAutoRaise(true);
     button->setAutoRepeat(true);
@@ -74,7 +74,7 @@ ZoomSlider::ZoomSlider(QWidget* parent)
     d->mSlider = new QSlider;
     d->mSlider->setOrientation(Qt::Horizontal);
 
-    QHBoxLayout* layout = new QHBoxLayout(this);
+    auto* layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     layout->addWidget(d->mZoomOutButton);

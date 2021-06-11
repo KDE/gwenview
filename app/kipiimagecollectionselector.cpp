@@ -48,7 +48,7 @@ KIPIImageCollectionSelector::KIPIImageCollectionSelector(KIPIInterface* interfac
     d->mListWidget = new QListWidget;
     const QList<KIPI::ImageCollection> list = interface->allAlbums();
     for (const KIPI::ImageCollection & collection : list) {
-        QListWidgetItem* item = new QListWidgetItem(d->mListWidget);
+        auto* item = new QListWidgetItem(d->mListWidget);
         QString name = collection.name();
         int imageCount = collection.images().size();
         QString title = i18ncp("%1 is collection name, %2 is image count in collection",
@@ -60,7 +60,7 @@ KIPIImageCollectionSelector::KIPIImageCollectionSelector(KIPIInterface* interfac
 
     connect(d->mListWidget, &QListWidget::currentRowChanged, this, &KIPIImageCollectionSelector::selectionChanged);
 
-    QVBoxLayout* layout = new QVBoxLayout(this);
+    auto* layout = new QVBoxLayout(this);
     layout->addWidget(d->mListWidget);
     layout->setContentsMargins(0, 0, 0, 0);
 }

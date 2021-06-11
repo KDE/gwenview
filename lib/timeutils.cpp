@@ -100,7 +100,7 @@ struct CacheItem
             if (exifData.empty()) {
                 return false;
             }
-            Exiv2::ExifData::const_iterator it = findDateTimeKey(exifData);
+            auto it = findDateTimeKey(exifData);
             if (it == exifData.end()) {
                 qCWarning(GWENVIEW_LIB_LOG) << "No date in exif header of" << path;
                 return false;
@@ -125,7 +125,7 @@ struct CacheItem
     }
 };
 
-typedef QHash<QUrl, CacheItem> Cache;
+using Cache = QHash<QUrl, CacheItem>;
 
 QDateTime dateTimeForFileItem(const KFileItem& fileItem, CachePolicy cachePolicy)
 {

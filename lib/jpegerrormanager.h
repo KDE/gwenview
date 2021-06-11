@@ -53,7 +53,7 @@ struct JPEGErrorManager : public jpeg_error_mgr
 
     static void errorExitCallBack(j_common_ptr cinfo)
     {
-        JPEGErrorManager* myerr = static_cast<JPEGErrorManager*>(cinfo->err);
+        auto* myerr = static_cast<JPEGErrorManager*>(cinfo->err);
         char buffer[JMSG_LENGTH_MAX];
         (*cinfo->err->format_message)(cinfo, buffer);
         qCWarning(GWENVIEW_LIB_LOG) << buffer ;

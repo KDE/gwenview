@@ -79,7 +79,7 @@ HudWidget::~HudWidget()
 
 void HudWidget::init(QWidget* mainWidget, Options options)
 {
-    QGraphicsProxyWidget* proxy = new QGraphicsProxyWidget(this);
+    auto* proxy = new QGraphicsProxyWidget(this);
     proxy->setWidget(mainWidget);
     init(proxy, options);
 }
@@ -90,7 +90,7 @@ void HudWidget::init(QGraphicsWidget* mainWidget, Options options)
         setProperty("opaque", QVariant(true));
     }
 
-    QGraphicsLinearLayout* layout = new QGraphicsLinearLayout(this);
+    auto* layout = new QGraphicsLinearLayout(this);
     layout->setContentsMargins(4, 4, 4, 4);
     d->mMainWidget = mainWidget;
     if (d->mMainWidget) {

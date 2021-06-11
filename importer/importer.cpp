@@ -195,7 +195,7 @@ void Importer::setAutoRenameFormat(const QString& format)
     if (format.isEmpty()) {
         d->mFileNameFormater.reset(nullptr);
     } else {
-        d->mFileNameFormater.reset(new FileNameFormater(format));
+        d->mFileNameFormater = std::make_unique<FileNameFormater>(format);
     }
 }
 
@@ -223,7 +223,7 @@ void Importer::start(const QList<QUrl>& list, const QUrl& destination)
 
 void Importer::slotCopyDone(KJob* _job)
 {
-    KIO::CopyJob* job = static_cast<KIO::CopyJob*>(_job);
+    auto* job = static_cast<KIO::CopyJob*>(_job);
     QUrl url = job->destUrl();
     if (job->error()) {
         // Add document to failed url list and proceed with next one

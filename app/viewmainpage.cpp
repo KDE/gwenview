@@ -162,7 +162,7 @@ struct ViewMainPagePrivate
         labelMargins.setRight(15);
         mDocumentCountLabel->setContentsMargins(labelMargins);
 
-        QHBoxLayout* statusBarContainerLayout = new QHBoxLayout(mStatusBarContainer);
+        auto* statusBarContainerLayout = new QHBoxLayout(mStatusBarContainer);
         // Use toolbar-like margins and spacing
         int margins = q->style()->pixelMetric(QStyle::PM_ToolBarItemMargin)
                     + q->style()->pixelMetric(QStyle::PM_ToolBarFrameWidth);
@@ -180,7 +180,7 @@ struct ViewMainPagePrivate
         //--
         mAdapterContainer = new QWidget;
 
-        QVBoxLayout* adapterContainerLayout = new QVBoxLayout(mAdapterContainer);
+        auto* adapterContainerLayout = new QVBoxLayout(mAdapterContainer);
         adapterContainerLayout->setContentsMargins(0, 0, 0, 0);
         adapterContainerLayout->setSpacing(0);
         mDocumentViewContainer = new DocumentViewContainer;
@@ -190,7 +190,7 @@ struct ViewMainPagePrivate
         adapterContainerLayout->addWidget(mToolContainer);
         //--
         mThumbnailBar = new ThumbnailBarView;
-        ThumbnailBarItemDelegate* delegate = new ThumbnailBarItemDelegate(mThumbnailBar);
+        auto* delegate = new ThumbnailBarItemDelegate(mThumbnailBar);
         mThumbnailBar->setItemDelegate(delegate);
         mThumbnailBar->setSelectionMode(QAbstractItemView::ExtendedSelection);
         //--
@@ -207,7 +207,7 @@ struct ViewMainPagePrivate
         mThumbnailBar->setVisible(GwenviewConfig::thumbnailBarIsVisible());
         mThumbnailBar->installEventFilter(q);
 
-        QVBoxLayout* viewMainPageLayout = new QVBoxLayout(q);
+        auto* viewMainPageLayout = new QVBoxLayout(q);
         viewMainPageLayout->setContentsMargins(0, 0, 0, 0);
         viewMainPageLayout->setSpacing(0);
         viewMainPageLayout->addWidget(mThumbnailSplitter);
@@ -417,12 +417,12 @@ ViewMainPage::ViewMainPage(QWidget* parent, SlideShow* slideShow, KActionCollect
     d->mGvCore = gvCore;
     d->mCompareMode = false;
 
-    QShortcut* enterKeyShortcut = new QShortcut(Qt::Key_Return, this);
+    auto* enterKeyShortcut = new QShortcut(Qt::Key_Return, this);
     connect(enterKeyShortcut, &QShortcut::activated, this, &ViewMainPage::slotEnterPressed);
 
     d->setupWidgets();
 
-    KActionCategory* view = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface", "View"), actionCollection);
+    auto* view = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface", "View"), actionCollection);
 
     d->mToggleThumbnailBarAction = view->add<KToggleAction>(QStringLiteral("toggle_thumbnailbar"));
     d->mToggleThumbnailBarAction->setText(i18n("Thumbnail Bar"));
@@ -643,7 +643,7 @@ void ViewMainPage::openUrls(const QList<QUrl>& allUrls, const QUrl &currentUrl)
     QSet<QUrl> urls(allUrls.begin(), allUrls.end());
     d->mCompareMode = urls.count() > 1;
 
-    typedef QMap<QUrl, DocumentView*> ViewForUrlMap;
+    using ViewForUrlMap = QMap<QUrl, DocumentView *>;
     ViewForUrlMap viewForUrlMap;
 
     if (!d->mDocumentViews.isEmpty()) {
@@ -787,7 +787,7 @@ void ViewMainPage::slotEnterPressed()
 bool ViewMainPage::eventFilter(QObject* watched, QEvent* event)
 {
     if (watched == d->mThumbnailBar && event->type() == QEvent::KeyPress) {
-        QKeyEvent *ke = static_cast<QKeyEvent*>(event);
+        auto *ke = static_cast<QKeyEvent*>(event);
         switch (ke->key()) {
         case Qt::Key_Left:
             if (QApplication::isRightToLeft()) {

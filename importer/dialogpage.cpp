@@ -140,7 +140,7 @@ void DialogPage::setText(const QString& text)
 int DialogPage::addButton(const KGuiItem& item)
 {
     int id = d->mButtons.size();
-    QPushButton* button = new QPushButton;
+    auto* button = new QPushButton;
     KGuiItem::assign(button, item);
     button->setFixedHeight(button->sizeHint().height() * 2);
 

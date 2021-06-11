@@ -182,7 +182,7 @@ Kind urlKind(const QUrl &url)
 
 QMimeData* selectionMimeData(const KFileItemList& selectedFiles, MimeTarget mimeTarget)
 {
-    QMimeData* mimeData = new QMimeData;
+    auto* mimeData = new QMimeData;
 
     if (selectedFiles.count() == 1) {
 

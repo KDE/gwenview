@@ -65,7 +65,7 @@ struct SemanticInfoDialog : public QDialog, public Ui_SemanticInfoDialog
     : QDialog(parent)
     {
         setLayout(new QVBoxLayout);
-        QWidget* mainWidget = new QWidget;
+        auto* mainWidget = new QWidget;
         layout()->addWidget(mainWidget);
         setupUi(mainWidget);
         mainWidget->layout()->setContentsMargins(0, 0, 0, 0);
@@ -174,7 +174,7 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
         q->setWidget(mGroup);
         EventWatcher::install(mGroup, QEvent::Show, q, SLOT(update()));
 
-        QWidget* container = new QWidget;
+        auto* container = new QWidget;
         setupUi(container);
         container->layout()->setContentsMargins(0, 0, 0, 0);
         mGroup->addWidget(container);
@@ -190,7 +190,7 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
 
     void setupActions()
     {
-        KActionCategory* edit = new KActionCategory(i18nc("@title actions category", "Edit"), mActionCollection);
+        auto* edit = new KActionCategory(i18nc("@title actions category", "Edit"), mActionCollection);
 
         mEditTagsAction = edit->addAction("edit_tags");
         mEditTagsAction->setText(i18nc("@action", "Edit Tags"));
@@ -301,7 +301,7 @@ void SemanticInfoContextManagerItem::update()
     // This hash stores for how many items the tag is present
     // If you have 3 items, and only 2 have the "Holiday" tag,
     // then tagHash["Holiday"] will be 2 at the end of the loop.
-    typedef QHash<QString, int> TagHash;
+    using TagHash = QHash<QString, int>;
     TagHash tagHash;
 
     for (const KFileItem & item : itemList) {

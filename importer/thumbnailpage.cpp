@@ -106,14 +106,14 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
     {
         mRecursiveDirModel = new RecursiveDirModel(q);
 
-        KindProxyModel* kindProxyModel = new KindProxyModel(q);
+        auto* kindProxyModel = new KindProxyModel(q);
         kindProxyModel->setKindFilter(
             MimeTypeUtils::KIND_RASTER_IMAGE
             | MimeTypeUtils::KIND_SVG_IMAGE
             | MimeTypeUtils::KIND_VIDEO);
         kindProxyModel->setSourceModel(mRecursiveDirModel);
 
-        QSortFilterProxyModel *sortModel = new QSortFilterProxyModel(q);
+        auto *sortModel = new QSortFilterProxyModel(q);
         sortModel->setDynamicSortFilter(true);
         sortModel->setSourceModel(kindProxyModel);
         sortModel->sort(0);
@@ -159,7 +159,7 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
         mThumbnailView->setSelectionMode(QAbstractItemView::ExtendedSelection);
         mThumbnailView->setThumbnailViewHelper(new ImporterThumbnailViewHelper(q));
 
-        PreviewItemDelegate* delegate = new PreviewItemDelegate(mThumbnailView);
+        auto* delegate = new PreviewItemDelegate(mThumbnailView);
         delegate->setThumbnailDetails(PreviewItemDelegate::FileNameDetail);
         PreviewItemDelegate::ContextBarActions actions;
         switch (GwenviewConfig::thumbnailActions())
@@ -277,7 +277,7 @@ void ThumbnailPage::setSourceUrl(const QUrl& srcBaseUrl, const QString& iconName
     if (url.isValid()) {
         openUrl(url);
     } else {
-        DocumentDirFinder* finder = new DocumentDirFinder(srcBaseUrl);
+        auto* finder = new DocumentDirFinder(srcBaseUrl);
         connect(finder, &DocumentDirFinder::done,
                 this, &ThumbnailPage::slotDocumentDirFinderDone);
         finder->start();
@@ -415,14 +415,14 @@ void ThumbnailPage::setupSrcUrlTreeView()
         // Already initialized
         return;
     }
-    KDirModel* dirModel = new KDirModel(this);
+    auto* dirModel = new KDirModel(this);
     dirModel->dirLister()->setDirOnlyMode(true);
     dirModel->dirLister()->openUrl(KIO::upUrl(d->mSrcBaseUrl));
 
-    OnlyBaseUrlProxyModel* onlyBaseUrlModel = new OnlyBaseUrlProxyModel(d->mSrcBaseUrl, d->mSrcBaseIcon, d->mSrcBaseName, this);
+    auto* onlyBaseUrlModel = new OnlyBaseUrlProxyModel(d->mSrcBaseUrl, d->mSrcBaseIcon, d->mSrcBaseName, this);
     onlyBaseUrlModel->setSourceModel(dirModel);
 
-    QSortFilterProxyModel* sortModel = new QSortFilterProxyModel(this);
+    auto* sortModel = new QSortFilterProxyModel(this);
     sortModel->setDynamicSortFilter(true);
     sortModel->setSourceModel(onlyBaseUrlModel);
     sortModel->sort(0);

@@ -76,12 +76,12 @@ struct PrintOptionsPagePrivate : public Ui_PrintOptionsPage
             "}")
         );
 
-        QGridLayout* layout = new QGridLayout(mPositionFrame);
+        auto* layout = new QGridLayout(mPositionFrame);
         layout->setContentsMargins(0, 0, 0, 0);
         layout->setSpacing(1);
         for (int row = 0; row < 3; ++row) {
             for (int col = 0; col < 3; ++col) {
-                QToolButton* button = new QToolButton(mPositionFrame);
+                auto* button = new QToolButton(mPositionFrame);
                 button->setFixedSize(40, 40);
                 button->setCheckable(true);
                 layout->addWidget(button, row, col);
@@ -221,7 +221,7 @@ void PrintOptionsPage::saveConfig()
     int position = d->mPositionGroup.checkedId();
     GwenviewConfig::setPrintPosition(position);
 
-    ScaleMode scaleMode = ScaleMode(d->mScaleGroup.checkedId());
+    auto scaleMode = ScaleMode(d->mScaleGroup.checkedId());
     GwenviewConfig::setPrintScaleMode(scaleMode);
 
     d->mConfigDialogManager->updateSettings();

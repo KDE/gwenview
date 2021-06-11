@@ -209,7 +209,7 @@ struct LoadingDocumentImplPrivate
             QByteArray previewData;
 
             // if the image is in format supported by dcraw, fetch its embedded preview
-            mJpegContent.reset(new JpegContent());
+            mJpegContent = std::make_unique<JpegContent>();
 
             // use KDcraw for getting the embedded preview
             // KDcraw functionality cloned locally (temp. solution)
@@ -269,7 +269,7 @@ struct LoadingDocumentImplPrivate
         GV_RETURN_VALUE_IF_FAIL(!mFormat.isEmpty(), false);
 
         if (mFormat == "jpeg" && mExiv2Image.get()) {
-            mJpegContent.reset(new JpegContent());
+            mJpegContent = std::make_unique<JpegContent>();
         }
 
         if (mJpegContent.get()) {

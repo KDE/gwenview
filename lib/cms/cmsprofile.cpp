@@ -168,7 +168,7 @@ Profile::Ptr Profile::loadFromExiv2Image(const Exiv2::Image* image)
 
     const Exiv2::ExifData& exifData = image->exifData();
     Exiv2::ExifKey key("Exif.Image.InterColorProfile");
-    Exiv2::ExifData::const_iterator it = exifData.findKey(key);
+    auto it = exifData.findKey(key);
     if (it == exifData.end()) {
         LOG("No profile found");
         return ptr;

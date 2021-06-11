@@ -40,7 +40,7 @@ struct TagModelPrivate
 
 static QStandardItem* createItem(const SemanticInfoTag& tag, const QString& label, TagModel::AssignmentStatus status)
 {
-    QStandardItem* item = new QStandardItem(label);
+    auto* item = new QStandardItem(label);
     item->setData(tag, TagModel::TagRole);
     item->setData(label.toLower(), TagModel::SortRole);
     item->setData(status, TagModel::AssignmentStatusRole);
@@ -117,7 +117,7 @@ void TagModel::removeTag(const SemanticInfoTag& tag)
 
 TagModel* TagModel::createAllTagsModel(QObject* parent, AbstractSemanticInfoBackEnd* backEnd)
 {
-    TagModel* tagModel = new TagModel(parent);
+    auto* tagModel = new TagModel(parent);
     tagModel->setSemanticInfoBackEnd(backEnd);
     tagModel->setTagSet(backEnd->allTags());
     connect(backEnd, SIGNAL(tagAdded(SemanticInfoTag,QString)),

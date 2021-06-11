@@ -57,7 +57,7 @@ struct SemanticInfoCacheItem
     SemanticInfo mInfo;
 };
 
-typedef QHash<QUrl, SemanticInfoCacheItem> SemanticInfoCache;
+using SemanticInfoCache = QHash<QUrl, SemanticInfoCacheItem>;
 
 struct SemanticInfoDirModelPrivate
 {

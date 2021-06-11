@@ -106,7 +106,7 @@ struct StartMainPagePrivate : public Ui_StartMainPage
     void setupHistoryView(ThumbnailView *view)
     {
         view->setThumbnailViewHelper(new HistoryThumbnailViewHelper(view));
-        PreviewItemDelegate* delegate = new PreviewItemDelegate(view);
+        auto* delegate = new PreviewItemDelegate(view);
         delegate->setContextBarActions(PreviewItemDelegate::NoAction);
         delegate->setTextElideMode(Qt::ElideLeft);
         view->setItemDelegate(delegate);
@@ -204,7 +204,7 @@ StartMainPage::~StartMainPage()
 bool StartMainPage::eventFilter(QObject*, QEvent* event)
 {
     if (event->type() == QEvent::MouseMove) {
-        QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
+        auto* mouseEvent = static_cast<QMouseEvent*>(event);
         if (mouseEvent->source() == Qt::MouseEventSynthesizedByQt) {
             return true;
         }

@@ -69,7 +69,7 @@ const int SHADOW_SIZE = 4;
 struct ThumbnailBarItemDelegatePrivate
 {
     // Key is height * 1000 + width
-    typedef QMap<int, QPixmap> ShadowCache;
+    using ShadowCache = QMap<int, QPixmap>;
     mutable ShadowCache mShadowCache;
 
     ThumbnailBarItemDelegate* q;
@@ -345,7 +345,7 @@ public:
 };
 #endif// WINDOWS_PROXY_STYLE
 
-typedef int (QSize::*QSizeDimension)() const;
+using QSizeDimension = int (QSize::*)() const;
 
 struct ThumbnailBarViewPrivate
 {

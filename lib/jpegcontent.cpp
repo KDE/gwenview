@@ -76,7 +76,7 @@ struct inmem_dest_mgr : public jpeg_destination_mgr
 
 void inmem_init_destination(j_compress_ptr cinfo)
 {
-    inmem_dest_mgr* dest = (inmem_dest_mgr*)(cinfo->dest);
+    auto* dest = (inmem_dest_mgr*)(cinfo->dest);
     if (dest->mOutput->size() == 0) {
         dest->mOutput->resize(INMEM_DST_DELTA);
     }
@@ -86,7 +86,7 @@ void inmem_init_destination(j_compress_ptr cinfo)
 
 boolean inmem_empty_output_buffer(j_compress_ptr cinfo)
 {
-    inmem_dest_mgr* dest = (inmem_dest_mgr*)(cinfo->dest);
+    auto* dest = (inmem_dest_mgr*)(cinfo->dest);
     dest->mOutput->resize(dest->mOutput->size() + INMEM_DST_DELTA);
     dest->next_output_byte = (JOCTET*)(dest->mOutput->data() + dest->mOutput->size() - INMEM_DST_DELTA);
     dest->free_in_buffer = INMEM_DST_DELTA;
@@ -96,7 +96,7 @@ boolean inmem_empty_output_buffer(j_compress_ptr cinfo)
 
 void inmem_term_destination(j_compress_ptr cinfo)
 {
-    inmem_dest_mgr* dest = (inmem_dest_mgr*)(cinfo->dest);
+    auto* dest = (inmem_dest_mgr*)(cinfo->dest);
     int finalSize = dest->next_output_byte - (JOCTET*)(dest->mOutput->data());
     Q_ASSERT(finalSize >= 0);
     dest->mOutput->resize(finalSize);
@@ -136,7 +136,7 @@ struct JpegContent::Private
     void setupInmemDestination(j_compress_ptr cinfo, QByteArray* outputData)
     {
         Q_ASSERT(!cinfo->dest);
-        inmem_dest_mgr* dest = (inmem_dest_mgr*)
+        auto* dest = (inmem_dest_mgr*)
                                (*cinfo->mem->alloc_small)((j_common_ptr) cinfo, JPOOL_PERMANENT,
                                        sizeof(inmem_dest_mgr));
         cinfo->dest = (struct jpeg_destination_mgr*)(dest);
@@ -296,7 +296,7 @@ QByteArray JpegContent::rawData() const
 Orientation JpegContent::orientation() const
 {
     Exiv2::ExifKey key("Exif.Image.Orientation");
-    Exiv2::ExifData::iterator it = d->mExifData.findKey(key);
+    auto it = d->mExifData.findKey(key);
 
     // We do the same checks as in libexiv2's src/crwimage.cpp:
     // https://github.com/Exiv2/exiv2/blob/0d397b95c7b4a10819c0ea0f36fa20943e6a4ea5/src/crwimage.cpp#L1336
@@ -319,7 +319,7 @@ int JpegContent::dotsPerMeterY() const
 int JpegContent::dotsPerMeter(const QString& keyName) const
 {
     Exiv2::ExifKey keyResUnit("Exif.Image.ResolutionUnit");
-    Exiv2::ExifData::iterator it = d->mExifData.findKey(keyResUnit);
+    auto it = d->mExifData.findKey(keyResUnit);
     if (it == d->mExifData.end()) {
         return 0;
     }
@@ -350,7 +350,7 @@ int JpegContent::dotsPerMeter(const QString& keyName) const
 void JpegContent::resetOrientation()
 {
     Exiv2::ExifKey key("Exif.Image.Orientation");
-    Exiv2::ExifData::iterator it = d->mExifData.findKey(key);
+    auto it = d->mExifData.findKey(key);
     if (it == d->mExifData.end()) {
         return;
     }
@@ -402,7 +402,7 @@ struct OrientationInfo
     QTransform matrix;
     JXFORM_CODE jxform;
 };
-typedef QList<OrientationInfo> OrientationInfoList;
+using OrientationInfoList = QList<OrientationInfo>;
 
 static const OrientationInfoList& orientationInfoList()
 {
@@ -575,7 +575,7 @@ QImage JpegContent::thumbnail() const
 #endif
         image.loadFromData(thumbnail.pData_, thumbnail.size_);
 
-        Exiv2::ExifData::iterator it = d->mExifData.findKey(Exiv2::ExifKey("Exif.Canon.ThumbnailImageValidArea"));
+        auto it = d->mExifData.findKey(Exiv2::ExifKey("Exif.Canon.ThumbnailImageValidArea"));
         // ensure ThumbnailImageValidArea actually specifies a rectangle, i.e. there must be 4 coordinates
         if (it != d->mExifData.end() && it->count() == 4) {
             QRect validArea(QPoint(it->toLong(0), it->toLong(2)), QPoint(it->toLong(1), it->toLong(3)));

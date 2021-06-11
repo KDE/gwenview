@@ -34,7 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 
-typedef QHash<QString, QString> Dict;
+using Dict = QHash<QString, QString>;
 
 struct FileNameFormaterPrivate
 {

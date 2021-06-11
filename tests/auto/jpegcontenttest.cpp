@@ -77,7 +77,7 @@ void JpegContentTest::cleanupTestCase()
     QDir::current().remove(CUT_FILE);
 }
 
-typedef QMap<QString, QString> MetaInfoMap;
+using MetaInfoMap = QMap<QString, QString>;
 
 #if 0
 MetaInfoMap getMetaInfo(const QString& path)

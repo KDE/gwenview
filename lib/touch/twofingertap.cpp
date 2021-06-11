@@ -67,7 +67,7 @@ QGestureRecognizer::Result TwoFingerTapRecognizer::recognize(QGesture* state, QO
 
     switch (event->type()) {
     case QEvent::TouchBegin: {
-        QTouchEvent* touchEvent = static_cast<QTouchEvent*>(event);
+        auto* touchEvent = static_cast<QTouchEvent*>(event);
         d->mTouchBeginnTimestamp = touchEvent->timestamp();
         state->setHotSpot(touchEvent->touchPoints().first().screenPos());
         d->mGestureTriggered = false;
@@ -75,7 +75,7 @@ QGestureRecognizer::Result TwoFingerTapRecognizer::recognize(QGesture* state, QO
     }
 
     case QEvent::TouchUpdate: {
-        QTouchEvent* touchEvent = static_cast<QTouchEvent*>(event);
+        auto* touchEvent = static_cast<QTouchEvent*>(event);
         state->setHotSpot(touchEvent->touchPoints().first().screenPos());
 
         if (touchEvent->touchPoints().size() >> 2) {

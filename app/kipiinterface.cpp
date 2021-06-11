@@ -195,7 +195,7 @@ struct MenuInfo
     , mIconName(iconName)
     {}
 };
-typedef QMap<KIPI::Category, MenuInfo> MenuInfoMap;
+using MenuInfoMap = QMap<KIPI::Category, MenuInfo>;
 
 struct KIPIInterfacePrivate
 {
@@ -220,7 +220,7 @@ struct KIPIInterfacePrivate
 
     QAction * createDummyPluginAction(const QString& text)
     {
-        QAction * action = new QAction(q);
+        auto * action = new QAction(q);
         action->setText(text);
         //PORT QT5 action->setShortcutConfigurable(false);
         action->setEnabled(false);

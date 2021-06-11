@@ -43,7 +43,7 @@ struct MessageViewAdapterPrivate : Ui_MessageView
 MessageViewAdapter::MessageViewAdapter()
 : d(new MessageViewAdapterPrivate)
 {
-    QWidget* widget = new QWidget;
+    auto* widget = new QWidget;
     widget->installEventFilter(this);
     d->setupUi(widget);
     d->mMessageWidget->setCloseButtonVisible(false);
@@ -55,7 +55,7 @@ MessageViewAdapter::MessageViewAdapter()
     widget->setBackgroundRole(QPalette::Base);
     widget->setForegroundRole(QPalette::Text);
 
-    QGraphicsProxyWidget* proxy = new QGraphicsProxyWidget;
+    auto* proxy = new QGraphicsProxyWidget;
     proxy->setWidget(widget);
     setWidget(proxy);
 }
@@ -106,7 +106,7 @@ void MessageViewAdapter::setDocument(const Document::Ptr &doc)
 bool MessageViewAdapter::eventFilter(QObject*, QEvent* ev)
 {
     if (ev->type() == QEvent::KeyPress) {
-        QKeyEvent* event = static_cast<QKeyEvent*>(ev);
+        auto* event = static_cast<QKeyEvent*>(ev);
         if (event->modifiers() != Qt::NoModifier) {
             return false;
         }

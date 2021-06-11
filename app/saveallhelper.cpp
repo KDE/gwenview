@@ -100,7 +100,7 @@ void SaveAllHelper::slotCanceled()
 
 void SaveAllHelper::slotResult(KJob* _job)
 {
-    DocumentJob* job = static_cast<DocumentJob*>(_job);
+    auto* job = static_cast<DocumentJob*>(_job);
     if (job->error()) {
         QUrl url = job->document()->url();
         QString name = url.fileName().isEmpty() ? url.toDisplayString() : url.fileName();

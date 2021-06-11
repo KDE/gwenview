@@ -268,7 +268,7 @@ struct MainWindow::Private
         mSaveBar = new SaveBar(mContentWidget, q->actionCollection());
         connect(mContextManager, &ContextManager::currentUrlChanged, mSaveBar, &SaveBar::setCurrentUrl);
         mViewStackedWidget = new QStackedWidget(mContentWidget);
-        QVBoxLayout* layout = new QVBoxLayout(mContentWidget);
+        auto* layout = new QVBoxLayout(mContentWidget);
         layout->addWidget(mSharedMessage);
         layout->addWidget(mSaveBar);
         layout->addWidget(mViewStackedWidget);
@@ -391,15 +391,15 @@ struct MainWindow::Private
 
     void installDisabledActionShortcutMonitor(QAction* action, const char* slot)
     {
-        DisabledActionShortcutMonitor* monitor = new DisabledActionShortcutMonitor(action, q);
+        auto* monitor = new DisabledActionShortcutMonitor(action, q);
         connect(monitor, SIGNAL(activated()), q, slot);
     }
 
     void setupActions()
     {
         KActionCollection* actionCollection = q->actionCollection();
-        KActionCategory* file = new KActionCategory(i18nc("@title actions category", "File"), actionCollection);
-        KActionCategory* view = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface", "View"), actionCollection);
+        auto* file = new KActionCategory(i18nc("@title actions category", "File"), actionCollection);
+        auto* view = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface", "View"), actionCollection);
 
         file->addAction(KStandardAction::Save, q, SLOT(saveCurrent()));
         file->addAction(KStandardAction::SaveAs, q, SLOT(saveCurrentAs()));
@@ -407,7 +407,7 @@ struct MainWindow::Private
         mFileOpenRecentAction = KStandardAction::openRecent(q, SLOT(openUrl(QUrl)), q);
         connect(mFileOpenRecentAction, &KRecentFilesAction::recentListCleared,
                 mGvCore, &GvCore::clearRecentFilesAndFolders);
-        QAction * clearAction = mFileOpenRecentAction->menu()->findChild<QAction*>("clear_action");
+        auto * clearAction = mFileOpenRecentAction->menu()->findChild<QAction*>("clear_action");
         if (clearAction) {
             clearAction->setText(i18nc("@action Open Recent menu", "Clear List"));
         }
@@ -594,7 +594,7 @@ struct MainWindow::Private
     void updateHamburgerMenu()
     {
         KActionCollection* actionCollection = q->actionCollection();
-        QMenu *menu = new QMenu;
+        auto *menu = new QMenu;
         menu->addAction(actionCollection->action(KStandardAction::name(KStandardAction::Open)));
         menu->addAction(actionCollection->action(KStandardAction::name(KStandardAction::OpenRecent)));
         menu->addAction(actionCollection->action(KStandardAction::name(KStandardAction::Save)));
@@ -619,7 +619,7 @@ struct MainWindow::Private
             menu->addMenu(pluginsMenu);
         }
 #endif
-        QMenu *configureMenu = new QMenu(i18nc("@title:menu submenu for actions that open configuration dialogs", "Configure"));
+        auto *configureMenu = new QMenu(i18nc("@title:menu submenu for actions that open configuration dialogs", "Configure"));
         configureMenu->addAction(actionCollection->action(QStringLiteral("options_configure_keybinding")));
         configureMenu->addAction(actionCollection->action(QStringLiteral("options_configure_toolbars")));
         configureMenu->addAction(actionCollection->action(QStringLiteral("options_configure")));
@@ -634,7 +634,7 @@ struct MainWindow::Private
         QUndoGroup* undoGroup = DocumentFactory::instance()->undoGroup();
         QAction* action;
         KActionCollection* actionCollection =  q->actionCollection();
-        KActionCategory* edit = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface", "Edit"), actionCollection);
+        auto* edit = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface", "Edit"), actionCollection);
 
         action = undoGroup->createRedoAction(actionCollection);
         action->setObjectName(KStandardAction::name(KStandardAction::Redo));
@@ -658,21 +658,21 @@ struct MainWindow::Private
         KActionCollection* actionCollection = q->actionCollection();
 
         // Create context manager items
-        FolderViewContextManagerItem* folderViewItem = new FolderViewContextManagerItem(mContextManager);
+        auto* folderViewItem = new FolderViewContextManagerItem(mContextManager);
         connect(folderViewItem, &FolderViewContextManagerItem::urlChanged,
                 q, &MainWindow::folderViewUrlChanged);
 
-        InfoContextManagerItem* infoItem = new InfoContextManagerItem(mContextManager);
+        auto* infoItem = new InfoContextManagerItem(mContextManager);
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
         SemanticInfoContextManagerItem* semanticInfoItem = nullptr;
         semanticInfoItem = new SemanticInfoContextManagerItem(mContextManager, actionCollection, mViewMainPage);
 #endif
 
-        ImageOpsContextManagerItem* imageOpsItem =
+        auto* imageOpsItem =
             new ImageOpsContextManagerItem(mContextManager, q);
 
-        FileOpsContextManagerItem* fileOpsItem = new FileOpsContextManagerItem(mContextManager, mThumbnailView, actionCollection, q);
+        auto* fileOpsItem = new FileOpsContextManagerItem(mContextManager, mThumbnailView, actionCollection, q);
 
         // Fill sidebar
         SideBarPage* page;
@@ -687,7 +687,7 @@ struct MainWindow::Private
         page->addWidget(infoItem->widget());
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
         if (semanticInfoItem) {
-            QFrame *separator = new QFrame;
+            auto *separator = new QFrame;
             separator->setFrameShape(QFrame::HLine);
             separator->setLineWidth(1);
             page->addWidget(separator);
@@ -699,7 +699,7 @@ struct MainWindow::Private
         page = new SideBarPage(QIcon::fromTheme("document-edit"), i18n("Operations"));
         page->setObjectName(QLatin1String("operations"));
         page->addWidget(imageOpsItem->widget());
-        QFrame *separator = new QFrame;
+        auto *separator = new QFrame;
         separator->setFrameShape(QFrame::HLine);
         separator->setLineWidth(1);
         page->addWidget(separator);
@@ -1092,7 +1092,7 @@ void MainWindow::setInitialUrl(const QUrl &_url)
     message << dirUrl.toString();
 
     QDBusPendingCall call = QDBusConnection::sessionBus().asyncCall(message);
-    QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(call, this);
+    auto *watcher = new QDBusPendingCallWatcher(call, this);
 
     connect(watcher, &QDBusPendingCallWatcher::finished,
             this, [this](QDBusPendingCallWatcher *call) {

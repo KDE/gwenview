@@ -430,7 +430,7 @@ void CropTool::keyPressEvent(QKeyEvent* event)
         d->mLockedCropRatio = 1. * d->mRect.height() / d->mRect.width();
     }
 
-    QDialogButtonBox *buttons = d->mCropWidget->findChild<QDialogButtonBox *>();
+    auto *buttons = d->mCropWidget->findChild<QDialogButtonBox *>();
     switch (event->key()) {
     case Qt::Key_Escape:
         event->accept();
@@ -479,7 +479,7 @@ void CropTool::toolDeactivated()
 
 void CropTool::slotCropRequested()
 {
-    CropImageOperation* op = new CropImageOperation(d->mRect);
+    auto* op = new CropImageOperation(d->mRect);
     emit imageOperationRequested(op);
     emit done();
 }

@@ -62,7 +62,7 @@ TagSet BalooSemanticInfoBackend::allTags() const
 
 void BalooSemanticInfoBackend::refreshAllTags()
 {
-    Baloo::TagListJob* job = new Baloo::TagListJob();
+    auto* job = new Baloo::TagListJob();
     job->exec();
 
     d->mAllTags.clear();

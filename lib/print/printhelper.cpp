@@ -121,7 +121,7 @@ void PrintHelper::print(Document::Ptr doc)
     QPrinter printer;
     printer.setDocName(doc->url().fileName());
 
-    PrintOptionsPage* optionsPage = new PrintOptionsPage(doc->size());
+    auto* optionsPage = new PrintOptionsPage(doc->size());
     optionsPage->loadConfig();
 
     DialogGuard<QPrintDialog> dialog(&printer, d->mParent);

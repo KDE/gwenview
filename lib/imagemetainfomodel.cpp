@@ -263,7 +263,7 @@ struct ImageMetaInfoModelPrivate
         // may appear multiple times) so we can't know how many rows we will
         // insert before going through them. That's why we create a hash
         // before.
-        typedef QHash<QString, MetaInfoGroup::Entry*> EntryHash;
+        using EntryHash = QHash<QString, MetaInfoGroup::Entry *>;
         EntryHash hash;
 
         Iterator

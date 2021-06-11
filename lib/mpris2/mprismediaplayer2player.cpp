@@ -286,7 +286,7 @@ void MprisMediaPlayer2Player::onMetaInfoUpdated()
         // TODO: for videos also get and report the length
         if (MimeTypeUtils::urlKind(url) != MimeTypeUtils::KIND_VIDEO) {
             // convert seconds in microseconds
-            const qlonglong duration = qlonglong(mSlideShow->interval() * 1000000);
+            const auto duration = qlonglong(mSlideShow->interval() * 1000000);
             updatedMetaData.insert(QStringLiteral("mpris:length"), duration);
         }
 

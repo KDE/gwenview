@@ -39,7 +39,7 @@ struct FileNameFormaterPrivate;
 class FileNameFormater
 {
 public:
-    typedef QMap<QString, QString> HelpMap;
+    using HelpMap = QMap<QString, QString>;
 
     FileNameFormater(const QString& format);
     ~FileNameFormater();

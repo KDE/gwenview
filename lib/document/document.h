@@ -91,7 +91,7 @@ public:
         LoadingFailed   ///< Image loading has failed
     };
 
-    typedef QExplicitlySharedDataPointer<Document> Ptr;
+    using Ptr = QExplicitlySharedDataPointer<Document>;
     ~Document() override;
 
     /**

@@ -41,13 +41,13 @@ LockScreenWatcher::LockScreenWatcher(QObject *parent)
     , mScreenSaverInterface(nullptr)
     , mLocked(false)
 {
-    QDBusServiceWatcher *screenLockServiceWatcher = new QDBusServiceWatcher(this);
+    auto *screenLockServiceWatcher = new QDBusServiceWatcher(this);
     connect(screenLockServiceWatcher, &QDBusServiceWatcher::serviceOwnerChanged,
             this, &LockScreenWatcher::onScreenSaverServiceOwnerChanged);
     screenLockServiceWatcher->setWatchMode(QDBusServiceWatcher::WatchForOwnerChange);
     screenLockServiceWatcher->addWatchedService(screenSaverServiceName());
 
-    DBusBoolReplyWatcher *watcher = new DBusBoolReplyWatcher(this);
+    auto *watcher = new DBusBoolReplyWatcher(this);
     connect(watcher, &DBusBoolReplyWatcher::finished,
             this, &LockScreenWatcher::onServiceRegisteredQueried);
     connect(watcher, &DBusBoolReplyWatcher::canceled,
@@ -83,7 +83,7 @@ void LockScreenWatcher::onScreenSaverServiceOwnerChanged(const QString &serviceN
         connect(mScreenSaverInterface, &OrgFreedesktopScreenSaverInterface::ActiveChanged,
                 this, &LockScreenWatcher::onScreenSaverActiveChanged);
 
-        QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(mScreenSaverInterface->GetActive(), this);
+        auto *watcher = new QDBusPendingCallWatcher(mScreenSaverInterface->GetActive(), this);
         connect(watcher, &QDBusPendingCallWatcher::finished,
                 this, &LockScreenWatcher::onActiveQueried);
     } else {
@@ -97,7 +97,7 @@ void LockScreenWatcher::onScreenSaverServiceOwnerChanged(const QString &serviceN
 
 void LockScreenWatcher::onServiceRegisteredQueried()
 {
-    DBusBoolReplyWatcher *watcher = dynamic_cast<DBusBoolReplyWatcher*>(sender());
+    auto *watcher = dynamic_cast<DBusBoolReplyWatcher*>(sender());
     if (!watcher) {
         return;
     }
@@ -105,7 +105,7 @@ void LockScreenWatcher::onServiceRegisteredQueried()
     const QDBusReply<bool> &reply = watcher->result();
 
     if (reply.isValid() && reply.value()) {
-        DBusStringReplyWatcher *ownerWatcher = new DBusStringReplyWatcher(this);
+        auto *ownerWatcher = new DBusStringReplyWatcher(this);
         connect(ownerWatcher, &DBusStringReplyWatcher::finished,
                 this, &LockScreenWatcher::onServiceOwnerQueried);
         connect(ownerWatcher, &DBusStringReplyWatcher::canceled,
@@ -120,7 +120,7 @@ void LockScreenWatcher::onServiceRegisteredQueried()
 
 void LockScreenWatcher::onServiceOwnerQueried()
 {
-    DBusStringReplyWatcher *watcher = dynamic_cast<DBusStringReplyWatcher*>(sender());
+    auto *watcher = dynamic_cast<DBusStringReplyWatcher*>(sender());
     if (!watcher) {
         return;
     }

@@ -50,7 +50,7 @@ struct IODeviceJpegSourceManager : public jpeg_source_mgr
 
 static boolean fill_input_buffer(j_decompress_ptr cinfo)
 {
-    IODeviceJpegSourceManager* src = static_cast<IODeviceJpegSourceManager*>(cinfo->src);
+    auto* src = static_cast<IODeviceJpegSourceManager*>(cinfo->src);
     Q_ASSERT(src->mIODevice);
     int readSize = src->mIODevice->read((char*)src->mBuffer, SOURCE_MANAGER_BUFFER_SIZE);
     if (readSize > 0) {
@@ -97,7 +97,7 @@ static void term_source(j_decompress_ptr)
 void setup(j_decompress_ptr cinfo, QIODevice* ioDevice)
 {
     Q_ASSERT(!cinfo->src);
-    IODeviceJpegSourceManager* src = (IODeviceJpegSourceManager*)
+    auto* src = (IODeviceJpegSourceManager*)
                                      (*cinfo->mem->alloc_small)((j_common_ptr) cinfo, JPOOL_PERMANENT,
                                              sizeof(IODeviceJpegSourceManager));
     cinfo->src = src;

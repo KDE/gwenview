@@ -68,7 +68,7 @@ QGestureRecognizer::Result TwoFingerPanRecognizer::recognize(QGesture* state, QO
 
     switch (event->type()) {
     case QEvent::TouchBegin: {
-        QTouchEvent* touchEvent = static_cast<QTouchEvent*>(event);
+        auto* touchEvent = static_cast<QTouchEvent*>(event);
         d->mTouchBeginnTimestamp = touchEvent->timestamp();
         d->mLastTouchTimestamp = touchEvent->timestamp();
         d->mGestureTriggered = false;
@@ -78,7 +78,7 @@ QGestureRecognizer::Result TwoFingerPanRecognizer::recognize(QGesture* state, QO
     }
 
     case QEvent::TouchUpdate: {
-        QTouchEvent* touchEvent = static_cast<QTouchEvent*>(event);
+        auto* touchEvent = static_cast<QTouchEvent*>(event);
         const qint64 now = touchEvent->timestamp();
         const QPointF pos = touchEvent->touchPoints().first().pos();
         state->setHotSpot(touchEvent->touchPoints().first().screenPos());
@@ -142,7 +142,7 @@ QGestureRecognizer::Result TwoFingerPanRecognizer::recognize(QGesture* state, QO
     }
 
     case QEvent::TouchEnd: {
-        QTouchEvent* touchEvent = static_cast<QTouchEvent*>(event);
+        auto* touchEvent = static_cast<QTouchEvent*>(event);
         if (d->mGestureTriggered) {
             d->mGestureTriggered = false;
             state->setHotSpot(touchEvent->touchPoints().first().screenPos());

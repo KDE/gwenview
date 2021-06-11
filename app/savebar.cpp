@@ -47,7 +47,7 @@ namespace Gwenview
 
 QToolButton* createToolButton()
 {
-    QToolButton* button = new QToolButton;
+    auto* button = new QToolButton;
     button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     button->hide();
     return button;
@@ -75,12 +75,12 @@ struct SaveBarPrivate
         mTooManyChangesFrame = new QFrame;
 
         // Icon
-        QLabel* iconLabel = new QLabel;
+        auto* iconLabel = new QLabel;
         QPixmap pix = QIcon::fromTheme(QStringLiteral("dialog-warning")).pixmap(KIconLoader::SizeSmall);
         iconLabel->setPixmap(pix);
 
         // Text label
-        QLabel* textLabel = new QLabel;
+        auto* textLabel = new QLabel;
         textLabel->setText(
             i18n("You have modified many images. To avoid memory problems, you should save your changes.")
         );
@@ -88,7 +88,7 @@ struct SaveBarPrivate
         mSaveAllFullScreenButton = createToolButton();
 
         // Layout
-        QHBoxLayout* layout = new QHBoxLayout(mTooManyChangesFrame);
+        auto* layout = new QHBoxLayout(mTooManyChangesFrame);
         layout->setContentsMargins(0, 0, 0, 0);
         layout->addWidget(iconLabel);
         layout->addWidget(textLabel);
@@ -209,7 +209,7 @@ struct SaveBarPrivate
 
     void updateWidgetSizes()
     {
-        QVBoxLayout* layout = static_cast<QVBoxLayout*>(mSaveBarWidget->layout());
+        auto* layout = static_cast<QVBoxLayout*>(mSaveBarWidget->layout());
         int topRowHeight = q->window()->isFullScreen() ? 0 : mTopRowWidget->height();
         int bottomRowHeight = mTooManyChangesFrame->isVisibleTo(mSaveBarWidget) ? mTooManyChangesFrame->sizeHint().height() : 0;
 
@@ -248,7 +248,7 @@ SaveBar::SaveBar(QWidget* parent, KActionCollection* actionCollection)
 
     // Setup top row
     d->mTopRowWidget = new QWidget;
-    QHBoxLayout* rowLayout = new QHBoxLayout(d->mTopRowWidget);
+    auto* rowLayout = new QHBoxLayout(d->mTopRowWidget);
     rowLayout->addWidget(d->mMessageLabel);
     rowLayout->setStretchFactor(d->mMessageLabel, 1);
     rowLayout->addWidget(d->mUndoButton);
@@ -260,13 +260,13 @@ SaveBar::SaveBar(QWidget* parent, KActionCollection* actionCollection)
     rowLayout->setContentsMargins(0, 0, 0, 0);
 
     // Setup bottom row
-    QHBoxLayout* bottomRowLayout = new QHBoxLayout;
+    auto* bottomRowLayout = new QHBoxLayout;
     bottomRowLayout->addStretch();
     bottomRowLayout->addWidget(d->mTooManyChangesFrame);
     bottomRowLayout->addStretch();
 
     // Gather everything together
-    QVBoxLayout* layout = new QVBoxLayout(d->mSaveBarWidget);
+    auto* layout = new QVBoxLayout(d->mSaveBarWidget);
     layout->addWidget(d->mTopRowWidget);
     layout->addLayout(bottomRowLayout);
     layout->setContentsMargins(3, 3, 3, 3);

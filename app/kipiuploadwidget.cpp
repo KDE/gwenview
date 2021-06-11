@@ -38,12 +38,12 @@ KIPIUploadWidget::KIPIUploadWidget(KIPIInterface* interface, QWidget* parent)
 : KIPI::UploadWidget(parent)
 , mInterface(interface)
 {
-    QLabel* label = new QLabel(this);
+    auto* label = new QLabel(this);
     QUrl url = mInterface->currentAlbum().uploadUrl();
     label->setText(i18n("Images will be uploaded here:\n%1", url.toDisplayString()));
     label->setWordWrap(true);
 
-    QVBoxLayout* layout = new QVBoxLayout(this);
+    auto* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(label);
 }

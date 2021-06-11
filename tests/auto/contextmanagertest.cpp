@@ -106,7 +106,7 @@ void ContextManagerTest::testInvalidDirUrl()
     };
 
     SortedDirModel dirModel;
-    DirLister* dirLister = new DirLister;
+    auto* dirLister = new DirLister;
     dirModel.setDirLister(dirLister);
     ContextManager manager(&dirModel, nullptr);
 

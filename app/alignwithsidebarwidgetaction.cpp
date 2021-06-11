@@ -102,7 +102,7 @@ QSize AligningSpacer::sizeHint() const
         newWidth = sideBarWidth - window()->width() + mapTo(window(), QPoint(width(), 0)).x();
     }
 
-    const float separatorWidth = static_cast<float>(
+    const auto separatorWidth = static_cast<float>(
             style()->pixelMetric(QStyle::PM_ToolBarSeparatorExtent, nullptr, this));
     if (!mWasSeparatorRemoved) {
          // Make it so a potentially following separator looks aligned with the sidebar.

@@ -83,10 +83,10 @@ template <class Receiver, class Arg, typename MethodArg>
 class BaseBinder : public BinderInternal
 {
 public:
-    typedef void (Receiver::*Method)(MethodArg);
+    using Method = void (Receiver::*)(MethodArg);
     static void bind(QObject* emitter, const char* signal, Receiver* receiver, Method method, MethodArg arg)
     {
-        BaseBinder<Receiver, Arg, MethodArg>* binder = new BaseBinder<Receiver, Arg, MethodArg>(emitter);
+        auto* binder = new BaseBinder<Receiver, Arg, MethodArg>(emitter);
         binder->mReceiver = receiver;
         binder->mMethod = method;
         binder->mArg = arg;

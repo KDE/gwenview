@@ -54,7 +54,7 @@ protected:
     void run() override;
 
 private:
-    typedef QHash<QString, QImage> Cache;
+    using Cache = QHash<QString, QImage>;
     Cache mCache;
     mutable QMutex mMutex;
 };

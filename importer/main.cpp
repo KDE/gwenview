@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
     }
     QString deviceUdi = parser.isSet(QStringLiteral("udi")) ? parser.value(QStringLiteral("udi")) : QString();
 
-    Gwenview::ImportDialog* dialog = new Gwenview::ImportDialog();
+    auto* dialog = new Gwenview::ImportDialog();
     dialog->show();
     QMetaObject::invokeMethod(dialog, [dialog, url, deviceUdi]() { dialog->setSourceUrl(url, deviceUdi); }, Qt::QueuedConnection);
     return app.exec();

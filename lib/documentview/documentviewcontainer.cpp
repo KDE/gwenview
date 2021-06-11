@@ -39,8 +39,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 
-typedef QSet<DocumentView*> DocumentViewSet;
-typedef QHash<QUrl, DocumentView::Setup> SetupForUrl;
+using DocumentViewSet = QSet<DocumentView *>;
+using SetupForUrl = QHash<QUrl, DocumentView::Setup>;
 
 struct DocumentViewContainerPrivate
 {
@@ -87,7 +87,7 @@ DocumentViewContainer::DocumentViewContainer(QWidget* parent)
     d->q = this;
     d->mScene = new QGraphicsScene(this);
     if (GwenviewConfig::animationMethod() == DocumentView::GLAnimation) {
-        QOpenGLWidget* glWidget = new QOpenGLWidget;
+        auto* glWidget = new QOpenGLWidget;
         setViewport(glWidget);
     }
     setScene(d->mScene);
@@ -112,7 +112,7 @@ DocumentViewContainer::~DocumentViewContainer()
 
 DocumentView* DocumentViewContainer::createView()
 {
-    DocumentView* view = new DocumentView(d->mScene);
+    auto* view = new DocumentView(d->mScene);
     view->setPalette(palette());
     d->mAddedViews << view;
     view->show();
@@ -318,7 +318,7 @@ void DocumentViewContainer::showMessageWidget(QGraphicsWidget* widget, Qt::Align
     GV_RETURN_IF_FAIL(view);
 
     widget->setParentItem(view);
-    GraphicsWidgetFloater* floater = new GraphicsWidgetFloater(view);
+    auto* floater = new GraphicsWidgetFloater(view);
     floater->setChildWidget(widget);
     floater->setAlignment(align);
     widget->show();

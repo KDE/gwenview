@@ -60,7 +60,7 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QVariantList& /*arg
     QScopedPointer<KAboutData> aboutData(createAboutData());
     setComponentData(*aboutData, false);
 
-    DocumentViewContainer* container = new DocumentViewContainer(parentWidget);
+    auto* container = new DocumentViewContainer(parentWidget);
     setWidget(container);
     mDocumentView = container->createView();
 
@@ -73,10 +73,10 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QVariantList& /*arg
             this, &GVPart::showContextMenu);
 
     // Necessary to have zoom actions
-    DocumentViewController* documentViewController = new DocumentViewController(actionCollection(), this);
+    auto* documentViewController = new DocumentViewController(actionCollection(), this);
     documentViewController->setView(mDocumentView);
 
-    QAction * action = new QAction(actionCollection());
+    auto * action = new QAction(actionCollection());
     action->setText(i18nc("@action", "Properties"));
     action->setShortcut(QKeySequence(Qt::ALT | Qt::Key_Return));
     connect(action, &QAction::triggered, this, &GVPart::showProperties);

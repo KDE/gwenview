@@ -43,7 +43,7 @@ struct KIPIExportActionPrivate
 
     void updateMenu()
     {
-        QMenu* menu = static_cast<QMenu*>(q->menu());
+        auto* menu = static_cast<QMenu*>(q->menu());
         menu->clear();
 
         if (mDefaultAction && mExportActionList.contains(mDefaultAction)) {

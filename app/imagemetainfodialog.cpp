@@ -131,7 +131,7 @@ ImageMetaInfoDialog::ImageMetaInfoDialog(QWidget* parent)
 
     setLayout(new QVBoxLayout);
     layout()->addWidget(d->mTreeView);
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Close);
+    auto *buttonBox = new QDialogButtonBox(QDialogButtonBox::Close);
     layout()->addWidget(buttonBox);
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
@@ -145,7 +145,7 @@ ImageMetaInfoDialog::~ImageMetaInfoDialog()
 void ImageMetaInfoDialog::setMetaInfo(ImageMetaInfoModel* model, const QStringList& list)
 {
     if (model) {
-        d->mModel.reset(new PreferredImageMetaInfoModel(model, list));
+        d->mModel = std::make_unique<PreferredImageMetaInfoModel>(model, list);
         connect(d->mModel.get(), &PreferredImageMetaInfoModel::preferredMetaInfoKeyListChanged,
                 this, &ImageMetaInfoDialog::preferredMetaInfoKeyListChanged);
     } else {

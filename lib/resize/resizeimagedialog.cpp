@@ -49,14 +49,14 @@ ResizeImageDialog::ResizeImageDialog(QWidget* parent)
     d->mUpdateFromRatio = false;
     d->mUpdateFromSizeOrPercentage = false;
 
-    QVBoxLayout *mainLayout = new QVBoxLayout;
+    auto *mainLayout = new QVBoxLayout;
     setLayout(mainLayout);
     mainLayout->setSizeConstraint(QLayout::SetFixedSize);
 
-    QWidget* content = new QWidget(this);
+    auto* content = new QWidget(this);
     d->setupUi(content);
     mainLayout->addWidget(content);
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    auto *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
     QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
     okButton->setDefault(true);
     okButton->setShortcut(Qt::CTRL | Qt::Key_Return);

@@ -221,7 +221,7 @@ struct CropWidgetPrivate : public QWidget
         ratioComboBox->setMaxVisibleItems(ratioComboBox->count());
         ratioComboBox->clearEditText();
 
-        QLineEdit* edit = qobject_cast<QLineEdit*>(ratioComboBox->lineEdit());
+        auto* edit = qobject_cast<QLineEdit*>(ratioComboBox->lineEdit());
         Q_ASSERT(edit);
         // Do not use i18n("%1:%2") because ':' should not be translated, it is
         // used to parse the ratio string.
@@ -281,8 +281,8 @@ struct CropWidgetPrivate : public QWidget
 
     QWidget* boxWidget(QWidget* parent = nullptr)
     {
-        QWidget* widget = new QWidget(parent);
-        QHBoxLayout* layout = new QHBoxLayout(widget);
+        auto* widget = new QWidget(parent);
+        auto* layout = new QHBoxLayout(widget);
         layout->setContentsMargins(0, 0, 0, 0);
         layout->setSpacing(2);
         return widget;
@@ -291,7 +291,7 @@ struct CropWidgetPrivate : public QWidget
     void setupUi(QWidget* cropWidget) {
         cropWidget->setObjectName(QStringLiteral("CropWidget"));
 
-        FlowLayout* flowLayout = new FlowLayout(cropWidget, 6, 0);
+        auto* flowLayout = new FlowLayout(cropWidget, 6, 0);
         flowLayout->setObjectName(QStringLiteral("CropWidgetFlowLayout"));
         flowLayout->setAlignment(Qt::AlignCenter);
         flowLayout->setVerticalSpacing(6);
@@ -307,7 +307,7 @@ struct CropWidgetPrivate : public QWidget
         // (2) Ratio combobox (Advanced settings)
         box = boxWidget(cropWidget);
         mAdvancedWidgets << box;
-        QLabel* label = new QLabel(i18nc("@label:listbox", "Aspect ratio:"), box);
+        auto* label = new QLabel(i18nc("@label:listbox", "Aspect ratio:"), box);
         label->setContentsMargins(4, 4, 4, 4);
         box->layout()->addWidget(label);
         ratioComboBox = new QComboBox(box);
@@ -324,7 +324,7 @@ struct CropWidgetPrivate : public QWidget
         label->setContentsMargins(4, 4, 4, 4);
         box->layout()->addWidget(label);
 
-        QHBoxLayout* innerLayout = new QHBoxLayout();
+        auto* innerLayout = new QHBoxLayout();
         innerLayout->setSpacing(3);
 
         widthSpinBox = new QSpinBox(box);

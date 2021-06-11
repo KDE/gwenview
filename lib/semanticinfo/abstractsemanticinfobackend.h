@@ -36,7 +36,7 @@ class QUrl;
 namespace Gwenview
 {
 
-typedef QString SemanticInfoTag;
+using SemanticInfoTag = QString;
 
 /**
  * This class represents the set of tags associated to an url.

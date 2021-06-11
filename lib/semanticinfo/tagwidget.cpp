@@ -100,7 +100,7 @@ protected:
     bool eventFilter(QObject*, QEvent* event) override
     {
         if (event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease) {
-            QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
+            auto* keyEvent = static_cast<QKeyEvent*>(event);
             switch (keyEvent->key()) {
             case Qt::Key_Return:
             case Qt::Key_Enter:
@@ -127,7 +127,7 @@ struct TagWidgetPrivate
     void setupWidgets()
     {
         mListView = new QListView;
-        TagItemDelegate* delegate = new TagItemDelegate(mListView);
+        auto* delegate = new TagItemDelegate(mListView);
         QObject::connect(delegate, SIGNAL(removeTagRequested(SemanticInfoTag)),
                          q, SLOT(removeTag(SemanticInfoTag)));
         QObject::connect(delegate, SIGNAL(assignTagToAllRequested(SemanticInfoTag)),
@@ -140,7 +140,7 @@ struct TagWidgetPrivate
         mComboBox->setInsertPolicy(QComboBox::NoInsert);
 
         mTagCompleterModel = new TagCompleterModel(q);
-        QCompleter* completer = new QCompleter(q);
+        auto* completer = new QCompleter(q);
         completer->setCaseSensitivity(Qt::CaseInsensitive);
         completer->setModel(mTagCompleterModel);
         mComboBox->setCompleter(completer);
@@ -154,11 +154,11 @@ struct TagWidgetPrivate
         QObject::connect(mAddButton, SIGNAL(clicked()),
                          q, SLOT(addTagFromComboBox()));
 
-        QVBoxLayout* layout = new QVBoxLayout(q);
+        auto* layout = new QVBoxLayout(q);
         layout->setContentsMargins(0, 0, 0, 0);
         layout->addWidget(mListView);
 
-        QHBoxLayout* hLayout = new QHBoxLayout;
+        auto* hLayout = new QHBoxLayout;
         hLayout->addWidget(mComboBox);
         hLayout->addWidget(mAddButton);
         layout->addLayout(hLayout);

@@ -115,7 +115,7 @@ struct PreviewItemDelegatePrivate
     mutable QHash<QString, QString> mElidedTextCache;
 
     // Key is height * 1000 + width
-    typedef QHash<int, QPixmap> ShadowCache;
+    using ShadowCache = QHash<int, QPixmap>;
     mutable ShadowCache mShadowCache;
 
     PreviewItemDelegate* q;
@@ -458,8 +458,8 @@ struct PreviewItemDelegatePrivate
         }
 
         // Show tip
-        QParallelAnimationGroup* anim = new QParallelAnimationGroup();
-        QPropertyAnimation* fadeIn = new QPropertyAnimation(mToolTip, "opacity");
+        auto* anim = new QParallelAnimationGroup();
+        auto* fadeIn = new QPropertyAnimation(mToolTip, "opacity");
         fadeIn->setStartValue(mToolTip->opacity());
         fadeIn->setEndValue(1.);
         anim->addAnimation(fadeIn);
@@ -467,7 +467,7 @@ struct PreviewItemDelegatePrivate
         if (newTipLabel) {
             mToolTip->setGeometry(geometry);
         } else {
-            QPropertyAnimation* move = new QPropertyAnimation(mToolTip, "geometry");
+            auto* move = new QPropertyAnimation(mToolTip, "geometry");
             move->setStartValue(mToolTip->geometry());
             move->setEndValue(geometry);
             anim->addAnimation(move);
@@ -482,11 +482,11 @@ struct PreviewItemDelegatePrivate
         if (!mToolTip) {
             return;
         }
-        QSequentialAnimationGroup* anim = new QSequentialAnimationGroup();
+        auto* anim = new QSequentialAnimationGroup();
         if (mToolTipAnimation->state() == QPropertyAnimation::Stopped) {
             anim->addPause(500);
         }
-        QPropertyAnimation* fadeOut = new QPropertyAnimation(mToolTip, "opacity");
+        auto* fadeOut = new QPropertyAnimation(mToolTip, "opacity");
         fadeOut->setStartValue(mToolTip->opacity());
         fadeOut->setEndValue(0.);
         anim->addAnimation(fadeOut);
@@ -636,7 +636,7 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
     d->mRotateRightButton->setIcon(QIcon::fromTheme(QStringLiteral("object-rotate-right")));
     connect(d->mRotateRightButton, &QToolButton::clicked, this, &PreviewItemDelegate::slotRotateRightClicked);
 
-    QHBoxLayout* layout = new QHBoxLayout(d->mContextBar);
+    auto* layout = new QHBoxLayout(d->mContextBar);
     layout->setContentsMargins(2, 2, 2, 2);
     layout->setSpacing(2);
     layout->addWidget(d->mToggleSelectionButton);
@@ -951,7 +951,7 @@ QWidget * PreviewItemDelegate::createEditor(QWidget* parent, const QStyleOptionV
 
 void PreviewItemDelegate::setEditorData(QWidget* widget, const QModelIndex& index) const
 {
-    ItemEditor* edit = qobject_cast<ItemEditor*>(widget);
+    auto* edit = qobject_cast<ItemEditor*>(widget);
     if (!edit) {
         return;
     }
@@ -960,7 +960,7 @@ void PreviewItemDelegate::setEditorData(QWidget* widget, const QModelIndex& inde
 
 void PreviewItemDelegate::updateEditorGeometry(QWidget* widget, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
-    ItemEditor* edit = qobject_cast<ItemEditor*>(widget);
+    auto* edit = qobject_cast<ItemEditor*>(widget);
     if (!edit) {
         return;
     }
@@ -977,7 +977,7 @@ void PreviewItemDelegate::updateEditorGeometry(QWidget* widget, const QStyleOpti
 
 void PreviewItemDelegate::setModelData(QWidget* widget, QAbstractItemModel* model, const QModelIndex& index) const
 {
-    ItemEditor* edit = qobject_cast<ItemEditor*>(widget);
+    auto* edit = qobject_cast<ItemEditor*>(widget);
     if (!edit) {
         return;
     }

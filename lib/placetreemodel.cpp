@@ -75,8 +75,8 @@ struct Node
     }
 };
 
-typedef QHash<QUrl, Node*> NodeHash;
-typedef QMap<SortedDirModel*, NodeHash*> NodeHashMap;
+using NodeHash = QHash<QUrl, Node *>;
+using NodeHashMap = QMap<SortedDirModel *, NodeHash *>;
 
 struct PlaceTreeModelPrivate
 {
@@ -300,7 +300,7 @@ void PlaceTreeModel::slotPlacesRowsInserted(const QModelIndex& /*parent*/, int s
 {
     beginInsertRows(QModelIndex(), start, end);
     for (int row = start; row <= end; ++row) {
-        SortedDirModel* dirModel = new SortedDirModel(this);
+        auto* dirModel = new SortedDirModel(this);
         connect(dirModel, &SortedDirModel::rowsAboutToBeInserted, this, &PlaceTreeModel::slotDirRowsAboutToBeInserted);
         connect(dirModel, &SortedDirModel::rowsInserted, this, &PlaceTreeModel::slotDirRowsInserted);
         connect(dirModel, &SortedDirModel::rowsAboutToBeRemoved, this, &PlaceTreeModel::slotDirRowsAboutToBeRemoved);
@@ -326,7 +326,7 @@ void PlaceTreeModel::slotPlacesRowsAboutToBeRemoved(const QModelIndex&, int star
 
 void PlaceTreeModel::slotDirRowsAboutToBeInserted(const QModelIndex& parentDirIndex, int start, int end)
 {
-    SortedDirModel* dirModel = static_cast<SortedDirModel*>(sender());
+    auto* dirModel = static_cast<SortedDirModel*>(sender());
     QModelIndex parentIndex;
     if (parentDirIndex.isValid()) {
         QUrl url = dirModel->urlForIndex(parentDirIndex);
@@ -344,7 +344,7 @@ void PlaceTreeModel::slotDirRowsInserted(const QModelIndex&, int, int)
 
 void PlaceTreeModel::slotDirRowsAboutToBeRemoved(const QModelIndex& parentDirIndex, int start, int end)
 {
-    SortedDirModel* dirModel = static_cast<SortedDirModel*>(sender());
+    auto* dirModel = static_cast<SortedDirModel*>(sender());
     QModelIndex parentIndex;
     if (parentDirIndex.isValid()) {
         QUrl url = dirModel->urlForIndex(parentDirIndex);

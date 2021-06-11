@@ -59,7 +59,7 @@ HudButtonBox::HudButtonBox(QGraphicsWidget* parent)
 , d(new HudButtonBoxPrivate)
 {
     d->mCountDown = nullptr;
-    QGraphicsWidget* content = new QGraphicsWidget();
+    auto* content = new QGraphicsWidget();
     d->mLayout = new QGraphicsLinearLayout(Qt::Vertical, content);
     d->mLabel = new HudLabel();
     d->mLayout->addItem(d->mLabel);
@@ -81,7 +81,7 @@ void HudButtonBox::addCountDown(qreal ms)
     d->mCountDown = new HudCountDown(this);
     connect(d->mCountDown, &HudCountDown::timeout, this, &HudButtonBox::fadeOut);
 
-    GraphicsWidgetFloater* floater = new GraphicsWidgetFloater(this);
+    auto* floater = new GraphicsWidgetFloater(this);
     floater->setChildWidget(d->mCountDown);
     floater->setAlignment(Qt::AlignRight | Qt::AlignBottom);
     floater->setHorizontalMargin(6);
@@ -100,7 +100,7 @@ HudButton* HudButtonBox::addAction(QAction* action, const QString& overrideText)
 
 HudButton* HudButtonBox::addButton(const QString& text)
 {
-    HudButton* button = new HudButton();
+    auto* button = new HudButton();
     connect(button, &HudButton::clicked, this, &HudButtonBox::fadeOut);
     button->setText(text);
     d->mLayout->addItem(button);

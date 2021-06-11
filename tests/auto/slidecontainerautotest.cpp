@@ -46,7 +46,7 @@ struct TestWindow : public QWidget
         createContent();
 
         mMainWidget = new QTextEdit();
-        QVBoxLayout* layout = new QVBoxLayout(this);
+        auto* layout = new QVBoxLayout(this);
         layout->setSpacing(0);
         layout->setContentsMargins(0, 0, 0, 0);
         layout->addWidget(mMainWidget);

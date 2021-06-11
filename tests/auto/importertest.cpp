@@ -23,10 +23,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <sys/stat.h>
 
 // Qt
-#include <QSignalSpy>
 #include <QDateTime>
 #include <QDebug>
+#include <QSignalSpy>
 #include <QTest>
+#include <memory>
 
 // KF
 
@@ -48,7 +49,7 @@ void ImporterTest::init()
                     << urlForTestFile("import/pict0003.jpg")
                     ;
 
-    mTempDir.reset(new QTemporaryDir());
+    mTempDir = std::make_unique<QTemporaryDir>();
 }
 
 void ImporterTest::testContentsAreIdentical()

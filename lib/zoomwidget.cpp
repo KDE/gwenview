@@ -120,7 +120,7 @@ ZoomWidget::ZoomWidget(QWidget* parent)
     connect(d->mZoomSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), [=](int i){ setCustomZoomFromSpinBox(static_cast<qreal>(i)); });
 
     // Layout
-    QHBoxLayout* layout = new QHBoxLayout(this);
+    auto* layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     layout->addWidget(d->mZoomToFitButton);
@@ -148,7 +148,7 @@ void ZoomWidget::setActions(QAction* zoomToFitAction, QAction* actualSizeAction,
     d->mZoomSlider->setZoomInAction(zoomInAction);
     d->mZoomSlider->setZoomOutAction(zoomOutAction);
 
-    QActionGroup *actionGroup = new QActionGroup(d->q);
+    auto *actionGroup = new QActionGroup(d->q);
     actionGroup->addAction(d->mZoomToFitAction);
     actionGroup->addAction(d->mZoomToFillAction);
     actionGroup->addAction(d->mActualSizeAction);

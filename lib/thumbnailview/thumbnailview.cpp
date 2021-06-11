@@ -165,9 +165,9 @@ struct Thumbnail
     bool mWaitingForThumbnail;
 };
 
-typedef QHash<QUrl, Thumbnail> ThumbnailForUrl;
-typedef QQueue<QUrl> UrlQueue;
-typedef QSet<QPersistentModelIndex> PersistentModelIndexSet;
+using ThumbnailForUrl = QHash<QUrl, Thumbnail>;
+using UrlQueue = QQueue<QUrl>;
+using PersistentModelIndexSet = QSet<QPersistentModelIndex>;
 
 struct ThumbnailViewPrivate
 {
@@ -731,7 +731,7 @@ void ThumbnailView::startDrag(Qt::DropActions)
         selectedFiles << fileItemForIndex(index);
     }
 
-    QDrag* drag = new QDrag(this);
+    auto* drag = new QDrag(this);
     drag->setMimeData(MimeTypeUtils::selectionMimeData(selectedFiles, MimeTypeUtils::DropTarget));
     d->initDragPixmap(drag, indexes);
     drag->exec(Qt::MoveAction | Qt::CopyAction | Qt::LinkAction, Qt::CopyAction);

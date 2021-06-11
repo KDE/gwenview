@@ -68,7 +68,7 @@ ImporterConfigDialog::ImporterConfigDialog(QWidget* parent)
 , d(new ImporterConfigDialogPrivate)
 {
     d->q = this;
-    QWidget* widget = new QWidget;
+    auto* widget = new QWidget;
     d->setupUi(widget);
     setFaceType(KPageDialog::Plain);
     addPage(widget, QString());

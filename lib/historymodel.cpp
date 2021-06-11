@@ -69,7 +69,7 @@ struct HistoryItem : public QStandardItem
             return nullptr;
         }
 
-        HistoryItem* item = new HistoryItem(url, dateTime, file.fileName());
+        auto* item = new HistoryItem(url, dateTime, file.fileName());
         item->save();
         return item;
     }
@@ -251,7 +251,7 @@ bool HistoryModel::removeRows(int start, int count, const QModelIndex& parent)
 {
     Q_ASSERT(!parent.isValid());
     for (int row = start + count - 1; row >= start ; --row) {
-        HistoryItem* historyItem = static_cast<HistoryItem*>(item(row, 0));
+        auto* historyItem = static_cast<HistoryItem*>(item(row, 0));
         Q_ASSERT(historyItem);
         d->mHistoryItemForUrl.remove(historyItem->url());
         historyItem->unlink();

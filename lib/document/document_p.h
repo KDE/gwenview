@@ -45,7 +45,7 @@ namespace Exiv2
 namespace Gwenview
 {
 
-typedef QQueue<DocumentJob*> DocumentJobQueue;
+using DocumentJobQueue = QQueue<DocumentJob *>;
 struct DocumentPrivate
 {
     Document* q;

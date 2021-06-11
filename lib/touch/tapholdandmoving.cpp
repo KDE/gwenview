@@ -68,7 +68,7 @@ QGestureRecognizer::Result TapHoldAndMovingRecognizer::recognize(QGesture* state
 
     switch (event->type()) {
     case QEvent::TouchBegin: {
-        QTouchEvent* touchEvent = static_cast<QTouchEvent*>(event);
+        auto* touchEvent = static_cast<QTouchEvent*>(event);
         d->mTouchBeginnTimestamp = touchEvent->timestamp();
         d->mGestureTriggered = false;
         d->mTouchPointStationary = true;
@@ -78,7 +78,7 @@ QGestureRecognizer::Result TapHoldAndMovingRecognizer::recognize(QGesture* state
     }
 
     case QEvent::TouchUpdate: {
-        QTouchEvent* touchEvent = static_cast<QTouchEvent*>(event);
+        auto* touchEvent = static_cast<QTouchEvent*>(event);
         const qint64 now = touchEvent->timestamp();
         const QPoint pos = touchEvent->touchPoints().first().pos().toPoint();
         state->setHotSpot(touchEvent->touchPoints().first().screenPos());
@@ -107,7 +107,7 @@ QGestureRecognizer::Result TapHoldAndMovingRecognizer::recognize(QGesture* state
     }
 
     case QEvent::TouchEnd: {
-        QTouchEvent* touchEvent = static_cast<QTouchEvent*>(event);
+        auto* touchEvent = static_cast<QTouchEvent*>(event);
         state->setHotSpot(touchEvent->touchPoints().first().screenPos());
         if (d->mGestureTriggered) {
             d->mLastGestureState = Qt::GestureFinished;

@@ -75,7 +75,7 @@ struct DocumentInfo
  * altering DocumentInfo::mDocument refcount, since we rely on it to garbage
  * collect documents.
  */
-typedef QMap<QUrl, DocumentInfo*> DocumentMap;
+using DocumentMap = QMap<QUrl, DocumentInfo *>;
 
 struct DocumentFactoryPrivate
 {
@@ -90,7 +90,7 @@ struct DocumentFactoryPrivate
         // Build a map of all unreferenced images. We use a MultiMap because in
         // rare cases documents may get accessed at the same millisecond.
         // See https://bugs.kde.org/show_bug.cgi?id=296401
-        typedef QMultiMap<QDateTime, QUrl> UnreferencedImages;
+        using UnreferencedImages = QMultiMap<QDateTime, QUrl>;
         UnreferencedImages unreferencedImages;
 
         DocumentMap::Iterator it = map.begin(), end = map.end();
@@ -178,7 +178,7 @@ Document::Ptr DocumentFactory::load(const QUrl &url)
 
     // Start loading the document
     LOG(url.fileName() << "loading");
-    Document* doc = new Document(url);
+    auto* doc = new Document(url);
     connect(doc, &Document::loaded, this, &DocumentFactory::slotLoaded);
     connect(doc, &Document::saved, this, &DocumentFactory::slotSaved);
     connect(doc, &Document::modified, this, &DocumentFactory::slotModified);

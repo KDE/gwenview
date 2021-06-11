@@ -95,7 +95,7 @@ DateWidget::DateWidget(QWidget* parent)
     d->mNextButton->setIcon(QIcon::fromTheme(QStringLiteral("go-next")));
     connect(d->mNextButton, &StatusBarToolButton::clicked, this, &DateWidget::goToNext);
 
-    QHBoxLayout* layout = new QHBoxLayout(this);
+    auto* layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     layout->addWidget(d->mPreviousButton);

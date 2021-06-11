@@ -59,7 +59,7 @@ struct DocumentViewControllerPrivate
 
     void setupActions()
     {
-        KActionCategory* view = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface", "View"), mActionCollection);
+        auto* view = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface", "View"), mActionCollection);
 
         mZoomToFitAction = view->addAction(QStringLiteral("view_zoom_to_fit"));
         view->collection()->setDefaultShortcut(mZoomToFitAction, Qt::Key_F);

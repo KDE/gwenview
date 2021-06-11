@@ -35,7 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 
-typedef QMap<SemanticInfoTag, bool> TagInfo;
+using TagInfo = QMap<SemanticInfoTag, bool>;
 
 struct TagWidgetPrivate;
 class GWENVIEWLIB_EXPORT TagWidget : public QWidget

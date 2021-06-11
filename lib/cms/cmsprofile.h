@@ -37,7 +37,7 @@ namespace Exiv2
     class Image;
 }
 
-typedef void* cmsHPROFILE;
+using cmsHPROFILE = void *;
 
 namespace Gwenview
 {
@@ -52,7 +52,7 @@ struct ProfilePrivate;
 class GWENVIEWLIB_EXPORT Profile : public QSharedData
 {
 public:
-    typedef QExplicitlySharedDataPointer<Profile> Ptr;
+    using Ptr = QExplicitlySharedDataPointer<Profile>;
 
     Profile();
     ~Profile();

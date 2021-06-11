@@ -235,7 +235,7 @@ bool FullScreenBar::eventFilter(QObject* object, QEvent* event)
                 slideOut();
             }
         } else {
-            QMouseEvent* mouseEvent = static_cast<QMouseEvent *>(event);
+            auto* mouseEvent = static_cast<QMouseEvent *>(event);
             if (d->mEdgeTriggerEnabled && mouseEvent->buttons() == 0 && d->slideInTriggerRect().contains(QCursor::pos())) {
                 slideIn();
             }
@@ -261,7 +261,7 @@ bool FullScreenBar::eventFilter(QObject* object, QEvent* event)
     // parenthesis construct should be removed. Use KLocale's method to do this.
     // """
     if (event->type() == QEvent::Show || event->type() == QEvent::Paint) {
-        QToolButton* button = qobject_cast<QToolButton*>(object);
+        auto* button = qobject_cast<QToolButton*>(object);
         if (button && !button->actions().isEmpty()) {
             QAction* action = button->actions().constFirst();
             QString toolTip = KLocalizedString::removeAcceleratorMarker(action->toolTip());
