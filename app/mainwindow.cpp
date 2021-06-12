@@ -859,11 +859,11 @@ struct MainWindow::Private
             GV_WARN_AND_RETURN_VALUE(false, "Sidebar not implemented on start page");
             break;
         case BrowseMainPageId:
-            return GwenviewConfig::sideBarVisibleBrowseMode();
+            return GwenviewConfig::sideBarVisible();
         case ViewMainPageId:
             return q->isFullScreen()
                 ? GwenviewConfig::sideBarVisibleViewModeFullScreen()
-                : GwenviewConfig::sideBarVisibleViewMode();
+                : GwenviewConfig::sideBarVisible();
         }
         return false;
     }
@@ -875,12 +875,12 @@ struct MainWindow::Private
             GV_WARN_AND_RETURN("Sidebar not implemented on start page");
             break;
         case BrowseMainPageId:
-            GwenviewConfig::setSideBarVisibleBrowseMode(visible);
+            GwenviewConfig::setSideBarVisible(visible);
             break;
         case ViewMainPageId:
             q->isFullScreen()
                 ? GwenviewConfig::setSideBarVisibleViewModeFullScreen(visible)
-                : GwenviewConfig::setSideBarVisibleViewMode(visible);
+                : GwenviewConfig::setSideBarVisible(visible);
             break;
         }
     }

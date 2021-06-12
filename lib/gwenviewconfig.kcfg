@@ -20,10 +20,7 @@
         <default>General.Name,General.ImageSize,Exif.Photo.ExposureTime,Exif.Photo.Flash</default>
         </entry>
 
-        <entry name="SideBarVisibleBrowseMode" key="IsVisible BrowseMode" type="Bool">
-            <default>false</default>
-        </entry>
-        <entry name="SideBarVisibleViewMode" key="IsVisible ViewMode" type="Bool">
+        <entry name="SideBarVisible" key="IsVisible ViewMode" type="Bool">
             <default>false</default>
         </entry>
         <entry name="SideBarVisibleViewModeFullScreen" key="IsVisible ViewMode FullScreen" type="Bool">
