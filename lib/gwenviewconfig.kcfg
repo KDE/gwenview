@@ -14,6 +14,7 @@
     <include>lib/documentview/rasterimageview.h</include>
     <include>lib/print/printoptionspage.h</include>
     <include>lib/renderingintent.h</include>
+    <include>lib/backgroundcolorwidget/backgroundcolorwidget.h</include>
     <kcfgfile name="gwenviewrc"/>
     <group name="SideBar">
         <entry name="PreferredMetaInfoKeyList" type="StringList">
@@ -36,8 +37,14 @@
             <default>true</default>
         </entry>
 
-        <entry name="ViewBackgroundValue" type="Int">
-            <default>100</default>
+        <entry name="BackgroundColorMode" type="Enum">
+            <choices name="Gwenview::BackgroundColorWidget::ColorMode">
+                <choice name="BackgroundColorWidget::Auto"/>
+                <choice name="BackgroundColorWidget::Light"/>
+                <choice name="BackgroundColorWidget::Neutral"/>
+                <choice name="BackgroundColorWidget::Dark"/>
+            </choices>
+            <default>BackgroundColorWidget::Auto</default>
         </entry>
 
         <entry name="HistoryEnabled" type="Bool">

@@ -189,6 +189,8 @@ StartMainPage::StartMainPage(QWidget* parent, GvCore* gvCore)
     d->updateHistoryTab();
     connect(GwenviewConfig::self(), &GwenviewConfig::configChanged, this, &StartMainPage::loadConfig);
 
+    connect(qApp, &QApplication::paletteChanged, this, [this](){ applyPalette(d->mGvCore->palette(GvCore::NormalViewPalette)); });
+
     d->mRecentFoldersView->setFocus();
 
     ScrollerUtils::setQScroller(d->mBookmarksView->viewport());

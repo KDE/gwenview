@@ -45,6 +45,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "fileoperations.h"
 #include <gvcore.h>
 #include "splitter.h"
+#include <lib/backgroundcolorwidget/backgroundcolorwidget.h>
 #include <lib/documentview/abstractdocumentviewadapter.h>
 #include <lib/documentview/abstractrasterimageviewtool.h>
 #include <lib/documentview/documentview.h>
@@ -121,6 +122,7 @@ struct ViewMainPagePrivate
     DocumentViewSynchronizer* mSynchronizer;
     QToolButton* mToggleSideBarButton;
     QToolButton* mToggleThumbnailBarButton;
+    BackgroundColorWidget* mBackgroundColorWidget;
     ZoomWidget* mZoomWidget;
     DocumentViewContainer* mDocumentViewContainer;
     SlideContainer* mToolContainer;
@@ -151,6 +153,7 @@ struct ViewMainPagePrivate
         mStatusBarContainer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         mToggleSideBarButton = new StatusBarToolButton;
         mToggleThumbnailBarButton = new StatusBarToolButton;
+        mBackgroundColorWidget = new BackgroundColorWidget;
         mZoomWidget = new ZoomWidget;
         mSynchronizeCheckBox = new QCheckBox(i18n("Synchronize"));
         mSynchronizeCheckBox->hide();
@@ -176,6 +179,7 @@ struct ViewMainPagePrivate
         // so its autohide feature works properly (stretch factor = 1)
         statusBarContainerLayout->addWidget(mDocumentCountLabel, 1);
         statusBarContainerLayout->addStretch();
+        statusBarContainerLayout->addWidget(mBackgroundColorWidget);
         statusBarContainerLayout->addWidget(mZoomWidget);
         //--
         mAdapterContainer = new QWidget;
@@ -214,6 +218,7 @@ struct ViewMainPagePrivate
         viewMainPageLayout->addWidget(mStatusBarContainer);
         //--
         mDocumentViewController = new DocumentViewController(mActionCollection, q);
+        mDocumentViewController->setBackgroundColorWidget(mBackgroundColorWidget);
         mDocumentViewController->setZoomWidget(mZoomWidget);
         mDocumentViewController->setToolContainer(mToolContainer);
         mSynchronizer = new DocumentViewSynchronizer(&mDocumentViews, q);
@@ -448,6 +453,8 @@ ViewMainPage::ViewMainPage(QWidget* parent, SlideShow* slideShow, KActionCollect
     connect(d->mThumbnailBar, &ThumbnailBarView::rowsRemovedSignal,
             this, &ViewMainPage::slotDirModelItemsAddedOrRemoved);
 
+    connect(qApp, &QApplication::paletteChanged, this, [this](){ d->applyPalette(window()->isFullScreen()); });
+
     installEventFilter(this);
 }
 
@@ -555,6 +562,14 @@ void ViewMainPage::showContextMenu()
         addActionToMenu(&menu, d->mActionCollection, "view_zoom_out");
         addActionToMenu(&menu, d->mActionCollection, "view_toggle_birdeyeview");
     }
+    menu.addSeparator();
+    QMenu backgroundColorModeMenu(i18nc("@item:inmenu", "Background Color Mode"), this);
+    addActionToMenu(&backgroundColorModeMenu, d->mActionCollection, "view_background_colormode_auto");
+    addActionToMenu(&backgroundColorModeMenu, d->mActionCollection, "view_background_colormode_light");
+    addActionToMenu(&backgroundColorModeMenu, d->mActionCollection, "view_background_colormode_neutral");
+    addActionToMenu(&backgroundColorModeMenu, d->mActionCollection, "view_background_colormode_dark");
+    backgroundColorModeMenu.setIcon(backgroundColorModeMenu.actions().at(0)->icon());
+    menu.addMenu(&backgroundColorModeMenu);
     if (d->mCompareMode) {
         menu.addSeparator();
         addActionToMenu(&menu, d->mActionCollection, "synchronize_views");
@@ -568,7 +583,7 @@ void ViewMainPage::showContextMenu()
     menu.addSeparator();
     addActionToMenu(&menu, d->mActionCollection, "file_open_with");
     addActionToMenu(&menu, d->mActionCollection, "file_open_containing_folder");
-    
+
     menu.exec(QCursor::pos());
 }
 

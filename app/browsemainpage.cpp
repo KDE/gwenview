@@ -352,6 +352,8 @@ BrowseMainPage::BrowseMainPage(QWidget* parent, KActionCollection* actionCollect
     connect(thumbnailView(), &ThumbnailView::selectionChangedSignal,
             this, &BrowseMainPage::slotSelectionChanged);
 
+    connect(qApp, &QApplication::paletteChanged, this, [this](){ d->applyPalette(window()->isFullScreen()); });
+
     installEventFilter(this);
 }
 

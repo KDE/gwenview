@@ -41,6 +41,7 @@ include_directories(
     )
 
 set(gwenviewlib_SRCS
+    backgroundcolorwidget/backgroundcolorwidget.cpp
     cms/iccjpeg.c
     cms/cmsprofile.cpp
     cms/cmsprofile_png.cpp

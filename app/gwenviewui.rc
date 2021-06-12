@@ -30,6 +30,11 @@
         <Action name="view_zoom_out"/>
         <Action name="view_toggle_birdeyeview"/>
         <Separator/>
+        <Action name="view_background_colormode_auto"/>
+        <Action name="view_background_colormode_light"/>
+        <Action name="view_background_colormode_neutral"/>
+        <Action name="view_background_colormode_dark"/>
+        <Separator/>
         <Action name="sort_by"/>
         <Action name="thumbnail_details"/>
         <Separator/>

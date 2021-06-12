@@ -686,6 +686,11 @@ void DocumentView::toggleBirdEyeView()
     GwenviewConfig::setBirdEyeViewEnabled(!GwenviewConfig::birdEyeViewEnabled());
 }
 
+void DocumentView::setBackgroundColorMode(BackgroundColorWidget::ColorMode colorMode) {
+    GwenviewConfig::setBackgroundColorMode(colorMode);
+    Q_EMIT backgroundColorModeChanged(colorMode);
+}
+
 bool DocumentView::zoomToFit() const
 {
     return d->mAdapter->zoomToFit();

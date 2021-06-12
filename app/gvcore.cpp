@@ -33,6 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KF
 #include <KColorScheme>
+#include <KColorUtils>
 #include <KFileCustomDialog>
 #include <KFileWidget>
 #include <KLocalizedString>
@@ -41,6 +42,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include "gwenview_app_debug.h"
 #include "dialogguard.h"
+#include <lib/backgroundcolorwidget/backgroundcolorwidget.h>
 #include <lib/binder.h>
 #include <lib/document/documentfactory.h>
 #include <lib/document/documentjob.h>
@@ -166,18 +168,44 @@ struct GvCorePrivate
 
     void setupPalettes()
     {
-        QPalette pal;
-        int value = GwenviewConfig::viewBackgroundValue();
-        QColor fgColor = value > 128 ? Qt::black : Qt::white;
-
         // Normal
         KSharedConfigPtr config = KSharedConfig::openConfig();
         mPalettes[GvCore::NormalPalette] = KColorScheme::createApplicationPalette(config);
+        QPalette viewPalette = mPalettes[GvCore::NormalPalette];
 
-        pal = mPalettes[GvCore::NormalPalette];
-        pal.setColor(QPalette::Base, QColor::fromHsv(0, 0, value));
-        pal.setColor(QPalette::Text, fgColor);
-        mPalettes[GvCore::NormalViewPalette] = pal;
+        BackgroundColorWidget::ColorMode colorMode = GwenviewConfig::backgroundColorMode();
+        bool usingLightTheme = BackgroundColorWidget::usingLightTheme();
+
+        if ((usingLightTheme && colorMode == BackgroundColorWidget::Dark)
+            || (!usingLightTheme && colorMode == BackgroundColorWidget::Light)) {
+            viewPalette.setColor(QPalette::Base, mPalettes[GvCore::NormalPalette].color(QPalette::Text));
+            viewPalette.setColor(QPalette::Text, mPalettes[GvCore::NormalPalette].color(QPalette::Base));
+            viewPalette.setColor(QPalette::Window, mPalettes[GvCore::NormalPalette].color(QPalette::WindowText));
+            viewPalette.setColor(QPalette::WindowText, mPalettes[GvCore::NormalPalette].color(QPalette::Window));
+            viewPalette.setColor(QPalette::Button, mPalettes[GvCore::NormalPalette].color(QPalette::ButtonText));
+            viewPalette.setColor(QPalette::ButtonText, mPalettes[GvCore::NormalPalette].color(QPalette::Button));
+            viewPalette.setColor(QPalette::ToolTipBase, mPalettes[GvCore::NormalPalette].color(QPalette::ToolTipText));
+            viewPalette.setColor(QPalette::ToolTipText, mPalettes[GvCore::NormalPalette].color(QPalette::ToolTipBase));
+        } else if (colorMode == BackgroundColorWidget::Neutral) {
+            QColor base = KColorUtils::mix(mPalettes[GvCore::NormalPalette].color(QPalette::Base),
+                                           mPalettes[GvCore::NormalPalette].color(QPalette::Text), 0.5);
+            QColor window = KColorUtils::mix(mPalettes[GvCore::NormalPalette].color(QPalette::Window),
+                                             mPalettes[GvCore::NormalPalette].color(QPalette::WindowText), 0.5);
+            QColor button = KColorUtils::mix(mPalettes[GvCore::NormalPalette].color(QPalette::Button),
+                                             mPalettes[GvCore::NormalPalette].color(QPalette::ButtonText), 0.5);
+            QColor toolTipBase = KColorUtils::mix(mPalettes[GvCore::NormalPalette].color(QPalette::ToolTipBase),
+                                                  mPalettes[GvCore::NormalPalette].color(QPalette::ToolTipText), 0.5);
+            viewPalette.setColor(QPalette::Base, base);
+            viewPalette.setColor(QPalette::Text, base.lightnessF() > 0.5 ? Qt::black : Qt::white);
+            viewPalette.setColor(QPalette::Window, window);
+            viewPalette.setColor(QPalette::WindowText, base.lightnessF() > 0.5 ? Qt::black : Qt::white);
+            viewPalette.setColor(QPalette::Button, button);
+            viewPalette.setColor(QPalette::ButtonText, base.lightnessF() > 0.5 ? Qt::black : Qt::white);
+            viewPalette.setColor(QPalette::ToolTipBase, toolTipBase);
+            viewPalette.setColor(QPalette::ToolTipText, base.lightnessF() > 0.5 ? Qt::black : Qt::white);
+        }
+
+        mPalettes[GvCore::NormalViewPalette] = viewPalette;
 
         // Fullscreen
         QString name = GwenviewConfig::fullScreenColorScheme();
@@ -202,7 +230,7 @@ struct GvCorePrivate
         }
 
         // FullScreenView has either a solid black color or a textured background
-        pal = mPalettes[GvCore::FullScreenPalette];
+        viewPalette = mPalettes[GvCore::FullScreenPalette];
         QPixmap bgTexture(256,256);
         if (Gwenview::GwenviewConfig::fullScreenBackground() == Gwenview::FullScreenBackground::Black) {
             bgTexture.fill(Qt::black);
@@ -210,8 +238,8 @@ struct GvCorePrivate
             QString path = QStandardPaths::locate(QStandardPaths::AppDataLocation, "images/background.png");
             bgTexture = path;
         }
-        pal.setBrush(QPalette::Base, bgTexture);
-        mPalettes[GvCore::FullScreenViewPalette] = pal;
+        viewPalette.setBrush(QPalette::Base, bgTexture);
+        mPalettes[GvCore::FullScreenViewPalette] = viewPalette;
     }
 
     void adjustDefaultFullScreenPalette()
@@ -318,6 +346,7 @@ GvCore::GvCore(MainWindow* mainWindow, SortedDirModel* dirModel)
 
     connect(GwenviewConfig::self(), SIGNAL(configChanged()),
             SLOT(slotConfigChanged()));
+    connect(qApp, &QApplication::paletteChanged, this, [this](){ d->setupPalettes(); });
 }
 
 GvCore::~GvCore()

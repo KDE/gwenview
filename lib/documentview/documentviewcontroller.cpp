@@ -36,6 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QAction>
+#include <QApplication>
 #include <QHBoxLayout>
 
 namespace Gwenview
@@ -46,6 +47,7 @@ struct DocumentViewControllerPrivate
     DocumentViewController* q;
     KActionCollection* mActionCollection;
     DocumentView* mView;
+    BackgroundColorWidget* mBackgroundColorWidget;
     ZoomWidget* mZoomWidget;
     SlideContainer* mToolContainer;
 
@@ -55,6 +57,10 @@ struct DocumentViewControllerPrivate
     QAction * mZoomInAction;
     QAction * mZoomOutAction;
     QAction * mToggleBirdEyeViewAction;
+    QAction * mBackgroundColorModeAuto;
+    QAction * mBackgroundColorModeLight;
+    QAction * mBackgroundColorModeNeutral;
+    QAction * mBackgroundColorModeDark;
     QList<QAction *> mActions;
 
     void setupActions()
@@ -91,7 +97,48 @@ struct DocumentViewControllerPrivate
         mToggleBirdEyeViewAction->setIcon(QIcon::fromTheme(QStringLiteral("zoom")));
         mToggleBirdEyeViewAction->setEnabled(mView != nullptr);
 
-        mActions << mZoomToFitAction << mActualSizeAction << mZoomInAction << mZoomOutAction << mZoomToFillAction << mToggleBirdEyeViewAction;
+        mBackgroundColorModeAuto = view->addAction(QStringLiteral("view_background_colormode_auto"));
+        mBackgroundColorModeAuto->setCheckable(true);
+        mBackgroundColorModeAuto->setChecked(GwenviewConfig::backgroundColorMode() == BackgroundColorWidget::Auto);
+        mBackgroundColorModeAuto->setText(i18nc("@action", "Follow color scheme"));
+        mBackgroundColorModeAuto->setEnabled(mView != nullptr);
+        mBackgroundColorModeAuto->setToolTip(mBackgroundColorModeAuto->text());
+
+        mBackgroundColorModeLight = view->addAction(QStringLiteral("view_background_colormode_light"));
+        mBackgroundColorModeLight->setCheckable(true);
+        mBackgroundColorModeLight->setChecked(GwenviewConfig::backgroundColorMode() == BackgroundColorWidget::Light);
+        mBackgroundColorModeLight->setText(i18nc("@action", "Light Mode"));
+        mBackgroundColorModeLight->setEnabled(mView != nullptr);
+        mBackgroundColorModeLight->setToolTip(mBackgroundColorModeLight->text());
+
+        mBackgroundColorModeNeutral = view->addAction(QStringLiteral("view_background_colormode_neutral"));
+        mBackgroundColorModeNeutral->setCheckable(true);
+        mBackgroundColorModeNeutral->setChecked(GwenviewConfig::backgroundColorMode() == BackgroundColorWidget::Neutral);
+        mBackgroundColorModeNeutral->setText(i18nc("@action", "Neutral Mode"));
+        mBackgroundColorModeNeutral->setEnabled(mView != nullptr);
+        mBackgroundColorModeNeutral->setToolTip(mBackgroundColorModeNeutral->text());
+
+        mBackgroundColorModeDark = view->addAction(QStringLiteral("view_background_colormode_dark"));
+        mBackgroundColorModeDark->setCheckable(true);
+        mBackgroundColorModeDark->setChecked(GwenviewConfig::backgroundColorMode() == BackgroundColorWidget::Dark);
+        mBackgroundColorModeDark->setText(i18nc("@action", "Dark Mode"));
+        mBackgroundColorModeDark->setEnabled(mView != nullptr);
+        mBackgroundColorModeDark->setToolTip(mBackgroundColorModeDark->text());
+
+        mActions << mZoomToFitAction << mActualSizeAction << mZoomInAction
+            << mZoomOutAction << mZoomToFillAction << mToggleBirdEyeViewAction
+            << mBackgroundColorModeAuto << mBackgroundColorModeLight
+            << mBackgroundColorModeNeutral << mBackgroundColorModeDark;
+    }
+
+    void connectBackgroundColorWidget()
+    {
+        if (!mBackgroundColorWidget || !mView) {
+            return;
+        }
+
+        QObject::connect(mBackgroundColorWidget, &BackgroundColorWidget::colorModeChanged, mView, &DocumentView::setBackgroundColorMode);
+        QObject::connect(mView, &DocumentView::backgroundColorModeChanged, mBackgroundColorWidget, &BackgroundColorWidget::setColorMode);
     }
 
     void connectZoomWidget()
@@ -135,6 +182,7 @@ DocumentViewController::DocumentViewController(KActionCollection* actionCollecti
     d->q = this;
     d->mActionCollection = actionCollection;
     d->mView = nullptr;
+    d->mBackgroundColorWidget = nullptr;
     d->mZoomWidget = nullptr;
     d->mToolContainer = nullptr;
 
@@ -155,6 +203,7 @@ void DocumentViewController::setView(DocumentView* view)
             disconnect(action, nullptr, d->mView, nullptr);
         }
         disconnect(d->mZoomWidget, nullptr, d->mView, nullptr);
+        disconnect(d->mBackgroundColorWidget, nullptr, d->mView, nullptr);
     }
 
     // Connect new view
@@ -181,10 +230,30 @@ void DocumentViewController::setView(DocumentView* view)
 
     connect(d->mToggleBirdEyeViewAction, &QAction::triggered, d->mView, &DocumentView::toggleBirdEyeView);
 
+    connect(d->mBackgroundColorModeAuto, &QAction::triggered, this, [this](){
+        d->mView->setBackgroundColorMode(BackgroundColorWidget::Auto);
+        qApp->paletteChanged(qApp->palette());
+    });
+    connect(d->mBackgroundColorModeLight, &QAction::triggered, this, [this](){
+        d->mView->setBackgroundColorMode(BackgroundColorWidget::Light);
+        qApp->paletteChanged(qApp->palette());
+    });
+    connect(d->mBackgroundColorModeNeutral, &QAction::triggered, this, [this](){
+        d->mView->setBackgroundColorMode(BackgroundColorWidget::Neutral);
+        qApp->paletteChanged(qApp->palette());
+    });
+    connect(d->mBackgroundColorModeDark, &QAction::triggered, this, [this](){
+        d->mView->setBackgroundColorMode(BackgroundColorWidget::Dark);
+        qApp->paletteChanged(qApp->palette());
+    });
+
     d->updateActions();
     updateZoomToFitActionFromView();
     updateZoomToFillActionFromView();
     updateTool();
+
+    // Sync background color widget
+    d->connectBackgroundColorWidget();
 
     // Sync zoom widget
     d->connectZoomWidget();
@@ -194,6 +263,26 @@ void DocumentViewController::setView(DocumentView* view)
 DocumentView* DocumentViewController::view() const
 {
     return d->mView;
+}
+
+void DocumentViewController::setBackgroundColorWidget(BackgroundColorWidget* widget)
+{
+    d->mBackgroundColorWidget = widget;
+
+    d->mBackgroundColorWidget->setActions(
+        d->mBackgroundColorModeAuto,
+        d->mBackgroundColorModeLight,
+        d->mBackgroundColorModeNeutral,
+        d->mBackgroundColorModeDark
+    );
+
+    d->connectBackgroundColorWidget();
+    d->mBackgroundColorWidget->setVisible(true);
+}
+
+BackgroundColorWidget* DocumentViewController::backgroundColorWidget() const
+{
+    return d->mBackgroundColorWidget;
 }
 
 void DocumentViewController::setZoomWidget(ZoomWidget* widget)

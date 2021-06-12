@@ -30,6 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include <lib/document/document.h>
+#include <lib/backgroundcolorwidget/backgroundcolorwidget.h>
 
 class QPropertyAnimation;
 class QUrl;
@@ -151,6 +152,8 @@ public Q_SLOTS:
     void toggleZoomToFill();
     void toggleBirdEyeView();
 
+    void setBackgroundColorMode(BackgroundColorWidget::ColorMode colorMode);
+
     void setPosition(const QPoint&);
 
     void hideAndDeleteLater();
@@ -174,6 +177,8 @@ Q_SIGNALS:
     void toggleFullScreenRequested();
 
     void videoFinished();
+
+    void backgroundColorModeChanged(BackgroundColorWidget::ColorMode);
 
     void minimumZoomChanged(qreal);
 

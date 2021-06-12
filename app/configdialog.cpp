@@ -72,11 +72,9 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 
     pageItem = addPage(widget, i18n("General"));
     pageItem->setIcon(QIcon::fromTheme(QStringLiteral("gwenview")));
-    connect(mGeneralConfigPage.kcfg_ViewBackgroundValue, &QAbstractSlider::valueChanged, this, &ConfigDialog::updateViewBackgroundFrame);
     connect(mGeneralConfigPage.kcfg_JPEGQuality, &QAbstractSlider::valueChanged, this, [=] (int value) {mGeneralConfigPage.jpegQualitySpinner->setValue(value);});
     connect(mGeneralConfigPage.jpegQualitySpinner, QOverload<int>::of(&QSpinBox::valueChanged), this, [=] (int value) {mGeneralConfigPage.kcfg_JPEGQuality->setValue(value);});
     mGeneralConfigPage.jpegQualitySpinner->setValue(mGeneralConfigPage.kcfg_JPEGQuality->value());
-    mGeneralConfigPage.backgroundValueFrame->setMinimumWidth(mGeneralConfigPage.jpegQualitySpinner->width());
     mGeneralConfigPage.lossyImageFormatHelpLabel->setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
 
     mGeneralConfigPage.kcfg_AutoplayVideos->setEnabled(mGeneralConfigPage.kcfg_ListVideos->isChecked());
@@ -133,24 +131,6 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     mAdvancedConfigPage.perceptualHelpLabel->setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
     mAdvancedConfigPage.relativeHelpLabel->setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
     mAdvancedConfigPage.colorProfileHelpLabel->setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
-
-
-    updateViewBackgroundFrame();
-}
-
-void ConfigDialog::updateViewBackgroundFrame()
-{
-    const QColor color = QColor::fromHsv(0, 0, mGeneralConfigPage.kcfg_ViewBackgroundValue->value());
-    const QString css =
-        QStringLiteral(
-            "background-color: %1;"
-            "border-radius: 5px;"
-            "border: 1px solid %1;")
-        .arg(color.name());
-    // When using Oxygen, setting the background color via palette causes the
-    // pixels outside the frame to be painted with the new background color as
-    // well. Using CSS works more like expected.
-    mGeneralConfigPage.backgroundValueFrame->setStyleSheet(css);
 }
 
 } // namespace

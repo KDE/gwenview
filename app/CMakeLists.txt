@@ -81,6 +81,7 @@ target_link_libraries(gwenview
     KF5::ItemModels
     KF5::Notifications
     KF5::WidgetsAddons
+    KF5::GuiAddons
     gwenviewlib
     )
 

@@ -175,17 +175,6 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
         delegate->setContextBarActions(actions);
         mThumbnailView->setItemDelegate(delegate);
 
-        // Colors
-        int value = GwenviewConfig::viewBackgroundValue();
-        QColor bgColor = QColor::fromHsv(0, 0, value);
-        QColor fgColor = value > 128 ? Qt::black : Qt::white;
-
-        QPalette pal = mThumbnailView->palette();
-        pal.setColor(QPalette::Base, bgColor);
-        pal.setColor(QPalette::Text, fgColor);
-
-        mThumbnailView->setPalette(pal);
-
         QObject::connect(mSlider, &ZoomSlider::valueChanged,
                          mThumbnailView, &ThumbnailView::setThumbnailWidth);
         QObject::connect(mThumbnailView, &ThumbnailView::thumbnailWidthChanged,

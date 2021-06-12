@@ -41,9 +41,6 @@ class ConfigDialog : public KConfigDialog
 public:
     ConfigDialog(QWidget* parent);
 
-private Q_SLOTS:
-    void updateViewBackgroundFrame();
-
 private:
     InvisibleButtonGroup* mWrapNavigationBehaviorGroup = nullptr;
     InvisibleButtonGroup* mAlphaBackgroundModeGroup = nullptr;
