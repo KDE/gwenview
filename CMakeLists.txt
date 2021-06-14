@@ -68,6 +68,7 @@ find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
     WindowSystem
     IconThemes
     Notifications
+    GuiAddons
     WidgetsAddons
 )
 find_package(KF5 ${KF5_MIN_VERSION} OPTIONAL_COMPONENTS

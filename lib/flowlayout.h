@@ -45,6 +45,7 @@
 
 class GWENVIEWLIB_EXPORT FlowLayout : public QLayout
 {
+    Q_OBJECT
 public:
     explicit FlowLayout(QWidget *parent, int margin = 0, int spacing = -1);
     FlowLayout(int spacing = -1);

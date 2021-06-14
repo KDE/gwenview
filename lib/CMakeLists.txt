@@ -87,6 +87,7 @@ set(gwenviewlib_SRCS
     recentfilesmodel.cpp
     archiveutils.cpp
     datewidget.cpp
+    decoratedtag/decoratedtag.cpp
     exiv2imageloader.cpp
     flowlayout.cpp
     fullscreenbar.cpp
@@ -237,6 +238,7 @@ target_link_libraries(gwenviewlib
    Qt5::Concurrent
    Qt5::Svg
    Qt5::PrintSupport
+   KF5::GuiAddons
    KF5::KIOCore
    KF5::KIOWidgets
    KF5::KIOFileWidgets

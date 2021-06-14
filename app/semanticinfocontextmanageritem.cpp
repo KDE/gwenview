@@ -46,8 +46,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "ui_semanticinfosidebaritem.h"
 #include "ui_semanticinfodialog.h"
 #include <lib/contextmanager.h>
+#include <lib/decoratedtag/decoratedtag.h>
 #include <lib/documentview/documentview.h>
 #include <lib/eventwatcher.h>
+#include <lib/flowlayout.h>
 #include <lib/hud/hudwidget.h>
 #include <lib/signalblocker.h>
 #include <lib/widgetfloater.h>
@@ -167,6 +169,8 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
     /** A list of all actions, so that we can disable them when necessary */
     QList<QAction *> mActions;
     QPointer<RatingIndicator> mRatingIndicator;
+    FlowLayout *mTagLayout;
+    QLabel *mEditLabel;
 
     void setupGroup()
     {
@@ -178,13 +182,27 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
         setupUi(container);
         container->layout()->setContentsMargins(0, 0, 0, 0);
         mGroup->addWidget(container);
+        mTagLayout = new FlowLayout;
+        mTagLayout->setHorizontalSpacing(2);
+        mTagLayout->setVerticalSpacing(2);
+        mTagLayout->setContentsMargins(0,0,0,0);
+        mTagContainerWidget->setLayout(mTagLayout);
+        DecoratedTag tempTag;
+        tempTag.setVisible(false);
+        mEditLabel = new QLabel(QStringLiteral("<a href='edit'>%1</a>").arg(i18n("Edit")));
+        mEditLabel->setVisible(false);
+        mEditLabel->setContentsMargins(tempTag.contentsMargins().left() / 2,
+                                       tempTag.contentsMargins().top(),
+                                       tempTag.contentsMargins().right() / 2,
+                                       tempTag.contentsMargins().bottom());
+        label_2->setContentsMargins(mEditLabel->contentsMargins());
 
         QObject::connect(mRatingWidget, SIGNAL(ratingChanged(int)),
                          q, SLOT(slotRatingChanged(int)));
 
         mDescriptionTextEdit->installEventFilter(q);
 
-        QObject::connect(mTagLabel, &QLabel::linkActivated,
+        QObject::connect(mEditLabel, &QLabel::linkActivated,
                          mEditTagsAction, &QAction::trigger);
     }
 
@@ -215,10 +233,17 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
         }
     }
 
-    void updateTagLabel()
+    void updateTags()
     {
+        QLayoutItem *item;
+        while ((item = mTagLayout->takeAt(0))) {
+            auto tag = item->widget();
+            if (tag != nullptr && tag != mEditLabel) {
+                tag->deleteLater();
+            }
+        }
         if (q->contextManager()->selectedFileItemList().isEmpty()) {
-            mTagLabel->clear();
+            mEditLabel->setVisible(false);
             return;
         }
 
@@ -239,9 +264,13 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
         }
         QStringList labels(labelMap.values());
 
-        QString editLink = i18n("Edit");
-        QString text = labels.join(", ") + QStringLiteral(" <a href='edit'>%1</a>").arg(editLink);
-        mTagLabel->setText(text);
+        for (const QString &label : labels) {
+            DecoratedTag *decoratedTag = new DecoratedTag(label);
+            mTagLayout->addWidget(decoratedTag);
+        }
+        mTagLayout->addWidget(mEditLabel);
+        mEditLabel->setVisible(true);
+        mTagLayout->update();
     }
 
     void updateSemanticInfoDialog()
@@ -357,7 +386,7 @@ void SemanticInfoContextManagerItem::update()
     for (QAction * action : qAsConst(d->mActions)) {
         action->setEnabled(enabled);
     }
-    d->updateTagLabel();
+    d->updateTags();
     if (d->mSemanticInfoDialog) {
         d->updateSemanticInfoDialog();
     }
