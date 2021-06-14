@@ -464,7 +464,6 @@ struct MainWindow::Private
         mGoToPreviousAction->setIcon(QIcon::fromTheme("go-previous-view"));
         mGoToPreviousAction->setText(i18nc("@action Go to previous image", "Previous"));
         mGoToPreviousAction->setToolTip(i18nc("@info:tooltip", "Go to previous image"));
-        actionCollection->setDefaultShortcut(mGoToPreviousAction, Qt::Key_Backspace);
         installDisabledActionShortcutMonitor(mGoToPreviousAction, SLOT(showFirstDocumentReached()));
 
         mGoToNextAction = view->addAction("go_next", q, SLOT(goToNext()));
@@ -472,7 +471,6 @@ struct MainWindow::Private
         mGoToNextAction->setIcon(QIcon::fromTheme("go-next-view"));
         mGoToNextAction->setText(i18nc("@action Go to next image", "Next"));
         mGoToNextAction->setToolTip(i18nc("@info:tooltip", "Go to next image"));
-        actionCollection->setDefaultShortcut(mGoToNextAction, Qt::Key_Space);
         installDisabledActionShortcutMonitor(mGoToNextAction, SLOT(showLastDocumentReached()));
 
         mGoToFirstAction = view->addAction("go_first", q, SLOT(goToFirst()));
