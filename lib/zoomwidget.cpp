@@ -90,6 +90,7 @@ struct ZoomWidgetPrivate
 
     bool mZoomUpdatedBySlider = false;
     bool mZoomUpdatedByComboBox = false;
+    bool mYetAnotherRecusionGuard = false;
 
     qreal mZoom = -1;
     qreal mMinimumZoom = -1;
@@ -162,9 +163,10 @@ void ZoomWidget::setActions(QAction* zoomToFitAction, QAction* actualSizeAction,
 
 void ZoomWidget::setZoom(qreal zoom)
 {
-    if (d->mZoom == zoom) {
+    if (d->mZoom == zoom || d->mYetAnotherRecusionGuard) {
         return;
     }
+    d->mYetAnotherRecusionGuard = true;
 
     d->mZoom = zoom;
 
@@ -181,6 +183,7 @@ void ZoomWidget::setZoom(qreal zoom)
     if(d->mZoomUpdatedByComboBox || d->mZoomUpdatedBySlider) {
         Q_EMIT zoomChanged(zoom);
     }
+    d->mYetAnotherRecusionGuard = false;
 }
 
 void ZoomWidget::setZoomFromSlider()
