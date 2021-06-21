@@ -1824,6 +1824,10 @@ void MainWindow::saveConfig()
     d->mContextManager->saveConfig();
     d->saveSplitterConfig();
     GwenviewConfig::setFullScreenModeActive(isFullScreen());
+    // Save the last used version when Gwenview closes so we know which settings/features the user
+    // is aware of which is needed for migration. The version format is: two digits each for
+    // major minor bugfix version. Never decrease this number. Increase it when needed.
+    GwenviewConfig::setLastUsedVersion(210800);
 }
 
 void MainWindow::print()
@@ -1889,6 +1893,11 @@ void MainWindow::showEvent(QShowEvent *event)
 {
     // We need to delay initializing the action state until the menu bar has
     // been initialized, that's why it's done only in the showEvent()
+    if (GwenviewConfig::lastUsedVersion() == -1
+        && toolBar()->actions().contains(d->mHamburgerMenu)
+    ) {
+        menuBar()->hide();
+    }
     d->mShowMenuBarAction->setChecked(menuBar()->isVisible());
     KXmlGuiWindow::showEvent(event);
 }
