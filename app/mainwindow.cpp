@@ -44,6 +44,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QJsonObject>
 
 // KF
+#include <kxmlgui_version.h>
 #include <KActionCategory>
 #include <KActionCollection>
 #include <KDirLister>
@@ -500,6 +501,10 @@ struct MainWindow::Private {
 
         view->addAction(KStandardAction::name(KStandardAction::KeyBindings),
                         KStandardAction::keyBindings(q, &MainWindow::configureShortcuts, actionCollection));
+
+        connect(q->guiFactory(), &KXMLGUIFactory::shortcutsSaved, q, [this]() {
+            q->guiFactory()->refreshActionProperties();
+        });
 
         view->addAction(KStandardAction::Preferences, q, SLOT(showConfigDialog()));
 
@@ -1693,8 +1698,11 @@ void MainWindow::showConfigDialog()
 
 void MainWindow::configureShortcuts()
 {
+#if KXMLGUI_VERSION >= QT_VERSION_CHECK(5, 84, 0)
+    guiFactory()->showConfigureShortcutsDialog();
+#else
     guiFactory()->configureShortcuts();
-    guiFactory()->refreshActionProperties();
+#endif
 }
 
 void MainWindow::toggleMenuBar()
