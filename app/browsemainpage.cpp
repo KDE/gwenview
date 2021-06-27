@@ -499,24 +499,21 @@ void BrowseMainPage::updateSortOrder()
 {
     const QAction* action = d->mSortAction->checkedAction();
     GV_RETURN_IF_FAIL(action);
-    
+
     const Qt::SortOrder order = d->mSortDescendingAction->isChecked() ? Qt::DescendingOrder : Qt::AscendingOrder;
-    KDirModel::ModelColumns column;
-    int sortRole;
+    KDirModel::ModelColumns column = KDirModel::Name;
+    int sortRole = Qt::DisplayRole;
 
     // Map Sorting::Enum to model columns and sorting roles
     switch (sortingFromSortAction(action)) {
     case Sorting::Name:
         column = KDirModel::Name;
-        sortRole = Qt::DisplayRole;
         break;
     case Sorting::Size:
         column = KDirModel::Size;
-        sortRole = Qt::DisplayRole;
         break;
     case Sorting::Date:
         column = KDirModel::ModifiedTime;
-        sortRole = Qt::DisplayRole;
         break;
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
     case Sorting::Rating:

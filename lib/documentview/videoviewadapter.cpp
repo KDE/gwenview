@@ -376,7 +376,7 @@ void VideoViewAdapter::updateTimestamps()
     switch (d->mMediaObject->state()) {
     case Phonon::PlayingState:
     case Phonon::BufferingState:
-    case Phonon::PausedState:
+    case Phonon::PausedState: {
         qint64 current = d->mMediaObject->currentTime();
         currentTime = QDateTime::fromSecsSinceEpoch(current/1000).toUTC().toString("h:mm:ss");
         if (currentTime.startsWith("0:")) {
@@ -389,6 +389,10 @@ void VideoViewAdapter::updateTimestamps()
             remainingTime.remove(0, 2);
         }
         remainingTime = "-" + remainingTime;
+        break;
+    }
+
+    default:
         break;
     }
 
