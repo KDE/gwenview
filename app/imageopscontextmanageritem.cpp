@@ -33,7 +33,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KMessageBox>
 
 // Local
-#include "dialogguard.h"
+#include "gwenview_app_debug.h"
+#include "viewmainpage.h"
 #include "gvcore.h"
 #include "gwenview_app_debug.h"
 #include "mainwindow.h"
@@ -225,13 +226,16 @@ void ImageOpsContextManagerItem::resizeImage()
     }
     Document::Ptr doc = DocumentFactory::instance()->load(contextManager()->currentUrl());
     doc->startLoadingFullImage();
-    DialogGuard<ResizeImageDialog> dialog(d->mMainWindow);
+
+    auto *dialog = new ResizeImageDialog(d->mMainWindow);
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
+    dialog->setModal(true);
     dialog->setOriginalSize(doc->size());
-    if (!dialog->exec()) {
-        return;
-    }
-    auto *op = new ResizeImageOperation(dialog->size());
-    applyImageOperation(op);
+    connect(dialog, &QDialog::accepted, this, [this, dialog]() {
+        applyImageOperation(new ResizeImageOperation(dialog->size()));
+    });
+
+    dialog->show();
 }
 
 void ImageOpsContextManagerItem::crop()

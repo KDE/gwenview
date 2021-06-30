@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QApplication>
 #include <QClipboard>
 #include <QDateTime>
+#include <QDialog>
 #include <QFileDialog>
 #include <QLineEdit>
 #include <QMenuBar>
@@ -74,6 +75,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #endif
 
 // Local
+#include "gwenview_app_debug.h"
 #include "alignwithsidebarwidgetaction.h"
 #include "configdialog.h"
 #include "dialogguard.h"
@@ -1583,21 +1585,22 @@ void MainWindow::reload()
 
 void MainWindow::openFile()
 {
-    QUrl dirUrl = d->mContextManager->currentDirUrl();
+    const QUrl dirUrl = d->mContextManager->currentDirUrl();
 
-    DialogGuard<QFileDialog> dialog(this);
+    auto *dialog = new QFileDialog(this);
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
+    dialog->setModal(true);
     dialog->setDirectoryUrl(dirUrl);
     dialog->setWindowTitle(i18nc("@title:window", "Open Image"));
-    const QStringList mimeFilter = MimeTypeUtils::imageMimeTypes();
-    dialog->setMimeTypeFilters(mimeFilter);
+    dialog->setMimeTypeFilters(MimeTypeUtils::imageMimeTypes());
     dialog->setAcceptMode(QFileDialog::AcceptOpen);
-    if (!dialog->exec()) {
-        return;
-    }
+    connect(dialog, &QDialog::accepted, this, [this, dialog]() {
+        if (!dialog->selectedUrls().isEmpty()) {
+            openUrl(dialog->selectedUrls().at(0));
+        }
+    });
 
-    if (!dialog->selectedUrls().isEmpty()) {
-        openUrl(dialog->selectedUrls().first());
-    }
+    dialog->show();
 }
 
 void MainWindow::openUrl(const QUrl &url)
@@ -1691,9 +1694,11 @@ void MainWindow::showConfigDialog()
     // Save first so changes like thumbnail zoom level are not lost when reloading config
     saveConfig();
 
-    DialogGuard<ConfigDialog> dialog(this);
-    connect(dialog.data(), &KConfigDialog::settingsChanged, this, &MainWindow::loadConfig);
-    dialog->exec();
+    auto *dialog = new ConfigDialog(this);
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
+    dialog->setModal(true);
+    connect(dialog, &KConfigDialog::settingsChanged, this, &MainWindow::loadConfig);
+    dialog->show();
 }
 
 void MainWindow::configureShortcuts()

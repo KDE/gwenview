@@ -36,7 +36,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KLocalizedString>
 
 // Local
-#include "dialogguard.h"
 #include "gwenview_app_debug.h"
 #include "renamedialog.h"
 #include <lib/contextmanager.h>
@@ -52,8 +51,10 @@ static void copyMoveOrLink(Operation operation, const QList<QUrl> &urlList, QWid
     Q_ASSERT(!urlList.isEmpty());
     const int numberOfImages = urlList.count();
 
-    DialogGuard<QFileDialog> dialog(parent->nativeParentWidget(), QString());
+    auto *dialog = new QFileDialog(parent->nativeParentWidget(), QString());
     dialog->setAcceptMode(QFileDialog::AcceptSave);
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
+    dialog->setModal(true);
 
     // Figure out what the window title and buttons should say,
     // depending on the operation and how many images are selected
@@ -100,33 +101,33 @@ static void copyMoveOrLink(Operation operation, const QList<QUrl> &urlList, QWid
     }
     dialog->setDirectoryUrl(dirUrl);
 
-    if (!dialog->exec()) {
-        return;
-    }
+    QObject::connect(dialog, &QDialog::accepted, parent, [=]() {
+        QUrl destUrl = dialog->selectedUrls().at(0);
 
-    QUrl destUrl = dialog->selectedUrls().first();
+        KIO::CopyJob* job = nullptr;
+        switch (operation) {
+        case COPY:
+            job = KIO::copy(urlList, destUrl);
+            break;
+        case MOVE:
+            job = KIO::move(urlList, destUrl);
+            break;
+        case LINK:
+            job = KIO::link(urlList, destUrl);
+            break;
+        default:
+            Q_ASSERT(0);
+        }
+        KJobWidgets::setWindow(job, parent);
+        job->uiDelegate()->setAutoErrorHandlingEnabled(true);
 
-    KIO::CopyJob *job = nullptr;
-    switch (operation) {
-    case COPY:
-        job = KIO::copy(urlList, destUrl);
-        break;
-    case MOVE:
-        job = KIO::move(urlList, destUrl);
-        break;
-    case LINK:
-        job = KIO::link(urlList, destUrl);
-        break;
-    default:
-        Q_ASSERT(0);
-    }
-    KJobWidgets::setWindow(job, parent);
-    job->uiDelegate()->setAutoErrorHandlingEnabled(true);
+        if (numberOfImages == 1) {
+            destUrl = destUrl.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash);
+        }
+        contextManager->setTargetDirUrl(destUrl);
+    });
 
-    if (numberOfImages == 1) {
-        destUrl = destUrl.adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash);
-    }
-    contextManager->setTargetDirUrl(destUrl);
+    dialog->show();
 }
 
 static void delOrTrash(KIO::JobUiDelegate::DeletionType deletionType, const QList<QUrl> &urlList, QWidget *parent)
@@ -219,28 +220,32 @@ void showMenuForDroppedUrls(QWidget *parent, const QList<QUrl> &urlList, const Q
 
 void rename(const QUrl &oldUrl, QWidget *parent, ContextManager *contextManager)
 {
-    const DialogGuard<RenameDialog> dialog(parent);
+    auto *dialog = new RenameDialog(parent);
     dialog->setFilename(oldUrl.fileName());
-    if (!dialog->exec()) {
-        return;
-    }
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
+    dialog->setModal(true);
 
-    const QString name = dialog->filename();
-    if (name.isEmpty() || name == oldUrl.fileName()) {
-        return;
-    }
+    QObject::connect(dialog, &QDialog::accepted, parent, [=]() {
+        const QString name = dialog->filename();
+        if (name.isEmpty() || name == oldUrl.fileName()) {
+            return;
+        }
 
-    QUrl newUrl = oldUrl;
-    newUrl = newUrl.adjusted(QUrl::RemoveFilename);
-    newUrl.setPath(newUrl.path() + name);
-    KIO::SimpleJob *job = KIO::rename(oldUrl, newUrl, KIO::HideProgressInfo);
-    KJobWidgets::setWindow(job, parent);
-    job->uiDelegate()->setAutoErrorHandlingEnabled(true);
-    if (!job->exec()) {
-        return;
-    }
-    contextManager->setCurrentUrl(newUrl);
-    ThumbnailProvider::moveThumbnail(oldUrl, newUrl);
+        QUrl newUrl = oldUrl;
+        newUrl = newUrl.adjusted(QUrl::RemoveFilename);
+        newUrl.setPath(newUrl.path() + name);
+        KIO::SimpleJob* job = KIO::rename(oldUrl, newUrl, KIO::HideProgressInfo);
+        KJobWidgets::setWindow(job, parent);
+        job->uiDelegate()->setAutoErrorHandlingEnabled(true);
+        QObject::connect(job, &KJob::result, parent, [contextManager, job, oldUrl, newUrl]() {
+            if (!job->error()) {
+                contextManager->setCurrentUrl(newUrl);
+                ThumbnailProvider::moveThumbnail(oldUrl, newUrl);
+            }
+        });
+    });
+
+    dialog->show();
 }
 
 } // namespace

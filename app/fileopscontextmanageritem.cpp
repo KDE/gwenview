@@ -56,7 +56,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #endif
 
 // Local
-#include "dialogguard.h"
 #include "fileoperations.h"
 #include "sidebar.h"
 #include <lib/contextmanager.h>
@@ -400,26 +399,28 @@ void FileOpsContextManagerItem::openWith(QAction *action)
     job->setUiDelegate(new KIO::JobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, mGroup));
     job->start();
 #else
-    if (idx == -1) {
-        // Other Application...
-        DialogGuard<KOpenWithDialog> dlg(list, mGroup);
-        if (!dlg->exec()) {
-            return;
-        }
-        service = dlg->service();
-
-        if (!service) {
-            // User entered a custom command
-            Q_ASSERT(!dlg->text().isEmpty());
-            KRun::run(dlg->text(), list, mGroup);
-            return;
-        }
-    } else {
+    if (idx != -1) {
         service = mServiceList.at(idx);
+        Q_ASSERT(service);
+        KRun::runService(*service, list, mGroup);
+        return;
     }
 
-    Q_ASSERT(service);
-    KRun::runService(*service, list, mGroup);
+    // Other Application...
+    auto *dlg = new KOpenWithDialog(list, mGroup);
+    dlg->setAttribute(Qt::WA_DeleteOnClose);
+    dlg->setModal(true);
+    connect(dlg, &QDialog::accepted, this, [this, dlg, list]() {
+        KService::Ptr servicePtr = dlg->service();
+        if (servicePtr) {
+            KRun::runService(*servicePtr, list, mGroup);
+        } else {
+            // User entered a custom command
+            KRun::run(dlg->text(), list, mGroup);
+        }
+    });
+
+    dlg->show();
 #endif
 }
 

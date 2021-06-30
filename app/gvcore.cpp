@@ -40,7 +40,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KMessageBox>
 
 // Local
-#include "dialogguard.h"
 #include "gwenview_app_debug.h"
 #include <lib/backgroundcolorwidget/backgroundcolorwidget.h>
 #include <lib/binder.h>
@@ -72,7 +71,7 @@ struct GvCorePrivate {
     QString mFullScreenPaletteName;
     int configFileJPEGQualityValue = GwenviewConfig::jPEGQuality();
 
-    bool showSaveAsDialog(const QUrl &url, QUrl *outUrl, QByteArray *format)
+    KFileCustomDialog *createSaveAsDialog(const QUrl &url)
     {
         // Build the JPEG quality chooser custom widget
         auto *JPEGQualityChooserWidget = new QWidget;
@@ -104,7 +103,9 @@ struct GvCorePrivate {
         JPEGQualityChooserLayout->addItem(horizontalSpacer);
 
         // Set up the dialog
-        DialogGuard<KFileCustomDialog> dialog(mMainWindow);
+        auto *dialog = new KFileCustomDialog(mMainWindow);
+        dialog->setAttribute(Qt::WA_DeleteOnClose);
+        dialog->setModal(true);
         KFileWidget *fileWidget = dialog->fileWidget();
         dialog->setCustomWidget(JPEGQualityChooserWidget);
         fileWidget->setConfirmOverwrite(true);
@@ -129,29 +130,7 @@ struct GvCorePrivate {
                                                  || filter.contains(QLatin1String("heif")) || filter.contains(QLatin1String("heic")));
         });
 
-        // Show dialog
-        do {
-            if (!dialog->exec()) {
-                return false;
-            }
-
-            QList<QUrl> files = fileWidget->selectedUrls();
-            if (files.isEmpty()) {
-                return false;
-            }
-
-            QString filename = files.first().fileName();
-
-            const QMimeType mimeType = QMimeDatabase().mimeTypeForFile(filename, QMimeDatabase::MatchExtension);
-            if (mimeType.isValid()) {
-                *format = mimeType.preferredSuffix().toLocal8Bit();
-                break;
-            }
-            KMessageBox::sorry(mMainWindow, i18nc("@info", "Gwenview cannot save images as %1.", QFileInfo(filename).suffix()));
-        } while (true);
-
-        *outUrl = fileWidget->selectedUrls().first();
-        return true;
+        return dialog;
     }
 
     void setupPalettes()
@@ -441,35 +420,57 @@ void GvCore::save(const QUrl &url)
 
 void GvCore::saveAs(const QUrl &url)
 {
-    QByteArray format;
-    QUrl saveAsUrl;
-    if (!d->showSaveAsDialog(url, &saveAsUrl, &format)) {
-        return;
-    }
+    KFileCustomDialog *dialog = d->createSaveAsDialog(url);
 
-    if (format == "jpg") {
-        // Gwenview code assumes JPEG images have "jpeg" format, so if the
-        // dialog returned the format "jpg", use "jpeg" instead
-        // This does not affect the actual filename extension
-        format = "jpeg";
-    }
+    connect(dialog, &QDialog::accepted, this, [=]() {
+        KFileWidget *fileWidget = dialog->fileWidget();
 
-    // Start save
-    Document::Ptr doc = DocumentFactory::instance()->load(url);
-    KJob *job = doc->save(saveAsUrl, format);
-    if (!job) {
-        const QString name = saveAsUrl.fileName().isEmpty() ? saveAsUrl.toDisplayString() : saveAsUrl.fileName();
-        const QString msg = xi18nc("@info", "<emphasis strong='true'>Saving <filename>%1</filename> failed:</emphasis><nl />%2", name, doc->errorString());
-        KMessageBox::sorry(QApplication::activeWindow(), msg);
-    } else {
-        // Regardless of job result, reset JPEG config value if it was changed by
-        // the Save As dialog
-        connect(job, &KJob::result, [=]() {
-            if (GwenviewConfig::jPEGQuality() != d->configFileJPEGQualityValue)
-                GwenviewConfig::setJPEGQuality(d->configFileJPEGQualityValue);
-        });
-        connect(job, SIGNAL(result(KJob *)), SLOT(slotSaveResult(KJob *)));
-    }
+        const QList<QUrl> files = fileWidget->selectedUrls();
+        if (files.isEmpty()) {
+            return;
+        }
+
+        const QString filename = files.at(0).fileName();
+
+        const QMimeType mimeType = QMimeDatabase().mimeTypeForFile(filename, QMimeDatabase::MatchExtension);
+        QByteArray format;
+        if (mimeType.isValid()) {
+            format = mimeType.preferredSuffix().toLocal8Bit();
+        } else {
+            KMessageBox::sorry(d->mMainWindow, i18nc("@info", "Gwenview cannot save images as %1.", QFileInfo(filename).suffix()));
+        }
+
+        QUrl saveAsUrl = fileWidget->selectedUrls().constFirst();
+
+        if (format == "jpg") {
+            // Gwenview code assumes JPEG images have "jpeg" format, so if the
+            // dialog returned the format "jpg", use "jpeg" instead
+            // This does not affect the actual filename extension
+            format = "jpeg";
+        }
+
+        // Start save
+        Document::Ptr doc = DocumentFactory::instance()->load(url);
+        KJob *job = doc->save(saveAsUrl, format);
+        if (!job) {
+            const QString saveName = saveAsUrl.fileName();
+            const QString name = !saveName.isEmpty() ? saveName : saveAsUrl.toDisplayString();
+            const QString msg = xi18nc("@info", "<emphasis strong='true'>Saving <filename>%1</filename> failed:</emphasis><nl />%2", name, doc->errorString());
+            KMessageBox::sorry(QApplication::activeWindow(), msg);
+        } else {
+            // Regardless of job result, reset JPEG config value if it was changed by
+            // the Save As dialog
+            connect(job, &KJob::result, this, [=]() {
+                if (GwenviewConfig::jPEGQuality() != d->configFileJPEGQualityValue) {
+                    GwenviewConfig::setJPEGQuality(d->configFileJPEGQualityValue);
+                }
+            });
+
+            connect(job, &KJob::result, this, &GvCore::slotSaveResult);
+        }
+    });
+
+    dialog->show();
 }
 
 static void applyTransform(const QUrl &url, Orientation orientation)

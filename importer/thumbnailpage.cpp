@@ -37,7 +37,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kio/global.h>
 
 // Local
-#include "dialogguard.h"
 #include "gwenview_importer_debug.h"
 #include <documentdirfinder.h>
 #include <importerconfigdialog.h>
@@ -330,8 +329,10 @@ void ThumbnailPage::updateImportButtons()
 
 void ThumbnailPage::showConfigDialog()
 {
-    DialogGuard<ImporterConfigDialog> dialog(this);
-    dialog->exec();
+    auto *dialog = new ImporterConfigDialog(this);
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
+    dialog->setModal(true);
+    dialog->show();
 }
 
 /**
