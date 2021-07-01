@@ -53,14 +53,14 @@ enum GroupRow {
     IptcGroup,
     XmpGroup,
     NoGroupSpace,   // second last entry
-    NoGroup         // last entry
+    NoGroup,         // last entry
 };
 
 class MetaInfoGroup
 {
 public:
     enum {
-        InvalidRow = -1
+        InvalidRow = -1,
     };
 
     class Entry

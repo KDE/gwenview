@@ -40,7 +40,7 @@ enum Enum {
     Size,
     Date,
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-    Rating
+    Rating,
 #endif
 };
 

@@ -49,7 +49,7 @@ enum Orientation {
     TRANSPOSE = 5,
     ROT_90 = 6,
     TRANSVERSE = 7,
-    ROT_270 = 8
+    ROT_270 = 8,
 };
 
 }

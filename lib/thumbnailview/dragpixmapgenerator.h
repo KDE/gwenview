@@ -38,7 +38,7 @@ namespace Gwenview
 namespace DragPixmapGenerator
 {
 
-enum { MaxCount = 6 };
+enum { MaxCount = 6, };
 
 struct DragPixmap {
     QPixmap pix;

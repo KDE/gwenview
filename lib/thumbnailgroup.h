@@ -35,7 +35,7 @@ namespace ThumbnailGroup
 enum Enum {
     Normal,
     Large,
-    Large2x
+    Large2x,
 };
 
 inline int pixelSize(const Enum value)

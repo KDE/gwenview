@@ -43,7 +43,7 @@ class GWENVIEWLIB_EXPORT RedEyeReductionTool : public AbstractRasterImageViewToo
 public:
     enum Status {
         NotSet,
-        Adjusting
+        Adjusting,
     };
 
     explicit RedEyeReductionTool(RasterImageView* parent);

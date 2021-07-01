@@ -48,7 +48,7 @@ public:
         LeftEdge,
         TopEdge,
         RightEdge,
-        BottomEdge
+        BottomEdge,
     };
     explicit ShadowFilter(QWidget* parent);
     ~ShadowFilter() override;

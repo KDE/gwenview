@@ -138,7 +138,7 @@ private Q_SLOTS:
     void emitThumbnailLoadingFailed();
 
 private:
-    enum { STATE_STATORIG, STATE_DOWNLOADORIG, STATE_PREVIEWJOB, STATE_NEXTTHUMB } mState;
+    enum { STATE_STATORIG, STATE_DOWNLOADORIG, STATE_PREVIEWJOB, STATE_NEXTTHUMB, } mState;
 
     KFileItemList mItems;
     KFileItem mCurrentItem;

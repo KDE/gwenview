@@ -36,7 +36,7 @@ namespace TimeUtils
 enum CachePolicy
 {
     SkipCache,
-    UseCache
+    UseCache,
 };
 
 QDateTime GWENVIEWLIB_EXPORT dateTimeForFileItem(const KFileItem& fileItem, Gwenview::TimeUtils::CachePolicy cachePolicy = UseCache);

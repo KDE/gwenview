@@ -43,7 +43,7 @@ class GWENVIEWLIB_EXPORT FakeSemanticInfoBackEnd : public AbstractSemanticInfoBa
 {
     Q_OBJECT
 public:
-    enum InitializeMode { InitializeEmpty, InitializeRandom };
+    enum InitializeMode { InitializeEmpty, InitializeRandom, };
     FakeSemanticInfoBackEnd(QObject* parent, InitializeMode initializeMode);
 
     virtual TagSet allTags() const;

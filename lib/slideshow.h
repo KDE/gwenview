@@ -42,7 +42,7 @@ public:
     enum NavigationEndNotification {
         NeverWarn,
         WarnOnSlideshow,
-        AlwaysWarn
+        AlwaysWarn,
     };
     Q_ENUM(NavigationEndNotification)
 

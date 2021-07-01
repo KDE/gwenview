@@ -65,7 +65,7 @@ class NameFilter : public AbstractSortedDirModelFilter
 public:
     enum Mode {
         Contains,
-        DoesNotContain
+        DoesNotContain,
     };
     NameFilter(SortedDirModel* model)
     : AbstractSortedDirModelFilter(model)
@@ -134,7 +134,7 @@ public:
     enum Mode {
         GreaterOrEqual,
         Equal,
-        LessOrEqual
+        LessOrEqual,
     };
     DateFilter(SortedDirModel* model)
     : AbstractSortedDirModelFilter(model)
@@ -207,7 +207,7 @@ public:
     enum Mode {
         GreaterOrEqual,
         Equal,
-        LessOrEqual
+        LessOrEqual,
     };
 
     RatingFilter(SortedDirModel* model)

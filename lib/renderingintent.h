@@ -33,7 +33,7 @@ namespace RenderingIntent
  */
 enum Enum : cmsUInt32Number {
     Perceptual = INTENT_PERCEPTUAL,
-    Relative = INTENT_RELATIVE_COLORIMETRIC
+    Relative = INTENT_RELATIVE_COLORIMETRIC,
 };
 
 } // namespace RenderingIntent

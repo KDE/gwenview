@@ -37,7 +37,7 @@ namespace FullScreenBackground
  */
 enum Enum {
     Black,
-    Image
+    Image,
 };
 
 } // namespace FullScreenBackground

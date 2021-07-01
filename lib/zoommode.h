@@ -39,7 +39,7 @@ namespace ZoomMode
 enum Enum {
     Autofit,
     KeepSame,
-    Individual
+    Individual,
 };
 
 } // namespace ZoomMode

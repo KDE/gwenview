@@ -142,7 +142,7 @@ static const char* SESSION_URL_KEY = "Url";
 enum MainPageId {
     StartMainPageId,
     BrowseMainPageId,
-    ViewMainPageId
+    ViewMainPageId,
 };
 
 struct MainWindowState

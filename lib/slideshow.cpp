@@ -50,7 +50,7 @@ namespace Gwenview
 enum State {
     Paused,
     Started,
-    WaitForEndOfUrl
+    WaitForEndOfUrl,
 };
 
 /**

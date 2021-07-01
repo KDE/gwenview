@@ -53,7 +53,7 @@ enum CropHandleFlag {
     CH_BottomLeft = CH_Bottom | CH_Left,
     CH_TopRight = CH_Top | CH_Right,
     CH_BottomRight = CH_Bottom | CH_Right,
-    CH_Content = 16
+    CH_Content = 16,
 };
 
 Q_DECLARE_FLAGS(CropHandle, CropHandleFlag)

@@ -42,7 +42,7 @@ public:
     enum Option {
         OptionNone                 = 0,
         OptionCloseButton          = 1 << 1,
-        OptionOpaque               = 1 << 2
+        OptionOpaque               = 1 << 2,
     };
     Q_DECLARE_FLAGS(Options, Option)
 

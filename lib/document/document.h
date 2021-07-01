@@ -88,7 +88,7 @@ public:
         KindDetermined, ///< Image is still loading, but kind has been determined
         MetaInfoLoaded, ///< Image is still loading, but meta info has been loaded
         Loaded,         ///< Full image has been loaded
-        LoadingFailed   ///< Image loading has failed
+        LoadingFailed,   ///< Image loading has failed
     };
 
     using Ptr = QExplicitlySharedDataPointer<Document>;

@@ -54,7 +54,7 @@ public:
         NormalPalette = 0,
         NormalViewPalette,
         FullScreenPalette,
-        FullScreenViewPalette
+        FullScreenViewPalette,
     };
 
     QAbstractItemModel* recentFoldersModel() const;

@@ -35,7 +35,7 @@ namespace MouseWheelBehavior
 enum Enum {
     Scroll,
     Browse,
-    Zoom
+    Zoom,
 };
 
 } // namespace MouseWheelBehavior

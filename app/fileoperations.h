@@ -32,7 +32,7 @@ namespace Gwenview
 namespace FileOperations
 {
 
-enum Operation { TRASH, COPY, MOVE, LINK, UNKNOWN, PUT };
+enum Operation { TRASH, COPY, MOVE, LINK, UNKNOWN, PUT, };
 
 void copyTo(const QList<QUrl>& urlList, QWidget* parent, ContextManager* contextManager);
 void moveTo(const QList<QUrl>& urlList, QWidget* parent, ContextManager* contextManager);

@@ -54,7 +54,7 @@ enum State
 {
     NormalState,
     MouseOverState,
-    DownState
+    DownState,
 };
 
 enum WidgetType
@@ -63,7 +63,7 @@ enum WidgetType
     FrameWidget,
     CountDown,
     SliderWidgetHandle,
-    SliderWidgetGroove
+    SliderWidgetGroove,
 };
 
 GWENVIEWLIB_EXPORT RenderInfo renderInfo(WidgetType, State = NormalState);

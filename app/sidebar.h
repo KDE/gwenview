@@ -75,7 +75,7 @@ public:
     enum TabButtonStyle {
         TabButtonIconOnly,
         TabButtonTextOnly,
-        TabButtonTextBesideIcon
+        TabButtonTextBesideIcon,
     };
     Q_ENUM(TabButtonStyle)
 

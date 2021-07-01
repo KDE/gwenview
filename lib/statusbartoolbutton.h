@@ -43,7 +43,7 @@ public:
         NotGrouped = 0,
         GroupLeft = 1,
         GroupRight = 2,
-        GroupCenter = 3
+        GroupCenter = 3,
     };
 
     explicit StatusBarToolButton(QWidget* parent = nullptr);

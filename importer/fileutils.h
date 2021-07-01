@@ -34,7 +34,7 @@ enum RenameResult {
     RenamedOK,           /** Renamed without problem */
     RenamedUnderNewName, /** Destination already existed, so rename() added a suffix to make the name unique */
     Skipped,             /** Destination already existed and contained the same data as source, so rename() just removed the source */
-    RenameFailed         /** Rename failed */
+    RenameFailed,        /** Rename failed */
 };
 
 /**

@@ -54,7 +54,7 @@ public:
         NoAction         = 0,
         SelectionAction  = 1,
         FullScreenAction = 2,
-        RotateAction     = 4
+        RotateAction     = 4,
     };
     Q_DECLARE_FLAGS(ContextBarActions, ContextBarAction)
 
@@ -63,7 +63,7 @@ public:
         DateDetail      = 2,
         RatingDetail    = 4,
         ImageSizeDetail = 8,
-        FileSizeDetail  = 16
+        FileSizeDetail  = 16,
     };
     // FIXME: Find out why this cause problems with Qt::Alignment in
     // PreviewItemDelegate!

@@ -38,7 +38,7 @@ namespace ThumbnailActions
 enum Enum {
     AllButtons,
     ShowSelectionButtonOnly,
-    None
+    None,
 };
 
 } // namespace ThumbnailActions

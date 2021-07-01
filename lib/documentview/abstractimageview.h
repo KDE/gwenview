@@ -46,12 +46,12 @@ class AbstractImageView : public QGraphicsWidget
 public:
     enum UpdateType {
         UpdateIfNecessary,
-        ForceUpdate
+        ForceUpdate,
     };
     enum AlphaBackgroundMode {
         AlphaBackgroundNone,
         AlphaBackgroundCheckBoard,
-        AlphaBackgroundSolid
+        AlphaBackgroundSolid,
     };
 
     AbstractImageView(QGraphicsItem* parent);

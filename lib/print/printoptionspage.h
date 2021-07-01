@@ -39,14 +39,14 @@ public:
     enum ScaleMode {
         NoScale,
         ScaleToPage,
-        ScaleToCustomSize
+        ScaleToCustomSize,
     };
 
     // Order should match the content of the unit combbox in the ui file
     enum Unit {
         Millimeters,
         Centimeters,
-        Inches
+        Inches,
     };
 
     PrintOptionsPage(const QSize& imageSize);

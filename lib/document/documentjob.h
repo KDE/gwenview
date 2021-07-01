@@ -52,7 +52,7 @@ class GWENVIEWLIB_EXPORT DocumentJob : public KCompositeJob
     Q_OBJECT
 public:
     enum {
-        NoDocumentEditorError = UserDefinedError + 1
+        NoDocumentEditorError = UserDefinedError + 1,
     };
     DocumentJob();
     ~DocumentJob() override;

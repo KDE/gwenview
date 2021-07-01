@@ -49,12 +49,12 @@ public:
     enum {
         TagRole = Qt::UserRole,
         SortRole,
-        AssignmentStatusRole
+        AssignmentStatusRole,
     };
 
     enum AssignmentStatus {
         PartiallyAssigned,
-        FullyAssigned
+        FullyAssigned,
     };
 
     void setSemanticInfoBackEnd(AbstractSemanticInfoBackEnd*);

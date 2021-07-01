@@ -50,7 +50,7 @@ enum Kind {
     KIND_FILE         = 1 << 3,
     KIND_RASTER_IMAGE = 1 << 4,
     KIND_SVG_IMAGE    = 1 << 5,
-    KIND_VIDEO        = 1 << 6
+    KIND_VIDEO        = 1 << 6,
 };
 Q_DECLARE_FLAGS(Kinds, Kind)
 
@@ -60,7 +60,7 @@ GWENVIEWLIB_EXPORT Kind mimeTypeKind(const QString& mimeType);
 
 enum MimeTarget {
     ClipboardTarget,
-    DropTarget
+    DropTarget,
 };
 
 /**

@@ -43,7 +43,7 @@ struct AbstractImageViewPrivate
 {
     enum Verbosity {
         Silent,
-        Notify
+        Notify,
     };
     AbstractImageView* q;
     QCursor mZoomCursor;

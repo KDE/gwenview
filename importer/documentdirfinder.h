@@ -52,7 +52,7 @@ public:
     enum Status {
         NoDocumentFound,
         DocumentDirFound,
-        MultipleDirsFound
+        MultipleDirsFound,
     };
 
     DocumentDirFinder(const QUrl& rootUrl);
