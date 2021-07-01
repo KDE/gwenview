@@ -5,3 +5,4 @@ tags
 /build*/
 CMakeLists.txt.user*
 .cmake/
+/.clang-format
