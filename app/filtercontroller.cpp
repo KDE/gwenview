@@ -247,7 +247,7 @@ public:
         closeButton->setIcon(QIcon::fromTheme(QStringLiteral("window-close")));
         closeButton->setAutoRaise(true);
         closeButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
-        int size = IconSize(KIconLoader::Small);
+        int size = style()->pixelMetric(QStyle::PM_SmallIconSize);
         closeButton->setIconSize(QSize(size, size));
         connect(closeButton, &QAbstractButton::clicked, this, &QObject::deleteLater);
         auto* layout = new QHBoxLayout(this);
