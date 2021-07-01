@@ -215,3 +215,13 @@ add_subdirectory(kconf_update)
 ecm_qt_install_logging_categories(EXPORT GWENVIEW FILE gwenview.categories DESTINATION ${KDE_INSTALL_LOGGINGCATEGORIESDIR})
 
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
+
+if (ECM_VERSION VERSION_GREATER_EQUAL 5.80.0)
+    include(KDEClangFormat)
+    # add clang-format target
+    file(GLOB_RECURSE ALL_CLANG_FORMAT_SOURCE_FILES *.cpp *.h *.c)
+    kde_clang_format(${ALL_CLANG_FORMAT_SOURCE_FILES})
+
+    include(KDEGitCommitHooks)
+    kde_configure_git_pre_commit_hook(CHECKS CLANG_FORMAT)
+endif ()
