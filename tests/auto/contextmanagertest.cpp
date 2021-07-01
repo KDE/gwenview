@@ -93,7 +93,7 @@ void ContextManagerTest::testInvalidDirUrl()
         DirLister()
         : mOpenUrlCalled(false)
         {
-            setAutoErrorHandlingEnabled(false, nullptr);
+            setAutoErrorHandlingEnabled(false);
         }
 
         bool openUrl(const QUrl &url, OpenUrlFlags flags = NoFlags) override

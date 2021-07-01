@@ -48,17 +48,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "gvbrowserextension.h"
 #include "gvpart.h"
 
-//Factory Code
-K_PLUGIN_FACTORY_WITH_JSON(GVPartFactory, "gvpart.json", registerPlugin<Gwenview::GVPart>();)
-
 namespace Gwenview
 {
 
-GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QVariantList& /*args*/)
+K_PLUGIN_CLASS_WITH_JSON(GVPart, "gvpart.json")
+
+GVPart::GVPart(QWidget* parentWidget, QObject* parent, const KPluginMetaData &metaData, const QVariantList& /*args*/)
 : KParts::ReadOnlyPart(parent)
 {
-    QScopedPointer<KAboutData> aboutData(createAboutData());
-    setComponentData(*aboutData, false);
+    setMetaData(metaData);
 
     auto* container = new DocumentViewContainer(parentWidget);
     setWidget(container);
@@ -115,16 +113,6 @@ bool GVPart::openUrl(const QUrl& url)
     mDocumentView->openUrl(url, setup);
     mDocumentView->setCurrent(true);
     return true;
-}
-
-KAboutData* GVPart::createAboutData()
-{
-    KAboutData* aboutData = Gwenview::createAboutData(
-        QStringLiteral("gvpart"), /* appname */
-        i18n("Gwenview KPart")    /* programName */
-        );
-    aboutData->setShortDescription(i18n("An Image Viewer"));
-    return aboutData;
 }
 
 inline void addActionToMenu(QMenu* menu, KActionCollection* actionCollection, const char* name)
