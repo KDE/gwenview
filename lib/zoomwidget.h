@@ -46,6 +46,9 @@ public:
     void setActions(QAction* zoomToFitAction, QAction* actualSizeAction, QAction* zoomInAction, QAction* zoomOutAction, QAction* zoomToFillAction);
 
 public Q_SLOTS:
+    /**
+     * Called when the zoom value has been changed from outside the ZoomWidget.
+     */
     void setZoom(qreal zoom);
 
     void setMinimumZoom(qreal zoom);
@@ -56,7 +59,6 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void slotZoomSliderActionTriggered();
-    void setCustomZoomFromSpinBox(qreal zoom);
 
 private:
     friend struct ZoomWidgetPrivate;

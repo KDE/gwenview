@@ -26,16 +26,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QAction>
-#include <QApplication>
-#include <QSpinBox>
 #include <QHBoxLayout>
 #include <QSlider>
 // KF
 
 // Local
-#include "zoomslider.h"
 #include "signalblocker.h"
-#include "statusbartoolbutton.h"
+#include "zoomcombobox/zoomcombobox.h"
+#include "zoomslider.h"
 
 namespace Gwenview
 {
@@ -57,14 +55,9 @@ struct ZoomWidgetPrivate
 {
     ZoomWidget* q;
 
-    StatusBarToolButton* mZoomToFitButton;
-    StatusBarToolButton* mActualSizeButton;
-    StatusBarToolButton* mZoomToFillButton;
     ZoomSlider* mZoomSlider;
-    QSpinBox* mZoomSpinBox;
-    QAction* mZoomToFitAction;
-    QAction* mActualSizeAction;
-    QAction* mZoomToFillAction;
+    ZoomComboBox* mZoomComboBox;
+    QAction* mActualSizeAction = nullptr;
 
     bool mZoomUpdatedBySlider;
 
@@ -89,45 +82,22 @@ ZoomWidget::ZoomWidget(QWidget* parent)
 
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
 
-    d->mZoomToFitButton = new StatusBarToolButton;
-    d->mActualSizeButton = new StatusBarToolButton;
-    d->mZoomToFillButton = new StatusBarToolButton;
-    d->mZoomToFitButton->setCheckable(true);
-    d->mActualSizeButton->setCheckable(true);
-    d->mZoomToFillButton->setCheckable(true);
-    d->mZoomToFitButton->setChecked(true);
-
-    if (QApplication::isLeftToRight()) {
-        d->mZoomToFitButton->setGroupPosition(StatusBarToolButton::GroupLeft);
-        d->mZoomToFillButton->setGroupPosition(StatusBarToolButton::GroupCenter);
-        d->mActualSizeButton->setGroupPosition(StatusBarToolButton::GroupRight);
-    } else {
-        d->mActualSizeButton->setGroupPosition(StatusBarToolButton::GroupLeft);
-        d->mZoomToFillButton->setGroupPosition(StatusBarToolButton::GroupCenter);
-        d->mZoomToFitButton->setGroupPosition(StatusBarToolButton::GroupRight);
-    }
-
     d->mZoomSlider = new ZoomSlider;
     d->mZoomSlider->setMinimumWidth(150);
     d->mZoomSlider->slider()->setSingleStep(int(PRECISION));
     d->mZoomSlider->slider()->setPageStep(3 * int(PRECISION));
     connect(d->mZoomSlider->slider(), &QAbstractSlider::actionTriggered, this, &ZoomWidget::slotZoomSliderActionTriggered);
 
-    d->mZoomSpinBox = new QSpinBox;
-    d->mZoomSpinBox->setFixedWidth(d->mZoomSpinBox->fontMetrics().boundingRect(QStringLiteral("      1000%      ")).width());
-    d->mZoomSpinBox->setAlignment(Qt::AlignCenter);
-    d->mZoomSpinBox->setSuffix(QLatin1String("%"));
-    connect(d->mZoomSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), [=](int i){ setCustomZoomFromSpinBox(static_cast<qreal>(i)); });
+    d->mZoomComboBox = new ZoomComboBox;
+    connect(d->mZoomComboBox, &ZoomComboBox::zoomChanged,
+            this, &ZoomWidget::zoomChanged);
 
     // Layout
     auto* layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
-    layout->addWidget(d->mZoomToFitButton);
-    layout->addWidget(d->mZoomToFillButton);
-    layout->addWidget(d->mActualSizeButton);
     layout->addWidget(d->mZoomSlider);
-    layout->addWidget(d->mZoomSpinBox);
+    layout->addWidget(d->mZoomComboBox);
 }
 
 ZoomWidget::~ZoomWidget()
@@ -137,28 +107,18 @@ ZoomWidget::~ZoomWidget()
 
 void ZoomWidget::setActions(QAction* zoomToFitAction, QAction* actualSizeAction, QAction* zoomInAction, QAction* zoomOutAction, QAction* zoomToFillAction)
 {
-    d->mZoomToFitAction = zoomToFitAction;
-    d->mActualSizeAction = actualSizeAction;
-    d->mZoomToFillAction = zoomToFillAction;
-
-    d->mZoomToFitButton->setDefaultAction(zoomToFitAction);
-    d->mActualSizeButton->setDefaultAction(actualSizeAction);
-    d->mZoomToFillButton->setDefaultAction(zoomToFillAction);
-
     d->mZoomSlider->setZoomInAction(zoomInAction);
     d->mZoomSlider->setZoomOutAction(zoomOutAction);
 
-    auto *actionGroup = new QActionGroup(d->q);
-    actionGroup->addAction(d->mZoomToFitAction);
-    actionGroup->addAction(d->mZoomToFillAction);
-    actionGroup->addAction(d->mActualSizeAction);
-    actionGroup->setExclusive(true);
+    d->mZoomComboBox->setActions(zoomToFitAction, zoomToFillAction, actualSizeAction);
 
-    // Adjust sizes
-    int width = std::max({d->mZoomToFitButton->sizeHint().width(), d->mActualSizeButton->sizeHint().width(), d->mZoomToFillButton->sizeHint().width()});
-    d->mZoomToFitButton->setFixedWidth(width);
-    d->mActualSizeButton->setFixedWidth(width);
-    d->mZoomToFillButton->setFixedWidth(width);
+    auto *actionGroup = new QActionGroup(d->q);
+    actionGroup->addAction(zoomToFitAction);
+    actionGroup->addAction(zoomToFillAction);
+    actionGroup->addAction(actualSizeAction);
+    actionGroup->setExclusionPolicy(QActionGroup::ExclusionPolicy::ExclusiveOptional);
+
+    d->mActualSizeAction = actualSizeAction;
 }
 
 void ZoomWidget::slotZoomSliderActionTriggered()
@@ -170,7 +130,10 @@ void ZoomWidget::slotZoomSliderActionTriggered()
 
 void ZoomWidget::setZoom(qreal zoom)
 {
-    d->mZoomSpinBox->setValue(qRound(zoom * PRECISION));
+    if (zoom != 1.0) {
+        d->mActualSizeAction->setChecked(false);
+    }
+    d->mZoomComboBox->setValue(zoom);
 
     // Don't change slider value if we come here because the slider change,
     // avoids choppy sliding scroll.
@@ -188,25 +151,16 @@ void ZoomWidget::setZoom(qreal zoom)
     }
 }
 
-void ZoomWidget::setCustomZoomFromSpinBox(qreal zoom)
-{
-    setZoom(zoom / PRECISION);
-    if (d->mZoomSpinBox->hasFocus()) {
-        d->emitZoomChanged();
-    }
-}
-
 void ZoomWidget::setMinimumZoom(qreal minimumZoom)
 {
     d->mZoomSlider->setMinimum(sliderValueForZoom(minimumZoom));
-    d->mZoomSpinBox->setMinimum(qRound(minimumZoom * PRECISION));
-    d->mZoomSpinBox->setValue(minimumZoom * PRECISION);
+    d->mZoomComboBox->setMinimum(minimumZoom);
 }
 
 void ZoomWidget::setMaximumZoom(qreal zoom)
 {
     d->mZoomSlider->setMaximum(sliderValueForZoom(zoom));
-    d->mZoomSpinBox->setMaximum(qRound(zoom * PRECISION));
+    d->mZoomComboBox->setMaximum(zoom);
 }
 
 } // namespace

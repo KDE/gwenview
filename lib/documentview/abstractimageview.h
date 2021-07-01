@@ -36,7 +36,9 @@ class AlphaBackgroundItem;
 
 struct AbstractImageViewPrivate;
 /**
- *
+ * The abstract base class used to implement common functionality of raster and vector image views
+ * like for example zooming, computing the area where the image will be displayed in the view and
+ * dealing with a background for transparent areas.
  */
 class AbstractImageView : public QGraphicsWidget
 {
@@ -127,8 +129,11 @@ public Q_SLOTS:
     void updateCursor();
 
 Q_SIGNALS:
+    /** Emitted when the zoom mode changes to or from "Fit". */
     void zoomToFitChanged(bool);
+    /** Emitted when the zoom mode changes to or from "Fill". */
     void zoomToFillChanged(bool);
+    /** Emitted when the zoom value changes in any way. */
     void zoomChanged(qreal);
     void zoomInRequested(const QPointF&);
     void zoomOutRequested(const QPointF&);

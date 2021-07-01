@@ -79,7 +79,7 @@ struct DocumentViewControllerPrivate
         mActualSizeAction = view->addAction(KStandardAction::ActualSize);
         mActualSizeAction->setCheckable(true);
         mActualSizeAction->setIcon(QIcon::fromTheme(QStringLiteral("zoom-original")));
-        mActualSizeAction->setIconText(i18nc("@action:button Zoom to original size, shown in status bar, keep it short please", "100%"));
+        mActualSizeAction->setIconText(QLocale().toString(100).append(QLocale().percent()));
 
         mZoomInAction = view->addAction(KStandardAction::ZoomIn);
         mZoomOutAction = view->addAction(KStandardAction::ZoomOut);
@@ -100,8 +100,10 @@ struct DocumentViewControllerPrivate
             return;
         }
 
+        // from mZoomWidget to mView
         QObject::connect(mZoomWidget, &ZoomWidget::zoomChanged, mView, &DocumentView::setZoom);
 
+        // from mView to mZoomWidget
         QObject::connect(mView, &DocumentView::minimumZoomChanged, mZoomWidget, &ZoomWidget::setMinimumZoom);
         QObject::connect(mView, &DocumentView::zoomChanged, mZoomWidget, &ZoomWidget::setZoom);
 
@@ -165,10 +167,13 @@ void DocumentViewController::setView(DocumentView* view)
     connect(d->mView, &DocumentView::zoomToFillChanged, this, &DocumentViewController::updateZoomToFillActionFromView);
     connect(d->mView, &DocumentView::currentToolChanged, this, &DocumentViewController::updateTool);
 
-    connect(d->mZoomToFitAction, &QAction::triggered, d->mView, &DocumentView::toggleZoomToFit);
-    connect(d->mZoomToFillAction, &QAction::triggered, d->mView, &DocumentView::toggleZoomToFill);
-    connect(d->mActualSizeAction, SIGNAL(triggered()),
-            d->mView, SLOT(zoomActualSize()));
+    connect(d->mZoomToFitAction, &QAction::toggled, d->mView, &DocumentView::setZoomToFit);
+    connect(d->mZoomToFillAction, &QAction::toggled, d->mView, &DocumentView::setZoomToFill);
+    connect(d->mActualSizeAction, &QAction::toggled, d->mView, [this](bool checked){
+        if (checked) {
+            d->mView->setZoom(1.0);
+        }
+    });
     connect(d->mZoomInAction, SIGNAL(triggered()),
             d->mView, SLOT(zoomIn()));
     connect(d->mZoomOutAction, SIGNAL(triggered()),

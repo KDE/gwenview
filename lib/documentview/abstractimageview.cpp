@@ -34,7 +34,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QStandardPaths>
 #include <QPainter>
 #include <QApplication>
-
 namespace Gwenview
 {
 
@@ -277,6 +276,9 @@ bool AbstractImageView::zoomToFill() const
 
 void AbstractImageView::setZoomToFit(bool on)
 {
+    if (d->mZoomToFit == on) {
+        return;
+    }
     d->mZoomToFit = on;
     if (on) {
         d->mZoomToFill = false;
@@ -290,6 +292,9 @@ void AbstractImageView::setZoomToFit(bool on)
 
 void AbstractImageView::setZoomToFill(bool on, const QPointF& center)
 {
+    if (d->mZoomToFill == on) {
+        return;
+    }
     d->mZoomToFill = on;
     if (on) {
         d->mZoomToFit = false;

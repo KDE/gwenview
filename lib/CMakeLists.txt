@@ -140,6 +140,7 @@ set(gwenviewlib_SRCS
     transformimageoperation.cpp
     urlutils.cpp
     widgetfloater.cpp
+    zoomcombobox/zoomcombobox.cpp
     zoomslider.cpp
     zoomwidget.cpp
     scrollerutils.cpp

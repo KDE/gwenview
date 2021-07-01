@@ -781,7 +781,6 @@ void ViewMainPage::slotEnterPressed()
             }
         }
     }
-    emit goToBrowseModeRequested();
 }
 
 bool ViewMainPage::eventFilter(QObject* watched, QEvent* event)
