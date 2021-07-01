@@ -20,7 +20,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 // Self
 #include "printhelper.h"
-#include "dialogguard.h"
 
 // STD
 #include <memory>
@@ -114,36 +113,38 @@ PrintHelper::~PrintHelper()
 void PrintHelper::print(Document::Ptr doc)
 {
     doc->waitUntilLoaded();
-    QPrinter printer;
-    printer.setDocName(doc->url().fileName());
+
+    std::shared_ptr<QPrinter> printer = std::make_shared<QPrinter>();
+    printer->setDocName(doc->url().fileName());
+
+    auto *dialog = new QPrintDialog(printer.get(), d->mParent);
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
+    dialog->setModal(true);
+    dialog->setWindowTitle(i18n("Print Image"));
 
     auto *optionsPage = new PrintOptionsPage(doc->size());
     optionsPage->loadConfig();
 
-    DialogGuard<QPrintDialog> dialog(&printer, d->mParent);
 #if defined(Q_OS_UNIX) && !defined(Q_OS_DARWIN)
-    dialog->setOptionTabs(QList<QWidget *>() << optionsPage);
+    dialog->setOptionTabs(QList<QWidget *>{optionsPage});
 #else
-    optionsPage->setParent(dialog.data());
+    optionsPage->setParent(dialog);
 #endif
 
-    dialog->setWindowTitle(i18n("Print Image"));
-    bool wantToPrint = dialog->exec();
+    QObject::connect(dialog, &QDialog::accepted, d->mParent, [this, dialog, optionsPage, doc, printer]() {
+        optionsPage->saveConfig();
+        QPainter painter(printer.get());
+        QRect rect = painter.viewport();
+        QSize size = d->adjustSize(optionsPage, doc, printer->resolution(), rect.size());
+        QPoint pos = d->adjustPosition(optionsPage, size, rect.size());
+        painter.setViewport(pos.x(), pos.y(), size.width(), size.height());
 
-    optionsPage->saveConfig();
-    if (!wantToPrint) {
-        return;
-    }
+        QImage image = doc->image();
+        painter.setWindow(image.rect());
+        painter.drawImage(0, 0, image);
+    });
 
-    QPainter painter(&printer);
-    QRect rect = painter.viewport();
-    QSize size = d->adjustSize(optionsPage, doc, printer.resolution(), rect.size());
-    QPoint pos = d->adjustPosition(optionsPage, size, rect.size());
-    painter.setViewport(pos.x(), pos.y(), size.width(), size.height());
-
-    QImage image = doc->image();
-    painter.setWindow(image.rect());
-    painter.drawImage(0, 0, image);
+    dialog->show();
 }
 
 } // namespace
