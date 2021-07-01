@@ -40,10 +40,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 namespace Gwenview
 {
-
-AbstractSortedDirModelFilter::AbstractSortedDirModelFilter(SortedDirModel* model)
-: QObject(model)
-, mModel(model)
+AbstractSortedDirModelFilter::AbstractSortedDirModelFilter(SortedDirModel *model)
+    : QObject(model)
+    , mModel(model)
 {
     if (mModel) {
         mModel->addFilter(this);
@@ -57,22 +56,21 @@ AbstractSortedDirModelFilter::~AbstractSortedDirModelFilter()
     }
 }
 
-struct SortedDirModelPrivate
-{
+struct SortedDirModelPrivate {
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-    KDirModel* mSourceModel;
+    KDirModel *mSourceModel;
 #else
-    SemanticInfoDirModel* mSourceModel;
+    SemanticInfoDirModel *mSourceModel;
 #endif
     QStringList mBlackListedExtensions;
-    QList<AbstractSortedDirModelFilter*> mFilters;
+    QList<AbstractSortedDirModelFilter *> mFilters;
     QTimer mDelayedApplyFiltersTimer;
     MimeTypeUtils::Kinds mKindFilter;
 };
 
-SortedDirModel::SortedDirModel(QObject* parent)
-: KDirSortFilterProxyModel(parent)
-, d(new SortedDirModelPrivate)
+SortedDirModel::SortedDirModel(QObject *parent)
+    : KDirSortFilterProxyModel(parent)
+    , d(new SortedDirModelPrivate)
 {
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_NONE
     d->mSourceModel = new KDirModel(this);
@@ -120,19 +118,19 @@ void SortedDirModel::adjustKindFilter(MimeTypeUtils::Kinds kinds, bool set)
     setKindFilter(kindFilter);
 }
 
-void SortedDirModel::addFilter(AbstractSortedDirModelFilter* filter)
+void SortedDirModel::addFilter(AbstractSortedDirModelFilter *filter)
 {
     d->mFilters << filter;
     applyFilters();
 }
 
-void SortedDirModel::removeFilter(AbstractSortedDirModelFilter* filter)
+void SortedDirModel::removeFilter(AbstractSortedDirModelFilter *filter)
 {
     d->mFilters.removeAll(filter);
     applyFilters();
 }
 
-KDirLister* SortedDirModel::dirLister() const
+KDirLister *SortedDirModel::dirLister() const
 {
     return d->mSourceModel->dirLister();
 }
@@ -145,12 +143,12 @@ void SortedDirModel::reload()
     dirLister()->updateDirectory(dirLister()->url());
 }
 
-void SortedDirModel::setBlackListedExtensions(const QStringList& list)
+void SortedDirModel::setBlackListedExtensions(const QStringList &list)
 {
     d->mBlackListedExtensions = list;
 }
 
-KFileItem SortedDirModel::itemForIndex(const QModelIndex& index) const
+KFileItem SortedDirModel::itemForIndex(const QModelIndex &index) const
 {
     if (!index.isValid()) {
         return KFileItem();
@@ -160,13 +158,13 @@ KFileItem SortedDirModel::itemForIndex(const QModelIndex& index) const
     return d->mSourceModel->itemForIndex(sourceIndex);
 }
 
-QUrl SortedDirModel::urlForIndex(const QModelIndex& index) const
+QUrl SortedDirModel::urlForIndex(const QModelIndex &index) const
 {
     KFileItem item = itemForIndex(index);
     return item.isNull() ? QUrl() : item.url();
 }
 
-KFileItem SortedDirModel::itemForSourceIndex(const QModelIndex& sourceIndex) const
+KFileItem SortedDirModel::itemForSourceIndex(const QModelIndex &sourceIndex) const
 {
     if (!sourceIndex.isValid()) {
         return KFileItem();
@@ -174,7 +172,7 @@ KFileItem SortedDirModel::itemForSourceIndex(const QModelIndex& sourceIndex) con
     return d->mSourceModel->itemForIndex(sourceIndex);
 }
 
-QModelIndex SortedDirModel::indexForItem(const KFileItem& item) const
+QModelIndex SortedDirModel::indexForItem(const KFileItem &item) const
 {
     if (item.isNull()) {
         return QModelIndex();
@@ -193,7 +191,7 @@ QModelIndex SortedDirModel::indexForUrl(const QUrl &url) const
     return mapFromSource(sourceIndex);
 }
 
-bool SortedDirModel::filterAcceptsRow(int row, const QModelIndex& parent) const
+bool SortedDirModel::filterAcceptsRow(int row, const QModelIndex &parent) const
 {
     QModelIndex index = d->mSourceModel->index(row, 0, parent);
     KFileItem fileItem = d->mSourceModel->itemForIndex(index);
@@ -213,7 +211,7 @@ bool SortedDirModel::filterAcceptsRow(int row, const QModelIndex& parent) const
         }
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
         if (!d->mSourceModel->semanticInfoAvailableForIndex(index)) {
-            for (const AbstractSortedDirModelFilter * filter : qAsConst(d->mFilters)) {
+            for (const AbstractSortedDirModelFilter *filter : qAsConst(d->mFilters)) {
                 // Make sure we have semanticinfo, otherwise retrieve it and
                 // return false, we will be called again later when it is
                 // there.
@@ -225,7 +223,7 @@ bool SortedDirModel::filterAcceptsRow(int row, const QModelIndex& parent) const
         }
 #endif
 
-        for (const AbstractSortedDirModelFilter * filter : qAsConst(d->mFilters)) {
+        for (const AbstractSortedDirModelFilter *filter : qAsConst(d->mFilters)) {
             if (!filter->acceptsIndex(index)) {
                 return false;
             }
@@ -234,7 +232,7 @@ bool SortedDirModel::filterAcceptsRow(int row, const QModelIndex& parent) const
     return KDirSortFilterProxyModel::filterAcceptsRow(row, parent);
 }
 
-AbstractSemanticInfoBackEnd* SortedDirModel::semanticInfoBackEnd() const
+AbstractSemanticInfoBackEnd *SortedDirModel::semanticInfoBackEnd() const
 {
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_NONE
     return 0;
@@ -244,7 +242,7 @@ AbstractSemanticInfoBackEnd* SortedDirModel::semanticInfoBackEnd() const
 }
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-SemanticInfo SortedDirModel::semanticInfoForSourceIndex(const QModelIndex& sourceIndex) const
+SemanticInfo SortedDirModel::semanticInfoForSourceIndex(const QModelIndex &sourceIndex) const
 {
     return d->mSourceModel->semanticInfoForIndex(sourceIndex);
 }
@@ -260,7 +258,7 @@ void SortedDirModel::doApplyFilters()
     QSortFilterProxyModel::invalidateFilter();
 }
 
-bool SortedDirModel::lessThan(const QModelIndex& left, const QModelIndex& right) const
+bool SortedDirModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
 {
     const KFileItem leftItem = itemForSourceIndex(left);
     const KFileItem rightItem = itemForSourceIndex(right);
@@ -314,9 +312,9 @@ bool SortedDirModel::hasDocuments() const
     return false;
 }
 
-void SortedDirModel::setDirLister(KDirLister* dirLister)
+void SortedDirModel::setDirLister(KDirLister *dirLister)
 {
     d->mSourceModel->setDirLister(dirLister);
 }
 
-} //namespace
+} // namespace

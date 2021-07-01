@@ -20,8 +20,7 @@
 AlignWithSideBarWidgetAction::AlignWithSideBarWidgetAction(QObject *parent)
     : QWidgetAction(parent)
 {
-    setText(i18nc("@action:inmenu a spacer that aligns toolbar buttons with the sidebar",
-                  "Sidebar Alignment Spacer"));
+    setText(i18nc("@action:inmenu a spacer that aligns toolbar buttons with the sidebar", "Sidebar Alignment Spacer"));
 }
 
 void AlignWithSideBarWidgetAction::setSideBar(QWidget *sideBar)
@@ -44,8 +43,7 @@ AligningSpacer::AligningSpacer(QWidget *parent)
     : QWidget{parent}
 {
     if ((mToolbar = qobject_cast<QToolBar *>(parent))) {
-        connect (mToolbar, &QToolBar::orientationChanged,
-                 this, &AligningSpacer::update);
+        connect(mToolbar, &QToolBar::orientationChanged, this, &AligningSpacer::update);
     }
 }
 
@@ -127,15 +125,12 @@ void AligningSpacer::update()
 
 int AligningSpacer::updateWidth()
 {
-    if (!mSideBar
-        || (mToolbar && mToolbar->orientation() == Qt::Vertical)
-    ) {
+    if (!mSideBar || (mToolbar && mToolbar->orientation() == Qt::Vertical)) {
         setFixedWidth(0);
         return 0;
     }
 
-    const auto separatorWidth = static_cast<float>(
-            style()->pixelMetric(QStyle::PM_ToolBarSeparatorExtent, nullptr, this));
+    const auto separatorWidth = static_cast<float>(style()->pixelMetric(QStyle::PM_ToolBarSeparatorExtent, nullptr, this));
     int sideBarWidth = mSideBar->geometry().width();
     if (sideBarWidth <= 0) {
         if (!Gwenview::GwenviewConfig::sideBarSplitterSizes().isEmpty()) {
@@ -147,7 +142,7 @@ int AligningSpacer::updateWidth()
             // a nice default appearance on the first run.
             if (QApplication::layoutDirection() != Qt::RightToLeft) {
                 sideBarWidth = x() + separatorWidth * 2; // Leads to a nice default spacing.
-            }  else {
+            } else {
                 sideBarWidth = mToolbar->width() - x() + separatorWidth * 2;
             }
             mSideBar->resize(sideBarWidth, mSideBar->height()); // Make sure it aligns.
@@ -156,12 +151,12 @@ int AligningSpacer::updateWidth()
 
     int newWidth;
     if (QApplication::layoutDirection() != Qt::RightToLeft) {
-        newWidth = sideBarWidth - mapTo(window(), QPoint(0,0)).x();
+        newWidth = sideBarWidth - mapTo(window(), QPoint(0, 0)).x();
     } else {
         newWidth = sideBarWidth - window()->width() + mapTo(window(), QPoint(width(), 0)).x();
     }
     if (!mWasSeparatorRemoved) {
-         // Make it so a potentially following separator looks aligned with the sidebar.
+        // Make it so a potentially following separator looks aligned with the sidebar.
         newWidth -= std::ceil(separatorWidth * 0.3);
     } else {
         // Make it so removing the separator doesn't change the toolbutton positions.

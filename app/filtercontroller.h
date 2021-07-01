@@ -54,7 +54,6 @@ class KComboBox;
 
 namespace Gwenview
 {
-
 class SortedDirModel;
 
 /**
@@ -67,31 +66,32 @@ public:
         Contains,
         DoesNotContain,
     };
-    NameFilter(SortedDirModel* model)
-    : AbstractSortedDirModelFilter(model)
-    , mText()
-    , mMode(Contains)
-    {}
+    NameFilter(SortedDirModel *model)
+        : AbstractSortedDirModelFilter(model)
+        , mText()
+        , mMode(Contains)
+    {
+    }
 
     bool needsSemanticInfo() const override
     {
         return false;
     }
 
-    bool acceptsIndex(const QModelIndex& index) const override
+    bool acceptsIndex(const QModelIndex &index) const override
     {
         if (mText.isEmpty()) {
             return true;
         }
         switch (mMode) {
-            case Contains:
-                return index.data().toString().contains(mText, Qt::CaseInsensitive);
-            default: /*DoesNotContain:*/
-                return !index.data().toString().contains(mText, Qt::CaseInsensitive);
+        case Contains:
+            return index.data().toString().contains(mText, Qt::CaseInsensitive);
+        default: /*DoesNotContain:*/
+            return !index.data().toString().contains(mText, Qt::CaseInsensitive);
         }
     }
 
-    void setText(const QString& text)
+    void setText(const QString &text)
     {
         mText = text;
         model()->applyFilters();
@@ -112,7 +112,7 @@ class NameFilterWidget : public QWidget
 {
     Q_OBJECT
 public:
-    NameFilterWidget(SortedDirModel*);
+    NameFilterWidget(SortedDirModel *);
     ~NameFilterWidget() override;
 
 private Q_SLOTS:
@@ -120,10 +120,9 @@ private Q_SLOTS:
 
 private:
     QPointer<NameFilter> mFilter;
-    KComboBox* mModeComboBox;
-    QLineEdit* mLineEdit;
+    KComboBox *mModeComboBox;
+    QLineEdit *mLineEdit;
 };
-
 
 /**
  * An AbstractSortedDirModelFilter which filters on the file dates
@@ -136,17 +135,18 @@ public:
         Equal,
         LessOrEqual,
     };
-    DateFilter(SortedDirModel* model)
-    : AbstractSortedDirModelFilter(model)
-    , mMode(GreaterOrEqual)
-    {}
+    DateFilter(SortedDirModel *model)
+        : AbstractSortedDirModelFilter(model)
+        , mMode(GreaterOrEqual)
+    {
+    }
 
     bool needsSemanticInfo() const override
     {
         return false;
     }
 
-    bool acceptsIndex(const QModelIndex& index) const override
+    bool acceptsIndex(const QModelIndex &index) const override
     {
         if (!mDate.isValid()) {
             return true;
@@ -154,16 +154,16 @@ public:
         KFileItem fileItem = model()->itemForSourceIndex(index);
         QDate date = TimeUtils::dateTimeForFileItem(fileItem).date();
         switch (mMode) {
-            case GreaterOrEqual:
-                return date >= mDate;
-            case Equal:
-                return date == mDate;
-            default: /* LessOrEqual */
-                return date <= mDate;
+        case GreaterOrEqual:
+            return date >= mDate;
+        case Equal:
+            return date == mDate;
+        default: /* LessOrEqual */
+            return date <= mDate;
         }
     }
 
-    void setDate(const QDate& date)
+    void setDate(const QDate &date)
     {
         mDate = date;
         model()->applyFilters();
@@ -184,7 +184,7 @@ class DateFilterWidget : public QWidget
 {
     Q_OBJECT
 public:
-    DateFilterWidget(SortedDirModel*);
+    DateFilterWidget(SortedDirModel *);
     ~DateFilterWidget() override;
 
 private Q_SLOTS:
@@ -192,10 +192,9 @@ private Q_SLOTS:
 
 private:
     QPointer<DateFilter> mFilter;
-    KComboBox* mModeComboBox;
-    DateWidget* mDateWidget;
+    KComboBox *mModeComboBox;
+    DateWidget *mDateWidget;
 };
-
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 /**
@@ -210,26 +209,28 @@ public:
         LessOrEqual,
     };
 
-    RatingFilter(SortedDirModel* model)
-    : AbstractSortedDirModelFilter(model)
-    , mRating(0)
-    , mMode(GreaterOrEqual) {}
+    RatingFilter(SortedDirModel *model)
+        : AbstractSortedDirModelFilter(model)
+        , mRating(0)
+        , mMode(GreaterOrEqual)
+    {
+    }
 
     bool needsSemanticInfo() const override
     {
         return true;
     }
 
-    bool acceptsIndex(const QModelIndex& index) const override
+    bool acceptsIndex(const QModelIndex &index) const override
     {
         SemanticInfo info = model()->semanticInfoForSourceIndex(index);
         switch (mMode) {
-            case GreaterOrEqual:
-                return info.mRating >= mRating;
-            case Equal:
-                return info.mRating == mRating;
-            default: /* LessOrEqual */
-                return info.mRating <= mRating;
+        case GreaterOrEqual:
+            return info.mRating >= mRating;
+        case Equal:
+            return info.mRating == mRating;
+        default: /* LessOrEqual */
+            return info.mRating <= mRating;
         }
     }
 
@@ -254,7 +255,7 @@ class RatingFilterWidget : public QWidget
 {
     Q_OBJECT
 public:
-    RatingFilterWidget(SortedDirModel*);
+    RatingFilterWidget(SortedDirModel *);
     ~RatingFilterWidget() override;
 
 private Q_SLOTS:
@@ -262,8 +263,8 @@ private Q_SLOTS:
     void updateFilterMode();
 
 private:
-    KComboBox* mModeComboBox;
-    KRatingWidget* mRatingWidget;
+    KComboBox *mModeComboBox;
+    KRatingWidget *mRatingWidget;
     QPointer<RatingFilter> mFilter;
 };
 
@@ -273,17 +274,18 @@ private:
 class TagFilter : public AbstractSortedDirModelFilter
 {
 public:
-    TagFilter(SortedDirModel* model)
-    : AbstractSortedDirModelFilter(model)
-    , mWantMatchingTag(true)
-    {}
+    TagFilter(SortedDirModel *model)
+        : AbstractSortedDirModelFilter(model)
+        , mWantMatchingTag(true)
+    {
+    }
 
     bool needsSemanticInfo() const override
     {
         return true;
     }
 
-    bool acceptsIndex(const QModelIndex& index) const override
+    bool acceptsIndex(const QModelIndex &index) const override
     {
         if (mTag.isEmpty()) {
             return true;
@@ -296,7 +298,7 @@ public:
         }
     }
 
-    void setTag(const SemanticInfoTag& tag)
+    void setTag(const SemanticInfoTag &tag)
     {
         mTag = tag;
         model()->applyFilters();
@@ -317,19 +319,18 @@ class TagFilterWidget : public QWidget
 {
     Q_OBJECT
 public:
-    TagFilterWidget(SortedDirModel*);
+    TagFilterWidget(SortedDirModel *);
     ~TagFilterWidget() override;
 
 private Q_SLOTS:
     void updateTagSetFilter();
 
 private:
-    KComboBox* mModeComboBox;
-    QComboBox* mTagComboBox;
+    KComboBox *mModeComboBox;
+    QComboBox *mTagComboBox;
     QPointer<TagFilter> mFilter;
 };
 #endif
-
 
 /**
  * This class manages the filter widgets in the filter frame and assign the
@@ -339,9 +340,9 @@ class FilterController : public QObject
 {
     Q_OBJECT
 public:
-    FilterController(QFrame* filterFrame, SortedDirModel* model);
+    FilterController(QFrame *filterFrame, SortedDirModel *model);
 
-    QList<QAction*> actionList() const;
+    QList<QAction *> actionList() const;
 
 private Q_SLOTS:
     void addFilterByName();
@@ -353,13 +354,13 @@ private Q_SLOTS:
     void slotFilterWidgetClosed();
 
 private:
-    void addAction(const QString& text, const char* slot, const QKeySequence &shortcut);
-    void addFilter(QWidget* widget);
+    void addAction(const QString &text, const char *slot, const QKeySequence &shortcut);
+    void addFilter(QWidget *widget);
 
-    FilterController* q;
-    QFrame* mFrame;
-    SortedDirModel* mDirModel;
-    QList<QAction*> mActionList;
+    FilterController *q;
+    QFrame *mFrame;
+    SortedDirModel *mDirModel;
+    QList<QAction *> mActionList;
 
     int mFilterWidgetCount; /**< How many filter widgets are in mFrame */
 };

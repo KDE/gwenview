@@ -32,7 +32,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 struct ResizeImageDialogPrivate;
 class GWENVIEWLIB_EXPORT ResizeImageDialog : public QDialog
 {
@@ -41,7 +40,7 @@ public:
     explicit ResizeImageDialog(QWidget *parent);
     ~ResizeImageDialog() override;
 
-    void setOriginalSize(const QSize&);
+    void setOriginalSize(const QSize &);
     QSize size() const;
 
 private Q_SLOTS:
@@ -52,7 +51,7 @@ private Q_SLOTS:
     void slotKeepAspectChanged(bool);
 
 private:
-    ResizeImageDialogPrivate* const d;
+    ResizeImageDialogPrivate *const d;
 };
 
 } // namespace

@@ -32,7 +32,6 @@ class QByteArray;
 
 namespace Gwenview
 {
-
 class JpegContent;
 
 struct JpegDocumentLoadedImplPrivate;
@@ -40,20 +39,20 @@ class JpegDocumentLoadedImpl : public DocumentLoadedImpl
 {
     Q_OBJECT
 public:
-    JpegDocumentLoadedImpl(Document*, JpegContent*);
+    JpegDocumentLoadedImpl(Document *, JpegContent *);
     ~JpegDocumentLoadedImpl() override;
     QByteArray rawData() const override;
 
 protected:
-    bool saveInternal(QIODevice* device, const QByteArray& format) override;
+    bool saveInternal(QIODevice *device, const QByteArray &format) override;
 
     // AbstractDocumentEditor
-    void setImage(const QImage&) override;
+    void setImage(const QImage &) override;
     void applyTransformation(Orientation orientation) override;
     //
 
 private:
-    JpegDocumentLoadedImplPrivate* const d;
+    JpegDocumentLoadedImplPrivate *const d;
 };
 
 } // namespace

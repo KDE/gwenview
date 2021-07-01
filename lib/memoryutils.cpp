@@ -33,50 +33,48 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #define _WIN32_WINNT 0x0500
 #include <windows.h>
 #elif defined(Q_OS_FREEBSD)
-#include <sys/types.h>
 #include <sys/sysctl.h>
+#include <sys/types.h>
 #include <vm/vm_param.h>
 #endif
 
 namespace Gwenview
 {
-
 namespace MemoryUtils
 {
-
 // This code has been copied from okular/core/document.cpp
 qulonglong getTotalMemory()
 {
     static qulonglong cachedValue = 0;
-    if ( cachedValue )
+    if (cachedValue)
         return cachedValue;
 
 #if defined(Q_OS_LINUX)
     // if /proc/meminfo doesn't exist, return 128MB
-    QFile memFile( QStringLiteral("/proc/meminfo") );
-    if ( !memFile.open( QIODevice::ReadOnly ) )
+    QFile memFile(QStringLiteral("/proc/meminfo"));
+    if (!memFile.open(QIODevice::ReadOnly))
         return (cachedValue = 134217728);
 
-    QTextStream readStream( &memFile );
-    while ( true )
-    {
+    QTextStream readStream(&memFile);
+    while (true) {
         QString entry = readStream.readLine();
-        if ( entry.isNull() ) break;
-        if ( entry.startsWith(QLatin1String("MemTotal:") ) )
-            return (cachedValue = (Q_UINT64_C(1024) * entry.section( QLatin1Char(' '), -2, -2 ).toULongLong()));
+        if (entry.isNull())
+            break;
+        if (entry.startsWith(QLatin1String("MemTotal:")))
+            return (cachedValue = (Q_UINT64_C(1024) * entry.section(QLatin1Char(' '), -2, -2).toULongLong()));
     }
 #elif defined(Q_OS_FREEBSD)
     qulonglong physmem;
     int mib[] = {CTL_HW, HW_PHYSMEM};
-    size_t len = sizeof( physmem );
-    if ( sysctl( mib, 2, &physmem, &len, NULL, 0 ) == 0 )
+    size_t len = sizeof(physmem);
+    if (sysctl(mib, 2, &physmem, &len, NULL, 0) == 0)
         return (cachedValue = physmem);
 #elif defined(Q_OS_WIN)
     MEMORYSTATUSEX stat;
     stat.dwLength = sizeof(stat);
-    GlobalMemoryStatusEx (&stat);
+    GlobalMemoryStatusEx(&stat);
 
-    return ( cachedValue = stat.ullTotalPhys );
+    return (cachedValue = stat.ullTotalPhys);
 #endif
     return (cachedValue = 134217728);
 }
@@ -86,44 +84,45 @@ qulonglong getFreeMemory()
     static QTime lastUpdate = QTime::currentTime().addSecs(-3);
     static qulonglong cachedValue = 0;
 
-    if ( qAbs( lastUpdate.secsTo( QTime::currentTime() ) ) <= 2 )
+    if (qAbs(lastUpdate.secsTo(QTime::currentTime())) <= 2)
         return cachedValue;
 
 #if defined(Q_OS_LINUX)
     // if /proc/meminfo doesn't exist, return MEMORY FULL
-    QFile memFile( QStringLiteral("/proc/meminfo") );
-    if ( !memFile.open( QIODevice::ReadOnly ) )
+    QFile memFile(QStringLiteral("/proc/meminfo"));
+    if (!memFile.open(QIODevice::ReadOnly))
         return 0;
 
     // read /proc/meminfo and sum up the contents of 'MemFree', 'Buffers'
     // and 'Cached' fields. consider swapped memory as used memory.
     qulonglong memoryFree = 0;
     QString entry;
-    QTextStream readStream( &memFile );
+    QTextStream readStream(&memFile);
     static const int nElems = 5;
-    QString names[nElems] = { QStringLiteral("MemFree:"), QStringLiteral("Buffers:"), QStringLiteral("Cached:"), QStringLiteral("SwapFree:"), QStringLiteral("SwapTotal:") };
-    qulonglong values[nElems] = { 0, 0, 0, 0, 0 };
-    bool foundValues[nElems] = { false, false, false, false, false };
-    while ( true )
-    {
+    QString names[nElems] = {QStringLiteral("MemFree:"),
+                             QStringLiteral("Buffers:"),
+                             QStringLiteral("Cached:"),
+                             QStringLiteral("SwapFree:"),
+                             QStringLiteral("SwapTotal:")};
+    qulonglong values[nElems] = {0, 0, 0, 0, 0};
+    bool foundValues[nElems] = {false, false, false, false, false};
+    while (true) {
         entry = readStream.readLine();
-        if ( entry.isNull() ) break;
-        for ( int i = 0; i < nElems; ++i )
-        {
-            if ( entry.startsWith( names[i] ) )
-            {
-                values[i] = entry.section( QLatin1Char(' '), -2, -2 ).toULongLong( &foundValues[i] );
+        if (entry.isNull())
+            break;
+        for (int i = 0; i < nElems; ++i) {
+            if (entry.startsWith(names[i])) {
+                values[i] = entry.section(QLatin1Char(' '), -2, -2).toULongLong(&foundValues[i]);
             }
         }
     }
     memFile.close();
     bool found = true;
-    for ( int i = 0; found && i < nElems; ++i )
+    for (int i = 0; found && i < nElems; ++i)
         found = found && foundValues[i];
-    if ( found )
-    {
+    if (found) {
         memoryFree = values[0] + values[1] + values[2] + values[3];
-        if ( values[4] > memoryFree )
+        if (values[4] > memoryFree)
             memoryFree = 0;
         else
             memoryFree -= values[4];
@@ -131,35 +130,32 @@ qulonglong getFreeMemory()
 
     lastUpdate = QTime::currentTime();
 
-    return ( cachedValue = (Q_UINT64_C(1024) * memoryFree) );
+    return (cachedValue = (Q_UINT64_C(1024) * memoryFree));
 #elif defined(Q_OS_FREEBSD)
     qulonglong cache, inact, free, psize;
     size_t cachelen, inactlen, freelen, psizelen;
-    cachelen = sizeof( cache );
-    inactlen = sizeof( inact );
-    freelen = sizeof( free );
-    psizelen = sizeof( psize );
+    cachelen = sizeof(cache);
+    inactlen = sizeof(inact);
+    freelen = sizeof(free);
+    psizelen = sizeof(psize);
     // sum up inactive, cached and free memory
-    if ( sysctlbyname( "vm.stats.vm.v_cache_count", &cache, &cachelen, NULL, 0 ) == 0 &&
-            sysctlbyname( "vm.stats.vm.v_inactive_count", &inact, &inactlen, NULL, 0 ) == 0 &&
-            sysctlbyname( "vm.stats.vm.v_free_count", &free, &freelen, NULL, 0 ) == 0 &&
-            sysctlbyname( "vm.stats.vm.v_page_size", &psize, &psizelen, NULL, 0 ) == 0 )
-    {
+    if (sysctlbyname("vm.stats.vm.v_cache_count", &cache, &cachelen, NULL, 0) == 0
+        && sysctlbyname("vm.stats.vm.v_inactive_count", &inact, &inactlen, NULL, 0) == 0
+        && sysctlbyname("vm.stats.vm.v_free_count", &free, &freelen, NULL, 0) == 0
+        && sysctlbyname("vm.stats.vm.v_page_size", &psize, &psizelen, NULL, 0) == 0) {
         lastUpdate = QTime::currentTime();
         return (cachedValue = (cache + inact + free) * psize);
-    }
-    else
-    {
+    } else {
         return 0;
     }
 #elif defined(Q_OS_WIN)
     MEMORYSTATUSEX stat;
     stat.dwLength = sizeof(stat);
-    GlobalMemoryStatusEx (&stat);
+    GlobalMemoryStatusEx(&stat);
 
     lastUpdate = QTime::currentTime();
 
-    return ( cachedValue = stat.ullAvailPhys );
+    return (cachedValue = stat.ullAvailPhys);
 #else
     // tell the memory is full.. will act as in LOW profile
     return 0;

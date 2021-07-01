@@ -33,16 +33,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 using Dict = QHash<QString, QString>;
 
-struct FileNameFormaterPrivate
-{
+struct FileNameFormaterPrivate {
     QString mFormat;
 };
 
-FileNameFormater::FileNameFormater(const QString& format)
-: d(new FileNameFormaterPrivate)
+FileNameFormater::FileNameFormater(const QString &format)
+    : d(new FileNameFormaterPrivate)
 {
     d->mFormat = format;
 }
@@ -52,17 +50,17 @@ FileNameFormater::~FileNameFormater()
     delete d;
 }
 
-QString FileNameFormater::format(const QUrl& url, const QDateTime& dateTime)
+QString FileNameFormater::format(const QUrl &url, const QDateTime &dateTime)
 {
     QFileInfo info(url.fileName());
 
     // Keep in sync with helpMap()
     Dict dict;
-    dict[QStringLiteral("date")]       = dateTime.toString(QStringLiteral("yyyy-MM-dd"));
-    dict[QStringLiteral("time")]       = dateTime.toString(QStringLiteral("HH-mm-ss"));
-    dict[QStringLiteral("ext")]        = info.suffix();
-    dict[QStringLiteral("ext.lower")]  = info.suffix().toLower();
-    dict[QStringLiteral("name")]       = info.completeBaseName();
+    dict[QStringLiteral("date")] = dateTime.toString(QStringLiteral("yyyy-MM-dd"));
+    dict[QStringLiteral("time")] = dateTime.toString(QStringLiteral("HH-mm-ss"));
+    dict[QStringLiteral("ext")] = info.suffix();
+    dict[QStringLiteral("ext.lower")] = info.suffix().toLower();
+    dict[QStringLiteral("name")] = info.completeBaseName();
     dict[QStringLiteral("name.lower")] = info.completeBaseName().toLower();
 
     QString name;
@@ -101,11 +99,11 @@ FileNameFormater::HelpMap FileNameFormater::helpMap()
     // Keep in sync with dict in format()
     static HelpMap map;
     if (map.isEmpty()) {
-        map[QStringLiteral("date")]       = i18n("Shooting date");
-        map[QStringLiteral("time")]       = i18n("Shooting time");
-        map[QStringLiteral("ext")]        = i18n("Original extension");
-        map[QStringLiteral("ext.lower")]  = i18n("Original extension, in lower case");
-        map[QStringLiteral("name")]       = i18n("Original filename");
+        map[QStringLiteral("date")] = i18n("Shooting date");
+        map[QStringLiteral("time")] = i18n("Shooting time");
+        map[QStringLiteral("ext")] = i18n("Original extension");
+        map[QStringLiteral("ext.lower")] = i18n("Original extension, in lower case");
+        map[QStringLiteral("name")] = i18n("Original filename");
         map[QStringLiteral("name.lower")] = i18n("Original filename, in lower case");
     }
     return map;

@@ -34,18 +34,17 @@ class QWidget;
 
 namespace Gwenview
 {
-
 struct PrintHelperPrivate;
 class GWENVIEWLIB_EXPORT PrintHelper
 {
 public:
-    explicit PrintHelper(QWidget* parent);
+    explicit PrintHelper(QWidget *parent);
     ~PrintHelper();
 
     void print(Document::Ptr);
 
 private:
-    PrintHelperPrivate* const d;
+    PrintHelperPrivate *const d;
 };
 
 } // namespace

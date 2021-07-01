@@ -23,10 +23,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "recentfilesmodel.h"
 
 // Qt
-#include <QUrl>
+#include <QDir>
 #include <QMimeDatabase>
 #include <QRegularExpression>
-#include <QDir>
+#include <QUrl>
 
 // KF
 #include <KDirModel>
@@ -40,17 +40,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
-struct RecentFilesItem : public QStandardItem
-{
+struct RecentFilesItem : public QStandardItem {
     QUrl url() const
     {
         return mUrl;
     }
 
-
     RecentFilesItem(const QUrl &url)
-        : mUrl(url) {
+        : mUrl(url)
+    {
         QString text(mUrl.toDisplayString(QUrl::PreferLocalFile));
 #ifdef Q_OS_UNIX
         text.replace(QRegularExpression(QStringLiteral("^") + QDir::homePath()), QStringLiteral("~"));
@@ -71,16 +69,15 @@ private:
     QUrl mUrl;
 };
 
-struct RecentFilesModelPrivate
-{
-    RecentFilesModel* q;
+struct RecentFilesModelPrivate {
+    RecentFilesModel *q;
 
-    QMap<QUrl, RecentFilesItem*> mRecentFilesItemForUrl;
+    QMap<QUrl, RecentFilesItem *> mRecentFilesItemForUrl;
 };
 
-RecentFilesModel::RecentFilesModel(QObject* parent)
-: QStandardItemModel(parent)
-, d(new RecentFilesModelPrivate)
+RecentFilesModel::RecentFilesModel(QObject *parent)
+    : QStandardItemModel(parent)
+    , d(new RecentFilesModelPrivate)
 {
     d->q = this;
 }
@@ -92,21 +89,22 @@ RecentFilesModel::~RecentFilesModel()
 
 void RecentFilesModel::addUrl(const QUrl &url)
 {
-    RecentFilesItem* historyItem = d->mRecentFilesItemForUrl.value(url);
+    RecentFilesItem *historyItem = d->mRecentFilesItemForUrl.value(url);
     if (!historyItem) {
         historyItem = new RecentFilesItem(url);
-        if (!historyItem) return;
+        if (!historyItem)
+            return;
         d->mRecentFilesItemForUrl.insert(url, historyItem);
         appendRow(historyItem);
     }
     sort(0);
 }
 
-bool RecentFilesModel::removeRows(int start, int count, const QModelIndex& parent)
+bool RecentFilesModel::removeRows(int start, int count, const QModelIndex &parent)
 {
     Q_ASSERT(!parent.isValid());
-    for (int row = start + count - 1; row >= start ; --row) {
-        auto* historyItem = static_cast<RecentFilesItem*>(item(row, 0));
+    for (int row = start + count - 1; row >= start; --row) {
+        auto *historyItem = static_cast<RecentFilesItem *>(item(row, 0));
         Q_ASSERT(historyItem);
         d->mRecentFilesItemForUrl.remove(historyItem->url());
     }

@@ -30,7 +30,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 namespace Gwenview
 {
-
 class AbstractImageOperation;
 class MainWindow;
 
@@ -38,7 +37,7 @@ class ImageOpsContextManagerItem : public AbstractContextManagerItem
 {
     Q_OBJECT
 public:
-    ImageOpsContextManagerItem(ContextManager*, MainWindow*);
+    ImageOpsContextManagerItem(ContextManager *, MainWindow *);
     ~ImageOpsContextManagerItem() override;
 
 private Q_SLOTS:
@@ -51,12 +50,12 @@ private Q_SLOTS:
     void resizeImage();
     void crop();
     void startRedEyeReduction();
-    void applyImageOperation(AbstractImageOperation*);
+    void applyImageOperation(AbstractImageOperation *);
     void restoreDefaultImageViewTool();
 
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
     void resetCropState();
 };
 

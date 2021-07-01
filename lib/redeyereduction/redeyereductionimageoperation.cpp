@@ -32,22 +32,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KLocalizedString>
 
 // Local
-#include "gwenview_lib_debug.h"
-#include "ramp.h"
+#include "document/abstractdocumenteditor.h"
 #include "document/document.h"
 #include "document/documentjob.h"
-#include "document/abstractdocumenteditor.h"
+#include "gwenview_lib_debug.h"
 #include "paintutils.h"
+#include "ramp.h"
 
 namespace Gwenview
 {
-
 class RedEyeReductionJob : public ThreadedDocumentJob
 {
 public:
-    RedEyeReductionJob(const QRectF& rectF)
+    RedEyeReductionJob(const QRectF &rectF)
         : mRectF(rectF)
-    {}
+    {
+    }
 
     void threadedStart() override
     {
@@ -64,14 +64,13 @@ private:
     QRectF mRectF;
 };
 
-struct RedEyeReductionImageOperationPrivate
-{
+struct RedEyeReductionImageOperationPrivate {
     QRectF mRectF;
     QImage mOriginalImage;
 };
 
-RedEyeReductionImageOperation::RedEyeReductionImageOperation(const QRectF& rectF)
-: d(new RedEyeReductionImageOperationPrivate)
+RedEyeReductionImageOperation::RedEyeReductionImageOperation(const QRectF &rectF)
+    : d(new RedEyeReductionImageOperationPrivate)
 {
     d->mRectF = rectF;
     setText(i18n("Reduce Red Eye"));
@@ -111,7 +110,7 @@ void RedEyeReductionImageOperation::undo()
  * This code is inspired from code found in a Paint.net plugin:
  * http://paintdotnet.forumer.com/viewtopic.php?f=27&t=26193&p=205954&hilit=red+eye#p205954
  */
-inline qreal computeRedEyeAlpha(const QColor& src)
+inline qreal computeRedEyeAlpha(const QColor &src)
 {
     int hue, sat, value;
     src.getHsv(&hue, &sat, &value);
@@ -128,19 +127,17 @@ inline qreal computeRedEyeAlpha(const QColor& src)
     return qBound(qreal(0.), src.alphaF() * axs, qreal(1.));
 }
 
-void RedEyeReductionImageOperation::apply(QImage* img, const QRectF& rectF)
+void RedEyeReductionImageOperation::apply(QImage *img, const QRectF &rectF)
 {
     const QRect rect = rectF.toAlignedRect();
     const qreal radius = rectF.width() / 2;
     const qreal centerX = rectF.x() + radius;
     const qreal centerY = rectF.y() + radius;
-    const Ramp radiusRamp(
-        qMin(qreal(radius * 0.7), qreal(radius - 1)), radius,
-        qreal(1.), qreal(0.));
+    const Ramp radiusRamp(qMin(qreal(radius * 0.7), qreal(radius - 1)), radius, qreal(1.), qreal(0.));
 
-    uchar* line = img->scanLine(rect.top()) + rect.left() * 4;
+    uchar *line = img->scanLine(rect.top()) + rect.left() * 4;
     for (int y = rect.top(); y < rect.bottom(); ++y, line += img->bytesPerLine()) {
-        QRgb* ptr = (QRgb*)line;
+        QRgb *ptr = (QRgb *)line;
 
         for (int x = rect.left(); x < rect.right(); ++x, ++ptr) {
             const qreal currentRadius = sqrt(pow(y - centerY, 2) + pow(x - centerX, 2));

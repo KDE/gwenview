@@ -32,7 +32,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 using SemanticInfoTag = QString;
 
 class AbstractSemanticInfoBackEnd;
@@ -43,7 +42,7 @@ class GWENVIEWLIB_EXPORT TagModel : public QStandardItemModel
 {
     Q_OBJECT
 public:
-    explicit TagModel(QObject*);
+    explicit TagModel(QObject *);
     ~TagModel() override;
 
     enum {
@@ -57,25 +56,25 @@ public:
         FullyAssigned,
     };
 
-    void setSemanticInfoBackEnd(AbstractSemanticInfoBackEnd*);
-    void setTagSet(const TagSet& set);
+    void setSemanticInfoBackEnd(AbstractSemanticInfoBackEnd *);
+    void setTagSet(const TagSet &set);
 
     /**
      * Convenience method to create a TagModel showing all tags available in
      * AbstractSemanticInfoBackEnd
      */
-    static TagModel* createAllTagsModel(QObject* parent, AbstractSemanticInfoBackEnd*);
+    static TagModel *createAllTagsModel(QObject *parent, AbstractSemanticInfoBackEnd *);
 
 public Q_SLOTS:
     /**
      * Add a new tag. If label is empty, backend will be queried for it
      */
-    void addTag(const SemanticInfoTag& tag, const QString& label = QString(), AssignmentStatus status = FullyAssigned);
+    void addTag(const SemanticInfoTag &tag, const QString &label = QString(), AssignmentStatus status = FullyAssigned);
 
-    void removeTag(const SemanticInfoTag& tag);
+    void removeTag(const SemanticInfoTag &tag);
 
 private:
-    TagModelPrivate* const d;
+    TagModelPrivate *const d;
 };
 
 } // namespace

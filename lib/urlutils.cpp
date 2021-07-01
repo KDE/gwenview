@@ -39,10 +39,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 namespace UrlUtils
 {
-
 bool urlIsFastLocalFile(const QUrl &url)
 {
     if (!url.isLocalFile()) {
@@ -72,7 +70,7 @@ bool urlIsDirectory(const QUrl &url)
     }
 
     QWidgetList list = QApplication::topLevelWidgets();
-    QWidget* parent;
+    QWidget *parent;
     if (!list.isEmpty()) {
         parent = list[0];
     } else {

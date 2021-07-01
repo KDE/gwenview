@@ -23,8 +23,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QApplication>
-#include <QShowEvent>
 #include <QMimeDatabase>
+#include <QShowEvent>
 
 // KF
 
@@ -33,15 +33,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
-struct ItemEditorPrivate
-{
+struct ItemEditorPrivate {
     QPoint mCenter;
 };
 
-ItemEditor::ItemEditor(QWidget* parent)
-: KLineEdit(parent)
-, d(new ItemEditorPrivate)
+ItemEditor::ItemEditor(QWidget *parent)
+    : KLineEdit(parent)
+    , d(new ItemEditorPrivate)
 {
     setPalette(QApplication::palette());
     connect(this, &ItemEditor::textChanged, this, &ItemEditor::resizeToContents);
@@ -53,9 +51,10 @@ ItemEditor::~ItemEditor()
     delete d;
 }
 
-void ItemEditor::showEvent(QShowEvent* event)
+void ItemEditor::showEvent(QShowEvent *event)
 {
-    // We can't do this in PreviewItemDelegate::updateEditorGeometry() because QAbstractItemView outsmarts us by calling selectAll() on the editor if it is a QLineEdit
+    // We can't do this in PreviewItemDelegate::updateEditorGeometry() because QAbstractItemView outsmarts us by calling selectAll() on the editor if it is a
+    // QLineEdit
     QMimeDatabase db;
     const QString extension = db.suffixForFileName(text());
     if (!extension.isEmpty()) {
@@ -83,7 +82,6 @@ void ItemEditor::resizeToContents()
         rect.setLeft(0);
     }
     setGeometry(rect);
-
 }
 
 } // namespace

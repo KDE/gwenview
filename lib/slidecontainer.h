@@ -21,8 +21,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #define SLIDECONTAINER_H
 
 // Qt
-#include <QPointer>
 #include <QFrame>
+#include <QPointer>
 
 #include <lib/gwenviewlib_export.h>
 
@@ -30,7 +30,6 @@ class QPropertyAnimation;
 
 namespace Gwenview
 {
-
 /**
  * This widget is design to contain one child widget, the "content" widget.
  * It will start hidden by default. Calling slideIn() will slide in the content
@@ -41,17 +40,17 @@ class GWENVIEWLIB_EXPORT SlideContainer : public QFrame
     Q_OBJECT
     Q_PROPERTY(int slideHeight READ slideHeight WRITE setSlideHeight)
 public:
-    explicit SlideContainer(QWidget* parent = nullptr);
+    explicit SlideContainer(QWidget *parent = nullptr);
 
     /**
      * Returns the content widget
      */
-    QWidget* content() const;
+    QWidget *content() const;
 
     /**
      * Defines the content widget
      */
-    void setContent(QWidget* content);
+    void setContent(QWidget *content);
 
     QSize sizeHint() const override;
 
@@ -79,8 +78,8 @@ Q_SIGNALS:
     void slidedOut();
 
 protected:
-    void resizeEvent(QResizeEvent*) override;
-    bool eventFilter(QObject*, QEvent* event) override;
+    void resizeEvent(QResizeEvent *) override;
+    bool eventFilter(QObject *, QEvent *event) override;
 
 private Q_SLOTS:
     void slotAnimFinished();

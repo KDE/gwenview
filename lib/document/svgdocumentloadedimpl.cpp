@@ -31,16 +31,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
-struct SvgDocumentLoadedImplPrivate
-{
+struct SvgDocumentLoadedImplPrivate {
     QByteArray mRawData;
-    QSvgRenderer* mRenderer;
+    QSvgRenderer *mRenderer;
 };
 
-SvgDocumentLoadedImpl::SvgDocumentLoadedImpl(Document* document, const QByteArray& data)
-: AbstractDocumentImpl(document)
-, d(new SvgDocumentLoadedImplPrivate)
+SvgDocumentLoadedImpl::SvgDocumentLoadedImpl(Document *document, const QByteArray &data)
+    : AbstractDocumentImpl(document)
+    , d(new SvgDocumentLoadedImplPrivate)
 {
     d->mRawData = data;
     d->mRenderer = new QSvgRenderer(this);
@@ -63,7 +61,7 @@ Document::LoadingState SvgDocumentLoadedImpl::loadingState() const
     return Document::Loaded;
 }
 
-void SvgDocumentLoadedImpl::setImage(const QImage&)
+void SvgDocumentLoadedImpl::setImage(const QImage &)
 {
     qCWarning(GWENVIEW_LIB_LOG) << "Should not be called";
 }
@@ -73,7 +71,7 @@ QByteArray SvgDocumentLoadedImpl::rawData() const
     return d->mRawData;
 }
 
-QSvgRenderer* SvgDocumentLoadedImpl::svgRenderer() const
+QSvgRenderer *SvgDocumentLoadedImpl::svgRenderer() const
 {
     return d->mRenderer;
 }

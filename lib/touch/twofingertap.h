@@ -35,9 +35,8 @@ struct TwoFingerTapRecognizerPrivate;
 
 class GWENVIEWLIB_EXPORT TwoFingerTap : public QGesture
 {
-
 public:
-    explicit TwoFingerTap(QObject* parent = nullptr);
+    explicit TwoFingerTap(QObject *parent = nullptr);
 
 private:
 };
@@ -47,12 +46,12 @@ class GWENVIEWLIB_EXPORT TwoFingerTapRecognizer : public QGestureRecognizer
 public:
     explicit TwoFingerTapRecognizer();
     ~TwoFingerTapRecognizer();
+
 private:
-    TwoFingerTapRecognizerPrivate* d;
+    TwoFingerTapRecognizerPrivate *d;
 
-    virtual QGesture* create(QObject*) override; 
-    virtual Result recognize(QGesture*, QObject*, QEvent*) override;
-
+    virtual QGesture *create(QObject *) override;
+    virtual Result recognize(QGesture *, QObject *, QEvent *) override;
 };
 
 } // namespace

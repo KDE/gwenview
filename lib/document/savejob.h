@@ -35,7 +35,6 @@ class QUrl;
 
 namespace Gwenview
 {
-
 class DocumentLoadedImpl;
 
 struct SaveJobPrivate;
@@ -43,7 +42,7 @@ class GWENVIEWLIB_EXPORT SaveJob : public DocumentJob
 {
     Q_OBJECT
 public:
-    SaveJob(DocumentLoadedImpl* impl, const QUrl &url, const QByteArray& format);
+    SaveJob(DocumentLoadedImpl *impl, const QUrl &url, const QByteArray &format);
     ~SaveJob() override;
     void saveInternal();
 
@@ -52,7 +51,7 @@ public:
 
 protected Q_SLOTS:
     void doStart() override;
-    void slotResult(KJob*) override;
+    void slotResult(KJob *) override;
 
 protected:
     bool doKill() override;
@@ -61,7 +60,7 @@ private Q_SLOTS:
     void finishSave();
 
 private:
-    SaveJobPrivate* const d;
+    SaveJobPrivate *const d;
 };
 
 } // namespace

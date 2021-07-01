@@ -25,8 +25,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/recursivedirmodel.h>
 
 // Qt
-#include <QTest>
 #include <QDebug>
+#include <QTest>
 
 // KF
 #include <KDirModel>
@@ -41,52 +41,34 @@ void RecursiveDirModelTest::testBasic_data()
     QTest::addColumn<QStringList>("addedFiles");
     QTest::addColumn<QStringList>("removedFiles");
 #define NEW_ROW(name, initialFiles, addedFiles, removedFiles) QTest::newRow(name) << (initialFiles) << (addedFiles) << (removedFiles)
-    NEW_ROW("empty_dir",
-        QStringList(),
-        QStringList()
-            << "new.jpg",
-        QStringList()
-            << "new.jpg"
-        );
+    NEW_ROW("empty_dir", QStringList(), QStringList() << "new.jpg", QStringList() << "new.jpg");
     NEW_ROW("images_only",
-        QStringList()
-            << "pict01.jpg"
-            << "pict02.jpg"
-            << "pict03.jpg",
-        QStringList()
-            << "pict04.jpg",
-        QStringList()
-            << "pict02.jpg"
-        );
+            QStringList() << "pict01.jpg"
+                          << "pict02.jpg"
+                          << "pict03.jpg",
+            QStringList() << "pict04.jpg",
+            QStringList() << "pict02.jpg");
     NEW_ROW("images_in_two_dirs",
-        QStringList()
-            << "d1/pict101.jpg"
-            << "d1/pict102.jpg"
-            << "d2/pict201.jpg",
-        QStringList()
-            << "d1/pict103.jpg"
-            << "d2/pict202.jpg",
-        QStringList()
-            << "d2/pict202.jpg"
-        );
+            QStringList() << "d1/pict101.jpg"
+                          << "d1/pict102.jpg"
+                          << "d2/pict201.jpg",
+            QStringList() << "d1/pict103.jpg"
+                          << "d2/pict202.jpg",
+            QStringList() << "d2/pict202.jpg");
     NEW_ROW("images_in_two_dirs_w_same_names",
-        QStringList()
-            << "d1/a.jpg"
-            << "d1/b.jpg"
-            << "d2/a.jpg"
-            << "d2/b.jpg",
-        QStringList()
-            << "d3/a.jpg"
-            << "d3/b.jpg",
-        QStringList()
-            << "d1/a.jpg"
-            << "d2/a.jpg"
-            << "d3/a.jpg"
-        );
+            QStringList() << "d1/a.jpg"
+                          << "d1/b.jpg"
+                          << "d2/a.jpg"
+                          << "d2/b.jpg",
+            QStringList() << "d3/a.jpg"
+                          << "d3/b.jpg",
+            QStringList() << "d1/a.jpg"
+                          << "d2/a.jpg"
+                          << "d3/a.jpg");
 #undef NEW_ROW
 }
 
-static QList<QUrl> listModelUrls(QAbstractItemModel* model)
+static QList<QUrl> listModelUrls(QAbstractItemModel *model)
 {
     QList<QUrl> out;
     for (int row = 0; row < model->rowCount(QModelIndex()); ++row) {
@@ -98,7 +80,7 @@ static QList<QUrl> listModelUrls(QAbstractItemModel* model)
     return out;
 }
 
-static QList<QUrl> listExpectedUrls(const QDir& dir, const QStringList& files)
+static QList<QUrl> listExpectedUrls(const QDir &dir, const QStringList &files)
 {
     QList<QUrl> lst;
     for (const QString &name : files) {
@@ -108,7 +90,7 @@ static QList<QUrl> listExpectedUrls(const QDir& dir, const QStringList& files)
     return lst;
 }
 
-void logLst(const QList<QUrl>& lst)
+void logLst(const QList<QUrl> &lst)
 {
     for (const QUrl &url : lst) {
         qWarning() << url.fileName();
@@ -148,7 +130,7 @@ void RecursiveDirModelTest::testBasic()
     } while (out.size() != expected.size());
     QCOMPARE(out, expected);
 
-# if 0
+#if 0
     /* FIXME: This part of the test is not reliable :/ Sometimes some tests pass,
      * sometimes they don't. It feels like KDirLister::itemsDeleted() is not
      * always emitted.
@@ -180,15 +162,12 @@ void RecursiveDirModelTest::testBasic()
 void RecursiveDirModelTest::testSetNewUrl()
 {
     TestUtils::SandBoxDir sandBoxDir;
-    sandBoxDir.fill(
-        QStringList()
-        << "d1/a.jpg"
-        << "d1/b.jpg"
-        << "d1/c.jpg"
-        << "d1/d.jpg"
-        << "d2/e.jpg"
-        << "d2/f.jpg"
-        );
+    sandBoxDir.fill(QStringList() << "d1/a.jpg"
+                                  << "d1/b.jpg"
+                                  << "d1/c.jpg"
+                                  << "d1/d.jpg"
+                                  << "d2/e.jpg"
+                                  << "d2/f.jpg");
 
     RecursiveDirModel model;
     TestUtils::TimedEventLoop loop;

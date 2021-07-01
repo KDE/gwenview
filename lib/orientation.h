@@ -23,7 +23,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 namespace Gwenview
 {
-
 /* Explanation extracted from http://sylvana.net/jpegcrop/exif_orientation.html
 
    For convenience, here is what the letter F would look like if it were tagged

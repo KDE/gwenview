@@ -34,7 +34,6 @@ class QUrl;
 
 namespace Gwenview
 {
-
 struct PreloaderPrivate;
 
 /**
@@ -44,16 +43,16 @@ class Preloader : public QObject
 {
     Q_OBJECT
 public:
-    explicit Preloader(QObject* parent);
+    explicit Preloader(QObject *parent);
     ~Preloader() override;
 
-    void preload(const QUrl&, const QSize&);
+    void preload(const QUrl &, const QSize &);
 
 private Q_SLOTS:
     void doPreload();
 
 private:
-    PreloaderPrivate* const d;
+    PreloaderPrivate *const d;
 };
 
 } // namespace

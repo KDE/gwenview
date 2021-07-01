@@ -26,8 +26,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KF
 
 // Qt
-#include <QUrl>
 #include <QToolButton>
+#include <QUrl>
 #include <QWidget>
 
 class QGraphicsWidget;
@@ -36,7 +36,6 @@ class KActionCollection;
 
 namespace Gwenview
 {
-
 class AbstractRasterImageViewTool;
 class DocumentView;
 class GvCore;
@@ -55,10 +54,10 @@ class ViewMainPage : public QWidget
 public:
     static const int MaxViewCount;
 
-    ViewMainPage(QWidget* parent, SlideShow*, KActionCollection*, GvCore*);
+    ViewMainPage(QWidget *parent, SlideShow *, KActionCollection *, GvCore *);
     ~ViewMainPage() override;
 
-    ThumbnailBarView* thumbnailBar() const;
+    ThumbnailBarView *thumbnailBar() const;
 
     void loadConfig();
 
@@ -86,7 +85,7 @@ public:
     /**
      * Opens up to MaxViewCount urls, and set currentUrl as the current one
      */
-    void openUrls(const QList<QUrl>& urls, const QUrl &currentUrl);
+    void openUrls(const QList<QUrl> &urls, const QUrl &currentUrl);
 
     void reload();
 
@@ -97,17 +96,16 @@ public:
     /**
      * Returns the image view, if the current adapter has one.
      */
-    RasterImageView* imageView() const;
+    RasterImageView *imageView() const;
 
     /**
      * Returns the document view
      */
-    DocumentView* documentView() const;
+    DocumentView *documentView() const;
 
+    QToolButton *toggleSideBarButton() const;
 
-    QToolButton* toggleSideBarButton() const;
-
-    void showMessageWidget(QGraphicsWidget*, Qt::Alignment align = Qt::AlignHCenter | Qt::AlignTop);
+    void showMessageWidget(QGraphicsWidget *, Qt::Alignment align = Qt::AlignHCenter | Qt::AlignTop);
 
 Q_SIGNALS:
 
@@ -120,15 +118,15 @@ Q_SIGNALS:
 
     void nextImageRequested();
 
-    void openUrlRequested(const QUrl&);
+    void openUrlRequested(const QUrl &);
 
-    void openDirUrlRequested(const QUrl&);
+    void openDirUrlRequested(const QUrl &);
 
     void toggleFullScreenRequested();
 
     void goToBrowseModeRequested();
 
-    void captionUpdateRequested(const QString&);
+    void captionUpdateRequested(const QString &);
 
 public Q_SLOTS:
     void setStatusBarVisible(bool);
@@ -138,23 +136,23 @@ private Q_SLOTS:
 
     void showContextMenu();
 
-    void slotViewFocused(DocumentView*);
+    void slotViewFocused(DocumentView *);
 
     void slotEnterPressed();
 
-    void trashView(DocumentView*);
-    void deselectView(DocumentView*);
+    void trashView(DocumentView *);
+    void deselectView(DocumentView *);
 
     void slotDirModelItemsAddedOrRemoved();
 
 protected:
-    bool eventFilter(QObject* watched, QEvent* event) override;
+    bool eventFilter(QObject *watched, QEvent *event) override;
 
 private:
     friend struct ViewMainPagePrivate;
-    ViewMainPagePrivate* const d;
+    ViewMainPagePrivate *const d;
 
-    void updateFocus(const AbstractRasterImageViewTool* tool);
+    void updateFocus(const AbstractRasterImageViewTool *tool);
 };
 
 } // namespace

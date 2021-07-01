@@ -31,15 +31,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
-struct KindProxyModelPrivate
-{
+struct KindProxyModelPrivate {
     MimeTypeUtils::Kinds mKindFilter;
 };
 
-KindProxyModel::KindProxyModel(QObject* parent)
-: QSortFilterProxyModel(parent)
-, d(new KindProxyModelPrivate)
+KindProxyModel::KindProxyModel(QObject *parent)
+    : QSortFilterProxyModel(parent)
+    , d(new KindProxyModelPrivate)
 {
 }
 
@@ -61,7 +59,7 @@ MimeTypeUtils::Kinds KindProxyModel::kindFilter() const
     return d->mKindFilter;
 }
 
-bool KindProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
+bool KindProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
     if (d->mKindFilter == MimeTypeUtils::Kinds()) {
         return true;

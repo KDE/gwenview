@@ -30,23 +30,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 struct ItemEditorPrivate;
 class ItemEditor : public KLineEdit
 {
     Q_OBJECT
 public:
-    explicit ItemEditor(QWidget* parent = nullptr);
+    explicit ItemEditor(QWidget *parent = nullptr);
     ~ItemEditor() override;
 
 protected:
-    void showEvent(QShowEvent*) override;
+    void showEvent(QShowEvent *) override;
 
 private Q_SLOTS:
     void resizeToContents();
 
 private:
-    ItemEditorPrivate* const d;
+    ItemEditorPrivate *const d;
 };
 
 } // namespace

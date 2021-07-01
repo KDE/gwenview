@@ -30,7 +30,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 class DocumentView;
 
 struct BirdEyeViewPrivate;
@@ -42,10 +41,10 @@ class BirdEyeView : public QGraphicsWidget
 {
     Q_OBJECT
 public:
-    explicit BirdEyeView(DocumentView* docView);
+    explicit BirdEyeView(DocumentView *docView);
     ~BirdEyeView() override;
 
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) override;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
     // Called by DocumentView when it detects mouse movements
     // We cannot use a sceneEventFilter because QGraphicsSceneHoverEvent are not
@@ -57,12 +56,12 @@ public Q_SLOTS:
     void slotZoomOrSizeChanged();
 
 protected:
-    void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
-    void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
-    void hoverEnterEvent(QGraphicsSceneHoverEvent* event) override;
-    void hoverMoveEvent(QGraphicsSceneHoverEvent* event) override;
-    void hoverLeaveEvent(QGraphicsSceneHoverEvent* event) override;
+    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
+    void hoverEnterEvent(QGraphicsSceneHoverEvent *event) override;
+    void hoverMoveEvent(QGraphicsSceneHoverEvent *event) override;
+    void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) override;
 
 private Q_SLOTS:
     void slotAutoHideTimeout();
@@ -70,7 +69,7 @@ private Q_SLOTS:
     void slotIsAnimatedChanged();
 
 private:
-    BirdEyeViewPrivate* const d;
+    BirdEyeViewPrivate *const d;
     void adjustVisibleRect();
     void adjustGeometry();
 };

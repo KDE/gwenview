@@ -34,13 +34,12 @@ class QEvent;
 
 namespace Gwenview
 {
-
 struct FullScreenBarPrivate;
 class GWENVIEWLIB_EXPORT FullScreenBar : public QFrame
 {
     Q_OBJECT
 public:
-    explicit FullScreenBar(QWidget* parent);
+    explicit FullScreenBar(QWidget *parent);
     ~FullScreenBar() override;
 
     void setActivated(bool);
@@ -60,10 +59,10 @@ private Q_SLOTS:
     void delayedInstallEventFilter();
 
 protected:
-    bool eventFilter(QObject*, QEvent*) override;
+    bool eventFilter(QObject *, QEvent *) override;
 
 private:
-    FullScreenBarPrivate* const d;
+    FullScreenBarPrivate *const d;
 };
 
 } // namespace

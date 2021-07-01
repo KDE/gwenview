@@ -25,14 +25,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 namespace Gwenview
 {
-
 /**
  * An RAII class to block and unblock signals from a QObject instance
  */
 class SignalBlocker
 {
 public:
-    explicit SignalBlocker(QObject* object)
+    explicit SignalBlocker(QObject *object)
     {
         mObject = object;
         mWasBlocked = object->blockSignals(true);
@@ -44,7 +43,7 @@ public:
     }
 
 private:
-    QObject* mObject;
+    QObject *mObject;
     bool mWasBlocked;
 };
 

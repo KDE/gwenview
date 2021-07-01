@@ -34,37 +34,36 @@ class QUrl;
 
 namespace Gwenview
 {
-
 struct PlaceTreeModelPrivate;
 class GWENVIEWLIB_EXPORT PlaceTreeModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:
-    explicit PlaceTreeModel(QObject*);
+    explicit PlaceTreeModel(QObject *);
     ~PlaceTreeModel() override;
 
-    int columnCount(const QModelIndex& parent = QModelIndex()) const override;
-    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
-    QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
-    QModelIndex parent(const QModelIndex& index) const override;
-    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
-    bool hasChildren(const QModelIndex& parent) const override;
-    bool canFetchMore(const QModelIndex& parent) const override;
-    void fetchMore(const QModelIndex& parent) override;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
+    QModelIndex parent(const QModelIndex &index) const override;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    bool hasChildren(const QModelIndex &parent) const override;
+    bool canFetchMore(const QModelIndex &parent) const override;
+    void fetchMore(const QModelIndex &parent) override;
 
-    QUrl urlForIndex(const QModelIndex&) const;
+    QUrl urlForIndex(const QModelIndex &) const;
 
 private Q_SLOTS:
-    void slotPlacesRowsInserted(const QModelIndex&, int start, int end);
-    void slotPlacesRowsAboutToBeRemoved(const QModelIndex&, int start, int end);
-    void slotDirRowsAboutToBeInserted(const QModelIndex&, int start, int end);
-    void slotDirRowsInserted(const QModelIndex&, int start, int end);
-    void slotDirRowsAboutToBeRemoved(const QModelIndex&, int start, int end);
-    void slotDirRowsRemoved(const QModelIndex&, int start, int end);
+    void slotPlacesRowsInserted(const QModelIndex &, int start, int end);
+    void slotPlacesRowsAboutToBeRemoved(const QModelIndex &, int start, int end);
+    void slotDirRowsAboutToBeInserted(const QModelIndex &, int start, int end);
+    void slotDirRowsInserted(const QModelIndex &, int start, int end);
+    void slotDirRowsAboutToBeRemoved(const QModelIndex &, int start, int end);
+    void slotDirRowsRemoved(const QModelIndex &, int start, int end);
 
 private:
     friend struct PlaceTreeModelPrivate;
-    PlaceTreeModelPrivate* const d;
+    PlaceTreeModelPrivate *const d;
 };
 
 } // namespace

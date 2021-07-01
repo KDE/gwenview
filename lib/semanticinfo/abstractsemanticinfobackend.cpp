@@ -31,15 +31,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 TagSet::TagSet()
-: QSet<SemanticInfoTag>() {}
+    : QSet<SemanticInfoTag>()
+{
+}
 
-TagSet::TagSet(const QSet<SemanticInfoTag>& set)
-: QSet<QString>(set) {}
+TagSet::TagSet(const QSet<SemanticInfoTag> &set)
+    : QSet<QString>(set)
+{
+}
 
-TagSet::TagSet(const QList<SemanticInfoTag>& list)
-: QSet(list.begin(), list.end())
+TagSet::TagSet(const QList<SemanticInfoTag> &list)
+    : QSet(list.begin(), list.end())
 {
 }
 
@@ -49,19 +52,19 @@ QVariant TagSet::toVariant() const
     return QVariant(lst);
 }
 
-TagSet TagSet::fromVariant(const QVariant& variant)
+TagSet TagSet::fromVariant(const QVariant &variant)
 {
     QStringList lst = variant.toStringList();
     return TagSet::fromList(lst);
 }
 
-TagSet TagSet::fromList(const QList<SemanticInfoTag>& list)
+TagSet TagSet::fromList(const QList<SemanticInfoTag> &list)
 {
     return TagSet(list);
 }
 
-AbstractSemanticInfoBackEnd::AbstractSemanticInfoBackEnd(QObject* parent)
-: QObject(parent)
+AbstractSemanticInfoBackEnd::AbstractSemanticInfoBackEnd(QObject *parent)
+    : QObject(parent)
 {
     qRegisterMetaType<SemanticInfo>("SemanticInfo");
 }

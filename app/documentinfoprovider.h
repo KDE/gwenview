@@ -30,20 +30,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 class SortedDirModel;
 
 class DocumentInfoProvider : public AbstractDocumentInfoProvider
 {
     Q_OBJECT
 public:
-    DocumentInfoProvider(SortedDirModel* model);
+    DocumentInfoProvider(SortedDirModel *model);
 
     bool isBusy(const QUrl &url) override;
 
     bool isModified(const QUrl &url) override;
 
-    void thumbnailForDocument(const QUrl &url, ThumbnailGroup::Enum group, QPixmap* outPix, QSize* outFullSize) const override;
+    void thumbnailForDocument(const QUrl &url, ThumbnailGroup::Enum group, QPixmap *outPix, QSize *outFullSize) const override;
 
 private:
     SortedDirModel *const mDirModel;

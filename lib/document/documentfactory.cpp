@@ -34,7 +34,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 namespace Gwenview
 {
-
 #undef ENABLE_LOG
 #undef LOG
 //#define ENABLE_LOG
@@ -64,8 +63,7 @@ static const int MAX_UNREFERENCED_IMAGES = getMaxUnreferencedImages();
  * accessed. This access time is used to "garbage collect" the loaded
  * documents.
  */
-struct DocumentInfo
-{
+struct DocumentInfo {
     Document::Ptr mDocument;
     QDateTime mLastAccess;
 };
@@ -77,15 +75,14 @@ struct DocumentInfo
  */
 using DocumentMap = QMap<QUrl, DocumentInfo *>;
 
-struct DocumentFactoryPrivate
-{
+struct DocumentFactoryPrivate {
     DocumentMap mDocumentMap;
     QUndoGroup mUndoGroup;
 
     /**
      * Removes items in a map if they are no longer referenced elsewhere
      */
-    void garbageCollect(DocumentMap& map)
+    void garbageCollect(DocumentMap &map)
     {
         // Build a map of all unreferenced images. We use a MultiMap because in
         // rare cases documents may get accessed at the same millisecond.
@@ -95,7 +92,7 @@ struct DocumentFactoryPrivate
 
         DocumentMap::Iterator it = map.begin(), end = map.end();
         for (; it != end; ++it) {
-            DocumentInfo* info = it.value();
+            DocumentInfo *info = it.value();
             if (info->mDocument->ref == 1 && !info->mDocument->isModified()) {
                 unreferencedImages.insert(info->mLastAccess, it.key());
             }
@@ -103,11 +100,8 @@ struct DocumentFactoryPrivate
 
         // Remove oldest unreferenced images. Since the map is sorted by key,
         // the oldest one is always unreferencedImages.begin().
-        for (
-            UnreferencedImages::Iterator unreferencedIt = unreferencedImages.begin();
-            unreferencedImages.count() > MAX_UNREFERENCED_IMAGES;
-            unreferencedIt = unreferencedImages.erase(unreferencedIt))
-        {
+        for (UnreferencedImages::Iterator unreferencedIt = unreferencedImages.begin(); unreferencedImages.count() > MAX_UNREFERENCED_IMAGES;
+             unreferencedIt = unreferencedImages.erase(unreferencedIt)) {
             QUrl url = unreferencedIt.value();
             LOG("Collecting" << url);
             it = map.find(url);
@@ -121,16 +115,12 @@ struct DocumentFactoryPrivate
 #endif
     }
 
-    void logDocumentMap(const DocumentMap& map)
+    void logDocumentMap(const DocumentMap &map)
     {
         LOG("map:");
-        DocumentMap::ConstIterator
-        it = map.constBegin(),
-        end = map.constEnd();
+        DocumentMap::ConstIterator it = map.constBegin(), end = map.constEnd();
         for (; it != end; ++it) {
-            LOG("-" << it.key()
-                << "refCount=" << it.value()->mDocument.count()
-                << "lastAccess=" << it.value()->mLastAccess);
+            LOG("-" << it.key() << "refCount=" << it.value()->mDocument.count() << "lastAccess=" << it.value()->mLastAccess);
         }
     }
 
@@ -138,7 +128,7 @@ struct DocumentFactoryPrivate
 };
 
 DocumentFactory::DocumentFactory()
-: d(new DocumentFactoryPrivate)
+    : d(new DocumentFactoryPrivate)
 {
 }
 
@@ -148,7 +138,7 @@ DocumentFactory::~DocumentFactory()
     delete d;
 }
 
-DocumentFactory* DocumentFactory::instance()
+DocumentFactory *DocumentFactory::instance()
 {
     static DocumentFactory factory;
     return &factory;
@@ -156,14 +146,14 @@ DocumentFactory* DocumentFactory::instance()
 
 Document::Ptr DocumentFactory::getCachedDocument(const QUrl &url) const
 {
-    const DocumentInfo* info = d->mDocumentMap.value(url);
+    const DocumentInfo *info = d->mDocumentMap.value(url);
     return info ? info->mDocument : Document::Ptr();
 }
 
 Document::Ptr DocumentFactory::load(const QUrl &url)
 {
     GV_RETURN_VALUE_IF_FAIL(!url.isEmpty(), Document::Ptr());
-    DocumentInfo* info = nullptr;
+    DocumentInfo *info = nullptr;
 
     DocumentMap::Iterator it = d->mDocumentMap.find(url);
 
@@ -178,7 +168,7 @@ Document::Ptr DocumentFactory::load(const QUrl &url)
 
     // Start loading the document
     LOG(url.fileName() << "loading");
-    auto* doc = new Document(url);
+    auto *doc = new Document(url);
     connect(doc, &Document::loaded, this, &DocumentFactory::slotLoaded);
     connect(doc, &Document::saved, this, &DocumentFactory::slotSaved);
     connect(doc, &Document::modified, this, &DocumentFactory::slotModified);
@@ -240,14 +230,14 @@ void DocumentFactory::slotLoaded(const QUrl &url)
     }
 }
 
-void DocumentFactory::slotSaved(const QUrl &oldUrl, const QUrl& newUrl)
+void DocumentFactory::slotSaved(const QUrl &oldUrl, const QUrl &newUrl)
 {
     bool oldIsNew = oldUrl == newUrl;
     bool oldUrlWasModified = d->mModifiedDocumentList.removeOne(oldUrl);
     bool newUrlWasModified = false;
     if (!oldIsNew) {
         newUrlWasModified = d->mModifiedDocumentList.removeOne(newUrl);
-        DocumentInfo* info = d->mDocumentMap.take(oldUrl);
+        DocumentInfo *info = d->mDocumentMap.take(oldUrl);
         d->mDocumentMap.insert(newUrl, info);
     }
     d->garbageCollect(d->mDocumentMap);
@@ -276,14 +266,14 @@ void DocumentFactory::slotBusyChanged(const QUrl &url, bool busy)
     emit documentBusyStateChanged(url, busy);
 }
 
-QUndoGroup* DocumentFactory::undoGroup()
+QUndoGroup *DocumentFactory::undoGroup()
 {
     return &d->mUndoGroup;
 }
 
 void DocumentFactory::forget(const QUrl &url)
 {
-    DocumentInfo* info = d->mDocumentMap.take(url);
+    DocumentInfo *info = d->mDocumentMap.take(url);
     if (!info) {
         return;
     }

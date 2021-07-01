@@ -22,50 +22,46 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "dialogpage.h"
 
 // Qt
+#include <QAction>
 #include <QEventLoop>
 #include <QList>
-#include <QVBoxLayout>
 #include <QPushButton>
-#include <QAction>
+#include <QVBoxLayout>
 
 // KF
 #include <KGuiItem>
 #include <KMessageBox>
 
 // Local
-#include <ui_dialogpage.h>
 #include "importdialog.h"
+#include <ui_dialogpage.h>
 
 namespace Gwenview
 {
-
-struct DialogPagePrivate : public Ui_DialogPage
-{
-    QVBoxLayout* mLayout;
-    QList<QPushButton*> mButtons;
-    QEventLoop* mEventLoop;
-    DialogPage* q;
+struct DialogPagePrivate : public Ui_DialogPage {
+    QVBoxLayout *mLayout;
+    QList<QPushButton *> mButtons;
+    QEventLoop *mEventLoop;
+    DialogPage *q;
     QStringList failedFileList;
     QStringList failedDirList;
-    QAction* fileDetails;
-    QAction* dirDetails;
+    QAction *fileDetails;
+    QAction *dirDetails;
 
     void setupFailedListActions()
     {
         fileDetails = new QAction(i18n("Show failed files..."));
         mErrorMessageWidget->addAction(fileDetails);
-        QObject::connect(fileDetails, &QAction::triggered,
-                         q, &DialogPage::slotShowFailedFileDetails);
+        QObject::connect(fileDetails, &QAction::triggered, q, &DialogPage::slotShowFailedFileDetails);
         fileDetails->setVisible(false);
 
-        dirDetails  = new QAction(i18n("Show failed subfolders..."));
+        dirDetails = new QAction(i18n("Show failed subfolders..."));
         mErrorMessageWidget->addAction(dirDetails);
-        QObject::connect(dirDetails, &QAction::triggered,
-                         q, &DialogPage::slotShowFailedDirDetails);
+        QObject::connect(dirDetails, &QAction::triggered, q, &DialogPage::slotShowFailedDirDetails);
         dirDetails->setVisible(false);
     }
 
-    void showErrors(const QStringList& files, const QStringList& dirs)
+    void showErrors(const QStringList &files, const QStringList &dirs)
     {
         mErrorMessageWidget->setVisible(true);
         failedFileList.clear();
@@ -73,19 +69,17 @@ struct DialogPagePrivate : public Ui_DialogPage
         QStringList message;
         if (files.count() > 0) {
             failedFileList = files;
-            message << i18np("Failed to import %1 document.",
-                             "Failed to import %1 documents.",
-                             files.count());
+            message << i18np("Failed to import %1 document.", "Failed to import %1 documents.", files.count());
             fileDetails->setVisible(true);
-        } else fileDetails->setVisible(false);
+        } else
+            fileDetails->setVisible(false);
 
         if (dirs.count() > 0) {
             failedDirList = dirs;
-            message << i18np("Failed to create %1 destination subfolder.",
-                             "Failed to create %1 destination subfolders.",
-                             dirs.count());
+            message << i18np("Failed to create %1 destination subfolder.", "Failed to create %1 destination subfolders.", dirs.count());
             dirDetails->setVisible(true);
-        } else dirDetails->setVisible(false);
+        } else
+            dirDetails->setVisible(false);
 
         mErrorMessageWidget->setText(message.join(QStringLiteral("<br/>")));
         mErrorMessageWidget->animatedShow();
@@ -94,25 +88,19 @@ struct DialogPagePrivate : public Ui_DialogPage
     void showFailedFileDetails()
     {
         QString message = i18n("Failed to import documents:");
-        KMessageBox::errorList(q,
-                               message,
-                               failedFileList
-                              );
+        KMessageBox::errorList(q, message, failedFileList);
     }
 
     void showFailedDirDetails()
     {
         QString message = i18n("Failed to create subfolders:");
-        KMessageBox::errorList(q,
-                               message,
-                               failedDirList
-                              );
+        KMessageBox::errorList(q, message, failedDirList);
     }
 };
 
-DialogPage::DialogPage(QWidget* parent)
-: QWidget(parent)
-, d(new DialogPagePrivate)
+DialogPage::DialogPage(QWidget *parent)
+    : QWidget(parent)
+    , d(new DialogPagePrivate)
 {
     d->q = this;
     d->setupUi(this);
@@ -132,15 +120,15 @@ void DialogPage::removeButtons()
     d->mButtons.clear();
 }
 
-void DialogPage::setText(const QString& text)
+void DialogPage::setText(const QString &text)
 {
     d->mLabel->setText(text);
 }
 
-int DialogPage::addButton(const KGuiItem& item)
+int DialogPage::addButton(const KGuiItem &item)
 {
     int id = d->mButtons.size();
-    auto* button = new QPushButton;
+    auto *button = new QPushButton;
     KGuiItem::assign(button, item);
     button->setFixedHeight(button->sizeHint().height() * 2);
 
@@ -152,7 +140,7 @@ int DialogPage::addButton(const KGuiItem& item)
     return id;
 }
 
-void DialogPage::slotShowErrors(const QStringList& files, const QStringList& dirs)
+void DialogPage::slotShowErrors(const QStringList &files, const QStringList &dirs)
 {
     d->showErrors(files, dirs);
 }

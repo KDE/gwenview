@@ -36,13 +36,12 @@ class Job;
 
 namespace Gwenview
 {
-
 struct LoadingDocumentImplPrivate;
 class LoadingDocumentImpl : public AbstractDocumentImpl
 {
     Q_OBJECT
 public:
-    LoadingDocumentImpl(Document*);
+    LoadingDocumentImpl(Document *);
     ~LoadingDocumentImpl() override;
 
     void init() override;
@@ -54,11 +53,11 @@ public:
 private Q_SLOTS:
     void slotMetaInfoLoaded();
     void slotImageLoaded();
-    void slotDataReceived(KIO::Job*, const QByteArray&);
-    void slotTransferFinished(KJob*);
+    void slotDataReceived(KIO::Job *, const QByteArray &);
+    void slotTransferFinished(KJob *);
 
 private:
-    LoadingDocumentImplPrivate* const d;
+    LoadingDocumentImplPrivate *const d;
     friend struct LoadingDocumentImplPrivate;
 };
 

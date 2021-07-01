@@ -33,7 +33,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 namespace Gwenview
 {
-
 class CropTool;
 class RasterImageView;
 
@@ -42,7 +41,7 @@ class GWENVIEWLIB_EXPORT CropWidget : public QWidget
 {
     Q_OBJECT
 public:
-    CropWidget(QWidget* parent, RasterImageView*, CropTool*);
+    CropWidget(QWidget *parent, RasterImageView *, CropTool *);
     ~CropWidget() override;
 
     void setAdvancedSettingsEnabled(bool enable);
@@ -67,14 +66,14 @@ private Q_SLOTS:
     void slotPositionChanged();
     void slotWidthChanged();
     void slotHeightChanged();
-    void setCropRect(const QRect& rect);
+    void setCropRect(const QRect &rect);
 
     void slotAdvancedCheckBoxToggled(bool checked);
     void slotRatioComboBoxChanged();
     void applyRatioConstraint();
 
 private:
-    CropWidgetPrivate* const d;
+    CropWidgetPrivate *const d;
 };
 
 } // namespace

@@ -4,8 +4,8 @@
 #include "zoomcombobox.h"
 #include "zoomcombobox_p.h"
 
-#include <QAction>
 #include <QAbstractItemView>
+#include <QAction>
 #include <QEvent>
 #include <QLineEdit>
 #include <QMouseEvent>
@@ -13,7 +13,7 @@
 
 using namespace Gwenview;
 
-ZoomValidator::ZoomValidator(qreal minimum, qreal maximum, ZoomComboBox *q, ZoomComboBoxPrivate *d, QWidget* parent)
+ZoomValidator::ZoomValidator(qreal minimum, qreal maximum, ZoomComboBox *q, ZoomComboBoxPrivate *d, QWidget *parent)
     : QValidator(parent)
     , m_minimum(minimum)
     , m_maximum(maximum)
@@ -54,7 +54,7 @@ void ZoomValidator::setMaximum(const qreal maximum)
     Q_EMIT changed();
 }
 
-QValidator::State ZoomValidator::validate(QString& input, int& pos) const
+QValidator::State ZoomValidator::validate(QString &input, int &pos) const
 {
     Q_UNUSED(pos)
     if (m_zoomComboBox->findText(input, Qt::MatchFixedString) > -1) {
@@ -87,7 +87,7 @@ ZoomComboBoxPrivate::ZoomComboBoxPrivate(ZoomComboBox *q)
 {
 }
 
-ZoomComboBox::ZoomComboBox(QWidget* parent)
+ZoomComboBox::ZoomComboBox(QWidget *parent)
     : QComboBox(parent)
     , d_ptr(new ZoomComboBoxPrivate(this))
 {
@@ -103,7 +103,7 @@ ZoomComboBox::ZoomComboBox(QWidget* parent)
     int percentLength = QString(locale().percent()).length();
     setMinimumContentsLength(locale().toString(9999).length() + percentLength);
 
-    connect(lineEdit(), &QLineEdit::textEdited, this, [this, d](const QString &text){
+    connect(lineEdit(), &QLineEdit::textEdited, this, [this, d](const QString &text) {
         const bool startsWithNumber = text.constBegin()->isNumber();
         int matches = 0;
         for (int i = 0; i < count(); ++i) {
@@ -119,29 +119,25 @@ ZoomComboBox::ZoomComboBox(QWidget* parent)
         activateAndChangeZoomTo(textIndex);
         lineEdit()->setCursorPosition(lineEdit()->cursorPosition() - 1);
     });
-    connect(this, qOverload<int>(&ZoomComboBox::highlighted),
-            this, &ZoomComboBox::changeZoomTo);
+    connect(this, qOverload<int>(&ZoomComboBox::highlighted), this, &ZoomComboBox::changeZoomTo);
     view()->installEventFilter(this);
-    connect(this, qOverload<int>(&ZoomComboBox::activated),
-            this, &ZoomComboBox::activateAndChangeZoomTo);
+    connect(this, qOverload<int>(&ZoomComboBox::activated), this, &ZoomComboBox::activateAndChangeZoomTo);
 }
 
 ZoomComboBox::~ZoomComboBox() noexcept
 {
 }
 
-void ZoomComboBox::setActions(QAction* zoomToFitAction, QAction* zoomToFillAction, QAction* actualSizeAction)
+void ZoomComboBox::setActions(QAction *zoomToFitAction, QAction *zoomToFillAction, QAction *actualSizeAction)
 {
     Q_D(ZoomComboBox);
     d->setActions(zoomToFitAction, zoomToFillAction, actualSizeAction);
 
-    connect(zoomToFitAction, &QAction::toggled,
-            this, &ZoomComboBox::updateDisplayedText);
-    connect(zoomToFillAction, &QAction::toggled,
-            this, &ZoomComboBox::updateDisplayedText);
+    connect(zoomToFitAction, &QAction::toggled, this, &ZoomComboBox::updateDisplayedText);
+    connect(zoomToFillAction, &QAction::toggled, this, &ZoomComboBox::updateDisplayedText);
 }
 
-void ZoomComboBoxPrivate::setActions(QAction* zoomToFitAction, QAction* zoomToFillAction, QAction* actualSizeAction)
+void ZoomComboBoxPrivate::setActions(QAction *zoomToFitAction, QAction *zoomToFillAction, QAction *actualSizeAction)
 {
     Q_Q(ZoomComboBox);
     q->clear();
@@ -215,7 +211,7 @@ void ZoomComboBox::setMaximum(qreal maximum)
     // but the problem is never enountered since max zoom doesn't actually change
     const int actualSizeActionIndex = findData(QVariant::fromValue(d->mActualSizeAction));
     const int count = this->count();
-    for(int i = actualSizeActionIndex + 1; i < count; ++i) {
+    for (int i = actualSizeActionIndex + 1; i < count; ++i) {
         removeItem(i);
     }
     qreal value = 2.0;
@@ -228,7 +224,7 @@ void ZoomComboBox::setMaximum(qreal maximum)
     }
 }
 
-qreal ZoomComboBox::valueFromText(const QString& text, bool *ok) const
+qreal ZoomComboBox::valueFromText(const QString &text, bool *ok) const
 {
     Q_D(const ZoomComboBox);
     QString copy = text;
@@ -274,7 +270,7 @@ bool ZoomComboBox::eventFilter(QObject *watched, QEvent *event)
 
 void ZoomComboBox::mousePressEvent(QMouseEvent *event)
 {
-    if (event->button() == Qt::LeftButton){
+    if (event->button() == Qt::LeftButton) {
         Q_D(ZoomComboBox);
         if (d->mZoomToFitAction->isChecked()) {
             setCurrentIndex(0);
@@ -292,8 +288,8 @@ void ZoomComboBox::mousePressEvent(QMouseEvent *event)
     QComboBox::mousePressEvent(event);
 }
 
-
-void ZoomComboBox::changeZoomTo(int index) {
+void ZoomComboBox::changeZoomTo(int index)
+{
     if (index < 0) {
         Q_D(ZoomComboBox);
         Q_EMIT zoomChanged(d->lastCustomZoomValue);
@@ -301,7 +297,7 @@ void ZoomComboBox::changeZoomTo(int index) {
     }
 
     QVariant itemData = this->itemData(index);
-    QAction *action = itemData.value<QAction*>();
+    QAction *action = itemData.value<QAction *>();
     if (action) {
         if (action->isCheckable()) {
             action->setChecked(true);

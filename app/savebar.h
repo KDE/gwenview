@@ -33,13 +33,12 @@ class QUrl;
 
 namespace Gwenview
 {
-
 struct SaveBarPrivate;
 class SaveBar : public SlideContainer
 {
     Q_OBJECT
 public:
-    SaveBar(QWidget* parent, KActionCollection* collection);
+    SaveBar(QWidget *parent, KActionCollection *collection);
     ~SaveBar() override;
 
     /**
@@ -50,18 +49,18 @@ public:
     void setFullScreenMode(bool);
 
 public Q_SLOTS:
-    void setCurrentUrl(const QUrl&);
+    void setCurrentUrl(const QUrl &);
 
 Q_SIGNALS:
     void requestSaveAll();
-    void goToUrl(const QUrl&);
+    void goToUrl(const QUrl &);
 
 private:
-    SaveBarPrivate* const d;
+    SaveBarPrivate *const d;
 
 private Q_SLOTS:
     void updateContent();
-    void triggerAction(const QString& action);
+    void triggerAction(const QString &action);
 };
 
 } // namespace

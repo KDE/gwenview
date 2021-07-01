@@ -24,9 +24,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QAction>
 #include <QHBoxLayout>
+#include <QIcon>
 #include <QSlider>
 #include <QToolButton>
-#include <QIcon>
 
 // KF
 
@@ -34,14 +34,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
-struct ZoomSliderPrivate
-{
-    QToolButton* mZoomOutButton;
-    QToolButton* mZoomInButton;
-    QSlider* mSlider;
-    QAction* mZoomInAction;
-    QAction* mZoomOutAction;
+struct ZoomSliderPrivate {
+    QToolButton *mZoomOutButton;
+    QToolButton *mZoomInButton;
+    QSlider *mSlider;
+    QAction *mZoomInAction;
+    QAction *mZoomOutAction;
 
     void updateButtons()
     {
@@ -53,18 +51,18 @@ struct ZoomSliderPrivate
     }
 };
 
-static QToolButton* createZoomButton(const QString &iconName)
+static QToolButton *createZoomButton(const QString &iconName)
 {
-    auto* button = new QToolButton;
+    auto *button = new QToolButton;
     button->setIcon(QIcon::fromTheme(iconName));
     button->setAutoRaise(true);
     button->setAutoRepeat(true);
     return button;
 }
 
-ZoomSlider::ZoomSlider(QWidget* parent)
-: QWidget(parent)
-, d(new ZoomSliderPrivate)
+ZoomSlider::ZoomSlider(QWidget *parent)
+    : QWidget(parent)
+    , d(new ZoomSliderPrivate)
 {
     d->mZoomInButton = createZoomButton(QStringLiteral("zoom-in"));
     d->mZoomOutButton = createZoomButton(QStringLiteral("zoom-out"));
@@ -74,7 +72,7 @@ ZoomSlider::ZoomSlider(QWidget* parent)
     d->mSlider = new QSlider;
     d->mSlider->setOrientation(Qt::Horizontal);
 
-    auto* layout = new QHBoxLayout(this);
+    auto *layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     layout->addWidget(d->mZoomOutButton);
@@ -116,12 +114,12 @@ void ZoomSlider::setMaximum(int value)
     d->updateButtons();
 }
 
-void ZoomSlider::setZoomInAction(QAction* action)
+void ZoomSlider::setZoomInAction(QAction *action)
 {
     d->mZoomInAction = action;
 }
 
-void ZoomSlider::setZoomOutAction(QAction* action)
+void ZoomSlider::setZoomOutAction(QAction *action)
 {
     d->mZoomOutAction = action;
 }
@@ -149,7 +147,7 @@ void ZoomSlider::zoomIn()
     }
 }
 
-QSlider* ZoomSlider::slider() const
+QSlider *ZoomSlider::slider() const
 {
     return d->mSlider;
 }

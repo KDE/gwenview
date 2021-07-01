@@ -28,7 +28,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 /**
  * @internal
  *
@@ -38,12 +37,13 @@ class GWENVIEWLIB_EXPORT BinderInternal : public QObject
 {
     Q_OBJECT
 public:
-    explicit BinderInternal(QObject* parent);
+    explicit BinderInternal(QObject *parent);
     ~BinderInternal() override;
 
 protected Q_SLOTS:
     virtual void callMethod()
-    {}
+    {
+    }
 };
 
 /**
@@ -79,19 +79,19 @@ protected Q_SLOTS:
  *
  * Note: the method does not need to be a slot.
  */
-template <class Receiver, class Arg, typename MethodArg>
+template<class Receiver, class Arg, typename MethodArg>
 class BaseBinder : public BinderInternal
 {
 public:
     using Method = void (Receiver::*)(MethodArg);
-    static void bind(QObject* emitter, const char* signal, Receiver* receiver, Method method, MethodArg arg)
+    static void bind(QObject *emitter, const char *signal, Receiver *receiver, Method method, MethodArg arg)
     {
-        auto* binder = new BaseBinder<Receiver, Arg, MethodArg>(emitter);
+        auto *binder = new BaseBinder<Receiver, Arg, MethodArg>(emitter);
         binder->mReceiver = receiver;
         binder->mMethod = method;
         binder->mArg = arg;
         QObject::connect(emitter, signal, binder, SLOT(callMethod()));
-        QObject::connect(receiver, SIGNAL(destroyed(QObject*)), binder, SLOT(deleteLater()));
+        QObject::connect(receiver, SIGNAL(destroyed(QObject *)), binder, SLOT(deleteLater()));
     }
 
 protected:
@@ -101,24 +101,27 @@ protected:
     }
 
 private:
-    BaseBinder(QObject* emitter)
-    : BinderInternal(emitter)
-    , mReceiver(nullptr)
-    , mMethod(nullptr)
-    {}
+    BaseBinder(QObject *emitter)
+        : BinderInternal(emitter)
+        , mReceiver(nullptr)
+        , mMethod(nullptr)
+    {
+    }
 
-    Receiver* mReceiver;
+    Receiver *mReceiver;
     Method mMethod;
     Arg mArg;
 };
 
-template <class Receiver, class Arg>
+template<class Receiver, class Arg>
 class Binder : public BaseBinder<Receiver, Arg, Arg>
-{};
+{
+};
 
-template <class Receiver, class Arg>
-class BinderRef : public BaseBinder<Receiver, Arg, const Arg&>
-{};
+template<class Receiver, class Arg>
+class BinderRef : public BaseBinder<Receiver, Arg, const Arg &>
+{
+};
 
 } // namespace
 

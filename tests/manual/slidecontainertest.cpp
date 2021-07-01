@@ -34,29 +34,29 @@ class Window : public QWidget
 public:
     Window()
         : QWidget()
-        {
-        auto* container = new SlideContainer(this);
+    {
+        auto *container = new SlideContainer(this);
 
-        auto* inButton = new QPushButton(this);
+        auto *inButton = new QPushButton(this);
         inButton->setText("Slide &In");
         connect(inButton, &QAbstractButton::clicked, container, &SlideContainer::slideIn);
 
-        auto* outButton = new QPushButton(this);
+        auto *outButton = new QPushButton(this);
         outButton->setText("Slide &Out");
         connect(outButton, &QAbstractButton::clicked, container, &SlideContainer::slideOut);
 
-        auto* layout = new QVBoxLayout(this);
+        auto *layout = new QVBoxLayout(this);
         layout->addWidget(inButton);
         layout->addWidget(outButton);
         layout->addWidget(container);
 
-        auto* content = new QLineEdit(container);
+        auto *content = new QLineEdit(container);
         content->setText("Some long text. Some long text. Some long text. Some long text.");
         container->setContent(content);
     }
 };
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
     Window window;

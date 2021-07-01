@@ -30,24 +30,24 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QShortcut>
 
 // KF
-#include <kio_version.h>
-#include <KActionCollection>
 #include <KActionCategory>
+#include <KActionCollection>
 #include <KFileItem>
 #include <KFileItemActions>
+#include <KFileItemListProperties>
+#include <KIO/JobUiDelegate>
+#include <KIO/OpenFileManagerWindowJob>
 #include <KIO/Paste>
 #include <KIO/PasteJob>
 #include <KIO/RestoreJob>
-#include <KIO/JobUiDelegate>
 #include <KIOCore/KFileItemListProperties>
 #include <KJobWidgets>
 #include <KLocalizedString>
 #include <KOpenWithDialog>
 #include <KPropertiesDialog>
-#include <KXMLGUIClient>
 #include <KUrlMimeData>
-#include <KFileItemListProperties>
-#include <KIO/OpenFileManagerWindowJob>
+#include <KXMLGUIClient>
+#include <kio_version.h>
 #if KIO_VERSION >= QT_VERSION_CHECK(5, 71, 0)
 #include <KIO/ApplicationLauncherJob>
 #include <KIO/JobUiDelegate>
@@ -57,17 +57,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // Local
 #include "dialogguard.h"
+#include "fileoperations.h"
+#include "sidebar.h"
 #include <lib/contextmanager.h>
 #include <lib/eventwatcher.h>
 #include <lib/gvdebug.h>
 #include <lib/mimetypeutils.h>
-#include "fileoperations.h"
-#include "sidebar.h"
 
 namespace Gwenview
 {
-
-
 QList<QUrl> FileOpsContextManagerItem::urlList() const
 {
     return contextManager()->selectedFileItemList().urlList();
@@ -81,7 +79,7 @@ void FileOpsContextManagerItem::updateServiceList()
     // Get list of all distinct mimetypes in selection
     QStringList mimeTypes;
     const auto selectedFileItemList = contextManager()->selectedFileItemList();
-    for (const KFileItem & item : selectedFileItemList) {
+    for (const KFileItem &item : selectedFileItemList) {
         const QString mimeType = item.mimetype();
         if (!mimeTypes.contains(mimeType)) {
             mimeTypes << mimeType;
@@ -95,7 +93,7 @@ void FileOpsContextManagerItem::updateServiceList()
 #endif
 }
 
-QMimeData* FileOpsContextManagerItem::selectionMimeData()
+QMimeData *FileOpsContextManagerItem::selectionMimeData()
 {
     KFileItemList selectedFiles;
 
@@ -121,15 +119,18 @@ QUrl FileOpsContextManagerItem::pasteTargetUrl() const
     }
 }
 
-static QAction* createSeparator(QObject* parent)
+static QAction *createSeparator(QObject *parent)
 {
-    auto* action = new QAction(parent);
+    auto *action = new QAction(parent);
     action->setSeparator(true);
     return action;
 }
 
-FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, QListView* thumbnailView, KActionCollection* actionCollection, KXMLGUIClient* client)
-: AbstractContextManagerItem(manager)
+FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager *manager,
+                                                     QListView *thumbnailView,
+                                                     KActionCollection *actionCollection,
+                                                     KXMLGUIClient *client)
+    : AbstractContextManagerItem(manager)
 {
     mThumbnailView = thumbnailView;
     mXMLGUIClient = client;
@@ -140,13 +141,11 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, QL
     mInTrash = false;
     mNewFileMenu = new KNewFileMenu(Q_NULLPTR, QString(), this);
 
-    connect(contextManager(), &ContextManager::selectionChanged,
-            this, &FileOpsContextManagerItem::updateActions);
-    connect(contextManager(), &ContextManager::currentDirUrlChanged,
-            this, &FileOpsContextManagerItem::updateActions);
+    connect(contextManager(), &ContextManager::selectionChanged, this, &FileOpsContextManagerItem::updateActions);
+    connect(contextManager(), &ContextManager::currentDirUrlChanged, this, &FileOpsContextManagerItem::updateActions);
 
-    auto* file = new KActionCategory(i18nc("@title actions category", "File"), actionCollection);
-    auto* edit = new KActionCategory(i18nc("@title actions category", "Edit"), actionCollection);
+    auto *file = new KActionCategory(i18nc("@title actions category", "File"), actionCollection);
+    auto *edit = new KActionCategory(i18nc("@title actions category", "Edit"), actionCollection);
 
     mCutAction = edit->addAction(KStandardAction::Cut, this, SLOT(cut()));
     mCopyAction = edit->addAction(KStandardAction::Copy, this, SLOT(copy()));
@@ -194,7 +193,7 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, QL
 
     mOpenWithAction = file->addAction(QStringLiteral("file_open_with"));
     mOpenWithAction->setText(i18n("Open With"));
-    auto* menu = new QMenu;
+    auto *menu = new QMenu;
     mOpenWithAction->setMenu(menu);
     connect(menu, &QMenu::aboutToShow, this, &FileOpsContextManagerItem::populateOpenMenu);
     connect(menu, &QMenu::triggered, this, &FileOpsContextManagerItem::openWith);
@@ -203,31 +202,13 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, QL
     mOpenContainingFolderAction->setText(i18n("Open Containing Folder"));
     mOpenContainingFolderAction->setIcon(QIcon::fromTheme(QStringLiteral("document-open-folder")));
 
-    mRegularFileActionList
-            << mRenameAction
-            << mTrashAction
-            << mDelAction
-            << createSeparator(this)
-            << mCopyToAction
-            << mMoveToAction
-            << mLinkToAction
-            << createSeparator(this)
-            << mOpenWithAction
-            << mOpenContainingFolderAction
-            << mShowPropertiesAction
-            << createSeparator(this)
-            << mCreateFolderAction
-            ;
+    mRegularFileActionList << mRenameAction << mTrashAction << mDelAction << createSeparator(this) << mCopyToAction << mMoveToAction << mLinkToAction
+                           << createSeparator(this) << mOpenWithAction << mOpenContainingFolderAction << mShowPropertiesAction << createSeparator(this)
+                           << mCreateFolderAction;
 
-    mTrashFileActionList
-            << mRestoreAction
-            << mDelAction
-            << createSeparator(this)
-            << mShowPropertiesAction
-            ;
+    mTrashFileActionList << mRestoreAction << mDelAction << createSeparator(this) << mShowPropertiesAction;
 
-    connect(QApplication::clipboard(), &QClipboard::dataChanged,
-            this, &FileOpsContextManagerItem::updatePasteAction);
+    connect(QApplication::clipboard(), &QClipboard::dataChanged, this, &FileOpsContextManagerItem::updatePasteAction);
 
     updatePasteAction();
     // Delay action update because it must happen *after* main window has called
@@ -266,7 +247,7 @@ void FileOpsContextManagerItem::updateActions()
     mShowPropertiesAction->setEnabled(dirUrlIsValid || urlIsValid);
 
     mXMLGUIClient->unplugActionList("file_action_list");
-    QList<QAction*>& list = mInTrash ? mTrashFileActionList : mRegularFileActionList;
+    QList<QAction *> &list = mInTrash ? mTrashFileActionList : mRegularFileActionList;
     mXMLGUIClient->plugActionList("file_action_list", list);
 
     updateSideBarContent();
@@ -289,8 +270,8 @@ void FileOpsContextManagerItem::updateSideBarContent()
     }
 
     mGroup->clear();
-    QList<QAction*>& list = mInTrash ? mTrashFileActionList : mRegularFileActionList;
-    for (QAction * action : qAsConst(list)) {
+    QList<QAction *> &list = mInTrash ? mTrashFileActionList : mRegularFileActionList;
+    for (QAction *action : qAsConst(list)) {
         if (action->isEnabled() && !action->isSeparator()) {
             mGroup->addAction(action);
         }
@@ -310,14 +291,14 @@ void FileOpsContextManagerItem::showProperties()
 
 void FileOpsContextManagerItem::cut()
 {
-    QMimeData* mimeData = selectionMimeData();
+    QMimeData *mimeData = selectionMimeData();
     KIO::setClipboardDataCut(mimeData, true);
     QApplication::clipboard()->setMimeData(mimeData);
 }
 
 void FileOpsContextManagerItem::copy()
 {
-    QMimeData* mimeData = selectionMimeData();
+    QMimeData *mimeData = selectionMimeData();
     KIO::setClipboardDataCut(mimeData, false);
     QApplication::clipboard()->setMimeData(mimeData);
 }
@@ -381,26 +362,26 @@ void FileOpsContextManagerItem::createFolder()
 
 void FileOpsContextManagerItem::populateOpenMenu()
 {
-    QMenu* openMenu = mOpenWithAction->menu();
+    QMenu *openMenu = mOpenWithAction->menu();
     qDeleteAll(openMenu->actions());
 
     updateServiceList();
 
     int idx = 0;
-    for (const KService::Ptr & service : qAsConst(mServiceList)) {
+    for (const KService::Ptr &service : qAsConst(mServiceList)) {
         QString text = service->name().replace('&', "&&");
-        QAction* action = openMenu->addAction(text);
+        QAction *action = openMenu->addAction(text);
         action->setIcon(QIcon::fromTheme(service->icon()));
         action->setData(idx);
         ++idx;
     }
 
     openMenu->addSeparator();
-    QAction* action = openMenu->addAction(i18n("Other Application..."));
+    QAction *action = openMenu->addAction(i18n("Other Application..."));
     action->setData(-1);
 }
 
-void FileOpsContextManagerItem::openWith(QAction* action)
+void FileOpsContextManagerItem::openWith(QAction *action)
 {
     Q_ASSERT(action);
     KService::Ptr service;

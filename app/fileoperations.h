@@ -28,20 +28,25 @@ class ContextManager;
 
 namespace Gwenview
 {
-
 namespace FileOperations
 {
+enum Operation {
+    TRASH,
+    COPY,
+    MOVE,
+    LINK,
+    UNKNOWN,
+    PUT,
+};
 
-enum Operation { TRASH, COPY, MOVE, LINK, UNKNOWN, PUT, };
+void copyTo(const QList<QUrl> &urlList, QWidget *parent, ContextManager *contextManager);
+void moveTo(const QList<QUrl> &urlList, QWidget *parent, ContextManager *contextManager);
+void linkTo(const QList<QUrl> &urlList, QWidget *parent, ContextManager *contextManager);
+void trash(const QList<QUrl> &urlList, QWidget *parent);
+void del(const QList<QUrl> &urlList, QWidget *parent);
+void rename(const QUrl &url, QWidget *parent, ContextManager *contextManager);
 
-void copyTo(const QList<QUrl>& urlList, QWidget* parent, ContextManager* contextManager);
-void moveTo(const QList<QUrl>& urlList, QWidget* parent, ContextManager* contextManager);
-void linkTo(const QList<QUrl>& urlList, QWidget* parent, ContextManager* contextManager);
-void trash(const QList<QUrl>& urlList, QWidget* parent);
-void del(const QList<QUrl>& urlList, QWidget* parent);
-void rename(const QUrl &url, QWidget* parent, ContextManager* contextManager);
-
-void showMenuForDroppedUrls(QWidget* parent, const QList<QUrl>& urlList, const QUrl &destUrl);
+void showMenuForDroppedUrls(QWidget *parent, const QList<QUrl> &urlList, const QUrl &destUrl);
 
 } // namespace
 

@@ -22,14 +22,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 #include <cmath>
 
-#include <QPainter>
+#include <QDebug>
 #include <QGraphicsScene>
 #include <QGraphicsView>
-#include <QDebug>
+#include <QPainter>
 
-#include "rasterimageview.h"
 #include "gvdebug.h"
 #include "lib/cms/cmsprofile.h"
+#include "rasterimageview.h"
 
 using namespace Gwenview;
 
@@ -37,7 +37,7 @@ using namespace Gwenview;
 static const qreal Third = 1.0 / 3.0;
 static const qreal Sixth = 1.0 / 6.0;
 
-RasterImageItem::RasterImageItem(Gwenview::RasterImageView* parent)
+RasterImageItem::RasterImageItem(Gwenview::RasterImageView *parent)
     : QGraphicsItem(parent)
     , mParentView(parent)
 {
@@ -67,7 +67,7 @@ void Gwenview::RasterImageItem::updateCache()
     mSixthScaledImage = document->image().scaled(document->size() * Sixth, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 }
 
-void RasterImageItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/)
+void RasterImageItem::paint(QPainter *painter, const QStyleOptionGraphicsItem * /*option*/, QWidget * /*widget*/)
 {
     auto document = mParentView->document();
 
@@ -125,13 +125,11 @@ void RasterImageItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* /
     // Perform color correction on the visible image.
     applyDisplayTransform(image);
 
-    const auto destinationRect = QRect{
-        // Ceil the top left corner to avoid pixel alignment issues on higher DPI because QPoint/QSize/QRect
-        // round instead of flooring when converting from float to int.
-        QPoint{int(std::ceil(imageRect.left() * (zoom / dpr))), int(std::ceil(imageRect.top() * (zoom / dpr)))},
-        // Floor the size, similarly to above.
-        QSize{int(image.size().width() / dpr), int(image.size().height() / dpr)}
-    };
+    const auto destinationRect = QRect{// Ceil the top left corner to avoid pixel alignment issues on higher DPI because QPoint/QSize/QRect
+                                       // round instead of flooring when converting from float to int.
+                                       QPoint{int(std::ceil(imageRect.left() * (zoom / dpr))), int(std::ceil(imageRect.top() * (zoom / dpr)))},
+                                       // Floor the size, similarly to above.
+                                       QSize{int(image.size().width() / dpr), int(image.size().height() / dpr)}};
 
     painter->drawImage(destinationRect, image);
 }
@@ -141,7 +139,7 @@ QRectF RasterImageItem::boundingRect() const
     return QRectF{QPointF{0, 0}, mParentView->documentSize() * mParentView->zoom()};
 }
 
-void RasterImageItem::applyDisplayTransform(QImage& image)
+void RasterImageItem::applyDisplayTransform(QImage &image)
 {
     if (mApplyDisplayTransform) {
         updateDisplayTransform(image.format());
@@ -207,8 +205,7 @@ void RasterImageItem::updateDisplayTransform(QImage::Format format)
         return;
     }
 
-    mDisplayTransform = cmsCreateTransform(profile->handle(), cmsFormat,
-                                           monitorProfile->handle(), cmsFormat,
-                                           mRenderingIntent, cmsFLAGS_BLACKPOINTCOMPENSATION);
+    mDisplayTransform =
+        cmsCreateTransform(profile->handle(), cmsFormat, monitorProfile->handle(), cmsFormat, mRenderingIntent, cmsFLAGS_BLACKPOINTCOMPENSATION);
     mApplyDisplayTransform = true;
 }

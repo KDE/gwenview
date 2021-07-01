@@ -35,7 +35,6 @@ class KJob;
 
 namespace Gwenview
 {
-
 struct AbstractImageOperationPrivate;
 
 /**
@@ -61,14 +60,15 @@ public:
 protected:
     virtual void redo() = 0;
     virtual void undo()
-    {}
-    void setText(const QString&);
+    {
+    }
+    void setText(const QString &);
 
     /**
      * Convenience method which can be called from redo() if the operation is
      * implemented as a job
      */
-    void redoAsDocumentJob(DocumentJob* job);
+    void redoAsDocumentJob(DocumentJob *job);
 
 protected Q_SLOTS:
     void finish(bool ok);
@@ -76,10 +76,10 @@ protected Q_SLOTS:
     /**
      * Convenience slot which call finish() correctly if job succeeded
      */
-    void finishFromKJob(KJob* job);
+    void finishFromKJob(KJob *job);
 
 private:
-    AbstractImageOperationPrivate* const d;
+    AbstractImageOperationPrivate *const d;
 
     friend class ImageOperationCommand;
 };

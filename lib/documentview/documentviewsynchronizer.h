@@ -30,10 +30,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QObject>
 
-
 namespace Gwenview
 {
-
 class DocumentView;
 
 struct DocumentViewSynchronizerPrivate;
@@ -46,10 +44,10 @@ class GWENVIEWLIB_EXPORT DocumentViewSynchronizer : public QObject
 public:
     // We pass a pointer to the view list because we don't want to maintain
     // a copy of the list itself
-    explicit DocumentViewSynchronizer(const QList<DocumentView*>* views, QObject* parent = nullptr);
+    explicit DocumentViewSynchronizer(const QList<DocumentView *> *views, QObject *parent = nullptr);
     ~DocumentViewSynchronizer() override;
 
-    void setCurrentView(DocumentView* view);
+    void setCurrentView(DocumentView *view);
 
 public Q_SLOTS:
     void setActive(bool);
@@ -61,7 +59,7 @@ private Q_SLOTS:
     void updatePosition();
 
 private:
-    DocumentViewSynchronizerPrivate* const d;
+    DocumentViewSynchronizerPrivate *const d;
 };
 
 } // namespace

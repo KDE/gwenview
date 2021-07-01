@@ -28,14 +28,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QStandardPaths>
 
 // KF
-#include <kio_version.h>
 #include <KIO/DeleteJob>
+#include <KLocalizedString>
 #include <KMessageBox>
 #include <KProtocolInfo>
 #include <KService>
 #include <KStandardGuiItem>
 #include <Solid/Device>
-#include <KLocalizedString>
+#include <kio_version.h>
 #if KIO_VERSION >= QT_VERSION_CHECK(5, 71, 0)
 #include <KIO/ApplicationLauncherJob>
 #include <KIO/JobUiDelegate>
@@ -44,8 +44,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #endif
 
 // Local
-#include "gwenview_importer_debug.h"
 #include "dialogpage.h"
+#include "gwenview_importer_debug.h"
 #include "importer.h"
 #include "importerconfig.h"
 #include "progresspage.h"
@@ -53,16 +53,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 class ImportDialogPrivate
 {
 public:
-    ImportDialog* q;
-    QStackedWidget* mCentralWidget;
-    ThumbnailPage* mThumbnailPage;
-    ProgressPage* mProgressPage;
-    DialogPage* mDialogPage;
-    Importer* mImporter;
+    ImportDialog *q;
+    QStackedWidget *mCentralWidget;
+    ThumbnailPage *mThumbnailPage;
+    ProgressPage *mProgressPage;
+    DialogPage *mDialogPage;
+    Importer *mImporter;
 
     void checkForFailedUrls()
     {
@@ -73,10 +72,10 @@ public:
         int failedSubFolderCount = failedSubFolders.count();
         if (failedUrlCount + failedSubFolderCount > 0) {
             QStringList files, dirs;
-            for (int i=0; i<failedUrlCount; i++) {
+            for (int i = 0; i < failedUrlCount; i++) {
                 files << failedUrls[i].toString(QUrl::PreferLocalFile);
             }
-            for (int i=0; i<failedSubFolderCount; i++) {
+            for (int i = 0; i < failedSubFolderCount; i++) {
                 dirs << failedSubFolders[i].toString(QUrl::PreferLocalFile);
             }
             emit q->showErrors(files, dirs);
@@ -95,69 +94,55 @@ public:
         }
 
         QStringList message;
-        message << i18np(
-                    "One document has been imported.",
-                    "%1 documents have been imported.",
-                    importedCount);
+        message << i18np("One document has been imported.", "%1 documents have been imported.", importedCount);
         if (skippedCount > 0) {
-            message << i18np(
-                        "One document has been skipped because it had already been imported.",
-                        "%1 documents have been skipped because they had already been imported.",
-                        skippedCount);
+            message << i18np("One document has been skipped because it had already been imported.",
+                             "%1 documents have been skipped because they had already been imported.",
+                             skippedCount);
         }
 
         if (mImporter->renamedCount() > 0) {
             message[0].append("*");
-            message << "<small>* " + i18np(
-                        "One of them has been renamed because another document with the same name had already been imported.",
-                        "%1 of them have been renamed because other documents with the same name had already been imported.",
-                        mImporter->renamedCount())
+            message << "<small>* "
+                    + i18np("One of them has been renamed because another document with the same name had already been imported.",
+                            "%1 of them have been renamed because other documents with the same name had already been imported.",
+                            mImporter->renamedCount())
                     + "</small>";
         }
 
         message << QString();
         if (skippedCount == 0) {
-            message << i18np(
-                        "Delete the imported document from the device?",
-                        "Delete the %1 imported documents from the device?",
-                        importedCount);
+            message << i18np("Delete the imported document from the device?", "Delete the %1 imported documents from the device?", importedCount);
         } else if (importedCount == 0) {
-            message << i18np(
-                        "Delete the skipped document from the device?",
-                        "Delete the %1 skipped documents from the device?",
-                        skippedCount);
+            message << i18np("Delete the skipped document from the device?", "Delete the %1 skipped documents from the device?", skippedCount);
         } else {
-            message << i18ncp(
-                        "Singular sentence is actually never used.",
-                        "Delete the imported or skipped document from the device?",
-                        "Delete the %1 imported and skipped documents from the device?",
-                        importedCount + skippedCount);
+            message << i18ncp("Singular sentence is actually never used.",
+                              "Delete the imported or skipped document from the device?",
+                              "Delete the %1 imported and skipped documents from the device?",
+                              importedCount + skippedCount);
         }
 
         int answer = KMessageBox::questionYesNo(mCentralWidget,
                                                 QStringLiteral("<qt>") + message.join(QStringLiteral("<br/>")) + QStringLiteral("</qt>"),
                                                 i18nc("@title:window", "Import Finished"),
                                                 KGuiItem(i18n("Keep")),
-                                                KStandardGuiItem::del()
-                                               );
+                                                KStandardGuiItem::del());
         if (answer == KMessageBox::Yes) {
             return;
         }
         QList<QUrl> urls = importedUrls + skippedUrls;
         while (true) {
-            KIO::Job* job = KIO::del(urls);
+            KIO::Job *job = KIO::del(urls);
             if (job->exec()) {
                 break;
             }
             // Deleting failed
-            int answer = KMessageBox::warningYesNo(mCentralWidget,
-                                                   i18np("Failed to delete the document:\n%2",
-                                                           "Failed to delete documents:\n%2",
-                                                           urls.count(), job->errorString()),
-                                                   QString(),
-                                                   KGuiItem(i18n("Retry")),
-                                                   KGuiItem(i18n("Ignore"))
-                                                  );
+            int answer =
+                KMessageBox::warningYesNo(mCentralWidget,
+                                          i18np("Failed to delete the document:\n%2", "Failed to delete documents:\n%2", urls.count(), job->errorString()),
+                                          QString(),
+                                          KGuiItem(i18n("Retry")),
+                                          KGuiItem(i18n("Ignore")));
             if (answer != KMessageBox::Yes) {
                 // Ignore
                 break;
@@ -204,12 +189,11 @@ public:
 };
 
 ImportDialog::ImportDialog()
-: d(new ImportDialogPrivate)
+    : d(new ImportDialogPrivate)
 {
     d->q = this;
     d->mImporter = new Importer(this);
-    connect(d->mImporter, &Importer::error,
-            this, &ImportDialog::showImportError);
+    connect(d->mImporter, &Importer::error, this, &ImportDialog::showImportError);
     d->mThumbnailPage = new ThumbnailPage;
 
     QUrl url = ImporterConfig::destinationUrl();
@@ -230,14 +214,10 @@ ImportDialog::ImportDialog()
     d->mCentralWidget->addWidget(d->mProgressPage);
     d->mCentralWidget->addWidget(d->mDialogPage);
 
-    connect(d->mThumbnailPage, &ThumbnailPage::importRequested,
-            this, &ImportDialog::startImport);
-    connect(d->mThumbnailPage, &ThumbnailPage::rejected,
-            this, &QWidget::close);
-    connect(d->mImporter, &Importer::importFinished,
-            this, &ImportDialog::slotImportFinished);
-    connect(this, &ImportDialog::showErrors,
-            d->mDialogPage, &DialogPage::slotShowErrors);
+    connect(d->mThumbnailPage, &ThumbnailPage::importRequested, this, &ImportDialog::startImport);
+    connect(d->mThumbnailPage, &ThumbnailPage::rejected, this, &QWidget::close);
+    connect(d->mImporter, &Importer::importFinished, this, &ImportDialog::slotImportFinished);
+    connect(this, &ImportDialog::showErrors, d->mDialogPage, &DialogPage::slotShowErrors);
 
     d->mCentralWidget->setCurrentWidget(d->mThumbnailPage);
 
@@ -255,7 +235,7 @@ QSize ImportDialog::sizeHint() const
     return QSize(700, 500);
 }
 
-void ImportDialog::setSourceUrl(const QUrl& url, const QString& deviceUdi)
+void ImportDialog::setSourceUrl(const QUrl &url, const QString &deviceUdi)
 {
     QString name, iconName;
     if (deviceUdi.isEmpty()) {
@@ -279,10 +259,7 @@ void ImportDialog::startImport()
     ImporterConfig::self()->save();
 
     d->mCentralWidget->setCurrentWidget(d->mProgressPage);
-    d->mImporter->setAutoRenameFormat(
-        ImporterConfig::autoRename()
-        ? ImporterConfig::autoRenameFormat()
-        : QString());
+    d->mImporter->setAutoRenameFormat(ImporterConfig::autoRename() ? ImporterConfig::autoRenameFormat() : QString());
     d->mImporter->start(d->mThumbnailPage->urlList(), url);
 }
 
@@ -293,7 +270,7 @@ void ImportDialog::slotImportFinished()
     d->showWhatNext();
 }
 
-void ImportDialog::showImportError(const QString& message)
+void ImportDialog::showImportError(const QString &message)
 {
     KMessageBox::sorry(this, message);
     d->mCentralWidget->setCurrentWidget(d->mThumbnailPage);

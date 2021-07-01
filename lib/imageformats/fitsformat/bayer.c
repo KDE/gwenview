@@ -21,6 +21,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+/* clang-format off */
+
 #include "bayer.h"
 
 #include <limits.h>

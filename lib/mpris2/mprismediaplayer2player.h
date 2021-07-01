@@ -56,9 +56,13 @@ class MprisMediaPlayer2Player : public DBusAbstractAdaptor
 
 public:
     MprisMediaPlayer2Player(const QString &objectDBusPath,
-                            SlideShow* slideShow, ContextManager* contextManager,
-                            QAction* toggleSlideShowAction, QAction* fullScreenAction,
-                            QAction* previousAction, QAction* nextAction, QObject* parent);
+                            SlideShow *slideShow,
+                            ContextManager *contextManager,
+                            QAction *toggleSlideShowAction,
+                            QAction *fullScreenAction,
+                            QAction *previousAction,
+                            QAction *nextAction,
+                            QObject *parent);
     ~MprisMediaPlayer2Player() override;
 
 public Q_SLOTS: // D-Bus API
@@ -69,8 +73,8 @@ public Q_SLOTS: // D-Bus API
     void Stop();
     void Play();
     void Seek(qlonglong Offset);
-    void SetPosition(const QDBusObjectPath& trackId, qlonglong pos);
-    void OpenUri(const QString& uri);
+    void SetPosition(const QDBusObjectPath &trackId, qlonglong pos);
+    void OpenUri(const QString &uri);
 
 Q_SIGNALS: // D-Bus API
     void Seeked(qlonglong Position) const;
@@ -99,7 +103,7 @@ private:
     bool updatePlaybackStatus();
 
     void onSlideShowStateChanged();
-    void onCurrentUrlChanged(const QUrl& url);
+    void onCurrentUrlChanged(const QUrl &url);
     void onRandomActionToggled(bool checked);
     void onFullScreenActionToggled();
     void onToggleSlideShowActionChanged();
@@ -108,12 +112,12 @@ private:
     void onMetaInfoUpdated();
 
 private:
-    SlideShow* mSlideShow;
-    ContextManager* mContextManager;
-    QAction* mToggleSlideShowAction;
-    QAction* mFullScreenAction;
-    QAction* mPreviousAction;
-    QAction* mNextAction;
+    SlideShow *mSlideShow;
+    ContextManager *mContextManager;
+    QAction *mToggleSlideShowAction;
+    QAction *mFullScreenAction;
+    QAction *mPreviousAction;
+    QAction *mNextAction;
 
     bool mSlideShowEnabled;
     bool mPreviousEnabled;

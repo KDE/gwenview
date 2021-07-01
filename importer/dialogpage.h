@@ -32,27 +32,26 @@ class KGuiItem;
 
 namespace Gwenview
 {
-
 struct DialogPagePrivate;
 class DialogPage : public QWidget
 {
     Q_OBJECT
 public:
-    explicit DialogPage(QWidget* parent = nullptr);
+    explicit DialogPage(QWidget *parent = nullptr);
     ~DialogPage() override;
 
     void removeButtons();
-    void setText(const QString&);
-    int addButton(const KGuiItem&);
+    void setText(const QString &);
+    int addButton(const KGuiItem &);
     int exec();
 
 public Q_SLOTS:
-    void slotShowErrors(const QStringList&, const QStringList&);
+    void slotShowErrors(const QStringList &, const QStringList &);
     void slotShowFailedFileDetails();
     void slotShowFailedDirDetails();
 
 private:
-    DialogPagePrivate* const d;
+    DialogPagePrivate *const d;
 };
 
 } // namespace

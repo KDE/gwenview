@@ -40,15 +40,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include "gwenview_app_debug.h"
 #include <gvcore.h>
-#include <ui_startmainpage.h>
 #include <lib/dialogguard.h>
 #include <lib/flowlayout.h>
 #include <lib/gvdebug.h>
 #include <lib/gwenviewconfig.h>
+#include <lib/scrollerutils.h>
+#include <lib/thumbnailprovider/thumbnailprovider.h>
 #include <lib/thumbnailview/abstractthumbnailviewhelper.h>
 #include <lib/thumbnailview/previewitemdelegate.h>
-#include <lib/thumbnailprovider/thumbnailprovider.h>
-#include <lib/scrollerutils.h>
+#include <ui_startmainpage.h>
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 #include <lib/semanticinfo/tagmodel.h>
@@ -56,32 +56,31 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 class HistoryThumbnailViewHelper : public AbstractThumbnailViewHelper
 {
 public:
-    HistoryThumbnailViewHelper(QObject* parent)
+    HistoryThumbnailViewHelper(QObject *parent)
         : AbstractThumbnailViewHelper(parent)
-    {}
-
-    void showContextMenu(QWidget*) override
     {
     }
 
-    void showMenuForUrlDroppedOnViewport(QWidget*, const QList<QUrl>&) override
+    void showContextMenu(QWidget *) override
     {
     }
 
-    void showMenuForUrlDroppedOnDir(QWidget*, const QList<QUrl>&, const QUrl&) override
+    void showMenuForUrlDroppedOnViewport(QWidget *, const QList<QUrl> &) override
+    {
+    }
+
+    void showMenuForUrlDroppedOnDir(QWidget *, const QList<QUrl> &, const QUrl &) override
     {
     }
 };
 
-struct StartMainPagePrivate : public Ui_StartMainPage
-{
-    StartMainPage* q;
-    GvCore* mGvCore;
-    KFilePlacesModel* mBookmarksModel;
+struct StartMainPagePrivate : public Ui_StartMainPage {
+    StartMainPage *q;
+    GvCore *mGvCore;
+    KFilePlacesModel *mBookmarksModel;
     ThumbnailProvider *mRecentFilesThumbnailProvider;
     bool mSearchUiInitialized;
 
@@ -106,7 +105,7 @@ struct StartMainPagePrivate : public Ui_StartMainPage
     void setupHistoryView(ThumbnailView *view)
     {
         view->setThumbnailViewHelper(new HistoryThumbnailViewHelper(view));
-        auto* delegate = new PreviewItemDelegate(view);
+        auto *delegate = new PreviewItemDelegate(view);
         delegate->setContextBarActions(PreviewItemDelegate::NoAction);
         delegate->setTextElideMode(Qt::ElideLeft);
         view->setItemDelegate(delegate);
@@ -117,12 +116,11 @@ struct StartMainPagePrivate : public Ui_StartMainPage
             view->setCurrentIndex(index);
         }
     }
-
 };
 
-static void initViewPalette(QAbstractItemView* view, const QColor& fgColor)
+static void initViewPalette(QAbstractItemView *view, const QColor &fgColor)
 {
-    QWidget* viewport = view->viewport();
+    QWidget *viewport = view->viewport();
     QPalette palette = viewport->palette();
     palette.setColor(viewport->backgroundRole(), Qt::transparent);
     palette.setColor(QPalette::WindowText, fgColor);
@@ -136,13 +134,13 @@ static void initViewPalette(QAbstractItemView* view, const QColor& fgColor)
 
 static bool styleIsGtkBased()
 {
-    const char* name = QApplication::style()->metaObject()->className();
+    const char *name = QApplication::style()->metaObject()->className();
     return qstrcmp(name, "QGtkStyle") == 0;
 }
 
-StartMainPage::StartMainPage(QWidget* parent, GvCore* gvCore)
-: QFrame(parent)
-, d(new StartMainPagePrivate)
+StartMainPage::StartMainPage(QWidget *parent, GvCore *gvCore)
+    : QFrame(parent)
+    , d(new StartMainPagePrivate)
 {
     d->mRecentFilesThumbnailProvider = nullptr;
     d->q = this;
@@ -151,15 +149,15 @@ StartMainPage::StartMainPage(QWidget* parent, GvCore* gvCore)
 
     d->setupUi(this);
     if (styleIsGtkBased()) {
-        #ifdef GTK_WORKAROUND_BROKE_IN_KF5_PORT
+#ifdef GTK_WORKAROUND_BROKE_IN_KF5_PORT
 
         // Gtk-based styles do not apply the correct background color on tabs.
         // As a workaround, use the Plastique style instead.
-        QStyle* fix = new QPlastiqueStyle();
+        QStyle *fix = new QPlastiqueStyle();
         fix->setParent(this);
         d->mHistoryWidget->tabBar()->setStyle(fix);
         d->mPlacesTagsWidget->tabBar()->setStyle(fix);
-        #endif
+#endif
     }
     setFrameStyle(QFrame::NoFrame);
 
@@ -175,21 +173,19 @@ StartMainPage::StartMainPage(QWidget* parent, GvCore* gvCore)
     connect(d->mTagView, &QListView::clicked, this, &StartMainPage::slotTagViewClicked);
 
     // Recent folders view
-    connect(d->mRecentFoldersView, &Gwenview::ThumbnailView::indexActivated,
-            this, &StartMainPage::slotListViewActivated);
-    connect(d->mRecentFoldersView, &Gwenview::ThumbnailView::customContextMenuRequested,
-            this, &StartMainPage::showContextMenu);
+    connect(d->mRecentFoldersView, &Gwenview::ThumbnailView::indexActivated, this, &StartMainPage::slotListViewActivated);
+    connect(d->mRecentFoldersView, &Gwenview::ThumbnailView::customContextMenuRequested, this, &StartMainPage::showContextMenu);
 
     // Recent files view
-    connect(d->mRecentFilesView, &Gwenview::ThumbnailView::indexActivated,
-            this, &StartMainPage::slotListViewActivated);
-    connect(d->mRecentFilesView, &Gwenview::ThumbnailView::customContextMenuRequested,
-            this, &StartMainPage::showContextMenu);
+    connect(d->mRecentFilesView, &Gwenview::ThumbnailView::indexActivated, this, &StartMainPage::slotListViewActivated);
+    connect(d->mRecentFilesView, &Gwenview::ThumbnailView::customContextMenuRequested, this, &StartMainPage::showContextMenu);
 
     d->updateHistoryTab();
     connect(GwenviewConfig::self(), &GwenviewConfig::configChanged, this, &StartMainPage::loadConfig);
 
-    connect(qApp, &QApplication::paletteChanged, this, [this](){ applyPalette(d->mGvCore->palette(GvCore::NormalViewPalette)); });
+    connect(qApp, &QApplication::paletteChanged, this, [this]() {
+        applyPalette(d->mGvCore->palette(GvCore::NormalViewPalette));
+    });
 
     d->mRecentFoldersView->setFocus();
 
@@ -203,10 +199,10 @@ StartMainPage::~StartMainPage()
     delete d;
 }
 
-bool StartMainPage::eventFilter(QObject*, QEvent* event)
+bool StartMainPage::eventFilter(QObject *, QEvent *event)
 {
     if (event->type() == QEvent::MouseMove) {
-        auto* mouseEvent = static_cast<QMouseEvent*>(event);
+        auto *mouseEvent = static_cast<QMouseEvent *>(event);
         if (mouseEvent->source() == Qt::MouseEventSynthesizedByQt) {
             return true;
         }
@@ -214,7 +210,7 @@ bool StartMainPage::eventFilter(QObject*, QEvent* event)
     return false;
 }
 
-void StartMainPage::slotTagViewClicked(const QModelIndex& index)
+void StartMainPage::slotTagViewClicked(const QModelIndex &index)
 {
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_BALOO
     if (!index.isValid()) {
@@ -226,7 +222,7 @@ void StartMainPage::slotTagViewClicked(const QModelIndex& index)
 #endif
 }
 
-void StartMainPage::applyPalette(const QPalette& newPalette)
+void StartMainPage::applyPalette(const QPalette &newPalette)
 {
     QColor fgColor = newPalette.text().color();
 
@@ -244,7 +240,7 @@ void StartMainPage::applyPalette(const QPalette& newPalette)
     initViewPalette(d->mRecentFilesView, fgColor);
 }
 
-void StartMainPage::slotListViewActivated(const QModelIndex& index)
+void StartMainPage::slotListViewActivated(const QModelIndex &index)
 {
     if (!index.isValid()) {
         return;
@@ -260,7 +256,7 @@ void StartMainPage::slotListViewActivated(const QModelIndex& index)
     emit urlSelected(url);
 }
 
-void StartMainPage::showEvent(QShowEvent* event)
+void StartMainPage::showEvent(QShowEvent *event)
 {
     if (GwenviewConfig::historyEnabled()) {
         if (!d->mRecentFoldersView->model()) {
@@ -281,15 +277,15 @@ void StartMainPage::showEvent(QShowEvent* event)
     QFrame::showEvent(event);
 }
 
-void StartMainPage::showContextMenu(const QPoint& pos)
+void StartMainPage::showContextMenu(const QPoint &pos)
 {
     // Create menu
     DialogGuard<QMenu> menu(this);
 
-    QAction* addAction = menu->addAction(QIcon::fromTheme(QStringLiteral("bookmark-new")), QString());
-    QAction* forgetAction = menu->addAction(QIcon::fromTheme(QStringLiteral("edit-delete")), QString());
+    QAction *addAction = menu->addAction(QIcon::fromTheme(QStringLiteral("bookmark-new")), QString());
+    QAction *forgetAction = menu->addAction(QIcon::fromTheme(QStringLiteral("edit-delete")), QString());
     menu->addSeparator();
-    QAction* forgetAllAction = menu->addAction(QIcon::fromTheme(QStringLiteral("edit-delete-all")), QString());
+    QAction *forgetAllAction = menu->addAction(QIcon::fromTheme(QStringLiteral("edit-delete-all")), QString());
 
     if (d->mHistoryWidget->currentWidget() == d->mRecentFoldersTab) {
         addAction->setText(i18nc("@action Recent Folders view", "Add Folder to Places"));
@@ -303,13 +299,13 @@ void StartMainPage::showContextMenu(const QPoint& pos)
         GV_WARN_AND_RETURN("Context menu not implemented on this tab page");
     }
 
-    const QAbstractItemView* view = qobject_cast<QAbstractItemView*>(sender());
+    const QAbstractItemView *view = qobject_cast<QAbstractItemView *>(sender());
     const QModelIndex index = view->indexAt(pos);
     addAction->setEnabled(index.isValid());
     forgetAction->setEnabled(index.isValid());
 
     // Handle menu
-    const QAction* action = menu->exec(view->mapToGlobal(pos));
+    const QAction *action = menu->exec(view->mapToGlobal(pos));
     if (!action) {
         return;
     }
@@ -344,7 +340,7 @@ void StartMainPage::loadConfig()
     applyPalette(d->mGvCore->palette(GvCore::NormalViewPalette));
 }
 
-ThumbnailView* StartMainPage::recentFoldersView() const
+ThumbnailView *StartMainPage::recentFoldersView() const
 {
     return d->mRecentFoldersView;
 }

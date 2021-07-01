@@ -22,10 +22,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "documentjob.h"
 
 // Qt
+#include <QApplication>
 #include <QFuture>
 #include <QFutureWatcher>
 #include <QtConcurrentRun>
-#include <QApplication>
 
 // KF
 #include <KDialogJobUiDelegate>
@@ -36,17 +36,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
-struct DocumentJobPrivate
-{
+struct DocumentJobPrivate {
     Document::Ptr mDoc;
 };
 
 DocumentJob::DocumentJob()
-: KCompositeJob(nullptr)
-, d(new DocumentJobPrivate)
+    : KCompositeJob(nullptr)
+    , d(new DocumentJobPrivate)
 {
-    auto* delegate = new KDialogJobUiDelegate;
+    auto *delegate = new KDialogJobUiDelegate;
     delegate->setWindow(qApp->activeWindow());
     delegate->setAutoErrorHandlingEnabled(true);
     setUiDelegate(delegate);
@@ -62,7 +60,7 @@ Document::Ptr DocumentJob::document() const
     return d->mDoc;
 }
 
-void DocumentJob::setDocument(const Document::Ptr& doc)
+void DocumentJob::setDocument(const Document::Ptr &doc)
 {
     d->mDoc = doc;
 }
@@ -85,7 +83,7 @@ bool DocumentJob::checkDocumentEditor()
 void ThreadedDocumentJob::doStart()
 {
     QFuture<void> future = QtConcurrent::run(this, &ThreadedDocumentJob::threadedStart);
-    auto* watcher = new QFutureWatcher<void>(this);
+    auto *watcher = new QFutureWatcher<void>(this);
     connect(watcher, SIGNAL(finished()), SLOT(emitResult()));
     watcher->setFuture(future);
 }

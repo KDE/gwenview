@@ -26,25 +26,23 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QPushButton>
 
 // KF
-#include <KLocalizedString>
 #include <KGuiItem>
+#include <KLocalizedString>
 
 // Local
 #include <ui_resizeimagewidget.h>
 
 namespace Gwenview
 {
-
-struct ResizeImageDialogPrivate : public Ui_ResizeImageWidget
-{
+struct ResizeImageDialogPrivate : public Ui_ResizeImageWidget {
     bool mUpdateFromRatio;
     bool mUpdateFromSizeOrPercentage;
     QSize mOriginalSize;
 };
 
-ResizeImageDialog::ResizeImageDialog(QWidget* parent)
-: QDialog(parent)
-, d(new ResizeImageDialogPrivate)
+ResizeImageDialog::ResizeImageDialog(QWidget *parent)
+    : QDialog(parent)
+    , d(new ResizeImageDialogPrivate)
 {
     d->mUpdateFromRatio = false;
     d->mUpdateFromSizeOrPercentage = false;
@@ -53,10 +51,10 @@ ResizeImageDialog::ResizeImageDialog(QWidget* parent)
     setLayout(mainLayout);
     mainLayout->setSizeConstraint(QLayout::SetFixedSize);
 
-    auto* content = new QWidget(this);
+    auto *content = new QWidget(this);
     d->setupUi(content);
     mainLayout->addWidget(content);
-    auto *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    auto *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
     okButton->setDefault(true);
     okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
@@ -81,7 +79,7 @@ ResizeImageDialog::~ResizeImageDialog()
     delete d;
 }
 
-void ResizeImageDialog::setOriginalSize(const QSize& size)
+void ResizeImageDialog::setOriginalSize(const QSize &size)
 {
     d->mOriginalSize = size;
     d->mOriginalWidthLabel->setText(QString::number(size.width()) + QStringLiteral(" px"));
@@ -92,10 +90,7 @@ void ResizeImageDialog::setOriginalSize(const QSize& size)
 
 QSize ResizeImageDialog::size() const
 {
-    return QSize(
-               d->mWidthSpinBox->value(),
-               d->mHeightSpinBox->value()
-           );
+    return QSize(d->mWidthSpinBox->value(), d->mHeightSpinBox->value());
 }
 
 void ResizeImageDialog::slotWidthChanged(int width)

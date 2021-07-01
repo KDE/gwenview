@@ -31,7 +31,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 class AlphaBackgroundItem;
 
 struct AbstractImageViewPrivate;
@@ -54,12 +53,12 @@ public:
         AlphaBackgroundSolid,
     };
 
-    AbstractImageView(QGraphicsItem* parent);
+    AbstractImageView(QGraphicsItem *parent);
     ~AbstractImageView() override;
 
     qreal zoom() const;
 
-    virtual void setZoom(qreal zoom, const QPointF& center = QPointF(-1, -1), UpdateType updateType = UpdateIfNecessary);
+    virtual void setZoom(qreal zoom, const QPointF &center = QPointF(-1, -1), UpdateType updateType = UpdateIfNecessary);
 
     bool zoomToFit() const;
 
@@ -67,7 +66,7 @@ public:
 
     virtual void setZoomToFit(bool value);
 
-    virtual void setZoomToFill(bool value, const QPointF& center = QPointF(-1, -1));
+    virtual void setZoomToFill(bool value, const QPointF &center = QPointF(-1, -1));
 
     virtual void setDocument(const Document::Ptr &doc);
 
@@ -81,7 +80,7 @@ public:
 
     /**
      * Returns the size of the loaded document in device independent pixels.
-    */
+     */
     QSizeF dipDocumentSize() const;
 
     /*
@@ -103,19 +102,19 @@ public:
      * x and y are always between 0 and (docsize * zoom - viewsize)
      */
     QPointF scrollPos() const;
-    void setScrollPos(const QPointF& pos);
+    void setScrollPos(const QPointF &pos);
 
     qreal devicePixelRatio() const;
 
-    QPointF mapToView(const QPointF& imagePos) const;
-    QPoint mapToView(const QPoint& imagePos) const;
-    QRectF mapToView(const QRectF& imageRect) const;
-    QRect mapToView(const QRect& imageRect) const;
+    QPointF mapToView(const QPointF &imagePos) const;
+    QPoint mapToView(const QPoint &imagePos) const;
+    QRectF mapToView(const QRectF &imageRect) const;
+    QRect mapToView(const QRect &imageRect) const;
 
-    QPointF mapToImage(const QPointF& viewPos) const;
-    QPoint mapToImage(const QPoint& viewPos) const;
-    QRectF mapToImage(const QRectF& viewRect) const;
-    QRect mapToImage(const QRect& viewRect) const;
+    QPointF mapToImage(const QPointF &viewPos) const;
+    QPoint mapToImage(const QPoint &viewPos) const;
+    QRectF mapToImage(const QRectF &viewRect) const;
+    QRect mapToImage(const QRect &viewRect) const;
 
     void setEnlargeSmallerImages(bool value);
 
@@ -123,7 +122,7 @@ public:
 
     void resetDragCursor();
 
-    AlphaBackgroundItem* backgroundItem() const;
+    AlphaBackgroundItem *backgroundItem() const;
 
 public Q_SLOTS:
     void updateCursor();
@@ -135,8 +134,8 @@ Q_SIGNALS:
     void zoomToFillChanged(bool);
     /** Emitted when the zoom value changes in any way. */
     void zoomChanged(qreal);
-    void zoomInRequested(const QPointF&);
-    void zoomOutRequested(const QPointF&);
+    void zoomInRequested(const QPointF &);
+    void zoomOutRequested(const QPointF &);
     void scrollPosChanged();
     void completed();
     void previousImageRequested();
@@ -155,23 +154,23 @@ protected:
      * Called when the scrollPos changes.
      * Note: to avoid multiple adjustments, this is not called if zoom changes!
      */
-    virtual void onScrollPosChanged(const QPointF& oldPos) = 0;
+    virtual void onScrollPosChanged(const QPointF &oldPos) = 0;
 
     void onImageRectUpdated();
 
-    void resizeEvent(QGraphicsSceneResizeEvent* event) override;
-    void focusInEvent(QFocusEvent* event) override;
+    void resizeEvent(QGraphicsSceneResizeEvent *event) override;
+    void focusInEvent(QFocusEvent *event) override;
 
-    void keyPressEvent(QKeyEvent* event) override;
-    void keyReleaseEvent(QKeyEvent* event) override;
-    void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
-    void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
-    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) override;
+    void keyPressEvent(QKeyEvent *event) override;
+    void keyReleaseEvent(QKeyEvent *event) override;
+    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
 
 private:
     friend struct AbstractImageViewPrivate;
-    AbstractImageViewPrivate* const d;
+    AbstractImageViewPrivate *const d;
 };
 
 } // namespace

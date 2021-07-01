@@ -33,7 +33,6 @@ class QAction;
 
 namespace Gwenview
 {
-
 struct SlideShowPrivate;
 class GWENVIEWLIB_EXPORT SlideShow : public QObject
 {
@@ -46,14 +45,14 @@ public:
     };
     Q_ENUM(NavigationEndNotification)
 
-    explicit SlideShow(QObject* parent);
+    explicit SlideShow(QObject *parent);
     ~SlideShow() override;
 
-    void start(const QList<QUrl>& urls);
+    void start(const QList<QUrl> &urls);
     void pause();
 
-    QAction* loopAction() const;
-    QAction* randomAction() const;
+    QAction *loopAction() const;
+    QAction *randomAction() const;
 
     /** @return true if the slideshow is running */
     bool isRunning() const;
@@ -77,7 +76,7 @@ public Q_SLOTS:
     void resumeAndGoToNextUrl();
 
 Q_SIGNALS:
-    void goToUrl(const QUrl&);
+    void goToUrl(const QUrl &);
     /**
      * Slideshow has been started or paused
      */
@@ -94,7 +93,7 @@ private Q_SLOTS:
     void slotRandomActionToggled(bool on);
 
 private:
-    SlideShowPrivate* const d;
+    SlideShowPrivate *const d;
 };
 
 } // namespace

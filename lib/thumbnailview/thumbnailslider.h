@@ -32,7 +32,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 struct ThumbnailSliderPrivate;
 /**
  * A zoom slider which shows the thumbnail size as a tooltip when it is
@@ -42,7 +41,7 @@ class GWENVIEWLIB_EXPORT ThumbnailSlider : public ZoomSlider
 {
     Q_OBJECT
 public:
-    explicit ThumbnailSlider(QWidget* parent = nullptr);
+    explicit ThumbnailSlider(QWidget *parent = nullptr);
     ~ThumbnailSlider() override;
 
     void updateToolTip();
@@ -51,7 +50,7 @@ private Q_SLOTS:
     void slotActionTriggered(int actionTriggered);
 
 private:
-    ThumbnailSliderPrivate* const d;
+    ThumbnailSliderPrivate *const d;
 };
 
 } // namespace

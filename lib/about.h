@@ -32,8 +32,7 @@ class QString;
 
 namespace Gwenview
 {
-
-GWENVIEWLIB_EXPORT KAboutData* createAboutData(const QString& appName, const QString& programName);
+GWENVIEWLIB_EXPORT KAboutData *createAboutData(const QString &appName, const QString &programName);
 
 } // namespace
 

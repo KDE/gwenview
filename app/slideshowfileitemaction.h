@@ -27,18 +27,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 class QAction;
 class QWidget;
 
-
 class SlideShowFileItemAction : public KAbstractFileItemActionPlugin
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
-    SlideShowFileItemAction(QObject* parent, const QVariantList& args);
+    SlideShowFileItemAction(QObject *parent, const QVariantList &args);
 
-    QList<QAction*> actions(const KFileItemListProperties& fileItemInfos, QWidget* parentWidget) override;
+    QList<QAction *> actions(const KFileItemListProperties &fileItemInfos, QWidget *parentWidget) override;
 
 private:
-    QAction *createAction(const QIcon& icon, const QString& name, QWidget *parent, const QList<QUrl>& urls, const QString& exec);
+    QAction *createAction(const QIcon &icon, const QString &name, QWidget *parent, const QList<QUrl> &urls, const QString &exec);
 };
 
 #endif // SLIDESHOWFILEITEMACTION_H

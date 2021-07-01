@@ -23,28 +23,27 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QCursor>
+#include <QGraphicsSceneEvent>
 #include <QGraphicsSvgItem>
 #include <QGraphicsTextItem>
 #include <QPainter>
 #include <QSvgRenderer>
-#include <QGraphicsSceneEvent>
 
 // KF
 
 // Local
-#include "gwenview_lib_debug.h"
+#include "alphabackgrounditem.h"
 #include "document/documentfactory.h"
+#include "gwenview_lib_debug.h"
 #include <lib/gvdebug.h>
 #include <lib/gwenviewconfig.h>
-#include "alphabackgrounditem.h"
 
 namespace Gwenview
 {
-
 /// SvgImageView ////
-SvgImageView::SvgImageView(QGraphicsItem* parent)
-: AbstractImageView(parent)
-, mSvgItem(new QGraphicsSvgItem(this))
+SvgImageView::SvgImageView(QGraphicsItem *parent)
+    : AbstractImageView(parent)
+    , mSvgItem(new QGraphicsSvgItem(this))
 {
     // At certain scales, the SVG can render outside its own bounds up to 1 pixel
     // This clips it so it isn't drawn outside the background or over the selection rect
@@ -71,7 +70,7 @@ void SvgImageView::loadFromDocument()
 
 void SvgImageView::finishLoadFromDocument()
 {
-    QSvgRenderer* renderer = document()->svgRenderer();
+    QSvgRenderer *renderer = document()->svgRenderer();
     GV_RETURN_IF_FAIL(renderer);
     mSvgItem->setSharedRenderer(renderer);
     if (zoomToFit()) {
@@ -97,7 +96,7 @@ void SvgImageView::onImageOffsetChanged()
     adjustItemPos();
 }
 
-void SvgImageView::onScrollPosChanged(const QPointF& /* oldPos */)
+void SvgImageView::onScrollPosChanged(const QPointF & /* oldPos */)
 {
     adjustItemPos();
 }
@@ -109,13 +108,12 @@ void SvgImageView::adjustItemPos()
 }
 
 //// SvgViewAdapter ////
-struct SvgViewAdapterPrivate
-{
-    SvgImageView* mView;
+struct SvgViewAdapterPrivate {
+    SvgImageView *mView;
 };
 
 SvgViewAdapter::SvgViewAdapter()
-: d(new SvgViewAdapterPrivate)
+    : d(new SvgViewAdapterPrivate)
 {
     d->mView = new SvgImageView;
     setWidget(d->mView);
@@ -141,7 +139,7 @@ QCursor SvgViewAdapter::cursor() const
     return widget()->cursor();
 }
 
-void SvgViewAdapter::setCursor(const QCursor& cursor)
+void SvgViewAdapter::setCursor(const QCursor &cursor)
 {
     widget()->setCursor(cursor);
 }
@@ -168,7 +166,7 @@ void SvgViewAdapter::setZoomToFit(bool on)
     d->mView->setZoomToFit(on);
 }
 
-void SvgViewAdapter::setZoomToFill(bool on, const QPointF& center)
+void SvgViewAdapter::setZoomToFill(bool on, const QPointF &center)
 {
     d->mView->setZoomToFill(on, center);
 }
@@ -188,7 +186,7 @@ qreal SvgViewAdapter::zoom() const
     return d->mView->zoom();
 }
 
-void SvgViewAdapter::setZoom(qreal zoom, const QPointF& center)
+void SvgViewAdapter::setZoom(qreal zoom, const QPointF &center)
 {
     d->mView->setZoom(zoom, center);
 }
@@ -208,7 +206,7 @@ QPointF SvgViewAdapter::scrollPos() const
     return d->mView->scrollPos();
 }
 
-void SvgViewAdapter::setScrollPos(const QPointF& pos)
+void SvgViewAdapter::setScrollPos(const QPointF &pos)
 {
     d->mView->setScrollPos(pos);
 }
@@ -218,7 +216,7 @@ QRectF SvgViewAdapter::visibleDocumentRect() const
     return QRectF(d->mView->imageOffset(), d->mView->visibleImageSize());
 }
 
-AbstractImageView* SvgViewAdapter::imageView() const
+AbstractImageView *SvgViewAdapter::imageView() const
 {
     return d->mView;
 }

@@ -32,85 +32,84 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KDirLister>
 #include <KDirModel>
 #include <KIconLoader>
-#include <kio/global.h>
-#include <KModelIndexProxyMapper>
 #include <KJobWidgets>
+#include <KModelIndexProxyMapper>
+#include <kio/global.h>
 
 // Local
-#include "gwenview_importer_debug.h"
 #include "dialogguard.h"
-#include <lib/archiveutils.h>
-#include <lib/kindproxymodel.h>
-#include <lib/gwenviewconfig.h>
-#include <lib/recursivedirmodel.h>
-#include <lib/semanticinfo/sorteddirmodel.h>
-#include <lib/thumbnailview/abstractthumbnailviewhelper.h>
-#include <lib/thumbnailview/previewitemdelegate.h>
+#include "gwenview_importer_debug.h"
 #include <documentdirfinder.h>
 #include <importerconfigdialog.h>
+#include <lib/archiveutils.h>
+#include <lib/gwenviewconfig.h>
+#include <lib/kindproxymodel.h>
+#include <lib/recursivedirmodel.h>
+#include <lib/semanticinfo/sorteddirmodel.h>
+#include <lib/thumbnailprovider/thumbnailprovider.h>
+#include <lib/thumbnailview/abstractthumbnailviewhelper.h>
+#include <lib/thumbnailview/previewitemdelegate.h>
 #include <serializedurlmap.h>
 #include <ui_thumbnailpage.h>
-#include <lib/thumbnailprovider/thumbnailprovider.h>
 
 namespace Gwenview
 {
-
 static const int DEFAULT_THUMBNAIL_SIZE = 128;
 static const qreal DEFAULT_THUMBNAIL_ASPECT_RATIO = 3. / 2.;
 
-static const char* URL_FOR_BASE_URL_GROUP = "UrlForBaseUrl";
+static const char *URL_FOR_BASE_URL_GROUP = "UrlForBaseUrl";
 
 class ImporterThumbnailViewHelper : public AbstractThumbnailViewHelper
 {
 public:
-    ImporterThumbnailViewHelper(QObject* parent)
+    ImporterThumbnailViewHelper(QObject *parent)
         : AbstractThumbnailViewHelper(parent)
-    {}
+    {
+    }
 
-    void showContextMenu(QWidget*) override
-    {}
+    void showContextMenu(QWidget *) override
+    {
+    }
 
-    void showMenuForUrlDroppedOnViewport(QWidget*, const QList<QUrl>&) override
-    {}
+    void showMenuForUrlDroppedOnViewport(QWidget *, const QList<QUrl> &) override
+    {
+    }
 
-    void showMenuForUrlDroppedOnDir(QWidget*, const QList<QUrl>&, const QUrl&) override
-    {}
+    void showMenuForUrlDroppedOnDir(QWidget *, const QList<QUrl> &, const QUrl &) override
+    {
+    }
 };
 
-inline KFileItem itemForIndex(const QModelIndex& index)
+inline KFileItem itemForIndex(const QModelIndex &index)
 {
     return index.data(KDirModel::FileItemRole).value<KFileItem>();
 }
 
-struct ThumbnailPagePrivate : public Ui_ThumbnailPage
-{
-    ThumbnailPage* q;
+struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
+    ThumbnailPage *q;
     SerializedUrlMap mUrlMap;
 
     QIcon mSrcBaseIcon;
     QString mSrcBaseName;
     QUrl mSrcBaseUrl;
     QUrl mSrcUrl;
-    KModelIndexProxyMapper* mSrcUrlModelProxyMapper;
+    KModelIndexProxyMapper *mSrcUrlModelProxyMapper;
 
-    RecursiveDirModel* mRecursiveDirModel;
-    QAbstractItemModel* mFinalModel;
+    RecursiveDirModel *mRecursiveDirModel;
+    QAbstractItemModel *mFinalModel;
 
     ThumbnailProvider mThumbnailProvider;
 
-    QPushButton* mImportSelectedButton;
-    QPushButton* mImportAllButton;
+    QPushButton *mImportSelectedButton;
+    QPushButton *mImportAllButton;
     QList<QUrl> mUrlList;
 
     void setupDirModel()
     {
         mRecursiveDirModel = new RecursiveDirModel(q);
 
-        auto* kindProxyModel = new KindProxyModel(q);
-        kindProxyModel->setKindFilter(
-            MimeTypeUtils::KIND_RASTER_IMAGE
-            | MimeTypeUtils::KIND_SVG_IMAGE
-            | MimeTypeUtils::KIND_VIDEO);
+        auto *kindProxyModel = new KindProxyModel(q);
+        kindProxyModel->setKindFilter(MimeTypeUtils::KIND_RASTER_IMAGE | MimeTypeUtils::KIND_SVG_IMAGE | MimeTypeUtils::KIND_VIDEO);
         kindProxyModel->setSourceModel(mRecursiveDirModel);
 
         auto *sortModel = new QSortFilterProxyModel(q);
@@ -120,15 +119,9 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
 
         mFinalModel = sortModel;
 
-        QObject::connect(
-            mFinalModel, &QAbstractItemModel::rowsInserted,
-            q, &ThumbnailPage::updateImportButtons);
-        QObject::connect(
-            mFinalModel, &QAbstractItemModel::rowsRemoved,
-            q, &ThumbnailPage::updateImportButtons);
-        QObject::connect(
-            mFinalModel, &QAbstractItemModel::modelReset,
-            q, &ThumbnailPage::updateImportButtons);
+        QObject::connect(mFinalModel, &QAbstractItemModel::rowsInserted, q, &ThumbnailPage::updateImportButtons);
+        QObject::connect(mFinalModel, &QAbstractItemModel::rowsRemoved, q, &ThumbnailPage::updateImportButtons);
+        QObject::connect(mFinalModel, &QAbstractItemModel::modelReset, q, &ThumbnailPage::updateImportButtons);
     }
 
     void setupIcons()
@@ -159,26 +152,23 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
         mThumbnailView->setSelectionMode(QAbstractItemView::ExtendedSelection);
         mThumbnailView->setThumbnailViewHelper(new ImporterThumbnailViewHelper(q));
 
-        auto* delegate = new PreviewItemDelegate(mThumbnailView);
+        auto *delegate = new PreviewItemDelegate(mThumbnailView);
         delegate->setThumbnailDetails(PreviewItemDelegate::FileNameDetail);
         PreviewItemDelegate::ContextBarActions actions;
-        switch (GwenviewConfig::thumbnailActions())
-        {
-            case ThumbnailActions::None:
-                actions = PreviewItemDelegate::NoAction;
-                break;
-            case ThumbnailActions::ShowSelectionButtonOnly:
-            case ThumbnailActions::AllButtons:
-                actions = PreviewItemDelegate::SelectionAction;
-                break;
+        switch (GwenviewConfig::thumbnailActions()) {
+        case ThumbnailActions::None:
+            actions = PreviewItemDelegate::NoAction;
+            break;
+        case ThumbnailActions::ShowSelectionButtonOnly:
+        case ThumbnailActions::AllButtons:
+            actions = PreviewItemDelegate::SelectionAction;
+            break;
         }
         delegate->setContextBarActions(actions);
         mThumbnailView->setItemDelegate(delegate);
 
-        QObject::connect(mSlider, &ZoomSlider::valueChanged,
-                         mThumbnailView, &ThumbnailView::setThumbnailWidth);
-        QObject::connect(mThumbnailView, &ThumbnailView::thumbnailWidthChanged,
-                         mSlider, &ZoomSlider::setValue);
+        QObject::connect(mSlider, &ZoomSlider::valueChanged, mThumbnailView, &ThumbnailView::setThumbnailWidth);
+        QObject::connect(mThumbnailView, &ThumbnailView::thumbnailWidthChanged, mSlider, &ZoomSlider::setValue);
         int thumbnailSize = DEFAULT_THUMBNAIL_SIZE;
         mSlider->setValue(thumbnailSize);
         mSlider->updateToolTip();
@@ -186,15 +176,12 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
         mThumbnailView->setThumbnailWidth(thumbnailSize);
         mThumbnailView->setThumbnailProvider(&mThumbnailProvider);
 
-        QObject::connect(
-            mThumbnailView->selectionModel(), &QItemSelectionModel::selectionChanged,
-            q, &ThumbnailPage::updateImportButtons);
+        QObject::connect(mThumbnailView->selectionModel(), &QItemSelectionModel::selectionChanged, q, &ThumbnailPage::updateImportButtons);
     }
 
     void setupButtonBox()
     {
-        QObject::connect(mConfigureButton, &QAbstractButton::clicked,
-                         q, &ThumbnailPage::showConfigDialog);
+        QObject::connect(mConfigureButton, &QAbstractButton::clicked, q, &ThumbnailPage::showConfigDialog);
 
         mImportSelectedButton = mButtonBox->addButton(i18n("Import Selected"), QDialogButtonBox::AcceptRole);
         QObject::connect(mImportSelectedButton, &QAbstractButton::clicked, q, &ThumbnailPage::slotImportSelected);
@@ -202,9 +189,7 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
         mImportAllButton = mButtonBox->addButton(i18n("Import All"), QDialogButtonBox::AcceptRole);
         QObject::connect(mImportAllButton, &QAbstractButton::clicked, q, &ThumbnailPage::slotImportAll);
 
-        QObject::connect(
-            mButtonBox, &QDialogButtonBox::rejected,
-            q, &ThumbnailPage::rejected);
+        QObject::connect(mButtonBox, &QDialogButtonBox::rejected, q, &ThumbnailPage::rejected);
     }
 
     QUrl urlForBaseUrl() const
@@ -223,14 +208,14 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage
         return item.isDir() ? url : QUrl();
     }
 
-    void rememberUrl(const QUrl& url)
+    void rememberUrl(const QUrl &url)
     {
         mUrlMap.insert(mSrcBaseUrl, url);
     }
 };
 
 ThumbnailPage::ThumbnailPage()
-: d(new ThumbnailPagePrivate)
+    : d(new ThumbnailPagePrivate)
 {
     d->q = this;
     d->mUrlMap.setConfigGroup(KConfigGroup(KSharedConfig::openConfig(), URL_FOR_BASE_URL_GROUP));
@@ -249,7 +234,7 @@ ThumbnailPage::~ThumbnailPage()
     delete d;
 }
 
-void ThumbnailPage::setSourceUrl(const QUrl& srcBaseUrl, const QString& iconName, const QString& name)
+void ThumbnailPage::setSourceUrl(const QUrl &srcBaseUrl, const QString &iconName, const QString &name)
 {
     d->mSrcBaseIcon = QIcon::fromTheme(iconName);
     d->mSrcBaseName = name;
@@ -266,20 +251,19 @@ void ThumbnailPage::setSourceUrl(const QUrl& srcBaseUrl, const QString& iconName
     if (url.isValid()) {
         openUrl(url);
     } else {
-        auto* finder = new DocumentDirFinder(srcBaseUrl);
-        connect(finder, &DocumentDirFinder::done,
-                this, &ThumbnailPage::slotDocumentDirFinderDone);
+        auto *finder = new DocumentDirFinder(srcBaseUrl);
+        connect(finder, &DocumentDirFinder::done, this, &ThumbnailPage::slotDocumentDirFinderDone);
         finder->start();
     }
 }
 
-void ThumbnailPage::slotDocumentDirFinderDone(const QUrl& url, DocumentDirFinder::Status /*status*/)
+void ThumbnailPage::slotDocumentDirFinderDone(const QUrl &url, DocumentDirFinder::Status /*status*/)
 {
     d->rememberUrl(url);
     openUrl(url);
 }
 
-void ThumbnailPage::openUrl(const QUrl& url)
+void ThumbnailPage::openUrl(const QUrl &url)
 {
     d->mSrcUrl = url;
     QString path = QDir(d->mSrcBaseUrl.path()).relativeFilePath(d->mSrcUrl.path());
@@ -300,7 +284,7 @@ QList<QUrl> ThumbnailPage::urlList() const
     return d->mUrlList;
 }
 
-void ThumbnailPage::setDestinationUrl(const QUrl& url)
+void ThumbnailPage::setDestinationUrl(const QUrl &url)
 {
     d->mDstUrlRequester->setUrl(url);
 }
@@ -318,17 +302,17 @@ void ThumbnailPage::slotImportSelected()
 void ThumbnailPage::slotImportAll()
 {
     QModelIndexList list;
-    QAbstractItemModel* model = d->mThumbnailView->model();
+    QAbstractItemModel *model = d->mThumbnailView->model();
     for (int row = model->rowCount() - 1; row >= 0; --row) {
         list << model->index(row, 0);
     }
     importList(list);
 }
 
-void ThumbnailPage::importList(const QModelIndexList& list)
+void ThumbnailPage::importList(const QModelIndexList &list)
 {
     d->mUrlList.clear();
-    for (const QModelIndex & index : list) {
+    for (const QModelIndex &index : list) {
         KFileItem item = itemForIndex(index);
         if (!ArchiveUtils::fileItemIsDirOrArchive(item)) {
             d->mUrlList << item.url();
@@ -358,14 +342,15 @@ void ThumbnailPage::showConfigDialog()
 class OnlyBaseUrlProxyModel : public QSortFilterProxyModel
 {
 public:
-    OnlyBaseUrlProxyModel(const QUrl& url, const QIcon& icon, const QString& name, QObject* parent)
-    : QSortFilterProxyModel(parent)
-    , mUrl(url)
-    , mIcon(icon)
-    , mName(name)
-    {}
+    OnlyBaseUrlProxyModel(const QUrl &url, const QIcon &icon, const QString &name, QObject *parent)
+        : QSortFilterProxyModel(parent)
+        , mUrl(url)
+        , mIcon(icon)
+        , mName(name)
+    {
+    }
 
-    bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override
     {
         if (sourceParent.isValid()) {
             return true;
@@ -375,7 +360,7 @@ public:
         return item.url().matches(mUrl, QUrl::StripTrailingSlash);
     }
 
-    QVariant data(const QModelIndex& index, int role) const override
+    QVariant data(const QModelIndex &index, int role) const override
     {
         if (index.parent().isValid()) {
             return QSortFilterProxyModel::data(index, role);
@@ -404,14 +389,14 @@ void ThumbnailPage::setupSrcUrlTreeView()
         // Already initialized
         return;
     }
-    auto* dirModel = new KDirModel(this);
+    auto *dirModel = new KDirModel(this);
     dirModel->dirLister()->setDirOnlyMode(true);
     dirModel->dirLister()->openUrl(KIO::upUrl(d->mSrcBaseUrl));
 
-    auto* onlyBaseUrlModel = new OnlyBaseUrlProxyModel(d->mSrcBaseUrl, d->mSrcBaseIcon, d->mSrcBaseName, this);
+    auto *onlyBaseUrlModel = new OnlyBaseUrlProxyModel(d->mSrcBaseUrl, d->mSrcBaseIcon, d->mSrcBaseName, this);
     onlyBaseUrlModel->setSourceModel(dirModel);
 
-    auto* sortModel = new QSortFilterProxyModel(this);
+    auto *sortModel = new QSortFilterProxyModel(this);
     sortModel->setDynamicSortFilter(true);
     sortModel->setSourceModel(onlyBaseUrlModel);
     sortModel->sort(0);
@@ -419,7 +404,7 @@ void ThumbnailPage::setupSrcUrlTreeView()
     d->mSrcUrlModelProxyMapper = new KModelIndexProxyMapper(dirModel, sortModel, this);
 
     d->mSrcUrlTreeView->setModel(sortModel);
-    for(int i = 1; i < dirModel->columnCount(); ++i) {
+    for (int i = 1; i < dirModel->columnCount(); ++i) {
         d->mSrcUrlTreeView->hideColumn(i);
     }
     connect(d->mSrcUrlTreeView, &QAbstractItemView::activated, this, &ThumbnailPage::openUrlFromIndex);
@@ -429,7 +414,7 @@ void ThumbnailPage::setupSrcUrlTreeView()
     connect(dirModel, &KDirModel::expand, this, &ThumbnailPage::slotSrcUrlModelExpand);
 }
 
-void ThumbnailPage::slotSrcUrlModelExpand(const QModelIndex& index)
+void ThumbnailPage::slotSrcUrlModelExpand(const QModelIndex &index)
 {
     QModelIndex viewIndex = d->mSrcUrlModelProxyMapper->mapLeftToRight(index);
     d->mSrcUrlTreeView->expand(viewIndex);
@@ -444,7 +429,7 @@ void ThumbnailPage::toggleSrcUrlTreeView()
     d->mSrcUrlTreeView->setVisible(!d->mSrcUrlTreeView->isVisible());
 }
 
-void ThumbnailPage::openUrlFromIndex(const QModelIndex& index)
+void ThumbnailPage::openUrlFromIndex(const QModelIndex &index)
 {
     KFileItem item = itemForIndex(index);
     if (item.isNull()) {

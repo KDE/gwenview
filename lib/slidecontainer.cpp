@@ -29,23 +29,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 namespace Gwenview
 {
-
 static const int SLIDE_DURATION = 250;
 
-SlideContainer::SlideContainer(QWidget* parent)
-: QFrame(parent)
+SlideContainer::SlideContainer(QWidget *parent)
+    : QFrame(parent)
 {
     mContent = nullptr;
     mSlidingOut = false;
     setFixedHeight(0);
 }
 
-QWidget* SlideContainer::content() const
+QWidget *SlideContainer::content() const
 {
     return mContent;
 }
 
-void SlideContainer::setContent(QWidget* content)
+void SlideContainer::setContent(QWidget *content)
 {
     if (mContent) {
         mContent->setParent(nullptr);
@@ -62,7 +61,7 @@ void SlideContainer::setContent(QWidget* content)
 void SlideContainer::animTo(int newHeight)
 {
     delete mAnim.data();
-    auto* anim = new QPropertyAnimation(this, "slideHeight", this);
+    auto *anim = new QPropertyAnimation(this, "slideHeight", this);
     anim->setDuration(SLIDE_DURATION);
     anim->setStartValue(slideHeight());
     anim->setEndValue(newHeight);
@@ -110,7 +109,7 @@ QSize SlideContainer::minimumSizeHint() const
     }
 }
 
-void SlideContainer::resizeEvent(QResizeEvent* event)
+void SlideContainer::resizeEvent(QResizeEvent *event)
 {
     if (mContent) {
         if (event->oldSize().width() != width()) {
@@ -122,14 +121,12 @@ void SlideContainer::resizeEvent(QResizeEvent* event)
 void SlideContainer::adjustContentGeometry()
 {
     if (mContent) {
-        const int contentHeight = mContent->hasHeightForWidth()
-            ? mContent->heightForWidth(width())
-            : mContent->height();
+        const int contentHeight = mContent->hasHeightForWidth() ? mContent->heightForWidth(width()) : mContent->height();
         mContent->setGeometry(0, height() - contentHeight, width(), contentHeight);
     }
 }
 
-bool SlideContainer::eventFilter(QObject*, QEvent* event)
+bool SlideContainer::eventFilter(QObject *, QEvent *event)
 {
     switch (event->type()) {
     case QEvent::Resize:

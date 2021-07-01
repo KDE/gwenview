@@ -37,7 +37,8 @@ class GWENVIEWLIB_EXPORT DoubleTap : public QGesture
 {
     Q_PROPERTY(QPointF pos READ pos WRITE pos)
 public:
-    explicit DoubleTap(QObject* parent = nullptr);
+    explicit DoubleTap(QObject *parent = nullptr);
+
 private:
     QPointF pos;
 };
@@ -47,12 +48,12 @@ class GWENVIEWLIB_EXPORT DoubleTapRecognizer : public QGestureRecognizer
 public:
     explicit DoubleTapRecognizer();
     ~DoubleTapRecognizer();
+
 private:
-    DoubleTapRecognizerPrivate* d;
+    DoubleTapRecognizerPrivate *d;
 
-    virtual QGesture* create(QObject*) override;
-    virtual Result recognize(QGesture*, QObject*, QEvent*) override;
-
+    virtual QGesture *create(QObject *) override;
+    virtual Result recognize(QGesture *, QObject *, QEvent *) override;
 };
 
 } // namespace

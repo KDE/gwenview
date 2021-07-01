@@ -32,7 +32,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 struct RasterImageViewAdapterPrivate;
 class GWENVIEWLIB_EXPORT RasterImageViewAdapter : public AbstractDocumentViewAdapter
 {
@@ -43,7 +42,7 @@ public:
 
     QCursor cursor() const override;
 
-    void setCursor(const QCursor&) override;
+    void setCursor(const QCursor &) override;
 
     MimeTypeUtils::Kind kind() const override
     {
@@ -57,7 +56,7 @@ public:
 
     void setZoomToFit(bool) override;
 
-    void setZoomToFill(bool on, const QPointF& center) override;
+    void setZoomToFill(bool on, const QPointF &center) override;
 
     bool zoomToFit() const override;
 
@@ -65,7 +64,7 @@ public:
 
     qreal zoom() const override;
 
-    void setZoom(qreal zoom, const QPointF& center) override;
+    void setZoom(qreal zoom, const QPointF &center) override;
 
     qreal computeZoomToFit() const override;
 
@@ -77,11 +76,11 @@ public:
 
     void loadConfig() override;
 
-    RasterImageView* rasterImageView() const override;
-    AbstractImageView* imageView() const override;
+    RasterImageView *rasterImageView() const override;
+    AbstractImageView *imageView() const override;
 
     QPointF scrollPos() const override;
-    void setScrollPos(const QPointF& pos) override;
+    void setScrollPos(const QPointF &pos) override;
 
     QRectF visibleDocumentRect() const override;
 
@@ -89,7 +88,7 @@ private Q_SLOTS:
     void slotLoadingFailed();
 
 private:
-    RasterImageViewAdapterPrivate* const d;
+    RasterImageViewAdapterPrivate *const d;
 };
 
 } // namespace

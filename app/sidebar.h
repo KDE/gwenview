@@ -22,13 +22,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Qt
 #include <QFrame>
-#include <QTabWidget>
-#include <QTabBar>
 #include <QStylePainter>
+#include <QTabBar>
+#include <QTabWidget>
 
 namespace Gwenview
 {
-
 class SideBar;
 
 struct SideBarGroupPrivate;
@@ -36,15 +35,15 @@ class SideBarGroup : public QFrame
 {
     Q_OBJECT
 public:
-    SideBarGroup(const QString& title = "");
+    SideBarGroup(const QString &title = "");
     ~SideBarGroup() override;
 
-    void addWidget(QWidget*);
-    void addAction(QAction*);
+    void addWidget(QWidget *);
+    void addAction(QAction *);
     void clear();
 
 private:
-    SideBarGroupPrivate* const d;
+    SideBarGroupPrivate *const d;
 };
 
 struct SideBarPagePrivate;
@@ -52,16 +51,16 @@ class SideBarPage : public QWidget
 {
     Q_OBJECT
 public:
-    SideBarPage(const QIcon& icon, const QString& title);
+    SideBarPage(const QIcon &icon, const QString &title);
     ~SideBarPage() override;
-    void addWidget(QWidget*);
+    void addWidget(QWidget *);
     void addStretch();
 
-    const QIcon& icon() const;
-    const QString& title() const;
+    const QIcon &icon() const;
+    const QString &title() const;
 
 private:
-    SideBarPagePrivate* const d;
+    SideBarPagePrivate *const d;
 };
 
 struct SideBarTabBarPrivate;
@@ -69,7 +68,7 @@ class SideBarTabBar : public QTabBar
 {
     Q_OBJECT
 public:
-    explicit SideBarTabBar(QWidget* parent);
+    explicit SideBarTabBar(QWidget *parent);
     ~SideBarTabBar() override;
 
     enum TabButtonStyle {
@@ -91,9 +90,10 @@ protected:
     // Switches the TabButtonStyle based on the width
     void tabLayoutChange() override;
     void paintEvent(QPaintEvent *event) override;
+
 private:
     // Like sizeHint, but just for content size
-    QSize tabContentSize(const int index, const TabButtonStyle tabButtonStyle, const QStyleOptionTab& opt) const;
+    QSize tabContentSize(const int index, const TabButtonStyle tabButtonStyle, const QStyleOptionTab &opt) const;
     // Gets the tab size hint for the given TabButtonStyle
     QSize tabSizeHint(const int index, const TabButtonStyle tabButtonStyle) const;
     // Gets the size hint for the given TabButtonStyle
@@ -107,20 +107,20 @@ class SideBar : public QTabWidget
 {
     Q_OBJECT
 public:
-    explicit SideBar(QWidget* parent);
+    explicit SideBar(QWidget *parent);
     ~SideBar() override;
 
-    void addPage(SideBarPage*);
+    void addPage(SideBarPage *);
 
     QString currentPage() const;
-    void setCurrentPage(const QString& name);
+    void setCurrentPage(const QString &name);
 
     void loadConfig();
 
     QSize sizeHint() const override;
 
 private:
-    SideBarPrivate* const d;
+    SideBarPrivate *const d;
 };
 
 } // namespace

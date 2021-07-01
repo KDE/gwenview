@@ -20,13 +20,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <config-gwenview.h>
 
 // Qt
+#include <QApplication>
+#include <QCommandLineParser>
 #include <QPointer>
 #include <QScopedPointer>
-#include <QUrl>
-#include <QTemporaryDir>
-#include <QApplication>
 #include <QStringList>
-#include <QCommandLineParser>
+#include <QTemporaryDir>
+#include <QUrl>
 
 // KF
 #include <KAboutData>
@@ -35,9 +35,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KLocalizedString>
 
 // Local
+#include "mainwindow.h"
 #include <lib/about.h>
 #include <lib/gwenviewconfig.h>
-#include "mainwindow.h"
 
 #ifdef HAVE_FITS
 // This hack is needed to include the fitsplugin moc file in main.cpp
@@ -48,22 +48,23 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <../lib/imageformats/moc_fitsplugin.cpp>
 #endif
 
-
 // To shut up libtiff
 #ifdef HAVE_TIFF
 #include <QLoggingCategory>
 #include <tiffio.h>
 
-namespace {
-
+namespace
+{
 Q_DECLARE_LOGGING_CATEGORY(LibTiffLog)
 Q_LOGGING_CATEGORY(LibTiffLog, "gwenview.libtiff", QtWarningMsg)
 
-static void handleTiffWarning(const char* mod, const char* fmt, va_list ap) {
+static void handleTiffWarning(const char *mod, const char *fmt, va_list ap)
+{
     qCDebug(LibTiffLog) << "Warning:" << mod << QString::vasprintf(fmt, ap);
 }
 
-static void handleTiffError(const char* mod, const char* fmt, va_list ap) {
+static void handleTiffError(const char *mod, const char *fmt, va_list ap)
+{
     // Since we're doing thumbnails, we don't really care about warnings by default either
     qCWarning(LibTiffLog) << "Error" << mod << QString::vasprintf(fmt, ap);
 }
@@ -74,9 +75,9 @@ static void handleTiffError(const char* mod, const char* fmt, va_list ap) {
 class StartHelper
 {
 public:
-    StartHelper(const QStringList & args, bool fullscreen, bool slideshow)
-    : mFullScreen(false)
-    , mSlideShow(false)
+    StartHelper(const QStringList &args, bool fullscreen, bool slideshow)
+        : mFullScreen(false)
+        , mSlideShow(false)
     {
         if (!args.isEmpty()) {
             parseArgs(args, fullscreen, slideshow);
@@ -93,15 +94,15 @@ public:
             QStringList tmpArgs = args;
             tmpArgs.removeDuplicates();
             QStringList fileNames;
-            for (const QString & url : qAsConst(tmpArgs)) {
+            for (const QString &url : qAsConst(tmpArgs)) {
                 QUrl fileUrl = QUrl::fromUserInput(url, QDir::currentPath(), QUrl::AssumeLocalFile);
                 if (!fileNames.contains(fileUrl.fileName())) {
                     fileNames << fileUrl.fileName();
-                    list <<fileUrl;
+                    list << fileUrl;
                 }
             }
 
-            KIO::CopyJob* job = KIO::link(list, mUrl);
+            KIO::CopyJob *job = KIO::link(list, mUrl);
             job->exec();
         } else {
             QString tmpArg = args.first();
@@ -161,11 +162,9 @@ int main(int argc, char *argv[])
 
     QApplication app(argc, argv);
     KLocalizedString::setApplicationDomain("gwenview");
-    QScopedPointer<KAboutData> aboutData(
-        Gwenview::createAboutData(
-            QStringLiteral("gwenview"), /* component name */
-            i18n("Gwenview")            /* display name */
-        ));
+    QScopedPointer<KAboutData> aboutData(Gwenview::createAboutData(QStringLiteral("gwenview"), /* component name */
+                                                                   i18n("Gwenview") /* display name */
+                                                                   ));
     aboutData->setShortDescription(i18n("An Image Viewer"));
 
     aboutData->setOrganizationDomain(QByteArray("kde.org"));
@@ -174,19 +173,15 @@ int main(int argc, char *argv[])
 
     QCommandLineParser parser;
     aboutData.data()->setupCommandLine(&parser);
-    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("f") << QStringLiteral("fullscreen"),
-                                        i18n("Start in fullscreen mode")));
-    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("s") << QStringLiteral("slideshow"),
-                                        i18n("Start in slideshow mode")));
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("f") << QStringLiteral("fullscreen"), i18n("Start in fullscreen mode")));
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("s") << QStringLiteral("slideshow"), i18n("Start in slideshow mode")));
     parser.addPositionalArgument("url", i18n("A starting file or folders"));
     parser.process(app);
     aboutData.data()->processCommandLine(&parser);
 
     // startHelper must live for the whole life of the application
     StartHelper startHelper(parser.positionalArguments(),
-                            parser.isSet(QStringLiteral("f"))
-                                ? true
-                                : Gwenview::GwenviewConfig::fullScreenModeActive(),
+                            parser.isSet(QStringLiteral("f")) ? true : Gwenview::GwenviewConfig::fullScreenModeActive(),
                             parser.isSet(QStringLiteral("s")));
     if (app.isSessionRestored()) {
         kRestoreMainWindows<Gwenview::MainWindow>();
@@ -203,5 +198,5 @@ int main(int argc, char *argv[])
 }
 
 #ifdef HAVE_FITS
-    Q_IMPORT_PLUGIN(FitsPlugin)
+Q_IMPORT_PLUGIN(FitsPlugin)
 #endif

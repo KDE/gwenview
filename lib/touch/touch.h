@@ -27,39 +27,38 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KF
 
 // Local
+#include "lib/touch/doubletap.h"
+#include "lib/touch/oneandtwofingerswipe.h"
 #include "lib/touch/tapholdandmoving.h"
 #include "lib/touch/twofingerpan.h"
-#include "lib/touch/oneandtwofingerswipe.h"
-#include "lib/touch/doubletap.h"
 #include "lib/touch/twofingertap.h"
 
 namespace Gwenview
 {
-
 struct TouchPrivate;
 class GWENVIEWLIB_EXPORT Touch : public QObject
 {
     Q_OBJECT
 public:
-    Touch(QObject* target);
+    Touch(QObject *target);
     ~Touch() override;
-    void setZoomParameter (qreal, qreal);
-    void setRotationThreshold (qreal);
-    qreal getRotationFromPinchGesture(QGestureEvent*);
-    qreal getZoomFromPinchGesture(QGestureEvent*);
-    QPoint positionGesture(QGestureEvent*);
-    bool checkTwoFingerPanGesture(QGestureEvent*);
-    bool checkOneAndTwoFingerSwipeGesture(QGestureEvent*);
-    bool checkTapGesture(QGestureEvent*);
-    bool checkDoubleTapGesture(QGestureEvent*);
-    bool checkTwoFingerTapGesture(QGestureEvent*);
-    bool checkTapHoldAndMovingGesture(QGestureEvent*, QObject*);
-    bool checkPinchGesture(QGestureEvent*);
-    void touchToMouseRelease(QPoint, QObject*);
-    void touchToMouseMove(QPoint, QEvent*, Qt::MouseButton);
-    void touchToMouseMove(QPoint, QObject*, Qt::MouseButton);
-    void touchToMouseClick(QPoint, QObject*);
-    void setPanGestureState ( QGestureEvent* event );
+    void setZoomParameter(qreal, qreal);
+    void setRotationThreshold(qreal);
+    qreal getRotationFromPinchGesture(QGestureEvent *);
+    qreal getZoomFromPinchGesture(QGestureEvent *);
+    QPoint positionGesture(QGestureEvent *);
+    bool checkTwoFingerPanGesture(QGestureEvent *);
+    bool checkOneAndTwoFingerSwipeGesture(QGestureEvent *);
+    bool checkTapGesture(QGestureEvent *);
+    bool checkDoubleTapGesture(QGestureEvent *);
+    bool checkTwoFingerTapGesture(QGestureEvent *);
+    bool checkTapHoldAndMovingGesture(QGestureEvent *, QObject *);
+    bool checkPinchGesture(QGestureEvent *);
+    void touchToMouseRelease(QPoint, QObject *);
+    void touchToMouseMove(QPoint, QEvent *, Qt::MouseButton);
+    void touchToMouseMove(QPoint, QObject *, Qt::MouseButton);
+    void touchToMouseClick(QPoint, QObject *);
+    void setPanGestureState(QGestureEvent *event);
     Qt::GestureState getLastPanGestureState();
     QPointF getLastTapPos();
     void setLastTapPos(QPointF);
@@ -73,26 +72,25 @@ public:
     Qt::GestureType getTwoFingerTapGesture();
 
 protected:
-    bool eventFilter(QObject*, QEvent*) override;
-
+    bool eventFilter(QObject *, QEvent *) override;
 
 signals:
-    void PanTriggered(const QPointF&);
+    void PanTriggered(const QPointF &);
     void swipeLeftTriggered();
     void swipeRightTriggered();
     void doubleTapTriggered();
-    void tapHoldAndMovingTriggered(const QPoint&);
-    void tapTriggered(const QPoint&);
+    void tapHoldAndMovingTriggered(const QPoint &);
+    void tapTriggered(const QPoint &);
     void pinchGestureStarted(qint64);
     void twoFingerTapTriggered();
-    void pinchZoomTriggered(qreal, const QPoint&, qint64);
+    void pinchZoomTriggered(qreal, const QPoint &, qint64);
     void pinchRotateTriggered(qreal);
 
 private:
-    qreal calculateZoom (qreal, qreal);
-    void touchToMouseEvent(QPoint, QObject*, QEvent::Type, Qt::MouseButton, Qt::MouseButtons);
-    bool gestureEvent(QGestureEvent*);
-    TouchPrivate* const d;
+    qreal calculateZoom(qreal, qreal);
+    void touchToMouseEvent(QPoint, QObject *, QEvent::Type, Qt::MouseButton, Qt::MouseButtons);
+    bool gestureEvent(QGestureEvent *);
+    TouchPrivate *const d;
 };
 
 } // namespace

@@ -23,13 +23,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "config-gwenview.h"
 
 // Qt
-#include <QSize>
 #include <QLocale>
+#include <QSize>
 
 // KF
 #include <KFileItem>
-#include <KLocalizedString>
 #include <KFormat>
+#include <KLocalizedString>
 
 // Exiv2
 #include <exiv2/exiv2.hpp>
@@ -43,7 +43,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 namespace Gwenview
 {
-
 enum GroupRow {
     GeneralGroup,
     ExifGroup,
@@ -52,8 +51,8 @@ enum GroupRow {
 #endif
     IptcGroup,
     XmpGroup,
-    NoGroupSpace,   // second last entry
-    NoGroup,         // last entry
+    NoGroupSpace, // second last entry
+    NoGroup, // last entry
 };
 
 class MetaInfoGroup
@@ -66,9 +65,12 @@ public:
     class Entry
     {
     public:
-        Entry(const QString& key, const QString& label, const QString& value)
-            : mKey(key), mLabel(label.trimmed()), mValue(value.trimmed())
-        {}
+        Entry(const QString &key, const QString &label, const QString &value)
+            : mKey(key)
+            , mLabel(label.trimmed())
+            , mValue(value.trimmed())
+        {
+        }
 
         QString key() const
         {
@@ -83,12 +85,12 @@ public:
         {
             return mValue;
         }
-        void setValue(const QString& value)
+        void setValue(const QString &value)
         {
             mValue = value.trimmed();
         }
 
-        void appendValue(const QString& value)
+        void appendValue(const QString &value)
         {
             if (!mValue.isEmpty()) {
                 mValue += QLatin1Char('\n');
@@ -102,9 +104,10 @@ public:
         QString mValue;
     };
 
-    MetaInfoGroup(const QString& label)
+    MetaInfoGroup(const QString &label)
         : mLabel(label)
-        {}
+    {
+    }
 
     ~MetaInfoGroup()
     {
@@ -118,20 +121,20 @@ public:
         mRowForKey.clear();
     }
 
-    void addEntry(const QString& key, const QString& label, const QString& value)
+    void addEntry(const QString &key, const QString &label, const QString &value)
     {
         addEntry(new Entry(key, label, value));
     }
 
-    void addEntry(Entry* entry)
+    void addEntry(Entry *entry)
     {
         mList << entry;
         mRowForKey[entry->key()] = mList.size() - 1;
     }
 
-    void getInfoForKey(const QString& key, QString* label, QString* value) const
+    void getInfoForKey(const QString &key, QString *label, QString *value) const
     {
-        Entry* entry = getEntryForKey(key);
+        Entry *entry = getEntryForKey(key);
         if (entry) {
             *label = entry->label();
             *value = entry->value();
@@ -156,13 +159,13 @@ public:
         return mList[row]->value();
     }
 
-    void setValueForKeyAt(int row, const QString& value)
+    void setValueForKeyAt(int row, const QString &value)
     {
         Q_ASSERT(row < mList.size());
         mList[row]->setValue(value);
     }
 
-    int getRowForKey(const QString& key) const
+    int getRowForKey(const QString &key) const
     {
         return mRowForKey.value(key, InvalidRow);
     }
@@ -177,12 +180,13 @@ public:
         return mLabel;
     }
 
-    const QList<Entry*>& entryList() const {
+    const QList<Entry *> &entryList() const
+    {
         return mList;
     }
 
 private:
-    Entry* getEntryForKey(const QString& key) const
+    Entry *getEntryForKey(const QString &key) const
     {
         int row = getRowForKey(key);
         if (row == InvalidRow) {
@@ -191,17 +195,16 @@ private:
         return mList[row];
     }
 
-    QList<Entry*> mList;
+    QList<Entry *> mList;
     QHash<QString, int> mRowForKey;
     QString mLabel;
 };
 
-struct ImageMetaInfoModelPrivate
-{
-    QVector<MetaInfoGroup*> mMetaInfoGroupVector;
-    ImageMetaInfoModel* q;
+struct ImageMetaInfoModelPrivate {
+    QVector<MetaInfoGroup *> mMetaInfoGroupVector;
+    ImageMetaInfoModel *q;
 
-    void clearGroup(MetaInfoGroup* group, const QModelIndex& parent)
+    void clearGroup(MetaInfoGroup *group, const QModelIndex &parent)
     {
         if (group->size() > 0) {
             q->beginRemoveRows(parent, 0, group->size() - 1);
@@ -210,9 +213,9 @@ struct ImageMetaInfoModelPrivate
         }
     }
 
-    void setGroupEntryValue(GroupRow groupRow, const QString& key, const QString& value)
+    void setGroupEntryValue(GroupRow groupRow, const QString &key, const QString &value)
     {
-        MetaInfoGroup* group = mMetaInfoGroupVector[groupRow];
+        MetaInfoGroup *group = mMetaInfoGroupVector[groupRow];
         int entryRow = group->getRowForKey(key);
         if (entryRow == MetaInfoGroup::InvalidRow) {
             qCWarning(GWENVIEW_LIB_LOG) << "No row for key" << key;
@@ -224,7 +227,7 @@ struct ImageMetaInfoModelPrivate
         emit q->dataChanged(entryIndex, entryIndex);
     }
 
-    QVariant displayData(const QModelIndex& index) const
+    QVariant displayData(const QModelIndex &index) const
     {
         if (index.internalId() == NoGroup) {
             if (index.column() != 0) {
@@ -238,7 +241,7 @@ struct ImageMetaInfoModelPrivate
             return QString();
         }
 
-        MetaInfoGroup* group = mMetaInfoGroupVector[index.internalId()];
+        MetaInfoGroup *group = mMetaInfoGroupVector[index.internalId()];
         if (index.column() == 0) {
             return group->getLabelForKeyAt(index.row());
         } else {
@@ -248,7 +251,7 @@ struct ImageMetaInfoModelPrivate
 
     void initGeneralGroup()
     {
-        MetaInfoGroup* group = mMetaInfoGroupVector[GeneralGroup];
+        MetaInfoGroup *group = mMetaInfoGroupVector[GeneralGroup];
         group->addEntry(QStringLiteral("General.Name"), i18nc("@item:intable Image file name", "Name"), QString());
         group->addEntry(QStringLiteral("General.Size"), i18nc("@item:intable", "File Size"), QString());
         group->addEntry(QStringLiteral("General.Time"), i18nc("@item:intable", "File Time"), QString());
@@ -256,8 +259,8 @@ struct ImageMetaInfoModelPrivate
         group->addEntry(QStringLiteral("General.Comment"), i18nc("@item:intable", "Comment"), QString());
     }
 
-    template <class Container, class Iterator>
-    void fillExivGroup(const QModelIndex& parent, MetaInfoGroup* group, const Container& container)
+    template<class Container, class Iterator>
+    void fillExivGroup(const QModelIndex &parent, MetaInfoGroup *group, const Container &container)
     {
         // key aren't always unique (for example, "Iptc.Application2.Keywords"
         // may appear multiple times) so we can't know how many rows we will
@@ -266,9 +269,7 @@ struct ImageMetaInfoModelPrivate
         using EntryHash = QHash<QString, MetaInfoGroup::Entry *>;
         EntryHash hash;
 
-        Iterator
-        it = container.begin(),
-        end = container.end();
+        Iterator it = container.begin(), end = container.end();
 
         for (; it != end; ++it) {
             try {
@@ -288,7 +289,7 @@ struct ImageMetaInfoModelPrivate
                 } else {
                     hash.insert(key, new MetaInfoGroup::Entry(key, label, value));
                 }
-            } catch (const Exiv2::Error& error) {
+            } catch (const Exiv2::Error &error) {
                 qCWarning(GWENVIEW_LIB_LOG) << "Failed to read some meta info:" << error.what();
             }
         }
@@ -297,7 +298,7 @@ struct ImageMetaInfoModelPrivate
             return;
         }
         q->beginInsertRows(parent, 0, hash.size() - 1);
-        for (MetaInfoGroup::Entry * entry : qAsConst(hash)) {
+        for (MetaInfoGroup::Entry *entry : qAsConst(hash)) {
             group->addEntry(entry);
         }
         q->endInsertRows();
@@ -305,7 +306,7 @@ struct ImageMetaInfoModelPrivate
 };
 
 ImageMetaInfoModel::ImageMetaInfoModel()
-: d(new ImageMetaInfoModelPrivate)
+    : d(new ImageMetaInfoModelPrivate)
 {
     d->q = this;
 #ifdef HAVE_FITS
@@ -319,7 +320,7 @@ ImageMetaInfoModel::ImageMetaInfoModel()
     d->mMetaInfoGroupVector[FitsGroup] = new MetaInfoGroup(QStringLiteral("FITS"));
 #endif
     d->mMetaInfoGroupVector[IptcGroup] = new MetaInfoGroup(QStringLiteral("IPTC"));
-    d->mMetaInfoGroupVector[XmpGroup]  = new MetaInfoGroup(QStringLiteral("XMP"));
+    d->mMetaInfoGroupVector[XmpGroup] = new MetaInfoGroup(QStringLiteral("XMP"));
     d->initGeneralGroup();
 }
 
@@ -340,10 +341,10 @@ void ImageMetaInfoModel::setUrl(const QUrl &url)
     d->setGroupEntryValue(GeneralGroup, QStringLiteral("General.Time"), timeString);
 
 #ifdef HAVE_FITS
-    if (UrlUtils::urlIsFastLocalFile(url) && (url.fileName().endsWith(QLatin1String(".fit"), Qt::CaseInsensitive) ||
-        url.fileName().endsWith(QLatin1String(".fits"), Qt::CaseInsensitive))) {
+    if (UrlUtils::urlIsFastLocalFile(url)
+        && (url.fileName().endsWith(QLatin1String(".fit"), Qt::CaseInsensitive) || url.fileName().endsWith(QLatin1String(".fits"), Qt::CaseInsensitive))) {
         FITSData fitsLoader;
-        MetaInfoGroup* group = d->mMetaInfoGroupVector[FitsGroup];
+        MetaInfoGroup *group = d->mMetaInfoGroupVector[FitsGroup];
         QFile file(url.toLocalFile());
 
         if (!file.open(QIODevice::ReadOnly)) {
@@ -355,8 +356,7 @@ void ImageMetaInfoModel::setUrl(const QUrl &url)
             int nkeys = 0;
 
             fitsLoader.getFITSRecord(recordList, nkeys);
-            for (int i = 0; i < nkeys; i++)
-            {
+            for (int i = 0; i < nkeys; i++) {
                 QString record = recordList.mid(i * 80, 80);
                 QString key;
                 QString keyStr;
@@ -390,28 +390,24 @@ void ImageMetaInfoModel::setUrl(const QUrl &url)
                     value = QString::number(number);
                 }
 
-                group->addEntry(QStringLiteral("Fits.")+key, keyStr, value);
+                group->addEntry(QStringLiteral("Fits.") + key, keyStr, value);
             }
         }
     }
 #endif
 }
 
-void ImageMetaInfoModel::setImageSize(const QSize& size)
+void ImageMetaInfoModel::setImageSize(const QSize &size)
 {
     QString imageSize;
     if (size.isValid()) {
-        imageSize = i18nc(
-                        "@item:intable %1 is image width, %2 is image height",
-                        "%1x%2", size.width(), size.height());
+        imageSize = i18nc("@item:intable %1 is image width, %2 is image height", "%1x%2", size.width(), size.height());
 
         double megaPixels = size.width() * size.height() / 1000000.;
         if (megaPixels > 0.1) {
             QString megaPixelsString = QString::number(megaPixels, 'f', 1);
             imageSize += QLatin1Char(' ');
-            imageSize += i18nc(
-                             "@item:intable %1 is number of millions of pixels in image",
-                             "(%1MP)", megaPixelsString);
+            imageSize += i18nc("@item:intable %1 is number of millions of pixels in image", "(%1MP)", megaPixelsString);
         }
     } else {
         imageSize = QLatin1Char('-');
@@ -419,17 +415,17 @@ void ImageMetaInfoModel::setImageSize(const QSize& size)
     d->setGroupEntryValue(GeneralGroup, QStringLiteral("General.ImageSize"), imageSize);
 }
 
-void ImageMetaInfoModel::setExiv2Image(const Exiv2::Image* image)
+void ImageMetaInfoModel::setExiv2Image(const Exiv2::Image *image)
 {
-    MetaInfoGroup* exifGroup = d->mMetaInfoGroupVector[ExifGroup];
-    MetaInfoGroup* iptcGroup = d->mMetaInfoGroupVector[IptcGroup];
-    MetaInfoGroup* xmpGroup  = d->mMetaInfoGroupVector[XmpGroup];
+    MetaInfoGroup *exifGroup = d->mMetaInfoGroupVector[ExifGroup];
+    MetaInfoGroup *iptcGroup = d->mMetaInfoGroupVector[IptcGroup];
+    MetaInfoGroup *xmpGroup = d->mMetaInfoGroupVector[XmpGroup];
     QModelIndex exifIndex = index(ExifGroup, 0);
     QModelIndex iptcIndex = index(IptcGroup, 0);
-    QModelIndex xmpIndex  = index(XmpGroup, 0);
+    QModelIndex xmpIndex = index(XmpGroup, 0);
     d->clearGroup(exifGroup, exifIndex);
     d->clearGroup(iptcGroup, iptcIndex);
-    d->clearGroup(xmpGroup,  xmpIndex);
+    d->clearGroup(xmpGroup, xmpIndex);
 
     if (!image) {
         return;
@@ -438,24 +434,24 @@ void ImageMetaInfoModel::setExiv2Image(const Exiv2::Image* image)
     d->setGroupEntryValue(GeneralGroup, QStringLiteral("General.Comment"), QString::fromUtf8(image->comment().c_str()));
 
     if (image->checkMode(Exiv2::mdExif) & Exiv2::amRead) {
-        const Exiv2::ExifData& exifData = image->exifData();
+        const Exiv2::ExifData &exifData = image->exifData();
         d->fillExivGroup<Exiv2::ExifData, Exiv2::ExifData::const_iterator>(exifIndex, exifGroup, exifData);
     }
 
     if (image->checkMode(Exiv2::mdIptc) & Exiv2::amRead) {
-        const Exiv2::IptcData& iptcData = image->iptcData();
+        const Exiv2::IptcData &iptcData = image->iptcData();
         d->fillExivGroup<Exiv2::IptcData, Exiv2::IptcData::const_iterator>(iptcIndex, iptcGroup, iptcData);
     }
 
     if (image->checkMode(Exiv2::mdXmp) & Exiv2::amRead) {
-        const Exiv2::XmpData& xmpData = image->xmpData();
+        const Exiv2::XmpData &xmpData = image->xmpData();
         d->fillExivGroup<Exiv2::XmpData, Exiv2::XmpData::const_iterator>(xmpIndex, xmpGroup, xmpData);
     }
 }
 
-void ImageMetaInfoModel::getInfoForKey(const QString& key, QString* label, QString* value) const
+void ImageMetaInfoModel::getInfoForKey(const QString &key, QString *label, QString *value) const
 {
-    MetaInfoGroup* group;
+    MetaInfoGroup *group;
     if (key.startsWith(QLatin1String("General"))) {
         group = d->mMetaInfoGroupVector[GeneralGroup];
     } else if (key.startsWith(QLatin1String("Exif"))) {
@@ -475,23 +471,23 @@ void ImageMetaInfoModel::getInfoForKey(const QString& key, QString* label, QStri
     group->getInfoForKey(key, label, value);
 }
 
-QString ImageMetaInfoModel::getValueForKey(const QString& key) const
+QString ImageMetaInfoModel::getValueForKey(const QString &key) const
 {
     QString label, value;
     getInfoForKey(key, &label, &value);
     return value;
 }
 
-QString ImageMetaInfoModel::keyForIndex(const QModelIndex& index) const
+QString ImageMetaInfoModel::keyForIndex(const QModelIndex &index) const
 {
     if (index.internalId() == NoGroup) {
         return QString();
     }
-    MetaInfoGroup* group = d->mMetaInfoGroupVector[index.internalId()];
+    MetaInfoGroup *group = d->mMetaInfoGroupVector[index.internalId()];
     return group->getKeyAt(index.row());
 }
 
-QModelIndex ImageMetaInfoModel::index(int row, int col, const QModelIndex& parent) const
+QModelIndex ImageMetaInfoModel::index(int row, int col, const QModelIndex &parent) const
 {
     if (col < 0 || col > 1) {
         return QModelIndex();
@@ -512,7 +508,7 @@ QModelIndex ImageMetaInfoModel::index(int row, int col, const QModelIndex& paren
     }
 }
 
-QModelIndex ImageMetaInfoModel::parent(const QModelIndex& index) const
+QModelIndex ImageMetaInfoModel::parent(const QModelIndex &index) const
 {
     if (!index.isValid()) {
         return QModelIndex();
@@ -524,7 +520,7 @@ QModelIndex ImageMetaInfoModel::parent(const QModelIndex& index) const
     }
 }
 
-int ImageMetaInfoModel::rowCount(const QModelIndex& parent) const
+int ImageMetaInfoModel::rowCount(const QModelIndex &parent) const
 {
     if (!parent.isValid()) {
         return d->mMetaInfoGroupVector.size();
@@ -535,12 +531,12 @@ int ImageMetaInfoModel::rowCount(const QModelIndex& parent) const
     }
 }
 
-int ImageMetaInfoModel::columnCount(const QModelIndex& /*parent*/) const
+int ImageMetaInfoModel::columnCount(const QModelIndex & /*parent*/) const
 {
     return 2;
 }
 
-QVariant ImageMetaInfoModel::data(const QModelIndex& index, int role) const
+QVariant ImageMetaInfoModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid()) {
         return QVariant();

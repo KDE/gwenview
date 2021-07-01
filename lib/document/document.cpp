@@ -27,17 +27,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QUrl>
 
 // KF
-#include <KLocalizedString>
 #include <KJobUiDelegate>
+#include <KLocalizedString>
 
 // Exiv2
 #include <exiv2/exiv2.hpp>
 
 // Local
-#include "gwenview_lib_debug.h"
 #include "documentjob.h"
 #include "emptydocumentimpl.h"
 #include "gvdebug.h"
+#include "gwenview_lib_debug.h"
 #include "imagemetainfomodel.h"
 #include "loadingdocumentimpl.h"
 #include "loadingjob.h"
@@ -45,19 +45,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 namespace Gwenview
 {
-
 #undef ENABLE_LOG
 #undef LOG
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
-#define LOG(x) //qCDebug(GWENVIEW_LIB_LOG) << x
+#define LOG(x) // qCDebug(GWENVIEW_LIB_LOG) << x
 #else
 #define LOG(x) ;
 #endif
 
 #ifdef ENABLE_LOG
 
-static void logQueue(DocumentPrivate* d)
+static void logQueue(DocumentPrivate *d)
 {
 #define PREFIX "  QUEUE: "
     if (!d->mCurrentJob) {
@@ -71,15 +70,15 @@ static void logQueue(DocumentPrivate* d)
         return;
     }
     qDebug(PREFIX "%d pending job(s):", d->mJobQueue.size());
-    for (DocumentJob* job : qAsConst(d->mJobQueue)) {
+    for (DocumentJob *job : qAsConst(d->mJobQueue)) {
         Q_ASSERT(job);
         qCDebug(GWENVIEW_LIB_LOG) << PREFIX "-" << job;
     }
 #undef PREFIX
 }
 
-#define LOG_QUEUE(msg, d) \
-    LOG(msg); \
+#define LOG_QUEUE(msg, d)                                                                                                                                      \
+    LOG(msg);                                                                                                                                                  \
     logQueue(d)
 
 #else
@@ -91,7 +90,7 @@ static void logQueue(DocumentPrivate* d)
 //- DocumentPrivate ---------------------------------------
 void DocumentPrivate::scheduleImageLoading(int invertedZoom)
 {
-    auto* impl = qobject_cast<LoadingDocumentImpl*>(mImpl);
+    auto *impl = qobject_cast<LoadingDocumentImpl *>(mImpl);
     Q_ASSERT(impl);
     impl->loadImage(invertedZoom);
 }
@@ -99,7 +98,7 @@ void DocumentPrivate::scheduleImageLoading(int invertedZoom)
 void DocumentPrivate::scheduleImageDownSampling(int invertedZoom)
 {
     LOG("invertedZoom=" << invertedZoom);
-    auto* job = qobject_cast<DownSamplingJob*>(mCurrentJob.data());
+    auto *job = qobject_cast<DownSamplingJob *>(mCurrentJob.data());
     if (job && job->mInvertedZoom == invertedZoom) {
         LOG("Current job is already doing it");
         return;
@@ -108,7 +107,7 @@ void DocumentPrivate::scheduleImageDownSampling(int invertedZoom)
     // Remove any previously scheduled downsampling job
     DocumentJobQueue::Iterator it;
     for (it = mJobQueue.begin(); it != mJobQueue.end(); ++it) {
-        auto* job = qobject_cast<DownSamplingJob*>(*it);
+        auto *job = qobject_cast<DownSamplingJob *>(*it);
         if (!job) {
             continue;
         }
@@ -137,7 +136,7 @@ void DocumentPrivate::downSampleImage(int invertedZoom)
 //- DownSamplingJob ---------------------------------------
 void DownSamplingJob::doStart()
 {
-    DocumentPrivate* d = document()->d;
+    DocumentPrivate *d = document()->d;
     d->downSampleImage(mInvertedZoom);
     setError(NoError);
     emitResult();
@@ -150,8 +149,8 @@ qreal Document::maxDownSampledZoom()
 }
 
 Document::Document(const QUrl &url)
-: QObject()
-, d(new DocumentPrivate)
+    : QObject()
+    , d(new DocumentPrivate)
 {
     d->q = this;
     d->mImpl = nullptr;
@@ -185,7 +184,7 @@ void Document::reload()
     switchToImpl(new LoadingDocumentImpl(this));
 }
 
-const QImage& Document::image() const
+const QImage &Document::image() const
 {
     return d->mImage;
 }
@@ -199,11 +198,11 @@ const QImage& Document::image() const
 inline int invertedZoomForZoom(qreal zoom)
 {
     int invertedZoom;
-    for (invertedZoom = 1; zoom < 1. / (invertedZoom * 4); invertedZoom *= 2) {}
+    for (invertedZoom = 1; zoom < 1. / (invertedZoom * 4); invertedZoom *= 2) { }
     return invertedZoom;
 }
 
-const QImage& Document::downSampledImageForZoom(qreal zoom) const
+const QImage &Document::downSampledImageForZoom(qreal zoom) const
 {
     static const QImage sNullImage;
 
@@ -232,7 +231,7 @@ Document::LoadingState Document::loadingState() const
     return d->mImpl->loadingState();
 }
 
-void Document::switchToImpl(AbstractDocumentImpl* impl)
+void Document::switchToImpl(AbstractDocumentImpl *impl)
 {
     Q_ASSERT(impl);
     LOG("old impl:" << d->mImpl << "new impl:" << impl);
@@ -241,20 +240,15 @@ void Document::switchToImpl(AbstractDocumentImpl* impl)
     }
     d->mImpl = impl;
 
-    connect(d->mImpl, &AbstractDocumentImpl::metaInfoLoaded,
-            this, &Document::emitMetaInfoLoaded);
-    connect(d->mImpl, &AbstractDocumentImpl::loaded,
-            this, &Document::emitLoaded);
-    connect(d->mImpl, &AbstractDocumentImpl::loadingFailed,
-            this, &Document::emitLoadingFailed);
-    connect(d->mImpl, &AbstractDocumentImpl::imageRectUpdated,
-            this, &Document::imageRectUpdated);
-    connect(d->mImpl, &AbstractDocumentImpl::isAnimatedUpdated,
-            this, &Document::isAnimatedUpdated);
+    connect(d->mImpl, &AbstractDocumentImpl::metaInfoLoaded, this, &Document::emitMetaInfoLoaded);
+    connect(d->mImpl, &AbstractDocumentImpl::loaded, this, &Document::emitLoaded);
+    connect(d->mImpl, &AbstractDocumentImpl::loadingFailed, this, &Document::emitLoadingFailed);
+    connect(d->mImpl, &AbstractDocumentImpl::imageRectUpdated, this, &Document::imageRectUpdated);
+    connect(d->mImpl, &AbstractDocumentImpl::isAnimatedUpdated, this, &Document::isAnimatedUpdated);
     d->mImpl->init();
 }
 
-void Document::setImageInternal(const QImage& image)
+void Document::setImageInternal(const QImage &image)
 {
     d->mImage = image;
     d->mDownSampledImageMap.clear();
@@ -296,10 +290,10 @@ void Document::waitUntilLoaded()
     }
 }
 
-DocumentJob* Document::save(const QUrl &url, const QByteArray& format)
+DocumentJob *Document::save(const QUrl &url, const QByteArray &format)
 {
     waitUntilLoaded();
-    DocumentJob* job = d->mImpl->save(url, format);
+    DocumentJob *job = d->mImpl->save(url, format);
     if (!job) {
         qCWarning(GWENVIEW_LIB_LOG) << "Implementation does not support saving!";
         setErrorString(i18nc("@info", "Gwenview cannot save this kind of documents."));
@@ -312,13 +306,13 @@ DocumentJob* Document::save(const QUrl &url, const QByteArray& format)
     return job;
 }
 
-void Document::slotSaveResult(KJob* job)
+void Document::slotSaveResult(KJob *job)
 {
     if (job->error()) {
         setErrorString(job->errorString());
     } else {
         d->mUndoStack.setClean();
-        auto* saveJob = static_cast<SaveJob*>(job);
+        auto *saveJob = static_cast<SaveJob *>(job);
         d->mUrl = saveJob->newUrl();
         d->mImageMetaInfoModel.setUrl(d->mUrl);
         emit saved(saveJob->oldUrl(), d->mUrl);
@@ -330,7 +324,7 @@ QByteArray Document::format() const
     return d->mFormat;
 }
 
-void Document::setFormat(const QByteArray& format)
+void Document::setFormat(const QByteArray &format)
 {
     d->mFormat = format;
     emit metaInfoUpdated();
@@ -369,7 +363,7 @@ int Document::memoryUsage() const
     return usage;
 }
 
-void Document::setSize(const QSize& size)
+void Document::setSize(const QSize &size)
 {
     if (size == d->mSize) {
         return;
@@ -384,7 +378,7 @@ bool Document::isModified() const
     return !d->mUndoStack.isClean();
 }
 
-AbstractDocumentEditor* Document::editor()
+AbstractDocumentEditor *Document::editor()
 {
     return d->mImpl->editor();
 }
@@ -396,7 +390,7 @@ void Document::setExiv2Image(std::unique_ptr<Exiv2::Image> image)
     emit metaInfoUpdated();
 }
 
-void Document::setDownSampledImage(const QImage& image, int invertedZoom)
+void Document::setDownSampledImage(const QImage &image, int invertedZoom)
 {
     Q_ASSERT(!d->mDownSampledImageMap.contains(invertedZoom));
     d->mDownSampledImageMap[invertedZoom] = image;
@@ -408,12 +402,12 @@ QString Document::errorString() const
     return d->mErrorString;
 }
 
-void Document::setErrorString(const QString& string)
+void Document::setErrorString(const QString &string)
 {
     d->mErrorString = string;
 }
 
-ImageMetaInfoModel* Document::metaInfo() const
+ImageMetaInfoModel *Document::metaInfo() const
 {
     return &d->mImageMetaInfoModel;
 }
@@ -423,7 +417,7 @@ void Document::startLoadingFullImage()
     LoadingState state = loadingState();
     if (state <= MetaInfoLoaded) {
         // Schedule full image loading
-        auto* job = new LoadingJob;
+        auto *job = new LoadingJob;
         job->uiDelegate()->setAutoWarningHandlingEnabled(false);
         job->uiDelegate()->setAutoErrorHandlingEnabled(false);
         enqueueJob(job);
@@ -478,7 +472,7 @@ void Document::emitLoadingFailed()
     emit loadingFailed(d->mUrl);
 }
 
-QUndoStack* Document::undoStack() const
+QUndoStack *Document::undoStack() const
 {
     return &d->mUndoStack;
 }
@@ -515,7 +509,7 @@ void Document::stopAnimation()
     return d->mImpl->stopAnimation();
 }
 
-void Document::enqueueJob(DocumentJob* job)
+void Document::enqueueJob(DocumentJob *job)
 {
     LOG("job=" << job);
     job->setDocument(Ptr(this));
@@ -531,7 +525,7 @@ void Document::enqueueJob(DocumentJob* job)
     LOG_QUEUE("Job added", d);
 }
 
-void Document::slotJobFinished(KJob* job)
+void Document::slotJobFinished(KJob *job)
 {
     LOG("job=" << job);
     GV_RETURN_IF_FAIL(job == d->mCurrentJob.data());
@@ -555,7 +549,7 @@ bool Document::isBusy() const
     return !d->mJobQueue.isEmpty();
 }
 
-QSvgRenderer* Document::svgRenderer() const
+QSvgRenderer *Document::svgRenderer() const
 {
     return d->mImpl->svgRenderer();
 }

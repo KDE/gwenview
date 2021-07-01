@@ -34,16 +34,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
-struct MessageViewAdapterPrivate : Ui_MessageView
-{
+struct MessageViewAdapterPrivate : Ui_MessageView {
     Document::Ptr mDocument;
 };
 
 MessageViewAdapter::MessageViewAdapter()
-: d(new MessageViewAdapterPrivate)
+    : d(new MessageViewAdapterPrivate)
 {
-    auto* widget = new QWidget;
+    auto *widget = new QWidget;
     widget->installEventFilter(this);
     d->setupUi(widget);
     d->mMessageWidget->setCloseButtonVisible(false);
@@ -55,7 +53,7 @@ MessageViewAdapter::MessageViewAdapter()
     widget->setBackgroundRole(QPalette::Base);
     widget->setForegroundRole(QPalette::Text);
 
-    auto* proxy = new QGraphicsProxyWidget;
+    auto *proxy = new QGraphicsProxyWidget;
     proxy->setWidget(widget);
     setWidget(proxy);
 }
@@ -65,7 +63,7 @@ MessageViewAdapter::~MessageViewAdapter()
     delete d;
 }
 
-void MessageViewAdapter::setErrorMessage(const QString& main, const QString& detail)
+void MessageViewAdapter::setErrorMessage(const QString &main, const QString &detail)
 {
     if (main.isEmpty()) {
         d->mMessageWidget->hide();
@@ -82,7 +80,7 @@ void MessageViewAdapter::setErrorMessage(const QString& main, const QString& det
     d->mMessageWidget->setText(message);
 }
 
-void MessageViewAdapter::setInfoMessage(const QString& message)
+void MessageViewAdapter::setInfoMessage(const QString &message)
 {
     if (message.isEmpty()) {
         d->mMessageWidget->hide();
@@ -103,10 +101,10 @@ void MessageViewAdapter::setDocument(const Document::Ptr &doc)
     d->mDocument = doc;
 }
 
-bool MessageViewAdapter::eventFilter(QObject*, QEvent* ev)
+bool MessageViewAdapter::eventFilter(QObject *, QEvent *ev)
 {
     if (ev->type() == QEvent::KeyPress) {
-        auto* event = static_cast<QKeyEvent*>(ev);
+        auto *event = static_cast<QKeyEvent *>(ev);
         if (event->modifiers() != Qt::NoModifier) {
             return false;
         }

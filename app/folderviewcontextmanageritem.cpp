@@ -22,41 +22,41 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "folderviewcontextmanageritem.h"
 
 // Qt
+#include <QApplication>
+#include <QDir>
 #include <QDragEnterEvent>
 #include <QHeaderView>
-#include <QTreeView>
-#include <QDir>
 #include <QMimeData>
 #include <QStyleHints>
-#include <QApplication>
+#include <QTreeView>
 
 // KF
 #include <KUrlMimeData>
 
 // Local
+#include "fileoperations.h"
 #include "gwenview_app_debug.h"
+#include "lib/touch/touch_helper.h"
+#include "sidebar.h"
 #include <lib/contextmanager.h>
 #include <lib/eventwatcher.h>
-#include "sidebar.h"
-#include "fileoperations.h"
 #include <lib/scrollerutils.h>
-#include "lib/touch/touch_helper.h"
 
 namespace Gwenview
 {
-
 /**
  * This treeview accepts url drops
  */
 class UrlDropTreeView : public QTreeView
 {
 public:
-    explicit UrlDropTreeView(QWidget* parent = nullptr)
+    explicit UrlDropTreeView(QWidget *parent = nullptr)
         : QTreeView(parent)
-        {}
+    {
+    }
 
 protected:
-    void dragEnterEvent(QDragEnterEvent* event) override
+    void dragEnterEvent(QDragEnterEvent *event) override
     {
         QAbstractItemView::dragEnterEvent(event);
         setDirtyRegion(mDropRect);
@@ -65,7 +65,7 @@ protected:
         }
     }
 
-    void dragMoveEvent(QDragMoveEvent* event) override
+    void dragMoveEvent(QDragMoveEvent *event) override
     {
         QAbstractItemView::dragMoveEvent(event);
 
@@ -84,7 +84,7 @@ protected:
         }
     }
 
-    void dropEvent(QDropEvent* event) override
+    void dropEvent(QDropEvent *event) override
     {
         const QList<QUrl> urlList = KUrlMimeData::urlsFromMimeData(event->mimeData());
         const QModelIndex index = indexAt(event->pos());
@@ -92,11 +92,11 @@ protected:
             qCWarning(GWENVIEW_APP_LOG) << "Invalid index!";
             return;
         }
-        const QUrl destUrl = static_cast<MODEL_CLASS*>(model())->urlForIndex(index);
+        const QUrl destUrl = static_cast<MODEL_CLASS *>(model())->urlForIndex(index);
         FileOperations::showMenuForDroppedUrls(this, urlList, destUrl);
     }
 
-    bool viewportEvent(QEvent* event) override
+    bool viewportEvent(QEvent *event) override
     {
         if (event->type() == QEvent::TouchBegin) {
             return true;
@@ -109,20 +109,19 @@ protected:
 
         return QTreeView::viewportEvent(event);
     }
+
 private:
     QRect mDropRect;
 };
 
-
-FolderViewContextManagerItem::FolderViewContextManagerItem(ContextManager* manager)
-: AbstractContextManagerItem(manager)
+FolderViewContextManagerItem::FolderViewContextManagerItem(ContextManager *manager)
+    : AbstractContextManagerItem(manager)
 {
     mModel = nullptr;
 
     setupView();
 
-    connect(contextManager(), &ContextManager::currentDirUrlChanged,
-            this, &FolderViewContextManagerItem::slotCurrentDirUrlChanged);
+    connect(contextManager(), &ContextManager::currentDirUrlChanged, this, &FolderViewContextManagerItem::slotCurrentDirUrlChanged);
 }
 
 void FolderViewContextManagerItem::slotCurrentDirUrlChanged(const QUrl &url)
@@ -157,7 +156,7 @@ void FolderViewContextManagerItem::expandToSelectedUrl()
     QUrl url = mModel->urlForIndex(mExpandingIndex);
     if (mUrlToSelect == url) {
         // We found our url
-        QItemSelectionModel* selModel = mView->selectionModel();
+        QItemSelectionModel *selModel = mView->selectionModel();
         selModel->setCurrentIndex(mExpandingIndex, QItemSelectionModel::ClearAndSelect);
         mView->scrollTo(mExpandingIndex);
         mUrlToSelect = QUrl();
@@ -168,7 +167,7 @@ void FolderViewContextManagerItem::expandToSelectedUrl()
     }
 }
 
-void FolderViewContextManagerItem::slotRowsInserted(const QModelIndex& parentIndex, int /*start*/, int /*end*/)
+void FolderViewContextManagerItem::slotRowsInserted(const QModelIndex &parentIndex, int /*start*/, int /*end*/)
 {
     // Can't trigger the case where parentIndex is invalid, but it most
     // probably happen when root items are created. In this case we trigger
@@ -181,7 +180,7 @@ void FolderViewContextManagerItem::slotRowsInserted(const QModelIndex& parentInd
     }
 }
 
-void FolderViewContextManagerItem::slotActivated(const QModelIndex& index)
+void FolderViewContextManagerItem::slotActivated(const QModelIndex &index)
 {
     if (!index.isValid()) {
         return;
@@ -233,7 +232,7 @@ void FolderViewContextManagerItem::setupView()
     EventWatcher::install(mView, QEvent::Show, this, SLOT(expandToSelectedUrl()));
 }
 
-QModelIndex FolderViewContextManagerItem::findClosestIndex(const QModelIndex& parent, const QUrl& wantedUrl)
+QModelIndex FolderViewContextManagerItem::findClosestIndex(const QModelIndex &parent, const QUrl &wantedUrl)
 {
     Q_ASSERT(mModel);
     QModelIndex index = parent;
@@ -252,8 +251,8 @@ QModelIndex FolderViewContextManagerItem::findClosestIndex(const QModelIndex& pa
 
     QString relativePath = QDir(url.path()).relativeFilePath(wantedUrl.path());
     QModelIndex lastFoundIndex = index;
-   const QStringList relativePathList = relativePath.split(QDir::separator(), Qt::SkipEmptyParts);
-    for (const QString & pathPart : relativePathList) {
+    const QStringList relativePathList = relativePath.split(QDir::separator(), Qt::SkipEmptyParts);
+    for (const QString &pathPart : relativePathList) {
         bool found = false;
         for (int row = 0; row < mModel->rowCount(lastFoundIndex); ++row) {
             QModelIndex index = mModel->index(row, 0, lastFoundIndex);
@@ -271,7 +270,7 @@ QModelIndex FolderViewContextManagerItem::findClosestIndex(const QModelIndex& pa
     return lastFoundIndex;
 }
 
-QModelIndex FolderViewContextManagerItem::findRootIndex(const QUrl& wantedUrl)
+QModelIndex FolderViewContextManagerItem::findRootIndex(const QUrl &wantedUrl)
 {
     QModelIndex matchIndex;
     int matchUrlLength = 0;

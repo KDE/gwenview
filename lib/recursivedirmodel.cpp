@@ -22,8 +22,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "recursivedirmodel.h"
 
 // Local
-#include <lib/gvdebug.h>
 #include "gwenview_lib_debug.h"
+#include <lib/gvdebug.h>
 
 // KF
 #include <KDirLister>
@@ -34,9 +34,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 struct RecursiveDirModelPrivate {
-    KDirLister* mDirLister;
+    KDirLister *mDirLister;
 
     int rowForUrl(const QUrl &url) const
     {
@@ -57,7 +56,7 @@ struct RecursiveDirModelPrivate {
         }
     }
 
-    void addItem(const KFileItem& item)
+    void addItem(const KFileItem &item)
     {
         mRowForUrl.insert(item.url(), mList.count());
         mList.append(item);
@@ -71,7 +70,7 @@ struct RecursiveDirModelPrivate {
 
     // RecursiveDirModel can only access mList through this read-only getter.
     // This ensures it cannot introduce inconsistencies between mList and mRowForUrl.
-    const KFileItemList& list() const
+    const KFileItemList &list() const
     {
         return mList;
     }
@@ -81,9 +80,9 @@ private:
     QHash<QUrl, int> mRowForUrl;
 };
 
-RecursiveDirModel::RecursiveDirModel(QObject* parent)
-: QAbstractListModel(parent)
-, d(new RecursiveDirModelPrivate)
+RecursiveDirModel::RecursiveDirModel(QObject *parent)
+    : QAbstractListModel(parent)
+    , d(new RecursiveDirModelPrivate)
 {
     d->mDirLister = new KDirLister(this);
     connect(d->mDirLister, &KDirLister::itemsAdded, this, &RecursiveDirModel::slotItemsAdded);
@@ -116,7 +115,7 @@ void RecursiveDirModel::setUrl(const QUrl &url)
     d->mDirLister->openUrl(url);
 }
 
-int RecursiveDirModel::rowCount(const QModelIndex& parent) const
+int RecursiveDirModel::rowCount(const QModelIndex &parent) const
 {
     if (parent.isValid()) {
         return 0;
@@ -125,7 +124,7 @@ int RecursiveDirModel::rowCount(const QModelIndex& parent) const
     }
 }
 
-QVariant RecursiveDirModel::data(const QModelIndex& index, int role) const
+QVariant RecursiveDirModel::data(const QModelIndex &index, int role) const
 {
     if (index.parent().isValid()) {
         return QVariant();
@@ -149,11 +148,11 @@ QVariant RecursiveDirModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-void RecursiveDirModel::slotItemsAdded(const QUrl&, const KFileItemList& newList)
+void RecursiveDirModel::slotItemsAdded(const QUrl &, const KFileItemList &newList)
 {
     QList<QUrl> dirUrls;
     KFileItemList fileList;
-    for (const KFileItem& item : newList) {
+    for (const KFileItem &item : newList) {
         if (item.isFile()) {
             if (d->rowForUrl(item.url()) == -1) {
                 fileList << item;
@@ -165,7 +164,7 @@ void RecursiveDirModel::slotItemsAdded(const QUrl&, const KFileItemList& newList
 
     if (!fileList.isEmpty()) {
         beginInsertRows(QModelIndex(), d->list().count(), d->list().count() + fileList.count());
-        for (const KFileItem& item : qAsConst(fileList)) {
+        for (const KFileItem &item : qAsConst(fileList)) {
             d->addItem(item);
         }
         endInsertRows();
@@ -176,9 +175,9 @@ void RecursiveDirModel::slotItemsAdded(const QUrl&, const KFileItemList& newList
     }
 }
 
-void RecursiveDirModel::slotItemsDeleted(const KFileItemList& list)
+void RecursiveDirModel::slotItemsDeleted(const KFileItemList &list)
 {
-    for (const KFileItem& item : list) {
+    for (const KFileItem &item : list) {
         if (item.isDir()) {
             continue;
         }

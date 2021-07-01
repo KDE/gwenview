@@ -30,7 +30,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 namespace Gwenview
 {
-
 struct PrintOptionsPagePrivate;
 class PrintOptionsPage : public QWidget
 {
@@ -49,7 +48,7 @@ public:
         Inches,
     };
 
-    PrintOptionsPage(const QSize& imageSize);
+    PrintOptionsPage(const QSize &imageSize);
     ~PrintOptionsPage() override;
 
     Qt::Alignment alignment() const;
@@ -67,7 +66,7 @@ private Q_SLOTS:
     void adjustHeightToRatio();
 
 private:
-    PrintOptionsPagePrivate* const d;
+    PrintOptionsPagePrivate *const d;
 };
 
 } // namespace

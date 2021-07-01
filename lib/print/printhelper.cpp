@@ -28,8 +28,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Qt
 #include <QCheckBox>
 #include <QPainter>
-#include <QPrinter>
 #include <QPrintDialog>
+#include <QPrinter>
 #include <QUrl>
 
 // KF
@@ -40,19 +40,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 namespace Gwenview
 {
+struct PrintHelperPrivate {
+    QWidget *mParent;
 
-struct PrintHelperPrivate
-{
-    QWidget* mParent;
-
-    QSize adjustSize(PrintOptionsPage* optionsPage, Document::Ptr doc, int printerResolution, const QSize & viewportSize)
+    QSize adjustSize(PrintOptionsPage *optionsPage, Document::Ptr doc, int printerResolution, const QSize &viewportSize)
     {
         QSize size = doc->size();
         PrintOptionsPage::ScaleMode scaleMode = optionsPage->scaleMode();
         if (scaleMode == PrintOptionsPage::ScaleToPage) {
-            bool imageBiggerThanPaper =
-                size.width() > viewportSize.width()
-                || size.height() > viewportSize.height();
+            bool imageBiggerThanPaper = size.width() > viewportSize.width() || size.height() > viewportSize.height();
 
             if (imageBiggerThanPaper || optionsPage->enlargeSmallerImages()) {
                 size.scale(viewportSize, Qt::KeepAspectRatio);
@@ -79,7 +75,7 @@ struct PrintHelperPrivate
         return size;
     }
 
-    QPoint adjustPosition(PrintOptionsPage* optionsPage, const QSize& imageSize, const QSize & viewportSize)
+    QPoint adjustPosition(PrintOptionsPage *optionsPage, const QSize &imageSize, const QSize &viewportSize)
     {
         Qt::Alignment alignment = optionsPage->alignment();
         int posX, posY;
@@ -104,8 +100,8 @@ struct PrintHelperPrivate
     }
 };
 
-PrintHelper::PrintHelper(QWidget* parent)
-: d(new PrintHelperPrivate)
+PrintHelper::PrintHelper(QWidget *parent)
+    : d(new PrintHelperPrivate)
 {
     d->mParent = parent;
 }
@@ -121,12 +117,12 @@ void PrintHelper::print(Document::Ptr doc)
     QPrinter printer;
     printer.setDocName(doc->url().fileName());
 
-    auto* optionsPage = new PrintOptionsPage(doc->size());
+    auto *optionsPage = new PrintOptionsPage(doc->size());
     optionsPage->loadConfig();
 
     DialogGuard<QPrintDialog> dialog(&printer, d->mParent);
-#if defined (Q_OS_UNIX) && !defined(Q_OS_DARWIN)
-    dialog->setOptionTabs(QList<QWidget*>() << optionsPage);
+#if defined(Q_OS_UNIX) && !defined(Q_OS_DARWIN)
+    dialog->setOptionTabs(QList<QWidget *>() << optionsPage);
 #else
     optionsPage->setParent(dialog.data());
 #endif

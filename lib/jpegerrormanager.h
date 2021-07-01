@@ -31,7 +31,6 @@ extern "C" {
 
 namespace Gwenview
 {
-
 /**
  * A simple error manager which overrides jpeg_error_mgr.error_exit to avoid
  * calls to exit(). It uses setjmp, which I don't like, but I don't fill like
@@ -40,10 +39,9 @@ namespace Gwenview
  * In order to use it, give an instance of it to jpeg_decompress_struct.err,
  * then call setjmp(errorManager.jmp_buffer)
  */
-struct JPEGErrorManager : public jpeg_error_mgr
-{
+struct JPEGErrorManager : public jpeg_error_mgr {
     JPEGErrorManager()
-    : jpeg_error_mgr()
+        : jpeg_error_mgr()
     {
         jpeg_std_error(this);
         error_exit = errorExitCallBack;
@@ -53,10 +51,10 @@ struct JPEGErrorManager : public jpeg_error_mgr
 
     static void errorExitCallBack(j_common_ptr cinfo)
     {
-        auto* myerr = static_cast<JPEGErrorManager*>(cinfo->err);
+        auto *myerr = static_cast<JPEGErrorManager *>(cinfo->err);
         char buffer[JMSG_LENGTH_MAX];
         (*cinfo->err->format_message)(cinfo, buffer);
-        qCWarning(GWENVIEW_LIB_LOG) << buffer ;
+        qCWarning(GWENVIEW_LIB_LOG) << buffer;
         longjmp(myerr->jmp_buffer, 1);
     }
 };

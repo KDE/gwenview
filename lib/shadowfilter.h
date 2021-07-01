@@ -35,7 +35,6 @@ class QWidget;
 
 namespace Gwenview
 {
-
 struct ShadowFilterPrivate;
 /**
  * Paint shadows on widget edges
@@ -50,17 +49,17 @@ public:
         RightEdge,
         BottomEdge,
     };
-    explicit ShadowFilter(QWidget* parent);
+    explicit ShadowFilter(QWidget *parent);
     ~ShadowFilter() override;
 
-    void setShadow(WidgetEdge edge, const QColor& color);
+    void setShadow(WidgetEdge edge, const QColor &color);
     void reset();
 
 protected:
-    bool eventFilter(QObject*, QEvent*) override;
+    bool eventFilter(QObject *, QEvent *) override;
 
 private:
-    ShadowFilterPrivate* const d;
+    ShadowFilterPrivate *const d;
 };
 
 } // namespace

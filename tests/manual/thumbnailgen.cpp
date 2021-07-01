@@ -19,30 +19,28 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Local
-#include <lib/thumbnailprovider/thumbnailprovider.h>
 #include <../auto/testutils.h>
 #include <lib/about.h>
+#include <lib/thumbnailprovider/thumbnailprovider.h>
 
 // KF
 #include <KAboutData>
 #include <KLocalizedString>
 
 // Qt
+#include <QCommandLineParser>
 #include <QDir>
 #include <QTime>
 #include <QtDebug>
-#include <QCommandLineParser>
 
 using namespace Gwenview;
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
     KLocalizedString::setApplicationDomain("thumbnailgen");
-    QScopedPointer<KAboutData> aboutData(
-        Gwenview::createAboutData(
-            QStringLiteral("thumbnailgen"), /* component name */
-            i18n("thumbnailgen")                    /* display name */
-        ));
+    QScopedPointer<KAboutData> aboutData(Gwenview::createAboutData(QStringLiteral("thumbnailgen"), /* component name */
+                                                                   i18n("thumbnailgen") /* display name */
+                                                                   ));
 
     QApplication app(argc, argv);
 
@@ -53,12 +51,10 @@ int main(int argc, char** argv)
     parser.addPositionalArgument("image-dir", i18n("Image dir to open"));
     parser.addPositionalArgument("size", i18n("What size of thumbnails to generate. Can be either 'normal' or 'large'"));
     parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("t") << QStringLiteral("thumbnail-dir"),
-                                        i18n("Use <dir> instead of ~/.thumbnails to store thumbnails"), "thumbnail-dir"));
+                                        i18n("Use <dir> instead of ~/.thumbnails to store thumbnails"),
+                                        "thumbnail-dir"));
     parser.process(app);
     aboutData->processCommandLine(&parser);
-
-
-
 
     // Read cmdline options
     QStringList args = parser.positionalArguments();

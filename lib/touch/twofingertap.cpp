@@ -21,8 +21,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "twofingertap.h"
 
 // Qt
-#include <QTouchEvent>
 #include <QGraphicsWidget>
+#include <QTouchEvent>
 
 // KF
 
@@ -32,17 +32,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
-struct TwoFingerTapRecognizerPrivate
-{
-    TwoFingerTapRecognizer* q;
+struct TwoFingerTapRecognizerPrivate {
+    TwoFingerTapRecognizer *q;
     bool mTargetIsGrapicsWidget = false;
     qint64 mTouchBeginnTimestamp;
     bool mGestureTriggered;
 };
 
-TwoFingerTapRecognizer::TwoFingerTapRecognizer() : QGestureRecognizer()
-, d (new TwoFingerTapRecognizerPrivate)
+TwoFingerTapRecognizer::TwoFingerTapRecognizer()
+    : QGestureRecognizer()
+    , d(new TwoFingerTapRecognizerPrivate)
 {
     d->q = this;
 }
@@ -52,22 +51,23 @@ TwoFingerTapRecognizer::~TwoFingerTapRecognizer()
     delete d;
 }
 
-QGesture* TwoFingerTapRecognizer::create(QObject*)
+QGesture *TwoFingerTapRecognizer::create(QObject *)
 {
-    return static_cast<QGesture*>(new TwoFingerTap());
+    return static_cast<QGesture *>(new TwoFingerTap());
 }
 
-QGestureRecognizer::Result TwoFingerTapRecognizer::recognize(QGesture* state, QObject* watched, QEvent* event)
+QGestureRecognizer::Result TwoFingerTapRecognizer::recognize(QGesture *state, QObject *watched, QEvent *event)
 {
-    //Because of a bug in Qt in a gesture event in a graphicsview, all gestures are trigger twice
-    //https://bugreports.qt.io/browse/QTBUG-13103
-    if (qobject_cast<QGraphicsWidget*>(watched)) d->mTargetIsGrapicsWidget = true;
-    if (d->mTargetIsGrapicsWidget && watched->isWidgetType()) return Ignore;
-
+    // Because of a bug in Qt in a gesture event in a graphicsview, all gestures are trigger twice
+    // https://bugreports.qt.io/browse/QTBUG-13103
+    if (qobject_cast<QGraphicsWidget *>(watched))
+        d->mTargetIsGrapicsWidget = true;
+    if (d->mTargetIsGrapicsWidget && watched->isWidgetType())
+        return Ignore;
 
     switch (event->type()) {
     case QEvent::TouchBegin: {
-        auto* touchEvent = static_cast<QTouchEvent*>(event);
+        auto *touchEvent = static_cast<QTouchEvent *>(event);
         d->mTouchBeginnTimestamp = touchEvent->timestamp();
         state->setHotSpot(touchEvent->touchPoints().first().screenPos());
         d->mGestureTriggered = false;
@@ -75,7 +75,7 @@ QGestureRecognizer::Result TwoFingerTapRecognizer::recognize(QGesture* state, QO
     }
 
     case QEvent::TouchUpdate: {
-        auto* touchEvent = static_cast<QTouchEvent*>(event);
+        auto *touchEvent = static_cast<QTouchEvent *>(event);
         state->setHotSpot(touchEvent->touchPoints().first().screenPos());
 
         if (touchEvent->touchPoints().size() >> 2) {
@@ -84,11 +84,13 @@ QGestureRecognizer::Result TwoFingerTapRecognizer::recognize(QGesture* state, QO
         }
 
         if (touchEvent->touchPoints().size() == 2) {
-            if ((touchEvent->touchPoints().first().startPos() - touchEvent->touchPoints().first().pos()).manhattanLength() > Touch_Helper::Touch::wiggleRoomForTap) {
+            if ((touchEvent->touchPoints().first().startPos() - touchEvent->touchPoints().first().pos()).manhattanLength()
+                > Touch_Helper::Touch::wiggleRoomForTap) {
                 d->mGestureTriggered = false;
                 return CancelGesture;
             }
-            if ((touchEvent->touchPoints().at(1).startPos() - touchEvent->touchPoints().at(1).pos()).manhattanLength() > Touch_Helper::Touch::wiggleRoomForTap) {
+            if ((touchEvent->touchPoints().at(1).startPos() - touchEvent->touchPoints().at(1).pos()).manhattanLength()
+                > Touch_Helper::Touch::wiggleRoomForTap) {
                 d->mGestureTriggered = false;
                 return CancelGesture;
             }
@@ -109,8 +111,8 @@ QGestureRecognizer::Result TwoFingerTapRecognizer::recognize(QGesture* state, QO
     return Ignore;
 }
 
-TwoFingerTap::TwoFingerTap(QObject* parent)
-: QGesture(parent)
+TwoFingerTap::TwoFingerTap(QObject *parent)
+    : QGesture(parent)
 {
 }
 

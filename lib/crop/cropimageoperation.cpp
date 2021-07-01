@@ -28,20 +28,20 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KLocalizedString>
 
 // Local
-#include "gwenview_lib_debug.h"
+#include "document/abstractdocumenteditor.h"
 #include "document/document.h"
 #include "document/documentjob.h"
-#include "document/abstractdocumenteditor.h"
+#include "gwenview_lib_debug.h"
 
 namespace Gwenview
 {
-
 class CropJob : public ThreadedDocumentJob
 {
 public:
-    CropJob(const QRect& rect)
+    CropJob(const QRect &rect)
         : mRect(rect)
-    {}
+    {
+    }
 
     void threadedStart() override
     {
@@ -58,14 +58,13 @@ private:
     QRect mRect;
 };
 
-struct CropImageOperationPrivate
-{
+struct CropImageOperationPrivate {
     QRect mRect;
     QImage mOriginalImage;
 };
 
-CropImageOperation::CropImageOperation(const QRect& rect)
-: d(new CropImageOperationPrivate)
+CropImageOperation::CropImageOperation(const QRect &rect)
+    : d(new CropImageOperationPrivate)
 {
     d->mRect = rect;
     setText(i18n("Crop"));

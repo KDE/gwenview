@@ -32,18 +32,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
-DocumentInfoProvider::DocumentInfoProvider(SortedDirModel* model)
-: AbstractDocumentInfoProvider(model)
-, mDirModel(model)
+DocumentInfoProvider::DocumentInfoProvider(SortedDirModel *model)
+    : AbstractDocumentInfoProvider(model)
+    , mDirModel(model)
 {
-    connect(DocumentFactory::instance(), &DocumentFactory::documentBusyStateChanged,
-            this, &AbstractDocumentInfoProvider::busyStateChanged);
-    connect(DocumentFactory::instance(), &DocumentFactory::documentChanged,
-            this, &AbstractDocumentInfoProvider::documentChanged);
+    connect(DocumentFactory::instance(), &DocumentFactory::documentBusyStateChanged, this, &AbstractDocumentInfoProvider::busyStateChanged);
+    connect(DocumentFactory::instance(), &DocumentFactory::documentChanged, this, &AbstractDocumentInfoProvider::documentChanged);
 }
 
-void DocumentInfoProvider::thumbnailForDocument(const QUrl &url, ThumbnailGroup::Enum group, QPixmap* outPix, QSize* outFullSize) const
+void DocumentInfoProvider::thumbnailForDocument(const QUrl &url, ThumbnailGroup::Enum group, QPixmap *outPix, QSize *outFullSize) const
 {
     Q_ASSERT(outPix);
     Q_ASSERT(outFullSize);

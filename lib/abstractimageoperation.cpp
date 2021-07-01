@@ -22,8 +22,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "abstractimageoperation.h"
 
 // Qt
-#include <QUrl>
 #include <QTimer>
+#include <QUrl>
 
 // KF
 #include <KJob>
@@ -34,13 +34,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 namespace Gwenview
 {
-
 class ImageOperationCommand : public QUndoCommand
 {
 public:
-    ImageOperationCommand(AbstractImageOperation* op)
+    ImageOperationCommand(AbstractImageOperation *op)
         : mOp(op)
-    {}
+    {
+    }
 
     ~ImageOperationCommand() override
     {
@@ -58,18 +58,17 @@ public:
     }
 
 private:
-    AbstractImageOperation* const mOp;
+    AbstractImageOperation *const mOp;
 };
 
-struct AbstractImageOperationPrivate
-{
+struct AbstractImageOperationPrivate {
     QString mText;
     QUrl mUrl;
-    ImageOperationCommand* mCommand;
+    ImageOperationCommand *mCommand;
 };
 
 AbstractImageOperation::AbstractImageOperation()
-: d(new AbstractImageOperationPrivate)
+    : d(new AbstractImageOperationPrivate)
 {
 }
 
@@ -108,17 +107,17 @@ void AbstractImageOperation::finish(bool ok)
     }
 }
 
-void AbstractImageOperation::finishFromKJob(KJob* job)
+void AbstractImageOperation::finishFromKJob(KJob *job)
 {
     finish(job->error() == KJob::NoError);
 }
 
-void AbstractImageOperation::setText(const QString& text)
+void AbstractImageOperation::setText(const QString &text)
 {
     d->mText = text;
 }
 
-void AbstractImageOperation::redoAsDocumentJob(DocumentJob* job)
+void AbstractImageOperation::redoAsDocumentJob(DocumentJob *job)
 {
     connect(job, &KJob::result, this, &AbstractImageOperation::finishFromKJob);
     document()->enqueueJob(job);

@@ -20,10 +20,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <hud/hudbuttonbox.h>
 
 // Local
+#include <graphicswidgetfloater.h>
 #include <hud/hudbutton.h>
 #include <hud/hudcountdown.h>
 #include <hud/hudlabel.h>
-#include <graphicswidgetfloater.h>
 
 // KF
 
@@ -34,32 +34,30 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace Gwenview
 {
-
-struct HudButtonBoxPrivate
-{
-    QGraphicsLinearLayout* mLayout;
-    HudLabel* mLabel;
-    QList<HudButton*> mButtonList;
-    HudCountDown* mCountDown;
+struct HudButtonBoxPrivate {
+    QGraphicsLinearLayout *mLayout;
+    HudLabel *mLabel;
+    QList<HudButton *> mButtonList;
+    HudCountDown *mCountDown;
 
     void updateButtonWidths()
     {
         qreal minWidth = 0;
-        for (HudButton* button : qAsConst(mButtonList)) {
+        for (HudButton *button : qAsConst(mButtonList)) {
             minWidth = qMax(minWidth, button->preferredWidth());
         }
-        for (HudButton* button : qAsConst(mButtonList)) {
+        for (HudButton *button : qAsConst(mButtonList)) {
             button->setMinimumWidth(minWidth);
         }
     }
 };
 
-HudButtonBox::HudButtonBox(QGraphicsWidget* parent)
-: HudWidget(parent)
-, d(new HudButtonBoxPrivate)
+HudButtonBox::HudButtonBox(QGraphicsWidget *parent)
+    : HudWidget(parent)
+    , d(new HudButtonBoxPrivate)
 {
     d->mCountDown = nullptr;
-    auto* content = new QGraphicsWidget();
+    auto *content = new QGraphicsWidget();
     d->mLayout = new QGraphicsLinearLayout(Qt::Vertical, content);
     d->mLabel = new HudLabel();
     d->mLayout->addItem(d->mLabel);
@@ -81,7 +79,7 @@ void HudButtonBox::addCountDown(qreal ms)
     d->mCountDown = new HudCountDown(this);
     connect(d->mCountDown, &HudCountDown::timeout, this, &HudButtonBox::fadeOut);
 
-    auto* floater = new GraphicsWidgetFloater(this);
+    auto *floater = new GraphicsWidgetFloater(this);
     floater->setChildWidget(d->mCountDown);
     floater->setAlignment(Qt::AlignRight | Qt::AlignBottom);
     floater->setHorizontalMargin(6);
@@ -90,17 +88,17 @@ void HudButtonBox::addCountDown(qreal ms)
     d->mCountDown->start(ms);
 }
 
-HudButton* HudButtonBox::addAction(QAction* action, const QString& overrideText)
+HudButton *HudButtonBox::addAction(QAction *action, const QString &overrideText)
 {
     QString text = overrideText.isEmpty() ? action->text() : overrideText;
-    HudButton* button = addButton(text);
+    HudButton *button = addButton(text);
     connect(button, &HudButton::clicked, action, &QAction::trigger);
     return button;
 }
 
-HudButton* HudButtonBox::addButton(const QString& text)
+HudButton *HudButtonBox::addButton(const QString &text)
 {
-    auto* button = new HudButton();
+    auto *button = new HudButton();
     connect(button, &HudButton::clicked, this, &HudButtonBox::fadeOut);
     button->setText(text);
     d->mLayout->addItem(button);
@@ -110,16 +108,15 @@ HudButton* HudButtonBox::addButton(const QString& text)
     return button;
 }
 
-void HudButtonBox::setText(const QString& msg)
+void HudButtonBox::setText(const QString &msg)
 {
     d->mLabel->setText(msg);
 }
 
-void HudButtonBox::showEvent(QShowEvent* event)
+void HudButtonBox::showEvent(QShowEvent *event)
 {
     HudWidget::showEvent(event);
     d->updateButtonWidths();
 }
-
 
 } // namespace

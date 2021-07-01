@@ -32,7 +32,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 struct HudLabelPrivate;
 /**
  *
@@ -41,15 +40,15 @@ class GWENVIEWLIB_EXPORT HudLabel : public QGraphicsWidget
 {
     Q_OBJECT
 public:
-    explicit HudLabel(QGraphicsItem* parent = nullptr);
+    explicit HudLabel(QGraphicsItem *parent = nullptr);
     ~HudLabel() override;
 
-    void setText(const QString&);
+    void setText(const QString &);
 
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override;
 
 private:
-    HudLabelPrivate* const d;
+    HudLabelPrivate *const d;
 };
 
 } // namespace

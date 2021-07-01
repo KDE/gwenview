@@ -31,21 +31,21 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 /**
  * Generate a nice pixmap to represent dragged images
  */
 namespace DragPixmapGenerator
 {
-
-enum { MaxCount = 6, };
+enum {
+    MaxCount = 6,
+};
 
 struct DragPixmap {
     QPixmap pix;
     QPoint hotSpot;
 };
 
-DragPixmap generate(const QList<QPixmap>& pixmaps, int totalCount);
+DragPixmap generate(const QList<QPixmap> &pixmaps, int totalCount);
 
 } // DragPixmapGenerator namespace
 

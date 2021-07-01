@@ -45,15 +45,15 @@ class GWENVIEWLIB_EXPORT HudMessageBubble : public HudWidget
 {
     Q_OBJECT
 public:
-    explicit HudMessageBubble(QGraphicsWidget* parent = nullptr);
+    explicit HudMessageBubble(QGraphicsWidget *parent = nullptr);
     ~HudMessageBubble() override;
 
-    void setText(const QString& text);
+    void setText(const QString &text);
 
-    HudButton* addButton(const KGuiItem&);
+    HudButton *addButton(const KGuiItem &);
 
 private:
-    HudMessageBubblePrivate* const d;
+    HudMessageBubblePrivate *const d;
 };
 
 } // namespace

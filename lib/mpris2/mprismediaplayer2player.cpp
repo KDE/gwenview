@@ -23,33 +23,33 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // lib
 #include "gwenview_lib_debug.h"
-#include <slideshow.h>
-#include <mimetypeutils.h>
 #include <contextmanager.h>
-#include <imagemetainfomodel.h>
 #include <document/documentfactory.h>
+#include <imagemetainfomodel.h>
+#include <mimetypeutils.h>
 #include <semanticinfo/semanticinfodirmodel.h>
 #include <semanticinfo/sorteddirmodel.h>
+#include <slideshow.h>
 // KF
-#include <KLocalizedString>
 #include <KFileItem>
+#include <KLocalizedString>
 // Qt
-#include <QDBusObjectPath>
 #include <QAction>
+#include <QDBusObjectPath>
 
 namespace Gwenview
 {
-
 static const double MAX_RATE = 1.0;
 static const double MIN_RATE = 1.0;
 
-
 MprisMediaPlayer2Player::MprisMediaPlayer2Player(const QString &objectDBusPath,
-                                                 SlideShow* slideShow,
-                                                 ContextManager* contextManager,
-                                                 QAction* toggleSlideShowAction, QAction* fullScreenAction,
-                                                 QAction* previousAction, QAction* nextAction,
-                                                 QObject* parent)
+                                                 SlideShow *slideShow,
+                                                 ContextManager *contextManager,
+                                                 QAction *toggleSlideShowAction,
+                                                 QAction *fullScreenAction,
+                                                 QAction *previousAction,
+                                                 QAction *nextAction,
+                                                 QObject *parent)
     : DBusAbstractAdaptor(objectDBusPath, parent)
     , mSlideShow(slideShow)
     , mContextManager(contextManager)
@@ -63,22 +63,14 @@ MprisMediaPlayer2Player::MprisMediaPlayer2Player(const QString &objectDBusPath,
 {
     updatePlaybackStatus();
 
-    connect(mSlideShow, &SlideShow::stateChanged,
-            this, &MprisMediaPlayer2Player::onSlideShowStateChanged);
-    connect(mSlideShow, &SlideShow::intervalChanged,
-            this, &MprisMediaPlayer2Player::onMetaInfoUpdated);
-    connect(mContextManager, &ContextManager::currentUrlChanged,
-            this, &MprisMediaPlayer2Player::onCurrentUrlChanged);
-    connect(mSlideShow->randomAction(), &QAction::toggled,
-            this, &MprisMediaPlayer2Player::onRandomActionToggled);
-    connect(mToggleSlideShowAction, &QAction::changed,
-            this, &MprisMediaPlayer2Player::onToggleSlideShowActionChanged);
-    connect(mFullScreenAction, &QAction::toggled,
-            this, &MprisMediaPlayer2Player::onFullScreenActionToggled);
-    connect(mNextAction, &QAction::changed,
-            this, &MprisMediaPlayer2Player::onNextActionChanged);
-    connect(mPreviousAction, &QAction::changed,
-            this, &MprisMediaPlayer2Player::onPreviousActionChanged);
+    connect(mSlideShow, &SlideShow::stateChanged, this, &MprisMediaPlayer2Player::onSlideShowStateChanged);
+    connect(mSlideShow, &SlideShow::intervalChanged, this, &MprisMediaPlayer2Player::onMetaInfoUpdated);
+    connect(mContextManager, &ContextManager::currentUrlChanged, this, &MprisMediaPlayer2Player::onCurrentUrlChanged);
+    connect(mSlideShow->randomAction(), &QAction::toggled, this, &MprisMediaPlayer2Player::onRandomActionToggled);
+    connect(mToggleSlideShowAction, &QAction::changed, this, &MprisMediaPlayer2Player::onToggleSlideShowActionChanged);
+    connect(mFullScreenAction, &QAction::toggled, this, &MprisMediaPlayer2Player::onFullScreenActionToggled);
+    connect(mNextAction, &QAction::changed, this, &MprisMediaPlayer2Player::onNextActionChanged);
+    connect(mPreviousAction, &QAction::changed, this, &MprisMediaPlayer2Player::onPreviousActionChanged);
 }
 
 MprisMediaPlayer2Player::~MprisMediaPlayer2Player()
@@ -87,13 +79,11 @@ MprisMediaPlayer2Player::~MprisMediaPlayer2Player()
 
 bool MprisMediaPlayer2Player::updatePlaybackStatus()
 {
-    const QString newStatus =
-        (!mSlideShowEnabled || !mFullScreenAction->isChecked()) ?
-            QStringLiteral("Stopped") :
-        mSlideShow->isRunning() ?
-            QStringLiteral("Playing") :
-        /* else */
-            QStringLiteral("Paused");
+    const QString newStatus = (!mSlideShowEnabled || !mFullScreenAction->isChecked()) ? QStringLiteral("Stopped")
+        : mSlideShow->isRunning()                                                     ? QStringLiteral("Playing")
+                                                                                      :
+                                  /* else */
+        QStringLiteral("Paused");
 
     const bool changed = (newStatus != mPlaybackStatus);
     if (changed) {
@@ -117,7 +107,6 @@ void MprisMediaPlayer2Player::Next()
 {
     mNextAction->trigger();
 }
-
 
 bool MprisMediaPlayer2Player::canGoPrevious() const
 {
@@ -215,7 +204,6 @@ bool MprisMediaPlayer2Player::isShuffle() const
     return mSlideShow->randomAction()->isChecked();
 }
 
-
 bool MprisMediaPlayer2Player::canSeek() const
 {
     return false;
@@ -231,13 +219,13 @@ void MprisMediaPlayer2Player::Seek(qlonglong offset)
     Q_UNUSED(offset);
 }
 
-void MprisMediaPlayer2Player::SetPosition(const QDBusObjectPath& trackId, qlonglong pos)
+void MprisMediaPlayer2Player::SetPosition(const QDBusObjectPath &trackId, qlonglong pos)
 {
     Q_UNUSED(trackId);
     Q_UNUSED(pos);
 }
 
-void MprisMediaPlayer2Player::OpenUri(const QString& uri)
+void MprisMediaPlayer2Player::OpenUri(const QString &uri)
 {
     Q_UNUSED(uri);
 }
@@ -252,14 +240,13 @@ void MprisMediaPlayer2Player::onSlideShowStateChanged()
     signalPropertyChange(QStringLiteral("PlaybackStatus"), mPlaybackStatus);
 }
 
-void MprisMediaPlayer2Player::onCurrentUrlChanged(const QUrl& url)
+void MprisMediaPlayer2Player::onCurrentUrlChanged(const QUrl &url)
 {
     if (url.isEmpty()) {
         mCurrentDocument = Document::Ptr();
     } else {
         mCurrentDocument = DocumentFactory::instance()->load(url);
-        connect(mCurrentDocument.data(), &Document::metaInfoUpdated,
-                this, &MprisMediaPlayer2Player::onMetaInfoUpdated);
+        connect(mCurrentDocument.data(), &Document::metaInfoUpdated, this, &MprisMediaPlayer2Player::onMetaInfoUpdated);
     }
 
     onMetaInfoUpdated();
@@ -272,7 +259,7 @@ void MprisMediaPlayer2Player::onMetaInfoUpdated()
 
     if (mCurrentDocument) {
         const QUrl url = mCurrentDocument->url();
-        ImageMetaInfoModel* metaInfoModel = mCurrentDocument->metaInfo();
+        ImageMetaInfoModel *metaInfoModel = mCurrentDocument->metaInfo();
 
         // We need some unique id mapping to urls. The index in the list is not reliable,
         // as images can be added/removed during a running slideshow
@@ -280,8 +267,7 @@ void MprisMediaPlayer2Player::onMetaInfoUpdated()
         // matching the D-Bus object path spec
         const QString slideId = QString::fromLatin1(url.toString().toUtf8().toBase64(QByteArray::OmitTrailingEquals));
         const QDBusObjectPath trackId(QStringLiteral("/org/kde/gwenview/imagelist/") + slideId);
-        updatedMetaData.insert(QStringLiteral("mpris:trackid"),
-                        QVariant::fromValue<QDBusObjectPath>(trackId));
+        updatedMetaData.insert(QStringLiteral("mpris:trackid"), QVariant::fromValue<QDBusObjectPath>(trackId));
 
         // TODO: for videos also get and report the length
         if (MimeTypeUtils::urlKind(url) != MimeTypeUtils::KIND_VIDEO) {
@@ -367,7 +353,6 @@ void MprisMediaPlayer2Player::onNextActionChanged()
 
     signalPropertyChange(QStringLiteral("CanGoNext"), mNextEnabled);
 }
-
 
 void MprisMediaPlayer2Player::onPreviousActionChanged()
 {

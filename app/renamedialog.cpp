@@ -23,30 +23,28 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "renamedialog.h"
 
 // Qt
-#include <QPushButton>
 #include <QMimeDatabase>
+#include <QPushButton>
 
 // KF
-#include <KLocalizedString>
 #include <KGuiItem>
+#include <KLocalizedString>
 
 // Local
 #include <ui_renamedialog.h>
 
 namespace Gwenview
 {
-
-struct RenameDialogPrivate : public Ui_RenameDialog
-{
+struct RenameDialogPrivate : public Ui_RenameDialog {
 };
 
-RenameDialog::RenameDialog(QWidget* parent)
-: QDialog(parent)
-, d(new RenameDialogPrivate)
+RenameDialog::RenameDialog(QWidget *parent)
+    : QDialog(parent)
+    , d(new RenameDialogPrivate)
 {
     d->setupUi(this);
 
-    QPushButton* okButton = d->mButtonBox->button(QDialogButtonBox::Ok);
+    QPushButton *okButton = d->mButtonBox->button(QDialogButtonBox::Ok);
     KGuiItem::assign(okButton, KGuiItem(i18nc("@action:button", "Rename"), "edit-rename"));
 
     connect(d->mFilename, &QLineEdit::textChanged, this, &RenameDialog::updateButtons);
@@ -57,7 +55,7 @@ RenameDialog::~RenameDialog()
     delete d;
 }
 
-void RenameDialog::setFilename(const QString& filename)
+void RenameDialog::setFilename(const QString &filename)
 {
     d->mFilename->setText(filename);
     d->mFilenameLabel->setText(xi18n("Rename <filename>%1</filename> to:", filename));
@@ -78,7 +76,8 @@ QString RenameDialog::filename() const
     return d->mFilename->text();
 }
 
-void RenameDialog::updateButtons() {
+void RenameDialog::updateButtons()
+{
     const bool enableButton = !d->mFilename->text().isEmpty();
     d->mButtonBox->button(QDialogButtonBox::Ok)->setEnabled(enableButton);
 }

@@ -31,7 +31,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 #undef ENABLE_LOG
 #undef LOG
 //#define ENABLE_LOG
@@ -41,9 +40,8 @@ namespace Gwenview
 #define LOG(x) ;
 #endif
 
-struct PreloaderPrivate
-{
-    Preloader* q;
+struct PreloaderPrivate {
+    Preloader *q;
     Document::Ptr mDocument;
     QSize mSize;
 
@@ -56,9 +54,9 @@ struct PreloaderPrivate
     }
 };
 
-Preloader::Preloader(QObject* parent)
-: QObject(parent)
-, d(new PreloaderPrivate)
+Preloader::Preloader(QObject *parent)
+    : QObject(parent)
+    , d(new PreloaderPrivate)
 {
     d->q = this;
 }
@@ -68,7 +66,7 @@ Preloader::~Preloader()
     delete d;
 }
 
-void Preloader::preload(const QUrl &url, const QSize& size)
+void Preloader::preload(const QUrl &url, const QSize &size)
 {
     LOG("url=" << url);
     if (d->mDocument) {
@@ -77,8 +75,7 @@ void Preloader::preload(const QUrl &url, const QSize& size)
 
     d->mDocument = DocumentFactory::instance()->load(url);
     d->mSize = size;
-    connect(d->mDocument.data(), &Document::metaInfoUpdated,
-            this, &Preloader::doPreload);
+    connect(d->mDocument.data(), &Document::metaInfoUpdated, this, &Preloader::doPreload);
 
     if (d->mDocument->size().isValid()) {
         LOG("size is already available");
@@ -103,10 +100,7 @@ void Preloader::doPreload()
         return;
     }
 
-    qreal zoom = qMin(
-                     d->mSize.width() / qreal(d->mDocument->width()),
-                     d->mSize.height() / qreal(d->mDocument->height())
-                 );
+    qreal zoom = qMin(d->mSize.width() / qreal(d->mDocument->width()), d->mSize.height() / qreal(d->mDocument->height()));
 
     if (zoom < Document::maxDownSampledZoom()) {
         LOG("preloading down sampled, zoom=" << zoom);

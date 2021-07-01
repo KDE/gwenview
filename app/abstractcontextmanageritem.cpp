@@ -24,16 +24,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 namespace Gwenview
 {
-
-struct AbstractContextManagerItemPrivate
-{
-    ContextManager* mContextManager = nullptr;
-    QWidget* mWidget = nullptr;
+struct AbstractContextManagerItemPrivate {
+    ContextManager *mContextManager = nullptr;
+    QWidget *mWidget = nullptr;
 };
 
-AbstractContextManagerItem::AbstractContextManagerItem(ContextManager* manager)
-: QObject(manager)
-, d(new AbstractContextManagerItemPrivate)
+AbstractContextManagerItem::AbstractContextManagerItem(ContextManager *manager)
+    : QObject(manager)
+    , d(new AbstractContextManagerItemPrivate)
 {
     d->mContextManager = manager;
     d->mWidget = nullptr;
@@ -44,17 +42,17 @@ AbstractContextManagerItem::~AbstractContextManagerItem()
     delete d;
 }
 
-ContextManager* AbstractContextManagerItem::contextManager() const
+ContextManager *AbstractContextManagerItem::contextManager() const
 {
     return d->mContextManager;
 }
 
-QWidget* AbstractContextManagerItem::widget() const
+QWidget *AbstractContextManagerItem::widget() const
 {
     return d->mWidget;
 }
 
-void AbstractContextManagerItem::setWidget(QWidget* widget)
+void AbstractContextManagerItem::setWidget(QWidget *widget)
 {
     d->mWidget = widget;
 }

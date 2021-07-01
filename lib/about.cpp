@@ -31,25 +31,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace Gwenview
 {
-
-KAboutData* createAboutData(const QString& appName, const QString& programName)
+KAboutData *createAboutData(const QString &appName, const QString &programName)
 {
-    auto* data = new KAboutData(appName, programName, QStringLiteral(GWENVIEW_VERSION_STRING));
+    auto *data = new KAboutData(appName, programName, QStringLiteral(GWENVIEW_VERSION_STRING));
     data->setLicense(KAboutLicense::GPL);
     data->setCopyrightStatement(i18n("Copyright 2000-2019 Gwenview authors"));
     data->setProductName("gwenview");
-    data->addAuthor(
-        QStringLiteral("Lukáš Tinkl"),
-        i18n("Current Maintainer"),
-        QStringLiteral("ltinkl@redhat.com"));
-    data->addAuthor(
-        QStringLiteral("Aurélien Gâteau"),
-        i18n("Developer"),
-        QStringLiteral("agateau@kde.org"));
-    data->addAuthor(
-        QStringLiteral("Benjamin Löwe"),
-        i18n("Developer"),
-        QStringLiteral("benni@mytum.de"));
+    data->addAuthor(QStringLiteral("Lukáš Tinkl"), i18n("Current Maintainer"), QStringLiteral("ltinkl@redhat.com"));
+    data->addAuthor(QStringLiteral("Aurélien Gâteau"), i18n("Developer"), QStringLiteral("agateau@kde.org"));
+    data->addAuthor(QStringLiteral("Benjamin Löwe"), i18n("Developer"), QStringLiteral("benni@mytum.de"));
     return data;
 }
 

@@ -35,7 +35,6 @@ class QSlider;
 
 namespace Gwenview
 {
-
 struct ZoomSliderPrivate;
 /**
  * A widget featuring an horizontal slider and zoom in/out buttons.
@@ -47,16 +46,16 @@ class GWENVIEWLIB_EXPORT ZoomSlider : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ZoomSlider(QWidget* parent = nullptr);
+    explicit ZoomSlider(QWidget *parent = nullptr);
     ~ZoomSlider() override;
 
     int value() const;
 
-    QSlider* slider() const;
+    QSlider *slider() const;
 
-    void setZoomInAction(QAction*);
+    void setZoomInAction(QAction *);
 
-    void setZoomOutAction(QAction*);
+    void setZoomOutAction(QAction *);
 
 public Q_SLOTS:
     void setValue(int);
@@ -74,7 +73,7 @@ private Q_SLOTS:
     void zoomIn();
 
 private:
-    ZoomSliderPrivate* const d;
+    ZoomSliderPrivate *const d;
 };
 
 } // namespace

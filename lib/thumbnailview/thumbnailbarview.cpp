@@ -24,10 +24,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QApplication>
-#include <QItemSelectionModel>
 #include <QHelpEvent>
-#include <QScrollBar>
+#include <QItemSelectionModel>
 #include <QPainter>
+#include <QScrollBar>
 #include <QTimeLine>
 #include <QToolButton>
 #include <QToolTip>
@@ -41,14 +41,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include "gwenview_lib_debug.h"
+#include "gwenviewconfig.h"
 #include "lib/hud/hudtheme.h"
 #include "lib/paintutils.h"
 #include "lib/thumbnailview/abstractthumbnailviewhelper.h"
-#include "gwenviewconfig.h"
 
 namespace Gwenview
 {
-
 /**
  * Duration in ms of the smooth scroll
  */
@@ -66,15 +65,14 @@ const int SHADOW_STRENGTH = 127;
 /** How many pixels around the thumbnail are shadowed */
 const int SHADOW_SIZE = 4;
 
-struct ThumbnailBarItemDelegatePrivate
-{
+struct ThumbnailBarItemDelegatePrivate {
     // Key is height * 1000 + width
     using ShadowCache = QMap<int, QPixmap>;
     mutable ShadowCache mShadowCache;
 
-    ThumbnailBarItemDelegate* q;
-    ThumbnailView* mView;
-    QToolButton* mToggleSelectionButton;
+    ThumbnailBarItemDelegate *q;
+    ThumbnailView *mView;
+    QToolButton *mToggleSelectionButton;
 
     QColor mBorderColor;
     QPersistentModelIndex mIndexUnderCursor;
@@ -87,7 +85,7 @@ struct ThumbnailBarItemDelegatePrivate
         QObject::connect(mToggleSelectionButton, &QToolButton::clicked, q, &ThumbnailBarItemDelegate::toggleSelection);
     }
 
-    void showToolTip(QHelpEvent* helpEvent)
+    void showToolTip(QHelpEvent *helpEvent)
     {
         QModelIndex index = mView->indexAt(helpEvent->pos());
         if (!index.isValid()) {
@@ -98,7 +96,7 @@ struct ThumbnailBarItemDelegatePrivate
         QToolTip::showText(pos, fullText, mView);
     }
 
-    void drawShadow(QPainter* painter, const QRect& rect) const
+    void drawShadow(QPainter *painter, const QRect &rect) const
     {
         const QPoint shadowOffset(-SHADOW_SIZE, -SHADOW_SIZE + 1);
 
@@ -116,7 +114,7 @@ struct ThumbnailBarItemDelegatePrivate
         painter->drawPixmap(rect.topLeft() + shadowOffset, it.value());
     }
 
-    bool hoverEventFilter(QHoverEvent* event)
+    bool hoverEventFilter(QHoverEvent *event)
     {
         QModelIndex index = mView->indexAt(event->pos());
         if (index != mIndexUnderCursor) {
@@ -125,7 +123,7 @@ struct ThumbnailBarItemDelegatePrivate
         return false;
     }
 
-    void updateHoverUi(const QModelIndex& index)
+    void updateHoverUi(const QModelIndex &index)
     {
         mIndexUnderCursor = index;
 
@@ -147,9 +145,9 @@ struct ThumbnailBarItemDelegatePrivate
     }
 };
 
-ThumbnailBarItemDelegate::ThumbnailBarItemDelegate(ThumbnailView* view)
-: QAbstractItemDelegate(view)
-, d(new ThumbnailBarItemDelegatePrivate)
+ThumbnailBarItemDelegate::ThumbnailBarItemDelegate(ThumbnailView *view)
+    : QAbstractItemDelegate(view)
+    , d(new ThumbnailBarItemDelegatePrivate)
 {
     d->q = this;
     d->mView = view;
@@ -170,7 +168,7 @@ ThumbnailBarItemDelegate::ThumbnailBarItemDelegate(ThumbnailView* view)
     });
 }
 
-QSize ThumbnailBarItemDelegate::sizeHint(const QStyleOptionViewItem & /*option*/, const QModelIndex & index) const
+QSize ThumbnailBarItemDelegate::sizeHint(const QStyleOptionViewItem & /*option*/, const QModelIndex &index) const
 {
     QSize size;
     if (d->mView->thumbnailScaleMode() == ThumbnailView::ScaleToFit) {
@@ -184,15 +182,15 @@ QSize ThumbnailBarItemDelegate::sizeHint(const QStyleOptionViewItem & /*option*/
     return size;
 }
 
-bool ThumbnailBarItemDelegate::eventFilter(QObject*, QEvent* event)
+bool ThumbnailBarItemDelegate::eventFilter(QObject *, QEvent *event)
 {
     switch (event->type()) {
     case QEvent::ToolTip:
-        d->showToolTip(static_cast<QHelpEvent*>(event));
+        d->showToolTip(static_cast<QHelpEvent *>(event));
         return true;
     case QEvent::HoverMove:
     case QEvent::HoverLeave:
-        return d->hoverEventFilter(static_cast<QHoverEvent*>(event));
+        return d->hoverEventFilter(static_cast<QHoverEvent *>(event));
     default:
         break;
     }
@@ -200,7 +198,7 @@ bool ThumbnailBarItemDelegate::eventFilter(QObject*, QEvent* event)
     return false;
 }
 
-void ThumbnailBarItemDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const
+void ThumbnailBarItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     bool isSelected = option.state & QStyle::State_Selected;
     bool isCurrent = d->mView->selectionModel()->currentIndex() == index;
@@ -209,8 +207,8 @@ void ThumbnailBarItemDelegate::paint(QPainter * painter, const QStyleOptionViewI
     QRect rect = option.rect;
 
     QStyleOptionViewItem opt = option;
-    const QWidget* widget = opt.widget;
-    QStyle* style = widget ? widget->style() : QApplication::style();
+    const QWidget *widget = opt.widget;
+    QStyle *style = widget ? widget->style() : QApplication::style();
     if (isSelected && !isCurrent) {
         // Draw selected but not current item backgrounds with some transparency
         // so that the current item stands out.
@@ -221,11 +219,10 @@ void ThumbnailBarItemDelegate::paint(QPainter * painter, const QStyleOptionViewI
 
     // Draw thumbnail
     if (!thumbnailPix.isNull()) {
-        QRect thumbnailRect = QRect(
-                                  rect.left() + (rect.width() - thumbnailSize.width()) / 2,
-                                  rect.top() + (rect.height() - thumbnailSize.height()) / 2 - 1,
-                                  thumbnailSize.width(),
-                                  thumbnailSize.height());
+        QRect thumbnailRect = QRect(rect.left() + (rect.width() - thumbnailSize.width()) / 2,
+                                    rect.top() + (rect.height() - thumbnailSize.height()) / 2 - 1,
+                                    thumbnailSize.width(),
+                                    thumbnailSize.height());
 
         if (!thumbnailPix.hasAlphaChannel()) {
             d->drawShadow(painter, thumbnailRect);
@@ -239,10 +236,9 @@ void ThumbnailBarItemDelegate::paint(QPainter * painter, const QStyleOptionViewI
         // Draw busy indicator
         if (d->mView->isBusy(index)) {
             QPixmap pix = d->mView->busySequenceCurrentPixmap();
-            painter->drawPixmap(
-                thumbnailRect.left() + (thumbnailRect.width() - pix.width()) / 2,
-                thumbnailRect.top() + (thumbnailRect.height() - pix.height()) / 2,
-                pix);
+            painter->drawPixmap(thumbnailRect.left() + (thumbnailRect.width() - pix.width()) / 2,
+                                thumbnailRect.top() + (thumbnailRect.height() - pix.height()) / 2,
+                                pix);
         }
     }
 }
@@ -257,8 +253,8 @@ ThumbnailBarItemDelegate::~ThumbnailBarItemDelegate()
     delete d;
 }
 
-//this is disabled by David Edmundson as I can't figure out how to port it
-//I hope with breeze being the default we don't want to start making our own styles anyway
+// this is disabled by David Edmundson as I can't figure out how to port it
+// I hope with breeze being the default we don't want to start making our own styles anyway
 #ifdef WINDOWS_PROXY_STYLE
 /**
  * This proxy style makes it possible to override the value returned by
@@ -270,7 +266,8 @@ ThumbnailBarItemDelegate::~ThumbnailBarItemDelegate()
 class ProxyStyle : public QWindowsStyle
 {
 public:
-    ProxyStyle() : QWindowsStyle()
+    ProxyStyle()
+        : QWindowsStyle()
     {
     }
 
@@ -305,32 +302,32 @@ public:
         }
     }
 
-    void polish(QApplication* application)
+    void polish(QApplication *application)
     {
         QApplication::style()->polish(application);
     }
 
-    void polish(QPalette& palette)
+    void polish(QPalette &palette)
     {
         QApplication::style()->polish(palette);
     }
 
-    void polish(QWidget* widget)
+    void polish(QWidget *widget)
     {
         QApplication::style()->polish(widget);
     }
 
-    void unpolish(QWidget* widget)
+    void unpolish(QWidget *widget)
     {
         QApplication::style()->unpolish(widget);
     }
 
-    void unpolish(QApplication* application)
+    void unpolish(QApplication *application)
     {
         QApplication::style()->unpolish(application);
     }
 
-    int pixelMetric(PixelMetric pm, const QStyleOption* opt, const QWidget* widget) const
+    int pixelMetric(PixelMetric pm, const QStyleOption *opt, const QWidget *widget) const
     {
         switch (pm) {
         case PM_MaximumDragDistance:
@@ -343,20 +340,19 @@ public:
         }
     }
 };
-#endif// WINDOWS_PROXY_STYLE
+#endif // WINDOWS_PROXY_STYLE
 
 using QSizeDimension = int (QSize::*)() const;
 
-struct ThumbnailBarViewPrivate
-{
-    ThumbnailBarView* q;
-    QStyle* mStyle;
-    QTimeLine* mTimeLine;
+struct ThumbnailBarViewPrivate {
+    ThumbnailBarView *q;
+    QStyle *mStyle;
+    QTimeLine *mTimeLine;
 
     Qt::Orientation mOrientation;
     int mRowCount;
 
-    QScrollBar* scrollBar() const
+    QScrollBar *scrollBar() const
     {
         return mOrientation == Qt::Horizontal ? q->horizontalScrollBar() : q->verticalScrollBar();
     }
@@ -371,7 +367,7 @@ struct ThumbnailBarViewPrivate
         return mOrientation == Qt::Horizontal ? &QSize::height : &QSize::width;
     }
 
-    void smoothScrollTo(const QModelIndex& index)
+    void smoothScrollTo(const QModelIndex &index)
     {
         if (!index.isValid()) {
             return;
@@ -388,7 +384,7 @@ struct ThumbnailBarViewPrivate
         mTimeLine->start();
     }
 
-    int scrollToValue(const QRect& rect)
+    int scrollToValue(const QRect &rect)
     {
         // This code is a much simplified version of
         // QListViewPrivate::horizontalScrollToValue()
@@ -449,9 +445,9 @@ struct ThumbnailBarViewPrivate
     }
 };
 
-ThumbnailBarView::ThumbnailBarView(QWidget* parent)
-: ThumbnailView(parent)
-, d(new ThumbnailBarViewPrivate)
+ThumbnailBarView::ThumbnailBarView(QWidget *parent)
+    : ThumbnailView(parent)
+    , d(new ThumbnailBarViewPrivate)
 {
     d->q = this;
     d->mTimeLine = new QTimeLine(SMOOTH_SCROLL_DURATION, this);
@@ -464,17 +460,17 @@ ThumbnailBarView::ThumbnailBarView(QWidget* parent)
     setObjectName(QStringLiteral("thumbnailBarView"));
     setWrapping(true);
 
-    #ifdef WINDOWS_PROXY_STYLE
+#ifdef WINDOWS_PROXY_STYLE
     d->mStyle = new ProxyStyle;
     setStyle(d->mStyle);
-    #endif
+#endif
 }
 
 ThumbnailBarView::~ThumbnailBarView()
 {
-    #ifdef WINDOWS_PROXY_STYLE
+#ifdef WINDOWS_PROXY_STYLE
     delete d->mStyle;
-    #endif
+#endif
     delete d;
 }
 
@@ -514,7 +510,7 @@ void ThumbnailBarView::resizeEvent(QResizeEvent *event)
     d->updateThumbnailSize();
 }
 
-void ThumbnailBarView::selectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
+void ThumbnailBarView::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
 {
     ThumbnailView::selectionChanged(selected, deselected);
 
@@ -529,7 +525,7 @@ void ThumbnailBarView::selectionChanged(const QItemSelection& selected, const QI
     }
 }
 
-void ThumbnailBarView::wheelEvent(QWheelEvent* event)
+void ThumbnailBarView::wheelEvent(QWheelEvent *event)
 {
     d->scrollBar()->setValue(d->scrollBar()->value() - event->angleDelta().y());
 }

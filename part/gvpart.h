@@ -33,14 +33,13 @@ class KPluginMetaData;
 
 namespace Gwenview
 {
-
 class DocumentView;
 
 class GVPart : public KParts::ReadOnlyPart
 {
     Q_OBJECT
 public:
-    GVPart(QWidget* parentWidget, QObject* parent, const KPluginMetaData &metaData, const QVariantList &);
+    GVPart(QWidget *parentWidget, QObject *parent, const KPluginMetaData &metaData, const QVariantList &);
 
 protected:
     bool openUrl(const QUrl &url) override;
@@ -49,10 +48,10 @@ private Q_SLOTS:
     void showContextMenu();
     void showProperties();
     void saveAs();
-    void showJobError(KJob*);
+    void showJobError(KJob *);
 
 private:
-    DocumentView* mDocumentView;
+    DocumentView *mDocumentView;
 };
 
 } // namespace

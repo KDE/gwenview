@@ -35,22 +35,20 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
-struct DateWidgetPrivate
-{
-    DateWidget* q;
+struct DateWidgetPrivate {
+    DateWidget *q;
 
     QDate mDate;
-    KDatePicker* mDatePicker;
-    StatusBarToolButton* mPreviousButton;
-    StatusBarToolButton* mDateButton;
-    StatusBarToolButton* mNextButton;
+    KDatePicker *mDatePicker;
+    StatusBarToolButton *mPreviousButton;
+    StatusBarToolButton *mDateButton;
+    StatusBarToolButton *mNextButton;
 
     void setupDatePicker()
     {
         mDatePicker = new KDatePicker;
         /* Use Qt::Tool instead of Qt::Window so that the bubble does not appear in the task bar */
-        //mDatePicker->setWindowFlags(Qt::Tool | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+        // mDatePicker->setWindowFlags(Qt::Tool | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
         mDatePicker->setWindowFlags(Qt::Popup);
         mDatePicker->hide();
         mDatePicker->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
@@ -72,9 +70,9 @@ struct DateWidgetPrivate
     }
 };
 
-DateWidget::DateWidget(QWidget* parent)
-: QWidget(parent)
-, d(new DateWidgetPrivate)
+DateWidget::DateWidget(QWidget *parent)
+    : QWidget(parent)
+    , d(new DateWidgetPrivate)
 {
     d->q = this;
 
@@ -95,7 +93,7 @@ DateWidget::DateWidget(QWidget* parent)
     d->mNextButton->setIcon(QIcon::fromTheme(QStringLiteral("go-next")));
     connect(d->mNextButton, &StatusBarToolButton::clicked, this, &DateWidget::goToNext);
 
-    auto* layout = new QHBoxLayout(this);
+    auto *layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     layout->addWidget(d->mPreviousButton);
@@ -123,7 +121,7 @@ void DateWidget::showDatePicker()
     d->mDatePicker->show();
 }
 
-void DateWidget::slotDatePickerModified(const QDate& date)
+void DateWidget::slotDatePickerModified(const QDate &date)
 {
     d->mDatePicker->hide();
     d->mDate = date;

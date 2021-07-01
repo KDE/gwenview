@@ -32,21 +32,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KActionCollection>
 
 // Local
+#include "fileoperations.h"
 #include "gwenview_app_debug.h"
 #include <lib/document/documentfactory.h>
-#include "fileoperations.h"
 
 namespace Gwenview
 {
-
-struct ThumbnailViewHelperPrivate
-{
-    KActionCollection* mActionCollection;
+struct ThumbnailViewHelperPrivate {
+    KActionCollection *mActionCollection;
     QUrl mCurrentDirUrl;
 
-    void addActionToMenu(QMenu& popup, const char* name)
+    void addActionToMenu(QMenu &popup, const char *name)
     {
-        QAction* action = mActionCollection->action(name);
+        QAction *action = mActionCollection->action(name);
         if (!action) {
             qCWarning(GWENVIEW_APP_LOG) << "Unknown action" << name;
             return;
@@ -57,9 +55,9 @@ struct ThumbnailViewHelperPrivate
     }
 };
 
-ThumbnailViewHelper::ThumbnailViewHelper(QObject* parent, KActionCollection* actionCollection)
-: AbstractThumbnailViewHelper(parent)
-, d(new ThumbnailViewHelperPrivate)
+ThumbnailViewHelper::ThumbnailViewHelper(QObject *parent, KActionCollection *actionCollection)
+    : AbstractThumbnailViewHelper(parent)
+    , d(new ThumbnailViewHelperPrivate)
 {
     d->mActionCollection = actionCollection;
 }
@@ -74,7 +72,7 @@ void ThumbnailViewHelper::setCurrentDirUrl(const QUrl &url)
     d->mCurrentDirUrl = url;
 }
 
-void ThumbnailViewHelper::showContextMenu(QWidget* parent)
+void ThumbnailViewHelper::showContextMenu(QWidget *parent)
 {
     QMenu popup(parent);
     if (d->mCurrentDirUrl.scheme() == "trash") {
@@ -105,12 +103,12 @@ void ThumbnailViewHelper::showContextMenu(QWidget* parent)
     popup.exec(QCursor::pos());
 }
 
-void ThumbnailViewHelper::showMenuForUrlDroppedOnViewport(QWidget* parent, const QList<QUrl>& lst)
+void ThumbnailViewHelper::showMenuForUrlDroppedOnViewport(QWidget *parent, const QList<QUrl> &lst)
 {
     showMenuForUrlDroppedOnDir(parent, lst, d->mCurrentDirUrl);
 }
 
-void ThumbnailViewHelper::showMenuForUrlDroppedOnDir(QWidget* parent, const QList<QUrl>& urlList, const QUrl &destUrl)
+void ThumbnailViewHelper::showMenuForUrlDroppedOnDir(QWidget *parent, const QList<QUrl> &urlList, const QUrl &destUrl)
 {
     FileOperations::showMenuForDroppedUrls(parent, urlList, destUrl);
 }

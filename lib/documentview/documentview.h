@@ -29,15 +29,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KF
 
 // Local
-#include <lib/document/document.h>
 #include <lib/backgroundcolorwidget/backgroundcolorwidget.h>
+#include <lib/document/document.h>
 
 class QPropertyAnimation;
 class QUrl;
 
 namespace Gwenview
 {
-
 class AbstractRasterImageViewTool;
 class RasterImageView;
 
@@ -60,14 +59,15 @@ public:
 
     struct Setup {
         Setup()
-        : valid(false)
-        , zoomToFit(true)
-        , zoomToFill(false)
-        , zoom(0)
-        {}
-        bool valid:1;
-        bool zoomToFit:1;
-        bool zoomToFill:1;
+            : valid(false)
+            , zoomToFit(true)
+            , zoomToFill(false)
+            , zoom(0)
+        {
+        }
+        bool valid : 1;
+        bool zoomToFit : 1;
+        bool zoomToFill : 1;
         qreal zoom;
         QPointF position;
     };
@@ -84,14 +84,14 @@ public:
      * Create a new view attached to scene. We need the scene to be able to
      * install scene event filters.
      */
-    explicit DocumentView(QGraphicsScene* scene);
+    explicit DocumentView(QGraphicsScene *scene);
     ~DocumentView() override;
 
     Document::Ptr document() const;
 
     QUrl url() const;
 
-    void openUrl(const QUrl&, const Setup&);
+    void openUrl(const QUrl &, const Setup &);
 
     Setup setup() const;
 
@@ -122,16 +122,16 @@ public:
     /**
      * Returns the RasterImageView of the current adapter, if it has one
      */
-    RasterImageView* imageView() const;
+    RasterImageView *imageView() const;
 
-    AbstractRasterImageViewTool* currentTool() const;
+    AbstractRasterImageViewTool *currentTool() const;
 
-    void moveTo(const QRect&);
-    void moveToAnimated(const QRect&);
-    QPropertyAnimation* fadeIn();
+    void moveTo(const QRect &);
+    void moveToAnimated(const QRect &);
+    QPropertyAnimation *fadeIn();
     void fadeOut();
 
-    void setGeometry(const QRectF& rect) override;
+    void setGeometry(const QRectF &rect) override;
 
     int sortKey() const;
     void setSortKey(int sortKey);
@@ -156,7 +156,7 @@ public Q_SLOTS:
 
     void setBackgroundColorMode(BackgroundColorWidget::ColorMode colorMode);
 
-    void setPosition(const QPoint&);
+    void setPosition(const QPoint &);
 
     void hideAndDeleteLater();
 
@@ -170,11 +170,11 @@ Q_SIGNALS:
 
     void nextImageRequested();
 
-    void openUrlRequested(const QUrl&);
+    void openUrlRequested(const QUrl &);
 
-    void openDirUrlRequested(const QUrl&);
+    void openDirUrlRequested(const QUrl &);
 
-    void captionUpdateRequested(const QString&);
+    void captionUpdateRequested(const QString &);
 
     void toggleFullScreenRequested();
 
@@ -188,7 +188,7 @@ Q_SIGNALS:
 
     void adapterChanged();
 
-    void focused(Gwenview::DocumentView*);
+    void focused(Gwenview::DocumentView *);
 
     void zoomToFitChanged(bool);
 
@@ -196,27 +196,27 @@ Q_SIGNALS:
 
     void positionChanged();
 
-    void hudTrashClicked(Gwenview::DocumentView*);
-    void hudDeselectClicked(Gwenview::DocumentView*);
+    void hudTrashClicked(Gwenview::DocumentView *);
+    void hudDeselectClicked(Gwenview::DocumentView *);
 
-    void fadeInFinished(Gwenview::DocumentView*);
+    void fadeInFinished(Gwenview::DocumentView *);
 
     void contextMenuRequested();
 
-    void currentToolChanged(AbstractRasterImageViewTool*);
+    void currentToolChanged(AbstractRasterImageViewTool *);
 
     void isAnimatedChanged();
 
 protected:
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) override;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
-    void resizeEvent(QGraphicsSceneResizeEvent* event) override;
-    void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
-    void wheelEvent(QGraphicsSceneWheelEvent* event) override;
-    void contextMenuEvent(QGraphicsSceneContextMenuEvent* event) override;
-    bool sceneEventFilter(QGraphicsItem*, QEvent*) override;
-    void dragEnterEvent(QGraphicsSceneDragDropEvent* event) override;
-    void dropEvent(QGraphicsSceneDragDropEvent* event) override;
+    void resizeEvent(QGraphicsSceneResizeEvent *event) override;
+    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+    void wheelEvent(QGraphicsSceneWheelEvent *event) override;
+    void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
+    bool sceneEventFilter(QGraphicsItem *, QEvent *) override;
+    void dragEnterEvent(QGraphicsSceneDragDropEvent *event) override;
+    void dropEvent(QGraphicsSceneDragDropEvent *event) override;
 
 private Q_SLOTS:
     void finishOpenUrl();
@@ -230,7 +230,7 @@ private Q_SLOTS:
 
     void slotZoomChanged(qreal);
 
-    void slotBusyChanged(const QUrl&, bool);
+    void slotBusyChanged(const QUrl &, bool);
 
     void emitHudTrashClicked();
     void emitHudDeselectClicked();
@@ -238,19 +238,19 @@ private Q_SLOTS:
 
     void slotFadeInFinished();
 
-    void dragThumbnailLoaded(const KFileItem&, const QPixmap&);
-    void dragThumbnailLoadingFailed(const KFileItem&);
+    void dragThumbnailLoaded(const KFileItem &, const QPixmap &);
+    void dragThumbnailLoadingFailed(const KFileItem &);
     void setPinchParameter(qint64 timeStamp);
-    void zoomGesture(qreal newZoom, const QPoint& pos, qint64 timeStamp);
+    void zoomGesture(qreal newZoom, const QPoint &pos, qint64 timeStamp);
     void rotationsGesture(qreal);
     void swipeRight();
     void swipeLeft();
-    void panGesture(const QPointF& delta);
-    void startDragFromTouch(const QPoint& pos);
+    void panGesture(const QPointF &delta);
+    void startDragFromTouch(const QPoint &pos);
 
 private:
     friend struct DocumentViewPrivate;
-    DocumentViewPrivate* const d;
+    DocumentViewPrivate *const d;
 
     void createAdapterForDocument();
 };

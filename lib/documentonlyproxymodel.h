@@ -31,7 +31,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 struct DocumentOnlyProxyModelPrivate;
 /**
  * A proxy model which lists items which are neither dirs nor archives.
@@ -41,14 +40,14 @@ class GWENVIEWLIB_EXPORT DocumentOnlyProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 public:
-    explicit DocumentOnlyProxyModel(QObject* parent = nullptr);
+    explicit DocumentOnlyProxyModel(QObject *parent = nullptr);
     ~DocumentOnlyProxyModel() override;
 
 protected:
-    bool filterAcceptsRow(int row, const QModelIndex& parent) const override;
+    bool filterAcceptsRow(int row, const QModelIndex &parent) const override;
 
 private:
-    DocumentOnlyProxyModelPrivate* const d;
+    DocumentOnlyProxyModelPrivate *const d;
 };
 
 } // namespace

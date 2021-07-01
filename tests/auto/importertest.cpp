@@ -32,9 +32,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KF
 
 // Local
+#include "../importer/filenameformater.h"
 #include "../importer/fileutils.h"
 #include "../importer/importer.h"
-#include "../importer/filenameformater.h"
 #include "testutils.h"
 
 QTEST_MAIN(ImporterTest)
@@ -43,11 +43,7 @@ using namespace Gwenview;
 
 void ImporterTest::init()
 {
-    mDocumentList = QList<QUrl>()
-                    << urlForTestFile("import/pict0001.jpg")
-                    << urlForTestFile("import/pict0002.jpg")
-                    << urlForTestFile("import/pict0003.jpg")
-                    ;
+    mDocumentList = QList<QUrl>() << urlForTestFile("import/pict0001.jpg") << urlForTestFile("import/pict0002.jpg") << urlForTestFile("import/pict0003.jpg");
 
     mTempDir = std::make_unique<QTemporaryDir>();
 }
@@ -104,7 +100,7 @@ void ImporterTest::testSuccessfulImport()
     QCOMPARE(importer.skippedUrlList().count(), 0);
     QCOMPARE(importer.renamedCount(), 0);
 
-    for (const QUrl & src : qAsConst(list)) {
+    for (const QUrl &src : qAsConst(list)) {
         QUrl dst = destUrl;
         dst.setPath(dst.path() + '/' + src.fileName());
         QVERIFY(FileUtils::contentsAreIdentical(src, dst));
@@ -139,7 +135,7 @@ void ImporterTest::testSuccessfulImportRemote()
     QCOMPARE(importer.skippedUrlList().count(), 0);
     QCOMPARE(importer.renamedCount(), 0);
 
-    for (const QUrl & src : qAsConst(list)) {
+    for (const QUrl &src : qAsConst(list)) {
         QUrl dst = remoteUrl;
         dst.setPath(dst.path() + '/' + src.fileName());
         QVERIFY(FileUtils::contentsAreIdentical(src, dst));
@@ -160,7 +156,7 @@ void ImporterTest::testSuccessfulImportRemote()
     QCOMPARE(importer.skippedUrlList().count(), 0);
     QCOMPARE(importer.renamedCount(), 0);
 
-    for (const QUrl & src : qAsConst(list)) {
+    for (const QUrl &src : qAsConst(list)) {
         QUrl dst = localUrl;
         dst.setPath(dst.path() + '/' + src.fileName());
         QVERIFY(FileUtils::contentsAreIdentical(src, dst));
@@ -264,14 +260,12 @@ void ImporterTest::testFileNameFormater_data()
 
 void ImporterTest::testAutoRenameFormat()
 {
-    QStringList dates = QStringList()
-                        << "1979-02-23_10-20-00"
-                        << "2006-04-01_11-30-15"
-                        << "2009-10-01_21-15-27";
-    QStringList dates2 = QStringList()
-                        << "1979-02-23/10-20-00"
-                        << "2006-04-01/11-30-15"
-                        << "2009-10-01/21-15-27";
+    QStringList dates = QStringList() << "1979-02-23_10-20-00"
+                                      << "2006-04-01_11-30-15"
+                                      << "2009-10-01_21-15-27";
+    QStringList dates2 = QStringList() << "1979-02-23/10-20-00"
+                                       << "2006-04-01/11-30-15"
+                                       << "2009-10-01/21-15-27";
     QCOMPARE(dates.count(), mDocumentList.count());
     QCOMPARE(dates2.count(), mDocumentList.count());
 

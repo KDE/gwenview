@@ -24,8 +24,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <cmath>
 
 // Qt
-#include <QTouchEvent>
 #include <QGraphicsWidget>
+#include <QTouchEvent>
 
 // KF
 
@@ -33,20 +33,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "gwenview_lib_debug.h"
 #include "lib/touch/touch_helper.h"
 
-
 namespace Gwenview
 {
-
-struct OneAndTwoFingerSwipeRecognizerPrivate
-{
-    OneAndTwoFingerSwipeRecognizer* q;
+struct OneAndTwoFingerSwipeRecognizerPrivate {
+    OneAndTwoFingerSwipeRecognizer *q;
     bool mTargetIsGrapicsWidget = false;
     qint64 mTouchBeginnTimestamp;
     bool mGestureAlreadyTriggered;
 };
 
-OneAndTwoFingerSwipeRecognizer::OneAndTwoFingerSwipeRecognizer() : QGestureRecognizer()
-, d (new OneAndTwoFingerSwipeRecognizerPrivate)
+OneAndTwoFingerSwipeRecognizer::OneAndTwoFingerSwipeRecognizer()
+    : QGestureRecognizer()
+    , d(new OneAndTwoFingerSwipeRecognizerPrivate)
 {
     d->q = this;
 }
@@ -56,21 +54,23 @@ OneAndTwoFingerSwipeRecognizer::~OneAndTwoFingerSwipeRecognizer()
     delete d;
 }
 
-QGesture* OneAndTwoFingerSwipeRecognizer::create(QObject*)
+QGesture *OneAndTwoFingerSwipeRecognizer::create(QObject *)
 {
-    return static_cast<QGesture*>(new OneAndTwoFingerSwipe());
+    return static_cast<QGesture *>(new OneAndTwoFingerSwipe());
 }
 
-QGestureRecognizer::Result OneAndTwoFingerSwipeRecognizer::recognize(QGesture* state, QObject* watched, QEvent* event)
+QGestureRecognizer::Result OneAndTwoFingerSwipeRecognizer::recognize(QGesture *state, QObject *watched, QEvent *event)
 {
-    //Because of a bug in Qt in a gesture event in a graphicsview, all gestures are trigger twice
-    //https://bugreports.qt.io/browse/QTBUG-13103
-    if (qobject_cast<QGraphicsWidget*>(watched)) d->mTargetIsGrapicsWidget = true;
-    if (d->mTargetIsGrapicsWidget && watched->isWidgetType()) return Ignore;
+    // Because of a bug in Qt in a gesture event in a graphicsview, all gestures are trigger twice
+    // https://bugreports.qt.io/browse/QTBUG-13103
+    if (qobject_cast<QGraphicsWidget *>(watched))
+        d->mTargetIsGrapicsWidget = true;
+    if (d->mTargetIsGrapicsWidget && watched->isWidgetType())
+        return Ignore;
 
     switch (event->type()) {
     case QEvent::TouchBegin: {
-        auto* touchEvent = static_cast<QTouchEvent*>(event);
+        auto *touchEvent = static_cast<QTouchEvent *>(event);
         d->mTouchBeginnTimestamp = touchEvent->timestamp();
         d->mGestureAlreadyTriggered = false;
         state->setHotSpot(touchEvent->touchPoints().first().screenPos());
@@ -78,7 +78,7 @@ QGestureRecognizer::Result OneAndTwoFingerSwipeRecognizer::recognize(QGesture* s
     }
 
     case QEvent::TouchUpdate: {
-        auto* touchEvent = static_cast<QTouchEvent*>(event);
+        auto *touchEvent = static_cast<QTouchEvent *>(event);
         const qint64 now = touchEvent->timestamp();
         const QPointF distance = touchEvent->touchPoints().first().startPos() - touchEvent->touchPoints().first().pos();
         state->setHotSpot(touchEvent->touchPoints().first().screenPos());
@@ -88,9 +88,8 @@ QGestureRecognizer::Result OneAndTwoFingerSwipeRecognizer::recognize(QGesture* s
             return CancelGesture;
         }
 
-        if (distance.manhattanLength() >= Touch_Helper::Touch::minDistanceForSwipe &&
-                (now - d->mTouchBeginnTimestamp) <= Touch_Helper::Touch::maxTimeFrameForSwipe &&
-                !d->mGestureAlreadyTriggered) {
+        if (distance.manhattanLength() >= Touch_Helper::Touch::minDistanceForSwipe
+            && (now - d->mTouchBeginnTimestamp) <= Touch_Helper::Touch::maxTimeFrameForSwipe && !d->mGestureAlreadyTriggered) {
             if (distance.x() < 0 && abs(distance.x()) >= abs(distance.y()) * 2) {
                 state->setProperty("right", true);
                 state->setProperty("left", false);
@@ -119,8 +118,8 @@ QGestureRecognizer::Result OneAndTwoFingerSwipeRecognizer::recognize(QGesture* s
     return Ignore;
 }
 
-OneAndTwoFingerSwipe::OneAndTwoFingerSwipe(QObject* parent)
-: QGesture(parent)
+OneAndTwoFingerSwipe::OneAndTwoFingerSwipe(QObject *parent)
+    : QGesture(parent)
 {
 }
 

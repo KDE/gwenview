@@ -34,18 +34,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
-struct LoadingIndicatorPrivate
-{
-    LoadingIndicator* q;
+struct LoadingIndicatorPrivate {
+    LoadingIndicator *q;
     KPixmapSequence mSequence;
     int mIndex;
-    QTimer* mTimer;
+    QTimer *mTimer;
 
-    LoadingIndicatorPrivate(LoadingIndicator* qq)
-    : q(qq)
-    , mIndex(0)
-    , mTimer(new QTimer(qq))
+    LoadingIndicatorPrivate(LoadingIndicator *qq)
+        : q(qq)
+        , mIndex(0)
+        , mTimer(new QTimer(qq))
     {
         mSequence = KIconLoader::global()->loadPixmapSequence(QStringLiteral("process-working"), 22);
         mTimer->setInterval(100);
@@ -53,9 +51,9 @@ struct LoadingIndicatorPrivate
     }
 };
 
-LoadingIndicator::LoadingIndicator(QGraphicsItem* parent)
-: QGraphicsWidget(parent)
-, d(new LoadingIndicatorPrivate(this))
+LoadingIndicator::LoadingIndicator(QGraphicsItem *parent)
+    : QGraphicsWidget(parent)
+    , d(new LoadingIndicatorPrivate(this))
 {
 }
 
@@ -69,7 +67,7 @@ QRectF LoadingIndicator::boundingRect() const
     return QRectF(QPointF(0, 0), d->mSequence.frameSize());
 }
 
-void LoadingIndicator::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
+void LoadingIndicator::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     painter->drawPixmap(0, 0, d->mSequence.frameAt(d->mIndex));
 }
@@ -82,7 +80,7 @@ void LoadingIndicator::showNextFrame()
     }
 }
 
-QVariant LoadingIndicator::itemChange(GraphicsItemChange change, const QVariant& value)
+QVariant LoadingIndicator::itemChange(GraphicsItemChange change, const QVariant &value)
 {
     if (change == QGraphicsItem::ItemVisibleHasChanged) {
         if (value.toBool()) {

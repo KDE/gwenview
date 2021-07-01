@@ -21,8 +21,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "tapholdandmoving.h"
 
 // Qt
-#include <QTouchEvent>
 #include <QGraphicsWidget>
+#include <QTouchEvent>
 
 // KF
 
@@ -32,10 +32,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
-struct TapHoldAndMovingRecognizerPrivate
-{
-    TapHoldAndMovingRecognizer* q;
+struct TapHoldAndMovingRecognizerPrivate {
+    TapHoldAndMovingRecognizer *q;
     bool mTargetIsGrapicsWidget = false;
     qint64 mTouchBeginnTimestamp;
     bool mTouchPointStationary;
@@ -43,8 +41,9 @@ struct TapHoldAndMovingRecognizerPrivate
     Qt::GestureState mLastGestureState = Qt::NoGesture;
 };
 
-TapHoldAndMovingRecognizer::TapHoldAndMovingRecognizer() : QGestureRecognizer()
-, d (new TapHoldAndMovingRecognizerPrivate)
+TapHoldAndMovingRecognizer::TapHoldAndMovingRecognizer()
+    : QGestureRecognizer()
+    , d(new TapHoldAndMovingRecognizerPrivate)
 {
     d->q = this;
 }
@@ -54,21 +53,23 @@ TapHoldAndMovingRecognizer::~TapHoldAndMovingRecognizer()
     delete d;
 }
 
-QGesture* TapHoldAndMovingRecognizer::create(QObject*)
+QGesture *TapHoldAndMovingRecognizer::create(QObject *)
 {
-    return static_cast<QGesture*>(new TapHoldAndMoving());
+    return static_cast<QGesture *>(new TapHoldAndMoving());
 }
 
-QGestureRecognizer::Result TapHoldAndMovingRecognizer::recognize(QGesture* state, QObject* watched, QEvent* event)
+QGestureRecognizer::Result TapHoldAndMovingRecognizer::recognize(QGesture *state, QObject *watched, QEvent *event)
 {
-    //Because of a bug in Qt in a gesture event in a graphicsview, all gestures are trigger twice
-    //https://bugreports.qt.io/browse/QTBUG-13103
-    if (qobject_cast<QGraphicsWidget*>(watched)) d->mTargetIsGrapicsWidget = true;
-    if (d->mTargetIsGrapicsWidget && watched->isWidgetType()) return Ignore;
+    // Because of a bug in Qt in a gesture event in a graphicsview, all gestures are trigger twice
+    // https://bugreports.qt.io/browse/QTBUG-13103
+    if (qobject_cast<QGraphicsWidget *>(watched))
+        d->mTargetIsGrapicsWidget = true;
+    if (d->mTargetIsGrapicsWidget && watched->isWidgetType())
+        return Ignore;
 
     switch (event->type()) {
     case QEvent::TouchBegin: {
-        auto* touchEvent = static_cast<QTouchEvent*>(event);
+        auto *touchEvent = static_cast<QTouchEvent *>(event);
         d->mTouchBeginnTimestamp = touchEvent->timestamp();
         d->mGestureTriggered = false;
         d->mTouchPointStationary = true;
@@ -78,7 +79,7 @@ QGestureRecognizer::Result TapHoldAndMovingRecognizer::recognize(QGesture* state
     }
 
     case QEvent::TouchUpdate: {
-        auto* touchEvent = static_cast<QTouchEvent*>(event);
+        auto *touchEvent = static_cast<QTouchEvent *>(event);
         const qint64 now = touchEvent->timestamp();
         const QPoint pos = touchEvent->touchPoints().first().pos().toPoint();
         state->setHotSpot(touchEvent->touchPoints().first().screenPos());
@@ -90,9 +91,7 @@ QGestureRecognizer::Result TapHoldAndMovingRecognizer::recognize(QGesture* state
         }
 
         if (touchEvent->touchPoints().size() == 1 && d->mLastGestureState != Qt::GestureCanceled) {
-            if (!d->mGestureTriggered &&
-                        d->mTouchPointStationary && 
-                        now - d->mTouchBeginnTimestamp >= Touch_Helper::Touch::durationForTapHold) {
+            if (!d->mGestureTriggered && d->mTouchPointStationary && now - d->mTouchBeginnTimestamp >= Touch_Helper::Touch::durationForTapHold) {
                 d->mGestureTriggered = true;
             }
         }
@@ -107,7 +106,7 @@ QGestureRecognizer::Result TapHoldAndMovingRecognizer::recognize(QGesture* state
     }
 
     case QEvent::TouchEnd: {
-        auto* touchEvent = static_cast<QTouchEvent*>(event);
+        auto *touchEvent = static_cast<QTouchEvent *>(event);
         state->setHotSpot(touchEvent->touchPoints().first().screenPos());
         if (d->mGestureTriggered) {
             d->mLastGestureState = Qt::GestureFinished;
@@ -121,8 +120,8 @@ QGestureRecognizer::Result TapHoldAndMovingRecognizer::recognize(QGesture* state
     return Ignore;
 }
 
-TapHoldAndMoving::TapHoldAndMoving(QObject* parent)
-: QGesture(parent)
+TapHoldAndMoving::TapHoldAndMoving(QObject *parent)
+    : QGesture(parent)
 {
 }
 

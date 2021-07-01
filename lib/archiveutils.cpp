@@ -33,11 +33,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 namespace Gwenview
 {
-
 namespace ArchiveUtils
 {
-
-bool fileItemIsArchive(const KFileItem& item)
+bool fileItemIsArchive(const KFileItem &item)
 {
     const QMimeType mimeType = item.determineMimeType();
     if (!mimeType.isValid()) {
@@ -47,12 +45,12 @@ bool fileItemIsArchive(const KFileItem& item)
     return !ArchiveUtils::protocolForMimeType(mimeType.name()).isEmpty();
 }
 
-bool fileItemIsDirOrArchive(const KFileItem& item)
+bool fileItemIsDirOrArchive(const KFileItem &item)
 {
     return item.isDir() || fileItemIsArchive(item);
 }
 
-QString protocolForMimeType(const QString& mimeType)
+QString protocolForMimeType(const QString &mimeType)
 {
     static QHash<QString, QString> cache;
     QHash<QString, QString>::ConstIterator it = cache.constFind(mimeType);
@@ -73,7 +71,7 @@ QString protocolForMimeType(const QString& mimeType)
         // example
         const QMimeType mime = QMimeDatabase().mimeTypeForName(mimeType);
         const QStringList allAncestors = mime.allAncestors();
-        for(const QString & parentMimeType : allAncestors) {
+        for (const QString &parentMimeType : allAncestors) {
             protocol = KProtocolManager::protocolForArchiveMimetype(parentMimeType);
             if (!protocol.isEmpty()) {
                 break;

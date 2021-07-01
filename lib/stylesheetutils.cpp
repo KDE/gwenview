@@ -30,17 +30,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 namespace Gwenview
 {
-
 namespace StyleSheetUtils
 {
-
 QString rgba(const QColor &color)
 {
-    return QString::fromLocal8Bit("rgba(%1, %2, %3, %4)")
-            .arg(color.red())
-            .arg(color.green())
-            .arg(color.blue())
-            .arg(color.alpha());
+    return QString::fromLocal8Bit("rgba(%1, %2, %3, %4)").arg(color.red()).arg(color.green()).arg(color.blue()).arg(color.alpha());
 }
 
 QString gradient(Qt::Orientation orientation, const QColor &color, int value)
@@ -53,14 +47,11 @@ QString gradient(Qt::Orientation orientation, const QColor &color, int value)
         x2 = 1;
         y2 = 0;
     }
-    QString grad =
-        QStringLiteral("qlineargradient(x1:0, y1:0, x2:%1, y2:%2,"
+    QString grad = QStringLiteral(
+        "qlineargradient(x1:0, y1:0, x2:%1, y2:%2,"
         "stop:0 %3, stop: 1 %4)");
-    return grad
-            .arg(x2)
-            .arg(y2)
-            .arg(rgba(PaintUtils::adjustedHsv(color, 0, 0, qMin(255 - color.value(), value / 2))),
-                 rgba(PaintUtils::adjustedHsv(color, 0, 0, -qMin(color.value(), value / 2))));
+    return grad.arg(x2).arg(y2).arg(rgba(PaintUtils::adjustedHsv(color, 0, 0, qMin(255 - color.value(), value / 2))),
+                                    rgba(PaintUtils::adjustedHsv(color, 0, 0, -qMin(color.value(), value / 2))));
 }
 
 } // namespace

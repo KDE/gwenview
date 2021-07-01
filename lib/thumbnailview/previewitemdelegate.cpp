@@ -24,19 +24,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QApplication>
-#include <QHash>
+#include <QDateTime>
+#include <QEvent>
 #include <QHBoxLayout>
+#include <QHash>
+#include <QHoverEvent>
 #include <QPainter>
 #include <QPainterPath>
 #include <QParallelAnimationGroup>
 #include <QPointer>
 #include <QPropertyAnimation>
 #include <QSequentialAnimationGroup>
-#include <QUrl>
-#include <QEvent>
-#include <QHoverEvent>
-#include <QDateTime>
 #include <QToolButton>
+#include <QUrl>
 
 // KF
 #include <KDirModel>
@@ -47,8 +47,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #endif
 
 // Local
-#include "gwenview_lib_debug.h"
 #include "archiveutils.h"
+#include "gwenview_lib_debug.h"
 #include "itemeditor.h"
 #include "paintutils.h"
 #include "thumbnailview.h"
@@ -71,7 +71,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 /**
  * Space between the item outer rect and the content, and between the
  * thumbnail and the caption
@@ -94,21 +93,20 @@ const int SHADOW_STRENGTH_DELEGATE = 128;
 /** How many pixels around the thumbnail are shadowed */
 const int SHADOW_SIZE_DELEGATE = 4;
 
-static KFileItem fileItemForIndexThumbnailView(const QModelIndex& index)
+static KFileItem fileItemForIndexThumbnailView(const QModelIndex &index)
 {
     Q_ASSERT(index.isValid());
     QVariant data = index.data(KDirModel::FileItemRole);
     return qvariant_cast<KFileItem>(data);
 }
 
-static QUrl urlForIndexThumbnailView(const QModelIndex& index)
+static QUrl urlForIndexThumbnailView(const QModelIndex &index)
 {
     KFileItem item = fileItemForIndexThumbnailView(index);
     return item.url();
 }
 
-struct PreviewItemDelegatePrivate
-{
+struct PreviewItemDelegatePrivate {
     /**
      * Maps full text to elided text.
      */
@@ -118,16 +116,16 @@ struct PreviewItemDelegatePrivate
     using ShadowCache = QHash<int, QPixmap>;
     mutable ShadowCache mShadowCache;
 
-    PreviewItemDelegate* q;
+    PreviewItemDelegate *q;
     QPointer<ThumbnailView> mView;
-    QWidget* mContextBar;
-    QToolButton* mSaveButton;
+    QWidget *mContextBar;
+    QToolButton *mSaveButton;
     QPixmap mSaveButtonPixmap;
 
-    QToolButton* mToggleSelectionButton;
-    QToolButton* mFullScreenButton;
-    QToolButton* mRotateLeftButton;
-    QToolButton* mRotateRightButton;
+    QToolButton *mToggleSelectionButton;
+    QToolButton *mFullScreenButton;
+    QToolButton *mRotateLeftButton;
+    QToolButton *mRotateRightButton;
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
     KRatingPainter mRatingPainter;
 #endif
@@ -154,16 +152,14 @@ struct PreviewItemDelegatePrivate
         mSaveButton->render(&mSaveButtonPixmap, QPoint(), QRegion(), QWidget::DrawChildren);
     }
 
-    void showContextBar(const QRect& rect, const QPixmap& thumbnailPix)
+    void showContextBar(const QRect &rect, const QPixmap &thumbnailPix)
     {
         if (mContextBarActions == PreviewItemDelegate::NoAction) {
             return;
         }
         mContextBar->adjustSize();
         // Center bar, except if only showing SelectionAction.
-        const int posX = mContextBarActions == PreviewItemDelegate::SelectionAction
-            ? 0
-            : (rect.width() - mContextBar->width()) / 2;
+        const int posX = mContextBarActions == PreviewItemDelegate::SelectionAction ? 0 : (rect.width() - mContextBar->width()) / 2;
         const int thumbnailPixHeight = qRound(thumbnailPix.height() / thumbnailPix.devicePixelRatio());
         const int posY = qMax(CONTEXTBAR_MARGIN, mThumbnailSize.height() - thumbnailPixHeight - mContextBar->height());
         mContextBar->move(rect.topLeft() + QPoint(posX, posY));
@@ -177,7 +173,7 @@ struct PreviewItemDelegatePrivate
         mToolTip->show();
     }
 
-    bool hoverEventFilter(QHoverEvent* event)
+    bool hoverEventFilter(QHoverEvent *event)
     {
         QModelIndex index = mView->indexAt(event->pos());
         if (index != mIndexUnderCursor) {
@@ -190,7 +186,7 @@ struct PreviewItemDelegatePrivate
         return false;
     }
 
-    void updateHoverUi(const QModelIndex& index)
+    void updateHoverUi(const QModelIndex &index)
     {
         QModelIndex oldIndex = mIndexUnderCursor;
         mIndexUnderCursor = index;
@@ -223,17 +219,13 @@ struct PreviewItemDelegatePrivate
         }
     }
 
-    QRect ratingRectFromIndexRect(const QRect& rect) const
+    QRect ratingRectFromIndexRect(const QRect &rect) const
     {
-        return QRect(
-                   rect.left(),
-                   rect.bottom() - ratingRowHeight() - ITEM_MARGIN_DELEGATE,
-                   rect.width(),
-                   ratingRowHeight());
+        return QRect(rect.left(), rect.bottom() - ratingRowHeight() - ITEM_MARGIN_DELEGATE, rect.width(), ratingRowHeight());
     }
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-    int ratingFromCursorPosition(const QRect& ratingRect) const
+    int ratingFromCursorPosition(const QRect &ratingRect) const
     {
         const QPoint pos = mView->viewport()->mapFromGlobal(QCursor::pos());
         return mRatingPainter.ratingFromPosition(ratingRect, pos);
@@ -249,7 +241,7 @@ struct PreviewItemDelegatePrivate
             return false;
         }
         if (type == QEvent::MouseButtonRelease) {
-            q->setDocumentRatingRequested(urlForIndexThumbnailView(mIndexUnderCursor) , rating);
+            q->setDocumentRatingRequested(urlForIndexThumbnailView(mIndexUnderCursor), rating);
         }
         return true;
 #else
@@ -257,7 +249,7 @@ struct PreviewItemDelegatePrivate
 #endif
     }
 
-    QPoint saveButtonPosition(const QRect& itemRect) const
+    QPoint saveButtonPosition(const QRect &itemRect) const
     {
         QSize buttonSize = mSaveButton->sizeHint();
         int posX = itemRect.right() - buttonSize.width();
@@ -266,13 +258,13 @@ struct PreviewItemDelegatePrivate
         return QPoint(posX, posY);
     }
 
-    void showSaveButton(const QRect& itemRect) const
+    void showSaveButton(const QRect &itemRect) const
     {
         mSaveButton->move(saveButtonPosition(itemRect));
         mSaveButton->show();
     }
 
-    void drawBackground(QPainter* painter, const QRect& rect, const QColor& bgColor, const QColor& borderColor) const
+    void drawBackground(QPainter *painter, const QRect &rect, const QColor &bgColor, const QColor &borderColor) const
     {
         int bgH, bgS, bgV;
         int borderH, borderS, borderV, borderMargin;
@@ -314,7 +306,7 @@ struct PreviewItemDelegatePrivate
         painter->drawPath(path);
     }
 
-    void drawShadow(QPainter* painter, const QRect& rect) const
+    void drawShadow(QPainter *painter, const QRect &rect) const
     {
         const QPoint shadowOffset(-SHADOW_SIZE_DELEGATE, -SHADOW_SIZE_DELEGATE + 1);
 
@@ -332,7 +324,7 @@ struct PreviewItemDelegatePrivate
         painter->drawPixmap(rect.topLeft() + shadowOffset, it.value());
     }
 
-    void drawText(QPainter* painter, const QRect& rect, const QColor& fgColor, const QString& fullText) const
+    void drawText(QPainter *painter, const QRect &rect, const QColor &fgColor, const QString &fullText) const
     {
         QFontMetrics fm = mView->fontMetrics();
 
@@ -361,7 +353,7 @@ struct PreviewItemDelegatePrivate
         painter->drawText(rect.left() + posX, rect.top() + fm.ascent(), text);
     }
 
-    void drawRating(QPainter* painter, const QRect& rect, const QVariant& value)
+    void drawRating(QPainter *painter, const QRect &rect, const QVariant &value)
     {
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
         const int rating = value.toInt();
@@ -371,7 +363,7 @@ struct PreviewItemDelegatePrivate
 #endif
     }
 
-    bool isTextElided(const QString& text) const
+    bool isTextElided(const QString &text) const
     {
         QHash<QString, QString>::const_iterator it = mElidedTextCache.constFind(text);
         if (it == mElidedTextCache.constEnd()) {
@@ -384,7 +376,7 @@ struct PreviewItemDelegatePrivate
      * Show a tooltip only if the item has been elided.
      * This function places the tooltip over the item text.
      */
-    void showToolTip(const QModelIndex& index)
+    void showToolTip(const QModelIndex &index)
     {
         if (mDetails == 0 || mDetails == PreviewItemDelegate::RatingDetail) {
             // No text to display
@@ -447,10 +439,7 @@ struct PreviewItemDelegatePrivate
         QRect rect = mView->visualRect(index);
         const int textY = ITEM_MARGIN_DELEGATE + mThumbnailSize.height() + ITEM_MARGIN_DELEGATE;
         const int spacing = 1;
-        QRect geometry(
-            QPoint(rect.topLeft() + QPoint((rect.width() - tipSize.width()) / 2, textY + spacing)),
-            tipSize
-        );
+        QRect geometry(QPoint(rect.topLeft() + QPoint((rect.width() - tipSize.width()) / 2, textY + spacing)), tipSize);
         if (geometry.left() < 0) {
             geometry.moveLeft(0);
         } else if (geometry.right() > mView->viewport()->width()) {
@@ -458,8 +447,8 @@ struct PreviewItemDelegatePrivate
         }
 
         // Show tip
-        auto* anim = new QParallelAnimationGroup();
-        auto* fadeIn = new QPropertyAnimation(mToolTip, "opacity");
+        auto *anim = new QParallelAnimationGroup();
+        auto *fadeIn = new QPropertyAnimation(mToolTip, "opacity");
         fadeIn->setStartValue(mToolTip->opacity());
         fadeIn->setEndValue(1.);
         anim->addAnimation(fadeIn);
@@ -467,7 +456,7 @@ struct PreviewItemDelegatePrivate
         if (newTipLabel) {
             mToolTip->setGeometry(geometry);
         } else {
-            auto* move = new QPropertyAnimation(mToolTip, "geometry");
+            auto *move = new QPropertyAnimation(mToolTip, "geometry");
             move->setStartValue(mToolTip->geometry());
             move->setEndValue(geometry);
             anim->addAnimation(move);
@@ -482,11 +471,11 @@ struct PreviewItemDelegatePrivate
         if (!mToolTip) {
             return;
         }
-        auto* anim = new QSequentialAnimationGroup();
+        auto *anim = new QSequentialAnimationGroup();
         if (mToolTipAnimation->state() == QPropertyAnimation::Stopped) {
             anim->addPause(500);
         }
-        auto* fadeOut = new QPropertyAnimation(mToolTip, "opacity");
+        auto *fadeOut = new QPropertyAnimation(mToolTip, "opacity");
         fadeOut->setStartValue(mToolTip->opacity());
         fadeOut->setEndValue(0.);
         anim->addAnimation(fadeOut);
@@ -544,9 +533,8 @@ struct PreviewItemDelegatePrivate
 
     void updateToggleSelectionButton()
     {
-        mToggleSelectionButton->setIcon(QIcon::fromTheme(
-                                            mView->selectionModel()->isSelected(mIndexUnderCursor) ? QStringLiteral("list-remove") : QStringLiteral("list-add")
-                                        ));
+        mToggleSelectionButton->setIcon(
+            QIcon::fromTheme(mView->selectionModel()->isSelected(mIndexUnderCursor) ? QStringLiteral("list-remove") : QStringLiteral("list-add")));
     }
 
     void updateImageButtons()
@@ -579,9 +567,9 @@ struct PreviewItemDelegatePrivate
     }
 };
 
-PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
-: QItemDelegate(view)
-, d(new PreviewItemDelegatePrivate)
+PreviewItemDelegate::PreviewItemDelegate(ThumbnailView *view)
+    : QItemDelegate(view)
+    , d(new PreviewItemDelegatePrivate)
 {
     d->q = this;
     d->mView = view;
@@ -599,10 +587,8 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
     d->mContextBarActions = SelectionAction | FullScreenAction | RotateAction;
     d->mTextElideMode = Qt::ElideRight;
 
-    connect(view, &ThumbnailView::rowsRemovedSignal,
-            this, &PreviewItemDelegate::slotRowsChanged);
-    connect(view, &ThumbnailView::rowsInsertedSignal,
-            this, &PreviewItemDelegate::slotRowsChanged);
+    connect(view, &ThumbnailView::rowsRemovedSignal, this, &PreviewItemDelegate::slotRowsChanged);
+    connect(view, &ThumbnailView::rowsInsertedSignal, this, &PreviewItemDelegate::slotRowsChanged);
     connect(view, &ThumbnailView::selectionChangedSignal, [this]() {
         d->updateToggleSelectionButton();
     });
@@ -613,8 +599,7 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
     d->mRatingPainter.setMaxRating(10);
 #endif
 
-    connect(view, &ThumbnailView::thumbnailSizeChanged,
-            this, &PreviewItemDelegate::setThumbnailSize);
+    connect(view, &ThumbnailView::thumbnailSizeChanged, this, &PreviewItemDelegate::setThumbnailSize);
 
     // Button frame
     d->mContextBar = new QWidget(d->mView->viewport());
@@ -636,7 +621,7 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
     d->mRotateRightButton->setIcon(QIcon::fromTheme(QStringLiteral("object-rotate-right")));
     connect(d->mRotateRightButton, &QToolButton::clicked, this, &PreviewItemDelegate::slotRotateRightClicked);
 
-    auto* layout = new QHBoxLayout(d->mContextBar);
+    auto *layout = new QHBoxLayout(d->mContextBar);
     layout->setContentsMargins(2, 2, 2, 2);
     layout->setSpacing(2);
     layout->addWidget(d->mToggleSelectionButton);
@@ -661,7 +646,7 @@ QSize PreviewItemDelegate::sizeHint(const QStyleOptionViewItem & /*option*/, con
     return d->mView->gridSize();
 }
 
-bool PreviewItemDelegate::eventFilter(QObject* object, QEvent* event)
+bool PreviewItemDelegate::eventFilter(QObject *object, QEvent *event)
 {
     if (event->type() == QEvent::Destroy || event->type() == QEvent::ChildRemoved || !d->mView) {
         return QItemDelegate::eventFilter(object, event);
@@ -674,7 +659,7 @@ bool PreviewItemDelegate::eventFilter(QObject* object, QEvent* event)
 
         case QEvent::HoverMove:
         case QEvent::HoverLeave:
-            return d->hoverEventFilter(static_cast<QHoverEvent*>(event));
+            return d->hoverEventFilter(static_cast<QHoverEvent *>(event));
 
         case QEvent::MouseButtonPress:
         case QEvent::MouseButtonRelease:
@@ -690,7 +675,7 @@ bool PreviewItemDelegate::eventFilter(QObject* object, QEvent* event)
     }
 }
 
-void PreviewItemDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const
+void PreviewItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     int thumbnailHeight = d->mThumbnailSize.height();
     QSize fullSize;
@@ -704,7 +689,7 @@ void PreviewItemDelegate::paint(QPainter * painter, const QStyleOptionViewItem &
     const bool underMouse = option.state & QStyle::State_MouseOver;
     const bool hasFocus = option.state & QStyle::State_HasFocus;
 
-    const QWidget* viewport = d->mView->viewport();
+    const QWidget *viewport = d->mView->viewport();
 
 #ifdef DEBUG_DRAW_BORDER
     painter->setPen(Qt::red);
@@ -746,11 +731,10 @@ void PreviewItemDelegate::paint(QPainter * painter, const QStyleOptionViewItem &
     }
 
     // Compute thumbnailRect
-    QRect thumbnailRect = QRect(
-                              rect.left() + (rect.width() - thumbnailSize.width()) / 2,
-                              rect.top() + (thumbnailHeight - thumbnailSize.height()) + ITEM_MARGIN_DELEGATE,
-                              thumbnailSize.width(),
-                              thumbnailSize.height());
+    QRect thumbnailRect = QRect(rect.left() + (rect.width() - thumbnailSize.width()) / 2,
+                                rect.top() + (thumbnailHeight - thumbnailSize.height()) + ITEM_MARGIN_DELEGATE,
+                                thumbnailSize.width(),
+                                thumbnailSize.height());
 
     // Draw background
     const QRect backgroundRect = thumbnailRect.adjusted(-ITEM_MARGIN_DELEGATE, -ITEM_MARGIN_DELEGATE, ITEM_MARGIN_DELEGATE, ITEM_MARGIN_DELEGATE);
@@ -792,10 +776,9 @@ void PreviewItemDelegate::paint(QPainter * painter, const QStyleOptionViewItem &
     // Draw busy indicator
     if (d->mView->isBusy(index)) {
         QPixmap pix = d->mView->busySequenceCurrentPixmap();
-        painter->drawPixmap(
-            thumbnailRect.left() + (thumbnailRect.width() - pix.width()) / 2,
-            thumbnailRect.top() + (thumbnailRect.height() - pix.height()) / 2,
-            pix);
+        painter->drawPixmap(thumbnailRect.left() + (thumbnailRect.width() - pix.width()) / 2,
+                            thumbnailRect.top() + (thumbnailRect.height() - pix.height()) / 2,
+                            pix);
     }
 
     if (index == d->mIndexUnderCursor) {
@@ -816,11 +799,10 @@ void PreviewItemDelegate::paint(QPainter * painter, const QStyleOptionViewItem &
         }
     }
 
-    QRect textRect(
-        rect.left() + ITEM_MARGIN_DELEGATE,
-        rect.top() + 2 * ITEM_MARGIN_DELEGATE + thumbnailHeight,
-        rect.width() - 2 * ITEM_MARGIN_DELEGATE,
-        d->mView->fontMetrics().height());
+    QRect textRect(rect.left() + ITEM_MARGIN_DELEGATE,
+                   rect.top() + 2 * ITEM_MARGIN_DELEGATE + thumbnailHeight,
+                   rect.width() - 2 * ITEM_MARGIN_DELEGATE,
+                   d->mView->fontMetrics().height());
     if (isDirOrArchive || (d->mDetails & PreviewItemDelegate::FileNameDetail)) {
         d->drawText(painter, textRect, fgColor, index.data().toString());
         textRect.moveTop(textRect.bottom());
@@ -862,7 +844,7 @@ void PreviewItemDelegate::paint(QPainter * painter, const QStyleOptionViewItem &
 #endif
 }
 
-void PreviewItemDelegate::setThumbnailSize(const QSize& value)
+void PreviewItemDelegate::setThumbnailSize(const QSize &value)
 {
     d->mThumbnailSize = value;
     d->updateViewGridSize();
@@ -944,40 +926,39 @@ void PreviewItemDelegate::slotRowsChanged()
     d->updateHoverUi(index);
 }
 
-QWidget * PreviewItemDelegate::createEditor(QWidget* parent, const QStyleOptionViewItem& /*option*/, const QModelIndex& /*index*/) const
+QWidget *PreviewItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem & /*option*/, const QModelIndex & /*index*/) const
 {
     return new ItemEditor(parent);
 }
 
-void PreviewItemDelegate::setEditorData(QWidget* widget, const QModelIndex& index) const
+void PreviewItemDelegate::setEditorData(QWidget *widget, const QModelIndex &index) const
 {
-    auto* edit = qobject_cast<ItemEditor*>(widget);
+    auto *edit = qobject_cast<ItemEditor *>(widget);
     if (!edit) {
         return;
     }
     edit->setText(index.data().toString());
 }
 
-void PreviewItemDelegate::updateEditorGeometry(QWidget* widget, const QStyleOptionViewItem& option, const QModelIndex& index) const
+void PreviewItemDelegate::updateEditorGeometry(QWidget *widget, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    auto* edit = qobject_cast<ItemEditor*>(widget);
+    auto *edit = qobject_cast<ItemEditor *>(widget);
     if (!edit) {
         return;
     }
     QString text = index.data().toString();
     int textWidth = edit->fontMetrics().boundingRect(QLatin1String("  ") + text + QLatin1String("  ")).width();
-    QRect textRect(
-        option.rect.left() + (option.rect.width() - textWidth) / 2,
-        option.rect.top() + 2 * ITEM_MARGIN_DELEGATE + d->mThumbnailSize.height(),
-        textWidth,
-        edit->sizeHint().height());
+    QRect textRect(option.rect.left() + (option.rect.width() - textWidth) / 2,
+                   option.rect.top() + 2 * ITEM_MARGIN_DELEGATE + d->mThumbnailSize.height(),
+                   textWidth,
+                   edit->sizeHint().height());
 
     edit->setGeometry(textRect);
 }
 
-void PreviewItemDelegate::setModelData(QWidget* widget, QAbstractItemModel* model, const QModelIndex& index) const
+void PreviewItemDelegate::setModelData(QWidget *widget, QAbstractItemModel *model, const QModelIndex &index) const
 {
-    auto* edit = qobject_cast<ItemEditor*>(widget);
+    auto *edit = qobject_cast<ItemEditor *>(widget);
     if (!edit) {
         return;
     }

@@ -37,16 +37,14 @@ static const int HMARGIN = 2;
 
 namespace Gwenview
 {
-
-struct ToolTipWidgetPrivate
-{
+struct ToolTipWidgetPrivate {
     QString mText;
     qreal mOpacity;
 };
 
-ToolTipWidget::ToolTipWidget(QWidget* parent)
-: QWidget(parent)
-, d(new ToolTipWidgetPrivate)
+ToolTipWidget::ToolTipWidget(QWidget *parent)
+    : QWidget(parent)
+    , d(new ToolTipWidgetPrivate)
 {
     d->mOpacity = 1.;
     setAttribute(Qt::WA_NoSystemBackground);
@@ -73,7 +71,7 @@ QString ToolTipWidget::text() const
     return d->mText;
 }
 
-void ToolTipWidget::setText(const QString& text)
+void ToolTipWidget::setText(const QString &text)
 {
     d->mText = text;
     update();
@@ -85,7 +83,7 @@ QSize ToolTipWidget::sizeHint() const
     return QSize(sh.width() + 2 * HMARGIN, sh.height());
 }
 
-void ToolTipWidget::paintEvent(QPaintEvent*)
+void ToolTipWidget::paintEvent(QPaintEvent *)
 {
     QColor bg2Color = palette().color(QPalette::Highlight);
     QColor bg1Color = KColorScheme::shade(bg2Color, KColorScheme::LightShade, 0.2);

@@ -22,8 +22,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "jpegdocumentloadedimpl.h"
 
 // Qt
-#include <QImage>
 #include <QIODevice>
+#include <QImage>
 
 // KF
 
@@ -32,15 +32,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 namespace Gwenview
 {
-
-struct JpegDocumentLoadedImplPrivate
-{
-    JpegContent* mJpegContent;
+struct JpegDocumentLoadedImplPrivate {
+    JpegContent *mJpegContent;
 };
 
-JpegDocumentLoadedImpl::JpegDocumentLoadedImpl(Document* doc, JpegContent* jpegContent)
-: DocumentLoadedImpl(doc, QByteArray() /* rawData */)
-, d(new JpegDocumentLoadedImplPrivate)
+JpegDocumentLoadedImpl::JpegDocumentLoadedImpl(Document *doc, JpegContent *jpegContent)
+    : DocumentLoadedImpl(doc, QByteArray() /* rawData */)
+    , d(new JpegDocumentLoadedImplPrivate)
 {
     Q_ASSERT(jpegContent);
     d->mJpegContent = jpegContent;
@@ -52,7 +50,7 @@ JpegDocumentLoadedImpl::~JpegDocumentLoadedImpl()
     delete d;
 }
 
-bool JpegDocumentLoadedImpl::saveInternal(QIODevice* device, const QByteArray& format)
+bool JpegDocumentLoadedImpl::saveInternal(QIODevice *device, const QByteArray &format)
 {
     if (format == "jpeg") {
         if (!d->mJpegContent->thumbnail().isNull()) {
@@ -70,7 +68,7 @@ bool JpegDocumentLoadedImpl::saveInternal(QIODevice* device, const QByteArray& f
     }
 }
 
-void JpegDocumentLoadedImpl::setImage(const QImage& image)
+void JpegDocumentLoadedImpl::setImage(const QImage &image)
 {
     d->mJpegContent->setImage(image);
     DocumentLoadedImpl::setImage(image);

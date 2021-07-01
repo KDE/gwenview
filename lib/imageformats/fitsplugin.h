@@ -37,9 +37,10 @@ class Q_CORE_EXPORT FitsPlugin : public QImageIOPlugin
     Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QImageIOHandlerFactoryInterface" FILE "fitsplugin.json")
 
 public:
-    ~FitsPlugin() override { }
+    ~FitsPlugin() override
+    {
+    }
 
     Capabilities capabilities(QIODevice *device, const QByteArray &format) const override;
     QImageIOHandler *create(QIODevice *device, const QByteArray &format = QByteArray()) const override;
 };
-

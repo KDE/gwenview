@@ -28,7 +28,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 namespace Gwenview
 {
-
 /**
  * A thin tool button which can be grouped with another and look like one solid
  * bar:
@@ -46,14 +45,14 @@ public:
         GroupCenter = 3,
     };
 
-    explicit StatusBarToolButton(QWidget* parent = nullptr);
+    explicit StatusBarToolButton(QWidget *parent = nullptr);
 
     QSize sizeHint() const override;
 
     void setGroupPosition(StatusBarToolButton::GroupPosition groupPosition);
 
 protected:
-    void paintEvent(QPaintEvent* event) override;
+    void paintEvent(QPaintEvent *event) override;
 
 private:
     GroupPosition mGroupPosition;

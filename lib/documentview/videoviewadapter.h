@@ -32,7 +32,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 struct VideoViewAdapterPrivate;
 class GWENVIEWLIB_EXPORT VideoViewAdapter : public AbstractDocumentViewAdapter
 {
@@ -54,7 +53,7 @@ Q_SIGNALS:
     void videoFinished();
 
 protected:
-    bool eventFilter(QObject*, QEvent*) override;
+    bool eventFilter(QObject *, QEvent *) override;
 
 private Q_SLOTS:
     void slotPlayPauseClicked();
@@ -69,7 +68,7 @@ private Q_SLOTS:
 
 private:
     friend struct VideoViewAdapterPrivate;
-    VideoViewAdapterPrivate* const d;
+    VideoViewAdapterPrivate *const d;
 };
 
 } // namespace

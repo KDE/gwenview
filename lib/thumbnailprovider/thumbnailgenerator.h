@@ -35,7 +35,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 struct ThumbnailContext {
     QImage mImage;
     int mOriginalWidth;
@@ -55,14 +54,13 @@ public:
     // can't trust isRunning()
     bool isStopped();
 
-    void load(
-        const QString& originalUri,
-        time_t originalTime,
-        KIO::filesize_t originalFileSize,
-        const QString& originalMimeType,
-        const QString& pixPath,
-        const QString& thumbnailPath,
-        ThumbnailGroup::Enum group);
+    void load(const QString &originalUri,
+              time_t originalTime,
+              KIO::filesize_t originalFileSize,
+              const QString &originalMimeType,
+              const QString &pixPath,
+              const QString &thumbnailPath,
+              ThumbnailGroup::Enum group);
 
     void cancel();
 
@@ -70,12 +68,13 @@ public:
     time_t originalTime() const;
     KIO::filesize_t originalFileSize() const;
     QString originalMimeType() const;
+
 protected:
     void run() override;
 
 Q_SIGNALS:
-    void done(const QImage&, const QSize&);
-    void thumbnailReadyToBeCached(const QString& thumbnailPath, const QImage&);
+    void done(const QImage &, const QSize &);
+    void thumbnailReadyToBeCached(const QString &thumbnailPath, const QImage &);
 
 private:
     bool testCancel();

@@ -23,8 +23,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #define KIPIINTERFACE_H
 
 // KIPI
-#include <kipi/interface.h>
 #include <kipi/imagecollectionshared.h>
+#include <kipi/interface.h>
 #include <kipi/plugin.h>
 #include <libkipi_version.h>
 
@@ -36,13 +36,12 @@ class QAction;
 #if KIPI_VERSION_MAJOR >= 5
 #define GWENVIEW_KIPI_WITH_CREATE_METHODS
 #if KIPI_VERSION_MINOR == 0
-# define GWENVIEW_KIPI_WITH_CREATE_RAW_PROCESSOR
+#define GWENVIEW_KIPI_WITH_CREATE_RAW_PROCESSOR
 #endif
 #endif
 
 namespace Gwenview
 {
-
 struct KIPIInterfacePrivate;
 
 class MainWindow;
@@ -52,7 +51,7 @@ class KIPIInterface : public KIPI::Interface
     Q_OBJECT
 
 public:
-    KIPIInterface(MainWindow*);
+    KIPIInterface(MainWindow *);
     ~KIPIInterface() override;
 
     KIPI::ImageCollection currentAlbum() override;
@@ -60,22 +59,22 @@ public:
     QList<KIPI::ImageCollection> allAlbums() override;
     KIPI::ImageInfo info(const QUrl &url) override;
     int features() const override;
-    bool addImage(const QUrl&, QString& err) override;
-    void delImage(const QUrl&) override;
-    void refreshImages(const QList<QUrl>& urls) override;
+    bool addImage(const QUrl &, QString &err) override;
+    void delImage(const QUrl &) override;
+    void refreshImages(const QList<QUrl> &urls) override;
 
-    KIPI::ImageCollectionSelector* imageCollectionSelector(QWidget *parent) override;
-    KIPI::UploadWidget* uploadWidget(QWidget *parent) override;
+    KIPI::ImageCollectionSelector *imageCollectionSelector(QWidget *parent) override;
+    KIPI::UploadWidget *uploadWidget(QWidget *parent) override;
 
-    QList<QAction*> pluginActions(KIPI::Category) const;
+    QList<QAction *> pluginActions(KIPI::Category) const;
 
     bool isLoadingFinished() const;
 
 #ifdef GWENVIEW_KIPI_WITH_CREATE_METHODS
-    KIPI::FileReadWriteLock* createReadWriteLock(const QUrl& url) const override;
-    KIPI::MetadataProcessor* createMetadataProcessor() const override;
+    KIPI::FileReadWriteLock *createReadWriteLock(const QUrl &url) const override;
+    KIPI::MetadataProcessor *createMetadataProcessor() const override;
 #ifdef GWENVIEW_KIPI_WITH_CREATE_RAW_PROCESSOR
-    virtual KIPI::RawProcessor* createRawProcessor() const;
+    virtual KIPI::RawProcessor *createRawProcessor() const;
 #endif
 #endif
 
@@ -93,38 +92,46 @@ private Q_SLOTS:
     void loadOnePlugin();
 
 private:
-    KIPIInterfacePrivate* const d;
+    KIPIInterfacePrivate *const d;
 };
 
 class ImageCollection : public KIPI::ImageCollectionShared
 {
 public:
-    ImageCollection(const QUrl &dirURL, const QString& name, const QList<QUrl>& images)
+    ImageCollection(const QUrl &dirURL, const QString &name, const QList<QUrl> &images)
         : KIPI::ImageCollectionShared()
         , mDirURL(dirURL)
         , mName(name)
-        , mImages(images) {}
+        , mImages(images)
+    {
+    }
 
-    QString name() override {
+    QString name() override
+    {
         return mName;
     }
-    QString comment() override {
+    QString comment() override
+    {
         return QString();
     }
-    QList<QUrl> images() override {
+    QList<QUrl> images() override
+    {
         return mImages;
     }
-    QUrl uploadRoot() {
+    QUrl uploadRoot()
+    {
         return QUrl(QStringLiteral("/"));
     }
-    QUrl uploadPath() {
+    QUrl uploadPath()
+    {
         return mDirURL;
     }
     QString uploadRootName() override
     {
         return QStringLiteral("/");
     }
-    bool isDirectory() override {
+    bool isDirectory() override
+    {
         return true;
     }
 

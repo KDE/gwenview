@@ -32,7 +32,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 struct WidgetFloaterPrivate;
 
 /**
@@ -44,10 +43,10 @@ class GWENVIEWLIB_EXPORT WidgetFloater : public QObject
 {
     Q_OBJECT
 public:
-    explicit WidgetFloater(QWidget* parent);
+    explicit WidgetFloater(QWidget *parent);
     ~WidgetFloater() override;
 
-    void setChildWidget(QWidget*);
+    void setChildWidget(QWidget *);
 
     void setAlignment(Qt::Alignment);
 
@@ -58,10 +57,10 @@ public:
     int verticalMargin() const;
 
 protected:
-    bool eventFilter(QObject*, QEvent*) override;
+    bool eventFilter(QObject *, QEvent *) override;
 
 private:
-    WidgetFloaterPrivate* const d;
+    WidgetFloaterPrivate *const d;
 };
 
 } // namespace

@@ -34,7 +34,6 @@ class QMouseEvent;
 
 namespace Gwenview
 {
-
 class ViewMainPage;
 class ContextManager;
 
@@ -47,13 +46,13 @@ public:
     /**
      * Defines the url to display when the window is shown for the first time.
      */
-    void setInitialUrl(const QUrl&);
+    void setInitialUrl(const QUrl &);
 
     void startSlideShow();
 
-    ViewMainPage* viewMainPage() const;
+    ViewMainPage *viewMainPage() const;
 
-    ContextManager* contextManager() const;
+    ContextManager *contextManager() const;
 
     void setDistractionFreeMode(bool);
 
@@ -63,39 +62,39 @@ public Q_SLOTS:
     /**
      * Go to url, without changing current mode
      */
-    void goToUrl(const QUrl&);
+    void goToUrl(const QUrl &);
 
 Q_SIGNALS:
     void viewModeChanged();
 
 public Q_SLOTS:
-    void setCaption(const QString&) override;
+    void setCaption(const QString &) override;
 
-    void setCaption(const QString&, bool modified) override;
+    void setCaption(const QString &, bool modified) override;
 
 protected:
     bool queryClose() override;
     QSize sizeHint() const override;
-    void showEvent(QShowEvent*) override;
-    void resizeEvent(QResizeEvent*) override;
-    void saveProperties(KConfigGroup&) override;
-    void readProperties(const KConfigGroup&) override;
+    void showEvent(QShowEvent *) override;
+    void resizeEvent(QResizeEvent *) override;
+    void saveProperties(KConfigGroup &) override;
+    void readProperties(const KConfigGroup &) override;
     bool eventFilter(QObject *, QEvent *) override;
     void mousePressEvent(QMouseEvent *) override;
     void mouseDoubleClickEvent(QMouseEvent *) override;
 
 private Q_SLOTS:
-    void setActiveViewModeAction(QAction* action);
-    void openDirUrl(const QUrl&);
-    void slotThumbnailViewIndexActivated(const QModelIndex&);
+    void setActiveViewModeAction(QAction *action);
+    void openDirUrl(const QUrl &);
+    void slotThumbnailViewIndexActivated(const QModelIndex &);
 
-    void slotStartMainPageUrlSelected(const QUrl&);
+    void slotStartMainPageUrlSelected(const QUrl &);
 
     void goUp();
     void toggleSideBar(bool visible);
     void toggleOperationsSideBar(bool visible);
     void slotModifiedDocumentListChanged();
-    void slotUpdateCaption(const QString& caption);
+    void slotUpdateCaption(const QString &caption);
     void slotPartCompleted();
     void slotDirModelNewItems();
     void slotDirListerCompleted();
@@ -117,10 +116,10 @@ private Q_SLOTS:
     void saveCurrent();
     void saveCurrentAs();
     void openFile();
-    void openUrl(const QUrl& url);
+    void openUrl(const QUrl &url);
     void reload();
 
-    void showDocumentInFullScreen(const QUrl&);
+    void showDocumentInFullScreen(const QUrl &);
 
     void showConfigDialog();
     void loadConfig();
@@ -133,12 +132,12 @@ private Q_SLOTS:
 
     void showFirstDocumentReached();
     void showLastDocumentReached();
-    
+
     void replaceLocation();
 
 private:
     struct Private;
-    MainWindow::Private* const d;
+    MainWindow::Private *const d;
 
     void openSelectedDocuments();
     void saveConfig();

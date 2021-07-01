@@ -30,27 +30,25 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 namespace Gwenview
 {
-
 namespace PaintUtils
 {
-
 // Copied from KFileItemDelegate
 QPainterPath roundedRectangle(const QRectF &rect, qreal radius)
 {
     QPainterPath path(QPointF(rect.left(), rect.top() + radius));
-    path.quadTo(rect.left(), rect.top(), rect.left() + radius, rect.top());         // Top left corner
-    path.lineTo(rect.right() - radius, rect.top());                                 // Top side
-    path.quadTo(rect.right(), rect.top(), rect.right(), rect.top() + radius);       // Top right corner
-    path.lineTo(rect.right(), rect.bottom() - radius);                              // Right side
+    path.quadTo(rect.left(), rect.top(), rect.left() + radius, rect.top()); // Top left corner
+    path.lineTo(rect.right() - radius, rect.top()); // Top side
+    path.quadTo(rect.right(), rect.top(), rect.right(), rect.top() + radius); // Top right corner
+    path.lineTo(rect.right(), rect.bottom() - radius); // Right side
     path.quadTo(rect.right(), rect.bottom(), rect.right() - radius, rect.bottom()); // Bottom right corner
-    path.lineTo(rect.left() + radius, rect.bottom());                               // Bottom side
-    path.quadTo(rect.left(), rect.bottom(), rect.left(), rect.bottom() - radius);   // Bottom left corner
+    path.lineTo(rect.left() + radius, rect.bottom()); // Bottom side
+    path.quadTo(rect.left(), rect.bottom(), rect.left(), rect.bottom() - radius); // Bottom left corner
     path.closeSubpath();
 
     return path;
 }
 
-QPixmap generateFuzzyRect(const QSize& size, const QColor& color, int radius)
+QPixmap generateFuzzyRect(const QSize &size, const QColor &color, int radius)
 {
     QPixmap pix(size);
     const QColor transparent(0, 0, 0, 0);
@@ -120,18 +118,14 @@ QPixmap generateFuzzyRect(const QSize& size, const QColor& color, int radius)
     return pix;
 }
 
-QColor adjustedHsv(const QColor& color, int deltaH, int deltaS, int deltaV)
+QColor adjustedHsv(const QColor &color, int deltaH, int deltaS, int deltaV)
 {
     int hue, saturation, value;
     color.getHsv(&hue, &saturation, &value);
-    return QColor::fromHsv(
-               qBound(0, hue + deltaH, 359),
-               qBound(0, saturation + deltaS, 255),
-               qBound(0, value + deltaV, 255)
-           );
+    return QColor::fromHsv(qBound(0, hue + deltaH, 359), qBound(0, saturation + deltaS, 255), qBound(0, value + deltaV, 255));
 }
 
-QColor alphaAdjustedF(const QColor& color, qreal alphaF)
+QColor alphaAdjustedF(const QColor &color, qreal alphaF)
 {
     QColor tmp = color;
     tmp.setAlphaF(alphaF);

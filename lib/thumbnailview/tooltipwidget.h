@@ -30,7 +30,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 struct ToolTipWidgetPrivate;
 
 /**
@@ -41,22 +40,22 @@ class ToolTipWidget : public QWidget
     Q_OBJECT
     Q_PROPERTY(qreal opacity READ opacity WRITE setOpacity)
 public:
-    explicit ToolTipWidget(QWidget* parent = nullptr);
+    explicit ToolTipWidget(QWidget *parent = nullptr);
     ~ToolTipWidget() override;
 
     qreal opacity() const;
     void setOpacity(qreal);
 
     QString text() const;
-    void setText(const QString& text);
+    void setText(const QString &text);
 
     QSize sizeHint() const override;
 
 protected:
-    void paintEvent(QPaintEvent*) override;
+    void paintEvent(QPaintEvent *) override;
 
 private:
-    ToolTipWidgetPrivate* const d;
+    ToolTipWidgetPrivate *const d;
 };
 
 } // namespace

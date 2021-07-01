@@ -27,23 +27,24 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QVBoxLayout>
 
 // KF
-#include <kwidgetsaddons_version.h>
-#include <KActionCollection>
 #include <KActionCategory>
+#include <KActionCollection>
 #include <KActionMenu>
+#include <KDirModel>
 #include <KFileItem>
 #include <KFilePlacesModel>
-#include <KLocalizedString>
-#include <KIconLoader>
-#include <KUrlNavigator>
-#include <KUrlMimeData>
 #include <KFormat>
-#include <KDirModel>
+#include <KIconLoader>
+#include <KLocalizedString>
+#include <KUrlMimeData>
+#include <KUrlNavigator>
+#include <kwidgetsaddons_version.h>
 
 // Local
+#include <fileoperations.h>
 #include <filtercontroller.h>
 #include <gvcore.h>
-#include <fileoperations.h>
+#include <lib/archiveutils.h>
 #include <lib/document/documentfactory.h>
 #include <lib/gvdebug.h>
 #include <lib/gwenviewconfig.h>
@@ -51,48 +52,44 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/semanticinfo/sorteddirmodel.h>
 #include <lib/semanticinfo/tagmodel.h>
 #include <lib/sorting.h>
-#include <lib/archiveutils.h>
 #include <lib/thumbnailview/previewitemdelegate.h>
 #include <lib/thumbnailview/thumbnailview.h>
-#include <ui_browsemainpage.h>
 #include <mimetypeutils.h>
+#include <ui_browsemainpage.h>
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 #include "lib/semanticinfo/semanticinfodirmodel.h"
 #endif
 
 namespace Gwenview
 {
-
-inline Sorting::Enum sortingFromSortAction(const QAction* action)
+inline Sorting::Enum sortingFromSortAction(const QAction *action)
 {
     Q_ASSERT(action);
     return Sorting::Enum(action->data().toInt());
 }
 
-struct BrowseMainPagePrivate : public Ui_BrowseMainPage
-{
-    BrowseMainPage* q;
-    GvCore* mGvCore;
-    KFilePlacesModel* mFilePlacesModel;
-    KUrlNavigator* mUrlNavigator;
-    SortedDirModel* mDirModel;
+struct BrowseMainPagePrivate : public Ui_BrowseMainPage {
+    BrowseMainPage *q;
+    GvCore *mGvCore;
+    KFilePlacesModel *mFilePlacesModel;
+    KUrlNavigator *mUrlNavigator;
+    SortedDirModel *mDirModel;
     int mDocumentCountImages;
     int mDocumentCountVideos;
-    KFileItemList* mSelectedMediaItems;
-    KActionCollection* mActionCollection;
-    FilterController* mFilterController;
-    QActionGroup* mSortAction;
-    KToggleAction* mSortDescendingAction;
-    QActionGroup* mThumbnailDetailsActionGroup;
-    PreviewItemDelegate* mDelegate;
+    KFileItemList *mSelectedMediaItems;
+    KActionCollection *mActionCollection;
+    FilterController *mFilterController;
+    QActionGroup *mSortAction;
+    KToggleAction *mSortDescendingAction;
+    QActionGroup *mThumbnailDetailsActionGroup;
+    PreviewItemDelegate *mDelegate;
 
     void setupWidgets()
     {
         setupUi(q);
         q->layout()->setContentsMargins(0, 0, 0, 0);
 
-        int margins = q->style()->pixelMetric(QStyle::PM_ToolBarItemMargin)
-                    + q->style()->pixelMetric(QStyle::PM_ToolBarFrameWidth);
+        int margins = q->style()->pixelMetric(QStyle::PM_ToolBarItemMargin) + q->style()->pixelMetric(QStyle::PM_ToolBarFrameWidth);
         mStatusBarContainer->layout()->setContentsMargins(margins, margins, margins, margins);
         mStatusBarContainer->layout()->setSpacing(q->style()->pixelMetric(QStyle::PM_ToolBarItemSpacing));
 
@@ -109,11 +106,10 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
         mUrlNavigator = new KUrlNavigator(mFilePlacesModel, QUrl(), mUrlNavigatorContainer);
         mUrlNavigatorContainer->setAutoFillBackground(true);
         mUrlNavigatorContainer->setBackgroundRole(QPalette::Mid);
-        auto* layout = new QVBoxLayout(mUrlNavigatorContainer);
+        auto *layout = new QVBoxLayout(mUrlNavigatorContainer);
         layout->setContentsMargins(0, 0, 0, 0);
         layout->addWidget(mUrlNavigator);
-        QObject::connect(mUrlNavigator, SIGNAL(urlsDropped(QUrl,QDropEvent*)),
-                         q, SLOT(slotUrlsDropped(QUrl,QDropEvent*)));
+        QObject::connect(mUrlNavigator, SIGNAL(urlsDropped(QUrl, QDropEvent *)), q, SLOT(slotUrlsDropped(QUrl, QDropEvent *)));
 
         // FullScreen Toolbar
         mFullScreenToolBar->setVisible(false);
@@ -124,10 +120,8 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
         mFullScreenToolBar2->setBackgroundRole(QPalette::Mid);
 
         // Thumbnail slider
-        QObject::connect(mThumbnailSlider, &ZoomSlider::valueChanged,
-                         mThumbnailView, &ThumbnailView::setThumbnailWidth);
-        QObject::connect(mThumbnailView, &ThumbnailView::thumbnailWidthChanged,
-                         mThumbnailSlider, &ZoomSlider::setValue);
+        QObject::connect(mThumbnailSlider, &ZoomSlider::valueChanged, mThumbnailView, &ThumbnailView::setThumbnailWidth);
+        QObject::connect(mThumbnailView, &ThumbnailView::thumbnailWidthChanged, mThumbnailSlider, &ZoomSlider::setValue);
 
         // Document count label
         QMargins labelMargins = mDocumentCountLabel->contentsMargins();
@@ -144,19 +138,18 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
         action->setChecked(GwenviewConfig::thumbnailDetails() & detail);
         action->setData(QVariant(detail));
         mThumbnailDetailsActionGroup->addAction(action);
-        QObject::connect(action, SIGNAL(triggered(bool)),
-            q, SLOT(updateThumbnailDetails()));
+        QObject::connect(action, SIGNAL(triggered(bool)), q, SLOT(updateThumbnailDetails()));
         return action;
     }
 
-    void setupActions(KActionCollection* actionCollection)
+    void setupActions(KActionCollection *actionCollection)
     {
-        auto* view = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface", "View"), actionCollection);
-        QAction * action = view->addAction("edit_location", q, SLOT(editLocation()));
+        auto *view = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface", "View"), actionCollection);
+        QAction *action = view->addAction("edit_location", q, SLOT(editLocation()));
         action->setText(i18nc("@action:inmenu Navigation Bar", "Edit Location"));
         actionCollection->setDefaultShortcut(action, Qt::Key_F6);
 
-        auto* sortActionMenu = view->add<KActionMenu>("sort_by");
+        auto *sortActionMenu = view->add<KActionMenu>("sort_by");
         sortActionMenu->setText(i18nc("@action:inmenu", "Sort By"));
         sortActionMenu->setIcon(QIcon::fromTheme(QStringLiteral("view-sort")));
 #if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 77, 0)
@@ -180,15 +173,13 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
         action->setCheckable(true);
         action->setData(QVariant(Sorting::Rating));
 #endif
-        QObject::connect(mSortAction, SIGNAL(triggered(QAction*)),
-                         q, SLOT(updateSortOrder()));
-                
+        QObject::connect(mSortAction, SIGNAL(triggered(QAction *)), q, SLOT(updateSortOrder()));
+
         mSortDescendingAction = view->add<KToggleAction>("sort_desc");
         mSortDescendingAction->setText(i18nc("@action:inmenu Sort", "Descending"));
-        QObject::connect(mSortDescendingAction, SIGNAL(toggled(bool)),
-                         q, SLOT(updateSortOrder()));
-        
-        for(auto action : mSortAction->actions()) {
+        QObject::connect(mSortDescendingAction, SIGNAL(toggled(bool)), q, SLOT(updateSortOrder()));
+
+        for (auto action : mSortAction->actions()) {
             sortActionMenu->addAction(action);
         }
         sortActionMenu->addSeparator();
@@ -196,7 +187,7 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
 
         mThumbnailDetailsActionGroup = new QActionGroup(q);
         mThumbnailDetailsActionGroup->setExclusive(false);
-        auto* thumbnailDetailsAction = view->add<KActionMenu>("thumbnail_details");
+        auto *thumbnailDetailsAction = view->add<KActionMenu>("thumbnail_details");
         thumbnailDetailsAction->setText(i18nc("@action:inmenu", "Thumbnail Details"));
         thumbnailDetailsAction->addAction(thumbnailDetailAction(i18nc("@action:inmenu", "Filename"), PreviewItemDelegate::FileNameDetail));
         thumbnailDetailsAction->addAction(thumbnailDetailAction(i18nc("@action:inmenu", "Date"), PreviewItemDelegate::DateDetail));
@@ -206,7 +197,7 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
         thumbnailDetailsAction->addAction(thumbnailDetailAction(i18nc("@action:inmenu", "Rating"), PreviewItemDelegate::RatingDetail));
 #endif
 
-        auto* file = new KActionCategory(i18nc("@title actions category", "File"), actionCollection);
+        auto *file = new KActionCategory(i18nc("@title actions category", "File"), actionCollection);
         action = file->addAction(QStringLiteral("add_folder_to_places"), q, SLOT(addFolderToPlaces()));
         action->setText(i18nc("@action:inmenu", "Add Folder to Places"));
         action->setIcon(QIcon::fromTheme(QStringLiteral("bookmark-new")));
@@ -214,10 +205,10 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
 
     void setupFilterController()
     {
-        auto* menu = new QMenu(mAddFilterButton);
+        auto *menu = new QMenu(mAddFilterButton);
         mFilterController = new FilterController(mFilterFrame, mDirModel);
         const auto actionList = mFilterController->actionList();
-        for (QAction * action : actionList) {
+        for (QAction *action : actionList) {
             menu->addAction(action);
         }
         mAddFilterButton->setMenu(menu);
@@ -235,7 +226,7 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
         mFullScreenToolBar2->addAction(mActionCollection->action(QStringLiteral("leave_fullscreen")));
     }
 
-    void updateSelectedMediaItems(const QItemSelection& selected, const QItemSelection& deselected)
+    void updateSelectedMediaItems(const QItemSelection &selected, const QItemSelection &deselected)
     {
         for (auto index : selected.indexes()) {
             KFileItem item = mDirModel->itemForIndex(index);
@@ -277,7 +268,7 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
         }
     }
 
-    void documentCountsForIndexRange(const QModelIndex& parent, int start, int end, int& imageCountOut, int& videoCountOut)
+    void documentCountsForIndexRange(const QModelIndex &parent, int start, int end, int &imageCountOut, int &videoCountOut)
     {
         imageCountOut = 0;
         videoCountOut = 0;
@@ -298,25 +289,24 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
     void updateContextBarActions()
     {
         PreviewItemDelegate::ContextBarActions actions;
-        switch (GwenviewConfig::thumbnailActions())
-        {
-            case ThumbnailActions::None:
-                actions = PreviewItemDelegate::NoAction;
-                break;
-            case ThumbnailActions::ShowSelectionButtonOnly:
-                actions = PreviewItemDelegate::SelectionAction;
-                break;
-            case ThumbnailActions::AllButtons:
-            default:
-                actions = PreviewItemDelegate::SelectionAction | PreviewItemDelegate::RotateAction;
-                if (!q->window()->isFullScreen()) {
-                    actions |= PreviewItemDelegate::FullScreenAction;
-                }
-                break;
+        switch (GwenviewConfig::thumbnailActions()) {
+        case ThumbnailActions::None:
+            actions = PreviewItemDelegate::NoAction;
+            break;
+        case ThumbnailActions::ShowSelectionButtonOnly:
+            actions = PreviewItemDelegate::SelectionAction;
+            break;
+        case ThumbnailActions::AllButtons:
+        default:
+            actions = PreviewItemDelegate::SelectionAction | PreviewItemDelegate::RotateAction;
+            if (!q->window()->isFullScreen()) {
+                actions |= PreviewItemDelegate::FullScreenAction;
+            }
+            break;
         }
         mDelegate->setContextBarActions(actions);
     }
-    
+
     void applyPalette(bool fullScreenmode)
     {
         q->setPalette(mGvCore->palette(fullScreenmode ? GvCore::FullScreenPalette : GvCore::NormalPalette));
@@ -324,9 +314,9 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage
     }
 };
 
-BrowseMainPage::BrowseMainPage(QWidget* parent, KActionCollection* actionCollection, GvCore* gvCore)
-: QWidget(parent)
-, d(new BrowseMainPagePrivate)
+BrowseMainPage::BrowseMainPage(QWidget *parent, KActionCollection *actionCollection, GvCore *gvCore)
+    : QWidget(parent)
+    , d(new BrowseMainPagePrivate)
 {
     d->q = this;
     d->mGvCore = gvCore;
@@ -343,16 +333,14 @@ BrowseMainPage::BrowseMainPage(QWidget* parent, KActionCollection* actionCollect
     updateThumbnailDetails();
 
     // Set up connections for document count
-    connect(d->mDirModel, &SortedDirModel::rowsInserted,
-            this, &BrowseMainPage::slotDirModelRowsInserted);
-    connect(d->mDirModel, &SortedDirModel::rowsAboutToBeRemoved,
-            this, &BrowseMainPage::slotDirModelRowsAboutToBeRemoved);
-    connect(d->mDirModel, &SortedDirModel::modelReset,
-            this, &BrowseMainPage::slotDirModelReset);
-    connect(thumbnailView(), &ThumbnailView::selectionChangedSignal,
-            this, &BrowseMainPage::slotSelectionChanged);
+    connect(d->mDirModel, &SortedDirModel::rowsInserted, this, &BrowseMainPage::slotDirModelRowsInserted);
+    connect(d->mDirModel, &SortedDirModel::rowsAboutToBeRemoved, this, &BrowseMainPage::slotDirModelRowsAboutToBeRemoved);
+    connect(d->mDirModel, &SortedDirModel::modelReset, this, &BrowseMainPage::slotDirModelReset);
+    connect(thumbnailView(), &ThumbnailView::selectionChangedSignal, this, &BrowseMainPage::slotSelectionChanged);
 
-    connect(qApp, &QApplication::paletteChanged, this, [this](){ d->applyPalette(window()->isFullScreen()); });
+    connect(qApp, &QApplication::paletteChanged, this, [this]() {
+        d->applyPalette(window()->isFullScreen());
+    });
 
     installEventFilter(this);
 }
@@ -379,14 +367,14 @@ void BrowseMainPage::loadConfig()
     d->mThumbnailView->setThumbnailWidth(GwenviewConfig::thumbnailSize());
 
     const auto actionsList = d->mSortAction->actions();
-    for (QAction * action : actionsList) {
+    for (QAction *action : actionsList) {
         if (sortingFromSortAction(action) == GwenviewConfig::sorting()) {
             action->setChecked(true);
             break;
         }
     }
     d->mSortDescendingAction->setChecked(GwenviewConfig::sortDescending());
-    
+
     d->updateContextBarActions();
 }
 
@@ -400,20 +388,20 @@ void BrowseMainPage::saveConfig() const
     GwenviewConfig::setThumbnailDetails(d->mDelegate->thumbnailDetails());
 }
 
-bool BrowseMainPage::eventFilter(QObject* watched, QEvent* event)
+bool BrowseMainPage::eventFilter(QObject *watched, QEvent *event)
 {
     // Leave fullscreen when not viewing an image
     if (window()->isFullScreen() && event->type() == QEvent::ShortcutOverride) {
-        const QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
+        const QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
         if (keyEvent->key() == Qt::Key_Escape) {
-           d->mActionCollection->action(QStringLiteral("leave_fullscreen"))->trigger();
-           event->accept();
+            d->mActionCollection->action(QStringLiteral("leave_fullscreen"))->trigger();
+            event->accept();
         }
     }
     return QWidget::eventFilter(watched, event);
 }
 
-void BrowseMainPage::mousePressEvent(QMouseEvent* event)
+void BrowseMainPage::mousePressEvent(QMouseEvent *event)
 {
     switch (event->button()) {
     case Qt::ForwardButton:
@@ -424,12 +412,12 @@ void BrowseMainPage::mousePressEvent(QMouseEvent* event)
     }
 }
 
-ThumbnailView* BrowseMainPage::thumbnailView() const
+ThumbnailView *BrowseMainPage::thumbnailView() const
 {
     return d->mThumbnailView;
 }
 
-KUrlNavigator* BrowseMainPage::urlNavigator() const
+KUrlNavigator *BrowseMainPage::urlNavigator() const
 {
     return d->mUrlNavigator;
 }
@@ -437,7 +425,7 @@ KUrlNavigator* BrowseMainPage::urlNavigator() const
 void BrowseMainPage::reload()
 {
     const QModelIndexList list = d->mThumbnailView->selectionModel()->selectedIndexes();
-    for (const QModelIndex & index : list) {
+    for (const QModelIndex &index : list) {
         d->mThumbnailView->reloadThumbnail(index);
     }
     d->mDirModel->reload();
@@ -459,7 +447,7 @@ void BrowseMainPage::addFolderToPlaces()
     d->mFilePlacesModel->addPlace(text, url);
 }
 
-void BrowseMainPage::slotDirModelRowsInserted(const QModelIndex& parent, int start, int end)
+void BrowseMainPage::slotDirModelRowsInserted(const QModelIndex &parent, int start, int end)
 {
     int imageCount;
     int videoCount;
@@ -471,7 +459,7 @@ void BrowseMainPage::slotDirModelRowsInserted(const QModelIndex& parent, int sta
     }
 }
 
-void BrowseMainPage::slotDirModelRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end)
+void BrowseMainPage::slotDirModelRowsAboutToBeRemoved(const QModelIndex &parent, int start, int end)
 {
     int imageCount;
     int videoCount;
@@ -491,7 +479,7 @@ void BrowseMainPage::slotDirModelReset()
     d->updateDocumentCountLabel();
 }
 
-void BrowseMainPage::slotSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
+void BrowseMainPage::slotSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
 {
     d->updateSelectedMediaItems(selected, deselected);
     d->updateDocumentCountLabel();
@@ -499,7 +487,7 @@ void BrowseMainPage::slotSelectionChanged(const QItemSelection& selected, const 
 
 void BrowseMainPage::updateSortOrder()
 {
-    const QAction* action = d->mSortAction->checkedAction();
+    const QAction *action = d->mSortAction->checkedAction();
     GV_RETURN_IF_FAIL(action);
 
     const Qt::SortOrder order = d->mSortDescendingAction->isChecked() ? Qt::DescendingOrder : Qt::AscendingOrder;
@@ -533,7 +521,7 @@ void BrowseMainPage::updateThumbnailDetails()
 {
     PreviewItemDelegate::ThumbnailDetails details = {};
     const auto actionList = d->mThumbnailDetailsActionGroup->actions();
-    for (const QAction * action : actionList) {
+    for (const QAction *action : actionList) {
         if (action->isChecked()) {
             details |= PreviewItemDelegate::ThumbnailDetail(action->data().toInt());
         }
@@ -544,9 +532,7 @@ void BrowseMainPage::updateThumbnailDetails()
 void BrowseMainPage::setFullScreenMode(bool fullScreen)
 {
     d->applyPalette(fullScreen);
-    d->mUrlNavigatorContainer->setContentsMargins(
-        fullScreen ? 6 : 0,
-        0, 0, 0);
+    d->mUrlNavigatorContainer->setContentsMargins(fullScreen ? 6 : 0, 0, 0, 0);
     d->updateContextBarActions();
 
     d->mFullScreenToolBar->setVisible(fullScreen);
@@ -561,7 +547,7 @@ void BrowseMainPage::setStatusBarVisible(bool visible)
     d->mStatusBarContainer->setVisible(visible);
 }
 
-void BrowseMainPage::slotUrlsDropped(const QUrl &destUrl, QDropEvent* event)
+void BrowseMainPage::slotUrlsDropped(const QUrl &destUrl, QDropEvent *event)
 {
     const QList<QUrl> urlList = KUrlMimeData::urlsFromMimeData(event->mimeData());
     if (urlList.isEmpty()) {
@@ -572,15 +558,20 @@ void BrowseMainPage::slotUrlsDropped(const QUrl &destUrl, QDropEvent* event)
     // We can't call FileOperations::showMenuForDroppedUrls() directly because
     // we need the slot to return so that the drop event is accepted. Otherwise
     // the drop cursor is still visible when the menu is shown.
-    QMetaObject::invokeMethod(this, [this, urlList, destUrl]() { showMenuForDroppedUrls(urlList, destUrl); }, Qt::QueuedConnection);
+    QMetaObject::invokeMethod(
+        this,
+        [this, urlList, destUrl]() {
+            showMenuForDroppedUrls(urlList, destUrl);
+        },
+        Qt::QueuedConnection);
 }
 
-void BrowseMainPage::showMenuForDroppedUrls(const QList<QUrl>& urlList, const QUrl &destUrl)
+void BrowseMainPage::showMenuForDroppedUrls(const QList<QUrl> &urlList, const QUrl &destUrl)
 {
     FileOperations::showMenuForDroppedUrls(d->mUrlNavigator, urlList, destUrl);
 }
 
-QToolButton* BrowseMainPage::toggleSideBarButton() const
+QToolButton *BrowseMainPage::toggleSideBarButton() const
 {
     return d->mToggleSideBarButton;
 }

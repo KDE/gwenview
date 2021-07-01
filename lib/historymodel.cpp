@@ -24,10 +24,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QDir>
 #include <QFile>
-#include <QUrl>
 #include <QMimeDatabase>
-#include <QTemporaryFile>
 #include <QRegularExpression>
+#include <QTemporaryFile>
+#include <QUrl>
 
 // KF
 #include <KConfig>
@@ -35,8 +35,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KDirModel>
 #include <KFileItem>
 #include <KFilePlacesModel>
-#include <KLocalizedString>
 #include <KFormat>
+#include <KLocalizedString>
 
 // Local
 #include "gwenview_lib_debug.h"
@@ -44,9 +44,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
-struct HistoryItem : public QStandardItem
-{
+struct HistoryItem : public QStandardItem {
     void save() const
     {
         KConfig config(mConfigPath, KConfig::SimpleConfig);
@@ -56,7 +54,7 @@ struct HistoryItem : public QStandardItem
         config.sync();
     }
 
-    static HistoryItem* create(const QUrl &url, const QDateTime& dateTime, const QString& storageDir)
+    static HistoryItem *create(const QUrl &url, const QDateTime &dateTime, const QString &storageDir)
     {
         if (!QDir().mkpath(storageDir)) {
             qCCritical(GWENVIEW_LIB_LOG) << "Could not create history dir" << storageDir;
@@ -69,12 +67,12 @@ struct HistoryItem : public QStandardItem
             return nullptr;
         }
 
-        auto* item = new HistoryItem(url, dateTime, file.fileName());
+        auto *item = new HistoryItem(url, dateTime, file.fileName());
         item->save();
         return item;
     }
 
-    static HistoryItem* load(const QString& fileName)
+    static HistoryItem *load(const QString &fileName)
     {
         KConfig config(fileName, KConfig::SimpleConfig);
         KConfigGroup group(&config, "general");
@@ -103,7 +101,7 @@ struct HistoryItem : public QStandardItem
         return mDateTime;
     }
 
-    void setDateTime(const QDateTime& dateTime)
+    void setDateTime(const QDateTime &dateTime)
     {
         if (mDateTime != dateTime) {
             mDateTime = dateTime;
@@ -121,11 +119,11 @@ private:
     QDateTime mDateTime;
     QString mConfigPath;
 
-    HistoryItem(const QUrl &url, const QDateTime& dateTime, const QString& configPath)
+    HistoryItem(const QUrl &url, const QDateTime &dateTime, const QString &configPath)
         : mUrl(url)
         , mDateTime(dateTime)
-        , mConfigPath(configPath) {
-
+        , mConfigPath(configPath)
+    {
         QString text(mUrl.toDisplayString(QUrl::PreferLocalFile));
 #ifdef Q_OS_UNIX
         // shorten home directory, but avoid showing a cryptic "~/"
@@ -148,18 +146,18 @@ private:
         setData(i18n("Last visited: %1", date), Qt::ToolTipRole);
     }
 
-    bool operator<(const QStandardItem& other) const override {
-        return mDateTime > static_cast<const HistoryItem*>(&other)->mDateTime;
+    bool operator<(const QStandardItem &other) const override
+    {
+        return mDateTime > static_cast<const HistoryItem *>(&other)->mDateTime;
     }
 };
 
-struct HistoryModelPrivate
-{
-    HistoryModel* q;
+struct HistoryModelPrivate {
+    HistoryModel *q;
     QString mStorageDir;
     int mMaxCount;
 
-    QMap<QUrl, HistoryItem*> mHistoryItemForUrl;
+    QMap<QUrl, HistoryItem *> mHistoryItemForUrl;
 
     void load()
     {
@@ -168,8 +166,8 @@ struct HistoryModelPrivate
             return;
         }
         const QStringList rcFilesList = dir.entryList(QStringList() << QStringLiteral("*rc"));
-        for (const QString & name : rcFilesList) {
-            HistoryItem* item = HistoryItem::load(dir.filePath(name));
+        for (const QString &name : rcFilesList) {
+            HistoryItem *item = HistoryItem::load(dir.filePath(name));
             if (!item) {
                 continue;
             }
@@ -184,7 +182,7 @@ struct HistoryModelPrivate
                 }
             }
 
-            HistoryItem* existingItem = mHistoryItemForUrl.value(item->url());
+            HistoryItem *existingItem = mHistoryItemForUrl.value(item->url());
             if (existingItem) {
                 // We already know this url(!) update existing item dateTime
                 // and get rid of duplicate
@@ -204,7 +202,7 @@ struct HistoryModelPrivate
     void garbageCollect()
     {
         while (q->rowCount() > mMaxCount) {
-            HistoryItem* item = static_cast<HistoryItem*>(q->takeRow(q->rowCount() - 1).at(0));
+            HistoryItem *item = static_cast<HistoryItem *>(q->takeRow(q->rowCount() - 1).at(0));
             mHistoryItemForUrl.remove(item->url());
             item->unlink();
             delete item;
@@ -212,9 +210,9 @@ struct HistoryModelPrivate
     }
 };
 
-HistoryModel::HistoryModel(QObject* parent, const QString& storageDir, int maxCount)
-: QStandardItemModel(parent)
-, d(new HistoryModelPrivate)
+HistoryModel::HistoryModel(QObject *parent, const QString &storageDir, int maxCount)
+    : QStandardItemModel(parent)
+    , d(new HistoryModelPrivate)
 {
     d->q = this;
     d->mStorageDir = storageDir;
@@ -227,10 +225,10 @@ HistoryModel::~HistoryModel()
     delete d;
 }
 
-void HistoryModel::addUrl(const QUrl &url, const QDateTime& _dateTime)
+void HistoryModel::addUrl(const QUrl &url, const QDateTime &_dateTime)
 {
     QDateTime dateTime = _dateTime.isValid() ? _dateTime : QDateTime::currentDateTime();
-    HistoryItem* historyItem = d->mHistoryItemForUrl.value(url);
+    HistoryItem *historyItem = d->mHistoryItemForUrl.value(url);
     if (historyItem) {
         historyItem->setDateTime(dateTime);
         sort(0);
@@ -247,11 +245,11 @@ void HistoryModel::addUrl(const QUrl &url, const QDateTime& _dateTime)
     }
 }
 
-bool HistoryModel::removeRows(int start, int count, const QModelIndex& parent)
+bool HistoryModel::removeRows(int start, int count, const QModelIndex &parent)
 {
     Q_ASSERT(!parent.isValid());
-    for (int row = start + count - 1; row >= start ; --row) {
-        auto* historyItem = static_cast<HistoryItem*>(item(row, 0));
+    for (int row = start + count - 1; row >= start; --row) {
+        auto *historyItem = static_cast<HistoryItem *>(item(row, 0));
         Q_ASSERT(historyItem);
         d->mHistoryItemForUrl.remove(historyItem->url());
         historyItem->unlink();

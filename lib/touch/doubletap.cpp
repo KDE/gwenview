@@ -21,9 +21,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "doubletap.h"
 
 // Qt
+#include <QGraphicsWidget>
 #include <QTouchEvent>
 #include <QVector2D>
-#include <QGraphicsWidget>
 
 // KF
 
@@ -31,13 +31,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "gwenview_lib_debug.h"
 #include "lib/touch/touch_helper.h"
 
-
 namespace Gwenview
 {
-
-struct DoubleTapRecognizerPrivate
-{
-    DoubleTapRecognizer* q;
+struct DoubleTapRecognizerPrivate {
+    DoubleTapRecognizer *q;
     bool mTargetIsGrapicsWidget = false;
     qint64 mTouchBeginnTimestamp;
     bool mIsOnlyTap;
@@ -45,8 +42,9 @@ struct DoubleTapRecognizerPrivate
     qint64 mLastDoupleTapTimestamp = 0;
 };
 
-DoubleTapRecognizer::DoubleTapRecognizer() : QGestureRecognizer()
-, d (new DoubleTapRecognizerPrivate)
+DoubleTapRecognizer::DoubleTapRecognizer()
+    : QGestureRecognizer()
+    , d(new DoubleTapRecognizerPrivate)
 {
     d->q = this;
 }
@@ -56,30 +54,33 @@ DoubleTapRecognizer::~DoubleTapRecognizer()
     delete d;
 }
 
-QGesture* DoubleTapRecognizer::create(QObject*)
+QGesture *DoubleTapRecognizer::create(QObject *)
 {
-    return static_cast<QGesture*>(new DoubleTap());
+    return static_cast<QGesture *>(new DoubleTap());
 }
 
-QGestureRecognizer::Result DoubleTapRecognizer::recognize(QGesture* state, QObject* watched, QEvent* event)
+QGestureRecognizer::Result DoubleTapRecognizer::recognize(QGesture *state, QObject *watched, QEvent *event)
 {
-    //Because of a bug in Qt in a gesture event in a graphicsview, all gestures are trigger twice
-    //https://bugreports.qt.io/browse/QTBUG-13103
-    if (qobject_cast<QGraphicsWidget*>(watched)) d->mTargetIsGrapicsWidget = true;
-    if (d->mTargetIsGrapicsWidget && watched->isWidgetType()) return Ignore;
+    // Because of a bug in Qt in a gesture event in a graphicsview, all gestures are trigger twice
+    // https://bugreports.qt.io/browse/QTBUG-13103
+    if (qobject_cast<QGraphicsWidget *>(watched))
+        d->mTargetIsGrapicsWidget = true;
+    if (d->mTargetIsGrapicsWidget && watched->isWidgetType())
+        return Ignore;
 
     switch (event->type()) {
     case QEvent::TouchBegin: {
-        auto* touchEvent = static_cast<QTouchEvent*>(event);
+        auto *touchEvent = static_cast<QTouchEvent *>(event);
         d->mTouchBeginnTimestamp = touchEvent->timestamp();
         d->mIsOnlyTap = true;
-        if (d->mLastDoupleTapTimestamp == 0) d->mLastDoupleTapTimestamp = touchEvent->timestamp() - Touch_Helper::Touch::doubleTapInterval;
+        if (d->mLastDoupleTapTimestamp == 0)
+            d->mLastDoupleTapTimestamp = touchEvent->timestamp() - Touch_Helper::Touch::doubleTapInterval;
         state->setHotSpot(touchEvent->touchPoints().first().screenPos());
         return MayBeGesture;
     }
 
     case QEvent::TouchUpdate: {
-        auto* touchEvent = static_cast<QTouchEvent*>(event);
+        auto *touchEvent = static_cast<QTouchEvent *>(event);
         const qint64 now = touchEvent->timestamp();
         state->setHotSpot(touchEvent->touchPoints().first().screenPos());
 
@@ -94,12 +95,12 @@ QGestureRecognizer::Result DoubleTapRecognizer::recognize(QGesture* state, QObje
     }
 
     case QEvent::TouchEnd: {
-        auto* touchEvent = static_cast<QTouchEvent*>(event);
+        auto *touchEvent = static_cast<QTouchEvent *>(event);
         const qint64 now = touchEvent->timestamp();
 
         if (now - d->mLastTapTimestamp <= Touch_Helper::Touch::doubleTapInterval && d->mIsOnlyTap) {
-            //Interval between two double tap gesture need to be bigger than Touch_Helper::Touch::doupleTapIntervall,
-            //to suppress fast successively double tap gestures
+            // Interval between two double tap gesture need to be bigger than Touch_Helper::Touch::doupleTapIntervall,
+            // to suppress fast successively double tap gestures
             if (now - d->mLastDoupleTapTimestamp > Touch_Helper::Touch::doubleTapInterval) {
                 d->mLastTapTimestamp = 0;
                 state->setHotSpot(touchEvent->touchPoints().first().screenPos());
@@ -108,7 +109,8 @@ QGestureRecognizer::Result DoubleTapRecognizer::recognize(QGesture* state, QObje
             }
         }
 
-        if (d->mIsOnlyTap)  d->mLastTapTimestamp = now;
+        if (d->mIsOnlyTap)
+            d->mLastTapTimestamp = now;
 
         break;
     }
@@ -119,8 +121,8 @@ QGestureRecognizer::Result DoubleTapRecognizer::recognize(QGesture* state, QObje
     return Ignore;
 }
 
-DoubleTap::DoubleTap(QObject* parent)
-: QGesture(parent)
+DoubleTap::DoubleTap(QObject *parent)
+    : QGesture(parent)
 {
 }
 

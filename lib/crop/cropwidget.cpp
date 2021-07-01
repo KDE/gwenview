@@ -26,28 +26,27 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QComboBox>
 #include <QDesktopWidget>
 #include <QDialogButtonBox>
+#include <QFontDatabase>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QLineEdit>
 #include <QPushButton>
+#include <QScreen>
 #include <QSpinBox>
 #include <QtMath>
-#include <QLineEdit>
-#include <QFontDatabase>
-#include <QScreen>
 
 // KF
 #include <KLocalizedString>
 
 // Local
-#include "gwenview_lib_debug.h"
-#include <lib/documentview/rasterimageview.h>
 #include "croptool.h"
 #include "cropwidget.h"
 #include "flowlayout.h"
+#include "gwenview_lib_debug.h"
+#include <lib/documentview/rasterimageview.h>
 
 namespace Gwenview
 {
-
 // Euclidean algorithm to compute the greatest common divisor of two integers.
 // Found at:
 // https://en.wikipedia.org/wiki/Euclidean_algorithm
@@ -62,22 +61,21 @@ static QSize ratio(const QSize &size)
     return size / divisor;
 }
 
-struct CropWidgetPrivate : public QWidget
-{
-    CropWidget* q;
-    QList<QWidget*> mAdvancedWidgets;
-    QWidget* mPreserveAspectRatioWidget;
-    QCheckBox* advancedCheckBox;
-    QComboBox* ratioComboBox;
-    QSpinBox* widthSpinBox;
-    QSpinBox* heightSpinBox;
-    QSpinBox* leftSpinBox;
-    QSpinBox* topSpinBox;
-    QCheckBox* preserveAspectRatioCheckBox;
-    QDialogButtonBox* dialogButtonBox;
+struct CropWidgetPrivate : public QWidget {
+    CropWidget *q;
+    QList<QWidget *> mAdvancedWidgets;
+    QWidget *mPreserveAspectRatioWidget;
+    QCheckBox *advancedCheckBox;
+    QComboBox *ratioComboBox;
+    QSpinBox *widthSpinBox;
+    QSpinBox *heightSpinBox;
+    QSpinBox *leftSpinBox;
+    QSpinBox *topSpinBox;
+    QCheckBox *preserveAspectRatioCheckBox;
+    QDialogButtonBox *dialogButtonBox;
 
     Document::Ptr mDocument;
-    CropTool* mCropTool;
+    CropTool *mCropTool;
     bool mUpdatingFromCropTool;
     int mCurrentImageComboBoxIndex;
     int mCropRatioComboBoxCurrentIndex;
@@ -161,15 +159,13 @@ struct CropWidgetPrivate : public QWidget
         return 0;
     }
 
-    void addRatioToComboBox(const QSizeF& size, const QString& label = QString())
+    void addRatioToComboBox(const QSizeF &size, const QString &label = QString())
     {
-        QString text = label.isEmpty()
-            ? QStringLiteral("%1:%2").arg(size.width()).arg(size.height())
-            : label;
+        QString text = label.isEmpty() ? QStringLiteral("%1:%2").arg(size.width()).arg(size.height()) : label;
         ratioComboBox->addItem(text, QVariant(size));
     }
 
-    void addSectionHeaderToComboBox(const QString& title)
+    void addSectionHeaderToComboBox(const QString &title)
     {
         // Insert a line
         ratioComboBox->insertSeparator(ratioComboBox->count());
@@ -189,12 +185,7 @@ struct CropWidgetPrivate : public QWidget
     {
         QList<QSizeF> ratioList;
         const qreal sqrt2 = qSqrt(2.);
-        ratioList
-                << QSizeF(16, 9)
-                << QSizeF(7, 5)
-                << QSizeF(3, 2)
-                << QSizeF(4, 3)
-                << QSizeF(5, 4);
+        ratioList << QSizeF(16, 9) << QSizeF(7, 5) << QSizeF(3, 2) << QSizeF(4, 3) << QSizeF(5, 4);
 
         addRatioToComboBox(ratio(mDocument->size()), i18n("Current Image"));
         mCurrentImageComboBoxIndex = ratioComboBox->count() - 1; // We need to refer to this ratio later
@@ -203,7 +194,7 @@ struct CropWidgetPrivate : public QWidget
         addRatioToComboBox(ratio(QGuiApplication::screenAt(QCursor::pos())->geometry().size()), i18n("This Screen"));
         addSectionHeaderToComboBox(i18n("Landscape"));
 
-        for (const QSizeF& size : qAsConst(ratioList)) {
+        for (const QSizeF &size : qAsConst(ratioList)) {
             addRatioToComboBox(size);
         }
         addRatioToComboBox(QSizeF(sqrt2, 1), i18n("ISO (A4, A3...)"));
@@ -219,7 +210,7 @@ struct CropWidgetPrivate : public QWidget
         ratioComboBox->setMaxVisibleItems(ratioComboBox->count());
         ratioComboBox->clearEditText();
 
-        auto* edit = qobject_cast<QLineEdit*>(ratioComboBox->lineEdit());
+        auto *edit = qobject_cast<QLineEdit *>(ratioComboBox->lineEdit());
         Q_ASSERT(edit);
         // Do not use i18n("%1:%2") because ':' should not be translated, it is
         // used to parse the ratio string.
@@ -238,12 +229,7 @@ struct CropWidgetPrivate : public QWidget
 
     QRect cropRect() const
     {
-        QRect rect(
-            leftSpinBox->value(),
-            topSpinBox->value(),
-            widthSpinBox->value(),
-            heightSpinBox->value()
-        );
+        QRect rect(leftSpinBox->value(), topSpinBox->value(), widthSpinBox->value(), heightSpinBox->value());
         return rect;
     }
 
@@ -267,7 +253,7 @@ struct CropWidgetPrivate : public QWidget
 
     void initDialogButtonBox()
     {
-        QPushButton* cropButton = dialogButtonBox->button(QDialogButtonBox::Ok);
+        QPushButton *cropButton = dialogButtonBox->button(QDialogButtonBox::Ok);
         cropButton->setIcon(QIcon::fromTheme(QStringLiteral("transform-crop-and-resize")));
         cropButton->setText(i18n("Crop"));
 
@@ -277,25 +263,26 @@ struct CropWidgetPrivate : public QWidget
         connect(resetButton, &QPushButton::clicked, q, &CropWidget::reset);
     }
 
-    QWidget* boxWidget(QWidget* parent = nullptr)
+    QWidget *boxWidget(QWidget *parent = nullptr)
     {
-        auto* widget = new QWidget(parent);
-        auto* layout = new QHBoxLayout(widget);
+        auto *widget = new QWidget(parent);
+        auto *layout = new QHBoxLayout(widget);
         layout->setContentsMargins(0, 0, 0, 0);
         layout->setSpacing(2);
         return widget;
     }
 
-    void setupUi(QWidget* cropWidget) {
+    void setupUi(QWidget *cropWidget)
+    {
         cropWidget->setObjectName(QStringLiteral("CropWidget"));
 
-        auto* flowLayout = new FlowLayout(cropWidget, 6, 0);
+        auto *flowLayout = new FlowLayout(cropWidget, 6, 0);
         flowLayout->setObjectName(QStringLiteral("CropWidgetFlowLayout"));
         flowLayout->setAlignment(Qt::AlignCenter);
         flowLayout->setVerticalSpacing(6);
 
         // (1) Checkbox
-        QWidget* box = boxWidget(cropWidget);
+        QWidget *box = boxWidget(cropWidget);
         advancedCheckBox = new QCheckBox(i18nc("@option:check", "Advanced settings"), box);
         advancedCheckBox->setFocusPolicy(Qt::NoFocus);
         box->layout()->addWidget(advancedCheckBox);
@@ -305,7 +292,7 @@ struct CropWidgetPrivate : public QWidget
         // (2) Ratio combobox (Advanced settings)
         box = boxWidget(cropWidget);
         mAdvancedWidgets << box;
-        auto* label = new QLabel(i18nc("@label:listbox", "Aspect ratio:"), box);
+        auto *label = new QLabel(i18nc("@label:listbox", "Aspect ratio:"), box);
         label->setContentsMargins(4, 4, 4, 4);
         box->layout()->addWidget(label);
         ratioComboBox = new QComboBox(box);
@@ -322,7 +309,7 @@ struct CropWidgetPrivate : public QWidget
         label->setContentsMargins(4, 4, 4, 4);
         box->layout()->addWidget(label);
 
-        auto* innerLayout = new QHBoxLayout();
+        auto *innerLayout = new QHBoxLayout();
         innerLayout->setSpacing(3);
 
         widthSpinBox = new QSpinBox(box);
@@ -374,9 +361,9 @@ struct CropWidgetPrivate : public QWidget
     }
 };
 
-CropWidget::CropWidget(QWidget* parent, RasterImageView* imageView, CropTool* cropTool)
-: QWidget(parent)
-, d(new CropWidgetPrivate)
+CropWidget::CropWidget(QWidget *parent, RasterImageView *imageView, CropTool *cropTool)
+    : QWidget(parent)
+    , d(new CropWidgetPrivate)
 {
     setWindowFlags(Qt::Tool);
     d->q = this;
@@ -476,7 +463,7 @@ int CropWidget::cropRatioIndex() const
     return d->mCropRatioComboBoxCurrentIndex;
 }
 
-void CropWidget::setCropRect(const QRect& rect)
+void CropWidget::setCropRect(const QRect &rect)
 {
     d->mUpdatingFromCropTool = true;
     d->leftSpinBox->setValue(rect.left());

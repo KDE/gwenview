@@ -24,18 +24,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QApplication>
 #include <QClipboard>
 #include <QDateTime>
+#include <QFileDialog>
 #include <QLineEdit>
+#include <QMenuBar>
+#include <QMouseEvent>
 #include <QPushButton>
 #include <QShortcut>
 #include <QSplitter>
 #include <QStackedWidget>
-#include <QFileDialog>
 #include <QTimer>
 #include <QUndoGroup>
-#include <QVBoxLayout>
-#include <QMenuBar>
 #include <QUrl>
-#include <QMouseEvent>
+#include <QVBoxLayout>
 
 #ifdef Q_OS_OSX
 #include <QFileOpenEvent>
@@ -46,45 +46,45 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KF
 #include <KActionCategory>
 #include <KActionCollection>
+#include <KDirLister>
 #include <KDirModel>
 #include <KFileItem>
 #include <KHamburgerMenu>
+#include <KLinkItemSelectionModel>
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KMessageWidget>
 #include <KNotificationRestrictions>
 #include <KProtocolManager>
-#include <KLinkItemSelectionModel>
 #include <KRecentFilesAction>
 #include <KStandardShortcut>
 #include <KToggleFullScreenAction>
-#include <KUrlComboBox>
-#include <KUrlNavigator>
 #include <KToolBar>
 #include <KToolBarPopupAction>
+#include <KUrlComboBox>
+#include <KUrlNavigator>
 #include <KXMLGUIFactory>
-#include <KDirLister>
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 #include "lib/semanticinfo/semanticinfodirmodel.h"
 #endif
 #ifdef KF5Purpose_FOUND
-#include <PurposeWidgets/Menu>
 #include <Purpose/AlternativesModel>
+#include <PurposeWidgets/Menu>
 #endif
 
 // Local
-#include "gwenview_app_debug.h"
-#include "dialogguard.h"
 #include "alignwithsidebarwidgetaction.h"
 #include "configdialog.h"
+#include "dialogguard.h"
 #include "documentinfoprovider.h"
-#include "viewmainpage.h"
 #include "fileopscontextmanageritem.h"
 #include "folderviewcontextmanageritem.h"
 #include "fullscreencontent.h"
 #include "gvcore.h"
+#include "gwenview_app_debug.h"
 #include "imageopscontextmanageritem.h"
 #include "infocontextmanageritem.h"
+#include "viewmainpage.h"
 #ifdef KIPI_FOUND
 #include "kipiexportaction.h"
 #include "kipiinterface.h"
@@ -92,14 +92,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 #include "semanticinfocontextmanageritem.h"
 #endif
+#include "browsemainpage.h"
 #include "preloader.h"
 #include "savebar.h"
 #include "sidebar.h"
 #include "splitter.h"
 #include "startmainpage.h"
 #include "thumbnailviewhelper.h"
-#include "browsemainpage.h"
-#include <lib/hud/hudbuttonbox.h>
 #include <lib/archiveutils.h>
 #include <lib/contextmanager.h>
 #include <lib/disabledactionshortcutmonitor.h>
@@ -107,15 +106,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/documentonlyproxymodel.h>
 #include <lib/gvdebug.h>
 #include <lib/gwenviewconfig.h>
+#include <lib/hud/hudbuttonbox.h>
 #include <lib/mimetypeutils.h>
 #ifdef HAVE_QTDBUS
-#include <lib/mpris2/mpris2service.h>
 #include <QDBusPendingReply>
+#include <lib/mpris2/mpris2service.h>
 #endif
 #include <lib/print/printhelper.h>
-#include <lib/slideshow.h>
-#include <lib/signalblocker.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
+#include <lib/signalblocker.h>
+#include <lib/slideshow.h>
 #include <lib/thumbnailprovider/thumbnailprovider.h>
 #include <lib/thumbnailview/thumbnailbarview.h>
 #include <lib/thumbnailview/thumbnailview.h>
@@ -123,7 +123,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 namespace Gwenview
 {
-
 #undef ENABLE_LOG
 #undef LOG
 //#define ENABLE_LOG
@@ -136,8 +135,8 @@ namespace Gwenview
 static const int BROWSE_PRELOAD_DELAY = 1000;
 static const int VIEW_PRELOAD_DELAY = 100;
 
-static const char* SESSION_CURRENT_PAGE_KEY = "Page";
-static const char* SESSION_URL_KEY = "Url";
+static const char *SESSION_CURRENT_PAGE_KEY = "Page";
+static const char *SESSION_URL_KEY = "Url";
 
 enum MainPageId {
     StartMainPageId,
@@ -145,8 +144,7 @@ enum MainPageId {
     ViewMainPageId,
 };
 
-struct MainWindowState
-{
+struct MainWindowState {
     bool mToolBarVisible;
 };
 
@@ -169,66 +167,65 @@ Layout of the main window looks like this:
 '----------------------------------------------'
 
 */
-struct MainWindow::Private
-{
-    GvCore* mGvCore;
-    MainWindow* q;
-    QSplitter* mCentralSplitter;
-    QWidget* mContentWidget;
-    ViewMainPage* mViewMainPage;
-    KUrlNavigator* mUrlNavigator;
-    ThumbnailView* mThumbnailView;
-    ThumbnailView* mActiveThumbnailView;
-    DocumentInfoProvider* mDocumentInfoProvider;
-    ThumbnailViewHelper* mThumbnailViewHelper;
+struct MainWindow::Private {
+    GvCore *mGvCore;
+    MainWindow *q;
+    QSplitter *mCentralSplitter;
+    QWidget *mContentWidget;
+    ViewMainPage *mViewMainPage;
+    KUrlNavigator *mUrlNavigator;
+    ThumbnailView *mThumbnailView;
+    ThumbnailView *mActiveThumbnailView;
+    DocumentInfoProvider *mDocumentInfoProvider;
+    ThumbnailViewHelper *mThumbnailViewHelper;
     QPointer<ThumbnailProvider> mThumbnailProvider;
-    BrowseMainPage* mBrowseMainPage;
-    StartMainPage* mStartMainPage;
-    SideBar* mSideBar;
-    KMessageWidget* mSharedMessage;
-    QStackedWidget* mViewStackedWidget;
-    FullScreenContent* mFullScreenContent;
-    SaveBar* mSaveBar;
+    BrowseMainPage *mBrowseMainPage;
+    StartMainPage *mStartMainPage;
+    SideBar *mSideBar;
+    KMessageWidget *mSharedMessage;
+    QStackedWidget *mViewStackedWidget;
+    FullScreenContent *mFullScreenContent;
+    SaveBar *mSaveBar;
     bool mStartSlideShowWhenDirListerCompleted;
-    SlideShow* mSlideShow;
+    SlideShow *mSlideShow;
 #ifdef HAVE_QTDBUS
-    Mpris2Service* mMpris2Service;
+    Mpris2Service *mMpris2Service;
 #endif
-    Preloader* mPreloader;
+    Preloader *mPreloader;
     bool mPreloadDirectionIsForward;
 #ifdef KIPI_FOUND
-    KIPIInterface* mKIPIInterface;
+    KIPIInterface *mKIPIInterface;
 #endif
 
-    QActionGroup* mViewModeActionGroup;
-    KRecentFilesAction* mFileOpenRecentAction;
-    QAction * mBrowseAction;
-    QAction * mViewAction;
-    QAction * mGoUpAction;
-    QAction * mGoToPreviousAction;
-    QAction * mGoToNextAction;
-    QAction * mGoToFirstAction;
-    QAction * mGoToLastAction;
-    KToggleAction* mToggleSideBarAction;
-    KToggleAction* mToggleOperationsSideBarAction;
-    QAction* mFullScreenAction;
-    QAction * mToggleSlideShowAction;
-    KToggleAction* mShowMenuBarAction;
-    KToggleAction* mShowStatusBarAction;
+    QActionGroup *mViewModeActionGroup;
+    KRecentFilesAction *mFileOpenRecentAction;
+    QAction *mBrowseAction;
+    QAction *mViewAction;
+    QAction *mGoUpAction;
+    QAction *mGoToPreviousAction;
+    QAction *mGoToNextAction;
+    QAction *mGoToFirstAction;
+    QAction *mGoToLastAction;
+    KToggleAction *mToggleSideBarAction;
+    KToggleAction *mToggleOperationsSideBarAction;
+    QAction *mFullScreenAction;
+    QAction *mToggleSlideShowAction;
+    KToggleAction *mShowMenuBarAction;
+    KToggleAction *mShowStatusBarAction;
     QPointer<HudButtonBox> hudButtonBox;
 #ifdef KF5Purpose_FOUND
-    Purpose::Menu* mShareMenu;
-    KToolBarPopupAction* mShareAction;
+    Purpose::Menu *mShareMenu;
+    KToolBarPopupAction *mShareAction;
 #endif
 #ifdef KIPI_FOUND
-    KIPIExportAction* mKIPIExportAction;
+    KIPIExportAction *mKIPIExportAction;
 #endif
-    KHamburgerMenu* mHamburgerMenu;
+    KHamburgerMenu *mHamburgerMenu;
 
-    SortedDirModel* mDirModel;
-    DocumentOnlyProxyModel* mThumbnailBarModel;
-    KLinkItemSelectionModel* mThumbnailBarSelectionModel;
-    ContextManager* mContextManager;
+    SortedDirModel *mDirModel;
+    DocumentOnlyProxyModel *mThumbnailBarModel;
+    KLinkItemSelectionModel *mThumbnailBarSelectionModel;
+    ContextManager *mContextManager;
 
     MainWindowState mStateBeforeFullScreen;
 
@@ -237,15 +234,13 @@ struct MainWindow::Private
     MainPageId mCurrentMainPageId;
 
     QDateTime mFullScreenLeftAt;
-    KNotificationRestrictions* mNotificationRestrictions;
+    KNotificationRestrictions *mNotificationRestrictions;
 
     void setupContextManager()
     {
         mContextManager = new ContextManager(mDirModel, q);
-        connect(mContextManager, &ContextManager::selectionChanged,
-            q, &MainWindow::slotSelectionChanged);
-        connect(mContextManager, &ContextManager::currentDirUrlChanged,
-            q, &MainWindow::slotCurrentDirUrlChanged);
+        connect(mContextManager, &ContextManager::selectionChanged, q, &MainWindow::slotSelectionChanged);
+        connect(mContextManager, &ContextManager::currentDirUrlChanged, q, &MainWindow::slotCurrentDirUrlChanged);
     }
 
     void setupWidgets()
@@ -268,7 +263,7 @@ struct MainWindow::Private
         mSaveBar = new SaveBar(mContentWidget, q->actionCollection());
         connect(mContextManager, &ContextManager::currentUrlChanged, mSaveBar, &SaveBar::setCurrentUrl);
         mViewStackedWidget = new QStackedWidget(mContentWidget);
-        auto* layout = new QVBoxLayout(mContentWidget);
+        auto *layout = new QVBoxLayout(mContentWidget);
         layout->addWidget(mSharedMessage);
         layout->addWidget(mSaveBar);
         layout->addWidget(mViewStackedWidget);
@@ -294,16 +289,13 @@ struct MainWindow::Private
 
         mThumbnailView->setFocus();
 
-        connect(mSaveBar, &SaveBar::requestSaveAll,
-                mGvCore, &GvCore::saveAll);
-        connect(mSaveBar, &SaveBar::goToUrl,
-                q, &MainWindow::goToUrl);
+        connect(mSaveBar, &SaveBar::requestSaveAll, mGvCore, &GvCore::saveAll);
+        connect(mSaveBar, &SaveBar::goToUrl, q, &MainWindow::goToUrl);
 
-        connect(mSlideShow, &SlideShow::goToUrl,
-                q, &MainWindow::goToUrl);
+        connect(mSlideShow, &SlideShow::goToUrl, q, &MainWindow::goToUrl);
     }
 
-    void setupThumbnailView(QWidget* parent)
+    void setupThumbnailView(QWidget *parent)
     {
         Q_ASSERT(mContextManager);
         mBrowseMainPage = new BrowseMainPage(parent, q->actionCollection(), mGvCore);
@@ -317,54 +309,40 @@ struct MainWindow::Private
         mThumbnailView->setDocumentInfoProvider(mDocumentInfoProvider);
 
         mThumbnailViewHelper = new ThumbnailViewHelper(mDirModel, q->actionCollection());
-        connect(mContextManager, &ContextManager::currentDirUrlChanged,
-            mThumbnailViewHelper, &ThumbnailViewHelper::setCurrentDirUrl);
+        connect(mContextManager, &ContextManager::currentDirUrlChanged, mThumbnailViewHelper, &ThumbnailViewHelper::setCurrentDirUrl);
         mThumbnailView->setThumbnailViewHelper(mThumbnailViewHelper);
 
         mThumbnailBarSelectionModel = new KLinkItemSelectionModel(mThumbnailBarModel, mContextManager->selectionModel(), q);
 
         // Connect thumbnail view
-        connect(mThumbnailView, &ThumbnailView::indexActivated,
-                q, &MainWindow::slotThumbnailViewIndexActivated);
+        connect(mThumbnailView, &ThumbnailView::indexActivated, q, &MainWindow::slotThumbnailViewIndexActivated);
 
         // Connect delegate
-        QAbstractItemDelegate* delegate = mThumbnailView->itemDelegate();
-        connect(delegate, SIGNAL(saveDocumentRequested(QUrl)),
-                mGvCore, SLOT(save(QUrl)));
-        connect(delegate, SIGNAL(rotateDocumentLeftRequested(QUrl)),
-                mGvCore, SLOT(rotateLeft(QUrl)));
-        connect(delegate, SIGNAL(rotateDocumentRightRequested(QUrl)),
-                mGvCore, SLOT(rotateRight(QUrl)));
-        connect(delegate, SIGNAL(showDocumentInFullScreenRequested(QUrl)),
-                q, SLOT(showDocumentInFullScreen(QUrl)));
-        connect(delegate, SIGNAL(setDocumentRatingRequested(QUrl,int)),
-                mGvCore, SLOT(setRating(QUrl,int)));
+        QAbstractItemDelegate *delegate = mThumbnailView->itemDelegate();
+        connect(delegate, SIGNAL(saveDocumentRequested(QUrl)), mGvCore, SLOT(save(QUrl)));
+        connect(delegate, SIGNAL(rotateDocumentLeftRequested(QUrl)), mGvCore, SLOT(rotateLeft(QUrl)));
+        connect(delegate, SIGNAL(rotateDocumentRightRequested(QUrl)), mGvCore, SLOT(rotateRight(QUrl)));
+        connect(delegate, SIGNAL(showDocumentInFullScreenRequested(QUrl)), q, SLOT(showDocumentInFullScreen(QUrl)));
+        connect(delegate, SIGNAL(setDocumentRatingRequested(QUrl, int)), mGvCore, SLOT(setRating(QUrl, int)));
 
         // Connect url navigator
-        connect(mUrlNavigator, &KUrlNavigator::urlChanged,
-                q, &MainWindow::openDirUrl);
+        connect(mUrlNavigator, &KUrlNavigator::urlChanged, q, &MainWindow::openDirUrl);
     }
 
-    void setupViewMainPage(QWidget* parent)
+    void setupViewMainPage(QWidget *parent)
     {
         mViewMainPage = new ViewMainPage(parent, mSlideShow, q->actionCollection(), mGvCore);
-        connect(mViewMainPage, &ViewMainPage::captionUpdateRequested,
-                q, &MainWindow::slotUpdateCaption);
-        connect(mViewMainPage, &ViewMainPage::completed,
-                q, &MainWindow::slotPartCompleted);
-        connect(mViewMainPage, &ViewMainPage::previousImageRequested,
-                q, &MainWindow::goToPrevious);
-        connect(mViewMainPage, &ViewMainPage::nextImageRequested,
-                q, &MainWindow::goToNext);
-        connect(mViewMainPage, &ViewMainPage::openUrlRequested,
-                q, &MainWindow::openUrl);
-        connect(mViewMainPage, &ViewMainPage::openDirUrlRequested,
-                q, &MainWindow::openDirUrl);
+        connect(mViewMainPage, &ViewMainPage::captionUpdateRequested, q, &MainWindow::slotUpdateCaption);
+        connect(mViewMainPage, &ViewMainPage::completed, q, &MainWindow::slotPartCompleted);
+        connect(mViewMainPage, &ViewMainPage::previousImageRequested, q, &MainWindow::goToPrevious);
+        connect(mViewMainPage, &ViewMainPage::nextImageRequested, q, &MainWindow::goToNext);
+        connect(mViewMainPage, &ViewMainPage::openUrlRequested, q, &MainWindow::openUrl);
+        connect(mViewMainPage, &ViewMainPage::openDirUrlRequested, q, &MainWindow::openDirUrl);
 
         setupThumbnailBar(mViewMainPage->thumbnailBar());
     }
 
-    void setupThumbnailBar(ThumbnailView* bar)
+    void setupThumbnailBar(ThumbnailView *bar)
     {
         Q_ASSERT(mThumbnailBarModel);
         Q_ASSERT(mThumbnailBarSelectionModel);
@@ -376,12 +354,11 @@ struct MainWindow::Private
         bar->setThumbnailViewHelper(mThumbnailViewHelper);
     }
 
-    void setupStartMainPage(QWidget* parent)
+    void setupStartMainPage(QWidget *parent)
     {
         mStartMainPage = new StartMainPage(parent, mGvCore);
-        connect(mStartMainPage, &StartMainPage::urlSelected,
-                q, &MainWindow::slotStartMainPageUrlSelected);
-        connect(mStartMainPage, &StartMainPage::recentFileRemoved, [this](const QUrl& url) {
+        connect(mStartMainPage, &StartMainPage::urlSelected, q, &MainWindow::slotStartMainPageUrlSelected);
+        connect(mStartMainPage, &StartMainPage::recentFileRemoved, [this](const QUrl &url) {
             mFileOpenRecentAction->removeUrl(url);
         });
         connect(mStartMainPage, &StartMainPage::recentFilesCleared, [this]() {
@@ -389,25 +366,24 @@ struct MainWindow::Private
         });
     }
 
-    void installDisabledActionShortcutMonitor(QAction* action, const char* slot)
+    void installDisabledActionShortcutMonitor(QAction *action, const char *slot)
     {
-        auto* monitor = new DisabledActionShortcutMonitor(action, q);
+        auto *monitor = new DisabledActionShortcutMonitor(action, q);
         connect(monitor, SIGNAL(activated()), q, slot);
     }
 
     void setupActions()
     {
-        KActionCollection* actionCollection = q->actionCollection();
-        auto* file = new KActionCategory(i18nc("@title actions category", "File"), actionCollection);
-        auto* view = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface", "View"), actionCollection);
+        KActionCollection *actionCollection = q->actionCollection();
+        auto *file = new KActionCategory(i18nc("@title actions category", "File"), actionCollection);
+        auto *view = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface", "View"), actionCollection);
 
         file->addAction(KStandardAction::Save, q, SLOT(saveCurrent()));
         file->addAction(KStandardAction::SaveAs, q, SLOT(saveCurrentAs()));
         file->addAction(KStandardAction::Open, q, SLOT(openFile()));
         mFileOpenRecentAction = KStandardAction::openRecent(q, SLOT(openUrl(QUrl)), q);
-        connect(mFileOpenRecentAction, &KRecentFilesAction::recentListCleared,
-                mGvCore, &GvCore::clearRecentFilesAndFolders);
-        auto * clearAction = mFileOpenRecentAction->menu()->findChild<QAction*>("clear_action");
+        connect(mFileOpenRecentAction, &KRecentFilesAction::recentListCleared, mGvCore, &GvCore::clearRecentFilesAndFolders);
+        auto *clearAction = mFileOpenRecentAction->menu()->findChild<QAction *>("clear_action");
         if (clearAction) {
             clearAction->setText(i18nc("@action Open Recent menu", "Clear List"));
         }
@@ -415,12 +391,12 @@ struct MainWindow::Private
         file->addAction(KStandardAction::Print, q, SLOT(print()));
         file->addAction(KStandardAction::Quit, qApp, SLOT(closeAllWindows()));
 
-        QAction * action = file->addAction("reload", q, SLOT(reload()));
+        QAction *action = file->addAction("reload", q, SLOT(reload()));
         action->setText(i18nc("@action reload the currently viewed image", "Reload"));
         action->setIcon(QIcon::fromTheme("view-refresh"));
         actionCollection->setDefaultShortcuts(action, KStandardShortcut::reload());
-        
-        QAction * replaceLocationAction = actionCollection->addAction(QStringLiteral("replace_location"));
+
+        QAction *replaceLocationAction = actionCollection->addAction(QStringLiteral("replace_location"));
         replaceLocationAction->setText(i18nc("@action:inmenu Navigation Bar", "Replace Location"));
         actionCollection->setDefaultShortcut(replaceLocationAction, Qt::CTRL | Qt::Key_L);
         connect(replaceLocationAction, &QAction::triggered, q, &MainWindow::replaceLocation);
@@ -431,8 +407,7 @@ struct MainWindow::Private
         mBrowseAction->setCheckable(true);
         mBrowseAction->setIcon(QIcon::fromTheme("view-list-icons"));
         actionCollection->setDefaultShortcut(mBrowseAction, Qt::Key_Escape);
-        connect(mViewMainPage, &ViewMainPage::goToBrowseModeRequested,
-            mBrowseAction, &QAction::trigger);
+        connect(mViewMainPage, &ViewMainPage::goToBrowseModeRequested, mBrowseAction, &QAction::trigger);
 
         mViewAction = view->addAction("view");
         mViewAction->setText(i18nc("@action:intoolbar Switch to image view", "View"));
@@ -444,18 +419,16 @@ struct MainWindow::Private
         mViewModeActionGroup->addAction(mBrowseAction);
         mViewModeActionGroup->addAction(mViewAction);
 
-        connect(mViewModeActionGroup, &QActionGroup::triggered,
-                q, &MainWindow::setActiveViewModeAction);
+        connect(mViewModeActionGroup, &QActionGroup::triggered, q, &MainWindow::setActiveViewModeAction);
 
         mFullScreenAction = KStandardAction::fullScreen(q, &MainWindow::toggleFullScreen, q, actionCollection);
         QList<QKeySequence> shortcuts = mFullScreenAction->shortcuts();
         shortcuts.append(QKeySequence(Qt::Key_F11));
         actionCollection->setDefaultShortcuts(mFullScreenAction, shortcuts);
 
-        connect(mViewMainPage, &ViewMainPage::toggleFullScreenRequested,
-                mFullScreenAction, &QAction::trigger);
+        connect(mViewMainPage, &ViewMainPage::toggleFullScreenRequested, mFullScreenAction, &QAction::trigger);
 
-        QAction * leaveFullScreenAction = view->addAction("leave_fullscreen", q, SLOT(leaveFullScreen()));
+        QAction *leaveFullScreenAction = view->addAction("leave_fullscreen", q, SLOT(leaveFullScreen()));
         leaveFullScreenAction->setIcon(QIcon::fromTheme("view-restore"));
         leaveFullScreenAction->setText(i18nc("@action", "Exit Full Screen"));
 
@@ -503,43 +476,34 @@ struct MainWindow::Private
         mToggleSideBarAction->setIcon(QIcon::fromTheme("view-sidetree"));
         actionCollection->setDefaultShortcut(mToggleSideBarAction, Qt::Key_F4);
         mToggleSideBarAction->setText(i18nc("@action", "Sidebar"));
-        connect(mBrowseMainPage->toggleSideBarButton(), &QAbstractButton::clicked,
-                mToggleSideBarAction, &QAction::trigger);
-        connect(mViewMainPage->toggleSideBarButton(), &QAbstractButton::clicked,
-                mToggleSideBarAction, &QAction::trigger);
+        connect(mBrowseMainPage->toggleSideBarButton(), &QAbstractButton::clicked, mToggleSideBarAction, &QAction::trigger);
+        connect(mViewMainPage->toggleSideBarButton(), &QAbstractButton::clicked, mToggleSideBarAction, &QAction::trigger);
 
         mToggleOperationsSideBarAction = view->add<KToggleAction>("toggle_operations_sidebar");
-        mToggleOperationsSideBarAction->setText(i18nc("@action opens crop, rename, etc.",
-                                                      "Show Editing Tools"));
+        mToggleOperationsSideBarAction->setText(i18nc("@action opens crop, rename, etc.", "Show Editing Tools"));
         mToggleOperationsSideBarAction->setIcon(QIcon::fromTheme("document-edit"));
-        connect(mToggleOperationsSideBarAction, &KToggleAction::triggered,
-                q, &MainWindow::toggleOperationsSideBar);
-        connect(mSideBar, &QTabWidget::currentChanged,
-                mToggleOperationsSideBarAction, [=](){
-            mToggleOperationsSideBarAction->setChecked(
-                    mSideBar->isVisible() && mSideBar->currentPage() == QLatin1String("operations"));
+        connect(mToggleOperationsSideBarAction, &KToggleAction::triggered, q, &MainWindow::toggleOperationsSideBar);
+        connect(mSideBar, &QTabWidget::currentChanged, mToggleOperationsSideBarAction, [=]() {
+            mToggleOperationsSideBarAction->setChecked(mSideBar->isVisible() && mSideBar->currentPage() == QLatin1String("operations"));
         });
 
         mToggleSlideShowAction = view->addAction("toggle_slideshow", q, SLOT(toggleSlideShow()));
         q->updateSlideShowAction();
-        connect(mSlideShow, &SlideShow::stateChanged,
-                q, &MainWindow::updateSlideShowAction);
+        connect(mSlideShow, &SlideShow::stateChanged, q, &MainWindow::updateSlideShowAction);
 
         q->setStandardToolBarMenuEnabled(true);
 
-        mShowMenuBarAction = static_cast<KToggleAction*>(view->addAction(KStandardAction::ShowMenubar, q, SLOT(toggleMenuBar())));
-        mShowStatusBarAction = static_cast<KToggleAction*>(view->addAction(KStandardAction::ShowStatusbar, q, SLOT(toggleStatusBar(bool))));
+        mShowMenuBarAction = static_cast<KToggleAction *>(view->addAction(KStandardAction::ShowMenubar, q, SLOT(toggleMenuBar())));
+        mShowStatusBarAction = static_cast<KToggleAction *>(view->addAction(KStandardAction::ShowStatusbar, q, SLOT(toggleStatusBar(bool))));
 
         actionCollection->setDefaultShortcut(mShowStatusBarAction, Qt::Key_F3);
 
         view->addAction(KStandardAction::name(KStandardAction::KeyBindings),
                         KStandardAction::keyBindings(q, &MainWindow::configureShortcuts, actionCollection));
 
-        view->addAction(KStandardAction::Preferences, q,
-                        SLOT(showConfigDialog()));
+        view->addAction(KStandardAction::Preferences, q, SLOT(showConfigDialog()));
 
-        view->addAction(KStandardAction::ConfigureToolbars, q,
-                        SLOT(configureToolbars()));
+        view->addAction(KStandardAction::ConfigureToolbars, q, SLOT(configureToolbars()));
 
 #ifdef KIPI_FOUND
         mKIPIExportAction = new KIPIExportAction(q);
@@ -553,7 +517,6 @@ struct MainWindow::Private
         mShareAction->setMenu(mShareMenu);
 
         connect(mShareMenu, &Purpose::Menu::finished, q, [this](const QJsonObject &output, int error, const QString &message) {
-
             if (error && error != KIO::ERR_USER_CANCELED) {
                 mSharedMessage->setText(i18n("Error while sharing: %1", message));
                 mSharedMessage->setMessageType(KMessageWidget::MessageType::Error);
@@ -580,7 +543,7 @@ struct MainWindow::Private
         mHamburgerMenu = KStandardAction::hamburgerMenu(nullptr, nullptr, actionCollection);
         mHamburgerMenu->setShowMenuBarAction(mShowMenuBarAction);
         mHamburgerMenu->setMenuBar(q->menuBar());
-        connect(mHamburgerMenu, &KHamburgerMenu::aboutToShowMenu, q, [this](){
+        connect(mHamburgerMenu, &KHamburgerMenu::aboutToShowMenu, q, [this]() {
             this->updateHamburgerMenu();
             // Immediately disconnect. We only need to run this once, but on demand.
             // NOTE: The nullptr at the end disconnects all connections between
@@ -591,7 +554,7 @@ struct MainWindow::Private
 
     void updateHamburgerMenu()
     {
-        KActionCollection* actionCollection = q->actionCollection();
+        KActionCollection *actionCollection = q->actionCollection();
         auto *menu = new QMenu;
         menu->addAction(actionCollection->action(KStandardAction::name(KStandardAction::Open)));
         menu->addAction(actionCollection->action(KStandardAction::name(KStandardAction::OpenRecent)));
@@ -612,7 +575,7 @@ struct MainWindow::Private
         menu->addMenu(mShareMenu);
 #endif
 #ifdef KIPI_FOUND
-        QMenu *pluginsMenu = static_cast<QMenu*>(q->guiFactory()->container("plugins", q));
+        QMenu *pluginsMenu = static_cast<QMenu *>(q->guiFactory()->container("plugins", q));
         if (pluginsMenu) {
             menu->addMenu(pluginsMenu);
         }
@@ -629,10 +592,10 @@ struct MainWindow::Private
     {
         // There is no KUndoGroup similar to KUndoStack. This code basically
         // does the same as KUndoStack, but for the KUndoGroup actions.
-        QUndoGroup* undoGroup = DocumentFactory::instance()->undoGroup();
-        QAction* action;
-        KActionCollection* actionCollection =  q->actionCollection();
-        auto* edit = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface", "Edit"), actionCollection);
+        QUndoGroup *undoGroup = DocumentFactory::instance()->undoGroup();
+        QAction *action;
+        KActionCollection *actionCollection = q->actionCollection();
+        auto *edit = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface", "Edit"), actionCollection);
 
         action = undoGroup->createRedoAction(actionCollection);
         action->setObjectName(KStandardAction::name(KStandardAction::Redo));
@@ -653,27 +616,25 @@ struct MainWindow::Private
     void setupContextManagerItems()
     {
         Q_ASSERT(mContextManager);
-        KActionCollection* actionCollection = q->actionCollection();
+        KActionCollection *actionCollection = q->actionCollection();
 
         // Create context manager items
-        auto* folderViewItem = new FolderViewContextManagerItem(mContextManager);
-        connect(folderViewItem, &FolderViewContextManagerItem::urlChanged,
-                q, &MainWindow::folderViewUrlChanged);
+        auto *folderViewItem = new FolderViewContextManagerItem(mContextManager);
+        connect(folderViewItem, &FolderViewContextManagerItem::urlChanged, q, &MainWindow::folderViewUrlChanged);
 
-        auto* infoItem = new InfoContextManagerItem(mContextManager);
+        auto *infoItem = new InfoContextManagerItem(mContextManager);
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-        SemanticInfoContextManagerItem* semanticInfoItem = nullptr;
+        SemanticInfoContextManagerItem *semanticInfoItem = nullptr;
         semanticInfoItem = new SemanticInfoContextManagerItem(mContextManager, actionCollection, mViewMainPage);
 #endif
 
-        auto* imageOpsItem =
-            new ImageOpsContextManagerItem(mContextManager, q);
+        auto *imageOpsItem = new ImageOpsContextManagerItem(mContextManager, q);
 
-        auto* fileOpsItem = new FileOpsContextManagerItem(mContextManager, mThumbnailView, actionCollection, q);
+        auto *fileOpsItem = new FileOpsContextManagerItem(mContextManager, mThumbnailView, actionCollection, q);
 
         // Fill sidebar
-        SideBarPage* page;
+        SideBarPage *page;
         page = new SideBarPage(QIcon::fromTheme("folder"), i18n("Folders"));
         page->setObjectName(QLatin1String("folders"));
         page->addWidget(folderViewItem->widget());
@@ -708,23 +669,15 @@ struct MainWindow::Private
 
     void initDirModel()
     {
-        mDirModel->setKindFilter(
-            MimeTypeUtils::KIND_DIR
-            | MimeTypeUtils::KIND_ARCHIVE
-            | MimeTypeUtils::KIND_RASTER_IMAGE
-            | MimeTypeUtils::KIND_SVG_IMAGE
-            | MimeTypeUtils::KIND_VIDEO);
+        mDirModel->setKindFilter(MimeTypeUtils::KIND_DIR | MimeTypeUtils::KIND_ARCHIVE | MimeTypeUtils::KIND_RASTER_IMAGE | MimeTypeUtils::KIND_SVG_IMAGE
+                                 | MimeTypeUtils::KIND_VIDEO);
 
-        connect(mDirModel, &QAbstractItemModel::rowsInserted,
-                q, &MainWindow::slotDirModelNewItems);
+        connect(mDirModel, &QAbstractItemModel::rowsInserted, q, &MainWindow::slotDirModelNewItems);
 
-        connect(mDirModel, &QAbstractItemModel::rowsRemoved,
-                q, &MainWindow::updatePreviousNextActions);
-        connect(mDirModel, &QAbstractItemModel::modelReset,
-                q, &MainWindow::updatePreviousNextActions);
+        connect(mDirModel, &QAbstractItemModel::rowsRemoved, q, &MainWindow::updatePreviousNextActions);
+        connect(mDirModel, &QAbstractItemModel::modelReset, q, &MainWindow::updatePreviousNextActions);
 
-        connect(mDirModel->dirLister(), SIGNAL(completed()),
-                q, SLOT(slotDirListerCompleted()));
+        connect(mDirModel->dirLister(), SIGNAL(completed()), q, SLOT(slotDirListerCompleted()));
     }
 
     void setupThumbnailBarModel()
@@ -733,14 +686,14 @@ struct MainWindow::Private
         mThumbnailBarModel->setSourceModel(mDirModel);
     }
 
-    bool indexIsDirOrArchive(const QModelIndex& index) const
+    bool indexIsDirOrArchive(const QModelIndex &index) const
     {
         Q_ASSERT(index.isValid());
         KFileItem item = mDirModel->itemForIndex(index);
         return ArchiveUtils::fileItemIsDirOrArchive(item);
     }
 
-    void goTo(const QModelIndex& index)
+    void goTo(const QModelIndex &index)
     {
         if (!index.isValid()) {
             return;
@@ -787,9 +740,9 @@ struct MainWindow::Private
         setupThumbnailBar(mFullScreenContent->thumbnailBar());
     }
 
-    inline void setActionEnabled(const char* name, bool enabled)
+    inline void setActionEnabled(const char *name, bool enabled)
     {
-        QAction* action = q->actionCollection()->action(name);
+        QAction *action = q->actionCollection()->action(name);
         if (action) {
             action->setEnabled(enabled);
         } else {
@@ -823,14 +776,13 @@ struct MainWindow::Private
             isRasterImage = mContextManager->currentUrlIsRasterImage();
             canSave = isRasterImage;
             isModified = DocumentFactory::instance()->load(url)->isModified();
-            if (mCurrentMainPageId != ViewMainPageId
-                    && mContextManager->selectedFileItemList().count() != 1) {
+            if (mCurrentMainPageId != ViewMainPageId && mContextManager->selectedFileItemList().count() != 1) {
                 // Saving only makes sense if exactly one image is selected
                 canSave = false;
             }
         }
 
-        KActionCollection* actionCollection = q->actionCollection();
+        KActionCollection *actionCollection = q->actionCollection();
         actionCollection->action("file_save")->setEnabled(canSave && isModified);
         actionCollection->action("file_save_as")->setEnabled(canSave);
         actionCollection->action("file_print")->setEnabled(isRasterImage);
@@ -840,11 +792,9 @@ struct MainWindow::Private
             mShareAction->setEnabled(false);
         } else {
             mShareAction->setEnabled(true);
-            mShareMenu->model()->setInputData(QJsonObject{
-                { QStringLiteral("mimeType"), MimeTypeUtils::urlMimeType(url) },
-                { QStringLiteral("urls"), QJsonArray{url.toString()} }
-            });
-            mShareMenu->model()->setPluginType( QStringLiteral("Export") );
+            mShareMenu->model()->setInputData(
+                QJsonObject{{QStringLiteral("mimeType"), MimeTypeUtils::urlMimeType(url)}, {QStringLiteral("urls"), QJsonArray{url.toString()}}});
+            mShareMenu->model()->setPluginType(QStringLiteral("Export"));
             mShareMenu->reload();
         }
 #endif
@@ -859,9 +809,7 @@ struct MainWindow::Private
         case BrowseMainPageId:
             return GwenviewConfig::sideBarVisible();
         case ViewMainPageId:
-            return q->isFullScreen()
-                ? GwenviewConfig::sideBarVisibleViewModeFullScreen()
-                : GwenviewConfig::sideBarVisible();
+            return q->isFullScreen() ? GwenviewConfig::sideBarVisibleViewModeFullScreen() : GwenviewConfig::sideBarVisible();
         }
         return false;
     }
@@ -876,9 +824,7 @@ struct MainWindow::Private
             GwenviewConfig::setSideBarVisible(visible);
             break;
         case ViewMainPageId:
-            q->isFullScreen()
-                ? GwenviewConfig::setSideBarVisibleViewModeFullScreen(visible)
-                : GwenviewConfig::setSideBarVisible(visible);
+            q->isFullScreen() ? GwenviewConfig::setSideBarVisibleViewModeFullScreen(visible) : GwenviewConfig::setSideBarVisible(visible);
             break;
         }
     }
@@ -892,9 +838,7 @@ struct MainWindow::Private
         case BrowseMainPageId:
             return GwenviewConfig::statusBarVisibleBrowseMode();
         case ViewMainPageId:
-            return q->isFullScreen()
-                ? GwenviewConfig::statusBarVisibleViewModeFullScreen()
-                : GwenviewConfig::statusBarVisibleViewMode();
+            return q->isFullScreen() ? GwenviewConfig::statusBarVisibleViewModeFullScreen() : GwenviewConfig::statusBarVisibleViewMode();
         }
         return false;
     }
@@ -909,9 +853,7 @@ struct MainWindow::Private
             GwenviewConfig::setStatusBarVisibleBrowseMode(visible);
             break;
         case ViewMainPageId:
-            q->isFullScreen()
-                ? GwenviewConfig::setStatusBarVisibleViewModeFullScreen(visible)
-                : GwenviewConfig::setStatusBarVisibleViewMode(visible);
+            q->isFullScreen() ? GwenviewConfig::setStatusBarVisibleViewModeFullScreen(visible) : GwenviewConfig::setStatusBarVisibleViewMode(visible);
             break;
         }
     }
@@ -942,7 +884,7 @@ struct MainWindow::Private
         }
     }
 
-    void assignThumbnailProviderToThumbnailView(ThumbnailView* thumbnailView)
+    void assignThumbnailProviderToThumbnailView(ThumbnailView *thumbnailView)
     {
         GV_RETURN_IF_FAIL(thumbnailView);
         if (mActiveThumbnailView) {
@@ -973,8 +915,8 @@ struct MainWindow::Private
 };
 
 MainWindow::MainWindow()
-: KXmlGuiWindow(),
-      d(new MainWindow::Private)
+    : KXmlGuiWindow()
+    , d(new MainWindow::Private)
 {
     d->q = this;
     d->mCurrentMainPageId = StartMainPageId;
@@ -1000,17 +942,14 @@ MainWindow::MainWindow()
     createGUI();
     loadConfig();
 
-    connect(DocumentFactory::instance(), &DocumentFactory::modifiedDocumentListChanged,
-            this, &MainWindow::slotModifiedDocumentListChanged);
+    connect(DocumentFactory::instance(), &DocumentFactory::modifiedDocumentListChanged, this, &MainWindow::slotModifiedDocumentListChanged);
 
 #ifdef HAVE_QTDBUS
-    d->mMpris2Service = new Mpris2Service(d->mSlideShow, d->mContextManager,
-                                          d->mToggleSlideShowAction, d->mFullScreenAction,
-                                          d->mGoToPreviousAction, d->mGoToNextAction, this);
+    d->mMpris2Service =
+        new Mpris2Service(d->mSlideShow, d->mContextManager, d->mToggleSlideShowAction, d->mFullScreenAction, d->mGoToPreviousAction, d->mGoToNextAction, this);
 #endif
 
-
-    auto* ratingMenu = static_cast<QMenu*>(guiFactory()->container("rating", this));
+    auto *ratingMenu = static_cast<QMenu *>(guiFactory()->container("rating", this));
     ratingMenu->setIcon(QIcon::fromTheme(QStringLiteral("rating-unrated")));
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_NONE
     if (ratingMenu) {
@@ -1022,7 +961,7 @@ MainWindow::MainWindow()
     d->mKIPIInterface = new KIPIInterface(this);
     d->mKIPIExportAction->setKIPIInterface(d->mKIPIInterface);
 #else
-    auto* pluginsMenu = static_cast<QMenu*>(guiFactory()->container("plugins", this));
+    auto *pluginsMenu = static_cast<QMenu *>(guiFactory()->container("plugins", this));
     if (pluginsMenu) {
         pluginsMenu->menuAction()->setVisible(false);
     }
@@ -1039,30 +978,30 @@ MainWindow::~MainWindow()
     delete d;
 }
 
-ContextManager* MainWindow::contextManager() const
+ContextManager *MainWindow::contextManager() const
 {
     return d->mContextManager;
 }
 
-ViewMainPage* MainWindow::viewMainPage() const
+ViewMainPage *MainWindow::viewMainPage() const
 {
     return d->mViewMainPage;
 }
 
-void MainWindow::setCaption(const QString& caption)
+void MainWindow::setCaption(const QString &caption)
 {
     // Keep a trace of caption to use it in slotModifiedDocumentListChanged()
     d->mCaption = caption;
     KXmlGuiWindow::setCaption(caption);
 }
 
-void MainWindow::setCaption(const QString& caption, bool modified)
+void MainWindow::setCaption(const QString &caption, bool modified)
 {
     d->mCaption = caption;
     KXmlGuiWindow::setCaption(caption, modified);
 }
 
-void MainWindow::slotUpdateCaption(const QString& caption)
+void MainWindow::slotUpdateCaption(const QString &caption)
 {
     const QUrl url = d->mContextManager->currentUrl();
     const QList<QUrl> list = DocumentFactory::instance()->modifiedDocumentList();
@@ -1092,42 +1031,40 @@ void MainWindow::setInitialUrl(const QUrl &_url)
     QDBusPendingCall call = QDBusConnection::sessionBus().asyncCall(message);
     auto *watcher = new QDBusPendingCallWatcher(call, this);
 
-    connect(watcher, &QDBusPendingCallWatcher::finished,
-            this, [this](QDBusPendingCallWatcher *call) {
-                QDBusPendingReply<QString, QString> reply = *call;
-                // Fail silently
-                if (!reply.isError()) {
-                    QString columnName = reply.argumentAt<0>();
-                    QString orderName = reply.argumentAt<1>();
+    connect(watcher, &QDBusPendingCallWatcher::finished, this, [this](QDBusPendingCallWatcher *call) {
+        QDBusPendingReply<QString, QString> reply = *call;
+        // Fail silently
+        if (!reply.isError()) {
+            QString columnName = reply.argumentAt<0>();
+            QString orderName = reply.argumentAt<1>();
 
-                    int column = -1;
-                    int sortRole = -1;
-                    Qt::SortOrder order = orderName == QStringLiteral("descending") ? Qt::DescendingOrder : Qt::AscendingOrder;
+            int column = -1;
+            int sortRole = -1;
+            Qt::SortOrder order = orderName == QStringLiteral("descending") ? Qt::DescendingOrder : Qt::AscendingOrder;
 
-                    if (columnName == "text") {
-                        column = KDirModel::Name;
-                        sortRole = Qt::DisplayRole;
-                    } else if (columnName == "modificationtime") {
-                        column = KDirModel::ModifiedTime;
-                        sortRole = Qt::DisplayRole;
-                    } else if (columnName == "size") {
-                        column = KDirModel::Size;
-                        sortRole = Qt::DisplayRole;
+            if (columnName == "text") {
+                column = KDirModel::Name;
+                sortRole = Qt::DisplayRole;
+            } else if (columnName == "modificationtime") {
+                column = KDirModel::ModifiedTime;
+                sortRole = Qt::DisplayRole;
+            } else if (columnName == "size") {
+                column = KDirModel::Size;
+                sortRole = Qt::DisplayRole;
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-                    } else if (columnName == "rating") {
-                        column = KDirModel::Name;
-                        sortRole = SemanticInfoDirModel::RatingRole;
+            } else if (columnName == "rating") {
+                column = KDirModel::Name;
+                sortRole = SemanticInfoDirModel::RatingRole;
 #endif
-                    }
+            }
 
-                    if (column >= 0 && sortRole >= 0) {
-                        d->mDirModel->setSortRole(sortRole);
-                        d->mDirModel->sort(column, order);
-                    }
-                    
-                }
-                call->deleteLater();
-            });
+            if (column >= 0 && sortRole >= 0) {
+                d->mDirModel->setSortRole(sortRole);
+                d->mDirModel->sort(column, order);
+            }
+        }
+        call->deleteLater();
+    });
 #endif
 
     if (UrlUtils::urlIsDirectory(url)) {
@@ -1147,7 +1084,7 @@ void MainWindow::startSlideShow()
     d->mStartSlideShowWhenDirListerCompleted = true;
 }
 
-void MainWindow::setActiveViewModeAction(QAction* action)
+void MainWindow::setActiveViewModeAction(QAction *action)
 {
     if (action == d->mViewAction) {
         d->mCurrentMainPageId = ViewMainPageId;
@@ -1160,8 +1097,7 @@ void MainWindow::setActiveViewModeAction(QAction* action)
         d->mCurrentMainPageId = BrowseMainPageId;
         // Switching to browse mode
         d->mViewStackedWidget->setCurrentWidget(d->mBrowseMainPage);
-        if (!d->mViewMainPage->isEmpty()
-                && KProtocolManager::supportsListing(d->mViewMainPage->url())) {
+        if (!d->mViewMainPage->isEmpty() && KProtocolManager::supportsListing(d->mViewMainPage->url())) {
             // Reset the view to spare resources, but don't do it if we can't
             // browse the url, otherwise if the user starts Gwenview this way:
             // gwenview http://example.com/example.png
@@ -1172,13 +1108,13 @@ void MainWindow::setActiveViewModeAction(QAction* action)
         setCaption(d->mUrlNavigator->locationUrl().adjusted(QUrl::RemoveScheme).toString());
     }
     d->autoAssignThumbnailProvider();
-    toggleSideBar(d->sideBarVisibility()); 
+    toggleSideBar(d->sideBarVisibility());
     toggleStatusBar(d->statusBarVisibility());
 
     emit viewModeChanged();
 }
 
-void MainWindow::slotThumbnailViewIndexActivated(const QModelIndex& index)
+void MainWindow::slotThumbnailViewIndexActivated(const QModelIndex &index)
 {
     if (!index.isValid()) {
         return;
@@ -1299,7 +1235,7 @@ void MainWindow::openDirUrl(const QUrl &url)
         // QUrl::path() here. Please don't, using QUrl::path() is the right
         // thing to do here.
         const QString currentPath = QDir::cleanPath(currentUrl.adjusted(QUrl::StripTrailingSlash).path());
-        const QString wantedPath  = QDir::cleanPath(url.adjusted(QUrl::StripTrailingSlash).path());
+        const QString wantedPath = QDir::cleanPath(url.adjusted(QUrl::StripTrailingSlash).path());
         const QChar separator('/');
         const int slashCount = wantedPath.count(separator);
         const QString pathToSelect = currentPath.section(separator, 0, slashCount + 1);
@@ -1313,7 +1249,8 @@ void MainWindow::openDirUrl(const QUrl &url)
     d->mViewMainPage->reset();
 }
 
-void MainWindow::folderViewUrlChanged(const QUrl &url) {
+void MainWindow::folderViewUrlChanged(const QUrl &url)
+{
     const QUrl currentUrl = d->mContextManager->currentDirUrl();
 
     if (url == currentUrl) {
@@ -1336,22 +1273,15 @@ void MainWindow::toggleSideBar(bool visible)
 {
     d->saveSplitterConfig();
     d->mToggleSideBarAction->setChecked(visible);
-    d->mToggleOperationsSideBarAction->setChecked(visible
-            && d->mSideBar->currentPage() == QLatin1String("operations"));
+    d->mToggleOperationsSideBarAction->setChecked(visible && d->mSideBar->currentPage() == QLatin1String("operations"));
     d->saveSideBarVisibility(visible);
     d->mSideBar->setVisible(visible);
 
-    const QString iconName = QApplication::isRightToLeft()
-        ? (visible ? "sidebar-collapse-right" : "sidebar-expand-right")
-        : (visible ? "sidebar-collapse-left" : "sidebar-expand-left");
-    const QString toolTip = visible
-        ? i18nc("@info:tooltip", "Hide sidebar")
-        : i18nc("@info:tooltip", "Show sidebar");
+    const QString iconName = QApplication::isRightToLeft() ? (visible ? "sidebar-collapse-right" : "sidebar-expand-right")
+                                                           : (visible ? "sidebar-collapse-left" : "sidebar-expand-left");
+    const QString toolTip = visible ? i18nc("@info:tooltip", "Hide sidebar") : i18nc("@info:tooltip", "Show sidebar");
 
-    const QList<QToolButton*> buttonList {
-        d->mBrowseMainPage->toggleSideBarButton(),
-        d->mViewMainPage->toggleSideBarButton()
-    };
+    const QList<QToolButton *> buttonList{d->mBrowseMainPage->toggleSideBarButton(), d->mViewMainPage->toggleSideBarButton()};
     for (auto button : buttonList) {
         button->setIcon(QIcon::fromTheme(iconName));
         button->setToolTip(toolTip);
@@ -1404,7 +1334,7 @@ void MainWindow::slotSelectionChanged()
         if (index.isValid()) {
             item = d->mDirModel->itemForIndex(index);
         }
-        QUndoGroup* undoGroup = DocumentFactory::instance()->undoGroup();
+        QUndoGroup *undoGroup = DocumentFactory::instance()->undoGroup();
         if (!item.isNull() && !ArchiveUtils::fileItemIsDirOrArchive(item)) {
             QUrl url = item.url();
             Document::Ptr doc = DocumentFactory::instance()->load(url);
@@ -1480,13 +1410,11 @@ void MainWindow::goToPrevious()
     do {
         previousIndex = d->mDirModel->index(previousIndex.row() - 1, 0);
         fileItem = previousIndex.data(KDirModel::FileItemRole).value<KFileItem>();
-    } while (previousIndex.isValid()
-             && !MimeTypeUtils::imageMimeTypes().contains(fileItem.currentMimeType().name()));
+    } while (previousIndex.isValid() && !MimeTypeUtils::imageMimeTypes().contains(fileItem.currentMimeType().name()));
 
     if (!previousIndex.isValid()
         && (GwenviewConfig::navigationEndNotification() == SlideShow::NeverWarn
-            || (GwenviewConfig::navigationEndNotification() == SlideShow::WarnOnSlideshow
-                && !d->mSlideShow->isRunning() && !d->mFullScreenAction->isChecked())
+            || (GwenviewConfig::navigationEndNotification() == SlideShow::WarnOnSlideshow && !d->mSlideShow->isRunning() && !d->mFullScreenAction->isChecked())
             || d->hudButtonBox)) {
         d->goToLastDocument();
     } else if (!previousIndex.isValid()) {
@@ -1508,13 +1436,11 @@ void MainWindow::goToNext()
     do {
         nextIndex = d->mDirModel->index(nextIndex.row() + 1, 0);
         fileItem = nextIndex.data(KDirModel::FileItemRole).value<KFileItem>();
-    } while (nextIndex.isValid()
-             && !MimeTypeUtils::imageMimeTypes().contains(fileItem.currentMimeType().name()));
+    } while (nextIndex.isValid() && !MimeTypeUtils::imageMimeTypes().contains(fileItem.currentMimeType().name()));
 
     if (!nextIndex.isValid()
         && (GwenviewConfig::navigationEndNotification() == SlideShow::NeverWarn
-            || (GwenviewConfig::navigationEndNotification() == SlideShow::WarnOnSlideshow
-                && !d->mSlideShow->isRunning() && !d->mFullScreenAction->isChecked())
+            || (GwenviewConfig::navigationEndNotification() == SlideShow::WarnOnSlideshow && !d->mSlideShow->isRunning() && !d->mFullScreenAction->isChecked())
             || d->hudButtonBox)) {
         d->goToFirstDocument();
     } else if (!nextIndex.isValid()) {
@@ -1558,10 +1484,10 @@ void MainWindow::updatePreviousNextActions()
         QModelIndex prevIndex = d->mDirModel->index(row - 1, 0);
         QModelIndex nextIndex = d->mDirModel->index(row + 1, 0);
         hasPrevious = GwenviewConfig::navigationEndNotification() != SlideShow::AlwaysWarn || (prevIndex.isValid() && !d->indexIsDirOrArchive(prevIndex));
-        hasNext     = GwenviewConfig::navigationEndNotification() != SlideShow::AlwaysWarn || (nextIndex.isValid() && !d->indexIsDirOrArchive(nextIndex));
+        hasNext = GwenviewConfig::navigationEndNotification() != SlideShow::AlwaysWarn || (nextIndex.isValid() && !d->indexIsDirOrArchive(nextIndex));
     } else {
         hasPrevious = false;
-        hasNext     = false;
+        hasNext = false;
     }
 
     d->mGoToPreviousAction->setEnabled(hasPrevious);
@@ -1669,7 +1595,7 @@ void MainWindow::openFile()
     }
 }
 
-void MainWindow::openUrl(const QUrl& url)
+void MainWindow::openUrl(const QUrl &url)
 {
     d->setActionsDisabledOnStartMainPageEnabled(true);
     d->mContextManager->setUrlToSelect(url);
@@ -1720,8 +1646,7 @@ void MainWindow::updateSlideShowAction()
         d->mToggleSlideShowAction->setText(i18n("Pause Slideshow"));
         d->mToggleSlideShowAction->setIcon(QIcon::fromTheme(QStringLiteral("media-playback-pause")));
     } else {
-        d->mToggleSlideShowAction->setText(d->mFullScreenAction->isChecked() ? i18n("Resume Slideshow")
-                                                                             : i18n("Start Slideshow"));
+        d->mToggleSlideShowAction->setText(d->mFullScreenAction->isChecked() ? i18n("Resume Slideshow") : i18n("Start Slideshow"));
         d->mToggleSlideShowAction->setIcon(QIcon::fromTheme(QStringLiteral("media-playback-start")));
     }
 }
@@ -1736,15 +1661,9 @@ bool MainWindow::queryClose()
 
     KGuiItem yes(i18n("Save All Changes"), "document-save-all");
     KGuiItem no(i18n("Discard Changes"), "delete");
-    QString msg = i18np("One image has been modified.", "%1 images have been modified.", list.size())
-                  + '\n'
-                  + i18n("If you quit now, your changes will be lost.");
-    int answer = KMessageBox::warningYesNoCancel(
-                     this,
-                     msg,
-                     QString() /* caption */,
-                     yes,
-                     no);
+    QString msg =
+        i18np("One image has been modified.", "%1 images have been modified.", list.size()) + '\n' + i18n("If you quit now, your changes will be lost.");
+    int answer = KMessageBox::warningYesNoCancel(this, msg, QString() /* caption */, yes, no);
 
     switch (answer) {
     case KMessageBox::Yes:
@@ -1766,7 +1685,7 @@ void MainWindow::showConfigDialog()
 {
     // Save first so changes like thumbnail zoom level are not lost when reloading config
     saveConfig();
-    
+
     DialogGuard<ConfigDialog> dialog(this);
     connect(dialog.data(), &KConfigDialog::settingsChanged, this, &MainWindow::loadConfig);
     dialog->exec();
@@ -1781,12 +1700,14 @@ void MainWindow::configureShortcuts()
 void MainWindow::toggleMenuBar()
 {
     if (!d->mFullScreenAction->isChecked()) {
-        if (!d->mShowMenuBarAction->isChecked()
-            && (!toolBar()->isVisible() || !toolBar()->actions().contains(d->mHamburgerMenu))) {
+        if (!d->mShowMenuBarAction->isChecked() && (!toolBar()->isVisible() || !toolBar()->actions().contains(d->mHamburgerMenu))) {
             const QString accel = d->mShowMenuBarAction->shortcut().toString();
-            KMessageBox::information(this, i18n("This will hide the menu bar completely."
-                                                " You can show it again by typing %1.", accel),
-                                     i18n("Hide menu bar"), QLatin1String("HideMenuBarWarning"));
+            KMessageBox::information(this,
+                                     i18n("This will hide the menu bar completely."
+                                          " You can show it again by typing %1.",
+                                          accel),
+                                     i18n("Hide menu bar"),
+                                     QLatin1String("HideMenuBarWarning"));
         }
         menuBar()->setVisible(d->mShowMenuBarAction->isChecked());
     }
@@ -1800,7 +1721,7 @@ void MainWindow::loadConfig()
     if (GwenviewConfig::historyEnabled()) {
         d->mFileOpenRecentAction->loadEntries(KConfigGroup(KSharedConfig::openConfig(), "Recent Files"));
         const auto mFileOpenRecentActionUrls = d->mFileOpenRecentAction->urls();
-        for (const QUrl& url : mFileOpenRecentActionUrls) {
+        for (const QUrl &url : mFileOpenRecentActionUrls) {
             d->mGvCore->addUrlToRecentFiles(url);
         }
     } else {
@@ -1893,16 +1814,14 @@ void MainWindow::showEvent(QShowEvent *event)
 {
     // We need to delay initializing the action state until the menu bar has
     // been initialized, that's why it's done only in the showEvent()
-    if (GwenviewConfig::lastUsedVersion() == -1
-        && toolBar()->actions().contains(d->mHamburgerMenu)
-    ) {
+    if (GwenviewConfig::lastUsedVersion() == -1 && toolBar()->actions().contains(d->mHamburgerMenu)) {
         menuBar()->hide();
     }
     d->mShowMenuBarAction->setChecked(menuBar()->isVisible());
     KXmlGuiWindow::showEvent(event);
 }
 
-void MainWindow::resizeEvent(QResizeEvent* event)
+void MainWindow::resizeEvent(QResizeEvent *event)
 {
     KXmlGuiWindow::resizeEvent(event);
     // This is a small hack to execute code after leaving fullscreen, and after
@@ -1921,21 +1840,21 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
     Q_UNUSED(event);
 #ifdef Q_OS_OSX
     /**
-    * handle Mac OS X file open events (only exist on OS X)
-    */
+     * handle Mac OS X file open events (only exist on OS X)
+     */
     if (event->type() == QEvent::FileOpen) {
-        QFileOpenEvent *fileOpenEvent = static_cast<QFileOpenEvent*>(event);
+        QFileOpenEvent *fileOpenEvent = static_cast<QFileOpenEvent *>(event);
         openUrl(fileOpenEvent->url());
         return true;
     }
 #endif
     if (obj == d->mThumbnailView->viewport()) {
-        switch(event->type()) {
+        switch (event->type()) {
         case QEvent::MouseButtonPress:
         case QEvent::MouseButtonDblClick:
-            mouseButtonNavigate(static_cast<QMouseEvent*>(event));
+            mouseButtonNavigate(static_cast<QMouseEvent *>(event));
             break;
-        default: ;
+        default:;
         }
     }
     return false;
@@ -1955,7 +1874,7 @@ void MainWindow::mouseDoubleClickEvent(QMouseEvent *event)
 
 void MainWindow::mouseButtonNavigate(QMouseEvent *event)
 {
-    switch(event->button()) {
+    switch (event->button()) {
     case Qt::ForwardButton:
         if (d->mGoToNextAction->isEnabled()) {
             d->mGoToNextAction->trigger();
@@ -1968,7 +1887,7 @@ void MainWindow::mouseButtonNavigate(QMouseEvent *event)
             return;
         }
         break;
-    default: ;
+    default:;
     }
 }
 
@@ -1977,13 +1896,13 @@ void MainWindow::setDistractionFreeMode(bool value)
     d->mFullScreenContent->setDistractionFreeMode(value);
 }
 
-void MainWindow::saveProperties(KConfigGroup& group)
+void MainWindow::saveProperties(KConfigGroup &group)
 {
     group.writeEntry(SESSION_CURRENT_PAGE_KEY, int(d->mCurrentMainPageId));
     group.writeEntry(SESSION_URL_KEY, d->mContextManager->currentUrl().toString());
 }
 
-void MainWindow::readProperties(const KConfigGroup& group)
+void MainWindow::readProperties(const KConfigGroup &group)
 {
     const QUrl url = group.readEntry(SESSION_URL_KEY, QUrl());
     if (url.isValid()) {
@@ -2030,13 +1949,11 @@ void MainWindow::showLastDocumentReached()
 
 void MainWindow::replaceLocation()
 {
-    QLineEdit* lineEdit = d->mUrlNavigator->editor()->lineEdit();
+    QLineEdit *lineEdit = d->mUrlNavigator->editor()->lineEdit();
 
     // If the text field currently has focus and everything is selected,
     // pressing the keyboard shortcut returns the whole thing to breadcrumb mode
-    if (d->mUrlNavigator->isUrlEditable()
-        && lineEdit->hasFocus()
-        && lineEdit->selectedText() == lineEdit->text() ) {
+    if (d->mUrlNavigator->isUrlEditable() && lineEdit->hasFocus() && lineEdit->selectedText() == lineEdit->text()) {
         d->mUrlNavigator->setUrlEditable(false);
     } else {
         d->mUrlNavigator->setUrlEditable(true);

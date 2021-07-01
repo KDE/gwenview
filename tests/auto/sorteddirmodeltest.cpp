@@ -25,8 +25,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/semanticinfo/sorteddirmodel.h>
 
 // Qt
-#include <QTest>
 #include <QTemporaryDir>
+#include <QTest>
 
 // KF
 #include <KDirLister>
@@ -52,8 +52,7 @@ void SortedDirModelTest::testHasDocuments_data()
 {
     QTest::addColumn<QString>("dir");
     QTest::addColumn<bool>("hasDocuments");
-#define NEW_ROW(dir, hasDocuments) \
-    QTest::newRow(QString(dir).toLocal8Bit().data()) << mSandBoxDir.absoluteFilePath(dir) << hasDocuments
+#define NEW_ROW(dir, hasDocuments) QTest::newRow(QString(dir).toLocal8Bit().data()) << mSandBoxDir.absoluteFilePath(dir) << hasDocuments
     NEW_ROW("empty_dir", false);
     NEW_ROW("dirs_only", false);
     NEW_ROW("dirs_and_docs", true);

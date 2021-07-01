@@ -27,18 +27,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KF
 
 // Qt
+#include <QSignalSpy>
 #include <QTest>
 #include <QTextEdit>
 #include <QVBoxLayout>
-#include <QSignalSpy>
 
 QTEST_MAIN(SlideContainerAutoTest)
 
 using namespace Gwenview;
 
-struct TestWindow : public QWidget
-{
-    explicit TestWindow(QWidget* parent = nullptr)
+struct TestWindow : public QWidget {
+    explicit TestWindow(QWidget *parent = nullptr)
         : QWidget(parent)
         , mContainer(new SlideContainer)
         , mContent(nullptr)
@@ -46,7 +45,7 @@ struct TestWindow : public QWidget
         createContent();
 
         mMainWidget = new QTextEdit();
-        auto* layout = new QVBoxLayout(this);
+        auto *layout = new QVBoxLayout(this);
         layout->setSpacing(0);
         layout->setContentsMargins(0, 0, 0, 0);
         layout->addWidget(mMainWidget);
@@ -60,9 +59,9 @@ struct TestWindow : public QWidget
         mContainer->setContent(mContent);
     }
 
-    SlideContainer* mContainer;
-    QWidget* mMainWidget;
-    QWidget* mContent;
+    SlideContainer *mContainer;
+    QWidget *mMainWidget;
+    QWidget *mContent;
 };
 
 void SlideContainerAutoTest::testInit()

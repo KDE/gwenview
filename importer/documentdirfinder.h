@@ -31,7 +31,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 struct DocumentDirFinderPrivate;
 
 /**
@@ -55,21 +54,21 @@ public:
         MultipleDirsFound,
     };
 
-    DocumentDirFinder(const QUrl& rootUrl);
+    DocumentDirFinder(const QUrl &rootUrl);
     ~DocumentDirFinder() override;
 
     void start();
 
 Q_SIGNALS:
-    void done(const QUrl&, DocumentDirFinder::Status);
+    void done(const QUrl &, DocumentDirFinder::Status);
 
 private Q_SLOTS:
-    void slotItemsAdded(const QUrl&, const KFileItemList&);
+    void slotItemsAdded(const QUrl &, const KFileItemList &);
     void slotCompleted();
 
 private:
-    DocumentDirFinderPrivate* const d;
-    void finish(const QUrl&, Status);
+    DocumentDirFinderPrivate *const d;
+    void finish(const QUrl &, Status);
 };
 
 } // namespace

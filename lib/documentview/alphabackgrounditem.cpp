@@ -1,6 +1,6 @@
 /*
  * SPDX-FileCopyrightText: 2021 Arjen Hiemstra <ahiemstra@heimr.nl>
- * 
+ *
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
@@ -11,7 +11,7 @@
 
 using namespace Gwenview;
 
-AlphaBackgroundItem::AlphaBackgroundItem(AbstractImageView* parent)
+AlphaBackgroundItem::AlphaBackgroundItem(AbstractImageView *parent)
     : QGraphicsItem(parent)
     , mParent(parent)
 {
@@ -41,7 +41,7 @@ QColor AlphaBackgroundItem::color()
     return mColor;
 }
 
-void AlphaBackgroundItem::setColor(const QColor& color)
+void AlphaBackgroundItem::setColor(const QColor &color)
 {
     if (color == mColor) {
         return;
@@ -51,7 +51,7 @@ void AlphaBackgroundItem::setColor(const QColor& color)
     update();
 }
 
-void AlphaBackgroundItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/)
+void AlphaBackgroundItem::paint(QPainter *painter, const QStyleOptionGraphicsItem * /*option*/, QWidget * /*widget*/)
 {
     // We need to floor the image size. Unfortunately, QPointF and QSizeF both
     // _round_ when converting instead of flooring. This means that we need to
@@ -62,23 +62,22 @@ void AlphaBackgroundItem::paint(QPainter* painter, const QStyleOptionGraphicsIte
     const auto imageRect = QRectF{mParent->imageOffset().toPoint(), QSize{width, height}};
 
     switch (mMode) {
-        case AbstractImageView::AlphaBackgroundNone:
-            // No background, do not paint anything.
-            break;
-        case AbstractImageView::AlphaBackgroundCheckBoard:
-        {
-            if (!mCheckBoardTexture) {
-                createCheckBoardTexture();
-            }
-
-            painter->drawTiledPixmap(imageRect, *mCheckBoardTexture, mParent->scrollPos());
-            break;
+    case AbstractImageView::AlphaBackgroundNone:
+        // No background, do not paint anything.
+        break;
+    case AbstractImageView::AlphaBackgroundCheckBoard: {
+        if (!mCheckBoardTexture) {
+            createCheckBoardTexture();
         }
-        case AbstractImageView::AlphaBackgroundSolid:
-            painter->fillRect(imageRect, mColor);
-            break;
-        default:
-            break;
+
+        painter->drawTiledPixmap(imageRect, *mCheckBoardTexture, mParent->scrollPos());
+        break;
+    }
+    case AbstractImageView::AlphaBackgroundSolid:
+        painter->fillRect(imageRect, mColor);
+        break;
+    default:
+        break;
     }
 }
 

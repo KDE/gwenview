@@ -22,16 +22,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Qt
 #include <QScroller>
 
-
 namespace Gwenview
 {
 namespace ScrollerUtils
 {
-
-QScroller* setQScroller (QObject* viewport)
+QScroller *setQScroller(QObject *viewport)
 {
-
-    QScroller* scroller = QScroller::scroller(viewport);
+    QScroller *scroller = QScroller::scroller(viewport);
     QScrollerProperties scrollerProperties = scroller->scrollerProperties();
     scrollerProperties.setScrollMetric(QScrollerProperties::HorizontalOvershootPolicy, QScrollerProperties::OvershootAlwaysOff);
     scrollerProperties.setScrollMetric(QScrollerProperties::VerticalOvershootPolicy, QScrollerProperties::OvershootAlwaysOff);

@@ -28,7 +28,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace Gwenview
 {
-
 struct HudCountDownPrivate;
 
 /**
@@ -38,12 +37,12 @@ class HudCountDown : public QGraphicsWidget
 {
     Q_OBJECT
 public:
-    explicit HudCountDown(QGraphicsWidget* parent = nullptr);
+    explicit HudCountDown(QGraphicsWidget *parent = nullptr);
     ~HudCountDown() override;
 
     void start(qreal ms);
 
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override;
 
 Q_SIGNALS:
     void timeout();
@@ -52,7 +51,7 @@ private Q_SLOTS:
     void doUpdate();
 
 private:
-    HudCountDownPrivate* const d;
+    HudCountDownPrivate *const d;
 };
 
 } // namespace

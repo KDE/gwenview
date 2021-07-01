@@ -22,8 +22,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <thumbnailview/dragpixmapgenerator.h>
 
 // Local
-#include <paintutils.h>
 #include "gwenview_lib_debug.h"
+#include <paintutils.h>
 
 // KF
 #include <KIconLoader>
@@ -37,14 +37,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 namespace DragPixmapGenerator
 {
-
 const int DRAG_THUMB_SIZE = KIconLoader::SizeHuge;
 const int SPREAD_ANGLE = 30;
 
-DragPixmap generate(const QList<QPixmap>& pixmaps, int totalCount)
+DragPixmap generate(const QList<QPixmap> &pixmaps, int totalCount)
 {
     DragPixmap out;
 
@@ -65,9 +63,9 @@ DragPixmap generate(const QList<QPixmap>& pixmaps, int totalCount)
 
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setRenderHint(QPainter::SmoothPixmapTransform);
-    //int index = 0;
+    // int index = 0;
     int maxX = 0;
-    for (const QPixmap& pix : pixmaps) {
+    for (const QPixmap &pix : pixmaps) {
         QPixmap pix2 = pix.scaled(DRAG_THUMB_SIZE - 2, DRAG_THUMB_SIZE - 2, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         QRect rect(-pix2.width() / 2, -pix2.height() - extraSpace, pix2.width(), pix2.height());
 

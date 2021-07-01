@@ -32,7 +32,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 namespace Gwenview
 {
-
 /**
  * Helper class which gathers the metadata retrieved when
  * AbstractSemanticInfoBackEnd::retrieveSemanticInfo() is called.
@@ -41,7 +40,7 @@ class SemanticInfoBackEndClient : public QObject
 {
     Q_OBJECT
 public:
-    SemanticInfoBackEndClient(AbstractSemanticInfoBackEnd*);
+    SemanticInfoBackEndClient(AbstractSemanticInfoBackEnd *);
 
     SemanticInfo semanticInfoForUrl(const QUrl &url) const
     {
@@ -49,11 +48,11 @@ public:
     }
 
 private Q_SLOTS:
-    void slotSemanticInfoRetrieved(const QUrl&, const SemanticInfo&);
+    void slotSemanticInfoRetrieved(const QUrl &, const SemanticInfo &);
 
 private:
     QHash<QUrl, SemanticInfo> mSemanticInfoForUrl;
-    AbstractSemanticInfoBackEnd* mBackEnd;
+    AbstractSemanticInfoBackEnd *mBackEnd;
 };
 
 class SemanticInfoBackEndTest : public QObject
@@ -65,12 +64,12 @@ private Q_SLOTS:
     void init();
     void cleanup();
     void testRating();
-    #if 0
+#if 0
     void testTagForLabel();
-    #endif
+#endif
 
 private:
-    AbstractSemanticInfoBackEnd* mBackEnd;
+    AbstractSemanticInfoBackEnd *mBackEnd;
 };
 
 } // namespace

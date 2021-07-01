@@ -37,7 +37,6 @@ class QUrl;
 
 namespace Gwenview
 {
-
 class GvCore;
 class ThumbnailView;
 
@@ -46,32 +45,32 @@ class StartMainPage : public QFrame
 {
     Q_OBJECT
 public:
-    explicit StartMainPage(QWidget* parent, GvCore*);
+    explicit StartMainPage(QWidget *parent, GvCore *);
     ~StartMainPage() override;
 
-    void applyPalette(const QPalette&);
-    ThumbnailView* recentFoldersView() const;
+    void applyPalette(const QPalette &);
+    ThumbnailView *recentFoldersView() const;
 
 Q_SIGNALS:
     void urlSelected(const QUrl &url);
-    void recentFileRemoved(const QUrl& url);
+    void recentFileRemoved(const QUrl &url);
     void recentFilesCleared();
 
 public Q_SLOTS:
     void loadConfig();
 
 protected:
-    void showEvent(QShowEvent*) override;
-    bool eventFilter(QObject*, QEvent*) override;
+    void showEvent(QShowEvent *) override;
+    bool eventFilter(QObject *, QEvent *) override;
 
 private Q_SLOTS:
-    void slotListViewActivated(const QModelIndex& index);
-    void slotTagViewClicked(const QModelIndex& index);
+    void slotListViewActivated(const QModelIndex &index);
+    void slotTagViewClicked(const QModelIndex &index);
 
 private:
-    StartMainPagePrivate* const d;
+    StartMainPagePrivate *const d;
 
-    void showContextMenu(const QPoint& pos);
+    void showContextMenu(const QPoint &pos);
 };
 
 } // namespace

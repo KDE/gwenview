@@ -22,8 +22,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #define BROWSEMAINPAGE_H
 
 // Qt
-#include <QWidget>
 #include <QUrl>
+#include <QWidget>
 
 // KF
 
@@ -39,7 +39,6 @@ class KUrlNavigator;
 
 namespace Gwenview
 {
-
 class GvCore;
 class ThumbnailView;
 
@@ -52,13 +51,13 @@ class BrowseMainPage : public QWidget
 {
     Q_OBJECT
 public:
-    BrowseMainPage(QWidget* parent, KActionCollection*, GvCore*);
+    BrowseMainPage(QWidget *parent, KActionCollection *, GvCore *);
     ~BrowseMainPage() override;
 
     void reload();
 
-    ThumbnailView* thumbnailView() const;
-    KUrlNavigator* urlNavigator() const;
+    ThumbnailView *thumbnailView() const;
+    KUrlNavigator *urlNavigator() const;
 
     void loadConfig();
     void saveConfig() const;
@@ -66,27 +65,27 @@ public:
     void setFullScreenMode(bool);
     void setStatusBarVisible(bool);
 
-    QToolButton* toggleSideBarButton() const;
+    QToolButton *toggleSideBarButton() const;
 
 private Q_SLOTS:
     void editLocation();
     void addFolderToPlaces();
 
-    void slotDirModelRowsInserted(const QModelIndex& parent, int start, int end);
-    void slotDirModelRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
+    void slotDirModelRowsInserted(const QModelIndex &parent, int start, int end);
+    void slotDirModelRowsAboutToBeRemoved(const QModelIndex &parent, int start, int end);
     void slotDirModelReset();
-    void slotSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
+    void slotSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
     void updateSortOrder();
     void updateThumbnailDetails();
-    void slotUrlsDropped(const QUrl &destUrl, QDropEvent*);
-    void showMenuForDroppedUrls(const QList<QUrl>&, const QUrl &destUrl);
+    void slotUrlsDropped(const QUrl &destUrl, QDropEvent *);
+    void showMenuForDroppedUrls(const QList<QUrl> &, const QUrl &destUrl);
 
 protected:
-    bool eventFilter(QObject* watched, QEvent* event) override;
-    void mousePressEvent(QMouseEvent*) override;
+    bool eventFilter(QObject *watched, QEvent *event) override;
+    void mousePressEvent(QMouseEvent *) override;
 
 private:
-    BrowseMainPagePrivate* const d;
+    BrowseMainPagePrivate *const d;
 };
 
 } // namespace

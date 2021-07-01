@@ -22,36 +22,33 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "hud/hudbutton.h"
 
 // Local
-#include <hud/hudtheme.h>
 #include "gwenview_lib_debug.h"
+#include <hud/hudtheme.h>
 
 // KF
 #include <KIconLoader>
 
 // Qt
 #include <QAction>
+#include <QFontDatabase>
 #include <QFontMetrics>
 #include <QGraphicsSceneEvent>
 #include <QIcon>
 #include <QPainter>
 #include <QStyle>
 #include <QStyleOptionGraphicsItem>
-#include <QFontDatabase>
 
 namespace Gwenview
 {
-
-struct LayoutInfo
-{
+struct LayoutInfo {
     QRect iconRect;
     QRect textRect;
     QSize size;
 };
 
-struct HudButtonPrivate
-{
-    HudButton* q;
-    QAction* mAction;
+struct HudButtonPrivate {
+    HudButton *q;
+    QAction *mAction;
 
     QPalette mDarkPalette;
     QPixmap mLightIcon;
@@ -60,7 +57,7 @@ struct HudButtonPrivate
 
     bool mIsDown;
 
-    void initLayoutInfo(LayoutInfo* info, const QSizeF& constraint)
+    void initLayoutInfo(LayoutInfo *info, const QSizeF &constraint)
     {
         HudTheme::RenderInfo renderInfo = HudTheme::renderInfo(HudTheme::ButtonWidget);
         const int padding = renderInfo.padding;
@@ -93,9 +90,9 @@ struct HudButtonPrivate
     }
 };
 
-HudButton::HudButton(QGraphicsItem* parent)
-: QGraphicsWidget(parent)
-, d(new HudButtonPrivate)
+HudButton::HudButton(QGraphicsItem *parent)
+    : QGraphicsWidget(parent)
+    , d(new HudButtonPrivate)
 {
     d->q = this;
     d->mAction = nullptr;
@@ -115,7 +112,7 @@ HudButton::~HudButton()
     delete d;
 }
 
-void HudButton::setIcon(const QIcon& icon)
+void HudButton::setIcon(const QIcon &icon)
 {
     // Since the HUD is always drawn with a dark theme, we need to make sure
     // the icon is light, in order to contrast. We then cache this light icon
@@ -126,13 +123,13 @@ void HudButton::setIcon(const QIcon& icon)
     updateGeometry();
 }
 
-void HudButton::setText(const QString& text)
+void HudButton::setText(const QString &text)
 {
     d->mText = text;
     updateGeometry();
 }
 
-void HudButton::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget*)
+void HudButton::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *)
 {
     HudTheme::State state;
     if (option->state.testFlag(QStyle::State_MouseOver)) {
@@ -151,21 +148,15 @@ void HudButton::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
     d->initLayoutInfo(&info, size());
 
     if (!d->mLightIcon.isNull()) {
-        painter->drawPixmap(
-            info.iconRect.topLeft(),
-            d->mLightIcon
-        );
+        painter->drawPixmap(info.iconRect.topLeft(), d->mLightIcon);
     }
     if (!d->mText.isEmpty()) {
         painter->setPen(renderInfo.textPen);
-        painter->drawText(
-            info.textRect,
-            Qt::AlignCenter,
-            d->mText);
+        painter->drawText(info.textRect, Qt::AlignCenter, d->mText);
     }
 }
 
-QSizeF HudButton::sizeHint(Qt::SizeHint which, const QSizeF& constraint) const
+QSizeF HudButton::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
 {
     LayoutInfo info;
     d->initLayoutInfo(&info, constraint);
@@ -176,13 +167,13 @@ QSizeF HudButton::sizeHint(Qt::SizeHint which, const QSizeF& constraint) const
     }
 }
 
-void HudButton::mousePressEvent(QGraphicsSceneMouseEvent*)
+void HudButton::mousePressEvent(QGraphicsSceneMouseEvent *)
 {
     d->mIsDown = true;
     update();
 }
 
-void HudButton::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
+void HudButton::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     d->mIsDown = false;
     update();
@@ -191,7 +182,7 @@ void HudButton::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
     }
 }
 
-void HudButton::setDefaultAction(QAction* action)
+void HudButton::setDefaultAction(QAction *action)
 {
     if (action != d->mAction) {
         d->mAction = action;
@@ -199,12 +190,11 @@ void HudButton::setDefaultAction(QAction* action)
             addAction(action);
         }
         d->initFromAction();
-        connect(this, SIGNAL(clicked()),
-            d->mAction, SLOT(trigger()));
+        connect(this, SIGNAL(clicked()), d->mAction, SLOT(trigger()));
     }
 }
 
-bool HudButton::event(QEvent* event)
+bool HudButton::event(QEvent *event)
 {
     if (event->type() == QEvent::ActionChanged) {
         d->initFromAction();

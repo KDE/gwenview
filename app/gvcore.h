@@ -37,7 +37,6 @@ class QString;
 
 namespace Gwenview
 {
-
 class AbstractSemanticInfoBackEnd;
 class MainWindow;
 class SortedDirModel;
@@ -47,7 +46,7 @@ class GvCore : public QObject
 {
     Q_OBJECT
 public:
-    GvCore(MainWindow* mainWindow, SortedDirModel*);
+    GvCore(MainWindow *mainWindow, SortedDirModel *);
     ~GvCore() override;
 
     enum PaletteType {
@@ -57,10 +56,10 @@ public:
         FullScreenViewPalette,
     };
 
-    QAbstractItemModel* recentFoldersModel() const;
-    QAbstractItemModel* recentFilesModel() const;
-    SortedDirModel* sortedDirModel() const;
-    AbstractSemanticInfoBackEnd* semanticInfoBackEnd() const;
+    QAbstractItemModel *recentFoldersModel() const;
+    QAbstractItemModel *recentFilesModel() const;
+    SortedDirModel *sortedDirModel() const;
+    AbstractSemanticInfoBackEnd *semanticInfoBackEnd() const;
 
     void addUrlToRecentFolders(QUrl);
     void addUrlToRecentFiles(const QUrl &);
@@ -71,18 +70,18 @@ public:
 
 public Q_SLOTS:
     void saveAll();
-    void save(const QUrl&);
-    void saveAs(const QUrl&);
-    void rotateLeft(const QUrl&);
-    void rotateRight(const QUrl&);
-    void setRating(const QUrl&, int);
+    void save(const QUrl &);
+    void saveAs(const QUrl &);
+    void rotateLeft(const QUrl &);
+    void rotateRight(const QUrl &);
+    void setRating(const QUrl &, int);
 
 private Q_SLOTS:
     void slotConfigChanged();
-    void slotSaveResult(KJob*);
+    void slotSaveResult(KJob *);
 
 private:
-    GvCorePrivate* const d;
+    GvCorePrivate *const d;
 };
 
 } // namespace

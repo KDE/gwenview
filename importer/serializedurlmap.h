@@ -32,7 +32,6 @@ class QUrl;
 
 namespace Gwenview
 {
-
 struct SerializedUrlMapPrivate;
 /**
  * A map-like QUrl=>QUrl object, serialized in a KConfigGroup
@@ -43,14 +42,14 @@ public:
     SerializedUrlMap();
     ~SerializedUrlMap();
 
-    void setConfigGroup(const KConfigGroup&);
+    void setConfigGroup(const KConfigGroup &);
 
-    QUrl value(const QUrl&) const;
+    QUrl value(const QUrl &) const;
 
-    void insert(const QUrl& key, const QUrl& value);
+    void insert(const QUrl &key, const QUrl &value);
 
 private:
-    SerializedUrlMapPrivate* const d;
+    SerializedUrlMapPrivate *const d;
 };
 
 } // namespace

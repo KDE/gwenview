@@ -28,7 +28,6 @@ class QDBusPendingCallWatcher;
 
 namespace Gwenview
 {
-
 class LockScreenWatcher : public QObject
 {
     Q_OBJECT
@@ -46,8 +45,7 @@ Q_SIGNALS:
 private:
     void onScreenSaverActiveChanged(bool isActive);
     void onActiveQueried(QDBusPendingCallWatcher *watcher);
-    void onScreenSaverServiceOwnerChanged(const QString &serviceName,
-                                          const QString &oldOwner, const QString &newOwner);
+    void onScreenSaverServiceOwnerChanged(const QString &serviceName, const QString &oldOwner, const QString &newOwner);
     void onServiceRegisteredQueried();
     void onServiceOwnerQueried();
 

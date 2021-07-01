@@ -36,53 +36,48 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
-TagItemDelegate::TagItemDelegate(QAbstractItemView* view)
-: KWidgetItemDelegate(view, view)
+TagItemDelegate::TagItemDelegate(QAbstractItemView *view)
+    : KWidgetItemDelegate(view, view)
 {
 #define pm(x) view->style()->pixelMetric(QStyle::x)
-    mMargin     = pm(PM_ToolBarItemMargin);
-    mSpacing    = pm(PM_ToolBarItemSpacing);
+    mMargin = pm(PM_ToolBarItemMargin);
+    mSpacing = pm(PM_ToolBarItemSpacing);
 #undef pm
     const int iconSize = KIconLoader::global()->currentSize(KIconLoader::Toolbar);
     const QSize sz = view->style()->sizeFromContents(QStyle::CT_ToolButton, nullptr, QSize(iconSize, iconSize));
     mButtonSize = qMax(sz.width(), sz.height());
 }
 
-QList<QWidget*> TagItemDelegate::createItemWidgets(const QModelIndex &index) const
+QList<QWidget *> TagItemDelegate::createItemWidgets(const QModelIndex &index) const
 {
-
-#define initButton(x) \
-    (x)->setAutoRaise(true); \
-    setBlockedEventTypes((x), QList<QEvent::Type>() \
-                         << QEvent::MouseButtonPress \
-                         << QEvent::MouseButtonRelease \
-                         << QEvent::MouseButtonDblClick);
+#define initButton(x)                                                                                                                                          \
+    (x)->setAutoRaise(true);                                                                                                                                   \
+    setBlockedEventTypes((x), QList<QEvent::Type>() << QEvent::MouseButtonPress << QEvent::MouseButtonRelease << QEvent::MouseButtonDblClick);
 
     Q_UNUSED(index);
 
-    auto* assignToAllButton = new QToolButton;
+    auto *assignToAllButton = new QToolButton;
     initButton(assignToAllButton);
     assignToAllButton->setIcon(QIcon::fromTheme(QStringLiteral("fill-color"))); /* FIXME: Probably not the appropriate icon */
     assignToAllButton->setToolTip(i18nc("@info:tooltip", "Assign this tag to all selected images"));
     connect(assignToAllButton, &QToolButton::clicked, this, &TagItemDelegate::slotAssignToAllButtonClicked);
 
-    auto* removeButton = new QToolButton;
+    auto *removeButton = new QToolButton;
     initButton(removeButton);
     removeButton->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
     connect(removeButton, &QToolButton::clicked, this, &TagItemDelegate::slotRemoveButtonClicked);
 
 #undef initButton
 
-    return QList<QWidget*>() << removeButton << assignToAllButton;
+    return QList<QWidget *>() << removeButton << assignToAllButton;
 }
 
-void TagItemDelegate::updateItemWidgets(const QList<QWidget *> widgets, const QStyleOptionViewItem& option, const QPersistentModelIndex& index) const
+void TagItemDelegate::updateItemWidgets(const QList<QWidget *> widgets, const QStyleOptionViewItem &option, const QPersistentModelIndex &index) const
 {
     const bool fullyAssigned = index.data(TagModel::AssignmentStatusRole).toInt() == int(TagModel::FullyAssigned);
 
-    auto* removeButton = static_cast<QToolButton*>(widgets[0]);
-    auto* assignToAllButton = static_cast<QToolButton*>(widgets[1]);
+    auto *removeButton = static_cast<QToolButton *>(widgets[0]);
+    auto *assignToAllButton = static_cast<QToolButton *>(widgets[1]);
 
     QSize buttonSize(mButtonSize, option.rect.height() - 2 * mMargin);
 
@@ -98,7 +93,7 @@ void TagItemDelegate::updateItemWidgets(const QList<QWidget *> widgets, const QS
     }
 }
 
-void TagItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
+void TagItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     if (!index.isValid()) {
         return;
@@ -115,16 +110,13 @@ void TagItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& optio
         textRect.setWidth(textRect.width() - mButtonSize - mSpacing);
     }
 
-    painter->setPen(option.palette.color(QPalette::Normal,
-                                         selected
-                                         ? QPalette::HighlightedText
-                                         : QPalette::Text));
+    painter->setPen(option.palette.color(QPalette::Normal, selected ? QPalette::HighlightedText : QPalette::Text));
     painter->drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, index.data().toString());
 }
 
-QSize TagItemDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
+QSize TagItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    const int width  = option.fontMetrics.boundingRect(index.data().toString()).width();
+    const int width = option.fontMetrics.boundingRect(index.data().toString()).width();
     const int height = qMax(mButtonSize, option.fontMetrics.height());
     return QSize(width + 2 * mMargin, height + 2 * mMargin);
 }

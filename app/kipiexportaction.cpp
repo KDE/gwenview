@@ -28,22 +28,20 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KLocalizedString>
 
 // Local
-#include <lib/gwenviewconfig.h>
 #include "kipiinterface.h"
+#include <lib/gwenviewconfig.h>
 
 namespace Gwenview
 {
-
-struct KIPIExportActionPrivate
-{
-    KIPIExportAction* q;
-    KIPIInterface* mKIPIInterface;
-    QAction* mDefaultAction;
-    QList<QAction*> mExportActionList;
+struct KIPIExportActionPrivate {
+    KIPIExportAction *q;
+    KIPIInterface *mKIPIInterface;
+    QAction *mDefaultAction;
+    QList<QAction *> mExportActionList;
 
     void updateMenu()
     {
-        auto* menu = static_cast<QMenu*>(q->menu());
+        auto *menu = static_cast<QMenu *>(q->menu());
         menu->clear();
 
         if (mDefaultAction && mExportActionList.contains(mDefaultAction)) {
@@ -53,7 +51,7 @@ struct KIPIExportActionPrivate
             menu->addAction(mDefaultAction);
             menu->addSection(i18n("Other Plugins"));
         }
-        for (QAction * action : qAsConst(mExportActionList)) {
+        for (QAction *action : qAsConst(mExportActionList)) {
             action->setIconVisibleInMenu(true);
             if (action != mDefaultAction) {
                 menu->addAction(action);
@@ -62,9 +60,9 @@ struct KIPIExportActionPrivate
     }
 };
 
-KIPIExportAction::KIPIExportAction(QObject* parent)
-: KToolBarPopupAction(QIcon::fromTheme(QStringLiteral("document-share")), i18nc("@action", "Share"), parent)
-, d(new KIPIExportActionPrivate)
+KIPIExportAction::KIPIExportAction(QObject *parent)
+    : KToolBarPopupAction(QIcon::fromTheme(QStringLiteral("document-share")), i18nc("@action", "Share"), parent)
+    , d(new KIPIExportActionPrivate)
 {
     d->q = this;
     d->mKIPIInterface = nullptr;
@@ -81,7 +79,7 @@ KIPIExportAction::~KIPIExportAction()
     delete d;
 }
 
-void KIPIExportAction::setKIPIInterface(KIPIInterface* interface)
+void KIPIExportAction::setKIPIInterface(KIPIInterface *interface)
 {
     d->mKIPIInterface = interface;
     connect(d->mKIPIInterface, &KIPIInterface::loadingFinished, this, &KIPIExportAction::init);
@@ -93,7 +91,7 @@ void KIPIExportAction::init()
     if (d->mKIPIInterface->isLoadingFinished()) {
         // Look for default action
         QString defaultActionText = GwenviewConfig::defaultExportPluginText();
-        for (QAction* action : qAsConst(d->mExportActionList)) {
+        for (QAction *action : qAsConst(d->mExportActionList)) {
             if (action->text() == defaultActionText) {
                 setDefaultAction(action);
                 break;
@@ -108,7 +106,7 @@ void KIPIExportAction::init()
     d->updateMenu();
 }
 
-void KIPIExportAction::setDefaultAction(QAction* action)
+void KIPIExportAction::setDefaultAction(QAction *action)
 {
     if (action == d->mDefaultAction) {
         return;
@@ -118,7 +116,7 @@ void KIPIExportAction::setDefaultAction(QAction* action)
     GwenviewConfig::setDefaultExportPluginText(action->text());
 }
 
-void KIPIExportAction::slotPluginTriggered(QAction* action)
+void KIPIExportAction::slotPluginTriggered(QAction *action)
 {
     setDefaultAction(action);
     d->updateMenu();

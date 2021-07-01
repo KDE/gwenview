@@ -36,12 +36,11 @@ class QRect;
 
 namespace Exiv2
 {
-    class Image;
+class Image;
 }
 
 namespace Gwenview
 {
-
 class Document;
 class DocumentJob;
 class AbstractDocumentEditor;
@@ -51,7 +50,7 @@ class AbstractDocumentImpl : public QObject
 {
     Q_OBJECT
 public:
-    AbstractDocumentImpl(Document*);
+    AbstractDocumentImpl(Document *);
     ~AbstractDocumentImpl() override;
 
     /**
@@ -62,12 +61,12 @@ public:
 
     virtual Document::LoadingState loadingState() const = 0;
 
-    virtual DocumentJob* save(const QUrl&, const QByteArray& /*format*/)
+    virtual DocumentJob *save(const QUrl &, const QByteArray & /*format*/)
     {
         return nullptr;
     }
 
-    virtual AbstractDocumentEditor* editor()
+    virtual AbstractDocumentEditor *editor()
     {
         return nullptr;
     }
@@ -88,38 +87,40 @@ public:
     }
 
     virtual void startAnimation()
-    {}
+    {
+    }
 
     virtual void stopAnimation()
-    {}
+    {
+    }
 
-    Document* document() const;
+    Document *document() const;
 
-    virtual QSvgRenderer* svgRenderer() const
+    virtual QSvgRenderer *svgRenderer() const
     {
         return nullptr;
     }
 
 Q_SIGNALS:
-    void imageRectUpdated(const QRect&);
+    void imageRectUpdated(const QRect &);
     void metaInfoLoaded();
     void loaded();
     void loadingFailed();
     void isAnimatedUpdated();
 
 protected:
-    void setDocumentImage(const QImage& image);
-    void setDocumentImageSize(const QSize& size);
+    void setDocumentImage(const QImage &image);
+    void setDocumentImageSize(const QSize &size);
     void setDocumentKind(MimeTypeUtils::Kind);
-    void setDocumentFormat(const QByteArray& format);
+    void setDocumentFormat(const QByteArray &format);
     void setDocumentExiv2Image(std::unique_ptr<Exiv2::Image>);
-    void setDocumentDownSampledImage(const QImage&, int invertedZoom);
+    void setDocumentDownSampledImage(const QImage &, int invertedZoom);
     void setDocumentCmsProfile(const Cms::Profile::Ptr &profile);
-    void setDocumentErrorString(const QString&);
-    void switchToImpl(AbstractDocumentImpl*  impl);
+    void setDocumentErrorString(const QString &);
+    void switchToImpl(AbstractDocumentImpl *impl);
 
 private:
-    AbstractDocumentImplPrivate* const d;
+    AbstractDocumentImplPrivate *const d;
 };
 
 } // namespace

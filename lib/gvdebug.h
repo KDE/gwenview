@@ -43,61 +43,61 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
  *     break;
  * }
  */
-#define GV_FATAL_FAILS \
-    do { \
-        if (!qEnvironmentVariableIsEmpty("GV_FATAL_FAILS")) { \
-            qFatal("Aborting because environment variable 'GV_FATAL_FAILS' is set"); \
-        } \
+#define GV_FATAL_FAILS                                                                                                                                         \
+    do {                                                                                                                                                       \
+        if (!qEnvironmentVariableIsEmpty("GV_FATAL_FAILS")) {                                                                                                  \
+            qFatal("Aborting because environment variable 'GV_FATAL_FAILS' is set");                                                                           \
+        }                                                                                                                                                      \
     } while (0)
 
-#define GV_RETURN_IF_FAIL(cond) \
-    do { \
-        if (!(cond)) { \
-            qCWarning(GWENVIEW_LIB_LOG) << "Condition '" << #cond << "' failed"; \
-            GV_FATAL_FAILS; \
-            return; \
-        } \
+#define GV_RETURN_IF_FAIL(cond)                                                                                                                                \
+    do {                                                                                                                                                       \
+        if (!(cond)) {                                                                                                                                         \
+            qCWarning(GWENVIEW_LIB_LOG) << "Condition '" << #cond << "' failed";                                                                               \
+            GV_FATAL_FAILS;                                                                                                                                    \
+            return;                                                                                                                                            \
+        }                                                                                                                                                      \
     } while (0)
 
-#define GV_RETURN_VALUE_IF_FAIL(cond, value) \
-    do { \
-        if (!(cond)) { \
-            qCWarning(GWENVIEW_LIB_LOG) << "Condition '" << #cond << "' failed."; \
-            GV_FATAL_FAILS; \
-            return value; \
-        } \
+#define GV_RETURN_VALUE_IF_FAIL(cond, value)                                                                                                                   \
+    do {                                                                                                                                                       \
+        if (!(cond)) {                                                                                                                                         \
+            qCWarning(GWENVIEW_LIB_LOG) << "Condition '" << #cond << "' failed.";                                                                              \
+            GV_FATAL_FAILS;                                                                                                                                    \
+            return value;                                                                                                                                      \
+        }                                                                                                                                                      \
     } while (0)
 
-#define GV_RETURN_IF_FAIL2(cond, msg) \
-    do { \
-        if (!(cond)) { \
-            qCWarning(GWENVIEW_LIB_LOG) << "Condition '" << #cond << "' failed" << msg; \
-            GV_FATAL_FAILS; \
-            return; \
-        } \
+#define GV_RETURN_IF_FAIL2(cond, msg)                                                                                                                          \
+    do {                                                                                                                                                       \
+        if (!(cond)) {                                                                                                                                         \
+            qCWarning(GWENVIEW_LIB_LOG) << "Condition '" << #cond << "' failed" << msg;                                                                        \
+            GV_FATAL_FAILS;                                                                                                                                    \
+            return;                                                                                                                                            \
+        }                                                                                                                                                      \
     } while (0)
 
-#define GV_RETURN_VALUE_IF_FAIL2(cond, value, msg) \
-    do { \
-        if (!(cond)) { \
-            qCWarning(GWENVIEW_LIB_LOG) << "Condition '" << #cond << "' failed." << msg; \
-            GV_FATAL_FAILS; \
-            return value; \
-        } \
+#define GV_RETURN_VALUE_IF_FAIL2(cond, value, msg)                                                                                                             \
+    do {                                                                                                                                                       \
+        if (!(cond)) {                                                                                                                                         \
+            qCWarning(GWENVIEW_LIB_LOG) << "Condition '" << #cond << "' failed." << msg;                                                                       \
+            GV_FATAL_FAILS;                                                                                                                                    \
+            return value;                                                                                                                                      \
+        }                                                                                                                                                      \
     } while (0)
 
-#define GV_WARN_AND_RETURN(msg) \
-    do { \
-        qCWarning(GWENVIEW_LIB_LOG) << msg; \
-        GV_FATAL_FAILS; \
-        return; \
+#define GV_WARN_AND_RETURN(msg)                                                                                                                                \
+    do {                                                                                                                                                       \
+        qCWarning(GWENVIEW_LIB_LOG) << msg;                                                                                                                    \
+        GV_FATAL_FAILS;                                                                                                                                        \
+        return;                                                                                                                                                \
     } while (0)
 
-#define GV_WARN_AND_RETURN_VALUE(value, msg) \
-    do { \
-        qCWarning(GWENVIEW_LIB_LOG) << msg; \
-        GV_FATAL_FAILS; \
-        return value; \
+#define GV_WARN_AND_RETURN_VALUE(value, msg)                                                                                                                   \
+    do {                                                                                                                                                       \
+        qCWarning(GWENVIEW_LIB_LOG) << msg;                                                                                                                    \
+        GV_FATAL_FAILS;                                                                                                                                        \
+        return value;                                                                                                                                          \
     } while (0)
 
 #define GV_LOG(var) qCDebug(GWENVIEW_LIB_LOG) << #var << '=' << (var)

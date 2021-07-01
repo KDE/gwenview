@@ -32,27 +32,25 @@ class KActionCollection;
 
 namespace Gwenview
 {
-
-
 struct ThumbnailViewHelperPrivate;
 class ThumbnailViewHelper : public AbstractThumbnailViewHelper
 {
     Q_OBJECT
 public:
-    ThumbnailViewHelper(QObject* parent, KActionCollection*);
+    ThumbnailViewHelper(QObject *parent, KActionCollection *);
     ~ThumbnailViewHelper() override;
 
-    void showContextMenu(QWidget* parent) override;
+    void showContextMenu(QWidget *parent) override;
 
-    void showMenuForUrlDroppedOnViewport(QWidget* parent, const QList<QUrl>&) override;
+    void showMenuForUrlDroppedOnViewport(QWidget *parent, const QList<QUrl> &) override;
 
-    void showMenuForUrlDroppedOnDir(QWidget* parent, const QList<QUrl>&, const QUrl&) override;
+    void showMenuForUrlDroppedOnDir(QWidget *parent, const QList<QUrl> &, const QUrl &) override;
 
 public Q_SLOTS:
-    void setCurrentDirUrl(const QUrl&);
+    void setCurrentDirUrl(const QUrl &);
 
 private:
-    ThumbnailViewHelperPrivate* const d;
+    ThumbnailViewHelperPrivate *const d;
 };
 
 } // namespace

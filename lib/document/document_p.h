@@ -25,31 +25,29 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <memory>
 
 // Local
-#include <imagemetainfomodel.h>
 #include <document/documentjob.h>
+#include <imagemetainfomodel.h>
 
 // KF
 
 // Qt
-#include <QUrl>
 #include <QImage>
+#include <QPointer>
 #include <QQueue>
 #include <QUndoStack>
-#include <QPointer>
+#include <QUrl>
 
 namespace Exiv2
 {
-    class Image;
+class Image;
 }
 
 namespace Gwenview
 {
-
 using DocumentJobQueue = QQueue<DocumentJob *>;
-struct DocumentPrivate
-{
-    Document* q;
-    AbstractDocumentImpl* mImpl;
+struct DocumentPrivate {
+    Document *q;
+    AbstractDocumentImpl *mImpl;
     QUrl mUrl;
     bool mKeepRawData;
     QPointer<DocumentJob> mCurrentJob;
@@ -76,20 +74,19 @@ struct DocumentPrivate
     void downSampleImage(int invertedZoom);
 };
 
-
 class DownSamplingJob : public DocumentJob
 {
     Q_OBJECT
 public:
     DownSamplingJob(int invertedZoom)
-    : mInvertedZoom(invertedZoom)
-    {}
+        : mInvertedZoom(invertedZoom)
+    {
+    }
 
     void doStart() override;
 
     int mInvertedZoom;
 };
-
 
 } // namespace
 

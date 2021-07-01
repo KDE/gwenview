@@ -43,32 +43,31 @@ class QTreeView;
 
 namespace Gwenview
 {
-
 class FolderViewContextManagerItem : public AbstractContextManagerItem
 {
     Q_OBJECT
 public:
-    FolderViewContextManagerItem(ContextManager*);
+    FolderViewContextManagerItem(ContextManager *);
 
 Q_SIGNALS:
-    void urlChanged(const QUrl&);
+    void urlChanged(const QUrl &);
 
 private Q_SLOTS:
-    void slotCurrentDirUrlChanged(const QUrl&);
+    void slotCurrentDirUrlChanged(const QUrl &);
     void expandToSelectedUrl();
-    void slotRowsInserted(const QModelIndex&, int start, int end);
-    void slotActivated(const QModelIndex&);
+    void slotRowsInserted(const QModelIndex &, int start, int end);
+    void slotActivated(const QModelIndex &);
 
 private:
-    MODEL_CLASS* mModel;
-    QTreeView* mView;
+    MODEL_CLASS *mModel;
+    QTreeView *mView;
 
     QUrl mUrlToSelect;
     QPersistentModelIndex mExpandingIndex;
 
     void setupModel();
     void setupView();
-    QModelIndex findClosestIndex(const QModelIndex& parent, const QUrl &wantedUrl);
+    QModelIndex findClosestIndex(const QModelIndex &parent, const QUrl &wantedUrl);
     QModelIndex findRootIndex(const QUrl &wantedUrl);
 };
 

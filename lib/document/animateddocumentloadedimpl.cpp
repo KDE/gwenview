@@ -33,17 +33,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
-struct AnimatedDocumentLoadedImplPrivate
-{
+struct AnimatedDocumentLoadedImplPrivate {
     QByteArray mRawData;
     QBuffer mMovieBuffer;
     QMovie mMovie;
 };
 
-AnimatedDocumentLoadedImpl::AnimatedDocumentLoadedImpl(Document* document, const QByteArray& rawData)
-: AbstractDocumentImpl(document)
-, d(new AnimatedDocumentLoadedImplPrivate)
+AnimatedDocumentLoadedImpl::AnimatedDocumentLoadedImpl(Document *document, const QByteArray &rawData)
+    : AbstractDocumentImpl(document)
+    , d(new AnimatedDocumentLoadedImplPrivate)
 {
     d->mRawData = rawData;
 
@@ -98,8 +96,8 @@ void AnimatedDocumentLoadedImpl::startAnimation()
     d->mMovie.start();
     if (d->mMovie.state() == QMovie::NotRunning) {
         // This is true with qt-copy as of 2008.08.23
-        //qCDebug(GWENVIEW_LIB_LOG) << "QMovie didn't start. This can happen in some cases when starting for the second time.";
-        //qCDebug(GWENVIEW_LIB_LOG) << "Trying to start again, it usually fixes the bug.";
+        // qCDebug(GWENVIEW_LIB_LOG) << "QMovie didn't start. This can happen in some cases when starting for the second time.";
+        // qCDebug(GWENVIEW_LIB_LOG) << "Trying to start again, it usually fixes the bug.";
         d->mMovie.start();
     }
 }

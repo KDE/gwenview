@@ -32,7 +32,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 struct KindProxyModelPrivate;
 /**
  * A simple proxy model allowing only objects of a certain kind
@@ -41,17 +40,17 @@ class GWENVIEWLIB_EXPORT KindProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 public:
-    explicit KindProxyModel(QObject* parent = nullptr);
+    explicit KindProxyModel(QObject *parent = nullptr);
     ~KindProxyModel() override;
 
     void setKindFilter(MimeTypeUtils::Kinds);
     MimeTypeUtils::Kinds kindFilter() const;
 
 protected:
-    bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override;
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
 
 private:
-    KindProxyModelPrivate* const d;
+    KindProxyModelPrivate *const d;
 };
 
 } // namespace

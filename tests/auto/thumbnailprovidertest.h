@@ -32,8 +32,8 @@ public:
     SandBox();
     void initDir();
     void fill();
-    void createTestImage(const QString& name, int width, int height, const QColor& color);
-    void copyTestImage(const QString& name, int width, int height);
+    void createTestImage(const QString &name, int width, int height, const QColor &color);
+    void copyTestImage(const QString &name, int width, int height);
 
     QHash<QString, QSize> mSizeHash;
     QString mPath;

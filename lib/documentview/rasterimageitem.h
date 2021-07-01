@@ -27,7 +27,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 class RasterImageView;
 
 /**
@@ -45,7 +44,7 @@ class RasterImageView;
 class RasterImageItem : public QGraphicsItem
 {
 public:
-    RasterImageItem(RasterImageView* parent);
+    RasterImageItem(RasterImageView *parent);
     ~RasterImageItem() override;
 
     /**
@@ -61,7 +60,7 @@ public:
     /**
      * Reimplemented from QGraphicsItem::paint
      */
-    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
     /**
      * Reimplemented from QGraphicsItem::boundingRect
@@ -69,10 +68,10 @@ public:
     virtual QRectF boundingRect() const override;
 
 private:
-    void applyDisplayTransform(QImage& image);
+    void applyDisplayTransform(QImage &image);
     void updateDisplayTransform(QImage::Format format);
 
-    RasterImageView* mParentView;
+    RasterImageView *mParentView;
     bool mApplyDisplayTransform = true;
     cmsHTRANSFORM mDisplayTransform = nullptr;
     cmsUInt32Number mRenderingIntent = INTENT_PERCEPTUAL;

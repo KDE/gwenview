@@ -24,19 +24,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Qt
 #include <QApplication>
+#include <QDateTime>
+#include <QDrag>
 #include <QDragEnterEvent>
 #include <QDropEvent>
+#include <QGestureEvent>
+#include <QMimeData>
 #include <QPainter>
 #include <QPointer>
 #include <QQueue>
 #include <QScrollBar>
+#include <QScroller>
 #include <QTimeLine>
 #include <QTimer>
-#include <QDrag>
-#include <QMimeData>
-#include <QDateTime>
-#include <QGestureEvent>
-#include <QScroller>
 
 // KF
 #include <KDirModel>
@@ -45,27 +45,26 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KUrlMimeData>
 
 // Local
-#include "gwenview_lib_debug.h"
 #include "abstractdocumentinfoprovider.h"
 #include "abstractthumbnailviewhelper.h"
 #include "archiveutils.h"
 #include "dragpixmapgenerator.h"
+#include "gwenview_lib_debug.h"
 #include "gwenviewconfig.h"
 #include "mimetypeutils.h"
 #include "urlutils.h"
 #include <lib/gvdebug.h>
-#include <lib/thumbnailprovider/thumbnailprovider.h>
 #include <lib/scrollerutils.h>
+#include <lib/thumbnailprovider/thumbnailprovider.h>
 #include <lib/touch/touch.h>
 
 namespace Gwenview
 {
-
 #undef ENABLE_LOG
 #undef LOG
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
-#define LOG(x) //qCDebug(GWENVIEW_LIB_LOG) << x
+#define LOG(x) // qCDebug(GWENVIEW_LIB_LOG) << x
 #else
 #define LOG(x) ;
 #endif
@@ -75,7 +74,7 @@ const int SMOOTH_DELAY = 500;
 
 const int WHEEL_ZOOM_MULTIPLIER = 4;
 
-static KFileItem fileItemForIndex(const QModelIndex& index)
+static KFileItem fileItemForIndex(const QModelIndex &index)
 {
     if (!index.isValid()) {
         LOG("Invalid index");
@@ -85,30 +84,33 @@ static KFileItem fileItemForIndex(const QModelIndex& index)
     return qvariant_cast<KFileItem>(data);
 }
 
-static QUrl urlForIndex(const QModelIndex& index)
+static QUrl urlForIndex(const QModelIndex &index)
 {
     KFileItem item = fileItemForIndex(index);
     return item.isNull() ? QUrl() : item.url();
 }
 
-struct Thumbnail
-{
-    Thumbnail(const QPersistentModelIndex& index_, const QDateTime& mtime)
+struct Thumbnail {
+    Thumbnail(const QPersistentModelIndex &index_, const QDateTime &mtime)
         : mIndex(index_)
         , mModificationTime(mtime)
         , mFileSize(0)
         , mRough(true)
-        , mWaitingForThumbnail(true) {}
+        , mWaitingForThumbnail(true)
+    {
+    }
 
     Thumbnail()
         : mFileSize(0)
         , mRough(true)
-        , mWaitingForThumbnail(true) {}
+        , mWaitingForThumbnail(true)
+    {
+    }
 
     /**
      * Init the thumbnail based on a icon
      */
-    void initAsIcon(const QPixmap& pix)
+    void initAsIcon(const QPixmap &pix)
     {
         mGroupPix = pix;
         int largeGroupSize = ThumbnailGroup::pixelSize(ThumbnailGroup::Large);
@@ -133,7 +135,7 @@ struct Thumbnail
         return groupSize == qMax(mFullSize.width(), mFullSize.height());
     }
 
-    void prepareForRefresh(const QDateTime& mtime)
+    void prepareForRefresh(const QDateTime &mtime)
     {
         mModificationTime = mtime;
         mFileSize = 0;
@@ -169,14 +171,13 @@ using ThumbnailForUrl = QHash<QUrl, Thumbnail>;
 using UrlQueue = QQueue<QUrl>;
 using PersistentModelIndexSet = QSet<QPersistentModelIndex>;
 
-struct ThumbnailViewPrivate
-{
-    ThumbnailView* q;
+struct ThumbnailViewPrivate {
+    ThumbnailView *q;
     ThumbnailView::ThumbnailScaleMode mScaleMode;
     QSize mThumbnailSize;
     qreal mThumbnailAspectRatio;
-    AbstractDocumentInfoProvider* mDocumentInfoProvider;
-    AbstractThumbnailViewHelper* mThumbnailViewHelper;
+    AbstractDocumentInfoProvider *mDocumentInfoProvider;
+    AbstractThumbnailViewHelper *mThumbnailViewHelper;
     ThumbnailForUrl mThumbnailForUrl;
     QTimer mScheduledThumbnailGenerationTimer;
 
@@ -188,12 +189,12 @@ struct ThumbnailViewPrivate
 
     PersistentModelIndexSet mBusyIndexSet;
     KPixmapSequence mBusySequence;
-    QTimeLine* mBusyAnimationTimeLine;
+    QTimeLine *mBusyAnimationTimeLine;
 
     bool mCreateThumbnailsForRemoteUrls;
 
-    QScroller* mScroller;
-    Touch* mTouch;
+    QScroller *mScroller;
+    Touch *mTouch;
 
     void setupBusyAnimation()
     {
@@ -216,7 +217,7 @@ struct ThumbnailViewPrivate
         }
     }
 
-    void updateThumbnailForModifiedDocument(const QModelIndex& index)
+    void updateThumbnailForModifiedDocument(const QModelIndex &index)
     {
         Q_ASSERT(mDocumentInfoProvider);
         KFileItem item = fileItemForIndex(index);
@@ -229,7 +230,7 @@ struct ThumbnailViewPrivate
         q->setThumbnail(item, pix, fullSize, 0);
     }
 
-    void appendItemsToThumbnailProvider(const KFileItemList& list)
+    void appendItemsToThumbnailProvider(const KFileItemList &list)
     {
         if (mThumbnailProvider) {
             ThumbnailGroup::Enum group = ThumbnailGroup::fromPixelSize(mThumbnailSize.width());
@@ -238,9 +239,9 @@ struct ThumbnailViewPrivate
         }
     }
 
-    void roughAdjustThumbnail(Thumbnail* thumbnail)
+    void roughAdjustThumbnail(Thumbnail *thumbnail)
     {
-        const QPixmap& mGroupPix = thumbnail->mGroupPix;
+        const QPixmap &mGroupPix = thumbnail->mGroupPix;
         const int groupSize = qMax(mGroupPix.width(), mGroupPix.height());
         const int fullSize = qMax(thumbnail->mFullSize.width(), thumbnail->mFullSize.height());
         if (fullSize == groupSize && mGroupPix.height() <= mThumbnailSize.height() && mGroupPix.width() <= mThumbnailSize.width()) {
@@ -252,7 +253,7 @@ struct ThumbnailViewPrivate
         }
     }
 
-    void initDragPixmap(QDrag* drag, const QModelIndexList& indexes)
+    void initDragPixmap(QDrag *drag, const QModelIndexList &indexes)
     {
         const int thumbCount = qMin(indexes.count(), int(DragPixmapGenerator::MaxCount));
         QList<QPixmap> lst;
@@ -265,7 +266,7 @@ struct ThumbnailViewPrivate
         drag->setHotSpot(dragPixmap.hotSpot);
     }
 
-    QPixmap scale(const QPixmap& pix, Qt::TransformationMode transformationMode)
+    QPixmap scale(const QPixmap &pix, Qt::TransformationMode transformationMode)
     {
         switch (mScaleMode) {
         case ThumbnailView::ScaleToFit:
@@ -286,9 +287,9 @@ struct ThumbnailViewPrivate
     }
 };
 
-ThumbnailView::ThumbnailView(QWidget* parent)
-: QListView(parent)
-, d(new ThumbnailViewPrivate)
+ThumbnailView::ThumbnailView(QWidget *parent)
+    : QListView(parent)
+    , d(new ThumbnailViewPrivate)
 {
     d->q = this;
     d->mScaleMode = ScaleToFit;
@@ -360,7 +361,7 @@ void ThumbnailView::setThumbnailScaleMode(ThumbnailScaleMode mode)
     setUniformItemSizes(mode == ScaleToFit || mode == ScaleToSquare);
 }
 
-void ThumbnailView::setModel(QAbstractItemModel* newModel)
+void ThumbnailView::setModel(QAbstractItemModel *newModel)
 {
     if (model()) {
         disconnect(model(), nullptr, this, nullptr);
@@ -375,16 +376,14 @@ void ThumbnailView::setModel(QAbstractItemModel* newModel)
     });
 }
 
-void ThumbnailView::setThumbnailProvider(ThumbnailProvider* thumbnailProvider)
+void ThumbnailView::setThumbnailProvider(ThumbnailProvider *thumbnailProvider)
 {
     GV_RETURN_IF_FAIL(d->mThumbnailProvider != thumbnailProvider);
     if (thumbnailProvider) {
-        connect(thumbnailProvider, &ThumbnailProvider::thumbnailLoaded,
-                         this, &ThumbnailView::setThumbnail);
-        connect(thumbnailProvider, &ThumbnailProvider::thumbnailLoadingFailed,
-                         this, &ThumbnailView::setBrokenThumbnail);
+        connect(thumbnailProvider, &ThumbnailProvider::thumbnailLoaded, this, &ThumbnailView::setThumbnail);
+        connect(thumbnailProvider, &ThumbnailProvider::thumbnailLoadingFailed, this, &ThumbnailView::setBrokenThumbnail);
     } else {
-        disconnect(d->mThumbnailProvider, nullptr , this, nullptr);
+        disconnect(d->mThumbnailProvider, nullptr, this, nullptr);
     }
     d->mThumbnailProvider = thumbnailProvider;
 }
@@ -415,9 +414,7 @@ void ThumbnailView::updateThumbnailSize()
     d->mSmoothThumbnailQueue.clear();
 
     // Clear adjustedPixes
-    ThumbnailForUrl::iterator
-    it = d->mThumbnailForUrl.begin(),
-    end = d->mThumbnailForUrl.end();
+    ThumbnailForUrl::iterator it = d->mThumbnailForUrl.begin(), end = d->mThumbnailForUrl.end();
     for (; it != end; ++it) {
         it.value().mAdjustedPix = QPixmap();
     }
@@ -435,7 +432,7 @@ void ThumbnailView::setThumbnailWidth(int width)
     const auto dpr = devicePixelRatioF();
     const qreal newWidthF = width * dpr;
     const int newWidth = qRound(newWidthF);
-    if(d->mThumbnailSize.width() == newWidth) {
+    if (d->mThumbnailSize.width() == newWidth) {
         return;
     }
     int height = qRound(newWidthF / d->mThumbnailAspectRatio);
@@ -445,7 +442,7 @@ void ThumbnailView::setThumbnailWidth(int width)
 
 void ThumbnailView::setThumbnailAspectRatio(qreal ratio)
 {
-    if(d->mThumbnailAspectRatio == ratio) {
+    if (d->mThumbnailAspectRatio == ratio) {
         return;
     }
     d->mThumbnailAspectRatio = ratio;
@@ -465,33 +462,31 @@ QSize ThumbnailView::thumbnailSize() const
     return d->mThumbnailSize / devicePixelRatioF();
 }
 
-void ThumbnailView::setThumbnailViewHelper(AbstractThumbnailViewHelper* helper)
+void ThumbnailView::setThumbnailViewHelper(AbstractThumbnailViewHelper *helper)
 {
     d->mThumbnailViewHelper = helper;
 }
 
-AbstractThumbnailViewHelper* ThumbnailView::thumbnailViewHelper() const
+AbstractThumbnailViewHelper *ThumbnailView::thumbnailViewHelper() const
 {
     return d->mThumbnailViewHelper;
 }
 
-void ThumbnailView::setDocumentInfoProvider(AbstractDocumentInfoProvider* provider)
+void ThumbnailView::setDocumentInfoProvider(AbstractDocumentInfoProvider *provider)
 {
     d->mDocumentInfoProvider = provider;
     if (provider) {
-        connect(provider, &AbstractDocumentInfoProvider::busyStateChanged,
-                this, &ThumbnailView::updateThumbnailBusyState);
-        connect(provider, &AbstractDocumentInfoProvider::documentChanged,
-                this, &ThumbnailView::updateThumbnail);
+        connect(provider, &AbstractDocumentInfoProvider::busyStateChanged, this, &ThumbnailView::updateThumbnailBusyState);
+        connect(provider, &AbstractDocumentInfoProvider::documentChanged, this, &ThumbnailView::updateThumbnail);
     }
 }
 
-AbstractDocumentInfoProvider* ThumbnailView::documentInfoProvider() const
+AbstractDocumentInfoProvider *ThumbnailView::documentInfoProvider() const
 {
     return d->mDocumentInfoProvider;
 }
 
-void ThumbnailView::rowsAboutToBeRemoved(const QModelIndex& parent, int start, int end)
+void ThumbnailView::rowsAboutToBeRemoved(const QModelIndex &parent, int start, int end)
 {
     QListView::rowsAboutToBeRemoved(parent, start, end);
 
@@ -501,7 +496,7 @@ void ThumbnailView::rowsAboutToBeRemoved(const QModelIndex& parent, int start, i
         QModelIndex index = model()->index(pos, 0, parent);
         KFileItem item = fileItemForIndex(index);
         if (item.isNull()) {
-            //qCDebug(GWENVIEW_LIB_LOG) << "Skipping invalid item!" << index.data().toString();
+            // qCDebug(GWENVIEW_LIB_LOG) << "Skipping invalid item!" << index.data().toString();
             continue;
         }
 
@@ -523,7 +518,7 @@ void ThumbnailView::rowsAboutToBeRemoved(const QModelIndex& parent, int start, i
     }
 }
 
-void ThumbnailView::rowsInserted(const QModelIndex& parent, int start, int end)
+void ThumbnailView::rowsInserted(const QModelIndex &parent, int start, int end)
 {
     QListView::rowsInserted(parent, start, end);
 
@@ -536,7 +531,7 @@ void ThumbnailView::rowsInserted(const QModelIndex& parent, int start, int end)
     }
 }
 
-void ThumbnailView::dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight, const QVector<int> &roles)
+void ThumbnailView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles)
 {
     QListView::dataChanged(topLeft, bottomRight, roles);
     bool thumbnailsNeedRefresh = false;
@@ -577,20 +572,20 @@ void ThumbnailView::showContextMenu()
     d->mThumbnailViewHelper->showContextMenu(this);
 }
 
-void ThumbnailView::emitIndexActivatedIfNoModifiers(const QModelIndex& index)
+void ThumbnailView::emitIndexActivatedIfNoModifiers(const QModelIndex &index)
 {
     if (QApplication::keyboardModifiers() == Qt::NoModifier) {
         emit indexActivated(index);
     }
 }
 
-void ThumbnailView::setThumbnail(const KFileItem& item, const QPixmap& pixmap, const QSize& size, qulonglong fileSize)
+void ThumbnailView::setThumbnail(const KFileItem &item, const QPixmap &pixmap, const QSize &size, qulonglong fileSize)
 {
     ThumbnailForUrl::iterator it = d->mThumbnailForUrl.find(item.url());
     if (it == d->mThumbnailForUrl.end()) {
         return;
     }
-    Thumbnail& thumbnail = it.value();
+    Thumbnail &thumbnail = it.value();
     thumbnail.mGroupPix = pixmap;
     thumbnail.mAdjustedPix = QPixmap();
     int largeGroupSize = ThumbnailGroup::pixelSize(ThumbnailGroup::Large2x);
@@ -605,13 +600,13 @@ void ThumbnailView::setThumbnail(const KFileItem& item, const QPixmap& pixmap, c
     }
 }
 
-void ThumbnailView::setBrokenThumbnail(const KFileItem& item)
+void ThumbnailView::setBrokenThumbnail(const KFileItem &item)
 {
     ThumbnailForUrl::iterator it = d->mThumbnailForUrl.find(item.url());
     if (it == d->mThumbnailForUrl.end()) {
         return;
     }
-    Thumbnail& thumbnail = it.value();
+    Thumbnail &thumbnail = it.value();
     MimeTypeUtils::Kind kind = MimeTypeUtils::fileItemKind(item);
     if (kind == MimeTypeUtils::KIND_VIDEO) {
         // Special case for videos because our kde install may come without
@@ -631,7 +626,7 @@ void ThumbnailView::setBrokenThumbnail(const KFileItem& item)
     update(thumbnail.mIndex);
 }
 
-QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index, QSize* fullSize)
+QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex &index, QSize *fullSize)
 {
     KFileItem item = fileItemForIndex(index);
     if (item.isNull()) {
@@ -649,7 +644,7 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index, QSize* fullSi
         Thumbnail thumbnail = Thumbnail(QPersistentModelIndex(index), item.time(KFileItem::ModificationTime));
         it = d->mThumbnailForUrl.insert(url, thumbnail);
     }
-    Thumbnail& thumbnail = it.value();
+    Thumbnail &thumbnail = it.value();
 
     // If dir or archive, generate a thumbnail from fileitem pixmap
     MimeTypeUtils::Kind kind = MimeTypeUtils::fileItemKind(item);
@@ -701,7 +696,7 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index, QSize* fullSi
     return thumbnail.mAdjustedPix;
 }
 
-bool ThumbnailView::isModified(const QModelIndex& index) const
+bool ThumbnailView::isModified(const QModelIndex &index) const
 {
     if (!d->mDocumentInfoProvider) {
         return false;
@@ -710,7 +705,7 @@ bool ThumbnailView::isModified(const QModelIndex& index) const
     return d->mDocumentInfoProvider->isModified(url);
 }
 
-bool ThumbnailView::isBusy(const QModelIndex& index) const
+bool ThumbnailView::isBusy(const QModelIndex &index) const
 {
     if (!d->mDocumentInfoProvider) {
         return false;
@@ -731,7 +726,7 @@ void ThumbnailView::startDrag(Qt::DropActions)
         selectedFiles << fileItemForIndex(index);
     }
 
-    auto* drag = new QDrag(this);
+    auto *drag = new QDrag(this);
     drag->setMimeData(MimeTypeUtils::selectionMimeData(selectedFiles, MimeTypeUtils::DropTarget));
     d->initDragPixmap(drag, indexes);
     drag->exec(Qt::MoveAction | Qt::CopyAction | Qt::LinkAction, Qt::CopyAction);
@@ -743,22 +738,22 @@ void ThumbnailView::setZoomParameter()
     d->mTouch->setZoomParameter(sensitivityModifier, thumbnailSize().width());
 }
 
-void ThumbnailView::zoomGesture(qreal newZoom, const QPoint&)
+void ThumbnailView::zoomGesture(qreal newZoom, const QPoint &)
 {
     if (newZoom >= 0.0) {
-        int width = qBound (int(MinThumbnailSize), static_cast<int>(newZoom), int(MaxThumbnailSize));
+        int width = qBound(int(MinThumbnailSize), static_cast<int>(newZoom), int(MaxThumbnailSize));
         setThumbnailWidth(width);
     }
 }
 
-void ThumbnailView::tapGesture(const QPoint& pos)
+void ThumbnailView::tapGesture(const QPoint &pos)
 {
     const QRect rect = QRect(pos, QSize(1, 1));
     setSelection(rect, QItemSelectionModel::ClearAndSelect);
     emit activated(indexAt(pos));
 }
 
-void ThumbnailView::startDragFromTouch(const QPoint& pos)
+void ThumbnailView::startDragFromTouch(const QPoint &pos)
 {
     QModelIndex index = indexAt(pos);
     if (index.isValid()) {
@@ -768,7 +763,7 @@ void ThumbnailView::startDragFromTouch(const QPoint& pos)
     }
 }
 
-void ThumbnailView::dragEnterEvent(QDragEnterEvent* event)
+void ThumbnailView::dragEnterEvent(QDragEnterEvent *event)
 {
     QAbstractItemView::dragEnterEvent(event);
     if (event->mimeData()->hasUrls()) {
@@ -776,14 +771,14 @@ void ThumbnailView::dragEnterEvent(QDragEnterEvent* event)
     }
 }
 
-void ThumbnailView::dragMoveEvent(QDragMoveEvent* event)
+void ThumbnailView::dragMoveEvent(QDragMoveEvent *event)
 {
     // Necessary, otherwise we don't reach dropEvent()
     QAbstractItemView::dragMoveEvent(event);
     event->acceptProposedAction();
 }
 
-void ThumbnailView::dropEvent(QDropEvent* event)
+void ThumbnailView::dropEvent(QDropEvent *event)
 {
     const QList<QUrl> urlList = KUrlMimeData::urlsFromMimeData(event->mimeData());
     if (urlList.isEmpty()) {
@@ -805,7 +800,7 @@ void ThumbnailView::dropEvent(QDropEvent* event)
     event->acceptProposedAction();
 }
 
-void ThumbnailView::keyPressEvent(QKeyEvent* event)
+void ThumbnailView::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Return) {
         const QModelIndex index = selectionModel()->currentIndex();
@@ -831,27 +826,27 @@ void ThumbnailView::keyPressEvent(QKeyEvent* event)
     QListView::keyPressEvent(event);
 }
 
-void ThumbnailView::resizeEvent(QResizeEvent* event)
+void ThumbnailView::resizeEvent(QResizeEvent *event)
 {
     QListView::resizeEvent(event);
     d->scheduleThumbnailGeneration();
 }
 
-void ThumbnailView::showEvent(QShowEvent* event)
+void ThumbnailView::showEvent(QShowEvent *event)
 {
     QListView::showEvent(event);
     d->scheduleThumbnailGeneration();
     QTimer::singleShot(0, this, &ThumbnailView::scrollToSelectedIndex);
 }
 
-void ThumbnailView::wheelEvent(QWheelEvent* event)
+void ThumbnailView::wheelEvent(QWheelEvent *event)
 {
     // If we don't adjust the single step, the wheel scroll exactly one item up
     // and down, giving the impression that the items do not move but only
     // their label changes.
     // For some reason it is necessary to set the step here: setting it in
     // setThumbnailSize() does not work
-    //verticalScrollBar()->setSingleStep(d->mThumbnailSize / 5);
+    // verticalScrollBar()->setSingleStep(d->mThumbnailSize / 5);
     if (event->modifiers() == Qt::ControlModifier) {
         int width = thumbnailSize().width() + (event->angleDelta().y() > 0 ? 1 : -1) * WHEEL_ZOOM_MULTIPLIER;
         width = qMax(int(MinThumbnailSize), qMin(width, int(MaxThumbnailSize)));
@@ -861,7 +856,7 @@ void ThumbnailView::wheelEvent(QWheelEvent* event)
     }
 }
 
-void ThumbnailView::mousePressEvent(QMouseEvent* event)
+void ThumbnailView::mousePressEvent(QMouseEvent *event)
 {
     switch (event->button()) {
     case Qt::ForwardButton:
@@ -880,7 +875,7 @@ void ThumbnailView::scrollToSelectedIndex()
     }
 }
 
-void ThumbnailView::selectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
+void ThumbnailView::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
 {
     QListView::selectionChanged(selected, deselected);
     emit selectionChangedSignal(selected, deselected);
@@ -988,7 +983,7 @@ void ThumbnailView::generateThumbnailsForItems()
     }
 }
 
-void ThumbnailView::updateThumbnail(const QUrl& url)
+void ThumbnailView::updateThumbnail(const QUrl &url)
 {
     const ThumbnailForUrl::Iterator it = d->mThumbnailForUrl.find(url);
     if (it == d->mThumbnailForUrl.end()) {
@@ -999,11 +994,11 @@ void ThumbnailView::updateThumbnail(const QUrl& url)
         d->updateThumbnailForModifiedDocument(it->mIndex);
     } else {
         const KFileItem item = fileItemForIndex(it->mIndex);
-        d->appendItemsToThumbnailProvider(KFileItemList({ item }));
+        d->appendItemsToThumbnailProvider(KFileItemList({item}));
     }
 }
 
-void ThumbnailView::updateThumbnailBusyState(const QUrl& url, bool busy)
+void ThumbnailView::updateThumbnailBusyState(const QUrl &url, bool busy)
 {
     const ThumbnailForUrl::Iterator it = d->mThumbnailForUrl.find(url);
     if (it == d->mThumbnailForUrl.end()) {
@@ -1027,7 +1022,7 @@ void ThumbnailView::updateThumbnailBusyState(const QUrl& url, bool busy)
 
 void ThumbnailView::updateBusyIndexes()
 {
-    for (const QPersistentModelIndex & index : qAsConst(d->mBusyIndexSet)) {
+    for (const QPersistentModelIndex &index : qAsConst(d->mBusyIndexSet)) {
         update(index);
     }
 }
@@ -1053,7 +1048,7 @@ void ThumbnailView::smoothNextThumbnail()
     ThumbnailForUrl::Iterator it = d->mThumbnailForUrl.find(url);
     GV_RETURN_IF_FAIL2(it != d->mThumbnailForUrl.end(), url << "not in mThumbnailForUrl.");
 
-    Thumbnail& thumbnail = it.value();
+    Thumbnail &thumbnail = it.value();
     thumbnail.mAdjustedPix = d->scale(thumbnail.mGroupPix, Qt::SmoothTransformation);
     thumbnail.mRough = false;
 
@@ -1065,7 +1060,7 @@ void ThumbnailView::smoothNextThumbnail()
     }
 }
 
-void ThumbnailView::reloadThumbnail(const QModelIndex& index)
+void ThumbnailView::reloadThumbnail(const QModelIndex &index)
 {
     QUrl url = urlForIndex(index);
     if (!url.isValid()) {

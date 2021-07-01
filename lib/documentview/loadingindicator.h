@@ -30,7 +30,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 struct LoadingIndicatorPrivate;
 /**
  * A graphics widget which shows a spinner
@@ -39,10 +38,10 @@ class LoadingIndicator : public QGraphicsWidget
 {
     Q_OBJECT
 public:
-    explicit LoadingIndicator(QGraphicsItem* parent = nullptr);
+    explicit LoadingIndicator(QGraphicsItem *parent = nullptr);
     ~LoadingIndicator() override;
 
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) override;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
     QRectF boundingRect() const override;
 
@@ -53,7 +52,7 @@ protected:
     QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 
 private:
-    LoadingIndicatorPrivate* const d;
+    LoadingIndicatorPrivate *const d;
 };
 
 } // namespace

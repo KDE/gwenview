@@ -22,42 +22,40 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "savejob.h"
 
 // Qt
+#include <QApplication>
 #include <QFuture>
 #include <QFutureWatcher>
-#include <QScopedPointer>
-#include <QtConcurrentRun>
-#include <QUrl>
-#include <QApplication>
-#include <QTemporaryFile>
 #include <QSaveFile>
+#include <QScopedPointer>
+#include <QTemporaryFile>
+#include <QUrl>
+#include <QtConcurrentRun>
 
 // KF
 #include <KIO/CopyJob>
 #include <KIO/JobUiDelegate>
-#include <KLocalizedString>
 #include <KJobWidgets>
+#include <KLocalizedString>
 
 // Local
 #include "documentloadedimpl.h"
 
 namespace Gwenview
 {
-
-struct SaveJobPrivate
-{
-    DocumentLoadedImpl* mImpl;
+struct SaveJobPrivate {
+    DocumentLoadedImpl *mImpl;
     QUrl mOldUrl;
     QUrl mNewUrl;
     QByteArray mFormat;
     QScopedPointer<QTemporaryFile> mTemporaryFile;
     QScopedPointer<QSaveFile> mSaveFile;
-    QScopedPointer<QFutureWatcher<void> > mInternalSaveWatcher;
+    QScopedPointer<QFutureWatcher<void>> mInternalSaveWatcher;
 
     bool mKillReceived;
 };
 
-SaveJob::SaveJob(DocumentLoadedImpl* impl, const QUrl &url, const QByteArray& format)
-: d(new SaveJobPrivate)
+SaveJob::SaveJob(DocumentLoadedImpl *impl, const QUrl &url, const QByteArray &format)
+    : d(new SaveJobPrivate)
 {
     d->mImpl = impl;
     d->mOldUrl = impl->document()->url();
@@ -104,7 +102,8 @@ void SaveJob::doStart()
         dirUrl = dirUrl.adjusted(QUrl::RemoveFilename);
         setError(UserDefinedError + 1);
         // Don't use xi18n* with markup substitution here, this is done in GvCore::slotSaveResult or SaveAllHelper::slotResult
-        setErrorText(i18nc("@info", "Could not open file for writing, check that you have the necessary rights in <filename>%1</filename>.",
+        setErrorText(i18nc("@info",
+                           "Could not open file for writing, check that you have the necessary rights in <filename>%1</filename>.",
                            dirUrl.toDisplayString(QUrl::PreferLocalFile)));
         uiDelegate()->setAutoErrorHandlingEnabled(false);
         uiDelegate()->setAutoWarningHandlingEnabled(false);
@@ -131,8 +130,8 @@ void SaveJob::finishSave()
     }
 
     if (!d->mSaveFile->commit()) {
-        setErrorText(xi18nc("@info", "Could not overwrite file, check that you have the necessary rights to write in <filename>%1</filename>.",
-                            d->mNewUrl.toString()));
+        setErrorText(
+            xi18nc("@info", "Could not overwrite file, check that you have the necessary rights to write in <filename>%1</filename>.", d->mNewUrl.toString()));
         setError(UserDefinedError + 3);
         return;
     }
@@ -140,13 +139,13 @@ void SaveJob::finishSave()
     if (d->mNewUrl.isLocalFile()) {
         emitResult();
     } else {
-        KIO::Job* job = KIO::copy(QUrl::fromLocalFile(d->mTemporaryFile->fileName()), d->mNewUrl);
+        KIO::Job *job = KIO::copy(QUrl::fromLocalFile(d->mTemporaryFile->fileName()), d->mNewUrl);
         KJobWidgets::setWindow(job, qApp->activeWindow());
         addSubjob(job);
     }
 }
 
-void SaveJob::slotResult(KJob* job)
+void SaveJob::slotResult(KJob *job)
 {
     DocumentJob::slotResult(job);
     if (!error()) {

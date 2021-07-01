@@ -34,21 +34,20 @@ class QRectF;
 
 namespace Gwenview
 {
-
 struct RedEyeReductionImageOperationPrivate;
 class GWENVIEWLIB_EXPORT RedEyeReductionImageOperation : public AbstractImageOperation
 {
 public:
-    RedEyeReductionImageOperation(const QRectF&);
+    RedEyeReductionImageOperation(const QRectF &);
     ~RedEyeReductionImageOperation() override;
 
     void redo() override;
     void undo() override;
 
-    static void apply(QImage* img, const QRectF& rectF);
+    static void apply(QImage *img, const QRectF &rectF);
 
 private:
-    RedEyeReductionImageOperationPrivate* const d;
+    RedEyeReductionImageOperationPrivate *const d;
 };
 
 } // namespace

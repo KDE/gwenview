@@ -25,8 +25,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <memory>
 
 // Qt
-#include <QFile>
 #include <QDateTime>
+#include <QFile>
 
 // KF
 #include <KFileItem>
@@ -41,21 +41,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 namespace TimeUtils
 {
-
-static Exiv2::ExifData::const_iterator findDateTimeKey(const Exiv2::ExifData& exifData)
+static Exiv2::ExifData::const_iterator findDateTimeKey(const Exiv2::ExifData &exifData)
 {
     // Ordered list of keys to try
-    static QList<Exiv2::ExifKey> lst = QList<Exiv2::ExifKey>()
-        << Exiv2::ExifKey("Exif.Photo.DateTimeOriginal")
-        << Exiv2::ExifKey("Exif.Image.DateTimeOriginal")
-        << Exiv2::ExifKey("Exif.Photo.DateTimeDigitized")
-        << Exiv2::ExifKey("Exif.Image.DateTime");
+    static QList<Exiv2::ExifKey> lst = QList<Exiv2::ExifKey>() << Exiv2::ExifKey("Exif.Photo.DateTimeOriginal") << Exiv2::ExifKey("Exif.Image.DateTimeOriginal")
+                                                               << Exiv2::ExifKey("Exif.Photo.DateTimeDigitized") << Exiv2::ExifKey("Exif.Image.DateTime");
 
     Exiv2::ExifData::const_iterator it, end = exifData.end();
-    for (const Exiv2::ExifKey& key : qAsConst(lst)) {
+    for (const Exiv2::ExifKey &key : qAsConst(lst)) {
         it = exifData.findKey(key);
         if (it != end) {
             return it;
@@ -64,12 +59,11 @@ static Exiv2::ExifData::const_iterator findDateTimeKey(const Exiv2::ExifData& ex
     return end;
 }
 
-struct CacheItem
-{
+struct CacheItem {
     QDateTime fileMTime;
     QDateTime realTime;
 
-    void update(const KFileItem& fileItem)
+    void update(const KFileItem &fileItem)
     {
         QDateTime time = fileItem.time(KFileItem::ModificationTime);
         if (fileMTime == time) {
@@ -118,7 +112,7 @@ struct CacheItem
 
             realTime = dt;
             return true;
-        } catch (const Exiv2::Error& error) {
+        } catch (const Exiv2::Error &error) {
             qCWarning(GWENVIEW_LIB_LOG) << "Failed to read date from exif header of" << path << ". Error:" << error.what();
             return false;
         }
@@ -127,7 +121,7 @@ struct CacheItem
 
 using Cache = QHash<QUrl, CacheItem>;
 
-QDateTime dateTimeForFileItem(const KFileItem& fileItem, CachePolicy cachePolicy)
+QDateTime dateTimeForFileItem(const KFileItem &fileItem, CachePolicy cachePolicy)
 {
     if (cachePolicy == SkipCache) {
         CacheItem item;

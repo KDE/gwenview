@@ -34,12 +34,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 struct ShadowFilterPrivate {
-    QWidget* mWidget;
+    QWidget *mWidget;
     QHash<ShadowFilter::WidgetEdge, QColor> mShadows;
 
-    void paintShadow(QPainter* painter, const QColor& color, QPoint origin, int dx, int dy)
+    void paintShadow(QPainter *painter, const QColor &color, QPoint origin, int dx, int dy)
     {
         const int gradientSize = 12;
 
@@ -74,9 +73,9 @@ struct ShadowFilterPrivate {
     }
 };
 
-ShadowFilter::ShadowFilter(QWidget* widget)
-: QObject(widget)
-, d(new ShadowFilterPrivate)
+ShadowFilter::ShadowFilter(QWidget *widget)
+    : QObject(widget)
+    , d(new ShadowFilterPrivate)
 {
     d->mWidget = widget;
     widget->installEventFilter(this);
@@ -87,7 +86,7 @@ ShadowFilter::~ShadowFilter()
     delete d;
 }
 
-void ShadowFilter::setShadow(ShadowFilter::WidgetEdge edge, const QColor& color)
+void ShadowFilter::setShadow(ShadowFilter::WidgetEdge edge, const QColor &color)
 {
     d->mShadows[edge] = color;
 }
@@ -97,7 +96,7 @@ void ShadowFilter::reset()
     d->mShadows.clear();
 }
 
-bool ShadowFilter::eventFilter(QObject* obj, QEvent* event)
+bool ShadowFilter::eventFilter(QObject *obj, QEvent *event)
 {
     if (event->type() == QEvent::Paint) {
         obj->removeEventFilter(this);

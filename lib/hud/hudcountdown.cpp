@@ -30,15 +30,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace Gwenview
 {
-
-struct HudCountDownPrivate
-{
-    QTimeLine* mTimeLine;
+struct HudCountDownPrivate {
+    QTimeLine *mTimeLine;
 };
 
-HudCountDown::HudCountDown(QGraphicsWidget* parent)
-: QGraphicsWidget(parent)
-, d(new HudCountDownPrivate)
+HudCountDown::HudCountDown(QGraphicsWidget *parent)
+    : QGraphicsWidget(parent)
+    , d(new HudCountDownPrivate)
 {
     d->mTimeLine = new QTimeLine(0, this);
     d->mTimeLine->setDirection(QTimeLine::Backward);
@@ -62,7 +60,7 @@ void HudCountDown::start(qreal ms)
     update();
 }
 
-void HudCountDown::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
+void HudCountDown::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     HudTheme::RenderInfo info = HudTheme::renderInfo(HudTheme::CountDown);
     painter->setRenderHint(QPainter::Antialiasing);

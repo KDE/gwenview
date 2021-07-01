@@ -35,16 +35,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "sidebar.h"
 #include <lib/archiveutils.h>
 #include <lib/contextmanager.h>
+#include <lib/document/document.h>
+#include <lib/document/documentfactory.h>
 #include <lib/eventwatcher.h>
 #include <lib/gvdebug.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/preferredimagemetainfomodel.h>
-#include <lib/document/document.h>
-#include <lib/document/documentfactory.h>
 
 namespace Gwenview
 {
-
 #undef ENABLE_LOG
 #undef LOG
 //#define ENABLE_LOG
@@ -59,11 +58,10 @@ namespace Gwenview
  */
 class KeyValueWidget : public QWidget
 {
-    struct Row
-    {
-        Row(QWidget* parent)
-        : keyLabel(new QLabel(parent))
-        , valueLabel(new QLabel(parent))
+    struct Row {
+        Row(QWidget *parent)
+            : keyLabel(new QLabel(parent))
+            , valueLabel(new QLabel(parent))
         {
             initLabel(keyLabel);
             initLabel(valueLabel);
@@ -99,19 +97,20 @@ class KeyValueWidget : public QWidget
             return keyLabel->heightForWidth(width) + valueLabel->heightForWidth(width);
         }
 
-        static void initLabel(QLabel* label)
+        static void initLabel(QLabel *label)
         {
             label->setWordWrap(true);
             label->show();
             label->setTextInteractionFlags(Qt::TextSelectableByMouse | Qt::LinksAccessibleByMouse);
         }
 
-        QLabel* keyLabel;
-        QLabel* valueLabel;
+        QLabel *keyLabel;
+        QLabel *valueLabel;
     };
+
 public:
-    explicit KeyValueWidget(QWidget* parent = nullptr)
-    : QWidget(parent)
+    explicit KeyValueWidget(QWidget *parent = nullptr)
+        : QWidget(parent)
     {
         QSizePolicy policy(QSizePolicy::Preferred, QSizePolicy::Fixed);
         policy.setHeightForWidth(true);
@@ -133,8 +132,8 @@ public:
     int heightForWidth(int w) const override
     {
         int height = 0;
-        for (Row* row : qAsConst(mRows)) {
-             height += row->heightForWidth(w);
+        for (Row *row : qAsConst(mRows)) {
+            height += row->heightForWidth(w);
         }
         return height;
     }
@@ -146,17 +145,15 @@ public:
         updateGeometry();
     }
 
-    void addRow(const QString& key, const QString& value)
+    void addRow(const QString &key, const QString &value)
     {
-        Row* row = new Row(this);
-        row->keyLabel->setText(i18nc(
-           "@item:intext %1 is a key, we append a colon to it. A value is displayed after",
-           "%1:", key));
+        Row *row = new Row(this);
+        row->keyLabel->setText(i18nc("@item:intext %1 is a key, we append a colon to it. A value is displayed after", "%1:", key));
         row->valueLabel->setText(value);
         mRows << row;
     }
 
-    static bool rowsLessThan(const Row* row1, const Row* row2)
+    static bool rowsLessThan(const Row *row1, const Row *row2)
     {
         return row1->keyLabel->text() < row2->keyLabel->text();
     }
@@ -174,40 +171,39 @@ public:
         // from one image to another
         int rowY = 0;
         const int labelWidth = width();
-        for (Row* row : qAsConst(mRows)) {
+        for (Row *row : qAsConst(mRows)) {
             rowY = row->setLabelGeometries(rowY, labelWidth);
         }
     }
 
 protected:
-    void showEvent(QShowEvent* event) override
+    void showEvent(QShowEvent *event) override
     {
         QWidget::showEvent(event);
         layoutRows();
     }
 
-    void resizeEvent(QResizeEvent* event) override
+    void resizeEvent(QResizeEvent *event) override
     {
         QWidget::resizeEvent(event);
         layoutRows();
     }
 
 private:
-    QVector<Row*> mRows;
+    QVector<Row *> mRows;
 };
 
-struct InfoContextManagerItemPrivate
-{
-    InfoContextManagerItem* q;
-    SideBarGroup* mGroup;
+struct InfoContextManagerItemPrivate {
+    InfoContextManagerItem *q;
+    SideBarGroup *mGroup;
 
     // One selection fields
-    QScrollArea* mOneFileWidget;
-    KeyValueWidget* mKeyValueWidget;
+    QScrollArea *mOneFileWidget;
+    KeyValueWidget *mKeyValueWidget;
     Document::Ptr mDocument;
 
     // Multiple selection fields
-    QLabel* mMultipleFilesLabel;
+    QLabel *mMultipleFilesLabel;
 
     QPointer<ImageMetaInfoDialog> mImageMetaInfoDialog;
 
@@ -216,7 +212,7 @@ struct InfoContextManagerItemPrivate
         if (!mImageMetaInfoDialog) {
             return;
         }
-        ImageMetaInfoModel* model = mDocument ? mDocument->metaInfo() : nullptr;
+        ImageMetaInfoModel *model = mDocument ? mDocument->metaInfo() : nullptr;
         mImageMetaInfoDialog->setMetaInfo(model, GwenviewConfig::preferredMetaInfoKeyList());
     }
 
@@ -228,13 +224,13 @@ struct InfoContextManagerItemPrivate
 
         mKeyValueWidget = new KeyValueWidget;
 
-        auto* moreLabel = new QLabel(mOneFileWidget);
+        auto *moreLabel = new QLabel(mOneFileWidget);
         moreLabel->setText(QStringLiteral("<a href='#'>%1</a>").arg(i18nc("@action show more image meta info", "Show more details...")));
         // for some reason, this label appears much further down the page without the following line
         moreLabel->setAlignment(Qt::AlignLeft);
 
-        auto* content = new QWidget;
-        auto* layout = new QVBoxLayout(content);
+        auto *content = new QWidget;
+        auto *layout = new QVBoxLayout(content);
         layout->setContentsMargins(0, 0, 0, 0);
         layout->addWidget(mKeyValueWidget);
         layout->addWidget(moreLabel);
@@ -263,16 +259,14 @@ struct InfoContextManagerItemPrivate
     }
 };
 
-InfoContextManagerItem::InfoContextManagerItem(ContextManager* manager)
-: AbstractContextManagerItem(manager)
-, d(new InfoContextManagerItemPrivate)
+InfoContextManagerItem::InfoContextManagerItem(ContextManager *manager)
+    : AbstractContextManagerItem(manager)
+    , d(new InfoContextManagerItemPrivate)
 {
     d->q = this;
     d->setupGroup();
-    connect(contextManager(), &ContextManager::selectionChanged,
-            this, &InfoContextManagerItem::updateSideBarContent);
-    connect(contextManager(), &ContextManager::selectionDataChanged,
-            this, &InfoContextManagerItem::updateSideBarContent);
+    connect(contextManager(), &ContextManager::selectionChanged, this, &InfoContextManagerItem::updateSideBarContent);
+    connect(contextManager(), &ContextManager::selectionDataChanged, this, &InfoContextManagerItem::updateSideBarContent);
 }
 
 InfoContextManagerItem::~InfoContextManagerItem()
@@ -307,26 +301,25 @@ void InfoContextManagerItem::updateSideBarContent()
     d->updateMetaInfoDialog();
 }
 
-void InfoContextManagerItem::fillOneFileGroup(const KFileItem& item)
+void InfoContextManagerItem::fillOneFileGroup(const KFileItem &item)
 {
     d->mOneFileWidget->show();
     d->mMultipleFilesLabel->hide();
 
     d->forgetCurrentDocument();
     d->mDocument = DocumentFactory::instance()->load(item.url());
-    connect(d->mDocument.data(), &Document::metaInfoUpdated,
-            this, &InfoContextManagerItem::updateOneFileInfo);
+    connect(d->mDocument.data(), &Document::metaInfoUpdated, this, &InfoContextManagerItem::updateOneFileInfo);
 
     d->updateMetaInfoDialog();
     updateOneFileInfo();
 }
 
-void InfoContextManagerItem::fillMultipleItemsGroup(const KFileItemList& itemList)
+void InfoContextManagerItem::fillMultipleItemsGroup(const KFileItemList &itemList)
 {
     d->forgetCurrentDocument();
 
     int folderCount = 0, fileCount = 0;
-    for (const KFileItem & item : itemList) {
+    for (const KFileItem &item : itemList) {
         if (item.isDir()) {
             folderCount++;
         } else {
@@ -340,7 +333,9 @@ void InfoContextManagerItem::fillMultipleItemsGroup(const KFileItemList& itemLis
         d->mMultipleFilesLabel->setText(i18ncp("@label", "%1 folder selected", "%1 folders selected", folderCount));
     } else {
         d->mMultipleFilesLabel->setText(i18nc("@label. The two parameters are strings like '2 folders' and '1 file'.",
-                                              "%1 and %2 selected", i18np("%1 folder", "%1 folders", folderCount), i18np("%1 file", "%1 files", fileCount)));
+                                              "%1 and %2 selected",
+                                              i18np("%1 folder", "%1 folders", folderCount),
+                                              i18np("%1 file", "%1 files", fileCount)));
     }
     d->mOneFileWidget->hide();
     d->mMultipleFilesLabel->show();
@@ -352,10 +347,10 @@ void InfoContextManagerItem::updateOneFileInfo()
         return;
     }
 
-    ImageMetaInfoModel* metaInfoModel = d->mDocument->metaInfo();
+    ImageMetaInfoModel *metaInfoModel = d->mDocument->metaInfo();
     d->mKeyValueWidget->clear();
     const QStringList preferredMetaInfoKeyList = GwenviewConfig::preferredMetaInfoKeyList();
-    for (const QString & key : preferredMetaInfoKeyList) {
+    for (const QString &key : preferredMetaInfoKeyList) {
         QString label;
         QString value;
         metaInfoModel->getInfoForKey(key, &label, &value);
@@ -372,14 +367,16 @@ void InfoContextManagerItem::showMetaInfoDialog()
     if (!d->mImageMetaInfoDialog) {
         d->mImageMetaInfoDialog = new ImageMetaInfoDialog(d->mOneFileWidget);
         d->mImageMetaInfoDialog->setAttribute(Qt::WA_DeleteOnClose, true);
-        connect(d->mImageMetaInfoDialog.data(), &ImageMetaInfoDialog::preferredMetaInfoKeyListChanged,
-                this, &InfoContextManagerItem::slotPreferredMetaInfoKeyListChanged);
+        connect(d->mImageMetaInfoDialog.data(),
+                &ImageMetaInfoDialog::preferredMetaInfoKeyListChanged,
+                this,
+                &InfoContextManagerItem::slotPreferredMetaInfoKeyListChanged);
     }
     d->mImageMetaInfoDialog->setMetaInfo(d->mDocument ? d->mDocument->metaInfo() : nullptr, GwenviewConfig::preferredMetaInfoKeyList());
     d->mImageMetaInfoDialog->show();
 }
 
-void InfoContextManagerItem::slotPreferredMetaInfoKeyListChanged(const QStringList& list)
+void InfoContextManagerItem::slotPreferredMetaInfoKeyListChanged(const QStringList &list)
 {
     GwenviewConfig::setPreferredMetaInfoKeyList(list);
     GwenviewConfig::self()->save();

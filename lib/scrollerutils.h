@@ -29,8 +29,7 @@ namespace Gwenview
 {
 namespace ScrollerUtils
 {
-
-GWENVIEWLIB_EXPORT QScroller* setQScroller(QObject*);
+GWENVIEWLIB_EXPORT QScroller *setQScroller(QObject *);
 
 } // namespace
 } // namespace

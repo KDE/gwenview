@@ -24,28 +24,25 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <cmath>
 
 // Qt
-#include <QWidget>
 #include <QCoreApplication>
+#include <QDateTime>
+#include <QGraphicsWidget>
+#include <QGuiApplication>
 #include <QMouseEvent>
 #include <QStyleHints>
-#include <QGuiApplication>
-#include <QGraphicsWidget>
-#include <QDateTime>
+#include <QWidget>
 
 // KF
 
 // Local
-#include "touch_helper.h"
 #include "gwenview_lib_debug.h"
-
+#include "touch_helper.h"
 
 namespace Gwenview
 {
-
-struct TouchPrivate
-{
-    Touch* q;
-    QObject* mTarget;
+struct TouchPrivate {
+    Touch *q;
+    QObject *mTarget;
     Qt::GestureState mLastPanGestureState;
     QPointF mLastTapPos;
     bool mTabHoldandMovingGestureActive;
@@ -54,21 +51,21 @@ struct TouchPrivate
     qreal mRotationThreshold;
     qint64 mLastTouchTimeStamp;
 
-    TapHoldAndMovingRecognizer* mTapHoldAndMovingRecognizer;
+    TapHoldAndMovingRecognizer *mTapHoldAndMovingRecognizer;
     Qt::GestureType mTapHoldAndMoving;
-    TwoFingerPanRecognizer* mTwoFingerPanRecognizer;
+    TwoFingerPanRecognizer *mTwoFingerPanRecognizer;
     Qt::GestureType mTwoFingerPan;
-    OneAndTwoFingerSwipeRecognizer* mOneAndTwoFingerSwipeRecognizer;
+    OneAndTwoFingerSwipeRecognizer *mOneAndTwoFingerSwipeRecognizer;
     Qt::GestureType mOneAndTwoFingerSwipe;
-    DoubleTapRecognizer* mDoubleTapRecognizer;
+    DoubleTapRecognizer *mDoubleTapRecognizer;
     Qt::GestureType mDoubleTap;
-    TwoFingerTapRecognizer* mTwoFingerTapRecognizer;
+    TwoFingerTapRecognizer *mTwoFingerTapRecognizer;
     Qt::GestureType mTwoFingerTap;
 };
 
-Touch::Touch(QObject* target)
-: QObject ()
-, d(new TouchPrivate)
+Touch::Touch(QObject *target)
+    : QObject()
+    , d(new TouchPrivate)
 {
     d->q = this;
     d->mTarget = target;
@@ -88,8 +85,8 @@ Touch::Touch(QObject* target)
     d->mDoubleTapRecognizer = new DoubleTapRecognizer();
     d->mDoubleTap = QGestureRecognizer::registerRecognizer(d->mDoubleTapRecognizer);
 
-    if (qobject_cast<QGraphicsWidget*>(target)) {
-        auto* widgetTarget = qobject_cast<QGraphicsWidget*>(target);
+    if (qobject_cast<QGraphicsWidget *>(target)) {
+        auto *widgetTarget = qobject_cast<QGraphicsWidget *>(target);
         widgetTarget->grabGesture(d->mOneAndTwoFingerSwipe);
         widgetTarget->grabGesture(d->mDoubleTap);
         widgetTarget->grabGesture(Qt::TapGesture);
@@ -97,15 +94,15 @@ Touch::Touch(QObject* target)
         widgetTarget->grabGesture(d->mTwoFingerTap);
         widgetTarget->grabGesture(d->mTwoFingerPan);
         widgetTarget->grabGesture(d->mTapHoldAndMoving);
-    } else if (qobject_cast<QWidget*>(target)) {
-        QWidget* widgetTarget = qobject_cast<QWidget*>(target);
+    } else if (qobject_cast<QWidget *>(target)) {
+        QWidget *widgetTarget = qobject_cast<QWidget *>(target);
         widgetTarget->grabGesture(Qt::TapGesture);
         widgetTarget->grabGesture(Qt::PinchGesture);
         widgetTarget->grabGesture(d->mTwoFingerTap);
         widgetTarget->grabGesture(d->mTwoFingerPan);
         widgetTarget->grabGesture(d->mTapHoldAndMoving);
     }
-     target->installEventFilter(this);
+    target->installEventFilter(this);
 }
 
 Touch::~Touch()
@@ -113,7 +110,7 @@ Touch::~Touch()
     delete d;
 }
 
-bool Touch::eventFilter(QObject*, QEvent* event)
+bool Touch::eventFilter(QObject *, QEvent *event)
 {
     if (event->type() == QEvent::TouchBegin) {
         d->mLastTouchTimeStamp = QDateTime::currentMSecsSinceEpoch();
@@ -121,11 +118,11 @@ bool Touch::eventFilter(QObject*, QEvent* event)
         touchToMouseMove(pos, event, Qt::NoButton);
         return true;
     }
-    if (event->type() ==  QEvent::TouchUpdate) {
-        auto* touchEvent = static_cast<QTouchEvent*>(event);
+    if (event->type() == QEvent::TouchUpdate) {
+        auto *touchEvent = static_cast<QTouchEvent *>(event);
         d->mLastTouchTimeStamp = QDateTime::currentMSecsSinceEpoch();
-        //because we suppress the making of mouse event through Qt, we need to make our own one finger panning
-        //but only if no TapHoldandMovingGesture is active (Drag and Drop action)
+        // because we suppress the making of mouse event through Qt, we need to make our own one finger panning
+        // but only if no TapHoldandMovingGesture is active (Drag and Drop action)
         if (touchEvent->touchPoints().size() == 1 && !getTapHoldandMovingGestureActive()) {
             const QPointF delta = touchEvent->touchPoints().first().lastPos() - touchEvent->touchPoints().first().pos();
             emit PanTriggered(delta);
@@ -136,12 +133,12 @@ bool Touch::eventFilter(QObject*, QEvent* event)
         d->mLastTouchTimeStamp = QDateTime::currentMSecsSinceEpoch();
     }
     if (event->type() == QEvent::Gesture) {
-        gestureEvent(static_cast<QGestureEvent*>(event));
+        gestureEvent(static_cast<QGestureEvent *>(event));
     }
     return false;
 }
 
-bool Touch::gestureEvent(QGestureEvent* event)
+bool Touch::gestureEvent(QGestureEvent *event)
 {
     bool ret = false;
 
@@ -158,7 +155,7 @@ bool Touch::gestureEvent(QGestureEvent* event)
     if (checkTapGesture(event)) {
         ret = true;
         if (event->widget()) {
-        touchToMouseClick(positionGesture(event), event->widget());
+            touchToMouseClick(positionGesture(event), event->widget());
         }
         emit tapTriggered(positionGesture(event));
     }
@@ -192,9 +189,9 @@ void Touch::setRotationThreshold(qreal rotationThreshold)
     d->mRotationThreshold = rotationThreshold;
 }
 
-qreal Touch::getRotationFromPinchGesture(QGestureEvent* event)
+qreal Touch::getRotationFromPinchGesture(QGestureEvent *event)
 {
-    const QPinchGesture* pinch = static_cast<QPinchGesture*>(event->gesture(Qt::PinchGesture));
+    const QPinchGesture *pinch = static_cast<QPinchGesture *>(event->gesture(Qt::PinchGesture));
     static qreal lastRotationAngel;
     if (pinch) {
         if (pinch->state() == Qt::GestureStarted) {
@@ -203,7 +200,7 @@ qreal Touch::getRotationFromPinchGesture(QGestureEvent* event)
         }
         if (pinch->state() == Qt::GestureUpdated) {
             const qreal rotationDelta = pinch->rotationAngle() - pinch->lastRotationAngle();
-            //very low and high changes in the rotation are suspect, so we ignore them
+            // very low and high changes in the rotation are suspect, so we ignore them
             if (abs(rotationDelta) <= 1.5 || abs(rotationDelta) >= 30) {
                 return 0.0;
             }
@@ -213,17 +210,17 @@ qreal Touch::getRotationFromPinchGesture(QGestureEvent* event)
                 lastRotationAngel = 0;
                 return ret;
             } else {
-            return 0.0;
+                return 0.0;
             }
         }
     }
     return 0.0;
 }
 
-qreal Touch::getZoomFromPinchGesture(QGestureEvent* event)
+qreal Touch::getZoomFromPinchGesture(QGestureEvent *event)
 {
     static qreal lastZoom;
-    const QPinchGesture* pinch = static_cast<QPinchGesture*>(event->gesture(Qt::PinchGesture));
+    const QPinchGesture *pinch = static_cast<QPinchGesture *>(event->gesture(Qt::PinchGesture));
     if (pinch) {
         if (pinch->state() == Qt::GestureStarted) {
             lastZoom = d->mStartZoom;
@@ -242,17 +239,17 @@ qreal Touch::calculateZoom(qreal scale, qreal modifier)
     return ((scale - 1.0) * modifier) + 1.0;
 }
 
-QPoint Touch::positionGesture(QGestureEvent* event)
+QPoint Touch::positionGesture(QGestureEvent *event)
 {
-    //return the position or the center point for follow gestures: QTapGesture, TabHoldAndMovingGesture and PinchGesture;
+    // return the position or the center point for follow gestures: QTapGesture, TabHoldAndMovingGesture and PinchGesture;
     QPoint position = QPoint(-1, -1);
-    if (auto* tap = static_cast<QTapGesture*>(event->gesture(Qt::TapGesture))) {
+    if (auto *tap = static_cast<QTapGesture *>(event->gesture(Qt::TapGesture))) {
         position = tap->position().toPoint();
-    } else if (QGesture* gesture = event->gesture(getTapHoldandMovingGesture())) {
+    } else if (QGesture *gesture = event->gesture(getTapHoldandMovingGesture())) {
         position = gesture->property("pos").toPoint();
-    } else if (auto* pinch = static_cast<QPinchGesture*>(event->gesture(Qt::PinchGesture))) {
-        if (qobject_cast<QGraphicsWidget*>(d->mTarget)) {
-            auto* widget = qobject_cast<QGraphicsWidget*>(d->mTarget);
+    } else if (auto *pinch = static_cast<QPinchGesture *>(event->gesture(Qt::PinchGesture))) {
+        if (qobject_cast<QGraphicsWidget *>(d->mTarget)) {
+            auto *widget = qobject_cast<QGraphicsWidget *>(d->mTarget);
             position = widget->mapFromScene(event->mapToGraphicsScene(pinch->centerPoint())).toPoint();
         } else {
             position = pinch->centerPoint().toPoint();
@@ -261,9 +258,9 @@ QPoint Touch::positionGesture(QGestureEvent* event)
     return position;
 }
 
-bool Touch::checkTwoFingerPanGesture(QGestureEvent* event)
+bool Touch::checkTwoFingerPanGesture(QGestureEvent *event)
 {
-    if (QGesture* gesture = event->gesture(getTwoFingerPanGesture())) {
+    if (QGesture *gesture = event->gesture(getTwoFingerPanGesture())) {
         event->accept();
         setPanGestureState(event);
         if (gesture->state() == Qt::GestureUpdated) {
@@ -275,9 +272,9 @@ bool Touch::checkTwoFingerPanGesture(QGestureEvent* event)
     return false;
 }
 
-bool Touch::checkOneAndTwoFingerSwipeGesture(QGestureEvent* event)
+bool Touch::checkOneAndTwoFingerSwipeGesture(QGestureEvent *event)
 {
-    if (QGesture* gesture = event->gesture(getOneAndTwoFingerSwipeGesture())) {
+    if (QGesture *gesture = event->gesture(getOneAndTwoFingerSwipeGesture())) {
         event->accept();
         if (gesture->state() == Qt::GestureFinished) {
             if (gesture->property("right").toBool()) {
@@ -292,20 +289,20 @@ bool Touch::checkOneAndTwoFingerSwipeGesture(QGestureEvent* event)
     return false;
 }
 
-
-bool Touch::checkTapGesture(QGestureEvent* event)
+bool Touch::checkTapGesture(QGestureEvent *event)
 {
-    const QTapGesture* tap = static_cast<QTapGesture*>(event->gesture(Qt::TapGesture));
+    const QTapGesture *tap = static_cast<QTapGesture *>(event->gesture(Qt::TapGesture));
     if (tap) {
         event->accept();
-        if (tap->state() == Qt::GestureFinished) return true;
+        if (tap->state() == Qt::GestureFinished)
+            return true;
     }
     return false;
 }
 
-bool Touch::checkDoubleTapGesture(QGestureEvent* event)
+bool Touch::checkDoubleTapGesture(QGestureEvent *event)
 {
-    if (QGesture* gesture = event->gesture(getDoubleTapGesture())) {
+    if (QGesture *gesture = event->gesture(getDoubleTapGesture())) {
         event->accept();
         if (gesture->state() == Qt::GestureFinished) {
             emit doubleTapTriggered();
@@ -315,9 +312,9 @@ bool Touch::checkDoubleTapGesture(QGestureEvent* event)
     return false;
 }
 
-bool Touch::checkTwoFingerTapGesture(QGestureEvent* event)
+bool Touch::checkTwoFingerTapGesture(QGestureEvent *event)
 {
-    if (QGesture* twoFingerTap = event->gesture(getTwoFingerTapGesture())) {
+    if (QGesture *twoFingerTap = event->gesture(getTwoFingerTapGesture())) {
         event->accept();
         if (twoFingerTap->state() == Qt::GestureFinished) {
             emit twoFingerTapTriggered();
@@ -327,9 +324,9 @@ bool Touch::checkTwoFingerTapGesture(QGestureEvent* event)
     return false;
 }
 
-bool Touch::checkTapHoldAndMovingGesture(QGestureEvent* event, QObject* target)
+bool Touch::checkTapHoldAndMovingGesture(QGestureEvent *event, QObject *target)
 {
-    if (QGesture* tapHoldAndMoving = event->gesture(getTapHoldandMovingGesture())) {
+    if (QGesture *tapHoldAndMoving = event->gesture(getTapHoldandMovingGesture())) {
         event->accept();
         const QPoint pos = tapHoldAndMoving->property("pos").toPoint();
         switch (tapHoldAndMoving->state()) {
@@ -354,22 +351,22 @@ bool Touch::checkTapHoldAndMovingGesture(QGestureEvent* event, QObject* target)
     return false;
 }
 
-bool Touch::checkPinchGesture(QGestureEvent* event)
+bool Touch::checkPinchGesture(QGestureEvent *event)
 {
     static qreal lastScaleFactor;
-    const QPinchGesture* pinch = static_cast<QPinchGesture*>(event->gesture(Qt::PinchGesture));
+    const QPinchGesture *pinch = static_cast<QPinchGesture *>(event->gesture(Qt::PinchGesture));
     if (pinch) {
-        //we don't want a pinch gesture, if a pan gesture is active
-        //only exception is, if the pinch gesture state is Qt::GestureStarted
+        // we don't want a pinch gesture, if a pan gesture is active
+        // only exception is, if the pinch gesture state is Qt::GestureStarted
         if (getLastPanGestureState() == Qt::GestureCanceled || pinch->state() == Qt::GestureStarted) {
             event->accept();
             if (pinch->state() == Qt::GestureStarted) {
                 lastScaleFactor = 0;
                 emit pinchGestureStarted(d->mLastTouchTimeStamp);
             } else if (pinch->state() == Qt::GestureUpdated) {
-                //Because of a bug in Qt in a gesture event in a graphicsview, all gestures are trigger twice
-                //https://bugreports.qt.io/browse/QTBUG-13103
-                //the duplicate events have the same scaleFactor, so I ignore them
+                // Because of a bug in Qt in a gesture event in a graphicsview, all gestures are trigger twice
+                // https://bugreports.qt.io/browse/QTBUG-13103
+                // the duplicate events have the same scaleFactor, so I ignore them
                 if (lastScaleFactor == pinch->scaleFactor()) {
                     return false;
                 } else {
@@ -382,44 +379,44 @@ bool Touch::checkPinchGesture(QGestureEvent* event)
     return false;
 }
 
-void Touch::touchToMouseRelease(QPoint pos, QObject* receiver)
+void Touch::touchToMouseRelease(QPoint pos, QObject *receiver)
 {
     touchToMouseEvent(pos, receiver, QEvent::MouseButtonRelease, Qt::LeftButton, Qt::LeftButton);
 }
 
-void Touch::touchToMouseMove(QPoint pos, QEvent* event, Qt::MouseButton button)
+void Touch::touchToMouseMove(QPoint pos, QEvent *event, Qt::MouseButton button)
 {
-    if (auto* touchEvent = static_cast<QTouchEvent*>(event)) {
-            touchToMouseEvent(pos, touchEvent->target(), QEvent::MouseMove, button, button);
+    if (auto *touchEvent = static_cast<QTouchEvent *>(event)) {
+        touchToMouseEvent(pos, touchEvent->target(), QEvent::MouseMove, button, button);
     }
 }
 
-void Touch::touchToMouseMove(QPoint pos, QObject* receiver, Qt::MouseButton button)
+void Touch::touchToMouseMove(QPoint pos, QObject *receiver, Qt::MouseButton button)
 {
     touchToMouseEvent(pos, receiver, QEvent::MouseMove, button, button);
 }
 
-
-void Touch::touchToMouseClick (QPoint pos, QObject* receiver)
+void Touch::touchToMouseClick(QPoint pos, QObject *receiver)
 {
     touchToMouseEvent(pos, receiver, QEvent::MouseButtonPress, Qt::LeftButton, Qt::LeftButton);
     touchToMouseEvent(pos, receiver, QEvent::MouseButtonRelease, Qt::LeftButton, Qt::LeftButton);
 }
 
-void Touch::touchToMouseEvent (QPoint pos, QObject* receiver, QEvent::Type type, Qt::MouseButton button, Qt::MouseButtons buttons)
+void Touch::touchToMouseEvent(QPoint pos, QObject *receiver, QEvent::Type type, Qt::MouseButton button, Qt::MouseButtons buttons)
 {
-    auto* evt = new QMouseEvent(type, pos, button, buttons, Qt::NoModifier);
+    auto *evt = new QMouseEvent(type, pos, button, buttons, Qt::NoModifier);
     QCoreApplication::postEvent(receiver, evt);
 }
 
 Qt::GestureState Touch::getLastPanGestureState()
 {
-    return d->mLastPanGestureState;;
+    return d->mLastPanGestureState;
+    ;
 }
 
-void Touch::setPanGestureState(QGestureEvent* event)
+void Touch::setPanGestureState(QGestureEvent *event)
 {
-    if (QGesture* panGesture = event->gesture(getTwoFingerPanGesture())) {
+    if (QGesture *panGesture = event->gesture(getTwoFingerPanGesture())) {
         d->mLastPanGestureState = panGesture->state();
     }
     return;

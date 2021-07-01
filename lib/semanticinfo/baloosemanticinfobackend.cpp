@@ -23,27 +23,25 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "baloosemanticinfobackend.h"
 
 // Local
-#include <lib/gvdebug.h>
 #include "gwenview_lib_debug.h"
+#include <lib/gvdebug.h>
 
 // Qt
 #include <QUrl>
 
 // KF
-#include <KFileMetaData/UserMetaData>
 #include <Baloo/TagListJob>
+#include <KFileMetaData/UserMetaData>
 
 namespace Gwenview
 {
-
-struct BalooSemanticInfoBackend::Private
-{
+struct BalooSemanticInfoBackend::Private {
     TagSet mAllTags;
 };
 
-BalooSemanticInfoBackend::BalooSemanticInfoBackend(QObject* parent)
-: AbstractSemanticInfoBackEnd(parent)
-, d(new BalooSemanticInfoBackend::Private)
+BalooSemanticInfoBackend::BalooSemanticInfoBackend(QObject *parent)
+    : AbstractSemanticInfoBackEnd(parent)
+    , d(new BalooSemanticInfoBackend::Private)
 {
 }
 
@@ -55,24 +53,24 @@ BalooSemanticInfoBackend::~BalooSemanticInfoBackend()
 TagSet BalooSemanticInfoBackend::allTags() const
 {
     if (d->mAllTags.isEmpty()) {
-        const_cast<BalooSemanticInfoBackend*>(this)->refreshAllTags();
+        const_cast<BalooSemanticInfoBackend *>(this)->refreshAllTags();
     }
     return d->mAllTags;
 }
 
 void BalooSemanticInfoBackend::refreshAllTags()
 {
-    auto* job = new Baloo::TagListJob();
+    auto *job = new Baloo::TagListJob();
     job->exec();
 
     d->mAllTags.clear();
     const QStringList tags = job->tags();
-    for (const QString& tag : tags) {
+    for (const QString &tag : tags) {
         d->mAllTags << tag;
     }
 }
 
-void BalooSemanticInfoBackend::storeSemanticInfo(const QUrl &url, const SemanticInfo& semanticInfo)
+void BalooSemanticInfoBackend::storeSemanticInfo(const QUrl &url, const SemanticInfo &semanticInfo)
 {
     KFileMetaData::UserMetaData md(url.toLocalFile());
     md.setRating(semanticInfo.mRating);
@@ -92,12 +90,12 @@ void BalooSemanticInfoBackend::retrieveSemanticInfo(const QUrl &url)
     emit semanticInfoRetrieved(url, si);
 }
 
-QString BalooSemanticInfoBackend::labelForTag(const SemanticInfoTag& uriString) const
+QString BalooSemanticInfoBackend::labelForTag(const SemanticInfoTag &uriString) const
 {
     return uriString;
 }
 
-SemanticInfoTag BalooSemanticInfoBackend::tagForLabel(const QString& label)
+SemanticInfoTag BalooSemanticInfoBackend::tagForLabel(const QString &label)
 {
     return label;
 }

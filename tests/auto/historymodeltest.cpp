@@ -20,8 +20,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "historymodeltest.h"
 
 // Qt
-#include <QDir>
 #include <QDebug>
+#include <QDir>
 #include <QTemporaryDir>
 #include <QTest>
 
@@ -35,7 +35,7 @@ QTEST_MAIN(HistoryModelTest)
 
 using namespace Gwenview;
 
-void testModel(const HistoryModel& model, const QUrl &u1, const QUrl& u2)
+void testModel(const HistoryModel &model, const QUrl &u1, const QUrl &u2)
 {
     QModelIndex index;
     QUrl url;
@@ -50,7 +50,6 @@ void testModel(const HistoryModel& model, const QUrl &u1, const QUrl& u2)
     QVERIFY(index.isValid());
     url = model.data(index, KFilePlacesModel::UrlRole).toUrl();
     QCOMPARE(url, u2);
-
 }
 
 void HistoryModelTest::testAddUrl()

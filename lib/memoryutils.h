@@ -32,10 +32,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 namespace MemoryUtils
 {
-
 /**
  * This function returns the amount of total memory installed on the system
  * FIXME: It lacks *BSD and MacOSX support!

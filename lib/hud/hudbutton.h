@@ -32,7 +32,6 @@ class QIcon;
 
 namespace Gwenview
 {
-
 struct HudButtonPrivate;
 /**
  *
@@ -41,28 +40,28 @@ class HudButton : public QGraphicsWidget
 {
     Q_OBJECT
 public:
-    explicit HudButton(QGraphicsItem* parent = nullptr);
+    explicit HudButton(QGraphicsItem *parent = nullptr);
     ~HudButton() override;
 
-    void setIcon(const QIcon&);
+    void setIcon(const QIcon &);
 
-    void setText(const QString&);
+    void setText(const QString &);
 
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override;
 
-    void setDefaultAction(QAction*);
+    void setDefaultAction(QAction *);
 
 Q_SIGNALS:
     void clicked();
 
 protected:
-    bool event(QEvent* event) override;
-    QSizeF sizeHint(Qt::SizeHint which, const QSizeF& constraint = QSizeF()) const override;
-    void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
+    bool event(QEvent *event) override;
+    QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const override;
+    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
 
 private:
-    HudButtonPrivate* const d;
+    HudButtonPrivate *const d;
 };
 
 } // namespace

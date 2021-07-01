@@ -32,10 +32,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
-struct GraphicsWidgetFloaterPrivate
-{
-    QGraphicsWidget* mParent;
+struct GraphicsWidgetFloaterPrivate {
+    QGraphicsWidget *mParent;
     QPointer<QGraphicsWidget> mChild;
     Qt::Alignment mAlignment;
 
@@ -91,9 +89,9 @@ struct GraphicsWidgetFloaterPrivate
     }
 };
 
-GraphicsWidgetFloater::GraphicsWidgetFloater(QGraphicsWidget* parent)
-: QObject(parent)
-, d(new GraphicsWidgetFloaterPrivate)
+GraphicsWidgetFloater::GraphicsWidgetFloater(QGraphicsWidget *parent)
+    : QObject(parent)
+    , d(new GraphicsWidgetFloaterPrivate)
 {
     Q_ASSERT(parent);
     d->mParent = parent;
@@ -110,7 +108,7 @@ GraphicsWidgetFloater::~GraphicsWidgetFloater()
     delete d;
 }
 
-void GraphicsWidgetFloater::setChildWidget(QGraphicsWidget* child)
+void GraphicsWidgetFloater::setChildWidget(QGraphicsWidget *child)
 {
     if (d->mChild) {
         d->mChild->removeEventFilter(this);
@@ -121,7 +119,7 @@ void GraphicsWidgetFloater::setChildWidget(QGraphicsWidget* child)
     d->mChild->installEventFilter(this);
     connect(d->mChild.data(), &QGraphicsObject::visibleChanged, this, &GraphicsWidgetFloater::slotChildVisibilityChanged);
     d->updateChildGeometry();
-    //d->mChild->raise();
+    // d->mChild->raise();
     d->mChild->show();
 }
 
@@ -131,7 +129,7 @@ void GraphicsWidgetFloater::setAlignment(Qt::Alignment alignment)
     d->updateChildGeometry();
 }
 
-bool GraphicsWidgetFloater::eventFilter(QObject*, QEvent* event)
+bool GraphicsWidgetFloater::eventFilter(QObject *, QEvent *event)
 {
     if (event->type() == QEvent::GraphicsSceneResize) {
         d->updateChildGeometry();

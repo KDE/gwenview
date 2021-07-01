@@ -24,11 +24,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include "abstractdocumentviewadapter.h"
 #include "documentview.h"
+#include "gwenview_lib_debug.h"
 #include <lib/documentview/abstractrasterimageviewtool.h>
+#include <lib/gwenviewconfig.h>
 #include <lib/slidecontainer.h>
 #include <lib/zoomwidget.h>
-#include <lib/gwenviewconfig.h>
-#include "gwenview_lib_debug.h"
 
 // KF
 #include <KActionCategory>
@@ -41,31 +41,29 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
+struct DocumentViewControllerPrivate {
+    DocumentViewController *q;
+    KActionCollection *mActionCollection;
+    DocumentView *mView;
+    BackgroundColorWidget *mBackgroundColorWidget;
+    ZoomWidget *mZoomWidget;
+    SlideContainer *mToolContainer;
 
-struct DocumentViewControllerPrivate
-{
-    DocumentViewController* q;
-    KActionCollection* mActionCollection;
-    DocumentView* mView;
-    BackgroundColorWidget* mBackgroundColorWidget;
-    ZoomWidget* mZoomWidget;
-    SlideContainer* mToolContainer;
-
-    QAction * mZoomToFitAction;
-    QAction * mZoomToFillAction;
-    QAction * mActualSizeAction;
-    QAction * mZoomInAction;
-    QAction * mZoomOutAction;
-    QAction * mToggleBirdEyeViewAction;
-    QAction * mBackgroundColorModeAuto;
-    QAction * mBackgroundColorModeLight;
-    QAction * mBackgroundColorModeNeutral;
-    QAction * mBackgroundColorModeDark;
+    QAction *mZoomToFitAction;
+    QAction *mZoomToFillAction;
+    QAction *mActualSizeAction;
+    QAction *mZoomInAction;
+    QAction *mZoomOutAction;
+    QAction *mToggleBirdEyeViewAction;
+    QAction *mBackgroundColorModeAuto;
+    QAction *mBackgroundColorModeLight;
+    QAction *mBackgroundColorModeNeutral;
+    QAction *mBackgroundColorModeDark;
     QList<QAction *> mActions;
 
     void setupActions()
     {
-        auto* view = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface", "View"), mActionCollection);
+        auto *view = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface", "View"), mActionCollection);
 
         mZoomToFitAction = view->addAction(QStringLiteral("view_zoom_to_fit"));
         view->collection()->setDefaultShortcut(mZoomToFitAction, Qt::Key_F);
@@ -125,10 +123,8 @@ struct DocumentViewControllerPrivate
         mBackgroundColorModeDark->setEnabled(mView != nullptr);
         mBackgroundColorModeDark->setToolTip(mBackgroundColorModeDark->text());
 
-        mActions << mZoomToFitAction << mActualSizeAction << mZoomInAction
-            << mZoomOutAction << mZoomToFillAction << mToggleBirdEyeViewAction
-            << mBackgroundColorModeAuto << mBackgroundColorModeLight
-            << mBackgroundColorModeNeutral << mBackgroundColorModeDark;
+        mActions << mZoomToFitAction << mActualSizeAction << mZoomInAction << mZoomOutAction << mZoomToFillAction << mToggleBirdEyeViewAction
+                 << mBackgroundColorModeAuto << mBackgroundColorModeLight << mBackgroundColorModeNeutral << mBackgroundColorModeDark;
     }
 
     void connectBackgroundColorWidget()
@@ -169,15 +165,15 @@ struct DocumentViewControllerPrivate
     void updateActions()
     {
         const bool enabled = mView && mView->isVisible() && mView->canZoom();
-        for (QAction * action : qAsConst(mActions)) {
+        for (QAction *action : qAsConst(mActions)) {
             action->setEnabled(enabled);
         }
     }
 };
 
-DocumentViewController::DocumentViewController(KActionCollection* actionCollection, QObject* parent)
-: QObject(parent)
-, d(new DocumentViewControllerPrivate)
+DocumentViewController::DocumentViewController(KActionCollection *actionCollection, QObject *parent)
+    : QObject(parent)
+    , d(new DocumentViewControllerPrivate)
 {
     d->q = this;
     d->mActionCollection = actionCollection;
@@ -194,12 +190,12 @@ DocumentViewController::~DocumentViewController()
     delete d;
 }
 
-void DocumentViewController::setView(DocumentView* view)
+void DocumentViewController::setView(DocumentView *view)
 {
     // Forget old view
     if (d->mView) {
         disconnect(d->mView, nullptr, this, nullptr);
-        for (QAction * action : qAsConst(d->mActions)) {
+        for (QAction *action : qAsConst(d->mActions)) {
             disconnect(action, nullptr, d->mView, nullptr);
         }
         disconnect(d->mZoomWidget, nullptr, d->mView, nullptr);
@@ -218,31 +214,29 @@ void DocumentViewController::setView(DocumentView* view)
 
     connect(d->mZoomToFitAction, &QAction::toggled, d->mView, &DocumentView::setZoomToFit);
     connect(d->mZoomToFillAction, &QAction::toggled, d->mView, &DocumentView::setZoomToFill);
-    connect(d->mActualSizeAction, &QAction::toggled, d->mView, [this](bool checked){
+    connect(d->mActualSizeAction, &QAction::toggled, d->mView, [this](bool checked) {
         if (checked) {
             d->mView->setZoom(1.0);
         }
     });
-    connect(d->mZoomInAction, SIGNAL(triggered()),
-            d->mView, SLOT(zoomIn()));
-    connect(d->mZoomOutAction, SIGNAL(triggered()),
-            d->mView, SLOT(zoomOut()));
+    connect(d->mZoomInAction, SIGNAL(triggered()), d->mView, SLOT(zoomIn()));
+    connect(d->mZoomOutAction, SIGNAL(triggered()), d->mView, SLOT(zoomOut()));
 
     connect(d->mToggleBirdEyeViewAction, &QAction::triggered, d->mView, &DocumentView::toggleBirdEyeView);
 
-    connect(d->mBackgroundColorModeAuto, &QAction::triggered, this, [this](){
+    connect(d->mBackgroundColorModeAuto, &QAction::triggered, this, [this]() {
         d->mView->setBackgroundColorMode(BackgroundColorWidget::Auto);
         qApp->paletteChanged(qApp->palette());
     });
-    connect(d->mBackgroundColorModeLight, &QAction::triggered, this, [this](){
+    connect(d->mBackgroundColorModeLight, &QAction::triggered, this, [this]() {
         d->mView->setBackgroundColorMode(BackgroundColorWidget::Light);
         qApp->paletteChanged(qApp->palette());
     });
-    connect(d->mBackgroundColorModeNeutral, &QAction::triggered, this, [this](){
+    connect(d->mBackgroundColorModeNeutral, &QAction::triggered, this, [this]() {
         d->mView->setBackgroundColorMode(BackgroundColorWidget::Neutral);
         qApp->paletteChanged(qApp->palette());
     });
-    connect(d->mBackgroundColorModeDark, &QAction::triggered, this, [this](){
+    connect(d->mBackgroundColorModeDark, &QAction::triggered, this, [this]() {
         d->mView->setBackgroundColorMode(BackgroundColorWidget::Dark);
         qApp->paletteChanged(qApp->palette());
     });
@@ -260,42 +254,34 @@ void DocumentViewController::setView(DocumentView* view)
     d->updateZoomWidgetVisibility();
 }
 
-DocumentView* DocumentViewController::view() const
+DocumentView *DocumentViewController::view() const
 {
     return d->mView;
 }
 
-void DocumentViewController::setBackgroundColorWidget(BackgroundColorWidget* widget)
+void DocumentViewController::setBackgroundColorWidget(BackgroundColorWidget *widget)
 {
     d->mBackgroundColorWidget = widget;
 
-    d->mBackgroundColorWidget->setActions(
-        d->mBackgroundColorModeAuto,
-        d->mBackgroundColorModeLight,
-        d->mBackgroundColorModeNeutral,
-        d->mBackgroundColorModeDark
-    );
+    d->mBackgroundColorWidget->setActions(d->mBackgroundColorModeAuto,
+                                          d->mBackgroundColorModeLight,
+                                          d->mBackgroundColorModeNeutral,
+                                          d->mBackgroundColorModeDark);
 
     d->connectBackgroundColorWidget();
     d->mBackgroundColorWidget->setVisible(true);
 }
 
-BackgroundColorWidget* DocumentViewController::backgroundColorWidget() const
+BackgroundColorWidget *DocumentViewController::backgroundColorWidget() const
 {
     return d->mBackgroundColorWidget;
 }
 
-void DocumentViewController::setZoomWidget(ZoomWidget* widget)
+void DocumentViewController::setZoomWidget(ZoomWidget *widget)
 {
     d->mZoomWidget = widget;
 
-    d->mZoomWidget->setActions(
-        d->mZoomToFitAction,
-        d->mActualSizeAction,
-        d->mZoomInAction,
-        d->mZoomOutAction,
-        d->mZoomToFillAction
-    );
+    d->mZoomWidget->setActions(d->mZoomToFitAction, d->mActualSizeAction, d->mZoomInAction, d->mZoomOutAction, d->mZoomToFillAction);
 
     d->mZoomWidget->setMaximumZoom(qreal(DocumentView::MaximumZoom));
 
@@ -303,7 +289,7 @@ void DocumentViewController::setZoomWidget(ZoomWidget* widget)
     d->updateZoomWidgetVisibility();
 }
 
-ZoomWidget* DocumentViewController::zoomWidget() const
+ZoomWidget *DocumentViewController::zoomWidget() const
 {
     return d->mZoomWidget;
 }
@@ -329,7 +315,7 @@ void DocumentViewController::updateTool()
     if (!d->mToolContainer) {
         return;
     }
-    AbstractRasterImageViewTool* tool = d->mView->currentTool();
+    AbstractRasterImageViewTool *tool = d->mView->currentTool();
     if (tool && tool->widget()) {
         // Use a QueuedConnection to ensure the size of the view has been
         // updated by the time the slot is called.
@@ -347,7 +333,7 @@ void DocumentViewController::reset()
     d->updateActions();
 }
 
-void DocumentViewController::setToolContainer(SlideContainer* container)
+void DocumentViewController::setToolContainer(SlideContainer *container)
 {
     d->mToolContainer = container;
 }

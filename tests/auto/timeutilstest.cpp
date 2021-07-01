@@ -39,7 +39,7 @@ QTEST_MAIN(TimeUtilsTest)
 
 using namespace Gwenview;
 
-static void touchFile(const QString& path)
+static void touchFile(const QString &path)
 {
     utime(QFile::encodeName(path).data(), nullptr);
 }

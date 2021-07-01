@@ -5,12 +5,11 @@
 #ifndef BACKGROUNDCOLORWIDGET_H
 #define BACKGROUNDCOLORWIDGET_H
 
-#include <lib/gwenviewlib_export.h>
 #include <QWidget>
+#include <lib/gwenviewlib_export.h>
 
 namespace Gwenview
 {
-
 class BackgroundColorWidgetPrivate;
 
 class GWENVIEWLIB_EXPORT BackgroundColorWidget : public QWidget
@@ -22,18 +21,13 @@ public:
     explicit BackgroundColorWidget(QWidget *parent = nullptr);
     ~BackgroundColorWidget() override;
 
-    enum ColorMode {
-        Auto = 0,
-        Light = 1,
-        Neutral = 2,
-        Dark = 3
-    };
+    enum ColorMode { Auto = 0, Light = 1, Neutral = 2, Dark = 3 };
     Q_ENUM(ColorMode)
 
     ColorMode colorMode() const;
     void setColorMode(ColorMode colorMode);
 
-    void setActions(QAction* autoMode, QAction* lightMode, QAction* neutralMode, QAction* darkMode);
+    void setActions(QAction *autoMode, QAction *lightMode, QAction *neutralMode, QAction *darkMode);
 
     static bool usingLightTheme();
 

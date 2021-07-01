@@ -34,21 +34,20 @@ class QUrl;
 
 namespace Gwenview
 {
-
 struct FileNameFormaterPrivate;
 class FileNameFormater
 {
 public:
     using HelpMap = QMap<QString, QString>;
 
-    FileNameFormater(const QString& format);
+    FileNameFormater(const QString &format);
     ~FileNameFormater();
 
     /**
      * Given an url and its dateTime, returns a filename according to the
      * format passed to the constructor
      */
-    QString format(const QUrl& url, const QDateTime& dateTime);
+    QString format(const QUrl &url, const QDateTime &dateTime);
 
     /**
      * Returns a map whose keys are the available keywords and values are the
@@ -57,7 +56,7 @@ public:
     static HelpMap helpMap();
 
 private:
-    FileNameFormaterPrivate* const d;
+    FileNameFormaterPrivate *const d;
 };
 
 } // namespace

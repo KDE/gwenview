@@ -34,20 +34,19 @@ class QRect;
 
 namespace Gwenview
 {
-
 struct CropImageOperationPrivate;
 class GWENVIEWLIB_EXPORT CropImageOperation : public AbstractImageOperation
 {
     Q_OBJECT
 public:
-    CropImageOperation(const QRect&);
+    CropImageOperation(const QRect &);
     ~CropImageOperation() override;
 
     void redo() override;
     void undo() override;
 
 private:
-    CropImageOperationPrivate* const d;
+    CropImageOperationPrivate *const d;
 };
 
 } // namespace

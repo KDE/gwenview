@@ -34,7 +34,6 @@ class QUrl;
 
 namespace Gwenview
 {
-
 struct RecursiveDirModelPrivate;
 /**
  * Recursively list content of a dir
@@ -43,25 +42,26 @@ class GWENVIEWLIB_EXPORT RecursiveDirModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    explicit RecursiveDirModel(QObject* parent = nullptr);
+    explicit RecursiveDirModel(QObject *parent = nullptr);
     ~RecursiveDirModel() override;
 
     QUrl url() const;
-    void setUrl(const QUrl&);
+    void setUrl(const QUrl &);
 
-    int rowCount(const QModelIndex&) const override;
-    QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const override;
+    int rowCount(const QModelIndex &) const override;
+    QVariant data(const QModelIndex &, int role = Qt::DisplayRole) const override;
 
 Q_SIGNALS:
     void completed();
 
 private Q_SLOTS:
-    void slotItemsAdded(const QUrl &dirUrl, const KFileItemList&);
-    void slotItemsDeleted(const KFileItemList&);
-    void slotDirCleared(const QUrl&);
+    void slotItemsAdded(const QUrl &dirUrl, const KFileItemList &);
+    void slotItemsDeleted(const KFileItemList &);
+    void slotDirCleared(const QUrl &);
     void slotCleared();
+
 private:
-    RecursiveDirModelPrivate* const d;
+    RecursiveDirModelPrivate *const d;
 };
 
 } // namespace

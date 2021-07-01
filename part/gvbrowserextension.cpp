@@ -24,8 +24,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 
 // KF
-#include <KParts/ReadOnlyPart>
 #include <KIconLoader>
+#include <KParts/ReadOnlyPart>
 
 // Local
 #include "../lib/document/documentfactory.h"
@@ -33,15 +33,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
-struct GVBrowserExtensionPrivate
-{
-    KParts::ReadOnlyPart* mPart;
+struct GVBrowserExtensionPrivate {
+    KParts::ReadOnlyPart *mPart;
 };
 
-GVBrowserExtension::GVBrowserExtension(KParts::ReadOnlyPart* part)
-: KParts::BrowserExtension(part)
-, d(new GVBrowserExtensionPrivate)
+GVBrowserExtension::GVBrowserExtension(KParts::ReadOnlyPart *part)
+    : KParts::BrowserExtension(part)
+    , d(new GVBrowserExtensionPrivate)
 {
     d->mPart = part;
     emit enableAction("print", true);

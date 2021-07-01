@@ -38,7 +38,6 @@ class QUrl;
 
 namespace Gwenview
 {
-
 class AbstractSemanticInfoBackEnd;
 struct SortedDirModelPrivate;
 
@@ -50,9 +49,9 @@ class SortedDirModel;
 class GWENVIEWLIB_EXPORT AbstractSortedDirModelFilter : public QObject
 {
 public:
-    AbstractSortedDirModelFilter(SortedDirModel* model);
+    AbstractSortedDirModelFilter(SortedDirModel *model);
     ~AbstractSortedDirModelFilter() override;
-    SortedDirModel* model() const
+    SortedDirModel *model() const
     {
         return mModel;
     }
@@ -62,7 +61,7 @@ public:
      * Returns true if index should be accepted.
      * Warning: index is a source index of SortedDirModel
      */
-    virtual bool acceptsIndex(const QModelIndex& index) const = 0;
+    virtual bool acceptsIndex(const QModelIndex &index) const = 0;
 
 private:
     QPointer<SortedDirModel> mModel;
@@ -76,17 +75,17 @@ class GWENVIEWLIB_EXPORT SortedDirModel : public KDirSortFilterProxyModel
 {
     Q_OBJECT
 public:
-    explicit SortedDirModel(QObject* parent = nullptr);
+    explicit SortedDirModel(QObject *parent = nullptr);
     ~SortedDirModel() override;
-    KDirLister* dirLister() const;
+    KDirLister *dirLister() const;
     /**
      * Redefines the dir lister, useful for debugging
      */
-    void setDirLister(KDirLister*);
-    KFileItem itemForIndex(const QModelIndex& index) const;
-    QUrl urlForIndex(const QModelIndex& index) const;
-    KFileItem itemForSourceIndex(const QModelIndex& sourceIndex) const;
-    QModelIndex indexForItem(const KFileItem& item) const;
+    void setDirLister(KDirLister *);
+    KFileItem itemForIndex(const QModelIndex &index) const;
+    QUrl urlForIndex(const QModelIndex &index) const;
+    KFileItem itemForSourceIndex(const QModelIndex &sourceIndex) const;
+    QModelIndex indexForItem(const KFileItem &item) const;
     QModelIndex indexForUrl(const QUrl &url) const;
 
     void setKindFilter(MimeTypeUtils::Kinds);
@@ -97,18 +96,18 @@ public:
     /**
      * A list of file extensions we should skip
      */
-    void setBlackListedExtensions(const QStringList& list);
+    void setBlackListedExtensions(const QStringList &list);
 
-    void addFilter(AbstractSortedDirModelFilter*);
+    void addFilter(AbstractSortedDirModelFilter *);
 
-    void removeFilter(AbstractSortedDirModelFilter*);
+    void removeFilter(AbstractSortedDirModelFilter *);
 
     void reload();
 
-    AbstractSemanticInfoBackEnd* semanticInfoBackEnd() const;
+    AbstractSemanticInfoBackEnd *semanticInfoBackEnd() const;
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-    SemanticInfo semanticInfoForSourceIndex(const QModelIndex& sourceIndex) const;
+    SemanticInfo semanticInfoForSourceIndex(const QModelIndex &sourceIndex) const;
 #endif
 
     bool hasDocuments() const;
@@ -117,15 +116,15 @@ public Q_SLOTS:
     void applyFilters();
 
 protected:
-    bool filterAcceptsRow(int row, const QModelIndex& parent) const override;
-    bool lessThan(const QModelIndex& left, const QModelIndex& right) const override;
+    bool filterAcceptsRow(int row, const QModelIndex &parent) const override;
+    bool lessThan(const QModelIndex &left, const QModelIndex &right) const override;
 
 private Q_SLOTS:
     void doApplyFilters();
 
 private:
     friend struct SortedDirModelPrivate;
-    SortedDirModelPrivate * const d;
+    SortedDirModelPrivate *const d;
 };
 
 } // namespace

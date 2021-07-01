@@ -29,31 +29,30 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KF
 
 // Local
-#include <lib/documentview/abstractimageview.h>
 #include <lib/documentview/abstractdocumentviewadapter.h>
+#include <lib/documentview/abstractimageview.h>
 
 class QGraphicsSvgItem;
 
 namespace Gwenview
 {
-
 class SvgImageView : public AbstractImageView
 {
     Q_OBJECT
 public:
-    explicit SvgImageView(QGraphicsItem* parent = nullptr);
+    explicit SvgImageView(QGraphicsItem *parent = nullptr);
 
 protected:
     void loadFromDocument() override;
     void onZoomChanged() override;
     void onImageOffsetChanged() override;
-    void onScrollPosChanged(const QPointF& oldPos) override;
+    void onScrollPosChanged(const QPointF &oldPos) override;
 
 private Q_SLOTS:
     void finishLoadFromDocument();
 
 private:
-    QGraphicsSvgItem* mSvgItem;
+    QGraphicsSvgItem *mSvgItem;
     void adjustItemPos();
 };
 
@@ -67,7 +66,7 @@ public:
 
     QCursor cursor() const override;
 
-    void setCursor(const QCursor&) override;
+    void setCursor(const QCursor &) override;
 
     void setDocument(const Document::Ptr &) override;
 
@@ -87,7 +86,7 @@ public:
 
     void setZoomToFit(bool) override;
 
-    void setZoomToFill(bool on, const QPointF& center) override;
+    void setZoomToFill(bool on, const QPointF &center) override;
 
     bool zoomToFit() const override;
 
@@ -95,21 +94,21 @@ public:
 
     qreal zoom() const override;
 
-    void setZoom(qreal /*zoom*/, const QPointF& /*center*/ = QPointF(-1, -1)) override;
+    void setZoom(qreal /*zoom*/, const QPointF & /*center*/ = QPointF(-1, -1)) override;
 
     qreal computeZoomToFit() const override;
 
     qreal computeZoomToFill() const override;
 
     QPointF scrollPos() const override;
-    void setScrollPos(const QPointF& pos) override;
+    void setScrollPos(const QPointF &pos) override;
 
     QRectF visibleDocumentRect() const override;
 
-    AbstractImageView* imageView() const override;
+    AbstractImageView *imageView() const override;
 
 private:
-    SvgViewAdapterPrivate* const d;
+    SvgViewAdapterPrivate *const d;
 };
 
 } // namespace

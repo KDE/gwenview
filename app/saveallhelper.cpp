@@ -24,10 +24,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QFuture>
 #include <QFutureWatcher>
+#include <QProgressDialog>
 #include <QSet>
 #include <QStringList>
 #include <QUrl>
-#include <QProgressDialog>
 
 // KF
 #include <KLocalizedString>
@@ -40,17 +40,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
-struct SaveAllHelperPrivate
-{
-    QWidget* mParent;
-    QProgressDialog* mProgressDialog;
-    QSet<DocumentJob*> mJobSet;
+struct SaveAllHelperPrivate {
+    QWidget *mParent;
+    QProgressDialog *mProgressDialog;
+    QSet<DocumentJob *> mJobSet;
     QStringList mErrorList;
 };
 
-SaveAllHelper::SaveAllHelper(QWidget* parent)
-: d(new SaveAllHelperPrivate)
+SaveAllHelper::SaveAllHelper(QWidget *parent)
+    : d(new SaveAllHelperPrivate)
 {
     d->mParent = parent;
     d->mProgressDialog = new QProgressDialog(parent);
@@ -72,7 +70,7 @@ void SaveAllHelper::save()
     d->mProgressDialog->setValue(0);
     for (const QUrl &url : list) {
         Document::Ptr doc = DocumentFactory::instance()->load(url);
-        DocumentJob* job = doc->save(url, doc->format());
+        DocumentJob *job = doc->save(url, doc->format());
         connect(job, &DocumentJob::result, this, &SaveAllHelper::slotResult);
         d->mJobSet << job;
     }
@@ -83,7 +81,7 @@ void SaveAllHelper::save()
     if (d->mErrorList.count() > 0) {
         QString msg = i18ncp("@info", "One document could not be saved:", "%1 documents could not be saved:", d->mErrorList.count());
         msg += "<ul>";
-        for (const QString & item : qAsConst(d->mErrorList)) {
+        for (const QString &item : qAsConst(d->mErrorList)) {
             msg += "<li>" + item + "</li>";
         }
         msg += "</ul>";
@@ -93,19 +91,21 @@ void SaveAllHelper::save()
 
 void SaveAllHelper::slotCanceled()
 {
-    for (DocumentJob * job : qAsConst(d->mJobSet)) {
+    for (DocumentJob *job : qAsConst(d->mJobSet)) {
         job->kill();
     }
 }
 
-void SaveAllHelper::slotResult(KJob* _job)
+void SaveAllHelper::slotResult(KJob *_job)
 {
-    auto* job = static_cast<DocumentJob*>(_job);
+    auto *job = static_cast<DocumentJob *>(_job);
     if (job->error()) {
         QUrl url = job->document()->url();
         QString name = url.fileName().isEmpty() ? url.toDisplayString() : url.fileName();
         d->mErrorList << xi18nc("@info %1 is the name of the document which failed to save, %2 is the reason for the failure",
-                                "<filename>%1</filename>: %2", name, kxi18n(qPrintable(job->errorString())));
+                                "<filename>%1</filename>: %2",
+                                name,
+                                kxi18n(qPrintable(job->errorString())));
     }
     d->mJobSet.remove(job);
     d->mProgressDialog->setValue(d->mProgressDialog->value() + 1);

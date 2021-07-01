@@ -31,10 +31,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include "abstractsemanticinfobackend.h"
 
-
 namespace Gwenview
 {
-
 /**
  * A real metadata backend using Baloo to store and retrieve metadata.
  */
@@ -42,24 +40,24 @@ class GWENVIEWLIB_EXPORT BalooSemanticInfoBackend : public AbstractSemanticInfoB
 {
     Q_OBJECT
 public:
-    explicit BalooSemanticInfoBackend(QObject* parent);
+    explicit BalooSemanticInfoBackend(QObject *parent);
     ~BalooSemanticInfoBackend() override;
 
     TagSet allTags() const override;
 
     void refreshAllTags() override;
 
-    void storeSemanticInfo(const QUrl&, const SemanticInfo&) override;
+    void storeSemanticInfo(const QUrl &, const SemanticInfo &) override;
 
-    void retrieveSemanticInfo(const QUrl&) override;
+    void retrieveSemanticInfo(const QUrl &) override;
 
-    QString labelForTag(const SemanticInfoTag&) const override;
+    QString labelForTag(const SemanticInfoTag &) const override;
 
-    SemanticInfoTag tagForLabel(const QString&) override;
+    SemanticInfoTag tagForLabel(const QString &) override;
 
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 } // namespace

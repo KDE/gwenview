@@ -22,19 +22,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "fileutils.h"
 
 // Qt
+#include <QBuffer>
 #include <QFile>
 #include <QFileInfo>
-#include <QUrl>
-#include <QBuffer>
 #include <QScopedPointer>
+#include <QUrl>
 
 // KF
 #include <KFileItem>
 #include <KIO/CopyJob>
 #include <KIO/Job>
-#include <kio/jobclasses.h>
 #include <KIO/JobUiDelegate>
 #include <KJobWidgets>
+#include <kio/jobclasses.h>
 
 // Local
 #include "gwenview_importer_debug.h"
@@ -43,8 +43,7 @@ namespace Gwenview
 {
 namespace FileUtils
 {
-
-bool contentsAreIdentical(const QUrl& url1, const QUrl& url2, QWidget* authWindow)
+bool contentsAreIdentical(const QUrl &url1, const QUrl &url2, QWidget *authWindow)
 {
     KIO::StatJob *statJob;
     KIO::StoredTransferJob *fileJob;
@@ -60,7 +59,7 @@ bool contentsAreIdentical(const QUrl& url1, const QUrl& url2, QWidget* authWindo
         }
         file1.reset(new QFile(statJob->mostLocalUrl().toLocalFile()));
     } else { // file1 is remote
-        fileJob = KIO::storedGet(url1, KIO::NoReload ,KIO::HideProgressInfo);
+        fileJob = KIO::storedGet(url1, KIO::NoReload, KIO::HideProgressInfo);
         KJobWidgets::setWindow(fileJob, authWindow);
         if (!fileJob->exec()) {
             qCWarning(GWENVIEW_IMPORTER_LOG) << "Can't read" << url1;
@@ -116,7 +115,7 @@ bool contentsAreIdentical(const QUrl& url1, const QUrl& url2, QWidget* authWindo
     }
 }
 
-RenameResult rename(const QUrl& src, const QUrl& dst_, QWidget* authWindow)
+RenameResult rename(const QUrl &src, const QUrl &dst_, QWidget *authWindow)
 {
     QUrl dst = dst_;
     RenameResult result = RenamedOK;
@@ -145,7 +144,7 @@ RenameResult rename(const QUrl& src, const QUrl& dst_, QWidget* authWindow)
 
         if (srcSize == dstSize && contentsAreIdentical(src, dst, authWindow)) {
             // Already imported, skip it
-            KIO::Job* job = KIO::file_delete(src, KIO::HideProgressInfo);
+            KIO::Job *job = KIO::file_delete(src, KIO::HideProgressInfo);
             KJobWidgets::setWindow(job, authWindow);
 
             return Skipped;
@@ -160,7 +159,7 @@ RenameResult rename(const QUrl& src, const QUrl& dst_, QWidget* authWindow)
     }
 
     // Rename
-    KIO::Job* job = KIO::moveAs(src, dst, KIO::HideProgressInfo);
+    KIO::Job *job = KIO::moveAs(src, dst, KIO::HideProgressInfo);
     KJobWidgets::setWindow(job, authWindow);
     if (!job->exec()) {
         result = RenameFailed;

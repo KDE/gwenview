@@ -60,4 +60,3 @@ QImageIOHandler *FitsPlugin::create(QIODevice *device, const QByteArray &format)
     handler->setFormat(format);
     return handler;
 }
-

@@ -33,7 +33,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 struct ThumbnailPagePrivate;
 class ThumbnailPage : public QWidget
 {
@@ -49,9 +48,9 @@ public:
     QList<QUrl> urlList() const;
 
     QUrl destinationUrl() const;
-    void setDestinationUrl(const QUrl&);
+    void setDestinationUrl(const QUrl &);
 
-    void setSourceUrl(const QUrl&, const QString& icon, const QString& label);
+    void setSourceUrl(const QUrl &, const QString &icon, const QString &label);
 
 Q_SIGNALS:
     void importRequested();
@@ -61,18 +60,18 @@ private Q_SLOTS:
     void slotImportSelected();
     void slotImportAll();
     void updateImportButtons();
-    void openUrl(const QUrl&);
-    void slotDocumentDirFinderDone(const QUrl& url, DocumentDirFinder::Status status);
+    void openUrl(const QUrl &);
+    void slotDocumentDirFinderDone(const QUrl &url, DocumentDirFinder::Status status);
     void showConfigDialog();
-    void openUrlFromIndex(const QModelIndex& index);
+    void openUrlFromIndex(const QModelIndex &index);
     void setupSrcUrlTreeView();
     void toggleSrcUrlTreeView();
-    void slotSrcUrlModelExpand(const QModelIndex& index);
+    void slotSrcUrlModelExpand(const QModelIndex &index);
 
 private:
     friend struct ThumbnailPagePrivate;
-    ThumbnailPagePrivate* const d;
-    void importList(const QModelIndexList&);
+    ThumbnailPagePrivate *const d;
+    void importList(const QModelIndexList &);
 };
 
 } // namespace

@@ -36,20 +36,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 static const int TIMEOUT = 10000;
 
-struct HudMessageBubblePrivate
-{
-    QGraphicsWidget* mWidget;
-    QGraphicsLinearLayout* mLayout;
-    HudCountDown* mCountDown;
-    HudLabel* mLabel;
+struct HudMessageBubblePrivate {
+    QGraphicsWidget *mWidget;
+    QGraphicsLinearLayout *mLayout;
+    HudCountDown *mCountDown;
+    HudLabel *mLabel;
 };
 
-HudMessageBubble::HudMessageBubble(QGraphicsWidget* parent)
-: HudWidget(parent)
-, d(new HudMessageBubblePrivate)
+HudMessageBubble::HudMessageBubble(QGraphicsWidget *parent)
+    : HudWidget(parent)
+    , d(new HudMessageBubblePrivate)
 {
     d->mWidget = new QGraphicsWidget;
     d->mCountDown = new HudCountDown;
@@ -72,14 +70,14 @@ HudMessageBubble::~HudMessageBubble()
     delete d;
 }
 
-void HudMessageBubble::setText(const QString& text)
+void HudMessageBubble::setText(const QString &text)
 {
     d->mLabel->setText(text);
 }
 
-HudButton* HudMessageBubble::addButton(const KGuiItem& guiItem)
+HudButton *HudMessageBubble::addButton(const KGuiItem &guiItem)
 {
-    auto* button = new HudButton;
+    auto *button = new HudButton;
     button->setText(guiItem.text());
     button->setIcon(guiItem.icon());
     d->mLayout->addItem(button);

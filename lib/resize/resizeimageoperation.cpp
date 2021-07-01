@@ -28,16 +28,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KLocalizedString>
 
 // Local
-#include "gwenview_lib_debug.h"
 #include "document/abstractdocumenteditor.h"
 #include "document/document.h"
 #include "document/documentjob.h"
+#include "gwenview_lib_debug.h"
 
 namespace Gwenview
 {
-
-struct ResizeImageOperationPrivate
-{
+struct ResizeImageOperationPrivate {
     QSize mSize;
     QImage mOriginalImage;
 };
@@ -45,9 +43,10 @@ struct ResizeImageOperationPrivate
 class ResizeJob : public ThreadedDocumentJob
 {
 public:
-    ResizeJob(const QSize& size)
+    ResizeJob(const QSize &size)
         : mSize(size)
-    {}
+    {
+    }
 
     void threadedStart() override
     {
@@ -64,8 +63,8 @@ private:
     QSize mSize;
 };
 
-ResizeImageOperation::ResizeImageOperation(const QSize& size)
-: d(new ResizeImageOperationPrivate)
+ResizeImageOperation::ResizeImageOperation(const QSize &size)
+    : d(new ResizeImageOperationPrivate)
 {
     d->mSize = size;
     setText(i18nc("(qtundo-format)", "Resize"));

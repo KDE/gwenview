@@ -23,13 +23,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QAction>
+#include <QElapsedTimer>
 #include <QGraphicsLinearLayout>
 #include <QGraphicsProxyWidget>
-#include <QMouseEvent>
-#include <QElapsedTimer>
 #include <QIcon>
-#include <QElapsedTimer>
 #include <QLabel>
+#include <QMouseEvent>
 
 // Phonon
 #include <Phonon/AudioOutput>
@@ -42,35 +41,33 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include "gwenview_lib_debug.h"
 #include <document/documentfactory.h>
+#include <graphicswidgetfloater.h>
 #include <hud/hudbutton.h>
 #include <hud/hudslider.h>
 #include <hud/hudwidget.h>
-#include <graphicswidgetfloater.h>
 #include <lib/gwenviewconfig.h>
 
 namespace Gwenview
 {
+struct VideoViewAdapterPrivate {
+    VideoViewAdapter *q;
+    Phonon::MediaObject *mMediaObject;
+    Phonon::VideoWidget *mVideoWidget;
+    Phonon::AudioOutput *mAudioOutput;
+    HudWidget *mHud;
+    GraphicsWidgetFloater *mFloater;
 
-struct VideoViewAdapterPrivate
-{
-    VideoViewAdapter* q;
-    Phonon::MediaObject* mMediaObject;
-    Phonon::VideoWidget* mVideoWidget;
-    Phonon::AudioOutput* mAudioOutput;
-    HudWidget* mHud;
-    GraphicsWidgetFloater* mFloater;
-
-    HudSlider* mSeekSlider;
+    HudSlider *mSeekSlider;
     QElapsedTimer mLastSeekSliderActionTime;
 
     QLabel *mCurrentTime;
     QLabel *mRemainingTime;
 
-    QAction* mPlayPauseAction;
-    QAction* mMuteAction;
-    QGraphicsProxyWidget* mProxy;
+    QAction *mPlayPauseAction;
+    QAction *mMuteAction;
+    QGraphicsProxyWidget *mProxy;
 
-    HudSlider* mVolumeSlider;
+    HudSlider *mVolumeSlider;
     QElapsedTimer mLastVolumeSliderChangeTime;
 
     Document::Ptr mDocument;
@@ -88,10 +85,10 @@ struct VideoViewAdapterPrivate
         QObject::connect(mAudioOutput, &Phonon::AudioOutput::mutedChanged, q, &VideoViewAdapter::updateMuteAction);
     }
 
-    void setupHud(QGraphicsWidget* parent)
+    void setupHud(QGraphicsWidget *parent)
     {
         // Play/Pause
-        auto* playPauseButton = new HudButton;
+        auto *playPauseButton = new HudButton;
         playPauseButton->setDefaultAction(mPlayPauseAction);
 
         // Seek
@@ -104,7 +101,7 @@ struct VideoViewAdapterPrivate
         QObject::connect(mMediaObject, &Phonon::MediaObject::seekableChanged, q, &VideoViewAdapter::updatePlayUi);
 
         // Mute
-        auto* muteButton = new HudButton;
+        auto *muteButton = new HudButton;
         muteButton->setDefaultAction(mMuteAction);
 
         // Volume
@@ -129,8 +126,8 @@ struct VideoViewAdapterPrivate
         QObject::connect(mMediaObject, &Phonon::MediaObject::tick, q, &VideoViewAdapter::updateTimestamps);
 
         // Layout
-        auto* hudContent = new QGraphicsWidget;
-        auto* layout = new QGraphicsLinearLayout(hudContent);
+        auto *hudContent = new QGraphicsWidget;
+        auto *layout = new QGraphicsLinearLayout(hudContent);
 
         auto *currentTimeProxy = new QGraphicsProxyWidget(hudContent);
         currentTimeProxy->setWidget(mCurrentTime);
@@ -181,7 +178,7 @@ struct VideoViewAdapterPrivate
         }
     }
 
-    void keyPressEvent(QKeyEvent* event)
+    void keyPressEvent(QKeyEvent *event)
     {
         if (event->modifiers() != Qt::NoModifier) {
             return;
@@ -218,14 +215,14 @@ struct VideoViewAdapterPrivate
 class DoubleClickableProxyWidget : public QGraphicsProxyWidget
 {
 protected:
-    void mousePressEvent(QGraphicsSceneMouseEvent* event) override
+    void mousePressEvent(QGraphicsSceneMouseEvent *event) override
     {
         QGraphicsWidget::mousePressEvent(event);
     }
 };
 
 VideoViewAdapter::VideoViewAdapter()
-: d(new VideoViewAdapterPrivate)
+    : d(new VideoViewAdapterPrivate)
 {
     d->q = this;
     d->mMediaObject = new Phonon::MediaObject(this);
@@ -301,14 +298,14 @@ void VideoViewAdapter::slotMuteClicked()
     d->mAudioOutput->setMuted(!d->mAudioOutput->isMuted());
 }
 
-bool VideoViewAdapter::eventFilter(QObject*, QEvent* event)
+bool VideoViewAdapter::eventFilter(QObject *, QEvent *event)
 {
     if (event->type() == QEvent::MouseMove) {
-        d->updateHudVisibility(static_cast<QMouseEvent*>(event)->y());
+        d->updateHudVisibility(static_cast<QMouseEvent *>(event)->y());
     } else if (event->type() == QEvent::KeyPress) {
-        d->keyPressEvent(static_cast<QKeyEvent*>(event));
+        d->keyPressEvent(static_cast<QKeyEvent *>(event));
     } else if (event->type() == QEvent::MouseButtonDblClick) {
-        if (static_cast<QMouseEvent*>(event)->modifiers() == Qt::NoModifier) {
+        if (static_cast<QMouseEvent *>(event)->modifiers() == Qt::NoModifier) {
             emit toggleFullScreenRequested();
         }
     }
@@ -343,9 +340,7 @@ void VideoViewAdapter::updatePlayUi()
 
 void VideoViewAdapter::updateMuteAction()
 {
-    d->mMuteAction->setIcon(
-        QIcon::fromTheme(d->mAudioOutput->isMuted() ? QStringLiteral("player-volume-muted") : QStringLiteral("player-volume"))
-        );
+    d->mMuteAction->setIcon(QIcon::fromTheme(d->mAudioOutput->isMuted() ? QStringLiteral("player-volume-muted") : QStringLiteral("player-volume")));
 }
 
 void VideoViewAdapter::slotVolumeSliderChanged(int value)
@@ -378,13 +373,13 @@ void VideoViewAdapter::updateTimestamps()
     case Phonon::BufferingState:
     case Phonon::PausedState: {
         qint64 current = d->mMediaObject->currentTime();
-        currentTime = QDateTime::fromSecsSinceEpoch(current/1000).toUTC().toString("h:mm:ss");
+        currentTime = QDateTime::fromSecsSinceEpoch(current / 1000).toUTC().toString("h:mm:ss");
         if (currentTime.startsWith("0:")) {
             currentTime.remove(0, 2);
         }
 
         qint64 remaining = d->mMediaObject->remainingTime();
-        remainingTime = QDateTime::fromSecsSinceEpoch(remaining/1000).toUTC().toString("h:mm:ss");
+        remainingTime = QDateTime::fromSecsSinceEpoch(remaining / 1000).toUTC().toString("h:mm:ss");
         if (remainingTime.startsWith("0:")) {
             remainingTime.remove(0, 2);
         }

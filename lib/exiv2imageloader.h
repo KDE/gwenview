@@ -33,7 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Exiv2
 namespace Exiv2
 {
-    class Image;
+class Image;
 }
 
 // Local
@@ -43,7 +43,6 @@ class QString;
 
 namespace Gwenview
 {
-
 struct Exiv2ImageLoaderPrivate;
 
 /**
@@ -56,13 +55,13 @@ public:
     Exiv2ImageLoader();
     ~Exiv2ImageLoader();
 
-    bool load(const QString&);
-    bool load(const QByteArray&);
+    bool load(const QString &);
+    bool load(const QByteArray &);
     QString errorMessage() const;
     std::unique_ptr<Exiv2::Image> popImage();
 
 private:
-    Exiv2ImageLoaderPrivate* const d;
+    Exiv2ImageLoaderPrivate *const d;
 };
 
 } // namespace

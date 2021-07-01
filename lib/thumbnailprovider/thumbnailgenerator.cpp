@@ -22,10 +22,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "thumbnailgenerator.h"
 
 // Local
-#include "jpegcontent.h"
-#include "gwenviewconfig.h"
 #include "exiv2imageloader.h"
 #include "gwenview_lib_debug.h"
+#include "gwenviewconfig.h"
+#include "jpegcontent.h"
 
 // KDCRAW
 #ifdef KDCRAW_FOUND
@@ -35,19 +35,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KF
 
 // Qt
-#include <QImageReader>
-#include <QTransform>
 #include <QBuffer>
 #include <QCoreApplication>
+#include <QImageReader>
+#include <QTransform>
 
 namespace Gwenview
 {
-
 #undef ENABLE_LOG
 #undef LOG
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
-#define LOG(x) //qCDebug(GWENVIEW_LIB_LOG) << x
+#define LOG(x) // qCDebug(GWENVIEW_LIB_LOG) << x
 #else
 #define LOG(x) ;
 #endif
@@ -121,9 +120,7 @@ bool ThumbnailContext::load(const QString &pixPath, int pixelSize)
 
         // If the user does not care about the generated thumbnails (by deleting them on exit), use ANY
         // embedded thumnail, even if it's too small.
-        if (!thumbnail.isNull() &&
-            (GwenviewConfig::lowResourceUsageMode() || qMax(thumbnail.width(), thumbnail.height()) >= pixelSize)
-        ) {
+        if (!thumbnail.isNull() && (GwenviewConfig::lowResourceUsageMode() || qMax(thumbnail.width(), thumbnail.height()) >= pixelSize)) {
             mImage = std::move(thumbnail);
             mOriginalWidth = content.size().width();
             mOriginalHeight = content.size().height();
@@ -133,9 +130,7 @@ bool ThumbnailContext::load(const QString &pixPath, int pixelSize)
 
     // Generate thumbnail from full image
     originalSize = reader.size();
-    if (originalSize.isValid() && reader.supportsOption(QImageIOHandler::ScaledSize)
-        && qMax(originalSize.width(), originalSize.height()) >= pixelSize)
-    {
+    if (originalSize.isValid() && reader.supportsOption(QImageIOHandler::ScaledSize) && qMax(originalSize.width(), originalSize.height()) >= pixelSize) {
         QSizeF scaledSize = originalSize;
         scaledSize.scale(pixelSize, pixelSize, Qt::KeepAspectRatio);
         if (!scaledSize.isEmpty()) {
@@ -180,20 +175,27 @@ bool ThumbnailContext::load(const QString &pixPath, int pixelSize)
 //
 //------------------------------------------------------------------------
 ThumbnailGenerator::ThumbnailGenerator()
-: mCancel(false)
+    : mCancel(false)
 {
-    connect(qApp, &QCoreApplication::aboutToQuit, this, [=]() {
-        cancel();
-        wait();
-    }, Qt::DirectConnection);
+    connect(
+        qApp,
+        &QCoreApplication::aboutToQuit,
+        this,
+        [=]() {
+            cancel();
+            wait();
+        },
+        Qt::DirectConnection);
     start();
 }
 
-void ThumbnailGenerator::load(
-    const QString& originalUri, time_t originalTime, KIO::filesize_t originalFileSize, const QString& originalMimeType,
-    const QString& pixPath,
-    const QString& thumbnailPath,
-    ThumbnailGroup::Enum group)
+void ThumbnailGenerator::load(const QString &originalUri,
+                              time_t originalTime,
+                              KIO::filesize_t originalFileSize,
+                              const QString &originalMimeType,
+                              const QString &pixPath,
+                              const QString &thumbnailPath,
+                              ThumbnailGroup::Enum group)
 {
     QMutexLocker lock(&mMutex);
     Q_ASSERT(mPixPath.isNull());
@@ -310,13 +312,13 @@ void ThumbnailGenerator::run()
 
 void ThumbnailGenerator::cacheThumbnail()
 {
-    mImage.setText(QStringLiteral("Thumb::URI")          , mOriginalUri);
-    mImage.setText(QStringLiteral("Thumb::MTime")        , QString::number(mOriginalTime));
-    mImage.setText(QStringLiteral("Thumb::Size")         , QString::number(mOriginalFileSize));
-    mImage.setText(QStringLiteral("Thumb::Mimetype")     , mOriginalMimeType);
-    mImage.setText(QStringLiteral("Thumb::Image::Width") , QString::number(mOriginalWidth));
+    mImage.setText(QStringLiteral("Thumb::URI"), mOriginalUri);
+    mImage.setText(QStringLiteral("Thumb::MTime"), QString::number(mOriginalTime));
+    mImage.setText(QStringLiteral("Thumb::Size"), QString::number(mOriginalFileSize));
+    mImage.setText(QStringLiteral("Thumb::Mimetype"), mOriginalMimeType);
+    mImage.setText(QStringLiteral("Thumb::Image::Width"), QString::number(mOriginalWidth));
     mImage.setText(QStringLiteral("Thumb::Image::Height"), QString::number(mOriginalHeight));
-    mImage.setText(QStringLiteral("Software")            , QStringLiteral("Gwenview"));
+    mImage.setText(QStringLiteral("Software"), QStringLiteral("Gwenview"));
 
     emit thumbnailReadyToBeCached(mThumbnailPath, mImage);
 }

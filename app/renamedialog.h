@@ -31,20 +31,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 struct RenameDialogPrivate;
 class RenameDialog : public QDialog
 {
     Q_OBJECT
 public:
-    explicit RenameDialog(QWidget* parent);
+    explicit RenameDialog(QWidget *parent);
     ~RenameDialog() override;
 
-    void setFilename(const QString& filename);
+    void setFilename(const QString &filename);
     QString filename() const;
 
 private:
-    RenameDialogPrivate* const d;
+    RenameDialogPrivate *const d;
 
     void updateButtons();
 };

@@ -34,29 +34,28 @@ class QDate;
 
 namespace Gwenview
 {
-
 struct DateWidgetPrivate;
 class GWENVIEWLIB_EXPORT DateWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit DateWidget(QWidget* parent = nullptr);
+    explicit DateWidget(QWidget *parent = nullptr);
     ~DateWidget() override;
 
     QDate date() const;
 
 Q_SIGNALS:
-    void dateChanged(const QDate&);
+    void dateChanged(const QDate &);
 
 private Q_SLOTS:
     void showDatePicker();
-    void slotDatePickerModified(const QDate& date);
+    void slotDatePickerModified(const QDate &date);
     void goToPrevious();
     void goToNext();
 
 private:
     friend struct DateWidgetPrivate;
-    DateWidgetPrivate* const d;
+    DateWidgetPrivate *const d;
 };
 
 } // namespace

@@ -31,7 +31,6 @@ class QUrl;
 
 namespace Gwenview
 {
-
 struct DocumentFactoryPrivate;
 
 /**
@@ -45,7 +44,7 @@ class GWENVIEWLIB_EXPORT DocumentFactory : public QObject
 {
     Q_OBJECT
 public:
-    static DocumentFactory* instance();
+    static DocumentFactory *instance();
     ~DocumentFactory() override;
 
     /**
@@ -59,15 +58,15 @@ public:
      * Returns a document if it has already been loaded once with load().
      * This method does not update the last-access timestamp.
      */
-    Document::Ptr getCachedDocument(const QUrl&) const;
+    Document::Ptr getCachedDocument(const QUrl &) const;
 
     QList<QUrl> modifiedDocumentList() const;
 
-    bool hasUrl(const QUrl&) const;
+    bool hasUrl(const QUrl &) const;
 
     void clearCache();
 
-    QUndoGroup* undoGroup();
+    QUndoGroup *undoGroup();
 
     /**
      * Do not keep document whose url is @url in cache even if it has been
@@ -77,20 +76,20 @@ public:
 
 Q_SIGNALS:
     void modifiedDocumentListChanged();
-    void documentChanged(const QUrl&);
-    void documentBusyStateChanged(const QUrl&, bool);
+    void documentChanged(const QUrl &);
+    void documentBusyStateChanged(const QUrl &, bool);
     void readyForDirListerStart(const QUrl &url);
 
 private Q_SLOTS:
-    void slotLoaded(const QUrl&);
-    void slotSaved(const QUrl&, const QUrl&);
-    void slotModified(const QUrl&);
-    void slotBusyChanged(const QUrl&, bool);
+    void slotLoaded(const QUrl &);
+    void slotSaved(const QUrl &, const QUrl &);
+    void slotModified(const QUrl &);
+    void slotBusyChanged(const QUrl &, bool);
 
 private:
     DocumentFactory();
 
-    DocumentFactoryPrivate* const d;
+    DocumentFactoryPrivate *const d;
 };
 
 } // namespace

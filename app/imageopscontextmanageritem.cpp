@@ -22,37 +22,36 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "imageopscontextmanageritem.h"
 
 // Qt
-#include <QApplication>
 #include <QAction>
+#include <QApplication>
 #include <QRect>
 
 // KF
+#include <KActionCategory>
+#include <KActionCollection>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KActionCollection>
-#include <KActionCategory>
 
 // Local
-#include "gwenview_app_debug.h"
 #include "dialogguard.h"
-#include "viewmainpage.h"
 #include "gvcore.h"
+#include "gwenview_app_debug.h"
 #include "mainwindow.h"
 #include "sidebar.h"
+#include "viewmainpage.h"
 #include <lib/contextmanager.h>
 #include <lib/crop/croptool.h>
 #include <lib/document/documentfactory.h>
 #include <lib/documentview/rasterimageview.h>
 #include <lib/eventwatcher.h>
-#include <lib/redeyereduction/redeyereductiontool.h>
 #include <lib/gwenviewconfig.h>
-#include <lib/resize/resizeimageoperation.h>
+#include <lib/redeyereduction/redeyereductiontool.h>
 #include <lib/resize/resizeimagedialog.h>
+#include <lib/resize/resizeimageoperation.h>
 #include <lib/transformimageoperation.h>
 
 namespace Gwenview
 {
-
 #undef ENABLE_LOG
 #undef LOG
 //#define ENABLE_LOG
@@ -62,26 +61,25 @@ namespace Gwenview
 #define LOG(x) ;
 #endif
 
-struct ImageOpsContextManagerItem::Private
-{
-    ImageOpsContextManagerItem* q;
-    MainWindow* mMainWindow;
-    SideBarGroup* mGroup;
-    QRect* mCropStateRect;
+struct ImageOpsContextManagerItem::Private {
+    ImageOpsContextManagerItem *q;
+    MainWindow *mMainWindow;
+    SideBarGroup *mGroup;
+    QRect *mCropStateRect;
 
-    QAction * mRotateLeftAction;
-    QAction * mRotateRightAction;
-    QAction * mMirrorAction;
-    QAction * mFlipAction;
-    QAction * mResizeAction;
-    QAction * mCropAction;
-    QAction * mRedEyeReductionAction;
+    QAction *mRotateLeftAction;
+    QAction *mRotateRightAction;
+    QAction *mMirrorAction;
+    QAction *mFlipAction;
+    QAction *mResizeAction;
+    QAction *mCropAction;
+    QAction *mRedEyeReductionAction;
     QList<QAction *> mActionList;
 
     void setupActions()
     {
-        KActionCollection* actionCollection = mMainWindow->actionCollection();
-        auto* edit = new KActionCategory(i18nc("@title actions category - means actions changing image", "Edit"), actionCollection);
+        KActionCollection *actionCollection = mMainWindow->actionCollection();
+        auto *edit = new KActionCategory(i18nc("@title actions category - means actions changing image", "Edit"), actionCollection);
 
         mRotateLeftAction = edit->addAction(QStringLiteral("rotate_left"), q, SLOT(rotateLeft()));
         mRotateLeftAction->setText(i18n("Rotate Left"));
@@ -118,15 +116,7 @@ struct ImageOpsContextManagerItem::Private
         mRedEyeReductionAction->setIcon(QIcon::fromTheme(QStringLiteral("redeyes")));
         actionCollection->setDefaultShortcut(mRedEyeReductionAction, Qt::SHIFT | Qt::Key_E);
 
-        mActionList
-                << mRotateLeftAction
-                << mRotateRightAction
-                << mMirrorAction
-                << mFlipAction
-                << mResizeAction
-                << mCropAction
-                << mRedEyeReductionAction
-                ;
+        mActionList << mRotateLeftAction << mRotateRightAction << mMirrorAction << mFlipAction << mResizeAction << mCropAction << mRedEyeReductionAction;
     }
 
     bool ensureEditable()
@@ -138,17 +128,14 @@ struct ImageOpsContextManagerItem::Private
             return true;
         }
 
-        KMessageBox::sorry(
-            QApplication::activeWindow(),
-            i18nc("@info", "Gwenview cannot edit this kind of image.")
-        );
+        KMessageBox::sorry(QApplication::activeWindow(), i18nc("@info", "Gwenview cannot edit this kind of image."));
         return false;
     }
 };
 
-ImageOpsContextManagerItem::ImageOpsContextManagerItem(ContextManager* manager, MainWindow* mainWindow)
-: AbstractContextManagerItem(manager)
-, d(new Private)
+ImageOpsContextManagerItem::ImageOpsContextManagerItem(ContextManager *manager, MainWindow *mainWindow)
+    : AbstractContextManagerItem(manager)
+    , d(new Private)
 {
     d->q = this;
     d->mMainWindow = mainWindow;
@@ -158,12 +145,9 @@ ImageOpsContextManagerItem::ImageOpsContextManagerItem(ContextManager* manager, 
     d->mCropStateRect = new QRect;
     d->setupActions();
     updateActions();
-    connect(contextManager(), &ContextManager::selectionChanged,
-            this, &ImageOpsContextManagerItem::updateActions);
-    connect(mainWindow, &MainWindow::viewModeChanged,
-            this, &ImageOpsContextManagerItem::updateActions);
-    connect(mainWindow->viewMainPage(), &ViewMainPage::completed,
-            this, &ImageOpsContextManagerItem::updateActions);
+    connect(contextManager(), &ContextManager::selectionChanged, this, &ImageOpsContextManagerItem::updateActions);
+    connect(mainWindow, &MainWindow::viewModeChanged, this, &ImageOpsContextManagerItem::updateActions);
+    connect(mainWindow->viewMainPage(), &ViewMainPage::completed, this, &ImageOpsContextManagerItem::updateActions);
 }
 
 ImageOpsContextManagerItem::~ImageOpsContextManagerItem()
@@ -179,7 +163,7 @@ void ImageOpsContextManagerItem::updateSideBarContent()
     }
 
     d->mGroup->clear();
-    for (QAction * action : qAsConst(d->mActionList)) {
+    for (QAction *action : qAsConst(d->mActionList)) {
         if (action->isEnabled() && action->priority() != QAction::LowPriority) {
             d->mGroup->addAction(action);
         }
@@ -212,25 +196,25 @@ void ImageOpsContextManagerItem::updateActions()
 
 void ImageOpsContextManagerItem::rotateLeft()
 {
-    auto* op = new TransformImageOperation(ROT_270);
+    auto *op = new TransformImageOperation(ROT_270);
     applyImageOperation(op);
 }
 
 void ImageOpsContextManagerItem::rotateRight()
 {
-    auto* op = new TransformImageOperation(ROT_90);
+    auto *op = new TransformImageOperation(ROT_90);
     applyImageOperation(op);
 }
 
 void ImageOpsContextManagerItem::mirror()
 {
-    auto* op = new TransformImageOperation(HFLIP);
+    auto *op = new TransformImageOperation(HFLIP);
     applyImageOperation(op);
 }
 
 void ImageOpsContextManagerItem::flip()
 {
-    auto* op = new TransformImageOperation(VFLIP);
+    auto *op = new TransformImageOperation(VFLIP);
     applyImageOperation(op);
 }
 
@@ -246,7 +230,7 @@ void ImageOpsContextManagerItem::resizeImage()
     if (!dialog->exec()) {
         return;
     }
-    auto* op = new ResizeImageOperation(dialog->size());
+    auto *op = new ResizeImageOperation(dialog->size());
     applyImageOperation(op);
 }
 
@@ -255,13 +239,13 @@ void ImageOpsContextManagerItem::crop()
     if (!d->ensureEditable()) {
         return;
     }
-    RasterImageView* imageView = d->mMainWindow->viewMainPage()->imageView();
+    RasterImageView *imageView = d->mMainWindow->viewMainPage()->imageView();
     if (!imageView) {
         qCCritical(GWENVIEW_APP_LOG) << "No ImageView available!";
         return;
     }
 
-    auto* tool = new CropTool(imageView);
+    auto *tool = new CropTool(imageView);
     Document::Ptr doc = DocumentFactory::instance()->load(contextManager()->currentUrl());
     QSize size = doc->size();
     QRect sizeAsRect = QRect(0, 0, size.width(), size.height());
@@ -271,14 +255,14 @@ void ImageOpsContextManagerItem::crop()
     }
 
     connect(tool, &CropTool::imageOperationRequested, this, &ImageOpsContextManagerItem::applyImageOperation);
-    connect(tool, &CropTool::rectReset, this, [this](){
-            this->resetCropState();
-        });
+    connect(tool, &CropTool::rectReset, this, [this]() {
+        this->resetCropState();
+    });
     connect(tool, &CropTool::done, this, [this, tool]() {
-            this->d->mCropStateRect->setTopLeft(tool->rect().topLeft());
-            this->d->mCropStateRect->setSize(tool->rect().size());
-            this->restoreDefaultImageViewTool();
-        });
+        this->d->mCropStateRect->setTopLeft(tool->rect().topLeft());
+        this->d->mCropStateRect->setSize(tool->rect().size());
+        this->restoreDefaultImageViewTool();
+    });
 
     d->mMainWindow->setDistractionFreeMode(true);
     imageView->setCurrentTool(tool);
@@ -295,12 +279,12 @@ void ImageOpsContextManagerItem::startRedEyeReduction()
     if (!d->ensureEditable()) {
         return;
     }
-    RasterImageView* view = d->mMainWindow->viewMainPage()->imageView();
+    RasterImageView *view = d->mMainWindow->viewMainPage()->imageView();
     if (!view) {
         qCCritical(GWENVIEW_APP_LOG) << "No RasterImageView available!";
         return;
     }
-    auto* tool = new RedEyeReductionTool(view);
+    auto *tool = new RedEyeReductionTool(view);
     connect(tool, &RedEyeReductionTool::imageOperationRequested, this, &ImageOpsContextManagerItem::applyImageOperation);
     connect(tool, &RedEyeReductionTool::done, this, &ImageOpsContextManagerItem::restoreDefaultImageViewTool);
 
@@ -308,7 +292,7 @@ void ImageOpsContextManagerItem::startRedEyeReduction()
     view->setCurrentTool(tool);
 }
 
-void ImageOpsContextManagerItem::applyImageOperation(AbstractImageOperation* op)
+void ImageOpsContextManagerItem::applyImageOperation(AbstractImageOperation *op)
 {
     // For now, we only support operations on one image
     QUrl url = contextManager()->currentUrl();
@@ -319,13 +303,13 @@ void ImageOpsContextManagerItem::applyImageOperation(AbstractImageOperation* op)
 
 void ImageOpsContextManagerItem::restoreDefaultImageViewTool()
 {
-    RasterImageView* imageView = d->mMainWindow->viewMainPage()->imageView();
+    RasterImageView *imageView = d->mMainWindow->viewMainPage()->imageView();
     if (!imageView) {
         qCCritical(GWENVIEW_APP_LOG) << "No RasterImageView available!";
         return;
     }
 
-    AbstractRasterImageViewTool* tool = imageView->currentTool();
+    AbstractRasterImageViewTool *tool = imageView->currentTool();
     imageView->setCurrentTool(nullptr);
     tool->deleteLater();
     d->mMainWindow->setDistractionFreeMode(false);

@@ -36,11 +36,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 namespace Gwenview
 {
-
-struct ContextManagerPrivate
-{
-    SortedDirModel* mDirModel;
-    QItemSelectionModel* mSelectionModel;
+struct ContextManagerPrivate {
+    SortedDirModel *mDirModel;
+    QItemSelectionModel *mSelectionModel;
     QUrl mCurrentDirUrl;
     QUrl mCurrentUrl;
 
@@ -53,7 +51,7 @@ struct ContextManagerPrivate
     KFileItemList mSelectedFileItemList;
 
     bool mDirListerFinished = false;
-    QTimer* mQueuedSignalsTimer;
+    QTimer *mQueuedSignalsTimer;
 
     void queueSignal(Signal signal)
     {
@@ -70,7 +68,7 @@ struct ContextManagerPrivate
         }
         mSelectedFileItemList.clear();
         const QItemSelection selection = mSelectionModel->selection();
-        for (const QModelIndex & index : selection.indexes()) {
+        for (const QModelIndex &index : selection.indexes()) {
             mSelectedFileItemList << mDirModel->itemForIndex(index);
         }
 
@@ -86,9 +84,9 @@ struct ContextManagerPrivate
     }
 };
 
-ContextManager::ContextManager(SortedDirModel* dirModel, QObject* parent)
-: QObject(parent)
-, d(new ContextManagerPrivate)
+ContextManager::ContextManager(SortedDirModel *dirModel, QObject *parent)
+    : QObject(parent)
+    , d(new ContextManagerPrivate)
 {
     d->mQueuedSignalsTimer = new QTimer(this);
     d->mQueuedSignalsTimer->setInterval(100);
@@ -117,11 +115,9 @@ ContextManager::ContextManager(SortedDirModel* dirModel, QObject* parent)
 
     connect(d->mDirModel, &SortedDirModel::rowsInserted, this, &ContextManager::slotRowsInserted);
 
-    connect(d->mDirModel->dirLister(),
-            QOverload<const QUrl &, const QUrl &>::of(&KDirLister::redirection),
-            this, [this](const QUrl &, const QUrl &newUrl) {
-              setCurrentDirUrl(newUrl);
-            });
+    connect(d->mDirModel->dirLister(), QOverload<const QUrl &, const QUrl &>::of(&KDirLister::redirection), this, [this](const QUrl &, const QUrl &newUrl) {
+        setCurrentDirUrl(newUrl);
+    });
 
     connect(d->mDirModel->dirLister(), QOverload<>::of(&KDirLister::completed), this, &ContextManager::slotDirListerCompleted);
 
@@ -152,7 +148,7 @@ void ContextManager::saveConfig() const
     GwenviewConfig::setLastTargetDir(targetDirUrl().toString());
 }
 
-QItemSelectionModel* ContextManager::selectionModel() const
+QItemSelectionModel *ContextManager::selectionModel() const
 {
     return d->mSelectionModel;
 }
@@ -166,7 +162,7 @@ void ContextManager::setCurrentUrl(const QUrl &currentUrl)
     d->mCurrentUrl = currentUrl;
     if (!d->mCurrentUrl.isEmpty()) {
         Document::Ptr doc = DocumentFactory::instance()->load(currentUrl);
-        QUndoGroup* undoGroup = DocumentFactory::instance()->undoGroup();
+        QUndoGroup *undoGroup = DocumentFactory::instance()->undoGroup();
         undoGroup->addStack(doc->undoStack());
         undoGroup->setActiveStack(doc->undoStack());
     }
@@ -209,12 +205,12 @@ QUrl ContextManager::currentUrl() const
     return d->mCurrentUrl;
 }
 
-SortedDirModel* ContextManager::dirModel() const
+SortedDirModel *ContextManager::dirModel() const
 {
     return d->mDirModel;
 }
 
-void ContextManager::slotDirModelDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
+void ContextManager::slotDirModelDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
 {
     // Data change can happen in the following cases:
     // - items have been renamed
@@ -234,12 +230,12 @@ void ContextManager::slotDirModelDataChanged(const QModelIndex& topLeft, const Q
         changedList << d->mDirModel->index(row, 0);
     }
 
-    QModelIndexList& shortList = selectionList;
-    QModelIndexList& longList = changedList;
+    QModelIndexList &shortList = selectionList;
+    QModelIndexList &longList = changedList;
     if (shortList.length() > longList.length()) {
         qSwap(shortList, longList);
     }
-    for (const QModelIndex & index : qAsConst(shortList)) {
+    for (const QModelIndex &index : qAsConst(shortList)) {
         if (longList.contains(index)) {
             d->mSelectedFileItemListNeedsUpdate = true;
             d->queueSignal(&ContextManager::selectionDataChanged);
@@ -265,7 +261,7 @@ void ContextManager::slotSelectionChanged()
     d->queueSignal(&ContextManager::selectionChanged);
 }
 
-void Gwenview::ContextManager::slotCurrentChanged(const QModelIndex& index)
+void Gwenview::ContextManager::slotCurrentChanged(const QModelIndex &index)
 {
     QUrl url = d->mDirModel->urlForIndex(index);
     setCurrentUrl(url);
@@ -274,12 +270,12 @@ void Gwenview::ContextManager::slotCurrentChanged(const QModelIndex& index)
 void ContextManager::emitQueuedSignals()
 {
     for (ContextManagerPrivate::Signal signal : qAsConst(d->mQueuedSignals)) {
-        emit (this->*signal)();
+        emit(this->*signal)();
     }
     d->mQueuedSignals.clear();
 }
 
-void Gwenview::ContextManager::slotRowsAboutToBeRemoved(const QModelIndex& /*parent*/, int start, int end)
+void Gwenview::ContextManager::slotRowsAboutToBeRemoved(const QModelIndex & /*parent*/, int start, int end)
 {
     QModelIndex oldCurrent = d->mSelectionModel->currentIndex();
     if (oldCurrent.row() < start || oldCurrent.row() > end) {
@@ -326,8 +322,7 @@ QUrl ContextManager::targetDirUrl() const
 void ContextManager::setTargetDirUrl(const QUrl &url)
 {
     GV_RETURN_IF_FAIL(url.isEmpty() || url.isValid());
-    d->mTargetDirUrl = GwenviewConfig::historyEnabled() ? url
-                                                        : QUrl();
+    d->mTargetDirUrl = GwenviewConfig::historyEnabled() ? url : QUrl();
 }
 
 void ContextManager::slotRowsInserted()
@@ -370,6 +365,5 @@ void ContextManager::slotDirListerCompleted()
 {
     d->mDirListerFinished = true;
 }
-
 
 } // namespace

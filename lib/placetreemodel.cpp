@@ -33,7 +33,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 /**
  * Here is how the mapping work:
  *
@@ -55,18 +54,19 @@ namespace Gwenview
  * code, in QSortFilterProxyModel or somewhere else.
  */
 
-struct Node
-{
+struct Node {
     Node()
         : model(nullptr)
-    {}
+    {
+    }
 
-    Node(SortedDirModel* _model, const QUrl &_parentUrl)
+    Node(SortedDirModel *_model, const QUrl &_parentUrl)
         : model(_model)
         , parentUrl(_parentUrl)
-    {}
+    {
+    }
 
-    SortedDirModel* model;
+    SortedDirModel *model;
     QUrl parentUrl;
 
     bool isPlace() const
@@ -78,27 +78,26 @@ struct Node
 using NodeHash = QHash<QUrl, Node *>;
 using NodeHashMap = QMap<SortedDirModel *, NodeHash *>;
 
-struct PlaceTreeModelPrivate
-{
-    PlaceTreeModel* q;
-    KFilePlacesModel* mPlacesModel;
-    QList<SortedDirModel*> mDirModels;
+struct PlaceTreeModelPrivate {
+    PlaceTreeModel *q;
+    KFilePlacesModel *mPlacesModel;
+    QList<SortedDirModel *> mDirModels;
     mutable NodeHashMap mNodes;
 
-    Node nodeForIndex(const QModelIndex& index) const
+    Node nodeForIndex(const QModelIndex &index) const
     {
         Q_ASSERT(index.isValid());
         Q_ASSERT(index.internalPointer());
-        return *static_cast<Node*>(index.internalPointer());
+        return *static_cast<Node *>(index.internalPointer());
     }
 
-    Node* createNode(SortedDirModel* dirModel, const QUrl &parentUrl) const
+    Node *createNode(SortedDirModel *dirModel, const QUrl &parentUrl) const
     {
         NodeHashMap::iterator nhmIt = mNodes.find(dirModel);
         if (nhmIt == mNodes.end()) {
             nhmIt = mNodes.insert(dirModel, new NodeHash);
         }
-        NodeHash* nodeHash = nhmIt.value();
+        NodeHash *nodeHash = nhmIt.value();
 
         NodeHash::iterator nhIt = nodeHash->find(parentUrl);
         if (nhIt == nodeHash->end()) {
@@ -107,7 +106,7 @@ struct PlaceTreeModelPrivate
         return nhIt.value();
     }
 
-    QModelIndex createIndexForDir(SortedDirModel* dirModel, const QUrl &url) const
+    QModelIndex createIndexForDir(SortedDirModel *dirModel, const QUrl &url) const
     {
         QModelIndex dirIndex = dirModel->indexForUrl(url);
         QModelIndex parentDirIndex = dirIndex.parent();
@@ -120,22 +119,22 @@ struct PlaceTreeModelPrivate
         return createIndexForDirChild(dirModel, parentUrl, dirIndex.row(), dirIndex.column());
     }
 
-    QModelIndex createIndexForDirChild(SortedDirModel* dirModel, const QUrl &parentUrl, int row, int column) const
+    QModelIndex createIndexForDirChild(SortedDirModel *dirModel, const QUrl &parentUrl, int row, int column) const
     {
         Q_ASSERT(parentUrl.isValid());
-        Node* node = createNode(dirModel, parentUrl);
+        Node *node = createNode(dirModel, parentUrl);
         return q->createIndex(row, column, node);
     }
 
-    QModelIndex createIndexForPlace(SortedDirModel* dirModel) const
+    QModelIndex createIndexForPlace(SortedDirModel *dirModel) const
     {
         int row = mDirModels.indexOf(dirModel);
         Q_ASSERT(row != -1);
-        Node* node = createNode(dirModel, QUrl());
+        Node *node = createNode(dirModel, QUrl());
         return q->createIndex(row, 0, node);
     }
 
-    QModelIndex dirIndexForNode(const Node& node, const QModelIndex& index) const
+    QModelIndex dirIndexForNode(const Node &node, const QModelIndex &index) const
     {
         if (node.isPlace()) {
             return QModelIndex();
@@ -146,9 +145,9 @@ struct PlaceTreeModelPrivate
     }
 };
 
-PlaceTreeModel::PlaceTreeModel(QObject* parent)
-: QAbstractItemModel(parent)
-, d(new PlaceTreeModelPrivate)
+PlaceTreeModel::PlaceTreeModel(QObject *parent)
+    : QAbstractItemModel(parent)
+    , d(new PlaceTreeModelPrivate)
 {
     d->q = this;
 
@@ -164,19 +163,19 @@ PlaceTreeModel::PlaceTreeModel(QObject* parent)
 
 PlaceTreeModel::~PlaceTreeModel()
 {
-    for (NodeHash * nodeHash : qAsConst(d->mNodes)) {
+    for (NodeHash *nodeHash : qAsConst(d->mNodes)) {
         qDeleteAll(*nodeHash);
     }
     qDeleteAll(d->mNodes);
     delete d;
 }
 
-int PlaceTreeModel::columnCount(const QModelIndex&) const
+int PlaceTreeModel::columnCount(const QModelIndex &) const
 {
     return 1;
 }
 
-QVariant PlaceTreeModel::data(const QModelIndex& index, int role) const
+QVariant PlaceTreeModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid()) {
         return QVariant();
@@ -193,7 +192,7 @@ QVariant PlaceTreeModel::data(const QModelIndex& index, int role) const
     return value;
 }
 
-QModelIndex PlaceTreeModel::index(int row, int column, const QModelIndex& parent) const
+QModelIndex PlaceTreeModel::index(int row, int column, const QModelIndex &parent) const
 {
     if (column != 0) {
         return QModelIndex();
@@ -201,7 +200,7 @@ QModelIndex PlaceTreeModel::index(int row, int column, const QModelIndex& parent
     if (!parent.isValid()) {
         // User wants to create a places index
         if (0 <= row && row < d->mDirModels.size()) {
-            SortedDirModel* dirModel = d->mDirModels[row];
+            SortedDirModel *dirModel = d->mDirModels[row];
             return d->createIndexForPlace(dirModel);
         } else {
             return QModelIndex();
@@ -211,7 +210,7 @@ QModelIndex PlaceTreeModel::index(int row, int column, const QModelIndex& parent
     Node parentNode = d->nodeForIndex(parent);
     QModelIndex parentDirIndex = d->dirIndexForNode(parentNode, parent);
 
-    SortedDirModel* dirModel = parentNode.model;
+    SortedDirModel *dirModel = parentNode.model;
     QUrl parentUrl = dirModel->urlForIndex(parentDirIndex);
     if (!parentUrl.isValid()) {
         // parent is a place
@@ -223,7 +222,7 @@ QModelIndex PlaceTreeModel::index(int row, int column, const QModelIndex& parent
     return d->createIndexForDirChild(dirModel, parentUrl, row, column);
 }
 
-QModelIndex PlaceTreeModel::parent(const QModelIndex& index) const
+QModelIndex PlaceTreeModel::parent(const QModelIndex &index) const
 {
     if (!index.isValid()) {
         return QModelIndex();
@@ -239,7 +238,7 @@ QModelIndex PlaceTreeModel::parent(const QModelIndex& index) const
     return d->createIndexForDir(node.model, node.parentUrl);
 }
 
-int PlaceTreeModel::rowCount(const QModelIndex& index) const
+int PlaceTreeModel::rowCount(const QModelIndex &index) const
 {
     if (!index.isValid()) {
         // index is the invisible root item
@@ -252,7 +251,7 @@ int PlaceTreeModel::rowCount(const QModelIndex& index) const
     return node.model->rowCount(dirIndex);
 }
 
-bool PlaceTreeModel::hasChildren(const QModelIndex& index) const
+bool PlaceTreeModel::hasChildren(const QModelIndex &index) const
 {
     if (!index.isValid()) {
         return true;
@@ -265,7 +264,7 @@ bool PlaceTreeModel::hasChildren(const QModelIndex& index) const
     return node.model->hasChildren(dirIndex);
 }
 
-bool PlaceTreeModel::canFetchMore(const QModelIndex& parent) const
+bool PlaceTreeModel::canFetchMore(const QModelIndex &parent) const
 {
     if (!parent.isValid()) {
         return d->mPlacesModel->canFetchMore(QModelIndex());
@@ -279,7 +278,7 @@ bool PlaceTreeModel::canFetchMore(const QModelIndex& parent) const
     return node.model->canFetchMore(dirIndex);
 }
 
-void PlaceTreeModel::fetchMore(const QModelIndex& parent)
+void PlaceTreeModel::fetchMore(const QModelIndex &parent)
 {
     if (!parent.isValid()) {
         d->mPlacesModel->fetchMore(QModelIndex());
@@ -296,37 +295,37 @@ void PlaceTreeModel::fetchMore(const QModelIndex& parent)
     node.model->fetchMore(dirIndex);
 }
 
-void PlaceTreeModel::slotPlacesRowsInserted(const QModelIndex& /*parent*/, int start, int end)
+void PlaceTreeModel::slotPlacesRowsInserted(const QModelIndex & /*parent*/, int start, int end)
 {
     beginInsertRows(QModelIndex(), start, end);
     for (int row = start; row <= end; ++row) {
-        auto* dirModel = new SortedDirModel(this);
+        auto *dirModel = new SortedDirModel(this);
         connect(dirModel, &SortedDirModel::rowsAboutToBeInserted, this, &PlaceTreeModel::slotDirRowsAboutToBeInserted);
         connect(dirModel, &SortedDirModel::rowsInserted, this, &PlaceTreeModel::slotDirRowsInserted);
         connect(dirModel, &SortedDirModel::rowsAboutToBeRemoved, this, &PlaceTreeModel::slotDirRowsAboutToBeRemoved);
         connect(dirModel, &SortedDirModel::rowsAboutToBeRemoved, this, &PlaceTreeModel::slotDirRowsRemoved);
 
         d->mDirModels.insert(row, dirModel);
-        KDirLister* lister = dirModel->dirLister();
+        KDirLister *lister = dirModel->dirLister();
         lister->setDirOnlyMode(true);
     }
     endInsertRows();
 }
 
-void PlaceTreeModel::slotPlacesRowsAboutToBeRemoved(const QModelIndex&, int start, int end)
+void PlaceTreeModel::slotPlacesRowsAboutToBeRemoved(const QModelIndex &, int start, int end)
 {
     beginRemoveRows(QModelIndex(), start, end);
     for (int row = end; row >= start; --row) {
-        SortedDirModel* dirModel = d->mDirModels.takeAt(row);
+        SortedDirModel *dirModel = d->mDirModels.takeAt(row);
         delete d->mNodes.take(dirModel);
         delete dirModel;
     }
     endRemoveRows();
 }
 
-void PlaceTreeModel::slotDirRowsAboutToBeInserted(const QModelIndex& parentDirIndex, int start, int end)
+void PlaceTreeModel::slotDirRowsAboutToBeInserted(const QModelIndex &parentDirIndex, int start, int end)
 {
-    auto* dirModel = static_cast<SortedDirModel*>(sender());
+    auto *dirModel = static_cast<SortedDirModel *>(sender());
     QModelIndex parentIndex;
     if (parentDirIndex.isValid()) {
         QUrl url = dirModel->urlForIndex(parentDirIndex);
@@ -337,14 +336,14 @@ void PlaceTreeModel::slotDirRowsAboutToBeInserted(const QModelIndex& parentDirIn
     beginInsertRows(parentIndex, start, end);
 }
 
-void PlaceTreeModel::slotDirRowsInserted(const QModelIndex&, int, int)
+void PlaceTreeModel::slotDirRowsInserted(const QModelIndex &, int, int)
 {
     endInsertRows();
 }
 
-void PlaceTreeModel::slotDirRowsAboutToBeRemoved(const QModelIndex& parentDirIndex, int start, int end)
+void PlaceTreeModel::slotDirRowsAboutToBeRemoved(const QModelIndex &parentDirIndex, int start, int end)
 {
-    auto* dirModel = static_cast<SortedDirModel*>(sender());
+    auto *dirModel = static_cast<SortedDirModel *>(sender());
     QModelIndex parentIndex;
     if (parentDirIndex.isValid()) {
         QUrl url = dirModel->urlForIndex(parentDirIndex);
@@ -355,12 +354,12 @@ void PlaceTreeModel::slotDirRowsAboutToBeRemoved(const QModelIndex& parentDirInd
     beginRemoveRows(parentIndex, start, end);
 }
 
-void PlaceTreeModel::slotDirRowsRemoved(const QModelIndex&, int, int)
+void PlaceTreeModel::slotDirRowsRemoved(const QModelIndex &, int, int)
 {
     endRemoveRows();
 }
 
-QUrl PlaceTreeModel::urlForIndex(const QModelIndex& index) const
+QUrl PlaceTreeModel::urlForIndex(const QModelIndex &index) const
 {
     const Node node = d->nodeForIndex(index);
     if (node.isPlace()) {

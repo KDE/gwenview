@@ -21,30 +21,29 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 namespace Gwenview
 {
-
-EventWatcher::EventWatcher(QObject* watched, const QList<QEvent::Type>& eventTypes)
-: QObject(watched)
-, mEventTypes(eventTypes)
+EventWatcher::EventWatcher(QObject *watched, const QList<QEvent::Type> &eventTypes)
+    : QObject(watched)
+    , mEventTypes(eventTypes)
 {
     Q_ASSERT(watched);
     watched->installEventFilter(this);
 }
 
-EventWatcher* EventWatcher::install(QObject* watched, const QList<QEvent::Type>& eventTypes, QObject* receiver, const char* slot)
+EventWatcher *EventWatcher::install(QObject *watched, const QList<QEvent::Type> &eventTypes, QObject *receiver, const char *slot)
 {
-    auto* watcher = new EventWatcher(watched, eventTypes);
-    connect(watcher, SIGNAL(eventTriggered(QEvent*)), receiver, slot);
+    auto *watcher = new EventWatcher(watched, eventTypes);
+    connect(watcher, SIGNAL(eventTriggered(QEvent *)), receiver, slot);
     return watcher;
 }
 
-EventWatcher* EventWatcher::install(QObject* watched, QEvent::Type eventType, QObject* receiver, const char* slot)
+EventWatcher *EventWatcher::install(QObject *watched, QEvent::Type eventType, QObject *receiver, const char *slot)
 {
-    auto* watcher = new EventWatcher(watched, QList<QEvent::Type>() << eventType);
-    connect(watcher, SIGNAL(eventTriggered(QEvent*)), receiver, slot);
+    auto *watcher = new EventWatcher(watched, QList<QEvent::Type>() << eventType);
+    connect(watcher, SIGNAL(eventTriggered(QEvent *)), receiver, slot);
     return watcher;
 }
 
-bool EventWatcher::eventFilter(QObject*, QEvent* event)
+bool EventWatcher::eventFilter(QObject *, QEvent *event)
 {
     if (mEventTypes.contains(event->type())) {
         emit eventTriggered(event);

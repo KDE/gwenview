@@ -31,24 +31,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // KF
 
 // Local
-#include "gwenview_lib_debug.h"
 #include "documentjob.h"
+#include "gwenview_lib_debug.h"
 #include "gwenviewconfig.h"
 #include "imageutils.h"
 #include "savejob.h"
 
 namespace Gwenview
 {
-
-struct DocumentLoadedImplPrivate
-{
+struct DocumentLoadedImplPrivate {
     QByteArray mRawData;
     bool mQuietInit;
 };
 
-DocumentLoadedImpl::DocumentLoadedImpl(Document* document, const QByteArray& rawData, bool quietInit)
-: AbstractDocumentImpl(document)
-, d(new DocumentLoadedImplPrivate)
+DocumentLoadedImpl::DocumentLoadedImpl(Document *document, const QByteArray &rawData, bool quietInit)
+    : AbstractDocumentImpl(document)
+    , d(new DocumentLoadedImplPrivate)
 {
     if (document->keepRawData()) {
         d->mRawData = rawData;
@@ -79,17 +77,12 @@ Document::LoadingState DocumentLoadedImpl::loadingState() const
     return Document::Loaded;
 }
 
-bool DocumentLoadedImpl::saveInternal(QIODevice* device, const QByteArray& format)
+bool DocumentLoadedImpl::saveInternal(QIODevice *device, const QByteArray &format)
 {
     QImageWriter writer(device, format);
     // If we're saving a non-JPEG image as a JPEG, respect the quality setting
-    if (format == QByteArrayLiteral("jpeg") ||
-        format == QByteArrayLiteral("jxl")  ||
-        format == QByteArrayLiteral("webp") ||
-        format == QByteArrayLiteral("avif") ||
-        format == QByteArrayLiteral("heif") ||
-        format == QByteArrayLiteral("heic")
-    ) {
+    if (format == QByteArrayLiteral("jpeg") || format == QByteArrayLiteral("jxl") || format == QByteArrayLiteral("webp") || format == QByteArrayLiteral("avif")
+        || format == QByteArrayLiteral("heif") || format == QByteArrayLiteral("heic")) {
         writer.setQuality(GwenviewConfig::jPEGQuality());
     }
     bool ok = writer.write(document()->image());
@@ -101,17 +94,17 @@ bool DocumentLoadedImpl::saveInternal(QIODevice* device, const QByteArray& forma
     return ok;
 }
 
-DocumentJob* DocumentLoadedImpl::save(const QUrl &url, const QByteArray& format)
+DocumentJob *DocumentLoadedImpl::save(const QUrl &url, const QByteArray &format)
 {
     return new SaveJob(this, url, format);
 }
 
-AbstractDocumentEditor* DocumentLoadedImpl::editor()
+AbstractDocumentEditor *DocumentLoadedImpl::editor()
 {
     return this;
 }
 
-void DocumentLoadedImpl::setImage(const QImage& image)
+void DocumentLoadedImpl::setImage(const QImage &image)
 {
     setDocumentImage(image);
     emit imageRectUpdated(image.rect());

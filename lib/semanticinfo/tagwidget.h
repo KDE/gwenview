@@ -34,7 +34,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 using TagInfo = QMap<SemanticInfoTag, bool>;
 
 struct TagWidgetPrivate;
@@ -42,22 +41,22 @@ class GWENVIEWLIB_EXPORT TagWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit TagWidget(QWidget* parent = nullptr);
+    explicit TagWidget(QWidget *parent = nullptr);
     ~TagWidget() override;
-    void setTagInfo(const TagInfo&);
-    void setSemanticInfoBackEnd(AbstractSemanticInfoBackEnd*);
+    void setTagInfo(const TagInfo &);
+    void setSemanticInfoBackEnd(AbstractSemanticInfoBackEnd *);
 
 Q_SIGNALS:
-    void tagAssigned(const SemanticInfoTag&);
-    void tagRemoved(const SemanticInfoTag&);
+    void tagAssigned(const SemanticInfoTag &);
+    void tagRemoved(const SemanticInfoTag &);
 
 private Q_SLOTS:
     void addTagFromComboBox();
-    void assignTag(const SemanticInfoTag& tag);
-    void removeTag(const SemanticInfoTag&);
+    void assignTag(const SemanticInfoTag &tag);
+    void removeTag(const SemanticInfoTag &);
 
 private:
-    TagWidgetPrivate* const d;
+    TagWidgetPrivate *const d;
 };
 
 } // namespace

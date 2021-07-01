@@ -22,52 +22,50 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "semanticinfocontextmanageritem.h"
 
 // Qt
+#include <QAction>
+#include <QDialog>
 #include <QEvent>
 #include <QPainter>
 #include <QShortcut>
 #include <QStyle>
 #include <QTimer>
-#include <QAction>
 #include <QVBoxLayout>
-#include <QDialog>
 
 // KF
 #include <KActionCategory>
 #include <KActionCollection>
+#include <KIconLoader>
 #include <KLocalizedString>
 #include <KRatingPainter>
-#include <KIconLoader>
 #include <KSharedConfig>
 #include <KWindowConfig>
 
 // Local
-#include "viewmainpage.h"
 #include "sidebar.h"
-#include "ui_semanticinfosidebaritem.h"
 #include "ui_semanticinfodialog.h"
+#include "ui_semanticinfosidebaritem.h"
+#include "viewmainpage.h"
 #include <lib/contextmanager.h>
 #include <lib/decoratedtag/decoratedtag.h>
 #include <lib/documentview/documentview.h>
 #include <lib/eventwatcher.h>
 #include <lib/flowlayout.h>
 #include <lib/hud/hudwidget.h>
-#include <lib/signalblocker.h>
-#include <lib/widgetfloater.h>
 #include <lib/semanticinfo/semanticinfodirmodel.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
+#include <lib/signalblocker.h>
+#include <lib/widgetfloater.h>
 
 namespace Gwenview
 {
-
 static const int RATING_INDICATOR_HIDE_DELAY = 2000;
 
-struct SemanticInfoDialog : public QDialog, public Ui_SemanticInfoDialog
-{
-    SemanticInfoDialog(QWidget* parent)
-    : QDialog(parent)
+struct SemanticInfoDialog : public QDialog, public Ui_SemanticInfoDialog {
+    SemanticInfoDialog(QWidget *parent)
+        : QDialog(parent)
     {
         setLayout(new QVBoxLayout);
-        auto* mainWidget = new QWidget;
+        auto *mainWidget = new QWidget;
         layout()->addWidget(mainWidget);
         setupUi(mainWidget);
         mainWidget->layout()->setContentsMargins(0, 0, 0, 0);
@@ -95,18 +93,15 @@ struct SemanticInfoDialog : public QDialog, public Ui_SemanticInfoDialog
 class GraphicsPixmapWidget : public QGraphicsWidget
 {
 public:
-    void setPixmap(const QPixmap& pix)
+    void setPixmap(const QPixmap &pix)
     {
         mPix = pix;
         setMinimumSize(pix.size());
     }
 
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override
     {
-        painter->drawPixmap(
-            (size().width() - mPix.width()) / 2,
-            (size().height() - mPix.height()) / 2,
-            mPix);
+        painter->drawPixmap((size().width() - mPix.width()) / 2, (size().height() - mPix.height()) / 2, mPix);
     }
 
 private:
@@ -117,9 +112,9 @@ class RatingIndicator : public HudWidget
 {
 public:
     RatingIndicator()
-    : HudWidget()
-    , mPixmapWidget(new GraphicsPixmapWidget)
-    , mDeleteTimer(new QTimer(this))
+        : HudWidget()
+        , mPixmapWidget(new GraphicsPixmapWidget)
+        , mDeleteTimer(new QTimer(this))
     {
         updatePixmap(0);
         setOpacity(0);
@@ -140,8 +135,8 @@ public:
     }
 
 private:
-    GraphicsPixmapWidget* mPixmapWidget;
-    QTimer* mDeleteTimer;
+    GraphicsPixmapWidget *mPixmapWidget;
+    QTimer *mDeleteTimer;
 
     void updatePixmap(int rating)
     {
@@ -157,15 +152,14 @@ private:
     }
 };
 
-struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
-{
-    SemanticInfoContextManagerItem* q;
-    SideBarGroup* mGroup;
-    KActionCollection* mActionCollection;
-    ViewMainPage* mViewMainPage;
+struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem {
+    SemanticInfoContextManagerItem *q;
+    SideBarGroup *mGroup;
+    KActionCollection *mActionCollection;
+    ViewMainPage *mViewMainPage;
     QPointer<SemanticInfoDialog> mSemanticInfoDialog;
     TagInfo mTagInfo;
-    QAction * mEditTagsAction;
+    QAction *mEditTagsAction;
     /** A list of all actions, so that we can disable them when necessary */
     QList<QAction *> mActions;
     QPointer<RatingIndicator> mRatingIndicator;
@@ -178,14 +172,14 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
         q->setWidget(mGroup);
         EventWatcher::install(mGroup, QEvent::Show, q, SLOT(update()));
 
-        auto* container = new QWidget;
+        auto *container = new QWidget;
         setupUi(container);
         container->layout()->setContentsMargins(0, 0, 0, 0);
         mGroup->addWidget(container);
         mTagLayout = new FlowLayout;
         mTagLayout->setHorizontalSpacing(2);
         mTagLayout->setVerticalSpacing(2);
-        mTagLayout->setContentsMargins(0,0,0,0);
+        mTagLayout->setContentsMargins(0, 0, 0, 0);
         mTagContainerWidget->setLayout(mTagLayout);
         DecoratedTag tempTag;
         tempTag.setVisible(false);
@@ -197,29 +191,26 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
                                        tempTag.contentsMargins().bottom());
         label_2->setContentsMargins(mEditLabel->contentsMargins());
 
-        QObject::connect(mRatingWidget, SIGNAL(ratingChanged(int)),
-                         q, SLOT(slotRatingChanged(int)));
+        QObject::connect(mRatingWidget, SIGNAL(ratingChanged(int)), q, SLOT(slotRatingChanged(int)));
 
         mDescriptionTextEdit->installEventFilter(q);
 
-        QObject::connect(mEditLabel, &QLabel::linkActivated,
-                         mEditTagsAction, &QAction::trigger);
+        QObject::connect(mEditLabel, &QLabel::linkActivated, mEditTagsAction, &QAction::trigger);
     }
 
     void setupActions()
     {
-        auto* edit = new KActionCategory(i18nc("@title actions category", "Edit"), mActionCollection);
+        auto *edit = new KActionCategory(i18nc("@title actions category", "Edit"), mActionCollection);
 
         mEditTagsAction = edit->addAction("edit_tags");
         mEditTagsAction->setText(i18nc("@action", "Edit Tags"));
         mEditTagsAction->setIcon(QIcon::fromTheme("tag"));
         mActionCollection->setDefaultShortcut(mEditTagsAction, Qt::CTRL | Qt::Key_T);
-        QObject::connect(mEditTagsAction, &QAction::triggered,
-                         q, &SemanticInfoContextManagerItem::showSemanticInfoDialog);
+        QObject::connect(mEditTagsAction, &QAction::triggered, q, &SemanticInfoContextManagerItem::showSemanticInfoDialog);
         mActions << mEditTagsAction;
 
         for (int rating = 0; rating <= 5; ++rating) {
-            QAction * action = edit->addAction(QStringLiteral("rate_%1").arg(rating));
+            QAction *action = edit->addAction(QStringLiteral("rate_%1").arg(rating));
             if (rating == 0) {
                 action->setText(i18nc("@action Rating value of zero", "Zero"));
             } else {
@@ -247,11 +238,9 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
             return;
         }
 
-        AbstractSemanticInfoBackEnd* backEnd = q->contextManager()->dirModel()->semanticInfoBackEnd();
+        AbstractSemanticInfoBackEnd *backEnd = q->contextManager()->dirModel()->semanticInfoBackEnd();
 
-        TagInfo::ConstIterator
-        it = mTagInfo.constBegin(),
-        end = mTagInfo.constEnd();
+        TagInfo::ConstIterator it = mTagInfo.constBegin(), end = mTagInfo.constEnd();
         QMap<QString, QString> labelMap;
         for (; it != end; ++it) {
             SemanticInfoTag tag = it.key();
@@ -280,20 +269,17 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
     }
 };
 
-SemanticInfoContextManagerItem::SemanticInfoContextManagerItem(ContextManager* manager, KActionCollection* actionCollection, ViewMainPage* viewMainPage)
-: AbstractContextManagerItem(manager)
-, d(new SemanticInfoContextManagerItemPrivate)
+SemanticInfoContextManagerItem::SemanticInfoContextManagerItem(ContextManager *manager, KActionCollection *actionCollection, ViewMainPage *viewMainPage)
+    : AbstractContextManagerItem(manager)
+    , d(new SemanticInfoContextManagerItemPrivate)
 {
     d->q = this;
     d->mActionCollection = actionCollection;
     d->mViewMainPage = viewMainPage;
 
-    connect(contextManager(), &ContextManager::selectionChanged,
-            this, &SemanticInfoContextManagerItem::slotSelectionChanged);
-    connect(contextManager(), &ContextManager::selectionDataChanged,
-            this, &SemanticInfoContextManagerItem::update);
-    connect(contextManager(), &ContextManager::currentDirUrlChanged,
-            this, &SemanticInfoContextManagerItem::update);
+    connect(contextManager(), &ContextManager::selectionChanged, this, &SemanticInfoContextManagerItem::slotSelectionChanged);
+    connect(contextManager(), &ContextManager::selectionDataChanged, this, &SemanticInfoContextManagerItem::update);
+    connect(contextManager(), &ContextManager::currentDirUrlChanged, this, &SemanticInfoContextManagerItem::update);
 
     d->setupActions();
     d->setupGroup();
@@ -304,7 +290,7 @@ SemanticInfoContextManagerItem::~SemanticInfoContextManagerItem()
     delete d;
 }
 
-inline int ratingForVariant(const QVariant& variant)
+inline int ratingForVariant(const QVariant &variant)
 {
     if (variant.isValid()) {
         return variant.toInt();
@@ -325,7 +311,7 @@ void SemanticInfoContextManagerItem::update()
     bool first = true;
     int rating = 0;
     QString description;
-    SortedDirModel* dirModel = contextManager()->dirModel();
+    SortedDirModel *dirModel = contextManager()->dirModel();
 
     // This hash stores for how many items the tag is present
     // If you have 3 items, and only 2 have the "Holiday" tag,
@@ -333,7 +319,7 @@ void SemanticInfoContextManagerItem::update()
     using TagHash = QHash<QString, int>;
     TagHash tagHash;
 
-    for (const KFileItem & item : itemList) {
+    for (const KFileItem &item : itemList) {
         QModelIndex index = dirModel->indexForItem(item);
 
         QVariant value = dirModel->data(index, SemanticInfoDirModel::RatingRole);
@@ -353,7 +339,7 @@ void SemanticInfoContextManagerItem::update()
 
         // Fill tagHash, incrementing the tag count if it's already there
         const TagSet tagSet = TagSet::fromVariant(index.data(SemanticInfoDirModel::TagsRole));
-        for (const QString & tag : tagSet) {
+        for (const QString &tag : tagSet) {
             TagHash::Iterator it = tagHash.find(tag);
             if (it == tagHash.end()) {
                 tagHash[tag] = 1;
@@ -373,9 +359,7 @@ void SemanticInfoContextManagerItem::update()
     // Init tagInfo from tagHash
     d->mTagInfo.clear();
     int itemCount = itemList.count();
-    TagHash::ConstIterator
-    it = tagHash.constBegin(),
-    end = tagHash.constEnd();
+    TagHash::ConstIterator it = tagHash.constBegin(), end = tagHash.constEnd();
     for (; it != end; ++it) {
         QString tag = it.key();
         int count = it.value();
@@ -383,7 +367,7 @@ void SemanticInfoContextManagerItem::update()
     }
 
     bool enabled = !contextManager()->selectedFileItemList().isEmpty();
-    for (QAction * action : qAsConst(d->mActions)) {
+    for (QAction *action : qAsConst(d->mActions)) {
         action->setEnabled(enabled);
     }
     d->updateTags();
@@ -405,8 +389,8 @@ void SemanticInfoContextManagerItem::slotRatingChanged(int rating)
         d->mRatingIndicator->setRating(rating);
     }
 
-    SortedDirModel* dirModel = contextManager()->dirModel();
-    for (const KFileItem & item : itemList) {
+    SortedDirModel *dirModel = contextManager()->dirModel();
+    for (const KFileItem &item : itemList) {
         QModelIndex index = dirModel->indexForItem(item);
         dirModel->setData(index, rating, SemanticInfoDirModel::RatingRole);
     }
@@ -421,19 +405,19 @@ void SemanticInfoContextManagerItem::storeDescription()
     QString description = d->mDescriptionTextEdit->toPlainText();
     const KFileItemList itemList = contextManager()->selectedFileItemList();
 
-    SortedDirModel* dirModel = contextManager()->dirModel();
-    for (const KFileItem & item : itemList) {
+    SortedDirModel *dirModel = contextManager()->dirModel();
+    for (const KFileItem &item : itemList) {
         QModelIndex index = dirModel->indexForItem(item);
         dirModel->setData(index, description, SemanticInfoDirModel::DescriptionRole);
     }
 }
 
-void SemanticInfoContextManagerItem::assignTag(const SemanticInfoTag& tag)
+void SemanticInfoContextManagerItem::assignTag(const SemanticInfoTag &tag)
 {
     const KFileItemList itemList = contextManager()->selectedFileItemList();
 
-    SortedDirModel* dirModel = contextManager()->dirModel();
-    for (const KFileItem & item : itemList) {
+    SortedDirModel *dirModel = contextManager()->dirModel();
+    for (const KFileItem &item : itemList) {
         QModelIndex index = dirModel->indexForItem(item);
         TagSet tags = TagSet::fromVariant(dirModel->data(index, SemanticInfoDirModel::TagsRole));
         if (!tags.contains(tag)) {
@@ -443,12 +427,12 @@ void SemanticInfoContextManagerItem::assignTag(const SemanticInfoTag& tag)
     }
 }
 
-void SemanticInfoContextManagerItem::removeTag(const SemanticInfoTag& tag)
+void SemanticInfoContextManagerItem::removeTag(const SemanticInfoTag &tag)
 {
     const KFileItemList itemList = contextManager()->selectedFileItemList();
 
-    SortedDirModel* dirModel = contextManager()->dirModel();
-    for (const KFileItem & item : itemList) {
+    SortedDirModel *dirModel = contextManager()->dirModel();
+    for (const KFileItem &item : itemList) {
         QModelIndex index = dirModel->indexForItem(item);
         TagSet tags = TagSet::fromVariant(dirModel->data(index, SemanticInfoDirModel::TagsRole));
         if (tags.contains(tag)) {
@@ -464,25 +448,23 @@ void SemanticInfoContextManagerItem::showSemanticInfoDialog()
         d->mSemanticInfoDialog = new SemanticInfoDialog(d->mGroup);
         d->mSemanticInfoDialog->setAttribute(Qt::WA_DeleteOnClose, true);
 
-        connect(d->mSemanticInfoDialog->mPreviousButton, &QAbstractButton::clicked,
-                d->mActionCollection->action(QStringLiteral("go_previous")), &QAction::trigger);
-        connect(d->mSemanticInfoDialog->mNextButton, &QAbstractButton::clicked,
-                d->mActionCollection->action(QStringLiteral("go_next")), &QAction::trigger);
-        connect(d->mSemanticInfoDialog->mButtonBox, &QDialogButtonBox::rejected,
-                d->mSemanticInfoDialog.data(), &QWidget::close);
+        connect(d->mSemanticInfoDialog->mPreviousButton,
+                &QAbstractButton::clicked,
+                d->mActionCollection->action(QStringLiteral("go_previous")),
+                &QAction::trigger);
+        connect(d->mSemanticInfoDialog->mNextButton, &QAbstractButton::clicked, d->mActionCollection->action(QStringLiteral("go_next")), &QAction::trigger);
+        connect(d->mSemanticInfoDialog->mButtonBox, &QDialogButtonBox::rejected, d->mSemanticInfoDialog.data(), &QWidget::close);
 
-        AbstractSemanticInfoBackEnd* backEnd = contextManager()->dirModel()->semanticInfoBackEnd();
+        AbstractSemanticInfoBackEnd *backEnd = contextManager()->dirModel()->semanticInfoBackEnd();
         d->mSemanticInfoDialog->mTagWidget->setSemanticInfoBackEnd(backEnd);
-        connect(d->mSemanticInfoDialog->mTagWidget, &TagWidget::tagAssigned,
-                this, &SemanticInfoContextManagerItem::assignTag);
-        connect(d->mSemanticInfoDialog->mTagWidget, &TagWidget::tagRemoved,
-                this, &SemanticInfoContextManagerItem::removeTag);
+        connect(d->mSemanticInfoDialog->mTagWidget, &TagWidget::tagAssigned, this, &SemanticInfoContextManagerItem::assignTag);
+        connect(d->mSemanticInfoDialog->mTagWidget, &TagWidget::tagRemoved, this, &SemanticInfoContextManagerItem::removeTag);
     }
     d->updateSemanticInfoDialog();
     d->mSemanticInfoDialog->show();
 }
 
-bool SemanticInfoContextManagerItem::eventFilter(QObject*, QEvent* event)
+bool SemanticInfoContextManagerItem::eventFilter(QObject *, QEvent *event)
 {
     if (event->type() == QEvent::FocusOut) {
         storeDescription();

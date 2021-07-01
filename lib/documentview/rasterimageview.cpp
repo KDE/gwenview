@@ -22,25 +22,25 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "rasterimageview.h"
 
 // Local
-#include <lib/documentview/abstractrasterimageviewtool.h>
+#include "alphabackgrounditem.h"
+#include "gwenview_lib_debug.h"
+#include "rasterimageitem.h"
 #include <lib/cms/cmsprofile.h>
+#include <lib/documentview/abstractrasterimageviewtool.h>
 #include <lib/gvdebug.h>
 #include <lib/paintutils.h>
-#include "gwenview_lib_debug.h"
-#include "alphabackgrounditem.h"
-#include "rasterimageitem.h"
 
 // KF
 
 // Qt
+#include <QApplication>
 #include <QGraphicsSceneMouseEvent>
 #include <QPainter>
-#include <QTimer>
 #include <QPointer>
-#include <QApplication>
+#include <QTimer>
 
-#include <QCryptographicHash>
 #include <QColorSpace>
+#include <QCryptographicHash>
 
 namespace Gwenview
 {
@@ -53,14 +53,13 @@ namespace Gwenview
 class ToolPainter : public QGraphicsItem
 {
 public:
-    ToolPainter(AbstractRasterImageViewTool* tool, QGraphicsItem* parent = nullptr)
+    ToolPainter(AbstractRasterImageViewTool *tool, QGraphicsItem *parent = nullptr)
         : QGraphicsItem(parent)
         , mTool(tool)
     {
-
     }
 
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/) override
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem * /*option*/, QWidget * /*widget*/) override
     {
         if (mTool) {
             mTool->paint(painter);
@@ -75,17 +74,16 @@ public:
     QPointer<AbstractRasterImageViewTool> mTool;
 };
 
-struct RasterImageViewPrivate
-{
-    RasterImageViewPrivate(RasterImageView* qq)
+struct RasterImageViewPrivate {
+    RasterImageViewPrivate(RasterImageView *qq)
         : q(qq)
     {
     }
 
-    RasterImageView* q;
+    RasterImageView *q;
 
-    RasterImageItem* mImageItem;
-    ToolPainter* mToolItem = nullptr;
+    RasterImageItem *mImageItem;
+    ToolPainter *mToolItem = nullptr;
 
     QPointer<AbstractRasterImageViewTool> mTool;
 
@@ -103,9 +101,9 @@ struct RasterImageViewPrivate
     }
 };
 
-RasterImageView::RasterImageView(QGraphicsItem* parent)
-: AbstractImageView(parent)
-, d(new RasterImageViewPrivate{this})
+RasterImageView::RasterImageView(QGraphicsItem *parent)
+    : AbstractImageView(parent)
+    , d(new RasterImageViewPrivate{this})
 {
     d->mImageItem = new RasterImageItem{this};
 
@@ -123,7 +121,7 @@ RasterImageView::~RasterImageView()
     delete d;
 }
 
-void RasterImageView::setRenderingIntent(const RenderingIntent::Enum& renderingIntent)
+void RasterImageView::setRenderingIntent(const RenderingIntent::Enum &renderingIntent)
 {
     d->mImageItem->setRenderingIntent(renderingIntent);
 }
@@ -140,12 +138,11 @@ void RasterImageView::loadFromDocument()
         return;
     }
 
-    connect(doc.data(), &Document::metaInfoLoaded,
-            this, &RasterImageView::slotDocumentMetaInfoLoaded);
-    connect(doc.data(), &Document::isAnimatedUpdated,
-            this, &RasterImageView::slotDocumentIsAnimatedUpdated);
-    connect(doc.data(), &Document::imageRectUpdated,
-            this, [this]() { d->mImageItem->updateCache(); });
+    connect(doc.data(), &Document::metaInfoLoaded, this, &RasterImageView::slotDocumentMetaInfoLoaded);
+    connect(doc.data(), &Document::isAnimatedUpdated, this, &RasterImageView::slotDocumentIsAnimatedUpdated);
+    connect(doc.data(), &Document::imageRectUpdated, this, [this]() {
+        d->mImageItem->updateCache();
+    });
 
     const Document::LoadingState state = doc->loadingState();
     if (state == Document::MetaInfoLoaded || state == Document::Loaded) {
@@ -160,8 +157,7 @@ void RasterImageView::slotDocumentMetaInfoLoaded()
     } else {
         // Could not retrieve image size from meta info, we need to load the
         // full image now.
-        connect(document().data(), &Document::loaded,
-                this, &RasterImageView::finishSetDocument);
+        connect(document().data(), &Document::loaded, this, &RasterImageView::finishSetDocument);
         document()->startLoadingFullImage();
     }
 }
@@ -206,13 +202,13 @@ void RasterImageView::onImageOffsetChanged()
     d->adjustItemPosition();
 }
 
-void RasterImageView::onScrollPosChanged(const QPointF& oldPos)
+void RasterImageView::onScrollPosChanged(const QPointF &oldPos)
 {
     Q_UNUSED(oldPos);
     d->adjustItemPosition();
 }
 
-void RasterImageView::setCurrentTool(AbstractRasterImageViewTool* tool)
+void RasterImageView::setCurrentTool(AbstractRasterImageViewTool *tool)
 {
     if (d->mTool) {
         d->mTool.data()->toolDeactivated();
@@ -233,12 +229,12 @@ void RasterImageView::setCurrentTool(AbstractRasterImageViewTool* tool)
     update();
 }
 
-AbstractRasterImageViewTool* RasterImageView::currentTool() const
+AbstractRasterImageViewTool *RasterImageView::currentTool() const
 {
     return d->mTool.data();
 }
 
-void RasterImageView::mousePressEvent(QGraphicsSceneMouseEvent* event)
+void RasterImageView::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if (d->mTool) {
         d->mTool.data()->mousePressEvent(event);
@@ -249,7 +245,7 @@ void RasterImageView::mousePressEvent(QGraphicsSceneMouseEvent* event)
     AbstractImageView::mousePressEvent(event);
 }
 
-void RasterImageView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
+void RasterImageView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
     if (d->mTool) {
         d->mTool.data()->mouseDoubleClickEvent(event);
@@ -260,7 +256,7 @@ void RasterImageView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
     AbstractImageView::mouseDoubleClickEvent(event);
 }
 
-void RasterImageView::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
+void RasterImageView::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     if (d->mTool) {
         d->mTool.data()->mouseMoveEvent(event);
@@ -271,7 +267,7 @@ void RasterImageView::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
     AbstractImageView::mouseMoveEvent(event);
 }
 
-void RasterImageView::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
+void RasterImageView::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     if (d->mTool) {
         d->mTool.data()->mouseReleaseEvent(event);
@@ -282,7 +278,7 @@ void RasterImageView::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
     AbstractImageView::mouseReleaseEvent(event);
 }
 
-void RasterImageView::wheelEvent(QGraphicsSceneWheelEvent* event)
+void RasterImageView::wheelEvent(QGraphicsSceneWheelEvent *event)
 {
     if (d->mTool) {
         d->mTool.data()->wheelEvent(event);
@@ -293,7 +289,7 @@ void RasterImageView::wheelEvent(QGraphicsSceneWheelEvent* event)
     AbstractImageView::wheelEvent(event);
 }
 
-void RasterImageView::keyPressEvent(QKeyEvent* event)
+void RasterImageView::keyPressEvent(QKeyEvent *event)
 {
     if (d->mTool) {
         d->mTool.data()->keyPressEvent(event);
@@ -304,7 +300,7 @@ void RasterImageView::keyPressEvent(QKeyEvent* event)
     AbstractImageView::keyPressEvent(event);
 }
 
-void RasterImageView::keyReleaseEvent(QKeyEvent* event)
+void RasterImageView::keyReleaseEvent(QKeyEvent *event)
 {
     if (d->mTool) {
         d->mTool.data()->keyReleaseEvent(event);
@@ -315,7 +311,7 @@ void RasterImageView::keyReleaseEvent(QKeyEvent* event)
     AbstractImageView::keyReleaseEvent(event);
 }
 
-void RasterImageView::hoverMoveEvent(QGraphicsSceneHoverEvent* event)
+void RasterImageView::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
 {
     if (d->mTool) {
         d->mTool.data()->hoverMoveEvent(event);

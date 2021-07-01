@@ -24,7 +24,13 @@ Gwenview: an image viewer
 
 #include "bayer.h"
 
-typedef enum { FITS_NORMAL, FITS_FOCUS, FITS_GUIDE, FITS_CALIBRATE, FITS_ALIGN, } FITSMode;
+typedef enum {
+    FITS_NORMAL,
+    FITS_FOCUS,
+    FITS_GUIDE,
+    FITS_CALIBRATE,
+    FITS_ALIGN,
+} FITSMode;
 
 #ifdef WIN32
 // This header must be included before fitsio.h to avoid compiler errors with Visual Studio
@@ -38,10 +44,9 @@ typedef enum { FITS_NORMAL, FITS_FOCUS, FITS_GUIDE, FITS_CALIBRATE, FITS_ALIGN, 
 #include <QRect>
 #include <QRectF>
 
-
 class FITSData
 {
-  public:
+public:
     FITSData();
     ~FITSData();
 
@@ -54,15 +59,30 @@ class FITSData
     void clearImageBuffers();
     uint8_t *getImageBuffer();
 
-    int getDataType() { return data_type; }
+    int getDataType()
+    {
+        return data_type;
+    }
 
     // Stats
-    unsigned int getSize() { return stats.samples_per_channel; }
-    uint16_t getWidth() { return stats.width; }
-    uint16_t getHeight() { return stats.height; }
+    unsigned int getSize()
+    {
+        return stats.samples_per_channel;
+    }
+    uint16_t getWidth()
+    {
+        return stats.width;
+    }
+    uint16_t getHeight()
+    {
+        return stats.height;
+    }
 
     // Statistics
-    int getNumOfChannels() { return channels; }
+    int getNumOfChannels()
+    {
+        return channels;
+    }
     void getMinMax(double *min, double *max, uint8_t channel = 0)
     {
         *min = stats.min[channel];
@@ -82,56 +102,55 @@ class FITSData
 
     QString getLastError() const;
 
-  private:
+private:
     int calculateMinMax(bool refresh = false);
     bool checkDebayer();
 
     // Templated functions
-    template <typename T>
+    template<typename T>
     bool debayer();
 
-    template <typename T>
+    template<typename T>
     void calculateMinMax();
     /* Calculate running average & standard deviation using Welford’s method for computing variance */
-    template <typename T>
+    template<typename T>
     void runningAverageStdDev();
 
-    template <typename T>
+    template<typename T>
     void convertToQImage(double dataMin, double dataMax, double scale, double zero, QImage &image);
 
     /// Pointer to CFITSIO FITS file struct
-    fitsfile *fptr { nullptr };
+    fitsfile *fptr{nullptr};
 
     /// FITS image data type (TBYTE, TUSHORT, TINT, TFLOAT, TLONG, TDOUBLE)
-    int data_type { 0 };
+    int data_type{0};
     /// Number of channels
-    int channels { 1 };
+    int channels{1};
     /// Generic data image buffer
-    uint8_t *imageBuffer { nullptr };
+    uint8_t *imageBuffer{nullptr};
 
     /// Our very own file name
     QString filename;
     /// FITS Mode (Normal, WCS, Guide, Focus..etc)
     FITSMode mode;
 
-    uint8_t *bayerBuffer { nullptr };
+    uint8_t *bayerBuffer{nullptr};
     /// Bayer parameters
     BayerParams debayerParams;
 
     /// Stats struct to hold statistical data about the FITS data
-    struct
-    {
+    struct {
         double min[3], max[3];
         double mean[3];
         double stddev[3];
         double median[3];
-        double SNR { 0 };
-        int bitpix { 8 };
-        int bytesPerPixel { 1 };
-        int ndim { 2 };
-        uint32_t samples_per_channel { 0 };
-        uint16_t width { 0 };
-        uint16_t height { 0 };
+        double SNR{0};
+        int bitpix{8};
+        int bytesPerPixel{1};
+        int ndim{2};
+        uint32_t samples_per_channel{0};
+        uint16_t width{0};
+        uint16_t height{0};
     } stats;
 
     QString lastError;

@@ -26,13 +26,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 namespace Gwenview
 {
-
 class SplitterHandle : public QSplitterHandle
 {
 public:
-    SplitterHandle(Qt::Orientation orientation, QSplitter* parent)
+    SplitterHandle(Qt::Orientation orientation, QSplitter *parent)
         : QSplitterHandle(orientation, parent)
-        {}
+    {
+    }
 };
 
 /**
@@ -42,13 +42,13 @@ public:
 class Splitter : public QSplitter
 {
 public:
-    Splitter(Qt::Orientation orientation, QWidget* parent)
+    Splitter(Qt::Orientation orientation, QWidget *parent)
         : QSplitter(orientation, parent)
     {
     }
 
 protected:
-    QSplitterHandle* createHandle() override
+    QSplitterHandle *createHandle() override
     {
         return new SplitterHandle(orientation(), this);
     }

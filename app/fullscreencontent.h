@@ -28,8 +28,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KF
 
 // Local
-#include "ui_fullscreenconfigwidget.h"
 #include "imagemetainfodialog.h"
+#include "ui_fullscreenconfigwidget.h"
 #include <lib/document/document.h>
 
 class QStringList;
@@ -39,7 +39,6 @@ class QUrl;
 
 namespace Gwenview
 {
-
 class FullScreenBar;
 class FullScreenToolBar;
 class ShadowFilter;
@@ -47,17 +46,15 @@ class SlideShow;
 class GvCore;
 class ThumbnailBarView;
 
-
 class FullScreenConfigWidget : public QWidget, public Ui_FullScreenConfigWidget
 {
 public:
-    explicit FullScreenConfigWidget(QWidget* parent=nullptr)
-    : QWidget(parent)
+    explicit FullScreenConfigWidget(QWidget *parent = nullptr)
+        : QWidget(parent)
     {
         setupUi(this);
     }
 };
-
 
 /**
  * The content of the fullscreen bar
@@ -66,18 +63,18 @@ class FullScreenContent : public QObject
 {
     Q_OBJECT
 public:
-    FullScreenContent(QObject* parent, GvCore* gvCore);
+    FullScreenContent(QObject *parent, GvCore *gvCore);
 
-    void init(KActionCollection*, QWidget* autoHideParentWidget, SlideShow*);
+    void init(KActionCollection *, QWidget *autoHideParentWidget, SlideShow *);
 
-    ThumbnailBarView* thumbnailBar() const;
+    ThumbnailBarView *thumbnailBar() const;
 
     void setDistractionFreeMode(bool);
 
     void setFullScreenMode(bool);
 
 public Q_SLOTS:
-    void setCurrentUrl(const QUrl&);
+    void setCurrentUrl(const QUrl &);
 
 private Q_SLOTS:
     void updateCurrentUrlWidgets();
@@ -85,7 +82,7 @@ private Q_SLOTS:
     void updateMetaInfoDialog();
     void showImageMetaInfoDialog();
     void slotImageMetaInfoDialogClosed();
-    void slotPreferredMetaInfoKeyListChanged(const QStringList& list);
+    void slotPreferredMetaInfoKeyListChanged(const QStringList &list);
     void showOptionsMenu();
     void updateSlideShowIntervalLabel();
     void setFullScreenBarHeight(int value);
@@ -95,24 +92,24 @@ private Q_SLOTS:
     void updateDocumentCountLabel();
 
 private:
-    KActionCollection* mActionCollection;
-    FullScreenBar* mAutoHideContainer;
-    SlideShow* mSlideShow;
-    QWidget* mContent;
-    FullScreenToolBar* mToolBar;
-    FullScreenToolBar* mRightToolBar;
-    ThumbnailBarView* mThumbnailBar;
-    QLabel* mInformationLabel;
-    QLabel* mDocumentCountLabel;
-    QWidget* mInformationContainer;
-    ShadowFilter* mToolBarShadow;
-    ShadowFilter* mRightToolBarShadow;
-    ShadowFilter* mInformationContainerShadow;
+    KActionCollection *mActionCollection;
+    FullScreenBar *mAutoHideContainer;
+    SlideShow *mSlideShow;
+    QWidget *mContent;
+    FullScreenToolBar *mToolBar;
+    FullScreenToolBar *mRightToolBar;
+    ThumbnailBarView *mThumbnailBar;
+    QLabel *mInformationLabel;
+    QLabel *mDocumentCountLabel;
+    QWidget *mInformationContainer;
+    ShadowFilter *mToolBarShadow;
+    ShadowFilter *mRightToolBarShadow;
+    ShadowFilter *mInformationContainerShadow;
     Document::Ptr mCurrentDocument;
     QPointer<ImageMetaInfoDialog> mImageMetaInfoDialog;
     QPointer<FullScreenConfigWidget> mConfigWidget;
-    QAction * mOptionsAction;
-    GvCore* mGvCore;
+    QAction *mOptionsAction;
+    GvCore *mGvCore;
     int mMinimumThumbnailBarHeight;
 
     bool mViewPageVisible;

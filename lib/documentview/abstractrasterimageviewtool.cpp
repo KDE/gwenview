@@ -31,15 +31,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 namespace Gwenview
 {
-
-struct AbstractRasterImageViewToolPrivate
-{
-    RasterImageView* mRasterImageView;
+struct AbstractRasterImageViewToolPrivate {
+    RasterImageView *mRasterImageView;
 };
 
-AbstractRasterImageViewTool::AbstractRasterImageViewTool(RasterImageView* view)
-: QObject(view)
-, d(new AbstractRasterImageViewToolPrivate)
+AbstractRasterImageViewTool::AbstractRasterImageViewTool(RasterImageView *view)
+    : QObject(view)
+    , d(new AbstractRasterImageViewToolPrivate)
 {
     d->mRasterImageView = view;
 }
@@ -49,17 +47,17 @@ AbstractRasterImageViewTool::~AbstractRasterImageViewTool()
     delete d;
 }
 
-RasterImageView* AbstractRasterImageViewTool::imageView() const
+RasterImageView *AbstractRasterImageViewTool::imageView() const
 {
     return d->mRasterImageView;
 }
 
-void AbstractRasterImageViewTool::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
+void AbstractRasterImageViewTool::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
     event->ignore();
 }
 
-void AbstractRasterImageViewTool::wheelEvent(QGraphicsSceneWheelEvent* event)
+void AbstractRasterImageViewTool::wheelEvent(QGraphicsSceneWheelEvent *event)
 {
     event->ignore();
 }

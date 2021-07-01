@@ -27,7 +27,6 @@ namespace Gwenview
 {
 namespace ImageUtils
 {
-
 QTransform transformMatrix(Orientation orientation)
 {
     QTransform matrix;

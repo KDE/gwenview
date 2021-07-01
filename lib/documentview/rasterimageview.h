@@ -33,7 +33,6 @@ class QGraphicsSceneHoverEvent;
 
 namespace Gwenview
 {
-
 class AbstractRasterImageViewTool;
 
 struct RasterImageViewPrivate;
@@ -41,32 +40,32 @@ class GWENVIEWLIB_EXPORT RasterImageView : public AbstractImageView
 {
     Q_OBJECT
 public:
-    explicit RasterImageView(QGraphicsItem* parent = nullptr);
+    explicit RasterImageView(QGraphicsItem *parent = nullptr);
     ~RasterImageView() override;
 
-    void setCurrentTool(AbstractRasterImageViewTool* tool);
-    AbstractRasterImageViewTool* currentTool() const;
+    void setCurrentTool(AbstractRasterImageViewTool *tool);
+    AbstractRasterImageViewTool *currentTool() const;
 
-    void setRenderingIntent(const RenderingIntent::Enum& renderingIntent);
+    void setRenderingIntent(const RenderingIntent::Enum &renderingIntent);
     void resetMonitorICC();
 
 Q_SIGNALS:
-    void currentToolChanged(AbstractRasterImageViewTool*);
+    void currentToolChanged(AbstractRasterImageViewTool *);
     void imageRectUpdated();
 
 protected:
     void loadFromDocument() override;
     void onZoomChanged() override;
     void onImageOffsetChanged() override;
-    void onScrollPosChanged(const QPointF& oldPos) override;
-    void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
-    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) override;
-    void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
-    void wheelEvent(QGraphicsSceneWheelEvent* event) override;
-    void keyPressEvent(QKeyEvent* event) override;
-    void keyReleaseEvent(QKeyEvent* event) override;
-    void hoverMoveEvent(QGraphicsSceneHoverEvent*) override;
+    void onScrollPosChanged(const QPointF &oldPos) override;
+    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
+    void wheelEvent(QGraphicsSceneWheelEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
+    void keyReleaseEvent(QKeyEvent *event) override;
+    void hoverMoveEvent(QGraphicsSceneHoverEvent *) override;
 
 private Q_SLOTS:
     void slotDocumentMetaInfoLoaded();
@@ -74,7 +73,7 @@ private Q_SLOTS:
     void finishSetDocument();
 
 private:
-    RasterImageViewPrivate* const d;
+    RasterImageViewPrivate *const d;
 };
 
 } // namespace

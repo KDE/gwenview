@@ -32,21 +32,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // Local
 #include "gwenview_lib_debug.h"
-#include <lib/documentview/rasterimageview.h>
 #include "gwenviewconfig.h"
 #include "paintutils.h"
 #include "redeyereductionimageoperation.h"
 #include "ui_redeyereductionwidget.h"
+#include <lib/documentview/rasterimageview.h>
 
 namespace Gwenview
 {
-
-struct RedEyeReductionWidget : public QWidget, public Ui_RedEyeReductionWidget
-{
+struct RedEyeReductionWidget : public QWidget, public Ui_RedEyeReductionWidget {
     RedEyeReductionWidget()
     {
         setupUi(this);
-        QPushButton* okButton = mainDialogButtonBox->button(QDialogButtonBox::Ok);
+        QPushButton *okButton = mainDialogButtonBox->button(QDialogButtonBox::Ok);
         okButton->setIcon(QIcon::fromTheme(QStringLiteral("redeyes")));
         okButton->setText(i18n("Reduce Red Eye"));
     }
@@ -65,26 +63,21 @@ struct RedEyeReductionWidget : public QWidget, public Ui_RedEyeReductionWidget
     }
 };
 
-struct RedEyeReductionToolPrivate
-{
-    RedEyeReductionTool* q;
+struct RedEyeReductionToolPrivate {
+    RedEyeReductionTool *q;
     RedEyeReductionTool::Status mStatus;
     QPointF mCenter;
     int mDiameter;
-    RedEyeReductionWidget* mToolWidget;
+    RedEyeReductionWidget *mToolWidget;
 
     void setupToolWidget()
     {
         mToolWidget = new RedEyeReductionWidget;
         mToolWidget->showNotSetPage();
-        QObject::connect(mToolWidget->diameterSpinBox, SIGNAL(valueChanged(int)),
-                         q, SLOT(setDiameter(int)));
-        QObject::connect(mToolWidget->mainDialogButtonBox, &QDialogButtonBox::accepted,
-                         q, &RedEyeReductionTool::slotApplyClicked);
-        QObject::connect(mToolWidget->mainDialogButtonBox, &QDialogButtonBox::rejected,
-                         q, &RedEyeReductionTool::done);
-        QObject::connect(mToolWidget->helpDialogButtonBox, &QDialogButtonBox::rejected,
-                         q, &RedEyeReductionTool::done);
+        QObject::connect(mToolWidget->diameterSpinBox, SIGNAL(valueChanged(int)), q, SLOT(setDiameter(int)));
+        QObject::connect(mToolWidget->mainDialogButtonBox, &QDialogButtonBox::accepted, q, &RedEyeReductionTool::slotApplyClicked);
+        QObject::connect(mToolWidget->mainDialogButtonBox, &QDialogButtonBox::rejected, q, &RedEyeReductionTool::done);
+        QObject::connect(mToolWidget->helpDialogButtonBox, &QDialogButtonBox::rejected, q, &RedEyeReductionTool::done);
     }
 
     QRectF rectF() const
@@ -96,9 +89,9 @@ struct RedEyeReductionToolPrivate
     }
 };
 
-RedEyeReductionTool::RedEyeReductionTool(RasterImageView* view)
-: AbstractRasterImageViewTool(view)
-, d(new RedEyeReductionToolPrivate)
+RedEyeReductionTool::RedEyeReductionTool(RasterImageView *view)
+    : AbstractRasterImageViewTool(view)
+    , d(new RedEyeReductionToolPrivate)
 {
     d->q = this;
     d->mDiameter = GwenviewConfig::redEyeReductionDiameter();
@@ -115,7 +108,7 @@ RedEyeReductionTool::~RedEyeReductionTool()
     delete d;
 }
 
-void RedEyeReductionTool::paint(QPainter* painter)
+void RedEyeReductionTool::paint(QPainter *painter)
 {
     if (d->mStatus == NotSet) {
         return;
@@ -125,22 +118,16 @@ void RedEyeReductionTool::paint(QPainter* painter)
 
     QRect docRect = docRectF.toAlignedRect();
     QImage img = imageView()->document()->image().copy(docRect);
-    QRectF imgRectF(
-        docRectF.left() - docRect.left(),
-        docRectF.top()  - docRect.top(),
-        docRectF.width(),
-        docRectF.height()
-    );
+    QRectF imgRectF(docRectF.left() - docRect.left(), docRectF.top() - docRect.top(), docRectF.width(), docRectF.height());
     RedEyeReductionImageOperation::apply(&img, imgRectF);
 
     const QRectF viewRectF = imageView()->mapToView(docRectF);
     painter->drawImage(viewRectF, img, imgRectF);
 }
 
-void RedEyeReductionTool::mousePressEvent(QGraphicsSceneMouseEvent* event)
+void RedEyeReductionTool::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    if (event->buttons() != Qt::LeftButton
-        || event->modifiers() & Qt::ControlModifier) {
+    if (event->buttons() != Qt::LeftButton || event->modifiers() & Qt::ControlModifier) {
         event->ignore();
         return;
     }
@@ -154,7 +141,7 @@ void RedEyeReductionTool::mousePressEvent(QGraphicsSceneMouseEvent* event)
     imageView()->update();
 }
 
-void RedEyeReductionTool::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
+void RedEyeReductionTool::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     event->accept();
     if (event->buttons() == Qt::NoButton) {
@@ -164,13 +151,13 @@ void RedEyeReductionTool::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
     imageView()->update();
 }
 
-void RedEyeReductionTool::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
+void RedEyeReductionTool::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     // Just prevent the event from reaching the image view
     event->accept();
 }
 
-void RedEyeReductionTool::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
+void RedEyeReductionTool::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->buttons() != Qt::LeftButton) {
         event->ignore();
@@ -180,7 +167,7 @@ void RedEyeReductionTool::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
     emit d->mToolWidget->mainDialogButtonBox->accepted();
 }
 
-void RedEyeReductionTool::keyPressEvent(QKeyEvent* event)
+void RedEyeReductionTool::keyPressEvent(QKeyEvent *event)
 {
     QDialogButtonBox *buttons;
     if (d->mStatus == Adjusting) {
@@ -197,7 +184,7 @@ void RedEyeReductionTool::keyPressEvent(QKeyEvent* event)
     case Qt::Key_Return:
     case Qt::Key_Enter: {
         event->accept();
-        auto focusButton = static_cast<QPushButton*>(buttons->focusWidget());
+        auto focusButton = static_cast<QPushButton *>(buttons->focusWidget());
         if (focusButton && buttons->buttonRole(focusButton) == QDialogButtonBox::RejectRole) {
             emit buttons->rejected();
         } else {
@@ -222,7 +209,7 @@ void RedEyeReductionTool::slotApplyClicked()
         qCWarning(GWENVIEW_LIB_LOG) << "invalid rect";
         return;
     }
-    auto* op = new RedEyeReductionImageOperation(docRectF);
+    auto *op = new RedEyeReductionImageOperation(docRectF);
     emit imageOperationRequested(op);
 
     d->mStatus = NotSet;
@@ -235,7 +222,7 @@ void RedEyeReductionTool::setDiameter(int value)
     imageView()->update();
 }
 
-QWidget* RedEyeReductionTool::widget() const
+QWidget *RedEyeReductionTool::widget() const
 {
     return d->mToolWidget;
 }

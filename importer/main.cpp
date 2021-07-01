@@ -19,11 +19,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 // Qt
 #include <QApplication>
-#include <QDir>
 #include <QCommandLineParser>
+#include <QDir>
+#include <QLocale>
 #include <QScopedPointer>
 #include <QUrl>
-#include <QLocale>
 
 // KF
 #include <KAboutData>
@@ -31,8 +31,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Local
 #include "gwenview_importer_debug.h"
-#include <lib/about.h>
 #include "importdialog.h"
+#include <lib/about.h>
 
 int main(int argc, char *argv[])
 {
@@ -40,18 +40,17 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     app.setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 
-    QScopedPointer<KAboutData> aboutData(
-        Gwenview::createAboutData(
-            QStringLiteral("org.kde.gwenview"), /* component name */
-            i18n("Gwenview Importer")  /* programName */
-        ));
+    QScopedPointer<KAboutData> aboutData(Gwenview::createAboutData(QStringLiteral("org.kde.gwenview"), /* component name */
+                                                                   i18n("Gwenview Importer") /* programName */
+                                                                   ));
     aboutData->setShortDescription(i18n("Photo Importer"));
 
     KAboutData::setApplicationData(*aboutData);
 
     QCommandLineParser parser;
     aboutData.data()->setupCommandLine(&parser);
-    parser.addOption(QCommandLineOption(QStringLiteral("udi"), i18n("The device UDI, used to retrieve information about the device (name, icon...)"), i18n("Device UDI")));
+    parser.addOption(
+        QCommandLineOption(QStringLiteral("udi"), i18n("The device UDI, used to retrieve information about the device (name, icon...)"), i18n("Device UDI")));
     parser.addPositionalArgument("folder", i18n("Source folder"));
     parser.process(app);
     aboutData.data()->processCommandLine(&parser);
@@ -72,8 +71,13 @@ int main(int argc, char *argv[])
     }
     QString deviceUdi = parser.isSet(QStringLiteral("udi")) ? parser.value(QStringLiteral("udi")) : QString();
 
-    auto* dialog = new Gwenview::ImportDialog();
+    auto *dialog = new Gwenview::ImportDialog();
     dialog->show();
-    QMetaObject::invokeMethod(dialog, [dialog, url, deviceUdi]() { dialog->setSourceUrl(url, deviceUdi); }, Qt::QueuedConnection);
+    QMetaObject::invokeMethod(
+        dialog,
+        [dialog, url, deviceUdi]() {
+            dialog->setSourceUrl(url, deviceUdi);
+        },
+        Qt::QueuedConnection);
     return app.exec();
 }

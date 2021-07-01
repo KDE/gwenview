@@ -18,23 +18,23 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
 // Qt
-#include <QUrl>
 #include <QAction>
 #include <QDebug>
-#include <QMenu>
 #include <QFileDialog>
+#include <QMenu>
+#include <QUrl>
 
 // KF
 #include <KAboutData>
 #include <KActionCollection>
-#include <KIconLoader>
 #include <KIO/Job>
 #include <KIO/JobUiDelegate>
+#include <KIconLoader>
+#include <KJobWidgets>
 #include <KLocalizedString>
-#include <KStandardAction>
 #include <KPluginFactory>
 #include <KPropertiesDialog>
-#include <KJobWidgets>
+#include <KStandardAction>
 
 // Local
 #include "../lib/about.h"
@@ -50,36 +50,31 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 namespace Gwenview
 {
-
 K_PLUGIN_CLASS_WITH_JSON(GVPart, "gvpart.json")
 
-GVPart::GVPart(QWidget* parentWidget, QObject* parent, const KPluginMetaData &metaData, const QVariantList& /*args*/)
-: KParts::ReadOnlyPart(parent)
+GVPart::GVPart(QWidget *parentWidget, QObject *parent, const KPluginMetaData &metaData, const QVariantList & /*args*/)
+    : KParts::ReadOnlyPart(parent)
 {
     setMetaData(metaData);
 
-    auto* container = new DocumentViewContainer(parentWidget);
+    auto *container = new DocumentViewContainer(parentWidget);
     setWidget(container);
     mDocumentView = container->createView();
 
-    connect(mDocumentView, &DocumentView::captionUpdateRequested,
-            this, &KParts::Part::setWindowCaption);
-    connect(mDocumentView, &DocumentView::completed,
-            this, QOverload<>::of(&KParts::ReadOnlyPart::completed));
+    connect(mDocumentView, &DocumentView::captionUpdateRequested, this, &KParts::Part::setWindowCaption);
+    connect(mDocumentView, &DocumentView::completed, this, QOverload<>::of(&KParts::ReadOnlyPart::completed));
 
-    connect(mDocumentView, &DocumentView::contextMenuRequested,
-            this, &GVPart::showContextMenu);
+    connect(mDocumentView, &DocumentView::contextMenuRequested, this, &GVPart::showContextMenu);
 
     // Necessary to have zoom actions
-    auto* documentViewController = new DocumentViewController(actionCollection(), this);
+    auto *documentViewController = new DocumentViewController(actionCollection(), this);
     documentViewController->setView(mDocumentView);
 
-    auto * action = new QAction(actionCollection());
+    auto *action = new QAction(actionCollection());
     action->setText(i18nc("@action", "Properties"));
     action->setShortcut(QKeySequence(Qt::ALT | Qt::Key_Return));
     connect(action, &QAction::triggered, this, &GVPart::showProperties);
     actionCollection()->addAction(QStringLiteral("file_show_properties"), action);
-
 
     KStandardAction::saveAs(this, SLOT(saveAs()), actionCollection());
 
@@ -93,7 +88,7 @@ void GVPart::showProperties()
     KPropertiesDialog::showDialog(url(), widget());
 }
 
-bool GVPart::openUrl(const QUrl& url)
+bool GVPart::openUrl(const QUrl &url)
 {
     if (!url.isValid()) {
         return false;
@@ -115,9 +110,9 @@ bool GVPart::openUrl(const QUrl& url)
     return true;
 }
 
-inline void addActionToMenu(QMenu* menu, KActionCollection* actionCollection, const char* name)
+inline void addActionToMenu(QMenu *menu, KActionCollection *actionCollection, const char *name)
 {
-    QAction* action = actionCollection->action(name);
+    QAction *action = actionCollection->action(name);
     if (action) {
         menu->addAction(action);
     }
@@ -145,7 +140,7 @@ void GVPart::saveAs()
         return;
     }
 
-    KIO::Job* job;
+    KIO::Job *job;
     Document::Ptr doc = DocumentFactory::instance()->load(srcUrl);
     QByteArray rawData = doc->rawData();
     if (rawData.length() > 0) {
@@ -153,14 +148,13 @@ void GVPart::saveAs()
     } else {
         job = KIO::file_copy(srcUrl, dstUrl);
     }
-    connect(job, &KJob::result,
-            this, &GVPart::showJobError);
+    connect(job, &KJob::result, this, &GVPart::showJobError);
 }
 
-void GVPart::showJobError(KJob* job)
+void GVPart::showJobError(KJob *job)
 {
     if (job->error() != 0) {
-        KJobUiDelegate* ui = static_cast<KIO::Job*>(job)->uiDelegate();
+        KJobUiDelegate *ui = static_cast<KIO::Job *>(job)->uiDelegate();
         if (!ui) {
             qCritical() << "Saving failed. job->ui() is null.";
             return;

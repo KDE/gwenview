@@ -33,28 +33,27 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 struct HudWidgetPrivate;
 class GWENVIEWLIB_EXPORT HudWidget : public QGraphicsWidget
 {
     Q_OBJECT
 public:
     enum Option {
-        OptionNone                 = 0,
-        OptionCloseButton          = 1 << 1,
-        OptionOpaque               = 1 << 2,
+        OptionNone = 0,
+        OptionCloseButton = 1 << 1,
+        OptionOpaque = 1 << 2,
     };
     Q_DECLARE_FLAGS(Options, Option)
 
-    explicit HudWidget(QGraphicsWidget* parent = nullptr);
+    explicit HudWidget(QGraphicsWidget *parent = nullptr);
     ~HudWidget() override;
 
-    void init(QWidget*, Options options);
-    void init(QGraphicsWidget*, Options options);
+    void init(QWidget *, Options options);
+    void init(QGraphicsWidget *, Options options);
 
     void setAutoDeleteOnFadeout(bool autoDelete);
 
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
 public Q_SLOTS:
     void fadeIn();
@@ -70,7 +69,7 @@ private Q_SLOTS:
     void slotFadeAnimationFinished();
 
 private:
-    HudWidgetPrivate* const d;
+    HudWidgetPrivate *const d;
 };
 
 } // namespace

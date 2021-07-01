@@ -22,21 +22,21 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "kipiinterface.h"
 
 // Qt
+#include <QAction>
+#include <QDesktopServices>
+#include <QFileSystemWatcher>
 #include <QList>
 #include <QMenu>
 #include <QRegExp>
-#include <QDesktopServices>
-#include <QFileSystemWatcher>
 #include <QTimer>
-#include <QAction>
 #include <QUrl>
 
 // KF
 #include <KActionCollection>
-#include <KXMLGUIFactory>
 #include <KDirLister>
-#include <KLocalizedString>
 #include <KIO/DesktopExecParser>
+#include <KLocalizedString>
+#include <KXMLGUIFactory>
 
 // KIPI
 #include <kipi/imageinfo.h>
@@ -45,14 +45,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // local
 #include "gwenview_app_debug.h"
-#include "mainwindow.h"
 #include "kipiimagecollectionselector.h"
 #include "kipiuploadwidget.h"
+#include "mainwindow.h"
 #include <lib/contextmanager.h>
 #include <lib/jpegcontent.h>
 #include <lib/mimetypeutils.h>
-#include <lib/timeutils.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
+#include <lib/timeutils.h>
 
 #define KIPI_PLUGINS_URL QStringLiteral("appstream://org.kde.kipi_plugins")
 
@@ -71,9 +71,10 @@ namespace Gwenview
 class KIPIImageInfo : public KIPI::ImageInfoShared
 {
     static const QRegExp sExtensionRE;
+
 public:
-    KIPIImageInfo(KIPI::Interface* interface, const QUrl &url)
-    : KIPI::ImageInfoShared(interface, url)
+    KIPIImageInfo(KIPI::Interface *interface, const QUrl &url)
+        : KIPI::ImageInfoShared(interface, url)
     {
         KFileItem item(url);
 
@@ -88,13 +89,14 @@ public:
         }
     }
 
-    QMap<QString, QVariant> attributes() override {
+    QMap<QString, QVariant> attributes() override
+    {
         return mAttributes;
     }
 
-    void delAttributes(const QStringList& attributeNames) override
+    void delAttributes(const QStringList &attributeNames) override
     {
-        for (const QString& name : attributeNames) {
+        for (const QString &name : attributeNames) {
             mAttributes.remove(name);
         }
     }
@@ -104,11 +106,9 @@ public:
         mAttributes.clear();
     }
 
-    void addAttributes(const QVariantMap& attributes) override
+    void addAttributes(const QVariantMap &attributes) override
     {
-        QVariantMap::ConstIterator
-            it = attributes.constBegin(),
-            end = attributes.constEnd();
+        QVariantMap::ConstIterator it = attributes.constBegin(), end = attributes.constEnd();
         for (; it != end; ++it) {
             mAttributes.insert(it.key(), it.value());
         }
@@ -125,18 +125,20 @@ private:
 
     QString comment() const
     {
-        if (!_url.isLocalFile()) return QString();
+        if (!_url.isLocalFile())
+            return QString();
 
         JpegContent content;
         bool ok = content.load(_url.toLocalFile());
-        if (!ok) return QString();
+        if (!ok)
+            return QString();
 
         return content.comment();
     }
 
     int orientation() const
     {
-#if 0 //PORT QT5
+#if 0 // PORT QT5
         KFileMetaInfo metaInfo(_url);
 
         if (!metaInfo.isValid()) {
@@ -172,7 +174,7 @@ private:
             return 0;
         }
 #endif
-        //qCWarning(GWENVIEW_APP_LOG) << "Don't know how to handle an orientation value of" << orientation << '(' << _url << ')';
+        // qCWarning(GWENVIEW_APP_LOG) << "Don't know how to handle an orientation value of" << orientation << '(' << _url << ')';
         return 0;
     }
 
@@ -181,56 +183,55 @@ private:
 
 const QRegExp KIPIImageInfo::sExtensionRE("\\.[a-z0-9]+$", Qt::CaseInsensitive);
 
-struct MenuInfo
-{
+struct MenuInfo {
     QString mName;
-    QList<QAction*> mActions;
+    QList<QAction *> mActions;
     QString mIconName;
 
     MenuInfo()
-    {}
+    {
+    }
 
-    MenuInfo(const QString& name, const QString &iconName)
-    : mName(name)
-    , mIconName(iconName)
-    {}
+    MenuInfo(const QString &name, const QString &iconName)
+        : mName(name)
+        , mIconName(iconName)
+    {
+    }
 };
 using MenuInfoMap = QMap<KIPI::Category, MenuInfo>;
 
-struct KIPIInterfacePrivate
-{
-    KIPIInterface* q;
-    MainWindow* mMainWindow;
-    QMenu* mPluginMenu;
-    KIPI::PluginLoader* mPluginLoader;
+struct KIPIInterfacePrivate {
+    KIPIInterface *q;
+    MainWindow *mMainWindow;
+    QMenu *mPluginMenu;
+    KIPI::PluginLoader *mPluginLoader;
     KIPI::PluginLoader::PluginList mPluginQueue;
     MenuInfoMap mMenuInfoMap;
-    QAction * mLoadingAction;
-    QAction * mNoPluginAction;
-    QAction * mInstallPluginAction;
+    QAction *mLoadingAction;
+    QAction *mNoPluginAction;
+    QAction *mInstallPluginAction;
     QFileSystemWatcher mPluginWatcher;
     QTimer mPluginLoadTimer;
 
     void setupPluginsMenu()
     {
-        mPluginMenu = static_cast<QMenu*>(
-                          mMainWindow->factory()->container("plugins", mMainWindow));
+        mPluginMenu = static_cast<QMenu *>(mMainWindow->factory()->container("plugins", mMainWindow));
         QObject::connect(mPluginMenu, &QMenu::aboutToShow, q, &KIPIInterface::loadPlugins);
     }
 
-    QAction * createDummyPluginAction(const QString& text)
+    QAction *createDummyPluginAction(const QString &text)
     {
-        auto * action = new QAction(q);
+        auto *action = new QAction(q);
         action->setText(text);
-        //PORT QT5 action->setShortcutConfigurable(false);
+        // PORT QT5 action->setShortcutConfigurable(false);
         action->setEnabled(false);
         return action;
     }
 };
 
-KIPIInterface::KIPIInterface(MainWindow* mainWindow)
-: KIPI::Interface(mainWindow)
-, d(new KIPIInterfacePrivate)
+KIPIInterface::KIPIInterface(MainWindow *mainWindow)
+    : KIPI::Interface(mainWindow)
+    , d(new KIPIInterfacePrivate)
 {
     d->q = this;
     d->mMainWindow = mainWindow;
@@ -241,10 +242,8 @@ KIPIInterface::KIPIInterface(MainWindow* mainWindow)
     connect(&d->mPluginLoadTimer, &QTimer::timeout, this, &KIPIInterface::loadPlugins);
 
     d->setupPluginsMenu();
-    QObject::connect(d->mMainWindow->contextManager(), &ContextManager::selectionChanged,
-                     this, &KIPIInterface::slotSelectionChanged);
-    QObject::connect(d->mMainWindow->contextManager(), &ContextManager::currentDirUrlChanged,
-                     this, &KIPIInterface::slotDirectoryChanged);
+    QObject::connect(d->mMainWindow->contextManager(), &ContextManager::selectionChanged, this, &KIPIInterface::slotSelectionChanged);
+    QObject::connect(d->mMainWindow->contextManager(), &ContextManager::currentDirUrlChanged, this, &KIPIInterface::slotDirectoryChanged);
 #if 0
 //TODO instead of delaying can we load them all at start-up to use actions somewhere else?
 // delay a bit, so that it's called after loadPlugins()
@@ -257,7 +256,7 @@ KIPIInterface::~KIPIInterface()
     delete d;
 }
 
-static bool actionLessThan(QAction* a1, QAction* a2)
+static bool actionLessThan(QAction *a1, QAction *a2)
 {
     QString a1Text = a1->text().remove('&');
     QString a2Text = a2->text().remove('&');
@@ -271,11 +270,11 @@ void KIPIInterface::loadPlugins()
         return;
     }
 
-    d->mMenuInfoMap[KIPI::ImagesPlugin]      = MenuInfo(i18nc("@title:menu", "Images"), QStringLiteral("viewimage"));
-    d->mMenuInfoMap[KIPI::ToolsPlugin]       = MenuInfo(i18nc("@title:menu", "Tools"), QStringLiteral("tools"));
-    d->mMenuInfoMap[KIPI::ImportPlugin]      = MenuInfo(i18nc("@title:menu", "Import"), QStringLiteral("document-import"));
-    d->mMenuInfoMap[KIPI::ExportPlugin]      = MenuInfo(i18nc("@title:menu", "Export"), QStringLiteral("document-export"));
-    d->mMenuInfoMap[KIPI::BatchPlugin]       = MenuInfo(i18nc("@title:menu", "Batch Processing"), QStringLiteral("editimage"));
+    d->mMenuInfoMap[KIPI::ImagesPlugin] = MenuInfo(i18nc("@title:menu", "Images"), QStringLiteral("viewimage"));
+    d->mMenuInfoMap[KIPI::ToolsPlugin] = MenuInfo(i18nc("@title:menu", "Tools"), QStringLiteral("tools"));
+    d->mMenuInfoMap[KIPI::ImportPlugin] = MenuInfo(i18nc("@title:menu", "Import"), QStringLiteral("document-import"));
+    d->mMenuInfoMap[KIPI::ExportPlugin] = MenuInfo(i18nc("@title:menu", "Export"), QStringLiteral("document-export"));
+    d->mMenuInfoMap[KIPI::BatchPlugin] = MenuInfo(i18nc("@title:menu", "Batch Processing"), QStringLiteral("editimage"));
     d->mMenuInfoMap[KIPI::CollectionsPlugin] = MenuInfo(i18nc("@title:menu", "Collections"), QStringLiteral("view-list-symbolic"));
 
     d->mPluginLoader = new KIPI::PluginLoader();
@@ -289,12 +288,12 @@ void KIPIInterface::loadPlugins()
 void KIPIInterface::loadOnePlugin()
 {
     while (!d->mPluginQueue.isEmpty()) {
-        KIPI::PluginLoader::Info* pluginInfo = d->mPluginQueue.takeFirst();
+        KIPI::PluginLoader::Info *pluginInfo = d->mPluginQueue.takeFirst();
         if (!pluginInfo->shouldLoad()) {
             continue;
         }
 
-        KIPI::Plugin* plugin = pluginInfo->plugin();
+        KIPI::Plugin *plugin = pluginInfo->plugin();
         if (!plugin) {
             qCWarning(GWENVIEW_APP_LOG) << "Plugin from library" << pluginInfo->library() << "failed to load";
             continue;
@@ -302,7 +301,7 @@ void KIPIInterface::loadOnePlugin()
 
         plugin->setup(d->mMainWindow);
         const QList<QAction *> actions = plugin->actions();
-        for (QAction * action : actions) {
+        for (QAction *action : actions) {
             KIPI::Category category = plugin->category(action);
 
             if (!d->mMenuInfoMap.contains(category)) {
@@ -313,7 +312,7 @@ void KIPIInterface::loadOnePlugin()
             d->mMenuInfoMap[category].mActions << action;
         }
         // FIXME: Port
-        //plugin->actionCollection()->readShortcutSettings();
+        // plugin->actionCollection()->readShortcutSettings();
 
         // If we reach this point, we just loaded one plugin. Go back to the
         // event loop. We will come back to load the remaining plugins or create
@@ -324,16 +323,14 @@ void KIPIInterface::loadOnePlugin()
 
     // If we reach this point, all plugins have been loaded. We can fill the
     // menu
-    MenuInfoMap::Iterator
-    it = d->mMenuInfoMap.begin(),
-    end = d->mMenuInfoMap.end();
+    MenuInfoMap::Iterator it = d->mMenuInfoMap.begin(), end = d->mMenuInfoMap.end();
     for (; it != end; ++it) {
-        MenuInfo& info = it.value();
+        MenuInfo &info = it.value();
         if (!info.mActions.isEmpty()) {
-            QMenu* menu = d->mPluginMenu->addMenu(info.mName);
+            QMenu *menu = d->mPluginMenu->addMenu(info.mName);
             menu->setIcon(QIcon::fromTheme(info.mIconName));
             std::sort(info.mActions.begin(), info.mActions.end(), actionLessThan);
-            for (QAction * action : qAsConst(info.mActions)) {
+            for (QAction *action : qAsConst(info.mActions)) {
                 menu->addAction(action);
             }
         }
@@ -344,7 +341,7 @@ void KIPIInterface::loadOnePlugin()
         if (KIO::DesktopExecParser::hasSchemeHandler(QUrl(KIPI_PLUGINS_URL))) {
             d->mPluginMenu->addAction(d->mInstallPluginAction);
             d->mInstallPluginAction->setEnabled(true);
-            QObject::connect(d->mInstallPluginAction, &QAction::triggered, this, [&](){
+            QObject::connect(d->mInstallPluginAction, &QAction::triggered, this, [&]() {
                 QDesktopServices::openUrl(QUrl(KIPI_PLUGINS_URL));
                 d->mPluginWatcher.addPaths(QCoreApplication::libraryPaths());
                 connect(&d->mPluginWatcher, &QFileSystemWatcher::directoryChanged, this, &KIPIInterface::packageFinished);
@@ -357,7 +354,8 @@ void KIPIInterface::loadOnePlugin()
     loadingFinished();
 }
 
-void KIPIInterface::packageFinished() {
+void KIPIInterface::packageFinished()
+{
     if (d->mPluginLoader) {
         delete d->mPluginLoader;
         d->mPluginLoader = nullptr;
@@ -367,12 +365,12 @@ void KIPIInterface::packageFinished() {
     d->mPluginLoadTimer.start(1000);
 }
 
-QList<QAction*> KIPIInterface::pluginActions(KIPI::Category category) const
+QList<QAction *> KIPIInterface::pluginActions(KIPI::Category category) const
 {
-    const_cast<KIPIInterface*>(this)->loadPlugins();
+    const_cast<KIPIInterface *>(this)->loadPlugins();
 
     if (isLoadingFinished()) {
-        QList<QAction*> list = d->mMenuInfoMap.value(category).mActions;
+        QList<QAction *> list = d->mMenuInfoMap.value(category).mActions;
         if (list.isEmpty()) {
             if (KIO::DesktopExecParser::hasSchemeHandler(QUrl(KIPI_PLUGINS_URL))) {
                 list << d->mInstallPluginAction;
@@ -382,7 +380,7 @@ QList<QAction*> KIPIInterface::pluginActions(KIPI::Category category) const
         }
         return list;
     } else {
-        return QList<QAction*>() << d->mLoadingAction;
+        return QList<QAction *>() << d->mLoadingAction;
     }
 }
 
@@ -404,14 +402,14 @@ void KIPIInterface::init()
 KIPI::ImageCollection KIPIInterface::currentAlbum()
 {
     LOG("");
-    const ContextManager* contextManager = d->mMainWindow->contextManager();
+    const ContextManager *contextManager = d->mMainWindow->contextManager();
     const QUrl url = contextManager->currentDirUrl();
-    const SortedDirModel* model = contextManager->dirModel();
+    const SortedDirModel *model = contextManager->dirModel();
 
     QList<QUrl> list;
     const int count = model->rowCount();
     for (int row = 0; row < count; ++row) {
-        const QModelIndex& index = model->index(row, 0);
+        const QModelIndex &index = model->index(row, 0);
         const KFileItem item = model->itemForIndex(index);
         if (MimeTypeUtils::fileItemKind(item) == MimeTypeUtils::KIND_RASTER_IMAGE) {
             list << item.targetUrl();
@@ -455,29 +453,29 @@ int KIPIInterface::features() const
  * KDirLister will pick up the image if necessary, so no updating is needed
  * here, it is however necessary to discard caches if the plugin preserves timestamp
  */
-bool KIPIInterface::addImage(const QUrl&, QString&)
+bool KIPIInterface::addImage(const QUrl &, QString &)
 {
-//TODO  setContext(const QUrl &currentUrl, const KFileItemList& selection)?
-    //Cache::instance()->invalidate( url );
+    // TODO  setContext(const QUrl &currentUrl, const KFileItemList& selection)?
+    // Cache::instance()->invalidate( url );
     return true;
 }
 
-void KIPIInterface::delImage(const QUrl&)
+void KIPIInterface::delImage(const QUrl &)
 {
-//TODO
+    // TODO
 }
 
-void KIPIInterface::refreshImages(const QList<QUrl>&)
+void KIPIInterface::refreshImages(const QList<QUrl> &)
 {
-// TODO
+    // TODO
 }
 
-KIPI::ImageCollectionSelector* KIPIInterface::imageCollectionSelector(QWidget *parent)
+KIPI::ImageCollectionSelector *KIPIInterface::imageCollectionSelector(QWidget *parent)
 {
     return new KIPIImageCollectionSelector(this, parent);
 }
 
-KIPI::UploadWidget* KIPIInterface::uploadWidget(QWidget *parent)
+KIPI::UploadWidget *KIPIInterface::uploadWidget(QWidget *parent)
 {
     return (new KIPIUploadWidget(this, parent));
 }
@@ -493,24 +491,23 @@ void KIPIInterface::slotDirectoryChanged()
 }
 
 #ifdef GWENVIEW_KIPI_WITH_CREATE_METHODS
-KIPI::FileReadWriteLock* KIPIInterface::createReadWriteLock(const QUrl& url) const
+KIPI::FileReadWriteLock *KIPIInterface::createReadWriteLock(const QUrl &url) const
 {
     Q_UNUSED(url);
     return nullptr;
 }
 
-KIPI::MetadataProcessor* KIPIInterface::createMetadataProcessor() const
+KIPI::MetadataProcessor *KIPIInterface::createMetadataProcessor() const
 {
     return nullptr;
 }
 
 #ifdef GWENVIEW_KIPI_WITH_CREATE_RAW_PROCESSOR
-KIPI::RawProcessor* KIPIInterface::createRawProcessor() const
+KIPI::RawProcessor *KIPIInterface::createRawProcessor() const
 {
     return NULL;
 }
 #endif
 #endif
 
-
-} //namespace
+} // namespace

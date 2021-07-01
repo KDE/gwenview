@@ -26,7 +26,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 namespace Gwenview
 {
-
 class ContextManager;
 
 struct AbstractContextManagerItemPrivate;
@@ -34,18 +33,18 @@ class AbstractContextManagerItem : public QObject
 {
     Q_OBJECT
 public:
-    AbstractContextManagerItem(ContextManager*);
+    AbstractContextManagerItem(ContextManager *);
     ~AbstractContextManagerItem() override;
 
-    QWidget* widget() const;
+    QWidget *widget() const;
 
-    ContextManager* contextManager() const;
+    ContextManager *contextManager() const;
 
 protected:
-    void setWidget(QWidget* widget);
+    void setWidget(QWidget *widget);
 
 private:
-    AbstractContextManagerItemPrivate * const d;
+    AbstractContextManagerItemPrivate *const d;
 };
 
 } // namespace

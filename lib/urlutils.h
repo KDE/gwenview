@@ -33,10 +33,8 @@ class QUrl;
 
 namespace Gwenview
 {
-
 namespace UrlUtils
 {
-
 /**
  * Returns whether the url is a local file, and it's not on a slow device like
  * an nfs export.

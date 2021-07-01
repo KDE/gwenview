@@ -32,27 +32,24 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
-struct KIPIImageCollectionSelectorPrivate
-{
-    KIPIInterface* mInterface;
-    QListWidget* mListWidget;
+struct KIPIImageCollectionSelectorPrivate {
+    KIPIInterface *mInterface;
+    QListWidget *mListWidget;
 };
 
-KIPIImageCollectionSelector::KIPIImageCollectionSelector(KIPIInterface* interface, QWidget* parent)
-: KIPI::ImageCollectionSelector(parent)
-, d(new KIPIImageCollectionSelectorPrivate)
+KIPIImageCollectionSelector::KIPIImageCollectionSelector(KIPIInterface *interface, QWidget *parent)
+    : KIPI::ImageCollectionSelector(parent)
+    , d(new KIPIImageCollectionSelectorPrivate)
 {
     d->mInterface = interface;
 
     d->mListWidget = new QListWidget;
     const QList<KIPI::ImageCollection> list = interface->allAlbums();
-    for (const KIPI::ImageCollection & collection : list) {
-        auto* item = new QListWidgetItem(d->mListWidget);
+    for (const KIPI::ImageCollection &collection : list) {
+        auto *item = new QListWidgetItem(d->mListWidget);
         QString name = collection.name();
         int imageCount = collection.images().size();
-        QString title = i18ncp("%1 is collection name, %2 is image count in collection",
-                               "%1 (%2 image)", "%1 (%2 images)", name, imageCount);
+        QString title = i18ncp("%1 is collection name, %2 is image count in collection", "%1 (%2 image)", "%1 (%2 images)", name, imageCount);
 
         item->setText(title);
         item->setData(Qt::UserRole, name);
@@ -60,7 +57,7 @@ KIPIImageCollectionSelector::KIPIImageCollectionSelector(KIPIInterface* interfac
 
     connect(d->mListWidget, &QListWidget::currentRowChanged, this, &KIPIImageCollectionSelector::selectionChanged);
 
-    auto* layout = new QVBoxLayout(this);
+    auto *layout = new QVBoxLayout(this);
     layout->addWidget(d->mListWidget);
     layout->setContentsMargins(0, 0, 0, 0);
 }
@@ -72,12 +69,12 @@ KIPIImageCollectionSelector::~KIPIImageCollectionSelector()
 
 QList<KIPI::ImageCollection> KIPIImageCollectionSelector::selectedImageCollections() const
 {
-    QListWidgetItem* item = d->mListWidget->currentItem();
+    QListWidgetItem *item = d->mListWidget->currentItem();
     QList<KIPI::ImageCollection> selectedList;
     if (item) {
         QString name = item->data(Qt::UserRole).toString();
         const QList<KIPI::ImageCollection> list = d->mInterface->allAlbums();
-        for (const KIPI::ImageCollection & collection : list) {
+        for (const KIPI::ImageCollection &collection : list) {
             if (collection.name() == name) {
                 selectedList << collection;
                 break;

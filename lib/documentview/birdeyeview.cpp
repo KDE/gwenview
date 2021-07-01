@@ -22,9 +22,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "birdeyeview.h"
 
 // Local
+#include "gwenview_lib_debug.h"
 #include <lib/document/document.h>
 #include <lib/documentview/documentview.h>
-#include "gwenview_lib_debug.h"
 
 // KF
 
@@ -37,7 +37,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 static qreal MIN_SIZE = 72;
 static qreal VIEW_OFFSET = MIN_SIZE / 4;
 
@@ -46,22 +45,21 @@ static int AUTOHIDE_DELAY = 2000;
 /**
  * Returns a QRectF whose coordinates are rounded to completely contains rect
  */
-inline QRectF alignedRectF(const QRectF& rect)
+inline QRectF alignedRectF(const QRectF &rect)
 {
     return QRectF(rect.toAlignedRect());
 }
 
-struct BirdEyeViewPrivate
-{
-    BirdEyeView* q;
-    DocumentView* mDocView;
-    QPropertyAnimation* mOpacityAnim;
-    QTimer* mAutoHideTimer;
+struct BirdEyeViewPrivate {
+    BirdEyeView *q;
+    DocumentView *mDocView;
+    QPropertyAnimation *mOpacityAnim;
+    QTimer *mAutoHideTimer;
     QRectF mVisibleRect;
     QPointF mStartDragMousePos;
     QPointF mStartDragViewPos;
 
-    void updateCursor(const QPointF& pos)
+    void updateCursor(const QPointF &pos)
     {
         q->setCursor(mVisibleRect.contains(pos) ? Qt::OpenHandCursor : Qt::ArrowCursor);
     }
@@ -100,9 +98,9 @@ struct BirdEyeViewPrivate
     }
 };
 
-BirdEyeView::BirdEyeView(DocumentView* docView)
-: QGraphicsWidget(docView)
-, d(new BirdEyeViewPrivate)
+BirdEyeView::BirdEyeView(DocumentView *docView)
+    : QGraphicsWidget(docView)
+    , d(new BirdEyeViewPrivate)
 {
     d->q = this;
     d->mDocView = docView;
@@ -149,14 +147,10 @@ void BirdEyeView::adjustGeometry()
     if (size.width() > maxBevWidth) {
         size.scale(maxBevWidth, MIN_SIZE, Qt::KeepAspectRatio);
     }
-    QRectF geom = QRectF(
-        QApplication::isRightToLeft()
-        ? docViewRect.left() + VIEW_OFFSET
-        : docViewRect.right() - VIEW_OFFSET - size.width(),
-        docViewRect.bottom() - VIEW_OFFSET - size.height(),
-        size.width(),
-        size.height()
-    );
+    QRectF geom = QRectF(QApplication::isRightToLeft() ? docViewRect.left() + VIEW_OFFSET : docViewRect.right() - VIEW_OFFSET - size.width(),
+                         docViewRect.bottom() - VIEW_OFFSET - size.height(),
+                         size.width(),
+                         size.height());
     setGeometry(alignedRectF(geom));
     adjustVisibleRect();
 }
@@ -177,9 +171,7 @@ void BirdEyeView::adjustVisibleRect()
         return;
     }
 
-    QRectF rect = QRectF(
-        QPointF(d->mDocView->position()) / viewZoom * bevZoom,
-        (d->mDocView->size() / viewZoom).boundedTo(docSize) * bevZoom);
+    QRectF rect = QRectF(QPointF(d->mDocView->position()) / viewZoom * bevZoom, (d->mDocView->size() / viewZoom).boundedTo(docSize) * bevZoom);
     d->mVisibleRect = rect;
 }
 
@@ -208,7 +200,7 @@ void BirdEyeView::slotPositionChanged()
     d->updateVisibility();
 }
 
-inline void drawTransparentRect(QPainter* painter, const QRectF& rect, const QColor& color)
+inline void drawTransparentRect(QPainter *painter, const QRectF &rect, const QColor &color)
 {
     QColor bg = color;
     bg.setAlphaF(.33);
@@ -219,7 +211,7 @@ inline void drawTransparentRect(QPainter* painter, const QRectF& rect, const QCo
     painter->drawRect(rect.adjusted(0, 0, -1, -1));
 }
 
-void BirdEyeView::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
+void BirdEyeView::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     static const QColor bgColor = QColor::fromHsvF(0, 0, .33);
     drawTransparentRect(painter, boundingRect(), bgColor);
@@ -237,7 +229,7 @@ void BirdEyeView::slotIsAnimatedChanged()
     d->updateVisibility();
 }
 
-void BirdEyeView::mousePressEvent(QGraphicsSceneMouseEvent* event)
+void BirdEyeView::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if (d->mVisibleRect.contains(event->pos()) && event->button() == Qt::LeftButton) {
         setCursor(Qt::ClosedHandCursor);
@@ -246,22 +238,21 @@ void BirdEyeView::mousePressEvent(QGraphicsSceneMouseEvent* event)
     }
 }
 
-void BirdEyeView::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
+void BirdEyeView::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsItem::mouseMoveEvent(event);
     if (d->mStartDragMousePos.isNull()) {
         // Do not drag if mouse was pressed outside visible rect
         return;
     }
-    qreal ratio = qMin(d->mDocView->boundingRect().height() / d->mVisibleRect.height(),
-                       d->mDocView->boundingRect().width() / d->mVisibleRect.width());
+    qreal ratio = qMin(d->mDocView->boundingRect().height() / d->mVisibleRect.height(), d->mDocView->boundingRect().width() / d->mVisibleRect.width());
     QPointF mousePos = event->pos();
     QPointF viewPos = d->mStartDragViewPos + (mousePos - d->mStartDragMousePos) * ratio;
 
     d->mDocView->setPosition(viewPos.toPoint());
 }
 
-void BirdEyeView::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
+void BirdEyeView::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsItem::mouseReleaseEvent(event);
     if (d->mStartDragMousePos.isNull()) {
@@ -272,20 +263,20 @@ void BirdEyeView::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
     d->mAutoHideTimer->start();
 }
 
-void BirdEyeView::hoverEnterEvent(QGraphicsSceneHoverEvent* /*event*/)
+void BirdEyeView::hoverEnterEvent(QGraphicsSceneHoverEvent * /*event*/)
 {
     d->mAutoHideTimer->stop();
     d->updateVisibility();
 }
 
-void BirdEyeView::hoverMoveEvent(QGraphicsSceneHoverEvent* event)
+void BirdEyeView::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
 {
     if (d->mStartDragMousePos.isNull()) {
         d->updateCursor(event->pos());
     }
 }
 
-void BirdEyeView::hoverLeaveEvent(QGraphicsSceneHoverEvent* /*event*/)
+void BirdEyeView::hoverLeaveEvent(QGraphicsSceneHoverEvent * /*event*/)
 {
     d->mAutoHideTimer->start();
     d->updateVisibility();

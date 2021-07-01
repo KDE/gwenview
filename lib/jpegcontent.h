@@ -22,9 +22,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #define JPEGCONTENT_H
 
 // Local
-#include <lib/orientation.h>
-#include <lib/gwenviewlib_export.h>
 #include <QByteArray>
+#include <lib/gwenviewlib_export.h>
+#include <lib/orientation.h>
 class QImage;
 class QSize;
 class QString;
@@ -37,7 +37,6 @@ class Image;
 
 namespace Gwenview
 {
-
 class GWENVIEWLIB_EXPORT JpegContent
 {
 public:
@@ -53,25 +52,25 @@ public:
     QSize size() const;
 
     QString comment() const;
-    void setComment(const QString&);
+    void setComment(const QString &);
 
     void transform(Orientation);
 
     QImage thumbnail() const;
-    void setThumbnail(const QImage&);
+    void setThumbnail(const QImage &);
 
     // Recreate raw data to represent image
     // Note: thumbnail must be updated separately
-    void setImage(const QImage& image);
+    void setImage(const QImage &image);
 
-    bool load(const QString& file);
-    bool loadFromData(const QByteArray& rawData);
+    bool load(const QString &file);
+    bool loadFromData(const QByteArray &rawData);
     /**
      * Use this version of loadFromData if you already have an Exiv2::Image*
      */
-    bool loadFromData(const QByteArray& rawData, Exiv2::Image*);
-    bool save(const QString& file);
-    bool save(QIODevice*);
+    bool loadFromData(const QByteArray &rawData, Exiv2::Image *);
+    bool save(const QString &file);
+    bool save(QIODevice *);
 
     QByteArray rawData() const;
 
@@ -81,10 +80,10 @@ private:
     struct Private;
     Private *d;
 
-    JpegContent(const JpegContent&);
-    void operator=(const JpegContent&);
+    JpegContent(const JpegContent &);
+    void operator=(const JpegContent &);
     void applyPendingTransformation();
-    int dotsPerMeter(const QString& keyName) const;
+    int dotsPerMeter(const QString &keyName) const;
 };
 
 } // namespace

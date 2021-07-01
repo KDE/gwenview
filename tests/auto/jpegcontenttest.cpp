@@ -21,27 +21,27 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <iostream>
 
 // Qt
+#include <QDebug>
 #include <QDir>
 #include <QFile>
 #include <QImage>
 #include <QString>
 #include <QTest>
-#include <QDebug>
 
 // KF
 
 // Local
-#include "../lib/orientation.h"
 #include "../lib/jpegcontent.h"
+#include "../lib/orientation.h"
 #include "testutils.h"
 
 using namespace std;
 
-const char* ORIENT6_FILE = "orient6.jpg";
-const char* ORIENT1_VFLIP_FILE = "orient1_vflip.jpg";
-const char* CUT_FILE = "cut.jpg";
-const char* TMP_FILE = "tmp.jpg";
-const char* THUMBNAIL_FILE = "test_thumbnail.jpg";
+const char *ORIENT6_FILE = "orient6.jpg";
+const char *ORIENT1_VFLIP_FILE = "orient1_vflip.jpg";
+const char *CUT_FILE = "cut.jpg";
+const char *TMP_FILE = "tmp.jpg";
+const char *THUMBNAIL_FILE = "test_thumbnail.jpg";
 
 const int ORIENT6_WIDTH = 128; // This size is the size *after* orientation
 const int ORIENT6_HEIGHT = 256; // has been applied
@@ -59,7 +59,7 @@ void JpegContentTest::initTestCase()
     QFileInfo info(in);
     int size = info.size() / 2;
 
-    char* data = new char[size];
+    char *data = new char[size];
     int readSize = in.read(data, size);
     QCOMPARE(size, readSize);
 
@@ -69,7 +69,7 @@ void JpegContentTest::initTestCase()
 
     int wroteSize = out.write(data, size);
     QCOMPARE(size, wroteSize);
-    delete []data;
+    delete[] data;
 }
 
 void JpegContentTest::cleanupTestCase()
@@ -182,7 +182,7 @@ void JpegContentTest::testTransform()
     result = expectedImage.load(pathForTestFile(ORIENT6_FILE));
     QVERIFY(result);
 
-    QCOMPARE(finalImage , expectedImage);
+    QCOMPARE(finalImage, expectedImage);
 }
 
 void JpegContentTest::testSetComment()
@@ -194,13 +194,13 @@ void JpegContentTest::testSetComment()
     QVERIFY(result);
 
     content.setComment(comment);
-    QCOMPARE(content.comment() , comment);
+    QCOMPARE(content.comment(), comment);
     result = content.save(TMP_FILE);
     QVERIFY(result);
 
     result = content.load(TMP_FILE);
     QVERIFY(result);
-    QCOMPARE(content.comment() , comment);
+    QCOMPARE(content.comment(), comment);
 }
 
 void JpegContentTest::testReadInfo()
@@ -209,8 +209,8 @@ void JpegContentTest::testReadInfo()
     bool result = content.load(pathForTestFile(ORIENT6_FILE));
     QVERIFY(result);
     QCOMPARE(int(content.orientation()), 6);
-    QCOMPARE(content.comment() , ORIENT6_COMMENT);
-    QCOMPARE(content.size() , QSize(ORIENT6_WIDTH, ORIENT6_HEIGHT));
+    QCOMPARE(content.comment(), ORIENT6_COMMENT);
+    QCOMPARE(content.size(), QSize(ORIENT6_WIDTH, ORIENT6_HEIGHT));
 }
 
 void JpegContentTest::testThumbnail()
@@ -242,12 +242,12 @@ void JpegContentTest::testMultipleRotations()
     result = content.load(TMP_FILE);
     QVERIFY(result);
 
-    QCOMPARE(content.size() , QSize(ORIENT6_HEIGHT, ORIENT6_WIDTH));
+    QCOMPARE(content.size(), QSize(ORIENT6_HEIGHT, ORIENT6_WIDTH));
 
     // Check the other meta info are still here
-//    QStringList ignoredKeys;
-//    ignoredKeys << "Orientation" << "Comment";
-//    compareMetaInfo(pathForTestFile(ORIENT6_FILE), pathForTestFile(ORIENT1_VFLIP_FILE), ignoredKeys);
+    //    QStringList ignoredKeys;
+    //    ignoredKeys << "Orientation" << "Comment";
+    //    compareMetaInfo(pathForTestFile(ORIENT6_FILE), pathForTestFile(ORIENT1_VFLIP_FILE), ignoredKeys);
 }
 
 void JpegContentTest::testLoadTruncated()
@@ -257,11 +257,11 @@ void JpegContentTest::testLoadTruncated()
     bool result = content.load(CUT_FILE);
     QVERIFY(result);
     QCOMPARE(int(content.orientation()), 6);
-    QCOMPARE(content.comment() , ORIENT6_COMMENT);
+    QCOMPARE(content.comment(), ORIENT6_COMMENT);
     content.transform(Gwenview::VFLIP);
-    qWarning() << "# Next function should output errors about incomplete image" ;
+    qWarning() << "# Next function should output errors about incomplete image";
     content.save(TMP_FILE);
-    qWarning() << "#" ;
+    qWarning() << "#";
 }
 
 void JpegContentTest::testRawData()
@@ -298,7 +298,7 @@ void JpegContentTest::testSetImage()
 
     QCOMPARE(content.size(), image.size());
 
-//    QStringList ignoredKeys;
-//    ignoredKeys << "Orientation";
-//    compareMetaInfo(pathForTestFile(ORIENT6_FILE), pathForTestFile(TMP_FILE), ignoredKeys);
+    //    QStringList ignoredKeys;
+    //    ignoredKeys << "Orientation";
+    //    compareMetaInfo(pathForTestFile(ORIENT6_FILE), pathForTestFile(TMP_FILE), ignoredKeys);
 }

@@ -32,10 +32,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
-struct WidgetFloaterPrivate
-{
-    QWidget* mParent;
+struct WidgetFloaterPrivate {
+    QWidget *mParent;
     QPointer<QWidget> mChild;
     Qt::Alignment mAlignment;
 
@@ -91,9 +89,9 @@ struct WidgetFloaterPrivate
     }
 };
 
-WidgetFloater::WidgetFloater(QWidget* parent)
-: QObject(parent)
-, d(new WidgetFloaterPrivate)
+WidgetFloater::WidgetFloater(QWidget *parent)
+    : QObject(parent)
+    , d(new WidgetFloaterPrivate)
 {
     Q_ASSERT(parent);
     d->mParent = parent;
@@ -110,7 +108,7 @@ WidgetFloater::~WidgetFloater()
     delete d;
 }
 
-void WidgetFloater::setChildWidget(QWidget* child)
+void WidgetFloater::setChildWidget(QWidget *child)
 {
     if (d->mChild) {
         d->mChild->removeEventFilter(this);
@@ -129,7 +127,7 @@ void WidgetFloater::setAlignment(Qt::Alignment alignment)
     d->updateChildGeometry();
 }
 
-bool WidgetFloater::eventFilter(QObject*, QEvent* event)
+bool WidgetFloater::eventFilter(QObject *, QEvent *event)
 {
     switch (event->type()) {
     case QEvent::Resize:

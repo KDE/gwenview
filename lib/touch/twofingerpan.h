@@ -40,11 +40,24 @@ class GWENVIEWLIB_EXPORT TwoFingerPan : public QGesture
     Q_PROPERTY(bool delayActive READ getDelayActive WRITE setDelayActive)
 
 public:
-    explicit TwoFingerPan(QObject* parent = nullptr);
-    QPointF getDelta() {return delta;};
-    void setDelta(QPointF _delta) {delta = _delta;};
-    bool getDelayActive() {return delayActive;};
-    void setDelayActive (bool _delay) {delayActive = _delay;};
+    explicit TwoFingerPan(QObject *parent = nullptr);
+    QPointF getDelta()
+    {
+        return delta;
+    };
+    void setDelta(QPointF _delta)
+    {
+        delta = _delta;
+    };
+    bool getDelayActive()
+    {
+        return delayActive;
+    };
+    void setDelayActive(bool _delay)
+    {
+        delayActive = _delay;
+    };
+
 private:
     QPointF delta;
     bool delayActive;
@@ -55,12 +68,12 @@ class GWENVIEWLIB_EXPORT TwoFingerPanRecognizer : public QGestureRecognizer
 public:
     explicit TwoFingerPanRecognizer();
     ~TwoFingerPanRecognizer();
+
 private:
-    TwoFingerPanRecognizerPrivate* d;
+    TwoFingerPanRecognizerPrivate *d;
 
-    virtual QGesture* create(QObject*) override;
-    virtual Result recognize(QGesture*, QObject*, QEvent*) override;
-
+    virtual QGesture *create(QObject *) override;
+    virtual Result recognize(QGesture *, QObject *, QEvent *) override;
 };
 
 } // namespace

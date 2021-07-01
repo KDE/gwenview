@@ -28,9 +28,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KF
 
 // Local
-#include "gwenview_lib_debug.h"
-#include "abstractsemanticinfobackend.h"
 #include "../archiveutils.h"
+#include "abstractsemanticinfobackend.h"
+#include "gwenview_lib_debug.h"
 
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_FAKE
 #include "fakesemanticinfobackend.h"
@@ -46,12 +46,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
-struct SemanticInfoCacheItem
-{
+struct SemanticInfoCacheItem {
     SemanticInfoCacheItem()
         : mValid(false)
-        {}
+    {
+    }
     QPersistentModelIndex mIndex;
     bool mValid;
     SemanticInfo mInfo;
@@ -59,15 +58,14 @@ struct SemanticInfoCacheItem
 
 using SemanticInfoCache = QHash<QUrl, SemanticInfoCacheItem>;
 
-struct SemanticInfoDirModelPrivate
-{
+struct SemanticInfoDirModelPrivate {
     SemanticInfoCache mSemanticInfoCache;
-    AbstractSemanticInfoBackEnd* mBackEnd;
+    AbstractSemanticInfoBackEnd *mBackEnd;
 };
 
-SemanticInfoDirModel::SemanticInfoDirModel(QObject* parent)
-: KDirModel(parent)
-, d(new SemanticInfoDirModelPrivate)
+SemanticInfoDirModel::SemanticInfoDirModel(QObject *parent)
+    : KDirModel(parent)
+    , d(new SemanticInfoDirModelPrivate)
 {
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_FAKE
     d->mBackEnd = new FakeSemanticInfoBackEnd(this, FakeSemanticInfoBackEnd::InitializeRandom);
@@ -92,7 +90,7 @@ void SemanticInfoDirModel::clearSemanticInfoCache()
     d->mSemanticInfoCache.clear();
 }
 
-bool SemanticInfoDirModel::semanticInfoAvailableForIndex(const QModelIndex& index) const
+bool SemanticInfoDirModel::semanticInfoAvailableForIndex(const QModelIndex &index) const
 {
     if (!index.isValid()) {
         return false;
@@ -108,7 +106,7 @@ bool SemanticInfoDirModel::semanticInfoAvailableForIndex(const QModelIndex& inde
     return it.value().mValid;
 }
 
-SemanticInfo SemanticInfoDirModel::semanticInfoForIndex(const QModelIndex& index) const
+SemanticInfo SemanticInfoDirModel::semanticInfoForIndex(const QModelIndex &index) const
 {
     if (!index.isValid()) {
         qCWarning(GWENVIEW_LIB_LOG) << "invalid index";
@@ -122,7 +120,7 @@ SemanticInfo SemanticInfoDirModel::semanticInfoForIndex(const QModelIndex& index
     return d->mSemanticInfoCache.value(item.targetUrl()).mInfo;
 }
 
-void SemanticInfoDirModel::retrieveSemanticInfoForIndex(const QModelIndex& index)
+void SemanticInfoDirModel::retrieveSemanticInfoForIndex(const QModelIndex &index)
 {
     if (!index.isValid()) {
         return;
@@ -141,7 +139,7 @@ void SemanticInfoDirModel::retrieveSemanticInfoForIndex(const QModelIndex& index
     d->mBackEnd->retrieveSemanticInfo(item.targetUrl());
 }
 
-QVariant SemanticInfoDirModel::data(const QModelIndex& index, int role) const
+QVariant SemanticInfoDirModel::data(const QModelIndex &index, int role) const
 {
     if (role == RatingRole || role == DescriptionRole || role == TagsRole) {
         KFileItem item = itemForIndex(index);
@@ -153,7 +151,7 @@ QVariant SemanticInfoDirModel::data(const QModelIndex& index, int role) const
             if (!it.value().mValid) {
                 return QVariant();
             }
-            const SemanticInfo& info = it.value().mInfo;
+            const SemanticInfo &info = it.value().mInfo;
             if (role == RatingRole) {
                 return info.mRating;
             } else if (role == DescriptionRole) {
@@ -166,7 +164,7 @@ QVariant SemanticInfoDirModel::data(const QModelIndex& index, int role) const
                 return QVariant();
             }
         } else {
-            const_cast<SemanticInfoDirModel*>(this)->retrieveSemanticInfoForIndex(index);
+            const_cast<SemanticInfoDirModel *>(this)->retrieveSemanticInfoForIndex(index);
             return QVariant();
         }
     } else {
@@ -174,7 +172,7 @@ QVariant SemanticInfoDirModel::data(const QModelIndex& index, int role) const
     }
 }
 
-bool SemanticInfoDirModel::setData(const QModelIndex& index, const QVariant& data, int role)
+bool SemanticInfoDirModel::setData(const QModelIndex &index, const QVariant &data, int role)
 {
     if (role == RatingRole || role == DescriptionRole || role == TagsRole) {
         KFileItem item = itemForIndex(index);
@@ -192,7 +190,7 @@ bool SemanticInfoDirModel::setData(const QModelIndex& index, const QVariant& dat
             qCWarning(GWENVIEW_LIB_LOG) << "Semantic info cache for" << url << "is invalid";
             return false;
         }
-        SemanticInfo& semanticInfo = it.value().mInfo;
+        SemanticInfo &semanticInfo = it.value().mInfo;
         if (role == RatingRole) {
             semanticInfo.mRating = data.toInt();
         } else if (role == DescriptionRole) {
@@ -212,14 +210,14 @@ bool SemanticInfoDirModel::setData(const QModelIndex& index, const QVariant& dat
     }
 }
 
-void SemanticInfoDirModel::slotSemanticInfoRetrieved(const QUrl &url, const SemanticInfo& semanticInfo)
+void SemanticInfoDirModel::slotSemanticInfoRetrieved(const QUrl &url, const SemanticInfo &semanticInfo)
 {
     SemanticInfoCache::iterator it = d->mSemanticInfoCache.find(url);
     if (it == d->mSemanticInfoCache.end()) {
         qCWarning(GWENVIEW_LIB_LOG) << "No index for" << url;
         return;
     }
-    SemanticInfoCacheItem& cacheItem = it.value();
+    SemanticInfoCacheItem &cacheItem = it.value();
     if (!cacheItem.mIndex.isValid()) {
         qCWarning(GWENVIEW_LIB_LOG) << "Index for" << url << "is invalid";
         return;
@@ -229,7 +227,7 @@ void SemanticInfoDirModel::slotSemanticInfoRetrieved(const QUrl &url, const Sema
     emit dataChanged(cacheItem.mIndex, cacheItem.mIndex);
 }
 
-void SemanticInfoDirModel::slotRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end)
+void SemanticInfoDirModel::slotRowsAboutToBeRemoved(const QModelIndex &parent, int start, int end)
 {
     for (int pos = start; pos <= end; ++pos) {
         QModelIndex idx = index(pos, 0, parent);
@@ -246,7 +244,7 @@ void SemanticInfoDirModel::slotModelAboutToBeReset()
     d->mSemanticInfoCache.clear();
 }
 
-AbstractSemanticInfoBackEnd* SemanticInfoDirModel::semanticInfoBackEnd() const
+AbstractSemanticInfoBackEnd *SemanticInfoDirModel::semanticInfoBackEnd() const
 {
     return d->mBackEnd;
 }

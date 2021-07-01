@@ -33,7 +33,6 @@ class QGraphicsWidget;
 
 namespace Gwenview
 {
-
 class HudButton;
 
 struct HudButtonBoxPrivate;
@@ -44,22 +43,22 @@ class GWENVIEWLIB_EXPORT HudButtonBox : public HudWidget
 {
     Q_OBJECT
 public:
-    HudButtonBox(QGraphicsWidget* parent = nullptr);
+    HudButtonBox(QGraphicsWidget *parent = nullptr);
     ~HudButtonBox() override;
 
-    void setText(const QString& text);
+    void setText(const QString &text);
 
-    HudButton* addButton(const QString& text);
+    HudButton *addButton(const QString &text);
 
-    HudButton* addAction(QAction* action, const QString& overrideText = QString());
+    HudButton *addAction(QAction *action, const QString &overrideText = QString());
 
     void addCountDown(qreal ms);
 
 protected:
-    void showEvent(QShowEvent* event) override;
+    void showEvent(QShowEvent *event) override;
 
 private:
-    HudButtonBoxPrivate* const d;
+    HudButtonBoxPrivate *const d;
 };
 
 } // namespace

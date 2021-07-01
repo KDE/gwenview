@@ -4,11 +4,11 @@
 #ifndef GWENVIEW_ZOOMCOMBOBOX_H
 #define GWENVIEW_ZOOMCOMBOBOX_H
 
-#include <lib/gwenviewlib_export.h>
 #include <QComboBox>
+#include <lib/gwenviewlib_export.h>
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 class ZoomComboBoxPrivate;
 
 /**

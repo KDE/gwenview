@@ -26,15 +26,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QPointer>
 
-
-
 template<class T>
 class DialogGuard
 {
     QPointer<T> m_dialog;
+
 public:
-    template<class ...Args>
-    DialogGuard(Args&& ...args)
+    template<class... Args>
+    DialogGuard(Args &&...args)
     {
         m_dialog = new T(std::forward<Args>(args)...);
     }
@@ -44,12 +43,12 @@ public:
         delete m_dialog;
     }
 
-    T* data() const
+    T *data() const
     {
         return m_dialog.data();
     }
 
-    T* operator->() const
+    T *operator->() const
     {
         return m_dialog.data();
     }

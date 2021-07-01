@@ -37,9 +37,13 @@ class GWENVIEWLIB_EXPORT Mpris2Service : public QObject
     Q_OBJECT
 
 public:
-    Mpris2Service(SlideShow* slideShow, ContextManager* contextManager,
-                  QAction* toggleSlideShowAction, QAction* fullScreenAction,
-                  QAction* previousAction, QAction* nextAction, QObject* parent);
+    Mpris2Service(SlideShow *slideShow,
+                  ContextManager *contextManager,
+                  QAction *toggleSlideShowAction,
+                  QAction *fullScreenAction,
+                  QAction *previousAction,
+                  QAction *nextAction,
+                  QObject *parent);
     ~Mpris2Service() override;
 
 private:

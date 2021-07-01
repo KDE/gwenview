@@ -34,7 +34,6 @@ class QImage;
 
 namespace Gwenview
 {
-
 /**
  * An interface which can be returned by some implementations of
  * AbstractDocumentImpl if they support edition.
@@ -43,7 +42,8 @@ class GWENVIEWLIB_EXPORT AbstractDocumentEditor
 {
 public:
     virtual ~AbstractDocumentEditor()
-    {}
+    {
+    }
 
     /**
      * Replaces the current image with image.
@@ -52,7 +52,7 @@ public:
      * This method should only be called from a subclass of
      * AbstractImageOperation and applied through Document::undoStack().
      */
-    virtual void setImage(const QImage&) = 0;
+    virtual void setImage(const QImage &) = 0;
 
     /**
      * Apply a transformation to the document image.

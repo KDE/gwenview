@@ -35,7 +35,6 @@ class QUrl;
 
 namespace Gwenview
 {
-
 using SemanticInfoTag = QString;
 
 /**
@@ -48,22 +47,21 @@ class GWENVIEWLIB_EXPORT TagSet : public QSet<SemanticInfoTag>
 {
 public:
     TagSet();
-    TagSet(const QSet<SemanticInfoTag>&);
+    TagSet(const QSet<SemanticInfoTag> &);
 
     QVariant toVariant() const;
-    static TagSet fromVariant(const QVariant&);
-    static TagSet fromList(const QList<SemanticInfoTag>&);
+    static TagSet fromVariant(const QVariant &);
+    static TagSet fromList(const QList<SemanticInfoTag> &);
 
 private:
-    TagSet(const QList<SemanticInfoTag>&);
+    TagSet(const QList<SemanticInfoTag> &);
 };
 
 /**
  * A POD struct used by AbstractSemanticInfoBackEnd to store the metadata
  * associated to an url.
  */
-struct SemanticInfo
-{
+struct SemanticInfo {
     int mRating;
     QString mDescription;
     TagSet mTags;
@@ -76,31 +74,31 @@ class AbstractSemanticInfoBackEnd : public QObject
 {
     Q_OBJECT
 public:
-    explicit AbstractSemanticInfoBackEnd(QObject* parent);
+    explicit AbstractSemanticInfoBackEnd(QObject *parent);
 
     virtual TagSet allTags() const = 0;
 
     virtual void refreshAllTags() = 0;
 
-    virtual void storeSemanticInfo(const QUrl&, const SemanticInfo&) = 0;
+    virtual void storeSemanticInfo(const QUrl &, const SemanticInfo &) = 0;
 
-    virtual void retrieveSemanticInfo(const QUrl&) = 0;
+    virtual void retrieveSemanticInfo(const QUrl &) = 0;
 
-    virtual QString labelForTag(const SemanticInfoTag&) const = 0;
+    virtual QString labelForTag(const SemanticInfoTag &) const = 0;
 
     /**
      * Return a tag for a label. Will emit tagAdded() if the tag had to be
      * created.
      */
-    virtual SemanticInfoTag tagForLabel(const QString&) = 0;
+    virtual SemanticInfoTag tagForLabel(const QString &) = 0;
 
 Q_SIGNALS:
-    void semanticInfoRetrieved(const QUrl&, const SemanticInfo&);
+    void semanticInfoRetrieved(const QUrl &, const SemanticInfo &);
 
     /**
      * Emitted whenever a new tag is added to allTags()
      */
-    void tagAdded(const SemanticInfoTag&, const QString& label);
+    void tagAdded(const SemanticInfoTag &, const QString &label);
 };
 
 } // namespace

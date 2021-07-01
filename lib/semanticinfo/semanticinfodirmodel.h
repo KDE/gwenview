@@ -32,7 +32,6 @@ class QUrl;
 
 namespace Gwenview
 {
-
 class AbstractSemanticInfoBackEnd;
 struct SemanticInfo;
 struct SemanticInfoDirModelPrivate;
@@ -49,33 +48,33 @@ public:
         DescriptionRole = 0x26FB33FA,
         TagsRole = 0x0462F0A8,
     };
-    SemanticInfoDirModel(QObject* parent);
+    SemanticInfoDirModel(QObject *parent);
     ~SemanticInfoDirModel() override;
 
     void clearSemanticInfoCache();
 
-    bool semanticInfoAvailableForIndex(const QModelIndex&) const;
+    bool semanticInfoAvailableForIndex(const QModelIndex &) const;
 
-    void retrieveSemanticInfoForIndex(const QModelIndex&);
+    void retrieveSemanticInfoForIndex(const QModelIndex &);
 
-    SemanticInfo semanticInfoForIndex(const QModelIndex&) const;
+    SemanticInfo semanticInfoForIndex(const QModelIndex &) const;
 
-    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
-    bool setData(const QModelIndex& index, const QVariant& data, int role = Qt::EditRole) override;
+    bool setData(const QModelIndex &index, const QVariant &data, int role = Qt::EditRole) override;
 
-    AbstractSemanticInfoBackEnd* semanticInfoBackEnd() const;
+    AbstractSemanticInfoBackEnd *semanticInfoBackEnd() const;
 
 Q_SIGNALS:
-    void semanticInfoRetrieved(const QUrl&, const SemanticInfo&);
+    void semanticInfoRetrieved(const QUrl &, const SemanticInfo &);
 
 private:
-    SemanticInfoDirModelPrivate* const d;
+    SemanticInfoDirModelPrivate *const d;
 
 private Q_SLOTS:
-    void slotSemanticInfoRetrieved(const QUrl &url, const SemanticInfo&);
+    void slotSemanticInfoRetrieved(const QUrl &url, const SemanticInfo &);
 
-    void slotRowsAboutToBeRemoved(const QModelIndex&, int, int);
+    void slotRowsAboutToBeRemoved(const QModelIndex &, int, int);
     void slotModelAboutToBeReset();
 };
 

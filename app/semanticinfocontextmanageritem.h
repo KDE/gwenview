@@ -33,7 +33,6 @@ class KActionCollection;
 
 namespace Gwenview
 {
-
 class ViewMainPage;
 
 struct SemanticInfoContextManagerItemPrivate;
@@ -41,24 +40,24 @@ class SemanticInfoContextManagerItem : public AbstractContextManagerItem
 {
     Q_OBJECT
 public:
-    SemanticInfoContextManagerItem(ContextManager*, KActionCollection*, ViewMainPage* viewMainPage);
+    SemanticInfoContextManagerItem(ContextManager *, KActionCollection *, ViewMainPage *viewMainPage);
     ~SemanticInfoContextManagerItem() override;
 
 protected:
-    bool eventFilter(QObject*, QEvent*) override;
+    bool eventFilter(QObject *, QEvent *) override;
 
 private Q_SLOTS:
     void slotSelectionChanged();
     void update();
     void slotRatingChanged(int rating);
     void storeDescription();
-    void assignTag(const SemanticInfoTag&);
-    void removeTag(const SemanticInfoTag&);
+    void assignTag(const SemanticInfoTag &);
+    void removeTag(const SemanticInfoTag &);
     void showSemanticInfoDialog();
 
 private:
     friend struct SemanticInfoContextManagerItemPrivate;
-    SemanticInfoContextManagerItemPrivate* const d;
+    SemanticInfoContextManagerItemPrivate *const d;
 };
 
 } // namespace

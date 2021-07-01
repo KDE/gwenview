@@ -34,7 +34,6 @@ class QImage;
 
 namespace Gwenview
 {
-
 /**
  * Store thumbnails to disk when done generating them
  */
@@ -43,12 +42,12 @@ class ThumbnailWriter : public QThread
     Q_OBJECT
 public:
     // Return thumbnail if it has still not been stored
-    QImage value(const QString&) const;
+    QImage value(const QString &) const;
 
     bool isEmpty() const;
 
 public Q_SLOTS:
-    void queueThumbnail(const QString&, const QImage&);
+    void queueThumbnail(const QString &, const QImage &);
 
 protected:
     void run() override;

@@ -29,25 +29,26 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
-struct InvisibleButtonGroupPrivate
-{
-    QButtonGroup* mGroup;
+struct InvisibleButtonGroupPrivate {
+    QButtonGroup *mGroup;
 };
 
-InvisibleButtonGroup::InvisibleButtonGroup(QWidget* parent)
-: QWidget(parent)
-, d(new InvisibleButtonGroupPrivate)
+InvisibleButtonGroup::InvisibleButtonGroup(QWidget *parent)
+    : QWidget(parent)
+    , d(new InvisibleButtonGroupPrivate)
 {
     hide();
     d->mGroup = new QButtonGroup(this);
     d->mGroup->setExclusive(true);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
-    connect(d->mGroup, &QButtonGroup::idClicked,
+    connect(d->mGroup,
+            &QButtonGroup::idClicked,
 #else
-    connect(d->mGroup, QOverload<int>::of(&QButtonGroup::buttonClicked),
+    connect(d->mGroup,
+            QOverload<int>::of(&QButtonGroup::buttonClicked),
 #endif
-            this, &InvisibleButtonGroup::selectionChanged);
+            this,
+            &InvisibleButtonGroup::selectionChanged);
 }
 
 InvisibleButtonGroup::~InvisibleButtonGroup()
@@ -60,14 +61,14 @@ int InvisibleButtonGroup::selected() const
     return d->mGroup->checkedId();
 }
 
-void InvisibleButtonGroup::addButton(QAbstractButton* button, int id)
+void InvisibleButtonGroup::addButton(QAbstractButton *button, int id)
 {
     d->mGroup->addButton(button, id);
 }
 
 void InvisibleButtonGroup::setSelected(int id)
 {
-    QAbstractButton* button = d->mGroup->button(id);
+    QAbstractButton *button = d->mGroup->button(id);
     if (button) {
         button->setChecked(true);
     }

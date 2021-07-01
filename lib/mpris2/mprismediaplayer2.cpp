@@ -20,20 +20,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mprismediaplayer2.h"
 
 // Qt
-#include <QGuiApplication>
 #include <QAction>
+#include <QGuiApplication>
 
 namespace Gwenview
 {
-
-MprisMediaPlayer2::MprisMediaPlayer2(const QString &objectDBusPath,
-                                     QAction* fullScreenAction,
-                                     QObject* parent)
+MprisMediaPlayer2::MprisMediaPlayer2(const QString &objectDBusPath, QAction *fullScreenAction, QObject *parent)
     : DBusAbstractAdaptor(objectDBusPath, parent)
     , mFullScreenAction(fullScreenAction)
 {
-    connect(mFullScreenAction, &QAction::toggled,
-            this, &MprisMediaPlayer2::onFullScreenActionToggled);
+    connect(mFullScreenAction, &QAction::toggled, this, &MprisMediaPlayer2::onFullScreenActionToggled);
 }
 
 MprisMediaPlayer2::~MprisMediaPlayer2()

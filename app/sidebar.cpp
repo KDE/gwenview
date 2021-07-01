@@ -21,14 +21,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Qt
 #include <QAction>
+#include <QFontDatabase>
+#include <QIcon>
 #include <QLabel>
 #include <QPainter>
 #include <QStyle>
+#include <QStyleOptionTab>
 #include <QToolButton>
 #include <QVBoxLayout>
-#include <QIcon>
-#include <QFontDatabase>
-#include <QStyleOptionTab>
 
 // KF
 #include <KIconLoader>
@@ -39,7 +39,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 namespace Gwenview
 {
-
 /**
  * A button which always leave room for an icon, even if there is none, so that
  * all button texts are correctly aligned.
@@ -47,7 +46,7 @@ namespace Gwenview
 class SideBarButton : public QToolButton
 {
 protected:
-    void paintEvent(QPaintEvent* event) override
+    void paintEvent(QPaintEvent *event) override
     {
         forceIcon();
         QToolButton::paintEvent(event);
@@ -55,7 +54,7 @@ protected:
 
     QSize sizeHint() const override
     {
-        const_cast<SideBarButton*>(this)->forceIcon();
+        const_cast<SideBarButton *>(this)->forceIcon();
         return QToolButton::sizeHint();
     }
 
@@ -81,15 +80,14 @@ private:
 };
 
 //- SideBarGroup ---------------------------------------------------------------
-struct SideBarGroupPrivate
-{
-    QFrame* mContainer;
-    QLabel* mTitleLabel;
+struct SideBarGroupPrivate {
+    QFrame *mContainer;
+    QLabel *mTitleLabel;
 };
 
-SideBarGroup::SideBarGroup(const QString& title)
-: QFrame()
-, d(new SideBarGroupPrivate)
+SideBarGroup::SideBarGroup(const QString &title)
+    : QFrame()
+    , d(new SideBarGroupPrivate)
 {
     d->mContainer = nullptr;
     d->mTitleLabel = new QLabel(this);
@@ -100,7 +98,7 @@ SideBarGroup::SideBarGroup(const QString& title)
     d->mTitleLabel->setText(title);
     d->mTitleLabel->setVisible(!d->mTitleLabel->text().isEmpty());
 
-    auto* layout = new QVBoxLayout(this);
+    auto *layout = new QVBoxLayout(this);
     layout->addWidget(d->mTitleLabel);
     layout->setContentsMargins(0, 0, 0, 0);
     clear();
@@ -111,8 +109,7 @@ SideBarGroup::~SideBarGroup()
     delete d;
 }
 
-
-void SideBarGroup::addWidget(QWidget* widget)
+void SideBarGroup::addWidget(QWidget *widget)
 {
     widget->setParent(d->mContainer);
     d->mContainer->layout()->addWidget(widget);
@@ -125,17 +122,17 @@ void SideBarGroup::clear()
     }
 
     d->mContainer = new QFrame(this);
-    auto* containerLayout = new QVBoxLayout(d->mContainer);
+    auto *containerLayout = new QVBoxLayout(d->mContainer);
     containerLayout->setContentsMargins(0, 0, 0, 0);
     containerLayout->setSpacing(0);
 
     layout()->addWidget(d->mContainer);
 }
 
-void SideBarGroup::addAction(QAction* action)
+void SideBarGroup::addAction(QAction *action)
 {
     int size = KIconLoader::global()->currentSize(KIconLoader::Small);
-    QToolButton* button = new SideBarButton();
+    QToolButton *button = new SideBarButton();
     button->setFocusPolicy(Qt::NoFocus);
     button->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
     button->setAutoRaise(true);
@@ -149,16 +146,15 @@ void SideBarGroup::addAction(QAction* action)
 }
 
 //- SideBarPage ----------------------------------------------------------------
-struct SideBarPagePrivate
-{
+struct SideBarPagePrivate {
     QIcon mIcon;
     QString mTitle;
-    QVBoxLayout* mLayout;
+    QVBoxLayout *mLayout;
 };
 
-SideBarPage::SideBarPage(const QIcon& icon, const QString& title)
-: QWidget()
-, d(new SideBarPagePrivate)
+SideBarPage::SideBarPage(const QIcon &icon, const QString &title)
+    : QWidget()
+    , d(new SideBarPagePrivate)
 {
     d->mIcon = icon;
     d->mTitle = title;
@@ -173,17 +169,17 @@ SideBarPage::~SideBarPage()
     delete d;
 }
 
-const QIcon & SideBarPage::icon() const
+const QIcon &SideBarPage::icon() const
 {
     return d->mIcon;
 }
 
-const QString& SideBarPage::title() const
+const QString &SideBarPage::title() const
 {
     return d->mTitle;
 }
 
-void SideBarPage::addWidget(QWidget* widget)
+void SideBarPage::addWidget(QWidget *widget)
 {
     d->mLayout->addWidget(widget);
 }
@@ -194,14 +190,13 @@ void SideBarPage::addStretch()
 }
 
 //- SideBarTabBar --------------------------------------------------------------
-struct SideBarTabBarPrivate
-{
+struct SideBarTabBarPrivate {
     SideBarTabBar::TabButtonStyle tabButtonStyle = SideBarTabBar::TabButtonTextBesideIcon;
 };
 
-SideBarTabBar::SideBarTabBar(QWidget* parent)
-: QTabBar(parent)
-, d(new SideBarTabBarPrivate)
+SideBarTabBar::SideBarTabBar(QWidget *parent)
+    : QTabBar(parent)
+    , d(new SideBarTabBarPrivate)
 {
     setIconSize(QSize(KIconLoader::SizeSmallMedium, KIconLoader::SizeSmallMedium));
 }
@@ -235,9 +230,7 @@ QSize SideBarTabBar::minimumSizeHint() const
     return sizeHint(TabButtonIconOnly);
 }
 
-QSize SideBarTabBar::tabContentSize(const int index,
-                                    const TabButtonStyle tabButtonStyle,
-                                    const QStyleOptionTab &opt) const
+QSize SideBarTabBar::tabContentSize(const int index, const TabButtonStyle tabButtonStyle, const QStyleOptionTab &opt) const
 {
     if (index < 0 || index > count() - 1) {
         return QSize();
@@ -246,17 +239,14 @@ QSize SideBarTabBar::tabContentSize(const int index,
     const int textWidth = opt.fontMetrics.size(Qt::TextShowMnemonic, tabText(index)).width();
 
     if (tabButtonStyle == TabButtonIconOnly) {
-        return QSize(opt.iconSize.width(),
-                qMax(opt.iconSize.height(), opt.fontMetrics.height()));
+        return QSize(opt.iconSize.width(), qMax(opt.iconSize.height(), opt.fontMetrics.height()));
     }
     if (tabButtonStyle == TabButtonTextOnly) {
-        return QSize(textWidth,
-                qMax(opt.iconSize.height(), opt.fontMetrics.height()));
+        return QSize(textWidth, qMax(opt.iconSize.height(), opt.fontMetrics.height()));
     }
     // 4 is the hardcoded spacing between icons and text used in Qt Widgets
     const int spacing = !opt.icon.isNull() ? 4 : 0;
-    return QSize(opt.iconSize.width() + spacing + textWidth,
-            qMax(opt.iconSize.height(), opt.fontMetrics.height()));
+    return QSize(opt.iconSize.width() + spacing + textWidth, qMax(opt.iconSize.height(), opt.fontMetrics.height()));
 }
 
 QSize SideBarTabBar::tabSizeHint(const int index, const TabButtonStyle tabButtonStyle) const
@@ -274,10 +264,8 @@ QSize SideBarTabBar::tabSizeHint(const int index, const TabButtonStyle tabButton
     }
     const QSize contentSize = tabContentSize(index, tabButtonStyle, opt);
     const int buttonMargin = style()->pixelMetric(QStyle::PM_ButtonMargin);
-    const int toolBarMargin = style()->pixelMetric(QStyle::PM_ToolBarFrameWidth)
-                            + style()->pixelMetric(QStyle::PM_ToolBarItemMargin);
-    return QSize(contentSize.width() + buttonMargin * 2 + toolBarMargin * 2,
-                contentSize.height() + buttonMargin * 2 + toolBarMargin * 2);
+    const int toolBarMargin = style()->pixelMetric(QStyle::PM_ToolBarFrameWidth) + style()->pixelMetric(QStyle::PM_ToolBarItemMargin);
+    return QSize(contentSize.width() + buttonMargin * 2 + toolBarMargin * 2, contentSize.height() + buttonMargin * 2 + toolBarMargin * 2);
 }
 
 QSize SideBarTabBar::tabSizeHint(const int index) const
@@ -289,7 +277,6 @@ QSize SideBarTabBar::minimumTabSizeHint(int index) const
 {
     return tabSizeHint(index, TabButtonIconOnly);
 }
-
 
 void SideBarTabBar::tabLayoutChange()
 {
@@ -303,7 +290,7 @@ void SideBarTabBar::tabLayoutChange()
     }
 }
 
-void SideBarTabBar::paintEvent(QPaintEvent* event)
+void SideBarTabBar::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event)
     QStylePainter painter(this);
@@ -356,25 +343,22 @@ void SideBarTabBar::drawTab(int index, QStylePainter &painter) const
 
     if (hasText) {
         // The available space to draw the text depends on wether we already drew an icon into our contentRect.
-        const QSize availableSizeForText = !hasIcon ? contentSize
-                : QSize(contentSize.width() - opt.iconSize.width() - 4, contentSize.height());
-                // The '4' above is the hardcoded spacing between icons and text used in Qt Widgets.
-        const QRect availableRectForText = !hasIcon ? contentRect
-                : QStyle::alignedRect(this->layoutDirection(), Qt::AlignRight, availableSizeForText, contentRect);
+        const QSize availableSizeForText = !hasIcon ? contentSize : QSize(contentSize.width() - opt.iconSize.width() - 4, contentSize.height());
+        // The '4' above is the hardcoded spacing between icons and text used in Qt Widgets.
+        const QRect availableRectForText =
+            !hasIcon ? contentRect : QStyle::alignedRect(this->layoutDirection(), Qt::AlignRight, availableSizeForText, contentRect);
 
         painter.drawItemText(availableRectForText, flags, opt.palette, opt.state & QStyle::State_Enabled, opt.text, QPalette::WindowText);
     }
 }
 
-
 //- SideBar --------------------------------------------------------------------
-struct SideBarPrivate
-{
+struct SideBarPrivate {
 };
 
-SideBar::SideBar(QWidget* parent)
-: QTabWidget(parent)
-, d(new SideBarPrivate)
+SideBar::SideBar(QWidget *parent)
+    : QTabWidget(parent)
+    , d(new SideBarPrivate)
 {
     setTabBar(new SideBarTabBar(this));
     setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
@@ -399,7 +383,7 @@ QSize SideBar::sizeHint() const
     return QSize(200, 200);
 }
 
-void SideBar::addPage(SideBarPage* page)
+void SideBar::addPage(SideBarPage *page)
 {
     // Prevent emitting currentChanged() while populating pages
     SignalBlocker blocker(tabBar());
@@ -413,7 +397,7 @@ QString SideBar::currentPage() const
     return currentWidget()->objectName();
 }
 
-void SideBar::setCurrentPage(const QString& name)
+void SideBar::setCurrentPage(const QString &name)
 {
     for (int index = 0; index < count(); ++index) {
         if (widget(index)->objectName() == name) {

@@ -20,13 +20,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "dbusabstractadaptor.h"
 
 // Qt
-#include <QMetaClassInfo>
-#include <QDBusMessage>
 #include <QDBusConnection>
+#include <QDBusMessage>
+#include <QMetaClassInfo>
 
 namespace Gwenview
 {
-
 DBusAbstractAdaptor::DBusAbstractAdaptor(const QString &objectDBusPath, QObject *parent)
     : QDBusAbstractAdaptor(parent)
     , mObjectPath(objectDBusPath)
@@ -46,25 +45,20 @@ void DBusAbstractAdaptor::signalPropertyChange(const QString &propertyName, cons
     }
 }
 
-
 void DBusAbstractAdaptor::emitPropertiesChangeDBusSignal()
 {
     if (mChangedProperties.isEmpty()) {
         return;
     }
 
-    const QMetaObject* metaObject = this->metaObject();
+    const QMetaObject *metaObject = this->metaObject();
     const int dBusInterfaceNameIndex = metaObject->indexOfClassInfo("D-Bus Interface");
     Q_ASSERT(dBusInterfaceNameIndex >= 0);
-    const char* dBusInterfaceName = metaObject->classInfo(dBusInterfaceNameIndex).value();
+    const char *dBusInterfaceName = metaObject->classInfo(dBusInterfaceNameIndex).value();
 
-    QDBusMessage signalMessage = QDBusMessage::createSignal(mObjectPath,
-        QStringLiteral("org.freedesktop.DBus.Properties"),
-        QStringLiteral("PropertiesChanged"));
-    signalMessage
-        << dBusInterfaceName
-        << mChangedProperties
-        << QStringList();
+    QDBusMessage signalMessage =
+        QDBusMessage::createSignal(mObjectPath, QStringLiteral("org.freedesktop.DBus.Properties"), QStringLiteral("PropertiesChanged"));
+    signalMessage << dBusInterfaceName << mChangedProperties << QStringList();
 
     QDBusConnection::sessionBus().send(signalMessage);
 

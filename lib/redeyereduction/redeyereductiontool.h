@@ -32,7 +32,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 namespace Gwenview
 {
-
 class AbstractImageOperation;
 class RasterImageView;
 
@@ -46,32 +45,32 @@ public:
         Adjusting,
     };
 
-    explicit RedEyeReductionTool(RasterImageView* parent);
+    explicit RedEyeReductionTool(RasterImageView *parent);
     ~RedEyeReductionTool() override;
 
-    void paint(QPainter*) override;
+    void paint(QPainter *) override;
 
-    void mousePressEvent(QGraphicsSceneMouseEvent*) override;
-    void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
-    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) override;
-    void keyPressEvent(QKeyEvent*) override;
+    void mousePressEvent(QGraphicsSceneMouseEvent *) override;
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *) override;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *) override;
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
+    void keyPressEvent(QKeyEvent *) override;
 
     void toolActivated() override;
 
     void slotApplyClicked();
 
-    QWidget* widget() const override;
+    QWidget *widget() const override;
 
 Q_SIGNALS:
     void done();
-    void imageOperationRequested(AbstractImageOperation*);
+    void imageOperationRequested(AbstractImageOperation *);
 
 private Q_SLOTS:
     void setDiameter(int);
 
 private:
-    RedEyeReductionToolPrivate* const d;
+    RedEyeReductionToolPrivate *const d;
 };
 
 } // namespace

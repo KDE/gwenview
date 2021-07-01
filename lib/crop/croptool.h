@@ -34,7 +34,6 @@ class QRect;
 
 namespace Gwenview
 {
-
 class AbstractImageOperation;
 
 struct CropToolPrivate;
@@ -42,39 +41,39 @@ class GWENVIEWLIB_EXPORT CropTool : public AbstractRasterImageViewTool
 {
     Q_OBJECT
 public:
-    CropTool(RasterImageView* parent);
+    CropTool(RasterImageView *parent);
     ~CropTool() override;
 
     void setCropRatio(double ratio);
 
-    void setRect(const QRect&);
+    void setRect(const QRect &);
     QRect rect() const;
 
-    void paint(QPainter*) override;
+    void paint(QPainter *) override;
 
-    void mousePressEvent(QGraphicsSceneMouseEvent*) override;
-    void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
-    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) override;
-    void hoverMoveEvent(QGraphicsSceneHoverEvent*) override;
-    void keyPressEvent(QKeyEvent*) override;
+    void mousePressEvent(QGraphicsSceneMouseEvent *) override;
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *) override;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *) override;
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
+    void hoverMoveEvent(QGraphicsSceneHoverEvent *) override;
+    void keyPressEvent(QKeyEvent *) override;
 
     void toolActivated() override;
     void toolDeactivated() override;
 
-    QWidget* widget() const override;
+    QWidget *widget() const override;
 
 Q_SIGNALS:
-    void rectUpdated(const QRect&);
+    void rectUpdated(const QRect &);
     void rectReset();
     void done();
-    void imageOperationRequested(AbstractImageOperation*);
+    void imageOperationRequested(AbstractImageOperation *);
 
 private Q_SLOTS:
     void slotCropRequested();
 
 private:
-    CropToolPrivate* const d;
+    CropToolPrivate *const d;
 };
 
 } // namespace

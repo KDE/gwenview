@@ -20,12 +20,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "thumbnailprovidertest.h"
 
 // Qt
+#include <QDebug>
 #include <QDir>
 #include <QFile>
 #include <QImage>
 #include <QPainter>
 #include <QTest>
-#include <QDebug>
 
 // KF
 #include <KIO/CopyJob>
@@ -33,8 +33,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Local
 #include "../lib/thumbnailprovider/thumbnailprovider.h"
-#include "testutils.h"
 #include "gwenviewconfig.h"
+#include "testutils.h"
 
 // libc
 #include <cerrno>
@@ -45,12 +45,13 @@ using namespace Gwenview;
 QTEST_MAIN(ThumbnailProviderTest)
 
 SandBox::SandBox()
-: mPath(QDir::currentPath() + "/sandbox")
-{}
+    : mPath(QDir::currentPath() + "/sandbox")
+{
+}
 
 void SandBox::initDir()
 {
-    KIO::Job* job;
+    KIO::Job *job;
     QDir dir(mPath);
     if (dir.exists()) {
         QUrl sandBoxUrl("file://" + mPath);
@@ -71,16 +72,16 @@ void SandBox::fill()
     copyTestImage("orient6-small.jpg", 32, 64);
 }
 
-void SandBox::copyTestImage(const QString& testFileName, int width, int height)
+void SandBox::copyTestImage(const QString &testFileName, int width, int height)
 {
     QUrl testPath = urlForTestFile(testFileName);
     QUrl testDest = QUrl("file://" + mPath + '/' + testFileName);
-    KIO::Job* job = KIO::copy(testPath, testDest);
+    KIO::Job *job = KIO::copy(testPath, testDest);
     QVERIFY2(job->exec(), "Couldn't copy test image");
     mSizeHash.insert(testFileName, QSize(width, height));
 }
 
-static QImage createColoredImage(int width, int height, const QColor& color)
+static QImage createColoredImage(int width, int height, const QColor &color)
 {
     QImage image(width, height, QImage::Format_RGB32);
     QPainter painter(&image);
@@ -88,7 +89,7 @@ static QImage createColoredImage(int width, int height, const QColor& color)
     return image;
 }
 
-void SandBox::createTestImage(const QString& name, int width, int height, const QColor& color)
+void SandBox::createTestImage(const QString &name, int width, int height, const QColor &color)
 {
     QImage image = createColoredImage(width, height, color);
     image.save(mPath + '/' + name, "png");
@@ -120,7 +121,7 @@ void ThumbnailProviderTest::testLoadLocal()
     // Create a list of items which will be thumbnailed
     KFileItemList list;
     const auto entryInfoList = dir.entryInfoList(QDir::Files);
-    for (const QFileInfo & info : entryInfoList) {
+    for (const QFileInfo &info : entryInfoList) {
         QUrl url("file://" + info.absoluteFilePath());
         KFileItem item(url);
         list << item;
@@ -130,7 +131,7 @@ void ThumbnailProviderTest::testLoadLocal()
     ThumbnailProvider provider;
     provider.setThumbnailGroup(ThumbnailGroup::Normal);
     provider.appendItems(list);
-    QSignalSpy spy(&provider, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize,qulonglong)));
+    QSignalSpy spy(&provider, SIGNAL(thumbnailLoaded(KFileItem, QPixmap, QSize, qulonglong)));
     syncRun(&provider);
     while (!ThumbnailProvider::isThumbnailWriterEmpty()) {
         QTest::qWait(100);
@@ -144,8 +145,8 @@ void ThumbnailProviderTest::testLoadLocal()
     QCOMPARE(entryList.count(), mSandBox.mSizeHash.size() - 1);
 
     // Check thumbnail keys
-    QHash<KFileItem, QHash<QString, QString> > thumbnailHash;
-    for (const QString& name : entryList) {
+    QHash<KFileItem, QHash<QString, QString>> thumbnailHash;
+    for (const QString &name : entryList) {
         QImage thumb;
         QVERIFY(thumb.load(thumbnailDir.filePath(name)));
 
@@ -176,8 +177,7 @@ void ThumbnailProviderTest::testLoadLocal()
 
     // Check what was in the thumbnailLoaded() signals
     QCOMPARE(spy.count(), mSandBox.mSizeHash.size());
-    QSignalSpy::ConstIterator it = spy.constBegin(),
-                              end = spy.constEnd();
+    QSignalSpy::ConstIterator it = spy.constBegin(), end = spy.constEnd();
     for (; it != end; ++it) {
         const QVariantList args = *it;
         const KFileItem item = qvariant_cast<KFileItem>(args.at(0));
@@ -205,7 +205,7 @@ void ThumbnailProviderTest::testUseEmbeddedOrNot()
         ThumbnailProvider provider;
         provider.setThumbnailGroup(ThumbnailGroup::Normal);
         provider.appendItems(list);
-        QSignalSpy spy(&provider, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize,qulonglong)));
+        QSignalSpy spy(&provider, SIGNAL(thumbnailLoaded(KFileItem, QPixmap, QSize, qulonglong)));
         syncRun(&provider);
 
         QCOMPARE(spy.count(), 1);
@@ -220,7 +220,7 @@ void ThumbnailProviderTest::testUseEmbeddedOrNot()
         ThumbnailProvider provider;
         provider.setThumbnailGroup(ThumbnailGroup::Large);
         provider.appendItems(list);
-        QSignalSpy spy(&provider, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize,qulonglong)));
+        QSignalSpy spy(&provider, SIGNAL(thumbnailLoaded(KFileItem, QPixmap, QSize, qulonglong)));
         syncRun(&provider);
 
         QCOMPARE(spy.count(), 1);
@@ -267,7 +267,7 @@ void ThumbnailProviderTest::testRemoveItemsWhileGenerating()
     // Create a list of items which will be thumbnailed
     KFileItemList list;
     const auto entryInfoList = dir.entryInfoList(QDir::Files);
-    for (const QFileInfo & info : entryInfoList) {
+    for (const QFileInfo &info : entryInfoList) {
         QUrl url("file://" + info.absoluteFilePath());
         KFileItem item(url);
         list << item;

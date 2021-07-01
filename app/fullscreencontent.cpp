@@ -28,32 +28,31 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QEvent>
 #include <QLabel>
 #include <QMenu>
+#include <QTimer>
 #include <QToolButton>
 #include <QWidgetAction>
-#include <QTimer>
 
 // KF
 #include <KActionCollection>
 #include <KActionMenu>
-#include <KLocalizedString>
 #include <KIconLoader>
+#include <KLocalizedString>
 
 // Local
 #include "gwenview_app_debug.h"
+#include <gvcore.h>
 #include <lib/document/documentfactory.h>
 #include <lib/eventwatcher.h>
 #include <lib/fullscreenbar.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/imagemetainfomodel.h>
-#include <lib/thumbnailview/thumbnailbarview.h>
 #include <lib/shadowfilter.h>
 #include <lib/slideshow.h>
-#include <gvcore.h>
 #include <lib/stylesheetutils.h>
+#include <lib/thumbnailview/thumbnailbarview.h>
 
 namespace Gwenview
 {
-
 /**
  * A widget which behaves more or less like a QToolBar, but which uses real
  * widgets for the toolbar items. We need a real widget to be able to position
@@ -62,18 +61,18 @@ namespace Gwenview
 class FullScreenToolBar : public QWidget
 {
 public:
-    explicit FullScreenToolBar(QWidget* parent = nullptr)
-    : QWidget(parent)
-    , mLayout(new QHBoxLayout(this))
+    explicit FullScreenToolBar(QWidget *parent = nullptr)
+        : QWidget(parent)
+        , mLayout(new QHBoxLayout(this))
     {
         setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         mLayout->setSpacing(0);
         mLayout->setContentsMargins(0, 0, 0, 0);
     }
 
-    void addAction(QAction* action, Qt::ToolButtonStyle style = Qt::ToolButtonIconOnly)
+    void addAction(QAction *action, Qt::ToolButtonStyle style = Qt::ToolButtonIconOnly)
     {
-        auto* button = new QToolButton;
+        auto *button = new QToolButton;
         button->setDefaultAction(action);
         button->setToolButtonStyle(style);
         button->setAutoRaise(true);
@@ -98,28 +97,26 @@ public:
     }
 
 private:
-    QBoxLayout* mLayout;
+    QBoxLayout *mLayout;
 };
 
-
-FullScreenContent::FullScreenContent(QObject* parent, GvCore* gvCore)
-: QObject(parent)
+FullScreenContent::FullScreenContent(QObject *parent, GvCore *gvCore)
+    : QObject(parent)
 {
     mGvCore = gvCore;
     mViewPageVisible = false;
 }
 
-void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoHideParentWidget, SlideShow* slideShow)
+void FullScreenContent::init(KActionCollection *actionCollection, QWidget *autoHideParentWidget, SlideShow *slideShow)
 {
     mSlideShow = slideShow;
     mActionCollection = actionCollection;
-    connect(actionCollection->action(QStringLiteral("view")), &QAction::toggled,
-        this, &FullScreenContent::slotViewModeActionToggled);
+    connect(actionCollection->action(QStringLiteral("view")), &QAction::toggled, this, &FullScreenContent::slotViewModeActionToggled);
 
     // mAutoHideContainer
     mAutoHideContainer = new FullScreenBar(autoHideParentWidget);
     mAutoHideContainer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    auto* layout = new QVBoxLayout(mAutoHideContainer);
+    auto *layout = new QVBoxLayout(mAutoHideContainer);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
 
@@ -137,7 +134,7 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
     // mToolBar
     mToolBar = new FullScreenToolBar(mContent);
 
-    #define addAction(name) mToolBar->addAction(actionCollection->action(name))
+#define addAction(name) mToolBar->addAction(actionCollection->action(name))
     addAction("toggle_sidebar");
     mToolBar->addSeparator();
     addAction("browse");
@@ -149,7 +146,7 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
     mToolBar->addSeparator();
     addAction("rotate_left");
     addAction("rotate_right");
-    #undef addAction
+#undef addAction
     mToolBarShadow = new ShadowFilter(mToolBar);
 
     // mInformationLabel
@@ -167,7 +164,7 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
     mInformationContainer->setAutoFillBackground(true);
     mInformationContainer->setBackgroundRole(QPalette::Mid);
     mInformationContainerShadow = new ShadowFilter(mInformationContainer);
-    auto* hLayout = new QHBoxLayout(mInformationContainer);
+    auto *hLayout = new QHBoxLayout(mInformationContainer);
     hLayout->setContentsMargins(0, 0, 0, 0);
     hLayout->addWidget(mInformationLabel);
     hLayout->addWidget(mDocumentCountLabel);
@@ -175,23 +172,17 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
     // Thumbnail bar
     mThumbnailBar = new ThumbnailBarView(mContent);
     mThumbnailBar->setThumbnailScaleMode(ThumbnailView::ScaleToSquare);
-    auto* delegate = new ThumbnailBarItemDelegate(mThumbnailBar);
+    auto *delegate = new ThumbnailBarItemDelegate(mThumbnailBar);
     mThumbnailBar->setItemDelegate(delegate);
     mThumbnailBar->setSelectionMode(QAbstractItemView::ExtendedSelection);
     // Calculate minimum bar height to give mInformationLabel exactly two lines height
     const int lineHeight = mInformationLabel->fontMetrics().lineSpacing();
-    mMinimumThumbnailBarHeight = mToolBar->sizeHint().height()
-                               + lineHeight * 2
-                               + infoContainerTopMargin + infoContainerBottomMargin;
+    mMinimumThumbnailBarHeight = mToolBar->sizeHint().height() + lineHeight * 2 + infoContainerTopMargin + infoContainerBottomMargin;
 
     // Ensure document count is updated when items added/removed from folder
-    connect(mThumbnailBar, &ThumbnailBarView::rowsInsertedSignal,
-            this, &FullScreenContent::updateDocumentCountLabel);
-    connect(mThumbnailBar, &ThumbnailBarView::rowsRemovedSignal,
-            this, &FullScreenContent::updateDocumentCountLabel);
-    connect(mThumbnailBar, &ThumbnailBarView::indexActivated,
-            this, &FullScreenContent::updateDocumentCountLabel);
-
+    connect(mThumbnailBar, &ThumbnailBarView::rowsInsertedSignal, this, &FullScreenContent::updateDocumentCountLabel);
+    connect(mThumbnailBar, &ThumbnailBarView::rowsRemovedSignal, this, &FullScreenContent::updateDocumentCountLabel);
+    connect(mThumbnailBar, &ThumbnailBarView::indexActivated, this, &FullScreenContent::updateDocumentCountLabel);
 
     // Right bar
     mRightToolBar = new FullScreenToolBar(mContent);
@@ -206,7 +197,7 @@ void FullScreenContent::init(KActionCollection* actionCollection, QWidget* autoH
     updateContainerAppearance();
 }
 
-ThumbnailBarView* FullScreenContent::thumbnailBar() const
+ThumbnailBarView *FullScreenContent::thumbnailBar() const
 {
     return mThumbnailBar;
 }
@@ -217,8 +208,7 @@ void FullScreenContent::setCurrentUrl(const QUrl &url)
         mCurrentDocument = Document::Ptr();
     } else {
         mCurrentDocument = DocumentFactory::instance()->load(url);
-        connect(mCurrentDocument.data(), &Document::metaInfoUpdated,
-                this, &FullScreenContent::updateCurrentUrlWidgets);
+        connect(mCurrentDocument.data(), &Document::metaInfoUpdated, this, &FullScreenContent::updateCurrentUrlWidgets);
     }
     updateCurrentUrlWidgets();
 
@@ -236,11 +226,11 @@ void FullScreenContent::updateInformationLabel()
         return;
     }
 
-    ImageMetaInfoModel* model = mCurrentDocument->metaInfo();
+    ImageMetaInfoModel *model = mCurrentDocument->metaInfo();
 
     QStringList valueList;
     const QStringList fullScreenPreferredMetaInfoKeyList = GwenviewConfig::fullScreenPreferredMetaInfoKeyList();
-    for (const QString & key : fullScreenPreferredMetaInfoKeyList) {
+    for (const QString &key : fullScreenPreferredMetaInfoKeyList) {
         const QString value = model->getValueForKey(key);
         if (!value.isEmpty()) {
             valueList << value;
@@ -265,10 +255,11 @@ void FullScreenContent::showImageMetaInfoDialog()
         // it's already quite complicated to create a theme
         mImageMetaInfoDialog->setStyle(QApplication::style());
         mImageMetaInfoDialog->setAttribute(Qt::WA_DeleteOnClose, true);
-        connect(mImageMetaInfoDialog.data(), &ImageMetaInfoDialog::preferredMetaInfoKeyListChanged,
-                this, &FullScreenContent::slotPreferredMetaInfoKeyListChanged);
-        connect(mImageMetaInfoDialog.data(), &QObject::destroyed,
-                this, &FullScreenContent::slotImageMetaInfoDialogClosed);
+        connect(mImageMetaInfoDialog.data(),
+                &ImageMetaInfoDialog::preferredMetaInfoKeyListChanged,
+                this,
+                &FullScreenContent::slotPreferredMetaInfoKeyListChanged);
+        connect(mImageMetaInfoDialog.data(), &QObject::destroyed, this, &FullScreenContent::slotImageMetaInfoDialogClosed);
     }
     if (mCurrentDocument) {
         mImageMetaInfoDialog->setMetaInfo(mCurrentDocument->metaInfo(), GwenviewConfig::fullScreenPreferredMetaInfoKeyList());
@@ -277,7 +268,7 @@ void FullScreenContent::showImageMetaInfoDialog()
     mImageMetaInfoDialog->show();
 }
 
-void FullScreenContent::slotPreferredMetaInfoKeyListChanged(const QStringList& list)
+void FullScreenContent::slotPreferredMetaInfoKeyListChanged(const QStringList &list)
 {
     GwenviewConfig::setFullScreenPreferredMetaInfoKeyList(list);
     GwenviewConfig::self()->save();
@@ -289,7 +280,7 @@ void FullScreenContent::updateMetaInfoDialog()
     if (!mImageMetaInfoDialog) {
         return;
     }
-    ImageMetaInfoModel* model = mCurrentDocument ? mCurrentDocument->metaInfo() : nullptr;
+    ImageMetaInfoModel *model = mCurrentDocument ? mCurrentDocument->metaInfo() : nullptr;
     mImageMetaInfoDialog->setMetaInfo(model, GwenviewConfig::fullScreenPreferredMetaInfoKeyList());
 }
 
@@ -305,10 +296,10 @@ void FullScreenContent::updateLayout()
     if (GwenviewConfig::showFullScreenThumbnails()) {
         mRightToolBar->setDirection(QBoxLayout::TopToBottom);
 
-        auto* layout = new QHBoxLayout(mContent);
+        auto *layout = new QHBoxLayout(mContent);
         layout->setContentsMargins(0, 0, 0, 0);
         layout->setSpacing(0);
-        QVBoxLayout* vLayout;
+        QVBoxLayout *vLayout;
 
         // First column
         vLayout = new QVBoxLayout;
@@ -349,7 +340,7 @@ void FullScreenContent::updateLayout()
     } else {
         mRightToolBar->setDirection(QBoxLayout::RightToLeft);
 
-        auto* layout = new QHBoxLayout(mContent);
+        auto *layout = new QHBoxLayout(mContent);
         layout->setContentsMargins(0, 0, 0, 0);
         layout->setSpacing(0);
         layout->addWidget(mToolBar);
@@ -373,7 +364,6 @@ void FullScreenContent::updateLayout()
         mRightToolBarShadow->setShadow(ShadowFilter::LeftEdge, QColor(255, 255, 255, 8));
     }
 }
-
 
 void FullScreenContent::updateContainerAppearance()
 {
@@ -412,7 +402,6 @@ void FullScreenContent::createOptionsAction()
     QObject::connect(mOptionsAction, &QAction::triggered, this, &FullScreenContent::showOptionsMenu);
 }
 
-
 void FullScreenContent::updateSlideShowIntervalLabel()
 {
     Q_ASSERT(mConfigWidget);
@@ -433,29 +422,25 @@ void FullScreenContent::showOptionsMenu()
     Q_ASSERT(!mConfigWidget);
 
     mConfigWidget = new FullScreenConfigWidget;
-    FullScreenConfigWidget* widget = mConfigWidget;
+    FullScreenConfigWidget *widget = mConfigWidget;
 
     // Put widget in a menu
     QMenu menu;
-    auto* action = new QWidgetAction(&menu);
+    auto *action = new QWidgetAction(&menu);
     action->setDefaultWidget(widget);
     menu.addAction(action);
 
     // Slideshow checkboxes
     widget->mSlideShowLoopCheckBox->setChecked(mSlideShow->loopAction()->isChecked());
-    connect(widget->mSlideShowLoopCheckBox, &QAbstractButton::toggled,
-            mSlideShow->loopAction(), &QAction::trigger);
+    connect(widget->mSlideShowLoopCheckBox, &QAbstractButton::toggled, mSlideShow->loopAction(), &QAction::trigger);
 
     widget->mSlideShowRandomCheckBox->setChecked(mSlideShow->randomAction()->isChecked());
-    connect(widget->mSlideShowRandomCheckBox, &QAbstractButton::toggled,
-            mSlideShow->randomAction(), &QAction::trigger);
+    connect(widget->mSlideShowRandomCheckBox, &QAbstractButton::toggled, mSlideShow->randomAction(), &QAction::trigger);
 
     // Interval slider
     widget->mSlideShowIntervalSlider->setValue(int(GwenviewConfig::interval()));
-    connect(widget->mSlideShowIntervalSlider, &QAbstractSlider::valueChanged,
-            mSlideShow, &SlideShow::setInterval);
-    connect(widget->mSlideShowIntervalSlider, &QAbstractSlider::valueChanged,
-            this, &FullScreenContent::updateSlideShowIntervalLabel);
+    connect(widget->mSlideShowIntervalSlider, &QAbstractSlider::valueChanged, mSlideShow, &SlideShow::setInterval);
+    connect(widget->mSlideShowIntervalSlider, &QAbstractSlider::valueChanged, this, &FullScreenContent::updateSlideShowIntervalLabel);
 
     // Interval label
     QString text = formatSlideShowIntervalText(88);
@@ -464,8 +449,7 @@ void FullScreenContent::showOptionsMenu()
     updateSlideShowIntervalLabel();
 
     // Image information
-    connect(widget->mConfigureDisplayedInformationButton, &QAbstractButton::clicked,
-            this, &FullScreenContent::showImageMetaInfoDialog);
+    connect(widget->mConfigureDisplayedInformationButton, &QAbstractButton::clicked, this, &FullScreenContent::showImageMetaInfoDialog);
 
     // Thumbnails
     widget->mThumbnailGroupBox->setVisible(mViewPageVisible);
@@ -473,15 +457,13 @@ void FullScreenContent::showOptionsMenu()
         widget->mShowThumbnailsCheckBox->setChecked(GwenviewConfig::showFullScreenThumbnails());
         widget->mHeightSlider->setMinimum(mMinimumThumbnailBarHeight);
         widget->mHeightSlider->setValue(mThumbnailBar->height());
-        connect(widget->mShowThumbnailsCheckBox, &QAbstractButton::toggled,
-                this, &FullScreenContent::slotShowThumbnailsToggled);
-        connect(widget->mHeightSlider, &QAbstractSlider::valueChanged,
-                this, &FullScreenContent::setFullScreenBarHeight);
+        connect(widget->mShowThumbnailsCheckBox, &QAbstractButton::toggled, this, &FullScreenContent::slotShowThumbnailsToggled);
+        connect(widget->mHeightSlider, &QAbstractSlider::valueChanged, this, &FullScreenContent::setFullScreenBarHeight);
     }
 
     // Show menu below its button
     QPoint pos;
-    QWidget* button = mOptionsAction->associatedWidgets().constFirst();
+    QWidget *button = mOptionsAction->associatedWidgets().constFirst();
     Q_ASSERT(button);
     qCWarning(GWENVIEW_APP_LOG) << button << button->geometry();
     if (QApplication::isRightToLeft()) {
@@ -534,31 +516,31 @@ void FullScreenContent::setupThumbnailBarStyleSheet()
     QColor bgColor = fsPal.color(QPalette::Normal, QPalette::Base);
     QColor bgSelColor = pal.color(QPalette::Normal, QPalette::Highlight);
     QColor bgHovColor = pal.color(QPalette::Normal, QPalette::Highlight);
-    
+
     // Darken the select color a little to suit dark theme of fullscreen mode
     bgSelColor.setHsv(bgSelColor.hue(), bgSelColor.saturation(), (bgSelColor.value() * 0.8));
-    
+
     // Calculate hover color based on background color in case it changes (matches ViewMainPage thumbnail bar)
     bgHovColor.setHsv(bgHovColor.hue(), (bgHovColor.saturation() / 2), ((bgHovColor.value() + bgColor.value()) / 2));
-    
-    QString genCss = 
+
+    QString genCss =
         "QListView {"
         "  background-color: %1;"
         "}";
     genCss = genCss.arg(StyleSheetUtils::rgba(bgColor));
-    
-    QString itemSelCss = 
+
+    QString itemSelCss =
         "QListView::item:selected {"
         "  background-color: %1;"
         "}";
     itemSelCss = itemSelCss.arg(StyleSheetUtils::rgba(bgSelColor));
-    
-    QString itemHovCss = 
+
+    QString itemHovCss =
         "QListView::item:hover:!selected {"
         "  background-color: %1;"
         "}";
     itemHovCss = itemHovCss.arg(StyleSheetUtils::rgba(bgHovColor));
-    
+
     QString css = genCss + itemSelCss + itemHovCss;
     mThumbnailBar->setStyleSheet(css);
 }

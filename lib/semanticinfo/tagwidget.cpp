@@ -28,10 +28,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QKeyEvent>
 #include <QLineEdit>
 #include <QListView>
+#include <QPushButton>
 #include <QSortFilterProxyModel>
 #include <QTimer>
 #include <QVBoxLayout>
-#include <QPushButton>
 
 // KF
 #include <KLocalizedString>
@@ -43,21 +43,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 class TagCompleterModel : public QSortFilterProxyModel
 {
 public:
-    TagCompleterModel(QObject* parent)
+    TagCompleterModel(QObject *parent)
         : QSortFilterProxyModel(parent)
     {
     }
 
-    void setTagInfo(const TagInfo& tagInfo)
+    void setTagInfo(const TagInfo &tagInfo)
     {
         mExcludedTagSet.clear();
-        TagInfo::ConstIterator
-        it = tagInfo.begin(),
-        end = tagInfo.end();
+        TagInfo::ConstIterator it = tagInfo.begin(), end = tagInfo.end();
         for (; it != end; ++it) {
             if (it.value()) {
                 mExcludedTagSet << it.key();
@@ -66,13 +63,13 @@ public:
         invalidate();
     }
 
-    void setSemanticInfoBackEnd(AbstractSemanticInfoBackEnd* backEnd)
+    void setSemanticInfoBackEnd(AbstractSemanticInfoBackEnd *backEnd)
     {
         setSourceModel(TagModel::createAllTagsModel(this, backEnd));
     }
 
 protected:
-    bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override
     {
         QModelIndex sourceIndex = sourceModel()->index(sourceRow, 0, sourceParent);
         SemanticInfoTag tag = sourceIndex.data(TagModel::TagRole).toString();
@@ -92,15 +89,16 @@ private:
 class ReturnKeyEater : public QObject
 {
 public:
-    explicit ReturnKeyEater(QObject* parent = nullptr)
+    explicit ReturnKeyEater(QObject *parent = nullptr)
         : QObject(parent)
-    {}
+    {
+    }
 
 protected:
-    bool eventFilter(QObject*, QEvent* event) override
+    bool eventFilter(QObject *, QEvent *event) override
     {
         if (event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease) {
-            auto* keyEvent = static_cast<QKeyEvent*>(event);
+            auto *keyEvent = static_cast<QKeyEvent *>(event);
             switch (keyEvent->key()) {
             case Qt::Key_Return:
             case Qt::Key_Enter:
@@ -113,25 +111,22 @@ protected:
     }
 };
 
-struct TagWidgetPrivate
-{
-    TagWidget* q;
+struct TagWidgetPrivate {
+    TagWidget *q;
     TagInfo mTagInfo;
-    QListView* mListView;
-    QComboBox* mComboBox;
-    QPushButton* mAddButton;
-    AbstractSemanticInfoBackEnd* mBackEnd;
-    TagCompleterModel* mTagCompleterModel;
-    TagModel* mAssignedTagModel;
+    QListView *mListView;
+    QComboBox *mComboBox;
+    QPushButton *mAddButton;
+    AbstractSemanticInfoBackEnd *mBackEnd;
+    TagCompleterModel *mTagCompleterModel;
+    TagModel *mAssignedTagModel;
 
     void setupWidgets()
     {
         mListView = new QListView;
-        auto* delegate = new TagItemDelegate(mListView);
-        QObject::connect(delegate, SIGNAL(removeTagRequested(SemanticInfoTag)),
-                         q, SLOT(removeTag(SemanticInfoTag)));
-        QObject::connect(delegate, SIGNAL(assignTagToAllRequested(SemanticInfoTag)),
-                         q, SLOT(assignTag(SemanticInfoTag)));
+        auto *delegate = new TagItemDelegate(mListView);
+        QObject::connect(delegate, SIGNAL(removeTagRequested(SemanticInfoTag)), q, SLOT(removeTag(SemanticInfoTag)));
+        QObject::connect(delegate, SIGNAL(assignTagToAllRequested(SemanticInfoTag)), q, SLOT(assignTag(SemanticInfoTag)));
         mListView->setItemDelegate(delegate);
         mListView->setModel(mAssignedTagModel);
 
@@ -140,7 +135,7 @@ struct TagWidgetPrivate
         mComboBox->setInsertPolicy(QComboBox::NoInsert);
 
         mTagCompleterModel = new TagCompleterModel(q);
-        auto* completer = new QCompleter(q);
+        auto *completer = new QCompleter(q);
         completer->setCaseSensitivity(Qt::CaseInsensitive);
         completer->setModel(mTagCompleterModel);
         mComboBox->setCompleter(completer);
@@ -151,14 +146,13 @@ struct TagWidgetPrivate
         mAddButton->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
         mAddButton->setToolTip(i18n("Add tag"));
         mAddButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        QObject::connect(mAddButton, SIGNAL(clicked()),
-                         q, SLOT(addTagFromComboBox()));
+        QObject::connect(mAddButton, SIGNAL(clicked()), q, SLOT(addTagFromComboBox()));
 
-        auto* layout = new QVBoxLayout(q);
+        auto *layout = new QVBoxLayout(q);
         layout->setContentsMargins(0, 0, 0, 0);
         layout->addWidget(mListView);
 
-        auto* hLayout = new QHBoxLayout;
+        auto *hLayout = new QHBoxLayout;
         hLayout->addWidget(mComboBox);
         hLayout->addWidget(mAddButton);
         layout->addLayout(hLayout);
@@ -171,14 +165,9 @@ struct TagWidgetPrivate
         Q_ASSERT(mBackEnd);
 
         mAssignedTagModel->clear();
-        TagInfo::ConstIterator
-        it = mTagInfo.constBegin(),
-        end = mTagInfo.constEnd();
+        TagInfo::ConstIterator it = mTagInfo.constBegin(), end = mTagInfo.constEnd();
         for (; it != end; ++it) {
-            mAssignedTagModel->addTag(
-                it.key(),
-                QString(),
-                it.value() ? TagModel::FullyAssigned : TagModel::PartiallyAssigned);
+            mAssignedTagModel->addTag(it.key(), QString(), it.value() ? TagModel::FullyAssigned : TagModel::PartiallyAssigned);
         }
     }
 
@@ -189,9 +178,9 @@ struct TagWidgetPrivate
     }
 };
 
-TagWidget::TagWidget(QWidget* parent)
-: QWidget(parent)
-, d(new TagWidgetPrivate)
+TagWidget::TagWidget(QWidget *parent)
+    : QWidget(parent)
+    , d(new TagWidgetPrivate)
 {
     d->q = this;
     d->mBackEnd = nullptr;
@@ -199,8 +188,7 @@ TagWidget::TagWidget(QWidget* parent)
     d->setupWidgets();
     installEventFilter(new ReturnKeyEater(this));
 
-    connect(d->mComboBox->lineEdit(), &QLineEdit::returnPressed,
-            this, &TagWidget::addTagFromComboBox);
+    connect(d->mComboBox->lineEdit(), &QLineEdit::returnPressed, this, &TagWidget::addTagFromComboBox);
 }
 
 TagWidget::~TagWidget()
@@ -208,14 +196,14 @@ TagWidget::~TagWidget()
     delete d;
 }
 
-void TagWidget::setSemanticInfoBackEnd(AbstractSemanticInfoBackEnd* backEnd)
+void TagWidget::setSemanticInfoBackEnd(AbstractSemanticInfoBackEnd *backEnd)
 {
     d->mBackEnd = backEnd;
     d->mAssignedTagModel->setSemanticInfoBackEnd(backEnd);
     d->mTagCompleterModel->setSemanticInfoBackEnd(backEnd);
 }
 
-void TagWidget::setTagInfo(const TagInfo& tagInfo)
+void TagWidget::setTagInfo(const TagInfo &tagInfo)
 {
     d->mTagInfo = tagInfo;
     d->fillTagModel();
@@ -237,7 +225,7 @@ void TagWidget::addTagFromComboBox()
     QTimer::singleShot(0, d->mComboBox, &QComboBox::clearEditText);
 }
 
-void TagWidget::assignTag(const SemanticInfoTag& tag)
+void TagWidget::assignTag(const SemanticInfoTag &tag)
 {
     d->mTagInfo[tag] = true;
     d->mAssignedTagModel->addTag(tag);
@@ -246,7 +234,7 @@ void TagWidget::assignTag(const SemanticInfoTag& tag)
     emit tagAssigned(tag);
 }
 
-void TagWidget::removeTag(const SemanticInfoTag& tag)
+void TagWidget::removeTag(const SemanticInfoTag &tag)
 {
     d->mTagInfo.remove(tag);
     d->mAssignedTagModel->removeTag(tag);

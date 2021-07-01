@@ -6,15 +6,15 @@
 
 #include "zoomcombobox.h"
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 class ZoomValidator : public QValidator
 {
     Q_OBJECT
     Q_PROPERTY(qreal minimum READ minimum WRITE setMinimum NOTIFY changed)
     Q_PROPERTY(qreal maximum READ maximum WRITE setMaximum NOTIFY changed)
 public:
-    explicit ZoomValidator(qreal minimum, qreal maximum, ZoomComboBox *q, ZoomComboBoxPrivate *d, QWidget* parent = nullptr);
+    explicit ZoomValidator(qreal minimum, qreal maximum, ZoomComboBox *q, ZoomComboBoxPrivate *d, QWidget *parent = nullptr);
     ~ZoomValidator() override;
 
     qreal minimum() const;

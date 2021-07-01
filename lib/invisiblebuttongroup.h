@@ -34,7 +34,6 @@ class QAbstractButton;
 
 namespace Gwenview
 {
-
 struct InvisibleButtonGroupPrivate;
 /**
  * This class makes it possible to create radio buttons without having to put
@@ -80,12 +79,12 @@ class GWENVIEWLIB_EXPORT InvisibleButtonGroup : public QWidget
     Q_OBJECT
     Q_PROPERTY(int current READ selected WRITE setSelected NOTIFY selectionChanged USER true)
 public:
-    explicit InvisibleButtonGroup(QWidget* parent = nullptr);
+    explicit InvisibleButtonGroup(QWidget *parent = nullptr);
     ~InvisibleButtonGroup() override;
 
     int selected() const;
 
-    void addButton(QAbstractButton* button, int id);
+    void addButton(QAbstractButton *button, int id);
 
 public Q_SLOTS:
     void setSelected(int id);
@@ -94,7 +93,7 @@ Q_SIGNALS:
     void selectionChanged(int id);
 
 private:
-    InvisibleButtonGroupPrivate* const d;
+    InvisibleButtonGroupPrivate *const d;
 };
 
 } // namespace

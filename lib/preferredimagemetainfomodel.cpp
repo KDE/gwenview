@@ -28,13 +28,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 namespace Gwenview
 {
-
-struct PreferredImageMetaInfoModelPrivate
-{
-    const ImageMetaInfoModel* mModel;
+struct PreferredImageMetaInfoModelPrivate {
+    const ImageMetaInfoModel *mModel;
     QStringList mPreferredMetaInfoKeyList;
 
-    QVariant checkStateData(const QModelIndex& sourceIndex) const
+    QVariant checkStateData(const QModelIndex &sourceIndex) const
     {
         if (sourceIndex.parent().isValid() && sourceIndex.column() == 0) {
             QString key = mModel->keyForIndex(sourceIndex);
@@ -64,8 +62,8 @@ struct PreferredImageMetaInfoModelPrivate
     }
 };
 
-PreferredImageMetaInfoModel::PreferredImageMetaInfoModel(ImageMetaInfoModel* model, const QStringList& list)
-: d(new PreferredImageMetaInfoModelPrivate)
+PreferredImageMetaInfoModel::PreferredImageMetaInfoModel(ImageMetaInfoModel *model, const QStringList &list)
+    : d(new PreferredImageMetaInfoModelPrivate)
 {
     d->mModel = model;
     setSourceModel(model);
@@ -79,7 +77,7 @@ PreferredImageMetaInfoModel::~PreferredImageMetaInfoModel()
     delete d;
 }
 
-Qt::ItemFlags PreferredImageMetaInfoModel::flags(const QModelIndex& index) const
+Qt::ItemFlags PreferredImageMetaInfoModel::flags(const QModelIndex &index) const
 {
     QModelIndex sourceIndex = mapToSource(index);
     Qt::ItemFlags fl = d->mModel->flags(sourceIndex);
@@ -89,7 +87,7 @@ Qt::ItemFlags PreferredImageMetaInfoModel::flags(const QModelIndex& index) const
     return fl;
 }
 
-QVariant PreferredImageMetaInfoModel::data(const QModelIndex& index, int role) const
+QVariant PreferredImageMetaInfoModel::data(const QModelIndex &index, int role) const
 {
     QModelIndex sourceIndex = mapToSource(index);
     if (!sourceIndex.isValid()) {
@@ -105,7 +103,7 @@ QVariant PreferredImageMetaInfoModel::data(const QModelIndex& index, int role) c
     }
 }
 
-bool PreferredImageMetaInfoModel::setData(const QModelIndex& index, const QVariant& value, int role)
+bool PreferredImageMetaInfoModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     QModelIndex sourceIndex = mapToSource(index);
     if (role != Qt::CheckStateRole) {
@@ -128,7 +126,7 @@ bool PreferredImageMetaInfoModel::setData(const QModelIndex& index, const QVaria
     return true;
 }
 
-bool PreferredImageMetaInfoModel::lessThan(const QModelIndex& left, const QModelIndex& right) const
+bool PreferredImageMetaInfoModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
 {
     if (!left.parent().isValid()) {
         // Keep root entries in insertion order

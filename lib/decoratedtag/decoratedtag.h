@@ -4,16 +4,16 @@
 #ifndef GWENVIEW_DECORATEDTAG_H
 #define GWENVIEW_DECORATEDTAG_H
 
-#include <lib/gwenviewlib_export.h>
 #include <QLabel>
+#include <lib/gwenviewlib_export.h>
 
-namespace Gwenview {
-
+namespace Gwenview
+{
 class DecoratedTagPrivate;
 
 /**
  * A label with a custom background under it.
- * 
+ *
  * TODO: Turn this into a more interactive control and make it look like Manuel's mockup.
  * Should probably be turned into a QAbstractButton subclass or something.
  */
@@ -27,7 +27,7 @@ public:
 
 protected:
     void changeEvent(QEvent *event) override;
-    void paintEvent(QPaintEvent* event) override;
+    void paintEvent(QPaintEvent *event) override;
 
 private:
     const std::unique_ptr<DecoratedTagPrivate> d_ptr;

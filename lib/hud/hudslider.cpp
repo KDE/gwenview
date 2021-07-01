@@ -22,8 +22,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "hud/hudslider.h"
 
 // Local
-#include <hud/hudtheme.h>
 #include "gwenview_lib_debug.h"
+#include <hud/hudtheme.h>
 
 // KF
 
@@ -37,12 +37,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 static const int FIRST_REPEAT_DELAY = 500;
 
-struct HudSliderPrivate
-{
-    HudSlider* q;
+struct HudSliderPrivate {
+    HudSlider *q;
     int mMin, mMax, mPageStep, mSingleStep;
     int mSliderPosition;
     int mRepeatX;
@@ -96,9 +94,9 @@ struct HudSliderPrivate
     }
 };
 
-HudSlider::HudSlider(QGraphicsItem* parent)
-: QGraphicsWidget(parent)
-, d(new HudSliderPrivate)
+HudSlider::HudSlider(QGraphicsItem *parent)
+    : QGraphicsWidget(parent)
+    , d(new HudSliderPrivate)
 {
     d->q = this;
     d->mMin = 0;
@@ -122,7 +120,7 @@ HudSlider::~HudSlider()
     delete d;
 }
 
-void HudSlider::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget*)
+void HudSlider::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *)
 {
     bool drawHandle = d->hasValidRange();
     HudTheme::State state;
@@ -140,11 +138,7 @@ void HudSlider::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
     painter->setPen(renderInfo.borderPen);
     painter->setBrush(renderInfo.bgBrush);
     qreal centerY = d->mHandleRect.center().y();
-    QRectF grooveRect = QRectF(
-        0, centerY - renderInfo.borderRadius,
-        sliderRect.width(),
-        2 * renderInfo.borderRadius
-        );
+    QRectF grooveRect = QRectF(0, centerY - renderInfo.borderRadius, sliderRect.width(), 2 * renderInfo.borderRadius);
 
     if (drawHandle) {
         // Clip out handle
@@ -166,7 +160,7 @@ void HudSlider::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
     painter->drawRoundedRect(d->mHandleRect.adjusted(.5, .5, -.5, -.5), renderInfo.borderRadius, renderInfo.borderRadius);
 }
 
-void HudSlider::mousePressEvent(QGraphicsSceneMouseEvent* event)
+void HudSlider::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if (!d->hasValidRange()) {
         return;
@@ -186,15 +180,13 @@ void HudSlider::mousePressEvent(QGraphicsSceneMouseEvent* event)
         }
     } else {
         d->mRepeatX = event->pos().x();
-        d->mRepeatAction = pos < d->mSliderPosition
-            ? QAbstractSlider::SliderPageStepSub
-            : QAbstractSlider::SliderPageStepAdd;
+        d->mRepeatAction = pos < d->mSliderPosition ? QAbstractSlider::SliderPageStepSub : QAbstractSlider::SliderPageStepAdd;
         doRepeatAction(FIRST_REPEAT_DELAY);
     }
     update();
 }
 
-void HudSlider::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
+void HudSlider::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     if (!d->hasValidRange()) {
         return;
@@ -206,7 +198,7 @@ void HudSlider::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
     }
 }
 
-void HudSlider::mouseReleaseEvent(QGraphicsSceneMouseEvent* /*event*/)
+void HudSlider::mouseReleaseEvent(QGraphicsSceneMouseEvent * /*event*/)
 {
     if (!d->hasValidRange()) {
         return;
@@ -216,7 +208,7 @@ void HudSlider::mouseReleaseEvent(QGraphicsSceneMouseEvent* /*event*/)
     update();
 }
 
-void HudSlider::wheelEvent(QGraphicsSceneWheelEvent* event)
+void HudSlider::wheelEvent(QGraphicsSceneWheelEvent *event)
 {
     if (!d->hasValidRange()) {
         return;
@@ -229,7 +221,7 @@ void HudSlider::wheelEvent(QGraphicsSceneWheelEvent* event)
     triggerAction(QAbstractSlider::SliderMove);
 }
 
-void HudSlider::keyPressEvent(QKeyEvent* event)
+void HudSlider::keyPressEvent(QKeyEvent *event)
 {
     if (!d->hasValidRange()) {
         return;
@@ -260,7 +252,7 @@ void HudSlider::keyPressEvent(QKeyEvent* event)
     }
 }
 
-void HudSlider::keyReleaseEvent(QKeyEvent* /*event*/)
+void HudSlider::keyReleaseEvent(QKeyEvent * /*event*/)
 {
     if (!d->hasValidRange()) {
         return;

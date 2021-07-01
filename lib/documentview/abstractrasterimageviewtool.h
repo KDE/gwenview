@@ -38,7 +38,6 @@ class QPainter;
 
 namespace Gwenview
 {
-
 class RasterImageView;
 
 struct AbstractRasterImageViewToolPrivate;
@@ -46,45 +45,55 @@ class GWENVIEWLIB_EXPORT AbstractRasterImageViewTool : public QObject
 {
     Q_OBJECT
 public:
-    AbstractRasterImageViewTool(RasterImageView* view);
+    AbstractRasterImageViewTool(RasterImageView *view);
     ~AbstractRasterImageViewTool() override;
 
-    RasterImageView* imageView() const;
+    RasterImageView *imageView() const;
 
-    virtual void paint(QPainter*)
-    {}
+    virtual void paint(QPainter *)
+    {
+    }
 
-    virtual void mousePressEvent(QGraphicsSceneMouseEvent*)
-    {}
-    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent*)
-    {}
-    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*)
-    {}
-    virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event);
-    virtual void hoverMoveEvent(QGraphicsSceneHoverEvent*)
-    {}
-    virtual void wheelEvent(QGraphicsSceneWheelEvent* event);
-    virtual void keyPressEvent(QKeyEvent*)
-    {}
-    virtual void keyReleaseEvent(QKeyEvent*)
-    {}
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent *)
+    {
+    }
+    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *)
+    {
+    }
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *)
+    {
+    }
+    virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
+    virtual void hoverMoveEvent(QGraphicsSceneHoverEvent *)
+    {
+    }
+    virtual void wheelEvent(QGraphicsSceneWheelEvent *event);
+    virtual void keyPressEvent(QKeyEvent *)
+    {
+    }
+    virtual void keyReleaseEvent(QKeyEvent *)
+    {
+    }
 
     virtual void toolActivated()
-    {}
+    {
+    }
     virtual void toolDeactivated()
-    {}
+    {
+    }
 
-    virtual QWidget* widget() const
+    virtual QWidget *widget() const
     {
         return nullptr;
     }
 
 public Q_SLOTS:
     virtual void onWidgetSlidedIn()
-    {}
+    {
+    }
 
 private:
-    AbstractRasterImageViewToolPrivate * const d;
+    AbstractRasterImageViewToolPrivate *const d;
 };
 
 } // namespace

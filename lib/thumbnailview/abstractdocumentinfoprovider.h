@@ -38,12 +38,11 @@ class QUrl;
 
 namespace Gwenview
 {
-
 class GWENVIEWLIB_EXPORT AbstractDocumentInfoProvider : public QObject
 {
     Q_OBJECT
 public:
-    explicit AbstractDocumentInfoProvider(QObject* parent = nullptr);
+    explicit AbstractDocumentInfoProvider(QObject *parent = nullptr);
 
     /**
      * Returns true if the document is currently busy (loading, saving,
@@ -53,11 +52,11 @@ public:
 
     virtual bool isModified(const QUrl &url) = 0;
 
-    virtual void thumbnailForDocument(const QUrl &url, ThumbnailGroup::Enum, QPixmap* outPix, QSize* outFullSize) const = 0;
+    virtual void thumbnailForDocument(const QUrl &url, ThumbnailGroup::Enum, QPixmap *outPix, QSize *outFullSize) const = 0;
 
 Q_SIGNALS:
-    void busyStateChanged(const QUrl& url, bool busy);
-    void documentChanged(const QUrl& url);
+    void busyStateChanged(const QUrl &url, bool busy);
+    void documentChanged(const QUrl &url);
 };
 
 } // namespace

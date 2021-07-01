@@ -32,15 +32,14 @@
 #include <QPointer>
 
 // KF
-#include <KIO/Job>
 #include <KFileItem>
+#include <KIO/Job>
 
 // Local
 #include <lib/thumbnailgroup.h>
 
 namespace Gwenview
 {
-
 class ThumbnailGenerator;
 class ThumbnailWriter;
 
@@ -59,7 +58,7 @@ public:
     /**
      * To be called whenever items are removed from the view
      */
-    void removeItems(const KFileItemList& itemList);
+    void removeItems(const KFileItemList &itemList);
 
     /**
      * Remove all pending items
@@ -69,12 +68,12 @@ public:
     /**
      * Returns the list of items waiting for a thumbnail
      */
-    const KFileItemList& pendingItems() const;
+    const KFileItemList &pendingItems() const;
 
     /**
      * Add items to the job
      */
-    void appendItems(const KFileItemList& items);
+    void appendItems(const KFileItemList &items);
 
     /**
      * Defines size of thumbnails to generate
@@ -91,7 +90,7 @@ public:
     /**
      * Sets the thumbnail base dir, useful for unit-testing
      */
-    static void setThumbnailBaseDir(const QString&);
+    static void setThumbnailBaseDir(const QString &);
 
     /**
      * Returns the thumbnail base dir, for the @p group
@@ -106,7 +105,7 @@ public:
     /**
      * Move a thumbnail to match a file move
      */
-    static void moveThumbnail(const QUrl &oldUrl, const QUrl& newUrl);
+    static void moveThumbnail(const QUrl &oldUrl, const QUrl &newUrl);
 
     /**
      * Returns true if all thumbnails have been written to disk. Useful for
@@ -118,9 +117,9 @@ Q_SIGNALS:
     /**
      * Emitted when the thumbnail for the @p item has been loaded
      */
-    void thumbnailLoaded(const KFileItem& item, const QPixmap&, const QSize&, qulonglong);
+    void thumbnailLoaded(const KFileItem &item, const QPixmap &, const QSize &, qulonglong);
 
-    void thumbnailLoadingFailed(const KFileItem& item);
+    void thumbnailLoadingFailed(const KFileItem &item);
 
     /**
      * Queue is empty
@@ -132,13 +131,18 @@ protected:
 
 private Q_SLOTS:
     void determineNextIcon();
-    void slotGotPreview(const KFileItem&, const QPixmap&);
+    void slotGotPreview(const KFileItem &, const QPixmap &);
     void checkThumbnail();
-    void thumbnailReady(const QImage&, const QSize&);
+    void thumbnailReady(const QImage &, const QSize &);
     void emitThumbnailLoadingFailed();
 
 private:
-    enum { STATE_STATORIG, STATE_DOWNLOADORIG, STATE_PREVIEWJOB, STATE_NEXTTHUMB, } mState;
+    enum {
+        STATE_STATORIG,
+        STATE_DOWNLOADORIG,
+        STATE_PREVIEWJOB,
+        STATE_NEXTTHUMB,
+    } mState;
 
     KFileItemList mItems;
     KFileItem mCurrentItem;
@@ -164,16 +168,16 @@ private:
     // Thumbnail group
     ThumbnailGroup::Enum mThumbnailGroup;
 
-    ThumbnailGenerator* mThumbnailGenerator;
+    ThumbnailGenerator *mThumbnailGenerator;
     QPointer<ThumbnailGenerator> mPreviousThumbnailGenerator;
 
     QStringList mPreviewPlugins;
 
     void createNewThumbnailGenerator();
     void abortSubjob();
-    void startCreatingThumbnail(const QString& path);
+    void startCreatingThumbnail(const QString &path);
 
-    void emitThumbnailLoaded(const QImage& img, const QSize& size);
+    void emitThumbnailLoaded(const QImage &img, const QSize &size);
 
     QImage loadThumbnailFromCache() const;
 };

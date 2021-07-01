@@ -31,29 +31,28 @@ class KFileItemList;
 
 namespace Gwenview
 {
-
 struct InfoContextManagerItemPrivate;
 
 class InfoContextManagerItem : public AbstractContextManagerItem
 {
     Q_OBJECT
 public:
-    InfoContextManagerItem(ContextManager*);
+    InfoContextManagerItem(ContextManager *);
     ~InfoContextManagerItem() override;
 
 private Q_SLOTS:
     void updateSideBarContent();
     void updateOneFileInfo();
     void showMetaInfoDialog();
-    void slotPreferredMetaInfoKeyListChanged(const QStringList&);
+    void slotPreferredMetaInfoKeyListChanged(const QStringList &);
 
 private:
-    void fillOneFileGroup(const KFileItem& item);
+    void fillOneFileGroup(const KFileItem &item);
 
-    void fillMultipleItemsGroup(const KFileItemList& itemList);
+    void fillMultipleItemsGroup(const KFileItemList &itemList);
 
     friend struct InfoContextManagerItemPrivate;
-    InfoContextManagerItemPrivate* const d;
+    InfoContextManagerItemPrivate *const d;
 };
 
 } // namespace

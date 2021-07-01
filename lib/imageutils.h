@@ -30,7 +30,6 @@ namespace Gwenview
 {
 namespace ImageUtils
 {
-
 GWENVIEWLIB_EXPORT QTransform transformMatrix(Orientation);
 
 } // namespace

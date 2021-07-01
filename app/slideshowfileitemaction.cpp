@@ -23,32 +23,33 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QMenu>
 #include <QMimeDatabase>
 
-#include <KPluginFactory>
-#include <KLocalizedString>
 #include <KFileItem>
 #include <KIO/CommandLauncherJob>
+#include <KLocalizedString>
 #include <KNotificationJobUiDelegate>
+#include <KPluginFactory>
 #include <QDir>
 
 K_PLUGIN_CLASS_WITH_JSON(SlideShowFileItemAction, "slideshowfileitemaction.json")
 
-SlideShowFileItemAction::SlideShowFileItemAction(QObject* parent, const QVariantList&)
-: KAbstractFileItemActionPlugin(parent)
-{}
+SlideShowFileItemAction::SlideShowFileItemAction(QObject *parent, const QVariantList &)
+    : KAbstractFileItemActionPlugin(parent)
+{
+}
 
-QList<QAction*> SlideShowFileItemAction::actions(const KFileItemListProperties& fileItemInfos, QWidget* parentWidget)
+QList<QAction *> SlideShowFileItemAction::actions(const KFileItemListProperties &fileItemInfos, QWidget *parentWidget)
 {
     QStringList itemsForSlideShow;
     QString text;
     const KFileItemList &fileItems = fileItemInfos.items();
-    if (fileItemInfos.isDirectory() ) {
+    if (fileItemInfos.isDirectory()) {
         if (fileItemInfos.isLocal()) {
             QMimeDatabase db;
             // filter selected dirs containing at least one image
             for (const KFileItem &dirItem : fileItems) {
                 QDir dir = QDir(dirItem.localPath());
                 const QStringList fileList = dir.entryList(QDir::Filter::Files);
-                const bool containsAtLeastAnImage = std::any_of(fileList.cbegin(), fileList.cend(), [&db, &dir](const QString& fileName){
+                const bool containsAtLeastAnImage = std::any_of(fileList.cbegin(), fileList.cend(), [&db, &dir](const QString &fileName) {
                     const auto mimeType = db.mimeTypeForFile(dir.absoluteFilePath(fileName), QMimeDatabase::MatchExtension);
                     return mimeType.name().startsWith(QStringLiteral("image"));
                 });
@@ -58,9 +59,7 @@ QList<QAction*> SlideShowFileItemAction::actions(const KFileItemListProperties& 
             }
         }
         text = i18nc("@action:inmenu Start a slideshow Dolphin context menu", "Start a Slideshow");
-    } else if (fileItemInfos.mimeGroup() == QLatin1String("image") &&
-               fileItems.length() > 1){
-
+    } else if (fileItemInfos.mimeGroup() == QLatin1String("image") && fileItems.length() > 1) {
         for (const KFileItem &fileItem : fileItems) {
             itemsForSlideShow << fileItem.url().toString();
         }
@@ -74,7 +73,6 @@ QList<QAction*> SlideShowFileItemAction::actions(const KFileItemListProperties& 
     startSlideShowAction->setIcon(QIcon::fromTheme(QStringLiteral("gwenview")));
 
     connect(startSlideShowAction, &QAction::triggered, this, [=]() {
-
         // gwenview -s %u
         auto job = new KIO::CommandLauncherJob(QStringLiteral("gwenview"), QStringList("-s") << itemsForSlideShow);
         job->setDesktopName("org.kde.gwenview");
@@ -85,6 +83,5 @@ QList<QAction*> SlideShowFileItemAction::actions(const KFileItemListProperties& 
 
     return {startSlideShowAction};
 }
-
 
 #include "slideshowfileitemaction.moc"

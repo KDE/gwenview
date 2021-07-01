@@ -34,16 +34,15 @@ class QAction;
 
 namespace Gwenview
 {
-
 struct ZoomWidgetPrivate;
 class GWENVIEWLIB_EXPORT ZoomWidget : public QFrame
 {
     Q_OBJECT
 public:
-    explicit ZoomWidget(QWidget* parent = nullptr);
+    explicit ZoomWidget(QWidget *parent = nullptr);
     ~ZoomWidget() override;
 
-    void setActions(QAction* zoomToFitAction, QAction* actualSizeAction, QAction* zoomInAction, QAction* zoomOutAction, QAction* zoomToFillAction);
+    void setActions(QAction *zoomToFitAction, QAction *actualSizeAction, QAction *zoomInAction, QAction *zoomOutAction, QAction *zoomToFillAction);
 
 public Q_SLOTS:
     /**
@@ -62,7 +61,7 @@ private Q_SLOTS:
 
 private:
     friend struct ZoomWidgetPrivate;
-    ZoomWidgetPrivate* const d;
+    ZoomWidgetPrivate *const d;
 };
 
 } // namespace

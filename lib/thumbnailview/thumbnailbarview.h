@@ -34,27 +34,26 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 struct ThumbnailBarItemDelegatePrivate;
 
 class GWENVIEWLIB_EXPORT ThumbnailBarItemDelegate : public QAbstractItemDelegate
 {
     Q_OBJECT
 public:
-    ThumbnailBarItemDelegate(ThumbnailView*);
+    ThumbnailBarItemDelegate(ThumbnailView *);
     ~ThumbnailBarItemDelegate() override;
 
-    void paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const override;
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
     QSize sizeHint(const QStyleOptionViewItem & /*option*/, const QModelIndex & /*index*/) const override;
 
 protected:
-    bool eventFilter(QObject*, QEvent*) override;
+    bool eventFilter(QObject *, QEvent *) override;
 
 private Q_SLOTS:
     void toggleSelection();
 
 private:
-    ThumbnailBarItemDelegatePrivate* const d;
+    ThumbnailBarItemDelegatePrivate *const d;
     friend struct ThumbnailBarItemDelegatePrivate;
 };
 
@@ -63,7 +62,7 @@ class GWENVIEWLIB_EXPORT ThumbnailBarView : public ThumbnailView
 {
     Q_OBJECT
 public:
-    ThumbnailBarView(QWidget* = nullptr);
+    ThumbnailBarView(QWidget * = nullptr);
     ~ThumbnailBarView() override;
 
     Qt::Orientation orientation() const;
@@ -73,15 +72,15 @@ public:
     void setRowCount(int);
 
 protected:
-    void resizeEvent(QResizeEvent * event) override;
-    void wheelEvent(QWheelEvent* event) override;
-    void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected) override;
+    void resizeEvent(QResizeEvent *event) override;
+    void wheelEvent(QWheelEvent *event) override;
+    void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected) override;
 
 private Q_SLOTS:
     void slotFrameChanged(int);
 
 private:
-    ThumbnailBarViewPrivate* const d;
+    ThumbnailBarViewPrivate *const d;
 };
 
 } // namespace

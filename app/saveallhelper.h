@@ -32,23 +32,22 @@ class KJob;
 
 namespace Gwenview
 {
-
 struct SaveAllHelperPrivate;
 class SaveAllHelper : public QObject
 {
     Q_OBJECT
 public:
-    explicit SaveAllHelper(QWidget* parent);
+    explicit SaveAllHelper(QWidget *parent);
     ~SaveAllHelper() override;
 
     void save();
 
 private Q_SLOTS:
     void slotCanceled();
-    void slotResult(KJob*);
+    void slotResult(KJob *);
 
 private:
-    SaveAllHelperPrivate* const d;
+    SaveAllHelperPrivate *const d;
 };
 
 } // namespace

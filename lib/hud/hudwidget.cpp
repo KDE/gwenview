@@ -22,29 +22,27 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "hud/hudwidget.h"
 
 // Qt
-#include <QGraphicsProxyWidget>
 #include <QGraphicsLinearLayout>
+#include <QGraphicsProxyWidget>
+#include <QIcon>
 #include <QLayout>
 #include <QPainter>
 #include <QPropertyAnimation>
-#include <QIcon>
 
 // KF
 #include <KLocalizedString>
 
 // Local
-#include <hud/hudtheme.h>
 #include <hud/hudbutton.h>
+#include <hud/hudtheme.h>
 
 namespace Gwenview
 {
-
-struct HudWidgetPrivate
-{
-    HudWidget* q;
-    QPropertyAnimation* mAnim;
-    QGraphicsWidget* mMainWidget;
-    HudButton* mCloseButton;
+struct HudWidgetPrivate {
+    HudWidget *q;
+    QPropertyAnimation *mAnim;
+    QGraphicsWidget *mMainWidget;
+    HudButton *mCloseButton;
     bool mAutoDeleteOnFadeout;
 
     void fadeTo(qreal value)
@@ -59,9 +57,9 @@ struct HudWidgetPrivate
     }
 };
 
-HudWidget::HudWidget(QGraphicsWidget* parent)
-: QGraphicsWidget(parent)
-, d(new HudWidgetPrivate)
+HudWidget::HudWidget(QGraphicsWidget *parent)
+    : QGraphicsWidget(parent)
+    , d(new HudWidgetPrivate)
 {
     d->q = this;
     d->mAnim = new QPropertyAnimation(this, "opacity", this);
@@ -77,20 +75,20 @@ HudWidget::~HudWidget()
     delete d;
 }
 
-void HudWidget::init(QWidget* mainWidget, Options options)
+void HudWidget::init(QWidget *mainWidget, Options options)
 {
-    auto* proxy = new QGraphicsProxyWidget(this);
+    auto *proxy = new QGraphicsProxyWidget(this);
     proxy->setWidget(mainWidget);
     init(proxy, options);
 }
 
-void HudWidget::init(QGraphicsWidget* mainWidget, Options options)
+void HudWidget::init(QGraphicsWidget *mainWidget, Options options)
 {
     if (options & OptionOpaque) {
         setProperty("opaque", QVariant(true));
     }
 
-    auto* layout = new QGraphicsLinearLayout(this);
+    auto *layout = new QGraphicsLinearLayout(this);
     layout->setContentsMargins(4, 4, 4, 4);
     d->mMainWidget = mainWidget;
     if (d->mMainWidget) {
@@ -118,7 +116,7 @@ void HudWidget::slotCloseButtonClicked()
     emit closed();
 }
 
-void HudWidget::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
+void HudWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     HudTheme::RenderInfo renderInfo = HudTheme::renderInfo(HudTheme::FrameWidget);
     painter->setPen(renderInfo.borderPen);

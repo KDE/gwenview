@@ -38,7 +38,6 @@ class QRectF;
 
 namespace Gwenview
 {
-
 class AbstractImageView;
 class RasterImageView;
 
@@ -53,26 +52,26 @@ public:
     AbstractDocumentViewAdapter();
     ~AbstractDocumentViewAdapter() override;
 
-    QGraphicsWidget* widget() const
+    QGraphicsWidget *widget() const
     {
         return mWidget;
     }
 
     virtual MimeTypeUtils::Kind kind() const = 0;
 
-    virtual AbstractImageView* imageView() const
+    virtual AbstractImageView *imageView() const
     {
         return nullptr;
     }
 
-    virtual RasterImageView* rasterImageView() const
+    virtual RasterImageView *rasterImageView() const
     {
         return nullptr;
     }
 
     virtual QCursor cursor() const;
 
-    virtual void setCursor(const QCursor&);
+    virtual void setCursor(const QCursor &);
 
     /**
      * @defgroup zooming functions
@@ -85,7 +84,8 @@ public:
 
     // Implementation must emit zoomToFitChanged()
     virtual void setZoomToFit(bool)
-    {}
+    {
+    }
 
     virtual bool zoomToFit() const
     {
@@ -93,8 +93,9 @@ public:
     }
 
     // Implementation must emit zoomToFillChanged()
-    virtual void setZoomToFill(bool /*on*/, const QPointF& /*center*/ = QPointF(-1, -1))
-    {}
+    virtual void setZoomToFill(bool /*on*/, const QPointF & /*center*/ = QPointF(-1, -1))
+    {
+    }
 
     virtual bool zoomToFill() const
     {
@@ -106,8 +107,9 @@ public:
         return 0;
     }
 
-    virtual void setZoom(qreal /*zoom*/, const QPointF& /*center*/ = QPointF(-1, -1))
-    {}
+    virtual void setZoom(qreal /*zoom*/, const QPointF & /*center*/ = QPointF(-1, -1))
+    {
+    }
 
     virtual qreal computeZoomToFit() const
     {
@@ -124,14 +126,16 @@ public:
     virtual void setDocument(const Document::Ptr &) = 0;
 
     virtual void loadConfig()
-    {}
+    {
+    }
 
     virtual QPointF scrollPos() const
     {
         return QPointF(0, 0);
     }
-    virtual void setScrollPos(const QPointF& /*pos*/)
-    {}
+    virtual void setScrollPos(const QPointF & /*pos*/)
+    {
+    }
 
     /**
      * Rectangle within the item which is actually used to show the document.
@@ -140,7 +144,7 @@ public:
     virtual QRectF visibleDocumentRect() const;
 
 protected:
-    void setWidget(QGraphicsWidget* widget)
+    void setWidget(QGraphicsWidget *widget)
     {
         mWidget = widget;
     }
@@ -156,9 +160,9 @@ Q_SIGNALS:
 
     void zoomToFillChanged(bool);
 
-    void zoomInRequested(const QPointF&);
+    void zoomInRequested(const QPointF &);
 
-    void zoomOutRequested(const QPointF&);
+    void zoomOutRequested(const QPointF &);
     /** @} */
 
     void scrollPosChanged();
@@ -175,7 +179,7 @@ Q_SIGNALS:
     void toggleFullScreenRequested();
 
 private:
-    QGraphicsWidget* mWidget;
+    QGraphicsWidget *mWidget;
 };
 
 /**
@@ -194,8 +198,9 @@ public:
     {
         return Document::Ptr();
     }
-    void setDocument(const Document::Ptr&) override
-    {}
+    void setDocument(const Document::Ptr &) override
+    {
+    }
 };
 
 } // namespace

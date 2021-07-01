@@ -22,8 +22,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "importerconfigdialog.h"
 
 // Qt
-#include <QTextDocument>
 #include <QDateTime>
+#include <QTextDocument>
 
 // KF
 
@@ -34,21 +34,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 static const QString PREVIEW_FILENAME = QStringLiteral("PICT0012.JPG");
 static const QDateTime PREVIEW_DATETIME = QDateTime(QDate(2009, 10, 25), QTime(17, 51, 18));
 
-struct ImporterConfigDialogPrivate : public Ui_ImporterConfigDialog
-{
-    ImporterConfigDialog* q;
+struct ImporterConfigDialogPrivate : public Ui_ImporterConfigDialog {
+    ImporterConfigDialog *q;
 
     void setupHelpText()
     {
         QString helpText = "<ul>";
         FileNameFormater::HelpMap map = FileNameFormater::helpMap();
-        FileNameFormater::HelpMap::ConstIterator
-        it = map.constBegin(),
-        end = map.constEnd();
+        FileNameFormater::HelpMap::ConstIterator it = map.constBegin(), end = map.constEnd();
         for (; it != end; ++it) {
             QString keyword = '{' + it.key() + '}';
             QString explanation = it.value().toHtmlEscaped();
@@ -58,23 +54,21 @@ struct ImporterConfigDialogPrivate : public Ui_ImporterConfigDialog
         helpText += "</ul>";
         mRenameFormatHelpLabel->setText(helpText);
 
-        QObject::connect(mRenameFormatHelpLabel, SIGNAL(linkActivated(QString)),
-                         q, SLOT(slotHelpLinkActivated(QString)));
+        QObject::connect(mRenameFormatHelpLabel, SIGNAL(linkActivated(QString)), q, SLOT(slotHelpLinkActivated(QString)));
     }
 };
 
-ImporterConfigDialog::ImporterConfigDialog(QWidget* parent)
-: KConfigDialog(parent, QStringLiteral("Importer Settings"), ImporterConfig::self())
-, d(new ImporterConfigDialogPrivate)
+ImporterConfigDialog::ImporterConfigDialog(QWidget *parent)
+    : KConfigDialog(parent, QStringLiteral("Importer Settings"), ImporterConfig::self())
+    , d(new ImporterConfigDialogPrivate)
 {
     d->q = this;
-    auto* widget = new QWidget;
+    auto *widget = new QWidget;
     d->setupUi(widget);
     setFaceType(KPageDialog::Plain);
     addPage(widget, QString());
 
-    connect(d->kcfg_AutoRenameFormat, &QLineEdit::textChanged,
-            this, &ImporterConfigDialog::updatePreview);
+    connect(d->kcfg_AutoRenameFormat, &QLineEdit::textChanged, this, &ImporterConfigDialog::updatePreview);
 
     d->setupHelpText();
     updatePreview();
@@ -85,7 +79,7 @@ ImporterConfigDialog::~ImporterConfigDialog()
     delete d;
 }
 
-void ImporterConfigDialog::slotHelpLinkActivated(const QString& keyword)
+void ImporterConfigDialog::slotHelpLinkActivated(const QString &keyword)
 {
     d->kcfg_AutoRenameFormat->insert(keyword);
 }

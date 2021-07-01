@@ -30,23 +30,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 struct VideoDocumentLoadedImplPrivate;
 class VideoDocumentLoadedImpl : public AbstractDocumentImpl
 {
     Q_OBJECT
 public:
-    VideoDocumentLoadedImpl(Document*);
+    VideoDocumentLoadedImpl(Document *);
     ~VideoDocumentLoadedImpl() override;
 
     void init() override;
 
     Document::LoadingState loadingState() const override;
 
-    virtual void setImage(const QImage&);
+    virtual void setImage(const QImage &);
 
 private:
-    VideoDocumentLoadedImplPrivate* const d;
+    VideoDocumentLoadedImplPrivate *const d;
 };
 
 } // namespace

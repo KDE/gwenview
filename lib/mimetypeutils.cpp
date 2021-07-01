@@ -23,12 +23,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Qt
 #include <QApplication>
-#include <QStringList>
 #include <QFileInfo>
-#include <QUrl>
+#include <QImageReader>
 #include <QMimeData>
 #include <QMimeDatabase>
-#include <QImageReader>
+#include <QStringList>
+#include <QUrl>
 
 // KF
 #include <KFileItem>
@@ -38,26 +38,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Local
 #include "gwenview_lib_debug.h"
 #include <archiveutils.h>
-#include <lib/document/documentfactory.h>
 #include <gvdebug.h>
+#include <lib/document/documentfactory.h>
 
 namespace Gwenview
 {
-
 namespace MimeTypeUtils
 {
-
-static inline QString resolveAlias(const QString& name)
+static inline QString resolveAlias(const QString &name)
 {
     QMimeDatabase db;
     return db.mimeTypeForName(name).name();
 }
 
-static void resolveAliasInList(QStringList* list)
+static void resolveAliasInList(QStringList *list)
 {
-    QStringList::Iterator
-    it = list->begin(),
-    end = list->end();
+    QStringList::Iterator it = list->begin(), end = list->end();
     for (; it != end; ++it) {
         *it = resolveAlias(*it);
     }
@@ -66,33 +62,31 @@ static void resolveAliasInList(QStringList* list)
 static inline QStringList rawMimeTypes()
 {
     // need to invent more intelligent way to whitelist raws
-    return {
-        QStringLiteral("image/x-nikon-nef"),
-        QStringLiteral("image/x-nikon-nrw"),
-        QStringLiteral("image/x-canon-cr2"),
-        QStringLiteral("image/x-canon-crw"),
-        QStringLiteral("image/x-pentax-pef"),
-        QStringLiteral("image/x-adobe-dng"),
-        QStringLiteral("image/x-sony-arw"),
-        QStringLiteral("image/x-minolta-mrw"),
-        QStringLiteral("image/x-panasonic-raw"),
-        QStringLiteral("image/x-panasonic-raw2"),
-        QStringLiteral("image/x-panasonic-rw"),
-        QStringLiteral("image/x-panasonic-rw2"),
-        QStringLiteral("image/x-samsung-srw"),
-        QStringLiteral("image/x-olympus-orf"),
-        QStringLiteral("image/x-fuji-raf"),
-        QStringLiteral("image/x-kodak-dcr"),
-        QStringLiteral("image/x-sigma-x3f")
-    };
+    return {QStringLiteral("image/x-nikon-nef"),
+            QStringLiteral("image/x-nikon-nrw"),
+            QStringLiteral("image/x-canon-cr2"),
+            QStringLiteral("image/x-canon-crw"),
+            QStringLiteral("image/x-pentax-pef"),
+            QStringLiteral("image/x-adobe-dng"),
+            QStringLiteral("image/x-sony-arw"),
+            QStringLiteral("image/x-minolta-mrw"),
+            QStringLiteral("image/x-panasonic-raw"),
+            QStringLiteral("image/x-panasonic-raw2"),
+            QStringLiteral("image/x-panasonic-rw"),
+            QStringLiteral("image/x-panasonic-rw2"),
+            QStringLiteral("image/x-samsung-srw"),
+            QStringLiteral("image/x-olympus-orf"),
+            QStringLiteral("image/x-fuji-raf"),
+            QStringLiteral("image/x-kodak-dcr"),
+            QStringLiteral("image/x-sigma-x3f")};
 }
 
-const QStringList& rasterImageMimeTypes()
+const QStringList &rasterImageMimeTypes()
 {
     static QStringList list;
     if (list.isEmpty()) {
         const auto supported = QImageReader::supportedMimeTypes();
-        for (const auto &mime: supported) {
+        for (const auto &mime : supported) {
             const auto resolved = resolveAlias(QString::fromUtf8(mime));
             if (resolved.isEmpty()) {
                 qCWarning(GWENVIEW_LIB_LOG) << "Unresolved mime type " << mime;
@@ -102,7 +96,7 @@ const QStringList& rasterImageMimeTypes()
         }
         // We don't want svg images to be considered as raster images
         const QStringList svgImageMimeTypesList = svgImageMimeTypes();
-        for (const QString& mimeType : svgImageMimeTypesList) {
+        for (const QString &mimeType : svgImageMimeTypesList) {
             list.removeOne(mimeType);
         }
         for (const QString &rawMimetype : rawMimeTypes()) {
@@ -117,7 +111,7 @@ const QStringList& rasterImageMimeTypes()
     return list;
 }
 
-const QStringList& svgImageMimeTypes()
+const QStringList &svgImageMimeTypes()
 {
     static QStringList list;
     if (list.isEmpty()) {
@@ -127,7 +121,7 @@ const QStringList& svgImageMimeTypes()
     return list;
 }
 
-const QStringList& imageMimeTypes()
+const QStringList &imageMimeTypes()
 {
     static QStringList list;
     if (list.isEmpty()) {
@@ -148,7 +142,7 @@ QString urlMimeType(const QUrl &url)
     return db.mimeTypeForUrl(url).name();
 }
 
-Kind mimeTypeKind(const QString& mimeType)
+Kind mimeTypeKind(const QString &mimeType)
 {
     if (rasterImageMimeTypes().contains(mimeType)) {
         return KIND_RASTER_IMAGE;
@@ -169,7 +163,7 @@ Kind mimeTypeKind(const QString& mimeType)
     return KIND_FILE;
 }
 
-Kind fileItemKind(const KFileItem& item)
+Kind fileItemKind(const KFileItem &item)
 {
     GV_RETURN_VALUE_IF_FAIL(!item.isNull(), KIND_UNKNOWN);
     return mimeTypeKind(item.mimetype());
@@ -180,12 +174,11 @@ Kind urlKind(const QUrl &url)
     return mimeTypeKind(urlMimeType(url));
 }
 
-QMimeData* selectionMimeData(const KFileItemList& selectedFiles, MimeTarget mimeTarget)
+QMimeData *selectionMimeData(const KFileItemList &selectedFiles, MimeTarget mimeTarget)
 {
-    auto* mimeData = new QMimeData;
+    auto *mimeData = new QMimeData;
 
     if (selectedFiles.count() == 1) {
-
         // When a single file is selected, there are a couple of cases:
         // - Pasting unmodified images: Set both image data and URL
         //   (since some apps only support either image data or URL)
@@ -217,8 +210,7 @@ QMimeData* selectionMimeData(const KFileItemList& selectedFiles, MimeTarget mime
                     suggestedFileName = url.fileName();
                 }
 
-                mimeData->setData(QStringLiteral("application/x-kde-suggestedfilename"),
-                                  QFile::encodeName(suggestedFileName));
+                mimeData->setData(QStringLiteral("application/x-kde-suggestedfilename"), QFile::encodeName(suggestedFileName));
             }
         }
 
@@ -232,17 +224,15 @@ QMimeData* selectionMimeData(const KFileItemList& selectedFiles, MimeTarget mime
     return mimeData;
 }
 
-DataAccumulator::DataAccumulator(KIO::TransferJob* job)
-: QObject()
-, mFinished(false)
+DataAccumulator::DataAccumulator(KIO::TransferJob *job)
+    : QObject()
+    , mFinished(false)
 {
-    connect(job, &KIO::TransferJob::data,
-            this, &DataAccumulator::slotDataReceived);
-    connect(job, &KJob::result,
-            this, &DataAccumulator::slotFinished);
+    connect(job, &KIO::TransferJob::data, this, &DataAccumulator::slotDataReceived);
+    connect(job, &KJob::result, this, &DataAccumulator::slotFinished);
 }
 
-void DataAccumulator::slotDataReceived(KIO::Job*, const QByteArray& data)
+void DataAccumulator::slotDataReceived(KIO::Job *, const QByteArray &data)
 {
     mData += data;
 }

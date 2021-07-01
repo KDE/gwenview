@@ -24,27 +24,27 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QApplication>
 #include <QCheckBox>
 #include <QItemSelectionModel>
+#include <QMenu>
 #include <QShortcut>
 #include <QVBoxLayout>
-#include <QMenu>
 
 // KF
-#include <KActionCollection>
 #include <KActionCategory>
+#include <KActionCollection>
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KModelIndexProxyMapper>
-#include <KToggleAction>
 #include <KSqueezedTextLabel>
+#include <KToggleAction>
 #ifdef KF5Activities_FOUND
 #include <KActivities/ResourceInstance>
 #endif
 
 // Local
-#include "gwenview_app_debug.h"
 #include "fileoperations.h"
-#include <gvcore.h>
+#include "gwenview_app_debug.h"
 #include "splitter.h"
+#include <gvcore.h>
 #include <lib/backgroundcolorwidget/backgroundcolorwidget.h>
 #include <lib/documentview/abstractdocumentviewadapter.h>
 #include <lib/documentview/abstractrasterimageviewtool.h>
@@ -61,14 +61,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/slidecontainer.h>
 #include <lib/slideshow.h>
 #include <lib/statusbartoolbutton.h>
-#include <lib/thumbnailview/thumbnailbarview.h>
-#include <lib/zoomwidget.h>
-#include <lib/zoommode.h>
 #include <lib/stylesheetutils.h>
+#include <lib/thumbnailview/thumbnailbarview.h>
+#include <lib/zoommode.h>
+#include <lib/zoomwidget.h>
 
 namespace Gwenview
 {
-
 #undef ENABLE_LOG
 #undef LOG
 //#define ENABLE_LOG
@@ -108,36 +107,35 @@ const int ViewMainPage::MaxViewCount = 6;
  * |+-----------------------------------------------------------------+|
  * +-------------------------------------------------------------------+
  */
-struct ViewMainPagePrivate
-{
-    ViewMainPage* q;
-    SlideShow* mSlideShow;
-    KActionCollection* mActionCollection;
-    GvCore* mGvCore;
-    KModelIndexProxyMapper* mDirModelToBarModelProxyMapper;
+struct ViewMainPagePrivate {
+    ViewMainPage *q;
+    SlideShow *mSlideShow;
+    KActionCollection *mActionCollection;
+    GvCore *mGvCore;
+    KModelIndexProxyMapper *mDirModelToBarModelProxyMapper;
     QSplitter *mThumbnailSplitter;
-    QWidget* mAdapterContainer;
-    DocumentViewController* mDocumentViewController;
-    QList<DocumentView*> mDocumentViews;
-    DocumentViewSynchronizer* mSynchronizer;
-    QToolButton* mToggleSideBarButton;
-    QToolButton* mToggleThumbnailBarButton;
-    BackgroundColorWidget* mBackgroundColorWidget;
-    ZoomWidget* mZoomWidget;
-    DocumentViewContainer* mDocumentViewContainer;
-    SlideContainer* mToolContainer;
-    QWidget* mStatusBarContainer;
-    ThumbnailBarView* mThumbnailBar;
-    KToggleAction* mToggleThumbnailBarAction;
-    KToggleAction* mSynchronizeAction;
-    QCheckBox* mSynchronizeCheckBox;
-    KSqueezedTextLabel* mDocumentCountLabel;
+    QWidget *mAdapterContainer;
+    DocumentViewController *mDocumentViewController;
+    QList<DocumentView *> mDocumentViews;
+    DocumentViewSynchronizer *mSynchronizer;
+    QToolButton *mToggleSideBarButton;
+    QToolButton *mToggleThumbnailBarButton;
+    BackgroundColorWidget *mBackgroundColorWidget;
+    ZoomWidget *mZoomWidget;
+    DocumentViewContainer *mDocumentViewContainer;
+    SlideContainer *mToolContainer;
+    QWidget *mStatusBarContainer;
+    ThumbnailBarView *mThumbnailBar;
+    KToggleAction *mToggleThumbnailBarAction;
+    KToggleAction *mSynchronizeAction;
+    QCheckBox *mSynchronizeCheckBox;
+    KSqueezedTextLabel *mDocumentCountLabel;
 
     // Activity Resource events reporting needs to be above KPart,
     // in the shell itself, to avoid problems with other MDI applications
     // that use this KPart
 #ifdef KF5Activities_FOUND
-    QHash<DocumentView*, KActivities::ResourceInstance*> mActivityResources;
+    QHash<DocumentView *, KActivities::ResourceInstance *> mActivityResources;
 #endif
 
     bool mCompareMode;
@@ -165,10 +163,9 @@ struct ViewMainPagePrivate
         labelMargins.setRight(15);
         mDocumentCountLabel->setContentsMargins(labelMargins);
 
-        auto* statusBarContainerLayout = new QHBoxLayout(mStatusBarContainer);
+        auto *statusBarContainerLayout = new QHBoxLayout(mStatusBarContainer);
         // Use toolbar-like margins and spacing
-        int margins = q->style()->pixelMetric(QStyle::PM_ToolBarItemMargin)
-                    + q->style()->pixelMetric(QStyle::PM_ToolBarFrameWidth);
+        int margins = q->style()->pixelMetric(QStyle::PM_ToolBarItemMargin) + q->style()->pixelMetric(QStyle::PM_ToolBarFrameWidth);
         statusBarContainerLayout->setContentsMargins(margins, margins, margins, margins);
         statusBarContainerLayout->setSpacing(q->style()->pixelMetric(QStyle::PM_ToolBarItemSpacing));
         statusBarContainerLayout->addWidget(mToggleSideBarButton);
@@ -184,7 +181,7 @@ struct ViewMainPagePrivate
         //--
         mAdapterContainer = new QWidget;
 
-        auto* adapterContainerLayout = new QVBoxLayout(mAdapterContainer);
+        auto *adapterContainerLayout = new QVBoxLayout(mAdapterContainer);
         adapterContainerLayout->setContentsMargins(0, 0, 0, 0);
         adapterContainerLayout->setSpacing(0);
         mDocumentViewContainer = new DocumentViewContainer;
@@ -194,7 +191,7 @@ struct ViewMainPagePrivate
         adapterContainerLayout->addWidget(mToolContainer);
         //--
         mThumbnailBar = new ThumbnailBarView;
-        auto* delegate = new ThumbnailBarItemDelegate(mThumbnailBar);
+        auto *delegate = new ThumbnailBarItemDelegate(mThumbnailBar);
         mThumbnailBar->setItemDelegate(delegate);
         mThumbnailBar->setSelectionMode(QAbstractItemView::ExtendedSelection);
         //--
@@ -211,7 +208,7 @@ struct ViewMainPagePrivate
         mThumbnailBar->setVisible(GwenviewConfig::thumbnailBarIsVisible());
         mThumbnailBar->installEventFilter(q);
 
-        auto* viewMainPageLayout = new QVBoxLayout(q);
+        auto *viewMainPageLayout = new QVBoxLayout(q);
         viewMainPageLayout->setContentsMargins(0, 0, 0, 0);
         viewMainPageLayout->setSpacing(0);
         viewMainPageLayout->addWidget(mThumbnailSplitter);
@@ -232,10 +229,10 @@ struct ViewMainPagePrivate
         QColor bgColor = pal.color(QPalette::Normal, QPalette::Base);
         QColor bgSelColor = pal.color(QPalette::Normal, QPalette::Highlight);
         QColor bgHovColor = pal.color(QPalette::Normal, QPalette::Highlight);
-        
+
         // Avoid dark and bright colors
         bgColor.setHsv(bgColor.hue(), bgColor.saturation(), (127 + 3 * bgColor.value()) / 4);
-        
+
         // Hover uses lighter/faded version of select color. Combine with bgColor to adapt to different backgrounds
         bgHovColor.setHsv(bgHovColor.hue(), (bgHovColor.saturation() / 2), ((bgHovColor.value() + bgColor.value()) / 2));
 
@@ -249,10 +246,9 @@ struct ViewMainPagePrivate
             "	border-left: 1px solid %2;"
             "	border-right: 1px solid %3;"
             "}";
-        itemCss = itemCss.arg(
-                      StyleSheetUtils::gradient(orientation, bgColor, 46),
-                      StyleSheetUtils::gradient(orientation, leftBorderColor, 36),
-                      StyleSheetUtils::gradient(orientation, rightBorderColor, 26));
+        itemCss = itemCss.arg(StyleSheetUtils::gradient(orientation, bgColor, 46),
+                              StyleSheetUtils::gradient(orientation, leftBorderColor, 36),
+                              StyleSheetUtils::gradient(orientation, rightBorderColor, 26));
 
         QString itemSelCss =
             "QListView::item:selected {"
@@ -260,20 +256,17 @@ struct ViewMainPagePrivate
             "	border-left: 1px solid %2;"
             "	border-right: 1px solid %2;"
             "}";
-        itemSelCss = itemSelCss.arg(
-                         StyleSheetUtils::gradient(orientation, bgSelColor, 56),
-                         StyleSheetUtils::rgba(borderSelColor));
-        
+        itemSelCss = itemSelCss.arg(StyleSheetUtils::gradient(orientation, bgSelColor, 56), StyleSheetUtils::rgba(borderSelColor));
+
         QString itemHovCss =
             "QListView::item:hover:!selected {"
             "  background-color: %1;"
             "  border-left: 1px solid %2;"
             "  border-right: 1px solid %3;"
             "}";
-        itemHovCss = itemHovCss.arg(
-                         StyleSheetUtils::gradient(orientation, bgHovColor, 56),
-                         StyleSheetUtils::rgba(leftBorderColor),
-                         StyleSheetUtils::rgba(rightBorderColor));
+        itemHovCss = itemHovCss.arg(StyleSheetUtils::gradient(orientation, bgHovColor, 56),
+                                    StyleSheetUtils::rgba(leftBorderColor),
+                                    StyleSheetUtils::rgba(rightBorderColor));
 
         QString css = itemCss + itemSelCss + itemHovCss;
         if (orientation == Qt::Vertical) {
@@ -283,9 +276,9 @@ struct ViewMainPagePrivate
         mThumbnailBar->setStyleSheet(css);
     }
 
-    DocumentView* createDocumentView()
+    DocumentView *createDocumentView()
     {
-        DocumentView* view = mDocumentViewContainer->createView();
+        DocumentView *view = mDocumentViewContainer->createView();
 
         // Connect context menu
         // If you need to connect another view signal, make sure it is disconnected in deleteDocumentView
@@ -312,7 +305,7 @@ struct ViewMainPagePrivate
         return view;
     }
 
-    void deleteDocumentView(DocumentView* view)
+    void deleteDocumentView(DocumentView *view)
     {
         if (mDocumentViewController->view() == view) {
             mDocumentViewController->setView(nullptr);
@@ -339,14 +332,14 @@ struct ViewMainPagePrivate
         }
     }
 
-    DocumentView* currentView() const
+    DocumentView *currentView() const
     {
         return mDocumentViewController->view();
     }
 
-    void setCurrentView(DocumentView* view)
+    void setCurrentView(DocumentView *view)
     {
-        DocumentView* oldView = currentView();
+        DocumentView *oldView = currentView();
         if (view == oldView) {
             return;
         }
@@ -372,11 +365,10 @@ struct ViewMainPagePrivate
         Q_ASSERT(mActivityResources.contains(view));
         mActivityResources.value(view)->notifyFocusedIn();
 #endif
-        QObject::connect(view, &DocumentView::currentToolChanged,
-                         q, &ViewMainPage::updateFocus);
+        QObject::connect(view, &DocumentView::currentToolChanged, q, &ViewMainPage::updateFocus);
     }
 
-    QModelIndex indexForView(DocumentView* view) const
+    QModelIndex indexForView(DocumentView *view) const
     {
         QUrl url = view->url();
         if (!url.isValid()) {
@@ -384,13 +376,13 @@ struct ViewMainPagePrivate
             return QModelIndex();
         }
 
-        SortedDirModel* dirModel = mGvCore->sortedDirModel();
+        SortedDirModel *dirModel = mGvCore->sortedDirModel();
         QModelIndex srcIndex = dirModel->indexForUrl(url);
         if (!mDirModelToBarModelProxyMapper) {
             // Delay the initialization of the mapper to its first use because
             // mThumbnailBar->model() is not set after ViewMainPage ctor is
             // done.
-            const_cast<ViewMainPagePrivate*>(this)->mDirModelToBarModelProxyMapper = new KModelIndexProxyMapper(dirModel, mThumbnailBar->model(), q);
+            const_cast<ViewMainPagePrivate *>(this)->mDirModelToBarModelProxyMapper = new KModelIndexProxyMapper(dirModel, mThumbnailBar->model(), q);
         }
         QModelIndex index = mDirModelToBarModelProxyMapper->mapLeftToRight(srcIndex);
         return index;
@@ -404,16 +396,16 @@ struct ViewMainPagePrivate
 
     void updateDocumentCountLabel()
     {
-        const int current = mThumbnailBar->currentIndex().row() + 1;  // zero-based
+        const int current = mThumbnailBar->currentIndex().row() + 1; // zero-based
         const int total = mThumbnailBar->model()->rowCount();
         const QString text = i18nc("@info:status %1 current document index, %2 total documents", "%1 of %2", current, total);
         mDocumentCountLabel->setText(text);
     }
 };
 
-ViewMainPage::ViewMainPage(QWidget* parent, SlideShow* slideShow, KActionCollection* actionCollection, GvCore* gvCore)
-: QWidget(parent)
-, d(new ViewMainPagePrivate)
+ViewMainPage::ViewMainPage(QWidget *parent, SlideShow *slideShow, KActionCollection *actionCollection, GvCore *gvCore)
+    : QWidget(parent)
+    , d(new ViewMainPagePrivate)
 {
     d->q = this;
     d->mDirModelToBarModelProxyMapper = nullptr; // Initialized later
@@ -422,12 +414,12 @@ ViewMainPage::ViewMainPage(QWidget* parent, SlideShow* slideShow, KActionCollect
     d->mGvCore = gvCore;
     d->mCompareMode = false;
 
-    auto* enterKeyShortcut = new QShortcut(Qt::Key_Return, this);
+    auto *enterKeyShortcut = new QShortcut(Qt::Key_Return, this);
     connect(enterKeyShortcut, &QShortcut::activated, this, &ViewMainPage::slotEnterPressed);
 
     d->setupWidgets();
 
-    auto* view = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface", "View"), actionCollection);
+    auto *view = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface", "View"), actionCollection);
 
     d->mToggleThumbnailBarAction = view->add<KToggleAction>(QStringLiteral("toggle_thumbnailbar"));
     d->mToggleThumbnailBarAction->setText(i18n("Thumbnail Bar"));
@@ -439,21 +431,18 @@ ViewMainPage::ViewMainPage(QWidget* parent, SlideShow* slideShow, KActionCollect
     d->mSynchronizeAction = view->add<KToggleAction>("synchronize_views");
     d->mSynchronizeAction->setText(i18n("Synchronize"));
     actionCollection->setDefaultShortcut(d->mSynchronizeAction, Qt::CTRL | Qt::Key_Y);
-    connect(d->mSynchronizeAction, &QAction::toggled,
-            d->mSynchronizer, &DocumentViewSynchronizer::setActive);
+    connect(d->mSynchronizeAction, &QAction::toggled, d->mSynchronizer, &DocumentViewSynchronizer::setActive);
     // Ensure mSynchronizeAction and mSynchronizeCheckBox are in sync
-    connect(d->mSynchronizeAction, &QAction::toggled,
-            d->mSynchronizeCheckBox, &QAbstractButton::setChecked);
-    connect(d->mSynchronizeCheckBox, &QAbstractButton::toggled,
-            d->mSynchronizeAction, &QAction::setChecked);
+    connect(d->mSynchronizeAction, &QAction::toggled, d->mSynchronizeCheckBox, &QAbstractButton::setChecked);
+    connect(d->mSynchronizeCheckBox, &QAbstractButton::toggled, d->mSynchronizeAction, &QAction::setChecked);
 
     // Connections for the document count
-    connect(d->mThumbnailBar, &ThumbnailBarView::rowsInsertedSignal,
-            this, &ViewMainPage::slotDirModelItemsAddedOrRemoved);
-    connect(d->mThumbnailBar, &ThumbnailBarView::rowsRemovedSignal,
-            this, &ViewMainPage::slotDirModelItemsAddedOrRemoved);
+    connect(d->mThumbnailBar, &ThumbnailBarView::rowsInsertedSignal, this, &ViewMainPage::slotDirModelItemsAddedOrRemoved);
+    connect(d->mThumbnailBar, &ThumbnailBarView::rowsRemovedSignal, this, &ViewMainPage::slotDirModelItemsAddedOrRemoved);
 
-    connect(qApp, &QApplication::paletteChanged, this, [this](){ d->applyPalette(window()->isFullScreen()); });
+    connect(qApp, &QApplication::paletteChanged, this, [this]() {
+        d->applyPalette(window()->isFullScreen());
+    });
 
     installEventFilter(this);
 }
@@ -468,7 +457,7 @@ void ViewMainPage::loadConfig()
     d->applyPalette(window()->isFullScreen());
 
     // FIXME: Not symmetric with saveConfig(). Check if it matters.
-    for (DocumentView * view : qAsConst(d->mDocumentViews)) {
+    for (DocumentView *view : qAsConst(d->mDocumentViews)) {
         view->loadAdapterConfig();
     }
 
@@ -534,14 +523,14 @@ void ViewMainPage::setFullScreenMode(bool fullScreenMode)
     d->mToggleThumbnailBarAction->setEnabled(!fullScreenMode);
 }
 
-ThumbnailBarView* ViewMainPage::thumbnailBar() const
+ThumbnailBarView *ViewMainPage::thumbnailBar() const
 {
     return d->mThumbnailBar;
 }
 
-inline void addActionToMenu(QMenu* menu, KActionCollection* actionCollection, const char* name)
+inline void addActionToMenu(QMenu *menu, KActionCollection *actionCollection, const char *name)
 {
-    QAction* action = actionCollection->action(name);
+    QAction *action = actionCollection->action(name);
     if (action) {
         menu->addAction(action);
     }
@@ -592,7 +581,8 @@ QSize ViewMainPage::sizeHint() const
     return QSize(400, 300);
 }
 
-QSize ViewMainPage::minimumSizeHint() const {
+QSize ViewMainPage::minimumSizeHint() const
+{
     if (!layout()) {
         return QSize();
     }
@@ -601,7 +591,7 @@ QSize ViewMainPage::minimumSizeHint() const {
     if (window()->isFullScreen()) {
         // Check minimum width of the overlay fullscreen bar
         // since there is no layout link which could do this
-        const FullScreenBar* fullScreenBar = findChild<FullScreenBar*>();
+        const FullScreenBar *fullScreenBar = findChild<FullScreenBar *>();
         if (fullScreenBar && fullScreenBar->layout()) {
             const int fullScreenBarWidth = fullScreenBar->layout()->minimumSize().width();
             if (fullScreenBarWidth > minimumSize.width()) {
@@ -633,7 +623,7 @@ bool ViewMainPage::isEmpty() const
     return !currentDocument();
 }
 
-RasterImageView* ViewMainPage::imageView() const
+RasterImageView *ViewMainPage::imageView() const
 {
     if (!d->currentView()) {
         return nullptr;
@@ -641,7 +631,7 @@ RasterImageView* ViewMainPage::imageView() const
     return d->currentView()->imageView();
 }
 
-DocumentView* ViewMainPage::documentView() const
+DocumentView *ViewMainPage::documentView() const
 {
     return d->currentView();
 }
@@ -651,7 +641,7 @@ void ViewMainPage::openUrl(const QUrl &url)
     openUrls(QList<QUrl>() << url, url);
 }
 
-void ViewMainPage::openUrls(const QList<QUrl>& allUrls, const QUrl &currentUrl)
+void ViewMainPage::openUrls(const QList<QUrl> &allUrls, const QUrl &currentUrl)
 {
     DocumentView::Setup setup;
 
@@ -672,7 +662,7 @@ void ViewMainPage::openUrls(const QList<QUrl>& allUrls, const QUrl &currentUrl)
     }
     // Destroy views which show urls we don't care about, remove from "urls" the
     // urls which already have a view.
-    for (DocumentView * view : qAsConst(d->mDocumentViews)) {
+    for (DocumentView *view : qAsConst(d->mDocumentViews)) {
         QUrl url = view->url();
         if (urls.contains(url)) {
             // view displays an url we must display, keep it
@@ -690,7 +680,7 @@ void ViewMainPage::openUrls(const QList<QUrl>& allUrls, const QUrl &currentUrl)
             qCWarning(GWENVIEW_APP_LOG) << "Too many documents to show";
             break;
         }
-        DocumentView* view = d->createDocumentView();
+        DocumentView *view = d->createDocumentView();
         viewForUrlMap.insert(url, view);
     }
 
@@ -706,12 +696,10 @@ void ViewMainPage::openUrls(const QList<QUrl>& allUrls, const QUrl &currentUrl)
     // Load urls for new views. Do it only now because the view must have the
     // correct size before it starts loading its url. Do not do it later because
     // view->url() needs to be set for the next loop.
-    ViewForUrlMap::ConstIterator
-        it = viewForUrlMap.constBegin(),
-        end = viewForUrlMap.constEnd();
+    ViewForUrlMap::ConstIterator it = viewForUrlMap.constBegin(), end = viewForUrlMap.constEnd();
     for (; it != end; ++it) {
         QUrl url = it.key();
-        DocumentView* view = it.value();
+        DocumentView *view = it.value();
         DocumentView::Setup savedSetup = d->mDocumentViewContainer->savedSetup(url);
         view->openUrl(url, d->mZoomMode == ZoomMode::Individual && savedSetup.valid ? savedSetup : setup);
 #ifdef KF5Activities_FOUND
@@ -723,7 +711,7 @@ void ViewMainPage::openUrls(const QList<QUrl>& allUrls, const QUrl &currentUrl)
     }
 
     // Init views
-    for (DocumentView * view : qAsConst(d->mDocumentViews)) {
+    for (DocumentView *view : qAsConst(d->mDocumentViews)) {
         view->setCompareMode(d->mCompareMode);
         if (view->url() == currentUrl) {
             d->setCurrentView(view);
@@ -758,9 +746,9 @@ void ViewMainPage::reload()
         KGuiItem cont = KStandardGuiItem::cont();
         cont.setText(i18nc("@action:button", "Discard Changes and Reload"));
         int answer = KMessageBox::warningContinueCancel(this,
-                     i18nc("@info", "This image has been modified. Reloading it will discard all your changes."),
-                     QString() /* caption */,
-                     cont);
+                                                        i18nc("@info", "This image has been modified. Reloading it will discard all your changes."),
+                                                        QString() /* caption */,
+                                                        cont);
         if (answer != KMessageBox::Continue) {
             return;
         }
@@ -778,7 +766,7 @@ void ViewMainPage::reset()
     d->mDocumentViews.clear();
 }
 
-void ViewMainPage::slotViewFocused(DocumentView* view)
+void ViewMainPage::slotViewFocused(DocumentView *view)
 {
     d->setCurrentView(view);
 }
@@ -798,10 +786,10 @@ void ViewMainPage::slotEnterPressed()
     }
 }
 
-bool ViewMainPage::eventFilter(QObject* watched, QEvent* event)
+bool ViewMainPage::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == d->mThumbnailBar && event->type() == QEvent::KeyPress) {
-        auto *ke = static_cast<QKeyEvent*>(event);
+        auto *ke = static_cast<QKeyEvent *>(event);
         switch (ke->key()) {
         case Qt::Key_Left:
             if (QApplication::isRightToLeft()) {
@@ -827,11 +815,11 @@ bool ViewMainPage::eventFilter(QObject* watched, QEvent* event)
             break;
         }
     } else if (event->type() == QEvent::ShortcutOverride) {
-        const int key = static_cast<QKeyEvent*>(event)->key();
+        const int key = static_cast<QKeyEvent *>(event)->key();
         if (key == Qt::Key_Space || key == Qt::Key_Escape) {
-            const DocumentView* view = d->currentView();
+            const DocumentView *view = d->currentView();
             if (view) {
-                AbstractRasterImageViewTool* tool = view->currentTool();
+                AbstractRasterImageViewTool *tool = view->currentTool();
                 if (tool) {
                     QKeyEvent toolKeyEvent(QEvent::KeyPress, key, Qt::NoModifier);
                     tool->keyPressEvent(&toolKeyEvent);
@@ -847,20 +835,20 @@ bool ViewMainPage::eventFilter(QObject* watched, QEvent* event)
             event->accept();
         }
     }
-    
+
     return QWidget::eventFilter(watched, event);
 }
 
-void ViewMainPage::trashView(DocumentView* view)
+void ViewMainPage::trashView(DocumentView *view)
 {
     QUrl url = view->url();
     deselectView(view);
     FileOperations::trash(QList<QUrl>() << url, this);
 }
 
-void ViewMainPage::deselectView(DocumentView* view)
+void ViewMainPage::deselectView(DocumentView *view)
 {
-    DocumentView* newCurrentView = nullptr;
+    DocumentView *newCurrentView = nullptr;
     if (view == d->currentView()) {
         // We need to find a new view to set as current
         int idx = d->mDocumentViews.indexOf(view);
@@ -874,7 +862,7 @@ void ViewMainPage::deselectView(DocumentView* view)
     }
 
     QModelIndex index = d->indexForView(view);
-    QItemSelectionModel* selectionModel = d->mThumbnailBar->selectionModel();
+    QItemSelectionModel *selectionModel = d->mThumbnailBar->selectionModel();
     selectionModel->select(index, QItemSelectionModel::Deselect);
 
     if (newCurrentView) {
@@ -882,17 +870,17 @@ void ViewMainPage::deselectView(DocumentView* view)
     }
 }
 
-QToolButton* ViewMainPage::toggleSideBarButton() const
+QToolButton *ViewMainPage::toggleSideBarButton() const
 {
     return d->mToggleSideBarButton;
 }
 
-void ViewMainPage::showMessageWidget(QGraphicsWidget* widget, Qt::Alignment align)
+void ViewMainPage::showMessageWidget(QGraphicsWidget *widget, Qt::Alignment align)
 {
     d->mDocumentViewContainer->showMessageWidget(widget, align);
 }
 
-void ViewMainPage::updateFocus(const AbstractRasterImageViewTool* tool)
+void ViewMainPage::updateFocus(const AbstractRasterImageViewTool *tool)
 {
     if (!tool) {
         d->mDocumentViewContainer->setFocus();

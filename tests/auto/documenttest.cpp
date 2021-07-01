@@ -24,9 +24,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QTest>
 
 // KF
-#include <kio_version.h>
-#include <KJobUiDelegate>
 #include <KIO/StatJob>
+#include <KJobUiDelegate>
+#include <kio_version.h>
 
 // KDCraw
 #include <KDCRAW/KDcraw>
@@ -34,8 +34,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Local
 #include "../lib/abstractimageoperation.h"
 #include "../lib/document/abstractdocumenteditor.h"
-#include "../lib/document/documentjob.h"
 #include "../lib/document/documentfactory.h"
+#include "../lib/document/documentjob.h"
 #include "../lib/imagemetainfomodel.h"
 #include "../lib/imageutils.h"
 #include "../lib/transformimageoperation.h"
@@ -56,7 +56,7 @@ static void waitUntilMetaInfoLoaded(Document::Ptr doc)
     }
 }
 
-static bool waitUntilJobIsDone(DocumentJob* job)
+static bool waitUntilJobIsDone(DocumentJob *job)
 {
     JobWatcher watcher(job);
     watcher.wait();
@@ -90,7 +90,8 @@ void DocumentTest::testLoad()
     QByteArray mFormatHint = url.fileName().section('.', -1).toLocal8Bit().toLower();
     if (KDcrawIface::KDcraw::rawFilesList().contains(QString(mFormatHint))) {
         if (!KDcrawIface::KDcraw::loadEmbeddedPreview(expectedImage, url.toLocalFile())) {
-            QSKIP("Not running this test: failed to get expectedImage. Try running ./fetch_testing_raw.sh\
+            QSKIP(
+                "Not running this test: failed to get expectedImage. Try running ./fetch_testing_raw.sh\
  in the tests/data directory and then rerun the tests.");
         }
     }
@@ -121,21 +122,13 @@ void DocumentTest::testLoad()
     }
 }
 
-static void testLoad_newRow(
-    const char* fileName,
-    const QByteArray& format,
-    MimeTypeUtils::Kind kind = MimeTypeUtils::KIND_RASTER_IMAGE,
-    bool isAnimated = false,
-    int maxHeight = -1
-    )
+static void testLoad_newRow(const char *fileName,
+                            const QByteArray &format,
+                            MimeTypeUtils::Kind kind = MimeTypeUtils::KIND_RASTER_IMAGE,
+                            bool isAnimated = false,
+                            int maxHeight = -1)
 {
-    QTest::newRow(fileName)
-        << fileName
-        << QByteArray(format)
-        << int(kind)
-        << isAnimated
-        << QImage(pathForTestFile(fileName), format)
-        << maxHeight;
+    QTest::newRow(fileName) << fileName << QByteArray(format) << int(kind) << isAnimated << QImage(pathForTestFile(fileName), format) << maxHeight;
 }
 
 void DocumentTest::testLoad_data()
@@ -169,8 +162,7 @@ void DocumentTest::testLoad_data()
     // Animated
     testLoad_newRow("4frames.gif", "gif", MimeTypeUtils::KIND_RASTER_IMAGE, true);
     testLoad_newRow("1frame.gif", "gif", MimeTypeUtils::KIND_RASTER_IMAGE, false);
-    testLoad_newRow("185523_1frame_with_graphic_control_extension.gif",
-                    "gif", MimeTypeUtils::KIND_RASTER_IMAGE, false);
+    testLoad_newRow("185523_1frame_with_graphic_control_extension.gif", "gif", MimeTypeUtils::KIND_RASTER_IMAGE, false);
 }
 
 void DocumentTest::testLoadTwoPasses()
@@ -374,7 +366,8 @@ void DocumentTest::testLoadRotated()
     // RAW preview on rotated image
     url = urlForTestFile("dsd_1838.nef");
     if (!KDcrawIface::KDcraw::loadEmbeddedPreview(image, url.toLocalFile())) {
-        QSKIP("Not running this test: failed to get image. Try running ./fetch_testing_raw.sh\
+        QSKIP(
+            "Not running this test: failed to get image. Try running ./fetch_testing_raw.sh\
  in the tests/data directory and then rerun the tests.");
     }
     matrix = ImageUtils::transformMatrix(ROT_270);
@@ -401,9 +394,9 @@ void DocumentTest::testMultipleLoads()
 void DocumentTest::testSaveAs()
 {
     QUrl url = urlForTestFile("orient6.jpg");
-    DocumentFactory* factory = DocumentFactory::instance();
+    DocumentFactory *factory = DocumentFactory::instance();
     Document::Ptr doc = factory->load(url);
-    QSignalSpy savedSpy(doc.data(), SIGNAL(saved(QUrl,QUrl)));
+    QSignalSpy savedSpy(doc.data(), SIGNAL(saved(QUrl, QUrl)));
     QSignalSpy modifiedDocumentListChangedSpy(factory, SIGNAL(modifiedDocumentListChanged()));
     QSignalSpy documentChangedSpy(factory, SIGNAL(documentChanged(QUrl)));
     doc->startLoadingFullImage();
@@ -414,9 +407,7 @@ void DocumentTest::testSaveAs()
     QCOMPARE(doc->url(), destUrl);
     QCOMPARE(doc->metaInfo()->getValueForKey("General.Name"), destUrl.fileName());
 
-    QVERIFY2(doc->loadingState() == Document::Loaded,
-             "Document is supposed to finish loading before saving"
-            );
+    QVERIFY2(doc->loadingState() == Document::Loaded, "Document is supposed to finish loading before saving");
 
     QTest::qWait(100); // saved() is emitted asynchronously
     QCOMPARE(savedSpy.count(), 1);
@@ -506,7 +497,7 @@ void DocumentTest::testModifyAndSaveAs()
     {
     public:
         void redo() override
-    {
+        {
             QImage image(10, 10, QImage::Format_ARGB32);
             image.fill(QColor(Qt::white).rgb());
             document()->editor()->setImage(image);
@@ -514,10 +505,10 @@ void DocumentTest::testModifyAndSaveAs()
         }
     };
     QUrl url = urlForTestFile("orient6.jpg");
-    DocumentFactory* factory = DocumentFactory::instance();
+    DocumentFactory *factory = DocumentFactory::instance();
     Document::Ptr doc = factory->load(url);
 
-    QSignalSpy savedSpy(doc.data(), SIGNAL(saved(QUrl,QUrl)));
+    QSignalSpy savedSpy(doc.data(), SIGNAL(saved(QUrl, QUrl)));
     QSignalSpy modifiedDocumentListChangedSpy(factory, SIGNAL(modifiedDocumentListChanged()));
     QSignalSpy documentChangedSpy(factory, SIGNAL(documentChanged(QUrl)));
 
@@ -527,7 +518,7 @@ void DocumentTest::testModifyAndSaveAs()
 
     // Modify image
     QVERIFY(doc->editor());
-    auto* op = new TestOperation;
+    auto *op = new TestOperation;
     op->applyToDocument(doc);
     QTest::qWait(100);
     QVERIFY(doc->isModified());
@@ -623,7 +614,7 @@ void DocumentTest::testForgetModifiedDocument()
     doc->waitUntilLoaded();
 
     // Modify it
-    auto* op = new TransformImageOperation(ROT_90);
+    auto *op = new TransformImageOperation(ROT_90);
     op->applyToDocument(doc);
     QTest::qWait(100);
 
@@ -643,12 +634,12 @@ void DocumentTest::testForgetModifiedDocument()
 
 void DocumentTest::testModifiedAndSavedSignals()
 {
-    TransformImageOperation* op;
+    TransformImageOperation *op;
 
     QUrl url = urlForTestFile("orient6.jpg");
     Document::Ptr doc = DocumentFactory::instance()->load(url);
     QSignalSpy modifiedSpy(doc.data(), SIGNAL(modified(QUrl)));
-    QSignalSpy savedSpy(doc.data(), SIGNAL(saved(QUrl,QUrl)));
+    QSignalSpy savedSpy(doc.data(), SIGNAL(saved(QUrl, QUrl)));
     doc->waitUntilLoaded();
 
     QCOMPARE(modifiedSpy.count(), 0);
@@ -676,10 +667,11 @@ void DocumentTest::testModifiedAndSavedSignals()
 class TestJob : public DocumentJob
 {
 public:
-    TestJob(QString* str, char ch)
+    TestJob(QString *str, char ch)
         : mStr(str)
         , mCh(ch)
-    {}
+    {
+    }
 
 protected:
     void doStart() override
@@ -689,7 +681,7 @@ protected:
     }
 
 private:
-    QString* mStr;
+    QString *mStr;
     char mCh;
 };
 
@@ -697,7 +689,7 @@ void DocumentTest::testJobQueue()
 {
     QUrl url = urlForTestFile("orient6.jpg");
     Document::Ptr doc = DocumentFactory::instance()->load(url);
-    QSignalSpy spy(doc.data(), SIGNAL(busyChanged(QUrl,bool)));
+    QSignalSpy spy(doc.data(), SIGNAL(busyChanged(QUrl, bool)));
 
     QString str;
     doc->enqueueJob(new TestJob(&str, 'a'));
@@ -705,8 +697,7 @@ void DocumentTest::testJobQueue()
     doc->enqueueJob(new TestJob(&str, 'c'));
     QVERIFY(doc->isBusy());
     QEventLoop loop;
-    connect(doc.data(), &Document::allTasksDone,
-            &loop, &QEventLoop::quit);
+    connect(doc.data(), &Document::allTasksDone, &loop, &QEventLoop::quit);
     loop.exec();
     QVERIFY(!doc->isBusy());
     QCOMPARE(spy.count(), 2);
@@ -722,9 +713,9 @@ void DocumentTest::testJobQueue()
 class TestCheckDocumentEditorJob : public DocumentJob
 {
 public:
-    TestCheckDocumentEditorJob(int* hasEditor)
+    TestCheckDocumentEditorJob(int *hasEditor)
         : mHasEditor(hasEditor)
-        {
+    {
         *mHasEditor = -1;
     }
 
@@ -737,27 +728,27 @@ protected:
     }
 
 private:
-    int* mHasEditor;
+    int *mHasEditor;
 };
 
 class TestUiDelegate : public KJobUiDelegate
 {
 public:
-    TestUiDelegate(bool* showErrorMessageCalled)
+    TestUiDelegate(bool *showErrorMessageCalled)
         : mShowErrorMessageCalled(showErrorMessageCalled)
-        {
+    {
         setAutoErrorHandlingEnabled(true);
         *mShowErrorMessageCalled = false;
     }
 
     void showErrorMessage() override
     {
-        //qDebug();
+        // qDebug();
         *mShowErrorMessageCalled = true;
     }
 
 private:
-    bool* mShowErrorMessageCalled;
+    bool *mShowErrorMessageCalled;
 };
 
 /**
@@ -770,7 +761,7 @@ void DocumentTest::testCheckDocumentEditor()
     bool showErrorMessageCalled;
     QEventLoop loop;
     Document::Ptr doc;
-    TestCheckDocumentEditorJob* job;
+    TestCheckDocumentEditorJob *job;
 
     doc = DocumentFactory::instance()->load(urlForTestFile("orient6.jpg"));
 
@@ -802,8 +793,13 @@ void DocumentTest::testUndoStackPush()
     {
     protected:
         void redo() override
-    {
-            QMetaObject::invokeMethod(this, [this]() { finish(true); }, Qt::QueuedConnection);
+        {
+            QMetaObject::invokeMethod(
+                this,
+                [this]() {
+                    finish(true);
+                },
+                Qt::QueuedConnection);
         }
     };
 
@@ -811,12 +807,17 @@ void DocumentTest::testUndoStackPush()
     {
     protected:
         void redo() override
-    {
-            QMetaObject::invokeMethod(this, [this]() { finish(false); }, Qt::QueuedConnection);
+        {
+            QMetaObject::invokeMethod(
+                this,
+                [this]() {
+                    finish(false);
+                },
+                Qt::QueuedConnection);
         }
     };
 
-    AbstractImageOperation* op;
+    AbstractImageOperation *op;
     Document::Ptr doc = DocumentFactory::instance()->load(urlForTestFile("orient6.jpg"));
 
     // A successful operation should be added to the undo stack
@@ -862,7 +863,7 @@ void DocumentTest::testUndoRedo()
     QSignalSpy modifiedSpy(doc.data(), &Document::modified);
     QSignalSpy savedSpy(doc.data(), &Document::saved);
 
-    auto* op = new SuccessOperation;
+    auto *op = new SuccessOperation;
     QCOMPARE(op->mRedoCount, 0);
     QCOMPARE(op->mUndoCount, 0);
 

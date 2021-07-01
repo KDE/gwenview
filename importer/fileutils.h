@@ -26,26 +26,24 @@ class QUrl;
 
 namespace Gwenview
 {
-
 namespace FileUtils
 {
-
 enum RenameResult {
-    RenamedOK,           /** Renamed without problem */
+    RenamedOK, /** Renamed without problem */
     RenamedUnderNewName, /** Destination already existed, so rename() added a suffix to make the name unique */
-    Skipped,             /** Destination already existed and contained the same data as source, so rename() just removed the source */
-    RenameFailed,        /** Rename failed */
+    Skipped, /** Destination already existed and contained the same data as source, so rename() just removed the source */
+    RenameFailed, /** Rename failed */
 };
 
 /**
  * Compare content of two urls, returns whether they are the same
  */
-bool contentsAreIdentical(const QUrl& url1, const QUrl& url2, QWidget* authWindow = nullptr);
+bool contentsAreIdentical(const QUrl &url1, const QUrl &url2, QWidget *authWindow = nullptr);
 
 /**
  * Rename src to dst, returns RenameResult
  */
-RenameResult rename(const QUrl& src, const QUrl& dst, QWidget* authWindow = nullptr);
+RenameResult rename(const QUrl &src, const QUrl &dst, QWidget *authWindow = nullptr);
 
 } // namespace
 } // namespace

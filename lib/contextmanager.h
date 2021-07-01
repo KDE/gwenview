@@ -34,7 +34,6 @@ class QModelIndex;
 
 namespace Gwenview
 {
-
 class SortedDirModel;
 
 struct ContextManagerPrivate;
@@ -47,7 +46,7 @@ class GWENVIEWLIB_EXPORT ContextManager : public QObject
 {
     Q_OBJECT
 public:
-    ContextManager(SortedDirModel*, QObject* parent);
+    ContextManager(SortedDirModel *, QObject *parent);
 
     ~ContextManager() override;
 
@@ -56,7 +55,7 @@ public:
 
     QUrl currentUrl() const;
 
-    void setCurrentDirUrl(const QUrl&);
+    void setCurrentDirUrl(const QUrl &);
 
     QUrl currentDirUrl() const;
 
@@ -64,23 +63,23 @@ public:
 
     KFileItemList selectedFileItemList() const;
 
-    SortedDirModel* dirModel() const;
+    SortedDirModel *dirModel() const;
 
-    QItemSelectionModel* selectionModel() const;
+    QItemSelectionModel *selectionModel() const;
 
     bool currentUrlIsRasterImage() const;
 
     QUrl urlToSelect() const;
 
-    void setUrlToSelect(const QUrl&);
+    void setUrlToSelect(const QUrl &);
 
     QUrl targetDirUrl() const;
 
-    void setTargetDirUrl(const QUrl&);
+    void setTargetDirUrl(const QUrl &);
 
 Q_SIGNALS:
-    void currentDirUrlChanged(const QUrl&);
-    void currentUrlChanged(const QUrl&);
+    void currentDirUrlChanged(const QUrl &);
+    void currentUrlChanged(const QUrl &);
     void selectionChanged();
     void selectionDataChanged();
 
@@ -88,16 +87,16 @@ public Q_SLOTS:
     void slotSelectionChanged();
 
 private Q_SLOTS:
-    void slotDirModelDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
-    void slotCurrentChanged(const QModelIndex&);
+    void slotDirModelDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
+    void slotCurrentChanged(const QModelIndex &);
     void emitQueuedSignals();
-    void slotRowsAboutToBeRemoved(const QModelIndex& /*parent*/, int start, int end);
+    void slotRowsAboutToBeRemoved(const QModelIndex & /*parent*/, int start, int end);
     void slotRowsInserted();
     void selectUrlToSelect();
     void slotDirListerCompleted();
 
 private:
-    ContextManagerPrivate* const d;
+    ContextManagerPrivate *const d;
 };
 
 } // namespace

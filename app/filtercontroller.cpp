@@ -24,12 +24,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QAction>
 #include <QCompleter>
+#include <QIcon>
 #include <QLineEdit>
 #include <QPainter>
 #include <QPainterPath>
 #include <QTimer>
 #include <QToolButton>
-#include <QIcon>
 
 // KF
 #include <KComboBox>
@@ -49,8 +49,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
-NameFilterWidget::NameFilterWidget(SortedDirModel* model)
+NameFilterWidget::NameFilterWidget(SortedDirModel *model)
 {
     mFilter = new NameFilter(model);
 
@@ -60,22 +59,20 @@ NameFilterWidget::NameFilterWidget(SortedDirModel* model)
 
     mLineEdit = new QLineEdit;
 
-    auto* layout = new QHBoxLayout(this);
+    auto *layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(2);
     layout->addWidget(mModeComboBox);
     layout->addWidget(mLineEdit);
 
-    auto* timer = new QTimer(this);
+    auto *timer = new QTimer(this);
     timer->setInterval(350);
     timer->setSingleShot(true);
     connect(timer, &QTimer::timeout, this, &NameFilterWidget::applyNameFilter);
 
-    connect(mLineEdit, SIGNAL(textChanged(QString)),
-            timer, SLOT(start()));
+    connect(mLineEdit, SIGNAL(textChanged(QString)), timer, SLOT(start()));
 
-    connect(mModeComboBox, SIGNAL(currentIndexChanged(int)),
-            SLOT(applyNameFilter()));
+    connect(mModeComboBox, SIGNAL(currentIndexChanged(int)), SLOT(applyNameFilter()));
 
     QTimer::singleShot(0, mLineEdit, SLOT(setFocus()));
 }
@@ -92,26 +89,24 @@ void NameFilterWidget::applyNameFilter()
     mFilter->setText(mLineEdit->text());
 }
 
-DateFilterWidget::DateFilterWidget(SortedDirModel* model)
+DateFilterWidget::DateFilterWidget(SortedDirModel *model)
 {
     mFilter = new DateFilter(model);
 
     mModeComboBox = new KComboBox;
     mModeComboBox->addItem(i18n("Date >="), DateFilter::GreaterOrEqual);
-    mModeComboBox->addItem(i18n("Date ="),  DateFilter::Equal);
+    mModeComboBox->addItem(i18n("Date ="), DateFilter::Equal);
     mModeComboBox->addItem(i18n("Date <="), DateFilter::LessOrEqual);
 
     mDateWidget = new DateWidget;
 
-    auto* layout = new QHBoxLayout(this);
+    auto *layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(mModeComboBox);
     layout->addWidget(mDateWidget);
 
-    connect(mDateWidget, &DateWidget::dateChanged,
-            this, &DateFilterWidget::applyDateFilter);
-    connect(mModeComboBox, SIGNAL(currentIndexChanged(int)),
-            SLOT(applyDateFilter()));
+    connect(mDateWidget, &DateWidget::dateChanged, this, &DateFilterWidget::applyDateFilter);
+    connect(mModeComboBox, SIGNAL(currentIndexChanged(int)), SLOT(applyDateFilter()));
 
     applyDateFilter();
 }
@@ -129,29 +124,27 @@ void DateFilterWidget::applyDateFilter()
 }
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-RatingFilterWidget::RatingFilterWidget(SortedDirModel* model)
+RatingFilterWidget::RatingFilterWidget(SortedDirModel *model)
 {
     mModeComboBox = new KComboBox;
     mModeComboBox->addItem(i18n("Rating >="), RatingFilter::GreaterOrEqual);
-    mModeComboBox->addItem(i18n("Rating =") , RatingFilter::Equal);
+    mModeComboBox->addItem(i18n("Rating ="), RatingFilter::Equal);
     mModeComboBox->addItem(i18n("Rating <="), RatingFilter::LessOrEqual);
 
     mRatingWidget = new KRatingWidget;
     mRatingWidget->setHalfStepsEnabled(true);
     mRatingWidget->setMaxRating(10);
 
-    auto* layout = new QHBoxLayout(this);
+    auto *layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(mModeComboBox);
     layout->addWidget(mRatingWidget);
 
     mFilter = new RatingFilter(model);
 
-    QObject::connect(mModeComboBox, SIGNAL(currentIndexChanged(int)),
-                     SLOT(updateFilterMode()));
+    QObject::connect(mModeComboBox, SIGNAL(currentIndexChanged(int)), SLOT(updateFilterMode()));
 
-    QObject::connect(mRatingWidget, SIGNAL(ratingChanged(int)),
-                     SLOT(slotRatingChanged(int)));
+    QObject::connect(mRatingWidget, SIGNAL(ratingChanged(int)), SLOT(slotRatingChanged(int)));
 
     updateFilterMode();
 }
@@ -172,8 +165,7 @@ void RatingFilterWidget::updateFilterMode()
     mFilter->setMode(RatingFilter::Mode(data.toInt()));
 }
 
-
-TagFilterWidget::TagFilterWidget(SortedDirModel* model)
+TagFilterWidget::TagFilterWidget(SortedDirModel *model)
 {
     mFilter = new TagFilter(model);
 
@@ -183,16 +175,16 @@ TagFilterWidget::TagFilterWidget(SortedDirModel* model)
 
     mTagComboBox = new QComboBox;
 
-    auto* layout = new QHBoxLayout(this);
+    auto *layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(mModeComboBox);
     layout->addWidget(mTagComboBox);
 
-    AbstractSemanticInfoBackEnd* backEnd = model->semanticInfoBackEnd();
+    AbstractSemanticInfoBackEnd *backEnd = model->semanticInfoBackEnd();
     backEnd->refreshAllTags();
-    TagModel* tagModel = TagModel::createAllTagsModel(this, backEnd);
+    TagModel *tagModel = TagModel::createAllTagsModel(this, backEnd);
 
-    auto* completer = new QCompleter(mTagComboBox);
+    auto *completer = new QCompleter(mTagComboBox);
     completer->setCaseSensitivity(Qt::CaseInsensitive);
     completer->setModel(tagModel);
     mTagComboBox->setCompleter(completer);
@@ -241,16 +233,16 @@ public:
         setPalette(pal);
     }
 
-    void setFilterWidget(QWidget* widget)
+    void setFilterWidget(QWidget *widget)
     {
-        auto* closeButton = new QToolButton;
+        auto *closeButton = new QToolButton;
         closeButton->setIcon(QIcon::fromTheme(QStringLiteral("window-close")));
         closeButton->setAutoRaise(true);
         closeButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
         int size = style()->pixelMetric(QStyle::PM_SmallIconSize);
         closeButton->setIconSize(QSize(size, size));
         connect(closeButton, &QAbstractButton::clicked, this, &QObject::deleteLater);
-        auto* layout = new QHBoxLayout(this);
+        auto *layout = new QHBoxLayout(this);
         layout->setContentsMargins(2, 2, 2, 2);
         layout->setSpacing(2);
         layout->addWidget(widget);
@@ -258,7 +250,7 @@ public:
     }
 
 protected:
-    void paintEvent(QPaintEvent*) override
+    void paintEvent(QPaintEvent *) override
     {
         QPainter painter(this);
         painter.setRenderHint(QPainter::Antialiasing);
@@ -271,9 +263,8 @@ protected:
     }
 };
 
-
-FilterController::FilterController(QFrame* frame, SortedDirModel* dirModel)
-: QObject(frame)
+FilterController::FilterController(QFrame *frame, SortedDirModel *dirModel)
+    : QObject(frame)
 {
     q = this;
     mFrame = frame;
@@ -281,29 +272,21 @@ FilterController::FilterController(QFrame* frame, SortedDirModel* dirModel)
     mFilterWidgetCount = 0;
 
     mFrame->hide();
-    auto* layout = new FlowLayout(mFrame);
+    auto *layout = new FlowLayout(mFrame);
     layout->setSpacing(2);
 
-    addAction(i18nc("@action:inmenu", "Filter by Name"),
-              SLOT(addFilterByName()),
-              QKeySequence(Qt::CTRL | Qt::Key_I));
+    addAction(i18nc("@action:inmenu", "Filter by Name"), SLOT(addFilterByName()), QKeySequence(Qt::CTRL | Qt::Key_I));
 
-    addAction(i18nc("@action:inmenu", "Filter by Date"),
-              SLOT(addFilterByDate()),
-              QKeySequence());
+    addAction(i18nc("@action:inmenu", "Filter by Date"), SLOT(addFilterByDate()), QKeySequence());
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-    addAction(i18nc("@action:inmenu", "Filter by Rating"),
-              SLOT(addFilterByRating()),
-              QKeySequence());
+    addAction(i18nc("@action:inmenu", "Filter by Rating"), SLOT(addFilterByRating()), QKeySequence());
 
-    addAction(i18nc("@action:inmenu", "Filter by Tag"),
-              SLOT(addFilterByTag()),
-              QKeySequence());
+    addAction(i18nc("@action:inmenu", "Filter by Tag"), SLOT(addFilterByTag()), QKeySequence());
 #endif
 }
 
-QList<QAction*> FilterController::actionList() const
+QList<QAction *> FilterController::actionList() const
 {
     return mActionList;
 }
@@ -338,22 +321,20 @@ void FilterController::slotFilterWidgetClosed()
     }
 }
 
-
-void FilterController::addAction(const QString& text, const char* slot, const QKeySequence &shortcut)
+void FilterController::addAction(const QString &text, const char *slot, const QKeySequence &shortcut)
 {
-    auto* action = new QAction(text, q);
+    auto *action = new QAction(text, q);
     action->setShortcut(shortcut);
     QObject::connect(action, SIGNAL(triggered()), q, slot);
     mActionList << action;
 }
 
-
-void FilterController::addFilter(QWidget* widget)
+void FilterController::addFilter(QWidget *widget)
 {
     if (mFrame->isHidden()) {
         mFrame->show();
     }
-    auto* container = new FilterWidgetContainer;
+    auto *container = new FilterWidgetContainer;
     container->setFilterWidget(widget);
     mFrame->layout()->addWidget(container);
 

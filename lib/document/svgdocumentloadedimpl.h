@@ -30,27 +30,26 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 struct SvgDocumentLoadedImplPrivate;
 class SvgDocumentLoadedImpl : public AbstractDocumentImpl
 {
     Q_OBJECT
 public:
-    SvgDocumentLoadedImpl(Document*, const QByteArray&);
+    SvgDocumentLoadedImpl(Document *, const QByteArray &);
     ~SvgDocumentLoadedImpl() override;
 
     void init() override;
 
     Document::LoadingState loadingState() const override;
 
-    virtual void setImage(const QImage&);
+    virtual void setImage(const QImage &);
 
     QByteArray rawData() const override;
 
-    QSvgRenderer* svgRenderer() const override;
+    QSvgRenderer *svgRenderer() const override;
 
 private:
-    SvgDocumentLoadedImplPrivate* const d;
+    SvgDocumentLoadedImplPrivate *const d;
 };
 
 } // namespace

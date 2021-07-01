@@ -31,7 +31,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 class ImportDialogPrivate;
 class ImportDialog : public KMainWindow
 {
@@ -43,18 +42,18 @@ public:
     QSize sizeHint() const override;
 
 public Q_SLOTS:
-    void setSourceUrl(const QUrl&, const QString& deviceUdi);
+    void setSourceUrl(const QUrl &, const QString &deviceUdi);
 
 private Q_SLOTS:
     void startImport();
     void slotImportFinished();
-    void showImportError(const QString&);
+    void showImportError(const QString &);
 
 Q_SIGNALS:
-    void showErrors(const QStringList&, const QStringList&);
+    void showErrors(const QStringList &, const QStringList &);
 
 private:
-    ImportDialogPrivate* const d;
+    ImportDialogPrivate *const d;
 };
 
 } // namespace

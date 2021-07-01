@@ -31,17 +31,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 #undef ENABLE_LOG
 #undef LOG
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
-#define LOG(x) //qCDebug(GWENVIEW_LIB_LOG) << x
+#define LOG(x) // qCDebug(GWENVIEW_LIB_LOG) << x
 #else
 #define LOG(x) ;
 #endif
 
-static void storeThumbnailToDiskCache(const QString& path, const QImage& image)
+static void storeThumbnailToDiskCache(const QString &path, const QImage &image)
 {
     if (GwenviewConfig::lowResourceUsageMode()) {
         return;
@@ -62,7 +61,7 @@ static void storeThumbnailToDiskCache(const QString& path, const QImage& image)
     QFile::rename(tmp.fileName(), path);
 }
 
-void ThumbnailWriter::queueThumbnail(const QString& path, const QImage& image)
+void ThumbnailWriter::queueThumbnail(const QString &path, const QImage &image)
 {
     if (GwenviewConfig::lowResourceUsageMode()) {
         return;
@@ -93,7 +92,7 @@ void ThumbnailWriter::run()
     }
 }
 
-QImage ThumbnailWriter::value(const QString& path) const
+QImage ThumbnailWriter::value(const QString &path) const
 {
     QMutexLocker locker(&mMutex);
     return mCache.value(path);

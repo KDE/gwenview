@@ -32,24 +32,20 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
-struct DocumentDirFinderPrivate
-{
+struct DocumentDirFinderPrivate {
     QUrl mRootUrl;
-    KDirLister* mDirLister;
+    KDirLister *mDirLister;
 
     QUrl mFoundDirUrl;
 };
 
-DocumentDirFinder::DocumentDirFinder(const QUrl& rootUrl)
-: d(new DocumentDirFinderPrivate)
+DocumentDirFinder::DocumentDirFinder(const QUrl &rootUrl)
+    : d(new DocumentDirFinderPrivate)
 {
     d->mRootUrl = rootUrl;
     d->mDirLister = new KDirLister(this);
-    connect(d->mDirLister, &KCoreDirLister::itemsAdded,
-            this, &DocumentDirFinder::slotItemsAdded);
-    connect(d->mDirLister, SIGNAL(completed()),
-            SLOT(slotCompleted()));
+    connect(d->mDirLister, &KCoreDirLister::itemsAdded, this, &DocumentDirFinder::slotItemsAdded);
+    connect(d->mDirLister, SIGNAL(completed()), SLOT(slotCompleted()));
     d->mDirLister->openUrl(rootUrl);
 }
 
@@ -63,9 +59,9 @@ void DocumentDirFinder::start()
     d->mDirLister->openUrl(d->mRootUrl);
 }
 
-void DocumentDirFinder::slotItemsAdded(const QUrl& dir, const KFileItemList& list)
+void DocumentDirFinder::slotItemsAdded(const QUrl &dir, const KFileItemList &list)
 {
-    for (const KFileItem & item : list) {
+    for (const KFileItem &item : list) {
         MimeTypeUtils::Kind kind = MimeTypeUtils::fileItemKind(item);
         switch (kind) {
         case MimeTypeUtils::KIND_DIR:
@@ -104,7 +100,7 @@ void DocumentDirFinder::slotCompleted()
     }
 }
 
-void DocumentDirFinder::finish(const QUrl& url, DocumentDirFinder::Status status)
+void DocumentDirFinder::finish(const QUrl &url, DocumentDirFinder::Status status)
 {
     disconnect(d->mDirLister, nullptr, this, nullptr);
     emit done(url, status);

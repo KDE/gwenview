@@ -44,7 +44,7 @@ class FileOpsContextManagerItem : public AbstractContextManagerItem
 {
     Q_OBJECT
 public:
-    FileOpsContextManagerItem(Gwenview::ContextManager* manager, QListView* thumbnailView, KActionCollection* actionCollection, KXMLGUIClient* client);
+    FileOpsContextManagerItem(Gwenview::ContextManager *manager, QListView *thumbnailView, KActionCollection *actionCollection, KXMLGUIClient *client);
     ~FileOpsContextManagerItem() override;
 
 private Q_SLOTS:
@@ -65,36 +65,36 @@ private Q_SLOTS:
     void showProperties();
     void createFolder();
     void populateOpenMenu();
-    void openWith(QAction* action);
+    void openWith(QAction *action);
     void openContainingFolder();
 
 private:
     QList<QUrl> urlList() const;
     void updateServiceList();
-    QMimeData* selectionMimeData();
+    QMimeData *selectionMimeData();
     QUrl pasteTargetUrl() const;
 
-    QListView* mThumbnailView;
-    KXMLGUIClient* mXMLGUIClient;
-    SideBarGroup* mGroup;
-    QAction * mCutAction;
-    QAction * mCopyAction;
-    QAction * mPasteAction;
-    QAction * mCopyToAction;
-    QAction * mMoveToAction;
-    QAction * mLinkToAction;
-    QAction * mRenameAction;
-    QAction * mTrashAction;
-    QAction * mDelAction;
-    QAction * mRestoreAction;
-    QAction * mShowPropertiesAction;
-    QAction * mCreateFolderAction;
-    QAction * mOpenWithAction;
-    QAction * mOpenContainingFolderAction;
-    QList<QAction*> mRegularFileActionList;
-    QList<QAction*> mTrashFileActionList;
+    QListView *mThumbnailView;
+    KXMLGUIClient *mXMLGUIClient;
+    SideBarGroup *mGroup;
+    QAction *mCutAction;
+    QAction *mCopyAction;
+    QAction *mPasteAction;
+    QAction *mCopyToAction;
+    QAction *mMoveToAction;
+    QAction *mLinkToAction;
+    QAction *mRenameAction;
+    QAction *mTrashAction;
+    QAction *mDelAction;
+    QAction *mRestoreAction;
+    QAction *mShowPropertiesAction;
+    QAction *mCreateFolderAction;
+    QAction *mOpenWithAction;
+    QAction *mOpenContainingFolderAction;
+    QList<QAction *> mRegularFileActionList;
+    QList<QAction *> mTrashFileActionList;
     KService::List mServiceList;
-    KNewFileMenu * mNewFileMenu;
+    KNewFileMenu *mNewFileMenu;
     bool mInTrash;
 };
 

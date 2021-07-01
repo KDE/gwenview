@@ -21,8 +21,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "semanticinfobackendtest.h"
 
 // Qt
-#include <QSignalSpy>
 #include <QDebug>
+#include <QSignalSpy>
 #include <QTemporaryFile>
 #include <QTest>
 
@@ -49,15 +49,13 @@ QTEST_MAIN(Gwenview::SemanticInfoBackEndTest)
 
 namespace Gwenview
 {
-
-SemanticInfoBackEndClient::SemanticInfoBackEndClient(AbstractSemanticInfoBackEnd* backEnd)
-: mBackEnd(backEnd)
+SemanticInfoBackEndClient::SemanticInfoBackEndClient(AbstractSemanticInfoBackEnd *backEnd)
+    : mBackEnd(backEnd)
 {
-    connect(backEnd, SIGNAL(semanticInfoRetrieved(QUrl,SemanticInfo)),
-            SLOT(slotSemanticInfoRetrieved(QUrl,SemanticInfo)));
+    connect(backEnd, SIGNAL(semanticInfoRetrieved(QUrl, SemanticInfo)), SLOT(slotSemanticInfoRetrieved(QUrl, SemanticInfo)));
 }
 
-void SemanticInfoBackEndClient::slotSemanticInfoRetrieved(const QUrl &url, const SemanticInfo& semanticInfo)
+void SemanticInfoBackEndClient::slotSemanticInfoRetrieved(const QUrl &url, const SemanticInfo &semanticInfo)
 {
     mSemanticInfoForUrl[url] = semanticInfo;
 }
@@ -95,7 +93,7 @@ void SemanticInfoBackEndTest::testRating()
     url.setPath(temp.fileName());
 
     SemanticInfoBackEndClient client(mBackEnd);
-    QSignalSpy spy(mBackEnd, SIGNAL(semanticInfoRetrieved(QUrl,SemanticInfo)));
+    QSignalSpy spy(mBackEnd, SIGNAL(semanticInfoRetrieved(QUrl, SemanticInfo)));
     mBackEnd->retrieveSemanticInfo(url);
     QVERIFY(waitForSignal(spy));
 

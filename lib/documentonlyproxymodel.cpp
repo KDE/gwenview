@@ -31,14 +31,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
-struct DocumentOnlyProxyModelPrivate
-{
+struct DocumentOnlyProxyModelPrivate {
 };
 
-DocumentOnlyProxyModel::DocumentOnlyProxyModel(QObject* parent)
-: QSortFilterProxyModel(parent)
-, d(new DocumentOnlyProxyModelPrivate)
+DocumentOnlyProxyModel::DocumentOnlyProxyModel(QObject *parent)
+    : QSortFilterProxyModel(parent)
+    , d(new DocumentOnlyProxyModelPrivate)
 {
     setDynamicSortFilter(true);
 }
@@ -54,6 +52,5 @@ bool DocumentOnlyProxyModel::filterAcceptsRow(int row, const QModelIndex &parent
     const KFileItem fileItem = index.data(KDirModel::FileItemRole).value<KFileItem>();
     return !ArchiveUtils::fileItemIsDirOrArchive(fileItem);
 }
-
 
 } // namespace

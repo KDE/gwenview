@@ -21,9 +21,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "twofingerpan.h"
 
 // Qt
+#include <QGraphicsWidget>
 #include <QTouchEvent>
 #include <QVector2D>
-#include <QGraphicsWidget>
 
 // KF
 
@@ -33,18 +33,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
-struct TwoFingerPanRecognizerPrivate
-{
-    TwoFingerPanRecognizer* q;
+struct TwoFingerPanRecognizerPrivate {
+    TwoFingerPanRecognizer *q;
     bool mTargetIsGrapicsWidget = false;
     qint64 mTouchBeginnTimestamp;
     bool mGestureTriggered;
     qint64 mLastTouchTimestamp;
 };
 
-TwoFingerPanRecognizer::TwoFingerPanRecognizer() : QGestureRecognizer()
-    , d (new TwoFingerPanRecognizerPrivate)
+TwoFingerPanRecognizer::TwoFingerPanRecognizer()
+    : QGestureRecognizer()
+    , d(new TwoFingerPanRecognizerPrivate)
 {
     d->q = this;
 }
@@ -54,21 +53,23 @@ TwoFingerPanRecognizer::~TwoFingerPanRecognizer()
     delete d;
 }
 
-QGesture* TwoFingerPanRecognizer::create(QObject*)
+QGesture *TwoFingerPanRecognizer::create(QObject *)
 {
-    return static_cast<QGesture*>(new TwoFingerPan());
+    return static_cast<QGesture *>(new TwoFingerPan());
 }
 
-QGestureRecognizer::Result TwoFingerPanRecognizer::recognize(QGesture* state, QObject* watched, QEvent* event)
+QGestureRecognizer::Result TwoFingerPanRecognizer::recognize(QGesture *state, QObject *watched, QEvent *event)
 {
-    //Because of a bug in Qt in a gesture event in a graphicsview, all gestures are trigger twice
-    //https://bugreports.qt.io/browse/QTBUG-13103
-    if (qobject_cast<QGraphicsWidget*>(watched)) d->mTargetIsGrapicsWidget = true;
-    if (d->mTargetIsGrapicsWidget && watched->isWidgetType()) return Ignore;
+    // Because of a bug in Qt in a gesture event in a graphicsview, all gestures are trigger twice
+    // https://bugreports.qt.io/browse/QTBUG-13103
+    if (qobject_cast<QGraphicsWidget *>(watched))
+        d->mTargetIsGrapicsWidget = true;
+    if (d->mTargetIsGrapicsWidget && watched->isWidgetType())
+        return Ignore;
 
     switch (event->type()) {
     case QEvent::TouchBegin: {
-        auto* touchEvent = static_cast<QTouchEvent*>(event);
+        auto *touchEvent = static_cast<QTouchEvent *>(event);
         d->mTouchBeginnTimestamp = touchEvent->timestamp();
         d->mLastTouchTimestamp = touchEvent->timestamp();
         d->mGestureTriggered = false;
@@ -78,7 +79,7 @@ QGestureRecognizer::Result TwoFingerPanRecognizer::recognize(QGesture* state, QO
     }
 
     case QEvent::TouchUpdate: {
-        auto* touchEvent = static_cast<QTouchEvent*>(event);
+        auto *touchEvent = static_cast<QTouchEvent *>(event);
         const qint64 now = touchEvent->timestamp();
         const QPointF pos = touchEvent->touchPoints().first().pos();
         state->setHotSpot(touchEvent->touchPoints().first().screenPos());
@@ -99,19 +100,21 @@ QGestureRecognizer::Result TwoFingerPanRecognizer::recognize(QGesture* state, QO
             }
 
             if (now - d->mTouchBeginnTimestamp >= Touch_Helper::Touch::gestureDelay) {
-                state ->setProperty("delayActive", false);
+                state->setProperty("delayActive", false);
 
-                //Check if both touch points moving in the same direction
-                const QVector2D vectorTouchPoint1 = QVector2D (touchEvent->touchPoints().at(0).startPos() - touchEvent->touchPoints().at(0).pos());
-                const QVector2D vectorTouchPoint2 = QVector2D (touchEvent->touchPoints().at(1).startPos() - touchEvent->touchPoints().at(1).pos());
+                // Check if both touch points moving in the same direction
+                const QVector2D vectorTouchPoint1 = QVector2D(touchEvent->touchPoints().at(0).startPos() - touchEvent->touchPoints().at(0).pos());
+                const QVector2D vectorTouchPoint2 = QVector2D(touchEvent->touchPoints().at(1).startPos() - touchEvent->touchPoints().at(1).pos());
                 QVector2D dotProduct = vectorTouchPoint1 * vectorTouchPoint2;
 
-                //The dot product is greater than zero if both touch points moving in the same direction
-                //special case if the touch point moving exact or almost exact in x or y axis
-                //one value of the dot product is zero or a little bit less than zero and
-                //the other value is bigger than zero
-                if (dotProduct.x() >= -500 && dotProduct.x() <= 0 && dotProduct.y() > 0) dotProduct.setX(1);
-                if (dotProduct.y() >= -500 && dotProduct.y() <= 0 && dotProduct.x() > 0) dotProduct.setY(1);
+                // The dot product is greater than zero if both touch points moving in the same direction
+                // special case if the touch point moving exact or almost exact in x or y axis
+                // one value of the dot product is zero or a little bit less than zero and
+                // the other value is bigger than zero
+                if (dotProduct.x() >= -500 && dotProduct.x() <= 0 && dotProduct.y() > 0)
+                    dotProduct.setX(1);
+                if (dotProduct.y() >= -500 && dotProduct.y() <= 0 && dotProduct.x() > 0)
+                    dotProduct.setY(1);
 
                 if (dotProduct.x() > 0 && dotProduct.y() > 0) {
                     const QPointF diff = (touchEvent->touchPoints().first().lastPos() - pos);
@@ -119,9 +122,9 @@ QGestureRecognizer::Result TwoFingerPanRecognizer::recognize(QGesture* state, QO
                     d->mGestureTriggered = true;
                     return TriggerGesture;
                 } else {
-                    //special case if the user makes a very slow pan gesture, the vectors a very short. Sometimes the
-                    //dot product is then zero, so we only want to cancel the gesture if the user makes a bigger wrong gesture
-                    if (vectorTouchPoint1.toPoint().manhattanLength() > 50 || vectorTouchPoint2.toPoint().manhattanLength() > 50 ) {
+                    // special case if the user makes a very slow pan gesture, the vectors a very short. Sometimes the
+                    // dot product is then zero, so we only want to cancel the gesture if the user makes a bigger wrong gesture
+                    if (vectorTouchPoint1.toPoint().manhattanLength() > 50 || vectorTouchPoint2.toPoint().manhattanLength() > 50) {
                         d->mGestureTriggered = false;
                         return CancelGesture;
                     } else {
@@ -132,7 +135,7 @@ QGestureRecognizer::Result TwoFingerPanRecognizer::recognize(QGesture* state, QO
                     }
                 }
             } else {
-                state->setProperty("delta", QPointF (0, 0));
+                state->setProperty("delta", QPointF(0, 0));
                 state->setProperty("delayActive", true);
                 d->mGestureTriggered = false;
                 return TriggerGesture;
@@ -142,7 +145,7 @@ QGestureRecognizer::Result TwoFingerPanRecognizer::recognize(QGesture* state, QO
     }
 
     case QEvent::TouchEnd: {
-        auto* touchEvent = static_cast<QTouchEvent*>(event);
+        auto *touchEvent = static_cast<QTouchEvent *>(event);
         if (d->mGestureTriggered) {
             d->mGestureTriggered = false;
             state->setHotSpot(touchEvent->touchPoints().first().screenPos());
@@ -157,7 +160,7 @@ QGestureRecognizer::Result TwoFingerPanRecognizer::recognize(QGesture* state, QO
     return Ignore;
 }
 
-TwoFingerPan::TwoFingerPan(QObject* parent)
+TwoFingerPan::TwoFingerPan(QObject *parent)
     : QGesture(parent)
 {
 }

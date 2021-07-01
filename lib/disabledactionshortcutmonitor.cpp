@@ -30,16 +30,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace Gwenview
 {
-
 class DisabledActionShortcutMonitorPrivate
 {
 public:
-    QShortcut* mShortcut;
+    QShortcut *mShortcut;
 };
 
-DisabledActionShortcutMonitor::DisabledActionShortcutMonitor(QAction* action, QWidget* parent)
-: QObject(parent)
-, d(new DisabledActionShortcutMonitorPrivate)
+DisabledActionShortcutMonitor::DisabledActionShortcutMonitor(QAction *action, QWidget *parent)
+    : QObject(parent)
+    , d(new DisabledActionShortcutMonitorPrivate)
 {
     d->mShortcut = new QShortcut(parent);
     connect(d->mShortcut, &QShortcut::activated, this, &DisabledActionShortcutMonitor::activated);
@@ -52,10 +51,10 @@ DisabledActionShortcutMonitor::~DisabledActionShortcutMonitor()
     delete d;
 }
 
-bool DisabledActionShortcutMonitor::eventFilter(QObject* object, QEvent* event)
+bool DisabledActionShortcutMonitor::eventFilter(QObject *object, QEvent *event)
 {
     if (event->type() == QEvent::ActionChanged) {
-        auto* action = static_cast<QAction*>(object);
+        auto *action = static_cast<QAction *>(object);
         if (action->isEnabled()) {
             // Unset the shortcut otherwise we get a dialog complaining about
             // ambiguous shortcuts when the user tries to trigger the action

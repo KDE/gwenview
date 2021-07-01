@@ -24,11 +24,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Qt
 #include <QAction>
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QBitmap>
+#include <QDesktopWidget>
 #include <QEvent>
-#include <QMouseEvent>
 #include <QLayout>
+#include <QMouseEvent>
 #include <QScreen>
 #include <QTimeLine>
 #include <QTimer>
@@ -44,7 +44,6 @@ using namespace std::chrono_literals;
 
 namespace Gwenview
 {
-
 static const int SLIDE_DURATION = 150;
 static const int AUTO_HIDE_CURSOR_TIMEOUT = 1000;
 
@@ -55,14 +54,13 @@ static const int INITIAL_HIDE_TIMEOUT = 2000;
 // prevent accidental slide outs
 static const int EXTRA_BAR_HEIGHT = 20;
 
-struct FullScreenBarPrivate
-{
-    FullScreenBar* q;
-    QTimeLine* mTimeLine;
-    QTimer* mAutoHideCursorTimer;
+struct FullScreenBarPrivate {
+    FullScreenBar *q;
+    QTimeLine *mTimeLine;
+    QTimer *mAutoHideCursorTimer;
     bool mAutoHidingEnabled;
     bool mEdgeTriggerEnabled;
-    QTimer* mInitialHideTimer;
+    QTimer *mInitialHideTimer;
 
     void startTimeLine()
     {
@@ -115,9 +113,9 @@ struct FullScreenBarPrivate
     }
 };
 
-FullScreenBar::FullScreenBar(QWidget* parent)
-: QFrame(parent)
-, d(new FullScreenBarPrivate)
+FullScreenBar::FullScreenBar(QWidget *parent)
+    : QFrame(parent)
+    , d(new FullScreenBarPrivate)
 {
     d->q = this;
     d->mAutoHidingEnabled = true;
@@ -222,7 +220,7 @@ void FullScreenBar::slideIn()
     d->startTimeLine();
 }
 
-bool FullScreenBar::eventFilter(QObject* object, QEvent* event)
+bool FullScreenBar::eventFilter(QObject *object, QEvent *event)
 {
     if (event->type() == QEvent::MouseMove) {
         QApplication::restoreOverrideCursor();
@@ -232,7 +230,7 @@ bool FullScreenBar::eventFilter(QObject* object, QEvent* event)
                 slideOut();
             }
         } else {
-            auto* mouseEvent = static_cast<QMouseEvent *>(event);
+            auto *mouseEvent = static_cast<QMouseEvent *>(event);
             if (d->mEdgeTriggerEnabled && mouseEvent->buttons() == 0 && d->slideInTriggerRect().contains(QCursor::pos())) {
                 slideIn();
             }
@@ -258,9 +256,9 @@ bool FullScreenBar::eventFilter(QObject* object, QEvent* event)
     // parenthesis construct should be removed. Use KLocale's method to do this.
     // """
     if (event->type() == QEvent::Show || event->type() == QEvent::Paint) {
-        auto* button = qobject_cast<QToolButton*>(object);
+        auto *button = qobject_cast<QToolButton *>(object);
         if (button && !button->actions().isEmpty()) {
-            QAction* action = button->actions().constFirst();
+            QAction *action = button->actions().constFirst();
             QString toolTip = KLocalizedString::removeAcceleratorMarker(action->toolTip());
             // Filtering message requested by translators (scripting).
             button->setToolTip(i18nc("@info:tooltip of custom toolbar button", "%1", toolTip));

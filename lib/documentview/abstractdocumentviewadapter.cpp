@@ -31,9 +31,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 AbstractDocumentViewAdapter::AbstractDocumentViewAdapter()
-: mWidget(nullptr)
+    : mWidget(nullptr)
 {
 }
 
@@ -47,7 +46,7 @@ QCursor AbstractDocumentViewAdapter::cursor() const
     return mWidget ? mWidget->cursor() : QCursor();
 }
 
-void AbstractDocumentViewAdapter::setCursor(const QCursor& cursor)
+void AbstractDocumentViewAdapter::setCursor(const QCursor &cursor)
 {
     if (mWidget) {
         mWidget->setCursor(cursor);

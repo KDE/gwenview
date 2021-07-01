@@ -35,16 +35,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 //// RasterImageViewAdapter ////
-struct RasterImageViewAdapterPrivate
-{
-    RasterImageViewAdapter* q;
-    RasterImageView* mView;
+struct RasterImageViewAdapterPrivate {
+    RasterImageViewAdapter *q;
+    RasterImageView *mView;
 };
 
 RasterImageViewAdapter::RasterImageViewAdapter()
-: d(new RasterImageViewAdapterPrivate)
+    : d(new RasterImageViewAdapterPrivate)
 {
     d->q = this;
     d->mView = new RasterImageView;
@@ -71,7 +69,7 @@ QCursor RasterImageViewAdapter::cursor() const
     return d->mView->cursor();
 }
 
-void RasterImageViewAdapter::setCursor(const QCursor& cursor)
+void RasterImageViewAdapter::setCursor(const QCursor &cursor)
 {
     d->mView->setCursor(cursor);
 }
@@ -96,7 +94,7 @@ void RasterImageViewAdapter::setZoomToFit(bool on)
     d->mView->setZoomToFit(on);
 }
 
-void RasterImageViewAdapter::setZoomToFill(bool on, const QPointF& center)
+void RasterImageViewAdapter::setZoomToFill(bool on, const QPointF &center)
 {
     d->mView->setZoomToFill(on, center);
 }
@@ -111,7 +109,7 @@ bool RasterImageViewAdapter::zoomToFill() const
     return d->mView->zoomToFill();
 }
 
-void RasterImageViewAdapter::setZoom(qreal zoom, const QPointF& center)
+void RasterImageViewAdapter::setZoom(qreal zoom, const QPointF &center)
 {
     d->mView->setZoom(zoom, center);
 }
@@ -145,12 +143,12 @@ void RasterImageViewAdapter::loadConfig()
     d->mView->resetMonitorICC();
 }
 
-RasterImageView* RasterImageViewAdapter::rasterImageView() const
+RasterImageView *RasterImageViewAdapter::rasterImageView() const
 {
     return d->mView;
 }
 
-AbstractImageView* RasterImageViewAdapter::imageView() const
+AbstractImageView *RasterImageViewAdapter::imageView() const
 {
     return d->mView;
 }
@@ -160,7 +158,7 @@ QPointF RasterImageViewAdapter::scrollPos() const
     return d->mView->scrollPos();
 }
 
-void RasterImageViewAdapter::setScrollPos(const QPointF& pos)
+void RasterImageViewAdapter::setScrollPos(const QPointF &pos)
 {
     d->mView->setScrollPos(pos);
 }
@@ -169,6 +167,5 @@ QRectF RasterImageViewAdapter::visibleDocumentRect() const
 {
     return QRectF(d->mView->imageOffset(), d->mView->visibleImageSize());
 }
-
 
 } // namespace

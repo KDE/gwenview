@@ -26,9 +26,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/semanticinfo/sorteddirmodel.h>
 
 // Qt
+#include <QDebug>
 #include <QEventLoop>
 #include <QItemSelectionModel>
-#include <QDebug>
 #include <QTest>
 
 // KF
@@ -91,7 +91,7 @@ void ContextManagerTest::testInvalidDirUrl()
     {
     public:
         DirLister()
-        : mOpenUrlCalled(false)
+            : mOpenUrlCalled(false)
         {
             setAutoErrorHandlingEnabled(false);
         }
@@ -106,11 +106,10 @@ void ContextManagerTest::testInvalidDirUrl()
     };
 
     SortedDirModel dirModel;
-    auto* dirLister = new DirLister;
+    auto *dirLister = new DirLister;
     dirModel.setDirLister(dirLister);
     ContextManager manager(&dirModel, nullptr);
 
     manager.setCurrentDirUrl(QUrl());
     QVERIFY(!dirLister->mOpenUrlCalled);
 }
-

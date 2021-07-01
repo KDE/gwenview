@@ -32,7 +32,6 @@ struct jpeg_decompress_struct;
 
 namespace Gwenview
 {
-
 /**
  * This namespace provides a function which makes it possible to decode JPEG
  * files with libjpeg from a QIODevice instance.
@@ -42,8 +41,7 @@ namespace Gwenview
  */
 namespace IODeviceJpegSourceManager
 {
-
-void setup(jpeg_decompress_struct* cinfo, QIODevice* ioDevice);
+void setup(jpeg_decompress_struct *cinfo, QIODevice *ioDevice);
 
 } // namespace
 } // namespace

@@ -33,7 +33,6 @@ class TransferJob;
 
 namespace Gwenview
 {
-
 namespace MimeTypeUtils
 {
 /**
@@ -44,9 +43,10 @@ class DataAccumulator : public QObject
 {
     Q_OBJECT
 public:
-    DataAccumulator(KIO::TransferJob* job);
+    DataAccumulator(KIO::TransferJob *job);
 
-    const QByteArray& data() const {
+    const QByteArray &data() const
+    {
         return mData;
     }
 
@@ -56,7 +56,7 @@ public:
     }
 
 private Q_SLOTS:
-    void slotDataReceived(KIO::Job*, const QByteArray& data);
+    void slotDataReceived(KIO::Job *, const QByteArray &data);
     void slotFinished();
 
 private:

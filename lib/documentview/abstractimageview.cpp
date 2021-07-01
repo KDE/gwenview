@@ -22,30 +22,28 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "abstractimageview.h"
 
 // Local
-#include "gwenview_lib_debug.h"
 #include "alphabackgrounditem.h"
+#include "gwenview_lib_debug.h"
 
 // KF
 
 // Qt
-#include <QGuiApplication>
+#include <QApplication>
 #include <QCursor>
 #include <QGraphicsSceneMouseEvent>
-#include <QStandardPaths>
+#include <QGuiApplication>
 #include <QPainter>
-#include <QApplication>
+#include <QStandardPaths>
 namespace Gwenview
 {
-
 static const int UNIT_STEP = 16;
 
-struct AbstractImageViewPrivate
-{
+struct AbstractImageViewPrivate {
     enum Verbosity {
         Silent,
         Notify,
     };
-    AbstractImageView* q;
+    AbstractImageView *q;
     QCursor mZoomCursor;
     Document::Ptr mDocument;
 
@@ -60,20 +58,16 @@ struct AbstractImageViewPrivate
     QPointF mLastDragPos;
     QSizeF mDocumentSize;
 
-    AlphaBackgroundItem* mBackgroundItem;
+    AlphaBackgroundItem *mBackgroundItem;
 
     void adjustImageOffset(Verbosity verbosity = Notify)
     {
         QSizeF zoomedDocSize = q->dipDocumentSize() * mZoom;
         QSizeF viewSize = q->boundingRect().size();
-        QPointF offset(
-            qMax((viewSize.width() - zoomedDocSize.width()) / 2, qreal(0.)),
-            qMax((viewSize.height() - zoomedDocSize.height()) / 2, qreal(0.))
-        );
+        QPointF offset(qMax((viewSize.width() - zoomedDocSize.width()) / 2, qreal(0.)), qMax((viewSize.height() - zoomedDocSize.height()) / 2, qreal(0.)));
 
         if (offset != mImageOffset) {
             mImageOffset = offset;
-
 
             if (verbosity == Notify) {
                 q->onImageOffsetChanged();
@@ -86,7 +80,7 @@ struct AbstractImageViewPrivate
         setScrollPos(mScrollPos, verbosity);
     }
 
-    void setScrollPos(const QPointF& _newPos, Verbosity verbosity = Notify)
+    void setScrollPos(const QPointF &_newPos, Verbosity verbosity = Notify)
     {
         if (!mDocument) {
             mScrollPos = _newPos;
@@ -94,14 +88,11 @@ struct AbstractImageViewPrivate
         }
         QSizeF zoomedDocSize = q->dipDocumentSize() * mZoom;
         QSizeF viewSize = q->boundingRect().size();
-        QPointF newPos(
-            qBound(qreal(0.), _newPos.x(), zoomedDocSize.width() - viewSize.width()),
-            qBound(qreal(0.), _newPos.y(), zoomedDocSize.height() - viewSize.height())
-        );
+        QPointF newPos(qBound(qreal(0.), _newPos.x(), zoomedDocSize.width() - viewSize.width()),
+                       qBound(qreal(0.), _newPos.y(), zoomedDocSize.height() - viewSize.height()));
         if (newPos != mScrollPos) {
             QPointF oldPos = mScrollPos;
             mScrollPos = newPos;
-
 
             if (verbosity == Notify) {
                 q->onScrollPosChanged(oldPos);
@@ -128,7 +119,7 @@ struct AbstractImageViewPrivate
         mBackgroundItem->setVisible(false);
     }
 
-    void checkAndRequestZoomAction(const QGraphicsSceneMouseEvent* event)
+    void checkAndRequestZoomAction(const QGraphicsSceneMouseEvent *event)
     {
         if (event->modifiers() & Qt::ControlModifier) {
             if (event->button() == Qt::LeftButton) {
@@ -140,9 +131,9 @@ struct AbstractImageViewPrivate
     }
 };
 
-AbstractImageView::AbstractImageView(QGraphicsItem* parent)
-: QGraphicsWidget(parent)
-, d(new AbstractImageViewPrivate(this))
+AbstractImageView::AbstractImageView(QGraphicsItem *parent)
+    : QGraphicsWidget(parent)
+    , d(new AbstractImageViewPrivate(this))
 {
     d->mControlKeyIsDown = false;
     d->mEnlargeSmallerImages = false;
@@ -192,7 +183,7 @@ QSizeF AbstractImageView::documentSize() const
 
 QSizeF AbstractImageView::dipDocumentSize() const
 {
-    return d->mDocument ? d->mDocument->size() / devicePixelRatio(): QSizeF();
+    return d->mDocument ? d->mDocument->size() / devicePixelRatio() : QSizeF();
 }
 
 qreal AbstractImageView::zoom() const
@@ -200,15 +191,14 @@ qreal AbstractImageView::zoom() const
     return d->mZoom;
 }
 
-void AbstractImageView::setZoom(qreal zoom, const QPointF& _center, AbstractImageView::UpdateType updateType)
+void AbstractImageView::setZoom(qreal zoom, const QPointF &_center, AbstractImageView::UpdateType updateType)
 {
     if (!d->mDocument) {
         d->mZoom = zoom;
         return;
     }
 
-    if (updateType == UpdateIfNecessary
-            && qFuzzyCompare(zoom, d->mZoom) && documentSize() == d->mDocumentSize) {
+    if (updateType == UpdateIfNecessary && qFuzzyCompare(zoom, d->mZoom) && documentSize() == d->mDocumentSize) {
         return;
     }
     qreal oldZoom = d->mZoom;
@@ -290,7 +280,7 @@ void AbstractImageView::setZoomToFit(bool on)
     emit zoomToFitChanged(d->mZoomToFit);
 }
 
-void AbstractImageView::setZoomToFill(bool on, const QPointF& center)
+void AbstractImageView::setZoomToFill(bool on, const QPointF &center)
 {
     if (d->mZoomToFill == on) {
         return;
@@ -306,7 +296,7 @@ void AbstractImageView::setZoomToFill(bool on, const QPointF& center)
     emit zoomToFillChanged(d->mZoomToFill);
 }
 
-void AbstractImageView::resizeEvent(QGraphicsSceneResizeEvent* event)
+void AbstractImageView::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
     QGraphicsWidget::resizeEvent(event);
     if (d->mZoomToFit) {
@@ -332,7 +322,7 @@ void AbstractImageView::resizeEvent(QGraphicsSceneResizeEvent* event)
     }
 }
 
-void AbstractImageView::focusInEvent(QFocusEvent* event)
+void AbstractImageView::focusInEvent(QFocusEvent *event)
 {
     QGraphicsWidget::focusInEvent(event);
 
@@ -376,7 +366,7 @@ qreal AbstractImageView::computeZoomToFill() const
     return fill;
 }
 
-void AbstractImageView::mousePressEvent(QGraphicsSceneMouseEvent* event)
+void AbstractImageView::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsItem::mousePressEvent(event);
 
@@ -389,7 +379,7 @@ void AbstractImageView::mousePressEvent(QGraphicsSceneMouseEvent* event)
     }
 }
 
-void AbstractImageView::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
+void AbstractImageView::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsItem::mouseMoveEvent(event);
 
@@ -426,7 +416,7 @@ void AbstractImageView::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
     d->setScrollPos(newScrollPos);
 }
 
-void AbstractImageView::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
+void AbstractImageView::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsItem::mouseReleaseEvent(event);
     if (!d->mLastDragPos.isNull()) {
@@ -435,7 +425,7 @@ void AbstractImageView::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
     updateCursor();
 }
 
-void AbstractImageView::keyPressEvent(QKeyEvent* event)
+void AbstractImageView::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Control) {
         d->mControlKeyIsDown = true;
@@ -514,7 +504,7 @@ void AbstractImageView::keyPressEvent(QKeyEvent* event)
     d->setScrollPos(d->mScrollPos + delta);
 }
 
-void AbstractImageView::keyReleaseEvent(QKeyEvent* event)
+void AbstractImageView::keyReleaseEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Control) {
         d->mControlKeyIsDown = false;
@@ -522,7 +512,7 @@ void AbstractImageView::keyReleaseEvent(QKeyEvent* event)
     }
 }
 
-void AbstractImageView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
+void AbstractImageView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->modifiers() == Qt::NoModifier && event->button() == Qt::LeftButton) {
         emit toggleFullScreenRequested();
@@ -541,7 +531,7 @@ QPointF AbstractImageView::scrollPos() const
     return d->mScrollPos;
 }
 
-void AbstractImageView::setScrollPos(const QPointF& pos)
+void AbstractImageView::setScrollPos(const QPointF &pos)
 {
     d->setScrollPos(pos);
 }
@@ -551,56 +541,44 @@ qreal AbstractImageView::devicePixelRatio() const
     return qApp->devicePixelRatio();
 }
 
-QPointF AbstractImageView::mapToView(const QPointF& imagePos) const
+QPointF AbstractImageView::mapToView(const QPointF &imagePos) const
 {
     return imagePos / devicePixelRatio() * d->mZoom + d->mImageOffset - d->mScrollPos;
 }
 
-QPoint AbstractImageView::mapToView(const QPoint& imagePos) const
+QPoint AbstractImageView::mapToView(const QPoint &imagePos) const
 {
     return mapToView(QPointF(imagePos)).toPoint();
 }
 
-QRectF AbstractImageView::mapToView(const QRectF& imageRect) const
+QRectF AbstractImageView::mapToView(const QRectF &imageRect) const
 {
-    return QRectF(
-               mapToView(imageRect.topLeft()),
-               imageRect.size() * zoom() / devicePixelRatio()
-           );
+    return QRectF(mapToView(imageRect.topLeft()), imageRect.size() * zoom() / devicePixelRatio());
 }
 
-QRect AbstractImageView::mapToView(const QRect& imageRect) const
+QRect AbstractImageView::mapToView(const QRect &imageRect) const
 {
-    return QRect(
-               mapToView(imageRect.topLeft()),
-               imageRect.size() * zoom() / devicePixelRatio()
-           );
+    return QRect(mapToView(imageRect.topLeft()), imageRect.size() * zoom() / devicePixelRatio());
 }
 
-QPointF AbstractImageView::mapToImage(const QPointF& viewPos) const
+QPointF AbstractImageView::mapToImage(const QPointF &viewPos) const
 {
     return (viewPos - d->mImageOffset + d->mScrollPos) / d->mZoom * devicePixelRatio();
 }
 
-QPoint AbstractImageView::mapToImage(const QPoint& viewPos) const
+QPoint AbstractImageView::mapToImage(const QPoint &viewPos) const
 {
     return mapToImage(QPointF(viewPos)).toPoint();
 }
 
-QRectF AbstractImageView::mapToImage(const QRectF& viewRect) const
+QRectF AbstractImageView::mapToImage(const QRectF &viewRect) const
 {
-    return QRectF(
-               mapToImage(viewRect.topLeft()),
-               viewRect.size() / zoom() * devicePixelRatio()
-           );
+    return QRectF(mapToImage(viewRect.topLeft()), viewRect.size() / zoom() * devicePixelRatio());
 }
 
-QRect AbstractImageView::mapToImage(const QRect& viewRect) const
+QRect AbstractImageView::mapToImage(const QRect &viewRect) const
 {
-    return QRect(
-               mapToImage(viewRect.topLeft()),
-               viewRect.size() / zoom() * devicePixelRatio()
-           );
+    return QRect(mapToImage(viewRect.topLeft()), viewRect.size() / zoom() * devicePixelRatio());
 }
 
 void AbstractImageView::setEnlargeSmallerImages(bool value)
@@ -645,7 +623,7 @@ void AbstractImageView::resetDragCursor()
     updateCursor();
 }
 
-AlphaBackgroundItem* AbstractImageView::backgroundItem() const
+AlphaBackgroundItem *AbstractImageView::backgroundItem() const
 {
     return d->mBackgroundItem;
 }

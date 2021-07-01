@@ -33,22 +33,21 @@ class KJob;
 
 namespace Gwenview
 {
-
 struct ImporterPrivate;
 class Importer : public QObject
 {
     Q_OBJECT
 public:
-    explicit Importer(QWidget* authWindow);
+    explicit Importer(QWidget *authWindow);
     ~Importer() override;
 
     /**
      * Defines the auto-rename format applied to imported documents
      * Set to QString() to reset
      */
-    void setAutoRenameFormat(const QString&);
+    void setAutoRenameFormat(const QString &);
 
-    void start(const QList<QUrl>& list, const QUrl& destUrl);
+    void start(const QList<QUrl> &list, const QUrl &destUrl);
 
     QList<QUrl> importedUrlList() const;
 
@@ -83,16 +82,16 @@ Q_SIGNALS:
      * An error has occurred and caused the whole process to stop without
      * importing anything
      */
-    void error(const QString& message);
+    void error(const QString &message);
 
 private Q_SLOTS:
-    void slotCopyDone(KJob*);
-    void slotPercent(KJob*, unsigned long);
+    void slotCopyDone(KJob *);
+    void slotPercent(KJob *, unsigned long);
     void emitProgressChanged();
 
 private:
     friend struct ImporterPrivate;
-    ImporterPrivate* const d;
+    ImporterPrivate *const d;
     void advance();
     void finalizeImport();
 };

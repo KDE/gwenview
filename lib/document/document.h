@@ -31,8 +31,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QSize>
 
 // Local
-#include <lib/mimetypeutils.h>
 #include <lib/cms/cmsprofile.h>
+#include <lib/mimetypeutils.h>
 
 class QImage;
 class QRect;
@@ -44,12 +44,11 @@ class QUrl;
 
 namespace Exiv2
 {
-    class Image;
+class Image;
 }
 
 namespace Gwenview
 {
-
 class AbstractDocumentEditor;
 class AbstractDocumentImpl;
 class DocumentJob;
@@ -84,11 +83,11 @@ public:
     static qreal maxDownSampledZoom();
 
     enum LoadingState {
-        Loading,        ///< Image is loading
+        Loading, ///< Image is loading
         KindDetermined, ///< Image is still loading, but kind has been determined
         MetaInfoLoaded, ///< Image is still loading, but meta info has been loaded
-        Loaded,         ///< Full image has been loaded
-        LoadingFailed,   ///< Image loading has failed
+        Loaded, ///< Full image has been loaded
+        LoadingFailed, ///< Image loading has failed
     };
 
     using Ptr = QExplicitlySharedDataPointer<Document>;
@@ -119,19 +118,19 @@ public:
 
     bool isModified() const;
 
-    const QImage& image() const;
+    const QImage &image() const;
 
-    const QImage& downSampledImageForZoom(qreal zoom) const;
+    const QImage &downSampledImageForZoom(qreal zoom) const;
 
     /**
      * Returns an implementation of AbstractDocumentEditor if this document can
      * be edited.
      */
-    AbstractDocumentEditor* editor();
+    AbstractDocumentEditor *editor();
 
     QUrl url() const;
 
-    DocumentJob* save(const QUrl &url, const QByteArray& format);
+    DocumentJob *save(const QUrl &url, const QByteArray &format);
 
     QByteArray format() const;
 
@@ -151,9 +150,9 @@ public:
 
     bool hasAlphaChannel() const;
 
-    ImageMetaInfoModel* metaInfo() const;
+    ImageMetaInfoModel *metaInfo() const;
 
-    QUndoStack* undoStack() const;
+    QUndoStack *undoStack() const;
 
     void setKeepRawData(bool);
 
@@ -176,7 +175,7 @@ public:
      * Returns a QSvgRenderer which can be used to render this document if it is
      * an SVG image. Returns a NULL pointer otherwise.
      */
-    QSvgRenderer* svgRenderer() const;
+    QSvgRenderer *svgRenderer() const;
 
     /**
      * Returns true if the image can be edited.
@@ -199,7 +198,7 @@ public:
      */
     void stopAnimation();
 
-    void enqueueJob(DocumentJob*);
+    void enqueueJob(DocumentJob *);
 
     void imageOperationCompleted();
 
@@ -210,24 +209,24 @@ public:
 
 Q_SIGNALS:
     void downSampledImageReady();
-    void imageRectUpdated(const QRect&);
-    void kindDetermined(const QUrl&);
-    void metaInfoLoaded(const QUrl&);
-    void loaded(const QUrl&);
-    void loadingFailed(const QUrl&);
-    void saved(const QUrl &oldUrl, const QUrl& newUrl);
-    void modified(const QUrl&);
+    void imageRectUpdated(const QRect &);
+    void kindDetermined(const QUrl &);
+    void metaInfoLoaded(const QUrl &);
+    void loaded(const QUrl &);
+    void loadingFailed(const QUrl &);
+    void saved(const QUrl &oldUrl, const QUrl &newUrl);
+    void modified(const QUrl &);
     void metaInfoUpdated();
     void isAnimatedUpdated();
-    void busyChanged(const QUrl&, bool);
+    void busyChanged(const QUrl &, bool);
     void allTasksDone();
 
 private Q_SLOTS:
     void emitMetaInfoLoaded();
     void emitLoaded();
     void emitLoadingFailed();
-    void slotSaveResult(KJob*);
-    void slotJobFinished(KJob*);
+    void slotSaveResult(KJob *);
+    void slotJobFinished(KJob *);
 
 private:
     friend class AbstractDocumentImpl;
@@ -235,18 +234,18 @@ private:
     friend struct DocumentPrivate;
     friend class DownSamplingJob;
 
-    void setImageInternal(const QImage&);
+    void setImageInternal(const QImage &);
     void setKind(MimeTypeUtils::Kind);
-    void setFormat(const QByteArray&);
-    void setSize(const QSize&);
+    void setFormat(const QByteArray &);
+    void setSize(const QSize &);
     void setExiv2Image(std::unique_ptr<Exiv2::Image>);
-    void setDownSampledImage(const QImage&, int invertedZoom);
-    void switchToImpl(AbstractDocumentImpl* impl);
-    void setErrorString(const QString&);
-    void setCmsProfile(const Cms::Profile::Ptr&);
+    void setDownSampledImage(const QImage &, int invertedZoom);
+    void switchToImpl(AbstractDocumentImpl *impl);
+    void setErrorString(const QString &);
+    void setCmsProfile(const Cms::Profile::Ptr &);
 
-    Document(const QUrl&);
-    DocumentPrivate * const d;
+    Document(const QUrl &);
+    DocumentPrivate *const d;
 };
 
 } // namespace

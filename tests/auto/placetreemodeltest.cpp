@@ -20,9 +20,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "placetreemodeltest.h"
 
 // Qt
+#include <QDebug>
 #include <QDir>
 #include <QFile>
-#include <QDebug>
 #include <QStandardPaths>
 #include <QTest>
 
@@ -39,10 +39,11 @@ QTEST_MAIN(PlaceTreeModelTest)
 
 using namespace Gwenview;
 
-const char* BOOKMARKS_XML =
+const char *BOOKMARKS_XML =
     "<?xml version='1.0' encoding='UTF-8'?>"
     "<!DOCTYPE xbel>"
-    "<xbel xmlns:bookmark='http://www.freedesktop.org/standards/desktop-bookmarks' xmlns:mime='http://www.freedesktop.org/standards/shared-mime-info' xmlns:kdepriv='http://www.kde.org/kdepriv' dbusName='kfilePlaces' >"
+    "<xbel xmlns:bookmark='http://www.freedesktop.org/standards/desktop-bookmarks' xmlns:mime='http://www.freedesktop.org/standards/shared-mime-info' "
+    "xmlns:kdepriv='http://www.kde.org/kdepriv' dbusName='kfilePlaces' >"
     " <bookmark href='%1' >"
     "  <title>url1</title>"
     "  <info>"
@@ -84,14 +85,16 @@ void PlaceTreeModelTest::initTestCase()
     Q_UNUSED(dir2created);
     mUrl2 = QUrl::fromLocalFile(dir.filePath("url2"));
 
-    mUrl1Dirs << "aaa" << "zzz" << "bbb";
-    for (const QString & dirName : qAsConst(mUrl1Dirs)) {
+    mUrl1Dirs << "aaa"
+              << "zzz"
+              << "bbb";
+    for (const QString &dirName : qAsConst(mUrl1Dirs)) {
         dir.mkdir("url1/" + dirName);
     }
 
 #ifdef KEEP_TEMP_DIR
     mTempDir.setAutoRemove(false);
-    //qDebug() << "mTempDir:" << mTempDir.name();
+    // qDebug() << "mTempDir:" << mTempDir.name();
 #endif
 }
 
@@ -113,7 +116,7 @@ void PlaceTreeModelTest::init()
 
 #ifdef KEEP_TEMP_DIR
     mTempDir.setAutoRemove(false);
-    //qDebug() << "mTempDir:" << mTempDir.name();
+    // qDebug() << "mTempDir:" << mTempDir.name();
 #endif
 }
 

@@ -30,7 +30,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 class Importer;
 
 struct ProgressPagePrivate;
@@ -38,11 +37,11 @@ class ProgressPage : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ProgressPage(Importer*);
+    explicit ProgressPage(Importer *);
     ~ProgressPage() override;
 
 private:
-    ProgressPagePrivate* const d;
+    ProgressPagePrivate *const d;
 };
 
 } // namespace

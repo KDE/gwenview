@@ -30,7 +30,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 struct MessageViewAdapterPrivate;
 class MessageViewAdapter : public AbstractDocumentViewAdapter
 {
@@ -46,17 +45,17 @@ public:
 
     Document::Ptr document() const override;
 
-    void setDocument(const Document::Ptr&) override;
+    void setDocument(const Document::Ptr &) override;
 
-    void setInfoMessage(const QString&);
+    void setInfoMessage(const QString &);
 
-    void setErrorMessage(const QString& main, const QString& detail = QString());
+    void setErrorMessage(const QString &main, const QString &detail = QString());
 
 protected:
-    bool eventFilter(QObject*, QEvent*) override;
+    bool eventFilter(QObject *, QEvent *) override;
 
 private:
-    MessageViewAdapterPrivate* const d;
+    MessageViewAdapterPrivate *const d;
 };
 
 } // namespace

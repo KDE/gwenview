@@ -33,17 +33,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
-KIPIUploadWidget::KIPIUploadWidget(KIPIInterface* interface, QWidget* parent)
-: KIPI::UploadWidget(parent)
-, mInterface(interface)
+KIPIUploadWidget::KIPIUploadWidget(KIPIInterface *interface, QWidget *parent)
+    : KIPI::UploadWidget(parent)
+    , mInterface(interface)
 {
-    auto* label = new QLabel(this);
+    auto *label = new QLabel(this);
     QUrl url = mInterface->currentAlbum().uploadUrl();
     label->setText(i18n("Images will be uploaded here:\n%1", url.toDisplayString()));
     label->setWordWrap(true);
 
-    auto* layout = new QVBoxLayout(this);
+    auto *layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(label);
 }

@@ -34,7 +34,6 @@ class QUrl;
 
 namespace Gwenview
 {
-
 class ThumbnailView;
 
 struct PreviewItemDelegatePrivate;
@@ -47,23 +46,23 @@ class GWENVIEWLIB_EXPORT PreviewItemDelegate : public QItemDelegate
 {
     Q_OBJECT
 public:
-    PreviewItemDelegate(ThumbnailView*);
+    PreviewItemDelegate(ThumbnailView *);
     ~PreviewItemDelegate() override;
 
     enum ContextBarAction {
-        NoAction         = 0,
-        SelectionAction  = 1,
+        NoAction = 0,
+        SelectionAction = 1,
         FullScreenAction = 2,
-        RotateAction     = 4,
+        RotateAction = 4,
     };
     Q_DECLARE_FLAGS(ContextBarActions, ContextBarAction)
 
     enum ThumbnailDetail {
-        FileNameDetail  = 1,
-        DateDetail      = 2,
-        RatingDetail    = 4,
+        FileNameDetail = 1,
+        DateDetail = 2,
+        RatingDetail = 4,
         ImageSizeDetail = 8,
-        FileSizeDetail  = 16,
+        FileSizeDetail = 16,
     };
     // FIXME: Find out why this cause problems with Qt::Alignment in
     // PreviewItemDelegate!
@@ -84,23 +83,23 @@ public:
 
     void setTextElideMode(Qt::TextElideMode);
 
-    QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index) const override;
-    void setEditorData(QWidget* editor, const QModelIndex& index) const override;
-    void setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const override;
-    void updateEditorGeometry(QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& index) const override;
+    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
+    void setEditorData(QWidget *editor, const QModelIndex &index) const override;
+    void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const override;
+    void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 
-    void paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const override;
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
     QSize sizeHint(const QStyleOptionViewItem & /*option*/, const QModelIndex & /*index*/) const override;
 
 Q_SIGNALS:
-    void saveDocumentRequested(const QUrl&);
-    void rotateDocumentLeftRequested(const QUrl&);
-    void rotateDocumentRightRequested(const QUrl&);
-    void showDocumentInFullScreenRequested(const QUrl&);
-    void setDocumentRatingRequested(const QUrl&, int rating);
+    void saveDocumentRequested(const QUrl &);
+    void rotateDocumentLeftRequested(const QUrl &);
+    void rotateDocumentRightRequested(const QUrl &);
+    void showDocumentInFullScreenRequested(const QUrl &);
+    void setDocumentRatingRequested(const QUrl &, int rating);
 
 private Q_SLOTS:
-    void setThumbnailSize(const QSize&);
+    void setThumbnailSize(const QSize &);
 
     void slotSaveClicked();
     void slotRotateLeftClicked();
@@ -110,10 +109,10 @@ private Q_SLOTS:
     void slotRowsChanged();
 
 protected:
-    bool eventFilter(QObject*, QEvent*) override;
+    bool eventFilter(QObject *, QEvent *) override;
 
 private:
-    PreviewItemDelegatePrivate* const d;
+    PreviewItemDelegatePrivate *const d;
     friend struct PreviewItemDelegatePrivate;
 };
 

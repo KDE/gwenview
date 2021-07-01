@@ -31,17 +31,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
-struct ThumbnailSliderPrivate
-{
+struct ThumbnailSliderPrivate {
 };
 
-ThumbnailSlider::ThumbnailSlider(QWidget* parent)
-: ZoomSlider(parent)
-, d(new ThumbnailSliderPrivate)
+ThumbnailSlider::ThumbnailSlider(QWidget *parent)
+    : ZoomSlider(parent)
+    , d(new ThumbnailSliderPrivate)
 {
-    connect(slider(), SIGNAL(actionTriggered(int)),
-            SLOT(slotActionTriggered(int)));
+    connect(slider(), SIGNAL(actionTriggered(int)), SLOT(slotActionTriggered(int)));
     slider()->setRange(ThumbnailView::MinThumbnailSize, ThumbnailView::MaxThumbnailSize);
 }
 

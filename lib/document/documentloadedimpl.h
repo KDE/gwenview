@@ -36,7 +36,6 @@ class QUrl;
 
 namespace Gwenview
 {
-
 struct DocumentLoadedImplPrivate;
 class DocumentLoadedImpl : public AbstractDocumentImpl, protected AbstractDocumentEditor
 {
@@ -45,28 +44,28 @@ public:
     /**
      * @param quietInit set to true if init() should not emit any signal
      */
-    DocumentLoadedImpl(Document*, const QByteArray&, bool quietInit = false);
+    DocumentLoadedImpl(Document *, const QByteArray &, bool quietInit = false);
     ~DocumentLoadedImpl() override;
 
     // AbstractDocumentImpl
     void init() override;
     Document::LoadingState loadingState() const override;
-    DocumentJob* save(const QUrl&, const QByteArray& format) override;
-    AbstractDocumentEditor* editor() override;
+    DocumentJob *save(const QUrl &, const QByteArray &format) override;
+    AbstractDocumentEditor *editor() override;
     QByteArray rawData() const override;
     bool isEditable() const override;
     //
 
 protected:
-    virtual bool saveInternal(QIODevice* device, const QByteArray& format);
+    virtual bool saveInternal(QIODevice *device, const QByteArray &format);
 
     // AbstractDocumentEditor
-    void setImage(const QImage&) override;
+    void setImage(const QImage &) override;
     void applyTransformation(Orientation orientation) override;
     //
 
 private:
-    DocumentLoadedImplPrivate* const d;
+    DocumentLoadedImplPrivate *const d;
 
     friend class SaveJob;
 };

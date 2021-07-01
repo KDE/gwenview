@@ -24,12 +24,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <cmath>
 
 // Qt
+#include <QDebug>
 #include <QDir>
 #include <QImage>
 #include <QSignalSpy>
-#include <QTest>
-#include <QDebug>
 #include <QTemporaryDir>
+#include <QTest>
 #include <QUrl>
 
 // KF
@@ -40,27 +40,27 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * This file contains simple helpers to access test files
  */
 
-inline QString pathForTestFile(const QString& name)
+inline QString pathForTestFile(const QString &name)
 {
     return QDir::cleanPath(QStringLiteral("%1/%2").arg(GV_TEST_DATA_DIR, name));
 }
 
-inline QUrl urlForTestFile(const QString& name)
+inline QUrl urlForTestFile(const QString &name)
 {
     return QUrl::fromLocalFile(pathForTestFile(name));
 }
 
-inline QString pathForTestOutputFile(const QString& name)
+inline QString pathForTestOutputFile(const QString &name)
 {
     return QStringLiteral("%1/%2").arg(QDir::currentPath(), name);
 }
 
-inline QUrl urlForTestOutputFile(const QString& name)
+inline QUrl urlForTestOutputFile(const QString &name)
 {
     return QUrl::fromLocalFile(pathForTestOutputFile(name));
 }
 
-inline bool waitForSignal(const QSignalSpy& spy, int timeout = 5)
+inline bool waitForSignal(const QSignalSpy &spy, int timeout = 5)
 {
     for (int x = 0; x < timeout; ++x) {
         if (spy.count() > 0) {
@@ -71,14 +71,14 @@ inline bool waitForSignal(const QSignalSpy& spy, int timeout = 5)
     return false;
 }
 
-void createEmptyFile(const QString& path);
+void createEmptyFile(const QString &path);
 
 /**
  * Returns the url of the remote url dir if remote test dir was successfully
  * set up.
  * If testFile is valid, it is copied into the test dir.
  */
-QUrl setUpRemoteTestDir(const QString& testFile = QString());
+QUrl setUpRemoteTestDir(const QString &testFile = QString());
 
 /**
  * Make sure all objects on which deleteLater() have been called have been
@@ -89,10 +89,9 @@ void waitForDeferredDeletes();
 // FIXME: Top-level functions should move to the TestUtils namespace
 namespace TestUtils
 {
+bool fuzzyImageCompare(const QImage &img1, const QImage &img2, int delta = 2);
 
-bool fuzzyImageCompare(const QImage& img1, const QImage& img2, int delta = 2);
-
-bool imageCompare(const QImage& img1, const QImage& img2);
+bool imageCompare(const QImage &img1, const QImage &img2);
 
 void purgeUserConfiguration();
 
@@ -100,7 +99,7 @@ class SandBoxDir : public QDir
 {
 public:
     SandBoxDir();
-    void fill(const QStringList& files);
+    void fill(const QStringList &files);
 
 private:
     QTemporaryDir mTempDir;

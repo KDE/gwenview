@@ -27,24 +27,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KF
 
 // Qt
+#include "gwenview_lib_debug.h"
+#include <QFontDatabase>
 #include <QFontMetrics>
 #include <QPainter>
 #include <QStyle>
 #include <QStyleOptionGraphicsItem>
-#include <QFontDatabase>
-#include "gwenview_lib_debug.h"
 
 namespace Gwenview
 {
-
-struct HudLabelPrivate
-{
+struct HudLabelPrivate {
     QString mText;
 };
 
-HudLabel::HudLabel(QGraphicsItem* parent)
-: QGraphicsWidget(parent)
-, d(new HudLabelPrivate)
+HudLabel::HudLabel(QGraphicsItem *parent)
+    : QGraphicsWidget(parent)
+    , d(new HudLabelPrivate)
 {
     setCursor(Qt::ArrowCursor);
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
@@ -55,7 +53,7 @@ HudLabel::~HudLabel()
     delete d;
 }
 
-void HudLabel::setText(const QString& text)
+void HudLabel::setText(const QString &text)
 {
     d->mText = text;
     QFont font = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
@@ -65,7 +63,7 @@ void HudLabel::setText(const QString& text)
     setPreferredSize(minSize);
 }
 
-void HudLabel::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
+void HudLabel::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     HudTheme::RenderInfo info = HudTheme::renderInfo(HudTheme::FrameWidget);
     painter->setPen(info.textPen);

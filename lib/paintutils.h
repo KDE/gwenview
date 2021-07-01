@@ -20,8 +20,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifndef PAINTUTILS_H
 #define PAINTUTILS_H
 
-#include <lib/gwenviewlib_export.h>
 #include <QtGlobal>
+#include <lib/gwenviewlib_export.h>
 class QColor;
 class QPainterPath;
 class QPixmap;
@@ -31,36 +31,34 @@ class QSize;
 
 namespace Gwenview
 {
-
 /**
  * A collection of independent painting functions
  */
 namespace PaintUtils
 {
-
 /**
  * Returns a rounded-corner version of @rect. Corner radius is @p radius.
  * (Copied from KFileItemDelegate)
  */
-GWENVIEWLIB_EXPORT QPainterPath roundedRectangle(const QRectF& rect, qreal radius);
+GWENVIEWLIB_EXPORT QPainterPath roundedRectangle(const QRectF &rect, qreal radius);
 
 /**
  * Generates a pixmap of size @p size, filled with @p color, whose borders have
  * been blurred by @p radius pixels.
  */
-GWENVIEWLIB_EXPORT QPixmap generateFuzzyRect(const QSize& size, const QColor& color, int radius);
+GWENVIEWLIB_EXPORT QPixmap generateFuzzyRect(const QSize &size, const QColor &color, int radius);
 
 /**
  * Returns a modified version of @p color, where hue, saturation and value have
  * been adjusted according to @p deltaH, @p deltaS and @p deltaV.
  */
-GWENVIEWLIB_EXPORT QColor adjustedHsv(const QColor& color, int deltaH, int deltaS, int deltaV);
+GWENVIEWLIB_EXPORT QColor adjustedHsv(const QColor &color, int deltaH, int deltaS, int deltaV);
 
 /**
  * Returns a modified version of @p color, where alpha has been set to @p
  * alphaF.
  */
-GWENVIEWLIB_EXPORT QColor alphaAdjustedF(const QColor& color, qreal alphaF);
+GWENVIEWLIB_EXPORT QColor alphaAdjustedF(const QColor &color, qreal alphaF);
 
 } // namespace
 

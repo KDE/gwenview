@@ -31,18 +31,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
-struct DocumentViewSynchronizerPrivate
-{
-    DocumentViewSynchronizer* q;
-    const QList<DocumentView*>* mViews;
+struct DocumentViewSynchronizerPrivate {
+    DocumentViewSynchronizer *q;
+    const QList<DocumentView *> *mViews;
     QPointer<DocumentView> mCurrentView;
     bool mActive;
     QPoint mOldPosition;
 
-    DocumentViewSynchronizerPrivate(const QList<DocumentView*>* views)
-    : mViews(views)
-    {}
+    DocumentViewSynchronizerPrivate(const QList<DocumentView *> *views)
+        : mViews(views)
+    {
+    }
 
     void updateConnections()
     {
@@ -50,16 +49,12 @@ struct DocumentViewSynchronizerPrivate
             return;
         }
 
-        QObject::connect(mCurrentView.data(), SIGNAL(zoomChanged(qreal)),
-                         q, SLOT(setZoom(qreal)));
-        QObject::connect(mCurrentView.data(), SIGNAL(zoomToFitChanged(bool)),
-                         q, SLOT(setZoomToFit(bool)));
-        QObject::connect(mCurrentView.data(), SIGNAL(zoomToFillChanged(bool)),
-                         q, SLOT(setZoomToFill(bool)));
-        QObject::connect(mCurrentView.data(), SIGNAL(positionChanged()),
-                         q, SLOT(updatePosition()));
+        QObject::connect(mCurrentView.data(), SIGNAL(zoomChanged(qreal)), q, SLOT(setZoom(qreal)));
+        QObject::connect(mCurrentView.data(), SIGNAL(zoomToFitChanged(bool)), q, SLOT(setZoomToFit(bool)));
+        QObject::connect(mCurrentView.data(), SIGNAL(zoomToFillChanged(bool)), q, SLOT(setZoomToFill(bool)));
+        QObject::connect(mCurrentView.data(), SIGNAL(positionChanged()), q, SLOT(updatePosition()));
 
-        for (DocumentView* view : qAsConst(*mViews)) {
+        for (DocumentView *view : qAsConst(*mViews)) {
             if (view == mCurrentView.data()) {
                 continue;
             }
@@ -78,9 +73,9 @@ struct DocumentViewSynchronizerPrivate
     }
 };
 
-DocumentViewSynchronizer::DocumentViewSynchronizer(const QList<DocumentView*>* views, QObject* parent)
-: QObject(parent)
-, d(new DocumentViewSynchronizerPrivate(views))
+DocumentViewSynchronizer::DocumentViewSynchronizer(const QList<DocumentView *> *views, QObject *parent)
+    : QObject(parent)
+    , d(new DocumentViewSynchronizerPrivate(views))
 {
     d->q = this;
     d->mActive = false;
@@ -91,7 +86,7 @@ DocumentViewSynchronizer::~DocumentViewSynchronizer()
     delete d;
 }
 
-void DocumentViewSynchronizer::setCurrentView(DocumentView* view)
+void DocumentViewSynchronizer::setCurrentView(DocumentView *view)
 {
     if (d->mCurrentView) {
         disconnect(d->mCurrentView.data(), nullptr, this, nullptr);
@@ -110,7 +105,7 @@ void DocumentViewSynchronizer::setActive(bool active)
 
 void DocumentViewSynchronizer::setZoom(qreal zoom)
 {
-    for (DocumentView* view : qAsConst(*d->mViews)) {
+    for (DocumentView *view : qAsConst(*d->mViews)) {
         if (view == d->mCurrentView.data()) {
             continue;
         }
@@ -121,7 +116,7 @@ void DocumentViewSynchronizer::setZoom(qreal zoom)
 
 void DocumentViewSynchronizer::setZoomToFit(bool fit)
 {
-    for (DocumentView* view : qAsConst(*d->mViews)) {
+    for (DocumentView *view : qAsConst(*d->mViews)) {
         if (view == d->mCurrentView.data()) {
             continue;
         }
@@ -132,7 +127,7 @@ void DocumentViewSynchronizer::setZoomToFit(bool fit)
 
 void DocumentViewSynchronizer::setZoomToFill(bool fit)
 {
-    for (DocumentView* view : qAsConst(*d->mViews)) {
+    for (DocumentView *view : qAsConst(*d->mViews)) {
         if (view == d->mCurrentView.data()) {
             continue;
         }
@@ -146,7 +141,7 @@ void DocumentViewSynchronizer::updatePosition()
     QPoint pos = d->mCurrentView.data()->position();
     QPoint delta = pos - d->mOldPosition;
     d->mOldPosition = pos;
-    for (DocumentView* view : qAsConst(*d->mViews)) {
+    for (DocumentView *view : qAsConst(*d->mViews)) {
         if (view == d->mCurrentView.data()) {
             continue;
         }

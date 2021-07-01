@@ -34,7 +34,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 class DocumentView;
 
 struct DocumentViewContainerPrivate;
@@ -46,19 +45,19 @@ class GWENVIEWLIB_EXPORT DocumentViewContainer : public QGraphicsView
 {
     Q_OBJECT
 public:
-    explicit DocumentViewContainer(QWidget* parent = nullptr);
+    explicit DocumentViewContainer(QWidget *parent = nullptr);
     ~DocumentViewContainer() override;
 
     /**
      * Create a DocumentView in the DocumentViewContainer scene
      */
-    DocumentView* createView();
+    DocumentView *createView();
 
     /**
      * Delete view. Note that the view will first be faded to black before
      * being destroyed.
      */
-    void deleteView(DocumentView* view);
+    void deleteView(DocumentView *view);
 
     /**
      * Immediately delete all views
@@ -73,28 +72,28 @@ public:
     /**
      * Updates setupForUrl hash with latest setup values
      */
-    void updateSetup(DocumentView* view);
+    void updateSetup(DocumentView *view);
 
-    void showMessageWidget(QGraphicsWidget*, Qt::Alignment);
+    void showMessageWidget(QGraphicsWidget *, Qt::Alignment);
 
     /**
      * Set palette on this and all document views
      */
-    void applyPalette(const QPalette& palette);
+    void applyPalette(const QPalette &palette);
 
 public Q_SLOTS:
     void updateLayout();
 
 protected:
-    void showEvent(QShowEvent*) override;
-    void resizeEvent(QResizeEvent*) override;
+    void showEvent(QShowEvent *) override;
+    void resizeEvent(QResizeEvent *) override;
 
 private:
     friend class ViewItem;
-    DocumentViewContainerPrivate* const d;
+    DocumentViewContainerPrivate *const d;
 
 private Q_SLOTS:
-    void slotFadeInFinished(DocumentView*);
+    void slotFadeInFinished(DocumentView *);
     void pretendFadeInFinished();
     void slotConfigChanged();
 };

@@ -32,7 +32,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 namespace Gwenview
 {
-
 /**
  * This class is used by the ThumbnailView to request various things.
  */
@@ -40,14 +39,14 @@ class GWENVIEWLIB_EXPORT AbstractThumbnailViewHelper : public QObject
 {
     Q_OBJECT
 public:
-    explicit AbstractThumbnailViewHelper(QObject* parent);
+    explicit AbstractThumbnailViewHelper(QObject *parent);
     ~AbstractThumbnailViewHelper() override;
 
-    virtual void showContextMenu(QWidget* parent) = 0;
+    virtual void showContextMenu(QWidget *parent) = 0;
 
-    virtual void showMenuForUrlDroppedOnViewport(QWidget* parent, const QList<QUrl>&) = 0;
+    virtual void showMenuForUrlDroppedOnViewport(QWidget *parent, const QList<QUrl> &) = 0;
 
-    virtual void showMenuForUrlDroppedOnDir(QWidget* parent, const QList<QUrl>&, const QUrl&) = 0;
+    virtual void showMenuForUrlDroppedOnDir(QWidget *parent, const QList<QUrl> &, const QUrl &) = 0;
 };
 
 } // namespace

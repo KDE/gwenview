@@ -30,7 +30,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 bool FitsHandler::canRead() const
 {
     if (!device()) {
@@ -54,7 +53,7 @@ bool FitsHandler::canRead() const
 bool FitsHandler::read(QImage *image)
 {
     if (!device()) {
-          return false;
+        return false;
     }
 
     *image = FITSData::FITSToImage(*device());
@@ -79,4 +78,3 @@ QVariant FitsHandler::option(ImageOption option) const
 }
 
 } // namespace
-

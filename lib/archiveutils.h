@@ -30,29 +30,27 @@ class KFileItem;
 
 namespace Gwenview
 {
-
 /**
  * Helper functions to deal with archives
  */
 namespace ArchiveUtils
 {
-
 /**
  * Returns true if @p item is an archive
  */
-GWENVIEWLIB_EXPORT bool fileItemIsArchive(const KFileItem& item);
+GWENVIEWLIB_EXPORT bool fileItemIsArchive(const KFileItem &item);
 
 /**
  * Returns true if @p item is a dir or an archive
  */
-GWENVIEWLIB_EXPORT bool fileItemIsDirOrArchive(const KFileItem& item);
+GWENVIEWLIB_EXPORT bool fileItemIsDirOrArchive(const KFileItem &item);
 
 /**
  * Returns the protocol for an archive mime type. Similar to
  * KProtocolManager::protocolForArchiveMimetype(), except it tries parent
  * mimetypes if it can't find anything (useful for .cbz and co)
  */
-GWENVIEWLIB_EXPORT QString protocolForMimeType(const QString& mimeType);
+GWENVIEWLIB_EXPORT QString protocolForMimeType(const QString &mimeType);
 
 } // namespace ArchiveUtils
 

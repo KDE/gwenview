@@ -23,13 +23,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // Qt
 #include <QApplication>
+#include <QDialogButtonBox>
 #include <QHeaderView>
 #include <QPainter>
+#include <QPushButton>
 #include <QStyledItemDelegate>
 #include <QTreeView>
 #include <QVBoxLayout>
-#include <QDialogButtonBox>
-#include <QPushButton>
 
 // KF
 #include <KLocalizedString>
@@ -42,16 +42,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 namespace Gwenview
 {
-
 class MetaInfoDelegate : public QStyledItemDelegate
 {
 public:
-    MetaInfoDelegate(QObject* parent)
+    MetaInfoDelegate(QObject *parent)
         : QStyledItemDelegate(parent)
-    {}
+    {
+    }
 
 protected:
-    void paint(QPainter* painter, const QStyleOptionViewItem& _option, const QModelIndex& index) const override
+    void paint(QPainter *painter, const QStyleOptionViewItem &_option, const QModelIndex &index) const override
     {
         QStyleOptionViewItem option = _option;
         if (!index.parent().isValid()) {
@@ -64,7 +64,7 @@ protected:
         }
     }
 
-    QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const override
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override
     {
         QSize sh = QStyledItemDelegate::sizeHint(option, index);
         if (!index.parent().isValid()) {
@@ -80,12 +80,13 @@ protected:
 class ExpandedTreeView : public QTreeView
 {
 public:
-    explicit ExpandedTreeView(QWidget* parent)
+    explicit ExpandedTreeView(QWidget *parent)
         : QTreeView(parent)
-        {}
+    {
+    }
 
 protected:
-    void rowsInserted(const QModelIndex& parent, int start, int end) override
+    void rowsInserted(const QModelIndex &parent, int start, int end) override
     {
         QTreeView::rowsInserted(parent, start, end);
         if (!parent.isValid()) {
@@ -113,15 +114,14 @@ private:
     }
 };
 
-struct ImageMetaInfoDialogPrivate
-{
+struct ImageMetaInfoDialogPrivate {
     std::unique_ptr<PreferredImageMetaInfoModel> mModel;
-    QTreeView* mTreeView;
+    QTreeView *mTreeView;
 };
 
-ImageMetaInfoDialog::ImageMetaInfoDialog(QWidget* parent)
-: QDialog(parent)
-, d(new ImageMetaInfoDialogPrivate)
+ImageMetaInfoDialog::ImageMetaInfoDialog(QWidget *parent)
+    : QDialog(parent)
+    , d(new ImageMetaInfoDialogPrivate)
 {
     d->mTreeView = new ExpandedTreeView(this);
     d->mTreeView->setRootIsDecorated(false);
@@ -142,12 +142,11 @@ ImageMetaInfoDialog::~ImageMetaInfoDialog()
     delete d;
 }
 
-void ImageMetaInfoDialog::setMetaInfo(ImageMetaInfoModel* model, const QStringList& list)
+void ImageMetaInfoDialog::setMetaInfo(ImageMetaInfoModel *model, const QStringList &list)
 {
     if (model) {
         d->mModel = std::make_unique<PreferredImageMetaInfoModel>(model, list);
-        connect(d->mModel.get(), &PreferredImageMetaInfoModel::preferredMetaInfoKeyListChanged,
-                this, &ImageMetaInfoDialog::preferredMetaInfoKeyListChanged);
+        connect(d->mModel.get(), &PreferredImageMetaInfoModel::preferredMetaInfoKeyListChanged, this, &ImageMetaInfoDialog::preferredMetaInfoKeyListChanged);
     } else {
         d->mModel.reset(nullptr);
     }

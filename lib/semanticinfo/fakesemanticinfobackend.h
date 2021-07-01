@@ -34,7 +34,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 /**
  * A fake metadata backend, useful to test the ui layer.
  * It provides fake rating values based on the image url.
@@ -43,23 +42,26 @@ class GWENVIEWLIB_EXPORT FakeSemanticInfoBackEnd : public AbstractSemanticInfoBa
 {
     Q_OBJECT
 public:
-    enum InitializeMode { InitializeEmpty, InitializeRandom, };
-    FakeSemanticInfoBackEnd(QObject* parent, InitializeMode initializeMode);
+    enum InitializeMode {
+        InitializeEmpty,
+        InitializeRandom,
+    };
+    FakeSemanticInfoBackEnd(QObject *parent, InitializeMode initializeMode);
 
     virtual TagSet allTags() const;
 
     virtual void refreshAllTags();
 
-    virtual void storeSemanticInfo(const QUrl&, const SemanticInfo&);
+    virtual void storeSemanticInfo(const QUrl &, const SemanticInfo &);
 
-    virtual void retrieveSemanticInfo(const QUrl&);
+    virtual void retrieveSemanticInfo(const QUrl &);
 
-    virtual QString labelForTag(const SemanticInfoTag&) const;
+    virtual QString labelForTag(const SemanticInfoTag &) const;
 
-    virtual SemanticInfoTag tagForLabel(const QString&);
+    virtual SemanticInfoTag tagForLabel(const QString &);
 
 private:
-    void mergeTagsWithAllTags(const TagSet&);
+    void mergeTagsWithAllTags(const TagSet &);
 
     QHash<QUrl, SemanticInfo> mSemanticInfoForUrl;
     InitializeMode mInitializeMode;

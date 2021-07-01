@@ -29,17 +29,14 @@ class QDateTime;
 
 namespace Gwenview
 {
-
 namespace TimeUtils
 {
-
-enum CachePolicy
-{
+enum CachePolicy {
     SkipCache,
     UseCache,
 };
 
-QDateTime GWENVIEWLIB_EXPORT dateTimeForFileItem(const KFileItem& fileItem, Gwenview::TimeUtils::CachePolicy cachePolicy = UseCache);
+QDateTime GWENVIEWLIB_EXPORT dateTimeForFileItem(const KFileItem &fileItem, Gwenview::TimeUtils::CachePolicy cachePolicy = UseCache);
 
 } // namespace
 

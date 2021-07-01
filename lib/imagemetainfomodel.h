@@ -39,7 +39,6 @@ class Image;
 
 namespace Gwenview
 {
-
 struct ImageMetaInfoModelPrivate;
 class GWENVIEWLIB_EXPORT ImageMetaInfoModel : public QAbstractItemModel
 {
@@ -48,23 +47,23 @@ public:
     ImageMetaInfoModel();
     ~ImageMetaInfoModel() override;
 
-    void setUrl(const QUrl&);
-    void setImageSize(const QSize&);
-    void setExiv2Image(const Exiv2::Image*);
+    void setUrl(const QUrl &);
+    void setImageSize(const QSize &);
+    void setExiv2Image(const Exiv2::Image *);
 
-    QString keyForIndex(const QModelIndex&) const;
-    void getInfoForKey(const QString& key, QString* label, QString* value) const;
-    QString getValueForKey(const QString& key) const;
+    QString keyForIndex(const QModelIndex &) const;
+    void getInfoForKey(const QString &key, QString *label, QString *value) const;
+    QString getValueForKey(const QString &key) const;
 
-    QModelIndex index(int row, int col, const QModelIndex& parent = QModelIndex()) const override;
-    QModelIndex parent(const QModelIndex&) const override;
-    int rowCount(const QModelIndex& = QModelIndex()) const override;
-    int columnCount(const QModelIndex& = QModelIndex()) const override;
+    QModelIndex index(int row, int col, const QModelIndex &parent = QModelIndex()) const override;
+    QModelIndex parent(const QModelIndex &) const override;
+    int rowCount(const QModelIndex & = QModelIndex()) const override;
+    int columnCount(const QModelIndex & = QModelIndex()) const override;
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
-    QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const override;
+    QVariant data(const QModelIndex &, int role = Qt::DisplayRole) const override;
 
 private:
-    ImageMetaInfoModelPrivate* const d;
+    ImageMetaInfoModelPrivate *const d;
     friend struct ImageMetaInfoModelPrivate;
 };
 

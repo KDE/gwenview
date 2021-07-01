@@ -33,7 +33,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 struct DocumentJobPrivate;
 
 /**
@@ -88,9 +87,9 @@ protected:
     bool checkDocumentEditor();
 
 private:
-    void setDocument(const Document::Ptr&);
+    void setDocument(const Document::Ptr &);
 
-    DocumentJobPrivate* const d;
+    DocumentJobPrivate *const d;
 
     friend class Document;
 };

@@ -32,7 +32,6 @@ class QAction;
 
 namespace Gwenview
 {
-
 class DisabledActionShortcutMonitorPrivate;
 /**
  * Monitors an action and emits a signal if one tries to trigger the action
@@ -45,17 +44,17 @@ public:
     /**
      * parent must be a widget because we need to create a QShortcut
      */
-    DisabledActionShortcutMonitor(QAction* action, QWidget* parent);
+    DisabledActionShortcutMonitor(QAction *action, QWidget *parent);
     ~DisabledActionShortcutMonitor() override;
 
 Q_SIGNALS:
     void activated();
 
 protected:
-    bool eventFilter(QObject* object, QEvent* event) override;
+    bool eventFilter(QObject *object, QEvent *event) override;
 
 private:
-    DisabledActionShortcutMonitorPrivate* const d;
+    DisabledActionShortcutMonitorPrivate *const d;
 };
 
 } // namespace

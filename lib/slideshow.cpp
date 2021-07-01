@@ -20,8 +20,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "slideshow.h"
 
 // STL
-#include <ctime>
 #include <algorithm>
+#include <ctime>
 
 // Qt
 #include <QAction>
@@ -32,12 +32,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Local
 #include "gwenview_lib_debug.h"
-#include <lib/gvdebug.h>
 #include <gwenviewconfig.h>
+#include <lib/gvdebug.h>
 
 namespace Gwenview
 {
-
 #undef ENABLE_LOG
 #undef LOG
 //#define ENABLE_LOG
@@ -61,7 +60,7 @@ class RandomNumberGenerator
 {
 public:
     RandomNumberGenerator()
-    : mSeed(time(nullptr))
+        : mSeed(time(nullptr))
     {
     }
 
@@ -74,9 +73,8 @@ private:
     unsigned int mSeed;
 };
 
-struct SlideShowPrivate
-{
-    QTimer* mTimer;
+struct SlideShowPrivate {
+    QTimer *mTimer;
     State mState;
     QVector<QUrl> mUrls;
     QVector<QUrl> mShuffledUrls;
@@ -84,8 +82,8 @@ struct SlideShowPrivate
     QUrl mCurrentUrl;
     QUrl mLastShuffledUrl;
 
-    QAction* mLoopAction;
-    QAction* mRandomAction;
+    QAction *mLoopAction;
+    QAction *mRandomAction;
 
     QUrl findNextUrl()
     {
@@ -171,9 +169,9 @@ struct SlideShowPrivate
     }
 };
 
-SlideShow::SlideShow(QObject* parent)
-: QObject(parent)
-, d(new SlideShowPrivate)
+SlideShow::SlideShow(QObject *parent)
+    : QObject(parent)
+    , d(new SlideShowPrivate)
 {
     d->mState = Paused;
 
@@ -201,17 +199,17 @@ SlideShow::~SlideShow()
     delete d;
 }
 
-QAction* SlideShow::loopAction() const
+QAction *SlideShow::loopAction() const
 {
     return d->mLoopAction;
 }
 
-QAction* SlideShow::randomAction() const
+QAction *SlideShow::randomAction() const
 {
     return d->mRandomAction;
 }
 
-void SlideShow::start(const QList<QUrl>& urls)
+void SlideShow::start(const QList<QUrl> &urls)
 {
     d->mUrls.resize(urls.size());
     std::copy(urls.begin(), urls.end(), d->mUrls.begin());

@@ -31,27 +31,28 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 namespace Gwenview
 {
+inline QString mediaPlayer2ObjectPath()
+{
+    return QStringLiteral("/org/mpris/MediaPlayer2");
+}
 
-inline QString mediaPlayer2ObjectPath() { return QStringLiteral("/org/mpris/MediaPlayer2"); }
-
-
-Mpris2Service::Mpris2Service(SlideShow* slideShow, ContextManager* contextManager,
-                             QAction* toggleSlideShowAction, QAction* fullScreenAction,
-                             QAction* previousAction, QAction* nextAction,
-                             QObject* parent)
+Mpris2Service::Mpris2Service(SlideShow *slideShow,
+                             ContextManager *contextManager,
+                             QAction *toggleSlideShowAction,
+                             QAction *fullScreenAction,
+                             QAction *previousAction,
+                             QAction *nextAction,
+                             QObject *parent)
     : QObject(parent)
 {
     new MprisMediaPlayer2(mediaPlayer2ObjectPath(), fullScreenAction, this);
-    new MprisMediaPlayer2Player(mediaPlayer2ObjectPath(), slideShow, contextManager,
-                                toggleSlideShowAction, fullScreenAction, previousAction, nextAction,
-                                this);
+    new MprisMediaPlayer2Player(mediaPlayer2ObjectPath(), slideShow, contextManager, toggleSlideShowAction, fullScreenAction, previousAction, nextAction, this);
 
     // To avoid appearing in the media controller on the lock screen,
     // which might be not expected or wanted for Gwenview,
     // the MPRIS service is unregistered while the lockscreen is active.
     auto *lockScreenWatcher = new LockScreenWatcher(this);
-    connect(lockScreenWatcher, &LockScreenWatcher::isLockedChanged,
-            this, &Mpris2Service::onLockScreenLockedChanged);
+    connect(lockScreenWatcher, &LockScreenWatcher::isLockedChanged, this, &Mpris2Service::onLockScreenLockedChanged);
 
     if (!lockScreenWatcher->isLocked()) {
         registerOnDBus();

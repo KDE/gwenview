@@ -31,7 +31,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 struct HudSliderPrivate;
 /**
  * A QGraphicsView slider.
@@ -41,7 +40,7 @@ class HudSlider : public QGraphicsWidget
 {
     Q_OBJECT
 public:
-    explicit HudSlider(QGraphicsItem* parent = nullptr);
+    explicit HudSlider(QGraphicsItem *parent = nullptr);
     ~HudSlider() override;
 
     void setRange(int min, int max);
@@ -54,7 +53,7 @@ public:
 
     bool isSliderDown() const;
 
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override;
 
     void triggerAction(QAbstractSlider::SliderAction);
 
@@ -63,18 +62,18 @@ Q_SIGNALS:
     void actionTriggered(int);
 
 protected:
-    void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
-    void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
-    void wheelEvent(QGraphicsSceneWheelEvent* event) override;
-    void keyPressEvent(QKeyEvent* event) override;
-    void keyReleaseEvent(QKeyEvent* event) override;
+    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
+    void wheelEvent(QGraphicsSceneWheelEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
+    void keyReleaseEvent(QKeyEvent *event) override;
 
 private Q_SLOTS:
     void doRepeatAction(int time = 50);
 
 private:
-    HudSliderPrivate* const d;
+    HudSliderPrivate *const d;
 };
 
 } // namespace

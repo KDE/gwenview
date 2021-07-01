@@ -27,30 +27,29 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KConfigDialog>
 
 // Local
+#include "ui_advancedconfigpage.h"
 #include "ui_generalconfigpage.h"
 #include "ui_imageviewconfigpage.h"
-#include "ui_advancedconfigpage.h"
 #include <lib/invisiblebuttongroup.h>
 
 namespace Gwenview
 {
-
 class ConfigDialog : public KConfigDialog
 {
     Q_OBJECT
 public:
-    ConfigDialog(QWidget* parent);
+    ConfigDialog(QWidget *parent);
 
 private:
-    InvisibleButtonGroup* mWrapNavigationBehaviorGroup = nullptr;
-    InvisibleButtonGroup* mAlphaBackgroundModeGroup = nullptr;
-    InvisibleButtonGroup* mWheelBehaviorGroup = nullptr;
-    InvisibleButtonGroup* mAnimationMethodGroup = nullptr;
-    InvisibleButtonGroup* mFullScreenBackgroundGroup = nullptr;
-    InvisibleButtonGroup* mThumbnailActionsGroup = nullptr;
-    InvisibleButtonGroup* mZoomModeGroup = nullptr;
-    InvisibleButtonGroup* mThumbnailBarOrientationGroup = nullptr;
-    InvisibleButtonGroup* mRenderingIntentGroup = nullptr;
+    InvisibleButtonGroup *mWrapNavigationBehaviorGroup = nullptr;
+    InvisibleButtonGroup *mAlphaBackgroundModeGroup = nullptr;
+    InvisibleButtonGroup *mWheelBehaviorGroup = nullptr;
+    InvisibleButtonGroup *mAnimationMethodGroup = nullptr;
+    InvisibleButtonGroup *mFullScreenBackgroundGroup = nullptr;
+    InvisibleButtonGroup *mThumbnailActionsGroup = nullptr;
+    InvisibleButtonGroup *mZoomModeGroup = nullptr;
+    InvisibleButtonGroup *mThumbnailBarOrientationGroup = nullptr;
+    InvisibleButtonGroup *mRenderingIntentGroup = nullptr;
     Ui_GeneralConfigPage mGeneralConfigPage;
     Ui_ImageViewConfigPage mImageViewConfigPage;
     Ui_AdvancedConfigPage mAdvancedConfigPage;

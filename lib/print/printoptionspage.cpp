@@ -37,7 +37,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 namespace Gwenview
 {
-
 static inline double unitToInches(PrintOptionsPage::Unit unit)
 {
     if (unit == PrintOptionsPage::Inches) {
@@ -49,39 +48,37 @@ static inline double unitToInches(PrintOptionsPage::Unit unit)
     }
 }
 
-struct PrintOptionsPagePrivate : public Ui_PrintOptionsPage
-{
+struct PrintOptionsPagePrivate : public Ui_PrintOptionsPage {
     QSize mImageSize;
     QButtonGroup mScaleGroup;
     QButtonGroup mPositionGroup;
-    KConfigDialogManager* mConfigDialogManager;
+    KConfigDialogManager *mConfigDialogManager;
 
     void initPositionFrame()
     {
         mPositionFrame->setStyleSheet(
             QStringLiteral("QFrame {"
-            "	background-color: palette(mid);"
-            "	border: 1px solid palette(dark);"
-            "}"
-            "QToolButton {"
-            "	border: none;"
-            "	background: palette(base);"
-            "}"
-            "QToolButton:hover {"
-            "	background: palette(alternate-base);"
-            "	border: 1px solid palette(highlight);"
-            "}"
-            "QToolButton:checked {"
-            "	background-color: palette(highlight);"
-            "}")
-        );
+                           "	background-color: palette(mid);"
+                           "	border: 1px solid palette(dark);"
+                           "}"
+                           "QToolButton {"
+                           "	border: none;"
+                           "	background: palette(base);"
+                           "}"
+                           "QToolButton:hover {"
+                           "	background: palette(alternate-base);"
+                           "	border: 1px solid palette(highlight);"
+                           "}"
+                           "QToolButton:checked {"
+                           "	background-color: palette(highlight);"
+                           "}"));
 
-        auto* layout = new QGridLayout(mPositionFrame);
+        auto *layout = new QGridLayout(mPositionFrame);
         layout->setContentsMargins(0, 0, 0, 0);
         layout->setSpacing(1);
         for (int row = 0; row < 3; ++row) {
             for (int col = 0; col < 3; ++col) {
-                auto* button = new QToolButton(mPositionFrame);
+                auto *button = new QToolButton(mPositionFrame);
                 button->setFixedSize(40, 40);
                 button->setCheckable(true);
                 layout->addWidget(button, row, col);
@@ -108,9 +105,9 @@ struct PrintOptionsPagePrivate : public Ui_PrintOptionsPage
     }
 };
 
-PrintOptionsPage::PrintOptionsPage(const QSize& imageSize)
-: QWidget()
-, d(new PrintOptionsPagePrivate)
+PrintOptionsPage::PrintOptionsPage(const QSize &imageSize)
+    : QWidget()
+    , d(new PrintOptionsPagePrivate)
 {
     d->setupUi(this);
     d->mImageSize = imageSize;
@@ -122,14 +119,11 @@ PrintOptionsPage::PrintOptionsPage(const QSize& imageSize)
     d->mScaleGroup.addButton(d->mScaleToPage, ScaleToPage);
     d->mScaleGroup.addButton(d->mScaleTo, ScaleToCustomSize);
 
-    connect(d->kcfg_PrintWidth, SIGNAL(valueChanged(double)),
-            SLOT(adjustHeightToRatio()));
+    connect(d->kcfg_PrintWidth, SIGNAL(valueChanged(double)), SLOT(adjustHeightToRatio()));
 
-    connect(d->kcfg_PrintHeight, SIGNAL(valueChanged(double)),
-            SLOT(adjustWidthToRatio()));
+    connect(d->kcfg_PrintHeight, SIGNAL(valueChanged(double)), SLOT(adjustWidthToRatio()));
 
-    connect(d->kcfg_PrintKeepRatio, &QAbstractButton::toggled,
-            this, &PrintOptionsPage::adjustHeightToRatio);
+    connect(d->kcfg_PrintKeepRatio, &QAbstractButton::toggled, this, &PrintOptionsPage::adjustHeightToRatio);
 }
 
 PrintOptionsPage::~PrintOptionsPage()
@@ -193,7 +187,7 @@ void PrintOptionsPage::adjustHeightToRatio()
 
 void PrintOptionsPage::loadConfig()
 {
-    QAbstractButton* button;
+    QAbstractButton *button;
 
     button = d->mPositionGroup.button(GwenviewConfig::printPosition());
     if (button) {

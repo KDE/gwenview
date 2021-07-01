@@ -34,19 +34,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 struct KIPIImageCollectionSelectorPrivate;
 class KIPIImageCollectionSelector : public KIPI::ImageCollectionSelector
 {
     Q_OBJECT
 public:
-    KIPIImageCollectionSelector(KIPIInterface*, QWidget* parent);
+    KIPIImageCollectionSelector(KIPIInterface *, QWidget *parent);
     ~KIPIImageCollectionSelector() override;
 
     QList<KIPI::ImageCollection> selectedImageCollections() const override;
 
 private:
-    KIPIImageCollectionSelectorPrivate* const d;
+    KIPIImageCollectionSelectorPrivate *const d;
 };
 
 } // namespace

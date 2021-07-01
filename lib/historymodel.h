@@ -34,7 +34,6 @@ class QUrl;
 
 namespace Gwenview
 {
-
 struct HistoryModelPrivate;
 /**
  * A model which maintains a list of urls in the dir specified by the
@@ -45,15 +44,15 @@ class GWENVIEWLIB_EXPORT HistoryModel : public QStandardItemModel
 {
     Q_OBJECT
 public:
-    HistoryModel(QObject* parent, const QString& storageDir, int maxCount = 20);
+    HistoryModel(QObject *parent, const QString &storageDir, int maxCount = 20);
     ~HistoryModel() override;
 
-    void addUrl(const QUrl&, const QDateTime& dateTime = QDateTime());
+    void addUrl(const QUrl &, const QDateTime &dateTime = QDateTime());
 
-    bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
+    bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
 
 private:
-    HistoryModelPrivate* const d;
+    HistoryModelPrivate *const d;
 };
 
 } // namespace

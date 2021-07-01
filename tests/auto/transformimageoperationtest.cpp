@@ -18,9 +18,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
 // Qt
+#include <QDebug>
 #include <QEventLoop>
 #include <QImage>
-#include <QDebug>
 #include <QTest>
 
 // KF
@@ -59,7 +59,7 @@ void TransformImageOperationTest::testRotate90()
 
     Document::Ptr doc = DocumentFactory::instance()->load(url);
 
-    auto* op = new TransformImageOperation(ROT_90);
+    auto *op = new TransformImageOperation(ROT_90);
     QEventLoop loop;
     connect(doc.data(), &Document::allTasksDone, &loop, &QEventLoop::quit);
     op->applyToDocument(doc);

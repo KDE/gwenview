@@ -23,41 +23,39 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QDateTime>
-#include <QUrl>
 #include <QTemporaryDir>
+#include <QUrl>
 
 // KF
 #include <KFileItem>
 #include <KIO/CopyJob>
 #include <KIO/DeleteJob>
-#include <KIO/MkpathJob>
 #include <KIO/Job>
-#include <kio/jobclasses.h>
 #include <KIO/JobUiDelegate>
+#include <KIO/MkpathJob>
 #include <KJobWidgets>
 #include <KLocalizedString>
+#include <kio/jobclasses.h>
 
 // stdc++
 #include <memory>
 
 // Local
 #include "gwenview_importer_debug.h"
-#include <fileutils.h>
+#include <QDir>
 #include <filenameformater.h>
+#include <fileutils.h>
 #include <lib/timeutils.h>
 #include <lib/urlutils.h>
-#include <QDir>
 
 namespace Gwenview
 {
-
-struct ImporterPrivate
-{
-    Importer* q;
-    QWidget* mAuthWindow;
+struct ImporterPrivate {
+    Importer *q;
+    QWidget *mAuthWindow;
     std::unique_ptr<FileNameFormater> mFileNameFormater;
     QUrl mTempImportDirUrl;
-    QTemporaryDir* mTempImportDir;
+    QTemporaryDir *mTempImportDir;
     QUrl mDestinationDirUrl;
 
     /* @defgroup reset Should be reset in start()
@@ -74,9 +72,9 @@ struct ImporterPrivate
 
     QUrl mCurrentUrl;
 
-    bool createImportDir(const QUrl& url)
+    bool createImportDir(const QUrl &url)
     {
-        KIO::Job* job = KIO::mkpath(url, QUrl(), KIO::HideProgressInfo);
+        KIO::Job *job = KIO::mkpath(url, QUrl(), KIO::HideProgressInfo);
         KJobWidgets::setWindow(job, mAuthWindow);
         if (!job->exec()) {
             emit q->error(i18n("Could not create destination folder."));
@@ -116,15 +114,13 @@ struct ImporterPrivate
         mCurrentUrl = mUrlList.takeFirst();
         QUrl dst = mTempImportDirUrl;
         dst.setPath(dst.path() + mCurrentUrl.fileName());
-        KIO::Job* job = KIO::copy(mCurrentUrl, dst, KIO::HideProgressInfo|KIO::Overwrite);
+        KIO::Job *job = KIO::copy(mCurrentUrl, dst, KIO::HideProgressInfo | KIO::Overwrite);
         KJobWidgets::setWindow(job, mAuthWindow);
-        QObject::connect(job, &KJob::result,
-                         q, &Importer::slotCopyDone);
-        QObject::connect(job, SIGNAL(percent(KJob*,ulong)),
-                         q, SLOT(slotPercent(KJob*,ulong)));
+        QObject::connect(job, &KJob::result, q, &Importer::slotCopyDone);
+        QObject::connect(job, SIGNAL(percent(KJob *, ulong)), q, SLOT(slotPercent(KJob *, ulong)));
     }
 
-    void renameImportedUrl(const QUrl& src)
+    void renameImportedUrl(const QUrl &src)
     {
         QUrl dst = mDestinationDirUrl;
         QString fileName;
@@ -145,8 +141,8 @@ struct ImporterPrivate
         FileUtils::RenameResult result;
         // Create additional subfolders if needed (e.g. when extra slashes in FileNameFormater)
         QUrl subFolder = dst.adjusted(QUrl::RemoveFilename);
-        KIO::Job* job = KIO::mkpath(subFolder, QUrl(), KIO::HideProgressInfo);
-        KJobWidgets::setWindow(job,mAuthWindow);
+        KIO::Job *job = KIO::mkpath(subFolder, QUrl(), KIO::HideProgressInfo);
+        KJobWidgets::setWindow(job, mAuthWindow);
         if (!job->exec()) { // if subfolder creation fails
             qCWarning(GWENVIEW_IMPORTER_LOG) << "Could not create subfolder:" << subFolder;
             if (!mFailedSubFolderList.contains(subFolder)) {
@@ -177,9 +173,9 @@ struct ImporterPrivate
     }
 };
 
-Importer::Importer(QWidget* parent)
-: QObject(parent)
-, d(new ImporterPrivate)
+Importer::Importer(QWidget *parent)
+    : QObject(parent)
+    , d(new ImporterPrivate)
 {
     d->q = this;
     d->mAuthWindow = parent;
@@ -190,7 +186,7 @@ Importer::~Importer()
     delete d;
 }
 
-void Importer::setAutoRenameFormat(const QString& format)
+void Importer::setAutoRenameFormat(const QString &format)
 {
     if (format.isEmpty()) {
         d->mFileNameFormater.reset(nullptr);
@@ -199,7 +195,7 @@ void Importer::setAutoRenameFormat(const QString& format)
     }
 }
 
-void Importer::start(const QList<QUrl>& list, const QUrl& destination)
+void Importer::start(const QList<QUrl> &list, const QUrl &destination)
 {
     d->mDestinationDirUrl = destination;
     d->mUrlList = list;
@@ -221,9 +217,9 @@ void Importer::start(const QList<QUrl>& list, const QUrl& destination)
     d->importNext();
 }
 
-void Importer::slotCopyDone(KJob* _job)
+void Importer::slotCopyDone(KJob *_job)
 {
-    auto* job = static_cast<KIO::CopyJob*>(_job);
+    auto *job = static_cast<KIO::CopyJob *>(_job);
     QUrl url = job->destUrl();
     if (job->error()) {
         // Add document to failed url list and proceed with next one
@@ -249,7 +245,7 @@ void Importer::advance()
     emitProgressChanged();
 }
 
-void Importer::slotPercent(KJob*, unsigned long percent)
+void Importer::slotPercent(KJob *, unsigned long percent)
 {
     d->mJobProgress = percent;
     emitProgressChanged();

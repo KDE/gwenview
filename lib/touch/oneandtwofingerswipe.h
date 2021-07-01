@@ -40,7 +40,7 @@ class GWENVIEWLIB_EXPORT OneAndTwoFingerSwipe : public QGesture
     Q_PROPERTY(bool right READ right WRITE right)
 
 public:
-    explicit OneAndTwoFingerSwipe(QObject* parent = nullptr);
+    explicit OneAndTwoFingerSwipe(QObject *parent = nullptr);
 
 private:
     bool left;
@@ -52,11 +52,12 @@ class GWENVIEWLIB_EXPORT OneAndTwoFingerSwipeRecognizer : public QGestureRecogni
 public:
     explicit OneAndTwoFingerSwipeRecognizer();
     ~OneAndTwoFingerSwipeRecognizer();
-private:
-    OneAndTwoFingerSwipeRecognizerPrivate* d;
 
-    virtual QGesture* create(QObject*) override;
-    virtual Result recognize(QGesture*, QObject*, QEvent*) override;
+private:
+    OneAndTwoFingerSwipeRecognizerPrivate *d;
+
+    virtual QGesture *create(QObject *) override;
+    virtual Result recognize(QGesture *, QObject *, QEvent *) override;
 };
 
 } // namespace

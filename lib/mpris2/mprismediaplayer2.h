@@ -28,7 +28,6 @@ class QAction;
 
 namespace Gwenview
 {
-
 // https://specifications.freedesktop.org/mpris-spec/latest/Media_Player.html
 class MprisMediaPlayer2 : public DBusAbstractAdaptor
 {
@@ -49,7 +48,7 @@ class MprisMediaPlayer2 : public DBusAbstractAdaptor
     Q_PROPERTY(QStringList SupportedMimeTypes READ supportedMimeTypes CONSTANT)
 
 public:
-    MprisMediaPlayer2(const QString &objectDBusPath, QAction* fullScreenAction, QObject* parent);
+    MprisMediaPlayer2(const QString &objectDBusPath, QAction *fullScreenAction, QObject *parent);
     ~MprisMediaPlayer2() override;
 
 public Q_SLOTS: // D-Bus API
@@ -73,7 +72,7 @@ private:
     void onFullScreenActionToggled(bool checked);
 
 private:
-    QAction* mFullScreenAction;
+    QAction *mFullScreenAction;
 };
 
 }

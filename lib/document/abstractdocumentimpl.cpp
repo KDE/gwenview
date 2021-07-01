@@ -31,14 +31,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 namespace Gwenview
 {
-
-struct AbstractDocumentImplPrivate
-{
-    Document* mDocument;
+struct AbstractDocumentImplPrivate {
+    Document *mDocument;
 };
 
-AbstractDocumentImpl::AbstractDocumentImpl(Document* document)
-: d(new AbstractDocumentImplPrivate)
+AbstractDocumentImpl::AbstractDocumentImpl(Document *document)
+    : d(new AbstractDocumentImplPrivate)
 {
     d->mDocument = document;
 }
@@ -48,27 +46,27 @@ AbstractDocumentImpl::~AbstractDocumentImpl()
     delete d;
 }
 
-Document* AbstractDocumentImpl::document() const
+Document *AbstractDocumentImpl::document() const
 {
     return d->mDocument;
 }
 
-void AbstractDocumentImpl::switchToImpl(AbstractDocumentImpl*  impl)
+void AbstractDocumentImpl::switchToImpl(AbstractDocumentImpl *impl)
 {
     d->mDocument->switchToImpl(impl);
 }
 
-void AbstractDocumentImpl::setDocumentImage(const QImage& image)
+void AbstractDocumentImpl::setDocumentImage(const QImage &image)
 {
     d->mDocument->setImageInternal(image);
 }
 
-void AbstractDocumentImpl::setDocumentImageSize(const QSize& size)
+void AbstractDocumentImpl::setDocumentImageSize(const QSize &size)
 {
     d->mDocument->setSize(size);
 }
 
-void AbstractDocumentImpl::setDocumentFormat(const QByteArray& format)
+void AbstractDocumentImpl::setDocumentFormat(const QByteArray &format)
 {
     d->mDocument->setFormat(format);
 }
@@ -83,12 +81,12 @@ void AbstractDocumentImpl::setDocumentExiv2Image(std::unique_ptr<Exiv2::Image> i
     d->mDocument->setExiv2Image(std::move(image));
 }
 
-void AbstractDocumentImpl::setDocumentDownSampledImage(const QImage& image, int invertedZoom)
+void AbstractDocumentImpl::setDocumentDownSampledImage(const QImage &image, int invertedZoom)
 {
     d->mDocument->setDownSampledImage(image, invertedZoom);
 }
 
-void AbstractDocumentImpl::setDocumentErrorString(const QString& string)
+void AbstractDocumentImpl::setDocumentErrorString(const QString &string)
 {
     d->mDocument->setErrorString(string);
 }

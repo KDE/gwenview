@@ -40,19 +40,17 @@ namespace Gwenview
 {
 namespace IODeviceJpegSourceManager
 {
-
 #define SOURCE_MANAGER_BUFFER_SIZE 4096
-struct IODeviceJpegSourceManager : public jpeg_source_mgr
-{
-    QIODevice* mIODevice;
+struct IODeviceJpegSourceManager : public jpeg_source_mgr {
+    QIODevice *mIODevice;
     JOCTET mBuffer[SOURCE_MANAGER_BUFFER_SIZE];
 };
 
 static boolean fill_input_buffer(j_decompress_ptr cinfo)
 {
-    auto* src = static_cast<IODeviceJpegSourceManager*>(cinfo->src);
+    auto *src = static_cast<IODeviceJpegSourceManager *>(cinfo->src);
     Q_ASSERT(src->mIODevice);
-    int readSize = src->mIODevice->read((char*)src->mBuffer, SOURCE_MANAGER_BUFFER_SIZE);
+    int readSize = src->mIODevice->read((char *)src->mBuffer, SOURCE_MANAGER_BUFFER_SIZE);
     if (readSize > 0) {
         src->next_input_byte = src->mBuffer;
         src->bytes_in_buffer = readSize;
@@ -61,7 +59,7 @@ static boolean fill_input_buffer(j_decompress_ptr cinfo)
          * JPEG file is broken. We feed the decoder with fake EOI, as specified
          * in the libjpeg documentation.
          */
-        static JOCTET fakeEOI[2] = { JOCTET(0xFF), JOCTET(JPEG_EOI)};
+        static JOCTET fakeEOI[2] = {JOCTET(0xFF), JOCTET(JPEG_EOI)};
         qCWarning(GWENVIEW_LIB_LOG) << "Image is incomplete";
         cinfo->src->next_input_byte = fakeEOI;
         cinfo->src->bytes_in_buffer = 2;
@@ -77,16 +75,16 @@ static void init_source(j_decompress_ptr cinfo)
 static void skip_input_data(j_decompress_ptr cinfo, long num_bytes)
 {
     if (num_bytes > 0) {
-        while (num_bytes > (long) cinfo->src->bytes_in_buffer) {
-            num_bytes -= (long) cinfo->src->bytes_in_buffer;
+        while (num_bytes > (long)cinfo->src->bytes_in_buffer) {
+            num_bytes -= (long)cinfo->src->bytes_in_buffer;
             fill_input_buffer(cinfo);
             /**
              * we assume that fill_input_buffer will never return FALSE, so
              * suspension need not be handled.
              */
         }
-        cinfo->src->next_input_byte += (size_t) num_bytes;
-        cinfo->src->bytes_in_buffer -= (size_t) num_bytes;
+        cinfo->src->next_input_byte += (size_t)num_bytes;
+        cinfo->src->bytes_in_buffer -= (size_t)num_bytes;
     }
 }
 
@@ -94,12 +92,10 @@ static void term_source(j_decompress_ptr)
 {
 }
 
-void setup(j_decompress_ptr cinfo, QIODevice* ioDevice)
+void setup(j_decompress_ptr cinfo, QIODevice *ioDevice)
 {
     Q_ASSERT(!cinfo->src);
-    auto* src = (IODeviceJpegSourceManager*)
-                                     (*cinfo->mem->alloc_small)((j_common_ptr) cinfo, JPOOL_PERMANENT,
-                                             sizeof(IODeviceJpegSourceManager));
+    auto *src = (IODeviceJpegSourceManager *)(*cinfo->mem->alloc_small)((j_common_ptr)cinfo, JPOOL_PERMANENT, sizeof(IODeviceJpegSourceManager));
     cinfo->src = src;
 
     src->init_source = init_source;

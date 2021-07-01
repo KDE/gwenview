@@ -21,8 +21,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifndef MIMETYPEUTILS_H
 #define MIMETYPEUTILS_H
 
-#include <lib/gwenviewlib_export.h>
 #include <QString>
+#include <lib/gwenviewlib_export.h>
 // Local
 class QStringList;
 
@@ -33,30 +33,28 @@ class QMimeData;
 
 namespace Gwenview
 {
-
 namespace MimeTypeUtils
 {
+GWENVIEWLIB_EXPORT const QStringList &rasterImageMimeTypes();
+GWENVIEWLIB_EXPORT const QStringList &svgImageMimeTypes();
+GWENVIEWLIB_EXPORT const QStringList &imageMimeTypes();
 
-GWENVIEWLIB_EXPORT const QStringList& rasterImageMimeTypes();
-GWENVIEWLIB_EXPORT const QStringList& svgImageMimeTypes();
-GWENVIEWLIB_EXPORT const QStringList& imageMimeTypes();
-
-GWENVIEWLIB_EXPORT QString urlMimeType(const QUrl&);
+GWENVIEWLIB_EXPORT QString urlMimeType(const QUrl &);
 
 enum Kind {
-    KIND_UNKNOWN      = 0,
-    KIND_DIR          = 1,
-    KIND_ARCHIVE      = 1 << 2,
-    KIND_FILE         = 1 << 3,
+    KIND_UNKNOWN = 0,
+    KIND_DIR = 1,
+    KIND_ARCHIVE = 1 << 2,
+    KIND_FILE = 1 << 3,
     KIND_RASTER_IMAGE = 1 << 4,
-    KIND_SVG_IMAGE    = 1 << 5,
-    KIND_VIDEO        = 1 << 6,
+    KIND_SVG_IMAGE = 1 << 5,
+    KIND_VIDEO = 1 << 6,
 };
 Q_DECLARE_FLAGS(Kinds, Kind)
 
-GWENVIEWLIB_EXPORT Kind fileItemKind(const KFileItem&);
-GWENVIEWLIB_EXPORT Kind urlKind(const QUrl&);
-GWENVIEWLIB_EXPORT Kind mimeTypeKind(const QString& mimeType);
+GWENVIEWLIB_EXPORT Kind fileItemKind(const KFileItem &);
+GWENVIEWLIB_EXPORT Kind urlKind(const QUrl &);
+GWENVIEWLIB_EXPORT Kind mimeTypeKind(const QString &mimeType);
 
 enum MimeTarget {
     ClipboardTarget,
@@ -68,7 +66,7 @@ enum MimeTarget {
  * is edited/unsaved) if there is a single image selected.
  * Otherwise, returns a list of URLs for all selected images.
  */
-GWENVIEWLIB_EXPORT QMimeData* selectionMimeData(const KFileItemList& selectedFiles, MimeTarget mimeTarget);
+GWENVIEWLIB_EXPORT QMimeData *selectionMimeData(const KFileItemList &selectedFiles, MimeTarget mimeTarget);
 
 } // namespace MimeTypeUtils
 

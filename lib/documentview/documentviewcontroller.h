@@ -34,7 +34,6 @@ class KActionCollection;
 
 namespace Gwenview
 {
-
 class DocumentView;
 class SlideContainer;
 class BackgroundColorWidget;
@@ -50,18 +49,18 @@ class GWENVIEWLIB_EXPORT DocumentViewController : public QObject
 {
     Q_OBJECT
 public:
-    explicit DocumentViewController(KActionCollection*, QObject* parent = nullptr);
+    explicit DocumentViewController(KActionCollection *, QObject *parent = nullptr);
     ~DocumentViewController() override;
 
-    DocumentView* view() const;
-    BackgroundColorWidget* backgroundColorWidget() const;
-    ZoomWidget* zoomWidget() const;
+    DocumentView *view() const;
+    BackgroundColorWidget *backgroundColorWidget() const;
+    ZoomWidget *zoomWidget() const;
 
-    void setView(DocumentView*);
-    void setBackgroundColorWidget(BackgroundColorWidget* widget);
-    void setZoomWidget(ZoomWidget* widget);
+    void setView(DocumentView *);
+    void setBackgroundColorWidget(BackgroundColorWidget *widget);
+    void setZoomWidget(ZoomWidget *widget);
 
-    void setToolContainer(SlideContainer* container);
+    void setToolContainer(SlideContainer *container);
 
     void reset();
 
@@ -72,7 +71,7 @@ private Q_SLOTS:
     void updateTool();
 
 private:
-    DocumentViewControllerPrivate* const d;
+    DocumentViewControllerPrivate *const d;
 };
 
 } // namespace

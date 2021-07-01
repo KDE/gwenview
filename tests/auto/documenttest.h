@@ -21,9 +21,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #define DOCUMENTTEST_H
 
 // Qt
-#include <QObject>
-#include <QDebug>
 #include <QApplication>
+#include <QDebug>
+#include <QObject>
 
 // KF
 #include <KJob>
@@ -35,9 +35,10 @@ class LoadingStateSpy : public QObject
 {
     Q_OBJECT
 public:
-    LoadingStateSpy(const Gwenview::Document::Ptr& doc)
+    LoadingStateSpy(const Gwenview::Document::Ptr &doc)
         : mDocument(doc)
-        , mCallCount(0) {
+        , mCallCount(0)
+    {
     }
 
 public Q_SLOTS:
@@ -57,13 +58,12 @@ class JobWatcher : public QObject
 {
     Q_OBJECT
 public:
-    JobWatcher(KJob* job)
+    JobWatcher(KJob *job)
         : mDone(false)
-        , mError(0) {
-        connect(job, &KJob::result,
-                this, &JobWatcher::slotResult);
-        connect(job, &QObject::destroyed,
-                this, &JobWatcher::slotDestroyed);
+        , mError(0)
+    {
+        connect(job, &KJob::result, this, &JobWatcher::slotResult);
+        connect(job, &QObject::destroyed, this, &JobWatcher::slotDestroyed);
     }
 
     void wait()
@@ -79,7 +79,7 @@ public:
     }
 
 private Q_SLOTS:
-    void slotResult(KJob* job)
+    void slotResult(KJob *job)
     {
         mError = job->error();
         mDone = true;

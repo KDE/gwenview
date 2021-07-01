@@ -22,27 +22,26 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "croptool.h"
 
 // Qt
-#include <QtMath>
 #include <QDialogButtonBox>
 #include <QGraphicsSceneMouseEvent>
 #include <QPainter>
 #include <QPushButton>
 #include <QRect>
+#include <QtMath>
 
 // KF
 
 // Local
-#include "gwenview_lib_debug.h"
-#include <lib/documentview/rasterimageview.h>
 #include "cropimageoperation.h"
 #include "cropwidget.h"
+#include "gwenview_lib_debug.h"
 #include "gwenviewconfig.h"
+#include <lib/documentview/rasterimageview.h>
 
 static const int HANDLE_SIZE = 15;
 
 namespace Gwenview
 {
-
 enum CropHandleFlag {
     CH_None,
     CH_Top = 1,
@@ -60,37 +59,29 @@ Q_DECLARE_FLAGS(CropHandle, CropHandleFlag)
 
 } // namespace
 
-inline QPoint boundPointX(const QPoint& point, const QRect& rect)
+inline QPoint boundPointX(const QPoint &point, const QRect &rect)
 {
-    return QPoint(
-               qBound(rect.left(), point.x(), rect.right()),
-               point.y()
-           );
+    return QPoint(qBound(rect.left(), point.x(), rect.right()), point.y());
 }
 
-inline QPoint boundPointXY(const QPoint& point, const QRect& rect)
+inline QPoint boundPointXY(const QPoint &point, const QRect &rect)
 {
-    return QPoint(
-               qBound(rect.left(), point.x(), rect.right()),
-               qBound(rect.top(),  point.y(), rect.bottom())
-           );
+    return QPoint(qBound(rect.left(), point.x(), rect.right()), qBound(rect.top(), point.y(), rect.bottom()));
 }
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Gwenview::CropHandle)
 
 namespace Gwenview
 {
-
-struct CropToolPrivate
-{
-    CropTool* q;
+struct CropToolPrivate {
+    CropTool *q;
     QRect mRect;
     QList<CropHandle> mCropHandleList;
     CropHandle mMovingHandle;
     QPoint mLastMouseMovePos;
     double mCropRatio;
     double mLockedCropRatio;
-    CropWidget* mCropWidget;
+    CropWidget *mCropWidget;
 
     QRect viewportCropRect() const
     {
@@ -125,9 +116,9 @@ struct CropToolPrivate
         return QRect(left, top, HANDLE_SIZE, HANDLE_SIZE);
     }
 
-    CropHandle handleAt(const QPointF& pos)
+    CropHandle handleAt(const QPointF &pos)
     {
-        for (const CropHandle & handle : qAsConst(mCropHandleList)) {
+        for (const CropHandle &handle : qAsConst(mCropHandleList)) {
             QRectF rect = handleViewportRect(handle);
             if (rect.contains(pos)) {
                 return handle;
@@ -199,14 +190,11 @@ struct CropToolPrivate
 
     void setupWidget()
     {
-        RasterImageView* view = q->imageView();
+        RasterImageView *view = q->imageView();
         mCropWidget = new CropWidget(nullptr, view, q);
-        QObject::connect(mCropWidget, SIGNAL(cropRequested()),
-                         q, SLOT(slotCropRequested()));
-        QObject::connect(mCropWidget, &CropWidget::done,
-                         q, &CropTool::done);
-        QObject::connect(mCropWidget, &CropWidget::rectReset,
-                         q, &CropTool::rectReset);
+        QObject::connect(mCropWidget, SIGNAL(cropRequested()), q, SLOT(slotCropRequested()));
+        QObject::connect(mCropWidget, &CropWidget::done, q, &CropTool::done);
+        QObject::connect(mCropWidget, &CropWidget::rectReset, q, &CropTool::rectReset);
 
         // This is needed when crop ratio set to Current Image, and the image is rotated
         QObject::connect(view, &RasterImageView::imageRectUpdated, mCropWidget, &CropWidget::updateCropRatio);
@@ -214,16 +202,16 @@ struct CropToolPrivate
 
     QRect computeVisibleImageRect() const
     {
-        RasterImageView* view = q->imageView();
+        RasterImageView *view = q->imageView();
         const QRect imageRect = QRect(QPoint(0, 0), view->documentSize().toSize());
         const QRect viewportRect = view->mapToImage(view->rect().toRect());
         return imageRect & viewportRect;
     }
 };
 
-CropTool::CropTool(RasterImageView* view)
-: AbstractRasterImageViewTool(view)
-, d(new CropToolPrivate)
+CropTool::CropTool(RasterImageView *view)
+    : AbstractRasterImageViewTool(view)
+    , d(new CropToolPrivate)
 {
     d->q = this;
     d->mCropHandleList << CH_Left << CH_Right << CH_Top << CH_Bottom << CH_TopLeft << CH_TopRight << CH_BottomLeft << CH_BottomRight;
@@ -246,7 +234,7 @@ void CropTool::setCropRatio(double ratio)
     d->mCropRatio = ratio;
 }
 
-void CropTool::setRect(const QRect& rect)
+void CropTool::setRect(const QRect &rect)
 {
     QRect oldRect = d->mRect;
     d->mRect = rect;
@@ -262,17 +250,17 @@ QRect CropTool::rect() const
     return d->mRect;
 }
 
-void CropTool::paint(QPainter* painter)
+void CropTool::paint(QPainter *painter)
 {
     QRect rect = d->viewportCropRect();
 
     QRect imageRect = imageView()->rect().toRect();
 
-    static const QColor outerColor  = QColor::fromHsvF(0, 0, 0, 0.5);
+    static const QColor outerColor = QColor::fromHsvF(0, 0, 0, 0.5);
     // For some reason nothing gets drawn if borderColor is not fully opaque!
-    //static const QColor borderColor = QColor::fromHsvF(0, 0, 1.0, 0.66);
+    // static const QColor borderColor = QColor::fromHsvF(0, 0, 1.0, 0.66);
     static const QColor borderColor = QColor::fromHsvF(0, 0, 1.0);
-    static const QColor fillColor   = QColor::fromHsvF(0, 0, 0.75, 0.66);
+    static const QColor fillColor = QColor::fromHsvF(0, 0, 0.75, 0.66);
 
     const QRegion outerRegion = QRegion(imageRect) - QRegion(rect);
     for (const QRect &outerRect : outerRegion) {
@@ -286,22 +274,21 @@ void CropTool::paint(QPainter* painter)
     if (d->mMovingHandle == CH_None) {
         // Only draw handles when user is not resizing
         painter->setBrush(fillColor);
-        for (const CropHandle & handle : qAsConst(d->mCropHandleList)) {
+        for (const CropHandle &handle : qAsConst(d->mCropHandleList)) {
             rect = d->handleViewportRect(handle);
             painter->drawRect(rect);
         }
     }
 }
 
-void CropTool::mousePressEvent(QGraphicsSceneMouseEvent* event)
+void CropTool::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->buttons() != Qt::LeftButton) {
         event->ignore();
         return;
     }
     const CropHandle newMovingHandle = d->handleAt(event->pos());
-    if (event->modifiers() & Qt::ControlModifier
-        && !(newMovingHandle & (CH_Top | CH_Left | CH_Right | CH_Bottom))) {
+    if (event->modifiers() & Qt::ControlModifier && !(newMovingHandle & (CH_Top | CH_Left | CH_Right | CH_Bottom))) {
         event->ignore();
         return;
     }
@@ -318,7 +305,7 @@ void CropTool::mousePressEvent(QGraphicsSceneMouseEvent* event)
     imageView()->update();
 }
 
-void CropTool::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
+void CropTool::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     event->accept();
     if (event->buttons() != Qt::LeftButton) {
@@ -350,10 +337,10 @@ void CropTool::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
     // Normalize rect and handles (this is useful when user drag the right side
     // of the crop rect to the left of the left side)
     if (d->mRect.height() < 0) {
-        d->mMovingHandle = d->mMovingHandle ^(CH_Top | CH_Bottom);
+        d->mMovingHandle = d->mMovingHandle ^ (CH_Top | CH_Bottom);
     }
     if (d->mRect.width() < 0) {
-        d->mMovingHandle = d->mMovingHandle ^(CH_Left | CH_Right);
+        d->mMovingHandle = d->mMovingHandle ^ (CH_Left | CH_Right);
     }
     d->mRect = d->mRect.normalized();
 
@@ -395,7 +382,7 @@ void CropTool::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
     emit rectUpdated(d->mRect);
 }
 
-void CropTool::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
+void CropTool::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     event->accept();
     d->mMovingHandle = CH_None;
@@ -405,7 +392,7 @@ void CropTool::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
     imageView()->update();
 }
 
-void CropTool::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
+void CropTool::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->buttons() != Qt::LeftButton || d->handleAt(event->pos()) == CH_None) {
         event->ignore();
@@ -415,7 +402,7 @@ void CropTool::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
     emit d->mCropWidget->findChild<QDialogButtonBox *>()->accepted();
 }
 
-void CropTool::hoverMoveEvent(QGraphicsSceneHoverEvent* event)
+void CropTool::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
 {
     event->accept();
     // Make sure cursor is updated when moving over handles
@@ -423,7 +410,7 @@ void CropTool::hoverMoveEvent(QGraphicsSceneHoverEvent* event)
     d->updateCursor(handle, false /* buttonDown */);
 }
 
-void CropTool::keyPressEvent(QKeyEvent* event)
+void CropTool::keyPressEvent(QKeyEvent *event)
 {
     // Lock crop ratio to current rect when user presses Control or Shift
     if (event->key() == Qt::Key_Control || event->key() == Qt::Key_Shift) {
@@ -439,7 +426,7 @@ void CropTool::keyPressEvent(QKeyEvent* event)
     case Qt::Key_Return:
     case Qt::Key_Enter: {
         event->accept();
-        auto focusButton = static_cast<QPushButton*>(buttons->focusWidget());
+        auto focusButton = static_cast<QPushButton *>(buttons->focusWidget());
         if (focusButton && buttons->buttonRole(focusButton) == QDialogButtonBox::RejectRole) {
             emit buttons->rejected();
         } else {
@@ -479,12 +466,12 @@ void CropTool::toolDeactivated()
 
 void CropTool::slotCropRequested()
 {
-    auto* op = new CropImageOperation(d->mRect);
+    auto *op = new CropImageOperation(d->mRect);
     emit imageOperationRequested(op);
     emit done();
 }
 
-QWidget* CropTool::widget() const
+QWidget *CropTool::widget() const
 {
     return d->mCropWidget;
 }

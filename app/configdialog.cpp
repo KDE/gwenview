@@ -32,23 +32,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 namespace Gwenview
 {
-
-template <class Ui>
-QWidget* setupPage(Ui& ui)
+template<class Ui>
+QWidget *setupPage(Ui &ui)
 {
-    auto* widget = new QWidget;
+    auto *widget = new QWidget;
     ui.setupUi(widget);
     widget->layout()->setContentsMargins(0, 0, 0, 0);
     return widget;
 }
 
-ConfigDialog::ConfigDialog(QWidget* parent)
-: KConfigDialog(parent, "Settings", GwenviewConfig::self())
+ConfigDialog::ConfigDialog(QWidget *parent)
+    : KConfigDialog(parent, "Settings", GwenviewConfig::self())
 {
     setFaceType(KPageDialog::List);
 
-    QWidget* widget;
-    KPageWidgetItem* pageItem;
+    QWidget *widget;
+    KPageWidgetItem *pageItem;
 
     // General
     widget = setupPage(mGeneralConfigPage);
@@ -72,8 +71,12 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 
     pageItem = addPage(widget, i18n("General"));
     pageItem->setIcon(QIcon::fromTheme(QStringLiteral("gwenview")));
-    connect(mGeneralConfigPage.kcfg_JPEGQuality, &QAbstractSlider::valueChanged, this, [=] (int value) {mGeneralConfigPage.jpegQualitySpinner->setValue(value);});
-    connect(mGeneralConfigPage.jpegQualitySpinner, QOverload<int>::of(&QSpinBox::valueChanged), this, [=] (int value) {mGeneralConfigPage.kcfg_JPEGQuality->setValue(value);});
+    connect(mGeneralConfigPage.kcfg_JPEGQuality, &QAbstractSlider::valueChanged, this, [=](int value) {
+        mGeneralConfigPage.jpegQualitySpinner->setValue(value);
+    });
+    connect(mGeneralConfigPage.jpegQualitySpinner, QOverload<int>::of(&QSpinBox::valueChanged), this, [=](int value) {
+        mGeneralConfigPage.kcfg_JPEGQuality->setValue(value);
+    });
     mGeneralConfigPage.jpegQualitySpinner->setValue(mGeneralConfigPage.kcfg_JPEGQuality->value());
     mGeneralConfigPage.lossyImageFormatHelpLabel->setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
 

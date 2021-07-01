@@ -23,8 +23,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // Qt
 #include <QAction>
-#include <QStyleOptionToolButton>
 #include <QStyleOptionToolBar>
+#include <QStyleOptionToolButton>
 #include <QStylePainter>
 
 // KF
@@ -32,10 +32,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 namespace Gwenview
 {
-
-StatusBarToolButton::StatusBarToolButton(QWidget* parent)
-: QToolButton(parent)
-, mGroupPosition(NotGrouped)
+StatusBarToolButton::StatusBarToolButton(QWidget *parent)
+    : QToolButton(parent)
+    , mGroupPosition(NotGrouped)
 {
     setToolButtonStyle(Qt::ToolButtonTextOnly);
     setFocusPolicy(Qt::NoFocus);
@@ -49,10 +48,8 @@ QSize StatusBarToolButton::sizeHint() const
     QStyleOptionToolButton opt;
     initStyleOption(&opt);
 
-    const bool isIconOnly = opt.toolButtonStyle == Qt::ToolButtonIconOnly
-            || (!opt.icon.isNull() && opt.text.isEmpty());
-    const bool isTextOnly = opt.toolButtonStyle == Qt::ToolButtonTextOnly
-            || (opt.icon.isNull() && !opt.text.isEmpty());
+    const bool isIconOnly = opt.toolButtonStyle == Qt::ToolButtonIconOnly || (!opt.icon.isNull() && opt.text.isEmpty());
+    const bool isTextOnly = opt.toolButtonStyle == Qt::ToolButtonTextOnly || (opt.icon.isNull() && !opt.text.isEmpty());
 
     if (isIconOnly || isTextOnly) {
         QSize contentSize;
@@ -63,7 +60,7 @@ QSize StatusBarToolButton::sizeHint() const
             // copying the default text size behavior for text only QToolButtons
             QSize textSize = opt.fontMetrics.size(Qt::TextShowMnemonic, opt.text);
             // NOTE: QToolButton really does use horizontalAdvance() instead of boundingRect().width()
-            textSize.setWidth(textSize.width() + opt.fontMetrics.horizontalAdvance(QLatin1Char(' '))*2);
+            textSize.setWidth(textSize.width() + opt.fontMetrics.horizontalAdvance(QLatin1Char(' ')) * 2);
             contentSize.setHeight(qMax(opt.iconSize.height(), textSize.height()));
             contentSize.setWidth(textSize.width());
         }
@@ -81,7 +78,7 @@ void StatusBarToolButton::setGroupPosition(StatusBarToolButton::GroupPosition gr
     mGroupPosition = groupPosition;
 }
 
-void StatusBarToolButton::paintEvent(QPaintEvent* event)
+void StatusBarToolButton::paintEvent(QPaintEvent *event)
 {
     if (mGroupPosition == NotGrouped) {
         QToolButton::paintEvent(event);
@@ -93,7 +90,7 @@ void StatusBarToolButton::paintEvent(QPaintEvent* event)
     QStyleOptionToolButton panelOpt = opt;
 
     // Panel
-    QRect& panelRect = panelOpt.rect;
+    QRect &panelRect = panelOpt.rect;
     switch (mGroupPosition) {
     case GroupLeft:
         panelRect.setWidth(panelRect.width() * 2);
@@ -120,13 +117,13 @@ void StatusBarToolButton::paintEvent(QPaintEvent* event)
     if (mGroupPosition & GroupRight) {
         // Kinda hacky. This is needed because of the way toolbar separators are horizontally aligned.
         // Tested with Breeze (width: 8), Fusion (width: 6) and Oxygen (width: 8)
-        const int x = opt.rect.left() - width/1.5;
-        tbOpt.rect = QRect(x,y,width,height);
+        const int x = opt.rect.left() - width / 1.5;
+        tbOpt.rect = QRect(x, y, width, height);
         painter.drawPrimitive(QStyle::PE_IndicatorToolBarSeparator, tbOpt);
     }
     if (mGroupPosition & GroupLeft) {
-        const int x = opt.rect.right() - width/2;
-        tbOpt.rect = QRect(x,y,width,height);
+        const int x = opt.rect.right() - width / 2;
+        tbOpt.rect = QRect(x, y, width, height);
         painter.drawPrimitive(QStyle::PE_IndicatorToolBarSeparator, tbOpt);
     }
 
@@ -143,7 +140,7 @@ void StatusBarToolButton::paintEvent(QPaintEvent* event)
     // messages so that translators can use Transcript for custom removal.
     // """
     if (!actions().isEmpty()) {
-        QAction* action = actions().constFirst();
+        QAction *action = actions().constFirst();
         setToolTip(i18nc("@info:tooltip of custom toolbar button", "%1", action->toolTip()));
     }
 }

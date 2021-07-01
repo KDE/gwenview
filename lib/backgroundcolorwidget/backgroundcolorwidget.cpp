@@ -26,7 +26,7 @@ class Gwenview::BackgroundColorWidgetPrivate
     Q_DECLARE_PUBLIC(BackgroundColorWidget)
 public:
     BackgroundColorWidgetPrivate(BackgroundColorWidget *q);
-    BackgroundColorWidget* const q_ptr;
+    BackgroundColorWidget *const q_ptr;
 
     void initChildWidgets();
     void initPixmaps();
@@ -111,7 +111,7 @@ void BackgroundColorWidgetPrivate::initPixmaps()
     QPixmap lightPixmap(lightButton->iconSize() * qApp->devicePixelRatio());
     QPixmap neutralPixmap(neutralButton->iconSize() * qApp->devicePixelRatio());
     QPixmap darkPixmap(darkButton->iconSize() * qApp->devicePixelRatio());
-    QPixmap autoPixmap(/*autoButton*/darkButton->iconSize() * qApp->devicePixelRatio());
+    QPixmap autoPixmap(/*autoButton*/ darkButton->iconSize() * qApp->devicePixelRatio());
     // Wipe them clean. If we don't do this, the background will have all sorts of weird artifacts.
     lightPixmap.fill(Qt::transparent);
     neutralPixmap.fill(Qt::transparent);
@@ -140,7 +140,7 @@ void BackgroundColorWidgetPrivate::paintPixmap(QPixmap &pixmap, const QColor &co
     qreal penWidth = qApp->devicePixelRatio() != 1 ? qApp->devicePixelRatio() : qApp->devicePixelRatio() + 0.001;
     QColor penColor = KColorUtils::mix(color, qApp->palette().text().color(), 0.3);
     QPen pen(penColor, penWidth);
-    qreal margin = pen.widthF()/2.0;
+    qreal margin = pen.widthF() / 2.0;
     QMarginsF penMargins(margin, margin, margin, margin);
     QRectF rect = pixmap.rect();
 
@@ -164,7 +164,7 @@ void BackgroundColorWidgetPrivate::paintAutoPixmap(QPixmap &pixmap, const QColor
     QColor darkPenColor = KColorUtils::mix(darkColor, lightColor, 0.3);
     QPen darkPen(darkPenColor, penWidth);
 
-    qreal margin = lightPen.widthF()/2.0;
+    qreal margin = lightPen.widthF() / 2.0;
     QMarginsF penMargins(margin, margin, margin, margin);
     QRectF rect = pixmap.rect();
     rect = rect.marginsRemoved(penMargins);
@@ -187,7 +187,8 @@ void BackgroundColorWidgetPrivate::paintAutoPixmap(QPixmap &pixmap, const QColor
 // define actions in a central location and then pass them down to children.
 // This code makes sure the buttons still have icons if the actions have not
 // been set yet.
-void BackgroundColorWidgetPrivate::setIcons(const QIcon &autoIcon, const QIcon &lightIcon, const QIcon &neutralIcon, const QIcon &darkIcon) {
+void BackgroundColorWidgetPrivate::setIcons(const QIcon &autoIcon, const QIcon &lightIcon, const QIcon &neutralIcon, const QIcon &darkIcon)
+{
     if (autoMode) {
         autoMode->setIcon(autoIcon);
     } else {
@@ -210,7 +211,7 @@ void BackgroundColorWidgetPrivate::setIcons(const QIcon &autoIcon, const QIcon &
     }
 }
 
-BackgroundColorWidget::BackgroundColorWidget(QWidget* parent)
+BackgroundColorWidget::BackgroundColorWidget(QWidget *parent)
     : QWidget(parent)
     , d_ptr(new BackgroundColorWidgetPrivate(this))
 {
@@ -251,7 +252,7 @@ void BackgroundColorWidget::setColorMode(ColorMode colorMode)
     Q_EMIT colorModeChanged(colorMode);
 }
 
-void BackgroundColorWidget::setActions(QAction* autoMode, QAction* lightMode, QAction* neutralMode, QAction* darkMode)
+void BackgroundColorWidget::setActions(QAction *autoMode, QAction *lightMode, QAction *neutralMode, QAction *darkMode)
 {
     Q_D(BackgroundColorWidget);
     autoMode->setIcon(d->autoButton->icon());

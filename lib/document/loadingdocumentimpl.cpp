@@ -37,21 +37,20 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QImage>
 #include <QImageReader>
 #include <QPointer>
-#include <QtConcurrent>
 #include <QUrl>
+#include <QtConcurrent>
 
 // KF
 #include <KIO/Job>
-#include <kio/jobclasses.h>
 #include <KLocalizedString>
 #include <KProtocolInfo>
+#include <kio/jobclasses.h>
 
 #ifdef KDCRAW_FOUND
 #include <kdcraw/kdcraw.h>
 #endif
 
 // Local
-#include "gwenview_lib_debug.h"
 #include "animateddocumentloadedimpl.h"
 #include "cms/cmsprofile.h"
 #include "document.h"
@@ -59,6 +58,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "emptydocumentimpl.h"
 #include "exiv2imageloader.h"
 #include "gvdebug.h"
+#include "gwenview_lib_debug.h"
+#include "gwenviewconfig.h"
 #include "imageutils.h"
 #include "jpegcontent.h"
 #include "jpegdocumentloadedimpl.h"
@@ -66,25 +67,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "svgdocumentloadedimpl.h"
 #include "urlutils.h"
 #include "videodocumentloadedimpl.h"
-#include "gwenviewconfig.h"
 
 namespace Gwenview
 {
-
 #undef ENABLE_LOG
 #undef LOG
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
-#define LOG(x) //qCDebug(GWENVIEW_LIB_LOG) << x
+#define LOG(x) // qCDebug(GWENVIEW_LIB_LOG) << x
 #else
 #define LOG(x) ;
 #endif
 
 const int HEADER_SIZE = 256;
 
-struct LoadingDocumentImplPrivate
-{
-    LoadingDocumentImpl* q;
+struct LoadingDocumentImplPrivate {
+    LoadingDocumentImpl *q;
     QPointer<KIO::TransferJob> mTransferJob;
     QFuture<bool> mMetaInfoFuture;
     QFutureWatcher<bool> mMetaInfoFutureWatcher;
@@ -140,9 +138,7 @@ struct LoadingDocumentImplPrivate
             return true;
 
         default:
-            q->setDocumentErrorString(
-                i18nc("@info", "Gwenview cannot display documents of type %1.", mMimeType.name())
-            );
+            q->setDocumentErrorString(i18nc("@info", "Gwenview cannot display documents of type %1.", mMimeType.name()));
             emit q->loadingFailed();
             q->switchToImpl(new EmptyDocumentImpl(q->document()));
             return true;
@@ -234,7 +230,7 @@ struct LoadingDocumentImplPrivate
             mFormat = mFormatHint;
         } else {
 #else
-{
+        {
 #endif
             reader.setFormat(mFormatHint);
             reader.setDevice(&buffer);
@@ -273,8 +269,7 @@ struct LoadingDocumentImplPrivate
         }
 
         if (mJpegContent.get()) {
-            if (!mJpegContent->loadFromData(mData, mExiv2Image.get()) &&
-                !mJpegContent->loadFromData(mData)) {
+            if (!mJpegContent->loadFromData(mData, mExiv2Image.get()) && !mJpegContent->loadFromData(mData)) {
                 qCWarning(GWENVIEW_LIB_LOG) << "Unable to use preview of " << q->document()->url().fileName();
                 return false;
             }
@@ -283,7 +278,6 @@ struct LoadingDocumentImplPrivate
             mImageSize = mJpegContent->size();
 
             mCmsProfile = Cms::Profile::loadFromExiv2Image(mExiv2Image.get());
-
         }
 
         LOG("mImageSize" << mImageSize);
@@ -310,10 +304,7 @@ struct LoadingDocumentImplPrivate
         QImageReader reader(&buffer, mFormat);
 
         LOG("mImageDataInvertedZoom=" << mImageDataInvertedZoom);
-        if (mImageSize.isValid()
-                && mImageDataInvertedZoom != 1
-                && reader.supportsOption(QImageIOHandler::ScaledSize)
-           ) {
+        if (mImageSize.isValid() && mImageDataInvertedZoom != 1 && reader.supportsOption(QImageIOHandler::ScaledSize)) {
             // Do not use mImageSize here: QImageReader needs a non-transposed
             // image size
             QSize size = reader.size() / mImageDataInvertedZoom;
@@ -335,9 +326,8 @@ struct LoadingDocumentImplPrivate
             return;
         }
 
-        if (reader.supportsAnimation()
-                && reader.nextImageDelay() > 0 // Assume delay == 0 <=> only one frame
-           ) {
+        if (reader.supportsAnimation() && reader.nextImageDelay() > 0 // Assume delay == 0 <=> only one frame
+        ) {
             /*
              * QImageReader is not really helpful to detect animated gif:
              * - QImageReader::imageCount() returns 0
@@ -361,9 +351,9 @@ struct LoadingDocumentImplPrivate
     }
 };
 
-LoadingDocumentImpl::LoadingDocumentImpl(Document* document)
-: AbstractDocumentImpl(document)
-, d(new LoadingDocumentImplPrivate)
+LoadingDocumentImpl::LoadingDocumentImpl(Document *document)
+    : AbstractDocumentImpl(document)
+    , d(new LoadingDocumentImplPrivate)
 {
     d->q = this;
     d->mMetaInfoLoaded = false;
@@ -371,11 +361,9 @@ LoadingDocumentImpl::LoadingDocumentImpl(Document* document)
     d->mDownSampledImageLoaded = false;
     d->mImageDataInvertedZoom = 0;
 
-    connect(&d->mMetaInfoFutureWatcher, &QFutureWatcherBase::finished,
-            this, &LoadingDocumentImpl::slotMetaInfoLoaded);
+    connect(&d->mMetaInfoFutureWatcher, &QFutureWatcherBase::finished, this, &LoadingDocumentImpl::slotMetaInfoLoaded);
 
-    connect(&d->mImageDataFutureWatcher, &QFutureWatcherBase::finished,
-            this, &LoadingDocumentImpl::slotImageLoaded);
+    connect(&d->mImageDataFutureWatcher, &QFutureWatcherBase::finished, this, &LoadingDocumentImpl::slotImageLoaded);
 }
 
 LoadingDocumentImpl::~LoadingDocumentImpl()
@@ -416,10 +404,8 @@ void LoadingDocumentImpl::init()
     } else {
         // Transfer file via KIO
         d->mTransferJob = KIO::get(document()->url(), KIO::NoReload, KIO::HideProgressInfo);
-        connect(d->mTransferJob.data(), &KIO::TransferJob::data,
-                this, &LoadingDocumentImpl::slotDataReceived);
-        connect(d->mTransferJob.data(), &KJob::result,
-                this, &LoadingDocumentImpl::slotTransferFinished);
+        connect(d->mTransferJob.data(), &KIO::TransferJob::data, this, &LoadingDocumentImpl::slotDataReceived);
+        connect(d->mTransferJob.data(), &KJob::result, this, &LoadingDocumentImpl::slotTransferFinished);
         d->mTransferJob->start();
     }
 }
@@ -444,7 +430,7 @@ void LoadingDocumentImpl::loadImage(int invertedZoom)
     }
 }
 
-void LoadingDocumentImpl::slotDataReceived(KIO::Job* job, const QByteArray& chunk)
+void LoadingDocumentImpl::slotDataReceived(KIO::Job *job, const QByteArray &chunk)
 {
     d->mData.append(chunk);
     if (document()->kind() == MimeTypeUtils::KIND_UNKNOWN && d->mData.length() >= HEADER_SIZE) {
@@ -455,7 +441,7 @@ void LoadingDocumentImpl::slotDataReceived(KIO::Job* job, const QByteArray& chun
     }
 }
 
-void LoadingDocumentImpl::slotTransferFinished(KJob* job)
+void LoadingDocumentImpl::slotTransferFinished(KJob *job)
 {
     if (job->error()) {
         setDocumentErrorString(job->errorString());
@@ -495,9 +481,7 @@ void LoadingDocumentImpl::slotMetaInfoLoaded()
     LOG("");
     Q_ASSERT(!d->mMetaInfoFuture.isRunning());
     if (!d->mMetaInfoFuture.result()) {
-        setDocumentErrorString(
-            i18nc("@info", "Loading meta information failed.")
-        );
+        setDocumentErrorString(i18nc("@info", "Loading meta information failed."));
         emit loadingFailed();
         switchToImpl(new EmptyDocumentImpl(document()));
         return;
@@ -523,9 +507,7 @@ void LoadingDocumentImpl::slotImageLoaded()
 {
     LOG("");
     if (d->mImage.isNull()) {
-        setDocumentErrorString(
-            i18nc("@info", "Loading image failed.")
-        );
+        setDocumentErrorString(i18nc("@info", "Loading image failed."));
         emit loadingFailed();
         switchToImpl(new EmptyDocumentImpl(document()));
         return;
@@ -538,9 +520,7 @@ void LoadingDocumentImpl::slotImageLoaded()
             setDocumentImage(d->mImage);
         }
 
-        switchToImpl(new AnimatedDocumentLoadedImpl(
-                         document(),
-                         d->mData));
+        switchToImpl(new AnimatedDocumentLoadedImpl(document(), d->mData));
 
         return;
     }
@@ -555,15 +535,11 @@ void LoadingDocumentImpl::slotImageLoaded()
 
     LOG("Loaded a full image");
     setDocumentImage(d->mImage);
-    DocumentLoadedImpl* impl;
+    DocumentLoadedImpl *impl;
     if (d->mJpegContent.get()) {
-        impl = new JpegDocumentLoadedImpl(
-            document(),
-            d->mJpegContent.release());
+        impl = new JpegDocumentLoadedImpl(document(), d->mJpegContent.release());
     } else {
-        impl = new DocumentLoadedImpl(
-            document(),
-            d->mData);
+        impl = new DocumentLoadedImpl(document(), d->mData);
     }
     switchToImpl(impl);
 }

@@ -20,20 +20,20 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "testutils.h"
 
 // Qt
-#include <QTimer>
 #include <QStandardPaths>
+#include <QTimer>
 
 // KF
-#include <kio_version.h>
-#include <KIO/StatJob>
 #include <KIO/DeleteJob>
-#include <KIO/MkdirJob>
 #include <KIO/FileCopyJob>
+#include <KIO/MkdirJob>
+#include <KIO/StatJob>
 #include <KJobWidgets>
+#include <kio_version.h>
 
-QUrl setUpRemoteTestDir(const QString& testFile)
+QUrl setUpRemoteTestDir(const QString &testFile)
 {
-    QWidget* authWindow = nullptr;
+    QWidget *authWindow = nullptr;
     if (qEnvironmentVariableIsEmpty("GV_REMOTE_TESTS_BASE_URL")) {
         qWarning() << "Environment variable GV_REMOTE_TESTS_BASE_URL not set: remote tests disabled";
         return QUrl();
@@ -44,7 +44,7 @@ QUrl setUpRemoteTestDir(const QString& testFile)
     baseUrl.setPath(baseUrl.path() + "/gwenview-remote-tests");
 
 #if KIO_VERSION >= QT_VERSION_CHECK(5, 69, 0)
-    auto* statJob = KIO::statDetails(baseUrl, KIO::StatJob::DestinationSide, KIO::StatNoDetails);
+    auto *statJob = KIO::statDetails(baseUrl, KIO::StatJob::DestinationSide, KIO::StatNoDetails);
 #else
     KIO::StatJob *statJob = KIO::stat(baseUrl, KIO::StatJob::DestinationSide, 0);
 #endif
@@ -78,7 +78,7 @@ QUrl setUpRemoteTestDir(const QString& testFile)
     return baseUrl;
 }
 
-void createEmptyFile(const QString& path)
+void createEmptyFile(const QString &path)
 {
     QVERIFY(!QFile::exists(path));
     QFile file(path);
@@ -97,7 +97,6 @@ void waitForDeferredDeletes()
 
 namespace TestUtils
 {
-
 void purgeUserConfiguration()
 {
     QString confDir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
@@ -108,7 +107,7 @@ void purgeUserConfiguration()
     }
 }
 
-static QImage simplifyFormats(const QImage& img)
+static QImage simplifyFormats(const QImage &img)
 {
     switch (img.format()) {
     case QImage::Format_RGB32:
@@ -124,7 +123,7 @@ inline bool fuzzyColorComponentCompare(int c1, int c2, int delta)
     return qAbs(c1 - c2) < delta;
 }
 
-bool fuzzyImageCompare(const QImage& img1_, const QImage& img2_, int delta)
+bool fuzzyImageCompare(const QImage &img1_, const QImage &img2_, int delta)
 {
     if (img1_.size() != img2_.size()) {
         qWarning() << "Different sizes" << img1_.size() << "!=" << img2_.size();
@@ -141,11 +140,8 @@ bool fuzzyImageCompare(const QImage& img1_, const QImage& img2_, int delta)
         for (int posX = 0; posX < img2.width(); ++posX) {
             QColor col1 = img1.pixel(posX, posY);
             QColor col2 = img2.pixel(posX, posY);
-            bool ok =
-                fuzzyColorComponentCompare(col1.red(), col2.red(), delta)
-                && fuzzyColorComponentCompare(col1.green(), col2.green(), delta)
-                && fuzzyColorComponentCompare(col1.blue(), col2.blue(), delta)
-                && fuzzyColorComponentCompare(col1.alpha(), col2.alpha(), delta);
+            bool ok = fuzzyColorComponentCompare(col1.red(), col2.red(), delta) && fuzzyColorComponentCompare(col1.green(), col2.green(), delta)
+                && fuzzyColorComponentCompare(col1.blue(), col2.blue(), delta) && fuzzyColorComponentCompare(col1.alpha(), col2.alpha(), delta);
             if (!ok) {
                 qWarning() << "Different at" << QPoint(posX, posY) << col1.name() << "!=" << col2.name();
                 return false;
@@ -155,20 +151,20 @@ bool fuzzyImageCompare(const QImage& img1_, const QImage& img2_, int delta)
     return true;
 }
 
-bool imageCompare(const QImage& img1, const QImage& img2)
+bool imageCompare(const QImage &img1, const QImage &img2)
 {
     return fuzzyImageCompare(img1, img2, 1);
 }
 
 SandBoxDir::SandBoxDir()
-: mTempDir(QDir::currentPath() + "/sandbox-")
+    : mTempDir(QDir::currentPath() + "/sandbox-")
 {
     setPath(mTempDir.path());
 }
 
-void SandBoxDir::fill(const QStringList& filePaths)
+void SandBoxDir::fill(const QStringList &filePaths)
 {
-    for (const QString& filePath : filePaths) {
+    for (const QString &filePath : filePaths) {
         QFileInfo info(*this, filePath);
         mkpath(info.absolutePath());
         createEmptyFile(info.absoluteFilePath());
@@ -176,7 +172,7 @@ void SandBoxDir::fill(const QStringList& filePaths)
 }
 
 TimedEventLoop::TimedEventLoop(int maxDuration)
-: mTimer(new QTimer(this))
+    : mTimer(new QTimer(this))
 {
     mTimer->setSingleShot(true);
     mTimer->setInterval(maxDuration * 1000);

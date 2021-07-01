@@ -34,7 +34,6 @@ class QUrl;
 
 namespace Gwenview
 {
-
 struct RecentFilesModelPrivate;
 /**
  * A model which maintains a list of urls in the dir specified by the
@@ -45,15 +44,15 @@ class GWENVIEWLIB_EXPORT RecentFilesModel : public QStandardItemModel
 {
     Q_OBJECT
 public:
-    explicit RecentFilesModel(QObject* parent);
+    explicit RecentFilesModel(QObject *parent);
     ~RecentFilesModel() override;
 
-    void addUrl(const QUrl&);
+    void addUrl(const QUrl &);
 
-    bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
+    bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
 
 private:
-    RecentFilesModelPrivate* const d;
+    RecentFilesModelPrivate *const d;
 };
 
 } // namespace

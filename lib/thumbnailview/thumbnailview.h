@@ -36,7 +36,6 @@ class QPixmap;
 
 namespace Gwenview
 {
-
 class AbstractDocumentInfoProvider;
 class AbstractThumbnailViewHelper;
 class ThumbnailProvider;
@@ -57,16 +56,16 @@ public:
         ScaleToWidth,
         ScaleToFit,
     };
-    explicit ThumbnailView(QWidget* parent);
+    explicit ThumbnailView(QWidget *parent);
     ~ThumbnailView() override;
 
-    void setThumbnailViewHelper(AbstractThumbnailViewHelper* helper);
+    void setThumbnailViewHelper(AbstractThumbnailViewHelper *helper);
 
-    AbstractThumbnailViewHelper* thumbnailViewHelper() const;
+    AbstractThumbnailViewHelper *thumbnailViewHelper() const;
 
-    void setDocumentInfoProvider(AbstractDocumentInfoProvider* provider);
+    void setDocumentInfoProvider(AbstractDocumentInfoProvider *provider);
 
-    AbstractDocumentInfoProvider* documentInfoProvider() const;
+    AbstractDocumentInfoProvider *documentInfoProvider() const;
 
     ThumbnailScaleMode thumbnailScaleMode() const;
 
@@ -82,23 +81,23 @@ public:
      */
     qreal thumbnailAspectRatio() const;
 
-    QPixmap thumbnailForIndex(const QModelIndex&, QSize* fullSize = nullptr);
+    QPixmap thumbnailForIndex(const QModelIndex &, QSize *fullSize = nullptr);
 
     /**
      * Returns true if the document pointed by the index has been modified
      * inside Gwenview.
      */
-    bool isModified(const QModelIndex&) const;
+    bool isModified(const QModelIndex &) const;
 
     /**
      * Returns true if the document pointed by the index is currently busy
      * (loading, saving, rotating...)
      */
-    bool isBusy(const QModelIndex& index) const;
+    bool isBusy(const QModelIndex &index) const;
 
-    void setModel(QAbstractItemModel* model) override;
+    void setModel(QAbstractItemModel *model) override;
 
-    void setThumbnailProvider(ThumbnailProvider* thumbnailProvider);
+    void setThumbnailProvider(ThumbnailProvider *thumbnailProvider);
 
     /**
      * Publish this method so that delegates can call it.
@@ -110,7 +109,7 @@ public:
      */
     QPixmap busySequenceCurrentPixmap() const;
 
-    void reloadThumbnail(const QModelIndex&);
+    void reloadThumbnail(const QModelIndex &);
 
     void updateThumbnailSize();
 
@@ -122,9 +121,9 @@ Q_SIGNALS:
      * not know about KDE single vs doubleclick settings. The indexActivated()
      * signal replaces it.
      */
-    void indexActivated(const QModelIndex&);
+    void indexActivated(const QModelIndex &);
 
-    void thumbnailSizeChanged(const QSize&);
+    void thumbnailSizeChanged(const QSize &);
     void thumbnailWidthChanged(int);
 
     /**
@@ -132,14 +131,14 @@ Q_SIGNALS:
      * This signal is suffixed with "Signal" because
      * QAbstractItemView::selectionChanged() is a slot.
      */
-    void selectionChangedSignal(const QItemSelection&, const QItemSelection&);
+    void selectionChangedSignal(const QItemSelection &, const QItemSelection &);
 
     /**
      * Forward some signals from model, so that the delegate can use them
      */
-    void rowsRemovedSignal(const QModelIndex& parent, int start, int end);
+    void rowsRemovedSignal(const QModelIndex &parent, int start, int end);
 
-    void rowsInsertedSignal(const QModelIndex& parent, int start, int end);
+    void rowsInsertedSignal(const QModelIndex &parent, int start, int end);
 
 public Q_SLOTS:
     /**
@@ -157,52 +156,51 @@ public Q_SLOTS:
     void generateThumbnailsForItems();
 
 protected:
-    void dragEnterEvent(QDragEnterEvent*) override;
+    void dragEnterEvent(QDragEnterEvent *) override;
 
-    void dragMoveEvent(QDragMoveEvent*) override;
+    void dragMoveEvent(QDragMoveEvent *) override;
 
-    void dropEvent(QDropEvent*) override;
+    void dropEvent(QDropEvent *) override;
 
-    void keyPressEvent(QKeyEvent*) override;
+    void keyPressEvent(QKeyEvent *) override;
 
-    void resizeEvent(QResizeEvent*) override;
+    void resizeEvent(QResizeEvent *) override;
 
     void scrollContentsBy(int dx, int dy) override;
 
-    void showEvent(QShowEvent*) override;
+    void showEvent(QShowEvent *) override;
 
-    void wheelEvent(QWheelEvent*) override;
+    void wheelEvent(QWheelEvent *) override;
 
     void startDrag(Qt::DropActions) override;
 
-    void mousePressEvent(QMouseEvent*) override;
+    void mousePressEvent(QMouseEvent *) override;
 
 protected Q_SLOTS:
-    void rowsAboutToBeRemoved(const QModelIndex& parent, int start, int end) override;
-    void rowsInserted(const QModelIndex& parent, int start, int end) override;
-    void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected) override;
-    void dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight,
-                     const QVector<int> &roles = QVector<int>()) override;
+    void rowsAboutToBeRemoved(const QModelIndex &parent, int start, int end) override;
+    void rowsInserted(const QModelIndex &parent, int start, int end) override;
+    void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected) override;
+    void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles = QVector<int>()) override;
 
 private Q_SLOTS:
-    void startDragFromTouch(const QPoint& pos);
-    void tapGesture(const QPoint& pos);
+    void startDragFromTouch(const QPoint &pos);
+    void tapGesture(const QPoint &pos);
     void setZoomParameter();
-    void zoomGesture(qreal newZoom, const QPoint& pos);
+    void zoomGesture(qreal newZoom, const QPoint &pos);
     void showContextMenu();
-    void emitIndexActivatedIfNoModifiers(const QModelIndex&);
-    void setThumbnail(const KFileItem&, const QPixmap&, const QSize&, qulonglong fileSize);
-    void setBrokenThumbnail(const KFileItem&);
+    void emitIndexActivatedIfNoModifiers(const QModelIndex &);
+    void setThumbnail(const KFileItem &, const QPixmap &, const QSize &, qulonglong fileSize);
+    void setBrokenThumbnail(const KFileItem &);
 
     /**
      * Generate thumbnail for url.
      */
-    void updateThumbnail(const QUrl& url);
+    void updateThumbnail(const QUrl &url);
 
     /**
      * Tells the view the busy state of the document pointed by the url has changed.
      */
-    void updateThumbnailBusyState(const QUrl& url, bool);
+    void updateThumbnailBusyState(const QUrl &url, bool);
 
     /*
      * Cause a repaint of all busy indexes
@@ -213,7 +211,7 @@ private Q_SLOTS:
 
 private:
     friend struct ThumbnailViewPrivate;
-    ThumbnailViewPrivate * const d;
+    ThumbnailViewPrivate *const d;
 };
 
 } // namespace

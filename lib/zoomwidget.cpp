@@ -37,7 +37,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 static const qreal MAGIC_K = 1.04;
 static const qreal MAGIC_OFFSET = 16.;
 static const qreal PRECISION = 100.;
@@ -51,13 +50,12 @@ inline qreal zoomForSliderValue(int sliderValue)
     return pow(MAGIC_K, sliderValue / PRECISION - MAGIC_OFFSET);
 }
 
-struct ZoomWidgetPrivate
-{
-    ZoomWidget* q;
+struct ZoomWidgetPrivate {
+    ZoomWidget *q;
 
-    ZoomSlider* mZoomSlider;
-    ZoomComboBox* mZoomComboBox;
-    QAction* mActualSizeAction = nullptr;
+    ZoomSlider *mZoomSlider;
+    ZoomComboBox *mZoomComboBox;
+    QAction *mActualSizeAction = nullptr;
 
     bool mZoomUpdatedBySlider;
 
@@ -73,9 +71,9 @@ struct ZoomWidgetPrivate
     }
 };
 
-ZoomWidget::ZoomWidget(QWidget* parent)
-: QFrame(parent)
-, d(new ZoomWidgetPrivate)
+ZoomWidget::ZoomWidget(QWidget *parent)
+    : QFrame(parent)
+    , d(new ZoomWidgetPrivate)
 {
     d->q = this;
     d->mZoomUpdatedBySlider = false;
@@ -89,11 +87,10 @@ ZoomWidget::ZoomWidget(QWidget* parent)
     connect(d->mZoomSlider->slider(), &QAbstractSlider::actionTriggered, this, &ZoomWidget::slotZoomSliderActionTriggered);
 
     d->mZoomComboBox = new ZoomComboBox;
-    connect(d->mZoomComboBox, &ZoomComboBox::zoomChanged,
-            this, &ZoomWidget::zoomChanged);
+    connect(d->mZoomComboBox, &ZoomComboBox::zoomChanged, this, &ZoomWidget::zoomChanged);
 
     // Layout
-    auto* layout = new QHBoxLayout(this);
+    auto *layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     layout->addWidget(d->mZoomSlider);
@@ -105,7 +102,7 @@ ZoomWidget::~ZoomWidget()
     delete d;
 }
 
-void ZoomWidget::setActions(QAction* zoomToFitAction, QAction* actualSizeAction, QAction* zoomInAction, QAction* zoomOutAction, QAction* zoomToFillAction)
+void ZoomWidget::setActions(QAction *zoomToFitAction, QAction *actualSizeAction, QAction *zoomInAction, QAction *zoomOutAction, QAction *zoomToFillAction)
 {
     d->mZoomSlider->setZoomInAction(zoomInAction);
     d->mZoomSlider->setZoomOutAction(zoomOutAction);
@@ -138,7 +135,7 @@ void ZoomWidget::setZoom(qreal zoom)
     // Don't change slider value if we come here because the slider change,
     // avoids choppy sliding scroll.
     if (!d->mZoomUpdatedBySlider) {
-        QSlider* slider = d->mZoomSlider->slider();
+        QSlider *slider = d->mZoomSlider->slider();
         SignalBlocker blocker(slider);
         int value = sliderValueForZoom(zoom);
 

@@ -30,13 +30,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 struct AnimatedDocumentLoadedImplPrivate;
 class AnimatedDocumentLoadedImpl : public AbstractDocumentImpl
 {
     Q_OBJECT
 public:
-    AnimatedDocumentLoadedImpl(Document*, const QByteArray&);
+    AnimatedDocumentLoadedImpl(Document *, const QByteArray &);
     ~AnimatedDocumentLoadedImpl() override;
 
     void init() override;
@@ -50,7 +49,7 @@ private Q_SLOTS:
     void slotFrameChanged(int frameNumber);
 
 private:
-    AnimatedDocumentLoadedImplPrivate* const d;
+    AnimatedDocumentLoadedImplPrivate *const d;
 };
 
 } // namespace

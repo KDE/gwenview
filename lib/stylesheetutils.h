@@ -22,25 +22,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #define STYLESHEETUTILS_H
 
 // Qt
-#include <QString>
 #include <QColor>
+#include <QString>
 
 // KF
 
 // Local
-#include <lib/gwenviewlib_export.h>
 #include "orientation.h"
-
+#include <lib/gwenviewlib_export.h>
 
 namespace Gwenview
 {
-
 /**
  * A collection of convenience functions to generate CSS code
  */
 namespace StyleSheetUtils
 {
-
 GWENVIEWLIB_EXPORT QString rgba(const QColor &color);
 
 GWENVIEWLIB_EXPORT QString gradient(Qt::Orientation orientation, const QColor &color, int value);

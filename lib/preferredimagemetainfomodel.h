@@ -31,7 +31,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 namespace Gwenview
 {
-
 /**
  * This model uses an instance of ImageMetaInfoModel to make it possible to
  * select your preferred image metainfo keys by checking them.
@@ -41,21 +40,21 @@ class GWENVIEWLIB_EXPORT PreferredImageMetaInfoModel : public QSortFilterProxyMo
 {
     Q_OBJECT
 public:
-    PreferredImageMetaInfoModel(ImageMetaInfoModel* model, const QStringList& list);
+    PreferredImageMetaInfoModel(ImageMetaInfoModel *model, const QStringList &list);
     ~PreferredImageMetaInfoModel() override;
 
-    QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const override;
-    bool setData(const QModelIndex& index, const QVariant& value, int role) override;
-    Qt::ItemFlags flags(const QModelIndex& index) const override;
+    QVariant data(const QModelIndex &, int role = Qt::DisplayRole) const override;
+    bool setData(const QModelIndex &index, const QVariant &value, int role) override;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
 
 Q_SIGNALS:
-    void preferredMetaInfoKeyListChanged(const QStringList&);
+    void preferredMetaInfoKeyListChanged(const QStringList &);
 
 protected:
-    bool lessThan(const QModelIndex& left, const QModelIndex& right) const override;
+    bool lessThan(const QModelIndex &left, const QModelIndex &right) const override;
 
 private:
-    PreferredImageMetaInfoModelPrivate* const d;
+    PreferredImageMetaInfoModelPrivate *const d;
     friend struct PreferredImageMetaInfoModelPrivate;
 };
 

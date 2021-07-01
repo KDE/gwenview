@@ -30,7 +30,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 class KIPIInterface;
 
 struct KIPIExportActionPrivate;
@@ -38,18 +37,18 @@ class KIPIExportAction : public KToolBarPopupAction
 {
     Q_OBJECT
 public:
-    explicit KIPIExportAction(QObject* parent);
+    explicit KIPIExportAction(QObject *parent);
     ~KIPIExportAction() override;
 
-    void setKIPIInterface(KIPIInterface*);
+    void setKIPIInterface(KIPIInterface *);
 
 private Q_SLOTS:
     void init();
-    void setDefaultAction(QAction*);
-    void slotPluginTriggered(QAction*);
+    void setDefaultAction(QAction *);
+    void slotPluginTriggered(QAction *);
 
 private:
-    KIPIExportActionPrivate* const d;
+    KIPIExportActionPrivate *const d;
 };
 
 } // namespace

@@ -31,9 +31,9 @@ Gwenview: an image viewer
 
 FITSData::FITSData()
 {
-    mode                  = FITS_NORMAL;
-    debayerParams.method  = DC1394_BAYER_METHOD_NEAREST;
-    debayerParams.filter  = DC1394_COLOR_FILTER_RGGB;
+    mode = FITS_NORMAL;
+    debayerParams.method = DC1394_BAYER_METHOD_NEAREST;
+    debayerParams.filter = DC1394_COLOR_FILTER_RGGB;
     debayerParams.offsetX = debayerParams.offsetY = 0;
 }
 
@@ -56,7 +56,7 @@ bool FITSData::loadFITS(QIODevice &buffer)
     QString errMessage;
     qint64 oldPos = buffer.pos();
     QByteArray imageData;
-    char* imageDataBuf = nullptr;
+    char *imageDataBuf = nullptr;
     size_t imageDataSize = 0;
 
     buffer.seek(0);
@@ -68,7 +68,7 @@ bool FITSData::loadFITS(QIODevice &buffer)
         fits_close_file(fptr, &status);
     }
 
-    if (fits_open_memfile(&fptr, "", READONLY, reinterpret_cast<void**>(&imageDataBuf), &imageDataSize, 3000, nullptr, &status)) {
+    if (fits_open_memfile(&fptr, "", READONLY, reinterpret_cast<void **>(&imageDataBuf), &imageDataSize, 3000, nullptr, &status)) {
         fits_report_error(stderr, status);
         fits_get_errstatus(status, error_status);
         errMessage = QString("Could not open file %1. Error %2").arg(filename, QString::fromUtf8(error_status));
@@ -90,40 +90,39 @@ bool FITSData::loadFITS(QIODevice &buffer)
         return false;
     }
 
-    switch (stats.bitpix)
-    {
+    switch (stats.bitpix) {
     case BYTE_IMG:
-        data_type           = TBYTE;
+        data_type = TBYTE;
         stats.bytesPerPixel = sizeof(uint8_t);
         break;
     case SHORT_IMG:
         // Read SHORT image as USHORT
-        data_type           = TUSHORT;
+        data_type = TUSHORT;
         stats.bytesPerPixel = sizeof(int16_t);
         break;
     case USHORT_IMG:
-        data_type           = TUSHORT;
+        data_type = TUSHORT;
         stats.bytesPerPixel = sizeof(uint16_t);
         break;
     case LONG_IMG:
         // Read LONG image as ULONG
-        data_type           = TULONG;
+        data_type = TULONG;
         stats.bytesPerPixel = sizeof(int32_t);
         break;
     case ULONG_IMG:
-        data_type           = TULONG;
+        data_type = TULONG;
         stats.bytesPerPixel = sizeof(uint32_t);
         break;
     case FLOAT_IMG:
-        data_type           = TFLOAT;
+        data_type = TFLOAT;
         stats.bytesPerPixel = sizeof(float);
         break;
     case LONGLONG_IMG:
-        data_type           = TLONGLONG;
+        data_type = TLONGLONG;
         stats.bytesPerPixel = sizeof(int64_t);
         break;
     case DOUBLE_IMG:
-        data_type           = TDOUBLE;
+        data_type = TDOUBLE;
         stats.bytesPerPixel = sizeof(double);
         break;
     default:
@@ -142,8 +141,8 @@ bool FITSData::loadFITS(QIODevice &buffer)
         return false;
     }
 
-    stats.width               = naxes[0];
-    stats.height              = naxes[1];
+    stats.width = naxes[0];
+    stats.height = naxes[1];
     stats.samples_per_channel = stats.width * stats.height;
 
     clearImageBuffers();
@@ -185,8 +184,7 @@ void FITSData::calculateStats(bool refresh)
     calculateMinMax(refresh);
 
     // Get standard deviation and mean in one run
-    switch (data_type)
-    {
+    switch (data_type) {
     case TBYTE:
         runningAverageStdDev<uint8_t>();
         break;
@@ -256,8 +254,7 @@ int FITSData::calculateMinMax(bool refresh)
     stats.min[2] = 1.0E30;
     stats.max[2] = -1.0E30;
 
-    switch (data_type)
-    {
+    switch (data_type) {
     case TBYTE:
         calculateMinMax<uint8_t>();
         break;
@@ -294,11 +291,11 @@ int FITSData::calculateMinMax(bool refresh)
         break;
     }
 
-    //qCDebug(GWENVIEW_LIB_LOG) << "DATAMIN: " << stats.min << " - DATAMAX: " << stats.max;
+    // qCDebug(GWENVIEW_LIB_LOG) << "DATAMIN: " << stats.min << " - DATAMAX: " << stats.max;
     return 0;
 }
 
-template <typename T>
+template<typename T>
 void FITSData::calculateMinMax()
 {
     T *buffer = reinterpret_cast<T *>(imageBuffer);
@@ -307,47 +304,41 @@ void FITSData::calculateMinMax()
         for (unsigned int i = 0; i < stats.samples_per_channel; i++) {
             if (buffer[i] < stats.min[0]) {
                 stats.min[0] = buffer[i];
-            } else
-            if (buffer[i] > stats.max[0]) {
+            } else if (buffer[i] > stats.max[0]) {
                 stats.max[0] = buffer[i];
             }
         }
-    }
-    else
-    {
+    } else {
         int g_offset = stats.samples_per_channel;
         int b_offset = stats.samples_per_channel * 2;
 
         for (unsigned int i = 0; i < stats.samples_per_channel; i++) {
             if (buffer[i] < stats.min[0]) {
                 stats.min[0] = buffer[i];
-            } else
-            if (buffer[i] > stats.max[0]) {
+            } else if (buffer[i] > stats.max[0]) {
                 stats.max[0] = buffer[i];
             }
 
             if (buffer[i + g_offset] < stats.min[1]) {
                 stats.min[1] = buffer[i + g_offset];
-            } else
-            if (buffer[i + g_offset] > stats.max[1]) {
+            } else if (buffer[i + g_offset] > stats.max[1]) {
                 stats.max[1] = buffer[i + g_offset];
             }
 
             if (buffer[i + b_offset] < stats.min[2]) {
                 stats.min[2] = buffer[i + b_offset];
-            } else
-            if (buffer[i + b_offset] > stats.max[2]) {
+            } else if (buffer[i + b_offset] > stats.max[2]) {
                 stats.max[2] = buffer[i + b_offset];
             }
         }
     }
 }
 
-template <typename T>
+template<typename T>
 void FITSData::runningAverageStdDev()
 {
-    T *buffer     = reinterpret_cast<T *>(imageBuffer);
-    int m_n       = 2;
+    T *buffer = reinterpret_cast<T *>(imageBuffer);
+    int m_n = 2;
     double m_oldM = 0, m_newM = 0, m_oldS = 0, m_newS = 0;
 
     m_oldM = m_newM = buffer[0];
@@ -362,14 +353,14 @@ void FITSData::runningAverageStdDev()
 
     double variance = (m_n == 2 ? 0 : m_newS / (m_n - 2));
 
-    stats.mean[0]   = m_newM;
+    stats.mean[0] = m_newM;
     stats.stddev[0] = sqrt(variance);
 }
 
 int FITSData::getFITSRecord(QString &recordList, int &nkeys)
 {
     char *header = nullptr;
-    int status   = 0;
+    int status = 0;
 
     if (fits_hdr2str(fptr, 0, nullptr, 0, &header, &nkeys, &status)) {
         fits_report_error(stderr, status);
@@ -407,14 +398,11 @@ bool FITSData::checkDebayer()
 
     if (pattern == "RGGB") {
         debayerParams.filter = DC1394_COLOR_FILTER_RGGB;
-    } else
-    if (pattern == "GBRG") {
+    } else if (pattern == "GBRG") {
         debayerParams.filter = DC1394_COLOR_FILTER_GBRG;
-    } else
-    if (pattern == "GRBG") {
+    } else if (pattern == "GRBG") {
         debayerParams.filter = DC1394_COLOR_FILTER_GRBG;
-    } else
-    if (pattern == "BGGR") {
+    } else if (pattern == "BGGR") {
         debayerParams.filter = DC1394_COLOR_FILTER_BGGR;
         // We return unless we find a valid pattern
     } else {
@@ -441,8 +429,7 @@ bool FITSData::debayer()
         }
     }
 
-    switch (data_type)
-    {
+    switch (data_type) {
     case TBYTE:
         return debayer_8bit();
 
@@ -460,10 +447,10 @@ bool FITSData::debayer_8bit()
 {
     dc1394error_t error_code;
 
-    int rgb_size               = stats.samples_per_channel * 3 * stats.bytesPerPixel;
+    int rgb_size = stats.samples_per_channel * 3 * stats.bytesPerPixel;
     uint8_t *destinationBuffer = new uint8_t[rgb_size];
 
-    int ds1394_height      = stats.height;
+    int ds1394_height = stats.height;
     uint8_t *dc1394_source = bayerBuffer;
 
     if (debayerParams.offsetY == 1) {
@@ -475,8 +462,7 @@ bool FITSData::debayer_8bit()
         dc1394_source++;
     }
 
-    error_code = dc1394_bayer_decoding_8bit(dc1394_source, destinationBuffer, stats.width, ds1394_height,
-                                            debayerParams.filter, debayerParams.method);
+    error_code = dc1394_bayer_decoding_8bit(dc1394_source, destinationBuffer, stats.width, ds1394_height, debayerParams.filter, debayerParams.method);
 
     if (error_code != DC1394_SUCCESS) {
         channels = 1;
@@ -512,13 +498,13 @@ bool FITSData::debayer_16bit()
 {
     dc1394error_t error_code;
 
-    int rgb_size               = stats.samples_per_channel * 3 * stats.bytesPerPixel;
+    int rgb_size = stats.samples_per_channel * 3 * stats.bytesPerPixel;
     uint8_t *destinationBuffer = new uint8_t[rgb_size];
 
-    uint16_t *buffer    = reinterpret_cast<uint16_t *>(bayerBuffer);
+    uint16_t *buffer = reinterpret_cast<uint16_t *>(bayerBuffer);
     uint16_t *dstBuffer = reinterpret_cast<uint16_t *>(destinationBuffer);
 
-    int ds1394_height       = stats.height;
+    int ds1394_height = stats.height;
     uint16_t *dc1394_source = buffer;
 
     if (debayerParams.offsetY == 1) {
@@ -530,8 +516,7 @@ bool FITSData::debayer_16bit()
         dc1394_source++;
     }
 
-    error_code = dc1394_bayer_decoding_16bit(dc1394_source, dstBuffer, stats.width, ds1394_height, debayerParams.filter,
-                                             debayerParams.method, 16);
+    error_code = dc1394_bayer_decoding_16bit(dc1394_source, dstBuffer, stats.width, ds1394_height, debayerParams.filter, debayerParams.method, 16);
 
     if (error_code != DC1394_SUCCESS) {
         channels = 1;
@@ -575,15 +560,15 @@ QString FITSData::getLastError() const
     return lastError;
 }
 
-template <typename T>
+template<typename T>
 void FITSData::convertToQImage(double dataMin, double dataMax, double scale, double zero, QImage &image)
 {
-    T *buffer = (T*)getImageBuffer();
-    const T limit   = std::numeric_limits<T>::max();
-    T bMin    = dataMin < 0 ? 0 : dataMin;
-    T bMax    = dataMax > limit ? limit : dataMax;
-    uint16_t w    = getWidth();
-    uint16_t h    = getHeight();
+    T *buffer = (T *)getImageBuffer();
+    const T limit = std::numeric_limits<T>::max();
+    T bMin = dataMin < 0 ? 0 : dataMin;
+    T bMax = dataMax > limit ? limit : dataMax;
+    uint16_t w = getWidth();
+    uint16_t h = getHeight();
     uint32_t size = getSize();
     double val;
 
@@ -593,14 +578,12 @@ void FITSData::convertToQImage(double dataMin, double dataMax, double scale, dou
             unsigned char *scanLine = image.scanLine(j);
 
             for (int i = 0; i < w; i++) {
-                val         = qBound(bMin, buffer[j * w + i], bMax);
-                val         = val * scale + zero;
+                val = qBound(bMin, buffer[j * w + i], bMax);
+                val = val * scale + zero;
                 scanLine[i] = qBound<unsigned char>(0, (unsigned char)val, 255);
             }
         }
-    }
-    else
-    {
+    } else {
         double rval = 0, gval = 0, bval = 0;
         QRgb value;
         /* Fill in pixel values using indexed map, linear scale */
@@ -654,11 +637,10 @@ QImage FITSData::FITSToImage(QIODevice &buffer)
     double dataMax = data.stats.mean[0] + data.stats.stddev[0] * 3;
 
     double bscale = 255. / (dataMax - dataMin);
-    double bzero  = (-dataMin) * (255. / (dataMax - dataMin));
+    double bzero = (-dataMin) * (255. / (dataMax - dataMin));
 
     // Long way to do this since we do not want to use templated functions here
-    switch (data.getDataType())
-    {
+    switch (data.getDataType()) {
     case TBYTE:
         data.convertToQImage<uint8_t>(dataMin, dataMax, bscale, bzero, fitsImage);
         break;

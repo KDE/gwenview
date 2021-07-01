@@ -30,30 +30,25 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
-FakeSemanticInfoBackEnd::FakeSemanticInfoBackEnd(QObject* parent, InitializeMode mode)
-: AbstractSemanticInfoBackEnd(parent)
-, mInitializeMode(mode)
+FakeSemanticInfoBackEnd::FakeSemanticInfoBackEnd(QObject *parent, InitializeMode mode)
+    : AbstractSemanticInfoBackEnd(parent)
+    , mInitializeMode(mode)
 {
-    mAllTags
-            << tagForLabel("beach")
-            << tagForLabel("mountains")
-            << tagForLabel("wallpaper")
-            ;
+    mAllTags << tagForLabel("beach") << tagForLabel("mountains") << tagForLabel("wallpaper");
 }
 
-void FakeSemanticInfoBackEnd::storeSemanticInfo(const QUrl &url, const SemanticInfo& semanticInfo)
+void FakeSemanticInfoBackEnd::storeSemanticInfo(const QUrl &url, const SemanticInfo &semanticInfo)
 {
     mSemanticInfoForUrl[url] = semanticInfo;
     mergeTagsWithAllTags(semanticInfo.mTags);
 }
 
-void FakeSemanticInfoBackEnd::mergeTagsWithAllTags(const TagSet& set)
+void FakeSemanticInfoBackEnd::mergeTagsWithAllTags(const TagSet &set)
 {
     int size = mAllTags.size();
     mAllTags |= set;
     if (mAllTags.size() > size) {
-        //emit allTagsUpdated();
+        // emit allTagsUpdated();
     }
 }
 
@@ -75,7 +70,7 @@ void FakeSemanticInfoBackEnd::retrieveSemanticInfo(const QUrl &url)
             semanticInfo.mRating = int(urlString.length()) % 6;
             semanticInfo.mDescription = url.fileName();
             const QStringList lst = url.path().split('/');
-            for (const QString & token : lst) {
+            for (const QString &token : lst) {
                 if (!token.isEmpty()) {
                     semanticInfo.mTags << '#' + token.toLower();
                 }
@@ -91,12 +86,12 @@ void FakeSemanticInfoBackEnd::retrieveSemanticInfo(const QUrl &url)
     emit semanticInfoRetrieved(url, mSemanticInfoForUrl.value(url));
 }
 
-QString FakeSemanticInfoBackEnd::labelForTag(const SemanticInfoTag& tag) const
+QString FakeSemanticInfoBackEnd::labelForTag(const SemanticInfoTag &tag) const
 {
     return tag[1].toUpper() + tag.mid(2);
 }
 
-SemanticInfoTag FakeSemanticInfoBackEnd::tagForLabel(const QString& label)
+SemanticInfoTag FakeSemanticInfoBackEnd::tagForLabel(const QString &label)
 {
     return '#' + label.toLower();
 }

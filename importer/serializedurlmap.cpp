@@ -31,9 +31,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
-static const char* KEY_SUFFIX = "key";
-static const char* VALUE_SUFFIX = "value";
+static const char *KEY_SUFFIX = "key";
+static const char *VALUE_SUFFIX = "value";
 
 static QUrl stripPass(const QUrl &url_)
 {
@@ -42,15 +41,14 @@ static QUrl stripPass(const QUrl &url_)
     return url;
 }
 
-struct SerializedUrlMapPrivate
-{
+struct SerializedUrlMapPrivate {
     KConfigGroup mGroup;
     QMap<QUrl, QUrl> mMap;
 
     void read()
     {
         mMap.clear();
-        for (int idx=0;; ++idx) {
+        for (int idx = 0;; ++idx) {
             QString idxString = QString::number(idx);
             QString key = idxString + QLatin1String(KEY_SUFFIX);
             if (!mGroup.hasKey(key)) {
@@ -77,7 +75,7 @@ struct SerializedUrlMapPrivate
 };
 
 SerializedUrlMap::SerializedUrlMap()
-: d(new SerializedUrlMapPrivate)
+    : d(new SerializedUrlMapPrivate)
 {
 }
 
@@ -86,13 +84,13 @@ SerializedUrlMap::~SerializedUrlMap()
     delete d;
 }
 
-void SerializedUrlMap::setConfigGroup(const KConfigGroup& group)
+void SerializedUrlMap::setConfigGroup(const KConfigGroup &group)
 {
     d->mGroup = group;
     d->read();
 }
 
-QUrl SerializedUrlMap::value(const QUrl& key_) const
+QUrl SerializedUrlMap::value(const QUrl &key_) const
 {
     QString pass = key_.password();
     QUrl key = stripPass(key_);
@@ -101,7 +99,7 @@ QUrl SerializedUrlMap::value(const QUrl& key_) const
     return url;
 }
 
-void SerializedUrlMap::insert(const QUrl& key, const QUrl& value)
+void SerializedUrlMap::insert(const QUrl &key, const QUrl &value)
 {
     d->mMap.insert(stripPass(key), stripPass(value));
     d->write();

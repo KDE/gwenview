@@ -23,10 +23,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // Qt
 #include <QHBoxLayout>
+#include <QIcon>
 #include <QLabel>
 #include <QToolButton>
 #include <QToolTip>
-#include <QIcon>
 #include <QUrl>
 
 // KF
@@ -44,30 +44,28 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 namespace Gwenview
 {
-
-QToolButton* createToolButton()
+QToolButton *createToolButton()
 {
-    auto* button = new QToolButton;
+    auto *button = new QToolButton;
     button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     button->hide();
     return button;
 }
 
-struct SaveBarPrivate
-{
-    SaveBar* q;
-    KActionCollection* mActionCollection;
-    QWidget* mSaveBarWidget;
-    QWidget* mTopRowWidget;
-    QToolButton* mUndoButton;
-    QToolButton* mRedoButton;
-    QToolButton* mSaveCurrentUrlButton;
-    QToolButton* mSaveAsButton;
-    QToolButton* mSaveAllButton;
-    QToolButton* mSaveAllFullScreenButton;
-    QLabel* mMessageLabel;
-    QLabel* mActionsLabel;
-    QFrame* mTooManyChangesFrame;
+struct SaveBarPrivate {
+    SaveBar *q;
+    KActionCollection *mActionCollection;
+    QWidget *mSaveBarWidget;
+    QWidget *mTopRowWidget;
+    QToolButton *mUndoButton;
+    QToolButton *mRedoButton;
+    QToolButton *mSaveCurrentUrlButton;
+    QToolButton *mSaveAsButton;
+    QToolButton *mSaveAllButton;
+    QToolButton *mSaveAllFullScreenButton;
+    QLabel *mMessageLabel;
+    QLabel *mActionsLabel;
+    QFrame *mTooManyChangesFrame;
     QUrl mCurrentUrl;
 
     void createTooManyChangesFrame()
@@ -75,20 +73,18 @@ struct SaveBarPrivate
         mTooManyChangesFrame = new QFrame;
 
         // Icon
-        auto* iconLabel = new QLabel;
+        auto *iconLabel = new QLabel;
         QPixmap pix = QIcon::fromTheme(QStringLiteral("dialog-warning")).pixmap(KIconLoader::SizeSmall);
         iconLabel->setPixmap(pix);
 
         // Text label
-        auto* textLabel = new QLabel;
-        textLabel->setText(
-            i18n("You have modified many images. To avoid memory problems, you should save your changes.")
-        );
+        auto *textLabel = new QLabel;
+        textLabel->setText(i18n("You have modified many images. To avoid memory problems, you should save your changes."));
 
         mSaveAllFullScreenButton = createToolButton();
 
         // Layout
-        auto* layout = new QHBoxLayout(mTooManyChangesFrame);
+        auto *layout = new QHBoxLayout(mTooManyChangesFrame);
         layout->setContentsMargins(0, 0, 0, 0);
         layout->addWidget(iconLabel);
         layout->addWidget(textLabel);
@@ -110,11 +106,8 @@ struct SaveBarPrivate
             "}"
             ".QFrame QLabel {"
             "	color: %3;"
-            "}"
-            ;
-        css = css.arg(warningBackgroundColor.name(),
-                      warningBorderColor.name(),
-                      warningColor.name());
+            "}";
+        css = css.arg(warningBackgroundColor.name(), warningBorderColor.name(), warningColor.name());
         mTooManyChangesFrame->setStyleSheet(css);
     }
 
@@ -130,12 +123,9 @@ struct SaveBarPrivate
             "	border-top: 1px solid %2;"
             "	border-bottom: 1px solid %2;"
             "	color: %3;"
-            "}"
-            ;
+            "}";
 
-        css = css.arg(bgColor.name(),
-                      borderColor.name(),
-                      fgColor.name());
+        css = css.arg(bgColor.name(), borderColor.name(), fgColor.name());
         mSaveBarWidget->setStyleSheet(css);
     }
 
@@ -148,7 +138,7 @@ struct SaveBarPrivate
         mSaveBarWidget->setStyleSheet(css);
     }
 
-    void updateTooManyChangesFrame(const QList<QUrl>& list)
+    void updateTooManyChangesFrame(const QList<QUrl> &list)
     {
         qreal maxPercentageOfMemoryUsage = GwenviewConfig::percentageOfMemoryUsageWarning();
         qulonglong maxMemoryUsage = MemoryUtils::getTotalMemory() * maxPercentageOfMemoryUsage;
@@ -161,7 +151,7 @@ struct SaveBarPrivate
         mTooManyChangesFrame->setVisible(memoryUsage > maxMemoryUsage);
     }
 
-    void updateTopRowWidget(const QList<QUrl>& lst)
+    void updateTopRowWidget(const QList<QUrl> &lst)
     {
         QStringList links;
         QString message;
@@ -209,7 +199,7 @@ struct SaveBarPrivate
 
     void updateWidgetSizes()
     {
-        auto* layout = static_cast<QVBoxLayout*>(mSaveBarWidget->layout());
+        auto *layout = static_cast<QVBoxLayout *>(mSaveBarWidget->layout());
         int topRowHeight = q->window()->isFullScreen() ? 0 : mTopRowWidget->height();
         int bottomRowHeight = mTooManyChangesFrame->isVisibleTo(mSaveBarWidget) ? mTooManyChangesFrame->sizeHint().height() : 0;
 
@@ -221,9 +211,9 @@ struct SaveBarPrivate
     }
 };
 
-SaveBar::SaveBar(QWidget* parent, KActionCollection* actionCollection)
-: SlideContainer(parent)
-, d(new SaveBarPrivate)
+SaveBar::SaveBar(QWidget *parent, KActionCollection *actionCollection)
+    : SlideContainer(parent)
+    , d(new SaveBarPrivate)
 {
     d->q = this;
     d->mActionCollection = actionCollection;
@@ -248,7 +238,7 @@ SaveBar::SaveBar(QWidget* parent, KActionCollection* actionCollection)
 
     // Setup top row
     d->mTopRowWidget = new QWidget;
-    auto* rowLayout = new QHBoxLayout(d->mTopRowWidget);
+    auto *rowLayout = new QHBoxLayout(d->mTopRowWidget);
     rowLayout->addWidget(d->mMessageLabel);
     rowLayout->setStretchFactor(d->mMessageLabel, 1);
     rowLayout->addWidget(d->mUndoButton);
@@ -260,13 +250,13 @@ SaveBar::SaveBar(QWidget* parent, KActionCollection* actionCollection)
     rowLayout->setContentsMargins(0, 0, 0, 0);
 
     // Setup bottom row
-    auto* bottomRowLayout = new QHBoxLayout;
+    auto *bottomRowLayout = new QHBoxLayout;
     bottomRowLayout->addStretch();
     bottomRowLayout->addWidget(d->mTooManyChangesFrame);
     bottomRowLayout->addStretch();
 
     // Gather everything together
-    auto* layout = new QVBoxLayout(d->mSaveBarWidget);
+    auto *layout = new QVBoxLayout(d->mSaveBarWidget);
     layout->addWidget(d->mTopRowWidget);
     layout->addLayout(bottomRowLayout);
     layout->setContentsMargins(3, 3, 3, 3);
@@ -274,8 +264,7 @@ SaveBar::SaveBar(QWidget* parent, KActionCollection* actionCollection)
 
     setContent(d->mSaveBarWidget);
 
-    connect(DocumentFactory::instance(), &DocumentFactory::modifiedDocumentListChanged,
-            this, &SaveBar::updateContent);
+    connect(DocumentFactory::instance(), &DocumentFactory::modifiedDocumentListChanged, this, &SaveBar::updateContent);
 
     connect(d->mActionsLabel, &QLabel::linkActivated, this, &SaveBar::triggerAction);
 }
@@ -338,7 +327,7 @@ void SaveBar::updateContent()
     }
 }
 
-void SaveBar::triggerAction(const QString& action)
+void SaveBar::triggerAction(const QString &action)
 {
     QList<QUrl> lst = DocumentFactory::instance()->modifiedDocumentList();
     if (action == "first") {
@@ -354,7 +343,7 @@ void SaveBar::triggerAction(const QString& action)
         Q_ASSERT(pos < lst.size());
         emit goToUrl(lst[pos]);
     } else {
-        qCWarning(GWENVIEW_APP_LOG) << "Unknown action: " << action ;
+        qCWarning(GWENVIEW_APP_LOG) << "Unknown action: " << action;
     }
 }
 

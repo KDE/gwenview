@@ -39,9 +39,15 @@ class GWENVIEWLIB_EXPORT TapHoldAndMoving : public QGesture
     Q_PROPERTY(QPoint pos READ getPos WRITE setPos)
 
 public:
-    explicit TapHoldAndMoving(QObject* parent = nullptr);
-    QPoint getPos() {return pos;};
-    void setPos(QPoint _pos) {pos = _pos;};
+    explicit TapHoldAndMoving(QObject *parent = nullptr);
+    QPoint getPos()
+    {
+        return pos;
+    };
+    void setPos(QPoint _pos)
+    {
+        pos = _pos;
+    };
 
 private:
     QPoint pos;
@@ -52,12 +58,12 @@ class GWENVIEWLIB_EXPORT TapHoldAndMovingRecognizer : public QGestureRecognizer
 public:
     explicit TapHoldAndMovingRecognizer();
     ~TapHoldAndMovingRecognizer();
+
 private:
-    TapHoldAndMovingRecognizerPrivate* d;
+    TapHoldAndMovingRecognizerPrivate *d;
 
-    virtual QGesture* create(QObject* target) override;
-    virtual Result recognize(QGesture* state, QObject* watched, QEvent* event) override;
-
+    virtual QGesture *create(QObject *target) override;
+    virtual Result recognize(QGesture *state, QObject *watched, QEvent *event) override;
 };
 
 } // namespace

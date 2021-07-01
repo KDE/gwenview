@@ -33,16 +33,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
-
 namespace HudTheme
 {
-
-struct RenderInfo
-{
+struct RenderInfo {
     RenderInfo()
-    : borderRadius(0)
-    , padding(0)
-    {}
+        : borderRadius(0)
+        , padding(0)
+    {
+    }
     qreal borderRadius;
     QPen borderPen;
     QBrush bgBrush;
@@ -50,15 +48,13 @@ struct RenderInfo
     QPen textPen;
 };
 
-enum State
-{
+enum State {
     NormalState,
     MouseOverState,
     DownState,
 };
 
-enum WidgetType
-{
+enum WidgetType {
     ButtonWidget,
     FrameWidget,
     CountDown,

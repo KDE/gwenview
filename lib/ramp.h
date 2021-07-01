@@ -23,7 +23,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 namespace Gwenview
 {
-
 /**
  * This class maps values on a linear ramp.
  * It's useful to do mappings like this:
@@ -41,7 +40,8 @@ public:
         : mX1(x1)
         , mX2(x2)
         , mY1(y1)
-        , mY2(y2) {
+        , mY2(y2)
+    {
         mK = (y2 - y1) / (x2 - x1);
     }
 

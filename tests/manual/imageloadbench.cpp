@@ -1,15 +1,15 @@
 #include <QBuffer>
 #include <QCoreApplication>
 #include <QDebug>
+#include <QElapsedTimer>
 #include <QFile>
 #include <QImage>
 #include <QImageReader>
-#include <QElapsedTimer>
 
 const int ITERATIONS = 2;
 const QSize SCALED_SIZE(1280, 800);
 
-static void bench(QIODevice* device, const QString& outputName)
+static void bench(QIODevice *device, const QString &outputName)
 {
     QElapsedTimer chrono;
     chrono.start();
@@ -31,7 +31,7 @@ static void bench(QIODevice* device, const QString& outputName)
     }
 }
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
     QCoreApplication app(argc, argv);
     if (argc != 2) {

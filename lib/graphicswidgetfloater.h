@@ -34,7 +34,6 @@ class QGraphicsWidget;
 
 namespace Gwenview
 {
-
 struct GraphicsWidgetFloaterPrivate;
 
 /**
@@ -46,10 +45,10 @@ class GWENVIEWLIB_EXPORT GraphicsWidgetFloater : public QObject
 {
     Q_OBJECT
 public:
-    GraphicsWidgetFloater(QGraphicsWidget* parent);
+    GraphicsWidgetFloater(QGraphicsWidget *parent);
     ~GraphicsWidgetFloater() override;
 
-    void setChildWidget(QGraphicsWidget*);
+    void setChildWidget(QGraphicsWidget *);
 
     void setAlignment(Qt::Alignment);
 
@@ -60,13 +59,13 @@ public:
     int verticalMargin() const;
 
 protected:
-    bool eventFilter(QObject*, QEvent*) override;
+    bool eventFilter(QObject *, QEvent *) override;
 
 private Q_SLOTS:
     void slotChildVisibilityChanged();
 
 private:
-    GraphicsWidgetFloaterPrivate* const d;
+    GraphicsWidgetFloaterPrivate *const d;
 };
 
 } // namespace

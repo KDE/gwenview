@@ -34,32 +34,29 @@ class QEvent;
 
 namespace Gwenview
 {
-
 namespace Touch_Helper
 {
-
-//constant variables that define touch behavior
-struct Touch
-{
-    //a little delay in the begin of the gesture, to get more data of the touch points moving so the recognizing
-    //of the pan gesture is better
+// constant variables that define touch behavior
+struct Touch {
+    // a little delay in the begin of the gesture, to get more data of the touch points moving so the recognizing
+    // of the pan gesture is better
     static const int gestureDelay = 110;
-    //this defines how much a touch point can move, for a single tap gesture
+    // this defines how much a touch point can move, for a single tap gesture
     static const int wiggleRoomForTap = 10;
-    //how long must a touch point be stationary, before he can move for a TabHoldAndMoving gesture
+    // how long must a touch point be stationary, before he can move for a TabHoldAndMoving gesture
     static const int durationForTapHold = 400;
-    //in what time and how far must the touch point moving to trigger a swipe gesture
+    // in what time and how far must the touch point moving to trigger a swipe gesture
     static const int maxTimeFrameForSwipe = 100;
     static const int minDistanceForSwipe = 70;
-    //How long is the duration for a simple tap gesture
+    // How long is the duration for a simple tap gesture
     static const int maxTimeForTap = 100;
-    //max interval for a double tap gesture
+    // max interval for a double tap gesture
     static const int doubleTapInterval = 400;
 };
 
-GWENVIEWLIB_EXPORT QPoint simpleTapPosition(QEvent*);
-GWENVIEWLIB_EXPORT QPoint simpleTouchPosition(QEvent*,int = 0);
-GWENVIEWLIB_EXPORT bool touchStationary(QEvent*);
+GWENVIEWLIB_EXPORT QPoint simpleTapPosition(QEvent *);
+GWENVIEWLIB_EXPORT QPoint simpleTouchPosition(QEvent *, int = 0);
+GWENVIEWLIB_EXPORT bool touchStationary(QEvent *);
 
 } // namespace
 } // namespace

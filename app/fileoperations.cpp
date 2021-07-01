@@ -22,34 +22,32 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "fileoperations.h"
 
 // Qt
-#include <QMenu>
-#include <QPushButton>
 #include <QFileDialog>
 #include <QInputDialog>
+#include <QMenu>
+#include <QPushButton>
 
 // KF
 #include <KIO/CopyJob>
 #include <KIO/DeleteJob>
 #include <KIO/Job>
 #include <KIO/JobUiDelegate>
-#include <KLocalizedString>
 #include <KJobWidgets>
+#include <KLocalizedString>
 
 // Local
-#include "gwenview_app_debug.h"
 #include "dialogguard.h"
+#include "gwenview_app_debug.h"
 #include "renamedialog.h"
+#include <lib/contextmanager.h>
 #include <lib/document/documentfactory.h>
 #include <lib/thumbnailprovider/thumbnailprovider.h>
-#include <lib/contextmanager.h>
 
 namespace Gwenview
 {
-
 namespace FileOperations
 {
-
-static void copyMoveOrLink(Operation operation, const QList<QUrl>& urlList, QWidget* parent, ContextManager* contextManager)
+static void copyMoveOrLink(Operation operation, const QList<QUrl> &urlList, QWidget *parent, ContextManager *contextManager)
 {
     Q_ASSERT(!urlList.isEmpty());
     const int numberOfImages = urlList.count();
@@ -98,7 +96,7 @@ static void copyMoveOrLink(Operation operation, const QList<QUrl>& urlList, QWid
 
     QUrl dirUrl = contextManager->targetDirUrl();
     if (!dirUrl.isValid()) {
-        dirUrl = urlList.constFirst().adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash);
+        dirUrl = urlList.constFirst().adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash);
     }
     dialog->setDirectoryUrl(dirUrl);
 
@@ -108,7 +106,7 @@ static void copyMoveOrLink(Operation operation, const QList<QUrl>& urlList, QWid
 
     QUrl destUrl = dialog->selectedUrls().first();
 
-    KIO::CopyJob* job = nullptr;
+    KIO::CopyJob *job = nullptr;
     switch (operation) {
     case COPY:
         job = KIO::copy(urlList, destUrl);
@@ -126,12 +124,12 @@ static void copyMoveOrLink(Operation operation, const QList<QUrl>& urlList, QWid
     job->uiDelegate()->setAutoErrorHandlingEnabled(true);
 
     if (numberOfImages == 1) {
-        destUrl = destUrl.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash);
+        destUrl = destUrl.adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash);
     }
     contextManager->setTargetDirUrl(destUrl);
 }
 
-static void delOrTrash(KIO::JobUiDelegate::DeletionType deletionType, const QList<QUrl>& urlList, QWidget* parent)
+static void delOrTrash(KIO::JobUiDelegate::DeletionType deletionType, const QList<QUrl> &urlList, QWidget *parent)
 {
     Q_ASSERT(urlList.count() > 0);
 
@@ -140,51 +138,51 @@ static void delOrTrash(KIO::JobUiDelegate::DeletionType deletionType, const QLis
     if (!uiDelegate.askDeleteConfirmation(urlList, deletionType, KIO::JobUiDelegate::DefaultConfirmation)) {
         return;
     }
-    KIO::Job* job = nullptr;
+    KIO::Job *job = nullptr;
     switch (deletionType) {
-        case KIO::JobUiDelegate::Trash:
-            job = KIO::trash(urlList);
-            break;
-        case KIO::JobUiDelegate::Delete:
-            job = KIO::del(urlList);
-            break;
-        default: // e.g. EmptyTrash
-            return;
+    case KIO::JobUiDelegate::Trash:
+        job = KIO::trash(urlList);
+        break;
+    case KIO::JobUiDelegate::Delete:
+        job = KIO::del(urlList);
+        break;
+    default: // e.g. EmptyTrash
+        return;
     }
     Q_ASSERT(job);
-    KJobWidgets::setWindow(job,parent);
+    KJobWidgets::setWindow(job, parent);
 
     for (const QUrl &url : urlList) {
         DocumentFactory::instance()->forget(url);
     }
 }
 
-void copyTo(const QList<QUrl>& urlList, QWidget* parent, ContextManager* contextManager)
+void copyTo(const QList<QUrl> &urlList, QWidget *parent, ContextManager *contextManager)
 {
     copyMoveOrLink(COPY, urlList, parent, contextManager);
 }
 
-void moveTo(const QList<QUrl>& urlList, QWidget* parent, ContextManager* contextManager)
+void moveTo(const QList<QUrl> &urlList, QWidget *parent, ContextManager *contextManager)
 {
     copyMoveOrLink(MOVE, urlList, parent, contextManager);
 }
 
-void linkTo(const QList<QUrl>& urlList, QWidget* parent, ContextManager* contextManager)
+void linkTo(const QList<QUrl> &urlList, QWidget *parent, ContextManager *contextManager)
 {
     copyMoveOrLink(LINK, urlList, parent, contextManager);
 }
 
-void trash(const QList<QUrl>& urlList, QWidget* parent)
+void trash(const QList<QUrl> &urlList, QWidget *parent)
 {
     delOrTrash(KIO::JobUiDelegate::Trash, urlList, parent);
 }
 
-void del(const QList<QUrl>& urlList, QWidget* parent)
+void del(const QList<QUrl> &urlList, QWidget *parent)
 {
     delOrTrash(KIO::JobUiDelegate::Delete, urlList, parent);
 }
 
-void showMenuForDroppedUrls(QWidget* parent, const QList<QUrl>& urlList, const QUrl &destUrl)
+void showMenuForDroppedUrls(QWidget *parent, const QList<QUrl> &urlList, const QUrl &destUrl)
 {
     if (urlList.isEmpty()) {
         qCWarning(GWENVIEW_APP_LOG) << "urlList is empty!";
@@ -197,23 +195,15 @@ void showMenuForDroppedUrls(QWidget* parent, const QList<QUrl>& urlList, const Q
     }
 
     QMenu menu(parent);
-    QAction* moveAction = menu.addAction(
-                              QIcon::fromTheme(QStringLiteral("edit-move"), QIcon::fromTheme(QStringLiteral("go-jump"))),
-                              i18n("Move Here"));
-    QAction* copyAction = menu.addAction(
-                              QIcon::fromTheme(QStringLiteral("edit-copy")),
-                              i18n("Copy Here"));
-    QAction* linkAction = menu.addAction(
-                              QIcon::fromTheme(QStringLiteral("edit-link")),
-                              i18n("Link Here"));
+    QAction *moveAction = menu.addAction(QIcon::fromTheme(QStringLiteral("edit-move"), QIcon::fromTheme(QStringLiteral("go-jump"))), i18n("Move Here"));
+    QAction *copyAction = menu.addAction(QIcon::fromTheme(QStringLiteral("edit-copy")), i18n("Copy Here"));
+    QAction *linkAction = menu.addAction(QIcon::fromTheme(QStringLiteral("edit-link")), i18n("Link Here"));
     menu.addSeparator();
-    menu.addAction(
-        QIcon::fromTheme(QStringLiteral("process-stop")),
-        i18n("Cancel"));
+    menu.addAction(QIcon::fromTheme(QStringLiteral("process-stop")), i18n("Cancel"));
 
-    QAction* action = menu.exec(QCursor::pos());
+    QAction *action = menu.exec(QCursor::pos());
 
-    KIO::Job* job = nullptr;
+    KIO::Job *job = nullptr;
     if (action == moveAction) {
         job = KIO::move(urlList, destUrl);
     } else if (action == copyAction) {
@@ -227,7 +217,7 @@ void showMenuForDroppedUrls(QWidget* parent, const QList<QUrl>& urlList, const Q
     KJobWidgets::setWindow(job, parent);
 }
 
-void rename(const QUrl &oldUrl, QWidget* parent, ContextManager* contextManager)
+void rename(const QUrl &oldUrl, QWidget *parent, ContextManager *contextManager)
 {
     const DialogGuard<RenameDialog> dialog(parent);
     dialog->setFilename(oldUrl.fileName());
@@ -243,7 +233,7 @@ void rename(const QUrl &oldUrl, QWidget* parent, ContextManager* contextManager)
     QUrl newUrl = oldUrl;
     newUrl = newUrl.adjusted(QUrl::RemoveFilename);
     newUrl.setPath(newUrl.path() + name);
-    KIO::SimpleJob* job = KIO::rename(oldUrl, newUrl, KIO::HideProgressInfo);
+    KIO::SimpleJob *job = KIO::rename(oldUrl, newUrl, KIO::HideProgressInfo);
     KJobWidgets::setWindow(job, parent);
     job->uiDelegate()->setAutoErrorHandlingEnabled(true);
     if (!job->exec()) {
