@@ -49,6 +49,7 @@
   <name xml:lang="zh-CN">Gwenview</name>
   <name xml:lang="zh-TW">影像檢視_Gwenview</name>
   <summary>Image Viewer</summary>
+  <summary xml:lang="ar">عارض الصور</summary>
   <summary xml:lang="az">Şəkilə Baxış</summary>
   <summary xml:lang="ca">Visor d'imatges</summary>
   <summary xml:lang="ca-valencia">Visor d'imatges</summary>
@@ -93,6 +94,7 @@
     <p>
       Gwenview is a fast and easy to use image viewer by KDE, ideal for browsing and displaying a collection of images.
     </p>
+    <p xml:lang="ar">جونفيو عارض صور سريع وسهل الاستخدام بواسطة كدي ، وهو مثالي لتصفح وعرض مجموعة من الصور.</p>
     <p xml:lang="az">Gwenview KDE-nin təqdim etdiyi istifadəsi rahat şəkillərə baxış vasitəsidir və şəkil kolleksiyalarına baxmaq və onları göstərmək üçün idealdır.</p>
     <p xml:lang="ca">El Gwenview és un visor d'imatges ràpid i senzill d'ús, creat per la comunitat KDE, ideal per a navegar i visualitzar col·leccions d'imatges.</p>
     <p xml:lang="ca-valencia">El Gwenview és un visor d'imatges ràpid i senzill d'ús, creat per la comunitat KDE, ideal per a navegar i visualitzar col·leccions d'imatges.</p>
@@ -311,6 +313,7 @@
       <li xml:lang="zh-CN">既可以独立运行，也可以作为 Konqueror 网页浏览器的内建图片查看器使用。</li>
       <li xml:lang="zh-TW">可以是單獨的應用程式，也可以嵌入在 Konqueror 瀏覽器中</li>
       <li>Can be extended using KIPI plugins.</li>
+      <li xml:lang="ar">يمكن توسعة مزاياه عن طريق ملحقات KIPI.</li>
       <li xml:lang="az">KIPI əlavələri istifadə edilərək funksiyalar genişləndirilə bilər</li>
       <li xml:lang="ca">Es pot estendre emprant els connectors KIPI.</li>
       <li xml:lang="ca-valencia">Es pot estendre emprant els connectors KIPI.</li>
@@ -410,6 +413,7 @@
     </screenshot>
     <screenshot>
       <caption>Gwenview displaying an image, with additional metadata shown in the sidebar</caption>
+      <caption xml:lang="ar">جونفيو يعرض الصورة ، مع بيانات وصفية إضافية معروضة في الشريط الجانبي</caption>
       <caption xml:lang="az">Gwenview, yan panelində əlavə meta məlumatları ilə birgə şəkilləri göstərir</caption>
       <caption xml:lang="ca">El Gwenview mostra una imatge, i a la barra lateral es mostraran les metadades addicionals</caption>
       <caption xml:lang="ca-valencia">El Gwenview mostra una imatge, i a la barra lateral es mostraran les metadades addicionals</caption>
