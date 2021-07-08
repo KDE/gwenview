@@ -1,5 +1,5 @@
 // SPDX-FileCopyrightText: 2021 Noah Davis <noahadvs@gmail.com>
-// SPDX-License-Identifier: LGPL-2.1-only OR LGPL-3.0-only OR LicenseRef-KDE-Accepted-LGPL
+// SPDX-License-Identifier: LGPL-2.1-or-later
 
 #ifndef GWENVIEW_ZOOMCOMBOBOX_H
 #define GWENVIEW_ZOOMCOMBOBOX_H
