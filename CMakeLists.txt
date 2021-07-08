@@ -63,7 +63,6 @@ find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
     KIO
     ItemModels
     I18n
-    DocTools
     Parts
     WindowSystem
     IconThemes
@@ -74,6 +73,7 @@ find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
 )
 find_package(KF5 ${KF5_MIN_VERSION} OPTIONAL_COMPONENTS
     Activities
+    DocTools
     Purpose
 )
 
