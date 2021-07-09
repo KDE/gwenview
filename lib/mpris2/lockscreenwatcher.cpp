@@ -47,15 +47,18 @@ LockScreenWatcher::LockScreenWatcher(QObject *parent)
     screenLockServiceWatcher->setWatchMode(QDBusServiceWatcher::WatchForOwnerChange);
     screenLockServiceWatcher->addWatchedService(screenSaverServiceName());
 
-    auto *watcher = new DBusBoolReplyWatcher(this);
-    connect(watcher, &DBusBoolReplyWatcher::finished,
-            this, &LockScreenWatcher::onServiceRegisteredQueried);
-    connect(watcher, &DBusBoolReplyWatcher::canceled,
-            watcher, &DBusBoolReplyWatcher::deleteLater);
+    if (QDBusConnection::sessionBus().interface()) {
+      auto *watcher = new DBusBoolReplyWatcher(this);
+      connect(watcher, &DBusBoolReplyWatcher::finished, this,
+              &LockScreenWatcher::onServiceRegisteredQueried);
+      connect(watcher, &DBusBoolReplyWatcher::canceled, watcher,
+              &DBusBoolReplyWatcher::deleteLater);
 
-    watcher->setFuture(QtConcurrent::run(QDBusConnection::sessionBus().interface(),
-                                         &QDBusConnectionInterface::isServiceRegistered,
-                                         screenSaverServiceName()));
+      watcher->setFuture(
+          QtConcurrent::run(QDBusConnection::sessionBus().interface(),
+                            &QDBusConnectionInterface::isServiceRegistered,
+                            screenSaverServiceName()));
+    }
 }
 
 LockScreenWatcher::~LockScreenWatcher() = default;
