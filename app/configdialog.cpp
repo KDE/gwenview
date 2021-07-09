@@ -99,7 +99,12 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 
     mAnimationMethodGroup = new InvisibleButtonGroup(widget);
     mAnimationMethodGroup->setObjectName(QStringLiteral("kcfg_AnimationMethod"));
+#ifdef QT_NO_OPENGL
+    mImageViewConfigPage.glAnimationRadioButton->setEnabled(false);
+    mAnimationMethodGroup->addButton(mImageViewConfigPage.glAnimationRadioButton, int(DocumentView::NoAnimation));
+#else
     mAnimationMethodGroup->addButton(mImageViewConfigPage.glAnimationRadioButton, int(DocumentView::GLAnimation));
+#endif
     mAnimationMethodGroup->addButton(mImageViewConfigPage.softwareAnimationRadioButton, int(DocumentView::SoftwareAnimation));
     mAnimationMethodGroup->addButton(mImageViewConfigPage.noAnimationRadioButton, int(DocumentView::NoAnimation));
 

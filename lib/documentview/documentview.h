@@ -75,7 +75,9 @@ public:
     enum AnimationMethod {
         NoAnimation,
         SoftwareAnimation,
-        GLAnimation
+#ifndef QT_NO_OPENGL
+        GLAnimation,
+#endif
     };
 
     /**

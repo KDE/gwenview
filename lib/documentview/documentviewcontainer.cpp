@@ -86,10 +86,12 @@ DocumentViewContainer::DocumentViewContainer(QWidget* parent)
 {
     d->q = this;
     d->mScene = new QGraphicsScene(this);
+#ifndef QT_NO_OPENGL
     if (GwenviewConfig::animationMethod() == DocumentView::GLAnimation) {
         auto* glWidget = new QOpenGLWidget;
         setViewport(glWidget);
     }
+#endif
     setScene(d->mScene);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
@@ -299,11 +301,13 @@ void DocumentViewContainer::slotFadeInFinished(DocumentView* view)
 
 void DocumentViewContainer::slotConfigChanged()
 {
+#ifndef QT_NO_OPENGL
     bool currentlyGL = qobject_cast<QOpenGLWidget*>(viewport());
     bool wantGL = GwenviewConfig::animationMethod() == DocumentView::GLAnimation;
     if (currentlyGL != wantGL) {
         setViewport(wantGL ? new QOpenGLWidget() : new QWidget());
     }
+#endif
 }
 
 void DocumentViewContainer::showMessageWidget(QGraphicsWidget* widget, Qt::Alignment align)
