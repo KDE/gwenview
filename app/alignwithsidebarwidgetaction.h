@@ -56,9 +56,6 @@ public:
      */
     bool eventFilter(QObject * /* watched */, QEvent *event) override;
 
-    /** @see QWidget::sizeHint() */
-    QSize sizeHint() const override;
-
 protected:
     /**
      * Used to trigger updateWidth() when the containing toolbar is locked/unlocked.
@@ -80,6 +77,13 @@ private:
      * of a potentially following separator.
      */
     void update();
+
+    /**
+     * Calculates the width of this spacer based on its position, the sideBar width,
+     * the toolbar orientation and the following action.
+     * @return the new width in pixels.
+     */
+    int updateWidth();
 
 private:
     /** The SideBar to align with. */

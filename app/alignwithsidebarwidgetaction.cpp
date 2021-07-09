@@ -74,51 +74,6 @@ bool AligningSpacer::eventFilter(QObject * /* watched */, QEvent *event)
     }
 }
 
-QSize AligningSpacer::sizeHint() const
-{
-    if (!mSideBar
-        || (mToolbar && mToolbar->orientation() == Qt::Vertical)
-    ) {
-        return QSize(0, 0);
-    }
-
-    int sideBarWidth = mSideBar->geometry().width();
-    if (sideBarWidth <= 0) {
-        if (!Gwenview::GwenviewConfig::sideBarSplitterSizes().isEmpty()) {
-            sideBarWidth = Gwenview::GwenviewConfig::sideBarSplitterSizes().constFirst();
-        } else {
-            // We get to this code when gwenview.rc was deleted or when this is the first run.
-            // There doesn't seem to be an easy way to get the width the sideBar is going
-            // to have at this point in time so we set it to some value that leads to
-            // a nice default appearance on the first run.
-            sideBarWidth = 242;
-        }
-    }
-
-    int newWidth;
-    if (QApplication::layoutDirection() != Qt::RightToLeft) {
-        newWidth = sideBarWidth - mapTo(window(), QPoint(0,0)).x();
-    } else {
-        newWidth = sideBarWidth - window()->width() + mapTo(window(), QPoint(width(), 0)).x();
-    }
-
-    const auto separatorWidth = static_cast<float>(
-            style()->pixelMetric(QStyle::PM_ToolBarSeparatorExtent, nullptr, this));
-    if (!mWasSeparatorRemoved) {
-         // Make it so a potentially following separator looks aligned with the sidebar.
-        newWidth -= std::ceil(separatorWidth * 0.3);
-    } else {
-        // Make it so removing the separator doesn't change the toolbutton positions.
-        newWidth += std::floor(separatorWidth * 0.7);
-    }
-
-    // Make sure nothing weird can happen.
-    if (newWidth < 0 || newWidth > sideBarWidth) {
-        newWidth = 0;
-    }
-    return QSize(newWidth, 0);
-}
-
 void AligningSpacer::moveEvent(QMoveEvent * /* moved */)
 {
     update();
@@ -155,7 +110,8 @@ void AligningSpacer::setFollowingSeparatorVisible(bool visible)
 
 void AligningSpacer::update()
 {
-    if (sizeHint().width() < 8) {
+    const bool oldWasSeparatorRemoved = mWasSeparatorRemoved;
+    if (updateWidth() < 8) {
         // Because the spacer is so small the separator should be visible to serve its purpose.
         if (mWasSeparatorRemoved) {
             setFollowingSeparatorVisible(true);
@@ -163,5 +119,59 @@ void AligningSpacer::update()
     } else if (mSideBar) {
         setFollowingSeparatorVisible(mSideBar->isVisible());
     }
-    setFixedWidth(sizeHint().width());
+
+    if (oldWasSeparatorRemoved != mWasSeparatorRemoved) { // One more updateWidth() is needed.
+        updateWidth();
+    }
+}
+
+int AligningSpacer::updateWidth()
+{
+    if (!mSideBar
+        || (mToolbar && mToolbar->orientation() == Qt::Vertical)
+    ) {
+        setFixedWidth(0);
+        return 0;
+    }
+
+    const auto separatorWidth = static_cast<float>(
+            style()->pixelMetric(QStyle::PM_ToolBarSeparatorExtent, nullptr, this));
+    int sideBarWidth = mSideBar->geometry().width();
+    if (sideBarWidth <= 0) {
+        if (!Gwenview::GwenviewConfig::sideBarSplitterSizes().isEmpty()) {
+            sideBarWidth = Gwenview::GwenviewConfig::sideBarSplitterSizes().constFirst();
+        } else {
+            // We get to this code when gwenview.rc was deleted or when this is the first run.
+            // There doesn't seem to be an easy way to get the width the sideBar is going
+            // to have at this point in time so we set it to some value that leads to
+            // a nice default appearance on the first run.
+            if (QApplication::layoutDirection() != Qt::RightToLeft) {
+                sideBarWidth = x() + separatorWidth * 2; // Leads to a nice default spacing.
+            }  else {
+                sideBarWidth = mToolbar->width() - x() + separatorWidth * 2;
+            }
+            mSideBar->resize(sideBarWidth, mSideBar->height()); // Make sure it aligns.
+        }
+    }
+
+    int newWidth;
+    if (QApplication::layoutDirection() != Qt::RightToLeft) {
+        newWidth = sideBarWidth - mapTo(window(), QPoint(0,0)).x();
+    } else {
+        newWidth = sideBarWidth - window()->width() + mapTo(window(), QPoint(width(), 0)).x();
+    }
+    if (!mWasSeparatorRemoved) {
+         // Make it so a potentially following separator looks aligned with the sidebar.
+        newWidth -= std::ceil(separatorWidth * 0.3);
+    } else {
+        // Make it so removing the separator doesn't change the toolbutton positions.
+        newWidth += std::floor(separatorWidth * 0.7);
+    }
+
+    // Make sure nothing weird can happen.
+    if (newWidth < 0 || newWidth > sideBarWidth) {
+        newWidth = 0;
+    }
+    setFixedWidth(newWidth);
+    return newWidth;
 }
