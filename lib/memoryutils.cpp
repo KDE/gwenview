@@ -33,8 +33,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #define _WIN32_WINNT 0x0500
 #include <windows.h>
 #elif defined(Q_OS_FREEBSD)
-#include <sys/sysctl.h>
 #include <sys/types.h>
+
+#include <sys/sysctl.h> // Must be included after sys/types.h
 #include <vm/vm_param.h>
 #endif
 
