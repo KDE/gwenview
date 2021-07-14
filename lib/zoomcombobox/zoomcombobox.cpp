@@ -259,7 +259,7 @@ void ZoomComboBox::updateDisplayedText()
     }
 }
 
-bool ZoomComboBox::eventFilter(QObject *watched, QEvent *event)
+bool ZoomComboBox::eventFilter(QObject * /* watched */, QEvent *event)
 {
     if (event->type() == QEvent::Hide) {
         Q_D(ZoomComboBox);
