@@ -131,6 +131,8 @@ install(FILES org.kde.gwenview.appdata.xml
 
 # slideshowfileitemaction plugin
 
+add_definitions(-DTRANSLATION_DOMAIN=\"gwenview\")
+
 kcoreaddons_add_plugin(slideshowfileitemaction
     SOURCES slideshowfileitemaction.cpp
     JSON slideshowfileitemaction.json
