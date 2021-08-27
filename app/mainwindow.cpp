@@ -529,23 +529,13 @@ struct MainWindow::Private {
                 mSharedMessage->setMessageType(KMessageWidget::MessageType::Error);
                 mSharedMessage->animatedShow();
             } else {
-                const QString imageUrl = output[QStringLiteral("url")].toString();
-                const QString deleteUrl = output[QStringLiteral("deleteUrl")].toString();
-                if (!imageUrl.isEmpty()) {
-                    if (!deleteUrl.isEmpty()) {
-                        mSharedMessage->setText(
-                            i18n("The shared image link (<a href=\"%1\">%1</a>) has been copied to the clipboard.And Delete Link is (<a href=\"%2\">%2</a>) in "
-                                 "case if you want to delete",
-                                 imageUrl,
-                                 deleteUrl));
-                    } else {
-                        // TODO : This part will be removed Whenever KF min became 5.86
-                        // deleteUrl part support added since 5.86 into purpose
-                        mSharedMessage->setText(i18n("The shared image link (<a href=\"%1\">%1</a>) has been copied to the clipboard", imageUrl));
-                    }
+                const QString url = output[QStringLiteral("url")].toString();
+
+                if (!url.isEmpty()) {
+                    mSharedMessage->setText(i18n("The shared image link (<a href=\"%1\">%1</a>) has been copied to the clipboard.", url));
                     mSharedMessage->setMessageType(KMessageWidget::MessageType::Positive);
                     mSharedMessage->animatedShow();
-                    QApplication::clipboard()->setText(imageUrl);
+                    QApplication::clipboard()->setText(url);
                 } else {
                     mSharedMessage->setVisible(false);
                 }
