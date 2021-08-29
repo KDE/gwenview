@@ -114,10 +114,18 @@ ZoomComboBox::ZoomComboBox(QWidget *parent)
         Qt::MatchFlags matchFlags = startsWithNumber || matches > 1 ? Qt::MatchFixedString : Qt::MatchStartsWith;
         const int textIndex = findText(text, matchFlags);
         if (textIndex < 0) {
-            setValue(valueFromText(text));
+            d->value = valueFromText(text);
         }
-        activateAndChangeZoomTo(textIndex);
-        lineEdit()->setCursorPosition(lineEdit()->cursorPosition() - 1);
+        if (textIndex >= 0 || d->value >= minimum()) {
+            // update only when doing so would not change the typed text due
+            // to being below the mininum as that means we can't type a new percentage
+            // one key at a time.
+            if (textIndex < 0)
+                d->lastCustomZoomValue = d->value;
+            updateDisplayedText();
+            activateAndChangeZoomTo(textIndex);
+            lineEdit()->setCursorPosition(lineEdit()->cursorPosition() - 1);
+        }
     });
     connect(this, qOverload<int>(&ZoomComboBox::highlighted), this, &ZoomComboBox::changeZoomTo);
     view()->installEventFilter(this);
@@ -286,6 +294,19 @@ void ZoomComboBox::mousePressEvent(QMouseEvent *event)
         }
     }
     QComboBox::mousePressEvent(event);
+}
+
+void ZoomComboBox::focusOutEvent(QFocusEvent *)
+{
+    Q_D(ZoomComboBox);
+    // Should the user have started typing a custom value
+    // that was out of our range, then we have a temporary
+    // state that is illegal. This is needed to allow a user
+    // to type a zoom with multiple keystrokes, but when the
+    // user leaves focus we should reset to the last known 'good'
+    // zoom value.
+    if (d->lastSelectedIndex == -1)
+        setValue(d->lastCustomZoomValue);
 }
 
 void ZoomComboBox::changeZoomTo(int index)

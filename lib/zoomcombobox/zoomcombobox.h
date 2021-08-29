@@ -63,6 +63,8 @@ protected:
 
     void mousePressEvent(QMouseEvent *event) override;
 
+    void focusOutEvent(QFocusEvent *event) override;
+
 private Q_SLOTS:
     /**
      * This method changes the zoom mode or value of the currently displayed image in response to
