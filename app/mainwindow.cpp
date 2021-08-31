@@ -72,6 +72,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifdef KF5Purpose_FOUND
 #include <Purpose/AlternativesModel>
 #include <PurposeWidgets/Menu>
+#include <purpose_version.h>
 #endif
 
 // Local
@@ -529,13 +530,22 @@ struct MainWindow::Private {
                 mSharedMessage->setMessageType(KMessageWidget::MessageType::Error);
                 mSharedMessage->animatedShow();
             } else {
-                const QString url = output[QStringLiteral("url")].toString();
-
-                if (!url.isEmpty()) {
-                    mSharedMessage->setText(i18n("The shared image link (<a href=\"%1\">%1</a>) has been copied to the clipboard.", url));
+                const QString imageUrl = output[QStringLiteral("url")].toString();
+#if PURPOSE_VERSION >= QT_VERSION_CHECK(5, 86, 0)
+                const QString deleteUrl = output[QStringLiteral("deleteUrl")].toString();
+                if (!imageUrl.isEmpty() && !deleteUrl.isEmpty()) {
+                    mSharedMessage->setText(
+                        i18n("The shared image link (<a href=\"%1\">%1</a>) has been copied to the clipboard.And Delete Link is (<a href=\"%2\">%2</a>) in "
+                             "case if you want to delete it",
+                             imageUrl,
+                             deleteUrl));
+#else
+                if (!imageUrl.isEmpty()) {
+                    mSharedMessage->setText(i18n("The shared image link (<a href=\"%1\">%1</a>) has been copied to the clipboard", imageUrl));
+#endif
                     mSharedMessage->setMessageType(KMessageWidget::MessageType::Positive);
                     mSharedMessage->animatedShow();
-                    QApplication::clipboard()->setText(url);
+                    QApplication::clipboard()->setText(imageUrl);
                 } else {
                     mSharedMessage->setVisible(false);
                 }
