@@ -535,7 +535,7 @@ struct MainWindow::Private {
                 const QString deleteUrl = output[QStringLiteral("deleteUrl")].toString();
                 if (!imageUrl.isEmpty() && !deleteUrl.isEmpty()) {
                     mSharedMessage->setText(
-                        i18n("The shared image link (<a href=\"%1\">%1</a>) has been copied to the clipboard.And Delete Link is (<a href=\"%2\">%2</a>) in "
+                        i18n("The shared image link (<a href=\"%1\">%1</a>) has been copied to the clipboard. Visit (<a href=\"%2\">%2</a>) to remove the image from the internet."
                              "case if you want to delete it",
                              imageUrl,
                              deleteUrl));
