@@ -114,6 +114,8 @@ void RasterImageItem::paint(QPainter *painter, const QStyleOptionGraphicsItem * 
         image = mSixthScaledImage.copy(sourceRect);
     }
 
+    const QImage::Format originalImageFormat = image.format();
+
     // We want nearest neighbour when zooming in since that provides the most
     // accurate representation of pixels, but when zooming out it will actually
     // not look very nice, so use smoothing when zooming out.
@@ -121,6 +123,12 @@ void RasterImageItem::paint(QPainter *painter, const QStyleOptionGraphicsItem * 
 
     // Scale the visible image to the requested zoom.
     image = image.scaled(image.size() * targetZoom, Qt::IgnoreAspectRatio, transformationMode);
+
+    // Scaling may convert image to premultiplied formats (unsupported by color correction engine),
+    // so we convert image back to originalImageFormat.
+    if (image.format() != originalImageFormat) {
+        image.convertTo(originalImageFormat);
+    }
 
     // Perform color correction on the visible image.
     applyDisplayTransform(image);
