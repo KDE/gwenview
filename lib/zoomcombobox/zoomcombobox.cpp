@@ -260,10 +260,7 @@ void ZoomComboBox::updateDisplayedText()
     } else if (d->mActualSizeAction->isChecked()) {
         lineEdit()->setText(d->mActualSizeAction->iconText());
     } else {
-        const QString currentZoomValueText(textFromValue(d->value));
-        lineEdit()->setText(currentZoomValueText);
-        d->lastSelectedIndex = -1;
-        d->lastCustomZoomValue = d->value;
+        lineEdit()->setText(textFromValue(d->value));
     }
 }
 
@@ -287,13 +284,24 @@ void ZoomComboBox::mousePressEvent(QMouseEvent *event)
             setCurrentIndex(1);
             d->lastSelectedIndex = 1;
         } else if (d->mActualSizeAction->isChecked()) {
-            setCurrentIndex(2);
-            d->lastSelectedIndex = 2;
+            const int actualSizeActionIndex = findData(QVariant::fromValue(d->mActualSizeAction));
+            setCurrentIndex(actualSizeActionIndex);
+            d->lastSelectedIndex = actualSizeActionIndex;
         } else {
-            d->lastSelectedIndex = -1;
+            // Now is a good time to save the zoom value that was selected before the user changes it through the popup.
+            d->lastCustomZoomValue = d->value;
+
+            // Highlight the correct index if the current zoom value exists as an option in the popup.
+            // If it doesn't exist, it is set to -1.
+            d->lastSelectedIndex = findText(textFromValue(d->value));
+            setCurrentIndex(d->lastSelectedIndex);
         }
     }
+    // We don't want to emit a QComboBox::highlighted event just because the popup is opened.
+    const bool previousSignalsBlockedState = signalsBlocked();
+    blockSignals(true);
     QComboBox::mousePressEvent(event);
+    blockSignals(previousSignalsBlockedState);
 }
 
 void ZoomComboBox::focusOutEvent(QFocusEvent *)
@@ -334,5 +342,13 @@ void ZoomComboBox::activateAndChangeZoomTo(int index)
 {
     Q_D(ZoomComboBox);
     d->lastSelectedIndex = index;
+
+    // The user has explicitly selected this zoom value so we
+    // remember it the same way as if they had typed it themselves.
+    QVariant itemData = this->itemData(index);
+    if (!itemData.value<QAction *>() && itemData.canConvert(QMetaType::QReal)) {
+        d->lastCustomZoomValue = itemData.toReal();
+    }
+
     changeZoomTo(index);
 }
