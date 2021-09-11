@@ -9,6 +9,8 @@
 #include <QEvent>
 #include <QLineEdit>
 #include <QMouseEvent>
+#include <QSignalBlocker>
+
 #include <cmath>
 
 using namespace Gwenview;
@@ -298,10 +300,8 @@ void ZoomComboBox::mousePressEvent(QMouseEvent *event)
         }
     }
     // We don't want to emit a QComboBox::highlighted event just because the popup is opened.
-    const bool previousSignalsBlockedState = signalsBlocked();
-    blockSignals(true);
+    const QSignalBlocker blocker(this);
     QComboBox::mousePressEvent(event);
-    blockSignals(previousSignalsBlockedState);
 }
 
 void ZoomComboBox::focusOutEvent(QFocusEvent *)
