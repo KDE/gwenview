@@ -266,6 +266,36 @@ void ZoomComboBox::updateDisplayedText()
     }
 }
 
+void Gwenview::ZoomComboBox::showPopup()
+{
+    Q_D(ZoomComboBox);
+
+    if (d->mZoomToFitAction->isChecked()) {
+        setCurrentIndex(0);
+        d->lastSelectedIndex = 0;
+    } else if (d->mZoomToFillAction->isChecked()) {
+        setCurrentIndex(1);
+        d->lastSelectedIndex = 1;
+    } else if (d->mActualSizeAction->isChecked()) {
+        const int actualSizeActionIndex = findData(QVariant::fromValue(d->mActualSizeAction));
+        setCurrentIndex(actualSizeActionIndex);
+        d->lastSelectedIndex = actualSizeActionIndex;
+    } else {
+        // Now is a good time to save the zoom value that was selected before the user changes it through the popup.
+        d->lastCustomZoomValue = d->value;
+
+        // Highlight the correct index if the current zoom value exists as an option in the popup.
+        // If it doesn't exist, it is set to -1.
+        d->lastSelectedIndex = findText(textFromValue(d->value));
+        setCurrentIndex(d->lastSelectedIndex);
+    }
+
+    // We don't want to emit a QComboBox::highlighted event just because the popup is opened.
+    const QSignalBlocker blocker(this);
+
+    QComboBox::showPopup();
+}
+
 bool ZoomComboBox::eventFilter(QObject * /* watched */, QEvent *event)
 {
     if (event->type() == QEvent::Hide) {
@@ -273,35 +303,6 @@ bool ZoomComboBox::eventFilter(QObject * /* watched */, QEvent *event)
         changeZoomTo(d->lastSelectedIndex);
     }
     return false;
-}
-
-void ZoomComboBox::mousePressEvent(QMouseEvent *event)
-{
-    if (event->button() == Qt::LeftButton) {
-        Q_D(ZoomComboBox);
-        if (d->mZoomToFitAction->isChecked()) {
-            setCurrentIndex(0);
-            d->lastSelectedIndex = 0;
-        } else if (d->mZoomToFillAction->isChecked()) {
-            setCurrentIndex(1);
-            d->lastSelectedIndex = 1;
-        } else if (d->mActualSizeAction->isChecked()) {
-            const int actualSizeActionIndex = findData(QVariant::fromValue(d->mActualSizeAction));
-            setCurrentIndex(actualSizeActionIndex);
-            d->lastSelectedIndex = actualSizeActionIndex;
-        } else {
-            // Now is a good time to save the zoom value that was selected before the user changes it through the popup.
-            d->lastCustomZoomValue = d->value;
-
-            // Highlight the correct index if the current zoom value exists as an option in the popup.
-            // If it doesn't exist, it is set to -1.
-            d->lastSelectedIndex = findText(textFromValue(d->value));
-            setCurrentIndex(d->lastSelectedIndex);
-        }
-    }
-    // We don't want to emit a QComboBox::highlighted event just because the popup is opened.
-    const QSignalBlocker blocker(this);
-    QComboBox::mousePressEvent(event);
 }
 
 void ZoomComboBox::focusOutEvent(QFocusEvent *)

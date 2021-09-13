@@ -55,14 +55,13 @@ public:
 
     void updateDisplayedText();
 
+    void showPopup() override;
+
 Q_SIGNALS:
     void zoomChanged(qreal zoom);
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event) override;
-
-    void mousePressEvent(QMouseEvent *event) override;
-
     void focusOutEvent(QFocusEvent *event) override;
 
 private Q_SLOTS:
