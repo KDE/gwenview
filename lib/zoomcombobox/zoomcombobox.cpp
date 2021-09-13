@@ -296,13 +296,30 @@ void Gwenview::ZoomComboBox::showPopup()
     QComboBox::showPopup();
 }
 
-bool ZoomComboBox::eventFilter(QObject * /* watched */, QEvent *event)
+bool ZoomComboBox::eventFilter(QObject *watched, QEvent *event)
 {
-    if (event->type() == QEvent::Hide) {
-        Q_D(ZoomComboBox);
-        changeZoomTo(d->lastSelectedIndex);
+    if (watched == view()) {
+        switch (event->type()) {
+        case QEvent::Hide: {
+            Q_D(ZoomComboBox);
+            changeZoomTo(d->lastSelectedIndex);
+            break;
+        }
+        case QEvent::ShortcutOverride: {
+            if (view()->isVisibleTo(this)) {
+                QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+                if (keyEvent->key() == Qt::Key_Escape) {
+                    event->accept();
+                }
+            }
+            break;
+        }
+        default:
+            break;
+        }
     }
-    return false;
+
+    return QComboBox::eventFilter(watched, event);
 }
 
 void ZoomComboBox::focusOutEvent(QFocusEvent *)
