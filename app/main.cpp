@@ -128,7 +128,7 @@ public:
 
         mMainWindow->show();
         if (mFullScreen) {
-            mMainWindow->actionCollection()->action("fullscreen")->trigger();
+            mMainWindow->actionCollection()->action(QStringLiteral("fullscreen"))->trigger();
         } else {
             mMainWindow->show();
         }

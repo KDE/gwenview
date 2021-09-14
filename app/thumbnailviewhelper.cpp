@@ -75,7 +75,7 @@ void ThumbnailViewHelper::setCurrentDirUrl(const QUrl &url)
 void ThumbnailViewHelper::showContextMenu(QWidget *parent)
 {
     QMenu popup(parent);
-    if (d->mCurrentDirUrl.scheme() == "trash") {
+    if (d->mCurrentDirUrl.scheme() == QLatin1String("trash")) {
         d->addActionToMenu(popup, "file_restore");
         d->addActionToMenu(popup, "deletefile");
         popup.addSeparator();

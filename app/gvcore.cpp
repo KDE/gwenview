@@ -177,7 +177,7 @@ struct GvCorePrivate {
         QString name = GwenviewConfig::fullScreenColorScheme();
         if (name.isEmpty()) {
             // Default color scheme
-            mFullScreenPaletteName = QStandardPaths::locate(QStandardPaths::AppDataLocation, "color-schemes/fullscreen.colors");
+            mFullScreenPaletteName = QStandardPaths::locate(QStandardPaths::AppDataLocation, QStringLiteral("color-schemes/fullscreen.colors"));
             config = KSharedConfig::openConfig(mFullScreenPaletteName);
         } else if (name.contains('/')) {
             // Full path to a .colors file
@@ -201,7 +201,7 @@ struct GvCorePrivate {
         if (Gwenview::GwenviewConfig::fullScreenBackground() == Gwenview::FullScreenBackground::Black) {
             bgTexture.fill(Qt::black);
         } else {
-            QString path = QStandardPaths::locate(QStandardPaths::AppDataLocation, "images/background.png");
+            QString path = QStandardPaths::locate(QStandardPaths::AppDataLocation, QStringLiteral("images/background.png"));
             bgTexture = path;
         }
         viewPalette.setBrush(QPalette::Base, bgTexture);

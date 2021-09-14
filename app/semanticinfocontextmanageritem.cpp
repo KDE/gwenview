@@ -202,9 +202,9 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
     {
         auto *edit = new KActionCategory(i18nc("@title actions category", "Edit"), mActionCollection);
 
-        mEditTagsAction = edit->addAction("edit_tags");
+        mEditTagsAction = edit->addAction(QStringLiteral("edit_tags"));
         mEditTagsAction->setText(i18nc("@action", "Edit Tags"));
-        mEditTagsAction->setIcon(QIcon::fromTheme("tag"));
+        mEditTagsAction->setIcon(QIcon::fromTheme(QStringLiteral("tag")));
         mActionCollection->setDefaultShortcut(mEditTagsAction, Qt::CTRL | Qt::Key_T);
         QObject::connect(mEditTagsAction, &QAction::triggered, q, &SemanticInfoContextManagerItem::showSemanticInfoDialog);
         mActions << mEditTagsAction;
@@ -251,7 +251,7 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
             }
             labelMap[label.toLower()] = label;
         }
-        QStringList labels(labelMap.values());
+        const QStringList labels(labelMap.values());
 
         for (const QString &label : labels) {
             DecoratedTag *decoratedTag = new DecoratedTag(label);

@@ -45,7 +45,7 @@ RenameDialog::RenameDialog(QWidget *parent)
     d->setupUi(this);
 
     QPushButton *okButton = d->mButtonBox->button(QDialogButtonBox::Ok);
-    KGuiItem::assign(okButton, KGuiItem(i18nc("@action:button", "Rename"), "edit-rename"));
+    KGuiItem::assign(okButton, KGuiItem(i18nc("@action:button", "Rename"), QStringLiteral("edit-rename")));
 
     connect(d->mFilename, &QLineEdit::textChanged, this, &RenameDialog::updateButtons);
 }

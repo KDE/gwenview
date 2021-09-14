@@ -42,16 +42,17 @@ struct ImporterConfigDialogPrivate : public Ui_ImporterConfigDialog {
 
     void setupHelpText()
     {
-        QString helpText = "<ul>";
+        QString helpText = QLatin1String("<ul>");
         FileNameFormater::HelpMap map = FileNameFormater::helpMap();
         FileNameFormater::HelpMap::ConstIterator it = map.constBegin(), end = map.constEnd();
         for (; it != end; ++it) {
             QString keyword = '{' + it.key() + '}';
             QString explanation = it.value().toHtmlEscaped();
             QString link = QStringLiteral("<a href='%1'>%1</a>").arg(keyword);
-            helpText += "<li>" + i18nc("%1 is the importer keyword, %2 is keyword explanation", "%1: %2", link, explanation) + "</li>";
+            helpText +=
+                QLatin1String("<li>") + i18nc("%1 is the importer keyword, %2 is keyword explanation", "%1: %2", link, explanation) + QLatin1String("</li>");
         }
-        helpText += "</ul>";
+        helpText += QLatin1String("</ul>");
         mRenameFormatHelpLabel->setText(helpText);
 
         QObject::connect(mRenameFormatHelpLabel, SIGNAL(linkActivated(QString)), q, SLOT(slotHelpLinkActivated(QString)));

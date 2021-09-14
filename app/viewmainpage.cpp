@@ -270,7 +270,7 @@ struct ViewMainPagePrivate {
 
         QString css = itemCss + itemSelCss + itemHovCss;
         if (orientation == Qt::Vertical) {
-            css.replace("left", "top").replace("right", "bottom");
+            css.replace(QLatin1String("left"), QLatin1String("top")).replace(QLatin1String("right"), QLatin1String("bottom"));
         }
 
         mThumbnailBar->setStyleSheet(css);
@@ -428,7 +428,7 @@ ViewMainPage::ViewMainPage(QWidget *parent, SlideShow *slideShow, KActionCollect
     connect(d->mToggleThumbnailBarAction, &KToggleAction::triggered, this, &ViewMainPage::setThumbnailBarVisibility);
     d->mToggleThumbnailBarButton->setDefaultAction(d->mToggleThumbnailBarAction);
 
-    d->mSynchronizeAction = view->add<KToggleAction>("synchronize_views");
+    d->mSynchronizeAction = view->add<KToggleAction>(QStringLiteral("synchronize_views"));
     d->mSynchronizeAction->setText(i18n("Synchronize"));
     actionCollection->setDefaultShortcut(d->mSynchronizeAction, Qt::CTRL | Qt::Key_Y);
     connect(d->mSynchronizeAction, &QAction::toggled, d->mSynchronizer, &DocumentViewSynchronizer::setActive);

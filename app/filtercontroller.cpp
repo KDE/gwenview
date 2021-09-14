@@ -38,8 +38,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include "gwenview_app_debug.h"
+#include <chrono>
 #include <lib/flowlayout.h>
 #include <lib/paintutils.h>
+
+using namespace std::chrono_literals;
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 // KF
@@ -66,7 +69,7 @@ NameFilterWidget::NameFilterWidget(SortedDirModel *model)
     layout->addWidget(mLineEdit);
 
     auto *timer = new QTimer(this);
-    timer->setInterval(350);
+    timer->setInterval(350ms);
     timer->setSingleShot(true);
     connect(timer, &QTimer::timeout, this, &NameFilterWidget::applyNameFilter);
 

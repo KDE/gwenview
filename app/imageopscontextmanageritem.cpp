@@ -102,17 +102,17 @@ struct ImageOpsContextManagerItem::Private {
         mFlipAction->setText(i18n("Flip"));
         mFlipAction->setIcon(QIcon::fromTheme(QStringLiteral("object-flip-vertical")));
 
-        mResizeAction = edit->addAction("resize", q, SLOT(resizeImage()));
+        mResizeAction = edit->addAction(QStringLiteral("resize"), q, SLOT(resizeImage()));
         mResizeAction->setText(i18n("Resize"));
         mResizeAction->setIcon(QIcon::fromTheme(QStringLiteral("transform-scale")));
         actionCollection->setDefaultShortcut(mResizeAction, Qt::SHIFT | Qt::Key_R);
 
-        mCropAction = edit->addAction("crop", q, SLOT(crop()));
+        mCropAction = edit->addAction(QStringLiteral("crop"), q, SLOT(crop()));
         mCropAction->setText(i18n("Crop"));
         mCropAction->setIcon(QIcon::fromTheme(QStringLiteral("transform-crop-and-resize")));
         actionCollection->setDefaultShortcut(mCropAction, Qt::SHIFT | Qt::Key_C);
 
-        mRedEyeReductionAction = edit->addAction("red_eye_reduction", q, SLOT(startRedEyeReduction()));
+        mRedEyeReductionAction = edit->addAction(QStringLiteral("red_eye_reduction"), q, SLOT(startRedEyeReduction()));
         mRedEyeReductionAction->setText(i18n("Reduce Red Eye"));
         mRedEyeReductionAction->setIcon(QIcon::fromTheme(QStringLiteral("redeyes")));
         actionCollection->setDefaultShortcut(mRedEyeReductionAction, Qt::SHIFT | Qt::Key_E);

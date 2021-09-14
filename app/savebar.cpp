@@ -194,7 +194,7 @@ struct SaveBarPrivate {
 
         mMessageLabel->setText(message);
         mMessageLabel->setMaximumWidth(mMessageLabel->minimumSizeHint().width());
-        mActionsLabel->setText(links.join(" | "));
+        mActionsLabel->setText(links.join(QStringLiteral(" | ")));
     }
 
     void updateWidgetSizes()
@@ -218,7 +218,7 @@ SaveBar::SaveBar(QWidget *parent, KActionCollection *actionCollection)
     d->q = this;
     d->mActionCollection = actionCollection;
     d->mSaveBarWidget = new QWidget();
-    d->mSaveBarWidget->setObjectName(QLatin1String("saveBarWidget"));
+    d->mSaveBarWidget->setObjectName(QStringLiteral("saveBarWidget"));
     d->applyNormalStyleSheet();
 
     d->mMessageLabel = new QLabel;
@@ -276,15 +276,15 @@ SaveBar::~SaveBar()
 
 void SaveBar::initActionDependentWidgets()
 {
-    d->mUndoButton->setDefaultAction(d->mActionCollection->action("edit_undo"));
-    d->mRedoButton->setDefaultAction(d->mActionCollection->action("edit_redo"));
-    d->mSaveCurrentUrlButton->setDefaultAction(d->mActionCollection->action("file_save"));
-    d->mSaveAsButton->setDefaultAction(d->mActionCollection->action("file_save_as"));
+    d->mUndoButton->setDefaultAction(d->mActionCollection->action(QStringLiteral("edit_undo")));
+    d->mRedoButton->setDefaultAction(d->mActionCollection->action(QStringLiteral("edit_redo")));
+    d->mSaveCurrentUrlButton->setDefaultAction(d->mActionCollection->action(QStringLiteral("file_save")));
+    d->mSaveAsButton->setDefaultAction(d->mActionCollection->action(QStringLiteral("file_save_as")));
 
     // FIXME: Not using an action for now
     d->mSaveAllButton->setText(i18n("Save All"));
     d->mSaveAllButton->setToolTip(i18nc("@info:tooltip", "Save all modified images"));
-    d->mSaveAllButton->setIcon(QIcon::fromTheme("document-save-all"));
+    d->mSaveAllButton->setIcon(QIcon::fromTheme(QStringLiteral("document-save-all")));
     connect(d->mSaveAllButton, &QToolButton::clicked, this, &SaveBar::requestSaveAll);
 
     d->mSaveAllFullScreenButton->setText(i18n("Save All"));
@@ -330,14 +330,14 @@ void SaveBar::updateContent()
 void SaveBar::triggerAction(const QString &action)
 {
     QList<QUrl> lst = DocumentFactory::instance()->modifiedDocumentList();
-    if (action == "first") {
+    if (action == QLatin1String("first")) {
         emit goToUrl(lst[0]);
-    } else if (action == "previous") {
+    } else if (action == QLatin1String("previous")) {
         int pos = lst.indexOf(d->mCurrentUrl);
         --pos;
         Q_ASSERT(pos >= 0);
         emit goToUrl(lst[pos]);
-    } else if (action == "next") {
+    } else if (action == QLatin1String("next")) {
         int pos = lst.indexOf(d->mCurrentUrl);
         ++pos;
         Q_ASSERT(pos < lst.size());

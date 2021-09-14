@@ -163,9 +163,9 @@ public:
         mCentralWidget->setCurrentWidget(mDialogPage);
         mDialogPage->setText(i18n("What do you want to do now?"));
         mDialogPage->removeButtons();
-        int gwenview = mDialogPage->addButton(KGuiItem(i18n("View Imported Documents with Gwenview"), "gwenview"));
+        int gwenview = mDialogPage->addButton(KGuiItem(i18n("View Imported Documents with Gwenview"), QStringLiteral("gwenview")));
         int importMore = mDialogPage->addButton(KGuiItem(i18n("Import more Documents")));
-        mDialogPage->addButton(KGuiItem(i18n("Quit"), "dialog-cancel"));
+        mDialogPage->addButton(KGuiItem(i18n("Quit"), QStringLiteral("dialog-cancel")));
 
         int answer = mDialogPage->exec();
         if (answer == gwenview) {

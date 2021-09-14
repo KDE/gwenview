@@ -42,7 +42,7 @@ QWidget *setupPage(Ui &ui)
 }
 
 ConfigDialog::ConfigDialog(QWidget *parent)
-    : KConfigDialog(parent, "Settings", GwenviewConfig::self())
+    : KConfigDialog(parent, QStringLiteral("Settings"), GwenviewConfig::self())
 {
     setFaceType(KPageDialog::List);
 

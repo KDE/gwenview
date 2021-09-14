@@ -80,11 +80,11 @@ void SaveAllHelper::save()
     // Done, show message if necessary
     if (d->mErrorList.count() > 0) {
         QString msg = i18ncp("@info", "One document could not be saved:", "%1 documents could not be saved:", d->mErrorList.count());
-        msg += "<ul>";
+        msg += QLatin1String("<ul>");
         for (const QString &item : qAsConst(d->mErrorList)) {
             msg += "<li>" + item + "</li>";
         }
-        msg += "</ul>";
+        msg += QLatin1String("</ul>");
         KMessageBox::sorry(d->mParent, msg);
     }
 }

@@ -267,7 +267,7 @@ void ThumbnailPage::openUrl(const QUrl &url)
     d->mSrcUrl = url;
     QString path = QDir(d->mSrcBaseUrl.path()).relativeFilePath(d->mSrcUrl.path());
     QString text;
-    if (path.isEmpty() || path == ".") {
+    if (path.isEmpty() || path == QLatin1String(".")) {
         text = d->mSrcBaseName;
     } else {
         path = QUrl::fromPercentEncoding(path.toUtf8());
