@@ -38,7 +38,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KLocalizedString>
 #include <KUrlMimeData>
 #include <KUrlNavigator>
-#include <kwidgetsaddons_version.h>
 
 // Local
 #include <fileoperations.h>
@@ -152,11 +151,7 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage {
         auto *sortActionMenu = view->add<KActionMenu>("sort_by");
         sortActionMenu->setText(i18nc("@action:inmenu", "Sort By"));
         sortActionMenu->setIcon(QIcon::fromTheme(QStringLiteral("view-sort")));
-#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 77, 0)
         sortActionMenu->setPopupMode(QToolButton::InstantPopup);
-#else
-        sortActionMenu->setDelayed(false);
-#endif
 
         mSortAction = new QActionGroup(actionCollection);
         action = new QAction(i18nc("@addAction:inmenu", "Name"), mSortAction);

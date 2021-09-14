@@ -35,13 +35,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KService>
 #include <KStandardGuiItem>
 #include <Solid/Device>
-#include <kio_version.h>
-#if KIO_VERSION >= QT_VERSION_CHECK(5, 71, 0)
 #include <KIO/ApplicationLauncherJob>
 #include <KIO/JobUiDelegate>
-#else
-#include <KRun>
-#endif
 
 // Local
 #include "dialogpage.h"
@@ -156,14 +151,10 @@ public:
         if (!service) {
             qCCritical(GWENVIEW_IMPORTER_LOG) << "Could not find gwenview";
         } else {
-#if KIO_VERSION >= QT_VERSION_CHECK(5, 71, 0)
             auto *job = new KIO::ApplicationLauncherJob(service);
             job->setUrls({mThumbnailPage->destinationUrl()});
             job->setUiDelegate(new KIO::JobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, nullptr));
             job->start();
-#else
-            KRun::runService(*service, {mThumbnailPage->destinationUrl()}, nullptr /* window */);
-#endif
         }
     }
 

@@ -48,12 +48,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KUrlMimeData>
 #include <KXMLGUIClient>
 #include <kio_version.h>
-#if KIO_VERSION >= QT_VERSION_CHECK(5, 71, 0)
 #include <KIO/ApplicationLauncherJob>
 #include <KIO/JobUiDelegate>
-#else
-#include <KRun>
-#endif
 
 // Local
 #include "fileoperations.h"
@@ -389,7 +385,6 @@ void FileOpsContextManagerItem::openWith(QAction *action)
     bool ok;
     int idx = action->data().toInt(&ok);
     GV_RETURN_IF_FAIL(ok);
-#if KIO_VERSION >= QT_VERSION_CHECK(5, 71, 0)
     if (idx != -1) {
         service = mServiceList.at(idx);
     }
@@ -398,30 +393,6 @@ void FileOpsContextManagerItem::openWith(QAction *action)
     job->setUrls(list);
     job->setUiDelegate(new KIO::JobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, mGroup));
     job->start();
-#else
-    if (idx != -1) {
-        service = mServiceList.at(idx);
-        Q_ASSERT(service);
-        KRun::runService(*service, list, mGroup);
-        return;
-    }
-
-    // Other Application...
-    auto *dlg = new KOpenWithDialog(list, mGroup);
-    dlg->setAttribute(Qt::WA_DeleteOnClose);
-    dlg->setModal(true);
-    connect(dlg, &QDialog::accepted, this, [this, dlg, list]() {
-        KService::Ptr servicePtr = dlg->service();
-        if (servicePtr) {
-            KRun::runService(*servicePtr, list, mGroup);
-        } else {
-            // User entered a custom command
-            KRun::run(dlg->text(), list, mGroup);
-        }
-    });
-
-    dlg->show();
-#endif
 }
 
 void FileOpsContextManagerItem::openContainingFolder()
