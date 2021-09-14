@@ -152,6 +152,9 @@ public Q_SLOTS:
 
     void setZoomToFill(bool);
     void toggleZoomToFill();
+
+    void zoomActualSize();
+
     void toggleBirdEyeView();
 
     void setBackgroundColorMode(BackgroundColorWidget::ColorMode colorMode);
@@ -222,8 +225,6 @@ private Q_SLOTS:
     void finishOpenUrl();
     void slotCompleted();
     void slotLoadingFailed();
-
-    void zoomActualSize();
 
     void zoomIn(QPointF center = QPointF(-1, -1));
     void zoomOut(QPointF center = QPointF(-1, -1));

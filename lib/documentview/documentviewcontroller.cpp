@@ -216,13 +216,9 @@ void DocumentViewController::setView(DocumentView* view)
     connect(d->mView, &DocumentView::zoomToFillChanged, this, &DocumentViewController::updateZoomToFillActionFromView);
     connect(d->mView, &DocumentView::currentToolChanged, this, &DocumentViewController::updateTool);
 
-    connect(d->mZoomToFitAction, &QAction::toggled, d->mView, &DocumentView::setZoomToFit);
-    connect(d->mZoomToFillAction, &QAction::toggled, d->mView, &DocumentView::setZoomToFill);
-    connect(d->mActualSizeAction, &QAction::toggled, d->mView, [this](bool checked){
-        if (checked) {
-            d->mView->setZoom(1.0);
-        }
-    });
+    connect(d->mZoomToFitAction, &QAction::triggered, d->mView, &DocumentView::toggleZoomToFit);
+    connect(d->mZoomToFillAction, &QAction::triggered, d->mView, &DocumentView::toggleZoomToFill);
+    connect(d->mActualSizeAction, &QAction::triggered, d->mView, &DocumentView::zoomActualSize);
     connect(d->mZoomInAction, SIGNAL(triggered()),
             d->mView, SLOT(zoomIn()));
     connect(d->mZoomOutAction, SIGNAL(triggered()),
