@@ -1118,7 +1118,7 @@ void MainWindow::setActiveViewModeAction(QAction *action)
     toggleSideBar(d->sideBarVisibility());
     toggleStatusBar(d->statusBarVisibility());
 
-    emit viewModeChanged();
+    Q_EMIT viewModeChanged();
 }
 
 void MainWindow::slotThumbnailViewIndexActivated(const QModelIndex &index)

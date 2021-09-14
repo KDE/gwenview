@@ -318,7 +318,7 @@ void ThumbnailPage::importList(const QModelIndexList &list)
         }
         // FIXME: Handle dirs (do we want to import recursively?)
     }
-    emit importRequested();
+    Q_EMIT importRequested();
 }
 
 void ThumbnailPage::updateImportButtons()

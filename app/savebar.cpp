@@ -331,17 +331,17 @@ void SaveBar::triggerAction(const QString &action)
 {
     QList<QUrl> lst = DocumentFactory::instance()->modifiedDocumentList();
     if (action == QLatin1String("first")) {
-        emit goToUrl(lst[0]);
+        Q_EMIT goToUrl(lst[0]);
     } else if (action == QLatin1String("previous")) {
         int pos = lst.indexOf(d->mCurrentUrl);
         --pos;
         Q_ASSERT(pos >= 0);
-        emit goToUrl(lst[pos]);
+        Q_EMIT goToUrl(lst[pos]);
     } else if (action == QLatin1String("next")) {
         int pos = lst.indexOf(d->mCurrentUrl);
         ++pos;
         Q_ASSERT(pos < lst.size());
-        emit goToUrl(lst[pos]);
+        Q_EMIT goToUrl(lst[pos]);
     } else {
         qCWarning(GWENVIEW_APP_LOG) << "Unknown action: " << action;
     }

@@ -48,7 +48,7 @@ void FakeSemanticInfoBackEnd::mergeTagsWithAllTags(const TagSet &set)
     int size = mAllTags.size();
     mAllTags |= set;
     if (mAllTags.size() > size) {
-        // emit allTagsUpdated();
+        // Q_EMIT allTagsUpdated();
     }
 }
 
@@ -83,7 +83,7 @@ void FakeSemanticInfoBackEnd::retrieveSemanticInfo(const QUrl &url)
         }
         mSemanticInfoForUrl[url] = semanticInfo;
     }
-    emit semanticInfoRetrieved(url, mSemanticInfoForUrl.value(url));
+    Q_EMIT semanticInfoRetrieved(url, mSemanticInfoForUrl.value(url));
 }
 
 QString FakeSemanticInfoBackEnd::labelForTag(const SemanticInfoTag &tag) const

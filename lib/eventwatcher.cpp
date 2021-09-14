@@ -46,7 +46,7 @@ EventWatcher *EventWatcher::install(QObject *watched, QEvent::Type eventType, QO
 bool EventWatcher::eventFilter(QObject *, QEvent *event)
 {
     if (mEventTypes.contains(event->type())) {
-        emit eventTriggered(event);
+        Q_EMIT eventTriggered(event);
     }
     return false;
 }

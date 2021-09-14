@@ -53,7 +53,7 @@ void SvgDocumentLoadedImpl::init()
 {
     d->mRenderer->load(d->mRawData);
     setDocumentImageSize(d->mRenderer->defaultSize());
-    emit loaded();
+    Q_EMIT loaded();
 }
 
 Document::LoadingState SvgDocumentLoadedImpl::loadingState() const

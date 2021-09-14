@@ -155,15 +155,15 @@ struct DocumentViewPrivate {
                 adapter->setScrollPos(mSetup.position);
             }
         }
-        emit q->adapterChanged();
-        emit q->positionChanged();
+        Q_EMIT q->adapterChanged();
+        Q_EMIT q->positionChanged();
         if (adapter->canZoom()) {
             if (adapter->zoomToFit()) {
-                emit q->zoomToFitChanged(true);
+                Q_EMIT q->zoomToFitChanged(true);
             } else if (adapter->zoomToFill()) {
-                emit q->zoomToFillChanged(true);
+                Q_EMIT q->zoomToFillChanged(true);
             } else {
-                emit q->zoomChanged(adapter->zoom());
+                Q_EMIT q->zoomChanged(adapter->zoom());
             }
         }
         if (adapter->rasterImageView()) {
@@ -230,7 +230,7 @@ struct DocumentViewPrivate {
 
         Document::Ptr doc = mAdapter->document();
         if (!doc) {
-            emit q->captionUpdateRequested(caption);
+            Q_EMIT q->captionUpdateRequested(caption);
             return;
         }
 
@@ -243,7 +243,7 @@ struct DocumentViewPrivate {
                 caption += QStringLiteral(" - %1%").arg(intZoom);
             }
         }
-        emit q->captionUpdateRequested(caption);
+        Q_EMIT q->captionUpdateRequested(caption);
     }
 
     void uncheckZoomToFit()
@@ -285,7 +285,7 @@ struct DocumentViewPrivate {
         }
         mZoomSnapValues << MAXIMUM_ZOOM_VALUE;
 
-        emit q->minimumZoomChanged(min);
+        Q_EMIT q->minimumZoomChanged(min);
     }
 
     void showLoadingIndicator()
@@ -333,7 +333,7 @@ struct DocumentViewPrivate {
         QObject::connect(anim, &QAbstractAnimation::finished, q, &DocumentView::isAnimatedChanged);
         anim->setDuration(DocumentView::AnimDuration);
         mFadeAnimation = anim;
-        emit q->isAnimatedChanged();
+        Q_EMIT q->isAnimatedChanged();
         anim->start(QAbstractAnimation::DeleteWhenStopped);
     }
 
@@ -585,7 +585,7 @@ void DocumentView::slotCompleted()
             d->mAdapter->setZoom(min);
         }
     }
-    emit completed();
+    Q_EMIT completed();
 }
 
 DocumentView::Setup DocumentView::setup() const
@@ -611,7 +611,7 @@ void DocumentView::slotLoadingFailed()
     QString message = xi18n("Loading <filename>%1</filename> failed", d->mDocument->url().fileName());
     adapter->setErrorMessage(message, d->mDocument->errorString());
     d->setCurrentAdapter(adapter);
-    emit completed();
+    Q_EMIT completed();
 }
 
 bool DocumentView::canZoom() const
@@ -725,7 +725,7 @@ void DocumentView::zoomOut(QPointF center)
 void DocumentView::slotZoomChanged(qreal zoom)
 {
     d->updateCaption();
-    emit zoomChanged(zoom);
+    Q_EMIT zoomChanged(zoom);
 }
 
 void DocumentView::setZoom(qreal zoom)
@@ -786,7 +786,7 @@ void DocumentView::swipeRight()
 {
     const QPoint scrollPos = d->mAdapter->scrollPos().toPoint();
     if (scrollPos.x() <= 1) {
-        emit d->mAdapter->previousImageRequested();
+        Q_EMIT d->mAdapter->previousImageRequested();
     }
 }
 
@@ -798,7 +798,7 @@ void DocumentView::swipeLeft()
     const QRect visibleRect = d->mAdapter->visibleDocumentRect().toRect();
     const int x = scrollPos.x() + visibleRect.width();
     if (x >= (width - 1)) {
-        emit d->mAdapter->nextImageRequested();
+        Q_EMIT d->mAdapter->nextImageRequested();
     }
 }
 
@@ -853,10 +853,10 @@ void DocumentView::wheelEvent(QGraphicsSceneWheelEvent *event)
         d->controlWheelAccumulatedDelta += event->delta();
         // Browse with mouse wheel
         if (d->controlWheelAccumulatedDelta >= QWheelEvent::DefaultDeltasPerStep) {
-            emit previousImageRequested();
+            Q_EMIT previousImageRequested();
             d->controlWheelAccumulatedDelta = 0;
         } else if (d->controlWheelAccumulatedDelta <= -QWheelEvent::DefaultDeltasPerStep) {
-            emit nextImageRequested();
+            Q_EMIT nextImageRequested();
             d->controlWheelAccumulatedDelta = 0;
         }
         return;
@@ -877,7 +877,7 @@ void DocumentView::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
     // Filter out context menu if Ctrl is down to avoid showing it when
     // zooming out with Ctrl + Right button
     if (event->modifiers() != Qt::ControlModifier) {
-        emit contextMenuRequested();
+        Q_EMIT contextMenuRequested();
     }
 }
 
@@ -969,17 +969,17 @@ QUrl DocumentView::url() const
 
 void DocumentView::emitHudDeselectClicked()
 {
-    emit hudDeselectClicked(this);
+    Q_EMIT hudDeselectClicked(this);
 }
 
 void DocumentView::emitHudTrashClicked()
 {
-    emit hudTrashClicked(this);
+    Q_EMIT hudTrashClicked(this);
 }
 
 void DocumentView::emitFocused()
 {
-    emit focused(this);
+    Q_EMIT focused(this);
 }
 
 void DocumentView::setGeometry(const QRectF &rect)
@@ -1007,7 +1007,7 @@ void DocumentView::moveToAnimated(const QRect &rect)
     anim->setDuration(DocumentView::AnimDuration);
     connect(anim, &QAbstractAnimation::finished, this, &DocumentView::isAnimatedChanged);
     d->mMoveAnimation = anim;
-    emit isAnimatedChanged();
+    Q_EMIT isAnimatedChanged();
     anim->start(QAbstractAnimation::DeleteWhenStopped);
 }
 
@@ -1024,7 +1024,7 @@ void DocumentView::fadeOut()
 
 void DocumentView::slotFadeInFinished()
 {
-    emit fadeInFinished(this);
+    Q_EMIT fadeInFinished(this);
 }
 
 bool DocumentView::isAnimated() const
@@ -1111,9 +1111,9 @@ void DocumentView::dropEvent(QGraphicsSceneDragDropEvent *event)
     // Since we're capturing drops in View mode, we only support one url
     const QUrl url = event->mimeData()->urls().first();
     if (UrlUtils::urlIsDirectory(url)) {
-        emit openDirUrlRequested(url);
+        Q_EMIT openDirUrlRequested(url);
     } else {
-        emit openUrlRequested(url);
+        Q_EMIT openUrlRequested(url);
     }
 }
 

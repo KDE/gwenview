@@ -854,24 +854,24 @@ void PreviewItemDelegate::setThumbnailSize(const QSize &value)
 
 void PreviewItemDelegate::slotSaveClicked()
 {
-    emit saveDocumentRequested(urlForIndexThumbnailView(d->mIndexUnderCursor));
+    Q_EMIT saveDocumentRequested(urlForIndexThumbnailView(d->mIndexUnderCursor));
 }
 
 void PreviewItemDelegate::slotRotateLeftClicked()
 {
     d->selectIndexUnderCursorIfNoMultiSelection();
-    emit rotateDocumentLeftRequested(urlForIndexThumbnailView(d->mIndexUnderCursor));
+    Q_EMIT rotateDocumentLeftRequested(urlForIndexThumbnailView(d->mIndexUnderCursor));
 }
 
 void PreviewItemDelegate::slotRotateRightClicked()
 {
     d->selectIndexUnderCursorIfNoMultiSelection();
-    emit rotateDocumentRightRequested(urlForIndexThumbnailView(d->mIndexUnderCursor));
+    Q_EMIT rotateDocumentRightRequested(urlForIndexThumbnailView(d->mIndexUnderCursor));
 }
 
 void PreviewItemDelegate::slotFullScreenClicked()
 {
-    emit showDocumentInFullScreenRequested(urlForIndexThumbnailView(d->mIndexUnderCursor));
+    Q_EMIT showDocumentInFullScreenRequested(urlForIndexThumbnailView(d->mIndexUnderCursor));
 }
 
 void PreviewItemDelegate::slotToggleSelectionClicked()

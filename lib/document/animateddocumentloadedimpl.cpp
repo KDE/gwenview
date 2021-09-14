@@ -59,13 +59,13 @@ AnimatedDocumentLoadedImpl::~AnimatedDocumentLoadedImpl()
 
 void AnimatedDocumentLoadedImpl::init()
 {
-    emit isAnimatedUpdated();
+    Q_EMIT isAnimatedUpdated();
     if (!document()->image().isNull()) {
         // We may reach this point without an image if the first frame got
         // downsampled by LoadingDocumentImpl (unlikely for now because the gif
         // io handler does not support the QImageIOHandler::ScaledSize option)
-        emit imageRectUpdated(document()->image().rect());
-        emit loaded();
+        Q_EMIT imageRectUpdated(document()->image().rect());
+        Q_EMIT loaded();
     }
 }
 
@@ -83,7 +83,7 @@ void AnimatedDocumentLoadedImpl::slotFrameChanged(int /*frameNumber*/)
 {
     QImage image = d->mMovie.currentImage();
     setDocumentImage(image);
-    emit imageRectUpdated(image.rect());
+    Q_EMIT imageRectUpdated(image.rect());
 }
 
 bool AnimatedDocumentLoadedImpl::isAnimated() const

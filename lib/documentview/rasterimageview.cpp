@@ -225,7 +225,7 @@ void RasterImageView::setCurrentTool(AbstractRasterImageViewTool *tool)
         d->mTool.data()->toolActivated();
         d->mToolItem = new ToolPainter{d->mTool, this};
     }
-    emit currentToolChanged(tool);
+    Q_EMIT currentToolChanged(tool);
     update();
 }
 

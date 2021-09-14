@@ -164,7 +164,7 @@ void RedEyeReductionTool::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
         return;
     }
     event->accept();
-    emit d->mToolWidget->mainDialogButtonBox->accepted();
+    Q_EMIT d->mToolWidget->mainDialogButtonBox->accepted();
 }
 
 void RedEyeReductionTool::keyPressEvent(QKeyEvent *event)
@@ -179,16 +179,16 @@ void RedEyeReductionTool::keyPressEvent(QKeyEvent *event)
     switch (event->key()) {
     case Qt::Key_Escape:
         event->accept();
-        emit buttons->rejected();
+        Q_EMIT buttons->rejected();
         break;
     case Qt::Key_Return:
     case Qt::Key_Enter: {
         event->accept();
         auto focusButton = static_cast<QPushButton *>(buttons->focusWidget());
         if (focusButton && buttons->buttonRole(focusButton) == QDialogButtonBox::RejectRole) {
-            emit buttons->rejected();
+            Q_EMIT buttons->rejected();
         } else {
-            emit buttons->accepted();
+            Q_EMIT buttons->accepted();
         }
         break;
     }
@@ -210,7 +210,7 @@ void RedEyeReductionTool::slotApplyClicked()
         return;
     }
     auto *op = new RedEyeReductionImageOperation(docRectF);
-    emit imageOperationRequested(op);
+    Q_EMIT imageOperationRequested(op);
 
     d->mStatus = NotSet;
     d->mToolWidget->showNotSetPage();

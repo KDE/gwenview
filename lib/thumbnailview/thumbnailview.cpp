@@ -371,7 +371,7 @@ void ThumbnailView::setModel(QAbstractItemModel *newModel)
     connect(model(), &QAbstractItemModel::rowsRemoved, this, [=](const QModelIndex &index, int first, int last) {
         // Avoid the delegate doing a ton of work if we're not visible
         if (isVisible()) {
-            emit rowsRemovedSignal(index, first, last);
+            Q_EMIT rowsRemovedSignal(index, first, last);
         }
     });
 }
@@ -419,8 +419,8 @@ void ThumbnailView::updateThumbnailSize()
         it.value().mAdjustedPix = QPixmap();
     }
 
-    emit thumbnailSizeChanged(value / dpr);
-    emit thumbnailWidthChanged(qRound(value.width() / dpr));
+    Q_EMIT thumbnailSizeChanged(value / dpr);
+    Q_EMIT thumbnailWidthChanged(qRound(value.width() / dpr));
     if (d->mScaleMode != ScaleToFit) {
         scheduleDelayedItemsLayout();
     }
@@ -527,7 +527,7 @@ void ThumbnailView::rowsInserted(const QModelIndex &parent, int start, int end)
     }
 
     if (isVisible()) {
-        emit rowsInsertedSignal(parent, start, end);
+        Q_EMIT rowsInsertedSignal(parent, start, end);
     }
 }
 
@@ -575,7 +575,7 @@ void ThumbnailView::showContextMenu()
 void ThumbnailView::emitIndexActivatedIfNoModifiers(const QModelIndex &index)
 {
     if (QApplication::keyboardModifiers() == Qt::NoModifier) {
-        emit indexActivated(index);
+        Q_EMIT indexActivated(index);
     }
 }
 
@@ -750,7 +750,7 @@ void ThumbnailView::tapGesture(const QPoint &pos)
 {
     const QRect rect = QRect(pos, QSize(1, 1));
     setSelection(rect, QItemSelectionModel::ClearAndSelect);
-    emit activated(indexAt(pos));
+    Q_EMIT activated(indexAt(pos));
 }
 
 void ThumbnailView::startDragFromTouch(const QPoint &pos)
@@ -805,7 +805,7 @@ void ThumbnailView::keyPressEvent(QKeyEvent *event)
     if (event->key() == Qt::Key_Return) {
         const QModelIndex index = selectionModel()->currentIndex();
         if (index.isValid() && selectionModel()->selectedIndexes().count() == 1) {
-            emit indexActivated(index);
+            Q_EMIT indexActivated(index);
         }
     } else if (event->key() == Qt::Key_Left && event->modifiers() == Qt::NoModifier) {
         if (flow() == LeftToRight && QApplication::isRightToLeft()) {
@@ -878,7 +878,7 @@ void ThumbnailView::scrollToSelectedIndex()
 void ThumbnailView::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
 {
     QListView::selectionChanged(selected, deselected);
-    emit selectionChangedSignal(selected, deselected);
+    Q_EMIT selectionChangedSignal(selected, deselected);
 }
 
 void ThumbnailView::scrollContentsBy(int dx, int dy)

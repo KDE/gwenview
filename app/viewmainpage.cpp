@@ -793,23 +793,23 @@ bool ViewMainPage::eventFilter(QObject *watched, QEvent *event)
         switch (ke->key()) {
         case Qt::Key_Left:
             if (QApplication::isRightToLeft()) {
-                emit nextImageRequested();
+                Q_EMIT nextImageRequested();
             } else {
-                emit previousImageRequested();
+                Q_EMIT previousImageRequested();
             }
             return true;
         case Qt::Key_Up:
-            emit previousImageRequested();
+            Q_EMIT previousImageRequested();
             return true;
         case Qt::Key_Right:
             if (QApplication::isRightToLeft()) {
-                emit previousImageRequested();
+                Q_EMIT previousImageRequested();
             } else {
-                emit nextImageRequested();
+                Q_EMIT nextImageRequested();
             }
             return true;
         case Qt::Key_Down:
-            emit nextImageRequested();
+            Q_EMIT nextImageRequested();
             return true;
         default:
             break;

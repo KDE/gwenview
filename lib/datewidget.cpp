@@ -66,7 +66,7 @@ struct DateWidgetPrivate {
     {
         mDate = mDate.addDays(delta);
         updateButton();
-        emit q->dateChanged(mDate);
+        Q_EMIT q->dateChanged(mDate);
     }
 };
 
@@ -125,7 +125,7 @@ void DateWidget::slotDatePickerModified(const QDate &date)
 {
     d->mDatePicker->hide();
     d->mDate = date;
-    emit dateChanged(date);
+    Q_EMIT dateChanged(date);
 
     d->updateButton();
 }

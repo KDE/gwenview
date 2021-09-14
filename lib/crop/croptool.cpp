@@ -240,7 +240,7 @@ void CropTool::setRect(const QRect &rect)
     d->mRect = rect;
     d->keepRectInsideImage();
     if (d->mRect != oldRect) {
-        emit rectUpdated(d->mRect);
+        Q_EMIT rectUpdated(d->mRect);
     }
     imageView()->update();
 }
@@ -379,7 +379,7 @@ void CropTool::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     d->keepRectInsideImage();
 
     imageView()->update();
-    emit rectUpdated(d->mRect);
+    Q_EMIT rectUpdated(d->mRect);
 }
 
 void CropTool::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
@@ -399,7 +399,7 @@ void CropTool::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
         return;
     }
     event->accept();
-    emit d->mCropWidget->findChild<QDialogButtonBox *>()->accepted();
+    Q_EMIT d->mCropWidget->findChild<QDialogButtonBox *>()->accepted();
 }
 
 void CropTool::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
@@ -421,16 +421,16 @@ void CropTool::keyPressEvent(QKeyEvent *event)
     switch (event->key()) {
     case Qt::Key_Escape:
         event->accept();
-        emit buttons->rejected();
+        Q_EMIT buttons->rejected();
         break;
     case Qt::Key_Return:
     case Qt::Key_Enter: {
         event->accept();
         auto focusButton = static_cast<QPushButton *>(buttons->focusWidget());
         if (focusButton && buttons->buttonRole(focusButton) == QDialogButtonBox::RejectRole) {
-            emit buttons->rejected();
+            Q_EMIT buttons->rejected();
         } else {
-            emit buttons->accepted();
+            Q_EMIT buttons->accepted();
         }
         break;
     }
@@ -467,8 +467,8 @@ void CropTool::toolDeactivated()
 void CropTool::slotCropRequested()
 {
     auto *op = new CropImageOperation(d->mRect);
-    emit imageOperationRequested(op);
-    emit done();
+    Q_EMIT imageOperationRequested(op);
+    Q_EMIT done();
 }
 
 QWidget *CropTool::widget() const

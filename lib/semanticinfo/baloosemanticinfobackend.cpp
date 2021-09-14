@@ -87,7 +87,7 @@ void BalooSemanticInfoBackend::retrieveSemanticInfo(const QUrl &url)
     si.mDescription = md.userComment();
     si.mTags = TagSet::fromList(md.tags());
 
-    emit semanticInfoRetrieved(url, si);
+    Q_EMIT semanticInfoRetrieved(url, si);
 }
 
 QString BalooSemanticInfoBackend::labelForTag(const SemanticInfoTag &uriString) const

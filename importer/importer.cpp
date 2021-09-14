@@ -77,7 +77,7 @@ struct ImporterPrivate {
         KIO::Job *job = KIO::mkpath(url, QUrl(), KIO::HideProgressInfo);
         KJobWidgets::setWindow(job, mAuthWindow);
         if (!job->exec()) {
-            emit q->error(i18n("Could not create destination folder."));
+            Q_EMIT q->error(i18n("Could not create destination folder."));
             return false;
         }
 
@@ -92,13 +92,13 @@ struct ImporterPrivate {
         }
 
         if (!mTempImportDir->isValid()) {
-            emit q->error(i18n("Could not create temporary upload folder."));
+            Q_EMIT q->error(i18n("Could not create temporary upload folder."));
             return false;
         }
 
         mTempImportDirUrl = QUrl::fromLocalFile(mTempImportDir->path() + '/');
         if (!mTempImportDirUrl.isValid()) {
-            emit q->error(i18n("Could not create temporary upload folder."));
+            Q_EMIT q->error(i18n("Could not create temporary upload folder."));
             return false;
         }
 
@@ -208,7 +208,7 @@ void Importer::start(const QList<QUrl> &list, const QUrl &destination)
     d->mJobProgress = 0;
 
     emitProgressChanged();
-    emit maximumChanged(d->mUrlList.count() * 100);
+    Q_EMIT maximumChanged(d->mUrlList.count() * 100);
 
     if (!d->createImportDir(destination)) {
         qCWarning(GWENVIEW_IMPORTER_LOG) << "Could not create import dir";
@@ -235,7 +235,7 @@ void Importer::slotCopyDone(KJob *_job)
 void Importer::finalizeImport()
 {
     delete d->mTempImportDir;
-    emit importFinished();
+    Q_EMIT importFinished();
 }
 
 void Importer::advance()
@@ -253,7 +253,7 @@ void Importer::slotPercent(KJob *, unsigned long percent)
 
 void Importer::emitProgressChanged()
 {
-    emit progressChanged(d->mProgress * 100 + d->mJobProgress);
+    Q_EMIT progressChanged(d->mProgress * 100 + d->mJobProgress);
 }
 
 QList<QUrl> Importer::importedUrlList() const

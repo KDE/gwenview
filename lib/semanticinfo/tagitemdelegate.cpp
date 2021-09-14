@@ -128,7 +128,7 @@ void TagItemDelegate::slotRemoveButtonClicked()
         qCWarning(GWENVIEW_LIB_LOG) << "!index.isValid()";
         return;
     }
-    emit removeTagRequested(index.data(TagModel::TagRole).toString());
+    Q_EMIT removeTagRequested(index.data(TagModel::TagRole).toString());
 }
 
 void TagItemDelegate::slotAssignToAllButtonClicked()
@@ -138,7 +138,7 @@ void TagItemDelegate::slotAssignToAllButtonClicked()
         qCWarning(GWENVIEW_LIB_LOG) << "!index.isValid()";
         return;
     }
-    emit assignTagToAllRequested(index.data(TagModel::TagRole).toString());
+    Q_EMIT assignTagToAllRequested(index.data(TagModel::TagRole).toString());
 }
 
 } // namespace

@@ -103,7 +103,7 @@ void DocumentDirFinder::slotCompleted()
 void DocumentDirFinder::finish(const QUrl &url, DocumentDirFinder::Status status)
 {
     disconnect(d->mDirLister, nullptr, this, nullptr);
-    emit done(url, status);
+    Q_EMIT done(url, status);
     deleteLater();
 }
 

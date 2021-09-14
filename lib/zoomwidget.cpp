@@ -66,7 +66,7 @@ struct ZoomWidgetPrivate {
         // been updated yet.
         qreal zoom = zoomForSliderValue(mZoomSlider->slider()->sliderPosition());
         mZoomUpdatedBySlider = true;
-        emit q->zoomChanged(zoom);
+        Q_EMIT q->zoomChanged(zoom);
         mZoomUpdatedBySlider = false;
     }
 };

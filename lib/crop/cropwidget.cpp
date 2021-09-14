@@ -450,7 +450,7 @@ void CropWidget::reset()
     d->widthSpinBox->setValue(size.width());
     d->topSpinBox->setValue(0);
     d->heightSpinBox->setValue(size.height());
-    emit rectReset();
+    Q_EMIT rectReset();
 }
 
 void CropWidget::setCropRatioIndex(int index)

@@ -85,7 +85,7 @@ void LockScreenWatcher::onScreenSaverServiceOwnerChanged(const QString &serviceN
         if (mLocked) {
             // reset
             mLocked = false;
-            emit isLockedChanged(mLocked);
+            Q_EMIT isLockedChanged(mLocked);
         }
     }
 }
@@ -144,7 +144,7 @@ void LockScreenWatcher::onScreenSaverActiveChanged(bool isActive)
 
     mLocked = isActive;
 
-    emit isLockedChanged(mLocked);
+    Q_EMIT isLockedChanged(mLocked);
 }
 
 }

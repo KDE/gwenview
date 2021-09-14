@@ -231,7 +231,7 @@ void TagWidget::assignTag(const SemanticInfoTag &tag)
     d->mAssignedTagModel->addTag(tag);
     d->updateCompleterModel();
 
-    emit tagAssigned(tag);
+    Q_EMIT tagAssigned(tag);
 }
 
 void TagWidget::removeTag(const SemanticInfoTag &tag)
@@ -240,7 +240,7 @@ void TagWidget::removeTag(const SemanticInfoTag &tag)
     d->mAssignedTagModel->removeTag(tag);
     d->updateCompleterModel();
 
-    emit tagRemoved(tag);
+    Q_EMIT tagRemoved(tag);
 }
 
 } // namespace

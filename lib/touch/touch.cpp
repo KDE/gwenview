@@ -125,7 +125,7 @@ bool Touch::eventFilter(QObject *, QEvent *event)
         // but only if no TapHoldandMovingGesture is active (Drag and Drop action)
         if (touchEvent->touchPoints().size() == 1 && !getTapHoldandMovingGestureActive()) {
             const QPointF delta = touchEvent->touchPoints().first().lastPos() - touchEvent->touchPoints().first().pos();
-            emit PanTriggered(delta);
+            Q_EMIT PanTriggered(delta);
         }
         return true;
     }
@@ -148,8 +148,8 @@ bool Touch::gestureEvent(QGestureEvent *event)
 
     if (checkPinchGesture(event)) {
         ret = true;
-        emit pinchZoomTriggered(getZoomFromPinchGesture(event), positionGesture(event), d->mLastTouchTimeStamp);
-        emit pinchRotateTriggered(getRotationFromPinchGesture(event));
+        Q_EMIT pinchZoomTriggered(getZoomFromPinchGesture(event), positionGesture(event), d->mLastTouchTimeStamp);
+        Q_EMIT pinchRotateTriggered(getRotationFromPinchGesture(event));
     }
 
     if (checkTapGesture(event)) {
@@ -157,12 +157,12 @@ bool Touch::gestureEvent(QGestureEvent *event)
         if (event->widget()) {
             touchToMouseClick(positionGesture(event), event->widget());
         }
-        emit tapTriggered(positionGesture(event));
+        Q_EMIT tapTriggered(positionGesture(event));
     }
 
     if (checkTapHoldAndMovingGesture(event, d->mTarget)) {
         ret = true;
-        emit tapHoldAndMovingTriggered(positionGesture(event));
+        Q_EMIT tapHoldAndMovingTriggered(positionGesture(event));
     }
 
     if (checkDoubleTapGesture(event)) {
@@ -265,7 +265,7 @@ bool Touch::checkTwoFingerPanGesture(QGestureEvent *event)
         setPanGestureState(event);
         if (gesture->state() == Qt::GestureUpdated) {
             const QPoint diff = gesture->property("delta").toPoint();
-            emit PanTriggered(diff);
+            Q_EMIT PanTriggered(diff);
             return true;
         }
     }
@@ -278,10 +278,10 @@ bool Touch::checkOneAndTwoFingerSwipeGesture(QGestureEvent *event)
         event->accept();
         if (gesture->state() == Qt::GestureFinished) {
             if (gesture->property("right").toBool()) {
-                emit swipeRightTriggered();
+                Q_EMIT swipeRightTriggered();
                 return true;
             } else if (gesture->property("left").toBool()) {
-                emit swipeLeftTriggered();
+                Q_EMIT swipeLeftTriggered();
                 return true;
             }
         }
@@ -305,7 +305,7 @@ bool Touch::checkDoubleTapGesture(QGestureEvent *event)
     if (QGesture *gesture = event->gesture(getDoubleTapGesture())) {
         event->accept();
         if (gesture->state() == Qt::GestureFinished) {
-            emit doubleTapTriggered();
+            Q_EMIT doubleTapTriggered();
             return true;
         }
     }
@@ -317,7 +317,7 @@ bool Touch::checkTwoFingerTapGesture(QGestureEvent *event)
     if (QGesture *twoFingerTap = event->gesture(getTwoFingerTapGesture())) {
         event->accept();
         if (twoFingerTap->state() == Qt::GestureFinished) {
-            emit twoFingerTapTriggered();
+            Q_EMIT twoFingerTapTriggered();
             return true;
         }
     }
@@ -362,7 +362,7 @@ bool Touch::checkPinchGesture(QGestureEvent *event)
             event->accept();
             if (pinch->state() == Qt::GestureStarted) {
                 lastScaleFactor = 0;
-                emit pinchGestureStarted(d->mLastTouchTimeStamp);
+                Q_EMIT pinchGestureStarted(d->mLastTouchTimeStamp);
             } else if (pinch->state() == Qt::GestureUpdated) {
                 // Because of a bug in Qt in a gesture event in a graphicsview, all gestures are trigger twice
                 // https://bugreports.qt.io/browse/QTBUG-13103

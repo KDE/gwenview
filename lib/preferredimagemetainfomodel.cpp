@@ -121,8 +121,8 @@ bool PreferredImageMetaInfoModel::setData(const QModelIndex &index, const QVaria
     } else {
         d->mPreferredMetaInfoKeyList.removeAll(key);
     }
-    emit preferredMetaInfoKeyListChanged(d->mPreferredMetaInfoKeyList);
-    emit dataChanged(index, index);
+    Q_EMIT preferredMetaInfoKeyListChanged(d->mPreferredMetaInfoKeyList);
+    Q_EMIT dataChanged(index, index);
     return true;
 }
 

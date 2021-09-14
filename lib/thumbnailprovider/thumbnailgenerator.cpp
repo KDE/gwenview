@@ -298,7 +298,7 @@ void ThumbnailGenerator::run()
             QSize size(mOriginalWidth, mOriginalHeight);
             LOG("emitting done signal, size=" << size);
             QMutexLocker lock(&mMutex);
-            emit done(mImage, size);
+            Q_EMIT done(mImage, size);
             LOG("Done");
         }
     }
@@ -320,7 +320,7 @@ void ThumbnailGenerator::cacheThumbnail()
     mImage.setText(QStringLiteral("Thumb::Image::Height"), QString::number(mOriginalHeight));
     mImage.setText(QStringLiteral("Software"), QStringLiteral("Gwenview"));
 
-    emit thumbnailReadyToBeCached(mThumbnailPath, mImage);
+    Q_EMIT thumbnailReadyToBeCached(mThumbnailPath, mImage);
 }
 
 } // namespace

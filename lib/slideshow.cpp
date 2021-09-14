@@ -227,14 +227,14 @@ void SlideShow::start(const QList<QUrl> &urls)
     d->updateTimerInterval();
     d->mTimer->setSingleShot(false);
     d->doStart();
-    emit stateChanged(true);
+    Q_EMIT stateChanged(true);
 }
 
 void SlideShow::setInterval(int intervalInSeconds)
 {
     GwenviewConfig::setInterval(double(intervalInSeconds));
     d->updateTimerInterval();
-    emit intervalChanged(intervalInSeconds);
+    Q_EMIT intervalChanged(intervalInSeconds);
 }
 
 int SlideShow::interval() const
@@ -265,7 +265,7 @@ void SlideShow::pause()
     LOG("Stopping timer");
     d->mTimer->stop();
     d->mState = Paused;
-    emit stateChanged(false);
+    Q_EMIT stateChanged(false);
 }
 
 void SlideShow::resumeAndGoToNextUrl()
@@ -285,7 +285,7 @@ void SlideShow::goToNextUrl()
         pause();
         return;
     }
-    emit goToUrl(url);
+    Q_EMIT goToUrl(url);
 }
 
 void SlideShow::setCurrentUrl(const QUrl &url)

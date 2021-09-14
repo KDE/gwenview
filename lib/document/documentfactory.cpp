@@ -179,13 +179,13 @@ Document::Ptr DocumentFactory::load(const QUrl &url)
     // network device is started. So start the dirlister after url is
     // loaded or failed to load.
     connect(doc, &Document::loaded, [this, url]() {
-        emit readyForDirListerStart(url);
+        Q_EMIT readyForDirListerStart(url);
     });
     connect(doc, &Document::loadingFailed, [this, url]() {
-        emit readyForDirListerStart(url);
+        Q_EMIT readyForDirListerStart(url);
     });
     connect(doc, &Document::downSampledImageReady, [this, url]() {
-        emit readyForDirListerStart(url);
+        Q_EMIT readyForDirListerStart(url);
     });
 
     doc->reload();
@@ -225,8 +225,8 @@ void DocumentFactory::slotLoaded(const QUrl &url)
 {
     if (d->mModifiedDocumentList.contains(url)) {
         d->mModifiedDocumentList.removeAll(url);
-        emit modifiedDocumentListChanged();
-        emit documentChanged(url);
+        Q_EMIT modifiedDocumentListChanged();
+        Q_EMIT documentChanged(url);
     }
 }
 
@@ -242,13 +242,13 @@ void DocumentFactory::slotSaved(const QUrl &oldUrl, const QUrl &newUrl)
     }
     d->garbageCollect(d->mDocumentMap);
     if (oldUrlWasModified || newUrlWasModified) {
-        emit modifiedDocumentListChanged();
+        Q_EMIT modifiedDocumentListChanged();
     }
     if (oldUrlWasModified) {
-        emit documentChanged(oldUrl);
+        Q_EMIT documentChanged(oldUrl);
     }
     if (!oldIsNew) {
-        emit documentChanged(newUrl);
+        Q_EMIT documentChanged(newUrl);
     }
 }
 
@@ -256,14 +256,14 @@ void DocumentFactory::slotModified(const QUrl &url)
 {
     if (!d->mModifiedDocumentList.contains(url)) {
         d->mModifiedDocumentList << url;
-        emit modifiedDocumentListChanged();
+        Q_EMIT modifiedDocumentListChanged();
     }
-    emit documentChanged(url);
+    Q_EMIT documentChanged(url);
 }
 
 void DocumentFactory::slotBusyChanged(const QUrl &url, bool busy)
 {
-    emit documentBusyStateChanged(url, busy);
+    Q_EMIT documentBusyStateChanged(url, busy);
 }
 
 QUndoGroup *DocumentFactory::undoGroup()
@@ -281,7 +281,7 @@ void DocumentFactory::forget(const QUrl &url)
 
     if (d->mModifiedDocumentList.contains(url)) {
         d->mModifiedDocumentList.removeAll(url);
-        emit modifiedDocumentListChanged();
+        Q_EMIT modifiedDocumentListChanged();
     }
 }
 

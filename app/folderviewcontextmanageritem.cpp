@@ -104,7 +104,7 @@ protected:
         const QPoint pos = Touch_Helper::simpleTapPosition(event);
         if (pos != QPoint(-1, -1)) {
             expand(indexAt(pos));
-            emit activated(indexAt(pos));
+            Q_EMIT activated(indexAt(pos));
         }
 
         return QTreeView::viewportEvent(event);
@@ -187,7 +187,7 @@ void FolderViewContextManagerItem::slotActivated(const QModelIndex &index)
     }
 
     QUrl url = mModel->urlForIndex(index);
-    emit urlChanged(url);
+    Q_EMIT urlChanged(url);
 }
 
 void FolderViewContextManagerItem::setupModel()

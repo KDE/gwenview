@@ -99,7 +99,7 @@ struct AbstractImageViewPrivate {
             }
             // No verbosity test: we always notify the outside world about
             // scrollPos changes
-            emit q->scrollPosChanged();
+            Q_EMIT q->scrollPosChanged();
         }
     }
 
@@ -123,9 +123,9 @@ struct AbstractImageViewPrivate {
     {
         if (event->modifiers() & Qt::ControlModifier) {
             if (event->button() == Qt::LeftButton) {
-                emit q->zoomInRequested(event->pos());
+                Q_EMIT q->zoomInRequested(event->pos());
             } else if (event->button() == Qt::RightButton) {
-                emit q->zoomOutRequested(event->pos());
+                Q_EMIT q->zoomOutRequested(event->pos());
             }
         }
     }
@@ -251,7 +251,7 @@ void AbstractImageView::setZoom(qreal zoom, const QPointF &_center, AbstractImag
     d->adjustImageOffset(AbstractImageViewPrivate::Silent);
     d->setScrollPos(scroll, AbstractImageViewPrivate::Silent);
     onZoomChanged();
-    emit zoomChanged(d->mZoom);
+    Q_EMIT zoomChanged(d->mZoom);
 }
 
 bool AbstractImageView::zoomToFit() const
@@ -277,7 +277,7 @@ void AbstractImageView::setZoomToFit(bool on)
     // We do not set zoom to 1 if zoomToFit is off, this is up to the code
     // calling us. It may went to zoom to some other level and/or to zoom on
     // a particular position
-    emit zoomToFitChanged(d->mZoomToFit);
+    Q_EMIT zoomToFitChanged(d->mZoomToFit);
 }
 
 void AbstractImageView::setZoomToFill(bool on, const QPointF &center)
@@ -293,7 +293,7 @@ void AbstractImageView::setZoomToFill(bool on, const QPointF &center)
     // We do not set zoom to 1 if zoomToFit is off, this is up to the code
     // calling us. It may went to zoom to some other level and/or to zoom on
     // a particular position
-    emit zoomToFillChanged(d->mZoomToFill);
+    Q_EMIT zoomToFillChanged(d->mZoomToFill);
 }
 
 void AbstractImageView::resizeEvent(QGraphicsSceneResizeEvent *event)
@@ -440,23 +440,23 @@ void AbstractImageView::keyPressEvent(QKeyEvent *event)
         switch (event->key()) {
         case Qt::Key_Left:
             if (QApplication::isRightToLeft()) {
-                emit nextImageRequested();
+                Q_EMIT nextImageRequested();
             } else {
-                emit previousImageRequested();
+                Q_EMIT previousImageRequested();
             }
             break;
         case Qt::Key_Up:
-            emit previousImageRequested();
+            Q_EMIT previousImageRequested();
             break;
         case Qt::Key_Right:
             if (QApplication::isRightToLeft()) {
-                emit previousImageRequested();
+                Q_EMIT previousImageRequested();
             } else {
-                emit nextImageRequested();
+                Q_EMIT nextImageRequested();
             }
             break;
         case Qt::Key_Down:
-            emit nextImageRequested();
+            Q_EMIT nextImageRequested();
             break;
         default:
             break;
@@ -515,7 +515,7 @@ void AbstractImageView::keyReleaseEvent(QKeyEvent *event)
 void AbstractImageView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->modifiers() == Qt::NoModifier && event->button() == Qt::LeftButton) {
-        emit toggleFullScreenRequested();
+        Q_EMIT toggleFullScreenRequested();
     }
 
     d->checkAndRequestZoomAction(event);

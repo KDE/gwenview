@@ -224,7 +224,7 @@ struct ImageMetaInfoModelPrivate {
         group->setValueForKeyAt(entryRow, value);
         QModelIndex groupIndex = q->index(groupRow, 0);
         QModelIndex entryIndex = q->index(entryRow, 1, groupIndex);
-        emit q->dataChanged(entryIndex, entryIndex);
+        Q_EMIT q->dataChanged(entryIndex, entryIndex);
     }
 
     QVariant displayData(const QModelIndex &index) const

@@ -112,11 +112,11 @@ bool MessageViewAdapter::eventFilter(QObject *, QEvent *ev)
         switch (event->key()) {
         case Qt::Key_Left:
         case Qt::Key_Up:
-            emit previousImageRequested();
+            Q_EMIT previousImageRequested();
             break;
         case Qt::Key_Right:
         case Qt::Key_Down:
-            emit nextImageRequested();
+            Q_EMIT nextImageRequested();
             break;
         default:
             break;

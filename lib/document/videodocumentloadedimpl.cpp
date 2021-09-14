@@ -46,7 +46,7 @@ VideoDocumentLoadedImpl::~VideoDocumentLoadedImpl()
 
 void VideoDocumentLoadedImpl::init()
 {
-    emit loaded();
+    Q_EMIT loaded();
 }
 
 Document::LoadingState VideoDocumentLoadedImpl::loadingState() const

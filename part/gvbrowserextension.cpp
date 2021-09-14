@@ -42,9 +42,9 @@ GVBrowserExtension::GVBrowserExtension(KParts::ReadOnlyPart *part)
     , d(new GVBrowserExtensionPrivate)
 {
     d->mPart = part;
-    emit enableAction("print", true);
+    Q_EMIT enableAction("print", true);
     const QString iconPath = KIconLoader::global()->iconPath(QStringLiteral("image-x-generic"), KIconLoader::SizeSmall);
-    emit setIconUrl(QUrl::fromLocalFile(iconPath));
+    Q_EMIT setIconUrl(QUrl::fromLocalFile(iconPath));
 }
 
 GVBrowserExtension::~GVBrowserExtension()

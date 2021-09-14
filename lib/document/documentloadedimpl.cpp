@@ -62,8 +62,8 @@ DocumentLoadedImpl::~DocumentLoadedImpl()
 void DocumentLoadedImpl::init()
 {
     if (!d->mQuietInit) {
-        emit imageRectUpdated(document()->image().rect());
-        emit loaded();
+        Q_EMIT imageRectUpdated(document()->image().rect());
+        Q_EMIT loaded();
     }
 }
 
@@ -107,7 +107,7 @@ AbstractDocumentEditor *DocumentLoadedImpl::editor()
 void DocumentLoadedImpl::setImage(const QImage &image)
 {
     setDocumentImage(image);
-    emit imageRectUpdated(image.rect());
+    Q_EMIT imageRectUpdated(image.rect());
 }
 
 void DocumentLoadedImpl::applyTransformation(Orientation orientation)
@@ -116,7 +116,7 @@ void DocumentLoadedImpl::applyTransformation(Orientation orientation)
     QTransform matrix = ImageUtils::transformMatrix(orientation);
     image = image.transformed(matrix);
     setDocumentImage(image);
-    emit imageRectUpdated(image.rect());
+    Q_EMIT imageRectUpdated(image.rect());
 }
 
 QByteArray DocumentLoadedImpl::rawData() const

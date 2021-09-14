@@ -293,7 +293,7 @@ void ThumbnailProvider::determineNextIcon()
     if (mItems.isEmpty()) {
         LOG("No more items. Nothing to do");
         mCurrentItem = KFileItem();
-        emit finished();
+        Q_EMIT finished();
         return;
     }
 
@@ -533,7 +533,7 @@ void ThumbnailProvider::slotGotPreview(const KFileItem &item, const QPixmap &pix
     }
     LOG(mCurrentItem.url());
     QSize size;
-    emit thumbnailLoaded(item, pixmap, size, mOriginalFileSize);
+    Q_EMIT thumbnailLoaded(item, pixmap, size, mOriginalFileSize);
 }
 
 void ThumbnailProvider::emitThumbnailLoaded(const QImage &img, const QSize &size)
@@ -544,7 +544,7 @@ void ThumbnailProvider::emitThumbnailLoaded(const QImage &img, const QSize &size
     }
     LOG(mCurrentItem.url());
     QPixmap thumb = QPixmap::fromImage(img);
-    emit thumbnailLoaded(mCurrentItem, thumb, size, mOriginalFileSize);
+    Q_EMIT thumbnailLoaded(mCurrentItem, thumb, size, mOriginalFileSize);
 }
 
 void ThumbnailProvider::emitThumbnailLoadingFailed()
@@ -554,7 +554,7 @@ void ThumbnailProvider::emitThumbnailLoadingFailed()
         return;
     }
     LOG(mCurrentItem.url());
-    emit thumbnailLoadingFailed(mCurrentItem);
+    Q_EMIT thumbnailLoadingFailed(mCurrentItem);
 }
 
 bool ThumbnailProvider::isThumbnailWriterEmpty()

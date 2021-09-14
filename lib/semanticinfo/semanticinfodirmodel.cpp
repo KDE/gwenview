@@ -201,7 +201,7 @@ bool SemanticInfoDirModel::setData(const QModelIndex &index, const QVariant &dat
             // We should never reach this part
             Q_ASSERT(0);
         }
-        emit dataChanged(index, index);
+        Q_EMIT dataChanged(index, index);
 
         d->mBackEnd->storeSemanticInfo(url, semanticInfo);
         return true;
@@ -224,7 +224,7 @@ void SemanticInfoDirModel::slotSemanticInfoRetrieved(const QUrl &url, const Sema
     }
     cacheItem.mInfo = semanticInfo;
     cacheItem.mValid = true;
-    emit dataChanged(cacheItem.mIndex, cacheItem.mIndex);
+    Q_EMIT dataChanged(cacheItem.mIndex, cacheItem.mIndex);
 }
 
 void SemanticInfoDirModel::slotRowsAboutToBeRemoved(const QModelIndex &parent, int start, int end)

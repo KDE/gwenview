@@ -73,7 +73,7 @@ public:
             for (int i = 0; i < failedSubFolderCount; i++) {
                 dirs << failedSubFolders[i].toString(QUrl::PreferLocalFile);
             }
-            emit q->showErrors(files, dirs);
+            Q_EMIT q->showErrors(files, dirs);
         }
     }
 

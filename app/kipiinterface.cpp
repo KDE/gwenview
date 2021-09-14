@@ -482,12 +482,12 @@ KIPI::UploadWidget *KIPIInterface::uploadWidget(QWidget *parent)
 
 void KIPIInterface::slotSelectionChanged()
 {
-    emit selectionChanged(!d->mMainWindow->contextManager()->selectedFileItemList().isEmpty());
+    Q_EMIT selectionChanged(!d->mMainWindow->contextManager()->selectedFileItemList().isEmpty());
 }
 
 void KIPIInterface::slotDirectoryChanged()
 {
-    emit currentAlbumChanged(true);
+    Q_EMIT currentAlbumChanged(true);
 }
 
 #ifdef GWENVIEW_KIPI_WITH_CREATE_METHODS

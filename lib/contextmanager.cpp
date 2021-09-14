@@ -168,7 +168,7 @@ void ContextManager::setCurrentUrl(const QUrl &currentUrl)
     }
 
     d->mSelectedFileItemListNeedsUpdate = true;
-    emit currentUrlChanged(currentUrl);
+    Q_EMIT currentUrlChanged(currentUrl);
 }
 
 KFileItemList ContextManager::selectedFileItemList() const
@@ -190,9 +190,9 @@ void ContextManager::setCurrentDirUrl(const QUrl &_url)
         d->mDirListerFinished = false;
     } else {
         d->mCurrentDirUrl.clear();
-        emit d->mDirModel->dirLister()->clear();
+        Q_EMIT d->mDirModel->dirLister()->clear();
     }
-    emit currentDirUrlChanged(d->mCurrentDirUrl);
+    Q_EMIT currentDirUrlChanged(d->mCurrentDirUrl);
 }
 
 QUrl ContextManager::currentDirUrl() const
@@ -270,7 +270,7 @@ void Gwenview::ContextManager::slotCurrentChanged(const QModelIndex &index)
 void ContextManager::emitQueuedSignals()
 {
     for (ContextManagerPrivate::Signal signal : qAsConst(d->mQueuedSignals)) {
-        emit(this->*signal)();
+        Q_EMIT(this->*signal)();
     }
     d->mQueuedSignals.clear();
 }

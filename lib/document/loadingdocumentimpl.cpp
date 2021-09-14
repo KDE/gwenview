@@ -139,7 +139,7 @@ struct LoadingDocumentImplPrivate {
 
         default:
             q->setDocumentErrorString(i18nc("@info", "Gwenview cannot display documents of type %1.", mMimeType.name()));
-            emit q->loadingFailed();
+            Q_EMIT q->loadingFailed();
             q->switchToImpl(new EmptyDocumentImpl(q->document()));
             return true;
         }
@@ -391,7 +391,7 @@ void LoadingDocumentImpl::init()
         QFile file(url.toLocalFile());
         if (!file.open(QIODevice::ReadOnly)) {
             setDocumentErrorString(i18nc("@info", "Could not open file %1", url.toLocalFile()));
-            emit loadingFailed();
+            Q_EMIT loadingFailed();
             switchToImpl(new EmptyDocumentImpl(document()));
             return;
         }
@@ -445,7 +445,7 @@ void LoadingDocumentImpl::slotTransferFinished(KJob *job)
 {
     if (job->error()) {
         setDocumentErrorString(job->errorString());
-        emit loadingFailed();
+        Q_EMIT loadingFailed();
         switchToImpl(new EmptyDocumentImpl(document()));
         return;
     } else if (document()->kind() == MimeTypeUtils::KIND_UNKNOWN) {
@@ -482,7 +482,7 @@ void LoadingDocumentImpl::slotMetaInfoLoaded()
     Q_ASSERT(!d->mMetaInfoFuture.isRunning());
     if (!d->mMetaInfoFuture.result()) {
         setDocumentErrorString(i18nc("@info", "Loading meta information failed."));
-        emit loadingFailed();
+        Q_EMIT loadingFailed();
         switchToImpl(new EmptyDocumentImpl(document()));
         return;
     }
@@ -493,7 +493,7 @@ void LoadingDocumentImpl::slotMetaInfoLoaded()
     setDocumentCmsProfile(d->mCmsProfile);
 
     d->mMetaInfoLoaded = true;
-    emit metaInfoLoaded();
+    Q_EMIT metaInfoLoaded();
 
     // Start image loading if necessary
     // We test if mImageDataFuture is not already running because code connected to
@@ -508,7 +508,7 @@ void LoadingDocumentImpl::slotImageLoaded()
     LOG("");
     if (d->mImage.isNull()) {
         setDocumentErrorString(i18nc("@info", "Loading image failed."));
-        emit loadingFailed();
+        Q_EMIT loadingFailed();
         switchToImpl(new EmptyDocumentImpl(document()));
         return;
     }

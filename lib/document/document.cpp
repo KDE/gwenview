@@ -130,7 +130,7 @@ void DocumentPrivate::downSampleImage(int invertedZoom)
     if (mDownSampledImageMap[invertedZoom].size().isEmpty()) {
         mDownSampledImageMap[invertedZoom] = mImage;
     }
-    emit q->downSampledImageReady();
+    Q_EMIT q->downSampledImageReady();
 }
 
 //- DownSamplingJob ---------------------------------------
@@ -315,7 +315,7 @@ void Document::slotSaveResult(KJob *job)
         auto *saveJob = static_cast<SaveJob *>(job);
         d->mUrl = saveJob->newUrl();
         d->mImageMetaInfoModel.setUrl(d->mUrl);
-        emit saved(saveJob->oldUrl(), d->mUrl);
+        Q_EMIT saved(saveJob->oldUrl(), d->mUrl);
     }
 }
 
@@ -327,7 +327,7 @@ QByteArray Document::format() const
 void Document::setFormat(const QByteArray &format)
 {
     d->mFormat = format;
-    emit metaInfoUpdated();
+    Q_EMIT metaInfoUpdated();
 }
 
 MimeTypeUtils::Kind Document::kind() const
@@ -338,7 +338,7 @@ MimeTypeUtils::Kind Document::kind() const
 void Document::setKind(MimeTypeUtils::Kind kind)
 {
     d->mKind = kind;
-    emit kindDetermined(d->mUrl);
+    Q_EMIT kindDetermined(d->mUrl);
 }
 
 QSize Document::size() const
@@ -370,7 +370,7 @@ void Document::setSize(const QSize &size)
     }
     d->mSize = size;
     d->mImageMetaInfoModel.setImageSize(size);
-    emit metaInfoUpdated();
+    Q_EMIT metaInfoUpdated();
 }
 
 bool Document::isModified() const
@@ -387,14 +387,14 @@ void Document::setExiv2Image(std::unique_ptr<Exiv2::Image> image)
 {
     d->mExiv2Image = std::move(image);
     d->mImageMetaInfoModel.setExiv2Image(d->mExiv2Image.get());
-    emit metaInfoUpdated();
+    Q_EMIT metaInfoUpdated();
 }
 
 void Document::setDownSampledImage(const QImage &image, int invertedZoom)
 {
     Q_ASSERT(!d->mDownSampledImageMap.contains(invertedZoom));
     d->mDownSampledImageMap[invertedZoom] = image;
-    emit downSampledImageReady();
+    Q_EMIT downSampledImageReady();
 }
 
 QString Document::errorString() const
@@ -459,17 +459,17 @@ bool Document::prepareDownSampledImageForZoom(qreal zoom)
 
 void Document::emitMetaInfoLoaded()
 {
-    emit metaInfoLoaded(d->mUrl);
+    Q_EMIT metaInfoLoaded(d->mUrl);
 }
 
 void Document::emitLoaded()
 {
-    emit loaded(d->mUrl);
+    Q_EMIT loaded(d->mUrl);
 }
 
 void Document::emitLoadingFailed()
 {
-    emit loadingFailed(d->mUrl);
+    Q_EMIT loadingFailed(d->mUrl);
 }
 
 QUndoStack *Document::undoStack() const
@@ -483,9 +483,9 @@ void Document::imageOperationCompleted()
         // If user just undid all his changes this does not really correspond
         // to a save, but it's similar enough as far as Document users are
         // concerned
-        emit saved(d->mUrl, d->mUrl);
+        Q_EMIT saved(d->mUrl, d->mUrl);
     } else {
-        emit modified(d->mUrl);
+        Q_EMIT modified(d->mUrl);
     }
 }
 
@@ -520,7 +520,7 @@ void Document::enqueueJob(DocumentJob *job)
         d->mCurrentJob = job;
         LOG("Starting first job");
         job->start();
-        emit busyChanged(d->mUrl, true);
+        Q_EMIT busyChanged(d->mUrl, true);
     }
     LOG_QUEUE("Job added", d);
 }
@@ -533,8 +533,8 @@ void Document::slotJobFinished(KJob *job)
     if (d->mJobQueue.isEmpty()) {
         LOG("All done");
         d->mCurrentJob.clear();
-        emit busyChanged(d->mUrl, false);
-        emit allTasksDone();
+        Q_EMIT busyChanged(d->mUrl, false);
+        Q_EMIT allTasksDone();
     } else {
         LOG("Starting next job");
         d->mCurrentJob = d->mJobQueue.dequeue();
