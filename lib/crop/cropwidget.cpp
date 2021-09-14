@@ -374,7 +374,7 @@ CropWidget::CropWidget(QWidget *parent, RasterImageView *imageView, CropTool *cr
     setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
 
     connect(d->advancedCheckBox, &QCheckBox::toggled, this, &CropWidget::slotAdvancedCheckBoxToggled);
-    for (auto w : d->mAdvancedWidgets) {
+    for (auto w : qAsConst(d->mAdvancedWidgets)) {
         w->setVisible(false);
     }
 
