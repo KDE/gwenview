@@ -346,9 +346,7 @@ void ZoomComboBox::changeZoomTo(int index)
     QVariant itemData = this->itemData(index);
     QAction *action = itemData.value<QAction *>();
     if (action) {
-        if (action->isCheckable()) {
-            action->setChecked(true);
-        } else {
+        if (!action->isCheckable() || !action->isChecked()) {
             action->trigger();
         }
     } else if (itemData.canConvert(QMetaType::QReal)) {
