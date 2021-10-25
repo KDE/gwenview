@@ -10,6 +10,7 @@
 #include <QLineEdit>
 #include <QMouseEvent>
 #include <QSignalBlocker>
+#include <QWheelEvent>
 
 #include <cmath>
 
@@ -153,7 +154,7 @@ void ZoomComboBoxPrivate::setActions(QAction *zoomToFitAction, QAction *zoomToFi
     q->clear();
     q->addItem(zoomToFitAction->iconText(), QVariant::fromValue(zoomToFitAction)); // index = 0
     q->addItem(zoomToFillAction->iconText(), QVariant::fromValue(zoomToFillAction)); // index = 1
-    q->addItem(actualSizeAction->iconText(), QVariant::fromValue(actualSizeAction)); // index = 2
+    q->addItem(actualSizeAction->iconText(), QVariant::fromValue(actualSizeAction)); // index will change later
 
     mZoomToFitAction = zoomToFitAction;
     mZoomToFillAction = zoomToFillAction;
@@ -195,7 +196,7 @@ void ZoomComboBox::setMinimum(qreal minimum)
     for (int i = actualSizeActionIndex - 1; i > zoomToFillActionIndex; --i) {
         removeItem(i);
     }
-    qreal value = minimum;
+    qreal value = minimum * 2; // The minimum zoom value itself is already available through "fit".
     for (int i = zoomToFillActionIndex + 1; value < 1.0; ++i) {
         insertItem(i, textFromValue(value), QVariant::fromValue(value));
         value *= 2;
@@ -268,31 +269,10 @@ void ZoomComboBox::updateDisplayedText()
 
 void Gwenview::ZoomComboBox::showPopup()
 {
-    Q_D(ZoomComboBox);
-
-    if (d->mZoomToFitAction->isChecked()) {
-        setCurrentIndex(0);
-        d->lastSelectedIndex = 0;
-    } else if (d->mZoomToFillAction->isChecked()) {
-        setCurrentIndex(1);
-        d->lastSelectedIndex = 1;
-    } else if (d->mActualSizeAction->isChecked()) {
-        const int actualSizeActionIndex = findData(QVariant::fromValue(d->mActualSizeAction));
-        setCurrentIndex(actualSizeActionIndex);
-        d->lastSelectedIndex = actualSizeActionIndex;
-    } else {
-        // Now is a good time to save the zoom value that was selected before the user changes it through the popup.
-        d->lastCustomZoomValue = d->value;
-
-        // Highlight the correct index if the current zoom value exists as an option in the popup.
-        // If it doesn't exist, it is set to -1.
-        d->lastSelectedIndex = findText(textFromValue(d->value));
-        setCurrentIndex(d->lastSelectedIndex);
-    }
+    updateCurrentIndex();
 
     // We don't want to emit a QComboBox::highlighted event just because the popup is opened.
     const QSignalBlocker blocker(this);
-
     QComboBox::showPopup();
 }
 
@@ -333,6 +313,68 @@ void ZoomComboBox::focusOutEvent(QFocusEvent *)
     // zoom value.
     if (d->lastSelectedIndex == -1)
         setValue(d->lastCustomZoomValue);
+}
+
+void ZoomComboBox::wheelEvent(QWheelEvent *event)
+{
+    updateCurrentIndex();
+    if (currentIndex() != -1) {
+        // Everything should work as expected.
+        return QComboBox::wheelEvent(event);
+    }
+
+    // There is no exact match for the current zoom value in the
+    // ComboBox. We need to find the closest matches, so scrolling
+    // works as expected.
+    Q_D(ZoomComboBox);
+    int closestZoomValueSmallerThanCurrent = 1; // = "fill" action
+    int closestZoomValueBiggerThanCurrent = count() - 1;
+
+    for (int i = 2; itemData(i) != QVariant::Invalid; i++) {
+        bool isValidConversion;
+        const qreal zoomValue = valueFromText(itemText(i), &isValidConversion);
+        if (!isValidConversion) {
+            continue;
+        }
+
+        if (zoomValue < d->value) {
+            closestZoomValueSmallerThanCurrent = i;
+        } else {
+            closestZoomValueBiggerThanCurrent = i;
+            break;
+        }
+    }
+    if (event->angleDelta().y() > 0) {
+        setCurrentIndex(closestZoomValueBiggerThanCurrent);
+    } else {
+        setCurrentIndex(closestZoomValueSmallerThanCurrent);
+    }
+    return QComboBox::wheelEvent(event);
+}
+
+void ZoomComboBox::updateCurrentIndex()
+{
+    Q_D(ZoomComboBox);
+
+    if (d->mZoomToFitAction->isChecked()) {
+        setCurrentIndex(0);
+        d->lastSelectedIndex = 0;
+    } else if (d->mZoomToFillAction->isChecked()) {
+        setCurrentIndex(1);
+        d->lastSelectedIndex = 1;
+    } else if (d->mActualSizeAction->isChecked()) {
+        const int actualSizeActionIndex = findData(QVariant::fromValue(d->mActualSizeAction));
+        setCurrentIndex(actualSizeActionIndex);
+        d->lastSelectedIndex = actualSizeActionIndex;
+    } else {
+        // Now is a good time to save the zoom value that was selected before the user changes it through the popup.
+        d->lastCustomZoomValue = d->value;
+
+        // Highlight the correct index if the current zoom value exists as an option in the popup.
+        // If it doesn't exist, it is set to -1.
+        d->lastSelectedIndex = findText(textFromValue(d->value));
+        setCurrentIndex(d->lastSelectedIndex);
+    }
 }
 
 void ZoomComboBox::changeZoomTo(int index)

@@ -7,6 +7,8 @@
 #include <QComboBox>
 #include <lib/gwenviewlib_export.h>
 
+class QWheelEvent;
+
 namespace Gwenview
 {
 class ZoomComboBoxPrivate;
@@ -63,6 +65,25 @@ Q_SIGNALS:
 protected:
     bool eventFilter(QObject *watched, QEvent *event) override;
     void focusOutEvent(QFocusEvent *event) override;
+
+    /**
+     * Makes sure using the mouse wheel on the combobox works as
+     * expected even though we sometimes programmatically change
+     * the currentIndex() of this ComboBox.
+     * @see updateCurrentIndex()
+     */
+    void wheelEvent(QWheelEvent *event) override;
+
+private:
+    /**
+     * The current index is the row in the popup of the ComboBox that is
+     * highlighted.
+     * This method updates the current index so it matches the current zoom
+     * state of the application.
+     * If the zoom value that is currently used doesn't exist as a row in
+     * the ComboBox, the currentIndex is set to -1 which hides the highlight.
+     */
+    void updateCurrentIndex();
 
 private Q_SLOTS:
     /**
