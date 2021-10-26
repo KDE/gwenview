@@ -67,7 +67,7 @@ class GWENVIEWLIB_EXPORT TwoFingerPanRecognizer : public QGestureRecognizer
 {
 public:
     explicit TwoFingerPanRecognizer();
-    ~TwoFingerPanRecognizer();
+    ~TwoFingerPanRecognizer() override;
 
 private:
     TwoFingerPanRecognizerPrivate *d;

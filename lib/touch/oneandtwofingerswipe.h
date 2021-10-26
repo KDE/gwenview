@@ -51,7 +51,7 @@ class GWENVIEWLIB_EXPORT OneAndTwoFingerSwipeRecognizer : public QGestureRecogni
 {
 public:
     explicit OneAndTwoFingerSwipeRecognizer();
-    ~OneAndTwoFingerSwipeRecognizer();
+    ~OneAndTwoFingerSwipeRecognizer() override;
 
 private:
     OneAndTwoFingerSwipeRecognizerPrivate *d;

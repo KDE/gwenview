@@ -47,7 +47,7 @@ class GWENVIEWLIB_EXPORT DoubleTapRecognizer : public QGestureRecognizer
 {
 public:
     explicit DoubleTapRecognizer();
-    ~DoubleTapRecognizer();
+    ~DoubleTapRecognizer() override;
 
 private:
     DoubleTapRecognizerPrivate *d;

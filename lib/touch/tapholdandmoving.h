@@ -57,7 +57,7 @@ class GWENVIEWLIB_EXPORT TapHoldAndMovingRecognizer : public QGestureRecognizer
 {
 public:
     explicit TapHoldAndMovingRecognizer();
-    ~TapHoldAndMovingRecognizer();
+    ~TapHoldAndMovingRecognizer() override;
 
 private:
     TapHoldAndMovingRecognizerPrivate *d;

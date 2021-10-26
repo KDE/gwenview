@@ -116,7 +116,7 @@ public:
         policy.setHeightForWidth(true);
         setSizePolicy(policy);
     }
-    ~KeyValueWidget()
+    ~KeyValueWidget() override
     {
         qDeleteAll(mRows);
         mRows.clear();
