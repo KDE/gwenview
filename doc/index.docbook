@@ -230,7 +230,7 @@ KIPI plugins.</para></listitem>
 <link linkend="sidebar">sidebar</link> available in Browse Mode is displayed on
 the left. At the bottom, there is the Thumbnail Bar, which allows you to scroll
 through the images in the current folder. The Thumbnail Bar can be unfolded by
-clicking on the <guibutton>Thumbnail Bar</guibutton> button. Clicking again will
+clicking on the <guibutton>Show Thumbnails</guibutton> button. Clicking again will
 fold it. To change the size of the thumbnails move the splitter with the &LMB;.</para>
 
 <para>View Mode supports viewing multiple images side-by-side.  You may select
