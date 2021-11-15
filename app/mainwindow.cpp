@@ -392,6 +392,7 @@ struct MainWindow::Private {
         }
         file->addAction("file_open_recent", mFileOpenRecentAction);
         file->addAction(KStandardAction::Print, q, SLOT(print()));
+        file->addAction(KStandardAction::PrintPreview, q, SLOT(printPreview()));
         file->addAction(KStandardAction::Quit, qApp, SLOT(closeAllWindows()));
 
         QAction *action = file->addAction("reload", q, SLOT(reload()));
@@ -568,6 +569,7 @@ struct MainWindow::Private {
         menu->addAction(actionCollection->action(KStandardAction::name(KStandardAction::Save)));
         menu->addAction(actionCollection->action(KStandardAction::name(KStandardAction::SaveAs)));
         menu->addAction(actionCollection->action(KStandardAction::name(KStandardAction::Print)));
+        menu->addAction(actionCollection->action(KStandardAction::name(KStandardAction::PrintPreview)));
         menu->addSeparator();
         menu->addAction(actionCollection->action(KStandardAction::name(KStandardAction::Copy)));
         menu->addAction(actionCollection->action(QStringLiteral("file_trash")));
@@ -793,6 +795,7 @@ struct MainWindow::Private {
         actionCollection->action("file_save")->setEnabled(canSave && isModified);
         actionCollection->action("file_save_as")->setEnabled(canSave);
         actionCollection->action("file_print")->setEnabled(isRasterImage);
+        actionCollection->action("file_print_preview")->setEnabled(isRasterImage);
 
 #ifdef KF5Purpose_FOUND
         if (url.isEmpty()) {
@@ -917,6 +920,22 @@ struct MainWindow::Private {
             assignThumbnailProviderToThumbnailView(mThumbnailView);
         } else if (mCurrentMainPageId == StartMainPageId) {
             assignThumbnailProviderToThumbnailView(mStartMainPage->recentFoldersView());
+        }
+    }
+
+    enum class ShowPreview { Yes, No };
+    void print(ShowPreview showPreview)
+    {
+        if (!mContextManager->currentUrlIsRasterImage()) {
+            return;
+        }
+
+        Document::Ptr doc = DocumentFactory::instance()->load(mContextManager->currentUrl());
+        PrintHelper printHelper(q);
+        if (showPreview == ShowPreview::Yes) {
+            printHelper.printPreview(doc);
+        } else {
+            printHelper.print(doc);
         }
     }
 };
@@ -1766,13 +1785,12 @@ void MainWindow::saveConfig()
 
 void MainWindow::print()
 {
-    if (!d->mContextManager->currentUrlIsRasterImage()) {
-        return;
-    }
+    d->print(Private::ShowPreview::No);
+}
 
-    Document::Ptr doc = DocumentFactory::instance()->load(d->mContextManager->currentUrl());
-    PrintHelper printHelper(this);
-    printHelper.print(doc);
+void MainWindow::printPreview()
+{
+    d->print(Private::ShowPreview::Yes);
 }
 
 void MainWindow::preloadNextUrl()

@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QCheckBox>
 #include <QPainter>
 #include <QPrintDialog>
+#include <QPrintPreviewDialog>
 #include <QPrinter>
 #include <QUrl>
 
@@ -98,6 +99,52 @@ struct PrintHelperPrivate {
 
         return QPoint(posX, posY);
     }
+
+    void setupPrinter(QPrinter *printer, Document::Ptr doc)
+    {
+        doc->waitUntilLoaded();
+        printer->setDocName(doc->url().fileName());
+        const auto docSize = doc->size();
+        printer->setPageOrientation(docSize.width() > docSize.height() ? QPageLayout::Landscape
+                                                                       : QPageLayout::Portrait);
+    }
+
+    void print(QPrinter *printer, Document::Ptr doc, bool showPrinterSetupDialog)
+    {
+        auto *optionsPage = new PrintOptionsPage(doc->size());
+        optionsPage->loadConfig();
+
+        QScopedPointer<QPrintDialog> dialog;
+        if (showPrinterSetupDialog) {
+            dialog.reset(new QPrintDialog(printer, mParent));
+#if defined(Q_OS_UNIX) && !defined(Q_OS_DARWIN)
+            dialog->setOptionTabs(QList<QWidget *>() << optionsPage);
+#else
+            optionsPage->setParent(dialog.data());
+#endif
+
+            dialog->setWindowTitle(i18n("Print Image"));
+            bool wantToPrint = dialog->exec();
+
+            optionsPage->saveConfig();
+            if (!wantToPrint) {
+                return;
+            }
+        }
+
+        QPainter painter(printer);
+        QRect rect = painter.viewport();
+        QSize size = adjustSize(optionsPage, doc, printer->resolution(), rect.size());
+        QPoint pos = adjustPosition(optionsPage, size, rect.size());
+        painter.setViewport(pos.x(), pos.y(), size.width(), size.height());
+        if (!dialog) {
+            delete optionsPage;
+        }
+
+        QImage image = doc->image();
+        painter.setWindow(image.rect());
+        painter.drawImage(0, 0, image);
+    }
 };
 
 PrintHelper::PrintHelper(QWidget *parent)
@@ -113,40 +160,20 @@ PrintHelper::~PrintHelper()
 
 void PrintHelper::print(Document::Ptr doc)
 {
-    doc->waitUntilLoaded();
     QPrinter printer;
-    printer.setDocName(doc->url().fileName());
+    d->setupPrinter(&printer, doc);
+    d->print(&printer, doc, true);
+}
 
-    const auto docSize = doc->size();
-    printer.setPageOrientation(docSize.width() > docSize.height() ? QPageLayout::Landscape
-                                                                  : QPageLayout::Portrait);
-    auto *optionsPage = new PrintOptionsPage(docSize);
-    optionsPage->loadConfig();
-
-    DialogGuard<QPrintDialog> dialog(&printer, d->mParent);
-#if defined(Q_OS_UNIX) && !defined(Q_OS_DARWIN)
-    dialog->setOptionTabs(QList<QWidget *>() << optionsPage);
-#else
-    optionsPage->setParent(dialog.data());
-#endif
-
-    dialog->setWindowTitle(i18n("Print Image"));
-    bool wantToPrint = dialog->exec();
-
-    optionsPage->saveConfig();
-    if (!wantToPrint) {
-        return;
-    }
-
-    QPainter painter(&printer);
-    QRect rect = painter.viewport();
-    QSize size = d->adjustSize(optionsPage, doc, printer.resolution(), rect.size());
-    QPoint pos = d->adjustPosition(optionsPage, size, rect.size());
-    painter.setViewport(pos.x(), pos.y(), size.width(), size.height());
-
-    QImage image = doc->image();
-    painter.setWindow(image.rect());
-    painter.drawImage(0, 0, image);
+void PrintHelper::printPreview(Document::Ptr doc)
+{
+    QPrinter printer;
+    d->setupPrinter(&printer, doc);
+    QPrintPreviewDialog dlg(&printer, d->mParent);
+    QObject::connect(&dlg, &QPrintPreviewDialog::paintRequested, [this, doc](QPrinter *printer) {
+        d->print(printer, doc, false);
+    });
+    dlg.exec();
 }
 
 } // namespace

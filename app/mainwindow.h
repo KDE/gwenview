@@ -124,6 +124,7 @@ private Q_SLOTS:
     void showConfigDialog();
     void loadConfig();
     void print();
+    void printPreview();
 
     void preloadNextUrl();
 

@@ -41,7 +41,8 @@ public:
     explicit PrintHelper(QWidget *parent);
     ~PrintHelper();
 
-    void print(Document::Ptr);
+    void print(Document::Ptr doc);
+    void printPreview(Document::Ptr doc);
 
 private:
     PrintHelperPrivate *const d;
