@@ -159,6 +159,7 @@ set(IMAGE_MIME_TYPES_LIST
     image/avif
     image/gif
     image/jpeg
+    image/jxl
     image/png
     image/bmp
     image/x-eps
