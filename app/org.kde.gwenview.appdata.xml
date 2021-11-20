@@ -20,6 +20,7 @@
   <name xml:lang="fi">Gwenview</name>
   <name xml:lang="fr">Gwenview</name>
   <name xml:lang="gl">Gwenview</name>
+  <name xml:lang="hsb">Gwenview</name>
   <name xml:lang="hu">Gwenview</name>
   <name xml:lang="ia">Gwenview</name>
   <name xml:lang="id">Gwenview</name>
@@ -65,6 +66,7 @@
   <summary xml:lang="fi">Kuvankatselin</summary>
   <summary xml:lang="fr">Afficheur d'image</summary>
   <summary xml:lang="gl">Visor de imaxes</summary>
+  <summary xml:lang="hsb">Wobhladowar za wobrazy</summary>
   <summary xml:lang="hu">Képmegjelenítő</summary>
   <summary xml:lang="ia">Visor de image</summary>
   <summary xml:lang="id">Penampil Citra</summary>
@@ -111,6 +113,7 @@
     <p xml:lang="fi">Gwenview on KDE:n nopea ja helppokäyttöinen kuvakatselin, joka on ihanteellinen kuvakokoelmien selaukseen ja esittämiseen.</p>
     <p xml:lang="fr">Gwenview est un afficheur d'images rapide et facile à utiliser pour KDE, idéal pour parcourir et afficher une collection d'images.</p>
     <p xml:lang="gl">Gwenview é un visor de imaxes por KDE rápido e doado de utilizar, ideal para examinar e mostrar unha colección de imaxes.</p>
+    <p xml:lang="hsb">Gwenview je spěšny a přihódny wobhladowar za wobrazy we KDE, idealny za přehladowanje a pokazowanje zběrki wobrazow.</p>
     <p xml:lang="hu">A Gwenview egy gyors és egyszerűen használható képmegjelenítő a KDE-hez, ideális képgyűjtemények böngészéséhez és megjelenítéséhez.</p>
     <p xml:lang="ia">Gwenview es un visor de imagine per KDE rapide e facile de usar, ideal per monstrar e navigar  in un colection de images.</p>
     <p xml:lang="id">Gwenview adalah cepat dan mudah untuk penggunaan penampil citra oleh KDE, sangat baik untuk menelusuri dan menampilkan citra dari sebuah koleksi.</p>
@@ -155,6 +158,7 @@
     <p xml:lang="fi">Ominaisuudet:</p>
     <p xml:lang="fr">Fonctionnalités :</p>
     <p xml:lang="gl">Funcionalidades:</p>
+    <p xml:lang="hsb">Wosebitosće:</p>
     <p xml:lang="hu">Szolgáltatások:</p>
     <p xml:lang="ia">Characteristicas:</p>
     <p xml:lang="id">Fitur:</p>
@@ -201,6 +205,7 @@
       <li xml:lang="fi">Tukee yksinkertaista kuvien manipulointia: kiertämistä, kääntämistä, peilaamista ja koon muuttamista</li>
       <li xml:lang="fr">Prise en charge des manipulations d'image simples : rotation, miroir, basculer, et redimensionner</li>
       <li xml:lang="gl">Permite manipulacións sinxelas de imaxes de maneira individual: rotar, reflectir, inverter e cambiar o tamaño.</li>
+      <li xml:lang="hsb">Podpěruje jednoru manipulaciju wobrazow: wjerćeć, špihelować, wobroćić a powjetšić/pomjeńšić</li>
       <li xml:lang="hu">Egyszerű képműveletek támogatása: forgatás, tükrözés, átméretezés</li>
       <li xml:lang="ia">Il supporta simple manipultiones de imagine: rotar, reflecter,  girar e redimensionar</li>
       <li xml:lang="id">Mendukung manipulasi citra sederhana: rotasi, cermin, jungkir, dan ubah ukuran</li>
@@ -246,6 +251,7 @@
       <li xml:lang="fi">Tukee tiedostonhallinnan perusasioita kuten kopiointia, siirtämistä, poistamista ynnä muuta</li>
       <li xml:lang="fr">Prise en charge d'actions basiques de gestion de fichiers comme copier, déplacer, supprimer, et autres</li>
       <li xml:lang="gl">Permite realizar accións básicas de xestión de ficheiros como copiar, mover, eliminar, etc.</li>
+      <li xml:lang="hsb">Podpěruje jednore rjadowanske akcije za dataje kaž kopěrowanje, přesunjenje, zničenje a druhe</li>
       <li xml:lang="hu">Egyszerű fájlművelet, mint például másolás, áthelyezés, törlés támogatása</li>
       <li xml:lang="ia">Il suppporta actiones de gestion de file basic tal como copiar,mover, deler, e alteres</li>
       <li xml:lang="id">Mendukung aksi pengelolaan file dasar seperti salin, pindah, hapus, dan lainnya</li>
@@ -291,6 +297,7 @@
       <li xml:lang="fi">Toimii sekä erillisenä ohjelmana että upotettuna katselimena Konqueror-verkkoselaimessa</li>
       <li xml:lang="fr">Fonctionne à la fois comme application autonome et comme afficheur embarqué dans le navigateur web Konqueror</li>
       <li xml:lang="gl">Pode usarse como unha aplicación autónoma e tamén como un visor incrustado no navegador web Konqueror.</li>
+      <li xml:lang="hsb">Funguje jako samostatna aplikacija a tež jako integrowana přehladowarka w konquerorje</li>
       <li xml:lang="hu">Önálló alkalmazásként és a Konqueror webböngészőbe épített képmegjelenítőként is működik</li>
       <li xml:lang="ia">Il functiona e como application per se mesme e un visor incorporate in le navigator web Konqueror</li>
       <li xml:lang="id">Fungsi sebagai aplikasi mandiri dan penampil tertanam dalam browser web Konqueror</li>
@@ -335,6 +342,7 @@
       <li xml:lang="fi">Sitä voi laajentaa KIPI-liitännäisillä.</li>
       <li xml:lang="fr">Peut être étendu en utilisant des modules KIPI.</li>
       <li xml:lang="gl">Poden ampliarse as súas funcionalidades mediante complementos KIPI.</li>
+      <li xml:lang="hsb">Hodźi so z KIPI-zašćěpkami rozšěrić.</li>
       <li xml:lang="hu">KIPI bővítményekkel bővíthető.</li>
       <li xml:lang="ia">Pote esser extendite usnte le plugins de KIPI.</li>
       <li xml:lang="id">Dapat diekstensi menggunakan plugin KIPI.</li>
@@ -389,6 +397,7 @@
       <caption xml:lang="fi">Gwenview</caption>
       <caption xml:lang="fr">Gwenview</caption>
       <caption xml:lang="gl">Gwenview</caption>
+      <caption xml:lang="hsb">Gwenview</caption>
       <caption xml:lang="hu">Gwenview</caption>
       <caption xml:lang="ia">Gwenview</caption>
       <caption xml:lang="id">Gwenview</caption>
@@ -437,6 +446,7 @@
       <caption xml:lang="fi">Gwenview näyttämässä kuvaa, sivupaneelissa näkyvät metatiedot</caption>
       <caption xml:lang="fr">Gwenview en train d'afficher une image, avec des métadonnées supplémentaires dans le panneau latéral.</caption>
       <caption xml:lang="gl">Gwenview mostrando unha imaxe, con metadatos adicionais mostrador na barra lateral.</caption>
+      <caption xml:lang="hsb">Gwenview pokazuje wobraz, dalše metadaty so w nabóčnym pasu pokazuja</caption>
       <caption xml:lang="hu">A Gwenview egy kép megjelenítése közben, az oldalsávokan további metaadatokat mutatva</caption>
       <caption xml:lang="ia">Gwenview monstrante un image, con metadatos additional monstrate in le barra lateral</caption>
       <caption xml:lang="id">Gwenview mendisplai sebuah citra, dengan metadata tambahan yang ditampilkan di dalam bilah sisi</caption>
