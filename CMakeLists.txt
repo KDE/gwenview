@@ -132,13 +132,18 @@ endif()
 set_package_properties(KF5KDcraw PROPERTIES URL "https://invent.kde.org/graphics/libkdcraw/" DESCRIPTION "C++ interface around LibRaw library used to decode RAW picture files" TYPE OPTIONAL)
 
 
-find_package(X11)
-if(X11_FOUND)
-    if (QT_MAJOR_VERSION STREQUAL "5")
-        find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED X11Extras)
+if(UNIX AND NOT APPLE)
+    option(WITH_X11 "Build with X11 integration" ON)
+    if(WITH_X11)
+        find_package(X11 REQUIRED)
+        if (QT_MAJOR_VERSION STREQUAL "5")
+            find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED X11Extras)
+        endif()
+        # we need to add qt6 lib when we found x11
+        set(HAVE_X11 TRUE)
     endif()
-    # we need to add qt6 lib when we found x11
-    set(HAVE_X11 1)
+else()
+    set(WITH_X11 OFF)
 endif()
 
 find_package(kImageAnnotator)
