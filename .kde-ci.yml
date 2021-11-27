@@ -25,6 +25,6 @@ Dependencies:
     'frameworks/kiconthemes': '@stable'
     'frameworks/kparts': '@stable'
     'frameworks/knotifications': '@stable'
-    'graphics/libkipi': '@stable'
-    'graphics/libkdcraw': '@stable'
+    'graphics/libkipi': '@same'
+    'graphics/libkdcraw': '@same'
     'libraries/phonon': '@stable'
