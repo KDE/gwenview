@@ -25,7 +25,6 @@ Name[he]=מציג התמונות Gwenview
 Name[hi]=ग्वेन-व्यू छवि प्रदर्शक
 Name[hne]=ग्वेन-व्यू फोटू प्रदर्सक
 Name[hr]=Preglednik slika Gwenview
-Name[hsb]=Gwenview wobhladowar za wobrazy
 Name[hu]=Gwenview képnézegető
 Name[ia]=Visor de imagine Gwenview
 Name[id]=Penampil Citra Gwenview
