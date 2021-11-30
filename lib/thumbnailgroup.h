@@ -34,7 +34,8 @@ namespace ThumbnailGroup
 enum Enum {
     Normal,
     Large,
-    Large2x,
+    XLarge,
+    XXLarge,
 };
 
 inline int pixelSize(const Enum value)
@@ -44,8 +45,10 @@ inline int pixelSize(const Enum value)
         return 128;
     case Large:
         return 256;
-    case Large2x:
+    case XLarge:
         return 512;
+    case XXLarge:
+        return 1024;
     default:
         return 128;
     }
@@ -57,8 +60,10 @@ inline Enum fromPixelSize(int value)
         return Normal;
     } else if (value <= 256) {
         return Large;
+    } else if (value <= 512) {
+        return XLarge;
     } else {
-        return Large2x;
+        return XXLarge;
     }
 }
 } // namespace ThumbnailGroup

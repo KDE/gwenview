@@ -60,6 +60,13 @@ namespace Gwenview
 
 Q_GLOBAL_STATIC(ThumbnailWriter, sThumbnailWriter)
 
+static const ThumbnailGroup::Enum s_thumbnailGroups[] = {
+    ThumbnailGroup::Normal,
+    ThumbnailGroup::Large,
+    ThumbnailGroup::XLarge,
+    ThumbnailGroup::XXLarge,
+};
+
 static QString generateOriginalUri(const QUrl &url_)
 {
     QUrl url = url_;
@@ -108,7 +115,12 @@ QString ThumbnailProvider::thumbnailBaseDir(ThumbnailGroup::Enum group)
     case ThumbnailGroup::Large:
         dir += QStringLiteral("large/");
         break;
-    case ThumbnailGroup::Large2x:
+    case ThumbnailGroup::XLarge:
+        dir += QStringLiteral("x-large/");
+        break;
+    case ThumbnailGroup::XXLarge:
+        dir += QStringLiteral("xx-large/");
+        break;
     default:
         dir += QLatin1String("x-gwenview/"); // Should never be hit, but just in case
     }
@@ -118,8 +130,9 @@ QString ThumbnailProvider::thumbnailBaseDir(ThumbnailGroup::Enum group)
 void ThumbnailProvider::deleteImageThumbnail(const QUrl &url)
 {
     QString uri = generateOriginalUri(url);
-    QFile::remove(generateThumbnailPath(uri, ThumbnailGroup::Normal));
-    QFile::remove(generateThumbnailPath(uri, ThumbnailGroup::Large));
+    for (auto group : s_thumbnailGroups) {
+        QFile::remove(generateThumbnailPath(uri, group));
+    }
 }
 
 static void moveThumbnailHelper(const QString &oldUri, const QString &newUri, ThumbnailGroup::Enum group)
@@ -139,8 +152,9 @@ void ThumbnailProvider::moveThumbnail(const QUrl &oldUrl, const QUrl &newUrl)
 {
     QString oldUri = generateOriginalUri(oldUrl);
     QString newUri = generateOriginalUri(newUrl);
-    moveThumbnailHelper(oldUri, newUri, ThumbnailGroup::Normal);
-    moveThumbnailHelper(oldUri, newUri, ThumbnailGroup::Large);
+    for (auto group : s_thumbnailGroups) {
+        moveThumbnailHelper(oldUri, newUri, group);
+    }
 }
 
 //------------------------------------------------------------------------
@@ -156,16 +170,15 @@ ThumbnailProvider::ThumbnailProvider()
     LOG(this);
 
     // Make sure we have a place to store our thumbnails
-    QString thumbnailDirNormal = ThumbnailProvider::thumbnailBaseDir(ThumbnailGroup::Normal);
-    QString thumbnailDirLarge = ThumbnailProvider::thumbnailBaseDir(ThumbnailGroup::Large);
-    QDir().mkpath(thumbnailDirNormal);
-    QDir().mkpath(thumbnailDirLarge);
-    QFile::setPermissions(thumbnailDirNormal, QFileDevice::WriteOwner | QFileDevice::ReadOwner | QFileDevice::ExeOwner);
-    QFile::setPermissions(thumbnailDirLarge, QFileDevice::WriteOwner | QFileDevice::ReadOwner | QFileDevice::ExeOwner);
+    for (auto group : s_thumbnailGroups) {
+        const QString thumbnailDir = ThumbnailProvider::thumbnailBaseDir(group);
+        QDir().mkpath(thumbnailDir);
+        QFile::setPermissions(thumbnailDir, QFileDevice::WriteOwner | QFileDevice::ReadOwner | QFileDevice::ExeOwner);
+    }
 
     // Look for images and store the items in our todo list
     mCurrentItem = KFileItem();
-    mThumbnailGroup = ThumbnailGroup::Large;
+    mThumbnailGroup = ThumbnailGroup::XXLarge;
     createNewThumbnailGenerator();
 }
 
@@ -383,7 +396,7 @@ void ThumbnailProvider::thumbnailReady(const QImage &_img, const QSize &_size)
 
 QImage ThumbnailProvider::loadThumbnailFromCache() const
 {
-    if (mThumbnailGroup > ThumbnailGroup::Large) {
+    if (mThumbnailGroup > ThumbnailGroup::XXLarge) {
         return QImage();
     }
 
@@ -393,21 +406,22 @@ QImage ThumbnailProvider::loadThumbnailFromCache() const
     }
 
     image = QImage(mThumbnailPath);
-    if (image.isNull() && mThumbnailGroup == ThumbnailGroup::Normal) {
-        // If there is a large-sized thumbnail, generate the normal-sized version from it
-        QString largeThumbnailPath = generateThumbnailPath(mOriginalUri, ThumbnailGroup::Large);
-        QImage largeImage(largeThumbnailPath);
-        if (largeImage.isNull()) {
-            return image;
+    int largeThumbnailGroup = mThumbnailGroup;
+    while (image.isNull() && ++largeThumbnailGroup <= ThumbnailGroup::XXLarge) {
+        // If there is a large-sized thumbnail, generate the small-sized version from it
+        const QString largeThumbnailPath = generateThumbnailPath(mOriginalUri, static_cast<ThumbnailGroup::Enum>(largeThumbnailGroup));
+        const QImage largeImage(largeThumbnailPath);
+        if (!largeImage.isNull()) {
+            const int size = ThumbnailGroup::pixelSize(mThumbnailGroup);
+            image = largeImage.scaled(size, size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            const QStringList textKeys = largeImage.textKeys();
+            for (const QString &key : textKeys) {
+                QString text = largeImage.text(key);
+                image.setText(key, text);
+            }
+            sThumbnailWriter->queueThumbnail(mThumbnailPath, image);
+            break;
         }
-        int size = ThumbnailGroup::pixelSize(ThumbnailGroup::Normal);
-        image = largeImage.scaled(size, size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-        const QStringList textKeys = largeImage.textKeys();
-        for (const QString &key : textKeys) {
-            QString text = largeImage.text(key);
-            image.setText(key, text);
-        }
-        sThumbnailWriter->queueThumbnail(mThumbnailPath, image);
     }
 
     return image;
