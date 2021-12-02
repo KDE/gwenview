@@ -45,16 +45,6 @@ if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
         )
 endif()
 
-if (KF5Kipi_FOUND)
-    set (gwenview_SRCS
-        ${gwenview_SRCS}
-        kipiexportaction.cpp
-        kipiimagecollectionselector.cpp
-        kipiinterface.cpp
-        kipiuploadwidget.cpp
-        )
-endif()
-
 ki18n_wrap_ui(gwenview_SRCS
     advancedconfigpage.ui
     fullscreenconfigwidget.ui
@@ -94,10 +84,6 @@ if (KF5Purpose_FOUND)
 endif()
 
 target_link_libraries(gwenview LINK_INTERFACE_LIBRARIES KF5::KIOCore Qt5::Core)
-
-if (KF5Kipi_FOUND)
-    target_link_libraries(gwenview KF5::Kipi)
-endif()
 
 if (HAVE_TIFF)
     target_link_libraries(gwenview TIFF::TIFF)

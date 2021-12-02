@@ -88,10 +88,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "imageopscontextmanageritem.h"
 #include "infocontextmanageritem.h"
 #include "viewmainpage.h"
-#ifdef KIPI_FOUND
-#include "kipiexportaction.h"
-#include "kipiinterface.h"
-#endif
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 #include "semanticinfocontextmanageritem.h"
 #endif
@@ -196,9 +192,6 @@ struct MainWindow::Private {
 #endif
     Preloader *mPreloader;
     bool mPreloadDirectionIsForward;
-#ifdef KIPI_FOUND
-    KIPIInterface *mKIPIInterface;
-#endif
 
     QActionGroup *mViewModeActionGroup;
     KRecentFilesAction *mFileOpenRecentAction;
@@ -219,9 +212,6 @@ struct MainWindow::Private {
 #ifdef KF5Purpose_FOUND
     Purpose::Menu *mShareMenu;
     KToolBarPopupAction *mShareAction;
-#endif
-#ifdef KIPI_FOUND
-    KIPIExportAction *mKIPIExportAction;
 #endif
     KHamburgerMenu *mHamburgerMenu;
 
@@ -513,10 +503,6 @@ struct MainWindow::Private {
 
         view->addAction(KStandardAction::ConfigureToolbars, q, SLOT(configureToolbars()));
 
-#ifdef KIPI_FOUND
-        mKIPIExportAction = new KIPIExportAction(q);
-#endif
-
 #ifdef KF5Purpose_FOUND
         mShareAction = new KToolBarPopupAction(QIcon::fromTheme("document-share"), i18nc("@action Share images", "Share"), q);
         mShareAction->setDelayed(false);
@@ -582,12 +568,6 @@ struct MainWindow::Private {
         menu->addSeparator();
 #ifdef KF5Purpose_FOUND
         menu->addMenu(mShareMenu);
-#endif
-#ifdef KIPI_FOUND
-        QMenu *pluginsMenu = static_cast<QMenu *>(q->guiFactory()->container("plugins", q));
-        if (pluginsMenu) {
-            menu->addMenu(pluginsMenu);
-        }
 #endif
         auto *configureMenu = new QMenu(i18nc("@title:menu submenu for actions that open configuration dialogs", "Configure"));
         configureMenu->addAction(actionCollection->action(QStringLiteral("options_configure_keybinding")));
@@ -980,16 +960,6 @@ MainWindow::MainWindow()
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_NONE
     if (ratingMenu) {
         ratingMenu->menuAction()->setVisible(false);
-    }
-#endif
-
-#ifdef KIPI_FOUND
-    d->mKIPIInterface = new KIPIInterface(this);
-    d->mKIPIExportAction->setKIPIInterface(d->mKIPIInterface);
-#else
-    auto *pluginsMenu = static_cast<QMenu *>(guiFactory()->container("plugins", this));
-    if (pluginsMenu) {
-        pluginsMenu->menuAction()->setVisible(false);
     }
 #endif
     setAutoSaveSettings();

@@ -110,12 +110,6 @@ if (TIFF_FOUND)
     set(HAVE_TIFF true)
 endif()
 
-find_package(KF5Kipi)
-if (KF5Kipi_FOUND)
-   set(KIPI_FOUND true)
-endif()
-set_package_properties(KF5Kipi PROPERTIES URL "https://phabricator.kde.org/source/kipi-plugins/" DESCRIPTION "Provides various image manipulation and export features" TYPE OPTIONAL)
-
 find_package(LCMS2)
 set_package_properties(LCMS2 PROPERTIES URL "http://www.littlecms.com" DESCRIPTION "Color management engine" TYPE REQUIRED)
 

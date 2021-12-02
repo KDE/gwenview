@@ -173,9 +173,6 @@ the changed images.
 
 <!--FIXME all actions also available context menus, where to add that info -->
 
-<tip><para>If you have installed the KIPI Plugins, a <guimenu>Plugins</guimenu>
-menu will be available that will allow you to perform many additional operations
-on your images.</para></tip>
 </sect1>
 
 <sect1 id='browse_mode'><title>Browse Mode</title>
@@ -217,9 +214,6 @@ the next image in the folder.</para></listitem>
 <listitem><para><guiicon>Show Editing Tools</guiicon>: Clicking this button toggles
 the <link linkend="sidebar">Operations sidebar tab</link>.</para></listitem>
 
-<listitem><para><guiicon>Share</guiicon>: Clicking this button opens an export menu to share your images through social
-media and image collection web services. This functionality depends on the list of installed
-KIPI plugins.</para></listitem>
 <listitem><para><guiicon>Full Screen</guiicon>: Switches to Full Screen Mode.</para></listitem>
 </itemizedlist>
 
