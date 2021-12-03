@@ -41,6 +41,7 @@ target_link_libraries(gwenview_importer
     gwenviewlib
     KF5::KIOCore
     KF5::ItemModels
+    KF5::WidgetsAddons
     Qt5::Core
     )
 
@@ -48,6 +49,7 @@ target_link_libraries(gwenview_importer
     LINK_INTERFACE_LIBRARIES
     KF5::KIOCore
     KF5::ItemModels
+    KF5::WidgetsAddons
     Qt5::Core
     )
 

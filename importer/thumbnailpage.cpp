@@ -22,8 +22,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "thumbnailpage.h"
 
 // Qt
+#include <QDesktopServices>
 #include <QDir>
+#include <QGraphicsOpacityEffect>
 #include <QIcon>
+#include <QProcess>
 #include <QPushButton>
 #include <QTreeView>
 
@@ -31,8 +34,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KAcceleratorManager>
 #include <KDirLister>
 #include <KDirModel>
+#include <KIO/DesktopExecParser>
 #include <KIconLoader>
 #include <KJobWidgets>
+#include <KMessageBox>
 #include <KModelIndexProxyMapper>
 #include <kio/global.h>
 
@@ -98,6 +103,14 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
     QAbstractItemModel *mFinalModel;
 
     ThumbnailProvider mThumbnailProvider;
+
+    // Placeholder view
+    QLabel *mPlaceHolderIconLabel = nullptr;
+    QLabel *mPlaceHolderLabel = nullptr;
+    QLabel *mRequireRestartLabel = nullptr;
+    QPushButton *mInstallProtocolSupportButton = nullptr;
+    QVBoxLayout *mPlaceHolderLayout = nullptr;
+    QWidget *mPlaceHolderWidget = nullptr; // To avoid clipping in gridLayout
 
     QPushButton *mImportSelectedButton;
     QPushButton *mImportAllButton;
@@ -178,6 +191,128 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
         QObject::connect(mThumbnailView->selectionModel(), &QItemSelectionModel::selectionChanged, q, &ThumbnailPage::updateImportButtons);
     }
 
+    void setupPlaceHolderView()
+    {
+        mPlaceHolderWidget = new QWidget(q);
+        // Use QSizePolicy::MinimumExpanding to avoid clipping
+        mPlaceHolderWidget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+
+        // Icon
+        mPlaceHolderIconLabel = new QLabel(mPlaceHolderWidget);
+        const QSize iconSize(KIconLoader::SizeHuge, KIconLoader::SizeHuge);
+        mPlaceHolderIconLabel->setMinimumSize(iconSize);
+        mPlaceHolderIconLabel->setPixmap(QIcon::fromTheme(QStringLiteral("edit-none")).pixmap(iconSize));
+        auto *iconEffect = new QGraphicsOpacityEffect(mPlaceHolderIconLabel);
+        iconEffect->setOpacity(0.5);
+        mPlaceHolderIconLabel->setGraphicsEffect(iconEffect);
+
+        // Label: see dolphin/src/views/dolphinview.cpp
+        const QSizePolicy labelSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred, QSizePolicy::Label);
+        mPlaceHolderLabel = new QLabel(mPlaceHolderWidget);
+        mPlaceHolderLabel->setSizePolicy(labelSizePolicy);
+        QFont placeholderLabelFont;
+        // To match the size of a level 2 Heading/KTitleWidget
+        placeholderLabelFont.setPointSize(qRound(placeholderLabelFont.pointSize() * 1.3));
+        mPlaceHolderLabel->setFont(placeholderLabelFont);
+        mPlaceHolderLabel->setTextInteractionFlags(Qt::NoTextInteraction);
+        mPlaceHolderLabel->setWordWrap(true);
+        mPlaceHolderLabel->setAlignment(Qt::AlignCenter);
+        // Match opacity of QML placeholder label component
+        auto *effect = new QGraphicsOpacityEffect(mPlaceHolderLabel);
+        effect->setOpacity(0.5);
+        mPlaceHolderLabel->setGraphicsEffect(effect);
+        // Show more friendly text when the protocol is "camera" (which is the usual case)
+        const QString scheme(mSrcBaseUrl.scheme());
+        // Truncate long protocol name
+        const QString truncatedScheme(scheme.length() <= 10 ? scheme : scheme.leftRef(5) + QStringLiteral("…") + scheme.rightRef(5));
+        // clang-format off
+        if (scheme == QLatin1String("camera")) {
+            mPlaceHolderLabel->setText(i18nc("@info above install button when Kamera is not installed", "Support for your camera is not installed."));
+        } else {
+            mPlaceHolderLabel->setText(i18nc("@info above install button, %1 protocol name", "The protocol support library for \"%1\" is not installed.", truncatedScheme));
+        }
+
+        // Label to guide the user to restart the wizard after installing the protocol support library
+        mRequireRestartLabel = new QLabel(mPlaceHolderWidget);
+        mRequireRestartLabel->setSizePolicy(labelSizePolicy);
+        mRequireRestartLabel->setTextInteractionFlags(Qt::NoTextInteraction);
+        mRequireRestartLabel->setWordWrap(true);
+        mRequireRestartLabel->setAlignment(Qt::AlignCenter);
+        auto *effect2 = new QGraphicsOpacityEffect(mRequireRestartLabel);
+        effect2->setOpacity(0.5);
+        mRequireRestartLabel->setGraphicsEffect(effect2);
+        mRequireRestartLabel->setText(i18nc("@info:usagetip above install button", "After finishing the installation process, restart this Importer to continue."));
+
+        // Button
+        // Check if Discover is installed
+        q->mDiscoverAvailable = !QStandardPaths::findExecutable("plasma-discover").isEmpty();
+        QIcon buttonIcon(q->mDiscoverAvailable ? QIcon::fromTheme("plasmadiscover") : QIcon::fromTheme("install"));
+        QString buttonText, whatsThisText;
+        QString tooltipText(i18nc("@info:tooltip for a button, %1 protocol name", "Launch Discover to install the protocol support library for \"%1\"", scheme));
+        if (scheme == QLatin1String("camera")) {
+            buttonText = i18nc("@action:button", "Install Support for this Camera…");
+            whatsThisText = i18nc("@info:whatsthis for a button when Kamera is not installed", "You need Kamera installed on your system to read from the camera. Click here to launch Discover to install Kamera to enable protocol support for \"camera:/\" on your system.");
+        } else {
+            if (q->mDiscoverAvailable) {
+                buttonText = i18nc("@action:button %1 protocol name", "Install Protocol Support for \"%1\"…", truncatedScheme);
+                whatsThisText = i18nc("@info:whatsthis for a button, %1 protocol name", "Click here to launch Discover to install the missing protocol support library to enable the protocol support for \"%1:/\" on your system.", scheme);
+            } else {
+                // If Discover is not found on the system, guide the user to search the web.
+                buttonIcon = QIcon::fromTheme("internet-web-browser");
+                buttonText = i18nc("@action:button %1 protocol name", "Search the Web for How to Install Protocol Support for \"%1\"…", truncatedScheme);
+                tooltipText.clear();
+            }
+        }
+        mInstallProtocolSupportButton = new QPushButton(buttonIcon, buttonText, mPlaceHolderWidget);
+        mInstallProtocolSupportButton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        mInstallProtocolSupportButton->setToolTip(tooltipText);
+        mInstallProtocolSupportButton->setWhatsThis(whatsThisText);
+        // Highlight the button so the user can notice it more easily.
+        mInstallProtocolSupportButton->setDefault(true);
+        mInstallProtocolSupportButton->setFocus();
+        // Button action
+        if (q->mDiscoverAvailable || scheme == QLatin1String("camera")) {
+            QObject::connect(mInstallProtocolSupportButton, &QAbstractButton::clicked, q, &ThumbnailPage::installProtocolSupport);
+        } else {
+            QObject::connect(mInstallProtocolSupportButton, &QAbstractButton::clicked, q, [scheme]() {
+                const QString searchKeyword(QUrl::toPercentEncoding(i18nc("@info this text will be used as a search term in an online search engine, %1 protocol name", "How to install protocol support for \"%1\" on Linux", scheme)).constData());
+                const QString searchEngineURL(i18nc("search engine URL, %1 search keyword, and translators can replace duckduckgo with other search engines", "https://duckduckgo.com/?q=%1", searchKeyword));
+                QDesktopServices::openUrl(QUrl(searchEngineURL));
+            });
+        }
+        // clang-format on
+
+        // VBoxLayout
+        mPlaceHolderLayout = new QVBoxLayout(mPlaceHolderWidget);
+        mPlaceHolderLayout->addStretch();
+        mPlaceHolderLayout->addWidget(mPlaceHolderIconLabel, 0, Qt::AlignCenter);
+        mPlaceHolderLayout->addWidget(mPlaceHolderLabel);
+        mPlaceHolderLayout->addWidget(mRequireRestartLabel);
+        mPlaceHolderLayout->addWidget(mInstallProtocolSupportButton, 0, Qt::AlignCenter); // Do not stretch the button
+        mPlaceHolderLayout->addStretch();
+
+        // Hide other controls
+        gridLayout->removeItem(verticalLayout);
+        gridLayout->removeItem(verticalLayout_2);
+        gridLayout->removeWidget(label);
+        gridLayout->removeWidget(label_2);
+        gridLayout->removeWidget(widget);
+        gridLayout->removeWidget(widget);
+        gridLayout->removeWidget(mDstUrlRequester);
+        mDstIconLabel->hide();
+        mSrcIconLabel->hide();
+        label->hide();
+        label_2->hide();
+        mDstUrlRequester->hide();
+        widget->hide();
+        widget_2->hide();
+        mConfigureButton->hide();
+        mImportSelectedButton->hide();
+        mImportAllButton->hide();
+
+        gridLayout->addWidget(mPlaceHolderWidget, 0, 0, 1, 0);
+    }
+
     void setupButtonBox()
     {
         QObject::connect(mConfigureButton, &QAbstractButton::clicked, q, &ThumbnailPage::showConfigDialog);
@@ -252,6 +387,9 @@ void ThumbnailPage::setSourceUrl(const QUrl &srcBaseUrl, const QString &iconName
     } else {
         auto *finder = new DocumentDirFinder(srcBaseUrl);
         connect(finder, &DocumentDirFinder::done, this, &ThumbnailPage::slotDocumentDirFinderDone);
+        connect(finder, &DocumentDirFinder::protocollNotSupportedError, this, [this]() {
+            d->setupPlaceHolderView();
+        });
         finder->start();
     }
 }
@@ -333,6 +471,24 @@ void ThumbnailPage::showConfigDialog()
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->setModal(true);
     dialog->show();
+}
+
+void ThumbnailPage::installProtocolSupport() const
+{
+    const QString scheme(d->mSrcBaseUrl.scheme());
+    // clang-format off
+    if (scheme == QLatin1String("camera")) {
+        const QUrl kameraInstallUrl("appstream://org.kde.kamera");
+        if (KIO::DesktopExecParser::hasSchemeHandler(kameraInstallUrl)) {
+            QDesktopServices::openUrl(kameraInstallUrl);
+        } else {
+            KMessageBox::error(d->widget, xi18nc("@info when failing to open the appstream URL", "Opening Discover failed.<nl/>Please check if Discover is installed on your system, or use your system's package manager to install \"Kamera\" package."));
+        }
+    } else if (!QProcess::startDetached(QStringLiteral("plasma-discover"), QStringList({"--search", scheme}))) {
+        // For other protocols, search for the protocol name in Discover.
+        KMessageBox::error(d->widget, xi18nc("@info when failing to launch plasma-discover, %1 protocol name", "Opening Discover failed.<nl/>Please check if Discover is installed on your system, or use your system's package manager to install the protocol support library for \"%1\".", scheme));
+    }
+    // clang-format on
 }
 
 /**

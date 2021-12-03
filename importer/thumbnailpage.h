@@ -69,9 +69,11 @@ private Q_SLOTS:
     void slotSrcUrlModelExpand(const QModelIndex &index);
 
 private:
+    bool mDiscoverAvailable = false;
     friend struct ThumbnailPagePrivate;
     ThumbnailPagePrivate *const d;
     void importList(const QModelIndexList &);
+    void installProtocolSupport() const;
 };
 
 } // namespace
