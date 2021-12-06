@@ -116,10 +116,11 @@ void RasterImageItem::paint(QPainter *painter, const QStyleOptionGraphicsItem * 
 
     const QImage::Format originalImageFormat = image.format();
 
-    // We want nearest neighbour when zooming in since that provides the most
-    // accurate representation of pixels, but when zooming out it will actually
-    // not look very nice, so use smoothing when zooming out.
-    const auto transformationMode = zoom < 1.0 ? Qt::SmoothTransformation : Qt::FastTransformation;
+    // We want nearest neighbour at high zoom since that provides the most
+    // accurate representation of pixels, but at low zoom or when zooming out it
+    // will not look very nice, so use smoothing instead. Switch at an arbitrary
+    // threshold of 400% zoom
+    const auto transformationMode = zoom < 4.0 ? Qt::SmoothTransformation : Qt::FastTransformation;
 
     // Scale the visible image to the requested zoom.
     image = image.scaled(image.size() * targetZoom, Qt::IgnoreAspectRatio, transformationMode);
