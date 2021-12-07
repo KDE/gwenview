@@ -152,6 +152,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 set(IMAGE_MIME_TYPES_LIST
     image/avif
     image/gif
+    image/heif
     image/jpeg
     image/jxl
     image/png
