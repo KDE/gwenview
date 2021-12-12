@@ -23,6 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QDate>
+#include <QGuiApplication>
 #include <QHBoxLayout>
 #include <QLocale>
 
@@ -80,8 +81,8 @@ DateWidget::DateWidget(QWidget *parent)
 
     d->mPreviousButton = new StatusBarToolButton;
     d->mPreviousButton->setGroupPosition(StatusBarToolButton::GroupLeft);
-    // FIXME: RTL
-    d->mPreviousButton->setIcon(QIcon::fromTheme(QStringLiteral("go-previous")));
+    d->mPreviousButton->setIcon(
+        QIcon::fromTheme(QGuiApplication::layoutDirection() == Qt::LeftToRight ? QStringLiteral("go-previous") : QStringLiteral("go-previous-symbolic-rtl")));
     connect(d->mPreviousButton, &StatusBarToolButton::clicked, this, &DateWidget::goToPrevious);
 
     d->mDateButton = new StatusBarToolButton;
@@ -90,7 +91,8 @@ DateWidget::DateWidget(QWidget *parent)
 
     d->mNextButton = new StatusBarToolButton;
     d->mNextButton->setGroupPosition(StatusBarToolButton::GroupRight);
-    d->mNextButton->setIcon(QIcon::fromTheme(QStringLiteral("go-next")));
+    d->mNextButton->setIcon(
+        QIcon::fromTheme(QGuiApplication::layoutDirection() == Qt::LeftToRight ? QStringLiteral("go-next") : QStringLiteral("go-next-symbolic-rtl")));
     connect(d->mNextButton, &StatusBarToolButton::clicked, this, &DateWidget::goToNext);
 
     auto *layout = new QHBoxLayout(this);

@@ -428,14 +428,14 @@ struct MainWindow::Private {
 
         mGoToPreviousAction = view->addAction("go_previous", q, SLOT(goToPrevious()));
         mGoToPreviousAction->setPriority(QAction::LowPriority);
-        mGoToPreviousAction->setIcon(QIcon::fromTheme("go-previous-view"));
+        mGoToPreviousAction->setIcon(QIcon::fromTheme(QGuiApplication::layoutDirection() == Qt::LeftToRight ? "go-next" : "go-next-symbolic-rtl"));
         mGoToPreviousAction->setText(i18nc("@action Go to previous image", "Previous"));
         mGoToPreviousAction->setToolTip(i18nc("@info:tooltip", "Go to previous image"));
         installDisabledActionShortcutMonitor(mGoToPreviousAction, SLOT(showFirstDocumentReached()));
 
         mGoToNextAction = view->addAction("go_next", q, SLOT(goToNext()));
         mGoToNextAction->setPriority(QAction::LowPriority);
-        mGoToNextAction->setIcon(QIcon::fromTheme("go-next-view"));
+        mGoToNextAction->setIcon(QIcon::fromTheme(QGuiApplication::layoutDirection() == Qt::LeftToRight ? "go-previous" : "go-previous-symbolic-rtl"));
         mGoToNextAction->setText(i18nc("@action Go to next image", "Next"));
         mGoToNextAction->setToolTip(i18nc("@info:tooltip", "Go to next image"));
         installDisabledActionShortcutMonitor(mGoToNextAction, SLOT(showLastDocumentReached()));
