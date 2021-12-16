@@ -5,4 +5,11 @@ tags
 /build*/
 CMakeLists.txt.user*
 .cmake/
+
+# LSP & IDE
 /.clang-format
+/compile_commands.json
+.clangd
+.cache
+.idea
+/cmake-build*
