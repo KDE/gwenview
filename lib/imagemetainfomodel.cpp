@@ -289,6 +289,10 @@ struct ImageMetaInfoModelPrivate {
                 } else {
                     hash.insert(key, new MetaInfoGroup::Entry(key, label, value));
                 }
+            } catch (const std::out_of_range &error) {
+                // Workaround for https://bugs.launchpad.net/ubuntu/+source/exiv2/+bug/1942799
+                // which was fixed with https://github.com/Exiv2/exiv2/pull/1918/commits/8a1e949bff482f74599f60b8ab518442036b1834
+                qCWarning(GWENVIEW_LIB_LOG) << "Failed to read some meta info:" << error.what();
             } catch (const Exiv2::Error &error) {
                 qCWarning(GWENVIEW_LIB_LOG) << "Failed to read some meta info:" << error.what();
             }
