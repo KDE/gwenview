@@ -59,3 +59,5 @@ install(TARGETS gwenview_importer
 install(FILES gwenview_importer.desktop
     gwenview_importer_camera.desktop
     DESTINATION ${KDE_INSTALL_DATADIR}/solid/actions/)
+
+install(FILES org.kde.gwenview_importer.desktop DESTINATION ${KDE_INSTALL_APPDIR})

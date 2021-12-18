@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     app.setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 
-    QScopedPointer<KAboutData> aboutData(Gwenview::createAboutData(QStringLiteral("org.kde.gwenview"), /* component name */
+    QScopedPointer<KAboutData> aboutData(Gwenview::createAboutData(QStringLiteral("gwenview_importer"), /* component name */
                                                                    i18n("Gwenview Importer") /* programName */
                                                                    ));
     aboutData->setShortDescription(i18n("Photo Importer"));
