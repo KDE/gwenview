@@ -361,7 +361,6 @@ SideBar::SideBar(QWidget *parent)
     , d(new SideBarPrivate)
 {
     setTabBar(new SideBarTabBar(this));
-    setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
     tabBar()->setDocumentMode(true);
     tabBar()->setUsesScrollButtons(false);
     tabBar()->setFocusPolicy(Qt::NoFocus);
