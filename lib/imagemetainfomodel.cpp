@@ -291,6 +291,8 @@ struct ImageMetaInfoModelPrivate {
                 }
             } catch (const Exiv2::Error &error) {
                 qCWarning(GWENVIEW_LIB_LOG) << "Failed to read some meta info:" << error.what();
+            } catch (const std::exception &error) {
+                qCWarning(GWENVIEW_LIB_LOG) << "Failed to read some meta info:" << error.what();
             }
         }
 
