@@ -128,7 +128,7 @@ private:
 #ifdef Q_OS_UNIX
         // shorten home directory, but avoid showing a cryptic "~/"
         if (text.length() > QDir::homePath().length() + 1) {
-            text.replace(QRegularExpression('^' + QDir::homePath()), QStringLiteral("~"));
+            text.replace(QRegularExpression(QLatin1Char('^') + QDir::homePath()), QStringLiteral("~"));
         }
 #endif
         setText(text);

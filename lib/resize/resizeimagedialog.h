@@ -42,7 +42,7 @@ public:
     ~ResizeImageDialog() override;
 
     void setOriginalSize(const QSize &);
-    void setCurrentImageUrl(QUrl);
+    void setCurrentImageUrl(const QUrl &);
     QSize size() const;
 
 private Q_SLOTS:

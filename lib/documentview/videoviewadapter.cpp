@@ -114,13 +114,13 @@ struct VideoViewAdapterPrivate {
         QObject::connect(mAudioOutput, &Phonon::AudioOutput::volumeChanged, q, &VideoViewAdapter::slotOutputVolumeChanged);
 
         // Timestamps
-        mCurrentTime = new QLabel("--:--");
+        mCurrentTime = new QLabel(QStringLiteral("--:--"));
         mCurrentTime->setAttribute(Qt::WA_TranslucentBackground);
-        mCurrentTime->setStyleSheet("QLabel { color : white; }");
+        mCurrentTime->setStyleSheet(QStringLiteral("QLabel { color : white; }"));
         mCurrentTime->setAlignment(Qt::AlignCenter);
-        mRemainingTime = new QLabel("--:--");
+        mRemainingTime = new QLabel(QStringLiteral("--:--"));
         mRemainingTime->setAttribute(Qt::WA_TranslucentBackground);
-        mRemainingTime->setStyleSheet("QLabel { color : white; }");
+        mRemainingTime->setStyleSheet(QStringLiteral("QLabel { color : white; }"));
         mRemainingTime->setAlignment(Qt::AlignCenter);
         QObject::connect(mMediaObject, &Phonon::MediaObject::stateChanged, q, &VideoViewAdapter::updateTimestamps);
         QObject::connect(mMediaObject, &Phonon::MediaObject::tick, q, &VideoViewAdapter::updateTimestamps);
@@ -365,25 +365,25 @@ void VideoViewAdapter::slotSeekSliderActionTriggered(int /*action*/)
 
 void VideoViewAdapter::updateTimestamps()
 {
-    QString currentTime("--:--");
-    QString remainingTime("--:--");
+    QString currentTime(QStringLiteral("--:--"));
+    QString remainingTime(QStringLiteral("--:--"));
 
     switch (d->mMediaObject->state()) {
     case Phonon::PlayingState:
     case Phonon::BufferingState:
     case Phonon::PausedState: {
         qint64 current = d->mMediaObject->currentTime();
-        currentTime = QDateTime::fromSecsSinceEpoch(current / 1000).toUTC().toString("h:mm:ss");
-        if (currentTime.startsWith("0:")) {
+        currentTime = QDateTime::fromSecsSinceEpoch(current / 1000).toUTC().toString(QStringLiteral("h:mm:ss"));
+        if (currentTime.startsWith(QStringLiteral("0:"))) {
             currentTime.remove(0, 2);
         }
 
         qint64 remaining = d->mMediaObject->remainingTime();
-        remainingTime = QDateTime::fromSecsSinceEpoch(remaining / 1000).toUTC().toString("h:mm:ss");
-        if (remainingTime.startsWith("0:")) {
+        remainingTime = QDateTime::fromSecsSinceEpoch(remaining / 1000).toUTC().toString(QStringLiteral("h:mm:ss"));
+        if (remainingTime.startsWith(QStringLiteral("0:"))) {
             remainingTime.remove(0, 2);
         }
-        remainingTime = "-" + remainingTime;
+        remainingTime = QStringLiteral("-") + remainingTime;
         break;
     }
 

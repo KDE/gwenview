@@ -71,7 +71,7 @@ void ItemEditor::resizeToContents()
     if (d->mCenter.isNull()) {
         d->mCenter = geometry().center();
     }
-    int textWidth = fontMetrics().boundingRect("  " + text() + "  ").width();
+    int textWidth = fontMetrics().boundingRect(QStringLiteral("  ") + text() + QStringLiteral("  ")).width();
     QRect rect = geometry();
     rect.setWidth(textWidth);
     rect.moveCenter(d->mCenter);

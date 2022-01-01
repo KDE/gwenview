@@ -74,7 +74,7 @@ public:
 protected:
     bool eventFilter(QObject *, QEvent *) override;
 
-signals:
+Q_SIGNALS:
     void PanTriggered(const QPointF &);
     void swipeLeftTriggered();
     void swipeRightTriggered();

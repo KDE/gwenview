@@ -179,7 +179,7 @@ Profile::Ptr Profile::loadFromExiv2Image(const Exiv2::Image* image)
     QByteArray data;
     data.resize(size);
     it->copy(reinterpret_cast<Exiv2::byte*>(data.data()), Exiv2::invalidByteOrder);
-    hProfile = cmsOpenProfileFromMem(data, size);
+    hProfile = cmsOpenProfileFromMem(data.constData(), size);
 
     if (hProfile) {
         ptr = new Profile(hProfile);
@@ -193,7 +193,7 @@ Profile::Ptr Profile::loadFromICC(const QByteArray &data)
     int size = data.size();
 
     if (size > 0) {
-        cmsHPROFILE hProfile = cmsOpenProfileFromMem(data, size);
+        cmsHPROFILE hProfile = cmsOpenProfileFromMem(data.constData(), size);
 
         if (hProfile) {
             ptr = new Profile(hProfile);

@@ -74,8 +74,8 @@ QList<QAction *> SlideShowFileItemAction::actions(const KFileItemListProperties 
 
     connect(startSlideShowAction, &QAction::triggered, this, [=]() {
         // gwenview -s %u
-        auto job = new KIO::CommandLauncherJob(QStringLiteral("gwenview"), QStringList("-s") << itemsForSlideShow);
-        job->setDesktopName("org.kde.gwenview");
+        auto job = new KIO::CommandLauncherJob(QStringLiteral("gwenview"), QStringList(QStringLiteral("-s")) << itemsForSlideShow);
+        job->setDesktopName(QStringLiteral("org.kde.gwenview"));
         job->setUiDelegate(new KNotificationJobUiDelegate(KJobUiDelegate::AutoHandlingEnabled));
 
         job->start();

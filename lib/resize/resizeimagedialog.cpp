@@ -105,7 +105,7 @@ void ResizeImageDialog::setOriginalSize(const QSize &size)
     d->mHeightSpinBox->setValue(size.height());
 }
 
-void ResizeImageDialog::setCurrentImageUrl(QUrl imageUrl)
+void ResizeImageDialog::setCurrentImageUrl(const QUrl &imageUrl)
 {
     mCurrentImageUrl = imageUrl;
 
@@ -238,9 +238,11 @@ qint64 ResizeImageDialog::calculateEstimatedImageSize()
         buffer.open(QIODevice::ReadWrite);
         image = image.scaled(size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
-        if (QString::compare(suffix, "jpg", Qt::CaseInsensitive) == 0 || QString::compare(suffix, "jpeg", Qt::CaseInsensitive) == 0
-            || QString::compare(suffix, "avif", Qt::CaseInsensitive) == 0 || QString::compare(suffix, "heic", Qt::CaseInsensitive) == 0
-            || QString::compare(suffix, "webp", Qt::CaseInsensitive) == 0) {
+        if (QString::compare(suffix, QStringLiteral("jpg"), Qt::CaseInsensitive) == 0
+            || QString::compare(suffix, QStringLiteral("jpeg"), Qt::CaseInsensitive) == 0
+            || QString::compare(suffix, QStringLiteral("avif"), Qt::CaseInsensitive) == 0
+            || QString::compare(suffix, QStringLiteral("heic"), Qt::CaseInsensitive) == 0
+            || QString::compare(suffix, QStringLiteral("webp"), Qt::CaseInsensitive) == 0) {
             image.save(&buffer, suffix.toStdString().c_str(), GwenviewConfig::jPEGQuality());
         } else {
             image.save(&buffer, suffix.toStdString().c_str());
