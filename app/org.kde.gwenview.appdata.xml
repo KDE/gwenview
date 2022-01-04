@@ -381,10 +381,10 @@
       <caption xml:lang="x-test">xxGwenviewxx</caption>
       <caption xml:lang="zh-CN">Gwenview</caption>
       <caption xml:lang="zh-TW">影像檢視_Gwenview</caption>
-      <image>https://cdn.kde.org/screenshots/gwenview/gwenview.png</image>
+      <image>https://cdn.kde.org/screenshots/gwenview/gwenview-image.png</image>
     </screenshot>
     <screenshot>
-      <caption>Gwenview displaying an image, with additional metadata shown in the sidebar</caption>
+      <caption>Use Gwenview to manage your image collection</caption>
       <caption xml:lang="ar">جونفيو يعرض الصورة ، مع بيانات وصفية إضافية معروضة في الشريط الجانبي</caption>
       <caption xml:lang="az">Gwenview, yan panelində əlavə meta məlumatları ilə birgə şəkilləri göstərir</caption>
       <caption xml:lang="ca">El Gwenview mostra una imatge, i a la barra lateral es mostraran les metadades addicionals</caption>
@@ -423,7 +423,7 @@
       <caption xml:lang="x-test">xxGwenview displaying an image, with additional metadata shown in the sidebarxx</caption>
       <caption xml:lang="zh-CN">Gwenview 正在显示一张图像，它的侧栏正在显示额外的元数据</caption>
       <caption xml:lang="zh-TW">Gwenview 顯示圖片時，也在側邊欄顯示了額外的中繼資料</caption>
-      <image>https://kde.org/images/screenshots/gwenview.png</image>
+      <image>https://cdn.kde.org/screenshots/gwenview/gwenview.png</image>
     </screenshot>
   </screenshots>
   <project_group>KDE</project_group>
