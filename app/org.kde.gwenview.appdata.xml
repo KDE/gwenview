@@ -385,44 +385,6 @@
     </screenshot>
     <screenshot>
       <caption>Use Gwenview to manage your image collection</caption>
-      <caption xml:lang="ar">جونفيو يعرض الصورة ، مع بيانات وصفية إضافية معروضة في الشريط الجانبي</caption>
-      <caption xml:lang="az">Gwenview, yan panelində əlavə meta məlumatları ilə birgə şəkilləri göstərir</caption>
-      <caption xml:lang="ca">El Gwenview mostra una imatge, i a la barra lateral es mostraran les metadades addicionals</caption>
-      <caption xml:lang="ca-valencia">El Gwenview mostra una imatge, i a la barra lateral es mostraran les metadades addicionals</caption>
-      <caption xml:lang="cs">Gwenview zobrazující obrázek s dodatečnými metadaty v postranní liště</caption>
-      <caption xml:lang="da">Gwenview der viser et billede med yderligere metadata vist i sidebjælken</caption>
-      <caption xml:lang="de">Gwenview zeigt ein Bild mit zusätzlichen Metadaten in der Seitenleiste</caption>
-      <caption xml:lang="el">Το gwenview εμφανίζει μια εικόνα με επιπλέον μεταδεδομένα στην πλευρική γραμμή</caption>
-      <caption xml:lang="en-GB">Gwenview displaying an image, with additional metadata shown in the sidebar</caption>
-      <caption xml:lang="es">Gwenview mostrando una imagen, con metadatos adicionales en la barra lateral</caption>
-      <caption xml:lang="et">Gwenview pilti näitamas, külgribal lisaks metaandmed</caption>
-      <caption xml:lang="eu">Gwenview irudi bat bistaratzen du, alboko-barran meta-datu osagarriak erakutsiz</caption>
-      <caption xml:lang="fi">Gwenview näyttämässä kuvaa, sivupaneelissa näkyvät metatiedot</caption>
-      <caption xml:lang="fr">Gwenview en train d'afficher une image, avec des métadonnées supplémentaires dans le panneau latéral.</caption>
-      <caption xml:lang="gl">Gwenview mostrando unha imaxe, con metadatos adicionais mostrador na barra lateral.</caption>
-      <caption xml:lang="hsb">Gwenview pokazuje wobraz, dalše metadaty so w nabóčnym pasu pokazuja</caption>
-      <caption xml:lang="hu">A Gwenview egy kép megjelenítése közben, az oldalsávokan további metaadatokat mutatva</caption>
-      <caption xml:lang="ia">Gwenview monstrante un image, con metadatos additional monstrate in le barra lateral</caption>
-      <caption xml:lang="id">Gwenview mendisplai sebuah citra, dengan metadata tambahan yang ditampilkan di dalam bilah sisi</caption>
-      <caption xml:lang="is">Gwenview birtir mynd, með viðbótarlýsigögnum sýndum á hliðarspjaldinu</caption>
-      <caption xml:lang="it">Gwenview mentre visualizza un'immagine, con ulteriori metadati mostrati nella barra laterale</caption>
-      <caption xml:lang="ko">사진을 표시하는 Gwenview, 사이드바에 추가 메타데이터 표시</caption>
-      <caption xml:lang="lt">Gwenview atvaizduojanti paveikslą su šoninėje juostoje rodomais papildomais metaduomenimis</caption>
-      <caption xml:lang="nb">Gwenview viser et bilde med ytterligere metadata vist i sidestolpen</caption>
-      <caption xml:lang="nl">Gwenview toont een afbeelding, met extra metagegevens getoond in de zijbalk</caption>
-      <caption xml:lang="nn">Gwenview som viser eit bilete, med metadata om biletet vist i sidestolpen</caption>
-      <caption xml:lang="pl">Gwenview wyświetla obraz z dodatkowymi metadanymi na pasku bocznym</caption>
-      <caption xml:lang="pt">O Gwenview a mostrar uma imagem com os meta-dados adicionais visíveis na barra lateral</caption>
-      <caption xml:lang="pt-BR">O Gwenview exibindo uma imagem com os metadados adicionais visíveis na barra lateral</caption>
-      <caption xml:lang="ro">Gwenview afișând o imagine, cu metadate suplimentare arătate în bara laterală</caption>
-      <caption xml:lang="ru">Просмотр изображения и дополнительных метаданных, показанных на боковой панели в Gwenview</caption>
-      <caption xml:lang="sk">Gwenview zobrazujúci obrázok, s ďalšími údajmi zobrazenými na bočnom paneli</caption>
-      <caption xml:lang="sl">Gwenview prikazuje sliko z dodatnimi metapodatki, prikazanimi v stranski vrstici</caption>
-      <caption xml:lang="sv">Gwenview som visar en bild, med ytterligare metadata visad i sidoraden</caption>
-      <caption xml:lang="uk">Gwenview із відкритим зображенням та додатковими метаданими, які показано на бічній панелі</caption>
-      <caption xml:lang="x-test">xxGwenview displaying an image, with additional metadata shown in the sidebarxx</caption>
-      <caption xml:lang="zh-CN">Gwenview 正在显示一张图像，它的侧栏正在显示额外的元数据</caption>
-      <caption xml:lang="zh-TW">Gwenview 顯示圖片時，也在側邊欄顯示了額外的中繼資料</caption>
       <image>https://cdn.kde.org/screenshots/gwenview/gwenview.png</image>
     </screenshot>
   </screenshots>
