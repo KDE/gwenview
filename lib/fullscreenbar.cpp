@@ -83,7 +83,13 @@ struct FullScreenBarPrivate {
      */
     QRect slideInTriggerRect() const
     {
-        QRect rect = QGuiApplication::screenAt(QCursor::pos())->geometry();
+        const QScreen *screen = QGuiApplication::screenAt(QCursor::pos());
+
+        if (!screen) {
+            return {};
+        }
+
+        QRect rect = screen->geometry();
         // Take parent widget position into account because it may not be at
         // the top of the screen, for example when the save bar warning is
         // shown.
