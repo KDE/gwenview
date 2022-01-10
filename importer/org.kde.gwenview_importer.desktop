@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Gwenview Importer
+Name[ar]=مستورد جوِينفيو
+Name[es]=Importador de Gwenview
+Name[sv]=Gwenview importverktyg
+Name[uk]=Інструмент імпортування Gwenview
+Name[x-test]=xxGwenview Importerxx
 Exec=gwenview_importer %u
 Icon=gwenview
 Type=Application
