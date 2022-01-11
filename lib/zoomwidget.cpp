@@ -78,7 +78,7 @@ ZoomWidget::ZoomWidget(QWidget *parent)
     d->q = this;
     d->mZoomUpdatedBySlider = false;
 
-    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
+    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
 
     d->mZoomSlider = new ZoomSlider;
     d->mZoomSlider->setMinimumWidth(150);

@@ -38,8 +38,6 @@ struct ZoomSliderPrivate {
     QToolButton *mZoomOutButton;
     QToolButton *mZoomInButton;
     QSlider *mSlider;
-    QAction *mZoomInAction;
-    QAction *mZoomOutAction;
 
     void updateButtons()
     {
@@ -55,6 +53,7 @@ static QToolButton *createZoomButton(const QString &iconName)
 {
     auto *button = new QToolButton;
     button->setIcon(QIcon::fromTheme(iconName));
+    button->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
     button->setAutoRaise(true);
     button->setAutoRepeat(true);
     return button;
@@ -66,8 +65,6 @@ ZoomSlider::ZoomSlider(QWidget *parent)
 {
     d->mZoomInButton = createZoomButton(QStringLiteral("zoom-in"));
     d->mZoomOutButton = createZoomButton(QStringLiteral("zoom-out"));
-    d->mZoomInAction = nullptr;
-    d->mZoomOutAction = nullptr;
 
     d->mSlider = new QSlider;
     d->mSlider->setOrientation(Qt::Horizontal);
@@ -116,12 +113,14 @@ void ZoomSlider::setMaximum(int value)
 
 void ZoomSlider::setZoomInAction(QAction *action)
 {
-    d->mZoomInAction = action;
+    disconnect(d->mZoomInButton, &QToolButton::clicked, this, &ZoomSlider::zoomIn);
+    d->mZoomInButton->setDefaultAction(action);
 }
 
 void ZoomSlider::setZoomOutAction(QAction *action)
 {
-    d->mZoomOutAction = action;
+    disconnect(d->mZoomOutButton, &QToolButton::clicked, this, &ZoomSlider::zoomOut);
+    d->mZoomOutButton->setDefaultAction(action);
 }
 
 void ZoomSlider::slotActionTriggered(int)
@@ -131,18 +130,14 @@ void ZoomSlider::slotActionTriggered(int)
 
 void ZoomSlider::zoomOut()
 {
-    if (d->mZoomOutAction) {
-        d->mZoomOutAction->trigger();
-    } else {
+    if (!d->mZoomOutButton->defaultAction()) {
         d->mSlider->triggerAction(QAbstractSlider::SliderPageStepSub);
     }
 }
 
 void ZoomSlider::zoomIn()
 {
-    if (d->mZoomInAction) {
-        d->mZoomInAction->trigger();
-    } else {
+    if (!d->mZoomInButton->defaultAction()) {
         d->mSlider->triggerAction(QAbstractSlider::SliderPageStepAdd);
     }
 }
