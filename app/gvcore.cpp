@@ -41,7 +41,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include "gwenview_app_debug.h"
-#include <lib/backgroundcolorwidget/backgroundcolorwidget.h>
 #include <lib/binder.h>
 #include <lib/document/documentfactory.h>
 #include <lib/document/documentjob.h>
@@ -140,10 +139,11 @@ struct GvCorePrivate {
         mPalettes[GvCore::NormalPalette] = KColorScheme::createApplicationPalette(config);
         QPalette viewPalette = mPalettes[GvCore::NormalPalette];
 
-        BackgroundColorWidget::ColorMode colorMode = GwenviewConfig::backgroundColorMode();
-        bool usingLightTheme = BackgroundColorWidget::usingLightTheme();
+        DocumentView::BackgroundColorMode colorMode = GwenviewConfig::backgroundColorMode();
+        const bool usingLightTheme = qApp->palette().base().color().lightness() > qApp->palette().text().color().lightness();
 
-        if ((usingLightTheme && colorMode == BackgroundColorWidget::Dark) || (!usingLightTheme && colorMode == BackgroundColorWidget::Light)) {
+        if ((usingLightTheme && colorMode == DocumentView::BackgroundColorMode::Dark)
+            || (!usingLightTheme && colorMode == DocumentView::BackgroundColorMode::Light)) {
             viewPalette.setColor(QPalette::Base, mPalettes[GvCore::NormalPalette].color(QPalette::Text));
             viewPalette.setColor(QPalette::Text, mPalettes[GvCore::NormalPalette].color(QPalette::Base));
             viewPalette.setColor(QPalette::Window, mPalettes[GvCore::NormalPalette].color(QPalette::WindowText));
@@ -152,7 +152,7 @@ struct GvCorePrivate {
             viewPalette.setColor(QPalette::ButtonText, mPalettes[GvCore::NormalPalette].color(QPalette::Button));
             viewPalette.setColor(QPalette::ToolTipBase, mPalettes[GvCore::NormalPalette].color(QPalette::ToolTipText));
             viewPalette.setColor(QPalette::ToolTipText, mPalettes[GvCore::NormalPalette].color(QPalette::ToolTipBase));
-        } else if (colorMode == BackgroundColorWidget::Neutral) {
+        } else if (colorMode == DocumentView::BackgroundColorMode::Neutral) {
             QColor base = KColorUtils::mix(mPalettes[GvCore::NormalPalette].color(QPalette::Base), mPalettes[GvCore::NormalPalette].color(QPalette::Text), 0.5);
             QColor window =
                 KColorUtils::mix(mPalettes[GvCore::NormalPalette].color(QPalette::Window), mPalettes[GvCore::NormalPalette].color(QPalette::WindowText), 0.5);

@@ -666,7 +666,7 @@ void DocumentView::toggleBirdEyeView()
     GwenviewConfig::setBirdEyeViewEnabled(!GwenviewConfig::birdEyeViewEnabled());
 }
 
-void DocumentView::setBackgroundColorMode(BackgroundColorWidget::ColorMode colorMode)
+void DocumentView::setBackgroundColorMode(BackgroundColorMode colorMode)
 {
     GwenviewConfig::setBackgroundColorMode(colorMode);
     Q_EMIT backgroundColorModeChanged(colorMode);

@@ -45,7 +45,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "gwenview_app_debug.h"
 #include "splitter.h"
 #include <gvcore.h>
-#include <lib/backgroundcolorwidget/backgroundcolorwidget.h>
 #include <lib/documentview/abstractdocumentviewadapter.h>
 #include <lib/documentview/abstractrasterimageviewtool.h>
 #include <lib/documentview/documentview.h>
@@ -120,7 +119,6 @@ struct ViewMainPagePrivate {
     DocumentViewSynchronizer *mSynchronizer;
     QToolButton *mToggleSideBarButton;
     QToolButton *mToggleThumbnailBarButton;
-    BackgroundColorWidget *mBackgroundColorWidget;
     ZoomWidget *mZoomWidget;
     DocumentViewContainer *mDocumentViewContainer;
     SlideContainer *mToolContainer;
@@ -151,7 +149,6 @@ struct ViewMainPagePrivate {
         mStatusBarContainer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         mToggleSideBarButton = new StatusBarToolButton;
         mToggleThumbnailBarButton = new StatusBarToolButton;
-        mBackgroundColorWidget = new BackgroundColorWidget;
         mZoomWidget = new ZoomWidget;
         mSynchronizeCheckBox = new QCheckBox(i18n("Synchronize"));
         mSynchronizeCheckBox->hide();
@@ -176,7 +173,6 @@ struct ViewMainPagePrivate {
         // so its autohide feature works properly (stretch factor = 1)
         statusBarContainerLayout->addWidget(mDocumentCountLabel, 1);
         statusBarContainerLayout->addStretch();
-        statusBarContainerLayout->addWidget(mBackgroundColorWidget);
         statusBarContainerLayout->addWidget(mZoomWidget);
         //--
         mAdapterContainer = new QWidget;
@@ -215,7 +211,6 @@ struct ViewMainPagePrivate {
         viewMainPageLayout->addWidget(mStatusBarContainer);
         //--
         mDocumentViewController = new DocumentViewController(mActionCollection, q);
-        mDocumentViewController->setBackgroundColorWidget(mBackgroundColorWidget);
         mDocumentViewController->setZoomWidget(mZoomWidget);
         mDocumentViewController->setToolContainer(mToolContainer);
         mSynchronizer = new DocumentViewSynchronizer(&mDocumentViews, q);

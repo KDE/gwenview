@@ -36,7 +36,6 @@ namespace Gwenview
 {
 class DocumentView;
 class SlideContainer;
-class BackgroundColorWidget;
 class ZoomWidget;
 
 struct DocumentViewControllerPrivate;
@@ -53,11 +52,9 @@ public:
     ~DocumentViewController() override;
 
     DocumentView *view() const;
-    BackgroundColorWidget *backgroundColorWidget() const;
     ZoomWidget *zoomWidget() const;
 
     void setView(DocumentView *);
-    void setBackgroundColorWidget(BackgroundColorWidget *widget);
     void setZoomWidget(ZoomWidget *widget);
 
     void setToolContainer(SlideContainer *container);

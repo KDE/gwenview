@@ -29,7 +29,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KF
 
 // Local
-#include <lib/backgroundcolorwidget/backgroundcolorwidget.h>
 #include <lib/document/document.h>
 
 class QPropertyAnimation;
@@ -79,6 +78,8 @@ public:
         GLAnimation,
 #endif
     };
+    enum BackgroundColorMode { Auto = 0, Light = 1, Neutral = 2, Dark = 3 };
+    Q_ENUM(BackgroundColorMode)
 
     /**
      * Create a new view attached to scene. We need the scene to be able to
@@ -157,7 +158,7 @@ public Q_SLOTS:
 
     void toggleBirdEyeView();
 
-    void setBackgroundColorMode(BackgroundColorWidget::ColorMode colorMode);
+    void setBackgroundColorMode(BackgroundColorMode colorMode);
 
     void setPosition(const QPoint &);
 
@@ -183,7 +184,7 @@ Q_SIGNALS:
 
     void videoFinished();
 
-    void backgroundColorModeChanged(BackgroundColorWidget::ColorMode);
+    void backgroundColorModeChanged(BackgroundColorMode);
 
     void minimumZoomChanged(qreal);
 

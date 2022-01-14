@@ -1,23 +1,12 @@
 // vim: set tabstop=4 shiftwidth=4 expandtab:
 /*
-Gwenview: an image viewer
-Copyright 2011 Aurélien Gâteau <agateau@kde.org>
+    Gwenview: an image viewer
+    SPDX-FileCopyrightText: 2011 Aurélien Gâteau <agateau@kde.org>
+    SPDX-FileCopyrightText: 2021 Noah Davis <noahadvs@gmail.com>
 
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
+
 // Self
 #include "documentviewcontroller.h"
 
@@ -32,12 +21,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KF
 #include <KActionCategory>
+#include <KColorUtils>
 #include <KLocalizedString>
 
 // Qt
 #include <QAction>
+#include <QActionGroup>
 #include <QApplication>
 #include <QHBoxLayout>
+#include <QPainter>
 
 namespace Gwenview
 {
@@ -45,7 +37,6 @@ struct DocumentViewControllerPrivate {
     DocumentViewController *q;
     KActionCollection *mActionCollection;
     DocumentView *mView;
-    BackgroundColorWidget *mBackgroundColorWidget;
     ZoomWidget *mZoomWidget;
     SlideContainer *mToolContainer;
 
@@ -97,44 +88,122 @@ struct DocumentViewControllerPrivate {
 
         mBackgroundColorModeAuto = view->addAction(QStringLiteral("view_background_colormode_auto"));
         mBackgroundColorModeAuto->setCheckable(true);
-        mBackgroundColorModeAuto->setChecked(GwenviewConfig::backgroundColorMode() == BackgroundColorWidget::Auto);
+        mBackgroundColorModeAuto->setChecked(GwenviewConfig::backgroundColorMode() == DocumentView::BackgroundColorMode::Auto);
         mBackgroundColorModeAuto->setText(i18nc("@action", "Follow color scheme"));
         mBackgroundColorModeAuto->setEnabled(mView != nullptr);
-        mBackgroundColorModeAuto->setToolTip(mBackgroundColorModeAuto->text());
 
         mBackgroundColorModeLight = view->addAction(QStringLiteral("view_background_colormode_light"));
         mBackgroundColorModeLight->setCheckable(true);
-        mBackgroundColorModeLight->setChecked(GwenviewConfig::backgroundColorMode() == BackgroundColorWidget::Light);
+        mBackgroundColorModeLight->setChecked(GwenviewConfig::backgroundColorMode() == DocumentView::BackgroundColorMode::Light);
         mBackgroundColorModeLight->setText(i18nc("@action", "Light Mode"));
         mBackgroundColorModeLight->setEnabled(mView != nullptr);
-        mBackgroundColorModeLight->setToolTip(mBackgroundColorModeLight->text());
 
         mBackgroundColorModeNeutral = view->addAction(QStringLiteral("view_background_colormode_neutral"));
         mBackgroundColorModeNeutral->setCheckable(true);
-        mBackgroundColorModeNeutral->setChecked(GwenviewConfig::backgroundColorMode() == BackgroundColorWidget::Neutral);
+        mBackgroundColorModeNeutral->setChecked(GwenviewConfig::backgroundColorMode() == DocumentView::BackgroundColorMode::Neutral);
         mBackgroundColorModeNeutral->setText(i18nc("@action", "Neutral Mode"));
         mBackgroundColorModeNeutral->setEnabled(mView != nullptr);
-        mBackgroundColorModeNeutral->setToolTip(mBackgroundColorModeNeutral->text());
 
         mBackgroundColorModeDark = view->addAction(QStringLiteral("view_background_colormode_dark"));
         mBackgroundColorModeDark->setCheckable(true);
-        mBackgroundColorModeDark->setChecked(GwenviewConfig::backgroundColorMode() == BackgroundColorWidget::Dark);
+        mBackgroundColorModeDark->setChecked(GwenviewConfig::backgroundColorMode() == DocumentView::BackgroundColorMode::Dark);
         mBackgroundColorModeDark->setText(i18nc("@action", "Dark Mode"));
         mBackgroundColorModeDark->setEnabled(mView != nullptr);
-        mBackgroundColorModeDark->setToolTip(mBackgroundColorModeDark->text());
+
+        setBackgroundColorModeIcons(mBackgroundColorModeAuto, mBackgroundColorModeLight, mBackgroundColorModeNeutral, mBackgroundColorModeDark);
+
+        QActionGroup *actionGroup = new QActionGroup(q);
+        actionGroup->addAction(mBackgroundColorModeAuto);
+        actionGroup->addAction(mBackgroundColorModeLight);
+        actionGroup->addAction(mBackgroundColorModeNeutral);
+        actionGroup->addAction(mBackgroundColorModeDark);
+        actionGroup->setExclusive(true);
 
         mActions << mZoomToFitAction << mActualSizeAction << mZoomInAction << mZoomOutAction << mZoomToFillAction << mToggleBirdEyeViewAction
                  << mBackgroundColorModeAuto << mBackgroundColorModeLight << mBackgroundColorModeNeutral << mBackgroundColorModeDark;
     }
 
-    void connectBackgroundColorWidget()
+    void setBackgroundColorModeIcons(QAction *autoAction, QAction *lightAction, QAction *neutralAction, QAction *darkAction) const
     {
-        if (!mBackgroundColorWidget || !mView) {
-            return;
-        }
+        const bool usingLightTheme = qApp->palette().base().color().lightness() > qApp->palette().text().color().lightness();
+        const int pixMapWidth(16 * qApp->devicePixelRatio()); // Default icon size in menus is 16 but on toolbars is 22. The icon will only show up in QMenus
+                                                              // unless a user adds the action to their toolbar so we go for 16.
+        QPixmap lightPixmap(pixMapWidth, pixMapWidth);
+        QPixmap neutralPixmap(pixMapWidth, pixMapWidth);
+        QPixmap darkPixmap(pixMapWidth, pixMapWidth);
+        QPixmap autoPixmap(pixMapWidth, pixMapWidth);
+        // Wipe them clean. If we don't do this, the background will have all sorts of weird artifacts.
+        lightPixmap.fill(Qt::transparent);
+        neutralPixmap.fill(Qt::transparent);
+        darkPixmap.fill(Qt::transparent);
+        autoPixmap.fill(Qt::transparent);
 
-        QObject::connect(mBackgroundColorWidget, &BackgroundColorWidget::colorModeChanged, mView, &DocumentView::setBackgroundColorMode);
-        QObject::connect(mView, &DocumentView::backgroundColorModeChanged, mBackgroundColorWidget, &BackgroundColorWidget::setColorMode);
+        const QColor &lightColor = usingLightTheme ? qApp->palette().base().color() : qApp->palette().text().color();
+        const QColor &darkColor = usingLightTheme ? qApp->palette().text().color() : qApp->palette().base().color();
+        QColor neutralColor = KColorUtils::mix(lightColor, darkColor, 0.5);
+
+        paintPixmap(lightPixmap, lightColor);
+        paintPixmap(neutralPixmap, neutralColor);
+        paintPixmap(darkPixmap, darkColor);
+        paintAutoPixmap(autoPixmap, lightColor, darkColor);
+
+        autoAction->setIcon(autoPixmap);
+        lightAction->setIcon(lightPixmap);
+        neutralAction->setIcon(neutralPixmap);
+        darkAction->setIcon(darkPixmap);
+    }
+
+    void paintPixmap(QPixmap &pixmap, const QColor &color) const
+    {
+        QPainter painter;
+        painter.begin(&pixmap);
+        painter.setRenderHint(QPainter::Antialiasing);
+
+        // QPainter isn't good at drawing lines that are exactly 1px thick.
+        qreal penWidth = qApp->devicePixelRatio() != 1 ? qApp->devicePixelRatio() : qApp->devicePixelRatio() + 0.001;
+        QColor penColor = KColorUtils::mix(color, qApp->palette().text().color(), 0.3);
+        QPen pen(penColor, penWidth);
+        qreal margin = pen.widthF() / 2.0;
+        QMarginsF penMargins(margin, margin, margin, margin);
+        QRectF rect = pixmap.rect();
+
+        painter.setBrush(color);
+        painter.setPen(pen);
+        painter.drawEllipse(rect.marginsRemoved(penMargins));
+
+        painter.end();
+    }
+
+    void paintAutoPixmap(QPixmap &pixmap, const QColor &lightColor, const QColor &darkColor) const
+    {
+        QPainter painter;
+        painter.begin(&pixmap);
+        painter.setRenderHint(QPainter::Antialiasing);
+
+        // QPainter isn't good at drawing lines that are exactly 1px thick.
+        qreal penWidth = qApp->devicePixelRatio() != 1 ? qApp->devicePixelRatio() : qApp->devicePixelRatio() + 0.001;
+        QColor lightPenColor = KColorUtils::mix(lightColor, darkColor, 0.3);
+        QPen lightPen(lightPenColor, penWidth);
+        QColor darkPenColor = KColorUtils::mix(darkColor, lightColor, 0.3);
+        QPen darkPen(darkPenColor, penWidth);
+
+        qreal margin = lightPen.widthF() / 2.0;
+        QMarginsF penMargins(margin, margin, margin, margin);
+        QRectF rect = pixmap.rect();
+        rect = rect.marginsRemoved(penMargins);
+        int lightStartAngle = 45 * 16;
+        int lightSpanAngle = 180 * 16;
+        int darkStartAngle = -135 * 16;
+        int darkSpanAngle = 180 * 16;
+
+        painter.setBrush(lightColor);
+        painter.setPen(lightPen);
+        painter.drawChord(rect, lightStartAngle, lightSpanAngle);
+        painter.setBrush(darkColor);
+        painter.setPen(darkPen);
+        painter.drawChord(rect, darkStartAngle, darkSpanAngle);
+
+        painter.end();
     }
 
     void connectZoomWidget()
@@ -178,7 +247,6 @@ DocumentViewController::DocumentViewController(KActionCollection *actionCollecti
     d->q = this;
     d->mActionCollection = actionCollection;
     d->mView = nullptr;
-    d->mBackgroundColorWidget = nullptr;
     d->mZoomWidget = nullptr;
     d->mToolContainer = nullptr;
 
@@ -198,8 +266,12 @@ void DocumentViewController::setView(DocumentView *view)
         for (QAction *action : qAsConst(d->mActions)) {
             disconnect(action, nullptr, d->mView, nullptr);
         }
+        disconnect(d->mBackgroundColorModeAuto, &QAction::triggered, this, nullptr);
+        disconnect(d->mBackgroundColorModeLight, &QAction::triggered, this, nullptr);
+        disconnect(d->mBackgroundColorModeNeutral, &QAction::triggered, this, nullptr);
+        disconnect(d->mBackgroundColorModeDark, &QAction::triggered, this, nullptr);
+
         disconnect(d->mZoomWidget, nullptr, d->mView, nullptr);
-        disconnect(d->mBackgroundColorWidget, nullptr, d->mView, nullptr);
     }
 
     // Connect new view
@@ -221,19 +293,19 @@ void DocumentViewController::setView(DocumentView *view)
     connect(d->mToggleBirdEyeViewAction, &QAction::triggered, d->mView, &DocumentView::toggleBirdEyeView);
 
     connect(d->mBackgroundColorModeAuto, &QAction::triggered, this, [this]() {
-        d->mView->setBackgroundColorMode(BackgroundColorWidget::Auto);
+        d->mView->setBackgroundColorMode(DocumentView::BackgroundColorMode::Auto);
         qApp->paletteChanged(qApp->palette());
     });
     connect(d->mBackgroundColorModeLight, &QAction::triggered, this, [this]() {
-        d->mView->setBackgroundColorMode(BackgroundColorWidget::Light);
+        d->mView->setBackgroundColorMode(DocumentView::BackgroundColorMode::Light);
         qApp->paletteChanged(qApp->palette());
     });
     connect(d->mBackgroundColorModeNeutral, &QAction::triggered, this, [this]() {
-        d->mView->setBackgroundColorMode(BackgroundColorWidget::Neutral);
+        d->mView->setBackgroundColorMode(DocumentView::BackgroundColorMode::Neutral);
         qApp->paletteChanged(qApp->palette());
     });
     connect(d->mBackgroundColorModeDark, &QAction::triggered, this, [this]() {
-        d->mView->setBackgroundColorMode(BackgroundColorWidget::Dark);
+        d->mView->setBackgroundColorMode(DocumentView::BackgroundColorMode::Dark);
         qApp->paletteChanged(qApp->palette());
     });
 
@@ -241,9 +313,6 @@ void DocumentViewController::setView(DocumentView *view)
     updateZoomToFitActionFromView();
     updateZoomToFillActionFromView();
     updateTool();
-
-    // Sync background color widget
-    d->connectBackgroundColorWidget();
 
     // Sync zoom widget
     d->connectZoomWidget();
@@ -253,24 +322,6 @@ void DocumentViewController::setView(DocumentView *view)
 DocumentView *DocumentViewController::view() const
 {
     return d->mView;
-}
-
-void DocumentViewController::setBackgroundColorWidget(BackgroundColorWidget *widget)
-{
-    d->mBackgroundColorWidget = widget;
-
-    d->mBackgroundColorWidget->setActions(d->mBackgroundColorModeAuto,
-                                          d->mBackgroundColorModeLight,
-                                          d->mBackgroundColorModeNeutral,
-                                          d->mBackgroundColorModeDark);
-
-    d->connectBackgroundColorWidget();
-    d->mBackgroundColorWidget->setVisible(true);
-}
-
-BackgroundColorWidget *DocumentViewController::backgroundColorWidget() const
-{
-    return d->mBackgroundColorWidget;
 }
 
 void DocumentViewController::setZoomWidget(ZoomWidget *widget)
