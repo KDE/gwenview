@@ -118,7 +118,7 @@
     <p xml:lang="ia">Gwenview es un visor de imagine per KDE rapide e facile de usar, ideal per monstrar e navigar  in un colection de images.</p>
     <p xml:lang="id">Gwenview adalah cepat dan mudah untuk penggunaan penampil citra oleh KDE, sangat baik untuk menelusuri dan menampilkan citra dari sebuah koleksi.</p>
     <p xml:lang="is">Gwenview er hraðvirkur og auðveldur myndskoðari frá KDE, hentugur til að vafra og birta myndir í myndasafni.</p>
-    <p xml:lang="it">Gwenview è un visore di immagini veloce e semplice da usare di KDE, ideale per sfogliare e visualizzare una collezione di immagini.</p>
+    <p xml:lang="it">Gwenview è un visore di immagini veloce e semplice da usare di KDE, ideale per sfogliare e visualizzare una raccolta di immagini.</p>
     <p xml:lang="ko">Gwenview는 KDE의 빠르고 사용하기 편한 그림 뷰어입니다.</p>
     <p xml:lang="lt">Gwenview yra greita ir lengva naudoti paveikslų žiūryklė pagal KDE, tobulai tinkanti naršyti ir atvaizduoti paveikslų kolekcijas.</p>
     <p xml:lang="nl">Gwenview is een snelle en gemakkelijk te gebruiken viewer voor afbeeldingen door KDE, ideaal voor bladeren door en weergeven van een verzameling afbeeldingen.</p>
@@ -393,8 +393,10 @@
       <caption xml:lang="fr">Utiliser Gwenview pour gérer votre collection d'images.</caption>
       <caption xml:lang="hu">A Gwenview használata a képgyűjteménye kezeléséhez</caption>
       <caption xml:lang="ia">Usa Guenview pro gerer tu collection de image</caption>
+      <caption xml:lang="it">Usa Gwenview per gestire la raccolta delle immagini</caption>
       <caption xml:lang="nl">Gwenview gebruiken om uw verzameling afbeeldingen te beheren</caption>
       <caption xml:lang="pl">Użyj Gwenview do zarządzania twoimi zbiorami obrazów</caption>
+      <caption xml:lang="pt-BR">Usar Gwenview para gerenciar sua coleção de imagens</caption>
       <caption xml:lang="sl">Uporabite Gwenview za upravljanje svoje zbirke slik</caption>
       <caption xml:lang="sv">Använd Gwenview för att hantera din bildsamling</caption>
       <caption xml:lang="uk">Використання Gwenview для керування вашою збіркою зображень</caption>
