@@ -559,7 +559,11 @@ QImage JpegContent::thumbnail() const
 #else
         Exiv2::DataBuf thumbnail = d->mExifData.copyThumbnail();
 #endif
+#if (EXIV2_TEST_VERSION(0, 28, 0))
+        image.loadFromData(thumbnail.data(), thumbnail.size());
+#else
         image.loadFromData(thumbnail.pData_, thumbnail.size_);
+#endif
 
         auto it = d->mExifData.findKey(Exiv2::ExifKey("Exif.Canon.ThumbnailImageValidArea"));
         // ensure ThumbnailImageValidArea actually specifies a rectangle, i.e. there must be 4 coordinates
