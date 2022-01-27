@@ -47,15 +47,26 @@ bool urlIsFastLocalFile(const QUrl &url)
         return false;
     }
 
-    KMountPoint::List list = KMountPoint::currentMountPoints();
-    KMountPoint::Ptr mountPoint = list.findByPath(url.toLocalFile());
-    if (!mountPoint) {
+    // Only query the mountpoint when we haven't queried it for this folder before
+    static QString lastFolder;
+    static KMountPoint::Ptr lastMountPoint;
+
+    const QString fileName = url.toLocalFile();
+    QString currentFolder = fileName.left(fileName.lastIndexOf(QLatin1Char('/')));
+
+    if (currentFolder != lastFolder) {
+        lastFolder = currentFolder;
+        KMountPoint::List list = KMountPoint::currentMountPoints();
+        lastMountPoint = list.findByPath(url.toLocalFile());
+    }
+
+    if (!lastMountPoint) {
         // We couldn't find a mount point for the url. We are probably in a
         // chroot. Assume everything is fast then.
         return true;
     }
 
-    return !mountPoint->probablySlow();
+    return !lastMountPoint->probablySlow();
 }
 
 bool urlIsDirectory(const QUrl &url)
