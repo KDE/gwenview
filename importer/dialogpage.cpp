@@ -39,14 +39,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 struct DialogPagePrivate : public Ui_DialogPage {
-    QVBoxLayout *mLayout;
+    QVBoxLayout *mLayout = nullptr;
     QList<QPushButton *> mButtons;
-    QEventLoop *mEventLoop;
-    DialogPage *q;
+    QEventLoop *mEventLoop = nullptr;
+    DialogPage *q = nullptr;
     QStringList failedFileList;
     QStringList failedDirList;
-    QAction *fileDetails;
-    QAction *dirDetails;
+    QAction *fileDetails = nullptr;
+    QAction *dirDetails = nullptr;
 
     void setupFailedListActions()
     {

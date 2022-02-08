@@ -70,9 +70,9 @@ struct ThumbnailBarItemDelegatePrivate {
     using ShadowCache = QMap<int, QPixmap>;
     mutable ShadowCache mShadowCache;
 
-    ThumbnailBarItemDelegate *q;
-    ThumbnailView *mView;
-    QToolButton *mToggleSelectionButton;
+    ThumbnailBarItemDelegate *q = nullptr;
+    ThumbnailView *mView = nullptr;
+    QToolButton *mToggleSelectionButton = nullptr;
 
     QColor mBorderColor;
     QPersistentModelIndex mIndexUnderCursor;

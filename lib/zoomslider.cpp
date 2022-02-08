@@ -35,9 +35,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 struct ZoomSliderPrivate {
-    QToolButton *mZoomOutButton;
-    QToolButton *mZoomInButton;
-    QSlider *mSlider;
+    QToolButton *mZoomOutButton = nullptr;
+    QToolButton *mZoomInButton = nullptr;
+    QSlider *mSlider = nullptr;
 
     void updateButtons()
     {

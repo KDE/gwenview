@@ -64,11 +64,11 @@ struct RedEyeReductionWidget : public QWidget, public Ui_RedEyeReductionWidget {
 };
 
 struct RedEyeReductionToolPrivate {
-    RedEyeReductionTool *q;
+    RedEyeReductionTool *q = nullptr;
     RedEyeReductionTool::Status mStatus;
     QPointF mCenter;
     int mDiameter;
-    RedEyeReductionWidget *mToolWidget;
+    RedEyeReductionWidget *mToolWidget = nullptr;
 
     void setupToolWidget()
     {

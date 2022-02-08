@@ -36,7 +36,7 @@ namespace Gwenview
 {
 struct DocumentDirFinderPrivate {
     QUrl mRootUrl;
-    KDirLister *mDirLister;
+    KDirLister *mDirLister = nullptr;
 
     QUrl mFoundDirUrl;
 };

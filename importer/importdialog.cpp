@@ -51,12 +51,12 @@ namespace Gwenview
 class ImportDialogPrivate
 {
 public:
-    ImportDialog *q;
-    QStackedWidget *mCentralWidget;
-    ThumbnailPage *mThumbnailPage;
-    ProgressPage *mProgressPage;
-    DialogPage *mDialogPage;
-    Importer *mImporter;
+    ImportDialog *q = nullptr;
+    QStackedWidget *mCentralWidget = nullptr;
+    ThumbnailPage *mThumbnailPage = nullptr;
+    ProgressPage *mProgressPage = nullptr;
+    DialogPage *mDialogPage = nullptr;
+    Importer *mImporter = nullptr;
 
     void checkForFailedUrls()
     {

@@ -70,7 +70,7 @@ private:
 };
 
 struct RecentFilesModelPrivate {
-    RecentFilesModel *q;
+    RecentFilesModel *q = nullptr;
 
     QMap<QUrl, RecentFilesItem *> mRecentFilesItemForUrl;
 };

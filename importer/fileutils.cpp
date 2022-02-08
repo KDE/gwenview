@@ -45,8 +45,8 @@ namespace FileUtils
 {
 bool contentsAreIdentical(const QUrl &url1, const QUrl &url2, QWidget *authWindow)
 {
-    KIO::StatJob *statJob;
-    KIO::StoredTransferJob *fileJob;
+    KIO::StatJob *statJob = nullptr;
+    KIO::StoredTransferJob *fileJob = nullptr;
     QScopedPointer<QIODevice> file1, file2;
     QByteArray file1Bytes, file2Bytes;
 

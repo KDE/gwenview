@@ -33,7 +33,7 @@ namespace Gwenview
 {
 struct SvgDocumentLoadedImplPrivate {
     QByteArray mRawData;
-    QSvgRenderer *mRenderer;
+    QSvgRenderer *mRenderer = nullptr;
 };
 
 SvgDocumentLoadedImpl::SvgDocumentLoadedImpl(Document *document, const QByteArray &data)

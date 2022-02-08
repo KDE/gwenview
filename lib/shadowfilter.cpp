@@ -35,7 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 struct ShadowFilterPrivate {
-    QWidget *mWidget;
+    QWidget *mWidget = nullptr;
     QHash<ShadowFilter::WidgetEdge, QColor> mShadows;
 
     void paintShadow(QPainter *painter, const QColor &color, QPoint origin, int dx, int dy)

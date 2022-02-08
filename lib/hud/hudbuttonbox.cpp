@@ -35,8 +35,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 namespace Gwenview
 {
 struct HudButtonBoxPrivate {
-    QGraphicsLinearLayout *mLayout;
-    HudLabel *mLabel;
+    QGraphicsLinearLayout *mLayout = nullptr;
+    HudLabel *mLabel = nullptr;
     QList<HudButton *> mButtonList;
     HudCountDown *mCountDown;
 

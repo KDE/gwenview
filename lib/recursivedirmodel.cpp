@@ -35,7 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 struct RecursiveDirModelPrivate {
-    KDirLister *mDirLister;
+    KDirLister *mDirLister = nullptr;
 
     int rowForUrl(const QUrl &url) const
     {
@@ -90,11 +90,7 @@ RecursiveDirModel::RecursiveDirModel(QObject *parent)
     connect(d->mDirLister, QOverload<>::of(&KDirLister::completed), this, &RecursiveDirModel::completed);
     connect(d->mDirLister, QOverload<>::of(&KDirLister::clear), this, &RecursiveDirModel::slotCleared);
 
-#if KIO_VERSION < QT_VERSION_CHECK(5, 79, 0)
-    connect(d->mDirLister, QOverload<const QUrl &>::of(&KDirLister::clear), this, &RecursiveDirModel::slotDirCleared);
-#else
     connect(d->mDirLister, &KDirLister::clearDir, this, &RecursiveDirModel::slotDirCleared);
-#endif
 }
 
 RecursiveDirModel::~RecursiveDirModel()

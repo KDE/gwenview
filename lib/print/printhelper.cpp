@@ -42,7 +42,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 namespace Gwenview
 {
 struct PrintHelperPrivate {
-    QWidget *mParent;
+    QWidget *mParent = nullptr;
 
     QSize adjustSize(PrintOptionsPage *optionsPage, Document::Ptr doc, int printerResolution, const QSize &viewportSize)
     {

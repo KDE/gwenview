@@ -48,11 +48,10 @@ namespace Gwenview
 {
 struct SemanticInfoCacheItem {
     SemanticInfoCacheItem()
-        : mValid(false)
     {
     }
     QPersistentModelIndex mIndex;
-    bool mValid;
+    bool mValid = false;
     SemanticInfo mInfo;
 };
 

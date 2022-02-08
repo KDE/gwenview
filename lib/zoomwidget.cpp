@@ -51,10 +51,10 @@ inline qreal zoomForSliderValue(int sliderValue)
 }
 
 struct ZoomWidgetPrivate {
-    ZoomWidget *q;
+    ZoomWidget *q = nullptr;
 
-    ZoomSlider *mZoomSlider;
-    ZoomComboBox *mZoomComboBox;
+    ZoomSlider *mZoomSlider = nullptr;
+    ZoomComboBox *mZoomComboBox = nullptr;
     QAction *mActualSizeAction = nullptr;
 
     bool mZoomUpdatedBySlider;

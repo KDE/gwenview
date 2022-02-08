@@ -31,7 +31,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 namespace Gwenview
 {
 struct HudCountDownPrivate {
-    QTimeLine *mTimeLine;
+    QTimeLine *mTimeLine = nullptr;
 };
 
 HudCountDown::HudCountDown(QGraphicsWidget *parent)

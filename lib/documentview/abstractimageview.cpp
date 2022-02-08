@@ -43,7 +43,7 @@ struct AbstractImageViewPrivate {
         Silent,
         Notify,
     };
-    AbstractImageView *q;
+    AbstractImageView *q = nullptr;
     QCursor mZoomCursor;
     Document::Ptr mDocument;
 

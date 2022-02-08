@@ -39,10 +39,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 struct HudWidgetPrivate {
-    HudWidget *q;
-    QPropertyAnimation *mAnim;
-    QGraphicsWidget *mMainWidget;
-    HudButton *mCloseButton;
+    HudWidget *q = nullptr;
+    QPropertyAnimation *mAnim = nullptr;
+    QGraphicsWidget *mMainWidget = nullptr;
+    HudButton *mCloseButton = nullptr;
     bool mAutoDeleteOnFadeout;
 
     void fadeTo(qreal value)

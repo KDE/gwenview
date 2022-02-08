@@ -51,10 +51,10 @@ inline QRectF alignedRectF(const QRectF &rect)
 }
 
 struct BirdEyeViewPrivate {
-    BirdEyeView *q;
-    DocumentView *mDocView;
-    QPropertyAnimation *mOpacityAnim;
-    QTimer *mAutoHideTimer;
+    BirdEyeView *q = nullptr;
+    DocumentView *mDocView = nullptr;
+    QPropertyAnimation *mOpacityAnim = nullptr;
+    QTimer *mAutoHideTimer = nullptr;
     QRectF mVisibleRect;
     QPointF mStartDragMousePos;
     QPointF mStartDragViewPos;

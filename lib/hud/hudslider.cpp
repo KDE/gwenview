@@ -40,7 +40,7 @@ namespace Gwenview
 static const int FIRST_REPEAT_DELAY = 500;
 
 struct HudSliderPrivate {
-    HudSlider *q;
+    HudSlider *q = nullptr;
     int mMin, mMax, mPageStep, mSingleStep;
     int mSliderPosition;
     int mRepeatX;

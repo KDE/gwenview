@@ -66,7 +66,7 @@ struct Node {
     {
     }
 
-    SortedDirModel *model;
+    SortedDirModel *model = nullptr;
     QUrl parentUrl;
 
     bool isPlace() const

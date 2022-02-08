@@ -39,10 +39,10 @@ namespace Gwenview
 static const int TIMEOUT = 10000;
 
 struct HudMessageBubblePrivate {
-    QGraphicsWidget *mWidget;
-    QGraphicsLinearLayout *mLayout;
-    HudCountDown *mCountDown;
-    HudLabel *mLabel;
+    QGraphicsWidget *mWidget = nullptr;
+    QGraphicsLinearLayout *mLayout = nullptr;
+    HudCountDown *mCountDown = nullptr;
+    HudLabel *mLabel = nullptr;
 };
 
 HudMessageBubble::HudMessageBubble(QGraphicsWidget *parent)

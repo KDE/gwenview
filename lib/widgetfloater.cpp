@@ -33,7 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 struct WidgetFloaterPrivate {
-    QWidget *mParent;
+    QWidget *mParent = nullptr;
     QPointer<QWidget> mChild;
     Qt::Alignment mAlignment;
 

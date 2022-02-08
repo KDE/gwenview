@@ -47,8 +47,8 @@ struct LayoutInfo {
 };
 
 struct HudButtonPrivate {
-    HudButton *q;
-    QAction *mAction;
+    HudButton *q = nullptr;
+    QAction *mAction = nullptr;
 
     QPalette mDarkPalette;
     QPixmap mLightIcon;

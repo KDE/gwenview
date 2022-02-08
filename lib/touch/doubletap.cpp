@@ -34,7 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 struct DoubleTapRecognizerPrivate {
-    DoubleTapRecognizer *q;
+    DoubleTapRecognizer *q = nullptr;
     bool mTargetIsGrapicsWidget = false;
     qint64 mTouchBeginnTimestamp;
     bool mIsOnlyTap;

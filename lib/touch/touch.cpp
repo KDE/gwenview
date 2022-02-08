@@ -41,8 +41,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 struct TouchPrivate {
-    Touch *q;
-    QObject *mTarget;
+    Touch *q = nullptr;
+    QObject *mTarget = nullptr;
     Qt::GestureState mLastPanGestureState;
     QPointF mLastTapPos;
     bool mTabHoldandMovingGestureActive;
