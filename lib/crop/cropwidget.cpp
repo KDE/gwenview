@@ -194,13 +194,13 @@ struct CropWidgetPrivate : public QWidget {
         addRatioToComboBox(ratio(QGuiApplication::screenAt(QCursor::pos())->geometry().size()), i18n("This Screen"));
         addSectionHeaderToComboBox(i18n("Landscape"));
 
-        for (const QSizeF &size : qAsConst(ratioList)) {
+        for (const QSizeF &size : std::as_const(ratioList)) {
             addRatioToComboBox(size);
         }
         addRatioToComboBox(QSizeF(sqrt2, 1), i18n("ISO (A4, A3...)"));
         addRatioToComboBox(QSizeF(11, 8.5), i18n("US Letter"));
         addSectionHeaderToComboBox(i18n("Portrait"));
-        for (QSizeF size : qAsConst(ratioList)) {
+        for (QSizeF size : std::as_const(ratioList)) {
             size.transpose();
             addRatioToComboBox(size);
         }
@@ -374,7 +374,7 @@ CropWidget::CropWidget(QWidget *parent, RasterImageView *imageView, CropTool *cr
     setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
 
     connect(d->advancedCheckBox, &QCheckBox::toggled, this, &CropWidget::slotAdvancedCheckBoxToggled);
-    for (auto w : qAsConst(d->mAdvancedWidgets)) {
+    for (auto w : std::as_const(d->mAdvancedWidgets)) {
         w->setVisible(false);
     }
 
@@ -528,7 +528,7 @@ void CropWidget::applyRatioConstraint()
 
 void CropWidget::slotAdvancedCheckBoxToggled(bool checked)
 {
-    for (auto w : qAsConst(d->mAdvancedWidgets)) {
+    for (auto w : std::as_const(d->mAdvancedWidgets)) {
         w->setVisible(checked);
     }
     d->mPreserveAspectRatioWidget->setVisible(!checked);

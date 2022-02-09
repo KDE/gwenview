@@ -452,7 +452,7 @@ void ViewMainPage::loadConfig()
     d->applyPalette(window()->isFullScreen());
 
     // FIXME: Not symmetric with saveConfig(). Check if it matters.
-    for (DocumentView *view : qAsConst(d->mDocumentViews)) {
+    for (DocumentView *view : std::as_const(d->mDocumentViews)) {
         view->loadAdapterConfig();
     }
 
@@ -657,7 +657,7 @@ void ViewMainPage::openUrls(const QList<QUrl> &allUrls, const QUrl &currentUrl)
     }
     // Destroy views which show urls we don't care about, remove from "urls" the
     // urls which already have a view.
-    for (DocumentView *view : qAsConst(d->mDocumentViews)) {
+    for (DocumentView *view : std::as_const(d->mDocumentViews)) {
         QUrl url = view->url();
         if (urls.contains(url)) {
             // view displays an url we must display, keep it
@@ -670,7 +670,7 @@ void ViewMainPage::openUrls(const QList<QUrl> &allUrls, const QUrl &currentUrl)
     }
 
     // Create view for remaining urls
-    for (const QUrl &url : qAsConst(urls)) {
+    for (const QUrl &url : std::as_const(urls)) {
         if (d->mDocumentViews.count() >= MaxViewCount) {
             qCWarning(GWENVIEW_APP_LOG) << "Too many documents to show";
             break;
@@ -706,7 +706,7 @@ void ViewMainPage::openUrls(const QList<QUrl> &allUrls, const QUrl &currentUrl)
     }
 
     // Init views
-    for (DocumentView *view : qAsConst(d->mDocumentViews)) {
+    for (DocumentView *view : std::as_const(d->mDocumentViews)) {
         view->setCompareMode(d->mCompareMode);
         if (view->url() == currentUrl) {
             d->setCurrentView(view);

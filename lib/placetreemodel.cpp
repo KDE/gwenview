@@ -163,7 +163,7 @@ PlaceTreeModel::PlaceTreeModel(QObject *parent)
 
 PlaceTreeModel::~PlaceTreeModel()
 {
-    for (NodeHash *nodeHash : qAsConst(d->mNodes)) {
+    for (NodeHash *nodeHash : std::as_const(d->mNodes)) {
         qDeleteAll(*nodeHash);
     }
     qDeleteAll(d->mNodes);

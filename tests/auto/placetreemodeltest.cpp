@@ -88,7 +88,7 @@ void PlaceTreeModelTest::initTestCase()
     mUrl1Dirs << "aaa"
               << "zzz"
               << "bbb";
-    for (const QString &dirName : qAsConst(mUrl1Dirs)) {
+    for (const QString &dirName : std::as_const(mUrl1Dirs)) {
         dir.mkdir("url1/" + dirName);
     }
 

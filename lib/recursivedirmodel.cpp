@@ -160,13 +160,13 @@ void RecursiveDirModel::slotItemsAdded(const QUrl &, const KFileItemList &newLis
 
     if (!fileList.isEmpty()) {
         beginInsertRows(QModelIndex(), d->list().count(), d->list().count() + fileList.count());
-        for (const KFileItem &item : qAsConst(fileList)) {
+        for (const KFileItem &item : std::as_const(fileList)) {
             d->addItem(item);
         }
         endInsertRows();
     }
 
-    for (const QUrl &url : qAsConst(dirUrls)) {
+    for (const QUrl &url : std::as_const(dirUrls)) {
         d->mDirLister->openUrl(url, KDirLister::Keep);
     }
 }

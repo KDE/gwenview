@@ -99,7 +99,7 @@ void ImporterTest::testSuccessfulImport()
     QCOMPARE(importer.skippedUrlList().count(), 0);
     QCOMPARE(importer.renamedCount(), 0);
 
-    for (const QUrl &src : qAsConst(list)) {
+    for (const QUrl &src : std::as_const(list)) {
         QUrl dst = destUrl;
         dst.setPath(dst.path() + '/' + src.fileName());
         QVERIFY(FileUtils::contentsAreIdentical(src, dst));
@@ -134,7 +134,7 @@ void ImporterTest::testSuccessfulImportRemote()
     QCOMPARE(importer.skippedUrlList().count(), 0);
     QCOMPARE(importer.renamedCount(), 0);
 
-    for (const QUrl &src : qAsConst(list)) {
+    for (const QUrl &src : std::as_const(list)) {
         QUrl dst = remoteUrl;
         dst.setPath(dst.path() + '/' + src.fileName());
         QVERIFY(FileUtils::contentsAreIdentical(src, dst));
@@ -155,7 +155,7 @@ void ImporterTest::testSuccessfulImportRemote()
     QCOMPARE(importer.skippedUrlList().count(), 0);
     QCOMPARE(importer.renamedCount(), 0);
 
-    for (const QUrl &src : qAsConst(list)) {
+    for (const QUrl &src : std::as_const(list)) {
         QUrl dst = localUrl;
         dst.setPath(dst.path() + '/' + src.fileName());
         QVERIFY(FileUtils::contentsAreIdentical(src, dst));

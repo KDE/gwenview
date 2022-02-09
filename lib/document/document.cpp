@@ -70,7 +70,7 @@ static void logQueue(DocumentPrivate *d)
         return;
     }
     qDebug(PREFIX "%d pending job(s):", d->mJobQueue.size());
-    for (DocumentJob *job : qAsConst(d->mJobQueue)) {
+    for (DocumentJob *job : std::as_const(d->mJobQueue)) {
         Q_ASSERT(job);
         qCDebug(GWENVIEW_LIB_LOG) << PREFIX "-" << job;
     }

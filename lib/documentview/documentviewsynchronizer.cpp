@@ -54,7 +54,7 @@ struct DocumentViewSynchronizerPrivate {
         QObject::connect(mCurrentView.data(), SIGNAL(zoomToFillChanged(bool)), q, SLOT(setZoomToFill(bool)));
         QObject::connect(mCurrentView.data(), SIGNAL(positionChanged()), q, SLOT(updatePosition()));
 
-        for (DocumentView *view : qAsConst(*mViews)) {
+        for (DocumentView *view : std::as_const(*mViews)) {
             if (view == mCurrentView.data()) {
                 continue;
             }
@@ -105,7 +105,7 @@ void DocumentViewSynchronizer::setActive(bool active)
 
 void DocumentViewSynchronizer::setZoom(qreal zoom)
 {
-    for (DocumentView *view : qAsConst(*d->mViews)) {
+    for (DocumentView *view : std::as_const(*d->mViews)) {
         if (view == d->mCurrentView.data()) {
             continue;
         }
@@ -116,7 +116,7 @@ void DocumentViewSynchronizer::setZoom(qreal zoom)
 
 void DocumentViewSynchronizer::setZoomToFit(bool fit)
 {
-    for (DocumentView *view : qAsConst(*d->mViews)) {
+    for (DocumentView *view : std::as_const(*d->mViews)) {
         if (view == d->mCurrentView.data()) {
             continue;
         }
@@ -127,7 +127,7 @@ void DocumentViewSynchronizer::setZoomToFit(bool fit)
 
 void DocumentViewSynchronizer::setZoomToFill(bool fit)
 {
-    for (DocumentView *view : qAsConst(*d->mViews)) {
+    for (DocumentView *view : std::as_const(*d->mViews)) {
         if (view == d->mCurrentView.data()) {
             continue;
         }
@@ -141,7 +141,7 @@ void DocumentViewSynchronizer::updatePosition()
     QPoint pos = d->mCurrentView.data()->position();
     QPoint delta = pos - d->mOldPosition;
     d->mOldPosition = pos;
-    for (DocumentView *view : qAsConst(*d->mViews)) {
+    for (DocumentView *view : std::as_const(*d->mViews)) {
         if (view == d->mCurrentView.data()) {
             continue;
         }

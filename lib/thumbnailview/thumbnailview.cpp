@@ -1022,7 +1022,7 @@ void ThumbnailView::updateThumbnailBusyState(const QUrl &url, bool busy)
 
 void ThumbnailView::updateBusyIndexes()
 {
-    for (const QPersistentModelIndex &index : qAsConst(d->mBusyIndexSet)) {
+    for (const QPersistentModelIndex &index : std::as_const(d->mBusyIndexSet)) {
         update(index);
     }
 }

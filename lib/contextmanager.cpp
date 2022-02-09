@@ -235,7 +235,7 @@ void ContextManager::slotDirModelDataChanged(const QModelIndex &topLeft, const Q
     if (shortList.length() > longList.length()) {
         qSwap(shortList, longList);
     }
-    for (const QModelIndex &index : qAsConst(shortList)) {
+    for (const QModelIndex &index : std::as_const(shortList)) {
         if (longList.contains(index)) {
             d->mSelectedFileItemListNeedsUpdate = true;
             d->queueSignal(&ContextManager::selectionDataChanged);
@@ -269,7 +269,7 @@ void Gwenview::ContextManager::slotCurrentChanged(const QModelIndex &index)
 
 void ContextManager::emitQueuedSignals()
 {
-    for (ContextManagerPrivate::Signal signal : qAsConst(d->mQueuedSignals)) {
+    for (ContextManagerPrivate::Signal signal : std::as_const(d->mQueuedSignals)) {
         Q_EMIT(this->*signal)();
     }
     d->mQueuedSignals.clear();

@@ -696,7 +696,7 @@ void DocumentView::zoomIn(QPointF center)
     }
     qreal currentZoom = d->mAdapter->zoom();
 
-    for (qreal zoom : qAsConst(d->mZoomSnapValues)) {
+    for (qreal zoom : std::as_const(d->mZoomSnapValues)) {
         if (zoom > currentZoom + REAL_DELTA) {
             d->setZoom(zoom, center);
             return;
