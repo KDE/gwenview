@@ -50,8 +50,8 @@ private:
     void onServiceOwnerQueried();
 
 private:
-    OrgFreedesktopScreenSaverInterface *mScreenSaverInterface;
-    bool mLocked;
+    OrgFreedesktopScreenSaverInterface *mScreenSaverInterface = nullptr;
+    bool mLocked = false;
 };
 
 }

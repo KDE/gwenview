@@ -37,13 +37,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 struct DateWidgetPrivate {
-    DateWidget *q;
+    DateWidget *q = nullptr;
 
     QDate mDate;
-    KDatePicker *mDatePicker;
-    StatusBarToolButton *mPreviousButton;
-    StatusBarToolButton *mDateButton;
-    StatusBarToolButton *mNextButton;
+    KDatePicker *mDatePicker = nullptr;
+    StatusBarToolButton *mPreviousButton = nullptr;
+    StatusBarToolButton *mDateButton = nullptr;
+    StatusBarToolButton *mNextButton = nullptr;
 
     void setupDatePicker()
     {

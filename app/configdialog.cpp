@@ -46,11 +46,10 @@ ConfigDialog::ConfigDialog(QWidget *parent)
 {
     setFaceType(KPageDialog::List);
 
-    QWidget *widget;
     KPageWidgetItem *pageItem;
 
     // General
-    widget = setupPage(mGeneralConfigPage);
+    QWidget *widget = setupPage(mGeneralConfigPage);
 
     mWrapNavigationBehaviorGroup = new InvisibleButtonGroup(widget);
     mWrapNavigationBehaviorGroup->setObjectName(QStringLiteral("kcfg_NavigationEndNotification"));

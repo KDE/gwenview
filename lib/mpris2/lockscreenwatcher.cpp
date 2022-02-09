@@ -39,8 +39,6 @@ inline QString screenSaverServiceName()
 
 LockScreenWatcher::LockScreenWatcher(QObject *parent)
     : QObject(parent)
-    , mScreenSaverInterface(nullptr)
-    , mLocked(false)
 {
     auto screenLockServiceWatcher = new QDBusServiceWatcher(this);
     connect(screenLockServiceWatcher, &QDBusServiceWatcher::serviceOwnerChanged, this, &LockScreenWatcher::onScreenSaverServiceOwnerChanged);

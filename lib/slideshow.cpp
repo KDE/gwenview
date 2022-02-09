@@ -82,8 +82,8 @@ struct SlideShowPrivate {
     QUrl mCurrentUrl;
     QUrl mLastShuffledUrl;
 
-    QAction *mLoopAction;
-    QAction *mRandomAction;
+    QAction *mLoopAction = nullptr;
+    QAction *mRandomAction = nullptr;
 
     QUrl findNextUrl()
     {

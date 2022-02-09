@@ -56,7 +56,6 @@ namespace Gwenview
 
 struct Node {
     Node()
-        : model(nullptr)
     {
     }
 
@@ -79,8 +78,8 @@ using NodeHash = QHash<QUrl, Node *>;
 using NodeHashMap = QMap<SortedDirModel *, NodeHash *>;
 
 struct PlaceTreeModelPrivate {
-    PlaceTreeModel *q;
-    KFilePlacesModel *mPlacesModel;
+    PlaceTreeModel *q = nullptr;
+    KFilePlacesModel *mPlacesModel = nullptr;
     QList<SortedDirModel *> mDirModels;
     mutable NodeHashMap mNodes;
 

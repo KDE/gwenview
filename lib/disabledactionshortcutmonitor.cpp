@@ -33,7 +33,7 @@ namespace Gwenview
 class DisabledActionShortcutMonitorPrivate
 {
 public:
-    QShortcut *mShortcut;
+    QShortcut *mShortcut = nullptr;
 };
 
 DisabledActionShortcutMonitor::DisabledActionShortcutMonitor(QAction *action, QWidget *parent)

@@ -97,7 +97,7 @@ public:
     }
 
 private:
-    QBoxLayout *mLayout;
+    QBoxLayout *const mLayout;
 };
 
 FullScreenContent::FullScreenContent(QObject *parent, GvCore *gvCore)

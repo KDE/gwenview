@@ -72,7 +72,7 @@ private:
     void onFullScreenActionToggled(bool checked);
 
 private:
-    QAction *mFullScreenAction;
+    QAction *const mFullScreenAction;
 };
 
 }
