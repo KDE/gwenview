@@ -530,7 +530,7 @@ struct MainWindow::Private {
         });
 #endif
 
-        auto alignWithSideBarWidgetAction = new AlignWithSideBarWidgetAction();
+        auto alignWithSideBarWidgetAction = new AlignWithSideBarWidgetAction(q);
         alignWithSideBarWidgetAction->setSideBar(mSideBar);
         actionCollection->addAction("align_with_sidebar", alignWithSideBarWidgetAction);
 
