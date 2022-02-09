@@ -196,7 +196,7 @@ public:
     }
     Document::Ptr document() const override
     {
-        return Document::Ptr();
+        return {};
     }
     void setDocument(const Document::Ptr &) override
     {

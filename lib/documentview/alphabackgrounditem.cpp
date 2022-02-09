@@ -17,9 +17,7 @@ AlphaBackgroundItem::AlphaBackgroundItem(AbstractImageView *parent)
 {
 }
 
-AlphaBackgroundItem::~AlphaBackgroundItem()
-{
-}
+AlphaBackgroundItem::~AlphaBackgroundItem() = default;
 
 AbstractImageView::AlphaBackgroundMode AlphaBackgroundItem::mode() const
 {

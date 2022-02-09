@@ -330,13 +330,13 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
     {
         QUrl url = mUrlMap.value(mSrcBaseUrl);
         if (!url.isValid()) {
-            return QUrl();
+            return {};
         }
 
         KIO::StatJob *job = KIO::stat(url);
         KJobWidgets::setWindow(job, q);
         if (!job->exec()) {
-            return QUrl();
+            return {};
         }
         KFileItem item(job->statResult(), url, true /* delayedMimeTypes */);
         return item.isDir() ? url : QUrl();

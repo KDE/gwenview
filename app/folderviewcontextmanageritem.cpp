@@ -239,14 +239,14 @@ QModelIndex FolderViewContextManagerItem::findClosestIndex(const QModelIndex &pa
     if (!index.isValid()) {
         index = findRootIndex(wantedUrl);
         if (!index.isValid()) {
-            return QModelIndex();
+            return {};
         }
     }
 
     QUrl url = mModel->urlForIndex(index);
     if (!url.isParentOf(wantedUrl)) {
         qCWarning(GWENVIEW_APP_LOG) << url << "is not a parent of" << wantedUrl << "!";
-        return QModelIndex();
+        return {};
     }
 
     QString relativePath = QDir(url.path()).relativeFilePath(wantedUrl.path());

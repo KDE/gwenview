@@ -231,7 +231,7 @@ struct ImageMetaInfoModelPrivate {
     {
         if (index.internalId() == NoGroup) {
             if (index.column() != 0) {
-                return QVariant();
+                return {};
             }
             QString label = mMetaInfoGroupVector[index.row()]->label();
             return QVariant(label);
@@ -485,7 +485,7 @@ QString ImageMetaInfoModel::getValueForKey(const QString &key) const
 QString ImageMetaInfoModel::keyForIndex(const QModelIndex &index) const
 {
     if (index.internalId() == NoGroup) {
-        return QString();
+        return {};
     }
     MetaInfoGroup *group = d->mMetaInfoGroupVector[index.internalId()];
     return group->getKeyAt(index.row());
@@ -494,19 +494,19 @@ QString ImageMetaInfoModel::keyForIndex(const QModelIndex &index) const
 QModelIndex ImageMetaInfoModel::index(int row, int col, const QModelIndex &parent) const
 {
     if (col < 0 || col > 1) {
-        return QModelIndex();
+        return {};
     }
     if (!parent.isValid()) {
         // This is a group
         if (row < 0 || row >= d->mMetaInfoGroupVector.size()) {
-            return QModelIndex();
+            return {};
         }
         return createIndex(row, col, col == 0 ? NoGroup : NoGroupSpace);
     } else {
         // This is an entry
         int group = parent.row();
         if (row < 0 || row >= d->mMetaInfoGroupVector[group]->size()) {
-            return QModelIndex();
+            return {};
         }
         return createIndex(row, col, group);
     }
@@ -515,10 +515,10 @@ QModelIndex ImageMetaInfoModel::index(int row, int col, const QModelIndex &paren
 QModelIndex ImageMetaInfoModel::parent(const QModelIndex &index) const
 {
     if (!index.isValid()) {
-        return QModelIndex();
+        return {};
     }
     if (index.internalId() == NoGroup || index.internalId() == NoGroupSpace) {
-        return QModelIndex();
+        return {};
     } else {
         return createIndex(index.internalId(), 0, NoGroup);
     }
@@ -543,21 +543,21 @@ int ImageMetaInfoModel::columnCount(const QModelIndex & /*parent*/) const
 QVariant ImageMetaInfoModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid()) {
-        return QVariant();
+        return {};
     }
 
     switch (role) {
     case Qt::DisplayRole:
         return d->displayData(index);
     default:
-        return QVariant();
+        return {};
     }
 }
 
 QVariant ImageMetaInfoModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (orientation == Qt::Vertical || role != Qt::DisplayRole) {
-        return QVariant();
+        return {};
     }
 
     QString caption;

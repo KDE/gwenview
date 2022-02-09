@@ -73,7 +73,7 @@ public:
 
     virtual QByteArray rawData() const
     {
-        return QByteArray();
+        return {};
     }
 
     virtual bool isEditable() const

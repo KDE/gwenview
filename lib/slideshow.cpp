@@ -116,7 +116,7 @@ struct SlideShowPrivate {
         if (it != mUrls.constEnd()) {
             return *it;
         } else {
-            return QUrl();
+            return {};
         }
     }
 
@@ -139,7 +139,7 @@ struct SlideShowPrivate {
             if (GwenviewConfig::loop()) {
                 initShuffledUrls();
             } else {
-                return QUrl();
+                return {};
             }
         }
 

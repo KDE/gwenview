@@ -151,7 +151,7 @@ void SortedDirModel::setBlackListedExtensions(const QStringList &list)
 KFileItem SortedDirModel::itemForIndex(const QModelIndex &index) const
 {
     if (!index.isValid()) {
-        return KFileItem();
+        return {};
     }
 
     QModelIndex sourceIndex = mapToSource(index);
@@ -167,7 +167,7 @@ QUrl SortedDirModel::urlForIndex(const QModelIndex &index) const
 KFileItem SortedDirModel::itemForSourceIndex(const QModelIndex &sourceIndex) const
 {
     if (!sourceIndex.isValid()) {
-        return KFileItem();
+        return {};
     }
     return d->mSourceModel->itemForIndex(sourceIndex);
 }
@@ -175,7 +175,7 @@ KFileItem SortedDirModel::itemForSourceIndex(const QModelIndex &sourceIndex) con
 QModelIndex SortedDirModel::indexForItem(const KFileItem &item) const
 {
     if (item.isNull()) {
-        return QModelIndex();
+        return {};
     }
 
     QModelIndex sourceIndex = d->mSourceModel->indexForItem(item);
@@ -185,7 +185,7 @@ QModelIndex SortedDirModel::indexForItem(const KFileItem &item) const
 QModelIndex SortedDirModel::indexForUrl(const QUrl &url) const
 {
     if (!url.isValid()) {
-        return QModelIndex();
+        return {};
     }
     QModelIndex sourceIndex = d->mSourceModel->indexForUrl(url);
     return mapFromSource(sourceIndex);

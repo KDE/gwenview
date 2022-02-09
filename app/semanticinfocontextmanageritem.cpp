@@ -254,7 +254,7 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
         const QStringList labels(labelMap.values());
 
         for (const QString &label : labels) {
-            DecoratedTag *decoratedTag = new DecoratedTag(label);
+            auto *decoratedTag = new DecoratedTag(label);
             mTagLayout->addWidget(decoratedTag);
         }
         mTagLayout->addWidget(mEditLabel);

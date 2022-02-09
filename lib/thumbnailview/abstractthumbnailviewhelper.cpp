@@ -26,8 +26,6 @@ AbstractThumbnailViewHelper::AbstractThumbnailViewHelper(QObject *parent)
 {
 }
 
-AbstractThumbnailViewHelper::~AbstractThumbnailViewHelper()
-{
-}
+AbstractThumbnailViewHelper::~AbstractThumbnailViewHelper() = default;
 
 } // namespace

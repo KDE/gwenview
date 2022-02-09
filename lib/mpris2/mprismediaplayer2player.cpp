@@ -73,9 +73,7 @@ MprisMediaPlayer2Player::MprisMediaPlayer2Player(const QString &objectDBusPath,
     connect(mPreviousAction, &QAction::changed, this, &MprisMediaPlayer2Player::onPreviousActionChanged);
 }
 
-MprisMediaPlayer2Player::~MprisMediaPlayer2Player()
-{
-}
+MprisMediaPlayer2Player::~MprisMediaPlayer2Player() = default;
 
 bool MprisMediaPlayer2Player::updatePlaybackStatus()
 {

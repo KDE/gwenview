@@ -112,7 +112,7 @@ struct DocumentViewControllerPrivate {
 
         setBackgroundColorModeIcons(mBackgroundColorModeAuto, mBackgroundColorModeLight, mBackgroundColorModeNeutral, mBackgroundColorModeDark);
 
-        QActionGroup *actionGroup = new QActionGroup(q);
+        auto *actionGroup = new QActionGroup(q);
         actionGroup->addAction(mBackgroundColorModeAuto);
         actionGroup->addAction(mBackgroundColorModeLight);
         actionGroup->addAction(mBackgroundColorModeNeutral);

@@ -35,7 +35,7 @@ QUrl setUpRemoteTestDir(const QString &testFile)
     QWidget *authWindow = nullptr;
     if (qEnvironmentVariableIsEmpty("GV_REMOTE_TESTS_BASE_URL")) {
         qWarning() << "Environment variable GV_REMOTE_TESTS_BASE_URL not set: remote tests disabled";
-        return QUrl();
+        return {};
     }
 
     QUrl baseUrl(QString::fromLocal8Bit(qgetenv("GV_REMOTE_TESTS_BASE_URL")));
@@ -55,7 +55,7 @@ QUrl setUpRemoteTestDir(const QString &testFile)
     KJobWidgets::setWindow(mkdirJob, authWindow);
     if (!mkdirJob->exec()) {
         qCritical() << "Could not create dir" << baseUrl << ":" << mkdirJob->errorString();
-        return QUrl();
+        return {};
     }
 
     if (!testFile.isEmpty()) {
@@ -66,7 +66,7 @@ QUrl setUpRemoteTestDir(const QString &testFile)
         KJobWidgets::setWindow(copyJob, authWindow);
         if (!copyJob->exec()) {
             qCritical() << "Could not copy" << testFile << "to" << dstUrl << ":" << copyJob->errorString();
-            return QUrl();
+            return {};
         }
     }
 

@@ -34,9 +34,7 @@ EmptyDocumentImpl::EmptyDocumentImpl(Document *document)
 {
 }
 
-EmptyDocumentImpl::~EmptyDocumentImpl()
-{
-}
+EmptyDocumentImpl::~EmptyDocumentImpl() = default;
 
 void EmptyDocumentImpl::init()
 {

@@ -28,8 +28,6 @@ BinderInternal::BinderInternal(QObject *parent)
 {
 }
 
-BinderInternal::~BinderInternal()
-{
-}
+BinderInternal::~BinderInternal() = default;
 
 } // namespace

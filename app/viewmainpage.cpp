@@ -368,7 +368,7 @@ struct ViewMainPagePrivate {
         QUrl url = view->url();
         if (!url.isValid()) {
             qCWarning(GWENVIEW_APP_LOG) << "View does not display any document!";
-            return QModelIndex();
+            return {};
         }
 
         SortedDirModel *dirModel = mGvCore->sortedDirModel();
@@ -607,7 +607,7 @@ Document::Ptr ViewMainPage::currentDocument() const
 {
     if (!d->currentView()) {
         LOG("!d->documentView()");
-        return Document::Ptr();
+        return {};
     }
 
     return d->currentView()->document();

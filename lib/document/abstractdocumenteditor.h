@@ -41,9 +41,7 @@ namespace Gwenview
 class GWENVIEWLIB_EXPORT AbstractDocumentEditor
 {
 public:
-    virtual ~AbstractDocumentEditor()
-    {
-    }
+    virtual ~AbstractDocumentEditor() = default;
 
     /**
      * Replaces the current image with image.

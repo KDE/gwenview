@@ -201,9 +201,7 @@ SideBarTabBar::SideBarTabBar(QWidget *parent)
     setIconSize(QSize(KIconLoader::SizeSmallMedium, KIconLoader::SizeSmallMedium));
 }
 
-SideBarTabBar::~SideBarTabBar()
-{
-}
+SideBarTabBar::~SideBarTabBar() = default;
 
 SideBarTabBar::TabButtonStyle SideBarTabBar::tabButtonStyle() const
 {

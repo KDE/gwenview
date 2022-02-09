@@ -50,9 +50,7 @@ DecoratedTag::DecoratedTag(const QString &text, QWidget *parent, Qt::WindowFlags
     d->updateMargins();
 }
 
-Gwenview::DecoratedTag::~DecoratedTag() noexcept
-{
-}
+Gwenview::DecoratedTag::~DecoratedTag() noexcept = default;
 
 void DecoratedTag::changeEvent(QEvent *event)
 {

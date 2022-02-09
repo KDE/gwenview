@@ -32,9 +32,7 @@ MprisMediaPlayer2::MprisMediaPlayer2(const QString &objectDBusPath, QAction *ful
     connect(mFullScreenAction, &QAction::toggled, this, &MprisMediaPlayer2::onFullScreenActionToggled);
 }
 
-MprisMediaPlayer2::~MprisMediaPlayer2()
-{
-}
+MprisMediaPlayer2::~MprisMediaPlayer2() = default;
 
 bool MprisMediaPlayer2::canQuit() const
 {
@@ -80,12 +78,12 @@ QString MprisMediaPlayer2::desktopEntry() const
 
 QStringList MprisMediaPlayer2::supportedUriSchemes() const
 {
-    return QStringList();
+    return {};
 }
 
 QStringList MprisMediaPlayer2::supportedMimeTypes() const
 {
-    return QStringList();
+    return {};
 }
 
 bool MprisMediaPlayer2::isFullscreen() const

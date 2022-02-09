@@ -397,7 +397,7 @@ void ThumbnailProvider::thumbnailReady(const QImage &_img, const QSize &_size)
 QImage ThumbnailProvider::loadThumbnailFromCache() const
 {
     if (mThumbnailGroup > ThumbnailGroup::XXLarge) {
-        return QImage();
+        return {};
     }
 
     QImage image = sThumbnailWriter->value(mThumbnailPath);

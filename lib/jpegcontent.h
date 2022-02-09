@@ -80,8 +80,8 @@ private:
     struct Private;
     Private *d;
 
-    JpegContent(const JpegContent &);
-    void operator=(const JpegContent &);
+    JpegContent(const JpegContent &) = delete;
+    void operator=(const JpegContent &) = delete;
     void applyPendingTransformation();
     int dotsPerMeter(const QString &keyName) const;
 };

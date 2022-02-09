@@ -62,7 +62,7 @@ QString protocolForMimeType(const QString &mimeType)
         // We don't want .svgz to be considered as archives because QtSvg knows
         // how to decode gzip-ed svg files
         cache.insert(mimeType, QString());
-        return QString();
+        return {};
     }
 
     QString protocol = KProtocolManager::protocolForArchiveMimetype(mimeType);

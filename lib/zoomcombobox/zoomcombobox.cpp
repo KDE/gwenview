@@ -25,9 +25,7 @@ ZoomValidator::ZoomValidator(qreal minimum, qreal maximum, ZoomComboBox *q, Zoom
 {
 }
 
-ZoomValidator::~ZoomValidator() noexcept
-{
-}
+ZoomValidator::~ZoomValidator() noexcept = default;
 
 qreal ZoomValidator::minimum() const
 {
@@ -135,9 +133,7 @@ ZoomComboBox::ZoomComboBox(QWidget *parent)
     connect(this, qOverload<int>(&ZoomComboBox::activated), this, &ZoomComboBox::activateAndChangeZoomTo);
 }
 
-ZoomComboBox::~ZoomComboBox() noexcept
-{
-}
+ZoomComboBox::~ZoomComboBox() noexcept = default;
 
 void ZoomComboBox::setActions(QAction *zoomToFitAction, QAction *zoomToFillAction, QAction *actualSizeAction)
 {
@@ -287,7 +283,7 @@ bool ZoomComboBox::eventFilter(QObject *watched, QEvent *event)
         }
         case QEvent::ShortcutOverride: {
             if (view()->isVisibleTo(this)) {
-                QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+                auto *keyEvent = static_cast<QKeyEvent *>(event);
                 if (keyEvent->key() == Qt::Key_Escape) {
                     event->accept();
                 }
@@ -386,7 +382,7 @@ void ZoomComboBox::changeZoomTo(int index)
     }
 
     QVariant itemData = this->itemData(index);
-    QAction *action = itemData.value<QAction *>();
+    auto *action = itemData.value<QAction *>();
     if (action) {
         if (!action->isCheckable() || !action->isChecked()) {
             action->trigger();

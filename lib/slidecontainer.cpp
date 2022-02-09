@@ -96,7 +96,7 @@ QSize SlideContainer::sizeHint() const
     if (mContent) {
         return mContent->sizeHint();
     } else {
-        return QSize();
+        return {};
     }
 }
 
@@ -105,7 +105,7 @@ QSize SlideContainer::minimumSizeHint() const
     if (mContent) {
         return mContent->minimumSizeHint();
     } else {
-        return QSize();
+        return {};
     }
 }
 

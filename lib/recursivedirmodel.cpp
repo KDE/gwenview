@@ -123,12 +123,12 @@ int RecursiveDirModel::rowCount(const QModelIndex &parent) const
 QVariant RecursiveDirModel::data(const QModelIndex &index, int role) const
 {
     if (index.parent().isValid()) {
-        return QVariant();
+        return {};
     }
     KFileItem item = d->list().value(index.row());
     if (item.isNull()) {
         qCWarning(GWENVIEW_LIB_LOG) << "Invalid row" << index.row();
-        return QVariant();
+        return {};
     }
     switch (role) {
     case Qt::DisplayRole:
@@ -141,7 +141,7 @@ QVariant RecursiveDirModel::data(const QModelIndex &index, int role) const
         qCWarning(GWENVIEW_LIB_LOG) << "Unhandled role" << role;
         break;
     }
-    return QVariant();
+    return {};
 }
 
 void RecursiveDirModel::slotItemsAdded(const QUrl &, const KFileItemList &newList)

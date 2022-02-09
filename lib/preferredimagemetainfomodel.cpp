@@ -91,7 +91,7 @@ QVariant PreferredImageMetaInfoModel::data(const QModelIndex &index, int role) c
 {
     QModelIndex sourceIndex = mapToSource(index);
     if (!sourceIndex.isValid()) {
-        return QVariant();
+        return {};
     }
 
     switch (role) {

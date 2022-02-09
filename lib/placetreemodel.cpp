@@ -137,7 +137,7 @@ struct PlaceTreeModelPrivate {
     QModelIndex dirIndexForNode(const Node &node, const QModelIndex &index) const
     {
         if (node.isPlace()) {
-            return QModelIndex();
+            return {};
         }
         Q_ASSERT(node.parentUrl.isValid());
         const QModelIndex parentDirIndex = node.model->indexForUrl(node.parentUrl);
@@ -178,7 +178,7 @@ int PlaceTreeModel::columnCount(const QModelIndex &) const
 QVariant PlaceTreeModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid()) {
-        return QVariant();
+        return {};
     }
     QVariant value;
     const Node node = d->nodeForIndex(index);
@@ -195,7 +195,7 @@ QVariant PlaceTreeModel::data(const QModelIndex &index, int role) const
 QModelIndex PlaceTreeModel::index(int row, int column, const QModelIndex &parent) const
 {
     if (column != 0) {
-        return QModelIndex();
+        return {};
     }
     if (!parent.isValid()) {
         // User wants to create a places index
@@ -203,7 +203,7 @@ QModelIndex PlaceTreeModel::index(int row, int column, const QModelIndex &parent
             SortedDirModel *dirModel = d->mDirModels[row];
             return d->createIndexForPlace(dirModel);
         } else {
-            return QModelIndex();
+            return {};
         }
     }
 
@@ -216,7 +216,7 @@ QModelIndex PlaceTreeModel::index(int row, int column, const QModelIndex &parent
         // parent is a place
         parentUrl = dirModel->dirLister()->url();
         if (!parentUrl.isValid()) {
-            return QModelIndex();
+            return {};
         }
     }
     return d->createIndexForDirChild(dirModel, parentUrl, row, column);
@@ -225,11 +225,11 @@ QModelIndex PlaceTreeModel::index(int row, int column, const QModelIndex &parent
 QModelIndex PlaceTreeModel::parent(const QModelIndex &index) const
 {
     if (!index.isValid()) {
-        return QModelIndex();
+        return {};
     }
     const Node node = d->nodeForIndex(index);
     if (node.isPlace()) {
-        return QModelIndex();
+        return {};
     }
     if (node.parentUrl == node.model->dirLister()->url()) {
         // index is a direct child of a place

@@ -78,7 +78,7 @@ static KFileItem fileItemForIndex(const QModelIndex &index)
 {
     if (!index.isValid()) {
         LOG("Invalid index");
-        return KFileItem();
+        return {};
     }
     QVariant data = index.data(KDirModel::FileItemRole);
     return qvariant_cast<KFileItem>(data);
@@ -283,7 +283,7 @@ struct ThumbnailViewPrivate {
         }
         // Keep compiler happy
         Q_ASSERT(0);
-        return QPixmap();
+        return {};
     }
 };
 
@@ -634,7 +634,7 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex &index, QSize *fullSi
         if (fullSize) {
             *fullSize = QSize();
         }
-        return QPixmap();
+        return {};
     }
     QUrl url = item.url();
 

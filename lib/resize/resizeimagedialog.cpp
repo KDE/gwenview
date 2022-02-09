@@ -86,7 +86,7 @@ ResizeImageDialog::ResizeImageDialog(QWidget *parent)
     connect(d->mHeightPercentSpinBox, &QSpinBox::editingFinished, this, &ResizeImageDialog::slotCalculateImageSize);
     connect(d->mKeepAspectCheckBox, &QCheckBox::toggled, this, &ResizeImageDialog::slotKeepAspectChanged);
 
-    QTimer *timer = new QTimer(this);
+    auto *timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, QOverload<>::of(&ResizeImageDialog::slotCalculateImageSize));
     timer->start(2000);
 }

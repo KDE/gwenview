@@ -47,9 +47,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 struct SemanticInfoCacheItem {
-    SemanticInfoCacheItem()
-    {
-    }
+    SemanticInfoCacheItem() = default;
     QPersistentModelIndex mIndex;
     bool mValid = false;
     SemanticInfo mInfo;
@@ -109,12 +107,12 @@ SemanticInfo SemanticInfoDirModel::semanticInfoForIndex(const QModelIndex &index
 {
     if (!index.isValid()) {
         qCWarning(GWENVIEW_LIB_LOG) << "invalid index";
-        return SemanticInfo();
+        return {};
     }
     KFileItem item = itemForIndex(index);
     if (item.isNull()) {
         qCWarning(GWENVIEW_LIB_LOG) << "no item for index";
-        return SemanticInfo();
+        return {};
     }
     return d->mSemanticInfoCache.value(item.targetUrl()).mInfo;
 }
@@ -143,12 +141,12 @@ QVariant SemanticInfoDirModel::data(const QModelIndex &index, int role) const
     if (role == RatingRole || role == DescriptionRole || role == TagsRole) {
         KFileItem item = itemForIndex(index);
         if (item.isNull()) {
-            return QVariant();
+            return {};
         }
         SemanticInfoCache::ConstIterator it = d->mSemanticInfoCache.constFind(item.targetUrl());
         if (it != d->mSemanticInfoCache.constEnd()) {
             if (!it.value().mValid) {
-                return QVariant();
+                return {};
             }
             const SemanticInfo &info = it.value().mInfo;
             if (role == RatingRole) {
@@ -160,11 +158,11 @@ QVariant SemanticInfoDirModel::data(const QModelIndex &index, int role) const
             } else {
                 // We should never reach this part
                 Q_ASSERT(0);
-                return QVariant();
+                return {};
             }
         } else {
             const_cast<SemanticInfoDirModel *>(this)->retrieveSemanticInfoForIndex(index);
-            return QVariant();
+            return {};
         }
     } else {
         return KDirModel::data(index, role);
