@@ -157,8 +157,8 @@ void BirdEyeView::adjustGeometry()
 
 void BirdEyeView::adjustVisibleRect()
 {
-    QSizeF docSize = d->mDocView->document()->size() / qApp->devicePixelRatio();
-    qreal viewZoom = d->mDocView->zoom();
+    const QSizeF docSize = d->mDocView->document()->size() / qApp->devicePixelRatio();
+    const qreal viewZoom = d->mDocView->zoom();
     qreal bevZoom;
     if (docSize.height() > docSize.width()) {
         bevZoom = size().height() / docSize.height();
@@ -171,7 +171,7 @@ void BirdEyeView::adjustVisibleRect()
         return;
     }
 
-    QRectF rect = QRectF(QPointF(d->mDocView->position()) / viewZoom * bevZoom, (d->mDocView->size() / viewZoom).boundedTo(docSize) * bevZoom);
+    const QRectF rect = QRectF(QPointF(d->mDocView->position()) / viewZoom * bevZoom, (d->mDocView->size() / viewZoom).boundedTo(docSize) * bevZoom);
     d->mVisibleRect = rect;
 }
 
@@ -245,9 +245,9 @@ void BirdEyeView::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         // Do not drag if mouse was pressed outside visible rect
         return;
     }
-    qreal ratio = qMin(d->mDocView->boundingRect().height() / d->mVisibleRect.height(), d->mDocView->boundingRect().width() / d->mVisibleRect.width());
-    QPointF mousePos = event->pos();
-    QPointF viewPos = d->mStartDragViewPos + (mousePos - d->mStartDragMousePos) * ratio;
+    const qreal ratio = qMin(d->mDocView->boundingRect().height() / d->mVisibleRect.height(), d->mDocView->boundingRect().width() / d->mVisibleRect.width());
+    const QPointF mousePos = event->pos();
+    const QPointF viewPos = d->mStartDragViewPos + (mousePos - d->mStartDragMousePos) * ratio;
 
     d->mDocView->setPosition(viewPos.toPoint());
 }

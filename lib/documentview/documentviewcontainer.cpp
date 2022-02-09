@@ -42,8 +42,8 @@ using DocumentViewSet = QSet<DocumentView *>;
 using SetupForUrl = QHash<QUrl, DocumentView::Setup>;
 
 struct DocumentViewContainerPrivate {
-    DocumentViewContainer *q;
-    QGraphicsScene *mScene;
+    DocumentViewContainer *q = nullptr;
+    QGraphicsScene *mScene = nullptr;
     SetupForUrl mSetupForUrl;
     DocumentViewSet mViews;
     DocumentViewSet mAddedViews;

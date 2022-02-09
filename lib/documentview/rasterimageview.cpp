@@ -80,9 +80,9 @@ struct RasterImageViewPrivate {
     {
     }
 
-    RasterImageView *q;
+    RasterImageView *q = nullptr;
 
-    RasterImageItem *mImageItem;
+    RasterImageItem *mImageItem = nullptr;
     ToolPainter *mToolItem = nullptr;
 
     QPointer<AbstractRasterImageViewTool> mTool;

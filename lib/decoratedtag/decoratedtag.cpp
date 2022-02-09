@@ -65,12 +65,12 @@ void DecoratedTag::paintEvent(QPaintEvent *event)
     Q_D(const DecoratedTag);
     QStylePainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
-    QColor penColor = KColorUtils::mix(palette().base().color(), palette().text().color(), 0.3);
+    const QColor penColor = KColorUtils::mix(palette().base().color(), palette().text().color(), 0.3);
     // QPainter is bad at drawing lines that are exactly 1px.
     // Using QPen::setCosmetic(true) with a 1px pen width
     // doesn't look quite as good as just using 1.001px.
-    qreal penWidth = 1.001;
-    qreal penMargin = penWidth / 2;
+    const qreal penWidth = 1.001;
+    const qreal penMargin = penWidth / 2;
     QPen pen(penColor, penWidth);
     pen.setCosmetic(true);
     QRectF rect = event->rect();

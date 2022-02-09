@@ -32,7 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 namespace Gwenview
 {
 struct AbstractDocumentImplPrivate {
-    Document *mDocument;
+    Document *mDocument = nullptr;
 };
 
 AbstractDocumentImpl::AbstractDocumentImpl(Document *document)

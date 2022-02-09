@@ -54,7 +54,7 @@ bool JpegDocumentLoadedImpl::saveInternal(QIODevice *device, const QByteArray &f
 {
     if (format == "jpeg") {
         if (!d->mJpegContent->thumbnail().isNull()) {
-            QImage thumbnail = document()->image().scaled(128, 128, Qt::KeepAspectRatio);
+            const QImage thumbnail = document()->image().scaled(128, 128, Qt::KeepAspectRatio);
             d->mJpegContent->setThumbnail(thumbnail);
         }
 

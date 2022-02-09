@@ -113,7 +113,7 @@ void DocumentLoadedImpl::setImage(const QImage &image)
 void DocumentLoadedImpl::applyTransformation(Orientation orientation)
 {
     QImage image = document()->image();
-    QTransform matrix = ImageUtils::transformMatrix(orientation);
+    const QTransform matrix = ImageUtils::transformMatrix(orientation);
     image = image.transformed(matrix);
     setDocumentImage(image);
     Q_EMIT imageRectUpdated(image.rect());

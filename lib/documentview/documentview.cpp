@@ -94,15 +94,15 @@ const int DocumentView::MaximumZoom = 16;
 const int DocumentView::AnimDuration = 250;
 
 struct DocumentViewPrivate {
-    DocumentView *q;
+    DocumentView *q = nullptr;
     int mSortKey; // Used to sort views when displayed in compare mode
-    HudWidget *mHud;
-    BirdEyeView *mBirdEyeView;
+    HudWidget *mHud = nullptr;
+    BirdEyeView *mBirdEyeView = nullptr;
     QPointer<QPropertyAnimation> mMoveAnimation;
     QPointer<QPropertyAnimation> mFadeAnimation;
-    QGraphicsOpacityEffect *mOpacityEffect;
+    QGraphicsOpacityEffect *mOpacityEffect = nullptr;
 
-    LoadingIndicator *mLoadingIndicator;
+    LoadingIndicator *mLoadingIndicator = nullptr;
 
     QScopedPointer<AbstractDocumentViewAdapter> mAdapter;
     QList<qreal> mZoomSnapValues;

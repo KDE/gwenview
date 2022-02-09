@@ -34,22 +34,22 @@
 namespace Gwenview
 {
 struct DocumentViewControllerPrivate {
-    DocumentViewController *q;
-    KActionCollection *mActionCollection;
-    DocumentView *mView;
-    ZoomWidget *mZoomWidget;
-    SlideContainer *mToolContainer;
+    DocumentViewController *q = nullptr;
+    KActionCollection *mActionCollection = nullptr;
+    DocumentView *mView = nullptr;
+    ZoomWidget *mZoomWidget = nullptr;
+    SlideContainer *mToolContainer = nullptr;
 
-    QAction *mZoomToFitAction;
-    QAction *mZoomToFillAction;
-    QAction *mActualSizeAction;
-    QAction *mZoomInAction;
-    QAction *mZoomOutAction;
-    QAction *mToggleBirdEyeViewAction;
-    QAction *mBackgroundColorModeAuto;
-    QAction *mBackgroundColorModeLight;
-    QAction *mBackgroundColorModeNeutral;
-    QAction *mBackgroundColorModeDark;
+    QAction *mZoomToFitAction = nullptr;
+    QAction *mZoomToFillAction = nullptr;
+    QAction *mActualSizeAction = nullptr;
+    QAction *mZoomInAction = nullptr;
+    QAction *mZoomOutAction = nullptr;
+    QAction *mToggleBirdEyeViewAction = nullptr;
+    QAction *mBackgroundColorModeAuto = nullptr;
+    QAction *mBackgroundColorModeLight = nullptr;
+    QAction *mBackgroundColorModeNeutral = nullptr;
+    QAction *mBackgroundColorModeDark = nullptr;
     QList<QAction *> mActions;
 
     void setupActions()
@@ -160,12 +160,12 @@ struct DocumentViewControllerPrivate {
         painter.setRenderHint(QPainter::Antialiasing);
 
         // QPainter isn't good at drawing lines that are exactly 1px thick.
-        qreal penWidth = qApp->devicePixelRatio() != 1 ? qApp->devicePixelRatio() : qApp->devicePixelRatio() + 0.001;
-        QColor penColor = KColorUtils::mix(color, qApp->palette().text().color(), 0.3);
-        QPen pen(penColor, penWidth);
-        qreal margin = pen.widthF() / 2.0;
-        QMarginsF penMargins(margin, margin, margin, margin);
-        QRectF rect = pixmap.rect();
+        const qreal penWidth = qApp->devicePixelRatio() != 1 ? qApp->devicePixelRatio() : qApp->devicePixelRatio() + 0.001;
+        const QColor penColor = KColorUtils::mix(color, qApp->palette().text().color(), 0.3);
+        const QPen pen(penColor, penWidth);
+        const qreal margin = pen.widthF() / 2.0;
+        const QMarginsF penMargins(margin, margin, margin, margin);
+        const QRectF rect = pixmap.rect();
 
         painter.setBrush(color);
         painter.setPen(pen);
@@ -181,14 +181,14 @@ struct DocumentViewControllerPrivate {
         painter.setRenderHint(QPainter::Antialiasing);
 
         // QPainter isn't good at drawing lines that are exactly 1px thick.
-        qreal penWidth = qApp->devicePixelRatio() != 1 ? qApp->devicePixelRatio() : qApp->devicePixelRatio() + 0.001;
-        QColor lightPenColor = KColorUtils::mix(lightColor, darkColor, 0.3);
-        QPen lightPen(lightPenColor, penWidth);
-        QColor darkPenColor = KColorUtils::mix(darkColor, lightColor, 0.3);
-        QPen darkPen(darkPenColor, penWidth);
+        const qreal penWidth = qApp->devicePixelRatio() != 1 ? qApp->devicePixelRatio() : qApp->devicePixelRatio() + 0.001;
+        const QColor lightPenColor = KColorUtils::mix(lightColor, darkColor, 0.3);
+        const QPen lightPen(lightPenColor, penWidth);
+        const QColor darkPenColor = KColorUtils::mix(darkColor, lightColor, 0.3);
+        const QPen darkPen(darkPenColor, penWidth);
 
-        qreal margin = lightPen.widthF() / 2.0;
-        QMarginsF penMargins(margin, margin, margin, margin);
+        const qreal margin = lightPen.widthF() / 2.0;
+        const QMarginsF penMargins(margin, margin, margin, margin);
         QRectF rect = pixmap.rect();
         rect = rect.marginsRemoved(penMargins);
         int lightStartAngle = 45 * 16;

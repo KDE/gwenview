@@ -102,7 +102,7 @@ struct DocumentFactoryPrivate {
         // the oldest one is always unreferencedImages.begin().
         for (UnreferencedImages::Iterator unreferencedIt = unreferencedImages.begin(); unreferencedImages.count() > MAX_UNREFERENCED_IMAGES;
              unreferencedIt = unreferencedImages.erase(unreferencedIt)) {
-            QUrl url = unreferencedIt.value();
+            const QUrl url = unreferencedIt.value();
             LOG("Collecting" << url);
             it = map.find(url);
             Q_ASSERT(it != map.end());
@@ -232,8 +232,8 @@ void DocumentFactory::slotLoaded(const QUrl &url)
 
 void DocumentFactory::slotSaved(const QUrl &oldUrl, const QUrl &newUrl)
 {
-    bool oldIsNew = oldUrl == newUrl;
-    bool oldUrlWasModified = d->mModifiedDocumentList.removeOne(oldUrl);
+    const bool oldIsNew = oldUrl == newUrl;
+    const bool oldUrlWasModified = d->mModifiedDocumentList.removeOne(oldUrl);
     bool newUrlWasModified = false;
     if (!oldIsNew) {
         newUrlWasModified = d->mModifiedDocumentList.removeOne(newUrl);

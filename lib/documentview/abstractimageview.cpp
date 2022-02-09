@@ -86,12 +86,12 @@ struct AbstractImageViewPrivate {
             mScrollPos = _newPos;
             return;
         }
-        QSizeF zoomedDocSize = q->dipDocumentSize() * mZoom;
-        QSizeF viewSize = q->boundingRect().size();
-        QPointF newPos(qBound(qreal(0.), _newPos.x(), zoomedDocSize.width() - viewSize.width()),
-                       qBound(qreal(0.), _newPos.y(), zoomedDocSize.height() - viewSize.height()));
+        const QSizeF zoomedDocSize = q->dipDocumentSize() * mZoom;
+        const QSizeF viewSize = q->boundingRect().size();
+        const QPointF newPos(qBound(qreal(0.), _newPos.x(), zoomedDocSize.width() - viewSize.width()),
+                             qBound(qreal(0.), _newPos.y(), zoomedDocSize.height() - viewSize.height()));
         if (newPos != mScrollPos) {
-            QPointF oldPos = mScrollPos;
+            const QPointF oldPos = mScrollPos;
             mScrollPos = newPos;
 
             if (verbosity == Notify) {

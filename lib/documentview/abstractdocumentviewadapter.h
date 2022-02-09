@@ -179,7 +179,7 @@ Q_SIGNALS:
     void toggleFullScreenRequested();
 
 private:
-    QGraphicsWidget *mWidget;
+    QGraphicsWidget *mWidget = nullptr;
 };
 
 /**
