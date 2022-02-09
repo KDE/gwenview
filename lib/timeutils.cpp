@@ -50,7 +50,7 @@ static Exiv2::ExifData::const_iterator findDateTimeKey(const Exiv2::ExifData &ex
                                                                << Exiv2::ExifKey("Exif.Photo.DateTimeDigitized") << Exiv2::ExifKey("Exif.Image.DateTime");
 
     Exiv2::ExifData::const_iterator it, end = exifData.end();
-    for (const Exiv2::ExifKey &key : std::as_const(lst)) {
+    for (const Exiv2::ExifKey &key : qAsConst(lst)) {
         it = exifData.findKey(key);
         if (it != end) {
             return it;

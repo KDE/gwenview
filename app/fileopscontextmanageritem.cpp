@@ -262,7 +262,7 @@ void FileOpsContextManagerItem::updateSideBarContent()
 
     mGroup->clear();
     QList<QAction *> &list = mInTrash ? mTrashFileActionList : mRegularFileActionList;
-    for (QAction *action : std::as_const(list)) {
+    for (QAction *action : qAsConst(list)) {
         if (action->isEnabled() && !action->isSeparator()) {
             mGroup->addAction(action);
         }
@@ -359,7 +359,7 @@ void FileOpsContextManagerItem::populateOpenMenu()
     updateServiceList();
 
     int idx = 0;
-    for (const KService::Ptr &service : std::as_const(mServiceList)) {
+    for (const KService::Ptr &service : qAsConst(mServiceList)) {
         QString text = service->name().replace('&', "&&");
         QAction *action = openMenu->addAction(text);
         action->setIcon(QIcon::fromTheme(service->icon()));

@@ -224,7 +224,7 @@ void DocumentViewContainer::updateLayout()
         int col = 0;
         int row = 0;
 
-        for (DocumentView *view : std::as_const(views)) {
+        for (DocumentView *view : qAsConst(views)) {
             QRect rect;
             rect.setLeft(col * viewWidth);
             rect.setTop(row * viewHeight);
@@ -263,12 +263,12 @@ void DocumentViewContainer::updateLayout()
 
     // Handle removed views
     if (animated) {
-        for (DocumentView *view : std::as_const(d->mRemovedViews)) {
+        for (DocumentView *view : qAsConst(d->mRemovedViews)) {
             view->fadeOut();
             QTimer::singleShot(DocumentView::AnimDuration, view, &QObject::deleteLater);
         }
     } else {
-        for (DocumentView *view : std::as_const(d->mRemovedViews)) {
+        for (DocumentView *view : qAsConst(d->mRemovedViews)) {
             view->deleteLater();
         }
         QMetaObject::invokeMethod(this, &DocumentViewContainer::pretendFadeInFinished, Qt::QueuedConnection);

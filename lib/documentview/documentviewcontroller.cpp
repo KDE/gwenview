@@ -234,7 +234,7 @@ struct DocumentViewControllerPrivate {
     void updateActions()
     {
         const bool enabled = mView && mView->isVisible() && mView->canZoom();
-        for (QAction *action : std::as_const(mActions)) {
+        for (QAction *action : qAsConst(mActions)) {
             action->setEnabled(enabled);
         }
     }
@@ -263,7 +263,7 @@ void DocumentViewController::setView(DocumentView *view)
     // Forget old view
     if (d->mView) {
         disconnect(d->mView, nullptr, this, nullptr);
-        for (QAction *action : std::as_const(d->mActions)) {
+        for (QAction *action : qAsConst(d->mActions)) {
             disconnect(action, nullptr, d->mView, nullptr);
         }
         disconnect(d->mBackgroundColorModeAuto, &QAction::triggered, this, nullptr);

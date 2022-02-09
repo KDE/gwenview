@@ -164,7 +164,7 @@ void ImageOpsContextManagerItem::updateSideBarContent()
     }
 
     d->mGroup->clear();
-    for (QAction *action : std::as_const(d->mActionList)) {
+    for (QAction *action : qAsConst(d->mActionList)) {
         if (action->isEnabled() && action->priority() != QAction::LowPriority) {
             d->mGroup->addAction(action);
         }

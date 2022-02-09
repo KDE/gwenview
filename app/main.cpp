@@ -94,7 +94,7 @@ public:
             QStringList tmpArgs = args;
             tmpArgs.removeDuplicates();
             QStringList fileNames;
-            for (const QString &url : std::as_const(tmpArgs)) {
+            for (const QString &url : qAsConst(tmpArgs)) {
                 QUrl fileUrl = QUrl::fromUserInput(url, QDir::currentPath(), QUrl::AssumeLocalFile);
                 if (!fileNames.contains(fileUrl.fileName())) {
                     fileNames << fileUrl.fileName();

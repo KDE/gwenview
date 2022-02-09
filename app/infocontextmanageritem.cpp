@@ -132,7 +132,7 @@ public:
     int heightForWidth(int w) const override
     {
         int height = 0;
-        for (Row *row : std::as_const(mRows)) {
+        for (Row *row : qAsConst(mRows)) {
             height += row->heightForWidth(w);
         }
         return height;
@@ -171,7 +171,7 @@ public:
         // from one image to another
         int rowY = 0;
         const int labelWidth = width();
-        for (Row *row : std::as_const(mRows)) {
+        for (Row *row : qAsConst(mRows)) {
             rowY = row->setLabelGeometries(rowY, labelWidth);
         }
     }

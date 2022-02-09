@@ -137,7 +137,7 @@ void RecursiveDirModelTest::testBasic()
      */
 
     // Test removing files
-    for (const QString &name : std::as_const(removedFiles)) {
+    for (const QString &name : qAsConst(removedFiles)) {
         bool ok = sandBoxDir.remove(name);
         Q_ASSERT(ok);
         expected.removeOne(QUrl(sandBoxDir.absoluteFilePath(name)));

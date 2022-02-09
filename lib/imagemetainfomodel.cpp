@@ -302,7 +302,7 @@ struct ImageMetaInfoModelPrivate {
             return;
         }
         q->beginInsertRows(parent, 0, hash.size() - 1);
-        for (MetaInfoGroup::Entry *entry : std::as_const(hash)) {
+        for (MetaInfoGroup::Entry *entry : qAsConst(hash)) {
             group->addEntry(entry);
         }
         q->endInsertRows();
