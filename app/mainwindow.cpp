@@ -1692,11 +1692,7 @@ void MainWindow::showConfigDialog()
 
 void MainWindow::configureShortcuts()
 {
-#if KXMLGUI_VERSION >= QT_VERSION_CHECK(5, 84, 0)
     guiFactory()->showConfigureShortcutsDialog();
-#else
-    guiFactory()->configureShortcuts();
-#endif
 }
 
 void MainWindow::toggleMenuBar()

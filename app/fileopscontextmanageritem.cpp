@@ -81,11 +81,7 @@ void FileOpsContextManagerItem::updateServiceList()
         }
     }
 
-#if KIO_VERSION >= QT_VERSION_CHECK(5, 83, 0)
     mServiceList = KFileItemActions::associatedApplications(mimeTypes);
-#else
-    mServiceList = KFileItemActions::associatedApplications(mimeTypes, QString());
-#endif
 }
 
 QMimeData *FileOpsContextManagerItem::selectionMimeData()

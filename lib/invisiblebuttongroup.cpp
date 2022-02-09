@@ -40,13 +40,8 @@ InvisibleButtonGroup::InvisibleButtonGroup(QWidget *parent)
     hide();
     d->mGroup = new QButtonGroup(this);
     d->mGroup->setExclusive(true);
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
     connect(d->mGroup,
             &QButtonGroup::idClicked,
-#else
-    connect(d->mGroup,
-            QOverload<int>::of(&QButtonGroup::buttonClicked),
-#endif
             this,
             &InvisibleButtonGroup::selectionChanged);
 }
