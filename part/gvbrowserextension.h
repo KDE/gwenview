@@ -35,7 +35,7 @@ class GVBrowserExtension : public KParts::BrowserExtension
 {
     Q_OBJECT
 public:
-    GVBrowserExtension(KParts::ReadOnlyPart *);
+    explicit GVBrowserExtension(KParts::ReadOnlyPart *);
     ~GVBrowserExtension() override;
 
 private Q_SLOTS:

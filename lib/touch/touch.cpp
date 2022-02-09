@@ -51,15 +51,15 @@ struct TouchPrivate {
     qreal mRotationThreshold;
     qint64 mLastTouchTimeStamp;
 
-    TapHoldAndMovingRecognizer *mTapHoldAndMovingRecognizer;
+    TapHoldAndMovingRecognizer *mTapHoldAndMovingRecognizer = nullptr;
     Qt::GestureType mTapHoldAndMoving;
-    TwoFingerPanRecognizer *mTwoFingerPanRecognizer;
+    TwoFingerPanRecognizer *mTwoFingerPanRecognizer = nullptr;
     Qt::GestureType mTwoFingerPan;
-    OneAndTwoFingerSwipeRecognizer *mOneAndTwoFingerSwipeRecognizer;
+    OneAndTwoFingerSwipeRecognizer *mOneAndTwoFingerSwipeRecognizer = nullptr;
     Qt::GestureType mOneAndTwoFingerSwipe;
-    DoubleTapRecognizer *mDoubleTapRecognizer;
+    DoubleTapRecognizer *mDoubleTapRecognizer = nullptr;
     Qt::GestureType mDoubleTap;
-    TwoFingerTapRecognizer *mTwoFingerTapRecognizer;
+    TwoFingerTapRecognizer *mTwoFingerTapRecognizer = nullptr;
     Qt::GestureType mTwoFingerTap;
 };
 

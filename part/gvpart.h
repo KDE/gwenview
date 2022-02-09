@@ -51,7 +51,7 @@ private Q_SLOTS:
     void showJobError(KJob *);
 
 private:
-    DocumentView *mDocumentView;
+    DocumentView *mDocumentView = nullptr;
 };
 
 } // namespace

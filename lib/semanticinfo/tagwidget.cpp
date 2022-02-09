@@ -112,14 +112,14 @@ protected:
 };
 
 struct TagWidgetPrivate {
-    TagWidget *q;
+    TagWidget *q = nullptr;
     TagInfo mTagInfo;
-    QListView *mListView;
-    QComboBox *mComboBox;
-    QPushButton *mAddButton;
-    AbstractSemanticInfoBackEnd *mBackEnd;
-    TagCompleterModel *mTagCompleterModel;
-    TagModel *mAssignedTagModel;
+    QListView *mListView = nullptr;
+    QComboBox *mComboBox = nullptr;
+    QPushButton *mAddButton = nullptr;
+    AbstractSemanticInfoBackEnd *mBackEnd = nullptr;
+    TagCompleterModel *mTagCompleterModel = nullptr;
+    TagModel *mAssignedTagModel = nullptr;
 
     void setupWidgets()
     {
