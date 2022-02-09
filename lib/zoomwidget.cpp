@@ -80,13 +80,13 @@ ZoomWidget::ZoomWidget(QWidget *parent)
 
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
 
-    d->mZoomSlider = new ZoomSlider;
+    d->mZoomSlider = new ZoomSlider(this);
     d->mZoomSlider->setMinimumWidth(150);
     d->mZoomSlider->slider()->setSingleStep(int(PRECISION));
     d->mZoomSlider->slider()->setPageStep(3 * int(PRECISION));
     connect(d->mZoomSlider->slider(), &QAbstractSlider::actionTriggered, this, &ZoomWidget::slotZoomSliderActionTriggered);
 
-    d->mZoomComboBox = new ZoomComboBox;
+    d->mZoomComboBox = new ZoomComboBox(this);
     connect(d->mZoomComboBox, &ZoomComboBox::zoomChanged, this, &ZoomWidget::zoomChanged);
 
     // Layout
