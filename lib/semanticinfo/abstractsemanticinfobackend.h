@@ -70,7 +70,7 @@ struct SemanticInfo {
 /**
  * An abstract class, used by SemanticInfoDirModel to store and retrieve metadata.
  */
-class AbstractSemanticInfoBackEnd : public QObject
+class GWENVIEWLIB_EXPORT AbstractSemanticInfoBackEnd : public QObject
 {
     Q_OBJECT
 public:
