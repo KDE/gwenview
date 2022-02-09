@@ -174,13 +174,13 @@ struct DocumentViewPrivate {
     void setupLoadingIndicator()
     {
         mLoadingIndicator = new LoadingIndicator(q);
-        auto *floater = new GraphicsWidgetFloater(q);
+        auto floater = new GraphicsWidgetFloater(q);
         floater->setChildWidget(mLoadingIndicator);
     }
 
     HudButton *createHudButton(const QString &text, const QString &iconName, bool showText)
     {
-        auto *button = new HudButton;
+        auto button = new HudButton;
         if (showText) {
             button->setText(text);
         } else {
@@ -195,14 +195,14 @@ struct DocumentViewPrivate {
         HudButton *trashButton = createHudButton(i18nc("@info:tooltip", "Trash"), QStringLiteral("user-trash"), false);
         HudButton *deselectButton = createHudButton(i18nc("@action:button", "Deselect"), QStringLiteral("list-remove"), true);
 
-        auto *content = new QGraphicsWidget;
-        auto *layout = new QGraphicsLinearLayout(content);
+        auto content = new QGraphicsWidget;
+        auto layout = new QGraphicsLinearLayout(content);
         layout->addItem(trashButton);
         layout->addItem(deselectButton);
 
         mHud = new HudWidget(q);
         mHud->init(content, HudWidget::OptionNone);
-        auto *floater = new GraphicsWidgetFloater(q);
+        auto floater = new GraphicsWidgetFloater(q);
         floater->setChildWidget(mHud);
         floater->setAlignment(Qt::AlignBottom | Qt::AlignHCenter);
 
@@ -324,7 +324,7 @@ struct DocumentViewPrivate {
             }
         }
         // Create a new fade animation
-        auto *anim = new QPropertyAnimation(mOpacityEffect, "opacity");
+        auto anim = new QPropertyAnimation(mOpacityEffect, "opacity");
         anim->setStartValue(mOpacityEffect->opacity());
         anim->setEndValue(value);
         if (qFuzzyCompare(value, 1)) {
@@ -534,7 +534,7 @@ void DocumentView::openUrl(const QUrl &url, const DocumentView::Setup &setup)
     });
 
     if (d->mDocument->loadingState() < Document::KindDetermined) {
-        auto *messageViewAdapter = qobject_cast<MessageViewAdapter *>(d->mAdapter.data());
+        auto messageViewAdapter = qobject_cast<MessageViewAdapter *>(d->mAdapter.data());
         if (messageViewAdapter) {
             messageViewAdapter->setInfoMessage(QString());
         }
@@ -606,7 +606,7 @@ DocumentView::Setup DocumentView::setup() const
 void DocumentView::slotLoadingFailed()
 {
     d->hideLoadingIndicator();
-    auto *adapter = new MessageViewAdapter;
+    auto adapter = new MessageViewAdapter;
     adapter->setDocument(d->mDocument);
     QString message = xi18n("Loading <filename>%1</filename> failed", d->mDocument->url().fileName());
     adapter->setErrorMessage(message, d->mDocument->errorString());
@@ -774,10 +774,10 @@ void DocumentView::zoomGesture(qreal zoom, const QPoint &zoomCenter, qint64 time
 void DocumentView::rotationsGesture(qreal rotation)
 {
     if (rotation > 0.0) {
-        auto *op = new TransformImageOperation(ROT_90);
+        auto op = new TransformImageOperation(ROT_90);
         op->applyToDocument(d->mDocument);
     } else if (rotation < 0.0) {
-        auto *op = new TransformImageOperation(ROT_270);
+        auto op = new TransformImageOperation(ROT_270);
         op->applyToDocument(d->mDocument);
     }
 }
@@ -1001,7 +1001,7 @@ void DocumentView::moveTo(const QRect &rect)
 
 void DocumentView::moveToAnimated(const QRect &rect)
 {
-    auto *anim = new QPropertyAnimation(this, "geometry");
+    auto anim = new QPropertyAnimation(this, "geometry");
     anim->setStartValue(geometry());
     anim->setEndValue(rect);
     anim->setDuration(DocumentView::AnimDuration);

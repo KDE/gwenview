@@ -77,7 +77,7 @@ void HudMessageBubble::setText(const QString &text)
 
 HudButton *HudMessageBubble::addButton(const KGuiItem &guiItem)
 {
-    auto *button = new HudButton;
+    auto button = new HudButton;
     button->setText(guiItem.text());
     button->setIcon(guiItem.icon());
     d->mLayout->addItem(button);

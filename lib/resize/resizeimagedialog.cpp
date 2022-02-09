@@ -52,14 +52,14 @@ ResizeImageDialog::ResizeImageDialog(QWidget *parent)
     d->mUpdateFromRatio = false;
     d->mUpdateFromSizeOrPercentage = false;
 
-    auto *mainLayout = new QVBoxLayout;
+    auto mainLayout = new QVBoxLayout;
     setLayout(mainLayout);
     mainLayout->setSizeConstraint(QLayout::SetFixedSize);
 
-    auto *content = new QWidget(this);
+    auto content = new QWidget(this);
     d->setupUi(content);
     mainLayout->addWidget(content);
-    auto *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
     okButton->setDefault(true);
     okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
@@ -86,7 +86,7 @@ ResizeImageDialog::ResizeImageDialog(QWidget *parent)
     connect(d->mHeightPercentSpinBox, &QSpinBox::editingFinished, this, &ResizeImageDialog::slotCalculateImageSize);
     connect(d->mKeepAspectCheckBox, &QCheckBox::toggled, this, &ResizeImageDialog::slotKeepAspectChanged);
 
-    auto *timer = new QTimer(this);
+    auto timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, QOverload<>::of(&ResizeImageDialog::slotCalculateImageSize));
     timer->start(2000);
 }

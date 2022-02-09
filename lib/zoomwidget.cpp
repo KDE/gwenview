@@ -90,7 +90,7 @@ ZoomWidget::ZoomWidget(QWidget *parent)
     connect(d->mZoomComboBox, &ZoomComboBox::zoomChanged, this, &ZoomWidget::zoomChanged);
 
     // Layout
-    auto *layout = new QHBoxLayout(this);
+    auto layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     layout->addWidget(d->mZoomSlider);
@@ -109,7 +109,7 @@ void ZoomWidget::setActions(QAction *zoomToFitAction, QAction *actualSizeAction,
 
     d->mZoomComboBox->setActions(zoomToFitAction, zoomToFillAction, actualSizeAction);
 
-    auto *actionGroup = new QActionGroup(d->q);
+    auto actionGroup = new QActionGroup(d->q);
     actionGroup->addAction(zoomToFitAction);
     actionGroup->addAction(zoomToFillAction);
     actionGroup->addAction(actualSizeAction);

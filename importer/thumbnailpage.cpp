@@ -90,17 +90,17 @@ inline KFileItem itemForIndex(const QModelIndex &index)
 }
 
 struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
-    ThumbnailPage *q;
+    ThumbnailPage *q = nullptr;
     SerializedUrlMap mUrlMap;
 
     QIcon mSrcBaseIcon;
     QString mSrcBaseName;
     QUrl mSrcBaseUrl;
     QUrl mSrcUrl;
-    KModelIndexProxyMapper *mSrcUrlModelProxyMapper;
+    KModelIndexProxyMapper *mSrcUrlModelProxyMapper = nullptr;
 
-    RecursiveDirModel *mRecursiveDirModel;
-    QAbstractItemModel *mFinalModel;
+    RecursiveDirModel *mRecursiveDirModel = nullptr;
+    QAbstractItemModel *mFinalModel = nullptr;
 
     ThumbnailProvider mThumbnailProvider;
 
@@ -120,11 +120,11 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
     {
         mRecursiveDirModel = new RecursiveDirModel(q);
 
-        auto *kindProxyModel = new KindProxyModel(q);
+        auto kindProxyModel = new KindProxyModel(q);
         kindProxyModel->setKindFilter(MimeTypeUtils::KIND_RASTER_IMAGE | MimeTypeUtils::KIND_SVG_IMAGE | MimeTypeUtils::KIND_VIDEO);
         kindProxyModel->setSourceModel(mRecursiveDirModel);
 
-        auto *sortModel = new QSortFilterProxyModel(q);
+        auto sortModel = new QSortFilterProxyModel(q);
         sortModel->setDynamicSortFilter(true);
         sortModel->setSourceModel(kindProxyModel);
         sortModel->sort(0);
@@ -164,7 +164,7 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
         mThumbnailView->setSelectionMode(QAbstractItemView::ExtendedSelection);
         mThumbnailView->setThumbnailViewHelper(new ImporterThumbnailViewHelper(q));
 
-        auto *delegate = new PreviewItemDelegate(mThumbnailView);
+        auto delegate = new PreviewItemDelegate(mThumbnailView);
         delegate->setThumbnailDetails(PreviewItemDelegate::FileNameDetail);
         PreviewItemDelegate::ContextBarActions actions;
         switch (GwenviewConfig::thumbnailActions()) {
@@ -202,7 +202,7 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
         const QSize iconSize(KIconLoader::SizeHuge, KIconLoader::SizeHuge);
         mPlaceHolderIconLabel->setMinimumSize(iconSize);
         mPlaceHolderIconLabel->setPixmap(QIcon::fromTheme(QStringLiteral("edit-none")).pixmap(iconSize));
-        auto *iconEffect = new QGraphicsOpacityEffect(mPlaceHolderIconLabel);
+        auto iconEffect = new QGraphicsOpacityEffect(mPlaceHolderIconLabel);
         iconEffect->setOpacity(0.5);
         mPlaceHolderIconLabel->setGraphicsEffect(iconEffect);
 
@@ -218,7 +218,7 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
         mPlaceHolderLabel->setWordWrap(true);
         mPlaceHolderLabel->setAlignment(Qt::AlignCenter);
         // Match opacity of QML placeholder label component
-        auto *effect = new QGraphicsOpacityEffect(mPlaceHolderLabel);
+        auto effect = new QGraphicsOpacityEffect(mPlaceHolderLabel);
         effect->setOpacity(0.5);
         mPlaceHolderLabel->setGraphicsEffect(effect);
         // Show more friendly text when the protocol is "camera" (which is the usual case)
@@ -238,7 +238,7 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
         mRequireRestartLabel->setTextInteractionFlags(Qt::NoTextInteraction);
         mRequireRestartLabel->setWordWrap(true);
         mRequireRestartLabel->setAlignment(Qt::AlignCenter);
-        auto *effect2 = new QGraphicsOpacityEffect(mRequireRestartLabel);
+        auto effect2 = new QGraphicsOpacityEffect(mRequireRestartLabel);
         effect2->setOpacity(0.5);
         mRequireRestartLabel->setGraphicsEffect(effect2);
         mRequireRestartLabel->setText(i18nc("@info:usagetip above install button", "After finishing the installation process, restart this Importer to continue."));
@@ -385,7 +385,7 @@ void ThumbnailPage::setSourceUrl(const QUrl &srcBaseUrl, const QString &iconName
     if (url.isValid()) {
         openUrl(url);
     } else {
-        auto *finder = new DocumentDirFinder(srcBaseUrl);
+        auto finder = new DocumentDirFinder(srcBaseUrl);
         connect(finder, &DocumentDirFinder::done, this, &ThumbnailPage::slotDocumentDirFinderDone);
         connect(finder, &DocumentDirFinder::protocollNotSupportedError, this, [this]() {
             d->setupPlaceHolderView();
@@ -467,7 +467,7 @@ void ThumbnailPage::updateImportButtons()
 
 void ThumbnailPage::showConfigDialog()
 {
-    auto *dialog = new ImporterConfigDialog(this);
+    auto dialog = new ImporterConfigDialog(this);
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->setModal(true);
     dialog->show();
@@ -546,14 +546,14 @@ void ThumbnailPage::setupSrcUrlTreeView()
         // Already initialized
         return;
     }
-    auto *dirModel = new KDirModel(this);
+    auto dirModel = new KDirModel(this);
     dirModel->dirLister()->setDirOnlyMode(true);
     dirModel->dirLister()->openUrl(KIO::upUrl(d->mSrcBaseUrl));
 
-    auto *onlyBaseUrlModel = new OnlyBaseUrlProxyModel(d->mSrcBaseUrl, d->mSrcBaseIcon, d->mSrcBaseName, this);
+    auto onlyBaseUrlModel = new OnlyBaseUrlProxyModel(d->mSrcBaseUrl, d->mSrcBaseIcon, d->mSrcBaseName, this);
     onlyBaseUrlModel->setSourceModel(dirModel);
 
-    auto *sortModel = new QSortFilterProxyModel(this);
+    auto sortModel = new QSortFilterProxyModel(this);
     sortModel->setDynamicSortFilter(true);
     sortModel->setSourceModel(onlyBaseUrlModel);
     sortModel->sort(0);

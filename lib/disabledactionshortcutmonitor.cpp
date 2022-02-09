@@ -54,7 +54,7 @@ DisabledActionShortcutMonitor::~DisabledActionShortcutMonitor()
 bool DisabledActionShortcutMonitor::eventFilter(QObject *object, QEvent *event)
 {
     if (event->type() == QEvent::ActionChanged) {
-        auto *action = static_cast<QAction *>(object);
+        auto action = static_cast<QAction *>(object);
         if (action->isEnabled()) {
             // Unset the shortcut otherwise we get a dialog complaining about
             // ambiguous shortcuts when the user tries to trigger the action

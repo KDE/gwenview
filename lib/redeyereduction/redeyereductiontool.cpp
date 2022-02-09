@@ -209,7 +209,7 @@ void RedEyeReductionTool::slotApplyClicked()
         qCWarning(GWENVIEW_LIB_LOG) << "invalid rect";
         return;
     }
-    auto *op = new RedEyeReductionImageOperation(docRectF);
+    auto op = new RedEyeReductionImageOperation(docRectF);
     Q_EMIT imageOperationRequested(op);
 
     d->mStatus = NotSet;

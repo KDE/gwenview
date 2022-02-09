@@ -65,7 +65,7 @@ struct SemanticInfoDialog : public QDialog, public Ui_SemanticInfoDialog {
         : QDialog(parent)
     {
         setLayout(new QVBoxLayout);
-        auto *mainWidget = new QWidget;
+        auto mainWidget = new QWidget;
         layout()->addWidget(mainWidget);
         setupUi(mainWidget);
         mainWidget->layout()->setContentsMargins(0, 0, 0, 0);
@@ -172,7 +172,7 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
         q->setWidget(mGroup);
         EventWatcher::install(mGroup, QEvent::Show, q, SLOT(update()));
 
-        auto *container = new QWidget;
+        auto container = new QWidget;
         setupUi(container);
         container->layout()->setContentsMargins(0, 0, 0, 0);
         mGroup->addWidget(container);
@@ -200,7 +200,7 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
 
     void setupActions()
     {
-        auto *edit = new KActionCategory(i18nc("@title actions category", "Edit"), mActionCollection);
+        auto edit = new KActionCategory(i18nc("@title actions category", "Edit"), mActionCollection);
 
         mEditTagsAction = edit->addAction(QStringLiteral("edit_tags"));
         mEditTagsAction->setText(i18nc("@action", "Edit Tags"));
@@ -254,7 +254,7 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
         const QStringList labels(labelMap.values());
 
         for (const QString &label : labels) {
-            auto *decoratedTag = new DecoratedTag(label);
+            auto decoratedTag = new DecoratedTag(label);
             mTagLayout->addWidget(decoratedTag);
         }
         mTagLayout->addWidget(mEditLabel);

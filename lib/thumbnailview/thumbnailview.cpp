@@ -726,7 +726,7 @@ void ThumbnailView::startDrag(Qt::DropActions)
         selectedFiles << fileItemForIndex(index);
     }
 
-    auto *drag = new QDrag(this);
+    auto drag = new QDrag(this);
     drag->setMimeData(MimeTypeUtils::selectionMimeData(selectedFiles, MimeTypeUtils::DropTarget));
     d->initDragPixmap(drag, indexes);
     drag->exec(Qt::MoveAction | Qt::CopyAction | Qt::LinkAction, Qt::CopyAction);

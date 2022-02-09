@@ -86,7 +86,7 @@ DocumentViewContainer::DocumentViewContainer(QWidget *parent)
     d->mScene = new QGraphicsScene(this);
 #ifndef QT_NO_OPENGL
     if (GwenviewConfig::animationMethod() == DocumentView::GLAnimation) {
-        auto *glWidget = new QOpenGLWidget;
+        auto glWidget = new QOpenGLWidget;
         setViewport(glWidget);
     }
 #endif
@@ -112,7 +112,7 @@ DocumentViewContainer::~DocumentViewContainer()
 
 DocumentView *DocumentViewContainer::createView()
 {
-    auto *view = new DocumentView(d->mScene);
+    auto view = new DocumentView(d->mScene);
     view->setPalette(palette());
     d->mAddedViews << view;
     view->show();
@@ -320,7 +320,7 @@ void DocumentViewContainer::showMessageWidget(QGraphicsWidget *widget, Qt::Align
     GV_RETURN_IF_FAIL(view);
 
     widget->setParentItem(view);
-    auto *floater = new GraphicsWidgetFloater(view);
+    auto floater = new GraphicsWidgetFloater(view);
     floater->setChildWidget(widget);
     floater->setAlignment(align);
     widget->show();

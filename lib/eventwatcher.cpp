@@ -31,14 +31,14 @@ EventWatcher::EventWatcher(QObject *watched, const QList<QEvent::Type> &eventTyp
 
 EventWatcher *EventWatcher::install(QObject *watched, const QList<QEvent::Type> &eventTypes, QObject *receiver, const char *slot)
 {
-    auto *watcher = new EventWatcher(watched, eventTypes);
+    auto watcher = new EventWatcher(watched, eventTypes);
     connect(watcher, SIGNAL(eventTriggered(QEvent *)), receiver, slot);
     return watcher;
 }
 
 EventWatcher *EventWatcher::install(QObject *watched, QEvent::Type eventType, QObject *receiver, const char *slot)
 {
-    auto *watcher = new EventWatcher(watched, QList<QEvent::Type>() << eventType);
+    auto watcher = new EventWatcher(watched, QList<QEvent::Type>() << eventType);
     connect(watcher, SIGNAL(eventTriggered(QEvent *)), receiver, slot);
     return watcher;
 }

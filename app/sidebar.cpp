@@ -98,7 +98,7 @@ SideBarGroup::SideBarGroup(const QString &title)
     d->mTitleLabel->setText(title);
     d->mTitleLabel->setVisible(!d->mTitleLabel->text().isEmpty());
 
-    auto *layout = new QVBoxLayout(this);
+    auto layout = new QVBoxLayout(this);
     layout->addWidget(d->mTitleLabel);
     layout->setContentsMargins(0, 0, 0, 0);
     clear();
@@ -122,7 +122,7 @@ void SideBarGroup::clear()
     }
 
     d->mContainer = new QFrame(this);
-    auto *containerLayout = new QVBoxLayout(d->mContainer);
+    auto containerLayout = new QVBoxLayout(d->mContainer);
     containerLayout->setContentsMargins(0, 0, 0, 0);
     containerLayout->setSpacing(0);
 

@@ -56,13 +56,13 @@ QList<QWidget *> TagItemDelegate::createItemWidgets(const QModelIndex &index) co
 
     Q_UNUSED(index);
 
-    auto *assignToAllButton = new QToolButton;
+    auto assignToAllButton = new QToolButton;
     initButton(assignToAllButton);
     assignToAllButton->setIcon(QIcon::fromTheme(QStringLiteral("fill-color"))); /* FIXME: Probably not the appropriate icon */
     assignToAllButton->setToolTip(i18nc("@info:tooltip", "Assign this tag to all selected images"));
     connect(assignToAllButton, &QToolButton::clicked, this, &TagItemDelegate::slotAssignToAllButtonClicked);
 
-    auto *removeButton = new QToolButton;
+    auto removeButton = new QToolButton;
     initButton(removeButton);
     removeButton->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
     connect(removeButton, &QToolButton::clicked, this, &TagItemDelegate::slotRemoveButtonClicked);
@@ -76,8 +76,8 @@ void TagItemDelegate::updateItemWidgets(const QList<QWidget *> widgets, const QS
 {
     const bool fullyAssigned = index.data(TagModel::AssignmentStatusRole).toInt() == int(TagModel::FullyAssigned);
 
-    auto *removeButton = static_cast<QToolButton *>(widgets[0]);
-    auto *assignToAllButton = static_cast<QToolButton *>(widgets[1]);
+    auto removeButton = static_cast<QToolButton *>(widgets[0]);
+    auto assignToAllButton = static_cast<QToolButton *>(widgets[1]);
 
     QSize buttonSize(mButtonSize, option.rect.height() - 2 * mMargin);
 

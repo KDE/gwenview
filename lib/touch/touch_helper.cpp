@@ -44,7 +44,7 @@ QPoint simpleTapPosition(QEvent *event)
 
 QPoint simpleTouchPosition(QEvent *event, int at)
 {
-    if (auto *touchEvent = static_cast<QTouchEvent *>(event)) {
+    if (auto touchEvent = static_cast<QTouchEvent *>(event)) {
         if (touchEvent->touchPoints().size() > at) {
             return touchEvent->touchPoints().at(at).pos().toPoint();
         }
@@ -54,7 +54,7 @@ QPoint simpleTouchPosition(QEvent *event, int at)
 
 bool touchStationary(QEvent *event)
 {
-    if (auto *touchEvent = static_cast<QTouchEvent *>(event)) {
+    if (auto touchEvent = static_cast<QTouchEvent *>(event)) {
         const QPointF distance = touchEvent->touchPoints().first().startPos() - touchEvent->touchPoints().first().pos();
         if (distance.manhattanLength() <= Touch::wiggleRoomForTap) {
             return true;

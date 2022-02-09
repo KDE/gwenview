@@ -59,7 +59,7 @@ void TransformImageOperationTest::testRotate90()
 
     Document::Ptr doc = DocumentFactory::instance()->load(url);
 
-    auto *op = new TransformImageOperation(ROT_90);
+    auto op = new TransformImageOperation(ROT_90);
     QEventLoop loop;
     connect(doc.data(), &Document::allTasksDone, &loop, &QEventLoop::quit);
     op->applyToDocument(doc);

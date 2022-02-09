@@ -62,13 +62,13 @@ NameFilterWidget::NameFilterWidget(SortedDirModel *model)
 
     mLineEdit = new QLineEdit;
 
-    auto *layout = new QHBoxLayout(this);
+    auto layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(2);
     layout->addWidget(mModeComboBox);
     layout->addWidget(mLineEdit);
 
-    auto *timer = new QTimer(this);
+    auto timer = new QTimer(this);
     timer->setInterval(350ms);
     timer->setSingleShot(true);
     connect(timer, &QTimer::timeout, this, &NameFilterWidget::applyNameFilter);
@@ -103,7 +103,7 @@ DateFilterWidget::DateFilterWidget(SortedDirModel *model)
 
     mDateWidget = new DateWidget;
 
-    auto *layout = new QHBoxLayout(this);
+    auto layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(mModeComboBox);
     layout->addWidget(mDateWidget);
@@ -138,7 +138,7 @@ RatingFilterWidget::RatingFilterWidget(SortedDirModel *model)
     mRatingWidget->setHalfStepsEnabled(true);
     mRatingWidget->setMaxRating(10);
 
-    auto *layout = new QHBoxLayout(this);
+    auto layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(mModeComboBox);
     layout->addWidget(mRatingWidget);
@@ -178,7 +178,7 @@ TagFilterWidget::TagFilterWidget(SortedDirModel *model)
 
     mTagComboBox = new QComboBox;
 
-    auto *layout = new QHBoxLayout(this);
+    auto layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(mModeComboBox);
     layout->addWidget(mTagComboBox);
@@ -187,7 +187,7 @@ TagFilterWidget::TagFilterWidget(SortedDirModel *model)
     backEnd->refreshAllTags();
     TagModel *tagModel = TagModel::createAllTagsModel(this, backEnd);
 
-    auto *completer = new QCompleter(mTagComboBox);
+    auto completer = new QCompleter(mTagComboBox);
     completer->setCaseSensitivity(Qt::CaseInsensitive);
     completer->setModel(tagModel);
     mTagComboBox->setCompleter(completer);
@@ -238,14 +238,14 @@ public:
 
     void setFilterWidget(QWidget *widget)
     {
-        auto *closeButton = new QToolButton;
+        auto closeButton = new QToolButton;
         closeButton->setIcon(QIcon::fromTheme(QStringLiteral("window-close")));
         closeButton->setAutoRaise(true);
         closeButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
         int size = style()->pixelMetric(QStyle::PM_SmallIconSize);
         closeButton->setIconSize(QSize(size, size));
         connect(closeButton, &QAbstractButton::clicked, this, &QObject::deleteLater);
-        auto *layout = new QHBoxLayout(this);
+        auto layout = new QHBoxLayout(this);
         layout->setContentsMargins(2, 2, 2, 2);
         layout->setSpacing(2);
         layout->addWidget(widget);
@@ -275,7 +275,7 @@ FilterController::FilterController(QFrame *frame, SortedDirModel *dirModel)
     mFilterWidgetCount = 0;
 
     mFrame->hide();
-    auto *layout = new FlowLayout(mFrame);
+    auto layout = new FlowLayout(mFrame);
     layout->setSpacing(2);
 
     addAction(i18nc("@action:inmenu", "Filter by Name"), SLOT(addFilterByName()), QKeySequence(Qt::CTRL | Qt::Key_I));
@@ -326,7 +326,7 @@ void FilterController::slotFilterWidgetClosed()
 
 void FilterController::addAction(const QString &text, const char *slot, const QKeySequence &shortcut)
 {
-    auto *action = new QAction(text, q);
+    auto action = new QAction(text, q);
     action->setShortcut(shortcut);
     QObject::connect(action, SIGNAL(triggered()), q, slot);
     mActionList << action;
@@ -337,7 +337,7 @@ void FilterController::addFilter(QWidget *widget)
     if (mFrame->isHidden()) {
         mFrame->show();
     }
-    auto *container = new FilterWidgetContainer;
+    auto container = new FilterWidgetContainer;
     container->setFilterWidget(widget);
     mFrame->layout()->addWidget(container);
 

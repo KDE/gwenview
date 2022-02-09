@@ -72,7 +72,7 @@ public:
 
     void addAction(QAction *action, Qt::ToolButtonStyle style = Qt::ToolButtonIconOnly)
     {
-        auto *button = new QToolButton;
+        auto button = new QToolButton;
         button->setDefaultAction(action);
         button->setToolButtonStyle(style);
         button->setAutoRaise(true);
@@ -116,7 +116,7 @@ void FullScreenContent::init(KActionCollection *actionCollection, QWidget *autoH
     // mAutoHideContainer
     mAutoHideContainer = new FullScreenBar(autoHideParentWidget);
     mAutoHideContainer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    auto *layout = new QVBoxLayout(mAutoHideContainer);
+    auto layout = new QVBoxLayout(mAutoHideContainer);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
 
@@ -164,7 +164,7 @@ void FullScreenContent::init(KActionCollection *actionCollection, QWidget *autoH
     mInformationContainer->setAutoFillBackground(true);
     mInformationContainer->setBackgroundRole(QPalette::Mid);
     mInformationContainerShadow = new ShadowFilter(mInformationContainer);
-    auto *hLayout = new QHBoxLayout(mInformationContainer);
+    auto hLayout = new QHBoxLayout(mInformationContainer);
     hLayout->setContentsMargins(0, 0, 0, 0);
     hLayout->addWidget(mInformationLabel);
     hLayout->addWidget(mDocumentCountLabel);
@@ -172,7 +172,7 @@ void FullScreenContent::init(KActionCollection *actionCollection, QWidget *autoH
     // Thumbnail bar
     mThumbnailBar = new ThumbnailBarView(mContent);
     mThumbnailBar->setThumbnailScaleMode(ThumbnailView::ScaleToSquare);
-    auto *delegate = new ThumbnailBarItemDelegate(mThumbnailBar);
+    auto delegate = new ThumbnailBarItemDelegate(mThumbnailBar);
     mThumbnailBar->setItemDelegate(delegate);
     mThumbnailBar->setSelectionMode(QAbstractItemView::ExtendedSelection);
     // Calculate minimum bar height to give mInformationLabel exactly two lines height
@@ -296,7 +296,7 @@ void FullScreenContent::updateLayout()
     if (GwenviewConfig::showFullScreenThumbnails()) {
         mRightToolBar->setDirection(QBoxLayout::TopToBottom);
 
-        auto *layout = new QHBoxLayout(mContent);
+        auto layout = new QHBoxLayout(mContent);
         layout->setContentsMargins(0, 0, 0, 0);
         layout->setSpacing(0);
         QVBoxLayout *vLayout;
@@ -340,7 +340,7 @@ void FullScreenContent::updateLayout()
     } else {
         mRightToolBar->setDirection(QBoxLayout::RightToLeft);
 
-        auto *layout = new QHBoxLayout(mContent);
+        auto layout = new QHBoxLayout(mContent);
         layout->setContentsMargins(0, 0, 0, 0);
         layout->setSpacing(0);
         layout->addWidget(mToolBar);
@@ -426,7 +426,7 @@ void FullScreenContent::showOptionsMenu()
 
     // Put widget in a menu
     QMenu menu;
-    auto *action = new QWidgetAction(&menu);
+    auto action = new QWidgetAction(&menu);
     action->setDefaultWidget(widget);
     menu.addAction(action);
 

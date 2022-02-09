@@ -63,15 +63,15 @@ int main(int argc, char *argv[])
         qCWarning(GWENVIEW_IMPORTER_LOG) << i18n("Too many arguments.");
         parser.showHelp();
     }
-    QString urlString = parser.positionalArguments().constFirst();
-    QUrl url = QUrl::fromUserInput(urlString, QDir::currentPath(), QUrl::AssumeLocalFile);
+    const QString urlString = parser.positionalArguments().constFirst();
+    const QUrl url = QUrl::fromUserInput(urlString, QDir::currentPath(), QUrl::AssumeLocalFile);
     if (!url.isValid()) {
         qCCritical(GWENVIEW_IMPORTER_LOG) << i18n("Invalid source folder.");
         return 1;
     }
-    QString deviceUdi = parser.isSet(QStringLiteral("udi")) ? parser.value(QStringLiteral("udi")) : QString();
+    const QString deviceUdi = parser.isSet(QStringLiteral("udi")) ? parser.value(QStringLiteral("udi")) : QString();
 
-    auto *dialog = new Gwenview::ImportDialog();
+    auto dialog = new Gwenview::ImportDialog();
     dialog->show();
     QMetaObject::invokeMethod(
         dialog,

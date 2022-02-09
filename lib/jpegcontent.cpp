@@ -76,7 +76,7 @@ struct inmem_dest_mgr : public jpeg_destination_mgr {
 
 void inmem_init_destination(j_compress_ptr cinfo)
 {
-    auto *dest = (inmem_dest_mgr *)(cinfo->dest);
+    auto dest = (inmem_dest_mgr *)(cinfo->dest);
     if (dest->mOutput->size() == 0) {
         dest->mOutput->resize(INMEM_DST_DELTA);
     }
@@ -86,7 +86,7 @@ void inmem_init_destination(j_compress_ptr cinfo)
 
 boolean inmem_empty_output_buffer(j_compress_ptr cinfo)
 {
-    auto *dest = (inmem_dest_mgr *)(cinfo->dest);
+    auto dest = (inmem_dest_mgr *)(cinfo->dest);
     dest->mOutput->resize(dest->mOutput->size() + INMEM_DST_DELTA);
     dest->next_output_byte = (JOCTET *)(dest->mOutput->data() + dest->mOutput->size() - INMEM_DST_DELTA);
     dest->free_in_buffer = INMEM_DST_DELTA;
@@ -96,7 +96,7 @@ boolean inmem_empty_output_buffer(j_compress_ptr cinfo)
 
 void inmem_term_destination(j_compress_ptr cinfo)
 {
-    auto *dest = (inmem_dest_mgr *)(cinfo->dest);
+    auto dest = (inmem_dest_mgr *)(cinfo->dest);
     int finalSize = dest->next_output_byte - (JOCTET *)(dest->mOutput->data());
     Q_ASSERT(finalSize >= 0);
     dest->mOutput->resize(finalSize);
@@ -135,7 +135,7 @@ struct JpegContent::Private {
     void setupInmemDestination(j_compress_ptr cinfo, QByteArray *outputData)
     {
         Q_ASSERT(!cinfo->dest);
-        auto *dest = (inmem_dest_mgr *)(*cinfo->mem->alloc_small)((j_common_ptr)cinfo, JPOOL_PERMANENT, sizeof(inmem_dest_mgr));
+        auto dest = (inmem_dest_mgr *)(*cinfo->mem->alloc_small)((j_common_ptr)cinfo, JPOOL_PERMANENT, sizeof(inmem_dest_mgr));
         cinfo->dest = (struct jpeg_destination_mgr *)(dest);
 
         dest->init_destination = inmem_init_destination;
@@ -630,7 +630,7 @@ bool JpegContent::save(const QString &path)
     // if the input file is still open, data is still only mem-mapped
     if (d->mFile.isOpen()) {
         // backup the mmap() pointer
-        auto *mappedFile = reinterpret_cast<unsigned char *>(d->mRawData.data());
+        auto mappedFile = reinterpret_cast<unsigned char *>(d->mRawData.data());
         // read the file to memory
         d->mRawData = d->mFile.readAll();
         d->mFile.unmap(mappedFile);

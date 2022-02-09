@@ -70,7 +70,7 @@ QGestureRecognizer::Result DoubleTapRecognizer::recognize(QGesture *state, QObje
 
     switch (event->type()) {
     case QEvent::TouchBegin: {
-        auto *touchEvent = static_cast<QTouchEvent *>(event);
+        auto touchEvent = static_cast<QTouchEvent *>(event);
         d->mTouchBeginnTimestamp = touchEvent->timestamp();
         d->mIsOnlyTap = true;
         if (d->mLastDoupleTapTimestamp == 0)
@@ -80,7 +80,7 @@ QGestureRecognizer::Result DoubleTapRecognizer::recognize(QGesture *state, QObje
     }
 
     case QEvent::TouchUpdate: {
-        auto *touchEvent = static_cast<QTouchEvent *>(event);
+        auto touchEvent = static_cast<QTouchEvent *>(event);
         const qint64 now = touchEvent->timestamp();
         state->setHotSpot(touchEvent->touchPoints().first().screenPos());
 
@@ -95,7 +95,7 @@ QGestureRecognizer::Result DoubleTapRecognizer::recognize(QGesture *state, QObje
     }
 
     case QEvent::TouchEnd: {
-        auto *touchEvent = static_cast<QTouchEvent *>(event);
+        auto touchEvent = static_cast<QTouchEvent *>(event);
         const qint64 now = touchEvent->timestamp();
 
         if (now - d->mLastTapTimestamp <= Touch_Helper::Touch::doubleTapInterval && d->mIsOnlyTap) {

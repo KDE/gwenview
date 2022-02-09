@@ -44,7 +44,7 @@ namespace Cms
 
 static void readPngChunk(png_structp png_ptr, png_bytep data, png_size_t length)
 {
-    auto *in = (QIODevice *)png_get_io_ptr(png_ptr);
+    auto in = (QIODevice *)png_get_io_ptr(png_ptr);
 
     while (length) {
         int nr = in->read((char*)data, length);

@@ -88,7 +88,7 @@ struct VideoViewAdapterPrivate {
     void setupHud(QGraphicsWidget *parent)
     {
         // Play/Pause
-        auto *playPauseButton = new HudButton;
+        auto playPauseButton = new HudButton;
         playPauseButton->setDefaultAction(mPlayPauseAction);
 
         // Seek
@@ -101,7 +101,7 @@ struct VideoViewAdapterPrivate {
         QObject::connect(mMediaObject, &Phonon::MediaObject::seekableChanged, q, &VideoViewAdapter::updatePlayUi);
 
         // Mute
-        auto *muteButton = new HudButton;
+        auto muteButton = new HudButton;
         muteButton->setDefaultAction(mMuteAction);
 
         // Volume
@@ -126,13 +126,13 @@ struct VideoViewAdapterPrivate {
         QObject::connect(mMediaObject, &Phonon::MediaObject::tick, q, &VideoViewAdapter::updateTimestamps);
 
         // Layout
-        auto *hudContent = new QGraphicsWidget;
-        auto *layout = new QGraphicsLinearLayout(hudContent);
+        auto hudContent = new QGraphicsWidget;
+        auto layout = new QGraphicsLinearLayout(hudContent);
 
-        auto *currentTimeProxy = new QGraphicsProxyWidget(hudContent);
+        auto currentTimeProxy = new QGraphicsProxyWidget(hudContent);
         currentTimeProxy->setWidget(mCurrentTime);
 
-        auto *remainingTimeProxy = new QGraphicsProxyWidget(hudContent);
+        auto remainingTimeProxy = new QGraphicsProxyWidget(hudContent);
         remainingTimeProxy->setWidget(mRemainingTime);
 
         layout->addItem(playPauseButton);

@@ -44,7 +44,7 @@ DocumentJob::DocumentJob()
     : KCompositeJob(nullptr)
     , d(new DocumentJobPrivate)
 {
-    auto *delegate = new KDialogJobUiDelegate;
+    auto delegate = new KDialogJobUiDelegate;
     delegate->setWindow(qApp->activeWindow());
     delegate->setAutoErrorHandlingEnabled(true);
     setUiDelegate(delegate);
@@ -83,7 +83,7 @@ bool DocumentJob::checkDocumentEditor()
 void ThreadedDocumentJob::doStart()
 {
     QFuture<void> future = QtConcurrent::run(this, &ThreadedDocumentJob::threadedStart);
-    auto *watcher = new QFutureWatcher<void>(this);
+    auto watcher = new QFutureWatcher<void>(this);
     connect(watcher, SIGNAL(finished()), SLOT(emitResult()));
     watcher->setFuture(future);
 }

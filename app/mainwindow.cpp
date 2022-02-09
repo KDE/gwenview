@@ -256,7 +256,7 @@ struct MainWindow::Private {
         mSaveBar = new SaveBar(mContentWidget, q->actionCollection());
         connect(mContextManager, &ContextManager::currentUrlChanged, mSaveBar, &SaveBar::setCurrentUrl);
         mViewStackedWidget = new QStackedWidget(mContentWidget);
-        auto *layout = new QVBoxLayout(mContentWidget);
+        auto layout = new QVBoxLayout(mContentWidget);
         layout->addWidget(mSharedMessage);
         layout->addWidget(mSaveBar);
         layout->addWidget(mViewStackedWidget);
@@ -361,22 +361,22 @@ struct MainWindow::Private {
 
     void installDisabledActionShortcutMonitor(QAction *action, const char *slot)
     {
-        auto *monitor = new DisabledActionShortcutMonitor(action, q);
+        auto monitor = new DisabledActionShortcutMonitor(action, q);
         connect(monitor, SIGNAL(activated()), q, slot);
     }
 
     void setupActions()
     {
         KActionCollection *actionCollection = q->actionCollection();
-        auto *file = new KActionCategory(i18nc("@title actions category", "File"), actionCollection);
-        auto *view = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface", "View"), actionCollection);
+        auto file = new KActionCategory(i18nc("@title actions category", "File"), actionCollection);
+        auto view = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface", "View"), actionCollection);
 
         file->addAction(KStandardAction::Save, q, SLOT(saveCurrent()));
         file->addAction(KStandardAction::SaveAs, q, SLOT(saveCurrentAs()));
         file->addAction(KStandardAction::Open, q, SLOT(openFile()));
         mFileOpenRecentAction = KStandardAction::openRecent(q, SLOT(openUrl(QUrl)), q);
         connect(mFileOpenRecentAction, &KRecentFilesAction::recentListCleared, mGvCore, &GvCore::clearRecentFilesAndFolders);
-        auto *clearAction = mFileOpenRecentAction->menu()->findChild<QAction *>("clear_action");
+        auto clearAction = mFileOpenRecentAction->menu()->findChild<QAction *>("clear_action");
         if (clearAction) {
             clearAction->setText(i18nc("@action Open Recent menu", "Clear List"));
         }
@@ -549,7 +549,7 @@ struct MainWindow::Private {
     void updateHamburgerMenu()
     {
         KActionCollection *actionCollection = q->actionCollection();
-        auto *menu = new QMenu;
+        auto menu = new QMenu;
         menu->addAction(actionCollection->action(KStandardAction::name(KStandardAction::Open)));
         menu->addAction(actionCollection->action(KStandardAction::name(KStandardAction::OpenRecent)));
         menu->addAction(actionCollection->action(KStandardAction::name(KStandardAction::Save)));
@@ -569,7 +569,7 @@ struct MainWindow::Private {
 #ifdef KF5Purpose_FOUND
         menu->addMenu(mShareMenu);
 #endif
-        auto *configureMenu = new QMenu(i18nc("@title:menu submenu for actions that open configuration dialogs", "Configure"));
+        auto configureMenu = new QMenu(i18nc("@title:menu submenu for actions that open configuration dialogs", "Configure"));
         configureMenu->addAction(actionCollection->action(QStringLiteral("options_configure_keybinding")));
         configureMenu->addAction(actionCollection->action(QStringLiteral("options_configure_toolbars")));
         configureMenu->addAction(actionCollection->action(QStringLiteral("options_configure")));
@@ -584,7 +584,7 @@ struct MainWindow::Private {
         QUndoGroup *undoGroup = DocumentFactory::instance()->undoGroup();
         QAction *action;
         KActionCollection *actionCollection = q->actionCollection();
-        auto *edit = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface", "Edit"), actionCollection);
+        auto edit = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface", "Edit"), actionCollection);
 
         action = undoGroup->createRedoAction(actionCollection);
         action->setObjectName(KStandardAction::name(KStandardAction::Redo));
@@ -608,19 +608,19 @@ struct MainWindow::Private {
         KActionCollection *actionCollection = q->actionCollection();
 
         // Create context manager items
-        auto *folderViewItem = new FolderViewContextManagerItem(mContextManager);
+        auto folderViewItem = new FolderViewContextManagerItem(mContextManager);
         connect(folderViewItem, &FolderViewContextManagerItem::urlChanged, q, &MainWindow::folderViewUrlChanged);
 
-        auto *infoItem = new InfoContextManagerItem(mContextManager);
+        auto infoItem = new InfoContextManagerItem(mContextManager);
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
         SemanticInfoContextManagerItem *semanticInfoItem = nullptr;
         semanticInfoItem = new SemanticInfoContextManagerItem(mContextManager, actionCollection, mViewMainPage);
 #endif
 
-        auto *imageOpsItem = new ImageOpsContextManagerItem(mContextManager, q);
+        auto imageOpsItem = new ImageOpsContextManagerItem(mContextManager, q);
 
-        auto *fileOpsItem = new FileOpsContextManagerItem(mContextManager, mThumbnailView, actionCollection, q);
+        auto fileOpsItem = new FileOpsContextManagerItem(mContextManager, mThumbnailView, actionCollection, q);
 
         // Fill sidebar
         SideBarPage *page;
@@ -635,7 +635,7 @@ struct MainWindow::Private {
         page->addWidget(infoItem->widget());
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
         if (semanticInfoItem) {
-            auto *separator = new QFrame;
+            auto separator = new QFrame;
             separator->setFrameShape(QFrame::HLine);
             separator->setLineWidth(1);
             page->addWidget(separator);
@@ -647,7 +647,7 @@ struct MainWindow::Private {
         page = new SideBarPage(QIcon::fromTheme("document-edit"), i18n("Operations"));
         page->setObjectName(QLatin1String("operations"));
         page->addWidget(imageOpsItem->widget());
-        auto *separator = new QFrame;
+        auto separator = new QFrame;
         separator->setFrameShape(QFrame::HLine);
         separator->setLineWidth(1);
         page->addWidget(separator);
@@ -955,7 +955,7 @@ MainWindow::MainWindow()
         new Mpris2Service(d->mSlideShow, d->mContextManager, d->mToggleSlideShowAction, d->mFullScreenAction, d->mGoToPreviousAction, d->mGoToNextAction, this);
 #endif
 
-    auto *ratingMenu = static_cast<QMenu *>(guiFactory()->container("rating", this));
+    auto ratingMenu = static_cast<QMenu *>(guiFactory()->container("rating", this));
     ratingMenu->setIcon(QIcon::fromTheme(QStringLiteral("rating-unrated")));
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_NONE
     if (ratingMenu) {
@@ -1025,7 +1025,7 @@ void MainWindow::setInitialUrl(const QUrl &_url)
     message << dirUrl.toString();
 
     QDBusPendingCall call = QDBusConnection::sessionBus().asyncCall(message);
-    auto *watcher = new QDBusPendingCallWatcher(call, this);
+    auto watcher = new QDBusPendingCallWatcher(call, this);
 
     connect(watcher, &QDBusPendingCallWatcher::finished, this, [this](QDBusPendingCallWatcher *call) {
         QDBusPendingReply<QString, QString> reply = *call;
@@ -1576,7 +1576,7 @@ void MainWindow::openFile()
 {
     const QUrl dirUrl = d->mContextManager->currentDirUrl();
 
-    auto *dialog = new QFileDialog(this);
+    auto dialog = new QFileDialog(this);
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->setModal(true);
     dialog->setDirectoryUrl(dirUrl);
@@ -1683,7 +1683,7 @@ void MainWindow::showConfigDialog()
     // Save first so changes like thumbnail zoom level are not lost when reloading config
     saveConfig();
 
-    auto *dialog = new ConfigDialog(this);
+    auto dialog = new ConfigDialog(this);
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->setModal(true);
     connect(dialog, &KConfigDialog::settingsChanged, this, &MainWindow::loadConfig);

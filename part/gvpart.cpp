@@ -57,7 +57,7 @@ GVPart::GVPart(QWidget *parentWidget, QObject *parent, const KPluginMetaData &me
 {
     setMetaData(metaData);
 
-    auto *container = new DocumentViewContainer(parentWidget);
+    auto container = new DocumentViewContainer(parentWidget);
     setWidget(container);
     mDocumentView = container->createView();
 
@@ -67,10 +67,10 @@ GVPart::GVPart(QWidget *parentWidget, QObject *parent, const KPluginMetaData &me
     connect(mDocumentView, &DocumentView::contextMenuRequested, this, &GVPart::showContextMenu);
 
     // Necessary to have zoom actions
-    auto *documentViewController = new DocumentViewController(actionCollection(), this);
+    auto documentViewController = new DocumentViewController(actionCollection(), this);
     documentViewController->setView(mDocumentView);
 
-    auto *action = new QAction(actionCollection());
+    auto action = new QAction(actionCollection());
     action->setText(i18nc("@action", "Properties"));
     action->setShortcut(QKeySequence(Qt::ALT | Qt::Key_Return));
     connect(action, &QAction::triggered, this, &GVPart::showProperties);

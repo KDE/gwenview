@@ -105,7 +105,7 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage {
         mUrlNavigator = new KUrlNavigator(mFilePlacesModel, QUrl(), mUrlNavigatorContainer);
         mUrlNavigatorContainer->setAutoFillBackground(true);
         mUrlNavigatorContainer->setBackgroundRole(QPalette::Mid);
-        auto *layout = new QVBoxLayout(mUrlNavigatorContainer);
+        auto layout = new QVBoxLayout(mUrlNavigatorContainer);
         layout->setContentsMargins(0, 0, 0, 0);
         layout->addWidget(mUrlNavigator);
         QObject::connect(mUrlNavigator, SIGNAL(urlsDropped(QUrl, QDropEvent *)), q, SLOT(slotUrlsDropped(QUrl, QDropEvent *)));
@@ -131,7 +131,7 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage {
 
     QAction *thumbnailDetailAction(const QString &text, PreviewItemDelegate::ThumbnailDetail detail)
     {
-        auto *action = new QAction(q);
+        auto action = new QAction(q);
         action->setText(text);
         action->setCheckable(true);
         action->setChecked(GwenviewConfig::thumbnailDetails() & detail);
@@ -143,12 +143,12 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage {
 
     void setupActions(KActionCollection *actionCollection)
     {
-        auto *view = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface", "View"), actionCollection);
+        auto view = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface", "View"), actionCollection);
         QAction *action = view->addAction("edit_location", q, SLOT(editLocation()));
         action->setText(i18nc("@action:inmenu Navigation Bar", "Edit Location"));
         actionCollection->setDefaultShortcut(action, Qt::Key_F6);
 
-        auto *sortActionMenu = view->add<KActionMenu>("sort_by");
+        auto sortActionMenu = view->add<KActionMenu>("sort_by");
         sortActionMenu->setText(i18nc("@action:inmenu", "Sort By"));
         sortActionMenu->setIcon(QIcon::fromTheme(QStringLiteral("view-sort")));
         sortActionMenu->setPopupMode(QToolButton::InstantPopup);
@@ -182,7 +182,7 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage {
 
         mThumbnailDetailsActionGroup = new QActionGroup(q);
         mThumbnailDetailsActionGroup->setExclusive(false);
-        auto *thumbnailDetailsAction = view->add<KActionMenu>("thumbnail_details");
+        auto thumbnailDetailsAction = view->add<KActionMenu>("thumbnail_details");
         thumbnailDetailsAction->setText(i18nc("@action:inmenu", "Thumbnail Details"));
         thumbnailDetailsAction->addAction(thumbnailDetailAction(i18nc("@action:inmenu", "Filename"), PreviewItemDelegate::FileNameDetail));
         thumbnailDetailsAction->addAction(thumbnailDetailAction(i18nc("@action:inmenu", "Date"), PreviewItemDelegate::DateDetail));
@@ -192,7 +192,7 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage {
         thumbnailDetailsAction->addAction(thumbnailDetailAction(i18nc("@action:inmenu", "Rating"), PreviewItemDelegate::RatingDetail));
 #endif
 
-        auto *file = new KActionCategory(i18nc("@title actions category", "File"), actionCollection);
+        auto file = new KActionCategory(i18nc("@title actions category", "File"), actionCollection);
         action = file->addAction(QStringLiteral("add_folder_to_places"), q, SLOT(addFolderToPlaces()));
         action->setText(i18nc("@action:inmenu", "Add Folder to Places"));
         action->setIcon(QIcon::fromTheme(QStringLiteral("bookmark-new")));
@@ -200,7 +200,7 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage {
 
     void setupFilterController()
     {
-        auto *menu = new QMenu(mAddFilterButton);
+        auto menu = new QMenu(mAddFilterButton);
         mFilterController = new FilterController(mFilterFrame, mDirModel);
         const auto actionList = mFilterController->actionList();
         for (QAction *action : actionList) {

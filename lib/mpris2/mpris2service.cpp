@@ -51,7 +51,7 @@ Mpris2Service::Mpris2Service(SlideShow *slideShow,
     // To avoid appearing in the media controller on the lock screen,
     // which might be not expected or wanted for Gwenview,
     // the MPRIS service is unregistered while the lockscreen is active.
-    auto *lockScreenWatcher = new LockScreenWatcher(this);
+    auto lockScreenWatcher = new LockScreenWatcher(this);
     connect(lockScreenWatcher, &LockScreenWatcher::isLockedChanged, this, &Mpris2Service::onLockScreenLockedChanged);
 
     if (!lockScreenWatcher->isLocked()) {

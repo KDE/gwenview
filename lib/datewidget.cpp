@@ -95,7 +95,7 @@ DateWidget::DateWidget(QWidget *parent)
         QIcon::fromTheme(QGuiApplication::layoutDirection() == Qt::LeftToRight ? QStringLiteral("go-next") : QStringLiteral("go-next-symbolic-rtl")));
     connect(d->mNextButton, &StatusBarToolButton::clicked, this, &DateWidget::goToNext);
 
-    auto *layout = new QHBoxLayout(this);
+    auto layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     layout->addWidget(d->mPreviousButton);

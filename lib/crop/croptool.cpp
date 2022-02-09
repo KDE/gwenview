@@ -74,14 +74,14 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(Gwenview::CropHandle)
 namespace Gwenview
 {
 struct CropToolPrivate {
-    CropTool *q;
+    CropTool *q = nullptr;
     QRect mRect;
     QList<CropHandle> mCropHandleList;
     CropHandle mMovingHandle;
     QPoint mLastMouseMovePos;
     double mCropRatio;
     double mLockedCropRatio;
-    CropWidget *mCropWidget;
+    CropWidget *mCropWidget = nullptr;
 
     QRect viewportCropRect() const
     {
@@ -417,7 +417,7 @@ void CropTool::keyPressEvent(QKeyEvent *event)
         d->mLockedCropRatio = 1. * d->mRect.height() / d->mRect.width();
     }
 
-    auto *buttons = d->mCropWidget->findChild<QDialogButtonBox *>();
+    auto buttons = d->mCropWidget->findChild<QDialogButtonBox *>();
     switch (event->key()) {
     case Qt::Key_Escape:
         event->accept();
@@ -466,7 +466,7 @@ void CropTool::toolDeactivated()
 
 void CropTool::slotCropRequested()
 {
-    auto *op = new CropImageOperation(d->mRect);
+    auto op = new CropImageOperation(d->mRect);
     Q_EMIT imageOperationRequested(op);
     Q_EMIT done();
 }

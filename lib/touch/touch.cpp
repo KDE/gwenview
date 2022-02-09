@@ -86,7 +86,7 @@ Touch::Touch(QObject *target)
     d->mDoubleTap = QGestureRecognizer::registerRecognizer(d->mDoubleTapRecognizer);
 
     if (qobject_cast<QGraphicsWidget *>(target)) {
-        auto *widgetTarget = qobject_cast<QGraphicsWidget *>(target);
+        auto widgetTarget = qobject_cast<QGraphicsWidget *>(target);
         widgetTarget->grabGesture(d->mOneAndTwoFingerSwipe);
         widgetTarget->grabGesture(d->mDoubleTap);
         widgetTarget->grabGesture(Qt::TapGesture);
@@ -119,7 +119,7 @@ bool Touch::eventFilter(QObject *, QEvent *event)
         return true;
     }
     if (event->type() == QEvent::TouchUpdate) {
-        auto *touchEvent = static_cast<QTouchEvent *>(event);
+        auto touchEvent = static_cast<QTouchEvent *>(event);
         d->mLastTouchTimeStamp = QDateTime::currentMSecsSinceEpoch();
         // because we suppress the making of mouse event through Qt, we need to make our own one finger panning
         // but only if no TapHoldandMovingGesture is active (Drag and Drop action)
@@ -243,13 +243,13 @@ QPoint Touch::positionGesture(QGestureEvent *event)
 {
     // return the position or the center point for follow gestures: QTapGesture, TabHoldAndMovingGesture and PinchGesture;
     QPoint position = QPoint(-1, -1);
-    if (auto *tap = static_cast<QTapGesture *>(event->gesture(Qt::TapGesture))) {
+    if (auto tap = static_cast<QTapGesture *>(event->gesture(Qt::TapGesture))) {
         position = tap->position().toPoint();
     } else if (QGesture *gesture = event->gesture(getTapHoldandMovingGesture())) {
         position = gesture->property("pos").toPoint();
-    } else if (auto *pinch = static_cast<QPinchGesture *>(event->gesture(Qt::PinchGesture))) {
+    } else if (auto pinch = static_cast<QPinchGesture *>(event->gesture(Qt::PinchGesture))) {
         if (qobject_cast<QGraphicsWidget *>(d->mTarget)) {
-            auto *widget = qobject_cast<QGraphicsWidget *>(d->mTarget);
+            auto widget = qobject_cast<QGraphicsWidget *>(d->mTarget);
             position = widget->mapFromScene(event->mapToGraphicsScene(pinch->centerPoint())).toPoint();
         } else {
             position = pinch->centerPoint().toPoint();
@@ -386,7 +386,7 @@ void Touch::touchToMouseRelease(QPoint pos, QObject *receiver)
 
 void Touch::touchToMouseMove(QPoint pos, QEvent *event, Qt::MouseButton button)
 {
-    if (auto *touchEvent = static_cast<QTouchEvent *>(event)) {
+    if (auto touchEvent = static_cast<QTouchEvent *>(event)) {
         touchToMouseEvent(pos, touchEvent->target(), QEvent::MouseMove, button, button);
     }
 }
@@ -404,7 +404,7 @@ void Touch::touchToMouseClick(QPoint pos, QObject *receiver)
 
 void Touch::touchToMouseEvent(QPoint pos, QObject *receiver, QEvent::Type type, Qt::MouseButton button, Qt::MouseButtons buttons)
 {
-    auto *evt = new QMouseEvent(type, pos, button, buttons, Qt::NoModifier);
+    auto evt = new QMouseEvent(type, pos, button, buttons, Qt::NoModifier);
     QCoreApplication::postEvent(receiver, evt);
 }
 

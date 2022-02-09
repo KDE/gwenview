@@ -42,7 +42,7 @@ QUrl setUpRemoteTestDir(const QString &testFile)
     baseUrl = baseUrl.adjusted(QUrl::StripTrailingSlash);
     baseUrl.setPath(baseUrl.path() + "/gwenview-remote-tests");
 
-    auto *statJob = KIO::statDetails(baseUrl, KIO::StatJob::DestinationSide, KIO::StatNoDetails);
+    auto statJob = KIO::statDetails(baseUrl, KIO::StatJob::DestinationSide, KIO::StatNoDetails);
     KJobWidgets::setWindow(statJob, authWindow);
 
     if (statJob->exec()) {

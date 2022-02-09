@@ -61,7 +61,7 @@ void SlideContainer::setContent(QWidget *content)
 void SlideContainer::animTo(int newHeight)
 {
     delete mAnim.data();
-    auto *anim = new QPropertyAnimation(this, "slideHeight", this);
+    auto anim = new QPropertyAnimation(this, "slideHeight", this);
     anim->setDuration(SLIDE_DURATION);
     anim->setStartValue(slideHeight());
     anim->setEndValue(newHeight);

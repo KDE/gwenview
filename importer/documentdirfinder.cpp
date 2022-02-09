@@ -102,7 +102,7 @@ void DocumentDirFinder::slotItemsAdded(const QUrl &dir, const KFileItemList &lis
 void DocumentDirFinder::slotCompleted()
 {
     if (d->mFoundDirUrl.isValid()) {
-        QUrl url = d->mFoundDirUrl;
+        const QUrl url = d->mFoundDirUrl;
         d->mFoundDirUrl.clear();
         d->mDirLister->openUrl(url);
     } else {

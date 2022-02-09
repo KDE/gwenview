@@ -73,14 +73,14 @@ struct GvCorePrivate {
     KFileCustomDialog *createSaveAsDialog(const QUrl &url)
     {
         // Build the JPEG quality chooser custom widget
-        auto *JPEGQualityChooserWidget = new QWidget;
+        auto JPEGQualityChooserWidget = new QWidget;
         JPEGQualityChooserWidget->setVisible(false); // shown only for JPEGs
 
-        auto *JPEGQualityChooserLabel = new QLabel;
+        auto JPEGQualityChooserLabel = new QLabel;
         JPEGQualityChooserLabel->setText(i18n("Image quality:"));
         JPEGQualityChooserLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
-        auto *JPEGQualityChooserSpinBox = new QSpinBox;
+        auto JPEGQualityChooserSpinBox = new QSpinBox;
         JPEGQualityChooserSpinBox->setMinimum(1);
         JPEGQualityChooserSpinBox->setMaximum(100);
         JPEGQualityChooserSpinBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -93,16 +93,16 @@ struct GvCorePrivate {
             GwenviewConfig::setJPEGQuality(value);
         });
 
-        auto *horizontalSpacer = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Fixed);
+        auto horizontalSpacer = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Fixed);
 
-        auto *JPEGQualityChooserLayout = new QHBoxLayout(JPEGQualityChooserWidget);
+        auto JPEGQualityChooserLayout = new QHBoxLayout(JPEGQualityChooserWidget);
         JPEGQualityChooserLayout->setContentsMargins(0, 0, 0, 0);
         JPEGQualityChooserLayout->addWidget(JPEGQualityChooserLabel);
         JPEGQualityChooserLayout->addWidget(JPEGQualityChooserSpinBox);
         JPEGQualityChooserLayout->addItem(horizontalSpacer);
 
         // Set up the dialog
-        auto *dialog = new KFileCustomDialog(mMainWindow);
+        auto dialog = new KFileCustomDialog(mMainWindow);
         dialog->setAttribute(Qt::WA_DeleteOnClose);
         dialog->setModal(true);
         KFileWidget *fileWidget = dialog->fileWidget();
@@ -475,14 +475,14 @@ void GvCore::saveAs(const QUrl &url)
 
 static void applyTransform(const QUrl &url, Orientation orientation)
 {
-    auto *op = new TransformImageOperation(orientation);
+    auto op = new TransformImageOperation(orientation);
     Document::Ptr doc = DocumentFactory::instance()->load(url);
     op->applyToDocument(doc);
 }
 
 void GvCore::slotSaveResult(KJob *_job)
 {
-    auto *job = static_cast<SaveJob *>(_job);
+    auto job = static_cast<SaveJob *>(_job);
     QUrl oldUrl = job->oldUrl();
     QUrl newUrl = job->newUrl();
 
@@ -504,7 +504,7 @@ void GvCore::slotSaveResult(KJob *_job)
 
         ViewMainPage *page = d->mMainWindow->viewMainPage();
         if (page->isVisible()) {
-            auto *bubble = new HudMessageBubble();
+            auto bubble = new HudMessageBubble();
             bubble->setText(i18n("You are now viewing the new document."));
             KGuiItem item = KStandardGuiItem::back();
             item.setText(i18n("Go back to the original"));

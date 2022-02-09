@@ -122,7 +122,7 @@ RenameResult rename(const QUrl &src, const QUrl &dst_, QWidget *authWindow)
     int count = 1;
 
     QFileInfo fileInfo(dst.fileName());
-    QString prefix = fileInfo.completeBaseName() + '_';
+    QString prefix = fileInfo.completeBaseName() + QLatin1Char('_');
     QString suffix = '.' + fileInfo.suffix();
 
     // Get src size

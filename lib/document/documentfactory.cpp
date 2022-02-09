@@ -168,7 +168,7 @@ Document::Ptr DocumentFactory::load(const QUrl &url)
 
     // Start loading the document
     LOG(url.fileName() << "loading");
-    auto *doc = new Document(url);
+    auto doc = new Document(url);
     connect(doc, &Document::loaded, this, &DocumentFactory::slotLoaded);
     connect(doc, &Document::saved, this, &DocumentFactory::slotSaved);
     connect(doc, &Document::modified, this, &DocumentFactory::slotModified);

@@ -90,7 +90,7 @@ static void logQueue(DocumentPrivate *d)
 //- DocumentPrivate ---------------------------------------
 void DocumentPrivate::scheduleImageLoading(int invertedZoom)
 {
-    auto *impl = qobject_cast<LoadingDocumentImpl *>(mImpl);
+    auto impl = qobject_cast<LoadingDocumentImpl *>(mImpl);
     Q_ASSERT(impl);
     impl->loadImage(invertedZoom);
 }
@@ -98,7 +98,7 @@ void DocumentPrivate::scheduleImageLoading(int invertedZoom)
 void DocumentPrivate::scheduleImageDownSampling(int invertedZoom)
 {
     LOG("invertedZoom=" << invertedZoom);
-    auto *job = qobject_cast<DownSamplingJob *>(mCurrentJob.data());
+    auto job = qobject_cast<DownSamplingJob *>(mCurrentJob.data());
     if (job && job->mInvertedZoom == invertedZoom) {
         LOG("Current job is already doing it");
         return;
@@ -107,7 +107,7 @@ void DocumentPrivate::scheduleImageDownSampling(int invertedZoom)
     // Remove any previously scheduled downsampling job
     DocumentJobQueue::Iterator it;
     for (it = mJobQueue.begin(); it != mJobQueue.end(); ++it) {
-        auto *job = qobject_cast<DownSamplingJob *>(*it);
+        auto job = qobject_cast<DownSamplingJob *>(*it);
         if (!job) {
             continue;
         }
@@ -312,7 +312,7 @@ void Document::slotSaveResult(KJob *job)
         setErrorString(job->errorString());
     } else {
         d->mUndoStack.setClean();
-        auto *saveJob = static_cast<SaveJob *>(job);
+        auto saveJob = static_cast<SaveJob *>(job);
         d->mUrl = saveJob->newUrl();
         d->mImageMetaInfoModel.setUrl(d->mUrl);
         Q_EMIT saved(saveJob->oldUrl(), d->mUrl);
@@ -417,7 +417,7 @@ void Document::startLoadingFullImage()
     LoadingState state = loadingState();
     if (state <= MetaInfoLoaded) {
         // Schedule full image loading
-        auto *job = new LoadingJob;
+        auto job = new LoadingJob;
         job->uiDelegate()->setAutoWarningHandlingEnabled(false);
         job->uiDelegate()->setAutoErrorHandlingEnabled(false);
         enqueueJob(job);

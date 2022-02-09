@@ -51,11 +51,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 struct ImporterPrivate {
-    Importer *q;
-    QWidget *mAuthWindow;
+    Importer *q = nullptr;
+    QWidget *mAuthWindow = nullptr;
     std::unique_ptr<FileNameFormater> mFileNameFormater;
     QUrl mTempImportDirUrl;
-    QTemporaryDir *mTempImportDir;
+    QTemporaryDir *mTempImportDir = nullptr;
     QUrl mDestinationDirUrl;
 
     /* @defgroup reset Should be reset in start()
@@ -136,7 +136,7 @@ struct ImporterPrivate {
         } else {
             fileName = src.fileName();
         }
-        dst.setPath(dst.path() + '/' + fileName);
+        dst.setPath(dst.path() + QLatin1Char('/') + fileName);
 
         FileUtils::RenameResult result;
         // Create additional subfolders if needed (e.g. when extra slashes in FileNameFormater)
@@ -219,8 +219,8 @@ void Importer::start(const QList<QUrl> &list, const QUrl &destination)
 
 void Importer::slotCopyDone(KJob *_job)
 {
-    auto *job = static_cast<KIO::CopyJob *>(_job);
-    QUrl url = job->destUrl();
+    auto job = static_cast<KIO::CopyJob *>(_job);
+    const QUrl url = job->destUrl();
     if (job->error()) {
         // Add document to failed url list and proceed with next one
         d->mFailedUrlList << d->mCurrentUrl;

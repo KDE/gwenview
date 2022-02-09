@@ -92,8 +92,8 @@ void SerializedUrlMap::setConfigGroup(const KConfigGroup &group)
 
 QUrl SerializedUrlMap::value(const QUrl &key_) const
 {
-    QString pass = key_.password();
-    QUrl key = stripPass(key_);
+    const QString pass = key_.password();
+    const QUrl key = stripPass(key_);
     QUrl url = d->mMap.value(key);
     url.setPassword(pass);
     return url;

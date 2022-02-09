@@ -112,7 +112,7 @@ QUrl FileOpsContextManagerItem::pasteTargetUrl() const
 
 static QAction *createSeparator(QObject *parent)
 {
-    auto *action = new QAction(parent);
+    auto action = new QAction(parent);
     action->setSeparator(true);
     return action;
 }
@@ -135,8 +135,8 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager *manager,
     connect(contextManager(), &ContextManager::selectionChanged, this, &FileOpsContextManagerItem::updateActions);
     connect(contextManager(), &ContextManager::currentDirUrlChanged, this, &FileOpsContextManagerItem::updateActions);
 
-    auto *file = new KActionCategory(i18nc("@title actions category", "File"), actionCollection);
-    auto *edit = new KActionCategory(i18nc("@title actions category", "Edit"), actionCollection);
+    auto file = new KActionCategory(i18nc("@title actions category", "File"), actionCollection);
+    auto edit = new KActionCategory(i18nc("@title actions category", "Edit"), actionCollection);
 
     mCutAction = edit->addAction(KStandardAction::Cut, this, SLOT(cut()));
     mCopyAction = edit->addAction(KStandardAction::Copy, this, SLOT(copy()));
@@ -184,7 +184,7 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager *manager,
 
     mOpenWithAction = file->addAction(QStringLiteral("file_open_with"));
     mOpenWithAction->setText(i18n("Open With"));
-    auto *menu = new QMenu;
+    auto menu = new QMenu;
     mOpenWithAction->setMenu(menu);
     connect(menu, &QMenu::aboutToShow, this, &FileOpsContextManagerItem::populateOpenMenu);
     connect(menu, &QMenu::triggered, this, &FileOpsContextManagerItem::openWith);
@@ -385,7 +385,7 @@ void FileOpsContextManagerItem::openWith(QAction *action)
         service = mServiceList.at(idx);
     }
     // If service is null, ApplicationLauncherJob will invoke the open-with dialog
-    auto *job = new KIO::ApplicationLauncherJob(service);
+    auto job = new KIO::ApplicationLauncherJob(service);
     job->setUrls(list);
     job->setUiDelegate(new KIO::JobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, mGroup));
     job->start();

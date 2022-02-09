@@ -111,7 +111,7 @@ struct PrintHelperPrivate {
 
     void print(QPrinter *printer, Document::Ptr doc, bool showPrinterSetupDialog)
     {
-        auto *optionsPage = new PrintOptionsPage(doc->size());
+        auto optionsPage = new PrintOptionsPage(doc->size());
         optionsPage->loadConfig();
 
         QScopedPointer<QPrintDialog> dialog;

@@ -70,7 +70,7 @@ QGestureRecognizer::Result OneAndTwoFingerSwipeRecognizer::recognize(QGesture *s
 
     switch (event->type()) {
     case QEvent::TouchBegin: {
-        auto *touchEvent = static_cast<QTouchEvent *>(event);
+        auto touchEvent = static_cast<QTouchEvent *>(event);
         d->mTouchBeginnTimestamp = touchEvent->timestamp();
         d->mGestureAlreadyTriggered = false;
         state->setHotSpot(touchEvent->touchPoints().first().screenPos());
@@ -78,7 +78,7 @@ QGestureRecognizer::Result OneAndTwoFingerSwipeRecognizer::recognize(QGesture *s
     }
 
     case QEvent::TouchUpdate: {
-        auto *touchEvent = static_cast<QTouchEvent *>(event);
+        auto touchEvent = static_cast<QTouchEvent *>(event);
         const qint64 now = touchEvent->timestamp();
         const QPointF distance = touchEvent->touchPoints().first().startPos() - touchEvent->touchPoints().first().pos();
         state->setHotSpot(touchEvent->touchPoints().first().screenPos());

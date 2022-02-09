@@ -38,7 +38,7 @@ static const QString PREVIEW_FILENAME = QStringLiteral("PICT0012.JPG");
 static const QDateTime PREVIEW_DATETIME = QDateTime(QDate(2009, 10, 25), QTime(17, 51, 18));
 
 struct ImporterConfigDialogPrivate : public Ui_ImporterConfigDialog {
-    ImporterConfigDialog *q;
+    ImporterConfigDialog *q = nullptr;
 
     void setupHelpText()
     {
@@ -64,7 +64,7 @@ ImporterConfigDialog::ImporterConfigDialog(QWidget *parent)
     , d(new ImporterConfigDialogPrivate)
 {
     d->q = this;
-    auto *widget = new QWidget;
+    auto widget = new QWidget;
     d->setupUi(widget);
     setFaceType(KPageDialog::Plain);
     addPage(widget, QString());

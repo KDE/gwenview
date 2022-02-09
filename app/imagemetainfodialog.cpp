@@ -131,7 +131,7 @@ ImageMetaInfoDialog::ImageMetaInfoDialog(QWidget *parent)
 
     setLayout(new QVBoxLayout);
     layout()->addWidget(d->mTreeView);
-    auto *buttonBox = new QDialogButtonBox(QDialogButtonBox::Close);
+    auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Close);
     layout()->addWidget(buttonBox);
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);

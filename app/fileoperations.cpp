@@ -51,7 +51,7 @@ static void copyMoveOrLink(Operation operation, const QList<QUrl> &urlList, QWid
     Q_ASSERT(!urlList.isEmpty());
     const int numberOfImages = urlList.count();
 
-    auto *dialog = new QFileDialog(parent->nativeParentWidget(), QString());
+    auto dialog = new QFileDialog(parent->nativeParentWidget(), QString());
     dialog->setAcceptMode(QFileDialog::AcceptSave);
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->setModal(true);
@@ -220,7 +220,7 @@ void showMenuForDroppedUrls(QWidget *parent, const QList<QUrl> &urlList, const Q
 
 void rename(const QUrl &oldUrl, QWidget *parent, ContextManager *contextManager)
 {
-    auto *dialog = new RenameDialog(parent);
+    auto dialog = new RenameDialog(parent);
     dialog->setFilename(oldUrl.fileName());
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->setModal(true);

@@ -64,18 +64,18 @@ static QSize ratio(const QSize &size)
 struct CropWidgetPrivate : public QWidget {
     CropWidget *q;
     QList<QWidget *> mAdvancedWidgets;
-    QWidget *mPreserveAspectRatioWidget;
-    QCheckBox *advancedCheckBox;
-    QComboBox *ratioComboBox;
-    QSpinBox *widthSpinBox;
-    QSpinBox *heightSpinBox;
-    QSpinBox *leftSpinBox;
-    QSpinBox *topSpinBox;
-    QCheckBox *preserveAspectRatioCheckBox;
-    QDialogButtonBox *dialogButtonBox;
+    QWidget *mPreserveAspectRatioWidget = nullptr;
+    QCheckBox *advancedCheckBox = nullptr;
+    QComboBox *ratioComboBox = nullptr;
+    QSpinBox *widthSpinBox = nullptr;
+    QSpinBox *heightSpinBox = nullptr;
+    QSpinBox *leftSpinBox = nullptr;
+    QSpinBox *topSpinBox = nullptr;
+    QCheckBox *preserveAspectRatioCheckBox = nullptr;
+    QDialogButtonBox *dialogButtonBox = nullptr;
 
     Document::Ptr mDocument;
-    CropTool *mCropTool;
+    CropTool *mCropTool = nullptr;
     bool mUpdatingFromCropTool;
     int mCurrentImageComboBoxIndex;
     int mCropRatioComboBoxCurrentIndex;
@@ -144,7 +144,7 @@ struct CropWidgetPrivate : public QWidget {
     double cropRatio() const
     {
         if (q->advancedSettingsEnabled()) {
-            QSizeF size = chosenRatio();
+            const QSizeF size = chosenRatio();
             if (size.isEmpty()) {
                 return 0;
             }
@@ -152,7 +152,7 @@ struct CropWidgetPrivate : public QWidget {
         }
 
         if (q->preserveAspectRatio()) {
-            QSizeF size = ratio(mDocument->size());
+            const QSizeF size = ratio(mDocument->size());
             return size.height() / size.width();
         }
 
@@ -161,7 +161,7 @@ struct CropWidgetPrivate : public QWidget {
 
     void addRatioToComboBox(const QSizeF &size, const QString &label = QString())
     {
-        QString text = label.isEmpty() ? QStringLiteral("%1:%2").arg(size.width()).arg(size.height()) : label;
+        const QString text = label.isEmpty() ? QStringLiteral("%1:%2").arg(size.width()).arg(size.height()) : label;
         ratioComboBox->addItem(text, QVariant(size));
     }
 
@@ -210,7 +210,7 @@ struct CropWidgetPrivate : public QWidget {
         ratioComboBox->setMaxVisibleItems(ratioComboBox->count());
         ratioComboBox->clearEditText();
 
-        auto *edit = qobject_cast<QLineEdit *>(ratioComboBox->lineEdit());
+        auto edit = qobject_cast<QLineEdit *>(ratioComboBox->lineEdit());
         Q_ASSERT(edit);
         // Do not use i18n("%1:%2") because ':' should not be translated, it is
         // used to parse the ratio string.
@@ -265,8 +265,8 @@ struct CropWidgetPrivate : public QWidget {
 
     QWidget *boxWidget(QWidget *parent = nullptr)
     {
-        auto *widget = new QWidget(parent);
-        auto *layout = new QHBoxLayout(widget);
+        auto widget = new QWidget(parent);
+        auto layout = new QHBoxLayout(widget);
         layout->setContentsMargins(0, 0, 0, 0);
         layout->setSpacing(2);
         return widget;
@@ -276,7 +276,7 @@ struct CropWidgetPrivate : public QWidget {
     {
         cropWidget->setObjectName(QStringLiteral("CropWidget"));
 
-        auto *flowLayout = new FlowLayout(cropWidget, 6, 0);
+        auto flowLayout = new FlowLayout(cropWidget, 6, 0);
         flowLayout->setObjectName(QStringLiteral("CropWidgetFlowLayout"));
         flowLayout->setAlignment(Qt::AlignCenter);
         flowLayout->setVerticalSpacing(6);
@@ -292,7 +292,7 @@ struct CropWidgetPrivate : public QWidget {
         // (2) Ratio combobox (Advanced settings)
         box = boxWidget(cropWidget);
         mAdvancedWidgets << box;
-        auto *label = new QLabel(i18nc("@label:listbox", "Aspect ratio:"), box);
+        auto label = new QLabel(i18nc("@label:listbox", "Aspect ratio:"), box);
         label->setContentsMargins(4, 4, 4, 4);
         box->layout()->addWidget(label);
         ratioComboBox = new QComboBox(box);
@@ -309,7 +309,7 @@ struct CropWidgetPrivate : public QWidget {
         label->setContentsMargins(4, 4, 4, 4);
         box->layout()->addWidget(label);
 
-        auto *innerLayout = new QHBoxLayout();
+        auto innerLayout = new QHBoxLayout();
         innerLayout->setSpacing(3);
 
         widthSpinBox = new QSpinBox(box);

@@ -61,10 +61,10 @@ public:
     void checkForFailedUrls()
     {
         // First check for errors on file imports or subfolder creation
-        QList<QUrl> failedUrls = mImporter->failedUrlList();
-        QList<QUrl> failedSubFolders = mImporter->failedSubFolderList();
-        int failedUrlCount = failedUrls.count();
-        int failedSubFolderCount = failedSubFolders.count();
+        const QList<QUrl> failedUrls = mImporter->failedUrlList();
+        const QList<QUrl> failedSubFolders = mImporter->failedSubFolderList();
+        const int failedUrlCount = failedUrls.count();
+        const int failedSubFolderCount = failedSubFolders.count();
         if (failedUrlCount + failedSubFolderCount > 0) {
             QStringList files, dirs;
             for (int i = 0; i < failedUrlCount; i++) {
@@ -79,10 +79,10 @@ public:
 
     void deleteImportedUrls()
     {
-        QList<QUrl> importedUrls = mImporter->importedUrlList();
-        QList<QUrl> skippedUrls = mImporter->skippedUrlList();
-        int importedCount = importedUrls.count();
-        int skippedCount = skippedUrls.count();
+        const QList<QUrl> importedUrls = mImporter->importedUrlList();
+        const QList<QUrl> skippedUrls = mImporter->skippedUrlList();
+        const int importedCount = importedUrls.count();
+        const int skippedCount = skippedUrls.count();
 
         if (importedCount == 0 && skippedCount == 0) {
             return;
@@ -97,8 +97,8 @@ public:
         }
 
         if (mImporter->renamedCount() > 0) {
-            message[0].append("*");
-            message << "<small>* "
+            message[0].append(QStringLiteral("*"));
+            message << QStringLiteral("<small>* ")
                     + i18np("One of them has been renamed because another document with the same name had already been imported.",
                             "%1 of them have been renamed because other documents with the same name had already been imported.",
                             mImporter->renamedCount())
@@ -151,7 +151,7 @@ public:
         if (!service) {
             qCCritical(GWENVIEW_IMPORTER_LOG) << "Could not find gwenview";
         } else {
-            auto *job = new KIO::ApplicationLauncherJob(service);
+            auto job = new KIO::ApplicationLauncherJob(service);
             job->setUrls({mThumbnailPage->destinationUrl()});
             job->setUiDelegate(new KIO::JobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, nullptr));
             job->start();
@@ -245,7 +245,7 @@ void ImportDialog::setSourceUrl(const QUrl &url, const QString &deviceUdi)
 
 void ImportDialog::startImport()
 {
-    QUrl url = d->mThumbnailPage->destinationUrl();
+    const QUrl url = d->mThumbnailPage->destinationUrl();
     ImporterConfig::setDestinationUrl(url);
     ImporterConfig::self()->save();
 

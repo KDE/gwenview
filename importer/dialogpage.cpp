@@ -67,14 +67,14 @@ struct DialogPagePrivate : public Ui_DialogPage {
         failedFileList.clear();
         failedDirList.clear();
         QStringList message;
-        if (files.count() > 0) {
+        if (!files.isEmpty()) {
             failedFileList = files;
             message << i18np("Failed to import %1 document.", "Failed to import %1 documents.", files.count());
             fileDetails->setVisible(true);
         } else
             fileDetails->setVisible(false);
 
-        if (dirs.count() > 0) {
+        if (!dirs.isEmpty()) {
             failedDirList = dirs;
             message << i18np("Failed to create %1 destination subfolder.", "Failed to create %1 destination subfolders.", dirs.count());
             dirDetails->setVisible(true);
@@ -87,13 +87,13 @@ struct DialogPagePrivate : public Ui_DialogPage {
 
     void showFailedFileDetails()
     {
-        QString message = i18n("Failed to import documents:");
+        const QString message = i18n("Failed to import documents:");
         KMessageBox::errorList(q, message, failedFileList);
     }
 
     void showFailedDirDetails()
     {
-        QString message = i18n("Failed to create subfolders:");
+        const QString message = i18n("Failed to create subfolders:");
         KMessageBox::errorList(q, message, failedDirList);
     }
 };
@@ -127,8 +127,8 @@ void DialogPage::setText(const QString &text)
 
 int DialogPage::addButton(const KGuiItem &item)
 {
-    int id = d->mButtons.size();
-    auto *button = new QPushButton;
+    const int id = d->mButtons.size();
+    auto button = new QPushButton;
     KGuiItem::assign(button, item);
     button->setFixedHeight(button->sizeHint().height() * 2);
 

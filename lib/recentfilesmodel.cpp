@@ -104,7 +104,7 @@ bool RecentFilesModel::removeRows(int start, int count, const QModelIndex &paren
 {
     Q_ASSERT(!parent.isValid());
     for (int row = start + count - 1; row >= start; --row) {
-        auto *historyItem = static_cast<RecentFilesItem *>(item(row, 0));
+        auto historyItem = static_cast<RecentFilesItem *>(item(row, 0));
         Q_ASSERT(historyItem);
         d->mRecentFilesItemForUrl.remove(historyItem->url());
     }

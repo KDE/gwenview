@@ -80,7 +80,7 @@ struct ImageOpsContextManagerItem::Private {
     void setupActions()
     {
         KActionCollection *actionCollection = mMainWindow->actionCollection();
-        auto *edit = new KActionCategory(i18nc("@title actions category - means actions changing image", "Edit"), actionCollection);
+        auto edit = new KActionCategory(i18nc("@title actions category - means actions changing image", "Edit"), actionCollection);
 
         mRotateLeftAction = edit->addAction(QStringLiteral("rotate_left"), q, SLOT(rotateLeft()));
         mRotateLeftAction->setText(i18n("Rotate Left"));
@@ -197,25 +197,25 @@ void ImageOpsContextManagerItem::updateActions()
 
 void ImageOpsContextManagerItem::rotateLeft()
 {
-    auto *op = new TransformImageOperation(ROT_270);
+    auto op = new TransformImageOperation(ROT_270);
     applyImageOperation(op);
 }
 
 void ImageOpsContextManagerItem::rotateRight()
 {
-    auto *op = new TransformImageOperation(ROT_90);
+    auto op = new TransformImageOperation(ROT_90);
     applyImageOperation(op);
 }
 
 void ImageOpsContextManagerItem::mirror()
 {
-    auto *op = new TransformImageOperation(HFLIP);
+    auto op = new TransformImageOperation(HFLIP);
     applyImageOperation(op);
 }
 
 void ImageOpsContextManagerItem::flip()
 {
-    auto *op = new TransformImageOperation(VFLIP);
+    auto op = new TransformImageOperation(VFLIP);
     applyImageOperation(op);
 }
 
@@ -227,7 +227,7 @@ void ImageOpsContextManagerItem::resizeImage()
     Document::Ptr doc = DocumentFactory::instance()->load(contextManager()->currentUrl());
     doc->startLoadingFullImage();
 
-    auto *dialog = new ResizeImageDialog(d->mMainWindow);
+    auto dialog = new ResizeImageDialog(d->mMainWindow);
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->setModal(true);
     dialog->setOriginalSize(doc->size());
@@ -250,7 +250,7 @@ void ImageOpsContextManagerItem::crop()
         return;
     }
 
-    auto *tool = new CropTool(imageView);
+    auto tool = new CropTool(imageView);
     Document::Ptr doc = DocumentFactory::instance()->load(contextManager()->currentUrl());
     QSize size = doc->size();
     QRect sizeAsRect = QRect(0, 0, size.width(), size.height());
@@ -289,7 +289,7 @@ void ImageOpsContextManagerItem::startRedEyeReduction()
         qCCritical(GWENVIEW_APP_LOG) << "No RasterImageView available!";
         return;
     }
-    auto *tool = new RedEyeReductionTool(view);
+    auto tool = new RedEyeReductionTool(view);
     connect(tool, &RedEyeReductionTool::imageOperationRequested, this, &ImageOpsContextManagerItem::applyImageOperation);
     connect(tool, &RedEyeReductionTool::done, this, &ImageOpsContextManagerItem::restoreDefaultImageViewTool);
 

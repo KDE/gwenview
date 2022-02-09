@@ -69,7 +69,7 @@ QList<QAction *> SlideShowFileItemAction::actions(const KFileItemListProperties 
         return {};
     }
 
-    auto *startSlideShowAction = new QAction(text, parentWidget);
+    auto startSlideShowAction = new QAction(text, parentWidget);
     startSlideShowAction->setIcon(QIcon::fromTheme(QStringLiteral("gwenview")));
 
     connect(startSlideShowAction, &QAction::triggered, this, [=]() {

@@ -224,13 +224,13 @@ struct InfoContextManagerItemPrivate {
 
         mKeyValueWidget = new KeyValueWidget;
 
-        auto *moreLabel = new QLabel(mOneFileWidget);
+        auto moreLabel = new QLabel(mOneFileWidget);
         moreLabel->setText(QStringLiteral("<a href='#'>%1</a>").arg(i18nc("@action show more image meta info", "Show more details...")));
         // for some reason, this label appears much further down the page without the following line
         moreLabel->setAlignment(Qt::AlignLeft);
 
-        auto *content = new QWidget;
-        auto *layout = new QVBoxLayout(content);
+        auto content = new QWidget;
+        auto layout = new QVBoxLayout(content);
         layout->setContentsMargins(0, 0, 0, 0);
         layout->addWidget(mKeyValueWidget);
         layout->addWidget(moreLabel);

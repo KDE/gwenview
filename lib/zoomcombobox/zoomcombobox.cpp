@@ -283,7 +283,7 @@ bool ZoomComboBox::eventFilter(QObject *watched, QEvent *event)
         }
         case QEvent::ShortcutOverride: {
             if (view()->isVisibleTo(this)) {
-                auto *keyEvent = static_cast<QKeyEvent *>(event);
+                auto keyEvent = static_cast<QKeyEvent *>(event);
                 if (keyEvent->key() == Qt::Key_Escape) {
                     event->accept();
                 }
@@ -382,7 +382,7 @@ void ZoomComboBox::changeZoomTo(int index)
     }
 
     QVariant itemData = this->itemData(index);
-    auto *action = itemData.value<QAction *>();
+    auto action = itemData.value<QAction *>();
     if (action) {
         if (!action->isCheckable() || !action->isChecked()) {
             action->trigger();

@@ -64,7 +64,7 @@ QString FileNameFormater::format(const QUrl &url, const QDateTime &dateTime)
     dict[QStringLiteral("name.lower")] = info.completeBaseName().toLower();
 
     QString name;
-    int length = d->mFormat.length();
+    const int length = d->mFormat.length();
     for (int pos = 0; pos < length; ++pos) {
         QChar ch = d->mFormat[pos];
         if (ch == '{') {

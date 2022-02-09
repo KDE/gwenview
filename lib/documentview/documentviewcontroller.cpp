@@ -54,7 +54,7 @@ struct DocumentViewControllerPrivate {
 
     void setupActions()
     {
-        auto *view = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface", "View"), mActionCollection);
+        auto view = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface", "View"), mActionCollection);
 
         mZoomToFitAction = view->addAction(QStringLiteral("view_zoom_to_fit"));
         view->collection()->setDefaultShortcut(mZoomToFitAction, Qt::Key_F);
@@ -112,7 +112,7 @@ struct DocumentViewControllerPrivate {
 
         setBackgroundColorModeIcons(mBackgroundColorModeAuto, mBackgroundColorModeLight, mBackgroundColorModeNeutral, mBackgroundColorModeDark);
 
-        auto *actionGroup = new QActionGroup(q);
+        auto actionGroup = new QActionGroup(q);
         actionGroup->addAction(mBackgroundColorModeAuto);
         actionGroup->addAction(mBackgroundColorModeLight);
         actionGroup->addAction(mBackgroundColorModeNeutral);

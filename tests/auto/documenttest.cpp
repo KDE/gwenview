@@ -513,7 +513,7 @@ void DocumentTest::testModifyAndSaveAs()
 
     // Modify image
     QVERIFY(doc->editor());
-    auto *op = new TestOperation;
+    auto op = new TestOperation;
     op->applyToDocument(doc);
     QTest::qWait(100);
     QVERIFY(doc->isModified());
@@ -609,7 +609,7 @@ void DocumentTest::testForgetModifiedDocument()
     doc->waitUntilLoaded();
 
     // Modify it
-    auto *op = new TransformImageOperation(ROT_90);
+    auto op = new TransformImageOperation(ROT_90);
     op->applyToDocument(doc);
     QTest::qWait(100);
 
@@ -858,7 +858,7 @@ void DocumentTest::testUndoRedo()
     QSignalSpy modifiedSpy(doc.data(), &Document::modified);
     QSignalSpy savedSpy(doc.data(), &Document::saved);
 
-    auto *op = new SuccessOperation;
+    auto op = new SuccessOperation;
     QCOMPARE(op->mRedoCount, 0);
     QCOMPARE(op->mUndoCount, 0);
 

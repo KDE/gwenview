@@ -33,7 +33,7 @@ namespace Gwenview
 {
 KAboutData *createAboutData(const QString &appName, const QString &programName)
 {
-    auto *data = new KAboutData(appName, programName, QStringLiteral(GWENVIEW_VERSION_STRING));
+    auto data = new KAboutData(appName, programName, QStringLiteral(GWENVIEW_VERSION_STRING));
     data->setLicense(KAboutLicense::GPL);
     data->setCopyrightStatement(i18n("Copyright 2000-2019 Gwenview authors"));
     data->setProductName("gwenview");
