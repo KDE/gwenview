@@ -84,7 +84,7 @@ QValidator::State ZoomValidator::validate(QString &input, int &pos) const
 
 ZoomComboBoxPrivate::ZoomComboBoxPrivate(ZoomComboBox *q)
     : q_ptr(q)
-    , validator(new ZoomValidator(0, 0, q, this))
+    , validator(new ZoomValidator(0, 0, q, this, q))
 {
 }
 
