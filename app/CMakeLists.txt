@@ -121,7 +121,7 @@ add_definitions(-DTRANSLATION_DOMAIN=\"gwenview\")
 
 kcoreaddons_add_plugin(slideshowfileitemaction
     SOURCES slideshowfileitemaction.cpp
-    INSTALL_NAMESPACE "kf5/kfileitemaction")
+    INSTALL_NAMESPACE "kf${QT_MAJOR_VERSION}/kfileitemaction")
 
 target_link_libraries(slideshowfileitemaction
     KF5::I18n
