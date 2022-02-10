@@ -83,7 +83,7 @@ if (KF5Purpose_FOUND)
     target_link_libraries(gwenview KF5::PurposeWidgets)
 endif()
 
-target_link_libraries(gwenview LINK_INTERFACE_LIBRARIES KF5::KIOCore Qt5::Core)
+target_link_libraries(gwenview LINK_INTERFACE_LIBRARIES KF5::KIOCore Qt::Core)
 
 if (HAVE_TIFF)
     target_link_libraries(gwenview TIFF::TIFF)

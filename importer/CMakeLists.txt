@@ -42,7 +42,7 @@ target_link_libraries(gwenview_importer
     KF5::KIOCore
     KF5::ItemModels
     KF5::WidgetsAddons
-    Qt5::Core
+    Qt::Core
     )
 
 target_link_libraries(gwenview_importer
@@ -50,7 +50,7 @@ target_link_libraries(gwenview_importer
     KF5::KIOCore
     KF5::ItemModels
     KF5::WidgetsAddons
-    Qt5::Core
+    Qt::Core
     )
 
 install(TARGETS gwenview_importer

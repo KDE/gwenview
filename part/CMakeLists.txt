@@ -18,4 +18,4 @@ configure_file(gvpart.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/gvpart.desktop)
 kcoreaddons_desktop_to_json(gvpart ${CMAKE_CURRENT_BINARY_DIR}/gvpart.desktop)
 
 install(TARGETS gvpart DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf5/parts)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/gvpart.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR})
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/gvpart.desktop DESTINATION ${KDE_INSTALL_KSERVICESDIR})

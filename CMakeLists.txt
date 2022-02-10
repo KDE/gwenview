@@ -11,7 +11,7 @@ project(gwenview VERSION ${RELEASE_SERVICE_VERSION})
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake )
 
 set (QT_MIN_VERSION "5.15.0")
-set (KF5_MIN_VERSION "5.84.0")
+set (KF5_MIN_VERSION "5.90.0")
 set(KDE_COMPILERSETTINGS_LEVEL "5.82")
 
 
@@ -53,11 +53,15 @@ else()
     set(GWENVIEW_SEMANTICINFO_BACKEND_BALOO ON)
 endif()
 
-find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Core Widgets Concurrent Svg PrintSupport)
-find_package(Qt5DBus ${QT_MIN_VERSION} CONFIG QUIET)
-set(HAVE_QTDBUS ${Qt5DBus_FOUND})
+find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} CONFIG REQUIRED Core Widgets Concurrent Svg PrintSupport)
+find_package(Qt${QT_MAJOR_VERSION}DBus ${QT_MIN_VERSION} CONFIG QUIET)
+if (QT_MAJOR_VERSION STREQUAL "6")
+    find_package(Qt6SvgWidgets)
+endif()
 
-find_package(Phonon4Qt5 4.6.60 NO_MODULE REQUIRED)
+set(HAVE_QTDBUS ${Qt${QT_MAJOR_VERSION}DBus_FOUND})
+
+find_package(Phonon4Qt${QT_MAJOR_VERSION} 4.6.60 NO_MODULE REQUIRED)
 include_directories(BEFORE SYSTEM ${PHONON_INCLUDES})
 add_definitions(-DPHONON_LIB_SONAME=\"${PHONON_LIB_SONAME}\")
 

@@ -12,7 +12,7 @@ add_dependencies(buildtests slidecontainertest)
 ecm_mark_as_test(slidecontainertest)
 
 target_link_libraries(slidecontainertest
-    Qt5::Test
+    Qt::Test
     gwenviewlib)
 
 # imageloadbench
@@ -25,7 +25,7 @@ add_dependencies(buildtests imageloadbench)
 ecm_mark_as_test(imageloadbench)
 
 target_link_libraries(imageloadbench
-    Qt5::Test
+    Qt::Test
     gwenviewlib)
 
 # thumbnailgen
@@ -39,5 +39,5 @@ add_dependencies(buildtests thumbnailgen)
 ecm_mark_as_test(thumbnailgen)
 
 target_link_libraries(thumbnailgen
-    Qt5::Test
+    Qt::Test
     gwenviewlib)

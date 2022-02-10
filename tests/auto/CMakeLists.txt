@@ -4,7 +4,7 @@ macro(gv_add_unit_test _test)
     ecm_add_test(
         ${_test}.cpp ${ARGN}
         TEST_NAME ${_test}
-        LINK_LIBRARIES Qt5::Test gwenviewlib
+        LINK_LIBRARIES Qt::Test gwenviewlib
         )
     add_dependencies(buildtests ${_test})
 endmacro(gv_add_unit_test)

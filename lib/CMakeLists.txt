@@ -168,7 +168,7 @@ if(HAVE_QTDBUS)
         mpris2/mprismediaplayer2.cpp
         mpris2/mprismediaplayer2player.cpp
         )
-    qt5_add_dbus_interface(gwenviewlib_SRCS mpris2/org.freedesktop.ScreenSaver.xml screensaverdbusinterface)
+    qt_add_dbus_interface(gwenviewlib_SRCS mpris2/org.freedesktop.ScreenSaver.xml screensaverdbusinterface)
 endif()
 
 if(HAVE_FITS)
@@ -236,9 +236,9 @@ if (WIN32)
 endif()
 
 target_link_libraries(gwenviewlib
-   Qt5::Concurrent
-   Qt5::Svg
-   Qt5::PrintSupport
+   Qt::Concurrent
+   Qt::Svg
+   Qt::PrintSupport
    KF5::GuiAddons
    KF5::KIOCore
    KF5::KIOWidgets
@@ -254,7 +254,7 @@ target_link_libraries(gwenviewlib
     )
 
 if(HAVE_QTDBUS)
-    target_link_libraries(gwenviewlib Qt5::DBus)
+    target_link_libraries(gwenviewlib Qt::DBus)
 endif()
 if(HAVE_FITS)
     target_link_libraries(gwenviewlib ${CFITSIO_LIBRARIES})
@@ -269,7 +269,11 @@ if (KF5KDcraw_FOUND)
 endif()
 
 if (HAVE_X11)
-    target_link_libraries(gwenviewlib Qt5::X11Extras X11::X11)
+    target_link_libraries(gwenviewlib Qt::X11Extras X11::X11)
+endif()
+
+if (QT_MAJOR_VERSION STREQUAL "6")
+    target_link_libraries(gwenviewlib Qt6::SvgWidgets)
 endif()
 
 if (GWENVIEW_SEMANTICINFO_BACKEND_BALOO)
