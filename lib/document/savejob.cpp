@@ -110,8 +110,11 @@ void SaveJob::doStart()
         emitResult();
         return;
     }
-
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QFuture<void> future = QtConcurrent::run(this, &SaveJob::saveInternal);
+#else
+    QFuture<void> future = QtConcurrent::run(&SaveJob::saveInternal, this);
+#endif
     d->mInternalSaveWatcher.reset(new QFutureWatcher<void>(this));
     connect(d->mInternalSaveWatcher.data(), &QFutureWatcherBase::finished, this, &SaveJob::finishSave);
     d->mInternalSaveWatcher->setFuture(future);

@@ -21,11 +21,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifndef MIMETYPEUTILS_H
 #define MIMETYPEUTILS_H
 
-#include <QString>
+#include <QStringList>
 #include <lib/gwenviewlib_export.h>
 // Local
-class QStringList;
-
 class KFileItem;
 class KFileItemList;
 class QUrl;

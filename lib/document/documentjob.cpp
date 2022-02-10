@@ -82,7 +82,11 @@ bool DocumentJob::checkDocumentEditor()
 
 void ThreadedDocumentJob::doStart()
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QFuture<void> future = QtConcurrent::run(this, &ThreadedDocumentJob::threadedStart);
+#else
+    QFuture<void> future = QtConcurrent::run(&ThreadedDocumentJob::threadedStart, this);
+#endif
     auto watcher = new QFutureWatcher<void>(this);
     connect(watcher, SIGNAL(finished()), SLOT(emitResult()));
     watcher->setFuture(future);
