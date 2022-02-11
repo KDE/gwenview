@@ -89,6 +89,7 @@ GenericName[fr]=Afficheur d'images de KDE
 GenericName[ga]=Amharcán Íomhánna KDE
 GenericName[gl]=Visor de imaxes de KDE
 GenericName[he]=מציג תמונות של KDE
+GenericName[hi]=केडीइ छवि प्रदर्शक
 GenericName[hsb]=KDE wobhladowar za wobrazy
 GenericName[hu]=KDE képnézegető
 GenericName[ia]=Visor de imagine de KDE
