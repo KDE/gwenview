@@ -20,6 +20,7 @@
   <name xml:lang="fi">Gwenview</name>
   <name xml:lang="fr">Gwenview</name>
   <name xml:lang="gl">Gwenview</name>
+  <name xml:lang="hi">ग्वेन-व्यू</name>
   <name xml:lang="hsb">Gwenview</name>
   <name xml:lang="hu">Gwenview</name>
   <name xml:lang="ia">Gwenview</name>
@@ -66,6 +67,7 @@
   <summary xml:lang="fi">Kuvankatselin</summary>
   <summary xml:lang="fr">Afficheur d'image</summary>
   <summary xml:lang="gl">Visor de imaxes</summary>
+  <summary xml:lang="hi">छवि प्रदर्शक</summary>
   <summary xml:lang="hsb">Wobhladowar za wobrazy</summary>
   <summary xml:lang="hu">Képmegjelenítő</summary>
   <summary xml:lang="ia">Visor de image</summary>
@@ -113,6 +115,7 @@
     <p xml:lang="fi">Gwenview on KDE:n nopea ja helppokäyttöinen kuvakatselin, joka on ihanteellinen kuvakokoelmien selaukseen ja esittämiseen.</p>
     <p xml:lang="fr">Gwenview est un afficheur d'images rapide et facile à utiliser pour KDE, idéal pour parcourir et afficher une collection d'images.</p>
     <p xml:lang="gl">Gwenview é un visor de imaxes por KDE rápido e doado de utilizar, ideal para examinar e mostrar unha colección de imaxes.</p>
+    <p xml:lang="hi">केडीई द्वारा ग्वेनव्यू एक तेज़ और उपयोग में आसान छवि दर्शक है, जो छवियों के संग्रह को ब्राउज़ करने और प्रदर्शित करने के लिए आदर्श है।</p>
     <p xml:lang="hsb">Gwenview je spěšny a přihódny wobhladowar za wobrazy we KDE, idealny za přehladowanje a pokazowanje zběrki wobrazow.</p>
     <p xml:lang="hu">A Gwenview egy gyors és egyszerűen használható képmegjelenítő a KDE-hez, ideális képgyűjtemények böngészéséhez és megjelenítéséhez.</p>
     <p xml:lang="ia">Gwenview es un visor de imagine per KDE rapide e facile de usar, ideal per monstrar e navigar  in un colection de images.</p>
@@ -158,6 +161,7 @@
     <p xml:lang="fi">Ominaisuudet:</p>
     <p xml:lang="fr">Fonctionnalités :</p>
     <p xml:lang="gl">Funcionalidades:</p>
+    <p xml:lang="hi">विशेषताएँ :</p>
     <p xml:lang="hsb">Wosebitosće:</p>
     <p xml:lang="hu">Szolgáltatások:</p>
     <p xml:lang="ia">Characteristicas:</p>
@@ -205,6 +209,7 @@
       <li xml:lang="fi">Tukee yksinkertaista kuvien manipulointia: kiertämistä, kääntämistä, peilaamista ja koon muuttamista</li>
       <li xml:lang="fr">Prise en charge des manipulations d'image simples : rotation, miroir, basculer, et redimensionner</li>
       <li xml:lang="gl">Permite manipulacións sinxelas de imaxes de maneira individual: rotar, reflectir, inverter e cambiar o tamaño.</li>
+      <li xml:lang="hi">सरल छवि जोड़तोड़ का समर्थन करता है: घुमाना, दर्पण, पलटना और आकार बदलना</li>
       <li xml:lang="hsb">Podpěruje jednoru manipulaciju wobrazow: wjerćeć, špihelować, wobroćić a powjetšić/pomjeńšić</li>
       <li xml:lang="hu">Egyszerű képműveletek támogatása: forgatás, tükrözés, átméretezés</li>
       <li xml:lang="ia">Il supporta simple manipultiones de imagine: rotar, reflecter,  girar e redimensionar</li>
@@ -251,6 +256,7 @@
       <li xml:lang="fi">Tukee tiedostonhallinnan perusasioita kuten kopiointia, siirtämistä, poistamista ynnä muuta</li>
       <li xml:lang="fr">Prise en charge d'actions basiques de gestion de fichiers comme copier, déplacer, supprimer, et autres</li>
       <li xml:lang="gl">Permite realizar accións básicas de xestión de ficheiros como copiar, mover, eliminar, etc.</li>
+      <li xml:lang="hi">मूल फ़ाइल प्रबंधन क्रियाओं का समर्थन करता है जैसे कॉपी करना, स्थानांतरित करना, हटाना, और अन्य</li>
       <li xml:lang="hsb">Podpěruje jednore rjadowanske akcije za dataje kaž kopěrowanje, přesunjenje, zničenje a druhe</li>
       <li xml:lang="hu">Egyszerű fájlművelet, mint például másolás, áthelyezés, törlés támogatása</li>
       <li xml:lang="ia">Il suppporta actiones de gestion de file basic tal como copiar,mover, deler, e alteres</li>
@@ -297,6 +303,7 @@
       <li xml:lang="fi">Toimii sekä erillisenä ohjelmana että upotettuna katselimena Konqueror-verkkoselaimessa</li>
       <li xml:lang="fr">Fonctionne à la fois comme application autonome et comme afficheur embarqué dans le navigateur web Konqueror</li>
       <li xml:lang="gl">Pode usarse como unha aplicación autónoma e tamén como un visor incrustado no navegador web Konqueror.</li>
+      <li xml:lang="hi">यह कॉन्करर वेब ब्राउज़र एम्बेडेड व्यूअरमें और स्टैंडअलोन एप्लिकेशन दोनों के रूप में कार्य करता है</li>
       <li xml:lang="hsb">Funguje jako samostatna aplikacija a tež jako integrowana přehladowarka w konquerorje</li>
       <li xml:lang="hu">Önálló alkalmazásként és a Konqueror webböngészőbe épített képmegjelenítőként is működik</li>
       <li xml:lang="ia">Il functiona e como application per se mesme e un visor incorporate in le navigator web Konqueror</li>
@@ -351,6 +358,7 @@
       <caption xml:lang="fi">Gwenview</caption>
       <caption xml:lang="fr">Gwenview</caption>
       <caption xml:lang="gl">Gwenview</caption>
+      <caption xml:lang="hi">ग्वेन-व्यू</caption>
       <caption xml:lang="hsb">Gwenview</caption>
       <caption xml:lang="hu">Gwenview</caption>
       <caption xml:lang="ia">Gwenview</caption>
@@ -392,6 +400,7 @@
       <caption xml:lang="es">Use Gwenview para la gestión de su colección de imágenes</caption>
       <caption xml:lang="fi">Hallitse kuvakokoelmaasi Gwenview’lla</caption>
       <caption xml:lang="fr">Utiliser Gwenview pour gérer votre collection d'images.</caption>
+      <caption xml:lang="hi">अपने छवि संग्रह को प्रबंधित करने के लिए ग्वेन-व्यू का उपयोग करें</caption>
       <caption xml:lang="hu">A Gwenview használata a képgyűjteménye kezeléséhez</caption>
       <caption xml:lang="ia">Usa Guenview pro gerer tu collection de image</caption>
       <caption xml:lang="it">Usa Gwenview per gestire la raccolta delle immagini</caption>
