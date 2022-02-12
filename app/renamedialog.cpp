@@ -63,7 +63,7 @@ void RenameDialog::setFilename(const QString &filename)
     const QMimeDatabase db;
     const QString extension = db.suffixForFileName(filename);
     int selectionLength = filename.length();
-    if (extension.length() > 0) {
+    if (!extension.isEmpty()) {
         // The filename contains an extension. Assure that only the filename
         // gets selected.
         selectionLength -= extension.length() + 1;

@@ -142,8 +142,8 @@ void GVPart::saveAs()
 
     KIO::Job *job;
     Document::Ptr doc = DocumentFactory::instance()->load(srcUrl);
-    QByteArray rawData = doc->rawData();
-    if (rawData.length() > 0) {
+    const QByteArray rawData = doc->rawData();
+    if (!rawData.isEmpty()) {
         job = KIO::storedPut(rawData, dstUrl, -1);
     } else {
         job = KIO::file_copy(srcUrl, dstUrl);
