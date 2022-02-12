@@ -7,6 +7,8 @@ include_directories(
 set(gvpart_SRCS
     gvbrowserextension.cpp
     gvpart.cpp
+    gvbrowserextension.h
+    gvpart.h
     gvpart.qrc
     )
 
