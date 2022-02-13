@@ -336,13 +336,13 @@ void AbstractImageView::focusInEvent(QFocusEvent *event)
 
 qreal AbstractImageView::computeZoomToFit() const
 {
-    QSizeF docSize = dipDocumentSize();
+    const QSizeF docSize = dipDocumentSize();
     if (docSize.isEmpty()) {
         return 1;
     }
-    QSizeF viewSize = boundingRect().size();
-    qreal fitWidth = viewSize.width() / docSize.width();
-    qreal fitHeight = viewSize.height() / docSize.height();
+    const QSizeF viewSize = boundingRect().size();
+    const qreal fitWidth = viewSize.width() / docSize.width();
+    const qreal fitHeight = viewSize.height() / docSize.height();
     qreal fit = qMin(fitWidth, fitHeight);
     if (!d->mEnlargeSmallerImages) {
         fit = qMin(fit, qreal(1.));
@@ -352,13 +352,13 @@ qreal AbstractImageView::computeZoomToFit() const
 
 qreal AbstractImageView::computeZoomToFill() const
 {
-    QSizeF docSize = dipDocumentSize();
+    const QSizeF docSize = dipDocumentSize();
     if (docSize.isEmpty()) {
         return 1;
     }
-    QSizeF viewSize = boundingRect().size();
-    qreal fitWidth = viewSize.width() / docSize.width();
-    qreal fitHeight = viewSize.height() / docSize.height();
+    const QSizeF viewSize = boundingRect().size();
+    const qreal fitWidth = viewSize.width() / docSize.width();
+    const qreal fitHeight = viewSize.height() / docSize.height();
     qreal fill = qMax(fitWidth, fitHeight);
     if (!d->mEnlargeSmallerImages) {
         fill = qMin(fill, qreal(1.));
@@ -465,7 +465,7 @@ void AbstractImageView::keyPressEvent(QKeyEvent *event)
     }
 
     QPointF delta(0, 0);
-    qreal pageStep = boundingRect().height();
+    const qreal pageStep = boundingRect().height();
     qreal unitStep;
 
     if (event->modifiers() & Qt::ShiftModifier) {

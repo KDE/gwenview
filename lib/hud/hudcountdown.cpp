@@ -71,8 +71,8 @@ void HudCountDown::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QW
     painter->setPen(info.borderPen);
 
     QRectF square = boundingRect().adjusted(.5, .5, -.5, -.5);
-    qreal width = square.width();
-    qreal height = square.height();
+    const qreal width = square.width();
+    const qreal height = square.height();
     if (width < height) {
         square.setHeight(width);
         square.moveTop((height - width) / 2);

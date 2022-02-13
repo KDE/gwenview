@@ -67,12 +67,12 @@ QString FileNameFormater::format(const QUrl &url, const QDateTime &dateTime)
     const int length = d->mFormat.length();
     for (int pos = 0; pos < length; ++pos) {
         QChar ch = d->mFormat[pos];
-        if (ch == '{') {
+        if (ch == QLatin1Char('{')) {
             if (pos == length - 1) {
                 // We are at the end, ignore this
                 break;
             }
-            if (d->mFormat[pos + 1] == '{') {
+            if (d->mFormat[pos + 1] == QLatin1Char('{')) {
                 // This is an escaped '{', skip one
                 name += '{';
                 ++pos;
@@ -84,7 +84,7 @@ QString FileNameFormater::format(const QUrl &url, const QDateTime &dateTime)
                 return name;
             }
             // Replace keyword with its value
-            QString keyword = d->mFormat.mid(pos + 1, end - pos - 1);
+            const QString keyword = d->mFormat.mid(pos + 1, end - pos - 1);
             name += dict.value(keyword);
             pos = end;
         } else {

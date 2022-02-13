@@ -133,7 +133,7 @@ PrintOptionsPage::~PrintOptionsPage()
 
 Qt::Alignment PrintOptionsPage::alignment() const
 {
-    int id = d->mPositionGroup.checkedId();
+    const int id = d->mPositionGroup.checkedId();
     qCWarning(GWENVIEW_LIB_LOG) << "alignment=" << id;
     return Qt::Alignment(id);
 }

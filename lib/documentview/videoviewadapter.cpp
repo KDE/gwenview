@@ -50,24 +50,24 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 struct VideoViewAdapterPrivate {
-    VideoViewAdapter *q;
-    Phonon::MediaObject *mMediaObject;
-    Phonon::VideoWidget *mVideoWidget;
-    Phonon::AudioOutput *mAudioOutput;
-    HudWidget *mHud;
-    GraphicsWidgetFloater *mFloater;
+    VideoViewAdapter *q = nullptr;
+    Phonon::MediaObject *mMediaObject = nullptr;
+    Phonon::VideoWidget *mVideoWidget = nullptr;
+    Phonon::AudioOutput *mAudioOutput = nullptr;
+    HudWidget *mHud = nullptr;
+    GraphicsWidgetFloater *mFloater = nullptr;
 
-    HudSlider *mSeekSlider;
+    HudSlider *mSeekSlider = nullptr;
     QElapsedTimer mLastSeekSliderActionTime;
 
-    QLabel *mCurrentTime;
-    QLabel *mRemainingTime;
+    QLabel *mCurrentTime = nullptr;
+    QLabel *mRemainingTime = nullptr;
 
-    QAction *mPlayPauseAction;
-    QAction *mMuteAction;
-    QGraphicsProxyWidget *mProxy;
+    QAction *mPlayPauseAction = nullptr;
+    QAction *mMuteAction = nullptr;
+    QGraphicsProxyWidget *mProxy = nullptr;
 
-    HudSlider *mVolumeSlider;
+    HudSlider *mVolumeSlider = nullptr;
     QElapsedTimer mLastVolumeSliderChangeTime;
 
     Document::Ptr mDocument;

@@ -52,7 +52,7 @@ inline int getMaxUnreferencedImages()
     }
     LOG("Custom value for max unreferenced images:" << ba);
     bool ok;
-    int value = ba.toInt(&ok);
+    const int value = ba.toInt(&ok);
     return ok ? value : defaultValue;
 }
 

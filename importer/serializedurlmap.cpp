@@ -49,13 +49,13 @@ struct SerializedUrlMapPrivate {
     {
         mMap.clear();
         for (int idx = 0;; ++idx) {
-            QString idxString = QString::number(idx);
-            QString key = idxString + QLatin1String(KEY_SUFFIX);
+            const QString idxString = QString::number(idx);
+            const QString key = idxString + QLatin1String(KEY_SUFFIX);
             if (!mGroup.hasKey(key)) {
                 break;
             }
-            QVariant keyUrl = mGroup.readEntry(key, QVariant());
-            QVariant valueUrl = mGroup.readEntry(idxString + QLatin1String(VALUE_SUFFIX), QVariant());
+            const QVariant keyUrl = mGroup.readEntry(key, QVariant());
+            const QVariant valueUrl = mGroup.readEntry(idxString + QLatin1String(VALUE_SUFFIX), QVariant());
             mMap.insert(keyUrl.toUrl(), valueUrl.toUrl());
         }
     }
@@ -66,7 +66,7 @@ struct SerializedUrlMapPrivate {
         QMap<QUrl, QUrl>::ConstIterator it = mMap.constBegin(), end = mMap.constEnd();
         int idx = 0;
         for (; it != end; ++it, ++idx) {
-            QString idxString = QString::number(idx);
+            const QString idxString = QString::number(idx);
             mGroup.writeEntry(idxString + QLatin1String(KEY_SUFFIX), QVariant(it.key()));
             mGroup.writeEntry(idxString + QLatin1String(VALUE_SUFFIX), QVariant(it.value()));
         }

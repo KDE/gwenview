@@ -116,7 +116,7 @@ struct DocumentViewPrivate {
     QPointer<ThumbnailProvider> mDragThumbnailProvider;
     QPointer<QDrag> mDrag;
 
-    Touch *mTouch;
+    Touch *mTouch = nullptr;
     int mMinTimeBetweenPinch;
 
     void setCurrentAdapter(AbstractDocumentViewAdapter *adapter)
@@ -270,7 +270,7 @@ struct DocumentViewPrivate {
 
     void updateZoomSnapValues()
     {
-        qreal min = q->minimumZoom();
+        const qreal min = q->minimumZoom();
 
         mZoomSnapValues.clear();
         for (qreal zoom = MINSTEP; zoom > min; zoom *= MINSTEP) {

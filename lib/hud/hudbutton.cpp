@@ -64,21 +64,21 @@ struct HudButtonPrivate {
         QSize minInnerSize = constraint.toSize() - QSize(2 * padding, 2 * padding);
 
         if (!mLightIcon.isNull()) {
-            int size = KIconLoader::global()->currentSize(mIconGroup);
+            const int size = KIconLoader::global()->currentSize(mIconGroup);
             info->iconRect = QRect(padding, padding, size, qMax(size, minInnerSize.height()));
             minInnerSize.rwidth() -= size;
         }
         if (!mText.isEmpty()) {
-            QFont font = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
+            const QFont font = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
             QFontMetrics fm(font);
-            QSize size = fm.size(0, mText).expandedTo(minInnerSize);
+            const QSize size = fm.size(0, mText).expandedTo(minInnerSize);
             info->textRect = QRect(padding, padding, size.width(), size.height());
             if (!info->iconRect.isNull()) {
                 info->textRect.translate(info->iconRect.right(), 0);
             }
         }
 
-        QRectF rect = info->iconRect | info->textRect;
+        const QRectF rect = info->iconRect | info->textRect;
         info->size = QSize(rect.right() + padding, rect.bottom() + padding);
     }
 

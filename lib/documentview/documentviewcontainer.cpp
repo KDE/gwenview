@@ -48,7 +48,7 @@ struct DocumentViewContainerPrivate {
     DocumentViewSet mViews;
     DocumentViewSet mAddedViews;
     DocumentViewSet mRemovedViews;
-    QTimer *mLayoutUpdateTimer;
+    QTimer *mLayoutUpdateTimer = nullptr;
 
     void scheduleLayoutUpdate()
     {

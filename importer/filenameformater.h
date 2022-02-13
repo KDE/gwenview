@@ -40,7 +40,7 @@ class FileNameFormater
 public:
     using HelpMap = QMap<QString, QString>;
 
-    FileNameFormater(const QString &format);
+    explicit FileNameFormater(const QString &format);
     ~FileNameFormater();
 
     /**

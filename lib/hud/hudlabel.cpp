@@ -56,9 +56,9 @@ HudLabel::~HudLabel()
 void HudLabel::setText(const QString &text)
 {
     d->mText = text;
-    QFont font = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
+    const QFont font = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
     QFontMetrics fm(font);
-    QSize minSize = fm.size(0, d->mText);
+    const QSize minSize = fm.size(0, d->mText);
     setMinimumSize(minSize);
     setPreferredSize(minSize);
 }

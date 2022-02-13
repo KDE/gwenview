@@ -229,13 +229,13 @@ struct CropWidgetPrivate : public QWidget {
 
     QRect cropRect() const
     {
-        QRect rect(leftSpinBox->value(), topSpinBox->value(), widthSpinBox->value(), heightSpinBox->value());
+        const QRect rect(leftSpinBox->value(), topSpinBox->value(), widthSpinBox->value(), heightSpinBox->value());
         return rect;
     }
 
     void initSpinBoxes()
     {
-        QSize size = mDocument->size();
+        const QSize size = mDocument->size();
         leftSpinBox->setMaximum(size.width());
         widthSpinBox->setMaximum(size.width());
         topSpinBox->setMaximum(size.height());

@@ -54,7 +54,7 @@ public:
         MultipleDirsFound,
     };
 
-    DocumentDirFinder(const QUrl &rootUrl);
+    explicit DocumentDirFinder(const QUrl &rootUrl);
     ~DocumentDirFinder() override;
 
     void start();

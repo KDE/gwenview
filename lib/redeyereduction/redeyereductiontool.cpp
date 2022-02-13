@@ -113,12 +113,12 @@ void RedEyeReductionTool::paint(QPainter *painter)
     if (d->mStatus == NotSet) {
         return;
     }
-    QRectF docRectF = d->rectF();
+    const QRectF docRectF = d->rectF();
     imageView()->document()->waitUntilLoaded();
 
-    QRect docRect = docRectF.toAlignedRect();
+    const QRect docRect = docRectF.toAlignedRect();
     QImage img = imageView()->document()->image().copy(docRect);
-    QRectF imgRectF(docRectF.left() - docRect.left(), docRectF.top() - docRect.top(), docRectF.width(), docRectF.height());
+    const QRectF imgRectF(docRectF.left() - docRect.left(), docRectF.top() - docRect.top(), docRectF.width(), docRectF.height());
     RedEyeReductionImageOperation::apply(&img, imgRectF);
 
     const QRectF viewRectF = imageView()->mapToView(docRectF);

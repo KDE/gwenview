@@ -83,8 +83,8 @@ RedEyeReductionImageOperation::~RedEyeReductionImageOperation()
 
 void RedEyeReductionImageOperation::redo()
 {
-    QImage img = document()->image();
-    QRect rect = d->mRectF.toAlignedRect();
+    const QImage img = document()->image();
+    const QRect rect = d->mRectF.toAlignedRect();
     d->mOriginalImage = img.copy(rect);
     redoAsDocumentJob(new RedEyeReductionJob(d->mRectF));
 }
@@ -99,7 +99,7 @@ void RedEyeReductionImageOperation::undo()
     {
         QPainter painter(&img);
         painter.setCompositionMode(QPainter::CompositionMode_Source);
-        QRect rect = d->mRectF.toAlignedRect();
+        const QRect rect = d->mRectF.toAlignedRect();
         painter.drawImage(rect.topLeft(), d->mOriginalImage);
     }
     document()->editor()->setImage(img);

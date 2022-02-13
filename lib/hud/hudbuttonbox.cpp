@@ -38,7 +38,7 @@ struct HudButtonBoxPrivate {
     QGraphicsLinearLayout *mLayout = nullptr;
     HudLabel *mLabel = nullptr;
     QList<HudButton *> mButtonList;
-    HudCountDown *mCountDown;
+    HudCountDown *mCountDown = nullptr;
 
     void updateButtonWidths()
     {
@@ -90,7 +90,7 @@ void HudButtonBox::addCountDown(qreal ms)
 
 HudButton *HudButtonBox::addAction(QAction *action, const QString &overrideText)
 {
-    QString text = overrideText.isEmpty() ? action->text() : overrideText;
+    const QString text = overrideText.isEmpty() ? action->text() : overrideText;
     HudButton *button = addButton(text);
     connect(button, &HudButton::clicked, action, &QAction::trigger);
     return button;

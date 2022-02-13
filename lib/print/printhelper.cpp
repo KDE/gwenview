@@ -64,8 +64,8 @@ struct PrintHelperPrivate {
         } else {
             // No scale
             const double INCHES_PER_METER = 100. / 2.54;
-            int dpmX = doc->image().dotsPerMeterX();
-            int dpmY = doc->image().dotsPerMeterY();
+            const int dpmX = doc->image().dotsPerMeterX();
+            const int dpmY = doc->image().dotsPerMeterY();
             if (dpmX > 0 && dpmY > 0) {
                 double wImg = double(size.width()) / double(dpmX) * INCHES_PER_METER;
                 double hImg = double(size.height()) / double(dpmY) * INCHES_PER_METER;
@@ -133,9 +133,9 @@ struct PrintHelperPrivate {
         }
 
         QPainter painter(printer);
-        QRect rect = painter.viewport();
-        QSize size = adjustSize(optionsPage, doc, printer->resolution(), rect.size());
-        QPoint pos = adjustPosition(optionsPage, size, rect.size());
+        const QRect rect = painter.viewport();
+        const QSize size = adjustSize(optionsPage, doc, printer->resolution(), rect.size());
+        const QPoint pos = adjustPosition(optionsPage, size, rect.size());
         painter.setViewport(pos.x(), pos.y(), size.width(), size.height());
         if (!dialog) {
             delete optionsPage;

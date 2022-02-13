@@ -86,7 +86,7 @@ struct BirdEyeViewPrivate {
             // No recent activity
             visible = false;
         }
-        qreal wantedOpacity = visible ? 1 : 0;
+        const qreal wantedOpacity = visible ? 1 : 0;
         if (!qFuzzyCompare(wantedOpacity, q->opacity())) {
             mOpacityAnim->setEndValue(wantedOpacity);
             mOpacityAnim->start();
@@ -147,10 +147,10 @@ void BirdEyeView::adjustGeometry()
     if (size.width() > maxBevWidth) {
         size.scale(maxBevWidth, MIN_SIZE, Qt::KeepAspectRatio);
     }
-    QRectF geom = QRectF(QApplication::isRightToLeft() ? docViewRect.left() + VIEW_OFFSET : docViewRect.right() - VIEW_OFFSET - size.width(),
-                         docViewRect.bottom() - VIEW_OFFSET - size.height(),
-                         size.width(),
-                         size.height());
+    const QRectF geom = QRectF(QApplication::isRightToLeft() ? docViewRect.left() + VIEW_OFFSET : docViewRect.right() - VIEW_OFFSET - size.width(),
+                               docViewRect.bottom() - VIEW_OFFSET - size.height(),
+                               size.width(),
+                               size.height());
     setGeometry(alignedRectF(geom));
     adjustVisibleRect();
 }

@@ -46,9 +46,9 @@ struct ImporterConfigDialogPrivate : public Ui_ImporterConfigDialog {
         FileNameFormater::HelpMap map = FileNameFormater::helpMap();
         FileNameFormater::HelpMap::ConstIterator it = map.constBegin(), end = map.constEnd();
         for (; it != end; ++it) {
-            QString keyword = '{' + it.key() + '}';
-            QString explanation = it.value().toHtmlEscaped();
-            QString link = QStringLiteral("<a href='%1'>%1</a>").arg(keyword);
+            const QString keyword = '{' + it.key() + '}';
+            const QString explanation = it.value().toHtmlEscaped();
+            const QString link = QStringLiteral("<a href='%1'>%1</a>").arg(keyword);
             helpText +=
                 QLatin1String("<li>") + i18nc("%1 is the importer keyword, %2 is keyword explanation", "%1: %2", link, explanation) + QLatin1String("</li>");
         }

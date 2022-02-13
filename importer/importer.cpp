@@ -96,7 +96,7 @@ struct ImporterPrivate {
             return false;
         }
 
-        mTempImportDirUrl = QUrl::fromLocalFile(mTempImportDir->path() + '/');
+        mTempImportDirUrl = QUrl::fromLocalFile(mTempImportDir->path() + QLatin1Char('/'));
         if (!mTempImportDirUrl.isValid()) {
             Q_EMIT q->error(i18n("Could not create temporary upload folder."));
             return false;
@@ -131,7 +131,7 @@ struct ImporterPrivate {
             // 'src' url is temporary: if we import "foo/image.jpg" and
             // "bar/image.jpg", both images will be temporarily saved in the
             // 'src' url.
-            QDateTime dateTime = TimeUtils::dateTimeForFileItem(item, TimeUtils::SkipCache);
+            const QDateTime dateTime = TimeUtils::dateTimeForFileItem(item, TimeUtils::SkipCache);
             fileName = mFileNameFormater->format(src, dateTime);
         } else {
             fileName = src.fileName();
