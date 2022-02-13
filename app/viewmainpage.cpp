@@ -107,27 +107,27 @@ const int ViewMainPage::MaxViewCount = 6;
  * +-------------------------------------------------------------------+
  */
 struct ViewMainPagePrivate {
-    ViewMainPage *q;
-    SlideShow *mSlideShow;
-    KActionCollection *mActionCollection;
-    GvCore *mGvCore;
-    KModelIndexProxyMapper *mDirModelToBarModelProxyMapper;
-    QSplitter *mThumbnailSplitter;
-    QWidget *mAdapterContainer;
-    DocumentViewController *mDocumentViewController;
+    ViewMainPage *q = nullptr;
+    SlideShow *mSlideShow = nullptr;
+    KActionCollection *mActionCollection = nullptr;
+    GvCore *mGvCore = nullptr;
+    KModelIndexProxyMapper *mDirModelToBarModelProxyMapper = nullptr;
+    QSplitter *mThumbnailSplitter = nullptr;
+    QWidget *mAdapterContainer = nullptr;
+    DocumentViewController *mDocumentViewController = nullptr;
     QList<DocumentView *> mDocumentViews;
-    DocumentViewSynchronizer *mSynchronizer;
-    QToolButton *mToggleSideBarButton;
-    QToolButton *mToggleThumbnailBarButton;
-    ZoomWidget *mZoomWidget;
-    DocumentViewContainer *mDocumentViewContainer;
-    SlideContainer *mToolContainer;
-    QWidget *mStatusBarContainer;
-    ThumbnailBarView *mThumbnailBar;
-    KToggleAction *mToggleThumbnailBarAction;
-    KToggleAction *mSynchronizeAction;
-    QCheckBox *mSynchronizeCheckBox;
-    KSqueezedTextLabel *mDocumentCountLabel;
+    DocumentViewSynchronizer *mSynchronizer = nullptr;
+    QToolButton *mToggleSideBarButton = nullptr;
+    QToolButton *mToggleThumbnailBarButton = nullptr;
+    ZoomWidget *mZoomWidget = nullptr;
+    DocumentViewContainer *mDocumentViewContainer = nullptr;
+    SlideContainer *mToolContainer = nullptr;
+    QWidget *mStatusBarContainer = nullptr;
+    ThumbnailBarView *mThumbnailBar = nullptr;
+    KToggleAction *mToggleThumbnailBarAction = nullptr;
+    KToggleAction *mSynchronizeAction = nullptr;
+    QCheckBox *mSynchronizeCheckBox = nullptr;
+    KSqueezedTextLabel *mDocumentCountLabel = nullptr;
 
     // Activity Resource events reporting needs to be above KPart,
     // in the shell itself, to avoid problems with other MDI applications

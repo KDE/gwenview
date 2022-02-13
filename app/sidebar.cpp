@@ -81,8 +81,8 @@ private:
 
 //- SideBarGroup ---------------------------------------------------------------
 struct SideBarGroupPrivate {
-    QFrame *mContainer;
-    QLabel *mTitleLabel;
+    QFrame *mContainer = nullptr;
+    QLabel *mTitleLabel = nullptr;
 };
 
 SideBarGroup::SideBarGroup(const QString &title)
@@ -149,7 +149,7 @@ void SideBarGroup::addAction(QAction *action)
 struct SideBarPagePrivate {
     QIcon mIcon;
     QString mTitle;
-    QVBoxLayout *mLayout;
+    QVBoxLayout *mLayout = nullptr;
 };
 
 SideBarPage::SideBarPage(const QIcon &icon, const QString &title)

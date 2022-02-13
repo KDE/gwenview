@@ -135,8 +135,8 @@ public:
     }
 
 private:
-    GraphicsPixmapWidget *mPixmapWidget;
-    QTimer *mDeleteTimer;
+    GraphicsPixmapWidget *mPixmapWidget = nullptr;
+    QTimer *mDeleteTimer = nullptr;
 
     void updatePixmap(int rating)
     {

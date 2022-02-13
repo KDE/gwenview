@@ -53,19 +53,19 @@ QToolButton *createToolButton()
 }
 
 struct SaveBarPrivate {
-    SaveBar *q;
-    KActionCollection *mActionCollection;
-    QWidget *mSaveBarWidget;
-    QWidget *mTopRowWidget;
-    QToolButton *mUndoButton;
-    QToolButton *mRedoButton;
-    QToolButton *mSaveCurrentUrlButton;
-    QToolButton *mSaveAsButton;
-    QToolButton *mSaveAllButton;
-    QToolButton *mSaveAllFullScreenButton;
-    QLabel *mMessageLabel;
-    QLabel *mActionsLabel;
-    QFrame *mTooManyChangesFrame;
+    SaveBar *q = nullptr;
+    KActionCollection *mActionCollection = nullptr;
+    QWidget *mSaveBarWidget = nullptr;
+    QWidget *mTopRowWidget = nullptr;
+    QToolButton *mUndoButton = nullptr;
+    QToolButton *mRedoButton = nullptr;
+    QToolButton *mSaveCurrentUrlButton = nullptr;
+    QToolButton *mSaveAsButton = nullptr;
+    QToolButton *mSaveAllButton = nullptr;
+    QToolButton *mSaveAllFullScreenButton = nullptr;
+    QLabel *mMessageLabel = nullptr;
+    QLabel *mActionsLabel = nullptr;
+    QFrame *mTooManyChangesFrame = nullptr;
     QUrl mCurrentUrl;
 
     void createTooManyChangesFrame()
@@ -113,9 +113,9 @@ struct SaveBarPrivate {
 
     void applyNormalStyleSheet()
     {
-        QColor bgColor = QToolTip::palette().base().color();
-        QColor borderColor = PaintUtils::adjustedHsv(bgColor, 0, 150, 0);
-        QColor fgColor = QToolTip::palette().text().color();
+        const QColor bgColor = QToolTip::palette().base().color();
+        const QColor borderColor = PaintUtils::adjustedHsv(bgColor, 0, 150, 0);
+        const QColor fgColor = QToolTip::palette().text().color();
 
         QString css =
             "#saveBarWidget {"
@@ -131,7 +131,7 @@ struct SaveBarPrivate {
 
     void applyFullScreenStyleSheet()
     {
-        QString css =
+        const QString css =
             "#saveBarWidget {"
             "	background-color: #333;"
             "}";

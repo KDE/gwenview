@@ -63,18 +63,18 @@ namespace Gwenview
 #endif
 
 struct ImageOpsContextManagerItem::Private {
-    ImageOpsContextManagerItem *q;
-    MainWindow *mMainWindow;
-    SideBarGroup *mGroup;
-    QRect *mCropStateRect;
+    ImageOpsContextManagerItem *q = nullptr;
+    MainWindow *mMainWindow = nullptr;
+    SideBarGroup *mGroup = nullptr;
+    QRect *mCropStateRect = nullptr;
 
-    QAction *mRotateLeftAction;
-    QAction *mRotateRightAction;
-    QAction *mMirrorAction;
-    QAction *mFlipAction;
-    QAction *mResizeAction;
-    QAction *mCropAction;
-    QAction *mRedEyeReductionAction;
+    QAction *mRotateLeftAction = nullptr;
+    QAction *mRotateRightAction = nullptr;
+    QAction *mMirrorAction = nullptr;
+    QAction *mFlipAction = nullptr;
+    QAction *mResizeAction = nullptr;
+    QAction *mCropAction = nullptr;
+    QAction *mRedEyeReductionAction = nullptr;
     QList<QAction *> mActionList;
 
     void setupActions()
@@ -122,7 +122,7 @@ struct ImageOpsContextManagerItem::Private {
 
     bool ensureEditable()
     {
-        QUrl url = q->contextManager()->currentUrl();
+        const QUrl url = q->contextManager()->currentUrl();
         Document::Ptr doc = DocumentFactory::instance()->load(url);
         doc->waitUntilLoaded();
         if (doc->isEditable()) {

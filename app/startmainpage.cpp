@@ -78,10 +78,10 @@ public:
 };
 
 struct StartMainPagePrivate : public Ui_StartMainPage {
-    StartMainPage *q;
-    GvCore *mGvCore;
-    KFilePlacesModel *mBookmarksModel;
-    ThumbnailProvider *mRecentFilesThumbnailProvider;
+    StartMainPage *q = nullptr;
+    GvCore *mGvCore = nullptr;
+    KFilePlacesModel *mBookmarksModel = nullptr;
+    ThumbnailProvider *mRecentFilesThumbnailProvider = nullptr;
     bool mSearchUiInitialized;
 
     void setupSearchUi()

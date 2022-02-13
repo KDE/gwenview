@@ -167,58 +167,58 @@ Layout of the main window looks like this:
 
 */
 struct MainWindow::Private {
-    GvCore *mGvCore;
-    MainWindow *q;
-    QSplitter *mCentralSplitter;
-    QWidget *mContentWidget;
-    ViewMainPage *mViewMainPage;
-    KUrlNavigator *mUrlNavigator;
-    ThumbnailView *mThumbnailView;
-    ThumbnailView *mActiveThumbnailView;
-    DocumentInfoProvider *mDocumentInfoProvider;
-    ThumbnailViewHelper *mThumbnailViewHelper;
+    GvCore *mGvCore = nullptr;
+    MainWindow *q = nullptr;
+    QSplitter *mCentralSplitter = nullptr;
+    QWidget *mContentWidget = nullptr;
+    ViewMainPage *mViewMainPage = nullptr;
+    KUrlNavigator *mUrlNavigator = nullptr;
+    ThumbnailView *mThumbnailView = nullptr;
+    ThumbnailView *mActiveThumbnailView = nullptr;
+    DocumentInfoProvider *mDocumentInfoProvider = nullptr;
+    ThumbnailViewHelper *mThumbnailViewHelper = nullptr;
     QPointer<ThumbnailProvider> mThumbnailProvider;
-    BrowseMainPage *mBrowseMainPage;
-    StartMainPage *mStartMainPage;
-    SideBar *mSideBar;
-    KMessageWidget *mSharedMessage;
-    QStackedWidget *mViewStackedWidget;
-    FullScreenContent *mFullScreenContent;
-    SaveBar *mSaveBar;
+    BrowseMainPage *mBrowseMainPage = nullptr;
+    StartMainPage *mStartMainPage = nullptr;
+    SideBar *mSideBar = nullptr;
+    KMessageWidget *mSharedMessage = nullptr;
+    QStackedWidget *mViewStackedWidget = nullptr;
+    FullScreenContent *mFullScreenContent = nullptr;
+    SaveBar *mSaveBar = nullptr;
     bool mStartSlideShowWhenDirListerCompleted;
-    SlideShow *mSlideShow;
+    SlideShow *mSlideShow = nullptr;
 #ifdef HAVE_QTDBUS
-    Mpris2Service *mMpris2Service;
+    Mpris2Service *mMpris2Service = nullptr;
 #endif
-    Preloader *mPreloader;
+    Preloader *mPreloader = nullptr;
     bool mPreloadDirectionIsForward;
 
-    QActionGroup *mViewModeActionGroup;
-    KRecentFilesAction *mFileOpenRecentAction;
-    QAction *mBrowseAction;
-    QAction *mViewAction;
-    QAction *mGoUpAction;
-    QAction *mGoToPreviousAction;
-    QAction *mGoToNextAction;
-    QAction *mGoToFirstAction;
-    QAction *mGoToLastAction;
-    KToggleAction *mToggleSideBarAction;
-    KToggleAction *mToggleOperationsSideBarAction;
-    QAction *mFullScreenAction;
-    QAction *mToggleSlideShowAction;
-    KToggleAction *mShowMenuBarAction;
-    KToggleAction *mShowStatusBarAction;
-    QPointer<HudButtonBox> hudButtonBox;
+    QActionGroup *mViewModeActionGroup = nullptr;
+    KRecentFilesAction *mFileOpenRecentAction = nullptr;
+    QAction *mBrowseAction = nullptr;
+    QAction *mViewAction = nullptr;
+    QAction *mGoUpAction = nullptr;
+    QAction *mGoToPreviousAction = nullptr;
+    QAction *mGoToNextAction = nullptr;
+    QAction *mGoToFirstAction = nullptr;
+    QAction *mGoToLastAction = nullptr;
+    KToggleAction *mToggleSideBarAction = nullptr;
+    KToggleAction *mToggleOperationsSideBarAction = nullptr;
+    QAction *mFullScreenAction = nullptr;
+    QAction *mToggleSlideShowAction = nullptr;
+    KToggleAction *mShowMenuBarAction = nullptr;
+    KToggleAction *mShowStatusBarAction = nullptr;
+    QPointer<HudButtonBox> hudButtonBox = nullptr;
 #ifdef KF5Purpose_FOUND
-    Purpose::Menu *mShareMenu;
-    KToolBarPopupAction *mShareAction;
+    Purpose::Menu *mShareMenu = nullptr;
+    KToolBarPopupAction *mShareAction = nullptr;
 #endif
-    KHamburgerMenu *mHamburgerMenu;
+    KHamburgerMenu *mHamburgerMenu = nullptr;
 
-    SortedDirModel *mDirModel;
-    DocumentOnlyProxyModel *mThumbnailBarModel;
-    KLinkItemSelectionModel *mThumbnailBarSelectionModel;
-    ContextManager *mContextManager;
+    SortedDirModel *mDirModel = nullptr;
+    DocumentOnlyProxyModel *mThumbnailBarModel = nullptr;
+    KLinkItemSelectionModel *mThumbnailBarSelectionModel = nullptr;
+    ContextManager *mContextManager = nullptr;
 
     MainWindowState mStateBeforeFullScreen;
 
@@ -227,7 +227,7 @@ struct MainWindow::Private {
     MainPageId mCurrentMainPageId;
 
     QDateTime mFullScreenLeftAt;
-    KNotificationRestrictions *mNotificationRestrictions;
+    KNotificationRestrictions *mNotificationRestrictions = nullptr;
 
     void setupContextManager()
     {

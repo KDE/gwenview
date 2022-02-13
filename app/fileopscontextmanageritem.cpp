@@ -102,7 +102,7 @@ QUrl FileOpsContextManagerItem::pasteTargetUrl() const
 {
     // If only one folder is selected, paste inside it, otherwise paste in
     // current
-    KFileItemList list = contextManager()->selectedFileItemList();
+    const KFileItemList list = contextManager()->selectedFileItemList();
     if (list.count() == 1 && list.first().isDir()) {
         return list.first().url();
     } else {
@@ -271,11 +271,11 @@ void FileOpsContextManagerItem::updateSideBarContent()
 
 void FileOpsContextManagerItem::showProperties()
 {
-    KFileItemList list = contextManager()->selectedFileItemList();
-    if (list.count() > 0) {
+    const KFileItemList list = contextManager()->selectedFileItemList();
+    if (!list.isEmpty()) {
         KPropertiesDialog::showDialog(list, mGroup);
     } else {
-        QUrl url = contextManager()->currentDirUrl();
+        const QUrl url = contextManager()->currentDirUrl();
         KPropertiesDialog::showDialog(url, mGroup);
     }
 }
@@ -345,7 +345,7 @@ void FileOpsContextManagerItem::rename()
 
 void FileOpsContextManagerItem::createFolder()
 {
-    QUrl url = contextManager()->currentDirUrl();
+    const QUrl url = contextManager()->currentDirUrl();
     mNewFileMenu->setParentWidget(mGroup);
     mNewFileMenu->setPopupFiles(QList<QUrl>() << url);
     mNewFileMenu->createDirectory();
@@ -376,7 +376,7 @@ void FileOpsContextManagerItem::openWith(QAction *action)
 {
     Q_ASSERT(action);
     KService::Ptr service;
-    QList<QUrl> list = urlList();
+    const QList<QUrl> list = urlList();
 
     bool ok;
     int idx = action->data().toInt(&ok);

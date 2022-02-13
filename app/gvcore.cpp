@@ -61,11 +61,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 struct GvCorePrivate {
-    GvCore *q;
-    MainWindow *mMainWindow;
-    SortedDirModel *mDirModel;
-    HistoryModel *mRecentFoldersModel;
-    RecentFilesModel *mRecentFilesModel;
+    GvCore *q = nullptr;
+    MainWindow *mMainWindow = nullptr;
+    SortedDirModel *mDirModel = nullptr;
+    HistoryModel *mRecentFoldersModel = nullptr;
+    RecentFilesModel *mRecentFilesModel = nullptr;
     QPalette mPalettes[4];
     QString mFullScreenPaletteName;
     int configFileJPEGQualityValue = GwenviewConfig::jPEGQuality();

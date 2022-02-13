@@ -87,7 +87,7 @@ NameFilterWidget::~NameFilterWidget()
 
 void NameFilterWidget::applyNameFilter()
 {
-    QVariant data = mModeComboBox->itemData(mModeComboBox->currentIndex());
+    const QVariant data = mModeComboBox->itemData(mModeComboBox->currentIndex());
     mFilter->setMode(NameFilter::Mode(data.toInt()));
     mFilter->setText(mLineEdit->text());
 }
@@ -121,7 +121,7 @@ DateFilterWidget::~DateFilterWidget()
 
 void DateFilterWidget::applyDateFilter()
 {
-    QVariant data = mModeComboBox->itemData(mModeComboBox->currentIndex());
+    const QVariant data = mModeComboBox->itemData(mModeComboBox->currentIndex());
     mFilter->setMode(DateFilter::Mode(data.toInt()));
     mFilter->setDate(mDateWidget->date());
 }
@@ -164,7 +164,7 @@ void RatingFilterWidget::slotRatingChanged(int value)
 
 void RatingFilterWidget::updateFilterMode()
 {
-    QVariant data = mModeComboBox->itemData(mModeComboBox->currentIndex());
+    const QVariant data = mModeComboBox->itemData(mModeComboBox->currentIndex());
     mFilter->setMode(RatingFilter::Mode(data.toInt()));
 }
 
@@ -257,9 +257,9 @@ protected:
     {
         QPainter painter(this);
         painter.setRenderHint(QPainter::Antialiasing);
-        QPainterPath path = PaintUtils::roundedRectangle(QRectF(rect()).adjusted(0.5, 0.5, -0.5, -0.5), 6);
+        const QPainterPath path = PaintUtils::roundedRectangle(QRectF(rect()).adjusted(0.5, 0.5, -0.5, -0.5), 6);
 
-        QColor color = palette().color(QPalette::Highlight);
+        const QColor color = palette().color(QPalette::Highlight);
         painter.fillPath(path, PaintUtils::alphaAdjustedF(color, 0.5));
         painter.setPen(color);
         painter.drawPath(path);

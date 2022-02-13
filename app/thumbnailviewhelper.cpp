@@ -39,7 +39,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 namespace Gwenview
 {
 struct ThumbnailViewHelperPrivate {
-    KActionCollection *mActionCollection;
+    KActionCollection *mActionCollection = nullptr;
     QUrl mCurrentDirUrl;
 
     void addActionToMenu(QMenu &popup, const char *name)

@@ -104,8 +104,8 @@ class KeyValueWidget : public QWidget
             label->setTextInteractionFlags(Qt::TextSelectableByMouse | Qt::LinksAccessibleByMouse);
         }
 
-        QLabel *keyLabel;
-        QLabel *valueLabel;
+        QLabel *const keyLabel;
+        QLabel *const valueLabel;
     };
 
 public:

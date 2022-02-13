@@ -41,8 +41,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview
 {
 struct SaveAllHelperPrivate {
-    QWidget *mParent;
-    QProgressDialog *mProgressDialog;
+    QWidget *mParent = nullptr;
+    QProgressDialog *mProgressDialog = nullptr;
     QSet<DocumentJob *> mJobSet;
     QStringList mErrorList;
 };
@@ -78,7 +78,7 @@ void SaveAllHelper::save()
     d->mProgressDialog->exec();
 
     // Done, show message if necessary
-    if (d->mErrorList.count() > 0) {
+    if (!d->mErrorList.isEmpty()) {
         QString msg = i18ncp("@info", "One document could not be saved:", "%1 documents could not be saved:", d->mErrorList.count());
         msg += QLatin1String("<ul>");
         for (const QString &item : qAsConst(d->mErrorList)) {
@@ -100,8 +100,8 @@ void SaveAllHelper::slotResult(KJob *_job)
 {
     auto job = static_cast<DocumentJob *>(_job);
     if (job->error()) {
-        QUrl url = job->document()->url();
-        QString name = url.fileName().isEmpty() ? url.toDisplayString() : url.fileName();
+        const QUrl url = job->document()->url();
+        const QString name = url.fileName().isEmpty() ? url.toDisplayString() : url.fileName();
         d->mErrorList << xi18nc("@info %1 is the name of the document which failed to save, %2 is the reason for the failure",
                                 "<filename>%1</filename>: %2",
                                 name,

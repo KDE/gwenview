@@ -68,20 +68,20 @@ inline Sorting::Enum sortingFromSortAction(const QAction *action)
 }
 
 struct BrowseMainPagePrivate : public Ui_BrowseMainPage {
-    BrowseMainPage *q;
-    GvCore *mGvCore;
-    KFilePlacesModel *mFilePlacesModel;
-    KUrlNavigator *mUrlNavigator;
-    SortedDirModel *mDirModel;
+    BrowseMainPage *q = nullptr;
+    GvCore *mGvCore = nullptr;
+    KFilePlacesModel *mFilePlacesModel = nullptr;
+    KUrlNavigator *mUrlNavigator = nullptr;
+    SortedDirModel *mDirModel = nullptr;
     int mDocumentCountImages;
     int mDocumentCountVideos;
-    KFileItemList *mSelectedMediaItems;
-    KActionCollection *mActionCollection;
-    FilterController *mFilterController;
-    QActionGroup *mSortAction;
-    KToggleAction *mSortDescendingAction;
-    QActionGroup *mThumbnailDetailsActionGroup;
-    PreviewItemDelegate *mDelegate;
+    KFileItemList *mSelectedMediaItems = nullptr;
+    KActionCollection *mActionCollection = nullptr;
+    FilterController *mFilterController = nullptr;
+    QActionGroup *mSortAction = nullptr;
+    KToggleAction *mSortDescendingAction = nullptr;
+    QActionGroup *mThumbnailDetailsActionGroup = nullptr;
+    PreviewItemDelegate *mDelegate = nullptr;
 
     void setupWidgets()
     {

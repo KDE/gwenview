@@ -41,7 +41,7 @@ namespace Gwenview
 #endif
 
 struct PreloaderPrivate {
-    Preloader *q;
+    Preloader *q = nullptr;
     Document::Ptr mDocument;
     QSize mSize;
 

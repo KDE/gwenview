@@ -236,7 +236,7 @@ void FullScreenContent::updateInformationLabel()
             valueList << value;
         }
     }
-    QString text = valueList.join(i18nc("@item:intext fullscreen meta info separator", ", "));
+    const QString text = valueList.join(i18nc("@item:intext fullscreen meta info separator", ", "));
 
     mInformationLabel->setText(text);
 }
@@ -405,8 +405,8 @@ void FullScreenContent::createOptionsAction()
 void FullScreenContent::updateSlideShowIntervalLabel()
 {
     Q_ASSERT(mConfigWidget);
-    int value = mConfigWidget->mSlideShowIntervalSlider->value();
-    QString text = formatSlideShowIntervalText(value);
+    const int value = mConfigWidget->mSlideShowIntervalSlider->value();
+    const QString text = formatSlideShowIntervalText(value);
     mConfigWidget->mSlideShowIntervalLabel->setText(text);
 }
 
