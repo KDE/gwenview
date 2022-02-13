@@ -17,6 +17,16 @@ set(importer_SRCS
     filenameformater.cpp
     serializedurlmap.cpp
     thumbnailpage.cpp
+    importerconfigdialog.h
+    dialogpage.h
+    documentdirfinder.h
+    fileutils.h
+    importdialog.h
+    importer.h
+    progresspage.h
+    filenameformater.h
+    serializedurlmap.h
+    thumbnailpage.h
     )
 ecm_qt_declare_logging_category(importer_SRCS HEADER gwenview_importer_debug.h IDENTIFIER GWENVIEW_IMPORTER_LOG CATEGORY_NAME org.kde.kdegraphics.gwenview.importer DESCRIPTION "gwenview importer (kdegraphics)" EXPORT GWENVIEW)
 ki18n_wrap_ui(importer_SRCS
