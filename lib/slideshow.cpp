@@ -74,7 +74,7 @@ private:
 };
 
 struct SlideShowPrivate {
-    QTimer *mTimer;
+    QTimer *mTimer = nullptr;
     State mState;
     QVector<QUrl> mUrls;
     QVector<QUrl> mShuffledUrls;
@@ -143,7 +143,7 @@ struct SlideShowPrivate {
             }
         }
 
-        QUrl url = mShuffledUrls.last();
+        const QUrl url = mShuffledUrls.last();
         mShuffledUrls.pop_back();
 
         return url;
@@ -279,7 +279,7 @@ void SlideShow::resumeAndGoToNextUrl()
 void SlideShow::goToNextUrl()
 {
     LOG("");
-    QUrl url = d->findNextUrl();
+    const QUrl url = d->findNextUrl();
     LOG("url:" << url);
     if (!url.isValid()) {
         pause();

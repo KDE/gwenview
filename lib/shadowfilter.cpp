@@ -56,7 +56,7 @@ struct ShadowFilterPrivate {
     void paint()
     {
         QPainter painter(mWidget);
-        QRect rect = mWidget->rect();
+        const QRect rect = mWidget->rect();
         QColor color;
 
         color = mShadows.value(ShadowFilter::LeftEdge, Qt::transparent);

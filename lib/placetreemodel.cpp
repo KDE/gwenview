@@ -107,8 +107,8 @@ struct PlaceTreeModelPrivate {
 
     QModelIndex createIndexForDir(SortedDirModel *dirModel, const QUrl &url) const
     {
-        QModelIndex dirIndex = dirModel->indexForUrl(url);
-        QModelIndex parentDirIndex = dirIndex.parent();
+        const QModelIndex dirIndex = dirModel->indexForUrl(url);
+        const QModelIndex parentDirIndex = dirIndex.parent();
         QUrl parentUrl;
         if (parentDirIndex.isValid()) {
             parentUrl = dirModel->urlForIndex(parentDirIndex);

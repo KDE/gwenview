@@ -82,7 +82,7 @@ struct CacheItem {
         if (!UrlUtils::urlIsFastLocalFile(url)) {
             return false;
         }
-        QString path = url.path();
+        const QString path = url.path();
         Exiv2ImageLoader loader;
 
         if (!loader.load(path)) {
@@ -102,9 +102,9 @@ struct CacheItem {
 
             std::ostringstream stream;
             stream << *it;
-            QString value = QString::fromLocal8Bit(stream.str().c_str());
+            const QString value = QString::fromLocal8Bit(stream.str().c_str());
 
-            QDateTime dt = QDateTime::fromString(value, QStringLiteral("yyyy:MM:dd hh:mm:ss"));
+            const QDateTime dt = QDateTime::fromString(value, QStringLiteral("yyyy:MM:dd hh:mm:ss"));
             if (!dt.isValid()) {
                 qCWarning(GWENVIEW_LIB_LOG) << "Invalid date in exif header of" << path;
                 return false;

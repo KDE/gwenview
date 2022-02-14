@@ -55,12 +55,12 @@ static const int INITIAL_HIDE_TIMEOUT = 2000;
 static const int EXTRA_BAR_HEIGHT = 20;
 
 struct FullScreenBarPrivate {
-    FullScreenBar *q;
-    QTimeLine *mTimeLine;
-    QTimer *mAutoHideCursorTimer;
+    FullScreenBar *q = nullptr;
+    QTimeLine *mTimeLine = nullptr;
+    QTimer *mAutoHideCursorTimer = nullptr;
     bool mAutoHidingEnabled;
     bool mEdgeTriggerEnabled;
-    QTimer *mInitialHideTimer;
+    QTimer *mInitialHideTimer = nullptr;
 
     void startTimeLine()
     {

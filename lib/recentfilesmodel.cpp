@@ -61,7 +61,7 @@ struct RecentFilesItem : public QStandardItem {
 
         setData(mUrl, KFilePlacesModel::UrlRole);
 
-        KFileItem fileItem(mUrl);
+        const KFileItem fileItem(mUrl);
         setData(QVariant(fileItem), KDirModel::FileItemRole);
     }
 

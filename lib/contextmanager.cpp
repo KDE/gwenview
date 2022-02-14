@@ -37,8 +37,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 namespace Gwenview
 {
 struct ContextManagerPrivate {
-    SortedDirModel *mDirModel;
-    QItemSelectionModel *mSelectionModel;
+    SortedDirModel *mDirModel = nullptr;
+    QItemSelectionModel *mSelectionModel = nullptr;
     QUrl mCurrentDirUrl;
     QUrl mCurrentUrl;
 
@@ -51,7 +51,7 @@ struct ContextManagerPrivate {
     KFileItemList mSelectedFileItemList;
 
     bool mDirListerFinished = false;
-    QTimer *mQueuedSignalsTimer;
+    QTimer *mQueuedSignalsTimer = nullptr;
 
     void queueSignal(Signal signal)
     {
@@ -263,7 +263,7 @@ void ContextManager::slotSelectionChanged()
 
 void Gwenview::ContextManager::slotCurrentChanged(const QModelIndex &index)
 {
-    QUrl url = d->mDirModel->urlForIndex(index);
+    const QUrl url = d->mDirModel->urlForIndex(index);
     setCurrentUrl(url);
 }
 
@@ -277,7 +277,7 @@ void ContextManager::emitQueuedSignals()
 
 void Gwenview::ContextManager::slotRowsAboutToBeRemoved(const QModelIndex & /*parent*/, int start, int end)
 {
-    QModelIndex oldCurrent = d->mSelectionModel->currentIndex();
+    const QModelIndex oldCurrent = d->mSelectionModel->currentIndex();
     if (oldCurrent.row() < start || oldCurrent.row() > end) {
         // currentIndex has not been removed
         return;

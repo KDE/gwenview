@@ -35,8 +35,8 @@ struct PreferredImageMetaInfoModelPrivate {
     QVariant checkStateData(const QModelIndex &sourceIndex) const
     {
         if (sourceIndex.parent().isValid() && sourceIndex.column() == 0) {
-            QString key = mModel->keyForIndex(sourceIndex);
-            bool checked = mPreferredMetaInfoKeyList.contains(key);
+            const QString key = mModel->keyForIndex(sourceIndex);
+            const bool checked = mPreferredMetaInfoKeyList.contains(key);
             return QVariant(checked ? Qt::Checked : Qt::Unchecked);
         } else {
             return QVariant();
@@ -48,11 +48,11 @@ struct PreferredImageMetaInfoModelPrivate {
         QStringList sortedList;
         int groupCount = mModel->rowCount();
         for (int groupRow = 0; groupRow < groupCount; ++groupRow) {
-            QModelIndex groupIndex = mModel->index(groupRow, 0);
-            int keyCount = mModel->rowCount(groupIndex);
+            const QModelIndex groupIndex = mModel->index(groupRow, 0);
+            const int keyCount = mModel->rowCount(groupIndex);
             for (int keyRow = 0; keyRow < keyCount; ++keyRow) {
-                QModelIndex keyIndex = mModel->index(keyRow, 0, groupIndex);
-                QString key = mModel->keyForIndex(keyIndex);
+                const QModelIndex keyIndex = mModel->index(keyRow, 0, groupIndex);
+                const QString key = mModel->keyForIndex(keyIndex);
                 if (mPreferredMetaInfoKeyList.contains(key)) {
                     sortedList << key;
                 }
@@ -79,7 +79,7 @@ PreferredImageMetaInfoModel::~PreferredImageMetaInfoModel()
 
 Qt::ItemFlags PreferredImageMetaInfoModel::flags(const QModelIndex &index) const
 {
-    QModelIndex sourceIndex = mapToSource(index);
+    const QModelIndex sourceIndex = mapToSource(index);
     Qt::ItemFlags fl = d->mModel->flags(sourceIndex);
     if (sourceIndex.parent().isValid() && sourceIndex.column() == 0) {
         fl |= Qt::ItemIsUserCheckable;
@@ -89,7 +89,7 @@ Qt::ItemFlags PreferredImageMetaInfoModel::flags(const QModelIndex &index) const
 
 QVariant PreferredImageMetaInfoModel::data(const QModelIndex &index, int role) const
 {
-    QModelIndex sourceIndex = mapToSource(index);
+    const QModelIndex sourceIndex = mapToSource(index);
     if (!sourceIndex.isValid()) {
         return {};
     }

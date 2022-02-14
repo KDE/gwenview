@@ -216,14 +216,14 @@ struct ImageMetaInfoModelPrivate {
     void setGroupEntryValue(GroupRow groupRow, const QString &key, const QString &value)
     {
         MetaInfoGroup *group = mMetaInfoGroupVector[groupRow];
-        int entryRow = group->getRowForKey(key);
+        const int entryRow = group->getRowForKey(key);
         if (entryRow == MetaInfoGroup::InvalidRow) {
             qCWarning(GWENVIEW_LIB_LOG) << "No row for key" << key;
             return;
         }
         group->setValueForKeyAt(entryRow, value);
-        QModelIndex groupIndex = q->index(groupRow, 0);
-        QModelIndex entryIndex = q->index(entryRow, 1, groupIndex);
+        const QModelIndex groupIndex = q->index(groupRow, 0);
+        const QModelIndex entryIndex = q->index(entryRow, 1, groupIndex);
         Q_EMIT q->dataChanged(entryIndex, entryIndex);
     }
 
@@ -233,7 +233,7 @@ struct ImageMetaInfoModelPrivate {
             if (index.column() != 0) {
                 return {};
             }
-            QString label = mMetaInfoGroupVector[index.row()]->label();
+            const QString label = mMetaInfoGroupVector[index.row()]->label();
             return QVariant(label);
         }
 
@@ -277,11 +277,11 @@ struct ImageMetaInfoModelPrivate {
                 if (it->tagName().substr(0, 2) == "0x") {
                     continue;
                 }
-                QString key = QString::fromUtf8(it->key().c_str());
-                QString label = QString::fromLocal8Bit(it->tagLabel().c_str());
+                const QString key = QString::fromUtf8(it->key().c_str());
+                const QString label = QString::fromLocal8Bit(it->tagLabel().c_str());
                 std::ostringstream stream;
                 stream << *it;
-                QString value = QString::fromLocal8Bit(stream.str().c_str());
+                const QString value = QString::fromLocal8Bit(stream.str().c_str());
 
                 EntryHash::iterator hashIt = hash.find(key);
                 if (hashIt != hash.end()) {

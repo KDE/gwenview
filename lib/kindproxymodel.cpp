@@ -64,12 +64,12 @@ bool KindProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourcePa
     if (d->mKindFilter == MimeTypeUtils::Kinds()) {
         return true;
     }
-    QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);
-    KFileItem fileItem = index.data(KDirModel::FileItemRole).value<KFileItem>();
+    const QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);
+    const KFileItem fileItem = index.data(KDirModel::FileItemRole).value<KFileItem>();
     if (fileItem.isNull()) {
         return false;
     }
-    MimeTypeUtils::Kinds kind = MimeTypeUtils::fileItemKind(fileItem);
+    const MimeTypeUtils::Kinds kind = MimeTypeUtils::fileItemKind(fileItem);
     return d->mKindFilter & kind;
 }
 

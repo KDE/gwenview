@@ -52,7 +52,7 @@ bool urlIsFastLocalFile(const QUrl &url)
     static KMountPoint::Ptr lastMountPoint;
 
     const QString fileName = url.toLocalFile();
-    QString currentFolder = fileName.left(fileName.lastIndexOf(QLatin1Char('/')));
+    const QString currentFolder = fileName.left(fileName.lastIndexOf(QLatin1Char('/')));
 
     if (currentFolder != lastFolder) {
         lastFolder = currentFolder;
@@ -80,7 +80,7 @@ bool urlIsDirectory(const QUrl &url)
         return QFileInfo(url.toLocalFile()).isDir();
     }
 
-    QWidgetList list = QApplication::topLevelWidgets();
+    const QWidgetList list = QApplication::topLevelWidgets();
     QWidget *parent;
     if (!list.isEmpty()) {
         parent = list[0];
@@ -101,11 +101,11 @@ QUrl fixUserEnteredUrl(const QUrl &in)
         return in;
     }
 
-    QFileInfo info(in.toLocalFile());
-    QString path = info.absoluteFilePath();
+    const QFileInfo info(in.toLocalFile());
+    const QString path = info.absoluteFilePath();
 
     QUrl out = QUrl::fromLocalFile(path);
-    QString mimeType = MimeTypeUtils::urlMimeType(out);
+    const QString mimeType = MimeTypeUtils::urlMimeType(out);
 
     const QString protocol = ArchiveUtils::protocolForMimeType(mimeType);
 

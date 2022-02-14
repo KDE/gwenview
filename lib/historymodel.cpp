@@ -139,7 +139,7 @@ private:
 
         setData(mUrl, KFilePlacesModel::UrlRole);
 
-        KFileItem fileItem(mUrl);
+        const KFileItem fileItem(mUrl);
         setData(QVariant(fileItem), KDirModel::FileItemRole);
 
         const QString date = KFormat().formatRelativeDateTime(mDateTime, QLocale::LongFormat);
@@ -172,7 +172,7 @@ struct HistoryModelPrivate {
                 continue;
             }
 
-            QUrl itemUrl = item->url();
+            const QUrl itemUrl = item->url();
             if (UrlUtils::urlIsFastLocalFile(itemUrl)) {
                 if (!QFile::exists(itemUrl.path())) {
                     qCDebug(GWENVIEW_LIB_LOG) << "Removing" << itemUrl.path() << "from recent folders. It does not exist anymore";
@@ -227,7 +227,7 @@ HistoryModel::~HistoryModel()
 
 void HistoryModel::addUrl(const QUrl &url, const QDateTime &_dateTime)
 {
-    QDateTime dateTime = _dateTime.isValid() ? _dateTime : QDateTime::currentDateTime();
+    const QDateTime dateTime = _dateTime.isValid() ? _dateTime : QDateTime::currentDateTime();
     HistoryItem *historyItem = d->mHistoryItemForUrl.value(url);
     if (historyItem) {
         historyItem->setDateTime(dateTime);

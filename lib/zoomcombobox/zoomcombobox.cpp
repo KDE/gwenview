@@ -101,7 +101,7 @@ ZoomComboBox::ZoomComboBox(QWidget *parent)
     setInsertPolicy(QComboBox::NoInsert);
     // QLocale::percent() will return a QString in Qt 6.
     // Qt encourages using QString(locale().percent()) in QLocale documentation.
-    int percentLength = QString(locale().percent()).length();
+    const int percentLength = QString(locale().percent()).length();
     setMinimumContentsLength(locale().toString(9999).length() + percentLength);
 
     connect(lineEdit(), &QLineEdit::textEdited, this, [this, d](const QString &text) {
