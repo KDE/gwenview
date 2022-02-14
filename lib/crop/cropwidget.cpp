@@ -191,7 +191,10 @@ struct CropWidgetPrivate : public QWidget {
         mCurrentImageComboBoxIndex = ratioComboBox->count() - 1; // We need to refer to this ratio later
 
         addRatioToComboBox(QSizeF(1, 1), i18n("Square"));
-        addRatioToComboBox(ratio(QGuiApplication::screenAt(QCursor::pos())->geometry().size()), i18n("This Screen"));
+        const QScreen *screen = QGuiApplication::screenAt(QCursor::pos());
+        if (screen) {
+            addRatioToComboBox(ratio(screen->geometry().size()), i18n("This Screen"));
+        }
         addSectionHeaderToComboBox(i18n("Landscape"));
 
         for (const QSizeF &size : qAsConst(ratioList)) {
