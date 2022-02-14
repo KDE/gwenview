@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QAction>
 #include <QHBoxLayout>
 #include <QSlider>
+#include <QToolButton>
 // KF
 
 // Local
@@ -53,6 +54,7 @@ inline qreal zoomForSliderValue(int sliderValue)
 struct ZoomWidgetPrivate {
     ZoomWidget *q = nullptr;
 
+    QToolButton *mFitButton = nullptr;
     ZoomSlider *mZoomSlider = nullptr;
     ZoomComboBox *mZoomComboBox = nullptr;
     QAction *mActualSizeAction = nullptr;
@@ -80,6 +82,8 @@ ZoomWidget::ZoomWidget(QWidget *parent)
 
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
 
+    d->mFitButton = new QToolButton(this);
+
     d->mZoomSlider = new ZoomSlider(this);
     d->mZoomSlider->setMinimumWidth(150);
     d->mZoomSlider->slider()->setSingleStep(int(PRECISION));
@@ -93,6 +97,7 @@ ZoomWidget::ZoomWidget(QWidget *parent)
     auto layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
+    layout->addWidget(d->mFitButton);
     layout->addWidget(d->mZoomSlider);
     layout->addWidget(d->mZoomComboBox);
 }
@@ -104,6 +109,9 @@ ZoomWidget::~ZoomWidget()
 
 void ZoomWidget::setActions(QAction *zoomToFitAction, QAction *actualSizeAction, QAction *zoomInAction, QAction *zoomOutAction, QAction *zoomToFillAction)
 {
+    d->mFitButton->setDefaultAction(zoomToFitAction);
+    d->mFitButton->setToolButtonStyle(Qt::ToolButtonStyle::ToolButtonTextOnly);
+
     d->mZoomSlider->setZoomInAction(zoomInAction);
     d->mZoomSlider->setZoomOutAction(zoomOutAction);
 
