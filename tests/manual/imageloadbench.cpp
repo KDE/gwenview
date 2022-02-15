@@ -39,7 +39,7 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    QString fileName = QString::fromUtf8(argv[1]);
+    const QString fileName = QString::fromUtf8(argv[1]);
 
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly)) {

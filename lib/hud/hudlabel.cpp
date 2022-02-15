@@ -65,7 +65,7 @@ void HudLabel::setText(const QString &text)
 
 void HudLabel::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-    HudTheme::RenderInfo info = HudTheme::renderInfo(HudTheme::FrameWidget);
+    const HudTheme::RenderInfo info = HudTheme::renderInfo(HudTheme::FrameWidget);
     painter->setPen(info.textPen);
     painter->drawText(boundingRect(), Qt::AlignCenter, d->mText);
 }

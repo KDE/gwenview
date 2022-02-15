@@ -37,8 +37,8 @@ namespace Gwenview
 {
 //// RasterImageViewAdapter ////
 struct RasterImageViewAdapterPrivate {
-    RasterImageViewAdapter *q;
-    RasterImageView *mView;
+    RasterImageViewAdapter *q = nullptr;
+    RasterImageView *mView = nullptr;
 };
 
 RasterImageViewAdapter::RasterImageViewAdapter()

@@ -207,7 +207,7 @@ QModelIndex PlaceTreeModel::index(int row, int column, const QModelIndex &parent
     }
 
     Node parentNode = d->nodeForIndex(parent);
-    QModelIndex parentDirIndex = d->dirIndexForNode(parentNode, parent);
+    const QModelIndex parentDirIndex = d->dirIndexForNode(parentNode, parent);
 
     SortedDirModel *dirModel = parentNode.model;
     QUrl parentUrl = dirModel->urlForIndex(parentDirIndex);
@@ -285,8 +285,8 @@ void PlaceTreeModel::fetchMore(const QModelIndex &parent)
     }
     const Node node = d->nodeForIndex(parent);
     if (!node.model->dirLister()->url().isValid()) {
-        QModelIndex placeIndex = d->mPlacesModel->index(parent.row(), parent.column());
-        QUrl url = KFilePlacesModel::convertedUrl(d->mPlacesModel->url(placeIndex));
+        const QModelIndex placeIndex = d->mPlacesModel->index(parent.row(), parent.column());
+        const QUrl url = KFilePlacesModel::convertedUrl(d->mPlacesModel->url(placeIndex));
         node.model->dirLister()->openUrl(url, KDirLister::Keep);
         return;
     }
@@ -327,7 +327,7 @@ void PlaceTreeModel::slotDirRowsAboutToBeInserted(const QModelIndex &parentDirIn
     auto dirModel = static_cast<SortedDirModel *>(sender());
     QModelIndex parentIndex;
     if (parentDirIndex.isValid()) {
-        QUrl url = dirModel->urlForIndex(parentDirIndex);
+        const QUrl url = dirModel->urlForIndex(parentDirIndex);
         parentIndex = d->createIndexForDir(dirModel, url);
     } else {
         parentIndex = d->createIndexForPlace(dirModel);
@@ -345,7 +345,7 @@ void PlaceTreeModel::slotDirRowsAboutToBeRemoved(const QModelIndex &parentDirInd
     auto dirModel = static_cast<SortedDirModel *>(sender());
     QModelIndex parentIndex;
     if (parentDirIndex.isValid()) {
-        QUrl url = dirModel->urlForIndex(parentDirIndex);
+        const QUrl url = dirModel->urlForIndex(parentDirIndex);
         parentIndex = d->createIndexForDir(dirModel, url);
     } else {
         parentIndex = d->createIndexForPlace(dirModel);

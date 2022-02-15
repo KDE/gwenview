@@ -73,7 +73,7 @@ struct FullScreenBarPrivate {
     {
         QBitmap empty(32, 32);
         empty.clear();
-        QCursor blankCursor(empty, empty);
+        const QCursor blankCursor(empty, empty);
         QApplication::setOverrideCursor(blankCursor);
     }
 
@@ -265,7 +265,7 @@ bool FullScreenBar::eventFilter(QObject *object, QEvent *event)
         auto button = qobject_cast<QToolButton *>(object);
         if (button && !button->actions().isEmpty()) {
             QAction *action = button->actions().constFirst();
-            QString toolTip = KLocalizedString::removeAcceleratorMarker(action->toolTip());
+            const QString toolTip = KLocalizedString::removeAcceleratorMarker(action->toolTip());
             // Filtering message requested by translators (scripting).
             button->setToolTip(i18nc("@info:tooltip of custom toolbar button", "%1", toolTip));
         }

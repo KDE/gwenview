@@ -52,7 +52,7 @@ struct PrintOptionsPagePrivate : public Ui_PrintOptionsPage {
     QSize mImageSize;
     QButtonGroup mScaleGroup;
     QButtonGroup mPositionGroup;
-    KConfigDialogManager *mConfigDialogManager;
+    KConfigDialogManager *mConfigDialogManager = nullptr;
 
     void initPositionFrame()
     {

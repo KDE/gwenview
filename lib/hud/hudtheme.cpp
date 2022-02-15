@@ -125,7 +125,7 @@ RenderInfo renderInfo(WidgetType widget, State state)
         overSliderWidgetGroove.borderPen = QPen(QColor(0xcc, 0xcc, 0xcc));
         renderInfoMap[SliderWidgetGroove].infos[MouseOverState] = overSliderWidgetGroove;
     }
-    RenderInfo normalInfo = renderInfoMap[widget].infos.value(NormalState);
+    const RenderInfo normalInfo = renderInfoMap[widget].infos.value(NormalState);
     if (state == NormalState) {
         return normalInfo;
     } else {

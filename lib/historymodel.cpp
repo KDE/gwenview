@@ -77,12 +77,12 @@ struct HistoryItem : public QStandardItem {
         KConfig config(fileName, KConfig::SimpleConfig);
         KConfigGroup group(&config, "general");
 
-        QUrl url(group.readEntry("url"));
+        const QUrl url(group.readEntry("url"));
         if (!url.isValid()) {
             qCCritical(GWENVIEW_LIB_LOG) << "Invalid url" << url;
             return nullptr;
         }
-        QDateTime dateTime = QDateTime::fromString(group.readEntry("dateTime"), Qt::ISODate);
+        const QDateTime dateTime = QDateTime::fromString(group.readEntry("dateTime"), Qt::ISODate);
         if (!dateTime.isValid()) {
             qCCritical(GWENVIEW_LIB_LOG) << "Invalid dateTime" << dateTime;
             return nullptr;
@@ -153,7 +153,7 @@ private:
 };
 
 struct HistoryModelPrivate {
-    HistoryModel *q;
+    HistoryModel *q = nullptr;
     QString mStorageDir;
     int mMaxCount;
 

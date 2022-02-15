@@ -141,7 +141,7 @@ struct PrintHelperPrivate {
             delete optionsPage;
         }
 
-        QImage image = doc->image();
+        const QImage image = doc->image();
         painter.setWindow(image.rect());
         painter.drawImage(0, 0, image);
     }

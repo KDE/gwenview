@@ -57,12 +57,12 @@ int main(int argc, char **argv)
     aboutData->processCommandLine(&parser);
 
     // Read cmdline options
-    QStringList args = parser.positionalArguments();
+    const QStringList args = parser.positionalArguments();
     if (args.count() != 2) {
         qFatal("Wrong number of arguments");
         return 1;
     }
-    QString imageDirName = args.first();
+    const QString imageDirName = args.first();
     ThumbnailGroup::Enum group = ThumbnailGroup::Normal;
     if (args.last() == "large") {
         group = ThumbnailGroup::Large;
@@ -75,7 +75,7 @@ int main(int argc, char **argv)
 
     // Set up thumbnail base dir
     if (!thumbnailBaseDirName.isEmpty()) {
-        QDir dir = QDir(thumbnailBaseDirName);
+        const QDir dir = QDir(thumbnailBaseDirName);
         thumbnailBaseDirName = dir.absolutePath();
         if (!dir.exists()) {
             bool ok = QDir::root().mkpath(thumbnailBaseDirName);
@@ -95,7 +95,7 @@ int main(int argc, char **argv)
     KFileItemList list;
     const auto entryList = dir.entryList();
     for (const QString &name : entryList) {
-        QUrl url = QUrl::fromLocalFile(dir.absoluteFilePath(name));
+        const QUrl url = QUrl::fromLocalFile(dir.absoluteFilePath(name));
         KFileItem item(url);
         list << item;
     }

@@ -140,7 +140,7 @@ struct DocumentViewControllerPrivate {
 
         const QColor &lightColor = usingLightTheme ? qApp->palette().base().color() : qApp->palette().text().color();
         const QColor &darkColor = usingLightTheme ? qApp->palette().text().color() : qApp->palette().base().color();
-        QColor neutralColor = KColorUtils::mix(lightColor, darkColor, 0.5);
+        const QColor neutralColor = KColorUtils::mix(lightColor, darkColor, 0.5);
 
         paintPixmap(lightPixmap, lightColor);
         paintPixmap(neutralPixmap, neutralColor);
