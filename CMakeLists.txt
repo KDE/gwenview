@@ -85,11 +85,6 @@ find_package(KF5 ${KF5_MIN_VERSION} OPTIONAL_COMPONENTS
 
 add_definitions(-DQT_NO_FOREACH)
 
-message(STATUS ${KF5KIO_VERSION})
-if (KF5KIO_VERSION VERSION_GREATER_EQUAL "5.82.0")
-    add_definitions(-DKIO_REQUEST_MIMETYPE)
-endif()
-
 ## Dependencies
 find_package(JPEG)
 set_package_properties(JPEG PROPERTIES URL "http://libjpeg.sourceforge.net/" DESCRIPTION "JPEG image manipulation support" TYPE REQUIRED)

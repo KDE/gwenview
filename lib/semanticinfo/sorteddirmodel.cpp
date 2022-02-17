@@ -79,9 +79,7 @@ SortedDirModel::SortedDirModel(QObject *parent)
 #endif
     setSourceModel(d->mSourceModel);
 
-#ifdef KIO_REQUEST_MIMETYPE
     d->mSourceModel->dirLister()->setRequestMimeTypeWhileListing(true);
-#endif
 
     d->mDelayedApplyFiltersTimer.setInterval(0);
     d->mDelayedApplyFiltersTimer.setSingleShot(true);
