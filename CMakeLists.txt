@@ -133,8 +133,11 @@ set_package_properties(KF5KDcraw PROPERTIES URL "https://phabricator.kde.org/sou
 
 find_package(X11)
 if(X11_FOUND)
-   find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED X11Extras)
-   set(HAVE_X11 1)
+    if (QT_MAJOR_VERSION STREQUAL "5")
+        find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED X11Extras)
+    endif()
+    # we need to add qt6 lib when we found x11
+    set(HAVE_X11 1)
 endif()
 
 configure_file(config-gwenview.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-gwenview.h)

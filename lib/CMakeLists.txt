@@ -269,7 +269,12 @@ if (KF5KDcraw_FOUND)
 endif()
 
 if (HAVE_X11)
-    target_link_libraries(gwenviewlib Qt::X11Extras X11::X11)
+    target_link_libraries(gwenviewlib X11::X11)
+    if (QT_MAJOR_VERSION STREQUAL "5")
+        target_link_libraries(gwenviewlib Qt5::X11Extras)
+    else()
+        MESSAGE(STATUS "need to replace Qt5::X11Extras in qt6")
+    endif()
 endif()
 
 if (QT_MAJOR_VERSION STREQUAL "6")
