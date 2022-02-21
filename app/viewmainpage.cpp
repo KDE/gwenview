@@ -328,7 +328,15 @@ struct ViewMainPagePrivate {
     void saveSplitterConfig()
     {
         if (mThumbnailBar->isVisible()) {
-            GwenviewConfig::setThumbnailSplitterSizes(mThumbnailSplitter->sizes());
+            if (mThumbnailSplitter->sizes().constLast() > 0) {
+                GwenviewConfig::setThumbnailSplitterSizes(mThumbnailSplitter->sizes());
+            } else {
+                // mThumbnailBar's size has been collapsed to 0. We reset the sizes to default so users can't "lose" the bar.
+                const bool didUseDefaults = GwenviewConfig::self()->useDefaults(true);
+                const auto defaultSplitterSizes = GwenviewConfig::thumbnailSplitterSizes();
+                GwenviewConfig::self()->useDefaults(didUseDefaults);
+                GwenviewConfig::setThumbnailSplitterSizes(defaultSplitterSizes);
+            }
         }
     }
 
@@ -427,6 +435,12 @@ ViewMainPage::ViewMainPage(QWidget *parent, SlideShow *slideShow, KActionCollect
     actionCollection->setDefaultShortcut(d->mToggleThumbnailBarAction, Qt::CTRL | Qt::Key_B);
     connect(d->mToggleThumbnailBarAction, &KToggleAction::triggered, this, &ViewMainPage::setThumbnailBarVisibility);
     d->mToggleThumbnailBarButton->setDefaultAction(d->mToggleThumbnailBarAction);
+    connect(d->mThumbnailSplitter, &QSplitter::splitterMoved, this, [this]() {
+        // The splitter can be moved until the bar has a size of zero which makes it invisible.
+        const bool isThumbnailBarVisible = d->mThumbnailSplitter->sizes().constLast() > 0;
+        GwenviewConfig::setThumbnailBarIsVisible(isThumbnailBarVisible);
+        d->mToggleThumbnailBarAction->setChecked(isThumbnailBarVisible);
+    });
 
     d->mSynchronizeAction = view->add<KToggleAction>(QStringLiteral("synchronize_views"));
     d->mSynchronizeAction->setText(i18n("Synchronize"));
@@ -500,6 +514,11 @@ void ViewMainPage::setThumbnailBarVisibility(bool visible)
 {
     d->saveSplitterConfig();
     d->mThumbnailBar->setVisible(visible);
+    if (visible && d->mThumbnailSplitter->sizes().constLast() <= 0) {
+        // mThumbnailBar is supposed to be made visible but its splitter has a size of 0 making it invisible.
+        // We load the last good sizes from the config.
+        d->mThumbnailSplitter->setSizes(GwenviewConfig::thumbnailSplitterSizes());
+    }
 }
 
 int ViewMainPage::statusBarHeight() const
