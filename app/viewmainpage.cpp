@@ -427,6 +427,13 @@ ViewMainPage::ViewMainPage(QWidget *parent, SlideShow *slideShow, KActionCollect
     d->mToggleThumbnailBarAction = view->add<KToggleAction>(QStringLiteral("toggle_thumbnailbar"));
     d->mToggleThumbnailBarAction->setText(i18n("Show Thumbnails"));
     d->mToggleThumbnailBarAction->setIcon(QIcon::fromTheme(QStringLiteral("folder-image")));
+    // clang-format off
+    // i18n: For languages that are read right to left, "right side" refers to the left side in this context.
+    d->mToggleThumbnailBarAction->setWhatsThis(xi18nc("@info:whatsthis", "<para>This toggles a small bar showing all the other images in the current folder. "
+        "Selecting one of them changes the currently viewed image.</para><para>Select multiple images at the same time to see them side by side.</para>"
+        "<para>The bar can optionally be moved to the right side of the screen and contain multiple rows of images; <link url='%1'>configure these options in the settings</link>.</para>", QStringLiteral("gwenview:/config/imageview")));
+        // Keep the previous link address in sync with MainWindow::Private::SettingsOpenerHelper::eventFilter().
+    // clang-format on
     actionCollection->setDefaultShortcut(d->mToggleThumbnailBarAction, Qt::CTRL | Qt::Key_B);
     connect(d->mToggleThumbnailBarAction, &KToggleAction::triggered, this, &ViewMainPage::setThumbnailBarVisibility);
     d->mToggleThumbnailBarButton->setDefaultAction(d->mToggleThumbnailBarAction);

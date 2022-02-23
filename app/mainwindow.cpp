@@ -918,6 +918,48 @@ struct MainWindow::Private {
             printHelper.print(doc);
         }
     }
+
+    /// Handles the clicking of links in help texts if the clicked url uses the "gwenview:" scheme.
+    class InternalUrlClickedHandler : public QObject
+    {
+    public:
+        InternalUrlClickedHandler(MainWindow *parent)
+            : QObject(parent)
+        {
+            Q_CHECK_PTR(parent);
+        }
+
+        inline bool eventFilter(QObject * /* watched */, QEvent *event) override
+        {
+            if (event->type() != QEvent::WhatsThisClicked) {
+                return false;
+            }
+            const QString linkAddress = static_cast<QWhatsThisClickedEvent *>(event)->href();
+            if (!linkAddress.startsWith(QStringLiteral("gwenview:"))) {
+                // This eventFilter only handles our internal "gwenview" scheme. Everything else is handled by KXmlGui::KToolTipHelper.
+                return false;
+            }
+            event->accept();
+            auto linkPathList = linkAddress.split(QLatin1Char('/'));
+            linkPathList.removeFirst(); // remove "gwenview:/"
+            Q_ASSERT(!linkPathList.isEmpty());
+            Q_ASSERT_X(linkPathList.constFirst() == QStringLiteral("config"), "link resolver", "Handling of this URL is not yet implemented");
+            linkPathList.removeFirst(); // remove "config/"
+            auto mainWindow = static_cast<MainWindow *>(parent());
+            if (linkPathList.isEmpty()) {
+                mainWindow->showConfigDialog();
+            } else if (linkPathList.constFirst() == QStringLiteral("general")) {
+                mainWindow->showConfigDialog(0); // "0" should open General.
+            } else if (linkPathList.constFirst() == QStringLiteral("imageview")) {
+                mainWindow->showConfigDialog(1); // "1" should open Image View.
+            } else if (linkPathList.constFirst() == QStringLiteral("advanced")) {
+                mainWindow->showConfigDialog(2); // "2" should open Advanced.
+            } else {
+                Q_ASSERT_X(false, "config link resolver", "Handling of this config URL is not yet implemented");
+            }
+            return true;
+        }
+    };
 };
 
 MainWindow::MainWindow()
@@ -966,6 +1008,7 @@ MainWindow::MainWindow()
 #ifdef Q_OS_OSX
     qApp->installEventFilter(this);
 #endif
+    qApp->installEventFilter(new Private::InternalUrlClickedHandler(this));
 }
 
 MainWindow::~MainWindow()
@@ -1678,7 +1721,7 @@ bool MainWindow::queryClose()
     }
 }
 
-void MainWindow::showConfigDialog()
+void MainWindow::showConfigDialog(int page)
 {
     // Save first so changes like thumbnail zoom level are not lost when reloading config
     saveConfig();
@@ -1687,6 +1730,7 @@ void MainWindow::showConfigDialog()
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->setModal(true);
     connect(dialog, &KConfigDialog::settingsChanged, this, &MainWindow::loadConfig);
+    dialog->setCurrentPage(page);
     dialog->show();
 }
 

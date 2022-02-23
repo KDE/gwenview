@@ -30,15 +30,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "ui_advancedconfigpage.h"
 #include "ui_generalconfigpage.h"
 #include "ui_imageviewconfigpage.h"
-#include <lib/invisiblebuttongroup.h>
 
 namespace Gwenview
 {
+class InvisibleButtonGroup;
+
 class ConfigDialog : public KConfigDialog
 {
     Q_OBJECT
 public:
     ConfigDialog(QWidget *parent);
+
+    /**
+     * Changes the page being displayed.
+     * @param page The page to be shown counted from the top.
+     */
+    void setCurrentPage(int page);
 
 private:
     InvisibleButtonGroup *mWrapNavigationBehaviorGroup = nullptr;
@@ -53,6 +60,9 @@ private:
     Ui_GeneralConfigPage mGeneralConfigPage;
     Ui_ImageViewConfigPage mImageViewConfigPage;
     Ui_AdvancedConfigPage mAdvancedConfigPage;
+    KPageWidgetItem *mGeneralConfigPageItem;
+    KPageWidgetItem *mImageViewConfigPageItem;
+    KPageWidgetItem *mAdvancedConfigPageItem;
 };
 
 } // namespace

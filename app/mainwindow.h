@@ -121,7 +121,11 @@ private Q_SLOTS:
 
     void showDocumentInFullScreen(const QUrl &);
 
-    void showConfigDialog();
+    /**
+     * Shows Gwenview's settings dialog.
+     * @param page defines which page should be shown initially.
+     */
+    void showConfigDialog(int page = 0);
     void loadConfig();
     void print();
     void printPreview();

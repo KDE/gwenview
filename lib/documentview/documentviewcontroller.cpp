@@ -60,9 +60,24 @@ struct DocumentViewControllerPrivate {
         view->collection()->setDefaultShortcut(mZoomToFitAction, Qt::Key_F);
         mZoomToFitAction->setCheckable(true);
         mZoomToFitAction->setChecked(true);
-        mZoomToFitAction->setText(i18n("Zoom to fit"));
+        mZoomToFitAction->setText(i18n("Zoom to Fit"));
         mZoomToFitAction->setIcon(QIcon::fromTheme(QStringLiteral("zoom-fit-best")));
         mZoomToFitAction->setIconText(i18nc("@action:button Zoom to fit, shown in status bar, keep it short please", "Fit"));
+        mZoomToFitAction->setToolTip(i18nc("@info:tooltip", "Fit image into the viewing area"));
+        // clang-format off
+        // i18n: "a previous zoom value" is worded in such an unclear way because it can either be the zoom value for the image viewed previously or the
+        // zoom value that was used the last time this same image was viewed. Being more clear about this isn't really necessary here so I kept it short
+        // but a more elaborate translation would also be fine.
+        // The text "in the settings" is supposed to sound like clicking it opens the settings.
+        mZoomToFitAction->setWhatsThis(xi18nc("@info:whatsthis, %1 the action's text", "<para>This fits the image into the available viewing area:<list>"
+            "<item>Images that are bigger than the viewing area are displayed at a smaller size so they fit.</item>"
+            "<item>Images that are smaller than the viewing area are displayed at their normal size. If smaller images should instead use all of "
+            "the available viewing area, turn on <emphasis>Enlarge smaller images</emphasis> <link url='%2'>in the settings</link>.</item></list></para>"
+            "<para>If \"%1\" is already enabled, pressing it again will switch it off and the image will be displayed at its normal size instead.</para>"
+            "<para>\"%1\" is the default zoom mode for images. This can be changed so images are displayed at a previous zoom value instead "
+            "<link url='%2'>in the settings</link>.</para>", mZoomToFitAction->iconText(), QStringLiteral("gwenview:/config/imageview")));
+            // Keep the previous link address in sync with MainWindow::Private::SettingsOpenerHelper::eventFilter().
+        // clang-format on
 
         mZoomToFillAction = view->addAction(QStringLiteral("view_zoom_to_fill"));
         view->collection()->setDefaultShortcut(mZoomToFillAction, Qt::SHIFT | Qt::Key_F);

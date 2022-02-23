@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // Local
 #include <lib/gwenviewconfig.h>
+#include <lib/invisiblebuttongroup.h>
 
 namespace Gwenview
 {
@@ -45,8 +46,6 @@ ConfigDialog::ConfigDialog(QWidget *parent)
     : KConfigDialog(parent, QStringLiteral("Settings"), GwenviewConfig::self())
 {
     setFaceType(KPageDialog::List);
-
-    KPageWidgetItem *pageItem;
 
     // General
     QWidget *widget = setupPage(mGeneralConfigPage);
@@ -68,8 +67,8 @@ ConfigDialog::ConfigDialog(QWidget *parent)
     mThumbnailActionsGroup->addButton(mGeneralConfigPage.selectionOnlyThumbnailActionsRadioButton, int(ThumbnailActions::ShowSelectionButtonOnly));
     mThumbnailActionsGroup->addButton(mGeneralConfigPage.noneThumbnailActionsRadioButton, int(ThumbnailActions::None));
 
-    pageItem = addPage(widget, i18n("General"));
-    pageItem->setIcon(QIcon::fromTheme(QStringLiteral("gwenview")));
+    mGeneralConfigPageItem = addPage(widget, i18n("General"));
+    mGeneralConfigPageItem->setIcon(QIcon::fromTheme(QStringLiteral("gwenview")));
     connect(mGeneralConfigPage.kcfg_JPEGQuality, &QAbstractSlider::valueChanged, this, [=](int value) {
         mGeneralConfigPage.jpegQualitySpinner->setValue(value);
     });
@@ -121,8 +120,8 @@ ConfigDialog::ConfigDialog(QWidget *parent)
     mThumbnailBarOrientationGroup->addButton(mImageViewConfigPage.horizontalRadioButton, int(Qt::Horizontal));
     mThumbnailBarOrientationGroup->addButton(mImageViewConfigPage.verticalRadioButton, int(Qt::Vertical));
 
-    pageItem = addPage(widget, i18n("Image View"));
-    pageItem->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-display-color")));
+    mImageViewConfigPageItem = addPage(widget, i18n("Image View"));
+    mImageViewConfigPageItem->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-display-color")));
 
     // Advanced
     widget = setupPage(mAdvancedConfigPage);
@@ -132,12 +131,24 @@ ConfigDialog::ConfigDialog(QWidget *parent)
     mRenderingIntentGroup->addButton(mAdvancedConfigPage.relativeRenderingIntentRadioButton, int(RenderingIntent::Relative));
     mRenderingIntentGroup->addButton(mAdvancedConfigPage.perceptualRenderingIntentRadioButton, int(RenderingIntent::Perceptual));
 
-    pageItem = addPage(widget, i18n("Advanced"));
-    pageItem->setIcon(QIcon::fromTheme(QStringLiteral("preferences-other")));
+    mAdvancedConfigPageItem = addPage(widget, i18n("Advanced"));
+    mAdvancedConfigPageItem->setIcon(QIcon::fromTheme(QStringLiteral("preferences-other")));
     mAdvancedConfigPage.cacheHelpLabel->setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
     mAdvancedConfigPage.perceptualHelpLabel->setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
     mAdvancedConfigPage.relativeHelpLabel->setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
     mAdvancedConfigPage.colorProfileHelpLabel->setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
+}
+
+void ConfigDialog::setCurrentPage(int page)
+{
+    switch (page) {
+    case 1:
+        return KPageDialog::setCurrentPage(mImageViewConfigPageItem);
+    case 2:
+        return KPageDialog::setCurrentPage(mAdvancedConfigPageItem);
+    default:
+        return KPageDialog::setCurrentPage(mGeneralConfigPageItem);
+    }
 }
 
 } // namespace
