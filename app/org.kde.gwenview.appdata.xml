@@ -46,6 +46,7 @@
   <name xml:lang="sr-ijekavian">Гвенвју</name>
   <name xml:lang="sr-ijekavianlatin">GwenView</name>
   <name xml:lang="sv">Gwenview</name>
+  <name xml:lang="ta">குவென்வியூ</name>
   <name xml:lang="tr">Gwenview</name>
   <name xml:lang="uk">Gwenview</name>
   <name xml:lang="x-test">xxGwenviewxx</name>
@@ -91,6 +92,7 @@
   <summary xml:lang="sr-ijekavian">Приказивач слика</summary>
   <summary xml:lang="sr-ijekavianlatin">Prikazivač slika</summary>
   <summary xml:lang="sv">Bildvisare</summary>
+  <summary xml:lang="ta">படக் காட்டி</summary>
   <summary xml:lang="tr">Resim Görüntüleyici</summary>
   <summary xml:lang="uk">Програма для перегляду зображень</summary>
   <summary xml:lang="x-test">xxImage Viewerxx</summary>
@@ -187,6 +189,7 @@
     <p xml:lang="sr-ijekavian">Могућности:</p>
     <p xml:lang="sr-ijekavianlatin">Mogućnosti:</p>
     <p xml:lang="sv">Funktioner:</p>
+    <p xml:lang="ta">அம்சங்கள்:</p>
     <p xml:lang="tr">Özellikleri:</p>
     <p xml:lang="uk">Можливості:</p>
     <p xml:lang="x-test">xxFeatures:xx</p>
@@ -384,6 +387,7 @@
       <caption xml:lang="sr-ijekavian">Гвенвју</caption>
       <caption xml:lang="sr-ijekavianlatin">GwenView</caption>
       <caption xml:lang="sv">Gwenview</caption>
+      <caption xml:lang="ta">குவென்வியூ</caption>
       <caption xml:lang="tr">Gwenview</caption>
       <caption xml:lang="uk">Gwenview</caption>
       <caption xml:lang="x-test">xxGwenviewxx</caption>
