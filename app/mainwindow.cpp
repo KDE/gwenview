@@ -1442,6 +1442,7 @@ void MainWindow::goToPrevious()
     const QModelIndex currentIndex = d->mContextManager->selectionModel()->currentIndex();
     QModelIndex previousIndex = d->mDirModel->index(currentIndex.row(), 0);
 
+    constexpr QFlags<MimeTypeUtils::Kind> allowedKinds = MimeTypeUtils::KIND_RASTER_IMAGE | MimeTypeUtils::KIND_SVG_IMAGE | MimeTypeUtils::KIND_VIDEO;
     KFileItem fileItem;
 
     // Besides images also folders and archives are listed as well,
@@ -1449,7 +1450,7 @@ void MainWindow::goToPrevious()
     do {
         previousIndex = d->mDirModel->index(previousIndex.row() - 1, 0);
         fileItem = previousIndex.data(KDirModel::FileItemRole).value<KFileItem>();
-    } while (previousIndex.isValid() && !MimeTypeUtils::imageMimeTypes().contains(fileItem.currentMimeType().name()));
+    } while (previousIndex.isValid() && !(allowedKinds & MimeTypeUtils::fileItemKind(fileItem)));
 
     if (!previousIndex.isValid()
         && (GwenviewConfig::navigationEndNotification() == SlideShow::NeverWarn
@@ -1468,6 +1469,7 @@ void MainWindow::goToNext()
     const QModelIndex currentIndex = d->mContextManager->selectionModel()->currentIndex();
     QModelIndex nextIndex = d->mDirModel->index(currentIndex.row(), 0);
 
+    constexpr QFlags<MimeTypeUtils::Kind> allowedKinds = MimeTypeUtils::KIND_RASTER_IMAGE | MimeTypeUtils::KIND_SVG_IMAGE | MimeTypeUtils::KIND_VIDEO;
     KFileItem fileItem;
 
     // Besides images also folders and archives are listed as well,
@@ -1475,7 +1477,7 @@ void MainWindow::goToNext()
     do {
         nextIndex = d->mDirModel->index(nextIndex.row() + 1, 0);
         fileItem = nextIndex.data(KDirModel::FileItemRole).value<KFileItem>();
-    } while (nextIndex.isValid() && !MimeTypeUtils::imageMimeTypes().contains(fileItem.currentMimeType().name()));
+    } while (nextIndex.isValid() && !(allowedKinds & MimeTypeUtils::fileItemKind(fileItem)));
 
     if (!nextIndex.isValid()
         && (GwenviewConfig::navigationEndNotification() == SlideShow::NeverWarn
