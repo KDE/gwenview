@@ -53,6 +53,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QLoggingCategory>
 #include <tiffio.h>
 
+// To enable AVIF/HEIF/JPEG-XL metadata support in Exiv2
+#include <exiv2/exiv2.hpp>
+
 namespace
 {
 Q_DECLARE_LOGGING_CATEGORY(LibTiffLog)
@@ -146,6 +149,11 @@ private:
 
 int main(int argc, char *argv[])
 {
+    // enable AVIF/HEIF/JPEG-XL metadata support
+#ifdef EXV_ENABLE_BMFF
+    Exiv2::enableBMFF(true);
+#endif
+
 #ifdef HAVE_TIFF
     TIFFSetWarningHandler(handleTiffWarning);
     TIFFSetErrorHandler(handleTiffError);

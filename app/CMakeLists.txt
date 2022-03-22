@@ -45,6 +45,10 @@ if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
         )
 endif()
 
+kde_source_files_enable_exceptions(
+    main.cpp
+    )
+
 ki18n_wrap_ui(gwenview_SRCS
     advancedconfigpage.ui
     fullscreenconfigwidget.ui
