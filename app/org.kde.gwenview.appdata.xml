@@ -105,7 +105,7 @@
     <p xml:lang="ar">جونفيو عارض صور سريع وسهل الاستخدام بواسطة كدي ، وهو مثالي لتصفح وعرض مجموعة من الصور.</p>
     <p xml:lang="az">Gwenview KDE-nin təqdim etdiyi istifadəsi rahat şəkillərə baxış vasitəsidir və şəkil kolleksiyalarına baxmaq və onları göstərmək üçün idealdır.</p>
     <p xml:lang="ca">El Gwenview és un visor d'imatges ràpid i senzill d'ús, creat per la comunitat KDE, ideal per a navegar i visualitzar col·leccions d'imatges.</p>
-    <p xml:lang="ca-valencia">El Gwenview és un visor d'imatges ràpid i senzill d'ús, creat per la comunitat KDE, ideal per a navegar i visualitzar col·leccions d'imatges.</p>
+    <p xml:lang="ca-valencia">Gwenview és un visor d'imatges ràpid i senzill d'ús, creat per la comunitat KDE, ideal per a navegar i visualitzar col·leccions d'imatges.</p>
     <p xml:lang="cs">Gwenview je jednoduchý a rychlý prohlížeč obrázků od KDE. Ideální pro procházení a prohlížení sbírek obrázků.</p>
     <p xml:lang="da">Gwenview er en hurtig og brugervenlig billedfremviser fra KDE, ideel til at gennemse og vise en samling af billeder.</p>
     <p xml:lang="de">Gwenview ist ein schneller und einfach zu verwendender Bildbetrachter besonders für die Anzeige einer Sammlung von Bildern.</p>
@@ -400,7 +400,7 @@
       <caption xml:lang="ar">استعمل جونفيو لإدارة مجموعة صورك</caption>
       <caption xml:lang="az">Şəkil kolleksiyasını idarəetmək üçün Gwenview istifadə edin</caption>
       <caption xml:lang="ca">Empreu el Gwenview per a gestionar la vostra col·lecció d'imatges</caption>
-      <caption xml:lang="ca-valencia">Empreu el Gwenview per a gestionar la vostra col·lecció d'imatges</caption>
+      <caption xml:lang="ca-valencia">Empreu Gwenview per a gestionar la vostra col·lecció d'imatges</caption>
       <caption xml:lang="cs">Používejte Gwenview pro správu vaší sbírky</caption>
       <caption xml:lang="en-GB">Use Gwenview to manage your image collection</caption>
       <caption xml:lang="es">Use Gwenview para la gestión de su colección de imágenes</caption>
