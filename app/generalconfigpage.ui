@@ -240,7 +240,7 @@
    <item row="15" column="1">
     <widget class="QRadioButton" name="noneThumbnailActionsRadioButton">
      <property name="text">
-      <string>None</string>
+      <string comment="A number of thumbnail actions to show">None</string>
      </property>
     </widget>
    </item>
