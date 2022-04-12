@@ -256,6 +256,11 @@ if (QT_MAJOR_VERSION STREQUAL "6")
     target_link_libraries(gwenviewlib Qt6::OpenGLWidgets)
 endif()
 
+if (QT_MAJOR_VERSION STREQUAL "6")
+    target_link_libraries(gwenviewlib Qt6::OpenGLWidgets)
+endif()
+
+
 if(HAVE_QTDBUS)
     target_link_libraries(gwenviewlib Qt::DBus)
 endif()
