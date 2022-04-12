@@ -152,7 +152,7 @@ void ImageMetaInfoDialog::setMetaInfo(ImageMetaInfoModel *model, const QStringLi
     }
     d->mTreeView->setModel(d->mModel.get());
 
-    const int marginSize = QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin);
+    const int marginSize = QApplication::style()->pixelMetric(QStyle::PM_LayoutLeftMargin);
     d->mTreeView->header()->resizeSection(0, sizeHint().width() / 2 - marginSize * 2);
 }
 
