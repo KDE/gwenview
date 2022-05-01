@@ -200,7 +200,7 @@
       <li xml:lang="ar">دعم التّلاعب البسيط بالصّورة: التّدوير، والعكس، والقلب وتغيير الحجم</li>
       <li xml:lang="az">Şəkil üzərində bu kimi sadə əməlləri dəstəkləyir: döndərmə, əks etdirmə və ölçüsünü dəyişdirmə</li>
       <li xml:lang="ca">Permet la manipulació senzilla d'imatges: gira, mirall, inverteix i canvia la mida</li>
-      <li xml:lang="ca-valencia">Permet la manipulació senzilla d'imatges: gira, mirall, inverteix i canvia la mida</li>
+      <li xml:lang="ca-valencia">Permet la manipulació senzilla d'imatges: gira, espill, inverteix i canvia la mida</li>
       <li xml:lang="cs">Podporuje základní nástroje pro manipulaci s obrázky: Otočení, zrcadlení, převrácení a změnu velikosti</li>
       <li xml:lang="da">Understøtter simpel billedredigering: Rotér, spejlvend, vend og ændre størrelse</li>
       <li xml:lang="de">Unterstützt einfache Bildbearbeitung wie Drehen, Spiegeln waagerecht und senkrecht und Größenänderung</li>
@@ -247,7 +247,7 @@
       <li xml:lang="ar">دعم إجراءات إدارة الملفّات البسيطة كالنّسخ، والنّقل، والحذف وغيرها</li>
       <li xml:lang="az">Kopyalamaq, köçürmək, silmək, və bu kimi bir çox əsas faylı idarəetmə əməllərini dəstəkləyir</li>
       <li xml:lang="ca">Permet les accions bàsiques de gestió de fitxers com copia, mou, suprimeix i altres</li>
-      <li xml:lang="ca-valencia">Permet les accions bàsiques de gestió de fitxers com copia, mou, suprimeix i altres</li>
+      <li xml:lang="ca-valencia">Permet les accions bàsiques de gestió de fitxers com copia, mou, suprimeix i atres</li>
       <li xml:lang="cs">Podporuje běžnou správu souborů, jako například kopírování, přesun, vymazání a podobně</li>
       <li xml:lang="da">Understøtter basal filhåndteringshandlinger, såsom kopiér, flyt, slet m.m.</li>
       <li xml:lang="de">Grundlegende Dateiverwaltungsaktionen wie Kopieren, Verschieben, Löschen und weitere Aktionen</li>
