@@ -391,7 +391,9 @@ struct DocumentViewPrivate {
         }
         mDrag = new QDrag(q);
         const auto itemList = KFileItemList({q->document()->url()});
-        mDrag->setMimeData(MimeTypeUtils::selectionMimeData(itemList, MimeTypeUtils::DropTarget));
+        auto *mimeData = MimeTypeUtils::selectionMimeData(itemList, MimeTypeUtils::DropTarget);
+        KUrlMimeData::exportUrlsToPortal(mimeData);
+        mDrag->setMimeData(mimeData);
 
         if (q->document()->isModified()) {
             setDragPixmap(QPixmap::fromImage(q->document()->image()));
@@ -1109,7 +1111,7 @@ void DocumentView::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
     QGraphicsWidget::dropEvent(event);
     // Since we're capturing drops in View mode, we only support one url
-    const QUrl url = event->mimeData()->urls().first();
+    const QUrl url = KUrlMimeData::urlsFromMimeData(event->mimeData()).first();
     if (UrlUtils::urlIsDirectory(url)) {
         Q_EMIT openDirUrlRequested(url);
     } else {
