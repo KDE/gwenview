@@ -27,7 +27,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QImageReader>
 #include <QMimeData>
 #include <QMimeDatabase>
-#include <QStringList>
 #include <QUrl>
 
 // KF
