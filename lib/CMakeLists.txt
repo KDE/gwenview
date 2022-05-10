@@ -250,7 +250,7 @@ target_link_libraries(gwenviewlib
    JPEG::JPEG
    PNG::PNG
     ${LCMS2_LIBRARIES}
-    ${PHONON_LIBRARY}
+    Phonon::phonon4qt${QT_MAJOR_VERSION}
     )
 
 if(HAVE_QTDBUS)
