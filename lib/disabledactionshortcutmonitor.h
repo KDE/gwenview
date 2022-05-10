@@ -44,7 +44,11 @@ public:
     /**
      * parent must be a widget because we need to create a QShortcut
      */
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     DisabledActionShortcutMonitor(QAction *action, QWidget *parent);
+#else
+    DisabledActionShortcutMonitor(QAction *action, QObject *parent);
+#endif
     ~DisabledActionShortcutMonitor() override;
 
 Q_SIGNALS:

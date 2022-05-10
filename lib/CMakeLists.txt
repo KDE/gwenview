@@ -252,6 +252,9 @@ target_link_libraries(gwenviewlib
     ${LCMS2_LIBRARIES}
     Phonon::phonon4qt${QT_MAJOR_VERSION}
     )
+if (QT_MAJOR_VERSION STREQUAL "6")
+    target_link_libraries(gwenviewlib Qt6::OpenGLWidgets)
+endif()
 
 if(HAVE_QTDBUS)
     target_link_libraries(gwenviewlib Qt::DBus)
@@ -273,7 +276,7 @@ if (HAVE_X11)
     if (QT_MAJOR_VERSION STREQUAL "5")
         target_link_libraries(gwenviewlib Qt5::X11Extras)
     else()
-        MESSAGE(STATUS "need to replace Qt5::X11Extras in qt6")
+        target_link_libraries(gwenviewlib Qt6::GuiPrivate) # Gui/private/qtx11extras_p.h
     endif()
 endif()
 

@@ -51,6 +51,8 @@ extern "C" {
 #include <fixx11h.h>
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <QtX11Extras/QX11Info>
+#else
+#include <private/qtx11extras_p.h>
 #endif
 #endif
 

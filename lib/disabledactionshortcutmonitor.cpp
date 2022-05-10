@@ -35,8 +35,11 @@ class DisabledActionShortcutMonitorPrivate
 public:
     QShortcut *mShortcut = nullptr;
 };
-
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 DisabledActionShortcutMonitor::DisabledActionShortcutMonitor(QAction *action, QWidget *parent)
+#else
+DisabledActionShortcutMonitor::DisabledActionShortcutMonitor(QAction *action, QObject *parent)
+#endif
     : QObject(parent)
     , d(new DisabledActionShortcutMonitorPrivate)
 {

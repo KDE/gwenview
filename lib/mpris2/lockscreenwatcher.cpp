@@ -50,8 +50,13 @@ LockScreenWatcher::LockScreenWatcher(QObject *parent)
         connect(watcher, &DBusBoolReplyWatcher::finished, this, &LockScreenWatcher::onServiceRegisteredQueried);
         connect(watcher, &DBusBoolReplyWatcher::canceled, watcher, &DBusBoolReplyWatcher::deleteLater);
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         watcher->setFuture(
             QtConcurrent::run(QDBusConnection::sessionBus().interface(), &QDBusConnectionInterface::isServiceRegistered, screenSaverServiceName()));
+#else
+        watcher->setFuture(
+            QtConcurrent::run(&QDBusConnectionInterface::isServiceRegistered, QDBusConnection::sessionBus().interface(), screenSaverServiceName()));
+#endif
     }
 }
 
@@ -101,8 +106,13 @@ void LockScreenWatcher::onServiceRegisteredQueried()
         auto ownerWatcher = new DBusStringReplyWatcher(this);
         connect(ownerWatcher, &DBusStringReplyWatcher::finished, this, &LockScreenWatcher::onServiceOwnerQueried);
         connect(ownerWatcher, &DBusStringReplyWatcher::canceled, ownerWatcher, &DBusStringReplyWatcher::deleteLater);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         ownerWatcher->setFuture(
             QtConcurrent::run(QDBusConnection::sessionBus().interface(), &QDBusConnectionInterface::serviceOwner, screenSaverServiceName()));
+#else
+        ownerWatcher->setFuture(
+            QtConcurrent::run(&QDBusConnectionInterface::serviceOwner, QDBusConnection::sessionBus().interface(), screenSaverServiceName()));
+#endif
     }
 
     watcher->deleteLater();

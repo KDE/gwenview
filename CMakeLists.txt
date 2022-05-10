@@ -57,6 +57,7 @@ find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} CONFIG REQUIRED Core Widget
 find_package(Qt${QT_MAJOR_VERSION}DBus ${QT_MIN_VERSION} CONFIG QUIET)
 if (QT_MAJOR_VERSION STREQUAL "6")
     find_package(Qt6SvgWidgets)
+    find_package(Qt6OpenGLWidgets)
 endif()
 
 set(HAVE_QTDBUS ${Qt${QT_MAJOR_VERSION}DBus_FOUND})
