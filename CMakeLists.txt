@@ -128,7 +128,7 @@ find_package(KF5KDcraw)
 if (KF5KDcraw_FOUND)
    add_definitions(-DKDCRAW_FOUND)
 endif()
-set_package_properties(KF5KDcraw PROPERTIES URL "https://phabricator.kde.org/source/libkdcraw/" DESCRIPTION "C++ interface around LibRaw library used to decode RAW picture files" TYPE OPTIONAL)
+set_package_properties(KF5KDcraw PROPERTIES URL "https://invent.kde.org/graphics/libkdcraw/" DESCRIPTION "C++ interface around LibRaw library used to decode RAW picture files" TYPE OPTIONAL)
 
 
 find_package(X11)
