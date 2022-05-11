@@ -132,13 +132,24 @@ QSize FlowLayout::sizeHint() const
     return minimumSize();
 }
 
+int FlowLayout::getMargin() const
+{
+    int left, top, right, bottom;
+    getContentsMargins(&left, &top, &right, &bottom);
+    if (left == top && top == right && right == bottom) {
+        return left;
+    } else {
+        return -1;
+    }
+}
+
 QSize FlowLayout::minimumSize() const
 {
     QSize size;
     for (QLayoutItem *item : qAsConst(itemList))
         size = size.expandedTo(item->minimumSize());
 
-    size += QSize(2 * margin(), 2 * margin());
+    size += QSize(2 * getMargin(), 2 * getMargin());
     return size;
 }
 
@@ -149,9 +160,9 @@ void FlowLayout::addSpacing(const int size)
 
 int FlowLayout::doLayout(const QRect &rect, bool testOnly) const
 {
-    const int left = rect.x() + margin();
+    const int left = rect.x() + getMargin();
     int x = left;
-    int y = rect.y() + margin();
+    int y = rect.y() + getMargin();
     int lineHeight = 0;
     bool lastItemIsSpacer = false;
     QHash<int, int> widthForY;
@@ -164,7 +175,7 @@ int FlowLayout::doLayout(const QRect &rect, bool testOnly) const
         }
 
         int nextX = x + item->sizeHint().width() + horizontalSpacing();
-        if (nextX - horizontalSpacing() > rect.right() - margin() && lineHeight > 0) {
+        if (nextX - horizontalSpacing() > rect.right() - getMargin() && lineHeight > 0) {
             x = left;
             y = y + lineHeight + verticalSpacing();
             nextX = x + item->sizeHint().width() + horizontalSpacing();
@@ -182,14 +193,14 @@ int FlowLayout::doLayout(const QRect &rect, bool testOnly) const
         x = nextX;
         // Don't add spacer items at end of line
         if (!itemIsSpacer) {
-            widthForY[y] = x - margin();
+            widthForY[y] = x - getMargin();
         }
         lineHeight = qMax(lineHeight, item->sizeHint().height());
         lastItemIsSpacer = itemIsSpacer;
     }
 
     if (!testOnly) {
-        const int contentWidth = rect.width() - 2 * margin();
+        const int contentWidth = rect.width() - 2 * getMargin();
         for (auto item : itemList) {
             QRect itemRect = item->geometry();
             // Center lines horizontally if flag AlignHCenter is set
@@ -208,5 +219,5 @@ int FlowLayout::doLayout(const QRect &rect, bool testOnly) const
         }
     }
 
-    return y + lineHeight - rect.y() + margin();
+    return y + lineHeight - rect.y() + getMargin();
 }

@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "browsemainpage.h"
 
 // Qt
+#include <QActionGroup>
 #include <QDropEvent>
 #include <QMenu>
 #include <QVBoxLayout>

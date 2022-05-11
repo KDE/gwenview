@@ -23,6 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QPointer>
+#include <QStringList>
 #include <QWidget>
 
 // KF
@@ -31,8 +32,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "imagemetainfodialog.h"
 #include "ui_fullscreenconfigwidget.h"
 #include <lib/document/document.h>
-
-class QStringList;
 
 class KActionCollection;
 class QUrl;

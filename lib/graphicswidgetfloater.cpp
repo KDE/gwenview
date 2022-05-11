@@ -98,7 +98,12 @@ GraphicsWidgetFloater::GraphicsWidgetFloater(QGraphicsWidget *parent)
     d->mParent->installEventFilter(this);
     d->mChild = nullptr;
     d->mAlignment = Qt::AlignCenter;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     d->mHorizontalMargin = QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin);
+#else
+    // TODO
+    d->mHorizontalMargin = 0;
+#endif
     d->mVerticalMargin = d->mHorizontalMargin;
     d->mInsideUpdateChildGeometry = false;
 }

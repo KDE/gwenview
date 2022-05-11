@@ -311,7 +311,11 @@ void SideBarTabBar::paintEvent(QPaintEvent *event)
 
 void SideBarTabBar::drawTab(int index, QStylePainter &painter) const
 {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     QStyleOptionTabV4 opt;
+#else
+    QStyleOptionTab opt;
+#endif
     QTabBar::initStyleOption(&opt, index);
 
     // draw background before doing anything else

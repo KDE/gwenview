@@ -69,6 +69,7 @@ public:
     void addSpacing(const int size);
 
 private:
+    int getMargin() const;
     int doLayout(const QRect &rect, bool testOnly) const;
 
     QList<QLayoutItem *> itemList;
