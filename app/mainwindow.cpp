@@ -506,7 +506,7 @@ struct MainWindow::Private {
 
 #ifdef KF5Purpose_FOUND
         mShareAction = new KToolBarPopupAction(QIcon::fromTheme("document-share"), i18nc("@action Share images", "Share"), q);
-        mShareAction->setDelayed(false);
+        mShareAction->setPopupMode(QToolButton::DelayedPopup);
         actionCollection->addAction("share", mShareAction);
         mShareMenu = new Purpose::Menu(q);
         mShareAction->setMenu(mShareMenu);
