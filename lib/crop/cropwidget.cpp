@@ -77,6 +77,8 @@ struct CropWidgetPrivate : public QWidget {
     Document::Ptr mDocument;
     CropTool *mCropTool = nullptr;
     bool mUpdatingFromCropTool;
+    bool mUpdatingFromWidthSpinBox = false;
+    bool mUpdatingFromHeightSpinBox = false;
     int mCurrentImageComboBoxIndex;
     int mCropRatioComboBoxCurrentIndex;
 
@@ -492,12 +494,15 @@ void CropWidget::slotWidthChanged()
 {
     d->leftSpinBox->setMaximum(d->mDocument->width() - d->widthSpinBox->value());
 
-    if (d->mUpdatingFromCropTool) {
+    if (d->mUpdatingFromCropTool || d->mUpdatingFromHeightSpinBox) {
         return;
     }
+
     if (d->ratioIsConstrained()) {
+        d->mUpdatingFromWidthSpinBox = true;
         int height = int(d->widthSpinBox->value() * d->cropRatio());
         d->heightSpinBox->setValue(height);
+        d->mUpdatingFromWidthSpinBox = false;
     }
     d->mCropTool->setRect(d->cropRect());
 }
@@ -506,12 +511,15 @@ void CropWidget::slotHeightChanged()
 {
     d->topSpinBox->setMaximum(d->mDocument->height() - d->heightSpinBox->value());
 
-    if (d->mUpdatingFromCropTool) {
+    if (d->mUpdatingFromCropTool || d->mUpdatingFromWidthSpinBox) {
         return;
     }
+
     if (d->ratioIsConstrained()) {
+        d->mUpdatingFromHeightSpinBox = true;
         int width = int(d->heightSpinBox->value() / d->cropRatio());
         d->widthSpinBox->setValue(width);
+        d->mUpdatingFromHeightSpinBox = false;
     }
     d->mCropTool->setRect(d->cropRect());
 }
