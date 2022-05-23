@@ -29,8 +29,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QTimer>
 
 // KF
-#include <KFormat>
 #include <KGuiItem>
+#include <KIO/Global>
 #include <KLocalizedString>
 
 // Local
@@ -111,7 +111,7 @@ void ResizeImageDialog::setCurrentImageUrl(const QUrl &imageUrl)
 
     // mCurrentSize->setText has to be set after the mCurrentImageUrl has been set, otherwise it's -1
     QFileInfo fileInfo(mCurrentImageUrl.toLocalFile());
-    d->mCurrentSize->setText(KFormat().formatByteSize(fileInfo.size()));
+    d->mCurrentSize->setText(KIO::convertSize(fileInfo.size()));
     mValueChanged = false;
 }
 
@@ -218,7 +218,7 @@ void ResizeImageDialog::slotCalculateImageSize()
     } else if (size == -2) {
         d->mEstimatedSize->setText(i18n("error"));
     } else {
-        d->mEstimatedSize->setText(KFormat().formatByteSize(size));
+        d->mEstimatedSize->setText(KIO::convertSize(size));
     }
 }
 

@@ -34,7 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KDirModel>
 #include <KFileItem>
 #include <KFilePlacesModel>
-#include <KFormat>
+#include <KIO/Global>
 #include <KIconLoader>
 #include <KLocalizedString>
 #include <KUrlMimeData>
@@ -247,7 +247,7 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage {
                                        "Selected %1 of %2 (%3)",
                                        mSelectedMediaItems->count(),
                                        mDocumentCountImages + mDocumentCountVideos,
-                                       KFormat().formatByteSize(totalSize));
+                                       KIO::convertSize(totalSize));
             mDocumentCountLabel->setText(text);
         } else {
             const QString imageText = i18ncp("@info:status Image files", "%1 image", "%1 images", mDocumentCountImages);

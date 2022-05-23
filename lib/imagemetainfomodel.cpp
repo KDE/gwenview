@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // KF
 #include <KFileItem>
-#include <KFormat>
+#include <KIO/Global>
 #include <KLocalizedString>
 
 // Exiv2
@@ -337,7 +337,7 @@ ImageMetaInfoModel::~ImageMetaInfoModel()
 void ImageMetaInfoModel::setUrl(const QUrl &url)
 {
     KFileItem item(url);
-    const QString sizeString = KFormat().formatByteSize(item.size());
+    const QString sizeString = KIO::convertSize(item.size());
     const QString timeString = QLocale().toString(item.time(KFileItem::ModificationTime), QLocale::LongFormat);
 
     d->setGroupEntryValue(GeneralGroup, QStringLiteral("General.Name"), item.name());
