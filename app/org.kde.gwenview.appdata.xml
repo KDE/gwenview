@@ -323,7 +323,7 @@
       <li xml:lang="pt">Funciona tanto como uma aplicação independente como um visualizador incorporado no navegador Web Konqueror</li>
       <li xml:lang="pt-BR">Funciona como um aplicativo independente e também como visualizador incorporado no navegador Web Konqueror</li>
       <li xml:lang="ro">Funcționează atât ca aplicație de sine stătătoare, precum și ca vizualizor înglobat în navigatorul web Konqueror</li>
-      <li xml:lang="ru">Доступен как отдельное приложение и как встроенный инструмент просмотра изображений в веб-браузере Konqueror</li>
+      <li xml:lang="ru">Работа как в качестве отдельного приложения, так и встроенного инструмента просмотра изображений в веб-браузере Konqueror</li>
       <li xml:lang="sk">Funguje tak ako samostatná aplikácia, ako aj vstavaný prehliadač vo webovom prehliadači Konqueror</li>
       <li xml:lang="sl">Deluje tako kot samostojen program, kot tudi v brskalnik Konqueror vgrajen pregledovalnik</li>
       <li xml:lang="sr">Ради и као самосталан програм и као угнежђени приказивач у К‑освајачу.</li>
@@ -417,6 +417,7 @@
       <caption xml:lang="pl">Użyj Gwenview do zarządzania twoimi zbiorami obrazów</caption>
       <caption xml:lang="pt-BR">Usar Gwenview para gerenciar sua coleção de imagens</caption>
       <caption xml:lang="ro">Folosiți Gwenview pentru a vă gestiona colecția de imagini</caption>
+      <caption xml:lang="ru">Используйте Gwenview для работы с коллекцией изображений</caption>
       <caption xml:lang="sk">Používajte aplikácie Gwenview na správu zbierky obrázkov</caption>
       <caption xml:lang="sl">Uporabite Gwenview za upravljanje svoje zbirke slik</caption>
       <caption xml:lang="sv">Använd Gwenview för att hantera din bildsamling</caption>
