@@ -56,7 +56,7 @@
   <summary xml:lang="ar">عارض الصور</summary>
   <summary xml:lang="az">Şəkilə Baxış</summary>
   <summary xml:lang="ca">Visor d'imatges</summary>
-  <summary xml:lang="ca-valencia">Visor d'imatges</summary>
+  <summary xml:lang="ca-valencia">Visor d'imàgens</summary>
   <summary xml:lang="cs">Prohlížeč obrázků</summary>
   <summary xml:lang="da">Billedfremviser</summary>
   <summary xml:lang="de">Bildbetrachter</summary>
@@ -105,7 +105,7 @@
     <p xml:lang="ar">جونفيو عارض صور سريع وسهل الاستخدام بواسطة كدي ، وهو مثالي لتصفح وعرض مجموعة من الصور.</p>
     <p xml:lang="az">Gwenview KDE-nin təqdim etdiyi istifadəsi rahat şəkillərə baxış vasitəsidir və şəkil kolleksiyalarına baxmaq və onları göstərmək üçün idealdır.</p>
     <p xml:lang="ca">El Gwenview és un visor d'imatges ràpid i senzill d'ús, creat per la comunitat KDE, ideal per a navegar i visualitzar col·leccions d'imatges.</p>
-    <p xml:lang="ca-valencia">Gwenview és un visor d'imatges ràpid i senzill d'ús, creat per la comunitat KDE, ideal per a navegar i visualisar coleccions d'imatges.</p>
+    <p xml:lang="ca-valencia">Gwenview és un visor d'imàgens ràpid i senzill d'ús, creat per la comunitat KDE, ideal per a navegar i visualisar coleccions d'imàgens.</p>
     <p xml:lang="cs">Gwenview je jednoduchý a rychlý prohlížeč obrázků od KDE. Ideální pro procházení a prohlížení sbírek obrázků.</p>
     <p xml:lang="da">Gwenview er en hurtig og brugervenlig billedfremviser fra KDE, ideel til at gennemse og vise en samling af billeder.</p>
     <p xml:lang="de">Gwenview ist ein schneller und einfach zu verwendender Bildbetrachter besonders für die Anzeige einer Sammlung von Bildern.</p>
@@ -200,7 +200,7 @@
       <li xml:lang="ar">دعم التّلاعب البسيط بالصّورة: التّدوير، والعكس، والقلب وتغيير الحجم</li>
       <li xml:lang="az">Şəkil üzərində bu kimi sadə əməlləri dəstəkləyir: döndərmə, əks etdirmə və ölçüsünü dəyişdirmə</li>
       <li xml:lang="ca">Permet la manipulació senzilla d'imatges: gira, mirall, inverteix i canvia la mida</li>
-      <li xml:lang="ca-valencia">Permet la manipulació senzilla d'imatges: gira, espill, inverteix i canvia la mida</li>
+      <li xml:lang="ca-valencia">Permet la manipulació senzilla d'imàgens: gira, espill, inverteix i canvia la mida</li>
       <li xml:lang="cs">Podporuje základní nástroje pro manipulaci s obrázky: Otočení, zrcadlení, převrácení a změnu velikosti</li>
       <li xml:lang="da">Understøtter simpel billedredigering: Rotér, spejlvend, vend og ændre størrelse</li>
       <li xml:lang="de">Unterstützt einfache Bildbearbeitung wie Drehen, Spiegeln waagerecht und senkrecht und Größenänderung</li>
@@ -247,7 +247,7 @@
       <li xml:lang="ar">دعم إجراءات إدارة الملفّات البسيطة كالنّسخ، والنّقل، والحذف وغيرها</li>
       <li xml:lang="az">Kopyalamaq, köçürmək, silmək, və bu kimi bir çox əsas faylı idarəetmə əməllərini dəstəkləyir</li>
       <li xml:lang="ca">Permet les accions bàsiques de gestió de fitxers com copia, mou, suprimeix i altres</li>
-      <li xml:lang="ca-valencia">Permet les accions bàsiques de gestió de fitxers com copia, mou, suprimix i atres</li>
+      <li xml:lang="ca-valencia">Permet les accions bàsiques de gestió de fichers com copia, mou, suprimix i atres</li>
       <li xml:lang="cs">Podporuje běžnou správu souborů, jako například kopírování, přesun, vymazání a podobně</li>
       <li xml:lang="da">Understøtter basal filhåndteringshandlinger, såsom kopiér, flyt, slet m.m.</li>
       <li xml:lang="de">Grundlegende Dateiverwaltungsaktionen wie Kopieren, Verschieben, Löschen und weitere Aktionen</li>
@@ -400,7 +400,7 @@
       <caption xml:lang="ar">استعمل جونفيو لإدارة مجموعة صورك</caption>
       <caption xml:lang="az">Şəkil kolleksiyasını idarəetmək üçün Gwenview istifadə edin</caption>
       <caption xml:lang="ca">Empreu el Gwenview per a gestionar la vostra col·lecció d'imatges</caption>
-      <caption xml:lang="ca-valencia">Utiliseu Gwenview per a gestionar la vostra colecció d'imatges</caption>
+      <caption xml:lang="ca-valencia">Utiliseu Gwenview per a gestionar la vostra colecció d'imàgens</caption>
       <caption xml:lang="cs">Používejte Gwenview pro správu vaší sbírky</caption>
       <caption xml:lang="en-GB">Use Gwenview to manage your image collection</caption>
       <caption xml:lang="es">Use Gwenview para la gestión de su colección de imágenes</caption>
