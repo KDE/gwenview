@@ -83,7 +83,7 @@ public:
 
     void addSeparator()
     {
-        mLayout->addSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+        mLayout->addSpacing(QApplication::style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
     }
 
     void addStretch()
