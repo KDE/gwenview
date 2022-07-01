@@ -476,7 +476,7 @@ struct MainWindow::Private {
 
         mToggleOperationsSideBarAction = view->add<KToggleAction>("toggle_operations_sidebar");
         mToggleOperationsSideBarAction->setText(i18nc("@action opens crop, rename, etc.", "Show Editing Tools"));
-        mToggleOperationsSideBarAction->setIcon(QIcon::fromTheme("document-edit"));
+        mToggleOperationsSideBarAction->setIcon(QIcon::fromTheme(QStringLiteral("edit-image"), QIcon::fromTheme(QStringLiteral("document-edit"))));
         connect(mToggleOperationsSideBarAction, &KToggleAction::triggered, q, &MainWindow::toggleOperationsSideBar);
         connect(mSideBar, &QTabWidget::currentChanged, mToggleOperationsSideBarAction, [=]() {
             mToggleOperationsSideBarAction->setChecked(mSideBar->isVisible() && mSideBar->currentPage() == QLatin1String("operations"));
