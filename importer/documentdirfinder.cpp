@@ -27,6 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KDirLister>
 #include <KIO/Job>
 #include <KJobUiDelegate>
+#include <kio_version.h>
 
 // Local
 #include "gwenview_importer_debug.h"
@@ -49,7 +50,11 @@ DocumentDirFinder::DocumentDirFinder(const QUrl &rootUrl)
     connect(d->mDirLister, &KCoreDirLister::itemsAdded, this, &DocumentDirFinder::slotItemsAdded);
     connect(d->mDirLister, SIGNAL(completed()), SLOT(slotCompleted()));
     connect(d->mDirLister, &KCoreDirLister::jobError, this, [this](KIO::Job *job) {
-        if (job->error() == KIO::Error::ERR_CANNOT_CREATE_SLAVE) {
+#if KIO_VERSION >= QT_VERSION_CHECK(5, 96, 0)
+        if (job->error() == KIO::Error::ERR_CANNOT_CREATE_WORKER) {
+#else
+    if (job->error() == KIO::Error::ERR_CANNOT_CREATE_SLAVE) {
+#endif
             Q_EMIT protocollNotSupportedError();
         } else {
             job->uiDelegate()->showErrorMessage();
