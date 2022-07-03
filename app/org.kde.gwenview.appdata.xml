@@ -51,7 +51,7 @@
   <name xml:lang="tr">Gwenview</name>
   <name xml:lang="uk">Gwenview</name>
   <name xml:lang="x-test">xxGwenviewxx</name>
-  <name xml:lang="zh-CN">Gwenview</name>
+  <name xml:lang="zh-CN">Gwenview 图像查看器</name>
   <name xml:lang="zh-TW">影像檢視_Gwenview</name>
   <summary>Image Viewer</summary>
   <summary xml:lang="ar">عارض الصور</summary>
@@ -399,7 +399,7 @@
       <caption xml:lang="tr">Gwenview</caption>
       <caption xml:lang="uk">Gwenview</caption>
       <caption xml:lang="x-test">xxGwenviewxx</caption>
-      <caption xml:lang="zh-CN">Gwenview</caption>
+      <caption xml:lang="zh-CN">Gwenview 图像查看器</caption>
       <caption xml:lang="zh-TW">影像檢視_Gwenview</caption>
       <image>https://cdn.kde.org/screenshots/gwenview/gwenview-image.png</image>
     </screenshot>
