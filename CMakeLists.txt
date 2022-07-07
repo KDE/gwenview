@@ -141,6 +141,15 @@ if(X11_FOUND)
     set(HAVE_X11 1)
 endif()
 
+find_package(kImageAnnotator)
+set_package_properties(kImageAnnotator PROPERTIES URL "https://github.com/ksnip/kImageAnnotator" DESCRIPTION "The kImageAnnotator library provides tools to annotate" TYPE REQUIRED)
+if(kImageAnnotator_FOUND)
+    find_package(kColorPicker REQUIRED)
+    if(NOT kImageAnnotator_VERSION VERSION_LESS 0.5.0)
+	set(KIMAGEANNOTATOR_CAN_LOAD_TRANSLATIONS 1)
+    endif()
+endif()
+
 configure_file(config-gwenview.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-gwenview.h)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 

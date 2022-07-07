@@ -33,13 +33,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KMessageBox>
 
 // Local
-#include "gwenview_app_debug.h"
-#include "viewmainpage.h"
 #include "gvcore.h"
 #include "gwenview_app_debug.h"
 #include "mainwindow.h"
 #include "sidebar.h"
 #include "viewmainpage.h"
+#include <lib/annotate/annotatedialog.h>
+#include <lib/annotate/annotateoperation.h>
 #include <lib/contextmanager.h>
 #include <lib/crop/croptool.h>
 #include <lib/document/documentfactory.h>
@@ -75,6 +75,7 @@ struct ImageOpsContextManagerItem::Private {
     QAction *mResizeAction = nullptr;
     QAction *mCropAction = nullptr;
     QAction *mRedEyeReductionAction = nullptr;
+    QAction *mAnnotateAction = nullptr;
     QList<QAction *> mActionList;
 
     void setupActions()
@@ -117,7 +118,24 @@ struct ImageOpsContextManagerItem::Private {
         mRedEyeReductionAction->setIcon(QIcon::fromTheme(QStringLiteral("redeyes")));
         actionCollection->setDefaultShortcut(mRedEyeReductionAction, Qt::SHIFT | Qt::Key_E);
 
-        mActionList << mRotateLeftAction << mRotateRightAction << mMirrorAction << mFlipAction << mResizeAction << mCropAction << mRedEyeReductionAction;
+        mAnnotateAction = edit->addAction(QStringLiteral("annotate"));
+        mAnnotateAction->setText(i18nc("@action:intoolbar", "Annotate"));
+        mAnnotateAction->setIcon(QIcon::fromTheme(QStringLiteral("edit-image"), QIcon::fromTheme(QStringLiteral("draw-brush"))));
+        actionCollection->setDefaultShortcut(mAnnotateAction, Qt::SHIFT | Qt::Key_A);
+        connect(mAnnotateAction, &QAction::triggered, q, [this]() {
+            Document::Ptr doc = DocumentFactory::instance()->load(q->contextManager()->currentUrl());
+            doc->waitUntilLoaded();
+
+            AnnotateDialog dialog(mMainWindow);
+            dialog.setWindowTitle(i18nc("@title:window Annotate [filename]", "Annotate %1", doc->url().fileName()));
+            dialog.setImage(doc->image());
+            if (dialog.exec() == QDialog::Accepted) {
+                q->applyImageOperation(new AnnotateOperation(dialog.getImage()));
+            }
+        });
+
+        mActionList << mRotateLeftAction << mRotateRightAction << mMirrorAction << mFlipAction << mResizeAction << mCropAction << mRedEyeReductionAction
+                    << mAnnotateAction;
     }
 
     bool ensureEditable()
@@ -191,6 +209,7 @@ void ImageOpsContextManagerItem::updateActions()
     d->mResizeAction->setEnabled(canModify);
     d->mCropAction->setEnabled(canModify && viewMainPageIsVisible);
     d->mRedEyeReductionAction->setEnabled(canModify && viewMainPageIsVisible);
+    d->mAnnotateAction->setEnabled(canModify);
 
     updateSideBarContent();
 }

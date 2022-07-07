@@ -8,3 +8,4 @@
 #cmakedefine KF5Activities_FOUND 1
 #cmakedefine KF5Purpose_FOUND 1
 #cmakedefine HAVE_TIFF 1
+#cmakedefine KIMAGEANNOTATOR_CAN_LOAD_TRANSLATIONS ${KIMAGEANNOTATOR_CAN_LOAD_TRANSLATIONS}

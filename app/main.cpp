@@ -56,6 +56,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // To enable AVIF/HEIF/JPEG-XL metadata support in Exiv2
 #include <exiv2/exiv2.hpp>
 
+#ifdef KIMAGEANNOTATOR_CAN_LOAD_TRANSLATIONS
+#include <kImageAnnotator/KImageAnnotator.h>
+#endif
+
 namespace
 {
 Q_DECLARE_LOGGING_CATEGORY(LibTiffLog)
@@ -201,6 +205,10 @@ int main(int argc, char *argv[])
     // Another solution would be to port BalooSemanticInfoBackend::refreshAllTags
     // to be async rather than using exec().
     qApp->sendPostedEvents(nullptr, QEvent::DeferredDelete);
+
+#ifdef KIMAGEANNOTATOR_CAN_LOAD_TRANSLATIONS
+    kImageAnnotator::loadTranslations();
+#endif
 
     return app.exec();
 }

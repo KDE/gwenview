@@ -131,3 +131,5 @@ target_link_libraries(slideshowfileitemaction
     KF5::I18n
     KF5::KIOWidgets
     KF5::Notifications)
+
+target_link_libraries(gwenview kImageAnnotator::kImageAnnotator)
