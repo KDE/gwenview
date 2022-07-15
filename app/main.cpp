@@ -53,13 +53,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QLoggingCategory>
 #include <tiffio.h>
 
-// To enable AVIF/HEIF/JPEG-XL metadata support in Exiv2
-#include <exiv2/exiv2.hpp>
-
-#ifdef KIMAGEANNOTATOR_CAN_LOAD_TRANSLATIONS
-#include <kImageAnnotator/KImageAnnotator.h>
-#endif
-
 namespace
 {
 Q_DECLARE_LOGGING_CATEGORY(LibTiffLog)
@@ -77,6 +70,13 @@ static void handleTiffError(const char *mod, const char *fmt, va_list ap)
 }
 
 } // namespace
+#endif
+
+// To enable AVIF/HEIF/JPEG-XL metadata support in Exiv2
+#include <exiv2/exiv2.hpp>
+
+#ifdef KIMAGEANNOTATOR_CAN_LOAD_TRANSLATIONS
+#include <kImageAnnotator/KImageAnnotator.h>
 #endif
 
 class StartHelper
