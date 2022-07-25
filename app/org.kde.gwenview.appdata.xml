@@ -134,7 +134,7 @@
     <p xml:lang="pa">ਜੀਵੀਨ-ਵਿਊ KDE ਲਈ ਤੇਜ਼ ਤੇ ਵਰਤਣ ਲਈ ਸੌਖਾ ਚਿੱਤਰ ਦਰਸ਼ਕ ਹੈ, ਜੋ ਕਿ ਚਿੱਤਰਾਂ ਦੇ ਭੰਡਾਰ ਨੂੰ ਬਰਾਊਜ਼ ਕਰਨ ਤੇ ਦਿਖਾਉਣ ਲਈ ਢੁੱਕਵਾਂ ਹੈ।</p>
     <p xml:lang="pl">Gwenview to szybka i łatwa w użyciu przeglądarka obrazów dla KDE. Świetnie nadaje się do przeglądania i wyświetlania zbiorów obrazów.</p>
     <p xml:lang="pt">O Gwenview é um visualizador de imagens rápido e simples de usar do KDE, ideal para a navegação e apresentação de uma colecção de imagens.</p>
-    <p xml:lang="pt-BR">Gwenview é um visualizador de imagens rápido e fácil de usar do KDE, ideal para navegar e exibir uma coleção de imagens.</p>
+    <p xml:lang="pt-BR">Gwenview é um visualizador de imagens rápido e fácil de usar, da KDE, ideal para navegar e exibir uma coleção de imagens.</p>
     <p xml:lang="ro">Gwenview e un vizualizor de imagini rapid și ușor de folosit de la KDE, ideal pentru răsfoirea și afișarea unei colecții de imagini.</p>
     <p xml:lang="ru">Gwenview — быстрая и простая в использовании программа просмотра изображений от KDE.</p>
     <p xml:lang="sk">Gwenview je rýchly a jednoducho použiteľný prehliadač obrázkov pre KDE, ideálny na prehliadanie a zobrazenie kolekcie obrázkov.</p>
@@ -233,7 +233,7 @@
       <li xml:lang="pa">ਸਧਾਰਨ ਚਿੱਤਰ ਤਬਦੀਲੀਆਂ ਲਈ ਸਹਾਇਕ ਹੈ: ਘੁੰਮਾਉਣਾ, ਮਿਰਰ ਕਰਨਾ, ਪਲਟਣਾ ਤੇ ਮੁੜ-ਆਕਾਰ ਦੇਣਾ</li>
       <li xml:lang="pl">Obsługa prostych działań na obrazach: obrót, odbicie w poziomie, odbicie w pionie oraz zmiana rozmiaru</li>
       <li xml:lang="pt">Suporta as manipulações simples de imagens: rotação, espelho, inversão e dimensionamento</li>
-      <li xml:lang="pt-BR">Suporte a manipulações simples de imagens: rotação, espelho, inversão e redimensionamento</li>
+      <li xml:lang="pt-BR">Suporta manipulações simples de imagens: rotação, espelhamento, inversão e redimensionamento</li>
       <li xml:lang="ro">Susține manipulări simple ale imaginilor: rotire, oglindire, răsturnare și redimensionare</li>
       <li xml:lang="ru">Поддержка простых преобразований изображения: поворот, отражение, переворот и изменение размера</li>
       <li xml:lang="sk">Podporuje jednoduché manipulácie s obrázkami: otáčanie, zrkadlenie, prevrátenie a zmenu veľkosti</li>
@@ -282,7 +282,7 @@
       <li xml:lang="pa">ਮੁੱਢਲੇ ਫ਼ਾਈਲ ਇੰਤਜ਼ਾਮ ਕਾਰਵਾਈਆਂ ਜਿਵੇਂ ਕਿ ਕਾਪੀ ਕਰਨਾ, ਭੇਜਣਾ, ਹਟਾਉਣਾ ਤੇ ਹੋਰ ਲਈ ਸਹਾਇਕ ਹੈ</li>
       <li xml:lang="pl">Możliwość wykonywania prostych działań plikowych takich jak kopiuj, przenieś, usuń i innych</li>
       <li xml:lang="pt">Suporta as acções básicas de gestão de ficheiros, como a cópia, movimentação, remoção, entre outras</li>
-      <li xml:lang="pt-BR">Suporta a ações básicas de gerenciamento de arquivos, como cópia, movimentação, exclusão, entre outras</li>
+      <li xml:lang="pt-BR">Suporta ações básicas de gerenciamento de arquivos, como cópia, movimentação, exclusão, entre outras</li>
       <li xml:lang="ro">Susține acțiuni de bază pentru gestiunea fișierelor, cum ar fi copiere, mutare, ștergere, și altele</li>
       <li xml:lang="ru">Поддержка базовых действий с файлами: копирование, перемещение, удаление и другие</li>
       <li xml:lang="sk">Podporuje základné akcie správy súborov ako kopírovanie, presúvanie, mazanie a iné</li>
@@ -330,7 +330,7 @@
       <li xml:lang="nn">Kan brukast både som eit frittståande program og som innebygd biletviser i nettlesaren Konqueror</li>
       <li xml:lang="pl">Możliwość działania jako samodzielny program lub jako osadzona przeglądarka w przeglądarce sieciowej Konqueror</li>
       <li xml:lang="pt">Funciona tanto como uma aplicação independente como um visualizador incorporado no navegador Web Konqueror</li>
-      <li xml:lang="pt-BR">Funciona como um aplicativo independente e também como visualizador incorporado no navegador Web Konqueror</li>
+      <li xml:lang="pt-BR">Funciona tanto como um aplicativo independente quanto como visualizador incorporado ao navegador web Konqueror</li>
       <li xml:lang="ro">Funcționează atât ca aplicație de sine stătătoare, precum și ca vizualizor înglobat în navigatorul web Konqueror</li>
       <li xml:lang="ru">Доступен как отдельное приложение и как встроенный инструмент просмотра изображений в веб-браузере Konqueror</li>
       <li xml:lang="sk">Funguje tak ako samostatná aplikácia, ako aj vstavaný prehliadač vo webovom prehliadači Konqueror</li>
@@ -429,7 +429,7 @@
       <caption xml:lang="nl">Gwenview gebruiken om uw verzameling afbeeldingen te beheren</caption>
       <caption xml:lang="pl">Użyj Gwenview do zarządzania twoimi zbiorami obrazów</caption>
       <caption xml:lang="pt">Use o Gwenview para gerir a sua colecção de imagens</caption>
-      <caption xml:lang="pt-BR">Usar Gwenview para gerenciar sua coleção de imagens</caption>
+      <caption xml:lang="pt-BR">Use o Gwenview para gerenciar sua coleção de imagens</caption>
       <caption xml:lang="ro">Folosiți Gwenview pentru a vă gestiona colecția de imagini</caption>
       <caption xml:lang="ru">Используйте Gwenview для работы с коллекцией изображений</caption>
       <caption xml:lang="sk">Použite Gwenview na správu vašej kolekcie obrázkov</caption>
