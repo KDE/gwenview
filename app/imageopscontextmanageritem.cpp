@@ -147,7 +147,7 @@ struct ImageOpsContextManagerItem::Private {
             return true;
         }
 
-        KMessageBox::sorry(QApplication::activeWindow(), i18nc("@info", "Gwenview cannot edit this kind of image."));
+        KMessageBox::error(QApplication::activeWindow(), i18nc("@info", "Gwenview cannot edit this kind of image."));
         return false;
     }
 };

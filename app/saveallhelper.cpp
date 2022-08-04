@@ -85,7 +85,7 @@ void SaveAllHelper::save()
             msg += "<li>" + item + "</li>";
         }
         msg += QLatin1String("</ul>");
-        KMessageBox::sorry(d->mParent, msg);
+        KMessageBox::error(d->mParent, msg);
     }
 }
 

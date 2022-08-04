@@ -437,7 +437,7 @@ void GvCore::saveAs(const QUrl &url)
         if (mimeType.isValid()) {
             format = mimeType.preferredSuffix().toLocal8Bit();
         } else {
-            KMessageBox::sorry(d->mMainWindow, i18nc("@info", "Gwenview cannot save images as %1.", QFileInfo(filename).suffix()));
+            KMessageBox::error(d->mMainWindow, i18nc("@info", "Gwenview cannot save images as %1.", QFileInfo(filename).suffix()));
         }
 
         QUrl saveAsUrl = fileWidget->selectedUrls().constFirst();
@@ -456,7 +456,7 @@ void GvCore::saveAs(const QUrl &url)
             const QString saveName = saveAsUrl.fileName();
             const QString name = !saveName.isEmpty() ? saveName : saveAsUrl.toDisplayString();
             const QString msg = xi18nc("@info", "<emphasis strong='true'>Saving <filename>%1</filename> failed:</emphasis><nl />%2", name, doc->errorString());
-            KMessageBox::sorry(QApplication::activeWindow(), msg);
+            KMessageBox::error(QApplication::activeWindow(), msg);
         } else {
             // Regardless of job result, reset JPEG config value if it was changed by
             // the Save As dialog

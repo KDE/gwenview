@@ -263,7 +263,7 @@ void ImportDialog::slotImportFinished()
 
 void ImportDialog::showImportError(const QString &message)
 {
-    KMessageBox::sorry(this, message);
+    KMessageBox::error(this, message);
     d->mCentralWidget->setCurrentWidget(d->mThumbnailPage);
 }
 
