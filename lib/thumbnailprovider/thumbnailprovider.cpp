@@ -404,6 +404,10 @@ QImage ThumbnailProvider::loadThumbnailFromCache() const
         return image;
     }
 
+    if (!QFileInfo::exists(mThumbnailPath)) {
+        return {};
+    }
+
     image = QImage(mThumbnailPath);
     int largeThumbnailGroup = mThumbnailGroup;
     while (image.isNull() && ++largeThumbnailGroup <= ThumbnailGroup::XXLarge) {
