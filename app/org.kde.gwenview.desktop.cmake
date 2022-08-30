@@ -193,7 +193,6 @@ Comment[x-test]=xxA simple image viewerxx
 Comment[zh_CN]=简易图像查看器
 Comment[zh_TW]=一個簡單的影像檢視程式
 Exec=gwenview %U
-Terminal=false
 Icon=gwenview
 Type=Application
 Categories=Qt;KDE;Graphics;Viewer;Photography;
