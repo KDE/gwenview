@@ -48,17 +48,17 @@ public:
     };
     FakeSemanticInfoBackEnd(QObject *parent, InitializeMode initializeMode);
 
-    virtual TagSet allTags() const;
+    TagSet allTags() const override;
 
-    virtual void refreshAllTags();
+    void refreshAllTags() override;
 
-    virtual void storeSemanticInfo(const QUrl &, const SemanticInfo &);
+    void storeSemanticInfo(const QUrl &, const SemanticInfo &) override;
 
-    virtual void retrieveSemanticInfo(const QUrl &);
+    void retrieveSemanticInfo(const QUrl &) override;
 
-    virtual QString labelForTag(const SemanticInfoTag &) const;
+    QString labelForTag(const SemanticInfoTag &) const override;
 
-    virtual SemanticInfoTag tagForLabel(const QString &);
+    SemanticInfoTag tagForLabel(const QString &) override;
 
 private:
     void mergeTagsWithAllTags(const TagSet &);
