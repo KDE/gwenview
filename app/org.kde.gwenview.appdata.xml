@@ -57,7 +57,7 @@
   <summary xml:lang="ar">عارض الصور</summary>
   <summary xml:lang="az">Şəkilə Baxış</summary>
   <summary xml:lang="bg">Преглед на изображения</summary>
-  <summary xml:lang="ca">Visor d'imatges</summary>
+  <summary xml:lang="ca">Visualitzador d'imatges</summary>
   <summary xml:lang="ca-valencia">Visor d'imatges</summary>
   <summary xml:lang="cs">Prohlížeč obrázků</summary>
   <summary xml:lang="da">Billedfremviser</summary>
@@ -107,7 +107,7 @@
     <p xml:lang="ar">جونفيو عارض صور سريع وسهل الاستخدام بواسطة كدي ، وهو مثالي لتصفح وعرض مجموعة من الصور.</p>
     <p xml:lang="az">Gwenview KDE-nin təqdim etdiyi istifadəsi rahat şəkillərə baxış vasitəsidir və şəkil kolleksiyalarına baxmaq və onları göstərmək üçün idealdır.</p>
     <p xml:lang="bg">Gwenview е програма на KDE за бързо и лесно преглеждане на колекция от изображения.</p>
-    <p xml:lang="ca">El Gwenview és un visor d'imatges ràpid i senzill d'ús, creat per la comunitat KDE, ideal per a navegar i visualitzar col·leccions d'imatges.</p>
+    <p xml:lang="ca">El Gwenview és un visualitzador d'imatges ràpid i senzill d'ús, creat per la comunitat KDE, ideal per a navegar i visualitzar col·leccions d'imatges.</p>
     <p xml:lang="ca-valencia">Gwenview és un visor d'imatges ràpid i senzill d'ús, creat per la comunitat KDE, ideal per a navegar i visualitzar col·leccions d'imatges.</p>
     <p xml:lang="cs">Gwenview je jednoduchý a rychlý prohlížeč obrázků od KDE. Ideální pro procházení a prohlížení sbírek obrázků.</p>
     <p xml:lang="da">Gwenview er en hurtig og brugervenlig billedfremviser fra KDE, ideel til at gennemse og vise en samling af billeder.</p>
@@ -302,7 +302,7 @@
       <li xml:lang="ar">يعمل كتطبيق مستقلّ وعارض مضمّن في متصفّح الوِبّ كنكر</li>
       <li xml:lang="az">Həm ayrıca proqram, həm də Konqueror veb bələdçisində daxili baxış proqramı kimi işləyir</li>
       <li xml:lang="bg">Действа като самостоятелно приложение и като вградена програма за преглед на изображения в Konqueror</li>
-      <li xml:lang="ca">Funciona tant com una aplicació independent o un visor incrustat al navegador web Konqueror</li>
+      <li xml:lang="ca">Funciona tant com una aplicació independent o un visualitzador incrustat al navegador web Konqueror</li>
       <li xml:lang="ca-valencia">Funciona tant com una aplicació independent o un visor incrustat en el navegador web Konqueror</li>
       <li xml:lang="cs">Pracuje jako samostatná aplikace i jako vložená komponenta ve webovém prohlížeči Konqueror</li>
       <li xml:lang="da">Fungerer både som selvstændigt program og som indlejret fremviser i webbrowseren Konqueror</li>
