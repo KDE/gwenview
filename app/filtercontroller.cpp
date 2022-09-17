@@ -53,9 +53,8 @@ using namespace std::chrono_literals;
 namespace Gwenview
 {
 NameFilterWidget::NameFilterWidget(SortedDirModel *model)
+    : mFilter(new NameFilter(model))
 {
-    mFilter = new NameFilter(model);
-
     mModeComboBox = new KComboBox;
     mModeComboBox->addItem(i18n("Name contains"), QVariant(NameFilter::Contains));
     mModeComboBox->addItem(i18n("Name does not contain"), QVariant(NameFilter::DoesNotContain));
@@ -93,9 +92,8 @@ void NameFilterWidget::applyNameFilter()
 }
 
 DateFilterWidget::DateFilterWidget(SortedDirModel *model)
+    : mFilter(new DateFilter(model))
 {
-    mFilter = new DateFilter(model);
-
     mModeComboBox = new KComboBox;
     mModeComboBox->addItem(i18n("Date >="), DateFilter::GreaterOrEqual);
     mModeComboBox->addItem(i18n("Date ="), DateFilter::Equal);
@@ -169,9 +167,8 @@ void RatingFilterWidget::updateFilterMode()
 }
 
 TagFilterWidget::TagFilterWidget(SortedDirModel *model)
+    : mFilter(new TagFilter(model))
 {
-    mFilter = new TagFilter(model);
-
     mModeComboBox = new KComboBox;
     mModeComboBox->addItem(i18n("Tagged"), QVariant(true));
     mModeComboBox->addItem(i18n("Not Tagged"), QVariant(false));

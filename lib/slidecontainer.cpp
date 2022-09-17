@@ -33,8 +33,8 @@ static const int SLIDE_DURATION = 250;
 
 SlideContainer::SlideContainer(QWidget *parent)
     : QFrame(parent)
+    , mContent(nullptr)
 {
-    mContent = nullptr;
     mSlidingOut = false;
     setFixedHeight(0);
 }

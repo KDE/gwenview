@@ -44,8 +44,8 @@ struct LoadingIndicatorPrivate {
         : q(qq)
         , mIndex(0)
         , mTimer(new QTimer(qq))
+        , mSequence(KIconLoader::global()->loadPixmapSequence(QStringLiteral("process-working"), 22))
     {
-        mSequence = KIconLoader::global()->loadPixmapSequence(QStringLiteral("process-working"), 22);
         mTimer->setInterval(100);
         QObject::connect(mTimer, SIGNAL(timeout()), q, SLOT(showNextFrame()));
     }
