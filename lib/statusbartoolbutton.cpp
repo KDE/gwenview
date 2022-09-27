@@ -36,7 +36,7 @@ StatusBarToolButton::StatusBarToolButton(QWidget *parent)
     : QToolButton(parent)
     , mGroupPosition(NotGrouped)
 {
-    setToolButtonStyle(Qt::ToolButtonTextOnly);
+    setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     setFocusPolicy(Qt::NoFocus);
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 }
