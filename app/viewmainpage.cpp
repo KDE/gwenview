@@ -426,7 +426,6 @@ ViewMainPage::ViewMainPage(QWidget *parent, SlideShow *slideShow, KActionCollect
 
     d->mToggleThumbnailBarAction = view->add<KToggleAction>(QStringLiteral("toggle_thumbnailbar"));
     d->mToggleThumbnailBarAction->setText(i18n("Show Thumbnails"));
-    d->mToggleThumbnailBarAction->setIcon(QIcon::fromTheme(QStringLiteral("folder-image")));
     // clang-format off
     // i18n: For languages that are read right to left, "right side" refers to the left side in this context.
     d->mToggleThumbnailBarAction->setWhatsThis(xi18nc("@info:whatsthis", "<para>This toggles a small bar showing all the other images in the current folder. "
