@@ -41,6 +41,10 @@ include_directories(
     )
 
 set(gwenviewlib_SRCS
+    bcg/bcgimageoperation.cpp
+    bcg/bcgtool.cpp
+    bcg/bcgwidget.cpp
+    bcg/imageutils.cpp
     cms/iccjpeg.c
     cms/cmsprofile.cpp
     cms/cmsprofile_png.cpp

@@ -1,7 +1,6 @@
-// vim: set tabstop=4 shiftwidth=4 expandtab:
 /*
 Gwenview: an image viewer
-Copyright 2007 Aurélien Gâteau <agateau@kde.org>
+Copyright 2022 Ilya Pominov <ipominov@astralinux.ru>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -18,48 +17,45 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 */
-#ifndef IMAGEOPSCONTEXTMANAGERITEM_H
-#define IMAGEOPSCONTEXTMANAGERITEM_H
+#ifndef BCGTOOL_H
+#define BCGTOOL_H
+
+#include <lib/gwenviewlib_export.h>
 
 // Qt
 
 // KF
 
 // Local
-#include "abstractcontextmanageritem.h"
+#include <lib/documentview/abstractrasterimageviewtool.h>
 
 namespace Gwenview
 {
 class AbstractImageOperation;
-class MainWindow;
 
-class ImageOpsContextManagerItem : public AbstractContextManagerItem
+struct BCGToolPrivate;
+class GWENVIEWLIB_EXPORT BCGTool : public AbstractRasterImageViewTool
 {
     Q_OBJECT
 public:
-    ImageOpsContextManagerItem(ContextManager *, MainWindow *);
-    ~ImageOpsContextManagerItem() override;
+    BCGTool(RasterImageView *parent);
+    ~BCGTool() override;
+
+    void paint(QPainter *painter) override;
+    void keyPressEvent(QKeyEvent *event) override;
+    QWidget *widget() const override;
+
+Q_SIGNALS:
+    void done();
+    void imageOperationRequested(AbstractImageOperation *);
 
 private Q_SLOTS:
-    void updateActions();
-    void updateSideBarContent();
-    void rotateLeft();
-    void rotateRight();
-    void mirror();
-    void flip();
-    void resizeImage();
-    void crop();
-    void startRedEyeReduction();
-    void applyImageOperation(AbstractImageOperation *);
-    void restoreDefaultImageViewTool();
-    void startBCG();
+    void slotBCGRequested();
 
 private:
-    struct Private;
-    Private *const d;
-    void resetCropState();
+    BCGToolPrivate *const d;
 };
 
 } // namespace
 
-#endif /* IMAGEOPSCONTEXTMANAGERITEM_H */
+#endif /* BCGTOOL_H */

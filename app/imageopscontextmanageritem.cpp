@@ -42,6 +42,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <lib/annotate/annotatedialog.h>
 #include <lib/annotate/annotateoperation.h>
 #endif
+#include <lib/bcg/bcgtool.h>
 #include <lib/contextmanager.h>
 #include <lib/crop/croptool.h>
 #include <lib/document/documentfactory.h>
@@ -76,6 +77,7 @@ struct ImageOpsContextManagerItem::Private {
     QAction *mFlipAction = nullptr;
     QAction *mResizeAction = nullptr;
     QAction *mCropAction = nullptr;
+    QAction *mBCGAction = nullptr;
     QAction *mRedEyeReductionAction = nullptr;
 #ifdef KIMAGEANNOTATOR_FOUND
     QAction *mAnnotateAction = nullptr;
@@ -117,6 +119,11 @@ struct ImageOpsContextManagerItem::Private {
         mCropAction->setIcon(QIcon::fromTheme(QStringLiteral("transform-crop-and-resize")));
         actionCollection->setDefaultShortcut(mCropAction, Qt::SHIFT | Qt::Key_C);
 
+        mBCGAction = edit->addAction(QStringLiteral("brightness_contrast_gamma"), q, SLOT(startBCG()));
+        mBCGAction->setText(i18nc("@action:intoolbar", "Adjust Brightness/Contrast/Gamma"));
+        mBCGAction->setIcon(QIcon::fromTheme(QStringLiteral("contrast")));
+        actionCollection->setDefaultShortcut(mBCGAction, Qt::SHIFT | Qt::Key_B);
+
         mRedEyeReductionAction = edit->addAction(QStringLiteral("red_eye_reduction"), q, SLOT(startRedEyeReduction()));
         mRedEyeReductionAction->setText(i18n("Reduce Red Eye"));
         mRedEyeReductionAction->setIcon(QIcon::fromTheme(QStringLiteral("redeyes")));
@@ -138,7 +145,8 @@ struct ImageOpsContextManagerItem::Private {
             }
         });
 #endif
-        mActionList << mRotateLeftAction << mRotateRightAction << mMirrorAction << mFlipAction << mResizeAction << mCropAction << mRedEyeReductionAction;
+        mActionList << mRotateLeftAction << mRotateRightAction << mMirrorAction << mFlipAction << mResizeAction << mCropAction << mBCGAction
+        << mRedEyeReductionAction;
 #ifdef KIMAGEANNOTATOR_FOUND
         mActionList << mAnnotateAction;
 #endif
@@ -214,6 +222,7 @@ void ImageOpsContextManagerItem::updateActions()
     d->mFlipAction->setEnabled(canModify);
     d->mResizeAction->setEnabled(canModify);
     d->mCropAction->setEnabled(canModify && viewMainPageIsVisible);
+    d->mBCGAction->setEnabled(canModify && viewMainPageIsVisible);
     d->mRedEyeReductionAction->setEnabled(canModify && viewMainPageIsVisible);
 #ifdef KIMAGEANNOTATOR_FOUND
     d->mAnnotateAction->setEnabled(canModify);
@@ -344,6 +353,24 @@ void ImageOpsContextManagerItem::restoreDefaultImageViewTool()
     imageView->setCurrentTool(nullptr);
     tool->deleteLater();
     d->mMainWindow->setDistractionFreeMode(false);
+}
+
+void ImageOpsContextManagerItem::startBCG()
+{
+    if (!d->ensureEditable()) {
+        return;
+    }
+    RasterImageView *view = d->mMainWindow->viewMainPage()->imageView();
+    if (!view) {
+        qCCritical(GWENVIEW_APP_LOG) << "No RasterImageView available!";
+        return;
+    }
+    auto tool = new BCGTool(view);
+    connect(tool, &BCGTool::imageOperationRequested, this, &ImageOpsContextManagerItem::applyImageOperation);
+    connect(tool, &BCGTool::done, this, &ImageOpsContextManagerItem::restoreDefaultImageViewTool);
+
+    d->mMainWindow->setDistractionFreeMode(true);
+    view->setCurrentTool(tool);
 }
 
 } // namespace
