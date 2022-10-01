@@ -46,7 +46,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QJsonObject>
 
 // KF
-#include <kxmlgui_version.h>
 #include <KActionCategory>
 #include <KActionCollection>
 #include <KDirLister>
@@ -67,6 +66,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KUrlComboBox>
 #include <KUrlNavigator>
 #include <KXMLGUIFactory>
+#include <kwidgetsaddons_version.h>
+#include <kxmlgui_version.h>
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 #include "lib/semanticinfo/semanticinfodirmodel.h"
 #endif
@@ -1704,17 +1705,29 @@ bool MainWindow::queryClose()
     KGuiItem no(i18n("Discard Changes"), "delete");
     QString msg =
         i18np("One image has been modified.", "%1 images have been modified.", list.size()) + '\n' + i18n("If you quit now, your changes will be lost.");
+#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+    int answer = KMessageBox::warningTwoActionsCancel(this, msg, QString() /* caption */, yes, no);
+#else
     int answer = KMessageBox::warningYesNoCancel(this, msg, QString() /* caption */, yes, no);
+#endif
 
     switch (answer) {
+#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+    case KMessageBox::PrimaryAction:
+#else
     case KMessageBox::Yes:
+#endif
         d->mGvCore->saveAll();
         // We need to wait a bit because the DocumentFactory is notified about
         // saved documents through a queued connection.
         qApp->processEvents();
         return DocumentFactory::instance()->modifiedDocumentList().isEmpty();
 
+#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+    case KMessageBox::SecondaryAction:
+#else
     case KMessageBox::No:
+#endif
         return true;
 
     default: // cancel

@@ -30,6 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KF
 #include <KIO/ApplicationLauncherJob>
 #include <KIO/DeleteJob>
+#include <KIO/JobUiDelegate>
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KProtocolInfo>
@@ -42,6 +43,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #else
 #include <KIO/JobUiDelegate>
 #endif
+#include <kwidgetsaddons_version.h>
 
 // Local
 #include "dialogpage.h"
@@ -122,12 +124,20 @@ public:
                               importedCount + skippedCount);
         }
 
+#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+        int answer = KMessageBox::questionTwoActions(mCentralWidget,
+#else
         int answer = KMessageBox::questionYesNo(mCentralWidget,
-                                                QStringLiteral("<qt>") + message.join(QStringLiteral("<br/>")) + QStringLiteral("</qt>"),
-                                                i18nc("@title:window", "Import Finished"),
-                                                KGuiItem(i18n("Keep")),
-                                                KStandardGuiItem::del());
+#endif
+                                                     QStringLiteral("<qt>") + message.join(QStringLiteral("<br/>")) + QStringLiteral("</qt>"),
+                                                     i18nc("@title:window", "Import Finished"),
+                                                     KGuiItem(i18n("Keep")),
+                                                     KStandardGuiItem::del());
+#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+        if (answer == KMessageBox::PrimaryAction) {
+#else
         if (answer == KMessageBox::Yes) {
+#endif
             return;
         }
         QList<QUrl> urls = importedUrls + skippedUrls;
@@ -138,12 +148,20 @@ public:
             }
             // Deleting failed
             int answer =
+#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+                KMessageBox::warningTwoActions(mCentralWidget,
+#else
                 KMessageBox::warningYesNo(mCentralWidget,
-                                          i18np("Failed to delete the document:\n%2", "Failed to delete documents:\n%2", urls.count(), job->errorString()),
-                                          QString(),
-                                          KGuiItem(i18n("Retry")),
-                                          KGuiItem(i18n("Ignore")));
+#endif
+                                               i18np("Failed to delete the document:\n%2", "Failed to delete documents:\n%2", urls.count(), job->errorString()),
+                                               QString(),
+                                               KGuiItem(i18n("Retry")),
+                                               KGuiItem(i18n("Ignore")));
+#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+            if (answer != KMessageBox::PrimaryAction) {
+#else
             if (answer != KMessageBox::Yes) {
+#endif
                 // Ignore
                 break;
             }
