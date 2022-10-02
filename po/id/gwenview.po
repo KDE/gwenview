@@ -1,0 +1,2947 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Budiman Jojo <budimanjojo@gmail.com>, 2014.
+# La Ode Muh. Fadlun Akbar <alunkeren@gmail.com>, 2014, 2015.
+# wantoyo <wantoyo@yahoo.com>, 2015.
+# Wantoyo <wantoyek@gmail.com>, 2017, 2018, 2019, 2020, 2021, 2022.
+# Linerly <linerly@protonmail.com>, 2022.
+#
+# Translators:
+msgid ""
+msgstr ""
+"Project-Id-Version: KDE Frameworks 5 Applications\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-09-28 00:44+0000\n"
+"PO-Revision-Date: 2022-09-27 17:54+0700\n"
+"Last-Translator: Wantoyèk <wantoyek@gmail.com>\n"
+"Language-Team: Indonesian <kde-i18n-doc@kde.org>\n"
+"Language: id\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 21.12.3\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Budiman,La Ode Muh. Fadlun Akbar,Wantoyèk"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "budimanjojo@gmail.com,alunkeren@gmail.com,wantoyek@gmail.com"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_LowResourceUsageMode)
+#: app/advancedconfigpage.ui:28
+#, kde-format
+msgid "Low resource usage mode"
+msgstr "Mode penggunaan sumberdaya rendah"
+
+#. i18n: ectx: property (text), widget (QLabel, cacheHelpLabel)
+#: app/advancedconfigpage.ui:72
+#, kde-format
+msgid ""
+"Enable this option if you do not have a lot of disk space. This will avoid "
+"storing thumbnails on disk and will prefer embedded thumbnails of lower "
+"quality that are faster to load, if available."
+msgstr ""
+"Aktifkan opsi ini jika Anda tidak memiliki banyak ruang disk. Ini akan "
+"menghindari menyimpan thumbnail pada disk dan akan menggunakan thumbnail "
+"resolusi tersemat yang dapat dimuat secara cepat, jika tersedia."
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: app/advancedconfigpage.ui:82
+#, kde-format
+msgid "Thumbnails:"
+msgstr "Gambar-mini:"
+
+#. i18n: ectx: property (text), widget (QLabel, relativeHelpLabel)
+#: app/advancedconfigpage.ui:92
+#, kde-format
+msgid ""
+"Squash colors that don't fit within the active color profile's color gamut, "
+"leaving other colors untouched"
+msgstr ""
+"Warna-warna tipis yang tidak pas dengan gamut warna profil warna yang aktif, "
+"menyisakan warna-warna lain yang tak tersentuh"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: app/advancedconfigpage.ui:102
+#, kde-format
+msgid "History:"
+msgstr "Histori:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, relativeRenderingIntentRadioButton)
+#: app/advancedconfigpage.ui:114
+#, kde-format
+msgctxt "@option:Relative Colorimetric rendering intent"
+msgid "Relative Colorimetric"
+msgstr "Perwarnaan Relatif"
+
+#. i18n: ectx: property (text), widget (QRadioButton, perceptualRenderingIntentRadioButton)
+#: app/advancedconfigpage.ui:160
+#, kde-format
+msgctxt "@option:Perceptual rendering intent"
+msgid "Perceptual"
+msgstr "Persepsi"
+
+#. i18n: ectx: property (text), widget (QLabel, perceptualHelpLabel)
+#: app/advancedconfigpage.ui:172
+#, kde-format
+msgid ""
+"Scale all colors equally to fit them within the active color profile's color "
+"gamut"
+msgstr ""
+"Skala semua warna sama untuk menngepaskannya dengan gamut warna profil warna "
+"yang aktif"
+
+#. i18n: ectx: property (text), widget (QLabel, colorRenderingLabel)
+#: app/advancedconfigpage.ui:182
+#, kde-format
+msgid "Rendering intent:"
+msgstr "Perenderan yang dimaksud:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_HistoryEnabled)
+#: app/advancedconfigpage.ui:197
+#, kde-format
+msgid "Remember folders and URLs"
+msgstr "Ingat folder dan URL"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_NoMonitorICC)
+#: app/advancedconfigpage.ui:240
+#, kde-format
+msgid "Apply only the profile embedded in the image file"
+msgstr "Terapkan hanya profil yang tertanam di dalam file citra"
+
+#. i18n: ectx: property (text), widget (QLabel, colorProfileHelpLabel)
+#: app/advancedconfigpage.ui:265
+#, kde-format
+msgid ""
+"Assume that system-wide color correction already applies monitor profile."
+msgstr ""
+"Asumsikan bahwa koreksi warna seluruh sistem sudah menerapkan profil monitor."
+
+#. i18n: ectx: property (text), widget (QLabel, colorProfileLabel)
+#: app/advancedconfigpage.ui:275
+#, kde-format
+msgid "Color profile:"
+msgstr "Profil warna:"
+
+#: app/alignwithsidebarwidgetaction.cpp:23
+#, kde-format
+msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
+msgid "Sidebar Alignment Spacer"
+msgstr "Pemisah Kesejajaran Sidebar"
+
+#: app/browsemainpage.cpp:147 app/mainwindow.cpp:373 app/viewmainpage.cpp:425
+#: lib/documentview/documentviewcontroller.cpp:57
+#, kde-format
+msgctxt "@title actions category - means actions changing smth in interface"
+msgid "View"
+msgstr "Tampilan"
+
+#: app/browsemainpage.cpp:149
+#, kde-format
+msgctxt "@action:inmenu Navigation Bar"
+msgid "Edit Location"
+msgstr "Edit Lokasi"
+
+#: app/browsemainpage.cpp:153
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Sort By"
+msgstr "Urutkan Berdasarkan"
+
+#: app/browsemainpage.cpp:158
+#, kde-format
+msgctxt "@addAction:inmenu"
+msgid "Name"
+msgstr "Nama"
+
+#: app/browsemainpage.cpp:161
+#, kde-format
+msgctxt "@addAction:inmenu"
+msgid "Date"
+msgstr "Tanggal"
+
+#: app/browsemainpage.cpp:164
+#, kde-format
+msgctxt "@addAction:inmenu"
+msgid "Size"
+msgstr "Ukuran"
+
+#: app/browsemainpage.cpp:168
+#, kde-format
+msgctxt "@addAction:inmenu"
+msgid "Rating"
+msgstr "Peringkat"
+
+#: app/browsemainpage.cpp:175
+#, kde-format
+msgctxt "@action:inmenu Sort"
+msgid "Descending"
+msgstr "Urut turun"
+
+#: app/browsemainpage.cpp:187
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Thumbnail Details"
+msgstr "Perincian Gambar-mini"
+
+#: app/browsemainpage.cpp:188
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Filename"
+msgstr "Nama File"
+
+#: app/browsemainpage.cpp:189
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Date"
+msgstr "Tanggal"
+
+#: app/browsemainpage.cpp:190
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Image Size"
+msgstr "Ukuran Citra"
+
+#: app/browsemainpage.cpp:191
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "File Size"
+msgstr "Ukuran File"
+
+#: app/browsemainpage.cpp:193
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Rating"
+msgstr "Peringkat"
+
+#: app/browsemainpage.cpp:196 app/fileopscontextmanageritem.cpp:138
+#: app/mainwindow.cpp:372
+#, kde-format
+msgctxt "@title actions category"
+msgid "File"
+msgstr "File"
+
+#: app/browsemainpage.cpp:198
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Add Folder to Places"
+msgstr "Tambah Folder ke Tempat"
+
+#: app/browsemainpage.cpp:247
+#, kde-format
+msgctxt ""
+"@info:status %1 number of selected documents, %2 total number of documents, "
+"%3 total filesize of selected documents"
+msgid "Selected %1 of %2 (%3)"
+msgstr "Terpilih %1 dari %2 (%3)"
+
+#: app/browsemainpage.cpp:253
+#, kde-format
+msgctxt "@info:status Image files"
+msgid "%1 image"
+msgid_plural "%1 images"
+msgstr[0] "%1 citra"
+msgstr[1] "%1 citra"
+
+#: app/browsemainpage.cpp:254
+#, kde-format
+msgctxt "@info:status Video files"
+msgid "%1 video"
+msgid_plural "%1 videos"
+msgstr[0] "%1 video"
+msgstr[1] "%1 video"
+
+#: app/browsemainpage.cpp:261
+#, kde-format
+msgctxt "@info:status images, videos"
+msgid "%1, %2"
+msgstr "%1, %2"
+
+#. i18n: ectx: property (text), widget (Gwenview::StatusBarToolButton, mAddFilterButton)
+#: app/browsemainpage.ui:88
+#, kde-format
+msgid "Add Filter"
+msgstr "Tambah Filter"
+
+#: app/configdialog.cpp:70
+#, kde-format
+msgid "General"
+msgstr "Umum"
+
+#: app/configdialog.cpp:123
+#, kde-format
+msgid "Image View"
+msgstr "Tampilan Citra"
+
+#: app/configdialog.cpp:134
+#, kde-format
+msgid "Advanced"
+msgstr "Tingkat-lanjut"
+
+#: app/fileoperations.cpp:64
+#, kde-format
+msgctxt "@title:window %1 file name"
+msgid "Copy %1"
+msgstr "Salin %1"
+
+#: app/fileoperations.cpp:66
+#, kde-format
+msgctxt "@title:window %1 number of images"
+msgid "Copy %1 image"
+msgid_plural "Copy %1 images"
+msgstr[0] "Sain %1 citra"
+msgstr[1] "Sain %1 citra"
+
+#: app/fileoperations.cpp:68
+#, kde-format
+msgctxt "@action:button"
+msgid "Copy"
+msgstr "Salin"
+
+#: app/fileoperations.cpp:72
+#, kde-format
+msgctxt "@title:window %1 file name"
+msgid "Move %1"
+msgstr "Pindah %1"
+
+#: app/fileoperations.cpp:74
+#, kde-format
+msgctxt "@title:window %1 number of images"
+msgid "Move %1 image"
+msgid_plural "Move %1 images"
+msgstr[0] "Pindah %1 citra"
+msgstr[1] "Pindah %1 citra"
+
+#: app/fileoperations.cpp:76
+#, kde-format
+msgctxt "@action:button"
+msgid "Move"
+msgstr "Pindah"
+
+#: app/fileoperations.cpp:80
+#, kde-format
+msgctxt "@title:window %1 file name"
+msgid "Link %1"
+msgstr "Taut %1"
+
+#: app/fileoperations.cpp:82
+#, kde-format
+msgctxt "@title:window %1 number of images"
+msgid "Link %1 image"
+msgid_plural "Link %1 images"
+msgstr[0] "Tautkan %1 citra"
+msgstr[1] "Tautkan %1 citra"
+
+#: app/fileoperations.cpp:84
+#, kde-format
+msgctxt "@action:button"
+msgid "Link"
+msgstr "Taut"
+
+#: app/fileoperations.cpp:199
+#, kde-format
+msgid "Move Here"
+msgstr "Pindah Sini"
+
+#: app/fileoperations.cpp:200
+#, kde-format
+msgid "Copy Here"
+msgstr "Salin Sini"
+
+#: app/fileoperations.cpp:201
+#, kde-format
+msgid "Link Here"
+msgstr "Taut Sini"
+
+#: app/fileoperations.cpp:203
+#, kde-format
+msgid "Cancel"
+msgstr "Batal"
+
+#: app/fileopscontextmanageritem.cpp:128
+#, kde-format
+msgid "File Operations"
+msgstr "Operasi File"
+
+#: app/fileopscontextmanageritem.cpp:139
+#: app/semanticinfocontextmanageritem.cpp:203
+#, kde-format
+msgctxt "@title actions category"
+msgid "Edit"
+msgstr "Edit"
+
+#: app/fileopscontextmanageritem.cpp:146
+#, kde-format
+msgctxt "Verb"
+msgid "Copy To..."
+msgstr "Salin Ke..."
+
+#: app/fileopscontextmanageritem.cpp:151
+#, kde-format
+msgctxt "Verb"
+msgid "Move To..."
+msgstr "Pindah Ke..."
+
+#: app/fileopscontextmanageritem.cpp:156
+#, kde-format
+msgctxt "Verb: create link to the file where user wants"
+msgid "Link To..."
+msgstr "Taut Ke..."
+
+#: app/fileopscontextmanageritem.cpp:161
+#, kde-format
+msgctxt "Verb"
+msgid "Rename..."
+msgstr "Ubah Nama..."
+
+#: app/fileopscontextmanageritem.cpp:166
+#, kde-format
+msgctxt "Verb"
+msgid "Trash"
+msgstr "Tong Sampah"
+
+#: app/fileopscontextmanageritem.cpp:173
+#, kde-format
+msgid "Restore"
+msgstr "Kembalikan"
+
+#: app/fileopscontextmanageritem.cpp:177
+#, kde-format
+msgid "Properties"
+msgstr "Properti"
+
+#: app/fileopscontextmanageritem.cpp:182
+#, kde-format
+msgid "Create Folder..."
+msgstr "Ciptakan Folder..."
+
+#: app/fileopscontextmanageritem.cpp:186
+#, kde-format
+msgid "Open With"
+msgstr "Buka Dengan"
+
+#: app/fileopscontextmanageritem.cpp:193
+#, kde-format
+msgid "Open Containing Folder"
+msgstr "Buka Folder Yang Mengandungnya"
+
+#: app/fileopscontextmanageritem.cpp:375
+#, kde-format
+msgid "Other Application..."
+msgstr "Aplikasi Lain..."
+
+#: app/filtercontroller.cpp:59
+#, kde-format
+msgid "Name contains"
+msgstr "Nama mengandung"
+
+#: app/filtercontroller.cpp:60
+#, kde-format
+msgid "Name does not contain"
+msgstr "Nama tidak mengandung"
+
+#: app/filtercontroller.cpp:98
+#, kde-format
+msgid "Date >="
+msgstr "Tanggal >="
+
+#: app/filtercontroller.cpp:99
+#, kde-format
+msgid "Date ="
+msgstr "Tanggal ="
+
+#: app/filtercontroller.cpp:100
+#, kde-format
+msgid "Date <="
+msgstr "Tanggal <="
+
+#: app/filtercontroller.cpp:131
+#, kde-format
+msgid "Rating >="
+msgstr "Peringkat >="
+
+#: app/filtercontroller.cpp:132
+#, kde-format
+msgid "Rating ="
+msgstr "Peringkat ="
+
+#: app/filtercontroller.cpp:133
+#, kde-format
+msgid "Rating <="
+msgstr "Peringkat <="
+
+#: app/filtercontroller.cpp:173
+#, kde-format
+msgid "Tagged"
+msgstr "Ditandai"
+
+#: app/filtercontroller.cpp:174
+#, kde-format
+msgid "Not Tagged"
+msgstr "Tidak Ditandai"
+
+#: app/filtercontroller.cpp:278
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Filter by Name"
+msgstr "Filter berdasarkan Nama"
+
+#: app/filtercontroller.cpp:280
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Filter by Date"
+msgstr "Filter berdasarkan Tanggal"
+
+#: app/filtercontroller.cpp:283
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Filter by Rating"
+msgstr "Filter berdasarkan Peringkat"
+
+#: app/filtercontroller.cpp:285
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Filter by Tag"
+msgstr "Filter berdasarkan Tanda"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: app/fullscreenconfigwidget.ui:20
+#, kde-format
+msgid "Slideshow"
+msgstr "Tampilan Slide"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: app/fullscreenconfigwidget.ui:29
+#, kde-format
+msgid "Interval:"
+msgstr "Interval:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, mSlideShowLoopCheckBox)
+#: app/fullscreenconfigwidget.ui:75
+#, kde-format
+msgid "Loop"
+msgstr "Putaran"
+
+#. i18n: ectx: property (text), widget (QCheckBox, mSlideShowRandomCheckBox)
+#: app/fullscreenconfigwidget.ui:82
+#, kde-format
+msgid "Random"
+msgstr "Acak"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: app/fullscreenconfigwidget.ui:92
+#, kde-format
+msgid "Image Information"
+msgstr "Informasi Citra"
+
+#. i18n: ectx: property (text), widget (QPushButton, mConfigureDisplayedInformationButton)
+#: app/fullscreenconfigwidget.ui:101
+#, kde-format
+msgid "Select Image Information to Display..."
+msgstr "Pilih Informasi Citra untuk Ditayangkan..."
+
+#. i18n: ectx: property (title), widget (QGroupBox, mThumbnailGroupBox)
+#: app/fullscreenconfigwidget.ui:111
+#, kde-format
+msgid "Thumbnails"
+msgstr "Gambar-mini"
+
+#. i18n: ectx: property (text), widget (QCheckBox, mShowThumbnailsCheckBox)
+#: app/fullscreenconfigwidget.ui:120
+#, kde-format
+msgid "Show thumbnails"
+msgstr "Tampilkan gambar-mini"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: app/fullscreenconfigwidget.ui:130
+#, kde-format
+msgid "Height:"
+msgstr "Tinggi:"
+
+#: app/fullscreencontent.cpp:239
+#, kde-format
+msgctxt "@item:intext fullscreen meta info separator"
+msgid ", "
+msgstr ","
+
+#: app/fullscreencontent.cpp:289
+#, kde-format
+msgctxt "Slideshow interval in seconds"
+msgid "%1 sec"
+msgid_plural "%1 secs"
+msgstr[0] "%1 detik"
+msgstr[1] "%1 detik"
+
+#: app/fullscreencontent.cpp:400
+#, kde-format
+msgid "Configure"
+msgstr "Konfigurasi"
+
+#: app/fullscreencontent.cpp:401
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Configure full screen mode"
+msgstr "Konfigurasikan mode layar penuh"
+
+#: app/fullscreencontent.cpp:552 app/viewmainpage.cpp:404
+#, kde-format
+msgctxt "@info:status %1 current document index, %2 total documents"
+msgid "%1 of %2"
+msgstr "%1 dari %2"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: app/generalconfigpage.ui:17
+#, kde-format
+msgid "Videos:"
+msgstr "Video:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_ListVideos)
+#: app/generalconfigpage.ui:27
+#, kde-format
+msgid "Show videos"
+msgstr "Tampilkan video"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_AutoplayVideos)
+#: app/generalconfigpage.ui:34
+#, kde-format
+msgid "Automatically play"
+msgstr "Play secara otomatis"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: app/generalconfigpage.ui:41
+#, kde-format
+msgid "Notify after reaching the last image:"
+msgstr "Beri tau setelah meraih citra terakhir:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, neverShowWrapNoticeRadioButton)
+#: app/generalconfigpage.ui:51
+#, kde-format
+msgid "Never"
+msgstr "Tidak pernah"
+
+#. i18n: ectx: property (text), widget (QRadioButton, wrapNoticeOnSlideshowRadioButton)
+#: app/generalconfigpage.ui:58
+#, kde-format
+msgid "Only during slideshows"
+msgstr "Hanya selagi tampilan slide"
+
+#. i18n: ectx: property (text), widget (QRadioButton, alwaysShowWrapNoticeRadioButton)
+#: app/generalconfigpage.ui:65
+#, kde-format
+msgid "Always"
+msgstr "Selalu"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: app/generalconfigpage.ui:88
+#, kde-format
+msgid "Fullscreen background:"
+msgstr "Latar-belakang layar-penuh:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, fullscreenBackgroundImageRadioButton)
+#: app/generalconfigpage.ui:98
+#, kde-format
+msgid "Dark gray texture"
+msgstr "Tekstur kelabu gelap"
+
+#. i18n: ectx: property (text), widget (QRadioButton, fullscreenBackgroundBlackRadioButton)
+#: app/generalconfigpage.ui:105
+#, kde-format
+msgid "Black"
+msgstr "Hitam"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: app/generalconfigpage.ui:128
+#, kde-format
+msgid "Lossy image save quality:"
+msgstr "Kualitas simpan citra lossy:"
+
+#. i18n: ectx: property (suffix), widget (QSpinBox, jpegQualitySpinner)
+#: app/generalconfigpage.ui:168
+#, no-c-format, kde-format
+msgid "%"
+msgstr "%"
+
+#. i18n: ectx: property (text), widget (QLabel, lossyImageFormatHelpLabel)
+#: app/generalconfigpage.ui:196
+#, kde-format
+msgid ""
+"The quality level when saving images using lossy image formats such as JPEG, "
+"WEBP, AVIF, HEIF, and HEIC. Higher quality increases the file size."
+msgstr ""
+"Tingkat kualitas ketika penyimpanan citra menggunakan format citra lossy "
+"sepertihalnya JPEG, WEBP, AVIF, HEIF, dan HEIC. Kualitas yang lebih tinggi "
+"menambah besar ukuran file."
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: app/generalconfigpage.ui:222
+#, kde-format
+msgid "Thumbnail actions:"
+msgstr "Aksi thumbnail:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, allButtonsThumbnailActionsRadioButton)
+#: app/generalconfigpage.ui:229
+#, kde-format
+msgid "All buttons"
+msgstr "Semua tombol"
+
+#. i18n: ectx: property (text), widget (QRadioButton, selectionOnlyThumbnailActionsRadioButton)
+#: app/generalconfigpage.ui:236
+#, kde-format
+msgid "Show selection button only"
+msgstr "Tampilkan tombol pemilihan saja"
+
+#. i18n: ectx: property (text), widget (QRadioButton, noneThumbnailActionsRadioButton)
+#: app/generalconfigpage.ui:243
+#, fuzzy, kde-format
+#| msgid "None"
+msgctxt "A number of thumbnail actions to show"
+msgid "None"
+msgstr "Nihil"
+
+#: app/gvcore.cpp:80
+#, kde-format
+msgid "Image quality:"
+msgstr "Kualitas citra:"
+
+#: app/gvcore.cpp:87
+#, kde-format
+msgctxt "Spinbox suffix; percentage 1 - 100"
+msgid "%"
+msgstr "%"
+
+#: app/gvcore.cpp:112
+#, kde-format
+msgctxt "@title:window"
+msgid "Save Image"
+msgstr "Simpan Citra"
+
+#: app/gvcore.cpp:410
+#, kde-format
+msgid "Save using another format"
+msgstr "Simpan menggunakan format lain"
+
+#: app/gvcore.cpp:412
+#, kde-format
+msgid "Gwenview cannot save images in '%1' format."
+msgstr "Gwenview tak bisa menyimpan citra dalam format '%1'."
+
+#: app/gvcore.cpp:440
+#, kde-format
+msgctxt "@info"
+msgid "Gwenview cannot save images as %1."
+msgstr "Gwenview tak bisa menyimpan citra sebagai %1."
+
+#: app/gvcore.cpp:458 app/gvcore.cpp:492
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"<emphasis strong='true'>Saving <filename>%1</filename> failed:</"
+"emphasis><nl />%2"
+msgstr ""
+"<emphasis strong='true'>Menyimpan <filename>%1</filename>, gagal:</"
+"emphasis><nl />%2"
+
+#: app/gvcore.cpp:508
+#, kde-format
+msgid "You are now viewing the new document."
+msgstr "Kamu sedang melihat dokumen baru."
+
+#: app/gvcore.cpp:510
+#, kde-format
+msgid "Go back to the original"
+msgstr "Kembali ke aslinya"
+
+#. i18n: ectx: Menu (rating)
+#: app/gwenviewui.rc:54
+#, kde-format
+msgid "&Rating"
+msgstr "&Peringkat"
+
+#. i18n: ectx: Menu (settings)
+#: app/gwenviewui.rc:84
+#, kde-format
+msgid "&Settings"
+msgstr "Peng&aturan"
+
+#. i18n: ectx: ToolBar (mainToolBar)
+#: app/gwenviewui.rc:100 part/gvpart.rc:16
+#, kde-format
+msgid "Main Toolbar"
+msgstr "Bilah Alat Utama"
+
+#: app/imagemetainfodialog.cpp:130
+#, kde-format
+msgctxt "@title:window"
+msgid "Image Information"
+msgstr "Informasi Citra"
+
+#: app/imageopscontextmanageritem.cpp:84
+#, kde-format
+msgctxt "@title actions category - means actions changing image"
+msgid "Edit"
+msgstr "Edit"
+
+#: app/imageopscontextmanageritem.cpp:87
+#, kde-format
+msgid "Rotate Left"
+msgstr "Rotasikan Ke Kiri"
+
+#: app/imageopscontextmanageritem.cpp:88
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Rotate image to the left"
+msgstr "Rotasikan citra ke kiri"
+
+#: app/imageopscontextmanageritem.cpp:93
+#, kde-format
+msgid "Rotate Right"
+msgstr "Rotasikan Ke Kanan"
+
+#: app/imageopscontextmanageritem.cpp:94
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Rotate image to the right"
+msgstr "Rotasikan citra ke kanan"
+
+#: app/imageopscontextmanageritem.cpp:99
+#, kde-format
+msgid "Mirror"
+msgstr "Cermin"
+
+#: app/imageopscontextmanageritem.cpp:103
+#, kde-format
+msgid "Flip"
+msgstr "Jungkir"
+
+#: app/imageopscontextmanageritem.cpp:107 lib/resize/resizeimagedialog.cpp:71
+#, kde-format
+msgid "Resize"
+msgstr "Ubah Ukuran"
+
+#: app/imageopscontextmanageritem.cpp:112 lib/crop/cropimageoperation.cpp:70
+#: lib/crop/cropwidget.cpp:263
+#, kde-format
+msgid "Crop"
+msgstr "Pangkas"
+
+#: app/imageopscontextmanageritem.cpp:117
+#: lib/redeyereduction/redeyereductionimageoperation.cpp:76
+#: lib/redeyereduction/redeyereductiontool.cpp:49
+#, kde-format
+msgid "Reduce Red Eye"
+msgstr "Reduksi Mata Merah"
+
+#: app/imageopscontextmanageritem.cpp:122 lib/annotate/annotateoperation.cpp:52
+#, kde-format
+msgctxt "@action:intoolbar"
+msgid "Annotate"
+msgstr ""
+
+#: app/imageopscontextmanageritem.cpp:130
+#, kde-format
+msgctxt "@title:window Annotate [filename]"
+msgid "Annotate %1"
+msgstr ""
+
+#: app/imageopscontextmanageritem.cpp:150 lib/document/documentjob.cpp:77
+#, kde-format
+msgctxt "@info"
+msgid "Gwenview cannot edit this kind of image."
+msgstr "Gwenview tidak dapat mengedit jenis citra ini."
+
+#: app/imageopscontextmanageritem.cpp:161
+#, kde-format
+msgid "Image Operations"
+msgstr "Operasi Citra"
+
+#. i18n: ectx: property (text), widget (QLabel, label_1)
+#: app/imageviewconfigpage.ui:17
+#, kde-format
+msgid "Show transparency with:"
+msgstr "Tampilkan transparansi dengan:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, surroundingRadioButton)
+#: app/imageviewconfigpage.ui:38
+#, kde-format
+msgid "Surrounding background"
+msgstr "Latarbelakang sekitarnya"
+
+#. i18n: ectx: property (text), widget (QRadioButton, checkBoardRadioButton)
+#: app/imageviewconfigpage.ui:71
+#, kde-format
+msgid "&Checkerboard background"
+msgstr "&Latarbelakang papancatur"
+
+#. i18n: ectx: property (text), widget (QRadioButton, solidColorRadioButton)
+#: app/imageviewconfigpage.ui:104
+#, kde-format
+msgid "&Solid color background:"
+msgstr "&Latarbelakang warna terpadu:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: app/imageviewconfigpage.ui:152
+#, kde-format
+msgid "Mouse wheel behavior:"
+msgstr "Perilaku roda mouse:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, mouseWheelScrollRadioButton)
+#: app/imageviewconfigpage.ui:167
+#, kde-format
+msgctxt "@option:radio action on mouse wheel"
+msgid "Scroll"
+msgstr "Gulung"
+
+#. i18n: ectx: property (text), widget (QRadioButton, mouseWheelBrowseRadioButton)
+#: app/imageviewconfigpage.ui:194
+#, kde-format
+msgctxt "@option:radio action on mouse wheel"
+msgid "Browse"
+msgstr "Telusur"
+
+#. i18n: ectx: property (text), widget (QRadioButton, mouseWheelZoomRadioButton)
+#: app/imageviewconfigpage.ui:218
+#, kde-format
+msgctxt "@option:radio action on mouse wheel"
+msgid "Zoom"
+msgstr "Zoom "
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: app/imageviewconfigpage.ui:256
+#, kde-format
+msgid "Zoom mode:"
+msgstr "Mode zoom:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, autofitZoomModeRadioButton)
+#: app/imageviewconfigpage.ui:271
+#, kde-format
+msgid "Autofit each image"
+msgstr "Paskan otomatis setiap citra"
+
+#. i18n: ectx: property (text), widget (QRadioButton, keepSameZoomModeRadioButton)
+#: app/imageviewconfigpage.ui:298
+#, kde-format
+msgid "Keep same zoom and position"
+msgstr "Jaga posisi dan zoom yang sama"
+
+#. i18n: ectx: property (text), widget (QRadioButton, individualZoomModeRadioButton)
+#: app/imageviewconfigpage.ui:322
+#, kde-format
+msgid "Per image zoom and position"
+msgstr "Posisi dan zoom tiap citra"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_EnlargeSmallerImages)
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_PrintEnlargeSmallerImages)
+#: app/imageviewconfigpage.ui:362 lib/print/printoptionspage.ui:98
+#, kde-format
+msgid "Enlarge smaller images"
+msgstr "Perbesar citra yang lebih kecil"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: app/imageviewconfigpage.ui:400
+#, kde-format
+msgid "Animations:"
+msgstr "Animasi:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, glAnimationRadioButton)
+#: app/imageviewconfigpage.ui:415
+#, kde-format
+msgid "OpenGL"
+msgstr "OpenGL"
+
+#. i18n: ectx: property (text), widget (QRadioButton, softwareAnimationRadioButton)
+#: app/imageviewconfigpage.ui:442
+#, kde-format
+msgid "Software"
+msgstr "Perangkat Lunak"
+
+#. i18n: ectx: property (text), widget (QRadioButton, noAnimationRadioButton)
+#: app/imageviewconfigpage.ui:466
+#, kde-format
+msgid "None"
+msgstr "Nihil"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: app/imageviewconfigpage.ui:504
+#, kde-format
+msgid "<b>Thumbnail Bar</b>"
+msgstr "<b>Bar Gambar-mini</b>"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: app/imageviewconfigpage.ui:527
+#, kde-format
+msgid "Orientation:"
+msgstr "Orientasi:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, horizontalRadioButton)
+#: app/imageviewconfigpage.ui:542
+#, kde-format
+msgid "Horizontal"
+msgstr "Mendatar"
+
+#. i18n: ectx: property (text), widget (QRadioButton, verticalRadioButton)
+#: app/imageviewconfigpage.ui:566
+#, kde-format
+msgid "Vertical"
+msgstr "Tegak"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: app/imageviewconfigpage.ui:588
+#, kde-format
+msgid "Row count:"
+msgstr "Jumlah baris:"
+
+#: app/infocontextmanageritem.cpp:151
+#, kde-format
+msgctxt ""
+"@item:intext %1 is a key, we append a colon to it. A value is displayed after"
+msgid "%1:"
+msgstr "%1:"
+
+#: app/infocontextmanageritem.cpp:228
+#, kde-format
+msgctxt "@action show more image meta info"
+msgid "Show more details..."
+msgstr "Tampilkan detail selebihnya..."
+
+#: app/infocontextmanageritem.cpp:242
+#, kde-format
+msgctxt "@title:group"
+msgid "Image Information"
+msgstr "Informasi Citra"
+
+#: app/infocontextmanageritem.cpp:331
+#, kde-format
+msgctxt "@label"
+msgid "%1 file selected"
+msgid_plural "%1 files selected"
+msgstr[0] "%1 file dipilih"
+msgstr[1] "%1 file dipilih"
+
+#: app/infocontextmanageritem.cpp:333
+#, kde-format
+msgctxt "@label"
+msgid "%1 folder selected"
+msgid_plural "%1 folders selected"
+msgstr[0] "%1 folder dipilih"
+msgstr[1] "%1 folder dipilih"
+
+#: app/infocontextmanageritem.cpp:336
+#, kde-format
+msgctxt "@label. The two parameters are strings like '2 folders' and '1 file'."
+msgid "%1 and %2 selected"
+msgstr "%1 dan %2 dipilih"
+
+#: app/infocontextmanageritem.cpp:337
+#, kde-format
+msgid "%1 folder"
+msgid_plural "%1 folders"
+msgstr[0] "%1 folder"
+msgstr[1] "%1 folder"
+
+#: app/infocontextmanageritem.cpp:338
+#, kde-format
+msgid "%1 file"
+msgid_plural "%1 files"
+msgstr[0] "%1 file"
+msgstr[1] "%1 file"
+
+#: app/main.cpp:178
+#, kde-format
+msgid "Gwenview"
+msgstr "Gwenview"
+
+#: app/main.cpp:180
+#, kde-format
+msgid "An Image Viewer"
+msgstr "Sebuah Penampil Citra"
+
+#: app/main.cpp:188
+#, kde-format
+msgid "Start in fullscreen mode"
+msgstr "Mulai dengan mode layar penuh"
+
+#: app/main.cpp:189
+#, kde-format
+msgid "Start in slideshow mode"
+msgstr "Mulai dalam mode tampilan slide"
+
+#: app/main.cpp:190
+#, kde-format
+msgid "A starting file or folders"
+msgstr "File atau folder pembuka"
+
+#: app/mainwindow.cpp:382
+#, kde-format
+msgctxt "@action Open Recent menu"
+msgid "Clear List"
+msgstr "Bersihkan Daftar"
+
+#: app/mainwindow.cpp:390
+#, kde-format
+msgctxt "@action reload the currently viewed image"
+msgid "Reload"
+msgstr "Muat-ulang"
+
+#: app/mainwindow.cpp:395
+#, kde-format
+msgctxt "@action:inmenu Navigation Bar"
+msgid "Replace Location"
+msgstr "Ganti Lokasi"
+
+#: app/mainwindow.cpp:400
+#, kde-format
+msgctxt "@action:intoolbar Switch to file list"
+msgid "Browse"
+msgstr "Telusur"
+
+#: app/mainwindow.cpp:401
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Browse folders for images"
+msgstr "Telusur folder citra"
+
+#: app/mainwindow.cpp:408
+#, kde-format
+msgctxt "@action:intoolbar Switch to image view"
+msgid "View"
+msgstr "Tampilan"
+
+#: app/mainwindow.cpp:409
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "View selected images"
+msgstr "Tampilkan citra yang dipilih"
+
+#: app/mainwindow.cpp:428
+#, kde-format
+msgctxt "@action"
+msgid "Exit Full Screen"
+msgstr "Keluarkan Layar Penuh"
+
+#: app/mainwindow.cpp:433
+#, kde-format
+msgctxt "@action Go to previous image"
+msgid "Previous"
+msgstr "Sebelumnya"
+
+#: app/mainwindow.cpp:434
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Go to previous image"
+msgstr "Menuju ke citra sebelumnya"
+
+#: app/mainwindow.cpp:440
+#, kde-format
+msgctxt "@action Go to next image"
+msgid "Next"
+msgstr "Selanjutnya"
+
+#: app/mainwindow.cpp:441
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Go to next image"
+msgstr "Menuju ke citra selanjutnya"
+
+#: app/mainwindow.cpp:447
+#, kde-format
+msgctxt "@action Go to first image"
+msgid "First"
+msgstr "Pertama"
+
+#: app/mainwindow.cpp:448
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Go to first image"
+msgstr "Menuju ke citra pertama"
+
+#: app/mainwindow.cpp:454
+#, kde-format
+msgctxt "@action Go to last image"
+msgid "Last"
+msgstr "Terakhir"
+
+#: app/mainwindow.cpp:455
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Go to last image"
+msgstr "Menuju ke citra terakhir"
+
+#: app/mainwindow.cpp:465
+#, kde-format
+msgctxt "@action"
+msgid "Start Page"
+msgstr "Halaman Awal"
+
+#: app/mainwindow.cpp:466
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Open the start page"
+msgstr "Buka halaman awal"
+
+#: app/mainwindow.cpp:473
+#, kde-format
+msgctxt "@action"
+msgid "Sidebar"
+msgstr "Bilah Sisi"
+
+#: app/mainwindow.cpp:478
+#, kde-format
+msgctxt "@action opens crop, rename, etc."
+msgid "Show Editing Tools"
+msgstr "Tampilkan Alat Pengeditan"
+
+#: app/mainwindow.cpp:508
+#, kde-format
+msgctxt "@action Share images"
+msgid "Share"
+msgstr "Bagikan"
+
+#: app/mainwindow.cpp:516
+#, kde-format
+msgid "Error while sharing: %1"
+msgstr "Galat ketika membagi: %1"
+
+#: app/mainwindow.cpp:523
+#, kde-format
+msgid ""
+"The shared image link (<a href=\"%1\">%1</a>) has been copied to the "
+"clipboard."
+msgstr ""
+"Tautan (<a href=\"%1\">%1</a>) citra yang dibagikan telah disalin ke "
+"clipboard."
+
+#: app/mainwindow.cpp:573
+#, kde-format
+msgctxt "@title:menu submenu for actions that open configuration dialogs"
+msgid "Configure"
+msgstr "Konfigurasi"
+
+#: app/mainwindow.cpp:588
+#, kde-format
+msgctxt "@title actions category - means actions changing smth in interface"
+msgid "Edit"
+msgstr "Edit"
+
+#: app/mainwindow.cpp:593
+#, kde-format
+msgid "Redo"
+msgstr "Ulang"
+
+#: app/mainwindow.cpp:601
+#, kde-format
+msgid "Undo"
+msgstr "Urung"
+
+#: app/mainwindow.cpp:628
+#, kde-format
+msgid "Folders"
+msgstr "Folder"
+
+#: app/mainwindow.cpp:634
+#, kde-format
+msgid "Information"
+msgstr "Informasi"
+
+#: app/mainwindow.cpp:648
+#, kde-format
+msgid "Operations"
+msgstr "Operasi"
+
+#: app/mainwindow.cpp:1322
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Hide sidebar"
+msgstr "Sembunyikan bilah sisi"
+
+#: app/mainwindow.cpp:1322
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Show sidebar"
+msgstr "Tampilkan bilah sisi"
+
+#: app/mainwindow.cpp:1629
+#, kde-format
+msgctxt "@title:window"
+msgid "Open Image"
+msgstr "Buka Citra"
+
+#: app/mainwindow.cpp:1689
+#, kde-format
+msgid "Pause Slideshow"
+msgstr "Jedakan Tampilan Slide"
+
+#: app/mainwindow.cpp:1692
+#, kde-format
+msgid "Resume Slideshow"
+msgstr "Lanjutkan Tampilan Slide"
+
+#: app/mainwindow.cpp:1692
+#, kde-format
+msgid "Start Slideshow"
+msgstr "Mulai Tampilan Slide"
+
+#: app/mainwindow.cpp:1705
+#, kde-format
+msgid "Save All Changes"
+msgstr "Simpan Semua Perubahan"
+
+#: app/mainwindow.cpp:1706
+#, kde-format
+msgid "Discard Changes"
+msgstr "Abaikan Perubahan"
+
+#: app/mainwindow.cpp:1708
+#, kde-format
+msgid "One image has been modified."
+msgid_plural "%1 images have been modified."
+msgstr[0] "Satu citra telah dimodifikasi."
+msgstr[1] "%1 citra telah dimodifikasi."
+
+#: app/mainwindow.cpp:1708
+#, kde-format
+msgid "If you quit now, your changes will be lost."
+msgstr "Jika anda berhenti sekarang, perubahan anda akan hilang."
+
+#: app/mainwindow.cpp:1751
+#, kde-format
+msgid ""
+"This will hide the menu bar completely. You can show it again by typing %1."
+msgstr ""
+"Ini akan menyembunyikan menubar secara keseluruhan. Kamu bisa menampilkannya "
+"lagi dengan mengetik %1."
+
+#: app/mainwindow.cpp:1754
+#, kde-format
+msgid "Hide menu bar"
+msgstr "Sembunyikan menubar"
+
+#: app/mainwindow.cpp:1972
+#, kde-format
+msgid "You reached the first document, what do you want to do?"
+msgstr "Kamu mencapai dokumen pertama, apa yang anda ingin lakukan?"
+
+#: app/mainwindow.cpp:1973 app/mainwindow.cpp:1987
+#, kde-format
+msgid "Stay There"
+msgstr "Tetap di Sana"
+
+#: app/mainwindow.cpp:1974
+#, kde-format
+msgid "Go to the Last Document"
+msgstr "Menuju ke Dokumen Terakhir"
+
+#: app/mainwindow.cpp:1975 app/mainwindow.cpp:1989
+#, kde-format
+msgid "Go Back to the Document List"
+msgstr "Kembali ke Daftar Dokumen"
+
+#: app/mainwindow.cpp:1986
+#, kde-format
+msgid "You reached the last document, what do you want to do?"
+msgstr "Kamu mencapai dokumen terakhir, apa yang anda ingin lakukan?"
+
+#: app/mainwindow.cpp:1988
+#, kde-format
+msgid "Go to the First Document"
+msgstr "Menuju ke Dokumen Pertama"
+
+#: app/renamedialog.cpp:48
+#, kde-format
+msgctxt "@action:button"
+msgid "Rename"
+msgstr "Ubah Nama"
+
+#: app/renamedialog.cpp:61
+#, kde-kuit-format
+msgid "Rename <filename>%1</filename> to:"
+msgstr "Ubah nama <filename>%1</filename> ke:"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, RenameDialog)
+#: app/renamedialog.ui:26
+#, kde-format
+msgctxt "@title:window"
+msgid "Rename"
+msgstr "Ubah Nama"
+
+#: app/saveallhelper.cpp:56
+#, kde-format
+msgctxt "@info:progress saving all image changes"
+msgid "Saving..."
+msgstr "Menyimpan..."
+
+#: app/saveallhelper.cpp:57
+#, kde-format
+msgid "&Stop"
+msgstr "&Hentikan"
+
+#: app/saveallhelper.cpp:82
+#, kde-format
+msgctxt "@info"
+msgid "One document could not be saved:"
+msgid_plural "%1 documents could not be saved:"
+msgstr[0] "Satu dokumen tidak dapat disimpan:"
+msgstr[1] "%1 dokumen tidak dapat disimpan:"
+
+#: app/saveallhelper.cpp:106
+#, kde-kuit-format
+msgctxt ""
+"@info %1 is the name of the document which failed to save, %2 is the reason "
+"for the failure"
+msgid "<filename>%1</filename>: %2"
+msgstr "<filename>%1</filename>: %2"
+
+#: app/savebar.cpp:82
+#, kde-format
+msgid ""
+"You have modified many images. To avoid memory problems, you should save "
+"your changes."
+msgstr ""
+"Kamu telah memodifikasi banyak citra. Untuk menghindari masalah memori, kamu "
+"sebaiknya menyimpan perubahanmu."
+
+#: app/savebar.cpp:160
+#, kde-format
+msgid "Current image modified"
+msgstr "Citra saat ini yang dimodifikasi"
+
+#: app/savebar.cpp:166
+#, kde-format
+msgid "Previous modified image"
+msgstr "Citra sebelumnya yang dimodifikasi"
+
+#: app/savebar.cpp:167
+#, kde-format
+msgid "Next modified image"
+msgstr "Citra selanjutnya yang dimodifikasi"
+
+#: app/savebar.cpp:183
+#, kde-format
+msgid "One image modified"
+msgid_plural "%1 images modified"
+msgstr[0] "Satu citra dimodifikasi"
+msgstr[1] "%1 citra dimodifikasi"
+
+#: app/savebar.cpp:185
+#, kde-format
+msgid "Go to first modified image"
+msgstr "Menuju ke citra yang dimodifikasi pertama"
+
+#: app/savebar.cpp:187
+#, kde-format
+msgid "Go to it"
+msgstr "Menuju ke sana"
+
+#: app/savebar.cpp:285 app/savebar.cpp:290
+#, kde-format
+msgid "Save All"
+msgstr "Simpan Semua"
+
+#: app/savebar.cpp:286
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Save all modified images"
+msgstr "Simpan semua citra yang dimodifikasi"
+
+#: app/semanticinfocontextmanageritem.cpp:186
+#, kde-format
+msgid "Edit"
+msgstr "Edit"
+
+#: app/semanticinfocontextmanageritem.cpp:206
+#, kde-format
+msgctxt "@action"
+msgid "Edit Tags"
+msgstr "Edit Tag"
+
+#: app/semanticinfocontextmanageritem.cpp:215
+#, kde-format
+msgctxt "@action Rating value of zero"
+msgid "Zero"
+msgstr "Nol"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, SemanticInfoDialog)
+#: app/semanticinfodialog.ui:13
+#, kde-format
+msgid "Tag Editor"
+msgstr "Pengedit Tag"
+
+#. i18n: ectx: property (text), widget (QPushButton, mPreviousButton)
+#: app/semanticinfodialog.ui:31
+#, kde-format
+msgid "Previous"
+msgstr "Sebelumnya"
+
+#. i18n: ectx: property (text), widget (QPushButton, mNextButton)
+#: app/semanticinfodialog.ui:38
+#, kde-format
+msgid "Next"
+msgstr "Selanjutnya"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: app/semanticinfosidebaritem.ui:22
+#, kde-format
+msgid "Rating:"
+msgstr "Peringkat:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: app/semanticinfosidebaritem.ui:45
+#, kde-format
+msgid "Tags:"
+msgstr "Tanda:"
+
+#. i18n: ectx: property (placeholderText), widget (QTextEdit, mDescriptionTextEdit)
+#: app/semanticinfosidebaritem.ui:73
+#, kde-format
+msgid "Description"
+msgstr "Deskripsi"
+
+#: app/slideshowfileitemaction.cpp:61
+#, kde-format
+msgctxt "@action:inmenu Start a slideshow Dolphin context menu"
+msgid "Start a Slideshow"
+msgstr "Mulai Tampilan Slide"
+
+#: app/slideshowfileitemaction.cpp:66
+#, kde-format
+msgctxt "@action:inmenu Start a slideshow Dolphin context menu"
+msgid "Start a Slideshow with selected images"
+msgstr "Mulai sebuah Tampilan Slide dengan citra yang terpilih"
+
+#: app/startmainpage.cpp:291
+#, kde-format
+msgctxt "@action Recent Folders view"
+msgid "Add Folder to Places"
+msgstr "Tambahkan Folder ke Tempat"
+
+#: app/startmainpage.cpp:292
+#, kde-format
+msgctxt "@action Recent Folders view"
+msgid "Forget This Folder"
+msgstr "Lupakan Folder Ini"
+
+#: app/startmainpage.cpp:293
+#, kde-format
+msgctxt "@action Recent Folders view"
+msgid "Forget All Folders"
+msgstr "Lupakan Semua Folder"
+
+#: app/startmainpage.cpp:295
+#, kde-format
+msgctxt "@action Recent Files view"
+msgid "Add Containing Folder to Places"
+msgstr "Tambahkan Folder Yang Mengandungnya ke Tempat"
+
+#: app/startmainpage.cpp:296
+#, kde-format
+msgctxt "@action Recent Files view"
+msgid "Forget This File"
+msgstr "Lupakan Folder Ini"
+
+#: app/startmainpage.cpp:297
+#, kde-format
+msgctxt "@action Recent Files view"
+msgid "Forget All Files"
+msgstr "Lupakan Semua File"
+
+#. i18n: ectx: property (text), widget (QLabel, mHistoryDisabledLabel)
+#: app/startmainpage.ui:34
+#, kde-format
+msgid "History has been disabled."
+msgstr "Histori telah dinonfungsikan."
+
+#. i18n: ectx: attribute (title), widget (QWidget, mRecentFoldersTab)
+#: app/startmainpage.ui:51
+#, kde-format
+msgid "Recent Folders"
+msgstr "Folder Baru-baru ini"
+
+#. i18n: ectx: attribute (title), widget (QWidget, mRecentFilesTab)
+#: app/startmainpage.ui:65
+#, kde-format
+msgid "Recent Files"
+msgstr "File Baru-baru ini"
+
+#. i18n: ectx: attribute (title), widget (QWidget, placesTab)
+#: app/startmainpage.ui:97
+#, kde-format
+msgid "Places"
+msgstr "Tempat"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tagsTab)
+#: app/startmainpage.ui:120
+#, kde-format
+msgid "Tags"
+msgstr "Tanda"
+
+#. i18n: ectx: property (text), widget (QLabel, mTagLabel)
+#: app/startmainpage.ui:126
+#, kde-format
+msgid ""
+"Browsing by tags is not available. Make sure Nepomuk is properly installed "
+"on your computer."
+msgstr ""
+"Penelusuran berdasarkan tanda tidak tersedia. Pastikan Nepomuk terinstal "
+"dengan benar di komputermu."
+
+#: app/viewmainpage.cpp:153 app/viewmainpage.cpp:448
+#, kde-format
+msgid "Synchronize"
+msgstr "Sinkronisasi"
+
+#: app/viewmainpage.cpp:428
+#, kde-format
+msgid "Show Thumbnails"
+msgstr "Tampilkan Thumbnail"
+
+#. i18n: For languages that are read right to left, "right side" refers to the left side in this context.
+#: app/viewmainpage.cpp:432
+#, kde-kuit-format
+msgctxt "@info:whatsthis"
+msgid ""
+"<para>This toggles a small bar showing all the other images in the current "
+"folder. Selecting one of them changes the currently viewed image.</"
+"para><para>Select multiple images at the same time to see them side by side."
+"</para><para>The bar can optionally be moved to the right side of the screen "
+"and contain multiple rows of images; <link url='%1'>configure these options "
+"in the settings</link>.</para>"
+msgstr ""
+"<para>Ini menjungkit sebuah bilah kecil yang menampilkan semua citra lain di "
+"folder saat ini. Memilih salah satunya akan mengubah citra yang sedang "
+"dilihat.</para><para>Pilih beberapa citra sekaligus untuk melihatnya "
+"berdampingan. </para><para>Bilah bisa secara opsional dipindahkan ke sisi "
+"kanan layar dan berisi beberapa baris citra; <link url='%1'>konfigurasi opsi "
+"ini di pengaturan</link>.</para >\""
+
+#: app/viewmainpage.cpp:576
+#, kde-format
+msgctxt "@item:inmenu"
+msgid "Background Color Mode"
+msgstr "Mode Warna Latar Belakang"
+
+#: app/viewmainpage.cpp:768
+#, kde-format
+msgctxt "@action:button"
+msgid "Discard Changes and Reload"
+msgstr "Abaikan Perubahan dan Muat Ulang"
+
+#: app/viewmainpage.cpp:770
+#, kde-format
+msgctxt "@info"
+msgid ""
+"This image has been modified. Reloading it will discard all your changes."
+msgstr ""
+"Citra ini telah dimodifikasi. Memuat ulangnya akan mengabaikan semua "
+"perubahanmu."
+
+#: importer/dialogpage.cpp:53
+#, kde-format
+msgid "Show failed files..."
+msgstr "Tampilkan file yang gagal..."
+
+#: importer/dialogpage.cpp:58
+#, kde-format
+msgid "Show failed subfolders..."
+msgstr "Tampilkan subfolder yang gagal..."
+
+#: importer/dialogpage.cpp:72
+#, kde-format
+msgid "Failed to import %1 document."
+msgid_plural "Failed to import %1 documents."
+msgstr[0] "Gagal mengimpor %1 dokumen."
+msgstr[1] "Gagal mengimpor %1 dokumen."
+
+#: importer/dialogpage.cpp:79
+#, kde-format
+msgid "Failed to create %1 destination subfolder."
+msgid_plural "Failed to create %1 destination subfolders."
+msgstr[0] "Tidak dapat menciptakan %1 folder tujuan."
+msgstr[1] "Tidak dapat menciptakan %1 folder tujuan."
+
+#: importer/dialogpage.cpp:90
+#, kde-format
+msgid "Failed to import documents:"
+msgstr "Gagal mengimpor dokumen:"
+
+#: importer/dialogpage.cpp:96
+#, kde-format
+msgid "Failed to create subfolders:"
+msgstr "Gagal membuat subfolder:"
+
+#: importer/filenameformater.cpp:102
+#, kde-format
+msgid "Shooting date"
+msgstr "Tanggal potret"
+
+#: importer/filenameformater.cpp:103
+#, kde-format
+msgid "Shooting time"
+msgstr "Waktu potret"
+
+#: importer/filenameformater.cpp:104
+#, kde-format
+msgid "Original extension"
+msgstr "Ekstensi asli"
+
+#: importer/filenameformater.cpp:105
+#, kde-format
+msgid "Original extension, in lower case"
+msgstr "Ekstensi asli, dalam huruf kecil"
+
+#: importer/filenameformater.cpp:106
+#, kde-format
+msgid "Original filename"
+msgstr "Nama file asli"
+
+#: importer/filenameformater.cpp:107
+#, kde-format
+msgid "Original filename, in lower case"
+msgstr "Nama file asli, dalam huruf kecil"
+
+#: importer/importdialog.cpp:92
+#, kde-format
+msgid "One document has been imported."
+msgid_plural "%1 documents have been imported."
+msgstr[0] "Satu dokumen telah diimpor."
+msgstr[1] "%1 dokumen telah diimpor."
+
+#: importer/importdialog.cpp:94
+#, kde-format
+msgid "One document has been skipped because it had already been imported."
+msgid_plural ""
+"%1 documents have been skipped because they had already been imported."
+msgstr[0] "Satu dokumen telah dilewati karena ia sudah diimpor."
+msgstr[1] "%1 dokumen telah dilewati karena mereka sudah diimpor."
+
+#: importer/importdialog.cpp:102
+#, kde-format
+msgid ""
+"One of them has been renamed because another document with the same name had "
+"already been imported."
+msgid_plural ""
+"%1 of them have been renamed because other documents with the same name had "
+"already been imported."
+msgstr[0] ""
+"Salah satu dari mereka telah diubah namanya karena dokumen lain dengan nama "
+"yang sama sudah diimpor."
+msgstr[1] ""
+"%1 dari mereka telah diubah namanya karena dokumen lain dengan nama yang "
+"sama sudah diimpor."
+
+#: importer/importdialog.cpp:110
+#, kde-format
+msgid "Delete the imported document from the device?"
+msgid_plural "Delete the %1 imported documents from the device?"
+msgstr[0] "Hapus dokumen yang diimpor, dari peranti?"
+msgstr[1] "Hapus %1 dokumen yang diimpor, dari peranti?"
+
+#: importer/importdialog.cpp:112
+#, kde-format
+msgid "Delete the skipped document from the device?"
+msgid_plural "Delete the %1 skipped documents from the device?"
+msgstr[0] "Hapus dokumen yang dilewati, dari peranti?"
+msgstr[1] "Hapus %1 dokumen yang dilewati, dari peranti?"
+
+#: importer/importdialog.cpp:115
+#, kde-format
+msgctxt "Singular sentence is actually never used."
+msgid "Delete the imported or skipped document from the device?"
+msgid_plural "Delete the %1 imported and skipped documents from the device?"
+msgstr[0] "Hapus dokumen yang diimpor atau yang dilewati, dari peranti?"
+msgstr[1] "Hapus %1 dokumen yang diimpor dan yang dilewati, dari peranti?"
+
+#: importer/importdialog.cpp:122
+#, kde-format
+msgctxt "@title:window"
+msgid "Import Finished"
+msgstr "Impor Selesai"
+
+#: importer/importdialog.cpp:123
+#, kde-format
+msgid "Keep"
+msgstr "Simpan"
+
+#: importer/importdialog.cpp:137
+#, kde-format
+msgid ""
+"Failed to delete the document:\n"
+"%2"
+msgid_plural ""
+"Failed to delete documents:\n"
+"%2"
+msgstr[0] ""
+"Gagal menghapus dokumen:\n"
+"%2"
+msgstr[1] ""
+"Gagal menghapus dokumen:\n"
+"%2"
+
+#: importer/importdialog.cpp:139
+#, kde-format
+msgid "Retry"
+msgstr "Coba Lagi"
+
+#: importer/importdialog.cpp:140
+#, kde-format
+msgid "Ignore"
+msgstr "Abaikan"
+
+#: importer/importdialog.cpp:164
+#, kde-format
+msgid "What do you want to do now?"
+msgstr "Apa yang anda ingin lakukan sekarang?"
+
+#: importer/importdialog.cpp:166
+#, kde-format
+msgid "View Imported Documents with Gwenview"
+msgstr "Tampilkan Dokumen Terimpor dengan Gwenview"
+
+#: importer/importdialog.cpp:167
+#, kde-format
+msgid "Import more Documents"
+msgstr "Impor Dokumen lebih"
+
+#: importer/importdialog.cpp:168
+#, kde-format
+msgid "Quit"
+msgstr "Berhenti"
+
+#: importer/importer.cpp:80
+#, kde-format
+msgid "Could not create destination folder."
+msgstr "Tidak dapat menciptakan folder tujuan."
+
+#: importer/importer.cpp:95 importer/importer.cpp:101
+#, kde-format
+msgid "Could not create temporary upload folder."
+msgstr "Tidak dapat menciptakan folder unggahan sementara."
+
+#: importer/importerconfigdialog.cpp:53
+#, kde-format
+msgctxt "%1 is the importer keyword, %2 is keyword explanation"
+msgid "%1: %2"
+msgstr "%1: %2"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_AutoRename)
+#: importer/importerconfigdialog.ui:17
+#, kde-format
+msgid "Rename documents automatically"
+msgstr "Ubah nama dokumen otomatis"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: importer/importerconfigdialog.ui:39
+#, kde-format
+msgid "Rename Format:"
+msgstr "Ubah Nama Format:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: importer/importerconfigdialog.ui:59
+#, kde-format
+msgid "Preview:"
+msgstr "Pratinjau:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: importer/importerconfigdialog.ui:83
+#, kde-format
+msgid "<i>Type text or click the items below to customize the format</i>"
+msgstr "<i>Ketik teks atau klik butir di bawah untuk menyesuaikan format</i>"
+
+#: importer/main.cpp:45
+#, kde-format
+msgid "Gwenview Importer"
+msgstr "Pengimpor Gwenview"
+
+#: importer/main.cpp:47
+#, kde-format
+msgid "Photo Importer"
+msgstr "Pengimpor Foto"
+
+#: importer/main.cpp:54
+#, kde-format
+msgid ""
+"The device UDI, used to retrieve information about the device (name, icon...)"
+msgstr ""
+"Perangkat UDI, digunakan untuk menerima informasi tentang (nama, ikon...) "
+"peranti"
+
+#: importer/main.cpp:54
+#, kde-format
+msgid "Device UDI"
+msgstr "UDI Peranti"
+
+#: importer/main.cpp:55
+#, kde-format
+msgid "Source folder"
+msgstr "Folder sumber"
+
+#: importer/main.cpp:60
+#, kde-format
+msgid "Missing required source folder argument."
+msgstr "Argumen folder sumber yang diperlukan hilang."
+
+#: importer/main.cpp:64
+#, kde-format
+msgid "Too many arguments."
+msgstr "Terlalu banyak argumen."
+
+#: importer/main.cpp:70
+#, kde-format
+msgid "Invalid source folder."
+msgstr "Folder sumber tidak absah."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: importer/progresspage.ui:30
+#, kde-format
+msgid "Importing documents..."
+msgstr "Mengimpor dokumen..."
+
+#: importer/thumbnailpage.cpp:235
+#, kde-format
+msgctxt "@info above install button when Kamera is not installed"
+msgid "Support for your camera is not installed."
+msgstr "Dukungan kameramu belum terinstal."
+
+#: importer/thumbnailpage.cpp:237
+#, kde-format
+msgctxt "@info above install button, %1 protocol name"
+msgid "The protocol support library for \"%1\" is not installed."
+msgstr "Pustaka lib dukungan protokol untuk \"%1\" tidak diinstal."
+
+#: importer/thumbnailpage.cpp:249
+#, kde-format
+msgctxt "@info:usagetip above install button"
+msgid ""
+"After finishing the installation process, restart this Importer to continue."
+msgstr ""
+"Sesudah proses pemasangan, mulailah ulang pengimpor ini untuk melanjutkan."
+
+#: importer/thumbnailpage.cpp:256
+#, kde-format
+msgctxt "@info:tooltip for a button, %1 protocol name"
+msgid "Launch Discover to install the protocol support library for \"%1\""
+msgstr "Luncurkan Discover untuk memasang lib dukungan protokol untuk \"%1\""
+
+#: importer/thumbnailpage.cpp:258
+#, kde-format
+msgctxt "@action:button"
+msgid "Install Support for this Camera…"
+msgstr "Pasang Dukungan untuk Kamera ini..."
+
+#: importer/thumbnailpage.cpp:259
+#, kde-format
+msgctxt "@info:whatsthis for a button when Kamera is not installed"
+msgid ""
+"You need Kamera installed on your system to read from the camera. Click here "
+"to launch Discover to install Kamera to enable protocol support for "
+"\"camera:/\" on your system."
+msgstr ""
+"Kamu harus menginstal Kamera di sistem untuk membaca dari kamera. Klik di "
+"sini untuk meluncurkan Discover untuk menginstal Kamera untuk memfungsikan "
+"dukungan protokol \"kamera:/\" di sistem kamu."
+
+#: importer/thumbnailpage.cpp:262
+#, kde-format
+msgctxt "@action:button %1 protocol name"
+msgid "Install Protocol Support for \"%1\"…"
+msgstr "Pasang Dukungan Protokol untuk \"%1\"..."
+
+#: importer/thumbnailpage.cpp:263
+#, kde-format
+msgctxt "@info:whatsthis for a button, %1 protocol name"
+msgid ""
+"Click here to launch Discover to install the missing protocol support "
+"library to enable the protocol support for \"%1:/\" on your system."
+msgstr ""
+"Klik di sini untuk meluncurkan Discover untuk menginstal dukungan protokol "
+"yang hilang library untuk memfungsikan dukungan protokol untuk \"%1:/\" di "
+"sistem kamu."
+
+#: importer/thumbnailpage.cpp:267
+#, kde-format
+msgctxt "@action:button %1 protocol name"
+msgid "Search the Web for How to Install Protocol Support for \"%1\"…"
+msgstr "Cari Web untuk Bagaimana cara Menginstal Dukungan Protokol \"%1\"…"
+
+#: importer/thumbnailpage.cpp:283
+#, kde-format
+msgctxt ""
+"@info this text will be used as a search term in an online search engine, %1 "
+"protocol name"
+msgid "How to install protocol support for \"%1\" on Linux"
+msgstr "Bagaimana cara menginstal dukungan protokol \"%1\" di Linux"
+
+#: importer/thumbnailpage.cpp:284
+#, kde-format
+msgctxt ""
+"search engine URL, %1 search keyword, and translators can replace duckduckgo "
+"with other search engines"
+msgid "https://duckduckgo.com/?q=%1"
+msgstr "https://duckduckgo.com/?q=%1"
+
+#: importer/thumbnailpage.cpp:325
+#, kde-format
+msgid "Import Selected"
+msgstr "Impor Terpilih"
+
+#: importer/thumbnailpage.cpp:328
+#, kde-format
+msgid "Import All"
+msgstr "Impor Semua"
+
+#: importer/thumbnailpage.cpp:490
+#, kde-kuit-format
+msgctxt "@info when failing to open the appstream URL"
+msgid ""
+"Opening Discover failed.<nl/>Please check if Discover is installed on your "
+"system, or use your system's package manager to install \"Kamera\" package."
+msgstr ""
+"Gagal membuka Discover.<nl/>Harap periksa apakah Discover diinstal di "
+"sistem, atau gunakan manajer paket sistem kamu untuk menginstal paket "
+"\"Kamera\"."
+
+#: importer/thumbnailpage.cpp:494
+#, kde-kuit-format
+msgctxt "@info when failing to launch plasma-discover, %1 protocol name"
+msgid ""
+"Opening Discover failed.<nl/>Please check if Discover is installed on your "
+"system, or use your system's package manager to install the protocol support "
+"library for \"%1\"."
+msgstr ""
+"Gagal membuka Discover.<nl/>Harap periksa apakah Discover diinstal di "
+"sistem, atau gunakan manajer paket sistem kamu untuk menginstal library "
+"dukungan protokol untuk \"%1\"."
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: importer/thumbnailpage.ui:173
+#, kde-format
+msgid "Select the documents to import"
+msgstr "PIlih dokumen untuk diimpor"
+
+#. i18n: ectx: property (text), widget (QPushButton, mConfigureButton)
+#: importer/thumbnailpage.ui:185
+#, kde-format
+msgid "Settings..."
+msgstr "Pengaturan..."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: importer/thumbnailpage.ui:201
+#, kde-format
+msgid "Enter the import destination"
+msgstr "Masukkan tujuan impor"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: importer/thumbnailpage.ui:220
+#, kde-format
+msgid "Listing content of:"
+msgstr "Mendaftar konten dari:"
+
+#: lib/about.cpp:38
+#, kde-format
+msgid "Copyright 2000-2022 Gwenview authors"
+msgstr "Hakcipta 2000-2022 para penulis Gwenview"
+
+#: lib/about.cpp:40
+#, kde-format
+msgid "Current Maintainer"
+msgstr "Pemelihara Saat Ini"
+
+#: lib/about.cpp:41 lib/about.cpp:42
+#, kde-format
+msgid "Developer"
+msgstr "Pengembang"
+
+#: lib/crop/cropwidget.cpp:192
+#, kde-format
+msgid "Current Image"
+msgstr "Citra Saat Ini"
+
+#: lib/crop/cropwidget.cpp:195
+#, kde-format
+msgid "Square"
+msgstr "Persegi"
+
+#: lib/crop/cropwidget.cpp:198
+#, kde-format
+msgid "This Screen"
+msgstr "Layar Ini"
+
+#: lib/crop/cropwidget.cpp:200
+#, kde-format
+msgid "Landscape"
+msgstr "Lanskap"
+
+#: lib/crop/cropwidget.cpp:205 lib/crop/cropwidget.cpp:212
+#, kde-format
+msgid "ISO (A4, A3...)"
+msgstr "ISO (A4, A3...)"
+
+#: lib/crop/cropwidget.cpp:206 lib/crop/cropwidget.cpp:213
+#, kde-format
+msgid "US Letter"
+msgstr "US Letter"
+
+#: lib/crop/cropwidget.cpp:207
+#, kde-format
+msgid "Portrait"
+msgstr "Potret"
+
+#. i18n("%1:%2") because ':' should not be translated, it is
+#. used to parse the ratio string.
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: lib/crop/cropwidget.cpp:222 lib/resize/resizeimagewidget.ui:30
+#, kde-format
+msgid "Width"
+msgstr "Lebar"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: lib/crop/cropwidget.cpp:222 lib/resize/resizeimagewidget.ui:40
+#, kde-format
+msgid "Height"
+msgstr "Tinggi"
+
+#: lib/crop/cropwidget.cpp:291
+#, kde-format
+msgctxt "@option:check"
+msgid "Advanced settings"
+msgstr "Pengaturan tingkat-lanjut"
+
+#: lib/crop/cropwidget.cpp:300
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Aspect ratio:"
+msgstr "Rasio aspek:"
+
+#: lib/crop/cropwidget.cpp:313
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Size:"
+msgstr "Ukuran:"
+
+#: lib/crop/cropwidget.cpp:335
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Position:"
+msgstr "Posisi:"
+
+#: lib/crop/cropwidget.cpp:356
+#, kde-format
+msgctxt "@option:check"
+msgid "Preserve aspect ratio"
+msgstr "Pertahankan aspek rasio"
+
+#: lib/document/document.cpp:299
+#, kde-format
+msgctxt "@info"
+msgid "Gwenview cannot save this kind of documents."
+msgstr "Gwenview tidak dapat menyimpan dokumen jenis ini."
+
+#: lib/document/loadingdocumentimpl.cpp:139
+#, kde-format
+msgctxt "@info"
+msgid "Gwenview cannot display documents of type %1."
+msgstr "Gwenview tidak dapat menampilkan dokumen jenis %1."
+
+#: lib/document/loadingdocumentimpl.cpp:399
+#, kde-format
+msgctxt "@info"
+msgid "Could not open file %1"
+msgstr "Tidak dapat membuka file %1"
+
+#: lib/document/loadingdocumentimpl.cpp:490
+#, kde-format
+msgctxt "@info"
+msgid "Loading meta information failed."
+msgstr "Pemuatan informasi meta gagal."
+
+#: lib/document/loadingdocumentimpl.cpp:516
+#, kde-format
+msgctxt "@info"
+msgid "Loading image failed."
+msgstr "Pemuatan citra gagal."
+
+#: lib/document/loadingjob.cpp:56
+#, kde-format
+msgid "Could not load document %1"
+msgstr "Tidak dapat memuat dokumen %1"
+
+#: lib/document/savejob.cpp:106
+#, kde-format
+msgctxt "@info"
+msgid ""
+"Could not open file for writing, check that you have the necessary rights in "
+"<filename>%1</filename>."
+msgstr ""
+"Tidak dapat membuka file untuk menulis, periksa bahwa anda memiliki hak yang "
+"diperlukan dalam <filename>%1</filename>."
+
+#: lib/document/savejob.cpp:137
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"Could not overwrite file, check that you have the necessary rights to write "
+"in <filename>%1</filename>."
+msgstr ""
+"Tidak dapat menimpa file, periksa bahwa anda memiliki hak yang diperlukan "
+"dalam <filename>%1</filename>."
+
+#: lib/documentview/documentview.cpp:195
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Trash"
+msgstr "Tong Sampah"
+
+#: lib/documentview/documentview.cpp:196
+#, kde-format
+msgctxt "@action:button"
+msgid "Deselect"
+msgstr "Batalkan pilihan"
+
+#: lib/documentview/documentview.cpp:507
+#, kde-format
+msgid "Gwenview does not know how to display this kind of document"
+msgstr "Gwenview tidak tahu bagaimana menampilkan dokumen jenis ini"
+
+#: lib/documentview/documentview.cpp:613
+#, kde-kuit-format
+msgid "Loading <filename>%1</filename> failed"
+msgstr "Pemuatan <filename>%1</filename> gagal"
+
+#: lib/documentview/documentviewcontroller.cpp:63
+#, kde-format
+msgid "Zoom to Fit"
+msgstr "Pebesar ke Pas"
+
+#: lib/documentview/documentviewcontroller.cpp:65
+#, kde-format
+msgctxt "@action:button Zoom to fit, shown in status bar, keep it short please"
+msgid "Fit"
+msgstr "Pas"
+
+#: lib/documentview/documentviewcontroller.cpp:66
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Fit image into the viewing area"
+msgstr "Paskan citra ke area penampilan"
+
+#. i18n: "a previous zoom value" is worded in such an unclear way because it can either be the zoom value for the image viewed previously or the
+#. zoom value that was used the last time this same image was viewed. Being more clear about this isn't really necessary here so I kept it short
+#. but a more elaborate translation would also be fine.
+#. The text "in the settings" is supposed to sound like clicking it opens the settings.
+#: lib/documentview/documentviewcontroller.cpp:72
+#, kde-kuit-format
+msgctxt "@info:whatsthis, %1 the action's text"
+msgid ""
+"<para>This fits the image into the available viewing area:<list><item>Images "
+"that are bigger than the viewing area are displayed at a smaller size so "
+"they fit.</item><item>Images that are smaller than the viewing area are "
+"displayed at their normal size. If smaller images should instead use all of "
+"the available viewing area, turn on <emphasis>Enlarge smaller images</"
+"emphasis> <link url='%2'>in the settings</link>.</item></list></"
+"para><para>If \"%1\" is already enabled, pressing it again will switch it "
+"off and the image will be displayed at its normal size instead.</para><para>"
+"\"%1\" is the default zoom mode for images. This can be changed so images "
+"are displayed at a previous zoom value instead <link url='%2'>in the "
+"settings</link>.</para>"
+msgstr ""
+"<para>Ini menyesuaikan citra dengan area tampilan yang tersedia:"
+"<list><item>Citra yang lebih besar dari area tampilan ditampilkan dalam "
+"ukuran yang lebih kecil sehingga pas.</item><item>Citra yang lebih kecil "
+"dari area tampilan ditampilkan dalam ukuran normal. Jika citra yang lebih "
+"kecil seharusnya menggunakan semua area tampilan yang tersedia, aktifkan "
+"<emphasis>Perbesar citra yang lebih kecil</emphasis> <link url='%2'>di "
+"pengaturan</link >.</item></list></para><para>Jika \"%1\" sudah diaktifkan, "
+"menekannya lagi akan menonaktifkannya dan gambar akan ditampilkan dalam "
+"ukuran normal.</para ><para>\"%1\" adalah mode zoom default untuk citra. Ini "
+"dapat diubah sehingga citra ditampilkan pada nilai zoom sebelumnya <link "
+"url='%2'>di pengaturan</link>.</para>"
+
+#: lib/documentview/documentviewcontroller.cpp:85
+#, kde-format
+msgid "Zoom to fill window by fitting to width or height"
+msgstr "Zoom ke isi jendela dengan mengepaskan lebar atau tinggi"
+
+#: lib/documentview/documentviewcontroller.cpp:87
+#, kde-format
+msgctxt ""
+"@action:button Zoom to fill (fit width or height), shown in status bar, keep "
+"it short please"
+msgid "Fill"
+msgstr "Isikan"
+
+#: lib/documentview/documentviewcontroller.cpp:100
+#, kde-format
+msgid "Show Bird's Eye View When Zoomed In"
+msgstr "Tampilkan Tampilan Bird's Eye Ketika Dizoom Perbesar"
+
+#: lib/documentview/documentviewcontroller.cpp:107
+#, kde-format
+msgctxt "@action"
+msgid "Follow color scheme"
+msgstr "Ikuti skema warna"
+
+#: lib/documentview/documentviewcontroller.cpp:113
+#, kde-format
+msgctxt "@action"
+msgid "Light Mode"
+msgstr "Mode Terang"
+
+#: lib/documentview/documentviewcontroller.cpp:119
+#, kde-format
+msgctxt "@action"
+msgid "Neutral Mode"
+msgstr "Mode Netral"
+
+#: lib/documentview/documentviewcontroller.cpp:125
+#, kde-format
+msgctxt "@action"
+msgid "Dark Mode"
+msgstr "Mode Gelap"
+
+#: lib/documentview/messageviewadapter.cpp:50
+#, kde-format
+msgid "No document selected"
+msgstr "Tidak ada dokumen terpilih"
+
+#: lib/fullscreenbar.cpp:269 lib/statusbartoolbutton.cpp:144
+#, kde-format
+msgctxt "@info:tooltip of custom toolbar button"
+msgid "%1"
+msgstr "%1"
+
+#. i18n: ectx: whatsthis, entry (PercentageOfMemoryUsageWarning), group (General)
+#: lib/gwenviewconfig.kcfg:57
+#, kde-format
+msgid ""
+"The percentage of memory used by Gwenview before it\n"
+"            warns the user and suggest saving changes."
+msgstr ""
+"Persentase memori yang digunakan Gwenview sebelumnya\n"
+"ingatkan pemakai dan sarankan menyimpan perubahan."
+
+#. i18n: ectx: whatsthis, entry (BlackListedExtensions), group (General)
+#: lib/gwenviewconfig.kcfg:64
+#, kde-format
+msgid ""
+"A list of filename extensions Gwenview should not try to\n"
+"            load. We exclude *.new as well because this is the extension\n"
+"            used for temporary files by KSaveFile."
+msgstr ""
+"Sebuah daftar ekstensi nama file yang seharusnya Gwenview tidak coba untuk\n"
+"            memuatnya. Kami mengecualikan *.new juga karena merupakan "
+"ekstensi\n"
+"            yang pernah digunakan untuk file temporer oleh KSaveFile."
+
+#. i18n: ectx: whatsthis, entry (ZoomMode), group (ImageView)
+#: lib/gwenviewconfig.kcfg:205
+#, kde-format
+msgid ""
+"Defines what happens when going to image B after\n"
+"            having zoomed in on an area of image A.  If set to Autofit,\n"
+"            image B is zoomed out to fit the screen.  If set to KeepSame,\n"
+"            all images share the same zoom and position: image B is set\n"
+"            to the same zoom parameters as image A (and if these are\n"
+"            changed, image A will then be displayed with the updated zoom\n"
+"            and position).  If set to Individual, all images remember\n"
+"            their own zoom and position: image B is initially set to the\n"
+"            same zoom parameters as image A, but will then remember its\n"
+"            own zoom and position (if these are changed, image A will NOT\n"
+"            be displayed with the updated zoom and position)."
+msgstr ""
+"Menentukan apa yang terjadi ketika menuju ke citra B setelah\n"
+"            dizoom perbesar pada sebuah area citra A. Jika diset ke "
+"autofit,\n"
+"            citra B diperkecil untuk mengepaskan layar. Jika diset ke "
+"KeepSame,\n"
+"            semua citra berbagi zoom dan posisi yang sama: citra B diset ke\n"
+"            parameter zoom yang sama sebagai citra A (dan jika mereka\n"
+"            diubah, citra A kemudian akan ditampilkan dengan zoom\n"
+"            dan posisi yang baru). Jika diset ke Individual, semua citra "
+"mengingat\n"
+"            zoom dan posisi mereka: citra B telah secara inisial diset ke\n"
+"            paramater zoom dan posisi yang sama sebagai citra A, namun\n"
+"            kemudian akan mengingat zoom dan posisinya (jika tidak diubah, "
+"citra A\n"
+"            TIDAK akan ditampilkan dengan zoom dan posisi baru)."
+
+#. i18n: ectx: whatsthis, entry (RenderingIntent), group (ImageView)
+#: lib/gwenviewconfig.kcfg:219
+#, kde-format
+msgid ""
+"Defines how colors are rendered when your display\n"
+"            uses an ICC color profile and an image has colors that do not\n"
+"            fit within the profile's color gamut. \"Perceptual\" will scale\n"
+"            the colors of the entire image so that they all fit within the\n"
+"            display's capabilities. \"Relative\" will squash only the "
+"colors\n"
+"            that cannot be displayed, and leave the other colors alone."
+msgstr ""
+"Menentukan bagaimana warna dirender ketika tampilanmu\n"
+"            menggunakan sebuah profil warna ICC dan citra memiliki warna "
+"yang tidak\n"
+"            pas dengan gamut warna profil. \"Persepsi\" akan menskala\n"
+"       warna seluruh citra sehingga semuanya pas dengan kemampuan\n"
+"      tayang. \"Relatif\" hanya akan menipiskan warna yang tidak dapat "
+"ditampilkan,\n"
+"            dan meninggalkan warna lain sendirian."
+
+#. i18n: ectx: label, entry (random), group (slide show)
+#: lib/gwenviewconfig.kcfg:322
+#, kde-format
+msgid "Display slide show images in random order"
+msgstr "Tampilkan tampilan slide citra dalam urutan acak"
+
+#. i18n: ectx: label, entry (fullscreen), group (slide show)
+#: lib/gwenviewconfig.kcfg:326
+#, kde-format
+msgid "Show slideshow in fullscreen mode"
+msgstr "Tampilkan tampilan slide dalam layar penuh"
+
+#. i18n: ectx: label, entry (loop), group (slide show)
+#: lib/gwenviewconfig.kcfg:330
+#, kde-format
+msgid "Loop on images"
+msgstr "Putaran pada gambar"
+
+#. i18n: ectx: label, entry (stopAtEnd), group (slide show)
+#: lib/gwenviewconfig.kcfg:334
+#, kde-format
+msgid "Stop at last image of folder"
+msgstr "Hentikan di citra terakhirnya folder"
+
+#. i18n: ectx: label, entry (interval), group (slide show)
+#: lib/gwenviewconfig.kcfg:338
+#, kde-format
+msgid "Interval between images (in seconds)"
+msgstr "Interval antar citra (dalam detik)"
+
+#. i18n: ectx: label, entry (CropPreserveAspectRatio), group (Crop)
+#: lib/gwenviewconfig.kcfg:354
+#, kde-format
+msgid "Restrict crop to image ratio when Advanced Settings disabled"
+msgstr ""
+"Batasi pemangkasan untuk rasio citra ketika Pengaturan Tingkat-lanjut "
+"dinonfungsikan"
+
+#. i18n: ectx: label, entry (CropRatioIndex), group (Crop)
+#: lib/gwenviewconfig.kcfg:358
+#, kde-format
+msgid "Index representing selected ratio in the Advanced settings combobox"
+msgstr ""
+"Rasio yang dipilih mewakili indeks dalam kotak kombo pengaturan Tingkat-"
+"lanjut"
+
+#. i18n: ectx: label, entry (CropRatioWidth), group (Crop)
+#: lib/gwenviewconfig.kcfg:362
+#, kde-format
+msgid "Last used crop ratio width when Advanced Settings enabled"
+msgstr ""
+"Lebar rasio pangkas yang digunakan terakhir ketika Pengaturan Tingkat-lanjut "
+"difungsikan"
+
+#. i18n: ectx: label, entry (CropRatioHeight), group (Crop)
+#: lib/gwenviewconfig.kcfg:366
+#, kde-format
+msgid "Last used crop ratio height when Advanced Settings enabled"
+msgstr ""
+"Tinggi rasio pangkas yang digunakan terakhir ketika Pengaturan Tingkat-"
+"lanjut difungsikan"
+
+#: lib/historymodel.cpp:146
+#, kde-format
+msgid "Last visited: %1"
+msgstr "Terakhir dikunjungi: %1"
+
+#: lib/hud/hudwidget.cpp:104
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Close"
+msgstr "Tutup"
+
+#: lib/imagemetainfomodel.cpp:255
+#, kde-format
+msgctxt "@item:intable Image file name"
+msgid "Name"
+msgstr "Nama"
+
+#: lib/imagemetainfomodel.cpp:256
+#, kde-format
+msgctxt "@item:intable"
+msgid "File Size"
+msgstr "Ukuran File"
+
+#: lib/imagemetainfomodel.cpp:257
+#, kde-format
+msgctxt "@item:intable"
+msgid "File Time"
+msgstr "Waktu File"
+
+#: lib/imagemetainfomodel.cpp:258
+#, kde-format
+msgctxt "@item:intable"
+msgid "Image Size"
+msgstr "Ukuran Citra"
+
+#: lib/imagemetainfomodel.cpp:259
+#, kde-format
+msgctxt "@item:intable"
+msgid "Comment"
+msgstr "Komentar"
+
+#: lib/imagemetainfomodel.cpp:321
+#, kde-format
+msgctxt "@title:group General info about the image"
+msgid "General"
+msgstr "Umum"
+
+#: lib/imagemetainfomodel.cpp:408
+#, kde-format
+msgctxt "@item:intable %1 is image width, %2 is image height"
+msgid "%1x%2"
+msgstr "%1x%2"
+
+#: lib/imagemetainfomodel.cpp:414
+#, kde-format
+msgctxt "@item:intable %1 is number of millions of pixels in image"
+msgid "(%1MP)"
+msgstr "(%1MP)"
+
+#: lib/imagemetainfomodel.cpp:565
+#, kde-format
+msgctxt "@title:column"
+msgid "Property"
+msgstr "Properti"
+
+#: lib/imagemetainfomodel.cpp:567
+#, kde-format
+msgctxt "@title:column"
+msgid "Value"
+msgstr "Nilai"
+
+#: lib/jpegcontent.cpp:642
+#, kde-format
+msgctxt "@info"
+msgid "Could not open file for writing."
+msgstr "Tidak dapat membuka file untuk menulis."
+
+#: lib/jpegcontent.cpp:658
+#, kde-format
+msgctxt "@info"
+msgid "No data to store."
+msgstr "Tidak ada data untuk disimpan."
+
+#: lib/print/printhelper.cpp:126
+#, kde-format
+msgid "Print Image"
+msgstr "Cetak Citra"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, PrintOptionsPage)
+#: lib/print/printoptionspage.ui:14
+#, kde-format
+msgid "Image Settings"
+msgstr "Pengaturan Citra"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: lib/print/printoptionspage.ui:20
+#, kde-format
+msgid "Image Position"
+msgstr "Posisi Citra"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: lib/print/printoptionspage.ui:45
+#, kde-format
+msgid "Scaling"
+msgstr "Skala"
+
+#. i18n: ectx: property (text), widget (QRadioButton, mNoScale)
+#: lib/print/printoptionspage.ui:51
+#, kde-format
+msgid "&No scaling"
+msgstr "&Tanpa skala"
+
+#. i18n: ectx: property (text), widget (QRadioButton, mScaleToPage)
+#: lib/print/printoptionspage.ui:61
+#, kde-format
+msgid "&Fit image to page"
+msgstr "&Paskan citra terhadap halaman"
+
+#. i18n: ectx: property (text), widget (QRadioButton, mScaleTo)
+#: lib/print/printoptionspage.ui:123
+#, kde-format
+msgid "&Scale to:"
+msgstr "&Skala ke:"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel2)
+#: lib/print/printoptionspage.ui:158
+#, kde-format
+msgctxt "Dimension separator, as in: '15 x 10 centimeters'"
+msgid "x"
+msgstr "x"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_PrintUnit)
+#: lib/print/printoptionspage.ui:185
+#, kde-format
+msgid "Millimeters"
+msgstr "Milimeter"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_PrintUnit)
+#: lib/print/printoptionspage.ui:190
+#, kde-format
+msgid "Centimeters"
+msgstr "Centimeter"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_PrintUnit)
+#: lib/print/printoptionspage.ui:195
+#, kde-format
+msgid "Inches"
+msgstr "Inci"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_PrintKeepRatio)
+#: lib/print/printoptionspage.ui:224
+#, kde-format
+msgid "Keep ratio"
+msgstr "Jaga rasio"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: lib/redeyereduction/redeyereductionwidget.ui:43
+#, kde-format
+msgid "Size:"
+msgstr "Ukuran:"
+
+#. i18n: ectx: property (text), widget (QLabel, helpTextLabel)
+#: lib/redeyereduction/redeyereductionwidget.ui:150
+#, kde-format
+msgid ""
+"Click on a red eye and choose a size, or double-click to correct instantly."
+msgstr ""
+"Klik pada mata merah dan pilih sebuah ukuran, atau klik ganda untuk koreksi "
+"secara instan."
+
+#: lib/resize/resizeimagedialog.cpp:76
+#, kde-format
+msgctxt "@action"
+msgid ""
+"Assuming that the image format won't be changed and\n"
+"for lossy images using the value set in 'Lossy image save quality'."
+msgstr ""
+"Dengan asumsi bahwa format citra tidak akan diubah dan\n"
+"untuk citra lossy menggunakan nilai yang ditetapkan dalam 'Kualitas "
+"penyimpanan citra lossy'."
+
+#: lib/resize/resizeimagedialog.cpp:219
+#, kde-format
+msgid "error"
+msgstr "galat"
+
+#: lib/resize/resizeimageoperation.cpp:70
+#, kde-format
+msgctxt "(qtundo-format)"
+msgid "Resize"
+msgstr "Ubah Ukuran"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, ResizeImageWidget)
+#: lib/resize/resizeimagewidget.ui:14
+#, kde-format
+msgid "Resize Image"
+msgstr "Ubah Ukuran Citra"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: lib/resize/resizeimagewidget.ui:47
+#, kde-format
+msgid "New size:"
+msgstr "Ukuran baru:"
+
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, mHeightPercentSpinBox)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, mWidthPercentSpinBox)
+#: lib/resize/resizeimagewidget.ui:63 lib/resize/resizeimagewidget.ui:195
+#, no-c-format, kde-format
+msgid " %"
+msgstr " %"
+
+#. i18n: ectx: property (suffix), widget (QSpinBox, mHeightSpinBox)
+#. i18n: ectx: property (suffix), widget (QSpinBox, mWidthSpinBox)
+#: lib/resize/resizeimagewidget.ui:86 lib/resize/resizeimagewidget.ui:102
+#, kde-format
+msgid " px"
+msgstr " px"
+
+#. i18n: ectx: property (text), widget (QCheckBox, mKeepAspectCheckBox)
+#: lib/resize/resizeimagewidget.ui:145
+#, kde-format
+msgid "Keep aspect ratio"
+msgstr "Jaga rasio aspek"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: lib/resize/resizeimagewidget.ui:172
+#, kde-format
+msgid "Current size:"
+msgstr "Ukuran saat ini:"
+
+#: lib/semanticinfo/tagitemdelegate.cpp:62
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Assign this tag to all selected images"
+msgstr "Tetapkan tag ini untuk semua citra terpilih"
+
+#: lib/semanticinfo/tagwidget.cpp:147
+#, kde-format
+msgid "Add tag"
+msgstr "Tambah tag"
+
+#: lib/slideshow.cpp:182
+#, kde-format
+msgctxt "@item:inmenu toggle loop in slideshow"
+msgid "Loop"
+msgstr "Putaran"
+
+#: lib/slideshow.cpp:187
+#, kde-format
+msgctxt "@item:inmenu toggle random order in slideshow"
+msgid "Random"
+msgstr "Acak"
+
+#: lib/transformimageoperation.cpp:58
+#, kde-format
+msgctxt "(qtundo-format)"
+msgid "Rotate Right"
+msgstr "Rotasikan ke Kanan"
+
+#: lib/transformimageoperation.cpp:61
+#, kde-format
+msgctxt "(qtundo-format)"
+msgid "Rotate Left"
+msgstr "Rotasikan ke Kiri"
+
+#: lib/transformimageoperation.cpp:64
+#, kde-format
+msgctxt "(qtundo-format)"
+msgid "Mirror"
+msgstr "Cermin"
+
+#: lib/transformimageoperation.cpp:67
+#, kde-format
+msgctxt "(qtundo-format)"
+msgid "Flip"
+msgstr "Jungkir"
+
+#: lib/transformimageoperation.cpp:72
+#, kde-format
+msgctxt "(qtundo-format)"
+msgid "Transform"
+msgstr "Jelma"
+
+#: part/gvpart.cpp:74
+#, kde-format
+msgctxt "@action"
+msgid "Properties"
+msgstr "Properti"
+
+#. i18n: ectx: Menu (file)
+#: part/gvpart.rc:5
+#, kde-format
+msgid "&File"
+msgstr "&File"
+
+#. i18n: ectx: Menu (view)
+#: part/gvpart.rc:9
+#, kde-format
+msgid "&View"
+msgstr "&Tampilan"
+
+#, fuzzy
+#~| msgid "Background color:"
+#~ msgctxt "@label:chooser Describes what a row of buttons control"
+#~ msgid "Background color:"
+#~ msgstr "Warna latar belakang:"
+
+#~ msgid "&Plugins"
+#~ msgstr "&Plugin"
+
+#~ msgid "Last Used Plugin"
+#~ msgstr "Plugin Terakhir Dipakai"
+
+#~ msgid "Other Plugins"
+#~ msgstr "Plugin Lainnya"
+
+#~ msgctxt "@action"
+#~ msgid "Share"
+#~ msgstr "Bagikan"
+
+#~ msgctxt "@info:tooltip"
+#~ msgid "Share images using various services"
+#~ msgstr "Bagikan citra dengan berbagai layanan"
+
+#~ msgctxt "%1 is collection name, %2 is image count in collection"
+#~ msgid "%1 (%2 image)"
+#~ msgid_plural "%1 (%2 images)"
+#~ msgstr[0] "%1 (%2 citra)"
+#~ msgstr[1] "%1 (%2 citra)"
+
+#~ msgid "Loading..."
+#~ msgstr "Memuat..."
+
+#~ msgid "No Plugin Found"
+#~ msgstr "Tidak Ditemukan Plugin"
+
+#~ msgctxt "@item:inmenu"
+#~ msgid "Install Plugins"
+#~ msgstr "Instal Plugin"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Images"
+#~ msgstr "Citra"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Tools"
+#~ msgstr "Peralatan"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Import"
+#~ msgstr "Impor"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Export"
+#~ msgstr "Ekspor"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Batch Processing"
+#~ msgstr "Proses Sekumpulan"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Collections"
+#~ msgstr "Koleksi"
+
+# Hi, ada yang salah pada uploaded.
+# Seharusnya adalah downloaded
+#~ msgid ""
+#~ "Images will be uploaded here:\n"
+#~ "%1"
+#~ msgstr ""
+#~ "Citra akan diunggah di sini:\n"
+#~ "%1"
+
+#~ msgid "Thumbnail Bar"
+#~ msgstr "Bar Gambar-mini"
+
+#~ msgctxt ""
+#~ "@action:button Zoom to original size, shown in status bar, keep it short "
+#~ "please"
+#~ msgid "100%"
+#~ msgstr "100%"
+
+#~ msgid "Gwenview KPart"
+#~ msgstr "KPart Gwenview"
+
+#~ msgctxt "@action show more image meta info"
+#~ msgid "More..."
+#~ msgstr "Selebihnya..."
+
+#~ msgctxt "@title:group"
+#~ msgid "Meta Information"
+#~ msgstr "Informasi Meta"
+
+#~ msgid "Semantic Information"
+#~ msgstr "Informasi Semantik"
+
+#~ msgctxt "@action Open Recent menu"
+#~ msgid "Forget All Files && Folders"
+#~ msgstr "Lupakan Semua File && Folder"
+
+#~ msgctxt "@action"
+#~ msgid "Leave Fullscreen Mode"
+#~ msgstr "Keluar dari Mode Layar Penuh "
+
+#~ msgid "Cache:"
+#~ msgstr "Cache:"
+
+#~ msgid "Delete thumbnail cache folder on exit"
+#~ msgstr "Hapus folder cache thumbnail saat keluar"
+
+#~ msgid "Size"
+#~ msgstr "Ukuran"
+
+#~ msgid "Click on the red eye you want to fix"
+#~ msgstr "Klik pada mata merah yang ingin Anda perbaiki"
+
+#~ msgid "Red Eye Reduction"
+#~ msgstr "Reduksi Mata Merah"
+
+#~ msgid "RedEyeReduction"
+#~ msgstr "ReduksiMataMerah"
+
+#~ msgctxt "@label"
+#~ msgid "%1 document"
+#~ msgid_plural "%1 documents"
+#~ msgstr[0] "%1 dokumen"
+
+#~ msgid "Image Resizing"
+#~ msgstr "Mengubah Ukuran Citra"
+
+#~ msgid "Enter the new size for this image."
+#~ msgstr "Masukkan ukuran baru untuk citra ini."
+
+#, fuzzy
+#~| msgctxt "@option:Perceptual rendering intent"
+#~| msgid "Perceptual"
+#~ msgid "Percentage:"
+#~ msgstr "Persepsi"
+
+#~ msgctxt "@info"
+#~ msgid ""
+#~ "A file named <filename>%1</filename> already exists.\n"
+#~ "Are you sure you want to overwrite it?"
+#~ msgstr ""
+#~ "Sebuah file bernama <filename>%1</filename> sudah ada.\n"
+#~ "Apakah anda yakin ingin menimpanya?"
+
+#~ msgid "Ratio:"
+#~ msgstr "Rasio:"
+
+#~ msgid "Stop Slideshow"
+#~ msgstr "Hentikan Slideshow"
+
+#~ msgid "Add to Places"
+#~ msgstr "Tambah Ke Tempat"
+
+#~ msgid "Zoom to Fit Width"
+#~ msgstr "Perbesar ke Lebar Pas"
+
+#~ msgctxt ""
+#~ "@action:button Zoom to fit width, shown in status bar, keep it short "
+#~ "please"
+#~ msgid "Fit Width"
+#~ msgstr "Lebar Pas"
+
+#~ msgid "Si&ze:"
+#~ msgstr "Uku&ran:"
+
+#~ msgid "Si&ze"
+#~ msgstr "Uku&ran"
+
+#~ msgctxt "@title:window"
+#~ msgid "Copy To"
+#~ msgstr "Salin Ke"
+
+#~ msgctxt "@title:window"
+#~ msgid "Move To"
+#~ msgstr "Pindah Ke"
+
+#~ msgctxt "@title:window"
+#~ msgid "Link To"
+#~ msgstr "Taut Ke"
+
+#~ msgctxt "@info"
+#~ msgid "No image format selected."
+#~ msgstr "Tidak ada format gambar dipilih."
+
+#~ msgid "Delete"
+#~ msgstr "Hapus"
+
+#~ msgid "Forget this URL"
+#~ msgstr "Lupakan URL ini"
+
+#~ msgid "Recent URLs"
+#~ msgstr "URL Terbaru"

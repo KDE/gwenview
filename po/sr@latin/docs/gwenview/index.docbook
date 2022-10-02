@@ -1,0 +1,1241 @@
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN"
+"dtd/kdedbx45.dtd" [
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % Serbian-Latin "INCLUDE"
+><!-- change language only here -->
+]>
+
+<book id="gwenview" lang="&language;">
+<title
+>Priručnik za <application
+>GwenView</application
+></title>
+
+<bookinfo>
+<authorgroup>
+<author
+><firstname
+>Orelijen</firstname
+> <surname
+>Gato</surname
+> <affiliation
+><address
+><email
+>agateau@kde.org</email
+></address
+></affiliation>
+</author>
+<author
+><firstname
+>Kristofer</firstname
+> <surname
+>Martin</surname
+> <affiliation
+><address
+><email
+>chrsmrtn@debian.org</email
+></address
+></affiliation>
+</author>
+<author
+><firstname
+>Anri</firstname
+> <surname
+>de Valans</surname
+> <affiliation
+><address
+><email
+>hdevalence@gmail.com</email
+></address
+></affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Zoran</firstname
+><surname
+>Olujić</surname
+><affiliation
+><address
+><email
+>olujicz@gmail.com</email
+></address
+></affiliation
+><contrib
+>prevod</contrib
+></othercredit
+> 
+</authorgroup>
+<copyright>
+<year
+>2005</year>
+<holder
+>Orelijen Gato</holder>
+</copyright>
+<copyright>
+<year
+>2008</year>
+<holder
+>Anri de Valans</holder>
+</copyright>
+<legalnotice
+>&FDLNotice;</legalnotice>
+
+<date
+>4. 8. 2015.</date>
+<releaseinfo
+>Programi KDE‑a 15.08</releaseinfo>
+<abstract>
+<para
+><application
+>GwenView</application
+> je prikazivač slika i videa.</para>
+</abstract>
+<keywordset>
+<keyword
+>KDE</keyword>
+<keyword
+>slika</keyword>
+<keyword
+>prikazivač</keyword>
+<keyword
+>umetnik</keyword>
+<keyword
+>fotografija</keyword>
+<keyword
+>slika</keyword>
+</keywordset>
+</bookinfo>
+<!--FIXME Read devels blog on http://agateau.com/
+-->
+<chapter id="introduction">
+<title
+>Uvod</title>
+
+<sect1 id="what-is-gwenview">
+<title
+>Šta je <application
+>GwenView</application
+></title>
+
+<para
+><application
+>GwenView</application
+> je brz i jednostavan prikazivač slika i videa. </para>
+
+ <para
+><application
+>GwenView</application
+> radi u dva osnovna režima, pregleda i prikaza. Oba se mogu koristiti bilo u normalnom prozoru programa bilo preko celog ekrana. U režimu pregleda krećete se kroz slike na računaru predstavljene sličicama, u režimu prikaza gledate slike jednu po jednu, a u režimu preko celog ekrana možete imati brze slajdšoue. Tu je još i početni ekran koji daje spisak nedavno otvaranih fascikli i URL‑ova, kao i vaša mesta i oznake. </para>
+
+<para
+>Učitavanjem slika rukuje biblioteka Qt, pa <application
+>GwenView</application
+> podržava sve formate slika koje podržava instalacija Qt‑a na sistemu. <application
+>GwenView</application
+> ispravno prikazuje slike sa alfa‑kanalom (providne) kao i animacije.</para>
+
+<para
+><application
+>GwenView</application
+> podržava prikazivanje i uređivanje EXIF komentara u JPEG slikama, te JPEG transformacije bez gubitaka poput rotacije i odraza u ogledalu.</para>
+
+<para
+><application
+>GwenView</application
+> može da čita ugnežđene profile boja iz PNG i JPEG fajlova. Profil boja slike koristi se zajedno sa profilom boja ekrana radi vernog predstavljanja boja na ekranu.</para>
+</sect1>
+
+</chapter>
+
+<chapter id="interface">
+<title
+>Sučelje</title>
+
+<sect1 id='start_page'
+><title
+>Početna stranica</title>
+<para
+>Početna stranica nabraja nedavno otvarane fascikle i URL‑ove na levoj strani, a vaša mesta i oznake na desnoj.</para>
+
+<screenshot>
+  <screeninfo
+>Snimak početne stranice</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="start-page.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+</sect1>
+
+<sect1 id='image_operations'
+><title
+>Postupci nad slikama</title>
+<para
+><application
+>GwenView</application
+> ima nekoliko mogućnosti dostupnih u svim režimima, pregleda, prikaza i celog ekrana. <application
+>GwenView</application
+> može da izvršava osnovne izmene na slikama.</para>
+<itemizedlist>
+<listitem
+><para
+>Rotiranje: rotira sliku ili ulevo ili udesno, u zavisnosti da li uradite <menuchoice
+> <shortcut
+> <keycombo action="simul"
+><keycap
+>Ctrl</keycap
+><keycap
+>R</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Uređivanje</guimenu
+> <guimenuitem
+>Rotiraj udesno</guimenuitem
+> </menuchoice
+> ili <menuchoice
+> <shortcut
+> <keycombo action="simul"
+><keycap
+>Ctrl</keycap
+><keycap
+>L</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Uređivanje</guimenu
+> <guimenuitem
+>Rotiraj ulevo</guimenuitem
+> </menuchoice
+> </para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+> <guimenu
+>Uređivanje</guimenu
+> <guimenuitem
+>U ogledalu</guimenuitem
+> </menuchoice
+>: reflektuje sliku preko vertikalne ose, kao odraz u ogledalu.</para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+> <guimenu
+>Uređivanje</guimenu
+> <guimenuitem
+>Prevrni</guimenuitem
+> </menuchoice
+>: reflektuje sliku preko horizontalne ose (postavlja je naopačke).</para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+> <shortcut
+> <keycombo action="simul"
+><keycap
+>Shift</keycap
+><keycap
+>R</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Uređivanje</guimenu
+> <guimenuitem
+>Promeni veličinu</guimenuitem
+> </menuchoice
+>: smanjuje ili uvećava sliku. Imajte na umu da ukoliko sliku uvećate, može postati mutna ili nazubljena.</para
+></listitem>
+ <!-- Crop + Red Eye Reduction are discussed in View mode sect-->
+</itemizedlist>
+
+<para
+>Ove radnje su takođe dostupne pod jezičkom <guilabel
+>Radnje</guilabel
+> na bočnoj traci.</para>
+
+<para
+>Pošto uredite jednu ili više slika, iznad slike će se pojaviti traka sa dodatnim radnjama. Izmene možete opozvati ili ponoviti, preći na sledeću ili prethodnu izmenjenu sliku, i sačuvati izmenjenu sliku na jedan od tri načina. </para>
+
+<screenshot>
+  <screeninfo
+>Traka radnji za izmenjene slike.</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="modified-bar.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<!--FIXME all actions also available context menus, where to add that info -->
+
+<tip
+><para
+>Ako ste instalirali KIPI‑jeve priključke, biće dostupan meni <guimenu
+>Priključci</guimenu
+> kroz koji možete izvoditi razne dodatne postupke nad slikama. Za više detalja pogledajte <ulink url="help:/kipi-plugins"
+>dokumentaciju KIPI‑jevih priključaka</ulink
+>.</para
+></tip>
+</sect1>
+
+<sect1 id='browse_mode'
+><title
+>Režim pregleda</title>
+
+<para
+>U režimu pregleda možete lako da se krećete kroz fajlove i fascikle. Prozor za pregled prikazuje sličice slika u trenutnoj fascikli, kao i u potfasciklama. </para>
+
+<screenshot>
+  <screeninfo
+>Snimak režima pregleda</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="browse_mode.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<para
+>Nadnošenjem miša nad sliku dobijate dugmad za biranje ili rotiranje slike, kao i za prelazak u celoekranski režim. Izmenjene slike označene su ikonicom dole desno, na koju možete kliknuti da sačuvate izmene. Klikom na sliku prelazite u režim prikaza. Možete izabrati više slika pa preći u režim prikaza, kad će se videti jedna naspram druge.</para>
+
+<para
+>Klizačem pri dnu desno možete promeniti veličinu slika. Takođe možete filtrirati slike po imenu fajla, datumu, oznaci ili oceni, u polju dole levo. Traka alatki pojavljuje se i u režimu pregleda i u režimu prikaza, i sadrži najčešće korišćene radnje. </para>
+<itemizedlist>
+<listitem
+><para
+><guiicon
+>Početna stranica</guiicon
+>: otvara početnu stranicu.</para
+></listitem>
+<listitem
+><para
+><guiicon
+>Pregledaj</guiicon
+>: prebacuje u režim pregleda.</para
+></listitem>
+<listitem
+><para
+><guiicon
+>Prikaži</guiicon
+>: prebacuje u režim prikaza.</para
+></listitem>
+<listitem
+><para
+><guiicon
+>Ceo ekran</guiicon
+>: prebacuje u režim preko celog ekrana. </para
+></listitem>
+<listitem
+><para
+><guiicon
+>Prethodna</guiicon
+>: klikom na ovu ikonicu odlazite na prethodnu sliku u fascikli.</para
+></listitem>
+
+<listitem
+><para
+><guiicon
+>Sledeća</guiicon
+>: klikom na ovo dugme odlazite na sledeću sliku u fascikli.</para
+></listitem>
+
+<listitem
+><para
+><guilabel
+>Rotiraj ulevo</guilabel
+>, <guilabel
+>Rotiraj udesno</guilabel
+>: kao što je objašnjeno u postupcima nad slikama.</para
+></listitem>
+<!--FIXME missing Share -->
+</itemizedlist>
+
+</sect1>
+
+<sect1 id='view_mode'
+><title
+>Režim prikaza</title>
+<para
+>Režim prikaza daje slike u punoj veličini. Ista <link linkend="sidebar"
+>bočna traka</link
+> kao u režimu pregleda stoji levo. Na dnu se nalazi traka sličica, kojom se pomerate kroz slike u trenutnoj fascikli. Traka sličica se može minimizovati klikom na dugme <guibutton
+>Traka sličica</guibutton
+>; naredni klik obnavlja traku. Veličinu sličica možete menjati pomeranjem razdvajača levim dugmetom miša.</para>
+
+<para
+>Režim prikaza omogućava gledanje više slika jednu naspram druge. Možete izabrati više slika u režimu pregleda pre nego što pređete u režim prikaza, a možete i kliknuti na dugme plusa pri lebdenju nad slikom u traci sličica da biste dodali okno sa prikazom te slike. Potom možete kliknuti na dugme minusa da uklonite okno date slike.</para>
+
+<para
+>Kada je prikazano više slika, pod svakom stoji mala traka alatki preko koje možete obrisati sliku ili ukloniti njeno okno. Slike možete uveličavati nezavisno ili sve zajedno. Ovo birate popunjavanjem <guilabel
+>Sinhronizuj</guilabel
+> levo od klizača uveličanja, ili pritiskom <keycombo action="simul"
+><keycap
+>Ctrl</keycap
+><keycap
+>Y</keycap
+></keycombo
+>. Prebacivati se između slika možete kliktanjem na njihova okna, ili preko tastature. Da pređete na sliku desno pritisnite <keycombo action="simul"
+><keycap
+>Tab</keycap
+></keycombo
+>, a na sliku levo <keycombo action="simul"
+><keycap
+>Shift</keycap
+><keycap
+>Tab</keycap
+></keycombo
+>.</para>
+
+<screenshot>
+  <screeninfo
+>Snimak režima prikaza</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="view_mode.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<para
+>Klizač na dnu desno upravlja uveličanjem slike. Dugmad <guibutton
+>Uklopi</guibutton
+> i <guibutton
+>100%</guibutton
+> odmah pored klizača uveličanja predstavljaju dva prepodešena nivoa uveličanja. Dugme <guibutton
+>Uklopi</guibutton
+> uveličava trenutnu sliku tako da se uklopi u veličinu prozora, a <guibutton
+>100%</guibutton
+> postavlja na stvarnu veličinu u pikselima. Prečica <keycap
+>F</keycap
+> prebacuje između ova dva režima prikaza.</para>
+
+<para
+>Kada je slika u režimu uklapanja, na prethodnu i sledeću sliku možete preći tasterima strelica. Ako uveličate sliku, tasteri strelica služe za klizanje slike. Ovo je vrlo slično ponašanju na telefonima i digitalnim fotoaparatima.</para>
+
+<para
+>Kada se slika uveliča, pojavljuje se prikaz iz visine u kojem možete da klizate sliku mišem i tasterima strelica. Ovaj prikaz se automatski sakriva posle kraćeg zastoja, a pojavljuje čim se krene sa klizanjem ili uveličavanjem.</para>
+
+<para
+>Možete odrediti šta se događa pri prelasku na sliku B pošto ste uveličali neku zonu slike A, kroz opcije iz grupe <guilabel
+>Režim uveličanja:</guilabel
+> na stranici <guimenuitem
+>Prikaz slike</guimenuitem
+> prozora za podešavanje <application
+>GwenViewa</application
+>. Tamo stižete preko <menuchoice
+><guimenu
+>Podešavanje</guimenu
+><guimenuitem
+>Podesi GwenView...</guimenuitem
+></menuchoice
+>.</para>
+
+<itemizedlist>
+    <listitem
+><para
+>Ako je zadato <guilabel
+>Automatski uklopi svaku sliku</guilabel
+>, slika B se umanjuje tako da se uklopi u ekran.</para
+></listitem>
+    <listitem
+><para
+>Ako je zadato <guilabel
+>Održavaj isto uveličanje i položaj</guilabel
+>, sve slike dele isto uveličanje i položaj: slika B preuzima iste parametre uveličanja kao slika A. Ako se oni promene na slici B, slika A će biti naknadno prikazana sa ažuriranim uveličanjem i položajem.</para
+></listitem>
+    <listitem
+><para
+>Ako je zadato <guilabel
+>Uveličanje i položaj po slici</guilabel
+>, za svaku sliku pamti se njeno uveličanje i položaj: slika B prvo dobije iste parametre uveličanja kao slika A, ali se onda oni trajno pamte. Ako se promene na slici B, slika A <emphasis
+>neće</emphasis
+> biti naknadno prikazana za ažuriranim uveličanjem i položajem.</para
+></listitem>
+</itemizedlist>
+
+<tip
+><para
+><application
+>GwenView</application
+> možete pokrenuti direktno u režimu prikaza iz kontekstnog menija nekog drugog programa (npr. opcija <guimenuitem
+>Otvori pomoću</guimenuitem
+>) ili iz komandne linije sa slikom kao argumentom.</para
+> </tip>
+
+<para
+>Sledeći dodatni postupci nad slikama raspoloživi su samo u režimu prikaza:</para>
+
+<itemizedlist>
+<listitem
+><para
+><menuchoice
+> <shortcut
+> <keycombo action="simul"
+><keycap
+>Shift</keycap
+><keycap
+>C</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Uređivanje</guimenu
+> <guimenuitem
+>Opseci</guimenuitem
+> </menuchoice
+>: izbacite delove slike koje ne želite. </para>
+<para
+>Naprednim parametrima opsecanja pristupate popunjavanjem kućice <guilabel
+>Napredne postavke</guilabel
+> u dnu iskačućeg okna. Upotrebite odgovarajuća polja da naštelujete radnju opsecanja. </para>
+<para
+>Zonu opsecanja takođe možete zadati prevlačenjem ručki sivog pravougaonika na ivicama slike. Zatim možete pomeriti celu zonu isecanja tako što kliknete i držite levo dugme miša, pa je prevučete pokazivačem. </para>
+<para
+>Kliknite na dugme <guibutton
+>Opseci</guibutton
+> da vidite rezultat pošto sve namestite. Upotrebite gornje iskačuće okno da sačuvate rezultate ili opozovete/ponovite radnju. </para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+> <guimenu
+>Uređivanje</guimenu
+> <guimenuitem
+>Popravka crvenih očiju</guimenuitem
+> </menuchoice
+>: ublažava efekat „crvenih očiju“, koji se često susreće na fotografijama načinjenim sa blicom. </para
+></listitem>
+</itemizedlist>
+
+</sect1>
+
+<sect1 id='fullscreen_mode'>
+<title
+>Režimi celog ekrana</title>
+
+<para
+>Pređite na ceo ekran klikom na dugme <guiicon
+>Ceo ekran</guiicon
+> na traci alatki, ili pomoću <menuchoice
+> <shortcut
+> <keycombo action="simul"
+><keycap
+>Ctrl</keycap
+><keycap
+>Shift</keycap
+><keycap
+>F</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Prikaz</guimenu
+> <guimenuitem
+>Preko celog ekrana</guimenuitem
+> </menuchoice
+>. </para>
+<para
+>Ovaj režim napuštate pritiskom tastera <keycap
+>Esc</keycap
+>.</para>
+
+<sect2>
+<title
+>Ceo ekran u režimu pregleda</title>
+
+<para
+>Režim pregleda možete prebaciti na ceo ekran takođe klikom na dugme koje se javlja dok prelazite mišem preko sličica. </para>
+<screenshot>
+  <screeninfo
+>Snimak režima prikaza preko celog ekrana</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="fullscreen-browse.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para
+>Ceo ekran pri pregledanju pruža vam veće uživljavanje dok prolazite kroz slike. Ovo je lepo i na običnom računaru, ali ima još više smisla kada povežete laptop na veliki televizor u dnevnoj sobi kako biste gostima pokazali neke slike. </para>
+</sect2>
+
+<sect2>
+<title
+>Ceo ekran u režimu prikaza</title>
+<para
+>Režim prikaza preko celog ekrana prikazuje slajdšou slika. Pristupate mu klikom na dugme koje se pojavi kada nadnesete pokazivač miša nad sličicu u režimu pregleda, ili klikom na dugme <guiicon
+>Ceo ekran</guiicon
+> na traci alatki. <screenshot>
+  <screeninfo
+>Snimak režima pregleda preko celog ekrana</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="fullscreen-view.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+</para>
+
+<para
+>Gornja traka će se automatski sakriti. Da bi se prikazala, samo pomerite pokazivač miša na vrh ekrana, i tada se neće sakriti sve dok pokazivač stoji nad njom. Većina dugmadi na traci ista su kao i ona na traci alatki u režimima pregleda ili prikaza, osim dugmeta <guiicon
+>Napusti ceo ekran</guiicon
+>, koje vas vraća u prozor <application
+>GwenViewa</application
+>, <guiicon
+>Pokreni slajdšou</guiicon
+>/<guiicon
+>Zaustavi slajdšou</guiicon
+>, i <guiicon
+>Podesi režim celog ekrana</guiicon
+> koje poziva mali dijalog postavki u kojem lako i brzo možete podesiti slajdšou. Kontrole za slajdšou su: </para>
+
+<itemizedlist>
+    <listitem
+><para
+>Klizač <guilabel
+>Interval:</guilabel
+> određuje koliko dugo će <application
+>GwenView</application
+> pokazivati jednu sliku pre nego što pređe na sledeću.</para
+></listitem>
+    <listitem
+><para
+>Ukoliko je kućica <guilabel
+>Ponavljanje</guilabel
+> popunjena, kada slajdšou dođe do kraja nastaviće od početka umesto da se zaustavi. </para
+></listitem>
+    <listitem
+><para
+>Ukoliko je kućica <guilabel
+>Nasumično</guilabel
+> popunjena, slike će se prikazivati nasumičnim umesto аbecednim redosledom.</para
+></listitem>
+    <listitem
+><para
+><guibutton
+>Prikazani podaci o slici...</guibutton
+> omogućava vam da odredite koji se metapodaci prikazuju pod dugmadima na traci alatki. </para
+></listitem>
+    <listitem
+><para
+>Ukoliko je kućica <guilabel
+>Prikaži sličice</guilabel
+> popunjena, sličice za sve slike u tekućoj fascikli biće prikazane desno od trake alatki.</para
+></listitem>
+    <listitem
+><para
+>Klizač <guilabel
+>Visina:</guilabel
+> menja veličinu prikazanih sličica.</para
+></listitem>
+</itemizedlist>
+
+<para
+>Ako je uključena, oblast koja pokazuje druge slike u trenutnoj fascikli videće se u gornjoj traci. Slika na koju kliknete biće prikazana.</para>
+</sect2>
+</sect1>
+
+<sect1 id="sidebar">
+<title
+>Bočna traka</title>
+
+ <para
+>Bočna traka na levoj strani dostupna je u režimima pregleda i prikaza, ali se podrazumevano ne vidi u režimu pregleda. Može se pozvati preko <menuchoice
+> <shortcut
+> <keycap
+>F4</keycap
+> </shortcut
+> <guimenu
+>Prikaz</guimenu
+> <guimenuitem
+>Bočna traka</guimenuitem
+> </menuchoice
+> ili dugmetom strelice levo u traci stanja. Kada se na njega klikne, bočna traka se proširi ili sažme. Bočna traka sadrži nekoliko jezičaka:</para>
+
+<variablelist>
+
+<varlistentry>
+<term
+><guilabel
+>Fascikle</guilabel
+></term>
+<listitem
+><para
+>Prikazuje spisak svih fascikli na sistemu, tako da se možete premeštati između njih. U režimu pregleda biće prikazane sličice iz fascikle; u režimu prikaza pojaviće se prva slika u fascikli, od koje možete pregledati dalje fasciklu koristeći dugmad <guibutton
+>Prethodna</guibutton
+> i <guibutton
+>Sledeća</guibutton
+> (ili prečice).</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Podaci</guilabel
+></term>
+<listitem
+><para
+>Prikazuje metapodatke poput imena fajla i veličine. Veza <guilabel
+>Više...</guilabel
+> omogućava vam da pogledate sve dostupne metapodatke i izaberete koje od njih želite u bočnoj traci.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Radnje</guilabel
+></term>
+<listitem
+><para
+>Ovim možete izvoditi <link linkend="image_operations"
+>prethodno opisane globalne postupke nad slikama</link
+>, kao i one vezane za režim prikaza. Na raspolaganju su vam i uobičajene radnje sa fajlovima, poput kopiranja, preimenovanja, brisanja i stvaranja novih fascikli.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+</sect1>
+
+</chapter>
+<!--FIXME no importer in kf5
+<chapter id="importer">
+<title
+>&gwenview; Importer</title>
+
+<sect1>
+<title
+>Introduction</title>
+<para
+>The &gwenview; Importer allows you to import images from a digital camera or
+removable media.  To launch it, select <guilabel
+>Download Photos with &gwenview;</guilabel>
+in the &kde; Device Notifier after connecting a supported device.</para>
+
+<para
+>When you plug in a device the &gwenview; importer recursively lists all images and videos.
+</para>
+<para
+>This is not always what you expect, &eg; plugging a smartphone you do not want to list all medias
+of the device; but only the pictures you took, which are usually in a special subfolder.
+</para>
+
+<screenshot>
+  <screeninfo
+>Root Folder Picking</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="importer-picking-root-folder.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para
+>It is possible to select the root folder to list, and &gwenview; Importer will remember the
+last root folder for each device. This way, next time you plug a device in, only the relevant
+pictures and videos should be listed.
+</para>
+
+<sect2>
+<title
+>Importing Images</title>
+
+<screenshot>
+  <screeninfo
+>&gwenview; Importer Screenshot</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="importer.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<para
+>If you wish, you may select the images you want to import under
+<guilabel
+>Select the documents to import</guilabel
+> by pressing the <guiicon
+>+</guiicon>
+button that appears when hovering over an image.  You may also select the folder
+that images are imported to in the text box at the bottom of the window. When you are done, click the
+<guibutton
+>Import Selected</guibutton
+> button to import only the images you have
+selected, or click <guibutton
+>Import All</guibutton
+> to import all images found
+on the device.</para>
+</sect2>
+
+<sect2>
+<title
+>Automatic Renaming</title>
+<para
+>&gwenview; Importer can rename your files according to a specified pattern.
+To configure this, select the <guibutton
+>Settings</guibutton
+> in the lower left
+corner.  You may turn this feature on or off using the check box at the top.  The
+<guilabel
+>Rename Format</guilabel
+> supports several special parameters, which will
+be replaced by metadata such as the date the image was created or its filename.
+They are listed below the text box.  You may either click on the parameter name to
+enter it into the text box or type one manually.</para>
+</sect2>
+</sect1>
+
+</chapter>
+-->
+<chapter id="tips">
+<title
+>Saveti</title>
+<sect1 id='mouse'
+><title
+>Korišćenje miša</title>
+
+<sect2 id='mouse_panning'
+><title
+>Paniranje mišem</title>
+<itemizedlist>
+  <listitem
+><para
+>Dok držite levo dugme miša nad slikom možete je klizati.</para
+></listitem>
+  <listitem
+><para
+>Točkić miša će klizati sliku nagore i nadole.</para
+></listitem>
+</itemizedlist>
+</sect2>
+
+
+<sect2 id='mouse_zooming'
+><title
+>Uveličavanje mišem</title>
+<itemizedlist>
+  <listitem
+><para
+>Klikom na srednje dugme miša uključuje se i isključuje automatsko uveličavanje slike.</para
+></listitem>
+  <listitem
+><para
+>Dok držite taster <keycap
+>Ctrl</keycap
+>, sliku možete uveličavati i umanjivati točkićem miša ili levim klikom (uveličavanje) i desnim klikom (umanjivanje).</para
+></listitem>
+
+  <listitem
+><para
+>Točkić miša uz držanje tastera <keycap
+>Alt</keycap
+> klizaće sliku vodoravno.</para
+></listitem>
+</itemizedlist>
+</sect2>
+
+
+<sect2 id='mouse_browsing'
+><title
+>Pregledanje mišem</title>
+<itemizedlist>
+  <listitem
+><para
+>Kada ste u režimu pregledanja, kliknite na sliku da se prebacite u režim prikaza i detaljnije je pogledate.</para
+></listitem>
+  <listitem
+><para
+>U režimu pregleda, točkić miša kliza nagore i nadole područje sličica.</para
+></listitem>
+  <listitem
+><para
+>Ukoliko je opcija <guilabel
+>Ponašanje točkića miša:</guilabel
+> pod <menuchoice
+><guimenu
+>Podešavanje</guimenu
+><guimenuitem
+>Podesi GwenView...</guimenuitem
+></menuchoice
+> postavljena na <guilabel
+>Pregledanje</guilabel
+>, obrtanjem točkića miša u režimu prikaza pomerate se kroz slike u fascikli.</para
+></listitem>
+</itemizedlist>
+</sect2>
+</sect1>
+
+<sect1 id="keybindings"
+> <title
+>Sveze tastera</title>
+
+<para
+><application
+>GwenView</application
+> dolazi sa nizom prečica sa tastature, koje se sve mogu pogledati i promeniti izborom <menuchoice
+><guimenu
+>Podešavanje</guimenu
+><guimenuitem
+>Podesi prečice...</guimenuitem
+></menuchoice
+>. U prozorima fajlova i fascikli normalno funkcionišu sve standardne KDE prečice, osim ako ih ručno ne promenite.</para>
+
+<para
+>Neke od najkorisnijih podrazumevanih prečica:</para>
+
+<itemizedlist>
+<listitem
+><para
+><keycap
+>Space</keycap
+>: prikazuje sledeću sliku u fascikli.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>Backspace</keycap
+>: prikazuje prethodnu sliku u fascikli.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>Alt</keycap
+><keycap
+>Gore</keycap
+></keycombo
+>: prebacuje u roditeljsku fasciklu trenutne fascikle.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>Ctrl</keycap
+><keycap
+>Shift</keycap
+><keycap
+>F</keycap
+></keycombo
+>: prebacuje preko celog ekrana.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>Esc</keycap
+>: prebacuje nazad u režim pregleda. </para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>Ctrl</keycap
+><keycap
+>M</keycap
+></keycombo
+>: prikazuje ili sakriva traku menija.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>Ctrl</keycap
+><keycap
+>B</keycap
+></keycombo
+>: prikazuje ili sakriva traku sličica.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F4</keycap
+>: prikazuje ili sakriva bočnu traku.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F6</keycap
+>: omogućava uređivanje trake lokacije, tako da možete neposredno uneti putanju do fajla. Standardnu traku lokacije možete vratiti klikom na strelicu sa desne strane.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>Ctrl</keycap
+><keycap
+>R</keycap
+></keycombo
+>: rotira sliku udesno.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>Ctrl</keycap
+><keycap
+>L</keycap
+></keycombo
+>: rotira sliku ulevo.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>Shift</keycap
+><keycap
+>R</keycap
+></keycombo
+>: menja veličinu trenutne slike.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>Shift</keycap
+><keycap
+>C</keycap
+></keycombo
+>: opseca trenutnu sliku.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>Ctrl</keycap
+><keycap
+>Y</keycap
+></keycombo
+>: kada je više slika prikazano u režimu prikaza, ovo ih sinhronizuje. </para
+></listitem>
+<!--FIXME not in kf5
+<listitem
+><para
+><keycombo action="simul"
+>&Tab;</keycombo
+>:
+When multiple images are displayed in View Mode, this switched to the image to
+the right of the currently selected image.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Shift;&Tab;</keycombo
+>:
+When multiple images are displayed in View Mode, this switched to the image to
+the left of the currently selected image.</para
+></listitem>
+-->
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>Ctrl</keycap
+><keycap
+>S</keycap
+></keycombo
+>: upisuje sve izmene učinjene nad slikom.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>Delete</keycap
+>: premešta sliku u smeće.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>Shift</keycap
+><keycap
+>Delete</keycap
+></keycombo
+>: trajno briše sliku sa diska. Pazite, ova radnja se ne može opozvati.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>Ctrl</keycap
+><keycap
+>P</keycap
+></keycombo
+>: štampa sliku.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>Ctrl</keycap
+><keycap
+>O</keycap
+></keycombo
+>: otvara sliku putem standardnog dijaloga za izbor fajlova.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F</keycap
+>: ova prečica aktivira i deaktivira uveličanje do uklapanja.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>P</keycap
+>: pri puštanju videa, ova prečica zaustavlja i nastavlja puštanje.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>Ctrl</keycap
+><keycap
+>T</keycap
+></keycombo
+>: uređuje oznake.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F2</keycap
+>: preimenuje sliku utkano.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>Delete</keycap
+>: premešta sliku u smeće.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>Shift</keycap
+><keycap
+>Del</keycap
+></keycombo
+>: briše sliku.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>Ctrl</keycap
+><keycap
+>F7</keycap
+></keycombo
+>: kopira sliku.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>Ctrl</keycap
+><keycap
+>F8</keycap
+></keycombo
+>: premešta sliku.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>Ctrl</keycap
+><keycap
+>F9</keycap
+></keycombo
+>: povezuje sliku.</para
+></listitem>
+
+</itemizedlist>
+
+</sect1>
+<sect1 id="advanced-configuration">
+    <title
+>Napredne postavne opcije</title>
+    <para
+>Neke beleške o skrivenim opcijama <application
+>GwenViewa</application
+> mogu se naći na <ulink url="http://userbase.kde.org/Special:myLanguage/Gwenview/Hidden_Configuration_Options"
+>ovoj stranici</ulink
+>. </para>
+    <important>
+        <para
+>Preko opcija opisanih na pomenutoj stranici možete naštelovati <application
+>GwenView</application
+> za posebne namene, ali imajte na umu da se za njih ne garantuje da će raditi u narednim izdanjima. </para>
+    </important>
+</sect1>
+</chapter>
+
+<chapter id="credits">
+<title
+>Zasluge i autorska prava</title>
+
+<para
+><application
+>GwenView</application
+> trenutno održava <personname
+><firstname
+>Orelijen</firstname
+> <surname
+>Gato</surname
+></personname
+>.</para>
+
+<para
+>Ovaj dokument napisao je <personname
+><firstname
+>Kristofer</firstname
+> <surname
+>Martin</surname
+></personname
+>.</para>
+
+<para
+>Ovaj dokument ažurirao je za KDE 4 <personname
+><firstname
+>Anri</firstname
+> <surname
+>de Valans</surname
+></personname
+>.</para>
+
+<para
+>Preveo Zoran Olujić <email
+>olujicz@gmail.com</email
+>.</para
+> 
+&underFDL; &underGPL; </chapter>
+
+</book>

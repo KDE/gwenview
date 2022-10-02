@@ -1,0 +1,1529 @@
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN"
+"dtd/kdedbx45.dtd" [
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % German "INCLUDE"
+><!-- change language only here -->
+]>
+
+<book id="gwenview" lang="&language;">
+<title
+>Das Handbuch zu Gwenview</title>
+
+<bookinfo>
+<authorgroup>
+<author
+><firstname
+>Aurélien</firstname
+> <surname
+>Gâteau</surname
+> <affiliation
+><address
+><email
+>agateau@kde.org</email
+></address
+></affiliation>
+</author>
+<author
+><firstname
+>Christopher</firstname
+><surname
+>Martin</surname
+> <affiliation
+><address
+><email
+>chrsmrtn@debian.org</email
+></address
+></affiliation>
+</author>
+<author
+><firstname
+>Henry</firstname
+> <surname
+>de Valence</surname
+> <affiliation
+><address
+><email
+>hdevalence@gmail.com</email
+></address
+></affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Thomas</firstname
+><surname
+>Reitelbach</surname
+><affiliation
+><address
+><email
+>tr@erdfunkstelle.de</email
+></address
+></affiliation
+><contrib
+>Übersetzung</contrib
+></othercredit
+> 
+</authorgroup>
+<copyright>
+<year
+>2005</year>
+<holder
+>Aurélien Gâteau</holder>
+</copyright>
+<copyright>
+<year
+>2008</year>
+<holder
+>Henry de Valence</holder>
+</copyright>
+<legalnotice
+>&FDLNotice;</legalnotice>
+
+<date
+>2021-06-04</date>
+<releaseinfo
+>KDE Gear 21.08</releaseinfo>
+<abstract>
+<para
+>&gwenview; ist ein Bild- und Videobetrachter.</para>
+</abstract>
+<keywordset>
+<keyword
+>KDE</keyword>
+<keyword
+>Bild</keyword>
+<keyword
+>Betrachter</keyword>
+<keyword
+>Künstler</keyword>
+<keyword
+>Foto</keyword>
+<keyword
+>Bild</keyword>
+</keywordset>
+</bookinfo>
+<!--FIXME Read devels blog on http://agateau.com/
+-->
+<chapter id="introduction">
+<title
+>Einführung</title>
+
+<sect1 id="what-is-gwenview">
+<title
+>Was ist &gwenview;</title>
+
+<para
+>&gwenview; ist ein schneller und einfach zu verwendender Betrachter für Bilder und Videos. </para>
+
+ <para
+>&gwenview; hat zwei Hauptmodi: einen Übersichts- und einen Ansichtsmodus: Beide können im normalen Anwendungsfenster und im Vollbildmodus benutzt werden. Im Übersichtsmodus blättern Sie durch die Vorschau der Bilder in einem Ordner, der Ansichtsmodus zeigt die Bilder einzeln an und im Vollbildmodus können Sie die Bilder in einer Diaschau anzeigen. Außerdem gibt es die Startseite, die Karteikarten mit zuletzt geöffneten Ordnern und Adressen sowie Ihre Orte und Stichwörter anzeigt. </para>
+
+<para
+>Das Laden von Bildern wird von der Qt-Bibliothek übernommen, daher unterstützt &gwenview; alle Bildformate, die auch von Qt unterstützt werden. &gwenview; zeigt auch Bilder mit Alpha-Kanal (Transparenz) und Animationen korrekt an.</para>
+
+<para
+>&gwenview; unterstützt das Anzeigen und Bearbeiten von EXIF-Kommentaren in JPEG-Bildern. Des weiteren wird verlustloses Transformieren von JPEG sowie Rotieren und Spiegeln unterstützt.</para>
+
+<para
+>&gwenview; kann eingebettete Farbprofile von PNG- und JPEG-Dateien lesen. Mit den Farbprofilen der Bilder und der Anzeige können die Bilder  farbgetreu auf dem Bildschirm dargestellt werden.</para>
+</sect1>
+
+</chapter>
+
+<chapter id="interface">
+<title
+>Die Oberfläche</title>
+
+<sect1 id='start_page'
+><title
+>Startseite</title>
+<para
+>Die Startseite enthält Karteikarten mit zuletzt geöffneten Ordnern und Adressen auf der linken und mit Orten und Stichwörtern auf der rechten Seite.</para>
+
+<screenshot>
+  <screeninfo
+>Bildschirmfoto der Startseite</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="start-page.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+</sect1>
+
+<sect1 id='image_operations'
+><title
+>Bildbearbeitung</title>
+<para
+>In &gwenview; gibt es einige Funktionen sowohl im Übersichts-, im Ansichts- und im Vollbildmodus. Sie können grundlegende Änderungen an Ihren Bildern vornehmen.</para>
+<itemizedlist>
+<listitem
+><para
+>Drehung: Das Bild wird entweder nach links (gegen den Uhrzeigersinn) mit <menuchoice
+> <shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>R</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Bearbeiten</guimenu
+> <guimenuitem
+>Rechts drehen</guimenuitem
+> </menuchoice
+> oder nach rechts (im den Uhrzeigersinn) mit <menuchoice
+> <shortcut
+> <keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>R</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Bearbeiten</guimenu
+> <guimenuitem
+>Links drehen</guimenuitem
+> </menuchoice
+> gedreht. </para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+> <guimenu
+>Bearbeiten</guimenu
+> <guimenuitem
+>Senkrecht spiegeln</guimenuitem
+> </menuchoice
+>: Spiegelt das Bild an der senkrechten Achse wie in einem Spiegel.</para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+> <guimenu
+>Bearbeiten</guimenu
+> <guimenuitem
+>Waagerecht spiegeln</guimenuitem
+> </menuchoice
+>: Spiegelt das Bild an der waagerechten Achse.</para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+> <shortcut
+> <keycombo action="simul"
+>&Shift;<keycap
+>R</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Bearbeiten</guimenu
+> <guimenuitem
+>Größe ändern</guimenuitem
+> </menuchoice
+>: Vergrößert oder verkleinert das aktuelle Bild. Durch eine Vergrößerung kann das Bild verschwommen oder verpixelt wirken.</para
+></listitem>
+ <!-- Crop + Red Eye Reduction are discussed in View mode sect-->
+</itemizedlist>
+
+<para
+>Diese Aktionen sind auch auf der Karteikarte <guilabel
+>Aktionen</guilabel
+> der Seitenleiste verfügbar.</para>
+
+<para
+>Wenn Sie eins oder mehrere Bilder geändert haben, erscheint oben über den Bildern eine Leiste mit zusätzlichen Aktionen. Sie können Ihre Änderungen zurücknehmen oder wiederherstellen, zum nächsten oder vorherigen geänderten Bild gehen und es gibt drei Optionen zur Speicherung der geänderten Bilder.  </para>
+
+<screenshot>
+  <screeninfo
+>Aktionenleiste für geänderte Bilder</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="modified-bar.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<!--FIXME all actions also available context menus, where to add that info -->
+
+<tip
+><para
+>Haben Sie die KIPI-Module installiert, enthält das Menü einen zusätzlichen Eintrag <guimenu
+>Module</guimenu
+>, in dem viele zusätzliche Funktionen zur Bildbearbeitung enthalten sind.</para
+></tip>
+</sect1>
+
+<sect1 id='browse_mode'
+><title
+>Übersichtsmodus</title>
+
+<para
+>In diesem Modus kann man auf einfache Weise Dateien und Ordner durchsehen. Die Bilder im aktuellen Ordner werden als Vorschau angezeigt, Unterordner als Symbole. </para>
+
+<screenshot>
+  <screeninfo
+>Bildschirmfoto des Übersichtsmodus</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="browse_mode.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<para
+>Bewegen Sie den Mauszeiger auf ein Bild, werden Knöpfe zur Auswahl, zur Drehung und zum Wechseln in den Vollbildmodus angezeigt. Geänderte Bilder werden durch ein nach rechts unten gerichtetes Symbol gekennzeichnet, klicken Sie darauf, um die geänderten Bilder zu speichern. Sie können auch mehrere Bilder auswählen und sie im Ansichtsmodus nebeneinander anzeigen.</para>
+
+<para
+>Mit dem Schieberegler unten rechts können Sie die Größe der Bilder ändern. Außerdem können die Bilder im Feld unten links nach Namen, Datum, Stichwörtern und Bewertung gefiltert werden. Die Werkzeugleiste wird in den Modi Übersicht und Ansehen links angezeigt  und enthält die am häufigsten benötigten Funktionen . </para>
+<itemizedlist>
+<listitem
+><para
+><guiicon
+>Startseite</guiicon
+>: Wechselt zur Startseite.</para
+></listitem>
+<listitem
+><para
+><guiicon
+>Übersicht</guiicon
+>: Wechselt in den Übersichtsmodus.</para
+></listitem>
+<listitem
+><para
+><guiicon
+>Ansehen</guiicon
+>: Wechselt in den Ansichtsmodus.</para
+></listitem>
+<listitem
+><para
+><guiicon
+>Vorheriges</guiicon
+>: Klicken Sie auf diesen Knopf, um das vorherige Bild im Ordner anzuzeigen.</para
+></listitem>
+
+<listitem
+><para
+><guiicon
+>Nächstes</guiicon
+>: Klicken Sie auf diesen Knopf, um das nächste Bild im Ordner anzuzeigen.</para
+></listitem>
+
+<listitem
+><para
+><guiicon
+>Bearbeitungswerkzeuge anzeigen</guiicon
+>: Durch Klicken auf diesen Knopf schalten Sie die <link linkend="sidebar"
+>Seitenleiste mit Aktionen zur Bildbearbeitung</link
+> ein und aus.</para
+></listitem>
+
+<listitem
+><para
+><guiicon
+>Weitergeben</guiicon
+>: Klicken Sie auf diesen Knopf. Damit öffnen Sie ein Menü mit Aktionen zur Weitergabe Ihrer Bilder über soziale Medien und Internetdiensten für Bildersammlungen. Für diese Funktionen müssen KIPI-Module installiert werden.</para
+></listitem>
+<listitem
+><para
+><guiicon
+>Vollbild</guiicon
+>: Wechselt in den Vollbildmodus.</para
+></listitem>
+</itemizedlist>
+
+</sect1>
+
+<sect1 id='view_mode'
+><title
+>Ansichtsmodus</title>
+<para
+>Im Ansichtsmodus werden die Bilder in voller Größe angezeigt. Links wird die gleiche <link linkend="sidebar"
+>Seitenleiste</link
+> wie im Übersichtsmodus angezeigt. Unten gibt es einen Vorschaubereich, in dem Sie durch die Bilder aus dem aktuellen Ordner blättern können. Klicken Sie auf den Knopf <guibutton
+>Vorschaubereich</guibutton
+>, um diesen Bereich aus- und einzublenden. Um die Größe der Vorschaubilder zu ändern, verschieben Sie die Trennlinie mit der &LMBn;.</para>
+
+<para
+>Im Ansichtsmodus können mehrere Bilder gemeinsam angezeigt werden. Sie können im Übersichtsmodus mehrere Bilder auswählen, bevor Sie in den Ansichtsmodus wechseln. Im Ansichtsmodus klicken Sie auf den Knopf <guibutton
+>+</guibutton
+>, der beim Überfahren eines Vorschaubildes mit der Maus erscheint, um das Bild gemeinsam mit vorher ausgewählten Bildern in der Ansicht anzuzeigen. Für diese Bilder wird ein Knopf <guibutton
+>-</guibutton
+> angezeigt, damit können Sie diese Bilder aus der gemeinsamen Anzeige entfernen.</para>
+
+<para
+>Werden mehrere Bilder angezeigt, dann erscheint eine kleine Werkzeugleiste unter jedem Bild mit Einträgen zum Löschen oder Entfernen aus der Ansicht. Sie können die Bilder unabhängig von einander vergrößern oder verschieben, oder die Ansichten koppeln. Diese Funktion schalten Sie mit <guilabel
+>Ansicht koppeln</guilabel
+> ein oder aus oder indem Sie den Kurzbefehl <keycombo action="simul"
+>&Ctrl;<keycap
+>Y</keycap
+></keycombo
+>. Sie können zu Bildern wechseln, indem Sie sie anklicken oder indem Sie die Tastatur verwenden. Um zum nächsten Bild zu wechseln, drücken Sie die Taste <keycombo action="simul"
+>&Tab;</keycombo
+>. Zum vorherigen Bild gehen Sie mit <keycombo action="simul"
+>&Shift;&Tab;</keycombo
+>.</para>
+
+<screenshot>
+  <screeninfo
+>Bildschirmfoto des Ansichtsmodus</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="view_mode.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<para
+>Mit dem Schieberegler rechts stellen Sie die Vergrößerung des Bildes ein. Neben diesem Regler befinden sich die Knöpfe <guibutton
+>Einpassen</guibutton
+>, <guibutton
+>Füllen</guibutton
+> und <guibutton
+>100 %</guibutton
+> mit drei voreingestellten Vergrößerungsstufen. <guibutton
+>Einpassen</guibutton
+> vergrößert das aktuelle Bild auf die Größe des Anzeigefensters. mit  <guibutton
+>Füllen</guibutton
+> wird das Bild auf die Breite oder Höhe vergrößert und <guibutton
+>100 %</guibutton
+> zeigt das Bild in voller Pixelgröße. Mit dem Kurzbefehl <keycap
+>F</keycap
+> können Sie zwischen <guibutton
+>Einpassen</guibutton
+> und <guibutton
+>100 %</guibutton
+> wechseln. Mit dem Kurzbefehl <keycombo action="simul"
+>&Shift;<keycap
+>F</keycap
+></keycombo
+> wechselt zwischen <guibutton
+>Füllen</guibutton
+> und <guibutton
+>100 %</guibutton
+>.</para>
+
+<para
+>Wenn ein Bild auf die Fenstergröße eingepasst ist, können Sie mit den Pfeiltasten zum vorherigen oder nächsten Bild gehen. Wird das Bild vergrößert angezeigt, verschieben Sie mit den Pfeiltasten den angezeigten Bildausschnitt. Dieses Verhalten finden Sie auch bei Handys und Digitalkameras.</para>
+
+<para
+>Wird ein Bild vergrößert angezeigt, dann erscheint eine Übersicht. Darin können Sie den Bildausschnitt mit der Maus und den Pfeiltasten verschieben. Diese Übersicht wird nach einer kurzen Verzögerung ausgeblendet und erscheint wieder beim Vergrößern, Verkleinern oder Blättern. Diese Übersicht können Sie im Kontextmenü oder mit <menuchoice
+><guimenu
+>Ansicht</guimenu
+> <guimenuitem
+>Übersicht bei Vergrößerung anzeigen</guimenuitem
+></menuchoice
+> ausschalten.</para>
+
+<para
+>Sie können festlegen, was beim Wechsel zum nächsten Bild passiert, wenn Sie die Ansicht auf einen Bereich des aktuellen Bilds vergrößert haben. Dazu verwenden Sie die Einstellungen im Abschnitt <guilabel
+>Vergrößerungsmodus</guilabel
+> auf der Seite <guimenuitem
+>Bildansicht</guimenuitem
+> des Einrichtungsdialogs von &gwenview;, den Sie mit <menuchoice
+><guimenu
+>Einstellungen</guimenu
+><guimenuitem
+>&gwenview; einrichten ...</guimenuitem
+></menuchoice
+> öffnen.</para>
+
+<itemizedlist>
+    <listitem
+><para
+>Haben Sie <guilabel
+>Jedes Bild automatisch einpassen</guilabel
+> gewählt, wird das nächste Bild vollständig im Fenster angezeigt.</para
+></listitem>
+    <listitem
+><para
+>Mit der Einstellung <guilabel
+>Vergrößerung und Position beibehalten</guilabel
+> verwenden all Bilder die gleiche Vergrößerung und Position: Das nächste Bild hat die gleichen Vergrößerungsparameter wie das aktuelle Bild und wenn die Parameter des aktuellen Bilds geändert werden, wird auch das vorherige Bild mit den aktualisierten Position und Vergrößerung angezeigt.</para
+></listitem>
+    <listitem
+><para
+>Mit der Einstellung <guilabel
+>Vergrößerung und Position je Bild</guilabel
+> werden alle Bilder in ihrer eigenen eingestellten Vergrößerung und Position angezeigt: Das nächste Bild wird zu Anfang mit den gleichen Vergrößerungsparametern wie das aktuelle Bild angezeigt, aber dann wird für das nächste Bild die eigene Vergrößerung und Position behalten. Werden die Vergrößerungsparameter des nächsten Bild geändert, wird das vorige Bild <emphasis
+>nicht</emphasis
+> in der aktualisierten Vergrößerung und Position angezeigt.</para
+></listitem>
+</itemizedlist>
+
+<tip
+><para
+>Sie können direkt im Ansichtsmodus beginnen, wenn Sie &gwenview; aus dem Kontextmenü eines anderen Programms durch <guimenuitem
+>Öffnen mit ...</guimenuitem
+> oder auf der Befehlszeile mit dem Namen eines Bild als Argument starten.</para
+> </tip>
+
+<para
+>Die folgenden zusätzlichen Möglichkeiten zur Bildbearbeitung gibt es nur im Ansichtsmodus:</para>
+
+<itemizedlist>
+<listitem
+><para
+><menuchoice
+> <shortcut
+> <keycombo action="simul"
+>&Shift;<keycap
+>C</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Bearbeiten</guimenu
+> <guimenuitem
+>Zuschneiden</guimenuitem
+> </menuchoice
+>: Entfernt die äußeren Teile eines Bildes. </para>
+<para
+>Zusätzliche Parameter erreichen Sie, wenn Sie auf <guilabel
+>Erweiterte Einstellungen</guilabel
+> in der Leiste unter dem Bild ankreuzen. Dann können Sie das Seitenverhältnis, die Position und die neue Bildgröße einstellen. </para>
+<para
+>Um den Zuschnittbereich mit der Maus anzupassen, ziehen Sie an den grauen Quadraten an der Bildrändern und mit gedrückter &LMBn; im Bereich können Sie den Ausschnitt mit der Maus verschieben. </para>
+<para
+>Haben Sie den Bereich eingestellt, drücken Sie den Knopf <guibutton
+>Zuschneiden</guibutton
+>, um das Ergebnis zu sehen. In der Leiste über dem Bild können Sie das geänderte Bild speichern oder die Änderung zurücknehmen. </para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+> <guimenu
+>Bearbeiten</guimenu
+> <guimenuitem
+>Rote-Augen-Reduzierung</guimenuitem
+> </menuchoice
+>: Reduziert den „Rote-Augen“-Effekt, der häufig bei Bildern auftritt, die mit Blitzlicht aufgenommen wurden. </para
+></listitem>
+</itemizedlist>
+
+</sect1>
+
+<sect1 id='fullscreen_mode'>
+<title
+>Vollbildmodi</title>
+
+<para
+>In den Vollbildmodus wechseln Sie mit dem Knopf <guiicon
+>Vollbild</guiicon
+> in der Werkzeugleiste oder mit <menuchoice
+> <shortcut
+> <keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>F</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Ansicht</guimenu
+> <guimenuitem
+>Vollbildmodus</guimenuitem
+> </menuchoice
+>. </para>
+<para
+>Um diesen Modus zu verlassen, drücken Sie die Taste &Esc;.</para>
+
+<sect2>
+<title
+>Übersicht im Vollbildmodus</title>
+
+<para
+>Um Übersichtsmodus können Sie auch zum Vollbild wechseln, wenn Sie auf das Symbol auf den Vorschaubildern klicken. Diese Symbole werden angezeigt, wenn Sie mit dem Mauszeiger über die Vorschaubilder fahren. </para>
+<screenshot>
+  <screeninfo
+>Bildschirmfoto der Übersicht im Vollbildmodus</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="fullscreen-browse.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para
+>Die Übersicht im Vollbildmodus können Sie zum Beispiel benutzen, um Bilder auf einem großen Fernsehbildschirm anzuzeigen. </para>
+</sect2>
+
+<sect2 id="fullscreen">
+<title
+>Ansicht im Vollbildmodus</title>
+<para
+>Bei der Ansicht m Vollbildmodus werden Ihre Bilder in einer Diaschau angezeigt. Diesen Modus aktivieren Sie durch Klicken auf den Knopf, der angezeigt wird, wenn Sie den Mauszeiger im Übersichtsmodus auf das Vorschaubild bewegen. Alternativ drücken Sie das Symbol <guiicon
+>Vollbild</guiicon
+> in der Werkzeugleiste. <screenshot>
+  <screeninfo
+>Bildschirmfoto der Übersicht im Vollbildmodus</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="fullscreen-view.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+</para>
+
+<para
+>Die Bedienungsleiste wird automatisch ausgeblendet. Um sie wieder einzublenden, bewegen Sie den Mauszeiger zum oberen Rand des Bildschirms. Solange sich der Mauszeiger auf der Leiste befindet, wird sie nicht ausgeblendet. In der Bedienungsleiste finden sie die meisten Knöpfe aus der Werkzeugleiste wieder, mit Ausnahme von <guiicon
+>Vollbildmodus beenden</guiicon
+>. Damit kommen Sie wieder zum normalen Fenster von &gwenview; zurück. Außerdem gibt es den Knopf <guiicon
+>Diaschau starten / Diaschau anhalten</guiicon
+> und <guiicon
+>Vollbildmodus einrichten</guiicon
+>, um den Einrichtungsdialog für den Vollbildmodus zu öffnen. In diesem Dialog können Sie folgende Einstellungen vornehmen: </para>
+
+<itemizedlist>
+    <listitem
+><para
+>Mit dem Schieberegler <guilabel
+>Intervall</guilabel
+> stellen Sie die Zeit für die Anzeigedauer eines Bildes ein.</para
+></listitem>
+    <listitem
+><para
+>Aktivieren Sie <guilabel
+>Wiederholen</guilabel
+>, wird am Ende der Diaschau wieder mit dem ersten Bild weitergemacht, anstatt die Diaschau anzuhalten. </para
+></listitem>
+    <listitem
+><para
+>Aktivieren Sie <guilabel
+>Zufällig</guilabel
+>, werden die Bilder in zufälliger Reihenfolge angezeigt, sonst in alphabetischer Reihenfolge der Bilder im Ordner.</para
+></listitem>
+    <listitem
+><para
+><guibutton
+>Anzuzeigende Bildinformationen auswählen</guibutton
+> öffnet einen Dialog, in dem Sie angeben können, welche Bildinformationen unter den Knöpfen in der Werkzeugleiste angezeigt werden sollen. </para
+></listitem>
+    <listitem
+><para
+>Haben Sie die Einstellung <guilabel
+>Vorschaubilder anzeigen</guilabel
+> aktiviert, werden diese oben rechts neben der Werkzeugleiste angezeigt.</para
+></listitem>
+    <listitem
+><para
+>Mit dem Schieberegler <guilabel
+>Höhe</guilabel
+> ändern Sie die Größe der angezeigten Vorschaubilder.</para
+></listitem>
+</itemizedlist>
+
+<para
+>Ist die Vorschau eingeschaltet, gibt es in der Bedienungsleiste einen Bereich mit Vorschaubildern der anderen Bilder im Ordner. Um eines dieser Bilder anzuzeigen, klicken Sie darauf.</para>
+</sect2>
+</sect1>
+
+<sect1 id="sidebar">
+<title
+>Seitenleiste</title>
+
+ <para
+>Die Seitenleiste kann im Übersichts- und Ansichtsmodus links eingeblendet werden. In der Standardeinstellung wird die Seitenleiste im Übersichtsmodus nicht angezeigt. Mit <menuchoice
+> <shortcut
+> <keycap
+>F4</keycap
+> </shortcut
+> <guimenu
+>Ansicht</guimenu
+> <guimenuitem
+>Seitenleiste</guimenuitem
+> </menuchoice
+> im Menü oder mit dem Knopf <guiicon
+>▮←</guiicon
+> / <guiicon
+>▮→</guiicon
+> unten links in der Statusleiste. Klicken Sie auf den Knopf, um die Seitenleiste aus- oder einzublenden. Die Seitenleiste enthält mehrere Karteikarten:</para>
+
+<variablelist>
+
+<varlistentry>
+<term
+><guilabel
+>Ordner</guilabel
+></term>
+<listitem
+><para
+>Diese Karteikarte zeigt eine Liste aller Ordner auf Ihrem System und ermöglicht das schnelle Wechseln in andere Ordner. Im Übersichtsmodus werden Vorschaubilder der Ordner, im Ansichtsmodus wird das erste Bild im ausgewählten Ordner gezeigt. Vom ersten Bild aus können Sie den Ordner durchsehen, indem Sie die Knöpfe <guibutton
+>Vorheriges</guibutton
+> und <guibutton
+>Nächstes</guibutton
+> oder Kurzbefehle benutzen. Klicken Sie auf einen Ordner, um zwischen Ansichts- und Übersichtsmodus zu wechseln.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Information</guilabel
+></term>
+<listitem
+><para
+>Zeigt <guilabel
+>Metainformation</guilabel
+> wie Dateiname und -größe an. Klicken Sie auf <guilabel
+>Mehr ...</guilabel
+>, dann werden alle verfügbaren Metadaten in einem Dialog angezeigt und Sie können auswählen, welche Daten in der Seitenleiste angezeigt werden sollen.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Aktionen</guilabel
+></term>
+<listitem
+><para
+>Aus dieser Karteikarte finden Sie sowohl die <link linkend="image_operations"
+>vorher beschriebenen globalen Bildbearbeitungsmethoden</link
+> wie auch spezielle Funktionen für den Ansichtsmodus. Außerdem gibt es häufig benötigte Dateioperationen wie Kopieren, Umbenennen, Löschen und die Erstellung neuer Ordner.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+</sect1>
+
+</chapter>
+<chapter id="importer">
+<title
+>&gwenview;-Importer</title>
+
+<sect1>
+<title
+>Einführung</title>
+<para
+>&gwenview;-Importer ermöglicht das Überspielen von Fotos auf Digitalkameras oder Wechselmedien. Um das Programm zu starten, wählen Sie <guilabel
+>Fotos herunterladen mit &gwenview;</guilabel
+> in der &kde;-Geräteüberwachung, nachdem Sie ein unterstütztes Gerät angeschlossen haben.</para>
+
+<para
+>Wenn Sie ein Gerät anschließen, zeigt &gwenview;-Importer alle Bilder und Videos rekursiv an. </para>
+<para
+>Aber &eg; bei einem Smartphone werden dann auch alle Medienordner auf dem Gerät angezeigt, das ist nicht unbedingt gewünscht. Normalerweise sollen nur Ihre Aufnahme angezeigt werden, die sich normalerweise in einem besonderen Unterordner befinden. </para>
+
+<screenshot>
+  <screeninfo
+>Einstellung des Basisordners</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="importer-picking-root-folder.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para
+>Der anzuzeigende Basisordner kann eingestellt werden, er wird für jedes angeschlossene Gerät getrennt gespeichert. Beim nächsten Anschluß eines Geräts werden dann nur die passenden Bilder und Videos angezeigt. </para>
+
+<sect2>
+<title
+>Bilder importieren</title>
+
+<screenshot>
+  <screeninfo
+>Bildschirmfoto des &gwenview;-Importer</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="importer.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<para
+>Sie können einzelne Bilder oder Ordner im Ansichtsbereich zum Import auswählen, indem Sie auf das Symbol <guiicon
+>+</guiicon
+> klicken, das beim Überfahren der Einträge mit der Maus erscheint. Den Ordner, in dem die zu importierenden Bilder gespeichert werden sollen. wählen Sie im Eingabefeld unten im Dialog. Haben Sie alle Einstellungen vorgenommen, klicken Sie auf den Knopf <guibutton
+>Auswahl importieren</guibutton
+>, um nur ausgewählte Bilder zu importieren, oder auf <guibutton
+>Alle importieren</guibutton
+>, um alle Bilder auf dem angeschlossenen Gerät herunterzuladen. </para>
+</sect2>
+
+<sect2>
+<title
+>Automatisch umbenennen</title>
+<para
+>&gwenview;-Importer kann Ihre Dateien nach bestimmten Mustern umbenennen. Um dies einzurichten, wählen Sie <guibutton
+>Einstellungen</guibutton
+> links unten im Dialog. Dann können Sie diese Funktion mit dem Ankreuzfeld oben ein-oder ausschalten. Das <guilabel
+>Format für das Umbenennen</guilabel
+> unterstützt mehrere spezielle Platzhalter, die durch Metadaten wie das Aufnahmedatum oder den Dateinamen ersetzt werden. Diese Platzhalter sind unter dem Eingabefeld aufgeführt. Sie können entweder auf die Namen der Platzhalter klicken oder Sie manuell in das Eingabefeld eintragen.</para>
+</sect2>
+</sect1>
+
+</chapter>
+<chapter id="tips">
+<title
+>Tipps</title>
+<sect1 id='mouse'
+><title
+>Verwenden der Maus</title>
+
+<sect2 id='mouse_panning'
+><title
+>Mit der Maus verschieben</title>
+<itemizedlist>
+  <listitem
+><para
+>Wenn man die linke Maustaste über einem Bild gedrückt hält, kann man das Bild in alle Richtungen rollen.</para
+></listitem>
+  <listitem
+><para
+>Das Mausrad rollt das Bild auf und ab.</para
+></listitem>
+</itemizedlist>
+</sect2>
+
+
+<sect2 id='mouse_zooming'
+><title
+>Zoomen mit der Maus</title>
+<itemizedlist>
+  <listitem
+><para
+>Klicken Sie die &MMB; wechselt zwischen <guibutton
+>Einpassen</guibutton
+> und der prozentualen Anzeigegröße. Drücken Sie dabei die &Shift;taste, wechseln Sie zwischen <guibutton
+>Füllen</guibutton
+> und der prozentualen Anzeigegröße.</para
+></listitem>
+  <listitem
+><para
+>Zum Herein- und Herauszoomen hält man die &Ctrl;-Taste gedrückt und verwendet das Mausrad. Außerdem kann man (ebenfalls mit gedrückter &Ctrl;-Taste) mit der linken Maustaste heraus- und mit der rechten Maustaste hereinzoomen.</para
+></listitem>
+
+  <listitem
+><para
+>Wenn man das Mausrad bei gedrückter &Alt;-Taste verwendet, wird das Bild horizontal gerollt.</para
+></listitem>
+</itemizedlist>
+</sect2>
+
+
+<sect2 id='mouse_browsing'
+><title
+>Durchsuchen mit der Maus</title>
+<itemizedlist>
+  <listitem
+><para
+>Klicken Sie im Übersichtsmodus auf ein Bild, um in den Ansichtsmodus zu wechseln und das Bild anzuzeigen.</para
+></listitem>
+  <listitem
+><para
+>Im Übersichtsmodus blättern Sie mit dem Mausrad durch die Bilder im Vorschaubereich.</para
+></listitem>
+  <listitem
+><para
+>Ist <guilabel
+>Zum vorherigen bzw. nächsten Bild im Ordner gehen</guilabel
+> als <guilabel
+>Verhalten des Mausrades</guilabel
+> in <menuchoice
+><guimenu
+>Einstellungen</guimenu
+><guimenuitem
+>&gwenview; einrichten ...</guimenuitem
+></menuchoice
+> ausgewählt, können Sie im Ansichtsmodus mit dem Mausrad durch die Bilder im Vorschaubereich blättern. </para
+></listitem>
+</itemizedlist>
+</sect2>
+</sect1>
+
+<sect1 id="keybindings"
+> <title
+>Kurzbefehle</title>
+
+<para
+>&gwenview; hat eine Reihe von Kurzbefehlen. Diese kann man unter <menuchoice
+><guimenu
+>Einstellungen</guimenu
+><guimenuitem
+>Kurzbefehle festlegen ...</guimenuitem
+></menuchoice
+> ansehen und bearbeiten. Beachten Sie, dass in den Datei- und Ordneransichten alle üblichen &plasma;-Kurzbefehle funktionieren, solange sie nicht anderweitig zugeordnet wurden.</para>
+
+<para
+>Die wichtigsten voreingestellten Kurzbefehle sind:</para>
+
+<itemizedlist>
+<listitem
+><para
+><keycap
+>Leertaste</keycap
+>: Zeigt das nächste Bild im Ordner an.</para
+></listitem>
+
+<listitem
+><para
+>&Backspace;: Zeigt das vorige Bild im Ordner an.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Alt;<keycap
+>Pfeil hoch</keycap
+></keycombo
+>: Wechselt vom aktuellen Ordner in den übergeordneten Ordner.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl; &Shift;<keycap
+>F</keycap
+></keycombo
+>: Wechselt in den Vollbildmodus.</para
+></listitem>
+
+<listitem
+><para
+>&Esc;: Wechselt in den Übersichtsmodus. </para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>M</keycap
+></keycombo
+>: Zeigt die Menüleiste an oder blendet sie aus.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>B</keycap
+></keycombo
+>: Zeigt den Vorschaubereich an oder blendet ihn aus.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F4</keycap
+>: Seitenleiste anzeigen oder ausblenden.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F6</keycap
+>: Setzt die Adressleiste in den Modus Bearbeiten, sodass Sie einen Pfad direkt eingeben können. Klicken Sie auf den Pfeil rechts, um die Adressleiste wieder zurück in den Standardmodus zu setzen.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>R</keycap
+></keycombo
+>: Dreht das angezeigte Bild im Uhrzeigersinn nach rechts.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;&Shift; <keycap
+>R</keycap
+></keycombo
+>: Dreht das angezeigte Bild gegen den Uhrzeigersinn nach links.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Shift;<keycap
+>R</keycap
+></keycombo
+>: Ändert die Größe des angezeigten Bildes.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl; <keycap
+>C</keycap
+></keycombo
+>: Ermöglicht das Zuschneiden des angezeigten Bildes.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>S</keycap
+></keycombo
+>: Koppelt die Ansichten von Bildern, wenn im Ansichtsmodus mehrere Bilder angezeigt werden. </para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>S</keycap
+></keycombo
+>: Speichert alle Änderungen am angezeigten Bild.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>Entf</keycap
+>: Verschiebt das angezeigte Bild in den Papierkorb.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Shift;<keycap
+>Entf</keycap
+></keycombo
+>: Löscht das Bild endgültig von der Festplatte. Diese Aktion kann nicht rückgängig gemacht werden.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl; <keycap
+>P</keycap
+></keycombo
+>: Druckt das angezeigte Bild.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>O</keycap
+></keycombo
+>: Startet den Standard-Dateidialog, um ein Bild zu öffnen.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F</keycap
+>: Mit diesem Kurzbefehl wechseln Sie zwischen Anzeige in der tatsächlichen Größe und der auf die Fenstergröße angepassten Anzeige.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>P</keycap
+>: Beim Betrachten eines Videos können Sie mit diesem Kurzbefehl die Wiedergabe starten und anhalten.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>T</keycap
+></keycombo
+>: Stichwörter bearbeiten.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F2</keycap
+>: Bild umbenennen.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>Entf</keycap
+>: Verschiebt ein Bild in den Papierkorb.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Shift;<keycap
+>Del</keycap
+></keycombo
+>: Löscht ein Bild</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>F7</keycap
+></keycombo
+>: Kopiert ein Bild</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>F8</keycap
+></keycombo
+>: Verschiebt ein Bild</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>P</keycap
+></keycombo
+>: Verknüpft ein Bild.</para
+></listitem>
+
+</itemizedlist>
+
+</sect1>
+</chapter>
+
+<chapter id="configure">
+    <title
+>&gwenview; einrichten</title>
+    <sect1 id="configindex">
+        <title
+>Übersicht der Einstellungen </title>
+        <para
+>Mit <menuchoice
+><guimenu
+>Einstellungen</guimenu
+><guimenuitem
+>&gwenview; einrichten ...</guimenuitem
+> </menuchoice
+> öffnen Sie einen Dialog mit drei Abschnitten. Dieses Kapitel beschreibt ausführlich alle vorhandenen Optionen. </para>
+        <itemizedlist>
+            <listitem>
+                <para
+><link linkend="configgeneral"
+>Allgemein</link
+></para>
+            </listitem>
+            <listitem>
+                <para
+><link linkend="configview"
+>Bildansicht</link
+></para>
+            </listitem>
+            <listitem>
+                <para
+><link linkend="configadvanced"
+>Erweitert</link
+></para>
+            </listitem>
+        </itemizedlist>
+    </sect1>
+    <sect1 id="configgeneral">
+        <title
+>Allgemein</title>
+        <variablelist>
+            <varlistentry>
+                <term
+><guilabel
+>Videos</guilabel
+></term>
+                <listitem>
+                    <para
+>Aktivieren Sie <guilabel
+>Videos anzeigen</guilabel
+>, damit &gwenview; neben Bildern auch Videos anzeigt.</para>
+                    <para
+>Schalten Sie <guilabel
+>Automatisch wiedergeben</guilabel
+> ab, um Videos beim Durchsehen nicht automatisch zu starten.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Benachrichtigen beim letzten Bild</guilabel
+></term>
+                <listitem>
+                    <para
+>Wählen Sie <guilabel
+>Nie</guilabel
+>, damit &gwenview; ohne weitere Benachrichtigung die Liste der Bilder durchläuft.</para>
+                    <para
+>Wählen Sie <guilabel
+>Nur in Diaschau</guilabel
+>, wenn Benachrichtigungen über die Anzeige des letzten Bildes nur in Modus <link linkend="fullscreen"
+>Diaschau</link
+> angezeigt werden sollen.</para>
+                    <para
+>Wählen Sie <guilabel
+>Immer</guilabel
+>, wenn die Benachrichtigung immer angezeigt werden soll.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Hintergrundfarbe</guilabel
+></term>
+                <listitem>
+                    <para
+>Mit dem Schieberegler die Farbe des Hintergrunds im Modus <guibutton
+>Übersicht</guibutton
+> und <guibutton
+>Ansehen</guibutton
+> von Schwarz (ganz links) zu Weiß (ganz rechts).</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Vollbild-Hintergrund</guilabel
+></term>
+                <listitem>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Schwarz</guilabel
+> &mdash; Verwendet einen schwarzen Hintergrund im Vollbildmodus.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Dunkelgraue Textur</guilabel
+> &mdash;  Verwendet einen dunkelgraue Textur als Hintergrund im Vollbildmodus.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Speicherqualität für verlustbehaftete Formate</guilabel
+></term>
+                <listitem>
+                    <para
+>Einstellung für die Qualität für Speichern und Komprimierung bei verlustbehafteten Bildformaten wie JPEG, WEBP, AVIF, HEIF, und HEIC,. Dies kann temporär im Dialog <guilabel
+>Speichern unter</guilabel
+> für Dateien mit verlustbehaftetem Bildformaten überschrieben werden. Wenn eine vorhandene Datei mit einem verlustbehaftetem Bildformaten unter einem neuen Namen oder nach einer verlustfreien Bearbeitung wie &eg; einer Drehung, bei der nur die EXIF-Ausrichtung geändert wird, gespeichert wird, wird das Erscheinungsbild der Datei nicht verändert, da keine tatsächliche Bildmanipulation ausgeführt wird.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Vorschaubild-Aktionen</guilabel
+></term>
+                <listitem>
+                    <para
+>Auswahl der Aktionsknöpfe über den Vorschaubildern im Übersichtsmodus.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Alle Knöpfe</guilabel
+> &mdash; zeigt alle Knöpfe an</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Nur Auswahlknopf anzeigen</guilabel
+> &mdash; Nur der Knopf Auswählen/Abwählen wird angezeigt</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Keine</guilabel
+> &mdash; Zeigt keine Knöpfe auf den Vorschaubildern an</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </sect1>
+        <sect1 id="configview">
+        <title
+>Bildansicht</title>
+        <variablelist>
+            <varlistentry>
+                <term
+><guilabel
+>Transparenz anzeigen als</guilabel
+></term>
+                <listitem>
+                    <para
+>Wählen Sie aus, wie der Hintergrund von transparenten Rastern oder &SVG;-Bildern gerendert wird.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Umgebungs-Hintergrund</guilabel
+> &mdash; Verwendet die Hintergrundfarbe, die auf der Seite <link linkend="configgeneral"
+>Allgemein</link
+> ausgewählt ist.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Schachbretthintergrund</guilabel
+> &mdash; Verwendet ein Schachbrettmuster als Hintergrund.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Einfarbiger Hintergrund</guilabel
+> &mdash; Verwendet die mit der <ulink url="help:/fundamentals/colors.html"
+>Farbauswahl</ulink
+> eingestellte Farbe.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Verhalten des Mausrades</guilabel
+></term>
+                <listitem>
+                    <para
+>Wählen Sie das Verhalten des Mausrads im Ansichtsmodus aus.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Bildausschnitt vertikal verschieben</guilabel
+> &mdash; In der vergrößerten Ansicht wird das Bild vertikal verschoben, ansonsten hat die Aktion keine Auswirkung.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Zum vorherigen bzw. nächsten Bild im Ordner gehen</guilabel
+> &mdash; Wechselt zum nächsten oder vorherigen Ordner.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Zoom</guilabel
+> &mdash; Sie können mit dem Mausrad die Anzeige des Bilds vergrößern oder verkleinern.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Vergrößerungsmodus</guilabel
+></term>
+                <listitem>
+                    <para
+>Einstellung für die Funktion der Vergrößerung im Ansichtsmodus.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Jedes Bild automatisch einpassen</guilabel
+> &mdash; Zeigt das nächste Bild vollständig im Fenster an.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Vergrößerung und Position beibehalten</guilabel
+> &mdash; Benutzt denselben Vergrößerungsfaktor für alle Bilder.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Vergrößerung und Position je Bild</guilabel
+> &mdash; Benutzt unterschiedliche Vergrößerungsstufen für jedes Bild.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Kleine Bilder vergrößern</guilabel
+> &mdash; Im Ansichtsmodus werden kleine Bildern durch &gwenview; vergrößert.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Animationen</guilabel
+></term>
+                <listitem>
+                    <para
+>Wählen Sie den den Übergang zwischen Bildern im Ansichtsmodus aus.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>OpenGL</guilabel
+> &mdash; Verwendet durch Hardware beschleunigte Animationen.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Software</guilabel
+> &mdash; Es wird keine Hardware-Beschleunigung für Animationen verwendet. Wählen Sie diese Einstellung, wenn <guilabel
+>OpenGL</guilabel
+> nicht richtig funktioniert, aber trotzdem Animationen beim Wechseln zwischen Bildern angezeigt werden sollen.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Keine</guilabel
+> &mdash; Verwendet keine Animationen beim Wechseln zwischen Bildern.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Vorschaubereich</guilabel
+></term>
+                <listitem>
+                    <para
+>Einstellungen für den Vorschaubereich.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Ausrichtung</guilabel
+></para>
+                            <itemizedlist>
+                                <listitem>
+                                    <para
+><guilabel
+>Waagerecht</guilabel
+> &mdash; Zeigt einen waagerechten Vorschaustreifen unter dem Bild.</para>
+                                </listitem>
+                                <listitem>
+                                    <para
+><guilabel
+>Senkrecht</guilabel
+> &mdash; Zeigt einen senkrechten Vorschaustreifen rechts neben dem Bild.</para>
+                                </listitem>
+                            </itemizedlist>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Anzahl der Reihen</guilabel
+> &mdash; Mit dem Drehfeld können Sie die Anzahl der Reihen in der Vorschauleiste einstellen.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </sect1>
+        <sect1 id="configadvanced">
+        <title
+>Erweitert</title>
+        <variablelist>
+            <varlistentry>
+                <term
+><guilabel
+>Vorschaubilder</guilabel
+></term>
+                <listitem>
+                    <para
+>Aktivieren Sie die Einstellung <guilabel
+>Modus mit geringen Ressourcen</guilabel
+>, wenn wenig Speicherplatz auf der Festplatte verfügbar ist. Dann werden eingebettete Vorschaubilder mit geringerer Auflösung verwendet, die schneller geladen werden können.</para>
+                    <para
+>Vorsicht: Hierbei wird der Ordner <filename
+>thumbnails</filename
+> in Ihrem Ordner <filename
+>.cache</filename
+> mit allen von &gwenview; und anderen Anwendungen erzeugten Vorschaubildern gelöscht.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Verlauf</guilabel
+></term>
+                <listitem>
+                    <para
+>Mit der Einstellung <guilabel
+>Ordner und Adressen merken</guilabel
+> speichert &gwenview; zuletzt angezeigte Ordner und &URL;s und zeigt sie auf der Seite <guilabel
+>Zuletzt geöffnete Ordner</guilabel
+> an.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Rendering-Methode</guilabel
+></term>
+                <listitem>
+                    <para
+>Hier können Sie die <ulink url="https://de.wikipedia.org/wiki/Rendering_intent"
+>Rendering-Methode</ulink
+> zur Anzeige der Bilder.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Wahrnehmungsorientiert</guilabel
+> &mdash; Skaliert alle Farben gleichmäßig, um sie an den Farbbereich des aktuellen Farbprofils anzupassen</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Relativ farbmetrisch</guilabel
+> &mdash; Ändert nur die Farben, die nicht in den Farbbereich des aktuellen Farbprofils passen, alle anderen Farben bleiben unverändert</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Farbprofil</guilabel
+></term>
+                <listitem>
+                    <para
+>Stellen Sie ein, ob das systemweite <ulink url="https://de.wikipedia.org/wiki/ICC-Profil"
+>Farbprofil</ulink
+> zusätzlich zum Farbprofil der Bilddatei angewendet wird.</para>
+                    <para
+>Ist <guilabel
+>Nur das eingebettete Profil in der Bilddatei anwenden</guilabel
+> aktiviert, wird die systemweite Farbkorrektur bereits für das Monitorprofil verwendet.</para>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </sect1>
+    <sect1 id="hidden-configuration">
+    <title
+>Versteckte Einstellungsoptionen</title>
+    <para
+>Einige Hinweise zu versteckten Einstellungen für &gwenview; finden Sie auf <ulink url="http://userbase.kde.org/Special:myLanguage/Gwenview/Hidden_Configuration_Options"
+>dieser Seite</ulink
+>. </para>
+    <important>
+        <para
+>Die auf der oben genannten Seite beschriebenen Einstellungen helfen Ihnen, &gwenview; für besondere Anwendungsfälle einzustellen. Beachten Sie aber, dass diese Einstellungen beim Wechseln zu einer anderen Version möglicherweise nicht mehr funktionieren. </para>
+    </important>
+    </sect1>
+</chapter>
+
+<chapter id="credits">
+<title
+>Mitwirkende und Copyright</title>
+
+<para
+>&gwenview; wird zurzeit von Aurélien Gâteau betreut</para>
+
+<para
+>Diese Dokumentation wurde von Christopher Martin geschrieben</para>
+
+<para
+>Dieses Dokument wurde für &kde; 4 von Henry de Valence aktualisiert.</para>
+
+<para
+>Übersetzung Thomas Reitelbach <email
+>tr@erdfunkstelle.de</email
+></para
+> &underFDL; &underGPL; </chapter>
+
+</book>

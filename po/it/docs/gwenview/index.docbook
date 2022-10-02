@@ -1,0 +1,1517 @@
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN"
+"dtd/kdedbx45.dtd" [
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % Italian "INCLUDE"
+><!-- change language only here -->
+]>
+
+<book id="gwenview" lang="&language;">
+<title
+>Manuale utente di Gwenview</title>
+
+<bookinfo>
+<authorgroup>
+<author
+><firstname
+>Aurélien</firstname
+> <surname
+>Gâteau</surname
+> <affiliation
+><address
+><email
+>agateau@kde.org</email
+></address
+></affiliation>
+</author>
+<author
+><firstname
+>Christopher</firstname
+><surname
+>Martin</surname
+> <affiliation
+><address
+><email
+>chrsmrtn@debian.org</email
+></address
+></affiliation>
+</author>
+<author
+><firstname
+>Henry</firstname
+> <surname
+>de Valence</surname
+> <affiliation
+><address
+><email
+>hdevalence@gmail.com</email
+></address
+></affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Federico</firstname
+><surname
+>Zenith</surname
+><affiliation
+><address
+><email
+>federico.zenith@member.fsf.org</email
+></address
+></affiliation
+><contrib
+>Traduzione della documentazione</contrib
+></othercredit
+> 
+</authorgroup>
+<copyright>
+<year
+>2005</year>
+<holder
+>Aurélien Gâteau</holder>
+</copyright>
+<copyright>
+<year
+>2008</year>
+<holder
+>Henry de Valence</holder>
+</copyright>
+<legalnotice
+>&FDLNotice;</legalnotice>
+
+<date
+>2021-06-04</date>
+<releaseinfo
+>KDE Gear 21.08</releaseinfo>
+<abstract>
+<para
+>&gwenview; è un visore di immagini e video.</para>
+</abstract>
+<keywordset>
+<keyword
+>KDE</keyword>
+<keyword
+>immagine</keyword>
+<keyword
+>visualizzatore</keyword>
+<keyword
+>artista</keyword>
+<keyword
+>foto</keyword>
+<keyword
+>immagine</keyword>
+</keywordset>
+</bookinfo>
+<!--FIXME Read devels blog on http://agateau.com/
+-->
+<chapter id="introduction">
+<title
+>Introduzione</title>
+
+<sect1 id="what-is-gwenview">
+<title
+>Cos'è &gwenview;</title>
+
+<para
+>&gwenview; è un visore di immagini e filmati facile e veloce. </para>
+
+ <para
+>&gwenview; ha due modalità principali: navigazione e visualizzazione. Entrambe possono essere usate in una normale finestra o a tutto schermo. La modalità di navigazione permette di sfogliare le cartelle del computer guardando delle miniature delle immagini, la modalità di visualizzazione permette di visualizzare un'immagine alla volta, e la modalità a tutto schermo permette di fare delle veloci carrellate. C'è anche una schermata iniziale che mostra un elenco di cartelle e &URL; aperti di recente, oltre alle tue risorse ed etichette. </para>
+
+<para
+>Il caricamento delle immagini è gestito dalle librerie &Qt;, quindi &gwenview; supporta tutti i formati di immagini supportati dalla tua installazione di &Qt;. &gwenview; visualizza correttamente le immagini con canale alfa (trasparenza) e con animazioni.</para>
+
+<para
+>&gwenview; supporta la visualizzazione e la modifica dei commenti EXIF nelle immagini JPEG. Sono supportate anche le trasformazioni JPEG senza perdita come la rotazione e il rispecchiamento.</para>
+
+<para
+>&gwenview; può leggere profili di colore incorporati dai file PNG e JPEG. Può usare il profilo di colore dell'immagine assieme al profilo di colore dello schermo per produrre i colori giusti sullo schermo.</para>
+</sect1>
+
+</chapter>
+
+<chapter id="interface">
+<title
+>L'interfaccia</title>
+
+<sect1 id='start_page'
+><title
+>Pagina iniziale</title>
+<para
+>La pagina iniziale elenca le cartelle e gli &URL; aperti di recente sul lato sinistro, e le tue risorse ed etichette sul destro.</para>
+
+<screenshot>
+  <screeninfo
+>Schermata della pagina iniziale</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="start-page.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+</sect1>
+
+<sect1 id='image_operations'
+><title
+>Operazioni sulle immagini</title>
+<para
+>&gwenview; ha alcune funzionalità disponibili in tutte le sue modalità (navigazione, visualizzazione e tutto schermo). &gwenview; ha la capacità di fare delle semplici modifiche alle immagini.</para>
+<itemizedlist>
+<listitem
+><para
+>Rotazione: questa operazione girerà l'immagine a sinistra o a destra, a seconda che scegli <menuchoice
+><shortcut
+><keycombo action="simul"
+>&Ctrl;<keycap
+>R</keycap
+></keycombo
+></shortcut
+><guimenu
+>Modifica</guimenu
+><guimenuitem
+>Ruota a destra</guimenuitem
+></menuchoice
+> o <menuchoice
+> <shortcut
+> <keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>R</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Modifica</guimenu
+> <guimenuitem
+>Ruota a sinistra</guimenuitem
+> </menuchoice
+>. </para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+><guimenu
+>Modifica</guimenu
+><guimenuitem
+>Rispecchia</guimenuitem
+></menuchoice
+>: questa operazione rifletterà l'immagine lungo l'asse verticale, come se la vedessi attraverso uno specchio.</para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+><guimenu
+>Modifica</guimenu
+><guimenuitem
+>Ribalta</guimenuitem
+></menuchoice
+>: questa operazione rifletterà l'immagine lungo l'asse orizzontale, come se la vedessi al contrario.</para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+><shortcut
+><keycombo action="simul"
+>&Shift;<keycap
+>R</keycap
+></keycombo
+></shortcut
+><guimenu
+>Modifica</guimenu
+><guimenuitem
+>Ridimensiona</guimenuitem
+></menuchoice
+>: questa operazione permette di restringere o ingrandire l'immagine. Nota che ingrandendo l'immagine essa potrebbe risultare sfocata o sgranata.</para
+></listitem>
+ <!-- Crop + Red Eye Reduction are discussed in View mode sect-->
+</itemizedlist>
+
+<para
+>Queste azioni sono disponibili anche sulla scheda <guilabel
+>Operazioni</guilabel
+> della barra laterale.</para>
+
+<para
+>Se hai modificato delle immagini, sopra l'immagine viene visualizzata una barra con azioni aggiuntive. Puoi annullare o rifare le modifiche, andare all'immagine modificata precedente o successiva, e ci sono tre opzioni per salvare le immagini modificate. </para>
+
+<screenshot>
+  <screeninfo
+>Barra delle azioni per le immagini modificate</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="modified-bar.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<!--FIXME all actions also available context menus, where to add that info -->
+
+</sect1>
+
+<sect1 id='browse_mode'
+><title
+>Modalità di navigazione</title>
+
+<para
+>In modalità di navigazione, puoi spostarti facilmente tra file e cartelle. Le finestre di anteprima mostrano le miniature delle immagini della cartella attuale, oltre alle sottocartelle. </para>
+
+<screenshot>
+  <screeninfo
+>Schermata della modalità di navigazione</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="browse_mode.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<para
+>Passando il mouse su un'immagine compaiono dei pulsanti per selezionarla o ruotarla, oltre a un pulsante per passare alla modalità a tutto schermo.Le immagini modificate sono indicate da un'icona in basso a destra; facci clic per salvare l'immagine modificata. Fare clic su un'immagine porta alla modalità di visualizzazione. Puoi selezionare più immagini e passare alla modalità di visualizzazione per vederle fianco a fianco.</para>
+
+<para
+>Il cursore in basso a destra permette di cambiare le dimensioni delle immagini. Puoi anche filtrare le immagini per nome del file, data, etichetta o voto con la casella in basso a sinistra. La barra degli strumenti appare sia nella modalità di navigazione che in quella di visualizzazione, e contiene le azioni di uso più comune. </para>
+<itemizedlist>
+<listitem
+><para
+><guiicon
+>Pagina iniziale</guiicon
+>: apre la pagina iniziale.</para
+></listitem>
+<listitem
+><para
+><guiicon
+>Sfoglia</guiicon
+>: passa alla modalità di navigazione.</para
+></listitem>
+<listitem
+><para
+><guiicon
+>Visualizza</guiicon
+>: passa alla modalità di visualizzazione.</para
+></listitem>
+<listitem
+><para
+><guiicon
+>Precedente</guiicon
+>: fare clic su questa icona andrà all'immagine precedente nella cartella.</para
+></listitem>
+
+<listitem
+><para
+><guiicon
+>Successiva</guiicon
+>: fare clic su questa icona andrà all'immagine successiva nella cartella.</para
+></listitem>
+
+<listitem
+><para
+><guiicon
+>Mostra strumenti di modifica</guiicon
+>: un clic su questo pulsante cambia la visualizzazione della <link linkend="sidebar"
+>scheda della barra laterale Operazioni</link
+>.</para
+></listitem>
+
+<listitem
+><para
+><guiicon
+>A tutto schermo</guiicon
+>: passa alla modalità a tutto schermo.</para
+></listitem>
+</itemizedlist>
+
+</sect1>
+
+<sect1 id='view_mode'
+><title
+>Modalità di visualizzazione</title>
+<para
+>La modalità di visualizzazione mostra immagini a dimensione completa. La stessa <link linkend="sidebar"
+>barra laterale</link
+> disponibile in modalità di navigazione è qui presente sulla sinistra. In basso c'è la barra delle miniature, che permette di scorrere tra le immagini della cartella attuale. La barra delle miniature può essere aperta facendo clic sul pulsante <guibutton
+>Mostra le miniature</guibutton
+>. Facendoci di nuovo clic verrà chiusa. Per cambiare le dimensioni delle miniature, sposta il separatore con il &LMB;.</para>
+
+<para
+>La modalità di visualizzazione supporta le immagini affiancate. Puoi selezionare più immagini nella modalità di navigazione prima di passare a quella di visualizzazione, o puoi fare clic sul pulsante <guibutton
+>+</guibutton
+> che compare quando passi sulle immagini nella barra delle miniature, per aggiungere un pannello che mostrerà quell'immagine. Apparirà quindi un pulsante <guibutton
+>-</guibutton
+> che permetterà di rimuoverla dal pannello.</para>
+
+<para
+>Quando sono visualizzate più immagini, appare sotto ciascuna una barretta che permette di eliminare o rimuovere l'immagine. Puoi ingrandire le immagini indipendentemente l'una dall'altra, o sincronizzarle. Puoi attivare questo comportamento spuntando <guilabel
+>Sincronizza</guilabel
+> a sinistra del cursore d'ingrandimento o premendo <keycombo action="simul"
+>&Ctrl;<keycap
+>Y</keycap
+></keycombo
+>. Puoi cambiare le immagini facendo clic sul loro pannello o con la tastiera. Per passare all'immagine a destra, premi <keycombo action="simul"
+>&Tab;</keycombo
+>; per quella a sinistra, <keycombo action="simul"
+>&Shift;&Tab;</keycombo
+>.</para>
+
+<screenshot>
+  <screeninfo
+>Schermata della modalità di visualizzazione</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="view_mode.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<para
+>Il cursore in fondo a destra controlla l'ingrandimento dell'immagine. Di fianco, i pulsanti <guibutton
+>Adatta</guibutton
+>, <guibutton
+>Riempi</guibutton
+> e <guibutton
+>100%</guibutton
+> sono due livelli di ingrandimento preimpostati. Il pulsante <guibutton
+>Adatta</guibutton
+> porta le dimensioni dell'immagine ad adattarsi a quelle della finestra, il pulsante <guibutton
+>Riempi</guibutton
+> cambia le dimensioni dell'immagine a riempire la finestra adattandosi alla larghezza o all'altezza, e il pulsante <guibutton
+>100%</guibutton
+> la porta alle sue dimensioni effettive. La scorciatoia <keycap
+>F</keycap
+> passa tra le modalità <guibutton
+>Adatta</guibutton
+> e <guibutton
+>100%</guibutton
+>, mentre l'uso di <keycombo action="simul"
+>&Shift;<keycap
+>F</keycap
+></keycombo
+> attiverà e disattiverà la modalità <guibutton
+>Riempi</guibutton
+>.</para>
+
+<para
+>Quando un'immagine è ingrandita adattativamente, puoi cambiare l'immagine con i tasti freccia. Quando ingrandisci, i tasti freccia vengono usati per far scorrere l'immagine. È molto simile al comportamento caratteristico dei cellulari o delle fotocamere digitali.</para>
+
+<para
+>Quando un'immagine è ingrandita, appare una vista a volo d'aquila che permette di scorrere l'immagine con il mouse e i tasti freccia. La vista a volo d'aquila viene automaticamente nascosta dopo un breve periodo di tempo, e riappare solo durante il ridimensionamento o lo scorrimento. La vista a volo d'aquila può essere disabilita tramite il menu contestuale accessibile con il tasto destro del mouse o dal <menuchoice
+><guimenu
+>Visualizza</guimenu
+><guimenuitem
+>Mostra vista a volo d'aquila all'ingrandimento</guimenuitem
+></menuchoice
+></para>
+
+<para
+>Puoi definire cosa succede quando si passa a un'immagine B dopo aver ingrandito un'area dell'immagine A con le opzioni nel gruppo <guilabel
+>Modalità di ingrandimento</guilabel
+> della pagina <guimenuitem
+>Vista immagini</guimenuitem
+> della finestra di configurazione di &gwenview;, che può essere raggiunta con <menuchoice
+><guimenu
+>Impostazioni</guimenu
+><guimenuitem
+>Configura &gwenview;</guimenuitem
+></menuchoice
+>.</para>
+
+<itemizedlist>
+    <listitem
+><para
+>Se impostato a <guilabel
+>Ingrandisci adattativamente ogni immagine</guilabel
+>, l'immagine B viene adattata allo schermo.</para
+></listitem>
+    <listitem
+><para
+>Se impostato a <guilabel
+>Mantieni ingrandimento e posizione</guilabel
+>, tutte le immagini condividono gli stessi ingrandimento e posizione: l'immagine B viene impostata agli stessi parametri di ingrandimento dell'immagine A (e se questi vengono modificati, l'immagine A verrà visualizzata con l'ingrandimento e la posizione aggiornati).</para
+></listitem>
+    <listitem
+><para
+>Se impostato a <guilabel
+>Ingrandimento e posizione per immagine</guilabel
+>, tutte le immagini memorizzeranno i loro ingrandimento e posizione: l'immagine B viene inizialmente impostata agli stessi parametri di ingrandimento dell'immagine A, ma terrà a mente i suoi parametri di ingrandimento e posizione (se questi vengono modificati, l'immagine A <emphasis
+>non</emphasis
+> verrà aggiornata coi nuovi valori).</para
+></listitem>
+</itemizedlist>
+
+<tip
+><para
+>Puoi partire direttamente in modalità di visualizzazione avviando &gwenview; da un menu contestuale come <guimenuitem
+>Apri con</guimenuitem
+> in un altro programma, o avviandolo dalla riga di comando con un'immagine come argomento.</para
+> </tip>
+
+<para
+>Le seguenti operazioni aggiuntive sulle immagini sono disponibili solo in modalità di visualizzazione:</para>
+
+<itemizedlist>
+<listitem
+><para
+><menuchoice
+> <shortcut
+> <keycombo action="simul"
+>&Shift;<keycap
+>C</keycap
+></keycombo
+> </shortcut
+><guimenu
+>Modifica</guimenu
+><guimenuitem
+>Ritaglia</guimenuitem
+></menuchoice
+>: questa operazione permette di scartare le parti indesiderate dell'immagine. </para>
+<para
+>Puoi accedere ai parametri di ritaglio avanzati spuntando la casella <guilabel
+>Impostazioni avanzate</guilabel
+> nel pannello a comparsa in basso. Usa i campi corrispondenti per regolare l'operazione di ritaglio. </para>
+<para
+>È anche possibile regolare l'area ritagliata trascinando la maniglie quadrate grigie sui bordi dell'immagine. Puoi spostare l'area ritagliata facendo clic con il &LMB; e trascinando il puntatore del mouse. </para>
+<para
+>Premi il pulsante <guibutton
+>Ritaglia</guibutton
+> per vedere i risultati quando sei pronto. Usa il pannello a comparsa in alto per salvare i risultati, o annullare o rifare l'operazione. </para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+><guimenu
+>Modifica</guimenu
+><guimenuitem
+>Riduci occhi rossi</guimenuitem
+></menuchoice
+>: questa operazione riduce l'effetto degli <quote
+>occhi rossi</quote
+> che occorre spesso nelle fotografie scattate con il flash. </para
+></listitem>
+</itemizedlist>
+
+</sect1>
+
+<sect1 id='fullscreen_mode'>
+<title
+>Modalità a tutto schermo</title>
+
+<para
+>Accedi alla modalità a tutto schermo facendo clic sul pulsante <guibutton
+>A tutto schermo</guibutton
+> nella barra degli strumenti, o con <menuchoice
+> <shortcut
+> <keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>F</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Visualizza</guimenu
+><guimenuitem
+>Modalità a tutto schermo</guimenuitem
+></menuchoice
+>. </para>
+<para
+>Per lasciare questa modalità, premi il tasto &Esc;.</para>
+
+<sect2>
+<title
+>Tutto schermo in modalità di navigazione</title>
+
+<para
+>In modalità di navigazione puoi passare a tutto schermo anche facendo clic sul pulsante che compare passando il mouse sulle miniature. </para>
+<screenshot>
+  <screeninfo
+>Schermata della modalità di visualizzazione a tutto schermo</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="fullscreen-browse.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para
+>Passare a tutto schermo durante la navigazione dà l'impressione di essere immersi nelle immagini mentre le sfogli. È molto carino su un computer normale, ma è ancora meglio quando colleghi un portatile al televisore nel salotto per far vedere le immagini ai tuoi ospiti. </para>
+</sect2>
+
+<sect2 id="fullscreen">
+<title
+>Tutto schermo in modalità di visualizzazione</title>
+<para
+>La modalità di visualizzazione a tutto schermo mostra una carrellata di immagini. Si accede a questa modalità facendo clic sul pulsante che compare quando fai passare il mouse sulle miniature in modalità di navigazione, premendo il pulsante <guibutton
+>A tutto schermo</guibutton
+> nella barra degli strumenti. <screenshot>
+  <screeninfo
+>Schermata della modalità di navigazione a tutto schermo</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="fullscreen-view.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+</para>
+
+<para
+>La barra in alto verrà automaticamente nascosta; per mostrarla basta far passare il mouse in quell'area dello schermo. Se il puntatore del mouse è sulla barra in alto, questa non verrà nascosta automaticamente. La maggior parte dei pulsanti sulla barra sono gli stessi della barra degli strumenti nelle modalità di navigazione e visualizzazione, tranne per il pulsante <guiicon
+>Esci dalla modalità a tutto schermo</guiicon
+> che riporta alla finestra di &gwenview;, il pulsante <guiicon
+>Metti in pausa/ripristina carrellata</guiicon
+>, e il pulsante <guiicon
+>Configura la modalità a tutto schermo</guiicon
+>, che mostra una finestrella di configurazione che permette di impostare la carrellata facilmente e rapidamente. I controlli della carrellata sono: </para>
+
+<itemizedlist>
+    <listitem
+><para
+>Il cursore <guilabel
+>Intervallo</guilabel
+> determina per quanto &gwenview; mostrerà un'immagine prima di passare alla prossima.</para
+></listitem>
+    <listitem
+><para
+>Se la casella <guilabel
+>Ciclo</guilabel
+> è spuntata, alla fine della carrellata si riprenderà dall'inizio invece di fermarsi. </para
+></listitem>
+    <listitem
+><para
+>Se è spuntata la casella <guilabel
+>Casuale</guilabel
+>, le immagini saranno mostrate in ordine casuale anziché alfabetico.</para
+></listitem>
+    <listitem
+><para
+><guibutton
+>Seleziona le informazioni sulle immagini da mostrare</guibutton
+> permette di definire quali metadati vengono visualizzati sotto i pulsanti della barra. </para
+></listitem>
+    <listitem
+><para
+>Se la casella <guilabel
+>Mostra le miniature</guilabel
+> è spuntata, le miniature di tutte le immagini delle cartella attuale saranno visualizzate a destra della barra.</para
+></listitem>
+    <listitem
+><para
+>Il cursore <guilabel
+>Altezza</guilabel
+> modifica la dimensione delle miniature visualizzate.</para
+></listitem>
+</itemizedlist>
+
+<para
+>Se abilitata, un'area che mostra le altre immagini nella cartella attuale sarà presente nella barra in alto. Facendoci clic vengono mostrate.</para>
+</sect2>
+</sect1>
+
+<sect1 id="sidebar">
+<title
+>Barra laterale</title>
+
+ <para
+>La barra laterale sulla sinistra è disponibile nelle modalità di navigazione e visualizzazione, ma non appare nella modalità di navigazione predefinita. La sua visibilità può essere determinata con <menuchoice
+><shortcut
+><keycap
+>F4</keycap
+></shortcut
+><guimenu
+>Visualizza</guimenu
+><guimenuitem
+>Barra laterale</guimenuitem
+></menuchoice
+> o usando il pulsante <guiicon
+>▮←</guiicon
+> / <guiicon
+>▮→</guiicon
+> sul lato sinistro della barra di stato. Quando viene premuto, richiude o espande la barra laterale. La barra laterale contiene diverse schede:</para>
+
+<variablelist>
+
+<varlistentry>
+<term
+><guilabel
+>Cartelle</guilabel
+></term>
+<listitem
+><para
+>Mostra un elenco di tutte le cartelle sul sistema, permettendo di selezionarle. Nella modalità di navigazione, saranno visualizzate le miniature della cartella, mentre in modalità di visualizzazione apparirà la prima immagine della cartella, dalla quale potrai sfogliare la cartella con i pulsanti o le scorciatoie <guibutton
+>Precedente</guibutton
+> e <guibutton
+>Successiva</guibutton
+>. Facendo clic varie volte su un cartella si passa tra la modalità di visualizzazione e la modalità di navigazione.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Informazioni</guilabel
+></term>
+<listitem
+><para
+>Mostra le <guilabel
+>Informazioni aggiuntive</guilabel
+> come il nome e la dimensione del file. Il collegamento <guilabel
+>Di più</guilabel
+> permette di vedere tutte i metadati disponibili e selezionare quali far comparire nella barra laterale.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Operazioni</guilabel
+></term>
+<listitem
+><para
+>Questo permette di effettuare le <link linkend="image_operations"
+>operazioni globali precedentemente descritte</link
+> oltre a quelle specifiche della modalità di visualizzazione. Permette anche le comuni operazioni sui file come copiatura, rinomina, eliminazione e creazione di nuove cartelle.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+</sect1>
+
+</chapter>
+<chapter id="importer">
+<title
+>Importazione di &gwenview;</title>
+
+<sect1>
+<title
+>Introduzione</title>
+<para
+>L'importazione di &gwenview; permette di importare immagini da una fotocamera digitale o supporti rimovibili. Per avviarla, seleziona <guilabel
+>Scarica foto con &gwenview;</guilabel
+> nel notificatore dei dispositivi di &kde; dopo aver collegato un dispositivo supportato.</para>
+
+<para
+>Quando colleghi un dispositivo, l'importatore di &gwenview; ne elenca ricorsivamente tutte le immagini e i video. </para>
+<para
+>Questo non è sempre quello che ti aspetti, per esempio collegando un cellulare di solito non vuoi elencare tutti i file del dispositivo, ma solo le foto che hai scattato, che di solito sono in una certa cartella. </para>
+
+<screenshot>
+  <screeninfo
+>Scelta della cartella radice</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="importer-picking-root-folder.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para
+>È possibile selezionare la cartella radice da cui partire, e l'importatore di &gwenview; ricorderà l'ultima cartella radice per ogni dispositivo. In questo modo, la prossima volta che lo collegherai verranno mostrate solo le immagini e i video pertinenti. </para>
+
+<sect2>
+<title
+>Importare immagini</title>
+
+<screenshot>
+  <screeninfo
+>Schermata dell'importazione di &gwenview;</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="importer.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<para
+>Se lo desideri, puoi selezionare le immagini che vuoi importare sotto <guilabel
+>Seleziona i documenti da importare</guilabel
+> premendo il pulsante <guiicon
+>+</guiicon
+> che appare passando sulle immagini. Puoi anche selezionare la cartella in cui importare le immagini nella casella di testo in fondo alla finestra. Quando hai finito, fai clic sul pulsante <guibutton
+>Importa le selezionate</guibutton
+> per importare solo le immagini che hai selezionato, o premi <guibutton
+>Importa tutto</guibutton
+> per importare tutte le immagini trovate sul dispositivo.</para>
+</sect2>
+
+<sect2>
+<title
+>Rinomina automatica</title>
+<para
+>L'importazione di &gwenview; può rinominare i file secondo uno certo schema. Per configurarlo, seleziona le <guibutton
+>Impostazioni</guibutton
+> nell'angolo in basso a sinistra. Puoi attivare o disattivare questa funzionalità con la casella in alto. Il <guilabel
+>Formato di rinomina</guilabel
+> supporta diversi parametri speciali, che verranno sostituiti da metadati come la data di creazione dell'immagine o il nome del suo file; sono elencati sotto la casella di testo. Puoi o fare clic sul nome del parametro per inserirlo nella casella, o scriverlo a mano.</para>
+</sect2>
+</sect1>
+
+</chapter>
+<chapter id="tips">
+<title
+>Suggerimenti</title>
+<sect1 id='mouse'
+><title
+>Usare il mouse</title>
+
+<sect2 id='mouse_panning'
+><title
+>Scorrere col mouse</title>
+<itemizedlist>
+  <listitem
+><para
+>Tenere premuto il &LMB; su un'immagine permette di farla scorrere.</para
+></listitem>
+  <listitem
+><para
+>La rotellina del mouse farà scorrere l'immagine verticalmente.</para
+></listitem>
+</itemizedlist>
+</sect2>
+
+
+<sect2 id='mouse_zooming'
+><title
+>Ingrandire col mouse</title>
+<itemizedlist>
+  <listitem
+><para
+>Un clic con il pulsante centrale del mouse attiverà o disattiverà il pulsante di ingrandimento <guibutton
+>Adatta</guibutton
+>. Tieni premuto il tasto &Shift; e fai clic con il pulsante dentro per attivare o disattivare il pulsante di ingrandimento <guibutton
+>Riempi</guibutton
+>.</para
+></listitem>
+  <listitem
+><para
+>Tieni premuto il tasto &Ctrl;, quindi usa la rotellina del mouse per ingrandire e rimpicciolire, o fai clic sinistro per ingrandire e destro per rimpicciolire.</para
+></listitem>
+
+  <listitem
+><para
+>La rotellina del mouse, usata tenendo premuto il tasto &Alt;, farà scorrere l'immagine orizzontalmente.</para
+></listitem>
+</itemizedlist>
+</sect2>
+
+
+<sect2 id='mouse_browsing'
+><title
+>Navigare col mouse</title>
+<itemizedlist>
+  <listitem
+><para
+>In modalità di navigazione, fare clic su un'immagine fa passare in modalità di visualizzazione e la mostra.</para
+></listitem>
+  <listitem
+><para
+>Quando si è in modalità di navigazione, scorrere la rotellina del mouse farà scorrere in alto o in basso nell'area di visualizzazione delle miniature.</para
+></listitem>
+  <listitem
+><para
+>Se l'opzione <guilabel
+>Rotellina del mouse</guilabel
+> in <menuchoice
+><guimenu
+>Impostazioni</guimenu
+><guimenuitem
+>Configura Gwenview</guimenuitem
+></menuchoice
+> è impostata a <guilabel
+>Sfoglia</guilabel
+>, scorrere la rotellina in modalità di visualizzazione farà scorrere tra le immagini della cartella.</para
+></listitem>
+</itemizedlist>
+</sect2>
+</sect1>
+
+<sect1 id="keybindings"
+> <title
+>Associazioni dei tasti</title>
+
+<para
+>&gwenview; ha una serie di scorciatoie da tastiera, tutte le quali possono essere mostrate e riconfigurate con <menuchoice
+><guimenu
+>Impostazioni</guimenu
+><guimenuitem
+>Configura le scorciatoie...</guimenuitem
+></menuchoice
+>. Nota che nelle finestre di file e cartelle valgono tutte le normali scorciatoie di &plasma;, a meno che siano state riconfigurate.</para>
+
+<para
+>Alcune delle associazioni più utili sono:</para>
+
+<itemizedlist>
+<listitem
+><para
+><keycap
+>Spazio</keycap
+>: mostra l'immagine successiva nella cartella.</para
+></listitem>
+
+<listitem
+><para
+>&Backspace;: mostra l'immagine precedente nella cartella.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Alt;<keycap
+>↑</keycap
+></keycombo
+>: sposta nella cartella madre di quella attuale.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>F</keycap
+></keycombo
+>: passa alla modalità a tutto schermo.</para
+></listitem>
+
+<listitem
+><para
+>&Esc;: torna alla modalità di navigazione. </para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>M</keycap
+></keycombo
+>: mostra o nasconde la barra dei menu.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>B</keycap
+></keycombo
+>: mostra o nasconde la barra delle miniature.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F4</keycap
+>: mostra o nasconde la barra laterale.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F6</keycap
+>: rendi la barra dell'indirizzo modificabile in modo da poter scrivere direttamente un percorso. Puoi tornare alla barra dell'indirizzo normale premendo il simbolo di spunta a destra.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>R</keycap
+></keycombo
+>: ruota l'immagine a destra.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>R</keycap
+></keycombo
+>: ruota l'immagine corrente a sinistra.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Shift;<keycap
+>R</keycap
+></keycombo
+>: ridimensiona l'immagine attuale.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Shift;<keycap
+>C</keycap
+></keycombo
+>: ritaglia l'immagine attuale.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>Y</keycap
+></keycombo
+>: quando ci sono più immagini mostrate in modalità di visualizzazione, questo ne sincronizza le viste. </para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>S</keycap
+></keycombo
+>: salva tutte le modifiche fatte all'immagine.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>Canc</keycap
+>: cestina l'immagine attuale.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Shift;<keycap
+>Canc</keycap
+></keycombo
+>: elimina l'immagine permanentemente dal disco. Questa operazione è irreversibile e non può essere annullata.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>P</keycap
+></keycombo
+>: Stampa l'immagine attuale.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>O</keycap
+></keycombo
+>: Apri un'immagine con la finestra di selezione dei file normale.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F</keycap
+>: premere questa scorciatoia attiva o disattiva l'ingrandimento adattativo.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>P</keycap
+>: quando si vede un filmato, questa scorciatoia attiva e disattiva la lettura.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>T</keycap
+></keycombo
+>: modifica etichette.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F2</keycap
+>: rinomina un'immagine.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>Canc</keycap
+>: cestina un'immagine.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Shift;<keycap
+>Canc</keycap
+></keycombo
+>: elimina un'immagine.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>F7</keycap
+></keycombo
+>: Copia un'immagine.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>F8</keycap
+></keycombo
+>: Sposta un'immagine.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>F9</keycap
+></keycombo
+>: collega un'immagine.</para
+></listitem>
+
+</itemizedlist>
+
+</sect1>
+</chapter>
+
+<chapter id="configure">
+    <title
+>Configurazione di &gwenview;</title>
+    <sect1 id="configindex">
+        <title
+>Panoramica della configurazione</title>
+        <para
+>Puoi configurare &gwenview; scegliendo <menuchoice
+><guimenu
+>Impostazioni</guimenu
+> <guimenuitem
+>Configura &gwenview;...</guimenuitem
+></menuchoice
+>. La finestra di configurazione è divisa in tre sezioni. Questo capitolo descrive in dettaglio le opzioni disponibili. </para>
+        <itemizedlist>
+            <listitem>
+                <para
+><link linkend="configgeneral"
+>Generale</link
+></para>
+            </listitem>
+            <listitem>
+                <para
+><link linkend="configview"
+>Vista immagini</link
+></para>
+            </listitem>
+            <listitem>
+                <para
+><link linkend="configadvanced"
+>Avanzate</link
+></para>
+            </listitem>
+        </itemizedlist>
+    </sect1>
+    <sect1 id="configgeneral">
+        <title
+>Generale</title>
+        <variablelist>
+            <varlistentry>
+                <term
+><guilabel
+>Video</guilabel
+></term>
+                <listitem>
+                    <para
+>Scegli la casella <guilabel
+>Mostra i video</guilabel
+> p</para>
+                    <para
+>Deseleziona la casella <guilabel
+>Riproduci automaticamente</guilabel
+> per disabilitare la riproduzione automatica dei video. Questo impedisce ai video di avviarsi automaticamente durante la navigazione.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Notifica al raggiungimento dell'ultima immagine:</guilabel
+></term>
+                <listitem>
+                    <para
+>Scegli l'elemento <guilabel
+>Mai</guilabel
+> per consentire a &gwenview; di scorrere ciclicamente nell'elenco delle immagini senza ulteriori notifiche.</para>
+                    <para
+>Seleziona l'elemento <guilabel
+>Solo durante le presentazioni di immagini</guilabel
+> se le notifiche relative al raggiungimento della fine dell'elenco debbano essere mostrate solo <link linkend="fullscreen"
+>in modalità presentazione di immagini</link
+>.</para>
+                    <para
+>Seleziona l'elemento <guilabel
+>Sempre</guilabel
+> se vuoi ricevere le notifiche incondizionatamente.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Colore di sfondo</guilabel
+></term>
+                <listitem>
+                    <para
+>Sposta il cursore per cambiare il colore dello sfondo grigio nelle modalità Sfoglia e Visualizza da nero (posizione più a sinistra) a bianco (posizione più a destra).</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Sfondo a schermo intero</guilabel
+></term>
+                <listitem>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Nero</guilabel
+> &mdash; imposta il nero come colore di sfondo in modalità a schermo intero.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Motivo grigio scuro</guilabel
+> &mdash; imposta una motivo grigio scuro come colore di sfondo in modalità a schermo intero.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Qualità di salvataggio per immagini lossy</guilabel
+></term>
+                <listitem>
+                    <para
+>Le impostazioni che regolano la qualità di salvataggio/compressione per formati di immagine lossy (a perdita di qualità) come JPEG, WEBP, AVIF, HEIF e HEIC; possono essere temporaneamente cambiate tramite la finestra <guilabel
+>Salva come</guilabel
+> al salvataggio dei file usando un formato di immagine lossy. Quando si salva un'immagine lossy esistente con un nuovo nome o dopo aver eseguito una modifica senza perdita di qualità (&eg; una rotazione, che modifica unicamente i dati di rotazione EXIF), l'aspetto del file non cambia perché non viene effettuata alcuna manipolazione dell'immagine.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Azioni delle miniature</guilabel
+></term>
+                <listitem>
+                    <para
+>Indica se i pulsanti delle azioni delle miniature devono essere mostrati come sovrapposizioni sopra le miniature delle immagini.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Tutti i pulsanti</guilabel
+> &mdash; mostra tutti i pulsanti</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Mostra solo pulsanti di selezione</guilabel
+> &mdash; mostra solo i pulsanti di selezione/deselezione</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Nessuno</guilabel
+> &mdash; non mostrare alcun pulsante di miniatura</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </sect1>
+        <sect1 id="configview">
+        <title
+>Vista immagini</title>
+        <variablelist>
+            <varlistentry>
+                <term
+><guilabel
+>Mostra trasparenza con</guilabel
+></term>
+                <listitem>
+                    <para
+>Scegli come rendere lo sfondo di immagini raster o <abbrev
+>SVG</abbrev
+> trasparenti.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Sfondo circostante</guilabel
+> &mdash; usa il colore di sfondo dalla <link linkend="configgeneral"
+>pagina Generale</link
+>.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Sfondo a scacchiera</guilabel
+> &mdash; usa il classico sfondo a scacchiera.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Colore solido di sfondo</guilabel
+> &mdash; usa un colore che può essere scelto tramite il <ulink url="help:/fundamentals/colors.html"
+>selettore di colore</ulink
+>.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Comportamento della rotellina del mouse</guilabel
+></term>
+                <listitem>
+                    <para
+>Seleziona il comportamento dello scorrimento su un'immagine in modalità Visualizza.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Scorri</guilabel
+> &mdash; quando si ingrandisce, scorre l'immagine verticalmente. Altrimenti non fa nulla.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Sfoglia</guilabel
+> &mdash; passa all'immagine successiva o precedente.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Ingrandimento</guilabel
+> &mdash; usa la rotellina del mouse per ingrandire/rimpicciolire l'immagine attuale.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Modalità di ingrandimento</guilabel
+></term>
+                <listitem>
+                    <para
+>Permette di scegliere come l'ingrandimento funziona in modalità Visualizza.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Ingrandisci adattativamente ogni immagine</guilabel
+> &mdash; ridimensiona automaticamente le immagini all'area di visualizzazione.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Mantieni ingrandimento e posizione</guilabel
+> &mdash; usa lo stesso livello di ingrandimento per tutte le immagini.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Ingrandimento e posizione per immagine</guilabel
+> &mdash; usa livelli di ingrandimento diversi per ogni immagine.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Ingrandisci le immagini più piccole</guilabel
+> &mdash; marca questo elemento per far sì che &gwenview; ingrandisca le immagini più piccole in modalità Visualizza.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Animazioni</guilabel
+></term>
+                <listitem>
+                    <para
+>Permette di scegliere come effettuare la transizione tra immagini in modalità Visualizza.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>OpenGL</guilabel
+> &mdash; usa animazioni accelerate dall'hardware.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Software</guilabel
+> &mdash; non usare animazioni accelerate dall'hardware. Seleziona questa opzione se <guilabel
+>OpenGL</guilabel
+> non funziona in maniera soddisfacente, ma vuoi comunque delle transizioni tra le immagini.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Nessuna</guilabel
+> &mdash; non usare animazioni quando passi da un'immagine all'altra.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Barra delle miniature</guilabel
+></term>
+                <listitem>
+                    <para
+>Permette di configurare la barra delle miniature.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Orientazione</guilabel
+></para>
+                            <itemizedlist>
+                                <listitem>
+                                    <para
+><guilabel
+>Orizzontale</guilabel
+> &mdash; mostra una striscia orizzontale di miniature sotto l'immagine.</para>
+                                </listitem>
+                                <listitem>
+                                    <para
+><guilabel
+>Verticale</guilabel
+> &mdash; mostra una striscia verticale di miniature a destra dell'immagine.</para>
+                                </listitem>
+                            </itemizedlist>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Numero di righe</guilabel
+> &mdash; usa la casella numerica per modificare il numero di righe nella barra delle miniature</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </sect1>
+        <sect1 id="configadvanced">
+        <title
+>Avanzate</title>
+        <variablelist>
+            <varlistentry>
+                <term
+><guilabel
+>Miniature</guilabel
+></term>
+                <listitem>
+                    <para
+>Abilita la <guilabel
+>Modalità a basso uso di risorse</guilabel
+> se non disponi di molto spazio su disco. In questo modo si eviterà il salvataggio delle miniature sul disco, preferendo, se disponibili, le miniature di qualità più bassa, ma più veloci da caricare, integrate nelle immagini.</para>
+                    <para
+>Attenzione: questo eliminerà la cartella chiamata <filename
+>.thumbnails</filename
+> nella tua cartella <filename
+>.cache</filename
+>, rimuovendo tutte le miniature generate in precedenza da &gwenview; e da altre applicazioni.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Cronologia</guilabel
+></term>
+                <listitem>
+                    <para
+>Marca <guilabel
+>Ricorda cartelle e URL</guilabel
+> perché &gwenview; ricordi cartelle e &URL; visitati e li mostri nel pannello <guilabel
+>Cartelle recenti</guilabel
+>.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Obiettivo di resa</guilabel
+></term>
+                <listitem>
+                    <para
+>Permette di scegliere l'<ulink url="https://en.wikipedia.org/wiki/Color_management#Rendering_intent"
+>obiettivo di resa</ulink
+> per la visualizzazione delle immagini.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Percettivo</guilabel
+> &mdash; scala tutti i colori allo stesso modo per farli rientrare nel gamut di colore del profilo di colore attivo</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Colorimetrico relativo</guilabel
+> &mdash; schiaccia i colori che non rientrano nel gamut di colore del profilo di colore attivo, senza toccare gli altri colori</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Profilo del colore</guilabel
+></term>
+                <listitem>
+                    <para
+>Ti permette di scegliere se vuoi applicare il <ulink url="https://it.wikipedia.org/wiki/Profilo_ICC"
+>profilo di colore</ulink
+> di sistema in aggiunta al profilo di colore dal file dell'immagine.</para>
+                    <para
+>Se l'elemento <guilabel
+>Applica solo il profilo integrato nel file dell'immagine</guilabel
+> è marcato, &gwenview; presume che la correzione di colore di sistema applichi già il profilo del monitor. </para>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </sect1>
+    <sect1 id="hidden-configuration">
+    <title
+>Opzioni di configurazione nascoste</title>
+    <para
+>Alcune note sulle opzioni nascoste di &gwenview; si possono trovare su <ulink url="http://userbase.kde.org/Special:myLanguage/Gwenview/Hidden_Configuration_Options"
+>questa pagina</ulink
+>. </para>
+    <important>
+        <para
+>Le opzioni descritte nella pagina summenzionata potrebbero aiutarti a regolare &gwenview; per necessità particolari, ma ricordati che non c'è nessuna garanzia che continuino a funzionare da una versione all'altra. </para>
+    </important>
+    </sect1>
+</chapter>
+
+<chapter id="credits">
+<title
+>Riconoscimenti e Copyright</title>
+
+<para
+>&gwenview; è attualmente mantenuto da Aurélien Gâteau</para>
+
+<para
+>Questo documento è stato scritto da Christopher Martin</para>
+
+<para
+>Questo documento è stato aggiornato a &kde; 4 da Henry de Valence</para>
+
+<para
+>Traduzione di Federico Zenith <email
+>federico.zenith@member.fsf.org</email
+></para
+> &underFDL; &underGPL; </chapter>
+
+</book>

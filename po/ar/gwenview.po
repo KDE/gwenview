@@ -1,0 +1,3167 @@
+# translation of gwenview.po to Arabic
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Mohammed Berdai <stuntgp2000@gmail.com>, 2008.
+# zayed <zayed.alsaidi@gmail.com>, 2008, 2021, 2022.
+# Abdalrahim G. Fakhouri <abdilra7eem@yahoo.com>, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: gwenview\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-09-28 00:44+0000\n"
+"PO-Revision-Date: 2022-08-08 21:38+0400\n"
+"Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
+"Language-Team: Arabic <kde-l10n-ar@kde.org>\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"X-Generator: Lokalize 21.07.70\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "محمد البردعي , زايد السعيدي, عبدالرحيم الفاخوري"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "stuntgp2000@gmail.com,zayed.alsaidi@gmail.com,abdilra7eem@yahoo.com"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_LowResourceUsageMode)
+#: app/advancedconfigpage.ui:28
+#, kde-format
+msgid "Low resource usage mode"
+msgstr "نمط الاستخدام الخفيف للموارد"
+
+#. i18n: ectx: property (text), widget (QLabel, cacheHelpLabel)
+#: app/advancedconfigpage.ui:72
+#, kde-format
+msgid ""
+"Enable this option if you do not have a lot of disk space. This will avoid "
+"storing thumbnails on disk and will prefer embedded thumbnails of lower "
+"quality that are faster to load, if available."
+msgstr ""
+"فعل هذه الخاصية إذا لم لديك مساحة قرص كافية. سيؤدي ذلك إلى تجنب تخزين الصور "
+"المصغرة على القرص ويفضل الصور المصغرة المضمنة ذات الجودة الأقل والتي يتم "
+"تحميلها بشكل أسرع، إذا كانت متوفرة."
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: app/advancedconfigpage.ui:82
+#, kde-format
+msgid "Thumbnails:"
+msgstr "المصغرات:"
+
+#. i18n: ectx: property (text), widget (QLabel, relativeHelpLabel)
+#: app/advancedconfigpage.ui:92
+#, kde-format
+msgid ""
+"Squash colors that don't fit within the active color profile's color gamut, "
+"leaving other colors untouched"
+msgstr ""
+"يضغط الألوان التي لا تتلاءم مع التدرج اللوني لملف تعريف الألوان النشط ، "
+"تاركًا الألوان الأخرى دون تغيير"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: app/advancedconfigpage.ui:102
+#, kde-format
+msgid "History:"
+msgstr "التاريخ:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, relativeRenderingIntentRadioButton)
+#: app/advancedconfigpage.ui:114
+#, kde-format
+msgctxt "@option:Relative Colorimetric rendering intent"
+msgid "Relative Colorimetric"
+msgstr "قياس الألوان النسبي"
+
+#. i18n: ectx: property (text), widget (QRadioButton, perceptualRenderingIntentRadioButton)
+#: app/advancedconfigpage.ui:160
+#, kde-format
+msgctxt "@option:Perceptual rendering intent"
+msgid "Perceptual"
+msgstr "محسوس"
+
+#. i18n: ectx: property (text), widget (QLabel, perceptualHelpLabel)
+#: app/advancedconfigpage.ui:172
+#, kde-format
+msgid ""
+"Scale all colors equally to fit them within the active color profile's color "
+"gamut"
+msgstr ""
+"كبر كل الألوان بشكل متساوٍ لملاءمتها ضمن النطاق اللوني لملف تعريف الألوان "
+"النشط"
+
+#. i18n: ectx: property (text), widget (QLabel, colorRenderingLabel)
+#: app/advancedconfigpage.ui:182
+#, kde-format
+msgid "Rendering intent:"
+msgstr "تجسيد اللون:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_HistoryEnabled)
+#: app/advancedconfigpage.ui:197
+#, kde-format
+msgid "Remember folders and URLs"
+msgstr "تذكر المجلدات و الوصلات"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_NoMonitorICC)
+#: app/advancedconfigpage.ui:240
+#, kde-format
+msgid "Apply only the profile embedded in the image file"
+msgstr "طبق على ملف التعريف المضمّن في ملف الصورة فقط"
+
+#. i18n: ectx: property (text), widget (QLabel, colorProfileHelpLabel)
+#: app/advancedconfigpage.ui:265
+#, kde-format
+msgid ""
+"Assume that system-wide color correction already applies monitor profile."
+msgstr "افترض أن تصحيح الألوان على مستوى النظام يطبق بالفعل ملف تعريف الشاشة."
+
+#. i18n: ectx: property (text), widget (QLabel, colorProfileLabel)
+#: app/advancedconfigpage.ui:275
+#, kde-format
+msgid "Color profile:"
+msgstr "لائحة الألوان:"
+
+#: app/alignwithsidebarwidgetaction.cpp:23
+#, kde-format
+msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
+msgid "Sidebar Alignment Spacer"
+msgstr "فاصل محاذاة الشريط الجانبي"
+
+#: app/browsemainpage.cpp:147 app/mainwindow.cpp:373 app/viewmainpage.cpp:425
+#: lib/documentview/documentviewcontroller.cpp:57
+#, kde-format
+msgctxt "@title actions category - means actions changing smth in interface"
+msgid "View"
+msgstr "اعرض"
+
+#: app/browsemainpage.cpp:149
+#, kde-format
+msgctxt "@action:inmenu Navigation Bar"
+msgid "Edit Location"
+msgstr "حرر الموقع"
+
+#: app/browsemainpage.cpp:153
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Sort By"
+msgstr "افرز حسب"
+
+#: app/browsemainpage.cpp:158
+#, kde-format
+msgctxt "@addAction:inmenu"
+msgid "Name"
+msgstr "الاسم"
+
+#: app/browsemainpage.cpp:161
+#, kde-format
+msgctxt "@addAction:inmenu"
+msgid "Date"
+msgstr "التاريخ"
+
+#: app/browsemainpage.cpp:164
+#, kde-format
+msgctxt "@addAction:inmenu"
+msgid "Size"
+msgstr "الحجم"
+
+#: app/browsemainpage.cpp:168
+#, kde-format
+msgctxt "@addAction:inmenu"
+msgid "Rating"
+msgstr "التقييم"
+
+#: app/browsemainpage.cpp:175
+#, kde-format
+msgctxt "@action:inmenu Sort"
+msgid "Descending"
+msgstr "تنازليًّا"
+
+#: app/browsemainpage.cpp:187
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Thumbnail Details"
+msgstr "تفاصيل المصغرة"
+
+#: app/browsemainpage.cpp:188
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Filename"
+msgstr "اسم الملف"
+
+#: app/browsemainpage.cpp:189
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Date"
+msgstr "التاريخ"
+
+#: app/browsemainpage.cpp:190
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Image Size"
+msgstr "حجم الصورة"
+
+#: app/browsemainpage.cpp:191
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "File Size"
+msgstr "حجم الملف"
+
+#: app/browsemainpage.cpp:193
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Rating"
+msgstr "التقييم"
+
+#: app/browsemainpage.cpp:196 app/fileopscontextmanageritem.cpp:138
+#: app/mainwindow.cpp:372
+#, kde-format
+msgctxt "@title actions category"
+msgid "File"
+msgstr "ملف"
+
+#: app/browsemainpage.cpp:198
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Add Folder to Places"
+msgstr "أضف المجلد إلى الأماكن"
+
+#: app/browsemainpage.cpp:247
+#, kde-format
+msgctxt ""
+"@info:status %1 number of selected documents, %2 total number of documents, "
+"%3 total filesize of selected documents"
+msgid "Selected %1 of %2 (%3)"
+msgstr "المحدد %1 من %2 (%3)"
+
+#: app/browsemainpage.cpp:253
+#, kde-format
+msgctxt "@info:status Image files"
+msgid "%1 image"
+msgid_plural "%1 images"
+msgstr[0] "٠ صورة"
+msgstr[1] "صورة واحدة"
+msgstr[2] "صورتين"
+msgstr[3] "%1 صور"
+msgstr[4] "%1 صورة"
+msgstr[5] "%1 صورة"
+
+#: app/browsemainpage.cpp:254
+#, kde-format
+msgctxt "@info:status Video files"
+msgid "%1 video"
+msgid_plural "%1 videos"
+msgstr[0] "٠ فيديو"
+msgstr[1] "فيديو واحد"
+msgstr[2] "فيديوين"
+msgstr[3] "%1 فيديوات"
+msgstr[4] "%1 فيديو"
+msgstr[5] "%1 فيديو"
+
+#: app/browsemainpage.cpp:261
+#, kde-format
+msgctxt "@info:status images, videos"
+msgid "%1, %2"
+msgstr "%1، %2"
+
+#. i18n: ectx: property (text), widget (Gwenview::StatusBarToolButton, mAddFilterButton)
+#: app/browsemainpage.ui:88
+#, kde-format
+msgid "Add Filter"
+msgstr "أضف مرشح"
+
+#: app/configdialog.cpp:70
+#, kde-format
+msgid "General"
+msgstr "عام"
+
+#: app/configdialog.cpp:123
+#, kde-format
+msgid "Image View"
+msgstr "عرض الصورة"
+
+#: app/configdialog.cpp:134
+#, kde-format
+msgid "Advanced"
+msgstr "متقدم"
+
+#: app/fileoperations.cpp:64
+#, kde-format
+msgctxt "@title:window %1 file name"
+msgid "Copy %1"
+msgstr "نسخ %1"
+
+#: app/fileoperations.cpp:66
+#, kde-format
+msgctxt "@title:window %1 number of images"
+msgid "Copy %1 image"
+msgid_plural "Copy %1 images"
+msgstr[0] "انسخ ٠ صورة"
+msgstr[1] "انسخ صورة واحدة"
+msgstr[2] "انسخ صورتين"
+msgstr[3] "انسخ %1 صور"
+msgstr[4] "انسخ %1 صورة"
+msgstr[5] "انسخ %1 صورة"
+
+#: app/fileoperations.cpp:68
+#, kde-format
+msgctxt "@action:button"
+msgid "Copy"
+msgstr "انسخ"
+
+#: app/fileoperations.cpp:72
+#, kde-format
+msgctxt "@title:window %1 file name"
+msgid "Move %1"
+msgstr "نقل %1"
+
+#: app/fileoperations.cpp:74
+#, kde-format
+msgctxt "@title:window %1 number of images"
+msgid "Move %1 image"
+msgid_plural "Move %1 images"
+msgstr[0] "انقل ٠ صورة"
+msgstr[1] "انقل صورة واحدة"
+msgstr[2] "انقل صورتين"
+msgstr[3] "انقل %1 صور"
+msgstr[4] "انقل %1 صورة"
+msgstr[5] "انقل %1 صورة"
+
+#: app/fileoperations.cpp:76
+#, kde-format
+msgctxt "@action:button"
+msgid "Move"
+msgstr "انقل"
+
+#: app/fileoperations.cpp:80
+#, kde-format
+msgctxt "@title:window %1 file name"
+msgid "Link %1"
+msgstr "اربط %1"
+
+#: app/fileoperations.cpp:82
+#, kde-format
+msgctxt "@title:window %1 number of images"
+msgid "Link %1 image"
+msgid_plural "Link %1 images"
+msgstr[0] "اربط ٠ صورة"
+msgstr[1] "اربط صورة واحدة"
+msgstr[2] "اربط صورتين"
+msgstr[3] "اربط %1 صور"
+msgstr[4] "اربط %1 صورة"
+msgstr[5] "اربط %1 صورة"
+
+#: app/fileoperations.cpp:84
+#, kde-format
+msgctxt "@action:button"
+msgid "Link"
+msgstr "اربط"
+
+#: app/fileoperations.cpp:199
+#, kde-format
+msgid "Move Here"
+msgstr "انقل هنا"
+
+#: app/fileoperations.cpp:200
+#, kde-format
+msgid "Copy Here"
+msgstr "انسخ هنا"
+
+#: app/fileoperations.cpp:201
+#, kde-format
+msgid "Link Here"
+msgstr "اربط هنا"
+
+#: app/fileoperations.cpp:203
+#, kde-format
+msgid "Cancel"
+msgstr "ألغ"
+
+#: app/fileopscontextmanageritem.cpp:128
+#, kde-format
+msgid "File Operations"
+msgstr "عمليات الملف"
+
+#: app/fileopscontextmanageritem.cpp:139
+#: app/semanticinfocontextmanageritem.cpp:203
+#, kde-format
+msgctxt "@title actions category"
+msgid "Edit"
+msgstr "حرر"
+
+#: app/fileopscontextmanageritem.cpp:146
+#, kde-format
+msgctxt "Verb"
+msgid "Copy To..."
+msgstr "انسخ إلى..."
+
+#: app/fileopscontextmanageritem.cpp:151
+#, kde-format
+msgctxt "Verb"
+msgid "Move To..."
+msgstr "انقل إلى..."
+
+#: app/fileopscontextmanageritem.cpp:156
+#, kde-format
+msgctxt "Verb: create link to the file where user wants"
+msgid "Link To..."
+msgstr "اربط إلى..."
+
+#: app/fileopscontextmanageritem.cpp:161
+#, kde-format
+msgctxt "Verb"
+msgid "Rename..."
+msgstr "أعد التسمية..."
+
+#: app/fileopscontextmanageritem.cpp:166
+#, kde-format
+msgctxt "Verb"
+msgid "Trash"
+msgstr "انقل إلى المهملات"
+
+#: app/fileopscontextmanageritem.cpp:173
+#, kde-format
+msgid "Restore"
+msgstr "أعد التحجيم"
+
+#: app/fileopscontextmanageritem.cpp:177
+#, kde-format
+msgid "Properties"
+msgstr "الخصائص"
+
+#: app/fileopscontextmanageritem.cpp:182
+#, kde-format
+msgid "Create Folder..."
+msgstr "أنشئ مجلد..."
+
+#: app/fileopscontextmanageritem.cpp:186
+#, kde-format
+msgid "Open With"
+msgstr "افتح بواسطة"
+
+#: app/fileopscontextmanageritem.cpp:193
+#, kde-format
+msgid "Open Containing Folder"
+msgstr "افتح المجلد الحاوي"
+
+#: app/fileopscontextmanageritem.cpp:375
+#, kde-format
+msgid "Other Application..."
+msgstr "برامج أخرى..."
+
+#: app/filtercontroller.cpp:59
+#, kde-format
+msgid "Name contains"
+msgstr "اسم يحتوي"
+
+#: app/filtercontroller.cpp:60
+#, kde-format
+msgid "Name does not contain"
+msgstr "اسم لا يحتوي"
+
+#: app/filtercontroller.cpp:98
+#, kde-format
+msgid "Date >="
+msgstr "التاريخ ≥"
+
+#: app/filtercontroller.cpp:99
+#, kde-format
+msgid "Date ="
+msgstr "التاريخ ="
+
+#: app/filtercontroller.cpp:100
+#, kde-format
+msgid "Date <="
+msgstr "التاريخ ≤"
+
+#: app/filtercontroller.cpp:131
+#, kde-format
+msgid "Rating >="
+msgstr "التقييم   ≥"
+
+#: app/filtercontroller.cpp:132
+#, kde-format
+msgid "Rating ="
+msgstr "التقييم ="
+
+#: app/filtercontroller.cpp:133
+#, kde-format
+msgid "Rating <="
+msgstr "التقييم ≤"
+
+#: app/filtercontroller.cpp:173
+#, kde-format
+msgid "Tagged"
+msgstr "موسومة"
+
+#: app/filtercontroller.cpp:174
+#, kde-format
+msgid "Not Tagged"
+msgstr "غير موسومة"
+
+#: app/filtercontroller.cpp:278
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Filter by Name"
+msgstr "رشح حسب الاسم"
+
+#: app/filtercontroller.cpp:280
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Filter by Date"
+msgstr "رشح حسب التاريخ"
+
+#: app/filtercontroller.cpp:283
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Filter by Rating"
+msgstr "رشح حسب التقييم"
+
+#: app/filtercontroller.cpp:285
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Filter by Tag"
+msgstr "رشح حسب الوسم"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: app/fullscreenconfigwidget.ui:20
+#, kde-format
+msgid "Slideshow"
+msgstr "عرض الشرائح"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: app/fullscreenconfigwidget.ui:29
+#, kde-format
+msgid "Interval:"
+msgstr "الفترة:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, mSlideShowLoopCheckBox)
+#: app/fullscreenconfigwidget.ui:75
+#, kde-format
+msgid "Loop"
+msgstr "حلقة"
+
+#. i18n: ectx: property (text), widget (QCheckBox, mSlideShowRandomCheckBox)
+#: app/fullscreenconfigwidget.ui:82
+#, kde-format
+msgid "Random"
+msgstr "عشوائي"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: app/fullscreenconfigwidget.ui:92
+#, kde-format
+msgid "Image Information"
+msgstr "معلومات الصورة"
+
+#. i18n: ectx: property (text), widget (QPushButton, mConfigureDisplayedInformationButton)
+#: app/fullscreenconfigwidget.ui:101
+#, kde-format
+msgid "Select Image Information to Display..."
+msgstr "اختر معلومات الصورة التي تريد عرضها..."
+
+#. i18n: ectx: property (title), widget (QGroupBox, mThumbnailGroupBox)
+#: app/fullscreenconfigwidget.ui:111
+#, kde-format
+msgid "Thumbnails"
+msgstr "المصغرات"
+
+#. i18n: ectx: property (text), widget (QCheckBox, mShowThumbnailsCheckBox)
+#: app/fullscreenconfigwidget.ui:120
+#, kde-format
+msgid "Show thumbnails"
+msgstr "أظهر المصغرات"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: app/fullscreenconfigwidget.ui:130
+#, kde-format
+msgid "Height:"
+msgstr "الارتفاع:"
+
+#: app/fullscreencontent.cpp:239
+#, kde-format
+msgctxt "@item:intext fullscreen meta info separator"
+msgid ", "
+msgstr "، "
+
+#: app/fullscreencontent.cpp:289
+#, kde-format
+msgctxt "Slideshow interval in seconds"
+msgid "%1 sec"
+msgid_plural "%1 secs"
+msgstr[0] "حالا"
+msgstr[1] "ثانية واحدة"
+msgstr[2] "ثانيتان"
+msgstr[3] "%1 ثوان "
+msgstr[4] "%1 ثانية"
+msgstr[5] "%1 ثانية"
+
+#: app/fullscreencontent.cpp:400
+#, kde-format
+msgid "Configure"
+msgstr "اضبط"
+
+#: app/fullscreencontent.cpp:401
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Configure full screen mode"
+msgstr "اضبط نمط ملء الشاشة"
+
+#: app/fullscreencontent.cpp:552 app/viewmainpage.cpp:404
+#, kde-format
+msgctxt "@info:status %1 current document index, %2 total documents"
+msgid "%1 of %2"
+msgstr "%1 من %2"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: app/generalconfigpage.ui:17
+#, kde-format
+msgid "Videos:"
+msgstr "المرئيات:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_ListVideos)
+#: app/generalconfigpage.ui:27
+#, kde-format
+msgid "Show videos"
+msgstr "أظهر الفيديو"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_AutoplayVideos)
+#: app/generalconfigpage.ui:34
+#, kde-format
+msgid "Automatically play"
+msgstr "شغل آليا"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: app/generalconfigpage.ui:41
+#, kde-format
+msgid "Notify after reaching the last image:"
+msgstr "نبه عند الوصول لأخر صورة:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, neverShowWrapNoticeRadioButton)
+#: app/generalconfigpage.ui:51
+#, kde-format
+msgid "Never"
+msgstr "البتة"
+
+#. i18n: ectx: property (text), widget (QRadioButton, wrapNoticeOnSlideshowRadioButton)
+#: app/generalconfigpage.ui:58
+#, kde-format
+msgid "Only during slideshows"
+msgstr "أثناء عرض الشرائح فقط"
+
+#. i18n: ectx: property (text), widget (QRadioButton, alwaysShowWrapNoticeRadioButton)
+#: app/generalconfigpage.ui:65
+#, kde-format
+msgid "Always"
+msgstr "دائما"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: app/generalconfigpage.ui:88
+#, kde-format
+msgid "Fullscreen background:"
+msgstr "خلفية ملئ الشاشة:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, fullscreenBackgroundImageRadioButton)
+#: app/generalconfigpage.ui:98
+#, kde-format
+msgid "Dark gray texture"
+msgstr "نسيج رمادي داكن"
+
+#. i18n: ectx: property (text), widget (QRadioButton, fullscreenBackgroundBlackRadioButton)
+#: app/generalconfigpage.ui:105
+#, kde-format
+msgid "Black"
+msgstr "أسود"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: app/generalconfigpage.ui:128
+#, kde-format
+msgid "Lossy image save quality:"
+msgstr "جودة حفظ الصور القابلة للضياع:"
+
+#. i18n: ectx: property (suffix), widget (QSpinBox, jpegQualitySpinner)
+#: app/generalconfigpage.ui:168
+#, no-c-format, kde-format
+msgid "%"
+msgstr "٪"
+
+#. i18n: ectx: property (text), widget (QLabel, lossyImageFormatHelpLabel)
+#: app/generalconfigpage.ui:196
+#, kde-format
+msgid ""
+"The quality level when saving images using lossy image formats such as JPEG, "
+"WEBP, AVIF, HEIF, and HEIC. Higher quality increases the file size."
+msgstr ""
+"مستوى الجودة عند حفظ الصور باستخدام تنسيقات الصور القابلة للضياع مثل JPEG و "
+"WEBP و AVIF و HEIF و HEIC. تزيد الجودة العالية من حجم الملف."
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: app/generalconfigpage.ui:222
+#, kde-format
+msgid "Thumbnail actions:"
+msgstr "إجراءات المصغرة:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, allButtonsThumbnailActionsRadioButton)
+#: app/generalconfigpage.ui:229
+#, kde-format
+msgid "All buttons"
+msgstr "جميع الأزرار"
+
+#. i18n: ectx: property (text), widget (QRadioButton, selectionOnlyThumbnailActionsRadioButton)
+#: app/generalconfigpage.ui:236
+#, kde-format
+msgid "Show selection button only"
+msgstr "أظهر زر التحديد فقط"
+
+#. i18n: ectx: property (text), widget (QRadioButton, noneThumbnailActionsRadioButton)
+#: app/generalconfigpage.ui:243
+#, kde-format
+msgctxt "A number of thumbnail actions to show"
+msgid "None"
+msgstr "لا شيء"
+
+#: app/gvcore.cpp:80
+#, kde-format
+msgid "Image quality:"
+msgstr "جودة الصورة:"
+
+#: app/gvcore.cpp:87
+#, kde-format
+msgctxt "Spinbox suffix; percentage 1 - 100"
+msgid "%"
+msgstr "٪"
+
+#: app/gvcore.cpp:112
+#, kde-format
+msgctxt "@title:window"
+msgid "Save Image"
+msgstr "احفظ الصّورة"
+
+#: app/gvcore.cpp:410
+#, kde-format
+msgid "Save using another format"
+msgstr "احفظ بإستخدام نسق أخر"
+
+#: app/gvcore.cpp:412
+#, kde-format
+msgid "Gwenview cannot save images in '%1' format."
+msgstr "جونفيو لم يتمكن من حفظ الصور في نسق '%1'"
+
+#: app/gvcore.cpp:440
+#, kde-format
+msgctxt "@info"
+msgid "Gwenview cannot save images as %1."
+msgstr "جونفيو لم يتمكن من حفظ الصور كـ %1."
+
+#: app/gvcore.cpp:458 app/gvcore.cpp:492
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"<emphasis strong='true'>Saving <filename>%1</filename> failed:</"
+"emphasis><nl />%2"
+msgstr ""
+"<emphasis strong='true'>فشل حفظ <filename>%1</filename> :</emphasis><nl />%2"
+
+#: app/gvcore.cpp:508
+#, kde-format
+msgid "You are now viewing the new document."
+msgstr "أنت الآن تعرض المستندات الجديدة."
+
+#: app/gvcore.cpp:510
+#, kde-format
+msgid "Go back to the original"
+msgstr "ارجِع إلى الأصل"
+
+#. i18n: ectx: Menu (rating)
+#: app/gwenviewui.rc:54
+#, kde-format
+msgid "&Rating"
+msgstr "ال&تقييم"
+
+#. i18n: ectx: Menu (settings)
+#: app/gwenviewui.rc:84
+#, kde-format
+msgid "&Settings"
+msgstr "الإ&عدادات"
+
+#. i18n: ectx: ToolBar (mainToolBar)
+#: app/gwenviewui.rc:100 part/gvpart.rc:16
+#, kde-format
+msgid "Main Toolbar"
+msgstr "شريط الأدوات الرئيسي"
+
+#: app/imagemetainfodialog.cpp:130
+#, kde-format
+msgctxt "@title:window"
+msgid "Image Information"
+msgstr "معلومات الصورة"
+
+#: app/imageopscontextmanageritem.cpp:84
+#, kde-format
+msgctxt "@title actions category - means actions changing image"
+msgid "Edit"
+msgstr "حرر"
+
+#: app/imageopscontextmanageritem.cpp:87
+#, kde-format
+msgid "Rotate Left"
+msgstr "دور لليسار"
+
+#: app/imageopscontextmanageritem.cpp:88
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Rotate image to the left"
+msgstr "دوّر الصورة إلى اليسار"
+
+#: app/imageopscontextmanageritem.cpp:93
+#, kde-format
+msgid "Rotate Right"
+msgstr "دور لليمين"
+
+#: app/imageopscontextmanageritem.cpp:94
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Rotate image to the right"
+msgstr "دوّر الصورة لليمين"
+
+#: app/imageopscontextmanageritem.cpp:99
+#, kde-format
+msgid "Mirror"
+msgstr "مرآة"
+
+#: app/imageopscontextmanageritem.cpp:103
+#, kde-format
+msgid "Flip"
+msgstr "اقلب"
+
+#: app/imageopscontextmanageritem.cpp:107 lib/resize/resizeimagedialog.cpp:71
+#, kde-format
+msgid "Resize"
+msgstr "أعد التحجيم"
+
+#: app/imageopscontextmanageritem.cpp:112 lib/crop/cropimageoperation.cpp:70
+#: lib/crop/cropwidget.cpp:263
+#, kde-format
+msgid "Crop"
+msgstr "قص"
+
+#: app/imageopscontextmanageritem.cpp:117
+#: lib/redeyereduction/redeyereductionimageoperation.cpp:76
+#: lib/redeyereduction/redeyereductiontool.cpp:49
+#, kde-format
+msgid "Reduce Red Eye"
+msgstr "قلل العين الحمراء"
+
+#: app/imageopscontextmanageritem.cpp:122 lib/annotate/annotateoperation.cpp:52
+#, kde-format
+msgctxt "@action:intoolbar"
+msgid "Annotate"
+msgstr "اشرح"
+
+#: app/imageopscontextmanageritem.cpp:130
+#, kde-format
+msgctxt "@title:window Annotate [filename]"
+msgid "Annotate %1"
+msgstr "اشرح %1"
+
+#: app/imageopscontextmanageritem.cpp:150 lib/document/documentjob.cpp:77
+#, kde-format
+msgctxt "@info"
+msgid "Gwenview cannot edit this kind of image."
+msgstr "جونفيو لا يستطيع تحرير صورة من هذا النوع."
+
+#: app/imageopscontextmanageritem.cpp:161
+#, kde-format
+msgid "Image Operations"
+msgstr "عمليات الصورة"
+
+#. i18n: ectx: property (text), widget (QLabel, label_1)
+#: app/imageviewconfigpage.ui:17
+#, kde-format
+msgid "Show transparency with:"
+msgstr "أظهر الشفافية باستخدام:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, surroundingRadioButton)
+#: app/imageviewconfigpage.ui:38
+#, kde-format
+msgid "Surrounding background"
+msgstr "الخلفية المحيطة:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, checkBoardRadioButton)
+#: app/imageviewconfigpage.ui:71
+#, kde-format
+msgid "&Checkerboard background"
+msgstr "&خلفية رقعة الشطرنج"
+
+#. i18n: ectx: property (text), widget (QRadioButton, solidColorRadioButton)
+#: app/imageviewconfigpage.ui:104
+#, kde-format
+msgid "&Solid color background:"
+msgstr "خلفية &لون صلب:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: app/imageviewconfigpage.ui:152
+#, kde-format
+msgid "Mouse wheel behavior:"
+msgstr "سلوك عجلة الفأرة:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, mouseWheelScrollRadioButton)
+#: app/imageviewconfigpage.ui:167
+#, kde-format
+msgctxt "@option:radio action on mouse wheel"
+msgid "Scroll"
+msgstr "لفّ"
+
+#. i18n: ectx: property (text), widget (QRadioButton, mouseWheelBrowseRadioButton)
+#: app/imageviewconfigpage.ui:194
+#, kde-format
+msgctxt "@option:radio action on mouse wheel"
+msgid "Browse"
+msgstr "تصفح"
+
+#. i18n: ectx: property (text), widget (QRadioButton, mouseWheelZoomRadioButton)
+#: app/imageviewconfigpage.ui:218
+#, kde-format
+msgctxt "@option:radio action on mouse wheel"
+msgid "Zoom"
+msgstr "كبّر"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: app/imageviewconfigpage.ui:256
+#, kde-format
+msgid "Zoom mode:"
+msgstr "نمط التكبير:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, autofitZoomModeRadioButton)
+#: app/imageviewconfigpage.ui:271
+#, kde-format
+msgid "Autofit each image"
+msgstr "احتواء تلقائي لكل صورة"
+
+#. i18n: ectx: property (text), widget (QRadioButton, keepSameZoomModeRadioButton)
+#: app/imageviewconfigpage.ui:298
+#, kde-format
+msgid "Keep same zoom and position"
+msgstr "حافظ على نفس التكبير والموضع"
+
+#. i18n: ectx: property (text), widget (QRadioButton, individualZoomModeRadioButton)
+#: app/imageviewconfigpage.ui:322
+#, kde-format
+msgid "Per image zoom and position"
+msgstr "التكبير و الموضع حسب الصورة"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_EnlargeSmallerImages)
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_PrintEnlargeSmallerImages)
+#: app/imageviewconfigpage.ui:362 lib/print/printoptionspage.ui:98
+#, kde-format
+msgid "Enlarge smaller images"
+msgstr "تكبير الصور الصغيرة"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: app/imageviewconfigpage.ui:400
+#, kde-format
+msgid "Animations:"
+msgstr "التحريكات:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, glAnimationRadioButton)
+#: app/imageviewconfigpage.ui:415
+#, kde-format
+msgid "OpenGL"
+msgstr "OpenGL"
+
+#. i18n: ectx: property (text), widget (QRadioButton, softwareAnimationRadioButton)
+#: app/imageviewconfigpage.ui:442
+#, kde-format
+msgid "Software"
+msgstr "برمجية"
+
+#. i18n: ectx: property (text), widget (QRadioButton, noAnimationRadioButton)
+#: app/imageviewconfigpage.ui:466
+#, kde-format
+msgid "None"
+msgstr "لا شيء"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: app/imageviewconfigpage.ui:504
+#, kde-format
+msgid "<b>Thumbnail Bar</b>"
+msgstr "<b>شريط المصغرات</b>"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: app/imageviewconfigpage.ui:527
+#, kde-format
+msgid "Orientation:"
+msgstr "الإتجاه:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, horizontalRadioButton)
+#: app/imageviewconfigpage.ui:542
+#, kde-format
+msgid "Horizontal"
+msgstr "أفقي"
+
+#. i18n: ectx: property (text), widget (QRadioButton, verticalRadioButton)
+#: app/imageviewconfigpage.ui:566
+#, kde-format
+msgid "Vertical"
+msgstr "عمودي"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: app/imageviewconfigpage.ui:588
+#, kde-format
+msgid "Row count:"
+msgstr "عدد الصفوف:"
+
+#: app/infocontextmanageritem.cpp:151
+#, kde-format
+msgctxt ""
+"@item:intext %1 is a key, we append a colon to it. A value is displayed after"
+msgid "%1:"
+msgstr "%1:"
+
+#: app/infocontextmanageritem.cpp:228
+#, kde-format
+msgctxt "@action show more image meta info"
+msgid "Show more details..."
+msgstr "أظهر تفاصيل أكثر..."
+
+#: app/infocontextmanageritem.cpp:242
+#, kde-format
+msgctxt "@title:group"
+msgid "Image Information"
+msgstr "معلومات الصورة"
+
+#: app/infocontextmanageritem.cpp:331
+#, kde-format
+msgctxt "@label"
+msgid "%1 file selected"
+msgid_plural "%1 files selected"
+msgstr[0] "%1 ملف محدد"
+msgstr[1] "ملف واحد محدد"
+msgstr[2] "ملفان محددان"
+msgstr[3] "%1 ملفات محددة"
+msgstr[4] "%1 ملفا محددا"
+msgstr[5] "%1 ملف محدد"
+
+#: app/infocontextmanageritem.cpp:333
+#, kde-format
+msgctxt "@label"
+msgid "%1 folder selected"
+msgid_plural "%1 folders selected"
+msgstr[0] "لم يحدد شيء"
+msgstr[1] "مجلد واحد محدد"
+msgstr[2] "مجلدان محددان"
+msgstr[3] "%1 مجلدات محددة"
+msgstr[4] "%1 مجلدا محددا"
+msgstr[5] "%1 مجلد محدد"
+
+#: app/infocontextmanageritem.cpp:336
+#, kde-format
+msgctxt "@label. The two parameters are strings like '2 folders' and '1 file'."
+msgid "%1 and %2 selected"
+msgstr "حدد %1 و %2"
+
+#: app/infocontextmanageritem.cpp:337
+#, kde-format
+msgid "%1 folder"
+msgid_plural "%1 folders"
+msgstr[0] "0"
+msgstr[1] "مجلد واحد"
+msgstr[2] "مجلدين"
+msgstr[3] "%1 مجلدات"
+msgstr[4] "%1 مجلدا"
+msgstr[5] "%1 مجلد"
+
+#: app/infocontextmanageritem.cpp:338
+#, kde-format
+msgid "%1 file"
+msgid_plural "%1 files"
+msgstr[0] "0"
+msgstr[1] "ملف واحد"
+msgstr[2] "ملفان"
+msgstr[3] "%1 ملفات"
+msgstr[4] "%1 ملفا"
+msgstr[5] "%1 ملف"
+
+#: app/main.cpp:178
+#, kde-format
+msgid "Gwenview"
+msgstr "جونفيو"
+
+#: app/main.cpp:180
+#, kde-format
+msgid "An Image Viewer"
+msgstr "عارض صور"
+
+#: app/main.cpp:188
+#, kde-format
+msgid "Start in fullscreen mode"
+msgstr "ابدأ في نمط ملء الشاشة"
+
+#: app/main.cpp:189
+#, kde-format
+msgid "Start in slideshow mode"
+msgstr "ابدأ في نمط عرض الشرائح"
+
+#: app/main.cpp:190
+#, kde-format
+msgid "A starting file or folders"
+msgstr "ملف أو مجلدات البدء"
+
+#: app/mainwindow.cpp:382
+#, kde-format
+msgctxt "@action Open Recent menu"
+msgid "Clear List"
+msgstr "امسح القائمة"
+
+#: app/mainwindow.cpp:390
+#, kde-format
+msgctxt "@action reload the currently viewed image"
+msgid "Reload"
+msgstr "أعد التحميل"
+
+#: app/mainwindow.cpp:395
+#, kde-format
+msgctxt "@action:inmenu Navigation Bar"
+msgid "Replace Location"
+msgstr "استبدل الموقع"
+
+#: app/mainwindow.cpp:400
+#, kde-format
+msgctxt "@action:intoolbar Switch to file list"
+msgid "Browse"
+msgstr "تصفح"
+
+#: app/mainwindow.cpp:401
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Browse folders for images"
+msgstr "استعرض المجلد للصور"
+
+#: app/mainwindow.cpp:408
+#, kde-format
+msgctxt "@action:intoolbar Switch to image view"
+msgid "View"
+msgstr "اعرض"
+
+#: app/mainwindow.cpp:409
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "View selected images"
+msgstr "اعرض الصور المنتقاة"
+
+#: app/mainwindow.cpp:428
+#, kde-format
+msgctxt "@action"
+msgid "Exit Full Screen"
+msgstr "أنهِ ملء الشاشة"
+
+#: app/mainwindow.cpp:433
+#, kde-format
+msgctxt "@action Go to previous image"
+msgid "Previous"
+msgstr "سابق"
+
+#: app/mainwindow.cpp:434
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Go to previous image"
+msgstr "اذهب إلى الصورة السابقة"
+
+#: app/mainwindow.cpp:440
+#, kde-format
+msgctxt "@action Go to next image"
+msgid "Next"
+msgstr "التالي"
+
+#: app/mainwindow.cpp:441
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Go to next image"
+msgstr "اذهب إلى الصورة التالية"
+
+#: app/mainwindow.cpp:447
+#, kde-format
+msgctxt "@action Go to first image"
+msgid "First"
+msgstr "الأولى"
+
+#: app/mainwindow.cpp:448
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Go to first image"
+msgstr "اذهب إلى الصورة الأولى"
+
+#: app/mainwindow.cpp:454
+#, kde-format
+msgctxt "@action Go to last image"
+msgid "Last"
+msgstr "الأخيرة"
+
+#: app/mainwindow.cpp:455
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Go to last image"
+msgstr "اذهب إلى الصورة الأخيرة"
+
+#: app/mainwindow.cpp:465
+#, kde-format
+msgctxt "@action"
+msgid "Start Page"
+msgstr "صفحة البداية"
+
+#: app/mainwindow.cpp:466
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Open the start page"
+msgstr "افتح صفحة البداية"
+
+#: app/mainwindow.cpp:473
+#, kde-format
+msgctxt "@action"
+msgid "Sidebar"
+msgstr "الشريط الجانبي"
+
+#: app/mainwindow.cpp:478
+#, kde-format
+msgctxt "@action opens crop, rename, etc."
+msgid "Show Editing Tools"
+msgstr "أظهر أدوات التحرير"
+
+#: app/mainwindow.cpp:508
+#, kde-format
+msgctxt "@action Share images"
+msgid "Share"
+msgstr "شارِك"
+
+#: app/mainwindow.cpp:516
+#, kde-format
+msgid "Error while sharing: %1"
+msgstr "حصل خطأ أثناء المشاركة: %1"
+
+#: app/mainwindow.cpp:523
+#, kde-format
+msgid ""
+"The shared image link (<a href=\"%1\">%1</a>) has been copied to the "
+"clipboard."
+msgstr "وصلة الصورة المشاركة بها (<a href=\"%1\">%1</a>) نسخت إلى الحافظة."
+
+#: app/mainwindow.cpp:573
+#, kde-format
+msgctxt "@title:menu submenu for actions that open configuration dialogs"
+msgid "Configure"
+msgstr "اضبط"
+
+#: app/mainwindow.cpp:588
+#, kde-format
+msgctxt "@title actions category - means actions changing smth in interface"
+msgid "Edit"
+msgstr "حرر"
+
+#: app/mainwindow.cpp:593
+#, kde-format
+msgid "Redo"
+msgstr "كرر"
+
+#: app/mainwindow.cpp:601
+#, kde-format
+msgid "Undo"
+msgstr "تراجع"
+
+#: app/mainwindow.cpp:628
+#, kde-format
+msgid "Folders"
+msgstr "المجلدات"
+
+#: app/mainwindow.cpp:634
+#, kde-format
+msgid "Information"
+msgstr "المعلومات"
+
+#: app/mainwindow.cpp:648
+#, kde-format
+msgid "Operations"
+msgstr "العمليات"
+
+#: app/mainwindow.cpp:1322
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Hide sidebar"
+msgstr "اخفِ الشريط الجانبي"
+
+#: app/mainwindow.cpp:1322
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Show sidebar"
+msgstr "أظهر الشريط الجانبي"
+
+#: app/mainwindow.cpp:1629
+#, kde-format
+msgctxt "@title:window"
+msgid "Open Image"
+msgstr "افتح صورة"
+
+#: app/mainwindow.cpp:1689
+#, kde-format
+msgid "Pause Slideshow"
+msgstr "أوقف الشرائح"
+
+#: app/mainwindow.cpp:1692
+#, kde-format
+msgid "Resume Slideshow"
+msgstr "استأنف الشرائح"
+
+#: app/mainwindow.cpp:1692
+#, kde-format
+msgid "Start Slideshow"
+msgstr "ابدأ عرض الشرائح"
+
+#: app/mainwindow.cpp:1705
+#, kde-format
+msgid "Save All Changes"
+msgstr "احفظ كل التغييرات"
+
+#: app/mainwindow.cpp:1706
+#, kde-format
+msgid "Discard Changes"
+msgstr "تجاهل التغييرات"
+
+#: app/mainwindow.cpp:1708
+#, kde-format
+msgid "One image has been modified."
+msgid_plural "%1 images have been modified."
+msgstr[0] "صورة واحدة عدِّلت"
+msgstr[1] "صورة واحدة عدِّلت"
+msgstr[2] "صورتين عدِّلتا"
+msgstr[3] "%1 صور عدِّلت"
+msgstr[4] "%1 صورة عدِّلت"
+msgstr[5] "%1 صورة عدِّلت"
+
+#: app/mainwindow.cpp:1708
+#, kde-format
+msgid "If you quit now, your changes will be lost."
+msgstr "إذا غادرت الآن، فإن كل التعديلات التي قمت بها ستضيع."
+
+#: app/mainwindow.cpp:1751
+#, kde-format
+msgid ""
+"This will hide the menu bar completely. You can show it again by typing %1."
+msgstr "سيُخفي هذا شريط القوائم بالكامل. يمكنك عرضه مجددًا بطباعة %1."
+
+#: app/mainwindow.cpp:1754
+#, kde-format
+msgid "Hide menu bar"
+msgstr "اخفِ الشريط القائمة"
+
+#: app/mainwindow.cpp:1972
+#, kde-format
+msgid "You reached the first document, what do you want to do?"
+msgstr "لقد وصلت إلى الملف الأول، ماذا تريد أن تفعل؟"
+
+#: app/mainwindow.cpp:1973 app/mainwindow.cpp:1987
+#, kde-format
+msgid "Stay There"
+msgstr "ابق هناك"
+
+#: app/mainwindow.cpp:1974
+#, kde-format
+msgid "Go to the Last Document"
+msgstr "اذهب إلى المستند الأخير"
+
+#: app/mainwindow.cpp:1975 app/mainwindow.cpp:1989
+#, kde-format
+msgid "Go Back to the Document List"
+msgstr "ارجع إلى لائحة المستندات"
+
+#: app/mainwindow.cpp:1986
+#, kde-format
+msgid "You reached the last document, what do you want to do?"
+msgstr "لقدوصلت إلى المستند الأخير، ماذا تريد أن تفعل؟"
+
+#: app/mainwindow.cpp:1988
+#, kde-format
+msgid "Go to the First Document"
+msgstr "اذهب إلى المستند الأول"
+
+#: app/renamedialog.cpp:48
+#, kde-format
+msgctxt "@action:button"
+msgid "Rename"
+msgstr "غيّر الاسم"
+
+#: app/renamedialog.cpp:61
+#, kde-kuit-format
+msgid "Rename <filename>%1</filename> to:"
+msgstr "أعد تسمية <filename>%1</filename> إلى:"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, RenameDialog)
+#: app/renamedialog.ui:26
+#, kde-format
+msgctxt "@title:window"
+msgid "Rename"
+msgstr "اسم الملف"
+
+#: app/saveallhelper.cpp:56
+#, kde-format
+msgctxt "@info:progress saving all image changes"
+msgid "Saving..."
+msgstr "يحفظ..."
+
+#: app/saveallhelper.cpp:57
+#, kde-format
+msgid "&Stop"
+msgstr "&قف"
+
+#: app/saveallhelper.cpp:82
+#, kde-format
+msgctxt "@info"
+msgid "One document could not be saved:"
+msgid_plural "%1 documents could not be saved:"
+msgstr[0] "مستند واحد لم يتمكن حفظه:"
+msgstr[1] "مستند واحد لم يتمكن حفظه:"
+msgstr[2] "مستندين لم يتمكن حفظهما:"
+msgstr[3] "%1 مستندات لم يتمكن حفظهم:"
+msgstr[4] "%1 مستندا لم يتمكن حفظهم:"
+msgstr[5] "%1 مستند لم يتمكن حفظهم:"
+
+#: app/saveallhelper.cpp:106
+#, kde-kuit-format
+msgctxt ""
+"@info %1 is the name of the document which failed to save, %2 is the reason "
+"for the failure"
+msgid "<filename>%1</filename>: %2"
+msgstr "<filename>%1</filename>: %2"
+
+#: app/savebar.cpp:82
+#, kde-format
+msgid ""
+"You have modified many images. To avoid memory problems, you should save "
+"your changes."
+msgstr ""
+"قمت بتعديل العديد من الصور. لتفادي مشاكل الذاكرة، يجب عليك حفظ التغييرات."
+
+#: app/savebar.cpp:160
+#, kde-format
+msgid "Current image modified"
+msgstr "الصورة الحالية معدّلة"
+
+#: app/savebar.cpp:166
+#, kde-format
+msgid "Previous modified image"
+msgstr "الصورة المعدّلة السابقة"
+
+#: app/savebar.cpp:167
+#, kde-format
+msgid "Next modified image"
+msgstr "الصورة المعدّلة التالية"
+
+#: app/savebar.cpp:183
+#, kde-format
+msgid "One image modified"
+msgid_plural "%1 images modified"
+msgstr[0] "صورة واحدة معدّلة"
+msgstr[1] "صورة واحدة معدّلة"
+msgstr[2] "صورتين معدّلتين"
+msgstr[3] "%1 صور معدّلة"
+msgstr[4] "%1 صورة معدّلة"
+msgstr[5] "%1 صورة معدّلة"
+
+#: app/savebar.cpp:185
+#, kde-format
+msgid "Go to first modified image"
+msgstr "اذهب إلى أول صورة معدّلة"
+
+#: app/savebar.cpp:187
+#, kde-format
+msgid "Go to it"
+msgstr "اذهب إليها"
+
+#: app/savebar.cpp:285 app/savebar.cpp:290
+#, kde-format
+msgid "Save All"
+msgstr "احفظ الكل"
+
+#: app/savebar.cpp:286
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Save all modified images"
+msgstr "احفظ جميع الصور المعدّلة"
+
+#: app/semanticinfocontextmanageritem.cpp:186
+#, kde-format
+msgid "Edit"
+msgstr "حرر"
+
+#: app/semanticinfocontextmanageritem.cpp:206
+#, kde-format
+msgctxt "@action"
+msgid "Edit Tags"
+msgstr "حرر الأوسمة"
+
+#: app/semanticinfocontextmanageritem.cpp:215
+#, kde-format
+msgctxt "@action Rating value of zero"
+msgid "Zero"
+msgstr "صفر"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, SemanticInfoDialog)
+#: app/semanticinfodialog.ui:13
+#, kde-format
+msgid "Tag Editor"
+msgstr "محرر الأوسمة"
+
+#. i18n: ectx: property (text), widget (QPushButton, mPreviousButton)
+#: app/semanticinfodialog.ui:31
+#, kde-format
+msgid "Previous"
+msgstr "السابق"
+
+#. i18n: ectx: property (text), widget (QPushButton, mNextButton)
+#: app/semanticinfodialog.ui:38
+#, kde-format
+msgid "Next"
+msgstr "التالي"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: app/semanticinfosidebaritem.ui:22
+#, kde-format
+msgid "Rating:"
+msgstr "التقييم:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: app/semanticinfosidebaritem.ui:45
+#, kde-format
+msgid "Tags:"
+msgstr "الأوسمة:"
+
+#. i18n: ectx: property (placeholderText), widget (QTextEdit, mDescriptionTextEdit)
+#: app/semanticinfosidebaritem.ui:73
+#, kde-format
+msgid "Description"
+msgstr "الوصف"
+
+#: app/slideshowfileitemaction.cpp:61
+#, kde-format
+msgctxt "@action:inmenu Start a slideshow Dolphin context menu"
+msgid "Start a Slideshow"
+msgstr "ابدأ عرض الشرائح"
+
+#: app/slideshowfileitemaction.cpp:66
+#, kde-format
+msgctxt "@action:inmenu Start a slideshow Dolphin context menu"
+msgid "Start a Slideshow with selected images"
+msgstr "ابدأ عرض الشرائح بالصور المحددة"
+
+#: app/startmainpage.cpp:291
+#, kde-format
+msgctxt "@action Recent Folders view"
+msgid "Add Folder to Places"
+msgstr "أضف المجلد إلى الأماكن"
+
+#: app/startmainpage.cpp:292
+#, kde-format
+msgctxt "@action Recent Folders view"
+msgid "Forget This Folder"
+msgstr "انس هذا المجلد"
+
+#: app/startmainpage.cpp:293
+#, kde-format
+msgctxt "@action Recent Folders view"
+msgid "Forget All Folders"
+msgstr "انس كل المجلدات"
+
+#: app/startmainpage.cpp:295
+#, kde-format
+msgctxt "@action Recent Files view"
+msgid "Add Containing Folder to Places"
+msgstr "أضف المجلد الحاوي إلى الأماكن"
+
+#: app/startmainpage.cpp:296
+#, kde-format
+msgctxt "@action Recent Files view"
+msgid "Forget This File"
+msgstr "انس هذا الملف"
+
+#: app/startmainpage.cpp:297
+#, kde-format
+msgctxt "@action Recent Files view"
+msgid "Forget All Files"
+msgstr "انس جميع الملفات"
+
+#. i18n: ectx: property (text), widget (QLabel, mHistoryDisabledLabel)
+#: app/startmainpage.ui:34
+#, kde-format
+msgid "History has been disabled."
+msgstr "عطل التاريخ."
+
+#. i18n: ectx: attribute (title), widget (QWidget, mRecentFoldersTab)
+#: app/startmainpage.ui:51
+#, kde-format
+msgid "Recent Folders"
+msgstr "المجلدات حديثة"
+
+#. i18n: ectx: attribute (title), widget (QWidget, mRecentFilesTab)
+#: app/startmainpage.ui:65
+#, kde-format
+msgid "Recent Files"
+msgstr "الملفات الحديثة"
+
+#. i18n: ectx: attribute (title), widget (QWidget, placesTab)
+#: app/startmainpage.ui:97
+#, kde-format
+msgid "Places"
+msgstr "الأماكن"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tagsTab)
+#: app/startmainpage.ui:120
+#, kde-format
+msgid "Tags"
+msgstr "الأوسمة"
+
+#. i18n: ectx: property (text), widget (QLabel, mTagLabel)
+#: app/startmainpage.ui:126
+#, kde-format
+msgid ""
+"Browsing by tags is not available. Make sure Nepomuk is properly installed "
+"on your computer."
+msgstr "وسم الاستعراض غير متاح. تأكد من أن نِبومَك مثبت بشكل صحيح في حاسوبك."
+
+#: app/viewmainpage.cpp:153 app/viewmainpage.cpp:448
+#, kde-format
+msgid "Synchronize"
+msgstr "زامِن"
+
+#: app/viewmainpage.cpp:428
+#, kde-format
+msgid "Show Thumbnails"
+msgstr "أظهر المصغرات"
+
+#. i18n: For languages that are read right to left, "right side" refers to the left side in this context.
+#: app/viewmainpage.cpp:432
+#, kde-kuit-format
+msgctxt "@info:whatsthis"
+msgid ""
+"<para>This toggles a small bar showing all the other images in the current "
+"folder. Selecting one of them changes the currently viewed image.</"
+"para><para>Select multiple images at the same time to see them side by side."
+"</para><para>The bar can optionally be moved to the right side of the screen "
+"and contain multiple rows of images; <link url='%1'>configure these options "
+"in the settings</link>.</para>"
+msgstr ""
+"<para> هذا يظهر شريط صغير يعرض كافة الصور الأخرى في المجلد الحالي. يؤدي "
+"تحديد أحدها إلى تغيير الصورة المعروضة حاليًا. </para> <para> حدد صورًا متعددة "
+"في نفس الوقت لرؤيتها جنبًا إلى جنب.</para> <para> يمكن نقل الشريط اختياريًا "
+"إلى الجانب الأيمن من الشاشة أو يمكن أن يحتوي على صفوف متعددة من الصور؛ <link "
+"url = '%1'> اضبط هذه الخيارات في الإعدادات </link>. </para> "
+
+#: app/viewmainpage.cpp:576
+#, kde-format
+msgctxt "@item:inmenu"
+msgid "Background Color Mode"
+msgstr "نمط لون الخلفية"
+
+#: app/viewmainpage.cpp:768
+#, kde-format
+msgctxt "@action:button"
+msgid "Discard Changes and Reload"
+msgstr "تجاهل التغييرات و أعد التحميل"
+
+#: app/viewmainpage.cpp:770
+#, kde-format
+msgctxt "@info"
+msgid ""
+"This image has been modified. Reloading it will discard all your changes."
+msgstr "هذه الصورة تغيرت. إعادة تحميلها سيلغي كل تعديلاتك."
+
+#: importer/dialogpage.cpp:53
+#, kde-format
+msgid "Show failed files..."
+msgstr "أظهر الملفات الفاشلة ..."
+
+#: importer/dialogpage.cpp:58
+#, kde-format
+msgid "Show failed subfolders..."
+msgstr "أظهر المجلدات الفرعية الفاشلة ..."
+
+#: importer/dialogpage.cpp:72
+#, kde-format
+msgid "Failed to import %1 document."
+msgid_plural "Failed to import %1 documents."
+msgstr[0] "فشل في استيراد مستند واحد"
+msgstr[1] "فشل في استيراد مستند واحد"
+msgstr[2] "فشل في استيراد مستندين"
+msgstr[3] "فشل في استيراد %1 مستندات"
+msgstr[4] "فشل في استيراد %1 مستندا"
+msgstr[5] "فشل في استيراد %1 مستند"
+
+#: importer/dialogpage.cpp:79
+#, kde-format
+msgid "Failed to create %1 destination subfolder."
+msgid_plural "Failed to create %1 destination subfolders."
+msgstr[0] "تعذر إنشاء المجلد الفرعي في المقصد."
+msgstr[1] "تعذر إنشاء المجلد الفرعي في المقصد."
+msgstr[2] "تعذر إنشاء المجلدين الفرعيين في المقصد."
+msgstr[3] "تعذر إنشاء %1 المجلدات الفرعية في المقصد"
+msgstr[4] "تعذر إنشاء %1 مجلدا فرعيا في المقصد"
+msgstr[5] "تعذر إنشاء %1 مجلد فرعي في المقصد"
+
+#: importer/dialogpage.cpp:90
+#, kde-format
+msgid "Failed to import documents:"
+msgstr "فشل في استيراد المستندات:"
+
+#: importer/dialogpage.cpp:96
+#, kde-format
+msgid "Failed to create subfolders:"
+msgstr "فشل في إنشاء المجلدات الفرعية:"
+
+#: importer/filenameformater.cpp:102
+#, kde-format
+msgid "Shooting date"
+msgstr "تاريخ الالتقاط"
+
+#: importer/filenameformater.cpp:103
+#, kde-format
+msgid "Shooting time"
+msgstr "وقت الالتقاط"
+
+#: importer/filenameformater.cpp:104
+#, kde-format
+msgid "Original extension"
+msgstr "اللاحقة الأصليّة"
+
+#: importer/filenameformater.cpp:105
+#, kde-format
+msgid "Original extension, in lower case"
+msgstr "اللاحقة الأصلية، بأحرف صغيرة"
+
+#: importer/filenameformater.cpp:106
+#, kde-format
+msgid "Original filename"
+msgstr "الاسم الأصلي للملف"
+
+#: importer/filenameformater.cpp:107
+#, kde-format
+msgid "Original filename, in lower case"
+msgstr "الاسم الأصلي للملف، بأحرف صغيرة"
+
+#: importer/importdialog.cpp:92
+#, kde-format
+msgid "One document has been imported."
+msgid_plural "%1 documents have been imported."
+msgstr[0] "لم يتم استيراد أي ملفات"
+msgstr[1] "تم استيراد ملف واحد."
+msgstr[2] "تم استيراد ملفين."
+msgstr[3] "تم استيراد %1 ملفات"
+msgstr[4] "تم استيراد %1 ملفاً"
+msgstr[5] "تم استيراد %1 ملف"
+
+#: importer/importdialog.cpp:94
+#, kde-format
+msgid "One document has been skipped because it had already been imported."
+msgid_plural ""
+"%1 documents have been skipped because they had already been imported."
+msgstr[0] "تخطي مستند واحد لأنه تم استيراده بالفعل."
+msgstr[1] "تخطي مستند واحد لأنه تم استيراده بالفعل."
+msgstr[2] "تخطي مستندين لأنه تم استيراده بالفعل."
+msgstr[3] "تخطي %1 مستندات لأنه تم استيرادها بالفعل."
+msgstr[4] "تخطي %1 مستندا لأنه تم استيراده بالفعل."
+msgstr[5] "تخطي %1 مستند لأنه تم استيرادها بالفعل."
+
+#: importer/importdialog.cpp:102
+#, kde-format
+msgid ""
+"One of them has been renamed because another document with the same name had "
+"already been imported."
+msgid_plural ""
+"%1 of them have been renamed because other documents with the same name had "
+"already been imported."
+msgstr[0] "أعيد تسمية أحدهما لأنه استورد بالفعل مستند آخر يحمل نفس الاسم."
+msgstr[1] "أعيد تسمية أحدهما لأنه استورد بالفعل مستند آخر يحمل نفس الاسم."
+msgstr[2] "أعيد تسميتهما لأنه استورد بالفعل مستندين آخرين يحمل نفس الاسم."
+msgstr[3] "%1 أعيد تسميتها لأنه استورد بالفعل مستندات أخرى يحمل نفس الاسم."
+msgstr[4] "%1 أعيد تسميتها لأنه استورد بالفعل مستندات أخرى يحمل نفس الاسم."
+msgstr[5] "%1 أعيد تسميتها لأنه استورد بالفعل مستندات أخرى يحمل نفس الاسم."
+
+#: importer/importdialog.cpp:110
+#, kde-format
+msgid "Delete the imported document from the device?"
+msgid_plural "Delete the %1 imported documents from the device?"
+msgstr[0] "أأحذف المستند المستورد من الجهاز؟"
+msgstr[1] "أأحذف المستند المستورد من الجهاز؟"
+msgstr[2] "أأحذف المستندين المستوردين من الجهاز؟"
+msgstr[3] "أأحذف %1 مستندات المستوردة من الجهاز؟"
+msgstr[4] "أأحذف %1 مستندا المستورد من الجهاز؟"
+msgstr[5] "أأحذف %1 مستند المستورد من الجهاز؟"
+
+#: importer/importdialog.cpp:112
+#, kde-format
+msgid "Delete the skipped document from the device?"
+msgid_plural "Delete the %1 skipped documents from the device?"
+msgstr[0] "أأحذف المستند المتخطى من الجهاز؟"
+msgstr[1] "أأحذف المستند المتخطى من الجهاز؟"
+msgstr[2] "أأحذف المستندين المتخطيين من الجهاز؟"
+msgstr[3] "أأحذف %1 المستندات المتخطاة من الجهاز؟"
+msgstr[4] "أأحذف %1 مستندا المتخطى من الجهاز؟"
+msgstr[5] "أأحذف %1 مستند المتخطى من الجهاز؟"
+
+#: importer/importdialog.cpp:115
+#, kde-format
+msgctxt "Singular sentence is actually never used."
+msgid "Delete the imported or skipped document from the device?"
+msgid_plural "Delete the %1 imported and skipped documents from the device?"
+msgstr[0] "أأحذف المستند الذي تم استيراده أو تخطيه من الجهاز؟"
+msgstr[1] "أأحذف المستند الذي تم استيراده أو تخطيه من الجهاز؟"
+msgstr[2] "أأحذف المستندين اللذان تم استيرادهما أو تخطيتهما من الجهاز؟"
+msgstr[3] "أأحذف %1 المستندات التي تم استيرادها أو تخطيتها من الجهاز؟"
+msgstr[4] "أأحذف %1 مستندا الذي تم استيرادها أو تخطيتها من الجهاز؟"
+msgstr[5] "أأحذف %1 مستند الذي تم استيرادها أو تخطيتها من الجهاز؟"
+
+#: importer/importdialog.cpp:122
+#, kde-format
+msgctxt "@title:window"
+msgid "Import Finished"
+msgstr "تم الاستيراد"
+
+#: importer/importdialog.cpp:123
+#, kde-format
+msgid "Keep"
+msgstr "أبقِ"
+
+#: importer/importdialog.cpp:137
+#, kde-format
+msgid ""
+"Failed to delete the document:\n"
+"%2"
+msgid_plural ""
+"Failed to delete documents:\n"
+"%2"
+msgstr[0] ""
+"فشل في حذف المستند: \n"
+"%2"
+msgstr[1] ""
+"فشل في حذف المستند: \n"
+"%2"
+msgstr[2] ""
+"فشل في حذف المستندين: \n"
+"%2"
+msgstr[3] ""
+"فشل في حذف المستندات: \n"
+"%2"
+msgstr[4] ""
+"فشل في حذف المستندات: \n"
+"%2"
+msgstr[5] ""
+"فشل في حذف المستندات: \n"
+"%2"
+
+#: importer/importdialog.cpp:139
+#, kde-format
+msgid "Retry"
+msgstr "أعد المحاولة"
+
+#: importer/importdialog.cpp:140
+#, kde-format
+msgid "Ignore"
+msgstr "تجاهل"
+
+#: importer/importdialog.cpp:164
+#, kde-format
+msgid "What do you want to do now?"
+msgstr "ماذا تريد أن تفعل الآن؟"
+
+#: importer/importdialog.cpp:166
+#, kde-format
+msgid "View Imported Documents with Gwenview"
+msgstr "اعرض المستندات المستوردة باستخدام جونفيو"
+
+#: importer/importdialog.cpp:167
+#, kde-format
+msgid "Import more Documents"
+msgstr "استورد مزيداً من المستندات"
+
+#: importer/importdialog.cpp:168
+#, kde-format
+msgid "Quit"
+msgstr "انهِ"
+
+#: importer/importer.cpp:80
+#, kde-format
+msgid "Could not create destination folder."
+msgstr "تعذر إنشاء المجلد الهدف."
+
+#: importer/importer.cpp:95 importer/importer.cpp:101
+#, kde-format
+msgid "Could not create temporary upload folder."
+msgstr "تعذر إنشاء مجلد الرفع المؤقت"
+
+#: importer/importerconfigdialog.cpp:53
+#, kde-format
+msgctxt "%1 is the importer keyword, %2 is keyword explanation"
+msgid "%1: %2"
+msgstr "%1: %2"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_AutoRename)
+#: importer/importerconfigdialog.ui:17
+#, kde-format
+msgid "Rename documents automatically"
+msgstr "أعد تسمية الملفات آليًّا"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: importer/importerconfigdialog.ui:39
+#, kde-format
+msgid "Rename Format:"
+msgstr "هيئة إعادة التسمية:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: importer/importerconfigdialog.ui:59
+#, kde-format
+msgid "Preview:"
+msgstr "المعاينة:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: importer/importerconfigdialog.ui:83
+#, kde-format
+msgid "<i>Type text or click the items below to customize the format</i>"
+msgstr "<i>اطبع نصًّا أو انقر على العناصر أدناه لتخصيص الهيئة</i>"
+
+#: importer/main.cpp:45
+#, kde-format
+msgid "Gwenview Importer"
+msgstr "استوردها جونفيو"
+
+#: importer/main.cpp:47
+#, kde-format
+msgid "Photo Importer"
+msgstr "مستورد الصور"
+
+#: importer/main.cpp:54
+#, kde-format
+msgid ""
+"The device UDI, used to retrieve information about the device (name, icon...)"
+msgstr ""
+"معرف الجهاز ، يستخدم لاسترجاع المعلومات عن الجهاز (الاسم ، الايقونة ...)"
+
+#: importer/main.cpp:54
+#, kde-format
+msgid "Device UDI"
+msgstr "معرف الجهاز"
+
+#: importer/main.cpp:55
+#, kde-format
+msgid "Source folder"
+msgstr "مجلد المصدر"
+
+#: importer/main.cpp:60
+#, kde-format
+msgid "Missing required source folder argument."
+msgstr "معاملات المجلد المصدر المطلوبة مفقودة."
+
+#: importer/main.cpp:64
+#, kde-format
+msgid "Too many arguments."
+msgstr "معاملات كثيرة جدا."
+
+#: importer/main.cpp:70
+#, kde-format
+msgid "Invalid source folder."
+msgstr "مجلد المصدر غير صالح."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: importer/progresspage.ui:30
+#, kde-format
+msgid "Importing documents..."
+msgstr "يجري استيراد المستندات..."
+
+#: importer/thumbnailpage.cpp:235
+#, kde-format
+msgctxt "@info above install button when Kamera is not installed"
+msgid "Support for your camera is not installed."
+msgstr "دعم كاميرتك غيب مثبت"
+
+#: importer/thumbnailpage.cpp:237
+#, kde-format
+msgctxt "@info above install button, %1 protocol name"
+msgid "The protocol support library for \"%1\" is not installed."
+msgstr "مكتبة دعم ميفاق \"%1\" غير مثبتة"
+
+#: importer/thumbnailpage.cpp:249
+#, kde-format
+msgctxt "@info:usagetip above install button"
+msgid ""
+"After finishing the installation process, restart this Importer to continue."
+msgstr "بعد الانتهاء من عملية التثبيت أعد المستورد للمتابعة"
+
+#: importer/thumbnailpage.cpp:256
+#, kde-format
+msgctxt "@info:tooltip for a button, %1 protocol name"
+msgid "Launch Discover to install the protocol support library for \"%1\""
+msgstr "شغل المستكشف لتثبيت مكتبة دعم ميفاق \"%1\""
+
+#: importer/thumbnailpage.cpp:258
+#, kde-format
+msgctxt "@action:button"
+msgid "Install Support for this Camera…"
+msgstr "ثبت دعم لهذه الكاميرا"
+
+#: importer/thumbnailpage.cpp:259
+#, kde-format
+msgctxt "@info:whatsthis for a button when Kamera is not installed"
+msgid ""
+"You need Kamera installed on your system to read from the camera. Click here "
+"to launch Discover to install Kamera to enable protocol support for "
+"\"camera:/\" on your system."
+msgstr ""
+"تحتاج إلى تثبيت Kamera على نظامك للقراءة من الكاميرا. انقر هنا لبدء تشغيل "
+"المستكشف لتثبيت Kamera لتمكين دعم البروتوكول لـ \"camera:‎/‎\"  على نظامك."
+
+#: importer/thumbnailpage.cpp:262
+#, kde-format
+msgctxt "@action:button %1 protocol name"
+msgid "Install Protocol Support for \"%1\"…"
+msgstr "ثبت دعم ميفاق \"%1\"…"
+
+#: importer/thumbnailpage.cpp:263
+#, kde-format
+msgctxt "@info:whatsthis for a button, %1 protocol name"
+msgid ""
+"Click here to launch Discover to install the missing protocol support "
+"library to enable the protocol support for \"%1:/\" on your system."
+msgstr "انقر هنا لتشغيل المستكشف لتثبيت مكتبة دعم ميفاق \"‎%1:‎/‎\" على نظامك."
+
+#: importer/thumbnailpage.cpp:267
+#, kde-format
+msgctxt "@action:button %1 protocol name"
+msgid "Search the Web for How to Install Protocol Support for \"%1\"…"
+msgstr "ابحث الويب عن كيفية تثبيت دعم ميفاق \"%1\"…"
+
+#: importer/thumbnailpage.cpp:283
+#, kde-format
+msgctxt ""
+"@info this text will be used as a search term in an online search engine, %1 "
+"protocol name"
+msgid "How to install protocol support for \"%1\" on Linux"
+msgstr "كيف تثبت  \"%1\" دعم على لينكس"
+
+#: importer/thumbnailpage.cpp:284
+#, kde-format
+msgctxt ""
+"search engine URL, %1 search keyword, and translators can replace duckduckgo "
+"with other search engines"
+msgid "https://duckduckgo.com/?q=%1"
+msgstr "https://duckduckgo.com/?q=%1"
+
+#: importer/thumbnailpage.cpp:325
+#, kde-format
+msgid "Import Selected"
+msgstr "استورد المحدد"
+
+#: importer/thumbnailpage.cpp:328
+#, kde-format
+msgid "Import All"
+msgstr "استورد الكل"
+
+#: importer/thumbnailpage.cpp:490
+#, kde-kuit-format
+msgctxt "@info when failing to open the appstream URL"
+msgid ""
+"Opening Discover failed.<nl/>Please check if Discover is installed on your "
+"system, or use your system's package manager to install \"Kamera\" package."
+msgstr ""
+"فشل فتح المستكشف. <nl/> يرجى التحقق مما إذا كان المستكشف مثبتًا على نظامك ، "
+"أو استخدم مدير الحزم في نظامك لتثبيت حزمة \"Kamera\"."
+
+#: importer/thumbnailpage.cpp:494
+#, kde-kuit-format
+msgctxt "@info when failing to launch plasma-discover, %1 protocol name"
+msgid ""
+"Opening Discover failed.<nl/>Please check if Discover is installed on your "
+"system, or use your system's package manager to install the protocol support "
+"library for \"%1\"."
+msgstr ""
+"فشل فتح المستكشف. <nl /> الرجاء التحقق مما إذا كان المستكشف مثبتًا على "
+"نظامك ، أو استخدم مدير حزم النظام لتثبيت مكتبة دعم البروتوكول لـ \"%1\"."
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: importer/thumbnailpage.ui:173
+#, kde-format
+msgid "Select the documents to import"
+msgstr "حدد مستندات لاستيرادها"
+
+#. i18n: ectx: property (text), widget (QPushButton, mConfigureButton)
+#: importer/thumbnailpage.ui:185
+#, kde-format
+msgid "Settings..."
+msgstr "الإ&عدادات..."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: importer/thumbnailpage.ui:201
+#, kde-format
+msgid "Enter the import destination"
+msgstr "أدخِل وجهة الاستيراد"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: importer/thumbnailpage.ui:220
+#, kde-format
+msgid "Listing content of:"
+msgstr "يعرض لائحة بمحتوى:"
+
+#: lib/about.cpp:38
+#, kde-format
+msgid "Copyright 2000-2022 Gwenview authors"
+msgstr "الحقوق محفوظة © 2000-2022 مؤلّفو جنوفيو"
+
+#: lib/about.cpp:40
+#, kde-format
+msgid "Current Maintainer"
+msgstr "المنسّق الحالي"
+
+#: lib/about.cpp:41 lib/about.cpp:42
+#, kde-format
+msgid "Developer"
+msgstr "المطور"
+
+#: lib/crop/cropwidget.cpp:192
+#, kde-format
+msgid "Current Image"
+msgstr "الصورة الحالية"
+
+#: lib/crop/cropwidget.cpp:195
+#, kde-format
+msgid "Square"
+msgstr "مربع"
+
+#: lib/crop/cropwidget.cpp:198
+#, kde-format
+msgid "This Screen"
+msgstr "هذه الشاشة"
+
+#: lib/crop/cropwidget.cpp:200
+#, kde-format
+msgid "Landscape"
+msgstr "بالعرض"
+
+#: lib/crop/cropwidget.cpp:205 lib/crop/cropwidget.cpp:212
+#, kde-format
+msgid "ISO (A4, A3...)"
+msgstr "مقاسات معيارية (A4, A3...)"
+
+#: lib/crop/cropwidget.cpp:206 lib/crop/cropwidget.cpp:213
+#, kde-format
+msgid "US Letter"
+msgstr "رسالة أمريكية"
+
+#: lib/crop/cropwidget.cpp:207
+#, kde-format
+msgid "Portrait"
+msgstr "بالطّول"
+
+#. i18n("%1:%2") because ':' should not be translated, it is
+#. used to parse the ratio string.
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: lib/crop/cropwidget.cpp:222 lib/resize/resizeimagewidget.ui:30
+#, kde-format
+msgid "Width"
+msgstr "العرض"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: lib/crop/cropwidget.cpp:222 lib/resize/resizeimagewidget.ui:40
+#, kde-format
+msgid "Height"
+msgstr "الإرتفاع"
+
+#: lib/crop/cropwidget.cpp:291
+#, kde-format
+msgctxt "@option:check"
+msgid "Advanced settings"
+msgstr "إعدادات متقدّمة"
+
+#: lib/crop/cropwidget.cpp:300
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Aspect ratio:"
+msgstr "معامل التناسب:"
+
+#: lib/crop/cropwidget.cpp:313
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Size:"
+msgstr "الحجم:"
+
+#: lib/crop/cropwidget.cpp:335
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Position:"
+msgstr "الموضع:"
+
+#: lib/crop/cropwidget.cpp:356
+#, kde-format
+msgctxt "@option:check"
+msgid "Preserve aspect ratio"
+msgstr "أبق التناسب"
+
+#: lib/document/document.cpp:299
+#, kde-format
+msgctxt "@info"
+msgid "Gwenview cannot save this kind of documents."
+msgstr "لا يستطيع جونفيو حفظ مستند من هذا النوع."
+
+#: lib/document/loadingdocumentimpl.cpp:139
+#, kde-format
+msgctxt "@info"
+msgid "Gwenview cannot display documents of type %1."
+msgstr "جونفيو لا يستطيع عرض مستندات من نوع %1."
+
+#: lib/document/loadingdocumentimpl.cpp:399
+#, kde-format
+msgctxt "@info"
+msgid "Could not open file %1"
+msgstr "تعذر فتح الملف %1"
+
+#: lib/document/loadingdocumentimpl.cpp:490
+#, kde-format
+msgctxt "@info"
+msgid "Loading meta information failed."
+msgstr "فشل تحميل معلومات ميتا meta ."
+
+#: lib/document/loadingdocumentimpl.cpp:516
+#, kde-format
+msgctxt "@info"
+msgid "Loading image failed."
+msgstr "فشل تحميل الصورة."
+
+#: lib/document/loadingjob.cpp:56
+#, kde-format
+msgid "Could not load document %1"
+msgstr "تعذر تحميل المستند %1 "
+
+#: lib/document/savejob.cpp:106
+#, kde-format
+msgctxt "@info"
+msgid ""
+"Could not open file for writing, check that you have the necessary rights in "
+"<filename>%1</filename>."
+msgstr ""
+"تعذر فتح الملف للكتابة، تحقق من أن لديك ما يلزم من الحقوق في <filename>%1</"
+"filename>."
+
+#: lib/document/savejob.cpp:137
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"Could not overwrite file, check that you have the necessary rights to write "
+"in <filename>%1</filename>."
+msgstr ""
+"لا يمكن الكتابة فوق الملف، تحقق من أن لديك الحقوق الضرورية للكتابة في "
+"<filename>%1</filename>."
+
+#: lib/documentview/documentview.cpp:195
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Trash"
+msgstr "المهملات"
+
+#: lib/documentview/documentview.cpp:196
+#, kde-format
+msgctxt "@action:button"
+msgid "Deselect"
+msgstr "الغِ التحديد"
+
+#: lib/documentview/documentview.cpp:507
+#, kde-format
+msgid "Gwenview does not know how to display this kind of document"
+msgstr "جونفيو لا يعرف كيف يعرض هذا النوع من المستندات"
+
+#: lib/documentview/documentview.cpp:613
+#, kde-kuit-format
+msgid "Loading <filename>%1</filename> failed"
+msgstr "تحميل <filename>%1</filename> فشل"
+
+#: lib/documentview/documentviewcontroller.cpp:63
+#, kde-format
+msgid "Zoom to Fit"
+msgstr "لائم التقريب"
+
+#: lib/documentview/documentviewcontroller.cpp:65
+#, kde-format
+msgctxt "@action:button Zoom to fit, shown in status bar, keep it short please"
+msgid "Fit"
+msgstr "ناسب"
+
+#: lib/documentview/documentviewcontroller.cpp:66
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Fit image into the viewing area"
+msgstr "لائم الصورة على مساحة العرض"
+
+#. i18n: "a previous zoom value" is worded in such an unclear way because it can either be the zoom value for the image viewed previously or the
+#. zoom value that was used the last time this same image was viewed. Being more clear about this isn't really necessary here so I kept it short
+#. but a more elaborate translation would also be fine.
+#. The text "in the settings" is supposed to sound like clicking it opens the settings.
+#: lib/documentview/documentviewcontroller.cpp:72
+#, kde-kuit-format
+msgctxt "@info:whatsthis, %1 the action's text"
+msgid ""
+"<para>This fits the image into the available viewing area:<list><item>Images "
+"that are bigger than the viewing area are displayed at a smaller size so "
+"they fit.</item><item>Images that are smaller than the viewing area are "
+"displayed at their normal size. If smaller images should instead use all of "
+"the available viewing area, turn on <emphasis>Enlarge smaller images</"
+"emphasis> <link url='%2'>in the settings</link>.</item></list></"
+"para><para>If \"%1\" is already enabled, pressing it again will switch it "
+"off and the image will be displayed at its normal size instead.</para><para>"
+"\"%1\" is the default zoom mode for images. This can be changed so images "
+"are displayed at a previous zoom value instead <link url='%2'>in the "
+"settings</link>.</para>"
+msgstr ""
+"<para> هذا يناسب الصورة في منطقة العرض المتاحة: <list> <item> تعرض الصور "
+"الأكبر من مساحة العرض بحجم أصغر حتى تناسبها.  </item> <item> الصور الأصغر "
+"تعرض في منطقة المشاهدة بحجمها الطبيعي. إذا كان يجب أن تكبر الصور الأصغر "
+"لتشغل كامل مساحة العرض، فقم بتشغيل <emphasis> تكبير الصور الأصغر  </"
+"emphasis> <link url = '%2'> في الإعدادات </link>. </item> </list> </para> "
+"<para> إذا مُكّن \"%1\" بالفعل، فسيؤدي الضغط عليه مرة أخرى إلى إيقاف تشغيله "
+"وسيتم عرض الصورة بحجمها الطبيعي بدلاً من ذلك. </para> <para> \"%1\" هو "
+"التكبير الافتراضي للصور. يمكن تغيير هذا بحيث تُعرض الصور بقيمة تكبير سابقة "
+"بدلاً من ذلك <link url = '%2'> في الإعدادات </link>. </para>"
+
+#: lib/documentview/documentviewcontroller.cpp:85
+#, kde-format
+msgid "Zoom to fill window by fitting to width or height"
+msgstr "تكبير لملء النافذة عن طريق ملاءمة العرض أو الارتفاع"
+
+#: lib/documentview/documentviewcontroller.cpp:87
+#, kde-format
+msgctxt ""
+"@action:button Zoom to fill (fit width or height), shown in status bar, keep "
+"it short please"
+msgid "Fill"
+msgstr "املأ"
+
+#: lib/documentview/documentviewcontroller.cpp:100
+#, kde-format
+msgid "Show Bird's Eye View When Zoomed In"
+msgstr "أظهر منظر عين الطائر عند التكبير"
+
+#: lib/documentview/documentviewcontroller.cpp:107
+#, kde-format
+msgctxt "@action"
+msgid "Follow color scheme"
+msgstr "اتبع مخطّط الألوان"
+
+#: lib/documentview/documentviewcontroller.cpp:113
+#, kde-format
+msgctxt "@action"
+msgid "Light Mode"
+msgstr "نمط فاتح"
+
+#: lib/documentview/documentviewcontroller.cpp:119
+#, kde-format
+msgctxt "@action"
+msgid "Neutral Mode"
+msgstr "نمط طبيعي"
+
+#: lib/documentview/documentviewcontroller.cpp:125
+#, kde-format
+msgctxt "@action"
+msgid "Dark Mode"
+msgstr "نمط داكن"
+
+#: lib/documentview/messageviewadapter.cpp:50
+#, kde-format
+msgid "No document selected"
+msgstr "لم يتم إختيار أي مستند"
+
+#: lib/fullscreenbar.cpp:269 lib/statusbartoolbutton.cpp:144
+#, kde-format
+msgctxt "@info:tooltip of custom toolbar button"
+msgid "%1"
+msgstr "%1"
+
+#. i18n: ectx: whatsthis, entry (PercentageOfMemoryUsageWarning), group (General)
+#: lib/gwenviewconfig.kcfg:57
+#, kde-format
+msgid ""
+"The percentage of memory used by Gwenview before it\n"
+"            warns the user and suggest saving changes."
+msgstr ""
+"نسبة الذاكرة التي سيستعملها جنيوفيو قبل أن \n"
+"            يحذر المستخدم و ينصحه بحفظ التغيرات"
+
+#. i18n: ectx: whatsthis, entry (BlackListedExtensions), group (General)
+#: lib/gwenviewconfig.kcfg:64
+#, kde-format
+msgid ""
+"A list of filename extensions Gwenview should not try to\n"
+"            load. We exclude *.new as well because this is the extension\n"
+"            used for temporary files by KSaveFile."
+msgstr ""
+"قائمة امتدادات الملفات التي يجب على جنيوفيو أن لا يحاول تحميلها.\n"
+"            نستثني أيضاً اللاحقة new لأن هذه هي اللاحقة\n"
+"            التي يستخدمها KSaveFile للملفات المؤقتة."
+
+#. i18n: ectx: whatsthis, entry (ZoomMode), group (ImageView)
+#: lib/gwenviewconfig.kcfg:205
+#, kde-format
+msgid ""
+"Defines what happens when going to image B after\n"
+"            having zoomed in on an area of image A.  If set to Autofit,\n"
+"            image B is zoomed out to fit the screen.  If set to KeepSame,\n"
+"            all images share the same zoom and position: image B is set\n"
+"            to the same zoom parameters as image A (and if these are\n"
+"            changed, image A will then be displayed with the updated zoom\n"
+"            and position).  If set to Individual, all images remember\n"
+"            their own zoom and position: image B is initially set to the\n"
+"            same zoom parameters as image A, but will then remember its\n"
+"            own zoom and position (if these are changed, image A will NOT\n"
+"            be displayed with the updated zoom and position)."
+msgstr ""
+"يحدد ما يحدث عند الانتقال إلى الصورة ب \n"
+"            بعد تكبير منطقة من الصورة أ. في حالة الضبط على \n"
+"            احتواء تلقائي ، تصغر الصورة ب لملاءمة الشاشة. \n"
+"            في حالة الضبط على حافظ على نفس التناسب ، تشترك \n"
+"            جميع الصور في نفس التكبير والموضع: تعيين الصورة \n"
+"            ب على نفس معلمات التكبير مثل الصورة أ (وإذا غيرت ،\n"
+"            فسيتم عرض الصورة أ مع التكبير والموضع المحدثين). إذا  \n"
+"            عينت على فردي ، فستتذكر جميع الصور نفس معلمات التكبير \n"
+"            مثل الصورة أ ، ولكنها ستتذكر بعد ذلك تكبيرها وموضعها (إذا  \n"
+"            غيرت ، فلن يتم عرض الصورة أ مع التكبير والموضع المحدثين)."
+
+#. i18n: ectx: whatsthis, entry (RenderingIntent), group (ImageView)
+#: lib/gwenviewconfig.kcfg:219
+#, kde-format
+msgid ""
+"Defines how colors are rendered when your display\n"
+"            uses an ICC color profile and an image has colors that do not\n"
+"            fit within the profile's color gamut. \"Perceptual\" will scale\n"
+"            the colors of the entire image so that they all fit within the\n"
+"            display's capabilities. \"Relative\" will squash only the "
+"colors\n"
+"            that cannot be displayed, and leave the other colors alone."
+msgstr ""
+"يحدد كيفية تجسيد الألوان عندما تستخدم شاشتك ملف تعريف\n"
+"                ألوان ICC والصورة بها ألوان لا تتلاءم مع نطاق ألوان ملف "
+"التعريف. \n"
+"                ستعمل ميزة \"الإدراك\" على قياس ألوان الصورة بأكملها بحيث "
+"تتناسب\n"
+"                جميعها مع إمكانات العرض. نسبي سوف يضغط فقط على الألوان التي\n"
+"                لا يمكن عرضها ، ويترك الألوان الأخرى بمفردها."
+
+#. i18n: ectx: label, entry (random), group (slide show)
+#: lib/gwenviewconfig.kcfg:322
+#, kde-format
+msgid "Display slide show images in random order"
+msgstr "اعرض الصور في عرض تقديمي بترتيب عشوائي"
+
+#. i18n: ectx: label, entry (fullscreen), group (slide show)
+#: lib/gwenviewconfig.kcfg:326
+#, kde-format
+msgid "Show slideshow in fullscreen mode"
+msgstr "اعرض العرض التقديمي في نمط ملء الشاشة"
+
+#. i18n: ectx: label, entry (loop), group (slide show)
+#: lib/gwenviewconfig.kcfg:330
+#, kde-format
+msgid "Loop on images"
+msgstr "أعد عرض الصور من جديد"
+
+#. i18n: ectx: label, entry (stopAtEnd), group (slide show)
+#: lib/gwenviewconfig.kcfg:334
+#, kde-format
+msgid "Stop at last image of folder"
+msgstr "توقف عن أخر صور في المجلد"
+
+#. i18n: ectx: label, entry (interval), group (slide show)
+#: lib/gwenviewconfig.kcfg:338
+#, kde-format
+msgid "Interval between images (in seconds)"
+msgstr "الفترة بين الصورة (بالثواني)"
+
+#. i18n: ectx: label, entry (CropPreserveAspectRatio), group (Crop)
+#: lib/gwenviewconfig.kcfg:354
+#, kde-format
+msgid "Restrict crop to image ratio when Advanced Settings disabled"
+msgstr "تقييد نسبة الاقتصاص إلى الصورة عند تعطيل الإعدادات المتقدمة"
+
+#. i18n: ectx: label, entry (CropRatioIndex), group (Crop)
+#: lib/gwenviewconfig.kcfg:358
+#, kde-format
+msgid "Index representing selected ratio in the Advanced settings combobox"
+msgstr "يمثل الفهرس النسبة المحددة في مربع التحرير والسرد للإعدادات المتقدمة"
+
+#. i18n: ectx: label, entry (CropRatioWidth), group (Crop)
+#: lib/gwenviewconfig.kcfg:362
+#, kde-format
+msgid "Last used crop ratio width when Advanced Settings enabled"
+msgstr "عرض نسبة الاقتصاص المستخدمة مؤخرًا عند تمكين الإعدادات المتقدمة"
+
+#. i18n: ectx: label, entry (CropRatioHeight), group (Crop)
+#: lib/gwenviewconfig.kcfg:366
+#, kde-format
+msgid "Last used crop ratio height when Advanced Settings enabled"
+msgstr "ارتفاع لنسبة الاقتصاص المستخدم مؤخرا عند تمكين الإعدادات المتقدمة"
+
+#: lib/historymodel.cpp:146
+#, kde-format
+msgid "Last visited: %1"
+msgstr "أخر زيارة: %1"
+
+#: lib/hud/hudwidget.cpp:104
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Close"
+msgstr "أغلق"
+
+#: lib/imagemetainfomodel.cpp:255
+#, kde-format
+msgctxt "@item:intable Image file name"
+msgid "Name"
+msgstr "الاسم"
+
+#: lib/imagemetainfomodel.cpp:256
+#, kde-format
+msgctxt "@item:intable"
+msgid "File Size"
+msgstr "حجم الملف"
+
+#: lib/imagemetainfomodel.cpp:257
+#, kde-format
+msgctxt "@item:intable"
+msgid "File Time"
+msgstr "وقت الملف"
+
+#: lib/imagemetainfomodel.cpp:258
+#, kde-format
+msgctxt "@item:intable"
+msgid "Image Size"
+msgstr "حجم الصورة"
+
+#: lib/imagemetainfomodel.cpp:259
+#, kde-format
+msgctxt "@item:intable"
+msgid "Comment"
+msgstr "تعليق"
+
+#: lib/imagemetainfomodel.cpp:321
+#, kde-format
+msgctxt "@title:group General info about the image"
+msgid "General"
+msgstr "عام"
+
+#: lib/imagemetainfomodel.cpp:408
+#, kde-format
+msgctxt "@item:intable %1 is image width, %2 is image height"
+msgid "%1x%2"
+msgstr "%1×%2"
+
+#: lib/imagemetainfomodel.cpp:414
+#, kde-format
+msgctxt "@item:intable %1 is number of millions of pixels in image"
+msgid "(%1MP)"
+msgstr "(%1م.بكسل)"
+
+#: lib/imagemetainfomodel.cpp:565
+#, kde-format
+msgctxt "@title:column"
+msgid "Property"
+msgstr "الخاصية"
+
+#: lib/imagemetainfomodel.cpp:567
+#, kde-format
+msgctxt "@title:column"
+msgid "Value"
+msgstr "القيمة"
+
+#: lib/jpegcontent.cpp:642
+#, kde-format
+msgctxt "@info"
+msgid "Could not open file for writing."
+msgstr "لم يتمكن من فتح الملف من أجل الكتابة."
+
+#: lib/jpegcontent.cpp:658
+#, kde-format
+msgctxt "@info"
+msgid "No data to store."
+msgstr "لا توجد بيانات للتخزين"
+
+#: lib/print/printhelper.cpp:126
+#, kde-format
+msgid "Print Image"
+msgstr "اطبع الصورة"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, PrintOptionsPage)
+#: lib/print/printoptionspage.ui:14
+#, kde-format
+msgid "Image Settings"
+msgstr "إعدادات الصورة"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: lib/print/printoptionspage.ui:20
+#, kde-format
+msgid "Image Position"
+msgstr "موضع الصورة"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: lib/print/printoptionspage.ui:45
+#, kde-format
+msgid "Scaling"
+msgstr "تحجيم"
+
+#. i18n: ectx: property (text), widget (QRadioButton, mNoScale)
+#: lib/print/printoptionspage.ui:51
+#, kde-format
+msgid "&No scaling"
+msgstr "&بدون تحجيم"
+
+#. i18n: ectx: property (text), widget (QRadioButton, mScaleToPage)
+#: lib/print/printoptionspage.ui:61
+#, kde-format
+msgid "&Fit image to page"
+msgstr "&ناسب الصورة على الصفحة"
+
+#. i18n: ectx: property (text), widget (QRadioButton, mScaleTo)
+#: lib/print/printoptionspage.ui:123
+#, kde-format
+msgid "&Scale to:"
+msgstr "ح&جّم إلى:"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel2)
+#: lib/print/printoptionspage.ui:158
+#, kde-format
+msgctxt "Dimension separator, as in: '15 x 10 centimeters'"
+msgid "x"
+msgstr "×"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_PrintUnit)
+#: lib/print/printoptionspage.ui:185
+#, kde-format
+msgid "Millimeters"
+msgstr "ملي.مترات"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_PrintUnit)
+#: lib/print/printoptionspage.ui:190
+#, kde-format
+msgid "Centimeters"
+msgstr "سنتيمترات"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_PrintUnit)
+#: lib/print/printoptionspage.ui:195
+#, kde-format
+msgid "Inches"
+msgstr "بوصات"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_PrintKeepRatio)
+#: lib/print/printoptionspage.ui:224
+#, kde-format
+msgid "Keep ratio"
+msgstr "أبق التناسب"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: lib/redeyereduction/redeyereductionwidget.ui:43
+#, kde-format
+msgid "Size:"
+msgstr "الحجم:"
+
+#. i18n: ectx: property (text), widget (QLabel, helpTextLabel)
+#: lib/redeyereduction/redeyereductionwidget.ui:150
+#, kde-format
+msgid ""
+"Click on a red eye and choose a size, or double-click to correct instantly."
+msgstr ""
+"انقر فوق العين الحمراء واختر الحجم ، أو انقر نقرًا مزدوجًا للتصحيح على الفور."
+
+#: lib/resize/resizeimagedialog.cpp:76
+#, kde-format
+msgctxt "@action"
+msgid ""
+"Assuming that the image format won't be changed and\n"
+"for lossy images using the value set in 'Lossy image save quality'."
+msgstr ""
+"بافتراض أن تنسيق الصورة لن يتغير و \n"
+"للصور القابلة للضياع باستخدام القيمة المحددة في \"جودة حفظ الصورة  القابلة "
+"للضياع\"."
+
+#: lib/resize/resizeimagedialog.cpp:219
+#, kde-format
+msgid "error"
+msgstr "خطأ"
+
+#: lib/resize/resizeimageoperation.cpp:70
+#, kde-format
+msgctxt "(qtundo-format)"
+msgid "Resize"
+msgstr "أعد التحجيم"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, ResizeImageWidget)
+#: lib/resize/resizeimagewidget.ui:14
+#, kde-format
+msgid "Resize Image"
+msgstr "أعد التحجيم الصورة"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: lib/resize/resizeimagewidget.ui:47
+#, kde-format
+msgid "New size:"
+msgstr "الحجم الجديد:"
+
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, mHeightPercentSpinBox)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, mWidthPercentSpinBox)
+#: lib/resize/resizeimagewidget.ui:63 lib/resize/resizeimagewidget.ui:195
+#, no-c-format, kde-format
+msgid " %"
+msgstr "٪"
+
+#. i18n: ectx: property (suffix), widget (QSpinBox, mHeightSpinBox)
+#. i18n: ectx: property (suffix), widget (QSpinBox, mWidthSpinBox)
+#: lib/resize/resizeimagewidget.ui:86 lib/resize/resizeimagewidget.ui:102
+#, kde-format
+msgid " px"
+msgstr "بكسل"
+
+#. i18n: ectx: property (text), widget (QCheckBox, mKeepAspectCheckBox)
+#: lib/resize/resizeimagewidget.ui:145
+#, kde-format
+msgid "Keep aspect ratio"
+msgstr "أبق التناسب"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: lib/resize/resizeimagewidget.ui:172
+#, kde-format
+msgid "Current size:"
+msgstr "الحجم الحالي:"
+
+#: lib/semanticinfo/tagitemdelegate.cpp:62
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Assign this tag to all selected images"
+msgstr "أسند هذه السمة لكل الصور المختارة"
+
+#: lib/semanticinfo/tagwidget.cpp:147
+#, kde-format
+msgid "Add tag"
+msgstr "أضف وسمًا"
+
+#: lib/slideshow.cpp:182
+#, kde-format
+msgctxt "@item:inmenu toggle loop in slideshow"
+msgid "Loop"
+msgstr "حلقة"
+
+#: lib/slideshow.cpp:187
+#, kde-format
+msgctxt "@item:inmenu toggle random order in slideshow"
+msgid "Random"
+msgstr "عشوائي"
+
+#: lib/transformimageoperation.cpp:58
+#, kde-format
+msgctxt "(qtundo-format)"
+msgid "Rotate Right"
+msgstr "دور لليمين"
+
+#: lib/transformimageoperation.cpp:61
+#, kde-format
+msgctxt "(qtundo-format)"
+msgid "Rotate Left"
+msgstr "دور لليسار"
+
+#: lib/transformimageoperation.cpp:64
+#, kde-format
+msgctxt "(qtundo-format)"
+msgid "Mirror"
+msgstr "مرآة"
+
+#: lib/transformimageoperation.cpp:67
+#, kde-format
+msgctxt "(qtundo-format)"
+msgid "Flip"
+msgstr "اقلب"
+
+#: lib/transformimageoperation.cpp:72
+#, kde-format
+msgctxt "(qtundo-format)"
+msgid "Transform"
+msgstr "حوّل"
+
+#: part/gvpart.cpp:74
+#, kde-format
+msgctxt "@action"
+msgid "Properties"
+msgstr "الخصائص"
+
+#. i18n: ectx: Menu (file)
+#: part/gvpart.rc:5
+#, kde-format
+msgid "&File"
+msgstr "&ملف"
+
+#. i18n: ectx: Menu (view)
+#: part/gvpart.rc:9
+#, kde-format
+msgid "&View"
+msgstr "عر&ض"
+
+#~ msgctxt "@label:chooser Describes what a row of buttons control"
+#~ msgid "Background color:"
+#~ msgstr "لون الخلفية:"
+
+#~ msgid "&Plugins"
+#~ msgstr "الم&لحقات"
+
+#~ msgid "Last Used Plugin"
+#~ msgstr "الملحق الأخير المستخدَم"
+
+#~ msgid "Other Plugins"
+#~ msgstr "الم&لحقات الأخرى"
+
+#~ msgctxt "@action"
+#~ msgid "Share"
+#~ msgstr "شارِك"
+
+#~ msgctxt "@info:tooltip"
+#~ msgid "Share images using various services"
+#~ msgstr "شارك الصور باستخدام خدمات عديدة"
+
+#~ msgctxt "%1 is collection name, %2 is image count in collection"
+#~ msgid "%1 (%2 image)"
+#~ msgid_plural "%1 (%2 images)"
+#~ msgstr[0] "%1 (%2 صورة)"
+#~ msgstr[1] "%1 (صورة واحدة)"
+#~ msgstr[2] "%1 (صورتان)"
+#~ msgstr[3] "%1 (%2 صور)"
+#~ msgstr[4] "%1 (%2 صورة)"
+#~ msgstr[5] "%1 (%2 صورة)"
+
+#~ msgid "Loading..."
+#~ msgstr "يحمل..."
+
+#~ msgid "No Plugin Found"
+#~ msgstr "لم يعثر على ملحق"
+
+#~ msgctxt "@item:inmenu"
+#~ msgid "Install Plugins"
+#~ msgstr "ثبت ملحقات"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Images"
+#~ msgstr "الصور"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Tools"
+#~ msgstr "الأدوات"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Import"
+#~ msgstr "استورد"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Export"
+#~ msgstr "صدر"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Batch Processing"
+#~ msgstr "المعالجة الدفعية"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Collections"
+#~ msgstr "المجموعات"
+
+#~ msgid ""
+#~ "Images will be uploaded here:\n"
+#~ "%1"
+#~ msgstr ""
+#~ "صور سيتم رفعها هنا:\n"
+#~ "%1"
+
+#~ msgid "Thumbnail Bar"
+#~ msgstr "شريط المصغرات"
+
+#~ msgctxt ""
+#~ "@action:button Zoom to original size, shown in status bar, keep it short "
+#~ "please"
+#~ msgid "100%"
+#~ msgstr "100%"
+
+#~ msgid "Gwenview KPart"
+#~ msgstr "جونفيو KPart"
+
+#~ msgctxt "@action show more image meta info"
+#~ msgid "More..."
+#~ msgstr "أكثر..."
+
+#~ msgctxt "@title:group"
+#~ msgid "Meta Information"
+#~ msgstr "معلومات ميتا (meta)"
+
+#~ msgid "Semantic Information"
+#~ msgstr "المعلومات الدلالية"
+
+#, fuzzy
+#~| msgid "Forget this Folder"
+#~ msgctxt "@action Open Recent menu"
+#~ msgid "Forget All Files && Folders"
+#~ msgstr "انس هذا المجلد"
+
+#~ msgctxt "@action"
+#~ msgid "Leave Fullscreen Mode"
+#~ msgstr "انهِ نمط ملء الشاشة"
+
+#~ msgid "Cache:"
+#~ msgstr "الخبيئة:"
+
+#~ msgid "Delete thumbnail cache folder on exit"
+#~ msgstr "احذف مجلد خابية المصغرات عند الخروج"
+
+#~ msgid "Size"
+#~ msgstr "الحجم"
+
+#~ msgid "Click on the red eye you want to fix"
+#~ msgstr "اضغط على العين الحمراء التي تريد تصحيحها"
+
+#~ msgid "Red Eye Reduction"
+#~ msgstr "انقاص العين الحمراء"
+
+#~ msgid "RedEyeReduction"
+#~ msgstr "RedEyeReduction"
+
+#~ msgctxt "@label"
+#~ msgid "%1 document"
+#~ msgid_plural "%1 documents"
+#~ msgstr[0] "مستند واحد"
+#~ msgstr[1] "مسند واحد"
+#~ msgstr[2] "مستندان"
+#~ msgstr[3] "%1 مستندات"
+#~ msgstr[4] "%1 مستندا"
+#~ msgstr[5] "%1 مستند"
+
+#~ msgid "Image Resizing"
+#~ msgstr "إعادة تحجيم الصورة"
+
+#~ msgid "Enter the new size for this image."
+#~ msgstr "أدخل الحجم الجديد للصورة."
+
+#~ msgctxt "@info"
+#~ msgid ""
+#~ "A file named <filename>%1</filename> already exists.\n"
+#~ "Are you sure you want to overwrite it?"
+#~ msgstr ""
+#~ "ملف بنفس الإسم <filename>%1</filename> موجود.\n"
+#~ "هل أنت متأكد من أنك تريد الكتابة عليه؟"
+
+#~ msgid "Ratio:"
+#~ msgstr "النسبة:"
+
+#~ msgid "Stop Slideshow"
+#~ msgstr "أوقف عرض الشرائح"
+
+#~ msgid "Add to Places"
+#~ msgstr "أضف إلى الأماكن"
+
+#, fuzzy
+#~| msgid "Zoom to Fit"
+#~ msgid "Zoom to Fit Width"
+#~ msgstr "كبِّر لتناسب"
+
+#, fuzzy
+#~| msgid "Width"
+#~ msgctxt ""
+#~ "@action:button Zoom to fit width, shown in status bar, keep it short "
+#~ "please"
+#~ msgid "Fit Width"
+#~ msgstr "العرض"
+
+#~ msgctxt "@title:window"
+#~ msgid "Copy To"
+#~ msgstr "انسخ إلى"
+
+#~ msgctxt "@title:window"
+#~ msgid "Move To"
+#~ msgstr "انقل إلى"
+
+#~ msgctxt "@title:window"
+#~ msgid "Link To"
+#~ msgstr "اربط إلى"
+
+#~ msgctxt "@info"
+#~ msgid "No image format selected."
+#~ msgstr "لم يتم تحديد نسق للصورة."
+
+#~ msgid "Delete"
+#~ msgstr "احذف"
+
+#~ msgid "Forget this URL"
+#~ msgstr "انس هذه الوصلة"
+
+#~ msgid "Recent URLs"
+#~ msgstr "الوصلات الحديثة"
+
+#~ msgid "Aurélien Gâteau"
+#~ msgstr "Aurélien Gâteau"
+
+#~ msgid "Main developer"
+#~ msgstr "المطور الرئيسي"
+
+#~ msgid "Benjamin Löwe"
+#~ msgstr "بنيامين لوي"
+
+#, fuzzy
+#~| msgid "Create Folder"
+#~ msgctxt "@action:inmenu"
+#~ msgid "Paste One Folder"
+#~ msgstr "أنشء مجلد"
+
+#, fuzzy
+#~| msgid "Create Folder"
+#~ msgctxt "@action:inmenu"
+#~ msgid "Paste One File"
+#~ msgstr "أنشء مجلد"
+
+#, fuzzy
+#~| msgid "Create Folder"
+#~ msgctxt "@action:inmenu"
+#~ msgid "Paste One Item"
+#~ msgid_plural "Paste %1 Items"
+#~ msgstr[0] "أنشء مجلد"
+#~ msgstr[1] "أنشء مجلد"
+#~ msgstr[2] "أنشء مجلد"
+#~ msgstr[3] "أنشء مجلد"
+#~ msgstr[4] "أنشء مجلد"
+#~ msgstr[5] "أنشء مجلد"
+
+#, fuzzy
+#~| msgctxt "@action:inmenu"
+#~| msgid "Date"
+#~ msgctxt "@action:inmenu"
+#~ msgid "Paste"
+#~ msgstr "التاريخ"
+
+#, fuzzy
+#~| msgid "Copyright 2000-2009 Aurélien Gâteau"
+#~ msgid "Copyright 2009-2010 Aurélien Gâteau"
+#~ msgstr "حقوق النسخ لأوغلين غتوا Aurélien Gâteau 2000-2009"
+
+#, fuzzy
+#~| msgid "Thumbnail Bar"
+#~ msgid "thumbnailgen"
+#~ msgstr "شريط المصغرات"
+
+#, fuzzy
+#~| msgid "Image Position"
+#~ msgid "Image dir to open"
+#~ msgstr "موضع الصورة"
+
+#, fuzzy
+#~| msgctxt "Verb"
+#~| msgid "Trash"
+#~ msgctxt "@action:button"
+#~ msgid "Trash"
+#~ msgstr "انقل إلى المهملات"
+
+#~ msgctxt ""
+#~ "@action Go back to a more general page (start page <- list <- image)"
+#~ msgid "Back"
+#~ msgstr "للخلف"
+
+#~ msgid "Metadata"
+#~ msgstr "بيانات الوصفية"
+
+#~ msgid "Configure Displayed Metadata..."
+#~ msgstr "ضبط بيانات الوصفية المعروضة..."
+
+#~ msgid "Appearance"
+#~ msgstr "المظهر"
+
+#~ msgid "Theme:"
+#~ msgstr "السِمة:"
+
+#~ msgid "Close"
+#~ msgstr "أغلق"
+
+#~ msgctxt "@action Switch to image view"
+#~ msgid "View"
+#~ msgstr "اعرض"
+
+#, fuzzy
+#~| msgid "Effects"
+#~ msgctxt "@title:menu"
+#~ msgid "Effects"
+#~ msgstr "المؤثرات"
+
+#~ msgid "Apply"
+#~ msgstr "طبق"
+
+#, fuzzy
+#~| msgid "Create Folder"
+#~ msgctxt "@title:window"
+#~ msgid "Create Folder"
+#~ msgstr "أنشئ مجلد"
+
+#~ msgid "Enter the name of the folder to create:"
+#~ msgstr "أدخل اسم المجلد لإنشائه:"
+
+#~ msgid "No Plugin"
+#~ msgstr "لا يوجد ملحق"
+
+#, fuzzy
+#~| msgid "Copyright 2000-2008 Aurélien Gâteau"
+#~ msgid "Copyright 2009 Aurélien Gâteau"
+#~ msgstr "حقوق النسخ لأوغلين غتوا Aurélien Gâteau 2000-2008"
+
+#~ msgid "Copyright 2000-2008 Aurélien Gâteau"
+#~ msgstr "حقوق النسخ لأوغلين غتوا Aurélien Gâteau 2000-2008"
+
+#, fuzzy
+#~| msgid "Loading <filename>%1</filename> failed"
+#~ msgid "Pictures will be imported in: <filename>%1</filename>"
+#~ msgstr "تحميل <filename>%1</filename> فشل"
+
+#~ msgid "Description:"
+#~ msgstr "الوصف:"
+
+#~ msgctxt "@title:group"
+#~ msgid "Exif"
+#~ msgstr "Exif"
+
+#~ msgctxt "@title:group"
+#~ msgid "Iptc"
+#~ msgstr "Iptc"
+
+#~ msgid "..."
+#~ msgstr "..."
+
+#, fuzzy
+#~| msgctxt "@action:inmenu"
+#~| msgid "Thumbnail Details"
+#~ msgid "Thumbnail bar orientation:"
+#~ msgstr "تفاصيل المصغرة"
+
+#~ msgid "Performance"
+#~ msgstr "الأداء"
+
+#, fuzzy
+#~| msgid "Crop"
+#~ msgid "&Crop"
+#~ msgstr "قص"
+
+#, fuzzy
+#~| msgid "Height:"
+#~ msgid "Width:Height"
+#~ msgstr "الارتفاع:"
+
+#, fuzzy
+#~| msgid "Constrain ratio"
+#~ msgctxt "Crop tool won't apply any ratio constraint"
+#~ msgid "No Constraint"
+#~ msgstr "حد التناسب"
+
+#~ msgid "x"
+#~ msgstr "×"
+
+#~ msgid "&X:"
+#~ msgstr "&س:"
+
+#~ msgid "&Y:"
+#~ msgstr "&ص:"
+
+#~ msgid "&Height:"
+#~ msgstr "الا&رتفاع:"

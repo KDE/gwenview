@@ -1,0 +1,2903 @@
+# Translation of gwenview.po to Ukrainian
+# Copyright (C) 2007-2021 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Ivan Petrouchtchak <fr.ivan@ukrainian-orthodox.org>, 2007, 2008.
+# Yuri Chornoivan <yurchor@ukr.net>, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: gwenview\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-09-28 00:44+0000\n"
+"PO-Revision-Date: 2022-07-08 08:16+0300\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
+"Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Lokalize 20.12.0\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "о. Іван Петрущак,Юрій Чорноіван"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "fr.ivan@ukrainian-orthodox.org,yurchor@ukr.net"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_LowResourceUsageMode)
+#: app/advancedconfigpage.ui:28
+#, kde-format
+msgid "Low resource usage mode"
+msgstr "Режим обмеженого використання ресурсів"
+
+#. i18n: ectx: property (text), widget (QLabel, cacheHelpLabel)
+#: app/advancedconfigpage.ui:72
+#, kde-format
+msgid ""
+"Enable this option if you do not have a lot of disk space. This will avoid "
+"storing thumbnails on disk and will prefer embedded thumbnails of lower "
+"quality that are faster to load, if available."
+msgstr ""
+"Позначте цей пункт, якщо на вашому диску не дуже багато місця. Якщо пункт "
+"буде позначено, програма не зберігатиме мініатюри на диску і "
+"використовуватиме, якщо такі буде виявлено, вбудовані мініатюри нижчої "
+"якості, які завантажуватимуться швидше."
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: app/advancedconfigpage.ui:82
+#, kde-format
+msgid "Thumbnails:"
+msgstr "Мініатюри:"
+
+#. i18n: ectx: property (text), widget (QLabel, relativeHelpLabel)
+#: app/advancedconfigpage.ui:92
+#, kde-format
+msgid ""
+"Squash colors that don't fit within the active color profile's color gamut, "
+"leaving other colors untouched"
+msgstr ""
+"Масштабувати кольори, які не потрапляють до гами кольорів активного профілю; "
+"інші кольори не змінювати"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: app/advancedconfigpage.ui:102
+#, kde-format
+msgid "History:"
+msgstr "Журнал:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, relativeRenderingIntentRadioButton)
+#: app/advancedconfigpage.ui:114
+#, kde-format
+msgctxt "@option:Relative Colorimetric rendering intent"
+msgid "Relative Colorimetric"
+msgstr "Відносне колориметричне"
+
+#. i18n: ectx: property (text), widget (QRadioButton, perceptualRenderingIntentRadioButton)
+#: app/advancedconfigpage.ui:160
+#, kde-format
+msgctxt "@option:Perceptual rendering intent"
+msgid "Perceptual"
+msgstr "Придатне для сприйняття"
+
+#. i18n: ectx: property (text), widget (QLabel, perceptualHelpLabel)
+#: app/advancedconfigpage.ui:172
+#, kde-format
+msgid ""
+"Scale all colors equally to fit them within the active color profile's color "
+"gamut"
+msgstr ""
+"Масштабувати усі кольори рівномірно так, щоб вони потрапили до гами кольорів "
+"активного профілю"
+
+#. i18n: ectx: property (text), widget (QLabel, colorRenderingLabel)
+#: app/advancedconfigpage.ui:182
+#, kde-format
+msgid "Rendering intent:"
+msgstr "Відтворення кольорів:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_HistoryEnabled)
+#: app/advancedconfigpage.ui:197
+#, kde-format
+msgid "Remember folders and URLs"
+msgstr "Запам’ятовувати теки і адреси URL"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_NoMonitorICC)
+#: app/advancedconfigpage.ui:240
+#, kde-format
+msgid "Apply only the profile embedded in the image file"
+msgstr "Застосувати лише профіль, який вбудовано до файла зображення"
+
+#. i18n: ectx: property (text), widget (QLabel, colorProfileHelpLabel)
+#: app/advancedconfigpage.ui:265
+#, kde-format
+msgid ""
+"Assume that system-wide color correction already applies monitor profile."
+msgstr ""
+"Припускати, що загальносистемне виправлення кольорів вже застосовує профіль "
+"монітора."
+
+#. i18n: ectx: property (text), widget (QLabel, colorProfileLabel)
+#: app/advancedconfigpage.ui:275
+#, kde-format
+msgid "Color profile:"
+msgstr "Профіль кольорів:"
+
+#: app/alignwithsidebarwidgetaction.cpp:23
+#, kde-format
+msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
+msgid "Sidebar Alignment Spacer"
+msgstr "Роздільник вирівнювання на бічній панелі"
+
+#: app/browsemainpage.cpp:147 app/mainwindow.cpp:373 app/viewmainpage.cpp:425
+#: lib/documentview/documentviewcontroller.cpp:57
+#, kde-format
+msgctxt "@title actions category - means actions changing smth in interface"
+msgid "View"
+msgstr "Перегляд"
+
+#: app/browsemainpage.cpp:149
+#, kde-format
+msgctxt "@action:inmenu Navigation Bar"
+msgid "Edit Location"
+msgstr "Змінити розташування"
+
+#: app/browsemainpage.cpp:153
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Sort By"
+msgstr "Впорядкувати за"
+
+#: app/browsemainpage.cpp:158
+#, kde-format
+msgctxt "@addAction:inmenu"
+msgid "Name"
+msgstr "Назвою"
+
+#: app/browsemainpage.cpp:161
+#, kde-format
+msgctxt "@addAction:inmenu"
+msgid "Date"
+msgstr "Датою"
+
+#: app/browsemainpage.cpp:164
+#, kde-format
+msgctxt "@addAction:inmenu"
+msgid "Size"
+msgstr "Розміром"
+
+#: app/browsemainpage.cpp:168
+#, kde-format
+msgctxt "@addAction:inmenu"
+msgid "Rating"
+msgstr "Оцінкою"
+
+#: app/browsemainpage.cpp:175
+#, kde-format
+msgctxt "@action:inmenu Sort"
+msgid "Descending"
+msgstr "За спаданням"
+
+#: app/browsemainpage.cpp:187
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Thumbnail Details"
+msgstr "Подробиці щодо мініатюри"
+
+#: app/browsemainpage.cpp:188
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Filename"
+msgstr "Назва файла"
+
+#: app/browsemainpage.cpp:189
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Date"
+msgstr "Дата"
+
+#: app/browsemainpage.cpp:190
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Image Size"
+msgstr "Розмір зображення"
+
+#: app/browsemainpage.cpp:191
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "File Size"
+msgstr "Розмір файла"
+
+#: app/browsemainpage.cpp:193
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Rating"
+msgstr "Оцінка"
+
+#: app/browsemainpage.cpp:196 app/fileopscontextmanageritem.cpp:138
+#: app/mainwindow.cpp:372
+#, kde-format
+msgctxt "@title actions category"
+msgid "File"
+msgstr "Файл"
+
+#: app/browsemainpage.cpp:198
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Add Folder to Places"
+msgstr "Додати теку до місць"
+
+#: app/browsemainpage.cpp:247
+#, kde-format
+msgctxt ""
+"@info:status %1 number of selected documents, %2 total number of documents, "
+"%3 total filesize of selected documents"
+msgid "Selected %1 of %2 (%3)"
+msgstr "Позначено %1 з %2 (%3)"
+
+#: app/browsemainpage.cpp:253
+#, kde-format
+msgctxt "@info:status Image files"
+msgid "%1 image"
+msgid_plural "%1 images"
+msgstr[0] "%1 зображення"
+msgstr[1] "%1 зображення"
+msgstr[2] "%1 зображень"
+msgstr[3] "%1 зображення"
+
+#: app/browsemainpage.cpp:254
+#, kde-format
+msgctxt "@info:status Video files"
+msgid "%1 video"
+msgid_plural "%1 videos"
+msgstr[0] "%1 відео"
+msgstr[1] "%1 відео"
+msgstr[2] "%1 відео"
+msgstr[3] "%1 відео"
+
+#: app/browsemainpage.cpp:261
+#, kde-format
+msgctxt "@info:status images, videos"
+msgid "%1, %2"
+msgstr "%1, %2"
+
+#. i18n: ectx: property (text), widget (Gwenview::StatusBarToolButton, mAddFilterButton)
+#: app/browsemainpage.ui:88
+#, kde-format
+msgid "Add Filter"
+msgstr "Додати фільтр"
+
+#: app/configdialog.cpp:70
+#, kde-format
+msgid "General"
+msgstr "Загальне"
+
+#: app/configdialog.cpp:123
+#, kde-format
+msgid "Image View"
+msgstr "Перегляд зображення"
+
+#: app/configdialog.cpp:134
+#, kde-format
+msgid "Advanced"
+msgstr "Додатково"
+
+#: app/fileoperations.cpp:64
+#, kde-format
+msgctxt "@title:window %1 file name"
+msgid "Copy %1"
+msgstr "Копіювати %1"
+
+#: app/fileoperations.cpp:66
+#, kde-format
+msgctxt "@title:window %1 number of images"
+msgid "Copy %1 image"
+msgid_plural "Copy %1 images"
+msgstr[0] "Копіювати %1 зображення"
+msgstr[1] "Копіювати %1 зображення"
+msgstr[2] "Копіювати %1 зображень"
+msgstr[3] "Копіювати %1 зображення"
+
+#: app/fileoperations.cpp:68
+#, kde-format
+msgctxt "@action:button"
+msgid "Copy"
+msgstr "Копіювати"
+
+#: app/fileoperations.cpp:72
+#, kde-format
+msgctxt "@title:window %1 file name"
+msgid "Move %1"
+msgstr "Пересунути %1"
+
+#: app/fileoperations.cpp:74
+#, kde-format
+msgctxt "@title:window %1 number of images"
+msgid "Move %1 image"
+msgid_plural "Move %1 images"
+msgstr[0] "Пересунути %1 зображення"
+msgstr[1] "Пересунути %1 зображення"
+msgstr[2] "Пересунути %1 зображень"
+msgstr[3] "Пересунути %1 зображення"
+
+#: app/fileoperations.cpp:76
+#, kde-format
+msgctxt "@action:button"
+msgid "Move"
+msgstr "Пересунути"
+
+#: app/fileoperations.cpp:80
+#, kde-format
+msgctxt "@title:window %1 file name"
+msgid "Link %1"
+msgstr "Створити посилання на %1"
+
+#: app/fileoperations.cpp:82
+#, kde-format
+msgctxt "@title:window %1 number of images"
+msgid "Link %1 image"
+msgid_plural "Link %1 images"
+msgstr[0] "Створити посилання на %1 зображення"
+msgstr[1] "Створити посилання на %1 зображення"
+msgstr[2] "Створити посилання на %1 зображень"
+msgstr[3] "Створити посилання на %1 зображення"
+
+#: app/fileoperations.cpp:84
+#, kde-format
+msgctxt "@action:button"
+msgid "Link"
+msgstr "Посилання"
+
+#: app/fileoperations.cpp:199
+#, kde-format
+msgid "Move Here"
+msgstr "Пересунути сюди"
+
+#: app/fileoperations.cpp:200
+#, kde-format
+msgid "Copy Here"
+msgstr "Скопіювати сюди"
+
+#: app/fileoperations.cpp:201
+#, kde-format
+msgid "Link Here"
+msgstr "Посилання сюди"
+
+#: app/fileoperations.cpp:203
+#, kde-format
+msgid "Cancel"
+msgstr "Скасувати"
+
+#: app/fileopscontextmanageritem.cpp:128
+#, kde-format
+msgid "File Operations"
+msgstr "Дії над файлами"
+
+#: app/fileopscontextmanageritem.cpp:139
+#: app/semanticinfocontextmanageritem.cpp:203
+#, kde-format
+msgctxt "@title actions category"
+msgid "Edit"
+msgstr "Змінити"
+
+#: app/fileopscontextmanageritem.cpp:146
+#, kde-format
+msgctxt "Verb"
+msgid "Copy To..."
+msgstr "Копіювати до..."
+
+#: app/fileopscontextmanageritem.cpp:151
+#, kde-format
+msgctxt "Verb"
+msgid "Move To..."
+msgstr "Пересунути до..."
+
+#: app/fileopscontextmanageritem.cpp:156
+#, kde-format
+msgctxt "Verb: create link to the file where user wants"
+msgid "Link To..."
+msgstr "Прив'язати до..."
+
+#: app/fileopscontextmanageritem.cpp:161
+#, kde-format
+msgctxt "Verb"
+msgid "Rename..."
+msgstr "Перейменувати..."
+
+#: app/fileopscontextmanageritem.cpp:166
+#, kde-format
+msgctxt "Verb"
+msgid "Trash"
+msgstr "Викинути"
+
+#: app/fileopscontextmanageritem.cpp:173
+#, kde-format
+msgid "Restore"
+msgstr "Відновити"
+
+#: app/fileopscontextmanageritem.cpp:177
+#, kde-format
+msgid "Properties"
+msgstr "Властивості"
+
+#: app/fileopscontextmanageritem.cpp:182
+#, kde-format
+msgid "Create Folder..."
+msgstr "Створити теку..."
+
+#: app/fileopscontextmanageritem.cpp:186
+#, kde-format
+msgid "Open With"
+msgstr "Відкрити за допомогою"
+
+#: app/fileopscontextmanageritem.cpp:193
+#, kde-format
+msgid "Open Containing Folder"
+msgstr "Відкрити теку об’єкта"
+
+#: app/fileopscontextmanageritem.cpp:375
+#, kde-format
+msgid "Other Application..."
+msgstr "Інша програма..."
+
+#: app/filtercontroller.cpp:59
+#, kde-format
+msgid "Name contains"
+msgstr "Назва містить"
+
+#: app/filtercontroller.cpp:60
+#, kde-format
+msgid "Name does not contain"
+msgstr "Назва не містить"
+
+#: app/filtercontroller.cpp:98
+#, kde-format
+msgid "Date >="
+msgstr "Дата >="
+
+#: app/filtercontroller.cpp:99
+#, kde-format
+msgid "Date ="
+msgstr "Дата"
+
+#: app/filtercontroller.cpp:100
+#, kde-format
+msgid "Date <="
+msgstr "Дата <="
+
+#: app/filtercontroller.cpp:131
+#, kde-format
+msgid "Rating >="
+msgstr "Оцінка >="
+
+#: app/filtercontroller.cpp:132
+#, kde-format
+msgid "Rating ="
+msgstr "Оцінка ="
+
+#: app/filtercontroller.cpp:133
+#, kde-format
+msgid "Rating <="
+msgstr "Оцінка <="
+
+#: app/filtercontroller.cpp:173
+#, kde-format
+msgid "Tagged"
+msgstr "З міткою"
+
+#: app/filtercontroller.cpp:174
+#, kde-format
+msgid "Not Tagged"
+msgstr "Без мітки"
+
+#: app/filtercontroller.cpp:278
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Filter by Name"
+msgstr "Фільтрувати за назвою"
+
+#: app/filtercontroller.cpp:280
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Filter by Date"
+msgstr "Фільтрувати за датою"
+
+#: app/filtercontroller.cpp:283
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Filter by Rating"
+msgstr "Фільтрувати за оцінкою"
+
+#: app/filtercontroller.cpp:285
+#, kde-format
+msgctxt "@action:inmenu"
+msgid "Filter by Tag"
+msgstr "Фільтрувати за міткою"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: app/fullscreenconfigwidget.ui:20
+#, kde-format
+msgid "Slideshow"
+msgstr "Показ слайдів"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: app/fullscreenconfigwidget.ui:29
+#, kde-format
+msgid "Interval:"
+msgstr "Інтервал:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, mSlideShowLoopCheckBox)
+#: app/fullscreenconfigwidget.ui:75
+#, kde-format
+msgid "Loop"
+msgstr "Цикл"
+
+#. i18n: ectx: property (text), widget (QCheckBox, mSlideShowRandomCheckBox)
+#: app/fullscreenconfigwidget.ui:82
+#, kde-format
+msgid "Random"
+msgstr "Випадковий"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: app/fullscreenconfigwidget.ui:92
+#, kde-format
+msgid "Image Information"
+msgstr "Дані щодо зображення"
+
+#. i18n: ectx: property (text), widget (QPushButton, mConfigureDisplayedInformationButton)
+#: app/fullscreenconfigwidget.ui:101
+#, kde-format
+msgid "Select Image Information to Display..."
+msgstr "Вибрати дані щодо зображення, які слід показувати…"
+
+#. i18n: ectx: property (title), widget (QGroupBox, mThumbnailGroupBox)
+#: app/fullscreenconfigwidget.ui:111
+#, kde-format
+msgid "Thumbnails"
+msgstr "Мініатюри"
+
+#. i18n: ectx: property (text), widget (QCheckBox, mShowThumbnailsCheckBox)
+#: app/fullscreenconfigwidget.ui:120
+#, kde-format
+msgid "Show thumbnails"
+msgstr "Показувати мініатюри"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: app/fullscreenconfigwidget.ui:130
+#, kde-format
+msgid "Height:"
+msgstr "Висота:"
+
+#: app/fullscreencontent.cpp:239
+#, kde-format
+msgctxt "@item:intext fullscreen meta info separator"
+msgid ", "
+msgstr ", "
+
+#: app/fullscreencontent.cpp:289
+#, kde-format
+msgctxt "Slideshow interval in seconds"
+msgid "%1 sec"
+msgid_plural "%1 secs"
+msgstr[0] "%1 секунда"
+msgstr[1] "%1 секунди"
+msgstr[2] "%1 секунд"
+msgstr[3] "%1 секунда"
+
+#: app/fullscreencontent.cpp:400
+#, kde-format
+msgid "Configure"
+msgstr "Налаштувати"
+
+#: app/fullscreencontent.cpp:401
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Configure full screen mode"
+msgstr "Налаштування повноекранного режиму"
+
+#: app/fullscreencontent.cpp:552 app/viewmainpage.cpp:404
+#, kde-format
+msgctxt "@info:status %1 current document index, %2 total documents"
+msgid "%1 of %2"
+msgstr "%1 з %2"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: app/generalconfigpage.ui:17
+#, kde-format
+msgid "Videos:"
+msgstr "Відео:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_ListVideos)
+#: app/generalconfigpage.ui:27
+#, kde-format
+msgid "Show videos"
+msgstr "Показувати відео"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_AutoplayVideos)
+#: app/generalconfigpage.ui:34
+#, kde-format
+msgid "Automatically play"
+msgstr "Відтворювати автоматично"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: app/generalconfigpage.ui:41
+#, kde-format
+msgid "Notify after reaching the last image:"
+msgstr "Сповіщати про завершення списку зображень:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, neverShowWrapNoticeRadioButton)
+#: app/generalconfigpage.ui:51
+#, kde-format
+msgid "Never"
+msgstr "Ніколи"
+
+#. i18n: ectx: property (text), widget (QRadioButton, wrapNoticeOnSlideshowRadioButton)
+#: app/generalconfigpage.ui:58
+#, kde-format
+msgid "Only during slideshows"
+msgstr "Лише під час показів слайдів"
+
+#. i18n: ectx: property (text), widget (QRadioButton, alwaysShowWrapNoticeRadioButton)
+#: app/generalconfigpage.ui:65
+#, kde-format
+msgid "Always"
+msgstr "Завжди"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: app/generalconfigpage.ui:88
+#, kde-format
+msgid "Fullscreen background:"
+msgstr "Тло у повноекранному режимі:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, fullscreenBackgroundImageRadioButton)
+#: app/generalconfigpage.ui:98
+#, kde-format
+msgid "Dark gray texture"
+msgstr "Темно-сіра текстура"
+
+#. i18n: ectx: property (text), widget (QRadioButton, fullscreenBackgroundBlackRadioButton)
+#: app/generalconfigpage.ui:105
+#, kde-format
+msgid "Black"
+msgstr "Чорне"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: app/generalconfigpage.ui:128
+#, kde-format
+msgid "Lossy image save quality:"
+msgstr "Якість зберігання із втратами:"
+
+#. i18n: ectx: property (suffix), widget (QSpinBox, jpegQualitySpinner)
+#: app/generalconfigpage.ui:168
+#, no-c-format, kde-format
+msgid "%"
+msgstr "%"
+
+#. i18n: ectx: property (text), widget (QLabel, lossyImageFormatHelpLabel)
+#: app/generalconfigpage.ui:196
+#, kde-format
+msgid ""
+"The quality level when saving images using lossy image formats such as JPEG, "
+"WEBP, AVIF, HEIF, and HEIC. Higher quality increases the file size."
+msgstr ""
+"Рівень якості при збереженні зображень з використанням формату зображень із "
+"втратами якості, зокрема JPEG, WEBP, AVIF, HEIF і HEIC. Вищий рівень якості "
+"збільшує розмір файла."
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: app/generalconfigpage.ui:222
+#, kde-format
+msgid "Thumbnail actions:"
+msgstr "Дії з мініатюрами:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, allButtonsThumbnailActionsRadioButton)
+#: app/generalconfigpage.ui:229
+#, kde-format
+msgid "All buttons"
+msgstr "усі кнопки"
+
+#. i18n: ectx: property (text), widget (QRadioButton, selectionOnlyThumbnailActionsRadioButton)
+#: app/generalconfigpage.ui:236
+#, kde-format
+msgid "Show selection button only"
+msgstr "показати лише кнопку вибору"
+
+#. i18n: ectx: property (text), widget (QRadioButton, noneThumbnailActionsRadioButton)
+#: app/generalconfigpage.ui:243
+#, kde-format
+msgctxt "A number of thumbnail actions to show"
+msgid "None"
+msgstr "не використовувати"
+
+#: app/gvcore.cpp:80
+#, kde-format
+msgid "Image quality:"
+msgstr "Якість зображення:"
+
+#: app/gvcore.cpp:87
+#, kde-format
+msgctxt "Spinbox suffix; percentage 1 - 100"
+msgid "%"
+msgstr "%"
+
+#: app/gvcore.cpp:112
+#, kde-format
+msgctxt "@title:window"
+msgid "Save Image"
+msgstr "Збереження зображення"
+
+#: app/gvcore.cpp:410
+#, kde-format
+msgid "Save using another format"
+msgstr "Зберегти в іншому форматі"
+
+#: app/gvcore.cpp:412
+#, kde-format
+msgid "Gwenview cannot save images in '%1' format."
+msgstr "Gwenview не може зберігати зображення в форматі «%1»."
+
+#: app/gvcore.cpp:440
+#, kde-format
+msgctxt "@info"
+msgid "Gwenview cannot save images as %1."
+msgstr "Gwenview не може зберігати зображення в форматі %1."
+
+#: app/gvcore.cpp:458 app/gvcore.cpp:492
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"<emphasis strong='true'>Saving <filename>%1</filename> failed:</"
+"emphasis><nl />%2"
+msgstr ""
+"<emphasis strong='true'>Не вдалося зберегти <filename>%1</filename>:</"
+"emphasis><nl />%2"
+
+#: app/gvcore.cpp:508
+#, kde-format
+msgid "You are now viewing the new document."
+msgstr "Зараз ви переглядаєте новий документ."
+
+#: app/gvcore.cpp:510
+#, kde-format
+msgid "Go back to the original"
+msgstr "Повернутися до оригіналу"
+
+#. i18n: ectx: Menu (rating)
+#: app/gwenviewui.rc:54
+#, kde-format
+msgid "&Rating"
+msgstr "&Оцінка"
+
+#. i18n: ectx: Menu (settings)
+#: app/gwenviewui.rc:84
+#, kde-format
+msgid "&Settings"
+msgstr "П&араметри"
+
+#. i18n: ectx: ToolBar (mainToolBar)
+#: app/gwenviewui.rc:100 part/gvpart.rc:16
+#, kde-format
+msgid "Main Toolbar"
+msgstr "Головний пенал"
+
+#: app/imagemetainfodialog.cpp:130
+#, kde-format
+msgctxt "@title:window"
+msgid "Image Information"
+msgstr "Дані щодо зображення"
+
+#: app/imageopscontextmanageritem.cpp:84
+#, kde-format
+msgctxt "@title actions category - means actions changing image"
+msgid "Edit"
+msgstr "Зміни"
+
+#: app/imageopscontextmanageritem.cpp:87
+#, kde-format
+msgid "Rotate Left"
+msgstr "Обернути ліворуч"
+
+#: app/imageopscontextmanageritem.cpp:88
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Rotate image to the left"
+msgstr "Обернути зображення на 90° проти год. стрілки"
+
+#: app/imageopscontextmanageritem.cpp:93
+#, kde-format
+msgid "Rotate Right"
+msgstr "Обернути праворуч"
+
+#: app/imageopscontextmanageritem.cpp:94
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Rotate image to the right"
+msgstr "Обернути зображення на 90° за год. стрілкою"
+
+#: app/imageopscontextmanageritem.cpp:99
+#, kde-format
+msgid "Mirror"
+msgstr "Віддзеркалити"
+
+#: app/imageopscontextmanageritem.cpp:103
+#, kde-format
+msgid "Flip"
+msgstr "Перевернути"
+
+#: app/imageopscontextmanageritem.cpp:107 lib/resize/resizeimagedialog.cpp:71
+#, kde-format
+msgid "Resize"
+msgstr "Змінити розмір"
+
+#: app/imageopscontextmanageritem.cpp:112 lib/crop/cropimageoperation.cpp:70
+#: lib/crop/cropwidget.cpp:263
+#, kde-format
+msgid "Crop"
+msgstr "Обрізати"
+
+#: app/imageopscontextmanageritem.cpp:117
+#: lib/redeyereduction/redeyereductionimageoperation.cpp:76
+#: lib/redeyereduction/redeyereductiontool.cpp:49
+#, kde-format
+msgid "Reduce Red Eye"
+msgstr "Послабити ефект «червоних» очей"
+
+#: app/imageopscontextmanageritem.cpp:122 lib/annotate/annotateoperation.cpp:52
+#, kde-format
+msgctxt "@action:intoolbar"
+msgid "Annotate"
+msgstr "Анотувати"
+
+#: app/imageopscontextmanageritem.cpp:130
+#, kde-format
+msgctxt "@title:window Annotate [filename]"
+msgid "Annotate %1"
+msgstr "Анотувати %1"
+
+#: app/imageopscontextmanageritem.cpp:150 lib/document/documentjob.cpp:77
+#, kde-format
+msgctxt "@info"
+msgid "Gwenview cannot edit this kind of image."
+msgstr "Gwenview не може змінювати зображення у такому форматі."
+
+#: app/imageopscontextmanageritem.cpp:161
+#, kde-format
+msgid "Image Operations"
+msgstr "Дії над зображеннями"
+
+#. i18n: ectx: property (text), widget (QLabel, label_1)
+#: app/imageviewconfigpage.ui:17
+#, kde-format
+msgid "Show transparency with:"
+msgstr "Показувати прозорість:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, surroundingRadioButton)
+#: app/imageviewconfigpage.ui:38
+#, kde-format
+msgid "Surrounding background"
+msgstr "Навколишнім тлом"
+
+#. i18n: ectx: property (text), widget (QRadioButton, checkBoardRadioButton)
+#: app/imageviewconfigpage.ui:71
+#, kde-format
+msgid "&Checkerboard background"
+msgstr "&Тлом-шахівницею"
+
+#. i18n: ectx: property (text), widget (QRadioButton, solidColorRadioButton)
+#: app/imageviewconfigpage.ui:104
+#, kde-format
+msgid "&Solid color background:"
+msgstr "Су&цільним кольором тла:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: app/imageviewconfigpage.ui:152
+#, kde-format
+msgid "Mouse wheel behavior:"
+msgstr "Поведінка коліщата мишки:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, mouseWheelScrollRadioButton)
+#: app/imageviewconfigpage.ui:167
+#, kde-format
+msgctxt "@option:radio action on mouse wheel"
+msgid "Scroll"
+msgstr "Гортання"
+
+#. i18n: ectx: property (text), widget (QRadioButton, mouseWheelBrowseRadioButton)
+#: app/imageviewconfigpage.ui:194
+#, kde-format
+msgctxt "@option:radio action on mouse wheel"
+msgid "Browse"
+msgstr "Навігація"
+
+#. i18n: ectx: property (text), widget (QRadioButton, mouseWheelZoomRadioButton)
+#: app/imageviewconfigpage.ui:218
+#, kde-format
+msgctxt "@option:radio action on mouse wheel"
+msgid "Zoom"
+msgstr "Масштабування"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: app/imageviewconfigpage.ui:256
+#, kde-format
+msgid "Zoom mode:"
+msgstr "Режим масштабування:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, autofitZoomModeRadioButton)
+#: app/imageviewconfigpage.ui:271
+#, kde-format
+msgid "Autofit each image"
+msgstr "Автомасштаб для кожного зображення"
+
+#. i18n: ectx: property (text), widget (QRadioButton, keepSameZoomModeRadioButton)
+#: app/imageviewconfigpage.ui:298
+#, kde-format
+msgid "Keep same zoom and position"
+msgstr "Зберігати однаковий масштаб і розташування"
+
+#. i18n: ectx: property (text), widget (QRadioButton, individualZoomModeRadioButton)
+#: app/imageviewconfigpage.ui:322
+#, kde-format
+msgid "Per image zoom and position"
+msgstr "Окреме масштабування і розташування"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_EnlargeSmallerImages)
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_PrintEnlargeSmallerImages)
+#: app/imageviewconfigpage.ui:362 lib/print/printoptionspage.ui:98
+#, kde-format
+msgid "Enlarge smaller images"
+msgstr "Збільшувати менші зображення"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: app/imageviewconfigpage.ui:400
+#, kde-format
+msgid "Animations:"
+msgstr "Анімація:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, glAnimationRadioButton)
+#: app/imageviewconfigpage.ui:415
+#, kde-format
+msgid "OpenGL"
+msgstr "OpenGL"
+
+#. i18n: ectx: property (text), widget (QRadioButton, softwareAnimationRadioButton)
+#: app/imageviewconfigpage.ui:442
+#, kde-format
+msgid "Software"
+msgstr "програмна"
+
+#. i18n: ectx: property (text), widget (QRadioButton, noAnimationRadioButton)
+#: app/imageviewconfigpage.ui:466
+#, kde-format
+msgid "None"
+msgstr "не використовувати"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: app/imageviewconfigpage.ui:504
+#, kde-format
+msgid "<b>Thumbnail Bar</b>"
+msgstr "<b>Панель мініатюр</b>"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: app/imageviewconfigpage.ui:527
+#, kde-format
+msgid "Orientation:"
+msgstr "Орієнтація:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, horizontalRadioButton)
+#: app/imageviewconfigpage.ui:542
+#, kde-format
+msgid "Horizontal"
+msgstr "Горизонтальна"
+
+#. i18n: ectx: property (text), widget (QRadioButton, verticalRadioButton)
+#: app/imageviewconfigpage.ui:566
+#, kde-format
+msgid "Vertical"
+msgstr "Вертикальна"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: app/imageviewconfigpage.ui:588
+#, kde-format
+msgid "Row count:"
+msgstr "Кількість рядків:"
+
+#: app/infocontextmanageritem.cpp:151
+#, kde-format
+msgctxt ""
+"@item:intext %1 is a key, we append a colon to it. A value is displayed after"
+msgid "%1:"
+msgstr "%1:"
+
+#: app/infocontextmanageritem.cpp:228
+#, kde-format
+msgctxt "@action show more image meta info"
+msgid "Show more details..."
+msgstr "Показати додаткові параметри…"
+
+#: app/infocontextmanageritem.cpp:242
+#, kde-format
+msgctxt "@title:group"
+msgid "Image Information"
+msgstr "Дані щодо зображення"
+
+#: app/infocontextmanageritem.cpp:331
+#, kde-format
+msgctxt "@label"
+msgid "%1 file selected"
+msgid_plural "%1 files selected"
+msgstr[0] "Вибрано %1 файл"
+msgstr[1] "Вибрано %1 файли"
+msgstr[2] "Вибрано %1 файлів"
+msgstr[3] "Вибрано %1 файл"
+
+#: app/infocontextmanageritem.cpp:333
+#, kde-format
+msgctxt "@label"
+msgid "%1 folder selected"
+msgid_plural "%1 folders selected"
+msgstr[0] "Вибрано %1 теку"
+msgstr[1] "Вибрано %1 теки"
+msgstr[2] "Вибрано %1 тек"
+msgstr[3] "Вибрано %1 теку"
+
+#: app/infocontextmanageritem.cpp:336
+#, kde-format
+msgctxt "@label. The two parameters are strings like '2 folders' and '1 file'."
+msgid "%1 and %2 selected"
+msgstr "Вибрано %1 і %2"
+
+#: app/infocontextmanageritem.cpp:337
+#, kde-format
+msgid "%1 folder"
+msgid_plural "%1 folders"
+msgstr[0] "%1 тека"
+msgstr[1] "%1 теки"
+msgstr[2] "%1 тек"
+msgstr[3] "%1 тека"
+
+#: app/infocontextmanageritem.cpp:338
+#, kde-format
+msgid "%1 file"
+msgid_plural "%1 files"
+msgstr[0] "%1 файл"
+msgstr[1] "%1 файли"
+msgstr[2] "%1 файлів"
+msgstr[3] "%1 файл"
+
+#: app/main.cpp:178
+#, kde-format
+msgid "Gwenview"
+msgstr "Gwenview"
+
+#: app/main.cpp:180
+#, kde-format
+msgid "An Image Viewer"
+msgstr "Переглядач зображень"
+
+#: app/main.cpp:188
+#, kde-format
+msgid "Start in fullscreen mode"
+msgstr "Запускати в повноекранному режимі"
+
+#: app/main.cpp:189
+#, kde-format
+msgid "Start in slideshow mode"
+msgstr "Розпочати у режимі показу слайдів"
+
+#: app/main.cpp:190
+#, kde-format
+msgid "A starting file or folders"
+msgstr "Початковий файл або теки"
+
+#: app/mainwindow.cpp:382
+#, kde-format
+msgctxt "@action Open Recent menu"
+msgid "Clear List"
+msgstr "Спорожнити список"
+
+#: app/mainwindow.cpp:390
+#, kde-format
+msgctxt "@action reload the currently viewed image"
+msgid "Reload"
+msgstr "Перезавантажити"
+
+#: app/mainwindow.cpp:395
+#, kde-format
+msgctxt "@action:inmenu Navigation Bar"
+msgid "Replace Location"
+msgstr "Замінити адресу"
+
+#: app/mainwindow.cpp:400
+#, kde-format
+msgctxt "@action:intoolbar Switch to file list"
+msgid "Browse"
+msgstr "Навігація"
+
+#: app/mainwindow.cpp:401
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Browse folders for images"
+msgstr "Навігація теками з зображеннями"
+
+#: app/mainwindow.cpp:408
+#, kde-format
+msgctxt "@action:intoolbar Switch to image view"
+msgid "View"
+msgstr "Переглянути"
+
+#: app/mainwindow.cpp:409
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "View selected images"
+msgstr "Переглянути позначені зображення"
+
+#: app/mainwindow.cpp:428
+#, kde-format
+msgctxt "@action"
+msgid "Exit Full Screen"
+msgstr "Вийти з повноекранного режиму"
+
+#: app/mainwindow.cpp:433
+#, kde-format
+msgctxt "@action Go to previous image"
+msgid "Previous"
+msgstr "Попереднє"
+
+#: app/mainwindow.cpp:434
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Go to previous image"
+msgstr "Перейти до попереднього зображення"
+
+#: app/mainwindow.cpp:440
+#, kde-format
+msgctxt "@action Go to next image"
+msgid "Next"
+msgstr "Наступне"
+
+#: app/mainwindow.cpp:441
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Go to next image"
+msgstr "Перейти до наступного зображення"
+
+#: app/mainwindow.cpp:447
+#, kde-format
+msgctxt "@action Go to first image"
+msgid "First"
+msgstr "Перше"
+
+#: app/mainwindow.cpp:448
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Go to first image"
+msgstr "Перейти до першого зображення"
+
+#: app/mainwindow.cpp:454
+#, kde-format
+msgctxt "@action Go to last image"
+msgid "Last"
+msgstr "Останнє"
+
+#: app/mainwindow.cpp:455
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Go to last image"
+msgstr "Перейти до останнього зображення"
+
+#: app/mainwindow.cpp:465
+#, kde-format
+msgctxt "@action"
+msgid "Start Page"
+msgstr "Початкова сторінка"
+
+#: app/mainwindow.cpp:466
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Open the start page"
+msgstr "Відкрити початкову сторінку"
+
+#: app/mainwindow.cpp:473
+#, kde-format
+msgctxt "@action"
+msgid "Sidebar"
+msgstr "Бічна панель"
+
+#: app/mainwindow.cpp:478
+#, kde-format
+msgctxt "@action opens crop, rename, etc."
+msgid "Show Editing Tools"
+msgstr "Показати засоби редагування"
+
+#: app/mainwindow.cpp:508
+#, kde-format
+msgctxt "@action Share images"
+msgid "Share"
+msgstr "Оприлюднити"
+
+#: app/mainwindow.cpp:516
+#, kde-format
+msgid "Error while sharing: %1"
+msgstr "Помилка під час спроби оприлюднити: %1"
+
+#: app/mainwindow.cpp:523
+#, kde-format
+msgid ""
+"The shared image link (<a href=\"%1\">%1</a>) has been copied to the "
+"clipboard."
+msgstr ""
+"Посилання на зображення (<a href=\"%1\">%1</a>) було скопійовано до буфера "
+"обміну даними."
+
+#: app/mainwindow.cpp:573
+#, kde-format
+msgctxt "@title:menu submenu for actions that open configuration dialogs"
+msgid "Configure"
+msgstr "Налаштувати"
+
+#: app/mainwindow.cpp:588
+#, kde-format
+msgctxt "@title actions category - means actions changing smth in interface"
+msgid "Edit"
+msgstr "Змінити"
+
+#: app/mainwindow.cpp:593
+#, kde-format
+msgid "Redo"
+msgstr "Повторити"
+
+#: app/mainwindow.cpp:601
+#, kde-format
+msgid "Undo"
+msgstr "Вернути"
+
+#: app/mainwindow.cpp:628
+#, kde-format
+msgid "Folders"
+msgstr "Теки"
+
+#: app/mainwindow.cpp:634
+#, kde-format
+msgid "Information"
+msgstr "Інформація"
+
+#: app/mainwindow.cpp:648
+#, kde-format
+msgid "Operations"
+msgstr "Дії"
+
+#: app/mainwindow.cpp:1322
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Hide sidebar"
+msgstr "Сховати бічну панель"
+
+#: app/mainwindow.cpp:1322
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Show sidebar"
+msgstr "Показати бічну панель"
+
+#: app/mainwindow.cpp:1629
+#, kde-format
+msgctxt "@title:window"
+msgid "Open Image"
+msgstr "Відкривання зображення"
+
+#: app/mainwindow.cpp:1689
+#, kde-format
+msgid "Pause Slideshow"
+msgstr "Призупинити показ слайдів"
+
+#: app/mainwindow.cpp:1692
+#, kde-format
+msgid "Resume Slideshow"
+msgstr "Поновити показ слайдів"
+
+#: app/mainwindow.cpp:1692
+#, kde-format
+msgid "Start Slideshow"
+msgstr "Почати показ слайдів"
+
+#: app/mainwindow.cpp:1705
+#, kde-format
+msgid "Save All Changes"
+msgstr "Зберегти всі зміни"
+
+#: app/mainwindow.cpp:1706
+#, kde-format
+msgid "Discard Changes"
+msgstr "Відкинути зміни"
+
+#: app/mainwindow.cpp:1708
+#, kde-format
+msgid "One image has been modified."
+msgid_plural "%1 images have been modified."
+msgstr[0] "Було змінено %1 зображення."
+msgstr[1] "Було змінено %1 зображення."
+msgstr[2] "Було змінено %1 зображень."
+msgstr[3] "Було змінено %1 зображення."
+
+#: app/mainwindow.cpp:1708
+#, kde-format
+msgid "If you quit now, your changes will be lost."
+msgstr "Якщо ви вийдете тепер, то всі зміни буде втрачено."
+
+#: app/mainwindow.cpp:1751
+#, kde-format
+msgid ""
+"This will hide the menu bar completely. You can show it again by typing %1."
+msgstr ""
+"У результаті смужку меню буде повністю приховано. Щоб наказати програмі "
+"знову її показувати, натисніть %1."
+
+#: app/mainwindow.cpp:1754
+#, kde-format
+msgid "Hide menu bar"
+msgstr "Сховати смужку меню"
+
+#: app/mainwindow.cpp:1972
+#, kde-format
+msgid "You reached the first document, what do you want to do?"
+msgstr "Ми досягли першого документа у списку. Що робити далі?"
+
+#: app/mainwindow.cpp:1973 app/mainwindow.cpp:1987
+#, kde-format
+msgid "Stay There"
+msgstr "Залишатися тут"
+
+#: app/mainwindow.cpp:1974
+#, kde-format
+msgid "Go to the Last Document"
+msgstr "Перейти до останнього документа"
+
+#: app/mainwindow.cpp:1975 app/mainwindow.cpp:1989
+#, kde-format
+msgid "Go Back to the Document List"
+msgstr "Повернутися до списку документів"
+
+#: app/mainwindow.cpp:1986
+#, kde-format
+msgid "You reached the last document, what do you want to do?"
+msgstr "Ми досягли останнього документа у списку. Що робити далі?"
+
+#: app/mainwindow.cpp:1988
+#, kde-format
+msgid "Go to the First Document"
+msgstr "Перейти до першого документа"
+
+#: app/renamedialog.cpp:48
+#, kde-format
+msgctxt "@action:button"
+msgid "Rename"
+msgstr "Перейменувати"
+
+#: app/renamedialog.cpp:61
+#, kde-kuit-format
+msgid "Rename <filename>%1</filename> to:"
+msgstr "Перейменувати <filename>%1</filename> на:"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, RenameDialog)
+#: app/renamedialog.ui:26
+#, kde-format
+msgctxt "@title:window"
+msgid "Rename"
+msgstr "Перейменування"
+
+#: app/saveallhelper.cpp:56
+#, kde-format
+msgctxt "@info:progress saving all image changes"
+msgid "Saving..."
+msgstr "Збереження..."
+
+#: app/saveallhelper.cpp:57
+#, kde-format
+msgid "&Stop"
+msgstr "&Зупинити"
+
+#: app/saveallhelper.cpp:82
+#, kde-format
+msgctxt "@info"
+msgid "One document could not be saved:"
+msgid_plural "%1 documents could not be saved:"
+msgstr[0] "Не вдалося зберегти %1 документ"
+msgstr[1] "Не вдалося зберегти %1 документи"
+msgstr[2] "Не вдалося зберегти %1 документів"
+msgstr[3] "Не вдалося зберегти %1 документ"
+
+#: app/saveallhelper.cpp:106
+#, kde-kuit-format
+msgctxt ""
+"@info %1 is the name of the document which failed to save, %2 is the reason "
+"for the failure"
+msgid "<filename>%1</filename>: %2"
+msgstr "<filename>%1</filename>: %2"
+
+#: app/savebar.cpp:82
+#, kde-format
+msgid ""
+"You have modified many images. To avoid memory problems, you should save "
+"your changes."
+msgstr ""
+"Ви змінили велику кількість зображень. Щоб уникнути проблем з нестачею "
+"пам’яті, вам слід зберегти зміни."
+
+#: app/savebar.cpp:160
+#, kde-format
+msgid "Current image modified"
+msgstr "Поточне змінене зображення"
+
+#: app/savebar.cpp:166
+#, kde-format
+msgid "Previous modified image"
+msgstr "Попереднє змінене зображення"
+
+#: app/savebar.cpp:167
+#, kde-format
+msgid "Next modified image"
+msgstr "Наступне змінене зображення"
+
+#: app/savebar.cpp:183
+#, kde-format
+msgid "One image modified"
+msgid_plural "%1 images modified"
+msgstr[0] "Змінено %1 зображення"
+msgstr[1] "Змінено %1 зображення"
+msgstr[2] "Змінено %1 зображень"
+msgstr[3] "Змінено %1 зображення"
+
+#: app/savebar.cpp:185
+#, kde-format
+msgid "Go to first modified image"
+msgstr "Перейти до першого зміненого зображення"
+
+#: app/savebar.cpp:187
+#, kde-format
+msgid "Go to it"
+msgstr "Перейти до цього"
+
+#: app/savebar.cpp:285 app/savebar.cpp:290
+#, kde-format
+msgid "Save All"
+msgstr "Зберегти всі"
+
+#: app/savebar.cpp:286
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Save all modified images"
+msgstr "Зберегти усі змінені зображення"
+
+#: app/semanticinfocontextmanageritem.cpp:186
+#, kde-format
+msgid "Edit"
+msgstr "Змінити"
+
+#: app/semanticinfocontextmanageritem.cpp:206
+#, kde-format
+msgctxt "@action"
+msgid "Edit Tags"
+msgstr "Змінити мітки"
+
+#: app/semanticinfocontextmanageritem.cpp:215
+#, kde-format
+msgctxt "@action Rating value of zero"
+msgid "Zero"
+msgstr "Нульовий"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, SemanticInfoDialog)
+#: app/semanticinfodialog.ui:13
+#, kde-format
+msgid "Tag Editor"
+msgstr "Редактор міток"
+
+#. i18n: ectx: property (text), widget (QPushButton, mPreviousButton)
+#: app/semanticinfodialog.ui:31
+#, kde-format
+msgid "Previous"
+msgstr "Попередня"
+
+#. i18n: ectx: property (text), widget (QPushButton, mNextButton)
+#: app/semanticinfodialog.ui:38
+#, kde-format
+msgid "Next"
+msgstr "Наступна"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: app/semanticinfosidebaritem.ui:22
+#, kde-format
+msgid "Rating:"
+msgstr "Оцінка:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: app/semanticinfosidebaritem.ui:45
+#, kde-format
+msgid "Tags:"
+msgstr "Мітки:"
+
+#. i18n: ectx: property (placeholderText), widget (QTextEdit, mDescriptionTextEdit)
+#: app/semanticinfosidebaritem.ui:73
+#, kde-format
+msgid "Description"
+msgstr "Опис"
+
+#: app/slideshowfileitemaction.cpp:61
+#, kde-format
+msgctxt "@action:inmenu Start a slideshow Dolphin context menu"
+msgid "Start a Slideshow"
+msgstr "Розпочати показ слайдів"
+
+#: app/slideshowfileitemaction.cpp:66
+#, kde-format
+msgctxt "@action:inmenu Start a slideshow Dolphin context menu"
+msgid "Start a Slideshow with selected images"
+msgstr "Почати показ слайдів з позначених зображень"
+
+#: app/startmainpage.cpp:291
+#, kde-format
+msgctxt "@action Recent Folders view"
+msgid "Add Folder to Places"
+msgstr "Додати теку до місць"
+
+#: app/startmainpage.cpp:292
+#, kde-format
+msgctxt "@action Recent Folders view"
+msgid "Forget This Folder"
+msgstr "Забути про цю теку"
+
+#: app/startmainpage.cpp:293
+#, kde-format
+msgctxt "@action Recent Folders view"
+msgid "Forget All Folders"
+msgstr "Забути про усі теки"
+
+#: app/startmainpage.cpp:295
+#, kde-format
+msgctxt "@action Recent Files view"
+msgid "Add Containing Folder to Places"
+msgstr "Додати теку до місць"
+
+#: app/startmainpage.cpp:296
+#, kde-format
+msgctxt "@action Recent Files view"
+msgid "Forget This File"
+msgstr "Забути про цей файл"
+
+#: app/startmainpage.cpp:297
+#, kde-format
+msgctxt "@action Recent Files view"
+msgid "Forget All Files"
+msgstr "Забути про усі файли"
+
+#. i18n: ectx: property (text), widget (QLabel, mHistoryDisabledLabel)
+#: app/startmainpage.ui:34
+#, kde-format
+msgid "History has been disabled."
+msgstr "Журнал було вимкнено."
+
+#. i18n: ectx: attribute (title), widget (QWidget, mRecentFoldersTab)
+#: app/startmainpage.ui:51
+#, kde-format
+msgid "Recent Folders"
+msgstr "Недавні теки"
+
+#. i18n: ectx: attribute (title), widget (QWidget, mRecentFilesTab)
+#: app/startmainpage.ui:65
+#, kde-format
+msgid "Recent Files"
+msgstr "Недавні файли"
+
+#. i18n: ectx: attribute (title), widget (QWidget, placesTab)
+#: app/startmainpage.ui:97
+#, kde-format
+msgid "Places"
+msgstr "Місця"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tagsTab)
+#: app/startmainpage.ui:120
+#, kde-format
+msgid "Tags"
+msgstr "Мітки"
+
+#. i18n: ectx: property (text), widget (QLabel, mTagLabel)
+#: app/startmainpage.ui:126
+#, kde-format
+msgid ""
+"Browsing by tags is not available. Make sure Nepomuk is properly installed "
+"on your computer."
+msgstr ""
+"Перегляд за мітками неможливий. Перевірте, чи належним чином встановлено "
+"Nepomuk на вашому комп’ютері."
+
+#: app/viewmainpage.cpp:153 app/viewmainpage.cpp:448
+#, kde-format
+msgid "Synchronize"
+msgstr "Синхронізувати"
+
+#: app/viewmainpage.cpp:428
+#, kde-format
+msgid "Show Thumbnails"
+msgstr "Показати мініатюри"
+
+#. i18n: For languages that are read right to left, "right side" refers to the left side in this context.
+#: app/viewmainpage.cpp:432
+#, kde-kuit-format
+msgctxt "@info:whatsthis"
+msgid ""
+"<para>This toggles a small bar showing all the other images in the current "
+"folder. Selecting one of them changes the currently viewed image.</"
+"para><para>Select multiple images at the same time to see them side by side."
+"</para><para>The bar can optionally be moved to the right side of the screen "
+"and contain multiple rows of images; <link url='%1'>configure these options "
+"in the settings</link>.</para>"
+msgstr ""
+"<para>Цей пункт вмикає або вимикає показ невеличкої панелі із усіма іншими "
+"зображеннями у поточній теці. Позначення одного з них змінює поточне "
+"зображення на панелі перегляду.</para><para>Позначте декілька зображень, щоб "
+"переглянути їх одночасно.</para><para>Панель, якщо потрібно, можна "
+"пересунути у праву частину вікна програми; на ній може міститися декілька "
+"рядків зображень; <link url='%1'>налаштувати параметри панелі можна у вікні "
+"параметрів програми</link>.</para>"
+
+#: app/viewmainpage.cpp:576
+#, kde-format
+msgctxt "@item:inmenu"
+msgid "Background Color Mode"
+msgstr "Режим кольору тла"
+
+#: app/viewmainpage.cpp:768
+#, kde-format
+msgctxt "@action:button"
+msgid "Discard Changes and Reload"
+msgstr "Відкинути зміни і перезавантажити"
+
+#: app/viewmainpage.cpp:770
+#, kde-format
+msgctxt "@info"
+msgid ""
+"This image has been modified. Reloading it will discard all your changes."
+msgstr ""
+"Це зображення було змінено. Його перезавантаження призведе до втрати всіх "
+"змін."
+
+#: importer/dialogpage.cpp:53
+#, kde-format
+msgid "Show failed files..."
+msgstr "Показати помилкові файли…"
+
+#: importer/dialogpage.cpp:58
+#, kde-format
+msgid "Show failed subfolders..."
+msgstr "Показати помилкові підтеки…"
+
+#: importer/dialogpage.cpp:72
+#, kde-format
+msgid "Failed to import %1 document."
+msgid_plural "Failed to import %1 documents."
+msgstr[0] "Не вдалося імпортувати %1 документ."
+msgstr[1] "Не вдалося імпортувати %1 документи."
+msgstr[2] "Не вдалося імпортувати %1 документів."
+msgstr[3] "Не вдалося імпортувати %1 документ."
+
+#: importer/dialogpage.cpp:79
+#, kde-format
+msgid "Failed to create %1 destination subfolder."
+msgid_plural "Failed to create %1 destination subfolders."
+msgstr[0] "Не вдалося створити %1 підтеку призначення."
+msgstr[1] "Не вдалося створити %1 підтеки призначення."
+msgstr[2] "Не вдалося створити %1 підтек призначення."
+msgstr[3] "Не вдалося створити підтеку призначення."
+
+#: importer/dialogpage.cpp:90
+#, kde-format
+msgid "Failed to import documents:"
+msgstr "Не вдалося імпортувати документи:"
+
+#: importer/dialogpage.cpp:96
+#, kde-format
+msgid "Failed to create subfolders:"
+msgstr "Не вдалося створити підтеки:"
+
+#: importer/filenameformater.cpp:102
+#, kde-format
+msgid "Shooting date"
+msgstr "Дата зйомки"
+
+#: importer/filenameformater.cpp:103
+#, kde-format
+msgid "Shooting time"
+msgstr "Час зйомки"
+
+#: importer/filenameformater.cpp:104
+#, kde-format
+msgid "Original extension"
+msgstr "Початковий суфікс"
+
+#: importer/filenameformater.cpp:105
+#, kde-format
+msgid "Original extension, in lower case"
+msgstr "Початковий суфікс, малими літерами"
+
+#: importer/filenameformater.cpp:106
+#, kde-format
+msgid "Original filename"
+msgstr "Початкова назва файла"
+
+#: importer/filenameformater.cpp:107
+#, kde-format
+msgid "Original filename, in lower case"
+msgstr "Початкова назва файла, малими літерами"
+
+#: importer/importdialog.cpp:92
+#, kde-format
+msgid "One document has been imported."
+msgid_plural "%1 documents have been imported."
+msgstr[0] "Було імпортовано %1 документ."
+msgstr[1] "Було імпортовано %1 документи."
+msgstr[2] "Було імпортовано %1 документів."
+msgstr[3] "Було імпортовано %1 документ."
+
+#: importer/importdialog.cpp:94
+#, kde-format
+msgid "One document has been skipped because it had already been imported."
+msgid_plural ""
+"%1 documents have been skipped because they had already been imported."
+msgstr[0] "Пропущено %1 документ, оскільки його вже було імпортовано."
+msgstr[1] "Пропущено %1 документи, оскільки його вже було імпортовано."
+msgstr[2] "Пропущено %1 документів, оскільки його вже було імпортовано."
+msgstr[3] "Пропущено %1 документ, оскільки його вже було імпортовано."
+
+#: importer/importdialog.cpp:102
+#, kde-format
+msgid ""
+"One of them has been renamed because another document with the same name had "
+"already been imported."
+msgid_plural ""
+"%1 of them have been renamed because other documents with the same name had "
+"already been imported."
+msgstr[0] ""
+"%1 з них було перейменовано, оскільки документ з такою назвою вже було "
+"імпортовано."
+msgstr[1] ""
+"%1 з них було перейменовано, оскільки документ з такою назвою вже було "
+"імпортовано."
+msgstr[2] ""
+"%1 з них було перейменовано, оскільки документ з такою назвою вже було "
+"імпортовано."
+msgstr[3] ""
+"Один з них було перейменовано, оскільки документ з такою назвою вже було "
+"імпортовано."
+
+#: importer/importdialog.cpp:110
+#, kde-format
+msgid "Delete the imported document from the device?"
+msgid_plural "Delete the %1 imported documents from the device?"
+msgstr[0] "Вилучити %1 імпортований документ з пристрою?"
+msgstr[1] "Вилучити %1 імпортовані документи з пристрою?"
+msgstr[2] "Вилучити %1 імпортованих документів з пристрою?"
+msgstr[3] "Вилучити %1 імпортований документ з пристрою?"
+
+#: importer/importdialog.cpp:112
+#, kde-format
+msgid "Delete the skipped document from the device?"
+msgid_plural "Delete the %1 skipped documents from the device?"
+msgstr[0] "Вилучити %1 пропущений документ з пристрою?"
+msgstr[1] "Вилучити %1 пропущені документи з пристрою?"
+msgstr[2] "Вилучити %1 пропущених документів з пристрою?"
+msgstr[3] "Вилучити %1 пропущений документ з пристрою?"
+
+#: importer/importdialog.cpp:115
+#, kde-format
+msgctxt "Singular sentence is actually never used."
+msgid "Delete the imported or skipped document from the device?"
+msgid_plural "Delete the %1 imported and skipped documents from the device?"
+msgstr[0] "Вилучити %1 імпортований і пропущений документ з пристрою?"
+msgstr[1] "Вилучити %1 імпортовані і пропущені документи з пристрою?"
+msgstr[2] "Вилучити %1 імпортовані і пропущені документи з пристрою?"
+msgstr[3] "Вилучити імпортований і пропущений документ з пристрою?"
+
+#: importer/importdialog.cpp:122
+#, kde-format
+msgctxt "@title:window"
+msgid "Import Finished"
+msgstr "Імпорт завершено"
+
+#: importer/importdialog.cpp:123
+#, kde-format
+msgid "Keep"
+msgstr "Залишити"
+
+#: importer/importdialog.cpp:137
+#, kde-format
+msgid ""
+"Failed to delete the document:\n"
+"%2"
+msgid_plural ""
+"Failed to delete documents:\n"
+"%2"
+msgstr[0] ""
+"Не вдалося вилучити документи:\n"
+"%2"
+msgstr[1] ""
+"Не вдалося вилучити документи:\n"
+"%2"
+msgstr[2] ""
+"Не вдалося вилучити документи:\n"
+"%2"
+msgstr[3] ""
+"Не вдалося вилучити документ:\n"
+"%2"
+
+#: importer/importdialog.cpp:139
+#, kde-format
+msgid "Retry"
+msgstr "Повторити"
+
+#: importer/importdialog.cpp:140
+#, kde-format
+msgid "Ignore"
+msgstr "Ігнорувати"
+
+#: importer/importdialog.cpp:164
+#, kde-format
+msgid "What do you want to do now?"
+msgstr "Що ви робити далі?"
+
+#: importer/importdialog.cpp:166
+#, kde-format
+msgid "View Imported Documents with Gwenview"
+msgstr "Переглянути імпортовані документи у Gwenview"
+
+#: importer/importdialog.cpp:167
+#, kde-format
+msgid "Import more Documents"
+msgstr "Імпортувати інші документи"
+
+#: importer/importdialog.cpp:168
+#, kde-format
+msgid "Quit"
+msgstr "Вийти"
+
+#: importer/importer.cpp:80
+#, kde-format
+msgid "Could not create destination folder."
+msgstr "Не вдалося створити теку призначення."
+
+#: importer/importer.cpp:95 importer/importer.cpp:101
+#, kde-format
+msgid "Could not create temporary upload folder."
+msgstr "Не вдалося створити тимчасову теку вивантаження."
+
+#: importer/importerconfigdialog.cpp:53
+#, kde-format
+msgctxt "%1 is the importer keyword, %2 is keyword explanation"
+msgid "%1: %2"
+msgstr "%1: %2"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_AutoRename)
+#: importer/importerconfigdialog.ui:17
+#, kde-format
+msgid "Rename documents automatically"
+msgstr "Автоматично перейменовувати документи"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: importer/importerconfigdialog.ui:39
+#, kde-format
+msgid "Rename Format:"
+msgstr "Формат перейменування:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: importer/importerconfigdialog.ui:59
+#, kde-format
+msgid "Preview:"
+msgstr "Перегляд:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: importer/importerconfigdialog.ui:83
+#, kde-format
+msgid "<i>Type text or click the items below to customize the format</i>"
+msgstr ""
+"<i>Введіть текст або позначте наведені нижче пункти, щоб змінити формат</i>"
+
+#: importer/main.cpp:45
+#, kde-format
+msgid "Gwenview Importer"
+msgstr "Інструмент імпортування Gwenview"
+
+#: importer/main.cpp:47
+#, kde-format
+msgid "Photo Importer"
+msgstr "Інструмент імпортування фотографій"
+
+#: importer/main.cpp:54
+#, kde-format
+msgid ""
+"The device UDI, used to retrieve information about the device (name, icon...)"
+msgstr ""
+"UDI пристрою, використовується для отримання даних щодо пристрою (назви, "
+"піктограми...)"
+
+#: importer/main.cpp:54
+#, kde-format
+msgid "Device UDI"
+msgstr "UDI пристрою"
+
+#: importer/main.cpp:55
+#, kde-format
+msgid "Source folder"
+msgstr "Тека джерела"
+
+#: importer/main.cpp:60
+#, kde-format
+msgid "Missing required source folder argument."
+msgstr "Не вказано обов’язкового аргументу теки джерела."
+
+#: importer/main.cpp:64
+#, kde-format
+msgid "Too many arguments."
+msgstr "Забагато аргументів."
+
+#: importer/main.cpp:70
+#, kde-format
+msgid "Invalid source folder."
+msgstr "Некоректна тека джерела."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: importer/progresspage.ui:30
+#, kde-format
+msgid "Importing documents..."
+msgstr "Імпортування документів..."
+
+#: importer/thumbnailpage.cpp:235
+#, kde-format
+msgctxt "@info above install button when Kamera is not installed"
+msgid "Support for your camera is not installed."
+msgstr "Засоби підтримки вашої камери не встановлено"
+
+#: importer/thumbnailpage.cpp:237
+#, kde-format
+msgctxt "@info above install button, %1 protocol name"
+msgid "The protocol support library for \"%1\" is not installed."
+msgstr "Бібліотеку підтримки протоколу для «%1» не встановлено."
+
+#: importer/thumbnailpage.cpp:249
+#, kde-format
+msgctxt "@info:usagetip above install button"
+msgid ""
+"After finishing the installation process, restart this Importer to continue."
+msgstr ""
+"Після завершення процедури встановлення перезапустіть цей засіб імпортування "
+"для продовження обробки."
+
+#: importer/thumbnailpage.cpp:256
+#, kde-format
+msgctxt "@info:tooltip for a button, %1 protocol name"
+msgid "Launch Discover to install the protocol support library for \"%1\""
+msgstr ""
+"Запустіть Discover для встановлення бібліотеки підтримки протоколу для «%1»"
+
+#: importer/thumbnailpage.cpp:258
+#, kde-format
+msgctxt "@action:button"
+msgid "Install Support for this Camera…"
+msgstr "Встановити підтримку для цієї камери…"
+
+#: importer/thumbnailpage.cpp:259
+#, kde-format
+msgctxt "@info:whatsthis for a button when Kamera is not installed"
+msgid ""
+"You need Kamera installed on your system to read from the camera. Click here "
+"to launch Discover to install Kamera to enable protocol support for "
+"\"camera:/\" on your system."
+msgstr ""
+"Для читання даних з камери вам слід встановити у вашій системі програму "
+"Kamera. Натисніть тут, щоб запустити Discover для встановлення Kamera і "
+"уможливлення підтримки протоколу «camera:/» у вашій системі."
+
+#: importer/thumbnailpage.cpp:262
+#, kde-format
+msgctxt "@action:button %1 protocol name"
+msgid "Install Protocol Support for \"%1\"…"
+msgstr "Встановити підтримку протоколу для «%1»…"
+
+#: importer/thumbnailpage.cpp:263
+#, kde-format
+msgctxt "@info:whatsthis for a button, %1 protocol name"
+msgid ""
+"Click here to launch Discover to install the missing protocol support "
+"library to enable the protocol support for \"%1:/\" on your system."
+msgstr ""
+"Натисніть тут, щоб запустити Discover для встановлення бібліотеки підтримки "
+"протоколу і уможливлення підтримки протоколу «%1:/» у вашій системі."
+
+#: importer/thumbnailpage.cpp:267
+#, kde-format
+msgctxt "@action:button %1 protocol name"
+msgid "Search the Web for How to Install Protocol Support for \"%1\"…"
+msgstr "Шукати в інтернеті спосіб встановлення підтримки протоколу для «%1»…"
+
+#: importer/thumbnailpage.cpp:283
+#, kde-format
+msgctxt ""
+"@info this text will be used as a search term in an online search engine, %1 "
+"protocol name"
+msgid "How to install protocol support for \"%1\" on Linux"
+msgstr "Як встановити підтримку протоколу для «%1» у Linux"
+
+#: importer/thumbnailpage.cpp:284
+#, kde-format
+msgctxt ""
+"search engine URL, %1 search keyword, and translators can replace duckduckgo "
+"with other search engines"
+msgid "https://duckduckgo.com/?q=%1"
+msgstr "https://duckduckgo.com/?q=%1"
+
+#: importer/thumbnailpage.cpp:325
+#, kde-format
+msgid "Import Selected"
+msgstr "Імпортувати позначене"
+
+#: importer/thumbnailpage.cpp:328
+#, kde-format
+msgid "Import All"
+msgstr "Імпортувати все"
+
+#: importer/thumbnailpage.cpp:490
+#, kde-kuit-format
+msgctxt "@info when failing to open the appstream URL"
+msgid ""
+"Opening Discover failed.<nl/>Please check if Discover is installed on your "
+"system, or use your system's package manager to install \"Kamera\" package."
+msgstr ""
+"Не вдалося відкрити вікно Discover.<nl/>Будь ласка, перевірте, чи "
+"встановлено у вашій системі Discover, або скористайтеся програмою для "
+"керування пакунків системи для встановлення пакунка «Kamera»."
+
+#: importer/thumbnailpage.cpp:494
+#, kde-kuit-format
+msgctxt "@info when failing to launch plasma-discover, %1 protocol name"
+msgid ""
+"Opening Discover failed.<nl/>Please check if Discover is installed on your "
+"system, or use your system's package manager to install the protocol support "
+"library for \"%1\"."
+msgstr ""
+"Не вдалося відкрити вікно Discover.<nl/>Будь ласка, перевірте, чи "
+"встановлено у вашій системі Discover, або скористайтеся програмою для "
+"керування пакунків системи для встановлення бібліотеки підтримки протоколу "
+"для «%1»."
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: importer/thumbnailpage.ui:173
+#, kde-format
+msgid "Select the documents to import"
+msgstr "Оберіть документи для імпортування"
+
+#. i18n: ectx: property (text), widget (QPushButton, mConfigureButton)
+#: importer/thumbnailpage.ui:185
+#, kde-format
+msgid "Settings..."
+msgstr "Параметри..."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: importer/thumbnailpage.ui:201
+#, kde-format
+msgid "Enter the import destination"
+msgstr "Введіть призначення імпортування"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: importer/thumbnailpage.ui:220
+#, kde-format
+msgid "Listing content of:"
+msgstr "Показ вмісту:"
+
+#: lib/about.cpp:38
+#, kde-format
+msgid "Copyright 2000-2022 Gwenview authors"
+msgstr "© Автори Gwenview, 2000–2022"
+
+#: lib/about.cpp:40
+#, kde-format
+msgid "Current Maintainer"
+msgstr "Поточний супровідник"
+
+#: lib/about.cpp:41 lib/about.cpp:42
+#, kde-format
+msgid "Developer"
+msgstr "Розробник"
+
+#: lib/crop/cropwidget.cpp:192
+#, kde-format
+msgid "Current Image"
+msgstr "Поточне зображення"
+
+#: lib/crop/cropwidget.cpp:195
+#, kde-format
+msgid "Square"
+msgstr "Квадрат"
+
+#: lib/crop/cropwidget.cpp:198
+#, kde-format
+msgid "This Screen"
+msgstr "Цей екран"
+
+#: lib/crop/cropwidget.cpp:200
+#, kde-format
+msgid "Landscape"
+msgstr "Альбомна"
+
+#: lib/crop/cropwidget.cpp:205 lib/crop/cropwidget.cpp:212
+#, kde-format
+msgid "ISO (A4, A3...)"
+msgstr "ISO (A4, A3...)"
+
+#: lib/crop/cropwidget.cpp:206 lib/crop/cropwidget.cpp:213
+#, kde-format
+msgid "US Letter"
+msgstr "US Letter"
+
+#: lib/crop/cropwidget.cpp:207
+#, kde-format
+msgid "Portrait"
+msgstr "Книжкова"
+
+#. i18n("%1:%2") because ':' should not be translated, it is
+#. used to parse the ratio string.
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: lib/crop/cropwidget.cpp:222 lib/resize/resizeimagewidget.ui:30
+#, kde-format
+msgid "Width"
+msgstr "Ширина"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: lib/crop/cropwidget.cpp:222 lib/resize/resizeimagewidget.ui:40
+#, kde-format
+msgid "Height"
+msgstr "Висота"
+
+#: lib/crop/cropwidget.cpp:291
+#, kde-format
+msgctxt "@option:check"
+msgid "Advanced settings"
+msgstr "Додаткові параметри"
+
+#: lib/crop/cropwidget.cpp:300
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Aspect ratio:"
+msgstr "Співвідношення:"
+
+#: lib/crop/cropwidget.cpp:313
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Size:"
+msgstr "Розмір:"
+
+#: lib/crop/cropwidget.cpp:335
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Position:"
+msgstr "Розташування:"
+
+#: lib/crop/cropwidget.cpp:356
+#, kde-format
+msgctxt "@option:check"
+msgid "Preserve aspect ratio"
+msgstr "Зберігати співвідношення розмірів"
+
+#: lib/document/document.cpp:299
+#, kde-format
+msgctxt "@info"
+msgid "Gwenview cannot save this kind of documents."
+msgstr "Gwenview не може зберігати документи цього типу."
+
+#: lib/document/loadingdocumentimpl.cpp:139
+#, kde-format
+msgctxt "@info"
+msgid "Gwenview cannot display documents of type %1."
+msgstr "Gwenview не може показувати документи у форматі %1."
+
+#: lib/document/loadingdocumentimpl.cpp:399
+#, kde-format
+msgctxt "@info"
+msgid "Could not open file %1"
+msgstr "Не вдалося відкрити файл %1"
+
+#: lib/document/loadingdocumentimpl.cpp:490
+#, kde-format
+msgctxt "@info"
+msgid "Loading meta information failed."
+msgstr "Спроба завантаження метаінформації завершилася невдало."
+
+#: lib/document/loadingdocumentimpl.cpp:516
+#, kde-format
+msgctxt "@info"
+msgid "Loading image failed."
+msgstr "Спроба завантаження зображення завершилася невдало."
+
+#: lib/document/loadingjob.cpp:56
+#, kde-format
+msgid "Could not load document %1"
+msgstr "Не вдалося завантажити документ %1"
+
+#: lib/document/savejob.cpp:106
+#, kde-format
+msgctxt "@info"
+msgid ""
+"Could not open file for writing, check that you have the necessary rights in "
+"<filename>%1</filename>."
+msgstr ""
+"Не вдалося відкрити файл для запису, перевірте, чи є у вас потрібні права на "
+"<filename>%1</filename>."
+
+#: lib/document/savejob.cpp:137
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"Could not overwrite file, check that you have the necessary rights to write "
+"in <filename>%1</filename>."
+msgstr ""
+"Не вдалося перезаписати файл, перевірте, чи є у вас потрібні права на запис "
+"до <filename>%1</filename>."
+
+#: lib/documentview/documentview.cpp:195
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Trash"
+msgstr "Викинути"
+
+#: lib/documentview/documentview.cpp:196
+#, kde-format
+msgctxt "@action:button"
+msgid "Deselect"
+msgstr "Скасувати позначення"
+
+#: lib/documentview/documentview.cpp:507
+#, kde-format
+msgid "Gwenview does not know how to display this kind of document"
+msgstr "Gwenview невідомий спосіб, у який слід показувати цей документ"
+
+#: lib/documentview/documentview.cpp:613
+#, kde-kuit-format
+msgid "Loading <filename>%1</filename> failed"
+msgstr "Спроба завантаження <filename>%1</filename> завершилася невдало"
+
+#: lib/documentview/documentviewcontroller.cpp:63
+#, kde-format
+msgid "Zoom to Fit"
+msgstr "Масштабувати, щоб вмістити"
+
+#: lib/documentview/documentviewcontroller.cpp:65
+#, kde-format
+msgctxt "@action:button Zoom to fit, shown in status bar, keep it short please"
+msgid "Fit"
+msgstr "Вмістити"
+
+#: lib/documentview/documentviewcontroller.cpp:66
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Fit image into the viewing area"
+msgstr "Вмістити зображення в область перегляду"
+
+#. i18n: "a previous zoom value" is worded in such an unclear way because it can either be the zoom value for the image viewed previously or the
+#. zoom value that was used the last time this same image was viewed. Being more clear about this isn't really necessary here so I kept it short
+#. but a more elaborate translation would also be fine.
+#. The text "in the settings" is supposed to sound like clicking it opens the settings.
+#: lib/documentview/documentviewcontroller.cpp:72
+#, kde-kuit-format
+msgctxt "@info:whatsthis, %1 the action's text"
+msgid ""
+"<para>This fits the image into the available viewing area:<list><item>Images "
+"that are bigger than the viewing area are displayed at a smaller size so "
+"they fit.</item><item>Images that are smaller than the viewing area are "
+"displayed at their normal size. If smaller images should instead use all of "
+"the available viewing area, turn on <emphasis>Enlarge smaller images</"
+"emphasis> <link url='%2'>in the settings</link>.</item></list></"
+"para><para>If \"%1\" is already enabled, pressing it again will switch it "
+"off and the image will be displayed at its normal size instead.</para><para>"
+"\"%1\" is the default zoom mode for images. This can be changed so images "
+"are displayed at a previous zoom value instead <link url='%2'>in the "
+"settings</link>.</para>"
+msgstr ""
+"<para>Підбирає розміри зображення за доступною областю перегляду:"
+"<list><item>Зображення, розміри яких є більшими за область перегляду, буде "
+"показано меншими так, щоб вони у неї вмістилися.</item><item>Зображення, "
+"розміри яких є меншими за область перегляду, буде показано у їхньому "
+"звичайному розмірі. Якщо ви хочете, щоб менші зображення було розтягнуто за "
+"усією областю перегляду, позначте пункт <emphasis>Збільшувати менші "
+"зображення</emphasis> <link url='%2'>у вікні параметрів програми</link>.</"
+"item></list></para><para>Якщо «%1» вже увімкнено, повторне його натискання "
+"призведе до вимикання і показу зображення з використанням звичайних розмірів."
+"</para><para>«%1» є типовим режимом масштабування для зображень. Це можна "
+"змінити так, щоб зображення було показано із попереднім значенням масштабу, "
+"<link url='%2'>у вікні параметрів програми</link>.</para>"
+
+#: lib/documentview/documentviewcontroller.cpp:85
+#, kde-format
+msgid "Zoom to fill window by fitting to width or height"
+msgstr ""
+"Змінити масштаб так, щоб заповнити панель перегляду за шириною і висотою"
+
+#: lib/documentview/documentviewcontroller.cpp:87
+#, kde-format
+msgctxt ""
+"@action:button Zoom to fill (fit width or height), shown in status bar, keep "
+"it short please"
+msgid "Fill"
+msgstr "Заповнити"
+
+#: lib/documentview/documentviewcontroller.cpp:100
+#, kde-format
+msgid "Show Bird's Eye View When Zoomed In"
+msgstr "Показувати панель області перегляду при збільшенні"
+
+#: lib/documentview/documentviewcontroller.cpp:107
+#, kde-format
+msgctxt "@action"
+msgid "Follow color scheme"
+msgstr "Відповідно до схеми кольорів"
+
+#: lib/documentview/documentviewcontroller.cpp:113
+#, kde-format
+msgctxt "@action"
+msgid "Light Mode"
+msgstr "Світлий режим"
+
+#: lib/documentview/documentviewcontroller.cpp:119
+#, kde-format
+msgctxt "@action"
+msgid "Neutral Mode"
+msgstr "Нейтральний режим"
+
+#: lib/documentview/documentviewcontroller.cpp:125
+#, kde-format
+msgctxt "@action"
+msgid "Dark Mode"
+msgstr "Темний режим"
+
+#: lib/documentview/messageviewadapter.cpp:50
+#, kde-format
+msgid "No document selected"
+msgstr "Немає вибраних документів"
+
+#: lib/fullscreenbar.cpp:269 lib/statusbartoolbutton.cpp:144
+#, kde-format
+msgctxt "@info:tooltip of custom toolbar button"
+msgid "%1"
+msgstr "%1"
+
+#. i18n: ectx: whatsthis, entry (PercentageOfMemoryUsageWarning), group (General)
+#: lib/gwenviewconfig.kcfg:57
+#, kde-format
+msgid ""
+"The percentage of memory used by Gwenview before it\n"
+"            warns the user and suggest saving changes."
+msgstr ""
+"Відсоток пам’яті, який може бути використано Gwenview, перш ніж\n"
+"програма попередить користувача і запропонує заходи з економії пам’яті."
+
+#. i18n: ectx: whatsthis, entry (BlackListedExtensions), group (General)
+#: lib/gwenviewconfig.kcfg:64
+#, kde-format
+msgid ""
+"A list of filename extensions Gwenview should not try to\n"
+"            load. We exclude *.new as well because this is the extension\n"
+"            used for temporary files by KSaveFile."
+msgstr ""
+"Список суфіксів назв файлів, які Gwenview не слід намагатися завантажити.\n"
+"Ми також виключаємо *.new, оскільки цей суфікс використовується для\n"
+"тимчасових файлів KSaveFile."
+
+#. i18n: ectx: whatsthis, entry (ZoomMode), group (ImageView)
+#: lib/gwenviewconfig.kcfg:205
+#, kde-format
+msgid ""
+"Defines what happens when going to image B after\n"
+"            having zoomed in on an area of image A.  If set to Autofit,\n"
+"            image B is zoomed out to fit the screen.  If set to KeepSame,\n"
+"            all images share the same zoom and position: image B is set\n"
+"            to the same zoom parameters as image A (and if these are\n"
+"            changed, image A will then be displayed with the updated zoom\n"
+"            and position).  If set to Individual, all images remember\n"
+"            their own zoom and position: image B is initially set to the\n"
+"            same zoom parameters as image A, but will then remember its\n"
+"            own zoom and position (if these are changed, image A will NOT\n"
+"            be displayed with the updated zoom and position)."
+msgstr ""
+"Визначає поведінку програми під час переходу до зображення B після\n"
+"масштабування зображення A. Якщо буде вибрано варіант Autofit\n"
+"(автомасштабування), масштаб зображення B буде збільшено до\n"
+"того значення, яке тільки можна буде вмістити на екрані. Якщо\n"
+"буде вибрано варіант KeepSame (те саме), для усіх зображень\n"
+"буде використано один масштаб і одне розташування: зображення B\n"
+"матиме ті самі параметри масштабування, що і зображення A (а якщо\n"
+"їх буде змінено, зображення A буде показано з оновленими параметрами\n"
+"масштабу та розташування). Якщо вибрати варіант Individual (окремі),\n"
+"програма запам’ятовуватиме параметри масштабування та розташування\n"
+"для кожного із зображень окремо: початково для зображення B\n"
+"буде вибрати ті самі параметри, що і для зображення A, але надалі\n"
+"програма запам’ятовуватиме ці параметри (якщо параметри показу\n"
+"B буде змінено, параметри показу зображення A НЕ ЗМІНЮВАТИМУТЬСЯ)."
+
+#. i18n: ectx: whatsthis, entry (RenderingIntent), group (ImageView)
+#: lib/gwenviewconfig.kcfg:219
+#, kde-format
+msgid ""
+"Defines how colors are rendered when your display\n"
+"            uses an ICC color profile and an image has colors that do not\n"
+"            fit within the profile's color gamut. \"Perceptual\" will scale\n"
+"            the colors of the entire image so that they all fit within the\n"
+"            display's capabilities. \"Relative\" will squash only the "
+"colors\n"
+"            that cannot be displayed, and leave the other colors alone."
+msgstr ""
+"Визначає, як буде оброблено кольори, якщо на вашому дисплеї використовується "
+"профіль кольорів, а на зображенні є кольори, які не потрапляють до гами "
+"кольорів цього профілю. Спосіб відтворення «Придатне до сприйняття» "
+"масштабує усі кольори на усьому зображенні так, щоб усі кольори можна було "
+"показати на дисплеї. Спосіб відтворення «Відносне» масштабує лише ті "
+"кольори, які не може бути показано, а інші кольори залишить без змін."
+
+#. i18n: ectx: label, entry (random), group (slide show)
+#: lib/gwenviewconfig.kcfg:322
+#, kde-format
+msgid "Display slide show images in random order"
+msgstr "Виконувати показ слайдів у випадковому порядку"
+
+#. i18n: ectx: label, entry (fullscreen), group (slide show)
+#: lib/gwenviewconfig.kcfg:326
+#, kde-format
+msgid "Show slideshow in fullscreen mode"
+msgstr "Запускати показ слайдів в повноекранному режимі"
+
+#. i18n: ectx: label, entry (loop), group (slide show)
+#: lib/gwenviewconfig.kcfg:330
+#, kde-format
+msgid "Loop on images"
+msgstr "Циклічний перегляд"
+
+#. i18n: ectx: label, entry (stopAtEnd), group (slide show)
+#: lib/gwenviewconfig.kcfg:334
+#, kde-format
+msgid "Stop at last image of folder"
+msgstr "Зупинитися на останньому зображенні теки"
+
+#. i18n: ectx: label, entry (interval), group (slide show)
+#: lib/gwenviewconfig.kcfg:338
+#, kde-format
+msgid "Interval between images (in seconds)"
+msgstr "Затримка між зображеннями (у секундах)"
+
+#. i18n: ectx: label, entry (CropPreserveAspectRatio), group (Crop)
+#: lib/gwenviewconfig.kcfg:354
+#, kde-format
+msgid "Restrict crop to image ratio when Advanced Settings disabled"
+msgstr ""
+"Обмежити обрізання співвідношенням зображення, якщо вимкнено додаткові "
+"параметри"
+
+#. i18n: ectx: label, entry (CropRatioIndex), group (Crop)
+#: lib/gwenviewconfig.kcfg:358
+#, kde-format
+msgid "Index representing selected ratio in the Advanced settings combobox"
+msgstr ""
+"Індекс, що відповідає вибраному співвідношенню у списку додаткових параметрів"
+
+#. i18n: ectx: label, entry (CropRatioWidth), group (Crop)
+#: lib/gwenviewconfig.kcfg:362
+#, kde-format
+msgid "Last used crop ratio width when Advanced Settings enabled"
+msgstr ""
+"Остання використана ширина обрізання, коли було увімкнено додаткові параметри"
+
+#. i18n: ectx: label, entry (CropRatioHeight), group (Crop)
+#: lib/gwenviewconfig.kcfg:366
+#, kde-format
+msgid "Last used crop ratio height when Advanced Settings enabled"
+msgstr ""
+"Остання використана висота обрізання, коли було увімкнено додаткові параметри"
+
+#: lib/historymodel.cpp:146
+#, kde-format
+msgid "Last visited: %1"
+msgstr "Востаннє відвідано: %1"
+
+#: lib/hud/hudwidget.cpp:104
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Close"
+msgstr "Закрити"
+
+#: lib/imagemetainfomodel.cpp:255
+#, kde-format
+msgctxt "@item:intable Image file name"
+msgid "Name"
+msgstr "Назва"
+
+#: lib/imagemetainfomodel.cpp:256
+#, kde-format
+msgctxt "@item:intable"
+msgid "File Size"
+msgstr "Розмір файла"
+
+#: lib/imagemetainfomodel.cpp:257
+#, kde-format
+msgctxt "@item:intable"
+msgid "File Time"
+msgstr "Час створення файла"
+
+#: lib/imagemetainfomodel.cpp:258
+#, kde-format
+msgctxt "@item:intable"
+msgid "Image Size"
+msgstr "Розмір зображення"
+
+#: lib/imagemetainfomodel.cpp:259
+#, kde-format
+msgctxt "@item:intable"
+msgid "Comment"
+msgstr "Коментар"
+
+#: lib/imagemetainfomodel.cpp:321
+#, kde-format
+msgctxt "@title:group General info about the image"
+msgid "General"
+msgstr "Загальні"
+
+#: lib/imagemetainfomodel.cpp:408
+#, kde-format
+msgctxt "@item:intable %1 is image width, %2 is image height"
+msgid "%1x%2"
+msgstr "%1x%2"
+
+#: lib/imagemetainfomodel.cpp:414
+#, kde-format
+msgctxt "@item:intable %1 is number of millions of pixels in image"
+msgid "(%1MP)"
+msgstr "(%1MP)"
+
+#: lib/imagemetainfomodel.cpp:565
+#, kde-format
+msgctxt "@title:column"
+msgid "Property"
+msgstr "Властивість"
+
+#: lib/imagemetainfomodel.cpp:567
+#, kde-format
+msgctxt "@title:column"
+msgid "Value"
+msgstr "Значення"
+
+#: lib/jpegcontent.cpp:642
+#, kde-format
+msgctxt "@info"
+msgid "Could not open file for writing."
+msgstr "Не вдалося відкрити файл для запису."
+
+#: lib/jpegcontent.cpp:658
+#, kde-format
+msgctxt "@info"
+msgid "No data to store."
+msgstr "Відсутні дані для збереження."
+
+#: lib/print/printhelper.cpp:126
+#, kde-format
+msgid "Print Image"
+msgstr "Надрукувати зображення"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, PrintOptionsPage)
+#: lib/print/printoptionspage.ui:14
+#, kde-format
+msgid "Image Settings"
+msgstr "Параметри зображення"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: lib/print/printoptionspage.ui:20
+#, kde-format
+msgid "Image Position"
+msgstr "Позиція зображення"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: lib/print/printoptionspage.ui:45
+#, kde-format
+msgid "Scaling"
+msgstr "Масштабування"
+
+#. i18n: ectx: property (text), widget (QRadioButton, mNoScale)
+#: lib/print/printoptionspage.ui:51
+#, kde-format
+msgid "&No scaling"
+msgstr "&Без масштабування"
+
+#. i18n: ectx: property (text), widget (QRadioButton, mScaleToPage)
+#: lib/print/printoptionspage.ui:61
+#, kde-format
+msgid "&Fit image to page"
+msgstr "&Вмістити зображення в сторінку"
+
+#. i18n: ectx: property (text), widget (QRadioButton, mScaleTo)
+#: lib/print/printoptionspage.ui:123
+#, kde-format
+msgid "&Scale to:"
+msgstr "&Масштабувати до:"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel2)
+#: lib/print/printoptionspage.ui:158
+#, kde-format
+msgctxt "Dimension separator, as in: '15 x 10 centimeters'"
+msgid "x"
+msgstr "x"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_PrintUnit)
+#: lib/print/printoptionspage.ui:185
+#, kde-format
+msgid "Millimeters"
+msgstr "Міліметрів"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_PrintUnit)
+#: lib/print/printoptionspage.ui:190
+#, kde-format
+msgid "Centimeters"
+msgstr "Сантиметрів"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_PrintUnit)
+#: lib/print/printoptionspage.ui:195
+#, kde-format
+msgid "Inches"
+msgstr "Дюймів"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_PrintKeepRatio)
+#: lib/print/printoptionspage.ui:224
+#, kde-format
+msgid "Keep ratio"
+msgstr "Зберігати співвідношення"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: lib/redeyereduction/redeyereductionwidget.ui:43
+#, kde-format
+msgid "Size:"
+msgstr "Розмір:"
+
+#. i18n: ectx: property (text), widget (QLabel, helpTextLabel)
+#: lib/redeyereduction/redeyereductionwidget.ui:150
+#, kde-format
+msgid ""
+"Click on a red eye and choose a size, or double-click to correct instantly."
+msgstr ""
+"Натисніть на «червоному» оці і виберіть розмір області або двічі клацніть "
+"для швидкого виправлення."
+
+#: lib/resize/resizeimagedialog.cpp:76
+#, kde-format
+msgctxt "@action"
+msgid ""
+"Assuming that the image format won't be changed and\n"
+"for lossy images using the value set in 'Lossy image save quality'."
+msgstr ""
+"Припускаємо, що формат зображення не буде змінено, а для\n"
+"форматів із втратою якості використовуємо значення, встановлене у параметрі "
+"«Якість зберігання із втратами»."
+
+#: lib/resize/resizeimagedialog.cpp:219
+#, kde-format
+msgid "error"
+msgstr "помилка"
+
+#: lib/resize/resizeimageoperation.cpp:70
+#, kde-format
+msgctxt "(qtundo-format)"
+msgid "Resize"
+msgstr "Зміна розміру"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, ResizeImageWidget)
+#: lib/resize/resizeimagewidget.ui:14
+#, kde-format
+msgid "Resize Image"
+msgstr "Зміна розмірів зображення"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: lib/resize/resizeimagewidget.ui:47
+#, kde-format
+msgid "New size:"
+msgstr "Новий розмір:"
+
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, mHeightPercentSpinBox)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, mWidthPercentSpinBox)
+#: lib/resize/resizeimagewidget.ui:63 lib/resize/resizeimagewidget.ui:195
+#, no-c-format, kde-format
+msgid " %"
+msgstr " %"
+
+#. i18n: ectx: property (suffix), widget (QSpinBox, mHeightSpinBox)
+#. i18n: ectx: property (suffix), widget (QSpinBox, mWidthSpinBox)
+#: lib/resize/resizeimagewidget.ui:86 lib/resize/resizeimagewidget.ui:102
+#, kde-format
+msgid " px"
+msgstr " пк"
+
+#. i18n: ectx: property (text), widget (QCheckBox, mKeepAspectCheckBox)
+#: lib/resize/resizeimagewidget.ui:145
+#, kde-format
+msgid "Keep aspect ratio"
+msgstr "Зберігати пропорції"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: lib/resize/resizeimagewidget.ui:172
+#, kde-format
+msgid "Current size:"
+msgstr "Поточний розмір:"
+
+#: lib/semanticinfo/tagitemdelegate.cpp:62
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Assign this tag to all selected images"
+msgstr "Позначити цією міткою всі вибрані зображення"
+
+#: lib/semanticinfo/tagwidget.cpp:147
+#, kde-format
+msgid "Add tag"
+msgstr "Додати мітку"
+
+#: lib/slideshow.cpp:182
+#, kde-format
+msgctxt "@item:inmenu toggle loop in slideshow"
+msgid "Loop"
+msgstr "Цикл"
+
+#: lib/slideshow.cpp:187
+#, kde-format
+msgctxt "@item:inmenu toggle random order in slideshow"
+msgid "Random"
+msgstr "Випадковий"
+
+#: lib/transformimageoperation.cpp:58
+#, kde-format
+msgctxt "(qtundo-format)"
+msgid "Rotate Right"
+msgstr "Обертання праворуч"
+
+#: lib/transformimageoperation.cpp:61
+#, kde-format
+msgctxt "(qtundo-format)"
+msgid "Rotate Left"
+msgstr "Обертання ліворуч"
+
+#: lib/transformimageoperation.cpp:64
+#, kde-format
+msgctxt "(qtundo-format)"
+msgid "Mirror"
+msgstr "Віддзеркалення"
+
+#: lib/transformimageoperation.cpp:67
+#, kde-format
+msgctxt "(qtundo-format)"
+msgid "Flip"
+msgstr "Перевертання"
+
+#: lib/transformimageoperation.cpp:72
+#, kde-format
+msgctxt "(qtundo-format)"
+msgid "Transform"
+msgstr "Перетворення"
+
+#: part/gvpart.cpp:74
+#, kde-format
+msgctxt "@action"
+msgid "Properties"
+msgstr "Властивості"
+
+#. i18n: ectx: Menu (file)
+#: part/gvpart.rc:5
+#, kde-format
+msgid "&File"
+msgstr "&Файл"
+
+#. i18n: ectx: Menu (view)
+#: part/gvpart.rc:9
+#, kde-format
+msgid "&View"
+msgstr "П&ерегляд"
+
+#~ msgctxt "@label:chooser Describes what a row of buttons control"
+#~ msgid "Background color:"
+#~ msgstr "Колір тла:"
+
+#~ msgid "&Plugins"
+#~ msgstr "Д&одатки"
+
+#~ msgid "Last Used Plugin"
+#~ msgstr "Останній використаний додаток"
+
+#~ msgid "Other Plugins"
+#~ msgstr "Інші додатки"
+
+#~ msgctxt "@action"
+#~ msgid "Share"
+#~ msgstr "Оприлюднення"
+
+#~ msgctxt "@info:tooltip"
+#~ msgid "Share images using various services"
+#~ msgstr "Оприлюднити зображення за допомогою різноманітних служб"
+
+#~ msgctxt "%1 is collection name, %2 is image count in collection"
+#~ msgid "%1 (%2 image)"
+#~ msgid_plural "%1 (%2 images)"
+#~ msgstr[0] "%1 (%2 зображення)"
+#~ msgstr[1] "%1 (%2 зображення)"
+#~ msgstr[2] "%1 (%2 зображень)"
+#~ msgstr[3] "%1 (%2 зображення)"
+
+#~ msgid "Loading..."
+#~ msgstr "Завантаження…"
+
+#~ msgid "No Plugin Found"
+#~ msgstr "Не знайдено додатка"
+
+#~ msgctxt "@item:inmenu"
+#~ msgid "Install Plugins"
+#~ msgstr "Встановити додатки"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Images"
+#~ msgstr "Зображення"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Tools"
+#~ msgstr "Інструменти"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Import"
+#~ msgstr "Імпорт"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Export"
+#~ msgstr "Експорт"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Batch Processing"
+#~ msgstr "Пакетна обробка"
+
+#~ msgctxt "@title:menu"
+#~ msgid "Collections"
+#~ msgstr "Збірки"
+
+#~ msgid ""
+#~ "Images will be uploaded here:\n"
+#~ "%1"
+#~ msgstr ""
+#~ "Зображення буде вивантажено сюди:\n"
+#~ "%1"
+
+#~ msgid "Thumbnail Bar"
+#~ msgstr "Панель мініатюр"
+
+#~ msgctxt ""
+#~ "@action:button Zoom to original size, shown in status bar, keep it short "
+#~ "please"
+#~ msgid "100%"
+#~ msgstr "100%"
+
+#~ msgid "Gwenview KPart"
+#~ msgstr "Gwenview KPart"
+
+#~ msgctxt "@action show more image meta info"
+#~ msgid "More..."
+#~ msgstr "Більше..."
+
+#~ msgctxt "@title:group"
+#~ msgid "Meta Information"
+#~ msgstr "Метаінформація"
+
+#~ msgid "Semantic Information"
+#~ msgstr "Семантична інформація"
+
+#~ msgid "JPEG quality:"
+#~ msgstr "Якість JPEG:"
+
+#~ msgctxt "@action Open Recent menu"
+#~ msgid "Forget All Files && Folders"
+#~ msgstr "Забути про усі файли і теки"

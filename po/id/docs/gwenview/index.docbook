@@ -1,0 +1,1471 @@
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN"
+"dtd/kdedbx45.dtd" [
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % Indonesian "INCLUDE"
+><!-- change language only here -->
+]>
+
+<book id="gwenview" lang="&language;">
+<title
+>Panduan Penggunaan Gwenview</title>
+
+<bookinfo>
+<authorgroup>
+<author
+><firstname
+>Aurélien</firstname
+> <surname
+>Gâteau</surname
+> <affiliation
+><address
+><email
+>agateau@kde.org</email
+></address
+></affiliation>
+</author>
+<author
+><firstname
+>Christopher</firstname
+><surname
+>Martin</surname
+> <affiliation
+><address
+><email
+>chrsmrtn@debian.org</email
+></address
+></affiliation>
+</author>
+<author
+><firstname
+>Henry</firstname
+> <surname
+>de Valence</surname
+> <affiliation
+><address
+><email
+>hdevalence@gmail.com</email
+></address
+></affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Wantoyo</firstname
+> <surname
+> </surname
+> <affiliation
+><address
+><email
+>wantoyek@gmail.com</email
+></address
+></affiliation
+><contrib
+>Penerjemah</contrib
+></othercredit
+> 
+</authorgroup>
+<copyright>
+<year
+>2005</year>
+<holder
+>Aurélien Gâteau</holder>
+</copyright>
+<copyright>
+<year
+>2008</year>
+<holder
+>Henry de Valence</holder>
+</copyright>
+<legalnotice
+>&FDLNotice;</legalnotice>
+
+<date
+>25-08-2019</date>
+<releaseinfo
+>Aplikasi 19.12</releaseinfo>
+<abstract>
+<para
+>&gwenview; adalah sebuah penampil citra dan video</para>
+</abstract>
+<keywordset>
+<keyword
+>KDE</keyword>
+<keyword
+>image</keyword>
+<keyword
+>penampil</keyword>
+<keyword
+>artis</keyword>
+<keyword
+>foto</keyword>
+<keyword
+>gambar</keyword>
+</keywordset>
+</bookinfo>
+<!--FIXME Read devels blog on http://agateau.com/
+-->
+<chapter id="introduction">
+<title
+>Pengenalan</title>
+
+<sect1 id="what-is-gwenview">
+<title
+>Apa sih &gwenview;</title>
+
+<para
+>&gwenview; adalah sebuah penampil citra dan video yang cepat dan mudah </para>
+
+ <para
+>&gwenview; dilengkapi dua mode utama: Telusur dan Tampilan. Kedua mode tersebut bisa digunakan di window aplikasi normal dan Layar Penuh. Mode Telusur memungkinkan kamu bernavigasi melalui komputer kamu yang menampilkan tumbnail citra kamu, Mode Tampilan memungkinkan kamu melihat citra satu per satu, dan Layar Penuh memungkinkan kamu membuat tampilan slideshow cepat. Ada juga layar awal yang menampilkan daftar folder dan URL yang saat ini dibuka serta tempat dan tanda kamu. </para>
+
+<para
+>Pemuatan citra ditangani oleh pustaka &Qt;, jadi &gwenview; mendukung semua format citra dukungan penginstalan &Qt; kamu.  &gwenview; menampilkan citra dengan benar dengan alpha channel (transparansi) serta animasi.</para>
+
+<para
+>&gwenview; mendukung penayangan dan pengeditan komentar EXIF dalam citra JPEG. Transformasi JPEG lossless seperti perotasian dan pencerminan juga didukung.</para>
+
+<para
+>&gwenview; bisa membaca profil warna tertanam dari file PNG dan JPEG. Ini bisa menggunakan profil warna citra bersamaan dengan tampilan profil warna untuk menghasilkan warna yang benar di layar.</para>
+</sect1>
+
+</chapter>
+
+<chapter id="interface">
+<title
+>Antarmuka</title>
+
+<sect1 id='start_page'
+><title
+>Halaman Awal</title>
+<para
+>Halaman awal mencantumkan folder dan &URL; yang baru saja dibuka yang ada di sisi kiri, dan tempat dan tag kamu di sisi kanan.</para>
+
+<screenshot>
+  <screeninfo
+>Cuplikan Halaman Awal</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="start-page.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+</sect1>
+
+<sect1 id='image_operations'
+><title
+>Operasi Citra</title>
+<para
+>&gwenview; memiliki beberapa fitur yang tersedia dalam dua tampilan Telusur, Tampilan, dan Layar Penuh. &gwenview; memiliki kemampuan untuk melakukan perubahan mendasar citra kamu.</para>
+<itemizedlist>
+<listitem
+><para
+>Rotasikan: Sebuah operasi rotasi akan merotasikan citra antara ke kiri atau ke kanan, bergantung pada apakah kamu melakukan <menuchoice
+> <shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>R</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Edit</guimenu
+> <guimenuitem
+>Rotasikan Kanan</guimenuitem
+> </menuchoice
+> atau <menuchoice
+> <shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>L</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Edit</guimenu
+> <guimenuitem
+>Rotasikan Kiri</guimenuitem
+> </menuchoice
+> </para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+> <guimenu
+>Edit</guimenu
+> <guimenuitem
+>Cermin</guimenuitem
+> </menuchoice
+>: Operasi ini akan mencerminkan citra sepanjang poros menegak, seolah-olah kamu melihatnya di cermin.</para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+> <guimenu
+>Edit</guimenu
+> <guimenuitem
+>Jungkir</guimenuitem
+> </menuchoice
+>: Operasi ini akan mencerminkan citra terbalik ke bawah (sebuah pencerminan sepanjang poros mendatar)</para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+> <shortcut
+> <keycombo action="simul"
+>&Shift;<keycap
+>R</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Edit</guimenu
+> <guimenuitem
+>Ubah ukuran</guimenuitem
+> </menuchoice
+>: Operasi ini akan memungkinkan kamu untuk menciutkan atau meluaskan citra. Catat itu jika kamu menambah ukuran citra, itu mungkin nampak buram dan/atau ter-pixelate.</para
+></listitem>
+ <!-- Crop + Red Eye Reduction are discussed in View mode sect-->
+</itemizedlist>
+
+<para
+>Aksi tersebut juga tersedia pada tab <guilabel
+>Operasi</guilabel
+> bilah sisi.</para>
+
+<para
+>Jika kamu telah mengedit citra satu atau lebih, sebuah bilah dengan aksi tambahan telah ditampilkan di bagian atas citra. Kamu dapat mengurungkan atau melanjurkan perubahan. Kamu, menuju ke citra yang dimodifikasi sebelumnya atau selanjutnya dan ada tiga pilihan untuk menyimpan perubahan citra. </para>
+
+<screenshot>
+  <screeninfo
+>Bilah tindakan untuk citra yang dimodifikasi</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="modified-bar.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<!--FIXME all actions also available context menus, where to add that info -->
+
+<tip
+><para
+>Jika kamu memiliki Plugin KIPI yang terinstal, sebuah menu <guimenu
+>Plugin</guimenu
+> akan tersedia yang akan memungkinkan kamu untuk melakukan banyak operasi tambahan pada citramu.</para
+></tip>
+</sect1>
+
+<sect1 id='browse_mode'
+><title
+>Mode Telusur</title>
+
+<para
+>Ketika di Mode Telusur, kamu bisa dengan mudah menavigasi file dan folder kamu. Jendela pratinjau menampilkan gambar-mini citra di folder saat ini, begitu juga subfolder. </para>
+
+<screenshot>
+  <screeninfo
+>Cuplikan Mode Telusur</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="browse_mode.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<para
+>Memindahkan mouse di atas citra menampilkan tombol untuk memilih atau memutar citra serta sebuah tombol untuk masuk ke Mode Layar Penuh. Citra yang dimodifikasi ditandai dengan sebuah ikon di kanan bawah, klik untuk menyimpan citra yang telah diubah. Mengeklik sebuah citra membawamu ke Mode Tampilan. Kamu dapat memilih beberapa citra dan beralih ke Mode Tampilan untuk menampilkan mereka berdampingan.</para>
+
+<para
+>Penggeser di kanan bawah memungkinkan kamu mengubah ukuran citra. Kamu juga bisa memfilter citra berdasarkan nama file, tanggal, tanda atau peringkat dengan menggunakan kotak di kiri bawah. Toolbar muncul di kedua mode Telusur dan juga mode Tampilan dan berisi aksi yang paling umum digunakan. </para>
+<itemizedlist>
+<listitem
+><para
+><guiicon
+>Halaman Awal</guiicon
+>: Buka halaman awal.</para
+></listitem>
+<listitem
+><para
+><guiicon
+>Telusur</guiicon
+>: Beralih ke Mode Telusur.</para
+></listitem>
+<listitem
+><para
+><guiicon
+>Tampilan</guiicon
+>: Beralih ke Mode Tampilan.</para
+></listitem>
+<listitem
+><para
+><guiicon
+>Layar Penuh</guiicon
+>: Beralih ke Mode Layar Penuh.</para
+></listitem>
+<listitem
+><para
+><guiicon
+>Sebelumnya</guiicon
+>: Mengeklik ikon ini akan menuju ke citra sebelumnya dalam folder.</para
+></listitem>
+
+<listitem
+><para
+><guiicon
+>Selanjutnya</guiicon
+>: Mengeklik tombol ini akan menuju ke citra selanjutnya dalam folder.</para
+></listitem>
+
+<listitem
+><para
+><guiicon
+>Rotasikan Kiri/Kanan</guiicon
+>: Sama seperti yang dibahas dalam Operasi Citra</para
+></listitem>
+
+<listitem
+><para
+><guiicon
+>Berbagi</guiicon
+>: Mengeklik tombol ini membuka sebuah menu ekspor untuk membagikan citramu melalui media sosial dan layanan koleksi citra. Fungsionalitas ini bergantung pada daftar dari plugin KIPI yang terinstal.</para
+></listitem>
+</itemizedlist>
+
+</sect1>
+
+<sect1 id='view_mode'
+><title
+>Mode Tampilan</title>
+<para
+>Mode Tampilan menampilkan citra ukuran penuh. Sama halnya <link linkend="sidebar"
+>sidebar</link
+> tersedia di Mode Telusur yang ditampilkan di sebelah kiri. Pada bagian bawah, ada Bilah Gambar-mini, yang memungkinkan kamu untuk menggulir melalui citra di folder saat ini. Bilah Gambar-mini bisa diminimalisir dengan mengeklik pada tombol <guibutton
+>Bilah Gambar-mini</guibutton
+>. Mengeklik lagi akan mengembalikan. Untuk mengubah ukuran gambar-mini pindahkan splitter dengan &LMB;.</para>
+
+<para
+>Mode Tampilan mendukung penampilan banyak citra secara berdampingan. Kamu bisa memilih beberapa citra di Mode Telusur sebelum beralih ke Mode Tampilan, atau mungkin juga klik tombol <guibutton
+>+</guibutton
+> yang muncul saat melayang di atas citra di Bilah Gambar-mini untuk menambahkan panel yang menampilkan citra tersebut. Sebuah <guibutton
+>-</guibutton
+> kemudian akan muncul yang akan mengizinka. Kamu untuk menghapus panelnya.</para>
+
+<para
+>Saat beberapa citra ditampilkan, bilah alat kecil muncul di bawah setiap citra yang memungkinkan kamu untuk menghapus citra atau menghapus panelnya. Kamu dapat melakukan operasi zoom secara terpisah untuk setiap citra, atau menyinkronkannya. Jungkitkan ini dengan mencentang <guilabel
+>Sinkronisasi</guilabel
+> sebelah kiri penggeser zoom atau dengan menekan tombol <keycombo action="simul"
+>&Ctrl;<keycap
+>Y</keycap
+></keycombo
+>. Kamu dapat beralih citra dengan mengeklik panelnya, atau menggunakan keyboard kamu. Untuk beralih ke citra sebelah kanan, tekan <keycombo action="simul"
+>&Tab;</keycombo
+>. Untuk beralih ke citra sebelah kiri, tekan <keycombo action="simul"
+>&Shift;&Tab;</keycombo
+>.</para>
+
+<screenshot>
+  <screeninfo
+>Cuplikan Mode Tampilan</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="view_mode.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<para
+>Penggeser di kanan bawah mengendalikan zoom citra. Tombol <guibutton
+>Pas</guibutton
+>, <guibutton
+>Ngisi</guibutton
+> dan <guibutton
+>100%</guibutton
+> berada di sebelah penggeser pembesaran dan tiga praset tingkat zoom. Tombol <guibutton
+>Pas</guibutton
+> mengezoomperbesarkan citra saat ini untuk mengepaskan ukuran citra pada window, tombol <guibutton
+>Ngisi</guibutton
+> mengezoomperbesarkan citra untuk mengisi window dengan mengepaskan atau meninggikan dan tombol <guibutton
+>100%</guibutton
+> mengezoomperbesarkan citra ke ukuran pixel sebenarnya. Pintasan <keycap
+>F</keycap
+> menjungkitkan antara mode <guibutton
+>Pas</guibutton
+> dan <guibutton
+>100%</guibutton
+>, menekan <keycombo action="simul"
+>&Shift;<keycap
+>F</keycap
+></keycombo
+> akan menjungkit <guibutton
+>Ngisi</guibutton
+> secara berturut-turut.</para>
+
+<para
+>Bila citra dalam mode zoom-ke-pas, kamu bisa menuju ke citra sebelumnya dan citra selanjutnya dengan tuts panah. Saat kamu mengezoom perbesar, tuts panah digunakan untuk menggulir citra. Ini sangat mirip dengan perilaku yang disediakan oleh ponsel atau kamera digital.</para>
+
+<para
+>Saat citra dizoom perbesar, tampilan mata-burung muncul dan memungkinkan kamu menggulir citra menggunakan mouse dan tuts panah. Tampilan mata-burung secara otomatis sembunyi sendiri setelah penundaan singkat, menampilkan kembali hanya saat memperbesar atau menggulir.</para>
+
+<para
+>Kamu bisa menentukan apa yang terjadi saat akan menuju ke citra B setelah melakukan zoom  pada area citra A dengan menggunakan pilihan dalam grup <guilabel
+>Mode zoom </guilabel
+> pada halaman <guimenuitem
+>Tampilan Citra</guimenuitem
+> pada window konfigurasi &gwenview; yang bisa dicapai menggunakan <menuchoice
+><guimenu
+>Pengaturan</guimenu
+><guimenuitem
+>Konfigurasikan &gwenview;...</guimenuitem
+></menuchoice
+>.</para>
+
+<itemizedlist>
+    <listitem
+><para
+>Jika diset ke <guilabel
+>Paskan otomatis setiap citra</guilabel
+>, citra B dizoom perkecil ke pas layar.</para
+></listitem>
+    <listitem
+><para
+>Jika diset ke <guilabel
+>Jaga posisi dan zoom yang sama</guilabel
+>, semua citra berbagi posisi dan zoom yang sama: citra B diset ke parameter zoom yang sama sebagai citra A (dan jika ini diubah, citra A akan ditampilkan dengan posisi dan zoom yang diperbarui).</para
+></listitem>
+    <listitem
+><para
+>Jika diset ke <guilabel
+>Posisi dan zoom tiap citra</guilabel
+>, semua citra ingat posisi dan zoom mereka sendiri: citra B pada awalnya diset ke parameter zoom yang sama sebagai citra A, namun kemudian akan mengingat posisi dan zoomnya sendiri (jika ini diubah, citra A <emphasis
+>tidak</emphasis
+> akan ditampilkan dengan posisi dan zoom yang diperbarui).</para
+></listitem>
+</itemizedlist>
+
+<tip
+><para
+>kamu bisa memulai secara langsung di mode Tampilan dengan memulai &gwenview; dari sebuah menu konteks seperti <guimenuitem
+>Buka Dengan</guimenuitem
+> dalam program lainnya atau dengan meluncurkannya dari baris perintah dengan sebuah citra sebagai argumen.</para
+> </tip>
+
+<para
+>Operasi citra tambahan berikut ini adalah hanya tersedia di Mode Tampilan:</para>
+
+<itemizedlist>
+<listitem
+><para
+><menuchoice
+> <shortcut
+> <keycombo action="simul"
+>&Shift;<keycap
+>C</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Edit</guimenu
+> <guimenuitem
+>Pangkas</guimenuitem
+> </menuchoice
+>: Operasi ini memungkinkan kamu membuang bagian citra yang tidak kamu inginkan. </para>
+<para
+>Kamu bisa mengakses parameter pemangkasan tingkat-lanjut dengan menutuli kotak centang <guilabel
+>Pengesetan tingkat-lanjut</guilabel
+> pada panel sembul bagian bawah. Menggunakan bidang yang sesuai untuk mengeset operasi pemangkasan. </para>
+<para
+>Hal ini juga memungkinkan untuk menyesuaikan area yang dipangkas dengan menyeret pegangan kotak abu-abu pada bingkai citra. Kamu bisa memindahkan area yang dipangkas dengan mengeklik dan menahan &LMB; dan menariknya dengan pointer mouse. </para>
+<para
+>Tekan tombol <guibutton
+>Pangkas</guibutton
+> untuk melihat hasilnya saat kamu siap. Gunakan panel sembul paling atas untuk menyimpan hasilnya atau operasi urungkan/lanjurkan. </para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+> <guimenu
+>Edit</guimenu
+> <guimenuitem
+>Reduksi Mata Merah</guimenuitem
+> </menuchoice
+>: Operasi ini mereduksi "mata merah" pengaruh yang umumnya ditemukan dalam pengambilan fotografi dengan kamera flash. </para
+></listitem>
+</itemizedlist>
+
+</sect1>
+
+<sect1 id='fullscreen_mode'>
+<title
+>Mode Layar Penuh</title>
+
+<para
+>Akses Layar Penuh dengan menekan tombol <guiicon
+>Layar Penuh</guiicon
+> pada bilah alat, atau dengan <menuchoice
+> <shortcut
+> <keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>F</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Tampilan</guimenu
+> <guimenuitem
+>Mode Layar Penuh</guimenuitem
+> </menuchoice
+>. </para>
+<para
+>Untuk meninggalkan mode ini tekan tombol &Esc;.</para>
+
+<sect2>
+<title
+>Layar Penuh Mode Telusur</title>
+
+<para
+>Di Mode Telusur kamu bisa beralih ke layar penuh juga dengan mengeklik tombol yang muncul saat kamu menggerakkan mouse ke gambar-mini. </para>
+<screenshot>
+  <screeninfo
+>Cuplikan Mode Tampilan Layar Penuh</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="fullscreen-browse.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para
+>Menuju ke layar penuh saat menjelajah memberikan kamu pengalaman yang lebih mendalam ketika kamu menuju menuju image kamu. Ini cukup bagus di komputer kamu biasanya, hal ini membuat lebih elok saat kamu mengkoneksikankan laptopmu ke TV besar di ruang tamu untuk menampilkan image kepada tamumu. </para>
+</sect2>
+
+<sect2>
+<title
+>Mode Tampilan Layar Penuh</title>
+<para
+>Mode Tampilan layar penuh menampilkan sebuah slideshow citra kamu. Akses Mode Layar Penuh dengan mengeklik pada tombol yang muncul saat kamu menggerakkan mouse di atas gambar-mini di Mode Telusur, dengan menekan tombol <guiicon
+>Layar Penuh</guiicon
+> pada taskbar. <screenshot>
+  <screeninfo
+>Cuplikan Mode Telusur Layar Penuh</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="fullscreen-view.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+</para>
+
+<para
+>Bagian atas bilah akan secara otomatis sembunyi sendiri; untuk menampilkannya hanya menggerakkan mouse ke bagian atas layar. Jika kursor mouse berada di atas bilah bagian atas, itu akan tersembunyi otomatis.  Sebagian besar tombol di bilah sama dengan yang ada di panel bilah alat dalam Mode Telusur atau Tampilan, kecuali untuk tombol <guiicon
+>Keluar Mode Layar Penuh</guiicon
+> yang membalikkan kamu ke  window &gwenview;,  tombol <guiicon
+>Jedakan/Lanjutkan Slideshow</guiicon
+>, dan tombol <guiicon
+>Konfigurasikan Mode Layar Penuh</guiicon
+> yang menampilkan dialog pengaturan kecil yang memungkinkan kamu untuk dengan mudah dan cepat mengkonfigurasi slideshow. Mengendalikan slideshow ada: </para>
+
+<itemizedlist>
+    <listitem
+><para
+>Penggeser <guilabel
+>Interval</guilabel
+> mengendalikan bagaimana &gwenview; akan menampilkan sebuah citra sebelum pindah ke selanjutnya.</para
+></listitem>
+    <listitem
+><para
+>Jika label <guilabel
+>Loop</guilabel
+> dicentang, saat pada akhir slideshow tercapai, itu akan berlanjut dari awal sebagai gantinya berhenti. </para
+></listitem>
+    <listitem
+><para
+>Jika kotak centang <guilabel
+>Random</guilabel
+> dicentang, sebagai gantinya progres melalui folder menurut abjad, citra akan ditampilkan secara acak.</para
+></listitem>
+    <listitem
+><para
+><guibutton
+>Pilih Informasi Citra untuk Ditayangkan</guibutton
+> membolehkan kamu untuk menemukan metadata apa yang ditampilkan di bawah tombol pada bilah alat. </para
+></listitem>
+    <listitem
+><para
+>Jika kotak centang <guilabel
+>Tampilkan gambar-mini</guilabel
+> dicentang, gambar-mini untuk semua citra yang ada di dalam folder saat ini akan ditampilkan di sebelah kanan bilah alat.</para
+></listitem>
+    <listitem
+><para
+>Penggeser <guilabel
+>Tinggi</guilabel
+> mengubah ukuran gambar-mini yang ditampilkan.</para
+></listitem>
+</itemizedlist>
+
+<para
+>Jika difungsikan, area yang menunjukkan kamu citra lain pada folder saat ini akan ditampilkan di bilah atas. Mengeklik salah satu akan menampilkannya.</para>
+</sect2>
+</sect1>
+
+<sect1 id="sidebar">
+<title
+>BilahSisi</title>
+
+ <para
+>BilahSisi di sebelah kiri telah tersedia dalam mode Telusur dan Tampilan, namun tidak muncul secara baku dalam Mode Telusur. Penampilannya bisa dijungkit pakai <menuchoice
+> <shortcut
+> <keycap
+>F4</keycap
+> </shortcut
+> <guimenu
+>Tampilan</guimenu
+> <guimenuitem
+>BilahSisi</guimenuitem
+> </menuchoice
+> atau menggunakan tombol <guiicon
+>▮←</guiicon
+> / <guiicon
+>▮→</guiicon
+> di sisi kiri bilah status. Ketika mengeklik itu menciutkan atau membentangkan bilah sisi. Bilah sisi berisi beberapa tab:</para>
+
+<variablelist>
+
+<varlistentry>
+<term
+><guilabel
+>Folder</guilabel
+></term>
+<listitem
+><para
+>Menayangkan daftar semua folder pada sistemmu yang memperkenankan kamu untuk beralih di antara keduanya. Dalam gambar-mini Mode Telusur dari folder akan ditampilkan, sedangkan dalam Mode Tampilan citra pertama di dalam folder akan muncul, dari mana kamu bisa menelusuri folder dengan menggunakan pintasan atau tombol  <guibutton
+>Sebelumnya</guibutton
+> dan <guibutton
+>Selanjutnya</guibutton 
+>. Pengeklikan pada folder beberapa kali menjungkitkan Mode Tampilan dan Mode Telusur.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Informasi</guilabel
+></term>
+<listitem
+><para
+>Menayangkan <guilabel
+>Informasi Meta</guilabel
+> seperti nama file dan ukuran. Tautan <guilabel
+>Selebihnya...</guilabel
+> memperkenankan kamu untuk menampilkan semua metadata yang tersedia dan memilih mana data yang muncul di bilah sisi.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Operasi</guilabel
+></term>
+<listitem
+><para
+>Ini memperkenankan kamu untuk melakukan <link linkend="image_operations"
+>operasi citra global yang diterangjelaskan sebelumnya</link
+> khususnya untuk Mode Tampilan. Yang juga memperkenankan pengoperasian file pada umumnya seperti menyalin, mengubah nama, menghapus, dan menciptakan folder baru.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+</sect1>
+
+</chapter>
+<chapter id="importer">
+<title
+>&gwenview; Importer</title>
+
+<sect1>
+<title
+>Pengenalan</title>
+<para
+>&gwenview; Importer memungkinkan kamu untuk mengimpor citra dari kamera digital atau media dapat-dilepas. Untuk meluncurkannya, pilih <guilabel
+>Unduh Foto dengan &gwenview;</guilabel
+> di dalam Notifikasi Perangkat &kde; seusai penyambungan sebuah perangkat yang didukung.</para>
+
+<para
+>Ketika kamu mencolokkan sebuah perangkat &gwenview; importer secara berturut-turut mendaftar semua citra dan video. </para>
+<para
+>Ini tidak selalu seperti apa yang kamu harapkan, &eg; mencolokkan sebuah ponsel smartphone yang kamu tidak ingin mendaftarkan semua media di perangkat; tapi hanya mengambil gambar kamu, yang biasanya dalam sebuah subfolder khusus. </para>
+
+<screenshot>
+  <screeninfo
+>Penukilan Folder Root</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="importer-picking-root-folder.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para
+>Dapat dimungkinkan untuk memilih folder root untuk mendaftar, dan &gwenview; Importer akan mengingat folder root yang terakhir untuk setiap perangkat. Dengan demikian, kemudian nanti saat kamu mencolokkan perangkat, hanya gambar dan video yang bersangkutan saja yang terdaftar. </para>
+
+<sect2>
+<title
+>Mengimpor Citra</title>
+
+<screenshot>
+  <screeninfo
+>&gwenview; Importer Cuplikan</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="importer.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<para
+>Jika kamu menginginkan, kamu dapat memilih citra yang kamu inginkan untuk diimpor melalui  <guilabel
+>Pilih dokumen untuk mengimpor</guilabel
+> dengan menekan tombol <guiicon
+>+</guiicon
+> yang muncul saat melayang melintasi citra. Kamu juga dapat memilih folder di mana citra yang telah diimpor ke dalam kotak teks di bagian bawah window. Ketika kamu sudah mantap, klik tombol <guibutton
+>Impor Terpilih</guibutton
+> untuk mengimpor citra-citra yang telah kamu pilih saja, atau klik <guibutton
+>Impor Semua</guibutton
+> untuk mengimpor semua citra yang ditemukan pada perangkat.</para>
+</sect2>
+
+<sect2>
+<title
+>Penamaan Otomatis</title>
+<para
+>&gwenview; Importer bisa menamai file-filemu menurut pola yang ditentukan. Untuk mengkonfigurasinya, pilih <guibutton
+>Pengaturan</guibutton
+> di pojok kiri bawah. Kamu dapat menyalakan atau mematikan fitur ini menggunakan kotak centang di bagian atas. <guilabel
+>Format Penamaan</guilabel
+> mendukung beberapa parameter khusus, yang akan digantikan dengan metadata sepertihalnya tanggal citra kapan diciptakan atau namafilenya. Yang terdaftar di bagian bawah kotak teks. Kamu dapat antara mengeklik pada nama parameter untuk memasukkannya ke dalam kotak teks atau mengetiknya secara manual.</para>
+</sect2>
+</sect1>
+
+</chapter>
+<chapter id="tips">
+<title
+>Tips</title>
+<sect1 id='mouse'
+><title
+>Penggunaan mouse</title>
+
+<sect2 id='mouse_panning'
+><title
+>Pendulangan dengan mouse</title>
+<itemizedlist>
+  <listitem
+><para
+>Menekan-tahan tombol kiri mouse pada sebuah citra memungkinkan kamu menggulir citra.</para
+></listitem>
+  <listitem
+><para
+>Roda mouse akan menggulir citra naik dan turun.</para
+></listitem>
+</itemizedlist>
+</sect2>
+
+
+<sect2 id='mouse_zooming'
+><title
+>Memperbesarkan pakai mouse</title>
+<itemizedlist>
+  <listitem
+><para
+>Mengeklik tombol mouse tengah akan menjungkit tombol zoom <guibutton
+>Pas</guibutton
+>. Menekan-tahan tuts &Shift; dan klik tengah untuk menjungkit tombol zoom <guibutton
+>Ngisi</guibutton
+>.</para
+></listitem>
+  <listitem
+><para
+>Tekan-tahan tuts &Ctrl;, kemudian gunakan antara roda mouse untuk mengezoom perbesar dan perkecil atau klik kiri untuk mengezoom perbesar dan klik kanan untuk mengezoom perkecil.</para
+></listitem>
+
+  <listitem
+><para
+>Roda mouse digunakan ketika menekan-tahan tombol &Alt;, akan menggulir citra secara mendatar.</para
+></listitem>
+</itemizedlist>
+</sect2>
+
+
+<sect2 id='mouse_browsing'
+><title
+>Jelajahi dengan mouse</title>
+<itemizedlist>
+  <listitem
+><para
+>Ketika dalam Mode Telusur, mengeklik sebuah citra mengalihkan ke dalam mode Tampilan dan menampilkan citra itu.</para
+></listitem>
+  <listitem
+><para
+>Ketika dalam Mode Telusur, menggulir roda mouse akan menggulir naik atau turun area tampilan gambar-mini.</para
+></listitem>
+  <listitem
+><para
+>Jika pilihan <guilabel
+>Perilaku roda mouse</guilabel
+> dalam <menuchoice
+><guimenu
+>Pengaturan</guimenu
+><guimenuitem
+>Konfigurasikan &gwenview;</guimenuitem
+></menuchoice
+> telah diset ke Telusur, pengguliran roda mouse ketika dalam Mode Tampilan akan memindahkan kamu menuju citra-citra yang ada di dalam folder.</para
+></listitem>
+</itemizedlist>
+</sect2>
+</sect1>
+
+<sect1 id="keybindings"
+> <title
+>Pengikat tuts</title>
+
+<para
+>&gwenview; dilengkapi dengan berbagai cara pintasan keyboard, yang kesemuanya bisa ditampilkan dan dipetakan ulang dengan memilih <menuchoice
+><guimenu
+>Pengaturan</guimenu
+><guimenuitem
+>Konfigurasikan Pintasan...</guimenuitem
+></menuchoice
+>. Perhatikan bahwa di window File dan Folder, semua pintasan normal &plasma; berfungsi, kecuali dipetakan ulang dalam keadaan lain.</para>
+
+<para
+>Beberapa pengikat baku yang paling berguna:</para>
+
+<itemizedlist>
+<listitem
+><para
+><keycap
+>Space</keycap
+>: Menayangkan citra selanjutnya di dalam direktori.</para
+></listitem>
+
+<listitem
+><para
+>&Backspace;: Menayangkan citra sebelumnya di dalam direktori.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Alt;<keycap
+>Up</keycap
+></keycombo
+>: Perpindahan ke folder induk dari folder saat ini.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>F</keycap
+></keycombo
+>: Peralihan ke dalam Mode Layar Penuh.</para
+></listitem>
+
+<listitem
+><para
+>&Esc;: Peralihan kembali ke Mode Telusur. </para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>M</keycap
+></keycombo
+>: Tampilkan atau menyembunyikan bilah menu.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>B</keycap
+></keycombo
+>: Tampilkan atau menyembunyikan bilah Gambar-mini.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F4</keycap
+>: Tampilkan atau menyembunyikan BilahSisi.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F6</keycap
+>: Buat bilah Lokasi dapat diedit sehingga kamu bisa langsung ketik di alur file . Kamu bisa kembali ke Bilah Lokasi standar dengan menekan panah di sebelah kanan.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>R</keycap
+></keycombo
+>: Rotasikan citra saat ini ke kanan.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>L</keycap
+></keycombo
+>: Rotasikan citra saat ini ke kiri.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Shift;<keycap
+>R</keycap
+></keycombo
+>: Mengubah ukuran citra saat ini.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Shift;<keycap
+>C</keycap
+></keycombo
+>: Memangkas citra saat ini.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>Y</keycap
+></keycombo
+>: Ketika beberapa citra ditampilkan dalam Mode Tampilan, ini menyinkronkan tampilan mereka. </para
+></listitem>
+<!--FIXME not in kf5
+<listitem
+><para
+><keycombo action="simul"
+>&Tab;</keycombo
+>:
+When multiple images are displayed in View Mode, this switched to the image to
+the right of the currently selected image.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Shift;&Tab;</keycombo
+>:
+When multiple images are displayed in View Mode, this switched to the image to
+the left of the currently selected image.</para
+></listitem>
+-->
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>S</keycap
+></keycombo
+>: Menyimpan perubahan apa pun yang dibuat ke citra.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>Del</keycap
+>: Memindah citra saat ini ke sesampahan.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Shift;<keycap
+>Del</keycap
+></keycombo
+>: Menghapus citra dari disk secara permanen. Perhatikan bahwa operasi ini tidak dapat diubah dan tidak dapat di-undo.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>P</keycap
+></keycombo
+>: Mencetak citra saat ini.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>O</keycap
+></keycombo
+>: Membuka sebuah citra menggunakan dialog pemilihan file standar.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F</keycap
+>: Menekan pintasan ini menjungkit zoom-ke-pas nyala dan mati.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>P</keycap
+>: Menampilkan sebuah video, pintasan ini menjungkit on/off pemutaran.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>T</keycap
+></keycombo
+>: Mengedit tag-tag.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F2</keycap
+>: Mengubah nama sebuah citra dalam baris.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>Del</keycap
+>: Memindah sebuah citra ke sesampahan.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Shift;<keycap
+>Del</keycap
+></keycombo
+>: Menghapus sebuah citra.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>F7</keycap
+></keycombo
+>: Menyalin sebuah citra.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>F8</keycap
+></keycombo
+>: Memindah sebuah citra.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>F9</keycap
+></keycombo
+>: Menautkan sebuah citra.</para
+></listitem>
+
+</itemizedlist>
+
+</sect1>
+</chapter>
+
+<chapter id="configure">
+    <title
+>Mengkonfigurasi &gwenview;</title>
+    <sect1 id="configindex">
+        <title
+>Konfigurasi ikhisar</title>
+        <para
+>Kamu bisa mengkonfigurasi &gwenview; dengan memilih <menuchoice
+><guimenu
+>Pengaturan</guimenu
+> <guimenuitem
+>Konfigurasikan &gwenview;...</guimenuitem
+></menuchoice
+>. Dialog konfigurasi yang terbelah ke dalam tiga bagian. Bab ini menjelaskan opsi yang tersedia di dalam perincian. </para>
+        <itemizedlist>
+            <listitem>
+                <para
+><link linkend="configgeneral"
+>Umum</link
+></para>
+            </listitem>
+            <listitem>
+                <para
+><link linkend="configview"
+>Tampilan Citra</link
+></para>
+            </listitem>
+            <listitem>
+                <para
+><link linkend="configadvanced"
+>Tingkat-lanjut</link
+></para>
+            </listitem>
+        </itemizedlist>
+    </sect1>
+    <sect1 id="configgeneral">
+        <title
+>Umum</title>
+        <variablelist>
+            <varlistentry>
+                <term
+><guilabel
+>Video</guilabel
+></term>
+                <listitem>
+                    <para
+>Centang kotakcentang <guilabel
+>Tampilkan video</guilabel
+> untuk membolehkan &gwenview; menampilkan video di antara citra.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Warna latarbelakang</guilabel
+></term>
+                <listitem>
+                    <para
+>Gerakkan penggeser untuk mengubah warna pada latarbelakang abu di dalam mode Telusur dan Tampilan dari hitam (posisi paling kiri) ke putih (posisi paling kanan).</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Kualitas penyimpanan JPEG</guilabel
+></term>
+                <listitem>
+                    <para
+>Pengaturan kualitas penyimpanan/kompresi JPEG, yang bisa ditimpa secara temporer di dalam dialog <guilabel
+>Simpan Sebagai</guilabel
+> ketika menyimpan file sebagai JPEG. Ketika menyimpan file JPEG yang ada dengan nama baru atau setelah melakukan pengeditan yang tidak hilang (&eg; perotasian, yang hanya mengubah tag rotasi EXIF), penampilan file tidak berubah karena tidak ada manipulasi citra yang sebenarnya dilakukan.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Aksi gambar-mini</guilabel
+></term>
+                <listitem>
+                    <para
+>Apakah tombol aksi gambar-mini harus ditampilkan sewaktu melayang di atas citra gambar-mini.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Semua tombol</guilabel
+> &mdash; Tampilkan semua tombol</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Tampilkan tombol pemilihan saja</guilabel
+> &mdash; Tampilkan tombol pilih/takpilih saja</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Nihil</guilabel
+> &mdash; Jangan menampilkan tombol gambar-mini apa pun</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </sect1>
+        <sect1 id="configview">
+        <title
+>Tampilan Citra</title>
+        <variablelist>
+            <varlistentry>
+                <term
+><guilabel
+>Tampilkan transparansi dengan</guilabel
+></term>
+                <listitem>
+                    <para
+>Memilih bagaimana latarbelakang ber-raster transparensi atau citra <abbrev
+>SVG</abbrev
+> yang telah dirender.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Latarbelakang sekitarnya</guilabel
+> &mdash; Gunakan warna latarbelakang dari <link linkend="configgeneral"
+>Halaman Umum</link
+>.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Latarbelakang papancatur</guilabel
+> &mdash; Gunakan latarbelakang papancatur tradisional.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Latarbelakang warna terpadu</guilabel
+> &mdash; Gunakan warna yang bisa dipilih menggunakan <ulink url="help:/fundamentals/colors.html"
+>pemilih warna</ulink
+>.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Perilaku roda mouse</guilabel
+></term>
+                <listitem>
+                    <para
+>Pilih bagaimana menggulir melintasi sebuah citra di dalam perilakuan mode Tampilan.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Gulir</guilabel
+> &mdash; Ketika dizoom perbesar, dulang citra secara menegak. Selain itu, tidak terjadi apa-apa.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Telusur</guilabel
+> &mdash; Beralih ke citra selanjutnya atau sebelumnya.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Zoom </guilabel
+> &mdash; Gunakan roda mouse untuk mengezoom perbesar/perkecil citra saat ini.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Mode zoom </guilabel
+></term>
+                <listitem>
+                    <para
+>Memungkinkan memilih bagaimana pengezooman dalam rangka mode Tampilan.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>AutoPas setiap citra</guilabel
+> &mdash; Secara otomatis mengubah ukuran citra ke panel tampilan.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Jaga posisi dan zoom yang sama</guilabel
+> &mdash; Gunakan tingkat zoom yang sama untuk semua citra.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Posisi dan zoom tiap citra</guilabel
+> &mdash; Gunakan tingkat zoom individu untuk setiap citra.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Besarkan citra yang lebih kecil</guilabel
+> &mdash; Centang item ini untuk membuat &gwenview; membesarkan citra yang lebih kecil di dalam mode Tampilan.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Animasi</guilabel
+></term>
+                <listitem>
+                    <para
+>Memperbolehkan pemilihan bagaimana pelesapan antarcitra yang dilakukan dalam mode Tampilan.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>OpenGL</guilabel
+> &mdash; Gunakan animasi terakselerasi hardware.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Software</guilabel
+> &mdash; Jangan guanakan animasi terakselerasi hardware. Pilih opsi ini jika <guilabel
+>OpenGL</guilabel
+> tidak bekerja secara memuaskan, tetapi kamu tetap menginginkan lesapan antarcitra.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Nihil</guilabel
+> &mdash; Jangan gunakan animasi ketika beralih atarcitra.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Bilah Gambar-mini</guilabel
+></term>
+                <listitem>
+                    <para
+>Memperbolehkan pengkonfigurasian bilah gambar-mini.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Orientasi</guilabel
+></para>
+                            <itemizedlist>
+                                <listitem>
+                                    <para
+><guilabel
+>Mendatar</guilabel
+> &mdash; Tampilkan sebuah lajur gambar-mini mendatar di bagian bawah citra.</para>
+                                </listitem>
+                                <listitem>
+                                    <para
+><guilabel
+>Tegak</guilabel
+> &mdash; Tampilkan sebuah lajur gambar-mini menegak di sebelah kanan citra.</para>
+                                </listitem>
+                            </itemizedlist>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Jumlah baris</guilabel
+> &mdash; Gunakan kotak putar untuk mengubah jumlah baris pada bilah gambar-mini.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </sect1>
+        <sect1 id="configadvanced">
+        <title
+>Tingkat-lanjut</title>
+        <variablelist>
+            <varlistentry>
+                <term
+><guilabel
+>Cache</guilabel
+></term>
+                <listitem>
+                    <para
+>Fungsikan opsi <guilabel
+>Mode penggunaan sumberdaya rendah</guilabel
+> jika tidak memiliki banyak ruang disk. Ini akan menghindari menyimpan gambar-mini pada disk dan lebih suka gambar-mini yang disematkan dengan kualitas lebih rendah yang lebih cepat dimuat, jika tersedia.</para>
+                    <para
+>Hati-hati: Ini akan menghapus folder yang bernama <filename
+>thumbnails</filename
+> di dalam folder <filename
+>.cache</filename
+>-mu, menghapus semua gambar-mini yang dihasilkan sebelumnya oleh &gwenview; dan aplikasi lainnya.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Histori</guilabel
+></term>
+                <listitem>
+                    <para
+>Centang <guilabel
+>Ingat folder dan URL</guilabel
+> untuk membuat &gwenview; mengingat folder dan &URL; yang dikunjungi dan menampilkannya pada panel <guilabel
+>Folder Baru-baru ini</guilabel
+>.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Rendering intent</guilabel
+></term>
+                <listitem>
+                    <para
+>Memperbolehkan memilih <ulink url="https://en.wikipedia.org/wiki/Color_management#Rendering_intent"
+>rendering intent</ulink
+> untuk menampilkan citra.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Persepsi</guilabel
+> &mdash; Skala semua warna sama agar pas dengan mereka dalam gamut warna profil warna yang aktif</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Perwarnaan Relatif</guilabel
+> &mdash; warna labu yang tidak pas dalam gamut warna profil warna yang aktif, biarkan warna lain tak tersentuh</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </sect1>
+    <sect1 id="hidden-configuration">
+    <title
+>Sembunyikan Opsi Konfigurasi</title>
+    <para
+>Beberapa catatan pada pilihan &gwenview; tersembunyi bisa ditemukan pada <ulink url="http://userbase.kde.org/Special:myLanguage/Gwenview/Hidden_Configuration_Options"
+>halaman ini</ulink
+>. </para>
+    <important>
+        <para
+>Opsi ini diterangjelaskan pada halaman yang disebutkan di atas mungkin membantu kamu mengeset &gwenview; untuk keperluan khusus, tapi tolong diingat tidak ada garansi, mereka akan terus bekerja dari satu versi ke versi yang lain. </para>
+    </important>
+    </sect1>
+</chapter>
+
+<chapter id="credits">
+<title
+>Kredit dan Hak Cipta</title>
+
+<para
+>&gwenview; saat ini dipelihara oleh Aurélien Gâteau</para>
+
+<para
+>Dokumen ini ditulis oleh Christopher Martin</para>
+
+<para
+>Dokumen ini telah diperbarui untuk &kde; 4 oleh Henry de Valence</para>
+
+<para
+>Wantoyo<email
+>wantoyek@gmail.com</email
+></para
+> &underFDL; &underGPL; </chapter>
+
+</book>

@@ -1,0 +1,1117 @@
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN"
+"dtd/kdedbx45.dtd" [
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % Portuguese "INCLUDE"
+><!-- change language only here -->
+]>
+
+<book id="gwenview" lang="&language;">
+<title
+>Manual de Utilizador do Gwenview</title>
+
+<bookinfo>
+<authorgroup>
+<author
+><firstname
+>Aurélien</firstname
+> <surname
+>Gâteau</surname
+> <affiliation
+><address
+><email
+>agateau@kde.org</email
+></address
+></affiliation>
+</author>
+<author
+><firstname
+>Christopher</firstname
+><surname
+>Martin</surname
+> <affiliation
+><address
+><email
+>chrsmrtn@freeshell.org</email
+></address
+></affiliation>
+</author>
+<author
+><firstname
+>Henry</firstname
+> <surname
+>de Valence</surname
+> <affiliation
+><address
+><email
+>hdevalence@gmail.com</email
+></address
+></affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Pedro</firstname
+><surname
+>Morais</surname
+><affiliation
+><address
+><email
+>morais@kde.org</email
+></address
+></affiliation
+><contrib
+>Tradução</contrib
+></othercredit
+> 
+</authorgroup>
+<copyright>
+<year
+>2005</year>
+<holder
+>Aurélien Gâteau</holder>
+</copyright>
+<copyright>
+<year
+>2008</year>
+<holder
+>Henry de Valence</holder>
+</copyright>
+<legalnotice
+>&FDLNotice;</legalnotice>
+
+<date
+>2015-08-04</date>
+<releaseinfo
+>Aplicações 15.08</releaseinfo>
+<abstract>
+<para
+>O &gwenview; é um visualizador de imagens e vídeos.</para>
+</abstract>
+<keywordset>
+<keyword
+>KDE</keyword>
+<keyword
+>imagem</keyword>
+<keyword
+>visualizador</keyword>
+<keyword
+>artista</keyword>
+<keyword
+>fotografia</keyword>
+<keyword
+>imagem</keyword>
+</keywordset>
+</bookinfo>
+<!--FIXME Read devels blog on http://agateau.com/
+-->
+<chapter id="introduction">
+<title
+>Introdução</title>
+
+<sect1 id="what-is-gwenview">
+<title
+>O que é o &gwenview;</title>
+
+<para
+>O &gwenview; é um visualizador de imagens e vídeos rápido e simples de usar. </para>
+
+ <para
+>O &gwenview; tem como característicos dois modos principais: Navegação e Visualização.  Ambos os modos funcionam como uma janela de aplicação normal ou em todo o ecrã. O Modo de Navegação permite-lhe navegar pelo seu computador, apresentando miniaturas das suas imagens. O Modo de Visualização permite-lhe ver as imagens, uma de cada vez. Existe também um ecrã inicial que lhe mostra uma lista das pastas e &URL;'s recentes, assim como os seus locais e marcas. </para>
+
+<para
+>O carregamento das imagens é feito pela biblioteca do &Qt;, pelo que o &gwenview; suporta todos os formatos de imagens que a sua instalação do &Qt; suporta. O &gwenview; mostra correctamente as imagens com um canal 'alpha' (transparência), assim como as animações.</para>
+
+<para
+>O &gwenview; suporta a visualização e edição de comentários de EXIF nas imagens JPEG. As transformações de JPEG sem perdas também são suportadas.</para>
+
+<para
+>O &gwenview; consegue ler os perfis de cores incorporados nos ficheiros JPEG e PNG. Pode usar o perfil de cores da imagem em conjunto com o perfil de visualização para corrigir as cores resultantes no ecrã.</para>
+</sect1>
+
+</chapter>
+
+<chapter id="interface">
+<title
+>A interface</title>
+
+<sect1 id='start_page'
+><title
+>Página Inicial</title>
+<para
+>A página inicial apresenta as pastas e &URL;'s abertos recentemente do lado esquerdo e os seus locais e marcas do lado direito.</para>
+
+<screenshot>
+  <screeninfo
+>Imagem da Página Inicial</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="start-page.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+</sect1>
+
+<sect1 id='image_operations'
+><title
+>Operações na Imagem</title>
+<para
+>O &gwenview; tem algumas funcionalidades que estão disponíveis para os modos de Navegação, Visualização e Ecrã Completo. O &gwenview; tem a capacidade de fazer algumas alterações básicas sobre as suas imagens.</para>
+<itemizedlist>
+<listitem
+><para
+>Rodar: Uma operação de rotação irá rodar a imagem tanto para a esquerda como para a direita, dependendo se fizer <menuchoice
+> <shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>R</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Editar</guimenu
+> <guimenuitem
+>Rodar à Direita</guimenuitem
+> </menuchoice
+> ou <menuchoice
+> <shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>L</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Editar</guimenu
+> <guimenuitem
+>Rodar à Esquerda</guimenuitem
+> </menuchoice
+> </para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+> <guimenu
+>Editar</guimenu
+> <guimenuitem
+>Espelho</guimenuitem
+> </menuchoice
+>: Esta operação irá reflectir a imagem em torno do eixo vertical, como se a visse num espelho.</para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+> <guimenu
+>Editar</guimenu
+> <guimenuitem
+>Inverter</guimenuitem
+> </menuchoice
+>: Esta operação irá reflectir a imagem de baixo para cima (um reflexão em torno do eixo horizontal)</para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+>  <shortcut
+> <keycombo action="simul"
+>&Shift;<keycap
+>R</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Editar</guimenu
+> <guimenuitem
+>Dimensionar</guimenuitem
+> </menuchoice
+>: Esta operação permitir-lhe-á encolher ou expandir a imagem. Lembre-se que, se aumentar o tamanho de uma imagem, poderá aparecer um pouco borrada ou quadriculada.</para
+></listitem>
+ <!-- Crop + Red Eye Reduction are discussed in View mode sect-->
+</itemizedlist>
+
+<para
+>Estas acções também estão disponíveis na página de <guilabel
+>Operações</guilabel
+> da barra lateral.</para>
+
+<para
+>Se tiver editado uma ou mais imagens, será apresentada uma barra com acções adicionais no topo da imagem. Poderá desfazer ou refazer as suas alterações; vá para a imagem modificada anterior ou seguinte, onde terá três opções para gravar as imagens alteradas. </para>
+
+<screenshot>
+  <screeninfo
+>Barra de acções para as imagens modificadas</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="modified-bar.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<!--FIXME all actions also available context menus, where to add that info -->
+
+<tip
+><para
+>Se tiver instalado os 'plugins' do Kipi, ficará disponível um menu <guimenu
+>'Plugins'</guimenu
+> que lhe permitirá efectuar muitas operações adicionais sobre as suas imagens. Para mais informações, veja a <ulink url="help:/kipi-plugins"
+>documentação dos 'plugins' do Kipi</ulink
+>.</para
+></tip>
+</sect1>
+
+<sect1 id='browse_mode'
+><title
+>Modo de Navegação</title>
+
+<para
+>Neste modo, poderá navegar facilmente pelos seus ficheiros e pastas. A janela de antevisão mostra miniaturas das imagens na pasta actual, assim como nas sub-pastas. </para>
+
+<screenshot>
+  <screeninfo
+>Imagem do Modo de Navegação</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="browse_mode.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<para
+>Se passar o rato sobre uma imagem, irão aparecer botões para seleccionar ou rodar a imagem, assim como um botão para entrar no modo de ecrã completo. As imagens modificadas têm como indicador um ícone em baixo e à direita. Se carregar numa imagem, irá entrar no modo de visualização. Poderá seleccionar várias imagens e mudar para o modo de visualização, de modo a vê-las lado-a-lado.</para>
+
+<para
+>A barra do lado inferior direito permite-lhe alterar o tamanho das imagens. Poderá também filtrar as imagens pelo nome do ficheiro, pela data, classificação ou marcas, usando o campo na parte inferior esquerda. A barra de ferramentas (à esquerda) aparece tanto no modo de Navegação como de Visualização e contém as acções mais comuns. </para>
+<itemizedlist>
+<listitem
+><para
+><guiicon
+>Página Inicial</guiicon
+>: Abre a página inicial.</para
+></listitem>
+<listitem
+><para
+><guiicon
+>Navegar</guiicon
+>: Muda para o Modo de Navegação.</para
+></listitem>
+<listitem
+><para
+><guiicon
+>Ver</guiicon
+>: Muda para o Modo de Visualização.</para
+></listitem>
+<listitem
+><para
+><guiicon
+>Ecrã Completo</guiicon
+>: Muda para o modo de Ecrã Completo.</para
+></listitem>
+<listitem
+><para
+><guiicon
+>Anterior</guiicon
+>: Se carregar neste ícone, irá para a imagem anterior na pasta.</para
+></listitem>
+
+<listitem
+><para
+><guiicon
+>Seguinte</guiicon
+>: Se carregar neste ícone, irá para a imagem seguinte na pasta.</para
+></listitem>
+
+<listitem
+><para
+>Rodar à Esquerda/Direita: O mesmo que foi discutido nas Operações da Imagem</para
+></listitem>
+<!--FIXME missing Share -->
+</itemizedlist>
+
+</sect1>
+
+<sect1 id='view_mode'
+><title
+>Modo de Visualização</title>
+<para
+>O Modo de Visualização apresenta uma imagem de cada vez. A mesma <link linkend="sidebar"
+>barra lateral</link
+> que aparece no modo de navegação também aparece aqui à esquerda No fundo, existe a Barra de Miniaturas, que lhe permite percorrer as imagens na pasta actual. A Barra de Miniaturas pode ser minimizada, se carregar no botão de minimização respectivo. Se carregar mais uma vez, irá repor a barra no seu estado original. Para mudar o tamanho das miniaturas, mova a divisória com o &LMB;.</para>
+
+<para
+>O modo de visualização permite ver várias imagens lado-a-lado. Poderá seleccionar várias imagens no modo de navegação antes de mudar para o modo de visualização, ou poderá ainda carregar no botão <guibutton
+>+</guibutton
+> que aparece quando passar o rato sobre as imagens da barra de miniaturas para adicionar uma nova área que mostra essa imagem. Irá aparecer então um <guibutton
+>-</guibutton
+> que lhe permitirá remover a sua área.</para>
+
+<para
+>Quando estiverem várias imagens seleccionadas, irá aparecer uma pequena barra de ferramentas por baixo de cada imagem, a qual lhe permite apagar a imagem ou remover a sua área respectiva. Poderá efectuar operações de ampliação independentes entre cada imagem ou ainda sincronizá-las. Active ou desactive isto ao carregar em <guilabel
+>Sincronizar</guilabel
+> à esquerda da barra de ampliação ou ao carregar em <keycombo action="simul"
+>&Ctrl;<keycap
+>Y</keycap
+></keycombo
+>. Poderá mudar de imagens, carregando para tal na sua área respectiva ou usando o seu teclado. Para mudar para a imagem à direita, carregue em <keycombo action="simul"
+>&Tab;</keycombo
+>. Para mudar para a imagem à esquerda, carregue em <keycombo action="simul"
+>&Shift;&Tab;</keycombo
+>.</para>
+
+<screenshot>
+  <screeninfo
+>Imagem do Modo de Visualização</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="view_mode.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<para
+>A barra no canto inferior esquerdo controla a ampliação da imagem. Os botões <guiicon
+>Ajustar</guiicon
+> e <guiicon
+>100%</guiicon
+> encontram-se a seguir à barra de ampliação e são dois níveis predefinidos. O botão <guiicon
+>Ajustar</guiicon
+> amplia a imagem actual para caber no tamanho da janela, enquanto o botão <guiicon
+>100%</guiicon
+> amplia a imagem para o tamanho actual dos pixels. O atalho <keycap
+>F</keycap
+> alterna entre ambos os modos de visualização.</para>
+
+<para
+>Quando uma imagem está no modo de ampliação para caber, poderá ir para a imagem anterior ou seguinte com as teclas de cursores. Quando ampliar, as teclas de cursor são usadas para se deslocar na imagem. Isto é muito semelhante ao comportamento oferecido pelos telefones e câmaras digitais.</para>
+
+<para
+>Quando uma imagem está ampliada, aparece uma visão geral que lhe permite deslocar a imagem com o rato e as teclas de cursores. A visão geral esconde-se automaticamente ao fim de algum tempo, voltando a aparecer apenas ao ampliar ou ao deslocar-se.</para>
+
+<para
+>Pode definir o que acontece quando for para a imagem B, após ter ampliado uma área da imagem A, usando as opções do grupo <guilabel
+>Modo de ampliação</guilabel
+> na página da <guimenuitem
+>Vista da Imagem</guimenuitem
+> da janela de configuração do &gwenview;, à qual poderá aceder com a opção <menuchoice
+><guimenu
+>Configuração</guimenu
+><guimenuitem
+>Configurar o &gwenview;...</guimenuitem
+></menuchoice
+>.</para>
+
+<itemizedlist>
+    <listitem
+><para
+>Se estiver como <guilabel
+>Auto-ajustar cada imagem</guilabel
+>, a imagem B é reduzida para caber no ecrã.</para
+></listitem>
+    <listitem
+><para
+>Se estiver configurada como <guilabel
+>Manter a mesma ampliação e posição</guilabel
+>, todas as imagens partilham a mesma ampliação e posição: a imagem B fica com os mesmos parâmetros de ampliação que a imagem A (e se estes forem alterados, a imagem A será apresentada com a ampliação e posição actualizadas).</para
+></listitem>
+    <listitem
+><para
+>Se estiver configurado como <guilabel
+>Ampliação e posição por imagem</guilabel
+>, todas as imagens irão recordar a sua própria ampliação e posição: a imagem B fica inicialmente configurada com os mesmos parâmetros de ampliação que a imagem A, mas irá depois recordar a sua própria ampliação e posição (se estas forem alteradas, a imagem A <emphasis
+>não</emphasis
+> será apresentada com a ampliação e posição actualizadas).</para
+></listitem>
+</itemizedlist>
+
+<tip
+><para
+>Poderá iniciar directamente no modo de Visualização se iniciar o &gwenview; com uma imagem como argumento ou através da opção de um menu de contexto para <guimenuitem
+>Abrir Com</guimenuitem
+> ou invocando-o a partir da linha de comandos como argumento.</para
+> </tip>
+
+<para
+>As seguintes operações adicionais com as imagens estão disponíveis apenas no modo de visualização:</para>
+
+<itemizedlist>
+<listitem
+><para
+><menuchoice
+> <shortcut
+> <keycombo action="simul"
+>&Shift;<keycap
+>C</keycap
+></keycombo
+> </shortcut
+>  <guimenu
+>Editar</guimenu
+> <guimenuitem
+>Recortar</guimenuitem
+> </menuchoice
+>: Esta operação permite-lhe retirar partes da imagem que não deseje. </para>
+<para
+>Poderá aceder aos parâmetros avançados de recorte se assinalar a opção <guilabel
+>Definições avançadas</guilabel
+> na parte inferior da janela. Use os campos correspondentes para ajustar a operação de recorte. </para>
+<para
+>Também é possível ajustar a área recortada, arrastando as pegas em quadrados cinzentos nos extremos da imagem. Poderá mover a área recortada se carregar e mantiver carregado o &LMB;, arrastando-o com o cursor do rato. </para>
+<para
+>Carregue no botão <guibutton
+>Recortar</guibutton
+> para ver os resultados quando estiver pronto. Use a área superior para gravar os resultados ou desfazer/refazer a operação. </para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+> <guimenu
+>Editar</guimenu
+> <guimenuitem
+>Redução de Olhos Vermelhos</guimenuitem
+> </menuchoice
+>: Esta operação irá reduzir o efeito de "olhos vermelhos" que aparece normalmente nas fotografias tiradas com 'flash'. </para
+></listitem>
+</itemizedlist>
+
+</sect1>
+
+<sect1 id='fullscreen_mode'>
+<title
+>Modos de Ecrã Completo</title>
+
+<para
+>Aceda ao Ecrã Completo se carregar no botão <guiicon
+>Ecrã Completo</guiicon
+> da barra de tarefas ou então se escolher a opção <menuchoice
+> <shortcut
+> <keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>F</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Ver</guimenu
+> <guimenuitem
+>Modo de Ecrã Completo</guimenuitem
+> </menuchoice
+>. </para>
+<para
+>Para deixar este modo, carregue na tecla &Esc;.</para>
+
+<sect2>
+<title
+>Modo de Navegação em Todo o Ecrã</title>
+
+<para
+>No Modo de Navegação, também poderá mudar para o ecrã completo se carregar no botão que aparece quando passa o rato sobre as miniaturas. </para>
+<screenshot>
+  <screeninfo
+>Imagem do Modo de Visualização em Todo o Ecrã</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="fullscreen-browse.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para
+>Se passar para o ecrã completo enquanto navega, ficará com uma experiência melhorada de envolvência enquanto percorre as suas imagens. É bastante bom no seu computador normal, mas ainda faz mais sentido se ligar o seu portátil à sua TV grande na sala de estar para mostrar fotografias aos seus convidados. </para>
+</sect2>
+
+<sect2>
+<title
+>Modo de Visualização em Todo o Ecrã</title>
+<para
+>O Modo de Ecrã Completo mostra uma apresentação das suas imagens. Poderá aceder ao Modo de Ecrã Completo se carregar no botão que aparece sempre que move o rato por cima das miniaturas, no caso do Modo de Navegação, ao carregar no botão <guiicon
+>Ecrã Completo</guiicon
+> da barra de tarefas. <screenshot>
+  <screeninfo
+>Imagem do Modo de Navegação em Todo o Ecrã</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="fullscreen-view.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+</para>
+
+<para
+>A barra de topo esconder-se-á automaticamente; para a mostrar, basta mover o rato para o topo do ecrã. Se o cursor do rato ficar por cima da barra de topo, esta não se irá esconder automaticamente. A maioria dos botões da barra são os mesmos da barra de ferramentas nos modos de Navegação ou Visualização, exceptuando o botão <guiicon
+>Sair do Modo de Ecrã Completo</guiicon
+>, o qual o leva de volta para a janela principal do &gwenview;, o botão <guiicon
+>Iniciar/Parar a Apresentação</guiicon
+> e o botão <guiicon
+>Configurar o Modo de Ecrã Completo</guiicon
+>, o qual mostra uma pequena janela de configuração que lhe permite configurar fácil e rapidamente a apresentação. Os controlos da apresentação aí existentes são: </para>
+
+<itemizedlist>
+    <listitem
+><para
+>A barra do <guilabel
+>Intervalo</guilabel
+> controla o período de tempo em que o &gwenview; irá mostrar uma imagem, antes de passar para a seguinte.</para
+></listitem>
+    <listitem
+><para
+>Se a opção <guilabel
+>Ciclo</guilabel
+> estiver assinalada e quando chegar o fim da apresentação, esta irá continuar do início em vez de terminar. </para
+></listitem>
+    <listitem
+><para
+>Se a opção <guilabel
+>Aleatório</guilabel
+> estiver assinalada, em vez de prosseguir na pasta por ordem alfabética, as imagens irão aparecer de forma aleatória.</para
+></listitem>
+    <listitem
+><para
+>A opção <guibutton
+>Seleccionar as Informações da Imagem a Apresentar</guibutton
+> permite-lhe definir os meta-dados que são apresentados por baixo dos botões da barra de ferramentas. </para
+></listitem>
+    <listitem
+><para
+>Se a opção <guilabel
+>Mostrar as miniaturas</guilabel
+> estiver assinalada, serão apresentadas as miniaturas de todas as imagens à direita da barra de ferramentas.</para
+></listitem>
+    <listitem
+><para
+>A barra da <guilabel
+>Altura</guilabel
+> muda o tamanho das miniaturas apresentadas.</para
+></listitem>
+</itemizedlist>
+
+<para
+>Do mesmo modo, na barra de topo existe uma área que lhe mostra as outras imagens na pasta actual. Se carregar numa, podê-la-á observar.</para>
+</sect2>
+</sect1>
+
+<sect1 id="sidebar">
+<title
+>Barra lateral</title>
+
+ <para
+>A barra lateral à esquerda está disponível nos modos de navegação e visualização, mas não aparece por omissão no modo de navegação. A sua visibilidade poderá ser activada ou desactivada com a opção <menuchoice
+> <shortcut
+> <keycap
+>F4</keycap
+> </shortcut
+> <guimenu
+>Ver</guimenu
+> <guimenuitem
+>Barra Lateral</guimenuitem
+> </menuchoice
+> ou usando os botões <guiicon
+>▮←</guiicon
+> / <guiicon
+>▮→</guiicon
+> à esquerda da barra de estado. Quando carregar nesta, poderá fechar ou expandir a barra lateral. O fecho pode-se sobrepor à imagem, mas desvanece-se quando o cursor sair para fora da barra lateral. A barra lateral contém várias páginas:</para>
+
+<variablelist>
+
+<varlistentry>
+<term
+><guilabel
+>Pastas</guilabel
+></term>
+<listitem
+><para
+>Mostra uma lista com todas as pastas do seu sistema, permitindo-lhe mudar entre elas. No modo de navegação, serão apresentadas as miniaturas da pasta, enquanto que, no modo de visualização, irá aparecer a primeira imagem da pasta, a qual poderá alterar ao longo de toda a pasta  com os botões ou atalhos <guibutton
+>Anterior</guibutton
+> e <guibutton
+>Seguinte</guibutton
+>.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Informação</guilabel
+></term>
+<listitem
+><para
+>Mostra os <guilabel
+>Meta-Dados</guilabel
+> como o nome e o tamanho do ficheiro. A opção <guilabel
+>Mais...</guilabel
+> permite-lhe ver todos os meta-dados disponíveis e seleccionar os que aparecem na barra lateral.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Operações</guilabel
+></term>
+<listitem
+><para
+>Isto permite-lhe efectuar as <link linkend="image_operations"
+>operações globais com as imagens, descritas anteriormente</link
+>, assim como as específicas do modo de visualização. Também lhe permite efectuar algumas operações comuns com ficheiros, como a cópia, a mudança de nome, a remoção e a criação de pastas novas.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+</sect1>
+
+</chapter>
+<!--FIXME no importer in kf5
+<chapter id="importer">
+<title
+>&gwenview; Importer</title>
+
+<sect1>
+<title
+>Introduction</title>
+<para
+>The &gwenview; Importer allows you to import images from a digital camera or
+removable media.  To launch it, select <guilabel
+>Download Photos with &gwenview;</guilabel>
+in the &kde; Device Notifier after connecting a supported device.</para>
+
+<para
+>When you plug in a device the &gwenview; importer recursively lists all images and videos.
+</para>
+<para
+>This is not always what you expect, &eg; plugging a smartphone you do not want to list all medias
+of the device; but only the pictures you took, which are usually in a special subfolder.
+</para>
+
+<screenshot>
+  <screeninfo
+>Root Folder Picking</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="importer-picking-root-folder.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para
+>It is possible to select the root folder to list, and &gwenview; Importer will remember the
+last root folder for each device. This way, next time you plug a device in, only the relevant
+pictures and videos should be listed.
+</para>
+
+<sect2>
+<title
+>Importing Images</title>
+
+<screenshot>
+  <screeninfo
+>&gwenview; Importer Screenshot</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="importer.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<para
+>If you wish, you may select the images you want to import under
+<guilabel
+>Select the documents to import</guilabel
+> by pressing the <guiicon
+>+</guiicon>
+button that appears when hovering over an image.  You may also select the folder
+that images are imported to in the text box at the bottom of the window. When you are done, click the
+<guibutton
+>Import Selected</guibutton
+> button to import only the images you have
+selected, or click <guibutton
+>Import All</guibutton
+> to import all images found
+on the device.</para>
+</sect2>
+
+<sect2>
+<title
+>Automatic Renaming</title>
+<para
+>&gwenview; Importer can rename your files according to a specified pattern.
+To configure this, select the <guibutton
+>Settings</guibutton
+> in the lower left
+corner.  You may turn this feature on or off using the check box at the top.  The
+<guilabel
+>Rename Format</guilabel
+> supports several special parameters, which will
+be replaced by metadata such as the date the image was created or its filename.
+They are listed below the text box.  You may either click on the parameter name to
+enter it into the text box or type one manually.</para>
+</sect2>
+</sect1>
+
+</chapter>
+-->
+<chapter id="tips">
+<title
+>Dicas</title>
+<sect1 id='mouse'
+><title
+>Usar o rato</title>
+
+<sect2 id='mouse_panning'
+><title
+>Posicionar com o rato</title>
+<itemizedlist>
+  <listitem
+><para
+>Se mantiver carregado o botão esquerdo do rato numa imagem, poderá deslocar a imagem.</para
+></listitem>
+  <listitem
+><para
+>A roda do rato irá deslocar a imagem para cima ou para baixo.</para
+></listitem>
+</itemizedlist>
+</sect2>
+
+
+<sect2 id='mouse_zooming'
+><title
+>Ampliar com o rato</title>
+<itemizedlist>
+  <listitem
+><para
+>Se carregar com o botão do meio do rato irá activar/desactivar a ampliação automática.</para
+></listitem>
+  <listitem
+><para
+>Mantenha carregada a tecla &Ctrl;, usando depois a roda do rato para ampliar ou reduzir; poderá também carregar com o botão esquerdo para ampliar e com o direito para reduzir.</para
+></listitem>
+
+  <listitem
+><para
+>A roda do rato, usada enquanto mantém carregada a tecla &Alt;, irá deslocar a imagem na horizontal.</para
+></listitem>
+</itemizedlist>
+</sect2>
+
+
+<sect2 id='mouse_browsing'
+><title
+>Navegar com o rato</title>
+<itemizedlist>
+  <listitem
+><para
+>Quando estiver no modo de Navegação, ao carregar numa imagem, irá mudar para o modo de Visualização para essa imagem.</para
+></listitem>
+  <listitem
+><para
+>Quando estiver no modo de Navegação, ao deslocar a roda do rato, irá posicionar a imagem na área de visualização da miniatura.</para
+></listitem>
+  <listitem
+><para
+>Se a opção de <guilabel
+>Comportamento da roda do rato</guilabel
+>, em <menuchoice
+><guimenu
+>Configuração</guimenu
+><guimenuitem
+>Configurar o &gwenview;</guimenuitem
+></menuchoice
+> estiver como Navegação, o deslocamento da roda do rato no modo de Visualização, irá percorrer as imagens na pasta.</para
+></listitem>
+</itemizedlist>
+</sect2>
+</sect1>
+
+<sect1 id="keybindings"
+> <title
+>Teclas</title>
+
+<para
+>O &gwenview; vem com um conjunto de atalhos de teclado, podendo todos ser vistos e alterados se seleccionar a opção <menuchoice
+><guimenu
+>Configuração</guimenu
+><guimenuitem
+>Configurar os Atalhos...</guimenuitem
+></menuchoice
+>. Lembre-se que, nas janelas de Ficheiros e Pastas, todos os atalhos normais do KDE estão funcionais, a menos que tenham sido atribuídos a outras combinações de teclas.</para>
+
+<para
+>Algumas das combinações de teclas predefinidas mais úteis são:</para>
+
+<itemizedlist>
+<listitem
+><para
+><keycap
+>Espaço</keycap
+>: Mostra a próxima imagem na pasta.</para
+></listitem>
+
+<listitem
+><para
+>&Backspace;: Mostra a imagem anterior na pasta.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Alt;<keycap
+>Cima</keycap
+></keycombo
+>: Move para a pasta-mãe da pasta actual.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>F</keycap
+></keycombo
+>: Muda para o modo de Ecrã Completo.</para
+></listitem>
+
+<listitem
+><para
+>&Esc;: Muda para o Modo de Navegação. </para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>M</keycap
+></keycombo
+>: Mostra ou esconde o menu.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>B</keycap
+></keycombo
+>: Mostra ou esconde a barra de Miniaturas.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F4</keycap
+>: Mostra ou esconde a barra lateral.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F6</keycap
+>: Torna a Barra de Localização editável, para que possa escrever directamente a localização de um ficheiro. Poderá voltar à Barra de Localização normal, se carregar na seta à direita.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>R</keycap
+></keycombo
+>: Roda a imagem actual para a direita.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>L</keycap
+></keycombo
+>: Roda a imagem actual para a esquerda.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Shift;<keycap
+>R</keycap
+></keycombo
+>: Ajusta o tamanho da imagem actual.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Shift;<keycap
+>C</keycap
+></keycombo
+>: Recorta a imagem actual.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>Y</keycap
+></keycombo
+>: Quando estiverem várias imagens visíveis no modo de visualização, isto sincroniza as suas janelas respectivas. </para
+></listitem>
+<!--FIXME not in kf5
+<listitem
+><para
+><keycombo action="simul"
+>&Tab;</keycombo
+>:
+When multiple images are displayed in View Mode, this switched to the image to
+the right of the currently selected image.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Shift;&Tab;</keycombo
+>:
+When multiple images are displayed in View Mode, this switched to the image to
+the left of the currently selected image.</para
+></listitem>
+-->
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>S</keycap
+></keycombo
+>: Grava as alterações feitas à imagem.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>Del</keycap
+>: Envia a imagem actual para o lixo.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Shift;<keycap
+>Del</keycap
+></keycombo
+>: Apaga de forma permanente a imagem do disco. Lembre-se que esta operação é irreversível e não poderá ser anulada.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>P</keycap
+></keycombo
+>: Imprime a imagem actual.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>O</keycap
+></keycombo
+>: Abre uma imagem com a janela normal de selecção de ficheiros.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F</keycap
+>: Se carregar neste botão, activa ou desactiva a ampliação até caber.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>P</keycap
+>: Ao ver um vídeo, este atalho activa ou desactiva a sua reprodução.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>T</keycap
+></keycombo
+>: Editar as marcas.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F2</keycap
+>: Muda o nome de uma imagem de forma incorporada.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>Del</keycap
+>: Envia uma imagem para o lixo.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Shift;<keycap
+>Del</keycap
+></keycombo
+>: Apaga uma imagem.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>F7</keycap
+></keycombo
+>: Copia uma imagem.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>F8</keycap
+></keycombo
+>: Move uma imagem.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>F9</keycap
+></keycombo
+>: Cria uma ligação para uma imagem.</para
+></listitem>
+
+</itemizedlist>
+
+</sect1>
+<sect1 id="advanced-configuration">
+    <title
+>Opções Avançadas de Configuração</title>
+    <para
+>Algumas notas sobre opções escondidas do &gwenview;  poderão ser encontradas <ulink url="http://userbase.kde.org/Special:myLanguage/Gwenview/Hidden_Configuration_Options"
+>nesta página</ulink
+>. </para>
+    <important>
+        <para
+>As opções descritas na página mencionada acima poderão ajudá-lo a ajustar o &gwenview; para as suas necessidades específicas, mas tenha em atenção que não existe garantia que continuem a funcionar de uma versão para a outra. </para>
+    </important>
+</sect1>
+</chapter>
+
+<chapter id="credits">
+<title
+>Créditos e Direitos de Cópia</title>
+
+<para
+>O &gwenview; é mantido de momento por Aurélien Gâteau</para>
+
+<para
+>Este documento foi escrito por Christopher Martin</para>
+
+<para
+>Este documento foi actualizado para o &kde; 4 por Henry de Valence</para>
+
+<para
+>Tradução de José Nuno Pires <email
+>zepires@gmail.com</email
+></para
+> 
+&underFDL; &underGPL; </chapter>
+
+</book>

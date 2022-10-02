@@ -1,0 +1,1241 @@
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN"
+"dtd/kdedbx45.dtd" [
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % Serbian "INCLUDE"
+><!-- change language only here -->
+]>
+
+<book id="gwenview" lang="&language;">
+<title
+>Приручник за <application
+>Гвенвју</application
+></title>
+
+<bookinfo>
+<authorgroup>
+<author
+><firstname
+>Орелијен</firstname
+> <surname
+>Гато</surname
+> <affiliation
+><address
+><email
+>agateau@kde.org</email
+></address
+></affiliation>
+</author>
+<author
+><firstname
+>Кристофер</firstname
+> <surname
+>Мартин</surname
+> <affiliation
+><address
+><email
+>chrsmrtn@debian.org</email
+></address
+></affiliation>
+</author>
+<author
+><firstname
+>Анри</firstname
+> <surname
+>де Валанс</surname
+> <affiliation
+><address
+><email
+>hdevalence@gmail.com</email
+></address
+></affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Зоран</firstname
+><surname
+>Олујић</surname
+><affiliation
+><address
+><email
+>olujicz@gmail.com</email
+></address
+></affiliation
+><contrib
+>превод</contrib
+></othercredit
+> 
+</authorgroup>
+<copyright>
+<year
+>2005</year>
+<holder
+>Орелијен Гато</holder>
+</copyright>
+<copyright>
+<year
+>2008</year>
+<holder
+>Анри де Валанс</holder>
+</copyright>
+<legalnotice
+>&FDLNotice;</legalnotice>
+
+<date
+>4. 8. 2015.</date>
+<releaseinfo
+>Програми КДЕ‑а 15.08</releaseinfo>
+<abstract>
+<para
+><application
+>Гвенвју</application
+> је приказивач слика и видеа.</para>
+</abstract>
+<keywordset>
+<keyword
+>КДЕ</keyword>
+<keyword
+>слика</keyword>
+<keyword
+>приказивач</keyword>
+<keyword
+>уметник</keyword>
+<keyword
+>фотографија</keyword>
+<keyword
+>слика</keyword>
+</keywordset>
+</bookinfo>
+<!--FIXME Read devels blog on http://agateau.com/
+-->
+<chapter id="introduction">
+<title
+>Увод</title>
+
+<sect1 id="what-is-gwenview">
+<title
+>Шта је <application
+>Гвенвју</application
+></title>
+
+<para
+><application
+>Гвенвју</application
+> је брз и једноставан приказивач слика и видеа. </para>
+
+ <para
+><application
+>Гвенвју</application
+> ради у два основна режима, прегледа и приказа. Оба се могу користити било у нормалном прозору програма било преко целог екрана. У режиму прегледа крећете се кроз слике на рачунару представљене сличицама, у режиму приказа гледате слике једну по једну, а у режиму преко целог екрана можете имати брзе слајдшоуе. Ту је још и почетни екран који даје списак недавно отвараних фасцикли и УРЛ‑ова, као и ваша места и ознаке. </para>
+
+<para
+>Учитавањем слика рукује библиотека КуТ, па <application
+>Гвенвју</application
+> подржава све формате слика које подржава инсталација КуТ‑а на систему. <application
+>Гвенвју</application
+> исправно приказује слике са алфа‑каналом (провидне) као и анимације.</para>
+
+<para
+><application
+>Гвенвју</application
+> подржава приказивање и уређивање ЕКСИФ коментара у ЈПЕГ сликама, те ЈПЕГ трансформације без губитака попут ротације и одраза у огледалу.</para>
+
+<para
+><application
+>Гвенвју</application
+> може да чита угнежђене профиле боја из ПНГ и ЈПЕГ фајлова. Профил боја слике користи се заједно са профилом боја екрана ради верног представљања боја на екрану.</para>
+</sect1>
+
+</chapter>
+
+<chapter id="interface">
+<title
+>Сучеље</title>
+
+<sect1 id='start_page'
+><title
+>Почетна страница</title>
+<para
+>Почетна страница набраја недавно отваране фасцикле и УРЛ‑ове на левој страни, а ваша места и ознаке на десној.</para>
+
+<screenshot>
+  <screeninfo
+>Снимак почетне странице</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="start-page.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+</sect1>
+
+<sect1 id='image_operations'
+><title
+>Поступци над сликама</title>
+<para
+><application
+>Гвенвју</application
+> има неколико могућности доступних у свим режимима, прегледа, приказа и целог екрана. <application
+>Гвенвју</application
+> може да извршава основне измене на сликама.</para>
+<itemizedlist>
+<listitem
+><para
+>Ротирање: ротира слику или улево или удесно, у зависности да ли урадите <menuchoice
+> <shortcut
+> <keycombo action="simul"
+><keycap
+>Ctrl</keycap
+><keycap
+>R</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Уређивање</guimenu
+> <guimenuitem
+>Ротирај удесно</guimenuitem
+> </menuchoice
+> или <menuchoice
+> <shortcut
+> <keycombo action="simul"
+><keycap
+>Ctrl</keycap
+><keycap
+>L</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Уређивање</guimenu
+> <guimenuitem
+>Ротирај улево</guimenuitem
+> </menuchoice
+> </para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+> <guimenu
+>Уређивање</guimenu
+> <guimenuitem
+>У огледалу</guimenuitem
+> </menuchoice
+>: рефлектује слику преко вертикалне осе, као одраз у огледалу.</para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+> <guimenu
+>Уређивање</guimenu
+> <guimenuitem
+>Преврни</guimenuitem
+> </menuchoice
+>: рефлектује слику преко хоризонталне осе (поставља је наопачке).</para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+> <shortcut
+> <keycombo action="simul"
+><keycap
+>Shift</keycap
+><keycap
+>R</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Уређивање</guimenu
+> <guimenuitem
+>Промени величину</guimenuitem
+> </menuchoice
+>: смањује или увећава слику. Имајте на уму да уколико слику увећате, може постати мутна или назубљена.</para
+></listitem>
+ <!-- Crop + Red Eye Reduction are discussed in View mode sect-->
+</itemizedlist>
+
+<para
+>Ове радње су такође доступне под језичком <guilabel
+>Радње</guilabel
+> на бочној траци.</para>
+
+<para
+>Пошто уредите једну или више слика, изнад слике ће се појавити трака са додатним радњама. Измене можете опозвати или поновити, прећи на следећу или претходну измењену слику, и сачувати измењену слику на један од три начина. </para>
+
+<screenshot>
+  <screeninfo
+>Трака радњи за измењене слике.</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="modified-bar.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<!--FIXME all actions also available context menus, where to add that info -->
+
+<tip
+><para
+>Ако сте инсталирали КИПИ‑јеве прикључке, биће доступан мени <guimenu
+>Прикључци</guimenu
+> кроз који можете изводити разне додатне поступке над сликама. За више детаља погледајте <ulink url="help:/kipi-plugins"
+>документацију КИПИ‑јевих прикључака</ulink
+>.</para
+></tip>
+</sect1>
+
+<sect1 id='browse_mode'
+><title
+>Режим прегледа</title>
+
+<para
+>У режиму прегледа можете лако да се крећете кроз фајлове и фасцикле. Прозор за преглед приказује сличице слика у тренутној фасцикли, као и у потфасциклама. </para>
+
+<screenshot>
+  <screeninfo
+>Снимак режима прегледа</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="browse_mode.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<para
+>Надношењем миша над слику добијате дугмад за бирање или ротирање слике, као и за прелазак у целоекрански режим. Измењене слике означене су иконицом доле десно, на коју можете кликнути да сачувате измене. Кликом на слику прелазите у режим приказа. Можете изабрати више слика па прећи у режим приказа, кад ће се видети једна наспрам друге.</para>
+
+<para
+>Клизачем при дну десно можете променити величину слика. Такође можете филтрирати слике по имену фајла, датуму, ознаци или оцени, у пољу доле лево. Трака алатки појављује се и у режиму прегледа и у режиму приказа, и садржи најчешће коришћене радње. </para>
+<itemizedlist>
+<listitem
+><para
+><guiicon
+>Почетна страница</guiicon
+>: отвара почетну страницу.</para
+></listitem>
+<listitem
+><para
+><guiicon
+>Прегледај</guiicon
+>: пребацује у режим прегледа.</para
+></listitem>
+<listitem
+><para
+><guiicon
+>Прикажи</guiicon
+>: пребацује у режим приказа.</para
+></listitem>
+<listitem
+><para
+><guiicon
+>Цео екран</guiicon
+>: пребацује у режим преко целог екрана. </para
+></listitem>
+<listitem
+><para
+><guiicon
+>Претходна</guiicon
+>: кликом на ову иконицу одлазите на претходну слику у фасцикли.</para
+></listitem>
+
+<listitem
+><para
+><guiicon
+>Следећа</guiicon
+>: кликом на ово дугме одлазите на следећу слику у фасцикли.</para
+></listitem>
+
+<listitem
+><para
+><guilabel
+>Ротирај улево</guilabel
+>, <guilabel
+>Ротирај удесно</guilabel
+>: као што је објашњено у поступцима над сликама.</para
+></listitem>
+<!--FIXME missing Share -->
+</itemizedlist>
+
+</sect1>
+
+<sect1 id='view_mode'
+><title
+>Режим приказа</title>
+<para
+>Режим приказа даје слике у пуној величини. Иста <link linkend="sidebar"
+>бочна трака</link
+> као у режиму прегледа стоји лево. На дну се налази трака сличица, којом се померате кроз слике у тренутној фасцикли. Трака сличица се може минимизовати кликом на дугме <guibutton
+>Трака сличица</guibutton
+>; наредни клик обнавља траку. Величину сличица можете мењати померањем раздвајача левим дугметом миша.</para>
+
+<para
+>Режим приказа омогућава гледање више слика једну наспрам друге. Можете изабрати више слика у режиму прегледа пре него што пређете у режим приказа, а можете и кликнути на дугме плуса при лебдењу над сликом у траци сличица да бисте додали окно са приказом те слике. Потом можете кликнути на дугме минуса да уклоните окно дате слике.</para>
+
+<para
+>Када је приказано више слика, под сваком стоји мала трака алатки преко које можете обрисати слику или уклонити њено окно. Слике можете увеличавати независно или све заједно. Ово бирате попуњавањем <guilabel
+>Синхронизуј</guilabel
+> лево од клизача увеличања, или притиском <keycombo action="simul"
+><keycap
+>Ctrl</keycap
+><keycap
+>Y</keycap
+></keycombo
+>. Пребацивати се између слика можете кликтањем на њихова окна, или преко тастатуре. Да пређете на слику десно притисните <keycombo action="simul"
+><keycap
+>Tab</keycap
+></keycombo
+>, а на слику лево <keycombo action="simul"
+><keycap
+>Shift</keycap
+><keycap
+>Tab</keycap
+></keycombo
+>.</para>
+
+<screenshot>
+  <screeninfo
+>Снимак режима приказа</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="view_mode.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<para
+>Клизач на дну десно управља увеличањем слике. Дугмад <guibutton
+>Уклопи</guibutton
+> и <guibutton
+>100%</guibutton
+> одмах поред клизача увеличања представљају два преподешена нивоа увеличања. Дугме <guibutton
+>Уклопи</guibutton
+> увеличава тренутну слику тако да се уклопи у величину прозора, а <guibutton
+>100%</guibutton
+> поставља на стварну величину у пикселима. Пречица <keycap
+>F</keycap
+> пребацује између ова два режима приказа.</para>
+
+<para
+>Када је слика у режиму уклапања, на претходну и следећу слику можете прећи тастерима стрелица. Ако увеличате слику, тастери стрелица служе за клизање слике. Ово је врло слично понашању на телефонима и дигиталним фотоапаратима.</para>
+
+<para
+>Када се слика увелича, појављује се приказ из висине у којем можете да клизате слику мишем и тастерима стрелица. Овај приказ се аутоматски сакрива после краћег застоја, а појављује чим се крене са клизањем или увеличавањем.</para>
+
+<para
+>Можете одредити шта се догађа при преласку на слику Б пошто сте увеличали неку зону слике А, кроз опције из групе <guilabel
+>Режим увеличања:</guilabel
+> на страници <guimenuitem
+>Приказ слике</guimenuitem
+> прозора за подешавање <application
+>Гвенвјуа</application
+>. Тамо стижете преко <menuchoice
+><guimenu
+>Подешавање</guimenu
+><guimenuitem
+>Подеси Гвенвју...</guimenuitem
+></menuchoice
+>.</para>
+
+<itemizedlist>
+    <listitem
+><para
+>Ако је задато <guilabel
+>Аутоматски уклопи сваку слику</guilabel
+>, слика Б се умањује тако да се уклопи у екран.</para
+></listitem>
+    <listitem
+><para
+>Ако је задато <guilabel
+>Одржавај исто увеличање и положај</guilabel
+>, све слике деле исто увеличање и положај: слика Б преузима исте параметре увеличања као слика А. Ако се они промене на слици Б, слика А ће бити накнадно приказана са ажурираним увеличањем и положајем.</para
+></listitem>
+    <listitem
+><para
+>Ако је задато <guilabel
+>Увеличање и положај по слици</guilabel
+>, за сваку слику памти се њено увеличање и положај: слика Б прво добије исте параметре увеличања као слика А, али се онда они трајно памте. Ако се промене на слици Б, слика А <emphasis
+>неће</emphasis
+> бити накнадно приказана за ажурираним увеличањем и положајем.</para
+></listitem>
+</itemizedlist>
+
+<tip
+><para
+><application
+>Гвенвју</application
+> можете покренути директно у режиму приказа из контекстног менија неког другог програма (нпр. опција <guimenuitem
+>Отвори помоћу</guimenuitem
+>) или из командне линије са сликом као аргументом.</para
+> </tip>
+
+<para
+>Следећи додатни поступци над сликама расположиви су само у режиму приказа:</para>
+
+<itemizedlist>
+<listitem
+><para
+><menuchoice
+> <shortcut
+> <keycombo action="simul"
+><keycap
+>Shift</keycap
+><keycap
+>C</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Уређивање</guimenu
+> <guimenuitem
+>Опсеци</guimenuitem
+> </menuchoice
+>: избаците делове слике које не желите. </para>
+<para
+>Напредним параметрима опсецања приступате попуњавањем кућице <guilabel
+>Напредне поставке</guilabel
+> у дну искачућег окна. Употребите одговарајућа поља да наштелујете радњу опсецања. </para>
+<para
+>Зону опсецања такође можете задати превлачењем ручки сивог правоугаоника на ивицама слике. Затим можете померити целу зону исецања тако што кликнете и држите лево дугме миша, па је превучете показивачем. </para>
+<para
+>Кликните на дугме <guibutton
+>Опсеци</guibutton
+> да видите резултат пошто све наместите. Употребите горње искачуће окно да сачувате резултате или опозовете/поновите радњу. </para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+> <guimenu
+>Уређивање</guimenu
+> <guimenuitem
+>Поправка црвених очију</guimenuitem
+> </menuchoice
+>: ублажава ефекат „црвених очију“, који се често сусреће на фотографијама начињеним са блицом. </para
+></listitem>
+</itemizedlist>
+
+</sect1>
+
+<sect1 id='fullscreen_mode'>
+<title
+>Режими целог екрана</title>
+
+<para
+>Пређите на цео екран кликом на дугме <guiicon
+>Цео екран</guiicon
+> на траци алатки, или помоћу <menuchoice
+> <shortcut
+> <keycombo action="simul"
+><keycap
+>Ctrl</keycap
+><keycap
+>Shift</keycap
+><keycap
+>F</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Приказ</guimenu
+> <guimenuitem
+>Преко целог екрана</guimenuitem
+> </menuchoice
+>. </para>
+<para
+>Овај режим напуштате притиском тастера <keycap
+>Esc</keycap
+>.</para>
+
+<sect2>
+<title
+>Цео екран у режиму прегледа</title>
+
+<para
+>Режим прегледа можете пребацити на цео екран такође кликом на дугме које се јавља док прелазите мишем преко сличица. </para>
+<screenshot>
+  <screeninfo
+>Снимак режима приказа преко целог екрана</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="fullscreen-browse.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para
+>Цео екран при прегледању пружа вам веће уживљавање док пролазите кроз слике. Ово је лепо и на обичном рачунару, али има још више смисла када повежете лаптоп на велики телевизор у дневној соби како бисте гостима показали неке слике. </para>
+</sect2>
+
+<sect2>
+<title
+>Цео екран у режиму приказа</title>
+<para
+>Режим приказа преко целог екрана приказује слајдшоу слика. Приступате му кликом на дугме које се појави када наднесете показивач миша над сличицу у режиму прегледа, или кликом на дугме <guiicon
+>Цео екран</guiicon
+> на траци алатки. <screenshot>
+  <screeninfo
+>Снимак режима прегледа преко целог екрана</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="fullscreen-view.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+</para>
+
+<para
+>Горња трака ће се аутоматски сакрити. Да би се приказала, само померите показивач миша на врх екрана, и тада се неће сакрити све док показивач стоји над њом. Већина дугмади на траци иста су као и она на траци алатки у режимима прегледа или приказа, осим дугмета <guiicon
+>Напусти цео екран</guiicon
+>, које вас враћа у прозор <application
+>Гвенвјуа</application
+>, <guiicon
+>Покрени слајдшоу</guiicon
+>/<guiicon
+>Заустави слајдшоу</guiicon
+>, и <guiicon
+>Подеси режим целог екрана</guiicon
+> које позива мали дијалог поставки у којем лако и брзо можете подесити слајдшоу. Контроле за слајдшоу су: </para>
+
+<itemizedlist>
+    <listitem
+><para
+>Клизач <guilabel
+>Интервал:</guilabel
+> одређује колико дуго ће <application
+>Гвенвју</application
+> показивати једну слику пре него што пређе на следећу.</para
+></listitem>
+    <listitem
+><para
+>Уколико је кућица <guilabel
+>Понављање</guilabel
+> попуњена, када слајдшоу дође до краја наставиће од почетка уместо да се заустави. </para
+></listitem>
+    <listitem
+><para
+>Уколико је кућица <guilabel
+>Насумично</guilabel
+> попуњена, слике ће се приказивати насумичним уместо азбучним редоследом.</para
+></listitem>
+    <listitem
+><para
+><guibutton
+>Приказани подаци о слици...</guibutton
+> омогућава вам да одредите који се метаподаци приказују под дугмадима на траци алатки. </para
+></listitem>
+    <listitem
+><para
+>Уколико је кућица <guilabel
+>Прикажи сличице</guilabel
+> попуњена, сличице за све слике у текућој фасцикли биће приказане десно од траке алатки.</para
+></listitem>
+    <listitem
+><para
+>Клизач <guilabel
+>Висина:</guilabel
+> мења величину приказаних сличица.</para
+></listitem>
+</itemizedlist>
+
+<para
+>Ако је укључена, област која показује друге слике у тренутној фасцикли видеће се у горњој траци. Слика на коју кликнете биће приказана.</para>
+</sect2>
+</sect1>
+
+<sect1 id="sidebar">
+<title
+>Бочна трака</title>
+
+ <para
+>Бочна трака на левој страни доступна је у режимима прегледа и приказа, али се подразумевано не види у режиму прегледа. Може се позвати преко <menuchoice
+> <shortcut
+> <keycap
+>F4</keycap
+> </shortcut
+> <guimenu
+>Приказ</guimenu
+> <guimenuitem
+>Бочна трака</guimenuitem
+> </menuchoice
+> или дугметом стрелице лево у траци стања. Када се на њега кликне, бочна трака се прошири или сажме. Бочна трака садржи неколико језичака:</para>
+
+<variablelist>
+
+<varlistentry>
+<term
+><guilabel
+>Фасцикле</guilabel
+></term>
+<listitem
+><para
+>Приказује списак свих фасцикли на систему, тако да се можете премештати између њих. У режиму прегледа биће приказане сличице из фасцикле; у режиму приказа појавиће се прва слика у фасцикли, од које можете прегледати даље фасциклу користећи дугмад <guibutton
+>Претходна</guibutton
+> и <guibutton
+>Следећа</guibutton
+> (или пречице).</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Подаци</guilabel
+></term>
+<listitem
+><para
+>Приказује метаподатке попут имена фајла и величине. Веза <guilabel
+>Више...</guilabel
+> омогућава вам да погледате све доступне метаподатке и изаберете које од њих желите у бочној траци.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Радње</guilabel
+></term>
+<listitem
+><para
+>Овим можете изводити <link linkend="image_operations"
+>претходно описане глобалне поступке над сликама</link
+>, као и оне везане за режим приказа. На располагању су вам и уобичајене радње са фајловима, попут копирања, преименовања, брисања и стварања нових фасцикли.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+</sect1>
+
+</chapter>
+<!--FIXME no importer in kf5
+<chapter id="importer">
+<title
+>&gwenview; Importer</title>
+
+<sect1>
+<title
+>Introduction</title>
+<para
+>The &gwenview; Importer allows you to import images from a digital camera or
+removable media.  To launch it, select <guilabel
+>Download Photos with &gwenview;</guilabel>
+in the &kde; Device Notifier after connecting a supported device.</para>
+
+<para
+>When you plug in a device the &gwenview; importer recursively lists all images and videos.
+</para>
+<para
+>This is not always what you expect, &eg; plugging a smartphone you do not want to list all medias
+of the device; but only the pictures you took, which are usually in a special subfolder.
+</para>
+
+<screenshot>
+  <screeninfo
+>Root Folder Picking</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="importer-picking-root-folder.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para
+>It is possible to select the root folder to list, and &gwenview; Importer will remember the
+last root folder for each device. This way, next time you plug a device in, only the relevant
+pictures and videos should be listed.
+</para>
+
+<sect2>
+<title
+>Importing Images</title>
+
+<screenshot>
+  <screeninfo
+>&gwenview; Importer Screenshot</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="importer.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<para
+>If you wish, you may select the images you want to import under
+<guilabel
+>Select the documents to import</guilabel
+> by pressing the <guiicon
+>+</guiicon>
+button that appears when hovering over an image.  You may also select the folder
+that images are imported to in the text box at the bottom of the window. When you are done, click the
+<guibutton
+>Import Selected</guibutton
+> button to import only the images you have
+selected, or click <guibutton
+>Import All</guibutton
+> to import all images found
+on the device.</para>
+</sect2>
+
+<sect2>
+<title
+>Automatic Renaming</title>
+<para
+>&gwenview; Importer can rename your files according to a specified pattern.
+To configure this, select the <guibutton
+>Settings</guibutton
+> in the lower left
+corner.  You may turn this feature on or off using the check box at the top.  The
+<guilabel
+>Rename Format</guilabel
+> supports several special parameters, which will
+be replaced by metadata such as the date the image was created or its filename.
+They are listed below the text box.  You may either click on the parameter name to
+enter it into the text box or type one manually.</para>
+</sect2>
+</sect1>
+
+</chapter>
+-->
+<chapter id="tips">
+<title
+>Савети</title>
+<sect1 id='mouse'
+><title
+>Коришћење миша</title>
+
+<sect2 id='mouse_panning'
+><title
+>Панирање мишем</title>
+<itemizedlist>
+  <listitem
+><para
+>Док држите лево дугме миша над сликом можете је клизати.</para
+></listitem>
+  <listitem
+><para
+>Точкић миша ће клизати слику нагоре и надоле.</para
+></listitem>
+</itemizedlist>
+</sect2>
+
+
+<sect2 id='mouse_zooming'
+><title
+>Увеличавање мишем</title>
+<itemizedlist>
+  <listitem
+><para
+>Кликом на средње дугме миша укључује се и искључује аутоматско увеличавање слике.</para
+></listitem>
+  <listitem
+><para
+>Док држите тастер <keycap
+>Ctrl</keycap
+>, слику можете увеличавати и умањивати точкићем миша или левим кликом (увеличавање) и десним кликом (умањивање).</para
+></listitem>
+
+  <listitem
+><para
+>Точкић миша уз држање тастера <keycap
+>Alt</keycap
+> клизаће слику водоравно.</para
+></listitem>
+</itemizedlist>
+</sect2>
+
+
+<sect2 id='mouse_browsing'
+><title
+>Прегледање мишем</title>
+<itemizedlist>
+  <listitem
+><para
+>Када сте у режиму прегледања, кликните на слику да се пребаците у режим приказа и детаљније је погледате.</para
+></listitem>
+  <listitem
+><para
+>У режиму прегледа, точкић миша клиза нагоре и надоле подручје сличица.</para
+></listitem>
+  <listitem
+><para
+>Уколико је опција <guilabel
+>Понашање точкића миша:</guilabel
+> под <menuchoice
+><guimenu
+>Подешавање</guimenu
+><guimenuitem
+>Подеси Гвенвју...</guimenuitem
+></menuchoice
+> постављена на <guilabel
+>Прегледање</guilabel
+>, обртањем точкића миша у режиму приказа померате се кроз слике у фасцикли.</para
+></listitem>
+</itemizedlist>
+</sect2>
+</sect1>
+
+<sect1 id="keybindings"
+> <title
+>Свезе тастера</title>
+
+<para
+><application
+>Гвенвју</application
+> долази са низом пречица са тастатуре, које се све могу погледати и променити избором <menuchoice
+><guimenu
+>Подешавање</guimenu
+><guimenuitem
+>Подеси пречице...</guimenuitem
+></menuchoice
+>. У прозорима фајлова и фасцикли нормално функционишу све стандардне КДЕ пречице, осим ако их ручно не промените.</para>
+
+<para
+>Неке од најкориснијих подразумеваних пречица:</para>
+
+<itemizedlist>
+<listitem
+><para
+><keycap
+>Space</keycap
+>: приказује следећу слику у фасцикли.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>Backspace</keycap
+>: приказује претходну слику у фасцикли.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>Alt</keycap
+><keycap
+>горе</keycap
+></keycombo
+>: пребацује у родитељску фасциклу тренутне фасцикле.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>Ctrl</keycap
+><keycap
+>Shift</keycap
+><keycap
+>F</keycap
+></keycombo
+>: пребацује преко целог екрана.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>Esc</keycap
+>: пребацује назад у режим прегледа. </para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>Ctrl</keycap
+><keycap
+>M</keycap
+></keycombo
+>: приказује или сакрива траку менија.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>Ctrl</keycap
+><keycap
+>B</keycap
+></keycombo
+>: приказује или сакрива траку сличица.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F4</keycap
+>: приказује или сакрива бочну траку.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F6</keycap
+>: омогућава уређивање траке локације, тако да можете непосредно унети путању до фајла. Стандардну траку локације можете вратити кликом на стрелицу са десне стране.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>Ctrl</keycap
+><keycap
+>R</keycap
+></keycombo
+>: ротира слику удесно.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>Ctrl</keycap
+><keycap
+>L</keycap
+></keycombo
+>: ротира слику улево.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>Shift</keycap
+><keycap
+>R</keycap
+></keycombo
+>: мења величину тренутне слике.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>Shift</keycap
+><keycap
+>C</keycap
+></keycombo
+>: опсеца тренутну слику.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>Ctrl</keycap
+><keycap
+>Y</keycap
+></keycombo
+>: када је више слика приказано у режиму приказа, ово их синхронизује. </para
+></listitem>
+<!--FIXME not in kf5
+<listitem
+><para
+><keycombo action="simul"
+>&Tab;</keycombo
+>:
+When multiple images are displayed in View Mode, this switched to the image to
+the right of the currently selected image.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Shift;&Tab;</keycombo
+>:
+When multiple images are displayed in View Mode, this switched to the image to
+the left of the currently selected image.</para
+></listitem>
+-->
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>Ctrl</keycap
+><keycap
+>S</keycap
+></keycombo
+>: уписује све измене учињене над сликом.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>Delete</keycap
+>: премешта слику у смеће.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>Shift</keycap
+><keycap
+>Delete</keycap
+></keycombo
+>: трајно брише слику са диска. Пазите, ова радња се не може опозвати.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>Ctrl</keycap
+><keycap
+>P</keycap
+></keycombo
+>: штампа слику.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>Ctrl</keycap
+><keycap
+>O</keycap
+></keycombo
+>: отвара слику путем стандардног дијалога за избор фајлова.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F</keycap
+>: ова пречица активира и деактивира увеличање до уклапања.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>P</keycap
+>: при пуштању видеа, ова пречица зауставља и наставља пуштање.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>Ctrl</keycap
+><keycap
+>T</keycap
+></keycombo
+>: уређује ознаке.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F2</keycap
+>: преименује слику уткано.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>Delete</keycap
+>: премешта слику у смеће.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>Shift</keycap
+><keycap
+>Del</keycap
+></keycombo
+>: брише слику.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>Ctrl</keycap
+><keycap
+>F7</keycap
+></keycombo
+>: копира слику.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>Ctrl</keycap
+><keycap
+>F8</keycap
+></keycombo
+>: премешта слику.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>Ctrl</keycap
+><keycap
+>F9</keycap
+></keycombo
+>: повезује слику.</para
+></listitem>
+
+</itemizedlist>
+
+</sect1>
+<sect1 id="advanced-configuration">
+    <title
+>Напредне поставне опције</title>
+    <para
+>Неке белешке о скривеним опцијама <application
+>Гвенвјуа</application
+> могу се наћи на <ulink url="http://userbase.kde.org/Special:myLanguage/Gwenview/Hidden_Configuration_Options"
+>овој страници</ulink
+>. </para>
+    <important>
+        <para
+>Преко опција описаних на поменутој страници можете наштеловати <application
+>Гвенвју</application
+> за посебне намене, али имајте на уму да се за њих не гарантује да ће радити у наредним издањима. </para>
+    </important>
+</sect1>
+</chapter>
+
+<chapter id="credits">
+<title
+>Заслуге и ауторска права</title>
+
+<para
+><application
+>Гвенвју</application
+> тренутно одржава <personname
+><firstname
+>Орелијен</firstname
+> <surname
+>Гато</surname
+></personname
+>.</para>
+
+<para
+>Овај документ написао је <personname
+><firstname
+>Кристофер</firstname
+> <surname
+>Мартин</surname
+></personname
+>.</para>
+
+<para
+>Овај документ ажурирао је за КДЕ 4 <personname
+><firstname
+>Анри</firstname
+> <surname
+>де Валанс</surname
+></personname
+>.</para>
+
+<para
+>Превео Зоран Олујић <email
+>olujicz@gmail.com</email
+>.</para
+> 
+&underFDL; &underGPL; </chapter>
+
+</book>

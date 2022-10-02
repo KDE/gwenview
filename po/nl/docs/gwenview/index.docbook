@@ -1,0 +1,1507 @@
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN"
+"dtd/kdedbx45.dtd" [
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % Dutch "INCLUDE"
+><!-- change language only here -->
+]>
+
+<book id="gwenview" lang="&language;">
+<title
+>Handboek van Gwenview</title>
+
+<bookinfo>
+<authorgroup>
+<author
+><firstname
+>Aurélien</firstname
+> <surname
+>Gâteau</surname
+> <affiliation
+><address
+><email
+>agateau@kde.org</email
+></address
+></affiliation>
+</author>
+<author
+><firstname
+>Christopher</firstname
+><surname
+>Martin</surname
+> <affiliation
+><address
+><email
+>chrsmrtn@debian.org</email
+></address
+></affiliation>
+</author>
+<author
+><firstname
+>Henry</firstname
+> <surname
+>de Valence</surname
+> <affiliation
+><address
+><email
+>hdevalence@gmail.com</email
+></address
+></affiliation>
+</author>
+&Rinse.Devries;&Kristof.Bal;&Freek.de.Kruijf; 
+</authorgroup>
+<copyright>
+<year
+>2005</year>
+<holder
+>Aurélien Gâteau</holder>
+</copyright>
+<copyright>
+<year
+>2008</year>
+<holder
+>Henry de Valence</holder>
+</copyright>
+<legalnotice
+>&FDLNotice;</legalnotice>
+
+<date
+>2021-06-04</date>
+<releaseinfo
+>KDE Gear 21.08</releaseinfo>
+<abstract>
+<para
+>&gwenview; is een afbeeldingen- en videoviewer.</para>
+</abstract>
+<keywordset>
+<keyword
+>KDE</keyword>
+<keyword
+>afbeelding</keyword>
+<keyword
+>viewer</keyword>
+<keyword
+>artiest</keyword>
+<keyword
+>foto</keyword>
+<keyword
+>afbeelding</keyword>
+</keywordset>
+</bookinfo>
+<!--FIXME Read devels blog on http://agateau.com/
+-->
+<chapter id="introduction">
+<title
+>Inleiding</title>
+
+<sect1 id="what-is-gwenview">
+<title
+>Wat is &gwenview;?</title>
+
+<para
+>&gwenview; is een snelle en gemakkelijk te gebruiken viewer voor afbeeldingen en video's. </para>
+
+ <para
+>&gwenview; heeft twee hoofdmodi: Bladeren en Weergeven. Beide modi kunnen in een normaal venster of in een volledig scherm worden gebruikt. Bladermodus laat u door uw computer bladeren en toont miniaturen van uw afbeeldingen, weergavemodus toont één afbeelding tegelijk en volledig scherm toont snel een diavoorstelling. Er is ook een beginscherm die een lijst met recent geopende mappen en URL-adressen toont, evenals uw plaatsen en tags. </para>
+
+<para
+>Het laden van de afbeeldingen wordt verzorgt door de bibliotheek &Qt;. &gwenview; ondersteunt dus alle afbeeldingsformaten die uw &Qt;-installatie ondersteunt. &gwenview; kan ook transparante afbeeldingen en animaties weergeven.</para>
+
+<para
+>&gwenview; biedt ondersteuning voor het weergeven en bewerken van EXIF-commentaren. Bovendien is er ondersteuning aanwezig voor verliesloze JPEG-transformaties, zoals roteren en spiegelen.</para>
+
+<para
+>&gwenview; kan ingebedde kleurprofielen uit PNG en JPEG bestanden lezen. Het kan de kleurprofielen van de afbeeldingen gebruiken samen met het kleurprofiel van het scherm om juiste kleuren op het scherm uit te voeren.</para>
+</sect1>
+
+</chapter>
+
+<chapter id="interface">
+<title
+>De interface</title>
+
+<sect1 id='start_page'
+><title
+>Beginpagina</title>
+<para
+>De startpagina toont aan de linker kant een lijst met recent geopende mappen en URL-adressen en aan de rechter kant plaatsen en tags.</para>
+
+<screenshot>
+  <screeninfo
+>Schermafdruk van startpagina</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="start-page.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+</sect1>
+
+<sect1 id='image_operations'
+><title
+>Afbeeldingsoperaties</title>
+<para
+>&gwenview; heeft een aantal mogelijkheden die beschikbaar zijn in de modi Bladeren, Weergave en Volledig scherm. &gwenview; kan enkele basale bewerkingen op uw afbeeldingen uitvoeren.</para>
+<itemizedlist>
+<listitem
+><para
+>Draaien: een rotatie zal de afbeelding naar links of naar rechts draaien, afhankelijk van de opties <menuchoice
+> <shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>R</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Bewerken</guimenu
+> <guimenuitem
+>Rechtsom draaien</guimenuitem
+> </menuchoice
+> en <menuchoice
+> <shortcut
+> <keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>R</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Bewerken</guimenu
+> <guimenuitem
+>Linksom draaien</guimenuitem
+> </menuchoice
+>. </para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+> <guimenu
+>Bewerken</guimenu
+> <guimenuitem
+>Spiegelen</guimenuitem
+> </menuchoice
+>: deze bewerking zal de afbeelding reflecteren langs een verticale as, alsof u in een spiegel kijkt.</para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+> <guimenu
+>Bewerken</guimenu
+> <guimenuitem
+>Omkeren</guimenuitem
+> </menuchoice
+>: de bewerking zal de afbeelding ondersteboven reflecteren (een reflectie langs een horizontale as).</para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+> <shortcut
+> <keycombo action="simul"
+>&Shift;<keycap
+>R</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Bewerken</guimenu
+> <guimenuitem
+>Grootte wijzigen</guimenuitem
+> </menuchoice
+>: deze bewerking laat u de afbeelding vergroten of verkleinen. Merk wel op dat als u de afbeelding vergroot, ze er wazig of vol pixels kan uitzien.</para
+></listitem>
+ <!-- Crop + Red Eye Reduction are discussed in View mode sect-->
+</itemizedlist>
+
+<para
+>Deze acties zijn ook beschikbaar op het tabblad <guilabel
+>Bewerkingen</guilabel
+> van de zijbalk.</para>
+
+<para
+>Als u een of meer afbeeldingen hebt bewerkt wordt er een balk met extra acties getoond boven de afbeelding. U kunt wijzigingen ongedaan maken of opnieuw doen, gaan naar de vorige of volgende gewijzigde afbeelding en er zijn drie opties om de gewijzigde afbeeldingen op te slaan. </para>
+
+<screenshot>
+  <screeninfo
+>Actiebalk voor gewijzigde afbeeldingen</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="modified-bar.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<!--FIXME all actions also available context menus, where to add that info -->
+
+<tip
+><para
+>Als u Kipi-plug-ins hebt geïnstalleerd, dan zal een menu <guimenu
+>Plug-ins</guimenu
+> beschikbaar zijn die u in staat stellen om vele extra bewerkingen op uw afbeeldingen uit te voeren.</para
+></tip>
+</sect1>
+
+<sect1 id='browse_mode'
+><title
+>Bladermodus</title>
+
+<para
+>In deze modus kunt u op eenvoudige wijze navigeren door uw bestanden en mappen. Het voorbeeldvenster toont miniaturen van afbeeldingen in de huidige map, maar ook van die in submappen. </para>
+
+<screenshot>
+  <screeninfo
+>Schermafdruk van bladermodus</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="browse_mode.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<para
+>Door de muis boven een afbeelding te bewegen worden knoppen getoond om de afbeelding te selecteren of te roteren evenals een knop om in de modus volledigscherm te gaan. Gewijzigde afbeeldingen worden aangegeven door een pictogram rechtsonder, klik erop om de gewijzigde afbeelding op te slaan. Klikken op een afbeelding brengt u in weergavemodus. U kunt meerdere afbeeldingen selecteren en omschakelen naar weergavemodus om ze naast elkaar te bekijken.</para>
+
+<para
+>De schuifbalk rechts onderaan stelt u in staat om de grootte van de afbeeldingen te wijzigen. U kunt ook filteren op de bestandsnaam, -datum, -tag of waardering met het vak links onderaan. De werkbalk verschijnt zowel in Bladermodus als in Weergavemodus en bevat de meest gebruikelijke acties. </para>
+<itemizedlist>
+<listitem
+><para
+><guiicon
+>Startpagina</guiicon
+>: open de startpagina.</para
+></listitem>
+<listitem
+><para
+><guiicon
+>Bladeren</guiicon
+>: schakelt over naar Bladermodus.</para
+></listitem>
+<listitem
+><para
+><guiicon
+>Weergeven</guiicon
+>: schakelt over naar Weergavemodus.</para
+></listitem>
+<listitem
+><para
+><guiicon
+>Vorige</guiicon
+>: met klikken op dit pictogram gaat u naar de vorige afbeelding in de map.</para
+></listitem>
+
+<listitem
+><para
+><guiicon
+>Volgende</guiicon
+>: met klikken op dit pictogram gaat u naar de volgende afbeelding in de map.</para
+></listitem>
+
+<listitem
+><para
+><guiicon
+>Bewerkingshulpmiddel tonen</guiicon
+>: Op deze knop drukken schakelt het <link linkend="sidebar"
+>tabblad bewerkingszijbalk</link
+> om.</para
+></listitem>
+
+<listitem
+><para
+><guiicon
+>Delen</guiicon
+>: op deze knop klikken opent een exportmenu om uw afbeeldingen te delen via socialmedia en webservices voor afbeeldingenverzamelingen. Deze functionaliteit hangt af van de lijst van geïnstalleerde KIPI-plug-ins.</para
+></listitem>
+<listitem
+><para
+><guiicon
+>Volledig scherm</guiicon
+>: schakelt over naar Volledig schermmodus.</para
+></listitem>
+</itemizedlist>
+
+</sect1>
+
+<sect1 id='view_mode'
+><title
+>Weergavemodus</title>
+<para
+>Weergavemodus toont afbeeldingen in volledige grootte. Dezelfde <link linkend="sidebar"
+>zijbalk</link
+> die beschikbaar is in Bladermodus wordt links getoond. Aan de onderkant bevindt zich de Miniaturenbalk, waarmee u door de afbeeldingen in de huidige map kunt bladeren. De Miniaturenbalk kan uitgevouwen worden met de knop <guibutton
+>Miniaturen tonen</guibutton
+>. De balk wordt opnieuw ingevouwen door nog eens op die knop te klikken. Om de grootte van de miniaturen te wijzigen verplaatst u de schuifbalk met de &LMB;.</para>
+
+<para
+>Weergavemodus ondersteunt het weergeven van meerdere afbeeldingen naast elkaar. U kunt meerdere afbeeldingen in Bladermodus selecteren alvorens naar weergavemodus om te schakelen of u kunt op de knop <guibutton
+>+</guibutton
+> klikken die verschijnt bij het bewegen boven afbeeldingen in de Miniaturenbalk om een paneel toe te voegen met die afbeelding. Een knop <guibutton
+>-</guibutton
+> verschijnt dan die toestaat om het paneel te verwijderen.</para>
+
+<para
+>Wanneer er meerdere afbeeldingen getoond worden zal een kleine werkbalk onder elke afbeelding verschijnen die u toestaat om de afbeelding te verwijderen of zijn paneel te verwijderen. U kunt onafhankelijk zoomen op elke afbeelding of ze synchroniseren. Schakel dit om door het activeren van <guilabel
+>Synchroniseren</guilabel
+> links van de schuifregelaar voor zoomen of door op <keycombo action="simul"
+>&Ctrl;<keycap
+>Y</keycap
+></keycombo
+> te drukken. U kunt naar afbeeldingen omschakelen door op hun paneel te klikken of met uw toetsenbord. Om om te schakelen naar de afbeelding rechts, drukt u <keycombo action="simul"
+>&Tab;</keycombo
+> in. Om om te schakelen naar de afbeelding links, drukt u <keycombo action="simul"
+>&Shift;&Tab;</keycombo
+>.</para>
+
+<screenshot>
+  <screeninfo
+>Schermafdruk van weergavemodus</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="view_mode.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<para
+>De schuifbalk rechtsonder in het scherm bepaalt de zoom van de afbeelding. De knoppen <guibutton
+>Passend</guibutton
+>, <guibutton
+>Vullen</guibutton
+> en <guibutton
+>100%</guibutton
+>  bevinden zich naast de schuifbalk en stellen 3 zoominstellingen voor. <guibutton
+>Passend</guibutton
+> zorgt dat de afbeelding in de grootte van het venster past, de knop <guibutton
+>Vullen</guibutton
+> zoomt de afbeelding om in de breedte of hoogte van het venster te passen en <guibutton
+>100%</guibutton
+> zoomt naar de grootte van de afbeelding zelf. De sneltoets <keycap
+>F</keycap
+> schakelt tussen modus <guibutton
+>Passend</guibutton
+> en <guibutton
+>100%</guibutton
+>, op <keycombo action="simul"
+>&Shift;<keycap
+>F</keycap
+></keycombo
+> drukken zal respectievelijk <guibutton
+>Passend</guibutton
+> omschakelen.</para>
+
+<para
+>Wanneer een afbeelding is de modus zoom-to-passend, dan kunt u naar de vorige en volgende afbeelding gaan met de pijltjestoetsen. Wanneer u inzoomt, worden de pijltjestoetsen gebruikt om door de afbeelding te schuiven. Dit is vrijwel gelijk aan het gedrag dat telefoons of digitale cameras leveren.</para>
+
+<para
+>Wanneer een afbeelding is ingezoomd, verschijnt er een overzicht en laat u de afbeelding met de muis en de pijltjestoetsen verschuiven. De overzichtsweergave verbergt zichzelf na een korte vertraging, en verschijnt alleen weer bij zoomen en schuiven. Het overzicht kan uitgeschakeld worden met een contextmenu na rechts klikken of met <menuchoice
+><guimenu
+>Beeld</guimenu
+><guimenuitem
+>Overzicht tonen bij inzoomen</guimenuitem
+></menuchoice
+></para>
+
+<para
+>U kunt definiëren wat er gebeurt bij gaan naar afbeelding B na te hebben ingezoomd op een gebied van afbeelding A met de opties in de groep <guilabel
+>Zoommodus</guilabel
+> op de pagina <guimenuitem
+> Afbeeldingweergave</guimenuitem
+> van de instellingendialoog van &gwenview; die bereikt kan worden via <menuchoice
+><guimenu
+>Instellingen</guimenu
+><guimenuitem
+>&gwenview; instellen...</guimenuitem
+></menuchoice
+>.</para>
+
+<itemizedlist>
+    <listitem
+><para
+>Indien ingesteld op <guilabel
+>Elke afbeelding automatisch passend maken</guilabel
+>, wordt afbeelding B uitgezoomd om op het scherm te passen.</para
+></listitem>
+    <listitem
+><para
+>Indien ingesteld op <guilabel
+>Zelfde zoom en positie behouden</guilabel
+>, zullen alle afbeeldingen dezelfde zoom en positie delen: afbeelding B is ingesteld op dezelfde zoom-parameters als afbeelding A (en indien deze zijn gewijzigd, zal afbeelding A daarna getoond worden met de bijgewerkte zoom en positie).</para
+></listitem>
+    <listitem
+><para
+>Indien ingesteld op <guilabel
+>Zoom en positie per afbeelding</guilabel
+>, zullen alle afbeeldingen hun eigen zoom en positie onthouden: afbeelding B is initieel ingesteld op dezelfde zoom-parameters als afbeelding A, maar zal daarna zijn eigen zoom en positie (als deze zijn gewijzigd, zal afbeelding A <emphasis
+>niet</emphasis
+> getoond worden met de bijgewerkte zoom en positie).</para
+></listitem>
+</itemizedlist>
+
+<tip
+><para
+>U kunt meteen in de Weergavemodus starten door &gwenview; op te starten met een contextmenu als <guimenuitem
+>Openen met</guimenuitem
+> in een ander programma of door het te starten vanaf de commandoregel met een afbeelding als argument.</para
+> </tip>
+
+<para
+>De volgende extra bewerkingen op afbeeldingen zijn alleen beschikbaar in Weergavemodus:</para>
+
+<itemizedlist>
+<listitem
+><para
+><menuchoice
+> <shortcut
+> <keycombo action="simul"
+>&Shift;<keycap
+>C</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Bewerken</guimenu
+> <guimenuitem
+>Uitsnijden</guimenuitem
+> </menuchoice
+>: deze bewerking laat u delen van de afbeelding die u niet wil uitsnijden. </para>
+<para
+>U kunt de geavanceerde parameters voor afsnijden wijzigen door het activeren van het keuzevakje <guilabel
+>Geavanceerde instellingen</guilabel
+> op het verschijnende paneel onderaan. Gebruik de overeenkomstige velden om de bewerkingen voor afsnijden aan te passen. </para>
+<para
+>Het is ook mogelijk om het uit te snijden gebied aan te passen door aan de handvatten op de randen van de grijze rechthoek in de afbeelding te trekken. U kunt het uitgesneden gebied verplaatsen door op de &LMB; te klikken en ingedrukt te houden en te slepen met de muisaanwijzer. </para>
+<para
+>Druk op de knop <guibutton
+>Afsnijden</guibutton
+> om het resultaat te bekijken wanneer u klaar bent. Gebruik het verschijnende paneel bovenaan om het resultaat op te slaan of de bewerking ongedaan te maken of opnieuw te doen. </para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+> <guimenu
+>Bewerken</guimenu
+> <guimenuitem
+>Rode ogen-reduceren</guimenuitem
+> </menuchoice
+>: de bewerking zal het rode ogen-effect, dat gewoonlijk gevonden wordt in camera's met flits, reduceren. </para
+></listitem>
+</itemizedlist>
+
+</sect1>
+
+<sect1 id='fullscreen_mode'>
+<title
+>Volledig schermmodi</title>
+
+<para
+>Toegang tot Volledig scherm krijgt door op de knop <guiicon
+>Volledig scherm</guiicon
+> in de werkbalk te drukken of met <menuchoice
+> <shortcut
+> <keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>F</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Beeld</guimenu
+> <guimenuitem
+>Modus volledig scherm</guimenuitem
+> </menuchoice
+>. </para>
+<para
+>Om deze modus te verlaten klik op toets &Esc;.</para>
+
+<sect2>
+<title
+>Bladermodus in volledig scherm</title>
+
+<para
+>In modus Bladeren kunt u ook omschakelen naar volledig scherm door te klikken op de knop die verschijnt wanneer u de muis over de miniaturen beweegt. </para>
+<screenshot>
+  <screeninfo
+>Schermafdruk van weergavemodus volledig scherm</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="fullscreen-browse.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para
+>In volledigscherm gaan bij het bladeren geeft u een overweldiger ervaring terwijl u door uw afbeeldingen loopt. Het is heel mooi op uw reguliere computer, maar is nog zinvoller wanneer u uw laptop verbindt met het grote TV-scherm in de woonkamer om uw afbeeldingen aan uw gasten te tonen. </para>
+</sect2>
+
+<sect2 id="fullscreen">
+<title
+>Weergavemodus volledig scherm</title>
+<para
+>De weergavemodus volledig scherm toont een diashow van uw afbeeldingen. U opent deze modus met de bijbehorende knop die verschijnt in de Bladermodus, wanneer u de muis over de miniaturen beweegt door op de knop <guiicon
+>Volledig scherm</guiicon
+> op de taakbalk te drukken. <screenshot>
+  <screeninfo
+>Schermafdruk van bladermodus in volledig scherm</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="fullscreen-view.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+</para>
+
+<para
+>De bovenste balk verbergt zichzelf automatisch; om hem weer te tonen, drukt u de muis tegen de bovenrand van het scherm aan. Als de muis zich op de balk bevindt, zal deze zich niet automatisch verbergen. De meeste knoppen op de balk zijn dezelfde als in de modi Bladeren en Weergave, met uitzondering van de knop <guiicon
+>Volledig scherm verlaten</guiicon
+>, die weer terug keert naar het &gwenview;-venster, de knop <guiicon
+>Diashow pauzeren/hervatten</guiicon
+> en de knop <guiicon
+>Volledig-scherm-modus instellen</guiicon
+>, die een klein voorkeurenvenster weergeeft waarin de diashow snel en gemakkelijk ingesteld kan worden. De instelmogelijkheden voor de diashow zijn: </para>
+
+<itemizedlist>
+    <listitem
+><para
+>De schuifregelaar <guilabel
+>Interval</guilabel
+> bepaalt hoe lang &gwenview; een afbeelding toont, voordat deze verder gaat naar de volgende.</para
+></listitem>
+    <listitem
+><para
+>Als het keuzevakje <guilabel
+>Herhalen</guilabel
+> is aangevinkt, wordt de diashow aan het einde opnieuw gestart, in plaats van dat deze wordt beëindigd. </para
+></listitem>
+    <listitem
+><para
+>Als het keuzevakje <guilabel
+>Willekeurig</guilabel
+> is aangevinkt, worden afbeeldingen in een willekeurige volgorde getoond, in plaats van in alfabetische volgorde.</para
+></listitem>
+    <listitem
+><para
+><guibutton
+>Selecteer te tonen informatie over afbeeldingen</guibutton
+> stelt u in staat om te definiëren welke metagegevens getoond worden onder de knoppen in de werkbalk. </para
+></listitem>
+    <listitem
+><para
+>Als het keuzevakje <guilabel
+>Miniaturen tonen</guilabel
+> is aangevinkt, worden miniaturen voor alle afbeeldingen in de huidige map getoond rechts van de werkbalk.</para
+></listitem>
+    <listitem
+><para
+>De schuifregelaar <guilabel
+>Hoogte</guilabel
+> wijzigt de grootte van de getoonde miniaturen.</para
+></listitem>
+</itemizedlist>
+
+<para
+>Indien ingeschakeld, zullen in de bovenste balk voorbeelden worden getoond van andere afbeeldingen in de huidige map. Als u op een afbeelding klikt wordt deze getoond.</para>
+</sect2>
+</sect1>
+
+<sect1 id="sidebar">
+<title
+>Zijbalk</title>
+
+ <para
+>De zijbalk links is beschikbaar in de Blader- en de Weergavemodus. maar verschijnt niet standaard in de Bladermodus. U kunt deze in- en uitschakelen met <menuchoice
+> <shortcut
+> <keycap
+>F4</keycap
+> </shortcut
+> <guimenu
+>Weergave</guimenu
+> <guimenuitem
+>Zijbalk</guimenuitem
+> </menuchoice
+> of met knop <guiicon
+>▮←</guiicon
+> / <guiicon
+>▮→</guiicon
+> aan linkerkant van de statusbalk. Er op klikken vouwt de zijbalk in of uit. De zijbalk bevat verschillende tabbladen:</para>
+
+<variablelist>
+
+<varlistentry>
+<term
+><guilabel
+>Mappen</guilabel
+></term>
+<listitem
+><para
+>Toont een lijst met alle mappen op uw systeem waarmee u naar ze kan omschakelen. In Bladermodus zullen miniaturen van de map worden getoond, terwijl in Weergavemodus de eerste afbeelding in de map zal verschijnen, waar vanaf u door de map kunt bladeren met de knoppen <guibutton
+>Vorige</guibutton
+> en <guibutton
+>Volgende</guibutton
+> of met sneltoetsen. Meerdere keren klikken p een map wisselt tussen Weergavemodus en Browsemodus.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Informatie</guilabel
+></term>
+<listitem
+><para
+>Toont <guilabel
+>Meta-informatie</guilabel
+> zoals de bestandsnaam en grootte. De <guilabel
+>Meer...</guilabel
+> koppeling stelt u in staat om alle beschikbare metagegevens te zien en te selecteren welke gegevens in de zijbalk verschijnen.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Bewerkingen</guilabel
+></term>
+<listitem
+><para
+>Dit stelt u in staat om de <link linkend="image_operations"
+>eerder beschreven globale bewerkingen op afbeeldingen</link
+> uit te voeren evenals die specifiek voor de Weergavemodus. Het biedt ook algemene bestandsbewerkingen zoals kopiëren, hernoemen, verwijderen en nieuwe mappen aanmaken.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+</sect1>
+
+</chapter>
+<chapter id="importer">
+<title
+>&gwenview;-importprogramma</title>
+
+<sect1>
+<title
+>Inleiding</title>
+<para
+>De &gwenview;-importeur stelt u in staat om afbeeldingen te importeren vanaf een digitale camera of een verwijderbaar medium. Om het te starten selecteert u <guilabel
+>Foto's downloaden met &gwenview;</guilabel
+> in de Apparaatmelder van &kde; na het verbinden van het ondersteunde apparaat.</para>
+
+<para
+>Wanneer u een apparaat inplugt zal het importprogramma van &gwenview; recursief alle afbeeldingen en video's laten zien. </para>
+<para
+>Dit is niet altijd wat u verwacht, &eg; bij inpluggen van een smartphone wilt u niet een lijst krijgen met alle media op het apparaat, maar alleen de gemaakte foto's, die zich gewoonlijk in een speciale submap bevinden. </para>
+
+<screenshot>
+  <screeninfo
+>Kiezen van de basismap</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="importer-picking-root-folder.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para
+>Het is mogelijk om de basismap voor de lijst te selecteren en het importprogramma van &gwenview; zal de laatste basismap voor elk apparaat herinneren. Op die manier zal bij het inpluggen van het apparaat, alleen de relevante foto's en video's worden getoond. </para>
+
+<sect2>
+<title
+>Afbeeldingen importeren</title>
+
+<screenshot>
+  <screeninfo
+>&gwenview; schermafdrukimporteur</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="importer.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<para
+>Als u wilt dan kunt u de afbeeldingen, die u wilt importeren, selecteren onder <guilabel
+>Te importeren documenten selecteren</guilabel
+> door de knop <guiicon
+>+</guiicon
+> in te drukken, die verschijnt bij het bewegen boven een afbeelding. U kunt ook de map selecteren waarnaar afbeeldingen moeten worden geïmporteerd in het tekstvak onderaan het venster. Wanneer u klaar bent, klikt u op de knop <guibutton
+>Geselecteerden importeren</guibutton
+> om alleen de geselecteerde afbeeldingen te importeren of klik op <guibutton
+>Alles importeren</guibutton
+> om alle gevonden afbeeldingen op het apparaat te importeren.</para>
+</sect2>
+
+<sect2>
+<title
+>Automatisch hernoemen</title>
+<para
+>&gwenview;-importeur kan uw bestanden hernoemen volgens een gespecificeerd patroon. Om dit te configureren selecteert u <guibutton
+>Instellingen</guibutton
+> in de hoek linksonder. U kunt deze functie aan of uit zetten met het keuzevakje bovenaan. De <guilabel
+>Hernoemindeling</guilabel
+> ondersteunt verschillende speciale parameters, die vervangen zullen worden door metagegevens zoals de creatie-datum van de afbeelding of zijn bestandsnaam. Ze worden getoond onder het tekstvak. U kunt ofwel op de naam van de parameter klikken om het in het tekstvak in te voeren of handmatig invoeren.</para>
+</sect2>
+</sect1>
+
+</chapter>
+<chapter id="tips">
+<title
+>Tips</title>
+<sect1 id='mouse'
+><title
+>Het gebruik van de muis</title>
+
+<sect2 id='mouse_panning'
+><title
+>Schuiven met de muis</title>
+<itemizedlist>
+  <listitem
+><para
+>Door de linker muisknop ingedrukt te houden kunt u de afbeelding verschuiven als deze groter is dan het venster.</para
+></listitem>
+  <listitem
+><para
+>De muiswiel zal de afbeelding op en neer schuiven.</para
+></listitem>
+</itemizedlist>
+</sect2>
+
+
+<sect2 id='mouse_zooming'
+><title
+>Zoomen met de muis</title>
+<itemizedlist>
+  <listitem
+><para
+>Klikken met de middelste muisknop zal de zoomknop <guibutton
+>Passend</guibutton
+> omschakelen. De &Shift;-toets en de middelste muisknop indrukken zal de zoomknop <guibutton
+>Passend</guibutton
+> omschakelen.</para
+></listitem>
+  <listitem
+><para
+>Om in of uit te zoomen, houdt u de &Ctrl;-toets ingedrukt terwijl u met het muiswiel draait of respectievelijk met de linker of rechter muisknop klikt.</para
+></listitem>
+
+  <listitem
+><para
+>Houd de &Alt;-toets ingedrukt terwijl u het muiswiel draait om horizontaal door de afbeelding te schuiven.</para
+></listitem>
+</itemizedlist>
+</sect2>
+
+
+<sect2 id='mouse_browsing'
+><title
+>Bladeren met de muis</title>
+<itemizedlist>
+  <listitem
+><para
+>Indien u in bladerenmodus bent zorgt klikken op een afbeelding ervoor dat u overschakeld naar de weergavemodus met die afbeelding.</para
+></listitem>
+  <listitem
+><para
+>Indien u in bladerenmodus bent, zorgt draaien aan het muiswiel ervoor dat het miniatuurgebied op en neer gaat.</para
+></listitem>
+  <listitem
+><para
+>Als de optie voor <guilabel
+>Muiswielgedrag</guilabel
+> in <menuchoice
+><guimenu
+>Instellingen</guimenu
+><guimenuitem
+>&gwenview; instellen</guimenuitem
+></menuchoice
+> is ingesteld op Bladeren zal scrollen met het muiswiel in weergavemodus ervoor zorgen dat u zich door afbeeldingen in de map kan bewegen.</para
+></listitem>
+</itemizedlist>
+</sect2>
+</sect1>
+
+<sect1 id="keybindings"
+> <title
+>Toetsenbindingen</title>
+
+<para
+>&gwenview; heeft een groot aantal sneltoetsen, welke u kunt vinden en wijzigen via menuoptie <menuchoice
+><guimenu
+>Instellingen</guimenu
+><guimenuitem
+>Sneltoetsen instellen...</guimenuitem
+></menuchoice
+>. Bij de bestandsoverzicht- en mappenstructuurvensters kunt u de standaard &plasma;-sneltoetsen gebruiken.</para>
+
+<para
+>Een aantal van de meest bruikbare standaardtoetsenbindingen zijn:</para>
+
+<itemizedlist>
+<listitem
+><para
+><keycap
+>Spatiebalk</keycap
+>: toont de volgende afbeelding in de map.</para
+></listitem>
+
+<listitem
+><para
+>&Backspace;: toont de voorgaande afbeelding in de map.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Alt;<keycap
+>Up</keycap
+></keycombo
+>: Wisselt naar de bovenliggende map van de huidige map.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>F</keycap
+></keycombo
+>: Activeert de volledig-scherm-modus.</para
+></listitem>
+
+<listitem
+><para
+>&Esc;: schakelt over naar Bladermodus. </para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>M</keycap
+></keycombo
+>: Toont of verbergt de menubalk.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>B</keycap
+></keycombo
+>: Toont of verbergt de miniaturenbalk.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F4</keycap
+>: toont of verbergt de zijbalk.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F6</keycap
+>: maakt de locatiebalk bewerkbaar zodat u een pad rechtstreeks kan invoeren. U kunt de standaardbalk terugkrijgen door op de pijl rechts te klikken.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>R</keycap
+></keycombo
+>: Roteert de huidige afbeelding naar rechts.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>R</keycap
+></keycombo
+>: Roteert de huidige afbeelding naar links.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Shift;<keycap
+>R</keycap
+></keycombo
+>: wijzigt de grootte van de huidige afbeelding.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Shift;<keycap
+>C</keycap
+></keycombo
+>: maak een uitsnede uit de huidige afbeelding.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>Y</keycap
+></keycombo
+>: wanneer meerdere afbeeldingen getoond worden in Weergavemodus, dan synchroniseert dit hun weergave. </para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>S</keycap
+></keycombo
+>: Slaat alle wijzigingen gemaakt aan een afbeelding op.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>Del</keycap
+>: verplaats de huidige afbeelding naar de prullenbak.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Shift;<keycap
+>Del</keycap
+></keycombo
+>: Verwijdert een afbeelding permanent van de schijf. Merk op dat deze bewerking niet ongedaan kan worden gemaakt.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>P</keycap
+></keycombo
+>: Drukt de huidige afbeelding af.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>O</keycap
+></keycombo
+>: Opent een afbeelding met de standaard "bestand openen"-dialoog.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F</keycap
+>: Op deze sneltoets drukken schakelt zoom-tot-passend aan en uit.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>P</keycap
+>: Een video met deze sneltoets bekijken schakelt afspelen aan en uit.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>T</keycap
+></keycombo
+>: Tags bewerken.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F2</keycap
+>: hernoem een afbeelding ter plekke.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>Del</keycap
+>: verplaats een afbeelding naar de prullenbak.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Shift;<keycap
+>Del</keycap
+></keycombo
+>: verwijder een afbeelding.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>F7</keycap
+></keycombo
+>: Kopieer een afbeelding.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>F8</keycap
+></keycombo
+>: Verplaats een afbeelding.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>F9</keycap
+></keycombo
+>: Maak een koppeling naar een afbeelding.</para
+></listitem>
+
+</itemizedlist>
+
+</sect1>
+</chapter>
+
+<chapter id="configure">
+    <title
+>&gwenview; configureren</title>
+    <sect1 id="configindex">
+        <title
+>Overzicht configuratie</title>
+        <para
+>U kunt &gwenview; instellen door te klikken op <menuchoice
+><guimenu
+>Instellingen</guimenu
+> <guimenuitem
+>&gwenview; instellen...</guimenuitem
+></menuchoice
+>. Het dialoogvenster voor de configuratie is opgesplitst in drie stukken. In dit hoofdstuk kunt u de beschikbare opties in detail terugvinden. </para>
+        <itemizedlist>
+            <listitem>
+                <para
+><link linkend="configgeneral"
+>Algemeen</link
+></para>
+            </listitem>
+            <listitem>
+                <para
+><link linkend="configview"
+>Afbeeldingweergave</link
+></para>
+            </listitem>
+            <listitem>
+                <para
+><link linkend="configadvanced"
+>Geavanceerd</link
+></para>
+            </listitem>
+        </itemizedlist>
+    </sect1>
+    <sect1 id="configgeneral">
+        <title
+>Algemeen</title>
+        <variablelist>
+            <varlistentry>
+                <term
+><guilabel
+>Video's</guilabel
+></term>
+                <listitem>
+                    <para
+>Activeer het keuzevakje <guilabel
+>Video's tonen</guilabel
+> om &gwenview; toe te staan video's naast de afbeeldingen te tonen.</para>
+                    <para
+>Deactiveer het keuzevakje <guilabel
+>Automatisch afspelen</guilabel
+> om automatisch afspelen van video's uit te schakelen. Dit voorkomt dat een video automatisch wordt gestart bij bladeren.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Melden na bereiken van de laatste afbeelding</guilabel
+></term>
+                <listitem>
+                    <para
+>Het item <guilabel
+>Nooit</guilabel
+> selecteren om &gwenview; toe te staan door de lijst met afbeeldingen te lopen zonder extra meldingen.</para>
+                    <para
+>Het item <guilabel
+>Alleen tijdens diashows</guilabel
+> selecteren als meldingen over het bereiken van het einde van de lijst alleen getoond zouden moeten worden in <link linkend="fullscreen"
+>modus diashow</link
+>.</para>
+                    <para
+>Het item <guilabel
+>Altijd</guilabel
+> selecteren als u de meldingen altijd wilt ontvangen.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Achtergrondkleur</guilabel
+></term>
+                <listitem>
+                    <para
+>Verplaats de schuifregelaar om de kleur van de grijze achtergrond in de Blader en weergavemodus van zwart (de meest linkse positie) naar wit (de meest rechtse positie) te wijzigen.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Achtergrond van volledig scherm</guilabel
+></term>
+                <listitem>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Zwart</guilabel
+> &mdash; stel de achtergrondkleur in modus volledig scherm in op zwart.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Donkergrijs met textuur</guilabel
+> &mdash; stel de achtergrondkleur in modus volledig scherm in op donkergrijs met textuur.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Opslagkwaliteit van afbeelding met verlies</guilabel
+></term>
+                <listitem>
+                    <para
+>Instelling van kwaliteit van opslag/compressie voor afbeeldingsformaten, zoals JPEG, WEBP, AVIF, HEIF en HEIC, die tijdelijk overschreven kan worden in de dialoog <guilabel
+>Opslaan als</guilabel
+> bij opslaan van een bestand in en afbeeldingsformaat met verlies. Bij opslaan van een bestaande afbeelding met verlies met een nieuwe naam of na uitvoeren van een bewerking zonder verlies (&eg; draaien, wat alleen de EXIF-rotatietag wijzigt), zal de verschijning van het bestand niet wijzigen omdat er geen echte manipulatie van de afbeelding is gedaan.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Miniaturenacties</guilabel
+></term>
+                <listitem>
+                    <para
+>Of de miniaturenactieknoppen getoond moeten worden als overlays boven miniaturen van afbeeldingen.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Alle knoppen</guilabel
+> &mdash; alle knoppen tonen</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Alleen selectieknop tonen</guilabel
+> &mdash; Alleen tonen knop selecteer/selectie ongedaan maken</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Geen</guilabel
+> &mdash; geen enkele miniatuurknop tonen</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </sect1>
+        <sect1 id="configview">
+        <title
+>Afbeeldingweergave</title>
+        <variablelist>
+            <varlistentry>
+                <term
+><guilabel
+>Transparantie tonen met</guilabel
+></term>
+                <listitem>
+                    <para
+>Kies hoe de achtergrond van een transparant raster of <abbrev
+>SVG</abbrev
+> afbeeldingen wordt gerenderd.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Omgevende achtergrond</guilabel
+> &mdash; gebruik achtergrondkleur uit de <link linkend="configgeneral"
+>Algemene pagina</link
+>.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Schaakbordachtergrond</guilabel
+> &mdash; gebruik de traditionele schaakbordachtergrond.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Vaste kleur achtergrond</guilabel
+> &mdash; gebruik een kleur die gekozen kan worden met de <ulink url="help:/fundamentals/colors.html"
+>kleurkiezer</ulink
+>.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Gedrag van muiswiel</guilabel
+></term>
+                <listitem>
+                    <para
+>Hoe schuiven over een afbeelding in weergavemodus zich grdraagd.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Schuiven</guilabel
+> &mdash; bij inzoomen, pan de afbeelding verticaal. Anders zal er niets gebeuren.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Bladeren</guilabel
+> &mdash; schakel om naar de volgende of de vorige afbeelding.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Zoomen</guilabel
+> &mdash; muiswiel gebruiken om de huidige afbeelding in/uit te zoomen.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Zoommodus</guilabel
+></term>
+                <listitem>
+                    <para
+>Laat kiezen hoe zoomen in weergavemodus werkt.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Elke afbeelding automatisch passend maken</guilabel
+> &mdash; automatisch afbeeldingen van grootte wijzigen naar het weergavevenster.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Zelfde zoom en positie behouden</guilabel
+> &mdash; gebruik hetzelfde zoomniveau voor alle afbeeldingen.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Zoom per afbeelding en positie</guilabel
+> &mdash; individuele zoomniveaus voor elke afbeelding gebruiken.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Kleinere afbeeldingen vergroten</guilabel
+> &mdash; activeer dit item om &gwenview; kleinere afbeeldingen in weergavemodus te laten vergroten.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Animaties</guilabel
+></term>
+                <listitem>
+                    <para
+>Biedt kiezen hoe vervaging tussen afbeeldingen wordt gedaan in weergavemodus.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>OpenGL</guilabel
+> &mdash; animaties met hardware versnelling gebruiken.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Software</guilabel
+> &mdash; geen animaties met hardware versnelling gebruiken. Selecteer deze optie als <guilabel
+>OpenGL</guilabel
+> niet bevredigend werkt, maar u wilt toch vervaging tussen afbeeldingen.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Geen</guilabel
+> &mdash; geen animaties bij schakelen tussen afbeeldingen.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Miniaturenbalk</guilabel
+></term>
+                <listitem>
+                    <para
+>Configuratie van de miniaturenbalk toestaan.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Oriëntatie</guilabel
+></para>
+                            <itemizedlist>
+                                <listitem>
+                                    <para
+><guilabel
+>Horizontaal</guilabel
+> &mdash; een horizontale strip miniaturen onder de afbeelding tonen.</para>
+                                </listitem>
+                                <listitem>
+                                    <para
+><guilabel
+>Verticaal</guilabel
+> &mdash; een verticale strip miniaturen rechts van de afbeelding tonen.</para>
+                                </listitem>
+                            </itemizedlist>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Aantal rijen</guilabel
+> &mdash; gebruik de draaischakelaar om het aantal rijen op de miniaturenbalk te wijzigen</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </sect1>
+        <sect1 id="configadvanced">
+        <title
+>Geavanceerd</title>
+        <variablelist>
+            <varlistentry>
+                <term
+><guilabel
+>Miniaturen</guilabel
+></term>
+                <listitem>
+                    <para
+>De optie <guilabel
+>Modus laag gebruik hulpbron</guilabel
+> als u niet veel schijfruimte hebt. Dit zal opslaan van miniaturen op schijf vermijden en zal de voorkeur geven aan ingebedde miniaturen of een lagere kwaliteit die sneller zijn te laden, indien beschikbaar.</para>
+                    <para
+>Wees voorzichtig: dit verwijdert de map genaamd <filename
+>.thumbnails</filename
+> in uw map <filename
+>.cache</filename
+>, waarbij alle miniaturen die hiervoor gemaakt zijn door &gwenview; en andere toepassingen verwijderd worden.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Geschiedenis</guilabel
+></term>
+                <listitem>
+                    <para
+>De <guilabel
+>Mappen en URL's onthouden</guilabel
+> activeren om &gwenview; bezochte mappen en &URL;'s te laten onthouden en ze te tonen in het paneel <guilabel
+>Recente mappen</guilabel
+>.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Renderingmethode</guilabel
+></term>
+                <listitem>
+                    <para
+>Kiezen van <ulink url="https://en.wikipedia.org/wiki/Color_management#Rendering_intent"
+>rendering-intent</ulink
+> toestaan bij tonen van afbeeldingen.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Op waarneming</guilabel
+> &mdash; schaal alle kleuren gelijk om ze te laten passen binnen het actieve kleurgamut van het kleurprofiel</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Relatief colorimetrisch</guilabel
+> &mdash; verander kleuren die niet passen binnen het actieve kleurgamut van het kleurprofiel en laat andere kleuren ongemoeid</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Kleurprofiel</guilabel
+></term>
+                <listitem>
+                    <para
+>Biedt de keuze of u extra het systeembrede <ulink url="https://en.wikipedia.org/wiki/ICC_profile"
+>kleurprofiel</ulink
+> wilt toepassen op het kleurprofiel uit het afbeeldingsbestand.</para>
+                    <para
+>Als het item <guilabel
+>Alleen het ingebedde profiel in het afbeeldingsbestand toepassen</guilabel
+> is geactiveerd, neemt &gwenview; aan dat de systeembrede kleurcorrectie al is toegepast op het monitorprofiel.</para>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </sect1>
+    <sect1 id="hidden-configuration">
+    <title
+>Verborgen configuratieopties</title>
+    <para
+>Enige notities over verborgen opties van &gwenview; zijn op <ulink url="http://userbase.kde.org/Special:myLanguage/Gwenview/Hidden_Configuration_Options"
+>deze pagina</ulink
+> te vinden. </para>
+    <important>
+        <para
+>De op de boven genoemde pagina beschreven opties kunnen u helpen om &gwenview; af te regelen voor specifieke behoeften, bedenk echter dat er geen garantie is dat ze zullen blijven werken van de ene naar de andere versie. </para>
+    </important>
+    </sect1>
+</chapter>
+
+<chapter id="credits">
+<title
+>Dankbetuigingen en copyright</title>
+
+<para
+>&gwenview; wordt nu onderhouden door Aurélien Gâteau</para>
+
+<para
+>Dit document is geschreven door Christopher Martin</para>
+
+<para
+>Dit document is bijgewerkt voor &kde; 4 door Henry de Valence</para>
+
+&meld.fouten;&vertaling.rinse;&vertaling.kristof;&vertaling.freek; &underFDL; &underGPL; </chapter>
+
+</book>

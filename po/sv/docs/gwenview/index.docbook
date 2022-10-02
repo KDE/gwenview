@@ -1,0 +1,1519 @@
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN"
+"dtd/kdedbx45.dtd" [
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % Swedish "INCLUDE"
+><!-- change language only here -->
+]>
+
+<book id="gwenview" lang="&language;">
+<title
+>Handbok Gwenview</title>
+
+<bookinfo>
+<authorgroup>
+<author
+><firstname
+>Aurélien</firstname
+> <surname
+>Gâteau</surname
+> <affiliation
+><address
+><email
+>agateau@kde.org</email
+></address
+></affiliation>
+</author>
+<author
+><firstname
+>Christopher</firstname
+><surname
+>Martin</surname
+> <affiliation
+><address
+><email
+>chrsmrtn@debian.org</email
+></address
+></affiliation>
+</author>
+<author
+><firstname
+>Henry</firstname
+> <surname
+>de Valence</surname
+> <affiliation
+><address
+><email
+>hdevalence@gmail.com</email
+></address
+></affiliation>
+</author>
+<othercredit role="translator"
+> <firstname
+>Stefan</firstname
+> <surname
+>Asserhäll</surname
+> <affiliation
+><address
+><email
+>stefan.asserhall@bredband.net</email
+></address
+></affiliation
+> <contrib
+>Översättare</contrib
+></othercredit
+> 
+</authorgroup>
+<copyright>
+<year
+>2005</year>
+<holder
+>Aurélien Gâteau</holder>
+</copyright>
+<copyright>
+<year
+>2008</year>
+<holder
+>Henry de Valence</holder>
+</copyright>
+<legalnotice
+>&FDLNotice;</legalnotice>
+
+<date
+>2021-06-04</date>
+<releaseinfo
+>KDE Gear 21.08</releaseinfo>
+<abstract>
+<para
+>&gwenview; är en bild- och videovisare.</para>
+</abstract>
+<keywordset>
+<keyword
+>KDE</keyword>
+<keyword
+>bild</keyword>
+<keyword
+>visare</keyword>
+<keyword
+>artist</keyword>
+<keyword
+>foto</keyword>
+<keyword
+>bild</keyword>
+</keywordset>
+</bookinfo>
+<!--FIXME Read devels blog on http://agateau.com/
+-->
+<chapter id="introduction">
+<title
+>Inledning</title>
+
+<sect1 id="what-is-gwenview">
+<title
+>Vad är &gwenview;</title>
+
+<para
+>&gwenview; är en snabb och lättanvänd bild- och videovisare. </para>
+
+ <para
+>&gwenview; omfattar två huvudlägen: Bläddra och Visa. Båda lägen kan användas i ett normalt programfönster och i fullskärmsläge. Bläddringsläget låter dig navigera på datorn och visar miniatyrbilder, Visningsläget låter dig titta på bilder en i taget, och fullskärmsläge låter dig snabbt visa ett bildspel. Det finns också en startskärm som visar en lista med de senast öppnade katalogerna och webbadresserna, samt platser och etiketter. </para>
+
+<para
+>Bildladdning hanteras av &Qt;-biblioteket, så &gwenview; stöder alla bildformat som &Qt;-installationen stöder. &gwenview; visar bilder med alfakanal (genomskinlighet) riktigt, samt animeringar.</para>
+
+<para
+>&gwenview; stöder visning och redigering av EXIF-kommentarer i JPEG-filer. Förlustfria transformeringar som rotation och spegling stöds också.</para>
+
+<para
+>&gwenview; kan läsa inbäddade färgprofiler från PNG- och JPEG-filer. Bildernas färgprofiler tillsammans med bildskärmens färgprofil kan användas för att visa korrekta färger på skärmen.</para>
+</sect1>
+
+</chapter>
+
+<chapter id="interface">
+<title
+>Gränssnittet</title>
+
+<sect1 id='start_page'
+><title
+>Startsida</title>
+<para
+>Startsidan har en lista över senast öppnade kataloger och webbadresser till vänster, och dina platser och etiketter till höger.</para>
+
+<screenshot>
+  <screeninfo
+>Skärmbild av startsidan</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="start-page.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+</sect1>
+
+<sect1 id='image_operations'
+><title
+>Bildåtgärder</title>
+<para
+>&gwenview; har några få funktioner som är tillgängliga i bläddringsläge, visningsläge och fullskärmsläge. &gwenview; har möjlighet att göra enklare ändringar i dina bilder.</para>
+<itemizedlist>
+<listitem
+><para
+>Rotera: En rotationsåtgärd roterar antingen bilden åt vänster eller åt höger, beroende på om du väljer <menuchoice
+> <shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>R</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Edit</guimenu
+> <guimenuitem
+>Rotera åt höger</guimenuitem
+> </menuchoice
+> eller <menuchoice
+> <shortcut
+> <keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>R</keycap
+></keycombo
+></shortcut
+> <guimenu
+>Redigera</guimenu
+> <guimenuitem
+>Rotera åt vänster</guimenuitem
+> </menuchoice
+> </para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+> <guimenu
+>Redigera</guimenu
+> <guimenuitem
+>Spegla</guimenuitem
+> </menuchoice
+>: Åtgärden reflekterar bilden längs den vertikala axeln, som om du såg den i en spegel.</para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+> <guimenu
+>Redigera</guimenu
+> <guimenuitem
+>Vänd</guimenuitem
+> </menuchoice
+>: Åtgärden reflekterar bilden upp och ner (en reflektion längs den horisontella axeln)</para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+><shortcut
+><keycombo action="simul"
+>&Shift;<keycap
+>R</keycap
+></keycombo
+></shortcut
+> <guimenu
+>Redigera</guimenu
+> <guimenuitem
+>Ändra storlek</guimenuitem
+> </menuchoice
+>: Åtgärden låter dig krympa eller expandera bilden. Observera att om du ökar bildens storlek, kan den verka suddig och/eller kornig.</para
+></listitem>
+ <!-- Crop + Red Eye Reduction are discussed in View mode sect-->
+</itemizedlist>
+
+<para
+>Dessa alternativ är också tillgängliga under fliken <guilabel
+>Åtgärder</guilabel
+> i sidoraden.</para>
+
+<para
+>Om du har redigerat en eller flera bilder visas en rad med ytterligare åtgärder längst upp i bilden. Det går att ångra eller göra om ändringar, gå till föregående eller nästa ändrade bild, och det finns tre alternativ för att spara de ändrade bilderna. </para>
+
+<screenshot>
+  <screeninfo
+>Åtgärdsrad för ändrade bilder</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="modified-bar.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<!--FIXME all actions also available context menus, where to add that info -->
+
+</sect1>
+
+<sect1 id='browse_mode'
+><title
+>Bläddringsläge</title>
+
+<para
+>I bläddringsläget kan du enkelt navigera bland dina filer och kataloger. Förhandsgranskningsfönstret visar miniatyrbilder av bilderna i nuvarande katalog, samt i underkataloger. </para>
+
+<screenshot>
+  <screeninfo
+>Skärmbild av bläddringsläge</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="browse_mode.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<para
+>När musen hålls över en bild visas knappar för att markera eller rotera bilden, samt en knapp för fullskärmsläge. Ändrade bilder anges av en ikon nere till höger, klicka på den för att spara bilden. Klicka på en bild för att gå till visningsläge. Du kan markera flera bilder och växla till visningsläge för att se dem sida vid sida.</para>
+
+<para
+>Skjutreglaget längst ner till höger låter dig ändra storlek på bilderna. Du kan också filtrera bilderna enligt filnamn med användning av rutan längst ner till vänster. Verktygsraden visas både i bläddringsläge och visningsläge, och innehåller de vanligaste åtgärderna. </para>
+<itemizedlist>
+<listitem
+><para
+><guiicon
+>Startsida</guiicon
+>: Visa startsidan.</para
+></listitem>
+<listitem
+><para
+><guiicon
+>Bläddra</guiicon
+>: Byter till bläddringsläge.</para
+></listitem>
+<listitem
+><para
+><guiicon
+>Visa</guiicon
+>: Byter till visningsläge.</para
+></listitem>
+<listitem
+><para
+><guiicon
+>Gå till föregående bild</guiicon
+>: Genom att klicka på ikonen går du till föregående bild i katalogen.</para
+></listitem>
+
+<listitem
+><para
+><guiicon
+>Gå till nästa bild</guiicon
+>: Genom att klicka på ikonen går du till nästa bild i katalogen.</para
+></listitem>
+
+<listitem
+><para
+><guiicon
+>Visa redigeringsverktyg</guiicon
+>: Att klicka på knappen visar eller döljer <link linkend="sidebar"
+>Åtgärdssidoradsfliken</link
+>.</para
+></listitem>
+
+<listitem
+><para
+><guiicon
+>Fullskärmsläge</guiicon
+>: Byter till fullskärmsläge.</para
+></listitem>
+</itemizedlist>
+
+</sect1>
+
+<sect1 id='view_mode'
+><title
+>Visningsläge</title>
+<para
+>Visningsläget visar bilder i full storlek. Samma <link linkend="sidebar"
+>sidorad</link
+> som i bläddringsläget visas till vänster. Längst ner finns en miniatyrbildsrad som låter dig bläddra mellan bilderna i nuvarande katalog. Miniatyrbildsraden kan vikas ut genom att klicka på knappen <guibutton
+>Visa miniatyrbilder</guibutton
+>. Genom att klicka på knappen igen viks den in. För att ändra miniatyrbildernas storlek, flytta avdelaren med vänster musknapp.</para>
+
+<para
+>Visningsläget har stöd för att visa flera bilder sida vid sida. Du kan välja flera bilder i bläddringsläget innan du växlar till visningsläge, eller så kan du klicka på knappen <guibutton
+>+</guibutton
+> som visas när du håller musen över bilder i miniatyrbildsraden för att lägga till en ruta som visar den bilden. Ett <guibutton
+>-</guibutton
+> kommer sedan visas som låter dig ta bort rutan.</para>
+
+<para
+>När flera bilder visas, syns en liten verktygsrad under varje bild som låter dig radera bilden eller ta bort dess ruta. Du kan zooma, oberoende för varje bild, eller synkronisera dem. Ändra det genom att kryssa för <guilabel
+>Synkronisera</guilabel
+> till vänster om zoomreglaget eller genom att trycka på <keycombo action="simul"
+>&Ctrl;<keycap
+>Y</keycap
+></keycombo
+>. Du kan byta bilder genom att klicka på deras ruta, eller med tangentbordet. För att byta till bilden till höger, tryck på <keycombo action="simul"
+><keycap
+>tabulator</keycap
+></keycombo
+>". För att byta till bilden till vänster, tryck på <keycombo action="simul"
+>&Shift;<keycap
+>tabulator</keycap
+></keycombo
+>.</para>
+
+<screenshot>
+  <screeninfo
+>Skärmbild av visningsläget</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="view_mode.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<para
+>Skjutreglaget längst ner till höger styr bildens zoomning. Knapparna <guibutton
+>Anpassa</guibutton
+>, <guibutton
+>Fyll</guibutton
+> och <guibutton
+>100 %</guibutton
+> finns intill zoomreglaget, och representerar tre förinställda zoomnivåer. Knappen <guibutton
+>Anpassa</guibutton
+> zoomar nuvarande bild så den anpassas till fönsterstorleken, knappen <guibutton
+>Fyll</guibutton
+> zoomar bilden så att fönstret fylls genom att anpassa bredd eller höjd, och knappen <guibutton
+>100 %</guibutton
+> zoomar bilden till verklig storlek i bildpunkter. Genvägen <keycap
+>F</keycap
+> byter mellan <guibutton
+>Anpassa</guibutton
+> och <guibutton
+>100 %</guibutton
+>, medan att trycka på <keycombo action="simul"
+>&Shift;<keycap
+>F</keycap
+></keycombo
+> ändrar <guibutton
+>Fyll</guibutton
+>.</para>
+
+<para
+>När en bild är i zoomläget fyll sida, kan man gå till föregående och nästa bild med piltangenterna. När man zoomar in, används piltangenterna för att panorera i bilden. Det liknar mycket beteendet som erbjuds av telefoner och digitalkameror.</para>
+
+<para
+>När en bild är inzoomad, visas en översiktsvy som låter dig panorera i bilden med användning av musen och piltangenterna. Översiktsvyn döljs automatiskt efter en kort fördröjning, och visas åter bara vid zoomning eller panorering. Översiktsvyn kan inaktiveras från den sammanhangsberoende menyn som visas med högerklick eller med <menuchoice
+><guimenu
+>Visa</guimenu
+><guimenuitem
+>Visa översiktsvy vid inzoomning</guimenuitem
+></menuchoice
+>.</para>
+
+<para
+>Du kan definiera vad som händer när man byter till bild B efter att ha zoomat in på ett område i bild a med alternativen i gruppen <guilabel
+>Zoommetod</guilabel
+> på sidan <guimenuitem
+>Bildvy</guimenuitem
+> i &gwenview;s inställningsfönster, som kan nås genom att använda <menuchoice
+><guimenu
+>Inställningar</guimenu
+> <guimenuitem
+>Anpassa &gwenview;...</guimenuitem
+></menuchoice
+></para>
+
+<itemizedlist>
+    <listitem
+><para
+>Om den är inställd till <guilabel
+>Anpassa alla bilders storlek automatiskt</guilabel
+>, zoomas bild B ut för att fylla skärmen.</para
+></listitem>
+    <listitem
+><para
+>Om den är inställt till <guilabel
+>Behåll samma zoom och position</guilabel
+>, delar alla bilder samma zoom och position: Bild B ställs in till samma zoomparametrar som bild A (och om de ändras visas bild A därefter med uppdaterad zoom och position).</para
+></listitem>
+    <listitem
+><para
+>Om inställd till <guilabel
+>Zoom och position per bild</guilabel
+>, kommer alla bilder ihåg sin egen zoom och position: Bild B ställs initialt in till samma zoomparametrar som bild A, men kommer därefter ihåg sin egen zoom och position (om de ändras visas <emphasis
+>inte</emphasis
+> bild A med uppdaterad zoom och position).</para
+></listitem>
+</itemizedlist>
+
+<tip
+><para
+>Du kan direkt starta i visningsläge genom att starta &gwenview; från en sammanhangsberoende meny, som <guimenuitem
+>Öppna med</guimenuitem
+> i ett annat program, eller genom att starta det från kommandoraden med en bild som argument.</para
+> </tip>
+
+<para
+>Följande ytterligare bildåtgärder är bara tillgängliga i visningsläget:</para>
+
+<itemizedlist>
+<listitem
+><para
+><menuchoice
+><shortcut
+><keycombo action="simul"
+>&Shift;<keycap
+>C</keycap
+></keycombo
+></shortcut
+> <guimenu
+>Redigera</guimenu
+> <guimenuitem
+>Beskär</guimenuitem
+> </menuchoice
+>: Åtgärden låter dig skära bort delar av bilden du inte vill ha kvar. </para>
+<para
+>Det går att komma åt avancerade beskärningsparametrar genom att markera kryssrutan <guilabel
+>Avancerade inställningar</guilabel
+> på rutan som dyker upp längst ner. Använd motsvarande fält för att stämma av beskärningsåtgärden. </para>
+<para
+>Det är också möjligt att justera det beskärda området genom att dra den gråa fyrkantiga greppen vid bildens kanter. Det beskärda området kan flyttas genom att klicka och hålla ner vänster musknapp, och dra det med muspekaren. </para>
+<para
+>Klicka på knappen <guibutton
+>Beskär</guibutton
+> för att se resultatet när du är klar. Använd den övre rutan som dyker upp för att spara resultatet eller ångra/göra om åtgärden. </para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+> <guimenu
+>Redigera</guimenu
+> <guimenuitem
+>Reducera röda ögon</guimenuitem
+></menuchoice
+>: Åtgärden reducerar effekten av "röda ögon" som ofta uppstår i bilder som tas med blixt. </para
+></listitem>
+</itemizedlist>
+
+</sect1>
+
+<sect1 id='fullscreen_mode'>
+<title
+>Fullskärmslägen</title>
+
+<para
+>Gå till fullskärmsläge genom att klicka på knappen <guiicon
+>Fullskärm</guiicon
+> på verktygsraden, eller med <menuchoice
+> <shortcut
+> <keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>F</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Visa</guimenu
+><guimenuitem
+>Fullskärmsläge</guimenuitem
+> </menuchoice
+>. </para>
+<para
+>Tryck på tangenten Esc för att lämna läget.</para>
+
+<sect2>
+<title
+>Bläddring i fullskärmsläge</title>
+
+<para
+>I bläddringsläge kan du också byta till fullskärmsläge genom att klicka på knappen som visas när muspekaren hålls över miniatyrbilderna. </para>
+<screenshot>
+  <screeninfo
+>Skärmbild av visning i fullskärmsläge</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="fullscreen-browse.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para
+>Att använda fullskärmsläge under bläddring ger en mer fängslandeupplevelse när du går igenom dina bilder. Det är rätt trevligt på en vanlig dator, men är ännu vettigare om man ansluter sin bärbara dator till den stora teven i vardagsrummet för att visa bilder för sina gäster. </para>
+</sect2>
+
+<sect2 id="fullscreen">
+<title
+>Visning i fullskärmsläge</title>
+<para
+>Visning i fullskärmsläge visar ett bildspel med bilderna. Aktivera fullskärmsläge genom att klicka på knappen som visas när musen rörs över miniatyrbilderna i bläddringsläge, genom att klicka på knappen <guiicon
+>Fullskärm</guiicon
+> i verktygsraden. <screenshot>
+  <screeninfo
+>Skärmbild av bläddring i fullskärmsläge</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="fullscreen-view.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+</para>
+
+<para
+>Raden längst upp döljs automatiskt. Flytta helt enkelt musen längst upp på skärmen för att visa den. Om muspekaren befinner sig över raden längst upp, döljs den inte automatiskt. De flesta knapparna på raden är samma som de på verktygsraden i bläddringsläge eller visningsläge, utom knappen <guiicon
+>Avsluta fullskärmsläge</guiicon
+>, som återgår till &gwenview;s fönster, knappen <guiicon
+>Starta/Stoppa bildspel</guiicon
+> och <guiicon
+> Anpassa fullskärmsläge</guiicon
+> som visar en liten inställningsdialogruta som enkelt och snabbt låter dig anpassa bildspelet. Styrningen av bildspelet där är: </para>
+
+<itemizedlist>
+    <listitem
+><para
+>Reglaget <guilabel
+>Intervall</guilabel
+> bestämmer hur länge &gwenview; visar en bild innan det går vidare till nästa.</para
+></listitem>
+    <listitem
+><para
+>Om kryssrutan <guilabel
+>Upprepa</guilabel
+> är markerad, och bildspelets slut nås, fortsätter det från början istället för att stoppas. </para
+></listitem>
+    <listitem
+><para
+>Om kryssrutan <guilabel
+>Slumpmässig</guilabel
+> är markerad, visas bilderna i slumpmässig ordning istället för att gå igenom katalogen i alfabetisk ordning.</para
+></listitem>
+    <listitem
+><para
+><guibutton
+>Välj bildinformation att visa</guibutton
+> låter dig ange vilken metadata som ska visas under knapparna i verktygsraden. </para
+></listitem>
+    <listitem
+><para
+>Om kryssrutan <guilabel
+>Visa miniatyrbilder</guilabel
+> är markerad, visas miniatyrbilder för alla bilder i nuvarande katalog till höger om verktygsraden.</para
+></listitem>
+    <listitem
+><para
+>Skjutreglaget <guilabel
+>Höjd</guilabel
+> ändrar storlek på de visade miniatyrbilderna.</para
+></listitem>
+</itemizedlist>
+
+<para
+>Om det aktiveras kommer ett område visas i raden längst upp som visar de andra bilderna i aktuell katalog. Genom att klicka på en av dem visas den.</para>
+</sect2>
+</sect1>
+
+<sect1 id="sidebar">
+<title
+>Sidorad</title>
+
+ <para
+>Sidoraden till vänster finns i bläddrings- och visningslägena, men visas inte normalt i bläddringsläget. Den kan visas och döljas med <menuchoice
+> <shortcut
+> <keycap
+>F4</keycap
+> </shortcut
+> <guimenu
+>Visa</guimenu
+> <guimenuitem
+>Sidorad</guimenuitem
+> </menuchoice
+> eller genom att använda knappen <guiicon
+>▮←</guiicon
+> / <guiicon
+>▮→</guiicon
+> på statusradens vänstra sida. När den klickas expanderas eller dras sidoraden ihop. Sidoraden innehåller flera flikar:</para>
+
+<variablelist>
+
+<varlistentry>
+<term
+><guilabel
+>Kataloger</guilabel
+></term>
+<listitem
+><para
+>Visar en lista över alla kataloger i systemet, och låter dig växla mellan dem. I bläddringsläget kommer miniatyrbilder från katalogen visas, medan visningsläget visar den första bilden i katalogen, varifrån du kan bläddra genom katalogen genom att använda knapparna <guibutton
+>Föregående</guibutton
+> och <guibutton
+>Nästa</guibutton
+>, eller genvägar. Att klicka flera gånger på en katalog växlar mellan visningsläge och bläddringsläge.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Information</guilabel
+></term>
+<listitem
+><para
+>Visar <guilabel
+>Metainformation</guilabel
+>, som filnamn och storlek. Länken <guilabel
+>Mer...</guilabel
+> låter dig visa all tillgänglig metadata och välja vilken data som ska visas i sidoraden.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Åtgärder</guilabel
+></term>
+<listitem
+><para
+>Det här låter dig utföra de <link linkend="image_operations"
+>tidigare beskrivna globala bildåtgärderna</link
+> såväl som de som är specifika för visningsläget. Det tillåter också vanliga filåtgärder, som kopiering, namnbyte, radering, och att skapa nya kataloger.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+</sect1>
+
+</chapter>
+<chapter id="importer">
+<title
+>&gwenview;s importverktyg</title>
+
+<sect1>
+<title
+>Inledning</title>
+<para
+>&gwenview;s importverktyg låter dig importera bilder från en digitalkamera eller flyttbart media. För att starta det, välj <guilabel
+>Ladda ner foton med &gwenview;</guilabel
+> i &kde;:s Underrättelse om enhet, efter att ha anslutit en enhet som stöds.</para>
+
+<para
+>När en enhet kopplas in visar importverktyget i &gwenview; en rekursiv lista över alla bilder och videor. </para>
+<para
+>Det är inte alltid vad du förväntar dig, t.ex. om en smartphone ansluts vill du inte lista alla mediaobjekt på telefonen, utan bara bilder du tagit själv, vilka oftast finns i en särskild underkatalog. </para>
+
+<screenshot>
+  <screeninfo
+>Val av rotkatalog</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="importer-picking-root-folder.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para
+>Det är möjligt att välja rotkatalogen att lista och &gwenview;s importverktyg kommer ihåg den senaste rotkatalogen på alla enheter. På så sätt ska bara relevanta bilder och videor listas, nästa gång du ansluter en enhet. </para>
+
+<sect2>
+<title
+>Importera bilder</title>
+
+<screenshot>
+  <screeninfo
+>Skärmbild av &gwenview;s importverktyg</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="importer.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<para
+>Om du vill, kan du välja de bilder du vill importera i <guilabel
+>Välj dokument att importera</guilabel
+> genom att trycka på knappen <guiicon
+>+</guiicon
+> som visas när musen hålls över en bild. Du kan också välja katalogen som bilderna importeras till i textrutan längst ner i fönstret. När du är färdig, klicka på knappen <guibutton
+>Importera markerade</guibutton
+> för att bara importera bilderna du har markerat, eller klicka på <guibutton
+>Importera alla</guibutton
+> för att importer alla bilder som finns på enheten.</para>
+</sect2>
+
+<sect2>
+<title
+>Automatiskt namnbyte</title>
+<para
+>&gwenview;s importverktyg kan byta namn på filer enligt ett angivet mönster. För att ställa in det, välj <guibutton
+>Inställningar</guibutton
+> i nedre vänstra hörnet. Du kan sätta på eller stänga av funktionen med kryssrutan längst upp. <guilabel
+>Namnbytesformat</guilabel
+> stödjer flera speciella parametrar, som ersätts av metadata som datumet bilden skapades, eller dess filnamn. De listas under textrutan. Du kan antingen klicka på parameternamnet för att lägga till det i textrutan eller skriva in det för hand.</para>
+</sect2>
+</sect1>
+
+</chapter>
+<chapter id="tips">
+<title
+>Tips</title>
+<sect1 id='mouse'
+><title
+>Använda musen</title>
+
+<sect2 id='mouse_panning'
+><title
+>Panorera med musen</title>
+<itemizedlist>
+  <listitem
+><para
+>Att hålla nere vänster musknapp på en bild låter dig panorera bilden.</para
+></listitem>
+  <listitem
+><para
+>Mushjulet rullar bilden uppåt eller neråt.</para
+></listitem>
+</itemizedlist>
+</sect2>
+
+
+<sect2 id='mouse_zooming'
+><title
+>Zooma med musen</title>
+<itemizedlist>
+  <listitem
+><para
+>Att klicka på musens mittenknapp ändrar zoomknappen <guibutton
+>Anpassa</guibutton
+>. Håll nere &Shift;-tangenten och klicka på mittenknappen för att ändra zoomknappen <guibutton
+>Fyll</guibutton
+>.</para
+></listitem>
+  <listitem
+><para
+>Håll nere &Ctrl;-tangenten, och använd antingen mushjulet för att zooma in eller ut, eller vänsterklicka för att zooma in och högerklicka för att zooma ut.</para
+></listitem>
+
+  <listitem
+><para
+>Mushjulet, använt medan &Alt;-tangenten hålls nere, rullar bilden horisontellt.</para
+></listitem>
+</itemizedlist>
+</sect2>
+
+
+<sect2 id='mouse_browsing'
+><title
+>Bläddra med musen</title>
+<itemizedlist>
+  <listitem
+><para
+>I bläddringsläget, byter du till visningsläget för att visa en bild genom att klicka på den.</para
+></listitem>
+  <listitem
+><para
+>I bläddringsläget, när mushjulet rörs, panoreras miniatyrbildsområdet uppåt eller neråt.</para
+></listitem>
+  <listitem
+><para
+>Om alternativet <guilabel
+>Mushjulets beteende</guilabel
+> är inställt till Bläddra i <menuchoice
+><guimenu
+>Inställningar</guimenu
+> <guimenuitem
+>Anpassa &gwenview;</guimenuitem
+></menuchoice
+>, flyttar du dig mellan bilderna i katalogen genom att röra mushjulet i visningsläge.</para
+></listitem>
+</itemizedlist>
+</sect2>
+</sect1>
+
+<sect1 id="keybindings"
+> <title
+>Tangentbindningar</title>
+
+<para
+>&gwenview; levereras med en mängd tangentbordsgenvägar, som alla kan visas eller ändras genom att välja <menuchoice
+><guimenu
+>Inställningar</guimenu
+><guimenuitem
+>Anpassa genvägar...</guimenuitem
+></menuchoice
+>. Observera att i fönstren Filer och Kataloger fungerar alla &plasma;s vanliga genvägar, om de inte har ändrats till något annat.</para>
+
+<para
+>Några av de mest användbara förvalda tangentbindningarna är:</para>
+
+<itemizedlist>
+<listitem
+><para
+><keycap
+>Mellanslag</keycap
+>: Visar nästa bild i katalogen.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>Backsteg</keycap
+>: Visar föregående bild i katalogen.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Alt;<keycap
+>Up</keycap
+></keycombo
+>: Går till överliggande katalog till den nuvarande katalogen.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>F</keycap
+></keycombo
+>: Byter till fullskärmsläge.</para
+></listitem>
+
+<listitem
+><para
+>Esc: Byter tillbaka till bläddringsläget. </para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>M</keycap
+></keycombo
+>: Visa eller dölj menyraden.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>B</keycap
+></keycombo
+>: Visa eller dölj miniatyrbildsraden.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F4</keycap
+>: Visa eller dölj sidoraden.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F6</keycap
+>: Gör platsraden redigerbar så att du direkt kan skriva in en filsökväg. Du kan återgå till den vanliga platsraden genom att klicka på pilen till höger.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>R</keycap
+></keycombo
+>: Rotera nuvarande bild åt höger.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>R</keycap
+></keycombo
+>: Rotera nuvarande bild åt vänster.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Shift;<keycap
+>R</keycap
+></keycombo
+>: Ändra storlek på aktuell bild.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Shift;<keycap
+>C</keycap
+></keycombo
+>: Beskär aktuell bild.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>Y</keycap
+></keycombo
+>: När flera bilder visas i visningsläge, synkroniserar det här deras visning. </para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>S</keycap
+></keycombo
+>: Spara alla ändringar som gjorts av bilden.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>Delete</keycap
+>: Flytta nuvarande bild till papperskorgen.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Shift;<keycap
+>Delete</keycap
+></keycombo
+>: Ta bort bilden permanent från disken. Observera att åtgärden är bestående och inte kan ångras.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>P</keycap
+></keycombo
+>: Skriv ut nuvarande bild.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>O</keycap
+></keycombo
+>: Öppna en bild med den vanliga filvalsdialogrutan.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F</keycap
+>: Att trycka på snabbtangenten stänger av eller sätter på zoom för att fylla sidan.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>P</keycap
+>: När en video visas används den här snabbtangenten för att sätta på eller stänga av uppspelning.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>T</keycap
+></keycombo
+>: Redigera etiketter.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F2</keycap
+>: Byt namn på en bild på plats.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>Delete</keycap
+>: Flytta en bild till papperskorgen.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Shift;<keycap
+>Delete</keycap
+></keycombo
+>: Ta bort en bild.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>F7</keycap
+></keycombo
+>: Kopiera en bild.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>F8</keycap
+></keycombo
+>: Flytta en bild.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>F9</keycap
+></keycombo
+>: Skapa en länk till en bild.</para
+></listitem>
+
+</itemizedlist>
+
+</sect1>
+</chapter>
+
+<chapter id="configure">
+    <title
+>Anpassa &gwenview;</title>
+    <sect1 id="configindex">
+        <title
+>Översikt av inställningar</title>
+        <para
+>Du kan ställa in &gwenview; genom att välja <menuchoice
+><guimenu
+>Inställningar</guimenu
+> <guimenuitem
+>Anpassa &gwenview;...</guimenuitem
+></menuchoice
+>. Inställningsdialogrutan är uppdelad i tre sidor. Det här kapitlet beskriver de tillgängliga alternativen i detalj. </para>
+        <itemizedlist>
+            <listitem>
+                <para
+><link linkend="configgeneral"
+>Allmänt</link
+></para>
+            </listitem>
+            <listitem>
+                <para
+><link linkend="configview"
+>Bildvy</link
+></para>
+            </listitem>
+            <listitem>
+                <para
+><link linkend="configadvanced"
+>Avancerat</link
+></para>
+            </listitem>
+        </itemizedlist>
+    </sect1>
+    <sect1 id="configgeneral">
+        <title
+>Allmänt</title>
+        <variablelist>
+            <varlistentry>
+                <term
+><guilabel
+>Videor</guilabel
+></term>
+                <listitem>
+                    <para
+>Markera kryssrutan <guilabel
+>Visa videor</guilabel
+> för att låta &gwenview; visa videor bland bilderna.</para>
+                    <para
+>Avmarkera kryssrutan <guilabel
+>Spela automatiskt</guilabel
+> för att inaktivera automatisk uppspelning av videor. Det förhindrar att en video startar automatiskt vid bläddring.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Underrätta när sista bilden nås</guilabel
+></term>
+                <listitem>
+                    <para
+>Välj alternativet <guilabel
+>Aldrig</guilabel
+> för att låta &gwenview; gå igenom bildlistan utan ytterligare underrättelser.</para>
+                    <para
+>Välj alternativet <guilabel
+>Bara under bildspel</guilabel
+> om underrättelser om att listans slut har nåtts bara ska visas i <link linkend="fullscreen"
+>bildspelsläge</link
+>.</para>
+                    <para
+>Välj alternativet <guilabel
+>Alltid</guilabel
+> om du vill få underrättelser utan villkor.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Bakgrundsfärg</guilabel
+></term>
+                <listitem>
+                    <para
+>Flytta skjutreglaget för att byta färg på den gråa bakgrunden i bläddrings- och visningsläget från svart (positionen längst till vänster) till vit (positionen längst till höger).</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Fullskärmsbakgrund</guilabel
+></term>
+                <listitem>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Svart</guilabel
+>: Ställ in bakgrundsfärgen i fullskärmsläge till svart.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Mörkgrå struktur</guilabel
+>: Ställ in bakgrundsfärgen i fullskärmsläge till en mörkgrå struktur.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Destruktiv bildkvalitet</guilabel
+></term>
+                <listitem>
+                    <para
+>Kvalitetsinställningar för destruktiva bildformat såsom JPEG, WEBP, AVIF, HEIF och HEIC, som tillfälligt kan överskridas i dialogrutan <guilabel
+>Spara som</guilabel
+> när en fil sparas med ett destruktivt bildformat. När en befintlig fil med destruktivt format sparas med ett nytt namn eller efter att ha utfört en icke-destruktiv redigering (t.ex. rotation, som bara ändrar EXIF-rotationsmarkeringen), ändras inte filens utseende, eftersom ingen verklig bildmanipulering utfördes.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Miniatyrbildsåtgärder</guilabel
+></term>
+                <listitem>
+                    <para
+>Om åtgärdsknappar för miniatyrbilder ska visas överlagrade ovanför bildernas miniatyrbilder.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Alla knappar</guilabel
+>: Visa alla knappar</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Visa bara markeringsknapp</guilabel
+>: Visa bara markerings- eller avmarkeringsknapp</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Ingen</guilabel
+>: Visa inte någon miniatyrbildsknapp</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </sect1>
+        <sect1 id="configview">
+        <title
+>Bildvy</title>
+        <variablelist>
+            <varlistentry>
+                <term
+><guilabel
+>Visa genomskinlighet med</guilabel
+></term>
+                <listitem>
+                    <para
+>Välj hur bakgrunden av genomskinlighetsrutmönster eller <abbrev
+>SVG</abbrev
+>-bilder återges.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Omgivande bakgrund</guilabel
+>: Använd bakgrundsfärg från sidan <link linkend="configgeneral"
+>Allmänt</link
+>.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Schackrutig bakgrund</guilabel
+>: Använd den traditionella schackrutiga bakgrunden.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Färgbakgrund</guilabel
+>: Använd en färg som kan väljas med <ulink url="help:/fundamentals/colors.html"
+>färgväljaren</ulink
+>.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Mushjulets beteende</guilabel
+></term>
+                <listitem>
+                    <para
+>Välj hur panorering över en bild i visningsläge beter sig.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Panorera</guilabel
+>: Om inzoomad, panorera bilden vertikalt. Annars sker ingenting.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Bläddra</guilabel
+>: Byt till nästa eller föregående bild.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Zooma</guilabel
+>: Använd mushjulet fär att zooma in eller ut i aktuell bild.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Zoommetod</guilabel
+></term>
+                <listitem>
+                    <para
+>Möjliggör att välja hur zoomning i visningläge fungerar.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Anpassa alla bilders storlek automatiskt</guilabel
+>: Ändra automatiskt storlek på bilder till visningsrutan.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Behåll samma zoom och position</guilabel
+>: Använd samma zoomnivå för alla bilder.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Zoom och position per bild</guilabel
+>: Använd individuella zoomnivåer för varje bild.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Förstora mindre bilder</guilabel
+>: Markera alternativet för att låta &gwenview; förstora mindre bilder i visningsläge.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Animeringar</guilabel
+></term>
+                <listitem>
+                    <para
+>Möjliggör att välja hur toning mellan bilder görs i visningsläge.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>OpenGL</guilabel
+>: Använd hårdvaruaccelererade animeringar.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Programvara</guilabel
+>: Använd inte hårdvaruaccelererade animeringar. Välj alternativet om <guilabel
+>OpenGL</guilabel
+> inte fungerar tillfredsställande, men du ändå vill tona mellan bilder.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Inga</guilabel
+>: Använd inte animeringar vid byte mellan bilder.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Miniatyrbildsrad</guilabel
+></term>
+                <listitem>
+                    <para
+>Gör det möjligt att anpassa miniatyrbildsraden.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Orientering</guilabel
+></para>
+                            <itemizedlist>
+                                <listitem>
+                                    <para
+><guilabel
+>Horisontell</guilabel
+>: Visa en horisontell miniatyrbildsrad under bilden.</para>
+                                </listitem>
+                                <listitem>
+                                    <para
+><guilabel
+>Vertikal</guilabel
+>: Visa en vertikal miniatyrbildsrad till höger om bilden.</para>
+                                </listitem>
+                            </itemizedlist>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Radantal</guilabel
+>: Använd nummerrutan för att ändra antal rader i miniatyrraden.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </sect1>
+        <sect1 id="configadvanced">
+        <title
+>Avancerat</title>
+        <variablelist>
+            <varlistentry>
+                <term
+><guilabel
+>Miniatyrbilder</guilabel
+></term>
+                <listitem>
+                    <para
+>Aktivera alternativet <guilabel
+>Användning med få resurser</guilabel
+> om du inte har mycket diskutrymme. Det undviker att lagra miniatyrbilder på disk och föredrar inbäddade miniatyrbilder med lägre kvalitet som går snabbare att läsa in, om tillgängliga.</para>
+                    <para
+>Var försiktig: detta tar bort katalogen som heter <filename
+>.thumbnails</filename
+> i katalogen <filename
+>.cache</filename
+>, vilket tar bort miniatyrbilder tidigare skapade av &gwenview; och andra program.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Historik</guilabel
+></term>
+                <listitem>
+                    <para
+>Markera <guilabel
+>Kom ihåg kataloger och webbadresser</guilabel
+> för att få &gwenview; att komma ihåg besökta kataloger och webbadresser och visa dem i rutan <guilabel
+>Senaste kataloger</guilabel
+>.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Återgivningsalternativ</guilabel
+></term>
+                <listitem>
+                    <para
+>Möjliggör att välja <ulink url="https://en.wikipedia.org/wiki/Color_management#Rendering_intent"
+>återgivningsalternativ</ulink
+> för att visa bilder.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Perceptuell</guilabel
+>: Skala alla färger lika mycket för att passa in dem inom den aktiva färgprofilens tonomfång</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Relativt färgläge</guilabel
+>: Tryck ihop färger som inte passar in i den aktiva färgprofilens tonomfång, och lämna övriga färger orörda</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Färgprofil</guilabel
+></term>
+                <listitem>
+                    <para
+>Gör det möjligt att välja om du dessutom vill använda systemets <ulink url="https://en.wikipedia.org/wiki/ICC_profile"
+>färgprofil</ulink
+> förutom bildfilens färgprofil.</para>
+                    <para
+>Om alternativet <guilabel
+>Använd bara profilen inbäddad i bildfilen</guilabel
+> är markerat, anta &gwenview; att systemets färgkorrektion redan använder bildskärmsprofilen.</para>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </sect1>
+    <sect1 id="hidden-configuration">
+    <title
+>Dolda inställningsalternativ</title>
+    <para
+>Visa anmärkningar om dolda alternativ i &gwenview; finns på <ulink url="http://userbase.kde.org/Special:myLanguage/Gwenview/Hidden_Configuration_Options"
+>denna sida</ulink
+>. </para>
+    <important>
+        <para
+>Alternativen som beskrivs på den ovannämnda sidan kan hjälpa till att finjustera &gwenview; för specifika behov, men var medveten om att det inte finns någon garanti att de fortsätter att fungera från en version till nästa. </para>
+    </important>
+    </sect1>
+</chapter>
+
+<chapter id="credits">
+<title
+>Tack till och Copyright</title>
+
+<para
+>&gwenview; underhålls för närvarande av Aurélien Gâteau</para>
+
+<para
+>Detta dokument är skrivet av Christopher Martin</para>
+
+<para
+>Dokumentet uppdaterades för &kde; 4 av Henry de Valence</para>
+
+<para
+>Översättning Stefan Asserhäll <email
+>stefan.asserhall@bredband.net</email
+></para
+> &underFDL; &underGPL; </chapter>
+
+</book>

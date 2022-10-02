@@ -1,0 +1,1497 @@
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN"
+"dtd/kdedbx45.dtd" [
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % Catalan  "INCLUDE"
+><!-- change language only here -->
+]>
+
+<book id="gwenview" lang="&language;">
+<title
+>Manual d'usuari del &gwenview;</title>
+
+<bookinfo>
+<authorgroup>
+<author
+><firstname
+>Aurélien</firstname
+> <surname
+>Gâteau</surname
+> <affiliation
+><address
+><email
+>agateau@kde.org</email
+></address
+></affiliation>
+</author>
+<author
+><firstname
+>Christopher</firstname
+><surname
+>Martin</surname
+> <affiliation
+><address
+><email
+>chrsmrtn@debian.org</email
+></address
+></affiliation>
+</author>
+<author
+><firstname
+>Henry</firstname
+> <surname
+>de Valence</surname
+> <affiliation
+><address
+><email
+>hdevalence@gmail.com</email
+></address
+></affiliation>
+</author>
+&traductor.Antoni.Bella; 
+</authorgroup>
+<copyright>
+<year
+>2005</year>
+<holder
+>Aurélien Gâteau</holder>
+</copyright>
+<copyright>
+<year
+>2008</year>
+<holder
+>Henry de Valence</holder>
+</copyright>
+<legalnotice
+>&FDLNotice;</legalnotice>
+
+<date
+>4 de juny de 2021</date>
+<releaseinfo
+>KDE Gear 21.08</releaseinfo>
+<abstract>
+<para
+>El &gwenview; és un visualitzador d'imatges i vídeo.</para>
+</abstract>
+<keywordset>
+<keyword
+>KDE</keyword>
+<keyword
+>imatge</keyword>
+<keyword
+>visualitzador</keyword>
+<keyword
+>artista</keyword>
+<keyword
+>fotografia</keyword>
+<keyword
+>imatge</keyword>
+</keywordset>
+</bookinfo>
+<!--FIXME Read devels blog on http://agateau.com/
+-->
+<chapter id="introduction">
+<title
+>Introducció</title>
+
+<sect1 id="what-is-gwenview">
+<title
+>Què és el &gwenview;</title>
+
+<para
+>El &gwenview; és un visualitzador d'imatges i vídeo, ràpid i fàcil d'utilitzar. </para>
+
+ <para
+>El &gwenview; inclou dos modes principals: Navega i Visualitza. Els dos modes es poden utilitzar en una finestra d'aplicació normal i a pantalla completa. El mode Navega permet navegar a través de l'ordinador mostrant les miniatures de les imatges, el mode Visualitza permet veure les imatges d'una en una, i pantalla completa permet fer presentacions amb ràpides diapositives. També hi ha una pantalla d'inici que mostra una llista de les carpetes obertes recentment i l'&URL;, així com els vostres llocs i etiquetes. </para>
+
+<para
+>La càrrega de la imatge és gestionada per les biblioteques &Qt;, de manera que el &gwenview; admet tots els formats d'imatge admesos per la vostra instal·lació de les &Qt;. El &gwenview; mostrarà correctament les imatges amb un canal alfa (transparència), així com les animacions.</para>
+
+<para
+>El &gwenview; suporta mostrar i editar els comentaris EXIF en les imatges JPEG. També implementa les transformacions JPEG sense pèrdua, com ara les rotacions i els reflexos.</para>
+
+<para
+>El &gwenview; pot llegir els perfils de color incrustats als fitxers PNG i JPEG. Podeu utilitzar el perfil de color de la imatge, juntament amb el perfil de color de la pantalla per a la sortida dels colors correctes a la pantalla.</para>
+</sect1>
+
+</chapter>
+
+<chapter id="interface">
+<title
+>La interfície</title>
+
+<sect1 id='start_page'
+><title
+>Pàgina d'inici</title>
+<para
+>La pàgina d'inici mostra les carpetes obertes recentment i l'&URL; al costat esquerre, i els vostres llocs i etiquetes al costat dret.</para>
+
+<screenshot>
+  <screeninfo
+>Captura de pantalla de la pantalla d'inici</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="start-page.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+</sect1>
+
+<sect1 id='image_operations'
+><title
+>Operacions de la imatge</title>
+<para
+>El &gwenview; té algunes característiques que estan disponibles tant en les vistes Navega, Visualitza i pantalla completa. El &gwenview; té la capacitat de realitzar alteracions bàsiques a les vostres imatges.</para>
+<itemizedlist>
+<listitem
+><para
+>Gira: Una operació de rotació girarà la imatge cap a l'esquerra o cap a la dreta, depenent de si feu <menuchoice
+> <shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>R</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Edita</guimenu
+> <guimenuitem
+>Gira a la dreta</guimenuitem
+> </menuchoice
+> o <menuchoice
+> <shortcut
+> <keycombo action="simul"
+>&Ctrl;&Maj;<keycap
+>R</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Edita</guimenu
+> <guimenuitem
+>Gira a l'esquerra</guimenuitem
+> </menuchoice
+> </para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+> <guimenu
+>Edita</guimenu
+> <guimenuitem
+>Mirall</guimenuitem
+> </menuchoice
+>: Aquesta operació reflecteix la imatge sobre l'eix vertical, com si l'estiguéssiu veient en un mirall.</para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+> <guimenu
+>Edita</guimenu
+> <guimenuitem
+>Inverteix</guimenuitem
+> </menuchoice
+>: Aquesta operació reflecteix la imatge de dalt a baix (una reflexió al llarg de l'eix horitzontal).</para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+> <shortcut
+> <keycombo action="simul"
+>&Maj;<keycap
+>R</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Edita</guimenu
+> <guimenuitem
+>Redimensiona</guimenuitem
+> </menuchoice
+>: Aquesta operació permet reduir o ampliar la imatge. Cal tenir en compte que si augmenteu la mida d'una imatge, aquesta pot aparèixer borrosa i/o pixelada.</para
+></listitem>
+ <!-- Crop + Red Eye Reduction are discussed in View mode sect-->
+</itemizedlist>
+
+<para
+>Aquestes accions també estan disponibles a la pestanya <guilabel
+>Operacions</guilabel
+> de la barra lateral.</para>
+
+<para
+>Si heu editat una o més imatges, es mostrarà una barra amb accions addicionals a la part superior de la imatge. Podeu desfer o refer els canvis, anar a la imatge modificada anterior o següent, i trobareu tres opcions per a desar les imatges modificades. </para>
+
+<screenshot>
+  <screeninfo
+>Accions de la barra per a les imatges modificades</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="modified-bar.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<!--FIXME all actions also available context menus, where to add that info -->
+
+</sect1>
+
+<sect1 id='browse_mode'
+><title
+>Mode Navega</title>
+
+<para
+>Quan està en el mode Navega, podreu navegar amb facilitat entre els fitxers i carpetes. La finestra de vista prèvia mostra miniatures de les imatges a la carpeta actual, així com les subcarpetes. </para>
+
+<screenshot>
+  <screeninfo
+>Captura de pantalla del mode Navega</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="browse_mode.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<para
+>En moure el punter del ratolí sobre la imatge es mostren els botons per a seleccionar o girar la imatge, així com un botó per a accedir al mode de pantalla completa. Les imatges modificades s'indiquen amb una icona a sota a la dreta, feu clic per a desar la imatge modificada. En fer clic sobre una imatge s'accedeix al mode Visualitza. Podeu seleccionar múltiples imatges i canviar al mode Visualitza per a veure-les una al costat de l'altra.</para>
+
+<para
+>El control lliscant a la part inferior dreta permet canviar la mida de les imatges. També les podeu filtrar pel nom de fitxer, data, etiqueta o classificació utilitzant el quadre a baix a l'esquerra. La barra d'eines apareix tant en el mode Navega com en el mode Visualitza, i conté les accions més utilitzades. </para>
+<itemizedlist>
+<listitem
+><para
+><guiicon
+>Pàgina d'inici</guiicon
+>: Obre la pàgina d'inici.</para
+></listitem>
+<listitem
+><para
+><guiicon
+>Navega</guiicon
+>: Canvia al mode Navega.</para
+></listitem>
+<listitem
+><para
+><guiicon
+>Visualitza</guiicon
+>: Canvia al mode Visualitza.</para
+></listitem>
+<listitem
+><para
+><guiicon
+>Anterior</guiicon
+>: En fer clic sobre aquesta icona anireu a la imatge anterior en la carpeta.</para
+></listitem>
+
+<listitem
+><para
+><guiicon
+>Següent</guiicon
+>: En fer clic sobre aquest botó anireu a la imatge següent en la carpeta.</para
+></listitem>
+
+<listitem
+><para
+><guiicon
+>Mostra les eines d'edició</guiicon
+>: En fer clic en aquest botó, s'alternarà la <link linkend="sidebar"
+>pestanya Operacions de la barra lateral</link
+>.</para
+></listitem>
+
+<listitem
+><para
+><guiicon
+>Pantalla completa</guiicon
+>: Canvia al mode de pantalla completa.</para
+></listitem>
+</itemizedlist>
+
+</sect1>
+
+<sect1 id='view_mode'
+><title
+>Mode Visualitza</title>
+<para
+>El mode Visualitza mostra les imatges a mida completa. A l'esquerra es mostra la mateixa <link linkend="sidebar"
+>barra lateral</link
+> disponible en el mode Navega. A la part inferior, hi ha la barra de miniatures, la qual permet desplaçar-se per les imatges a la carpeta actual. La barra de miniatures es pot desplegar fent clic al botó <guibutton
+>Mostra les miniatures</guibutton
+>. Fent-hi clic una altra vegada es plegarà. Per a canviar la mida de les miniatures moveu el divisor amb el &BER;.</para>
+
+<para
+>El mode Visualitza permet veure múltiples imatges una al costat de l'altra. Podeu seleccionar múltiples imatges en el mode Navega abans de canviar al mode Visualitza, o podeu fer clic al botó <guibutton
+>+</guibutton
+> que apareix en passar el cursor per sobre les imatges a la barra de miniatures per a afegir una subfinestra de visualització per a aquesta imatge. A continuació apareixerà el botó <guibutton
+>-</guibutton
+> que permet eliminar aquesta subfinestra.</para>
+
+<para
+>Quan es mostren múltiples imatges, apareixerà una petita barra d'eines sota de cada imatge que permet eliminar la imatge o la seva subfinestra. Podeu realitzar operacions de zoom independentment per a cada imatge, o sincronitzar-les. Alterneu això marcant l'opció <guilabel
+>Sincronitza</guilabel
+> a l'esquerra del control lliscant de zoom o prement <keycombo action="simul"
+>&Ctrl;<keycap
+>Y</keycap
+></keycombo
+>. Podeu canviar entre les imatges fent clic en la seva subfinestra, o amb el teclat. Per a canviar a la imatge de la dreta, premeu <keycombo action="simul"
+>&Tab;</keycombo
+>. Per a canviar a la imatge de l'esquerra, premeu <keycombo action="simul"
+>&Maj;&Tab;</keycombo
+>.</para>
+
+<screenshot>
+  <screeninfo
+>Captura de pantalla del mode Visualitza</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="view_mode.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<para
+>El control lliscant a la part inferior dreta controla el zoom de la imatge. Els botons <guibutton
+>Ajusta</guibutton
+>, <guibutton
+>Omple</guibutton
+> i <guibutton
+>100%</guibutton
+> es troben al costat del control lliscant de zoom i disposen de tres nivells de zoom preestablerts. El botó <guibutton
+>Ajusta</guibutton
+> ajustarà la imatge actual a la mida de la finestra, el botó <guibutton
+>Omple</guibutton
+> ajustarà la imatge fins a omplir la finestra, amb l'amplada o alçada, i el botó <guibutton
+>100%</guibutton
+> ajustarà la imatge a la mida real dels píxels. La drecera <keycap
+>F</keycap
+> alternarà entre el mode <guibutton
+>Ajusta</guibutton
+> i <guibutton
+>100%</guibutton
+>, prement <keycombo action="simul"
+>&Maj;<keycap
+>F</keycap
+></keycombo
+> s'alternarà <guibutton
+>Ajusta</guibutton
+> respectivament.</para>
+
+<para
+>Quan una imatge està en el mode apropa fins a omplir, podreu anar a la imatge anterior i següent amb les tecles de fletxa. En apropar el zoom, les fletxes s'utilitzaran per a desplaçar-vos per la imatge. Això és molt similar al comportament que proporcionen els telèfons o les càmeres digitals.</para>
+
+<para
+>Quan una imatge està ampliada, apareixerà una vista d'ocell que permet desplaçar-vos per la imatge amb el ratolí i les tecles de fletxa. La vista d'ocell s'ocultarà automàticament després d'un breu retard, mostrant-se de nou quan feu zoom o desplaceu. La vista d'ocell es pot inhabilitar des del menú contextual del clic dret o des de l'element de menú <menuchoice
+><guimenu
+>Visualitza</guimenu
+><guimenuitem
+>Mostra la vista d'ocell en apropar</guimenuitem
+></menuchoice
+>.</para>
+
+<para
+>Podeu definir el que passa quan es va a la imatge B després d'haver acostat el zoom a una àrea de la imatge A emprant les opcions al grup <guilabel
+>Mode de zoom</guilabel
+> a la pàgina <guimenuitem
+>Vista de la imatge</guimenuitem
+> de la finestra de configuració del &gwenview;, a la qual podeu arribar utilitzant <menuchoice
+><guimenu
+>Arranjament</guimenu
+><guimenuitem
+>Configura el &gwenview;...</guimenuitem
+></menuchoice
+>.</para>
+
+<itemizedlist>
+    <listitem
+><para
+>Si s'ha establert a <guilabel
+>Ajusta automàticament cada imatge</guilabel
+>, la imatge B serà allunyada fins a omplir la pantalla.</para
+></listitem>
+    <listitem
+><para
+>Si s'ha establert a <guilabel
+>Mantén el mateix zoom i posició</guilabel
+>, totes les imatges compartiran el mateix zoom i posició: la imatge B s'establirà en els mateixos paràmetres de zoom com la imatge A (i si es canvien, la imatge A es mostrarà amb el zoom i posició actualitzats).</para
+></listitem>
+    <listitem
+><para
+>Si s'ha establert a <guilabel
+>Zoom i posició per a cada imatge</guilabel
+>, totes les imatges recordaran el seu propi zoom i posició: la imatge B s'establirà inicialment als mateixos paràmetres de zoom com la imatge A, però a continuació, recordarà el seu propi zoom i posició (si es canvien, la imatge A <emphasis
+>no</emphasis
+> es mostrarà amb el zoom i posició actualitzats).</para
+></listitem>
+</itemizedlist>
+
+<tip
+><para
+>Podeu començar directament en el mode Visualitza iniciant el &gwenview; des d'un menú contextual com <guimenuitem
+>Obre amb</guimenuitem
+> en un altre programa o llançant-lo des de la línia d'ordres amb una imatge com a argument.</para
+> </tip>
+
+<para
+>Les següents operacions d'imatge addicionals només estan disponibles en el mode Visualitza:</para>
+
+<itemizedlist>
+<listitem
+><para
+><menuchoice
+> <shortcut
+> <keycombo action="simul"
+>&Maj;<keycap
+>C</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Edita</guimenu
+> <guimenuitem
+>Escapça</guimenuitem
+> </menuchoice
+>: Aquesta operació permet descartar algunes parts de la imatge que no voleu. </para>
+<para
+>Podeu accedir als paràmetres avançats d'escapçat marcant la casella de selecció <guilabel
+>Arranjament avançat</guilabel
+> a la subfinestra emergent de baix. Utilitzeu els camps corresponents per a afinar l'operació d'escapçat. </para>
+<para
+>També és possible ajustar l'àrea d'escapçat arrossegant les nanses quadrades grises que hi ha a les vores de la imatge. Podeu moure l'àrea d'escapçament fent clic i mantenint premut el &BER; i arrossegant amb el punter del ratolí. </para>
+<para
+>Premeu el botó <guibutton
+>Escapça</guibutton
+> per a veure els resultats quan esteu llest. Utilitzeu la subfinestra emergent superior per a desar els resultats o desfer/refer l'operació. </para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+> <guimenu
+>Edita</guimenu
+> <guimenuitem
+>Reducció d'ulls vermells</guimenuitem
+> </menuchoice
+>: Aquesta operació redueix els «ulls vermells» que habitualment es troben en les fotografies preses amb una càmera amb flaix. </para
+></listitem>
+</itemizedlist>
+
+</sect1>
+
+<sect1 id='fullscreen_mode'>
+<title
+>Els modes a pantalla completa</title>
+
+<para
+>Accediu a la pantalla completa prement el botó <guiicon
+>Pantalla completa</guiicon
+> a la barra d'eines, o escollint <menuchoice
+> <shortcut
+> <keycombo action="simul"
+>&Ctrl;&Maj;<keycap
+>F</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Visualitza</guimenu
+> <guimenuitem
+>Mode de pantalla completa</guimenuitem
+> </menuchoice
+>. </para>
+<para
+>Per a sortir d'aquest mode premeu la tecla &Esc;.</para>
+
+<sect2>
+<title
+>El mode Navega a pantalla completa</title>
+
+<para
+>En el mode Navega també podeu canviar a pantalla completa fent clic al botó que apareix en passar el ratolí sobre les miniatures. </para>
+<screenshot>
+  <screeninfo
+>Captura de pantalla del mode Visualitza a pantalla completa</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="fullscreen-browse.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para
+>Anar a pantalla completa durant la navegació us donarà una major experiència d'immersió mentre aneu a través de les vostres imatges. És molt agradable al vostre ordinador habitual, però encara té més sentit quan connecteu el portàtil al televisor gran a la sala d'estar per a mostrar fotografies als vostres convidats. </para>
+</sect2>
+
+<sect2 id="fullscreen">
+<title
+>El mode Visualitza a pantalla completa</title>
+<para
+>El mode Visualitza a pantalla completa mostra una presentació de diapositives de les vostres imatges. Per a accedir al mode de pantalla completa feu clic al botó que apareix en passar el ratolí sobre les miniatures en el mode Navega, prement el botó <guiicon
+>Pantalla completa</guiicon
+> a la barra de tasques. <screenshot>
+  <screeninfo
+>Captura de pantalla del mode Navega a pantalla completa</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="fullscreen-view.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+</para>
+
+<para
+>La barra superior s'oculta automàticament, per a mostrar-la altra vegada, n'hi ha prou amb moure el ratolí a la part superior de la pantalla. Si el cursor del ratolí està sobre la barra superior, aquesta no s'ocultarà automàticament. La majoria dels botons sobre la barra són els mateixos que els de la barra d'eines en els modes Visualitza o Navega, a excepció del botó <guiicon
+>Surt del mode de pantalla completa</guiicon
+> que us retornarà a la finestra del &gwenview;, el botó <guiicon
+>Fes pausa/Reprèn el passi de diapositives</guiicon
+> i el botó <guiicon
+>Configuració del mode de pantalla completa</guiicon
+> mostren un diàleg de configuració que permet configurar de manera fàcil i ràpida el passi de diapositives. Els controls del passi de diapositives són: </para>
+
+<itemizedlist>
+    <listitem
+><para
+>El control lliscant <guilabel
+>Interval</guilabel
+> controla el temps durant el qual, el &gwenview; mostrarà una imatge abans de passar a la següent.</para
+></listitem>
+    <listitem
+><para
+>Si la casella de selecció <guilabel
+>Repetició</guilabel
+> està marcada, en abastar el final del passi de diapositives, continuarà des del començament en lloc de parar. </para
+></listitem>
+    <listitem
+><para
+>Si la casella de selecció <guilabel
+>Aleatori</guilabel
+> està marcada, en lloc d'avançar a través de la carpeta per ordre alfabètic, les imatges es mostraran en un ordre aleatori.</para
+></listitem>
+    <listitem
+><para
+><guibutton
+>Seleccioneu la informació a mostrar de la imatge</guibutton
+> permet definir les metadades que es mostren sota els botons de la barra d'eines. </para
+></listitem>
+    <listitem
+><para
+>Si la casella de selecció <guilabel
+>Mostra les miniatures</guilabel
+> està marcada, les miniatures per a totes les imatges a la carpeta actual es mostraran a la dreta de la barra d'eines.</para
+></listitem>
+    <listitem
+><para
+>El control lliscant <guilabel
+>Alçada</guilabel
+> canvia la mida de les miniatures mostrades.</para
+></listitem>
+</itemizedlist>
+
+<para
+>Si s'activa, es mostrarà una àrea amb les altres imatges a la carpeta actual a la barra superior. En fer clic sobre una es mostrarà.</para>
+</sect2>
+</sect1>
+
+<sect1 id="sidebar">
+<title
+>Barra lateral</title>
+
+ <para
+>La barra lateral de l'esquerra està disponible en els modes Navega i Visualitza, però no apareix de manera predeterminada en el mode Navega. La seva aparició es pot alternar utilitzant <menuchoice
+> <shortcut
+> <keycap
+>F4</keycap
+> </shortcut
+> <guimenu
+>Visualitza</guimenu
+> <guimenuitem
+>Barra lateral</guimenuitem
+> </menuchoice
+> o utilitzant el botó <guiicon
+>▮←</guiicon
+> / <guiicon
+>▮→</guiicon
+> situat al costat esquerre de la barra d'estat. En fer clic sobre seu es plegarà o desplegarà la barra lateral. La barra lateral conté diverses pestanyes:</para>
+
+<variablelist>
+
+<varlistentry>
+<term
+><guilabel
+>Carpetes</guilabel
+></term>
+<listitem
+><para
+>Mostra una llista de totes les carpetes en el sistema permetent canviar entre elles. En el mode Navega es mostraran les miniatures de la carpeta, mentre que en el mode Visualitza apareixerà la primera imatge a la carpeta, des dels quals podreu navegar a través de la carpeta utilitzant els botons <guibutton
+>Anterior</guibutton
+> i <guibutton
+>Següent</guibutton
+> o les dreceres. Fent clic múltiples vegades sobre una carpeta, alternareu entre els modes Visualitza i Navega.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Informació</guilabel
+></term>
+<listitem
+><para
+>Mostra <guilabel
+>Meta-informació</guilabel
+> com el nom de fitxer i la mida. L'enllaç <guilabel
+>Més...</guilabel
+> permet veure totes les metadades disponibles i seleccionar quines dades apareixeran a la barra lateral.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Operacions</guilabel
+></term>
+<listitem
+><para
+>Aquestes permeten realitzar les <link linkend="image_operations"
+>«Operacions de la imatge» anteriorment descrites com a globals</link
+>, així com les específiques per al mode de visualització. També permet operacions de fitxer comunes com copiar, canviar el nom, suprimir i crear carpetes.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+</sect1>
+
+</chapter>
+<chapter id="importer">
+<title
+>Importador del &gwenview;</title>
+
+<sect1>
+<title
+>Introducció</title>
+<para
+>L'importador del &gwenview; permet importar imatges des d'una càmera digital o un suport extraïble. Per a llançar-lo, seleccioneu <guilabel
+>Baixa les fotografies amb el &gwenview;</guilabel
+> al Notificador de dispositius del &kde; després de connectar amb un dispositiu admès.</para>
+
+<para
+>Quan connecteu un dispositiu, l'importador del &gwenview; llistarà de forma recursiva totes les imatges i vídeos. </para>
+<para
+>Això no serà sempre el que espereu, &pex; en connectar un telèfon intel·ligent no voldreu llistar tots els mitjans del dispositiu; només prendre les fotografies, les quals es troben normalment en una subcarpeta especial. </para>
+
+<screenshot>
+  <screeninfo
+>Selector de la carpeta arrel</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="importer-picking-root-folder.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para
+>Podeu seleccionar la carpeta arrel a la llista, i l'importador del &gwenview; recordarà l'última carpeta arrel de cada dispositiu. D'aquesta manera, la propera vegada que connecteu un dispositiu, només apareixeran llistades les fotografies i vídeos apropiats. </para>
+
+<sect2>
+<title
+>Importar imatges</title>
+
+<screenshot>
+  <screeninfo
+>Captura de pantalla de l'importador del &gwenview;</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="importer.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<para
+>Si voleu, podeu seleccionar les imatges que voleu importar a <guilabel
+>Seleccioneu els documents a importar</guilabel
+> prement el botó <guiicon
+>+</guiicon
+> que apareix en passar el cursor sobre una imatge. També podeu seleccionar la carpeta on s'importaran les imatges en el quadre de text a la part inferior de la finestra. En acabar, feu clic al botó <guibutton
+>Importa els seleccionats</guibutton
+> per a sols importar les imatges seleccionades o feu clic a <guibutton
+>Importa-ho tot</guibutton
+> per a importar totes les imatges que es trobin en el dispositiu.</para>
+</sect2>
+
+<sect2>
+<title
+>Reanomenar automàticament</title>
+<para
+>L'importador del &gwenview; pot canviar el nom dels fitxers d'acord amb un patró especificat. Per a configurar-ho, seleccioneu el botó <guibutton
+>Arranjament</guibutton
+> a la cantonada inferior esquerra. Podeu activar o desactivar aquesta característica amb la casella de selecció a la part superior. El <guilabel
+>Format per a reanomenar</guilabel
+> suporta diversos paràmetres especials, els quals seran substituïts per les metadades com la data de quan es va crear la imatge o el nom de fitxer. Es llisten a continuació del quadre de text. Podeu fer clic al nom del paràmetre per a introduir-lo al quadre de text o escriure'l de forma manual.</para>
+</sect2>
+</sect1>
+
+</chapter>
+<chapter id="tips">
+<title
+>Consells</title>
+<sect1 id='mouse'
+><title
+>Ús del ratolí</title>
+
+<sect2 id='mouse_panning'
+><title
+>Desplaçar amb el ratolí</title>
+<itemizedlist>
+  <listitem
+><para
+>Si manteniu premut el &BER; sobre una imatge podreu desplaçar-vos per aquesta.</para
+></listitem>
+  <listitem
+><para
+>La roda del ratolí desplaça la imatge cap amunt i cap avall.</para
+></listitem>
+</itemizedlist>
+</sect2>
+
+
+<sect2 id='mouse_zooming'
+><title
+>Fer zoom amb el ratolí</title>
+<itemizedlist>
+  <listitem
+><para
+>En fer clic amb el &BMR; es canviarà el botó de zoom <guibutton
+>Ajusta</guibutton
+>. Manteniu premuda la tecla &Maj; i feu clic del mig per a alternar el botó <guibutton
+>Ajusta</guibutton
+>.</para
+></listitem>
+  <listitem
+><para
+>Manteniu premuda la tecla &Ctrl;, llavors utilitzeu la roda del ratolí per a apropar i allunyar, o feu clic esquerre per a apropar i clic dret per a allunyar.</para
+></listitem>
+
+  <listitem
+><para
+>La roda del ratolí, utilitzada mentre es manté premuda la tecla &Alt;, desplaçarà la imatge horitzontalment.</para
+></listitem>
+</itemizedlist>
+</sect2>
+
+
+<sect2 id='mouse_browsing'
+><title
+>Navegar amb el ratolí</title>
+<itemizedlist>
+  <listitem
+><para
+>Quan està en el mode Navega, fent clic en una imatge es canviarà al mode Visualitza i es mostrarà aquesta imatge.</para
+></listitem>
+  <listitem
+><para
+>Quan està en el mode Navega, moure la roda del ratolí desplaçarà cap amunt o cap avall l'àrea de vista de miniatures.</para
+></listitem>
+  <listitem
+><para
+>Si l'opció <guilabel
+>Comportament del ratolí</guilabel
+> a <menuchoice
+><guimenu
+>Arranjament</guimenu
+><guimenuitem
+>Configura el &gwenview;</guimenuitem
+></menuchoice
+> està establerta a Navega, moure ​​la roda del ratolí mentre s'està en el mode Visualitza es desplaçarà a través de les imatges a la carpeta.</para
+></listitem>
+</itemizedlist>
+</sect2>
+</sect1>
+
+<sect1 id="keybindings"
+> <title
+>Dreceres de teclat</title>
+
+<para
+>El &gwenview; ve amb una sèrie de dreceres de teclat, totes les quals es poden veure i reassignar, seleccioneu <menuchoice
+><guimenu
+>Arranjament</guimenu
+><guimenuitem
+>Configura les dreceres...</guimenuitem
+></menuchoice
+>. Cal tenir en compte que en les finestres amb fitxers i carpetes, seran funcionals totes les dreceres habituals del &plasma;, d'altra manera seran reassignades.</para>
+
+<para
+>Alguns dels enllaços predeterminats més útils són:</para>
+
+<itemizedlist>
+<listitem
+><para
+><keycap
+>Espai</keycap
+>: Mostra la imatge següent en el directori.</para
+></listitem>
+
+<listitem
+><para
+>&Retro;: Mostra la imatge anterior en el directori.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Alt;<keysym
+>Fletxa amunt</keysym
+></keycombo
+>: Passa a la carpeta pare de la carpeta actual.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;&Maj;<keycap
+>F</keycap
+></keycombo
+>: Canvia al mode de pantalla completa.</para
+></listitem>
+
+<listitem
+><para
+>&Esc;: Canvia al mode Navega. </para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>M</keycap
+></keycombo
+>: Mostra/oculta la barra de menús.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>B</keycap
+></keycombo
+>: Mostra/oculta la barra de miniatures.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F4</keycap
+>: Mostra o oculta la barra lateral.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F6</keycap
+>: Fa editable la barra de localització de manera que pugueu escriure directament un camí de fitxer. Podreu tornar a la barra de localització estàndard prement la marca a la dreta.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>R</keycap
+></keycombo
+>: Gira la imatge actual a la dreta.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;&Maj;<keycap
+>R</keycap
+></keycombo
+>: Gira la imatge actual a l'esquerra.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Maj;<keycap
+>R</keycap
+></keycombo
+>: Canvia la mida de la imatge actual.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Maj;<keycap
+>C</keycap
+></keycombo
+>: Escapça la imatge actual.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>Y</keycap
+></keycombo
+>: Quan es mostren múltiples imatges en el mode Visualitza, aquesta sincronitzarà les seves vistes. </para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>S</keycap
+></keycombo
+>: Desa qualsevol canvi realitzat a la imatge.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>Supr</keycap
+>: Mou la imatge actual a la paperera.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Maj;<keycap
+>Supr</keycap
+></keycombo
+>: Elimina definitivament la imatge del disc. Cal tenir en compte que aquesta operació és irreversible i que no es podrà desfer.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>P</keycap
+></keycombo
+>: Imprimeix la imatge actual.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>O</keycap
+></keycombo
+>: Obre una imatge utilitzant el diàleg de selecció de fitxers estàndard del &kde;.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F</keycap
+>: En prémer aquesta drecera s'alterna el zoom per a ajustar-lo a la finestra entre activat/desactivat.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>P</keycap
+>: Quan es reprodueix un vídeo, aquesta drecera alternarà l'estat de la reproducció entre activat/desactivat.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>T</keycap
+></keycombo
+>: Edita les etiquetes.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F2</keycap
+>: Reanomena una imatge inclosa.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>Supr</keycap
+>: Mou una imatge a la paperera.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Maj;<keycap
+>Supr</keycap
+></keycombo
+>: Suprimeix una imatge.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>F7</keycap
+></keycombo
+>: Copia una imatge.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>F8</keycap
+></keycombo
+>: Mou una imatge.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>F9</keycap
+></keycombo
+>: Enllaça una imatge.</para
+></listitem>
+
+</itemizedlist>
+
+</sect1>
+</chapter>
+
+<chapter id="configure">
+    <title
+>Configurar el &gwenview;</title>
+    <sect1 id="configindex">
+        <title
+>Resum de la configuració</title>
+        <para
+>Podeu configurar el &gwenview; escollint <menuchoice
+><guimenu
+>Arranjament</guimenu
+> <guimenuitem
+>Configura el &gwenview;...</guimenuitem
+></menuchoice
+>. El diàleg de configuració es divideix en tres seccions. En aquest capítol es descriuen detalladament les opcions disponibles. </para>
+        <itemizedlist>
+            <listitem>
+                <para
+><link linkend="configgeneral"
+>General</link
+></para>
+            </listitem>
+            <listitem>
+                <para
+><link linkend="configview"
+>Vista de la imatge</link
+></para>
+            </listitem>
+            <listitem>
+                <para
+><link linkend="configadvanced"
+>Avançat</link
+></para>
+            </listitem>
+        </itemizedlist>
+    </sect1>
+    <sect1 id="configgeneral">
+        <title
+>General</title>
+        <variablelist>
+            <varlistentry>
+                <term
+><guilabel
+>Vídeos</guilabel
+></term>
+                <listitem>
+                    <para
+>Marqueu la casella de selecció <guilabel
+>Mostra els vídeos</guilabel
+> per a permetre que el &gwenview; mostri els vídeos entre les imatges.</para>
+                    <para
+>Desmarqueu la casella de selecció <guilabel
+>Reprodueix automàticament</guilabel
+> per a inhabilitar la reproducció automàtica de vídeos. Això evitarà que el vídeo s'iniciï automàticament mentre es navega.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Informa després d'obtenir l'última imatge</guilabel
+></term>
+                <listitem>
+                    <para
+>Seleccioneu l'element <guilabel
+>Mai</guilabel
+> per a permetre que el &gwenview; recorri la llista d'imatges sense notificacions addicionals.</para>
+                    <para
+>Seleccioneu l'element <guilabel
+>Només durant els passis de diapositives</guilabel
+> si les notificacions sobre arribar al final de la llista només s'han de mostrar en <link linkend="fullscreen"
+>el mode de passi de diapositives</link
+>.</para>
+                    <para
+>Seleccioneu l'element <guilabel
+>Sempre</guilabel
+> si voleu rebre les notificacions incondicionalment.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Color de fons</guilabel
+></term>
+                <listitem>
+                    <para
+>Moveu el control lliscant per a canviar el color del fons gris al mode Navega i Vista des del negre (la posició més a l'esquerra) fins al blanc (la posició més a la dreta).</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Fons a la pantalla completa</guilabel
+></term>
+                <listitem>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Negre</guilabel
+>: Estableix el color de fons a negre en el mode a pantalla completa.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Textura de gris fosc</guilabel
+>: Estableix el color de fons a una textura de gris fosc en el mode a pantalla completa.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Qualitat d'estalvi de les imatges amb pèrdua</guilabel
+></term>
+                <listitem>
+                    <para
+>Configuració de la qualitat de desament/compressió per a formats d'imatge amb pèrdua com JPEG, WEBP, AVIF, HEIF i HEIC, el qual es pot substituir temporalment en el diàleg <guilabel
+>Desa com a</guilabel
+> quan es desa un fitxer en un format d'imatge amb pèrdua. En desar una imatge amb pèrdua existent amb un nom nou o després de realitzar una edició sense pèrdua (&pex;, gir, el qual només canviarà l'etiqueta de gir a l'EXIF), l'aparença del fitxer no canviarà perquè no es realitzarà una manipulació real de la imatge.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Accions de les miniatures</guilabel
+></term>
+                <listitem>
+                    <para
+>Si els botons d'acció de les miniatures s'han de mostrar com a superposicions sobre les miniatures de les imatges.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Tots els botons</guilabel
+>: Mostra tots els botons.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Mostra només el botó de selecció</guilabel
+>: Mostra només el botó selecciona/desselecciona.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Cap</guilabel
+>: No mostra cap botó de miniatura.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </sect1>
+        <sect1 id="configview">
+        <title
+>Vista de la imatge</title>
+        <variablelist>
+            <varlistentry>
+                <term
+><guilabel
+>Mostra la transparència amb</guilabel
+></term>
+                <listitem>
+                    <para
+>Trieu com es representarà el fons de la trama transparent o les imatges <abbrev
+>SVG</abbrev
+>.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Fons circumdant</guilabel
+>: Utilitza el color de fons des de la pàgina <link linkend="configgeneral"
+>General</link
+>.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Fons de tauler d'escacs</guilabel
+>: Utilitza el fons tradicional d'un tauler d'escacs.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Fons de color sòlid</guilabel
+>: Utilitza un color que es pugui triar amb el <ulink url="help:/fundamentals/colors.html"
+>selector de color</ulink
+>.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Comportament de la roda del ratolí</guilabel
+></term>
+                <listitem>
+                    <para
+>Selecciona com es comporta el desplaçament per sobre d'una imatge en el mode Visualitza.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Desplaçament</guilabel
+>: Quan amplieu, es posicionarà la imatge verticalment. En cas contrari, no passarà res.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Navega</guilabel
+>: Canvia a la imatge següent o anterior.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Zoom</guilabel
+>: Utilitza la roda del ratolí per a apropar/allunyar la imatge actual.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Mode de zoom</guilabel
+></term>
+                <listitem>
+                    <para
+>Permet triar com funcionarà el zoom en el mode Visualitza.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Ajusta automàticament cada imatge</guilabel
+>: Redimensiona automàticament les imatges a la subfinestra de visualització.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Mantén el mateix zoom i posició</guilabel
+>: Utilitza el mateix nivell de zoom per a totes les imatges.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Zoom i posició per a cada imatge</guilabel
+>: Utilitza nivells de zoom individuals per a cada imatge.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Augmenta les imatges petites</guilabel
+>: Marcar aquest element per a fer que el &gwenview; ampliï les imatges més petites en el mode Visualitza.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Animacions</guilabel
+></term>
+                <listitem>
+                    <para
+>Permet triar com es farà l'esvaïment entre les imatges en el mode Visualitza.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>OpenGL</guilabel
+>: Utilitza les animacions accelerades per maquinari.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Programari</guilabel
+>: No utilitza les animacions accelerades per maquinari. Seleccioneu aquesta opció si l'<guilabel
+>OpenGL</guilabel
+> no funciona satisfactòriament, però encara voleu un esvaïment entre les imatges.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Cap</guilabel
+>: No utilitza cap animació quan es canvia entre les imatges.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Barra de miniatures</guilabel
+></term>
+                <listitem>
+                    <para
+>Permet configurar la barra de miniatures.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Orientació</guilabel
+></para>
+                            <itemizedlist>
+                                <listitem>
+                                    <para
+><guilabel
+>Horitzontal</guilabel
+>: Mostra una franja horitzontal de miniatures a sota de la imatge.</para>
+                                </listitem>
+                                <listitem>
+                                    <para
+><guilabel
+>Vertical</guilabel
+>: Mostra una franja vertical de miniatures a la dreta de la imatge.</para>
+                                </listitem>
+                            </itemizedlist>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Nombre de files</guilabel
+>: Utilitza el botó de selecció de valors per a canviar el nombre de files a la barra de miniatures</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </sect1>
+        <sect1 id="configadvanced">
+        <title
+>Avançat</title>
+        <variablelist>
+            <varlistentry>
+                <term
+><guilabel
+>Miniatures</guilabel
+></term>
+                <listitem>
+                    <para
+>Habiliteu l'opció <guilabel
+>Mode d'ús baix de recursos</guilabel
+> si no teniu gaire espai al disc. Això evitarà emmagatzemar les miniatures al disc i preferirà les miniatures incrustades de menor qualitat que seran més ràpides de carregar, si estan disponibles.</para>
+                    <para
+>Aneu amb compte: això suprimirà la carpeta anomenada <filename
+>thumbnails</filename
+> de la carpeta <filename
+>.cache</filename
+>, eliminant totes les miniatures generades prèviament pel &gwenview; i altres aplicacions.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Historial</guilabel
+></term>
+                <listitem>
+                    <para
+>Marqueu l'opció <guilabel
+>Recorda les carpetes i els URL</guilabel
+> per a fer que el &gwenview; recordi les carpetes visitades i els &URL;, que les mostri a la subfinestra <guilabel
+>Carpetes recents</guilabel
+>.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Propòsit de la representació</guilabel
+></term>
+                <listitem>
+                    <para
+>Permet escollir el <ulink url="https://en.wikipedia.org/wiki/Color_management#Rendering_intent"
+>propòsit de la representació</ulink
+> per a mostrar les imatges.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Perceptiu</guilabel
+>: Redueix tots els colors per igual per a ajustar-los a la gamma de colors del perfil de color actiu.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Colorimetria relativa</guilabel
+>: Redueix els colors que no s'ajustin a la gamma de colors del perfil de colors actiu, sense modificar els altres colors.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Perfil de color</guilabel
+></term>
+                <listitem>
+                    <para
+>Permet decidir si voleu aplicar addicionalment el <ulink url="https://en.wikipedia.org/wiki/ICC_profile"
+>perfil de color</ulink
+> de tot el sistema al perfil de color del fitxer d'imatge.</para>
+                    <para
+>Si està marcat l'element <guilabel
+>Aplica només el perfil incrustat al fitxer de la imatge</guilabel
+>, el &gwenview; assumirà que la correcció de color a tot el sistema ja està aplicada pel perfil del monitor.</para>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </sect1>
+    <sect1 id="hidden-configuration">
+    <title
+>Opcions ocultes de la configuració</title>
+    <para
+>Algunes notes sobre les opcions ocultes del &gwenview; es poden trobar en <ulink url="http://userbase.kde.org/Special:myLanguage/Gwenview/Hidden_Configuration_Options"
+>aquesta pàgina</ulink
+>. </para>
+    <important>
+        <para
+>Les opcions descrites a la pàgina anteriorment esmentada poden ajudar-vos a ajustar el &gwenview; per a necessitats específiques, però cal tenir en compte que no es garanteix que continuaran funcionant d'una versió a una altra. </para>
+    </important>
+    </sect1>
+</chapter>
+
+<chapter id="credits">
+<title
+>Crèdits i llicència</title>
+
+<para
+>El &gwenview; actualment és mantingut per en Aurélien Gâteau</para>
+
+<para
+>Aquest document ha estat escrit per en Christopher Martin</para>
+
+<para
+>Aquest document ha estat actualitzat per al &kde; 4 per en Henry de Valence</para>
+
+<para
+>Traductor/Revisor de la documentació: &credits.Antoni.Bella;</para
+> &underFDL; &underGPL; </chapter>
+
+</book>
