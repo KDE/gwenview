@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-09-28 00:44+0000\n"
+"POT-Creation-Date: 2022-10-07 00:43+0000\n"
 "PO-Revision-Date: 2014-09-28 22:46-0700\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -1647,7 +1647,7 @@ msgstr ""
 "タグによる検索は利用できません。Nepomuk が正しくインストールされているか確認"
 "してください。"
 
-#: app/viewmainpage.cpp:153 app/viewmainpage.cpp:448
+#: app/viewmainpage.cpp:153 app/viewmainpage.cpp:447
 #, kde-format
 msgid "Synchronize"
 msgstr "同期"
@@ -1659,7 +1659,7 @@ msgid "Show Thumbnails"
 msgstr "サムネイルを表示する"
 
 #. i18n: For languages that are read right to left, "right side" refers to the left side in this context.
-#: app/viewmainpage.cpp:432
+#: app/viewmainpage.cpp:431
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1671,20 +1671,20 @@ msgid ""
 "in the settings</link>.</para>"
 msgstr ""
 
-#: app/viewmainpage.cpp:576
+#: app/viewmainpage.cpp:575
 #, fuzzy, kde-format
 #| msgid "Background color:"
 msgctxt "@item:inmenu"
 msgid "Background Color Mode"
 msgstr "背景色:"
 
-#: app/viewmainpage.cpp:768
+#: app/viewmainpage.cpp:767
 #, kde-format
 msgctxt "@action:button"
 msgid "Discard Changes and Reload"
 msgstr "変更を破棄して再読み込み"
 
-#: app/viewmainpage.cpp:770
+#: app/viewmainpage.cpp:769
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2286,8 +2286,7 @@ msgstr "<filename>%1</filename> の読み込みに失敗しました"
 
 # ACCELERATOR added by translator
 #: lib/documentview/documentviewcontroller.cpp:63
-#, fuzzy, kde-format
-#| msgid "Zoom to Fit"
+#, kde-format
 msgid "Zoom to Fit"
 msgstr "ビューに合わせる(&F)"
 
@@ -2787,83 +2786,3 @@ msgstr "ファイル(&F)"
 #, kde-format
 msgid "&View"
 msgstr "表示(&V)"
-
-#, fuzzy
-#~| msgid "Background color:"
-#~ msgctxt "@label:chooser Describes what a row of buttons control"
-#~ msgid "Background color:"
-#~ msgstr "背景色:"
-
-#~ msgid "&Plugins"
-#~ msgstr "プラグイン(&P)"
-
-#~ msgid "Last Used Plugin"
-#~ msgstr "最後に使用したプラグイン"
-
-#~ msgid "Other Plugins"
-#~ msgstr "他のプラグイン"
-
-#~ msgctxt "@action"
-#~ msgid "Share"
-#~ msgstr "共有"
-
-#~ msgctxt "%1 is collection name, %2 is image count in collection"
-#~ msgid "%1 (%2 image)"
-#~ msgid_plural "%1 (%2 images)"
-#~ msgstr[0] "%1 (%2 画像)"
-#~ msgstr[1] "%1 (%2 画像)"
-
-#~ msgid "Loading..."
-#~ msgstr "読み込んでいます..."
-
-#~ msgid "No Plugin Found"
-#~ msgstr "プラグインがありません"
-
-#, fuzzy
-#~| msgid "Other Plugins"
-#~ msgctxt "@item:inmenu"
-#~ msgid "Install Plugins"
-#~ msgstr "他のプラグイン"
-
-#~ msgctxt "@title:menu"
-#~ msgid "Images"
-#~ msgstr "画像"
-
-#~ msgctxt "@title:menu"
-#~ msgid "Tools"
-#~ msgstr "ツール"
-
-#~ msgctxt "@title:menu"
-#~ msgid "Import"
-#~ msgstr "インポート"
-
-#~ msgctxt "@title:menu"
-#~ msgid "Export"
-#~ msgstr "エクスポート"
-
-#~ msgctxt "@title:menu"
-#~ msgid "Batch Processing"
-#~ msgstr "一括処理"
-
-#~ msgctxt "@title:menu"
-#~ msgid "Collections"
-#~ msgstr "コレクション"
-
-#~ msgid ""
-#~ "Images will be uploaded here:\n"
-#~ "%1"
-#~ msgstr ""
-#~ "画像を以下にアップロードします:\n"
-#~ "%1"
-
-#~ msgid "Thumbnail Bar"
-#~ msgstr "サムネイルバー|/|$[~setProps ~full 'サムネイルバーを表示']"
-
-#~ msgctxt ""
-#~ "@action:button Zoom to original size, shown in status bar, keep it short "
-#~ "please"
-#~ msgid "100%"
-#~ msgstr "100%"
-
-#~ msgid "Gwenview KPart"
-#~ msgstr "Gwenview KPart"

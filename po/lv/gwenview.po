@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-09-28 00:44+0000\n"
+"POT-Creation-Date: 2022-10-07 00:43+0000\n"
 "PO-Revision-Date: 2012-07-02 21:42+0300\n"
 "Last-Translator: Einars Sprugis <einars8@gmail.com>\n"
 "Language-Team: Latvian <locale@laka.lv>\n"
@@ -1658,7 +1658,7 @@ msgstr ""
 "Pārlūkošana pēc birkām nav pieejama. Pārbaudiet vai Nepomuk ir korekti "
 "instalēts jūsu datorā."
 
-#: app/viewmainpage.cpp:153 app/viewmainpage.cpp:448
+#: app/viewmainpage.cpp:153 app/viewmainpage.cpp:447
 #, kde-format
 msgid "Synchronize"
 msgstr "Sinhronizēt"
@@ -1670,7 +1670,7 @@ msgid "Show Thumbnails"
 msgstr "Rādīt sīktēlus"
 
 #. i18n: For languages that are read right to left, "right side" refers to the left side in this context.
-#: app/viewmainpage.cpp:432
+#: app/viewmainpage.cpp:431
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1682,20 +1682,20 @@ msgid ""
 "in the settings</link>.</para>"
 msgstr ""
 
-#: app/viewmainpage.cpp:576
+#: app/viewmainpage.cpp:575
 #, fuzzy, kde-format
 #| msgid "Background color:"
 msgctxt "@item:inmenu"
 msgid "Background Color Mode"
 msgstr "Fona krāsa:"
 
-#: app/viewmainpage.cpp:768
+#: app/viewmainpage.cpp:767
 #, kde-format
 msgctxt "@action:button"
 msgid "Discard Changes and Reload"
 msgstr "Izmest izmaiņas un pārlādēt"
 
-#: app/viewmainpage.cpp:770
+#: app/viewmainpage.cpp:769
 #, kde-format
 msgctxt "@info"
 msgid ""

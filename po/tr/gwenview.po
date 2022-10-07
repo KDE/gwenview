@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdegraphics-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-09-28 00:44+0000\n"
+"POT-Creation-Date: 2022-10-07 00:43+0000\n"
 "PO-Revision-Date: 2022-07-11 10:57+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -1589,7 +1589,7 @@ msgstr ""
 "Etiketlere göre tarama kullanılabilir değil. Nepomuk uygulamasının "
 "bilgisayarınıza doğru bir şekilde kurulduğundan emin olun."
 
-#: app/viewmainpage.cpp:153 app/viewmainpage.cpp:448
+#: app/viewmainpage.cpp:153 app/viewmainpage.cpp:447
 #, kde-format
 msgid "Synchronize"
 msgstr "Eşzamanla"
@@ -1600,7 +1600,7 @@ msgid "Show Thumbnails"
 msgstr "Küçük Görselleri Göster"
 
 #. i18n: For languages that are read right to left, "right side" refers to the left side in this context.
-#: app/viewmainpage.cpp:432
+#: app/viewmainpage.cpp:431
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1618,19 +1618,19 @@ msgstr ""
 "taşınabilir ve birden çok görsel satırı içerebilir; <link url='%1'>bu "
 "seçenekleri ayarlardan yapılandırabilirsiniz</link>.</para>"
 
-#: app/viewmainpage.cpp:576
+#: app/viewmainpage.cpp:575
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Background Color Mode"
 msgstr "Arka Plan Renk Kipi"
 
-#: app/viewmainpage.cpp:768
+#: app/viewmainpage.cpp:767
 #, kde-format
 msgctxt "@action:button"
 msgid "Discard Changes and Reload"
 msgstr "Değişiklikleri At ve Yeniden Yükle"
 
-#: app/viewmainpage.cpp:770
+#: app/viewmainpage.cpp:769
 #, kde-format
 msgctxt "@info"
 msgid ""

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-09-28 00:44+0000\n"
+"POT-Creation-Date: 2022-10-07 00:43+0000\n"
 "PO-Revision-Date: 2022-07-09 00:16+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -1590,7 +1590,7 @@ msgstr ""
 "Bladeren op basis van een tag is niet beschikbaar. Verzeker u ervan dat "
 "Nepomuk juist is geïnstalleerd  op uw computer."
 
-#: app/viewmainpage.cpp:153 app/viewmainpage.cpp:448
+#: app/viewmainpage.cpp:153 app/viewmainpage.cpp:447
 #, kde-format
 msgid "Synchronize"
 msgstr "Synchroniseren"
@@ -1601,7 +1601,7 @@ msgid "Show Thumbnails"
 msgstr "Miniaturen tonen"
 
 #. i18n: For languages that are read right to left, "right side" refers to the left side in this context.
-#: app/viewmainpage.cpp:432
+#: app/viewmainpage.cpp:431
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1619,19 +1619,19 @@ msgstr ""
 "rechterkant van het scherm en meerdere rijen afbeeldingen bevatten; <link "
 "url='%1'>deze opties in de instellingen configureren</link>.</para>"
 
-#: app/viewmainpage.cpp:576
+#: app/viewmainpage.cpp:575
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Background Color Mode"
 msgstr "Modus Achtergrondkleur"
 
-#: app/viewmainpage.cpp:768
+#: app/viewmainpage.cpp:767
 #, kde-format
 msgctxt "@action:button"
 msgid "Discard Changes and Reload"
 msgstr "Wijzigingen negeren en opnieuw laden"
 
-#: app/viewmainpage.cpp:770
+#: app/viewmainpage.cpp:769
 #, kde-format
 msgctxt "@info"
 msgid ""

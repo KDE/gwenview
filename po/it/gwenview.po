@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-09-28 00:44+0000\n"
+"POT-Creation-Date: 2022-10-07 00:43+0000\n"
 "PO-Revision-Date: 2022-07-11 00:46+0200\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -1591,7 +1591,7 @@ msgstr ""
 "La navigazione per etichette non è disponibile. Assicurati che Nepomuk sia "
 "correttamente installato sul computer."
 
-#: app/viewmainpage.cpp:153 app/viewmainpage.cpp:448
+#: app/viewmainpage.cpp:153 app/viewmainpage.cpp:447
 #, kde-format
 msgid "Synchronize"
 msgstr "Sincronizza"
@@ -1602,7 +1602,7 @@ msgid "Show Thumbnails"
 msgstr "Mostra le miniature"
 
 #. i18n: For languages that are read right to left, "right side" refers to the left side in this context.
-#: app/viewmainpage.cpp:432
+#: app/viewmainpage.cpp:431
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1621,19 +1621,19 @@ msgstr ""
 "diverse righe di immagini; <link url='%1'>configura queste opzioni nelle "
 "impostazioni</link>.</para>"
 
-#: app/viewmainpage.cpp:576
+#: app/viewmainpage.cpp:575
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Background Color Mode"
 msgstr "Modalità colore di sfondo"
 
-#: app/viewmainpage.cpp:768
+#: app/viewmainpage.cpp:767
 #, kde-format
 msgctxt "@action:button"
 msgid "Discard Changes and Reload"
 msgstr "Scarta le modifiche e ricarica"
 
-#: app/viewmainpage.cpp:770
+#: app/viewmainpage.cpp:769
 #, kde-format
 msgctxt "@info"
 msgid ""

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-09-28 00:44+0000\n"
+"POT-Creation-Date: 2022-10-07 00:43+0000\n"
 "PO-Revision-Date: 2022-08-08 21:38+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: Arabic <kde-l10n-ar@kde.org>\n"
@@ -1627,7 +1627,7 @@ msgid ""
 "on your computer."
 msgstr "وسم الاستعراض غير متاح. تأكد من أن نِبومَك مثبت بشكل صحيح في حاسوبك."
 
-#: app/viewmainpage.cpp:153 app/viewmainpage.cpp:448
+#: app/viewmainpage.cpp:153 app/viewmainpage.cpp:447
 #, kde-format
 msgid "Synchronize"
 msgstr "زامِن"
@@ -1638,7 +1638,7 @@ msgid "Show Thumbnails"
 msgstr "أظهر المصغرات"
 
 #. i18n: For languages that are read right to left, "right side" refers to the left side in this context.
-#: app/viewmainpage.cpp:432
+#: app/viewmainpage.cpp:431
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1655,19 +1655,19 @@ msgstr ""
 "إلى الجانب الأيمن من الشاشة أو يمكن أن يحتوي على صفوف متعددة من الصور؛ <link "
 "url = '%1'> اضبط هذه الخيارات في الإعدادات </link>. </para> "
 
-#: app/viewmainpage.cpp:576
+#: app/viewmainpage.cpp:575
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Background Color Mode"
 msgstr "نمط لون الخلفية"
 
-#: app/viewmainpage.cpp:768
+#: app/viewmainpage.cpp:767
 #, kde-format
 msgctxt "@action:button"
 msgid "Discard Changes and Reload"
 msgstr "تجاهل التغييرات و أعد التحميل"
 
-#: app/viewmainpage.cpp:770
+#: app/viewmainpage.cpp:769
 #, kde-format
 msgctxt "@info"
 msgid ""

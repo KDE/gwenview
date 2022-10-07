@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-09-28 00:44+0000\n"
+"POT-Creation-Date: 2022-10-07 00:43+0000\n"
 "PO-Revision-Date: 2012-07-11 10:26+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer\n"
@@ -1629,7 +1629,7 @@ msgstr ""
 "ការ​រុក​រក​តាម​ស្លាក​មិន​អាច​ធ្វើ​កើត​ទេ ។ សូម​ប្រាក​ដ​ថា  Nepomuk ត្រូវ​បាន​ដំឡើង​យ៉ាង​ត្រឹម​ត្រូវ​នៅ​លើ​កុំព្យូទ័រ​"
 "របស់​អ្នក ។"
 
-#: app/viewmainpage.cpp:153 app/viewmainpage.cpp:448
+#: app/viewmainpage.cpp:153 app/viewmainpage.cpp:447
 #, kde-format
 msgid "Synchronize"
 msgstr "ធ្វើ​សមកាល​កម្ម"
@@ -1641,7 +1641,7 @@ msgid "Show Thumbnails"
 msgstr "បង្ហាញ​រូបភាព​តូច​ៗ"
 
 #. i18n: For languages that are read right to left, "right side" refers to the left side in this context.
-#: app/viewmainpage.cpp:432
+#: app/viewmainpage.cpp:431
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1653,20 +1653,20 @@ msgid ""
 "in the settings</link>.</para>"
 msgstr ""
 
-#: app/viewmainpage.cpp:576
+#: app/viewmainpage.cpp:575
 #, fuzzy, kde-format
 #| msgid "Background color:"
 msgctxt "@item:inmenu"
 msgid "Background Color Mode"
 msgstr "ពណ៌​ផ្ទៃ​ខាង​ក្រោយ ៖"
 
-#: app/viewmainpage.cpp:768
+#: app/viewmainpage.cpp:767
 #, kde-format
 msgctxt "@action:button"
 msgid "Discard Changes and Reload"
 msgstr "បោះបង់​ការ​ផ្លាស់​ប្ដូរ រួច​ផ្ទុក​ឡើង​វិញ"
 
-#: app/viewmainpage.cpp:770
+#: app/viewmainpage.cpp:769
 #, kde-format
 msgctxt "@info"
 msgid ""
