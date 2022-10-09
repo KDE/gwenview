@@ -2438,7 +2438,7 @@ msgstr ""
 #, kde-format
 msgid "Index representing selected ratio in the Advanced settings combobox"
 msgstr ""
-"Índex que representa la relació seleccionada al quadro combinat de la "
+"Índex que representa la relació seleccionada en el quadro combinat de la "
 "configuració avançada"
 
 #. i18n: ectx: label, entry (CropRatioWidth), group (Crop)
