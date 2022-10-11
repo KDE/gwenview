@@ -1,5 +1,6 @@
 [Desktop Entry]
 X-KDE-Solid-Predicate=[ StorageVolume.ignored == false AND StorageVolume.usage == 'FileSystem' ]
+X-KDE-AliasFor=org.kde.gwenview_importer
 Type=Service
 Actions=open;
 
