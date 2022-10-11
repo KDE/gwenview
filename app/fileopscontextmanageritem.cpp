@@ -35,6 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KFileItem>
 #include <KFileItemActions>
 #include <KFileItemListProperties>
+#include <KIO/ApplicationLauncherJob>
 #include <KIO/JobUiDelegate>
 #include <KIO/OpenFileManagerWindowJob>
 #include <KIO/Paste>
@@ -48,8 +49,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KUrlMimeData>
 #include <KXMLGUIClient>
 #include <kio_version.h>
-#include <KIO/ApplicationLauncherJob>
+#if KIO_VERSION >= QT_VERSION_CHECK(5, 98, 0)
+#include <KIO/JobUiDelegateFactory>
+#else
 #include <KIO/JobUiDelegate>
+#endif
 
 // Local
 #include "fileoperations.h"
@@ -391,7 +395,11 @@ void FileOpsContextManagerItem::openWith(QAction *action)
     // If service is null, ApplicationLauncherJob will invoke the open-with dialog
     auto job = new KIO::ApplicationLauncherJob(service);
     job->setUrls(list);
+#if KIO_VERSION >= QT_VERSION_CHECK(5, 98, 0)
+    job->setUiDelegate(KIO::createDefaultJobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, mGroup));
+#else
     job->setUiDelegate(new KIO::JobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, mGroup));
+#endif
     job->start();
 }
 

@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QStandardPaths>
 
 // KF
+#include <KIO/ApplicationLauncherJob>
 #include <KIO/DeleteJob>
 #include <KLocalizedString>
 #include <KMessageBox>
@@ -35,8 +36,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KService>
 #include <KStandardGuiItem>
 #include <Solid/Device>
-#include <KIO/ApplicationLauncherJob>
+#include <kio_version.h>
+#if KIO_VERSION >= QT_VERSION_CHECK(5, 98, 0)
+#include <KIO/JobUiDelegateFactory>
+#else
 #include <KIO/JobUiDelegate>
+#endif
 
 // Local
 #include "dialogpage.h"
@@ -153,7 +158,11 @@ public:
         } else {
             auto job = new KIO::ApplicationLauncherJob(service);
             job->setUrls({mThumbnailPage->destinationUrl()});
+#if KIO_VERSION >= QT_VERSION_CHECK(5, 98, 0)
+            job->setUiDelegate(KIO::createDefaultJobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, nullptr));
+#else
             job->setUiDelegate(new KIO::JobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, nullptr));
+#endif
             job->start();
         }
     }
