@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-07 00:43+0000\n"
+"POT-Creation-Date: 2022-10-12 00:44+0000\n"
 "PO-Revision-Date: 2020-09-17 14:48+0800\n"
 "Last-Translator: Jeff Huang <s8321414@gmail.com>\n"
 "Language-Team: Chinese <zh-l10n@linux.org.tw>\n"
@@ -215,7 +215,7 @@ msgctxt "@action:inmenu"
 msgid "Rating"
 msgstr "比率"
 
-#: app/browsemainpage.cpp:196 app/fileopscontextmanageritem.cpp:138
+#: app/browsemainpage.cpp:196 app/fileopscontextmanageritem.cpp:142
 #: app/mainwindow.cpp:372
 #, kde-format
 msgctxt "@title actions category"
@@ -354,74 +354,74 @@ msgstr "鏈結到這裡"
 msgid "Cancel"
 msgstr "取消"
 
-#: app/fileopscontextmanageritem.cpp:128
+#: app/fileopscontextmanageritem.cpp:132
 #, kde-format
 msgid "File Operations"
 msgstr "檔案"
 
-#: app/fileopscontextmanageritem.cpp:139
+#: app/fileopscontextmanageritem.cpp:143
 #: app/semanticinfocontextmanageritem.cpp:203
 #, kde-format
 msgctxt "@title actions category"
 msgid "Edit"
 msgstr "編輯"
 
-#: app/fileopscontextmanageritem.cpp:146
+#: app/fileopscontextmanageritem.cpp:150
 #, kde-format
 msgctxt "Verb"
 msgid "Copy To..."
 msgstr "複製到..."
 
-#: app/fileopscontextmanageritem.cpp:151
+#: app/fileopscontextmanageritem.cpp:155
 #, kde-format
 msgctxt "Verb"
 msgid "Move To..."
 msgstr "移動到..."
 
-#: app/fileopscontextmanageritem.cpp:156
+#: app/fileopscontextmanageritem.cpp:160
 #, kde-format
 msgctxt "Verb: create link to the file where user wants"
 msgid "Link To..."
 msgstr "鏈結到..."
 
-#: app/fileopscontextmanageritem.cpp:161
+#: app/fileopscontextmanageritem.cpp:165
 #, kde-format
 msgctxt "Verb"
 msgid "Rename..."
 msgstr "重新命名..."
 
-#: app/fileopscontextmanageritem.cpp:166
+#: app/fileopscontextmanageritem.cpp:170
 #, kde-format
 msgctxt "Verb"
 msgid "Trash"
 msgstr "垃圾桶"
 
-#: app/fileopscontextmanageritem.cpp:173
+#: app/fileopscontextmanageritem.cpp:177
 #, kde-format
 msgid "Restore"
 msgstr "回復"
 
-#: app/fileopscontextmanageritem.cpp:177
+#: app/fileopscontextmanageritem.cpp:181
 #, kde-format
 msgid "Properties"
 msgstr "屬性"
 
-#: app/fileopscontextmanageritem.cpp:182
+#: app/fileopscontextmanageritem.cpp:186
 #, kde-format
 msgid "Create Folder..."
 msgstr "建立資料夾..."
 
-#: app/fileopscontextmanageritem.cpp:186
+#: app/fileopscontextmanageritem.cpp:190
 #, kde-format
 msgid "Open With"
 msgstr "開啟方式..."
 
-#: app/fileopscontextmanageritem.cpp:193
+#: app/fileopscontextmanageritem.cpp:197
 #, kde-format
 msgid "Open Containing Folder"
 msgstr "開啟包含資料夾"
 
-#: app/fileopscontextmanageritem.cpp:375
+#: app/fileopscontextmanageritem.cpp:379
 #, kde-format
 msgid "Other Application..."
 msgstr "其它應用程式..."
@@ -1676,20 +1676,20 @@ msgstr "原始檔名"
 msgid "Original filename, in lower case"
 msgstr "原始檔名，用小寫"
 
-#: importer/importdialog.cpp:92
+#: importer/importdialog.cpp:97
 #, kde-format
 msgid "One document has been imported."
 msgid_plural "%1 documents have been imported."
 msgstr[0] "已匯入 %1 個文件。"
 
-#: importer/importdialog.cpp:94
+#: importer/importdialog.cpp:99
 #, kde-format
 msgid "One document has been skipped because it had already been imported."
 msgid_plural ""
 "%1 documents have been skipped because they had already been imported."
 msgstr[0] "已忽略 %1 個文件，因為它們已匯入。"
 
-#: importer/importdialog.cpp:102
+#: importer/importdialog.cpp:107
 #, kde-format
 msgid ""
 "One of them has been renamed because another document with the same name had "
@@ -1699,37 +1699,37 @@ msgid_plural ""
 "already been imported."
 msgstr[0] "這些文件中的 %1 個已經重新命名，因為有同名的文件已被匯入。"
 
-#: importer/importdialog.cpp:110
+#: importer/importdialog.cpp:115
 #, kde-format
 msgid "Delete the imported document from the device?"
 msgid_plural "Delete the %1 imported documents from the device?"
 msgstr[0] "要從裝置上刪除 %1 個已匯入的文件嗎？"
 
-#: importer/importdialog.cpp:112
+#: importer/importdialog.cpp:117
 #, kde-format
 msgid "Delete the skipped document from the device?"
 msgid_plural "Delete the %1 skipped documents from the device?"
 msgstr[0] "要從裝置上刪除 %1 個已忽略的文件嗎？"
 
-#: importer/importdialog.cpp:115
+#: importer/importdialog.cpp:120
 #, kde-format
 msgctxt "Singular sentence is actually never used."
 msgid "Delete the imported or skipped document from the device?"
 msgid_plural "Delete the %1 imported and skipped documents from the device?"
 msgstr[0] "要從裝置上刪除 %1 個已匯入與已忽略的文件嗎？"
 
-#: importer/importdialog.cpp:122
+#: importer/importdialog.cpp:127
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Finished"
 msgstr "匯入已完成"
 
-#: importer/importdialog.cpp:123
+#: importer/importdialog.cpp:128
 #, kde-format
 msgid "Keep"
 msgstr "保留"
 
-#: importer/importdialog.cpp:137
+#: importer/importdialog.cpp:142
 #, kde-format
 msgid ""
 "Failed to delete the document:\n"
@@ -1741,32 +1741,32 @@ msgstr[0] ""
 "刪除文件失敗：\n"
 "%2"
 
-#: importer/importdialog.cpp:139
+#: importer/importdialog.cpp:144
 #, kde-format
 msgid "Retry"
 msgstr "重試"
 
-#: importer/importdialog.cpp:140
+#: importer/importdialog.cpp:145
 #, kde-format
 msgid "Ignore"
 msgstr "忽略"
 
-#: importer/importdialog.cpp:164
+#: importer/importdialog.cpp:173
 #, kde-format
 msgid "What do you want to do now?"
 msgstr "您打算怎麼辦？"
 
-#: importer/importdialog.cpp:166
+#: importer/importdialog.cpp:175
 #, kde-format
 msgid "View Imported Documents with Gwenview"
 msgstr "用 Gwenview 檢視已匯入的文件"
 
-#: importer/importdialog.cpp:167
+#: importer/importdialog.cpp:176
 #, kde-format
 msgid "Import more Documents"
 msgstr "匯入更多文件"
 
-#: importer/importdialog.cpp:168
+#: importer/importdialog.cpp:177
 #, kde-format
 msgid "Quit"
 msgstr "離開"

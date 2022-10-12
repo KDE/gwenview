@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-07 00:43+0000\n"
+"POT-Creation-Date: 2022-10-12 00:44+0000\n"
 "PO-Revision-Date: 2021-12-10 00:17+0200\n"
 "Last-Translator: Moo\n"
 "Language-Team: lt <kde-i18n-lt@kde.org>\n"
@@ -219,7 +219,7 @@ msgctxt "@action:inmenu"
 msgid "Rating"
 msgstr "Įvertinimas"
 
-#: app/browsemainpage.cpp:196 app/fileopscontextmanageritem.cpp:138
+#: app/browsemainpage.cpp:196 app/fileopscontextmanageritem.cpp:142
 #: app/mainwindow.cpp:372
 #, kde-format
 msgctxt "@title actions category"
@@ -373,74 +373,74 @@ msgstr "Kurti nuorodą čia"
 msgid "Cancel"
 msgstr "Atsisakyti"
 
-#: app/fileopscontextmanageritem.cpp:128
+#: app/fileopscontextmanageritem.cpp:132
 #, kde-format
 msgid "File Operations"
 msgstr "Operacijos su failais"
 
-#: app/fileopscontextmanageritem.cpp:139
+#: app/fileopscontextmanageritem.cpp:143
 #: app/semanticinfocontextmanageritem.cpp:203
 #, kde-format
 msgctxt "@title actions category"
 msgid "Edit"
 msgstr "Taisa"
 
-#: app/fileopscontextmanageritem.cpp:146
+#: app/fileopscontextmanageritem.cpp:150
 #, kde-format
 msgctxt "Verb"
 msgid "Copy To..."
 msgstr "Kopijuoti į..."
 
-#: app/fileopscontextmanageritem.cpp:151
+#: app/fileopscontextmanageritem.cpp:155
 #, kde-format
 msgctxt "Verb"
 msgid "Move To..."
 msgstr "Perkelti į..."
 
-#: app/fileopscontextmanageritem.cpp:156
+#: app/fileopscontextmanageritem.cpp:160
 #, kde-format
 msgctxt "Verb: create link to the file where user wants"
 msgid "Link To..."
 msgstr "Kurti nuorodą į..."
 
-#: app/fileopscontextmanageritem.cpp:161
+#: app/fileopscontextmanageritem.cpp:165
 #, kde-format
 msgctxt "Verb"
 msgid "Rename..."
 msgstr "Pervadinti..."
 
-#: app/fileopscontextmanageritem.cpp:166
+#: app/fileopscontextmanageritem.cpp:170
 #, kde-format
 msgctxt "Verb"
 msgid "Trash"
 msgstr "Perkelti į šiukšlinę"
 
-#: app/fileopscontextmanageritem.cpp:173
+#: app/fileopscontextmanageritem.cpp:177
 #, kde-format
 msgid "Restore"
 msgstr "Atkurti"
 
-#: app/fileopscontextmanageritem.cpp:177
+#: app/fileopscontextmanageritem.cpp:181
 #, kde-format
 msgid "Properties"
 msgstr "Savybės"
 
-#: app/fileopscontextmanageritem.cpp:182
+#: app/fileopscontextmanageritem.cpp:186
 #, kde-format
 msgid "Create Folder..."
 msgstr "Sukurti aplanką..."
 
-#: app/fileopscontextmanageritem.cpp:186
+#: app/fileopscontextmanageritem.cpp:190
 #, kde-format
 msgid "Open With"
 msgstr "Atverti naudojant"
 
-#: app/fileopscontextmanageritem.cpp:193
+#: app/fileopscontextmanageritem.cpp:197
 #, kde-format
 msgid "Open Containing Folder"
 msgstr "Atverti vidinį aplanką"
 
-#: app/fileopscontextmanageritem.cpp:375
+#: app/fileopscontextmanageritem.cpp:379
 #, kde-format
 msgid "Other Application..."
 msgstr "Kita programa..."
@@ -1723,7 +1723,7 @@ msgstr "Pradinis failo pavadinimas"
 msgid "Original filename, in lower case"
 msgstr "Pradinis failo pavadinimas, mažosiomis"
 
-#: importer/importdialog.cpp:92
+#: importer/importdialog.cpp:97
 #, kde-format
 msgid "One document has been imported."
 msgid_plural "%1 documents have been imported."
@@ -1732,7 +1732,7 @@ msgstr[1] "Importuoti %1 dokumentai."
 msgstr[2] "Importuota %1 dokumentų."
 msgstr[3] "Importuotas %1 dokumentas."
 
-#: importer/importdialog.cpp:94
+#: importer/importdialog.cpp:99
 #, kde-format
 msgid "One document has been skipped because it had already been imported."
 msgid_plural ""
@@ -1742,7 +1742,7 @@ msgstr[1] "%1 dokumentai praleisti, nes jie jau buvo importuoti."
 msgstr[2] "%1 dokumentų praleista, nes jie jau buvo importuoti."
 msgstr[3] "%1 dokumentas praleistas, nes jie jau buvo importuoti."
 
-#: importer/importdialog.cpp:102
+#: importer/importdialog.cpp:107
 #, kde-format
 msgid ""
 "One of them has been renamed because another document with the same name had "
@@ -1763,7 +1763,7 @@ msgstr[3] ""
 "%1 iš jų buvo pervadintas, nes jau buvo importuoti kiti dokumentai tokiais "
 "pačiais pavadinimais."
 
-#: importer/importdialog.cpp:110
+#: importer/importdialog.cpp:115
 #, kde-format
 msgid "Delete the imported document from the device?"
 msgid_plural "Delete the %1 imported documents from the device?"
@@ -1772,7 +1772,7 @@ msgstr[1] "Ištrinti %1 importuotus dokumentus iš įrenginio?"
 msgstr[2] "Ištrinti %1 importuotų dokumentų iš įrenginio?"
 msgstr[3] "Ištrinti %1 importuotą dokumentą iš įrenginio?"
 
-#: importer/importdialog.cpp:112
+#: importer/importdialog.cpp:117
 #, kde-format
 msgid "Delete the skipped document from the device?"
 msgid_plural "Delete the %1 skipped documents from the device?"
@@ -1781,7 +1781,7 @@ msgstr[1] "Ištrinti %1 praleistus dokumentus iš įrenginio?"
 msgstr[2] "Ištrinti %1 praleistų dokumentų iš įrenginio?"
 msgstr[3] "Ištrinti %1 praleistą dokumentą iš įrenginio?"
 
-#: importer/importdialog.cpp:115
+#: importer/importdialog.cpp:120
 #, kde-format
 msgctxt "Singular sentence is actually never used."
 msgid "Delete the imported or skipped document from the device?"
@@ -1791,18 +1791,18 @@ msgstr[1] "Ištrinti %1 importuotus bei praleistus dokumentus iš įrenginio?"
 msgstr[2] "Ištrinti %1 importuotų bei praleistus dokumentus iš įrenginio?"
 msgstr[3] "Ištrinti %1 importuotą bei praleistus dokumentus iš įrenginio?"
 
-#: importer/importdialog.cpp:122
+#: importer/importdialog.cpp:127
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Finished"
 msgstr "Importavimas baigtas"
 
-#: importer/importdialog.cpp:123
+#: importer/importdialog.cpp:128
 #, kde-format
 msgid "Keep"
 msgstr "Palikti"
 
-#: importer/importdialog.cpp:137
+#: importer/importdialog.cpp:142
 #, kde-format
 msgid ""
 "Failed to delete the document:\n"
@@ -1823,32 +1823,32 @@ msgstr[3] ""
 "Nepavyko ištrinti dokumentų:\n"
 "%2"
 
-#: importer/importdialog.cpp:139
+#: importer/importdialog.cpp:144
 #, kde-format
 msgid "Retry"
 msgstr "Bandyti dar kartą"
 
-#: importer/importdialog.cpp:140
+#: importer/importdialog.cpp:145
 #, kde-format
 msgid "Ignore"
 msgstr "Nepaisyti"
 
-#: importer/importdialog.cpp:164
+#: importer/importdialog.cpp:173
 #, kde-format
 msgid "What do you want to do now?"
 msgstr "Ką dabar norėtumėte daryti?"
 
-#: importer/importdialog.cpp:166
+#: importer/importdialog.cpp:175
 #, kde-format
 msgid "View Imported Documents with Gwenview"
 msgstr "Rodyti importuotus dokumentus naudojant Gwenview"
 
-#: importer/importdialog.cpp:167
+#: importer/importdialog.cpp:176
 #, kde-format
 msgid "Import more Documents"
 msgstr "Importuoti daugiau dokumentų"
 
-#: importer/importdialog.cpp:168
+#: importer/importdialog.cpp:177
 #, kde-format
 msgid "Quit"
 msgstr "Baigti"

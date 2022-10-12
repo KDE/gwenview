@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-07 00:43+0000\n"
+"POT-Creation-Date: 2022-10-12 00:44+0000\n"
 "PO-Revision-Date: 2007-11-27 20:43+0100\n"
 "Last-Translator: Pierre-Marie Pédrot <pedrotpmx@wanadoo.fr>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
@@ -215,7 +215,7 @@ msgctxt "@action:inmenu"
 msgid "Rating"
 msgstr "&Agordo"
 
-#: app/browsemainpage.cpp:196 app/fileopscontextmanageritem.cpp:138
+#: app/browsemainpage.cpp:196 app/fileopscontextmanageritem.cpp:142
 #: app/mainwindow.cpp:372
 #, fuzzy, kde-format
 #| msgid "&View"
@@ -373,79 +373,79 @@ msgstr "Ligi tie"
 msgid "Cancel"
 msgstr "Nuligi"
 
-#: app/fileopscontextmanageritem.cpp:128
+#: app/fileopscontextmanageritem.cpp:132
 #, kde-format
 msgid "File Operations"
 msgstr "Dosieraj operacioj"
 
-#: app/fileopscontextmanageritem.cpp:139
+#: app/fileopscontextmanageritem.cpp:143
 #: app/semanticinfocontextmanageritem.cpp:203
 #, kde-format
 msgctxt "@title actions category"
 msgid "Edit"
 msgstr ""
 
-#: app/fileopscontextmanageritem.cpp:146
+#: app/fileopscontextmanageritem.cpp:150
 #, fuzzy, kde-format
 #| msgid "Copy To"
 msgctxt "Verb"
 msgid "Copy To..."
 msgstr "Kopii al"
 
-#: app/fileopscontextmanageritem.cpp:151
+#: app/fileopscontextmanageritem.cpp:155
 #, fuzzy, kde-format
 #| msgid "Move To"
 msgctxt "Verb"
 msgid "Move To..."
 msgstr "Movi al"
 
-#: app/fileopscontextmanageritem.cpp:156
+#: app/fileopscontextmanageritem.cpp:160
 #, fuzzy, kde-format
 #| msgid "Link To"
 msgctxt "Verb: create link to the file where user wants"
 msgid "Link To..."
 msgstr "Ligi al"
 
-#: app/fileopscontextmanageritem.cpp:161
+#: app/fileopscontextmanageritem.cpp:165
 #, kde-format
 msgctxt "Verb"
 msgid "Rename..."
 msgstr ""
 
-#: app/fileopscontextmanageritem.cpp:166
+#: app/fileopscontextmanageritem.cpp:170
 #, kde-format
 msgctxt "Verb"
 msgid "Trash"
 msgstr "Rubigi"
 
-#: app/fileopscontextmanageritem.cpp:173
+#: app/fileopscontextmanageritem.cpp:177
 #, fuzzy, kde-format
 #| msgid "Retry"
 msgid "Restore"
 msgstr "Peni denove"
 
-#: app/fileopscontextmanageritem.cpp:177
+#: app/fileopscontextmanageritem.cpp:181
 #, kde-format
 msgid "Properties"
 msgstr "Ecoj"
 
-#: app/fileopscontextmanageritem.cpp:182
+#: app/fileopscontextmanageritem.cpp:186
 #, fuzzy, kde-format
 #| msgid "Create Folder"
 msgid "Create Folder..."
 msgstr "Krei dosierujon"
 
-#: app/fileopscontextmanageritem.cpp:186
+#: app/fileopscontextmanageritem.cpp:190
 #, kde-format
 msgid "Open With"
 msgstr "Malfermu per"
 
-#: app/fileopscontextmanageritem.cpp:193
+#: app/fileopscontextmanageritem.cpp:197
 #, kde-format
 msgid "Open Containing Folder"
 msgstr ""
 
-#: app/fileopscontextmanageritem.cpp:375
+#: app/fileopscontextmanageritem.cpp:379
 #, kde-format
 msgid "Other Application..."
 msgstr "Alia aplikaĵo..."
@@ -1786,7 +1786,7 @@ msgstr ""
 msgid "Original filename, in lower case"
 msgstr ""
 
-#: importer/importdialog.cpp:92
+#: importer/importdialog.cpp:97
 #, fuzzy, kde-format
 #| msgid "One image has been modified."
 #| msgid_plural "%1 images have been modified."
@@ -1795,7 +1795,7 @@ msgid_plural "%1 documents have been imported."
 msgstr[0] "Unu bildo ŝanĝiĝis."
 msgstr[1] "%1 bildoj ŝanĝiĝis."
 
-#: importer/importdialog.cpp:94
+#: importer/importdialog.cpp:99
 #, kde-format
 msgid "One document has been skipped because it had already been imported."
 msgid_plural ""
@@ -1803,7 +1803,7 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: importer/importdialog.cpp:102
+#: importer/importdialog.cpp:107
 #, kde-format
 msgid ""
 "One of them has been renamed because another document with the same name had "
@@ -1814,21 +1814,21 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: importer/importdialog.cpp:110
+#: importer/importdialog.cpp:115
 #, kde-format
 msgid "Delete the imported document from the device?"
 msgid_plural "Delete the %1 imported documents from the device?"
 msgstr[0] ""
 msgstr[1] ""
 
-#: importer/importdialog.cpp:112
+#: importer/importdialog.cpp:117
 #, kde-format
 msgid "Delete the skipped document from the device?"
 msgid_plural "Delete the %1 skipped documents from the device?"
 msgstr[0] ""
 msgstr[1] ""
 
-#: importer/importdialog.cpp:115
+#: importer/importdialog.cpp:120
 #, kde-format
 msgctxt "Singular sentence is actually never used."
 msgid "Delete the imported or skipped document from the device?"
@@ -1836,19 +1836,19 @@ msgid_plural "Delete the %1 imported and skipped documents from the device?"
 msgstr[0] ""
 msgstr[1] ""
 
-#: importer/importdialog.cpp:122
+#: importer/importdialog.cpp:127
 #, fuzzy, kde-format
 #| msgid "%1 folders selected"
 msgctxt "@title:window"
 msgid "Import Finished"
 msgstr "%1 dosierujoj elektitaj"
 
-#: importer/importdialog.cpp:123
+#: importer/importdialog.cpp:128
 #, kde-format
 msgid "Keep"
 msgstr "Konservi"
 
-#: importer/importdialog.cpp:137
+#: importer/importdialog.cpp:142
 #, kde-format
 msgid ""
 "Failed to delete the document:\n"
@@ -1859,32 +1859,32 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: importer/importdialog.cpp:139
+#: importer/importdialog.cpp:144
 #, kde-format
 msgid "Retry"
 msgstr "Peni denove"
 
-#: importer/importdialog.cpp:140
+#: importer/importdialog.cpp:145
 #, kde-format
 msgid "Ignore"
 msgstr "Ignori"
 
-#: importer/importdialog.cpp:164
+#: importer/importdialog.cpp:173
 #, kde-format
 msgid "What do you want to do now?"
 msgstr ""
 
-#: importer/importdialog.cpp:166
+#: importer/importdialog.cpp:175
 #, kde-format
 msgid "View Imported Documents with Gwenview"
 msgstr ""
 
-#: importer/importdialog.cpp:167
+#: importer/importdialog.cpp:176
 #, kde-format
 msgid "Import more Documents"
 msgstr ""
 
-#: importer/importdialog.cpp:168
+#: importer/importdialog.cpp:177
 #, kde-format
 msgid "Quit"
 msgstr "Forlasi"

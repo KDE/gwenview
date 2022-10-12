@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-07 00:43+0000\n"
+"POT-Creation-Date: 2022-10-12 00:44+0000\n"
 "PO-Revision-Date: 2012-07-11 10:26+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer\n"
@@ -221,7 +221,7 @@ msgctxt "@action:inmenu"
 msgid "Rating"
 msgstr "ការ​វាយ​តម្លៃ"
 
-#: app/browsemainpage.cpp:196 app/fileopscontextmanageritem.cpp:138
+#: app/browsemainpage.cpp:196 app/fileopscontextmanageritem.cpp:142
 #: app/mainwindow.cpp:372
 #, kde-format
 msgctxt "@title actions category"
@@ -375,74 +375,74 @@ msgstr "តភ្ជាប់​នៅ​ទីនេះ"
 msgid "Cancel"
 msgstr "បោះបង់"
 
-#: app/fileopscontextmanageritem.cpp:128
+#: app/fileopscontextmanageritem.cpp:132
 #, kde-format
 msgid "File Operations"
 msgstr "ការ​ប្រតិបត្តិ​ឯកសារ"
 
-#: app/fileopscontextmanageritem.cpp:139
+#: app/fileopscontextmanageritem.cpp:143
 #: app/semanticinfocontextmanageritem.cpp:203
 #, kde-format
 msgctxt "@title actions category"
 msgid "Edit"
 msgstr "កែ​សម្រួល"
 
-#: app/fileopscontextmanageritem.cpp:146
+#: app/fileopscontextmanageritem.cpp:150
 #, kde-format
 msgctxt "Verb"
 msgid "Copy To..."
 msgstr "ចម្លង​ទៅ​..."
 
-#: app/fileopscontextmanageritem.cpp:151
+#: app/fileopscontextmanageritem.cpp:155
 #, kde-format
 msgctxt "Verb"
 msgid "Move To..."
 msgstr "ផ្លាស់​ទី​ទៅ​..."
 
-#: app/fileopscontextmanageritem.cpp:156
+#: app/fileopscontextmanageritem.cpp:160
 #, kde-format
 msgctxt "Verb: create link to the file where user wants"
 msgid "Link To..."
 msgstr "ត​ភ្ជាប់​ទៅ..."
 
-#: app/fileopscontextmanageritem.cpp:161
+#: app/fileopscontextmanageritem.cpp:165
 #, kde-format
 msgctxt "Verb"
 msgid "Rename..."
 msgstr "ប្ដូរ​ឈ្មោះ​..."
 
-#: app/fileopscontextmanageritem.cpp:166
+#: app/fileopscontextmanageritem.cpp:170
 #, kde-format
 msgctxt "Verb"
 msgid "Trash"
 msgstr "សំអាត"
 
-#: app/fileopscontextmanageritem.cpp:173
+#: app/fileopscontextmanageritem.cpp:177
 #, kde-format
 msgid "Restore"
 msgstr "ស្ដារ"
 
-#: app/fileopscontextmanageritem.cpp:177
+#: app/fileopscontextmanageritem.cpp:181
 #, kde-format
 msgid "Properties"
 msgstr "លក្ខណ​​សម្បត្តិ"
 
-#: app/fileopscontextmanageritem.cpp:182
+#: app/fileopscontextmanageritem.cpp:186
 #, kde-format
 msgid "Create Folder..."
 msgstr "បង្កើត​ថត..."
 
-#: app/fileopscontextmanageritem.cpp:186
+#: app/fileopscontextmanageritem.cpp:190
 #, kde-format
 msgid "Open With"
 msgstr "បើក​ជា​មួយ"
 
-#: app/fileopscontextmanageritem.cpp:193
+#: app/fileopscontextmanageritem.cpp:197
 #, kde-format
 msgid "Open Containing Folder"
 msgstr ""
 
-#: app/fileopscontextmanageritem.cpp:375
+#: app/fileopscontextmanageritem.cpp:379
 #, kde-format
 msgid "Other Application..."
 msgstr "កម្មវិធី​ផ្សេង​ទៀត​..."
@@ -1752,20 +1752,20 @@ msgstr "ឈ្មោះ​ឯកសារ​ដើម"
 msgid "Original filename, in lower case"
 msgstr "ឈ្មោះ​ឯកសារ​ដើម​ ជា​អក្សរ​តូច"
 
-#: importer/importdialog.cpp:92
+#: importer/importdialog.cpp:97
 #, kde-format
 msgid "One document has been imported."
 msgid_plural "%1 documents have been imported."
 msgstr[0] "ឯកសារ %1 ត្រូវ​បាន​នាំ​ចូល ។"
 
-#: importer/importdialog.cpp:94
+#: importer/importdialog.cpp:99
 #, kde-format
 msgid "One document has been skipped because it had already been imported."
 msgid_plural ""
 "%1 documents have been skipped because they had already been imported."
 msgstr[0] "ឯកសារ %1 ត្រូវ​បាន​រំលង ពីព្រោះ​វា​ត្រូវ​បាន​នាំ​ចូល​​រួច​ហើយ ។"
 
-#: importer/importdialog.cpp:102
+#: importer/importdialog.cpp:107
 #, kde-format
 msgid ""
 "One of them has been renamed because another document with the same name had "
@@ -1777,37 +1777,37 @@ msgstr[0] ""
 "%1 ក្នុង​ចំណោម​ពួក​វា​ត្រូវ​បាន​ប្ដូរ​ឈ្មោះ ពីព្រោះ​ឯកសារ​ផ្សេង​ទៀត​ដែល​មាន​ឈ្មោះ​ដូច​គ្នា ត្រូវ​បាន​នាំ​ចូល​រួច​ហើយ "
 "។"
 
-#: importer/importdialog.cpp:110
+#: importer/importdialog.cpp:115
 #, kde-format
 msgid "Delete the imported document from the device?"
 msgid_plural "Delete the %1 imported documents from the device?"
 msgstr[0] "លុប​ឯកសារ​ %1 ដែល​បាន​នាំ​ចូល​ពី​ឧបករណ៍នេះឬ ?"
 
-#: importer/importdialog.cpp:112
+#: importer/importdialog.cpp:117
 #, kde-format
 msgid "Delete the skipped document from the device?"
 msgid_plural "Delete the %1 skipped documents from the device?"
 msgstr[0] "លុប​ឯកសារ​ %1 ដែល​បាន​រំលង​ពី​ឧបករណ៍​នេះ​ឬ ?"
 
-#: importer/importdialog.cpp:115
+#: importer/importdialog.cpp:120
 #, kde-format
 msgctxt "Singular sentence is actually never used."
 msgid "Delete the imported or skipped document from the device?"
 msgid_plural "Delete the %1 imported and skipped documents from the device?"
 msgstr[0] "លុប​ឯកសារ​ %1 ដែល​បាន​នាំ​ចូល និង​បាន​រំលង​ពី​ឧបករណ៍ឬ ?"
 
-#: importer/importdialog.cpp:122
+#: importer/importdialog.cpp:127
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Finished"
 msgstr "ការ​នាំ​ចូល​ត្រូវ​បាន​បញ្ចប់"
 
-#: importer/importdialog.cpp:123
+#: importer/importdialog.cpp:128
 #, kde-format
 msgid "Keep"
 msgstr "រក្សា​ទុក"
 
-#: importer/importdialog.cpp:137
+#: importer/importdialog.cpp:142
 #, kde-format
 msgid ""
 "Failed to delete the document:\n"
@@ -1819,32 +1819,32 @@ msgstr[0] ""
 "មិន​អាច​លុប​ឯកសារ​ ៖\n"
 "%2"
 
-#: importer/importdialog.cpp:139
+#: importer/importdialog.cpp:144
 #, kde-format
 msgid "Retry"
 msgstr "ព្យាយាម​ម្ដង​ទៀត"
 
-#: importer/importdialog.cpp:140
+#: importer/importdialog.cpp:145
 #, kde-format
 msgid "Ignore"
 msgstr "មិន​អើពើ"
 
-#: importer/importdialog.cpp:164
+#: importer/importdialog.cpp:173
 #, kde-format
 msgid "What do you want to do now?"
 msgstr "តើ​អ្នក​ចង់​ធ្វើ​អ្វី​ឥឡូវ​នេះ ?"
 
-#: importer/importdialog.cpp:166
+#: importer/importdialog.cpp:175
 #, kde-format
 msgid "View Imported Documents with Gwenview"
 msgstr "មើល​ឯកសារ​ដែល​បាន​នាំ​ចូល​ជា​មួយ​ Gwenview"
 
-#: importer/importdialog.cpp:167
+#: importer/importdialog.cpp:176
 #, kde-format
 msgid "Import more Documents"
 msgstr "នាំ​ចូល​ឯកសារ​បន្ថែម​ទៀត​"
 
-#: importer/importdialog.cpp:168
+#: importer/importdialog.cpp:177
 #, kde-format
 msgid "Quit"
 msgstr "បោះ​បង់"

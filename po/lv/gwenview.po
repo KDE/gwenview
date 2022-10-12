@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-07 00:43+0000\n"
+"POT-Creation-Date: 2022-10-12 00:44+0000\n"
 "PO-Revision-Date: 2012-07-02 21:42+0300\n"
 "Last-Translator: Einars Sprugis <einars8@gmail.com>\n"
 "Language-Team: Latvian <locale@laka.lv>\n"
@@ -224,7 +224,7 @@ msgctxt "@action:inmenu"
 msgid "Rating"
 msgstr "Vērtējums"
 
-#: app/browsemainpage.cpp:196 app/fileopscontextmanageritem.cpp:138
+#: app/browsemainpage.cpp:196 app/fileopscontextmanageritem.cpp:142
 #: app/mainwindow.cpp:372
 #, kde-format
 msgctxt "@title actions category"
@@ -388,74 +388,74 @@ msgstr "Saitēt šeit"
 msgid "Cancel"
 msgstr "Atcelt"
 
-#: app/fileopscontextmanageritem.cpp:128
+#: app/fileopscontextmanageritem.cpp:132
 #, kde-format
 msgid "File Operations"
 msgstr "Faila darbības"
 
-#: app/fileopscontextmanageritem.cpp:139
+#: app/fileopscontextmanageritem.cpp:143
 #: app/semanticinfocontextmanageritem.cpp:203
 #, kde-format
 msgctxt "@title actions category"
 msgid "Edit"
 msgstr "Rediģēt"
 
-#: app/fileopscontextmanageritem.cpp:146
+#: app/fileopscontextmanageritem.cpp:150
 #, kde-format
 msgctxt "Verb"
 msgid "Copy To..."
 msgstr "Kopēt uz ..."
 
-#: app/fileopscontextmanageritem.cpp:151
+#: app/fileopscontextmanageritem.cpp:155
 #, kde-format
 msgctxt "Verb"
 msgid "Move To..."
 msgstr "Pārvietot uz..."
 
-#: app/fileopscontextmanageritem.cpp:156
+#: app/fileopscontextmanageritem.cpp:160
 #, kde-format
 msgctxt "Verb: create link to the file where user wants"
 msgid "Link To..."
 msgstr "Saitēt uz..."
 
-#: app/fileopscontextmanageritem.cpp:161
+#: app/fileopscontextmanageritem.cpp:165
 #, kde-format
 msgctxt "Verb"
 msgid "Rename..."
 msgstr "Pārdēvēt..."
 
-#: app/fileopscontextmanageritem.cpp:166
+#: app/fileopscontextmanageritem.cpp:170
 #, kde-format
 msgctxt "Verb"
 msgid "Trash"
 msgstr "Izmest"
 
-#: app/fileopscontextmanageritem.cpp:173
+#: app/fileopscontextmanageritem.cpp:177
 #, kde-format
 msgid "Restore"
 msgstr "Atjaunot"
 
-#: app/fileopscontextmanageritem.cpp:177
+#: app/fileopscontextmanageritem.cpp:181
 #, kde-format
 msgid "Properties"
 msgstr "Īpašības"
 
-#: app/fileopscontextmanageritem.cpp:182
+#: app/fileopscontextmanageritem.cpp:186
 #, kde-format
 msgid "Create Folder..."
 msgstr "Izveidot mapi..."
 
-#: app/fileopscontextmanageritem.cpp:186
+#: app/fileopscontextmanageritem.cpp:190
 #, kde-format
 msgid "Open With"
 msgstr "Atvērt ar"
 
-#: app/fileopscontextmanageritem.cpp:193
+#: app/fileopscontextmanageritem.cpp:197
 #, kde-format
 msgid "Open Containing Folder"
 msgstr ""
 
-#: app/fileopscontextmanageritem.cpp:375
+#: app/fileopscontextmanageritem.cpp:379
 #, kde-format
 msgid "Other Application..."
 msgstr "Citu lietotni..."
@@ -1789,7 +1789,7 @@ msgstr "Orģinālais nosaukums"
 msgid "Original filename, in lower case"
 msgstr "Orģinālais nosaukums, mazie burti"
 
-#: importer/importdialog.cpp:92
+#: importer/importdialog.cpp:97
 #, kde-format
 msgid "One document has been imported."
 msgid_plural "%1 documents have been imported."
@@ -1797,7 +1797,7 @@ msgstr[0] "Importēts %1 dokuments."
 msgstr[1] "Importēti %1 dokumenti."
 msgstr[2] "Importēti %1 dokumenti."
 
-#: importer/importdialog.cpp:94
+#: importer/importdialog.cpp:99
 #, kde-format
 msgid "One document has been skipped because it had already been imported."
 msgid_plural ""
@@ -1806,7 +1806,7 @@ msgstr[0] "%1 dokuments tika izlaists, jo tas jau ir iepriekš importēts."
 msgstr[1] "%1 dokumenti tika izlaisti, jo tie jau bijia iepriekš importēti."
 msgstr[2] "%1 dokumenti tika izlaisti, jo tie jau bijia iepriekš importēti."
 
-#: importer/importdialog.cpp:102
+#: importer/importdialog.cpp:107
 #, kde-format
 msgid ""
 "One of them has been renamed because another document with the same name had "
@@ -1824,7 +1824,7 @@ msgstr[2] ""
 "%1 no tiem tika pārdēvēti, jo cits dokuments ar to pašu nosaukumu jau ir "
 "importēts."
 
-#: importer/importdialog.cpp:110
+#: importer/importdialog.cpp:115
 #, kde-format
 msgid "Delete the imported document from the device?"
 msgid_plural "Delete the %1 imported documents from the device?"
@@ -1832,7 +1832,7 @@ msgstr[0] "Vai dzēst %1 importēto dokumentu no ierīces?"
 msgstr[1] "Vai dzēst %1 importētos dokumentus no ierīces?"
 msgstr[2] "Vai dzēst %1 importētos dokumentus no ierīces?"
 
-#: importer/importdialog.cpp:112
+#: importer/importdialog.cpp:117
 #, kde-format
 msgid "Delete the skipped document from the device?"
 msgid_plural "Delete the %1 skipped documents from the device?"
@@ -1840,7 +1840,7 @@ msgstr[0] "Vai dzēst %1 izlaisto dokumentu no ierīces?"
 msgstr[1] "Vai dzēst %1 izlaistos dokumentus no ierīces?"
 msgstr[2] "Vai dzēst %1 izlaistos dokumentus no ierīces?"
 
-#: importer/importdialog.cpp:115
+#: importer/importdialog.cpp:120
 #, kde-format
 msgctxt "Singular sentence is actually never used."
 msgid "Delete the imported or skipped document from the device?"
@@ -1849,18 +1849,18 @@ msgstr[0] "Dzēst %1 importēto vai izlaisto dokumentu no ierīces?"
 msgstr[1] "Dzēst %1 importētos vai izlaistos dokumentu no ierīces?"
 msgstr[2] "Dzēst %1 importētos vai izlaistos dokumentu no ierīces?"
 
-#: importer/importdialog.cpp:122
+#: importer/importdialog.cpp:127
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Finished"
 msgstr "Importēšana pabeigta"
 
-#: importer/importdialog.cpp:123
+#: importer/importdialog.cpp:128
 #, kde-format
 msgid "Keep"
 msgstr "Paturēt"
 
-#: importer/importdialog.cpp:137
+#: importer/importdialog.cpp:142
 #, kde-format
 msgid ""
 "Failed to delete the document:\n"
@@ -1878,32 +1878,32 @@ msgstr[2] ""
 "Neizdevās izdzēst dokumentus:\n"
 "%2"
 
-#: importer/importdialog.cpp:139
+#: importer/importdialog.cpp:144
 #, kde-format
 msgid "Retry"
 msgstr "Mēģināt vēlreiz"
 
-#: importer/importdialog.cpp:140
+#: importer/importdialog.cpp:145
 #, kde-format
 msgid "Ignore"
 msgstr "Ignorēt"
 
-#: importer/importdialog.cpp:164
+#: importer/importdialog.cpp:173
 #, kde-format
 msgid "What do you want to do now?"
 msgstr "Ko vēlaties darīt tālāk?"
 
-#: importer/importdialog.cpp:166
+#: importer/importdialog.cpp:175
 #, kde-format
 msgid "View Imported Documents with Gwenview"
 msgstr "Apskatīt importētos dokumentus ar Gwenview"
 
-#: importer/importdialog.cpp:167
+#: importer/importdialog.cpp:176
 #, kde-format
 msgid "Import more Documents"
 msgstr "Importēt vēl dokumentus"
 
-#: importer/importdialog.cpp:168
+#: importer/importdialog.cpp:177
 #, kde-format
 msgid "Quit"
 msgstr "Iziet"
