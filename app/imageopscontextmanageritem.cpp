@@ -38,8 +38,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "mainwindow.h"
 #include "sidebar.h"
 #include "viewmainpage.h"
+#ifdef KIMAGEANNOTATOR_FOUND
 #include <lib/annotate/annotatedialog.h>
 #include <lib/annotate/annotateoperation.h>
+#endif
 #include <lib/contextmanager.h>
 #include <lib/crop/croptool.h>
 #include <lib/document/documentfactory.h>
@@ -75,7 +77,9 @@ struct ImageOpsContextManagerItem::Private {
     QAction *mResizeAction = nullptr;
     QAction *mCropAction = nullptr;
     QAction *mRedEyeReductionAction = nullptr;
+#ifdef KIMAGEANNOTATOR_FOUND
     QAction *mAnnotateAction = nullptr;
+#endif
     QList<QAction *> mActionList;
 
     void setupActions()
@@ -117,7 +121,7 @@ struct ImageOpsContextManagerItem::Private {
         mRedEyeReductionAction->setText(i18n("Reduce Red Eye"));
         mRedEyeReductionAction->setIcon(QIcon::fromTheme(QStringLiteral("redeyes")));
         actionCollection->setDefaultShortcut(mRedEyeReductionAction, Qt::SHIFT | Qt::Key_E);
-
+#ifdef KIMAGEANNOTATOR_FOUND
         mAnnotateAction = edit->addAction(QStringLiteral("annotate"));
         mAnnotateAction->setText(i18nc("@action:intoolbar", "Annotate"));
         mAnnotateAction->setIcon(QIcon::fromTheme(QStringLiteral("edit-image"), QIcon::fromTheme(QStringLiteral("draw-brush"))));
@@ -133,9 +137,11 @@ struct ImageOpsContextManagerItem::Private {
                 q->applyImageOperation(new AnnotateOperation(dialog.getImage()));
             }
         });
-
-        mActionList << mRotateLeftAction << mRotateRightAction << mMirrorAction << mFlipAction << mResizeAction << mCropAction << mRedEyeReductionAction
-                    << mAnnotateAction;
+#endif
+        mActionList << mRotateLeftAction << mRotateRightAction << mMirrorAction << mFlipAction << mResizeAction << mCropAction << mRedEyeReductionAction;
+#ifdef KIMAGEANNOTATOR_FOUND
+        mActionList << mAnnotateAction;
+#endif
     }
 
     bool ensureEditable()
@@ -209,8 +215,9 @@ void ImageOpsContextManagerItem::updateActions()
     d->mResizeAction->setEnabled(canModify);
     d->mCropAction->setEnabled(canModify && viewMainPageIsVisible);
     d->mRedEyeReductionAction->setEnabled(canModify && viewMainPageIsVisible);
+#ifdef KIMAGEANNOTATOR_FOUND
     d->mAnnotateAction->setEnabled(canModify);
-
+#endif
     updateSideBarContent();
 }
 

@@ -152,9 +152,13 @@ set(gwenviewlib_SRCS
     touch/twofingertap.cpp
     touch/touch_helper.cpp
     ${GV_JPEG_DIR}/transupp.c
-    annotate/annotatedialog.cpp
-    annotate/annotateoperation.cpp
     )
+if (kImageAnnotator_FOUND)
+    set(gwenviewlib_SRCS ${gwenviewlib_SRCS}
+        annotate/annotatedialog.cpp
+        annotate/annotateoperation.cpp
+    )
+endif()
 set_source_files_properties(${GV_JPEG_DIR}/transupp.c PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON)
 
 
@@ -298,6 +302,7 @@ if (GWENVIEW_SEMANTICINFO_BACKEND_BALOO)
         )
 endif()
 
-target_link_libraries(gwenviewlib kImageAnnotator::kImageAnnotator)
-
+if(kImageAnnotator_FOUND)
+    target_link_libraries(gwenviewlib kImageAnnotator::kImageAnnotator)
+endif()
 install(TARGETS gwenviewlib ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} LIBRARY NAMELINK_SKIP)
