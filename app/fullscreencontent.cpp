@@ -135,17 +135,17 @@ void FullScreenContent::init(KActionCollection *actionCollection, QWidget *autoH
     mToolBar = new FullScreenToolBar(mContent);
 
 #define addAction(name) mToolBar->addAction(actionCollection->action(name))
-    addAction("toggle_sidebar");
+    addAction(QStringLiteral("toggle_sidebar"));
     mToolBar->addSeparator();
-    addAction("browse");
-    addAction("view");
+    addAction(QStringLiteral("browse"));
+    addAction(QStringLiteral("view"));
     mToolBar->addSeparator();
-    addAction("go_previous");
-    addAction("toggle_slideshow");
-    addAction("go_next");
+    addAction(QStringLiteral("go_previous"));
+    addAction(QStringLiteral("toggle_slideshow"));
+    addAction(QStringLiteral("go_next"));
     mToolBar->addSeparator();
-    addAction("rotate_left");
-    addAction("rotate_right");
+    addAction(QStringLiteral("rotate_left"));
+    addAction(QStringLiteral("rotate_right"));
 #undef addAction
     mToolBarShadow = new ShadowFilter(mToolBar);
 

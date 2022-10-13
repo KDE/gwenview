@@ -386,7 +386,7 @@ struct MainWindow::Private {
 
         QAction *action = file->addAction("reload", q, SLOT(reload()));
         action->setText(i18nc("@action reload the currently viewed image", "Reload"));
-        action->setIcon(QIcon::fromTheme("view-refresh"));
+        action->setIcon(QIcon::fromTheme(QStringLiteral("view-refresh")));
         actionCollection->setDefaultShortcuts(action, KStandardShortcut::reload());
 
         QAction *replaceLocationAction = actionCollection->addAction(QStringLiteral("replace_location"));
@@ -398,14 +398,14 @@ struct MainWindow::Private {
         mBrowseAction->setText(i18nc("@action:intoolbar Switch to file list", "Browse"));
         mBrowseAction->setToolTip(i18nc("@info:tooltip", "Browse folders for images"));
         mBrowseAction->setCheckable(true);
-        mBrowseAction->setIcon(QIcon::fromTheme("view-list-icons"));
+        mBrowseAction->setIcon(QIcon::fromTheme(QStringLiteral("view-list-icons")));
         actionCollection->setDefaultShortcut(mBrowseAction, Qt::Key_Escape);
         connect(mViewMainPage, &ViewMainPage::goToBrowseModeRequested, mBrowseAction, &QAction::trigger);
 
         mViewAction = view->addAction("view");
         mViewAction->setText(i18nc("@action:intoolbar Switch to image view", "View"));
         mViewAction->setToolTip(i18nc("@info:tooltip", "View selected images"));
-        mViewAction->setIcon(QIcon::fromTheme("view-preview"));
+        mViewAction->setIcon(QIcon::fromTheme(QStringLiteral("view-preview")));
         mViewAction->setCheckable(true);
 
         mViewModeActionGroup = new QActionGroup(q);
@@ -422,7 +422,7 @@ struct MainWindow::Private {
         connect(mViewMainPage, &ViewMainPage::toggleFullScreenRequested, mFullScreenAction, &QAction::trigger);
 
         QAction *leaveFullScreenAction = view->addAction("leave_fullscreen", q, SLOT(leaveFullScreen()));
-        leaveFullScreenAction->setIcon(QIcon::fromTheme("view-restore"));
+        leaveFullScreenAction->setIcon(QIcon::fromTheme(QStringLiteral("view-restore")));
         leaveFullScreenAction->setText(i18nc("@action", "Exit Full Screen"));
 
         mGoToPreviousAction = view->addAction("go_previous", q, SLOT(goToPrevious()));
@@ -441,14 +441,14 @@ struct MainWindow::Private {
 
         mGoToFirstAction = view->addAction("go_first", q, SLOT(goToFirst()));
         mGoToFirstAction->setPriority(QAction::LowPriority);
-        mGoToFirstAction->setIcon(QIcon::fromTheme("go-first-view"));
+        mGoToFirstAction->setIcon(QIcon::fromTheme(QStringLiteral("go-first-view")));
         mGoToFirstAction->setText(i18nc("@action Go to first image", "First"));
         mGoToFirstAction->setToolTip(i18nc("@info:tooltip", "Go to first image"));
         actionCollection->setDefaultShortcut(mGoToFirstAction, Qt::Key_Home);
 
         mGoToLastAction = view->addAction("go_last", q, SLOT(goToLast()));
         mGoToLastAction->setPriority(QAction::LowPriority);
-        mGoToLastAction->setIcon(QIcon::fromTheme("go-last-view"));
+        mGoToLastAction->setIcon(QIcon::fromTheme(QStringLiteral("go-last-view")));
         mGoToLastAction->setText(i18nc("@action Go to last image", "Last"));
         mGoToLastAction->setToolTip(i18nc("@info:tooltip", "Go to last image"));
         actionCollection->setDefaultShortcut(mGoToLastAction, Qt::Key_End);
@@ -459,14 +459,14 @@ struct MainWindow::Private {
 
         action = view->addAction("go_start_page", q, SLOT(showStartMainPage()));
         action->setPriority(QAction::LowPriority);
-        action->setIcon(QIcon::fromTheme("go-home"));
+        action->setIcon(QIcon::fromTheme(QStringLiteral("go-home")));
         action->setText(i18nc("@action", "Start Page"));
         action->setToolTip(i18nc("@info:tooltip", "Open the start page"));
         actionCollection->setDefaultShortcuts(action, KStandardShortcut::home());
 
         mToggleSideBarAction = view->add<KToggleAction>("toggle_sidebar");
         connect(mToggleSideBarAction, &KToggleAction::triggered, q, &MainWindow::toggleSideBar);
-        mToggleSideBarAction->setIcon(QIcon::fromTheme("view-sidetree"));
+        mToggleSideBarAction->setIcon(QIcon::fromTheme(QStringLiteral("view-sidetree")));
         actionCollection->setDefaultShortcut(mToggleSideBarAction, Qt::Key_F4);
         mToggleSideBarAction->setText(i18nc("@action", "Sidebar"));
         connect(mBrowseMainPage->toggleSideBarButton(), &QAbstractButton::clicked, mToggleSideBarAction, &QAction::trigger);
@@ -503,9 +503,9 @@ struct MainWindow::Private {
         view->addAction(KStandardAction::ConfigureToolbars, q, SLOT(configureToolbars()));
 
 #ifdef KF5Purpose_FOUND
-        mShareAction = new KToolBarPopupAction(QIcon::fromTheme("document-share"), i18nc("@action Share images", "Share"), q);
+        mShareAction = new KToolBarPopupAction(QIcon::fromTheme(QStringLiteral("document-share")), i18nc("@action Share images", "Share"), q);
         mShareAction->setPopupMode(QToolButton::InstantPopup);
-        actionCollection->addAction("share", mShareAction);
+        actionCollection->addAction(QStringLiteral("share"), mShareAction);
         mShareMenu = new Purpose::Menu(q);
         mShareAction->setMenu(mShareMenu);
 
@@ -587,7 +587,7 @@ struct MainWindow::Private {
 
         action = undoGroup->createRedoAction(actionCollection);
         action->setObjectName(KStandardAction::name(KStandardAction::Redo));
-        action->setIcon(QIcon::fromTheme("edit-redo"));
+        action->setIcon(QIcon::fromTheme(QStringLiteral("edit-redo")));
         action->setIconText(i18n("Redo"));
         actionCollection->setDefaultShortcuts(action, KStandardShortcut::redo());
 
@@ -595,7 +595,7 @@ struct MainWindow::Private {
 
         action = undoGroup->createUndoAction(actionCollection);
         action->setObjectName(KStandardAction::name(KStandardAction::Undo));
-        action->setIcon(QIcon::fromTheme("edit-undo"));
+        action->setIcon(QIcon::fromTheme(QStringLiteral("edit-undo")));
         action->setIconText(i18n("Undo"));
         actionCollection->setDefaultShortcuts(action, KStandardShortcut::undo());
         edit->addAction(action->objectName(), action);
@@ -623,13 +623,13 @@ struct MainWindow::Private {
 
         // Fill sidebar
         SideBarPage *page;
-        page = new SideBarPage(QIcon::fromTheme("folder"), i18n("Folders"));
+        page = new SideBarPage(QIcon::fromTheme(QStringLiteral("folder")), i18n("Folders"));
         page->setObjectName(QLatin1String("folders"));
         page->addWidget(folderViewItem->widget());
         page->layout()->setContentsMargins(0, 0, 0, 0);
         mSideBar->addPage(page);
 
-        page = new SideBarPage(QIcon::fromTheme("documentinfo"), i18n("Information"));
+        page = new SideBarPage(QIcon::fromTheme(QStringLiteral("documentinfo")), i18n("Information"));
         page->setObjectName(QLatin1String("information"));
         page->addWidget(infoItem->widget());
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
@@ -643,7 +643,7 @@ struct MainWindow::Private {
 #endif
         mSideBar->addPage(page);
 
-        page = new SideBarPage(QIcon::fromTheme("document-edit"), i18n("Operations"));
+        page = new SideBarPage(QIcon::fromTheme(QStringLiteral("document-edit")), i18n("Operations"));
         page->setObjectName(QLatin1String("operations"));
         page->addWidget(imageOpsItem->widget());
         auto separator = new QFrame;
