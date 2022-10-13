@@ -95,7 +95,7 @@ namespace TestUtils
 void purgeUserConfiguration()
 {
     QString confDir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
-    QVERIFY(confDir.endsWith(".qttest/share")); // Better safe than sorry
+    QVERIFY(confDir.endsWith(QStringLiteral(".qttest/share"))); // Better safe than sorry
     if (QFileInfo(confDir).isDir()) {
         KIO::DeleteJob *deleteJob = KIO::del(QUrl::fromLocalFile(confDir));
         QVERIFY(deleteJob->exec());
