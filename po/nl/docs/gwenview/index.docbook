@@ -233,12 +233,6 @@
 
 <!--FIXME all actions also available context menus, where to add that info -->
 
-<tip
-><para
->Als u Kipi-plug-ins hebt geïnstalleerd, dan zal een menu <guimenu
->Plug-ins</guimenu
-> beschikbaar zijn die u in staat stellen om vele extra bewerkingen op uw afbeeldingen uit te voeren.</para
-></tip>
 </sect1>
 
 <sect1 id='browse_mode'
@@ -305,12 +299,6 @@
 > om.</para
 ></listitem>
 
-<listitem
-><para
-><guiicon
->Delen</guiicon
->: op deze knop klikken opent een exportmenu om uw afbeeldingen te delen via socialmedia en webservices voor afbeeldingenverzamelingen. Deze functionaliteit hangt af van de lijst van geïnstalleerde KIPI-plug-ins.</para
-></listitem>
 <listitem
 ><para
 ><guiicon
