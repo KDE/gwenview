@@ -42,11 +42,11 @@ struct ImporterConfigDialogPrivate : public Ui_ImporterConfigDialog {
 
     void setupHelpText()
     {
-        QString helpText = QLatin1String("<ul>");
+        QString helpText = QStringLiteral("<ul>");
         FileNameFormater::HelpMap map = FileNameFormater::helpMap();
         FileNameFormater::HelpMap::ConstIterator it = map.constBegin(), end = map.constEnd();
         for (; it != end; ++it) {
-            const QString keyword = '{' + it.key() + '}';
+            const QString keyword = QLatin1Char('{') + it.key() + QLatin1Char('}');
             const QString explanation = it.value().toHtmlEscaped();
             const QString link = QStringLiteral("<a href='%1'>%1</a>").arg(keyword);
             helpText +=
