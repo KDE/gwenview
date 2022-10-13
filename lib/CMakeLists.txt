@@ -157,6 +157,8 @@ if (kImageAnnotator_FOUND)
     set(gwenviewlib_SRCS ${gwenviewlib_SRCS}
         annotate/annotatedialog.cpp
         annotate/annotateoperation.cpp
+        annotate/annotatedialog.h
+        annotate/annotateoperation.h
     )
 endif()
 set_source_files_properties(${GV_JPEG_DIR}/transupp.c PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON)
@@ -173,6 +175,11 @@ if(HAVE_QTDBUS)
         mpris2/mpris2service.cpp
         mpris2/mprismediaplayer2.cpp
         mpris2/mprismediaplayer2player.cpp
+        mpris2/lockscreenwatcher.h
+        mpris2/dbusabstractadaptor.h
+        mpris2/mpris2service.h
+        mpris2/mprismediaplayer2.h
+        mpris2/mprismediaplayer2player.h
         )
     qt_add_dbus_interface(gwenviewlib_SRCS mpris2/org.freedesktop.ScreenSaver.xml screensaverdbusinterface)
 endif()
@@ -184,6 +191,10 @@ if(HAVE_FITS)
         imageformats/fitshandler.cpp
         imageformats/fitsformat/bayer.c
         imageformats/fitsformat/fitsdata.cpp
+        imageformats/fitsplugin.h
+        imageformats/fitshandler.h
+        imageformats/fitsformat/bayer.h
+        imageformats/fitsformat/fitsdata.h
         )
 endif()
 
@@ -195,6 +206,11 @@ if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
         semanticinfo/tagitemdelegate.cpp
         semanticinfo/tagmodel.cpp
         semanticinfo/tagwidget.cpp
+        semanticinfo/abstractsemanticinfobackend.h
+        semanticinfo/semanticinfodirmodel.h
+        semanticinfo/tagitemdelegate.h
+        semanticinfo/tagmodel.h
+        semanticinfo/tagwidget.h
         )
 endif()
 
@@ -202,6 +218,7 @@ if (GWENVIEW_SEMANTICINFO_BACKEND_FAKE)
     set(gwenviewlib_SRCS
         ${gwenviewlib_SRCS}
         semanticinfo/fakesemanticinfobackend.cpp
+        semanticinfo/fakesemanticinfobackend.h
         )
 endif()
 
@@ -209,6 +226,7 @@ if (GWENVIEW_SEMANTICINFO_BACKEND_BALOO)
     set(gwenviewlib_SRCS
         ${gwenviewlib_SRCS}
         semanticinfo/baloosemanticinfobackend.cpp
+        semanticinfo/baloosemanticinfobackend.h
         )
 endif()
 
@@ -221,6 +239,14 @@ kde_source_files_enable_exceptions(
     document/document.cpp
     document/loadingdocumentimpl.cpp
     jpegcontent.cpp
+    exiv2imageloader.h
+    imagemetainfomodel.h
+    timeutils.h
+    cms/cmsprofile.h
+    document/abstractdocumentimpl.h
+    document/document.h
+    document/loadingdocumentimpl.h
+    jpegcontent.h
     )
 
 ki18n_wrap_ui(gwenviewlib_SRCS

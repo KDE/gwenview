@@ -33,6 +33,30 @@ set(gwenview_SRCS
     thumbnailviewhelper.cpp
     browsemainpage.cpp
     gwenview.qrc
+
+    abstractcontextmanageritem.h
+    alignwithsidebarwidgetaction.h
+    configdialog.h
+    gvcore.h
+    documentinfoprovider.h
+    viewmainpage.h
+    fileoperations.h
+    filtercontroller.h
+    folderviewcontextmanageritem.h
+    fullscreencontent.h
+    infocontextmanageritem.h
+    imagemetainfodialog.h
+    imageopscontextmanageritem.h
+    fileopscontextmanageritem.h
+    mainwindow.h
+    preloader.h
+    renamedialog.h
+    saveallhelper.h
+    savebar.h
+    sidebar.h
+    startmainpage.h
+    thumbnailviewhelper.h
+    browsemainpage.h
     )
 ecm_qt_declare_logging_category(gwenview_SRCS HEADER gwenview_app_debug.h IDENTIFIER GWENVIEW_APP_LOG CATEGORY_NAME org.kde.kdegraphics.gwenview.app DESCRIPTION "gwenview app (kdegraphics)" EXPORT GWENVIEW)
 # need by GV_RETURN_VALUE_IF_FAIL
@@ -42,6 +66,7 @@ if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
     set (gwenview_SRCS
         ${gwenview_SRCS}
         semanticinfocontextmanageritem.cpp
+        semanticinfocontextmanageritem.h
         )
 endif()
 
@@ -124,7 +149,7 @@ install(FILES org.kde.gwenview.appdata.xml
 add_definitions(-DTRANSLATION_DOMAIN=\"gwenview\")
 
 kcoreaddons_add_plugin(slideshowfileitemaction
-    SOURCES slideshowfileitemaction.cpp
+    SOURCES slideshowfileitemaction.cpp slideshowfileitemaction.h
     INSTALL_NAMESPACE "kf${QT_MAJOR_VERSION}/kfileitemaction")
 
 target_link_libraries(slideshowfileitemaction
