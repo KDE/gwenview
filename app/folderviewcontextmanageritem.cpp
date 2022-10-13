@@ -37,7 +37,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "fileoperations.h"
 #include "gwenview_app_debug.h"
 #include "lib/touch/touch_helper.h"
-#include "sidebar.h"
 #include <lib/contextmanager.h>
 #include <lib/eventwatcher.h>
 #include <lib/scrollerutils.h>

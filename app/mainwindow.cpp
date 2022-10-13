@@ -76,10 +76,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #endif
 
 // Local
-#include "gwenview_app_debug.h"
 #include "alignwithsidebarwidgetaction.h"
 #include "configdialog.h"
-#include "dialogguard.h"
 #include "documentinfoprovider.h"
 #include "fileopscontextmanageritem.h"
 #include "folderviewcontextmanageritem.h"
