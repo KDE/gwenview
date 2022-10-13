@@ -32,7 +32,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // Local
 #include "documentjob.h"
-#include "gwenview_lib_debug.h"
 #include "gwenviewconfig.h"
 #include "imageutils.h"
 #include "savejob.h"

@@ -36,7 +36,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "document/document.h"
 #include "document/documentjob.h"
 #include "gwenview_lib_debug.h"
-#include "paintutils.h"
 #include "ramp.h"
 
 namespace Gwenview

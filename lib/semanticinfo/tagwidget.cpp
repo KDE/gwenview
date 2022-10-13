@@ -37,7 +37,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KLocalizedString>
 
 // Local
-#include "gwenview_lib_debug.h"
 #include <lib/semanticinfo/tagitemdelegate.h>
 #include <lib/semanticinfo/tagmodel.h>
 

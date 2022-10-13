@@ -42,7 +42,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "croptool.h"
 #include "cropwidget.h"
 #include "flowlayout.h"
-#include "gwenview_lib_debug.h"
 #include <lib/documentview/rasterimageview.h>
 
 namespace Gwenview

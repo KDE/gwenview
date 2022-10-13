@@ -42,9 +42,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include "gwenview_lib_debug.h"
 #include "gwenviewconfig.h"
-#include "lib/hud/hudtheme.h"
 #include "lib/paintutils.h"
-#include "lib/thumbnailview/abstractthumbnailviewhelper.h"
 
 namespace Gwenview
 {

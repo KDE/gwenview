@@ -37,14 +37,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KStandardAction>
 
 // Local
-#include "../lib/about.h"
 #include "../lib/document/document.h"
 #include "../lib/document/documentfactory.h"
 #include "../lib/documentview/documentview.h"
 #include "../lib/documentview/documentviewcontainer.h"
 #include "../lib/documentview/documentviewcontroller.h"
 #include "../lib/urlutils.h"
-#include "../lib/zoomwidget.h"
 #include "gvbrowserextension.h"
 #include "gvpart.h"
 

@@ -11,7 +11,6 @@
 #include "documentviewcontroller.h"
 
 // Local
-#include "abstractdocumentviewadapter.h"
 #include "documentview.h"
 #include "gwenview_lib_debug.h"
 #include <lib/documentview/abstractrasterimageviewtool.h>

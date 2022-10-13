@@ -29,7 +29,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KDirModel>
 #endif
 // Local
-#include "gwenview_lib_debug.h"
 #include <lib/archiveutils.h>
 #include <lib/timeutils.h>
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
