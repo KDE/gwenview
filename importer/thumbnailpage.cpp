@@ -42,7 +42,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kio/global.h>
 
 // Local
-#include "gwenview_importer_debug.h"
 #include <documentdirfinder.h>
 #include <importerconfigdialog.h>
 #include <lib/archiveutils.h>
