@@ -384,7 +384,7 @@ struct MainWindow::Private {
         file->addAction(KStandardAction::PrintPreview, q, SLOT(printPreview()));
         file->addAction(KStandardAction::Quit, qApp, SLOT(closeAllWindows()));
 
-        QAction *action = file->addAction("reload", q, SLOT(reload()));
+        QAction *action = file->addAction(QStringLiteral("reload"), q, SLOT(reload()));
         action->setText(i18nc("@action reload the currently viewed image", "Reload"));
         action->setIcon(QIcon::fromTheme(QStringLiteral("view-refresh")));
         actionCollection->setDefaultShortcuts(action, KStandardShortcut::reload());
@@ -394,7 +394,7 @@ struct MainWindow::Private {
         actionCollection->setDefaultShortcut(replaceLocationAction, Qt::CTRL | Qt::Key_L);
         connect(replaceLocationAction, &QAction::triggered, q, &MainWindow::replaceLocation);
 
-        mBrowseAction = view->addAction("browse");
+        mBrowseAction = view->addAction(QStringLiteral("browse"));
         mBrowseAction->setText(i18nc("@action:intoolbar Switch to file list", "Browse"));
         mBrowseAction->setToolTip(i18nc("@info:tooltip", "Browse folders for images"));
         mBrowseAction->setCheckable(true);
@@ -402,7 +402,7 @@ struct MainWindow::Private {
         actionCollection->setDefaultShortcut(mBrowseAction, Qt::Key_Escape);
         connect(mViewMainPage, &ViewMainPage::goToBrowseModeRequested, mBrowseAction, &QAction::trigger);
 
-        mViewAction = view->addAction("view");
+        mViewAction = view->addAction(QStringLiteral("view"));
         mViewAction->setText(i18nc("@action:intoolbar Switch to image view", "View"));
         mViewAction->setToolTip(i18nc("@info:tooltip", "View selected images"));
         mViewAction->setIcon(QIcon::fromTheme(QStringLiteral("view-preview")));
@@ -432,21 +432,21 @@ struct MainWindow::Private {
         mGoToPreviousAction->setToolTip(i18nc("@info:tooltip", "Go to previous image"));
         installDisabledActionShortcutMonitor(mGoToPreviousAction, SLOT(showFirstDocumentReached()));
 
-        mGoToNextAction = view->addAction("go_next", q, SLOT(goToNext()));
+        mGoToNextAction = view->addAction(QStringLiteral("go_next"), q, SLOT(goToNext()));
         mGoToNextAction->setPriority(QAction::LowPriority);
         mGoToNextAction->setIcon(QIcon::fromTheme(QGuiApplication::layoutDirection() == Qt::LeftToRight ? "go-next" : "go-next-symbolic-rtl"));
         mGoToNextAction->setText(i18nc("@action Go to next image", "Next"));
         mGoToNextAction->setToolTip(i18nc("@info:tooltip", "Go to next image"));
         installDisabledActionShortcutMonitor(mGoToNextAction, SLOT(showLastDocumentReached()));
 
-        mGoToFirstAction = view->addAction("go_first", q, SLOT(goToFirst()));
+        mGoToFirstAction = view->addAction(QStringLiteral("go_first"), q, SLOT(goToFirst()));
         mGoToFirstAction->setPriority(QAction::LowPriority);
         mGoToFirstAction->setIcon(QIcon::fromTheme(QStringLiteral("go-first-view")));
         mGoToFirstAction->setText(i18nc("@action Go to first image", "First"));
         mGoToFirstAction->setToolTip(i18nc("@info:tooltip", "Go to first image"));
         actionCollection->setDefaultShortcut(mGoToFirstAction, Qt::Key_Home);
 
-        mGoToLastAction = view->addAction("go_last", q, SLOT(goToLast()));
+        mGoToLastAction = view->addAction(QStringLiteral("go_last"), q, SLOT(goToLast()));
         mGoToLastAction->setPriority(QAction::LowPriority);
         mGoToLastAction->setIcon(QIcon::fromTheme(QStringLiteral("go-last-view")));
         mGoToLastAction->setText(i18nc("@action Go to last image", "Last"));
@@ -464,7 +464,7 @@ struct MainWindow::Private {
         action->setToolTip(i18nc("@info:tooltip", "Open the start page"));
         actionCollection->setDefaultShortcuts(action, KStandardShortcut::home());
 
-        mToggleSideBarAction = view->add<KToggleAction>("toggle_sidebar");
+        mToggleSideBarAction = view->add<KToggleAction>(QStringLiteral("toggle_sidebar"));
         connect(mToggleSideBarAction, &KToggleAction::triggered, q, &MainWindow::toggleSideBar);
         mToggleSideBarAction->setIcon(QIcon::fromTheme(QStringLiteral("view-sidetree")));
         actionCollection->setDefaultShortcut(mToggleSideBarAction, Qt::Key_F4);
@@ -472,7 +472,7 @@ struct MainWindow::Private {
         connect(mBrowseMainPage->toggleSideBarButton(), &QAbstractButton::clicked, mToggleSideBarAction, &QAction::trigger);
         connect(mViewMainPage->toggleSideBarButton(), &QAbstractButton::clicked, mToggleSideBarAction, &QAction::trigger);
 
-        mToggleOperationsSideBarAction = view->add<KToggleAction>("toggle_operations_sidebar");
+        mToggleOperationsSideBarAction = view->add<KToggleAction>(QStringLiteral("toggle_operations_sidebar"));
         mToggleOperationsSideBarAction->setText(i18nc("@action opens crop, rename, etc.", "Show Editing Tools"));
         mToggleOperationsSideBarAction->setIcon(QIcon::fromTheme(QStringLiteral("edit-image"), QIcon::fromTheme(QStringLiteral("document-edit"))));
         connect(mToggleOperationsSideBarAction, &KToggleAction::triggered, q, &MainWindow::toggleOperationsSideBar);
@@ -480,7 +480,7 @@ struct MainWindow::Private {
             mToggleOperationsSideBarAction->setChecked(mSideBar->isVisible() && mSideBar->currentPage() == QLatin1String("operations"));
         });
 
-        mToggleSlideShowAction = view->addAction("toggle_slideshow", q, SLOT(toggleSlideShow()));
+        mToggleSlideShowAction = view->addAction(QStringLiteral("toggle_slideshow"), q, SLOT(toggleSlideShow()));
         q->updateSlideShowAction();
         connect(mSlideShow, &SlideShow::stateChanged, q, &MainWindow::updateSlideShowAction);
 
@@ -624,13 +624,13 @@ struct MainWindow::Private {
         // Fill sidebar
         SideBarPage *page;
         page = new SideBarPage(QIcon::fromTheme(QStringLiteral("folder")), i18n("Folders"));
-        page->setObjectName(QLatin1String("folders"));
+        page->setObjectName(QStringLiteral("folders"));
         page->addWidget(folderViewItem->widget());
         page->layout()->setContentsMargins(0, 0, 0, 0);
         mSideBar->addPage(page);
 
         page = new SideBarPage(QIcon::fromTheme(QStringLiteral("documentinfo")), i18n("Information"));
-        page->setObjectName(QLatin1String("information"));
+        page->setObjectName(QStringLiteral("information"));
         page->addWidget(infoItem->widget());
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
         if (semanticInfoItem) {
@@ -644,7 +644,7 @@ struct MainWindow::Private {
         mSideBar->addPage(page);
 
         page = new SideBarPage(QIcon::fromTheme(QStringLiteral("document-edit")), i18n("Operations"));
-        page->setObjectName(QLatin1String("operations"));
+        page->setObjectName(QStringLiteral("operations"));
         page->addWidget(imageOpsItem->widget());
         auto separator = new QFrame;
         separator->setFrameShape(QFrame::HLine);
@@ -771,10 +771,10 @@ struct MainWindow::Private {
         }
 
         KActionCollection *actionCollection = q->actionCollection();
-        actionCollection->action("file_save")->setEnabled(canSave && isModified);
-        actionCollection->action("file_save_as")->setEnabled(canSave);
-        actionCollection->action("file_print")->setEnabled(isRasterImage);
-        actionCollection->action("file_print_preview")->setEnabled(isRasterImage);
+        actionCollection->action(QStringLiteral("file_save"))->setEnabled(canSave && isModified);
+        actionCollection->action(QStringLiteral("file_save_as"))->setEnabled(canSave);
+        actionCollection->action(QStringLiteral("file_print"))->setEnabled(isRasterImage);
+        actionCollection->action(QStringLiteral("file_print_preview"))->setEnabled(isRasterImage);
 
 #ifdef KF5Purpose_FOUND
         if (url.isEmpty()) {
@@ -996,7 +996,7 @@ MainWindow::MainWindow()
         new Mpris2Service(d->mSlideShow, d->mContextManager, d->mToggleSlideShowAction, d->mFullScreenAction, d->mGoToPreviousAction, d->mGoToNextAction, this);
 #endif
 
-    auto ratingMenu = static_cast<QMenu *>(guiFactory()->container("rating", this));
+    auto ratingMenu = static_cast<QMenu *>(guiFactory()->container(QStringLiteral("rating"), this));
     ratingMenu->setIcon(QIcon::fromTheme(QStringLiteral("rating-unrated")));
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_NONE
     if (ratingMenu) {

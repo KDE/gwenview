@@ -170,7 +170,7 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage {
 #endif
         QObject::connect(mSortAction, SIGNAL(triggered(QAction *)), q, SLOT(updateSortOrder()));
 
-        mSortDescendingAction = view->add<KToggleAction>("sort_desc");
+        mSortDescendingAction = view->add<KToggleAction>(QStringLiteral("sort_desc"));
         mSortDescendingAction->setText(i18nc("@action:inmenu Sort", "Descending"));
         QObject::connect(mSortDescendingAction, SIGNAL(toggled(bool)), q, SLOT(updateSortOrder()));
 
@@ -182,7 +182,7 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage {
 
         mThumbnailDetailsActionGroup = new QActionGroup(q);
         mThumbnailDetailsActionGroup->setExclusive(false);
-        auto thumbnailDetailsAction = view->add<KActionMenu>("thumbnail_details");
+        auto thumbnailDetailsAction = view->add<KActionMenu>(QStringLiteral("thumbnail_details"));
         thumbnailDetailsAction->setText(i18nc("@action:inmenu", "Thumbnail Details"));
         thumbnailDetailsAction->addAction(thumbnailDetailAction(i18nc("@action:inmenu", "Filename"), PreviewItemDelegate::FileNameDetail));
         thumbnailDetailsAction->addAction(thumbnailDetailAction(i18nc("@action:inmenu", "Date"), PreviewItemDelegate::DateDetail));

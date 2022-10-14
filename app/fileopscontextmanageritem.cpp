@@ -224,7 +224,7 @@ void FileOpsContextManagerItem::updateActions()
     const bool urlIsValid = contextManager()->currentUrl().isValid();
     const bool dirUrlIsValid = contextManager()->currentDirUrl().isValid();
 
-    mInTrash = contextManager()->currentDirUrl().scheme() == "trash";
+    mInTrash = contextManager()->currentDirUrl().scheme() == QLatin1String("trash");
 
     mCutAction->setEnabled(selectionNotEmpty);
     mCopyAction->setEnabled(selectionNotEmpty);
@@ -241,9 +241,9 @@ void FileOpsContextManagerItem::updateActions()
     mCreateFolderAction->setEnabled(dirUrlIsValid);
     mShowPropertiesAction->setEnabled(dirUrlIsValid || urlIsValid);
 
-    mXMLGUIClient->unplugActionList("file_action_list");
+    mXMLGUIClient->unplugActionList(QStringLiteral("file_action_list"));
     QList<QAction *> &list = mInTrash ? mTrashFileActionList : mRegularFileActionList;
-    mXMLGUIClient->plugActionList("file_action_list", list);
+    mXMLGUIClient->plugActionList(QStringLiteral("file_action_list"), list);
 
     updateSideBarContent();
 }

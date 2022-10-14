@@ -79,7 +79,7 @@ ConfigDialog::ConfigDialog(QWidget *parent)
     mGeneralConfigPage.lossyImageFormatHelpLabel->setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
 
     mGeneralConfigPage.kcfg_AutoplayVideos->setEnabled(mGeneralConfigPage.kcfg_ListVideos->isChecked());
-    connect(mGeneralConfigPage.kcfg_ListVideos, &QCheckBox::stateChanged, [=](const int &state) {
+    connect(mGeneralConfigPage.kcfg_ListVideos, &QCheckBox::stateChanged, this, [=](int state) {
         mGeneralConfigPage.kcfg_AutoplayVideos->setEnabled(state == Qt::Checked);
     });
 
