@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-12 00:44+0000\n"
+"POT-Creation-Date: 2022-10-14 00:44+0000\n"
 "PO-Revision-Date: 2022-07-19 10:03+0200\n"
 "Last-Translator: Matej Mrenica <matejm98mthw@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -135,8 +135,8 @@ msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
 msgid "Sidebar Alignment Spacer"
 msgstr "Oddeľovač bočného panela"
 
-#: app/browsemainpage.cpp:147 app/mainwindow.cpp:373 app/viewmainpage.cpp:425
-#: lib/documentview/documentviewcontroller.cpp:57
+#: app/browsemainpage.cpp:147 app/mainwindow.cpp:371 app/viewmainpage.cpp:425
+#: lib/documentview/documentviewcontroller.cpp:56
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "View"
@@ -221,7 +221,7 @@ msgid "Rating"
 msgstr "Hodnotenie"
 
 #: app/browsemainpage.cpp:196 app/fileopscontextmanageritem.cpp:142
-#: app/mainwindow.cpp:372
+#: app/mainwindow.cpp:370
 #, kde-format
 msgctxt "@title actions category"
 msgid "File"
@@ -785,81 +785,81 @@ msgctxt "@title:window"
 msgid "Image Information"
 msgstr "Informácie o obrázku"
 
-#: app/imageopscontextmanageritem.cpp:84
+#: app/imageopscontextmanageritem.cpp:87
 #, kde-format
 msgctxt "@title actions category - means actions changing image"
 msgid "Edit"
 msgstr "Upraviť"
 
-#: app/imageopscontextmanageritem.cpp:87
+#: app/imageopscontextmanageritem.cpp:90
 #, kde-format
 msgid "Rotate Left"
 msgstr "Otočiť doľava"
 
-#: app/imageopscontextmanageritem.cpp:88
+#: app/imageopscontextmanageritem.cpp:91
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate image to the left"
 msgstr "Otočiť obrázok doľava"
 
-#: app/imageopscontextmanageritem.cpp:93
+#: app/imageopscontextmanageritem.cpp:96
 #, kde-format
 msgid "Rotate Right"
 msgstr "Otočiť doprava"
 
-#: app/imageopscontextmanageritem.cpp:94
+#: app/imageopscontextmanageritem.cpp:97
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate image to the right"
 msgstr "Otočiť obrázok doprava"
 
-#: app/imageopscontextmanageritem.cpp:99
+#: app/imageopscontextmanageritem.cpp:102
 #, kde-format
 msgid "Mirror"
 msgstr "Zrkadliť"
 
-#: app/imageopscontextmanageritem.cpp:103
+#: app/imageopscontextmanageritem.cpp:106
 #, kde-format
 msgid "Flip"
 msgstr "Prevrátiť"
 
-#: app/imageopscontextmanageritem.cpp:107 lib/resize/resizeimagedialog.cpp:71
+#: app/imageopscontextmanageritem.cpp:110 lib/resize/resizeimagedialog.cpp:71
 #, kde-format
 msgid "Resize"
 msgstr "Zmeniť veľkosť"
 
-#: app/imageopscontextmanageritem.cpp:112 lib/crop/cropimageoperation.cpp:70
-#: lib/crop/cropwidget.cpp:263
+#: app/imageopscontextmanageritem.cpp:115 lib/crop/cropimageoperation.cpp:70
+#: lib/crop/cropwidget.cpp:262
 #, kde-format
 msgid "Crop"
 msgstr "Orezať"
 
-#: app/imageopscontextmanageritem.cpp:117
-#: lib/redeyereduction/redeyereductionimageoperation.cpp:76
-#: lib/redeyereduction/redeyereductiontool.cpp:49
+#: app/imageopscontextmanageritem.cpp:120
+#: lib/redeyereduction/redeyereductionimageoperation.cpp:75
+#: lib/redeyereduction/redeyereductiontool.cpp:48
 #, kde-format
 msgid "Reduce Red Eye"
 msgstr "Odstrániť červené oči"
 
-#: app/imageopscontextmanageritem.cpp:122 lib/annotate/annotateoperation.cpp:52
+#: app/imageopscontextmanageritem.cpp:125 lib/annotate/annotateoperation.cpp:51
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Annotate"
 msgstr "Pridať poznámku"
 
-#: app/imageopscontextmanageritem.cpp:130
+#: app/imageopscontextmanageritem.cpp:133
 #, kde-format
 msgctxt "@title:window Annotate [filename]"
 msgid "Annotate %1"
 msgstr "Pridať poznámku %1"
 
-#: app/imageopscontextmanageritem.cpp:150 lib/document/documentjob.cpp:77
+#: app/imageopscontextmanageritem.cpp:155 lib/document/documentjob.cpp:77
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot edit this kind of image."
 msgstr "Gwenview nevie upravovať tento typ obrázka."
 
-#: app/imageopscontextmanageritem.cpp:161
+#: app/imageopscontextmanageritem.cpp:166
 #, kde-format
 msgid "Image Operations"
 msgstr "Operácie s obrázkami"
@@ -1084,138 +1084,138 @@ msgstr "Spustí v režime prezentácia"
 msgid "A starting file or folders"
 msgstr "Počiatočný súbor alebo priečinky"
 
-#: app/mainwindow.cpp:382
+#: app/mainwindow.cpp:380
 #, kde-format
 msgctxt "@action Open Recent menu"
 msgid "Clear List"
 msgstr "Vyčistiť zoznam"
 
-#: app/mainwindow.cpp:390
+#: app/mainwindow.cpp:388
 #, kde-format
 msgctxt "@action reload the currently viewed image"
 msgid "Reload"
 msgstr "Obnoviť"
 
-#: app/mainwindow.cpp:395
+#: app/mainwindow.cpp:393
 #, kde-format
 msgctxt "@action:inmenu Navigation Bar"
 msgid "Replace Location"
 msgstr "Nahradiť umiestnenie"
 
-#: app/mainwindow.cpp:400
+#: app/mainwindow.cpp:398
 #, kde-format
 msgctxt "@action:intoolbar Switch to file list"
 msgid "Browse"
 msgstr "Prehlidať"
 
-#: app/mainwindow.cpp:401
+#: app/mainwindow.cpp:399
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Browse folders for images"
 msgstr "Prehliadať priečinky pre obrázky"
 
-#: app/mainwindow.cpp:408
+#: app/mainwindow.cpp:406
 #, kde-format
 msgctxt "@action:intoolbar Switch to image view"
 msgid "View"
 msgstr "Zobraziť"
 
-#: app/mainwindow.cpp:409
+#: app/mainwindow.cpp:407
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "View selected images"
 msgstr "Zobraziť vybrané obrázky"
 
-#: app/mainwindow.cpp:428
+#: app/mainwindow.cpp:426
 #, kde-format
 msgctxt "@action"
 msgid "Exit Full Screen"
 msgstr "Ukončiť režim celej obrazovky"
 
-#: app/mainwindow.cpp:433
+#: app/mainwindow.cpp:431
 #, kde-format
 msgctxt "@action Go to previous image"
 msgid "Previous"
 msgstr "Predchádzajúci"
 
-#: app/mainwindow.cpp:434
+#: app/mainwindow.cpp:432
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to previous image"
 msgstr "Prejsť na predchádzajúci obrázok"
 
-#: app/mainwindow.cpp:440
+#: app/mainwindow.cpp:438
 #, kde-format
 msgctxt "@action Go to next image"
 msgid "Next"
 msgstr "Nasledujúci"
 
-#: app/mainwindow.cpp:441
+#: app/mainwindow.cpp:439
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to next image"
 msgstr "Prejsť na nasledujúci obrázok"
 
-#: app/mainwindow.cpp:447
+#: app/mainwindow.cpp:445
 #, kde-format
 msgctxt "@action Go to first image"
 msgid "First"
 msgstr "Prvý"
 
-#: app/mainwindow.cpp:448
+#: app/mainwindow.cpp:446
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to first image"
 msgstr "Prejsť na prvý obrázok"
 
-#: app/mainwindow.cpp:454
+#: app/mainwindow.cpp:452
 #, kde-format
 msgctxt "@action Go to last image"
 msgid "Last"
 msgstr "Posledný"
 
-#: app/mainwindow.cpp:455
+#: app/mainwindow.cpp:453
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to last image"
 msgstr "Prejsť na posledný obrázok"
 
-#: app/mainwindow.cpp:465
+#: app/mainwindow.cpp:463
 #, kde-format
 msgctxt "@action"
 msgid "Start Page"
 msgstr "Úvodná stránka"
 
-#: app/mainwindow.cpp:466
+#: app/mainwindow.cpp:464
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open the start page"
 msgstr "Otvoriť domovskú stránku"
 
-#: app/mainwindow.cpp:473
+#: app/mainwindow.cpp:471
 #, kde-format
 msgctxt "@action"
 msgid "Sidebar"
 msgstr "Bočný panel"
 
-#: app/mainwindow.cpp:478
+#: app/mainwindow.cpp:476
 #, kde-format
 msgctxt "@action opens crop, rename, etc."
 msgid "Show Editing Tools"
 msgstr "Zobraziť nástroje na úpravy"
 
-#: app/mainwindow.cpp:508
+#: app/mainwindow.cpp:506
 #, kde-format
 msgctxt "@action Share images"
 msgid "Share"
 msgstr "Zdieľať"
 
-#: app/mainwindow.cpp:516
+#: app/mainwindow.cpp:514
 #, kde-format
 msgid "Error while sharing: %1"
 msgstr "Chyba počas zdieľania: %1"
 
-#: app/mainwindow.cpp:523
+#: app/mainwindow.cpp:521
 #, kde-format
 msgid ""
 "The shared image link (<a href=\"%1\">%1</a>) has been copied to the "
@@ -1224,87 +1224,87 @@ msgstr ""
 "Odkaz na zdieľaný obrázok (<a href=\"%1\">%1</a>) bol skopírovaný do "
 "schránky."
 
-#: app/mainwindow.cpp:573
+#: app/mainwindow.cpp:571
 #, kde-format
 msgctxt "@title:menu submenu for actions that open configuration dialogs"
 msgid "Configure"
 msgstr "Nastaviť"
 
-#: app/mainwindow.cpp:588
+#: app/mainwindow.cpp:586
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "Edit"
 msgstr "Upraviť"
 
-#: app/mainwindow.cpp:593
+#: app/mainwindow.cpp:591
 #, kde-format
 msgid "Redo"
 msgstr "Znovu"
 
-#: app/mainwindow.cpp:601
+#: app/mainwindow.cpp:599
 #, kde-format
 msgid "Undo"
 msgstr "Späť"
 
-#: app/mainwindow.cpp:628
+#: app/mainwindow.cpp:626
 #, kde-format
 msgid "Folders"
 msgstr "Priečinky"
 
-#: app/mainwindow.cpp:634
+#: app/mainwindow.cpp:632
 #, kde-format
 msgid "Information"
 msgstr "Informácie"
 
-#: app/mainwindow.cpp:648
+#: app/mainwindow.cpp:646
 #, kde-format
 msgid "Operations"
 msgstr "Operácie"
 
-#: app/mainwindow.cpp:1322
+#: app/mainwindow.cpp:1320
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Skryť bočný panel"
 
-#: app/mainwindow.cpp:1322
+#: app/mainwindow.cpp:1320
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Zobraziť bočný panel"
 
-#: app/mainwindow.cpp:1629
+#: app/mainwindow.cpp:1627
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Otvoriť obrázok"
 
-#: app/mainwindow.cpp:1689
+#: app/mainwindow.cpp:1687
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "Pozastaviť prezentáciu"
 
-#: app/mainwindow.cpp:1692
+#: app/mainwindow.cpp:1690
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "Pokračovať prezentáciu"
 
-#: app/mainwindow.cpp:1692
+#: app/mainwindow.cpp:1690
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Spustiť prezentáciu"
 
-#: app/mainwindow.cpp:1705
+#: app/mainwindow.cpp:1703
 #, kde-format
 msgid "Save All Changes"
 msgstr "Uložiť všetky zmeny"
 
-#: app/mainwindow.cpp:1706
+#: app/mainwindow.cpp:1704
 #, kde-format
 msgid "Discard Changes"
 msgstr "Zahodiť zmeny"
 
-#: app/mainwindow.cpp:1708
+#: app/mainwindow.cpp:1706
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
@@ -1312,48 +1312,48 @@ msgstr[0] "Jeden obrázok bol zmenený."
 msgstr[1] "%1 obrázky boli zmenené."
 msgstr[2] "%1 obrázkov bolo zmenených."
 
-#: app/mainwindow.cpp:1708
+#: app/mainwindow.cpp:1706
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Ak teraz ukončíte aplikáciu, vaše zmeny budú stratené."
 
-#: app/mainwindow.cpp:1751
+#: app/mainwindow.cpp:1749
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr "Toto úplne skryje panel ponuky. Môžete ho znova zobraziť stlačením %1."
 
-#: app/mainwindow.cpp:1754
+#: app/mainwindow.cpp:1752
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Skryť panel ponuky"
 
-#: app/mainwindow.cpp:1972
+#: app/mainwindow.cpp:1970
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "Dosiahli ste prvý dokument, čo chcete urobiť?"
 
-#: app/mainwindow.cpp:1973 app/mainwindow.cpp:1987
+#: app/mainwindow.cpp:1971 app/mainwindow.cpp:1985
 #, kde-format
 msgid "Stay There"
 msgstr "Zostať tam"
 
-#: app/mainwindow.cpp:1974
+#: app/mainwindow.cpp:1972
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "Prejsť na posledný dokument"
 
-#: app/mainwindow.cpp:1975 app/mainwindow.cpp:1989
+#: app/mainwindow.cpp:1973 app/mainwindow.cpp:1987
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "Prejsť späť na zoznam dokumentov"
 
-#: app/mainwindow.cpp:1986
+#: app/mainwindow.cpp:1984
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "Dosiahli ste posledný dokument, čo chcete urobiť?"
 
-#: app/mainwindow.cpp:1988
+#: app/mainwindow.cpp:1986
 #, kde-format
 msgid "Go to the First Document"
 msgstr "Prejsť na prvý dokument"
@@ -1646,17 +1646,17 @@ msgid ""
 "This image has been modified. Reloading it will discard all your changes."
 msgstr "Tento obrázok bol zmenený. Jeho obnovením zahodíte všetky zmeny."
 
-#: importer/dialogpage.cpp:53
+#: importer/dialogpage.cpp:52
 #, kde-format
 msgid "Show failed files..."
 msgstr "Zobraziť zlyhané súbory..."
 
-#: importer/dialogpage.cpp:58
+#: importer/dialogpage.cpp:57
 #, kde-format
 msgid "Show failed subfolders..."
 msgstr "Zobraziť zlyhané podpriečinky..."
 
-#: importer/dialogpage.cpp:72
+#: importer/dialogpage.cpp:71
 #, kde-format
 msgid "Failed to import %1 document."
 msgid_plural "Failed to import %1 documents."
@@ -1664,7 +1664,7 @@ msgstr[0] "Nepodarilo sa importovať %1 dokument."
 msgstr[1] "Nepodarilo sa importovať %1 dokumenty."
 msgstr[2] "Nepodarilo sa importovať %1 dokumentov."
 
-#: importer/dialogpage.cpp:79
+#: importer/dialogpage.cpp:78
 #, kde-format
 msgid "Failed to create %1 destination subfolder."
 msgid_plural "Failed to create %1 destination subfolders."
@@ -1672,12 +1672,12 @@ msgstr[0] "Nepodarilo sa vytvoriť  %1 cieľový podpriečinok."
 msgstr[1] "Nepodarilo sa vytvoriť  %1 cieľové podpriečinky."
 msgstr[2] "Nepodarilo sa vytvoriť  %1 cieľových podpriečinkov."
 
-#: importer/dialogpage.cpp:90
+#: importer/dialogpage.cpp:89
 #, kde-format
 msgid "Failed to import documents:"
 msgstr "Nepodarilo sa importovať dokumenty:"
 
-#: importer/dialogpage.cpp:96
+#: importer/dialogpage.cpp:95
 #, kde-format
 msgid "Failed to create subfolders:"
 msgstr "Nepodarilo sa vytvoriť podpriečinky:"
@@ -1923,19 +1923,19 @@ msgstr "Neplatný zdrojový priečinok."
 msgid "Importing documents..."
 msgstr "Importujú sa dokumenty..."
 
-#: importer/thumbnailpage.cpp:235
+#: importer/thumbnailpage.cpp:234
 #, kde-format
 msgctxt "@info above install button when Kamera is not installed"
 msgid "Support for your camera is not installed."
 msgstr "Podpora pre váš fotoaparát nie je nainštalovaná."
 
-#: importer/thumbnailpage.cpp:237
+#: importer/thumbnailpage.cpp:236
 #, kde-format
 msgctxt "@info above install button, %1 protocol name"
 msgid "The protocol support library for \"%1\" is not installed."
 msgstr "Knižnica pre podporu protokolu \"%1\" nie je nainštalovaná."
 
-#: importer/thumbnailpage.cpp:249
+#: importer/thumbnailpage.cpp:248
 #, kde-format
 msgctxt "@info:usagetip above install button"
 msgid ""
@@ -1944,7 +1944,7 @@ msgstr ""
 "Po dokončení procesu inštalácie reštartujte tento importér, aby ste mohli "
 "pokračovať."
 
-#: importer/thumbnailpage.cpp:256
+#: importer/thumbnailpage.cpp:255
 #, kde-format
 msgctxt "@info:tooltip for a button, %1 protocol name"
 msgid "Launch Discover to install the protocol support library for \"%1\""
@@ -1952,13 +1952,13 @@ msgstr ""
 "Spustenie programu Discover na inštaláciu knižnice na podporu protokolu pre "
 "\"%1\""
 
-#: importer/thumbnailpage.cpp:258
+#: importer/thumbnailpage.cpp:257
 #, kde-format
 msgctxt "@action:button"
 msgid "Install Support for this Camera…"
 msgstr "Inštalácia podpory pre tento fotoaparát..."
 
-#: importer/thumbnailpage.cpp:259
+#: importer/thumbnailpage.cpp:258
 #, kde-format
 msgctxt "@info:whatsthis for a button when Kamera is not installed"
 msgid ""
@@ -1970,13 +1970,13 @@ msgstr ""
 "Kamera. Kliknite sem a spustite službu Discover, aby ste nainštalovali "
 "Kameru a aktivovali podporu protokolu pre \"camera:/\" vo vašom systéme."
 
-#: importer/thumbnailpage.cpp:262
+#: importer/thumbnailpage.cpp:261
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Install Protocol Support for \"%1\"…"
 msgstr "Inštalácia podpory protokolu \"%1\"..."
 
-#: importer/thumbnailpage.cpp:263
+#: importer/thumbnailpage.cpp:262
 #, kde-format
 msgctxt "@info:whatsthis for a button, %1 protocol name"
 msgid ""
@@ -1986,13 +1986,13 @@ msgstr ""
 "Kliknutím sem spustíte službu Discover a nainštalujete chýbajúcu podporu "
 "protokolu knižnice, aby ste v systéme povolili podporu protokolu \"%1:/\"."
 
-#: importer/thumbnailpage.cpp:267
+#: importer/thumbnailpage.cpp:266
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Search the Web for How to Install Protocol Support for \"%1\"…"
 msgstr "Vyhľadajte na webe Ako nainštalovať podporu protokolu \"%1\"..."
 
-#: importer/thumbnailpage.cpp:283
+#: importer/thumbnailpage.cpp:282
 #, kde-format
 msgctxt ""
 "@info this text will be used as a search term in an online search engine, %1 "
@@ -2000,7 +2000,7 @@ msgctxt ""
 msgid "How to install protocol support for \"%1\" on Linux"
 msgstr "Ako nainštalovať podporu protokolu \"%1\" v systéme Linux"
 
-#: importer/thumbnailpage.cpp:284
+#: importer/thumbnailpage.cpp:283
 #, kde-format
 msgctxt ""
 "search engine URL, %1 search keyword, and translators can replace duckduckgo "
@@ -2008,17 +2008,17 @@ msgctxt ""
 msgid "https://duckduckgo.com/?q=%1"
 msgstr "https://duckduckgo.com/?q=%1"
 
-#: importer/thumbnailpage.cpp:325
+#: importer/thumbnailpage.cpp:324
 #, kde-format
 msgid "Import Selected"
 msgstr "Importovať vybrané"
 
-#: importer/thumbnailpage.cpp:328
+#: importer/thumbnailpage.cpp:327
 #, kde-format
 msgid "Import All"
 msgstr "Importovať všetko"
 
-#: importer/thumbnailpage.cpp:490
+#: importer/thumbnailpage.cpp:489
 #, kde-kuit-format
 msgctxt "@info when failing to open the appstream URL"
 msgid ""
@@ -2029,7 +2029,7 @@ msgstr ""
 "vašom systéme nainštalovaný program Discover, alebo použite správcu balíkov "
 "vášho systému na inštaláciu balíka \"Kamera\"."
 
-#: importer/thumbnailpage.cpp:494
+#: importer/thumbnailpage.cpp:493
 #, kde-kuit-format
 msgctxt "@info when failing to launch plasma-discover, %1 protocol name"
 msgid ""
@@ -2080,37 +2080,37 @@ msgstr "Aktuálny správca"
 msgid "Developer"
 msgstr "Vývojár"
 
-#: lib/crop/cropwidget.cpp:192
+#: lib/crop/cropwidget.cpp:191
 #, kde-format
 msgid "Current Image"
 msgstr "Aktuálny obrázok"
 
-#: lib/crop/cropwidget.cpp:195
+#: lib/crop/cropwidget.cpp:194
 #, kde-format
 msgid "Square"
 msgstr "Štvorec"
 
-#: lib/crop/cropwidget.cpp:198
+#: lib/crop/cropwidget.cpp:197
 #, kde-format
 msgid "This Screen"
 msgstr "Táto obrazovka"
 
-#: lib/crop/cropwidget.cpp:200
+#: lib/crop/cropwidget.cpp:199
 #, kde-format
 msgid "Landscape"
 msgstr "Na šírku"
 
-#: lib/crop/cropwidget.cpp:205 lib/crop/cropwidget.cpp:212
+#: lib/crop/cropwidget.cpp:204 lib/crop/cropwidget.cpp:211
 #, kde-format
 msgid "ISO (A4, A3...)"
 msgstr "ISO (A4, A3...)"
 
-#: lib/crop/cropwidget.cpp:206 lib/crop/cropwidget.cpp:213
+#: lib/crop/cropwidget.cpp:205 lib/crop/cropwidget.cpp:212
 #, kde-format
 msgid "US Letter"
 msgstr "US Letter"
 
-#: lib/crop/cropwidget.cpp:207
+#: lib/crop/cropwidget.cpp:206
 #, kde-format
 msgid "Portrait"
 msgstr "Na výšku"
@@ -2118,72 +2118,72 @@ msgstr "Na výšku"
 #. i18n("%1:%2") because ':' should not be translated, it is
 #. used to parse the ratio string.
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: lib/crop/cropwidget.cpp:222 lib/resize/resizeimagewidget.ui:30
+#: lib/crop/cropwidget.cpp:221 lib/resize/resizeimagewidget.ui:30
 #, kde-format
 msgid "Width"
 msgstr "Šírka"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: lib/crop/cropwidget.cpp:222 lib/resize/resizeimagewidget.ui:40
+#: lib/crop/cropwidget.cpp:221 lib/resize/resizeimagewidget.ui:40
 #, kde-format
 msgid "Height"
 msgstr "Výška"
 
-#: lib/crop/cropwidget.cpp:291
+#: lib/crop/cropwidget.cpp:290
 #, kde-format
 msgctxt "@option:check"
 msgid "Advanced settings"
 msgstr "Pokročilé nastavenia"
 
-#: lib/crop/cropwidget.cpp:300
+#: lib/crop/cropwidget.cpp:299
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Aspect ratio:"
 msgstr "Pomer strán:"
 
-#: lib/crop/cropwidget.cpp:313
+#: lib/crop/cropwidget.cpp:312
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Size:"
 msgstr "Veľkosť:"
 
-#: lib/crop/cropwidget.cpp:335
+#: lib/crop/cropwidget.cpp:334
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Position:"
 msgstr "Pozícia:"
 
-#: lib/crop/cropwidget.cpp:356
+#: lib/crop/cropwidget.cpp:355
 #, kde-format
 msgctxt "@option:check"
 msgid "Preserve aspect ratio"
 msgstr "Zachovať pomer strán"
 
-#: lib/document/document.cpp:299
+#: lib/document/document.cpp:298
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot save this kind of documents."
 msgstr "Gwenview nevie uložiť tento typ dokumentu."
 
-#: lib/document/loadingdocumentimpl.cpp:139
+#: lib/document/loadingdocumentimpl.cpp:137
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot display documents of type %1."
 msgstr "Gwenview nevie zobraziť dokumenty typu %1."
 
-#: lib/document/loadingdocumentimpl.cpp:399
+#: lib/document/loadingdocumentimpl.cpp:397
 #, kde-format
 msgctxt "@info"
 msgid "Could not open file %1"
 msgstr "Súbor %1 sa nepodarilo otvoriť"
 
-#: lib/document/loadingdocumentimpl.cpp:490
+#: lib/document/loadingdocumentimpl.cpp:488
 #, kde-format
 msgctxt "@info"
 msgid "Loading meta information failed."
 msgstr "Načítanie meta-informácií zlyhalo."
 
-#: lib/document/loadingdocumentimpl.cpp:516
+#: lib/document/loadingdocumentimpl.cpp:514
 #, kde-format
 msgctxt "@info"
 msgid "Loading image failed."
@@ -2236,18 +2236,18 @@ msgstr "Gwenview nevie zobraziť tento typ dokumentu"
 msgid "Loading <filename>%1</filename> failed"
 msgstr "Načítanie <filename>%1</filename> zlyhalo"
 
-#: lib/documentview/documentviewcontroller.cpp:63
+#: lib/documentview/documentviewcontroller.cpp:62
 #, kde-format
 msgid "Zoom to Fit"
 msgstr "Prispôsobiť veľkosti"
 
-#: lib/documentview/documentviewcontroller.cpp:65
+#: lib/documentview/documentviewcontroller.cpp:64
 #, kde-format
 msgctxt "@action:button Zoom to fit, shown in status bar, keep it short please"
 msgid "Fit"
 msgstr "Prispôsobiť"
 
-#: lib/documentview/documentviewcontroller.cpp:66
+#: lib/documentview/documentviewcontroller.cpp:65
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Fit image into the viewing area"
@@ -2257,7 +2257,7 @@ msgstr "Prispôsobiť obrázok do oblasti zobrazenia"
 #. zoom value that was used the last time this same image was viewed. Being more clear about this isn't really necessary here so I kept it short
 #. but a more elaborate translation would also be fine.
 #. The text "in the settings" is supposed to sound like clicking it opens the settings.
-#: lib/documentview/documentviewcontroller.cpp:72
+#: lib/documentview/documentviewcontroller.cpp:71
 #, kde-kuit-format
 msgctxt "@info:whatsthis, %1 the action's text"
 msgid ""
@@ -2284,12 +2284,12 @@ msgstr ""
 "režim priblíženia pre obrázky. Toto sa dá zmeniť a obrázky sa zobrazia v "
 "predošlom priblížení <link url='%2'>v nastaveniach</link>.</para>"
 
-#: lib/documentview/documentviewcontroller.cpp:85
+#: lib/documentview/documentviewcontroller.cpp:84
 #, kde-format
 msgid "Zoom to fill window by fitting to width or height"
 msgstr "Priblížiť na vyplnenie okna podľa šírky alebo výšky"
 
-#: lib/documentview/documentviewcontroller.cpp:87
+#: lib/documentview/documentviewcontroller.cpp:86
 #, kde-format
 msgctxt ""
 "@action:button Zoom to fill (fit width or height), shown in status bar, keep "
@@ -2297,30 +2297,30 @@ msgctxt ""
 msgid "Fill"
 msgstr "Vyplniť"
 
-#: lib/documentview/documentviewcontroller.cpp:100
+#: lib/documentview/documentviewcontroller.cpp:99
 #, kde-format
 msgid "Show Bird's Eye View When Zoomed In"
 msgstr "Po priblížení zobraziť pohľad z vtáčej perspektívy"
 
-#: lib/documentview/documentviewcontroller.cpp:107
+#: lib/documentview/documentviewcontroller.cpp:106
 #, kde-format
 msgctxt "@action"
 msgid "Follow color scheme"
 msgstr "Nasledovať farebnú schému"
 
-#: lib/documentview/documentviewcontroller.cpp:113
+#: lib/documentview/documentviewcontroller.cpp:112
 #, kde-format
 msgctxt "@action"
 msgid "Light Mode"
 msgstr "Svetlý režim"
 
-#: lib/documentview/documentviewcontroller.cpp:119
+#: lib/documentview/documentviewcontroller.cpp:118
 #, kde-format
 msgctxt "@action"
 msgid "Neutral Mode"
 msgstr "Neutrálny režim"
 
-#: lib/documentview/documentviewcontroller.cpp:125
+#: lib/documentview/documentviewcontroller.cpp:124
 #, kde-format
 msgctxt "@action"
 msgid "Dark Mode"
@@ -2551,7 +2551,7 @@ msgctxt "@info"
 msgid "No data to store."
 msgstr "Žiadne dáta na uloženie."
 
-#: lib/print/printhelper.cpp:126
+#: lib/print/printhelper.cpp:125
 #, kde-format
 msgid "Print Image"
 msgstr "Vytlačiť obrázok"
@@ -2704,7 +2704,7 @@ msgctxt "@info:tooltip"
 msgid "Assign this tag to all selected images"
 msgstr "Priradiť túto značku všetkým vybraným obrázkom"
 
-#: lib/semanticinfo/tagwidget.cpp:147
+#: lib/semanticinfo/tagwidget.cpp:146
 #, kde-format
 msgid "Add tag"
 msgstr "Pridať značku"
@@ -2751,7 +2751,7 @@ msgctxt "(qtundo-format)"
 msgid "Transform"
 msgstr "Transformovať"
 
-#: part/gvpart.cpp:74
+#: part/gvpart.cpp:72
 #, kde-format
 msgctxt "@action"
 msgid "Properties"

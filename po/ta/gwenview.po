@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-12 00:44+0000\n"
+"POT-Creation-Date: 2022-10-14 00:44+0000\n"
 "PO-Revision-Date: 2022-07-10 19:53+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -126,8 +126,8 @@ msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
 msgid "Sidebar Alignment Spacer"
 msgstr "பக்கப்பட்டை சீரமைப்பு இடைவெளி"
 
-#: app/browsemainpage.cpp:147 app/mainwindow.cpp:373 app/viewmainpage.cpp:425
-#: lib/documentview/documentviewcontroller.cpp:57
+#: app/browsemainpage.cpp:147 app/mainwindow.cpp:371 app/viewmainpage.cpp:425
+#: lib/documentview/documentviewcontroller.cpp:56
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "View"
@@ -212,7 +212,7 @@ msgid "Rating"
 msgstr "மதிப்பீடு"
 
 #: app/browsemainpage.cpp:196 app/fileopscontextmanageritem.cpp:142
-#: app/mainwindow.cpp:372
+#: app/mainwindow.cpp:370
 #, kde-format
 msgctxt "@title actions category"
 msgid "File"
@@ -770,81 +770,81 @@ msgctxt "@title:window"
 msgid "Image Information"
 msgstr "படத்தின் விவரங்கள்"
 
-#: app/imageopscontextmanageritem.cpp:84
+#: app/imageopscontextmanageritem.cpp:87
 #, kde-format
 msgctxt "@title actions category - means actions changing image"
 msgid "Edit"
 msgstr "திருத்துதல்"
 
-#: app/imageopscontextmanageritem.cpp:87
+#: app/imageopscontextmanageritem.cpp:90
 #, kde-format
 msgid "Rotate Left"
 msgstr "இடதுபுறமாக திருப்பு"
 
-#: app/imageopscontextmanageritem.cpp:88
+#: app/imageopscontextmanageritem.cpp:91
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate image to the left"
 msgstr "படத்தை இடதுபுறமாக திருப்பும்"
 
-#: app/imageopscontextmanageritem.cpp:93
+#: app/imageopscontextmanageritem.cpp:96
 #, kde-format
 msgid "Rotate Right"
 msgstr "வலதுபுறமாக திருப்பு"
 
-#: app/imageopscontextmanageritem.cpp:94
+#: app/imageopscontextmanageritem.cpp:97
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate image to the right"
 msgstr "படத்தை வலதுபுறமாக திருப்பும்"
 
-#: app/imageopscontextmanageritem.cpp:99
+#: app/imageopscontextmanageritem.cpp:102
 #, kde-format
 msgid "Mirror"
 msgstr "கிடைமட்டமாக புரட்டு"
 
-#: app/imageopscontextmanageritem.cpp:103
+#: app/imageopscontextmanageritem.cpp:106
 #, kde-format
 msgid "Flip"
 msgstr "நெடுக்காக புரட்டு"
 
-#: app/imageopscontextmanageritem.cpp:107 lib/resize/resizeimagedialog.cpp:71
+#: app/imageopscontextmanageritem.cpp:110 lib/resize/resizeimagedialog.cpp:71
 #, kde-format
 msgid "Resize"
 msgstr "அளவுமாற்று"
 
-#: app/imageopscontextmanageritem.cpp:112 lib/crop/cropimageoperation.cpp:70
-#: lib/crop/cropwidget.cpp:263
+#: app/imageopscontextmanageritem.cpp:115 lib/crop/cropimageoperation.cpp:70
+#: lib/crop/cropwidget.cpp:262
 #, kde-format
 msgid "Crop"
 msgstr "வெட்டு"
 
-#: app/imageopscontextmanageritem.cpp:117
-#: lib/redeyereduction/redeyereductionimageoperation.cpp:76
-#: lib/redeyereduction/redeyereductiontool.cpp:49
+#: app/imageopscontextmanageritem.cpp:120
+#: lib/redeyereduction/redeyereductionimageoperation.cpp:75
+#: lib/redeyereduction/redeyereductiontool.cpp:48
 #, kde-format
 msgid "Reduce Red Eye"
 msgstr "சிவந்த கண்களை குறை"
 
-#: app/imageopscontextmanageritem.cpp:122 lib/annotate/annotateoperation.cpp:52
+#: app/imageopscontextmanageritem.cpp:125 lib/annotate/annotateoperation.cpp:51
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Annotate"
 msgstr "குறிப்பிடு"
 
-#: app/imageopscontextmanageritem.cpp:130
+#: app/imageopscontextmanageritem.cpp:133
 #, kde-format
 msgctxt "@title:window Annotate [filename]"
 msgid "Annotate %1"
 msgstr "%1 தனில் குறிப்பிடுவது"
 
-#: app/imageopscontextmanageritem.cpp:150 lib/document/documentjob.cpp:77
+#: app/imageopscontextmanageritem.cpp:155 lib/document/documentjob.cpp:77
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot edit this kind of image."
 msgstr "இப்படிப்பட்ட படத்தை குவென்வியூவால் திருத்த முடியாது."
 
-#: app/imageopscontextmanageritem.cpp:161
+#: app/imageopscontextmanageritem.cpp:166
 #, kde-format
 msgid "Image Operations"
 msgstr "பட செயல்பாடுகள்"
@@ -1065,138 +1065,138 @@ msgstr "வில்லைக்காட்சி பயன்முறைய�
 msgid "A starting file or folders"
 msgstr "துவக்கத்தில் காட்ட வேண்டிய கோப்புகள் அல்லது அடைவுகள்"
 
-#: app/mainwindow.cpp:382
+#: app/mainwindow.cpp:380
 #, kde-format
 msgctxt "@action Open Recent menu"
 msgid "Clear List"
 msgstr "பட்டியலை காலியாக்கு"
 
-#: app/mainwindow.cpp:390
+#: app/mainwindow.cpp:388
 #, kde-format
 msgctxt "@action reload the currently viewed image"
 msgid "Reload"
 msgstr "மீளேற்று"
 
-#: app/mainwindow.cpp:395
+#: app/mainwindow.cpp:393
 #, kde-format
 msgctxt "@action:inmenu Navigation Bar"
 msgid "Replace Location"
 msgstr "இடத்தை மாற்று"
 
-#: app/mainwindow.cpp:400
+#: app/mainwindow.cpp:398
 #, kde-format
 msgctxt "@action:intoolbar Switch to file list"
 msgid "Browse"
 msgstr "உலாவு"
 
-#: app/mainwindow.cpp:401
+#: app/mainwindow.cpp:399
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Browse folders for images"
 msgstr "படங்களை கொண்ட அடைவுகளில் உலாவுங்கள்"
 
-#: app/mainwindow.cpp:408
+#: app/mainwindow.cpp:406
 #, kde-format
 msgctxt "@action:intoolbar Switch to image view"
 msgid "View"
 msgstr "பார்"
 
-#: app/mainwindow.cpp:409
+#: app/mainwindow.cpp:407
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "View selected images"
 msgstr "தேர்ந்தெடுக்கப்பட்ட படங்களை பாருங்கள்"
 
-#: app/mainwindow.cpp:428
+#: app/mainwindow.cpp:426
 #, kde-format
 msgctxt "@action"
 msgid "Exit Full Screen"
 msgstr "முழுத்திரையிலிருந்து வெளியேறு"
 
-#: app/mainwindow.cpp:433
+#: app/mainwindow.cpp:431
 #, kde-format
 msgctxt "@action Go to previous image"
 msgid "Previous"
 msgstr "முந்தையது"
 
-#: app/mainwindow.cpp:434
+#: app/mainwindow.cpp:432
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to previous image"
 msgstr "முந்தைய படத்திற்கு செல்"
 
-#: app/mainwindow.cpp:440
+#: app/mainwindow.cpp:438
 #, kde-format
 msgctxt "@action Go to next image"
 msgid "Next"
 msgstr "அடுத்தது"
 
-#: app/mainwindow.cpp:441
+#: app/mainwindow.cpp:439
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to next image"
 msgstr "அடுத்த படத்திற்கு செல்"
 
-#: app/mainwindow.cpp:447
+#: app/mainwindow.cpp:445
 #, kde-format
 msgctxt "@action Go to first image"
 msgid "First"
 msgstr "முதல்"
 
-#: app/mainwindow.cpp:448
+#: app/mainwindow.cpp:446
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to first image"
 msgstr "முதல் படத்திற்கு செல்"
 
-#: app/mainwindow.cpp:454
+#: app/mainwindow.cpp:452
 #, kde-format
 msgctxt "@action Go to last image"
 msgid "Last"
 msgstr "கடைசி"
 
-#: app/mainwindow.cpp:455
+#: app/mainwindow.cpp:453
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to last image"
 msgstr "கடைசி படத்திற்கு செல்"
 
-#: app/mainwindow.cpp:465
+#: app/mainwindow.cpp:463
 #, kde-format
 msgctxt "@action"
 msgid "Start Page"
 msgstr "துவக்கப்பக்கம்"
 
-#: app/mainwindow.cpp:466
+#: app/mainwindow.cpp:464
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open the start page"
 msgstr "துவக்கப்பக்கத்தை திற"
 
-#: app/mainwindow.cpp:473
+#: app/mainwindow.cpp:471
 #, kde-format
 msgctxt "@action"
 msgid "Sidebar"
 msgstr "பக்கப்பட்டை"
 
-#: app/mainwindow.cpp:478
+#: app/mainwindow.cpp:476
 #, kde-format
 msgctxt "@action opens crop, rename, etc."
 msgid "Show Editing Tools"
 msgstr "திருத்த கருவிகளை காட்டு"
 
-#: app/mainwindow.cpp:508
+#: app/mainwindow.cpp:506
 #, kde-format
 msgctxt "@action Share images"
 msgid "Share"
 msgstr "பகிர்"
 
-#: app/mainwindow.cpp:516
+#: app/mainwindow.cpp:514
 #, kde-format
 msgid "Error while sharing: %1"
 msgstr "பகிர்வதில் சிக்கல்: %1"
 
-#: app/mainwindow.cpp:523
+#: app/mainwindow.cpp:521
 #, kde-format
 msgid ""
 "The shared image link (<a href=\"%1\">%1</a>) has been copied to the "
@@ -1205,99 +1205,99 @@ msgstr ""
 "பகிரப்பட்ட படத்தின் முகவரி (<a href=\"%1\">%1</a>) பிடிப்புப்பலகைக்கு "
 "நகலெடுக்கப்பட்டுள்ளது."
 
-#: app/mainwindow.cpp:573
+#: app/mainwindow.cpp:571
 #, kde-format
 msgctxt "@title:menu submenu for actions that open configuration dialogs"
 msgid "Configure"
 msgstr "அமை"
 
-#: app/mainwindow.cpp:588
+#: app/mainwindow.cpp:586
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "Edit"
 msgstr "திருத்து"
 
-#: app/mainwindow.cpp:593
+#: app/mainwindow.cpp:591
 #, kde-format
 msgid "Redo"
 msgstr "மீளச்செய்"
 
-#: app/mainwindow.cpp:601
+#: app/mainwindow.cpp:599
 #, kde-format
 msgid "Undo"
 msgstr "செயல்நீக்கு"
 
-#: app/mainwindow.cpp:628
+#: app/mainwindow.cpp:626
 #, kde-format
 msgid "Folders"
 msgstr "அடைவுகள்"
 
-#: app/mainwindow.cpp:634
+#: app/mainwindow.cpp:632
 #, kde-format
 msgid "Information"
 msgstr "விவரங்கள்"
 
-#: app/mainwindow.cpp:648
+#: app/mainwindow.cpp:646
 #, kde-format
 msgid "Operations"
 msgstr "செயல்பாடுகள்"
 
-#: app/mainwindow.cpp:1322
+#: app/mainwindow.cpp:1320
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "பக்கப்பட்டையை மறை"
 
-#: app/mainwindow.cpp:1322
+#: app/mainwindow.cpp:1320
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "பக்கப்பட்டையை காட்டு"
 
-#: app/mainwindow.cpp:1629
+#: app/mainwindow.cpp:1627
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "படத்தை திறத்தல்"
 
-#: app/mainwindow.cpp:1689
+#: app/mainwindow.cpp:1687
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "வில்லைக்காட்சியை இடைநிறுத்து"
 
-#: app/mainwindow.cpp:1692
+#: app/mainwindow.cpp:1690
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "வில்லைக்காட்சியை தொடர்"
 
-#: app/mainwindow.cpp:1692
+#: app/mainwindow.cpp:1690
 #, kde-format
 msgid "Start Slideshow"
 msgstr "வில்லைக்காட்சியை துவக்கு"
 
-#: app/mainwindow.cpp:1705
+#: app/mainwindow.cpp:1703
 #, kde-format
 msgid "Save All Changes"
 msgstr "அனைத்து மாற்றங்களையும் சேமி"
 
-#: app/mainwindow.cpp:1706
+#: app/mainwindow.cpp:1704
 #, kde-format
 msgid "Discard Changes"
 msgstr "மாற்றங்களை கைவிடு"
 
-#: app/mainwindow.cpp:1708
+#: app/mainwindow.cpp:1706
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "ஒரு படம் மாற்றப்பட்டுள்ளது."
 msgstr[1] "%1 படங்கள் மாற்றப்பட்டுள்ளன."
 
-#: app/mainwindow.cpp:1708
+#: app/mainwindow.cpp:1706
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "நீங்கள் இப்போது வெளியேறினால் உங்கள் மாற்றங்களை இழப்பீர்கள்."
 
-#: app/mainwindow.cpp:1751
+#: app/mainwindow.cpp:1749
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
@@ -1305,37 +1305,37 @@ msgstr ""
 "இது பட்டிப் பட்டையை முழுதாக மறைத்துவிடும். %1 என்பதை தட்டி நீங்கள் மறுபடியும் அதை "
 "காட்டலாம்."
 
-#: app/mainwindow.cpp:1754
+#: app/mainwindow.cpp:1752
 #, kde-format
 msgid "Hide menu bar"
 msgstr "பட்டிப் பட்டையை மறை"
 
-#: app/mainwindow.cpp:1972
+#: app/mainwindow.cpp:1970
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "முதல் ஆவணத்தை அடைந்துவிட்டீர்கள். என்ன செய்ய வேண்டும்?"
 
-#: app/mainwindow.cpp:1973 app/mainwindow.cpp:1987
+#: app/mainwindow.cpp:1971 app/mainwindow.cpp:1985
 #, kde-format
 msgid "Stay There"
 msgstr "அங்கேயே இரு"
 
-#: app/mainwindow.cpp:1974
+#: app/mainwindow.cpp:1972
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "கடைசி ஆவணத்திற்கு செல்"
 
-#: app/mainwindow.cpp:1975 app/mainwindow.cpp:1989
+#: app/mainwindow.cpp:1973 app/mainwindow.cpp:1987
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "ஆவணப் பட்டியலுக்கு திரும்ப செல்"
 
-#: app/mainwindow.cpp:1986
+#: app/mainwindow.cpp:1984
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "கடைசி ஆவணத்தை அடைந்துவிட்டீர்கள். என்ன செய்ய வேண்டும்?"
 
-#: app/mainwindow.cpp:1988
+#: app/mainwindow.cpp:1986
 #, kde-format
 msgid "Go to the First Document"
 msgstr "முதல் ஆவணத்திற்கு செல்"
@@ -1620,36 +1620,36 @@ msgid ""
 msgstr ""
 "இப்படம் மாற்றப்பட்டுள்ளது. அதனை மீளேற்றினால், நீங்கள் செய்த அனைத்து மாற்றங்களையும் இழப்பீர்கள்."
 
-#: importer/dialogpage.cpp:53
+#: importer/dialogpage.cpp:52
 #, kde-format
 msgid "Show failed files..."
 msgstr "தோல்வியடைந்த கோப்புகளை காட்டு…"
 
-#: importer/dialogpage.cpp:58
+#: importer/dialogpage.cpp:57
 #, kde-format
 msgid "Show failed subfolders..."
 msgstr "தோல்வியடைந்த சார் அடைவுகளை காட்டு…"
 
-#: importer/dialogpage.cpp:72
+#: importer/dialogpage.cpp:71
 #, kde-format
 msgid "Failed to import %1 document."
 msgid_plural "Failed to import %1 documents."
 msgstr[0] "%1 ஆவணத்தை இறக்குமதி செய்ய முடியவில்லை."
 msgstr[1] "%1 ஆவணங்களை இறக்குமதி செய்ய முடியவில்லை."
 
-#: importer/dialogpage.cpp:79
+#: importer/dialogpage.cpp:78
 #, kde-format
 msgid "Failed to create %1 destination subfolder."
 msgid_plural "Failed to create %1 destination subfolders."
 msgstr[0] "%1 சேருமிட அடைவை உருவாக்குதல் தோல்வியடைந்தது."
 msgstr[1] "%1 சேருமிட அடைவுகளை உருவாக்குதல் தோல்வியடைந்தது."
 
-#: importer/dialogpage.cpp:90
+#: importer/dialogpage.cpp:89
 #, kde-format
 msgid "Failed to import documents:"
 msgstr "ஆவணங்களை இறக்குமதி செய்தல் தோல்வியடைந்தது:"
 
-#: importer/dialogpage.cpp:96
+#: importer/dialogpage.cpp:95
 #, kde-format
 msgid "Failed to create subfolders:"
 msgstr "சார் அடைவுகளை உருவாக்குதல் தோல்வியடைந்தது:"
@@ -1876,38 +1876,38 @@ msgstr "செல்லுபடியாகாத மூல அடைவு"
 msgid "Importing documents..."
 msgstr "ஆவணங்கள் இறக்குமதி செய்யப்படுகின்றன…"
 
-#: importer/thumbnailpage.cpp:235
+#: importer/thumbnailpage.cpp:234
 #, kde-format
 msgctxt "@info above install button when Kamera is not installed"
 msgid "Support for your camera is not installed."
 msgstr "உங்கள் படக்கருவிக்கான ஆதரவு நிறுவப்படவில்லை."
 
-#: importer/thumbnailpage.cpp:237
+#: importer/thumbnailpage.cpp:236
 #, kde-format
 msgctxt "@info above install button, %1 protocol name"
 msgid "The protocol support library for \"%1\" is not installed."
 msgstr "\"%1\" எனும் நெறிமுறைக்கு தேவைப்படும் நிரலகம் நிறுவப்படவில்லை."
 
-#: importer/thumbnailpage.cpp:249
+#: importer/thumbnailpage.cpp:248
 #, kde-format
 msgctxt "@info:usagetip above install button"
 msgid ""
 "After finishing the installation process, restart this Importer to continue."
 msgstr "நிறுவிய பின், இந்த இறக்குமதி நிரலை மீண்டும் துவக்குங்கள்."
 
-#: importer/thumbnailpage.cpp:256
+#: importer/thumbnailpage.cpp:255
 #, kde-format
 msgctxt "@info:tooltip for a button, %1 protocol name"
 msgid "Launch Discover to install the protocol support library for \"%1\""
 msgstr "\"%1\" எனும் நெறிமுறைக்கு தேவைப்படும் நிரலகத்தை நிறுவ டிஸ்கவரை துவக்கு"
 
-#: importer/thumbnailpage.cpp:258
+#: importer/thumbnailpage.cpp:257
 #, kde-format
 msgctxt "@action:button"
 msgid "Install Support for this Camera…"
 msgstr "இப்படக்கருவிக்கான ஆதரவை நிறுவு…"
 
-#: importer/thumbnailpage.cpp:259
+#: importer/thumbnailpage.cpp:258
 #, kde-format
 msgctxt "@info:whatsthis for a button when Kamera is not installed"
 msgid ""
@@ -1919,13 +1919,13 @@ msgstr ""
 "நிறுவப்பட்டிருக்க வேண்டும். டிஸ்கவர் மூலம் கேமராவை நிறுவி \"camera:/\" நெறிமுறைக்கான "
 "ஆதரவை பெறலாம். அதற்காக டிஸ்கவரை துவக்க இங்கு க்ளிக் செய்யுங்கள்."
 
-#: importer/thumbnailpage.cpp:262
+#: importer/thumbnailpage.cpp:261
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Install Protocol Support for \"%1\"…"
 msgstr "\"%1\" நெறிமுறைக்கான ஆதரவை நிறுவு…"
 
-#: importer/thumbnailpage.cpp:263
+#: importer/thumbnailpage.cpp:262
 #, kde-format
 msgctxt "@info:whatsthis for a button, %1 protocol name"
 msgid ""
@@ -1935,13 +1935,13 @@ msgstr ""
 "\"%1\" என்பதை ஆதரிக்க தேவைப்படும் நிரலகத்தை டிஸ்கவர் மூலம் நிறுவலாம். அதற்காக டிஸ்கவரை "
 "துவக்க இங்கு க்ளிக் செய்யுங்கள்."
 
-#: importer/thumbnailpage.cpp:267
+#: importer/thumbnailpage.cpp:266
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Search the Web for How to Install Protocol Support for \"%1\"…"
 msgstr "\"%1\" நெறிமுறைக்கான ஆதரவை எவ்வாறு நிறுவுவதென இணையத்தில் தேடு…"
 
-#: importer/thumbnailpage.cpp:283
+#: importer/thumbnailpage.cpp:282
 #, kde-format
 msgctxt ""
 "@info this text will be used as a search term in an online search engine, %1 "
@@ -1949,7 +1949,7 @@ msgctxt ""
 msgid "How to install protocol support for \"%1\" on Linux"
 msgstr "How to install protocol support for \"%1\" on Linux"
 
-#: importer/thumbnailpage.cpp:284
+#: importer/thumbnailpage.cpp:283
 #, kde-format
 msgctxt ""
 "search engine URL, %1 search keyword, and translators can replace duckduckgo "
@@ -1957,17 +1957,17 @@ msgctxt ""
 msgid "https://duckduckgo.com/?q=%1"
 msgstr "https://duckduckgo.com/?q=%1"
 
-#: importer/thumbnailpage.cpp:325
+#: importer/thumbnailpage.cpp:324
 #, kde-format
 msgid "Import Selected"
 msgstr "தேர்ந்தெடுத்தவற்றை இறக்குமதி செய்"
 
-#: importer/thumbnailpage.cpp:328
+#: importer/thumbnailpage.cpp:327
 #, kde-format
 msgid "Import All"
 msgstr "அனைத்தையும் இறக்குமதி செய்"
 
-#: importer/thumbnailpage.cpp:490
+#: importer/thumbnailpage.cpp:489
 #, kde-kuit-format
 msgctxt "@info when failing to open the appstream URL"
 msgid ""
@@ -1978,7 +1978,7 @@ msgstr ""
 "நிறுவப்பட்டுள்ளதா என பாருங்கள், அல்லது உங்கள் இயங்குதளத்தின் நிரல் மேலாளர் மூலம் \"Kamera"
 "\" நிரலை நிறுவுங்கள்."
 
-#: importer/thumbnailpage.cpp:494
+#: importer/thumbnailpage.cpp:493
 #, kde-kuit-format
 msgctxt "@info when failing to launch plasma-discover, %1 protocol name"
 msgid ""
@@ -2029,37 +2029,37 @@ msgstr "தற்போதைய பராமரிப்பாளர்"
 msgid "Developer"
 msgstr "நிரலாளர்"
 
-#: lib/crop/cropwidget.cpp:192
+#: lib/crop/cropwidget.cpp:191
 #, kde-format
 msgid "Current Image"
 msgstr "தற்போதைய படம்"
 
-#: lib/crop/cropwidget.cpp:195
+#: lib/crop/cropwidget.cpp:194
 #, kde-format
 msgid "Square"
 msgstr "சதுரம்"
 
-#: lib/crop/cropwidget.cpp:198
+#: lib/crop/cropwidget.cpp:197
 #, kde-format
 msgid "This Screen"
 msgstr "இந்த காட்சிக் கருவி"
 
-#: lib/crop/cropwidget.cpp:200
+#: lib/crop/cropwidget.cpp:199
 #, kde-format
 msgid "Landscape"
 msgstr "கிடைமட்டம்"
 
-#: lib/crop/cropwidget.cpp:205 lib/crop/cropwidget.cpp:212
+#: lib/crop/cropwidget.cpp:204 lib/crop/cropwidget.cpp:211
 #, kde-format
 msgid "ISO (A4, A3...)"
 msgstr "ISO (A4, A3...)"
 
-#: lib/crop/cropwidget.cpp:206 lib/crop/cropwidget.cpp:213
+#: lib/crop/cropwidget.cpp:205 lib/crop/cropwidget.cpp:212
 #, kde-format
 msgid "US Letter"
 msgstr "US கடிதம்"
 
-#: lib/crop/cropwidget.cpp:207
+#: lib/crop/cropwidget.cpp:206
 #, kde-format
 msgid "Portrait"
 msgstr "செங்குத்து"
@@ -2067,72 +2067,72 @@ msgstr "செங்குத்து"
 #. i18n("%1:%2") because ':' should not be translated, it is
 #. used to parse the ratio string.
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: lib/crop/cropwidget.cpp:222 lib/resize/resizeimagewidget.ui:30
+#: lib/crop/cropwidget.cpp:221 lib/resize/resizeimagewidget.ui:30
 #, kde-format
 msgid "Width"
 msgstr "அகலம்"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: lib/crop/cropwidget.cpp:222 lib/resize/resizeimagewidget.ui:40
+#: lib/crop/cropwidget.cpp:221 lib/resize/resizeimagewidget.ui:40
 #, kde-format
 msgid "Height"
 msgstr "உயரம்"
 
-#: lib/crop/cropwidget.cpp:291
+#: lib/crop/cropwidget.cpp:290
 #, kde-format
 msgctxt "@option:check"
 msgid "Advanced settings"
 msgstr "மேம்பட்ட அமைப்புகள்"
 
-#: lib/crop/cropwidget.cpp:300
+#: lib/crop/cropwidget.cpp:299
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Aspect ratio:"
 msgstr "உருவ விகிதம்:"
 
-#: lib/crop/cropwidget.cpp:313
+#: lib/crop/cropwidget.cpp:312
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Size:"
 msgstr "அளவு:"
 
-#: lib/crop/cropwidget.cpp:335
+#: lib/crop/cropwidget.cpp:334
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Position:"
 msgstr "இருப்பிடம்:"
 
-#: lib/crop/cropwidget.cpp:356
+#: lib/crop/cropwidget.cpp:355
 #, kde-format
 msgctxt "@option:check"
 msgid "Preserve aspect ratio"
 msgstr "உருவ விகித‍த்தை மாற்றாதே"
 
-#: lib/document/document.cpp:299
+#: lib/document/document.cpp:298
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot save this kind of documents."
 msgstr "இவ்வகையான ஆவணங்களை குவென்வியூவால் சேமிக்க முடியாது."
 
-#: lib/document/loadingdocumentimpl.cpp:139
+#: lib/document/loadingdocumentimpl.cpp:137
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot display documents of type %1."
 msgstr "%1 வகையான ஆவணங்களை குவென்வியூவால் காட்ட முடியாது."
 
-#: lib/document/loadingdocumentimpl.cpp:399
+#: lib/document/loadingdocumentimpl.cpp:397
 #, kde-format
 msgctxt "@info"
 msgid "Could not open file %1"
 msgstr "%1 என்ற கோப்பை திறக்க முடியவில்லை"
 
-#: lib/document/loadingdocumentimpl.cpp:490
+#: lib/document/loadingdocumentimpl.cpp:488
 #, kde-format
 msgctxt "@info"
 msgid "Loading meta information failed."
 msgstr "மெட்டா விவரங்களை ஏற்றுதல் தோல்வியடைந்தது."
 
-#: lib/document/loadingdocumentimpl.cpp:516
+#: lib/document/loadingdocumentimpl.cpp:514
 #, kde-format
 msgctxt "@info"
 msgid "Loading image failed."
@@ -2185,18 +2185,18 @@ msgstr "இவ்வகையான ஆவணத்தை குவென்வ�
 msgid "Loading <filename>%1</filename> failed"
 msgstr "<filename>%1</filename> என்பதை ஏற்றல் தோல்வியடைந்தது"
 
-#: lib/documentview/documentviewcontroller.cpp:63
+#: lib/documentview/documentviewcontroller.cpp:62
 #, kde-format
 msgid "Zoom to Fit"
 msgstr "உருப்பெருக்கி பொருத்து"
 
-#: lib/documentview/documentviewcontroller.cpp:65
+#: lib/documentview/documentviewcontroller.cpp:64
 #, kde-format
 msgctxt "@action:button Zoom to fit, shown in status bar, keep it short please"
 msgid "Fit"
 msgstr "பொருத்து"
 
-#: lib/documentview/documentviewcontroller.cpp:66
+#: lib/documentview/documentviewcontroller.cpp:65
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Fit image into the viewing area"
@@ -2206,7 +2206,7 @@ msgstr "காட்சிப்பகுதிக்கு படத்தை �
 #. zoom value that was used the last time this same image was viewed. Being more clear about this isn't really necessary here so I kept it short
 #. but a more elaborate translation would also be fine.
 #. The text "in the settings" is supposed to sound like clicking it opens the settings.
-#: lib/documentview/documentviewcontroller.cpp:72
+#: lib/documentview/documentviewcontroller.cpp:71
 #, kde-kuit-format
 msgctxt "@info:whatsthis, %1 the action's text"
 msgid ""
@@ -2223,12 +2223,12 @@ msgid ""
 "settings</link>.</para>"
 msgstr ""
 
-#: lib/documentview/documentviewcontroller.cpp:85
+#: lib/documentview/documentviewcontroller.cpp:84
 #, kde-format
 msgid "Zoom to fill window by fitting to width or height"
 msgstr "அகலத்தையோ உயரத்தையோ பொறுத்து உருப்பெருக்கி, சாளரத்தை நிரப்பு"
 
-#: lib/documentview/documentviewcontroller.cpp:87
+#: lib/documentview/documentviewcontroller.cpp:86
 #, kde-format
 msgctxt ""
 "@action:button Zoom to fill (fit width or height), shown in status bar, keep "
@@ -2236,30 +2236,30 @@ msgctxt ""
 msgid "Fill"
 msgstr "நிரப்பு"
 
-#: lib/documentview/documentviewcontroller.cpp:100
+#: lib/documentview/documentviewcontroller.cpp:99
 #, kde-format
 msgid "Show Bird's Eye View When Zoomed In"
 msgstr "உருப்பெருக்க முறையில் இருக்கும்போது மேலோட்ட காட்சியை காட்டு"
 
-#: lib/documentview/documentviewcontroller.cpp:107
+#: lib/documentview/documentviewcontroller.cpp:106
 #, kde-format
 msgctxt "@action"
 msgid "Follow color scheme"
 msgstr "நிறத்திட்டத்தை பொறுத்து"
 
-#: lib/documentview/documentviewcontroller.cpp:113
+#: lib/documentview/documentviewcontroller.cpp:112
 #, kde-format
 msgctxt "@action"
 msgid "Light Mode"
 msgstr "வெளிர்ந்தது"
 
-#: lib/documentview/documentviewcontroller.cpp:119
+#: lib/documentview/documentviewcontroller.cpp:118
 #, kde-format
 msgctxt "@action"
 msgid "Neutral Mode"
 msgstr "சாம்பலானது"
 
-#: lib/documentview/documentviewcontroller.cpp:125
+#: lib/documentview/documentviewcontroller.cpp:124
 #, kde-format
 msgctxt "@action"
 msgid "Dark Mode"
@@ -2465,7 +2465,7 @@ msgctxt "@info"
 msgid "No data to store."
 msgstr "சேமிப்பதற்கு எந்த தரவும் இல்லை."
 
-#: lib/print/printhelper.cpp:126
+#: lib/print/printhelper.cpp:125
 #, kde-format
 msgid "Print Image"
 msgstr "படத்தை அச்சிடு"
@@ -2619,7 +2619,7 @@ msgctxt "@info:tooltip"
 msgid "Assign this tag to all selected images"
 msgstr "தேர்ந்தெடுக்கப்பட்ட அனைத்து படங்களுக்கும் இந்த குறிச்சொல்லை இடு"
 
-#: lib/semanticinfo/tagwidget.cpp:147
+#: lib/semanticinfo/tagwidget.cpp:146
 #, kde-format
 msgid "Add tag"
 msgstr "குறிச்சொல்லை சேர்"
@@ -2676,7 +2676,7 @@ msgstr ""
 "உருமாற்றியது\n"
 "உருமாற்றியதை"
 
-#: part/gvpart.cpp:74
+#: part/gvpart.cpp:72
 #, kde-format
 msgctxt "@action"
 msgid "Properties"

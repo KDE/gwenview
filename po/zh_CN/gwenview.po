@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-12 00:44+0000\n"
+"POT-Creation-Date: 2022-10-14 00:44+0000\n"
 "PO-Revision-Date: 2022-10-02 15:49\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -128,8 +128,8 @@ msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
 msgid "Sidebar Alignment Spacer"
 msgstr "侧边栏对齐占位符"
 
-#: app/browsemainpage.cpp:147 app/mainwindow.cpp:373 app/viewmainpage.cpp:425
-#: lib/documentview/documentviewcontroller.cpp:57
+#: app/browsemainpage.cpp:147 app/mainwindow.cpp:371 app/viewmainpage.cpp:425
+#: lib/documentview/documentviewcontroller.cpp:56
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "View"
@@ -214,7 +214,7 @@ msgid "Rating"
 msgstr "评分"
 
 #: app/browsemainpage.cpp:196 app/fileopscontextmanageritem.cpp:142
-#: app/mainwindow.cpp:372
+#: app/mainwindow.cpp:370
 #, kde-format
 msgctxt "@title actions category"
 msgid "File"
@@ -766,81 +766,81 @@ msgctxt "@title:window"
 msgid "Image Information"
 msgstr "图像信息"
 
-#: app/imageopscontextmanageritem.cpp:84
+#: app/imageopscontextmanageritem.cpp:87
 #, kde-format
 msgctxt "@title actions category - means actions changing image"
 msgid "Edit"
 msgstr "编辑"
 
-#: app/imageopscontextmanageritem.cpp:87
+#: app/imageopscontextmanageritem.cpp:90
 #, kde-format
 msgid "Rotate Left"
 msgstr "向左旋转"
 
-#: app/imageopscontextmanageritem.cpp:88
+#: app/imageopscontextmanageritem.cpp:91
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate image to the left"
 msgstr "向左旋转图像"
 
-#: app/imageopscontextmanageritem.cpp:93
+#: app/imageopscontextmanageritem.cpp:96
 #, kde-format
 msgid "Rotate Right"
 msgstr "向右旋转"
 
-#: app/imageopscontextmanageritem.cpp:94
+#: app/imageopscontextmanageritem.cpp:97
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate image to the right"
 msgstr "向右旋转图像"
 
-#: app/imageopscontextmanageritem.cpp:99
+#: app/imageopscontextmanageritem.cpp:102
 #, kde-format
 msgid "Mirror"
 msgstr "左右翻转"
 
-#: app/imageopscontextmanageritem.cpp:103
+#: app/imageopscontextmanageritem.cpp:106
 #, kde-format
 msgid "Flip"
 msgstr "上下翻转"
 
-#: app/imageopscontextmanageritem.cpp:107 lib/resize/resizeimagedialog.cpp:71
+#: app/imageopscontextmanageritem.cpp:110 lib/resize/resizeimagedialog.cpp:71
 #, kde-format
 msgid "Resize"
 msgstr "调整大小"
 
-#: app/imageopscontextmanageritem.cpp:112 lib/crop/cropimageoperation.cpp:70
-#: lib/crop/cropwidget.cpp:263
+#: app/imageopscontextmanageritem.cpp:115 lib/crop/cropimageoperation.cpp:70
+#: lib/crop/cropwidget.cpp:262
 #, kde-format
 msgid "Crop"
 msgstr "裁剪"
 
-#: app/imageopscontextmanageritem.cpp:117
-#: lib/redeyereduction/redeyereductionimageoperation.cpp:76
-#: lib/redeyereduction/redeyereductiontool.cpp:49
+#: app/imageopscontextmanageritem.cpp:120
+#: lib/redeyereduction/redeyereductionimageoperation.cpp:75
+#: lib/redeyereduction/redeyereductiontool.cpp:48
 #, kde-format
 msgid "Reduce Red Eye"
 msgstr "减轻红眼"
 
-#: app/imageopscontextmanageritem.cpp:122 lib/annotate/annotateoperation.cpp:52
+#: app/imageopscontextmanageritem.cpp:125 lib/annotate/annotateoperation.cpp:51
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Annotate"
 msgstr "标注"
 
-#: app/imageopscontextmanageritem.cpp:130
+#: app/imageopscontextmanageritem.cpp:133
 #, kde-format
 msgctxt "@title:window Annotate [filename]"
 msgid "Annotate %1"
 msgstr "标注 %1"
 
-#: app/imageopscontextmanageritem.cpp:150 lib/document/documentjob.cpp:77
+#: app/imageopscontextmanageritem.cpp:155 lib/document/documentjob.cpp:77
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot edit this kind of image."
 msgstr "Gwenview 无法编辑这种图像。"
 
-#: app/imageopscontextmanageritem.cpp:161
+#: app/imageopscontextmanageritem.cpp:166
 #, kde-format
 msgid "Image Operations"
 msgstr "图像操作"
@@ -1057,272 +1057,272 @@ msgstr "启动到幻灯片模式"
 msgid "A starting file or folders"
 msgstr "起始文件或文件夹"
 
-#: app/mainwindow.cpp:382
+#: app/mainwindow.cpp:380
 #, kde-format
 msgctxt "@action Open Recent menu"
 msgid "Clear List"
 msgstr "清空列表"
 
-#: app/mainwindow.cpp:390
+#: app/mainwindow.cpp:388
 #, kde-format
 msgctxt "@action reload the currently viewed image"
 msgid "Reload"
 msgstr "重新加载"
 
-#: app/mainwindow.cpp:395
+#: app/mainwindow.cpp:393
 #, kde-format
 msgctxt "@action:inmenu Navigation Bar"
 msgid "Replace Location"
 msgstr "替换位置"
 
-#: app/mainwindow.cpp:400
+#: app/mainwindow.cpp:398
 #, kde-format
 msgctxt "@action:intoolbar Switch to file list"
 msgid "Browse"
 msgstr "浏览"
 
-#: app/mainwindow.cpp:401
+#: app/mainwindow.cpp:399
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Browse folders for images"
 msgstr "浏览文件夹中的图像"
 
-#: app/mainwindow.cpp:408
+#: app/mainwindow.cpp:406
 #, kde-format
 msgctxt "@action:intoolbar Switch to image view"
 msgid "View"
 msgstr "查看"
 
-#: app/mainwindow.cpp:409
+#: app/mainwindow.cpp:407
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "View selected images"
 msgstr "查看选中的图像"
 
-#: app/mainwindow.cpp:428
+#: app/mainwindow.cpp:426
 #, kde-format
 msgctxt "@action"
 msgid "Exit Full Screen"
 msgstr "退出全屏"
 
-#: app/mainwindow.cpp:433
+#: app/mainwindow.cpp:431
 #, kde-format
 msgctxt "@action Go to previous image"
 msgid "Previous"
 msgstr "上一张"
 
-#: app/mainwindow.cpp:434
+#: app/mainwindow.cpp:432
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to previous image"
 msgstr "切换到上一张图像"
 
-#: app/mainwindow.cpp:440
+#: app/mainwindow.cpp:438
 #, kde-format
 msgctxt "@action Go to next image"
 msgid "Next"
 msgstr "下一张"
 
-#: app/mainwindow.cpp:441
+#: app/mainwindow.cpp:439
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to next image"
 msgstr "切换到下一张图像"
 
-#: app/mainwindow.cpp:447
+#: app/mainwindow.cpp:445
 #, kde-format
 msgctxt "@action Go to first image"
 msgid "First"
 msgstr "第一张"
 
-#: app/mainwindow.cpp:448
+#: app/mainwindow.cpp:446
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to first image"
 msgstr "切换到第一张图像"
 
-#: app/mainwindow.cpp:454
+#: app/mainwindow.cpp:452
 #, kde-format
 msgctxt "@action Go to last image"
 msgid "Last"
 msgstr "最后一张"
 
-#: app/mainwindow.cpp:455
+#: app/mainwindow.cpp:453
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to last image"
 msgstr "切换到最后一张图像"
 
-#: app/mainwindow.cpp:465
+#: app/mainwindow.cpp:463
 #, kde-format
 msgctxt "@action"
 msgid "Start Page"
 msgstr "起始页面"
 
-#: app/mainwindow.cpp:466
+#: app/mainwindow.cpp:464
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open the start page"
 msgstr "打开起始页面"
 
-#: app/mainwindow.cpp:473
+#: app/mainwindow.cpp:471
 #, kde-format
 msgctxt "@action"
 msgid "Sidebar"
 msgstr "侧边栏"
 
-#: app/mainwindow.cpp:478
+#: app/mainwindow.cpp:476
 #, kde-format
 msgctxt "@action opens crop, rename, etc."
 msgid "Show Editing Tools"
 msgstr "显示编辑工具"
 
-#: app/mainwindow.cpp:508
+#: app/mainwindow.cpp:506
 #, kde-format
 msgctxt "@action Share images"
 msgid "Share"
 msgstr "分享"
 
-#: app/mainwindow.cpp:516
+#: app/mainwindow.cpp:514
 #, kde-format
 msgid "Error while sharing: %1"
 msgstr "分享操作出错：%1"
 
-#: app/mainwindow.cpp:523
+#: app/mainwindow.cpp:521
 #, kde-format
 msgid ""
 "The shared image link (<a href=\"%1\">%1</a>) has been copied to the "
 "clipboard."
 msgstr "图像分享链接 (<a href=\"%1\">%1</a>) 已复制到剪贴板。"
 
-#: app/mainwindow.cpp:573
+#: app/mainwindow.cpp:571
 #, kde-format
 msgctxt "@title:menu submenu for actions that open configuration dialogs"
 msgid "Configure"
 msgstr "配置"
 
-#: app/mainwindow.cpp:588
+#: app/mainwindow.cpp:586
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "Edit"
 msgstr "编辑"
 
-#: app/mainwindow.cpp:593
+#: app/mainwindow.cpp:591
 #, kde-format
 msgid "Redo"
 msgstr "重做"
 
-#: app/mainwindow.cpp:601
+#: app/mainwindow.cpp:599
 #, kde-format
 msgid "Undo"
 msgstr "撤销"
 
-#: app/mainwindow.cpp:628
+#: app/mainwindow.cpp:626
 #, kde-format
 msgid "Folders"
 msgstr "文件夹"
 
-#: app/mainwindow.cpp:634
+#: app/mainwindow.cpp:632
 #, kde-format
 msgid "Information"
 msgstr "信息"
 
-#: app/mainwindow.cpp:648
+#: app/mainwindow.cpp:646
 #, kde-format
 msgid "Operations"
 msgstr "操作"
 
-#: app/mainwindow.cpp:1322
+#: app/mainwindow.cpp:1320
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "隐藏侧边栏"
 
-#: app/mainwindow.cpp:1322
+#: app/mainwindow.cpp:1320
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "显示侧边栏"
 
-#: app/mainwindow.cpp:1629
+#: app/mainwindow.cpp:1627
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "打开图像"
 
-#: app/mainwindow.cpp:1689
+#: app/mainwindow.cpp:1687
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "暂停幻灯片放映"
 
-#: app/mainwindow.cpp:1692
+#: app/mainwindow.cpp:1690
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "继续幻灯片放映"
 
-#: app/mainwindow.cpp:1692
+#: app/mainwindow.cpp:1690
 #, kde-format
 msgid "Start Slideshow"
 msgstr "开始幻灯片放映"
 
-#: app/mainwindow.cpp:1705
+#: app/mainwindow.cpp:1703
 #, kde-format
 msgid "Save All Changes"
 msgstr "保存全部更改"
 
-#: app/mainwindow.cpp:1706
+#: app/mainwindow.cpp:1704
 #, kde-format
 msgid "Discard Changes"
 msgstr "丢弃更改"
 
-#: app/mainwindow.cpp:1708
+#: app/mainwindow.cpp:1706
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "%1 个图像已修改。"
 
-#: app/mainwindow.cpp:1708
+#: app/mainwindow.cpp:1706
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "如果现在退出，您的更改将会丢失。"
 
-#: app/mainwindow.cpp:1751
+#: app/mainwindow.cpp:1749
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr "菜单栏将被完全隐藏。按 %1 可以重新显示。"
 
-#: app/mainwindow.cpp:1754
+#: app/mainwindow.cpp:1752
 #, kde-format
 msgid "Hide menu bar"
 msgstr "隐藏菜单栏"
 
-#: app/mainwindow.cpp:1972
+#: app/mainwindow.cpp:1970
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "您已切换到第一张图像，接下来应该怎么做？"
 
-#: app/mainwindow.cpp:1973 app/mainwindow.cpp:1987
+#: app/mainwindow.cpp:1971 app/mainwindow.cpp:1985
 #, kde-format
 msgid "Stay There"
 msgstr "停留在此位置"
 
-#: app/mainwindow.cpp:1974
+#: app/mainwindow.cpp:1972
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "切换到最后一张图像"
 
-#: app/mainwindow.cpp:1975 app/mainwindow.cpp:1989
+#: app/mainwindow.cpp:1973 app/mainwindow.cpp:1987
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "返回到图像列表"
 
-#: app/mainwindow.cpp:1986
+#: app/mainwindow.cpp:1984
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "您已切换到最后一张图像，接下来应该怎么做？"
 
-#: app/mainwindow.cpp:1988
+#: app/mainwindow.cpp:1986
 #, kde-format
 msgid "Go to the First Document"
 msgstr "切换到第一张图像"
@@ -1605,34 +1605,34 @@ msgid ""
 "This image has been modified. Reloading it will discard all your changes."
 msgstr "此图像已被修改，重新加载将会丢弃您之前的所有改动。"
 
-#: importer/dialogpage.cpp:53
+#: importer/dialogpage.cpp:52
 #, kde-format
 msgid "Show failed files..."
 msgstr "显示无法导入的文件..."
 
-#: importer/dialogpage.cpp:58
+#: importer/dialogpage.cpp:57
 #, kde-format
 msgid "Show failed subfolders..."
 msgstr "显示无法导入的子文件夹..."
 
-#: importer/dialogpage.cpp:72
+#: importer/dialogpage.cpp:71
 #, kde-format
 msgid "Failed to import %1 document."
 msgid_plural "Failed to import %1 documents."
 msgstr[0] "无法导入 %1 张图像。"
 
-#: importer/dialogpage.cpp:79
+#: importer/dialogpage.cpp:78
 #, kde-format
 msgid "Failed to create %1 destination subfolder."
 msgid_plural "Failed to create %1 destination subfolders."
 msgstr[0] "无法创建 %1 个目标子文件夹。"
 
-#: importer/dialogpage.cpp:90
+#: importer/dialogpage.cpp:89
 #, kde-format
 msgid "Failed to import documents:"
 msgstr "无法导入图像："
 
-#: importer/dialogpage.cpp:96
+#: importer/dialogpage.cpp:95
 #, kde-format
 msgid "Failed to create subfolders:"
 msgstr "无法创建子文件夹："
@@ -1849,38 +1849,38 @@ msgstr "无效的来源文件夹。"
 msgid "Importing documents..."
 msgstr "正在导入图像..."
 
-#: importer/thumbnailpage.cpp:235
+#: importer/thumbnailpage.cpp:234
 #, kde-format
 msgctxt "@info above install button when Kamera is not installed"
 msgid "Support for your camera is not installed."
 msgstr "尚未安装此相机所需的支持软件。"
 
-#: importer/thumbnailpage.cpp:237
+#: importer/thumbnailpage.cpp:236
 #, kde-format
 msgctxt "@info above install button, %1 protocol name"
 msgid "The protocol support library for \"%1\" is not installed."
 msgstr "尚未安装“%1”的协议支持程序库。"
 
-#: importer/thumbnailpage.cpp:249
+#: importer/thumbnailpage.cpp:248
 #, kde-format
 msgctxt "@info:usagetip above install button"
 msgid ""
 "After finishing the installation process, restart this Importer to continue."
 msgstr "完成安装后，重新启动此导入程序以继续操作。"
 
-#: importer/thumbnailpage.cpp:256
+#: importer/thumbnailpage.cpp:255
 #, kde-format
 msgctxt "@info:tooltip for a button, %1 protocol name"
 msgid "Launch Discover to install the protocol support library for \"%1\""
 msgstr "启动 Discover 为“%1”安装协议支持程序库"
 
-#: importer/thumbnailpage.cpp:258
+#: importer/thumbnailpage.cpp:257
 #, kde-format
 msgctxt "@action:button"
 msgid "Install Support for this Camera…"
 msgstr "安装此相机的支持软件…"
 
-#: importer/thumbnailpage.cpp:259
+#: importer/thumbnailpage.cpp:258
 #, kde-format
 msgctxt "@info:whatsthis for a button when Kamera is not installed"
 msgid ""
@@ -1891,13 +1891,13 @@ msgstr ""
 "您需要安装 Kamera 以读取该相机的数据。点击此处启动 Discover 安装 Kamera，即可"
 "为本机系统启用“camera:/”协议的支持功能。"
 
-#: importer/thumbnailpage.cpp:262
+#: importer/thumbnailpage.cpp:261
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Install Protocol Support for \"%1\"…"
 msgstr "安装“%1”的协议支持软件…"
 
-#: importer/thumbnailpage.cpp:263
+#: importer/thumbnailpage.cpp:262
 #, kde-format
 msgctxt "@info:whatsthis for a button, %1 protocol name"
 msgid ""
@@ -1907,13 +1907,13 @@ msgstr ""
 "点击此处启动 Discover 安装所需的协议支持程序库，即可为本机系统启用“%1:/”协议"
 "的支持功能。"
 
-#: importer/thumbnailpage.cpp:267
+#: importer/thumbnailpage.cpp:266
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Search the Web for How to Install Protocol Support for \"%1\"…"
 msgstr "搜索网页以了解如何安装“%1”的协议支持功能…"
 
-#: importer/thumbnailpage.cpp:283
+#: importer/thumbnailpage.cpp:282
 #, kde-format
 msgctxt ""
 "@info this text will be used as a search term in an online search engine, %1 "
@@ -1921,7 +1921,7 @@ msgctxt ""
 msgid "How to install protocol support for \"%1\" on Linux"
 msgstr "如何在 Linux 上安装“%1”的协议支持功能"
 
-#: importer/thumbnailpage.cpp:284
+#: importer/thumbnailpage.cpp:283
 #, kde-format
 msgctxt ""
 "search engine URL, %1 search keyword, and translators can replace duckduckgo "
@@ -1929,17 +1929,17 @@ msgctxt ""
 msgid "https://duckduckgo.com/?q=%1"
 msgstr "https://cn.bing.com/search?q=%1"
 
-#: importer/thumbnailpage.cpp:325
+#: importer/thumbnailpage.cpp:324
 #, kde-format
 msgid "Import Selected"
 msgstr "导入选中图像"
 
-#: importer/thumbnailpage.cpp:328
+#: importer/thumbnailpage.cpp:327
 #, kde-format
 msgid "Import All"
 msgstr "导入全部图像"
 
-#: importer/thumbnailpage.cpp:490
+#: importer/thumbnailpage.cpp:489
 #, kde-kuit-format
 msgctxt "@info when failing to open the appstream URL"
 msgid ""
@@ -1949,7 +1949,7 @@ msgstr ""
 "无法打开 Discover。<nl/>请检查是否已在本机安装 Discover，或使用本机的软件包管"
 "理器来安装“Kamera”软件包。"
 
-#: importer/thumbnailpage.cpp:494
+#: importer/thumbnailpage.cpp:493
 #, kde-kuit-format
 msgctxt "@info when failing to launch plasma-discover, %1 protocol name"
 msgid ""
@@ -1999,37 +1999,37 @@ msgstr "当前项目负责人"
 msgid "Developer"
 msgstr "开发人员"
 
-#: lib/crop/cropwidget.cpp:192
+#: lib/crop/cropwidget.cpp:191
 #, kde-format
 msgid "Current Image"
 msgstr "当前图像"
 
-#: lib/crop/cropwidget.cpp:195
+#: lib/crop/cropwidget.cpp:194
 #, kde-format
 msgid "Square"
 msgstr "方形"
 
-#: lib/crop/cropwidget.cpp:198
+#: lib/crop/cropwidget.cpp:197
 #, kde-format
 msgid "This Screen"
 msgstr "此屏幕"
 
-#: lib/crop/cropwidget.cpp:200
+#: lib/crop/cropwidget.cpp:199
 #, kde-format
 msgid "Landscape"
 msgstr "横向"
 
-#: lib/crop/cropwidget.cpp:205 lib/crop/cropwidget.cpp:212
+#: lib/crop/cropwidget.cpp:204 lib/crop/cropwidget.cpp:211
 #, kde-format
 msgid "ISO (A4, A3...)"
 msgstr "ISO (A4、A3 等)"
 
-#: lib/crop/cropwidget.cpp:206 lib/crop/cropwidget.cpp:213
+#: lib/crop/cropwidget.cpp:205 lib/crop/cropwidget.cpp:212
 #, kde-format
 msgid "US Letter"
 msgstr "美国信纸"
 
-#: lib/crop/cropwidget.cpp:207
+#: lib/crop/cropwidget.cpp:206
 #, kde-format
 msgid "Portrait"
 msgstr "纵向"
@@ -2037,72 +2037,72 @@ msgstr "纵向"
 #. i18n("%1:%2") because ':' should not be translated, it is
 #. used to parse the ratio string.
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: lib/crop/cropwidget.cpp:222 lib/resize/resizeimagewidget.ui:30
+#: lib/crop/cropwidget.cpp:221 lib/resize/resizeimagewidget.ui:30
 #, kde-format
 msgid "Width"
 msgstr "宽度"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: lib/crop/cropwidget.cpp:222 lib/resize/resizeimagewidget.ui:40
+#: lib/crop/cropwidget.cpp:221 lib/resize/resizeimagewidget.ui:40
 #, kde-format
 msgid "Height"
 msgstr "高度"
 
-#: lib/crop/cropwidget.cpp:291
+#: lib/crop/cropwidget.cpp:290
 #, kde-format
 msgctxt "@option:check"
 msgid "Advanced settings"
 msgstr "高级控制选项"
 
-#: lib/crop/cropwidget.cpp:300
+#: lib/crop/cropwidget.cpp:299
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Aspect ratio:"
 msgstr "宽高比："
 
-#: lib/crop/cropwidget.cpp:313
+#: lib/crop/cropwidget.cpp:312
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Size:"
 msgstr "大小："
 
-#: lib/crop/cropwidget.cpp:335
+#: lib/crop/cropwidget.cpp:334
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Position:"
 msgstr "位置："
 
-#: lib/crop/cropwidget.cpp:356
+#: lib/crop/cropwidget.cpp:355
 #, kde-format
 msgctxt "@option:check"
 msgid "Preserve aspect ratio"
 msgstr "保持宽高比"
 
-#: lib/document/document.cpp:299
+#: lib/document/document.cpp:298
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot save this kind of documents."
 msgstr "Gwenview 无法保存这种图像。"
 
-#: lib/document/loadingdocumentimpl.cpp:139
+#: lib/document/loadingdocumentimpl.cpp:137
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot display documents of type %1."
 msgstr "Gwenview 无法显示 %1 类型的图像。"
 
-#: lib/document/loadingdocumentimpl.cpp:399
+#: lib/document/loadingdocumentimpl.cpp:397
 #, kde-format
 msgctxt "@info"
 msgid "Could not open file %1"
 msgstr "无法打开文件 %1"
 
-#: lib/document/loadingdocumentimpl.cpp:490
+#: lib/document/loadingdocumentimpl.cpp:488
 #, kde-format
 msgctxt "@info"
 msgid "Loading meta information failed."
 msgstr "加载元数据失败。"
 
-#: lib/document/loadingdocumentimpl.cpp:516
+#: lib/document/loadingdocumentimpl.cpp:514
 #, kde-format
 msgctxt "@info"
 msgid "Loading image failed."
@@ -2152,18 +2152,18 @@ msgstr "Gwenview 无法显示此类图像"
 msgid "Loading <filename>%1</filename> failed"
 msgstr "加载 <filename>%1</filename> 失败"
 
-#: lib/documentview/documentviewcontroller.cpp:63
+#: lib/documentview/documentviewcontroller.cpp:62
 #, kde-format
 msgid "Zoom to Fit"
 msgstr "缩放到视图大小"
 
-#: lib/documentview/documentviewcontroller.cpp:65
+#: lib/documentview/documentviewcontroller.cpp:64
 #, kde-format
 msgctxt "@action:button Zoom to fit, shown in status bar, keep it short please"
 msgid "Fit"
 msgstr "适合视图"
 
-#: lib/documentview/documentviewcontroller.cpp:66
+#: lib/documentview/documentviewcontroller.cpp:65
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Fit image into the viewing area"
@@ -2173,7 +2173,7 @@ msgstr "将图像缩放到视图区域大小"
 #. zoom value that was used the last time this same image was viewed. Being more clear about this isn't really necessary here so I kept it short
 #. but a more elaborate translation would also be fine.
 #. The text "in the settings" is supposed to sound like clicking it opens the settings.
-#: lib/documentview/documentviewcontroller.cpp:72
+#: lib/documentview/documentviewcontroller.cpp:71
 #, kde-kuit-format
 msgctxt "@info:whatsthis, %1 the action's text"
 msgid ""
@@ -2197,12 +2197,12 @@ msgstr ""
 "示。</para><para>“%1”是图像的默认缩放模式。您也可以在<link url='%2'>程序设置"
 "对话框中</link>将默认缩放模式改为按上一次的缩放值显示。</para>"
 
-#: lib/documentview/documentviewcontroller.cpp:85
+#: lib/documentview/documentviewcontroller.cpp:84
 #, kde-format
 msgid "Zoom to fill window by fitting to width or height"
 msgstr "缩放到短边适合视图大小"
 
-#: lib/documentview/documentviewcontroller.cpp:87
+#: lib/documentview/documentviewcontroller.cpp:86
 #, kde-format
 msgctxt ""
 "@action:button Zoom to fill (fit width or height), shown in status bar, keep "
@@ -2210,30 +2210,30 @@ msgctxt ""
 msgid "Fill"
 msgstr "填满视图"
 
-#: lib/documentview/documentviewcontroller.cpp:100
+#: lib/documentview/documentviewcontroller.cpp:99
 #, kde-format
 msgid "Show Bird's Eye View When Zoomed In"
 msgstr "放大时显示总览图"
 
-#: lib/documentview/documentviewcontroller.cpp:107
+#: lib/documentview/documentviewcontroller.cpp:106
 #, kde-format
 msgctxt "@action"
 msgid "Follow color scheme"
 msgstr "跟随配色方案"
 
-#: lib/documentview/documentviewcontroller.cpp:113
+#: lib/documentview/documentviewcontroller.cpp:112
 #, kde-format
 msgctxt "@action"
 msgid "Light Mode"
 msgstr "浅色模式"
 
-#: lib/documentview/documentviewcontroller.cpp:119
+#: lib/documentview/documentviewcontroller.cpp:118
 #, kde-format
 msgctxt "@action"
 msgid "Neutral Mode"
 msgstr "中间灰模式"
 
-#: lib/documentview/documentviewcontroller.cpp:125
+#: lib/documentview/documentviewcontroller.cpp:124
 #, kde-format
 msgctxt "@action"
 msgid "Dark Mode"
@@ -2447,7 +2447,7 @@ msgctxt "@info"
 msgid "No data to store."
 msgstr "没有需要存储的数据。"
 
-#: lib/print/printhelper.cpp:126
+#: lib/print/printhelper.cpp:125
 #, kde-format
 msgid "Print Image"
 msgstr "打印图像"
@@ -2597,7 +2597,7 @@ msgctxt "@info:tooltip"
 msgid "Assign this tag to all selected images"
 msgstr "分配此标签到所有选中的图像"
 
-#: lib/semanticinfo/tagwidget.cpp:147
+#: lib/semanticinfo/tagwidget.cpp:146
 #, kde-format
 msgid "Add tag"
 msgstr "添加标签"
@@ -2644,7 +2644,7 @@ msgctxt "(qtundo-format)"
 msgid "Transform"
 msgstr "变形"
 
-#: part/gvpart.cpp:74
+#: part/gvpart.cpp:72
 #, kde-format
 msgctxt "@action"
 msgid "Properties"

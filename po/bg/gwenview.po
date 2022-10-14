@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-12 00:44+0000\n"
+"POT-Creation-Date: 2022-10-14 00:44+0000\n"
 "PO-Revision-Date: 2022-09-17 08:42+0200\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
@@ -133,8 +133,8 @@ msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
 msgid "Sidebar Alignment Spacer"
 msgstr "Разделител на подравняване на страничния панел"
 
-#: app/browsemainpage.cpp:147 app/mainwindow.cpp:373 app/viewmainpage.cpp:425
-#: lib/documentview/documentviewcontroller.cpp:57
+#: app/browsemainpage.cpp:147 app/mainwindow.cpp:371 app/viewmainpage.cpp:425
+#: lib/documentview/documentviewcontroller.cpp:56
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "View"
@@ -219,7 +219,7 @@ msgid "Rating"
 msgstr "Оценка"
 
 #: app/browsemainpage.cpp:196 app/fileopscontextmanageritem.cpp:142
-#: app/mainwindow.cpp:372
+#: app/mainwindow.cpp:370
 #, kde-format
 msgctxt "@title actions category"
 msgid "File"
@@ -778,81 +778,81 @@ msgctxt "@title:window"
 msgid "Image Information"
 msgstr "Данни на изображението"
 
-#: app/imageopscontextmanageritem.cpp:84
+#: app/imageopscontextmanageritem.cpp:87
 #, kde-format
 msgctxt "@title actions category - means actions changing image"
 msgid "Edit"
 msgstr "Редактиране"
 
-#: app/imageopscontextmanageritem.cpp:87
+#: app/imageopscontextmanageritem.cpp:90
 #, kde-format
 msgid "Rotate Left"
 msgstr "Завъртане наляво"
 
-#: app/imageopscontextmanageritem.cpp:88
+#: app/imageopscontextmanageritem.cpp:91
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate image to the left"
 msgstr "Завъртане на изображението наляво"
 
-#: app/imageopscontextmanageritem.cpp:93
+#: app/imageopscontextmanageritem.cpp:96
 #, kde-format
 msgid "Rotate Right"
 msgstr "Завъртане надясно"
 
-#: app/imageopscontextmanageritem.cpp:94
+#: app/imageopscontextmanageritem.cpp:97
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate image to the right"
 msgstr "Завъртане на изображението надясно"
 
-#: app/imageopscontextmanageritem.cpp:99
+#: app/imageopscontextmanageritem.cpp:102
 #, kde-format
 msgid "Mirror"
 msgstr "Огледално"
 
-#: app/imageopscontextmanageritem.cpp:103
+#: app/imageopscontextmanageritem.cpp:106
 #, kde-format
 msgid "Flip"
 msgstr "Обръщане"
 
-#: app/imageopscontextmanageritem.cpp:107 lib/resize/resizeimagedialog.cpp:71
+#: app/imageopscontextmanageritem.cpp:110 lib/resize/resizeimagedialog.cpp:71
 #, kde-format
 msgid "Resize"
 msgstr "Преоразмеряване"
 
-#: app/imageopscontextmanageritem.cpp:112 lib/crop/cropimageoperation.cpp:70
-#: lib/crop/cropwidget.cpp:263
+#: app/imageopscontextmanageritem.cpp:115 lib/crop/cropimageoperation.cpp:70
+#: lib/crop/cropwidget.cpp:262
 #, kde-format
 msgid "Crop"
 msgstr "Изрязване"
 
-#: app/imageopscontextmanageritem.cpp:117
-#: lib/redeyereduction/redeyereductionimageoperation.cpp:76
-#: lib/redeyereduction/redeyereductiontool.cpp:49
+#: app/imageopscontextmanageritem.cpp:120
+#: lib/redeyereduction/redeyereductionimageoperation.cpp:75
+#: lib/redeyereduction/redeyereductiontool.cpp:48
 #, kde-format
 msgid "Reduce Red Eye"
 msgstr "Корекция на червени очи"
 
-#: app/imageopscontextmanageritem.cpp:122 lib/annotate/annotateoperation.cpp:52
+#: app/imageopscontextmanageritem.cpp:125 lib/annotate/annotateoperation.cpp:51
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Annotate"
 msgstr "Пояснение"
 
-#: app/imageopscontextmanageritem.cpp:130
+#: app/imageopscontextmanageritem.cpp:133
 #, kde-format
 msgctxt "@title:window Annotate [filename]"
 msgid "Annotate %1"
 msgstr "Пояснение %1"
 
-#: app/imageopscontextmanageritem.cpp:150 lib/document/documentjob.cpp:77
+#: app/imageopscontextmanageritem.cpp:155 lib/document/documentjob.cpp:77
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot edit this kind of image."
 msgstr "Gwenview не може да редактира този вид изображения."
 
-#: app/imageopscontextmanageritem.cpp:161
+#: app/imageopscontextmanageritem.cpp:166
 #, kde-format
 msgid "Image Operations"
 msgstr "Операции с изображение"
@@ -1073,138 +1073,138 @@ msgstr "Стартиране в режим \"презентация\""
 msgid "A starting file or folders"
 msgstr "Начален файл или папка"
 
-#: app/mainwindow.cpp:382
+#: app/mainwindow.cpp:380
 #, kde-format
 msgctxt "@action Open Recent menu"
 msgid "Clear List"
 msgstr "Изчистване на списъка"
 
-#: app/mainwindow.cpp:390
+#: app/mainwindow.cpp:388
 #, kde-format
 msgctxt "@action reload the currently viewed image"
 msgid "Reload"
 msgstr "Презареждане"
 
-#: app/mainwindow.cpp:395
+#: app/mainwindow.cpp:393
 #, kde-format
 msgctxt "@action:inmenu Navigation Bar"
 msgid "Replace Location"
 msgstr "Заместване на местоположение"
 
-#: app/mainwindow.cpp:400
+#: app/mainwindow.cpp:398
 #, kde-format
 msgctxt "@action:intoolbar Switch to file list"
 msgid "Browse"
 msgstr "Прелистване"
 
-#: app/mainwindow.cpp:401
+#: app/mainwindow.cpp:399
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Browse folders for images"
 msgstr "Прелистване на папките за изображения"
 
-#: app/mainwindow.cpp:408
+#: app/mainwindow.cpp:406
 #, kde-format
 msgctxt "@action:intoolbar Switch to image view"
 msgid "View"
 msgstr "Преглед"
 
-#: app/mainwindow.cpp:409
+#: app/mainwindow.cpp:407
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "View selected images"
 msgstr "Преглед на избраните изображения"
 
-#: app/mainwindow.cpp:428
+#: app/mainwindow.cpp:426
 #, kde-format
 msgctxt "@action"
 msgid "Exit Full Screen"
 msgstr "Изход от цял екран"
 
-#: app/mainwindow.cpp:433
+#: app/mainwindow.cpp:431
 #, kde-format
 msgctxt "@action Go to previous image"
 msgid "Previous"
 msgstr "Предишно"
 
-#: app/mainwindow.cpp:434
+#: app/mainwindow.cpp:432
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to previous image"
 msgstr "Към предишното изображение"
 
-#: app/mainwindow.cpp:440
+#: app/mainwindow.cpp:438
 #, kde-format
 msgctxt "@action Go to next image"
 msgid "Next"
 msgstr "Следващо"
 
-#: app/mainwindow.cpp:441
+#: app/mainwindow.cpp:439
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to next image"
 msgstr "Към следващото изображение"
 
-#: app/mainwindow.cpp:447
+#: app/mainwindow.cpp:445
 #, kde-format
 msgctxt "@action Go to first image"
 msgid "First"
 msgstr "Първо"
 
-#: app/mainwindow.cpp:448
+#: app/mainwindow.cpp:446
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to first image"
 msgstr "Към първото изображение"
 
-#: app/mainwindow.cpp:454
+#: app/mainwindow.cpp:452
 #, kde-format
 msgctxt "@action Go to last image"
 msgid "Last"
 msgstr "Последно"
 
-#: app/mainwindow.cpp:455
+#: app/mainwindow.cpp:453
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to last image"
 msgstr "Към последното изображение"
 
-#: app/mainwindow.cpp:465
+#: app/mainwindow.cpp:463
 #, kde-format
 msgctxt "@action"
 msgid "Start Page"
 msgstr "Начална страница"
 
-#: app/mainwindow.cpp:466
+#: app/mainwindow.cpp:464
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open the start page"
 msgstr "Отваряне на началната страница"
 
-#: app/mainwindow.cpp:473
+#: app/mainwindow.cpp:471
 #, kde-format
 msgctxt "@action"
 msgid "Sidebar"
 msgstr "Странична лента"
 
-#: app/mainwindow.cpp:478
+#: app/mainwindow.cpp:476
 #, kde-format
 msgctxt "@action opens crop, rename, etc."
 msgid "Show Editing Tools"
 msgstr "Показване на инструменти за редактиране"
 
-#: app/mainwindow.cpp:508
+#: app/mainwindow.cpp:506
 #, kde-format
 msgctxt "@action Share images"
 msgid "Share"
 msgstr "Споделяне"
 
-#: app/mainwindow.cpp:516
+#: app/mainwindow.cpp:514
 #, kde-format
 msgid "Error while sharing: %1"
 msgstr "Грешка при споделяне на: %1"
 
-#: app/mainwindow.cpp:523
+#: app/mainwindow.cpp:521
 #, kde-format
 msgid ""
 "The shared image link (<a href=\"%1\">%1</a>) has been copied to the "
@@ -1213,99 +1213,99 @@ msgstr ""
 "Връзката за споделено изображение (<a href=\"%1\">%1</a>)е копирана в "
 "клипборда."
 
-#: app/mainwindow.cpp:573
+#: app/mainwindow.cpp:571
 #, kde-format
 msgctxt "@title:menu submenu for actions that open configuration dialogs"
 msgid "Configure"
 msgstr "Настройване"
 
-#: app/mainwindow.cpp:588
+#: app/mainwindow.cpp:586
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "Edit"
 msgstr "Редактиране"
 
-#: app/mainwindow.cpp:593
+#: app/mainwindow.cpp:591
 #, kde-format
 msgid "Redo"
 msgstr "Повторение"
 
-#: app/mainwindow.cpp:601
+#: app/mainwindow.cpp:599
 #, kde-format
 msgid "Undo"
 msgstr "Отмяна"
 
-#: app/mainwindow.cpp:628
+#: app/mainwindow.cpp:626
 #, kde-format
 msgid "Folders"
 msgstr "Директории"
 
-#: app/mainwindow.cpp:634
+#: app/mainwindow.cpp:632
 #, kde-format
 msgid "Information"
 msgstr "Информация"
 
-#: app/mainwindow.cpp:648
+#: app/mainwindow.cpp:646
 #, kde-format
 msgid "Operations"
 msgstr "Операции"
 
-#: app/mainwindow.cpp:1322
+#: app/mainwindow.cpp:1320
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Скриване на страничната лента"
 
-#: app/mainwindow.cpp:1322
+#: app/mainwindow.cpp:1320
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Показване на страничната лента"
 
-#: app/mainwindow.cpp:1629
+#: app/mainwindow.cpp:1627
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Отваряне на изображение"
 
-#: app/mainwindow.cpp:1689
+#: app/mainwindow.cpp:1687
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "Прожекция"
 
-#: app/mainwindow.cpp:1692
+#: app/mainwindow.cpp:1690
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "Прожекция"
 
-#: app/mainwindow.cpp:1692
+#: app/mainwindow.cpp:1690
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Стартиране на прожекция"
 
-#: app/mainwindow.cpp:1705
+#: app/mainwindow.cpp:1703
 #, kde-format
 msgid "Save All Changes"
 msgstr "Запис на всички промени"
 
-#: app/mainwindow.cpp:1706
+#: app/mainwindow.cpp:1704
 #, kde-format
 msgid "Discard Changes"
 msgstr "Отказ от промените"
 
-#: app/mainwindow.cpp:1708
+#: app/mainwindow.cpp:1706
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "Променено е 1 изображение."
 msgstr[1] "Променени са %1 изображения."
 
-#: app/mainwindow.cpp:1708
+#: app/mainwindow.cpp:1706
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Ако спрете програмата, промените ще бъдат загубени."
 
-#: app/mainwindow.cpp:1751
+#: app/mainwindow.cpp:1749
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
@@ -1313,37 +1313,37 @@ msgstr ""
 "Това ще скрие лентата с менюта напълно. Можете да го покажете отново, като  "
 "натиснете %1."
 
-#: app/mainwindow.cpp:1754
+#: app/mainwindow.cpp:1752
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Скриване на меню лентата"
 
-#: app/mainwindow.cpp:1972
+#: app/mainwindow.cpp:1970
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "Достигнахте първия документ, какво да се направи?"
 
-#: app/mainwindow.cpp:1973 app/mainwindow.cpp:1987
+#: app/mainwindow.cpp:1971 app/mainwindow.cpp:1985
 #, kde-format
 msgid "Stay There"
 msgstr "Оставане тук"
 
-#: app/mainwindow.cpp:1974
+#: app/mainwindow.cpp:1972
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "Към последния документ"
 
-#: app/mainwindow.cpp:1975 app/mainwindow.cpp:1989
+#: app/mainwindow.cpp:1973 app/mainwindow.cpp:1987
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "Назад към списъка"
 
-#: app/mainwindow.cpp:1986
+#: app/mainwindow.cpp:1984
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "Достигнахте последния документ, какво да се направи?"
 
-#: app/mainwindow.cpp:1988
+#: app/mainwindow.cpp:1986
 #, kde-format
 msgid "Go to the First Document"
 msgstr "Към първия документ"
@@ -1635,36 +1635,36 @@ msgid ""
 msgstr ""
 "Изображението е променено. Ако го презаредите промените ще бъдат анулирани."
 
-#: importer/dialogpage.cpp:53
+#: importer/dialogpage.cpp:52
 #, kde-format
 msgid "Show failed files..."
 msgstr "Показване на неуспешните файлове..."
 
-#: importer/dialogpage.cpp:58
+#: importer/dialogpage.cpp:57
 #, kde-format
 msgid "Show failed subfolders..."
 msgstr "Показване на неуспешните подпапки..."
 
-#: importer/dialogpage.cpp:72
+#: importer/dialogpage.cpp:71
 #, kde-format
 msgid "Failed to import %1 document."
 msgid_plural "Failed to import %1 documents."
 msgstr[0] "Неуспех при импортиране на %1 документ."
 msgstr[1] "Неуспех при импортиране на %1 документа."
 
-#: importer/dialogpage.cpp:79
+#: importer/dialogpage.cpp:78
 #, kde-format
 msgid "Failed to create %1 destination subfolder."
 msgid_plural "Failed to create %1 destination subfolders."
 msgstr[0] "Неуспешно създаване на %1поддиректория."
 msgstr[1] "Неуспешно създаване на %1поддиректории."
 
-#: importer/dialogpage.cpp:90
+#: importer/dialogpage.cpp:89
 #, kde-format
 msgid "Failed to import documents:"
 msgstr "Неуспешно импортирани документи:"
 
-#: importer/dialogpage.cpp:96
+#: importer/dialogpage.cpp:95
 #, kde-format
 msgid "Failed to create subfolders:"
 msgstr "Неуспешно импортирани подпапки:"
@@ -1898,19 +1898,19 @@ msgstr "Невалидна изходна папка."
 msgid "Importing documents..."
 msgstr "Внасяне на документи..."
 
-#: importer/thumbnailpage.cpp:235
+#: importer/thumbnailpage.cpp:234
 #, kde-format
 msgctxt "@info above install button when Kamera is not installed"
 msgid "Support for your camera is not installed."
 msgstr "Не е инсталирана поддръжка за камерата."
 
-#: importer/thumbnailpage.cpp:237
+#: importer/thumbnailpage.cpp:236
 #, kde-format
 msgctxt "@info above install button, %1 protocol name"
 msgid "The protocol support library for \"%1\" is not installed."
 msgstr "Библиотеката на поддържащия протокол \"%1\" не е инсталирана."
 
-#: importer/thumbnailpage.cpp:249
+#: importer/thumbnailpage.cpp:248
 #, kde-format
 msgctxt "@info:usagetip above install button"
 msgid ""
@@ -1919,7 +1919,7 @@ msgstr ""
 "След завършване на инсталационния процес рестартирайте програмата за "
 "импортиране, за да продължите."
 
-#: importer/thumbnailpage.cpp:256
+#: importer/thumbnailpage.cpp:255
 #, kde-format
 msgctxt "@info:tooltip for a button, %1 protocol name"
 msgid "Launch Discover to install the protocol support library for \"%1\""
@@ -1927,13 +1927,13 @@ msgstr ""
 "Стартирайте Discover за да инсталирате библиотеката на поддържащия протокол "
 "\"%1\""
 
-#: importer/thumbnailpage.cpp:258
+#: importer/thumbnailpage.cpp:257
 #, kde-format
 msgctxt "@action:button"
 msgid "Install Support for this Camera…"
 msgstr "Инсталиране на поддръжка за камерата…"
 
-#: importer/thumbnailpage.cpp:259
+#: importer/thumbnailpage.cpp:258
 #, kde-format
 msgctxt "@info:whatsthis for a button when Kamera is not installed"
 msgid ""
@@ -1945,13 +1945,13 @@ msgstr ""
 "камерата. Кликнете тук, за да стартирате Discover, за да инсталирате Kamera, "
 "за да активирате поддръжката на протокола за \"camera:/\" ."
 
-#: importer/thumbnailpage.cpp:262
+#: importer/thumbnailpage.cpp:261
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Install Protocol Support for \"%1\"…"
 msgstr "Инсталиране на поддържащия протокол за \"%1\"…"
 
-#: importer/thumbnailpage.cpp:263
+#: importer/thumbnailpage.cpp:262
 #, kde-format
 msgctxt "@info:whatsthis for a button, %1 protocol name"
 msgid ""
@@ -1961,13 +1961,13 @@ msgstr ""
 "Кликнете тук, за да стартирате Discover и инсталирате липсващия протокол и "
 "активирате поддръжката за \"%1:/\" ."
 
-#: importer/thumbnailpage.cpp:267
+#: importer/thumbnailpage.cpp:266
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Search the Web for How to Install Protocol Support for \"%1\"…"
 msgstr "Търсене в интернет за Инсталиране на поддържащ протокол за \"%1\"…"
 
-#: importer/thumbnailpage.cpp:283
+#: importer/thumbnailpage.cpp:282
 #, kde-format
 msgctxt ""
 "@info this text will be used as a search term in an online search engine, %1 "
@@ -1975,7 +1975,7 @@ msgctxt ""
 msgid "How to install protocol support for \"%1\" on Linux"
 msgstr "Как да се инсталира протокол за поддръжка за \"%1\" на Linux"
 
-#: importer/thumbnailpage.cpp:284
+#: importer/thumbnailpage.cpp:283
 #, kde-format
 msgctxt ""
 "search engine URL, %1 search keyword, and translators can replace duckduckgo "
@@ -1983,17 +1983,17 @@ msgctxt ""
 msgid "https://duckduckgo.com/?q=%1"
 msgstr "https://duckduckgo.com/?q=%1"
 
-#: importer/thumbnailpage.cpp:325
+#: importer/thumbnailpage.cpp:324
 #, kde-format
 msgid "Import Selected"
 msgstr "Внасяне на избраните"
 
-#: importer/thumbnailpage.cpp:328
+#: importer/thumbnailpage.cpp:327
 #, kde-format
 msgid "Import All"
 msgstr "Внасяне на всички"
 
-#: importer/thumbnailpage.cpp:490
+#: importer/thumbnailpage.cpp:489
 #, kde-kuit-format
 msgctxt "@info when failing to open the appstream URL"
 msgid ""
@@ -2004,7 +2004,7 @@ msgstr ""
 "инсталиран или използвайте инструмента за инсталиране на пакети на вашата "
 "дистрибуция, за да инсталирате \"Kamera\" ."
 
-#: importer/thumbnailpage.cpp:494
+#: importer/thumbnailpage.cpp:493
 #, kde-kuit-format
 msgctxt "@info when failing to launch plasma-discover, %1 protocol name"
 msgid ""
@@ -2056,37 +2056,37 @@ msgstr "Текуща поддръжка"
 msgid "Developer"
 msgstr "Разработчик"
 
-#: lib/crop/cropwidget.cpp:192
+#: lib/crop/cropwidget.cpp:191
 #, kde-format
 msgid "Current Image"
 msgstr "Текущата страница"
 
-#: lib/crop/cropwidget.cpp:195
+#: lib/crop/cropwidget.cpp:194
 #, kde-format
 msgid "Square"
 msgstr "Квадрат"
 
-#: lib/crop/cropwidget.cpp:198
+#: lib/crop/cropwidget.cpp:197
 #, kde-format
 msgid "This Screen"
 msgstr "Този екран"
 
-#: lib/crop/cropwidget.cpp:200
+#: lib/crop/cropwidget.cpp:199
 #, kde-format
 msgid "Landscape"
 msgstr "Хоризонтално"
 
-#: lib/crop/cropwidget.cpp:205 lib/crop/cropwidget.cpp:212
+#: lib/crop/cropwidget.cpp:204 lib/crop/cropwidget.cpp:211
 #, kde-format
 msgid "ISO (A4, A3...)"
 msgstr "ISO (A4, A3...)"
 
-#: lib/crop/cropwidget.cpp:206 lib/crop/cropwidget.cpp:213
+#: lib/crop/cropwidget.cpp:205 lib/crop/cropwidget.cpp:212
 #, kde-format
 msgid "US Letter"
 msgstr "US Letter"
 
-#: lib/crop/cropwidget.cpp:207
+#: lib/crop/cropwidget.cpp:206
 #, kde-format
 msgid "Portrait"
 msgstr "Вертикално"
@@ -2094,72 +2094,72 @@ msgstr "Вертикално"
 #. i18n("%1:%2") because ':' should not be translated, it is
 #. used to parse the ratio string.
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: lib/crop/cropwidget.cpp:222 lib/resize/resizeimagewidget.ui:30
+#: lib/crop/cropwidget.cpp:221 lib/resize/resizeimagewidget.ui:30
 #, kde-format
 msgid "Width"
 msgstr "Широчина"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: lib/crop/cropwidget.cpp:222 lib/resize/resizeimagewidget.ui:40
+#: lib/crop/cropwidget.cpp:221 lib/resize/resizeimagewidget.ui:40
 #, kde-format
 msgid "Height"
 msgstr "Височина"
 
-#: lib/crop/cropwidget.cpp:291
+#: lib/crop/cropwidget.cpp:290
 #, kde-format
 msgctxt "@option:check"
 msgid "Advanced settings"
 msgstr "Разширени настройки"
 
-#: lib/crop/cropwidget.cpp:300
+#: lib/crop/cropwidget.cpp:299
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Aspect ratio:"
 msgstr "Съотношение:"
 
-#: lib/crop/cropwidget.cpp:313
+#: lib/crop/cropwidget.cpp:312
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Size:"
 msgstr "Големина:"
 
-#: lib/crop/cropwidget.cpp:335
+#: lib/crop/cropwidget.cpp:334
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Position:"
 msgstr "Длъжност:"
 
-#: lib/crop/cropwidget.cpp:356
+#: lib/crop/cropwidget.cpp:355
 #, kde-format
 msgctxt "@option:check"
 msgid "Preserve aspect ratio"
 msgstr "Запазване на пропорциите с изрязване"
 
-#: lib/document/document.cpp:299
+#: lib/document/document.cpp:298
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot save this kind of documents."
 msgstr "Gwenview не може да запазва този вид документи."
 
-#: lib/document/loadingdocumentimpl.cpp:139
+#: lib/document/loadingdocumentimpl.cpp:137
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot display documents of type %1."
 msgstr "Gwenview не може да показва документи от вида %1."
 
-#: lib/document/loadingdocumentimpl.cpp:399
+#: lib/document/loadingdocumentimpl.cpp:397
 #, kde-format
 msgctxt "@info"
 msgid "Could not open file %1"
 msgstr "Грешка при отваряне на файл %1"
 
-#: lib/document/loadingdocumentimpl.cpp:490
+#: lib/document/loadingdocumentimpl.cpp:488
 #, kde-format
 msgctxt "@info"
 msgid "Loading meta information failed."
 msgstr "Зареждането на мета-информацията беше неуспешно."
 
-#: lib/document/loadingdocumentimpl.cpp:516
+#: lib/document/loadingdocumentimpl.cpp:514
 #, kde-format
 msgctxt "@info"
 msgid "Loading image failed."
@@ -2212,18 +2212,18 @@ msgstr "Gwenview не знае как да покаже този докумен�
 msgid "Loading <filename>%1</filename> failed"
 msgstr "Зареждането на <filename>%1</filename> беше неуспешно"
 
-#: lib/documentview/documentviewcontroller.cpp:63
+#: lib/documentview/documentviewcontroller.cpp:62
 #, kde-format
 msgid "Zoom to Fit"
 msgstr "Побиране в прозореца"
 
-#: lib/documentview/documentviewcontroller.cpp:65
+#: lib/documentview/documentviewcontroller.cpp:64
 #, kde-format
 msgctxt "@action:button Zoom to fit, shown in status bar, keep it short please"
 msgid "Fit"
 msgstr "Мащабиране"
 
-#: lib/documentview/documentviewcontroller.cpp:66
+#: lib/documentview/documentviewcontroller.cpp:65
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Fit image into the viewing area"
@@ -2233,7 +2233,7 @@ msgstr "Побиране на изображението в прозореца"
 #. zoom value that was used the last time this same image was viewed. Being more clear about this isn't really necessary here so I kept it short
 #. but a more elaborate translation would also be fine.
 #. The text "in the settings" is supposed to sound like clicking it opens the settings.
-#: lib/documentview/documentviewcontroller.cpp:72
+#: lib/documentview/documentviewcontroller.cpp:71
 #, kde-kuit-format
 msgctxt "@info:whatsthis, %1 the action's text"
 msgid ""
@@ -2262,12 +2262,12 @@ msgstr ""
 "така че изображенията вместо това да се показват с предишна стойност на "
 "увеличението <link url='%2'>в настройките</link>.</para>"
 
-#: lib/documentview/documentviewcontroller.cpp:85
+#: lib/documentview/documentviewcontroller.cpp:84
 #, kde-format
 msgid "Zoom to fill window by fitting to width or height"
 msgstr "Увеличаване на мащаба за изпълване на прозореца на ширина или височина"
 
-#: lib/documentview/documentviewcontroller.cpp:87
+#: lib/documentview/documentviewcontroller.cpp:86
 #, kde-format
 msgctxt ""
 "@action:button Zoom to fill (fit width or height), shown in status bar, keep "
@@ -2275,30 +2275,30 @@ msgctxt ""
 msgid "Fill"
 msgstr "Изпълване"
 
-#: lib/documentview/documentviewcontroller.cpp:100
+#: lib/documentview/documentviewcontroller.cpp:99
 #, kde-format
 msgid "Show Bird's Eye View When Zoomed In"
 msgstr "Изглед на птичи поглед при увеличаване на мащаба"
 
-#: lib/documentview/documentviewcontroller.cpp:107
+#: lib/documentview/documentviewcontroller.cpp:106
 #, kde-format
 msgctxt "@action"
 msgid "Follow color scheme"
 msgstr "Спазване на цветовата схема"
 
-#: lib/documentview/documentviewcontroller.cpp:113
+#: lib/documentview/documentviewcontroller.cpp:112
 #, kde-format
 msgctxt "@action"
 msgid "Light Mode"
 msgstr "Светъл режим"
 
-#: lib/documentview/documentviewcontroller.cpp:119
+#: lib/documentview/documentviewcontroller.cpp:118
 #, kde-format
 msgctxt "@action"
 msgid "Neutral Mode"
 msgstr "Неутрален режим"
 
-#: lib/documentview/documentviewcontroller.cpp:125
+#: lib/documentview/documentviewcontroller.cpp:124
 #, kde-format
 msgctxt "@action"
 msgid "Dark Mode"
@@ -2540,7 +2540,7 @@ msgctxt "@info"
 msgid "No data to store."
 msgstr "Няма данни, които да бъдат записани."
 
-#: lib/print/printhelper.cpp:126
+#: lib/print/printhelper.cpp:125
 #, kde-format
 msgid "Print Image"
 msgstr "Отпечатване на избображение"
@@ -2693,7 +2693,7 @@ msgctxt "@info:tooltip"
 msgid "Assign this tag to all selected images"
 msgstr "Добавяне на този етикет към всички избрани изображения"
 
-#: lib/semanticinfo/tagwidget.cpp:147
+#: lib/semanticinfo/tagwidget.cpp:146
 #, kde-format
 msgid "Add tag"
 msgstr "Добавяне на етикет"
@@ -2740,7 +2740,7 @@ msgctxt "(qtundo-format)"
 msgid "Transform"
 msgstr "Преобразуване"
 
-#: part/gvpart.cpp:74
+#: part/gvpart.cpp:72
 #, kde-format
 msgctxt "@action"
 msgid "Properties"
