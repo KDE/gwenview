@@ -24,8 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/gwenviewlib_export.h>
 
 // Qt
-#include <QStringList>
-
+#include <QString>
 class KFileItem;
 
 namespace Gwenview

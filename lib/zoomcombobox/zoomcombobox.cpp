@@ -8,7 +8,6 @@
 #include <QAction>
 #include <QEvent>
 #include <QLineEdit>
-#include <QMouseEvent>
 #include <QSignalBlocker>
 #include <QWheelEvent>
 

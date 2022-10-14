@@ -5,9 +5,7 @@
 #include <KColorUtils>
 #include <QEvent>
 #include <QPaintEvent>
-#include <QStyleOptionFrame>
 #include <QStylePainter>
-#include <QTextItem>
 
 using namespace Gwenview;
 

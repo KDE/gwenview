@@ -36,7 +36,6 @@
 #include <QTemporaryFile>
 
 // KF
-#include <KIO/JobUiDelegate>
 #include <KIO/PreviewJob>
 #include <KJobWidgets>
 

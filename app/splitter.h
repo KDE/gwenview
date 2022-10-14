@@ -21,7 +21,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #define SPLITTER_H
 
 // Qt
-#include <QPainter>
 #include <QSplitter>
 
 namespace Gwenview

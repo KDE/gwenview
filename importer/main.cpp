@@ -21,7 +21,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QApplication>
 #include <QCommandLineParser>
 #include <QDir>
-#include <QLocale>
 #include <QScopedPointer>
 #include <QUrl>
 

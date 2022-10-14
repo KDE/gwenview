@@ -27,9 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QCoreApplication>
 #include <QDateTime>
 #include <QGraphicsWidget>
-#include <QGuiApplication>
 #include <QMouseEvent>
-#include <QStyleHints>
 #include <QWidget>
 
 // KF

@@ -40,9 +40,7 @@ typedef enum {
 #include <fitsio.h>
 
 #include <QIODevice>
-#include <QObject>
 #include <QRect>
-#include <QRectF>
 
 class FITSData
 {

@@ -31,7 +31,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QCursor>
 #include <QGraphicsSceneMouseEvent>
 #include <QGuiApplication>
-#include <QPainter>
 #include <QStandardPaths>
 namespace Gwenview
 {

@@ -32,7 +32,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KDirModel>
 #include <KFileItem>
 #include <KFilePlacesModel>
-#include <KFormat>
 
 // Local
 #include "gwenview_lib_debug.h"

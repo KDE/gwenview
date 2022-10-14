@@ -27,7 +27,6 @@
 #include <QAction>
 #include <QActionGroup>
 #include <QApplication>
-#include <QHBoxLayout>
 #include <QPainter>
 
 namespace Gwenview

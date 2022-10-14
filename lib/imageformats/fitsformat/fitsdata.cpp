@@ -23,7 +23,6 @@ Gwenview: an image viewer
 #include "fitsdata.h"
 
 // Qt
-#include <QApplication>
 #include <QImage>
 
 // STL

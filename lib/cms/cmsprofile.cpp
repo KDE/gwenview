@@ -36,7 +36,6 @@ extern "C" {
 
 // Qt
 #include <QBuffer>
-#include <QtGlobal>
 
 // lcms
 #include <lcms2.h>

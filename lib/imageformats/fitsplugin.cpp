@@ -24,7 +24,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "fitshandler.h"
 
 #include <QImageIOHandler>
-#include <QtPlugin>
 
 QImageIOPlugin::Capabilities FitsPlugin::capabilities(QIODevice *device, const QByteArray &format) const
 {

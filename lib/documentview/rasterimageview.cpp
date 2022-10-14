@@ -33,13 +33,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KF
 
 // Qt
-#include <QApplication>
 #include <QGraphicsSceneMouseEvent>
 #include <QPainter>
 #include <QPointer>
-#include <QTimer>
 
-#include <QColorSpace>
 #include <QCryptographicHash>
 
 namespace Gwenview

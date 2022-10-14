@@ -22,12 +22,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "folderviewcontextmanageritem.h"
 
 // Qt
-#include <QApplication>
 #include <QDir>
 #include <QDragEnterEvent>
 #include <QHeaderView>
 #include <QMimeData>
-#include <QStyleHints>
 #include <QTreeView>
 
 // KF
