@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-14 00:44+0000\n"
+"POT-Creation-Date: 2022-10-15 00:44+0000\n"
 "PO-Revision-Date: 2012-07-11 10:26+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer\n"
@@ -134,44 +134,44 @@ msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
 msgid "Sidebar Alignment Spacer"
 msgstr ""
 
-#: app/browsemainpage.cpp:147 app/mainwindow.cpp:371 app/viewmainpage.cpp:425
-#: lib/documentview/documentviewcontroller.cpp:56
+#: app/browsemainpage.cpp:146 app/mainwindow.cpp:371 app/viewmainpage.cpp:425
+#: lib/documentview/documentviewcontroller.cpp:55
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "View"
 msgstr "មើល"
 
-#: app/browsemainpage.cpp:149
+#: app/browsemainpage.cpp:148
 #, kde-format
 msgctxt "@action:inmenu Navigation Bar"
 msgid "Edit Location"
 msgstr "កែ​សម្រួល​ទីតាំង"
 
-#: app/browsemainpage.cpp:153
+#: app/browsemainpage.cpp:152
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Sort By"
 msgstr "តម្រៀប​តាម"
 
-#: app/browsemainpage.cpp:158
+#: app/browsemainpage.cpp:157
 #, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Name"
 msgstr "ឈ្មោះ"
 
-#: app/browsemainpage.cpp:161
+#: app/browsemainpage.cpp:160
 #, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Date"
 msgstr "កាល​បរិច្ឆេទ"
 
-#: app/browsemainpage.cpp:164
+#: app/browsemainpage.cpp:163
 #, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Size"
 msgstr "ទំហំ"
 
-#: app/browsemainpage.cpp:168
+#: app/browsemainpage.cpp:167
 #, fuzzy, kde-format
 #| msgctxt "@action:inmenu"
 #| msgid "Rating"
@@ -179,62 +179,62 @@ msgctxt "@addAction:inmenu"
 msgid "Rating"
 msgstr "ការ​វាយ​តម្លៃ"
 
-#: app/browsemainpage.cpp:175
+#: app/browsemainpage.cpp:174
 #, kde-format
 msgctxt "@action:inmenu Sort"
 msgid "Descending"
 msgstr ""
 
-#: app/browsemainpage.cpp:187
+#: app/browsemainpage.cpp:186
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Thumbnail Details"
 msgstr "សេចក្ដី​លម្អិត​អំពី​រូបភាព​តូច​ៗ"
 
-#: app/browsemainpage.cpp:188
+#: app/browsemainpage.cpp:187
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filename"
 msgstr "ប្ដូរ​ឈ្មោះ"
 
-#: app/browsemainpage.cpp:189
+#: app/browsemainpage.cpp:188
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Date"
 msgstr "កាល​បរិច្ឆេទ"
 
-#: app/browsemainpage.cpp:190
+#: app/browsemainpage.cpp:189
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Image Size"
 msgstr "ទំហំ​រូបភាព"
 
-#: app/browsemainpage.cpp:191
+#: app/browsemainpage.cpp:190
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "File Size"
 msgstr "ទំហំ​ឯកសារ"
 
-#: app/browsemainpage.cpp:193
+#: app/browsemainpage.cpp:192
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rating"
 msgstr "ការ​វាយ​តម្លៃ"
 
-#: app/browsemainpage.cpp:196 app/fileopscontextmanageritem.cpp:142
+#: app/browsemainpage.cpp:195 app/fileopscontextmanageritem.cpp:142
 #: app/mainwindow.cpp:370
 #, kde-format
 msgctxt "@title actions category"
 msgid "File"
 msgstr "ឯកសារ"
 
-#: app/browsemainpage.cpp:198
+#: app/browsemainpage.cpp:197
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Add Folder to Places"
 msgstr "បន្ថែម​ថត​ទៅ​ខ្ទង់"
 
-#: app/browsemainpage.cpp:247
+#: app/browsemainpage.cpp:246
 #, kde-format
 msgctxt ""
 "@info:status %1 number of selected documents, %2 total number of documents, "
@@ -242,7 +242,7 @@ msgctxt ""
 msgid "Selected %1 of %2 (%3)"
 msgstr ""
 
-#: app/browsemainpage.cpp:253
+#: app/browsemainpage.cpp:252
 #, fuzzy, kde-format
 #| msgid "Loop on images"
 msgctxt "@info:status Image files"
@@ -250,7 +250,7 @@ msgid "%1 image"
 msgid_plural "%1 images"
 msgstr[0] "រង្វិល​ជុំ​លើ​រូបភាព"
 
-#: app/browsemainpage.cpp:254
+#: app/browsemainpage.cpp:253
 #, fuzzy, kde-format
 #| msgid "Show videos"
 msgctxt "@info:status Video files"
@@ -258,7 +258,7 @@ msgid "%1 video"
 msgid_plural "%1 videos"
 msgstr[0] "បញ្ចាំង​វីដេអូ"
 
-#: app/browsemainpage.cpp:261
+#: app/browsemainpage.cpp:260
 #, kde-format
 msgctxt "@info:status images, videos"
 msgid "%1, %2"
@@ -285,7 +285,7 @@ msgstr "មើល​រូបភាព"
 msgid "Advanced"
 msgstr "កម្រិតខ្ពស់"
 
-#: app/fileoperations.cpp:64
+#: app/fileoperations.cpp:63
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Copy"
@@ -293,7 +293,7 @@ msgctxt "@title:window %1 file name"
 msgid "Copy %1"
 msgstr "ចម្លង"
 
-#: app/fileoperations.cpp:66
+#: app/fileoperations.cpp:65
 #, fuzzy, kde-format
 #| msgid "Loop on images"
 msgctxt "@title:window %1 number of images"
@@ -301,13 +301,13 @@ msgid "Copy %1 image"
 msgid_plural "Copy %1 images"
 msgstr[0] "រង្វិល​ជុំ​លើ​រូបភាព"
 
-#: app/fileoperations.cpp:68
+#: app/fileoperations.cpp:67
 #, kde-format
 msgctxt "@action:button"
 msgid "Copy"
 msgstr "ចម្លង"
 
-#: app/fileoperations.cpp:72
+#: app/fileoperations.cpp:71
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Move"
@@ -315,7 +315,7 @@ msgctxt "@title:window %1 file name"
 msgid "Move %1"
 msgstr "ផ្លាស់ទី"
 
-#: app/fileoperations.cpp:74
+#: app/fileoperations.cpp:73
 #, fuzzy, kde-format
 #| msgctxt "%1 is collection name, %2 is image count in collection"
 #| msgid "%1 (%2 image)"
@@ -325,13 +325,13 @@ msgid "Move %1 image"
 msgid_plural "Move %1 images"
 msgstr[0] "%1 (រូបភាព %2)"
 
-#: app/fileoperations.cpp:76
+#: app/fileoperations.cpp:75
 #, kde-format
 msgctxt "@action:button"
 msgid "Move"
 msgstr "ផ្លាស់ទី"
 
-#: app/fileoperations.cpp:80
+#: app/fileoperations.cpp:79
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Link"
@@ -339,7 +339,7 @@ msgctxt "@title:window %1 file name"
 msgid "Link %1"
 msgstr "តំណ"
 
-#: app/fileoperations.cpp:82
+#: app/fileoperations.cpp:81
 #, fuzzy, kde-format
 #| msgctxt "%1 is collection name, %2 is image count in collection"
 #| msgid "%1 (%2 image)"
@@ -349,28 +349,28 @@ msgid "Link %1 image"
 msgid_plural "Link %1 images"
 msgstr[0] "%1 (រូបភាព %2)"
 
-#: app/fileoperations.cpp:84
+#: app/fileoperations.cpp:83
 #, kde-format
 msgctxt "@action:button"
 msgid "Link"
 msgstr "តំណ"
 
-#: app/fileoperations.cpp:199
+#: app/fileoperations.cpp:198
 #, kde-format
 msgid "Move Here"
 msgstr "ផ្លាស់ទី​នៅ​ទីនេះ"
 
-#: app/fileoperations.cpp:200
+#: app/fileoperations.cpp:199
 #, kde-format
 msgid "Copy Here"
 msgstr "ចម្លង​នៅ​ទីនេះ"
 
-#: app/fileoperations.cpp:201
+#: app/fileoperations.cpp:200
 #, kde-format
 msgid "Link Here"
 msgstr "តភ្ជាប់​នៅ​ទីនេះ"
 
-#: app/fileoperations.cpp:203
+#: app/fileoperations.cpp:202
 #, kde-format
 msgid "Cancel"
 msgstr "បោះបង់"
@@ -797,81 +797,81 @@ msgctxt "@title:window"
 msgid "Image Information"
 msgstr "ព័ត៌មានរូបភាព"
 
-#: app/imageopscontextmanageritem.cpp:87
+#: app/imageopscontextmanageritem.cpp:88
 #, kde-format
 msgctxt "@title actions category - means actions changing image"
 msgid "Edit"
 msgstr "កែ​សម្រួល"
 
-#: app/imageopscontextmanageritem.cpp:90
+#: app/imageopscontextmanageritem.cpp:91
 #, kde-format
 msgid "Rotate Left"
 msgstr "បង្វិល​ឆ្វេង"
 
-#: app/imageopscontextmanageritem.cpp:91
+#: app/imageopscontextmanageritem.cpp:92
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate image to the left"
 msgstr "បង្វិល​​រូបភាព​ទៅ​ឆ្វេង"
 
-#: app/imageopscontextmanageritem.cpp:96
+#: app/imageopscontextmanageritem.cpp:97
 #, kde-format
 msgid "Rotate Right"
 msgstr "បង្វិល​ស្ដាំ"
 
-#: app/imageopscontextmanageritem.cpp:97
+#: app/imageopscontextmanageritem.cpp:98
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate image to the right"
 msgstr "បង្វិល​រូបភាព​ទៅ​ស្ដាំ"
 
-#: app/imageopscontextmanageritem.cpp:102
+#: app/imageopscontextmanageritem.cpp:103
 #, kde-format
 msgid "Mirror"
 msgstr "កញ្ចក់"
 
-#: app/imageopscontextmanageritem.cpp:106
+#: app/imageopscontextmanageritem.cpp:107
 #, kde-format
 msgid "Flip"
 msgstr "ត្រឡប់"
 
-#: app/imageopscontextmanageritem.cpp:110 lib/resize/resizeimagedialog.cpp:71
+#: app/imageopscontextmanageritem.cpp:111 lib/resize/resizeimagedialog.cpp:71
 #, kde-format
 msgid "Resize"
 msgstr "ប្ដូរ​ទំហំ​"
 
-#: app/imageopscontextmanageritem.cpp:115 lib/crop/cropimageoperation.cpp:70
+#: app/imageopscontextmanageritem.cpp:116 lib/crop/cropimageoperation.cpp:70
 #: lib/crop/cropwidget.cpp:262
 #, kde-format
 msgid "Crop"
 msgstr "ច្រឹប"
 
-#: app/imageopscontextmanageritem.cpp:120
+#: app/imageopscontextmanageritem.cpp:121
 #: lib/redeyereduction/redeyereductionimageoperation.cpp:75
 #: lib/redeyereduction/redeyereductiontool.cpp:48
 #, kde-format
 msgid "Reduce Red Eye"
 msgstr ""
 
-#: app/imageopscontextmanageritem.cpp:125 lib/annotate/annotateoperation.cpp:51
+#: app/imageopscontextmanageritem.cpp:126 lib/annotate/annotateoperation.cpp:51
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Annotate"
 msgstr ""
 
-#: app/imageopscontextmanageritem.cpp:133
+#: app/imageopscontextmanageritem.cpp:134
 #, kde-format
 msgctxt "@title:window Annotate [filename]"
 msgid "Annotate %1"
 msgstr ""
 
-#: app/imageopscontextmanageritem.cpp:155 lib/document/documentjob.cpp:77
+#: app/imageopscontextmanageritem.cpp:156 lib/document/documentjob.cpp:77
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot edit this kind of image."
 msgstr "Gwenview មិន​អាច​កែ​សម្រួល​រូបភាព​ប្រភេទ​នេះ​បាន​ទេ ។​"
 
-#: app/imageopscontextmanageritem.cpp:166
+#: app/imageopscontextmanageritem.cpp:167
 #, kde-format
 msgid "Image Operations"
 msgstr "ការ​ប្រតិបត្តិ​រូបភាព"
@@ -1864,7 +1864,7 @@ msgstr ""
 "មិន​អាច​បង្កើត​ថត​ផ្ទុក​ឡើង​បណ្ដោះ​អាសន្ន​បានទេ ៖\n"
 "%1"
 
-#: importer/importerconfigdialog.cpp:53
+#: importer/importerconfigdialog.cpp:52
 #, kde-format
 msgctxt "%1 is the importer keyword, %2 is keyword explanation"
 msgid "%1: %2"
@@ -1894,43 +1894,43 @@ msgstr "មើល​ជា​មុន ៖"
 msgid "<i>Type text or click the items below to customize the format</i>"
 msgstr "<i>វាយ​អត្ថបទ​ ឬ​ចុច​លើ​ធាតុ​ខាង​ក្រោម ដើម្បី​ប្ដូរ​ទ្រង់​ទ្រាយ​តាម​បំណង</i>"
 
-#: importer/main.cpp:45
+#: importer/main.cpp:44
 #, kde-format
 msgid "Gwenview Importer"
 msgstr "កម្មវិធី​នាំ​ចូល Gwenview"
 
-#: importer/main.cpp:47
+#: importer/main.cpp:46
 #, kde-format
 msgid "Photo Importer"
 msgstr "កម្មវិធី​នាំ​ចូល​រូបថត"
 
-#: importer/main.cpp:54
+#: importer/main.cpp:53
 #, kde-format
 msgid ""
 "The device UDI, used to retrieve information about the device (name, icon...)"
 msgstr ""
 
-#: importer/main.cpp:54
+#: importer/main.cpp:53
 #, kde-format
 msgid "Device UDI"
 msgstr ""
 
-#: importer/main.cpp:55
+#: importer/main.cpp:54
 #, kde-format
 msgid "Source folder"
 msgstr "ថត​ប្រភព"
 
-#: importer/main.cpp:60
+#: importer/main.cpp:59
 #, kde-format
 msgid "Missing required source folder argument."
 msgstr ""
 
-#: importer/main.cpp:64
+#: importer/main.cpp:63
 #, kde-format
 msgid "Too many arguments."
 msgstr ""
 
-#: importer/main.cpp:70
+#: importer/main.cpp:69
 #, fuzzy, kde-format
 #| msgid "Source folder"
 msgid "Invalid source folder."
@@ -2250,19 +2250,19 @@ msgstr "Gwenview មិន​ដឹង​អំពី​វិធី​បង្
 msgid "Loading <filename>%1</filename> failed"
 msgstr "ការ​ផ្ទុក​ <filename>%1</filename> បាន​បរាជ័យ"
 
-#: lib/documentview/documentviewcontroller.cpp:62
+#: lib/documentview/documentviewcontroller.cpp:61
 #, fuzzy, kde-format
 #| msgid "Zoom to Fit"
 msgid "Zoom to Fit"
 msgstr "ពង្រីក​ដើម្បី​ឲ្យ​សម"
 
-#: lib/documentview/documentviewcontroller.cpp:64
+#: lib/documentview/documentviewcontroller.cpp:63
 #, kde-format
 msgctxt "@action:button Zoom to fit, shown in status bar, keep it short please"
 msgid "Fit"
 msgstr "សម"
 
-#: lib/documentview/documentviewcontroller.cpp:65
+#: lib/documentview/documentviewcontroller.cpp:64
 #, fuzzy, kde-format
 #| msgid "&Fit image to page"
 msgctxt "@info:tooltip"
@@ -2273,7 +2273,7 @@ msgstr "ធ្វើ​ឲ្យ​រូបភាព​សម​នឹង​ទ
 #. zoom value that was used the last time this same image was viewed. Being more clear about this isn't really necessary here so I kept it short
 #. but a more elaborate translation would also be fine.
 #. The text "in the settings" is supposed to sound like clicking it opens the settings.
-#: lib/documentview/documentviewcontroller.cpp:71
+#: lib/documentview/documentviewcontroller.cpp:70
 #, kde-kuit-format
 msgctxt "@info:whatsthis, %1 the action's text"
 msgid ""
@@ -2290,12 +2290,12 @@ msgid ""
 "settings</link>.</para>"
 msgstr ""
 
-#: lib/documentview/documentviewcontroller.cpp:84
+#: lib/documentview/documentviewcontroller.cpp:83
 #, kde-format
 msgid "Zoom to fill window by fitting to width or height"
 msgstr ""
 
-#: lib/documentview/documentviewcontroller.cpp:86
+#: lib/documentview/documentviewcontroller.cpp:85
 #, kde-format
 msgctxt ""
 "@action:button Zoom to fill (fit width or height), shown in status bar, keep "
@@ -2303,30 +2303,30 @@ msgctxt ""
 msgid "Fill"
 msgstr ""
 
-#: lib/documentview/documentviewcontroller.cpp:99
+#: lib/documentview/documentviewcontroller.cpp:98
 #, kde-format
 msgid "Show Bird's Eye View When Zoomed In"
 msgstr ""
 
-#: lib/documentview/documentviewcontroller.cpp:106
+#: lib/documentview/documentviewcontroller.cpp:105
 #, kde-format
 msgctxt "@action"
 msgid "Follow color scheme"
 msgstr ""
 
-#: lib/documentview/documentviewcontroller.cpp:112
+#: lib/documentview/documentviewcontroller.cpp:111
 #, kde-format
 msgctxt "@action"
 msgid "Light Mode"
 msgstr ""
 
-#: lib/documentview/documentviewcontroller.cpp:118
+#: lib/documentview/documentviewcontroller.cpp:117
 #, kde-format
 msgctxt "@action"
 msgid "Neutral Mode"
 msgstr ""
 
-#: lib/documentview/documentviewcontroller.cpp:124
+#: lib/documentview/documentviewcontroller.cpp:123
 #, kde-format
 msgctxt "@action"
 msgid "Dark Mode"
@@ -2468,61 +2468,61 @@ msgctxt "@info:tooltip"
 msgid "Close"
 msgstr "បិទ"
 
-#: lib/imagemetainfomodel.cpp:255
+#: lib/imagemetainfomodel.cpp:254
 #, kde-format
 msgctxt "@item:intable Image file name"
 msgid "Name"
 msgstr "ឈ្មោះ"
 
-#: lib/imagemetainfomodel.cpp:256
+#: lib/imagemetainfomodel.cpp:255
 #, kde-format
 msgctxt "@item:intable"
 msgid "File Size"
 msgstr "ទំហំ​ឯកសារ"
 
-#: lib/imagemetainfomodel.cpp:257
+#: lib/imagemetainfomodel.cpp:256
 #, kde-format
 msgctxt "@item:intable"
 msgid "File Time"
 msgstr "ពេល​វេលា​របស់​ឯកសារ"
 
-#: lib/imagemetainfomodel.cpp:258
+#: lib/imagemetainfomodel.cpp:257
 #, kde-format
 msgctxt "@item:intable"
 msgid "Image Size"
 msgstr "ទំហំ​រូបភាព"
 
-#: lib/imagemetainfomodel.cpp:259
+#: lib/imagemetainfomodel.cpp:258
 #, kde-format
 msgctxt "@item:intable"
 msgid "Comment"
 msgstr "មតិយោបល់"
 
-#: lib/imagemetainfomodel.cpp:321
+#: lib/imagemetainfomodel.cpp:320
 #, kde-format
 msgctxt "@title:group General info about the image"
 msgid "General"
 msgstr "ទូទៅ"
 
-#: lib/imagemetainfomodel.cpp:408
+#: lib/imagemetainfomodel.cpp:407
 #, kde-format
 msgctxt "@item:intable %1 is image width, %2 is image height"
 msgid "%1x%2"
 msgstr "%1x%2"
 
-#: lib/imagemetainfomodel.cpp:414
+#: lib/imagemetainfomodel.cpp:413
 #, kde-format
 msgctxt "@item:intable %1 is number of millions of pixels in image"
 msgid "(%1MP)"
 msgstr "(%1MP)"
 
-#: lib/imagemetainfomodel.cpp:565
+#: lib/imagemetainfomodel.cpp:564
 #, kde-format
 msgctxt "@title:column"
 msgid "Property"
 msgstr "លក្ខណ​សម្បត្តិ"
 
-#: lib/imagemetainfomodel.cpp:567
+#: lib/imagemetainfomodel.cpp:566
 #, kde-format
 msgctxt "@title:column"
 msgid "Value"
@@ -2739,7 +2739,7 @@ msgctxt "(qtundo-format)"
 msgid "Transform"
 msgstr "ប្លែង"
 
-#: part/gvpart.cpp:72
+#: part/gvpart.cpp:70
 #, kde-format
 msgctxt "@action"
 msgid "Properties"

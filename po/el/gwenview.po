@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-14 00:44+0000\n"
+"POT-Creation-Date: 2022-10-15 00:44+0000\n"
 "PO-Revision-Date: 2021-10-17 10:04+0300\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -142,105 +142,105 @@ msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
 msgid "Sidebar Alignment Spacer"
 msgstr "Δείκτης εναρμόνισης με την πλευρική γραμμή"
 
-#: app/browsemainpage.cpp:147 app/mainwindow.cpp:371 app/viewmainpage.cpp:425
-#: lib/documentview/documentviewcontroller.cpp:56
+#: app/browsemainpage.cpp:146 app/mainwindow.cpp:371 app/viewmainpage.cpp:425
+#: lib/documentview/documentviewcontroller.cpp:55
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "View"
 msgstr "Προβολή"
 
-#: app/browsemainpage.cpp:149
+#: app/browsemainpage.cpp:148
 #, kde-format
 msgctxt "@action:inmenu Navigation Bar"
 msgid "Edit Location"
 msgstr "Επεξεργασία τοποθεσίας"
 
-#: app/browsemainpage.cpp:153
+#: app/browsemainpage.cpp:152
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Sort By"
 msgstr "Ταξινόμηση κατά"
 
-#: app/browsemainpage.cpp:158
+#: app/browsemainpage.cpp:157
 #, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Name"
 msgstr "Όνομα"
 
-#: app/browsemainpage.cpp:161
+#: app/browsemainpage.cpp:160
 #, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Date"
 msgstr "Ημερομηνία"
 
-#: app/browsemainpage.cpp:164
+#: app/browsemainpage.cpp:163
 #, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Size"
 msgstr "Μέγεθος"
 
-#: app/browsemainpage.cpp:168
+#: app/browsemainpage.cpp:167
 #, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Rating"
 msgstr "Αξιολόγηση"
 
-#: app/browsemainpage.cpp:175
+#: app/browsemainpage.cpp:174
 #, kde-format
 msgctxt "@action:inmenu Sort"
 msgid "Descending"
 msgstr "Φθίνουσα"
 
-#: app/browsemainpage.cpp:187
+#: app/browsemainpage.cpp:186
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Thumbnail Details"
 msgstr "Λεπτομέρειες επισκόπησης"
 
-#: app/browsemainpage.cpp:188
+#: app/browsemainpage.cpp:187
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filename"
 msgstr "Όνομα αρχείου"
 
-#: app/browsemainpage.cpp:189
+#: app/browsemainpage.cpp:188
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Date"
 msgstr "Ημερομηνία"
 
-#: app/browsemainpage.cpp:190
+#: app/browsemainpage.cpp:189
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Image Size"
 msgstr "Μέγεθος εικόνας"
 
-#: app/browsemainpage.cpp:191
+#: app/browsemainpage.cpp:190
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "File Size"
 msgstr "Μέγεθος αρχείου"
 
-#: app/browsemainpage.cpp:193
+#: app/browsemainpage.cpp:192
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rating"
 msgstr "Αξιολόγηση"
 
-#: app/browsemainpage.cpp:196 app/fileopscontextmanageritem.cpp:142
+#: app/browsemainpage.cpp:195 app/fileopscontextmanageritem.cpp:142
 #: app/mainwindow.cpp:370
 #, kde-format
 msgctxt "@title actions category"
 msgid "File"
 msgstr "Αρχείο"
 
-#: app/browsemainpage.cpp:198
+#: app/browsemainpage.cpp:197
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Add Folder to Places"
 msgstr "Προσθήκη φακέλου στις τοποθεσίες"
 
-#: app/browsemainpage.cpp:247
+#: app/browsemainpage.cpp:246
 #, kde-format
 msgctxt ""
 "@info:status %1 number of selected documents, %2 total number of documents, "
@@ -248,7 +248,7 @@ msgctxt ""
 msgid "Selected %1 of %2 (%3)"
 msgstr "Επιλέχθηκαν %1 από %2 (%3)"
 
-#: app/browsemainpage.cpp:253
+#: app/browsemainpage.cpp:252
 #, kde-format
 msgctxt "@info:status Image files"
 msgid "%1 image"
@@ -256,7 +256,7 @@ msgid_plural "%1 images"
 msgstr[0] "%1 εικόνα"
 msgstr[1] "%1 εικόνες"
 
-#: app/browsemainpage.cpp:254
+#: app/browsemainpage.cpp:253
 #, kde-format
 msgctxt "@info:status Video files"
 msgid "%1 video"
@@ -264,7 +264,7 @@ msgid_plural "%1 videos"
 msgstr[0] "%1 βίντεο"
 msgstr[1] "%1 βίντεο"
 
-#: app/browsemainpage.cpp:261
+#: app/browsemainpage.cpp:260
 #, kde-format
 msgctxt "@info:status images, videos"
 msgid "%1, %2"
@@ -291,13 +291,13 @@ msgstr "Προβολή εικόνας"
 msgid "Advanced"
 msgstr "Για προχωρημένους"
 
-#: app/fileoperations.cpp:64
+#: app/fileoperations.cpp:63
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Copy %1"
 msgstr "Αντιγραφή %1"
 
-#: app/fileoperations.cpp:66
+#: app/fileoperations.cpp:65
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Copy %1 image"
@@ -305,19 +305,19 @@ msgid_plural "Copy %1 images"
 msgstr[0] "Αντιγραφή %1 εικόνας"
 msgstr[1] "Αντιγραφή %1 εικόνων"
 
-#: app/fileoperations.cpp:68
+#: app/fileoperations.cpp:67
 #, kde-format
 msgctxt "@action:button"
 msgid "Copy"
 msgstr "Αντιγραφή"
 
-#: app/fileoperations.cpp:72
+#: app/fileoperations.cpp:71
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Move %1"
 msgstr "Μετακίνηση %1"
 
-#: app/fileoperations.cpp:74
+#: app/fileoperations.cpp:73
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Move %1 image"
@@ -325,19 +325,19 @@ msgid_plural "Move %1 images"
 msgstr[0] "Μετακίνηση %1 εικόνας"
 msgstr[1] "Μετακίνηση %1 εικόνων"
 
-#: app/fileoperations.cpp:76
+#: app/fileoperations.cpp:75
 #, kde-format
 msgctxt "@action:button"
 msgid "Move"
 msgstr "Μετακίνηση"
 
-#: app/fileoperations.cpp:80
+#: app/fileoperations.cpp:79
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Link %1"
 msgstr "Δεσμός %1"
 
-#: app/fileoperations.cpp:82
+#: app/fileoperations.cpp:81
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Link %1 image"
@@ -345,28 +345,28 @@ msgid_plural "Link %1 images"
 msgstr[0] "Δεσμός σε %1 εικόνα"
 msgstr[1] "Δεσμός σε %1 εικόνες"
 
-#: app/fileoperations.cpp:84
+#: app/fileoperations.cpp:83
 #, kde-format
 msgctxt "@action:button"
 msgid "Link"
 msgstr "Δεσμός"
 
-#: app/fileoperations.cpp:199
+#: app/fileoperations.cpp:198
 #, kde-format
 msgid "Move Here"
 msgstr "Μετακίνηση εδώ"
 
-#: app/fileoperations.cpp:200
+#: app/fileoperations.cpp:199
 #, kde-format
 msgid "Copy Here"
 msgstr "Αντιγραφή εδώ"
 
-#: app/fileoperations.cpp:201
+#: app/fileoperations.cpp:200
 #, kde-format
 msgid "Link Here"
 msgstr "Δεσμός εδώ"
 
-#: app/fileoperations.cpp:203
+#: app/fileoperations.cpp:202
 #, kde-format
 msgid "Cancel"
 msgstr "Ακύρωση"
@@ -789,81 +789,81 @@ msgctxt "@title:window"
 msgid "Image Information"
 msgstr "Πληροφορίες εικόνας"
 
-#: app/imageopscontextmanageritem.cpp:87
+#: app/imageopscontextmanageritem.cpp:88
 #, kde-format
 msgctxt "@title actions category - means actions changing image"
 msgid "Edit"
 msgstr "Επεξεργασία"
 
-#: app/imageopscontextmanageritem.cpp:90
+#: app/imageopscontextmanageritem.cpp:91
 #, kde-format
 msgid "Rotate Left"
 msgstr "Περιστροφή αριστερά"
 
-#: app/imageopscontextmanageritem.cpp:91
+#: app/imageopscontextmanageritem.cpp:92
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate image to the left"
 msgstr "Περιστροφή εικόνας προς τα αριστερά"
 
-#: app/imageopscontextmanageritem.cpp:96
+#: app/imageopscontextmanageritem.cpp:97
 #, kde-format
 msgid "Rotate Right"
 msgstr "Περιστροφή δεξιά"
 
-#: app/imageopscontextmanageritem.cpp:97
+#: app/imageopscontextmanageritem.cpp:98
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate image to the right"
 msgstr "Περιστροφή εικόνας προς τα δεξιά"
 
-#: app/imageopscontextmanageritem.cpp:102
+#: app/imageopscontextmanageritem.cpp:103
 #, kde-format
 msgid "Mirror"
 msgstr "Καθρεπτισμός"
 
-#: app/imageopscontextmanageritem.cpp:106
+#: app/imageopscontextmanageritem.cpp:107
 #, kde-format
 msgid "Flip"
 msgstr "Αναστροφή"
 
-#: app/imageopscontextmanageritem.cpp:110 lib/resize/resizeimagedialog.cpp:71
+#: app/imageopscontextmanageritem.cpp:111 lib/resize/resizeimagedialog.cpp:71
 #, kde-format
 msgid "Resize"
 msgstr "Αλλαγή μεγέθους"
 
-#: app/imageopscontextmanageritem.cpp:115 lib/crop/cropimageoperation.cpp:70
+#: app/imageopscontextmanageritem.cpp:116 lib/crop/cropimageoperation.cpp:70
 #: lib/crop/cropwidget.cpp:262
 #, kde-format
 msgid "Crop"
 msgstr "Κόψιμο"
 
-#: app/imageopscontextmanageritem.cpp:120
+#: app/imageopscontextmanageritem.cpp:121
 #: lib/redeyereduction/redeyereductionimageoperation.cpp:75
 #: lib/redeyereduction/redeyereductiontool.cpp:48
 #, kde-format
 msgid "Reduce Red Eye"
 msgstr "Μείωση κόκκινου ματιού"
 
-#: app/imageopscontextmanageritem.cpp:125 lib/annotate/annotateoperation.cpp:51
+#: app/imageopscontextmanageritem.cpp:126 lib/annotate/annotateoperation.cpp:51
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Annotate"
 msgstr ""
 
-#: app/imageopscontextmanageritem.cpp:133
+#: app/imageopscontextmanageritem.cpp:134
 #, kde-format
 msgctxt "@title:window Annotate [filename]"
 msgid "Annotate %1"
 msgstr ""
 
-#: app/imageopscontextmanageritem.cpp:155 lib/document/documentjob.cpp:77
+#: app/imageopscontextmanageritem.cpp:156 lib/document/documentjob.cpp:77
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot edit this kind of image."
 msgstr "Το Gwenview αδυνατεί να επεξεργαστεί αυτόν τον τύπο εικόνας."
 
-#: app/imageopscontextmanageritem.cpp:166
+#: app/imageopscontextmanageritem.cpp:167
 #, kde-format
 msgid "Image Operations"
 msgstr "Λειτουργίες εικόνας"
@@ -1824,7 +1824,7 @@ msgstr "Αδυναμία δημιουργίας φακέλου προορισμ�
 msgid "Could not create temporary upload folder."
 msgstr "Αδυναμία δημιουργίας προσωρινού φακέλου αποστολής."
 
-#: importer/importerconfigdialog.cpp:53
+#: importer/importerconfigdialog.cpp:52
 #, kde-format
 msgctxt "%1 is the importer keyword, %2 is keyword explanation"
 msgid "%1: %2"
@@ -1856,17 +1856,17 @@ msgstr ""
 "<i>Πληκτρολογήστε το κείμενο ή κάντε κλικ στα παρακάτω αντικείμενα για να "
 "προσαρμόσετε τον τύπο αρχειοθέτησης</i>"
 
-#: importer/main.cpp:45
+#: importer/main.cpp:44
 #, kde-format
 msgid "Gwenview Importer"
 msgstr "Εισαγωγέας Gwenview"
 
-#: importer/main.cpp:47
+#: importer/main.cpp:46
 #, kde-format
 msgid "Photo Importer"
 msgstr "Εισαγωγέας φωτογραφιών"
 
-#: importer/main.cpp:54
+#: importer/main.cpp:53
 #, kde-format
 msgid ""
 "The device UDI, used to retrieve information about the device (name, icon...)"
@@ -1874,27 +1874,27 @@ msgstr ""
 "Η συσκευή UDI, χρησιμεύει στην ανάκτηση πληροφοριών σχετικά με τη συσκευή "
 "(όνομα, εικονίδιο...)"
 
-#: importer/main.cpp:54
+#: importer/main.cpp:53
 #, kde-format
 msgid "Device UDI"
 msgstr "Συσκευή UDI"
 
-#: importer/main.cpp:55
+#: importer/main.cpp:54
 #, kde-format
 msgid "Source folder"
 msgstr "Φάκελος πηγής"
 
-#: importer/main.cpp:60
+#: importer/main.cpp:59
 #, kde-format
 msgid "Missing required source folder argument."
 msgstr "Λείπει το απαιτούμενο όρισμα φακέλου πηγής."
 
-#: importer/main.cpp:64
+#: importer/main.cpp:63
 #, kde-format
 msgid "Too many arguments."
 msgstr "Πάρα πολλά ορίσματα."
 
-#: importer/main.cpp:70
+#: importer/main.cpp:69
 #, kde-format
 msgid "Invalid source folder."
 msgstr "Μη έγκυρος φάκελος πηγής"
@@ -2204,19 +2204,19 @@ msgstr "Το Gwenview αδυνατεί να εμφανίσει αυτόν τον
 msgid "Loading <filename>%1</filename> failed"
 msgstr "Αποτυχία φόρτωσης του <filename>%1</filename>"
 
-#: lib/documentview/documentviewcontroller.cpp:62
+#: lib/documentview/documentviewcontroller.cpp:61
 #, fuzzy, kde-format
 #| msgid "Zoom to fit"
 msgid "Zoom to Fit"
 msgstr "Εστίαση προσαρμογής"
 
-#: lib/documentview/documentviewcontroller.cpp:64
+#: lib/documentview/documentviewcontroller.cpp:63
 #, kde-format
 msgctxt "@action:button Zoom to fit, shown in status bar, keep it short please"
 msgid "Fit"
 msgstr "Προσ."
 
-#: lib/documentview/documentviewcontroller.cpp:65
+#: lib/documentview/documentviewcontroller.cpp:64
 #, fuzzy, kde-format
 #| msgid "&Fit image to page"
 msgctxt "@info:tooltip"
@@ -2227,7 +2227,7 @@ msgstr "&Προσαρμογή εικόνας στη σελίδα"
 #. zoom value that was used the last time this same image was viewed. Being more clear about this isn't really necessary here so I kept it short
 #. but a more elaborate translation would also be fine.
 #. The text "in the settings" is supposed to sound like clicking it opens the settings.
-#: lib/documentview/documentviewcontroller.cpp:71
+#: lib/documentview/documentviewcontroller.cpp:70
 #, kde-kuit-format
 msgctxt "@info:whatsthis, %1 the action's text"
 msgid ""
@@ -2244,12 +2244,12 @@ msgid ""
 "settings</link>.</para>"
 msgstr ""
 
-#: lib/documentview/documentviewcontroller.cpp:84
+#: lib/documentview/documentviewcontroller.cpp:83
 #, kde-format
 msgid "Zoom to fill window by fitting to width or height"
 msgstr "Εστίαση γεμίσματος παραθύρου με εφαρμογή στο πλάτος ή στο ύψος"
 
-#: lib/documentview/documentviewcontroller.cpp:86
+#: lib/documentview/documentviewcontroller.cpp:85
 #, kde-format
 msgctxt ""
 "@action:button Zoom to fill (fit width or height), shown in status bar, keep "
@@ -2257,30 +2257,30 @@ msgctxt ""
 msgid "Fill"
 msgstr "Γέμ."
 
-#: lib/documentview/documentviewcontroller.cpp:99
+#: lib/documentview/documentviewcontroller.cpp:98
 #, kde-format
 msgid "Show Bird's Eye View When Zoomed In"
 msgstr "Να εμφανίζεται η προβολή από ψηλά με τη μεγέθυνση"
 
-#: lib/documentview/documentviewcontroller.cpp:106
+#: lib/documentview/documentviewcontroller.cpp:105
 #, kde-format
 msgctxt "@action"
 msgid "Follow color scheme"
 msgstr "Να ακολουθείται το σχήμα χρώματος"
 
-#: lib/documentview/documentviewcontroller.cpp:112
+#: lib/documentview/documentviewcontroller.cpp:111
 #, kde-format
 msgctxt "@action"
 msgid "Light Mode"
 msgstr "Ανοιχτόχρωμη λειτουργία"
 
-#: lib/documentview/documentviewcontroller.cpp:118
+#: lib/documentview/documentviewcontroller.cpp:117
 #, kde-format
 msgctxt "@action"
 msgid "Neutral Mode"
 msgstr "Ουδέτερη λειτουργία"
 
-#: lib/documentview/documentviewcontroller.cpp:124
+#: lib/documentview/documentviewcontroller.cpp:123
 #, kde-format
 msgctxt "@action"
 msgid "Dark Mode"
@@ -2441,61 +2441,61 @@ msgctxt "@info:tooltip"
 msgid "Close"
 msgstr "Κλείσιμο"
 
-#: lib/imagemetainfomodel.cpp:255
+#: lib/imagemetainfomodel.cpp:254
 #, kde-format
 msgctxt "@item:intable Image file name"
 msgid "Name"
 msgstr "Όνομα"
 
-#: lib/imagemetainfomodel.cpp:256
+#: lib/imagemetainfomodel.cpp:255
 #, kde-format
 msgctxt "@item:intable"
 msgid "File Size"
 msgstr "Μέγεθος αρχείου"
 
-#: lib/imagemetainfomodel.cpp:257
+#: lib/imagemetainfomodel.cpp:256
 #, kde-format
 msgctxt "@item:intable"
 msgid "File Time"
 msgstr "Ώρα αρχείου"
 
-#: lib/imagemetainfomodel.cpp:258
+#: lib/imagemetainfomodel.cpp:257
 #, kde-format
 msgctxt "@item:intable"
 msgid "Image Size"
 msgstr "Μέγεθος εικόνας"
 
-#: lib/imagemetainfomodel.cpp:259
+#: lib/imagemetainfomodel.cpp:258
 #, kde-format
 msgctxt "@item:intable"
 msgid "Comment"
 msgstr "Σχόλιο"
 
-#: lib/imagemetainfomodel.cpp:321
+#: lib/imagemetainfomodel.cpp:320
 #, kde-format
 msgctxt "@title:group General info about the image"
 msgid "General"
 msgstr "Γενικά"
 
-#: lib/imagemetainfomodel.cpp:408
+#: lib/imagemetainfomodel.cpp:407
 #, kde-format
 msgctxt "@item:intable %1 is image width, %2 is image height"
 msgid "%1x%2"
 msgstr "%1x%2"
 
-#: lib/imagemetainfomodel.cpp:414
+#: lib/imagemetainfomodel.cpp:413
 #, kde-format
 msgctxt "@item:intable %1 is number of millions of pixels in image"
 msgid "(%1MP)"
 msgstr "(%1MP)"
 
-#: lib/imagemetainfomodel.cpp:565
+#: lib/imagemetainfomodel.cpp:564
 #, kde-format
 msgctxt "@title:column"
 msgid "Property"
 msgstr "Ιδιότητα"
 
-#: lib/imagemetainfomodel.cpp:567
+#: lib/imagemetainfomodel.cpp:566
 #, kde-format
 msgctxt "@title:column"
 msgid "Value"
@@ -2713,7 +2713,7 @@ msgctxt "(qtundo-format)"
 msgid "Transform"
 msgstr "Μετασχηματισμός"
 
-#: part/gvpart.cpp:72
+#: part/gvpart.cpp:70
 #, kde-format
 msgctxt "@action"
 msgid "Properties"

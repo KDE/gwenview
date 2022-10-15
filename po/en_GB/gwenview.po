@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-14 00:44+0000\n"
+"POT-Creation-Date: 2022-10-15 00:44+0000\n"
 "PO-Revision-Date: 2022-07-22 14:45+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English <kde-l10n-en_gb@kde.org>\n"
@@ -132,105 +132,105 @@ msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
 msgid "Sidebar Alignment Spacer"
 msgstr "Sidebar Alignment Spacer"
 
-#: app/browsemainpage.cpp:147 app/mainwindow.cpp:371 app/viewmainpage.cpp:425
-#: lib/documentview/documentviewcontroller.cpp:56
+#: app/browsemainpage.cpp:146 app/mainwindow.cpp:371 app/viewmainpage.cpp:425
+#: lib/documentview/documentviewcontroller.cpp:55
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "View"
 msgstr "View"
 
-#: app/browsemainpage.cpp:149
+#: app/browsemainpage.cpp:148
 #, kde-format
 msgctxt "@action:inmenu Navigation Bar"
 msgid "Edit Location"
 msgstr "Edit Location"
 
-#: app/browsemainpage.cpp:153
+#: app/browsemainpage.cpp:152
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Sort By"
 msgstr "Sort By"
 
-#: app/browsemainpage.cpp:158
+#: app/browsemainpage.cpp:157
 #, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Name"
 msgstr "Name"
 
-#: app/browsemainpage.cpp:161
+#: app/browsemainpage.cpp:160
 #, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Date"
 msgstr "Date"
 
-#: app/browsemainpage.cpp:164
+#: app/browsemainpage.cpp:163
 #, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Size"
 msgstr "Size"
 
-#: app/browsemainpage.cpp:168
+#: app/browsemainpage.cpp:167
 #, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Rating"
 msgstr "Rating"
 
-#: app/browsemainpage.cpp:175
+#: app/browsemainpage.cpp:174
 #, kde-format
 msgctxt "@action:inmenu Sort"
 msgid "Descending"
 msgstr "Descending"
 
-#: app/browsemainpage.cpp:187
+#: app/browsemainpage.cpp:186
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Thumbnail Details"
 msgstr "Thumbnail Details"
 
-#: app/browsemainpage.cpp:188
+#: app/browsemainpage.cpp:187
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filename"
 msgstr "Filename"
 
-#: app/browsemainpage.cpp:189
+#: app/browsemainpage.cpp:188
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Date"
 msgstr "Date"
 
-#: app/browsemainpage.cpp:190
+#: app/browsemainpage.cpp:189
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Image Size"
 msgstr "Image Size"
 
-#: app/browsemainpage.cpp:191
+#: app/browsemainpage.cpp:190
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "File Size"
 msgstr "File Size"
 
-#: app/browsemainpage.cpp:193
+#: app/browsemainpage.cpp:192
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rating"
 msgstr "Rating"
 
-#: app/browsemainpage.cpp:196 app/fileopscontextmanageritem.cpp:142
+#: app/browsemainpage.cpp:195 app/fileopscontextmanageritem.cpp:142
 #: app/mainwindow.cpp:370
 #, kde-format
 msgctxt "@title actions category"
 msgid "File"
 msgstr "File"
 
-#: app/browsemainpage.cpp:198
+#: app/browsemainpage.cpp:197
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Add Folder to Places"
 msgstr "Add Folder to Places"
 
-#: app/browsemainpage.cpp:247
+#: app/browsemainpage.cpp:246
 #, kde-format
 msgctxt ""
 "@info:status %1 number of selected documents, %2 total number of documents, "
@@ -238,7 +238,7 @@ msgctxt ""
 msgid "Selected %1 of %2 (%3)"
 msgstr "Selected %1 of %2 (%3)"
 
-#: app/browsemainpage.cpp:253
+#: app/browsemainpage.cpp:252
 #, kde-format
 msgctxt "@info:status Image files"
 msgid "%1 image"
@@ -246,7 +246,7 @@ msgid_plural "%1 images"
 msgstr[0] "Image"
 msgstr[1] "%1 images"
 
-#: app/browsemainpage.cpp:254
+#: app/browsemainpage.cpp:253
 #, kde-format
 msgctxt "@info:status Video files"
 msgid "%1 video"
@@ -254,7 +254,7 @@ msgid_plural "%1 videos"
 msgstr[0] "Video"
 msgstr[1] "%1 videos"
 
-#: app/browsemainpage.cpp:261
+#: app/browsemainpage.cpp:260
 #, kde-format
 msgctxt "@info:status images, videos"
 msgid "%1, %2"
@@ -281,13 +281,13 @@ msgstr "Image View"
 msgid "Advanced"
 msgstr "Advanced"
 
-#: app/fileoperations.cpp:64
+#: app/fileoperations.cpp:63
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Copy %1"
 msgstr "Copy %1"
 
-#: app/fileoperations.cpp:66
+#: app/fileoperations.cpp:65
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Copy %1 image"
@@ -295,19 +295,19 @@ msgid_plural "Copy %1 images"
 msgstr[0] "Copy %1 image"
 msgstr[1] "Copy %1 images"
 
-#: app/fileoperations.cpp:68
+#: app/fileoperations.cpp:67
 #, kde-format
 msgctxt "@action:button"
 msgid "Copy"
 msgstr "Copy"
 
-#: app/fileoperations.cpp:72
+#: app/fileoperations.cpp:71
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Move %1"
 msgstr "Move %1"
 
-#: app/fileoperations.cpp:74
+#: app/fileoperations.cpp:73
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Move %1 image"
@@ -315,19 +315,19 @@ msgid_plural "Move %1 images"
 msgstr[0] "Move %1 image"
 msgstr[1] "Move %1 images"
 
-#: app/fileoperations.cpp:76
+#: app/fileoperations.cpp:75
 #, kde-format
 msgctxt "@action:button"
 msgid "Move"
 msgstr "Move"
 
-#: app/fileoperations.cpp:80
+#: app/fileoperations.cpp:79
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Link %1"
 msgstr "Link %1"
 
-#: app/fileoperations.cpp:82
+#: app/fileoperations.cpp:81
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Link %1 image"
@@ -335,28 +335,28 @@ msgid_plural "Link %1 images"
 msgstr[0] "Link %1 image"
 msgstr[1] "Link %1 images"
 
-#: app/fileoperations.cpp:84
+#: app/fileoperations.cpp:83
 #, kde-format
 msgctxt "@action:button"
 msgid "Link"
 msgstr "Link"
 
-#: app/fileoperations.cpp:199
+#: app/fileoperations.cpp:198
 #, kde-format
 msgid "Move Here"
 msgstr "Move Here"
 
-#: app/fileoperations.cpp:200
+#: app/fileoperations.cpp:199
 #, kde-format
 msgid "Copy Here"
 msgstr "Copy Here"
 
-#: app/fileoperations.cpp:201
+#: app/fileoperations.cpp:200
 #, kde-format
 msgid "Link Here"
 msgstr "Link Here"
 
-#: app/fileoperations.cpp:203
+#: app/fileoperations.cpp:202
 #, kde-format
 msgid "Cancel"
 msgstr "Cancel"
@@ -776,81 +776,81 @@ msgctxt "@title:window"
 msgid "Image Information"
 msgstr "Image Information"
 
-#: app/imageopscontextmanageritem.cpp:87
+#: app/imageopscontextmanageritem.cpp:88
 #, kde-format
 msgctxt "@title actions category - means actions changing image"
 msgid "Edit"
 msgstr "Edit"
 
-#: app/imageopscontextmanageritem.cpp:90
+#: app/imageopscontextmanageritem.cpp:91
 #, kde-format
 msgid "Rotate Left"
 msgstr "Rotate Left"
 
-#: app/imageopscontextmanageritem.cpp:91
+#: app/imageopscontextmanageritem.cpp:92
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate image to the left"
 msgstr "Rotate image to the left"
 
-#: app/imageopscontextmanageritem.cpp:96
+#: app/imageopscontextmanageritem.cpp:97
 #, kde-format
 msgid "Rotate Right"
 msgstr "Rotate Right"
 
-#: app/imageopscontextmanageritem.cpp:97
+#: app/imageopscontextmanageritem.cpp:98
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate image to the right"
 msgstr "Rotate image to the right"
 
-#: app/imageopscontextmanageritem.cpp:102
+#: app/imageopscontextmanageritem.cpp:103
 #, kde-format
 msgid "Mirror"
 msgstr "Mirror"
 
-#: app/imageopscontextmanageritem.cpp:106
+#: app/imageopscontextmanageritem.cpp:107
 #, kde-format
 msgid "Flip"
 msgstr "Flip"
 
-#: app/imageopscontextmanageritem.cpp:110 lib/resize/resizeimagedialog.cpp:71
+#: app/imageopscontextmanageritem.cpp:111 lib/resize/resizeimagedialog.cpp:71
 #, kde-format
 msgid "Resize"
 msgstr "Resize"
 
-#: app/imageopscontextmanageritem.cpp:115 lib/crop/cropimageoperation.cpp:70
+#: app/imageopscontextmanageritem.cpp:116 lib/crop/cropimageoperation.cpp:70
 #: lib/crop/cropwidget.cpp:262
 #, kde-format
 msgid "Crop"
 msgstr "Crop"
 
-#: app/imageopscontextmanageritem.cpp:120
+#: app/imageopscontextmanageritem.cpp:121
 #: lib/redeyereduction/redeyereductionimageoperation.cpp:75
 #: lib/redeyereduction/redeyereductiontool.cpp:48
 #, kde-format
 msgid "Reduce Red Eye"
 msgstr "Reduce Red Eye"
 
-#: app/imageopscontextmanageritem.cpp:125 lib/annotate/annotateoperation.cpp:51
+#: app/imageopscontextmanageritem.cpp:126 lib/annotate/annotateoperation.cpp:51
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Annotate"
 msgstr "Annotate"
 
-#: app/imageopscontextmanageritem.cpp:133
+#: app/imageopscontextmanageritem.cpp:134
 #, kde-format
 msgctxt "@title:window Annotate [filename]"
 msgid "Annotate %1"
 msgstr "Annotate %1"
 
-#: app/imageopscontextmanageritem.cpp:155 lib/document/documentjob.cpp:77
+#: app/imageopscontextmanageritem.cpp:156 lib/document/documentjob.cpp:77
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot edit this kind of image."
 msgstr "Gwenview cannot edit this kind of image."
 
-#: app/imageopscontextmanageritem.cpp:166
+#: app/imageopscontextmanageritem.cpp:167
 #, kde-format
 msgid "Image Operations"
 msgstr "Image Operations"
@@ -1815,7 +1815,7 @@ msgstr "Could not create destination folder."
 msgid "Could not create temporary upload folder."
 msgstr "Could not create temporary upload folder."
 
-#: importer/importerconfigdialog.cpp:53
+#: importer/importerconfigdialog.cpp:52
 #, kde-format
 msgctxt "%1 is the importer keyword, %2 is keyword explanation"
 msgid "%1: %2"
@@ -1845,44 +1845,44 @@ msgstr "Preview:"
 msgid "<i>Type text or click the items below to customize the format</i>"
 msgstr "<i>Type text or click the items below to customise the format</i>"
 
-#: importer/main.cpp:45
+#: importer/main.cpp:44
 #, kde-format
 msgid "Gwenview Importer"
 msgstr "Gwenview Importer"
 
-#: importer/main.cpp:47
+#: importer/main.cpp:46
 #, kde-format
 msgid "Photo Importer"
 msgstr "Photo Importer"
 
-#: importer/main.cpp:54
+#: importer/main.cpp:53
 #, kde-format
 msgid ""
 "The device UDI, used to retrieve information about the device (name, icon...)"
 msgstr ""
 "The device UDI, used to retrieve information about the device (name, icon...)"
 
-#: importer/main.cpp:54
+#: importer/main.cpp:53
 #, kde-format
 msgid "Device UDI"
 msgstr "Device UDI"
 
-#: importer/main.cpp:55
+#: importer/main.cpp:54
 #, kde-format
 msgid "Source folder"
 msgstr "Source folder"
 
-#: importer/main.cpp:60
+#: importer/main.cpp:59
 #, kde-format
 msgid "Missing required source folder argument."
 msgstr "Missing required source folder argument."
 
-#: importer/main.cpp:64
+#: importer/main.cpp:63
 #, kde-format
 msgid "Too many arguments."
 msgstr "Too many arguments."
 
-#: importer/main.cpp:70
+#: importer/main.cpp:69
 #, kde-format
 msgid "Invalid source folder."
 msgstr "Invalid source folder."
@@ -2202,18 +2202,18 @@ msgstr "Gwenview does not know how to display this kind of document"
 msgid "Loading <filename>%1</filename> failed"
 msgstr "Loading <filename>%1</filename> failed"
 
-#: lib/documentview/documentviewcontroller.cpp:62
+#: lib/documentview/documentviewcontroller.cpp:61
 #, kde-format
 msgid "Zoom to Fit"
 msgstr "Zoom to Fit"
 
-#: lib/documentview/documentviewcontroller.cpp:64
+#: lib/documentview/documentviewcontroller.cpp:63
 #, kde-format
 msgctxt "@action:button Zoom to fit, shown in status bar, keep it short please"
 msgid "Fit"
 msgstr "Fit"
 
-#: lib/documentview/documentviewcontroller.cpp:65
+#: lib/documentview/documentviewcontroller.cpp:64
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Fit image into the viewing area"
@@ -2223,7 +2223,7 @@ msgstr "Fit image into the viewing area"
 #. zoom value that was used the last time this same image was viewed. Being more clear about this isn't really necessary here so I kept it short
 #. but a more elaborate translation would also be fine.
 #. The text "in the settings" is supposed to sound like clicking it opens the settings.
-#: lib/documentview/documentviewcontroller.cpp:71
+#: lib/documentview/documentviewcontroller.cpp:70
 #, kde-kuit-format
 msgctxt "@info:whatsthis, %1 the action's text"
 msgid ""
@@ -2251,12 +2251,12 @@ msgstr ""
 "are displayed at a previous zoom value instead <link url='%2'>in the "
 "settings</link>.</para>"
 
-#: lib/documentview/documentviewcontroller.cpp:84
+#: lib/documentview/documentviewcontroller.cpp:83
 #, kde-format
 msgid "Zoom to fill window by fitting to width or height"
 msgstr "Zoom to fill window by fitting to width or height"
 
-#: lib/documentview/documentviewcontroller.cpp:86
+#: lib/documentview/documentviewcontroller.cpp:85
 #, kde-format
 msgctxt ""
 "@action:button Zoom to fill (fit width or height), shown in status bar, keep "
@@ -2264,30 +2264,30 @@ msgctxt ""
 msgid "Fill"
 msgstr "Fill"
 
-#: lib/documentview/documentviewcontroller.cpp:99
+#: lib/documentview/documentviewcontroller.cpp:98
 #, kde-format
 msgid "Show Bird's Eye View When Zoomed In"
 msgstr "Show Bird's Eye View When Zoomed In"
 
-#: lib/documentview/documentviewcontroller.cpp:106
+#: lib/documentview/documentviewcontroller.cpp:105
 #, kde-format
 msgctxt "@action"
 msgid "Follow color scheme"
 msgstr "Follow colour scheme"
 
-#: lib/documentview/documentviewcontroller.cpp:112
+#: lib/documentview/documentviewcontroller.cpp:111
 #, kde-format
 msgctxt "@action"
 msgid "Light Mode"
 msgstr "Light Mode"
 
-#: lib/documentview/documentviewcontroller.cpp:118
+#: lib/documentview/documentviewcontroller.cpp:117
 #, kde-format
 msgctxt "@action"
 msgid "Neutral Mode"
 msgstr "Neutral Mode"
 
-#: lib/documentview/documentviewcontroller.cpp:124
+#: lib/documentview/documentviewcontroller.cpp:123
 #, kde-format
 msgctxt "@action"
 msgid "Dark Mode"
@@ -2440,61 +2440,61 @@ msgctxt "@info:tooltip"
 msgid "Close"
 msgstr "Close"
 
-#: lib/imagemetainfomodel.cpp:255
+#: lib/imagemetainfomodel.cpp:254
 #, kde-format
 msgctxt "@item:intable Image file name"
 msgid "Name"
 msgstr "Name"
 
-#: lib/imagemetainfomodel.cpp:256
+#: lib/imagemetainfomodel.cpp:255
 #, kde-format
 msgctxt "@item:intable"
 msgid "File Size"
 msgstr "File Size"
 
-#: lib/imagemetainfomodel.cpp:257
+#: lib/imagemetainfomodel.cpp:256
 #, kde-format
 msgctxt "@item:intable"
 msgid "File Time"
 msgstr "File Time"
 
-#: lib/imagemetainfomodel.cpp:258
+#: lib/imagemetainfomodel.cpp:257
 #, kde-format
 msgctxt "@item:intable"
 msgid "Image Size"
 msgstr "Image Size"
 
-#: lib/imagemetainfomodel.cpp:259
+#: lib/imagemetainfomodel.cpp:258
 #, kde-format
 msgctxt "@item:intable"
 msgid "Comment"
 msgstr "Comment"
 
-#: lib/imagemetainfomodel.cpp:321
+#: lib/imagemetainfomodel.cpp:320
 #, kde-format
 msgctxt "@title:group General info about the image"
 msgid "General"
 msgstr "General"
 
-#: lib/imagemetainfomodel.cpp:408
+#: lib/imagemetainfomodel.cpp:407
 #, kde-format
 msgctxt "@item:intable %1 is image width, %2 is image height"
 msgid "%1x%2"
 msgstr "%1x%2"
 
-#: lib/imagemetainfomodel.cpp:414
+#: lib/imagemetainfomodel.cpp:413
 #, kde-format
 msgctxt "@item:intable %1 is number of millions of pixels in image"
 msgid "(%1MP)"
 msgstr "(%1MP)"
 
-#: lib/imagemetainfomodel.cpp:565
+#: lib/imagemetainfomodel.cpp:564
 #, kde-format
 msgctxt "@title:column"
 msgid "Property"
 msgstr "Property"
 
-#: lib/imagemetainfomodel.cpp:567
+#: lib/imagemetainfomodel.cpp:566
 #, kde-format
 msgctxt "@title:column"
 msgid "Value"
@@ -2710,7 +2710,7 @@ msgctxt "(qtundo-format)"
 msgid "Transform"
 msgstr "Transform"
 
-#: part/gvpart.cpp:72
+#: part/gvpart.cpp:70
 #, kde-format
 msgctxt "@action"
 msgid "Properties"
