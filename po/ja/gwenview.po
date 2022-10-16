@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-15 00:44+0000\n"
+"POT-Creation-Date: 2022-10-16 00:44+0000\n"
 "PO-Revision-Date: 2014-09-28 22:46-0700\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -133,7 +133,7 @@ msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
 msgid "Sidebar Alignment Spacer"
 msgstr ""
 
-#: app/browsemainpage.cpp:146 app/mainwindow.cpp:371 app/viewmainpage.cpp:425
+#: app/browsemainpage.cpp:146 app/mainwindow.cpp:372 app/viewmainpage.cpp:425
 #: lib/documentview/documentviewcontroller.cpp:55
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
@@ -221,7 +221,7 @@ msgid "Rating"
 msgstr "評価"
 
 #: app/browsemainpage.cpp:195 app/fileopscontextmanageritem.cpp:142
-#: app/mainwindow.cpp:370
+#: app/mainwindow.cpp:371
 #, kde-format
 msgctxt "@title actions category"
 msgid "File"
@@ -1109,20 +1109,20 @@ msgstr "スライドショーモードで開始"
 msgid "A starting file or folders"
 msgstr "開始ファイルまたはフォルダ"
 
-#: app/mainwindow.cpp:380
+#: app/mainwindow.cpp:381
 #, kde-format
 msgctxt "@action Open Recent menu"
 msgid "Clear List"
 msgstr ""
 
 # ACCELERATOR added by translator
-#: app/mainwindow.cpp:388
+#: app/mainwindow.cpp:389
 #, kde-format
 msgctxt "@action reload the currently viewed image"
 msgid "Reload"
 msgstr "再読み込み(&R)"
 
-#: app/mainwindow.cpp:393
+#: app/mainwindow.cpp:394
 #, fuzzy, kde-format
 #| msgctxt "@action:inmenu Navigation Bar"
 #| msgid "Edit Location"
@@ -1131,111 +1131,111 @@ msgid "Replace Location"
 msgstr "場所を編集"
 
 # ACCELERATOR added by translator
-#: app/mainwindow.cpp:398
+#: app/mainwindow.cpp:399
 #, kde-format
 msgctxt "@action:intoolbar Switch to file list"
 msgid "Browse"
 msgstr "ブラウズ(&B)"
 
-#: app/mainwindow.cpp:399
+#: app/mainwindow.cpp:400
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Browse folders for images"
 msgstr ""
 
-#: app/mainwindow.cpp:406
+#: app/mainwindow.cpp:407
 #, kde-format
 msgctxt "@action:intoolbar Switch to image view"
 msgid "View"
 msgstr "表示"
 
-#: app/mainwindow.cpp:407
+#: app/mainwindow.cpp:408
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "View selected images"
 msgstr "選択した画像を表示"
 
-#: app/mainwindow.cpp:426
+#: app/mainwindow.cpp:427
 #, kde-format
 msgctxt "@action"
 msgid "Exit Full Screen"
 msgstr ""
 
 # ACCELERATOR added by translator
-#: app/mainwindow.cpp:431
+#: app/mainwindow.cpp:432
 #, kde-format
 msgctxt "@action Go to previous image"
 msgid "Previous"
 msgstr "前へ(&P)|/|$[~setProps ~full '前の画像に移動']"
 
-#: app/mainwindow.cpp:432
+#: app/mainwindow.cpp:433
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to previous image"
 msgstr "前の画像に移動"
 
 # ACCELERATOR added by translator
-#: app/mainwindow.cpp:438
+#: app/mainwindow.cpp:439
 #, kde-format
 msgctxt "@action Go to next image"
 msgid "Next"
 msgstr "次へ(&N)|/|$[~setProps ~full '次の画像に移動']"
 
-#: app/mainwindow.cpp:439
+#: app/mainwindow.cpp:440
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to next image"
 msgstr "次の画像に移動"
 
-#: app/mainwindow.cpp:445
+#: app/mainwindow.cpp:446
 #, kde-format
 msgctxt "@action Go to first image"
 msgid "First"
 msgstr "最初"
 
-#: app/mainwindow.cpp:446
+#: app/mainwindow.cpp:447
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to first image"
 msgstr "最初の画像に移動"
 
-#: app/mainwindow.cpp:452
+#: app/mainwindow.cpp:453
 #, kde-format
 msgctxt "@action Go to last image"
 msgid "Last"
 msgstr "最後"
 
-#: app/mainwindow.cpp:453
+#: app/mainwindow.cpp:454
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to last image"
 msgstr "最後の画像に移動"
 
-#: app/mainwindow.cpp:463
+#: app/mainwindow.cpp:464
 #, kde-format
 msgctxt "@action"
 msgid "Start Page"
 msgstr "開始ページ"
 
-#: app/mainwindow.cpp:464
+#: app/mainwindow.cpp:465
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open the start page"
 msgstr ""
 
-#: app/mainwindow.cpp:471
+#: app/mainwindow.cpp:472
 #, kde-format
 msgctxt "@action"
 msgid "Sidebar"
 msgstr "サイドバー|/|$[~setProps ~full 'サイドバーを表示']"
 
-#: app/mainwindow.cpp:476
+#: app/mainwindow.cpp:477
 #, kde-format
 msgctxt "@action opens crop, rename, etc."
 msgid "Show Editing Tools"
 msgstr ""
 
-#: app/mainwindow.cpp:506
+#: app/mainwindow.cpp:507
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Share"
@@ -1243,151 +1243,151 @@ msgctxt "@action Share images"
 msgid "Share"
 msgstr "共有"
 
-#: app/mainwindow.cpp:514
+#: app/mainwindow.cpp:515
 #, kde-format
 msgid "Error while sharing: %1"
 msgstr ""
 
-#: app/mainwindow.cpp:521
+#: app/mainwindow.cpp:522
 #, kde-format
 msgid ""
 "The shared image link (<a href=\"%1\">%1</a>) has been copied to the "
 "clipboard."
 msgstr ""
 
-#: app/mainwindow.cpp:571
+#: app/mainwindow.cpp:572
 #, kde-format
 msgctxt "@title:menu submenu for actions that open configuration dialogs"
 msgid "Configure"
 msgstr ""
 
-#: app/mainwindow.cpp:586
+#: app/mainwindow.cpp:587
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "Edit"
 msgstr "編集"
 
-#: app/mainwindow.cpp:591
+#: app/mainwindow.cpp:592
 #, kde-format
 msgid "Redo"
 msgstr "やり直す"
 
-#: app/mainwindow.cpp:599
+#: app/mainwindow.cpp:600
 #, kde-format
 msgid "Undo"
 msgstr "元に戻す"
 
-#: app/mainwindow.cpp:626
+#: app/mainwindow.cpp:627
 #, kde-format
 msgid "Folders"
 msgstr "フォルダ"
 
-#: app/mainwindow.cpp:632
+#: app/mainwindow.cpp:633
 #, kde-format
 msgid "Information"
 msgstr "情報"
 
-#: app/mainwindow.cpp:646
+#: app/mainwindow.cpp:647
 #, kde-format
 msgid "Operations"
 msgstr "操作"
 
-#: app/mainwindow.cpp:1320
+#: app/mainwindow.cpp:1321
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "サイドバーを隱す"
 
-#: app/mainwindow.cpp:1320
+#: app/mainwindow.cpp:1321
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "サイドバーを表示"
 
-#: app/mainwindow.cpp:1627
+#: app/mainwindow.cpp:1628
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "画像を開く"
 
-#: app/mainwindow.cpp:1687
+#: app/mainwindow.cpp:1688
 #, fuzzy, kde-format
 #| msgid "Slideshow"
 msgid "Pause Slideshow"
 msgstr "スライドショー"
 
-#: app/mainwindow.cpp:1690
+#: app/mainwindow.cpp:1691
 #, fuzzy, kde-format
 #| msgid "Slideshow"
 msgid "Resume Slideshow"
 msgstr "スライドショー"
 
-#: app/mainwindow.cpp:1690
+#: app/mainwindow.cpp:1691
 #, kde-format
 msgid "Start Slideshow"
 msgstr "スライドショーを開始"
 
-#: app/mainwindow.cpp:1703
+#: app/mainwindow.cpp:1704
 #, kde-format
 msgid "Save All Changes"
 msgstr "すべての変更を保存"
 
-#: app/mainwindow.cpp:1704
+#: app/mainwindow.cpp:1705
 #, kde-format
 msgid "Discard Changes"
 msgstr "変更を破棄"
 
-#: app/mainwindow.cpp:1706
+#: app/mainwindow.cpp:1707
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "1 個の画像が変更されています。"
 msgstr[1] "%1 個の画像が変更されています。"
 
-#: app/mainwindow.cpp:1706
+#: app/mainwindow.cpp:1707
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "今終了すると変更は失われます。"
 
-#: app/mainwindow.cpp:1749
+#: app/mainwindow.cpp:1762
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr ""
 
-#: app/mainwindow.cpp:1752
+#: app/mainwindow.cpp:1765
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Hide sidebar"
 msgid "Hide menu bar"
 msgstr "サイドバーを隱す"
 
-#: app/mainwindow.cpp:1970
+#: app/mainwindow.cpp:1983
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr ""
 
-#: app/mainwindow.cpp:1971 app/mainwindow.cpp:1985
+#: app/mainwindow.cpp:1984 app/mainwindow.cpp:1998
 #, kde-format
 msgid "Stay There"
 msgstr ""
 
-#: app/mainwindow.cpp:1972
+#: app/mainwindow.cpp:1985
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "最後の文書に移動"
 
-#: app/mainwindow.cpp:1973 app/mainwindow.cpp:1987
+#: app/mainwindow.cpp:1986 app/mainwindow.cpp:2000
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "文書一覧に戻る"
 
-#: app/mainwindow.cpp:1984
+#: app/mainwindow.cpp:1997
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr ""
 
-#: app/mainwindow.cpp:1986
+#: app/mainwindow.cpp:1999
 #, kde-format
 msgid "Go to the First Document"
 msgstr "最初の文書に移動"
@@ -1774,14 +1774,14 @@ msgstr "元のファイル名"
 msgid "Original filename, in lower case"
 msgstr "元のファイル名 (小文字)"
 
-#: importer/importdialog.cpp:97
+#: importer/importdialog.cpp:99
 #, kde-format
 msgid "One document has been imported."
 msgid_plural "%1 documents have been imported."
 msgstr[0] "1 個の文書をインポートしました。"
 msgstr[1] "%1 個の文書をインポートしました。"
 
-#: importer/importdialog.cpp:99
+#: importer/importdialog.cpp:101
 #, kde-format
 msgid "One document has been skipped because it had already been imported."
 msgid_plural ""
@@ -1789,7 +1789,7 @@ msgid_plural ""
 msgstr[0] "既にインポートされているため 1 個の文書をスキップしました。"
 msgstr[1] "既にインポートされているため %1 個の文書をスキップしました。"
 
-#: importer/importdialog.cpp:107
+#: importer/importdialog.cpp:109
 #, kde-format
 msgid ""
 "One of them has been renamed because another document with the same name had "
@@ -1803,21 +1803,21 @@ msgstr[1] ""
 "既に同名の他の文書がインポートされているため %1 個の文書の名前を変更しまし"
 "た。"
 
-#: importer/importdialog.cpp:115
+#: importer/importdialog.cpp:117
 #, kde-format
 msgid "Delete the imported document from the device?"
 msgid_plural "Delete the %1 imported documents from the device?"
 msgstr[0] "インポート済みの文書をデバイスから削除しますか？"
 msgstr[1] "インポート済みの %1 個の文書をデバイスから削除しますか？"
 
-#: importer/importdialog.cpp:117
+#: importer/importdialog.cpp:119
 #, kde-format
 msgid "Delete the skipped document from the device?"
 msgid_plural "Delete the %1 skipped documents from the device?"
 msgstr[0] "スキップした文書をデバイスから削除しますか？"
 msgstr[1] "スキップした %1 個の文書をデバイスから削除しますか？"
 
-#: importer/importdialog.cpp:120
+#: importer/importdialog.cpp:122
 #, kde-format
 msgctxt "Singular sentence is actually never used."
 msgid "Delete the imported or skipped document from the device?"
@@ -1826,18 +1826,18 @@ msgstr[0] "インポート済みまたはスキップした文書をデバイス
 msgstr[1] ""
 "インポート済みとスキップした %1 個の文書をデバイスから削除しますか？"
 
-#: importer/importdialog.cpp:127
+#: importer/importdialog.cpp:133
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Finished"
 msgstr "インポート完了"
 
-#: importer/importdialog.cpp:128
+#: importer/importdialog.cpp:134
 #, kde-format
 msgid "Keep"
 msgstr "保持"
 
-#: importer/importdialog.cpp:142
+#: importer/importdialog.cpp:156
 #, kde-format
 msgid ""
 "Failed to delete the document:\n"
@@ -1852,32 +1852,32 @@ msgstr[1] ""
 "文書の削除に失敗しました:\n"
 "%2"
 
-#: importer/importdialog.cpp:144
+#: importer/importdialog.cpp:158
 #, kde-format
 msgid "Retry"
 msgstr "再試行"
 
-#: importer/importdialog.cpp:145
+#: importer/importdialog.cpp:159
 #, kde-format
 msgid "Ignore"
 msgstr "無視"
 
-#: importer/importdialog.cpp:173
+#: importer/importdialog.cpp:191
 #, kde-format
 msgid "What do you want to do now?"
 msgstr "次に何をしますか？"
 
-#: importer/importdialog.cpp:175
+#: importer/importdialog.cpp:193
 #, kde-format
 msgid "View Imported Documents with Gwenview"
 msgstr "インポートした文書を Gwenview で見る"
 
-#: importer/importdialog.cpp:176
+#: importer/importdialog.cpp:194
 #, kde-format
 msgid "Import more Documents"
 msgstr "インポートを続ける"
 
-#: importer/importdialog.cpp:177
+#: importer/importdialog.cpp:195
 #, kde-format
 msgid "Quit"
 msgstr "終了"

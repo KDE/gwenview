@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-15 00:44+0000\n"
+"POT-Creation-Date: 2022-10-16 00:44+0000\n"
 "PO-Revision-Date: 2022-04-04 11:38+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian <kde-i18n-ro@kde.org>\n"
@@ -128,7 +128,7 @@ msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
 msgid "Sidebar Alignment Spacer"
 msgstr "Spațiator de aliniere în bara laterală"
 
-#: app/browsemainpage.cpp:146 app/mainwindow.cpp:371 app/viewmainpage.cpp:425
+#: app/browsemainpage.cpp:146 app/mainwindow.cpp:372 app/viewmainpage.cpp:425
 #: lib/documentview/documentviewcontroller.cpp:55
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
@@ -214,7 +214,7 @@ msgid "Rating"
 msgstr "Punctaj"
 
 #: app/browsemainpage.cpp:195 app/fileopscontextmanageritem.cpp:142
-#: app/mainwindow.cpp:370
+#: app/mainwindow.cpp:371
 #, kde-format
 msgctxt "@title actions category"
 msgid "File"
@@ -1078,138 +1078,138 @@ msgstr "Pornește în regim de diaporamă"
 msgid "A starting file or folders"
 msgstr "Un fișier sau dosare inițiale"
 
-#: app/mainwindow.cpp:380
+#: app/mainwindow.cpp:381
 #, kde-format
 msgctxt "@action Open Recent menu"
 msgid "Clear List"
 msgstr "Curăță lista"
 
-#: app/mainwindow.cpp:388
+#: app/mainwindow.cpp:389
 #, kde-format
 msgctxt "@action reload the currently viewed image"
 msgid "Reload"
 msgstr "Reîncarcă"
 
-#: app/mainwindow.cpp:393
+#: app/mainwindow.cpp:394
 #, kde-format
 msgctxt "@action:inmenu Navigation Bar"
 msgid "Replace Location"
 msgstr "Înlocuiește amplasarea"
 
-#: app/mainwindow.cpp:398
+#: app/mainwindow.cpp:399
 #, kde-format
 msgctxt "@action:intoolbar Switch to file list"
 msgid "Browse"
 msgstr "Răsfoiește"
 
-#: app/mainwindow.cpp:399
+#: app/mainwindow.cpp:400
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Browse folders for images"
 msgstr "Răsfoiește dosarele pentru imagini"
 
-#: app/mainwindow.cpp:406
+#: app/mainwindow.cpp:407
 #, kde-format
 msgctxt "@action:intoolbar Switch to image view"
 msgid "View"
 msgstr "Vezi"
 
-#: app/mainwindow.cpp:407
+#: app/mainwindow.cpp:408
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "View selected images"
 msgstr "Vezi imaginile alese"
 
-#: app/mainwindow.cpp:426
+#: app/mainwindow.cpp:427
 #, kde-format
 msgctxt "@action"
 msgid "Exit Full Screen"
 msgstr "Ieși din ecranul complet"
 
-#: app/mainwindow.cpp:431
+#: app/mainwindow.cpp:432
 #, kde-format
 msgctxt "@action Go to previous image"
 msgid "Previous"
 msgstr "Precedentă"
 
-#: app/mainwindow.cpp:432
+#: app/mainwindow.cpp:433
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to previous image"
 msgstr "Mergi la imaginea precedentă"
 
-#: app/mainwindow.cpp:438
+#: app/mainwindow.cpp:439
 #, kde-format
 msgctxt "@action Go to next image"
 msgid "Next"
 msgstr "Următoare"
 
-#: app/mainwindow.cpp:439
+#: app/mainwindow.cpp:440
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to next image"
 msgstr "Mergi la imaginea următoare"
 
-#: app/mainwindow.cpp:445
+#: app/mainwindow.cpp:446
 #, kde-format
 msgctxt "@action Go to first image"
 msgid "First"
 msgstr "Prima"
 
-#: app/mainwindow.cpp:446
+#: app/mainwindow.cpp:447
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to first image"
 msgstr "Mergi la prima imagine"
 
-#: app/mainwindow.cpp:452
+#: app/mainwindow.cpp:453
 #, kde-format
 msgctxt "@action Go to last image"
 msgid "Last"
 msgstr "Ultima"
 
-#: app/mainwindow.cpp:453
+#: app/mainwindow.cpp:454
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to last image"
 msgstr "Mergi la ultima imagine"
 
-#: app/mainwindow.cpp:463
+#: app/mainwindow.cpp:464
 #, kde-format
 msgctxt "@action"
 msgid "Start Page"
 msgstr "Pagina de pornire"
 
-#: app/mainwindow.cpp:464
+#: app/mainwindow.cpp:465
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open the start page"
 msgstr "Deschide pagina de pornire"
 
-#: app/mainwindow.cpp:471
+#: app/mainwindow.cpp:472
 #, kde-format
 msgctxt "@action"
 msgid "Sidebar"
 msgstr "Bara laterală"
 
-#: app/mainwindow.cpp:476
+#: app/mainwindow.cpp:477
 #, kde-format
 msgctxt "@action opens crop, rename, etc."
 msgid "Show Editing Tools"
 msgstr "Arată unelte de redactare"
 
-#: app/mainwindow.cpp:506
+#: app/mainwindow.cpp:507
 #, kde-format
 msgctxt "@action Share images"
 msgid "Share"
 msgstr "Partajează"
 
-#: app/mainwindow.cpp:514
+#: app/mainwindow.cpp:515
 #, kde-format
 msgid "Error while sharing: %1"
 msgstr "Eroare la partajare: %1"
 
-#: app/mainwindow.cpp:521
+#: app/mainwindow.cpp:522
 #, kde-format
 msgid ""
 "The shared image link (<a href=\"%1\">%1</a>) has been copied to the "
@@ -1218,87 +1218,87 @@ msgstr ""
 "Legătura spre imaginea partajată (<a href=\"%1\">%1</a>) a fost copiată în "
 "clipboard."
 
-#: app/mainwindow.cpp:571
+#: app/mainwindow.cpp:572
 #, kde-format
 msgctxt "@title:menu submenu for actions that open configuration dialogs"
 msgid "Configure"
 msgstr "Configurează"
 
-#: app/mainwindow.cpp:586
+#: app/mainwindow.cpp:587
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "Edit"
 msgstr "Editare"
 
-#: app/mainwindow.cpp:591
+#: app/mainwindow.cpp:592
 #, kde-format
 msgid "Redo"
 msgstr "Refă"
 
-#: app/mainwindow.cpp:599
+#: app/mainwindow.cpp:600
 #, kde-format
 msgid "Undo"
 msgstr "Desfă"
 
-#: app/mainwindow.cpp:626
+#: app/mainwindow.cpp:627
 #, kde-format
 msgid "Folders"
 msgstr "Dosare"
 
-#: app/mainwindow.cpp:632
+#: app/mainwindow.cpp:633
 #, kde-format
 msgid "Information"
 msgstr "Informații"
 
-#: app/mainwindow.cpp:646
+#: app/mainwindow.cpp:647
 #, kde-format
 msgid "Operations"
 msgstr "Operații"
 
-#: app/mainwindow.cpp:1320
+#: app/mainwindow.cpp:1321
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Ascunde bara laterală"
 
-#: app/mainwindow.cpp:1320
+#: app/mainwindow.cpp:1321
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Arată bara laterală"
 
-#: app/mainwindow.cpp:1627
+#: app/mainwindow.cpp:1628
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Deschide imagine"
 
-#: app/mainwindow.cpp:1687
+#: app/mainwindow.cpp:1688
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "Întrerupe diaporama"
 
-#: app/mainwindow.cpp:1690
+#: app/mainwindow.cpp:1691
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "Reia diaporama"
 
-#: app/mainwindow.cpp:1690
+#: app/mainwindow.cpp:1691
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Pornește diaporama"
 
-#: app/mainwindow.cpp:1703
+#: app/mainwindow.cpp:1704
 #, kde-format
 msgid "Save All Changes"
 msgstr "Salvează toate modificările"
 
-#: app/mainwindow.cpp:1704
+#: app/mainwindow.cpp:1705
 #, kde-format
 msgid "Discard Changes"
 msgstr "Aruncă modificările"
 
-#: app/mainwindow.cpp:1706
+#: app/mainwindow.cpp:1707
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
@@ -1306,49 +1306,49 @@ msgstr[0] "O imagine a fost modificată."
 msgstr[1] "%1 imagini au fost modificate."
 msgstr[2] "%1 de imagini au fost modificate."
 
-#: app/mainwindow.cpp:1706
+#: app/mainwindow.cpp:1707
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Dacă ieșiți acum din program, modificările voastre vor fi pierdute."
 
-#: app/mainwindow.cpp:1749
+#: app/mainwindow.cpp:1762
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr ""
 "Aceasta va ascunde complet bara meniului. O puteți arăta din nou tastând %1."
 
-#: app/mainwindow.cpp:1752
+#: app/mainwindow.cpp:1765
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Ascunde bara meniului"
 
-#: app/mainwindow.cpp:1970
+#: app/mainwindow.cpp:1983
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "Ați atins primul document. Ce doriți să faceți?"
 
-#: app/mainwindow.cpp:1971 app/mainwindow.cpp:1985
+#: app/mainwindow.cpp:1984 app/mainwindow.cpp:1998
 #, kde-format
 msgid "Stay There"
 msgstr "Rămâi aici"
 
-#: app/mainwindow.cpp:1972
+#: app/mainwindow.cpp:1985
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "Mergi la ultimul document"
 
-#: app/mainwindow.cpp:1973 app/mainwindow.cpp:1987
+#: app/mainwindow.cpp:1986 app/mainwindow.cpp:2000
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "Mergi înapoi la lista documentelor"
 
-#: app/mainwindow.cpp:1984
+#: app/mainwindow.cpp:1997
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "Ați atins ultimul document. Ce doriți să faceți?"
 
-#: app/mainwindow.cpp:1986
+#: app/mainwindow.cpp:1999
 #, kde-format
 msgid "Go to the First Document"
 msgstr "Mergi la primul document"
@@ -1709,7 +1709,7 @@ msgstr "Denumirea originală"
 msgid "Original filename, in lower case"
 msgstr "Denumirea originală, cu minuscule"
 
-#: importer/importdialog.cpp:97
+#: importer/importdialog.cpp:99
 #, kde-format
 msgid "One document has been imported."
 msgid_plural "%1 documents have been imported."
@@ -1717,7 +1717,7 @@ msgstr[0] "A fost importat un document."
 msgstr[1] "Au fost importate %1 documente."
 msgstr[2] "Au fost importate %1 de documente."
 
-#: importer/importdialog.cpp:99
+#: importer/importdialog.cpp:101
 #, kde-format
 msgid "One document has been skipped because it had already been imported."
 msgid_plural ""
@@ -1726,7 +1726,7 @@ msgstr[0] "Un document a fost sărit deoarece fusese importat deja."
 msgstr[1] "%1 documente au fost sărite deoarece fuseseră importate deja."
 msgstr[2] "%1 de documente au fost sărite deoarece fuseseră importate deja."
 
-#: importer/importdialog.cpp:107
+#: importer/importdialog.cpp:109
 #, kde-format
 msgid ""
 "One of them has been renamed because another document with the same name had "
@@ -1744,7 +1744,7 @@ msgstr[2] ""
 "%1 dintre ele au fost redenumite deoarece alte documente cu aceleași "
 "denumiri fuseseră importate deja."
 
-#: importer/importdialog.cpp:115
+#: importer/importdialog.cpp:117
 #, kde-format
 msgid "Delete the imported document from the device?"
 msgid_plural "Delete the %1 imported documents from the device?"
@@ -1752,7 +1752,7 @@ msgstr[0] "Ștergeți de pe dispozitiv documentul importat?"
 msgstr[1] "Ștergeți de pe dispozitiv cele %1 documente importate?"
 msgstr[2] "Ștergeți de pe dispozitiv cele %1 de documente importate?"
 
-#: importer/importdialog.cpp:117
+#: importer/importdialog.cpp:119
 #, kde-format
 msgid "Delete the skipped document from the device?"
 msgid_plural "Delete the %1 skipped documents from the device?"
@@ -1760,7 +1760,7 @@ msgstr[0] "Ștergeți de pe dispozitiv documentul sărit?"
 msgstr[1] "Ștergeți de pe dispozitiv cele %1 documente sărite?"
 msgstr[2] "Ștergeți de pe dispozitiv cele %1 de documente sărite?"
 
-#: importer/importdialog.cpp:120
+#: importer/importdialog.cpp:122
 #, kde-format
 msgctxt "Singular sentence is actually never used."
 msgid "Delete the imported or skipped document from the device?"
@@ -1769,18 +1769,18 @@ msgstr[0] "Ștergeți de pe dispozitiv documentul importat sau sărit?"
 msgstr[1] "Ștergeți de pe dispozitiv cele %1 documente importate și sărite?"
 msgstr[2] "Ștergeți de pe dispozitiv cele %1 de documente importate și sărite?"
 
-#: importer/importdialog.cpp:127
+#: importer/importdialog.cpp:133
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Finished"
 msgstr "Importare încheiată"
 
-#: importer/importdialog.cpp:128
+#: importer/importdialog.cpp:134
 #, kde-format
 msgid "Keep"
 msgstr "Păstrează"
 
-#: importer/importdialog.cpp:142
+#: importer/importdialog.cpp:156
 #, kde-format
 msgid ""
 "Failed to delete the document:\n"
@@ -1798,32 +1798,32 @@ msgstr[2] ""
 "Ștergerea documentelor a eșuat:\n"
 "%2"
 
-#: importer/importdialog.cpp:144
+#: importer/importdialog.cpp:158
 #, kde-format
 msgid "Retry"
 msgstr "Reîncearcă"
 
-#: importer/importdialog.cpp:145
+#: importer/importdialog.cpp:159
 #, kde-format
 msgid "Ignore"
 msgstr "Ignoră"
 
-#: importer/importdialog.cpp:173
+#: importer/importdialog.cpp:191
 #, kde-format
 msgid "What do you want to do now?"
 msgstr "Ce doriți să faceți acum?"
 
-#: importer/importdialog.cpp:175
+#: importer/importdialog.cpp:193
 #, kde-format
 msgid "View Imported Documents with Gwenview"
 msgstr "Vizualizează documentele importate cu Gwenview"
 
-#: importer/importdialog.cpp:176
+#: importer/importdialog.cpp:194
 #, kde-format
 msgid "Import more Documents"
 msgstr "Importă mai multe documente"
 
-#: importer/importdialog.cpp:177
+#: importer/importdialog.cpp:195
 #, kde-format
 msgid "Quit"
 msgstr "Termină"

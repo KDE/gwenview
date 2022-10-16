@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-15 00:44+0000\n"
+"POT-Creation-Date: 2022-10-16 00:44+0000\n"
 "PO-Revision-Date: 2021-12-10 00:17+0200\n"
 "Last-Translator: Moo\n"
 "Language-Team: lt <kde-i18n-lt@kde.org>\n"
@@ -134,7 +134,7 @@ msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
 msgid "Sidebar Alignment Spacer"
 msgstr "Šoninės juosto lygiavimo skirtukas"
 
-#: app/browsemainpage.cpp:146 app/mainwindow.cpp:371 app/viewmainpage.cpp:425
+#: app/browsemainpage.cpp:146 app/mainwindow.cpp:372 app/viewmainpage.cpp:425
 #: lib/documentview/documentviewcontroller.cpp:55
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
@@ -220,7 +220,7 @@ msgid "Rating"
 msgstr "Įvertinimas"
 
 #: app/browsemainpage.cpp:195 app/fileopscontextmanageritem.cpp:142
-#: app/mainwindow.cpp:370
+#: app/mainwindow.cpp:371
 #, kde-format
 msgctxt "@title actions category"
 msgid "File"
@@ -1095,138 +1095,138 @@ msgstr "Paleisti skaidrių rodymo veiksenoje"
 msgid "A starting file or folders"
 msgstr "Failas ar aplankas, atveriamas paleidus programą"
 
-#: app/mainwindow.cpp:380
+#: app/mainwindow.cpp:381
 #, kde-format
 msgctxt "@action Open Recent menu"
 msgid "Clear List"
 msgstr "Išvalyti sąrašą"
 
-#: app/mainwindow.cpp:388
+#: app/mainwindow.cpp:389
 #, kde-format
 msgctxt "@action reload the currently viewed image"
 msgid "Reload"
 msgstr "Įkelti iš naujo"
 
-#: app/mainwindow.cpp:393
+#: app/mainwindow.cpp:394
 #, kde-format
 msgctxt "@action:inmenu Navigation Bar"
 msgid "Replace Location"
 msgstr "Pakeisti vietą"
 
-#: app/mainwindow.cpp:398
+#: app/mainwindow.cpp:399
 #, kde-format
 msgctxt "@action:intoolbar Switch to file list"
 msgid "Browse"
 msgstr "Naršyti"
 
-#: app/mainwindow.cpp:399
+#: app/mainwindow.cpp:400
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Browse folders for images"
 msgstr "Naršyti aplankuose per paveikslus"
 
-#: app/mainwindow.cpp:406
+#: app/mainwindow.cpp:407
 #, kde-format
 msgctxt "@action:intoolbar Switch to image view"
 msgid "View"
 msgstr "Rodinys"
 
-#: app/mainwindow.cpp:407
+#: app/mainwindow.cpp:408
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "View selected images"
 msgstr "Rodyti pažymėtus paveikslus"
 
-#: app/mainwindow.cpp:426
+#: app/mainwindow.cpp:427
 #, kde-format
 msgctxt "@action"
 msgid "Exit Full Screen"
 msgstr "Išeiti iš viso ekrano"
 
-#: app/mainwindow.cpp:431
+#: app/mainwindow.cpp:432
 #, kde-format
 msgctxt "@action Go to previous image"
 msgid "Previous"
 msgstr "Ankstesnis"
 
-#: app/mainwindow.cpp:432
+#: app/mainwindow.cpp:433
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to previous image"
 msgstr "Rodyti ankstesnį paveikslą"
 
-#: app/mainwindow.cpp:438
+#: app/mainwindow.cpp:439
 #, kde-format
 msgctxt "@action Go to next image"
 msgid "Next"
 msgstr "Kitas"
 
-#: app/mainwindow.cpp:439
+#: app/mainwindow.cpp:440
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to next image"
 msgstr "Rodyti kitą paveikslą"
 
-#: app/mainwindow.cpp:445
+#: app/mainwindow.cpp:446
 #, kde-format
 msgctxt "@action Go to first image"
 msgid "First"
 msgstr "Pirmas"
 
-#: app/mainwindow.cpp:446
+#: app/mainwindow.cpp:447
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to first image"
 msgstr "Pereiti į pirmą paveikslą"
 
-#: app/mainwindow.cpp:452
+#: app/mainwindow.cpp:453
 #, kde-format
 msgctxt "@action Go to last image"
 msgid "Last"
 msgstr "Paskutinis"
 
-#: app/mainwindow.cpp:453
+#: app/mainwindow.cpp:454
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to last image"
 msgstr "Pereiti į paskutinį paveikslą"
 
-#: app/mainwindow.cpp:463
+#: app/mainwindow.cpp:464
 #, kde-format
 msgctxt "@action"
 msgid "Start Page"
 msgstr "Pradžios puslapis"
 
-#: app/mainwindow.cpp:464
+#: app/mainwindow.cpp:465
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open the start page"
 msgstr "Atverti pradžios puslapį"
 
-#: app/mainwindow.cpp:471
+#: app/mainwindow.cpp:472
 #, kde-format
 msgctxt "@action"
 msgid "Sidebar"
 msgstr "Šoninė juosta"
 
-#: app/mainwindow.cpp:476
+#: app/mainwindow.cpp:477
 #, kde-format
 msgctxt "@action opens crop, rename, etc."
 msgid "Show Editing Tools"
 msgstr "Rodyti taisymo įrankius"
 
-#: app/mainwindow.cpp:506
+#: app/mainwindow.cpp:507
 #, kde-format
 msgctxt "@action Share images"
 msgid "Share"
 msgstr "Bendrinti"
 
-#: app/mainwindow.cpp:514
+#: app/mainwindow.cpp:515
 #, kde-format
 msgid "Error while sharing: %1"
 msgstr "Klaida bendrinant: %1"
 
-#: app/mainwindow.cpp:521
+#: app/mainwindow.cpp:522
 #, kde-format
 msgid ""
 "The shared image link (<a href=\"%1\">%1</a>) has been copied to the "
@@ -1234,87 +1234,87 @@ msgid ""
 msgstr ""
 "Bendrinamo paveikslo nuoroda (<a href=\"%1\">%1</a>) nukopijuota į iškarpinę."
 
-#: app/mainwindow.cpp:571
+#: app/mainwindow.cpp:572
 #, kde-format
 msgctxt "@title:menu submenu for actions that open configuration dialogs"
 msgid "Configure"
 msgstr "Konfigūruoti"
 
-#: app/mainwindow.cpp:586
+#: app/mainwindow.cpp:587
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "Edit"
 msgstr "Taisa"
 
-#: app/mainwindow.cpp:591
+#: app/mainwindow.cpp:592
 #, kde-format
 msgid "Redo"
 msgstr "Grąžinti"
 
-#: app/mainwindow.cpp:599
+#: app/mainwindow.cpp:600
 #, kde-format
 msgid "Undo"
 msgstr "Atšaukti"
 
-#: app/mainwindow.cpp:626
+#: app/mainwindow.cpp:627
 #, kde-format
 msgid "Folders"
 msgstr "Aplankai"
 
-#: app/mainwindow.cpp:632
+#: app/mainwindow.cpp:633
 #, kde-format
 msgid "Information"
 msgstr "Informacija"
 
-#: app/mainwindow.cpp:646
+#: app/mainwindow.cpp:647
 #, kde-format
 msgid "Operations"
 msgstr "Operacijos"
 
-#: app/mainwindow.cpp:1320
+#: app/mainwindow.cpp:1321
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Slėpti šoninę juostą"
 
-#: app/mainwindow.cpp:1320
+#: app/mainwindow.cpp:1321
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Rodyti šoninę juostą"
 
-#: app/mainwindow.cpp:1627
+#: app/mainwindow.cpp:1628
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Atverti paveikslą"
 
-#: app/mainwindow.cpp:1687
+#: app/mainwindow.cpp:1688
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "Pristabdyti skaidrių rodymą"
 
-#: app/mainwindow.cpp:1690
+#: app/mainwindow.cpp:1691
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "Pratęsti skaidrių rodymą"
 
-#: app/mainwindow.cpp:1690
+#: app/mainwindow.cpp:1691
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Pradėti skaidrių rodymą"
 
-#: app/mainwindow.cpp:1703
+#: app/mainwindow.cpp:1704
 #, kde-format
 msgid "Save All Changes"
 msgstr "Įrašyti visus pakeitimus"
 
-#: app/mainwindow.cpp:1704
+#: app/mainwindow.cpp:1705
 #, kde-format
 msgid "Discard Changes"
 msgstr "Atmesti pakeitimus"
 
-#: app/mainwindow.cpp:1706
+#: app/mainwindow.cpp:1707
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
@@ -1323,48 +1323,48 @@ msgstr[1] "Pakeisti %1 paveikslai."
 msgstr[2] "Pakeista %1 paveikslų."
 msgstr[3] "Pakeistas %1 paveikslas."
 
-#: app/mainwindow.cpp:1706
+#: app/mainwindow.cpp:1707
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Jei išjungsite programą dabar, jūsų atlikti pakeitimai bus prarasti."
 
-#: app/mainwindow.cpp:1749
+#: app/mainwindow.cpp:1762
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr "Tai visiškai paslėps meniu juostą. Galite vėl ją rodyti, paspaudę %1."
 
-#: app/mainwindow.cpp:1752
+#: app/mainwindow.cpp:1765
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Slėpti meniu juostą"
 
-#: app/mainwindow.cpp:1970
+#: app/mainwindow.cpp:1983
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "Pasiekėte pirmąjį dokumentą. Ką norėtumėte daryti?"
 
-#: app/mainwindow.cpp:1971 app/mainwindow.cpp:1985
+#: app/mainwindow.cpp:1984 app/mainwindow.cpp:1998
 #, kde-format
 msgid "Stay There"
 msgstr "Pasilikti ten"
 
-#: app/mainwindow.cpp:1972
+#: app/mainwindow.cpp:1985
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "Pereiti į paskutinį dokumentą"
 
-#: app/mainwindow.cpp:1973 app/mainwindow.cpp:1987
+#: app/mainwindow.cpp:1986 app/mainwindow.cpp:2000
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "Grįžti į dokumentų sąrašą"
 
-#: app/mainwindow.cpp:1984
+#: app/mainwindow.cpp:1997
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "Pasiekėte paskutinįjį dokumentą. Ką norėtumėte daryti?"
 
-#: app/mainwindow.cpp:1986
+#: app/mainwindow.cpp:1999
 #, kde-format
 msgid "Go to the First Document"
 msgstr "Pereiti į pirmą dokumentą"
@@ -1723,7 +1723,7 @@ msgstr "Pradinis failo pavadinimas"
 msgid "Original filename, in lower case"
 msgstr "Pradinis failo pavadinimas, mažosiomis"
 
-#: importer/importdialog.cpp:97
+#: importer/importdialog.cpp:99
 #, kde-format
 msgid "One document has been imported."
 msgid_plural "%1 documents have been imported."
@@ -1732,7 +1732,7 @@ msgstr[1] "Importuoti %1 dokumentai."
 msgstr[2] "Importuota %1 dokumentų."
 msgstr[3] "Importuotas %1 dokumentas."
 
-#: importer/importdialog.cpp:99
+#: importer/importdialog.cpp:101
 #, kde-format
 msgid "One document has been skipped because it had already been imported."
 msgid_plural ""
@@ -1742,7 +1742,7 @@ msgstr[1] "%1 dokumentai praleisti, nes jie jau buvo importuoti."
 msgstr[2] "%1 dokumentų praleista, nes jie jau buvo importuoti."
 msgstr[3] "%1 dokumentas praleistas, nes jie jau buvo importuoti."
 
-#: importer/importdialog.cpp:107
+#: importer/importdialog.cpp:109
 #, kde-format
 msgid ""
 "One of them has been renamed because another document with the same name had "
@@ -1763,7 +1763,7 @@ msgstr[3] ""
 "%1 iš jų buvo pervadintas, nes jau buvo importuoti kiti dokumentai tokiais "
 "pačiais pavadinimais."
 
-#: importer/importdialog.cpp:115
+#: importer/importdialog.cpp:117
 #, kde-format
 msgid "Delete the imported document from the device?"
 msgid_plural "Delete the %1 imported documents from the device?"
@@ -1772,7 +1772,7 @@ msgstr[1] "Ištrinti %1 importuotus dokumentus iš įrenginio?"
 msgstr[2] "Ištrinti %1 importuotų dokumentų iš įrenginio?"
 msgstr[3] "Ištrinti %1 importuotą dokumentą iš įrenginio?"
 
-#: importer/importdialog.cpp:117
+#: importer/importdialog.cpp:119
 #, kde-format
 msgid "Delete the skipped document from the device?"
 msgid_plural "Delete the %1 skipped documents from the device?"
@@ -1781,7 +1781,7 @@ msgstr[1] "Ištrinti %1 praleistus dokumentus iš įrenginio?"
 msgstr[2] "Ištrinti %1 praleistų dokumentų iš įrenginio?"
 msgstr[3] "Ištrinti %1 praleistą dokumentą iš įrenginio?"
 
-#: importer/importdialog.cpp:120
+#: importer/importdialog.cpp:122
 #, kde-format
 msgctxt "Singular sentence is actually never used."
 msgid "Delete the imported or skipped document from the device?"
@@ -1791,18 +1791,18 @@ msgstr[1] "Ištrinti %1 importuotus bei praleistus dokumentus iš įrenginio?"
 msgstr[2] "Ištrinti %1 importuotų bei praleistus dokumentus iš įrenginio?"
 msgstr[3] "Ištrinti %1 importuotą bei praleistus dokumentus iš įrenginio?"
 
-#: importer/importdialog.cpp:127
+#: importer/importdialog.cpp:133
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Finished"
 msgstr "Importavimas baigtas"
 
-#: importer/importdialog.cpp:128
+#: importer/importdialog.cpp:134
 #, kde-format
 msgid "Keep"
 msgstr "Palikti"
 
-#: importer/importdialog.cpp:142
+#: importer/importdialog.cpp:156
 #, kde-format
 msgid ""
 "Failed to delete the document:\n"
@@ -1823,32 +1823,32 @@ msgstr[3] ""
 "Nepavyko ištrinti dokumentų:\n"
 "%2"
 
-#: importer/importdialog.cpp:144
+#: importer/importdialog.cpp:158
 #, kde-format
 msgid "Retry"
 msgstr "Bandyti dar kartą"
 
-#: importer/importdialog.cpp:145
+#: importer/importdialog.cpp:159
 #, kde-format
 msgid "Ignore"
 msgstr "Nepaisyti"
 
-#: importer/importdialog.cpp:173
+#: importer/importdialog.cpp:191
 #, kde-format
 msgid "What do you want to do now?"
 msgstr "Ką dabar norėtumėte daryti?"
 
-#: importer/importdialog.cpp:175
+#: importer/importdialog.cpp:193
 #, kde-format
 msgid "View Imported Documents with Gwenview"
 msgstr "Rodyti importuotus dokumentus naudojant Gwenview"
 
-#: importer/importdialog.cpp:176
+#: importer/importdialog.cpp:194
 #, kde-format
 msgid "Import more Documents"
 msgstr "Importuoti daugiau dokumentų"
 
-#: importer/importdialog.cpp:177
+#: importer/importdialog.cpp:195
 #, kde-format
 msgid "Quit"
 msgstr "Baigti"
