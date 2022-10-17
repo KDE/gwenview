@@ -546,7 +546,7 @@ msgstr "Informació de la imatge"
 #: app/fullscreenconfigwidget.ui:101
 #, kde-format
 msgid "Select Image Information to Display..."
-msgstr "Seleccioneu la informació que es mostrarà de la imatge..."
+msgstr "Seleccioneu la informació que s'haja de mostrar de la imatge..."
 
 #. i18n: ectx: property (title), widget (QGroupBox, mThumbnailGroupBox)
 #: app/fullscreenconfigwidget.ui:111
@@ -2027,7 +2027,7 @@ msgstr ""
 #: importer/thumbnailpage.ui:173
 #, kde-format
 msgid "Select the documents to import"
-msgstr "Seleccioneu els documents que s'importarà"
+msgstr "Seleccioneu els documents que s'han d'importar"
 
 #. i18n: ectx: property (text), widget (QPushButton, mConfigureButton)
 #: importer/thumbnailpage.ui:185
