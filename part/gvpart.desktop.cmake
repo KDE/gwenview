@@ -32,6 +32,7 @@ Name[id]=Penampil Citra Gwenview
 Name[is]=Gwenview myndskoðari
 Name[it]=Visore di immagini Gwenview
 Name[ja]=Gwenview 画像ビューア
+Name[ka]=Gwenview - სურათების დამთვალიერებელი
 Name[kk]=Gwenview кескінді қарау құралы
 Name[km]=កម្មវិធី​មើល​រូបភាព​របស់ Gwenview
 Name[ko]=Gwenview 그림 뷰어
