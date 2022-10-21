@@ -30,6 +30,9 @@
 
         <entry name="SideBarSplitterSizes" type="IntList">
         </entry>
+
+        <entry name="InformationSplitterSizes" type="IntList">
+        </entry>
     </group>
 
     <group name="General">
