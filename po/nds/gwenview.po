@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-16 00:44+0000\n"
+"POT-Creation-Date: 2022-10-22 00:43+0000\n"
 "PO-Revision-Date: 2014-08-11 13:36+0200\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -1275,107 +1275,107 @@ msgstr "Ornern"
 msgid "Information"
 msgstr "Informatschonen"
 
-#: app/mainwindow.cpp:647
+#: app/mainwindow.cpp:672
 #, kde-format
 msgid "Operations"
 msgstr "Akschonen"
 
-#: app/mainwindow.cpp:1321
+#: app/mainwindow.cpp:1370
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Sietpaneel versteken"
 
-#: app/mainwindow.cpp:1321
+#: app/mainwindow.cpp:1370
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Sietpaneel wiesen"
 
-#: app/mainwindow.cpp:1628
+#: app/mainwindow.cpp:1677
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Bild opmaken"
 
-#: app/mainwindow.cpp:1688
+#: app/mainwindow.cpp:1737
 #, fuzzy, kde-format
 #| msgid "Slideshow"
 msgid "Pause Slideshow"
 msgstr "Diaschau"
 
-#: app/mainwindow.cpp:1691
+#: app/mainwindow.cpp:1740
 #, fuzzy, kde-format
 #| msgid "Slideshow"
 msgid "Resume Slideshow"
 msgstr "Diaschau"
 
-#: app/mainwindow.cpp:1691
+#: app/mainwindow.cpp:1740
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Diaschau anfangen"
 
-#: app/mainwindow.cpp:1704
+#: app/mainwindow.cpp:1753
 #, kde-format
 msgid "Save All Changes"
 msgstr "All Ännern sekern"
 
-#: app/mainwindow.cpp:1705
+#: app/mainwindow.cpp:1754
 #, kde-format
 msgid "Discard Changes"
 msgstr "Ännern wegsmieten"
 
-#: app/mainwindow.cpp:1707
+#: app/mainwindow.cpp:1756
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "Een Bild wöör ännert."
 msgstr[1] "%1 Biller wöörn ännert."
 
-#: app/mainwindow.cpp:1707
+#: app/mainwindow.cpp:1756
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Wenn Du nu ophöllst, kaamt Di Dien Ännern weg."
 
-#: app/mainwindow.cpp:1762
+#: app/mainwindow.cpp:1811
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr ""
 
-#: app/mainwindow.cpp:1765
+#: app/mainwindow.cpp:1814
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Hide sidebar"
 msgid "Hide menu bar"
 msgstr "Sietpaneel versteken"
 
-#: app/mainwindow.cpp:1983
+#: app/mainwindow.cpp:2034
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "Du büst bi't eerste Dokment ankamen. Wat wullt Du nu doon?"
 
-#: app/mainwindow.cpp:1984 app/mainwindow.cpp:1998
+#: app/mainwindow.cpp:2035 app/mainwindow.cpp:2049
 #, kde-format
 msgid "Stay There"
 msgstr "Dor blieven"
 
-#: app/mainwindow.cpp:1985
+#: app/mainwindow.cpp:2036
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "Na't leste Dokment gahn"
 
-#: app/mainwindow.cpp:1986 app/mainwindow.cpp:2000
+#: app/mainwindow.cpp:2037 app/mainwindow.cpp:2051
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "Torüch na de Dokmentenlist gahn"
 
-#: app/mainwindow.cpp:1997
+#: app/mainwindow.cpp:2048
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "Du büst bi't leste Dokment ankamen. Wat wullt Du nu doon?"
 
-#: app/mainwindow.cpp:1999
+#: app/mainwindow.cpp:2050
 #, kde-format
 msgid "Go to the First Document"
 msgstr "Na't eerste Dokment gahn"
@@ -2367,7 +2367,7 @@ msgid "%1"
 msgstr "%1"
 
 #. i18n: ectx: whatsthis, entry (PercentageOfMemoryUsageWarning), group (General)
-#: lib/gwenviewconfig.kcfg:57
+#: lib/gwenviewconfig.kcfg:60
 #, kde-format
 msgid ""
 "The percentage of memory used by Gwenview before it\n"
@@ -2377,7 +2377,7 @@ msgstr ""
 "            wohrschoen un dat Sekern vun Ännern vörslaan deit."
 
 #. i18n: ectx: whatsthis, entry (BlackListedExtensions), group (General)
-#: lib/gwenviewconfig.kcfg:64
+#: lib/gwenviewconfig.kcfg:67
 #, kde-format
 msgid ""
 "A list of filename extensions Gwenview should not try to\n"
@@ -2389,7 +2389,7 @@ msgstr ""
 "            KSaveFile för't Sekern vun Temporeerdateien."
 
 #. i18n: ectx: whatsthis, entry (ZoomMode), group (ImageView)
-#: lib/gwenviewconfig.kcfg:205
+#: lib/gwenviewconfig.kcfg:208
 #, kde-format
 msgid ""
 "Defines what happens when going to image B after\n"
@@ -2423,7 +2423,7 @@ msgstr ""
 "            Parameters wiest)."
 
 #. i18n: ectx: whatsthis, entry (RenderingIntent), group (ImageView)
-#: lib/gwenviewconfig.kcfg:219
+#: lib/gwenviewconfig.kcfg:222
 #, kde-format
 msgid ""
 "Defines how colors are rendered when your display\n"
@@ -2436,55 +2436,55 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (random), group (slide show)
-#: lib/gwenviewconfig.kcfg:322
+#: lib/gwenviewconfig.kcfg:325
 #, kde-format
 msgid "Display slide show images in random order"
 msgstr "Diaschau-Biller in tofällig Reeg wiesen"
 
 #. i18n: ectx: label, entry (fullscreen), group (slide show)
-#: lib/gwenviewconfig.kcfg:326
+#: lib/gwenviewconfig.kcfg:329
 #, kde-format
 msgid "Show slideshow in fullscreen mode"
 msgstr "Diaschau in Heelschirmbedrief wiesen"
 
 #. i18n: ectx: label, entry (loop), group (slide show)
-#: lib/gwenviewconfig.kcfg:330
+#: lib/gwenviewconfig.kcfg:333
 #, kde-format
 msgid "Loop on images"
 msgstr "Billerslööp"
 
 #. i18n: ectx: label, entry (stopAtEnd), group (slide show)
-#: lib/gwenviewconfig.kcfg:334
+#: lib/gwenviewconfig.kcfg:337
 #, kde-format
 msgid "Stop at last image of folder"
 msgstr "Bi't leste Bild vun Orner anhollen"
 
 #. i18n: ectx: label, entry (interval), group (slide show)
-#: lib/gwenviewconfig.kcfg:338
+#: lib/gwenviewconfig.kcfg:341
 #, kde-format
 msgid "Interval between images (in seconds)"
 msgstr "Tiet twischen de Biller (in Sekunnen)"
 
 #. i18n: ectx: label, entry (CropPreserveAspectRatio), group (Crop)
-#: lib/gwenviewconfig.kcfg:354
+#: lib/gwenviewconfig.kcfg:357
 #, kde-format
 msgid "Restrict crop to image ratio when Advanced Settings disabled"
 msgstr ""
 
 #. i18n: ectx: label, entry (CropRatioIndex), group (Crop)
-#: lib/gwenviewconfig.kcfg:358
+#: lib/gwenviewconfig.kcfg:361
 #, kde-format
 msgid "Index representing selected ratio in the Advanced settings combobox"
 msgstr ""
 
 #. i18n: ectx: label, entry (CropRatioWidth), group (Crop)
-#: lib/gwenviewconfig.kcfg:362
+#: lib/gwenviewconfig.kcfg:365
 #, kde-format
 msgid "Last used crop ratio width when Advanced Settings enabled"
 msgstr ""
 
 #. i18n: ectx: label, entry (CropRatioHeight), group (Crop)
-#: lib/gwenviewconfig.kcfg:366
+#: lib/gwenviewconfig.kcfg:369
 #, kde-format
 msgid "Last used crop ratio height when Advanced Settings enabled"
 msgstr ""
