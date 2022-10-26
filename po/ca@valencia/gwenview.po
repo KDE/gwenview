@@ -1361,7 +1361,7 @@ msgstr "Canvia el nom"
 #: app/renamedialog.cpp:61
 #, kde-kuit-format
 msgid "Rename <filename>%1</filename> to:"
-msgstr "Canvia el nom <filename>%1</filename> a:"
+msgstr "Canvia el nom de <filename>%1</filename> a:"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, RenameDialog)
 #: app/renamedialog.ui:26
