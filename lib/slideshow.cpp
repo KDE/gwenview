@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // STL
 #include <algorithm>
 #include <ctime>
+#include <random>
 
 // Qt
 #include <QAction>
@@ -50,27 +51,6 @@ enum State {
     Paused,
     Started,
     WaitForEndOfUrl,
-};
-
-/**
- * This class generate random numbers which are not the same between two runs
- * of Gwenview. See bug #132334
- */
-class RandomNumberGenerator
-{
-public:
-    RandomNumberGenerator()
-        : mSeed(time(nullptr))
-    {
-    }
-
-    int operator()(int n)
-    {
-        return rand_r(&mSeed) % n;
-    }
-
-private:
-    unsigned int mSeed;
 };
 
 struct SlideShowPrivate {
@@ -123,8 +103,9 @@ struct SlideShowPrivate {
     void initShuffledUrls()
     {
         mShuffledUrls = mUrls;
-        RandomNumberGenerator generator;
-        std::random_shuffle(mShuffledUrls.begin(), mShuffledUrls.end(), generator);
+        std::random_device rd;
+        std::mt19937 generator(rd());
+        std::shuffle(mShuffledUrls.begin(), mShuffledUrls.end(), generator);
         // Ensure the first url is different from the previous last one, so that
         // last url does not stay visible twice longer than usual
         if (mLastShuffledUrl == mShuffledUrls.first() && mShuffledUrls.count() > 1) {
