@@ -203,7 +203,7 @@ struct SaveBarPrivate {
         int topRowHeight = q->window()->isFullScreen() ? 0 : mTopRowWidget->height();
         int bottomRowHeight = mTooManyChangesFrame->isVisibleTo(mSaveBarWidget) ? mTooManyChangesFrame->sizeHint().height() : 0;
 
-        int height = 2 * layout->margin() + topRowHeight + bottomRowHeight;
+        int height = 2 * layout->contentsMargins().top() + layout->contentsMargins().bottom() + topRowHeight + bottomRowHeight;
         if (topRowHeight > 0 && bottomRowHeight > 0) {
             height += layout->spacing();
         }

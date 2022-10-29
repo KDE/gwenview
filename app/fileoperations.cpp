@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KF
 #include <KIO/CopyJob>
 #include <KIO/DeleteJob>
+#include <KIO/DeleteOrTrashJob>
 #include <KIO/Job>
 #include <KIO/JobUiDelegate>
 #include <KJobWidgets>
@@ -133,18 +134,13 @@ static void delOrTrash(KIO::JobUiDelegate::DeletionType deletionType, const QLis
 {
     Q_ASSERT(urlList.count() > 0);
 
-    KIO::JobUiDelegate uiDelegate;
-    uiDelegate.setWindow(parent);
-    if (!uiDelegate.askDeleteConfirmation(urlList, deletionType, KIO::JobUiDelegate::DefaultConfirmation)) {
-        return;
-    }
-    KIO::Job *job = nullptr;
+    KJob *job = nullptr;
     switch (deletionType) {
     case KIO::JobUiDelegate::Trash:
-        job = KIO::trash(urlList);
+        job = new KIO::DeleteOrTrashJob(urlList, KIO::AskUserActionInterface::Trash, KIO::AskUserActionInterface::DefaultConfirmation, parent);
         break;
     case KIO::JobUiDelegate::Delete:
-        job = KIO::del(urlList);
+        job = new KIO::DeleteOrTrashJob(urlList, KIO::AskUserActionInterface::Delete, KIO::AskUserActionInterface::DefaultConfirmation, parent);
         break;
     default: // e.g. EmptyTrash
         return;

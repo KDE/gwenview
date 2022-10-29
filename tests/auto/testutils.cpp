@@ -83,11 +83,9 @@ void createEmptyFile(const QString &path)
 
 void waitForDeferredDeletes()
 {
-    while (QCoreApplication::hasPendingEvents()) {
-        QCoreApplication::sendPostedEvents();
-        QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
-        QCoreApplication::processEvents();
-    }
+    QCoreApplication::sendPostedEvents();
+    QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
+    QCoreApplication::processEvents();
 }
 
 namespace TestUtils
