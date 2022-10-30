@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-22 00:43+0000\n"
+"POT-Creation-Date: 2022-10-30 00:44+0000\n"
 "PO-Revision-Date: 2022-07-11 00:46+0200\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -766,13 +766,13 @@ msgid "&Rating"
 msgstr "&Voto"
 
 #. i18n: ectx: Menu (settings)
-#: app/gwenviewui.rc:84
+#: app/gwenviewui.rc:85
 #, kde-format
 msgid "&Settings"
 msgstr "Impo&stazioni"
 
 #. i18n: ectx: ToolBar (mainToolBar)
-#: app/gwenviewui.rc:100 part/gvpart.rc:16
+#: app/gwenviewui.rc:101 part/gvpart.rc:16
 #, kde-format
 msgid "Main Toolbar"
 msgstr "Barra principale"
@@ -783,81 +783,88 @@ msgctxt "@title:window"
 msgid "Image Information"
 msgstr "Informazioni sull'immagine"
 
-#: app/imageopscontextmanageritem.cpp:88
+#: app/imageopscontextmanageritem.cpp:90
 #, kde-format
 msgctxt "@title actions category - means actions changing image"
 msgid "Edit"
 msgstr "Modifica"
 
-#: app/imageopscontextmanageritem.cpp:91
+#: app/imageopscontextmanageritem.cpp:93
 #, kde-format
 msgid "Rotate Left"
 msgstr "Ruota a sinistra"
 
-#: app/imageopscontextmanageritem.cpp:92
+#: app/imageopscontextmanageritem.cpp:94
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate image to the left"
 msgstr "Ruota immagine a sinistra"
 
-#: app/imageopscontextmanageritem.cpp:97
+#: app/imageopscontextmanageritem.cpp:99
 #, kde-format
 msgid "Rotate Right"
 msgstr "Ruota a destra"
 
-#: app/imageopscontextmanageritem.cpp:98
+#: app/imageopscontextmanageritem.cpp:100
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate image to the right"
 msgstr "Ruota immagine a destra"
 
-#: app/imageopscontextmanageritem.cpp:103
+#: app/imageopscontextmanageritem.cpp:105
 #, kde-format
 msgid "Mirror"
 msgstr "Rispecchia"
 
-#: app/imageopscontextmanageritem.cpp:107
+#: app/imageopscontextmanageritem.cpp:109
 #, kde-format
 msgid "Flip"
 msgstr "Ribalta"
 
-#: app/imageopscontextmanageritem.cpp:111 lib/resize/resizeimagedialog.cpp:71
+#: app/imageopscontextmanageritem.cpp:113 lib/resize/resizeimagedialog.cpp:71
 #, kde-format
 msgid "Resize"
 msgstr "Ridimensiona"
 
-#: app/imageopscontextmanageritem.cpp:116 lib/crop/cropimageoperation.cpp:70
+#: app/imageopscontextmanageritem.cpp:118 lib/crop/cropimageoperation.cpp:70
 #: lib/crop/cropwidget.cpp:262
 #, kde-format
 msgid "Crop"
 msgstr "Ritaglia"
 
-#: app/imageopscontextmanageritem.cpp:121
+#: app/imageopscontextmanageritem.cpp:123
+#, fuzzy, kde-format
+#| msgid "Adjust Brightness/Contrast/Gamma"
+msgctxt "@action:intoolbar"
+msgid "Adjust Brightness/Contrast/Gamma"
+msgstr "Regola luminosità, contrasto e gamma"
+
+#: app/imageopscontextmanageritem.cpp:128
 #: lib/redeyereduction/redeyereductionimageoperation.cpp:75
 #: lib/redeyereduction/redeyereductiontool.cpp:48
 #, kde-format
 msgid "Reduce Red Eye"
 msgstr "Riduci occhi rossi"
 
-#: app/imageopscontextmanageritem.cpp:126 lib/annotate/annotateoperation.cpp:51
+#: app/imageopscontextmanageritem.cpp:133 lib/annotate/annotateoperation.cpp:51
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Annotate"
 msgstr "Annota"
 
-#: app/imageopscontextmanageritem.cpp:134
+#: app/imageopscontextmanageritem.cpp:141
 #, kde-format
 msgctxt "@title:window Annotate [filename]"
 msgid "Annotate %1"
 msgstr "Annota %1"
 
-#: app/imageopscontextmanageritem.cpp:156 lib/document/documentjob.cpp:77
+#: app/imageopscontextmanageritem.cpp:164 lib/document/documentjob.cpp:77
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot edit this kind of image."
 msgstr "Gwenview non può modificare questo tipo di immagine."
 
-#: app/imageopscontextmanageritem.cpp:167
+#: app/imageopscontextmanageritem.cpp:175
 #, kde-format
 msgid "Image Operations"
 msgstr "Operazioni sulle immagini"
@@ -2061,6 +2068,29 @@ msgstr "Responsabile attuale"
 #, kde-format
 msgid "Developer"
 msgstr "Sviluppatore"
+
+#: lib/bcg/bcgimageoperation.cpp:69
+#, kde-format
+msgid "Adjust Brightness/Contrast/Gamma"
+msgstr "Regola luminosità, contrasto e gamma"
+
+#: lib/bcg/bcgwidget.cpp:51
+#, fuzzy, kde-format
+#| msgid "&Brightness:"
+msgid "Brightness:"
+msgstr "&Luminosità:"
+
+#: lib/bcg/bcgwidget.cpp:52
+#, fuzzy, kde-format
+#| msgid "&Contrast:"
+msgid "Contrast:"
+msgstr "&Contrasto:"
+
+#: lib/bcg/bcgwidget.cpp:53
+#, fuzzy, kde-format
+#| msgid "&Gamma:"
+msgid "Gamma:"
+msgstr "&Gamma:"
 
 #: lib/crop/cropwidget.cpp:191
 #, kde-format
@@ -3503,9 +3533,6 @@ msgstr "&Visualizza"
 #~ msgid "An error happened while saving."
 #~ msgstr "È avvenuto un errore durante il salvataggio."
 
-#~ msgid "Adjust Brightness/Contrast/Gamma"
-#~ msgstr "Regola luminosità, contrasto e gamma"
-
 #~ msgid "The tool name cannot be empty"
 #~ msgstr "Il nome dello strumento non può essere vuoto"
 
@@ -3872,15 +3899,6 @@ msgstr "&Visualizza"
 #~ "permanentemente</b> invece di venire cestinati.</p><p><em>Usa questa "
 #~ "opzione con cautela</em>: la maggior parte dei file system non sono in "
 #~ "grado di recuperare i file eliminati.</p></qt>"
-
-#~ msgid "&Contrast:"
-#~ msgstr "&Contrasto:"
-
-#~ msgid "&Gamma:"
-#~ msgstr "&Gamma:"
-
-#~ msgid "&Brightness:"
-#~ msgstr "&Luminosità:"
 
 #~ msgid "Configure External Tools"
 #~ msgstr "Configura gli strumenti esterni"

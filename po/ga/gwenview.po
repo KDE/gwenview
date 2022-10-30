@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdegraphics/gwenview.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-22 00:43+0000\n"
+"POT-Creation-Date: 2022-10-30 00:44+0000\n"
 "PO-Revision-Date: 2007-09-30 16:51-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -793,13 +793,13 @@ msgid "&Rating"
 msgstr "&Rátáil"
 
 #. i18n: ectx: Menu (settings)
-#: app/gwenviewui.rc:84
+#: app/gwenviewui.rc:85
 #, kde-format
 msgid "&Settings"
 msgstr "&Socruithe"
 
 #. i18n: ectx: ToolBar (mainToolBar)
-#: app/gwenviewui.rc:100 part/gvpart.rc:16
+#: app/gwenviewui.rc:101 part/gvpart.rc:16
 #, kde-format
 msgid "Main Toolbar"
 msgstr "Príomhbharra Uirlisí"
@@ -810,81 +810,87 @@ msgctxt "@title:window"
 msgid "Image Information"
 msgstr ""
 
-#: app/imageopscontextmanageritem.cpp:88
+#: app/imageopscontextmanageritem.cpp:90
 #, kde-format
 msgctxt "@title actions category - means actions changing image"
 msgid "Edit"
 msgstr "Eagar"
 
-#: app/imageopscontextmanageritem.cpp:91
+#: app/imageopscontextmanageritem.cpp:93
 #, kde-format
 msgid "Rotate Left"
 msgstr "Rothlaigh go Tuathalach"
 
-#: app/imageopscontextmanageritem.cpp:92
+#: app/imageopscontextmanageritem.cpp:94
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate image to the left"
 msgstr "Rothlaigh an íomhá go tuathalach"
 
-#: app/imageopscontextmanageritem.cpp:97
+#: app/imageopscontextmanageritem.cpp:99
 #, kde-format
 msgid "Rotate Right"
 msgstr "Rothlaigh go Deisealach"
 
-#: app/imageopscontextmanageritem.cpp:98
+#: app/imageopscontextmanageritem.cpp:100
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate image to the right"
 msgstr "Rothlaigh an íomhá go deisealach"
 
-#: app/imageopscontextmanageritem.cpp:103
+#: app/imageopscontextmanageritem.cpp:105
 #, kde-format
 msgid "Mirror"
 msgstr "Scáthán"
 
-#: app/imageopscontextmanageritem.cpp:107
+#: app/imageopscontextmanageritem.cpp:109
 #, kde-format
 msgid "Flip"
 msgstr "Smeach"
 
-#: app/imageopscontextmanageritem.cpp:111 lib/resize/resizeimagedialog.cpp:71
+#: app/imageopscontextmanageritem.cpp:113 lib/resize/resizeimagedialog.cpp:71
 #, kde-format
 msgid "Resize"
 msgstr "Athraigh an mhéid"
 
-#: app/imageopscontextmanageritem.cpp:116 lib/crop/cropimageoperation.cpp:70
+#: app/imageopscontextmanageritem.cpp:118 lib/crop/cropimageoperation.cpp:70
 #: lib/crop/cropwidget.cpp:262
 #, kde-format
 msgid "Crop"
 msgstr "Bearr"
 
-#: app/imageopscontextmanageritem.cpp:121
+#: app/imageopscontextmanageritem.cpp:123
+#, kde-format
+msgctxt "@action:intoolbar"
+msgid "Adjust Brightness/Contrast/Gamma"
+msgstr ""
+
+#: app/imageopscontextmanageritem.cpp:128
 #: lib/redeyereduction/redeyereductionimageoperation.cpp:75
 #: lib/redeyereduction/redeyereductiontool.cpp:48
 #, kde-format
 msgid "Reduce Red Eye"
 msgstr ""
 
-#: app/imageopscontextmanageritem.cpp:126 lib/annotate/annotateoperation.cpp:51
+#: app/imageopscontextmanageritem.cpp:133 lib/annotate/annotateoperation.cpp:51
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Annotate"
 msgstr ""
 
-#: app/imageopscontextmanageritem.cpp:134
+#: app/imageopscontextmanageritem.cpp:141
 #, kde-format
 msgctxt "@title:window Annotate [filename]"
 msgid "Annotate %1"
 msgstr ""
 
-#: app/imageopscontextmanageritem.cpp:156 lib/document/documentjob.cpp:77
+#: app/imageopscontextmanageritem.cpp:164 lib/document/documentjob.cpp:77
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot edit this kind of image."
 msgstr "Ní féidir le Gwenview íomhá den chineál seo a chur in eagar."
 
-#: app/imageopscontextmanageritem.cpp:167
+#: app/imageopscontextmanageritem.cpp:175
 #, kde-format
 msgid "Image Operations"
 msgstr "Oibríochtaí Íomhá"
@@ -2175,6 +2181,26 @@ msgstr "Méid faoi láthair:"
 #| msgid "Main developer"
 msgid "Developer"
 msgstr "Príomhfhorbróir"
+
+#: lib/bcg/bcgimageoperation.cpp:69
+#, kde-format
+msgid "Adjust Brightness/Contrast/Gamma"
+msgstr ""
+
+#: lib/bcg/bcgwidget.cpp:51
+#, kde-format
+msgid "Brightness:"
+msgstr ""
+
+#: lib/bcg/bcgwidget.cpp:52
+#, kde-format
+msgid "Contrast:"
+msgstr ""
+
+#: lib/bcg/bcgwidget.cpp:53
+#, kde-format
+msgid "Gamma:"
+msgstr ""
 
 #: lib/crop/cropwidget.cpp:191
 #, fuzzy, kde-format

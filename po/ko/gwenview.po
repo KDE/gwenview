@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-22 00:43+0000\n"
+"POT-Creation-Date: 2022-10-30 00:44+0000\n"
 "PO-Revision-Date: 2022-07-13 15:15+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -748,13 +748,13 @@ msgid "&Rating"
 msgstr "별점(&R)"
 
 #. i18n: ectx: Menu (settings)
-#: app/gwenviewui.rc:84
+#: app/gwenviewui.rc:85
 #, kde-format
 msgid "&Settings"
 msgstr "설정(&S)"
 
 #. i18n: ectx: ToolBar (mainToolBar)
-#: app/gwenviewui.rc:100 part/gvpart.rc:16
+#: app/gwenviewui.rc:101 part/gvpart.rc:16
 #, kde-format
 msgid "Main Toolbar"
 msgstr "주 도구 모음"
@@ -765,81 +765,87 @@ msgctxt "@title:window"
 msgid "Image Information"
 msgstr "그림 정보"
 
-#: app/imageopscontextmanageritem.cpp:88
+#: app/imageopscontextmanageritem.cpp:90
 #, kde-format
 msgctxt "@title actions category - means actions changing image"
 msgid "Edit"
 msgstr "편집"
 
-#: app/imageopscontextmanageritem.cpp:91
+#: app/imageopscontextmanageritem.cpp:93
 #, kde-format
 msgid "Rotate Left"
 msgstr "왼쪽으로 회전"
 
-#: app/imageopscontextmanageritem.cpp:92
+#: app/imageopscontextmanageritem.cpp:94
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate image to the left"
 msgstr "왼쪽으로 그림 회전"
 
-#: app/imageopscontextmanageritem.cpp:97
+#: app/imageopscontextmanageritem.cpp:99
 #, kde-format
 msgid "Rotate Right"
 msgstr "오른쪽으로 회전"
 
-#: app/imageopscontextmanageritem.cpp:98
+#: app/imageopscontextmanageritem.cpp:100
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate image to the right"
 msgstr "오른쪽으로 그림 회전"
 
-#: app/imageopscontextmanageritem.cpp:103
+#: app/imageopscontextmanageritem.cpp:105
 #, kde-format
 msgid "Mirror"
 msgstr "좌우 뒤집기"
 
-#: app/imageopscontextmanageritem.cpp:107
+#: app/imageopscontextmanageritem.cpp:109
 #, kde-format
 msgid "Flip"
 msgstr "상하 뒤집기"
 
-#: app/imageopscontextmanageritem.cpp:111 lib/resize/resizeimagedialog.cpp:71
+#: app/imageopscontextmanageritem.cpp:113 lib/resize/resizeimagedialog.cpp:71
 #, kde-format
 msgid "Resize"
 msgstr "크기 조정"
 
-#: app/imageopscontextmanageritem.cpp:116 lib/crop/cropimageoperation.cpp:70
+#: app/imageopscontextmanageritem.cpp:118 lib/crop/cropimageoperation.cpp:70
 #: lib/crop/cropwidget.cpp:262
 #, kde-format
 msgid "Crop"
 msgstr "자르기"
 
-#: app/imageopscontextmanageritem.cpp:121
+#: app/imageopscontextmanageritem.cpp:123
+#, kde-format
+msgctxt "@action:intoolbar"
+msgid "Adjust Brightness/Contrast/Gamma"
+msgstr ""
+
+#: app/imageopscontextmanageritem.cpp:128
 #: lib/redeyereduction/redeyereductionimageoperation.cpp:75
 #: lib/redeyereduction/redeyereductiontool.cpp:48
 #, kde-format
 msgid "Reduce Red Eye"
 msgstr "적목 감소"
 
-#: app/imageopscontextmanageritem.cpp:126 lib/annotate/annotateoperation.cpp:51
+#: app/imageopscontextmanageritem.cpp:133 lib/annotate/annotateoperation.cpp:51
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Annotate"
 msgstr "주석 달기"
 
-#: app/imageopscontextmanageritem.cpp:134
+#: app/imageopscontextmanageritem.cpp:141
 #, kde-format
 msgctxt "@title:window Annotate [filename]"
 msgid "Annotate %1"
 msgstr "%1에 주석 달기"
 
-#: app/imageopscontextmanageritem.cpp:156 lib/document/documentjob.cpp:77
+#: app/imageopscontextmanageritem.cpp:164 lib/document/documentjob.cpp:77
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot edit this kind of image."
 msgstr "Gwenview에서는 이 형식의 그림을 편집할 수 없습니다."
 
-#: app/imageopscontextmanageritem.cpp:167
+#: app/imageopscontextmanageritem.cpp:175
 #, kde-format
 msgid "Image Operations"
 msgstr "그림 작업"
@@ -2004,6 +2010,26 @@ msgstr "현재 관리자"
 #, kde-format
 msgid "Developer"
 msgstr "개발자"
+
+#: lib/bcg/bcgimageoperation.cpp:69
+#, kde-format
+msgid "Adjust Brightness/Contrast/Gamma"
+msgstr ""
+
+#: lib/bcg/bcgwidget.cpp:51
+#, kde-format
+msgid "Brightness:"
+msgstr ""
+
+#: lib/bcg/bcgwidget.cpp:52
+#, kde-format
+msgid "Contrast:"
+msgstr ""
+
+#: lib/bcg/bcgwidget.cpp:53
+#, kde-format
+msgid "Gamma:"
+msgstr ""
 
 #: lib/crop/cropwidget.cpp:191
 #, kde-format

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-22 00:43+0000\n"
+"POT-Creation-Date: 2022-10-30 00:44+0000\n"
 "PO-Revision-Date: 2008-02-02 22:23+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@gmail.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -830,13 +830,13 @@ msgid "&Rating"
 msgstr "&Настаўленні"
 
 #. i18n: ectx: Menu (settings)
-#: app/gwenviewui.rc:84
+#: app/gwenviewui.rc:85
 #, kde-format
 msgid "&Settings"
 msgstr "&Настаўленні"
 
 #. i18n: ectx: ToolBar (mainToolBar)
-#: app/gwenviewui.rc:100 part/gvpart.rc:16
+#: app/gwenviewui.rc:101 part/gvpart.rc:16
 #, kde-format
 msgid "Main Toolbar"
 msgstr "Галоўная панель начыння"
@@ -848,83 +848,89 @@ msgctxt "@title:window"
 msgid "Image Information"
 msgstr "Метаінфармацыя"
 
-#: app/imageopscontextmanageritem.cpp:88
+#: app/imageopscontextmanageritem.cpp:90
 #, kde-format
 msgctxt "@title actions category - means actions changing image"
 msgid "Edit"
 msgstr ""
 
-#: app/imageopscontextmanageritem.cpp:91
+#: app/imageopscontextmanageritem.cpp:93
 #, kde-format
 msgid "Rotate Left"
 msgstr "Павярнуць налева"
 
-#: app/imageopscontextmanageritem.cpp:92
+#: app/imageopscontextmanageritem.cpp:94
 #, fuzzy, kde-format
 #| msgid "Rotate Right"
 msgctxt "@info:tooltip"
 msgid "Rotate image to the left"
 msgstr "Павярнуць направа"
 
-#: app/imageopscontextmanageritem.cpp:97
+#: app/imageopscontextmanageritem.cpp:99
 #, kde-format
 msgid "Rotate Right"
 msgstr "Павярнуць направа"
 
-#: app/imageopscontextmanageritem.cpp:98
+#: app/imageopscontextmanageritem.cpp:100
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate image to the right"
 msgstr ""
 
-#: app/imageopscontextmanageritem.cpp:103
+#: app/imageopscontextmanageritem.cpp:105
 #, kde-format
 msgid "Mirror"
 msgstr "Адлюстраваць"
 
-#: app/imageopscontextmanageritem.cpp:107
+#: app/imageopscontextmanageritem.cpp:109
 #, kde-format
 msgid "Flip"
 msgstr "Абярнуць відарыс"
 
-#: app/imageopscontextmanageritem.cpp:111 lib/resize/resizeimagedialog.cpp:71
+#: app/imageopscontextmanageritem.cpp:113 lib/resize/resizeimagedialog.cpp:71
 #, kde-format
 msgid "Resize"
 msgstr "Змяніць памер"
 
-#: app/imageopscontextmanageritem.cpp:116 lib/crop/cropimageoperation.cpp:70
+#: app/imageopscontextmanageritem.cpp:118 lib/crop/cropimageoperation.cpp:70
 #: lib/crop/cropwidget.cpp:262
 #, kde-format
 msgid "Crop"
 msgstr "Кадраванне"
 
-#: app/imageopscontextmanageritem.cpp:121
+#: app/imageopscontextmanageritem.cpp:123
+#, kde-format
+msgctxt "@action:intoolbar"
+msgid "Adjust Brightness/Contrast/Gamma"
+msgstr ""
+
+#: app/imageopscontextmanageritem.cpp:128
 #: lib/redeyereduction/redeyereductionimageoperation.cpp:75
 #: lib/redeyereduction/redeyereductiontool.cpp:48
 #, kde-format
 msgid "Reduce Red Eye"
 msgstr ""
 
-#: app/imageopscontextmanageritem.cpp:126 lib/annotate/annotateoperation.cpp:51
+#: app/imageopscontextmanageritem.cpp:133 lib/annotate/annotateoperation.cpp:51
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Annotate"
 msgstr ""
 
-#: app/imageopscontextmanageritem.cpp:134
+#: app/imageopscontextmanageritem.cpp:141
 #, kde-format
 msgctxt "@title:window Annotate [filename]"
 msgid "Annotate %1"
 msgstr ""
 
-#: app/imageopscontextmanageritem.cpp:156 lib/document/documentjob.cpp:77
+#: app/imageopscontextmanageritem.cpp:164 lib/document/documentjob.cpp:77
 #, fuzzy, kde-format
 #| msgid "Gwenview cannot save images in '%1' format."
 msgctxt "@info"
 msgid "Gwenview cannot edit this kind of image."
 msgstr "Gwenview не можа запісаць выяву ў фармаце '%1'."
 
-#: app/imageopscontextmanageritem.cpp:167
+#: app/imageopscontextmanageritem.cpp:175
 #, kde-format
 msgid "Image Operations"
 msgstr "Дзеянні над малюнкамі"
@@ -2196,6 +2202,26 @@ msgstr "Бягучая выява зменена"
 #| msgid "Main developer"
 msgid "Developer"
 msgstr "Галоўны распрацоўшчык"
+
+#: lib/bcg/bcgimageoperation.cpp:69
+#, kde-format
+msgid "Adjust Brightness/Contrast/Gamma"
+msgstr ""
+
+#: lib/bcg/bcgwidget.cpp:51
+#, kde-format
+msgid "Brightness:"
+msgstr ""
+
+#: lib/bcg/bcgwidget.cpp:52
+#, kde-format
+msgid "Contrast:"
+msgstr ""
+
+#: lib/bcg/bcgwidget.cpp:53
+#, kde-format
+msgid "Gamma:"
+msgstr ""
 
 #: lib/crop/cropwidget.cpp:191
 #, fuzzy, kde-format
