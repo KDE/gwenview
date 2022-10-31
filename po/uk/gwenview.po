@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-30 00:44+0000\n"
-"PO-Revision-Date: 2022-07-08 08:16+0300\n"
+"POT-Creation-Date: 2022-10-31 00:43+0000\n"
+"PO-Revision-Date: 2022-10-30 14:31+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -288,13 +288,13 @@ msgstr "Перегляд зображення"
 msgid "Advanced"
 msgstr "Додатково"
 
-#: app/fileoperations.cpp:63
+#: app/fileoperations.cpp:64
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Copy %1"
 msgstr "Копіювати %1"
 
-#: app/fileoperations.cpp:65
+#: app/fileoperations.cpp:66
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Copy %1 image"
@@ -304,19 +304,19 @@ msgstr[1] "Копіювати %1 зображення"
 msgstr[2] "Копіювати %1 зображень"
 msgstr[3] "Копіювати %1 зображення"
 
-#: app/fileoperations.cpp:67
+#: app/fileoperations.cpp:68
 #, kde-format
 msgctxt "@action:button"
 msgid "Copy"
 msgstr "Копіювати"
 
-#: app/fileoperations.cpp:71
+#: app/fileoperations.cpp:72
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Move %1"
 msgstr "Пересунути %1"
 
-#: app/fileoperations.cpp:73
+#: app/fileoperations.cpp:74
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Move %1 image"
@@ -326,19 +326,19 @@ msgstr[1] "Пересунути %1 зображення"
 msgstr[2] "Пересунути %1 зображень"
 msgstr[3] "Пересунути %1 зображення"
 
-#: app/fileoperations.cpp:75
+#: app/fileoperations.cpp:76
 #, kde-format
 msgctxt "@action:button"
 msgid "Move"
 msgstr "Пересунути"
 
-#: app/fileoperations.cpp:79
+#: app/fileoperations.cpp:80
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Link %1"
 msgstr "Створити посилання на %1"
 
-#: app/fileoperations.cpp:81
+#: app/fileoperations.cpp:82
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Link %1 image"
@@ -348,28 +348,28 @@ msgstr[1] "Створити посилання на %1 зображення"
 msgstr[2] "Створити посилання на %1 зображень"
 msgstr[3] "Створити посилання на %1 зображення"
 
-#: app/fileoperations.cpp:83
+#: app/fileoperations.cpp:84
 #, kde-format
 msgctxt "@action:button"
 msgid "Link"
 msgstr "Посилання"
 
-#: app/fileoperations.cpp:198
+#: app/fileoperations.cpp:194
 #, kde-format
 msgid "Move Here"
 msgstr "Пересунути сюди"
 
-#: app/fileoperations.cpp:199
+#: app/fileoperations.cpp:195
 #, kde-format
 msgid "Copy Here"
 msgstr "Скопіювати сюди"
 
-#: app/fileoperations.cpp:200
+#: app/fileoperations.cpp:196
 #, kde-format
 msgid "Link Here"
 msgstr "Посилання сюди"
 
-#: app/fileoperations.cpp:202
+#: app/fileoperations.cpp:198
 #, kde-format
 msgid "Cancel"
 msgstr "Скасувати"
@@ -845,7 +845,7 @@ msgstr "Обрізати"
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Adjust Brightness/Contrast/Gamma"
-msgstr ""
+msgstr "Скоригувати яскравість/контрастність/гамму"
 
 #: app/imageopscontextmanageritem.cpp:128
 #: lib/redeyereduction/redeyereductionimageoperation.cpp:75
@@ -2119,22 +2119,22 @@ msgstr "Розробник"
 #: lib/bcg/bcgimageoperation.cpp:69
 #, kde-format
 msgid "Adjust Brightness/Contrast/Gamma"
-msgstr ""
+msgstr "Скоригувати яскравість/контрастність/гамму"
 
 #: lib/bcg/bcgwidget.cpp:51
 #, kde-format
 msgid "Brightness:"
-msgstr ""
+msgstr "Яскравість:"
 
 #: lib/bcg/bcgwidget.cpp:52
 #, kde-format
 msgid "Contrast:"
-msgstr ""
+msgstr "Контрастність:"
 
 #: lib/bcg/bcgwidget.cpp:53
 #, kde-format
 msgid "Gamma:"
-msgstr ""
+msgstr "Гамма:"
 
 #: lib/crop/cropwidget.cpp:191
 #, kde-format
@@ -2768,13 +2768,13 @@ msgstr "Позначити цією міткою всі вибрані зобр�
 msgid "Add tag"
 msgstr "Додати мітку"
 
-#: lib/slideshow.cpp:182
+#: lib/slideshow.cpp:163
 #, kde-format
 msgctxt "@item:inmenu toggle loop in slideshow"
 msgid "Loop"
 msgstr "Цикл"
 
-#: lib/slideshow.cpp:187
+#: lib/slideshow.cpp:168
 #, kde-format
 msgctxt "@item:inmenu toggle random order in slideshow"
 msgid "Random"

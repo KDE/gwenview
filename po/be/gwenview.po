@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-30 00:44+0000\n"
+"POT-Creation-Date: 2022-10-31 00:43+0000\n"
 "PO-Revision-Date: 2008-02-02 22:23+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@gmail.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -302,14 +302,14 @@ msgstr "Праглядач выяваў"
 msgid "Advanced"
 msgstr "Настаўленні выявы"
 
-#: app/fileoperations.cpp:63
+#: app/fileoperations.cpp:64
 #, fuzzy, kde-format
 #| msgid "Crop"
 msgctxt "@title:window %1 file name"
 msgid "Copy %1"
 msgstr "Кадраванне"
 
-#: app/fileoperations.cpp:65
+#: app/fileoperations.cpp:66
 #, fuzzy, kde-format
 #| msgid "Go to Next Image"
 msgctxt "@title:window %1 number of images"
@@ -319,21 +319,21 @@ msgstr[0] "Перайсці да наступнай выявы"
 msgstr[1] "Перайсці да наступнай выявы"
 msgstr[2] "Перайсці да наступнай выявы"
 
-#: app/fileoperations.cpp:67
+#: app/fileoperations.cpp:68
 #, fuzzy, kde-format
 #| msgid "Crop"
 msgctxt "@action:button"
 msgid "Copy"
 msgstr "Кадраванне"
 
-#: app/fileoperations.cpp:71
+#: app/fileoperations.cpp:72
 #, fuzzy, kde-format
 #| msgid "Move To"
 msgctxt "@title:window %1 file name"
 msgid "Move %1"
 msgstr "Перамясціць у"
 
-#: app/fileoperations.cpp:73
+#: app/fileoperations.cpp:74
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Open Image"
@@ -344,21 +344,21 @@ msgstr[0] "Адкрыць відарыс"
 msgstr[1] "Адкрыць відарыс"
 msgstr[2] "Адкрыць відарыс"
 
-#: app/fileoperations.cpp:75
+#: app/fileoperations.cpp:76
 #, fuzzy, kde-format
 #| msgid "Move To"
 msgctxt "@action:button"
 msgid "Move"
 msgstr "Перамясціць у"
 
-#: app/fileoperations.cpp:79
+#: app/fileoperations.cpp:80
 #, fuzzy, kde-format
 #| msgid "Link To"
 msgctxt "@title:window %1 file name"
 msgid "Link %1"
 msgstr "Злучыць з"
 
-#: app/fileoperations.cpp:81
+#: app/fileoperations.cpp:82
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Link %1 image"
@@ -367,29 +367,29 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: app/fileoperations.cpp:83
+#: app/fileoperations.cpp:84
 #, fuzzy, kde-format
 #| msgid "Link To"
 msgctxt "@action:button"
 msgid "Link"
 msgstr "Злучыць з"
 
-#: app/fileoperations.cpp:198
+#: app/fileoperations.cpp:194
 #, kde-format
 msgid "Move Here"
 msgstr "Перамясціць сюды"
 
-#: app/fileoperations.cpp:199
+#: app/fileoperations.cpp:195
 #, kde-format
 msgid "Copy Here"
 msgstr "Скапіраваць сюды"
 
-#: app/fileoperations.cpp:200
+#: app/fileoperations.cpp:196
 #, kde-format
 msgid "Link Here"
 msgstr "Спасылку сюды"
 
-#: app/fileoperations.cpp:202
+#: app/fileoperations.cpp:198
 #, kde-format
 msgid "Cancel"
 msgstr "Скасаваць"
@@ -2839,13 +2839,13 @@ msgstr ""
 msgid "Add tag"
 msgstr ""
 
-#: lib/slideshow.cpp:182
+#: lib/slideshow.cpp:163
 #, kde-format
 msgctxt "@item:inmenu toggle loop in slideshow"
 msgid "Loop"
 msgstr "Паўтараць"
 
-#: lib/slideshow.cpp:187
+#: lib/slideshow.cpp:168
 #, kde-format
 msgctxt "@item:inmenu toggle random order in slideshow"
 msgid "Random"

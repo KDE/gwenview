@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-30 00:44+0000\n"
+"POT-Creation-Date: 2022-10-31 00:43+0000\n"
 "PO-Revision-Date: 2022-09-17 08:42+0200\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
@@ -282,13 +282,13 @@ msgstr "Преглед на изображения"
 msgid "Advanced"
 msgstr "Разширени"
 
-#: app/fileoperations.cpp:63
+#: app/fileoperations.cpp:64
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Copy %1"
 msgstr "Копиране на %1"
 
-#: app/fileoperations.cpp:65
+#: app/fileoperations.cpp:66
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Copy %1 image"
@@ -296,19 +296,19 @@ msgid_plural "Copy %1 images"
 msgstr[0] "Копиране на %1изображение"
 msgstr[1] "Копиране на %1 изображения"
 
-#: app/fileoperations.cpp:67
+#: app/fileoperations.cpp:68
 #, kde-format
 msgctxt "@action:button"
 msgid "Copy"
 msgstr "Копиране"
 
-#: app/fileoperations.cpp:71
+#: app/fileoperations.cpp:72
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Move %1"
 msgstr "Преместване на %1"
 
-#: app/fileoperations.cpp:73
+#: app/fileoperations.cpp:74
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Move %1 image"
@@ -316,19 +316,19 @@ msgid_plural "Move %1 images"
 msgstr[0] "Премахване на %1 изображение"
 msgstr[1] "Премахване на %1 изображения"
 
-#: app/fileoperations.cpp:75
+#: app/fileoperations.cpp:76
 #, kde-format
 msgctxt "@action:button"
 msgid "Move"
 msgstr "Преместване"
 
-#: app/fileoperations.cpp:79
+#: app/fileoperations.cpp:80
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Link %1"
 msgstr "Връзка %1"
 
-#: app/fileoperations.cpp:81
+#: app/fileoperations.cpp:82
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Link %1 image"
@@ -336,28 +336,28 @@ msgid_plural "Link %1 images"
 msgstr[0] "Връзка на %1 изображение"
 msgstr[1] "Връзка на %1 изображения"
 
-#: app/fileoperations.cpp:83
+#: app/fileoperations.cpp:84
 #, kde-format
 msgctxt "@action:button"
 msgid "Link"
 msgstr "Връзка"
 
-#: app/fileoperations.cpp:198
+#: app/fileoperations.cpp:194
 #, kde-format
 msgid "Move Here"
 msgstr "Преместване"
 
-#: app/fileoperations.cpp:199
+#: app/fileoperations.cpp:195
 #, kde-format
 msgid "Copy Here"
 msgstr "Копиране"
 
-#: app/fileoperations.cpp:200
+#: app/fileoperations.cpp:196
 #, kde-format
 msgid "Link Here"
 msgstr "Създаване на връзка"
 
-#: app/fileoperations.cpp:202
+#: app/fileoperations.cpp:198
 #, kde-format
 msgid "Cancel"
 msgstr "Отказ"
@@ -2724,13 +2724,13 @@ msgstr "Добавяне на този етикет към всички избр
 msgid "Add tag"
 msgstr "Добавяне на етикет"
 
-#: lib/slideshow.cpp:182
+#: lib/slideshow.cpp:163
 #, kde-format
 msgctxt "@item:inmenu toggle loop in slideshow"
 msgid "Loop"
 msgstr "Повторение"
 
-#: lib/slideshow.cpp:187
+#: lib/slideshow.cpp:168
 #, kde-format
 msgctxt "@item:inmenu toggle random order in slideshow"
 msgid "Random"

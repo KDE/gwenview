@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-30 00:44+0000\n"
+"POT-Creation-Date: 2022-10-31 00:43+0000\n"
 "PO-Revision-Date: 2012-07-13 22:35+0530\n"
 "Last-Translator: Deepayan Sarkar <deepayan.sarkar@gmail.com>\n"
 "Language-Team: American English <kde-translation@bengalinux.org>\n"
@@ -276,7 +276,7 @@ msgstr ""
 msgid "Advanced"
 msgstr "অগ্রসর"
 
-#: app/fileoperations.cpp:63
+#: app/fileoperations.cpp:64
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Copy"
@@ -284,7 +284,7 @@ msgctxt "@title:window %1 file name"
 msgid "Copy %1"
 msgstr "কপি করো"
 
-#: app/fileoperations.cpp:65
+#: app/fileoperations.cpp:66
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Go to next image"
@@ -294,13 +294,13 @@ msgid_plural "Copy %1 images"
 msgstr[0] "পরবর্তী ছবিতে যাও"
 msgstr[1] "পরবর্তী ছবিতে যাও"
 
-#: app/fileoperations.cpp:67
+#: app/fileoperations.cpp:68
 #, kde-format
 msgctxt "@action:button"
 msgid "Copy"
 msgstr "কপি করো"
 
-#: app/fileoperations.cpp:71
+#: app/fileoperations.cpp:72
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Move"
@@ -308,7 +308,7 @@ msgctxt "@title:window %1 file name"
 msgid "Move %1"
 msgstr "সরাও"
 
-#: app/fileoperations.cpp:73
+#: app/fileoperations.cpp:74
 #, fuzzy, kde-format
 #| msgctxt "%1 is collection name, %2 is image count in collection"
 #| msgid "%1 (%2 image)"
@@ -319,13 +319,13 @@ msgid_plural "Move %1 images"
 msgstr[0] "%1 (%2 ছবি)"
 msgstr[1] "%1 (%2 ছবি)"
 
-#: app/fileoperations.cpp:75
+#: app/fileoperations.cpp:76
 #, kde-format
 msgctxt "@action:button"
 msgid "Move"
 msgstr "সরাও"
 
-#: app/fileoperations.cpp:79
+#: app/fileoperations.cpp:80
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Link"
@@ -333,7 +333,7 @@ msgctxt "@title:window %1 file name"
 msgid "Link %1"
 msgstr "লিঙ্ক করো"
 
-#: app/fileoperations.cpp:81
+#: app/fileoperations.cpp:82
 #, fuzzy, kde-format
 #| msgctxt "%1 is collection name, %2 is image count in collection"
 #| msgid "%1 (%2 image)"
@@ -344,28 +344,28 @@ msgid_plural "Link %1 images"
 msgstr[0] "%1 (%2 ছবি)"
 msgstr[1] "%1 (%2 ছবি)"
 
-#: app/fileoperations.cpp:83
+#: app/fileoperations.cpp:84
 #, kde-format
 msgctxt "@action:button"
 msgid "Link"
 msgstr "লিঙ্ক করো"
 
-#: app/fileoperations.cpp:198
+#: app/fileoperations.cpp:194
 #, kde-format
 msgid "Move Here"
 msgstr "এখানে সরাও"
 
-#: app/fileoperations.cpp:199
+#: app/fileoperations.cpp:195
 #, kde-format
 msgid "Copy Here"
 msgstr "এখানে কপি করো"
 
-#: app/fileoperations.cpp:200
+#: app/fileoperations.cpp:196
 #, kde-format
 msgid "Link Here"
 msgstr "এখানে লিঙ্ক করো"
 
-#: app/fileoperations.cpp:202
+#: app/fileoperations.cpp:198
 #, kde-format
 msgid "Cancel"
 msgstr "বাতিল করো"
@@ -2700,13 +2700,13 @@ msgstr ""
 msgid "Add tag"
 msgstr "স্থানতালিকায় যোগ করো"
 
-#: lib/slideshow.cpp:182
+#: lib/slideshow.cpp:163
 #, kde-format
 msgctxt "@item:inmenu toggle loop in slideshow"
 msgid "Loop"
 msgstr ""
 
-#: lib/slideshow.cpp:187
+#: lib/slideshow.cpp:168
 #, kde-format
 msgctxt "@item:inmenu toggle random order in slideshow"
 msgid "Random"

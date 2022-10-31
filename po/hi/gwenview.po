@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-30 00:44+0000\n"
+"POT-Creation-Date: 2022-10-31 00:43+0000\n"
 "PO-Revision-Date: 2022-02-10 12:40+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -272,13 +272,13 @@ msgstr "छवि दृश्य"
 msgid "Advanced"
 msgstr "विस्तृत"
 
-#: app/fileoperations.cpp:63
+#: app/fileoperations.cpp:64
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Copy %1"
 msgstr "%1 की नक़ल करें"
 
-#: app/fileoperations.cpp:65
+#: app/fileoperations.cpp:66
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Copy %1 image"
@@ -286,19 +286,19 @@ msgid_plural "Copy %1 images"
 msgstr[0] "%1 छवि की नक़ल करें"
 msgstr[1] "%1 छवियों को नक़ल करें"
 
-#: app/fileoperations.cpp:67
+#: app/fileoperations.cpp:68
 #, kde-format
 msgctxt "@action:button"
 msgid "Copy"
 msgstr "नक़ल करें"
 
-#: app/fileoperations.cpp:71
+#: app/fileoperations.cpp:72
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Move %1"
 msgstr "%1 स्थानांतरित करें"
 
-#: app/fileoperations.cpp:73
+#: app/fileoperations.cpp:74
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Move %1 image"
@@ -306,19 +306,19 @@ msgid_plural "Move %1 images"
 msgstr[0] "%1 छवि स्थानांतरित करें"
 msgstr[1] "%1 छवियाँ स्थानांतरित करें"
 
-#: app/fileoperations.cpp:75
+#: app/fileoperations.cpp:76
 #, kde-format
 msgctxt "@action:button"
 msgid "Move"
 msgstr "स्थानांतरित करें"
 
-#: app/fileoperations.cpp:79
+#: app/fileoperations.cpp:80
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Link %1"
 msgstr "कडी %1"
 
-#: app/fileoperations.cpp:81
+#: app/fileoperations.cpp:82
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Link %1 image"
@@ -326,28 +326,28 @@ msgid_plural "Link %1 images"
 msgstr[0] ""
 msgstr[1] ""
 
-#: app/fileoperations.cpp:83
+#: app/fileoperations.cpp:84
 #, kde-format
 msgctxt "@action:button"
 msgid "Link"
 msgstr "कड़ी"
 
-#: app/fileoperations.cpp:198
+#: app/fileoperations.cpp:194
 #, kde-format
 msgid "Move Here"
 msgstr "यहाँ स्थानांतरित करें"
 
-#: app/fileoperations.cpp:199
+#: app/fileoperations.cpp:195
 #, kde-format
 msgid "Copy Here"
 msgstr "यहाँ नक़ल करें"
 
-#: app/fileoperations.cpp:200
+#: app/fileoperations.cpp:196
 #, kde-format
 msgid "Link Here"
 msgstr "यहां कड़ी जोडें"
 
-#: app/fileoperations.cpp:202
+#: app/fileoperations.cpp:198
 #, kde-format
 msgid "Cancel"
 msgstr ""
@@ -2716,14 +2716,14 @@ msgstr ""
 msgid "Add tag"
 msgstr ""
 
-#: lib/slideshow.cpp:182
+#: lib/slideshow.cpp:163
 #, fuzzy, kde-format
 #| msgid "Loop"
 msgctxt "@item:inmenu toggle loop in slideshow"
 msgid "Loop"
 msgstr "लूप"
 
-#: lib/slideshow.cpp:187
+#: lib/slideshow.cpp:168
 #, fuzzy, kde-format
 #| msgid "Random"
 msgctxt "@item:inmenu toggle random order in slideshow"

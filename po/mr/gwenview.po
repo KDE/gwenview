@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-30 00:44+0000\n"
+"POT-Creation-Date: 2022-10-31 00:43+0000\n"
 "PO-Revision-Date: 2014-10-28 15:32+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: Marathi <kde-i18n-doc@kde.org>\n"
@@ -284,7 +284,7 @@ msgstr "प्रतिमेचे दृश्य"
 msgid "Advanced"
 msgstr "प्रगत"
 
-#: app/fileoperations.cpp:63
+#: app/fileoperations.cpp:64
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Copy"
@@ -292,7 +292,7 @@ msgctxt "@title:window %1 file name"
 msgid "Copy %1"
 msgstr "प्रत करा"
 
-#: app/fileoperations.cpp:65
+#: app/fileoperations.cpp:66
 #, fuzzy, kde-format
 #| msgid "Loop on images"
 msgctxt "@title:window %1 number of images"
@@ -301,13 +301,13 @@ msgid_plural "Copy %1 images"
 msgstr[0] "प्रतिमा चक्राकार पद्धतीत ठेवा"
 msgstr[1] "प्रतिमा चक्राकार पद्धतीत ठेवा"
 
-#: app/fileoperations.cpp:67
+#: app/fileoperations.cpp:68
 #, kde-format
 msgctxt "@action:button"
 msgid "Copy"
 msgstr "प्रत करा"
 
-#: app/fileoperations.cpp:71
+#: app/fileoperations.cpp:72
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Move"
@@ -315,7 +315,7 @@ msgctxt "@title:window %1 file name"
 msgid "Move %1"
 msgstr "हलवा"
 
-#: app/fileoperations.cpp:73
+#: app/fileoperations.cpp:74
 #, fuzzy, kde-format
 #| msgctxt "%1 is collection name, %2 is image count in collection"
 #| msgid "%1 (%2 image)"
@@ -326,13 +326,13 @@ msgid_plural "Move %1 images"
 msgstr[0] "%1 (%2 प्रतिमा)"
 msgstr[1] "%1 (%2 प्रतिमा)"
 
-#: app/fileoperations.cpp:75
+#: app/fileoperations.cpp:76
 #, kde-format
 msgctxt "@action:button"
 msgid "Move"
 msgstr "हलवा"
 
-#: app/fileoperations.cpp:79
+#: app/fileoperations.cpp:80
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Link"
@@ -340,7 +340,7 @@ msgctxt "@title:window %1 file name"
 msgid "Link %1"
 msgstr "लिंक करा"
 
-#: app/fileoperations.cpp:81
+#: app/fileoperations.cpp:82
 #, fuzzy, kde-format
 #| msgctxt "%1 is collection name, %2 is image count in collection"
 #| msgid "%1 (%2 image)"
@@ -351,28 +351,28 @@ msgid_plural "Link %1 images"
 msgstr[0] "%1 (%2 प्रतिमा)"
 msgstr[1] "%1 (%2 प्रतिमा)"
 
-#: app/fileoperations.cpp:83
+#: app/fileoperations.cpp:84
 #, kde-format
 msgctxt "@action:button"
 msgid "Link"
 msgstr "लिंक करा"
 
-#: app/fileoperations.cpp:198
+#: app/fileoperations.cpp:194
 #, kde-format
 msgid "Move Here"
 msgstr "येथे हलवा"
 
-#: app/fileoperations.cpp:199
+#: app/fileoperations.cpp:195
 #, kde-format
 msgid "Copy Here"
 msgstr "येथे प्रत करा"
 
-#: app/fileoperations.cpp:200
+#: app/fileoperations.cpp:196
 #, kde-format
 msgid "Link Here"
 msgstr "येथे जोडा"
 
-#: app/fileoperations.cpp:202
+#: app/fileoperations.cpp:198
 #, kde-format
 msgid "Cancel"
 msgstr "रद्द करा"
@@ -2737,13 +2737,13 @@ msgstr "निवडलेल्या सर्व प्रतिमांस�
 msgid "Add tag"
 msgstr "टॅग जोडा"
 
-#: lib/slideshow.cpp:182
+#: lib/slideshow.cpp:163
 #, kde-format
 msgctxt "@item:inmenu toggle loop in slideshow"
 msgid "Loop"
 msgstr "चक्राकार फिरणे"
 
-#: lib/slideshow.cpp:187
+#: lib/slideshow.cpp:168
 #, kde-format
 msgctxt "@item:inmenu toggle random order in slideshow"
 msgid "Random"

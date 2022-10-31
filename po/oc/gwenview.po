@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-30 00:44+0000\n"
+"POT-Creation-Date: 2022-10-31 00:43+0000\n"
 "PO-Revision-Date: 2008-08-05 22:27+0200\n"
 "Last-Translator: Yannig Marchegay (Kokoyaya) <yannig@marchegay.org>\n"
 "Language-Team: Occitan (lengadocian) <ubuntu-l10n-oci@lists.ubuntu.com>\n"
@@ -295,14 +295,14 @@ msgstr "Talha d'imatge"
 msgid "Advanced"
 msgstr "Paramètres de l'imatge"
 
-#: app/fileoperations.cpp:63
+#: app/fileoperations.cpp:64
 #, fuzzy, kde-format
 #| msgid "Crop"
 msgctxt "@title:window %1 file name"
 msgid "Copy %1"
 msgstr "Rosegar"
 
-#: app/fileoperations.cpp:65
+#: app/fileoperations.cpp:66
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Copy %1 image"
@@ -310,21 +310,21 @@ msgid_plural "Copy %1 images"
 msgstr[0] ""
 msgstr[1] ""
 
-#: app/fileoperations.cpp:67
+#: app/fileoperations.cpp:68
 #, fuzzy, kde-format
 #| msgid "Crop"
 msgctxt "@action:button"
 msgid "Copy"
 msgstr "Rosegar"
 
-#: app/fileoperations.cpp:71
+#: app/fileoperations.cpp:72
 #, fuzzy, kde-format
 #| msgid "Move Here"
 msgctxt "@title:window %1 file name"
 msgid "Move %1"
 msgstr "Desplaçar aicí"
 
-#: app/fileoperations.cpp:73
+#: app/fileoperations.cpp:74
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Open Image"
@@ -334,20 +334,20 @@ msgid_plural "Move %1 images"
 msgstr[0] "Dobrir un imatge"
 msgstr[1] "Dobrir un imatge"
 
-#: app/fileoperations.cpp:75
+#: app/fileoperations.cpp:76
 #, fuzzy, kde-format
 #| msgid "Move Here"
 msgctxt "@action:button"
 msgid "Move"
 msgstr "Desplaçar aicí"
 
-#: app/fileoperations.cpp:79
+#: app/fileoperations.cpp:80
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Link %1"
 msgstr ""
 
-#: app/fileoperations.cpp:81
+#: app/fileoperations.cpp:82
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Link %1 image"
@@ -355,28 +355,28 @@ msgid_plural "Link %1 images"
 msgstr[0] ""
 msgstr[1] ""
 
-#: app/fileoperations.cpp:83
+#: app/fileoperations.cpp:84
 #, kde-format
 msgctxt "@action:button"
 msgid "Link"
 msgstr ""
 
-#: app/fileoperations.cpp:198
+#: app/fileoperations.cpp:194
 #, kde-format
 msgid "Move Here"
 msgstr "Desplaçar aicí"
 
-#: app/fileoperations.cpp:199
+#: app/fileoperations.cpp:195
 #, kde-format
 msgid "Copy Here"
 msgstr "Copiar aicí"
 
-#: app/fileoperations.cpp:200
+#: app/fileoperations.cpp:196
 #, kde-format
 msgid "Link Here"
 msgstr ""
 
-#: app/fileoperations.cpp:202
+#: app/fileoperations.cpp:198
 #, kde-format
 msgid "Cancel"
 msgstr "Anullar"
@@ -2745,13 +2745,13 @@ msgstr ""
 msgid "Add tag"
 msgstr "Acorchis"
 
-#: lib/slideshow.cpp:182
+#: lib/slideshow.cpp:163
 #, kde-format
 msgctxt "@item:inmenu toggle loop in slideshow"
 msgid "Loop"
 msgstr ""
 
-#: lib/slideshow.cpp:187
+#: lib/slideshow.cpp:168
 #, kde-format
 msgctxt "@item:inmenu toggle random order in slideshow"
 msgid "Random"
