@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-31 00:43+0000\n"
-"PO-Revision-Date: 2022-07-10 19:53+0530\n"
+"PO-Revision-Date: 2022-11-03 21:18+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
 "Language: ta\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.04.3\n"
+"X-Generator: Lokalize 22.08.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -823,7 +823,7 @@ msgstr "வெட்டு"
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Adjust Brightness/Contrast/Gamma"
-msgstr ""
+msgstr "நிறமாறுபாடு/பிரகாசம்/காமா போன்றவற்றை மாற்று"
 
 #: app/imageopscontextmanageritem.cpp:128
 #: lib/redeyereduction/redeyereductionimageoperation.cpp:75
@@ -1605,6 +1605,12 @@ msgid ""
 "and contain multiple rows of images; <link url='%1'>configure these options "
 "in the settings</link>.</para>"
 msgstr ""
+"<para>தற்போதைய அடைவிலுள்ள மற்றப் படங்களைக் காட்டும் சிறிய பட்டையை இது காட்டும்/மறைக்கும். "
+"அப்பட்டையில் காட்டப்படும் படமொன்றைத் தேர்வு செய்தால், அது பிரதான காட்சிப்பகுதியில் "
+"காட்டப்படும்.</para><para>பல படங்களைப் பக்கத்துப் பக்கத்தில் காட்ட, அவற்றை சேர்த்து "
+"தேர்ந்தெடுங்கள்.</para><para>விரும்பினால், அப்பட்டையை சாளரத்தின் வலது ஓரத்துக்கு "
+"நகர்த்தலாம், மேலும் படங்களை பல வரிசைகளாக காட்டலாம்; <link url='%1'>இத்தேர்வுகளை "
+"அமைப்புகளில் மாற்றியமையுங்கள்</link>.</para>"
 
 #: app/viewmainpage.cpp:575
 #, kde-format
@@ -2038,22 +2044,22 @@ msgstr "நிரலாளர்"
 #: lib/bcg/bcgimageoperation.cpp:69
 #, kde-format
 msgid "Adjust Brightness/Contrast/Gamma"
-msgstr ""
+msgstr "நிறமாறுபாடு/பிரகாசம்/காமா போன்றவற்றை மாற்றுங்கள்"
 
 #: lib/bcg/bcgwidget.cpp:51
 #, kde-format
 msgid "Brightness:"
-msgstr ""
+msgstr "பிரகாசம்:"
 
 #: lib/bcg/bcgwidget.cpp:52
 #, kde-format
 msgid "Contrast:"
-msgstr ""
+msgstr "நிறமாறுபாடு:"
 
 #: lib/bcg/bcgwidget.cpp:53
 #, kde-format
 msgid "Gamma:"
-msgstr ""
+msgstr "காமா:"
 
 #: lib/crop/cropwidget.cpp:191
 #, kde-format
@@ -2388,25 +2394,29 @@ msgstr "படங்களுக்கிடையேயான இடைவெ�
 #: lib/gwenviewconfig.kcfg:357
 #, kde-format
 msgid "Restrict crop to image ratio when Advanced Settings disabled"
-msgstr ""
+msgstr "மேம்பட்ட விருப்பங்கள் முடங்கியிருக்கும்போது படத்தின் உருவ விகித‍த்தை மாற்றவிடாதே"
 
 #. i18n: ectx: label, entry (CropRatioIndex), group (Crop)
 #: lib/gwenviewconfig.kcfg:361
 #, kde-format
 msgid "Index representing selected ratio in the Advanced settings combobox"
 msgstr ""
+"மேம்பட்ட அமைப்புகளிலுள்ள உருவ‍விகித‍ தேர்வுப்பெட்டியில் தேர்ந்தெடுத்துள்ள உருவ‍விகித‍த்தின் "
+"வரிசையெண்"
 
 #. i18n: ectx: label, entry (CropRatioWidth), group (Crop)
 #: lib/gwenviewconfig.kcfg:365
 #, kde-format
 msgid "Last used crop ratio width when Advanced Settings enabled"
 msgstr ""
+"மேம்பட்ட அமைப்புகளைக் கடைசியாக பயன்படுத்தியபோது தேர்ந்தெடுத்திருந்த உருவ‍விகித‍த்தின் அகலம்"
 
 #. i18n: ectx: label, entry (CropRatioHeight), group (Crop)
 #: lib/gwenviewconfig.kcfg:369
 #, kde-format
 msgid "Last used crop ratio height when Advanced Settings enabled"
 msgstr ""
+"மேம்பட்ட அமைப்புகளைக் கடைசியாக பயன்படுத்தியபோது தேர்ந்தெடுத்திருந்த உருவ‍விகித‍த்தின் உயரம்"
 
 #: lib/historymodel.cpp:146
 #, kde-format
