@@ -2069,7 +2069,8 @@ msgid "Developer"
 msgstr "Entwickler"
 
 #: lib/bcg/bcgimageoperation.cpp:69
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Adjust Brightness/Contrast/Gamma"
 msgid "Adjust Brightness/Contrast/Gamma"
 msgstr "Helligkeit/Kontrast/Gamma einstellen"
 
