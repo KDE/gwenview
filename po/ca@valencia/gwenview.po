@@ -1594,7 +1594,7 @@ msgid ""
 "on your computer."
 msgstr ""
 "No està disponible la navegació per les etiquetes. Comproveu que Nepomuk "
-"estiga instal·lat correctament a l'ordinador."
+"estiga instal·lat correctament en l'ordinador."
 
 #: app/viewmainpage.cpp:153 app/viewmainpage.cpp:447
 #, kde-format
