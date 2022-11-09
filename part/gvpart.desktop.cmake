@@ -29,6 +29,7 @@ Name[hsb]=Gwenview wobhladowar za wobrazy
 Name[hu]=Gwenview képnézegető
 Name[ia]=Visor de imagine Gwenview
 Name[id]=Penampil Citra Gwenview
+Name[ie]=Visor de images Gwenview
 Name[is]=Gwenview myndskoðari
 Name[it]=Visore di immagini Gwenview
 Name[ja]=Gwenview 画像ビューア
