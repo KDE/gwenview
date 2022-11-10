@@ -902,7 +902,7 @@ msgstr "Fare tekerleği davranışı:"
 #, kde-format
 msgctxt "@option:radio action on mouse wheel"
 msgid "Scroll"
-msgstr "Kaydır"
+msgstr "Sar"
 
 #. i18n: ectx: property (text), widget (QRadioButton, mouseWheelBrowseRadioButton)
 #: app/imageviewconfigpage.ui:194
