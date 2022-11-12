@@ -35,6 +35,7 @@ Name[tr]=Gwenview İçe Aktarıcı
 Name[uk]=Інструмент імпортування Gwenview
 Name[x-test]=xxGwenview Importerxx
 Name[zh_CN]=Gwenview 导入程序
+Name[zh_TW]=Gwenview 匯入器
 Exec=gwenview_importer %u
 Icon=gwenview
 Type=Application
