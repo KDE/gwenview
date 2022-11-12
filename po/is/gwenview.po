@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-31 00:43+0000\n"
-"PO-Revision-Date: 2022-08-02 11:43+0000\n"
+"PO-Revision-Date: 2022-11-11 08:52+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic\n"
 "Language: is\n"
@@ -21,7 +21,7 @@ msgstr ""
 "\n"
 "\n"
 "\n"
-"X-Generator: Lokalize 19.12.3\n"
+"X-Generator: Lokalize 21.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -831,7 +831,7 @@ msgstr "Sníða utan af"
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Adjust Brightness/Contrast/Gamma"
-msgstr ""
+msgstr "Aðlaga Birtustig/Birtuskil/Litróf"
 
 #: app/imageopscontextmanageritem.cpp:128
 #: lib/redeyereduction/redeyereductionimageoperation.cpp:75
@@ -2056,22 +2056,22 @@ msgstr "Aðalforritari"
 #: lib/bcg/bcgimageoperation.cpp:69
 #, kde-format
 msgid "Adjust Brightness/Contrast/Gamma"
-msgstr ""
+msgstr "Aðlaga Birtustig/Birtuskil/Litróf"
 
 #: lib/bcg/bcgwidget.cpp:51
 #, kde-format
 msgid "Brightness:"
-msgstr ""
+msgstr "Birtustig:"
 
 #: lib/bcg/bcgwidget.cpp:52
 #, kde-format
 msgid "Contrast:"
-msgstr ""
+msgstr "Birtuskil:"
 
 #: lib/bcg/bcgwidget.cpp:53
 #, kde-format
 msgid "Gamma:"
-msgstr ""
+msgstr "Litróf:"
 
 #: lib/crop/cropwidget.cpp:191
 #, kde-format
