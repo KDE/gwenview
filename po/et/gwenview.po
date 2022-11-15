@@ -4,20 +4,20 @@
 #
 # Marek Laane <bald@smail.ee>, 2007-2009.
 # Marek Laane <bald@smail.ee>, 2009, 2010, 2011, 2012, 2014, 2016, 2019, 2020.
-# Mihkel Tõnnov <mihhkel@gmail.com>, 2020.
+# Mihkel Tõnnov <mihhkel@gmail.com>, 2020, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-31 00:43+0000\n"
-"PO-Revision-Date: 2020-11-20 00:38+0100\n"
+"PO-Revision-Date: 2022-10-22 11:35+0200\n"
 "Last-Translator: Mihkel Tõnnov <mihhkel@gmail.com>\n"
 "Language-Team: Estonian <>\n"
 "Language: et\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 20.08.3\n"
+"X-Generator: Lokalize 22.08.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -131,7 +131,7 @@ msgstr "Värviprofiil:"
 #, kde-format
 msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
 msgid "Sidebar Alignment Spacer"
-msgstr ""
+msgstr "Külgribalaiune tühikoht"
 
 #: app/browsemainpage.cpp:146 app/mainwindow.cpp:372 app/viewmainpage.cpp:425
 #: lib/documentview/documentviewcontroller.cpp:55
@@ -615,51 +615,49 @@ msgstr "Automaatne taasesitus"
 #: app/generalconfigpage.ui:41
 #, kde-format
 msgid "Notify after reaching the last image:"
-msgstr ""
+msgstr "Viimase pildi järel teavituse näitamine:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, neverShowWrapNoticeRadioButton)
 #: app/generalconfigpage.ui:51
 #, kde-format
 msgid "Never"
-msgstr ""
+msgstr "Mitte kunagi"
 
 #. i18n: ectx: property (text), widget (QRadioButton, wrapNoticeOnSlideshowRadioButton)
 #: app/generalconfigpage.ui:58
 #, kde-format
 msgid "Only during slideshows"
-msgstr ""
+msgstr "Ainult slaidiseansi ajal"
 
 #. i18n: ectx: property (text), widget (QRadioButton, alwaysShowWrapNoticeRadioButton)
 #: app/generalconfigpage.ui:65
 #, kde-format
 msgid "Always"
-msgstr ""
+msgstr "Alati"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: app/generalconfigpage.ui:88
-#, fuzzy, kde-format
-#| msgid "&Solid color background:"
+#, kde-format
 msgid "Fullscreen background:"
-msgstr "Ü&htlast värvi taust:"
+msgstr "Täisekraani taust:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, fullscreenBackgroundImageRadioButton)
 #: app/generalconfigpage.ui:98
 #, kde-format
 msgid "Dark gray texture"
-msgstr ""
+msgstr "Tumehall tekstuur"
 
 #. i18n: ectx: property (text), widget (QRadioButton, fullscreenBackgroundBlackRadioButton)
 #: app/generalconfigpage.ui:105
 #, kde-format
 msgid "Black"
-msgstr ""
+msgstr "Must"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: app/generalconfigpage.ui:128
-#, fuzzy, kde-format
-#| msgid "JPEG save quality:"
+#, kde-format
 msgid "Lossy image save quality:"
-msgstr "JPEG salvestamise kvaliteet:"
+msgstr "Kadudega salvestamise kvaliteet:"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, jpegQualitySpinner)
 #: app/generalconfigpage.ui:168
@@ -674,6 +672,8 @@ msgid ""
 "The quality level when saving images using lossy image formats such as JPEG, "
 "WEBP, AVIF, HEIF, and HEIC. Higher quality increases the file size."
 msgstr ""
+"Kvaliteeditase salvestamisel kadudega pildivormingutesse nagu JPEG, WEBP, "
+"AVIF, HEIF ja HEIC. Mida kõrgem kvaliteet, seda suurem failimaht."
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: app/generalconfigpage.ui:222
@@ -695,17 +695,15 @@ msgstr "Ainult valikunupu näitamine"
 
 #. i18n: ectx: property (text), widget (QRadioButton, noneThumbnailActionsRadioButton)
 #: app/generalconfigpage.ui:243
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "A number of thumbnail actions to show"
 msgid "None"
-msgstr "Puudub"
+msgstr "Nuppe ei näidata"
 
 #: app/gvcore.cpp:80
-#, fuzzy, kde-format
-#| msgid "JPEG save quality:"
+#, kde-format
 msgid "Image quality:"
-msgstr "JPEG salvestamise kvaliteet:"
+msgstr "Pildi kvaliteet:"
 
 #: app/gvcore.cpp:87
 #, kde-format
@@ -845,13 +843,13 @@ msgstr "Kärbi punasilmsust"
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Annotate"
-msgstr ""
+msgstr "Annoteeri"
 
 #: app/imageopscontextmanageritem.cpp:141
 #, kde-format
 msgctxt "@title:window Annotate [filename]"
 msgid "Annotate %1"
-msgstr ""
+msgstr "Annoteerimine: %1"
 
 #: app/imageopscontextmanageritem.cpp:164 lib/document/documentjob.cpp:77
 #, kde-format
@@ -1008,15 +1006,13 @@ msgid "%1:"
 msgstr "%1:"
 
 #: app/infocontextmanageritem.cpp:228
-#, fuzzy, kde-format
-#| msgid "Show failed files..."
+#, kde-format
 msgctxt "@action show more image meta info"
 msgid "Show more details..."
-msgstr "Näita nurjunud faile ..."
+msgstr "Näita lisateavet ..."
 
 #: app/infocontextmanageritem.cpp:242
-#, fuzzy, kde-format
-#| msgid "Image Information"
+#, kde-format
 msgctxt "@title:group"
 msgid "Image Information"
 msgstr "Pilditeave"
@@ -1200,7 +1196,7 @@ msgstr "Külgriba"
 #, kde-format
 msgctxt "@action opens crop, rename, etc."
 msgid "Show Editing Tools"
-msgstr ""
+msgstr "Redigeerimistööriistade näitamine"
 
 #: app/mainwindow.cpp:507
 #, kde-format
@@ -1221,11 +1217,10 @@ msgid ""
 msgstr "Jagatud pildi link (<a href=\"%1\">%1</a>) kopeeriti lõikepuhvrisse."
 
 #: app/mainwindow.cpp:572
-#, fuzzy, kde-format
-#| msgid "Configure"
+#, kde-format
 msgctxt "@title:menu submenu for actions that open configuration dialogs"
 msgid "Configure"
-msgstr "Seadista "
+msgstr "Seadistamine"
 
 #: app/mainwindow.cpp:587
 #, kde-format
@@ -1446,11 +1441,10 @@ msgid "Save All"
 msgstr "Salvesta kõik"
 
 #: app/savebar.cpp:286
-#, fuzzy, kde-format
-#| msgid "Next modified image"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Save all modified images"
-msgstr "Järgmine muudetud pilt"
+msgstr "Salvesta kõik muudetud pildid"
 
 #: app/semanticinfocontextmanageritem.cpp:186
 #, kde-format
@@ -1506,19 +1500,16 @@ msgid "Description"
 msgstr "Kirjeldus"
 
 #: app/slideshowfileitemaction.cpp:61
-#, fuzzy, kde-format
-#| msgid "Start Slideshow"
+#, kde-format
 msgctxt "@action:inmenu Start a slideshow Dolphin context menu"
 msgid "Start a Slideshow"
 msgstr "Alusta slaidiseanssi"
 
 #: app/slideshowfileitemaction.cpp:66
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "View selected images"
+#, kde-format
 msgctxt "@action:inmenu Start a slideshow Dolphin context menu"
 msgid "Start a Slideshow with selected images"
-msgstr "Valitud piltide vaatamine"
+msgstr "Alusta valitud piltidega slaidiseanssi"
 
 #: app/startmainpage.cpp:291
 #, kde-format
@@ -1602,8 +1593,7 @@ msgid "Synchronize"
 msgstr "Sünkroonimine"
 
 #: app/viewmainpage.cpp:428
-#, fuzzy, kde-format
-#| msgid "Show thumbnails"
+#, kde-format
 msgid "Show Thumbnails"
 msgstr "Pisipiltide näitamine"
 
@@ -1619,13 +1609,18 @@ msgid ""
 "and contain multiple rows of images; <link url='%1'>configure these options "
 "in the settings</link>.</para>"
 msgstr ""
+"<para>See lülitab sisse riba, mis näitab kõiki praeguse kausta pilte. Neist "
+"ühe valimine vahetab praegu näidatavat pilti.</para><para>Kui valid mitu "
+"pilti korraga, näidatakse neid kõrvuti.</para><para>Soovi korral saab <link "
+"url='%1'>seadetes määrata</link>, et pisipildiriba tuleks näidata hoopis "
+"püstiselt akna paremas servas ja et see peaks sisaldama mitu rida (või "
+"veergu) pilte.</para>"
 
 #: app/viewmainpage.cpp:575
-#, fuzzy, kde-format
-#| msgid "Background color:"
+#, kde-format
 msgctxt "@item:inmenu"
 msgid "Background Color Mode"
-msgstr "Taustavärv:"
+msgstr "Taustavärvi režiim"
 
 #: app/viewmainpage.cpp:767
 #, kde-format
@@ -1904,32 +1899,32 @@ msgstr "Dokumentide import..."
 #, kde-format
 msgctxt "@info above install button when Kamera is not installed"
 msgid "Support for your camera is not installed."
-msgstr ""
+msgstr "Sinu kaamera tuge pole paigaldatud."
 
 #: importer/thumbnailpage.cpp:236
 #, kde-format
 msgctxt "@info above install button, %1 protocol name"
 msgid "The protocol support library for \"%1\" is not installed."
-msgstr ""
+msgstr "Protokolli \"%1\" tugiteeki pole paigaldatud."
 
 #: importer/thumbnailpage.cpp:248
 #, kde-format
 msgctxt "@info:usagetip above install button"
 msgid ""
 "After finishing the installation process, restart this Importer to continue."
-msgstr ""
+msgstr "Pärast paigaldamist tuleb jätkamiseks see importija taaskäivitada."
 
 #: importer/thumbnailpage.cpp:255
 #, kde-format
 msgctxt "@info:tooltip for a button, %1 protocol name"
 msgid "Launch Discover to install the protocol support library for \"%1\""
-msgstr ""
+msgstr "Ava protokolli \"%1\" tugiteegi paigaldamiseks Discover"
 
 #: importer/thumbnailpage.cpp:257
 #, kde-format
 msgctxt "@action:button"
 msgid "Install Support for this Camera…"
-msgstr ""
+msgstr "Paigalda selle kaamera tugi …"
 
 #: importer/thumbnailpage.cpp:258
 #, kde-format
@@ -1939,12 +1934,15 @@ msgid ""
 "to launch Discover to install Kamera to enable protocol support for "
 "\"camera:/\" on your system."
 msgstr ""
+"Kaamerast lugemiseks peab süsteemis olema paigaldatud rakendus Kamera. "
+"Klõpsa siin, et avada Discover ja paigaldada Kamera, mis lisab süsteemile "
+"\"camera:/\" protokolli toe."
 
 #: importer/thumbnailpage.cpp:261
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Install Protocol Support for \"%1\"…"
-msgstr ""
+msgstr "Paigalda protokolli \"%1\" tugi …"
 
 #: importer/thumbnailpage.cpp:262
 #, kde-format
@@ -1953,12 +1951,14 @@ msgid ""
 "Click here to launch Discover to install the missing protocol support "
 "library to enable the protocol support for \"%1:/\" on your system."
 msgstr ""
+"Klõpsa siin, et avada Discover ja paigaldada puuduv protokolli tugiteek, mis "
+"lisab süsteemile \"%1:/\" protokolli toe"
 
 #: importer/thumbnailpage.cpp:266
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Search the Web for How to Install Protocol Support for \"%1\"…"
-msgstr ""
+msgstr "Otsi veebist, kuidas paigaldada protokolli \"%1\" tugi …"
 
 #: importer/thumbnailpage.cpp:282
 #, kde-format
@@ -1966,7 +1966,7 @@ msgctxt ""
 "@info this text will be used as a search term in an online search engine, %1 "
 "protocol name"
 msgid "How to install protocol support for \"%1\" on Linux"
-msgstr ""
+msgstr "How to install protocol support for \"%1\" on Linux"
 
 #: importer/thumbnailpage.cpp:283
 #, kde-format
@@ -1974,7 +1974,7 @@ msgctxt ""
 "search engine URL, %1 search keyword, and translators can replace duckduckgo "
 "with other search engines"
 msgid "https://duckduckgo.com/?q=%1"
-msgstr ""
+msgstr "https://duckduckgo.com/?q=%1"
 
 #: importer/thumbnailpage.cpp:324
 #, kde-format
@@ -1993,6 +1993,8 @@ msgid ""
 "Opening Discover failed.<nl/>Please check if Discover is installed on your "
 "system, or use your system's package manager to install \"Kamera\" package."
 msgstr ""
+"Discover'i avamine ebaõnnestus.<nl/>Vaata, et Discover oleks süsteemis "
+"paigaldatud, või paigalda pakett \"Kamera\" oma süsteemi paketihalduri abil."
 
 #: importer/thumbnailpage.cpp:493
 #, kde-kuit-format
@@ -2002,6 +2004,9 @@ msgid ""
 "system, or use your system's package manager to install the protocol support "
 "library for \"%1\"."
 msgstr ""
+"Discover'i avamine ebaõnnestus.<nl/>Vaata, et Discover oleks süsteemis "
+"paigaldatud, või paigalda protokolli \"%1\" tugiteek oma süsteemi "
+"paketihalduri abil."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: importer/thumbnailpage.ui:173
@@ -2028,10 +2033,9 @@ msgid "Listing content of:"
 msgstr "Sisu näitamine:"
 
 #: lib/about.cpp:38
-#, fuzzy, kde-format
-#| msgid "Copyright 2000-2019 Gwenview authors"
+#, kde-format
 msgid "Copyright 2000-2022 Gwenview authors"
-msgstr "Autoriõigus 2000-2019: Gwenview autorid"
+msgstr "Autoriõigus 2000-2022: Gwenview autorid"
 
 #: lib/about.cpp:40
 #, kde-format
@@ -2220,10 +2224,9 @@ msgid "Loading <filename>%1</filename> failed"
 msgstr "Faili <filename>%1</filename> laadimine nurjus"
 
 #: lib/documentview/documentviewcontroller.cpp:61
-#, fuzzy, kde-format
-#| msgid "Zoom to fit"
+#, kde-format
 msgid "Zoom to Fit"
-msgstr "Suurenda mahutamiseks"
+msgstr "Mahuta aknasse"
 
 #: lib/documentview/documentviewcontroller.cpp:63
 #, kde-format
@@ -2232,11 +2235,10 @@ msgid "Fit"
 msgstr "Mahutamine"
 
 #: lib/documentview/documentviewcontroller.cpp:64
-#, fuzzy, kde-format
-#| msgid "&Fit image to page"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Fit image into the viewing area"
-msgstr "&Mahutatakse lehele"
+msgstr "Pildi mahutamine vaatealasse"
 
 #. i18n: "a previous zoom value" is worded in such an unclear way because it can either be the zoom value for the image viewed previously or the
 #. zoom value that was used the last time this same image was viewed. Being more clear about this isn't really necessary here so I kept it short
@@ -2258,6 +2260,17 @@ msgid ""
 "are displayed at a previous zoom value instead <link url='%2'>in the "
 "settings</link>.</para>"
 msgstr ""
+"<para>See sobitab pildi saadaolevasse vaatealasse:<list><item>Vaatealast "
+"suuremad pildid kuvatakse väiksemalt, et nad ära mahuks.</"
+"item><item>Vaatealast väiksemad pildid kuvatakse nende tavasuuruses. Kui "
+"väiksemad pildid peaksid selle asemel täitma kogu saadaoleva vaateala, märgi "
+"<link url='%2'>seadetes</link> ruut <emphasis>Väiksemaid pilte "
+"suurendatakse</emphasis>.</item></list></para><para>Kui \"%1\" on juba sisse "
+"lülitatud, siis siin uuesti klõpsamine lülitab selle välja, nii et pilt "
+"kuvatakse taas oma tavasuuruses.</para><para>\"%1\" on piltide vaikimisi "
+"suurendusrežiim. Seda saab <link url='%2'>seadetes</link> muuta, nii et "
+"pilte kuvatakse kas eelmise pildi puhul kasutatud suurendusega või "
+"suurendusega, millega sama pilti viimati vaadati.</para>"
 
 #: lib/documentview/documentviewcontroller.cpp:83
 #, kde-format
@@ -2275,31 +2288,31 @@ msgstr "Täitmine"
 #: lib/documentview/documentviewcontroller.cpp:98
 #, kde-format
 msgid "Show Bird's Eye View When Zoomed In"
-msgstr ""
+msgstr "Ülevaate näitamine, kui tervet pilti pole näha"
 
 #: lib/documentview/documentviewcontroller.cpp:105
 #, kde-format
 msgctxt "@action"
 msgid "Follow color scheme"
-msgstr ""
+msgstr "Värviskeemi järgi"
 
 #: lib/documentview/documentviewcontroller.cpp:111
 #, kde-format
 msgctxt "@action"
 msgid "Light Mode"
-msgstr ""
+msgstr "Hele kujundus"
 
 #: lib/documentview/documentviewcontroller.cpp:117
 #, kde-format
 msgctxt "@action"
 msgid "Neutral Mode"
-msgstr ""
+msgstr "Neutraalne kujundus"
 
 #: lib/documentview/documentviewcontroller.cpp:123
 #, kde-format
 msgctxt "@action"
 msgid "Dark Mode"
-msgstr ""
+msgstr "Tume kujundus"
 
 #: lib/documentview/messageviewadapter.cpp:50
 #, kde-format
@@ -2616,12 +2629,13 @@ msgid ""
 "Assuming that the image format won't be changed and\n"
 "for lossy images using the value set in 'Lossy image save quality'."
 msgstr ""
+"Eeldusel, et failivorming jääb samaks ja kadudega salvestamise puhul "
+"kasutatakse seadetes määratud kvaliteeti."
 
 #: lib/resize/resizeimagedialog.cpp:219
-#, fuzzy, kde-format
-#| msgid "Mirror"
+#, kde-format
 msgid "error"
-msgstr "Peegelda"
+msgstr "tõrge"
 
 #: lib/resize/resizeimageoperation.cpp:70
 #, kde-format
