@@ -154,6 +154,8 @@ static void delOrTrash(KIO::JobUiDelegate::DeletionType deletionType, const QLis
     default: // e.g. EmptyTrash
         return;
     }
+    Q_ASSERT(job);
+    KJobWidgets::setWindow(job, parent);
 #else
     KJob *job = nullptr;
     switch (deletionType) {
@@ -166,9 +168,10 @@ static void delOrTrash(KIO::JobUiDelegate::DeletionType deletionType, const QLis
     default: // e.g. EmptyTrash
         return;
     }
-#endif
     Q_ASSERT(job);
     KJobWidgets::setWindow(job, parent);
+    job->start();
+#endif
 
     for (const QUrl &url : urlList) {
         DocumentFactory::instance()->forget(url);
