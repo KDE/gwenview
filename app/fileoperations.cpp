@@ -147,6 +147,7 @@ static void delOrTrash(KIO::JobUiDelegate::DeletionType deletionType, const QLis
     }
     Q_ASSERT(job);
     KJobWidgets::setWindow(job, parent);
+    job->start();
 
     for (const QUrl &url : urlList) {
         DocumentFactory::instance()->forget(url);
