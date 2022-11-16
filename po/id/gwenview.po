@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KDE Frameworks 5 Applications\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-31 00:43+0000\n"
+"POT-Creation-Date: 2022-11-16 02:50+0000\n"
 "PO-Revision-Date: 2022-09-27 17:54+0700\n"
 "Last-Translator: Wantoyèk <wantoyek@gmail.com>\n"
 "Language-Team: Indonesian <kde-i18n-doc@kde.org>\n"
@@ -283,13 +283,13 @@ msgstr "Tampilan Citra"
 msgid "Advanced"
 msgstr "Tingkat-lanjut"
 
-#: app/fileoperations.cpp:64
+#: app/fileoperations.cpp:67
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Copy %1"
 msgstr "Salin %1"
 
-#: app/fileoperations.cpp:66
+#: app/fileoperations.cpp:69
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Copy %1 image"
@@ -297,19 +297,19 @@ msgid_plural "Copy %1 images"
 msgstr[0] "Sain %1 citra"
 msgstr[1] "Sain %1 citra"
 
-#: app/fileoperations.cpp:68
+#: app/fileoperations.cpp:71
 #, kde-format
 msgctxt "@action:button"
 msgid "Copy"
 msgstr "Salin"
 
-#: app/fileoperations.cpp:72
+#: app/fileoperations.cpp:75
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Move %1"
 msgstr "Pindah %1"
 
-#: app/fileoperations.cpp:74
+#: app/fileoperations.cpp:77
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Move %1 image"
@@ -317,19 +317,19 @@ msgid_plural "Move %1 images"
 msgstr[0] "Pindah %1 citra"
 msgstr[1] "Pindah %1 citra"
 
-#: app/fileoperations.cpp:76
+#: app/fileoperations.cpp:79
 #, kde-format
 msgctxt "@action:button"
 msgid "Move"
 msgstr "Pindah"
 
-#: app/fileoperations.cpp:80
+#: app/fileoperations.cpp:83
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Link %1"
 msgstr "Taut %1"
 
-#: app/fileoperations.cpp:82
+#: app/fileoperations.cpp:85
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Link %1 image"
@@ -337,28 +337,28 @@ msgid_plural "Link %1 images"
 msgstr[0] "Tautkan %1 citra"
 msgstr[1] "Tautkan %1 citra"
 
-#: app/fileoperations.cpp:84
+#: app/fileoperations.cpp:87
 #, kde-format
 msgctxt "@action:button"
 msgid "Link"
 msgstr "Taut"
 
-#: app/fileoperations.cpp:194
+#: app/fileoperations.cpp:216
 #, kde-format
 msgid "Move Here"
 msgstr "Pindah Sini"
 
-#: app/fileoperations.cpp:195
+#: app/fileoperations.cpp:217
 #, kde-format
 msgid "Copy Here"
 msgstr "Salin Sini"
 
-#: app/fileoperations.cpp:196
+#: app/fileoperations.cpp:218
 #, kde-format
 msgid "Link Here"
 msgstr "Taut Sini"
 
-#: app/fileoperations.cpp:198
+#: app/fileoperations.cpp:220
 #, kde-format
 msgid "Cancel"
 msgstr "Batal"

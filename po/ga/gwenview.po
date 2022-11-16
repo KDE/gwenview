@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdegraphics/gwenview.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-31 00:43+0000\n"
+"POT-Creation-Date: 2022-11-16 02:50+0000\n"
 "PO-Revision-Date: 2007-09-30 16:51-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -281,7 +281,7 @@ msgstr "Amharc Íomhánna"
 msgid "Advanced"
 msgstr "Casta"
 
-#: app/fileoperations.cpp:64
+#: app/fileoperations.cpp:67
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Copy"
@@ -289,7 +289,7 @@ msgctxt "@title:window %1 file name"
 msgid "Copy %1"
 msgstr "Cóipeáil"
 
-#: app/fileoperations.cpp:66
+#: app/fileoperations.cpp:69
 #, fuzzy, kde-format
 #| msgid "Loop on images"
 msgctxt "@title:window %1 number of images"
@@ -301,13 +301,13 @@ msgstr[2] "Lúb ar íomhánna"
 msgstr[3] "Lúb ar íomhánna"
 msgstr[4] "Lúb ar íomhánna"
 
-#: app/fileoperations.cpp:68
+#: app/fileoperations.cpp:71
 #, kde-format
 msgctxt "@action:button"
 msgid "Copy"
 msgstr "Cóipeáil"
 
-#: app/fileoperations.cpp:72
+#: app/fileoperations.cpp:75
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Move"
@@ -315,7 +315,7 @@ msgctxt "@title:window %1 file name"
 msgid "Move %1"
 msgstr "Bog"
 
-#: app/fileoperations.cpp:74
+#: app/fileoperations.cpp:77
 #, fuzzy, kde-format
 #| msgctxt "%1 is collection name, %2 is image count in collection"
 #| msgid "%1 (%2 image)"
@@ -329,13 +329,13 @@ msgstr[2] "%1 (%2 íomhá)"
 msgstr[3] "%1 (%2 n-íomhá)"
 msgstr[4] "%1 (%2 íomhá)"
 
-#: app/fileoperations.cpp:76
+#: app/fileoperations.cpp:79
 #, kde-format
 msgctxt "@action:button"
 msgid "Move"
 msgstr "Bog"
 
-#: app/fileoperations.cpp:80
+#: app/fileoperations.cpp:83
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Link"
@@ -343,7 +343,7 @@ msgctxt "@title:window %1 file name"
 msgid "Link %1"
 msgstr "Nasc"
 
-#: app/fileoperations.cpp:82
+#: app/fileoperations.cpp:85
 #, fuzzy, kde-format
 #| msgctxt "%1 is collection name, %2 is image count in collection"
 #| msgid "%1 (%2 image)"
@@ -357,28 +357,28 @@ msgstr[2] "%1 (%2 íomhá)"
 msgstr[3] "%1 (%2 n-íomhá)"
 msgstr[4] "%1 (%2 íomhá)"
 
-#: app/fileoperations.cpp:84
+#: app/fileoperations.cpp:87
 #, kde-format
 msgctxt "@action:button"
 msgid "Link"
 msgstr "Nasc"
 
-#: app/fileoperations.cpp:194
+#: app/fileoperations.cpp:216
 #, kde-format
 msgid "Move Here"
 msgstr "Bog Anseo"
 
-#: app/fileoperations.cpp:195
+#: app/fileoperations.cpp:217
 #, kde-format
 msgid "Copy Here"
 msgstr "Cóipeáil Anseo"
 
-#: app/fileoperations.cpp:196
+#: app/fileoperations.cpp:218
 #, kde-format
 msgid "Link Here"
 msgstr "Nasc Anseo"
 
-#: app/fileoperations.cpp:198
+#: app/fileoperations.cpp:220
 #, kde-format
 msgid "Cancel"
 msgstr "Cealaigh"
