@@ -120,7 +120,7 @@ struct ImageOpsContextManagerItem::Private {
         actionCollection->setDefaultShortcut(mCropAction, Qt::SHIFT | Qt::Key_C);
 
         mBCGAction = edit->addAction(QStringLiteral("brightness_contrast_gamma"), q, SLOT(startBCG()));
-        mBCGAction->setText(i18nc("@action:intoolbar", "Adjust Brightness/Contrast/Gamma"));
+        mBCGAction->setText(i18nc("@action:intoolbar", "Adjust Colors"));
         mBCGAction->setIcon(QIcon::fromTheme(QStringLiteral("contrast")));
         actionCollection->setDefaultShortcut(mBCGAction, Qt::SHIFT | Qt::Key_B);
 
