@@ -66,7 +66,7 @@ struct BCGImageOperationPrivate {
 BCGImageOperation::BCGImageOperation(const BrightnessContrastGamma &bcg)
     : d(new BCGImageOperationPrivate)
 {
-    setText(i18n("Adjust Brightness/Contrast/Gamma"));
+    setText(i18n("Adjust Colors"));
 
     d->mBcg = bcg;
 }
