@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-16 02:50+0000\n"
+"POT-Creation-Date: 2022-11-17 02:24+0000\n"
 "PO-Revision-Date: 2021-11-19 08:51+0100\n"
 "Last-Translator: Edward Wornar <edi.werner@gmx.de>\n"
 "Language-Team: Upper Sorbian <kde-i18n-doc@kde.org>\n"
@@ -335,22 +335,22 @@ msgctxt "@action:button"
 msgid "Link"
 msgstr "Wotkaz"
 
-#: app/fileoperations.cpp:216
+#: app/fileoperations.cpp:219
 #, kde-format
 msgid "Move Here"
 msgstr "Sem přesunyć"
 
-#: app/fileoperations.cpp:217
+#: app/fileoperations.cpp:220
 #, kde-format
 msgid "Copy Here"
 msgstr "Sem kopěrować"
 
-#: app/fileoperations.cpp:218
+#: app/fileoperations.cpp:221
 #, kde-format
 msgid "Link Here"
 msgstr "Sem wotkazać"
 
-#: app/fileoperations.cpp:220
+#: app/fileoperations.cpp:223
 #, kde-format
 msgid "Cancel"
 msgstr "Přetorhnyć"
@@ -819,7 +819,7 @@ msgstr ""
 #: app/imageopscontextmanageritem.cpp:123
 #, kde-format
 msgctxt "@action:intoolbar"
-msgid "Adjust Brightness/Contrast/Gamma"
+msgid "Adjust Colors"
 msgstr ""
 
 #: app/imageopscontextmanageritem.cpp:128
@@ -2012,7 +2012,7 @@ msgstr "Wuwiwar"
 
 #: lib/bcg/bcgimageoperation.cpp:69
 #, kde-format
-msgid "Adjust Brightness/Contrast/Gamma"
+msgid "Adjust Colors"
 msgstr ""
 
 #: lib/bcg/bcgwidget.cpp:51

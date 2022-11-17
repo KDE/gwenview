@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-16 02:50+0000\n"
+"POT-Creation-Date: 2022-11-17 02:24+0000\n"
 "PO-Revision-Date: 2022-11-01 15:49+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@neuf.fr>\n"
 "Language-Team: French <kde-francophone@kde.org>\n"
@@ -352,22 +352,22 @@ msgctxt "@action:button"
 msgid "Link"
 msgstr "Lier"
 
-#: app/fileoperations.cpp:216
+#: app/fileoperations.cpp:219
 #, kde-format
 msgid "Move Here"
 msgstr "Déplacer ici"
 
-#: app/fileoperations.cpp:217
+#: app/fileoperations.cpp:220
 #, kde-format
 msgid "Copy Here"
 msgstr "Copier ici"
 
-#: app/fileoperations.cpp:218
+#: app/fileoperations.cpp:221
 #, kde-format
 msgid "Link Here"
 msgstr "Lier ici"
 
-#: app/fileoperations.cpp:220
+#: app/fileoperations.cpp:223
 #, kde-format
 msgid "Cancel"
 msgstr "Annuler"
@@ -840,8 +840,8 @@ msgstr "Rogner"
 #: app/imageopscontextmanageritem.cpp:123
 #, kde-format
 msgctxt "@action:intoolbar"
-msgid "Adjust Brightness/Contrast/Gamma"
-msgstr "Ajuster la luminosité / le contraste / le gamma"
+msgid "Adjust Colors"
+msgstr ""
 
 #: app/imageopscontextmanageritem.cpp:128
 #: lib/redeyereduction/redeyereductionimageoperation.cpp:75
@@ -2084,8 +2084,8 @@ msgstr "Développeur"
 
 #: lib/bcg/bcgimageoperation.cpp:69
 #, kde-format
-msgid "Adjust Brightness/Contrast/Gamma"
-msgstr "Ajuster la luminosité / le contraste / le gamma"
+msgid "Adjust Colors"
+msgstr ""
 
 #: lib/bcg/bcgwidget.cpp:51
 #, kde-format
@@ -2803,6 +2803,13 @@ msgstr "&Fichier"
 #, kde-format
 msgid "&View"
 msgstr "&Affichage"
+
+#~ msgctxt "@action:intoolbar"
+#~ msgid "Adjust Brightness/Contrast/Gamma"
+#~ msgstr "Ajuster la luminosité / le contraste / le gamma"
+
+#~ msgid "Adjust Brightness/Contrast/Gamma"
+#~ msgstr "Ajuster la luminosité / le contraste / le gamma"
 
 #~ msgctxt "@label:chooser Describes what a row of buttons control"
 #~ msgid "Background color:"

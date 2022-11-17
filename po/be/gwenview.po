@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-16 02:50+0000\n"
+"POT-Creation-Date: 2022-11-17 02:24+0000\n"
 "PO-Revision-Date: 2008-02-02 22:23+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@gmail.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -374,22 +374,22 @@ msgctxt "@action:button"
 msgid "Link"
 msgstr "Злучыць з"
 
-#: app/fileoperations.cpp:216
+#: app/fileoperations.cpp:219
 #, kde-format
 msgid "Move Here"
 msgstr "Перамясціць сюды"
 
-#: app/fileoperations.cpp:217
+#: app/fileoperations.cpp:220
 #, kde-format
 msgid "Copy Here"
 msgstr "Скапіраваць сюды"
 
-#: app/fileoperations.cpp:218
+#: app/fileoperations.cpp:221
 #, kde-format
 msgid "Link Here"
 msgstr "Спасылку сюды"
 
-#: app/fileoperations.cpp:220
+#: app/fileoperations.cpp:223
 #, kde-format
 msgid "Cancel"
 msgstr "Скасаваць"
@@ -901,7 +901,7 @@ msgstr "Кадраванне"
 #: app/imageopscontextmanageritem.cpp:123
 #, kde-format
 msgctxt "@action:intoolbar"
-msgid "Adjust Brightness/Contrast/Gamma"
+msgid "Adjust Colors"
 msgstr ""
 
 #: app/imageopscontextmanageritem.cpp:128
@@ -2205,7 +2205,7 @@ msgstr "Галоўны распрацоўшчык"
 
 #: lib/bcg/bcgimageoperation.cpp:69
 #, kde-format
-msgid "Adjust Brightness/Contrast/Gamma"
+msgid "Adjust Colors"
 msgstr ""
 
 #: lib/bcg/bcgwidget.cpp:51

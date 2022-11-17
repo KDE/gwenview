@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-16 02:50+0000\n"
+"POT-Creation-Date: 2022-11-17 02:24+0000\n"
 "PO-Revision-Date: 2014-09-28 22:46-0700\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -359,22 +359,22 @@ msgctxt "@action:button"
 msgid "Link"
 msgstr "リンク"
 
-#: app/fileoperations.cpp:216
+#: app/fileoperations.cpp:219
 #, kde-format
 msgid "Move Here"
 msgstr "ここに移動"
 
-#: app/fileoperations.cpp:217
+#: app/fileoperations.cpp:220
 #, kde-format
 msgid "Copy Here"
 msgstr "ここにコピー"
 
-#: app/fileoperations.cpp:218
+#: app/fileoperations.cpp:221
 #, kde-format
 msgid "Link Here"
 msgstr "ここにリンク"
 
-#: app/fileoperations.cpp:220
+#: app/fileoperations.cpp:223
 #, kde-format
 msgid "Cancel"
 msgstr "キャンセル"
@@ -856,7 +856,7 @@ msgstr "切り取り"
 #: app/imageopscontextmanageritem.cpp:123
 #, kde-format
 msgctxt "@action:intoolbar"
-msgid "Adjust Brightness/Contrast/Gamma"
+msgid "Adjust Colors"
 msgstr ""
 
 #: app/imageopscontextmanageritem.cpp:128
@@ -2127,7 +2127,7 @@ msgstr "開発者"
 
 #: lib/bcg/bcgimageoperation.cpp:69
 #, kde-format
-msgid "Adjust Brightness/Contrast/Gamma"
+msgid "Adjust Colors"
 msgstr ""
 
 #: lib/bcg/bcgwidget.cpp:51

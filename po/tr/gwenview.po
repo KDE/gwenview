@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdegraphics-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-16 02:50+0000\n"
+"POT-Creation-Date: 2022-11-17 02:24+0000\n"
 "PO-Revision-Date: 2022-10-30 20:41+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -347,22 +347,22 @@ msgctxt "@action:button"
 msgid "Link"
 msgstr "Bağlantıla"
 
-#: app/fileoperations.cpp:216
+#: app/fileoperations.cpp:219
 #, kde-format
 msgid "Move Here"
 msgstr "Buraya Taşı"
 
-#: app/fileoperations.cpp:217
+#: app/fileoperations.cpp:220
 #, kde-format
 msgid "Copy Here"
 msgstr "Buraya Kopyala"
 
-#: app/fileoperations.cpp:218
+#: app/fileoperations.cpp:221
 #, kde-format
 msgid "Link Here"
 msgstr "Buraya Bağlantıla"
 
-#: app/fileoperations.cpp:220
+#: app/fileoperations.cpp:223
 #, kde-format
 msgid "Cancel"
 msgstr "İptal"
@@ -834,8 +834,8 @@ msgstr "Kırp"
 #: app/imageopscontextmanageritem.cpp:123
 #, kde-format
 msgctxt "@action:intoolbar"
-msgid "Adjust Brightness/Contrast/Gamma"
-msgstr "Parlaklık/Karşıtlık/Gama Ayarla"
+msgid "Adjust Colors"
+msgstr ""
 
 #: app/imageopscontextmanageritem.cpp:128
 #: lib/redeyereduction/redeyereductionimageoperation.cpp:75
@@ -2062,8 +2062,8 @@ msgstr "Geliştirici"
 
 #: lib/bcg/bcgimageoperation.cpp:69
 #, kde-format
-msgid "Adjust Brightness/Contrast/Gamma"
-msgstr "Parlaklık/Karşıtlık/Gama Ayarla"
+msgid "Adjust Colors"
+msgstr ""
 
 #: lib/bcg/bcgwidget.cpp:51
 #, kde-format
@@ -2764,3 +2764,10 @@ msgstr "&Dosya"
 #, kde-format
 msgid "&View"
 msgstr "&Görünüm"
+
+#~ msgctxt "@action:intoolbar"
+#~ msgid "Adjust Brightness/Contrast/Gamma"
+#~ msgstr "Parlaklık/Karşıtlık/Gama Ayarla"
+
+#~ msgid "Adjust Brightness/Contrast/Gamma"
+#~ msgstr "Parlaklık/Karşıtlık/Gama Ayarla"
