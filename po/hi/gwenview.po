@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-31 00:43+0000\n"
+"POT-Creation-Date: 2022-11-17 00:43+0000\n"
 "PO-Revision-Date: 2022-02-10 12:40+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -332,22 +332,22 @@ msgctxt "@action:button"
 msgid "Link"
 msgstr "कड़ी"
 
-#: app/fileoperations.cpp:194
+#: app/fileoperations.cpp:195
 #, kde-format
 msgid "Move Here"
 msgstr "यहाँ स्थानांतरित करें"
 
-#: app/fileoperations.cpp:195
+#: app/fileoperations.cpp:196
 #, kde-format
 msgid "Copy Here"
 msgstr "यहाँ नक़ल करें"
 
-#: app/fileoperations.cpp:196
+#: app/fileoperations.cpp:197
 #, kde-format
 msgid "Link Here"
 msgstr "यहां कड़ी जोडें"
 
-#: app/fileoperations.cpp:198
+#: app/fileoperations.cpp:199
 #, kde-format
 msgid "Cancel"
 msgstr ""
@@ -821,7 +821,7 @@ msgstr "काँट छाँट करें"
 #: app/imageopscontextmanageritem.cpp:123
 #, kde-format
 msgctxt "@action:intoolbar"
-msgid "Adjust Brightness/Contrast/Gamma"
+msgid "Adjust Colors"
 msgstr ""
 
 #: app/imageopscontextmanageritem.cpp:128
@@ -2084,7 +2084,7 @@ msgstr ""
 
 #: lib/bcg/bcgimageoperation.cpp:69
 #, kde-format
-msgid "Adjust Brightness/Contrast/Gamma"
+msgid "Adjust Colors"
 msgstr ""
 
 #: lib/bcg/bcgwidget.cpp:51

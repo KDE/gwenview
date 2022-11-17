@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-31 00:43+0000\n"
+"POT-Creation-Date: 2022-11-17 00:43+0000\n"
 "PO-Revision-Date: 2022-11-03 21:18+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -335,22 +335,22 @@ msgctxt "@action:button"
 msgid "Link"
 msgstr "இணை"
 
-#: app/fileoperations.cpp:194
+#: app/fileoperations.cpp:195
 #, kde-format
 msgid "Move Here"
 msgstr "இங்கு நகர்த்து"
 
-#: app/fileoperations.cpp:195
+#: app/fileoperations.cpp:196
 #, kde-format
 msgid "Copy Here"
 msgstr "இங்கு நகலெடு"
 
-#: app/fileoperations.cpp:196
+#: app/fileoperations.cpp:197
 #, kde-format
 msgid "Link Here"
 msgstr "இங்கு இணை"
 
-#: app/fileoperations.cpp:198
+#: app/fileoperations.cpp:199
 #, kde-format
 msgid "Cancel"
 msgstr "ரத்து செய்"
@@ -822,8 +822,8 @@ msgstr "வெட்டு"
 #: app/imageopscontextmanageritem.cpp:123
 #, kde-format
 msgctxt "@action:intoolbar"
-msgid "Adjust Brightness/Contrast/Gamma"
-msgstr "நிறமாறுபாடு/பிரகாசம்/காமா போன்றவற்றை மாற்று"
+msgid "Adjust Colors"
+msgstr ""
 
 #: app/imageopscontextmanageritem.cpp:128
 #: lib/redeyereduction/redeyereductionimageoperation.cpp:75
@@ -2043,8 +2043,8 @@ msgstr "நிரலாளர்"
 
 #: lib/bcg/bcgimageoperation.cpp:69
 #, kde-format
-msgid "Adjust Brightness/Contrast/Gamma"
-msgstr "நிறமாறுபாடு/பிரகாசம்/காமா போன்றவற்றை மாற்றுங்கள்"
+msgid "Adjust Colors"
+msgstr ""
 
 #: lib/bcg/bcgwidget.cpp:51
 #, kde-format
@@ -2729,6 +2729,13 @@ msgstr "&கோப்பு"
 #, kde-format
 msgid "&View"
 msgstr "&பார்வை"
+
+#~ msgctxt "@action:intoolbar"
+#~ msgid "Adjust Brightness/Contrast/Gamma"
+#~ msgstr "நிறமாறுபாடு/பிரகாசம்/காமா போன்றவற்றை மாற்று"
+
+#~ msgid "Adjust Brightness/Contrast/Gamma"
+#~ msgstr "நிறமாறுபாடு/பிரகாசம்/காமா போன்றவற்றை மாற்றுங்கள்"
 
 #~ msgctxt "@label:chooser Describes what a row of buttons control"
 #~ msgid "Background color:"

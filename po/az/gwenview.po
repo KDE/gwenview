@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-31 00:43+0000\n"
+"POT-Creation-Date: 2022-11-17 00:43+0000\n"
 "PO-Revision-Date: 2022-11-11 11:04+0400\n"
 "Last-Translator: Kheyyam <xxmn77@gmail.com>\n"
 "Language-Team: Azerbaijani <kde-i18n-doc@kde.org>\n"
@@ -339,22 +339,22 @@ msgctxt "@action:button"
 msgid "Link"
 msgstr "Keçid"
 
-#: app/fileoperations.cpp:194
+#: app/fileoperations.cpp:195
 #, kde-format
 msgid "Move Here"
 msgstr "Buraya Köçürmək"
 
-#: app/fileoperations.cpp:195
+#: app/fileoperations.cpp:196
 #, kde-format
 msgid "Copy Here"
 msgstr "Bura Kopyalamaq"
 
-#: app/fileoperations.cpp:196
+#: app/fileoperations.cpp:197
 #, kde-format
 msgid "Link Here"
 msgstr "Keçid yaratmaq"
 
-#: app/fileoperations.cpp:198
+#: app/fileoperations.cpp:199
 #, kde-format
 msgid "Cancel"
 msgstr "İmtina"
@@ -827,8 +827,8 @@ msgstr "Kadrlaşdırmaq"
 #: app/imageopscontextmanageritem.cpp:123
 #, kde-format
 msgctxt "@action:intoolbar"
-msgid "Adjust Brightness/Contrast/Gamma"
-msgstr "Parlaqlıq/dolğunluq/qamma səviyyəsini tənzimləyin"
+msgid "Adjust Colors"
+msgstr ""
 
 #: app/imageopscontextmanageritem.cpp:128
 #: lib/redeyereduction/redeyereductionimageoperation.cpp:75
@@ -2059,8 +2059,8 @@ msgstr "Tərtibatçı"
 
 #: lib/bcg/bcgimageoperation.cpp:69
 #, kde-format
-msgid "Adjust Brightness/Contrast/Gamma"
-msgstr "Parlaqlıq/kontrast/qamma səviyyəsini tənzimlə"
+msgid "Adjust Colors"
+msgstr ""
 
 #: lib/bcg/bcgwidget.cpp:51
 #, kde-format
@@ -2769,6 +2769,13 @@ msgstr "&Fayl"
 #, kde-format
 msgid "&View"
 msgstr "&Baxmaq"
+
+#~ msgctxt "@action:intoolbar"
+#~ msgid "Adjust Brightness/Contrast/Gamma"
+#~ msgstr "Parlaqlıq/dolğunluq/qamma səviyyəsini tənzimləyin"
+
+#~ msgid "Adjust Brightness/Contrast/Gamma"
+#~ msgstr "Parlaqlıq/kontrast/qamma səviyyəsini tənzimlə"
 
 #~ msgctxt "@label:chooser Describes what a row of buttons control"
 #~ msgid "Background color:"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdegraphics/gwenview.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-31 00:43+0000\n"
+"POT-Creation-Date: 2022-11-17 00:43+0000\n"
 "PO-Revision-Date: 2007-09-30 16:51-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -363,22 +363,22 @@ msgctxt "@action:button"
 msgid "Link"
 msgstr "Nasc"
 
-#: app/fileoperations.cpp:194
+#: app/fileoperations.cpp:195
 #, kde-format
 msgid "Move Here"
 msgstr "Bog Anseo"
 
-#: app/fileoperations.cpp:195
+#: app/fileoperations.cpp:196
 #, kde-format
 msgid "Copy Here"
 msgstr "Cóipeáil Anseo"
 
-#: app/fileoperations.cpp:196
+#: app/fileoperations.cpp:197
 #, kde-format
 msgid "Link Here"
 msgstr "Nasc Anseo"
 
-#: app/fileoperations.cpp:198
+#: app/fileoperations.cpp:199
 #, kde-format
 msgid "Cancel"
 msgstr "Cealaigh"
@@ -862,7 +862,7 @@ msgstr "Bearr"
 #: app/imageopscontextmanageritem.cpp:123
 #, kde-format
 msgctxt "@action:intoolbar"
-msgid "Adjust Brightness/Contrast/Gamma"
+msgid "Adjust Colors"
 msgstr ""
 
 #: app/imageopscontextmanageritem.cpp:128
@@ -2184,7 +2184,7 @@ msgstr "Príomhfhorbróir"
 
 #: lib/bcg/bcgimageoperation.cpp:69
 #, kde-format
-msgid "Adjust Brightness/Contrast/Gamma"
+msgid "Adjust Colors"
 msgstr ""
 
 #: lib/bcg/bcgwidget.cpp:51
