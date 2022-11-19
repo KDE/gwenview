@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-17 00:43+0000\n"
-"PO-Revision-Date: 2022-10-30 18:19+0000\n"
+"PO-Revision-Date: 2022-11-18 09:20+0000\n"
 "Last-Translator: Pedro Morais <morais@kde.org>\n"
 "Language-Team: pt <kde-i18n-pt@kde.org>\n"
 "Language: pt\n"
@@ -832,7 +832,7 @@ msgstr "Recortar"
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Adjust Colors"
-msgstr ""
+msgstr "Ajustar as Cores"
 
 #: app/imageopscontextmanageritem.cpp:128
 #: lib/redeyereduction/redeyereductionimageoperation.cpp:75
@@ -2066,7 +2066,7 @@ msgstr "Desenvolvimento"
 #: lib/bcg/bcgimageoperation.cpp:69
 #, kde-format
 msgid "Adjust Colors"
-msgstr ""
+msgstr "Ajustar as Cores"
 
 #: lib/bcg/bcgwidget.cpp:51
 #, kde-format
@@ -2777,10 +2777,3 @@ msgstr "&Ficheiro"
 #, kde-format
 msgid "&View"
 msgstr "&Ver"
-
-#~ msgctxt "@action:intoolbar"
-#~ msgid "Adjust Brightness/Contrast/Gamma"
-#~ msgstr "Ajustar o Brilho/Contraste/Gama"
-
-#~ msgid "Adjust Brightness/Contrast/Gamma"
-#~ msgstr "Ajustar o Brilho/Contraste/Gama"

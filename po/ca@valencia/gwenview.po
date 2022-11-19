@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-17 00:43+0000\n"
-"PO-Revision-Date: 2022-10-30 10:52+0100\n"
+"PO-Revision-Date: 2022-11-17 13:25+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -835,7 +835,7 @@ msgstr "Escapça"
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Adjust Colors"
-msgstr ""
+msgstr "Ajusta els colors"
 
 #: app/imageopscontextmanageritem.cpp:128
 #: lib/redeyereduction/redeyereductionimageoperation.cpp:75
@@ -1620,7 +1620,7 @@ msgid ""
 msgstr ""
 "<para>Canvia una xicoteta barra que mostra totes les altres imatges de la "
 "carpeta actual. Seleccionant una d'elles canvia la imatge visualitzada "
-"actualment.</para><para>Seleccioneu diverses imatges al mateix temps per "
+"actualment.</para><para>Seleccioneu diverses imatges al mateix temps per a "
 "veure-les una al costat de l'altra.</para><para>La barra es pot moure de "
 "manera opcional a la part dreta de la pantalla i contindre diverses files "
 "d'imatges; <link url='%1'>configureu estes opcions en la configuració</link>."
@@ -2071,7 +2071,7 @@ msgstr "Desenvolupador"
 #: lib/bcg/bcgimageoperation.cpp:69
 #, kde-format
 msgid "Adjust Colors"
-msgstr ""
+msgstr "Ajusta els colors"
 
 #: lib/bcg/bcgwidget.cpp:51
 #, kde-format
@@ -2783,10 +2783,3 @@ msgstr "Fi&txer"
 #, kde-format
 msgid "&View"
 msgstr "Vi&sualitza"
-
-#~ msgctxt "@action:intoolbar"
-#~ msgid "Adjust Brightness/Contrast/Gamma"
-#~ msgstr "Ajusta la brillantor/contrast/gamma"
-
-#~ msgid "Adjust Brightness/Contrast/Gamma"
-#~ msgstr "Ajusta la brillantor/contrast/gamma"
