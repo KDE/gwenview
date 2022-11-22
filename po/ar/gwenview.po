@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-17 00:43+0000\n"
-"PO-Revision-Date: 2022-11-01 12:29+0400\n"
+"PO-Revision-Date: 2022-11-21 19:07+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -851,7 +851,7 @@ msgstr "قص"
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Adjust Colors"
-msgstr ""
+msgstr "اضبط الألوان"
 
 #: app/imageopscontextmanageritem.cpp:128
 #: lib/redeyereduction/redeyereductionimageoperation.cpp:75
@@ -2131,7 +2131,7 @@ msgstr "المطور"
 #: lib/bcg/bcgimageoperation.cpp:69
 #, kde-format
 msgid "Adjust Colors"
-msgstr ""
+msgstr "اضبط الألوان"
 
 #: lib/bcg/bcgwidget.cpp:51
 #, kde-format
