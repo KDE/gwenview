@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-17 00:43+0000\n"
-"PO-Revision-Date: 2022-11-23 19:58+0100\n"
+"PO-Revision-Date: 2022-11-26 10:57+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -760,12 +760,12 @@ msgstr ""
 #: app/gvcore.cpp:508
 #, kde-format
 msgid "You are now viewing the new document."
-msgstr "Przeglądasz teraz nowy dokument."
+msgstr "Teraz przeglądasz nowy dokument."
 
 #: app/gvcore.cpp:510
 #, kde-format
 msgid "Go back to the original"
-msgstr "Wróć do pierwowzoru"
+msgstr "Wróć do pierwotnego"
 
 #. i18n: ectx: Menu (rating)
 #: app/gwenviewui.rc:54
