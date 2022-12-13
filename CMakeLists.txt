@@ -31,6 +31,7 @@ include(ECMAddAppIcon)
 include(GenerateExportHeader)
 include(FeatureSummary)
 include(ECMQtDeclareLoggingCategory)
+include(ECMDeprecationSettings)
 ## Generate header with version number
 ecm_setup_version(${RELEASE_SERVICE_VERSION}
                   VARIABLE_PREFIX GWENVIEW
@@ -83,6 +84,9 @@ find_package(KF5 ${KF5_MIN_VERSION} OPTIONAL_COMPONENTS
     DocTools
     Purpose
 )
+
+ecm_set_disabled_deprecation_versions(QT 5.14.0 KF 5.99.0
+    )
 
 add_definitions(-DQT_NO_FOREACH)
 
