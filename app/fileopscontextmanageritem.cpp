@@ -134,7 +134,7 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager *manager,
     EventWatcher::install(mGroup, QEvent::Show, this, SLOT(updateSideBarContent()));
 
     mInTrash = false;
-    mNewFileMenu = new KNewFileMenu(Q_NULLPTR, QString(), this);
+    mNewFileMenu = new KNewFileMenu(this);
 
     connect(contextManager(), &ContextManager::selectionChanged, this, &FileOpsContextManagerItem::updateActions);
     connect(contextManager(), &ContextManager::currentDirUrlChanged, this, &FileOpsContextManagerItem::updateActions);
