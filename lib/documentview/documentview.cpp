@@ -69,6 +69,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/thumbnailprovider/thumbnailprovider.h>
 #include <lib/thumbnailview/dragpixmapgenerator.h>
 #include <lib/touch/touch.h>
+#ifndef GWENVIEW_NO_WAYLAND_GESTURES
+#include <lib/waylandgestures/waylandgestures.h>
+#endif
 #include <lib/urlutils.h>
 #include <transformimageoperation.h>
 
@@ -117,6 +120,9 @@ struct DocumentViewPrivate {
     QPointer<QDrag> mDrag;
 
     Touch *mTouch = nullptr;
+#ifndef GWENVIEW_NO_WAYLAND_GESTURES
+    WaylandGestures *mWaylandGestures = nullptr;
+#endif
     int mMinTimeBetweenPinch;
 
     void setCurrentAdapter(AbstractDocumentViewAdapter *adapter)
@@ -438,6 +444,18 @@ DocumentView::DocumentView(QGraphicsScene *scene)
     d->mDragStartPosition = QPointF(0, 0);
     d->mDrag = nullptr;
 
+#ifndef GWENVIEW_NO_WAYLAND_GESTURES
+    if (QApplication::platformName() == QStringLiteral("wayland")) {
+        d->mWaylandGestures = new WaylandGestures();
+        connect(d->mWaylandGestures, &WaylandGestures::pinchGestureStarted, [this]() {
+            d->mWaylandGestures->setStartZoom(zoom());
+        });
+        connect(d->mWaylandGestures, &WaylandGestures::pinchZoomChanged, [this](double zoom) {
+            d->setZoom(zoom, d->cursorPosition());
+        });
+    }
+#endif
+
     d->mTouch = new Touch(this);
     setAcceptTouchEvents(true);
     connect(d->mTouch, &Touch::doubleTapTriggered, this, &DocumentView::toggleFullScreenRequested);
@@ -477,6 +495,9 @@ DocumentView::DocumentView(QGraphicsScene *scene)
 DocumentView::~DocumentView()
 {
     delete d->mTouch;
+#ifndef GWENVIEW_NO_WAYLAND_GESTURES
+    delete d->mWaylandGestures;
+#endif
     delete d->mDragThumbnailProvider;
     delete d->mDrag;
     delete d;

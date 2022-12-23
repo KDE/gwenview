@@ -165,6 +165,14 @@ if (kImageAnnotator_FOUND)
         annotate/annotateoperation.h
     )
 endif()
+
+if (NOT GWENVIEW_NO_WAYLAND_GESTURES)
+    set(gwenviewlib_SRCS ${gwenviewlib_SRCS}
+        waylandgestures/waylandgestures.cpp
+        waylandgestures/waylandgestures.h
+    )
+endif()
+
 set_source_files_properties(${GV_JPEG_DIR}/transupp.c PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON)
 
 
@@ -331,4 +339,21 @@ endif()
 if(kImageAnnotator_FOUND)
     target_link_libraries(gwenviewlib kImageAnnotator::kImageAnnotator)
 endif()
+
+if (NOT GWENVIEW_NO_WAYLAND_GESTURES)
+    if (QT_MAJOR_VERSION EQUAL "5")
+        ecm_add_qtwayland_client_protocol(wayland_SRCS
+            PROTOCOL ${WaylandProtocols_DATADIR}/unstable/pointer-gestures/pointer-gestures-unstable-v1.xml
+            BASENAME pointer-gestures-unstable-v1
+        )
+    else()
+        qt6_generate_wayland_protocol_client_sources(gwenviewlib FILES
+            ${WaylandProtocols_DATADIR}/unstable/pointer-gestures/pointer-gestures-unstable-v1.xml)
+    endif()
+
+    target_sources(gwenviewlib PRIVATE ${wayland_SRCS})
+    target_link_libraries(gwenviewlib Wayland::Client Qt::WaylandClient Qt::GuiPrivate)
+    target_sources(gwenviewlib PRIVATE waylandgestures/waylandgestures.cpp waylandgestures/waylandgestures.h)
+endif()
+
 install(TARGETS gwenviewlib ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} LIBRARY NAMELINK_SKIP)

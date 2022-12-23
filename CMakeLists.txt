@@ -54,11 +54,26 @@ else()
     set(GWENVIEW_SEMANTICINFO_BACKEND_BALOO ON)
 endif()
 
+if (APPLE OR NOT UNIX)
+    set(GWENVIEW_NO_WAYLAND_GESTURES ON)
+endif()
+
 find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} CONFIG REQUIRED Core Widgets Concurrent Svg PrintSupport)
 find_package(Qt${QT_MAJOR_VERSION}DBus ${QT_MIN_VERSION} CONFIG QUIET)
 if (QT_MAJOR_VERSION STREQUAL "6")
     find_package(Qt6SvgWidgets)
     find_package(Qt6OpenGLWidgets)
+endif()
+
+
+
+if(NOT GWENVIEW_NO_WAYLAND_GESTURES)
+    find_package(WaylandProtocols REQUIRED)
+    if (QT_MAJOR_VERSION EQUAL "5")
+        find_package(QtWaylandScanner REQUIRED)
+    endif()
+    find_package(Wayland 1.9 REQUIRED Client)
+    find_package(Qt${QT_MAJOR_VERSION} REQUIRED COMPONENTS WaylandClient)
 endif()
 
 set(HAVE_QTDBUS ${Qt${QT_MAJOR_VERSION}DBus_FOUND})
