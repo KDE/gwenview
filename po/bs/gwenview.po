@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdegraphics\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-17 00:43+0000\n"
+"POT-Creation-Date: 2022-12-24 00:47+0000\n"
 "PO-Revision-Date: 2014-01-31 20:41+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -2311,24 +2311,24 @@ msgstr ""
 "Nije moguće napisati ponovo preko datoteke, provjerite da li imate potrebna "
 "prava za pisanje u <filename>%1</filename>."
 
-#: lib/documentview/documentview.cpp:195
+#: lib/documentview/documentview.cpp:201
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Trash"
 msgstr "Smeće"
 
-#: lib/documentview/documentview.cpp:196
+#: lib/documentview/documentview.cpp:202
 #, kde-format
 msgctxt "@action:button"
 msgid "Deselect"
 msgstr "Poništi izbor"
 
-#: lib/documentview/documentview.cpp:507
+#: lib/documentview/documentview.cpp:528
 #, kde-format
 msgid "Gwenview does not know how to display this kind of document"
 msgstr "Greenview ne zna kako prikazati ovaj tip dokumenta"
 
-#: lib/documentview/documentview.cpp:613
+#: lib/documentview/documentview.cpp:634
 #, kde-kuit-format
 msgid "Loading <filename>%1</filename> failed"
 msgstr "Učitavanje <filename>%1</filename> nije uspjelo"

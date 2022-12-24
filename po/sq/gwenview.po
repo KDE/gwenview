@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdegraphics\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-17 00:43+0000\n"
+"POT-Creation-Date: 2022-12-24 00:47+0000\n"
 "PO-Revision-Date: 2009-08-30 02:35+0000\n"
 "Last-Translator: Vilson Gjeci <vilsongjeci@gmail.com>\n"
 "Language-Team: Albanian <sq@li.org>\n"
@@ -2243,7 +2243,7 @@ msgid ""
 "in <filename>%1</filename>."
 msgstr ""
 
-#: lib/documentview/documentview.cpp:195
+#: lib/documentview/documentview.cpp:201
 #, fuzzy, kde-format
 #| msgctxt "Verb"
 #| msgid "Trash"
@@ -2251,19 +2251,19 @@ msgctxt "@info:tooltip"
 msgid "Trash"
 msgstr "Koshi"
 
-#: lib/documentview/documentview.cpp:196
+#: lib/documentview/documentview.cpp:202
 #, fuzzy, kde-format
 #| msgid "Delete"
 msgctxt "@action:button"
 msgid "Deselect"
 msgstr "Fshije"
 
-#: lib/documentview/documentview.cpp:507
+#: lib/documentview/documentview.cpp:528
 #, kde-format
 msgid "Gwenview does not know how to display this kind of document"
 msgstr ""
 
-#: lib/documentview/documentview.cpp:613
+#: lib/documentview/documentview.cpp:634
 #, kde-kuit-format
 msgid "Loading <filename>%1</filename> failed"
 msgstr ""

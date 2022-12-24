@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-17 00:43+0000\n"
+"POT-Creation-Date: 2022-12-24 00:47+0000\n"
 "PO-Revision-Date: 2022-07-22 14:45+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English <kde-l10n-en_gb@kde.org>\n"
@@ -2206,24 +2206,24 @@ msgstr ""
 "Could not overwrite file, check that you have the necessary rights to write "
 "in <filename>%1</filename>."
 
-#: lib/documentview/documentview.cpp:195
+#: lib/documentview/documentview.cpp:201
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Trash"
 msgstr "Wastebin"
 
-#: lib/documentview/documentview.cpp:196
+#: lib/documentview/documentview.cpp:202
 #, kde-format
 msgctxt "@action:button"
 msgid "Deselect"
 msgstr "Deselect"
 
-#: lib/documentview/documentview.cpp:507
+#: lib/documentview/documentview.cpp:528
 #, kde-format
 msgid "Gwenview does not know how to display this kind of document"
 msgstr "Gwenview does not know how to display this kind of document"
 
-#: lib/documentview/documentview.cpp:613
+#: lib/documentview/documentview.cpp:634
 #, kde-kuit-format
 msgid "Loading <filename>%1</filename> failed"
 msgstr "Loading <filename>%1</filename> failed"

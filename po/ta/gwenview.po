@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-17 00:43+0000\n"
+"POT-Creation-Date: 2022-12-24 00:47+0000\n"
 "PO-Revision-Date: 2022-11-17 20:01+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -2195,24 +2195,24 @@ msgstr ""
 "கோப்பை மேலெழுத முடியவில்லை. <filename>%1</filename> என்பதற்கு எழுத உங்களுக்கு "
 "உரிமை உள்ளதா என்று சரிபாருங்கள்."
 
-#: lib/documentview/documentview.cpp:195
+#: lib/documentview/documentview.cpp:201
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Trash"
 msgstr "அகற்றிடம்"
 
-#: lib/documentview/documentview.cpp:196
+#: lib/documentview/documentview.cpp:202
 #, kde-format
 msgctxt "@action:button"
 msgid "Deselect"
 msgstr "தேர்வை நிராகரி"
 
-#: lib/documentview/documentview.cpp:507
+#: lib/documentview/documentview.cpp:528
 #, kde-format
 msgid "Gwenview does not know how to display this kind of document"
 msgstr "இவ்வகையான ஆவணத்தை குவென்வியூவால் காட்ட முடியாது"
 
-#: lib/documentview/documentview.cpp:613
+#: lib/documentview/documentview.cpp:634
 #, kde-kuit-format
 msgid "Loading <filename>%1</filename> failed"
 msgstr "<filename>%1</filename> என்பதை ஏற்றல் தோல்வியடைந்தது"

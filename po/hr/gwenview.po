@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-17 00:43+0000\n"
+"POT-Creation-Date: 2022-12-24 00:47+0000\n"
 "PO-Revision-Date: 2011-07-22 16:56+0200\n"
 "Last-Translator: Marko Dimjašević <marko@dimjasevic.net>\n"
 "Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
@@ -2333,26 +2333,26 @@ msgstr ""
 "Nije moguće prepisati datoteku. Provjerite imate li potreba prava za pisanje "
 "u <filename>%1</filename>."
 
-#: lib/documentview/documentview.cpp:195
+#: lib/documentview/documentview.cpp:201
 #, fuzzy, kde-format
 #| msgid "Trash"
 msgctxt "@info:tooltip"
 msgid "Trash"
 msgstr "U smeće"
 
-#: lib/documentview/documentview.cpp:196
+#: lib/documentview/documentview.cpp:202
 #, fuzzy, kde-format
 #| msgid "Deselect"
 msgctxt "@action:button"
 msgid "Deselect"
 msgstr "Ukloni odabir"
 
-#: lib/documentview/documentview.cpp:507
+#: lib/documentview/documentview.cpp:528
 #, kde-format
 msgid "Gwenview does not know how to display this kind of document"
 msgstr "Gwenview ne zna kako prikazati ovu vrstu dokumenata"
 
-#: lib/documentview/documentview.cpp:613
+#: lib/documentview/documentview.cpp:634
 #, kde-kuit-format
 msgid "Loading <filename>%1</filename> failed"
 msgstr "Neuspjelo učitavanje datoteke <filename>%1</filename>"
