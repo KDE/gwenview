@@ -188,6 +188,7 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager *manager,
 
     mOpenWithAction = file->addAction(QStringLiteral("file_open_with"));
     mOpenWithAction->setText(i18n("Open With"));
+    mOpenWithAction->setIcon(QIcon::fromTheme(QStringLiteral("system-run")));
     auto menu = new QMenu;
     mOpenWithAction->setMenu(menu);
     connect(menu, &QMenu::aboutToShow, this, &FileOpsContextManagerItem::populateOpenMenu);
@@ -376,7 +377,7 @@ void FileOpsContextManagerItem::populateOpenMenu()
     }
 
     openMenu->addSeparator();
-    QAction *action = openMenu->addAction(i18n("Other Application..."));
+    QAction *action = openMenu->addAction(QIcon::fromTheme(QStringLiteral("system-run")), i18n("Other Application..."));
     action->setData(-1);
 }
 
