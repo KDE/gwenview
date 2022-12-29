@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-24 00:47+0000\n"
-"PO-Revision-Date: 2022-12-27 06:35+0100\n"
+"POT-Creation-Date: 2022-12-29 00:50+0000\n"
+"PO-Revision-Date: 2022-12-28 09:15+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -416,12 +416,12 @@ msgstr "საქაღალდის შექმნა..."
 msgid "Open With"
 msgstr "გამხსნელი პროგრამა"
 
-#: app/fileopscontextmanageritem.cpp:197
+#: app/fileopscontextmanageritem.cpp:198
 #, kde-format
 msgid "Open Containing Folder"
 msgstr "შემცველი საქაღალდის გახსნა"
 
-#: app/fileopscontextmanageritem.cpp:379
+#: app/fileopscontextmanageritem.cpp:380
 #, kde-format
 msgid "Other Application..."
 msgstr "სხვა პროგრამა..."
@@ -818,7 +818,7 @@ msgstr "ამოჭრა"
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Adjust Colors"
-msgstr ""
+msgstr "ფერების მორგება"
 
 #: app/imageopscontextmanageritem.cpp:128
 #: lib/redeyereduction/redeyereductionimageoperation.cpp:75
@@ -2023,22 +2023,22 @@ msgstr "პროგრამისტი"
 #: lib/bcg/bcgimageoperation.cpp:69
 #, kde-format
 msgid "Adjust Colors"
-msgstr ""
+msgstr "ფერების მორგება"
 
 #: lib/bcg/bcgwidget.cpp:51
 #, kde-format
 msgid "Brightness:"
-msgstr ""
+msgstr "სიკაშკაშე:"
 
 #: lib/bcg/bcgwidget.cpp:52
 #, kde-format
 msgid "Contrast:"
-msgstr ""
+msgstr "კონტრასტი:"
 
 #: lib/bcg/bcgwidget.cpp:53
 #, kde-format
 msgid "Gamma:"
-msgstr ""
+msgstr "გამა:"
 
 #: lib/crop/cropwidget.cpp:191
 #, kde-format
@@ -2334,13 +2334,13 @@ msgstr ""
 #: lib/gwenviewconfig.kcfg:325
 #, kde-format
 msgid "Display slide show images in random order"
-msgstr ""
+msgstr "შემთხვევითი სლაიდშოუ"
 
 #. i18n: ectx: label, entry (fullscreen), group (slide show)
 #: lib/gwenviewconfig.kcfg:329
 #, kde-format
 msgid "Show slideshow in fullscreen mode"
-msgstr ""
+msgstr "სლაიდშოუს მთელ ეკრანზე ჩვენება"
 
 #. i18n: ectx: label, entry (loop), group (slide show)
 #: lib/gwenviewconfig.kcfg:333
