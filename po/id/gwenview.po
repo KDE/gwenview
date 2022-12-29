@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KDE Frameworks 5 Applications\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-17 02:24+0000\n"
+"POT-Creation-Date: 2022-12-29 02:50+0000\n"
 "PO-Revision-Date: 2022-09-27 17:54+0700\n"
 "Last-Translator: Wantoyèk <wantoyek@gmail.com>\n"
 "Language-Team: Indonesian <kde-i18n-doc@kde.org>\n"
@@ -425,12 +425,12 @@ msgstr "Ciptakan Folder..."
 msgid "Open With"
 msgstr "Buka Dengan"
 
-#: app/fileopscontextmanageritem.cpp:197
+#: app/fileopscontextmanageritem.cpp:198
 #, kde-format
 msgid "Open Containing Folder"
 msgstr "Buka Folder Yang Mengandungnya"
 
-#: app/fileopscontextmanageritem.cpp:379
+#: app/fileopscontextmanageritem.cpp:380
 #, kde-format
 msgid "Other Application..."
 msgstr "Aplikasi Lain..."

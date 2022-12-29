@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-17 02:24+0000\n"
+"POT-Creation-Date: 2022-12-29 02:50+0000\n"
 "PO-Revision-Date: 2022-08-13 23:05+0300\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -450,12 +450,12 @@ msgstr "Создать папку..."
 msgid "Open With"
 msgstr "Открыть в"
 
-#: app/fileopscontextmanageritem.cpp:197
+#: app/fileopscontextmanageritem.cpp:198
 #, kde-format
 msgid "Open Containing Folder"
 msgstr "Открыть содержащую папку"
 
-#: app/fileopscontextmanageritem.cpp:379
+#: app/fileopscontextmanageritem.cpp:380
 #, kde-format
 msgid "Other Application..."
 msgstr "Внешнее приложение..."

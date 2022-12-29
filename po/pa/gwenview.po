@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-17 02:24+0000\n"
+"POT-Creation-Date: 2022-12-29 02:50+0000\n"
 "PO-Revision-Date: 2021-04-25 13:12-0700\n"
 "Last-Translator: A S Alam <aalam@satluj.org>\n"
 "Language-Team: Punjabi <punjabi-users@lists.sf.net>\n"
@@ -414,12 +414,12 @@ msgstr "ਫੋਲਡਰ ਬਣਾਓ..."
 msgid "Open With"
 msgstr "...ਨਾਲ ਖੋਲ੍ਹੋ"
 
-#: app/fileopscontextmanageritem.cpp:197
+#: app/fileopscontextmanageritem.cpp:198
 #, kde-format
 msgid "Open Containing Folder"
 msgstr "ਰੱਖਣ ਵਾਲਾ ਫੋਲਡਰ ਖੋਲ੍ਹੋ"
 
-#: app/fileopscontextmanageritem.cpp:379
+#: app/fileopscontextmanageritem.cpp:380
 #, kde-format
 msgid "Other Application..."
 msgstr "ਹੋਰ ਐਪਲੀਕੇਸ਼ਨ..."
