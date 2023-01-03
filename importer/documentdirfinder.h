@@ -61,7 +61,7 @@ public:
 
 Q_SIGNALS:
     void done(const QUrl &, DocumentDirFinder::Status);
-    void protocollNotSupportedError();
+    void protocollNotSupportedError(const QString &errorText);
 
 private Q_SLOTS:
     void slotItemsAdded(const QUrl &, const KFileItemList &);

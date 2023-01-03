@@ -54,7 +54,7 @@ DocumentDirFinder::DocumentDirFinder(const QUrl &rootUrl)
 #else
     if (job->error() == KIO::Error::ERR_CANNOT_CREATE_SLAVE) {
 #endif
-            Q_EMIT protocollNotSupportedError();
+            Q_EMIT protocollNotSupportedError(job->errorText());
         } else {
             job->uiDelegate()->showErrorMessage();
         }

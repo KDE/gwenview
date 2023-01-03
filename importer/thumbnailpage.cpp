@@ -190,7 +190,7 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
         QObject::connect(mThumbnailView->selectionModel(), &QItemSelectionModel::selectionChanged, q, &ThumbnailPage::updateImportButtons);
     }
 
-    void setupPlaceHolderView()
+    void setupPlaceHolderView(const QString &errorText)
     {
         mPlaceHolderWidget = new QWidget(q);
         // Use QSizePolicy::MinimumExpanding to avoid clipping
@@ -232,6 +232,8 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
         // clang-format off
         if (scheme == QLatin1String("camera")) {
             mPlaceHolderLabel->setText(i18nc("@info above install button when Kamera is not installed", "Support for your camera is not installed."));
+        } else if (!errorText.isEmpty()) {
+            mPlaceHolderLabel->setText(i18nc("@info above install button, %1 protocol name %2 error text from KIO", "The protocol support library for \"%1\" is not installed. Error: %2", truncatedScheme, errorText));
         } else {
             mPlaceHolderLabel->setText(i18nc("@info above install button, %1 protocol name", "The protocol support library for \"%1\" is not installed.", truncatedScheme));
         }
@@ -391,8 +393,8 @@ void ThumbnailPage::setSourceUrl(const QUrl &srcBaseUrl, const QString &iconName
     } else {
         auto finder = new DocumentDirFinder(srcBaseUrl);
         connect(finder, &DocumentDirFinder::done, this, &ThumbnailPage::slotDocumentDirFinderDone);
-        connect(finder, &DocumentDirFinder::protocollNotSupportedError, this, [this]() {
-            d->setupPlaceHolderView();
+        connect(finder, &DocumentDirFinder::protocollNotSupportedError, this, [this](const QString &errorText) {
+            d->setupPlaceHolderView(errorText);
         });
         finder->start();
     }
