@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-17 00:43+0000\n"
+"POT-Creation-Date: 2022-12-29 00:50+0000\n"
 "PO-Revision-Date: 2020-08-10 14:45+0200\n"
 "Last-Translator: Dan Åsen Hansen <post@danhansen.net>\n"
 "Language-Team: Norwegian Bokmål <l10n-no@lister.huftis.org>\n"
@@ -428,12 +428,12 @@ msgstr "Opprett mappe …"
 msgid "Open With"
 msgstr "Åpne med"
 
-#: app/fileopscontextmanageritem.cpp:197
+#: app/fileopscontextmanageritem.cpp:198
 #, kde-format
 msgid "Open Containing Folder"
 msgstr "Åpne mappen med innholdet"
 
-#: app/fileopscontextmanageritem.cpp:379
+#: app/fileopscontextmanageritem.cpp:380
 #, kde-format
 msgid "Other Application..."
 msgstr "Andre programmer …"
@@ -2193,24 +2193,24 @@ msgstr ""
 "Klarte ikke å skrive over fil, se etter at du har de nødvendige rettigheter "
 "i <filename>%1</filename>."
 
-#: lib/documentview/documentview.cpp:195
+#: lib/documentview/documentview.cpp:201
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Trash"
 msgstr "Kast"
 
-#: lib/documentview/documentview.cpp:196
+#: lib/documentview/documentview.cpp:202
 #, kde-format
 msgctxt "@action:button"
 msgid "Deselect"
 msgstr "Fravelg"
 
-#: lib/documentview/documentview.cpp:507
+#: lib/documentview/documentview.cpp:528
 #, kde-format
 msgid "Gwenview does not know how to display this kind of document"
 msgstr "Gwenview vet ikke hvordan denne typen dokument kan vises."
 
-#: lib/documentview/documentview.cpp:613
+#: lib/documentview/documentview.cpp:634
 #, kde-kuit-format
 msgid "Loading <filename>%1</filename> failed"
 msgstr "Det lyktes ikke å laste inn <filename>%1</filename>"
