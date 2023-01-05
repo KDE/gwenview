@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-29 00:50+0000\n"
+"POT-Creation-Date: 2023-01-05 00:45+0000\n"
 "PO-Revision-Date: 2022-11-17 07:03+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -1914,12 +1914,20 @@ msgid "Support for your camera is not installed."
 msgstr "Zure kameraren euskarria ez dago instalatuta."
 
 #: importer/thumbnailpage.cpp:236
+#, fuzzy, kde-format
+#| msgctxt "@info above install button, %1 protocol name"
+#| msgid "The protocol support library for \"%1\" is not installed."
+msgctxt "@info above install button, %1 protocol name %2 error text from KIO"
+msgid "The protocol support library for \"%1\" is not installed. Error: %2"
+msgstr "«%1»(e)rako protokolo euskarri liburutegia ez dago instalatuta."
+
+#: importer/thumbnailpage.cpp:238
 #, kde-format
 msgctxt "@info above install button, %1 protocol name"
 msgid "The protocol support library for \"%1\" is not installed."
 msgstr "«%1»(e)rako protokolo euskarri liburutegia ez dago instalatuta."
 
-#: importer/thumbnailpage.cpp:248
+#: importer/thumbnailpage.cpp:250
 #, kde-format
 msgctxt "@info:usagetip above install button"
 msgid ""
@@ -1928,19 +1936,19 @@ msgstr ""
 "Instalatzeko prozesua amaitu ondoren, berrabiatu inportatzaile hau "
 "jarraitzeko."
 
-#: importer/thumbnailpage.cpp:255
+#: importer/thumbnailpage.cpp:257
 #, kde-format
 msgctxt "@info:tooltip for a button, %1 protocol name"
 msgid "Launch Discover to install the protocol support library for \"%1\""
 msgstr "Abiatu Discover «%1»(e)n protokolo euskarri liburutegia instalatzeko."
 
-#: importer/thumbnailpage.cpp:257
+#: importer/thumbnailpage.cpp:259
 #, kde-format
 msgctxt "@action:button"
 msgid "Install Support for this Camera…"
 msgstr "Instalatu kamera honetarako euskarria..."
 
-#: importer/thumbnailpage.cpp:258
+#: importer/thumbnailpage.cpp:260
 #, kde-format
 msgctxt "@info:whatsthis for a button when Kamera is not installed"
 msgid ""
@@ -1952,13 +1960,13 @@ msgstr ""
 "Egin klik hemen Kamera instalatzeko Discover abiatzeko, zure sisteman "
 "«camera:/»ren protokolo euskarria gaitzeko."
 
-#: importer/thumbnailpage.cpp:261
+#: importer/thumbnailpage.cpp:263
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Install Protocol Support for \"%1\"…"
 msgstr "Instalatu «%1»(e)rako protokolo euskarria..."
 
-#: importer/thumbnailpage.cpp:262
+#: importer/thumbnailpage.cpp:264
 #, kde-format
 msgctxt "@info:whatsthis for a button, %1 protocol name"
 msgid ""
@@ -1968,13 +1976,13 @@ msgstr ""
 "Egin klik hemen Discover abiatu eta falta den protokolo euskarri liburutegia "
 "instalatzeko, zure sisteman «%1:/»(e)rako protokolo euskarria gaitzeko."
 
-#: importer/thumbnailpage.cpp:266
+#: importer/thumbnailpage.cpp:268
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Search the Web for How to Install Protocol Support for \"%1\"…"
 msgstr "Bilatu webean «%1»(e)rako protokolo euskarria nola instalatu..."
 
-#: importer/thumbnailpage.cpp:282
+#: importer/thumbnailpage.cpp:284
 #, kde-format
 msgctxt ""
 "@info this text will be used as a search term in an online search engine, %1 "
@@ -1982,7 +1990,7 @@ msgctxt ""
 msgid "How to install protocol support for \"%1\" on Linux"
 msgstr "Linux-en «%1»(e)rako protokolo euskarria nola instalatu"
 
-#: importer/thumbnailpage.cpp:283
+#: importer/thumbnailpage.cpp:285
 #, kde-format
 msgctxt ""
 "search engine URL, %1 search keyword, and translators can replace duckduckgo "
@@ -1990,17 +1998,17 @@ msgctxt ""
 msgid "https://duckduckgo.com/?q=%1"
 msgstr "https://duckduckgo.com/?q=%1"
 
-#: importer/thumbnailpage.cpp:324
+#: importer/thumbnailpage.cpp:326
 #, kde-format
 msgid "Import Selected"
 msgstr "Inportatu hautatuta"
 
-#: importer/thumbnailpage.cpp:327
+#: importer/thumbnailpage.cpp:329
 #, kde-format
 msgid "Import All"
 msgstr "Inportatu dena"
 
-#: importer/thumbnailpage.cpp:489
+#: importer/thumbnailpage.cpp:491
 #, kde-kuit-format
 msgctxt "@info when failing to open the appstream URL"
 msgid ""
@@ -2011,7 +2019,7 @@ msgstr ""
 "sisteman instalatuta dagoen, edo erabili sistemaren pakete kudeatzailea "
 "«Kamera» paketea instalatzeko."
 
-#: importer/thumbnailpage.cpp:493
+#: importer/thumbnailpage.cpp:495
 #, kde-kuit-format
 msgctxt "@info when failing to launch plasma-discover, %1 protocol name"
 msgid ""

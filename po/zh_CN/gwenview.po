@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-29 00:50+0000\n"
+"POT-Creation-Date: 2023-01-05 00:45+0000\n"
 "PO-Revision-Date: 2023-01-02 07:11\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -1862,31 +1862,39 @@ msgid "Support for your camera is not installed."
 msgstr "尚未安装此相机所需的支持软件。"
 
 #: importer/thumbnailpage.cpp:236
+#, fuzzy, kde-format
+#| msgctxt "@info above install button, %1 protocol name"
+#| msgid "The protocol support library for \"%1\" is not installed."
+msgctxt "@info above install button, %1 protocol name %2 error text from KIO"
+msgid "The protocol support library for \"%1\" is not installed. Error: %2"
+msgstr "尚未安装“%1”的协议支持程序库。"
+
+#: importer/thumbnailpage.cpp:238
 #, kde-format
 msgctxt "@info above install button, %1 protocol name"
 msgid "The protocol support library for \"%1\" is not installed."
 msgstr "尚未安装“%1”的协议支持程序库。"
 
-#: importer/thumbnailpage.cpp:248
+#: importer/thumbnailpage.cpp:250
 #, kde-format
 msgctxt "@info:usagetip above install button"
 msgid ""
 "After finishing the installation process, restart this Importer to continue."
 msgstr "完成安装后，重新启动此导入程序以继续操作。"
 
-#: importer/thumbnailpage.cpp:255
+#: importer/thumbnailpage.cpp:257
 #, kde-format
 msgctxt "@info:tooltip for a button, %1 protocol name"
 msgid "Launch Discover to install the protocol support library for \"%1\""
 msgstr "启动 Discover 为“%1”安装协议支持程序库"
 
-#: importer/thumbnailpage.cpp:257
+#: importer/thumbnailpage.cpp:259
 #, kde-format
 msgctxt "@action:button"
 msgid "Install Support for this Camera…"
 msgstr "安装此相机的支持软件…"
 
-#: importer/thumbnailpage.cpp:258
+#: importer/thumbnailpage.cpp:260
 #, kde-format
 msgctxt "@info:whatsthis for a button when Kamera is not installed"
 msgid ""
@@ -1897,13 +1905,13 @@ msgstr ""
 "您需要安装 Kamera 以读取该相机的数据。点击此处启动 Discover 安装 Kamera，即可"
 "为本机系统启用“camera:/”协议的支持功能。"
 
-#: importer/thumbnailpage.cpp:261
+#: importer/thumbnailpage.cpp:263
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Install Protocol Support for \"%1\"…"
 msgstr "安装“%1”的协议支持软件…"
 
-#: importer/thumbnailpage.cpp:262
+#: importer/thumbnailpage.cpp:264
 #, kde-format
 msgctxt "@info:whatsthis for a button, %1 protocol name"
 msgid ""
@@ -1913,13 +1921,13 @@ msgstr ""
 "点击此处启动 Discover 安装所需的协议支持程序库，即可为本机系统启用“%1:/”协议"
 "的支持功能。"
 
-#: importer/thumbnailpage.cpp:266
+#: importer/thumbnailpage.cpp:268
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Search the Web for How to Install Protocol Support for \"%1\"…"
 msgstr "搜索网页以了解如何安装“%1”的协议支持功能…"
 
-#: importer/thumbnailpage.cpp:282
+#: importer/thumbnailpage.cpp:284
 #, kde-format
 msgctxt ""
 "@info this text will be used as a search term in an online search engine, %1 "
@@ -1927,7 +1935,7 @@ msgctxt ""
 msgid "How to install protocol support for \"%1\" on Linux"
 msgstr "如何在 Linux 上安装“%1”的协议支持功能"
 
-#: importer/thumbnailpage.cpp:283
+#: importer/thumbnailpage.cpp:285
 #, kde-format
 msgctxt ""
 "search engine URL, %1 search keyword, and translators can replace duckduckgo "
@@ -1935,17 +1943,17 @@ msgctxt ""
 msgid "https://duckduckgo.com/?q=%1"
 msgstr "https://cn.bing.com/search?q=%1"
 
-#: importer/thumbnailpage.cpp:324
+#: importer/thumbnailpage.cpp:326
 #, kde-format
 msgid "Import Selected"
 msgstr "导入选中图像"
 
-#: importer/thumbnailpage.cpp:327
+#: importer/thumbnailpage.cpp:329
 #, kde-format
 msgid "Import All"
 msgstr "导入全部图像"
 
-#: importer/thumbnailpage.cpp:489
+#: importer/thumbnailpage.cpp:491
 #, kde-kuit-format
 msgctxt "@info when failing to open the appstream URL"
 msgid ""
@@ -1955,7 +1963,7 @@ msgstr ""
 "无法打开 Discover。<nl/>请检查是否已在本机安装 Discover，或使用本机的软件包管"
 "理器来安装“Kamera”软件包。"
 
-#: importer/thumbnailpage.cpp:493
+#: importer/thumbnailpage.cpp:495
 #, kde-kuit-format
 msgctxt "@info when failing to launch plasma-discover, %1 protocol name"
 msgid ""

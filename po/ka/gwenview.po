@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-29 00:50+0000\n"
+"POT-Creation-Date: 2023-01-05 00:45+0000\n"
 "PO-Revision-Date: 2022-12-29 08:20+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -1880,12 +1880,20 @@ msgid "Support for your camera is not installed."
 msgstr "თქვენი კამერის მხარდაჭერა დაყენებული არაა."
 
 #: importer/thumbnailpage.cpp:236
+#, fuzzy, kde-format
+#| msgctxt "@info above install button, %1 protocol name"
+#| msgid "The protocol support library for \"%1\" is not installed."
+msgctxt "@info above install button, %1 protocol name %2 error text from KIO"
+msgid "The protocol support library for \"%1\" is not installed. Error: %2"
+msgstr "პროტოკოლის მხარდაჭერის ბიბლიოთეკა \"%1\"-სთვის დაყენებული არაა."
+
+#: importer/thumbnailpage.cpp:238
 #, kde-format
 msgctxt "@info above install button, %1 protocol name"
 msgid "The protocol support library for \"%1\" is not installed."
 msgstr "პროტოკოლის მხარდაჭერის ბიბლიოთეკა \"%1\"-სთვის დაყენებული არაა."
 
-#: importer/thumbnailpage.cpp:248
+#: importer/thumbnailpage.cpp:250
 #, kde-format
 msgctxt "@info:usagetip above install button"
 msgid ""
@@ -1894,19 +1902,19 @@ msgstr ""
 "დაყენების პროცესის დასრულების შემდეგ შემომტანი გასაგრძელებლად თავიდან "
 "გაუშვით."
 
-#: importer/thumbnailpage.cpp:255
+#: importer/thumbnailpage.cpp:257
 #, kde-format
 msgctxt "@info:tooltip for a button, %1 protocol name"
 msgid "Launch Discover to install the protocol support library for \"%1\""
 msgstr "\"%1\"-ის მხარდაჭერის ბიბლიოთეკის დასაყენებლად Discover-ის გაშვება"
 
-#: importer/thumbnailpage.cpp:257
+#: importer/thumbnailpage.cpp:259
 #, kde-format
 msgctxt "@action:button"
 msgid "Install Support for this Camera…"
 msgstr "ამ კამერის მხარდაჭერის დაყენება…"
 
-#: importer/thumbnailpage.cpp:258
+#: importer/thumbnailpage.cpp:260
 #, kde-format
 msgctxt "@info:whatsthis for a button when Kamera is not installed"
 msgid ""
@@ -1918,13 +1926,13 @@ msgstr ""
 "Discover-ის გასაშვებად და Kamera-ის დასაყენებლად, რათა \"camera:/\" "
 "პროტოკოლის მხარდაჭერა გქონდეთ."
 
-#: importer/thumbnailpage.cpp:261
+#: importer/thumbnailpage.cpp:263
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Install Protocol Support for \"%1\"…"
 msgstr "\"%1\"-ის პროტოკოლის მხარდაჭერის დაყენება…"
 
-#: importer/thumbnailpage.cpp:262
+#: importer/thumbnailpage.cpp:264
 #, kde-format
 msgctxt "@info:whatsthis for a button, %1 protocol name"
 msgid ""
@@ -1932,13 +1940,13 @@ msgid ""
 "library to enable the protocol support for \"%1:/\" on your system."
 msgstr ""
 
-#: importer/thumbnailpage.cpp:266
+#: importer/thumbnailpage.cpp:268
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Search the Web for How to Install Protocol Support for \"%1\"…"
 msgstr ""
 
-#: importer/thumbnailpage.cpp:282
+#: importer/thumbnailpage.cpp:284
 #, kde-format
 msgctxt ""
 "@info this text will be used as a search term in an online search engine, %1 "
@@ -1946,7 +1954,7 @@ msgctxt ""
 msgid "How to install protocol support for \"%1\" on Linux"
 msgstr ""
 
-#: importer/thumbnailpage.cpp:283
+#: importer/thumbnailpage.cpp:285
 #, kde-format
 msgctxt ""
 "search engine URL, %1 search keyword, and translators can replace duckduckgo "
@@ -1954,17 +1962,17 @@ msgctxt ""
 msgid "https://duckduckgo.com/?q=%1"
 msgstr "https://duckduckgo.com/?q=%1"
 
-#: importer/thumbnailpage.cpp:324
+#: importer/thumbnailpage.cpp:326
 #, kde-format
 msgid "Import Selected"
 msgstr "მონიშნულის შემოტანა"
 
-#: importer/thumbnailpage.cpp:327
+#: importer/thumbnailpage.cpp:329
 #, kde-format
 msgid "Import All"
 msgstr "ყველას შემოტანა"
 
-#: importer/thumbnailpage.cpp:489
+#: importer/thumbnailpage.cpp:491
 #, kde-kuit-format
 msgctxt "@info when failing to open the appstream URL"
 msgid ""
@@ -1972,7 +1980,7 @@ msgid ""
 "system, or use your system's package manager to install \"Kamera\" package."
 msgstr ""
 
-#: importer/thumbnailpage.cpp:493
+#: importer/thumbnailpage.cpp:495
 #, kde-kuit-format
 msgctxt "@info when failing to launch plasma-discover, %1 protocol name"
 msgid ""

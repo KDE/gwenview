@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdegraphics-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-29 00:50+0000\n"
+"POT-Creation-Date: 2023-01-05 00:45+0000\n"
 "PO-Revision-Date: 2022-12-10 17:59+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -1911,12 +1911,20 @@ msgid "Support for your camera is not installed."
 msgstr "Kameranız için destek kurulu değil."
 
 #: importer/thumbnailpage.cpp:236
+#, fuzzy, kde-format
+#| msgctxt "@info above install button, %1 protocol name"
+#| msgid "The protocol support library for \"%1\" is not installed."
+msgctxt "@info above install button, %1 protocol name %2 error text from KIO"
+msgid "The protocol support library for \"%1\" is not installed. Error: %2"
+msgstr "\"%1\" protokolü destek kitaplığı kurulu değil."
+
+#: importer/thumbnailpage.cpp:238
 #, kde-format
 msgctxt "@info above install button, %1 protocol name"
 msgid "The protocol support library for \"%1\" is not installed."
 msgstr "\"%1\" protokolü destek kitaplığı kurulu değil."
 
-#: importer/thumbnailpage.cpp:248
+#: importer/thumbnailpage.cpp:250
 #, kde-format
 msgctxt "@info:usagetip above install button"
 msgid ""
@@ -1925,19 +1933,19 @@ msgstr ""
 "Kurulum süreci bittikten sonra sürdürmek için bu içe aktarıcıyı yeniden "
 "başlatın."
 
-#: importer/thumbnailpage.cpp:255
+#: importer/thumbnailpage.cpp:257
 #, kde-format
 msgctxt "@info:tooltip for a button, %1 protocol name"
 msgid "Launch Discover to install the protocol support library for \"%1\""
 msgstr "\"%1\" protokolü destek kitaplığını kurmak için Keşfet'i çalıştırın"
 
-#: importer/thumbnailpage.cpp:257
+#: importer/thumbnailpage.cpp:259
 #, kde-format
 msgctxt "@action:button"
 msgid "Install Support for this Camera…"
 msgstr "Bu Kamera için Destek Kur..."
 
-#: importer/thumbnailpage.cpp:258
+#: importer/thumbnailpage.cpp:260
 #, kde-format
 msgctxt "@info:whatsthis for a button when Kamera is not installed"
 msgid ""
@@ -1949,13 +1957,13 @@ msgstr ""
 "Sisteminzde \"camera:/\" desteği kurulumu yapmak için buraya tıklayıp "
 "Keşfet'i çalıştırın."
 
-#: importer/thumbnailpage.cpp:261
+#: importer/thumbnailpage.cpp:263
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Install Protocol Support for \"%1\"…"
 msgstr "\"%1\" protokolü desteği kuruluyor..."
 
-#: importer/thumbnailpage.cpp:262
+#: importer/thumbnailpage.cpp:264
 #, kde-format
 msgctxt "@info:whatsthis for a button, %1 protocol name"
 msgid ""
@@ -1965,7 +1973,7 @@ msgstr ""
 "Sisteminzde \"%1:/\" desteği kurulumu yapmak için buraya tıklayıp Keşfet'i "
 "çalıştırın."
 
-#: importer/thumbnailpage.cpp:266
+#: importer/thumbnailpage.cpp:268
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Search the Web for How to Install Protocol Support for \"%1\"…"
@@ -1973,7 +1981,7 @@ msgstr ""
 "\"%1\" protokolü desteği kurulumunun nasıl yapılacağını görmek için web'de "
 "arama yapın..."
 
-#: importer/thumbnailpage.cpp:282
+#: importer/thumbnailpage.cpp:284
 #, kde-format
 msgctxt ""
 "@info this text will be used as a search term in an online search engine, %1 "
@@ -1981,7 +1989,7 @@ msgctxt ""
 msgid "How to install protocol support for \"%1\" on Linux"
 msgstr "Linux üzerinde \"%1\" protokolü desteği kurulumu nasıl yapılır"
 
-#: importer/thumbnailpage.cpp:283
+#: importer/thumbnailpage.cpp:285
 #, kde-format
 msgctxt ""
 "search engine URL, %1 search keyword, and translators can replace duckduckgo "
@@ -1989,17 +1997,17 @@ msgctxt ""
 msgid "https://duckduckgo.com/?q=%1"
 msgstr "https://duckduckgo.com/?q=%1"
 
-#: importer/thumbnailpage.cpp:324
+#: importer/thumbnailpage.cpp:326
 #, kde-format
 msgid "Import Selected"
 msgstr "Seçileni İçe Aktar"
 
-#: importer/thumbnailpage.cpp:327
+#: importer/thumbnailpage.cpp:329
 #, kde-format
 msgid "Import All"
 msgstr "Tümünü İçe Aktar"
 
-#: importer/thumbnailpage.cpp:489
+#: importer/thumbnailpage.cpp:491
 #, kde-kuit-format
 msgctxt "@info when failing to open the appstream URL"
 msgid ""
@@ -2009,7 +2017,7 @@ msgstr ""
 "Keşfet'i açma başarısız oldu.<nl/>Sisteminizde Keşfet'in kurulu olduğundan "
 "emin olun veya \"Kamera\"yı kurmak için sistem paket yöneticinizi kullanın."
 
-#: importer/thumbnailpage.cpp:493
+#: importer/thumbnailpage.cpp:495
 #, kde-kuit-format
 msgctxt "@info when failing to launch plasma-discover, %1 protocol name"
 msgid ""

@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-29 00:50+0000\n"
+"POT-Creation-Date: 2023-01-05 00:45+0000\n"
 "PO-Revision-Date: 2022-12-15 11:35-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -1917,12 +1917,20 @@ msgid "Support for your camera is not installed."
 msgstr "O suporte para sua câmera não está instalado."
 
 #: importer/thumbnailpage.cpp:236
+#, fuzzy, kde-format
+#| msgctxt "@info above install button, %1 protocol name"
+#| msgid "The protocol support library for \"%1\" is not installed."
+msgctxt "@info above install button, %1 protocol name %2 error text from KIO"
+msgid "The protocol support library for \"%1\" is not installed. Error: %2"
+msgstr "A biblioteca de suporte ao protocolo para \"%1\" não está instalada."
+
+#: importer/thumbnailpage.cpp:238
 #, kde-format
 msgctxt "@info above install button, %1 protocol name"
 msgid "The protocol support library for \"%1\" is not installed."
 msgstr "A biblioteca de suporte ao protocolo para \"%1\" não está instalada."
 
-#: importer/thumbnailpage.cpp:248
+#: importer/thumbnailpage.cpp:250
 #, kde-format
 msgctxt "@info:usagetip above install button"
 msgid ""
@@ -1931,7 +1939,7 @@ msgstr ""
 "Após concluir o processo de instalação, reinicie este importador para "
 "continuar."
 
-#: importer/thumbnailpage.cpp:255
+#: importer/thumbnailpage.cpp:257
 #, kde-format
 msgctxt "@info:tooltip for a button, %1 protocol name"
 msgid "Launch Discover to install the protocol support library for \"%1\""
@@ -1939,13 +1947,13 @@ msgstr ""
 "Lança o Discover para instalar a biblioteca de suporte ao protocolo para "
 "\"%1\""
 
-#: importer/thumbnailpage.cpp:257
+#: importer/thumbnailpage.cpp:259
 #, kde-format
 msgctxt "@action:button"
 msgid "Install Support for this Camera…"
 msgstr "Instalar o suporte para esta câmera..."
 
-#: importer/thumbnailpage.cpp:258
+#: importer/thumbnailpage.cpp:260
 #, kde-format
 msgctxt "@info:whatsthis for a button when Kamera is not installed"
 msgid ""
@@ -1957,13 +1965,13 @@ msgstr ""
 "Clique aqui para lançar o Discover para instalar o Kamera e habilitar o "
 "suporte ao protocolo \"camera:/\" no seu sistema."
 
-#: importer/thumbnailpage.cpp:261
+#: importer/thumbnailpage.cpp:263
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Install Protocol Support for \"%1\"…"
 msgstr "Instalar suporte ao protocolo para \"%1\"..."
 
-#: importer/thumbnailpage.cpp:262
+#: importer/thumbnailpage.cpp:264
 #, kde-format
 msgctxt "@info:whatsthis for a button, %1 protocol name"
 msgid ""
@@ -1973,14 +1981,14 @@ msgstr ""
 "Clique aqui para lançar o Discover para instalar a biblioteca ausente de "
 "suporte ao protocolo para \"%1:/\" no seu sistema."
 
-#: importer/thumbnailpage.cpp:266
+#: importer/thumbnailpage.cpp:268
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Search the Web for How to Install Protocol Support for \"%1\"…"
 msgstr ""
 "Pesquisar na Web sobre como instalar o suporte ao protocolo para \"%1\"..."
 
-#: importer/thumbnailpage.cpp:282
+#: importer/thumbnailpage.cpp:284
 #, kde-format
 msgctxt ""
 "@info this text will be used as a search term in an online search engine, %1 "
@@ -1988,7 +1996,7 @@ msgctxt ""
 msgid "How to install protocol support for \"%1\" on Linux"
 msgstr "Como instalar o suporte ao protocolo para \"%1\" no Linux"
 
-#: importer/thumbnailpage.cpp:283
+#: importer/thumbnailpage.cpp:285
 #, kde-format
 msgctxt ""
 "search engine URL, %1 search keyword, and translators can replace duckduckgo "
@@ -1996,17 +2004,17 @@ msgctxt ""
 msgid "https://duckduckgo.com/?q=%1"
 msgstr "https://duckduckgo.com/?q=%1"
 
-#: importer/thumbnailpage.cpp:324
+#: importer/thumbnailpage.cpp:326
 #, kde-format
 msgid "Import Selected"
 msgstr "Importar as selecionadas"
 
-#: importer/thumbnailpage.cpp:327
+#: importer/thumbnailpage.cpp:329
 #, kde-format
 msgid "Import All"
 msgstr "Importar tudo"
 
-#: importer/thumbnailpage.cpp:489
+#: importer/thumbnailpage.cpp:491
 #, kde-kuit-format
 msgctxt "@info when failing to open the appstream URL"
 msgid ""
@@ -2017,7 +2025,7 @@ msgstr ""
 "instalado em seu sistema ou use o gerenciador de pacotes de seu sistema para "
 "instalar o pacote \"Kamera\"."
 
-#: importer/thumbnailpage.cpp:493
+#: importer/thumbnailpage.cpp:495
 #, kde-kuit-format
 msgctxt "@info when failing to launch plasma-discover, %1 protocol name"
 msgid ""
