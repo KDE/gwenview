@@ -1,10 +1,10 @@
 # Translation of gwenview.po to Catalan
-# Copyright (C) 2004-2022 This_file_is_part_of_KDE
+# Copyright (C) 2004-2023 This_file_is_part_of_KDE
 # This file is distributed under the same license as the kegraphics package.
 #
 # Marc Coll Carrillo <marcoll@ya.com>, 2004, 2005, 2006.
 # Albert Astals Cid <aacid@kde.org>, 2004, 2005, 2006.
-# Josep M. Ferrer <txemaq@gmail.com>, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
+# Josep M. Ferrer <txemaq@gmail.com>, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
 # Manuel Tortosa Moreno <manutortosa@gmail.com>, 2009.
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2014, 2016, 2017, 2018, 2019, 2020, 2021.
 msgid ""
@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-05 00:45+0000\n"
-"PO-Revision-Date: 2022-11-17 13:25+0100\n"
+"PO-Revision-Date: 2023-01-05 05:06+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -1917,12 +1917,12 @@ msgid "Support for your camera is not installed."
 msgstr "El suport per a la vostra càmera no està instal·lat."
 
 #: importer/thumbnailpage.cpp:236
-#, fuzzy, kde-format
-#| msgctxt "@info above install button, %1 protocol name"
-#| msgid "The protocol support library for \"%1\" is not installed."
+#, kde-format
 msgctxt "@info above install button, %1 protocol name %2 error text from KIO"
 msgid "The protocol support library for \"%1\" is not installed. Error: %2"
-msgstr "La biblioteca de suport del protocol per a «%1» no està instal·lada."
+msgstr ""
+"La biblioteca d'implementació del protocol per a «%1» no està instal·lada. "
+"Error: %2"
 
 #: importer/thumbnailpage.cpp:238
 #, kde-format

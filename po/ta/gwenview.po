@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This file is copyright:
 # This file is distributed under the same license as the gwenview package.
 #
-# Kishore G <kishore96@gmail.com>, 2021, 2022.
+# Kishore G <kishore96@gmail.com>, 2021, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-05 00:45+0000\n"
-"PO-Revision-Date: 2022-11-17 20:01+0530\n"
+"PO-Revision-Date: 2023-01-05 20:07+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
 "Language: ta\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.08.3\n"
+"X-Generator: Lokalize 22.12.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1895,12 +1895,10 @@ msgid "Support for your camera is not installed."
 msgstr "உங்கள் படக்கருவிக்கான ஆதரவு நிறுவப்படவில்லை."
 
 #: importer/thumbnailpage.cpp:236
-#, fuzzy, kde-format
-#| msgctxt "@info above install button, %1 protocol name"
-#| msgid "The protocol support library for \"%1\" is not installed."
+#, kde-format
 msgctxt "@info above install button, %1 protocol name %2 error text from KIO"
 msgid "The protocol support library for \"%1\" is not installed. Error: %2"
-msgstr "\"%1\" எனும் நெறிமுறைக்கு தேவைப்படும் நிரலகம் நிறுவப்படவில்லை."
+msgstr "\"%1\" எனும் நெறிமுறைக்கு தேவைப்படும் நிரலகம் நிறுவப்படவில்லை. சிக்கல்: %2"
 
 #: importer/thumbnailpage.cpp:238
 #, kde-format

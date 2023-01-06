@@ -6,20 +6,20 @@
 # Bram Schoenmakers <bramschoenmakers@kde.nl>, 2006.
 # Freek de Kruijf <f.de.kruijf@hetnet.nl>, 2008, 2009.
 # Freek de Kruijf <freekdekruijf@kde.nl>, 2009, 2010, 2011, 2012.
-# Freek de Kruijf <f.de.kruijf@gmail.com>, 2011, 2013, 2014, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
+# Freek de Kruijf <f.de.kruijf@gmail.com>, 2011, 2013, 2014, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-05 00:45+0000\n"
-"PO-Revision-Date: 2022-11-17 13:26+0100\n"
+"PO-Revision-Date: 2023-01-05 22:25+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 22.08.3\n"
+"X-Generator: Lokalize 22.12.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -27,7 +27,7 @@ msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr ""
 "Rinse de Vries - 2002 tot 2007,Wilbert Berendsen - 2003,Tom Albers - 2005,"
-"Bram Schoenmakers - 2006,Freek de Kruijf - 2014 t/m 2022"
+"Bram Schoenmakers - 2006,Freek de Kruijf - 2014 t/m 2023"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
@@ -1918,14 +1918,12 @@ msgid "Support for your camera is not installed."
 msgstr "Ondersteuning voor uw camera is niet geïnstalleerd."
 
 #: importer/thumbnailpage.cpp:236
-#, fuzzy, kde-format
-#| msgctxt "@info above install button, %1 protocol name"
-#| msgid "The protocol support library for \"%1\" is not installed."
+#, kde-format
 msgctxt "@info above install button, %1 protocol name %2 error text from KIO"
 msgid "The protocol support library for \"%1\" is not installed. Error: %2"
 msgstr ""
 "De bibliotheek voor ondersteuning van het protocol voor \"%1\" is niet "
-"geïnstalleerd"
+"geïnstalleerd. Fout: %2"
 
 #: importer/thumbnailpage.cpp:238
 #, kde-format
