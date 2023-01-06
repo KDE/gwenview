@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-29 02:50+0000\n"
-"PO-Revision-Date: 2023-01-01 13:06+0100\n"
+"PO-Revision-Date: 2023-01-05 07:33+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -1301,7 +1301,7 @@ msgstr "თუ ახლა გახვალთ, ცვლილებებ�
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
-msgstr ""
+msgstr "ეს მენიუს ზოლს სრულად დამალავს. მისი ჩვენება %1-ზე დაწოლით შეგიძლიათ."
 
 #: app/mainwindow.cpp:1814
 #, kde-format
@@ -1573,6 +1573,7 @@ msgid ""
 "Browsing by tags is not available. Make sure Nepomuk is properly installed "
 "on your computer."
 msgstr ""
+"ჭდეებით მოძებნა ხელმიუწვდომელია. დარწმუნდით, რომ Nepomuk სწორად გიყენიათ."
 
 #: app/viewmainpage.cpp:153 app/viewmainpage.cpp:447
 #, kde-format
@@ -1694,8 +1695,8 @@ msgstr[1] "შემოტანილია %1 დოკუმენტი."
 msgid "One document has been skipped because it had already been imported."
 msgid_plural ""
 "%1 documents have been skipped because they had already been imported."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "გამოტოვებულია ერთი დოკუმენტი, რადგან ის უკვე შემოტანილია."
+msgstr[1] "გამოტოვებულია %1 დოკუმენტი, რადგან ისინი უკვე შემოტანილია."
 
 #: importer/importdialog.cpp:109
 #, kde-format
@@ -1825,6 +1826,7 @@ msgstr "წინასწარი ნახვა:"
 #, kde-format
 msgid "<i>Type text or click the items below to customize the format</i>"
 msgstr ""
+"<i>ფორმატის მოსარგებად აკრიფეთ ტექსტი ან დააწკაპუნეთ ელემენტის ქვეშ</i>"
 
 #: importer/main.cpp:44
 #, kde-format
@@ -1841,6 +1843,8 @@ msgstr "ფოტოს შემომტანი"
 msgid ""
 "The device UDI, used to retrieve information about the device (name, icon...)"
 msgstr ""
+"იმ მოწყობილობის UDI, რომელიც მოწყობილობის შესახებ ინფორმაციის მისაღებად "
+"გამოიყენება (სახელი, ხატულა...)"
 
 #: importer/main.cpp:53
 #, kde-format
@@ -1937,6 +1941,7 @@ msgstr ""
 msgctxt "@action:button %1 protocol name"
 msgid "Search the Web for How to Install Protocol Support for \"%1\"…"
 msgstr ""
+"ინტერნეტში მოძებნა, როგორ დავაყენოთ პროტოკოლის მხარდაჭერა \"%1\"-სთვის…"
 
 #: importer/thumbnailpage.cpp:282
 #, kde-format
@@ -2161,6 +2166,8 @@ msgid ""
 "Could not open file for writing, check that you have the necessary rights in "
 "<filename>%1</filename>."
 msgstr ""
+"ფაილის ჩასაწერად გახსნა შეუძლებელია. დარწმუნდით, რომ <filename>%1</filename>-"
+"ზე ყველა საჭირო წვდომა გაგაჩნიათ."
 
 #: lib/document/savejob.cpp:137
 #, kde-kuit-format
@@ -2169,6 +2176,8 @@ msgid ""
 "Could not overwrite file, check that you have the necessary rights to write "
 "in <filename>%1</filename>."
 msgstr ""
+"ფაილის თავზე გადაწერა შეუძლებელია. დარწმუნდით, რომ <filename>%1</filename>-"
+"ზე ყველა საჭირო წვდომა გაგაჩნიათ."
 
 #: lib/documentview/documentview.cpp:195
 #, kde-format
@@ -2246,7 +2255,7 @@ msgstr "შევსება"
 #: lib/documentview/documentviewcontroller.cpp:98
 #, kde-format
 msgid "Show Bird's Eye View When Zoomed In"
-msgstr ""
+msgstr "გადიდებისას გადახედვის ჩვენება"
 
 #: lib/documentview/documentviewcontroller.cpp:105
 #, kde-format
@@ -2376,13 +2385,13 @@ msgstr ""
 #: lib/gwenviewconfig.kcfg:365
 #, kde-format
 msgid "Last used crop ratio width when Advanced Settings enabled"
-msgstr ""
+msgstr "დამატებით პარამეტრებში ბოლოს გამოყენებული სიგანე"
 
 #. i18n: ectx: label, entry (CropRatioHeight), group (Crop)
 #: lib/gwenviewconfig.kcfg:369
 #, kde-format
 msgid "Last used crop ratio height when Advanced Settings enabled"
-msgstr ""
+msgstr "დამატებით პარამეტრებში ბოლოს გამოყენებული სიმაღლე"
 
 #: lib/historymodel.cpp:146
 #, kde-format
