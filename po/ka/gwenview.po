@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-29 02:50+0000\n"
-"PO-Revision-Date: 2023-01-05 07:33+0100\n"
+"PO-Revision-Date: 2023-01-06 12:59+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -2622,7 +2622,7 @@ msgstr "მიმდინარე ზომა:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Assign this tag to all selected images"
-msgstr ""
+msgstr "ამ ჭდის ყველა მონიშნული გამოსახულებისთვის მინიჭება"
 
 #: lib/semanticinfo/tagwidget.cpp:146
 #, kde-format
