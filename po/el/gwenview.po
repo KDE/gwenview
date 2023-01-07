@@ -31,7 +31,7 @@ msgstr ""
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Σπύρος Γεωργαράς, Τούσης Μανώλης"
+msgstr "Σπύρος Γεωργαράς, Τούsης Μανώλης"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
@@ -1923,12 +1923,12 @@ msgid "Support for your camera is not installed."
 msgstr "Δεν έχει εγκατασταθεί υποστήριξη για κάμερα."
 
 #: importer/thumbnailpage.cpp:236
-#, fuzzy, kde-format
-#| msgctxt "@info above install button, %1 protocol name"
-#| msgid "The protocol support library for \"%1\" is not installed."
+#, kde-format
 msgctxt "@info above install button, %1 protocol name %2 error text from KIO"
 msgid "The protocol support library for \"%1\" is not installed. Error: %2"
-msgstr "Η βιβλιοθήκη υποστήριξης του πρωτοκόλλου «%1» δεν έχει εγκατασταθεί."
+msgstr ""
+"Η βιβλιοθήκη υποστήριξης του πρωτοκόλλου «%1» δεν έχει εγκατασταθεί. Σφάλμα: "
+"%2"
 
 #: importer/thumbnailpage.cpp:238
 #, kde-format
