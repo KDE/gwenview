@@ -3,13 +3,13 @@
 #
 # Yasen Pramatarov <yasen@lindeas.com>, 2009, 2010, 2011, 2012, 2013, 2015.
 # Zlatko Popov <zlatkopopov@fsa-bg.org>, 2009, 2012.
-# Mincho Kondarev <mkondarev@yahoo.de>, 2022.
+# Mincho Kondarev <mkondarev@yahoo.de>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-05 00:45+0000\n"
-"PO-Revision-Date: 2022-11-19 22:06+0100\n"
+"PO-Revision-Date: 2023-01-07 17:40+0100\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
 "Language: bg\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.08.3\n"
+"X-Generator: Lokalize 22.12.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1911,12 +1911,11 @@ msgid "Support for your camera is not installed."
 msgstr "Не е инсталирана поддръжка за камерата."
 
 #: importer/thumbnailpage.cpp:236
-#, fuzzy, kde-format
-#| msgctxt "@info above install button, %1 protocol name"
-#| msgid "The protocol support library for \"%1\" is not installed."
+#, kde-format
 msgctxt "@info above install button, %1 protocol name %2 error text from KIO"
 msgid "The protocol support library for \"%1\" is not installed. Error: %2"
-msgstr "Библиотеката на поддържащия протокол \"%1\" не е инсталирана."
+msgstr ""
+"Библиотеката на поддържащия протокол \"%1\" не е инсталирана. Грешка: %2"
 
 #: importer/thumbnailpage.cpp:238
 #, kde-format

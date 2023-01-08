@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-05 00:45+0000\n"
-"PO-Revision-Date: 2023-01-06 07:45+0100\n"
+"PO-Revision-Date: 2023-01-07 08:31+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -730,6 +730,8 @@ msgid ""
 "<emphasis strong='true'>Saving <filename>%1</filename> failed:</"
 "emphasis><nl />%2"
 msgstr ""
+"<emphasis strong='true'><filename>%1</filename>-ის შენახვის შეცდომა:</"
+"emphasis><nl />%2"
 
 #: app/gvcore.cpp:508
 #, kde-format
@@ -2381,6 +2383,8 @@ msgstr "ინტერვალი სურთებს შორის (წ�
 #, kde-format
 msgid "Restrict crop to image ratio when Advanced Settings disabled"
 msgstr ""
+"ამოჭრის გამოსახულების ზომებზე შეზღუდვა, როცა დამატებითი პარამეტრები "
+"გამორთეულია"
 
 #. i18n: ectx: label, entry (CropRatioIndex), group (Crop)
 #: lib/gwenviewconfig.kcfg:361
