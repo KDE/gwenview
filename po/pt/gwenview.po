@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-05 00:45+0000\n"
-"PO-Revision-Date: 2022-11-18 09:20+0000\n"
+"PO-Revision-Date: 2023-01-06 03:10+0000\n"
 "Last-Translator: Pedro Morais <morais@kde.org>\n"
 "Language-Team: pt <kde-i18n-pt@kde.org>\n"
 "Language: pt\n"
@@ -1914,12 +1914,11 @@ msgid "Support for your camera is not installed."
 msgstr "O suporte para a sua máquina fotográfica não está instalado."
 
 #: importer/thumbnailpage.cpp:236
-#, fuzzy, kde-format
-#| msgctxt "@info above install button, %1 protocol name"
-#| msgid "The protocol support library for \"%1\" is not installed."
+#, kde-format
 msgctxt "@info above install button, %1 protocol name %2 error text from KIO"
 msgid "The protocol support library for \"%1\" is not installed. Error: %2"
-msgstr "A biblioteca de suporte do protocolo \"%1\" não está instalada."
+msgstr ""
+"A biblioteca de suporte do protocolo \"%1\" não está instalada. Erro: %2"
 
 #: importer/thumbnailpage.cpp:238
 #, kde-format

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-05 00:45+0000\n"
-"PO-Revision-Date: 2023-01-07 08:31+0100\n"
+"PO-Revision-Date: 2023-01-09 08:02+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -1985,6 +1985,9 @@ msgid ""
 "Opening Discover failed.<nl/>Please check if Discover is installed on your "
 "system, or use your system's package manager to install \"Kamera\" package."
 msgstr ""
+"Discover -ის გახსნის შეცდომა.<nl/> შეამოწმეთ, დაყენებული გაქვთ თუ არა "
+"Discover, ან გამოიყენეთ თქვენი სისტემის პაკეტების მმართველი, რათა 'Kamera' "
+"პაკეტი დააყენოთ."
 
 #: importer/thumbnailpage.cpp:495
 #, kde-kuit-format
@@ -1994,6 +1997,9 @@ msgid ""
 "system, or use your system's package manager to install the protocol support "
 "library for \"%1\"."
 msgstr ""
+"Discover-ის გახსნის შეცდომა.<nl/>შეამოწმეთ, დაყენებულია თუ არა Discover, ან "
+"გამოიყენეთ თქვენი სისტემის პაკეტების მმართველი, რათა დააყენოთ პროტოკოლის "
+"მხარდაჭერის ბიბლიოთეკები '%1'-სთვის."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: importer/thumbnailpage.ui:173
@@ -2308,6 +2314,8 @@ msgid ""
 "The percentage of memory used by Gwenview before it\n"
 "            warns the user and suggest saving changes."
 msgstr ""
+"მეხსიერების პროცენტული მაჩვენებელი, რომელსაც Gwenview იყენებს მის წინაშე\n"
+"            აფრთხილებს მომხმარებელს და გთავაზობთ ცვლილებების დაზოგვას."
 
 #. i18n: ectx: whatsthis, entry (BlackListedExtensions), group (General)
 #: lib/gwenviewconfig.kcfg:67
@@ -2317,6 +2325,10 @@ msgid ""
 "            load. We exclude *.new as well because this is the extension\n"
 "            used for temporary files by KSaveFile."
 msgstr ""
+"ფაილის სახელის გაფართოებების სია Gwenview არ უნდა შეეცადოს\n"
+"            ჩატვირთოს. ჩვენ გამოვრიცხავთ *.new იმიტომ, რომ ეს არის "
+"გაფართოება\n"
+"            გამოიყენება KSaveFile- ის დროებითი ფაილებისთვის."
 
 #. i18n: ectx: whatsthis, entry (ZoomMode), group (ImageView)
 #: lib/gwenviewconfig.kcfg:208
@@ -2391,6 +2403,8 @@ msgstr ""
 #, kde-format
 msgid "Index representing selected ratio in the Advanced settings combobox"
 msgstr ""
+"ინდექსი, რომელიც წარმოადგენს შერჩეულ თანაფარდობას მოწინავე პარამეტრების "
+"კომბობებში"
 
 #. i18n: ectx: label, entry (CropRatioWidth), group (Crop)
 #: lib/gwenviewconfig.kcfg:365
