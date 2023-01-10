@@ -205,7 +205,8 @@ struct LoadingDocumentImplPrivate {
         QImageReader reader;
 
 #ifdef KDCRAW_FOUND
-        if (KDcrawIface::KDcraw::rawFilesList().contains(QString::fromLatin1(mFormatHint))) {
+        if (!QImageReader::supportedImageFormats().contains(QByteArray("raw"))
+            && KDcrawIface::KDcraw::rawFilesList().contains(QString::fromLatin1(mFormatHint))) {
             QByteArray previewData;
 
             // if the image is in format supported by dcraw, fetch its embedded preview
