@@ -1460,7 +1460,7 @@ void MainWindow::slotCurrentDirUrlChanged(const QUrl &url)
         d->mUrlNavigator->setLocationUrl(url);
         d->mGoUpAction->setEnabled(url.path() != "/");
         if (d->mCurrentMainPageId == BrowseMainPageId) {
-            setCaption(d->mUrlNavigator->locationUrl().adjusted(QUrl::RemoveScheme).toString());
+            setCaption(d->mUrlNavigator->locationUrl().toDisplayString(QUrl::PreferLocalFile));
         }
     } else {
         d->mGoUpAction->setEnabled(false);
