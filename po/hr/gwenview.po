@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-05 00:45+0000\n"
+"POT-Creation-Date: 2023-01-11 00:55+0000\n"
 "PO-Revision-Date: 2011-07-22 16:56+0200\n"
 "Last-Translator: Marko Dimjašević <marko@dimjasevic.net>\n"
 "Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
@@ -2296,19 +2296,19 @@ msgctxt "@info"
 msgid "Gwenview cannot display documents of type %1."
 msgstr "Gwenview ne može prikazati dokumente vrste %1."
 
-#: lib/document/loadingdocumentimpl.cpp:397
+#: lib/document/loadingdocumentimpl.cpp:398
 #, kde-format
 msgctxt "@info"
 msgid "Could not open file %1"
 msgstr "Ne mogu otvoriti datoteku %1"
 
-#: lib/document/loadingdocumentimpl.cpp:488
+#: lib/document/loadingdocumentimpl.cpp:489
 #, kde-format
 msgctxt "@info"
 msgid "Loading meta information failed."
 msgstr "Neuspjelo učitavanje metainformacija."
 
-#: lib/document/loadingdocumentimpl.cpp:514
+#: lib/document/loadingdocumentimpl.cpp:515
 #, kde-format
 msgctxt "@info"
 msgid "Loading image failed."
