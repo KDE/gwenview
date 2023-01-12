@@ -10,14 +10,14 @@
 # Yuri Efremov <yur.arh@gmail.com>, 2012, 2013.
 # Alexander Lakhin <exclusion@gmail.com>, 2013.
 # Aleksei Baranov <aleksei.ee@gmail.com>, 2014.
-# Alexander Yavorsky <kekcuha@gmail.com>, 2018, 2019, 2020, 2021, 2022.
+# Alexander Yavorsky <kekcuha@gmail.com>, 2018, 2019, 2020, 2021, 2022, 2023.
 # Мария Шикунова <translation-team@basealt.ru>, 2021, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-11 00:55+0000\n"
-"PO-Revision-Date: 2022-08-13 23:05+0300\n"
+"PO-Revision-Date: 2023-01-09 10:26+0300\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
 "Language: ru\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Lokalize 22.04.3\n"
+"X-Generator: Lokalize 22.12.1\n"
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
@@ -404,13 +404,13 @@ msgstr "Изменить"
 #, kde-format
 msgctxt "Verb"
 msgid "Copy To..."
-msgstr "Копировать в..."
+msgstr "Копировать…"
 
 #: app/fileopscontextmanageritem.cpp:155
 #, kde-format
 msgctxt "Verb"
 msgid "Move To..."
-msgstr "Переместить в ..."
+msgstr "Переместить…"
 
 #: app/fileopscontextmanageritem.cpp:160
 #, kde-format
@@ -859,7 +859,7 @@ msgstr "Кадрировать"
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Adjust Colors"
-msgstr ""
+msgstr "Коррекция цветов"
 
 #: app/imageopscontextmanageritem.cpp:128
 #: lib/redeyereduction/redeyereductionimageoperation.cpp:75
@@ -1978,12 +1978,10 @@ msgid "Support for your camera is not installed."
 msgstr "Не установлен модуль поддержки этой камеры "
 
 #: importer/thumbnailpage.cpp:236
-#, fuzzy, kde-format
-#| msgctxt "@info above install button, %1 protocol name"
-#| msgid "The protocol support library for \"%1\" is not installed."
+#, kde-format
 msgctxt "@info above install button, %1 protocol name %2 error text from KIO"
 msgid "The protocol support library for \"%1\" is not installed. Error: %2"
-msgstr "Не установлен модуль поддержки протокола «%1»"
+msgstr "Не установлен модуль поддержки протокола «%1», сообщение об ошибке: %2"
 
 #: importer/thumbnailpage.cpp:238
 #, kde-format
@@ -2140,22 +2138,22 @@ msgstr "Разработчик"
 #: lib/bcg/bcgimageoperation.cpp:69
 #, kde-format
 msgid "Adjust Colors"
-msgstr ""
+msgstr "Коррекция цветов"
 
 #: lib/bcg/bcgwidget.cpp:51
 #, kde-format
 msgid "Brightness:"
-msgstr ""
+msgstr "Яркость:"
 
 #: lib/bcg/bcgwidget.cpp:52
 #, kde-format
 msgid "Contrast:"
-msgstr ""
+msgstr "Контраст:"
 
 #: lib/bcg/bcgwidget.cpp:53
 #, kde-format
 msgid "Gamma:"
-msgstr ""
+msgstr "Гамма:"
 
 #: lib/crop/cropwidget.cpp:191
 #, kde-format
