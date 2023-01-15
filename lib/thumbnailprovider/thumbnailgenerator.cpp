@@ -167,7 +167,7 @@ bool ThumbnailContext::load(const QString &pixPath, int pixelSize)
     }
 
     if (reader.autoTransform() && (reader.transformation() & QImageIOHandler::TransformationRotate90)) {
-        qSwap(mOriginalWidth, mOriginalHeight);
+        std::swap(mOriginalWidth, mOriginalHeight);
     }
 
     return true;

@@ -109,7 +109,7 @@ struct SlideShowPrivate {
         // Ensure the first url is different from the previous last one, so that
         // last url does not stay visible twice longer than usual
         if (mLastShuffledUrl == mShuffledUrls.first() && mShuffledUrls.count() > 1) {
-            qSwap(mShuffledUrls[0], mShuffledUrls[1]);
+            std::swap(mShuffledUrls[0], mShuffledUrls[1]);
         }
         mLastShuffledUrl = mShuffledUrls.last();
     }

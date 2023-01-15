@@ -890,7 +890,7 @@ void DocumentView::wheelEvent(QGraphicsSceneWheelEvent *event)
     // 120: see QWheelEvent::angleDelta().y() doc
     qreal dy = -qApp->wheelScrollLines() * 16 * event->delta() / 120;
     if (event->orientation() == Qt::Horizontal) {
-        qSwap(dx, dy);
+        std::swap(dx, dy);
     }
     d->mAdapter->setScrollPos(d->mAdapter->scrollPos() + QPointF(dx, dy));
 }

@@ -233,7 +233,7 @@ void ContextManager::slotDirModelDataChanged(const QModelIndex &topLeft, const Q
     QModelIndexList &shortList = selectionList;
     QModelIndexList &longList = changedList;
     if (shortList.length() > longList.length()) {
-        qSwap(shortList, longList);
+        std::swap(shortList, longList);
     }
     for (const QModelIndex &index : qAsConst(shortList)) {
         if (longList.contains(index)) {
