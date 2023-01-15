@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This file is copyright:
 # This file is distributed under the same license as the gwenview package.
 #
-# Kheyyam Gojayev <xxmn77@gmail.com>, 2020, 2021, 2022.
+# Kheyyam Gojayev <xxmn77@gmail.com>, 2020, 2021, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-11 00:55+0000\n"
-"PO-Revision-Date: 2022-11-11 11:04+0400\n"
+"PO-Revision-Date: 2023-01-14 23:45+0400\n"
 "Last-Translator: Kheyyam <xxmn77@gmail.com>\n"
 "Language-Team: Azerbaijani <kde-i18n-doc@kde.org>\n"
 "Language: az\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 22.08.3\n"
+"X-Generator: Lokalize 22.12.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -828,7 +828,7 @@ msgstr "Kadrlaşdırmaq"
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Adjust Colors"
-msgstr ""
+msgstr "Rəngləri təyin edin"
 
 #: app/imageopscontextmanageritem.cpp:128
 #: lib/redeyereduction/redeyereductionimageoperation.cpp:75
@@ -1907,12 +1907,10 @@ msgid "Support for your camera is not installed."
 msgstr "Kameranız üçün dəstəkləmə quraşdırılmayıb."
 
 #: importer/thumbnailpage.cpp:236
-#, fuzzy, kde-format
-#| msgctxt "@info above install button, %1 protocol name"
-#| msgid "The protocol support library for \"%1\" is not installed."
+#, kde-format
 msgctxt "@info above install button, %1 protocol name %2 error text from KIO"
 msgid "The protocol support library for \"%1\" is not installed. Error: %2"
-msgstr "\"%1\" üçün protokol dəstəyi kitabxanası quraşdırılmayıb."
+msgstr "\"%1\" dəstəkləyəcək protokol quraşdırılmayıb. Xəta: %2"
 
 #: importer/thumbnailpage.cpp:238
 #, kde-format
@@ -2068,7 +2066,7 @@ msgstr "Tərtibatçı"
 #: lib/bcg/bcgimageoperation.cpp:69
 #, kde-format
 msgid "Adjust Colors"
-msgstr ""
+msgstr "Rəngləri təyin edin"
 
 #: lib/bcg/bcgwidget.cpp:51
 #, kde-format
