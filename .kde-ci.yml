@@ -17,7 +17,6 @@ Dependencies:
     'frameworks/knewstuff': '@stable'
     'frameworks/kglobalaccel': '@stable'
     'frameworks/kxmlgui': '@stable'
-    'frameworks/kwayland': '@stable'
     'frameworks/purpose': '@stable'
     'frameworks/kguiaddons': '@stable'
     'frameworks/kactivities': '@stable'
