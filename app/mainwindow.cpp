@@ -109,7 +109,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/mimetypeutils.h>
 #ifdef HAVE_QTDBUS
 #include <QDBusPendingReply>
-#include <lib/mpris2/mpris2service.h>
 #endif
 #include <lib/print/printhelper.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
@@ -187,9 +186,6 @@ struct MainWindow::Private {
     SaveBar *mSaveBar = nullptr;
     bool mStartSlideShowWhenDirListerCompleted;
     SlideShow *mSlideShow = nullptr;
-#ifdef HAVE_QTDBUS
-    Mpris2Service *mMpris2Service = nullptr;
-#endif
     Preloader *mPreloader = nullptr;
     bool mPreloadDirectionIsForward;
 
@@ -1040,11 +1036,6 @@ MainWindow::MainWindow()
     loadConfig();
 
     connect(DocumentFactory::instance(), &DocumentFactory::modifiedDocumentListChanged, this, &MainWindow::slotModifiedDocumentListChanged);
-
-#ifdef HAVE_QTDBUS
-    d->mMpris2Service =
-        new Mpris2Service(d->mSlideShow, d->mContextManager, d->mToggleSlideShowAction, d->mFullScreenAction, d->mGoToPreviousAction, d->mGoToNextAction, this);
-#endif
 
     auto ratingMenu = static_cast<QMenu *>(guiFactory()->container(QStringLiteral("rating"), this));
     ratingMenu->setIcon(QIcon::fromTheme(QStringLiteral("rating-unrated")));

@@ -179,23 +179,6 @@ set_source_files_properties(${GV_JPEG_DIR}/transupp.c PROPERTIES SKIP_UNITY_BUIL
 ecm_qt_declare_logging_category(gwenviewlib_SRCS HEADER gwenview_lib_debug.h IDENTIFIER GWENVIEW_LIB_LOG CATEGORY_NAME org.kde.kdegraphics.gwenview.lib)
 ecm_qt_declare_logging_category(gwenviewlib_SRCS HEADER gwenview_exiv2_debug.h IDENTIFIER GWENVIEW_EXIV2_LOG CATEGORY_NAME org.kde.kdegraphics.gwenview.exiv2 DEFAULT_SEVERITY Critical DESCRIPTION "gwenview lib exiv2 (kdegraphics)" EXPORT GWENVIEW)
 
-if(HAVE_QTDBUS)
-    set(gwenviewlib_SRCS
-        ${gwenviewlib_SRCS}
-        mpris2/lockscreenwatcher.cpp
-        mpris2/dbusabstractadaptor.cpp
-        mpris2/mpris2service.cpp
-        mpris2/mprismediaplayer2.cpp
-        mpris2/mprismediaplayer2player.cpp
-        mpris2/lockscreenwatcher.h
-        mpris2/dbusabstractadaptor.h
-        mpris2/mpris2service.h
-        mpris2/mprismediaplayer2.h
-        mpris2/mprismediaplayer2player.h
-        )
-    qt_add_dbus_interface(gwenviewlib_SRCS mpris2/org.freedesktop.ScreenSaver.xml screensaverdbusinterface)
-endif()
-
 if(HAVE_FITS)
     set(gwenviewlib_SRCS
         ${gwenviewlib_SRCS}
