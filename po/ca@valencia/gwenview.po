@@ -589,7 +589,7 @@ msgstr "Configura"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure full screen mode"
-msgstr "Configuració del mode de pantalla completa"
+msgstr "Configureu el mode de pantalla completa"
 
 #: app/fullscreencontent.cpp:552 app/viewmainpage.cpp:404
 #, kde-format
