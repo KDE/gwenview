@@ -44,6 +44,7 @@ Mpris2Service::Mpris2Service(SlideShow *slideShow,
                              QAction *nextAction,
                              QObject *parent)
     : QObject(parent)
+    , m_fullscreenAction(fullScreenAction)
 {
     new MprisMediaPlayer2(mediaPlayer2ObjectPath(), fullScreenAction, this);
     new MprisMediaPlayer2Player(mediaPlayer2ObjectPath(), slideShow, contextManager, toggleSlideShowAction, fullScreenAction, previousAction, nextAction, this);
@@ -53,8 +54,9 @@ Mpris2Service::Mpris2Service(SlideShow *slideShow,
     // the MPRIS service is unregistered while the lockscreen is active.
     auto lockScreenWatcher = new LockScreenWatcher(this);
     connect(lockScreenWatcher, &LockScreenWatcher::isLockedChanged, this, &Mpris2Service::onLockScreenLockedChanged);
+    connect(fullScreenAction, &QAction::toggled, this, &Mpris2Service::onFullScreenActionToggled);
 
-    if (!lockScreenWatcher->isLocked()) {
+    if (!lockScreenWatcher->isLocked() && fullScreenAction->isChecked()) {
         registerOnDBus();
     }
 }
@@ -111,4 +113,12 @@ void Mpris2Service::onLockScreenLockedChanged(bool isLocked)
     }
 }
 
+void Mpris2Service::onFullScreenActionToggled()
+{
+    if (m_fullscreenAction->isChecked()) {
+        registerOnDBus();
+    } else {
+        unregisterOnDBus();
+    }
+}
 }

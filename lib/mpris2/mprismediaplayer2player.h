@@ -105,7 +105,6 @@ private:
     void onSlideShowStateChanged();
     void onCurrentUrlChanged(const QUrl &url);
     void onRandomActionToggled(bool checked);
-    void onFullScreenActionToggled();
     void onToggleSlideShowActionChanged();
     void onPreviousActionChanged();
     void onNextActionChanged();

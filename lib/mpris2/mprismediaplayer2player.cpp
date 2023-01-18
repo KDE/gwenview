@@ -68,7 +68,6 @@ MprisMediaPlayer2Player::MprisMediaPlayer2Player(const QString &objectDBusPath,
     connect(mContextManager, &ContextManager::currentUrlChanged, this, &MprisMediaPlayer2Player::onCurrentUrlChanged);
     connect(mSlideShow->randomAction(), &QAction::toggled, this, &MprisMediaPlayer2Player::onRandomActionToggled);
     connect(mToggleSlideShowAction, &QAction::changed, this, &MprisMediaPlayer2Player::onToggleSlideShowActionChanged);
-    connect(mFullScreenAction, &QAction::toggled, this, &MprisMediaPlayer2Player::onFullScreenActionToggled);
     connect(mNextAction, &QAction::changed, this, &MprisMediaPlayer2Player::onNextActionChanged);
     connect(mPreviousAction, &QAction::changed, this, &MprisMediaPlayer2Player::onPreviousActionChanged);
 }
@@ -77,11 +76,7 @@ MprisMediaPlayer2Player::~MprisMediaPlayer2Player() = default;
 
 bool MprisMediaPlayer2Player::updatePlaybackStatus()
 {
-    const QString newStatus = (!mSlideShowEnabled || !mFullScreenAction->isChecked()) ? QStringLiteral("Stopped")
-        : mSlideShow->isRunning()                                                     ? QStringLiteral("Playing")
-                                                                                      :
-                                  /* else */
-        QStringLiteral("Paused");
+    const QString newStatus = mSlideShow->isRunning() ? QStringLiteral("Playing") : QStringLiteral("Stopped");
 
     const bool changed = (newStatus != mPlaybackStatus);
     if (changed) {
@@ -309,16 +304,6 @@ void MprisMediaPlayer2Player::onMetaInfoUpdated()
 void MprisMediaPlayer2Player::onRandomActionToggled(bool checked)
 {
     signalPropertyChange(QStringLiteral("Shuffle"), checked);
-}
-
-void MprisMediaPlayer2Player::onFullScreenActionToggled()
-{
-    if (!updatePlaybackStatus()) {
-        return;
-    }
-
-    signalPropertyChange(QStringLiteral("Position"), position());
-    signalPropertyChange(QStringLiteral("PlaybackStatus"), mPlaybackStatus);
 }
 
 void MprisMediaPlayer2Player::onToggleSlideShowActionChanged()
