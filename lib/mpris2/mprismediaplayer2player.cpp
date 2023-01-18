@@ -263,7 +263,7 @@ void MprisMediaPlayer2Player::onMetaInfoUpdated()
         // as images can be added/removed during a running slideshow
         // To allow some bidrectional mapping, convert the url to base64 to encode it for
         // matching the D-Bus object path spec
-        const QString slideId = QString::fromLatin1(url.toString().toUtf8().toBase64(QByteArray::OmitTrailingEquals));
+        const QString slideId = QString::fromLatin1(url.toString().toUtf8().toBase64(QByteArray::OmitTrailingEquals).replace('+', ""));
         const QDBusObjectPath trackId(QStringLiteral("/org/kde/gwenview/imagelist/") + slideId);
         updatedMetaData.insert(QStringLiteral("mpris:trackid"), QVariant::fromValue<QDBusObjectPath>(trackId));
 
