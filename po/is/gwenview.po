@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-11 00:55+0000\n"
-"PO-Revision-Date: 2023-01-02 13:45+0000\n"
+"PO-Revision-Date: 2023-02-02 14:46+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic\n"
 "Language: is\n"
@@ -1903,12 +1903,10 @@ msgid "Support for your camera is not installed."
 msgstr "Stuðningur við myndavélina þína er ekki uppsettur."
 
 #: importer/thumbnailpage.cpp:236
-#, fuzzy, kde-format
-#| msgctxt "@info above install button, %1 protocol name"
-#| msgid "The protocol support library for \"%1\" is not installed."
+#, kde-format
 msgctxt "@info above install button, %1 protocol name %2 error text from KIO"
 msgid "The protocol support library for \"%1\" is not installed. Error: %2"
-msgstr "Aðgerðasafn fyrir samskiptamáta við \"%1\" er ekki settur upp."
+msgstr "Aðgerðasafn fyrir samskiptamáta við \"%1\" er ekki uppsett. Villa: %2"
 
 #: importer/thumbnailpage.cpp:238
 #, kde-format
