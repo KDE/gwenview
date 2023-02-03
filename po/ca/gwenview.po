@@ -2784,10 +2784,3 @@ msgstr "&Fitxer"
 #, kde-format
 msgid "&View"
 msgstr "Vi&sualitza"
-
-#~ msgctxt "@action:intoolbar"
-#~ msgid "Adjust Brightness/Contrast/Gamma"
-#~ msgstr "Ajusta la brillantor/contrast/gamma"
-
-#~ msgid "Adjust Brightness/Contrast/Gamma"
-#~ msgstr "Ajusta la brillantor/contrast/gamma"
