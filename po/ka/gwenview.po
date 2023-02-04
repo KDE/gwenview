@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-11 00:55+0000\n"
-"PO-Revision-Date: 2023-01-09 08:02+0100\n"
+"PO-Revision-Date: 2023-02-03 15:56+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -352,7 +352,7 @@ msgstr "აქ ბმულის შექმნა"
 #: app/fileoperations.cpp:199
 #, kde-format
 msgid "Cancel"
-msgstr "_გაუქმება"
+msgstr "გაუქმება"
 
 #: app/fileopscontextmanageritem.cpp:132
 #, kde-format
@@ -2712,4 +2712,4 @@ msgstr "&ფაილი"
 #: part/gvpart.rc:9
 #, kde-format
 msgid "&View"
-msgstr "_ხედი"
+msgstr "&ხედი"
