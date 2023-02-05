@@ -803,12 +803,19 @@ struct MainWindow::Private {
         actionCollection->action(QStringLiteral("file_print_preview"))->setEnabled(isRasterImage);
 
 #ifdef KF5Purpose_FOUND
-        if (url.isEmpty()) {
+        const KFileItemList selectedFiles = mContextManager->selectedFileItemList();
+
+        if (selectedFiles.isEmpty()) {
             mShareAction->setEnabled(false);
         } else {
             mShareAction->setEnabled(true);
-            mShareMenu->model()->setInputData(
-                QJsonObject{{QStringLiteral("mimeType"), MimeTypeUtils::urlMimeType(url)}, {QStringLiteral("urls"), QJsonArray{url.toString()}}});
+
+            QJsonArray urls;
+            for (const KFileItem &fileItem : selectedFiles) {
+                urls << QJsonValue(fileItem.url().toString());
+            }
+
+            mShareMenu->model()->setInputData(QJsonObject{{QStringLiteral("mimeType"), MimeTypeUtils::urlMimeType(url)}, {QStringLiteral("urls"), urls}});
             mShareMenu->model()->setPluginType(QStringLiteral("Export"));
             mShareMenu->reload();
         }
