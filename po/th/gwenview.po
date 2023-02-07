@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-11 00:55+0000\n"
+"POT-Creation-Date: 2023-02-07 00:56+0000\n"
 "PO-Revision-Date: 2010-12-17 21:37+0700\n"
 "Last-Translator: Thanomsub Noppaburana <donga.nb@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -1292,7 +1292,7 @@ msgstr "ข้อมูลรายละเอียด"
 msgid "Operations"
 msgstr "ปฏิบัติการต่าง ๆ"
 
-#: app/mainwindow.cpp:1370
+#: app/mainwindow.cpp:1377
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Sidebar"
@@ -1300,7 +1300,7 @@ msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "ถาดข้าง"
 
-#: app/mainwindow.cpp:1370
+#: app/mainwindow.cpp:1377
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Sidebar"
@@ -1308,91 +1308,91 @@ msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "ถาดข้าง"
 
-#: app/mainwindow.cpp:1677
+#: app/mainwindow.cpp:1684
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "เปิดภาพ"
 
-#: app/mainwindow.cpp:1737
+#: app/mainwindow.cpp:1744
 #, fuzzy, kde-format
 #| msgid "Slideshow"
 msgid "Pause Slideshow"
 msgstr "นำเสนอภาพนิ่ง"
 
-#: app/mainwindow.cpp:1740
+#: app/mainwindow.cpp:1747
 #, fuzzy, kde-format
 #| msgid "Slideshow"
 msgid "Resume Slideshow"
 msgstr "นำเสนอภาพนิ่ง"
 
-#: app/mainwindow.cpp:1740
+#: app/mainwindow.cpp:1747
 #, kde-format
 msgid "Start Slideshow"
 msgstr "เริ่มการนำเสนอภาพนิ่ง"
 
-#: app/mainwindow.cpp:1753
+#: app/mainwindow.cpp:1760
 #, kde-format
 msgid "Save All Changes"
 msgstr "จัดเก็บการเปลี่ยนแปลงทั้งหมด"
 
-#: app/mainwindow.cpp:1754
+#: app/mainwindow.cpp:1761
 #, kde-format
 msgid "Discard Changes"
 msgstr "ละทิ้งการเปลี่ยนแปลงที่มี"
 
-#: app/mainwindow.cpp:1756
+#: app/mainwindow.cpp:1763
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "ภาพมีการแก้ไขจำนวน %1 ภาพ"
 
-#: app/mainwindow.cpp:1756
+#: app/mainwindow.cpp:1763
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "หากคุณออกตอนนี้ การเปลี่ยนแปลงทั้งหมดจะสูญหายไป"
 
-#: app/mainwindow.cpp:1811
+#: app/mainwindow.cpp:1818
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr ""
 
-#: app/mainwindow.cpp:1814
+#: app/mainwindow.cpp:1821
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Sidebar"
 msgid "Hide menu bar"
 msgstr "ถาดข้าง"
 
-#: app/mainwindow.cpp:2034
+#: app/mainwindow.cpp:2041
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr ""
 
-#: app/mainwindow.cpp:2035 app/mainwindow.cpp:2049
+#: app/mainwindow.cpp:2042 app/mainwindow.cpp:2056
 #, kde-format
 msgid "Stay There"
 msgstr ""
 
-#: app/mainwindow.cpp:2036
+#: app/mainwindow.cpp:2043
 #, fuzzy, kde-format
 #| msgid "Go to Last Image"
 msgid "Go to the Last Document"
 msgstr "ไปยังภาพสุดท้าย"
 
-#: app/mainwindow.cpp:2037 app/mainwindow.cpp:2051
+#: app/mainwindow.cpp:2044 app/mainwindow.cpp:2058
 #, fuzzy, kde-format
 #| msgid "Go back to the original"
 msgid "Go Back to the Document List"
 msgstr "ย้อนกลับไปยังต้นฉบับ"
 
-#: app/mainwindow.cpp:2048
+#: app/mainwindow.cpp:2055
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr ""
 
-#: app/mainwindow.cpp:2050
+#: app/mainwindow.cpp:2057
 #, fuzzy, kde-format
 #| msgid "Go to First Image"
 msgid "Go to the First Document"

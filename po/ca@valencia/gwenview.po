@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-11 00:55+0000\n"
+"POT-Creation-Date: 2023-02-07 00:56+0000\n"
 "PO-Revision-Date: 2023-01-05 05:06+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -1260,62 +1260,62 @@ msgstr "Informació"
 msgid "Operations"
 msgstr "Operacions"
 
-#: app/mainwindow.cpp:1370
+#: app/mainwindow.cpp:1377
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Oculta la barra lateral"
 
-#: app/mainwindow.cpp:1370
+#: app/mainwindow.cpp:1377
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Mostra la barra lateral"
 
-#: app/mainwindow.cpp:1677
+#: app/mainwindow.cpp:1684
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Obri una imatge"
 
-#: app/mainwindow.cpp:1737
+#: app/mainwindow.cpp:1744
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "Fes pausa en el passe de diapositives"
 
-#: app/mainwindow.cpp:1740
+#: app/mainwindow.cpp:1747
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "Reprén el passe de diapositives"
 
-#: app/mainwindow.cpp:1740
+#: app/mainwindow.cpp:1747
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Inicia el passe de diapositives"
 
-#: app/mainwindow.cpp:1753
+#: app/mainwindow.cpp:1760
 #, kde-format
 msgid "Save All Changes"
 msgstr "Guarda tots els canvis"
 
-#: app/mainwindow.cpp:1754
+#: app/mainwindow.cpp:1761
 #, kde-format
 msgid "Discard Changes"
 msgstr "Descarta els canvis"
 
-#: app/mainwindow.cpp:1756
+#: app/mainwindow.cpp:1763
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "S'ha modificat una imatge."
 msgstr[1] "S'han modificat %1 imatges."
 
-#: app/mainwindow.cpp:1756
+#: app/mainwindow.cpp:1763
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Si eixiu ara, els canvis es perdran."
 
-#: app/mainwindow.cpp:1811
+#: app/mainwindow.cpp:1818
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
@@ -1323,37 +1323,37 @@ msgstr ""
 "Ocultarà completament la barra de menús. La podeu tornar a mostrar prement "
 "%1."
 
-#: app/mainwindow.cpp:1814
+#: app/mainwindow.cpp:1821
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Oculta la barra de menús"
 
-#: app/mainwindow.cpp:2034
+#: app/mainwindow.cpp:2041
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "Heu arribat al primer document. Què voleu fer?"
 
-#: app/mainwindow.cpp:2035 app/mainwindow.cpp:2049
+#: app/mainwindow.cpp:2042 app/mainwindow.cpp:2056
 #, kde-format
 msgid "Stay There"
 msgstr "Canvia allí"
 
-#: app/mainwindow.cpp:2036
+#: app/mainwindow.cpp:2043
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "Ves al últim document"
 
-#: app/mainwindow.cpp:2037 app/mainwindow.cpp:2051
+#: app/mainwindow.cpp:2044 app/mainwindow.cpp:2058
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "Torna a la llista de documents"
 
-#: app/mainwindow.cpp:2048
+#: app/mainwindow.cpp:2055
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "Heu arribat al últim document. Què voleu fer?"
 
-#: app/mainwindow.cpp:2050
+#: app/mainwindow.cpp:2057
 #, kde-format
 msgid "Go to the First Document"
 msgstr "Ves al primer document"

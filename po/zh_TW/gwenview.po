@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-11 00:55+0000\n"
+"POT-Creation-Date: 2023-02-07 00:56+0000\n"
 "PO-Revision-Date: 2022-11-11 15:49+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@linux.org.tw>\n"
@@ -1241,97 +1241,97 @@ msgstr "資訊"
 msgid "Operations"
 msgstr "操作"
 
-#: app/mainwindow.cpp:1370
+#: app/mainwindow.cpp:1377
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "隱藏側邊欄"
 
-#: app/mainwindow.cpp:1370
+#: app/mainwindow.cpp:1377
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "顯示側邊欄"
 
-#: app/mainwindow.cpp:1677
+#: app/mainwindow.cpp:1684
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "開啟影像"
 
-#: app/mainwindow.cpp:1737
+#: app/mainwindow.cpp:1744
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "暫停投影秀"
 
-#: app/mainwindow.cpp:1740
+#: app/mainwindow.cpp:1747
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "繼續投影秀"
 
-#: app/mainwindow.cpp:1740
+#: app/mainwindow.cpp:1747
 #, kde-format
 msgid "Start Slideshow"
 msgstr "開始投影秀"
 
-#: app/mainwindow.cpp:1753
+#: app/mainwindow.cpp:1760
 #, kde-format
 msgid "Save All Changes"
 msgstr "儲存所有的變更"
 
-#: app/mainwindow.cpp:1754
+#: app/mainwindow.cpp:1761
 #, kde-format
 msgid "Discard Changes"
 msgstr "放棄修改"
 
-#: app/mainwindow.cpp:1756
+#: app/mainwindow.cpp:1763
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "%1 張影像已修改。"
 
-#: app/mainwindow.cpp:1756
+#: app/mainwindow.cpp:1763
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "如果您現在離開，您會失去所有的修改。"
 
-#: app/mainwindow.cpp:1811
+#: app/mainwindow.cpp:1818
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr "這將會完全隱藏選單列。按下 %1 重新顯示選單列。"
 
-#: app/mainwindow.cpp:1814
+#: app/mainwindow.cpp:1821
 #, kde-format
 msgid "Hide menu bar"
 msgstr "隱藏選單列"
 
-#: app/mainwindow.cpp:2034
+#: app/mainwindow.cpp:2041
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "您到了第一份文件。您想要做什麼？"
 
-#: app/mainwindow.cpp:2035 app/mainwindow.cpp:2049
+#: app/mainwindow.cpp:2042 app/mainwindow.cpp:2056
 #, kde-format
 msgid "Stay There"
 msgstr "留在那裡"
 
-#: app/mainwindow.cpp:2036
+#: app/mainwindow.cpp:2043
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "跳到最後一份文件"
 
-#: app/mainwindow.cpp:2037 app/mainwindow.cpp:2051
+#: app/mainwindow.cpp:2044 app/mainwindow.cpp:2058
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "回到文件清單"
 
-#: app/mainwindow.cpp:2048
+#: app/mainwindow.cpp:2055
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "您到了最後一份文件。您想要做什麼？"
 
-#: app/mainwindow.cpp:2050
+#: app/mainwindow.cpp:2057
 #, kde-format
 msgid "Go to the First Document"
 msgstr "跳到第一份文件"
