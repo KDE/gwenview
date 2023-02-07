@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-11 02:45+0000\n"
+"POT-Creation-Date: 2023-02-07 02:50+0000\n"
 "PO-Revision-Date: 2007-11-27 20:43+0100\n"
 "Last-Translator: Pierre-Marie Pédrot <pedrotpmx@wanadoo.fr>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
@@ -1323,106 +1323,106 @@ msgstr "Informo"
 msgid "Operations"
 msgstr "Dosieraj operacioj"
 
-#: app/mainwindow.cpp:1370
+#: app/mainwindow.cpp:1377
 #, fuzzy, kde-format
 #| msgid "Hide Side Bar"
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Kaŝi la flankobreton"
 
-#: app/mainwindow.cpp:1370
+#: app/mainwindow.cpp:1377
 #, fuzzy, kde-format
 #| msgid "Hide Side Bar"
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Kaŝi la flankobreton"
 
-#: app/mainwindow.cpp:1677
+#: app/mainwindow.cpp:1684
 #, fuzzy, kde-format
 #| msgid "Print Image"
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Printi bildon"
 
-#: app/mainwindow.cpp:1737
+#: app/mainwindow.cpp:1744
 #, fuzzy, kde-format
 #| msgid "Stop slideshow"
 msgid "Pause Slideshow"
 msgstr "Halti la lumbildon"
 
-#: app/mainwindow.cpp:1740
+#: app/mainwindow.cpp:1747
 #, fuzzy, kde-format
 #| msgid "Stop slideshow"
 msgid "Resume Slideshow"
 msgstr "Halti la lumbildon"
 
-#: app/mainwindow.cpp:1740
+#: app/mainwindow.cpp:1747
 #, fuzzy, kde-format
 #| msgid "Start slideshow"
 msgid "Start Slideshow"
 msgstr "Starti la lumbildon"
 
-#: app/mainwindow.cpp:1753
+#: app/mainwindow.cpp:1760
 #, kde-format
 msgid "Save All Changes"
 msgstr "Konservi ĉiujn ŝanĝojn"
 
-#: app/mainwindow.cpp:1754
+#: app/mainwindow.cpp:1761
 #, kde-format
 msgid "Discard Changes"
 msgstr "Nuligi ĉiujn ŝanĝojn"
 
-#: app/mainwindow.cpp:1756
+#: app/mainwindow.cpp:1763
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "Unu bildo ŝanĝiĝis."
 msgstr[1] "%1 bildoj ŝanĝiĝis."
 
-#: app/mainwindow.cpp:1756
+#: app/mainwindow.cpp:1763
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Se vi finas nun, la ŝanĝoj perdiĝos."
 
-#: app/mainwindow.cpp:1811
+#: app/mainwindow.cpp:1818
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr ""
 
-#: app/mainwindow.cpp:1814
+#: app/mainwindow.cpp:1821
 #, fuzzy, kde-format
 #| msgid "Hide Side Bar"
 msgid "Hide menu bar"
 msgstr "Kaŝi la flankobreton"
 
-#: app/mainwindow.cpp:2034
+#: app/mainwindow.cpp:2041
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr ""
 
-#: app/mainwindow.cpp:2035 app/mainwindow.cpp:2049
+#: app/mainwindow.cpp:2042 app/mainwindow.cpp:2056
 #, kde-format
 msgid "Stay There"
 msgstr ""
 
-#: app/mainwindow.cpp:2036
+#: app/mainwindow.cpp:2043
 #, fuzzy, kde-format
 #| msgid "Previous modified image"
 msgid "Go to the Last Document"
 msgstr "Antaŭa ŝanĝita bildo"
 
-#: app/mainwindow.cpp:2037 app/mainwindow.cpp:2051
+#: app/mainwindow.cpp:2044 app/mainwindow.cpp:2058
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr ""
 
-#: app/mainwindow.cpp:2048
+#: app/mainwindow.cpp:2055
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr ""
 
-#: app/mainwindow.cpp:2050
+#: app/mainwindow.cpp:2057
 #, fuzzy, kde-format
 #| msgid "Previous modified image"
 msgid "Go to the First Document"

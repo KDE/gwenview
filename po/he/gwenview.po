@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-11 02:45+0000\n"
+"POT-Creation-Date: 2023-02-07 02:50+0000\n"
 "PO-Revision-Date: 2017-05-16 07:01-0400\n"
 "Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: Hebrew <kde-i18n-doc@kde.org>\n"
@@ -1284,102 +1284,102 @@ msgstr "מידע"
 msgid "Operations"
 msgstr "פעולות"
 
-#: app/mainwindow.cpp:1370
+#: app/mainwindow.cpp:1377
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "הסתר סרגל צד"
 
-#: app/mainwindow.cpp:1370
+#: app/mainwindow.cpp:1377
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "הצג סרגל צד"
 
-#: app/mainwindow.cpp:1677
+#: app/mainwindow.cpp:1684
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "פתח תמונה"
 
-#: app/mainwindow.cpp:1737
+#: app/mainwindow.cpp:1744
 #, fuzzy, kde-format
 #| msgid "Slideshow"
 msgid "Pause Slideshow"
 msgstr "מצגת"
 
-#: app/mainwindow.cpp:1740
+#: app/mainwindow.cpp:1747
 #, fuzzy, kde-format
 #| msgid "Slideshow"
 msgid "Resume Slideshow"
 msgstr "מצגת"
 
-#: app/mainwindow.cpp:1740
+#: app/mainwindow.cpp:1747
 #, kde-format
 msgid "Start Slideshow"
 msgstr "התחל מצגת"
 
-#: app/mainwindow.cpp:1753
+#: app/mainwindow.cpp:1760
 #, kde-format
 msgid "Save All Changes"
 msgstr "שמור את כל השינויים"
 
-#: app/mainwindow.cpp:1754
+#: app/mainwindow.cpp:1761
 #, kde-format
 msgid "Discard Changes"
 msgstr "בטל שינויים"
 
-#: app/mainwindow.cpp:1756
+#: app/mainwindow.cpp:1763
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "תמונה אחת שונתה"
 msgstr[1] "%1 תמונות שונו"
 
-#: app/mainwindow.cpp:1756
+#: app/mainwindow.cpp:1763
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "אם תצא כעת, כל שינוייך יאבדו."
 
-#: app/mainwindow.cpp:1811
+#: app/mainwindow.cpp:1818
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr ""
 
-#: app/mainwindow.cpp:1814
+#: app/mainwindow.cpp:1821
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Hide sidebar"
 msgid "Hide menu bar"
 msgstr "הסתר סרגל צד"
 
-#: app/mainwindow.cpp:2034
+#: app/mainwindow.cpp:2041
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr ""
 
-#: app/mainwindow.cpp:2035 app/mainwindow.cpp:2049
+#: app/mainwindow.cpp:2042 app/mainwindow.cpp:2056
 #, kde-format
 msgid "Stay There"
 msgstr ""
 
-#: app/mainwindow.cpp:2036
+#: app/mainwindow.cpp:2043
 #, fuzzy, kde-format
 msgid "Go to the Last Document"
 msgstr "ועבור לתמונה האחרונה"
 
-#: app/mainwindow.cpp:2037 app/mainwindow.cpp:2051
+#: app/mainwindow.cpp:2044 app/mainwindow.cpp:2058
 #, fuzzy, kde-format
 msgid "Go Back to the Document List"
 msgstr "חזור למקורי"
 
-#: app/mainwindow.cpp:2048
+#: app/mainwindow.cpp:2055
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr ""
 
-#: app/mainwindow.cpp:2050
+#: app/mainwindow.cpp:2057
 #, fuzzy, kde-format
 msgid "Go to the First Document"
 msgstr "ועבור לתמונה הראשונה"
