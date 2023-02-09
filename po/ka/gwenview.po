@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-07 02:50+0000\n"
-"PO-Revision-Date: 2023-01-09 09:48+0100\n"
+"PO-Revision-Date: 2023-02-08 11:25+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -130,7 +130,7 @@ msgstr "გვერდითი ზოლის სწორების ად
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "View"
-msgstr "ხედო"
+msgstr "ნახვა"
 
 #: app/browsemainpage.cpp:148
 #, kde-format
@@ -352,7 +352,7 @@ msgstr "აქ ბმულის შექმნა"
 #: app/fileoperations.cpp:223
 #, kde-format
 msgid "Cancel"
-msgstr "_გაუქმება"
+msgstr "გაუქმება"
 
 #: app/fileopscontextmanageritem.cpp:132
 #, kde-format
@@ -1102,7 +1102,7 @@ msgstr "გამოსახულებების შემცველი �
 #, kde-format
 msgctxt "@action:intoolbar Switch to image view"
 msgid "View"
-msgstr "ხედო"
+msgstr "ნახვა"
 
 #: app/mainwindow.cpp:408
 #, kde-format
@@ -2705,4 +2705,4 @@ msgstr "&ფაილი"
 #: part/gvpart.rc:9
 #, kde-format
 msgid "&View"
-msgstr "_ხედი"
+msgstr "&ხედი"
