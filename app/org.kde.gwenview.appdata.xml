@@ -15,6 +15,7 @@
   <name xml:lang="de">Gwenview</name>
   <name xml:lang="el">Gwenview</name>
   <name xml:lang="en-GB">Gwenview</name>
+  <name xml:lang="eo">Gwenview</name>
   <name xml:lang="es">Gwenview</name>
   <name xml:lang="et">Gwenview</name>
   <name xml:lang="eu">Gwenview</name>
@@ -65,6 +66,7 @@
   <summary xml:lang="de">Bildbetrachter</summary>
   <summary xml:lang="el">Προβολέας εικόνων</summary>
   <summary xml:lang="en-GB">Image Viewer</summary>
+  <summary xml:lang="eo">Bildrigardilo</summary>
   <summary xml:lang="es">Visor de imágenes</summary>
   <summary xml:lang="et">Pildinäitaja</summary>
   <summary xml:lang="eu">Irudi erakuslea</summary>
@@ -116,6 +118,7 @@
     <p xml:lang="de">Gwenview ist ein schneller und einfach zu verwendender Bildbetrachter besonders für die Anzeige einer Sammlung von Bildern.</p>
     <p xml:lang="el">Το Gwenview είναι ένας γρήγορος και εύχρηστος προβολέας εικόνων για το KDE, ιδανικός για περιήγηση και εμφάνιση συλλογών από εικόνες.</p>
     <p xml:lang="en-GB">Gwenview is a fast and easy to use image viewer by KDE, ideal for browsing and displaying a collection of images.</p>
+    <p xml:lang="eo">Gwenview estas rapida kaj simple uzebla bildrigardilo de KDE, ideala por foliumado kaj montrado de bildaro.</p>
     <p xml:lang="es">Gwenview es un visor de imágenes rápido y fácil de usar creado por KDE, ideal para explorar y mostrar una colección de imágenes.</p>
     <p xml:lang="et">Gwenview on KDE kiire ja kasutajasõbralik piltide näitaja, ideaale vahend pildikogude sirvimiseks ja kuvamiseks.</p>
     <p xml:lang="eu">Gwenview KDEk egindako irudi erakusle azkar eta erabilerraza da, irudi bilduma  bat arakatu eta bistaratzeko aproposa.</p>
@@ -164,6 +167,7 @@
     <p xml:lang="de">Funktionen:</p>
     <p xml:lang="el">Χαρακτηριστικά:</p>
     <p xml:lang="en-GB">Features:</p>
+    <p xml:lang="eo">Trajtoj:</p>
     <p xml:lang="es">Funcionalidades:</p>
     <p xml:lang="et">Omadused:</p>
     <p xml:lang="eu">Eginbideak:</p>
@@ -215,6 +219,7 @@
       <li xml:lang="de">Unterstützt einfache Bildbearbeitung wie Drehen, Spiegeln waagerecht und senkrecht und Größenänderung</li>
       <li xml:lang="el">Υποστηρίζει απλές λειτουργίες διαχείρισης εικόνας: περιστροφή, καθρεπτισμό, αναστροφή και αλλαγή μεγέθους</li>
       <li xml:lang="en-GB">Supports simple image manipulations: rotate, mirror, flip, and resize</li>
+      <li xml:lang="eo">Subtenas simplajn bildmanipuladojn: turni, speguli, renversi kaj regrandigi</li>
       <li xml:lang="es">Permite manipulaciones simples de imágenes: rotar, reflejar, invertir y cambiar de tamaño</li>
       <li xml:lang="et">Toetab lihtsaid pilditöötlusvõimalusi: pööramine, peegeldamine ja suuruse muutmine</li>
       <li xml:lang="eu">Irudien manipulazio errazak egin ditzake: biratu, ispilatu, irauli eta handiera aldatu</li>
@@ -265,6 +270,7 @@
       <li xml:lang="de">Grundlegende Dateiverwaltungsaktionen wie Kopieren, Verschieben, Löschen und weitere Aktionen</li>
       <li xml:lang="el">Υποστηρίζει βασικές ενέργειες διαχείρισης αρχείων όπως αντιγραφή, μετακίνηση, διαγραφή κ.α.</li>
       <li xml:lang="en-GB">Supports basic file management actions such as copy, move, delete, and others</li>
+      <li xml:lang="eo">Subtenas bazajn agojn pri administrado de dosieroj kiel kopii, movi, forigi kaj aliajn</li>
       <li xml:lang="es">Permite acciones básicas de gestión de archivos, como copiar, mover y borrar, entre otras</li>
       <li xml:lang="et">Toetab lihtsamaid failihaldusvõimalusi: kopeerimine, liigutamine, kustutamine jms</li>
       <li xml:lang="eu">Fitxategi kudeaketarako oinarrizko ekintzak egin ditzake, hala nola kopiatu, mugitu, ezabatu eta beste batzuk</li>
@@ -315,6 +321,7 @@
       <li xml:lang="de">Funktioniert sowohl als eigenständiges Programm als auch als eingebetteter Betrachter im Webbrowser Konqueror.</li>
       <li xml:lang="el">Λειτουργεί και ως αυτόνομη εφαρμογή και ως ενσωματωμένος προβολέας στον περιηγητή ιστού Konqueror</li>
       <li xml:lang="en-GB">Functions both as a standalone application and an embedded viewer in the Konqueror web browser</li>
+      <li xml:lang="eo">Funkcias kaj kiel memstara aplikaĵo kaj enigita spektilo en la TTT-legilo Konqueror</li>
       <li xml:lang="es">Funciona como aplicación independiente o como visor integrado en el navegador web Konqueror</li>
       <li xml:lang="et">Töötab nii eraldi rakendusena kui ka põimituna veebibrauserisse Konqueror</li>
       <li xml:lang="eu">Aplikazio autonomo gisa erabili daiteke, baita kapsulatutako erakusle gisa Konqueror web arakatzailean</li>
@@ -373,6 +380,7 @@
       <caption xml:lang="de">Gwenview</caption>
       <caption xml:lang="el">Gwenview</caption>
       <caption xml:lang="en-GB">Gwenview</caption>
+      <caption xml:lang="eo">Gwenview</caption>
       <caption xml:lang="es">Gwenview</caption>
       <caption xml:lang="et">Gwenview</caption>
       <caption xml:lang="eu">Gwenview</caption>
@@ -425,6 +433,7 @@
       <caption xml:lang="de">Verwenden Sie Gwenview zur Verwaltung Ihrer Bildersammlung</caption>
       <caption xml:lang="el">Χρησιμοποίησε το Gwenview για να διαχειριστείς τη συλλογή των φωτογραφιών σου</caption>
       <caption xml:lang="en-GB">Use Gwenview to manage your image collection</caption>
+      <caption xml:lang="eo">Uzu Gwenview por administri vian bildkolekton</caption>
       <caption xml:lang="es">Use Gwenview para la gestión de su colección de imágenes</caption>
       <caption xml:lang="eu">Erabili Gwenview zure irudi-bilduma kudeatzeko</caption>
       <caption xml:lang="fi">Hallitse kuvakokoelmaasi Gwenview’lla</caption>
