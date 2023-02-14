@@ -82,6 +82,7 @@ GenericName[da]=KDE billedfremviser
 GenericName[de]=KDE-Bildbetrachter
 GenericName[el]=Προβολέας εικόνων του KDE
 GenericName[en_GB]=KDE Image Viewer
+GenericName[eo]=KDE-Bildrigardilo
 GenericName[es]=Visor de imágenes de KDE
 GenericName[et]=KDE pildinäitaja
 GenericName[eu]=KDEren irudi erakuslea
