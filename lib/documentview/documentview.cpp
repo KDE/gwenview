@@ -727,6 +727,19 @@ void DocumentView::zoomIn(QPointF center)
     }
 }
 
+void DocumentView::zoomContinuous(int delta, QPointF center)
+{
+    if (center == QPointF(-1, -1)) {
+        center = d->cursorPosition();
+    }
+    const qreal currentZoom = d->mAdapter->zoom();
+
+    // multiplies by sqrt(2) for every mouse wheel step
+    const qreal newZoom = currentZoom * pow(2, 0.5 * float(delta)/QWheelEvent::DefaultDeltasPerStep);
+    d->setZoom(newZoom, center);
+    return;
+}
+
 void DocumentView::zoomOut(QPointF center)
 {
     if (center == QPointF(-1, -1)) {
@@ -860,15 +873,8 @@ void DocumentView::wheelEvent(QGraphicsSceneWheelEvent *event)
     if (d->mAdapter->canZoom()) {
         if ((event->modifiers() & Qt::ControlModifier)
             || (GwenviewConfig::mouseWheelBehavior() == MouseWheelBehavior::Zoom && event->modifiers() == Qt::NoModifier)) {
-            d->controlWheelAccumulatedDelta += event->delta();
+            zoomContinuous(event->delta(), event->pos());
             // Ctrl + wheel => zoom in or out
-            if (d->controlWheelAccumulatedDelta >= QWheelEvent::DefaultDeltasPerStep) {
-                zoomIn(event->pos());
-                d->controlWheelAccumulatedDelta = 0;
-            } else if (d->controlWheelAccumulatedDelta <= -QWheelEvent::DefaultDeltasPerStep) {
-                zoomOut(event->pos());
-                d->controlWheelAccumulatedDelta = 0;
-            }
             return;
         }
     }
