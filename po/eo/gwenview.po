@@ -1,38 +1,39 @@
 # translation of gwenview.po to esperanto
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Copyright (C) 2007 Free Software Foundation, Inc.
+# This file is distributed under the same license as the gwenview package.
 # Pierre-Marie Pédrot <pedrotpmx@wanadoo.fr>, 2007.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-07 00:56+0000\n"
-"PO-Revision-Date: 2007-11-27 20:43+0100\n"
-"Last-Translator: Pierre-Marie Pédrot <pedrotpmx@wanadoo.fr>\n"
+"PO-Revision-Date: 2023-02-13 20:54+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.4\n"
+"X-Generator: translate-po (https://github.com/zcribe/translate-po)\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Pierre-Marie Pédrot"
+msgstr "Pierre-Marie Pédrot,Oliver Kellogg"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "pedrotpmx@wanadoo.fr"
+msgstr "pedrotpmx@wanadoo.fr,okellogg@users.sourceforge.net"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_LowResourceUsageMode)
 #: app/advancedconfigpage.ui:28
 #, kde-format
 msgid "Low resource usage mode"
-msgstr ""
+msgstr "Reĝimo de malalta uzado de rimedoj"
 
 #. i18n: ectx: property (text), widget (QLabel, cacheHelpLabel)
 #: app/advancedconfigpage.ui:72
@@ -42,13 +43,15 @@ msgid ""
 "storing thumbnails on disk and will prefer embedded thumbnails of lower "
 "quality that are faster to load, if available."
 msgstr ""
+"Ebligu ĉi tiun opcion se vi ne havas multe da diskospaco. Ĉi tio evitos "
+"stoki bildetojn sur disko kaj preferos enigitajn bildetojn de pli malalta "
+"kvalito, kiuj estas pli rapide ŝarĝeblaj, se disponeblaj."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: app/advancedconfigpage.ui:82
-#, fuzzy, kde-format
-#| msgid "Show Side Bar"
+#, kde-format
 msgid "Thumbnails:"
-msgstr "Montri la flankobreton"
+msgstr "Bildetoj:"
 
 #. i18n: ectx: property (text), widget (QLabel, relativeHelpLabel)
 #: app/advancedconfigpage.ui:92
@@ -57,26 +60,28 @@ msgid ""
 "Squash colors that don't fit within the active color profile's color gamut, "
 "leaving other colors untouched"
 msgstr ""
+"Skvaŝkoloroj kiuj ne konvenas ene de la kolorgamo de la aktiva kolorprofilo, "
+"lasante aliajn kolorojn netuŝitaj"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: app/advancedconfigpage.ui:102
 #, kde-format
 msgid "History:"
-msgstr ""
+msgstr "Historio:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, relativeRenderingIntentRadioButton)
 #: app/advancedconfigpage.ui:114
 #, kde-format
 msgctxt "@option:Relative Colorimetric rendering intent"
 msgid "Relative Colorimetric"
-msgstr ""
+msgstr "Relativa Kolorimetria"
 
 #. i18n: ectx: property (text), widget (QRadioButton, perceptualRenderingIntentRadioButton)
 #: app/advancedconfigpage.ui:160
 #, kde-format
 msgctxt "@option:Perceptual rendering intent"
 msgid "Perceptual"
-msgstr ""
+msgstr "Percepta"
 
 #. i18n: ectx: property (text), widget (QLabel, perceptualHelpLabel)
 #: app/advancedconfigpage.ui:172
@@ -85,43 +90,45 @@ msgid ""
 "Scale all colors equally to fit them within the active color profile's color "
 "gamut"
 msgstr ""
+"Skali ĉiujn kolorojn egale por konveni ilin al la kolorgamo de la aktiva "
+"kolorprofilo"
 
 #. i18n: ectx: property (text), widget (QLabel, colorRenderingLabel)
 #: app/advancedconfigpage.ui:182
 #, kde-format
 msgid "Rendering intent:"
-msgstr ""
+msgstr "Reprezentanta intenco:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_HistoryEnabled)
 #: app/advancedconfigpage.ui:197
 #, kde-format
 msgid "Remember folders and URLs"
-msgstr ""
+msgstr "Memoru dosierujojn kaj URL-ojn"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_NoMonitorICC)
 #: app/advancedconfigpage.ui:240
 #, kde-format
 msgid "Apply only the profile embedded in the image file"
-msgstr ""
+msgstr "Apliki nur la profilon enigitan en la bilddosiero"
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileHelpLabel)
 #: app/advancedconfigpage.ui:265
 #, kde-format
 msgid ""
 "Assume that system-wide color correction already applies monitor profile."
-msgstr ""
+msgstr "Supozu, ke tutsistema kolorkorektado jam aplikas monitoran profilon."
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileLabel)
 #: app/advancedconfigpage.ui:275
 #, kde-format
 msgid "Color profile:"
-msgstr ""
+msgstr "Kolora profilo:"
 
 #: app/alignwithsidebarwidgetaction.cpp:23
 #, kde-format
 msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
 msgid "Sidebar Alignment Spacer"
-msgstr ""
+msgstr "Flankmenuo Alineación Spacer"
 
 #: app/browsemainpage.cpp:146 app/mainwindow.cpp:372 app/viewmainpage.cpp:425
 #: lib/documentview/documentviewcontroller.cpp:55
@@ -134,13 +141,13 @@ msgstr "Vidi"
 #, kde-format
 msgctxt "@action:inmenu Navigation Bar"
 msgid "Edit Location"
-msgstr ""
+msgstr "Redaktu Lokon"
 
 #: app/browsemainpage.cpp:152
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Sort By"
-msgstr ""
+msgstr "Ordigi laŭ"
 
 #: app/browsemainpage.cpp:157
 #, kde-format
@@ -149,52 +156,46 @@ msgid "Name"
 msgstr "Nomo"
 
 #: app/browsemainpage.cpp:160
-#, fuzzy, kde-format
-#| msgid "Delete"
+#, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Date"
-msgstr "Forigi"
+msgstr "Dato"
 
 #: app/browsemainpage.cpp:163
-#, fuzzy, kde-format
-#| msgid "File Size"
+#, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Size"
-msgstr "Dosiera grandeco"
+msgstr "Grandeco"
 
 #: app/browsemainpage.cpp:167
-#, fuzzy, kde-format
-#| msgid "&Settings"
+#, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Rating"
-msgstr "&Agordo"
+msgstr "Taksado"
 
 #: app/browsemainpage.cpp:174
 #, kde-format
 msgctxt "@action:inmenu Sort"
 msgid "Descending"
-msgstr ""
+msgstr "Malkreskanta"
 
 #: app/browsemainpage.cpp:186
-#, fuzzy, kde-format
-#| msgid "Show Side Bar"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Thumbnail Details"
-msgstr "Montri la flankobreton"
+msgstr "Detaloj de Bildetoj"
 
 #: app/browsemainpage.cpp:187
-#, fuzzy, kde-format
-#| msgid "File Time"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Filename"
-msgstr "Dosiera tempo"
+msgstr "Dosiernomo"
 
 #: app/browsemainpage.cpp:188
-#, fuzzy, kde-format
-#| msgid "Delete"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Date"
-msgstr "Forigi"
+msgstr "Dato"
 
 #: app/browsemainpage.cpp:189
 #, kde-format
@@ -209,25 +210,23 @@ msgid "File Size"
 msgstr "Dosiera grandeco"
 
 #: app/browsemainpage.cpp:192
-#, fuzzy, kde-format
-#| msgid "&Settings"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Rating"
-msgstr "&Agordo"
+msgstr "Taksado"
 
 #: app/browsemainpage.cpp:195 app/fileopscontextmanageritem.cpp:142
 #: app/mainwindow.cpp:371
-#, fuzzy, kde-format
-#| msgid "&View"
+#, kde-format
 msgctxt "@title actions category"
 msgid "File"
-msgstr "&Vidi"
+msgstr "Dosiero"
 
 #: app/browsemainpage.cpp:197
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Add Folder to Places"
-msgstr ""
+msgstr "Aldoni Dosierujon al Lokoj"
 
 #: app/browsemainpage.cpp:246
 #, kde-format
@@ -235,123 +234,110 @@ msgctxt ""
 "@info:status %1 number of selected documents, %2 total number of documents, "
 "%3 total filesize of selected documents"
 msgid "Selected %1 of %2 (%3)"
-msgstr ""
+msgstr "Elektita %1 el %2 (%3)"
 
 #: app/browsemainpage.cpp:252
-#, fuzzy, kde-format
-#| msgid "Previous modified image"
+#, kde-format
 msgctxt "@info:status Image files"
 msgid "%1 image"
 msgid_plural "%1 images"
-msgstr[0] "Antaŭa ŝanĝita bildo"
-msgstr[1] "Antaŭa ŝanĝita bildo"
+msgstr[0] "%1 bildo"
+msgstr[1] "%1 bildoj"
 
 #: app/browsemainpage.cpp:253
-#, fuzzy, kde-format
-#| msgid "Show Side Bar"
+#, kde-format
 msgctxt "@info:status Video files"
 msgid "%1 video"
 msgid_plural "%1 videos"
-msgstr[0] "Montri la flankobreton"
-msgstr[1] "Montri la flankobreton"
+msgstr[0] "%1 filmo"
+msgstr[1] "%1 filmoj"
 
 #: app/browsemainpage.cpp:260
 #, kde-format
 msgctxt "@info:status images, videos"
 msgid "%1, %2"
-msgstr ""
+msgstr "%1, %2"
 
 #. i18n: ectx: property (text), widget (Gwenview::StatusBarToolButton, mAddFilterButton)
 #: app/browsemainpage.ui:88
-#, fuzzy, kde-format
-#| msgid "Hide Side Bar"
+#, kde-format
 msgid "Add Filter"
-msgstr "Kaŝi la flankobreton"
+msgstr "Aldoni Filtrilon"
 
 #: app/configdialog.cpp:70
-#, fuzzy, kde-format
+#, kde-format
 msgid "General"
-msgstr "Ĝeneralo"
+msgstr "Generalo"
 
 #: app/configdialog.cpp:123
-#, fuzzy, kde-format
-#| msgid "An Image Viewer"
+#, kde-format
 msgid "Image View"
-msgstr "Bilda rigardilo"
+msgstr "Bilda Vido"
 
 #: app/configdialog.cpp:134
-#, fuzzy, kde-format
-#| msgid "Image Settings"
+#, kde-format
 msgid "Advanced"
-msgstr "Bilda agordo"
+msgstr "Altnivela"
 
 #: app/fileoperations.cpp:64
-#, fuzzy, kde-format
-#| msgid "Crop"
+#, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Copy %1"
-msgstr "Stuci"
+msgstr "Kopii %1"
 
 #: app/fileoperations.cpp:66
-#, fuzzy, kde-format
-#| msgid "Previous modified image"
+#, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Copy %1 image"
 msgid_plural "Copy %1 images"
-msgstr[0] "Antaŭa ŝanĝita bildo"
-msgstr[1] "Antaŭa ŝanĝita bildo"
+msgstr[0] "Kopii %1 bildon"
+msgstr[1] "Kopii %1 bildojn"
 
 #: app/fileoperations.cpp:68
-#, fuzzy, kde-format
-#| msgid "Crop"
+#, kde-format
 msgctxt "@action:button"
 msgid "Copy"
-msgstr "Stuci"
+msgstr "Kopii"
 
 #: app/fileoperations.cpp:72
-#, fuzzy, kde-format
-#| msgid "Move To"
+#, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Move %1"
-msgstr "Movi al"
+msgstr "Movi %1"
 
 #: app/fileoperations.cpp:74
-#, fuzzy, kde-format
-#| msgid "Print Image"
+#, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Move %1 image"
 msgid_plural "Move %1 images"
-msgstr[0] "Printi bildon"
-msgstr[1] "Printi bildon"
+msgstr[0] "Movi %1 bildon"
+msgstr[1] "Movi %1 bildojn"
 
 #: app/fileoperations.cpp:76
-#, fuzzy, kde-format
-#| msgid "Move To"
+#, kde-format
 msgctxt "@action:button"
 msgid "Move"
-msgstr "Movi al"
+msgstr "Movi"
 
 #: app/fileoperations.cpp:80
-#, fuzzy, kde-format
-#| msgid "Link To"
+#, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Link %1"
-msgstr "Ligi al"
+msgstr "Ligo %1"
 
 #: app/fileoperations.cpp:82
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Link %1 image"
 msgid_plural "Link %1 images"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ligi %1 bildon"
+msgstr[1] "Ligi %1 bildojn"
 
 #: app/fileoperations.cpp:84
-#, fuzzy, kde-format
-#| msgid "Link To"
+#, kde-format
 msgctxt "@action:button"
 msgid "Link"
-msgstr "Ligi al"
+msgstr "Ligo"
 
 #: app/fileoperations.cpp:195
 #, kde-format
@@ -383,34 +369,31 @@ msgstr "Dosieraj operacioj"
 #, kde-format
 msgctxt "@title actions category"
 msgid "Edit"
-msgstr ""
+msgstr "Redakti"
 
 #: app/fileopscontextmanageritem.cpp:150
-#, fuzzy, kde-format
-#| msgid "Copy To"
+#, kde-format
 msgctxt "Verb"
 msgid "Copy To..."
-msgstr "Kopii al"
+msgstr "Kopii al..."
 
 #: app/fileopscontextmanageritem.cpp:155
-#, fuzzy, kde-format
-#| msgid "Move To"
+#, kde-format
 msgctxt "Verb"
 msgid "Move To..."
-msgstr "Movi al"
+msgstr "Movi al..."
 
 #: app/fileopscontextmanageritem.cpp:160
-#, fuzzy, kde-format
-#| msgid "Link To"
+#, kde-format
 msgctxt "Verb: create link to the file where user wants"
 msgid "Link To..."
-msgstr "Ligi al"
+msgstr "Ligo al..."
 
 #: app/fileopscontextmanageritem.cpp:165
 #, kde-format
 msgctxt "Verb"
 msgid "Rename..."
-msgstr ""
+msgstr "Alinomi..."
 
 #: app/fileopscontextmanageritem.cpp:170
 #, kde-format
@@ -419,10 +402,9 @@ msgid "Trash"
 msgstr "Rubigi"
 
 #: app/fileopscontextmanageritem.cpp:177
-#, fuzzy, kde-format
-#| msgid "Retry"
+#, kde-format
 msgid "Restore"
-msgstr "Peni denove"
+msgstr "Restaŭri"
 
 #: app/fileopscontextmanageritem.cpp:181
 #, kde-format
@@ -430,20 +412,19 @@ msgid "Properties"
 msgstr "Ecoj"
 
 #: app/fileopscontextmanageritem.cpp:186
-#, fuzzy, kde-format
-#| msgid "Create Folder"
+#, kde-format
 msgid "Create Folder..."
-msgstr "Krei dosierujon"
+msgstr "Krei dosierujon..."
 
 #: app/fileopscontextmanageritem.cpp:190
 #, kde-format
 msgid "Open With"
-msgstr "Malfermu per"
+msgstr "Malfermi per"
 
 #: app/fileopscontextmanageritem.cpp:198
 #, kde-format
 msgid "Open Containing Folder"
-msgstr ""
+msgstr "Malfermi Enhavan Dosierujon"
 
 #: app/fileopscontextmanageritem.cpp:380
 #, kde-format
@@ -453,100 +434,88 @@ msgstr "Alia aplikaĵo..."
 #: app/filtercontroller.cpp:59
 #, kde-format
 msgid "Name contains"
-msgstr ""
+msgstr "Nomo enhavas"
 
 #: app/filtercontroller.cpp:60
 #, kde-format
 msgid "Name does not contain"
-msgstr ""
+msgstr "Nomo ne enhavas"
 
 #: app/filtercontroller.cpp:98
-#, fuzzy, kde-format
-#| msgid "Delete"
+#, kde-format
 msgid "Date >="
-msgstr "Forigi"
+msgstr "Dato >="
 
 #: app/filtercontroller.cpp:99
-#, fuzzy, kde-format
-#| msgid "Delete"
+#, kde-format
 msgid "Date ="
-msgstr "Forigi"
+msgstr "Dato ="
 
 #: app/filtercontroller.cpp:100
-#, fuzzy, kde-format
-#| msgid "Delete"
+#, kde-format
 msgid "Date <="
-msgstr "Forigi"
+msgstr "Dato <="
 
 #: app/filtercontroller.cpp:131
-#, fuzzy, kde-format
-#| msgid "&Settings"
+#, kde-format
 msgid "Rating >="
-msgstr "&Agordo"
+msgstr "Taksado >="
 
 #: app/filtercontroller.cpp:132
-#, fuzzy, kde-format
-#| msgid "&Settings"
+#, kde-format
 msgid "Rating ="
-msgstr "&Agordo"
+msgstr "Taksado ="
 
 #: app/filtercontroller.cpp:133
-#, fuzzy, kde-format
-#| msgid "&Settings"
+#, kde-format
 msgid "Rating <="
-msgstr "&Agordo"
+msgstr "Taksado <="
 
 #: app/filtercontroller.cpp:173
 #, kde-format
 msgid "Tagged"
-msgstr ""
+msgstr "Etikedita"
 
 #: app/filtercontroller.cpp:174
 #, kde-format
 msgid "Not Tagged"
-msgstr ""
+msgstr "Ne Etikedita"
 
 #: app/filtercontroller.cpp:278
-#, fuzzy, kde-format
-#| msgid "&View"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Name"
-msgstr "&Vidi"
+msgstr "Filtri laŭ Nomo"
 
 #: app/filtercontroller.cpp:280
-#, fuzzy, kde-format
-#| msgid "&View"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Date"
-msgstr "&Vidi"
+msgstr "Filtri laŭ dato"
 
 #: app/filtercontroller.cpp:283
-#, fuzzy, kde-format
-#| msgid "&View"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Rating"
-msgstr "&Vidi"
+msgstr "Filtri per taksado"
 
 #: app/filtercontroller.cpp:285
-#, fuzzy, kde-format
-#| msgid "&View"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Tag"
-msgstr "&Vidi"
+msgstr "Filtri per etikedo"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: app/fullscreenconfigwidget.ui:20
-#, fuzzy, kde-format
-#| msgid "Stop slideshow"
+#, kde-format
 msgid "Slideshow"
-msgstr "Halti la lumbildon"
+msgstr "Bildoprezento"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: app/fullscreenconfigwidget.ui:29
-#, fuzzy, kde-format
-#| msgid "General"
+#, kde-format
 msgid "Interval:"
-msgstr "Ĝeneralo"
+msgstr "Intervalo:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, mSlideShowLoopCheckBox)
 #: app/fullscreenconfigwidget.ui:75
@@ -562,38 +531,33 @@ msgstr "Hazarde"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: app/fullscreenconfigwidget.ui:92
-#, fuzzy, kde-format
-#| msgid "Meta Information"
+#, kde-format
 msgid "Image Information"
-msgstr "Meta-informo"
+msgstr "Bilda Informo"
 
 #. i18n: ectx: property (text), widget (QPushButton, mConfigureDisplayedInformationButton)
 #: app/fullscreenconfigwidget.ui:101
-#, fuzzy, kde-format
-#| msgid "Meta Information"
+#, kde-format
 msgid "Select Image Information to Display..."
-msgstr "Meta-informo"
+msgstr "Elekti Bildajn Informojn Montrendajn..."
 
 #. i18n: ectx: property (title), widget (QGroupBox, mThumbnailGroupBox)
 #: app/fullscreenconfigwidget.ui:111
-#, fuzzy, kde-format
-#| msgid "Show Side Bar"
+#, kde-format
 msgid "Thumbnails"
-msgstr "Montri la flankobreton"
+msgstr "Bildetoj"
 
 #. i18n: ectx: property (text), widget (QCheckBox, mShowThumbnailsCheckBox)
 #: app/fullscreenconfigwidget.ui:120
-#, fuzzy, kde-format
-#| msgid "Show Side Bar"
+#, kde-format
 msgid "Show thumbnails"
-msgstr "Montri la flankobreton"
+msgstr "Montri bildetojn"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: app/fullscreenconfigwidget.ui:130
-#, fuzzy, kde-format
-#| msgid "&Height:"
+#, kde-format
 msgid "Height:"
-msgstr "&Alto:"
+msgstr "Alteco:"
 
 #: app/fullscreencontent.cpp:239
 #, kde-format
@@ -606,101 +570,97 @@ msgstr ", "
 msgctxt "Slideshow interval in seconds"
 msgid "%1 sec"
 msgid_plural "%1 secs"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1 sek"
+msgstr[1] "%1 s-oj"
 
 #: app/fullscreencontent.cpp:400
 #, kde-format
 msgid "Configure"
-msgstr ""
+msgstr "Agordi"
 
 #: app/fullscreencontent.cpp:401
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure full screen mode"
-msgstr ""
+msgstr "Agordi plenekranan reĝimon"
 
 #: app/fullscreencontent.cpp:552 app/viewmainpage.cpp:404
 #, kde-format
 msgctxt "@info:status %1 current document index, %2 total documents"
 msgid "%1 of %2"
-msgstr ""
+msgstr "%1 el %2"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: app/generalconfigpage.ui:17
 #, kde-format
 msgid "Videos:"
-msgstr ""
+msgstr "Videoj:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_ListVideos)
 #: app/generalconfigpage.ui:27
-#, fuzzy, kde-format
-#| msgid "Show Side Bar"
+#, kde-format
 msgid "Show videos"
-msgstr "Montri la flankobreton"
+msgstr "Montri filmetojn"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_AutoplayVideos)
 #: app/generalconfigpage.ui:34
 #, kde-format
 msgid "Automatically play"
-msgstr ""
+msgstr "Aŭtomate ludi"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: app/generalconfigpage.ui:41
 #, kde-format
 msgid "Notify after reaching the last image:"
-msgstr ""
+msgstr "Sciigi post atingi la lastan bildon:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, neverShowWrapNoticeRadioButton)
 #: app/generalconfigpage.ui:51
 #, kde-format
 msgid "Never"
-msgstr ""
+msgstr "Neniam"
 
 #. i18n: ectx: property (text), widget (QRadioButton, wrapNoticeOnSlideshowRadioButton)
 #: app/generalconfigpage.ui:58
 #, kde-format
 msgid "Only during slideshows"
-msgstr ""
+msgstr "Nur dum bildaroj"
 
 #. i18n: ectx: property (text), widget (QRadioButton, alwaysShowWrapNoticeRadioButton)
 #: app/generalconfigpage.ui:65
 #, kde-format
 msgid "Always"
-msgstr ""
+msgstr "Ĉiam"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: app/generalconfigpage.ui:88
-#, fuzzy, kde-format
-#| msgid "&Solid Color"
+#, kde-format
 msgid "Fullscreen background:"
-msgstr "&Solida koloro"
+msgstr "Plenekrana fono:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, fullscreenBackgroundImageRadioButton)
 #: app/generalconfigpage.ui:98
 #, kde-format
 msgid "Dark gray texture"
-msgstr ""
+msgstr "Malhela griza teksturo"
 
 #. i18n: ectx: property (text), widget (QRadioButton, fullscreenBackgroundBlackRadioButton)
 #: app/generalconfigpage.ui:105
 #, kde-format
 msgid "Black"
-msgstr ""
+msgstr "Nigra"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: app/generalconfigpage.ui:128
 #, kde-format
 msgid "Lossy image save quality:"
-msgstr ""
+msgstr "Kvalito de konservado de perdita bildo:"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, jpegQualitySpinner)
 #: app/generalconfigpage.ui:168
-#, fuzzy, no-c-format, kde-format
-#| msgctxt "@info:tooltip of custom toolbar button"
-#| msgid "%1"
+#, no-c-format, kde-format
 msgid "%"
-msgstr "%1"
+msgstr "%"
 
 #. i18n: ectx: property (text), widget (QLabel, lossyImageFormatHelpLabel)
 #: app/generalconfigpage.ui:196
@@ -709,52 +669,50 @@ msgid ""
 "The quality level when saving images using lossy image formats such as JPEG, "
 "WEBP, AVIF, HEIF, and HEIC. Higher quality increases the file size."
 msgstr ""
+"La kvalita nivelo dum konservado de bildoj uzante perdformatojn kiel JPEG, "
+"WEBP, AVIF, HEIF kaj HEIC. Pli alta kvalito pliigas la grandecon de dosiero."
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: app/generalconfigpage.ui:222
-#, fuzzy, kde-format
-#| msgid "Show Side Bar"
+#, kde-format
 msgid "Thumbnail actions:"
-msgstr "Montri la flankobreton"
+msgstr "Bildetaj agoj:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, allButtonsThumbnailActionsRadioButton)
 #: app/generalconfigpage.ui:229
 #, kde-format
 msgid "All buttons"
-msgstr ""
+msgstr "Ĉiuj butonoj"
 
 #. i18n: ectx: property (text), widget (QRadioButton, selectionOnlyThumbnailActionsRadioButton)
 #: app/generalconfigpage.ui:236
 #, kde-format
 msgid "Show selection button only"
-msgstr ""
+msgstr "Montri nur elektbutonon"
 
 #. i18n: ectx: property (text), widget (QRadioButton, noneThumbnailActionsRadioButton)
 #: app/generalconfigpage.ui:243
 #, kde-format
 msgctxt "A number of thumbnail actions to show"
 msgid "None"
-msgstr ""
+msgstr "Neniu"
 
 #: app/gvcore.cpp:80
 #, kde-format
 msgid "Image quality:"
-msgstr ""
+msgstr "Bilda kvalito:"
 
 #: app/gvcore.cpp:87
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip of custom toolbar button"
-#| msgid "%1"
+#, kde-format
 msgctxt "Spinbox suffix; percentage 1 - 100"
 msgid "%"
-msgstr "%1"
+msgstr "%"
 
 #: app/gvcore.cpp:112
-#, fuzzy, kde-format
-#| msgid "Print Image"
+#, kde-format
 msgctxt "@title:window"
 msgid "Save Image"
-msgstr "Printi bildon"
+msgstr "Konservi Bildon"
 
 #: app/gvcore.cpp:410
 #, kde-format
@@ -762,46 +720,41 @@ msgid "Save using another format"
 msgstr "Konservi per alia formato"
 
 #: app/gvcore.cpp:412
-#, fuzzy, kde-format
-#| msgid "Gwenview can't save images in '%1' format."
+#, kde-format
 msgid "Gwenview cannot save images in '%1' format."
-msgstr "Gwenview ne kapablas konservi bildojn per la '%1' formato."
+msgstr "Gwenview ne povas konservi bildojn en '%1' formato."
 
 #: app/gvcore.cpp:440
-#, fuzzy, kde-format
-#| msgid "Gwenview can't save images in '%1' format."
+#, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot save images as %1."
-msgstr "Gwenview ne kapablas konservi bildojn per la '%1' formato."
+msgstr "Gwenview ne povas konservi bildojn kiel %1."
 
 #: app/gvcore.cpp:458 app/gvcore.cpp:492
-#, fuzzy, kde-kuit-format
-#| msgctxt ""
-#| "@info %1 is the name of the document which failed to save, %2 is the "
-#| "reason for the failure"
-#| msgid "<filename>%1</filename>: %2"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<emphasis strong='true'>Saving <filename>%1</filename> failed:</"
 "emphasis><nl />%2"
-msgstr "<filename>%1</filename>: %2"
+msgstr ""
+"<emphasis strong='true'>Konservado de <filename>%1</filename> malsukcesis:</"
+"emphasis><nl />%2"
 
 #: app/gvcore.cpp:508
 #, kde-format
 msgid "You are now viewing the new document."
-msgstr ""
+msgstr "Vi nun rigardas la novan dokumenton."
 
 #: app/gvcore.cpp:510
 #, kde-format
 msgid "Go back to the original"
-msgstr ""
+msgstr "Reiri al la originalo"
 
 #. i18n: ectx: Menu (rating)
 #: app/gwenviewui.rc:54
-#, fuzzy, kde-format
-#| msgid "&Settings"
+#, kde-format
 msgid "&Rating"
-msgstr "&Agordo"
+msgstr "&Taksado"
 
 #. i18n: ectx: Menu (settings)
 #: app/gwenviewui.rc:85
@@ -813,43 +766,41 @@ msgstr "&Agordo"
 #: app/gwenviewui.rc:101 part/gvpart.rc:16
 #, kde-format
 msgid "Main Toolbar"
-msgstr "Ĉefa ilobreto"
+msgstr "Ĉefa Ilobreto"
 
 #: app/imagemetainfodialog.cpp:130
-#, fuzzy, kde-format
-#| msgid "Meta Information"
+#, kde-format
 msgctxt "@title:window"
 msgid "Image Information"
-msgstr "Meta-informo"
+msgstr "Bilda Informo"
 
 #: app/imageopscontextmanageritem.cpp:90
 #, kde-format
 msgctxt "@title actions category - means actions changing image"
 msgid "Edit"
-msgstr ""
+msgstr "Redakti"
 
 #: app/imageopscontextmanageritem.cpp:93
 #, kde-format
 msgid "Rotate Left"
-msgstr "Turni maldekstre"
+msgstr "Rotacii Maldekstren"
 
 #: app/imageopscontextmanageritem.cpp:94
-#, fuzzy, kde-format
-#| msgid "Rotate Right"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate image to the left"
-msgstr "Turni dekstre"
+msgstr "Rotacii bildon maldekstren"
 
 #: app/imageopscontextmanageritem.cpp:99
 #, kde-format
 msgid "Rotate Right"
-msgstr "Turni dekstre"
+msgstr "Rotacii Dekstren"
 
 #: app/imageopscontextmanageritem.cpp:100
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate image to the right"
-msgstr ""
+msgstr "Rotacii bildon dekstren"
 
 #: app/imageopscontextmanageritem.cpp:105
 #, kde-format
@@ -864,7 +815,7 @@ msgstr "Renversi"
 #: app/imageopscontextmanageritem.cpp:113 lib/resize/resizeimagedialog.cpp:71
 #, kde-format
 msgid "Resize"
-msgstr "Regrandigi"
+msgstr "Aligrandigi"
 
 #: app/imageopscontextmanageritem.cpp:118 lib/crop/cropimageoperation.cpp:70
 #: lib/crop/cropwidget.cpp:262
@@ -876,33 +827,32 @@ msgstr "Stuci"
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Adjust Colors"
-msgstr ""
+msgstr "Alĝustigi Kolorojn"
 
 #: app/imageopscontextmanageritem.cpp:128
 #: lib/redeyereduction/redeyereductionimageoperation.cpp:75
 #: lib/redeyereduction/redeyereductiontool.cpp:48
 #, kde-format
 msgid "Reduce Red Eye"
-msgstr ""
+msgstr "Redukti Ruĝ-Okulon"
 
 #: app/imageopscontextmanageritem.cpp:133 lib/annotate/annotateoperation.cpp:51
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Annotate"
-msgstr ""
+msgstr "Komenti"
 
 #: app/imageopscontextmanageritem.cpp:141
 #, kde-format
 msgctxt "@title:window Annotate [filename]"
 msgid "Annotate %1"
-msgstr ""
+msgstr "Komenti %1"
 
 #: app/imageopscontextmanageritem.cpp:164 lib/document/documentjob.cpp:77
-#, fuzzy, kde-format
-#| msgid "Gwenview can't save images in '%1' format."
+#, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot edit this kind of image."
-msgstr "Gwenview ne kapablas konservi bildojn per la '%1' formato."
+msgstr "Gwenview ne povas redakti tian bildon."
 
 #: app/imageopscontextmanageritem.cpp:175
 #, kde-format
@@ -913,41 +863,38 @@ msgstr "Bildaj operacioj"
 #: app/imageviewconfigpage.ui:17
 #, kde-format
 msgid "Show transparency with:"
-msgstr ""
+msgstr "Montri travideblecon kun:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, surroundingRadioButton)
 #: app/imageviewconfigpage.ui:38
-#, fuzzy, kde-format
-#| msgid "Transparent Image Background:"
+#, kde-format
 msgid "Surrounding background"
-msgstr "Travidebla bilda fono:"
+msgstr "Ĉirkaŭa fono"
 
 #. i18n: ectx: property (text), widget (QRadioButton, checkBoardRadioButton)
 #: app/imageviewconfigpage.ui:71
-#, fuzzy, kde-format
-#| msgid "&Check Board"
+#, kde-format
 msgid "&Checkerboard background"
-msgstr "Ŝakta&bulo"
+msgstr "Ŝa&ktabula fono"
 
 #. i18n: ectx: property (text), widget (QRadioButton, solidColorRadioButton)
 #: app/imageviewconfigpage.ui:104
-#, fuzzy, kde-format
-#| msgid "&Solid Color"
+#, kde-format
 msgid "&Solid color background:"
-msgstr "&Solida koloro"
+msgstr "&Solidkolora fono:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: app/imageviewconfigpage.ui:152
 #, kde-format
 msgid "Mouse wheel behavior:"
-msgstr ""
+msgstr "Konduto de musrado:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, mouseWheelScrollRadioButton)
 #: app/imageviewconfigpage.ui:167
 #, kde-format
 msgctxt "@option:radio action on mouse wheel"
 msgid "Scroll"
-msgstr ""
+msgstr "Rulumi"
 
 #. i18n: ectx: property (text), widget (QRadioButton, mouseWheelBrowseRadioButton)
 #: app/imageviewconfigpage.ui:194
@@ -961,32 +908,31 @@ msgstr "Foliumi"
 #, kde-format
 msgctxt "@option:radio action on mouse wheel"
 msgid "Zoom"
-msgstr ""
+msgstr "Zomi"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: app/imageviewconfigpage.ui:256
 #, kde-format
 msgid "Zoom mode:"
-msgstr ""
+msgstr "Zoma reĝimo:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, autofitZoomModeRadioButton)
 #: app/imageviewconfigpage.ui:271
-#, fuzzy, kde-format
-#| msgid "Previous modified image"
+#, kde-format
 msgid "Autofit each image"
-msgstr "Antaŭa ŝanĝita bildo"
+msgstr "Aŭtomate ĝustigi ĉiun bildon"
 
 #. i18n: ectx: property (text), widget (QRadioButton, keepSameZoomModeRadioButton)
 #: app/imageviewconfigpage.ui:298
 #, kde-format
 msgid "Keep same zoom and position"
-msgstr ""
+msgstr "Konservi la saman zomon kaj pozicion"
 
 #. i18n: ectx: property (text), widget (QRadioButton, individualZoomModeRadioButton)
 #: app/imageviewconfigpage.ui:322
 #, kde-format
 msgid "Per image zoom and position"
-msgstr ""
+msgstr "Per bildo zomo kaj pozicio"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_EnlargeSmallerImages)
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_PrintEnlargeSmallerImages)
@@ -997,42 +943,39 @@ msgstr "Pligrandigi la malgrandajn bildojn"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: app/imageviewconfigpage.ui:400
-#, fuzzy, kde-format
-#| msgid "Information"
+#, kde-format
 msgid "Animations:"
-msgstr "Informo"
+msgstr "Animacioj:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, glAnimationRadioButton)
 #: app/imageviewconfigpage.ui:415
 #, kde-format
 msgid "OpenGL"
-msgstr ""
+msgstr "OpenGL"
 
 #. i18n: ectx: property (text), widget (QRadioButton, softwareAnimationRadioButton)
 #: app/imageviewconfigpage.ui:442
 #, kde-format
 msgid "Software"
-msgstr ""
+msgstr "Programaro"
 
 #. i18n: ectx: property (text), widget (QRadioButton, noAnimationRadioButton)
 #: app/imageviewconfigpage.ui:466
 #, kde-format
 msgid "None"
-msgstr ""
+msgstr "Neniu"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: app/imageviewconfigpage.ui:504
-#, fuzzy, kde-format
-#| msgid "Show Side Bar"
+#, kde-format
 msgid "<b>Thumbnail Bar</b>"
-msgstr "Montri la flankobreton"
+msgstr "<b>Minitrajn trinkejon</b>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: app/imageviewconfigpage.ui:527
-#, fuzzy, kde-format
-#| msgid "File Operations"
+#, kde-format
 msgid "Orientation:"
-msgstr "Dosieraj operacioj"
+msgstr "Orientiĝo:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, horizontalRadioButton)
 #: app/imageviewconfigpage.ui:542
@@ -1050,7 +993,7 @@ msgstr "Vertikala"
 #: app/imageviewconfigpage.ui:588
 #, kde-format
 msgid "Row count:"
-msgstr ""
+msgstr "Nombro de vicoj:"
 
 #: app/infocontextmanageritem.cpp:151
 #, kde-format
@@ -1063,53 +1006,49 @@ msgstr "%1:"
 #, kde-format
 msgctxt "@action show more image meta info"
 msgid "Show more details..."
-msgstr ""
+msgstr "Montri pliajn detalojn..."
 
 #: app/infocontextmanageritem.cpp:242
-#, fuzzy, kde-format
-#| msgid "Meta Information"
+#, kde-format
 msgctxt "@title:group"
 msgid "Image Information"
-msgstr "Meta-informo"
+msgstr "Bilda Informo"
 
 #: app/infocontextmanageritem.cpp:331
-#, fuzzy, kde-format
-#| msgid "%1 files selected"
+#, kde-format
 msgctxt "@label"
 msgid "%1 file selected"
 msgid_plural "%1 files selected"
-msgstr[0] "%1 dosieroj elektitaj"
+msgstr[0] "%1 dosiero elektita"
 msgstr[1] "%1 dosieroj elektitaj"
 
 #: app/infocontextmanageritem.cpp:333
-#, fuzzy, kde-format
-#| msgid "%1 folders selected"
+#, kde-format
 msgctxt "@label"
 msgid "%1 folder selected"
 msgid_plural "%1 folders selected"
-msgstr[0] "%1 dosierujoj elektitaj"
+msgstr[0] "%1 dosierujo elektita"
 msgstr[1] "%1 dosierujoj elektitaj"
 
 #: app/infocontextmanageritem.cpp:336
-#, fuzzy, kde-format
-#| msgid "%1 folders and %2 files selected"
+#, kde-format
 msgctxt "@label. The two parameters are strings like '2 folders' and '1 file'."
 msgid "%1 and %2 selected"
-msgstr "%1 dosierujoj kaj %2 dosieroj elektitaj"
+msgstr "%1 kaj %2 elektitaj"
 
 #: app/infocontextmanageritem.cpp:337
 #, kde-format
 msgid "%1 folder"
 msgid_plural "%1 folders"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1 dosierujo"
+msgstr[1] "%1 dosierujoj"
 
 #: app/infocontextmanageritem.cpp:338
 #, kde-format
 msgid "%1 file"
 msgid_plural "%1 files"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1 dosiero"
+msgstr[1] "%1 dosieroj"
 
 #: app/main.cpp:178
 #, kde-format
@@ -1124,25 +1063,23 @@ msgstr "Bilda rigardilo"
 #: app/main.cpp:188
 #, kde-format
 msgid "Start in fullscreen mode"
-msgstr ""
+msgstr "Komenci en plenekrana reĝimo"
 
 #: app/main.cpp:189
-#, fuzzy, kde-format
-#| msgid "Start slideshow"
+#, kde-format
 msgid "Start in slideshow mode"
-msgstr "Starti la lumbildon"
+msgstr "Komencu en bildoprezenta reĝimo"
 
 #: app/main.cpp:190
-#, fuzzy, kde-format
-#| msgid "A starting file or folder"
+#, kde-format
 msgid "A starting file or folders"
-msgstr "Komenca dosiero aŭ dosierujo"
+msgstr "Komenca dosiero aŭ dosierujoj"
 
 #: app/mainwindow.cpp:381
 #, kde-format
 msgctxt "@action Open Recent menu"
 msgid "Clear List"
-msgstr ""
+msgstr "Klara Listo"
 
 #: app/mainwindow.cpp:389
 #, kde-format
@@ -1154,7 +1091,7 @@ msgstr "Reŝargi"
 #, kde-format
 msgctxt "@action:inmenu Navigation Bar"
 msgid "Replace Location"
-msgstr ""
+msgstr "Anstataŭigi Lokon"
 
 #: app/mainwindow.cpp:399
 #, kde-format
@@ -1166,7 +1103,7 @@ msgstr "Foliumi"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Browse folders for images"
-msgstr ""
+msgstr "Foliumi dosierujojn por bildoj"
 
 #: app/mainwindow.cpp:407
 #, kde-format
@@ -1175,17 +1112,16 @@ msgid "View"
 msgstr "Vidi"
 
 #: app/mainwindow.cpp:408
-#, fuzzy, kde-format
-#| msgid "Next modified image"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "View selected images"
-msgstr "Sekva ŝanĝita bildo"
+msgstr "Rigardi elektitajn bildojn"
 
 #: app/mainwindow.cpp:427
 #, kde-format
 msgctxt "@action"
 msgid "Exit Full Screen"
-msgstr ""
+msgstr "Eliri Plenan Ekranon"
 
 #: app/mainwindow.cpp:432
 #, kde-format
@@ -1194,11 +1130,10 @@ msgid "Previous"
 msgstr "Antaŭa"
 
 #: app/mainwindow.cpp:433
-#, fuzzy, kde-format
-#| msgid "Previous modified image"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to previous image"
-msgstr "Antaŭa ŝanĝita bildo"
+msgstr "Iri al la antaŭa bildo"
 
 #: app/mainwindow.cpp:439
 #, kde-format
@@ -1207,75 +1142,69 @@ msgid "Next"
 msgstr "Sekva"
 
 #: app/mainwindow.cpp:440
-#, fuzzy, kde-format
-#| msgid "Previous modified image"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to next image"
-msgstr "Antaŭa ŝanĝita bildo"
+msgstr "Iri al la sekva bildo"
 
 #: app/mainwindow.cpp:446
 #, kde-format
 msgctxt "@action Go to first image"
 msgid "First"
-msgstr ""
+msgstr "Unue"
 
 #: app/mainwindow.cpp:447
-#, fuzzy, kde-format
-#| msgid "Previous modified image"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to first image"
-msgstr "Antaŭa ŝanĝita bildo"
+msgstr "Iri al la unua bildo"
 
 #: app/mainwindow.cpp:453
-#, fuzzy, kde-format
-#| msgid "Delete"
+#, kde-format
 msgctxt "@action Go to last image"
 msgid "Last"
-msgstr "Forigi"
+msgstr "Laste"
 
 #: app/mainwindow.cpp:454
-#, fuzzy, kde-format
-#| msgid "Previous modified image"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to last image"
-msgstr "Antaŭa ŝanĝita bildo"
+msgstr "Iri al la lasta bildo"
 
 #: app/mainwindow.cpp:464
 #, kde-format
 msgctxt "@action"
 msgid "Start Page"
-msgstr ""
+msgstr "Komenca Paĝo"
 
 #: app/mainwindow.cpp:465
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open the start page"
-msgstr ""
+msgstr "Malfermi la komencan paĝon"
 
 #: app/mainwindow.cpp:472
-#, fuzzy, kde-format
-#| msgid "Hide Side Bar"
+#, kde-format
 msgctxt "@action"
 msgid "Sidebar"
-msgstr "Kaŝi la flankobreton"
+msgstr "Flankmenuo"
 
 #: app/mainwindow.cpp:477
 #, kde-format
 msgctxt "@action opens crop, rename, etc."
 msgid "Show Editing Tools"
-msgstr ""
+msgstr "Montri Redaktajn Ilojn"
 
 #: app/mainwindow.cpp:507
-#, fuzzy, kde-format
-#| msgid "Save"
+#, kde-format
 msgctxt "@action Share images"
 msgid "Share"
-msgstr "Konservi"
+msgstr "Kunhavigi"
 
 #: app/mainwindow.cpp:515
 #, kde-format
 msgid "Error while sharing: %1"
-msgstr ""
+msgstr "Eraro dum konigo: %1"
 
 #: app/mainwindow.cpp:522
 #, kde-format
@@ -1283,18 +1212,19 @@ msgid ""
 "The shared image link (<a href=\"%1\">%1</a>) has been copied to the "
 "clipboard."
 msgstr ""
+"La komuna bildligo (<a href=\"%1\">%1</a>) estis kopiita al la tondujo."
 
 #: app/mainwindow.cpp:572
 #, kde-format
 msgctxt "@title:menu submenu for actions that open configuration dialogs"
 msgid "Configure"
-msgstr ""
+msgstr "Agordi"
 
 #: app/mainwindow.cpp:587
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "Edit"
-msgstr ""
+msgstr "Redakti"
 
 #: app/mainwindow.cpp:592
 #, kde-format
@@ -1307,10 +1237,9 @@ msgid "Undo"
 msgstr "Malfari"
 
 #: app/mainwindow.cpp:627
-#, fuzzy, kde-format
-#| msgid "Create Folder"
+#, kde-format
 msgid "Folders"
-msgstr "Krei dosierujon"
+msgstr "Dosierujoj"
 
 #: app/mainwindow.cpp:633
 #, kde-format
@@ -1318,49 +1247,42 @@ msgid "Information"
 msgstr "Informo"
 
 #: app/mainwindow.cpp:672
-#, fuzzy, kde-format
-#| msgid "File Operations"
+#, kde-format
 msgid "Operations"
-msgstr "Dosieraj operacioj"
+msgstr "Operacioj"
 
 #: app/mainwindow.cpp:1377
-#, fuzzy, kde-format
-#| msgid "Hide Side Bar"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
-msgstr "Kaŝi la flankobreton"
+msgstr "Kaŝi flankbreton"
 
 #: app/mainwindow.cpp:1377
-#, fuzzy, kde-format
-#| msgid "Hide Side Bar"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
-msgstr "Kaŝi la flankobreton"
+msgstr "Montri flankbreton"
 
 #: app/mainwindow.cpp:1684
-#, fuzzy, kde-format
-#| msgid "Print Image"
+#, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
-msgstr "Printi bildon"
+msgstr "Malfermi Bildon"
 
 #: app/mainwindow.cpp:1744
-#, fuzzy, kde-format
-#| msgid "Stop slideshow"
+#, kde-format
 msgid "Pause Slideshow"
-msgstr "Halti la lumbildon"
+msgstr "Paŭzi prezenton"
 
 #: app/mainwindow.cpp:1747
-#, fuzzy, kde-format
-#| msgid "Stop slideshow"
+#, kde-format
 msgid "Resume Slideshow"
-msgstr "Halti la lumbildon"
+msgstr "Rekomenci Bildoprezenton"
 
 #: app/mainwindow.cpp:1747
-#, fuzzy, kde-format
-#| msgid "Start slideshow"
+#, kde-format
 msgid "Start Slideshow"
-msgstr "Starti la lumbildon"
+msgstr "Komenci Bildoprezento"
 
 #: app/mainwindow.cpp:1760
 #, kde-format
@@ -1389,68 +1311,60 @@ msgstr "Se vi finas nun, la ŝanĝoj perdiĝos."
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr ""
+"Ĉi tio tute kaŝos la menubreton. Vi povas montri ĝin denove tajpante %1."
 
 #: app/mainwindow.cpp:1821
-#, fuzzy, kde-format
-#| msgid "Hide Side Bar"
+#, kde-format
 msgid "Hide menu bar"
-msgstr "Kaŝi la flankobreton"
+msgstr "Kaŝi menubreton"
 
 #: app/mainwindow.cpp:2041
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
-msgstr ""
+msgstr "Vi atingis la unuan dokumenton, kion vi volas fari?"
 
 #: app/mainwindow.cpp:2042 app/mainwindow.cpp:2056
 #, kde-format
 msgid "Stay There"
-msgstr ""
+msgstr "Resti Tie"
 
 #: app/mainwindow.cpp:2043
-#, fuzzy, kde-format
-#| msgid "Previous modified image"
+#, kde-format
 msgid "Go to the Last Document"
-msgstr "Antaŭa ŝanĝita bildo"
+msgstr "Iri al la Lasta Dokumento"
 
 #: app/mainwindow.cpp:2044 app/mainwindow.cpp:2058
 #, kde-format
 msgid "Go Back to the Document List"
-msgstr ""
+msgstr "Reiri al la Dokumenta Listo"
 
 #: app/mainwindow.cpp:2055
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
-msgstr ""
+msgstr "Vi atingis la lastan dokumenton, kion vi volas fari?"
 
 #: app/mainwindow.cpp:2057
-#, fuzzy, kde-format
-#| msgid "Previous modified image"
+#, kde-format
 msgid "Go to the First Document"
-msgstr "Antaŭa ŝanĝita bildo"
+msgstr "Iri al la Unua Dokumento"
 
 #: app/renamedialog.cpp:48
-#, fuzzy, kde-format
-#| msgid "File Time"
+#, kde-format
 msgctxt "@action:button"
 msgid "Rename"
-msgstr "Dosiera tempo"
+msgstr "Alinomi"
 
 #: app/renamedialog.cpp:61
-#, fuzzy, kde-kuit-format
-#| msgctxt ""
-#| "@info %1 is the name of the document which failed to save, %2 is the "
-#| "reason for the failure"
-#| msgid "<filename>%1</filename>: %2"
+#, kde-kuit-format
 msgid "Rename <filename>%1</filename> to:"
-msgstr "<filename>%1</filename>: %2"
+msgstr "Alinomi <filename>%1</filename> al:"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, RenameDialog)
 #: app/renamedialog.ui:26
-#, fuzzy, kde-format
-#| msgid "File Time"
+#, kde-format
 msgctxt "@title:window"
 msgid "Rename"
-msgstr "Dosiera tempo"
+msgstr "Alinomi"
 
 #: app/saveallhelper.cpp:56
 #, kde-format
@@ -1468,8 +1382,8 @@ msgstr "&Halti"
 msgctxt "@info"
 msgid "One document could not be saved:"
 msgid_plural "%1 documents could not be saved:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Unu dokumenton ne eblis konservi:"
+msgstr[1] "%1 dokumentojn ne eblis konservi:"
 
 #: app/saveallhelper.cpp:106
 #, kde-kuit-format
@@ -1485,6 +1399,8 @@ msgid ""
 "You have modified many images. To avoid memory problems, you should save "
 "your changes."
 msgstr ""
+"Vi modifis multajn bildojn. Por eviti problemojn pri memoro, vi devas "
+"konservi viajn ŝanĝojn."
 
 #: app/savebar.cpp:160
 #, kde-format
@@ -1524,11 +1440,10 @@ msgid "Save All"
 msgstr "Konservi ĉion"
 
 #: app/savebar.cpp:286
-#, fuzzy, kde-format
-#| msgid "Next modified image"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Save all modified images"
-msgstr "Sekva ŝanĝita bildo"
+msgstr "Konservi ĉiujn modifitajn bildojn"
 
 #: app/semanticinfocontextmanageritem.cpp:186
 #, kde-format
@@ -1539,19 +1454,19 @@ msgstr "Redakti"
 #, kde-format
 msgctxt "@action"
 msgid "Edit Tags"
-msgstr ""
+msgstr "Redakti Etikedojn"
 
 #: app/semanticinfocontextmanageritem.cpp:215
 #, kde-format
 msgctxt "@action Rating value of zero"
 msgid "Zero"
-msgstr ""
+msgstr "Nulo"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, SemanticInfoDialog)
 #: app/semanticinfodialog.ui:13
 #, kde-format
 msgid "Tag Editor"
-msgstr ""
+msgstr "Etikedredaktilo"
 
 #. i18n: ectx: property (text), widget (QPushButton, mPreviousButton)
 #: app/semanticinfodialog.ui:31
@@ -1573,92 +1488,81 @@ msgstr "Noto:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: app/semanticinfosidebaritem.ui:45
-#, fuzzy, kde-format
-#| msgctxt "Verb"
-#| msgid "Trash"
+#, kde-format
 msgid "Tags:"
-msgstr "Rubigi"
+msgstr "Etikedoj:"
 
 #. i18n: ectx: property (placeholderText), widget (QTextEdit, mDescriptionTextEdit)
 #: app/semanticinfosidebaritem.ui:73
-#, fuzzy, kde-format
-#| msgid "Image Position"
+#, kde-format
 msgid "Description"
-msgstr "Bilda pozicio"
+msgstr "Priskribo"
 
 #: app/slideshowfileitemaction.cpp:61
-#, fuzzy, kde-format
-#| msgid "Start slideshow"
+#, kde-format
 msgctxt "@action:inmenu Start a slideshow Dolphin context menu"
 msgid "Start a Slideshow"
-msgstr "Starti la lumbildon"
+msgstr "Komenci Bildaron"
 
 #: app/slideshowfileitemaction.cpp:66
-#, fuzzy, kde-format
-#| msgid "Next modified image"
+#, kde-format
 msgctxt "@action:inmenu Start a slideshow Dolphin context menu"
 msgid "Start a Slideshow with selected images"
-msgstr "Sekva ŝanĝita bildo"
+msgstr "Komenci Bildaron kun elektitaj bildoj"
 
 #: app/startmainpage.cpp:291
 #, kde-format
 msgctxt "@action Recent Folders view"
 msgid "Add Folder to Places"
-msgstr ""
+msgstr "Aldoni Dosierujon al Lokoj"
 
 #: app/startmainpage.cpp:292
-#, fuzzy, kde-format
-#| msgid "Create Folder"
+#, kde-format
 msgctxt "@action Recent Folders view"
 msgid "Forget This Folder"
-msgstr "Krei dosierujon"
+msgstr "Forgesi Ĉi tiun Dosierujon"
 
 #: app/startmainpage.cpp:293
-#, fuzzy, kde-format
-#| msgid "Create Folder"
+#, kde-format
 msgctxt "@action Recent Folders view"
 msgid "Forget All Folders"
-msgstr "Krei dosierujon"
+msgstr "Forgesi Ĉiujn Dosierujojn"
 
 #: app/startmainpage.cpp:295
 #, kde-format
 msgctxt "@action Recent Files view"
 msgid "Add Containing Folder to Places"
-msgstr ""
+msgstr "Aldoni Enhavantan Dosierujon al Lokoj"
 
 #: app/startmainpage.cpp:296
-#, fuzzy, kde-format
-#| msgid "Create Folder"
+#, kde-format
 msgctxt "@action Recent Files view"
 msgid "Forget This File"
-msgstr "Krei dosierujon"
+msgstr "Forgesi Ĉi tiun Dosieron"
 
 #: app/startmainpage.cpp:297
-#, fuzzy, kde-format
-#| msgid "Create Folder"
+#, kde-format
 msgctxt "@action Recent Files view"
 msgid "Forget All Files"
-msgstr "Krei dosierujon"
+msgstr "Forgesi ĉiujn dosierojn"
 
 #. i18n: ectx: property (text), widget (QLabel, mHistoryDisabledLabel)
 #: app/startmainpage.ui:34
 #, kde-format
 msgid "History has been disabled."
-msgstr ""
+msgstr "Historio estas malŝaltita."
 
 #. i18n: ectx: attribute (title), widget (QWidget, mRecentFoldersTab)
 #: app/startmainpage.ui:51
-#, fuzzy, kde-format
-#| msgid "Create Folder"
+#, kde-format
 msgid "Recent Folders"
-msgstr "Krei dosierujon"
+msgstr "Lastatempaj Dosierujoj"
 
 #. i18n: ectx: attribute (title), widget (QWidget, mRecentFilesTab)
 #: app/startmainpage.ui:65
-#, fuzzy, kde-format
-#| msgid "Create Folder"
+#, kde-format
 msgid "Recent Files"
-msgstr "Krei dosierujon"
+msgstr "Lastatempaj Dosieroj"
 
 #. i18n: ectx: attribute (title), widget (QWidget, placesTab)
 #: app/startmainpage.ui:97
@@ -1668,11 +1572,9 @@ msgstr "Lokoj"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tagsTab)
 #: app/startmainpage.ui:120
-#, fuzzy, kde-format
-#| msgctxt "Verb"
-#| msgid "Trash"
+#, kde-format
 msgid "Tags"
-msgstr "Rubigi"
+msgstr "Etikedoj"
 
 #. i18n: ectx: property (text), widget (QLabel, mTagLabel)
 #: app/startmainpage.ui:126
@@ -1681,17 +1583,18 @@ msgid ""
 "Browsing by tags is not available. Make sure Nepomuk is properly installed "
 "on your computer."
 msgstr ""
+"Foliumado per etikedoj ne disponeblas. Certigu, ke Nepomuk estas ĝuste "
+"instalita en via komputilo."
 
 #: app/viewmainpage.cpp:153 app/viewmainpage.cpp:447
 #, kde-format
 msgid "Synchronize"
-msgstr ""
+msgstr "Sinkronigi"
 
 #: app/viewmainpage.cpp:428
-#, fuzzy, kde-format
-#| msgid "Show Side Bar"
+#, kde-format
 msgid "Show Thumbnails"
-msgstr "Montri la flankobreton"
+msgstr "Montri Bildetojn"
 
 #. i18n: For languages that are read right to left, "right side" refers to the left side in this context.
 #: app/viewmainpage.cpp:431
@@ -1705,101 +1608,102 @@ msgid ""
 "and contain multiple rows of images; <link url='%1'>configure these options "
 "in the settings</link>.</para>"
 msgstr ""
+"<para>Ĉi tio ŝanĝas malgrandan stangon montrantan ĉiujn aliajn bildojn en la "
+"nuna dosierujo. Elektante unu el ili ŝanĝas la nuntempe viditan bildon.</"
+"para><para >Elektu plurajn bildojn samtempe por vidi ilin unu apud la alia.</"
+"para><para >La stango povas laŭvole movi dekstren de la ekrano kaj enhavas "
+"plurajn vicojn da bildoj; <link url='%1'>agordu ĉi tiujn opciojn en la "
+"agordoj</link>.</para>"
 
 #: app/viewmainpage.cpp:575
-#, fuzzy, kde-format
-#| msgid "&View Background Color:"
+#, kde-format
 msgctxt "@item:inmenu"
 msgid "Background Color Mode"
-msgstr "&Vida fonkoloro:"
+msgstr "Fona Kolora Reĝimo"
 
 #: app/viewmainpage.cpp:767
-#, fuzzy, kde-format
-#| msgid "Discard Changes"
+#, kde-format
 msgctxt "@action:button"
 msgid "Discard Changes and Reload"
-msgstr "Nuligi ĉiujn ŝanĝojn"
+msgstr "Forĵeti Ŝanĝojn kaj Reŝargi"
 
 #: app/viewmainpage.cpp:769
 #, kde-format
 msgctxt "@info"
 msgid ""
 "This image has been modified. Reloading it will discard all your changes."
-msgstr ""
+msgstr "Ĉi tiu bildo estis modifita. Reŝargi ĝin forĵetos ĉiujn viajn ŝanĝojn."
 
 #: importer/dialogpage.cpp:52
 #, kde-format
 msgid "Show failed files..."
-msgstr ""
+msgstr "Montri malsukcesajn dosierojn..."
 
 #: importer/dialogpage.cpp:57
 #, kde-format
 msgid "Show failed subfolders..."
-msgstr ""
+msgstr "Montri malsukcesajn subdosierujojn..."
 
 #: importer/dialogpage.cpp:71
 #, kde-format
 msgid "Failed to import %1 document."
 msgid_plural "Failed to import %1 documents."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Malsukcesis importi %1 dokumenton."
+msgstr[1] "Malsukcesis importi %1 dokumentojn."
 
 #: importer/dialogpage.cpp:78
 #, kde-format
 msgid "Failed to create %1 destination subfolder."
 msgid_plural "Failed to create %1 destination subfolders."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Malsukcesis krei %1 celdosierujon."
+msgstr[1] "Malsukcesis krei %1 celdosierujojn."
 
 #: importer/dialogpage.cpp:89
 #, kde-format
 msgid "Failed to import documents:"
-msgstr ""
+msgstr "Malsukcesis importi dokumentojn:"
 
 #: importer/dialogpage.cpp:95
 #, kde-format
 msgid "Failed to create subfolders:"
-msgstr ""
+msgstr "Malsukcesis krei subdosierujojn:"
 
 #: importer/filenameformater.cpp:102
 #, kde-format
 msgid "Shooting date"
-msgstr ""
+msgstr "Dato de pafado"
 
 #: importer/filenameformater.cpp:103
 #, kde-format
 msgid "Shooting time"
-msgstr ""
+msgstr "Tempo de pafado"
 
 #: importer/filenameformater.cpp:104
-#, fuzzy, kde-format
-#| msgid "File Operations"
+#, kde-format
 msgid "Original extension"
-msgstr "Dosieraj operacioj"
+msgstr "Originala etendo"
 
 #: importer/filenameformater.cpp:105
 #, kde-format
 msgid "Original extension, in lower case"
-msgstr ""
+msgstr "Originala etendo, minuskle"
 
 #: importer/filenameformater.cpp:106
 #, kde-format
 msgid "Original filename"
-msgstr ""
+msgstr "Originala dosiernomo"
 
 #: importer/filenameformater.cpp:107
 #, kde-format
 msgid "Original filename, in lower case"
-msgstr ""
+msgstr "Originala dosiernomo, minuskle"
 
 #: importer/importdialog.cpp:99
-#, fuzzy, kde-format
-#| msgid "One image has been modified."
-#| msgid_plural "%1 images have been modified."
+#, kde-format
 msgid "One document has been imported."
 msgid_plural "%1 documents have been imported."
-msgstr[0] "Unu bildo ŝanĝiĝis."
-msgstr[1] "%1 bildoj ŝanĝiĝis."
+msgstr[0] "Unu dokumento estis importita."
+msgstr[1] "%1 dokumentoj estis importitaj."
 
 #: importer/importdialog.cpp:101
 #, kde-format
@@ -1824,15 +1728,15 @@ msgstr[1] ""
 #, kde-format
 msgid "Delete the imported document from the device?"
 msgid_plural "Delete the %1 imported documents from the device?"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ĉu forigi la importitan dokumenton de la aparato?"
+msgstr[1] "Ĉu forigi la %1 importitajn dokumentojn de la aparato?"
 
 #: importer/importdialog.cpp:119
 #, kde-format
 msgid "Delete the skipped document from the device?"
 msgid_plural "Delete the %1 skipped documents from the device?"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ĉu forigi la preterlasitan dokumenton de la aparato?"
+msgstr[1] "Ĉu forigi la %1 preterlasitajn dokumentojn de la aparato?"
 
 #: importer/importdialog.cpp:122
 #, kde-format
@@ -1843,11 +1747,10 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: importer/importdialog.cpp:133
-#, fuzzy, kde-format
-#| msgid "%1 folders selected"
+#, kde-format
 msgctxt "@title:window"
 msgid "Import Finished"
-msgstr "%1 dosierujoj elektitaj"
+msgstr "Importo Finita"
 
 #: importer/importdialog.cpp:134
 #, kde-format
@@ -1863,7 +1766,11 @@ msgid_plural ""
 "Failed to delete documents:\n"
 "%2"
 msgstr[0] ""
+"Malsukcesis forigo de la dokumento:\n"
+"%2"
 msgstr[1] ""
+"Malsukcesis forigo de dokumentoj:\n"
+"%2"
 
 #: importer/importdialog.cpp:158
 #, kde-format
@@ -1878,17 +1785,17 @@ msgstr "Ignori"
 #: importer/importdialog.cpp:191
 #, kde-format
 msgid "What do you want to do now?"
-msgstr ""
+msgstr "Kion vi volas fari nun?"
 
 #: importer/importdialog.cpp:193
 #, kde-format
 msgid "View Imported Documents with Gwenview"
-msgstr ""
+msgstr "Vidi Importitajn Dokumentojn kun Gwenview"
 
 #: importer/importdialog.cpp:194
 #, kde-format
 msgid "Import more Documents"
-msgstr ""
+msgstr "Importi pliajn Dokumentojn"
 
 #: importer/importdialog.cpp:195
 #, kde-format
@@ -1898,12 +1805,12 @@ msgstr "Forlasi"
 #: importer/importer.cpp:80
 #, kde-format
 msgid "Could not create destination folder."
-msgstr ""
+msgstr "Ne eblis krei celdosierujon."
 
 #: importer/importer.cpp:95 importer/importer.cpp:101
 #, kde-format
 msgid "Could not create temporary upload folder."
-msgstr ""
+msgstr "Ne eblis krei provizoran alŝutan dosierujon."
 
 #: importer/importerconfigdialog.cpp:52
 #, kde-format
@@ -1915,95 +1822,93 @@ msgstr "%1: %2"
 #: importer/importerconfigdialog.ui:17
 #, kde-format
 msgid "Rename documents automatically"
-msgstr ""
+msgstr "Renomi dokumentojn aŭtomate"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: importer/importerconfigdialog.ui:39
-#, fuzzy, kde-format
-#| msgid "File Time"
+#, kde-format
 msgid "Rename Format:"
-msgstr "Dosiera tempo"
+msgstr "Alinomi Formaton:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: importer/importerconfigdialog.ui:59
-#, fuzzy, kde-format
-#| msgid "Preview"
+#, kde-format
 msgid "Preview:"
-msgstr "Antaŭrigardo"
+msgstr "Antaŭrigardo:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: importer/importerconfigdialog.ui:83
 #, kde-format
 msgid "<i>Type text or click the items below to customize the format</i>"
 msgstr ""
+"<i>Tajpu tekston aŭ alklaku la subajn erojn por personecigi la formaton</i>"
 
 #: importer/main.cpp:44
-#, fuzzy, kde-format
-#| msgid "Gwenview"
+#, kde-format
 msgid "Gwenview Importer"
-msgstr "Gwenview"
+msgstr "Gwenview Importisto"
 
 #: importer/main.cpp:46
 #, kde-format
 msgid "Photo Importer"
-msgstr ""
+msgstr "Foto Importisto"
 
 #: importer/main.cpp:53
 #, kde-format
 msgid ""
 "The device UDI, used to retrieve information about the device (name, icon...)"
 msgstr ""
+"La aparato UDI, uzata por preni informojn pri la aparato (nomo, ikono...)"
 
 #: importer/main.cpp:53
 #, kde-format
 msgid "Device UDI"
-msgstr ""
+msgstr "Aparato UDI"
 
 #: importer/main.cpp:54
-#, fuzzy, kde-format
-#| msgid "Create Folder"
+#, kde-format
 msgid "Source folder"
-msgstr "Krei dosierujon"
+msgstr "Fonta dosierujo"
 
 #: importer/main.cpp:59
 #, kde-format
 msgid "Missing required source folder argument."
-msgstr ""
+msgstr "Mankas bezonata fonta dosierujo argumento."
 
 #: importer/main.cpp:63
 #, kde-format
 msgid "Too many arguments."
-msgstr ""
+msgstr "Tro da argumentoj."
 
 #: importer/main.cpp:69
-#, fuzzy, kde-format
-#| msgid "Create Folder"
+#, kde-format
 msgid "Invalid source folder."
-msgstr "Krei dosierujon"
+msgstr "Nevalida fontdosierujo."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: importer/progresspage.ui:30
 #, kde-format
 msgid "Importing documents..."
-msgstr ""
+msgstr "Importado de dokumentoj..."
 
 #: importer/thumbnailpage.cpp:234
 #, kde-format
 msgctxt "@info above install button when Kamera is not installed"
 msgid "Support for your camera is not installed."
-msgstr ""
+msgstr "Subteno por via fotilo ne estas instalita."
 
 #: importer/thumbnailpage.cpp:236
 #, kde-format
 msgctxt "@info above install button, %1 protocol name %2 error text from KIO"
 msgid "The protocol support library for \"%1\" is not installed. Error: %2"
 msgstr ""
+"La protokolo-subtena biblioteko por \"%1\" ne estas instalita. Eraro: %2"
 
 #: importer/thumbnailpage.cpp:238
 #, kde-format
 msgctxt "@info above install button, %1 protocol name"
 msgid "The protocol support library for \"%1\" is not installed."
-msgstr ""
+msgstr "La protokolo-subtena biblioteko por \"%1\" ne estas instalita."
 
 #: importer/thumbnailpage.cpp:250
 #, kde-format
@@ -2011,18 +1916,19 @@ msgctxt "@info:usagetip above install button"
 msgid ""
 "After finishing the installation process, restart this Importer to continue."
 msgstr ""
+"Fininte la instalan procezon, rekomencu ĉi tiun Importilon por daŭrigi."
 
 #: importer/thumbnailpage.cpp:257
 #, kde-format
 msgctxt "@info:tooltip for a button, %1 protocol name"
 msgid "Launch Discover to install the protocol support library for \"%1\""
-msgstr ""
+msgstr "Lanĉi Discover por instali la protokolsubtenan bibliotekon por \"%1\""
 
 #: importer/thumbnailpage.cpp:259
 #, kde-format
 msgctxt "@action:button"
 msgid "Install Support for this Camera…"
-msgstr ""
+msgstr "Instali Subtenon por ĉi tiu Fotilo…"
 
 #: importer/thumbnailpage.cpp:260
 #, kde-format
@@ -2032,12 +1938,15 @@ msgid ""
 "to launch Discover to install Kamera to enable protocol support for "
 "\"camera:/\" on your system."
 msgstr ""
+"Vi bezonas fotilon instalitan en via sistemo por legi de la fotilo. Klaku ĉi "
+"tie por lanĉi Discover por instali Kamera por ebligi protokolan subtenon por "
+"\"camera:/\" en via sistemo."
 
 #: importer/thumbnailpage.cpp:263
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Install Protocol Support for \"%1\"…"
-msgstr ""
+msgstr "Instali Protokolsubtenon por \"%1\"…"
 
 #: importer/thumbnailpage.cpp:264
 #, kde-format
@@ -2046,12 +1955,14 @@ msgid ""
 "Click here to launch Discover to install the missing protocol support "
 "library to enable the protocol support for \"%1:/\" on your system."
 msgstr ""
+"Klaku ĉi tie por lanĉi Discover por instali la mankantan protokolsubtenan "
+"bibliotekon por ebligi la protokolsubtenon por \"%1:/\" en via sistemo."
 
 #: importer/thumbnailpage.cpp:268
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Search the Web for How to Install Protocol Support for \"%1\"…"
-msgstr ""
+msgstr "Serĉi en la Reto Kiel Instali Protokolan Subtenon por \"%1\"…"
 
 #: importer/thumbnailpage.cpp:284
 #, kde-format
@@ -2059,7 +1970,7 @@ msgctxt ""
 "@info this text will be used as a search term in an online search engine, %1 "
 "protocol name"
 msgid "How to install protocol support for \"%1\" on Linux"
-msgstr ""
+msgstr "Kiel instali protokolan subtenon por \"%1\" en Linukso"
 
 #: importer/thumbnailpage.cpp:285
 #, kde-format
@@ -2067,18 +1978,17 @@ msgctxt ""
 "search engine URL, %1 search keyword, and translators can replace duckduckgo "
 "with other search engines"
 msgid "https://duckduckgo.com/?q=%1"
-msgstr ""
+msgstr "https://duckduckgo.com/?q=%1"
 
 #: importer/thumbnailpage.cpp:326
-#, fuzzy, kde-format
-#| msgid "%1 folders selected"
+#, kde-format
 msgid "Import Selected"
-msgstr "%1 dosierujoj elektitaj"
+msgstr "Importi Elektita"
 
 #: importer/thumbnailpage.cpp:329
 #, kde-format
 msgid "Import All"
-msgstr ""
+msgstr "Importi Ĉion"
 
 #: importer/thumbnailpage.cpp:491
 #, kde-kuit-format
@@ -2087,6 +1997,9 @@ msgid ""
 "Opening Discover failed.<nl/>Please check if Discover is installed on your "
 "system, or use your system's package manager to install \"Kamera\" package."
 msgstr ""
+"Malfermo Discover malsukcesis.<nl/>Bonvolu kontroli ĉu Discover estas "
+"instalita en via sistemo, aŭ uzi la pakaĵadministrilon de via sistemo por "
+"instali pakaĵon \"Kamera\"."
 
 #: importer/thumbnailpage.cpp:495
 #, kde-kuit-format
@@ -2096,198 +2009,182 @@ msgid ""
 "system, or use your system's package manager to install the protocol support "
 "library for \"%1\"."
 msgstr ""
+"Malfermo Discover malsukcesis.<nl/>Bonvolu kontroli ĉu Discover estas "
+"instalita en via sistemo, aŭ uzu la pakaĵadministrilon de via sistemo por "
+"instali la protokolsubtenan bibliotekon por \"%1\"."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: importer/thumbnailpage.ui:173
-#, fuzzy, kde-format
-#| msgid "One image has been modified."
-#| msgid_plural "%1 images have been modified."
+#, kde-format
 msgid "Select the documents to import"
-msgstr "Unu bildo ŝanĝiĝis."
+msgstr "Elekti la dokumentojn por importi"
 
 #. i18n: ectx: property (text), widget (QPushButton, mConfigureButton)
 #: importer/thumbnailpage.ui:185
-#, fuzzy, kde-format
-#| msgid "&Settings"
+#, kde-format
 msgid "Settings..."
-msgstr "&Agordo"
+msgstr "Agordoj..."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: importer/thumbnailpage.ui:201
 #, kde-format
 msgid "Enter the import destination"
-msgstr ""
+msgstr "Enigu la importcelon"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: importer/thumbnailpage.ui:220
 #, kde-format
 msgid "Listing content of:"
-msgstr ""
+msgstr "Enlistigante enhavon de:"
 
 #: lib/about.cpp:38
-#, fuzzy, kde-format
-#| msgid "Copyright 2000-2009 Aurélien Gâteau"
+#, kde-format
 msgid "Copyright 2000-2022 Gwenview authors"
-msgstr "Copyright 2000-2009 Aurélien Gâteau"
+msgstr "Kopirajto 2000-2022 Gwenview aŭtoroj"
 
 #: lib/about.cpp:40
-#, fuzzy, kde-format
-#| msgid "Current image modified"
+#, kde-format
 msgid "Current Maintainer"
-msgstr "Nuna bildo ŝanĝiĝis"
+msgstr "Nuna Prizorganto"
 
 #: lib/about.cpp:41 lib/about.cpp:42
-#, fuzzy, kde-format
-#| msgid "Main developer"
+#, kde-format
 msgid "Developer"
-msgstr "Precipa programisto"
+msgstr "Ellaboranto"
 
 #: lib/bcg/bcgimageoperation.cpp:69
 #, kde-format
 msgid "Adjust Colors"
-msgstr ""
+msgstr "Alĝustigu Kolorojn"
 
 #: lib/bcg/bcgwidget.cpp:51
 #, kde-format
 msgid "Brightness:"
-msgstr ""
+msgstr "Brilo:"
 
 #: lib/bcg/bcgwidget.cpp:52
 #, kde-format
 msgid "Contrast:"
-msgstr ""
+msgstr "Kontrasto:"
 
 #: lib/bcg/bcgwidget.cpp:53
 #, kde-format
 msgid "Gamma:"
-msgstr ""
+msgstr "Gamo:"
 
 #: lib/crop/cropwidget.cpp:191
-#, fuzzy, kde-format
-#| msgid "Print Image"
+#, kde-format
 msgid "Current Image"
-msgstr "Printi bildon"
+msgstr "Nuna Bildo"
 
 #: lib/crop/cropwidget.cpp:194
-#, fuzzy, kde-format
-#| msgid "Save"
+#, kde-format
 msgid "Square"
-msgstr "Konservi"
+msgstr "Kvadrato"
 
 #: lib/crop/cropwidget.cpp:197
 #, kde-format
 msgid "This Screen"
-msgstr ""
+msgstr "Ĉi tiu Ekrano"
 
 #: lib/crop/cropwidget.cpp:199
 #, kde-format
 msgid "Landscape"
-msgstr ""
+msgstr "Pejzaĝo"
 
 #: lib/crop/cropwidget.cpp:204 lib/crop/cropwidget.cpp:211
 #, kde-format
 msgid "ISO (A4, A3...)"
-msgstr ""
+msgstr "ISO (A4, A3...)"
 
 #: lib/crop/cropwidget.cpp:205 lib/crop/cropwidget.cpp:212
 #, kde-format
 msgid "US Letter"
-msgstr ""
+msgstr "Usona Letero"
 
 #: lib/crop/cropwidget.cpp:206
 #, kde-format
 msgid "Portrait"
-msgstr ""
+msgstr "Portreto"
 
 #. i18n("%1:%2") because ':' should not be translated, it is
 #. used to parse the ratio string.
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: lib/crop/cropwidget.cpp:221 lib/resize/resizeimagewidget.ui:30
-#, fuzzy, kde-format
-#| msgid "&Width:"
+#, kde-format
 msgid "Width"
-msgstr "&Larĝo:"
+msgstr "Larĝo"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: lib/crop/cropwidget.cpp:221 lib/resize/resizeimagewidget.ui:40
-#, fuzzy, kde-format
-#| msgid "&Height:"
+#, kde-format
 msgid "Height"
-msgstr "&Alto:"
+msgstr "Alteco"
 
 #: lib/crop/cropwidget.cpp:290
-#, fuzzy, kde-format
-#| msgid "Image Settings"
+#, kde-format
 msgctxt "@option:check"
 msgid "Advanced settings"
-msgstr "Bilda agordo"
+msgstr "Altnivelaj agordoj"
 
 #: lib/crop/cropwidget.cpp:299
-#, fuzzy, kde-format
-#| msgid "Keep ratio"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Aspect ratio:"
-msgstr "Konservi la proporciojn"
+msgstr "Bildformato:"
 
 #: lib/crop/cropwidget.cpp:312
-#, fuzzy, kde-format
-#| msgid "File Size"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Size:"
-msgstr "Dosiera grandeco"
+msgstr "Grandeco:"
 
 #: lib/crop/cropwidget.cpp:334
-#, fuzzy, kde-format
-#| msgid "Image Position"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Position:"
-msgstr "Bilda pozicio"
+msgstr "Pozicio:"
 
 #: lib/crop/cropwidget.cpp:355
-#, fuzzy, kde-format
-#| msgid "Keep ratio"
+#, kde-format
 msgctxt "@option:check"
 msgid "Preserve aspect ratio"
-msgstr "Konservi la proporciojn"
+msgstr "Konservi bildformaton"
 
 #: lib/document/document.cpp:298
-#, fuzzy, kde-format
-#| msgid "Gwenview can't save images in '%1' format."
+#, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot save this kind of documents."
-msgstr "Gwenview ne kapablas konservi bildojn per la '%1' formato."
+msgstr "Gwenview ne povas konservi ĉi tiajn dokumentojn."
 
 #: lib/document/loadingdocumentimpl.cpp:137
-#, fuzzy, kde-format
-#| msgid "Gwenview can't save images in '%1' format."
+#, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot display documents of type %1."
-msgstr "Gwenview ne kapablas konservi bildojn per la '%1' formato."
+msgstr "Gwenview ne povas montri dokumentojn de tipo %1."
 
 #: lib/document/loadingdocumentimpl.cpp:398
 #, kde-format
 msgctxt "@info"
 msgid "Could not open file %1"
-msgstr ""
+msgstr "Ne eblis malfermi la dosieron %1"
 
 #: lib/document/loadingdocumentimpl.cpp:489
 #, kde-format
 msgctxt "@info"
 msgid "Loading meta information failed."
-msgstr ""
+msgstr "Ŝargado de metainformoj malsukcesis."
 
 #: lib/document/loadingdocumentimpl.cpp:515
-#, fuzzy, kde-format
-#| msgid "One image modified"
-#| msgid_plural "%1 images modified"
+#, kde-format
 msgctxt "@info"
 msgid "Loading image failed."
-msgstr "Unu bildo ŝanĝiĝis"
+msgstr "Ŝargado de bildo malsukcesis."
 
 #: lib/document/loadingjob.cpp:56
 #, kde-format
 msgid "Could not load document %1"
-msgstr ""
+msgstr "Ne eblis ŝargi la dokumenton %1"
 
 #: lib/document/savejob.cpp:106
 #, kde-format
@@ -2296,6 +2193,8 @@ msgid ""
 "Could not open file for writing, check that you have the necessary rights in "
 "<filename>%1</filename>."
 msgstr ""
+"Ne eblis malfermi dosieron por skribado, kontrolu ke vi havas la necesajn "
+"rajtojn en <filename>%1</filename>."
 
 #: lib/document/savejob.cpp:137
 #, kde-kuit-format
@@ -2304,52 +2203,47 @@ msgid ""
 "Could not overwrite file, check that you have the necessary rights to write "
 "in <filename>%1</filename>."
 msgstr ""
+"Ne eblis anstataŭigi dosieron, kontrolu ke vi havas la necesajn rajtojn por "
+"skribi en <filename>%1</filename>."
 
 #: lib/documentview/documentview.cpp:201
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Trash"
-msgstr "Rubigi"
+msgstr "Rubujo"
 
 #: lib/documentview/documentview.cpp:202
-#, fuzzy, kde-format
-#| msgid "Delete"
+#, kde-format
 msgctxt "@action:button"
 msgid "Deselect"
-msgstr "Forigi"
+msgstr "Malelekti"
 
 #: lib/documentview/documentview.cpp:528
 #, kde-format
 msgid "Gwenview does not know how to display this kind of document"
-msgstr ""
+msgstr "Gwenview ne scias kiel montri tian dokumenton"
 
 #: lib/documentview/documentview.cpp:634
-#, fuzzy, kde-kuit-format
-#| msgctxt ""
-#| "@info %1 is the name of the document which failed to save, %2 is the "
-#| "reason for the failure"
-#| msgid "<filename>%1</filename>: %2"
+#, kde-kuit-format
 msgid "Loading <filename>%1</filename> failed"
-msgstr "<filename>%1</filename>: %2"
+msgstr "Ŝargado de <filename>%1</filename> malsukcesis"
 
 #: lib/documentview/documentviewcontroller.cpp:61
-#, fuzzy, kde-format
-#| msgid "Zoom To Fit"
+#, kde-format
 msgid "Zoom to Fit"
-msgstr "Zomi por adapti"
+msgstr "Zomi al Konvena"
 
 #: lib/documentview/documentviewcontroller.cpp:63
 #, kde-format
 msgctxt "@action:button Zoom to fit, shown in status bar, keep it short please"
 msgid "Fit"
-msgstr ""
+msgstr "Fit"
 
 #: lib/documentview/documentviewcontroller.cpp:64
-#, fuzzy, kde-format
-#| msgid "&Fit image to page"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Fit image into the viewing area"
-msgstr "&Adapti la bildon laŭ paĝo"
+msgstr "Alĝustigi bildon en la rigardan areon"
 
 #. i18n: "a previous zoom value" is worded in such an unclear way because it can either be the zoom value for the image viewed previously or the
 #. zoom value that was used the last time this same image was viewed. Being more clear about this isn't really necessary here so I kept it short
@@ -2371,11 +2265,23 @@ msgid ""
 "are displayed at a previous zoom value instead <link url='%2'>in the "
 "settings</link>.</para>"
 msgstr ""
+"<para>Ĉi tio konvenas la bildon en la disponeblan rigardan areon:"
+"<list><item>Bildoj kiuj estas pli grandaj ol la rigarda areo estas montrataj "
+"en pli malgranda grandeco, por ke ili taŭgas.</item><item>Bildoj kiuj estas "
+"pli malgrandaj ol la rigarda areo. rigarda areo estas montrata laŭ sia "
+"normala grandeco. Se pli malgrandaj bildoj devus anstataŭe uzi la tutan "
+"disponeblan rigardan areon, ŝaltu <emphasis>Pligrandigi pli malgrandajn "
+"bildojn</emphasis> <link url='%2'>en la agordoj</link>.</item></list> </"
+"para><para>Se \"%1\" jam estas ebligita, premante ĝin denove malŝaltos ĝin "
+"kaj la bildo estos montrata en sia normala grandeco anstataŭe.</para><para>"
+"\"%1\" estas la defaŭlta zomreĝimo por bildoj. Ĉi tio povas esti ŝanĝita "
+"tiel bildoj estas montrataj ĉe antaŭa zomvaloro anstataŭe <link url='%2'>en "
+"la agordoj</link>.</para>"
 
 #: lib/documentview/documentviewcontroller.cpp:83
 #, kde-format
 msgid "Zoom to fill window by fitting to width or height"
-msgstr ""
+msgstr "Zomi por plenigi fenestron per alĝustigo al larĝo aŭ alteco"
 
 #: lib/documentview/documentviewcontroller.cpp:85
 #, kde-format
@@ -2383,36 +2289,36 @@ msgctxt ""
 "@action:button Zoom to fill (fit width or height), shown in status bar, keep "
 "it short please"
 msgid "Fill"
-msgstr ""
+msgstr "Plenigi"
 
 #: lib/documentview/documentviewcontroller.cpp:98
 #, kde-format
 msgid "Show Bird's Eye View When Zoomed In"
-msgstr ""
+msgstr "Montri Birdan Vidon Kiam Zomita"
 
 #: lib/documentview/documentviewcontroller.cpp:105
 #, kde-format
 msgctxt "@action"
 msgid "Follow color scheme"
-msgstr ""
+msgstr "Sekvi kolorskemon"
 
 #: lib/documentview/documentviewcontroller.cpp:111
 #, kde-format
 msgctxt "@action"
 msgid "Light Mode"
-msgstr ""
+msgstr "Luma Reĝimo"
 
 #: lib/documentview/documentviewcontroller.cpp:117
 #, kde-format
 msgctxt "@action"
 msgid "Neutral Mode"
-msgstr ""
+msgstr "Neŭtrala Reĝimo"
 
 #: lib/documentview/documentviewcontroller.cpp:123
 #, kde-format
 msgctxt "@action"
 msgid "Dark Mode"
-msgstr ""
+msgstr "Malhela Reĝimo"
 
 #: lib/documentview/messageviewadapter.cpp:50
 #, kde-format
@@ -2432,6 +2338,8 @@ msgid ""
 "The percentage of memory used by Gwenview before it\n"
 "            warns the user and suggest saving changes."
 msgstr ""
+"La procento de memoro uzata de Gwenview antaŭ ol ĝi\n"
+"            avertas la uzanton kaj sugestas konservi ŝanĝojn."
 
 #. i18n: ectx: whatsthis, entry (BlackListedExtensions), group (General)
 #: lib/gwenviewconfig.kcfg:67
@@ -2441,6 +2349,9 @@ msgid ""
 "            load. We exclude *.new as well because this is the extension\n"
 "            used for temporary files by KSaveFile."
 msgstr ""
+"Listo de dosiernomaj etendoj Gwenview ne provu \n"
+"            ŝargi. Ni ekskludas ankaŭ *.new ĉar ĉi tiu estas la etendo\n"
+"            uzata por provizoraj dosieroj de KSaveFile."
 
 #. i18n: ectx: whatsthis, entry (ZoomMode), group (ImageView)
 #: lib/gwenviewconfig.kcfg:208
@@ -2458,6 +2369,21 @@ msgid ""
 "            own zoom and position (if these are changed, image A will NOT\n"
 "            be displayed with the updated zoom and position)."
 msgstr ""
+"Difinas kio okazas kiam oni iras al bildo B post\n"
+"            zomi sur areo de bildo A. Se agordita al Aŭtomata agordo,\n"
+"            bildo B estas malzomita por konveni al la ekrano. Se metata al "
+"KeepSame,\n"
+"            ĉiuj bildoj kunhavas la saman zomon kaj pozicion: bildo B estas "
+"metata\n"
+"            al la samaj zomparametroj kiel bildo A (kaj se ĉi tiuj estas\n"
+"            ŝanĝitaj, bildo A tiam estos montrita kun la ĝisdatigita zomo\n"
+"            kaj pozicio). Se metata al Individua, ĉiuj bildoj memoras\n"
+"            sian propran zomon kaj pozicion: bildo B estas komence agordita "
+"al la\n"
+"            samaj zomparametroj kiel bildo A, sed tiam memoros sian\n"
+"            propran zomon kaj pozicion (se ĉi tiuj estas ŝanĝitaj, bildo A "
+"NE\n"
+"            montriĝos kun la ĝisdatigitaj zomo kaj pozicio)."
 
 #. i18n: ectx: whatsthis, entry (RenderingIntent), group (ImageView)
 #: lib/gwenviewconfig.kcfg:222
@@ -2471,67 +2397,76 @@ msgid ""
 "colors\n"
 "            that cannot be displayed, and leave the other colors alone."
 msgstr ""
+"Difinas kiel koloroj estas prezentitaj kiam via ekrano\n"
+"            uzas ICC-kolorprofilon kaj bildo havas kolorojn kiuj ne\n"
+"            konvenas en la kolora gamo de la profilo. \"Percepta\" skalos\n"
+"            la kolorojn de la tuta bildo tiel ke ili ĉiuj konvenu al la\n"
+"            kapabloj de la ekrano. \"Relativa\" premos nur la kolorojn\n"
+"            kiuj ne povas esti montrataj, kaj lasos la aliajn kolorojn "
+"netuŝitaj."
 
 #. i18n: ectx: label, entry (random), group (slide show)
 #: lib/gwenviewconfig.kcfg:325
 #, kde-format
 msgid "Display slide show images in random order"
-msgstr ""
+msgstr "Montri bildoprezentojn en hazarda ordo"
 
 #. i18n: ectx: label, entry (fullscreen), group (slide show)
 #: lib/gwenviewconfig.kcfg:329
 #, kde-format
 msgid "Show slideshow in fullscreen mode"
-msgstr ""
+msgstr "Montru bildaron en plenekrana reĝimo"
 
 #. i18n: ectx: label, entry (loop), group (slide show)
 #: lib/gwenviewconfig.kcfg:333
-#, fuzzy, kde-format
-#| msgid "Previous modified image"
+#, kde-format
 msgid "Loop on images"
-msgstr "Antaŭa ŝanĝita bildo"
+msgstr "Buklo sur bildoj"
 
 #. i18n: ectx: label, entry (stopAtEnd), group (slide show)
 #: lib/gwenviewconfig.kcfg:337
-#, fuzzy, kde-format
-#| msgid "A starting file or folder"
+#, kde-format
 msgid "Stop at last image of folder"
-msgstr "Komenca dosiero aŭ dosierujo"
+msgstr "Ĉesi ĉe la lasta bildo de dosierujo"
 
 #. i18n: ectx: label, entry (interval), group (slide show)
 #: lib/gwenviewconfig.kcfg:341
 #, kde-format
 msgid "Interval between images (in seconds)"
-msgstr ""
+msgstr "Intervalo inter bildoj (en sekundoj)"
 
 #. i18n: ectx: label, entry (CropPreserveAspectRatio), group (Crop)
 #: lib/gwenviewconfig.kcfg:357
 #, kde-format
 msgid "Restrict crop to image ratio when Advanced Settings disabled"
 msgstr ""
+"Limigi rikolton al bilda proporcio kiam Altnivelaj Agordoj estas malŝaltita"
 
 #. i18n: ectx: label, entry (CropRatioIndex), group (Crop)
 #: lib/gwenviewconfig.kcfg:361
 #, kde-format
 msgid "Index representing selected ratio in the Advanced settings combobox"
 msgstr ""
+"Indekso reprezentanta elektitan proporcion en la Kombinujo de Altnivelaj "
+"agordoj"
 
 #. i18n: ectx: label, entry (CropRatioWidth), group (Crop)
 #: lib/gwenviewconfig.kcfg:365
 #, kde-format
 msgid "Last used crop ratio width when Advanced Settings enabled"
-msgstr ""
+msgstr "Laste uzata riproporcio-larĝo kiam Altnivelaj Agordoj estas ebligita"
 
 #. i18n: ectx: label, entry (CropRatioHeight), group (Crop)
 #: lib/gwenviewconfig.kcfg:369
 #, kde-format
 msgid "Last used crop ratio height when Advanced Settings enabled"
 msgstr ""
+"Laste uzata rikolta proporcio alteco kiam Altnivelaj Agordoj estas ebligita"
 
 #: lib/historymodel.cpp:146
 #, kde-format
 msgid "Last visited: %1"
-msgstr ""
+msgstr "Laste vizitita: %1"
 
 #: lib/hud/hudwidget.cpp:104
 #, kde-format
@@ -2567,13 +2502,13 @@ msgstr "Bilda grandeco"
 #, kde-format
 msgctxt "@item:intable"
 msgid "Comment"
-msgstr ""
+msgstr "Komento"
 
 #: lib/imagemetainfomodel.cpp:320
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:group General info about the image"
 msgid "General"
-msgstr "Ĝeneralo"
+msgstr "Generalo"
 
 #: lib/imagemetainfomodel.cpp:407
 #, kde-format
@@ -2603,13 +2538,13 @@ msgstr "Valoro"
 #, kde-format
 msgctxt "@info"
 msgid "Could not open file for writing."
-msgstr ""
+msgstr "Ne eblis malfermi dosieron por skribado."
 
 #: lib/jpegcontent.cpp:658
 #, kde-format
 msgctxt "@info"
 msgid "No data to store."
-msgstr ""
+msgstr "Neniuj datumoj por stoki."
 
 #: lib/print/printhelper.cpp:125
 #, kde-format
@@ -2685,10 +2620,9 @@ msgstr "Konservi la proporciojn"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: lib/redeyereduction/redeyereductionwidget.ui:43
-#, fuzzy, kde-format
-#| msgid "File Size"
+#, kde-format
 msgid "Size:"
-msgstr "Dosiera grandeco"
+msgstr "Grandeco:"
 
 #. i18n: ectx: property (text), widget (QLabel, helpTextLabel)
 #: lib/redeyereduction/redeyereductionwidget.ui:150
@@ -2696,6 +2630,7 @@ msgstr "Dosiera grandeco"
 msgid ""
 "Click on a red eye and choose a size, or double-click to correct instantly."
 msgstr ""
+"Alklaku ruĝan okulon kaj elektu grandecon, aŭ duoble alklaku por tuj korekti."
 
 #: lib/resize/resizeimagedialog.cpp:76
 #, kde-format
@@ -2704,12 +2639,14 @@ msgid ""
 "Assuming that the image format won't be changed and\n"
 "for lossy images using the value set in 'Lossy image save quality'."
 msgstr ""
+"Supozante, ke la bildformato ne estos ŝanĝita kaj\n"
+"por perdbildoj uzante la valoron fiksitan en 'Kvalito de konservado de "
+"perdbildo'."
 
 #: lib/resize/resizeimagedialog.cpp:219
-#, fuzzy, kde-format
-#| msgid "Mirror"
+#, kde-format
 msgid "error"
-msgstr "Speguli"
+msgstr "eraro"
 
 #: lib/resize/resizeimageoperation.cpp:70
 #, kde-format
@@ -2719,55 +2656,52 @@ msgstr "Regrandigi"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, ResizeImageWidget)
 #: lib/resize/resizeimagewidget.ui:14
-#, fuzzy, kde-format
-#| msgid "Resize"
+#, kde-format
 msgid "Resize Image"
-msgstr "Regrandigi"
+msgstr "Regrandigi Bildon"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: lib/resize/resizeimagewidget.ui:47
-#, fuzzy, kde-format
-#| msgid "File Size"
+#, kde-format
 msgid "New size:"
-msgstr "Dosiera grandeco"
+msgstr "Nova grandeco:"
 
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, mHeightPercentSpinBox)
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, mWidthPercentSpinBox)
 #: lib/resize/resizeimagewidget.ui:63 lib/resize/resizeimagewidget.ui:195
 #, no-c-format, kde-format
 msgid " %"
-msgstr ""
+msgstr "%"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, mHeightSpinBox)
 #. i18n: ectx: property (suffix), widget (QSpinBox, mWidthSpinBox)
 #: lib/resize/resizeimagewidget.ui:86 lib/resize/resizeimagewidget.ui:102
 #, kde-format
 msgid " px"
-msgstr ""
+msgstr "px"
 
 #. i18n: ectx: property (text), widget (QCheckBox, mKeepAspectCheckBox)
 #: lib/resize/resizeimagewidget.ui:145
-#, fuzzy, kde-format
-#| msgid "Keep ratio"
+#, kde-format
 msgid "Keep aspect ratio"
-msgstr "Konservi la proporciojn"
+msgstr "Konservu bildformajn proporciojn"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: lib/resize/resizeimagewidget.ui:172
 #, kde-format
 msgid "Current size:"
-msgstr ""
+msgstr "Nuna grandeco:"
 
 #: lib/semanticinfo/tagitemdelegate.cpp:62
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Assign this tag to all selected images"
-msgstr ""
+msgstr "Atribui ĉi tiun etikedon al ĉiuj elektitaj bildoj"
 
 #: lib/semanticinfo/tagwidget.cpp:146
 #, kde-format
 msgid "Add tag"
-msgstr ""
+msgstr "Aldoni etikedon"
 
 #: lib/slideshow.cpp:163
 #, kde-format
@@ -2809,7 +2743,7 @@ msgstr "Renversi"
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Transform"
-msgstr ""
+msgstr "Transformi"
 
 #: part/gvpart.cpp:70
 #, kde-format
@@ -2819,402 +2753,12 @@ msgstr "Ecoj"
 
 #. i18n: ectx: Menu (file)
 #: part/gvpart.rc:5
-#, fuzzy, kde-format
-#| msgid "&View"
+#, kde-format
 msgid "&File"
-msgstr "&Vidi"
+msgstr "&Dosiero"
 
 #. i18n: ectx: Menu (view)
 #: part/gvpart.rc:9
 #, kde-format
 msgid "&View"
 msgstr "&Vidi"
-
-#, fuzzy
-#~| msgid "&View Background Color:"
-#~ msgctxt "@label:chooser Describes what a row of buttons control"
-#~ msgid "Background color:"
-#~ msgstr "&Vida fonkoloro:"
-
-#~ msgid "&Plugins"
-#~ msgstr "&Kromaĵoj"
-
-#, fuzzy
-#~| msgid "&Plugins"
-#~ msgid "Other Plugins"
-#~ msgstr "&Kromaĵoj"
-
-#, fuzzy
-#~| msgid "Save"
-#~ msgctxt "@action"
-#~ msgid "Share"
-#~ msgstr "Konservi"
-
-#, fuzzy
-#~| msgid "Saving..."
-#~ msgid "Loading..."
-#~ msgstr "Konservante..."
-
-#, fuzzy
-#~| msgid "&No scaling"
-#~ msgid "No Plugin Found"
-#~ msgstr "&Neniu skalado"
-
-#, fuzzy
-#~| msgid "&Plugins"
-#~ msgctxt "@item:inmenu"
-#~ msgid "Install Plugins"
-#~ msgstr "&Kromaĵoj"
-
-#, fuzzy
-#~| msgid "Print Image"
-#~ msgctxt "@title:menu"
-#~ msgid "Images"
-#~ msgstr "Printi bildon"
-
-#~ msgctxt "@title:menu"
-#~ msgid "Tools"
-#~ msgstr "Iloj"
-
-#~ msgctxt "@title:menu"
-#~ msgid "Import"
-#~ msgstr "Importi"
-
-#~ msgctxt "@title:menu"
-#~ msgid "Export"
-#~ msgstr "Eksporti"
-
-#, fuzzy
-#~| msgid "Collection"
-#~ msgctxt "@title:menu"
-#~ msgid "Collections"
-#~ msgstr "Kolekto"
-
-#, fuzzy
-#~| msgid "Show Side Bar"
-#~ msgid "Thumbnail Bar"
-#~ msgstr "Montri la flankobreton"
-
-#~ msgctxt ""
-#~ "@action:button Zoom to original size, shown in status bar, keep it short "
-#~ "please"
-#~ msgid "100%"
-#~ msgstr "100%"
-
-#, fuzzy
-#~| msgid "Gwenview"
-#~ msgid "Gwenview KPart"
-#~ msgstr "Gwenview"
-
-#~ msgctxt "@action show more image meta info"
-#~ msgid "More..."
-#~ msgstr "Plie..."
-
-#~ msgctxt "@title:group"
-#~ msgid "Meta Information"
-#~ msgstr "Meta-informo"
-
-#, fuzzy
-#~| msgid "Meta Information"
-#~ msgid "Semantic Information"
-#~ msgstr "Meta-informo"
-
-#, fuzzy
-#~| msgid "Create Folder"
-#~ msgctxt "@action Open Recent menu"
-#~ msgid "Forget All Files && Folders"
-#~ msgstr "Krei dosierujon"
-
-#, fuzzy
-#~| msgid "Cancel"
-#~ msgid "Cache:"
-#~ msgstr "Nuligi"
-
-#, fuzzy
-#~| msgid "File Size"
-#~ msgid "Size"
-#~ msgstr "Dosiera grandeco"
-
-#~ msgid "Image Resizing"
-#~ msgstr "Bilda regrandigo"
-
-#, fuzzy
-#~| msgid "Enter the new size of the image:"
-#~ msgid "Enter the new size for this image."
-#~ msgstr "Enmetu la novan grandecon de la bildo:"
-
-#, fuzzy
-#~| msgid "&Settings"
-#~ msgid "Ratio:"
-#~ msgstr "&Agordo"
-
-#, fuzzy
-#~| msgid "Stop slideshow"
-#~ msgid "Stop Slideshow"
-#~ msgstr "Halti la lumbildon"
-
-#, fuzzy
-#~| msgid "Zoom To Fit"
-#~ msgid "Zoom to Fit Width"
-#~ msgstr "Zomi por adapti"
-
-#, fuzzy
-#~| msgid "&Width:"
-#~ msgctxt ""
-#~ "@action:button Zoom to fit width, shown in status bar, keep it short "
-#~ "please"
-#~ msgid "Fit Width"
-#~ msgstr "&Larĝo:"
-
-#~ msgctxt "@title:window"
-#~ msgid "Copy To"
-#~ msgstr "Kopii al"
-
-#~ msgctxt "@title:window"
-#~ msgid "Move To"
-#~ msgstr "Movi al"
-
-#~ msgctxt "@title:window"
-#~ msgid "Link To"
-#~ msgstr "Ligi al"
-
-#, fuzzy
-#~| msgid "No document selected"
-#~ msgctxt "@info"
-#~ msgid "No image format selected."
-#~ msgstr "Neniu dokumento elektita"
-
-#~ msgid "Delete"
-#~ msgstr "Forigi"
-
-#, fuzzy
-#~| msgid "Create Folder"
-#~ msgid "Forget this URL"
-#~ msgstr "Krei dosierujon"
-
-#, fuzzy
-#~| msgid "Create Folder"
-#~ msgid "Recent URLs"
-#~ msgstr "Krei dosierujon"
-
-#~ msgid "Aurélien Gâteau"
-#~ msgstr "Aurélien Gâteau"
-
-#~ msgid "Main developer"
-#~ msgstr "Precipa programisto"
-
-#, fuzzy
-#~| msgid "Create Folder"
-#~ msgctxt "@action:inmenu"
-#~ msgid "Paste One Folder"
-#~ msgstr "Krei dosierujon"
-
-#, fuzzy
-#~| msgid "Create Folder"
-#~ msgctxt "@action:inmenu"
-#~ msgid "Paste One File"
-#~ msgstr "Krei dosierujon"
-
-#, fuzzy
-#~| msgid "Create Folder"
-#~ msgctxt "@action:inmenu"
-#~ msgid "Paste One Item"
-#~ msgid_plural "Paste %1 Items"
-#~ msgstr[0] "Krei dosierujon"
-#~ msgstr[1] "Krei dosierujon"
-
-#, fuzzy
-#~| msgid "Delete"
-#~ msgctxt "@action:inmenu"
-#~ msgid "Paste"
-#~ msgstr "Forigi"
-
-#, fuzzy
-#~| msgid "Copyright 2000-2009 Aurélien Gâteau"
-#~ msgid "Copyright 2009-2010 Aurélien Gâteau"
-#~ msgstr "Copyright 2000-2009 Aurélien Gâteau"
-
-#, fuzzy
-#~| msgid "Show Side Bar"
-#~ msgid "thumbnailgen"
-#~ msgstr "Montri la flankobreton"
-
-#, fuzzy
-#~| msgid "Image Position"
-#~ msgid "Image dir to open"
-#~ msgstr "Bilda pozicio"
-
-#, fuzzy
-#~| msgctxt "Verb"
-#~| msgid "Trash"
-#~ msgctxt "@action:button"
-#~ msgid "Trash"
-#~ msgstr "Rubigi"
-
-#, fuzzy
-#~| msgid "Meta Information"
-#~ msgctxt "@title:window"
-#~ msgid "Meta Information"
-#~ msgstr "Meta-informo"
-
-#~ msgid "Appearance"
-#~ msgstr "Aspekto"
-
-#~ msgid "Theme:"
-#~ msgstr "Etoso:"
-
-#~ msgid "Close"
-#~ msgstr "Fermi"
-
-#, fuzzy
-#~| msgid "View"
-#~ msgctxt "@action Switch to image view"
-#~ msgid "View"
-#~ msgstr "Vidi"
-
-#, fuzzy
-#~| msgid "Effects"
-#~ msgctxt "@title:menu"
-#~ msgid "Effects"
-#~ msgstr "Efektoj"
-
-#~ msgid "Apply"
-#~ msgstr "Apliki"
-
-#, fuzzy
-#~| msgid "Create Folder"
-#~ msgctxt "@title:window"
-#~ msgid "Create Folder"
-#~ msgstr "Krei dosierujon"
-
-#~ msgid "Enter the name of the folder to create:"
-#~ msgstr "Enmetu la nomon de la kreota dosierujo:"
-
-#, fuzzy
-#~| msgid "&No scaling"
-#~ msgid "No Plugin"
-#~ msgstr "&Neniu skalado"
-
-#~ msgid "Copyright 2009 Aurélien Gâteau"
-#~ msgstr "Copyright 2009 Aurélien Gâteau"
-
-#~ msgid "Copyright 2000-2008 Aurélien Gâteau"
-#~ msgstr "Copyright 2000-2008 Aurélien Gâteau"
-
-#, fuzzy
-#~| msgid "Exif"
-#~ msgctxt "@title:group"
-#~ msgid "Exif"
-#~ msgstr "Exif"
-
-#, fuzzy
-#~| msgid "Iptc"
-#~ msgctxt "@title:group"
-#~ msgid "Iptc"
-#~ msgstr "Iptc"
-
-#, fuzzy
-#~| msgid "Show Side Bar"
-#~ msgid "Thumbnail bar orientation:"
-#~ msgstr "Montri la flankobreton"
-
-#, fuzzy
-#~| msgid "Crop"
-#~ msgid "&Crop"
-#~ msgstr "Stuci"
-
-#, fuzzy
-#~| msgid "&Height:"
-#~ msgid "Width:Height"
-#~ msgstr "&Alto:"
-
-#, fuzzy
-#~| msgid "x"
-#~ msgid "x"
-#~ msgstr "x"
-
-#~ msgid "&X:"
-#~ msgstr "&X:"
-
-#~ msgid "&Y:"
-#~ msgstr "&Y:"
-
-#~ msgid "&Height:"
-#~ msgstr "&Alto:"
-
-#, fuzzy
-#~| msgid "General"
-#~ msgid "<b>General</b>"
-#~ msgstr "Ĝeneralo"
-
-#, fuzzy
-#~| msgid "Image Viewer"
-#~ msgid "<b>Image View</b>"
-#~ msgstr "Bilda rigardilo"
-
-#~ msgid "Do you really want to delete this item?"
-#~ msgid_plural "Do you really want to delete these %1 items?"
-#~ msgstr[0] "Ĉu vi vere volas forigi tiun eron?"
-#~ msgstr[1] "Ĉu vi vere volas forigi tiujn %1 erojn?"
-
-#~ msgid "Delete Files"
-#~ msgstr "Forigi dosierojn"
-
-#~ msgid "Do you really want to move this item to the trash?"
-#~ msgid_plural "Do you really want to move these %1 items to the trash?"
-#~ msgstr[0] "Ĉu vi vere volas movi tiun eron al la rubujo?"
-#~ msgstr[1] "Ĉu vi vere volas movi tiujn %1 erojn al la rubujo?"
-
-#~ msgid "Move to Trash"
-#~ msgstr "Movi al la rubujo"
-
-#~ msgctxt "Verb"
-#~ msgid "&Trash"
-#~ msgstr "&Rubigi"
-
-#~ msgid "Save"
-#~ msgstr "Konservi"
-
-#, fuzzy
-#~| msgid "Show Side Bar"
-#~ msgctxt "@action:inmenu Tools"
-#~ msgid "Show Filter Bar"
-#~ msgstr "Montri la flankobreton"
-
-#, fuzzy
-#~| msgid "Slideshow options"
-#~ msgctxt "@info:tooltip"
-#~ msgid "Slideshow options"
-#~ msgstr "Lumbildaj opcioj"
-
-#, fuzzy
-#~| msgid " seconds"
-#~ msgctxt "@item:intext spinbox suffix for slideshow interval"
-#~ msgid " seconds"
-#~ msgstr " sekundoj"
-
-#, fuzzy
-#~| msgid "Meta Information"
-#~ msgid "Full Screen Information"
-#~ msgstr "Meta-informo"
-
-#~ msgid "(c) 2007"
-#~ msgstr "(c) 2007"
-
-#~ msgid "<b>%1:</b> %2"
-#~ msgstr "<b>%1:</b> %2"
-
-#~ msgid "GVPart"
-#~ msgstr "GVPart"
-
-#~ msgctxt "Verb"
-#~ msgid "Copy To"
-#~ msgstr "Kopii al"
-
-#~ msgctxt "Verb"
-#~ msgid "Move To"
-#~ msgstr "Movi al"
-
-#~ msgctxt "Verb"
-#~ msgid "Link To"
-#~ msgstr "Ligi al"
