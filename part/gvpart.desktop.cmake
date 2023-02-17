@@ -3,6 +3,7 @@ Type=Service
 Name=Gwenview Image Viewer
 Name[ar]=جوِينفيو مستعرض الصورة
 Name[az]=Gwenview Şəkilə Baxış Vasitəsi
+Name[be]=Праграма для прагляду выяў Gwenview
 Name[bg]=Програма за снимки Gwenview
 Name[bs]=Gvenview prikazivač slika
 Name[ca]=Visualitzador d'imatges Gwenview
