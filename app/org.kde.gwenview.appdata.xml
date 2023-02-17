@@ -6,6 +6,7 @@
   <name>Gwenview</name>
   <name xml:lang="ar">جونفيو</name>
   <name xml:lang="az">Gwenview</name>
+  <name xml:lang="be">Gwenview</name>
   <name xml:lang="bg">Gwenview</name>
   <name xml:lang="bs">Gwenview</name>
   <name xml:lang="ca">Gwenview</name>
@@ -58,6 +59,7 @@
   <summary>Image Viewer</summary>
   <summary xml:lang="ar">عارض الصور</summary>
   <summary xml:lang="az">Şəkilə Baxış</summary>
+  <summary xml:lang="be">Сродак прагляду выяў</summary>
   <summary xml:lang="bg">Преглед на изображения</summary>
   <summary xml:lang="ca">Visualitzador d'imatges</summary>
   <summary xml:lang="ca-valencia">Visor d'imatges</summary>
@@ -110,6 +112,7 @@
     </p>
     <p xml:lang="ar">جونفيو عارض صور سريع وسهل الاستخدام بواسطة كدي ، وهو مثالي لتصفح وعرض مجموعة من الصور.</p>
     <p xml:lang="az">Gwenview KDE-nin təqdim etdiyi istifadəsi rahat şəkillərə baxış vasitəsidir və şəkil kolleksiyalarına baxmaq və onları göstərmək üçün idealdır.</p>
+    <p xml:lang="be">Gwenview - гэта хуткая і простая ў выкарыстанні праграма для прагляду выяў ад KDE, ідэальна пасуе для прагляду калекцый выяў.</p>
     <p xml:lang="bg">Gwenview е програма на KDE за бързо и лесно преглеждане на колекция от изображения.</p>
     <p xml:lang="ca">El Gwenview és un visualitzador d'imatges ràpid i senzill d'ús, creat per la comunitat KDE, ideal per a navegar i visualitzar col·leccions d'imatges.</p>
     <p xml:lang="ca-valencia">Gwenview és un visor d'imatges ràpid i senzill d'ús, creat per la comunitat KDE, ideal per a navegar i visualitzar col·leccions d'imatges.</p>
@@ -158,6 +161,7 @@
     <p>Features:</p>
     <p xml:lang="ar">الميزات:</p>
     <p xml:lang="az">İmkanlar:</p>
+    <p xml:lang="be">Магчымасці:</p>
     <p xml:lang="bg">Функции:</p>
     <p xml:lang="bs">Svojstva:</p>
     <p xml:lang="ca">Característiques:</p>
@@ -211,6 +215,7 @@
       <li>Supports simple image manipulations: rotate, mirror, flip, and resize</li>
       <li xml:lang="ar">دعم التّلاعب البسيط بالصّورة: التّدوير، والعكس، والقلب وتغيير الحجم</li>
       <li xml:lang="az">Şəkil üzərində bu kimi sadə əməlləri dəstəkləyir: döndərmə, əks etdirmə və ölçüsünü dəyişdirmə</li>
+      <li xml:lang="be">Падтрымлівае простыя аперацыі з выявамі: паварочванне, адлюстраванне і змену памеру</li>
       <li xml:lang="bg">Поддържа прости методи на обработка на изображения: завъртване, огледален образ, обръщане и преоразмеряване</li>
       <li xml:lang="ca">Permet la manipulació senzilla d'imatges: gira, mirall, inverteix i canvia la mida</li>
       <li xml:lang="ca-valencia">Permet la manipulació senzilla d'imatges: gira, espill, invertix i canvia la mida</li>
@@ -262,6 +267,7 @@
       <li>Supports basic file management actions such as copy, move, delete, and others</li>
       <li xml:lang="ar">دعم إجراءات إدارة الملفّات البسيطة كالنّسخ، والنّقل، والحذف وغيرها</li>
       <li xml:lang="az">Kopyalamaq, köçürmək, silmək, və bu kimi bir çox əsas faylı idarəetmə əməllərini dəstəkləyir</li>
+      <li xml:lang="be">Падтрымлівае базавыя аперацыі кіравання файламі: капіяванне, перамяшчэнне, выдаленне і інш.</li>
       <li xml:lang="bg">Поддържа основни файлови операции като копиране, преместване, изтриване и други</li>
       <li xml:lang="ca">Permet les accions bàsiques de gestió de fitxers com copia, mou, suprimeix i altres</li>
       <li xml:lang="ca-valencia">Permet les accions bàsiques de gestió de fitxers com copia, mou, suprimix i altres</li>
@@ -313,6 +319,7 @@
       <li>Functions both as a standalone application and an embedded viewer in the Konqueror web browser</li>
       <li xml:lang="ar">يعمل كتطبيق مستقلّ وعارض مضمّن في متصفّح الوِبّ كنكر</li>
       <li xml:lang="az">Həm ayrıca proqram, həm də Konqueror veb bələdçisində daxili baxış proqramı kimi işləyir</li>
+      <li xml:lang="be">Можа функцыянаваць і як асобная праграма, і як убудаваны сродак для прагляду ў вэб-браўзеры Konqueror</li>
       <li xml:lang="bg">Действа като самостоятелно приложение и като вградена програма за преглед на изображения в Konqueror</li>
       <li xml:lang="ca">Funciona tant com una aplicació independent o un visualitzador incrustat al navegador web Konqueror</li>
       <li xml:lang="ca-valencia">Funciona tant com una aplicació independent o un visor incrustat en el navegador web Konqueror</li>
@@ -371,6 +378,7 @@
       <caption>Gwenview</caption>
       <caption xml:lang="ar">جونفيو</caption>
       <caption xml:lang="az">Gwenview</caption>
+      <caption xml:lang="be">Gwenview</caption>
       <caption xml:lang="bg">Gwenview</caption>
       <caption xml:lang="bs">Gwenview</caption>
       <caption xml:lang="ca">Gwenview</caption>
@@ -426,6 +434,7 @@
       <caption>Use Gwenview to manage your image collection</caption>
       <caption xml:lang="ar">استعمل جونفيو لإدارة مجموعة صورك</caption>
       <caption xml:lang="az">Şəkil kolleksiyasını idarəetmək üçün Gwenview istifadə edin</caption>
+      <caption xml:lang="be">Выкарыстоўвайце Gwenview для кіравання сваёй калекцыяй выяў</caption>
       <caption xml:lang="bg">Използвайте Gwenview да управлявате вашата колекция от изображения</caption>
       <caption xml:lang="ca">Empreu el Gwenview per a gestionar la vostra col·lecció d'imatges</caption>
       <caption xml:lang="ca-valencia">Utilitzeu Gwenview per a gestionar la vostra col·lecció d'imatges</caption>
