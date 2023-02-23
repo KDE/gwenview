@@ -1,0 +1,268 @@
+{
+  "id": "org.kde.gwenview",
+  "runtime": "org.kde.Platform",
+  "runtime-version": "5.15-22.08",
+  "sdk": "org.kde.Sdk",
+  "command": "gwenview",
+  "rename-icon": "gwenview",
+  "finish-args": [
+      "--device=dri",
+      "--filesystem=host",
+      "--share=ipc",
+      "--socket=fallback-x11",
+      "--socket=pulseaudio",
+      "--socket=wayland",
+      "--filesystem=xdg-data/Trash"
+  ],
+  "cleanup": [
+      "*.a",
+      "*.la",
+      "/include",
+      "/lib/cmake",
+      "/lib/pkgconfig",
+      "/share/man"
+  ],
+  "modules": [
+      {
+          "name": "exiv2",
+          "buildsystem": "cmake-ninja",
+          "builddir": true,
+          "config-opts": [
+              "-DBUILD_SHARED_LIBS=ON",
+              "-DEXIV2_ENABLE_XMP=ON",
+              "-DEXIV2_ENABLE_EXTERNAL_XMP=OFF",
+              "-DEXIV2_ENABLE_PNG=ON",
+              "-DEXIV2_ENABLE_NLS=ON",
+              "-DEXIV2_ENABLE_PRINTUCS2=ON",
+              "-DEXIV2_ENABLE_LENSDATA=ON",
+              "-DEXIV2_ENABLE_VIDEO=OFF",
+              "-DEXIV2_ENABLE_WEBREADY=OFF",
+              "-DEXIV2_ENABLE_DYNAMIC_RUNTIME=OFF",
+              "-DEXIV2_ENABLE_CURL=OFF",
+              "-DEXIV2_ENABLE_SSH=OFF",
+              "-DEXIV2_BUILD_SAMPLES=OFF",
+              "-DEXIV2_BUILD_PO=OFF",
+              "-DEXIV2_BUILD_EXIV2_COMMAND=OFF",
+              "-DEXIV2_BUILD_UNIT_TESTS=OFF",
+              "-DEXIV2_BUILD_DOC=OFF",
+              "-DEXIV2_TEAM_EXTRA_WARNINGS=OFF",
+              "-DEXIV2_TEAM_WARNINGS_AS_ERRORS=OFF",
+              "-DEXIV2_TEAM_USE_SANITIZERS=OFF",
+              "-DEXIV2_ENABLE_WIN_UNICODE=OFF"
+          ],
+          "sources": [
+              {
+                  "type": "archive",
+                  "url": "https://github.com/Exiv2/exiv2/releases/download/v0.27.6/exiv2-0.27.6-Source.tar.gz",
+                  "sha256": "4c192483a1125dc59a3d70b30d30d32edace9e14adf52802d2f853abf72db8a6",
+                  "x-checker-data": {
+                      "type": "anitya",
+                      "project-id": 769,
+                      "stable-only": true,
+                      "url-template": "https://github.com/Exiv2/exiv2/releases/download/v$version/exiv2-$version-Source.tar.gz"
+                  }
+              }
+          ]
+      },
+      {
+          "name": "cfitsio",
+          "buildsystem": "simple",
+          "build-commands": [
+              "sed -e 's|LDFLAGS=.*|LDFLAGS=\"$LDFLAGS\"|g' -i configure.in",
+              "autoreconf -vi",
+              "./configure --prefix=/ --enable-reentrant",
+              "make shared",
+              "make utils",
+              "make DESTDIR=${FLATPAK_DEST} install",
+              "install -D -m644 License.txt ${FLATPAK_DEST}/share/licenses/cfitsio/LICENSE"
+          ],
+          "cleanup": [
+              "/bin/cookbook",
+              "/bin/smem",
+              "/bin/testprog"
+          ],
+          "sources": [
+              {
+                  "type": "archive",
+                  "url": "http://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio-4.2.0.tar.gz",
+                  "sha256": "eba53d1b3f6e345632bb09a7b752ec7ced3d63ec5153a848380f3880c5d61889",
+                  "x-checker-data": {
+                      "type": "anitya",
+                      "project-id": 270,
+                      "stable-only": true,
+                      "url-template": "http://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio-$version.tar.gz"
+                  }
+              }
+          ]
+      },
+      {
+          "name": "jasper",
+          "buildsystem": "cmake-ninja",
+          "builddir": true,
+          "config-opts": [
+              "-DJAS_ENABLE_SHARED=ON",
+              "-DJAS_ENABLE_LIBJPEG=ON",
+              "-DJAS_ENABLE_OPENGL=OFF",
+              "-DJAS_LOCAL=OFF",
+              "-DJAS_ENABLE_DOC=OFF",
+              "-DJAS_ENABLE_PROGRAMS=OFF"
+          ],
+          "sources": [
+              {
+                  "type": "archive",
+                  "url": "https://github.com/jasper-software/jasper/archive/version-4.0.0.tar.gz",
+                  "sha256": "977c4c2e4210f4e37313cd2232d99e73d57ab561917b3c060bcdd5e83a0a13f1",
+                  "x-checker-data": {
+                      "type": "anitya",
+                      "project-id": 1421,
+                      "stable-only": true,
+                      "url-template": "https://github.com/jasper-software/jasper/archive/version-$version.tar.gz"
+                  }
+              }
+          ]
+      },
+      {
+          "name": "libraw",
+          "builddir": true,
+          "config-opts": [
+              "--disable-examples",
+              "--disable-static"
+          ],
+          "sources": [
+              {
+                  "type": "archive",
+                  "url": "https://www.libraw.org/data/LibRaw-0.21.1.tar.gz",
+                  "sha256": "630a6bcf5e65d1b1b40cdb8608bdb922316759bfb981c65091fec8682d1543cd",
+                  "x-checker-data": {
+                      "type": "anitya",
+                      "project-id": 1709,
+                      "stable-only": true,
+                      "url-template": "https://www.libraw.org/data/LibRaw-$version.tar.gz"
+                  }
+              },
+              {
+                  "type": "shell",
+                  "commands": [
+                      "autoreconf -vfi"
+                  ]
+              }
+          ]
+      },
+      {
+          "name": "libkdcraw",
+          "buildsystem": "cmake-ninja",
+          "config-opts": [
+              "-DBUILD_TESTING=OFF"
+          ],
+          "builddir": true,
+          "sources": [
+              {
+                  "type": "git",
+                  "url": "https://invent.kde.org/graphics/libkdcraw",
+                  "branch": "master"
+                  
+              }
+          ]
+      },
+      {
+          "name": "libkipi",
+          "buildsystem": "cmake-ninja",
+          "config-opts": [
+              "-DBUILD_TESTING=OFF"
+          ],
+          "builddir": true,
+          "sources": [
+              {
+                  "type": "git",
+                  "url": "https://invent.kde.org/graphics/libkipi",
+                  "branch": "master"
+                  
+              }
+          ]
+      },
+      {
+          "name": "lmdb",
+          "no-autogen": true,
+          "make-install-args": [
+              "prefix=/app"
+          ],
+          "subdir": "libraries/liblmdb",
+          "sources": [
+              {
+                  "type": "archive",
+                  "url": "https://git.openldap.org/openldap/openldap/-/archive/LMDB_0.9.30/openldap-LMDB_0.9.30.tar.bz2",
+                  "sha256": "eb16ed6fd535b85857c331b93e7f9fd790bc9fcea3fa26162befdc1ba2775668",
+                  "x-checker-data": {
+                      "type": "anitya",
+                      "project-id": 6974,
+                      "stable-only": true,
+                      "url-template": "https://git.openldap.org/openldap/openldap/-/archive/LMDB_$version/openldap-LMDB_$version.tar.bz2"
+                  }
+              }
+          ]
+      },
+      {
+          "name": "baloo",
+          "buildsystem": "cmake-ninja",
+          "config-opts": [
+              "-DBUILD_TESTING=OFF"
+          ],
+          "builddir": true,
+          "sources": [
+              {
+                  "type": "git",
+                  "url": "https://invent.kde.org/frameworks/baloo",
+                  "branch": "kf5"
+                  
+              }
+          ]
+      },
+      {
+          "name": "kColorPicker",
+          "buildsystem": "cmake-ninja",
+          "builddir": true,
+          "sources": [
+              {
+                  "type": "archive",
+                  "url": "https://github.com/ksnip/kColorPicker/archive/refs/tags/v0.2.0.tar.gz",
+                  "sha256": "20ffc5e935333a18c5cd813c3d306d3482ec9c826fe0d0c3d7b7635419703d55",
+                  "x-checker-data": {
+                      "type": "anitya",
+                      "project-id": 120606,
+                      "stable-only": true,
+                      "url-template": "https://github.com/ksnip/kColorPicker/archive/refs/tags/v$version.tar.gz"
+                  }
+              }
+          ]
+      },
+      {
+          "name": "kImageAnnotator",
+          "buildsystem": "cmake-ninja",
+          "builddir": true,
+          "sources": [
+              {
+                  "type": "archive",
+                  "url": "https://github.com/ksnip/kImageAnnotator/archive/refs/tags/v0.6.0.tar.gz",
+                  "sha256": "148ef703ed5535a0c23d11629b588d9cb163598798261aa760d5b351756646a7",
+                  "x-checker-data": {
+                      "type": "anitya",
+                      "project-id": 120605,
+                      "stable-only": true,
+                      "url-template": "https://github.com/ksnip/kImageAnnotator/archive/refs/tags/v$version.tar.gz"
+                  }
+              }
+          ]
+      },
+      {
+          "name": "gwenview",
+          "buildsystem": "cmake-ninja",
+          "builddir": true,
+          "sources": [
+              {
+                  "type": "dir",
+                  "path": "."
+              }
+          ]
+      }
+  ]
+}
