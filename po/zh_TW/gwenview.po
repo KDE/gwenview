@@ -9,21 +9,21 @@
 # pan93412 <pan93412@gmail.com>, 2018, 2019, 2020.
 # Franklin Weng <franklin at goodhorse dot idv dot tw>, 2007, 2008.
 # Frank Weng (a.k.a. Franklin) <franklin at goodhorse dot idv dot tw>, 2008, 2009, 2010.
-# Kisaragi Hiu <mail@kisaragi-hiu.com>, 2022.
+# Kisaragi Hiu <mail@kisaragi-hiu.com>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-07 00:56+0000\n"
-"PO-Revision-Date: 2022-11-11 15:49+0900\n"
+"PO-Revision-Date: 2023-02-27 22:13+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
-"Language-Team: Traditional Chinese <zh-l10n@linux.org.tw>\n"
+"Language-Team: Chinese <zh-l10n@linux.org.tw>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Lokalize 22.08.2\n"
+"X-Generator: Lokalize 22.12.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -822,7 +822,7 @@ msgstr "切割"
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Adjust Colors"
-msgstr ""
+msgstr "調整色彩"
 
 #: app/imageopscontextmanageritem.cpp:128
 #: lib/redeyereduction/redeyereductionimageoperation.cpp:75
@@ -1864,13 +1864,13 @@ msgstr "未安裝對您的相機的支援。"
 #, kde-format
 msgctxt "@info above install button, %1 protocol name %2 error text from KIO"
 msgid "The protocol support library for \"%1\" is not installed. Error: %2"
-msgstr ""
+msgstr "\"%1\" 的協定支援函式庫尚未安裝。錯誤：%2"
 
 #: importer/thumbnailpage.cpp:238
 #, kde-format
 msgctxt "@info above install button, %1 protocol name"
 msgid "The protocol support library for \"%1\" is not installed."
-msgstr ""
+msgstr "\"%1\" 的協定支援函式庫尚未安裝。"
 
 #: importer/thumbnailpage.cpp:250
 #, kde-format
@@ -1883,13 +1883,13 @@ msgstr "完成安裝程序後，重新啟動這個匯入器來繼續。"
 #, kde-format
 msgctxt "@info:tooltip for a button, %1 protocol name"
 msgid "Launch Discover to install the protocol support library for \"%1\""
-msgstr ""
+msgstr "開啟 Discover 來安裝 \"%1\" 的協定支援函式庫"
 
 #: importer/thumbnailpage.cpp:259
 #, kde-format
 msgctxt "@action:button"
 msgid "Install Support for this Camera…"
-msgstr ""
+msgstr "安裝對這個相機的支援…"
 
 #: importer/thumbnailpage.cpp:260
 #, kde-format
@@ -1899,12 +1899,14 @@ msgid ""
 "to launch Discover to install Kamera to enable protocol support for "
 "\"camera:/\" on your system."
 msgstr ""
+"您需要在系統上有安裝 Kamera 才能從相機進行讀取。點擊此處來開啟 Discover 以安"
+"裝 Kamera 來啟用對 \"camera:/\" 協定的支援。"
 
 #: importer/thumbnailpage.cpp:263
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Install Protocol Support for \"%1\"…"
-msgstr ""
+msgstr "安裝 \"%1\" 的協定支援…"
 
 #: importer/thumbnailpage.cpp:264
 #, kde-format
@@ -1913,12 +1915,14 @@ msgid ""
 "Click here to launch Discover to install the missing protocol support "
 "library to enable the protocol support for \"%1:/\" on your system."
 msgstr ""
+"點擊此處來開啟 Discover 以安裝缺失的協定支援函式庫，以便在您的系統上啟用對 "
+"\"%1:/\" 協定的支援。"
 
 #: importer/thumbnailpage.cpp:268
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Search the Web for How to Install Protocol Support for \"%1\"…"
-msgstr ""
+msgstr "在網路上搜尋如何安裝 \"%1\" 的協定支援…"
 
 #: importer/thumbnailpage.cpp:284
 #, kde-format
@@ -1926,7 +1930,7 @@ msgctxt ""
 "@info this text will be used as a search term in an online search engine, %1 "
 "protocol name"
 msgid "How to install protocol support for \"%1\" on Linux"
-msgstr ""
+msgstr "Linux 怎麽安裝 \"%1\" 協定的支援"
 
 #: importer/thumbnailpage.cpp:285
 #, kde-format
@@ -1947,17 +1951,17 @@ msgid "Import All"
 msgstr "全部匯入"
 
 #: importer/thumbnailpage.cpp:491
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info when failing to open the appstream URL"
 msgid ""
 "Opening Discover failed.<nl/>Please check if Discover is installed on your "
 "system, or use your system's package manager to install \"Kamera\" package."
 msgstr ""
 "無法開啟 Discover。<nl/>請檢查 Discover 是否已安裝於您的系統上，或者自行使用"
-"您的系統軟體包管理員安裝「Kamera」的軟體包。"
+"您的系統軟體包管理員安裝 \"Kamera\" 軟體包。"
 
 #: importer/thumbnailpage.cpp:495
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info when failing to launch plasma-discover, %1 protocol name"
 msgid ""
 "Opening Discover failed.<nl/>Please check if Discover is installed on your "
@@ -1965,7 +1969,7 @@ msgid ""
 "library for \"%1\"."
 msgstr ""
 "無法開啟 Discover。<nl/>請檢查 Discover 是否已安裝於您的系統上，或者自行使用"
-"您的系統軟體包管理員安裝「%1」的協定支援函式庫。"
+"您的系統軟體包管理員安裝 \"%1\" 的協定支援函式庫。"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: importer/thumbnailpage.ui:173
@@ -2009,7 +2013,7 @@ msgstr "開發者"
 #: lib/bcg/bcgimageoperation.cpp:69
 #, kde-format
 msgid "Adjust Colors"
-msgstr ""
+msgstr "調整色彩"
 
 #: lib/bcg/bcgwidget.cpp:51
 #, kde-format
@@ -2558,6 +2562,8 @@ msgid ""
 "Assuming that the image format won't be changed and\n"
 "for lossy images using the value set in 'Lossy image save quality'."
 msgstr ""
+"假設影像格式不會變更，且\n"
+"對有損影像使用「有損格式影像儲存品質」設定的值。"
 
 #: lib/resize/resizeimagedialog.cpp:219
 #, kde-format
