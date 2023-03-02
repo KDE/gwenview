@@ -1,14 +1,14 @@
 # Translation of gwenview to Korean.
 # Copyright (C) 2007-2008 This_file_is_part_of_KDE
 # This file is distributed under the same license as the kdegraphics package.
-# Shinjo Park <kde@peremen.name>, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
+# Shinjo Park <kde@peremen.name>, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-07 00:56+0000\n"
-"PO-Revision-Date: 2022-07-13 15:15+0200\n"
+"PO-Revision-Date: 2023-03-01 01:20+0100\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
@@ -818,7 +818,7 @@ msgstr "자르기"
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Adjust Colors"
-msgstr ""
+msgstr "색 조정"
 
 #: app/imageopscontextmanageritem.cpp:128
 #: lib/redeyereduction/redeyereductionimageoperation.cpp:75
@@ -1867,12 +1867,10 @@ msgid "Support for your camera is not installed."
 msgstr "카메라 지원이 설치되어 있지 않습니다."
 
 #: importer/thumbnailpage.cpp:236
-#, fuzzy, kde-format
-#| msgctxt "@info above install button, %1 protocol name"
-#| msgid "The protocol support library for \"%1\" is not installed."
+#, kde-format
 msgctxt "@info above install button, %1 protocol name %2 error text from KIO"
 msgid "The protocol support library for \"%1\" is not installed. Error: %2"
-msgstr "\"%1\" 프로토콜 지원 라이브러리가 설치되어 있지 않습니다."
+msgstr "\"%1\" 프로토콜 지원 라이브러리가 설치되어 있지 않습니다. 오류: %2"
 
 #: importer/thumbnailpage.cpp:238
 #, kde-format
@@ -2022,22 +2020,22 @@ msgstr "개발자"
 #: lib/bcg/bcgimageoperation.cpp:69
 #, kde-format
 msgid "Adjust Colors"
-msgstr ""
+msgstr "색 조정"
 
 #: lib/bcg/bcgwidget.cpp:51
 #, kde-format
 msgid "Brightness:"
-msgstr ""
+msgstr "밝기:"
 
 #: lib/bcg/bcgwidget.cpp:52
 #, kde-format
 msgid "Contrast:"
-msgstr ""
+msgstr "명암:"
 
 #: lib/bcg/bcgwidget.cpp:53
 #, kde-format
 msgid "Gamma:"
-msgstr ""
+msgstr "감마:"
 
 #: lib/crop/cropwidget.cpp:191
 #, kde-format
@@ -2261,7 +2259,7 @@ msgstr "확대했을 때 멀리 보기 표시"
 #, kde-format
 msgctxt "@action"
 msgid "Follow color scheme"
-msgstr "색 배열 따르기"
+msgstr "색 구성표 따르기"
 
 #: lib/documentview/documentviewcontroller.cpp:111
 #, kde-format
