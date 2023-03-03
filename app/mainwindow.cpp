@@ -73,7 +73,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #endif
 #ifdef KF5Purpose_FOUND
 #include <Purpose/AlternativesModel>
+#include <purpose_version.h>
+#if PURPOSE_VERSION >= QT_VERSION_CHECK(5, 104, 0)
+#include <Purpose/Menu>
+#else
 #include <PurposeWidgets/Menu>
+#endif
 #endif
 
 // Local
