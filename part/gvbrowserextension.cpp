@@ -38,7 +38,11 @@ struct GVBrowserExtensionPrivate {
 };
 
 GVBrowserExtension::GVBrowserExtension(KParts::ReadOnlyPart *part)
+#if KPARTS_VERSION < QT_VERSION_CHECK(5, 240, 0)
     : KParts::BrowserExtension(part)
+#else
+    : KParts::NavigationExtension(part)
+#endif
     , d(new GVBrowserExtensionPrivate)
 {
     d->mPart = part;

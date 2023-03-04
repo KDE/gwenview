@@ -26,7 +26,7 @@ include_directories(
 
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
 
-if (KF5KDcraw_FOUND)
+if (KF${QT_MAJOR_VERSION}KDcraw_FOUND)
     gv_add_unit_test(documenttest testutils.cpp)
 endif()
 gv_add_unit_test(transformimageoperationtest)

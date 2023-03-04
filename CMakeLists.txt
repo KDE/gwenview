@@ -11,11 +11,11 @@ project(gwenview VERSION ${RELEASE_SERVICE_VERSION})
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake )
 
 set (QT_MIN_VERSION "5.15.2")
-set (KF5_MIN_VERSION "5.90.0")
+set (KF_MIN_VERSION "5.90.0")
 set(KDE_COMPILERSETTINGS_LEVEL "5.82")
 
 
-find_package(ECM ${KF5_MIN_VERSION} REQUIRED NO_MODULE)
+find_package(ECM ${KF_MIN_VERSION} REQUIRED NO_MODULE)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH})
 
@@ -82,7 +82,7 @@ find_package(Phonon4Qt${QT_MAJOR_VERSION} 4.6.60 NO_MODULE REQUIRED)
 include_directories(BEFORE SYSTEM ${PHONON_INCLUDES})
 add_definitions(-DPHONON_LIB_SONAME=\"${PHONON_LIB_SONAME}\")
 
-find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
+find_package(KF${QT_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS
     KIO
     ItemModels
     I18n
@@ -93,7 +93,7 @@ find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
     GuiAddons
     WidgetsAddons
 )
-find_package(KF5 ${KF5_MIN_VERSION} OPTIONAL_COMPONENTS
+find_package(KF${QT_MAJOR_VERSION} ${KF_MIN_VERSION} OPTIONAL_COMPONENTS
     Activities
     DocTools
     Purpose
@@ -134,20 +134,20 @@ find_package(LCMS2)
 set_package_properties(LCMS2 PROPERTIES URL "http://www.littlecms.com" DESCRIPTION "Color management engine" TYPE REQUIRED)
 
 if (GWENVIEW_SEMANTICINFO_BACKEND_BALOO)
-    find_package(KF5Baloo 5.1.90)
-    set_package_properties(KF5Baloo PROPERTIES URL "https://commits.kde.org/baloo" DESCRIPTION "Desktop-wide semantic information support" TYPE OPTIONAL)
-    if (NOT KF5Baloo_FOUND)
+    find_package(KF${QT_MAJOR_VERSION}Baloo 5.1.90)
+    set_package_properties(KF${QT_MAJOR_VERSION}Baloo PROPERTIES URL "https://commits.kde.org/baloo" DESCRIPTION "Desktop-wide semantic information support" TYPE OPTIONAL)
+    if (NOT KF${QT_MAJOR_VERSION}Baloo_FOUND)
         message (STATUS "You have selected Baloo for semantic backend, but required version was not found. Overriding the backend to None")
         unset(GWENVIEW_SEMANTICINFO_BACKEND_BALOO)
         set(GWENVIEW_SEMANTICINFO_BACKEND_NONE ON)
     endif ()
 endif ()
 
-find_package(KF5KDcraw)
-if (KF5KDcraw_FOUND)
+find_package(KF${QT_MAJOR_VERSION}KDcraw)
+if (KF${QT_MAJOR_VERSION}KDcraw_FOUND)
    add_definitions(-DKDCRAW_FOUND)
 endif()
-set_package_properties(KF5KDcraw PROPERTIES URL "https://invent.kde.org/graphics/libkdcraw/" DESCRIPTION "C++ interface around LibRaw library used to decode RAW picture files" TYPE OPTIONAL)
+set_package_properties(KF${QT_MAJOR_VERSION}KDcraw PROPERTIES URL "https://invent.kde.org/graphics/libkdcraw/" DESCRIPTION "C++ interface around LibRaw library used to decode RAW picture files" TYPE OPTIONAL)
 
 
 option(WITHOUT_X11 "Build without X11 integration (disables finding X11)" OFF)
@@ -211,7 +211,7 @@ set(IMAGE_MIME_TYPES_LIST
     image/x-xcf
     application/x-krita
 )
-if (KF5KDcraw_FOUND)
+if (KF${QT_MAJOR_VERSION}KDcraw_FOUND)
     list(APPEND IMAGE_MIME_TYPES_LIST
         image/x-kde-raw
         image/x-canon-cr2
@@ -250,7 +250,7 @@ add_subdirectory(kconf_update)
 ecm_qt_install_logging_categories(EXPORT GWENVIEW FILE gwenview.categories DESTINATION ${KDE_INSTALL_LOGGINGCATEGORIESDIR})
 
 ki18n_install(po)
-if(KF5DocTools_FOUND)
+if(KF${QT_MAJOR_VERSION}DocTools_FOUND)
     kdoctools_install(po)
 endif()
 

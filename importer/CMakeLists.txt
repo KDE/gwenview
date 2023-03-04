@@ -49,17 +49,17 @@ add_executable(gwenview_importer ${importer_SRCS})
 
 target_link_libraries(gwenview_importer
     gwenviewlib
-    KF5::KIOCore
-    KF5::ItemModels
-    KF5::WidgetsAddons
+    KF${QT_MAJOR_VERSION}::KIOCore
+    KF${QT_MAJOR_VERSION}::ItemModels
+    KF${QT_MAJOR_VERSION}::WidgetsAddons
     Qt::Core
     )
 
 target_link_libraries(gwenview_importer
     LINK_INTERFACE_LIBRARIES
-    KF5::KIOCore
-    KF5::ItemModels
-    KF5::WidgetsAddons
+    KF${QT_MAJOR_VERSION}::KIOCore
+    KF${QT_MAJOR_VERSION}::ItemModels
+    KF${QT_MAJOR_VERSION}::WidgetsAddons
     Qt::Core
     )
 

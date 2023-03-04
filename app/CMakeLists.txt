@@ -97,22 +97,22 @@ ecm_add_app_icon(gwenview_SRCS ICONS ${ICONS_SRCS})
 add_executable(gwenview ${gwenview_SRCS})
 
 target_link_libraries(gwenview
-    KF5::ItemModels
-    KF5::Notifications
-    KF5::WidgetsAddons
-    KF5::GuiAddons
+    KF${QT_MAJOR_VERSION}::ItemModels
+    KF${QT_MAJOR_VERSION}::Notifications
+    KF${QT_MAJOR_VERSION}::WidgetsAddons
+    KF${QT_MAJOR_VERSION}::GuiAddons
     gwenviewlib
     )
 
-if (KF5Activities_FOUND)
-    target_link_libraries(gwenview KF5::Activities)
+if (KF${QT_MAJOR_VERSION}Activities_FOUND)
+    target_link_libraries(gwenview KF${QT_MAJOR_VERSION}::Activities)
 endif()
 
-if (KF5Purpose_FOUND)
-    target_link_libraries(gwenview KF5::PurposeWidgets)
+if (KF${QT_MAJOR_VERSION}Purpose_FOUND)
+    target_link_libraries(gwenview KF${QT_MAJOR_VERSION}::PurposeWidgets)
 endif()
 
-target_link_libraries(gwenview LINK_INTERFACE_LIBRARIES KF5::KIOCore Qt::Core)
+target_link_libraries(gwenview LINK_INTERFACE_LIBRARIES KF${QT_MAJOR_VERSION}::KIOCore Qt::Core)
 
 if (HAVE_TIFF)
     target_link_libraries(gwenview TIFF::TIFF)
@@ -153,9 +153,9 @@ kcoreaddons_add_plugin(slideshowfileitemaction
     INSTALL_NAMESPACE "kf${QT_MAJOR_VERSION}/kfileitemaction")
 
 target_link_libraries(slideshowfileitemaction
-    KF5::I18n
-    KF5::KIOWidgets
-    KF5::Notifications)
+    KF${QT_MAJOR_VERSION}::I18n
+    KF${QT_MAJOR_VERSION}::KIOWidgets
+    KF${QT_MAJOR_VERSION}::Notifications)
 
 if(kImageAnnotator_FOUND)
     target_link_libraries(gwenview kImageAnnotator::kImageAnnotator)

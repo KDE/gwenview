@@ -113,6 +113,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/hud/hudbuttonbox.h>
 #include <lib/mimetypeutils.h>
 #ifdef HAVE_QTDBUS
+#include <QDBusConnection>
 #include <QDBusPendingReply>
 #include <lib/mpris2/mpris2service.h>
 #endif

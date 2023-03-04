@@ -283,13 +283,15 @@ target_link_libraries(gwenviewlib
    Qt::Concurrent
    Qt::Svg
    Qt::PrintSupport
-   KF5::GuiAddons
-   KF5::KIOCore
-   KF5::KIOWidgets
-   KF5::KIOFileWidgets
-   KF5::I18n
-   KF5::WindowSystem
-   KF5::IconThemes
+   KF${QT_MAJOR_VERSION}::GuiAddons
+   KF${QT_MAJOR_VERSION}::ConfigGui
+   KF${QT_MAJOR_VERSION}::KIOCore
+   KF${QT_MAJOR_VERSION}::KIOWidgets
+   KF${QT_MAJOR_VERSION}::KIOFileWidgets
+   KF${QT_MAJOR_VERSION}::I18n
+   KF${QT_MAJOR_VERSION}::WindowSystem
+   KF${QT_MAJOR_VERSION}::IconThemes
+   KF${QT_MAJOR_VERSION}::XmlGui
    LibExiv2::LibExiv2
    JPEG::JPEG
    PNG::PNG
@@ -312,8 +314,8 @@ if (WIN32)
     target_link_libraries(gwenviewlib ${EXPAT_LIBRARIES})
 endif()
 
-if (KF5KDcraw_FOUND)
-    target_link_libraries(gwenviewlib KF5::KDcraw)
+if (KF${QT_MAJOR_VERSION}KDcraw_FOUND)
+    target_link_libraries(gwenviewlib KF${QT_MAJOR_VERSION}::KDcraw)
 endif()
 
 if (HAVE_X11)
@@ -331,8 +333,8 @@ endif()
 
 if (GWENVIEW_SEMANTICINFO_BACKEND_BALOO)
     target_link_libraries(gwenviewlib
-        KF5::Baloo
-        KF5::FileMetaData
+        KF${QT_MAJOR_VERSION}::Baloo
+        KF${QT_MAJOR_VERSION}::FileMetaData
         )
 endif()
 

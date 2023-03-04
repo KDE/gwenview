@@ -396,7 +396,7 @@ struct DocumentViewPrivate {
             mDrag->deleteLater();
         }
         mDrag = new QDrag(q);
-        const auto itemList = KFileItemList({q->document()->url()});
+        const auto itemList = KFileItemList({KFileItem(q->document()->url())});
         auto *mimeData = MimeTypeUtils::selectionMimeData(itemList, MimeTypeUtils::DropTarget);
         KUrlMimeData::exportUrlsToPortal(mimeData);
         mDrag->setMimeData(mimeData);
