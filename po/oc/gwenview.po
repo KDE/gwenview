@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-07 00:56+0000\n"
+"POT-Creation-Date: 2023-03-07 00:44+0000\n"
 "PO-Revision-Date: 2008-08-05 22:27+0200\n"
 "Last-Translator: Yannig Marchegay (Kokoyaya) <yannig@marchegay.org>\n"
 "Language-Team: Occitan (lengadocian) <ubuntu-l10n-oci@lists.ubuntu.com>\n"
@@ -124,7 +124,7 @@ msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
 msgid "Sidebar Alignment Spacer"
 msgstr ""
 
-#: app/browsemainpage.cpp:146 app/mainwindow.cpp:372 app/viewmainpage.cpp:425
+#: app/browsemainpage.cpp:146 app/mainwindow.cpp:377 app/viewmainpage.cpp:425
 #: lib/documentview/documentviewcontroller.cpp:55
 #, fuzzy, kde-format
 #| msgid "View"
@@ -224,7 +224,7 @@ msgid "Rating"
 msgstr "&Paramètres"
 
 #: app/browsemainpage.cpp:195 app/fileopscontextmanageritem.cpp:142
-#: app/mainwindow.cpp:371
+#: app/mainwindow.cpp:376
 #, fuzzy, kde-format
 #| msgid "&File"
 msgctxt "@title actions category"
@@ -1135,81 +1135,81 @@ msgstr ""
 msgid "A starting file or folders"
 msgstr ""
 
-#: app/mainwindow.cpp:381
+#: app/mainwindow.cpp:386
 #, kde-format
 msgctxt "@action Open Recent menu"
 msgid "Clear List"
 msgstr ""
 
-#: app/mainwindow.cpp:389
+#: app/mainwindow.cpp:394
 #, kde-format
 msgctxt "@action reload the currently viewed image"
 msgid "Reload"
 msgstr "Tornar cargar"
 
-#: app/mainwindow.cpp:394
+#: app/mainwindow.cpp:399
 #, kde-format
 msgctxt "@action:inmenu Navigation Bar"
 msgid "Replace Location"
 msgstr ""
 
-#: app/mainwindow.cpp:399
+#: app/mainwindow.cpp:404
 #, fuzzy, kde-format
 #| msgid "Browse"
 msgctxt "@action:intoolbar Switch to file list"
 msgid "Browse"
 msgstr "Navigar"
 
-#: app/mainwindow.cpp:400
+#: app/mainwindow.cpp:405
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Browse folders for images"
 msgstr ""
 
-#: app/mainwindow.cpp:407
+#: app/mainwindow.cpp:412
 #, fuzzy, kde-format
 #| msgid "View"
 msgctxt "@action:intoolbar Switch to image view"
 msgid "View"
 msgstr "Visualizacion"
 
-#: app/mainwindow.cpp:408
+#: app/mainwindow.cpp:413
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "View selected images"
 msgstr ""
 
-#: app/mainwindow.cpp:427
+#: app/mainwindow.cpp:432
 #, kde-format
 msgctxt "@action"
 msgid "Exit Full Screen"
 msgstr ""
 
-#: app/mainwindow.cpp:432
+#: app/mainwindow.cpp:437
 #, kde-format
 msgctxt "@action Go to previous image"
 msgid "Previous"
 msgstr "Precedent"
 
-#: app/mainwindow.cpp:433
+#: app/mainwindow.cpp:438
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to previous image"
 msgstr ""
 
-#: app/mainwindow.cpp:439
+#: app/mainwindow.cpp:444
 #, kde-format
 msgctxt "@action Go to next image"
 msgid "Next"
 msgstr "Seguent"
 
-#: app/mainwindow.cpp:440
+#: app/mainwindow.cpp:445
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to next image"
 msgstr ""
 
-#: app/mainwindow.cpp:446
+#: app/mainwindow.cpp:451
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "@action:button Zoom to fit, shown in status bar, keep it short please"
@@ -1218,204 +1218,204 @@ msgctxt "@action Go to first image"
 msgid "First"
 msgstr "Filtre"
 
-#: app/mainwindow.cpp:447
+#: app/mainwindow.cpp:452
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to first image"
 msgstr ""
 
-#: app/mainwindow.cpp:453
+#: app/mainwindow.cpp:458
 #, fuzzy, kde-format
 #| msgid "Delete"
 msgctxt "@action Go to last image"
 msgid "Last"
 msgstr "Suprimir"
 
-#: app/mainwindow.cpp:454
+#: app/mainwindow.cpp:459
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to last image"
 msgstr ""
 
-#: app/mainwindow.cpp:464
+#: app/mainwindow.cpp:469
 #, kde-format
 msgctxt "@action"
 msgid "Start Page"
 msgstr ""
 
-#: app/mainwindow.cpp:465
+#: app/mainwindow.cpp:470
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open the start page"
 msgstr ""
 
-#: app/mainwindow.cpp:472
+#: app/mainwindow.cpp:477
 #, kde-format
 msgctxt "@action"
 msgid "Sidebar"
 msgstr ""
 
-#: app/mainwindow.cpp:477
+#: app/mainwindow.cpp:482
 #, kde-format
 msgctxt "@action opens crop, rename, etc."
 msgid "Show Editing Tools"
 msgstr ""
 
-#: app/mainwindow.cpp:507
+#: app/mainwindow.cpp:512
 #, fuzzy, kde-format
 #| msgid "Save"
 msgctxt "@action Share images"
 msgid "Share"
 msgstr "Carrat"
 
-#: app/mainwindow.cpp:515
+#: app/mainwindow.cpp:520
 #, kde-format
 msgid "Error while sharing: %1"
 msgstr ""
 
-#: app/mainwindow.cpp:522
+#: app/mainwindow.cpp:527
 #, kde-format
 msgid ""
 "The shared image link (<a href=\"%1\">%1</a>) has been copied to the "
 "clipboard."
 msgstr ""
 
-#: app/mainwindow.cpp:572
+#: app/mainwindow.cpp:577
 #, kde-format
 msgctxt "@title:menu submenu for actions that open configuration dialogs"
 msgid "Configure"
 msgstr ""
 
-#: app/mainwindow.cpp:587
+#: app/mainwindow.cpp:592
 #, fuzzy, kde-format
 #| msgid "Edit"
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "Edit"
 msgstr "Edicion"
 
-#: app/mainwindow.cpp:592
+#: app/mainwindow.cpp:597
 #, kde-format
 msgid "Redo"
 msgstr "Tornar far"
 
-#: app/mainwindow.cpp:600
+#: app/mainwindow.cpp:605
 #, kde-format
 msgid "Undo"
 msgstr "Anullar"
 
-#: app/mainwindow.cpp:627
+#: app/mainwindow.cpp:632
 #, fuzzy, kde-format
 #| msgid "Create Folder"
 msgid "Folders"
 msgstr "Crear un repertòri"
 
-#: app/mainwindow.cpp:633
+#: app/mainwindow.cpp:638
 #, fuzzy, kde-format
 #| msgctxt "@title:group"
 #| msgid "Information"
 msgid "Information"
 msgstr "Entresenhas"
 
-#: app/mainwindow.cpp:672
+#: app/mainwindow.cpp:677
 #, fuzzy, kde-format
 #| msgid "File Operations"
 msgid "Operations"
 msgstr "Operacions suls fichièrs"
 
-#: app/mainwindow.cpp:1377
+#: app/mainwindow.cpp:1382
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr ""
 
-#: app/mainwindow.cpp:1377
+#: app/mainwindow.cpp:1382
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr ""
 
-#: app/mainwindow.cpp:1684
+#: app/mainwindow.cpp:1689
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Dobrir un imatge"
 
-#: app/mainwindow.cpp:1744
+#: app/mainwindow.cpp:1749
 #, fuzzy, kde-format
 #| msgid "Slideshow"
 msgid "Pause Slideshow"
 msgstr "Diaporamà"
 
-#: app/mainwindow.cpp:1747
+#: app/mainwindow.cpp:1752
 #, fuzzy, kde-format
 #| msgid "Slideshow"
 msgid "Resume Slideshow"
 msgstr "Diaporamà"
 
-#: app/mainwindow.cpp:1747
+#: app/mainwindow.cpp:1752
 #, kde-format
 msgid "Start Slideshow"
 msgstr ""
 
-#: app/mainwindow.cpp:1760
+#: app/mainwindow.cpp:1765
 #, kde-format
 msgid "Save All Changes"
 msgstr ""
 
-#: app/mainwindow.cpp:1761
+#: app/mainwindow.cpp:1766
 #, kde-format
 msgid "Discard Changes"
 msgstr ""
 
-#: app/mainwindow.cpp:1763
+#: app/mainwindow.cpp:1768
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] ""
 msgstr[1] ""
 
-#: app/mainwindow.cpp:1763
+#: app/mainwindow.cpp:1768
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr ""
 
-#: app/mainwindow.cpp:1818
+#: app/mainwindow.cpp:1823
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr ""
 
-#: app/mainwindow.cpp:1821
+#: app/mainwindow.cpp:1826
 #, kde-format
 msgid "Hide menu bar"
 msgstr ""
 
-#: app/mainwindow.cpp:2041
+#: app/mainwindow.cpp:2046
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr ""
 
-#: app/mainwindow.cpp:2042 app/mainwindow.cpp:2056
+#: app/mainwindow.cpp:2047 app/mainwindow.cpp:2061
 #, kde-format
 msgid "Stay There"
 msgstr ""
 
-#: app/mainwindow.cpp:2043
+#: app/mainwindow.cpp:2048
 #, kde-format
 msgid "Go to the Last Document"
 msgstr ""
 
-#: app/mainwindow.cpp:2044 app/mainwindow.cpp:2058
+#: app/mainwindow.cpp:2049 app/mainwindow.cpp:2063
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr ""
 
-#: app/mainwindow.cpp:2055
+#: app/mainwindow.cpp:2060
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr ""
 
-#: app/mainwindow.cpp:2057
+#: app/mainwindow.cpp:2062
 #, kde-format
 msgid "Go to the First Document"
 msgstr ""

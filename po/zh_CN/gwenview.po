@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-07 00:56+0000\n"
+"POT-Creation-Date: 2023-03-07 00:44+0000\n"
 "PO-Revision-Date: 2023-02-24 12:43\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -128,7 +128,7 @@ msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
 msgid "Sidebar Alignment Spacer"
 msgstr "侧边栏对齐占位符"
 
-#: app/browsemainpage.cpp:146 app/mainwindow.cpp:372 app/viewmainpage.cpp:425
+#: app/browsemainpage.cpp:146 app/mainwindow.cpp:377 app/viewmainpage.cpp:425
 #: lib/documentview/documentviewcontroller.cpp:55
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
@@ -214,7 +214,7 @@ msgid "Rating"
 msgstr "评分"
 
 #: app/browsemainpage.cpp:195 app/fileopscontextmanageritem.cpp:142
-#: app/mainwindow.cpp:371
+#: app/mainwindow.cpp:376
 #, kde-format
 msgctxt "@title actions category"
 msgid "File"
@@ -1063,272 +1063,272 @@ msgstr "启动到幻灯片模式"
 msgid "A starting file or folders"
 msgstr "起始文件或文件夹"
 
-#: app/mainwindow.cpp:381
+#: app/mainwindow.cpp:386
 #, kde-format
 msgctxt "@action Open Recent menu"
 msgid "Clear List"
 msgstr "清空列表"
 
-#: app/mainwindow.cpp:389
+#: app/mainwindow.cpp:394
 #, kde-format
 msgctxt "@action reload the currently viewed image"
 msgid "Reload"
 msgstr "重新加载"
 
-#: app/mainwindow.cpp:394
+#: app/mainwindow.cpp:399
 #, kde-format
 msgctxt "@action:inmenu Navigation Bar"
 msgid "Replace Location"
 msgstr "替换位置"
 
-#: app/mainwindow.cpp:399
+#: app/mainwindow.cpp:404
 #, kde-format
 msgctxt "@action:intoolbar Switch to file list"
 msgid "Browse"
 msgstr "浏览"
 
-#: app/mainwindow.cpp:400
+#: app/mainwindow.cpp:405
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Browse folders for images"
 msgstr "浏览文件夹中的图像"
 
-#: app/mainwindow.cpp:407
+#: app/mainwindow.cpp:412
 #, kde-format
 msgctxt "@action:intoolbar Switch to image view"
 msgid "View"
 msgstr "查看"
 
-#: app/mainwindow.cpp:408
+#: app/mainwindow.cpp:413
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "View selected images"
 msgstr "查看选中的图像"
 
-#: app/mainwindow.cpp:427
+#: app/mainwindow.cpp:432
 #, kde-format
 msgctxt "@action"
 msgid "Exit Full Screen"
 msgstr "退出全屏"
 
-#: app/mainwindow.cpp:432
+#: app/mainwindow.cpp:437
 #, kde-format
 msgctxt "@action Go to previous image"
 msgid "Previous"
 msgstr "上一张"
 
-#: app/mainwindow.cpp:433
+#: app/mainwindow.cpp:438
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to previous image"
 msgstr "切换到上一张图像"
 
-#: app/mainwindow.cpp:439
+#: app/mainwindow.cpp:444
 #, kde-format
 msgctxt "@action Go to next image"
 msgid "Next"
 msgstr "下一张"
 
-#: app/mainwindow.cpp:440
+#: app/mainwindow.cpp:445
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to next image"
 msgstr "切换到下一张图像"
 
-#: app/mainwindow.cpp:446
+#: app/mainwindow.cpp:451
 #, kde-format
 msgctxt "@action Go to first image"
 msgid "First"
 msgstr "第一张"
 
-#: app/mainwindow.cpp:447
+#: app/mainwindow.cpp:452
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to first image"
 msgstr "切换到第一张图像"
 
-#: app/mainwindow.cpp:453
+#: app/mainwindow.cpp:458
 #, kde-format
 msgctxt "@action Go to last image"
 msgid "Last"
 msgstr "最后一张"
 
-#: app/mainwindow.cpp:454
+#: app/mainwindow.cpp:459
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to last image"
 msgstr "切换到最后一张图像"
 
-#: app/mainwindow.cpp:464
+#: app/mainwindow.cpp:469
 #, kde-format
 msgctxt "@action"
 msgid "Start Page"
 msgstr "起始页面"
 
-#: app/mainwindow.cpp:465
+#: app/mainwindow.cpp:470
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open the start page"
 msgstr "打开起始页面"
 
-#: app/mainwindow.cpp:472
+#: app/mainwindow.cpp:477
 #, kde-format
 msgctxt "@action"
 msgid "Sidebar"
 msgstr "侧边栏"
 
-#: app/mainwindow.cpp:477
+#: app/mainwindow.cpp:482
 #, kde-format
 msgctxt "@action opens crop, rename, etc."
 msgid "Show Editing Tools"
 msgstr "显示编辑工具"
 
-#: app/mainwindow.cpp:507
+#: app/mainwindow.cpp:512
 #, kde-format
 msgctxt "@action Share images"
 msgid "Share"
 msgstr "分享"
 
-#: app/mainwindow.cpp:515
+#: app/mainwindow.cpp:520
 #, kde-format
 msgid "Error while sharing: %1"
 msgstr "分享操作出错：%1"
 
-#: app/mainwindow.cpp:522
+#: app/mainwindow.cpp:527
 #, kde-format
 msgid ""
 "The shared image link (<a href=\"%1\">%1</a>) has been copied to the "
 "clipboard."
 msgstr "图像分享链接 (<a href=\"%1\">%1</a>) 已复制到剪贴板。"
 
-#: app/mainwindow.cpp:572
+#: app/mainwindow.cpp:577
 #, kde-format
 msgctxt "@title:menu submenu for actions that open configuration dialogs"
 msgid "Configure"
 msgstr "配置"
 
-#: app/mainwindow.cpp:587
+#: app/mainwindow.cpp:592
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "Edit"
 msgstr "编辑"
 
-#: app/mainwindow.cpp:592
+#: app/mainwindow.cpp:597
 #, kde-format
 msgid "Redo"
 msgstr "重做"
 
-#: app/mainwindow.cpp:600
+#: app/mainwindow.cpp:605
 #, kde-format
 msgid "Undo"
 msgstr "撤销"
 
-#: app/mainwindow.cpp:627
+#: app/mainwindow.cpp:632
 #, kde-format
 msgid "Folders"
 msgstr "文件夹"
 
-#: app/mainwindow.cpp:633
+#: app/mainwindow.cpp:638
 #, kde-format
 msgid "Information"
 msgstr "信息"
 
-#: app/mainwindow.cpp:672
+#: app/mainwindow.cpp:677
 #, kde-format
 msgid "Operations"
 msgstr "操作"
 
-#: app/mainwindow.cpp:1377
+#: app/mainwindow.cpp:1382
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "隐藏侧边栏"
 
-#: app/mainwindow.cpp:1377
+#: app/mainwindow.cpp:1382
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "显示侧边栏"
 
-#: app/mainwindow.cpp:1684
+#: app/mainwindow.cpp:1689
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "打开图像"
 
-#: app/mainwindow.cpp:1744
+#: app/mainwindow.cpp:1749
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "暂停幻灯片放映"
 
-#: app/mainwindow.cpp:1747
+#: app/mainwindow.cpp:1752
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "继续幻灯片放映"
 
-#: app/mainwindow.cpp:1747
+#: app/mainwindow.cpp:1752
 #, kde-format
 msgid "Start Slideshow"
 msgstr "开始幻灯片放映"
 
-#: app/mainwindow.cpp:1760
+#: app/mainwindow.cpp:1765
 #, kde-format
 msgid "Save All Changes"
 msgstr "保存全部更改"
 
-#: app/mainwindow.cpp:1761
+#: app/mainwindow.cpp:1766
 #, kde-format
 msgid "Discard Changes"
 msgstr "丢弃更改"
 
-#: app/mainwindow.cpp:1763
+#: app/mainwindow.cpp:1768
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "%1 个图像已修改。"
 
-#: app/mainwindow.cpp:1763
+#: app/mainwindow.cpp:1768
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "如果现在退出，您的更改将会丢失。"
 
-#: app/mainwindow.cpp:1818
+#: app/mainwindow.cpp:1823
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr "菜单栏将被完全隐藏。按 %1 可以重新显示。"
 
-#: app/mainwindow.cpp:1821
+#: app/mainwindow.cpp:1826
 #, kde-format
 msgid "Hide menu bar"
 msgstr "隐藏菜单栏"
 
-#: app/mainwindow.cpp:2041
+#: app/mainwindow.cpp:2046
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "您已切换到第一张图像，接下来应该怎么做？"
 
-#: app/mainwindow.cpp:2042 app/mainwindow.cpp:2056
+#: app/mainwindow.cpp:2047 app/mainwindow.cpp:2061
 #, kde-format
 msgid "Stay There"
 msgstr "停留在此位置"
 
-#: app/mainwindow.cpp:2043
+#: app/mainwindow.cpp:2048
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "切换到最后一张图像"
 
-#: app/mainwindow.cpp:2044 app/mainwindow.cpp:2058
+#: app/mainwindow.cpp:2049 app/mainwindow.cpp:2063
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "返回到图像列表"
 
-#: app/mainwindow.cpp:2055
+#: app/mainwindow.cpp:2060
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "您已切换到最后一张图像，接下来应该怎么做？"
 
-#: app/mainwindow.cpp:2057
+#: app/mainwindow.cpp:2062
 #, kde-format
 msgid "Go to the First Document"
 msgstr "切换到第一张图像"
