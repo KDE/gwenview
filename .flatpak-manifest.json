@@ -212,7 +212,7 @@
               {
                   "type": "git",
                   "url": "https://invent.kde.org/frameworks/baloo",
-                  "branch": "kf5"
+                  "tag": "v5.104.0"
               }
           ]
       },
