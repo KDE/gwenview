@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-07 00:44+0000\n"
+"POT-Creation-Date: 2023-03-11 00:45+0000\n"
 "PO-Revision-Date: 2021-12-27 16:33+0100\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -285,13 +285,13 @@ msgstr "Képmegjelenítés"
 msgid "Advanced"
 msgstr "Speciális"
 
-#: app/fileoperations.cpp:64
+#: app/fileoperations.cpp:67
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Copy %1"
 msgstr "%1 másolása"
 
-#: app/fileoperations.cpp:66
+#: app/fileoperations.cpp:69
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Copy %1 image"
@@ -299,19 +299,19 @@ msgid_plural "Copy %1 images"
 msgstr[0] "%1 kép másolása"
 msgstr[1] "%1 kép másolása"
 
-#: app/fileoperations.cpp:68
+#: app/fileoperations.cpp:71
 #, kde-format
 msgctxt "@action:button"
 msgid "Copy"
 msgstr "Másolás"
 
-#: app/fileoperations.cpp:72
+#: app/fileoperations.cpp:75
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Move %1"
 msgstr "%1 áthelyezése"
 
-#: app/fileoperations.cpp:74
+#: app/fileoperations.cpp:77
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Move %1 image"
@@ -319,19 +319,19 @@ msgid_plural "Move %1 images"
 msgstr[0] "%1 kép áthelyezése"
 msgstr[1] "%1 kép áthelyezése"
 
-#: app/fileoperations.cpp:76
+#: app/fileoperations.cpp:79
 #, kde-format
 msgctxt "@action:button"
 msgid "Move"
 msgstr "Áthelyezés"
 
-#: app/fileoperations.cpp:80
+#: app/fileoperations.cpp:83
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Link %1"
 msgstr "%1 linkelése"
 
-#: app/fileoperations.cpp:82
+#: app/fileoperations.cpp:85
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Link %1 image"
@@ -339,28 +339,28 @@ msgid_plural "Link %1 images"
 msgstr[0] "%1 kép linkelése"
 msgstr[1] "%1 kép linkelése"
 
-#: app/fileoperations.cpp:84
+#: app/fileoperations.cpp:87
 #, kde-format
 msgctxt "@action:button"
 msgid "Link"
 msgstr "Link"
 
-#: app/fileoperations.cpp:195
+#: app/fileoperations.cpp:217
 #, kde-format
 msgid "Move Here"
 msgstr "Áthelyezés ide"
 
-#: app/fileoperations.cpp:196
+#: app/fileoperations.cpp:218
 #, kde-format
 msgid "Copy Here"
 msgstr "Másolás ide"
 
-#: app/fileoperations.cpp:197
+#: app/fileoperations.cpp:219
 #, kde-format
 msgid "Link Here"
 msgstr "Link ide"
 
-#: app/fileoperations.cpp:199
+#: app/fileoperations.cpp:221
 #, kde-format
 msgid "Cancel"
 msgstr "Mégsem"

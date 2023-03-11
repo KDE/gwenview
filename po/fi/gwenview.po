@@ -6,7 +6,7 @@
 # Elias Julkunen <elias.julkunen@gmail.com>, 2008, 2010.
 # Sasu Karttunen <sasu.karttunen@tpnet.fi>, 2010.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2010, 2011, 2012, 2013, 2014, 2015, 2016.
-# Tommi Nieminen <translator@legisign.org>, 2011, 2016, 2018, 2019, 2020, 2021, 2022.
+# Tommi Nieminen <translator@legisign.org>, 2011, 2016, 2018, 2019, 2020, 2021, 2022, 2023.
 #
 # KDE Finnish translation sprint participants:
 # Author: Artnay
@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-07 00:44+0000\n"
-"PO-Revision-Date: 2022-07-29 13:25+0300\n"
+"POT-Creation-Date: 2023-03-11 00:45+0000\n"
+"PO-Revision-Date: 2023-03-05 21:51+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -30,7 +30,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 20.12.0\n"
+"X-Generator: Lokalize 22.12.2\n"
 "X-POT-Import-Date: 2012-12-01 22:24:09+0000\n"
 
 #, kde-format
@@ -298,13 +298,13 @@ msgstr "Kuvanäkymä"
 msgid "Advanced"
 msgstr "Lisäasetukset"
 
-#: app/fileoperations.cpp:64
+#: app/fileoperations.cpp:67
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Copy %1"
 msgstr "Kopioi %1"
 
-#: app/fileoperations.cpp:66
+#: app/fileoperations.cpp:69
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Copy %1 image"
@@ -312,19 +312,19 @@ msgid_plural "Copy %1 images"
 msgstr[0] "Kopioi %1 kuva"
 msgstr[1] "Kopioi %1 kuvaa"
 
-#: app/fileoperations.cpp:68
+#: app/fileoperations.cpp:71
 #, kde-format
 msgctxt "@action:button"
 msgid "Copy"
 msgstr "Kopioi"
 
-#: app/fileoperations.cpp:72
+#: app/fileoperations.cpp:75
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Move %1"
 msgstr "Siirrä %1"
 
-#: app/fileoperations.cpp:74
+#: app/fileoperations.cpp:77
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Move %1 image"
@@ -332,19 +332,19 @@ msgid_plural "Move %1 images"
 msgstr[0] "Siirrä %1 kuva"
 msgstr[1] "Siirrä %1 kuvaa"
 
-#: app/fileoperations.cpp:76
+#: app/fileoperations.cpp:79
 #, kde-format
 msgctxt "@action:button"
 msgid "Move"
 msgstr "Siirrä"
 
-#: app/fileoperations.cpp:80
+#: app/fileoperations.cpp:83
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Link %1"
 msgstr "Linkitä %1"
 
-#: app/fileoperations.cpp:82
+#: app/fileoperations.cpp:85
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Link %1 image"
@@ -352,28 +352,28 @@ msgid_plural "Link %1 images"
 msgstr[0] "Linkitä %1 kuva"
 msgstr[1] "Linkitä %1 kuvaa"
 
-#: app/fileoperations.cpp:84
+#: app/fileoperations.cpp:87
 #, kde-format
 msgctxt "@action:button"
 msgid "Link"
 msgstr "Linkitä"
 
-#: app/fileoperations.cpp:195
+#: app/fileoperations.cpp:217
 #, kde-format
 msgid "Move Here"
 msgstr "Siirrä tänne"
 
-#: app/fileoperations.cpp:196
+#: app/fileoperations.cpp:218
 #, kde-format
 msgid "Copy Here"
 msgstr "Kopioi tänne"
 
-#: app/fileoperations.cpp:197
+#: app/fileoperations.cpp:219
 #, kde-format
 msgid "Link Here"
 msgstr "Linkitä tänne"
 
-#: app/fileoperations.cpp:199
+#: app/fileoperations.cpp:221
 #, kde-format
 msgid "Cancel"
 msgstr "Peru"
@@ -846,7 +846,7 @@ msgstr "Rajaa"
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Adjust Colors"
-msgstr ""
+msgstr "Säädä värejä"
 
 #: app/imageopscontextmanageritem.cpp:128
 #: lib/redeyereduction/redeyereductionimageoperation.cpp:75
@@ -1922,12 +1922,10 @@ msgid "Support for your camera is not installed."
 msgstr "Kamerallesi ei ole asennettu tukea."
 
 #: importer/thumbnailpage.cpp:236
-#, fuzzy, kde-format
-#| msgctxt "@info above install button, %1 protocol name"
-#| msgid "The protocol support library for \"%1\" is not installed."
+#, kde-format
 msgctxt "@info above install button, %1 protocol name %2 error text from KIO"
 msgid "The protocol support library for \"%1\" is not installed. Error: %2"
-msgstr "Yhteyskäytännön ”%1” tukikirjastoa ei ole asennettu."
+msgstr "Yhteyskäytännön ”%1” tukikirjastoa ei ole asennettu. Virhe: %2"
 
 #: importer/thumbnailpage.cpp:238
 #, kde-format
@@ -2077,22 +2075,22 @@ msgstr "Kehittäjä"
 #: lib/bcg/bcgimageoperation.cpp:69
 #, kde-format
 msgid "Adjust Colors"
-msgstr ""
+msgstr "Säädä värejä"
 
 #: lib/bcg/bcgwidget.cpp:51
 #, kde-format
 msgid "Brightness:"
-msgstr ""
+msgstr "Kirkkaus:"
 
 #: lib/bcg/bcgwidget.cpp:52
 #, kde-format
 msgid "Contrast:"
-msgstr ""
+msgstr "Kontrasti:"
 
 #: lib/bcg/bcgwidget.cpp:53
 #, kde-format
 msgid "Gamma:"
-msgstr ""
+msgstr "Gamma:"
 
 #: lib/crop/cropwidget.cpp:191
 #, kde-format
