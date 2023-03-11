@@ -8,7 +8,6 @@
         "Name": "Start a Slideshow",
         "Name[ar]": "ابدأ عرض الشرائح",
         "Name[az]": "Slayd şounu başlatmaq",
-        "Name[be]": "Пачаць слайд-шоу",
         "Name[bg]": "Стартиране на прожекция",
         "Name[ca@valencia]": "Inicia un passe de diapositives",
         "Name[ca]": "Inicia un passi de diapositives",
@@ -16,7 +15,6 @@
         "Name[de]": "Diaschau starten",
         "Name[el]": "Έναρξη παρουσίασης",
         "Name[en_GB]": "Start a Slideshow",
-        "Name[eo]": "Komenci Bildoprezenton",
         "Name[es]": "Comenzar una presentación",
         "Name[eu]": "Hasi diapositiba-emanaldi bat",
         "Name[fi]": "Käynnistä diaesitys",
@@ -47,7 +45,6 @@
         "Name[uk]": "Розпочати показ слайдів",
         "Name[x-test]": "xxStart a Slideshowxx",
         "Name[zh_CN]": "开始幻灯片放映",
-        "Name[zh_TW]": "開始投影秀",
         "ServiceTypes": [
             "KFileItemAction/Plugin"
         ]
