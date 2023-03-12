@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-07 00:44+0000\n"
+"POT-Creation-Date: 2023-03-12 04:49+0000\n"
 "PO-Revision-Date: 2020-11-17 19:47+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -282,13 +282,13 @@ msgstr "Billedvisning"
 msgid "Advanced"
 msgstr "Avanceret"
 
-#: app/fileoperations.cpp:64
+#: app/fileoperations.cpp:67
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Copy %1"
 msgstr "Kopiér %1"
 
-#: app/fileoperations.cpp:66
+#: app/fileoperations.cpp:69
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Copy %1 image"
@@ -296,19 +296,19 @@ msgid_plural "Copy %1 images"
 msgstr[0] "Kopiér %1 billede"
 msgstr[1] "Kopiér %1 billeder"
 
-#: app/fileoperations.cpp:68
+#: app/fileoperations.cpp:71
 #, kde-format
 msgctxt "@action:button"
 msgid "Copy"
 msgstr "Kopiér"
 
-#: app/fileoperations.cpp:72
+#: app/fileoperations.cpp:75
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Move %1"
 msgstr "Flyt %1"
 
-#: app/fileoperations.cpp:74
+#: app/fileoperations.cpp:77
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Move %1 image"
@@ -316,19 +316,19 @@ msgid_plural "Move %1 images"
 msgstr[0] "Flyt %1 billede"
 msgstr[1] "Flyt %1 billeder"
 
-#: app/fileoperations.cpp:76
+#: app/fileoperations.cpp:79
 #, kde-format
 msgctxt "@action:button"
 msgid "Move"
 msgstr "Flyt"
 
-#: app/fileoperations.cpp:80
+#: app/fileoperations.cpp:83
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Link %1"
 msgstr "Link til %1"
 
-#: app/fileoperations.cpp:82
+#: app/fileoperations.cpp:85
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Link %1 image"
@@ -336,28 +336,28 @@ msgid_plural "Link %1 images"
 msgstr[0] "Link til %1 billede"
 msgstr[1] "Link til %1 billeder"
 
-#: app/fileoperations.cpp:84
+#: app/fileoperations.cpp:87
 #, kde-format
 msgctxt "@action:button"
 msgid "Link"
 msgstr "Link"
 
-#: app/fileoperations.cpp:195
+#: app/fileoperations.cpp:217
 #, kde-format
 msgid "Move Here"
 msgstr "Flyt hertil"
 
-#: app/fileoperations.cpp:196
+#: app/fileoperations.cpp:218
 #, kde-format
 msgid "Copy Here"
 msgstr "Kopiér hertil"
 
-#: app/fileoperations.cpp:197
+#: app/fileoperations.cpp:219
 #, kde-format
 msgid "Link Here"
 msgstr "Link hertil"
 
-#: app/fileoperations.cpp:199
+#: app/fileoperations.cpp:221
 #, kde-format
 msgid "Cancel"
 msgstr "Annullér"

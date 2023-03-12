@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-07 00:44+0000\n"
+"POT-Creation-Date: 2023-03-12 04:49+0000\n"
 "PO-Revision-Date: 2023-03-01 01:20+0100\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -274,79 +274,79 @@ msgstr "그림 보기"
 msgid "Advanced"
 msgstr "고급"
 
-#: app/fileoperations.cpp:64
+#: app/fileoperations.cpp:67
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Copy %1"
 msgstr "%1 복사"
 
-#: app/fileoperations.cpp:66
+#: app/fileoperations.cpp:69
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Copy %1 image"
 msgid_plural "Copy %1 images"
 msgstr[0] "그림 %1개 복사"
 
-#: app/fileoperations.cpp:68
+#: app/fileoperations.cpp:71
 #, kde-format
 msgctxt "@action:button"
 msgid "Copy"
 msgstr "복사"
 
-#: app/fileoperations.cpp:72
+#: app/fileoperations.cpp:75
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Move %1"
 msgstr "%1 이동"
 
-#: app/fileoperations.cpp:74
+#: app/fileoperations.cpp:77
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Move %1 image"
 msgid_plural "Move %1 images"
 msgstr[0] "그림 %1개 이동"
 
-#: app/fileoperations.cpp:76
+#: app/fileoperations.cpp:79
 #, kde-format
 msgctxt "@action:button"
 msgid "Move"
 msgstr "이동"
 
-#: app/fileoperations.cpp:80
+#: app/fileoperations.cpp:83
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Link %1"
 msgstr "%1 링크"
 
-#: app/fileoperations.cpp:82
+#: app/fileoperations.cpp:85
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Link %1 image"
 msgid_plural "Link %1 images"
 msgstr[0] "그림 %1개 링크"
 
-#: app/fileoperations.cpp:84
+#: app/fileoperations.cpp:87
 #, kde-format
 msgctxt "@action:button"
 msgid "Link"
 msgstr "링크"
 
-#: app/fileoperations.cpp:195
+#: app/fileoperations.cpp:217
 #, kde-format
 msgid "Move Here"
 msgstr "여기에 이동"
 
-#: app/fileoperations.cpp:196
+#: app/fileoperations.cpp:218
 #, kde-format
 msgid "Copy Here"
 msgstr "여기에 복사"
 
-#: app/fileoperations.cpp:197
+#: app/fileoperations.cpp:219
 #, kde-format
 msgid "Link Here"
 msgstr "여기에 링크 만들기"
 
-#: app/fileoperations.cpp:199
+#: app/fileoperations.cpp:221
 #, kde-format
 msgid "Cancel"
 msgstr "취소"

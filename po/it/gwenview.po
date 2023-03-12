@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-07 00:44+0000\n"
+"POT-Creation-Date: 2023-03-12 04:49+0000\n"
 "PO-Revision-Date: 2023-01-07 15:55+0100\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -288,13 +288,13 @@ msgstr "Vista immagini"
 msgid "Advanced"
 msgstr "Avanzate"
 
-#: app/fileoperations.cpp:64
+#: app/fileoperations.cpp:67
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Copy %1"
 msgstr "Copia %1"
 
-#: app/fileoperations.cpp:66
+#: app/fileoperations.cpp:69
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Copy %1 image"
@@ -302,19 +302,19 @@ msgid_plural "Copy %1 images"
 msgstr[0] "Copia %1 immagine"
 msgstr[1] "Copia %1 immagini"
 
-#: app/fileoperations.cpp:68
+#: app/fileoperations.cpp:71
 #, kde-format
 msgctxt "@action:button"
 msgid "Copy"
 msgstr "Copia"
 
-#: app/fileoperations.cpp:72
+#: app/fileoperations.cpp:75
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Move %1"
 msgstr "Sposta %1"
 
-#: app/fileoperations.cpp:74
+#: app/fileoperations.cpp:77
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Move %1 image"
@@ -322,19 +322,19 @@ msgid_plural "Move %1 images"
 msgstr[0] "Sposta %1 immagine"
 msgstr[1] "Sposta %1 immagini"
 
-#: app/fileoperations.cpp:76
+#: app/fileoperations.cpp:79
 #, kde-format
 msgctxt "@action:button"
 msgid "Move"
 msgstr "Sposta"
 
-#: app/fileoperations.cpp:80
+#: app/fileoperations.cpp:83
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Link %1"
 msgstr "Collega %1"
 
-#: app/fileoperations.cpp:82
+#: app/fileoperations.cpp:85
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Link %1 image"
@@ -342,28 +342,28 @@ msgid_plural "Link %1 images"
 msgstr[0] "Collega %1 immagine"
 msgstr[1] "Collega %1 immagini"
 
-#: app/fileoperations.cpp:84
+#: app/fileoperations.cpp:87
 #, kde-format
 msgctxt "@action:button"
 msgid "Link"
 msgstr "Collega"
 
-#: app/fileoperations.cpp:195
+#: app/fileoperations.cpp:217
 #, kde-format
 msgid "Move Here"
 msgstr "Sposta qui"
 
-#: app/fileoperations.cpp:196
+#: app/fileoperations.cpp:218
 #, kde-format
 msgid "Copy Here"
 msgstr "Copia qui"
 
-#: app/fileoperations.cpp:197
+#: app/fileoperations.cpp:219
 #, kde-format
 msgid "Link Here"
 msgstr "Collega qui"
 
-#: app/fileoperations.cpp:199
+#: app/fileoperations.cpp:221
 #, kde-format
 msgid "Cancel"
 msgstr "Annulla"

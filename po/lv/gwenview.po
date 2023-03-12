@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-07 00:44+0000\n"
+"POT-Creation-Date: 2023-03-12 04:49+0000\n"
 "PO-Revision-Date: 2012-07-02 21:42+0300\n"
 "Last-Translator: Einars Sprugis <einars8@gmail.com>\n"
 "Language-Team: Latvian <locale@laka.lv>\n"
@@ -292,7 +292,7 @@ msgstr "Attēlu skats"
 msgid "Advanced"
 msgstr "Paplašināti"
 
-#: app/fileoperations.cpp:64
+#: app/fileoperations.cpp:67
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Copy"
@@ -300,7 +300,7 @@ msgctxt "@title:window %1 file name"
 msgid "Copy %1"
 msgstr "Kopēt"
 
-#: app/fileoperations.cpp:66
+#: app/fileoperations.cpp:69
 #, fuzzy, kde-format
 #| msgid "Loop on images"
 msgctxt "@title:window %1 number of images"
@@ -310,13 +310,13 @@ msgstr[0] "Cilkot attēlus"
 msgstr[1] "Cilkot attēlus"
 msgstr[2] "Cilkot attēlus"
 
-#: app/fileoperations.cpp:68
+#: app/fileoperations.cpp:71
 #, kde-format
 msgctxt "@action:button"
 msgid "Copy"
 msgstr "Kopēt"
 
-#: app/fileoperations.cpp:72
+#: app/fileoperations.cpp:75
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Move"
@@ -324,7 +324,7 @@ msgctxt "@title:window %1 file name"
 msgid "Move %1"
 msgstr "Pārvietot"
 
-#: app/fileoperations.cpp:74
+#: app/fileoperations.cpp:77
 #, fuzzy, kde-format
 #| msgctxt "%1 is collection name, %2 is image count in collection"
 #| msgid "%1 (%2 image)"
@@ -336,13 +336,13 @@ msgstr[0] "%1 (%2 attēls)"
 msgstr[1] "%1 (%2 attēli)"
 msgstr[2] "%1 (%2 attēlu)"
 
-#: app/fileoperations.cpp:76
+#: app/fileoperations.cpp:79
 #, kde-format
 msgctxt "@action:button"
 msgid "Move"
 msgstr "Pārvietot"
 
-#: app/fileoperations.cpp:80
+#: app/fileoperations.cpp:83
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Link"
@@ -350,7 +350,7 @@ msgctxt "@title:window %1 file name"
 msgid "Link %1"
 msgstr "Saitēt"
 
-#: app/fileoperations.cpp:82
+#: app/fileoperations.cpp:85
 #, fuzzy, kde-format
 #| msgctxt "%1 is collection name, %2 is image count in collection"
 #| msgid "%1 (%2 image)"
@@ -362,28 +362,28 @@ msgstr[0] "%1 (%2 attēls)"
 msgstr[1] "%1 (%2 attēli)"
 msgstr[2] "%1 (%2 attēlu)"
 
-#: app/fileoperations.cpp:84
+#: app/fileoperations.cpp:87
 #, kde-format
 msgctxt "@action:button"
 msgid "Link"
 msgstr "Saitēt"
 
-#: app/fileoperations.cpp:195
+#: app/fileoperations.cpp:217
 #, kde-format
 msgid "Move Here"
 msgstr "Pārvietot šeit"
 
-#: app/fileoperations.cpp:196
+#: app/fileoperations.cpp:218
 #, kde-format
 msgid "Copy Here"
 msgstr "Kopēt šeit"
 
-#: app/fileoperations.cpp:197
+#: app/fileoperations.cpp:219
 #, kde-format
 msgid "Link Here"
 msgstr "Saitēt šeit"
 
-#: app/fileoperations.cpp:199
+#: app/fileoperations.cpp:221
 #, kde-format
 msgid "Cancel"
 msgstr "Atcelt"
