@@ -6,6 +6,7 @@
             "${IMAGE_MIME_LIST}"
         ],
         "Name": "Gwenview Image Viewer",
+        "Name[ca@valencia]": "Visor d'imatges Gwenview",
         "Name[ca]": "Visualitzador d'imatges Gwenview",
         "Name[cs]": "Prohlížeč obrázků Gwenview",
         "Name[es]": "Visor de imágenes Gwenview",
@@ -13,6 +14,7 @@
         "Name[nl]": "GWenview Afbeeldingenviewer",
         "Name[pt]": "Visualizador de Imagens Gwenview",
         "Name[pt_BR]": "Visualizador de imagens do Gwenview",
+        "Name[sl]": "Gwenview pregledovalnik slik",
         "Name[tr]": "Gwenview Görsel Görüntüleyici",
         "Name[uk]": "Переглядач зображень Gwenview",
         "Name[x-test]": "xxGwenview Image Viewerxx",
