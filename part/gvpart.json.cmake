@@ -11,6 +11,7 @@
         "Name[ca]": "Visualitzador d'imatges Gwenview",
         "Name[cs]": "Prohlížeč obrázků Gwenview",
         "Name[es]": "Visor de imágenes Gwenview",
+        "Name[fr]": "Afficheur d'images Gwenview",
         "Name[ka]": "Gwenview - სურათების დამთვალიერებელი",
         "Name[nl]": "GWenview Afbeeldingenviewer",
         "Name[pt]": "Visualizador de Imagens Gwenview",
