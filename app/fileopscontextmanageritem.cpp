@@ -41,7 +41,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KIO/Paste>
 #include <KIO/PasteJob>
 #include <KIO/RestoreJob>
-#include <KIOCore/KFileItemListProperties>
 #include <KJobWidgets>
 #include <KLocalizedString>
 #include <KOpenWithDialog>
