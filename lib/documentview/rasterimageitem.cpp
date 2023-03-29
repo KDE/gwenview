@@ -57,20 +57,23 @@ void RasterImageItem::setRenderingIntent(RenderingIntent::Enum intent)
 
 void Gwenview::RasterImageItem::updateCache()
 {
+    auto document = mParentView->document();
+
+    // Save a shallow copy of the image to make sure that it will not get
+    // destroyed by another thread.
+    mOriginalImage = document->image();
+
     // Cache two scaled down versions of the image, one at a third of the size
     // and one at a sixth. These are used instead of the document image at small
     // zoom levels, to avoid having to copy around the entire image which can be
     // very slow for large images.
-    auto document = mParentView->document();
-    mThirdScaledImage = document->image().scaled(document->size() * Third, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-    mSixthScaledImage = document->image().scaled(document->size() * Sixth, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    mThirdScaledImage = mOriginalImage.scaled(document->size() * Third, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    mSixthScaledImage = mOriginalImage.scaled(document->size() * Sixth, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 }
 
 void RasterImageItem::paint(QPainter *painter, const QStyleOptionGraphicsItem * /*option*/, QWidget * /*widget*/)
 {
-    auto document = mParentView->document();
-
-    if (document->image().isNull() || mThirdScaledImage.isNull() || mSixthScaledImage.isNull()) {
+    if (mOriginalImage.isNull() || mThirdScaledImage.isNull() || mSixthScaledImage.isNull()) {
         return;
     }
 
@@ -92,7 +95,7 @@ void RasterImageItem::paint(QPainter *painter, const QStyleOptionGraphicsItem * 
 
     // Constrain the visible area rect by the image's rect so we don't try to
     // copy pixels that are outside the image.
-    imageRect = imageRect.intersected(document->image().rect());
+    imageRect = imageRect.intersected(mOriginalImage.rect());
 
     QImage image;
     qreal targetZoom = zoom;
@@ -102,7 +105,7 @@ void RasterImageItem::paint(QPainter *painter, const QStyleOptionGraphicsItem * 
     // image data. If we are zoomed out far enough, we instead use one of the
     // cached scaled copies to avoid having to copy a lot of data.
     if (zoom > Third) {
-        image = document->image().copy(imageRect);
+        image = mOriginalImage.copy(imageRect);
     } else if (zoom > Sixth) {
         auto sourceRect = QRect{imageRect.topLeft() * Third, imageRect.size() * Third};
         targetZoom = zoom / Third;

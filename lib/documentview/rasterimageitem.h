@@ -76,6 +76,7 @@ private:
     cmsHTRANSFORM mDisplayTransform = nullptr;
     cmsUInt32Number mRenderingIntent = INTENT_PERCEPTUAL;
 
+    QImage mOriginalImage;
     QImage mThirdScaledImage;
     QImage mSixthScaledImage;
 };
