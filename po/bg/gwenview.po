@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-21 00:45+0000\n"
+"POT-Creation-Date: 2023-03-29 00:45+0000\n"
 "PO-Revision-Date: 2023-01-07 17:40+0100\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
@@ -218,7 +218,7 @@ msgctxt "@action:inmenu"
 msgid "Rating"
 msgstr "Оценка"
 
-#: app/browsemainpage.cpp:195 app/fileopscontextmanageritem.cpp:142
+#: app/browsemainpage.cpp:195 app/fileopscontextmanageritem.cpp:141
 #: app/mainwindow.cpp:377
 #, kde-format
 msgctxt "@title actions category"
@@ -362,74 +362,74 @@ msgstr "Създаване на връзка"
 msgid "Cancel"
 msgstr "Отказ"
 
-#: app/fileopscontextmanageritem.cpp:132
+#: app/fileopscontextmanageritem.cpp:131
 #, kde-format
 msgid "File Operations"
 msgstr "Операции с файлове"
 
-#: app/fileopscontextmanageritem.cpp:143
+#: app/fileopscontextmanageritem.cpp:142
 #: app/semanticinfocontextmanageritem.cpp:203
 #, kde-format
 msgctxt "@title actions category"
 msgid "Edit"
 msgstr "Редактиране"
 
-#: app/fileopscontextmanageritem.cpp:150
+#: app/fileopscontextmanageritem.cpp:149
 #, kde-format
 msgctxt "Verb"
 msgid "Copy To..."
 msgstr "Копиране в..."
 
-#: app/fileopscontextmanageritem.cpp:155
+#: app/fileopscontextmanageritem.cpp:154
 #, kde-format
 msgctxt "Verb"
 msgid "Move To..."
 msgstr "Преместване в..."
 
-#: app/fileopscontextmanageritem.cpp:160
+#: app/fileopscontextmanageritem.cpp:159
 #, kde-format
 msgctxt "Verb: create link to the file where user wants"
 msgid "Link To..."
 msgstr "Връзка към..."
 
-#: app/fileopscontextmanageritem.cpp:165
+#: app/fileopscontextmanageritem.cpp:164
 #, kde-format
 msgctxt "Verb"
 msgid "Rename..."
 msgstr "Преименуване..."
 
-#: app/fileopscontextmanageritem.cpp:170
+#: app/fileopscontextmanageritem.cpp:169
 #, kde-format
 msgctxt "Verb"
 msgid "Trash"
 msgstr "Кошче"
 
-#: app/fileopscontextmanageritem.cpp:177
+#: app/fileopscontextmanageritem.cpp:176
 #, kde-format
 msgid "Restore"
 msgstr "Възстановяване"
 
-#: app/fileopscontextmanageritem.cpp:181
+#: app/fileopscontextmanageritem.cpp:180
 #, kde-format
 msgid "Properties"
 msgstr "Информация"
 
-#: app/fileopscontextmanageritem.cpp:186
+#: app/fileopscontextmanageritem.cpp:185
 #, kde-format
 msgid "Create Folder..."
 msgstr "Създаване на директория..."
 
-#: app/fileopscontextmanageritem.cpp:190
+#: app/fileopscontextmanageritem.cpp:189
 #, kde-format
 msgid "Open With"
 msgstr "Отваряне с"
 
-#: app/fileopscontextmanageritem.cpp:198
+#: app/fileopscontextmanageritem.cpp:197
 #, kde-format
 msgid "Open Containing Folder"
 msgstr "Отваряне на съдържащата папка"
 
-#: app/fileopscontextmanageritem.cpp:380
+#: app/fileopscontextmanageritem.cpp:379
 #, kde-format
 msgid "Other Application..."
 msgstr "Друга програма..."

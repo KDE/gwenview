@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-21 00:45+0000\n"
+"POT-Creation-Date: 2023-03-29 00:45+0000\n"
 "PO-Revision-Date: 2023-03-01 01:20+0100\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -212,7 +212,7 @@ msgctxt "@action:inmenu"
 msgid "Rating"
 msgstr "별점"
 
-#: app/browsemainpage.cpp:195 app/fileopscontextmanageritem.cpp:142
+#: app/browsemainpage.cpp:195 app/fileopscontextmanageritem.cpp:141
 #: app/mainwindow.cpp:377
 #, kde-format
 msgctxt "@title actions category"
@@ -351,74 +351,74 @@ msgstr "여기에 링크 만들기"
 msgid "Cancel"
 msgstr "취소"
 
-#: app/fileopscontextmanageritem.cpp:132
+#: app/fileopscontextmanageritem.cpp:131
 #, kde-format
 msgid "File Operations"
 msgstr "파일 작업"
 
-#: app/fileopscontextmanageritem.cpp:143
+#: app/fileopscontextmanageritem.cpp:142
 #: app/semanticinfocontextmanageritem.cpp:203
 #, kde-format
 msgctxt "@title actions category"
 msgid "Edit"
 msgstr "편집"
 
-#: app/fileopscontextmanageritem.cpp:150
+#: app/fileopscontextmanageritem.cpp:149
 #, kde-format
 msgctxt "Verb"
 msgid "Copy To..."
 msgstr "다음으로 복사..."
 
-#: app/fileopscontextmanageritem.cpp:155
+#: app/fileopscontextmanageritem.cpp:154
 #, kde-format
 msgctxt "Verb"
 msgid "Move To..."
 msgstr "다음으로 이동..."
 
-#: app/fileopscontextmanageritem.cpp:160
+#: app/fileopscontextmanageritem.cpp:159
 #, kde-format
 msgctxt "Verb: create link to the file where user wants"
 msgid "Link To..."
 msgstr "다음으로 링크..."
 
-#: app/fileopscontextmanageritem.cpp:165
+#: app/fileopscontextmanageritem.cpp:164
 #, kde-format
 msgctxt "Verb"
 msgid "Rename..."
 msgstr "이름 바꾸기..."
 
-#: app/fileopscontextmanageritem.cpp:170
+#: app/fileopscontextmanageritem.cpp:169
 #, kde-format
 msgctxt "Verb"
 msgid "Trash"
 msgstr "휴지통으로 이동"
 
-#: app/fileopscontextmanageritem.cpp:177
+#: app/fileopscontextmanageritem.cpp:176
 #, kde-format
 msgid "Restore"
 msgstr "복원"
 
-#: app/fileopscontextmanageritem.cpp:181
+#: app/fileopscontextmanageritem.cpp:180
 #, kde-format
 msgid "Properties"
 msgstr "속성"
 
-#: app/fileopscontextmanageritem.cpp:186
+#: app/fileopscontextmanageritem.cpp:185
 #, kde-format
 msgid "Create Folder..."
 msgstr "폴더 만들기..."
 
-#: app/fileopscontextmanageritem.cpp:190
+#: app/fileopscontextmanageritem.cpp:189
 #, kde-format
 msgid "Open With"
 msgstr "다음으로 열기"
 
-#: app/fileopscontextmanageritem.cpp:198
+#: app/fileopscontextmanageritem.cpp:197
 #, kde-format
 msgid "Open Containing Folder"
 msgstr "포함하는 폴더 열기"
 
-#: app/fileopscontextmanageritem.cpp:380
+#: app/fileopscontextmanageritem.cpp:379
 #, kde-format
 msgid "Other Application..."
 msgstr "다른 프로그램..."
