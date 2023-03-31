@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-12 04:49+0000\n"
-"PO-Revision-Date: 2023-03-19 14:48+0100\n"
+"PO-Revision-Date: 2023-03-30 22:43+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
 "Language: nn\n"
@@ -846,13 +846,13 @@ msgstr "Fjern raude auge"
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Annotate"
-msgstr ""
+msgstr "Legg til påteikningar"
 
 #: app/imageopscontextmanageritem.cpp:141
 #, kde-format
 msgctxt "@title:window Annotate [filename]"
 msgid "Annotate %1"
-msgstr ""
+msgstr "Legg påteikningar på %1"
 
 #: app/imageopscontextmanageritem.cpp:164 lib/document/documentjob.cpp:77
 #, kde-format
