@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-29 00:45+0000\n"
+"POT-Creation-Date: 2023-03-31 00:44+0000\n"
 "PO-Revision-Date: 2013-06-28 02:40+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -2774,7 +2774,7 @@ msgctxt "(qtundo-format)"
 msgid "Transform"
 msgstr "Түрлендіру"
 
-#: part/gvpart.cpp:70
+#: part/gvpart.cpp:76
 #, kde-format
 msgctxt "@action"
 msgid "Properties"

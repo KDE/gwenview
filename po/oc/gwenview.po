@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-29 00:45+0000\n"
+"POT-Creation-Date: 2023-03-31 00:44+0000\n"
 "PO-Revision-Date: 2008-08-05 22:27+0200\n"
 "Last-Translator: Yannig Marchegay (Kokoyaya) <yannig@marchegay.org>\n"
 "Language-Team: Occitan (lengadocian) <ubuntu-l10n-oci@lists.ubuntu.com>\n"
@@ -2795,7 +2795,7 @@ msgctxt "(qtundo-format)"
 msgid "Transform"
 msgstr ""
 
-#: part/gvpart.cpp:70
+#: part/gvpart.cpp:76
 #, fuzzy, kde-format
 #| msgid "Properties"
 msgctxt "@action"

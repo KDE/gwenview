@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KDE Frameworks 5 Applications\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-29 00:45+0000\n"
+"POT-Creation-Date: 2023-03-31 00:44+0000\n"
 "PO-Revision-Date: 2022-09-27 17:54+0700\n"
 "Last-Translator: Wantoyèk <wantoyek@gmail.com>\n"
 "Language-Team: Indonesian <kde-i18n-doc@kde.org>\n"
@@ -2767,7 +2767,7 @@ msgctxt "(qtundo-format)"
 msgid "Transform"
 msgstr "Jelma"
 
-#: part/gvpart.cpp:70
+#: part/gvpart.cpp:76
 #, kde-format
 msgctxt "@action"
 msgid "Properties"

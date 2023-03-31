@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-21 00:45+0000\n"
-"PO-Revision-Date: 2023-03-19 14:48+0100\n"
+"POT-Creation-Date: 2023-03-29 00:45+0000\n"
+"PO-Revision-Date: 2023-03-30 22:43+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
 "Language: nn\n"
@@ -218,7 +218,7 @@ msgctxt "@action:inmenu"
 msgid "Rating"
 msgstr "Karakter"
 
-#: app/browsemainpage.cpp:195 app/fileopscontextmanageritem.cpp:142
+#: app/browsemainpage.cpp:195 app/fileopscontextmanageritem.cpp:141
 #: app/mainwindow.cpp:377
 #, kde-format
 msgctxt "@title actions category"
@@ -362,76 +362,76 @@ msgstr "Lag lenkje hit"
 msgid "Cancel"
 msgstr "Avbryt"
 
-#: app/fileopscontextmanageritem.cpp:132
+#: app/fileopscontextmanageritem.cpp:131
 #, kde-format
 msgid "File Operations"
 msgstr "Filhandlingar"
 
 # unreviewed-context
-#: app/fileopscontextmanageritem.cpp:143
+#: app/fileopscontextmanageritem.cpp:142
 #: app/semanticinfocontextmanageritem.cpp:203
 #, kde-format
 msgctxt "@title actions category"
 msgid "Edit"
 msgstr "Rediger"
 
-#: app/fileopscontextmanageritem.cpp:150
+#: app/fileopscontextmanageritem.cpp:149
 #, kde-format
 msgctxt "Verb"
 msgid "Copy To..."
 msgstr "Kopier til …"
 
-#: app/fileopscontextmanageritem.cpp:155
+#: app/fileopscontextmanageritem.cpp:154
 #, kde-format
 msgctxt "Verb"
 msgid "Move To..."
 msgstr "Flytt til …"
 
 # unreviewed-context
-#: app/fileopscontextmanageritem.cpp:160
+#: app/fileopscontextmanageritem.cpp:159
 #, kde-format
 msgctxt "Verb: create link to the file where user wants"
 msgid "Link To..."
 msgstr "Lag lenkje til …"
 
-#: app/fileopscontextmanageritem.cpp:165
+#: app/fileopscontextmanageritem.cpp:164
 #, kde-format
 msgctxt "Verb"
 msgid "Rename..."
 msgstr "Endra namn …"
 
-#: app/fileopscontextmanageritem.cpp:170
+#: app/fileopscontextmanageritem.cpp:169
 #, kde-format
 msgctxt "Verb"
 msgid "Trash"
 msgstr "Legg i papirkorg"
 
-#: app/fileopscontextmanageritem.cpp:177
+#: app/fileopscontextmanageritem.cpp:176
 #, kde-format
 msgid "Restore"
 msgstr "Gjenopprett"
 
-#: app/fileopscontextmanageritem.cpp:181
+#: app/fileopscontextmanageritem.cpp:180
 #, kde-format
 msgid "Properties"
 msgstr "Eigenskapar"
 
-#: app/fileopscontextmanageritem.cpp:186
+#: app/fileopscontextmanageritem.cpp:185
 #, kde-format
 msgid "Create Folder..."
 msgstr "Lag mappe …"
 
-#: app/fileopscontextmanageritem.cpp:190
+#: app/fileopscontextmanageritem.cpp:189
 #, kde-format
 msgid "Open With"
 msgstr "Opna med"
 
-#: app/fileopscontextmanageritem.cpp:198
+#: app/fileopscontextmanageritem.cpp:197
 #, kde-format
 msgid "Open Containing Folder"
 msgstr "Opna mappa med innhaldet"
 
-#: app/fileopscontextmanageritem.cpp:380
+#: app/fileopscontextmanageritem.cpp:379
 #, kde-format
 msgid "Other Application..."
 msgstr "Anna program …"
@@ -846,13 +846,13 @@ msgstr "Fjern raude auge"
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Annotate"
-msgstr ""
+msgstr "Legg til påteikningar"
 
 #: app/imageopscontextmanageritem.cpp:141
 #, kde-format
 msgctxt "@title:window Annotate [filename]"
 msgid "Annotate %1"
-msgstr ""
+msgstr "Legg påteikningar på %1"
 
 #: app/imageopscontextmanageritem.cpp:164 lib/document/documentjob.cpp:77
 #, kde-format
