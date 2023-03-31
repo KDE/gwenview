@@ -1053,6 +1053,7 @@ MainWindow::MainWindow()
     loadConfig();
 
     connect(DocumentFactory::instance(), &DocumentFactory::modifiedDocumentListChanged, this, &MainWindow::slotModifiedDocumentListChanged);
+    connect(qApp, &QApplication::focusChanged, this, &MainWindow::onFocusChanged);
 
 #ifdef HAVE_QTDBUS
     d->mMpris2Service =
@@ -2078,6 +2079,19 @@ void MainWindow::replaceLocation()
         d->mUrlNavigator->setUrlEditable(true);
         d->mUrlNavigator->setFocus();
         lineEdit->selectAll();
+    }
+}
+
+void MainWindow::onFocusChanged(QWidget *old, QWidget *now)
+{
+    if (old == nullptr) {
+        if (now != nullptr && isFullScreen()) {
+            d->setScreenSaverEnabled(false);
+        }
+    } else {
+        if (now == nullptr) {
+            d->setScreenSaverEnabled(true);
+        }
     }
 }
 

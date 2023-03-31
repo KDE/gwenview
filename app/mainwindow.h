@@ -140,6 +140,8 @@ private Q_SLOTS:
 
     void replaceLocation();
 
+    void onFocusChanged(QWidget *old, QWidget *now);
+
 private:
     struct Private;
     MainWindow::Private *const d;
