@@ -19,6 +19,7 @@
         "Name[it]": "Visore di immagini Gwenview",
         "Name[ka]": "Gwenview - სურათების დამთვალიერებელი",
         "Name[nl]": "GWenview Afbeeldingenviewer",
+        "Name[nn]": "Gwenview biletvisar",
         "Name[pt]": "Visualizador de Imagens Gwenview",
         "Name[pt_BR]": "Visualizador de imagens do Gwenview",
         "Name[sl]": "Gwenview pregledovalnik slik",
