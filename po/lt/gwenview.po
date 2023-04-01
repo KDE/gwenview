@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-12 04:49+0000\n"
+"POT-Creation-Date: 2023-04-01 02:41+0000\n"
 "PO-Revision-Date: 2022-12-12 21:19+0200\n"
 "Last-Translator: Moo <<>>\n"
 "Language-Team: lt <kde-i18n-lt@kde.org>\n"
@@ -1276,50 +1276,50 @@ msgstr "Informacija"
 msgid "Operations"
 msgstr "Operacijos"
 
-#: app/mainwindow.cpp:1382
+#: app/mainwindow.cpp:1383
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Slėpti šoninę juostą"
 
-#: app/mainwindow.cpp:1382
+#: app/mainwindow.cpp:1383
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Rodyti šoninę juostą"
 
-#: app/mainwindow.cpp:1689
+#: app/mainwindow.cpp:1690
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Atverti paveikslą"
 
-#: app/mainwindow.cpp:1749
+#: app/mainwindow.cpp:1750
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "Pristabdyti skaidrių rodymą"
 
-#: app/mainwindow.cpp:1752
+#: app/mainwindow.cpp:1753
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "Pratęsti skaidrių rodymą"
 
-#: app/mainwindow.cpp:1752
+#: app/mainwindow.cpp:1753
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Pradėti skaidrių rodymą"
 
-#: app/mainwindow.cpp:1765
+#: app/mainwindow.cpp:1766
 #, kde-format
 msgid "Save All Changes"
 msgstr "Įrašyti visus pakeitimus"
 
-#: app/mainwindow.cpp:1766
+#: app/mainwindow.cpp:1767
 #, kde-format
 msgid "Discard Changes"
 msgstr "Atmesti pakeitimus"
 
-#: app/mainwindow.cpp:1768
+#: app/mainwindow.cpp:1769
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
@@ -1328,48 +1328,48 @@ msgstr[1] "Pakeisti %1 paveikslai."
 msgstr[2] "Pakeista %1 paveikslų."
 msgstr[3] "Pakeistas %1 paveikslas."
 
-#: app/mainwindow.cpp:1768
+#: app/mainwindow.cpp:1769
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Jei išjungsite programą dabar, jūsų atlikti pakeitimai bus prarasti."
 
-#: app/mainwindow.cpp:1823
+#: app/mainwindow.cpp:1824
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr "Tai visiškai paslėps meniu juostą. Galite vėl ją rodyti, paspaudę %1."
 
-#: app/mainwindow.cpp:1826
+#: app/mainwindow.cpp:1827
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Slėpti meniu juostą"
 
-#: app/mainwindow.cpp:2046
+#: app/mainwindow.cpp:2047
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "Pasiekėte pirmąjį dokumentą. Ką norėtumėte daryti?"
 
-#: app/mainwindow.cpp:2047 app/mainwindow.cpp:2061
+#: app/mainwindow.cpp:2048 app/mainwindow.cpp:2062
 #, kde-format
 msgid "Stay There"
 msgstr "Pasilikti ten"
 
-#: app/mainwindow.cpp:2048
+#: app/mainwindow.cpp:2049
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "Pereiti į paskutinį dokumentą"
 
-#: app/mainwindow.cpp:2049 app/mainwindow.cpp:2063
+#: app/mainwindow.cpp:2050 app/mainwindow.cpp:2064
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "Grįžti į dokumentų sąrašą"
 
-#: app/mainwindow.cpp:2060
+#: app/mainwindow.cpp:2061
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "Pasiekėte paskutinįjį dokumentą. Ką norėtumėte daryti?"
 
-#: app/mainwindow.cpp:2062
+#: app/mainwindow.cpp:2063
 #, kde-format
 msgid "Go to the First Document"
 msgstr "Pereiti į pirmą dokumentą"
