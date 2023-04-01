@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-31 00:44+0000\n"
+"POT-Creation-Date: 2023-04-01 00:48+0000\n"
 "PO-Revision-Date: 2012-07-02 21:42+0300\n"
 "Last-Translator: Einars Sprugis <einars8@gmail.com>\n"
 "Language-Team: Latvian <locale@laka.lv>\n"
@@ -1303,52 +1303,52 @@ msgstr "Informācija"
 msgid "Operations"
 msgstr "Darbības"
 
-#: app/mainwindow.cpp:1383
+#: app/mainwindow.cpp:1384
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Slēpt sānjoslu"
 
-#: app/mainwindow.cpp:1383
+#: app/mainwindow.cpp:1384
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Rādīt sānjoslu"
 
-#: app/mainwindow.cpp:1690
+#: app/mainwindow.cpp:1691
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Atvērt attēlu"
 
-#: app/mainwindow.cpp:1750
+#: app/mainwindow.cpp:1751
 #, fuzzy, kde-format
 #| msgid "Slideshow"
 msgid "Pause Slideshow"
 msgstr "Slīdrāde"
 
-#: app/mainwindow.cpp:1753
+#: app/mainwindow.cpp:1754
 #, fuzzy, kde-format
 #| msgid "Slideshow"
 msgid "Resume Slideshow"
 msgstr "Slīdrāde"
 
-#: app/mainwindow.cpp:1753
+#: app/mainwindow.cpp:1754
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Sākt slīdrādi"
 
-#: app/mainwindow.cpp:1766
+#: app/mainwindow.cpp:1767
 #, kde-format
 msgid "Save All Changes"
 msgstr "Saglabāt visas izmaiņas"
 
-#: app/mainwindow.cpp:1767
+#: app/mainwindow.cpp:1768
 #, kde-format
 msgid "Discard Changes"
 msgstr "Izmest izmaiņas"
 
-#: app/mainwindow.cpp:1769
+#: app/mainwindow.cpp:1770
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
@@ -1356,53 +1356,53 @@ msgstr[0] "Izmainīts %1 attēls."
 msgstr[1] "Izmainīti %1 attēli."
 msgstr[2] "Izmanīti %1 attēlu."
 
-#: app/mainwindow.cpp:1769
+#: app/mainwindow.cpp:1770
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Ja aizvērsiet tagad, pazaudēsiet jūsu veiktās izmaiņas."
 
-#: app/mainwindow.cpp:1824
+#: app/mainwindow.cpp:1825
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr ""
 
-#: app/mainwindow.cpp:1827
+#: app/mainwindow.cpp:1828
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Hide sidebar"
 msgid "Hide menu bar"
 msgstr "Slēpt sānjoslu"
 
-#: app/mainwindow.cpp:2047
+#: app/mainwindow.cpp:2048
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr ""
 
-#: app/mainwindow.cpp:2048 app/mainwindow.cpp:2062
+#: app/mainwindow.cpp:2049 app/mainwindow.cpp:2063
 #, kde-format
 msgid "Stay There"
 msgstr ""
 
-#: app/mainwindow.cpp:2049
+#: app/mainwindow.cpp:2050
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Go to last image"
 msgid "Go to the Last Document"
 msgstr "Iet uz pēdējo attēlu"
 
-#: app/mainwindow.cpp:2050 app/mainwindow.cpp:2064
+#: app/mainwindow.cpp:2051 app/mainwindow.cpp:2065
 #, fuzzy, kde-format
 #| msgid "Go back to the original"
 msgid "Go Back to the Document List"
 msgstr "Atgriezties uz orģinālu"
 
-#: app/mainwindow.cpp:2061
+#: app/mainwindow.cpp:2062
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr ""
 
-#: app/mainwindow.cpp:2063
+#: app/mainwindow.cpp:2064
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Go to first image"
