@@ -13,6 +13,7 @@
         "Name[cs]": "Prohlížeč obrázků Gwenview",
         "Name[en_GB]": "Gwenview Image Viewer",
         "Name[es]": "Visor de imágenes Gwenview",
+        "Name[fi]": "Gwenview-kuvakatselin",
         "Name[fr]": "Afficheur d'images Gwenview",
         "Name[gl]": "Visor de imaxes Gwenview",
         "Name[ia]": "Visor de imagine Gwenview",
