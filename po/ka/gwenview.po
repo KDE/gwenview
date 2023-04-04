@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-01 02:41+0000\n"
-"PO-Revision-Date: 2023-02-03 15:56+0100\n"
+"PO-Revision-Date: 2023-04-03 06:11+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -1958,7 +1958,7 @@ msgctxt ""
 "@info this text will be used as a search term in an online search engine, %1 "
 "protocol name"
 msgid "How to install protocol support for \"%1\" on Linux"
-msgstr ""
+msgstr "როგორ დავაყენოთ \"%1\" პროტოკოლის მხარდაჭერა Linux-ზე"
 
 #: importer/thumbnailpage.cpp:285
 #, kde-format
