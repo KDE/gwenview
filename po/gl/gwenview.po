@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-01 02:41+0000\n"
-"PO-Revision-Date: 2023-03-26 12:05+0200\n"
+"PO-Revision-Date: 2023-04-06 22:35+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -1737,11 +1737,11 @@ msgid_plural ""
 "%1 of them have been renamed because other documents with the same name had "
 "already been imported."
 msgstr[0] ""
-"Renomeóuse un deles xa que había outro documento que se importou que tiña o "
-"mesmo nome."
+"Cambiouse o nome dun deles xa que había outro documento que se importou que "
+"tiña o mesmo nome."
 msgstr[1] ""
-"Renomeóuse %1 deles xa que había outros documentos que se importaran que "
-"tiñan o mesmo nome."
+"Cambouse o nome de %1 deles xa que había outros documentos que se importaran "
+"que tiñan o mesmo nome."
 
 #: importer/importdialog.cpp:117
 #, kde-format
@@ -2200,7 +2200,7 @@ msgstr "Non se puido abrir o ficheiro %1"
 #, kde-format
 msgctxt "@info"
 msgid "Loading meta information failed."
-msgstr "Fallou a carga da metainformación."
+msgstr "Fallou a carga dos metadatos."
 
 #: lib/document/loadingdocumentimpl.cpp:515
 #, kde-format
@@ -2403,10 +2403,10 @@ msgstr ""
 "ampliación e na mesma posición que a primeira imaxe, e\n"
 "calquera cambio nestas afectará asemade á primeira imaxe.\n"
 "Se escolle conservar distintas ampliacións e posicións para\n"
-"cada imaxe, Gwenview lembra a ampliación e a posición\n"
+"cada imaxe, lémbrase a ampliación e a posición\n"
 "usada con cada imaxe; a segunda imaxe usa inicialmente a\n"
 "ampliación e posición da primeira imaxe, pero se as cambia\n"
-"Gwenview lembrará os cambios da segunda imaxe sen\n"
+"lembraranse os cambios da segunda imaxe sen\n"
 "actualizar a primeira imaxe."
 
 #. i18n: ectx: whatsthis, entry (RenderingIntent), group (ImageView)
