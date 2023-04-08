@@ -11,6 +11,7 @@
         "Name[ca@valencia]": "Visor d'imatges Gwenview",
         "Name[ca]": "Visualitzador d'imatges Gwenview",
         "Name[cs]": "Prohlížeč obrázků Gwenview",
+        "Name[de]": "Gwenview Bildbetrachter",
         "Name[en_GB]": "Gwenview Image Viewer",
         "Name[es]": "Visor de imágenes Gwenview",
         "Name[fi]": "Gwenview-kuvakatselin",
