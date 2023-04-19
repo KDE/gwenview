@@ -368,6 +368,9 @@ void FileOpsContextManagerItem::populateOpenMenu()
 
     int idx = 0;
     for (const KService::Ptr &service : qAsConst(mServiceList)) {
+        if (service->name() == QLatin1String("Gwenview")) {
+            continue;
+        }
         QString text = service->name().replace('&', "&&");
         QAction *action = openMenu->addAction(text);
         action->setIcon(QIcon::fromTheme(service->icon()));
