@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QAction>
 #include <QHBoxLayout>
 #include <QIcon>
+#include <QProxyStyle>
 #include <QSlider>
 #include <QToolButton>
 
@@ -34,6 +35,26 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
+class ZoomSliderStyle : public QProxyStyle
+{
+public:
+    explicit ZoomSliderStyle(QObject *parent = nullptr)
+        : QProxyStyle()
+    {
+        setParent(parent);
+    }
+
+    int styleHint(QStyle::StyleHint hint, const QStyleOption *option, const QWidget *widget, QStyleHintReturn *returnData) const override
+    {
+        int styleHint = QProxyStyle::styleHint(hint, option, widget, returnData);
+        if (hint == QStyle::SH_Slider_AbsoluteSetButtons) {
+            styleHint |= Qt::LeftButton;
+        }
+
+        return styleHint;
+    }
+};
+
 struct ZoomSliderPrivate {
     QToolButton *mZoomOutButton = nullptr;
     QToolButton *mZoomInButton = nullptr;
@@ -68,6 +89,7 @@ ZoomSlider::ZoomSlider(QWidget *parent)
 
     d->mSlider = new QSlider;
     d->mSlider->setOrientation(Qt::Horizontal);
+    d->mSlider->setStyle(new ZoomSliderStyle(this));
 
     auto layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
