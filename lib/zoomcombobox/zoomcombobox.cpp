@@ -15,6 +15,25 @@
 
 using namespace Gwenview;
 
+struct LineEditSelectionKeeper {
+    LineEditSelectionKeeper(QLineEdit *lineEdit)
+        : m_lineEdit(lineEdit)
+    {
+        Q_ASSERT(m_lineEdit);
+        m_cursorPos = m_lineEdit->cursorPosition();
+    }
+
+    ~LineEditSelectionKeeper()
+    {
+        m_lineEdit->end(false);
+        m_lineEdit->cursorBackward(true, m_lineEdit->text().length() - m_cursorPos);
+    }
+
+private:
+    QLineEdit *m_lineEdit;
+    int m_cursorPos;
+};
+
 ZoomValidator::ZoomValidator(qreal minimum, qreal maximum, ZoomComboBox *q, ZoomComboBoxPrivate *d, QWidget *parent)
     : QValidator(parent)
     , m_minimum(minimum)
@@ -105,26 +124,41 @@ ZoomComboBox::ZoomComboBox(QWidget *parent)
 
     connect(lineEdit(), &QLineEdit::textEdited, this, [this, d](const QString &text) {
         const bool startsWithNumber = text.constBegin()->isNumber();
-        int matches = 0;
-        for (int i = 0; i < count(); ++i) {
-            if (itemText(i).startsWith(text, Qt::CaseInsensitive)) {
-                matches += 1;
+        int matchedIndex = -1;
+        if (startsWithNumber) {
+            matchedIndex = findText(text, Qt::MatchFixedString);
+        } else {
+            // check if there is more than 1 match
+            for (int i = 0, n = count(); i < n; ++i) {
+                if (itemText(i).startsWith(text, Qt::CaseInsensitive)) {
+                    if (matchedIndex != -1) {
+                        // there is more than 1 match
+                        return;
+                    }
+                    matchedIndex = i;
+                }
             }
         }
-        Qt::MatchFlags matchFlags = startsWithNumber || matches > 1 ? Qt::MatchFixedString : Qt::MatchStartsWith;
-        const int textIndex = findText(text, matchFlags);
-        if (textIndex < 0) {
-            d->value = valueFromText(text);
-        }
-        if (textIndex >= 0 || d->value >= minimum()) {
-            // update only when doing so would not change the typed text due
-            // to being below the mininum as that means we can't type a new percentage
-            // one key at a time.
-            if (textIndex < 0)
-                d->lastCustomZoomValue = d->value;
-            updateDisplayedText();
-            activateAndChangeZoomTo(textIndex);
-            lineEdit()->setCursorPosition(lineEdit()->cursorPosition() - 1);
+        if (matchedIndex != -1) {
+            LineEditSelectionKeeper selectionKeeper(lineEdit());
+            updateCurrentIndex();
+            if (matchedIndex == currentIndex()) {
+                updateDisplayedText();
+            } else {
+                activateAndChangeZoomTo(matchedIndex);
+            }
+        } else if (startsWithNumber) {
+            bool ok = false;
+            const qreal value = valueFromText(text, &ok);
+            if (ok && value >= minimum() && value <= maximum()) {
+                LineEditSelectionKeeper selectionKeeper(lineEdit());
+                if (value == d->value) {
+                    updateDisplayedText();
+                } else {
+                    d->lastCustomZoomValue = value;
+                    activateAndChangeZoomTo(-1);
+                }
+            }
         }
     });
     connect(this, qOverload<int>(&ZoomComboBox::highlighted), this, &ZoomComboBox::changeZoomTo);
@@ -233,19 +267,25 @@ void ZoomComboBox::setMaximum(qreal maximum)
 qreal ZoomComboBox::valueFromText(const QString &text, bool *ok) const
 {
     Q_D(const ZoomComboBox);
-    QString copy = text;
-    copy.remove(locale().groupSeparator());
-    copy.remove(locale().percent());
-    return qreal(locale().toInt(copy, ok)) / 100.0;
+
+    const QLocale l = locale();
+    QString s = text;
+    s.remove(l.groupSeparator());
+    if (s.endsWith(l.percent())) {
+        s = s.chopped(1);
+    }
+
+    return l.toDouble(s, ok) / 100.0;
 }
 
 QString ZoomComboBox::textFromValue(const qreal value) const
 {
     Q_D(const ZoomComboBox);
-    QString text = locale().toString(qRound(value * 100));
-    d->validator->fixup(text);
-    text.remove(locale().groupSeparator());
-    return text.append(locale().percent());
+
+    QLocale l = locale();
+    l.setNumberOptions(QLocale::OmitGroupSeparator);
+
+    return l.toString(qRound(value * 100)).append(l.percent());
 }
 
 void ZoomComboBox::updateDisplayedText()
@@ -297,7 +337,7 @@ bool ZoomComboBox::eventFilter(QObject *watched, QEvent *event)
     return QComboBox::eventFilter(watched, event);
 }
 
-void ZoomComboBox::focusOutEvent(QFocusEvent *)
+void ZoomComboBox::focusOutEvent(QFocusEvent *event)
 {
     Q_D(ZoomComboBox);
     // Should the user have started typing a custom value
@@ -308,6 +348,29 @@ void ZoomComboBox::focusOutEvent(QFocusEvent *)
     // zoom value.
     if (d->lastSelectedIndex == -1)
         setValue(d->lastCustomZoomValue);
+
+    QComboBox::focusOutEvent(event);
+}
+
+void ZoomComboBox::keyPressEvent(QKeyEvent *event)
+{
+    switch (event->key()) {
+    case Qt::Key_Down:
+    case Qt::Key_Up:
+    case Qt::Key_PageDown:
+    case Qt::Key_PageUp: {
+        updateCurrentIndex();
+        if (currentIndex() != -1) {
+            break;
+        }
+        moveCurrentIndex(event->key() == Qt::Key_Down || event->key() == Qt::Key_PageDown);
+        return;
+    }
+    default:
+        break;
+    }
+
+    QComboBox::keyPressEvent(event);
 }
 
 void ZoomComboBox::wheelEvent(QWheelEvent *event)
@@ -315,36 +378,11 @@ void ZoomComboBox::wheelEvent(QWheelEvent *event)
     updateCurrentIndex();
     if (currentIndex() != -1) {
         // Everything should work as expected.
-        return QComboBox::wheelEvent(event);
+        QComboBox::wheelEvent(event);
+        return;
     }
 
-    // There is no exact match for the current zoom value in the
-    // ComboBox. We need to find the closest matches, so scrolling
-    // works as expected.
-    Q_D(ZoomComboBox);
-    int closestZoomValueSmallerThanCurrent = 1; // = "fill" action
-    int closestZoomValueBiggerThanCurrent = count() - 1;
-
-    for (int i = 2; itemData(i) != QVariant::Invalid; i++) {
-        bool isValidConversion;
-        const qreal zoomValue = valueFromText(itemText(i), &isValidConversion);
-        if (!isValidConversion) {
-            continue;
-        }
-
-        if (zoomValue < d->value) {
-            closestZoomValueSmallerThanCurrent = i;
-        } else {
-            closestZoomValueBiggerThanCurrent = i;
-            break;
-        }
-    }
-    if (event->angleDelta().y() > 0) {
-        setCurrentIndex(closestZoomValueBiggerThanCurrent);
-    } else {
-        setCurrentIndex(closestZoomValueSmallerThanCurrent);
-    }
-    return QComboBox::wheelEvent(event);
+    moveCurrentIndex(event->angleDelta().y() < 0);
 }
 
 void ZoomComboBox::updateCurrentIndex()
@@ -370,6 +408,51 @@ void ZoomComboBox::updateCurrentIndex()
         d->lastSelectedIndex = findText(textFromValue(d->value));
         setCurrentIndex(d->lastSelectedIndex);
     }
+}
+
+void ZoomComboBox::moveCurrentIndex(bool moveUp)
+{
+    // There is no exact match for the current zoom value in the
+    // ComboBox. We need to find the closest matches, so scrolling
+    // works as expected.
+    Q_D(ZoomComboBox);
+
+    int newIndex;
+    if (moveUp) {
+        // switch to a larger item
+        newIndex = count() - 1;
+        for (int i = 2; i < newIndex; ++i) {
+            const QVariant data = itemData(i);
+            qreal value;
+            if (data.value<QAction *>() == d->mActualSizeAction) {
+                value = 1;
+            } else {
+                value = data.value<qreal>();
+            }
+            if (value > d->value) {
+                newIndex = i;
+                break;
+            }
+        }
+    } else {
+        // switch to a smaller item
+        newIndex = 1;
+        for (int i = count() - 1; i > newIndex; --i) {
+            const QVariant data = itemData(i);
+            qreal value;
+            if (data.value<QAction *>() == d->mActualSizeAction) {
+                value = 1;
+            } else {
+                value = data.value<qreal>();
+            }
+            if (value < d->value) {
+                newIndex = i;
+                break;
+            }
+        }
+    }
+    setCurrentIndex(newIndex);
+    Q_EMIT activated(newIndex);
 }
 
 void ZoomComboBox::changeZoomTo(int index)

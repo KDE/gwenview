@@ -65,6 +65,7 @@ Q_SIGNALS:
 protected:
     bool eventFilter(QObject *watched, QEvent *event) override;
     void focusOutEvent(QFocusEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
 
     /**
      * Makes sure using the mouse wheel on the combobox works as
@@ -84,6 +85,8 @@ private:
      * the ComboBox, the currentIndex is set to -1 which hides the highlight.
      */
     void updateCurrentIndex();
+
+    void moveCurrentIndex(bool moveUp);
 
 private Q_SLOTS:
     /**
