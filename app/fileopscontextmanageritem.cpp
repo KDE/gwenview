@@ -265,9 +265,17 @@ void FileOpsContextManagerItem::updateSideBarContent()
     }
 
     mGroup->clear();
+
+    // Some actions we want to exist in a general sense so they're accessible
+    // via the menu structure and with keyboard shortcuts, but we don't want
+    // them to appear in the sidebar because they're too dangerous, little-used,
+    // and/or contribute to the main window being too tall on short screens; see
+    // https://bugs.kde.org/458987.
+    const QList<QAction *> itemsToOmit = {mDelAction, mCreateFolderAction};
+
     QList<QAction *> &list = mInTrash ? mTrashFileActionList : mRegularFileActionList;
     for (QAction *action : qAsConst(list)) {
-        if (action->isEnabled() && !action->isSeparator()) {
+        if (action->isEnabled() && !action->isSeparator() && !itemsToOmit.contains(action)) {
             mGroup->addAction(action);
         }
     }
