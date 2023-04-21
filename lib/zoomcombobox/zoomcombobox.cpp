@@ -13,6 +13,21 @@
 
 #include <cmath>
 
+bool fuzzyEqual(qreal a, qreal b)
+{
+    return (qFuzzyIsNull(a) && qFuzzyIsNull(b)) || qFuzzyCompare(a, b);
+}
+
+bool fuzzyLessEqual(qreal a, qreal b)
+{
+    return fuzzyEqual(a, b) || a < b;
+}
+
+bool fuzzyGreaterEqual(qreal a, qreal b)
+{
+    return fuzzyEqual(a, b) || a > b;
+}
+
 using namespace Gwenview;
 
 struct LineEditSelectionKeeper {
@@ -52,7 +67,7 @@ qreal ZoomValidator::minimum() const
 
 void ZoomValidator::setMinimum(const qreal minimum)
 {
-    if (m_minimum == minimum) {
+    if (fuzzyEqual(m_minimum, minimum)) {
         return;
     }
     m_minimum = minimum;
@@ -66,7 +81,7 @@ qreal ZoomValidator::maximum() const
 
 void ZoomValidator::setMaximum(const qreal maximum)
 {
-    if (m_maximum == maximum) {
+    if (fuzzyEqual(m_maximum, maximum)) {
         return;
     }
     m_maximum = maximum;
@@ -150,9 +165,9 @@ ZoomComboBox::ZoomComboBox(QWidget *parent)
         } else if (startsWithNumber) {
             bool ok = false;
             const qreal value = valueFromText(text, &ok);
-            if (ok && value >= minimum() && value <= maximum()) {
+            if (ok && fuzzyGreaterEqual(value, minimum()) && fuzzyLessEqual(value, maximum())) {
                 LineEditSelectionKeeper selectionKeeper(lineEdit());
-                if (value == d->value) {
+                if (fuzzyEqual(value, d->value)) {
                     updateDisplayedText();
                 } else {
                     d->lastCustomZoomValue = value;
@@ -213,7 +228,7 @@ qreal ZoomComboBox::minimum() const
 void ZoomComboBox::setMinimum(qreal minimum)
 {
     Q_D(ZoomComboBox);
-    if (this->minimum() == minimum) {
+    if (fuzzyEqual(this->minimum(), minimum)) {
         return;
     }
     d->validator->setMinimum(minimum);
@@ -241,7 +256,7 @@ qreal ZoomComboBox::maximum() const
 void ZoomComboBox::setMaximum(qreal maximum)
 {
     Q_D(ZoomComboBox);
-    if (this->maximum() == maximum) {
+    if (fuzzyEqual(this->maximum(), maximum)) {
         return;
     }
     d->validator->setMaximum(maximum);
@@ -259,7 +274,7 @@ void ZoomComboBox::setMaximum(qreal maximum)
         addItem(textFromValue(value), QVariant::fromValue(value));
         value *= 2;
     }
-    if (value >= maximum) {
+    if (fuzzyGreaterEqual(value, maximum)) {
         addItem(textFromValue(maximum), QVariant::fromValue(maximum));
     }
 }
