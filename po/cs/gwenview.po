@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-01 02:41+0000\n"
+"POT-Creation-Date: 2023-04-21 02:49+0000\n"
 "PO-Revision-Date: 2023-02-24 11:09+0100\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -425,7 +425,7 @@ msgstr "Otevřít pomocí"
 msgid "Open Containing Folder"
 msgstr "Otevřít odpovídající složku"
 
-#: app/fileopscontextmanageritem.cpp:380
+#: app/fileopscontextmanageritem.cpp:383
 #, kde-format
 msgid "Other Application..."
 msgstr "Jiná aplikace..."

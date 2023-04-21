@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-01 02:41+0000\n"
+"POT-Creation-Date: 2023-04-21 02:49+0000\n"
 "PO-Revision-Date: 2023-03-01 01:20+0100\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -418,7 +418,7 @@ msgstr "다음으로 열기"
 msgid "Open Containing Folder"
 msgstr "포함하는 폴더 열기"
 
-#: app/fileopscontextmanageritem.cpp:380
+#: app/fileopscontextmanageritem.cpp:383
 #, kde-format
 msgid "Other Application..."
 msgstr "다른 프로그램..."
