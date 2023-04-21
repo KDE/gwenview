@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-01 00:48+0000\n"
+"POT-Creation-Date: 2023-04-21 00:46+0000\n"
 "PO-Revision-Date: 2022-04-04 11:38+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian <kde-i18n-ro@kde.org>\n"
@@ -429,7 +429,7 @@ msgstr "Deschide cu"
 msgid "Open Containing Folder"
 msgstr "Deschide dosarul conținător"
 
-#: app/fileopscontextmanageritem.cpp:379
+#: app/fileopscontextmanageritem.cpp:382
 #, kde-format
 msgid "Other Application..."
 msgstr "Altă aplicație..."

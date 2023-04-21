@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-01 00:48+0000\n"
+"POT-Creation-Date: 2023-04-21 00:46+0000\n"
 "PO-Revision-Date: 2023-04-04 06:39+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -421,7 +421,7 @@ msgstr "გამხსნელი პროგრამა"
 msgid "Open Containing Folder"
 msgstr "შემცველი საქაღალდის გახსნა"
 
-#: app/fileopscontextmanageritem.cpp:379
+#: app/fileopscontextmanageritem.cpp:382
 #, kde-format
 msgid "Other Application..."
 msgstr "სხვა პროგრამა..."

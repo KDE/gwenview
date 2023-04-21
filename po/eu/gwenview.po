@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-01 00:48+0000\n"
+"POT-Creation-Date: 2023-04-21 00:46+0000\n"
 "PO-Revision-Date: 2023-01-05 21:24+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -433,7 +433,7 @@ msgstr "Ireki honekin"
 msgid "Open Containing Folder"
 msgstr "Ireki hau barnean duen karpeta"
 
-#: app/fileopscontextmanageritem.cpp:379
+#: app/fileopscontextmanageritem.cpp:382
 #, kde-format
 msgid "Other Application..."
 msgstr "Beste aplikazio bat..."
