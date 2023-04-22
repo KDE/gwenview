@@ -164,8 +164,16 @@ ZoomComboBox::ZoomComboBox(QWidget *parent)
             }
         } else if (startsWithNumber) {
             bool ok = false;
-            const qreal value = valueFromText(text, &ok);
-            if (ok && fuzzyGreaterEqual(value, minimum()) && fuzzyLessEqual(value, maximum())) {
+            qreal value = valueFromText(text, &ok);
+            if (ok && value > 0 && fuzzyLessEqual(value, maximum())) {
+                // emulate autocompletion for valid values that aren't predefined
+                while (value < minimum()) {
+                    value *= 10;
+                    if (value > maximum()) {
+                        // autocompletion cannot be emulated for this value
+                        return;
+                    }
+                }
                 LineEditSelectionKeeper selectionKeeper(lineEdit());
                 if (fuzzyEqual(value, d->value)) {
                     updateDisplayedText();
