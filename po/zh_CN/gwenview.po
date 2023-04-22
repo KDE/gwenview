@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-21 00:46+0000\n"
+"POT-Creation-Date: 2023-04-22 00:47+0000\n"
 "PO-Revision-Date: 2023-04-16 12:31\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -419,7 +419,7 @@ msgstr "打开方式"
 msgid "Open Containing Folder"
 msgstr "打开所在文件夹"
 
-#: app/fileopscontextmanageritem.cpp:382
+#: app/fileopscontextmanageritem.cpp:390
 #, kde-format
 msgid "Other Application..."
 msgstr "其他应用程序..."
@@ -1552,13 +1552,13 @@ msgid "Places"
 msgstr "常用位置"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tagsTab)
-#: app/startmainpage.ui:120
+#: app/startmainpage.ui:114
 #, kde-format
 msgid "Tags"
 msgstr "标签"
 
 #. i18n: ectx: property (text), widget (QLabel, mTagLabel)
-#: app/startmainpage.ui:126
+#: app/startmainpage.ui:120
 #, kde-format
 msgid ""
 "Browsing by tags is not available. Make sure Nepomuk is properly installed "

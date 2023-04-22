@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-21 00:46+0000\n"
+"POT-Creation-Date: 2023-04-22 00:47+0000\n"
 "PO-Revision-Date: 2023-01-08 12:57+0100\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard]neuf.fr>\n"
 "Language-Team: fr\n"
@@ -440,7 +440,7 @@ msgstr "Ouvrir avec..."
 msgid "Open Containing Folder"
 msgstr "Ouvrir le dossier contenant cet élément"
 
-#: app/fileopscontextmanageritem.cpp:382
+#: app/fileopscontextmanageritem.cpp:390
 #, kde-format
 msgid "Other Application..."
 msgstr "Autre application..."
@@ -1588,13 +1588,13 @@ msgid "Places"
 msgstr "Emplacements"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tagsTab)
-#: app/startmainpage.ui:120
+#: app/startmainpage.ui:114
 #, kde-format
 msgid "Tags"
 msgstr "Étiquettes"
 
 #. i18n: ectx: property (text), widget (QLabel, mTagLabel)
-#: app/startmainpage.ui:126
+#: app/startmainpage.ui:120
 #, kde-format
 msgid ""
 "Browsing by tags is not available. Make sure Nepomuk is properly installed "

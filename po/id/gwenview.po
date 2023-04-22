@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KDE Frameworks 5 Applications\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-21 00:46+0000\n"
+"POT-Creation-Date: 2023-04-22 00:47+0000\n"
 "PO-Revision-Date: 2022-09-27 17:54+0700\n"
 "Last-Translator: Wantoyèk <wantoyek@gmail.com>\n"
 "Language-Team: Indonesian <kde-i18n-doc@kde.org>\n"
@@ -430,7 +430,7 @@ msgstr "Buka Dengan"
 msgid "Open Containing Folder"
 msgstr "Buka Folder Yang Mengandungnya"
 
-#: app/fileopscontextmanageritem.cpp:382
+#: app/fileopscontextmanageritem.cpp:390
 #, kde-format
 msgid "Other Application..."
 msgstr "Aplikasi Lain..."
@@ -1579,13 +1579,13 @@ msgid "Places"
 msgstr "Tempat"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tagsTab)
-#: app/startmainpage.ui:120
+#: app/startmainpage.ui:114
 #, kde-format
 msgid "Tags"
 msgstr "Tanda"
 
 #. i18n: ectx: property (text), widget (QLabel, mTagLabel)
-#: app/startmainpage.ui:126
+#: app/startmainpage.ui:120
 #, kde-format
 msgid ""
 "Browsing by tags is not available. Make sure Nepomuk is properly installed "
