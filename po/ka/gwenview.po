@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-22 00:47+0000\n"
-"PO-Revision-Date: 2023-04-04 06:39+0200\n"
+"PO-Revision-Date: 2023-04-22 07:10+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -59,6 +59,8 @@ msgid ""
 "Squash colors that don't fit within the active color profile's color gamut, "
 "leaving other colors untouched"
 msgstr ""
+"ფერების წაშლა, რომლებიც აქტიური ფერის პროფილის ფერის გამაში არ ჯდებიან. სხვა "
+"ფერები არ შეიცვლება"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: app/advancedconfigpage.ui:102
@@ -87,6 +89,7 @@ msgid ""
 "Scale all colors equally to fit them within the active color profile's color "
 "gamut"
 msgstr ""
+"ყველა ფერის თანაბარი მასშტაბირება მათი აქტიური ფერის ფერის გამაში ჩასატევად"
 
 #. i18n: ectx: property (text), widget (QLabel, colorRenderingLabel)
 #: app/advancedconfigpage.ui:182
@@ -111,7 +114,7 @@ msgstr "მხოლოდ გამოსახულების ფაილ�
 #, kde-format
 msgid ""
 "Assume that system-wide color correction already applies monitor profile."
-msgstr ""
+msgstr "ჩათვლა, რომ მონიტორის ფერების კორექცია სისტემაში უკვე გამოიყენება."
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileLabel)
 #: app/advancedconfigpage.ui:275
@@ -664,6 +667,8 @@ msgid ""
 "The quality level when saving images using lossy image formats such as JPEG, "
 "WEBP, AVIF, HEIF, and HEIC. Higher quality increases the file size."
 msgstr ""
+"კარგვითი ფორმატების, როგორიცაა, მაგალითად JPEG, WEBP, AVIF, HEIF და HEIC, "
+"ხარისხის დონე. მაღალი ხარისხი ფაილის ზომასაც გაზრდის."
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: app/generalconfigpage.ui:222
@@ -1709,7 +1714,11 @@ msgid_plural ""
 "%1 of them have been renamed because other documents with the same name had "
 "already been imported."
 msgstr[0] ""
+"ერთ მათგანს სახელი გადაერქვა, რადგან იგივე სახელის მქონე სხვა დოკუმენტი უკვე "
+"შემოტანილია."
 msgstr[1] ""
+"%1 მათგანს სახელი გადაერქვა, რადგან იგივე სახელის მქონე სხვა დოკუმენტი უკვე "
+"შემოტანილია."
 
 #: importer/importdialog.cpp:117
 #, kde-format
@@ -1944,6 +1953,8 @@ msgid ""
 "Click here to launch Discover to install the missing protocol support "
 "library to enable the protocol support for \"%1:/\" on your system."
 msgstr ""
+"თქვენს სისტემაში ნაკლული პროტოკოლის (\"%1:/)მხარდაჭერის ბიბლიოთეკის "
+"დასაყენებლად Discover-ის გასაშვებად აქ დააწკაპუნეთ."
 
 #: importer/thumbnailpage.cpp:268
 #, kde-format
