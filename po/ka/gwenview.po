@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-22 00:47+0000\n"
-"PO-Revision-Date: 2023-04-22 07:10+0200\n"
+"PO-Revision-Date: 2023-04-23 07:01+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -1604,6 +1604,13 @@ msgid ""
 "and contain multiple rows of images; <link url='%1'>configure these options "
 "in the settings</link>.</para>"
 msgstr ""
+"<para>ეს გადართავს პატარა პანელს, რომელიც მიმდინარე საქაღალდეში ყველა სხვა "
+"გამოსახულებას გაჩვენებთ. ერთ-ერთი მათგანის მონიშვნა ამჟამად გახსნილ "
+"გამოსახულებას შეცვლის..</para><para>აირჩიეთ ბევრი გამოსახულება, რათა ისინი "
+"გვერდიგვერდ დაინახოთ.</para><para>ეს პანელი ასევე შეგიძლიათ ეკრანის მარჯვენა "
+"მხარეს გადაიტანოთ და მასზე გამოსახულებების ერთზე მეტი მწკრივი გამოჩნდება."
+"<link url='%1'>ამ პარამეტრების დაყენება მორგების ფანჯარაში შეგიძლიათ</link>."
+"</para>"
 
 #: app/viewmainpage.cpp:575
 #, kde-format
@@ -2604,6 +2611,9 @@ msgid ""
 "Assuming that the image format won't be changed and\n"
 "for lossy images using the value set in 'Lossy image save quality'."
 msgstr ""
+"ითვლება, რომ გამოსახულების ფორმატი არ შეიცვლება და\n"
+"კარგვების მქონე გამოსახულებებს 'კარგვების მქონე გამოსახულებებისთვის ხარისხის "
+"შენარჩუნება'-ში დაყენებული მნიშვნელობა იქნება გამოყენებული."
 
 #: lib/resize/resizeimagedialog.cpp:219
 #, kde-format
