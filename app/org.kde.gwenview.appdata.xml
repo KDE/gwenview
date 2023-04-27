@@ -212,7 +212,7 @@
     <p xml:lang="zh-CN">程序功能：</p>
     <p xml:lang="zh-TW">功能：</p>
     <ul>
-      <li>Supports simple image manipulations: rotate, mirror, flip, and resize</li>
+      <li>Simple image editing: rotate, crop, resize, mirror, flip, reduce red eye, and adjust brightness, contrast, or gamma</li>
       <li xml:lang="ar">دعم التّلاعب البسيط بالصّورة: التّدوير، والعكس، والقلب وتغيير الحجم</li>
       <li xml:lang="az">Şəkil üzərində bu kimi sadə əməlləri dəstəkləyir: döndərmə, əks etdirmə və ölçüsünü dəyişdirmə</li>
       <li xml:lang="be">Падтрымлівае простыя аперацыі з выявамі: паварочванне, адлюстраванне і змену памеру</li>
@@ -264,7 +264,8 @@
       <li xml:lang="x-test">xxSupports simple image manipulations: rotate, mirror, flip, and resizexx</li>
       <li xml:lang="zh-CN">支持简单的图片操作：旋转、镜像、翻转和缩放</li>
       <li xml:lang="zh-TW">支援簡單影像處理：旋轉、鏡射、翻轉與調整大小</li>
-      <li>Supports basic file management actions such as copy, move, delete, and others</li>
+      <li>Annotate and mark up images with arrows, shapes, text boxes, image stamps, and more</li>
+      <li>Basic file management actions such as copy, move, delete, and others</li>
       <li xml:lang="ar">دعم إجراءات إدارة الملفّات البسيطة كالنّسخ، والنّقل، والحذف وغيرها</li>
       <li xml:lang="az">Kopyalamaq, köçürmək, silmək, və bu kimi bir çox əsas faylı idarəetmə əməllərini dəstəkləyir</li>
       <li xml:lang="be">Падтрымлівае базавыя аперацыі кіравання файламі: капіяванне, перамяшчэнне, выдаленне і інш.</li>
