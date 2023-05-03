@@ -214,6 +214,7 @@
     <p xml:lang="zh-TW">功能：</p>
     <ul>
       <li>Simple image editing: rotate, crop, resize, mirror, flip, reduce red eye, and adjust brightness, contrast, or gamma</li>
+      <li xml:lang="bg">Основно редактиране на изображения: завъртане, изрязване, промяна на размера, огледален образ, обръщане, намаляване на червените очи, и регулиране на яркостта, контраста или гамата</li>
       <li xml:lang="ca">Edició senzilla d'imatges: gira, escapça, redimensiona, emmiralla, capgira, redueix els ulls vermells i ajusta la brillantor, el contrast o la gamma</li>
       <li xml:lang="ca-valencia">Edició senzilla d'imatges: gira, escapça, redimensiona, emmiralla, capgira, reduïx els ulls rojos i ajusta la brillantor, el contrast o la gamma</li>
       <li xml:lang="en-GB">Simple image editing: rotate, crop, resize, mirror, flip, reduce red eye, and adjust brightness, contrast, or gamma</li>
@@ -232,6 +233,7 @@
       <li xml:lang="x-test">xxSimple image editing: rotate, crop, resize, mirror, flip, reduce red eye, and adjust brightness, contrast, or gammaxx</li>
       <li xml:lang="zh-CN">简易图像编辑功能：旋转、裁剪、缩放、镜像、翻转、消除红眼、调整亮度、对比度和伽玛值等</li>
       <li>Annotate and mark up images with arrows, shapes, text boxes, image stamps, and more</li>
+      <li xml:lang="bg">Анотиране и маркиране на изображения със стрелки, форми, текстови полета, печати за изображения, и др.</li>
       <li xml:lang="ca">Anota i marca les imatges amb fletxes, formes, quadres de text, segells d'imatge i més</li>
       <li xml:lang="ca-valencia">Anota i marca les imatges amb fletxes, formes, quadros de text, segells d'imatge i més</li>
       <li xml:lang="en-GB">Annotate and mark up images with arrows, shapes, text boxes, image stamps, and more</li>
@@ -250,6 +252,7 @@
       <li xml:lang="x-test">xxAnnotate and mark up images with arrows, shapes, text boxes, image stamps, and morexx</li>
       <li xml:lang="zh-CN">图像标注功能：可以使用箭头、形状、文字框、图像图章等在图像上进行标注</li>
       <li>Basic file management actions such as copy, move, delete, and others</li>
+      <li xml:lang="bg">Основни файлови операции като копиране, преместване, изтриване и други</li>
       <li xml:lang="ca">Accions bàsiques de gestió de fitxers com copia, mou, suprimeix i altres</li>
       <li xml:lang="ca-valencia">Accions bàsiques de gestió de fitxers com copia, mou, suprimix i altres</li>
       <li xml:lang="de">Grundlegende Dateiverwaltungsaktionen wie Kopieren, Verschieben, Löschen und weitere</li>
