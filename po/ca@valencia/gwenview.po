@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-22 00:47+0000\n"
-"PO-Revision-Date: 2023-01-05 05:06+0100\n"
+"PO-Revision-Date: 2023-05-02 16:23+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -516,7 +516,7 @@ msgstr "Filtra per etiqueta"
 #: app/fullscreenconfigwidget.ui:20
 #, kde-format
 msgid "Slideshow"
-msgstr "Passe de diapositives"
+msgstr "Presentació de diapositives"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: app/fullscreenconfigwidget.ui:29
@@ -631,7 +631,7 @@ msgstr "Mai"
 #: app/generalconfigpage.ui:58
 #, kde-format
 msgid "Only during slideshows"
-msgstr "Només durant els passes de diapositives"
+msgstr "Només durant les presentacions de diapositives"
 
 #. i18n: ectx: property (text), widget (QRadioButton, alwaysShowWrapNoticeRadioButton)
 #: app/generalconfigpage.ui:65
@@ -1076,7 +1076,7 @@ msgstr "Inicia en el mode de pantalla completa"
 #: app/main.cpp:189
 #, kde-format
 msgid "Start in slideshow mode"
-msgstr "Inicia en el mode de passe de diapositives"
+msgstr "Inicia en el mode de presentació de diapositives"
 
 #: app/main.cpp:190
 #, kde-format
@@ -1281,17 +1281,17 @@ msgstr "Obri una imatge"
 #: app/mainwindow.cpp:1751
 #, kde-format
 msgid "Pause Slideshow"
-msgstr "Fes pausa en el passe de diapositives"
+msgstr "Fes pausa en la presentació de diapositives"
 
 #: app/mainwindow.cpp:1754
 #, kde-format
 msgid "Resume Slideshow"
-msgstr "Reprén el passe de diapositives"
+msgstr "Reprén la presentació de diapositives"
 
 #: app/mainwindow.cpp:1754
 #, kde-format
 msgid "Start Slideshow"
-msgstr "Inicia el passe de diapositives"
+msgstr "Inicia la presentació de diapositives"
 
 #: app/mainwindow.cpp:1767
 #, kde-format
@@ -1512,13 +1512,13 @@ msgstr "Descripció"
 #, kde-format
 msgctxt "@action:inmenu Start a slideshow Dolphin context menu"
 msgid "Start a Slideshow"
-msgstr "Inicia un passe de diapositives"
+msgstr "Inicia una presentació de diapositives"
 
 #: app/slideshowfileitemaction.cpp:66
 #, kde-format
 msgctxt "@action:inmenu Start a slideshow Dolphin context menu"
 msgid "Start a Slideshow with selected images"
-msgstr "Inicia un passe de diapositives amb les imatges seleccionades"
+msgstr "Inicia una presentació de diapositives amb les imatges seleccionades"
 
 #: app/startmainpage.cpp:291
 #, kde-format
@@ -2433,13 +2433,14 @@ msgstr ""
 #: lib/gwenviewconfig.kcfg:325
 #, kde-format
 msgid "Display slide show images in random order"
-msgstr "Visualitza les imatges del passe de diapositives en ordre aleatori"
+msgstr ""
+"Visualitza les imatges de la presentació de diapositives en ordre aleatori"
 
 #. i18n: ectx: label, entry (fullscreen), group (slide show)
 #: lib/gwenviewconfig.kcfg:329
 #, kde-format
 msgid "Show slideshow in fullscreen mode"
-msgstr "Mostra el passe de diapositives en el mode de pantalla completa"
+msgstr "Mostra la presentació de diapositives en el mode de pantalla completa"
 
 #. i18n: ectx: label, entry (loop), group (slide show)
 #: lib/gwenviewconfig.kcfg:333

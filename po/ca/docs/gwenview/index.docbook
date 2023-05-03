@@ -102,7 +102,7 @@
 >El &gwenview; és un visualitzador d'imatges i vídeo, ràpid i fàcil d'utilitzar. </para>
 
  <para
->El &gwenview; inclou dos modes principals: Navega i Visualitza. Els dos modes es poden utilitzar en una finestra d'aplicació normal i a pantalla completa. El mode Navega permet navegar a través de l'ordinador mostrant les miniatures de les imatges, el mode Visualitza permet veure les imatges d'una en una, i pantalla completa permet fer presentacions amb ràpides diapositives. També hi ha una pantalla d'inici que mostra una llista de les carpetes obertes recentment i l'&URL;, així com els vostres llocs i etiquetes. </para>
+>El &gwenview; inclou dos modes principals: Navega i Visualitza. Els dos modes es poden utilitzar en una finestra d'aplicació normal i a pantalla completa. El mode Navega permet navegar a través de l'ordinador mostrant les miniatures de les imatges, el mode Visualitza permet veure les imatges d'una en una, i pantalla completa permet fer presentacions de diapositives ràpides. També hi ha una pantalla d'inici que mostra una llista de les carpetes obertes recentment i l'&URL;, així com els vostres llocs i etiquetes. </para>
 
 <para
 >La càrrega de la imatge és gestionada per les biblioteques &Qt;, de manera que el &gwenview; admet tots els formats d'imatge admesos per la vostra instal·lació de les &Qt;. El &gwenview; mostrarà correctament les imatges amb un canal alfa (transparència), així com les animacions.</para>
@@ -539,10 +539,10 @@
 >La barra superior s'oculta automàticament, per a mostrar-la altra vegada, n'hi ha prou amb moure el ratolí a la part superior de la pantalla. Si el cursor del ratolí està sobre la barra superior, aquesta no s'ocultarà automàticament. La majoria dels botons sobre la barra són els mateixos que els de la barra d'eines en els modes Visualitza o Navega, a excepció del botó <guiicon
 >Surt del mode de pantalla completa</guiicon
 > que us retornarà a la finestra del &gwenview;, el botó <guiicon
->Fes pausa/Reprèn el passi de diapositives</guiicon
+>Fes pausa/Reprèn la presentació de diapositives</guiicon
 > i el botó <guiicon
 >Configuració del mode de pantalla completa</guiicon
-> mostren un diàleg de configuració que permet configurar de manera fàcil i ràpida el passi de diapositives. Els controls del passi de diapositives són: </para>
+> mostren un diàleg de configuració que permet configurar de manera fàcil i ràpida la presentació de diapositives. Els controls de la presentació de diapositives són: </para>
 
 <itemizedlist>
     <listitem
@@ -555,7 +555,7 @@
 ><para
 >Si la casella de selecció <guilabel
 >Repetició</guilabel
-> està marcada, en abastar el final del passi de diapositives, continuarà des del començament en lloc de parar. </para
+> està marcada, en arribar al final de la presentació de diapositives, continuarà des del començament en lloc de parar. </para
 ></listitem>
     <listitem
 ><para
@@ -1119,9 +1119,9 @@
 > per a permetre que el &gwenview; recorri la llista d'imatges sense notificacions addicionals.</para>
                     <para
 >Seleccioneu l'element <guilabel
->Només durant els passis de diapositives</guilabel
+>Només durant les presentacions de diapositives</guilabel
 > si les notificacions sobre arribar al final de la llista només s'han de mostrar en <link linkend="fullscreen"
->el mode de passi de diapositives</link
+>el mode de presentació de diapositives</link
 >.</para>
                     <para
 >Seleccioneu l'element <guilabel
