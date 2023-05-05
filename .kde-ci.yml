@@ -26,6 +26,8 @@ Dependencies:
     'frameworks/knotifications': '@stable'
     'graphics/libkdcraw': '@same'
     'libraries/phonon': '@stable'
+    'third-party/wayland': '@latest'
+    'third-party/wayland-protocols': '@latest'
 
 - 'on': ['Linux/Qt6', 'FreeBSD/Qt6']
   'require':
@@ -51,3 +53,5 @@ Dependencies:
     'frameworks/knotifications': '@latest-kf6'
     'graphics/libkdcraw': '@same'
     'libraries/phonon': '@latest-kf6'
+    'third-party/wayland': '@latest'
+    'third-party/wayland-protocols': '@latest'
