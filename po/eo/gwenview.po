@@ -969,7 +969,7 @@ msgstr "Neniu"
 #: app/imageviewconfigpage.ui:504
 #, kde-format
 msgid "<b>Thumbnail Bar</b>"
-msgstr "<b>Minitrajn trinkejon</b>"
+msgstr "<b>Bildeta breto</b>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: app/imageviewconfigpage.ui:527
