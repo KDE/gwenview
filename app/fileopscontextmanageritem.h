@@ -65,6 +65,7 @@ private Q_SLOTS:
     void showProperties();
     void createFolder();
     void populateOpenMenu();
+    void openInNewWindow();
     void openWith(QAction *action);
     void openContainingFolder();
 
@@ -89,6 +90,7 @@ private:
     QAction *mRestoreAction;
     QAction *mShowPropertiesAction;
     QAction *mCreateFolderAction;
+    QAction *mOpenInNewWindowAction;
     QAction *mOpenWithAction;
     QAction *mOpenContainingFolderAction;
     QList<QAction *> mRegularFileActionList;

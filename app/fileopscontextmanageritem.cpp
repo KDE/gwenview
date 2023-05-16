@@ -185,6 +185,11 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager *manager,
     mCreateFolderAction->setText(i18n("Create Folder..."));
     mCreateFolderAction->setIcon(QIcon::fromTheme(QStringLiteral("folder-new")));
 
+    mOpenInNewWindowAction = file->addAction(QStringLiteral("file_open_in_new_window"));
+    mOpenInNewWindowAction->setText(i18nc("@action:inmenu", "Open in New Window"));
+    mOpenInNewWindowAction->setIcon(QIcon::fromTheme(QStringLiteral("window-new")));
+    connect(mOpenInNewWindowAction, &QAction::triggered, this, &FileOpsContextManagerItem::openInNewWindow);
+
     mOpenWithAction = file->addAction(QStringLiteral("file_open_with"));
     mOpenWithAction->setText(i18n("Open With"));
     mOpenWithAction->setIcon(QIcon::fromTheme(QStringLiteral("system-run")));
@@ -198,8 +203,8 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager *manager,
     mOpenContainingFolderAction->setIcon(QIcon::fromTheme(QStringLiteral("document-open-folder")));
 
     mRegularFileActionList << mRenameAction << mTrashAction << mDelAction << createSeparator(this) << mCopyToAction << mMoveToAction << mLinkToAction
-                           << createSeparator(this) << mOpenWithAction << mOpenContainingFolderAction << mShowPropertiesAction << createSeparator(this)
-                           << mCreateFolderAction;
+                           << createSeparator(this) << mOpenInNewWindowAction << mOpenWithAction << mOpenContainingFolderAction << mShowPropertiesAction
+                           << createSeparator(this) << mCreateFolderAction;
 
     mTrashFileActionList << mRestoreAction << mDelAction << createSeparator(this) << mShowPropertiesAction;
 
@@ -234,6 +239,7 @@ void FileOpsContextManagerItem::updateActions()
     mTrashAction->setEnabled(selectionNotEmpty);
     mRestoreAction->setEnabled(selectionNotEmpty);
     mDelAction->setEnabled(selectionNotEmpty);
+    mOpenInNewWindowAction->setEnabled(selectionNotEmpty);
     mOpenWithAction->setEnabled(selectionNotEmpty);
     mRenameAction->setEnabled(count == 1);
     mOpenContainingFolderAction->setEnabled(selectionNotEmpty);
@@ -271,7 +277,7 @@ void FileOpsContextManagerItem::updateSideBarContent()
     // them to appear in the sidebar because they're too dangerous, little-used,
     // and/or contribute to the main window being too tall on short screens; see
     // https://bugs.kde.org/458987.
-    const QList<QAction *> itemsToOmit = {mDelAction, mCreateFolderAction};
+    const QList<QAction *> itemsToOmit = {mDelAction, mCreateFolderAction, mOpenInNewWindowAction};
 
     QList<QAction *> &list = mInTrash ? mTrashFileActionList : mRegularFileActionList;
     for (QAction *action : qAsConst(list)) {
@@ -389,6 +395,28 @@ void FileOpsContextManagerItem::populateOpenMenu()
     openMenu->addSeparator();
     QAction *action = openMenu->addAction(QIcon::fromTheme(QStringLiteral("system-run")), i18n("Other Application..."));
     action->setData(-1);
+}
+
+void FileOpsContextManagerItem::openInNewWindow()
+{
+    const QList<QUrl> urls = urlList();
+    if (urls.isEmpty()) {
+        return;
+    }
+
+    KService::Ptr service = KService::serviceByDesktopName(QStringLiteral("org.kde.gwenview"));
+    if (!service) {
+        return;
+    }
+
+    auto job = new KIO::ApplicationLauncherJob(service);
+    job->setUrls(urls);
+#if KIO_VERSION >= QT_VERSION_CHECK(5, 98, 0)
+    job->setUiDelegate(KIO::createDefaultJobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, nullptr));
+#else
+    job->setUiDelegate(new KIO::JobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, nullptr));
+#endif
+    job->start();
 }
 
 void FileOpsContextManagerItem::openWith(QAction *action)
