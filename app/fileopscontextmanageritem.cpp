@@ -380,8 +380,9 @@ void FileOpsContextManagerItem::populateOpenMenu()
 
     updateServiceList();
 
-    int idx = 0;
+    int idx = -1;
     for (const KService::Ptr &service : qAsConst(mServiceList)) {
+        ++idx;
         if (service->name() == QLatin1String("Gwenview")) {
             continue;
         }
@@ -389,7 +390,6 @@ void FileOpsContextManagerItem::populateOpenMenu()
         QAction *action = openMenu->addAction(text);
         action->setIcon(QIcon::fromTheme(service->icon()));
         action->setData(idx);
-        ++idx;
     }
 
     openMenu->addSeparator();
