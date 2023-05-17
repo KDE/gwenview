@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-22 00:47+0000\n"
+"POT-Creation-Date: 2023-05-17 00:44+0000\n"
 "PO-Revision-Date: 2023-04-23 07:01+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -416,15 +416,21 @@ msgstr "საქაღალდის შექმნა..."
 
 #: app/fileopscontextmanageritem.cpp:189
 #, kde-format
+msgctxt "@action:inmenu"
+msgid "Open in New Window"
+msgstr ""
+
+#: app/fileopscontextmanageritem.cpp:194
+#, kde-format
 msgid "Open With"
 msgstr "გამხსნელი პროგრამა"
 
-#: app/fileopscontextmanageritem.cpp:197
+#: app/fileopscontextmanageritem.cpp:202
 #, kde-format
 msgid "Open Containing Folder"
 msgstr "შემცველი საქაღალდის გახსნა"
 
-#: app/fileopscontextmanageritem.cpp:390
+#: app/fileopscontextmanageritem.cpp:396
 #, kde-format
 msgid "Other Application..."
 msgstr "სხვა პროგრამა..."
@@ -1618,13 +1624,13 @@ msgctxt "@item:inmenu"
 msgid "Background Color Mode"
 msgstr "ფონის ფერის რეჟიმი"
 
-#: app/viewmainpage.cpp:767
+#: app/viewmainpage.cpp:768
 #, kde-format
 msgctxt "@action:button"
 msgid "Discard Changes and Reload"
 msgstr "ცვლილებების გაუქმება და თავიდან ჩატვირთვა"
 
-#: app/viewmainpage.cpp:769
+#: app/viewmainpage.cpp:770
 #, kde-format
 msgctxt "@info"
 msgid ""

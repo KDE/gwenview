@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-22 00:47+0000\n"
+"POT-Creation-Date: 2023-05-17 00:44+0000\n"
 "PO-Revision-Date: 2012-07-11 10:26+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer\n"
@@ -434,15 +434,21 @@ msgstr "បង្កើត​ថត..."
 
 #: app/fileopscontextmanageritem.cpp:189
 #, kde-format
+msgctxt "@action:inmenu"
+msgid "Open in New Window"
+msgstr ""
+
+#: app/fileopscontextmanageritem.cpp:194
+#, kde-format
 msgid "Open With"
 msgstr "បើក​ជា​មួយ"
 
-#: app/fileopscontextmanageritem.cpp:197
+#: app/fileopscontextmanageritem.cpp:202
 #, kde-format
 msgid "Open Containing Folder"
 msgstr ""
 
-#: app/fileopscontextmanageritem.cpp:390
+#: app/fileopscontextmanageritem.cpp:396
 #, kde-format
 msgid "Other Application..."
 msgstr "កម្មវិធី​ផ្សេង​ទៀត​..."
@@ -1666,13 +1672,13 @@ msgctxt "@item:inmenu"
 msgid "Background Color Mode"
 msgstr "ពណ៌​ផ្ទៃ​ខាង​ក្រោយ ៖"
 
-#: app/viewmainpage.cpp:767
+#: app/viewmainpage.cpp:768
 #, kde-format
 msgctxt "@action:button"
 msgid "Discard Changes and Reload"
 msgstr "បោះបង់​ការ​ផ្លាស់​ប្ដូរ រួច​ផ្ទុក​ឡើង​វិញ"
 
-#: app/viewmainpage.cpp:769
+#: app/viewmainpage.cpp:770
 #, kde-format
 msgctxt "@info"
 msgid ""

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-22 00:47+0000\n"
+"POT-Creation-Date: 2023-05-17 00:44+0000\n"
 "PO-Revision-Date: 2019-12-12 21:15+0000\n"
 "Last-Translator: Vivek KJ Pazhedath <vivekkj2004@gmail.com>\n"
 "Language-Team: Swathanthra|സ്വതന്ത്ര Malayalam|മലയാളം Computing|കമ്പ്യൂട്ടിങ്ങ് <smc."
@@ -421,15 +421,21 @@ msgstr "ഫോൾഡർ സൃഷ്ടിക്കുക"
 
 #: app/fileopscontextmanageritem.cpp:189
 #, kde-format
+msgctxt "@action:inmenu"
+msgid "Open in New Window"
+msgstr ""
+
+#: app/fileopscontextmanageritem.cpp:194
+#, kde-format
 msgid "Open With"
 msgstr "ഇതിലൂടെ തുറക്കു"
 
-#: app/fileopscontextmanageritem.cpp:197
+#: app/fileopscontextmanageritem.cpp:202
 #, kde-format
 msgid "Open Containing Folder"
 msgstr "അടങ്ങുന്ന ഫോൾഡർ തുറക്കുക"
 
-#: app/fileopscontextmanageritem.cpp:390
+#: app/fileopscontextmanageritem.cpp:396
 #, kde-format
 msgid "Other Application..."
 msgstr "മറ്റ് അപ്ലിക്കേഷനുകൾ"
@@ -1610,13 +1616,13 @@ msgctxt "@item:inmenu"
 msgid "Background Color Mode"
 msgstr ""
 
-#: app/viewmainpage.cpp:767
+#: app/viewmainpage.cpp:768
 #, kde-format
 msgctxt "@action:button"
 msgid "Discard Changes and Reload"
 msgstr ""
 
-#: app/viewmainpage.cpp:769
+#: app/viewmainpage.cpp:770
 #, kde-format
 msgctxt "@info"
 msgid ""

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-22 00:47+0000\n"
+"POT-Creation-Date: 2023-05-17 00:44+0000\n"
 "PO-Revision-Date: 2023-04-29 08:33\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -411,15 +411,21 @@ msgstr "新建文件夹..."
 
 #: app/fileopscontextmanageritem.cpp:189
 #, kde-format
+msgctxt "@action:inmenu"
+msgid "Open in New Window"
+msgstr ""
+
+#: app/fileopscontextmanageritem.cpp:194
+#, kde-format
 msgid "Open With"
 msgstr "打开方式"
 
-#: app/fileopscontextmanageritem.cpp:197
+#: app/fileopscontextmanageritem.cpp:202
 #, kde-format
 msgid "Open Containing Folder"
 msgstr "打开所在文件夹"
 
-#: app/fileopscontextmanageritem.cpp:390
+#: app/fileopscontextmanageritem.cpp:396
 #, kde-format
 msgid "Other Application..."
 msgstr "其他应用程序..."
@@ -1598,13 +1604,13 @@ msgctxt "@item:inmenu"
 msgid "Background Color Mode"
 msgstr "背景颜色模式"
 
-#: app/viewmainpage.cpp:767
+#: app/viewmainpage.cpp:768
 #, kde-format
 msgctxt "@action:button"
 msgid "Discard Changes and Reload"
 msgstr "丢弃更改并重新加载"
 
-#: app/viewmainpage.cpp:769
+#: app/viewmainpage.cpp:770
 #, kde-format
 msgctxt "@info"
 msgid ""

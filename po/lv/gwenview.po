@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-22 00:47+0000\n"
+"POT-Creation-Date: 2023-05-17 00:44+0000\n"
 "PO-Revision-Date: 2012-07-02 21:42+0300\n"
 "Last-Translator: Einars Sprugis <einars8@gmail.com>\n"
 "Language-Team: Latvian <locale@laka.lv>\n"
@@ -447,15 +447,21 @@ msgstr "Izveidot mapi..."
 
 #: app/fileopscontextmanageritem.cpp:189
 #, kde-format
+msgctxt "@action:inmenu"
+msgid "Open in New Window"
+msgstr ""
+
+#: app/fileopscontextmanageritem.cpp:194
+#, kde-format
 msgid "Open With"
 msgstr "Atvērt ar"
 
-#: app/fileopscontextmanageritem.cpp:197
+#: app/fileopscontextmanageritem.cpp:202
 #, kde-format
 msgid "Open Containing Folder"
 msgstr ""
 
-#: app/fileopscontextmanageritem.cpp:390
+#: app/fileopscontextmanageritem.cpp:396
 #, kde-format
 msgid "Other Application..."
 msgstr "Citu lietotni..."
@@ -1695,13 +1701,13 @@ msgctxt "@item:inmenu"
 msgid "Background Color Mode"
 msgstr "Fona krāsa:"
 
-#: app/viewmainpage.cpp:767
+#: app/viewmainpage.cpp:768
 #, kde-format
 msgctxt "@action:button"
 msgid "Discard Changes and Reload"
 msgstr "Izmest izmaiņas un pārlādēt"
 
-#: app/viewmainpage.cpp:769
+#: app/viewmainpage.cpp:770
 #, kde-format
 msgctxt "@info"
 msgid ""
