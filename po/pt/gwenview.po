@@ -424,7 +424,7 @@ msgstr "Criar uma Pasta..."
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Open in New Window"
-msgstr ""
+msgstr "Abrir numa Nova Janela"
 
 #: app/fileopscontextmanageritem.cpp:194
 #, kde-format

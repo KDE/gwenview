@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-17 00:44+0000\n"
-"PO-Revision-Date: 2023-02-13 20:54+0100\n"
+"PO-Revision-Date: 2023-05-17 11:58+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -1716,8 +1716,8 @@ msgstr[1] "%1 dokumentoj estis importitaj."
 msgid "One document has been skipped because it had already been imported."
 msgid_plural ""
 "%1 documents have been skipped because they had already been imported."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Unu dokumento estis preterlasata ĉar ĝi jam estis importita."
+msgstr[1] "%1 dokumentoj estis preterlasataj ĉar ili jam estis importitaj."
 
 #: importer/importdialog.cpp:109
 #, kde-format
@@ -1749,8 +1749,9 @@ msgstr[1] "Ĉu forigi la %1 preterlasitajn dokumentojn de la aparato?"
 msgctxt "Singular sentence is actually never used."
 msgid "Delete the imported or skipped document from the device?"
 msgid_plural "Delete the %1 imported and skipped documents from the device?"
-msgstr[0] ""
+msgstr[0] "Ĉu forigi la importitan aŭ preterlasitan dokumenton el la aparato?"
 msgstr[1] ""
+"Ĉu forigi la %1 importitajn aŭ preterlasitajn dokumentojn el la aparato?"
 
 #: importer/importdialog.cpp:133
 #, kde-format
@@ -2550,7 +2551,7 @@ msgstr "Ne eblis malfermi dosieron por skribado."
 #, kde-format
 msgctxt "@info"
 msgid "No data to store."
-msgstr "Neniuj datumoj por stoki."
+msgstr "Neniuj datumoj por konservi."
 
 #: lib/print/printhelper.cpp:125
 #, kde-format
