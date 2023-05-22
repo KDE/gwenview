@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-17 00:44+0000\n"
+"POT-Creation-Date: 2023-05-22 00:45+0000\n"
 "PO-Revision-Date: 2014-10-28 15:32+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: Marathi <kde-i18n-doc@kde.org>\n"
@@ -2581,13 +2581,13 @@ msgctxt "@title:column"
 msgid "Value"
 msgstr "मूल्य"
 
-#: lib/jpegcontent.cpp:642
+#: lib/jpegcontent.cpp:667
 #, kde-format
 msgctxt "@info"
 msgid "Could not open file for writing."
 msgstr "लिहिण्यासाठी फाईल उघडू शकत नाही"
 
-#: lib/jpegcontent.cpp:658
+#: lib/jpegcontent.cpp:683
 #, kde-format
 msgctxt "@info"
 msgid "No data to store."

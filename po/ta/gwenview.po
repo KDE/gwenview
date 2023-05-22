@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-17 00:44+0000\n"
-"PO-Revision-Date: 2023-01-05 20:07+0530\n"
+"POT-Creation-Date: 2023-05-22 00:45+0000\n"
+"PO-Revision-Date: 2023-05-21 14:59+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
 "Language: ta\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.12.0\n"
+"X-Generator: Lokalize 23.04.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -416,7 +416,7 @@ msgstr "அடைவை உருவாக்கு..."
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Open in New Window"
-msgstr ""
+msgstr "புதிய சாளரத்தில் திற"
 
 #: app/fileopscontextmanageritem.cpp:194
 #, kde-format
@@ -2501,13 +2501,13 @@ msgctxt "@title:column"
 msgid "Value"
 msgstr "மதிப்பு"
 
-#: lib/jpegcontent.cpp:642
+#: lib/jpegcontent.cpp:667
 #, kde-format
 msgctxt "@info"
 msgid "Could not open file for writing."
 msgstr "எழுத கோப்பை திறக்க முடியவில்லை."
 
-#: lib/jpegcontent.cpp:658
+#: lib/jpegcontent.cpp:683
 #, kde-format
 msgctxt "@info"
 msgid "No data to store."

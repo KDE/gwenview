@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-17 00:44+0000\n"
+"POT-Creation-Date: 2023-05-22 00:45+0000\n"
 "PO-Revision-Date: 2019-12-12 21:15+0000\n"
 "Last-Translator: Vivek KJ Pazhedath <vivekkj2004@gmail.com>\n"
 "Language-Team: Swathanthra|സ്വതന്ത്ര Malayalam|മലയാളം Computing|കമ്പ്യൂട്ടിങ്ങ് <smc."
@@ -2463,13 +2463,13 @@ msgctxt "@title:column"
 msgid "Value"
 msgstr ""
 
-#: lib/jpegcontent.cpp:642
+#: lib/jpegcontent.cpp:667
 #, kde-format
 msgctxt "@info"
 msgid "Could not open file for writing."
 msgstr ""
 
-#: lib/jpegcontent.cpp:658
+#: lib/jpegcontent.cpp:683
 #, kde-format
 msgctxt "@info"
 msgid "No data to store."
