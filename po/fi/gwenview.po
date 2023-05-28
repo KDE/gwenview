@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-22 03:04+0000\n"
-"PO-Revision-Date: 2023-03-05 21:51+0200\n"
+"PO-Revision-Date: 2023-05-18 18:00+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -30,7 +30,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 22.12.2\n"
+"X-Generator: Lokalize 23.04.1\n"
 "X-POT-Import-Date: 2012-12-01 22:24:09+0000\n"
 
 #, kde-format
@@ -493,12 +493,12 @@ msgstr "Arvostelu <="
 #: app/filtercontroller.cpp:173
 #, kde-format
 msgid "Tagged"
-msgstr "Sisältää tunnisteita / Tunnistettu?"
+msgstr "Luokiteltu"
 
 #: app/filtercontroller.cpp:174
 #, kde-format
 msgid "Not Tagged"
-msgstr "Ei tunnisteita"
+msgstr "Ei luokituksia"
 
 #: app/filtercontroller.cpp:278
 #, kde-format
@@ -522,7 +522,7 @@ msgstr "Suodata arvostelulla"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Tag"
-msgstr "Suodata tunnisteella"
+msgstr "Suodata luokituksella"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: app/fullscreenconfigwidget.ui:20
@@ -939,13 +939,13 @@ msgstr "Lähennystapa:"
 #: app/imageviewconfigpage.ui:271
 #, kde-format
 msgid "Autofit each image"
-msgstr "Sovita kuvat automaattisesti"
+msgstr "Sovita kukin kuva automaattisesti"
 
 #. i18n: ectx: property (text), widget (QRadioButton, keepSameZoomModeRadioButton)
 #: app/imageviewconfigpage.ui:298
 #, kde-format
 msgid "Keep same zoom and position"
-msgstr "Säilytä sama lähennys ja sijainti"
+msgstr "Pidä sama lähennys ja sijainti"
 
 #. i18n: ectx: property (text), widget (QRadioButton, individualZoomModeRadioButton)
 #: app/imageviewconfigpage.ui:322
@@ -1476,7 +1476,7 @@ msgstr "Muokkaa"
 #, kde-format
 msgctxt "@action"
 msgid "Edit Tags"
-msgstr "Muokkaa tunnisteita"
+msgstr "Muokkaa luokituksia"
 
 #: app/semanticinfocontextmanageritem.cpp:215
 #, kde-format
@@ -1488,7 +1488,7 @@ msgstr "Nolla"
 #: app/semanticinfodialog.ui:13
 #, kde-format
 msgid "Tag Editor"
-msgstr "Tunnisteiden muokkaaja"
+msgstr "Luokitusmuokkain"
 
 #. i18n: ectx: property (text), widget (QPushButton, mPreviousButton)
 #: app/semanticinfodialog.ui:31
@@ -1512,7 +1512,7 @@ msgstr "Arvostelu:"
 #: app/semanticinfosidebaritem.ui:45
 #, kde-format
 msgid "Tags:"
-msgstr "Tunnisteet:"
+msgstr "Luokitukset:"
 
 #. i18n: ectx: property (placeholderText), widget (QTextEdit, mDescriptionTextEdit)
 #: app/semanticinfosidebaritem.ui:73
@@ -1596,7 +1596,7 @@ msgstr "Sijainnit"
 #: app/startmainpage.ui:114
 #, kde-format
 msgid "Tags"
-msgstr "Tunnisteet"
+msgstr "Luokitukset"
 
 #. i18n: ectx: property (text), widget (QLabel, mTagLabel)
 #: app/startmainpage.ui:120
@@ -1605,8 +1605,8 @@ msgid ""
 "Browsing by tags is not available. Make sure Nepomuk is properly installed "
 "on your computer."
 msgstr ""
-"Tunnisteilla selaaminen ei ole käytettävissä. Tarkista, että Nepomuk on "
-"käytössä."
+"Luokituksen mukaan selaaminen ei ole käytettävissä. Tarkista, että Nepomuk "
+"on asennettu oikein."
 
 #: app/viewmainpage.cpp:153 app/viewmainpage.cpp:447
 #, kde-format
@@ -2356,8 +2356,8 @@ msgid ""
 "The percentage of memory used by Gwenview before it\n"
 "            warns the user and suggest saving changes."
 msgstr ""
-"Määrä kuinka paljon Gwenview voi käyttää muistia ennen kuin\n"
-"            se varoittaa käyttäjää ja suosittelee muutosten tallentamista."
+"Paljonko Gwenview voi käyttää muistia, ennen kuin se\n"
+"            varoittaa ja suosittaa muutosten tallentamista."
 
 #. i18n: ectx: whatsthis, entry (BlackListedExtensions), group (General)
 #: lib/gwenviewconfig.kcfg:67
@@ -2368,9 +2368,10 @@ msgid ""
 "            used for temporary files by KSaveFile."
 msgstr ""
 "Lista tiedostomuodoista joita Gwenview’n ei tulisi ladata\n"
-"            Jätämme myös *.new-tiedostot huomiotta,\n"
-"            koska ne ovat KSaveFilen käyttämiä väliaikaistiedostoja."
+"            Myös *.new-tiedostot jätetään huomiotta, koska\n"
+"            ne ovat KSaveFilen väliaikaistiedostoja."
 
+# ”Keep same” löytyy muualtakin, mutta ”Individual” ei. Läheisin vastine tuntuu olevan jono, jossa käännöksessä on sana ”kuvakohtainen”, joten sitä on käytetty.
 #. i18n: ectx: whatsthis, entry (ZoomMode), group (ImageView)
 #: lib/gwenviewconfig.kcfg:208
 #, kde-format
@@ -2387,16 +2388,18 @@ msgid ""
 "            own zoom and position (if these are changed, image A will NOT\n"
 "            be displayed with the updated zoom and position)."
 msgstr ""
-"Määrittää, mitä tapahtuu, kun siirrytään kuvaan B sen jälkeen, kun kuvaa A "
-"on näytetty zoomattuna.\n"
-"Jos Autofit, kuva B zoomataan sopimaan näytölle. Jos KeepSame, kaikille "
-"kuville käytetään samaa zoomausta ja sijaintia: kuva B:lle asetetaan samat "
-"zoomausparametrit kuin kuva A:lle (ja jos ne muuttuvat, kuva A näytetään "
-"päivittyneillä zoomaus- ja sijaintiasetuksilla). Jos Individual, kaikkien "
-"kuvien zoomaus ja sijainti muistetaan erikseen: kuva B:lle asetetaan aluksi "
-"samat zoomausparametrit kuin kuva A:lle, mutta kuva B:n zoomaus ja sijainti "
-"muistetaan sen jälkeen erikseen (jos niitä muutetaan, kuva A:ta EI näytetä "
-"päivittyneillä zoomaus- ja sijaintiasetuksilla)."
+"Määrittää, mitä tapahtuu siiryttäessä kuvaan B, kun kuva A on\n"
+"            näytetty lähennettynä. Jos käytetään automaattisovitusta,\n"
+"            kuva B sovitetaan näytölle. Jos pidetään samana, kaikille\n"
+"            kuville käytetään samaa lähennystasoa ja sijaintia: kuvalle\n"
+"            B asetetaan samat lähennysarvot kuin kuvalle A (ja jos ne\n"
+"            muuttuvat, kuva A näytetään päivittyneillä lähennys- ja\n"
+"            sijaintiasetuksilla). Jos valinta on kuvakohtainen, kaikkien\n"
+"            kuvien lähennys ja sijainti muistetaan erikseen: kuvalle B\n"
+"            asetetaan aluksi samat lähennysarvot kuin kuvalle A, mutta\n"
+"            kuvan B lähennys ja sijainti muistetaan sen jälkeen erikseen\n"
+"            (jos niitä muutetaan, kuvaa A EI näytetä päivittyneillä\n"
+"            lähennys- ja sijaintiasetuksilla)."
 
 #. i18n: ectx: whatsthis, entry (RenderingIntent), group (ImageView)
 #: lib/gwenviewconfig.kcfg:222
@@ -2410,8 +2413,8 @@ msgid ""
 "colors\n"
 "            that cannot be displayed, and leave the other colors alone."
 msgstr ""
-"Määrittää, miten värit toteutetaan näytöllesi\n"
-"            käyttää ICC-väriprofiilia, ja kuvalla on värejä, jotka eivät\n"
+"Määrittää, miten värit toteutetaan näytöllesi, kun\n"
+"            käytetään ICC-väriprofiilia ja kuvassa on värejä, jotka eivät\n"
 "            sovi profiilin väriavaruuteen. ”Havaintoa vastaava” skaalaa\n"
 "            koko kuvan värit vastaamaan näytön kykyjä. ”Suhteellinen”\n"
 "            latistaa vain värit, joita ei voi esittää, ja jättää muut\n"
@@ -2421,13 +2424,13 @@ msgstr ""
 #: lib/gwenviewconfig.kcfg:325
 #, kde-format
 msgid "Display slide show images in random order"
-msgstr "Näytä diaesityksen kuvat satunnaisessa järjestyksessä"
+msgstr "Näytä diaesityksen kuvat satunnaisjärjestyksessä"
 
 #. i18n: ectx: label, entry (fullscreen), group (slide show)
 #: lib/gwenviewconfig.kcfg:329
 #, kde-format
 msgid "Show slideshow in fullscreen mode"
-msgstr "Näytä diaesitys koko näytön tilassa"
+msgstr "Näytä diaesitys koko näytöllä"
 
 #. i18n: ectx: label, entry (loop), group (slide show)
 #: lib/gwenviewconfig.kcfg:333
@@ -2445,7 +2448,7 @@ msgstr "Lopeta kansion viimeiseen kuvaan"
 #: lib/gwenviewconfig.kcfg:341
 #, kde-format
 msgid "Interval between images (in seconds)"
-msgstr "Aikaväli kuvien välillä (sekunneissa)"
+msgstr "Kuvien välinen aika (sekunteina)"
 
 #. i18n: ectx: label, entry (CropPreserveAspectRatio), group (Crop)
 #: lib/gwenviewconfig.kcfg:357
@@ -2706,12 +2709,12 @@ msgstr "Nykyinen koko:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Assign this tag to all selected images"
-msgstr "Lisää tämä tunniste kaikille valituille kuville"
+msgstr "Lisää tämä luokitus kaikkiin valittuihin kuviin"
 
 #: lib/semanticinfo/tagwidget.cpp:146
 #, kde-format
 msgid "Add tag"
-msgstr "Lisää tunniste"
+msgstr "Lisää luokitus"
 
 #: lib/slideshow.cpp:163
 #, kde-format
