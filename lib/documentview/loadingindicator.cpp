@@ -28,6 +28,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KIconLoader>
 #include <KPixmapSequence>
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#include <KPixmapSequenceLoader>
+#endif
+
 // Qt
 #include <QPainter>
 #include <QTimer>
@@ -42,7 +46,11 @@ struct LoadingIndicatorPrivate {
 
     LoadingIndicatorPrivate(LoadingIndicator *qq)
         : q(qq)
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         , mSequence(KIconLoader::global()->loadPixmapSequence(QStringLiteral("process-working"), 22))
+#else
+        , mSequence(KPixmapSequenceLoader::load(QStringLiteral("process-working"), 22))
+#endif
         , mIndex(0)
         , mTimer(new QTimer(qq))
     {

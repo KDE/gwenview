@@ -299,7 +299,7 @@ target_link_libraries(gwenviewlib
     Phonon::phonon4qt${QT_MAJOR_VERSION}
     )
 if (QT_MAJOR_VERSION STREQUAL "6")
-    target_link_libraries(gwenviewlib Qt6::OpenGLWidgets)
+    target_link_libraries(gwenviewlib Qt6::OpenGLWidgets KF6::IconWidgets)
 endif()
 
 
