@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kdegraphics-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-22 03:04+0000\n"
-"PO-Revision-Date: 2023-05-15 22:39+0300\n"
+"PO-Revision-Date: 2023-05-29 12:35+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.03.70\n"
+"X-Generator: Lokalize 23.04.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -109,7 +109,7 @@ msgstr "Sunum amacı:"
 #: app/advancedconfigpage.ui:197
 #, kde-format
 msgid "Remember folders and URLs"
-msgstr "Klasörleri ve URL'leri hatırla"
+msgstr "Klasörleri ve URL'leri anımsa"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_NoMonitorICC)
 #: app/advancedconfigpage.ui:240
@@ -2391,9 +2391,9 @@ msgstr ""
 "            görseli güncellenen yakınlaştırma ve konumla görüntülenir).\n"
 "            Bireysel ayarlanmışsa her görsel kendi konum ve "
 "yakınlaştırmasını\n"
-"            hatırlar: B görseli başlangıçta A ile aynı yakınlaştırma\n"
+"            anımsar: B görseli başlangıçta A ile aynı yakınlaştırma\n"
 "            parametrelerini kullanacak; ancak sonra kendi konumunu ve\n"
-"            yakınlaştırma oranını hatırlayacaktır (eğer değiştirilirse A\n"
+"            yakınlaştırma oranını anımsayacaktır (eğer değiştirilirse A\n"
 "            görseli güncellenmiş yakınlaştırma oranı ve konumla "
 "GÖRÜNTÜLENMEZ)."
 
