@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-22 00:45+0000\n"
-"PO-Revision-Date: 2023-05-17 11:58+0100\n"
+"PO-Revision-Date: 2023-05-30 22:35+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -420,7 +420,7 @@ msgstr "Krei dosierujon..."
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Open in New Window"
-msgstr ""
+msgstr "Malfermi en nova fenestro"
 
 #: app/fileopscontextmanageritem.cpp:194
 #, kde-format
@@ -1728,7 +1728,11 @@ msgid_plural ""
 "%1 of them have been renamed because other documents with the same name had "
 "already been imported."
 msgstr[0] ""
+"Unu el ili estis alinomata ĉar alia dokumento kun sama nomo jam estis "
+"importita."
 msgstr[1] ""
+"%1 el ili estis alinomataj ĉar aliaj dokumentoj kun sama nomo jam estis "
+"importitaj."
 
 #: importer/importdialog.cpp:117
 #, kde-format
