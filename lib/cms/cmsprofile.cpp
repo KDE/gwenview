@@ -237,7 +237,7 @@ Profile::Ptr Profile::getMonitorProfile()
     // Get the profile from you config file if the user has set it.
     // if the user allows override through the atom, do this:
 #ifdef HAVE_X11
-    if (QX11Info::isPlatformX11() && !GwenviewConfig::noMonitorICC()) {
+    if (QX11Info::isPlatformX11() && GwenviewConfig::enableColorManagement()) {
         // get the current screen...
         int screen = -1;
 

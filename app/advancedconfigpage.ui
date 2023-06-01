@@ -232,12 +232,12 @@
    <item row="11" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout_5">
      <item>
-      <widget class="QCheckBox" name="kcfg_NoMonitorICC">
+      <widget class="QCheckBox" name="kcfg_EnableColorManagement">
        <property name="toolTip">
         <string/>
        </property>
        <property name="text">
-        <string>Apply only the profile embedded in the image file</string>
+        <string>Enable color management</string>
        </property>
        <property name="checked">
         <bool>true</bool>
@@ -262,7 +262,7 @@
    <item row="12" column="1">
     <widget class="QLabel" name="colorProfileHelpLabel">
      <property name="text">
-      <string>Assume that system-wide color correction already applies monitor profile.</string>
+      <string>When color management is disabled, Gwenview will convert images to the sRGB color space rather than to the color space it detects for the display. This is only appropriate for displays that are calibrated to the sRGB color space or are known to provide an incorrect color profile.</string>
      </property>
      <property name="wordWrap">
       <bool>true</bool>
@@ -272,7 +272,7 @@
    <item row="11" column="0">
     <widget class="QLabel" name="colorProfileLabel">
      <property name="text">
-      <string>Color profile:</string>
+      <string>Color management:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

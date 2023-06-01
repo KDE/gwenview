@@ -222,7 +222,7 @@
             that cannot be displayed, and leave the other colors alone.</whatsthis>
         </entry>
         
-        <entry name="NoMonitorICC" type="Bool">
+        <entry name="EnableColorManagement" type="Bool">
             <default>true</default>
         </entry>
 
