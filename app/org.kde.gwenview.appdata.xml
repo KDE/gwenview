@@ -229,6 +229,7 @@
       <li xml:lang="nl">Eenvoudige bewerkingen van afbeelding: draaien, bijsnijden, grootte wijzigen, spiegelen, omklappen, rode ogen reductie en aanpassen van helderheid, contrast of gamma</li>
       <li xml:lang="pl">Proste edytowanie obrazów: obrót, przycięcie, zmiana rozmiaru, odbicie w pionie i poziomie, usuwanie czerwonych oczu, dostosowywanie jasności, -kontrastu, -gammy</li>
       <li xml:lang="pt">Edição simples das imagens: rotação, recorte, dimensionamento, espelho, inversão, redução de olhos vermelhos e ajustes de brilho, contraste ou gama</li>
+      <li xml:lang="pt-BR">Edição de imagem simples: girar, cortar, redimensionar, espelhar, inverter, reduzir olhos vermelhos e ajustar brilho, contraste ou gama</li>
       <li xml:lang="sl">Enostavno urejanje slik: zasuk, obrezovanje, sprememba velikosti, zrcaljenje, obračanje, zmanjšanje rdečine v očesih in prilagajanje svetlosti, kontrasta ali game</li>
       <li xml:lang="ta">அடிப்படை படத்திருத்தம்: திருப்புவது; வெட்டுவது; புரட்டுவது; பிரகாசத்தை நிறமாறுபாட்டை அல்லது காமாவை மாற்றுவது; கண்கள் சிவந்திருப்பதைக் குறைப்பது</li>
       <li xml:lang="tr">Temel görsel düzenlemesi: Döndürme, kırpma, yeniden boyutlandırma, yansıtma, ters çevirme, kırmızı göz azaltma ve parlaklık/karşıtlık/gama ayarlama</li>
@@ -251,6 +252,7 @@
       <li xml:lang="nl">Voorzie en markeer afbeeldingen met pijlen, vormen, tekstvakken, afbeeldingstempels en meer</li>
       <li xml:lang="pl">Opisuj obrazy strzałkami, kształtami, polami tekstowymi, stemplami i więcej</li>
       <li xml:lang="pt">Anotação e marcação de imagens com setas, formas, áreas de texto, carimbos de imagens, entre outros</li>
+      <li xml:lang="pt-BR">Anotar e marcar imagens com setas, formas, caixas de texto, carimbos de imagem e muito mais</li>
       <li xml:lang="sl">Dodajanje opomb in oznak na slike s puščicami, oblikami, okviri z besedilom, žigi in drugim</li>
       <li xml:lang="ta">அம்புக்குறிகள், சொற்றொடர்கள், வடிவங்கள் போன்றவற்றைக் கொண்டு படங்களிலுள்ளவற்றை முன்னிலைப்படுத்தலாம்</li>
       <li xml:lang="tr">Görsellere oklar, şekiller, metin kutuları, görsel damgaları ve çok daha fazlasını ekleyin</li>
@@ -274,6 +276,7 @@
       <li xml:lang="nl">Basis bestandsbeheeracties zoals kopiëren, verplaatsen, verwijderen en andere</li>
       <li xml:lang="pl">Proste działania plikowe takie jak kopiuj, przenieś, usuń i inne</li>
       <li xml:lang="pt">Acções básicas de gestão de ficheiros, como a cópia, movimentação, remoção, entre outras</li>
+      <li xml:lang="pt-BR">Ações básicas de gerenciamento de arquivos, como copiar, mover, excluir entre outras</li>
       <li xml:lang="sl">Osnovni ukazi za delo z datotekami: kopiranje, premikanje, brisanje in drugo</li>
       <li xml:lang="ta">நகலெடுத்தல், நகர்த்தல், மற்றும் அகற்றல் போன்ற அடிப்படை கோப்புநிர்வாக செய்லகள்</li>
       <li xml:lang="tr">Kopyalama, taşıma, silme ve benzer temel dosya yönetimi işlevleri</li>
