@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-22 00:45+0000\n"
+"POT-Creation-Date: 2023-06-02 00:45+0000\n"
 "PO-Revision-Date: 2023-01-05 21:24+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -110,26 +110,28 @@ msgstr "Errendatzearen saiakera:"
 msgid "Remember folders and URLs"
 msgstr "Gogoratu karpetak eta URLak"
 
-#. i18n: ectx: property (text), widget (QCheckBox, kcfg_NoMonitorICC)
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_EnableColorManagement)
 #: app/advancedconfigpage.ui:240
 #, kde-format
-msgid "Apply only the profile embedded in the image file"
-msgstr "Ezarri soilik irudi-fitxategian txertatutako profila"
+msgid "Enable color management"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileHelpLabel)
 #: app/advancedconfigpage.ui:265
 #, kde-format
 msgid ""
-"Assume that system-wide color correction already applies monitor profile."
+"When color management is disabled, Gwenview will convert images to the sRGB "
+"color space rather than to the color space it detects for the display. This "
+"is only appropriate for displays that are calibrated to the sRGB color space "
+"or are known to provide an incorrect color profile."
 msgstr ""
-"sistema osoko kolore zuzenketak dagoeneko monitoreko profila ezartzen duela "
-"jo."
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileLabel)
 #: app/advancedconfigpage.ui:275
-#, kde-format
-msgid "Color profile:"
-msgstr "Kolore-profila:"
+#, fuzzy, kde-format
+#| msgid "Too many arguments."
+msgid "Color management:"
+msgstr "Argumentu gehiegi."
 
 #: app/alignwithsidebarwidgetaction.cpp:23
 #, kde-format
@@ -2785,6 +2787,18 @@ msgstr "&Fitxategia"
 #, kde-format
 msgid "&View"
 msgstr "&Ikusi"
+
+#~ msgid "Apply only the profile embedded in the image file"
+#~ msgstr "Ezarri soilik irudi-fitxategian txertatutako profila"
+
+#~ msgid ""
+#~ "Assume that system-wide color correction already applies monitor profile."
+#~ msgstr ""
+#~ "sistema osoko kolore zuzenketak dagoeneko monitoreko profila ezartzen "
+#~ "duela jo."
+
+#~ msgid "Color profile:"
+#~ msgstr "Kolore-profila:"
 
 #~ msgctxt "@action:intoolbar"
 #~ msgid "Adjust Brightness/Contrast/Gamma"

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-22 00:45+0000\n"
+"POT-Creation-Date: 2023-06-02 00:45+0000\n"
 "PO-Revision-Date: 2021-12-27 16:33+0100\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -109,26 +109,28 @@ msgstr "Renderelési szándék:"
 msgid "Remember folders and URLs"
 msgstr "Mappák és URL-ek megjegyzése"
 
-#. i18n: ectx: property (text), widget (QCheckBox, kcfg_NoMonitorICC)
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_EnableColorManagement)
 #: app/advancedconfigpage.ui:240
 #, kde-format
-msgid "Apply only the profile embedded in the image file"
-msgstr "Csak a képfájlba beágyazott profil alkalmazása"
+msgid "Enable color management"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileHelpLabel)
 #: app/advancedconfigpage.ui:265
 #, kde-format
 msgid ""
-"Assume that system-wide color correction already applies monitor profile."
+"When color management is disabled, Gwenview will convert images to the sRGB "
+"color space rather than to the color space it detects for the display. This "
+"is only appropriate for displays that are calibrated to the sRGB color space "
+"or are known to provide an incorrect color profile."
 msgstr ""
-"A rendszerszintű színkorrekciós profil alkalmazásának feltételezése a "
-"monitor profiljára."
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileLabel)
 #: app/advancedconfigpage.ui:275
-#, kde-format
-msgid "Color profile:"
-msgstr "Színprofil:"
+#, fuzzy, kde-format
+#| msgid "Too many arguments."
+msgid "Color management:"
+msgstr "Túl sok argumentum."
 
 #: app/alignwithsidebarwidgetaction.cpp:23
 #, kde-format
@@ -2778,6 +2780,18 @@ msgstr "&Fájl"
 #, kde-format
 msgid "&View"
 msgstr "Né&zet"
+
+#~ msgid "Apply only the profile embedded in the image file"
+#~ msgstr "Csak a képfájlba beágyazott profil alkalmazása"
+
+#~ msgid ""
+#~ "Assume that system-wide color correction already applies monitor profile."
+#~ msgstr ""
+#~ "A rendszerszintű színkorrekciós profil alkalmazásának feltételezése a "
+#~ "monitor profiljára."
+
+#~ msgid "Color profile:"
+#~ msgstr "Színprofil:"
 
 #~ msgctxt "@label:chooser Describes what a row of buttons control"
 #~ msgid "Background color:"

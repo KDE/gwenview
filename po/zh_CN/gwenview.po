@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-22 00:45+0000\n"
+"POT-Creation-Date: 2023-06-02 00:45+0000\n"
 "PO-Revision-Date: 2023-05-22 14:00\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -103,24 +103,28 @@ msgstr "再现意图："
 msgid "Remember folders and URLs"
 msgstr "记住文件夹和 URL"
 
-#. i18n: ectx: property (text), widget (QCheckBox, kcfg_NoMonitorICC)
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_EnableColorManagement)
 #: app/advancedconfigpage.ui:240
 #, kde-format
-msgid "Apply only the profile embedded in the image file"
-msgstr "仅应用图像文件嵌入的色彩特性文件"
+msgid "Enable color management"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileHelpLabel)
 #: app/advancedconfigpage.ui:265
 #, kde-format
 msgid ""
-"Assume that system-wide color correction already applies monitor profile."
-msgstr "假定显示器色彩特性文件已用于系统全局色彩管理。"
+"When color management is disabled, Gwenview will convert images to the sRGB "
+"color space rather than to the color space it detects for the display. This "
+"is only appropriate for displays that are calibrated to the sRGB color space "
+"or are known to provide an incorrect color profile."
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileLabel)
 #: app/advancedconfigpage.ui:275
-#, kde-format
-msgid "Color profile:"
-msgstr "色彩特性文件："
+#, fuzzy, kde-format
+#| msgid "Too many arguments."
+msgid "Color management:"
+msgstr "参数过多。"
 
 #: app/alignwithsidebarwidgetaction.cpp:23
 #, kde-format
@@ -2699,3 +2703,13 @@ msgstr "文件(&F)"
 #, kde-format
 msgid "&View"
 msgstr "视图(&V)"
+
+#~ msgid "Apply only the profile embedded in the image file"
+#~ msgstr "仅应用图像文件嵌入的色彩特性文件"
+
+#~ msgid ""
+#~ "Assume that system-wide color correction already applies monitor profile."
+#~ msgstr "假定显示器色彩特性文件已用于系统全局色彩管理。"
+
+#~ msgid "Color profile:"
+#~ msgstr "色彩特性文件："

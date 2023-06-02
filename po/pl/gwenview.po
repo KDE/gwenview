@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-22 00:45+0000\n"
+"POT-Creation-Date: 2023-06-02 00:45+0000\n"
 "PO-Revision-Date: 2023-05-20 09:18+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -116,24 +116,28 @@ msgstr "Zamiar wyświetlania:"
 msgid "Remember folders and URLs"
 msgstr "Pamiętaj katalogi i adresy URL"
 
-#. i18n: ectx: property (text), widget (QCheckBox, kcfg_NoMonitorICC)
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_EnableColorManagement)
 #: app/advancedconfigpage.ui:240
 #, kde-format
-msgid "Apply only the profile embedded in the image file"
-msgstr "Nałóż tylko profil osadzony w pliku obrazu"
+msgid "Enable color management"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileHelpLabel)
 #: app/advancedconfigpage.ui:265
 #, kde-format
 msgid ""
-"Assume that system-wide color correction already applies monitor profile."
-msgstr "Załóż, że system nakłada już profil monitora, gdy poprawia barwy."
+"When color management is disabled, Gwenview will convert images to the sRGB "
+"color space rather than to the color space it detects for the display. This "
+"is only appropriate for displays that are calibrated to the sRGB color space "
+"or are known to provide an incorrect color profile."
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileLabel)
 #: app/advancedconfigpage.ui:275
-#, kde-format
-msgid "Color profile:"
-msgstr "Profil barw:"
+#, fuzzy, kde-format
+#| msgid "Too many arguments."
+msgid "Color management:"
+msgstr "Zbyt wiele argumentów."
 
 #: app/alignwithsidebarwidgetaction.cpp:23
 #, kde-format
@@ -2818,6 +2822,16 @@ msgstr "&Plik"
 #, kde-format
 msgid "&View"
 msgstr "&Widok"
+
+#~ msgid "Apply only the profile embedded in the image file"
+#~ msgstr "Nałóż tylko profil osadzony w pliku obrazu"
+
+#~ msgid ""
+#~ "Assume that system-wide color correction already applies monitor profile."
+#~ msgstr "Załóż, że system nakłada już profil monitora, gdy poprawia barwy."
+
+#~ msgid "Color profile:"
+#~ msgstr "Profil barw:"
 
 #~ msgctxt "@label:chooser Describes what a row of buttons control"
 #~ msgid "Background color:"

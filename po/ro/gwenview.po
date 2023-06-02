@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-22 00:45+0000\n"
+"POT-Creation-Date: 2023-06-02 00:45+0000\n"
 "PO-Revision-Date: 2022-04-04 11:38+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian <kde-i18n-ro@kde.org>\n"
@@ -102,25 +102,28 @@ msgstr "Intenția de randare:"
 msgid "Remember folders and URLs"
 msgstr "Memorează dosare și URL-uri"
 
-#. i18n: ectx: property (text), widget (QCheckBox, kcfg_NoMonitorICC)
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_EnableColorManagement)
 #: app/advancedconfigpage.ui:240
 #, kde-format
-msgid "Apply only the profile embedded in the image file"
-msgstr "Aplică doar profilul înglobat în fișierul imaginii"
+msgid "Enable color management"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileHelpLabel)
 #: app/advancedconfigpage.ui:265
 #, kde-format
 msgid ""
-"Assume that system-wide color correction already applies monitor profile."
+"When color management is disabled, Gwenview will convert images to the sRGB "
+"color space rather than to the color space it detects for the display. This "
+"is only appropriate for displays that are calibrated to the sRGB color space "
+"or are known to provide an incorrect color profile."
 msgstr ""
-"Presupune că corecția de culori din sistem aplică deja profilul monitorului."
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileLabel)
 #: app/advancedconfigpage.ui:275
-#, kde-format
-msgid "Color profile:"
-msgstr "Profil de culori:"
+#, fuzzy, kde-format
+#| msgid "Too many arguments."
+msgid "Color management:"
+msgstr "Prea multe argumente."
 
 #: app/alignwithsidebarwidgetaction.cpp:23
 #, kde-format
@@ -2788,6 +2791,18 @@ msgstr "&Fișier"
 #, kde-format
 msgid "&View"
 msgstr "&Vizualizare"
+
+#~ msgid "Apply only the profile embedded in the image file"
+#~ msgstr "Aplică doar profilul înglobat în fișierul imaginii"
+
+#~ msgid ""
+#~ "Assume that system-wide color correction already applies monitor profile."
+#~ msgstr ""
+#~ "Presupune că corecția de culori din sistem aplică deja profilul "
+#~ "monitorului."
+
+#~ msgid "Color profile:"
+#~ msgstr "Profil de culori:"
 
 #, fuzzy
 #~| msgid "Background color:"
