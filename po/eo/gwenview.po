@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-02 00:45+0000\n"
-"PO-Revision-Date: 2023-05-30 22:35+0100\n"
+"PO-Revision-Date: 2023-06-02 21:20+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -109,7 +109,7 @@ msgstr "Memoru dosierujojn kaj URL-ojn"
 #: app/advancedconfigpage.ui:240
 #, kde-format
 msgid "Enable color management"
-msgstr ""
+msgstr "Ebligi koloradministradon"
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileHelpLabel)
 #: app/advancedconfigpage.ui:265
@@ -120,13 +120,16 @@ msgid ""
 "is only appropriate for displays that are calibrated to the sRGB color space "
 "or are known to provide an incorrect color profile."
 msgstr ""
+"Kiam koloradministrado estas malŝaltita, Gwenview konvertos bildojn al la "
+"sRGB-kolorspaco anstataŭ al la kolorspaco kiun ĝi ekkonas por la ekrano. Tio "
+"estas nur adekvata por ekranoj kiuj estas kalibritaj al la sRGB-kolorspaco "
+"aŭ kiuj estas konataj liveri malĝustan kolorprofilon."
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileLabel)
 #: app/advancedconfigpage.ui:275
-#, fuzzy, kde-format
-#| msgid "Too many arguments."
+#, kde-format
 msgid "Color management:"
-msgstr "Tro da argumentoj."
+msgstr "Koloradministrado:"
 
 #: app/alignwithsidebarwidgetaction.cpp:23
 #, kde-format

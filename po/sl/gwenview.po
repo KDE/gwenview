@@ -9,17 +9,17 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-02 00:45+0000\n"
-"PO-Revision-Date: 2023-05-17 09:35+0200\n"
+"PO-Revision-Date: 2023-06-02 07:48+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
-"%100==4 ? 3 : 0);\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n"
+"%100<=4 ? 2 : 3);\n"
 "Translator: Andrej Mernik <andrejm@ubuntu.si>\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.3.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -112,7 +112,7 @@ msgstr "Zapomni si mape in naslove URL"
 #: app/advancedconfigpage.ui:240
 #, kde-format
 msgid "Enable color management"
-msgstr ""
+msgstr "Omogoči upravljanje barv"
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileHelpLabel)
 #: app/advancedconfigpage.ui:265
@@ -123,13 +123,16 @@ msgid ""
 "is only appropriate for displays that are calibrated to the sRGB color space "
 "or are known to provide an incorrect color profile."
 msgstr ""
+"Kadar je upravljaje barv onemogočeno, bo Gwenview predelal slike v barvni "
+"prostor sRGB namesto barvnega prostora, ki ga zazna za zaslon. To je edino "
+"primerno za zaslone, ki so kalibrirani za prostor sRGB ali pa je znano, da "
+"imajo nekorektni profil barv."
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileLabel)
 #: app/advancedconfigpage.ui:275
-#, fuzzy, kde-format
-#| msgid "Too many arguments."
+#, kde-format
 msgid "Color management:"
-msgstr "Preveč argumentov."
+msgstr "Upravljanje barv:"
 
 #: app/alignwithsidebarwidgetaction.cpp:23
 #, kde-format

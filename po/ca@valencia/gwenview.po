@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-02 00:45+0000\n"
-"PO-Revision-Date: 2023-05-17 09:49+0200\n"
+"PO-Revision-Date: 2023-06-02 09:17+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -114,7 +114,7 @@ msgstr "Recorda les carpetes i els URL"
 #: app/advancedconfigpage.ui:240
 #, kde-format
 msgid "Enable color management"
-msgstr ""
+msgstr "Activa la gestió del color"
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileHelpLabel)
 #: app/advancedconfigpage.ui:265
@@ -125,13 +125,16 @@ msgid ""
 "is only appropriate for displays that are calibrated to the sRGB color space "
 "or are known to provide an incorrect color profile."
 msgstr ""
+"Quan la gestió del color està desactivada, Gwenview convertirà les imatges a "
+"l'espai de color sRGB en lloc de l'espai de color que detecte per la "
+"pantalla. Açò només és apropiat per les pantalles calibrades amb l'espai de "
+"color sRGB o que se sap que proporcionen un perfil de color incorrecte."
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileLabel)
 #: app/advancedconfigpage.ui:275
-#, fuzzy, kde-format
-#| msgid "Too many arguments."
+#, kde-format
 msgid "Color management:"
-msgstr "Hi ha massa arguments."
+msgstr "Gestió del color:"
 
 #: app/alignwithsidebarwidgetaction.cpp:23
 #, kde-format
@@ -2800,15 +2803,3 @@ msgstr "Fi&txer"
 #, kde-format
 msgid "&View"
 msgstr "Vi&sualitza"
-
-#~ msgid "Apply only the profile embedded in the image file"
-#~ msgstr "Aplica només el perfil incrustat en el fitxer de la imatge"
-
-#~ msgid ""
-#~ "Assume that system-wide color correction already applies monitor profile."
-#~ msgstr ""
-#~ "Assumix que la correcció de color global del sistema ja aplica el perfil "
-#~ "del monitor."
-
-#~ msgid "Color profile:"
-#~ msgstr "Perfil de color:"

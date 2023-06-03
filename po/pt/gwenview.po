@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-02 00:45+0000\n"
-"PO-Revision-Date: 2023-01-06 03:10+0000\n"
+"PO-Revision-Date: 2023-06-02 09:46+0100\n"
 "Last-Translator: Pedro Morais <morais@kde.org>\n"
 "Language-Team: pt <kde-i18n-pt@kde.org>\n"
 "Language: pt\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-POFile-SpellExtra: space TextLabel thumbnails RAW tmp photo event new\n"
 "X-POFile-SpellExtra: KSaveFile thumbnailgen UDI Löwe ICC intocadas\n"
-"X-POFile-SpellExtra: Discover Kamera camera\n"
+"X-POFile-SpellExtra: Discover Kamera camera sRGB\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -112,7 +112,7 @@ msgstr "Recordar as pastas e URL's"
 #: app/advancedconfigpage.ui:240
 #, kde-format
 msgid "Enable color management"
-msgstr ""
+msgstr "Activar a gestão de cores"
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileHelpLabel)
 #: app/advancedconfigpage.ui:265
@@ -123,13 +123,17 @@ msgid ""
 "is only appropriate for displays that are calibrated to the sRGB color space "
 "or are known to provide an incorrect color profile."
 msgstr ""
+"Quando a gestão de cores está desactivada, o Gwenview irá converter as "
+"imagens para o espaço de cores sRGB, em vez do espaço de cores que detecta "
+"para o ecrã. Isto só é apropriado para os ecrãs que estejam calibrados para "
+"o espaço de cores sRGB ou que sejam conhecidos por possuir um perfil de "
+"cores incorrecto."
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileLabel)
 #: app/advancedconfigpage.ui:275
-#, fuzzy, kde-format
-#| msgid "Too many arguments."
+#, kde-format
 msgid "Color management:"
-msgstr "Demasiados argumentos."
+msgstr "Gestão de cores:"
 
 #: app/alignwithsidebarwidgetaction.cpp:23
 #, kde-format
@@ -2793,14 +2797,3 @@ msgstr "&Ficheiro"
 #, kde-format
 msgid "&View"
 msgstr "&Ver"
-
-#~ msgid "Apply only the profile embedded in the image file"
-#~ msgstr "Aplicar apenas o perfil incorporado no ficheiro de imagem"
-
-#~ msgid ""
-#~ "Assume that system-wide color correction already applies monitor profile."
-#~ msgstr ""
-#~ "Assumir que a correcção de cores no sistema já aplica o perfil do monitor."
-
-#~ msgid "Color profile:"
-#~ msgstr "Perfil de cores:"

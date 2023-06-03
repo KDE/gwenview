@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kdegraphics-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-02 00:45+0000\n"
-"PO-Revision-Date: 2023-05-29 12:35+0300\n"
+"PO-Revision-Date: 2023-06-02 12:27+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.04.1\n"
+"X-Generator: Lokalize 23.07.70\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -115,7 +115,7 @@ msgstr "Klasörleri ve URL'leri anımsa"
 #: app/advancedconfigpage.ui:240
 #, kde-format
 msgid "Enable color management"
-msgstr ""
+msgstr "Renk yönetimini etkinleştir"
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileHelpLabel)
 #: app/advancedconfigpage.ui:265
@@ -126,13 +126,16 @@ msgid ""
 "is only appropriate for displays that are calibrated to the sRGB color space "
 "or are known to provide an incorrect color profile."
 msgstr ""
+"Renk yönetimi devre dışıyken, Gwenview görselleri, ekranda algıladığı renk "
+"uzayından ziyade sRGB renk uzayına dönüştürür. Bu, yalnızca sRGB renk "
+"uzayına kalibre edilmiş ekranlar veya yanlış bir renk profili sağladığı "
+"bilinen ekranlar için uygundur."
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileLabel)
 #: app/advancedconfigpage.ui:275
-#, fuzzy, kde-format
-#| msgid "Too many arguments."
+#, kde-format
 msgid "Color management:"
-msgstr "Pek fazla argüman."
+msgstr "Renk yönetimi:"
 
 #: app/alignwithsidebarwidgetaction.cpp:23
 #, kde-format

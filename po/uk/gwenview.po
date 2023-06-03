@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-02 00:45+0000\n"
-"PO-Revision-Date: 2023-05-17 08:33+0300\n"
+"PO-Revision-Date: 2023-06-02 09:31+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -112,7 +112,7 @@ msgstr "Запам’ятовувати теки і адреси URL"
 #: app/advancedconfigpage.ui:240
 #, kde-format
 msgid "Enable color management"
-msgstr ""
+msgstr "Увімкнути керування кольорами"
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileHelpLabel)
 #: app/advancedconfigpage.ui:265
@@ -123,13 +123,16 @@ msgid ""
 "is only appropriate for displays that are calibrated to the sRGB color space "
 "or are known to provide an incorrect color profile."
 msgstr ""
+"Якщо керування кольорами вимкнено, Gwenview перетворюватиме зображення до "
+"простору кольорів sRGB, а не до виявленого простору кольорів дисплея. Це "
+"стосується лише дисплеїв, які калібровано до простору кольорів sRGB або "
+"таких дисплеїв, які відомі тим, що надають помилкові профілі кольорів."
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileLabel)
 #: app/advancedconfigpage.ui:275
-#, fuzzy, kde-format
-#| msgid "Too many arguments."
+#, kde-format
 msgid "Color management:"
-msgstr "Забагато аргументів."
+msgstr "Керування кольорами:"
 
 #: app/alignwithsidebarwidgetaction.cpp:23
 #, kde-format
