@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-02 00:45+0000\n"
-"PO-Revision-Date: 2023-05-31 06:20+0200\n"
+"PO-Revision-Date: 2023-06-03 05:39+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -107,7 +107,7 @@ msgstr "საქაღალდეებისა და URL-ების დ�
 #: app/advancedconfigpage.ui:240
 #, kde-format
 msgid "Enable color management"
-msgstr ""
+msgstr "ფერების მართვის ჩართვა"
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileHelpLabel)
 #: app/advancedconfigpage.ui:265
@@ -118,13 +118,16 @@ msgid ""
 "is only appropriate for displays that are calibrated to the sRGB color space "
 "or are known to provide an incorrect color profile."
 msgstr ""
+"როცა ფერების მართვა გამორთულია, Gwenview გამოსახულებებს ეკრანის ფერების "
+"სივრცის მაგიერ sRGB-ში გადაიყვანს. ეს ვრცელდება მხოლოდ ეკრანებზე, რომელსაც "
+"sRGB ფერების სივრცე აქვს მითითებული ან ცნობილია, როგორც არასწორი ფერის "
+"პროფილის მქონე."
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileLabel)
 #: app/advancedconfigpage.ui:275
-#, fuzzy, kde-format
-#| msgid "Too many arguments."
+#, kde-format
 msgid "Color management:"
-msgstr "მეტისმეტად ბევრი არგუმენტი."
+msgstr "ფერების მართვა:"
 
 #: app/alignwithsidebarwidgetaction.cpp:23
 #, kde-format

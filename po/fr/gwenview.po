@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-02 00:45+0000\n"
-"PO-Revision-Date: 2023-05-18 15:16+0200\n"
-"Last-Translator: Xavier BESNARD <xavier.besnard]neuf.fr>\n"
+"PO-Revision-Date: 2023-06-03 17:55+0200\n"
+"Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -121,7 +121,7 @@ msgstr "Se souvenir des dossiers et des URL"
 #: app/advancedconfigpage.ui:240
 #, kde-format
 msgid "Enable color management"
-msgstr ""
+msgstr "Activer la gestion des couleurs"
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileHelpLabel)
 #: app/advancedconfigpage.ui:265
@@ -132,13 +132,17 @@ msgid ""
 "is only appropriate for displays that are calibrated to the sRGB color space "
 "or are known to provide an incorrect color profile."
 msgstr ""
+"Lorsque la gestion des couleurs est désactivée, Gwenview convertira les "
+"images en espace colorimétrique « sRGB » plutôt que vers l'espace "
+"colorimétrique détecté pour l’affichage. Ceci est approprié uniquement pour "
+"les affichages qui sont calibrés à l’espace colorimétrique « sRGB »  ou qui "
+"sont connus pour la fourniture d'un profil colorimétrique incorrect."
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileLabel)
 #: app/advancedconfigpage.ui:275
-#, fuzzy, kde-format
-#| msgid "Too many arguments."
+#, kde-format
 msgid "Color management:"
-msgstr "Trop d'arguments."
+msgstr "Gestion des couleurs :"
 
 #: app/alignwithsidebarwidgetaction.cpp:23
 #, kde-format
@@ -1634,11 +1638,11 @@ msgid ""
 "in the settings</link>.</para>"
 msgstr ""
 "<para>Ceci fait apparaître / disparaître une petite barre affichant toutes "
-"les autres images du dossier en cours. La sélection de l’une d’entre elles "
-"modifie l’image actuellement affichée. </para><para>Sélectionnez plusieurs "
+"les autres images du dossier en cours. La sélection de l'une d'entre elles "
+"modifie l'image actuellement affichée. </para><para>Sélectionnez plusieurs "
 "images en même temps pour les afficher côte à côte. </para><para>La barre "
-"peut éventuellement être déplacée vers la droite de l’écran et contenir "
-"plusieurs lignes d’images. <link url='%1'>Vous pouvez configurer ces options "
+"peut éventuellement être déplacée vers la droite de l'écran et contenir "
+"plusieurs lignes d'images. <link url='%1'>Vous pouvez configurer ces options "
 "dans les paramètres</link>. </para>"
 
 #: app/viewmainpage.cpp:575
@@ -2312,15 +2316,15 @@ msgid ""
 "are displayed at a previous zoom value instead <link url='%2'>in the "
 "settings</link>.</para>"
 msgstr ""
-"<para>Ceci permet d’adapter l’image à la zone disponible d'affichage :"
+"<para>Ceci permet d'adapter l'image à la zone disponible d'affichage :"
 "<list><item>Les images plus grandes que la zone d'affichage sont affichées à "
-"une taille plus petite afin qu’elles s’adaptent.</item><item>Les images plus "
+"une taille plus petite afin qu'elles s'adaptent.</item><item>Les images plus "
 "petites que la zone d'affichage sont affichées à leur taille normale. Si les "
 "images plus petites doivent plutôt utiliser toute la zone disponible "
 "d'affichage, activez <emphasis>Agrandir les images plus petites</emphasis> "
 "<link url='%2'>dans les paramètres</link>.</item></list></para><para>Si "
-"« %1 » est déjà activé, un nouvel appui dessus le désactive et l’image "
-"s’affichera à sa taille normale. </para><para>« %1 » est le mode de zoom par "
+"« %1 » est déjà activé, un nouvel appui dessus le désactive et l'image "
+"s'affichera à sa taille normale. </para><para>« %1 » est le mode de zoom par "
 "défaut pour les images. Ceci peut être modifié <link url='%2'>dans les "
 "paramètres</link> pour que les images soient affichées à une valeur "
 "précédente de zoom.</para>"
