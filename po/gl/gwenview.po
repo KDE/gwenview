@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-02 00:45+0000\n"
-"PO-Revision-Date: 2023-06-03 03:38+0200\n"
+"PO-Revision-Date: 2023-06-05 13:21+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -468,7 +468,7 @@ msgstr "O nome non contén"
 #: app/filtercontroller.cpp:98
 #, kde-format
 msgid "Date >="
-msgstr "Data >="
+msgstr "Data ≥"
 
 #: app/filtercontroller.cpp:99
 #, kde-format
@@ -483,7 +483,7 @@ msgstr "Data <="
 #: app/filtercontroller.cpp:131
 #, kde-format
 msgid "Rating >="
-msgstr "Cualificación >="
+msgstr "Cualificación ≥"
 
 #: app/filtercontroller.cpp:132
 #, kde-format
@@ -1635,7 +1635,7 @@ msgid ""
 "in the settings</link>.</para>"
 msgstr ""
 "<para>Isto conmuta unha pequena barra que mostra o resto de imaxes do "
-"cartafol actual. Seleccionar unha cambia a imaxe visualizada actualmente.</"
+"cartafol actual. Seleccionar unha cambia a imaxe que se ve.</"
 "para><para>Seleccione varias imaxes ao mesmo tempo para velas as unhas canda "
 "as outras.</para><para>A barra pode moverse á dereita da pantalla e conter "
 "varias filas de imaxes; <link url='%1'>defina estas opcións na "
