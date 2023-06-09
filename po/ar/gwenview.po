@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-02 00:45+0000\n"
-"PO-Revision-Date: 2023-05-17 19:58+0400\n"
+"PO-Revision-Date: 2023-06-08 10:54+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -110,7 +110,7 @@ msgstr "تذكر المجلدات و الوصلات"
 #: app/advancedconfigpage.ui:240
 #, kde-format
 msgid "Enable color management"
-msgstr ""
+msgstr "فعّل إدارة الألوان"
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileHelpLabel)
 #: app/advancedconfigpage.ui:265
@@ -121,13 +121,15 @@ msgid ""
 "is only appropriate for displays that are calibrated to the sRGB color space "
 "or are known to provide an incorrect color profile."
 msgstr ""
+"عند تعطيل إدارة الألوان، يقوم جونفيو بتحويل الصور إلى مساحة ألوان sRGB بدلاً "
+"من مساحة الألوان التي يكتشفها للشاشة. هذا مناسب فقط لشاشات العرض التي تمت "
+"معايرتها لمساحة ألوان sRGB أو المعروف عنها أنها توفر ملف تعريف لون غير صحيح."
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileLabel)
 #: app/advancedconfigpage.ui:275
-#, fuzzy, kde-format
-#| msgid "Too many arguments."
+#, kde-format
 msgid "Color management:"
-msgstr "معاملات كثيرة جدا."
+msgstr "إدارة الألوان:"
 
 #: app/alignwithsidebarwidgetaction.cpp:23
 #, kde-format
