@@ -31,7 +31,7 @@
         "Name[pt_BR]": "Visualizador de imagens do Gwenview",
         "Name[sl]": "Gwenview pregledovalnik slik",
         "Name[ta]": "குவென்வியூ படக் காட்டி",
-        "Name[tr]": "Gwenview Görsel Görüntüleyici",
+        "Name[tr]": "Gwenview Görsel Görüntüleyicisi",
         "Name[uk]": "Переглядач зображень Gwenview",
         "Name[x-test]": "xxGwenview Image Viewerxx",
         "Name[zh_CN]": "Gwenview 图像查看器",
