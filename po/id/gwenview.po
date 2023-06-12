@@ -3,7 +3,7 @@
 # Budiman Jojo <budimanjojo@gmail.com>, 2014.
 # La Ode Muh. Fadlun Akbar <alunkeren@gmail.com>, 2014, 2015.
 # wantoyo <wantoyo@yahoo.com>, 2015.
-# Wantoyo <wantoyek@gmail.com>, 2017, 2018, 2019, 2020, 2021, 2022.
+# Wantoyo <wantoyek@gmail.com>, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
 # Linerly <linerly@protonmail.com>, 2022.
 #
 # Translators:
@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: KDE Frameworks 5 Applications\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-07 02:54+0000\n"
-"PO-Revision-Date: 2022-09-27 17:54+0700\n"
+"PO-Revision-Date: 2023-06-12 07:43+0700\n"
 "Last-Translator: Wantoyèk <wantoyek@gmail.com>\n"
 "Language-Team: Indonesian <kde-i18n-doc@kde.org>\n"
 "Language: id\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 23.04.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -697,8 +697,7 @@ msgstr "Tampilkan tombol pemilihan saja"
 
 #. i18n: ectx: property (text), widget (QRadioButton, noneThumbnailActionsRadioButton)
 #: app/generalconfigpage.ui:243
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "A number of thumbnail actions to show"
 msgid "None"
 msgstr "Nihil"
@@ -833,7 +832,7 @@ msgstr "Pangkas"
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Adjust Colors"
-msgstr ""
+msgstr "Setel Warna"
 
 #: app/imageopscontextmanageritem.cpp:128
 #: lib/redeyereduction/redeyereductionimageoperation.cpp:75
@@ -846,13 +845,13 @@ msgstr "Reduksi Mata Merah"
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Annotate"
-msgstr ""
+msgstr "Anotasi"
 
 #: app/imageopscontextmanageritem.cpp:141
 #, kde-format
 msgctxt "@title:window Annotate [filename]"
 msgid "Annotate %1"
-msgstr ""
+msgstr "Anotasi %1"
 
 #: app/imageopscontextmanageritem.cpp:164 lib/document/documentjob.cpp:77
 #, kde-format
@@ -1912,12 +1911,10 @@ msgid "Support for your camera is not installed."
 msgstr "Dukungan kameramu belum terinstal."
 
 #: importer/thumbnailpage.cpp:236
-#, fuzzy, kde-format
-#| msgctxt "@info above install button, %1 protocol name"
-#| msgid "The protocol support library for \"%1\" is not installed."
+#, kde-format
 msgctxt "@info above install button, %1 protocol name %2 error text from KIO"
 msgid "The protocol support library for \"%1\" is not installed. Error: %2"
-msgstr "Pustaka lib dukungan protokol untuk \"%1\" tidak diinstal."
+msgstr "Pustaka lib dukungan protokol untuk \"%1\" tidak terinstal. Galat: %2"
 
 #: importer/thumbnailpage.cpp:238
 #, kde-format
@@ -2071,22 +2068,22 @@ msgstr "Pengembang"
 #: lib/bcg/bcgimageoperation.cpp:69
 #, kde-format
 msgid "Adjust Colors"
-msgstr ""
+msgstr "Setel Warna"
 
 #: lib/bcg/bcgwidget.cpp:51
 #, kde-format
 msgid "Brightness:"
-msgstr ""
+msgstr "Kecerahan:"
 
 #: lib/bcg/bcgwidget.cpp:52
 #, kde-format
 msgid "Contrast:"
-msgstr ""
+msgstr "Kontras:"
 
 #: lib/bcg/bcgwidget.cpp:53
 #, kde-format
 msgid "Gamma:"
-msgstr ""
+msgstr "Gamma:"
 
 #: lib/crop/cropwidget.cpp:191
 #, kde-format
