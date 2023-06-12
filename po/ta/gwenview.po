@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-02 00:45+0000\n"
-"PO-Revision-Date: 2023-05-21 14:59+0530\n"
+"PO-Revision-Date: 2023-06-11 17:36+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
 "Language: ta\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.04.1\n"
+"X-Generator: Lokalize 23.04.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -103,7 +103,7 @@ msgstr "அடைவுகளை மற்றும் முகவரிகள�
 #: app/advancedconfigpage.ui:240
 #, kde-format
 msgid "Enable color management"
-msgstr ""
+msgstr "நிற மேலாண்மையை இயக்கு"
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileHelpLabel)
 #: app/advancedconfigpage.ui:265
@@ -114,13 +114,16 @@ msgid ""
 "is only appropriate for displays that are calibrated to the sRGB color space "
 "or are known to provide an incorrect color profile."
 msgstr ""
+"நிற மேலாண்மை முடக்கப்பட்டிருந்தால், அனைத்து படங்களையும் sRGB நிறமுறைக்கே குவென்வியூ "
+"மாற்றும் (திரைக்கு ஏற்ற நிறமுறையை பொருட்படுத்தாமல்). sRGB நிறமுறையை பயன்படுத்தும் "
+"திரைகளுக்கும், தவறான நிறமுறையைத் தெரிவிக்கும் திரைகளுக்கும் மட்டுமே இதைப் பயன்படுத்த "
+"வேண்டும்."
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileLabel)
 #: app/advancedconfigpage.ui:275
-#, fuzzy, kde-format
-#| msgid "Too many arguments."
+#, kde-format
 msgid "Color management:"
-msgstr "தேவைக்கு அதிகமான தரு மதிப்புகள்."
+msgstr "நிற மேலாண்மை:"
 
 #: app/alignwithsidebarwidgetaction.cpp:23
 #, kde-format
