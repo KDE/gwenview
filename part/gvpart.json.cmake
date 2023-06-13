@@ -21,6 +21,7 @@
         "Name[fr]": "Afficheur d'images Gwenview",
         "Name[gl]": "Visor de imaxes Gwenview",
         "Name[ia]": "Visor de imagine Gwenview",
+        "Name[id]": "Gwenview Penampil Gambar",
         "Name[it]": "Visore di immagini Gwenview",
         "Name[ka]": "Gwenview - სურათების დამთვალიერებელი",
         "Name[ko]": "Gwenview 그림 뷰어",
