@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-02 00:45+0000\n"
-"PO-Revision-Date: 2023-01-14 23:45+0400\n"
+"PO-Revision-Date: 2023-06-12 16:55+0400\n"
 "Last-Translator: Kheyyam <xxmn77@gmail.com>\n"
 "Language-Team: Azerbaijani <kde-i18n-doc@kde.org>\n"
 "Language: az\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 22.12.1\n"
+"X-Generator: Lokalize 23.04.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -107,7 +107,7 @@ msgstr "Qovluqları və URL-ları yadda saxlamaq"
 #: app/advancedconfigpage.ui:240
 #, kde-format
 msgid "Enable color management"
-msgstr ""
+msgstr "Rəng idarəetməsini aktiv edin"
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileHelpLabel)
 #: app/advancedconfigpage.ui:265
@@ -118,13 +118,16 @@ msgid ""
 "is only appropriate for displays that are calibrated to the sRGB color space "
 "or are known to provide an incorrect color profile."
 msgstr ""
+"Rəng idarəetməsi bağlı olduqda Gwenview şəkilləri, onun ekran üçün "
+"aşkarladığı rəng sahəsinə deyil, sRGB rəng sahəsinə çevirəcəkdir. Bu yalnız, "
+"sRGB rəng sahəsinə ayarlanmış ekranlar üçün uyğundur və yalnız rəng "
+"profilini təqdim etdiyi məlumdur."
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileLabel)
 #: app/advancedconfigpage.ui:275
-#, fuzzy, kde-format
-#| msgid "Too many arguments."
+#, kde-format
 msgid "Color management:"
-msgstr "Həddindən çox arqumentlər."
+msgstr "Rənglərin idarə edilməsi:"
 
 #: app/alignwithsidebarwidgetaction.cpp:23
 #, kde-format
@@ -422,7 +425,7 @@ msgstr "Qovluq yaratmaq..."
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Open in New Window"
-msgstr ""
+msgstr "Yeni pəncərədə açın"
 
 #: app/fileopscontextmanageritem.cpp:194
 #, kde-format
