@@ -79,7 +79,7 @@
   <summary xml:lang="hsb">Wobhladowar za wobrazy</summary>
   <summary xml:lang="hu">Képmegjelenítő</summary>
   <summary xml:lang="ia">Visor de image</summary>
-  <summary xml:lang="id">Penampil Citra</summary>
+  <summary xml:lang="id">Penampil Gambar</summary>
   <summary xml:lang="is">Myndskoðari</summary>
   <summary xml:lang="it">Visualizzatore di immagini</summary>
   <summary xml:lang="ka">სურათების გალერეა</summary>
@@ -132,7 +132,7 @@
     <p xml:lang="hsb">Gwenview je spěšny a přihódny wobhladowar za wobrazy we KDE, idealny za přehladowanje a pokazowanje zběrki wobrazow.</p>
     <p xml:lang="hu">A Gwenview egy gyors és egyszerűen használható képmegjelenítő a KDE-hez, ideális képgyűjtemények böngészéséhez és megjelenítéséhez.</p>
     <p xml:lang="ia">Gwenview es un visor de imagine per KDE rapide e facile de usar, ideal per monstrar e navigar  in un colection de images.</p>
-    <p xml:lang="id">Gwenview adalah cepat dan mudah untuk penggunaan penampil citra oleh KDE, sangat baik untuk menelusuri dan menampilkan citra dari sebuah koleksi.</p>
+    <p xml:lang="id">Gwenview adalah cepat dan mudah untuk penggunaan penampil gambar oleh KDE, sangat baik untuk menelusuri dan menampilkan gambar dari sebuah koleksi.</p>
     <p xml:lang="is">Gwenview er hraðvirkur og auðveldur myndskoðari frá KDE, hentugur til að vafra og birta myndir í myndasafni.</p>
     <p xml:lang="it">Gwenview è un visore di immagini veloce e semplice da usare di KDE, ideale per sfogliare e visualizzare una raccolta di immagini.</p>
     <p xml:lang="ka">Gwenview სწრაფი და ადვილად გამოსაყენებელი პროგრამაა KDE-სგან. ის იდეალურია სურათების კოლექციების დასათვალიერებლად და დასალაგებლად.</p>
@@ -236,7 +236,7 @@
       <li xml:lang="hsb">Podpěruje jednoru manipulaciju wobrazow: wjerćeć, špihelować, wobroćić a powjetšić/pomjeńšić</li>
       <li xml:lang="hu">Egyszerű képműveletek támogatása: forgatás, tükrözés, átméretezés</li>
       <li xml:lang="ia">Il supporta simple manipultiones de imagine: rotar, reflecter,  girar e redimensionar</li>
-      <li xml:lang="id">Mendukung manipulasi citra sederhana: rotasi, cermin, jungkir, dan ubah ukuran</li>
+      <li xml:lang="id">Mendukung manipulasi gambar sederhana: rotasi, cermin, jungkir, dan ubah ukuran</li>
       <li xml:lang="is">Styður einfaldar myndvinnsluaðgerðir: snúa, spegla, fletta og breyta stærð</li>
       <li xml:lang="it">Supporta semplici operazioni di manipolazione di immagini: ruota, rispecchia, rifletti e ridimensioni</li>
       <li xml:lang="ka">აქვს სურათების ისეთი მარტივი მანიპულაციების მხარდაჭერა, როგორიცაა შემობრუნება, სარკისებური ანარეკლი, გადაბრუნება და ზომის შეცვლა</li>
@@ -452,7 +452,7 @@
       <caption xml:lang="hi">अपने छवि संग्रह को प्रबंधित करने के लिए ग्वेन-व्यू का उपयोग करें</caption>
       <caption xml:lang="hu">A Gwenview használata a képgyűjteménye kezeléséhez</caption>
       <caption xml:lang="ia">Usa Guenview pro gerer tu collection de image</caption>
-      <caption xml:lang="id">Gunakan Gwenview untuk mengelola koleksi citra Anda</caption>
+      <caption xml:lang="id">Gunakan Gwenview untuk mengelola koleksi gambar Anda</caption>
       <caption xml:lang="is">Notaðu Gwenview til að sýsla með myndasafnið þitt</caption>
       <caption xml:lang="it">Usa Gwenview per gestire la raccolta delle immagini</caption>
       <caption xml:lang="ka">გამოიყენეთ Gwenview თქვენი სურათების კოლექციების სამართავად</caption>
