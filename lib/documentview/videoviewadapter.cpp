@@ -31,10 +31,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QMouseEvent>
 
 // Phonon
-#include <Phonon/AudioOutput>
-#include <Phonon/MediaObject>
-#include <Phonon/Path>
-#include <Phonon/VideoWidget>
+#include <phonon/AudioOutput>
+#include <phonon/MediaObject>
+#include <phonon/Path>
+#include <phonon/VideoWidget>
 
 // KF
 
