@@ -563,7 +563,7 @@ msgstr "Información da imaxe"
 #: app/fullscreenconfigwidget.ui:101
 #, kde-format
 msgid "Select Image Information to Display..."
-msgstr "Escoller a información da imaxe que mostrar…"
+msgstr "Escoller a información da imaxe que amosar…"
 
 #. i18n: ectx: property (title), widget (QGroupBox, mThumbnailGroupBox)
 #: app/fullscreenconfigwidget.ui:111
@@ -575,7 +575,7 @@ msgstr "Miniaturas"
 #: app/fullscreenconfigwidget.ui:120
 #, kde-format
 msgid "Show thumbnails"
-msgstr "Mostrar as miniaturas"
+msgstr "Amosar as miniaturas"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: app/fullscreenconfigwidget.ui:130
@@ -624,7 +624,7 @@ msgstr "Vídeos:"
 #: app/generalconfigpage.ui:27
 #, kde-format
 msgid "Show videos"
-msgstr "Mostrar os vídeos"
+msgstr "Amosar os vídeos"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_AutoplayVideos)
 #: app/generalconfigpage.ui:34
@@ -712,7 +712,7 @@ msgstr "Todos os botóns"
 #: app/generalconfigpage.ui:236
 #, kde-format
 msgid "Show selection button only"
-msgstr "Mostrar só o botón da selección"
+msgstr "Amosar só o botón da selección"
 
 #. i18n: ectx: property (text), widget (QRadioButton, noneThumbnailActionsRadioButton)
 #: app/generalconfigpage.ui:243
@@ -887,7 +887,7 @@ msgstr "Operacións coa imaxe"
 #: app/imageviewconfigpage.ui:17
 #, kde-format
 msgid "Show transparency with:"
-msgstr "Mostrar a transparencia con:"
+msgstr "Amosar a transparencia con:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, surroundingRadioButton)
 #: app/imageviewconfigpage.ui:38
@@ -1030,7 +1030,7 @@ msgstr "%1:"
 #, kde-format
 msgctxt "@action show more image meta info"
 msgid "Show more details..."
-msgstr "Mostrar máis detalles…"
+msgstr "Amosar máis detalles…"
 
 #: app/infocontextmanageritem.cpp:242
 #, kde-format
@@ -1217,7 +1217,7 @@ msgstr "Barra lateral"
 #, kde-format
 msgctxt "@action opens crop, rename, etc."
 msgid "Show Editing Tools"
-msgstr "Mostrar as ferramentas de edición"
+msgstr "Amosar as ferramentas de edición"
 
 #: app/mainwindow.cpp:513
 #, kde-format
@@ -1286,7 +1286,7 @@ msgstr "Agochar a barra lateral"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
-msgstr "Mostrar a barra lateral"
+msgstr "Amosar a barra lateral"
 
 #: app/mainwindow.cpp:1691
 #, kde-format
@@ -1336,7 +1336,7 @@ msgstr "Se sae agora esqueceranse os cambios."
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr ""
-"Isto agocha completamente a barra do menú. Pódese mostrar de novo escribindo "
+"Isto agocha completamente a barra do menú. Pódese amosar de novo escribindo "
 "%1."
 
 #: app/mainwindow.cpp:1828
@@ -1620,7 +1620,7 @@ msgstr "Sincronizar"
 #: app/viewmainpage.cpp:428
 #, kde-format
 msgid "Show Thumbnails"
-msgstr "Mostrar as miniaturas"
+msgstr "Amosar as miniaturas"
 
 #. i18n: For languages that are read right to left, "right side" refers to the left side in this context.
 #: app/viewmainpage.cpp:431
@@ -1664,12 +1664,12 @@ msgstr ""
 #: importer/dialogpage.cpp:52
 #, kde-format
 msgid "Show failed files..."
-msgstr "Mostrar os ficheiros fallados…"
+msgstr "Amosar os ficheiros fallados…"
 
 #: importer/dialogpage.cpp:57
 #, kde-format
 msgid "Show failed subfolders..."
-msgstr "Mostrar os subcartafoles fallados…"
+msgstr "Amosar os subcartafoles fallados…"
 
 #: importer/dialogpage.cpp:71
 #, kde-format
@@ -2200,7 +2200,7 @@ msgstr "Gwenview non pode gardar este tipo de documentos."
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot display documents of type %1."
-msgstr "O Gwenview non pode mostrar documentos do tipo %1."
+msgstr "O Gwenview non pode amosar documentos do tipo %1."
 
 #: lib/document/loadingdocumentimpl.cpp:398
 #, kde-format
@@ -2260,7 +2260,7 @@ msgstr "Anular a selección"
 #: lib/documentview/documentview.cpp:528
 #, kde-format
 msgid "Gwenview does not know how to display this kind of document"
-msgstr "O Gwenview non sabe como mostrar este tipo de documento"
+msgstr "O Gwenview non sabe como amosar este tipo de documento"
 
 #: lib/documentview/documentview.cpp:634
 #, kde-kuit-format
@@ -2305,15 +2305,15 @@ msgid ""
 "settings</link>.</para>"
 msgstr ""
 "<para>Isto axusta a imaxe á zona de visualización dispoñíbel:<list><item>As "
-"imaxes que son máis grandes que a zona de visualización móstranse cun tamaño "
+"imaxes que son máis grandes que a zona de visualización amósanse cun tamaño "
 "máis pequeno para que caiban.</item><item>As imaxes que son máis pequenas "
-"que a zona de visualización móstranse co seu tamaño normal. Se prefire que "
-"as imaxes pequenas se amplíen ata ocupar toda a zona de visualización, "
-"active <emphasis>Ampliar as imaxes máis pequenas</emphasis> <link "
-"url='%2'>na configuración</link>.</item></list></para><para>Se «%1» xa está "
-"activada, premela de novo a desactivará e a imaxe pasará a mostrarse co seu "
-"tamaño normal.</para><para>«%1» é o modo de ampliación predeterminado para "
-"imaxes. Pode cambiarse para que as imaxes se mostren cun valor anteriores de "
+"que a zona de visualización amósanse co seu tamaño normal. Se prefire que as "
+"imaxes pequenas se amplíen ata ocupar toda a zona de visualización, active "
+"<emphasis>Ampliar as imaxes máis pequenas</emphasis> <link url='%2'>na "
+"configuración</link>.</item></list></para><para>Se «%1» xa está activada, "
+"premela de novo a desactivará e a imaxe pasará a amosarse co seu tamaño "
+"normal.</para><para>«%1» é o modo de ampliación predeterminado para imaxes. "
+"Pode cambiarse para que as imaxes se amosen cun valor anteriores de "
 "aplicación no seu lugar, <link url='%2'>na configuración</link>.</para>"
 
 #: lib/documentview/documentviewcontroller.cpp:83
@@ -2332,7 +2332,7 @@ msgstr "Encher"
 #: lib/documentview/documentviewcontroller.cpp:98
 #, kde-format
 msgid "Show Bird's Eye View When Zoomed In"
-msgstr "Mostrar unha vista de paxaro ao ampliar"
+msgstr "Amosar unha vista de paxaro ao ampliar"
 
 #: lib/documentview/documentviewcontroller.cpp:105
 #, kde-format
@@ -2437,19 +2437,19 @@ msgstr ""
 "e unha imaxe ten cores que non encaixan dentro da gama de cores do perfil. "
 "«Perceptivo» escalará as cores a toda a imaxe para que todas encaixen dentro "
 "das capacidades da pantalla. «Relativo» mesturará só as cores que non se "
-"poden mostrar, e deixará sen tocar o resto de cores."
+"poden amosar, e deixará sen tocar o resto de cores."
 
 #. i18n: ectx: label, entry (random), group (slide show)
 #: lib/gwenviewconfig.kcfg:325
 #, kde-format
 msgid "Display slide show images in random order"
-msgstr "Mostrar as imaxes da presentación nunha orde aleatoria"
+msgstr "Amosar as imaxes da presentación nunha orde aleatoria"
 
 #. i18n: ectx: label, entry (fullscreen), group (slide show)
 #: lib/gwenviewconfig.kcfg:329
 #, kde-format
 msgid "Show slideshow in fullscreen mode"
-msgstr "Mostrar a presentación a pantalla completa"
+msgstr "Amosar a presentación a pantalla completa"
 
 #. i18n: ectx: label, entry (loop), group (slide show)
 #: lib/gwenviewconfig.kcfg:333
