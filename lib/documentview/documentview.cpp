@@ -857,14 +857,21 @@ void DocumentView::resizeEvent(QGraphicsSceneResizeEvent *event)
 
 void DocumentView::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    QGraphicsWidget::mousePressEvent(event);
-
     if (d->mAdapter->canZoom() && event->button() == Qt::MiddleButton) {
         if (event->modifiers() == Qt::NoModifier) {
+            event->accept();
             toggleZoomToFit();
         } else if (event->modifiers() == Qt::SHIFT) {
+            event->accept();
             toggleZoomToFill();
         }
+    }
+
+    // Don't let (presumably double click handling in) the superclass swallow the second of two
+    // quickly following middle clicks, preventing a fast toggle & toggle again. We wouldn't even
+    // get a double click event - handling that could be somewhat cleaner.
+    if (!event->isAccepted()) {
+        QGraphicsWidget::mousePressEvent(event);
     }
 }
 
