@@ -222,6 +222,7 @@
       <li xml:lang="en-GB">Simple image editing: rotate, crop, resize, mirror, flip, reduce red eye, and adjust brightness, contrast, or gamma</li>
       <li xml:lang="eo">Simpla bildredaktado: rotacii, tondi, aligrandigi, speguli, renversi, redukti ruĝ-okulon, kaj alĝustigi helecon, kontraston aŭ gamma</li>
       <li xml:lang="es">Edición de imagen sencilla: rotar, recortar, cambiar tamaño, reflejar, voltear, reducción de ojos rojos, y ajuste de brillo, contraste o gamma</li>
+      <li xml:lang="fi">Yksinkertainen kuvanmuokkaus: kääntäminen, rajaaminen, koon muuttaminen, peilaaminen, kiepauttaminen, punasilmäisyyden vähentäminen sekä kirkkauden, kontrastin tai gamman säätäminen</li>
       <li xml:lang="fr">Modifications simples d'images : rotation, rognage, re-dimensionnement, inversion, réduction des yeux rouges, ajustement de la luminosité, du contraste et du gamma.</li>
       <li xml:lang="gl">Edición sinxela de imaxes: rotar, recortar, cambiar de tamaño, inverter en horizontal ou vertical, reducir os ollos vermellos e axustar o brillo, o contraste e a tonalidade.</li>
       <li xml:lang="ia">Editar de imagine simple: rota, tonde, redimensiona, reflecte, gira, reduce oculos rubie, e adapta brillantia, contrasto, o gamma</li>
@@ -247,6 +248,7 @@
       <li xml:lang="en-GB">Annotate and mark up images with arrows, shapes, text boxes, image stamps, and more</li>
       <li xml:lang="eo">Prinoti kaj primarki bildojn per sagoj, formoj, tekstskatoloj, bildostampoj kaj pli</li>
       <li xml:lang="es">Anotar y marcar imágenes con flechas, formas, cuadros de texto, sellos de imágenes y más</li>
+      <li xml:lang="fi">Merkitse kuvia nuolin, kuvioin, tekstilaatikoin, leimoin jne.</li>
       <li xml:lang="fr">Annotez et balisez les images avec des flèches, des formes, des zones de texte, des timbres d'images et plus encore</li>
       <li xml:lang="gl">Anotar e marcar imaxes con frechas, formas, caixas de texto, selos de imaxe e máis.</li>
       <li xml:lang="ia">Annota e marca imagines con flechas, umbras, quadratos de texto, timbros de imagine e alteres</li>
@@ -274,6 +276,7 @@
       <li xml:lang="en-GB">Basic file management actions such as copy, move, delete, and others</li>
       <li xml:lang="eo">Bazaj agoj de dosiermastrumado kiel kopii, movi, forigi kaj aliaj</li>
       <li xml:lang="es">Acciones básicas de gestión de archivos, como copiar, mover y borrar, entre otras</li>
+      <li xml:lang="fi">Tiedostonhallinnan perustoiminnot kuten kopioiminen, siirtäminen, poistaminen jne.</li>
       <li xml:lang="fr">Actions basiques de gestion de fichiers comme copier, déplacer, supprimer et autres</li>
       <li xml:lang="gl">Accións básicas de xestión de ficheiros como copiar, mover, eliminar, etc.</li>
       <li xml:lang="ia">Actiones de gestion de file basic tal como copiar,mover, deler, e alteres</li>
