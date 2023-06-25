@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-02 00:45+0000\n"
-"PO-Revision-Date: 2023-05-18 18:00+0300\n"
+"PO-Revision-Date: 2023-05-29 21:07+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -441,7 +441,7 @@ msgstr "Luo kansio…"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Open in New Window"
-msgstr ""
+msgstr "Avaa uuteen ikkunaan"
 
 #: app/fileopscontextmanageritem.cpp:194
 #, kde-format
