@@ -259,7 +259,7 @@ struct ImageMetaInfoModelPrivate {
     }
 
     template<class Container, class Iterator>
-    void fillExivGroup(const QModelIndex &parent, MetaInfoGroup *group, const Container &container)
+    void fillExivGroup(const QModelIndex &parent, MetaInfoGroup *group, const Container &container, const Exiv2::ExifData &exifData)
     {
         // key aren't always unique (for example, "Iptc.Application2.Keywords"
         // may appear multiple times) so we can't know how many rows we will
@@ -279,7 +279,7 @@ struct ImageMetaInfoModelPrivate {
                 const QString key = QString::fromUtf8(it->key().c_str());
                 const QString label = QString::fromLocal8Bit(it->tagLabel().c_str());
                 std::ostringstream stream;
-                stream << *it;
+                it->write(stream, &exifData);
                 const QString value = QString::fromLocal8Bit(stream.str().c_str());
 
                 EntryHash::iterator hashIt = hash.find(key);
@@ -436,19 +436,19 @@ void ImageMetaInfoModel::setExiv2Image(const Exiv2::Image *image)
 
     d->setGroupEntryValue(GeneralGroup, QStringLiteral("General.Comment"), QString::fromUtf8(image->comment().c_str()));
 
+    const Exiv2::ExifData &exifData = image->exifData();
     if (image->checkMode(Exiv2::mdExif) & Exiv2::amRead) {
-        const Exiv2::ExifData &exifData = image->exifData();
-        d->fillExivGroup<Exiv2::ExifData, Exiv2::ExifData::const_iterator>(exifIndex, exifGroup, exifData);
+        d->fillExivGroup<Exiv2::ExifData, Exiv2::ExifData::const_iterator>(exifIndex, exifGroup, exifData, exifData);
     }
 
     if (image->checkMode(Exiv2::mdIptc) & Exiv2::amRead) {
         const Exiv2::IptcData &iptcData = image->iptcData();
-        d->fillExivGroup<Exiv2::IptcData, Exiv2::IptcData::const_iterator>(iptcIndex, iptcGroup, iptcData);
+        d->fillExivGroup<Exiv2::IptcData, Exiv2::IptcData::const_iterator>(iptcIndex, iptcGroup, iptcData, exifData);
     }
 
     if (image->checkMode(Exiv2::mdXmp) & Exiv2::amRead) {
         const Exiv2::XmpData &xmpData = image->xmpData();
-        d->fillExivGroup<Exiv2::XmpData, Exiv2::XmpData::const_iterator>(xmpIndex, xmpGroup, xmpData);
+        d->fillExivGroup<Exiv2::XmpData, Exiv2::XmpData::const_iterator>(xmpIndex, xmpGroup, xmpData, exifData);
     }
 }
 
