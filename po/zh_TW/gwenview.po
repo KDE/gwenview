@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-02 00:45+0000\n"
-"PO-Revision-Date: 2023-02-27 22:13+0900\n"
+"PO-Revision-Date: 2023-07-03 19:46+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Chinese <zh-l10n@linux.org.tw>\n"
 "Language: zh_TW\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Lokalize 22.12.2\n"
+"X-Generator: Lokalize 23.04.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -110,7 +110,7 @@ msgstr "記住資料夾與網址"
 #: app/advancedconfigpage.ui:240
 #, kde-format
 msgid "Enable color management"
-msgstr ""
+msgstr "啟用色彩管理"
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileHelpLabel)
 #: app/advancedconfigpage.ui:265
@@ -121,13 +121,15 @@ msgid ""
 "is only appropriate for displays that are calibrated to the sRGB color space "
 "or are known to provide an incorrect color profile."
 msgstr ""
+"停用色彩管理時，Gwenview 在顯示影像時會將影像轉至 sRGB 色彩空間而不是它所偵測"
+"到的顯示器色彩空間。這只有在顯示器提供的色彩設定檔是錯誤的時候，或是顯示器校"
+"準為 sRGB 色彩空間的時候才是合適的。"
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileLabel)
 #: app/advancedconfigpage.ui:275
-#, fuzzy, kde-format
-#| msgid "Too many arguments."
+#, kde-format
 msgid "Color management:"
-msgstr "太多參數。"
+msgstr "色彩管理："
 
 #: app/alignwithsidebarwidgetaction.cpp:23
 #, kde-format
@@ -420,7 +422,7 @@ msgstr "建立資料夾..."
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Open in New Window"
-msgstr ""
+msgstr "在新視窗開啟"
 
 #: app/fileopscontextmanageritem.cpp:194
 #, kde-format
@@ -810,12 +812,12 @@ msgstr "向右旋轉影像"
 #: app/imageopscontextmanageritem.cpp:105
 #, kde-format
 msgid "Mirror"
-msgstr "鏡面"
+msgstr "鏡像"
 
 #: app/imageopscontextmanageritem.cpp:109
 #, kde-format
 msgid "Flip"
-msgstr "反轉"
+msgstr "翻轉"
 
 #: app/imageopscontextmanageritem.cpp:113 lib/resize/resizeimagedialog.cpp:71
 #, kde-format
@@ -1600,6 +1602,10 @@ msgid ""
 "and contain multiple rows of images; <link url='%1'>configure these options "
 "in the settings</link>.</para>"
 msgstr ""
+"<para>這會切換顯示一個顯示目前資料夾內其他影像的縮圖列。在縮圖列中選取一個影"
+"像就會改為顯示該影像。</para><para>同時選取多個影像來同時並列顯示它們。</"
+"para><para>縮圖列可以被移到螢幕右側，也可以調整為顯示超過一行影像；<link "
+"url='%1'>到設定裡調整這些選項</link>。</para>"
 
 #: app/viewmainpage.cpp:575
 #, kde-format
@@ -2230,6 +2236,13 @@ msgid ""
 "are displayed at a previous zoom value instead <link url='%2'>in the "
 "settings</link>.</para>"
 msgstr ""
+"<para>這會將影像調整至可用的檢視區域內：<list><item>比檢視區域還要大的影像會"
+"縮小到適合。</item><item>比檢視區域還要小的影像會以原本的大小顯示。如果希望比"
+"較小的影像要放大到適合檢視區域的話，請<link url='%2'>至設定裡</link>開啟"
+"<emphasis>將較小的影像放大</emphasis>這個選項。</item></list></para><para>如"
+"果「%1」已經啟用，再按它一次時會停用它，使影像改為以原本的大小顯示。</"
+"para><para>影像的預設縮放模式是「%1」。這可以<link url='%2'>在設定裡</link>調"
+"整，使影像使用之前使用的縮放模式。</para>"
 
 #: lib/documentview/documentviewcontroller.cpp:83
 #, kde-format
@@ -2663,7 +2676,7 @@ msgstr "向左旋轉"
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror"
-msgstr "鏡面"
+msgstr "鏡像"
 
 #: lib/transformimageoperation.cpp:67
 #, kde-format
