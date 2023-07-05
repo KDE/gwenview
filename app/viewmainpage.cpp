@@ -36,7 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KModelIndexProxyMapper>
 #include <KSqueezedTextLabel>
 #include <KToggleAction>
-#ifdef KF5Activities_FOUND
+#if HAVE_KACTIVITIES
 #include <KActivities/ResourceInstance>
 #endif
 
@@ -132,7 +132,7 @@ struct ViewMainPagePrivate {
     // Activity Resource events reporting needs to be above KPart,
     // in the shell itself, to avoid problems with other MDI applications
     // that use this KPart
-#ifdef KF5Activities_FOUND
+#if HAVE_KACTIVITIES
     QHash<DocumentView *, KActivities::ResourceInstance *> mActivityResources;
 #endif
 
@@ -293,7 +293,7 @@ struct ViewMainPagePrivate {
         QObject::connect(view, &DocumentView::videoFinished, mSlideShow, &SlideShow::resumeAndGoToNextUrl);
 
         mDocumentViews << view;
-#ifdef KF5Activities_FOUND
+#if HAVE_KACTIVITIES
         mActivityResources.insert(view, new KActivities::ResourceInstance(q->window()->winId(), view));
 #endif
 
@@ -314,7 +314,7 @@ struct ViewMainPagePrivate {
         QObject::disconnect(view, nullptr, mSlideShow, nullptr);
 
         mDocumentViews.removeOne(view);
-#ifdef KF5Activities_FOUND
+#if HAVE_KACTIVITIES
         mActivityResources.remove(view);
 #endif
         mDocumentViewContainer->deleteView(view);
@@ -348,7 +348,7 @@ struct ViewMainPagePrivate {
         }
         if (oldView) {
             oldView->setCurrent(false);
-#ifdef KF5Activities_FOUND
+#if HAVE_KACTIVITIES
             Q_ASSERT(mActivityResources.contains(oldView));
             mActivityResources.value(oldView)->notifyFocusedOut();
 #endif
@@ -364,7 +364,7 @@ struct ViewMainPagePrivate {
             // *before* listing /foo (because it matters less to the user)
             mThumbnailBar->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Current);
         }
-#ifdef KF5Activities_FOUND
+#if HAVE_KACTIVITIES
         Q_ASSERT(mActivityResources.contains(view));
         mActivityResources.value(view)->notifyFocusedIn();
 #endif
@@ -723,7 +723,7 @@ void ViewMainPage::openUrls(const QList<QUrl> &allUrls, const QUrl &currentUrl)
         DocumentView *view = it.value();
         DocumentView::Setup savedSetup = d->mDocumentViewContainer->savedSetup(url);
         view->openUrl(url, d->mZoomMode == ZoomMode::Individual && savedSetup.valid ? savedSetup : setup);
-#ifdef KF5Activities_FOUND
+#if HAVE_KACTIVITIES
         if (GwenviewConfig::historyEnabled()) {
             d->mActivityResources.value(view)->setUri(url);
             d->mActivityResources.value(view)->setMimetype(MimeTypeUtils::urlMimeType(url));

@@ -99,6 +99,9 @@ find_package(KF${QT_MAJOR_VERSION} ${KF_MIN_VERSION} OPTIONAL_COMPONENTS
     Purpose
 )
 
+set(HAVE_KACTIVITIES ${KF${QT_MAJOR_VERSION}Activities_FOUND})
+set(HAVE_PURPOSE ${KF${QT_MAJOR_VERSION}Purpose_FOUND})
+
 ecm_set_disabled_deprecation_versions(QT 5.14.0 KF 5.99.0
     )
 

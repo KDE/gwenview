@@ -71,7 +71,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 #include "lib/semanticinfo/semanticinfodirmodel.h"
 #endif
-#ifdef KF5Purpose_FOUND
+#if HAVE_PURPOSE
 #include <Purpose/AlternativesModel>
 #include <purpose_version.h>
 #if PURPOSE_VERSION >= QT_VERSION_CHECK(5, 104, 0)
@@ -215,7 +215,7 @@ struct MainWindow::Private {
     KToggleAction *mShowMenuBarAction = nullptr;
     KToggleAction *mShowStatusBarAction = nullptr;
     QPointer<HudButtonBox> hudButtonBox = nullptr;
-#ifdef KF5Purpose_FOUND
+#if HAVE_PURPOSE
     Purpose::Menu *mShareMenu = nullptr;
     KToolBarPopupAction *mShareAction = nullptr;
 #endif
@@ -509,7 +509,7 @@ struct MainWindow::Private {
 
         view->addAction(KStandardAction::ConfigureToolbars, q, SLOT(configureToolbars()));
 
-#ifdef KF5Purpose_FOUND
+#if HAVE_PURPOSE
         mShareAction = new KToolBarPopupAction(QIcon::fromTheme(QStringLiteral("document-share")), i18nc("@action Share images", "Share"), q);
         mShareAction->setPopupMode(QToolButton::InstantPopup);
         actionCollection->addAction(QStringLiteral("share"), mShareAction);
@@ -572,7 +572,7 @@ struct MainWindow::Private {
         menu->addAction(mFullScreenAction);
         menu->addAction(mToggleSlideShowAction);
         menu->addSeparator();
-#ifdef KF5Purpose_FOUND
+#if HAVE_PURPOSE
         menu->addMenu(mShareMenu);
 #endif
         auto configureMenu = new QMenu(i18nc("@title:menu submenu for actions that open configuration dialogs", "Configure"));
@@ -808,7 +808,7 @@ struct MainWindow::Private {
         actionCollection->action(QStringLiteral("file_print"))->setEnabled(isRasterImage);
         actionCollection->action(QStringLiteral("file_print_preview"))->setEnabled(isRasterImage);
 
-#ifdef KF5Purpose_FOUND
+#if HAVE_PURPOSE
         const KFileItemList selectedFiles = mContextManager->selectedFileItemList();
 
         if (selectedFiles.isEmpty()) {
