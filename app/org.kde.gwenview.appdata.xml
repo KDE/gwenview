@@ -367,7 +367,7 @@
       <li xml:lang="uk">можливість роботи у режимі окремої програми та вбудованого переглядача у програмі для керування файлами Konqueror;</li>
       <li xml:lang="x-test">xxFunctions both as a standalone application and an embedded viewer in the Konqueror web browserxx</li>
       <li xml:lang="zh-CN">既可以独立运行，也可以作为 Konqueror 网页浏览器的内建图片查看器使用。</li>
-      <li xml:lang="zh-TW">可以是單獨的應用程式，也可以嵌入在 Konqueror 瀏覽器中</li>
+      <li xml:lang="zh-TW">可以是作為獨立的應用程式使用，也可以嵌入在 Konqueror 瀏覽器中</li>
     </ul>
   </description>
   <url type="homepage">https://userbase.kde.org/Gwenview</url>
