@@ -79,7 +79,7 @@ namespace Gwenview
 {
 #undef ENABLE_LOG
 #undef LOG
-//#define ENABLE_LOG
+// #define ENABLE_LOG
 #ifdef ENABLE_LOG
 #define LOG(x) // qCDebug(GWENVIEW_LIB_LOG) << x
 #else
@@ -735,7 +735,7 @@ void DocumentView::zoomContinuous(int delta, QPointF center)
     const qreal currentZoom = d->mAdapter->zoom();
 
     // multiplies by sqrt(2) for every mouse wheel step
-    const qreal newZoom = currentZoom * pow(2, 0.5 * float(delta)/QWheelEvent::DefaultDeltasPerStep);
+    const qreal newZoom = currentZoom * pow(2, 0.5 * float(delta) / QWheelEvent::DefaultDeltasPerStep);
     d->setZoom(newZoom, center);
     return;
 }

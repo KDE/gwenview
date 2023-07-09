@@ -107,7 +107,7 @@ static void copyMoveOrLink(Operation operation, const QList<QUrl> &urlList, QWid
     QObject::connect(dialog, &QDialog::accepted, parent, [=]() {
         QUrl destUrl = dialog->selectedUrls().at(0);
 
-        KIO::CopyJob* job = nullptr;
+        KIO::CopyJob *job = nullptr;
         switch (operation) {
         case COPY:
             job = KIO::copy(urlList, destUrl);
@@ -125,7 +125,7 @@ static void copyMoveOrLink(Operation operation, const QList<QUrl> &urlList, QWid
         job->uiDelegate()->setAutoErrorHandlingEnabled(true);
 
         if (numberOfImages == 1) {
-            destUrl = destUrl.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash);
+            destUrl = destUrl.adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash);
         }
         contextManager->setTargetDirUrl(destUrl);
     });
@@ -252,7 +252,7 @@ void rename(const QUrl &oldUrl, QWidget *parent, ContextManager *contextManager)
         QUrl newUrl = oldUrl;
         newUrl = newUrl.adjusted(QUrl::RemoveFilename);
         newUrl.setPath(newUrl.path() + name);
-        KIO::SimpleJob* job = KIO::rename(oldUrl, newUrl, KIO::HideProgressInfo);
+        KIO::SimpleJob *job = KIO::rename(oldUrl, newUrl, KIO::HideProgressInfo);
         KJobWidgets::setWindow(job, parent);
         job->uiDelegate()->setAutoErrorHandlingEnabled(true);
         QObject::connect(job, &KJob::result, parent, [contextManager, job, oldUrl, newUrl]() {

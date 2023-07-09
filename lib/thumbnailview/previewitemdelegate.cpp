@@ -60,14 +60,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Define this to be able to fine tune the rendering of the selection
 // background through a config file
-//#define FINETUNE_SELECTION_BACKGROUND
+// #define FINETUNE_SELECTION_BACKGROUND
 #ifdef FINETUNE_SELECTION_BACKGROUND
 #include <QDir>
 #include <QSettings>
 #endif
 
-//#define DEBUG_DRAW_BORDER
-//#define DEBUG_DRAW_CURRENT
+// #define DEBUG_DRAW_BORDER
+// #define DEBUG_DRAW_CURRENT
 
 namespace Gwenview
 {

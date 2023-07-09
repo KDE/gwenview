@@ -58,7 +58,7 @@ namespace Gwenview
 {
 #undef ENABLE_LOG
 #undef LOG
-//#define ENABLE_LOG
+// #define ENABLE_LOG
 #ifdef ENABLE_LOG
 #define LOG(x) qCDebug(GWENVIEW_APP_LOG) << x
 #else
@@ -146,7 +146,7 @@ struct ImageOpsContextManagerItem::Private {
         });
 #endif
         mActionList << mRotateLeftAction << mRotateRightAction << mMirrorAction << mFlipAction << mResizeAction << mCropAction << mBCGAction
-        << mRedEyeReductionAction;
+                    << mRedEyeReductionAction;
 #ifdef KIMAGEANNOTATOR_FOUND
         mActionList << mAnnotateAction;
 #endif

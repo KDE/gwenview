@@ -301,7 +301,7 @@ Orientation JpegContent::orientation() const
     if (it == d->mExifData.end() || it->count() == 0 || it->typeId() != Exiv2::unsignedShort) {
         return NOT_AVAILABLE;
     }
-#if EXIV2_TEST_VERSION(0,28,0)
+#if EXIV2_TEST_VERSION(0, 28, 0)
     return Orientation(it->toUint32());
 #else
     return Orientation(it->toLong());
@@ -325,7 +325,7 @@ int JpegContent::dotsPerMeter(const QString &keyName) const
     if (it == d->mExifData.end()) {
         return 0;
     }
-#if EXIV2_TEST_VERSION(0,28,0)
+#if EXIV2_TEST_VERSION(0, 28, 0)
     int res = it->toUint32();
 #else
     int res = it->toLong();
@@ -345,13 +345,13 @@ int JpegContent::dotsPerMeter(const QString &keyName) const
     const float INCHESPERMETER = (100. / 2.54);
     switch (res) {
     case 3: // dots per cm
-#if EXIV2_TEST_VERSION(0,28,0)
+#if EXIV2_TEST_VERSION(0, 28, 0)
         return int(it->toUint32() * 100);
 #else
         return int(it->toLong() * 100);
 #endif
     default: // dots per inch
-#if EXIV2_TEST_VERSION(0,28,0)
+#if EXIV2_TEST_VERSION(0, 28, 0)
         return int(it->toUint32() * INCHESPERMETER);
 #else
         return int(it->toLong() * INCHESPERMETER);
@@ -584,7 +584,7 @@ QImage JpegContent::thumbnail() const
         auto it = d->mExifData.findKey(Exiv2::ExifKey("Exif.Canon.ThumbnailImageValidArea"));
         // ensure ThumbnailImageValidArea actually specifies a rectangle, i.e. there must be 4 coordinates
         if (it != d->mExifData.end() && it->count() == 4) {
-#if EXIV2_TEST_VERSION(0,28,0)
+#if EXIV2_TEST_VERSION(0, 28, 0)
             QRect validArea(QPoint(it->toUint32(0), it->toUint32(2)), QPoint(it->toUint32(1), it->toUint32(3)));
 #else
             QRect validArea(QPoint(it->toLong(0), it->toLong(2)), QPoint(it->toLong(1), it->toLong(3)));
@@ -595,7 +595,7 @@ QImage JpegContent::thumbnail() const
             // embedded thumbnail. Need to derive it from the size of the preview image instead.
             it = d->mExifData.findKey(Exiv2::ExifKey("Exif.Sony1.PreviewImageSize"));
             if (it != d->mExifData.end() && it->count() == 2) {
-#if EXIV2_TEST_VERSION(0,28,0)
+#if EXIV2_TEST_VERSION(0, 28, 0)
                 const long prevHeight = it->toUint32(0);
                 const long prevWidth = it->toUint32(1);
 #else

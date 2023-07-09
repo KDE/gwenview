@@ -40,10 +40,7 @@ InvisibleButtonGroup::InvisibleButtonGroup(QWidget *parent)
     hide();
     d->mGroup = new QButtonGroup(this);
     d->mGroup->setExclusive(true);
-    connect(d->mGroup,
-            &QButtonGroup::idClicked,
-            this,
-            &InvisibleButtonGroup::selectionChanged);
+    connect(d->mGroup, &QButtonGroup::idClicked, this, &InvisibleButtonGroup::selectionChanged);
 }
 
 InvisibleButtonGroup::~InvisibleButtonGroup()

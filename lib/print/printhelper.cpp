@@ -104,8 +104,7 @@ struct PrintHelperPrivate {
         doc->waitUntilLoaded();
         printer->setDocName(doc->url().fileName());
         const auto docSize = doc->size();
-        printer->setPageOrientation(docSize.width() > docSize.height() ? QPageLayout::Landscape
-                                                                       : QPageLayout::Portrait);
+        printer->setPageOrientation(docSize.width() > docSize.height() ? QPageLayout::Landscape : QPageLayout::Portrait);
     }
 
     void print(QPrinter *printer, Document::Ptr doc, bool showPrinterSetupDialog)

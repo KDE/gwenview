@@ -24,7 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QApplication>
 #include <QCheckBox>
 #include <QComboBox>
-//#include <QDesktopWidget>
+// #include <QDesktopWidget>
 #include <QDialogButtonBox>
 #include <QFontDatabase>
 #include <QHBoxLayout>
