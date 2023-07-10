@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-02 00:45+0000\n"
+"POT-Creation-Date: 2023-07-09 00:57+0000\n"
 "PO-Revision-Date: 2023-06-02 21:20+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
@@ -2564,7 +2564,7 @@ msgctxt "@info"
 msgid "No data to store."
 msgstr "Neniuj datumoj por konservi."
 
-#: lib/print/printhelper.cpp:125
+#: lib/print/printhelper.cpp:124
 #, kde-format
 msgid "Print Image"
 msgstr "Printi bildon"

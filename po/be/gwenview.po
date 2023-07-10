@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 86ff119b1606fcaa910d6b44fc14b611\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-02 00:45+0000\n"
+"POT-Creation-Date: 2023-07-09 00:57+0000\n"
 "PO-Revision-Date: 2023-02-15 22:16\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@gmail.com>\n"
 "Language-Team: Belarusian\n"
@@ -2622,7 +2622,7 @@ msgctxt "@info"
 msgid "No data to store."
 msgstr "Няма даных для захавання."
 
-#: lib/print/printhelper.cpp:125
+#: lib/print/printhelper.cpp:124
 #, kde-format
 msgid "Print Image"
 msgstr "Друкаванне выявы"

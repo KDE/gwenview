@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-02 00:45+0000\n"
+"POT-Creation-Date: 2023-07-09 00:57+0000\n"
 "PO-Revision-Date: 2012-07-02 21:42+0300\n"
 "Last-Translator: Einars Sprugis <einars8@gmail.com>\n"
 "Language-Team: Latvian <locale@laka.lv>\n"
@@ -2642,7 +2642,7 @@ msgctxt "@info"
 msgid "No data to store."
 msgstr "Nav datu, ko saglabāt."
 
-#: lib/print/printhelper.cpp:125
+#: lib/print/printhelper.cpp:124
 #, kde-format
 msgid "Print Image"
 msgstr "Drukāt attēlu"
