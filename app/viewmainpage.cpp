@@ -294,7 +294,11 @@ struct ViewMainPagePrivate {
 
         mDocumentViews << view;
 #if HAVE_KACTIVITIES
+#if QT_VERSION_MAJOR == 6
+        mActivityResources.insert(view, new KActivities::ResourceInstance(q->window()->windowHandle(), view));
+#else
         mActivityResources.insert(view, new KActivities::ResourceInstance(q->window()->winId(), view));
+#endif
 #endif
 
         return view;
