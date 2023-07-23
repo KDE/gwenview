@@ -70,3 +70,5 @@ AbstractSemanticInfoBackEnd::AbstractSemanticInfoBackEnd(QObject *parent)
 }
 
 } // namespace
+
+#include "moc_abstractsemanticinfobackend.cpp"

@@ -59,3 +59,5 @@ QImageIOHandler *FitsPlugin::create(QIODevice *device, const QByteArray &format)
     handler->setFormat(format);
     return handler;
 }
+
+#include "moc_fitsplugin.cpp"

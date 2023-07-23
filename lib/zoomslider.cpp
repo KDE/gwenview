@@ -170,3 +170,5 @@ QSlider *ZoomSlider::slider() const
 }
 
 } // namespace
+
+#include "moc_zoomslider.cpp"

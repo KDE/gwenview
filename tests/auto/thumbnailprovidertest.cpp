@@ -284,3 +284,5 @@ void ThumbnailProviderTest::testRemoveItemsWhileGenerating()
     provider.removeItems(list);
     loop.exec();
 }
+
+#include "moc_thumbnailprovidertest.cpp"

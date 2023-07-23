@@ -354,3 +354,5 @@ void SaveBar::setCurrentUrl(const QUrl &url)
 }
 
 } // namespace
+
+#include "moc_savebar.cpp"

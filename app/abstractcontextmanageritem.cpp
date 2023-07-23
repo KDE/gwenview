@@ -58,3 +58,5 @@ void AbstractContextManagerItem::setWidget(QWidget *widget)
 }
 
 } // namespace
+
+#include "moc_abstractcontextmanageritem.cpp"

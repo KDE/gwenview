@@ -68,3 +68,5 @@ void ThumbnailSlider::updateToolTip()
 }
 
 } // namespace
+
+#include "moc_thumbnailslider.cpp"

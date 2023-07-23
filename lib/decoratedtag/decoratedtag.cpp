@@ -78,3 +78,5 @@ void DecoratedTag::paintEvent(QPaintEvent *event)
     painter.drawRoundedRect(rect, d->horizontalMargin, d->horizontalMargin);
     QLabel::paintEvent(event);
 }
+
+#include "moc_decoratedtag.cpp"

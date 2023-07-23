@@ -384,3 +384,5 @@ void InfoContextManagerItem::slotPreferredMetaInfoKeyListChanged(const QStringLi
 }
 
 } // namespace
+
+#include "moc_infocontextmanageritem.cpp"

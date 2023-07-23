@@ -213,3 +213,5 @@ void RecursiveDirModel::slotDirCleared(const QUrl &dirUrl)
 }
 
 } // namespace
+
+#include "moc_recursivedirmodel.cpp"

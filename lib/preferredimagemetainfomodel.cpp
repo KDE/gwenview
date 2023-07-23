@@ -138,3 +138,5 @@ bool PreferredImageMetaInfoModel::lessThan(const QModelIndex &left, const QModel
 }
 
 } // namespace
+
+#include "moc_preferredimagemetainfomodel.cpp"

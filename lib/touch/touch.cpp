@@ -466,3 +466,5 @@ void Touch::setTapHoldandMovingGestureActive(bool active)
 }
 
 } // namespace
+
+#include "moc_touch.cpp"

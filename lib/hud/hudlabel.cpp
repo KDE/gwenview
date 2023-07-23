@@ -71,3 +71,5 @@ void HudLabel::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidge
 }
 
 } // namespace
+
+#include "moc_hudlabel.cpp"

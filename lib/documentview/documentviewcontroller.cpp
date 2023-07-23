@@ -399,3 +399,5 @@ void DocumentViewController::setToolContainer(SlideContainer *container)
 }
 
 } // namespace
+
+#include "moc_documentviewcontroller.cpp"

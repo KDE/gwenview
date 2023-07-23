@@ -64,3 +64,5 @@ void GVBrowserExtension::print()
 }
 
 } // namespace
+
+#include "moc_gvbrowserextension.cpp"

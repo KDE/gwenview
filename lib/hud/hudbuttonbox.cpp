@@ -120,3 +120,5 @@ void HudButtonBox::showEvent(QShowEvent *event)
 }
 
 } // namespace
+
+#include "moc_hudbuttonbox.cpp"

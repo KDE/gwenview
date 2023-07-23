@@ -115,3 +115,5 @@ void HistoryModelTest::testRemoveRows()
     QDir qDir(dir.path());
     QCOMPARE(qDir.entryList(QDir::Files | QDir::NoDotAndDotDot).count(), 1);
 }
+
+#include "moc_historymodeltest.cpp"

@@ -124,3 +124,5 @@ void AbstractImageOperation::redoAsDocumentJob(DocumentJob *job)
 }
 
 } // namespace
+
+#include "moc_abstractimageoperation.cpp"

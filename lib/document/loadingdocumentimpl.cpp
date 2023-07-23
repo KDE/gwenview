@@ -550,3 +550,5 @@ void LoadingDocumentImpl::slotImageLoaded()
 }
 
 } // namespace
+
+#include "moc_loadingdocumentimpl.cpp"

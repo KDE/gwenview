@@ -287,3 +287,5 @@ QModelIndex FolderViewContextManagerItem::findRootIndex(const QUrl &wantedUrl)
 }
 
 } // namespace
+
+#include "moc_folderviewcontextmanageritem.cpp"

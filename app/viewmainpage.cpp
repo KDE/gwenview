@@ -914,3 +914,5 @@ void ViewMainPage::slotDirModelItemsAddedOrRemoved()
 }
 
 } // namespace
+
+#include "moc_viewmainpage.cpp"

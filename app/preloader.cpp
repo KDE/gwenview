@@ -113,3 +113,5 @@ void Preloader::doPreload()
 }
 
 } // namespace
+
+#include "moc_preloader.cpp"

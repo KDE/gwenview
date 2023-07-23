@@ -58,3 +58,5 @@ void LoadingJob::slotLoadingFailed()
 }
 
 } // namespace
+
+#include "moc_loadingjob.cpp"

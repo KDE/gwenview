@@ -181,3 +181,5 @@ void RecursiveDirModelTest::testSetNewUrl()
     loop.exec();
     QCOMPARE(model.rowCount(QModelIndex()), 2);
 }
+
+#include "moc_recursivedirmodeltest.cpp"

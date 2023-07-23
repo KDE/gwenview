@@ -572,3 +572,5 @@ QVariant ImageMetaInfoModel::headerData(int section, Qt::Orientation orientation
 }
 
 } // namespace
+
+#include "moc_imagemetainfomodel.cpp"

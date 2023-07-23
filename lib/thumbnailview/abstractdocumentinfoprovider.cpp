@@ -35,3 +35,5 @@ AbstractDocumentInfoProvider::AbstractDocumentInfoProvider(QObject *parent)
 }
 
 } // namespace
+
+#include "moc_abstractdocumentinfoprovider.cpp"

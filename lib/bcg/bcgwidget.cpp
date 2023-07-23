@@ -142,3 +142,5 @@ int BCGWidget::gamma() const
 }
 
 } // namespace
+
+#include "moc_bcgwidget.cpp"

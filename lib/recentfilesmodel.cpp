@@ -111,3 +111,5 @@ bool RecentFilesModel::removeRows(int start, int count, const QModelIndex &paren
 }
 
 } // namespace
+
+#include "moc_recentfilesmodel.cpp"

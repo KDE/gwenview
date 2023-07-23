@@ -97,3 +97,5 @@ SemanticInfoTag FakeSemanticInfoBackEnd::tagForLabel(const QString &label)
 }
 
 } // namespace
+
+#include "moc_fakesemanticinfobackend.cpp"

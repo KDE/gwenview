@@ -142,3 +142,5 @@ void DateWidget::goToNext()
 }
 
 } // namespace
+
+#include "moc_datewidget.cpp"

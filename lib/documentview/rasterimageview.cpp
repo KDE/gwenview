@@ -320,3 +320,5 @@ void RasterImageView::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
 }
 
 } // namespace
+
+#include "moc_rasterimageview.cpp"

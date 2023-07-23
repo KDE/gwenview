@@ -143,3 +143,5 @@ void SlideContainerAutoTest::testHiddenContentResize()
     QTest::qWait(500);
     QCOMPARE(window.mContainer->height(), 0);
 }
+
+#include "moc_slidecontainerautotest.cpp"

@@ -604,3 +604,5 @@ void ThumbnailPage::openUrlFromIndex(const QModelIndex &index)
 }
 
 } // namespace
+
+#include "moc_thumbnailpage.cpp"

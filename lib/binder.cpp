@@ -31,3 +31,5 @@ BinderInternal::BinderInternal(QObject *parent)
 BinderInternal::~BinderInternal() = default;
 
 } // namespace
+
+#include "moc_binder.cpp"

@@ -258,3 +258,5 @@ qint64 ResizeImageDialog::calculateEstimatedImageSize()
 }
 
 } // namespace
+
+#include "moc_resizeimagedialog.cpp"

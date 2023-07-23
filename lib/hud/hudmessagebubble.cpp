@@ -85,3 +85,5 @@ HudButton *HudMessageBubble::addButton(const KGuiItem &guiItem)
 }
 
 } // namespace
+
+#include "moc_hudmessagebubble.cpp"

@@ -176,3 +176,5 @@ bool SaveJob::doKill()
 }
 
 } // namespace
+
+#include "moc_savejob.cpp"

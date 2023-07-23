@@ -71,3 +71,5 @@ bool DisabledActionShortcutMonitor::eventFilter(QObject *object, QEvent *event)
 }
 
 } // namespace
+
+#include "moc_disabledactionshortcutmonitor.cpp"

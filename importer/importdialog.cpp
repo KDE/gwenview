@@ -295,3 +295,5 @@ void ImportDialog::showImportError(const QString &message)
 }
 
 } // namespace
+
+#include "moc_importdialog.cpp"

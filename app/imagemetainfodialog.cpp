@@ -162,3 +162,5 @@ QSize ImageMetaInfoDialog::sizeHint() const
 }
 
 } // namespace
+
+#include "moc_imagemetainfodialog.cpp"

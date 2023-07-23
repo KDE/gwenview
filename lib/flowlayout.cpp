@@ -221,3 +221,5 @@ int FlowLayout::doLayout(const QRect &rect, bool testOnly) const
 
     return y + lineHeight - rect.y() + getMargin();
 }
+
+#include "moc_flowlayout.cpp"

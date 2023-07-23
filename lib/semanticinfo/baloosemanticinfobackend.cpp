@@ -100,3 +100,5 @@ SemanticInfoTag BalooSemanticInfoBackend::tagForLabel(const QString &label)
 }
 
 } // namespace
+
+#include "moc_baloosemanticinfobackend.cpp"

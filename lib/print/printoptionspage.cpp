@@ -224,3 +224,5 @@ void PrintOptionsPage::saveConfig()
 }
 
 } // namespace
+
+#include "moc_printoptionspage.cpp"

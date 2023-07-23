@@ -476,3 +476,5 @@ QWidget *CropTool::widget() const
 }
 
 } // namespace
+
+#include "moc_croptool.cpp"

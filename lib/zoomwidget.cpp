@@ -170,3 +170,5 @@ void ZoomWidget::setMaximumZoom(qreal zoom)
 }
 
 } // namespace
+
+#include "moc_zoomwidget.cpp"

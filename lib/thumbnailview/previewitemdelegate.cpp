@@ -968,3 +968,5 @@ void PreviewItemDelegate::setModelData(QWidget *widget, QAbstractItemModel *mode
 }
 
 } // namespace
+
+#include "moc_previewitemdelegate.cpp"

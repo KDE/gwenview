@@ -112,3 +112,5 @@ void ContextManagerTest::testInvalidDirUrl()
     manager.setCurrentDirUrl(QUrl());
     QVERIFY(!dirLister->mOpenUrlCalled);
 }
+
+#include "moc_contextmanagertest.cpp"

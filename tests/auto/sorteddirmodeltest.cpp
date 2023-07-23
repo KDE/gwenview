@@ -73,3 +73,5 @@ void SortedDirModelTest::testHasDocuments()
     loop.exec();
     QCOMPARE(model.hasDocuments(), hasDocuments);
 }
+
+#include "moc_sorteddirmodeltest.cpp"

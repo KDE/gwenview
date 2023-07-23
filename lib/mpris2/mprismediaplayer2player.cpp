@@ -350,3 +350,5 @@ void MprisMediaPlayer2Player::onPreviousActionChanged()
 }
 
 }
+
+#include "moc_mprismediaplayer2player.cpp"

@@ -152,3 +152,5 @@ void ConfigDialog::setCurrentPage(int page)
 }
 
 } // namespace
+
+#include "moc_configdialog.cpp"

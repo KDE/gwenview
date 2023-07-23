@@ -75,3 +75,5 @@ QSvgRenderer *SvgDocumentLoadedImpl::svgRenderer() const
 }
 
 } // namespace
+
+#include "moc_svgdocumentloadedimpl.cpp"

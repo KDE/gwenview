@@ -74,3 +74,5 @@ bool KindProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourcePa
 }
 
 } // namespace
+
+#include "moc_kindproxymodel.cpp"

@@ -282,3 +282,5 @@ int Importer::renamedCount() const
 }
 
 } // namespace
+
+#include "moc_importer.cpp"

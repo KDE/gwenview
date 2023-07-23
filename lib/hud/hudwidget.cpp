@@ -153,3 +153,5 @@ void HudWidget::setAutoDeleteOnFadeout(bool value)
 }
 
 } // namespace
+
+#include "moc_hudwidget.cpp"

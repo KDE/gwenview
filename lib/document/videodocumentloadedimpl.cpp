@@ -60,3 +60,5 @@ void VideoDocumentLoadedImpl::setImage(const QImage &)
 }
 
 } // namespace
+
+#include "moc_videodocumentloadedimpl.cpp"

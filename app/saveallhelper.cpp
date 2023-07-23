@@ -112,3 +112,5 @@ void SaveAllHelper::slotResult(KJob *_job)
 }
 
 } // namespace
+
+#include "moc_saveallhelper.cpp"

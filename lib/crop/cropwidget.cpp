@@ -583,3 +583,5 @@ void CropWidget::updateCropRatio()
 }
 
 } // namespace
+
+#include "moc_cropwidget.cpp"

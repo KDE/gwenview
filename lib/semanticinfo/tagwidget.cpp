@@ -243,3 +243,5 @@ void TagWidget::removeTag(const SemanticInfoTag &tag)
 }
 
 } // namespace
+
+#include "moc_tagwidget.cpp"

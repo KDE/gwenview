@@ -52,3 +52,5 @@ bool EventWatcher::eventFilter(QObject *, QEvent *event)
 }
 
 } // namespace
+
+#include "moc_eventwatcher.cpp"

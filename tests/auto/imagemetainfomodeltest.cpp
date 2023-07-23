@@ -60,3 +60,5 @@ void ImageMetaInfoModelTest::testCatchExiv2Errors()
     ImageMetaInfoModel model;
     model.setExiv2Image(image.get());
 }
+
+#include "moc_imagemetainfomodeltest.cpp"

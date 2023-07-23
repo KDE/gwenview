@@ -227,3 +227,5 @@ QWidget *RedEyeReductionTool::widget() const
 }
 
 } // namespace
+
+#include "moc_redeyereductiontool.cpp"

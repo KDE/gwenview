@@ -63,3 +63,5 @@ void AbstractRasterImageViewTool::wheelEvent(QGraphicsSceneWheelEvent *event)
 }
 
 } // namespace
+
+#include "moc_abstractrasterimageviewtool.cpp"

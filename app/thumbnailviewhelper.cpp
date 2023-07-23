@@ -115,3 +115,5 @@ void ThumbnailViewHelper::showMenuForUrlDroppedOnDir(QWidget *parent, const QLis
 }
 
 } // namespace
+
+#include "moc_thumbnailviewhelper.cpp"

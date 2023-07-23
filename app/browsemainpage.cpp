@@ -572,3 +572,5 @@ QToolButton *BrowseMainPage::toggleSideBarButton() const
 }
 
 } // namespace
+
+#include "moc_browsemainpage.cpp"

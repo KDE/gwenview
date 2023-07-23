@@ -172,3 +172,5 @@ int GraphicsWidgetFloater::verticalMargin() const
 }
 
 } // namespace
+
+#include "moc_graphicswidgetfloater.cpp"

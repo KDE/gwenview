@@ -86,3 +86,5 @@ bool DocumentInfoProvider::isBusy(const QUrl &url)
 }
 
 } // namespace
+
+#include "moc_documentinfoprovider.cpp"

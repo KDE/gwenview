@@ -89,3 +89,5 @@ void HudCountDown::doUpdate()
 }
 
 } // namespace
+
+#include "moc_hudcountdown.cpp"

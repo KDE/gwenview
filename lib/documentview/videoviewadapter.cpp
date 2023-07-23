@@ -406,3 +406,5 @@ void VideoViewAdapter::slotTicked(qint64 value)
 }
 
 } // namespace
+
+#include "moc_videoviewadapter.cpp"

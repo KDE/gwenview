@@ -165,3 +165,5 @@ void SlideContainer::slotAnimFinished()
 }
 
 } // namespace
+
+#include "moc_slidecontainer.cpp"

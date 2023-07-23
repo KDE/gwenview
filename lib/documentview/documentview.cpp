@@ -1167,3 +1167,5 @@ void DocumentView::dragThumbnailLoadingFailed(const KFileItem &item)
 }
 
 } // namespace
+
+#include "moc_documentview.cpp"

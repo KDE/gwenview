@@ -106,3 +106,5 @@ void BCGImageOperation::apply(QImage &img, const BrightnessContrastGamma &bcg)
 }
 
 } // namespace
+
+#include "moc_bcgimageoperation.cpp"

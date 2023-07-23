@@ -97,3 +97,5 @@ void AbstractDocumentImpl::setDocumentCmsProfile(const Cms::Profile::Ptr &profil
 }
 
 } // namespace
+
+#include "moc_abstractdocumentimpl.cpp"

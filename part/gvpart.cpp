@@ -169,3 +169,5 @@ void GVPart::showJobError(KJob *job)
 } // namespace
 
 #include "gvpart.moc"
+
+#include "moc_gvpart.cpp"

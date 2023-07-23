@@ -640,3 +640,5 @@ void AbstractImageView::onImageRectUpdated()
 }
 
 } // namespace
+
+#include "moc_abstractimageview.cpp"

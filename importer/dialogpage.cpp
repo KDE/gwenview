@@ -162,3 +162,5 @@ int DialogPage::exec()
 }
 
 } // namespace
+
+#include "moc_dialogpage.cpp"

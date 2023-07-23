@@ -187,3 +187,5 @@ void TimedEventLoop::fail()
 }
 
 } // namespace TestUtils
+
+#include "moc_testutils.cpp"

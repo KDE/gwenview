@@ -283,3 +283,5 @@ void BirdEyeView::hoverLeaveEvent(QGraphicsSceneHoverEvent * /*event*/)
 }
 
 } // namespace
+
+#include "moc_birdeyeview.cpp"

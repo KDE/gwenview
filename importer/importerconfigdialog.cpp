@@ -91,3 +91,5 @@ void ImporterConfigDialog::updatePreview()
 }
 
 } // namespace
+
+#include "moc_importerconfigdialog.cpp"

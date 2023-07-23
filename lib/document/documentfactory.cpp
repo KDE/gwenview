@@ -286,3 +286,5 @@ void DocumentFactory::forget(const QUrl &url)
 }
 
 } // namespace
+
+#include "moc_documentfactory.cpp"

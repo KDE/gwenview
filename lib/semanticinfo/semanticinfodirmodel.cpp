@@ -247,3 +247,5 @@ AbstractSemanticInfoBackEnd *SemanticInfoDirModel::semanticInfoBackEnd() const
 }
 
 } // namespace
+
+#include "moc_semanticinfodirmodel.cpp"

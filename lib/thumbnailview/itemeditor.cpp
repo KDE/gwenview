@@ -85,3 +85,5 @@ void ItemEditor::resizeToContents()
 }
 
 } // namespace
+
+#include "moc_itemeditor.cpp"

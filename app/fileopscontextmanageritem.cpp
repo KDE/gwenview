@@ -448,3 +448,5 @@ void FileOpsContextManagerItem::openContainingFolder()
 }
 
 } // namespace
+
+#include "moc_fileopscontextmanageritem.cpp"

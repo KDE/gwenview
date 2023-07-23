@@ -328,3 +328,5 @@ void ThumbnailGenerator::cacheThumbnail()
 }
 
 } // namespace
+
+#include "moc_thumbnailgenerator.cpp"

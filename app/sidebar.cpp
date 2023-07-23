@@ -412,3 +412,5 @@ void SideBar::loadConfig()
 }
 
 } // namespace
+
+#include "moc_sidebar.cpp"

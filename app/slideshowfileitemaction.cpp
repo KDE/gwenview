@@ -85,3 +85,5 @@ QList<QAction *> SlideShowFileItemAction::actions(const KFileItemListProperties 
 }
 
 #include "slideshowfileitemaction.moc"
+
+#include "moc_slideshowfileitemaction.cpp"

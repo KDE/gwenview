@@ -161,3 +161,5 @@ void PlaceTreeModelTest::testListUrl1()
         QCOMPARE(dirName, dirs.value(row));
     }
 }
+
+#include "moc_placetreemodeltest.cpp"

@@ -372,3 +372,5 @@ QUrl PlaceTreeModel::urlForIndex(const QModelIndex &index) const
 }
 
 } // namespace
+
+#include "moc_placetreemodel.cpp"

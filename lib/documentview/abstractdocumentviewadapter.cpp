@@ -64,3 +64,5 @@ EmptyAdapter::EmptyAdapter()
 }
 
 } // namespace
+
+#include "moc_abstractdocumentviewadapter.cpp"

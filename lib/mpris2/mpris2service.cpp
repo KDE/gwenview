@@ -122,3 +122,5 @@ void Mpris2Service::onFullScreenActionToggled()
     }
 }
 }
+
+#include "moc_mpris2service.cpp"

@@ -511,3 +511,7 @@ void ZoomComboBox::activateAndChangeZoomTo(int index)
 
     changeZoomTo(index);
 }
+
+#include "moc_zoomcombobox.cpp"
+
+#include "moc_zoomcombobox_p.cpp"

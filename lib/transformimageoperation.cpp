@@ -103,3 +103,5 @@ void TransformImageOperation::undo()
 }
 
 } // namespace
+
+#include "moc_transformimageoperation.cpp"

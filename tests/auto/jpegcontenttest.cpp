@@ -302,3 +302,5 @@ void JpegContentTest::testSetImage()
     //    ignoredKeys << "Orientation";
     //    compareMetaInfo(pathForTestFile(ORIENT6_FILE), pathForTestFile(TMP_FILE), ignoredKeys);
 }
+
+#include "moc_jpegcontenttest.cpp"

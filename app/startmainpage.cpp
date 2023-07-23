@@ -346,3 +346,5 @@ ThumbnailView *StartMainPage::recentFoldersView() const
 }
 
 } // namespace
+
+#include "moc_startmainpage.cpp"

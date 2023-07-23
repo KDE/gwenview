@@ -125,3 +125,5 @@ void WaylandGestures::init()
 }
 
 #include "waylandgestures.moc"
+
+#include "moc_waylandgestures.cpp"

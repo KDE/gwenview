@@ -554,3 +554,5 @@ void FullScreenContent::updateDocumentCountLabel()
 }
 
 } // namespace
+
+#include "moc_fullscreencontent.cpp"

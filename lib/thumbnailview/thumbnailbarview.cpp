@@ -541,3 +541,5 @@ void ThumbnailBarView::setRowCount(int rowCount)
 }
 
 } // namespace
+
+#include "moc_thumbnailbarview.cpp"

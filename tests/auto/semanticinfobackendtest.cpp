@@ -131,3 +131,5 @@ void SemanticInfoBackEndTest::testTagForLabel()
 #endif
 
 } // namespace
+
+#include "moc_semanticinfobackendtest.cpp"

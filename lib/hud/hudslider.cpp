@@ -380,3 +380,5 @@ void HudSlider::doRepeatAction(int time)
 }
 
 } // namespace
+
+#include "moc_hudslider.cpp"

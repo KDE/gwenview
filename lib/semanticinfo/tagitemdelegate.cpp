@@ -146,3 +146,5 @@ void TagItemDelegate::slotAssignToAllButtonClicked()
 }
 
 } // namespace
+
+#include "moc_tagitemdelegate.cpp"

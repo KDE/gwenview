@@ -284,3 +284,5 @@ void FullScreenBar::setEdgeTriggerEnabled(bool value)
 }
 
 } // namespace
+
+#include "moc_fullscreenbar.cpp"

@@ -343,3 +343,5 @@ void FilterController::addFilter(QWidget *widget)
 }
 
 } // namespace
+
+#include "moc_filtercontroller.cpp"

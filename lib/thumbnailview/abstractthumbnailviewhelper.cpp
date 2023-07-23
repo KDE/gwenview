@@ -29,3 +29,5 @@ AbstractThumbnailViewHelper::AbstractThumbnailViewHelper(QObject *parent)
 AbstractThumbnailViewHelper::~AbstractThumbnailViewHelper() = default;
 
 } // namespace
+
+#include "moc_abstractthumbnailviewhelper.cpp"

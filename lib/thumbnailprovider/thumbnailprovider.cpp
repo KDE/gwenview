@@ -580,3 +580,5 @@ bool ThumbnailProvider::isThumbnailWriterEmpty()
 }
 
 } // namespace
+
+#include "moc_thumbnailprovider.cpp"

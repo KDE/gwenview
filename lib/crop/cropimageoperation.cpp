@@ -92,3 +92,5 @@ void CropImageOperation::undo()
 }
 
 } // namespace
+
+#include "moc_cropimageoperation.cpp"

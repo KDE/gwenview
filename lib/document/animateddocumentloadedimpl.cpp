@@ -108,3 +108,5 @@ void AnimatedDocumentLoadedImpl::stopAnimation()
 }
 
 } // namespace
+
+#include "moc_animateddocumentloadedimpl.cpp"

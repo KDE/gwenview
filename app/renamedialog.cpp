@@ -83,3 +83,5 @@ void RenameDialog::updateButtons()
 }
 
 } // namespace
+
+#include "moc_renamedialog.cpp"

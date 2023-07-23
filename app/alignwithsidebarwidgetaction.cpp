@@ -170,3 +170,5 @@ int AligningSpacer::updateWidth()
     setFixedWidth(newWidth);
     return newWidth;
 }
+
+#include "moc_alignwithsidebarwidgetaction.cpp"

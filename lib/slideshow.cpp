@@ -302,3 +302,5 @@ void SlideShow::slotRandomActionToggled(bool on)
 }
 
 } // namespace
+
+#include "moc_slideshow.cpp"

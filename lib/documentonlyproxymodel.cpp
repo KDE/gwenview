@@ -54,3 +54,5 @@ bool DocumentOnlyProxyModel::filterAcceptsRow(int row, const QModelIndex &parent
 }
 
 } // namespace
+
+#include "moc_documentonlyproxymodel.cpp"

@@ -91,3 +91,5 @@ QByteArray JpegDocumentLoadedImpl::rawData() const
 }
 
 } // namespace
+
+#include "moc_jpegdocumentloadedimpl.cpp"

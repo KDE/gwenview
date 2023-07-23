@@ -150,3 +150,5 @@ void DocumentViewSynchronizer::updatePosition()
 }
 
 } // namespace
+
+#include "moc_documentviewsynchronizer.cpp"

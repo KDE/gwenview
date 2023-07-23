@@ -336,3 +336,5 @@ void DocumentViewContainer::applyPalette(const QPalette &palette)
 }
 
 } // namespace
+
+#include "moc_documentviewcontainer.cpp"

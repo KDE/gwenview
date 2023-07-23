@@ -168,3 +168,5 @@ QRectF RasterImageViewAdapter::visibleDocumentRect() const
 }
 
 } // namespace
+
+#include "moc_rasterimageviewadapter.cpp"

@@ -66,3 +66,5 @@ void DBusAbstractAdaptor::emitPropertiesChangeDBusSignal()
 }
 
 }
+
+#include "moc_dbusabstractadaptor.cpp"

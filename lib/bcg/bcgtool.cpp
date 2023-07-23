@@ -119,3 +119,5 @@ void BCGTool::slotBCGRequested()
 }
 
 } // namespace
+
+#include "moc_bcgtool.cpp"

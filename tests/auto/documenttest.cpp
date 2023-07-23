@@ -894,3 +894,5 @@ void DocumentTest::testUndoRedo()
     QCOMPARE(doc->undoStack()->count(), 1);
     QVERIFY(doc->undoStack()->isClean());
 }
+
+#include "moc_documenttest.cpp"

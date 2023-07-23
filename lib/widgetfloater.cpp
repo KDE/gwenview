@@ -168,3 +168,5 @@ int WidgetFloater::verticalMargin() const
 }
 
 } // namespace
+
+#include "moc_widgetfloater.cpp"

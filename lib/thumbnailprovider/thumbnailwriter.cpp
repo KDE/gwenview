@@ -105,3 +105,5 @@ bool ThumbnailWriter::isEmpty() const
 }
 
 } // namespace
+
+#include "moc_thumbnailwriter.cpp"

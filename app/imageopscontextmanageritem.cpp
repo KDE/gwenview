@@ -374,3 +374,5 @@ void ImageOpsContextManagerItem::startBCG()
 }
 
 } // namespace
+
+#include "moc_imageopscontextmanageritem.cpp"

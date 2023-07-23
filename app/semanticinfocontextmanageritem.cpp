@@ -473,3 +473,5 @@ bool SemanticInfoContextManagerItem::eventFilter(QObject *, QEvent *event)
 }
 
 } // namespace
+
+#include "moc_semanticinfocontextmanageritem.cpp"

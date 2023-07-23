@@ -122,3 +122,5 @@ TagModel *TagModel::createAllTagsModel(QObject *parent, AbstractSemanticInfoBack
 }
 
 } // namespace
+
+#include "moc_tagmodel.cpp"

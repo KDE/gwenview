@@ -220,3 +220,5 @@ AbstractImageView *SvgViewAdapter::imageView() const
 }
 
 } // namespace
+
+#include "moc_svgviewadapter.cpp"

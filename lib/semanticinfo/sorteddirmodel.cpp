@@ -315,3 +315,5 @@ void SortedDirModel::setDirLister(KDirLister *dirLister)
 }
 
 } // namespace
+
+#include "moc_sorteddirmodel.cpp"

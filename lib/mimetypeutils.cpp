@@ -242,3 +242,5 @@ void DataAccumulator::slotFinished()
 
 } // namespace MimeTypeUtils
 } // namespace Gwenview
+
+#include "moc_mimetypeutils_p.cpp"

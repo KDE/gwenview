@@ -568,3 +568,5 @@ QString GvCore::fullScreenPaletteName() const
 }
 
 } // namespace
+
+#include "moc_gvcore.cpp"

@@ -94,3 +94,5 @@ void CmsProfileTest::testLoadFromExiv2Image_data()
 #undef NEW_ROW
 
 #endif
+
+#include "moc_cmsprofiletest.cpp"

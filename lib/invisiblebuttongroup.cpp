@@ -67,3 +67,5 @@ void InvisibleButtonGroup::setSelected(int id)
 }
 
 } // namespace
+
+#include "moc_invisiblebuttongroup.cpp"

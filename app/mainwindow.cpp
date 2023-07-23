@@ -2096,3 +2096,5 @@ void MainWindow::onFocusChanged(QWidget *old, QWidget *now)
 }
 
 } // namespace
+
+#include "moc_mainwindow.cpp"

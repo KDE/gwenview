@@ -55,3 +55,5 @@ void UrlUtilsTest::testFixUserEnteredUrl_data()
     // Check it does not get turned into gzip://...
     NEW_ROW("file://" + pwd + "/example.svgz", "file://" + pwd + "/example.svgz");
 }
+
+#include "moc_urlutilstest.cpp"

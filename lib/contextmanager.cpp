@@ -367,3 +367,5 @@ void ContextManager::slotDirListerCompleted()
 }
 
 } // namespace
+
+#include "moc_contextmanager.cpp"

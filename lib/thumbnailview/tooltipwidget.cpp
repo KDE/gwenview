@@ -102,3 +102,5 @@ void ToolTipWidget::paintEvent(QPaintEvent *)
 }
 
 } // namespace
+
+#include "moc_tooltipwidget.cpp"

@@ -109,3 +109,5 @@ bool ShadowFilter::eventFilter(QObject *obj, QEvent *event)
 }
 
 } // namespace
+
+#include "moc_shadowfilter.cpp"

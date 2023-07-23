@@ -564,3 +564,7 @@ Cms::Profile::Ptr Document::cmsProfile() const
 }
 
 } // namespace
+
+#include "moc_document.cpp"
+
+#include "moc_document_p.cpp"

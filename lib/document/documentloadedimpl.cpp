@@ -124,3 +124,5 @@ QByteArray DocumentLoadedImpl::rawData() const
 }
 
 } // namespace
+
+#include "moc_documentloadedimpl.cpp"

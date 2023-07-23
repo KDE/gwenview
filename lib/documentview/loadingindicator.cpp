@@ -101,3 +101,5 @@ QVariant LoadingIndicator::itemChange(GraphicsItemChange change, const QVariant 
 }
 
 } // namespace
+
+#include "moc_loadingindicator.cpp"

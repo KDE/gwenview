@@ -156,3 +156,5 @@ void LockScreenWatcher::onScreenSaverActiveChanged(bool isActive)
 }
 
 }
+
+#include "moc_lockscreenwatcher.cpp"

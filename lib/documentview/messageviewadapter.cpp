@@ -126,3 +126,5 @@ bool MessageViewAdapter::eventFilter(QObject *, QEvent *ev)
 }
 
 } // namespace
+
+#include "moc_messageviewadapter.cpp"

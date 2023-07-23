@@ -66,3 +66,5 @@ void TransformImageOperationTest::testRotate90()
 
     QCOMPARE(image, doc->image());
 }
+
+#include "moc_transformimageoperationtest.cpp"

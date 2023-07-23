@@ -92,3 +92,5 @@ void TimeUtilsTest::testCache()
 
     QCOMPARE(dateTime2, item2.time(KFileItem::ModificationTime));
 }
+
+#include "moc_timeutilstest.cpp"

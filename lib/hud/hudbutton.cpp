@@ -203,3 +203,5 @@ bool HudButton::event(QEvent *event)
 }
 
 } // namespace
+
+#include "moc_hudbutton.cpp"

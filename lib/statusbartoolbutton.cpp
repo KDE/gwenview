@@ -146,3 +146,5 @@ void StatusBarToolButton::paintEvent(QPaintEvent *event)
 }
 
 } // namespace
+
+#include "moc_statusbartoolbutton.cpp"

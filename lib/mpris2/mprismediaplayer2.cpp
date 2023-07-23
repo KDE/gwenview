@@ -106,3 +106,5 @@ void MprisMediaPlayer2::onFullScreenActionToggled(bool checked)
 }
 
 }
+
+#include "moc_mprismediaplayer2.cpp"

@@ -316,3 +316,5 @@ void ImporterTest::testReadOnlyDestination()
     QCOMPARE(errorSpy.count(), 1);
     QVERIFY(importer.importedUrlList().isEmpty());
 }
+
+#include "moc_importertest.cpp"

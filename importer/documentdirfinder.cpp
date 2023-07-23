@@ -122,3 +122,5 @@ void DocumentDirFinder::finish(const QUrl &url, DocumentDirFinder::Status status
 }
 
 } // namespace
+
+#include "moc_documentdirfinder.cpp"

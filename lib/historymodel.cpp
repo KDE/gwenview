@@ -258,3 +258,5 @@ bool HistoryModel::removeRows(int start, int count, const QModelIndex &parent)
 }
 
 } // namespace
+
+#include "moc_historymodel.cpp"

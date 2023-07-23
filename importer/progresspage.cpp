@@ -49,3 +49,5 @@ ProgressPage::~ProgressPage()
 }
 
 } // namespace
+
+#include "moc_progresspage.cpp"
