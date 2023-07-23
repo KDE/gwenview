@@ -98,7 +98,6 @@ add_executable(gwenview ${gwenview_SRCS})
 
 target_link_libraries(gwenview
     KF${QT_MAJOR_VERSION}::ItemModels
-    KF${QT_MAJOR_VERSION}::Notifications
     KF${QT_MAJOR_VERSION}::WidgetsAddons
     KF${QT_MAJOR_VERSION}::GuiAddons
     gwenviewlib

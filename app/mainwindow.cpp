@@ -56,7 +56,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KMessageWidget>
-#include <KNotificationRestrictions>
 #include <KProtocolManager>
 #include <KRecentFilesAction>
 #include <KStandardShortcut>
@@ -115,6 +114,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifdef HAVE_QTDBUS
 #include <QDBusConnection>
 #include <QDBusPendingReply>
+#include <QDBusReply>
 #include <lib/mpris2/mpris2service.h>
 #endif
 #include <lib/print/printhelper.h>
@@ -233,7 +233,7 @@ struct MainWindow::Private {
     MainPageId mCurrentMainPageId;
 
     QDateTime mFullScreenLeftAt;
-    KNotificationRestrictions *mNotificationRestrictions = nullptr;
+    uint screenSaverDbusCookie = 0;
 
     void setupContextManager()
     {
@@ -927,13 +927,30 @@ struct MainWindow::Private {
 
     void setScreenSaverEnabled(bool enabled)
     {
-        // Always delete mNotificationRestrictions, it does not hurt
-        delete mNotificationRestrictions;
-        if (!enabled) {
-            mNotificationRestrictions = new KNotificationRestrictions(KNotificationRestrictions::ScreenSaver, q);
+#ifdef HAVE_QTDBUS
+        if (enabled) {
+            QDBusMessage message = QDBusMessage::createMethodCall(QStringLiteral("org.freedesktop.ScreenSaver"),
+                                                                  QStringLiteral("/ScreenSaver"),
+                                                                  QStringLiteral("org.freedesktop.ScreenSaver"),
+                                                                  QStringLiteral("Inhibit"));
+            message << QGuiApplication::desktopFileName();
+            message << i18n("Viewing media");
+            QDBusReply<uint> reply = QDBusConnection::sessionBus().call(message);
+            if (reply.isValid()) {
+                screenSaverDbusCookie = reply.value();
+            }
         } else {
-            mNotificationRestrictions = nullptr;
+            if (screenSaverDbusCookie != 0) {
+                QDBusMessage message = QDBusMessage::createMethodCall(QStringLiteral("org.freedesktop.ScreenSaver"),
+                                                                      QStringLiteral("/ScreenSaver"),
+                                                                      QStringLiteral("org.freedesktop.ScreenSaver"),
+                                                                      QStringLiteral("UnInhibit"));
+                message << static_cast<uint>(screenSaverDbusCookie);
+                screenSaverDbusCookie = 0;
+                QDBusConnection::sessionBus().send(message);
+            }
         }
+#endif
     }
 
     void assignThumbnailProviderToThumbnailView(ThumbnailView *thumbnailView)
@@ -1035,7 +1052,6 @@ MainWindow::MainWindow()
     d->setupThumbnailBarModel();
     d->mGvCore = new GvCore(this, d->mDirModel);
     d->mPreloader = new Preloader(this);
-    d->mNotificationRestrictions = nullptr;
     d->mThumbnailProvider = new ThumbnailProvider();
     d->mActiveThumbnailView = nullptr;
     d->initDirModel();
