@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-09 00:57+0000\n"
-"PO-Revision-Date: 2023-03-01 01:20+0100\n"
+"PO-Revision-Date: 2023-07-22 23:49+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -42,15 +42,15 @@ msgid ""
 "storing thumbnails on disk and will prefer embedded thumbnails of lower "
 "quality that are faster to load, if available."
 msgstr ""
-"디스크 공간이 부족할 때 이 옵션을 사용하십시오. 디스크에 축소판을 저장하지 않"
-"고, 사용 가능한 경우 이미지 파일에 내장된 축소판을 사용합니다. 해당 그림은 저"
+"디스크 공간이 부족할 때 이 옵션을 사용하십시오. 디스크에 섬네일을 저장하지 않"
+"고, 사용 가능한 경우 이미지 파일에 내장된 섬네일을 사용합니다. 해당 그림은 저"
 "품질일 수 있지만 더 빠르게 불러올 수 있습니다."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: app/advancedconfigpage.ui:82
 #, kde-format
 msgid "Thumbnails:"
-msgstr "축소판:"
+msgstr "섬네일:"
 
 #. i18n: ectx: property (text), widget (QLabel, relativeHelpLabel)
 #: app/advancedconfigpage.ui:92
@@ -106,7 +106,7 @@ msgstr "폴더와 URL 기억하기"
 #: app/advancedconfigpage.ui:240
 #, kde-format
 msgid "Enable color management"
-msgstr ""
+msgstr "색 관리 활성화"
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileHelpLabel)
 #: app/advancedconfigpage.ui:265
@@ -117,13 +117,16 @@ msgid ""
 "is only appropriate for displays that are calibrated to the sRGB color space "
 "or are known to provide an incorrect color profile."
 msgstr ""
+"색 관리가 비활성화되어 있으면 Gwenview에서는 모든 그림을 디스플레이의 색 공간"
+"이 아닌 sRGB 색 공간으로 변환하여 표시합니다. sRGB 색 공간으로 교정된 디스플"
+"레이를 사용하거나 디스플레이 장치의 색 프로필이 잘못되어 있는 경우에만 추천합"
+"니다."
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileLabel)
 #: app/advancedconfigpage.ui:275
-#, fuzzy, kde-format
-#| msgid "Too many arguments."
+#, kde-format
 msgid "Color management:"
-msgstr "인자가 너무 많습니다."
+msgstr "색 관리:"
 
 #: app/alignwithsidebarwidgetaction.cpp:23
 #, kde-format
@@ -184,7 +187,7 @@ msgstr "내림차순"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Thumbnail Details"
-msgstr "축소판 정보"
+msgstr "섬네일 정보"
 
 #: app/browsemainpage.cpp:187
 #, kde-format
@@ -416,7 +419,7 @@ msgstr "폴더 만들기..."
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Open in New Window"
-msgstr ""
+msgstr "새 창으로 열기"
 
 #: app/fileopscontextmanageritem.cpp:194
 #, kde-format
@@ -431,7 +434,7 @@ msgstr "포함하는 폴더 열기"
 #: app/fileopscontextmanageritem.cpp:396
 #, kde-format
 msgid "Other Application..."
-msgstr "다른 프로그램..."
+msgstr "다른 앱..."
 
 #: app/filtercontroller.cpp:59
 #, kde-format
@@ -547,13 +550,13 @@ msgstr "표시할 그림 정보 선택..."
 #: app/fullscreenconfigwidget.ui:111
 #, kde-format
 msgid "Thumbnails"
-msgstr "축소판"
+msgstr "섬네일"
 
 #. i18n: ectx: property (text), widget (QCheckBox, mShowThumbnailsCheckBox)
 #: app/fullscreenconfigwidget.ui:120
 #, kde-format
 msgid "Show thumbnails"
-msgstr "축소판 표시"
+msgstr "섬네일 표시"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: app/fullscreenconfigwidget.ui:130
@@ -677,7 +680,7 @@ msgstr ""
 #: app/generalconfigpage.ui:222
 #, kde-format
 msgid "Thumbnail actions:"
-msgstr "축소판 동작:"
+msgstr "섬네일 동작:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, allButtonsThumbnailActionsRadioButton)
 #: app/generalconfigpage.ui:229
@@ -970,7 +973,7 @@ msgstr "없음"
 #: app/imageviewconfigpage.ui:504
 #, kde-format
 msgid "<b>Thumbnail Bar</b>"
-msgstr "<b>축소판 바</b>"
+msgstr "<b>섬네일 바</b>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: app/imageviewconfigpage.ui:527
@@ -1585,7 +1588,7 @@ msgstr "동기화"
 #: app/viewmainpage.cpp:428
 #, kde-format
 msgid "Show Thumbnails"
-msgstr "축소판 표시"
+msgstr "섬네일 표시"
 
 #. i18n: For languages that are read right to left, "right side" refers to the left side in this context.
 #: app/viewmainpage.cpp:431
