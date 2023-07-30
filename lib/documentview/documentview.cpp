@@ -42,6 +42,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QPointer>
 #include <QPropertyAnimation>
 #include <QStyleHints>
+#include <QTimer>
 #include <QUrl>
 
 // KF
@@ -106,6 +107,9 @@ struct DocumentViewPrivate {
     QGraphicsOpacityEffect *mOpacityEffect = nullptr;
 
     LoadingIndicator *mLoadingIndicator = nullptr;
+    /** Delays showing the loading indicator. This is to avoid that we show a few annoying frames of
+     * a loading indicator even though the loading might be pretty much instantaneous. */
+    QTimer *mLoadingIndicatorDelay = nullptr;
 
     QScopedPointer<AbstractDocumentViewAdapter> mAdapter;
     QList<qreal> mZoomSnapValues;
@@ -182,6 +186,14 @@ struct DocumentViewPrivate {
         mLoadingIndicator = new LoadingIndicator(q);
         auto floater = new GraphicsWidgetFloater(q);
         floater->setChildWidget(mLoadingIndicator);
+        mLoadingIndicator->setZValue(1);
+        mLoadingIndicator->hide();
+
+        mLoadingIndicatorDelay = new QTimer(q);
+        mLoadingIndicatorDelay->setSingleShot(true);
+        QObject::connect(mLoadingIndicatorDelay, &QTimer::timeout, mLoadingIndicator, [this]() {
+            mLoadingIndicator->show();
+        });
     }
 
     HudButton *createHudButton(const QString &text, const QString &iconName, bool showText)
@@ -299,8 +311,7 @@ struct DocumentViewPrivate {
         if (!mLoadingIndicator) {
             setupLoadingIndicator();
         }
-        mLoadingIndicator->show();
-        mLoadingIndicator->setZValue(1);
+        mLoadingIndicatorDelay->start(400);
     }
 
     void hideLoadingIndicator()
@@ -308,6 +319,7 @@ struct DocumentViewPrivate {
         if (!mLoadingIndicator) {
             return;
         }
+        mLoadingIndicatorDelay->stop();
         mLoadingIndicator->hide();
     }
 
@@ -545,7 +557,7 @@ void DocumentView::openUrl(const QUrl &url, const DocumentView::Setup &setup)
         disconnect(d->mDocument.data(), nullptr, this, nullptr);
     }
 
-    // because some loading will be going on right now, also display the indicator right now
+    // because some loading will be going on right now, also display the indicator after a small delay
     // it will be hidden again in slotBusyChanged()
     d->showLoadingIndicator();
 
