@@ -118,6 +118,17 @@ DocumentView *DocumentViewContainer::createView()
     view->show();
     connect(view, &DocumentView::fadeInFinished, this, &DocumentViewContainer::slotFadeInFinished);
     d->scheduleLayoutUpdate();
+
+    if (GwenviewConfig::animationMethod() == DocumentView::NoAnimation) {
+        setUpdatesEnabled(false);
+        connect(view, &DocumentView::completed, this, [this]() {
+            setUpdatesEnabled(true);
+        });
+        connect(view, &DocumentView::indicateLoadingToUser, this, [this]() {
+            setUpdatesEnabled(true);
+        });
+    }
+
     return view;
 }
 
