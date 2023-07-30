@@ -40,6 +40,9 @@ struct DocumentViewContainerPrivate;
 /**
  * A container for DocumentViews which will arrange them to make best use of
  * available space.
+ *
+ * All creations and deletions of DocumentViews/images use this class even if
+ * only a single image is viewed.
  */
 class GWENVIEWLIB_EXPORT DocumentViewContainer : public QGraphicsView
 {
