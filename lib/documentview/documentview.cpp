@@ -193,6 +193,7 @@ struct DocumentViewPrivate {
         mLoadingIndicatorDelay->setSingleShot(true);
         QObject::connect(mLoadingIndicatorDelay, &QTimer::timeout, mLoadingIndicator, [this]() {
             mLoadingIndicator->show();
+            Q_EMIT q->indicateLoadingToUser();
         });
     }
 

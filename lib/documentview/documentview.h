@@ -211,6 +211,12 @@ Q_SIGNALS:
 
     void isAnimatedChanged();
 
+    /** Is emitted when the image loading took long enough that we start showing a loading indicator.
+     * This happens after a time frame that is long enough that the user would wonder if anything is
+     * happening at all.
+     */
+    void indicateLoadingToUser();
+
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
