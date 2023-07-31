@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-09 00:57+0000\n"
-"PO-Revision-Date: 2023-03-30 22:43+0200\n"
+"PO-Revision-Date: 2023-07-30 21:51+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
 "Language: nn\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.04.3\n"
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
@@ -111,7 +111,7 @@ msgstr "Hugs mapper og adresser"
 #: app/advancedconfigpage.ui:240
 #, kde-format
 msgid "Enable color management"
-msgstr ""
+msgstr "Slå på fargestyring"
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileHelpLabel)
 #: app/advancedconfigpage.ui:265
@@ -127,7 +127,7 @@ msgstr ""
 #: app/advancedconfigpage.ui:275
 #, kde-format
 msgid "Color management:"
-msgstr ""
+msgstr "Fargestyring:"
 
 #: app/alignwithsidebarwidgetaction.cpp:23
 #, kde-format
@@ -428,7 +428,7 @@ msgstr "Lag mappe …"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Open in New Window"
-msgstr ""
+msgstr "Opna i nytt vindauge"
 
 #: app/fileopscontextmanageritem.cpp:194
 #, kde-format
@@ -1975,7 +1975,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Search the Web for How to Install Protocol Support for \"%1\"…"
-msgstr ""
+msgstr "Søk på nettet om korleis du installer protokollstøtte for «%1» …"
 
 #: importer/thumbnailpage.cpp:284
 #, kde-format
@@ -1983,7 +1983,7 @@ msgctxt ""
 "@info this text will be used as a search term in an online search engine, %1 "
 "protocol name"
 msgid "How to install protocol support for \"%1\" on Linux"
-msgstr ""
+msgstr "Korleis installera protokollstøtte for «%1» på Linux"
 
 #: importer/thumbnailpage.cpp:285
 #, kde-format

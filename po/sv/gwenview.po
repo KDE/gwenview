@@ -3,13 +3,13 @@
 #
 # Mattias Newzella <newzella@linux.nu>, 2003.
 # Stefan Asserhäll <stefan.asserhall@bredband.net>, 2004, 2005, 2006, 2007, 2008, 2009, 2010.
-# Stefan Asserhall <stefan.asserhall@bredband.net>, 2005, 2010, 2011, 2012, 2013, 2014, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
+# Stefan Asserhall <stefan.asserhall@bredband.net>, 2005, 2010, 2011, 2012, 2013, 2014, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-09 00:57+0000\n"
-"PO-Revision-Date: 2022-08-02 22:10+0200\n"
+"PO-Revision-Date: 2023-07-24 11:29+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -109,7 +109,7 @@ msgstr "Kom ihåg kataloger och webbadresser"
 #: app/advancedconfigpage.ui:240
 #, kde-format
 msgid "Enable color management"
-msgstr ""
+msgstr "Aktivera färghantering"
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileHelpLabel)
 #: app/advancedconfigpage.ui:265
@@ -120,13 +120,16 @@ msgid ""
 "is only appropriate for displays that are calibrated to the sRGB color space "
 "or are known to provide an incorrect color profile."
 msgstr ""
+"När färghantering är inaktiverad, konverterar Gwenview bilder till "
+"färgrymden sRGB istället för bildskärmens färgrymd som detekterats. Det är "
+"bara lämpligt för bildskärmar som kalibrerats för färgrymden sRGB eller är "
+"kända för att tillhandahålla en felaktig färgprofil."
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileLabel)
 #: app/advancedconfigpage.ui:275
-#, fuzzy, kde-format
-#| msgid "Too many arguments."
+#, kde-format
 msgid "Color management:"
-msgstr "För många argument."
+msgstr "Färghantering:"
 
 #: app/alignwithsidebarwidgetaction.cpp:23
 #, kde-format
@@ -424,7 +427,7 @@ msgstr "Skapa katalog..."
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Open in New Window"
-msgstr ""
+msgstr "Öppna i nytt fönster"
 
 #: app/fileopscontextmanageritem.cpp:194
 #, kde-format
@@ -837,7 +840,7 @@ msgstr "Beskär"
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Adjust Colors"
-msgstr ""
+msgstr "Justera färger"
 
 #: app/imageopscontextmanageritem.cpp:128
 #: lib/redeyereduction/redeyereductionimageoperation.cpp:75
@@ -1914,12 +1917,10 @@ msgid "Support for your camera is not installed."
 msgstr "Stöd för din kamera är inte installerat."
 
 #: importer/thumbnailpage.cpp:236
-#, fuzzy, kde-format
-#| msgctxt "@info above install button, %1 protocol name"
-#| msgid "The protocol support library for \"%1\" is not installed."
+#, kde-format
 msgctxt "@info above install button, %1 protocol name %2 error text from KIO"
 msgid "The protocol support library for \"%1\" is not installed. Error: %2"
-msgstr "Protokollstödbiblioteket för \"%1\" är inte installerat."
+msgstr "Protokollstödbiblioteket för \"%1\" är inte installerat. Fel: %2"
 
 #: importer/thumbnailpage.cpp:238
 #, kde-format
@@ -2073,22 +2074,22 @@ msgstr "Utvecklare"
 #: lib/bcg/bcgimageoperation.cpp:69
 #, kde-format
 msgid "Adjust Colors"
-msgstr ""
+msgstr "Justera färger"
 
 #: lib/bcg/bcgwidget.cpp:51
 #, kde-format
 msgid "Brightness:"
-msgstr ""
+msgstr "Ljusstyrka:"
 
 #: lib/bcg/bcgwidget.cpp:52
 #, kde-format
 msgid "Contrast:"
-msgstr ""
+msgstr "Kontrast:"
 
 #: lib/bcg/bcgwidget.cpp:53
 #, kde-format
 msgid "Gamma:"
-msgstr ""
+msgstr "Gamma:"
 
 #: lib/crop/cropwidget.cpp:191
 #, kde-format
