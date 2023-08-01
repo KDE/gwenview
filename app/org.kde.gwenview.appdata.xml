@@ -232,6 +232,7 @@
       <li xml:lang="ka">გამოსახულების მარტივი რედაქტორი: მობრუნება, ამოჭრა, ზომის შეცვლა, სარკისებურად გარდაქმნა, წითელი თვალის ეფექტის მოცილება, სიკაშკაშის, კონტრასტისა და გამის მორგება</li>
       <li xml:lang="ko">간단한 그림 편집: 회전, 자르기, 크기 조정, 반전, 적목 감소, 밝기, 명암, 감마 조정</li>
       <li xml:lang="nl">Eenvoudige bewerkingen van afbeelding: draaien, bijsnijden, grootte wijzigen, spiegelen, omklappen, rode ogen reductie en aanpassen van helderheid, contrast of gamma</li>
+      <li xml:lang="nn">Enkel biletredigering: dreiing, avskjering, spegelvending, fjerning av raude auge og justering av lysstyrke, kontrast og gamma</li>
       <li xml:lang="pl">Proste edytowanie obrazów: obrót, przycięcie, zmiana rozmiaru, odbicie w pionie i poziomie, usuwanie czerwonych oczu, dostosowywanie jasności, -kontrastu, -gammy</li>
       <li xml:lang="pt">Edição simples das imagens: rotação, recorte, dimensionamento, espelho, inversão, redução de olhos vermelhos e ajustes de brilho, contraste ou gama</li>
       <li xml:lang="pt-BR">Edição de imagem simples: girar, cortar, redimensionar, espelhar, inverter, reduzir olhos vermelhos e ajustar brilho, contraste ou gama</li>
@@ -263,6 +264,7 @@
       <li xml:lang="ka">ისრების, ესკიზების, ტექსტური ფანჯრების, გამოსახულებების შტამპების და ა.შ. ანოტაცია და მონიშვნა</li>
       <li xml:lang="ko">화살표, 도형, 텍스트 상자, 스탬프 등으로 그림 강조 및 꾸미기</li>
       <li xml:lang="nl">Voorzie en markeer afbeeldingen met pijlen, vormen, tekstvakken, afbeeldingstempels en meer</li>
+      <li xml:lang="nn">Legg piler, tekst, figurar og andre biletelement på bileta</li>
       <li xml:lang="pl">Opisuj obrazy strzałkami, kształtami, polami tekstowymi, stemplami i więcej</li>
       <li xml:lang="pt">Anotação e marcação de imagens com setas, formas, áreas de texto, carimbos de imagens, entre outros</li>
       <li xml:lang="pt-BR">Anotar e marcar imagens com setas, formas, caixas de texto, carimbos de imagem e muito mais</li>
@@ -296,6 +298,7 @@
       <li xml:lang="ka">ფაილების ისეთი მარტივი მანიპულაციების მხარდაჭერა, როგორიცაა კოპირება, გადატანა, წაშლა და სხვა</li>
       <li xml:lang="ko">파일 복사, 이동, 삭제와 같은 기본 파일 관리 작업</li>
       <li xml:lang="nl">Basis bestandsbeheeracties zoals kopiëren, verplaatsen, verwijderen en andere</li>
+      <li xml:lang="nn">Enkle filhandlingar, som kopiering, flytting og sletting</li>
       <li xml:lang="pl">Proste działania plikowe takie jak kopiuj, przenieś, usuń i inne</li>
       <li xml:lang="pt">Acções básicas de gestão de ficheiros, como a cópia, movimentação, remoção, entre outras</li>
       <li xml:lang="pt-BR">Ações básicas de gerenciamento de arquivos, como copiar, mover, excluir entre outras</li>
