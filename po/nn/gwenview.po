@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-09 00:57+0000\n"
-"PO-Revision-Date: 2023-07-30 21:51+0200\n"
+"PO-Revision-Date: 2023-07-31 21:08+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
 "Language: nn\n"
@@ -1940,7 +1940,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip for a button, %1 protocol name"
 msgid "Launch Discover to install the protocol support library for \"%1\""
-msgstr ""
+msgstr "Start Discover for å installera støttebibliotek for protokollen «%1»"
 
 #: importer/thumbnailpage.cpp:259
 #, kde-format
