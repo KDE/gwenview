@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kdegraphics-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-09 00:57+0000\n"
-"PO-Revision-Date: 2023-06-11 21:49+0300\n"
+"PO-Revision-Date: 2023-08-02 00:35+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.07.70\n"
+"X-Generator: Lokalize 23.11.70\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -951,7 +951,7 @@ msgstr "Aynı yakınlaştırmayı ve konumu koru"
 #: app/imageviewconfigpage.ui:322
 #, kde-format
 msgid "Per image zoom and position"
-msgstr "Görüntü başına yakınlaştırma ve konum"
+msgstr "Görsel başına yakınlaştırma ve konum"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_EnlargeSmallerImages)
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_PrintEnlargeSmallerImages)
@@ -1485,7 +1485,7 @@ msgstr "Sıfır"
 #: app/semanticinfodialog.ui:13
 #, kde-format
 msgid "Tag Editor"
-msgstr "Etiket Düzenleyici"
+msgstr "Etiket Düzenleyicisi"
 
 #. i18n: ectx: property (text), widget (QPushButton, mPreviousButton)
 #: app/semanticinfodialog.ui:31

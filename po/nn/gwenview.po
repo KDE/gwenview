@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-09 00:57+0000\n"
-"PO-Revision-Date: 2023-07-31 21:08+0200\n"
+"PO-Revision-Date: 2023-08-01 21:33+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
 "Language: nn\n"
@@ -1935,6 +1935,7 @@ msgctxt "@info:usagetip above install button"
 msgid ""
 "After finishing the installation process, restart this Importer to continue."
 msgstr ""
+"Når installeringa er fullført, start importeringa på nytt for å halda fram."
 
 #: importer/thumbnailpage.cpp:257
 #, kde-format
