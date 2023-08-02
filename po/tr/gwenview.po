@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kdegraphics-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-09 00:57+0000\n"
-"PO-Revision-Date: 2023-06-11 21:49+0300\n"
+"PO-Revision-Date: 2023-08-02 00:35+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.07.70\n"
+"X-Generator: Lokalize 23.11.70\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -126,7 +126,7 @@ msgid ""
 "is only appropriate for displays that are calibrated to the sRGB color space "
 "or are known to provide an incorrect color profile."
 msgstr ""
-"Renk yönetimi devre dışıyken, Gwenview görselleri, ekranda algıladığı renk "
+"Renk yönetimi devre dışıyken Akbakış görselleri, ekranda algıladığı renk "
 "uzayından ziyade sRGB renk uzayına dönüştürür. Bu, yalnızca sRGB renk "
 "uzayına kalibre edilmiş ekranlar veya yanlış bir renk profili sağladığı "
 "bilinen ekranlar için uygundur."
@@ -741,13 +741,13 @@ msgstr "Başka bir biçimde kaydet"
 #: app/gvcore.cpp:412
 #, kde-format
 msgid "Gwenview cannot save images in '%1' format."
-msgstr "Gwenview görüntüleri %1 biçiminde kaydedemiyor."
+msgstr "Akbakış görselleri %1 biçiminde kaydedemiyor."
 
 #: app/gvcore.cpp:440
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot save images as %1."
-msgstr "Gwenview görselleri %1 biçiminde kaydedemiyor."
+msgstr "Akbakış görselleri %1 olarak kaydedemiyor."
 
 #: app/gvcore.cpp:458 app/gvcore.cpp:492
 #, kde-kuit-format
@@ -871,7 +871,7 @@ msgstr "%1 Ögesine Bilgi Notu Ekle"
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot edit this kind of image."
-msgstr "Gwenview bu biçimdeki görselleri düzenleyemiyor."
+msgstr "Akbakış bu biçimdeki görselleri düzenleyemiyor."
 
 #: app/imageopscontextmanageritem.cpp:175
 #, kde-format
@@ -951,7 +951,7 @@ msgstr "Aynı yakınlaştırmayı ve konumu koru"
 #: app/imageviewconfigpage.ui:322
 #, kde-format
 msgid "Per image zoom and position"
-msgstr "Görüntü başına yakınlaştırma ve konum"
+msgstr "Görsel başına yakınlaştırma ve konum"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_EnlargeSmallerImages)
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_PrintEnlargeSmallerImages)
@@ -1072,7 +1072,7 @@ msgstr[1] "%1 dosya"
 #: app/main.cpp:178
 #, kde-format
 msgid "Gwenview"
-msgstr "Gwenview"
+msgstr "Akbakış"
 
 #: app/main.cpp:180
 #, kde-format
@@ -1485,7 +1485,7 @@ msgstr "Sıfır"
 #: app/semanticinfodialog.ui:13
 #, kde-format
 msgid "Tag Editor"
-msgstr "Etiket Düzenleyici"
+msgstr "Etiket Düzenleyicisi"
 
 #. i18n: ectx: property (text), widget (QPushButton, mPreviousButton)
 #: app/semanticinfodialog.ui:31
@@ -1815,7 +1815,7 @@ msgstr "Ne yapmak istiyorsunuz?"
 #: importer/importdialog.cpp:193
 #, kde-format
 msgid "View Imported Documents with Gwenview"
-msgstr "İçe Aktarılan Belgeleri Gwenview ile Görüntüle"
+msgstr "İçe Aktarılan Belgeleri Akbakış ile Görüntüle"
 
 #: importer/importdialog.cpp:194
 #, kde-format
@@ -1871,7 +1871,7 @@ msgstr ""
 #: importer/main.cpp:44
 #, kde-format
 msgid "Gwenview Importer"
-msgstr "Gwenview İçe Aktarıcı"
+msgstr "Akbakış İçe Aktarıcısı"
 
 #: importer/main.cpp:46
 #, kde-format
@@ -2065,7 +2065,7 @@ msgstr "İçerikleri listelenen:"
 #: lib/about.cpp:38
 #, kde-format
 msgid "Copyright 2000-2022 Gwenview authors"
-msgstr "Telif hakkı 2000-2022 Gwenview yazarları"
+msgstr "Telif hakkı 2000-2022 Akbakış yazarları"
 
 #: lib/about.cpp:40
 #, kde-format
@@ -2180,13 +2180,13 @@ msgstr "En-boy oranını koru"
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot save this kind of documents."
-msgstr "Gwenview bu biçimdeki belgeleri kaydedemez."
+msgstr "Akbakış bu biçimdeki belgeleri kaydedemez."
 
 #: lib/document/loadingdocumentimpl.cpp:137
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot display documents of type %1."
-msgstr "Gwenview %1 biçimindeki belgeleri görüntüleyemez."
+msgstr "Akbakış %1 biçimindeki belgeleri görüntüleyemez."
 
 #: lib/document/loadingdocumentimpl.cpp:398
 #, kde-format
@@ -2246,7 +2246,7 @@ msgstr "Seçimi Kaldır"
 #: lib/documentview/documentview.cpp:528
 #, kde-format
 msgid "Gwenview does not know how to display this kind of document"
-msgstr "Gwenview bu biçimdeki belgeleri nasıl göstereceğini bilmiyor"
+msgstr "Akbakış bu biçimdeki belgeleri nasıl göstereceğini bilmiyor"
 
 #: lib/documentview/documentview.cpp:634
 #, kde-kuit-format
@@ -2362,7 +2362,7 @@ msgid ""
 "The percentage of memory used by Gwenview before it\n"
 "            warns the user and suggest saving changes."
 msgstr ""
-"Gwenview uygulamasının kullanıcıyı değişiklikleri kaydetmesi\n"
+"Akbakış uygulamasının kullanıcıyı değişiklikleri kaydetmesi\n"
 "            konusunda uyarmadan önce kullanacağı bellek yüzdesi."
 
 #. i18n: ectx: whatsthis, entry (BlackListedExtensions), group (General)
@@ -2373,7 +2373,7 @@ msgid ""
 "            load. We exclude *.new as well because this is the extension\n"
 "            used for temporary files by KSaveFile."
 msgstr ""
-"Gwenview uygulamasının yüklemeyi denemeyeceği dosya\n"
+"Akbakış uygulamasının yüklemeyi denemeyeceği dosya\n"
 "            uzantılarının listesi. KSaveFile geçici dosyalarını temsil\n"
 "            eden *.new uzantısına sahip dosyalar da yok sayılır."
 
