@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-09 00:57+0000\n"
+"POT-Creation-Date: 2023-08-03 03:10+0000\n"
 "PO-Revision-Date: 2009-01-22 22:46+0200\n"
 "Last-Translator: Omer Ensari <oensari@gmail.com>\n"
 "Language-Team: Kurdish <kde-i18n-doc@kde.org>\n"
@@ -2347,7 +2347,7 @@ msgstr ""
 "Nikare ser pelê binivîse, kontrol bike ku tu xwedî destûrên hewce yên di "
 "<filename>%1</filename> de yî."
 
-#: lib/documentview/documentview.cpp:201
+#: lib/documentview/documentview.cpp:214
 #, fuzzy, kde-format
 #| msgctxt "Verb"
 #| msgid "Trash"
@@ -2355,19 +2355,19 @@ msgctxt "@info:tooltip"
 msgid "Trash"
 msgstr "Bavêje Çopê"
 
-#: lib/documentview/documentview.cpp:202
+#: lib/documentview/documentview.cpp:215
 #, fuzzy, kde-format
 #| msgid "Delete"
 msgctxt "@action:button"
 msgid "Deselect"
 msgstr "Jê Bibe"
 
-#: lib/documentview/documentview.cpp:528
+#: lib/documentview/documentview.cpp:541
 #, kde-format
 msgid "Gwenview does not know how to display this kind of document"
 msgstr "Gwenview nizane ku belgeyên vê cureyê çawa nîşan bide"
 
-#: lib/documentview/documentview.cpp:634
+#: lib/documentview/documentview.cpp:647
 #, kde-kuit-format
 msgid "Loading <filename>%1</filename> failed"
 msgstr "Barkirina <filename>%1</filename> pêk nehat"

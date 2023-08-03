@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-09 00:57+0000\n"
+"POT-Creation-Date: 2023-08-03 03:10+0000\n"
 "PO-Revision-Date: 2021-12-27 16:33+0100\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -2226,24 +2226,24 @@ msgstr ""
 "Nem sikerült felülírni a fájlt. Ellenőrizze, hogy rendelkezik-e a szükséges "
 "írási jogosultságokkal ehhez a fájlhoz: <filename>%1</filename>."
 
-#: lib/documentview/documentview.cpp:201
+#: lib/documentview/documentview.cpp:214
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Trash"
 msgstr "Kuka"
 
-#: lib/documentview/documentview.cpp:202
+#: lib/documentview/documentview.cpp:215
 #, kde-format
 msgctxt "@action:button"
 msgid "Deselect"
 msgstr "Kijelölés megszüntetése"
 
-#: lib/documentview/documentview.cpp:528
+#: lib/documentview/documentview.cpp:541
 #, kde-format
 msgid "Gwenview does not know how to display this kind of document"
 msgstr "A Gwenview nem tudja megjeleníteni ezt a fajta dokumentumot"
 
-#: lib/documentview/documentview.cpp:634
+#: lib/documentview/documentview.cpp:647
 #, kde-kuit-format
 msgid "Loading <filename>%1</filename> failed"
 msgstr "Nem sikerült betölteni ezt a fájlt: <filename>%1</filename>."

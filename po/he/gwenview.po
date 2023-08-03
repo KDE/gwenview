@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-09 00:57+0000\n"
+"POT-Creation-Date: 2023-08-03 03:10+0000\n"
 "PO-Revision-Date: 2017-05-16 07:01-0400\n"
 "Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: Hebrew <kde-i18n-doc@kde.org>\n"
@@ -2274,24 +2274,24 @@ msgstr ""
 "לא ניתן לשכתב את הקובץ, בדוק כי יש לך את הזכויות הנדרשות ב <filename>%1</"
 "filename>."
 
-#: lib/documentview/documentview.cpp:201
+#: lib/documentview/documentview.cpp:214
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Trash"
 msgstr "זרוק לפח הזבל"
 
-#: lib/documentview/documentview.cpp:202
+#: lib/documentview/documentview.cpp:215
 #, kde-format
 msgctxt "@action:button"
 msgid "Deselect"
 msgstr "בטל בחירה"
 
-#: lib/documentview/documentview.cpp:528
+#: lib/documentview/documentview.cpp:541
 #, kde-format
 msgid "Gwenview does not know how to display this kind of document"
 msgstr "Gwenview אינו יודע כיצד להציג מסמך זה"
 
-#: lib/documentview/documentview.cpp:634
+#: lib/documentview/documentview.cpp:647
 #, kde-kuit-format
 msgid "Loading <filename>%1</filename> failed"
 msgstr "טעינת <filename>%1</filename> נכשלה"

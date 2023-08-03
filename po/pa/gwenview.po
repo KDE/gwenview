@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-09 00:57+0000\n"
+"POT-Creation-Date: 2023-08-03 03:10+0000\n"
 "PO-Revision-Date: 2021-04-25 13:12-0700\n"
 "Last-Translator: A S Alam <aalam@satluj.org>\n"
 "Language-Team: Punjabi <punjabi-users@lists.sf.net>\n"
@@ -2190,24 +2190,24 @@ msgstr ""
 "ਫ਼ਾਈਲ ਉੱਤੇ ਨਹੀਂ ਲਿਖਿਆ ਜਾ ਸਕਿਆ, <filename>%1</filename> ਵਿੱਚ ਲਿਖਣ ਲਈ ਆਪਣੇ ਜ਼ਰੂਰੀ "
 "ਅਧਿਕਾਰਾਂ ਦੀ ਜਾਂਚ ਕਰੋ ਜੀ।"
 
-#: lib/documentview/documentview.cpp:201
+#: lib/documentview/documentview.cpp:214
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Trash"
 msgstr "ਰੱਦੀ"
 
-#: lib/documentview/documentview.cpp:202
+#: lib/documentview/documentview.cpp:215
 #, kde-format
 msgctxt "@action:button"
 msgid "Deselect"
 msgstr "ਚੋਣ ਹਟਾਓ"
 
-#: lib/documentview/documentview.cpp:528
+#: lib/documentview/documentview.cpp:541
 #, kde-format
 msgid "Gwenview does not know how to display this kind of document"
 msgstr "ਜੀਵੀਨ-ਵਿਊ ਨਹੀਂ ਜਾਣਦਾ ਹੈ ਕਿ ਇਸ ਕਿਸਮ ਦੇ ਡੌਕੂਮੈਂਟ ਵੇਖਾਉਣਾ ਹੈ"
 
-#: lib/documentview/documentview.cpp:634
+#: lib/documentview/documentview.cpp:647
 #, kde-kuit-format
 msgid "Loading <filename>%1</filename> failed"
 msgstr "<filename>%1</filename> ਲੋਡ ਕਰਨ ਲਈ ਫੇਲ੍ਹ"

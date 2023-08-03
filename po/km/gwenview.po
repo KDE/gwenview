@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-09 00:57+0000\n"
+"POT-Creation-Date: 2023-08-03 03:10+0000\n"
 "PO-Revision-Date: 2012-07-11 10:26+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer\n"
@@ -2269,24 +2269,24 @@ msgstr ""
 "មិន​អាច​សរសេរ​ជាន់​លើ​ឯកសារ​នេះ​បាន​ទេ សូម​ពិនិត្យ​មើល​ថា​ តើ​អ្នក​មិន​សិទ្ធិ​ត្រឹម​ត្រូវ​ ដើម្បី​សរសេរ​នៅ​ក្នុង​ "
 "<filename>%1</filename> ដែរ​ឬ​ទេ ។"
 
-#: lib/documentview/documentview.cpp:201
+#: lib/documentview/documentview.cpp:214
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Trash"
 msgstr "ធុង​សំរាម"
 
-#: lib/documentview/documentview.cpp:202
+#: lib/documentview/documentview.cpp:215
 #, kde-format
 msgctxt "@action:button"
 msgid "Deselect"
 msgstr "ដោះ​ជម្រើស"
 
-#: lib/documentview/documentview.cpp:528
+#: lib/documentview/documentview.cpp:541
 #, kde-format
 msgid "Gwenview does not know how to display this kind of document"
 msgstr "Gwenview មិន​ដឹង​អំពី​វិធី​បង្ហាញ​ឯកសារ​ប្រភេទ​នេះ​ទេ"
 
-#: lib/documentview/documentview.cpp:634
+#: lib/documentview/documentview.cpp:647
 #, kde-kuit-format
 msgid "Loading <filename>%1</filename> failed"
 msgstr "ការ​ផ្ទុក​ <filename>%1</filename> បាន​បរាជ័យ"

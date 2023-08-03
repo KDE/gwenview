@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-09 00:57+0000\n"
+"POT-Creation-Date: 2023-08-03 03:10+0000\n"
 "PO-Revision-Date: 2023-07-24 22:17+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -2182,24 +2182,24 @@ msgid ""
 "in <filename>%1</filename>."
 msgstr "파일에 덮어쓸 수 없습니다. <filename>%1</filename>에 충분한 권한을  가지고 있는지 확인하십시오."
 
-#: lib/documentview/documentview.cpp:201
+#: lib/documentview/documentview.cpp:214
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Trash"
 msgstr "휴지통으로 이동"
 
-#: lib/documentview/documentview.cpp:202
+#: lib/documentview/documentview.cpp:215
 #, kde-format
 msgctxt "@action:button"
 msgid "Deselect"
 msgstr "선택 해제"
 
-#: lib/documentview/documentview.cpp:528
+#: lib/documentview/documentview.cpp:541
 #, kde-format
 msgid "Gwenview does not know how to display this kind of document"
 msgstr "Gwenview는 이 문서를 어떻게 표시할지 모릅니다."
 
-#: lib/documentview/documentview.cpp:634
+#: lib/documentview/documentview.cpp:647
 #, kde-kuit-format
 msgid "Loading <filename>%1</filename> failed"
 msgstr "<filename>%1</filename>을(를) 불러오는 데 실패했습니다"

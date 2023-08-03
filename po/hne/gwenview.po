@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-09 00:57+0000\n"
+"POT-Creation-Date: 2023-08-03 03:10+0000\n"
 "PO-Revision-Date: 2009-02-26 15:00+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -2319,7 +2319,7 @@ msgid ""
 "in <filename>%1</filename>."
 msgstr ""
 
-#: lib/documentview/documentview.cpp:201
+#: lib/documentview/documentview.cpp:214
 #, fuzzy, kde-format
 #| msgctxt "Verb"
 #| msgid "Trash"
@@ -2327,19 +2327,19 @@ msgctxt "@info:tooltip"
 msgid "Trash"
 msgstr "घुरुवा"
 
-#: lib/documentview/documentview.cpp:202
+#: lib/documentview/documentview.cpp:215
 #, fuzzy, kde-format
 #| msgid "Delete"
 msgctxt "@action:button"
 msgid "Deselect"
 msgstr "मेटाव"
 
-#: lib/documentview/documentview.cpp:528
+#: lib/documentview/documentview.cpp:541
 #, kde-format
 msgid "Gwenview does not know how to display this kind of document"
 msgstr ""
 
-#: lib/documentview/documentview.cpp:634
+#: lib/documentview/documentview.cpp:647
 #, kde-kuit-format
 msgid "Loading <filename>%1</filename> failed"
 msgstr "<filename>%1</filename> के लोड करे मं फेल"
