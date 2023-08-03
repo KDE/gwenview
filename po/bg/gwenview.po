@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-09 00:57+0000\n"
+"POT-Creation-Date: 2023-08-03 00:43+0000\n"
 "PO-Revision-Date: 2023-06-08 22:02+0200\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
@@ -2235,24 +2235,24 @@ msgstr ""
 "Файлът не може да бъде презаписан. Проверете дали имате достатъчно права за "
 "запис в <filename>%1</filename>."
 
-#: lib/documentview/documentview.cpp:201
+#: lib/documentview/documentview.cpp:214
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Trash"
 msgstr "Кошче"
 
-#: lib/documentview/documentview.cpp:202
+#: lib/documentview/documentview.cpp:215
 #, kde-format
 msgctxt "@action:button"
 msgid "Deselect"
 msgstr "Размаркиране"
 
-#: lib/documentview/documentview.cpp:528
+#: lib/documentview/documentview.cpp:541
 #, kde-format
 msgid "Gwenview does not know how to display this kind of document"
 msgstr "Gwenview не знае как да покаже този документ"
 
-#: lib/documentview/documentview.cpp:634
+#: lib/documentview/documentview.cpp:647
 #, kde-kuit-format
 msgid "Loading <filename>%1</filename> failed"
 msgstr "Зареждането на <filename>%1</filename> беше неуспешно"
@@ -2802,15 +2802,3 @@ msgstr "&Файл"
 #, kde-format
 msgid "&View"
 msgstr "&Изглед"
-
-#~ msgid "Apply only the profile embedded in the image file"
-#~ msgstr "Прилагане само на профила, вграден във файла с изображение"
-
-#~ msgid ""
-#~ "Assume that system-wide color correction already applies monitor profile."
-#~ msgstr ""
-#~ "Предполага, че системната корекция на цветовете вече прилага профила на "
-#~ "монитора."
-
-#~ msgid "Color profile:"
-#~ msgstr "Цветен профил:"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-09 00:57+0000\n"
+"POT-Creation-Date: 2023-08-03 00:43+0000\n"
 "PO-Revision-Date: 2010-12-17 21:37+0700\n"
 "Last-Translator: Thanomsub Noppaburana <donga.nb@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -2286,7 +2286,7 @@ msgstr ""
 "ไม่สามารถเขียนทับแฟ้มได้ โปรดสอบตรวจสอบว่า คุณมีสิทธิ์ต่าง ๆ ในการเขียนแฟ้ม <filename>%1</"
 "filename> ตามที่ต้องการหรือยัง"
 
-#: lib/documentview/documentview.cpp:201
+#: lib/documentview/documentview.cpp:214
 #, fuzzy, kde-format
 #| msgctxt "Verb"
 #| msgid "Trash"
@@ -2294,19 +2294,19 @@ msgctxt "@info:tooltip"
 msgid "Trash"
 msgstr "ทิ้งลงถังขยะ"
 
-#: lib/documentview/documentview.cpp:202
+#: lib/documentview/documentview.cpp:215
 #, fuzzy, kde-format
 #| msgid "Delete"
 msgctxt "@action:button"
 msgid "Deselect"
 msgstr "ลบ"
 
-#: lib/documentview/documentview.cpp:528
+#: lib/documentview/documentview.cpp:541
 #, kde-format
 msgid "Gwenview does not know how to display this kind of document"
 msgstr "เกวนวิวไม่ทราบว่าจะทำการแสดงผลเอกสารประเภทนี้อย่างไร"
 
-#: lib/documentview/documentview.cpp:634
+#: lib/documentview/documentview.cpp:647
 #, kde-kuit-format
 msgid "Loading <filename>%1</filename> failed"
 msgstr "ล้มเหลวในการโหลด <filename>%1</filename>"
