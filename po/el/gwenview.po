@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-03 00:43+0000\n"
+"POT-Creation-Date: 2023-08-04 00:43+0000\n"
 "PO-Revision-Date: 2023-07-30 00:13+0300\n"
 "Last-Translator: George Stefanakis <george.stefanakis@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-doc@kde.org>\n"
@@ -1278,62 +1278,67 @@ msgstr "Πληροφορίες"
 msgid "Operations"
 msgstr "Λειτουργίες"
 
-#: app/mainwindow.cpp:1384
+#: app/mainwindow.cpp:937
+#, kde-format
+msgid "Viewing media"
+msgstr ""
+
+#: app/mainwindow.cpp:1400
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Απόκρυψη πλευρικής γραμμής"
 
-#: app/mainwindow.cpp:1384
+#: app/mainwindow.cpp:1400
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Εμφάνιση πλευρικής γραμμής"
 
-#: app/mainwindow.cpp:1691
+#: app/mainwindow.cpp:1707
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Άνοιγμα εικόνας"
 
-#: app/mainwindow.cpp:1751
+#: app/mainwindow.cpp:1767
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "Παύση διαφανειών"
 
-#: app/mainwindow.cpp:1754
+#: app/mainwindow.cpp:1770
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "Συνέχιση διαφανειών"
 
-#: app/mainwindow.cpp:1754
+#: app/mainwindow.cpp:1770
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Εκκίνηση παρουσίασης διαφανειών"
 
-#: app/mainwindow.cpp:1767
+#: app/mainwindow.cpp:1783
 #, kde-format
 msgid "Save All Changes"
 msgstr "Αποθήκευση όλων των τροποποιήσεων"
 
-#: app/mainwindow.cpp:1768
+#: app/mainwindow.cpp:1784
 #, kde-format
 msgid "Discard Changes"
 msgstr "Απόρριψη αλλαγών"
 
-#: app/mainwindow.cpp:1770
+#: app/mainwindow.cpp:1786
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "Μία εικόνα έχει τροποποιηθεί."
 msgstr[1] "%1 εικόνες έχουν τροποποιηθεί."
 
-#: app/mainwindow.cpp:1770
+#: app/mainwindow.cpp:1786
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Αν τερματίσετε την εφαρμογή τώρα, οι τροποποιήσεις σας θα χαθούν."
 
-#: app/mainwindow.cpp:1825
+#: app/mainwindow.cpp:1841
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
@@ -1341,37 +1346,37 @@ msgstr ""
 "Με αυτό θα γίνει πλήρης απόκρυψη της γραμμής μενού. Μπορείτε να το "
 "εμφανίσετε πάλι πληκτρολογώντας %1."
 
-#: app/mainwindow.cpp:1828
+#: app/mainwindow.cpp:1844
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Απόκρυψη γραμμής μενού"
 
-#: app/mainwindow.cpp:2048
+#: app/mainwindow.cpp:2064
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "Φτάσατε στο πρώτο έγγραφο, τι επιθυμείτε να κάνετε;"
 
-#: app/mainwindow.cpp:2049 app/mainwindow.cpp:2063
+#: app/mainwindow.cpp:2065 app/mainwindow.cpp:2079
 #, kde-format
 msgid "Stay There"
 msgstr "Παραμονή εδώ"
 
-#: app/mainwindow.cpp:2050
+#: app/mainwindow.cpp:2066
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "Μετάβαση στο τελευταίο έγγραφο"
 
-#: app/mainwindow.cpp:2051 app/mainwindow.cpp:2065
+#: app/mainwindow.cpp:2067 app/mainwindow.cpp:2081
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "Μετάβαση πίσω στη λίστα εγγράφων"
 
-#: app/mainwindow.cpp:2062
+#: app/mainwindow.cpp:2078
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "Φτάσατε στο τελευταίο έγγραφο, τι επιθυμείτε να κάνετε;"
 
-#: app/mainwindow.cpp:2064
+#: app/mainwindow.cpp:2080
 #, kde-format
 msgid "Go to the First Document"
 msgstr "Μετάβαση στο πρώτο έγγραφο"

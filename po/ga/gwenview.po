@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdegraphics/gwenview.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-03 00:43+0000\n"
+"POT-Creation-Date: 2023-08-04 00:43+0000\n"
 "PO-Revision-Date: 2007-09-30 16:51-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -1318,52 +1318,57 @@ msgstr "Eolas"
 msgid "Operations"
 msgstr "Oibríochtaí"
 
-#: app/mainwindow.cpp:1384
+#: app/mainwindow.cpp:937
+#, kde-format
+msgid "Viewing media"
+msgstr ""
+
+#: app/mainwindow.cpp:1400
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Folaigh an barra taoibh"
 
-#: app/mainwindow.cpp:1384
+#: app/mainwindow.cpp:1400
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Taispeáin an barra taoibh"
 
-#: app/mainwindow.cpp:1691
+#: app/mainwindow.cpp:1707
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Oscail Íomhá"
 
-#: app/mainwindow.cpp:1751
+#: app/mainwindow.cpp:1767
 #, fuzzy, kde-format
 #| msgid "Slideshow"
 msgid "Pause Slideshow"
 msgstr "Taispeántas Sleamhnán"
 
-#: app/mainwindow.cpp:1754
+#: app/mainwindow.cpp:1770
 #, fuzzy, kde-format
 #| msgid "Slideshow"
 msgid "Resume Slideshow"
 msgstr "Taispeántas Sleamhnán"
 
-#: app/mainwindow.cpp:1754
+#: app/mainwindow.cpp:1770
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Rith an Taispeántas Sleamhnán"
 
-#: app/mainwindow.cpp:1767
+#: app/mainwindow.cpp:1783
 #, kde-format
 msgid "Save All Changes"
 msgstr "Sábháil na hAthruithe"
 
-#: app/mainwindow.cpp:1768
+#: app/mainwindow.cpp:1784
 #, kde-format
 msgid "Discard Changes"
 msgstr "Ná Sábháil na hAthruithe"
 
-#: app/mainwindow.cpp:1770
+#: app/mainwindow.cpp:1786
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
@@ -1373,52 +1378,52 @@ msgstr[2] "Athraíodh %1 íomhá."
 msgstr[3] "Athraíodh %1 n-íomhá."
 msgstr[4] "Athraíodh %1 íomhá."
 
-#: app/mainwindow.cpp:1770
+#: app/mainwindow.cpp:1786
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Má éiríonn tú as anois, caillfidh tú do chuid athruithe."
 
-#: app/mainwindow.cpp:1825
+#: app/mainwindow.cpp:1841
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr ""
 
-#: app/mainwindow.cpp:1828
+#: app/mainwindow.cpp:1844
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Hide sidebar"
 msgid "Hide menu bar"
 msgstr "Folaigh an barra taoibh"
 
-#: app/mainwindow.cpp:2048
+#: app/mainwindow.cpp:2064
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr ""
 
-#: app/mainwindow.cpp:2049 app/mainwindow.cpp:2063
+#: app/mainwindow.cpp:2065 app/mainwindow.cpp:2079
 #, kde-format
 msgid "Stay There"
 msgstr ""
 
-#: app/mainwindow.cpp:2050
+#: app/mainwindow.cpp:2066
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Go to last image"
 msgid "Go to the Last Document"
 msgstr "Go dtí an íomhá dheiridh"
 
-#: app/mainwindow.cpp:2051 app/mainwindow.cpp:2065
+#: app/mainwindow.cpp:2067 app/mainwindow.cpp:2081
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr ""
 
-#: app/mainwindow.cpp:2062
+#: app/mainwindow.cpp:2078
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr ""
 
-#: app/mainwindow.cpp:2064
+#: app/mainwindow.cpp:2080
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Go to first image"
