@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kdegraphics-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-04 00:43+0000\n"
-"PO-Revision-Date: 2023-08-02 00:35+0300\n"
+"PO-Revision-Date: 2023-08-04 13:27+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -81,7 +81,7 @@ msgstr "Geçmiş:"
 #, kde-format
 msgctxt "@option:Relative Colorimetric rendering intent"
 msgid "Relative Colorimetric"
-msgstr "Göreceli Renkölçümsel"
+msgstr "Göreceli Renkölçer"
 
 #. i18n: ectx: property (text), widget (QRadioButton, perceptualRenderingIntentRadioButton)
 #: app/advancedconfigpage.ui:160
@@ -285,7 +285,7 @@ msgstr "Genel"
 #: app/configdialog.cpp:123
 #, kde-format
 msgid "Image View"
-msgstr "Görsel Görüntüleme"
+msgstr "Görsel Görünümü"
 
 #: app/configdialog.cpp:134
 #, kde-format
@@ -1273,7 +1273,7 @@ msgstr "İşlemler"
 #: app/mainwindow.cpp:937
 #, kde-format
 msgid "Viewing media"
-msgstr ""
+msgstr "Ortam görüntüleniyor"
 
 #: app/mainwindow.cpp:1400
 #, kde-format
@@ -2538,13 +2538,13 @@ msgstr "Genel"
 #, kde-format
 msgctxt "@item:intable %1 is image width, %2 is image height"
 msgid "%1x%2"
-msgstr "%1x%2"
+msgstr "%1 x %2"
 
 #: lib/imagemetainfomodel.cpp:413
 #, kde-format
 msgctxt "@item:intable %1 is number of millions of pixels in image"
 msgid "(%1MP)"
-msgstr "(%1MP)"
+msgstr "(%1 MP)"
 
 #: lib/imagemetainfomodel.cpp:564
 #, kde-format
@@ -2616,7 +2616,7 @@ msgstr "Ölç&ekle:"
 #, kde-format
 msgctxt "Dimension separator, as in: '15 x 10 centimeters'"
 msgid "x"
-msgstr "x"
+msgstr " x "
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_PrintUnit)
 #: lib/print/printoptionspage.ui:185
