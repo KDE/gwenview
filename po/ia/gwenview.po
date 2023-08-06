@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-04 00:43+0000\n"
-"PO-Revision-Date: 2023-06-11 22:04+0200\n"
+"PO-Revision-Date: 2023-08-05 16:59+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.04.2\n"
+"X-Generator: Lokalize 21.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1268,7 +1268,7 @@ msgstr "Operationes"
 #: app/mainwindow.cpp:937
 #, kde-format
 msgid "Viewing media"
-msgstr ""
+msgstr "Vider medios"
 
 #: app/mainwindow.cpp:1400
 #, kde-format
