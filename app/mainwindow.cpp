@@ -511,7 +511,12 @@ struct MainWindow::Private {
 
 #if HAVE_PURPOSE
         mShareAction = new KToolBarPopupAction(QIcon::fromTheme(QStringLiteral("document-share")), i18nc("@action Share images", "Share"), q);
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         mShareAction->setPopupMode(QToolButton::InstantPopup);
+#else
+        mShareAction->setPopupMode(KToolBarPopupAction::InstantPopup);
+#endif
         actionCollection->addAction(QStringLiteral("share"), mShareAction);
         mShareMenu = new Purpose::Menu(q);
         mShareAction->setMenu(mShareMenu);
