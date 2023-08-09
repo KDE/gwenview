@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-04 00:43+0000\n"
+"POT-Creation-Date: 2023-08-09 00:43+0000\n"
 "PO-Revision-Date: 2009-01-22 22:46+0200\n"
 "Last-Translator: Omer Ensari <oensari@gmail.com>\n"
 "Language-Team: Kurdish <kde-i18n-doc@kde.org>\n"
@@ -1291,161 +1291,161 @@ msgctxt "@action Share images"
 msgid "Share"
 msgstr "Çar goşe(kare)"
 
-#: app/mainwindow.cpp:521
+#: app/mainwindow.cpp:526
 #, kde-format
 msgid "Error while sharing: %1"
 msgstr ""
 
-#: app/mainwindow.cpp:528
+#: app/mainwindow.cpp:533
 #, kde-format
 msgid ""
 "The shared image link (<a href=\"%1\">%1</a>) has been copied to the "
 "clipboard."
 msgstr ""
 
-#: app/mainwindow.cpp:578
+#: app/mainwindow.cpp:583
 #, kde-format
 msgctxt "@title:menu submenu for actions that open configuration dialogs"
 msgid "Configure"
 msgstr ""
 
-#: app/mainwindow.cpp:593
+#: app/mainwindow.cpp:598
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "Edit"
 msgstr "Serast Bike"
 
-#: app/mainwindow.cpp:598
+#: app/mainwindow.cpp:603
 #, kde-format
 msgid "Redo"
 msgstr "Dîsa Bike"
 
-#: app/mainwindow.cpp:606
+#: app/mainwindow.cpp:611
 #, kde-format
 msgid "Undo"
 msgstr "Şûnde Bîne"
 
-#: app/mainwindow.cpp:633
+#: app/mainwindow.cpp:638
 #, fuzzy, kde-format
 #| msgid "Recent Folders"
 msgid "Folders"
 msgstr "Peldankên Borî"
 
-#: app/mainwindow.cpp:639
+#: app/mainwindow.cpp:644
 #, fuzzy, kde-format
 #| msgid "Meta Information"
 msgid "Information"
 msgstr "Agahiya Meta"
 
-#: app/mainwindow.cpp:678
+#: app/mainwindow.cpp:683
 #, fuzzy, kde-format
 #| msgid "File Operations"
 msgid "Operations"
 msgstr "Xebatên Pelê"
 
-#: app/mainwindow.cpp:937
+#: app/mainwindow.cpp:942
 #, kde-format
 msgid "Viewing media"
 msgstr ""
 
-#: app/mainwindow.cpp:1400
+#: app/mainwindow.cpp:1405
 #, fuzzy, kde-format
 #| msgid "Hide Sidebar"
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Darika-kêlekê Veşêre"
 
-#: app/mainwindow.cpp:1400
+#: app/mainwindow.cpp:1405
 #, fuzzy, kde-format
 #| msgid "Hide Sidebar"
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Darika-kêlekê Veşêre"
 
-#: app/mainwindow.cpp:1707
+#: app/mainwindow.cpp:1712
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Wêneyê Veke"
 
-#: app/mainwindow.cpp:1767
+#: app/mainwindow.cpp:1772
 #, fuzzy, kde-format
 #| msgid "Slideshow"
 msgid "Pause Slideshow"
 msgstr "NîşandanaSlaydê"
 
-#: app/mainwindow.cpp:1770
+#: app/mainwindow.cpp:1775
 #, fuzzy, kde-format
 #| msgid "Slideshow"
 msgid "Resume Slideshow"
 msgstr "NîşandanaSlaydê"
 
-#: app/mainwindow.cpp:1770
+#: app/mainwindow.cpp:1775
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Nîşandana-slaytê Bide Destpêkirin"
 
-#: app/mainwindow.cpp:1783
+#: app/mainwindow.cpp:1788
 #, kde-format
 msgid "Save All Changes"
 msgstr "Hemû Guherandinan Tomar Bike"
 
-#: app/mainwindow.cpp:1784
+#: app/mainwindow.cpp:1789
 #, kde-format
 msgid "Discard Changes"
 msgstr "Guhertinan Jê Bibe"
 
-#: app/mainwindow.cpp:1786
+#: app/mainwindow.cpp:1791
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "Yek wêne hatiye guhertin."
 msgstr[1] "%1 wêne hatine guhertin."
 
-#: app/mainwindow.cpp:1786
+#: app/mainwindow.cpp:1791
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Heke tu niha derkevî, guherandinên te dê winda bin."
 
-#: app/mainwindow.cpp:1841
+#: app/mainwindow.cpp:1846
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr ""
 
-#: app/mainwindow.cpp:1844
+#: app/mainwindow.cpp:1849
 #, fuzzy, kde-format
 #| msgid "Hide Sidebar"
 msgid "Hide menu bar"
 msgstr "Darika-kêlekê Veşêre"
 
-#: app/mainwindow.cpp:2064
+#: app/mainwindow.cpp:2069
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr ""
 
-#: app/mainwindow.cpp:2065 app/mainwindow.cpp:2079
+#: app/mainwindow.cpp:2070 app/mainwindow.cpp:2084
 #, kde-format
 msgid "Stay There"
 msgstr ""
 
-#: app/mainwindow.cpp:2066
+#: app/mainwindow.cpp:2071
 #, fuzzy, kde-format
 #| msgid "Go to Next Image"
 msgid "Go to the Last Document"
 msgstr "Biçe Wêneya Pêş"
 
-#: app/mainwindow.cpp:2067 app/mainwindow.cpp:2081
+#: app/mainwindow.cpp:2072 app/mainwindow.cpp:2086
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr ""
 
-#: app/mainwindow.cpp:2078
+#: app/mainwindow.cpp:2083
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr ""
 
-#: app/mainwindow.cpp:2080
+#: app/mainwindow.cpp:2085
 #, fuzzy, kde-format
 #| msgid "Go to Next Image"
 msgid "Go to the First Document"

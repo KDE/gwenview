@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KDE Frameworks 5 Applications\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-04 00:43+0000\n"
+"POT-Creation-Date: 2023-08-09 00:43+0000\n"
 "PO-Revision-Date: 2023-06-12 07:43+0700\n"
 "Last-Translator: Wantoyèk <wantoyek@gmail.com>\n"
 "Language-Team: Indonesian <kde-i18n-doc@kde.org>\n"
@@ -1218,12 +1218,12 @@ msgctxt "@action Share images"
 msgid "Share"
 msgstr "Bagikan"
 
-#: app/mainwindow.cpp:521
+#: app/mainwindow.cpp:526
 #, kde-format
 msgid "Error while sharing: %1"
 msgstr "Galat ketika membagi: %1"
 
-#: app/mainwindow.cpp:528
+#: app/mainwindow.cpp:533
 #, kde-format
 msgid ""
 "The shared image link (<a href=\"%1\">%1</a>) has been copied to the "
@@ -1232,104 +1232,104 @@ msgstr ""
 "Tautan (<a href=\"%1\">%1</a>) citra yang dibagikan telah disalin ke "
 "clipboard."
 
-#: app/mainwindow.cpp:578
+#: app/mainwindow.cpp:583
 #, kde-format
 msgctxt "@title:menu submenu for actions that open configuration dialogs"
 msgid "Configure"
 msgstr "Konfigurasi"
 
-#: app/mainwindow.cpp:593
+#: app/mainwindow.cpp:598
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "Edit"
 msgstr "Edit"
 
-#: app/mainwindow.cpp:598
+#: app/mainwindow.cpp:603
 #, kde-format
 msgid "Redo"
 msgstr "Ulang"
 
-#: app/mainwindow.cpp:606
+#: app/mainwindow.cpp:611
 #, kde-format
 msgid "Undo"
 msgstr "Urung"
 
-#: app/mainwindow.cpp:633
+#: app/mainwindow.cpp:638
 #, kde-format
 msgid "Folders"
 msgstr "Folder"
 
-#: app/mainwindow.cpp:639
+#: app/mainwindow.cpp:644
 #, kde-format
 msgid "Information"
 msgstr "Informasi"
 
-#: app/mainwindow.cpp:678
+#: app/mainwindow.cpp:683
 #, kde-format
 msgid "Operations"
 msgstr "Operasi"
 
-#: app/mainwindow.cpp:937
+#: app/mainwindow.cpp:942
 #, kde-format
 msgid "Viewing media"
 msgstr ""
 
-#: app/mainwindow.cpp:1400
+#: app/mainwindow.cpp:1405
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Sembunyikan bilah sisi"
 
-#: app/mainwindow.cpp:1400
+#: app/mainwindow.cpp:1405
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Tampilkan bilah sisi"
 
-#: app/mainwindow.cpp:1707
+#: app/mainwindow.cpp:1712
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Buka Citra"
 
-#: app/mainwindow.cpp:1767
+#: app/mainwindow.cpp:1772
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "Jedakan Tampilan Slide"
 
-#: app/mainwindow.cpp:1770
+#: app/mainwindow.cpp:1775
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "Lanjutkan Tampilan Slide"
 
-#: app/mainwindow.cpp:1770
+#: app/mainwindow.cpp:1775
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Mulai Tampilan Slide"
 
-#: app/mainwindow.cpp:1783
+#: app/mainwindow.cpp:1788
 #, kde-format
 msgid "Save All Changes"
 msgstr "Simpan Semua Perubahan"
 
-#: app/mainwindow.cpp:1784
+#: app/mainwindow.cpp:1789
 #, kde-format
 msgid "Discard Changes"
 msgstr "Abaikan Perubahan"
 
-#: app/mainwindow.cpp:1786
+#: app/mainwindow.cpp:1791
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "Satu citra telah dimodifikasi."
 msgstr[1] "%1 citra telah dimodifikasi."
 
-#: app/mainwindow.cpp:1786
+#: app/mainwindow.cpp:1791
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Jika anda berhenti sekarang, perubahan anda akan hilang."
 
-#: app/mainwindow.cpp:1841
+#: app/mainwindow.cpp:1846
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
@@ -1337,37 +1337,37 @@ msgstr ""
 "Ini akan menyembunyikan menubar secara keseluruhan. Kamu bisa menampilkannya "
 "lagi dengan mengetik %1."
 
-#: app/mainwindow.cpp:1844
+#: app/mainwindow.cpp:1849
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Sembunyikan menubar"
 
-#: app/mainwindow.cpp:2064
+#: app/mainwindow.cpp:2069
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "Kamu mencapai dokumen pertama, apa yang anda ingin lakukan?"
 
-#: app/mainwindow.cpp:2065 app/mainwindow.cpp:2079
+#: app/mainwindow.cpp:2070 app/mainwindow.cpp:2084
 #, kde-format
 msgid "Stay There"
 msgstr "Tetap di Sana"
 
-#: app/mainwindow.cpp:2066
+#: app/mainwindow.cpp:2071
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "Menuju ke Dokumen Terakhir"
 
-#: app/mainwindow.cpp:2067 app/mainwindow.cpp:2081
+#: app/mainwindow.cpp:2072 app/mainwindow.cpp:2086
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "Kembali ke Daftar Dokumen"
 
-#: app/mainwindow.cpp:2078
+#: app/mainwindow.cpp:2083
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "Kamu mencapai dokumen terakhir, apa yang anda ingin lakukan?"
 
-#: app/mainwindow.cpp:2080
+#: app/mainwindow.cpp:2085
 #, kde-format
 msgid "Go to the First Document"
 msgstr "Menuju ke Dokumen Pertama"
