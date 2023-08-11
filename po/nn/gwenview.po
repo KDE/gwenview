@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-04 00:43+0000\n"
-"PO-Revision-Date: 2023-08-01 21:33+0200\n"
+"POT-Creation-Date: 2023-08-09 00:43+0000\n"
+"PO-Revision-Date: 2023-08-10 18:25+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
 "Language: nn\n"
@@ -122,6 +122,10 @@ msgid ""
 "is only appropriate for displays that are calibrated to the sRGB color space "
 "or are known to provide an incorrect color profile."
 msgstr ""
+"Når fargestyring er slått av, vil Gwenview gjera om bilete til fargerommet "
+"sRGB i staden for til skjermen sitt registrerte fargerom. Dette passar berre "
+"for skjermar som er kalibrerte til sRGB-fargerommet eller som har feil "
+"fargeprofil."
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileLabel)
 #: app/advancedconfigpage.ui:275
@@ -407,7 +411,7 @@ msgstr "Endra namn …"
 #, kde-format
 msgctxt "Verb"
 msgid "Trash"
-msgstr "Legg i papirkorg"
+msgstr "Legg i papirkorga"
 
 #: app/fileopscontextmanageritem.cpp:176
 #, kde-format
@@ -1216,12 +1220,12 @@ msgctxt "@action Share images"
 msgid "Share"
 msgstr "Del"
 
-#: app/mainwindow.cpp:521
+#: app/mainwindow.cpp:526
 #, kde-format
 msgid "Error while sharing: %1"
 msgstr "Feil ved deling: %1"
 
-#: app/mainwindow.cpp:528
+#: app/mainwindow.cpp:533
 #, kde-format
 msgid ""
 "The shared image link (<a href=\"%1\">%1</a>) has been copied to the "
@@ -1230,142 +1234,142 @@ msgstr ""
 "Lenkja til det delte biletet  (<a href=\"%1\">%1</a>) er no kopiert til "
 "utklippstavla."
 
-#: app/mainwindow.cpp:578
+#: app/mainwindow.cpp:583
 #, kde-format
 msgctxt "@title:menu submenu for actions that open configuration dialogs"
 msgid "Configure"
 msgstr "Set opp"
 
 # unreviewed-context
-#: app/mainwindow.cpp:593
+#: app/mainwindow.cpp:598
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "Edit"
 msgstr "Rediger"
 
-#: app/mainwindow.cpp:598
+#: app/mainwindow.cpp:603
 #, kde-format
 msgid "Redo"
 msgstr "Gjer om"
 
-#: app/mainwindow.cpp:606
+#: app/mainwindow.cpp:611
 #, kde-format
 msgid "Undo"
 msgstr "Angra"
 
-#: app/mainwindow.cpp:633
+#: app/mainwindow.cpp:638
 #, kde-format
 msgid "Folders"
 msgstr "Mapper"
 
-#: app/mainwindow.cpp:639
+#: app/mainwindow.cpp:644
 #, kde-format
 msgid "Information"
 msgstr "Informasjon"
 
-#: app/mainwindow.cpp:678
+#: app/mainwindow.cpp:683
 #, kde-format
 msgid "Operations"
 msgstr "Operasjonar"
 
-#: app/mainwindow.cpp:937
+#: app/mainwindow.cpp:942
 #, kde-format
 msgid "Viewing media"
-msgstr ""
+msgstr "Medievising"
 
-#: app/mainwindow.cpp:1400
+#: app/mainwindow.cpp:1405
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Gøym sidestolpe"
 
-#: app/mainwindow.cpp:1400
+#: app/mainwindow.cpp:1405
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Vis sidestolpe"
 
-#: app/mainwindow.cpp:1707
+#: app/mainwindow.cpp:1712
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Opna bilete"
 
-#: app/mainwindow.cpp:1767
+#: app/mainwindow.cpp:1772
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "Pausa lysbiletvising"
 
-#: app/mainwindow.cpp:1770
+#: app/mainwindow.cpp:1775
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "Hald fram lysbiletvising"
 
-#: app/mainwindow.cpp:1770
+#: app/mainwindow.cpp:1775
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Start lysbiletvising"
 
-#: app/mainwindow.cpp:1783
+#: app/mainwindow.cpp:1788
 #, kde-format
 msgid "Save All Changes"
 msgstr "Lagra alle endringane"
 
-#: app/mainwindow.cpp:1784
+#: app/mainwindow.cpp:1789
 #, kde-format
 msgid "Discard Changes"
 msgstr "Forkast endringane"
 
-#: app/mainwindow.cpp:1786
+#: app/mainwindow.cpp:1791
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "Eitt bilete er endra."
 msgstr[1] "%1 bilete er endra."
 
-#: app/mainwindow.cpp:1786
+#: app/mainwindow.cpp:1791
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Dersom du avsluttar no, går endringane tapt."
 
 # %1 er for eksempel «Ctrl + M».
-#: app/mainwindow.cpp:1841
+#: app/mainwindow.cpp:1846
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr "Dette vil gøyma menylinja heilt. Du kan visa ho att ved å trykkja %1."
 
-#: app/mainwindow.cpp:1844
+#: app/mainwindow.cpp:1849
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Gøym menylinje"
 
-#: app/mainwindow.cpp:2064
+#: app/mainwindow.cpp:2069
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "Du nådde det første dokumentet. Kva vil du gjera?"
 
-#: app/mainwindow.cpp:2065 app/mainwindow.cpp:2079
+#: app/mainwindow.cpp:2070 app/mainwindow.cpp:2084
 #, kde-format
 msgid "Stay There"
 msgstr "Vert verande"
 
-#: app/mainwindow.cpp:2066
+#: app/mainwindow.cpp:2071
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "Gå til det siste dokumentet"
 
-#: app/mainwindow.cpp:2067 app/mainwindow.cpp:2081
+#: app/mainwindow.cpp:2072 app/mainwindow.cpp:2086
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "Gå tilbake til dokumentoversikta"
 
-#: app/mainwindow.cpp:2078
+#: app/mainwindow.cpp:2083
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "Du nådde det siste dokumentet. Kva vil du gjera?"
 
-#: app/mainwindow.cpp:2080
+#: app/mainwindow.cpp:2085
 #, kde-format
 msgid "Go to the First Document"
 msgstr "Gå til det første dokumentet"
@@ -1630,6 +1634,11 @@ msgid ""
 "and contain multiple rows of images; <link url='%1'>configure these options "
 "in the settings</link>.</para>"
 msgstr ""
+"<para>Dette viser/gøymer eit felt med miniatyrbilete av alle bileta i mappa. "
+"Du kan trykkja på eit bilete for å visa det.</para><para>Du kan òg trykkja "
+"på fleire bilete samtidig for å visa dei side ved side.</para><para>Og du "
+"kan velja å heller visa feltet på høgre side, eller med fleire rader. <link "
+"url='%1'>Set opp dette i innstillingane</link>.</para>"
 
 #: app/viewmainpage.cpp:575
 #, kde-format
@@ -1962,6 +1971,9 @@ msgid ""
 "to launch Discover to install Kamera to enable protocol support for "
 "\"camera:/\" on your system."
 msgstr ""
+"Du må ha programmet Kamera installert på systemet for å kunna lesa frå "
+"kameraet. Trykk her for å starta Discover for å installera det. Dette legg "
+"til støtte for «camera:/»-protokollen."
 
 #: importer/thumbnailpage.cpp:263
 #, kde-format
@@ -1976,6 +1988,8 @@ msgid ""
 "Click here to launch Discover to install the missing protocol support "
 "library to enable the protocol support for \"%1:/\" on your system."
 msgstr ""
+"Trykk her for å starta Discover for å installera støttebibliotek for "
+"protokollen «%1:/»."
 
 #: importer/thumbnailpage.cpp:268
 #, kde-format
@@ -2016,6 +2030,9 @@ msgid ""
 "Opening Discover failed.<nl/>Please check if Discover is installed on your "
 "system, or use your system's package manager to install \"Kamera\" package."
 msgstr ""
+"Klarte ikkje starta Discover.<nl/>Sjå til at Discover er installert. Du kan "
+"òg bruka pakke­handsamaren til systemet direkte for å installera «Kamera»-"
+"pakken."
 
 #: importer/thumbnailpage.cpp:495
 #, kde-kuit-format
@@ -2025,6 +2042,9 @@ msgid ""
 "system, or use your system's package manager to install the protocol support "
 "library for \"%1\"."
 msgstr ""
+"Klarte ikkje starta Discover.<nl/>Sjå til at Discover er installert. Du kan "
+"òg bruka pakke­handsamaren til systemet direkte for å støtte­bibliotek for "
+"protokollen «%1»."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: importer/thumbnailpage.ui:173
@@ -2224,7 +2244,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Trash"
-msgstr "Legg i papirkorg"
+msgstr "Legg i papirkorga"
 
 #: lib/documentview/documentview.cpp:215
 #, kde-format
