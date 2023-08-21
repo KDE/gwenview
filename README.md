@@ -15,7 +15,7 @@ Gwenview is a fast and easy to use image viewer by KDE, ideal for browsing and d
 
 ## Get It
 
-Details on where to find stable releases of Gwenview can be found on it's
+Details on where to find stable releases of Gwenview can be found on its
 [homepage](https://apps.kde.org/gwenview).
 
 ## Support
