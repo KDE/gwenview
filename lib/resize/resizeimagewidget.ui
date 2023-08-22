@@ -17,7 +17,7 @@
    <item row="7" column="0" colspan="2">
     <widget class="QLabel" name="mEstimatedSizeLabel">
      <property name="text">
-      <string notr="true">Estimated new file size:</string>
+      <string>Estimated new file size:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -112,7 +112,7 @@
    <item row="6" column="0" colspan="2">
     <widget class="QLabel" name="mCurrentSizeLabel">
      <property name="text">
-      <string notr="true">Current file size:</string>
+      <string>Current file size:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
