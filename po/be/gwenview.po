@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 86ff119b1606fcaa910d6b44fc14b611\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-09 00:43+0000\n"
+"POT-Creation-Date: 2023-08-23 00:44+0000\n"
 "PO-Revision-Date: 2023-02-15 22:16\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@gmail.com>\n"
 "Language-Team: Belarusian\n"
@@ -2742,6 +2742,12 @@ msgstr "Змяніць памер"
 msgid "Resize Image"
 msgstr "Змяніць памеры выявы"
 
+#. i18n: ectx: property (text), widget (QLabel, mEstimatedSizeLabel)
+#: lib/resize/resizeimagewidget.ui:20
+#, kde-format
+msgid "Estimated new file size:"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: lib/resize/resizeimagewidget.ui:47
 #, kde-format
@@ -2761,6 +2767,13 @@ msgstr " %"
 #, kde-format
 msgid " px"
 msgstr " пікс."
+
+#. i18n: ectx: property (text), widget (QLabel, mCurrentSizeLabel)
+#: lib/resize/resizeimagewidget.ui:115
+#, fuzzy, kde-format
+#| msgid "Current size:"
+msgid "Current file size:"
+msgstr "Бягучы памер:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, mKeepAspectCheckBox)
 #: lib/resize/resizeimagewidget.ui:145

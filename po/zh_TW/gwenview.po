@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-09 00:43+0000\n"
+"POT-Creation-Date: 2023-08-23 00:44+0000\n"
 "PO-Revision-Date: 2023-08-17 22:23+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -2610,6 +2610,12 @@ msgstr "調整大小"
 msgid "Resize Image"
 msgstr "調整影像大小"
 
+#. i18n: ectx: property (text), widget (QLabel, mEstimatedSizeLabel)
+#: lib/resize/resizeimagewidget.ui:20
+#, kde-format
+msgid "Estimated new file size:"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: lib/resize/resizeimagewidget.ui:47
 #, kde-format
@@ -2629,6 +2635,13 @@ msgstr " %"
 #, kde-format
 msgid " px"
 msgstr " 像素 (px)"
+
+#. i18n: ectx: property (text), widget (QLabel, mCurrentSizeLabel)
+#: lib/resize/resizeimagewidget.ui:115
+#, fuzzy, kde-format
+#| msgid "Current size:"
+msgid "Current file size:"
+msgstr "目前的大小："
 
 #. i18n: ectx: property (text), widget (QCheckBox, mKeepAspectCheckBox)
 #: lib/resize/resizeimagewidget.ui:145

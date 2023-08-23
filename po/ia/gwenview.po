@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-09 00:43+0000\n"
+"POT-Creation-Date: 2023-08-23 00:44+0000\n"
 "PO-Revision-Date: 2023-08-05 16:59+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -2699,6 +2699,12 @@ msgstr "Redimensiona"
 msgid "Resize Image"
 msgstr "Redimensiona image"
 
+#. i18n: ectx: property (text), widget (QLabel, mEstimatedSizeLabel)
+#: lib/resize/resizeimagewidget.ui:20
+#, kde-format
+msgid "Estimated new file size:"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: lib/resize/resizeimagewidget.ui:47
 #, kde-format
@@ -2718,6 +2724,13 @@ msgstr " %"
 #, kde-format
 msgid " px"
 msgstr "px"
+
+#. i18n: ectx: property (text), widget (QLabel, mCurrentSizeLabel)
+#: lib/resize/resizeimagewidget.ui:115
+#, fuzzy, kde-format
+#| msgid "Current size:"
+msgid "Current file size:"
+msgstr "Dimension currente"
 
 #. i18n: ectx: property (text), widget (QCheckBox, mKeepAspectCheckBox)
 #: lib/resize/resizeimagewidget.ui:145
