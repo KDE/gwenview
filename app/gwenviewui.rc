@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE gui SYSTEM "kpartgui.dtd">
-<gui name="gwenview" version="67">
+<gui name="gwenview" version="68">
 
 <MenuBar>
     <Menu name="file" >
@@ -80,20 +80,6 @@
         <Action name="go_up"/>
         <Separator/>
         <Action name="go_start_page"/>
-    </Menu>
-    <Menu name="settings" noMerge="1">
-        <text>&amp;Settings</text>
-        <!--
-        Disable merging because we do not want the "fullscreen" action to appear
-        here, since it is already in the "view" menu.
-        -->
-        <Action name="options_show_menubar"/>
-        <Merge name="StandardToolBarMenuHandler"/>
-        <Action name="options_show_statusbar"/>
-        <Separator/>
-        <Action name="options_configure_keybinding"/>
-        <Action name="options_configure_toolbars"/>
-        <Action name="options_configure"/>
     </Menu>
 </MenuBar>
 
