@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdegraphics-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-03 03:10+0000\n"
-"PO-Revision-Date: 2023-08-04 13:27+0300\n"
+"POT-Creation-Date: 2023-08-23 02:25+0000\n"
+"PO-Revision-Date: 2023-08-22 16:54+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -58,7 +58,7 @@ msgstr ""
 #: app/advancedconfigpage.ui:82
 #, kde-format
 msgid "Thumbnails:"
-msgstr "Küçük Görseller:"
+msgstr "Küçük görseller:"
 
 #. i18n: ectx: property (text), widget (QLabel, relativeHelpLabel)
 #: app/advancedconfigpage.ui:92
@@ -296,15 +296,15 @@ msgstr "Gelişmiş"
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Copy %1"
-msgstr "%1 dosyasını kopyala"
+msgstr "Kopyala: %1"
 
 #: app/fileoperations.cpp:69
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Copy %1 image"
 msgid_plural "Copy %1 images"
-msgstr[0] "%1 görseli kopyala"
-msgstr[1] "%1 görseli kopyala"
+msgstr[0] "%1 Görsel Bağlantıla"
+msgstr[1] "%1 Görsel Bağlantıla"
 
 #: app/fileoperations.cpp:71
 #, kde-format
@@ -316,15 +316,15 @@ msgstr "Kopyala"
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Move %1"
-msgstr "%1 dosyasını taşı"
+msgstr "Taşı: %1"
 
 #: app/fileoperations.cpp:77
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Move %1 image"
 msgid_plural "Move %1 images"
-msgstr[0] "%1 görseli taşı"
-msgstr[1] "%1 görseli taşı"
+msgstr[0] "%1 Görseli Taşı"
+msgstr[1] "%1 Görseli Taşı"
 
 #: app/fileoperations.cpp:79
 #, kde-format
@@ -336,15 +336,15 @@ msgstr "Taşı"
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Link %1"
-msgstr "%1 dosyasını bağlantıla"
+msgstr "Bağlantıla: %1"
 
 #: app/fileoperations.cpp:85
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Link %1 image"
 msgid_plural "Link %1 images"
-msgstr[0] "%1 görseli bağlantıla"
-msgstr[1] "%1 görseli bağlantıla"
+msgstr[0] "%1 Görseli Bağlantıla"
+msgstr[1] "%1 Görseli Bağlantıla"
 
 #: app/fileoperations.cpp:87
 #, kde-format
@@ -865,7 +865,7 @@ msgstr "Bilgi Notu Ekle"
 #, kde-format
 msgctxt "@title:window Annotate [filename]"
 msgid "Annotate %1"
-msgstr "%1 Ögesine Bilgi Notu Ekle"
+msgstr "Bilgi Notu Ekle: %1"
 
 #: app/imageopscontextmanageritem.cpp:164 lib/document/documentjob.cpp:77
 #, kde-format
@@ -1038,22 +1038,22 @@ msgstr "Görsel Bilgisi"
 msgctxt "@label"
 msgid "%1 file selected"
 msgid_plural "%1 files selected"
-msgstr[0] "%1 dosya seçildi"
-msgstr[1] "%1 dosya seçildi"
+msgstr[0] "%1 dosya seçili"
+msgstr[1] "%1 dosya seçili"
 
 #: app/infocontextmanageritem.cpp:333
 #, kde-format
 msgctxt "@label"
 msgid "%1 folder selected"
 msgid_plural "%1 folders selected"
-msgstr[0] "%1 klasör seçildi"
-msgstr[1] "%1 klasör seçildi"
+msgstr[0] "%1 klasör seçili"
+msgstr[1] "%1 klasör seçili"
 
 #: app/infocontextmanageritem.cpp:336
 #, kde-format
 msgctxt "@label. The two parameters are strings like '2 folders' and '1 file'."
 msgid "%1 and %2 selected"
-msgstr "%1 ve %2 seçildi"
+msgstr "%1 ve %2 seçili"
 
 #: app/infocontextmanageritem.cpp:337
 #, kde-format
@@ -1853,7 +1853,7 @@ msgstr "Belgeleri otomatik olarak yeniden adlandır"
 #: importer/importerconfigdialog.ui:39
 #, kde-format
 msgid "Rename Format:"
-msgstr "Biçimi Yeniden Adlandır:"
+msgstr "Biçimi yeniden adlandır:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: importer/importerconfigdialog.ui:59
@@ -2485,7 +2485,7 @@ msgstr "Gelişmiş Ayarlar etkinken son kullanılan kırpma oranı yüksekliği"
 #: lib/historymodel.cpp:146
 #, kde-format
 msgid "Last visited: %1"
-msgstr "Son ziyaret edilme: %1"
+msgstr "Son ziyaret: %1"
 
 #: lib/hud/hudwidget.cpp:104
 #, kde-format
@@ -2679,6 +2679,12 @@ msgstr "Yeniden Boyutlandır"
 msgid "Resize Image"
 msgstr "Görseli Yeniden Boyutlandır"
 
+#. i18n: ectx: property (text), widget (QLabel, mEstimatedSizeLabel)
+#: lib/resize/resizeimagewidget.ui:20
+#, kde-format
+msgid "Estimated new file size:"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: lib/resize/resizeimagewidget.ui:47
 #, kde-format
@@ -2698,6 +2704,13 @@ msgstr " %"
 #, kde-format
 msgid " px"
 msgstr " pks"
+
+#. i18n: ectx: property (text), widget (QLabel, mCurrentSizeLabel)
+#: lib/resize/resizeimagewidget.ui:115
+#, fuzzy, kde-format
+#| msgid "Current size:"
+msgid "Current file size:"
+msgstr "Geçerli boyut:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, mKeepAspectCheckBox)
 #: lib/resize/resizeimagewidget.ui:145
