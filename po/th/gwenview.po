@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-23 00:44+0000\n"
+"POT-Creation-Date: 2023-08-24 00:43+0000\n"
 "PO-Revision-Date: 2010-12-17 21:37+0700\n"
 "Last-Translator: Thanomsub Noppaburana <donga.nb@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -790,14 +790,8 @@ msgstr "ย้อนกลับไปยังต้นฉบับ"
 msgid "&Rating"
 msgstr "&ระดับความชื่นชอบ"
 
-#. i18n: ectx: Menu (settings)
-#: app/gwenviewui.rc:85
-#, kde-format
-msgid "&Settings"
-msgstr "&ตั้งค่า"
-
 #. i18n: ectx: ToolBar (mainToolBar)
-#: app/gwenviewui.rc:101 part/gvpart.rc:16
+#: app/gwenviewui.rc:87 part/gvpart.rc:16
 #, kde-format
 msgid "Main Toolbar"
 msgstr "แถบเครื่องมือหลัก"
@@ -2846,6 +2840,9 @@ msgstr "แ&ฟ้ม"
 #, kde-format
 msgid "&View"
 msgstr "&มุมมอง"
+
+#~ msgid "&Settings"
+#~ msgstr "&ตั้งค่า"
 
 #, fuzzy
 #~| msgid "Background color:"

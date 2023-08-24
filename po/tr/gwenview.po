@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdegraphics-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-23 00:44+0000\n"
-"PO-Revision-Date: 2023-08-22 16:54+0300\n"
+"POT-Creation-Date: 2023-08-24 00:43+0000\n"
+"PO-Revision-Date: 2023-08-24 00:26+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -775,14 +775,8 @@ msgstr "Özgün haline geri dön"
 msgid "&Rating"
 msgstr "Dere&celendirme"
 
-#. i18n: ectx: Menu (settings)
-#: app/gwenviewui.rc:85
-#, kde-format
-msgid "&Settings"
-msgstr "Ayar&lar"
-
 #. i18n: ectx: ToolBar (mainToolBar)
-#: app/gwenviewui.rc:101 part/gvpart.rc:16
+#: app/gwenviewui.rc:87 part/gvpart.rc:16
 #, kde-format
 msgid "Main Toolbar"
 msgstr "Ana Araç Çubuğu"
@@ -2664,8 +2658,8 @@ msgid ""
 "Assuming that the image format won't be changed and\n"
 "for lossy images using the value set in 'Lossy image save quality'."
 msgstr ""
-"Görsel biçiminini değişmeyeceği varsayılıyor ve kayıplı\n"
-"görseller için 'Kayıplı görsel kaydetme kalitesi'ndeki değe kullanılıyor."
+"Görsel biçiminini değişmeyeceği varsayılıyor ve kayıplı görseller\n"
+"için 'Kayıplı görsel kaydetme kalitesi'ndeki değer kullanılıyor."
 
 #: lib/resize/resizeimagedialog.cpp:219
 #, kde-format
@@ -2688,7 +2682,7 @@ msgstr "Görseli Yeniden Boyutlandır"
 #: lib/resize/resizeimagewidget.ui:20
 #, kde-format
 msgid "Estimated new file size:"
-msgstr ""
+msgstr "Tahmini yeni dosya boyutu:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: lib/resize/resizeimagewidget.ui:47
@@ -2712,10 +2706,9 @@ msgstr " pks"
 
 #. i18n: ectx: property (text), widget (QLabel, mCurrentSizeLabel)
 #: lib/resize/resizeimagewidget.ui:115
-#, fuzzy, kde-format
-#| msgid "Current size:"
+#, kde-format
 msgid "Current file size:"
-msgstr "Geçerli boyut:"
+msgstr "Şu anki dosya boyutu:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, mKeepAspectCheckBox)
 #: lib/resize/resizeimagewidget.ui:145
@@ -2799,6 +2792,9 @@ msgstr "&Dosya"
 #, kde-format
 msgid "&View"
 msgstr "&Görünüm"
+
+#~ msgid "&Settings"
+#~ msgstr "Ayar&lar"
 
 #~ msgid "Apply only the profile embedded in the image file"
 #~ msgstr "Yalnızca görsel dosyasında gömülü profili kullan"

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-23 00:44+0000\n"
-"PO-Revision-Date: 2023-08-11 10:45+0100\n"
+"POT-Creation-Date: 2023-08-24 00:43+0000\n"
+"PO-Revision-Date: 2023-08-23 22:21+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -769,14 +769,8 @@ msgstr "Reiri al la originalo"
 msgid "&Rating"
 msgstr "&Taksado"
 
-#. i18n: ectx: Menu (settings)
-#: app/gwenviewui.rc:85
-#, kde-format
-msgid "&Settings"
-msgstr "&Agordo"
-
 #. i18n: ectx: ToolBar (mainToolBar)
-#: app/gwenviewui.rc:101 part/gvpart.rc:16
+#: app/gwenviewui.rc:87 part/gvpart.rc:16
 #, kde-format
 msgid "Main Toolbar"
 msgstr "Ĉefa Ilobreto"
@@ -2687,7 +2681,7 @@ msgstr "Regrandigi Bildon"
 #: lib/resize/resizeimagewidget.ui:20
 #, kde-format
 msgid "Estimated new file size:"
-msgstr ""
+msgstr "Taksita nova dosiergrandeco:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: lib/resize/resizeimagewidget.ui:47
@@ -2711,10 +2705,9 @@ msgstr "px"
 
 #. i18n: ectx: property (text), widget (QLabel, mCurrentSizeLabel)
 #: lib/resize/resizeimagewidget.ui:115
-#, fuzzy, kde-format
-#| msgid "Current size:"
+#, kde-format
 msgid "Current file size:"
-msgstr "Nuna grandeco:"
+msgstr "Nuna dosiergrandeco:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, mKeepAspectCheckBox)
 #: lib/resize/resizeimagewidget.ui:145
@@ -2798,3 +2791,6 @@ msgstr "&Dosiero"
 #, kde-format
 msgid "&View"
 msgstr "&Vidi"
+
+#~ msgid "&Settings"
+#~ msgstr "&Agordo"

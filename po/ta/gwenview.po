@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-23 00:44+0000\n"
+"POT-Creation-Date: 2023-08-24 00:43+0000\n"
 "PO-Revision-Date: 2023-06-11 17:36+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -763,14 +763,8 @@ msgstr "மூலத்திற்கு திரும்ப செல்"
 msgid "&Rating"
 msgstr "&மதிப்பீடு"
 
-#. i18n: ectx: Menu (settings)
-#: app/gwenviewui.rc:85
-#, kde-format
-msgid "&Settings"
-msgstr "&அமைப்புகள்"
-
 #. i18n: ectx: ToolBar (mainToolBar)
-#: app/gwenviewui.rc:101 part/gvpart.rc:16
+#: app/gwenviewui.rc:87 part/gvpart.rc:16
 #, kde-format
 msgid "Main Toolbar"
 msgstr "பிரதான கருவிப்பட்டை"
@@ -2764,6 +2758,9 @@ msgstr "&கோப்பு"
 #, kde-format
 msgid "&View"
 msgstr "&பார்வை"
+
+#~ msgid "&Settings"
+#~ msgstr "&அமைப்புகள்"
 
 #~ msgid "Apply only the profile embedded in the image file"
 #~ msgstr "படக்கோப்பிலுள்ள நிறத்திருத்தங்களை மட்டும் பயன்படுத்து"

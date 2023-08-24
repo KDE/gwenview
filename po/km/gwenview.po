@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-23 00:44+0000\n"
+"POT-Creation-Date: 2023-08-24 00:43+0000\n"
 "PO-Revision-Date: 2012-07-11 10:26+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer\n"
@@ -788,14 +788,8 @@ msgstr "ត្រឡប់​ទៅ​កាន់​រូបភាពដើម
 msgid "&Rating"
 msgstr "ការ​វាយ​តម្លៃ"
 
-#. i18n: ectx: Menu (settings)
-#: app/gwenviewui.rc:85
-#, kde-format
-msgid "&Settings"
-msgstr "ការ​កំណត់"
-
 #. i18n: ectx: ToolBar (mainToolBar)
-#: app/gwenviewui.rc:101 part/gvpart.rc:16
+#: app/gwenviewui.rc:87 part/gvpart.rc:16
 #, kde-format
 msgid "Main Toolbar"
 msgstr "របារ​ឧបករណ៍​មេ"
@@ -2815,6 +2809,9 @@ msgstr "ឯកសារ"
 #, kde-format
 msgid "&View"
 msgstr "មើល"
+
+#~ msgid "&Settings"
+#~ msgstr "ការ​កំណត់"
 
 #, fuzzy
 #~| msgid "Background color:"

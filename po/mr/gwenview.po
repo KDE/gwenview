@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-23 00:44+0000\n"
+"POT-Creation-Date: 2023-08-24 00:43+0000\n"
 "PO-Revision-Date: 2014-10-28 15:32+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: Marathi <kde-i18n-doc@kde.org>\n"
@@ -791,14 +791,8 @@ msgstr "मूळस्थळाकडे जा"
 msgid "&Rating"
 msgstr "मुल्यांकन (&R)"
 
-#. i18n: ectx: Menu (settings)
-#: app/gwenviewui.rc:85
-#, kde-format
-msgid "&Settings"
-msgstr "संयोजना (&S)"
-
 #. i18n: ectx: ToolBar (mainToolBar)
-#: app/gwenviewui.rc:101 part/gvpart.rc:16
+#: app/gwenviewui.rc:87 part/gvpart.rc:16
 #, kde-format
 msgid "Main Toolbar"
 msgstr "मुख्य साधनपट्टी"
@@ -2829,6 +2823,9 @@ msgstr "फाईल (&F)"
 #, kde-format
 msgid "&View"
 msgstr "दृश्य (&V)"
+
+#~ msgid "&Settings"
+#~ msgstr "संयोजना (&S)"
 
 #, fuzzy
 #~| msgid "Background color:"

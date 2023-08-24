@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-23 00:44+0000\n"
+"POT-Creation-Date: 2023-08-24 00:43+0000\n"
 "PO-Revision-Date: 2023-06-12 16:55+0400\n"
 "Last-Translator: Kheyyam <xxmn77@gmail.com>\n"
 "Language-Team: Azerbaijani <kde-i18n-doc@kde.org>\n"
@@ -768,14 +768,8 @@ msgstr "Əslinə qayıtmaq"
 msgid "&Rating"
 msgstr "&Reytinq"
 
-#. i18n: ectx: Menu (settings)
-#: app/gwenviewui.rc:85
-#, kde-format
-msgid "&Settings"
-msgstr "&Ayarlar"
-
 #. i18n: ectx: ToolBar (mainToolBar)
-#: app/gwenviewui.rc:101 part/gvpart.rc:16
+#: app/gwenviewui.rc:87 part/gvpart.rc:16
 #, kde-format
 msgid "Main Toolbar"
 msgstr "Əsas Alətlər Paneli"
@@ -2804,6 +2798,9 @@ msgstr "&Fayl"
 #, kde-format
 msgid "&View"
 msgstr "&Baxmaq"
+
+#~ msgid "&Settings"
+#~ msgstr "&Ayarlar"
 
 #~ msgid "Apply only the profile embedded in the image file"
 #~ msgstr "Yalnız şəkil faylı ilə əlaqəli profili tətbiq edin"

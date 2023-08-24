@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-23 00:44+0000\n"
+"POT-Creation-Date: 2023-08-24 00:43+0000\n"
 "PO-Revision-Date: 2022-12-12 21:19+0200\n"
 "Last-Translator: Moo <<>>\n"
 "Language-Team: lt <kde-i18n-lt@kde.org>\n"
@@ -782,14 +782,8 @@ msgstr "Grįžti prie originalo"
 msgid "&Rating"
 msgstr "Į&vertinimas"
 
-#. i18n: ectx: Menu (settings)
-#: app/gwenviewui.rc:85
-#, kde-format
-msgid "&Settings"
-msgstr "Nuo&statos"
-
 #. i18n: ectx: ToolBar (mainToolBar)
-#: app/gwenviewui.rc:101 part/gvpart.rc:16
+#: app/gwenviewui.rc:87 part/gvpart.rc:16
 #, kde-format
 msgid "Main Toolbar"
 msgstr "Pagrindinė įrankių juosta"
@@ -2831,6 +2825,9 @@ msgstr "&Failas"
 #, kde-format
 msgid "&View"
 msgstr "&Rodymas"
+
+#~ msgid "&Settings"
+#~ msgstr "Nuo&statos"
 
 #~ msgid "Apply only the profile embedded in the image file"
 #~ msgstr "Taikyti tik paveikslo faile įterptą profilį"

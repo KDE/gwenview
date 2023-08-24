@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-23 00:44+0000\n"
+"POT-Creation-Date: 2023-08-24 00:43+0000\n"
 "PO-Revision-Date: 2013-09-08 07:05+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -775,14 +775,8 @@ msgstr ""
 msgid "&Rating"
 msgstr "دەرىجە(&R)"
 
-#. i18n: ectx: Menu (settings)
-#: app/gwenviewui.rc:85
-#, kde-format
-msgid "&Settings"
-msgstr "تەڭشەك(&S)"
-
 #. i18n: ectx: ToolBar (mainToolBar)
-#: app/gwenviewui.rc:101 part/gvpart.rc:16
+#: app/gwenviewui.rc:87 part/gvpart.rc:16
 #, kde-format
 msgid "Main Toolbar"
 msgstr "ئاساسىي قورال بالداق"
@@ -2726,6 +2720,9 @@ msgstr "ھۆججەت(&F)"
 #, kde-format
 msgid "&View"
 msgstr "كۆرۈنۈش(&V)"
+
+#~ msgid "&Settings"
+#~ msgstr "تەڭشەك(&S)"
 
 #, fuzzy
 #~| msgid "Background color:"

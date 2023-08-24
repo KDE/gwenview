@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-23 00:44+0000\n"
+"POT-Creation-Date: 2023-08-24 00:43+0000\n"
 "PO-Revision-Date: 2022-10-22 11:34+0200\n"
 "Last-Translator: Mihkel Tõnnov <mihhkel@gmail.com>\n"
 "Language-Team: Estonian <>\n"
@@ -767,14 +767,8 @@ msgstr "Tagasi originaali juurde"
 msgid "&Rating"
 msgstr "&Hinnang"
 
-#. i18n: ectx: Menu (settings)
-#: app/gwenviewui.rc:85
-#, kde-format
-msgid "&Settings"
-msgstr "&Seadistused"
-
 #. i18n: ectx: ToolBar (mainToolBar)
-#: app/gwenviewui.rc:101 part/gvpart.rc:16
+#: app/gwenviewui.rc:87 part/gvpart.rc:16
 #, kde-format
 msgid "Main Toolbar"
 msgstr "Peamine tööriistariba"
@@ -2785,6 +2779,9 @@ msgstr "&Fail"
 #, kde-format
 msgid "&View"
 msgstr "&Vaade"
+
+#~ msgid "&Settings"
+#~ msgstr "&Seadistused"
 
 #~ msgid "Apply only the profile embedded in the image file"
 #~ msgstr "Ainult pildifaili põimitud profiili rakendamine"
