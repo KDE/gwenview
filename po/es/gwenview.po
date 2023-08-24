@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-23 02:25+0000\n"
-"PO-Revision-Date: 2023-06-03 01:14+0200\n"
+"POT-Creation-Date: 2023-08-24 02:22+0000\n"
+"PO-Revision-Date: 2023-08-23 11:02+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.04.1\n"
+"X-Generator: Lokalize 23.04.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -771,14 +771,8 @@ msgstr "Volver al original"
 msgid "&Rating"
 msgstr "&Puntuación"
 
-#. i18n: ectx: Menu (settings)
-#: app/gwenviewui.rc:85
-#, kde-format
-msgid "&Settings"
-msgstr "&Preferencias"
-
 #. i18n: ectx: ToolBar (mainToolBar)
-#: app/gwenviewui.rc:101 part/gvpart.rc:16
+#: app/gwenviewui.rc:87 part/gvpart.rc:16
 #, kde-format
 msgid "Main Toolbar"
 msgstr "Barra de herramientas principal"
@@ -2706,7 +2700,7 @@ msgstr "Cambiar tamaño de la imagen"
 #: lib/resize/resizeimagewidget.ui:20
 #, kde-format
 msgid "Estimated new file size:"
-msgstr ""
+msgstr "Tamaño estimado del nuevo archivo:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: lib/resize/resizeimagewidget.ui:47
@@ -2730,10 +2724,9 @@ msgstr " px"
 
 #. i18n: ectx: property (text), widget (QLabel, mCurrentSizeLabel)
 #: lib/resize/resizeimagewidget.ui:115
-#, fuzzy, kde-format
-#| msgid "Current size:"
+#, kde-format
 msgid "Current file size:"
-msgstr "Tamaño actual:"
+msgstr "Tamaño actual del de archivo:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, mKeepAspectCheckBox)
 #: lib/resize/resizeimagewidget.ui:145
@@ -2817,6 +2810,9 @@ msgstr "&Archivo"
 #, kde-format
 msgid "&View"
 msgstr "&Ver"
+
+#~ msgid "&Settings"
+#~ msgstr "&Preferencias"
 
 #~ msgid "Apply only the profile embedded in the image file"
 #~ msgstr "Aplicar solo el perfil integrado en el archivo de imagen"

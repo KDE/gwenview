@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-23 02:25+0000\n"
+"POT-Creation-Date: 2023-08-24 02:22+0000\n"
 "PO-Revision-Date: 2023-06-11 22:04+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -769,14 +769,8 @@ msgstr "Retorna al original"
 msgid "&Rating"
 msgstr "&Evalutation"
 
-#. i18n: ectx: Menu (settings)
-#: app/gwenviewui.rc:85
-#, kde-format
-msgid "&Settings"
-msgstr "Preferentia&s"
-
 #. i18n: ectx: ToolBar (mainToolBar)
-#: app/gwenviewui.rc:101 part/gvpart.rc:16
+#: app/gwenviewui.rc:87 part/gvpart.rc:16
 #, kde-format
 msgid "Main Toolbar"
 msgstr "Barra de instrumento principal"
@@ -2809,6 +2803,9 @@ msgstr "&File"
 #, kde-format
 msgid "&View"
 msgstr "&Vista"
+
+#~ msgid "&Settings"
+#~ msgstr "Preferentia&s"
 
 #~ msgid "Apply only the profile embedded in the image file"
 #~ msgstr "Applica solmente le profilo inserite in le file de imagine"

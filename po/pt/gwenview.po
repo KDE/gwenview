@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-23 02:25+0000\n"
+"POT-Creation-Date: 2023-08-24 02:22+0000\n"
 "PO-Revision-Date: 2023-06-02 09:46+0100\n"
 "Last-Translator: Pedro Morais <morais@kde.org>\n"
 "Language-Team: pt <kde-i18n-pt@kde.org>\n"
@@ -774,14 +774,8 @@ msgstr "Voltar ao original"
 msgid "&Rating"
 msgstr "&Classificação"
 
-#. i18n: ectx: Menu (settings)
-#: app/gwenviewui.rc:85
-#, kde-format
-msgid "&Settings"
-msgstr "&Configuração"
-
 #. i18n: ectx: ToolBar (mainToolBar)
-#: app/gwenviewui.rc:101 part/gvpart.rc:16
+#: app/gwenviewui.rc:87 part/gvpart.rc:16
 #, kde-format
 msgid "Main Toolbar"
 msgstr "Barra Principal"
@@ -2810,3 +2804,6 @@ msgstr "&Ficheiro"
 #, kde-format
 msgid "&View"
 msgstr "&Ver"
+
+#~ msgid "&Settings"
+#~ msgstr "&Configuração"

@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-23 02:25+0000\n"
+"POT-Creation-Date: 2023-08-24 02:22+0000\n"
 "PO-Revision-Date: 2023-05-29 21:07+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -783,14 +783,8 @@ msgstr "Palaa alkuperäiseen"
 msgid "&Rating"
 msgstr "&Arvostelu"
 
-#. i18n: ectx: Menu (settings)
-#: app/gwenviewui.rc:85
-#, kde-format
-msgid "&Settings"
-msgstr "A&setukset"
-
 #. i18n: ectx: ToolBar (mainToolBar)
-#: app/gwenviewui.rc:101 part/gvpart.rc:16
+#: app/gwenviewui.rc:87 part/gvpart.rc:16
 #, kde-format
 msgid "Main Toolbar"
 msgstr "Päätyökalurivi"
@@ -2796,6 +2790,9 @@ msgstr "&Tiedosto"
 #, kde-format
 msgid "&View"
 msgstr "&Näytä"
+
+#~ msgid "&Settings"
+#~ msgstr "A&setukset"
 
 # *** TARKISTA: ID jättää epäselväksi suunnan (”apply” kuvan profiilista jonnekin vai jostakin kuvan profiiliin)
 #~ msgid "Apply only the profile embedded in the image file"

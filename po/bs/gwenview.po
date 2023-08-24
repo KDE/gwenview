@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdegraphics\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-23 02:25+0000\n"
+"POT-Creation-Date: 2023-08-24 02:22+0000\n"
 "PO-Revision-Date: 2014-01-31 20:41+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -802,14 +802,8 @@ msgstr "Vrati se na original"
 msgid "&Rating"
 msgstr "&Procjena"
 
-#. i18n: ectx: Menu (settings)
-#: app/gwenviewui.rc:85
-#, kde-format
-msgid "&Settings"
-msgstr "&Postavke"
-
 #. i18n: ectx: ToolBar (mainToolBar)
-#: app/gwenviewui.rc:101 part/gvpart.rc:16
+#: app/gwenviewui.rc:87 part/gvpart.rc:16
 #, kde-format
 msgid "Main Toolbar"
 msgstr "Glavna alatna traka"
@@ -2859,6 +2853,9 @@ msgstr "&Datoteka"
 #, kde-format
 msgid "&View"
 msgstr "&Pogled"
+
+#~ msgid "&Settings"
+#~ msgstr "&Postavke"
 
 #, fuzzy
 #~| msgid "Background color:"

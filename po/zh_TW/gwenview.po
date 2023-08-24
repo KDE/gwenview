@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-23 02:25+0000\n"
+"POT-Creation-Date: 2023-08-24 02:22+0000\n"
 "PO-Revision-Date: 2023-07-03 19:46+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Chinese <zh-l10n@linux.org.tw>\n"
@@ -763,14 +763,8 @@ msgstr "回到最原始的"
 msgid "&Rating"
 msgstr "評分(&R)："
 
-#. i18n: ectx: Menu (settings)
-#: app/gwenviewui.rc:85
-#, kde-format
-msgid "&Settings"
-msgstr "設定(&S)"
-
 #. i18n: ectx: ToolBar (mainToolBar)
-#: app/gwenviewui.rc:101 part/gvpart.rc:16
+#: app/gwenviewui.rc:87 part/gvpart.rc:16
 #, kde-format
 msgid "Main Toolbar"
 msgstr "主工具列"
@@ -2720,6 +2714,9 @@ msgstr "檔案(&F)"
 #, kde-format
 msgid "&View"
 msgstr "檢視(&V)"
+
+#~ msgid "&Settings"
+#~ msgstr "設定(&S)"
 
 #~ msgid "Apply only the profile embedded in the image file"
 #~ msgstr "僅套用嵌入在影像檔中的設定檔"

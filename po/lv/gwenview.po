@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-23 02:25+0000\n"
+"POT-Creation-Date: 2023-08-24 02:22+0000\n"
 "PO-Revision-Date: 2012-07-02 21:42+0300\n"
 "Last-Translator: Einars Sprugis <einars8@gmail.com>\n"
 "Language-Team: Latvian <locale@laka.lv>\n"
@@ -803,14 +803,8 @@ msgstr "Atgriezties uz orģinālu"
 msgid "&Rating"
 msgstr "&Vērtējums"
 
-#. i18n: ectx: Menu (settings)
-#: app/gwenviewui.rc:85
-#, kde-format
-msgid "&Settings"
-msgstr "Ie&statījumi"
-
 #. i18n: ectx: ToolBar (mainToolBar)
-#: app/gwenviewui.rc:101 part/gvpart.rc:16
+#: app/gwenviewui.rc:87 part/gvpart.rc:16
 #, kde-format
 msgid "Main Toolbar"
 msgstr "Galvenā rīkjosla"
@@ -2871,6 +2865,9 @@ msgstr "&Fails"
 #, kde-format
 msgid "&View"
 msgstr "&Skats"
+
+#~ msgid "&Settings"
+#~ msgstr "Ie&statījumi"
 
 #, fuzzy
 #~| msgid "Background color:"

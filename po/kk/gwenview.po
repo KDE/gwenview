@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-23 02:25+0000\n"
+"POT-Creation-Date: 2023-08-24 02:22+0000\n"
 "PO-Revision-Date: 2013-06-28 02:40+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -789,14 +789,8 @@ msgstr "Түпнұсқасына қайта өту"
 msgid "&Rating"
 msgstr "&Ұпайы"
 
-#. i18n: ectx: Menu (settings)
-#: app/gwenviewui.rc:85
-#, kde-format
-msgid "&Settings"
-msgstr "&Баптау"
-
 #. i18n: ectx: ToolBar (mainToolBar)
-#: app/gwenviewui.rc:101 part/gvpart.rc:16
+#: app/gwenviewui.rc:87 part/gvpart.rc:16
 #, kde-format
 msgid "Main Toolbar"
 msgstr "Негізгі құралдар панелі"
@@ -2813,6 +2807,9 @@ msgstr "&Көрініс"
 #, kde-format
 msgid "&View"
 msgstr "&Көрініс"
+
+#~ msgid "&Settings"
+#~ msgstr "&Баптау"
 
 #, fuzzy
 #~| msgid "Background color:"

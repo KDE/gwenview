@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KDE Frameworks 5 Applications\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-23 02:25+0000\n"
+"POT-Creation-Date: 2023-08-24 02:22+0000\n"
 "PO-Revision-Date: 2023-06-12 07:43+0700\n"
 "Last-Translator: Wantoyèk <wantoyek@gmail.com>\n"
 "Language-Team: Indonesian <kde-i18n-doc@kde.org>\n"
@@ -773,14 +773,8 @@ msgstr "Kembali ke aslinya"
 msgid "&Rating"
 msgstr "&Peringkat"
 
-#. i18n: ectx: Menu (settings)
-#: app/gwenviewui.rc:85
-#, kde-format
-msgid "&Settings"
-msgstr "Peng&aturan"
-
 #. i18n: ectx: ToolBar (mainToolBar)
-#: app/gwenviewui.rc:101 part/gvpart.rc:16
+#: app/gwenviewui.rc:87 part/gvpart.rc:16
 #, kde-format
 msgid "Main Toolbar"
 msgstr "Bilah Alat Utama"
@@ -2806,6 +2800,9 @@ msgstr "&File"
 #, kde-format
 msgid "&View"
 msgstr "&Tampilan"
+
+#~ msgid "&Settings"
+#~ msgstr "Peng&aturan"
 
 #~ msgid "Apply only the profile embedded in the image file"
 #~ msgstr "Terapkan hanya profil yang tertanam di dalam file citra"

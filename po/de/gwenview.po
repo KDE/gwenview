@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-23 02:25+0000\n"
+"POT-Creation-Date: 2023-08-24 02:22+0000\n"
 "PO-Revision-Date: 2023-06-12 00:16+0200\n"
 "Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -769,14 +769,8 @@ msgstr "Zurück zum Original gehen"
 msgid "&Rating"
 msgstr "&Bewertung"
 
-#. i18n: ectx: Menu (settings)
-#: app/gwenviewui.rc:85
-#, kde-format
-msgid "&Settings"
-msgstr "&Einstellungen"
-
 #. i18n: ectx: ToolBar (mainToolBar)
-#: app/gwenviewui.rc:101 part/gvpart.rc:16
+#: app/gwenviewui.rc:87 part/gvpart.rc:16
 #, kde-format
 msgid "Main Toolbar"
 msgstr "Haupt-Werkzeugleiste"
@@ -2806,6 +2800,9 @@ msgstr "&Datei"
 #, kde-format
 msgid "&View"
 msgstr "&Ansicht"
+
+#~ msgid "&Settings"
+#~ msgstr "&Einstellungen"
 
 #~ msgid "Apply only the profile embedded in the image file"
 #~ msgstr "Nur das eingebettete Profil in der Bilddatei anwenden"

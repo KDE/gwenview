@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-23 02:25+0000\n"
+"POT-Creation-Date: 2023-08-24 02:22+0000\n"
 "PO-Revision-Date: 2023-06-03 05:39+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -767,14 +767,8 @@ msgstr "საწყისზე დაბრუნება"
 msgid "&Rating"
 msgstr "&შეფასება"
 
-#. i18n: ectx: Menu (settings)
-#: app/gwenviewui.rc:85
-#, kde-format
-msgid "&Settings"
-msgstr "&პარამეტრები"
-
 #. i18n: ectx: ToolBar (mainToolBar)
-#: app/gwenviewui.rc:101 part/gvpart.rc:16
+#: app/gwenviewui.rc:87 part/gvpart.rc:16
 #, kde-format
 msgid "Main Toolbar"
 msgstr "ხელსაწყოთა მთავარი ზოლი"
@@ -2796,6 +2790,9 @@ msgstr "&ფაილი"
 #, kde-format
 msgid "&View"
 msgstr "&ხედი"
+
+#~ msgid "&Settings"
+#~ msgstr "&პარამეტრები"
 
 #~ msgid "Apply only the profile embedded in the image file"
 #~ msgstr "მხოლოდ გამოსახულების ფაილში ჩაშენებულ პროფილზე გადატარება"
