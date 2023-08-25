@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-24 00:43+0000\n"
-"PO-Revision-Date: 2023-08-18 06:10+0200\n"
+"PO-Revision-Date: 2023-08-24 05:06+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -2291,7 +2291,7 @@ msgstr ""
 "დაიკავოს, ჩართეთ <emphasis>პატარა გამოსახულებების გადიდება</emphasis> <link "
 "url='%2'>პარამეტრებში</link>.</item></list></para><para>თუ \"%1\" უკვე "
 "ჩართულია, მასზე კიდევ ერთხელ დაწოლა მას გამორთავს და გამოსახულება ისევ "
-"ნორმალური ზომით გამოჩნდება. </para><para>\"%1\" გადიდების ნაგულისხმები "
+"ნორმალური ზომით გამოჩნდება. </para><para>\"%1\" გადიდების ნაგულისხმევი "
 "რეჟიმია. ამისი შეცვლა, რათა გამოსახულებების გადიდების წინა დონეზე გამოჩნდეს, "
 "<link url='%2'>პარამეტრებში</link>შეგიძლიათ.</para>"
 
@@ -2684,7 +2684,7 @@ msgstr "გამოსახულების ზომის შეცვლ�
 #: lib/resize/resizeimagewidget.ui:20
 #, kde-format
 msgid "Estimated new file size:"
-msgstr ""
+msgstr "ახალი ფაილის დაახლოებითი ზომა:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: lib/resize/resizeimagewidget.ui:47
@@ -2708,10 +2708,9 @@ msgstr " px"
 
 #. i18n: ectx: property (text), widget (QLabel, mCurrentSizeLabel)
 #: lib/resize/resizeimagewidget.ui:115
-#, fuzzy, kde-format
-#| msgid "Current size:"
+#, kde-format
 msgid "Current file size:"
-msgstr "მიმდინარე ზომა:"
+msgstr "მიმდინარე ფაილის ზომა:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, mKeepAspectCheckBox)
 #: lib/resize/resizeimagewidget.ui:145
