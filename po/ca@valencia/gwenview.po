@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-24 00:43+0000\n"
-"PO-Revision-Date: 2023-08-04 09:51+0200\n"
+"PO-Revision-Date: 2023-08-23 10:49+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -2704,7 +2704,7 @@ msgstr "Redimensiona la imatge"
 #: lib/resize/resizeimagewidget.ui:20
 #, kde-format
 msgid "Estimated new file size:"
-msgstr ""
+msgstr "Mida estimada del fitxer nou:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: lib/resize/resizeimagewidget.ui:47
@@ -2728,10 +2728,9 @@ msgstr " px"
 
 #. i18n: ectx: property (text), widget (QLabel, mCurrentSizeLabel)
 #: lib/resize/resizeimagewidget.ui:115
-#, fuzzy, kde-format
-#| msgid "Current size:"
+#, kde-format
 msgid "Current file size:"
-msgstr "Mida actual:"
+msgstr "Mida actual del fitxer:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, mKeepAspectCheckBox)
 #: lib/resize/resizeimagewidget.ui:145
@@ -2815,6 +2814,3 @@ msgstr "Fi&txer"
 #, kde-format
 msgid "&View"
 msgstr "Vi&sualitza"
-
-#~ msgid "&Settings"
-#~ msgstr "Con&figuració"
