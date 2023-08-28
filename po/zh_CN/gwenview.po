@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-24 00:43+0000\n"
-"PO-Revision-Date: 2023-08-02 12:39\n"
+"PO-Revision-Date: 2023-08-27 03:40\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -1247,7 +1247,7 @@ msgstr "操作"
 #: app/mainwindow.cpp:942
 #, kde-format
 msgid "Viewing media"
-msgstr ""
+msgstr "正在查看媒体"
 
 #: app/mainwindow.cpp:1405
 #, kde-format
@@ -2606,7 +2606,7 @@ msgstr "调整图像大小"
 #: lib/resize/resizeimagewidget.ui:20
 #, kde-format
 msgid "Estimated new file size:"
-msgstr ""
+msgstr "新文件预计大小："
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: lib/resize/resizeimagewidget.ui:47
@@ -2630,10 +2630,9 @@ msgstr " 像素"
 
 #. i18n: ectx: property (text), widget (QLabel, mCurrentSizeLabel)
 #: lib/resize/resizeimagewidget.ui:115
-#, fuzzy, kde-format
-#| msgid "Current size:"
+#, kde-format
 msgid "Current file size:"
-msgstr "当前尺寸："
+msgstr "当前文件大小："
 
 #. i18n: ectx: property (text), widget (QCheckBox, mKeepAspectCheckBox)
 #: lib/resize/resizeimagewidget.ui:145
@@ -2717,6 +2716,3 @@ msgstr "文件(&F)"
 #, kde-format
 msgid "&View"
 msgstr "视图(&V)"
-
-#~ msgid "&Settings"
-#~ msgstr "设置(&S)"
