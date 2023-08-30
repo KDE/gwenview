@@ -41,6 +41,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KF
 #include <KDirModel>
 #include <KIconLoader>
+#include <KLocalizedString>
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 #include <KRatingPainter>
@@ -408,7 +409,7 @@ struct PreviewItemDelegatePrivate {
             QSize fullSize;
             QPixmap thumbnailPix = mView->thumbnailForIndex(index, &fullSize);
             if (fullSize.isValid()) {
-                const QString text = QStringLiteral("%1x%2").arg(fullSize.width()).arg(fullSize.height());
+                const QString text = i18nc("@item:intable %1 is image width, %2 is image height", "%1x%2", fullSize.width(), fullSize.height());
                 elided |= isTextElided(text);
                 textList << text;
             }
@@ -816,7 +817,7 @@ void PreviewItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &o
 
     if (!isDirOrArchive && (d->mDetails & PreviewItemDelegate::ImageSizeDetail)) {
         if (fullSize.isValid()) {
-            const QString text = QStringLiteral("%1x%2").arg(fullSize.width()).arg(fullSize.height());
+            const QString text = i18nc("@item:intable %1 is image width, %2 is image height", "%1x%2", fullSize.width(), fullSize.height());
             d->drawText(painter, textRect, fgColor, text);
             textRect.moveTop(textRect.bottom());
         }

@@ -4,6 +4,7 @@
 #include "zoomcombobox.h"
 #include "zoomcombobox_p.h"
 
+#include <KLocalizedString>
 #include <QAbstractItemView>
 #include <QAction>
 #include <QEvent>
@@ -294,8 +295,13 @@ qreal ZoomComboBox::valueFromText(const QString &text, bool *ok) const
     const QLocale l = locale();
     QString s = text;
     s.remove(l.groupSeparator());
+
     if (s.endsWith(l.percent())) {
         s = s.chopped(1);
+    }
+
+    if (s.startsWith(l.percent())) {
+        s = s.remove(0, 1);
     }
 
     return l.toDouble(s, ok) / 100.0;
@@ -308,7 +314,8 @@ QString ZoomComboBox::textFromValue(const qreal value) const
     QLocale l = locale();
     l.setNumberOptions(QLocale::OmitGroupSeparator);
 
-    return l.toString(qRound(value * 100)).append(l.percent());
+    QString formattedValue = l.toString(qRound(value * 100));
+    return i18nc("Percent value", "%1%", formattedValue);
 }
 
 void ZoomComboBox::updateDisplayedText()

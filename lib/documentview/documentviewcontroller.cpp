@@ -87,7 +87,7 @@ struct DocumentViewControllerPrivate {
         mActualSizeAction = view->addAction(KStandardAction::ActualSize);
         mActualSizeAction->setCheckable(true);
         mActualSizeAction->setIcon(QIcon::fromTheme(QStringLiteral("zoom-original")));
-        mActualSizeAction->setIconText(QLocale().toString(100).append(QLocale().percent()));
+        mActualSizeAction->setIconText(i18nc("Original image size percent value", "100%"));
 
         mZoomInAction = view->addAction(KStandardAction::ZoomIn);
         mZoomOutAction = view->addAction(KStandardAction::ZoomOut);

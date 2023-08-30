@@ -256,10 +256,12 @@ struct DocumentViewPrivate {
         caption = doc->url().fileName();
         QSize size = doc->size();
         if (size.isValid()) {
-            caption += QStringLiteral(" - %1x%2").arg(size.width()).arg(size.height());
+            caption += QStringLiteral(" - ");
+            caption += i18nc("@item:intable %1 is image width, %2 is image height", "%1x%2", size.width(), size.height());
             if (mAdapter->canZoom()) {
                 int intZoom = qRound(mAdapter->zoom() * 100);
-                caption += QStringLiteral(" - %1%").arg(intZoom);
+                caption += QStringLiteral(" - ");
+                caption += i18nc("Percent value", "%1%", intZoom);
             }
         }
         Q_EMIT q->captionUpdateRequested(caption);
