@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdegraphics-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-24 00:43+0000\n"
+"POT-Creation-Date: 2023-08-31 00:43+0000\n"
 "PO-Revision-Date: 2023-08-24 00:26+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -2242,12 +2242,28 @@ msgctxt "@action:button"
 msgid "Deselect"
 msgstr "Seçimi Kaldır"
 
-#: lib/documentview/documentview.cpp:541
+#: lib/documentview/documentview.cpp:260 lib/imagemetainfomodel.cpp:407
+#: lib/thumbnailview/previewitemdelegate.cpp:412
+#: lib/thumbnailview/previewitemdelegate.cpp:820
+#, kde-format
+msgctxt "@item:intable %1 is image width, %2 is image height"
+msgid "%1x%2"
+msgstr "%1 x %2"
+
+#: lib/documentview/documentview.cpp:264 lib/zoomcombobox/zoomcombobox.cpp:318
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip of custom toolbar button"
+#| msgid "%1"
+msgctxt "Percent value"
+msgid "%1%"
+msgstr "%1"
+
+#: lib/documentview/documentview.cpp:543
 #, kde-format
 msgid "Gwenview does not know how to display this kind of document"
 msgstr "Akbakış bu biçimdeki belgeleri nasıl göstereceğini bilmiyor"
 
-#: lib/documentview/documentview.cpp:647
+#: lib/documentview/documentview.cpp:649
 #, kde-kuit-format
 msgid "Loading <filename>%1</filename> failed"
 msgstr "<filename>%1</filename> dosyası yüklenemedi"
@@ -2313,6 +2329,12 @@ msgctxt ""
 "it short please"
 msgid "Fill"
 msgstr "Doldur"
+
+#: lib/documentview/documentviewcontroller.cpp:90
+#, kde-format
+msgctxt "Original image size percent value"
+msgid "100%"
+msgstr ""
 
 #: lib/documentview/documentviewcontroller.cpp:98
 #, kde-format
@@ -2527,12 +2549,6 @@ msgstr "Açıklama"
 msgctxt "@title:group General info about the image"
 msgid "General"
 msgstr "Genel"
-
-#: lib/imagemetainfomodel.cpp:407
-#, kde-format
-msgctxt "@item:intable %1 is image width, %2 is image height"
-msgid "%1x%2"
-msgstr "%1 x %2"
 
 #: lib/imagemetainfomodel.cpp:413
 #, kde-format

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-24 00:43+0000\n"
+"POT-Creation-Date: 2023-08-31 00:43+0000\n"
 "PO-Revision-Date: 2023-08-23 10:49+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -2252,12 +2252,28 @@ msgctxt "@action:button"
 msgid "Deselect"
 msgstr "Desselecciona"
 
-#: lib/documentview/documentview.cpp:541
+#: lib/documentview/documentview.cpp:260 lib/imagemetainfomodel.cpp:407
+#: lib/thumbnailview/previewitemdelegate.cpp:412
+#: lib/thumbnailview/previewitemdelegate.cpp:820
+#, kde-format
+msgctxt "@item:intable %1 is image width, %2 is image height"
+msgid "%1x%2"
+msgstr "%1x%2"
+
+#: lib/documentview/documentview.cpp:264 lib/zoomcombobox/zoomcombobox.cpp:318
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip of custom toolbar button"
+#| msgid "%1"
+msgctxt "Percent value"
+msgid "%1%"
+msgstr "%1"
+
+#: lib/documentview/documentview.cpp:543
 #, kde-format
 msgid "Gwenview does not know how to display this kind of document"
 msgstr "Gwenview no sap com visualitzar esta classe de document"
 
-#: lib/documentview/documentview.cpp:647
+#: lib/documentview/documentview.cpp:649
 #, kde-kuit-format
 msgid "Loading <filename>%1</filename> failed"
 msgstr "Ha fallat la càrrega de <filename>%1</filename>"
@@ -2324,6 +2340,12 @@ msgctxt ""
 "it short please"
 msgid "Fill"
 msgstr "Òmpliga"
+
+#: lib/documentview/documentviewcontroller.cpp:90
+#, kde-format
+msgctxt "Original image size percent value"
+msgid "100%"
+msgstr ""
 
 #: lib/documentview/documentviewcontroller.cpp:98
 #, kde-format
@@ -2548,12 +2570,6 @@ msgstr "Comentari"
 msgctxt "@title:group General info about the image"
 msgid "General"
 msgstr "General"
-
-#: lib/imagemetainfomodel.cpp:407
-#, kde-format
-msgctxt "@item:intable %1 is image width, %2 is image height"
-msgid "%1x%2"
-msgstr "%1x%2"
 
 #: lib/imagemetainfomodel.cpp:413
 #, kde-format

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-24 00:43+0000\n"
+"POT-Creation-Date: 2023-08-31 00:43+0000\n"
 "PO-Revision-Date: 2012-07-13 22:35+0530\n"
 "Last-Translator: Deepayan Sarkar <deepayan.sarkar@gmail.com>\n"
 "Language-Team: American English <kde-translation@bengalinux.org>\n"
@@ -2259,12 +2259,28 @@ msgctxt "@action:button"
 msgid "Deselect"
 msgstr "অ-নির্বাচন করো"
 
-#: lib/documentview/documentview.cpp:541
+#: lib/documentview/documentview.cpp:260 lib/imagemetainfomodel.cpp:407
+#: lib/thumbnailview/previewitemdelegate.cpp:412
+#: lib/thumbnailview/previewitemdelegate.cpp:820
+#, kde-format
+msgctxt "@item:intable %1 is image width, %2 is image height"
+msgid "%1x%2"
+msgstr "%1x%2"
+
+#: lib/documentview/documentview.cpp:264 lib/zoomcombobox/zoomcombobox.cpp:318
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip of custom toolbar button"
+#| msgid "%1"
+msgctxt "Percent value"
+msgid "%1%"
+msgstr "%1"
+
+#: lib/documentview/documentview.cpp:543
 #, kde-format
 msgid "Gwenview does not know how to display this kind of document"
 msgstr ""
 
-#: lib/documentview/documentview.cpp:647
+#: lib/documentview/documentview.cpp:649
 #, fuzzy, kde-kuit-format
 #| msgctxt ""
 #| "@info %1 is the name of the document which failed to save, %2 is the "
@@ -2326,6 +2342,16 @@ msgctxt ""
 "it short please"
 msgid "Fill"
 msgstr ""
+
+#: lib/documentview/documentviewcontroller.cpp:90
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "@action:button Zoom to original size, shown in status bar, keep it short "
+#| "please"
+#| msgid "100%"
+msgctxt "Original image size percent value"
+msgid "100%"
+msgstr "100%"
 
 #: lib/documentview/documentviewcontroller.cpp:98
 #, kde-format
@@ -2518,12 +2544,6 @@ msgstr "মন্তব্য"
 msgctxt "@title:group General info about the image"
 msgid "General"
 msgstr "সাধারণ"
-
-#: lib/imagemetainfomodel.cpp:407
-#, kde-format
-msgctxt "@item:intable %1 is image width, %2 is image height"
-msgid "%1x%2"
-msgstr "%1x%2"
 
 #: lib/imagemetainfomodel.cpp:413
 #, kde-format
@@ -2850,12 +2870,6 @@ msgstr "ভি&উ"
 #~ msgctxt "@title:menu"
 #~ msgid "Collections"
 #~ msgstr "সংগ্রহ"
-
-#~ msgctxt ""
-#~ "@action:button Zoom to original size, shown in status bar, keep it short "
-#~ "please"
-#~ msgid "100%"
-#~ msgstr "100%"
 
 #~ msgid "Gwenview KPart"
 #~ msgstr "গোয়েন-ভিউ কে-পার্ট"

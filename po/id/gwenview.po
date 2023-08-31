@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KDE Frameworks 5 Applications\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-24 00:43+0000\n"
+"POT-Creation-Date: 2023-08-31 00:43+0000\n"
 "PO-Revision-Date: 2023-06-12 07:43+0700\n"
 "Last-Translator: Wantoyèk <wantoyek@gmail.com>\n"
 "Language-Team: Indonesian <kde-i18n-doc@kde.org>\n"
@@ -2242,12 +2242,28 @@ msgctxt "@action:button"
 msgid "Deselect"
 msgstr "Batalkan pilihan"
 
-#: lib/documentview/documentview.cpp:541
+#: lib/documentview/documentview.cpp:260 lib/imagemetainfomodel.cpp:407
+#: lib/thumbnailview/previewitemdelegate.cpp:412
+#: lib/thumbnailview/previewitemdelegate.cpp:820
+#, kde-format
+msgctxt "@item:intable %1 is image width, %2 is image height"
+msgid "%1x%2"
+msgstr "%1x%2"
+
+#: lib/documentview/documentview.cpp:264 lib/zoomcombobox/zoomcombobox.cpp:318
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip of custom toolbar button"
+#| msgid "%1"
+msgctxt "Percent value"
+msgid "%1%"
+msgstr "%1"
+
+#: lib/documentview/documentview.cpp:543
 #, kde-format
 msgid "Gwenview does not know how to display this kind of document"
 msgstr "Gwenview tidak tahu bagaimana menampilkan dokumen jenis ini"
 
-#: lib/documentview/documentview.cpp:647
+#: lib/documentview/documentview.cpp:649
 #, kde-kuit-format
 msgid "Loading <filename>%1</filename> failed"
 msgstr "Pemuatan <filename>%1</filename> gagal"
@@ -2313,6 +2329,16 @@ msgctxt ""
 "it short please"
 msgid "Fill"
 msgstr "Isikan"
+
+#: lib/documentview/documentviewcontroller.cpp:90
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "@action:button Zoom to original size, shown in status bar, keep it short "
+#| "please"
+#| msgid "100%"
+msgctxt "Original image size percent value"
+msgid "100%"
+msgstr "100%"
 
 #: lib/documentview/documentviewcontroller.cpp:98
 #, kde-format
@@ -2538,12 +2564,6 @@ msgstr "Komentar"
 msgctxt "@title:group General info about the image"
 msgid "General"
 msgstr "Umum"
-
-#: lib/imagemetainfomodel.cpp:407
-#, kde-format
-msgctxt "@item:intable %1 is image width, %2 is image height"
-msgid "%1x%2"
-msgstr "%1x%2"
 
 #: lib/imagemetainfomodel.cpp:413
 #, kde-format
@@ -2895,12 +2915,6 @@ msgstr "&Tampilan"
 
 #~ msgid "Thumbnail Bar"
 #~ msgstr "Bar Gambar-mini"
-
-#~ msgctxt ""
-#~ "@action:button Zoom to original size, shown in status bar, keep it short "
-#~ "please"
-#~ msgid "100%"
-#~ msgstr "100%"
 
 #~ msgid "Gwenview KPart"
 #~ msgstr "KPart Gwenview"
