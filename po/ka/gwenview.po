@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-31 00:43+0000\n"
-"PO-Revision-Date: 2023-08-24 05:06+0200\n"
+"PO-Revision-Date: 2023-09-01 07:09+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -2245,12 +2245,10 @@ msgid "%1x%2"
 msgstr "%1x%2"
 
 #: lib/documentview/documentview.cpp:264 lib/zoomcombobox/zoomcombobox.cpp:318
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip of custom toolbar button"
-#| msgid "%1"
+#, kde-format
 msgctxt "Percent value"
 msgid "%1%"
-msgstr "%1"
+msgstr "%1%"
 
 #: lib/documentview/documentview.cpp:543
 #, kde-format
@@ -2328,7 +2326,7 @@ msgstr "შევსება"
 #, kde-format
 msgctxt "Original image size percent value"
 msgid "100%"
-msgstr ""
+msgstr "100%"
 
 #: lib/documentview/documentviewcontroller.cpp:98
 #, kde-format
