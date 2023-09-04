@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-31 00:43+0000\n"
-"PO-Revision-Date: 2023-08-26 04:17+0200\n"
+"PO-Revision-Date: 2023-09-03 10:20+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -1335,7 +1335,7 @@ msgstr "Se sae agora esqueceranse os cambios."
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr ""
-"Isto agocha completamente a barra do menú. Pódese amosar de novo escribindo "
+"Isto agocha completamente a barra de menú. Pódese amosar de novo escribindo "
 "%1."
 
 #: app/mainwindow.cpp:1849
@@ -2265,12 +2265,10 @@ msgid "%1x%2"
 msgstr "%1x%2"
 
 #: lib/documentview/documentview.cpp:264 lib/zoomcombobox/zoomcombobox.cpp:318
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip of custom toolbar button"
-#| msgid "%1"
+#, kde-format
 msgctxt "Percent value"
 msgid "%1%"
-msgstr "%1"
+msgstr "%1%"
 
 #: lib/documentview/documentview.cpp:543
 #, kde-format
@@ -2345,11 +2343,7 @@ msgid "Fill"
 msgstr "Encher"
 
 #: lib/documentview/documentviewcontroller.cpp:90
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "@action:button Zoom to original size, shown in status bar, keep it short "
-#| "please"
-#| msgid "100%"
+#, kde-format
 msgctxt "Original image size percent value"
 msgid "100%"
 msgstr "100%"
