@@ -253,9 +253,13 @@ struct ImageMetaInfoModelPrivate {
         MetaInfoGroup *group = mMetaInfoGroupVector[GeneralGroup];
         group->addEntry(QStringLiteral("General.Name"), i18nc("@item:intable Image file name", "Name"), QString());
         group->addEntry(QStringLiteral("General.Size"), i18nc("@item:intable", "File Size"), QString());
-        group->addEntry(QStringLiteral("General.Time"), i18nc("@item:intable", "File Time"), QString());
+        group->addEntry(QStringLiteral("General.Created"), i18nc("@item:intable", "Date Created"), QString());
+        group->addEntry(QStringLiteral("General.Modified"), i18nc("@item:intable", "Date Modified"), QString());
+        group->addEntry(QStringLiteral("General.Accessed"), i18nc("@item:intable", "Date Accessed"), QString());
+        group->addEntry(QStringLiteral("General.LocalPath"), i18nc("@item:intable", "Path"), QString());
         group->addEntry(QStringLiteral("General.ImageSize"), i18nc("@item:intable", "Image Size"), QString());
         group->addEntry(QStringLiteral("General.Comment"), i18nc("@item:intable", "Comment"), QString());
+        group->addEntry(QStringLiteral("General.MimeType"), i18nc("@item:intable", "File Type"), QString());
     }
 
     template<class Container, class Iterator>
@@ -333,15 +337,44 @@ ImageMetaInfoModel::~ImageMetaInfoModel()
     delete d;
 }
 
+static QString formatFileTime(const KFileItem &item, const KFileItem::FileTimes timeType)
+{
+    return QLocale().toString(item.time(timeType), QLocale::LongFormat);
+}
+
+void ImageMetaInfoModel::setDates(const QUrl &url)
+{
+    KFileItem item(url);
+    const QString modifiedString = formatFileTime(item, KFileItem::ModificationTime);
+    const QString accessString = formatFileTime(item, KFileItem::AccessTime);
+    const QString createdString = formatFileTime(item, KFileItem::CreationTime);
+
+    d->setGroupEntryValue(GeneralGroup, QStringLiteral("General.Created"), createdString);
+    d->setGroupEntryValue(GeneralGroup, QStringLiteral("General.Modified"), modifiedString);
+    d->setGroupEntryValue(GeneralGroup, QStringLiteral("General.Accessed"), accessString);
+}
+
+void ImageMetaInfoModel::setMimeType(const QUrl &url)
+{
+    KFileItem item(url);
+
+    d->setGroupEntryValue(GeneralGroup, QStringLiteral("General.MimeType"), item.mimetype());
+}
+
+void ImageMetaInfoModel::setFileSize(const QUrl &url)
+{
+    KFileItem item(url);
+
+    d->setGroupEntryValue(GeneralGroup, QStringLiteral("General.Size"), KIO::convertSize(item.size()));
+}
+
 void ImageMetaInfoModel::setUrl(const QUrl &url)
 {
     KFileItem item(url);
-    const QString sizeString = KIO::convertSize(item.size());
-    const QString timeString = QLocale().toString(item.time(KFileItem::ModificationTime), QLocale::LongFormat);
+    const QString localPathString = item.localPath();
 
     d->setGroupEntryValue(GeneralGroup, QStringLiteral("General.Name"), item.name());
-    d->setGroupEntryValue(GeneralGroup, QStringLiteral("General.Size"), sizeString);
-    d->setGroupEntryValue(GeneralGroup, QStringLiteral("General.Time"), timeString);
+    d->setGroupEntryValue(GeneralGroup, QStringLiteral("General.LocalPath"), localPathString);
 
 #ifdef HAVE_FITS
     if (UrlUtils::urlIsFastLocalFile(url)

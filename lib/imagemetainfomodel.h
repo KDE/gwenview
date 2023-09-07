@@ -48,6 +48,9 @@ public:
     ~ImageMetaInfoModel() override;
 
     void setUrl(const QUrl &);
+    void setMimeType(const QUrl &);
+    void setFileSize(const QUrl &);
+    void setDates(const QUrl &);
     void setImageSize(const QSize &);
     void setExiv2Image(const Exiv2::Image *);
 

@@ -176,6 +176,9 @@ void Document::reload()
     d->mKind = MimeTypeUtils::KIND_UNKNOWN;
     d->mFormat = QByteArray();
     d->mImageMetaInfoModel.setUrl(d->mUrl);
+    d->mImageMetaInfoModel.setDates(d->mUrl);
+    d->mImageMetaInfoModel.setMimeType(d->mUrl);
+    d->mImageMetaInfoModel.setFileSize(d->mUrl);
     d->mUndoStack.clear();
     d->mErrorString.clear();
     d->mCmsProfile = nullptr;
@@ -314,6 +317,8 @@ void Document::slotSaveResult(KJob *job)
         auto saveJob = static_cast<SaveJob *>(job);
         d->mUrl = saveJob->newUrl();
         d->mImageMetaInfoModel.setUrl(d->mUrl);
+        d->mImageMetaInfoModel.setDates(d->mUrl);
+        d->mImageMetaInfoModel.setFileSize(d->mUrl);
         Q_EMIT saved(saveJob->oldUrl(), d->mUrl);
     }
 }
