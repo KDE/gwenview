@@ -567,6 +567,16 @@ QString GvCore::fullScreenPaletteName() const
     return d->mFullScreenPaletteName;
 }
 
+void GvCore::setTrackFileManagerSorting(bool enable)
+{
+    sortingTracksFileManager = enable;
+}
+
+bool GvCore::trackFileManagerSorting()
+{
+    return sortingTracksFileManager;
+}
+
 } // namespace
 
 #include "moc_gvcore.cpp"

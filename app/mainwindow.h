@@ -153,6 +153,7 @@ private:
     void mouseButtonNavigate(QMouseEvent *);
 
     void folderViewUrlChanged(const QUrl &url);
+    void syncSortOrder(const QUrl &url);
 };
 
 } // namespace

@@ -510,6 +510,7 @@ void BrowseMainPage::updateSortOrder()
 
     d->mDirModel->setSortRole(sortRole);
     d->mDirModel->sort(column, order);
+    d->mGvCore->setTrackFileManagerSorting(false);
 }
 
 void BrowseMainPage::updateThumbnailDetails()

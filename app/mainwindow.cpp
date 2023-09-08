@@ -1141,54 +1141,8 @@ void MainWindow::setInitialUrl(const QUrl &_url)
 {
     Q_ASSERT(_url.isValid());
     QUrl url = UrlUtils::fixUserEnteredUrl(_url);
-#ifdef HAVE_QTDBUS
-    QDBusMessage message = QDBusMessage::createMethodCall(QStringLiteral("org.freedesktop.FileManager1"),
-                                                          QStringLiteral("/org/freedesktop/FileManager1"),
-                                                          QStringLiteral("org.freedesktop.FileManager1"),
-                                                          QStringLiteral("SortOrderForUrl"));
-
-    QUrl dirUrl = url;
-    dirUrl = dirUrl.adjusted(QUrl::RemoveFilename);
-    message << dirUrl.toString();
-
-    QDBusPendingCall call = QDBusConnection::sessionBus().asyncCall(message);
-    auto watcher = new QDBusPendingCallWatcher(call, this);
-
-    connect(watcher, &QDBusPendingCallWatcher::finished, this, [this](QDBusPendingCallWatcher *call) {
-        QDBusPendingReply<QString, QString> reply = *call;
-        // Fail silently
-        if (!reply.isError()) {
-            QString columnName = reply.argumentAt<0>();
-            QString orderName = reply.argumentAt<1>();
-
-            int column = -1;
-            int sortRole = -1;
-            Qt::SortOrder order = orderName == QStringLiteral("descending") ? Qt::DescendingOrder : Qt::AscendingOrder;
-
-            if (columnName == "text") {
-                column = KDirModel::Name;
-                sortRole = Qt::DisplayRole;
-            } else if (columnName == "modificationtime") {
-                column = KDirModel::ModifiedTime;
-                sortRole = Qt::DisplayRole;
-            } else if (columnName == "size") {
-                column = KDirModel::Size;
-                sortRole = Qt::DisplayRole;
-#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-            } else if (columnName == "rating") {
-                column = KDirModel::Name;
-                sortRole = SemanticInfoDirModel::RatingRole;
-#endif
-            }
-
-            if (column >= 0 && sortRole >= 0) {
-                d->mDirModel->setSortRole(sortRole);
-                d->mDirModel->sort(column, order);
-            }
-        }
-        call->deleteLater();
-    });
-#endif
+    d->mGvCore->setTrackFileManagerSorting(true);
+    syncSortOrder(url);
 
     if (UrlUtils::urlIsDirectory(url)) {
         d->mBrowseAction->trigger();
@@ -1244,6 +1198,7 @@ void MainWindow::slotThumbnailViewIndexActivated(const QModelIndex &index)
     }
 
     KFileItem item = d->mDirModel->itemForIndex(index);
+    syncSortOrder(item.url());
     if (item.isDir()) {
         // Item is a dir, open it
         openDirUrl(item.url());
@@ -1390,6 +1345,66 @@ void MainWindow::folderViewUrlChanged(const QUrl &url)
     } else {
         openDirUrl(url);
     }
+}
+
+void MainWindow::syncSortOrder(const QUrl &url)
+{
+    if (!d->mGvCore->trackFileManagerSorting()) {
+        return;
+    }
+
+#ifdef HAVE_QTDBUS
+    QDBusMessage message = QDBusMessage::createMethodCall(QStringLiteral("org.freedesktop.FileManager1"),
+                                                          QStringLiteral("/org/freedesktop/FileManager1"),
+                                                          QStringLiteral("org.freedesktop.FileManager1"),
+                                                          QStringLiteral("SortOrderForUrl"));
+
+    QUrl dirUrl = url;
+    dirUrl = dirUrl.adjusted(QUrl::RemoveFilename);
+    message << dirUrl.toString();
+
+    QDBusPendingCall call = QDBusConnection::sessionBus().asyncCall(message);
+    auto watcher = new QDBusPendingCallWatcher(call, this);
+
+    connect(watcher, &QDBusPendingCallWatcher::finished, this, [this](QDBusPendingCallWatcher *call) {
+        QDBusPendingReply<QString, QString> reply = *call;
+        // Fail silently
+        if (!reply.isError()) {
+            QString columnName = reply.argumentAt<0>();
+            QString orderName = reply.argumentAt<1>();
+
+            int column = -1;
+            int sortRole = -1;
+            Qt::SortOrder order = orderName == QStringLiteral("descending") ? Qt::DescendingOrder : Qt::AscendingOrder;
+
+            if (columnName == "text") {
+                column = KDirModel::Name;
+                sortRole = Qt::DisplayRole;
+                qCDebug(GWENVIEW_APP_LOG) << "Sorting according to file manager: text";
+            } else if (columnName == "modificationtime") {
+                column = KDirModel::ModifiedTime;
+                sortRole = Qt::DisplayRole;
+                qCDebug(GWENVIEW_APP_LOG) << "Sorting according to file manager: modtime";
+            } else if (columnName == "size") {
+                column = KDirModel::Size;
+                sortRole = Qt::DisplayRole;
+                qCDebug(GWENVIEW_APP_LOG) << "Sorting according to file manager: size";
+#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
+            } else if (columnName == "rating") {
+                column = KDirModel::Name;
+                sortRole = SemanticInfoDirModel::RatingRole;
+                qCDebug(GWENVIEW_APP_LOG) << "Sorting according to file manager: rating";
+#endif
+            }
+
+            if (column >= 0 && sortRole >= 0) {
+                d->mDirModel->setSortRole(sortRole);
+                d->mDirModel->sort(column, order);
+            }
+        }
+        call->deleteLater();
+    });
+#endif
 }
 
 void MainWindow::toggleSideBar(bool visible)

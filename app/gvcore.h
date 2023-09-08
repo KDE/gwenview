@@ -68,6 +68,10 @@ public:
     QPalette palette(PaletteType type) const;
     QString fullScreenPaletteName() const;
 
+    void setTrackFileManagerSorting(bool enable);
+    /// Whether the file listing should follow the filemanager (i.e dolphin) sorting for this folder, default to false
+    bool trackFileManagerSorting();
+
 public Q_SLOTS:
     void saveAll();
     void save(const QUrl &);
@@ -82,6 +86,7 @@ private Q_SLOTS:
 
 private:
     GvCorePrivate *const d;
+    bool sortingTracksFileManager = false;
 };
 
 } // namespace
