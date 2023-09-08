@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-31 00:43+0000\n"
+"POT-Creation-Date: 2023-09-08 00:43+0000\n"
 "PO-Revision-Date: 2008-08-05 22:27+0200\n"
 "Last-Translator: Yannig Marchegay (Kokoyaya) <yannig@marchegay.org>\n"
 "Language-Team: Occitan (lengadocian) <ubuntu-l10n-oci@lists.ubuntu.com>\n"
@@ -2242,7 +2242,7 @@ msgctxt "@option:check"
 msgid "Preserve aspect ratio"
 msgstr "Operacions suls fichièrs"
 
-#: lib/document/document.cpp:298
+#: lib/document/document.cpp:301
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot save this kind of documents."
@@ -2308,7 +2308,7 @@ msgctxt "@action:button"
 msgid "Deselect"
 msgstr "Suprimir"
 
-#: lib/documentview/documentview.cpp:260 lib/imagemetainfomodel.cpp:407
+#: lib/documentview/documentview.cpp:260 lib/imagemetainfomodel.cpp:440
 #: lib/thumbnailview/previewitemdelegate.cpp:412
 #: lib/thumbnailview/previewitemdelegate.cpp:820
 #, kde-format
@@ -2563,40 +2563,66 @@ msgstr "Nom de fichièr"
 #: lib/imagemetainfomodel.cpp:256
 #, kde-format
 msgctxt "@item:intable"
-msgid "File Time"
+msgid "Date Created"
 msgstr ""
 
 #: lib/imagemetainfomodel.cpp:257
 #, kde-format
 msgctxt "@item:intable"
+msgid "Date Modified"
+msgstr ""
+
+#: lib/imagemetainfomodel.cpp:258
+#, kde-format
+msgctxt "@item:intable"
+msgid "Date Accessed"
+msgstr ""
+
+#: lib/imagemetainfomodel.cpp:259
+#, kde-format
+msgctxt "@item:intable"
+msgid "Path"
+msgstr ""
+
+#: lib/imagemetainfomodel.cpp:260
+#, kde-format
+msgctxt "@item:intable"
 msgid "Image Size"
 msgstr "Talha d'imatge"
 
-#: lib/imagemetainfomodel.cpp:258
+#: lib/imagemetainfomodel.cpp:261
 #, kde-format
 msgctxt "@item:intable"
 msgid "Comment"
 msgstr ""
 
-#: lib/imagemetainfomodel.cpp:320
+#: lib/imagemetainfomodel.cpp:262
+#, fuzzy, kde-format
+#| msgctxt "@item:intable"
+#| msgid "File Size"
+msgctxt "@item:intable"
+msgid "File Type"
+msgstr "Nom de fichièr"
+
+#: lib/imagemetainfomodel.cpp:324
 #, kde-format
 msgctxt "@title:group General info about the image"
 msgid "General"
 msgstr "General"
 
-#: lib/imagemetainfomodel.cpp:413
+#: lib/imagemetainfomodel.cpp:446
 #, kde-format
 msgctxt "@item:intable %1 is number of millions of pixels in image"
 msgid "(%1MP)"
 msgstr ""
 
-#: lib/imagemetainfomodel.cpp:564
+#: lib/imagemetainfomodel.cpp:597
 #, kde-format
 msgctxt "@title:column"
 msgid "Property"
 msgstr "Propietat"
 
-#: lib/imagemetainfomodel.cpp:566
+#: lib/imagemetainfomodel.cpp:599
 #, kde-format
 msgctxt "@title:column"
 msgid "Value"

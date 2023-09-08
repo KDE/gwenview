@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-31 00:43+0000\n"
+"POT-Creation-Date: 2023-09-08 00:43+0000\n"
 "PO-Revision-Date: 2022-02-10 12:40+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -2202,7 +2202,7 @@ msgctxt "@option:check"
 msgid "Preserve aspect ratio"
 msgstr "फ़ाइल प्रक्रियाएँ"
 
-#: lib/document/document.cpp:298
+#: lib/document/document.cpp:301
 #, fuzzy, kde-format
 #| msgid "Gwenview can't save images in '%1' format."
 msgctxt "@info"
@@ -2272,7 +2272,7 @@ msgctxt "@action:button"
 msgid "Deselect"
 msgstr "मिटाएँ"
 
-#: lib/documentview/documentview.cpp:260 lib/imagemetainfomodel.cpp:407
+#: lib/documentview/documentview.cpp:260 lib/imagemetainfomodel.cpp:440
 #: lib/thumbnailview/previewitemdelegate.cpp:412
 #: lib/thumbnailview/previewitemdelegate.cpp:820
 #, fuzzy, kde-format
@@ -2527,47 +2527,73 @@ msgid "File Size"
 msgstr "फ़ाइल आकार"
 
 #: lib/imagemetainfomodel.cpp:256
-#, fuzzy, kde-format
-#| msgid "File Time"
+#, kde-format
 msgctxt "@item:intable"
-msgid "File Time"
-msgstr "फ़ाइल समय"
+msgid "Date Created"
+msgstr ""
 
 #: lib/imagemetainfomodel.cpp:257
+#, fuzzy, kde-format
+#| msgid "One image modified"
+#| msgid_plural "%1 images modified"
+msgctxt "@item:intable"
+msgid "Date Modified"
+msgstr "%1 छवियाँ परिवर्धित"
+
+#: lib/imagemetainfomodel.cpp:258
+#, kde-format
+msgctxt "@item:intable"
+msgid "Date Accessed"
+msgstr ""
+
+#: lib/imagemetainfomodel.cpp:259
+#, kde-format
+msgctxt "@item:intable"
+msgid "Path"
+msgstr ""
+
+#: lib/imagemetainfomodel.cpp:260
 #, fuzzy, kde-format
 #| msgid "Image Size"
 msgctxt "@item:intable"
 msgid "Image Size"
 msgstr "छवि आकार"
 
-#: lib/imagemetainfomodel.cpp:258
+#: lib/imagemetainfomodel.cpp:261
 #, kde-format
 msgctxt "@item:intable"
 msgid "Comment"
 msgstr ""
 
-#: lib/imagemetainfomodel.cpp:320
+#: lib/imagemetainfomodel.cpp:262
+#, fuzzy, kde-format
+#| msgid "File Time"
+msgctxt "@item:intable"
+msgid "File Type"
+msgstr "फ़ाइल समय"
+
+#: lib/imagemetainfomodel.cpp:324
 #, fuzzy, kde-format
 #| msgid "General"
 msgctxt "@title:group General info about the image"
 msgid "General"
 msgstr "सामान्य"
 
-#: lib/imagemetainfomodel.cpp:413
+#: lib/imagemetainfomodel.cpp:446
 #, fuzzy, kde-format
 #| msgid "(%1MP)"
 msgctxt "@item:intable %1 is number of millions of pixels in image"
 msgid "(%1MP)"
 msgstr "(%1मेपि)"
 
-#: lib/imagemetainfomodel.cpp:564
+#: lib/imagemetainfomodel.cpp:597
 #, fuzzy, kde-format
 #| msgid "Property"
 msgctxt "@title:column"
 msgid "Property"
 msgstr "गुण"
 
-#: lib/imagemetainfomodel.cpp:566
+#: lib/imagemetainfomodel.cpp:599
 #, fuzzy, kde-format
 #| msgid "Value"
 msgctxt "@title:column"
