@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-08 00:43+0000\n"
+"POT-Creation-Date: 2023-09-09 00:43+0000\n"
 "PO-Revision-Date: 2014-09-28 22:46-0700\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -1296,101 +1296,101 @@ msgstr "操作"
 msgid "Viewing media"
 msgstr ""
 
-#: app/mainwindow.cpp:1405
+#: app/mainwindow.cpp:1420
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "サイドバーを隱す"
 
-#: app/mainwindow.cpp:1405
+#: app/mainwindow.cpp:1420
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "サイドバーを表示"
 
-#: app/mainwindow.cpp:1712
+#: app/mainwindow.cpp:1727
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "画像を開く"
 
-#: app/mainwindow.cpp:1772
+#: app/mainwindow.cpp:1787
 #, fuzzy, kde-format
 #| msgid "Slideshow"
 msgid "Pause Slideshow"
 msgstr "スライドショー"
 
-#: app/mainwindow.cpp:1775
+#: app/mainwindow.cpp:1790
 #, fuzzy, kde-format
 #| msgid "Slideshow"
 msgid "Resume Slideshow"
 msgstr "スライドショー"
 
-#: app/mainwindow.cpp:1775
+#: app/mainwindow.cpp:1790
 #, kde-format
 msgid "Start Slideshow"
 msgstr "スライドショーを開始"
 
-#: app/mainwindow.cpp:1788
+#: app/mainwindow.cpp:1803
 #, kde-format
 msgid "Save All Changes"
 msgstr "すべての変更を保存"
 
-#: app/mainwindow.cpp:1789
+#: app/mainwindow.cpp:1804
 #, kde-format
 msgid "Discard Changes"
 msgstr "変更を破棄"
 
-#: app/mainwindow.cpp:1791
+#: app/mainwindow.cpp:1806
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "%1 個の画像が変更されています。"
 
-#: app/mainwindow.cpp:1791
+#: app/mainwindow.cpp:1806
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "今終了すると変更は失われます。"
 
-#: app/mainwindow.cpp:1846
+#: app/mainwindow.cpp:1861
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr ""
 
-#: app/mainwindow.cpp:1849
+#: app/mainwindow.cpp:1864
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Hide sidebar"
 msgid "Hide menu bar"
 msgstr "サイドバーを隱す"
 
-#: app/mainwindow.cpp:2069
+#: app/mainwindow.cpp:2084
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr ""
 
-#: app/mainwindow.cpp:2070 app/mainwindow.cpp:2084
+#: app/mainwindow.cpp:2085 app/mainwindow.cpp:2099
 #, kde-format
 msgid "Stay There"
 msgstr ""
 
-#: app/mainwindow.cpp:2071
+#: app/mainwindow.cpp:2086
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "最後の文書に移動"
 
-#: app/mainwindow.cpp:2072 app/mainwindow.cpp:2086
+#: app/mainwindow.cpp:2087 app/mainwindow.cpp:2101
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "文書一覧に戻る"
 
-#: app/mainwindow.cpp:2083
+#: app/mainwindow.cpp:2098
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr ""
 
-#: app/mainwindow.cpp:2085
+#: app/mainwindow.cpp:2100
 #, kde-format
 msgid "Go to the First Document"
 msgstr "最初の文書に移動"

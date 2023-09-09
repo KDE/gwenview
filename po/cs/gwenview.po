@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-08 00:43+0000\n"
+"POT-Creation-Date: 2023-09-09 00:43+0000\n"
 "PO-Revision-Date: 2023-08-07 11:44+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -1263,50 +1263,50 @@ msgstr "Operace"
 msgid "Viewing media"
 msgstr "Prohlížím média"
 
-#: app/mainwindow.cpp:1405
+#: app/mainwindow.cpp:1420
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Skrýt postranní panel"
 
-#: app/mainwindow.cpp:1405
+#: app/mainwindow.cpp:1420
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Zobrazit postranní panel"
 
-#: app/mainwindow.cpp:1712
+#: app/mainwindow.cpp:1727
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Otevřít obrázek"
 
-#: app/mainwindow.cpp:1772
+#: app/mainwindow.cpp:1787
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "Pozastavit prezentaci"
 
-#: app/mainwindow.cpp:1775
+#: app/mainwindow.cpp:1790
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "Pokračovat v prezentaci"
 
-#: app/mainwindow.cpp:1775
+#: app/mainwindow.cpp:1790
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Spustit promítání"
 
-#: app/mainwindow.cpp:1788
+#: app/mainwindow.cpp:1803
 #, kde-format
 msgid "Save All Changes"
 msgstr "Uložit všechny změny"
 
-#: app/mainwindow.cpp:1789
+#: app/mainwindow.cpp:1804
 #, kde-format
 msgid "Discard Changes"
 msgstr "Zahodit změny"
 
-#: app/mainwindow.cpp:1791
+#: app/mainwindow.cpp:1806
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
@@ -1314,49 +1314,49 @@ msgstr[0] "1 obrázek byl změněn."
 msgstr[1] "%1 obrázky byly změněny."
 msgstr[2] "%1 obrázků bylo změněno."
 
-#: app/mainwindow.cpp:1791
+#: app/mainwindow.cpp:1806
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Pokud nyní ukončíte aplikaci, vaše změny budou ztraceny."
 
-#: app/mainwindow.cpp:1846
+#: app/mainwindow.cpp:1861
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr ""
 "Toto úplně skryje panel nabídky. Můžete ji opětovně zobrazit pomocí %1."
 
-#: app/mainwindow.cpp:1849
+#: app/mainwindow.cpp:1864
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Skrýt nabídku"
 
-#: app/mainwindow.cpp:2069
+#: app/mainwindow.cpp:2084
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "Dosáhli jste prvního dokumentu. Co si přejete udělat?"
 
-#: app/mainwindow.cpp:2070 app/mainwindow.cpp:2084
+#: app/mainwindow.cpp:2085 app/mainwindow.cpp:2099
 #, kde-format
 msgid "Stay There"
 msgstr "Zůstat zde"
 
-#: app/mainwindow.cpp:2071
+#: app/mainwindow.cpp:2086
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "Přejít na poslední dokument"
 
-#: app/mainwindow.cpp:2072 app/mainwindow.cpp:2086
+#: app/mainwindow.cpp:2087 app/mainwindow.cpp:2101
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "Přejít zpět na seznam dokumentů"
 
-#: app/mainwindow.cpp:2083
+#: app/mainwindow.cpp:2098
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "Dosáhli jste posledního dokumentu. Co si přejete udělat?"
 
-#: app/mainwindow.cpp:2085
+#: app/mainwindow.cpp:2100
 #, kde-format
 msgid "Go to the First Document"
 msgstr "Přejít na první dokument"

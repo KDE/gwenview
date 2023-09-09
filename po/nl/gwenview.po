@@ -4,22 +4,22 @@
 # Tom Albers <tomalbers@kde.nl>, 2005.
 # Rinse de Vries <RinseDeVries@home.nl>, 2005.
 # Bram Schoenmakers <bramschoenmakers@kde.nl>, 2006.
-# Freek de Kruijf <f.de.kruijf@hetnet.nl>, 2008, 2009.
+# SPDX-FileCopyrightText: 2008, 2009, 2023 Freek de Kruijf <f.de.kruijf@hetnet.nl>
 # Freek de Kruijf <freekdekruijf@kde.nl>, 2009, 2010, 2011, 2012.
 # Freek de Kruijf <f.de.kruijf@gmail.com>, 2011, 2013, 2014, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-08 00:43+0000\n"
-"PO-Revision-Date: 2023-08-31 10:18+0200\n"
+"POT-Creation-Date: 2023-09-09 00:43+0000\n"
+"PO-Revision-Date: 2023-09-08 10:12+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.04.3\n"
+"X-Generator: Lokalize 23.08.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -1271,62 +1271,62 @@ msgstr "Bewerkingen"
 msgid "Viewing media"
 msgstr "Media bekijken"
 
-#: app/mainwindow.cpp:1405
+#: app/mainwindow.cpp:1420
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Zijbalk verbergen"
 
-#: app/mainwindow.cpp:1405
+#: app/mainwindow.cpp:1420
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Zijbalk tonen"
 
-#: app/mainwindow.cpp:1712
+#: app/mainwindow.cpp:1727
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Afbeelding openen"
 
-#: app/mainwindow.cpp:1772
+#: app/mainwindow.cpp:1787
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "Diashow pauzeren"
 
-#: app/mainwindow.cpp:1775
+#: app/mainwindow.cpp:1790
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "Diashow hervatten"
 
-#: app/mainwindow.cpp:1775
+#: app/mainwindow.cpp:1790
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Diavoorstelling starten"
 
-#: app/mainwindow.cpp:1788
+#: app/mainwindow.cpp:1803
 #, kde-format
 msgid "Save All Changes"
 msgstr "Alle wijzigingen opslaan"
 
-#: app/mainwindow.cpp:1789
+#: app/mainwindow.cpp:1804
 #, kde-format
 msgid "Discard Changes"
 msgstr "Wijzigingen negeren"
 
-#: app/mainwindow.cpp:1791
+#: app/mainwindow.cpp:1806
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "Eén afbeelding is gewijzigd."
 msgstr[1] "%1 afbeeldingen zijn gewijzigd."
 
-#: app/mainwindow.cpp:1791
+#: app/mainwindow.cpp:1806
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Als u nu afsluit zullen al uw wijzigingen verloren gaan."
 
-#: app/mainwindow.cpp:1846
+#: app/mainwindow.cpp:1861
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
@@ -1334,37 +1334,37 @@ msgstr ""
 "Hierdoor wordt de menubalk geheel verborgen. U kunt die weer zichtbaar maken "
 "door %1 te typen."
 
-#: app/mainwindow.cpp:1849
+#: app/mainwindow.cpp:1864
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Menubalk verbergen"
 
-#: app/mainwindow.cpp:2069
+#: app/mainwindow.cpp:2084
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "U hebt het eerste document bereikt, wat wilt u gaan doen?"
 
-#: app/mainwindow.cpp:2070 app/mainwindow.cpp:2084
+#: app/mainwindow.cpp:2085 app/mainwindow.cpp:2099
 #, kde-format
 msgid "Stay There"
 msgstr "Daar blijven"
 
-#: app/mainwindow.cpp:2071
+#: app/mainwindow.cpp:2086
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "Ga naar het laatste document"
 
-#: app/mainwindow.cpp:2072 app/mainwindow.cpp:2086
+#: app/mainwindow.cpp:2087 app/mainwindow.cpp:2101
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "Ga terug naar de lijst met documenten"
 
-#: app/mainwindow.cpp:2083
+#: app/mainwindow.cpp:2098
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "U hebt het laatste document bereikt, wat wilt u gaan doen?"
 
-#: app/mainwindow.cpp:2085
+#: app/mainwindow.cpp:2100
 #, kde-format
 msgid "Go to the First Document"
 msgstr "Ga naar het eerste document"
@@ -2559,27 +2559,25 @@ msgstr "Bestandsgrootte"
 #, kde-format
 msgctxt "@item:intable"
 msgid "Date Created"
-msgstr ""
+msgstr "Datum aangemaakt"
 
 #: lib/imagemetainfomodel.cpp:257
-#, fuzzy, kde-format
-#| msgid "One image modified"
-#| msgid_plural "%1 images modified"
+#, kde-format
 msgctxt "@item:intable"
 msgid "Date Modified"
-msgstr "Een afbeelding gewijzigd"
+msgstr "Datum gewijzigd"
 
 #: lib/imagemetainfomodel.cpp:258
 #, kde-format
 msgctxt "@item:intable"
 msgid "Date Accessed"
-msgstr ""
+msgstr "Datum gebruikt"
 
 #: lib/imagemetainfomodel.cpp:259
 #, kde-format
 msgctxt "@item:intable"
 msgid "Path"
-msgstr ""
+msgstr "Pad"
 
 #: lib/imagemetainfomodel.cpp:260
 #, kde-format
@@ -2594,12 +2592,10 @@ msgid "Comment"
 msgstr "Toelichting"
 
 #: lib/imagemetainfomodel.cpp:262
-#, fuzzy, kde-format
-#| msgctxt "@item:intable"
-#| msgid "File Time"
+#, kde-format
 msgctxt "@item:intable"
 msgid "File Type"
-msgstr "Bestandstijd"
+msgstr "Bestandstype"
 
 #: lib/imagemetainfomodel.cpp:324
 #, kde-format

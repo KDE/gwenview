@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-08 00:43+0000\n"
+"POT-Creation-Date: 2023-09-09 00:43+0000\n"
 "PO-Revision-Date: 2022-11-01 00:37+0700\n"
 "Last-Translator: OIS <mistresssilvara@hotmail.com>\n"
 "Language-Team: Interlingue <kde-i18n-doc@kde.org>\n"
@@ -1246,98 +1246,98 @@ msgstr "Operationes"
 msgid "Viewing media"
 msgstr ""
 
-#: app/mainwindow.cpp:1405
+#: app/mainwindow.cpp:1420
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Celar li panel lateral"
 
-#: app/mainwindow.cpp:1405
+#: app/mainwindow.cpp:1420
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Monstrar li panel lateral"
 
-#: app/mainwindow.cpp:1712
+#: app/mainwindow.cpp:1727
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Aperter un image"
 
-#: app/mainwindow.cpp:1772
+#: app/mainwindow.cpp:1787
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "Pausar li exhibition"
 
-#: app/mainwindow.cpp:1775
+#: app/mainwindow.cpp:1790
 #, fuzzy, kde-format
 msgid "Resume Slideshow"
 msgstr "Pausar o reprender li exhibition"
 
-#: app/mainwindow.cpp:1775
+#: app/mainwindow.cpp:1790
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Iniciar un exhibition"
 
-#: app/mainwindow.cpp:1788
+#: app/mainwindow.cpp:1803
 #, kde-format
 msgid "Save All Changes"
 msgstr "Gardar omni modificationes"
 
-#: app/mainwindow.cpp:1789
+#: app/mainwindow.cpp:1804
 #, kde-format
 msgid "Discard Changes"
 msgstr "Rejecter li modificationes"
 
-#: app/mainwindow.cpp:1791
+#: app/mainwindow.cpp:1806
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] ""
 msgstr[1] ""
 
-#: app/mainwindow.cpp:1791
+#: app/mainwindow.cpp:1806
 #, fuzzy, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Si vu ne garda it, vor modificationes va esser perdit."
 
-#: app/mainwindow.cpp:1846
+#: app/mainwindow.cpp:1861
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr ""
 
-#: app/mainwindow.cpp:1849
+#: app/mainwindow.cpp:1864
 #, fuzzy, kde-format
 msgid "Hide menu bar"
 msgstr "Celar li barra de menú"
 
-#: app/mainwindow.cpp:2069
+#: app/mainwindow.cpp:2084
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr ""
 
-#: app/mainwindow.cpp:2070 app/mainwindow.cpp:2084
+#: app/mainwindow.cpp:2085 app/mainwindow.cpp:2099
 #, fuzzy, kde-format
 msgid "Stay There"
 msgstr "Sem&pre in avan"
 
-#: app/mainwindow.cpp:2071
+#: app/mainwindow.cpp:2086
 #, fuzzy, kde-format
 msgid "Go to the Last Document"
 msgstr "Ear al ultim definition"
 
-#: app/mainwindow.cpp:2072 app/mainwindow.cpp:2086
+#: app/mainwindow.cpp:2087 app/mainwindow.cpp:2101
 #, fuzzy, kde-format
 msgid "Go Back to the Document List"
 msgstr "Ear 10 secondes retro"
 
-#: app/mainwindow.cpp:2083
+#: app/mainwindow.cpp:2098
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr ""
 
-#: app/mainwindow.cpp:2085
+#: app/mainwindow.cpp:2100
 #, kde-format
 msgid "Go to the First Document"
 msgstr "Ear al document"

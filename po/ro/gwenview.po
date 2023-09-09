@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-08 00:43+0000\n"
+"POT-Creation-Date: 2023-09-09 00:43+0000\n"
 "PO-Revision-Date: 2022-04-04 11:38+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian <kde-i18n-ro@kde.org>\n"
@@ -1269,50 +1269,50 @@ msgstr "Operații"
 msgid "Viewing media"
 msgstr ""
 
-#: app/mainwindow.cpp:1405
+#: app/mainwindow.cpp:1420
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Ascunde bara laterală"
 
-#: app/mainwindow.cpp:1405
+#: app/mainwindow.cpp:1420
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Arată bara laterală"
 
-#: app/mainwindow.cpp:1712
+#: app/mainwindow.cpp:1727
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Deschide imagine"
 
-#: app/mainwindow.cpp:1772
+#: app/mainwindow.cpp:1787
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "Întrerupe diaporama"
 
-#: app/mainwindow.cpp:1775
+#: app/mainwindow.cpp:1790
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "Reia diaporama"
 
-#: app/mainwindow.cpp:1775
+#: app/mainwindow.cpp:1790
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Pornește diaporama"
 
-#: app/mainwindow.cpp:1788
+#: app/mainwindow.cpp:1803
 #, kde-format
 msgid "Save All Changes"
 msgstr "Salvează toate modificările"
 
-#: app/mainwindow.cpp:1789
+#: app/mainwindow.cpp:1804
 #, kde-format
 msgid "Discard Changes"
 msgstr "Aruncă modificările"
 
-#: app/mainwindow.cpp:1791
+#: app/mainwindow.cpp:1806
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
@@ -1320,49 +1320,49 @@ msgstr[0] "O imagine a fost modificată."
 msgstr[1] "%1 imagini au fost modificate."
 msgstr[2] "%1 de imagini au fost modificate."
 
-#: app/mainwindow.cpp:1791
+#: app/mainwindow.cpp:1806
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Dacă ieșiți acum din program, modificările voastre vor fi pierdute."
 
-#: app/mainwindow.cpp:1846
+#: app/mainwindow.cpp:1861
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr ""
 "Aceasta va ascunde complet bara meniului. O puteți arăta din nou tastând %1."
 
-#: app/mainwindow.cpp:1849
+#: app/mainwindow.cpp:1864
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Ascunde bara meniului"
 
-#: app/mainwindow.cpp:2069
+#: app/mainwindow.cpp:2084
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "Ați atins primul document. Ce doriți să faceți?"
 
-#: app/mainwindow.cpp:2070 app/mainwindow.cpp:2084
+#: app/mainwindow.cpp:2085 app/mainwindow.cpp:2099
 #, kde-format
 msgid "Stay There"
 msgstr "Rămâi aici"
 
-#: app/mainwindow.cpp:2071
+#: app/mainwindow.cpp:2086
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "Mergi la ultimul document"
 
-#: app/mainwindow.cpp:2072 app/mainwindow.cpp:2086
+#: app/mainwindow.cpp:2087 app/mainwindow.cpp:2101
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "Mergi înapoi la lista documentelor"
 
-#: app/mainwindow.cpp:2083
+#: app/mainwindow.cpp:2098
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "Ați atins ultimul document. Ce doriți să faceți?"
 
-#: app/mainwindow.cpp:2085
+#: app/mainwindow.cpp:2100
 #, kde-format
 msgid "Go to the First Document"
 msgstr "Mergi la primul document"
