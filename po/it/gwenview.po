@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-09 00:43+0000\n"
-"PO-Revision-Date: 2023-09-01 13:07+0200\n"
+"PO-Revision-Date: 2023-09-09 01:48+0200\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -2550,28 +2550,25 @@ msgstr "Dimensione del file"
 #, kde-format
 msgctxt "@item:intable"
 msgid "Date Created"
-msgstr ""
+msgstr "Data di creazione"
 
 #: lib/imagemetainfomodel.cpp:257
-#, fuzzy, kde-format
-#| msgid "One image modified"
-#| msgid_plural "%1 images modified"
+#, kde-format
 msgctxt "@item:intable"
 msgid "Date Modified"
-msgstr "Una immagine modificata"
+msgstr "Data di modifica"
 
 #: lib/imagemetainfomodel.cpp:258
 #, kde-format
 msgctxt "@item:intable"
 msgid "Date Accessed"
-msgstr ""
+msgstr "Data di accesso"
 
 #: lib/imagemetainfomodel.cpp:259
-#, fuzzy, kde-format
-#| msgid "Path only"
+#, kde-format
 msgctxt "@item:intable"
 msgid "Path"
-msgstr "Solo percorso"
+msgstr "Percorso"
 
 # «Dimensione dell'immagine» è troppo lungo, secondo una segnalazione:
 # https://bugs.kde.org/show_bug.cgi?id=171581
@@ -2588,12 +2585,10 @@ msgid "Comment"
 msgstr "Commento"
 
 #: lib/imagemetainfomodel.cpp:262
-#, fuzzy, kde-format
-#| msgctxt "@item:intable"
-#| msgid "File Time"
+#, kde-format
 msgctxt "@item:intable"
 msgid "File Type"
-msgstr "Ora del file"
+msgstr "Tipo di file"
 
 #: lib/imagemetainfomodel.cpp:324
 #, kde-format
