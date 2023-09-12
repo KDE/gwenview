@@ -4,7 +4,7 @@
 # Olivier Serve <tifauv@gmail.com>, 2007, 2008, 2009, 2010, 2012, 2013, 2014.
 # Sébastien Renard <Sebastien.Renard@digitalfox.org>, 2007, 2008.
 # Guillaume Pujol <guill.p@gmail.com>, 2008, 2010.
-# xavier <xavier.besnard@neuf.fr>, 2012, 2013, 2020, 2021, 2022.
+# SPDX-FileCopyrightText: 2012, 2013, 2020, 2021, 2022, 2023 xavier <xavier.besnard@neuf.fr>
 # Sebastien Renard <renard@kde.org>, 2013.
 # Peter Potrowl <peter.potrowl@gmail.com>, 2017, 2018, 2019.
 # Simon Depiets <sdepiets@gmail.com>, 2018, 2019, 2020.
@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-24 02:22+0000\n"
-"PO-Revision-Date: 2023-06-03 17:55+0200\n"
+"PO-Revision-Date: 2023-09-10 15:52+0200\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.08.0\n"
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
@@ -2720,7 +2720,7 @@ msgstr "Re-dimensionner l'image"
 #: lib/resize/resizeimagewidget.ui:20
 #, kde-format
 msgid "Estimated new file size:"
-msgstr ""
+msgstr "Taille estimée du nouveau fichier :"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: lib/resize/resizeimagewidget.ui:47
@@ -2744,10 +2744,9 @@ msgstr " px"
 
 #. i18n: ectx: property (text), widget (QLabel, mCurrentSizeLabel)
 #: lib/resize/resizeimagewidget.ui:115
-#, fuzzy, kde-format
-#| msgid "Current size:"
+#, kde-format
 msgid "Current file size:"
-msgstr "Taille actuelle :"
+msgstr "Taille du fichier actuel :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, mKeepAspectCheckBox)
 #: lib/resize/resizeimagewidget.ui:145
