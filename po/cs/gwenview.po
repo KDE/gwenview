@@ -2487,12 +2487,10 @@ msgid "Date Created"
 msgstr ""
 
 #: lib/imagemetainfomodel.cpp:257
-#, fuzzy, kde-format
-#| msgid "One image modified"
-#| msgid_plural "%1 images modified"
+#, kde-format
 msgctxt "@item:intable"
 msgid "Date Modified"
-msgstr "Změněn 1 obrázek"
+msgstr ""
 
 #: lib/imagemetainfomodel.cpp:258
 #, kde-format
@@ -2504,7 +2502,7 @@ msgstr ""
 #, kde-format
 msgctxt "@item:intable"
 msgid "Path"
-msgstr ""
+msgstr "Cesta"
 
 #: lib/imagemetainfomodel.cpp:260
 #, kde-format
@@ -2519,12 +2517,10 @@ msgid "Comment"
 msgstr "Komentář"
 
 #: lib/imagemetainfomodel.cpp:262
-#, fuzzy, kde-format
-#| msgctxt "@item:intable"
-#| msgid "File Time"
+#, kde-format
 msgctxt "@item:intable"
 msgid "File Type"
-msgstr "Čas vytvoření souboru"
+msgstr ""
 
 #: lib/imagemetainfomodel.cpp:324
 #, kde-format
