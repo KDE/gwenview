@@ -162,7 +162,7 @@ StartMainPage::StartMainPage(QWidget *parent, GvCore *gvCore)
     setFrameStyle(QFrame::NoFrame);
 
     // Bookmark view
-    d->mBookmarksModel = new KFilePlacesModel(this);
+    d->mBookmarksModel = new KFilePlacesModel({}, this);
 
     d->mBookmarksView->setModel(d->mBookmarksModel);
     d->mBookmarksView->setAutoResizeItemsEnabled(false);

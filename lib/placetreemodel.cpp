@@ -150,7 +150,7 @@ PlaceTreeModel::PlaceTreeModel(QObject *parent)
 {
     d->q = this;
 
-    d->mPlacesModel = new KFilePlacesModel(this);
+    d->mPlacesModel = new KFilePlacesModel({}, this);
     connect(d->mPlacesModel, &KFilePlacesModel::rowsInserted, this, &PlaceTreeModel::slotPlacesRowsInserted);
     connect(d->mPlacesModel, &KFilePlacesModel::rowsAboutToBeRemoved, this, &PlaceTreeModel::slotPlacesRowsAboutToBeRemoved);
 
