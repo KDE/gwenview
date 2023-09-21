@@ -12,14 +12,14 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-09 00:43+0000\n"
-"PO-Revision-Date: 2023-09-08 10:12+0200\n"
+"PO-Revision-Date: 2023-09-20 11:03+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.08.0\n"
+"X-Generator: Lokalize 23.08.1\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -540,7 +540,7 @@ msgstr "Interval:"
 #: app/fullscreenconfigwidget.ui:75
 #, kde-format
 msgid "Loop"
-msgstr "Herhalen"
+msgstr "Lus"
 
 #. i18n: ectx: property (text), widget (QCheckBox, mSlideShowRandomCheckBox)
 #: app/fullscreenconfigwidget.ui:82
@@ -2807,7 +2807,7 @@ msgstr "Tag toevoegen"
 #, kde-format
 msgctxt "@item:inmenu toggle loop in slideshow"
 msgid "Loop"
-msgstr "Herhalen"
+msgstr "Lus"
 
 #: lib/slideshow.cpp:168
 #, kde-format
