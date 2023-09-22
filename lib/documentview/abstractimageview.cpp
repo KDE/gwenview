@@ -29,7 +29,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QApplication>
 #include <QCursor>
+#include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
+#include <QGraphicsView>
 #include <QGuiApplication>
 #include <QStandardPaths>
 namespace Gwenview
@@ -536,7 +538,11 @@ void AbstractImageView::setScrollPos(const QPointF &pos)
 
 qreal AbstractImageView::devicePixelRatio() const
 {
-    return qApp->devicePixelRatio();
+    if (!scene()->views().isEmpty()) {
+        return scene()->views().constFirst()->devicePixelRatio();
+    } else {
+        return qApp->devicePixelRatio();
+    }
 }
 
 QPointF AbstractImageView::mapToView(const QPointF &imagePos) const
