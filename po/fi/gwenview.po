@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-24 02:22+0000\n"
-"PO-Revision-Date: 2023-05-29 21:07+0300\n"
+"PO-Revision-Date: 2023-08-26 17:44+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -30,7 +30,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.04.1\n"
+"X-Generator: Lokalize 22.12.3\n"
 "X-POT-Import-Date: 2012-12-01 22:24:09+0000\n"
 
 #, kde-format
@@ -126,7 +126,7 @@ msgstr "Muista kansiot ja verkko-osoitteet"
 #: app/advancedconfigpage.ui:240
 #, kde-format
 msgid "Enable color management"
-msgstr ""
+msgstr "Käytä värinhallintaa"
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileHelpLabel)
 #: app/advancedconfigpage.ui:265
@@ -137,13 +137,16 @@ msgid ""
 "is only appropriate for displays that are calibrated to the sRGB color space "
 "or are known to provide an incorrect color profile."
 msgstr ""
+"Kun värinhallinta on poistettu käytöstä, Gwenview muuntaa kuvat sRGB-"
+"väriavaruuteen näytölle havaitsemansa väriavaruuden sijaan. Tämä on "
+"mielekästä vain sRGB-väriavaruuteen kalibroiduille näytöille tai näytöille, "
+"joiden tiedetään kertovan väriprofiilinsa väärin."
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileLabel)
 #: app/advancedconfigpage.ui:275
-#, fuzzy, kde-format
-#| msgid "Too many arguments."
+#, kde-format
 msgid "Color management:"
-msgstr "Liikaa parametreja."
+msgstr "Värinhallinta:"
 
 #: app/alignwithsidebarwidgetaction.cpp:23
 #, kde-format
