@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-24 02:22+0000\n"
-"PO-Revision-Date: 2023-09-03 10:20+0200\n"
+"PO-Revision-Date: 2023-09-09 10:43+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -1402,8 +1402,8 @@ msgstr "&Deter"
 msgctxt "@info"
 msgid "One document could not be saved:"
 msgid_plural "%1 documents could not be saved:"
-msgstr[0] "Non se puido gardar un documento:"
-msgstr[1] "Non se puido gardar %1 documentos:"
+msgstr[0] "Non foi posíbel gardar un documento:"
+msgstr[1] "Non foi posíbel gardar %1 documentos:"
 
 #: app/saveallhelper.cpp:106
 #, kde-kuit-format
@@ -1669,25 +1669,25 @@ msgstr "Amosar os subcartafoles fallados…"
 #, kde-format
 msgid "Failed to import %1 document."
 msgid_plural "Failed to import %1 documents."
-msgstr[0] "Non se puido importar %1 documento."
-msgstr[1] "Non se puideron importar %1 documentos."
+msgstr[0] "Non foi posíbel importar %1 documento."
+msgstr[1] "Non foi posíbel importar %1 documentos."
 
 #: importer/dialogpage.cpp:78
 #, kde-format
 msgid "Failed to create %1 destination subfolder."
 msgid_plural "Failed to create %1 destination subfolders."
-msgstr[0] "Non se puido crear %1 subcartafol de destino."
-msgstr[1] "Non se puideron crear %1 subcartafoles de destino."
+msgstr[0] "Non foi posíbel crear %1 subcartafol de destino."
+msgstr[1] "Non foi posíbel crear %1 subcartafoles de destino."
 
 #: importer/dialogpage.cpp:89
 #, kde-format
 msgid "Failed to import documents:"
-msgstr "Non se puideron importar os documentos:"
+msgstr "Non foi posíbel importar os documentos:"
 
 #: importer/dialogpage.cpp:95
 #, kde-format
 msgid "Failed to create subfolders:"
-msgstr "Non se puideron crear os subcartafoles:"
+msgstr "Non foi posíbel crear os subcartafoles:"
 
 #: importer/filenameformater.cpp:102
 #, kde-format
@@ -1793,10 +1793,10 @@ msgid_plural ""
 "Failed to delete documents:\n"
 "%2"
 msgstr[0] ""
-"Non se puido eliminar o documento:\n"
+"Non foi posíbel eliminar o documento:\n"
 "%2"
 msgstr[1] ""
-"Non se puideron eliminar os documentos:\n"
+"Non foi posíbel eliminar os documentos:\n"
 "%2"
 
 #: importer/importdialog.cpp:158
@@ -1832,12 +1832,12 @@ msgstr "Saír"
 #: importer/importer.cpp:80
 #, kde-format
 msgid "Could not create destination folder."
-msgstr "Non se puido crear un cartafol de destino."
+msgstr "Non foi posíbel crear un cartafol de destino."
 
 #: importer/importer.cpp:95 importer/importer.cpp:101
 #, kde-format
 msgid "Could not create temporary upload folder."
-msgstr "Non se puido crear un cartafol de envío temporal."
+msgstr "Non foi posíbel crear un cartafol de envío temporal."
 
 #: importer/importerconfigdialog.cpp:52
 #, kde-format
@@ -2030,7 +2030,7 @@ msgid ""
 "Opening Discover failed.<nl/>Please check if Discover is installed on your "
 "system, or use your system's package manager to install \"Kamera\" package."
 msgstr ""
-"Non se puido abrir Discover.<nl/>Comprobe se ten Discover instalado no "
+"Non foi posíbel abrir Discover.<nl/>Comprobe se ten Discover instalado no "
 "sistema, ou use o xestor de paquetes do sistema para instalar o paquete de "
 "«Kamera»."
 
@@ -2042,7 +2042,7 @@ msgid ""
 "system, or use your system's package manager to install the protocol support "
 "library for \"%1\"."
 msgstr ""
-"Non se puido abrir Discover.<nl/>Comprobe se ten Discover instalado no "
+"Non foi posíbel abrir Discover.<nl/>Comprobe se ten Discover instalado no "
 "sistema, ou use o xestor de paquetes do sistema para instalar a biblioteca "
 "de compatibilidade co protocolo «%1»."
 
@@ -2200,7 +2200,7 @@ msgstr "O Gwenview non pode amosar documentos do tipo %1."
 #, kde-format
 msgctxt "@info"
 msgid "Could not open file %1"
-msgstr "Non se puido abrir o ficheiro %1"
+msgstr "Non foi posíbel abrir o ficheiro %1"
 
 #: lib/document/loadingdocumentimpl.cpp:489
 #, kde-format
@@ -2217,7 +2217,7 @@ msgstr "Fallou a carga da imaxe."
 #: lib/document/loadingjob.cpp:56
 #, kde-format
 msgid "Could not load document %1"
-msgstr "Non se puido cargar o documento %1"
+msgstr "Non foi posíbel cargar o documento %1"
 
 #: lib/document/savejob.cpp:106
 #, kde-format
@@ -2226,7 +2226,7 @@ msgid ""
 "Could not open file for writing, check that you have the necessary rights in "
 "<filename>%1</filename>."
 msgstr ""
-"Non se puido abrir o ficheiro para escribir nel. Comprobe que ten os "
+"Non foi posíbel abrir o ficheiro para escribir nel. Comprobe que ten os "
 "permisos precisos sobre <filename>%1</filename>."
 
 #: lib/document/savejob.cpp:137
@@ -2236,8 +2236,8 @@ msgid ""
 "Could not overwrite file, check that you have the necessary rights to write "
 "in <filename>%1</filename>."
 msgstr ""
-"Non se puido sobrescribir o ficheiro; comprobe que ten os permisos precisos "
-"sobre <filename>%1</filename>."
+"Non foi posíbel sobrescribir o ficheiro; comprobe que ten os permisos "
+"precisos sobre <filename>%1</filename>."
 
 #: lib/documentview/documentview.cpp:214
 #, kde-format
@@ -2484,7 +2484,7 @@ msgstr ""
 #, kde-format
 msgid "Last used crop ratio width when Advanced Settings enabled"
 msgstr ""
-"Anchura utilizada por última vez nas proporcións de recorte cando a "
+"Anchura usada por última vez nas proporcións de recorte cando a "
 "configuración avanzada está activada."
 
 #. i18n: ectx: label, entry (CropRatioHeight), group (Crop)
@@ -2492,8 +2492,8 @@ msgstr ""
 #, kde-format
 msgid "Last used crop ratio height when Advanced Settings enabled"
 msgstr ""
-"Altura utilizada por última vez nas proporcións de recorte cando a "
-"configuración avanzada está activada."
+"Altura usada por última vez nas proporcións de recorte cando a configuración "
+"avanzada está activada."
 
 #: lib/historymodel.cpp:146
 #, kde-format
@@ -2570,7 +2570,7 @@ msgstr "Valor"
 #, kde-format
 msgctxt "@info"
 msgid "Could not open file for writing."
-msgstr "Non se puido abrir o ficheiro para escribir nel."
+msgstr "Non foi posíbel abrir o ficheiro para escribir nel."
 
 #: lib/jpegcontent.cpp:683
 #, kde-format
