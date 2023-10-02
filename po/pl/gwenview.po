@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-09 00:43+0000\n"
-"PO-Revision-Date: 2023-09-09 10:55+0200\n"
+"PO-Revision-Date: 2023-10-01 09:17+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -1283,7 +1283,7 @@ msgstr "Działania"
 #: app/mainwindow.cpp:942
 #, kde-format
 msgid "Viewing media"
-msgstr ""
+msgstr "Oglądanie mediów"
 
 #: app/mainwindow.cpp:1420
 #, kde-format
@@ -2279,12 +2279,10 @@ msgid "%1x%2"
 msgstr "%1x%2"
 
 #: lib/documentview/documentview.cpp:264 lib/zoomcombobox/zoomcombobox.cpp:318
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip of custom toolbar button"
-#| msgid "%1"
+#, kde-format
 msgctxt "Percent value"
 msgid "%1%"
-msgstr "%1"
+msgstr "%1%"
 
 #: lib/documentview/documentview.cpp:543
 #, kde-format
@@ -2359,11 +2357,7 @@ msgid "Fill"
 msgstr "Wypełnij"
 
 #: lib/documentview/documentviewcontroller.cpp:90
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "@action:button Zoom to original size, shown in status bar, keep it short "
-#| "please"
-#| msgid "100%"
+#, kde-format
 msgctxt "Original image size percent value"
 msgid "100%"
 msgstr "100%"
@@ -2577,27 +2571,25 @@ msgstr "Rozmiar pliku"
 #, kde-format
 msgctxt "@item:intable"
 msgid "Date Created"
-msgstr ""
+msgstr "Data utworzenia"
 
 #: lib/imagemetainfomodel.cpp:257
-#, fuzzy, kde-format
-#| msgid "One image modified"
-#| msgid_plural "%1 images modified"
+#, kde-format
 msgctxt "@item:intable"
 msgid "Date Modified"
-msgstr "Zmieniono jeden obraz"
+msgstr "Data zmiany"
 
 #: lib/imagemetainfomodel.cpp:258
 #, kde-format
 msgctxt "@item:intable"
 msgid "Date Accessed"
-msgstr ""
+msgstr "Data dostępu"
 
 #: lib/imagemetainfomodel.cpp:259
 #, kde-format
 msgctxt "@item:intable"
 msgid "Path"
-msgstr ""
+msgstr "Ścieżka"
 
 #: lib/imagemetainfomodel.cpp:260
 #, kde-format
@@ -2612,12 +2604,10 @@ msgid "Comment"
 msgstr "Komentarz"
 
 #: lib/imagemetainfomodel.cpp:262
-#, fuzzy, kde-format
-#| msgctxt "@item:intable"
-#| msgid "File Time"
+#, kde-format
 msgctxt "@item:intable"
 msgid "File Type"
-msgstr "Czas pliku"
+msgstr "Rodzaj pliku"
 
 #: lib/imagemetainfomodel.cpp:324
 #, kde-format
