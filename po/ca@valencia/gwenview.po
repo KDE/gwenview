@@ -1225,8 +1225,8 @@ msgid ""
 "The shared image link (<a href=\"%1\">%1</a>) has been copied to the "
 "clipboard."
 msgstr ""
-"L'enllaç cap a la imatge compartida (<a href=\"%1\">%1</a>) s'ha copiat al "
-"porta-retalls."
+"L'enllaç cap a la imatge compartida (<a href=\"%1\">%1</a>) s'ha copiat a "
+"dins del porta-retalls."
 
 #: app/mainwindow.cpp:578
 #, kde-format
