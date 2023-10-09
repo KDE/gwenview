@@ -2856,6 +2856,3 @@ msgstr "ファイル(&F)"
 #, kde-format
 msgid "&View"
 msgstr "表示(&V)"
-
-#~ msgid "&Settings"
-#~ msgstr "設定(&S)"

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-09 00:43+0000\n"
-"PO-Revision-Date: 2023-08-25 22:26+0200\n"
+"PO-Revision-Date: 2023-10-08 22:44+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
@@ -2202,12 +2202,10 @@ msgid "%1x%2"
 msgstr "%1x%2"
 
 #: lib/documentview/documentview.cpp:264 lib/zoomcombobox/zoomcombobox.cpp:318
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip of custom toolbar button"
-#| msgid "%1"
+#, kde-format
 msgctxt "Percent value"
 msgid "%1%"
-msgstr "%1"
+msgstr "%1%"
 
 #: lib/documentview/documentview.cpp:543
 #, kde-format
@@ -2279,11 +2277,7 @@ msgid "Fill"
 msgstr "채우기"
 
 #: lib/documentview/documentviewcontroller.cpp:90
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "@action:button Zoom to original size, shown in status bar, keep it short "
-#| "please"
-#| msgid "100%"
+#, kde-format
 msgctxt "Original image size percent value"
 msgid "100%"
 msgstr "100%"
@@ -2478,27 +2472,25 @@ msgstr "파일 크기"
 #, kde-format
 msgctxt "@item:intable"
 msgid "Date Created"
-msgstr ""
+msgstr "만든 날짜"
 
 #: lib/imagemetainfomodel.cpp:257
-#, fuzzy, kde-format
-#| msgid "One image modified"
-#| msgid_plural "%1 images modified"
+#, kde-format
 msgctxt "@item:intable"
 msgid "Date Modified"
-msgstr "%1개 그림 수정됨"
+msgstr "수정한 날짜"
 
 #: lib/imagemetainfomodel.cpp:258
 #, kde-format
 msgctxt "@item:intable"
 msgid "Date Accessed"
-msgstr ""
+msgstr "접근한 날짜"
 
 #: lib/imagemetainfomodel.cpp:259
 #, kde-format
 msgctxt "@item:intable"
 msgid "Path"
-msgstr ""
+msgstr "경로"
 
 #: lib/imagemetainfomodel.cpp:260
 #, kde-format
@@ -2513,12 +2505,10 @@ msgid "Comment"
 msgstr "설명"
 
 #: lib/imagemetainfomodel.cpp:262
-#, fuzzy, kde-format
-#| msgctxt "@item:intable"
-#| msgid "File Time"
+#, kde-format
 msgctxt "@item:intable"
 msgid "File Type"
-msgstr "파일 시간"
+msgstr "파일 형식"
 
 #: lib/imagemetainfomodel.cpp:324
 #, kde-format
