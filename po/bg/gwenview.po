@@ -2808,18 +2808,3 @@ msgstr "&Файл"
 #, kde-format
 msgid "&View"
 msgstr "&Изглед"
-
-#~ msgid "&Settings"
-#~ msgstr "&Настройки"
-
-#~ msgid "Apply only the profile embedded in the image file"
-#~ msgstr "Прилагане само на профила, вграден във файла с изображение"
-
-#~ msgid ""
-#~ "Assume that system-wide color correction already applies monitor profile."
-#~ msgstr ""
-#~ "Предполага, че системната корекция на цветовете вече прилага профила на "
-#~ "монитора."
-
-#~ msgid "Color profile:"
-#~ msgstr "Цветен профил:"
