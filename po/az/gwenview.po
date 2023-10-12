@@ -1,13 +1,13 @@
-# Copyright (C) YEAR This file is copyright:
+# Copyright (C) 2023 This file is copyright:
 # This file is distributed under the same license as the gwenview package.
 #
-# Kheyyam Gojayev <xxmn77@gmail.com>, 2020, 2021, 2022, 2023.
+# SPDX-FileCopyrightText: 2020, 2021, 2022, 2023 Kheyyam Gojayev <xxmn77@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-09 00:43+0000\n"
-"PO-Revision-Date: 2023-06-12 16:55+0400\n"
+"PO-Revision-Date: 2023-10-11 18:09+0400\n"
 "Last-Translator: Kheyyam <xxmn77@gmail.com>\n"
 "Language-Team: Azerbaijani <kde-i18n-doc@kde.org>\n"
 "Language: az\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.04.2\n"
+"X-Generator: Lokalize 23.08.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1261,7 +1261,7 @@ msgstr "Əməliyyatlar"
 #: app/mainwindow.cpp:942
 #, kde-format
 msgid "Viewing media"
-msgstr ""
+msgstr "Multimediyay baxış"
 
 #: app/mainwindow.cpp:1420
 #, kde-format
@@ -2248,12 +2248,10 @@ msgid "%1x%2"
 msgstr "%1x%2"
 
 #: lib/documentview/documentview.cpp:264 lib/zoomcombobox/zoomcombobox.cpp:318
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip of custom toolbar button"
-#| msgid "%1"
+#, kde-format
 msgctxt "Percent value"
 msgid "%1%"
-msgstr "%1"
+msgstr "%1%"
 
 #: lib/documentview/documentview.cpp:543
 #, kde-format
@@ -2327,11 +2325,7 @@ msgid "Fill"
 msgstr "Doldurmaq"
 
 #: lib/documentview/documentviewcontroller.cpp:90
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "@action:button Zoom to original size, shown in status bar, keep it short "
-#| "please"
-#| msgid "100%"
+#, kde-format
 msgctxt "Original image size percent value"
 msgid "100%"
 msgstr "100%"
@@ -2538,27 +2532,25 @@ msgstr "Faylın ölçüsü"
 #, kde-format
 msgctxt "@item:intable"
 msgid "Date Created"
-msgstr ""
+msgstr "Yaradılma tarixi"
 
 #: lib/imagemetainfomodel.cpp:257
-#, fuzzy, kde-format
-#| msgid "One image modified"
-#| msgid_plural "%1 images modified"
+#, kde-format
 msgctxt "@item:intable"
 msgid "Date Modified"
-msgstr "Bir şəkil dəyişdirilib"
+msgstr "Dəyişiklik tarixi"
 
 #: lib/imagemetainfomodel.cpp:258
 #, kde-format
 msgctxt "@item:intable"
 msgid "Date Accessed"
-msgstr ""
+msgstr "Giriş tarixi"
 
 #: lib/imagemetainfomodel.cpp:259
 #, kde-format
 msgctxt "@item:intable"
 msgid "Path"
-msgstr ""
+msgstr "Yol"
 
 #: lib/imagemetainfomodel.cpp:260
 #, kde-format
@@ -2573,12 +2565,10 @@ msgid "Comment"
 msgstr "Şərh"
 
 #: lib/imagemetainfomodel.cpp:262
-#, fuzzy, kde-format
-#| msgctxt "@item:intable"
-#| msgid "File Time"
+#, kde-format
 msgctxt "@item:intable"
 msgid "File Type"
-msgstr "Faylın yaradılma vaxtı"
+msgstr "Fayl növü"
 
 #: lib/imagemetainfomodel.cpp:324
 #, kde-format
@@ -2735,7 +2725,7 @@ msgstr "Şəklin ölçüsünü dəyişmək"
 #: lib/resize/resizeimagewidget.ui:20
 #, kde-format
 msgid "Estimated new file size:"
-msgstr ""
+msgstr "Yeni faylın təxmini ölçüsü:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: lib/resize/resizeimagewidget.ui:47
@@ -2759,10 +2749,9 @@ msgstr " piksel"
 
 #. i18n: ectx: property (text), widget (QLabel, mCurrentSizeLabel)
 #: lib/resize/resizeimagewidget.ui:115
-#, fuzzy, kde-format
-#| msgid "Current size:"
+#, kde-format
 msgid "Current file size:"
-msgstr "Hazırkı ölçü:"
+msgstr "Faylın hazırkı ölçüsü:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, mKeepAspectCheckBox)
 #: lib/resize/resizeimagewidget.ui:145
