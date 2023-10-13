@@ -2,19 +2,20 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
+# SPDX-FileCopyrightText: 2022, 2023 Emir SARI <emir_sari@icloud.com>
 # H. İbrahim Güngör <ibrahim@pardus.org.tr>, 2011.
 # Koray Löker <loker@pardus.org.tr>, 2008.
 # Ozan Çağlayan <ozan@pardus.org.tr>, 2010-2011.
 # obsoleteman <tulliana@gmail.com>, 2008-2009,2011-2012.
 # Volkan Gezer <volkangezer@gmail.com>, 2013-2014, 2017.
 # Kaan Ozdincer <kaanozdincer@gmail.com>, 2014.
-# Emir SARI <emir_sari@icloud.com>, 2022, 2023.
+# Emir SARI <emir_sari@icloud.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdegraphics-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-09 00:43+0000\n"
-"PO-Revision-Date: 2023-09-08 04:58+0300\n"
+"PO-Revision-Date: 2023-10-12 17:42+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -148,7 +149,7 @@ msgstr "Kenar Çubuğu Hizalama Boşluklandırıcısı"
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "View"
-msgstr "Göster"
+msgstr "Görüntüle"
 
 #: app/browsemainpage.cpp:148
 #, kde-format
@@ -160,7 +161,7 @@ msgstr "Konumu Düzenle"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Sort By"
-msgstr "Sıralama Ölçütü"
+msgstr "Şuna Göre Sırala"
 
 #: app/browsemainpage.cpp:157
 #, kde-format
@@ -202,7 +203,7 @@ msgstr "Küçük Görsel Ayrıntıları"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filename"
-msgstr "Dosya adı"
+msgstr "Dosya Adı"
 
 #: app/browsemainpage.cpp:188
 #, kde-format
@@ -933,7 +934,7 @@ msgstr "Yakınlaştırma kipi:"
 #: app/imageviewconfigpage.ui:271
 #, kde-format
 msgid "Autofit each image"
-msgstr "Görselleri otomatik sığdır"
+msgstr "Her bir görseli kendiliğinden sığdır"
 
 #. i18n: ectx: property (text), widget (QRadioButton, keepSameZoomModeRadioButton)
 #: app/imageviewconfigpage.ui:298
@@ -2830,25 +2831,3 @@ msgstr "&Dosya"
 #, kde-format
 msgid "&View"
 msgstr "&Görünüm"
-
-#~ msgid "&Settings"
-#~ msgstr "Ayar&lar"
-
-#~ msgid "Apply only the profile embedded in the image file"
-#~ msgstr "Yalnızca görsel dosyasında gömülü profili kullan"
-
-#~ msgid ""
-#~ "Assume that system-wide color correction already applies monitor profile."
-#~ msgstr ""
-#~ "Sistem geneli renk düzeltmesinin monitör profiline halihazırda uyduğunu "
-#~ "varsay."
-
-#~ msgid "Color profile:"
-#~ msgstr "Renk profili:"
-
-#~ msgctxt "@action:intoolbar"
-#~ msgid "Adjust Brightness/Contrast/Gamma"
-#~ msgstr "Parlaklık/Karşıtlık/Gama Ayarla"
-
-#~ msgid "Adjust Brightness/Contrast/Gamma"
-#~ msgstr "Parlaklık/Karşıtlık/Gama Ayarla"
