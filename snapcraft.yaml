@@ -136,6 +136,7 @@ parts:
         - libkf5purpose5
         - libkf5purpose-bin
         - libkf5service5
+        - libphonon4qt5-4
         - denef
         - qml-module-org-kde-purpose
         - qml-module-org-kde-qqc2desktopstyle
