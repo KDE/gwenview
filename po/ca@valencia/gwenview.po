@@ -393,7 +393,7 @@ msgstr "Copia a..."
 #, kde-format
 msgctxt "Verb"
 msgid "Move To..."
-msgstr "Mou a..."
+msgstr "Mou cap a..."
 
 #: app/fileopscontextmanageritem.cpp:159
 #, kde-format
@@ -1351,7 +1351,7 @@ msgstr "Canvia allí"
 #: app/mainwindow.cpp:2086
 #, kde-format
 msgid "Go to the Last Document"
-msgstr "Ves al últim document"
+msgstr "Ves fins a l'últim document"
 
 #: app/mainwindow.cpp:2087 app/mainwindow.cpp:2101
 #, kde-format
@@ -1361,12 +1361,12 @@ msgstr "Torna a la llista de documents"
 #: app/mainwindow.cpp:2098
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
-msgstr "Heu arribat al últim document. Què voleu fer?"
+msgstr "Heu arribat a l'últim document. Què voleu fer?"
 
 #: app/mainwindow.cpp:2100
 #, kde-format
 msgid "Go to the First Document"
-msgstr "Ves al primer document"
+msgstr "Ves fins al primer document"
 
 #: app/renamedialog.cpp:48
 #, kde-format
@@ -1447,7 +1447,7 @@ msgstr[1] "S'han modificat %1 imatges"
 #: app/savebar.cpp:185
 #, kde-format
 msgid "Go to first modified image"
-msgstr "Ves a la primera imatge modificada"
+msgstr "Ves fins a la primera imatge modificada"
 
 #: app/savebar.cpp:187
 #, kde-format
