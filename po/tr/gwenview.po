@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kdegraphics-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-09 00:43+0000\n"
-"PO-Revision-Date: 2023-10-13 13:24+0300\n"
+"PO-Revision-Date: 2023-10-16 18:15+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.11.70\n"
+"X-Generator: Lokalize 23.08.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -662,7 +662,7 @@ msgstr "Tam ekran arka planı:"
 #: app/generalconfigpage.ui:98
 #, kde-format
 msgid "Dark gray texture"
-msgstr "Koyu gri desen"
+msgstr "Koyu gri doku"
 
 #. i18n: ectx: property (text), widget (QRadioButton, fullscreenBackgroundBlackRadioButton)
 #: app/generalconfigpage.ui:105
@@ -715,7 +715,7 @@ msgstr "Yalnızca seçim düğmesini göster"
 #, kde-format
 msgctxt "A number of thumbnail actions to show"
 msgid "None"
-msgstr "Hiçbiri"
+msgstr "Yok"
 
 #: app/gvcore.cpp:80
 #, kde-format
@@ -915,7 +915,7 @@ msgstr "Sar"
 #, kde-format
 msgctxt "@option:radio action on mouse wheel"
 msgid "Browse"
-msgstr "Göz At"
+msgstr "Göz at"
 
 #. i18n: ectx: property (text), widget (QRadioButton, mouseWheelZoomRadioButton)
 #: app/imageviewconfigpage.ui:218
@@ -977,7 +977,7 @@ msgstr "Yazılım"
 #: app/imageviewconfigpage.ui:466
 #, kde-format
 msgid "None"
-msgstr "Hiçbiri"
+msgstr "Yok"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: app/imageviewconfigpage.ui:504
