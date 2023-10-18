@@ -1,0 +1,1531 @@
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN"
+"dtd/kdedbx45.dtd" [
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % Turkish "INCLUDE"
+><!-- change language only here -->
+]>
+
+<book id="gwenview" lang="&language;">
+<title
+>Akbakış Kullanıcı Kılavuzu</title>
+
+<bookinfo>
+<authorgroup>
+<author
+><firstname
+>Aurélien</firstname
+> <surname
+>Gâteau</surname
+> <affiliation
+><address
+><email
+>agateau@kde.org</email
+></address
+></affiliation>
+</author>
+<author
+><firstname
+>Christopher</firstname
+><surname
+>Martin</surname
+> <affiliation
+><address
+><email
+>chrsmrtn@debian.org</email
+></address
+></affiliation>
+</author>
+<author
+><firstname
+>Henry</firstname
+> <surname
+>de Valence</surname
+> <affiliation
+><address
+><email
+>hdevalence@gmail.com</email
+></address
+></affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Gökhan</firstname
+><surname
+>HUZ</surname
+><affiliation
+><address
+><email
+>gokhanhuzz@gmail.com</email
+></address
+></affiliation
+><contrib
+>Çeviri</contrib
+></othercredit
+> <othercredit role="translator"
+><firstname
+>Emir</firstname
+><surname
+>SARI</surname
+><affiliation
+><address
+><email
+>emir_sari@icloud.com</email
+></address
+></affiliation
+><contrib
+>Çeviri</contrib
+></othercredit
+> 
+</authorgroup>
+<copyright>
+<year
+>2005</year>
+<holder
+>Aurélien Gâteau</holder>
+</copyright>
+<copyright>
+<year
+>2008</year>
+<holder
+>Henry de Valence</holder>
+</copyright>
+<legalnotice
+>&FDLNotice;</legalnotice>
+
+<date
+>2021-06-04</date>
+<releaseinfo
+>KDE Gear 21.08</releaseinfo>
+<abstract>
+<para
+>&gwenview; bir görsel ve video görüntüleyicisidir.</para>
+</abstract>
+<keywordset>
+<keyword
+>KDE</keyword>
+<keyword
+>görsel</keyword>
+<keyword
+>görüntüleyici</keyword>
+<keyword
+>sanatçı</keyword>
+<keyword
+>fotoğraf</keyword>
+<keyword
+>resim</keyword>
+</keywordset>
+</bookinfo>
+<!--FIXME Read devels blog on http://agateau.com/
+-->
+<chapter id="introduction">
+<title
+>Giriş</title>
+
+<sect1 id="what-is-gwenview">
+<title
+>&gwenview; Nedir</title>
+
+<para
+>&gwenview; hızlı ve kullanımı kolay bir görsel ve video görüntüleyicisidir. </para>
+
+ <para
+>&gwenview; iki ana kip içerir: Göz At ve Görüntüle. Her iki kip de normal uygulama penceresinde ve Tam Ekran'da kullanılabilir. Göz At kipi, görsellerinizin küçük hallerini göstererek bilgisayarınızda dolaşmanızı sağlar; Görüntüle kipi, görselleri birer birer görüntülemenizi ve Tam Ekran, hızlı slayt gösterileri yapmanızı sağlar. Ayrıca, son açılan klasörlerin ve &URL;'lerin yanı sıra yerleriniz ve etiketlerinizin listesini görüntüleyen bir başlangıç ekranı da bulunmaktadır. </para>
+
+<para
+>Görsel yüklemesi &Qt; kitaplığı tarafından halledilir; böylece &gwenview;, &Qt; kurulumunuzun desteklediği tüm görsel biçimlerini destekler. &gwenview;, hem alfa kanallı (saydam) hem de canlandırmaları düzgünce görüntüleyebilir.</para>
+
+<para
+>&gwenview; JPEG görsellerindeki EXIF yorumlarının görüntülenmesini ve düzenlenmesini destekler. Döndürme ve yansıtma gibi kayıpsız JPEG dönüşümleri de desteklenir.</para>
+
+<para
+>&gwenview;, PNG ve JPEG dosyalarından gömülü renk profillerini okuyabilir. Ekranda doğru renklerin çıktısını almak için görsel renk profilini ekran renk profiliyle birlikte kullanabilir.</para>
+</sect1>
+
+</chapter>
+
+<chapter id="interface">
+<title
+>Arayüz</title>
+
+<sect1 id='start_page'
+><title
+>Başlangıç Sayfası</title>
+<para
+>Başlangıç sayfası, sol tarafta son açılan klasörleri ve URL'leri, sağ tarafta ise yerlerinizi ve etiketlerinizi listeler.</para>
+
+<screenshot>
+  <screeninfo
+>Başlangıç Sayfası Ekran Görüntüsü</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="start-page.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+</sect1>
+
+<sect1 id='image_operations'
+><title
+>Görsel İşlemleri</title>
+<para
+>&gwenview;, Göz At, Görüntüle ve Tam Ekran görünümlerinde kullanılabilen birkaç özelliğe sahiptir. &gwenview; görsellerinizde temel değişiklikler uygulayabilir.</para>
+<itemizedlist>
+<listitem
+><para
+>Döndür: Bir döndürme işlemi, görseli <menuchoice
+> <shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>R</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Düzen</guimenu
+> <guimenuitem
+>Sağa Döndür</guimenuitem
+> </menuchoice
+> veya <menuchoice
+> <shortcut
+> <keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>R</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Düzen</guimenu
+> <guimenuitem
+>Sola Döndür</guimenuitem
+> </menuchoice
+> yapmanıza bağlı olarak sağa veya sola döndürür </para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+> <guimenu
+>Düzen</guimenu
+> <guimenuitem
+>Yansıt</guimenuitem
+> </menuchoice
+>: Bu işlem, görseli sanki aynada görüyormuşsunuz gibi dikey eksen boyunca yansıtacaktır.</para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+> <guimenu
+>Düzen</guimenu
+> <guimenuitem
+>Ters Çevir</guimenuitem
+> </menuchoice
+>:Bu işlem, görseli baş aşağı yansıtır (yatay eksen boyunca bir yansıma)</para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+> <shortcut
+> <keycombo action="simul"
+>&Shift;<keycap
+>R</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Düzen</guimenu
+> <guimenuitem
+>Yeniden Boyutlandır</guimenuitem
+> </menuchoice
+>: Bu işlem, görseli küçültmenize veya büyütmenize olanak tanır. Bir görselin boyutunu artırırsanız bulanık ve/veya pikselli görünebileceğini unutmayın.</para
+></listitem>
+ <!-- Crop + Red Eye Reduction are discussed in View mode sect-->
+</itemizedlist>
+
+<para
+>Bu eylemler aynı zamanda kenar çubuğunun <guilabel
+>İşlemler</guilabel
+> sekmesinde de vardır.</para>
+
+<para
+>Bir veya daha fazla görseli düzenlediyseniz görselin üst kısmında ek eylemlerin bulunduğu bir çubuk görüntülenir. Değişikliklerinizi geri alabilir veya yineleyebilirsiniz, önceki veya sonraki değiştirilen görsele gidebilirsiniz; değiştirilen görselleri kaydetmek için üç seçenek vardır. </para>
+
+<screenshot>
+  <screeninfo
+>Değiştirilmiş görseller için eylem çubuğu</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="modified-bar.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<!--FIXME all actions also available context menus, where to add that info -->
+
+</sect1>
+
+<sect1 id='browse_mode'
+><title
+>Göz At Kipi</title>
+
+<para
+>Göz At kipindeyken dosyalarınız ve klasörleriniz arasında kolayca dolaşabilirsiniz. Önizleme penceresi, geçerli klasördeki ve alt klasörlerdeki görsellerin küçük hallerini gösterir. </para>
+
+<screenshot>
+  <screeninfo
+>Göz At Kipi Ekran Görüntüsü</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="browse_mode.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<para
+>Fareyi bir görselin üzerinde hareket ettirmek, görseli seçmek veya döndürmek için kullanılan düğmelerin yanı sıra Tam Ekran kipine girmek için bir düğme gösterir. Değiştirilen görseller sağ altta bir simgeyle gösterilir; değiştirilen görseli kaydetmek için buna tıklayın. Bir görsele tıklamak sizi Görüntüle kipine götürür. Birden fazla görsel seçip bunları yan yana görüntülemek için Görüntüle kipine geçebilirsiniz.</para>
+
+<para
+>Sağ alttaki kaydırıcı görsellerin boyutunu değiştirmenize olanak sağlar. Sol alttaki kutuyu kullanarak görselleri dosya adına, tarihe, etikete veya derecelendirmeye göre de süzebilirsiniz. Araç çubuğu, hem Göz At kipinde hem de Görüntüle kipinde görünür ve en sık kullanılan eylemleri içerir. </para>
+<itemizedlist>
+<listitem
+><para
+><guiicon
+>Başlangıç Sayfası</guiicon
+>: Başlangıç sayfasını açar.</para
+></listitem>
+<listitem
+><para
+><guiicon
+>Göz At</guiicon
+>: Göz At kipine geçer.</para
+></listitem>
+<listitem
+><para
+><guiicon
+>Görüntüle</guiicon
+>: Görüntüle kipine geçer.</para
+></listitem>
+<listitem
+><para
+><guiicon
+>Önceki</guiicon
+>: Bu simgeye tıklamak, klasördeki önceki görsele gider.</para
+></listitem>
+
+<listitem
+><para
+><guiicon
+>Sonraki</guiicon
+>: Bu simgeye tıklamak, klasördeki sonraki görsele gider.</para
+></listitem>
+
+<listitem
+><para
+><guiicon
+>Düzenleme Araçlarını Göster</guiicon
+>: Bu düğmeye tıklamak <link linkend="sidebar"
+>İşlemler</link
+> kenar çubuğu sekmesini açar/kapatır.</para
+></listitem>
+
+<listitem
+><para
+><guiicon
+>Tam Ekran</guiicon
+>: Tam Ekran kipine geçer.</para
+></listitem>
+</itemizedlist>
+
+</sect1>
+
+<sect1 id='view_mode'
+><title
+>Görüntüle Kipi</title>
+<para
+>Görüntüle kipi, görselleri tam boyutlu olarak görüntüler. Göz At kipinde bulunan aynı <link linkend="sidebar"
+>kenar çubuğu</link
+> solda görüntülenir. Altta, geçerli klasördeki görseller arasında gezinmenizi sağlayan Küçük Görsel Çubuğu bulunmaktadır. Küçük Görsel Çubuğu, <guibutton
+>Küçük Görselleri Göster</guibutton
+> düğmesine tıklanarak açılabilir. Yeniden tıkladığınızda katlanacaktır. Küçük görsellerin boyutunu değiştirmek için ayırıcıyı &LMB; ile hareket ettirin.</para>
+
+<para
+>Görüntüle kipi, birden fazla görselin yan yana görüntülenmesini destekler. Görüntüle kipine geçmeden önce Göz At kipinde birden fazla görseli seçebilirsiniz veya Küçük Görsel Çubuğu'ndaki görsellerin üzerine geldiğinizde o görseli gösteren bir bölme eklemek için görünen <guibutton
+>+</guibutton
+> düğmesine tıklayabilirsiniz. Daha sonra bölmesini kaldırmanıza izin verecek bir <guibutton
+>-</guibutton
+> de görünecektir.</para>
+
+<para
+>Birden çok görsel görüntülendiğinde, her görselin altında, görseli silmenize veya bölmesini kaldırmanıza olanak tanıyan küçük bir araç çubuğu görünür. Yakınlaştırma işlemlerini her görsel için bağımsız olarak gerçekleştirebilir veya eşzamanlayabilirsiniz. Yakınlaştırma kaydırıcısının solundaki <guilabel
+>Eşzamanla</guilabel
+> seçeneğini işaretleyerek veya <keycombo action="simul"
+>&Ctrl;<keycap
+>Y</keycap
+></keycombo
+> düğmelerine basarak bunu değiştirin. Bölmelerine tıklayarak veya klavyenizi kullanarak görseller arasında geçiş yapabilirsiniz. Sağdaki görsele geçmek için <keycombo action="simul"
+>&Tab;</keycombo
+>, soldaki görsele geçiş yapmak için <keycombo action="simul"
+>&Shift;&Tab;</keycombo
+> kısayollarını kullanın.</para>
+
+<screenshot>
+  <screeninfo
+>Görüntüle Kipi Ekran Görüntüsü</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="view_mode.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<para
+>Sağ ortadaki kaydırıcı görselin yakınlaştırma boyutunu denetler. <guibutton
+>Sığdır</guibutton
+>, <guibutton
+>Doldur</guibutton
+>, <guibutton
+>%​100</guibutton
+> ve üç önden ayarlanmış yakınlaştırma düzeyi için düğmeler kaydırıcının hemen yanında bulunur. <guibutton
+>Sığdır</guibutton
+> düğmesi, geçerli görseli pencerenin boyutuna yakınlaştırır; <guibutton
+>Doldur</guibutton
+> düğmesi, görseli görseli genişlik veya yüksekliğe sığdırır ve <guibutton
+>%​100</guibutton
+> düğmesi, görseli gerçek piksel boyutuna yakınlaştırır. <keycap
+>F</keycap
+> kısayolu ise <guibutton
+>Sığdır</guibutton
+> ve <guibutton
+>%​100</guibutton
+> kipi arasında geçiş yapar; <keycombo action="simul"
+>&Shift;<keycap
+>F</keycap
+></keycombo
+> ise <guibutton
+>Doldur</guibutton
+> kipine geçer.</para>
+
+<para
+>Bir görsel sığdırmak için yakınlaştırma kipindeyken, ok düğmelerini kullanarak önceki ve sonraki görsele gidebilirsiniz. Yakınlaştırdığınızda görseli kaydırmak için ok düğmeleri kullanılır. Bu, telefonların veya sayısal kameraların sağladığı davranışa çok benzer.</para>
+
+<para
+>Bir görsel yakınlaştırıldığında kuşbakışı görünümü görüntülenir ve fare ve ok düğmelerini kullanarak görseli kaydırmanıza olanak tanır. Kuşbakışı görünüm, kısa bir gecikmenin ardından otomatik olarak kendini gizler ve yalnızca yakınlaştırma veya sarma sırasında geri gösterilir. Kuşbakışı görünüm, bağlam menüsünden veya <menuchoice
+><guimenu
+>Görünüm</guimenu
+><guimenuitem
+>SYakınlaştırıldığında Kuşbakışı Görünümü Göster</guimenuitem
+></menuchoice
+> seçeneğinden devre dışı bırakılabilir</para>
+
+<para
+><menuchoice
+><guimenu
+>Ayarlar</guimenu
+><guimenuitem
+>&gwenview; Uygulamasını Yapılandır...</guimenuitem
+></menuchoice
+> konumundan erişilebilen &gwenview; yapılandırma penceresinin .<guimenuitem
+>Görsel Görünümü</guimenuitem
+> sayfasındaki <guilabel
+>Yakınlaştırma kipi</guilabel
+> bölümünden, A görselinin bir bölümüne yakınlaştırdıktan sonra B görseline ne olacağını belirleyebilirsiniz.</para>
+
+<itemizedlist>
+    <listitem
+><para
+><guilabel
+>Her bir görseli kendiliğinden sığdır</guilabel
+> olarak ayarlanırsa B görseli ekrana sığması için uzaklaştırılır.</para
+></listitem>
+    <listitem
+><para
+><guilabel
+>Aynı yakınlaştırmayı ve konumu koru</guilabel
+> olarak ayarlanırsa tüm görseller aynı yakınlaştırmayı ve konumu paylaşır: B görseli, A görseli ile aynı yakınlaştırma parametrelerine ayarlanır (ve bunlar değiştirilirse A görseli görüntülenir) güncellenmiş yakınlaştırma ve konumla).</para
+></listitem>
+    <listitem
+><para
+><guilabel
+>Görsel başına yakınlaştırma ve konum</guilabel
+> olarak ayarlanırsa tüm görseller kendi yakınlaştırma ve konumlarını hatırlar: B görseli, başlangıçta A görseli ile aynı yakınlaştırma parametrelerine ayarlanır; ancak daha sonra kendi yakınlaştırma ve konumunu anımsar (eğer bunlar değiştirilirse A görseli güncellenmiş yakınlaştırma ve konumla <emphasis
+>görüntülenmeyecektir</emphasis
+>).</para
+></listitem>
+</itemizedlist>
+
+<tip
+><para
+>Başka bir programdaki <guimenuitem
+>Birlikte Aç</guimenuitem
+> gibi bir bağlam menüsünden &gwenview;'ı başlatarak veya argüman olarak bir görseli komut satırından vererek doğrudan Görüntüle kipinde başlayabilirsiniz.</para
+> </tip>
+
+<para
+>Aşağıdaki ek görsel işlemleri yalnızca Görüntüle kipinde kullanılabilir:</para>
+
+<itemizedlist>
+<listitem
+><para
+><menuchoice
+> <shortcut
+> <keycombo action="simul"
+>&Shift;<keycap
+>C</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Düzen</guimenu
+> <guimenuitem
+>Kırp</guimenuitem
+> </menuchoice
+>: Bu işlem, görselin istemediğiniz kısımlarını atmanıza olanak tanır. </para>
+<para
+>Alt açılır bölmedeki <guilabel
+>Gelişmiş ayarlar</guilabel
+> onay kutusunu işaretleyerek gelişmiş kırpma parametrelerine erişebilirsiniz. Kırpma işlemini ayarlamak için ilgili alanları kullanın. </para>
+<para
+>Kırpılan alanı görselin kenarlarındaki gri kare tutaçları sürükleyerek de ayarlamak mümkündür. Kırpılan alana &LMB; ile tıklayıp basılı tutarak taşıyabilir ve fare işaretçisiyle sürükleyebilirsiniz. </para>
+<para
+>Hazır olduğunuzda sonuçları görmek için <guibutton
+>Kırp</guibutton
+> düğmesine basın. Sonuçları kaydetmek veya işlemi geri almak/yeniden yapmak için üst açılır pencereyi kullanın. </para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+> <guimenu
+>Düzen</guimenu
+> <guimenuitem
+>Kırmızı Gözü Azalt</guimenuitem
+> </menuchoice
+>: Bu işlem, flaşlı fotoğraf makinesiyle çekilen fotoğraflarda yaygın olarak görülen "kırmızı göz" etkisini azaltır. </para
+></listitem>
+</itemizedlist>
+
+</sect1>
+
+<sect1 id='fullscreen_mode'>
+<title
+>Tam Ekran Kipleri</title>
+
+<para
+>Araç çubuğundaki <guiicon
+>Tam Ekran</guiicon
+> düğmesine basarak veya <menuchoice
+> <shortcut
+> <keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>F</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Görünüm</guimenu
+> <guimenuitem
+>Tam Ekran Kipi</guimenuitem
+> </menuchoice
+> seçeneklerini kullanarak tam ekran kipine geçebilirsiniz. </para>
+<para
+>Bu kipten ayrılmak için &Esc; düğmesine basın.</para>
+
+<sect2>
+<title
+>Tam Ekran Göz At Kipi</title>
+
+<para
+>Göz At kipinde, fareyi küçük görsellerin üzerine getirdiğinizde görünen düğmeye tıklayarak da tam ekrana geçebilirsiniz. </para>
+<screenshot>
+  <screeninfo
+>Tam Ekran Görüntüle Kipi Ekran Görüntüsü</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="fullscreen-browse.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para
+>Göz atarken tam ekrana geçmek, görselleriniz arasında gezinirken size daha sürükleyici bir deneyim sunar. Normal bilgisayarınızda oldukça hoştur; ancak misafirlerinize resimler göstermek için dizüstü bilgisayarınızı oturma odasındaki büyük TV'ye bağladığınızda daha da anlamlı olur. </para>
+</sect2>
+
+<sect2 id="fullscreen">
+<title
+>Tam Ekran Görüntüle Kipi</title>
+<para
+>Tam ekran Görüntüle kipi, görselleriniz bir slayt gösterisini gösterir. Göz At kipinde fareyi küçük görsellerin üzerine getirdiğinizde görünen düğmeye tıklayarak veya görev çubuğundaki <guiicon
+>Tam Ekran</guiicon
+> düğmesine basarak Tam Ekran kipine erişin. <screenshot>
+  <screeninfo
+>Tam Ekran Göz At Kipi Ekran Görüntüsü</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="fullscreen-view.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+</para>
+
+<para
+>Üst çubuk kendiliğinden gizlenecektir; göstermek için fareyi ekranın üstüne getirmeniz yeterlidir. Fare imleci üst çubuğun üzerindeyse kendiliğinden gizlenmez. Bazı düğmeler dışında, çubuktaki düğmeler Göz At veya Görüntüle kipindeki düğmeler ile aynıdır; farklı olanlar, sizi ana &gwenview; penceresine döndüren <guiicon
+>Tam Ekrandan Çık</guiicon
+> düğmesi, <guiicon
+>Slayt Gösterisini Duraklat/Sürdür</guiicon
+> düğmesi ve slayt gösterisini tez ve kolay yapılandırmanıza izin veren bir <guiicon
+>Tam ekran kipini yapılandır</guiicon
+> düğmesidir. Kullanılabilir slayt gösterisi denetimleri şunlardır: </para>
+
+<itemizedlist>
+    <listitem
+><para
+><guilabel
+>Aralık</guilabel
+> kaydırıcısı, &gwenview;'ın bir sonraki görsele geçmeden önce bir görseli ne kadar süreyle göstereceğini denetler.</para
+></listitem>
+    <listitem
+><para
+><guilabel
+>Döngü</guilabel
+> onay kutusu işaretliyse slayt gösterisinin sonuna gelindiğinde durmak yerine baştan sürecektir. </para
+></listitem>
+    <listitem
+><para
+><guilabel
+>Rastgele</guilabel
+> onay kutusu işaretliyse klasörde abecesel olarak ilerlemek yerine görseller rastgele sırada gösterilirler.</para
+></listitem>
+    <listitem
+><para
+><guibutton
+>Görüntülenecek Görsel Bilgisini Seç</guibutton
+>, araç çubuğundaki düğmelerin altında hangi üst verinin görüntüleneceğini tanımlamanıza olanak tanır. </para
+></listitem>
+    <listitem
+><para
+><guilabel
+>Küçük görselleri göster</guilabel
+> onay kutusu işaretliyse geçerli klasördeki tüm görsellerin küçük halleri araç çubuğunun sağında görüntülenecektir.</para
+></listitem>
+    <listitem
+><para
+><guilabel
+>Yükseklik</guilabel
+> kaydırıcısı, görüntülenen küçük görsellerin boyutunu değiştirir.</para
+></listitem>
+</itemizedlist>
+
+<para
+>Etkinleştirilirse üst çubukta geçerli klasördeki diğer görselleri gösteren bir alan gösterilecektir. Birine tıklamak onu gösterir.</para>
+</sect2>
+</sect1>
+
+<sect1 id="sidebar">
+<title
+>Kenar Çubuğu</title>
+
+ <para
+>Soldaki kenar çubuğu, Göz At ve Görüntüle kiplerinde kullanılabilir; ancak Göz At kipinde öntanımlı olarak görünmez. Görünüşü, <menuchoice
+> <shortcut
+> <keycap
+>F4</keycap
+> </shortcut
+> <guimenu
+>Görünüm</guimenu
+> <guimenuitem
+>Kenar Çubuğu</guimenuitem
+> </menuchoice
+> seçenekleri kullanılarak veya durum çubuğunun solundaki <guiicon
+>▮←</guiicon
+> / <guiicon
+>▮→</guiicon
+> düğmesi kullanılarak açılabilir veya kapatılabilir. Tıklandığında, kenar çubuğunu genişletir veya daraltır. Kenar çubuğunda birkaç sekme bulunur:</para>
+
+<variablelist>
+
+<varlistentry>
+<term
+><guilabel
+>Klasörler</guilabel
+></term>
+<listitem
+><para
+>Sisteminizdeki tüm klasörlerin bir listesini görüntüler ve bunlar arasında geçiş yapmanıza olanak tanır. Göz At kipinde klasörlerden küçük görseller görüntülenir; Görüntüle kipinde ise klasördeki ilk görsel görünür. Klasördeki görseller arasında kısayol veya <guibutton
+>Önceki</guibutton
+> ve <guibutton
+>Sonraki</guibutton
+> düğmelerini kullanarak geçiş yapabilirsiniz. Bir klasöre birçok kez tıklamak Görüntüle ve Göz At kipleri arasında geçiş yapar.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Bilgi</guilabel
+></term>
+<listitem
+><para
+>Dosya adı ve boyutu gibi <guilabel
+>Üst Bilgi</guilabel
+>'leri görüntüler. <guilabel
+>Daha Fazla...</guilabel
+> bağlantısı, kullanılabilir tüm üst veriyi görüntülemenize ve kenar çubuğunda hangi verinin görüneceğini seçmenize olanak tanır.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>İşlemler</guilabel
+></term>
+<listitem
+><para
+>Bu, <link linkend="image_operations"
+>daha önce açıklanan genel görsel işlemlerinin</link
+> yanı sıra Görüntüle kipine özel işlemleri de gerçekleştirmenize olanak tanır. Ayrıca kopyalama, yeniden adlandırma, silme ve yeni klasör oluşturma gibi yaygın dosya işlemlerine de izin verir.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+</sect1>
+
+</chapter>
+<chapter id="importer">
+<title
+>&gwenview; İçe Aktarıcısı</title>
+
+<sect1>
+<title
+>Giriş</title>
+<para
+>&gwenview; içe aktarıcısı, görselleri bir sayısal kameradan veya çıkarılabilir ortamdan içe aktarmanıza izin verir. Başlatmak için desteklenen bir aygıtı bağladıktan sonra &kde; Aygıt Bildiricisi içindeki <guilabel
+>&gwenview; ile Fotoğrafları İndir</guilabel
+> seçeneğini seçin.</para>
+
+<para
+>Bir aygıt bağladığınızda, &gwenview; içe aktarıcısı tüm görselleri ve klasörleri özyineli olarak listeler. </para>
+<para
+>Bu her zaman beklediğiniz şey değildir; bir akıllı telefonu taktığınızda aygıttaki tüm ortamları değil de yalnızca, genellikle özel bir alt klasörde bulunan, çektiğiniz resimleri almak istersiniz. </para>
+
+<screenshot>
+  <screeninfo
+>Kök Klasör Seçimi</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="importer-picking-root-folder.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para
+>Listelenecek kök klasörü seçmek olanaklıdır ve &gwenview; İçe Aktarıcısı, her aygıt için son kök klasörü anımsar. Böylece, bir sonrakinde aygıtı taktığınızda yalnızca ilgili resimler ve videolar listelenir. </para>
+
+<sect2>
+<title
+>Görselleri İçe Aktarmak</title>
+
+<screenshot>
+  <screeninfo
+>&gwenview; İçe Aktarıcısı Ekran Görüntüsü</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="importer.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<para
+>Dilerseniz bir görselin üzerine fareyle geldiğinizde görünen <guiicon
+>+</guiicon
+> düğmesine basarak <guilabel
+>İçe aktarılacak belgeleri seç</guilabel
+> altında içe aktarmak istediğiniz belgeleri seçebilirsiniz. Ayrıca pencerenin altındaki metin kutusundan görsellerin içe aktarılacağı klasörü de seçebilirsiniz. İşiniz bittiğinde, yalnızca seçtiğiniz görselleri içe aktarmak için <guibutton
+>Seçiliyi İçe Aktar</guibutton
+> düğmesini veya aygıttaki tüm dosyaları içe aktarmak için <guibutton
+>Tümünü İçe Aktar</guibutton
+> düğmesine tıklayın.</para>
+</sect2>
+
+<sect2>
+<title
+>Kendiliğinden Yeniden Adlandırma</title>
+<para
+>&gwenview; İçe Aktarıcısı, belirli bir modele göre dosyaları yeniden adlandırabilir. Bunu yapılandırmak için sol alt köşeden <guibutton
+>Ayarlar</guibutton
+>'ı seçin. Bu özelliği, yukarıdaki onay kutusunu kullanarak açabilirsiniz veya kapatabilirsiniz. <guilabel
+>Yeniden Adlandırma Biçimi</guilabel
+>, birkaç parametreyi destekler; bunların arasında görselin oluşturma tarihi veya dosya ado olabilir. Bunlar metin kutusunun altında listelenirler. Metin kutusuna girmek için parametre adını tıklayabilirsiniz veya elle yazabilirsiniz.</para>
+</sect2>
+</sect1>
+
+</chapter>
+<chapter id="tips">
+<title
+>İpuçları</title>
+<sect1 id='mouse'
+><title
+>Fareyi kullanmak</title>
+
+<sect2 id='mouse_panning'
+><title
+>Fare ile kaydırmak</title>
+<itemizedlist>
+  <listitem
+><para
+>Bir görselin üzerinde farenin sol düğmesini basılı tutmak, görseli sarmanıza olanak tanır.</para
+></listitem>
+  <listitem
+><para
+>Fare tekerleği, görseli yukarı ve aşağı saracaktır.</para
+></listitem>
+</itemizedlist>
+</sect2>
+
+
+<sect2 id='mouse_zooming'
+><title
+>Fare ile yakınlaştırmak</title>
+<itemizedlist>
+  <listitem
+><para
+>Orta fare düğmesini tıklamak <guibutton
+>Sığdır</guibutton
+> yakınlaştırma düğmesini açar/kapatır. &Shift; düğmesini basılıp tutup orta fare düğmesine tıklarsanız <guibutton
+>Doldur</guibutton
+> seçeneği tetiklenir.</para
+></listitem>
+  <listitem
+><para
+>&Ctrl; düğmesini basılı tutun, ardından yakınlaştırmak ve uzaklaştırmak için fare tekerleğini kullanın veya yakınlaştırmak için sol tıklayın ve uzaklaştırmak için sağ tıklayın.</para
+></listitem>
+
+  <listitem
+><para
+>&Alt; düğmesi basılı tutulurken kullanılan fare tekerleği, görseli yatay olarak sarar.</para
+></listitem>
+</itemizedlist>
+</sect2>
+
+
+<sect2 id='mouse_browsing'
+><title
+>Fare ile göz atmak</title>
+<itemizedlist>
+  <listitem
+><para
+>Göz At kipindeyken bir görsele tıklamak, Görüntüle kipine geçer ve o görseli gösterir.</para
+></listitem>
+  <listitem
+><para
+>Göz At kipindeyken fare tekerleğini sarmak, küçük görsel görüntüleme alanını yukarı veya aşağı sarar.</para
+></listitem>
+  <listitem
+><para
+><menuchoice
+><guimenu
+>Ayarlar</guimenu
+><guimenuitem
+>&gwenview; Uygulamasını Yapılandır</guimenuitem
+></menuchoice
+> bölümündeki <guilabel
+>Fare tekerleği davranışı</guilabel
+> Göz At olarak ayarlanmışsa Görüntüle kipindeyken fare tekerleği ile sarmak, klasördeki görseller arasında dolaştırır.</para
+></listitem>
+</itemizedlist>
+</sect2>
+</sect1>
+
+<sect1 id="keybindings"
+> <title
+>Düğme bağıntıları</title>
+
+<para
+>&gwenview;, <menuchoice
+><guimenu
+>Ayarlar</guimenu
+><guimenuitem
+>Kısayolları Yapılandır...</guimenuitem
+></menuchoice
+> bölümünden yapılandırılabilen ve yeniden eşlemlenebilen birçok klavye kısayolu ile birlikte gelir. Tüm dosyalar ve klasörler görünümünde olağan &plasma; kısayolları değiştirilmedikleri sürece kullanılabilirler.</para>
+
+<para
+>En kullanışlı düğme bağıntılarından bazıları şunlardır:</para>
+
+<itemizedlist>
+<listitem
+><para
+><keycap
+>Boşluk</keycap
+>: Dizindeki sonraki görsel görüntüler.</para
+></listitem>
+
+<listitem
+><para
+>&Backspace;: Dizindeki önceki görseli görüntüler.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Alt;<keycap
+>Yukarı</keycap
+></keycombo
+>: Geçerli klasörün bir üst klasörüne geçer.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>F</keycap
+></keycombo
+>: Tam Ekran kipine geçer.</para
+></listitem>
+
+<listitem
+><para
+>&Esc;: Göz At kipine geri döner. </para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>M</keycap
+></keycombo
+>: Menü çubuğunu gösterin veya gizleyin.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>B</keycap
+></keycombo
+>: Küçük görsel çubuğunu gösterin veya gizleyin.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F4</keycap
+>: Kenar çubuğunu gösterin veya gizleyin.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F6</keycap
+>: Doğrudan dosya yolunu yazabilmeniz için Konum Çubuğu'nu düzenlenebilir hale getirin. Sağdaki oka basarak standart Konum Çubuğu'na dönebilirsiniz.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>R</keycap
+></keycombo
+>: Geçerli görseli sağa döndürün.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>R</keycap
+></keycombo
+>: Geçerli görseli sola döndürün.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Shift;<keycap
+>R</keycap
+></keycombo
+>: Geçerli görseli yeniden boyutlandırın.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Shift;<keycap
+>C</keycap
+></keycombo
+>: Geçerli görseli kırpın.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>Y</keycap
+></keycombo
+>: Görüntüle kipinde birden çok görsel görüntülendiğinde, bu onların görünümlerini eşzamanlar. </para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>S</keycap
+></keycombo
+>: Görselde yapılan değişiklikleri kaydedin.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>Sil</keycap
+>: Geçerli görseli çöp kutusuna taşıyın.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Shift;<keycap
+>Sil</keycap
+></keycombo
+>: Görseli diskten kalıcı olarak silin. Bu işlemin geri döndürülemez olduğunu ve geri alınamayacağını unutmayın.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>P</keycap
+></keycombo
+>: Geçerli görseli yazdırın.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>O</keycap
+></keycombo
+>: Standart dosya seçim iletişim kutusunu kullanarak bir görsel açın.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F</keycap
+>: Bu kısayola basmak sığdırmak için yakınlaştırmayı açar ve kapatır.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>P</keycap
+>: Bir videoyu görüntülerken bu kısayol oynatmayı açar ve kapatır.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>T</keycap
+></keycombo
+>: Etiketleri düzenleyin.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F2</keycap
+>: Bir görseli yerinde yeniden adlandırın.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>Sil</keycap
+>: Bir görseli çöp kutusuna taşıyın.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Shift;<keycap
+>Sil</keycap
+></keycombo
+>: Bir görseli silin.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>F7</keycap
+></keycombo
+>: Bir görseli kopyalayın.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>F8</keycap
+></keycombo
+>: Bir görseli taşıyın.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>F9</keycap
+></keycombo
+>: Bir görseli bağlantılayın.</para
+></listitem>
+
+</itemizedlist>
+
+</sect1>
+</chapter>
+
+<chapter id="configure">
+    <title
+>&gwenview; Yapılandırması</title>
+    <sect1 id="configindex">
+        <title
+>Yapılandırma genel görünümü</title>
+        <para
+><menuchoice
+><guimenu
+>Ayarlar</guimenu
+> <guimenuitem
+>&gwenview; Uygulamasını Yapılandır...</guimenuitem
+></menuchoice
+> ögesini seçerek &gwenview; uygulamasını yapılandırabilirsiniz. Yapılandırma iletişim kutusu üç bölüme ayrılmıştır. Bu bölümde kullanılabilir seçenekler ayrıntılı olarak açıklanmaktadır. </para>
+        <itemizedlist>
+            <listitem>
+                <para
+><link linkend="configgeneral"
+>Genel</link
+></para>
+            </listitem>
+            <listitem>
+                <para
+><link linkend="configview"
+>Görsel Görünümü</link
+></para>
+            </listitem>
+            <listitem>
+                <para
+><link linkend="configadvanced"
+>Gelişmiş</link
+></para>
+            </listitem>
+        </itemizedlist>
+    </sect1>
+    <sect1 id="configgeneral">
+        <title
+>Genel</title>
+        <variablelist>
+            <varlistentry>
+                <term
+><guilabel
+>Videolar</guilabel
+></term>
+                <listitem>
+                    <para
+>&gwenview;'ın görseller arasında video göstermesine izin vermek için <guilabel
+>Videoları göster</guilabel
+> onay kutusunu işaretleyin.</para>
+                    <para
+>Videoların kendiliğinden oynatılmasını devre dışı bırakmak için <guilabel
+>Kendiliğinden oynat</guilabel
+> onay kutusunun işaretini kaldırın. Bu, tarama sırasında videonun kendiliğinden başlatılmasını engeller.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Son görsele ulaşınca bildir</guilabel
+></term>
+                <listitem>
+                    <para
+>&gwenview;'ın ek bildirimler olmadan görseller listesinde dolaşmasına izin vermek için <guilabel
+>Asla</guilabel
+> ögesini seçin.</para>
+                    <para
+>Listenin sonuna ulaşmak ile ilgili bildirimlerin yalnızca <link linkend="fullscreen"
+>slayt gösterisi kipinde</link
+> gösterilmesini istiyorsanız <guilabel
+>Yalnızca slayt gösterisi sırasında</guilabel
+> ögesini seçin.</para>
+                    <para
+>Bildirimleri koşulsuz olarak almak istiyorsanız <guilabel
+>Her zaman</guilabel
+> ögesini seçin.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Arka plan rengi</guilabel
+></term>
+                <listitem>
+                    <para
+>Göz At ve Görüntüle kiplerinde gri arka planın rengini siyahtan (en soldaki konum) beyaza (en sağdaki konum) değiştirmek için kaydırıcıyı hareket ettirin.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Tam ekran arka planı</guilabel
+></term>
+                <listitem>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Siyah</guilabel
+> &mdash; Tam ekran kipinde arka plan rengini siyah olarak ayarlayın.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Koyu gri doku</guilabel
+> &mdash; Tam ekran kipinde arka plan rengini koyu gri olarak ayarlayın.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Kayıplı görsel kaydetme kalitesi</guilabel
+></term>
+                <listitem>
+                    <para
+>JPEG, WEBP, AVIF, HEIF ve HEIC gibi kayıplı görsel biçimleri için kaydetme/sıkıştırma kalitesi ayarı; bir dosyayı kayıplı görsel biçiminde kaydederken <guilabel
+>Farklı Kaydet</guilabel
+> iletişim kutusunda geçici olarak geçersiz kılınabilir. Var olan bir kayıplı görseli yeni bir adla kaydederken veya kayıpsız bir düzenleme (örneğin, yalnızca EXIF döndürme etiketini değiştiren döndürme) gerçekleştirdikten sonra, gerçek görsel üzerinde herhangi bir değişiklik yapılmadığından dosyanın görünümü değişmez.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Küçük görsel eylemleri</guilabel
+></term>
+                <listitem>
+                    <para
+>Küçük görsel eylem düğmelerinin, görsel küçük halleri üzerinde katmanlar olarak gösterilip gösterilmeyeceği.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Tüm düğmeler</guilabel
+> &mdash; Tüm düğmeleri göster</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Yalnızca seçim düğmesini göster</guilabel
+> &mdash; Yalnızca seç/seçimi kaldır düğmesini göster</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Yok</guilabel
+> &mdash; Hiçbir küçük görsel düğmesi gösterme</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </sect1>
+        <sect1 id="configview">
+        <title
+>Görsel Görünümü</title>
+        <variablelist>
+            <varlistentry>
+                <term
+><guilabel
+>Saydamlığı şununla göster</guilabel
+></term>
+                <listitem>
+                    <para
+>Saydam raster veya <abbrev
+>SVG</abbrev
+> görsellerin arka planının nasıl sunulacağını seçin.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Çevreleyen arka plan</guilabel
+> &mdash; <link linkend="configgeneral"
+>Genel</link
+> sayfasındaki arka plan rengini kullanın.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Dama tahtası arka plan</guilabel
+> &mdash; Geleneksel dama tahtası arka planını kullanın.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Katı renk arka plan</guilabel
+> &mdash; <ulink url="help:/fundamentals/colors.html"
+>Renk seçicisi</ulink
+> ile seçilebilen bir renk kullanın.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Fare tekerleği davranışı</guilabel
+></term>
+                <listitem>
+                    <para
+>Görüntüle kipinde bir görsel üzerinde sarmanın nasıl davranacağını seçin.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Sar</guilabel
+> &mdash; Yakınlaştırıldığında görseli dikey olarak kaydırın. Aksi takdirde hiçbir şey olmaz.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Göz at</guilabel
+> &mdash; Sonraki veya önceki görsele geçin.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Yakınlaştır</guilabel
+> &mdash; Geçerli görseli yakınlaştırmak/uzaklaştırmak için fare tekerleğini kullanın.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Yakınlaştırma kipi</guilabel
+></term>
+                <listitem>
+                    <para
+>Görüntüle kipinde yakınlaştırmanın nasıl çalışacağını seçmenize olanak tanır.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Her bir görseli kendiliğinden sığdır</guilabel
+> &mdash; Görselleri görünüm bölmesine göre kendiliğinden yeniden boyutlandırın.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Aynı yakınlaştırmayı ve konumu koru</guilabel
+> &mdash; Tüm görseller için aynı yakınlaştırma düzeyini kullanın.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Görsel başına yakınlaştırma ve konum</guilabel
+> &mdash; Her bir görsel için ayrı yakınlaştırma düzeyleri kullanın.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Küçükçe görselleri büyüt</guilabel
+> &mdash; &gwenview;'ın Görüntüle kipinde küçük boyutlu görselleri genişletmesi için bu seçeneği işaretleyin.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Canlandırmalar</guilabel
+></term>
+                <listitem>
+                    <para
+>Görüntüle kipinde görseller arasındaki soldurmanın nasıl yapılacağının seçilmesine olanak sağlar.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>OpenGL</guilabel
+> &mdash; Donanım ivmelendirmeleri canlandırmalar kullanın.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Yazılım</guilabel
+> &mdash; Donanım ivmelendirmeli canlandırmalar kullanmayın.<guilabel
+>OpenGL</guilabel
+> çalışmaz ise ve görseller arasında yine de solmalı geçiş isterseniz bu seçeneği işaretleyin.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Yok</guilabel
+> &mdash; Görseller arasında geçiş yaparken canlandırma kullanmayın.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Küçük Görsel Çubuğu</guilabel
+></term>
+                <listitem>
+                    <para
+>Küçük görsel çubuğunu yapılandırmaya izin verir.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Yönelim</guilabel
+></para>
+                            <itemizedlist>
+                                <listitem>
+                                    <para
+><guilabel
+>Yatay</guilabel
+> &mdash; Görselin altında yatay bir küçük görsel şeridi gösterin.</para>
+                                </listitem>
+                                <listitem>
+                                    <para
+><guilabel
+>Dikey</guilabel
+> &mdash; Görselin sağında dikey bir küçük görsel şeridi gösterin.</para>
+                                </listitem>
+                            </itemizedlist>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Satır sayısı</guilabel
+> &mdash; Küçük görsel çubuğundaki satır sayısını değiştirmek için döndürme kutusunu kullanın.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </sect1>
+        <sect1 id="configadvanced">
+        <title
+>Gelişmiş</title>
+        <variablelist>
+            <varlistentry>
+                <term
+><guilabel
+>Küçük Görseller</guilabel
+></term>
+                <listitem>
+                    <para
+>Pek fazla disk alanınız yoksa <guilabel
+>Düşük özkaynak kullanım kipi</guilabel
+> seçeneğini işaretleyin. Bu, küçük görsellerin diskte saklanmasını önler ve varsa daha hızlı yüklenen, daha düşük kaliteli gömülü küçük görselleri tercih eder.</para>
+                    <para
+>Dikkatli olun: Bu, <filename
+>.cache</filename
+> klasörünüzdeki <filename
+>thumbnails</filename
+> siler ve daha önceden &gwenview; veya diğer uygulamalar tarafından oluşturulan tüm küçük görselleri kaldırır.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Geçmiş</guilabel
+></term>
+                <listitem>
+                    <para
+>&gwenview;'ın ziyaret edilen &URL;'leri anımsamasını ve onları <guilabel
+>Son Kullanılan Klasörler</guilabel
+> bölmesinde göstermesini istiyorsanız <guilabel
+>Klasörleri ve URL'leri anımsa</guilabel
+> onay kutusunu işaretleyin.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Sunum amacı</guilabel
+></term>
+                <listitem>
+                    <para
+>Görselleri göstermek üzere <ulink url="https://en.wikipedia.org/wiki/Color_management#Rendering_intent"
+>sunum amacının</ulink
+> seçilmesine izin verir.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>Algısal</guilabel
+> &mdash; Tüm renkleri etkin renk profilinin renk gamına uyacak şekilde eşit olarak ölçeklendir</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>Göreceli Renkölçer</guilabel
+> &mdash; Etkin renk profilinin renk gamına uymayan renkleri tıkıştır, diğer renklere dokunulmaz</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>Renk profili</guilabel
+></term>
+                <listitem>
+                    <para
+>Görsel dosyasındaki renk profiline sistem geneli <ulink url="https://en.wikipedia.org/wiki/ICC_profile"
+>renk profilini</ulink
+> ek olarak uygulamak isteyip istemediğinizi seçmenize olanak tanır.</para>
+                    <para
+><guilabel
+>Yalnızca görsel dosyasına gömülü profili uygula</guilabel
+> ögesi işaretliyse &gwenview;, sistem çapında renk düzeltmenin monitör profilini zaten uyguladığını varsayar.</para>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </sect1>
+    <sect1 id="hidden-configuration">
+    <title
+>Gizli Yapılandırma Seçenekleri</title>
+    <para
+>Gizli &gwenview; seçenekleri üzerine ek bilgi <ulink url="http://userbase.kde.org/Special:myLanguage/Gwenview/Hidden_Configuration_Options"
+>bu sayfada</ulink
+> bulunabilir. </para>
+    <important>
+        <para
+>Yukarıda belirtilen sayfada açıklanan seçenekler, &gwenview;'ı belirli gereksinimlere göre ayarlamanıza yardımcı olabilir; ancak lütfen bir sürümden diğerine çalışmayı sürdüreceklerinin hiçbir garantisinin olmadığını unutmayın. </para>
+    </important>
+    </sect1>
+</chapter>
+
+<chapter id="credits">
+<title
+>Emeği Geçenler ve Telif Hakkı</title>
+
+<para
+>&gwenview; bakımı şu anda Aurélien Gâteau tarafından yapılmaktadır</para>
+
+<para
+>Bu belge Christopher Martin tarafından yazılmıştır</para>
+
+<para
+>Bu belge Henry de Valence tarafından &kde; 4 için güncellenmiştir</para>
+
+<para
+>Çeviri: Gökhan HUZ<email
+>gokhanhuzz@gmail.com</email
+></para
+><para
+>Çeviri: Emir SARI<email
+>emir_sari@icloud.com</email
+></para
+> &underFDL; &underGPL; </chapter>
+
+</book>
