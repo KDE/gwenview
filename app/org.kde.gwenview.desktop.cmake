@@ -21,6 +21,7 @@ Name[fi]=Gwenview
 Name[fr]=Gwenview
 Name[ga]=Gwenview
 Name[gl]=Gwenview
+Name[he]=Gwenview
 Name[hi]=ग्वेन-व्यू
 Name[hne]=ग्वेन-व्यू
 Name[hr]=Gwenview
