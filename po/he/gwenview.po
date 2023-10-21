@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-09 00:43+0000\n"
-"PO-Revision-Date: 2023-10-06 00:04+0300\n"
+"PO-Revision-Date: 2023-10-20 11:33+0300\n"
 "Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: Hebrew <kde-i18n-doc@kde.org>\n"
 "Language: he\n"
@@ -23,7 +23,7 @@ msgstr ""
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "אבי זאנד וצוות התרגום של KDE ישראל"
+msgstr "אבי זאנד,צוות התרגום של KDE ישראל"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
@@ -1726,8 +1726,8 @@ msgid ""
 msgid_plural ""
 "%1 of them have been renamed because other documents with the same name had "
 "already been imported."
-msgstr[0] "שם הקובץ של אחת התמונות שונה מאחר ומסמך אחר בשם זהה כבר יובא"
-msgstr[1] "%1 שמות קבצים שונו מאחר ומסמכים אחרים בשמות זההים כבר יובאו"
+msgstr[0] "שם הקובץ של אחת התמונות שונה מאחר ומסמך אחר בשם זהה כבר יובא."
+msgstr[1] "%1 שמות קבצים שונו מאחר ומסמכים אחרים בשמות זההים כבר יובאו."
 
 #: importer/importdialog.cpp:117
 #, kde-format
