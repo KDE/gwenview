@@ -110,37 +110,45 @@ parts:
         - usr/share/metainfo/org.kde.gwenview.appdata.xml
         plugin: cmake
         build-packages:
+        - cmake
+        - libcfitsio-dev
         - libexiv2-dev
         - libjpeg-dev
         - libkf5kdcraw-dev
         - libkf5kipi-dev
+        - libkf5purpose-dev
         - libkimageannotator-dev
         - liblcms2-dev
-        - libcfitsio-dev
         - libphonon4qt5-dev
         - libphonon4qt5experimental-dev
-        - libkf5doctools-dev
-        - libkf5purpose-dev
-        - libtiff-dev
-        - wayland-protocols
-        - libwayland-dev
-        - qtbase5-private-dev
         - libpng-dev
+        - libtiff-dev
+        - libwayland-dev
+        - pkg-config
+        - qtbase5-private-dev
+        - wayland-protocols
         stage-packages:
-        - kio
-        - libkcolorpicker0
+        - kinit
+        - libc6
+        - libcfitsio
+        - libexiv2-27
+        - libgcc-s1
+        - libjpeg-turbo8
         - libkf5kdcraw5
-        - libkf5kipi32.0.0
-        - libkimageannotator0
-        - libcfitsio9
         - libkf5purpose5
-        - libkf5purpose-bin
-        - libkf5service5
+        - libkimageannotator0
+        - liblcms2-2
         - libphonon4qt5-4
-        - denef
-        - qml-module-org-kde-purpose
-        - qml-module-org-kde-qqc2desktopstyle
+        - libpng16-16
+        - libstdc++6
+        - libtiff5
         - libwayland-client0
+        - libx11-6
+        - phonon4qt5
+        - kio-extras
+        - qt5-image-formats-plugins
+        stage-snaps:
+        - kamera
         source: .
         source-type: local
         cmake-parameters:
