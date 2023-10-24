@@ -53,6 +53,19 @@ struct ThumbnailViewHelperPrivate {
             popup.addAction(action);
         }
     }
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    void addActionToMenu(QMenu &popup, const QString &name)
+    {
+        QAction *action = mActionCollection->action(name);
+        if (!action) {
+            qCWarning(GWENVIEW_APP_LOG) << "Unknown action" << name;
+            return;
+        }
+        if (action->isEnabled()) {
+            popup.addAction(action);
+        }
+    }
+#endif
 };
 
 ThumbnailViewHelper::ThumbnailViewHelper(QObject *parent, KActionCollection *actionCollection)

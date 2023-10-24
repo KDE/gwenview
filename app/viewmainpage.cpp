@@ -555,6 +555,15 @@ inline void addActionToMenu(QMenu *menu, KActionCollection *actionCollection, co
         menu->addAction(action);
     }
 }
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+inline void addActionToMenu(QMenu *menu, KActionCollection *actionCollection, const QString &name)
+{
+    QAction *action = actionCollection->action(name);
+    if (action) {
+        menu->addAction(action);
+    }
+}
+#endif
 
 void ViewMainPage::showContextMenu()
 {
