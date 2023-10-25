@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-09 00:43+0000\n"
+"POT-Creation-Date: 2023-10-25 00:40+0000\n"
 "PO-Revision-Date: 2023-10-21 13:54\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -1603,19 +1603,19 @@ msgstr ""
 "它们。</para><para>此栏可被移动到屏幕右侧并显示多列图像；<link url='%1'>请在"
 "程序设置对话框配置相关选项</link>。</para>"
 
-#: app/viewmainpage.cpp:575
+#: app/viewmainpage.cpp:584
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Background Color Mode"
 msgstr "背景颜色模式"
 
-#: app/viewmainpage.cpp:768
+#: app/viewmainpage.cpp:777
 #, kde-format
 msgctxt "@action:button"
 msgid "Discard Changes and Reload"
 msgstr "丢弃更改并重新加载"
 
-#: app/viewmainpage.cpp:770
+#: app/viewmainpage.cpp:779
 #, kde-format
 msgctxt "@info"
 msgid ""

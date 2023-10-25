@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-09 00:43+0000\n"
+"POT-Creation-Date: 2023-10-25 00:40+0000\n"
 "PO-Revision-Date: 2023-07-22 15:16+0300\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -1673,19 +1673,19 @@ msgstr ""
 "перемещена в правую часть экрана и содержать несколько рядов миниатюр; <link "
 "url='%1'>эти параметры устанавливаются в разделе настройки</link>.</para>"
 
-#: app/viewmainpage.cpp:575
+#: app/viewmainpage.cpp:584
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Background Color Mode"
 msgstr "Режим выбора цвета фона:"
 
-#: app/viewmainpage.cpp:768
+#: app/viewmainpage.cpp:777
 #, kde-format
 msgctxt "@action:button"
 msgid "Discard Changes and Reload"
 msgstr "Отклонить изменения и загрузить старую версию"
 
-#: app/viewmainpage.cpp:770
+#: app/viewmainpage.cpp:779
 #, kde-format
 msgctxt "@info"
 msgid ""

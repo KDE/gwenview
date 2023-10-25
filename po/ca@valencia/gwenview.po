@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-09 00:43+0000\n"
+"POT-Creation-Date: 2023-10-25 00:40+0000\n"
 "PO-Revision-Date: 2023-09-08 12:06+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -1146,7 +1146,7 @@ msgstr "Anterior"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to previous image"
-msgstr "Va a la imatge anterior"
+msgstr "Va fins a la imatge anterior"
 
 #: app/mainwindow.cpp:445
 #, kde-format
@@ -1158,7 +1158,7 @@ msgstr "Següent"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to next image"
-msgstr "Va a la imatge següent"
+msgstr "Va fins a la imatge següent"
 
 #: app/mainwindow.cpp:452
 #, kde-format
@@ -1170,7 +1170,7 @@ msgstr "Primera"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to first image"
-msgstr "Va a la primera imatge"
+msgstr "Va fins a la primera imatge"
 
 #: app/mainwindow.cpp:459
 #, kde-format
@@ -1182,7 +1182,7 @@ msgstr "Última"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to last image"
-msgstr "Va a l'última imatge"
+msgstr "Va fins a l'última imatge"
 
 #: app/mainwindow.cpp:470
 #, kde-format
@@ -1636,19 +1636,19 @@ msgstr ""
 "d'imatges; <link url='%1'>configureu estes opcions en la configuració</link>."
 "</para>"
 
-#: app/viewmainpage.cpp:575
+#: app/viewmainpage.cpp:584
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Background Color Mode"
 msgstr "Mode del color de fons"
 
-#: app/viewmainpage.cpp:768
+#: app/viewmainpage.cpp:777
 #, kde-format
 msgctxt "@action:button"
 msgid "Discard Changes and Reload"
 msgstr "Descarta els canvis i torna a carregar"
 
-#: app/viewmainpage.cpp:770
+#: app/viewmainpage.cpp:779
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2423,7 +2423,7 @@ msgid ""
 "            own zoom and position (if these are changed, image A will NOT\n"
 "            be displayed with the updated zoom and position)."
 msgstr ""
-"Definix el que passa quan es va a la imatge B\n"
+"Definix el que passa quan es va fins a la imatge B\n"
 "            després d'haver acostat el zoom a una àrea de la imatge A.\n"
 "            Si s'establix a «Ajusta automàticament», la imatge B estarà\n"
 "            allunyada per a ajustar-se a la pantalla. Si s'establix a\n"

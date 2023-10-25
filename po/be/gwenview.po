@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 86ff119b1606fcaa910d6b44fc14b611\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-09 00:43+0000\n"
+"POT-Creation-Date: 2023-10-25 00:40+0000\n"
 "PO-Revision-Date: 2023-02-15 22:16\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@gmail.com>\n"
 "Language-Team: Belarusian\n"
@@ -1658,19 +1658,19 @@ msgstr ""
 "правы бок экран, яна можа змяшчаць некалькі радкоў выяў; <link url='%1'> "
 "гэтыя параметры можна змяніць у наладах</link>.</para>"
 
-#: app/viewmainpage.cpp:575
+#: app/viewmainpage.cpp:584
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Background Color Mode"
 msgstr "Рэжым каляровага фону"
 
-#: app/viewmainpage.cpp:768
+#: app/viewmainpage.cpp:777
 #, kde-format
 msgctxt "@action:button"
 msgid "Discard Changes and Reload"
 msgstr "Адкінуць змены і перазагрузіць"
 
-#: app/viewmainpage.cpp:770
+#: app/viewmainpage.cpp:779
 #, kde-format
 msgctxt "@info"
 msgid ""
