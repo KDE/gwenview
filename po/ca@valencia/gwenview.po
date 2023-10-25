@@ -1146,7 +1146,7 @@ msgstr "Anterior"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to previous image"
-msgstr "Va a la imatge anterior"
+msgstr "Va fins a la imatge anterior"
 
 #: app/mainwindow.cpp:445
 #, kde-format
@@ -1158,7 +1158,7 @@ msgstr "Següent"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to next image"
-msgstr "Va a la imatge següent"
+msgstr "Va fins a la imatge següent"
 
 #: app/mainwindow.cpp:452
 #, kde-format
@@ -1170,7 +1170,7 @@ msgstr "Primera"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to first image"
-msgstr "Va a la primera imatge"
+msgstr "Va fins a la primera imatge"
 
 #: app/mainwindow.cpp:459
 #, kde-format
@@ -1182,7 +1182,7 @@ msgstr "Última"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to last image"
-msgstr "Va a l'última imatge"
+msgstr "Va fins a l'última imatge"
 
 #: app/mainwindow.cpp:470
 #, kde-format
@@ -2398,7 +2398,7 @@ msgid ""
 "            own zoom and position (if these are changed, image A will NOT\n"
 "            be displayed with the updated zoom and position)."
 msgstr ""
-"Definix el que passa quan es va a la imatge B\n"
+"Definix el que passa quan es va fins a la imatge B\n"
 "            després d'haver acostat el zoom a una àrea de la imatge A.\n"
 "            Si s'establix a «Ajusta automàticament», la imatge B estarà\n"
 "            allunyada per a ajustar-se a la pantalla. Si s'establix a\n"
