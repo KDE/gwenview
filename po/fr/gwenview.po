@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-25 00:40+0000\n"
-"PO-Revision-Date: 2023-10-21 21:50+0200\n"
+"PO-Revision-Date: 2023-10-24 21:12+0200\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -134,8 +134,8 @@ msgid ""
 msgstr ""
 "Lorsque la gestion des couleurs est désactivée, Gwenview convertira les "
 "images en espace colorimétrique « sRGB » plutôt que vers l'espace "
-"colorimétrique détecté pour l’affichage. Ceci est approprié uniquement pour "
-"les affichages qui sont calibrés à l’espace colorimétrique « sRGB »  ou qui "
+"colorimétrique détecté pour l'affichage. Ceci est approprié uniquement pour "
+"les affichages qui sont calibrés à l'espace colorimétrique « sRGB » ou qui "
 "sont connus pour la fourniture d'un profil colorimétrique incorrect."
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileLabel)
@@ -1276,7 +1276,7 @@ msgstr "Actions"
 #: app/mainwindow.cpp:942
 #, kde-format
 msgid "Viewing media"
-msgstr "Affichage du media"
+msgstr "Affichage du média"
 
 #: app/mainwindow.cpp:1420
 #, kde-format
@@ -2337,8 +2337,8 @@ msgstr ""
 "d'affichage, activez <emphasis>Agrandir les images plus petites</emphasis> "
 "<link url='%2'>dans les paramètres</link>.</item></list></para><para>Si "
 "« %1 » est déjà activé, un nouvel appui dessus le désactive et l'image "
-"s'affichera à sa taille normale. </para><para>« %1 » est le mode de zoom par "
-"défaut pour les images. Ceci peut être modifié <link url='%2'>dans les "
+"s'affichera à sa taille normale. </para><para> « %1 » est le mode de zoom "
+"par défaut pour les images. Ceci peut être modifié <link url='%2'>dans les "
 "paramètres</link> pour que les images soient affichées à une valeur "
 "précédente de zoom.</para>"
 
