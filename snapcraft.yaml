@@ -129,10 +129,8 @@ parts:
         - wayland-protocols
         stage-packages:
         - kinit
-        - libc6
-        - libcfitsio
+        - libcfitsio9
         - libexiv2-27
-        - libgcc-s1
         - libjpeg-turbo8
         - libkf5kdcraw5
         - libkf5purpose5
@@ -140,7 +138,6 @@ parts:
         - liblcms2-2
         - libphonon4qt5-4
         - libpng16-16
-        - libstdc++6
         - libtiff5
         - libwayland-client0
         - libx11-6
