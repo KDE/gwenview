@@ -114,6 +114,7 @@ parts:
         - libcfitsio-dev
         - libexiv2-dev
         - libjpeg-dev
+        - libkf5doctools-dev
         - libkf5kdcraw-dev
         - libkf5kipi-dev
         - libkf5purpose-dev
