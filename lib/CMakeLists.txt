@@ -314,8 +314,10 @@ if (WIN32)
     target_link_libraries(gwenviewlib ${EXPAT_LIBRARIES})
 endif()
 
-if (KF${QT_MAJOR_VERSION}KDcraw_FOUND)
-    target_link_libraries(gwenviewlib KF${QT_MAJOR_VERSION}::KDcraw)
+if (KF5KDcraw_FOUND)
+    target_link_libraries(gwenviewlib KF5::KDcraw)
+elseif(KDcrawQt6_FOUND)
+    target_link_libraries(gwenviewlib KDcrawQt6)
 endif()
 
 if (HAVE_X11)

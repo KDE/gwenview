@@ -146,12 +146,20 @@ if (GWENVIEW_SEMANTICINFO_BACKEND_BALOO)
     endif ()
 endif ()
 
-find_package(KF${QT_MAJOR_VERSION}KDcraw)
-if (KF${QT_MAJOR_VERSION}KDcraw_FOUND)
+if(QT_MAJOR_VERSION STREQUAL "6")
+    set(KDcrawPackageName KDcrawQt6)
+else()
+    set(KDcrawPackageName KF5KDcraw)
+endif()
+find_package(${KDcrawPackageName})
+if (${KDcrawPackageName}_FOUND)
    add_definitions(-DKDCRAW_FOUND)
 endif()
-set_package_properties(KF${QT_MAJOR_VERSION}KDcraw PROPERTIES URL "https://invent.kde.org/graphics/libkdcraw/" DESCRIPTION "C++ interface around LibRaw library used to decode RAW picture files" TYPE OPTIONAL)
-
+set_package_properties(${KDcrawPackageName} PROPERTIES
+    URL "https://commits.kde.org/libkdcraw"
+    DESCRIPTION "C++ interface around LibRaw library used to decode RAW picture files"
+    TYPE OPTIONAL
+)
 
 option(WITHOUT_X11 "Build without X11 integration (disables finding X11)" OFF)
 if(NOT WITHOUT_X11)
