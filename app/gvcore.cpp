@@ -115,6 +115,7 @@ struct GvCorePrivate {
         dialog->setUrl(url.adjusted(QUrl::RemoveFilename));
         fileWidget->setSelectedUrl(url);
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         QStringList supportedMimetypes;
         for (const QByteArray &mimeName : QImageWriter::supportedMimeTypes()) {
             supportedMimetypes.append(QString::fromLocal8Bit(mimeName));
@@ -127,7 +128,24 @@ struct GvCorePrivate {
             JPEGQualityChooserWidget->setVisible(filter.contains(QLatin1String("jpeg")) || filter.contains(QLatin1String("jxl"))
                                                  || filter.contains(QLatin1String("webp")) || filter.contains(QLatin1String("avif"))
                                                  || filter.contains(QLatin1String("heif")) || filter.contains(QLatin1String("heic")));
+#else
+        QList<KFileFilter> filters;
+        for (const QByteArray &mimeName : QImageWriter::supportedMimeTypes()) {
+            filters << KFileFilter::fromMimeType(mimeName);
+        }
+
+        fileWidget->setFilters(filters, KFileFilter::fromMimeType(MimeTypeUtils::urlMimeType(url)));
+
+        // Only show the lossy image quality chooser when saving a lossy image
+        QObject::connect(fileWidget, &KFileWidget::filterChanged, JPEGQualityChooserWidget, [=](const KFileFilter &filter) {
+            const bool hasQuality = std::any_of(filter.mimePatterns().constBegin(), filter.mimePatterns().constEnd(), [](const QString &mime) {
+                return mime.contains(QLatin1String("jpeg")) || mime.contains(QLatin1String("jxl")) || mime.contains(QLatin1String("webp"))
+                    || mime.contains(QLatin1String("avif")) || mime.contains(QLatin1String("heif")) || mime.contains(QLatin1String("heic"));
+            });
+
+            JPEGQualityChooserWidget->setVisible(hasQuality);
         });
+#endif
 
         return dialog;
     }
