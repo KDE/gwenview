@@ -129,13 +129,6 @@ struct ViewMainPagePrivate {
     QCheckBox *mSynchronizeCheckBox = nullptr;
     KSqueezedTextLabel *mDocumentCountLabel = nullptr;
 
-    // Activity Resource events reporting needs to be above KPart,
-    // in the shell itself, to avoid problems with other MDI applications
-    // that use this KPart
-#if HAVE_KACTIVITIES
-    QHash<DocumentView *, KActivities::ResourceInstance *> mActivityResources;
-#endif
-
     bool mCompareMode;
     ZoomMode::Enum mZoomMode;
 
@@ -293,9 +286,6 @@ struct ViewMainPagePrivate {
         QObject::connect(view, &DocumentView::videoFinished, mSlideShow, &SlideShow::resumeAndGoToNextUrl);
 
         mDocumentViews << view;
-#if HAVE_KACTIVITIES
-        mActivityResources.insert(view, new KActivities::ResourceInstance(q->window()->winId(), view));
-#endif
 
         return view;
     }
@@ -314,9 +304,6 @@ struct ViewMainPagePrivate {
         QObject::disconnect(view, nullptr, mSlideShow, nullptr);
 
         mDocumentViews.removeOne(view);
-#if HAVE_KACTIVITIES
-        mActivityResources.remove(view);
-#endif
         mDocumentViewContainer->deleteView(view);
     }
 
@@ -348,10 +335,6 @@ struct ViewMainPagePrivate {
         }
         if (oldView) {
             oldView->setCurrent(false);
-#if HAVE_KACTIVITIES
-            Q_ASSERT(mActivityResources.contains(oldView));
-            mActivityResources.value(oldView)->notifyFocusedOut();
-#endif
         }
         view->setCurrent(true);
         mDocumentViewController->setView(view);
@@ -364,10 +347,6 @@ struct ViewMainPagePrivate {
             // *before* listing /foo (because it matters less to the user)
             mThumbnailBar->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Current);
         }
-#if HAVE_KACTIVITIES
-        Q_ASSERT(mActivityResources.contains(view));
-        mActivityResources.value(view)->notifyFocusedIn();
-#endif
         QObject::connect(view, &DocumentView::currentToolChanged, q, &ViewMainPage::updateFocus);
     }
 
@@ -734,8 +713,7 @@ void ViewMainPage::openUrls(const QList<QUrl> &allUrls, const QUrl &currentUrl)
         view->openUrl(url, d->mZoomMode == ZoomMode::Individual && savedSetup.valid ? savedSetup : setup);
 #if HAVE_KACTIVITIES
         if (GwenviewConfig::historyEnabled()) {
-            d->mActivityResources.value(view)->setUri(url);
-            d->mActivityResources.value(view)->setMimetype(MimeTypeUtils::urlMimeType(url));
+            KActivities::ResourceInstance::notifyAccessed(url);
         }
 #endif
     }
