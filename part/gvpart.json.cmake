@@ -37,7 +37,6 @@
         "Name[ta]": "குவென்வியூ படக் காட்டி",
         "Name[tr]": "Akbakış Görsel Görüntüleyicisi",
         "Name[uk]": "Переглядач зображень Gwenview",
-        "Name[x-test]": "xxGwenview Image Viewerxx",
         "Name[zh_CN]": "Gwenview 图像查看器",
         "Name[zh_TW]": "Gwenview 影像檢視程式",
         "ServiceTypes": [
