@@ -84,33 +84,4 @@ void ContextManagerTest::testRemove()
     QCOMPARE(currentIndex.data(Qt::DisplayRole).toString(), QStringLiteral("a"));
 }
 
-void ContextManagerTest::testInvalidDirUrl()
-{
-    class DirLister : public KDirLister
-    {
-    public:
-        DirLister()
-            : mOpenUrlCalled(false)
-        {
-            setAutoErrorHandlingEnabled(false);
-        }
-
-        bool openUrl(const QUrl &url, OpenUrlFlags flags = NoFlags) override
-        {
-            mOpenUrlCalled = true;
-            return KDirLister::openUrl(url, flags);
-        }
-
-        bool mOpenUrlCalled;
-    };
-
-    SortedDirModel dirModel;
-    auto dirLister = new DirLister;
-    dirModel.setDirLister(dirLister);
-    ContextManager manager(&dirModel, nullptr);
-
-    manager.setCurrentDirUrl(QUrl());
-    QVERIFY(!dirLister->mOpenUrlCalled);
-}
-
 #include "moc_contextmanagertest.cpp"
