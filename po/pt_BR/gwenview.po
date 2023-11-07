@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:25+0000\n"
+"POT-Creation-Date: 2023-11-07 01:11+0000\n"
 "PO-Revision-Date: 2023-09-18 10:02-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -148,7 +148,7 @@ msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
 msgid "Sidebar Alignment Spacer"
 msgstr "Espaçador de alinhamento da barra lateral"
 
-#: app/browsemainpage.cpp:146 app/mainwindow.cpp:378 app/viewmainpage.cpp:425
+#: app/browsemainpage.cpp:146 app/mainwindow.cpp:378 app/viewmainpage.cpp:404
 #: lib/documentview/documentviewcontroller.cpp:55
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
@@ -609,7 +609,7 @@ msgctxt "@info:tooltip"
 msgid "Configure full screen mode"
 msgstr "Configura o modo de tela inteira"
 
-#: app/fullscreencontent.cpp:552 app/viewmainpage.cpp:404
+#: app/fullscreencontent.cpp:552 app/viewmainpage.cpp:383
 #, kde-format
 msgctxt "@info:status %1 current document index, %2 total documents"
 msgid "%1 of %2"
@@ -1613,18 +1613,18 @@ msgstr ""
 "A navegação por etiquetas não está disponível. Certifique-se de que o "
 "Nepomuk está corretamente instalado no seu computador."
 
-#: app/viewmainpage.cpp:153 app/viewmainpage.cpp:447
+#: app/viewmainpage.cpp:146 app/viewmainpage.cpp:426
 #, kde-format
 msgid "Synchronize"
 msgstr "Sincronizar"
 
-#: app/viewmainpage.cpp:428
+#: app/viewmainpage.cpp:407
 #, kde-format
 msgid "Show Thumbnails"
 msgstr "Exibir miniaturas"
 
 #. i18n: For languages that are read right to left, "right side" refers to the left side in this context.
-#: app/viewmainpage.cpp:431
+#: app/viewmainpage.cpp:410
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1642,19 +1642,19 @@ msgstr ""
 "conter várias linhas de imagem, caso você queira. <link url='%1'>Altere "
 "essas opções nas configurações</link>.</para>"
 
-#: app/viewmainpage.cpp:584
+#: app/viewmainpage.cpp:563
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Background Color Mode"
 msgstr "Modo de cor de fundo"
 
-#: app/viewmainpage.cpp:777
+#: app/viewmainpage.cpp:755
 #, kde-format
 msgctxt "@action:button"
 msgid "Discard Changes and Reload"
 msgstr "Descartar as alterações e recarregar"
 
-#: app/viewmainpage.cpp:779
+#: app/viewmainpage.cpp:757
 #, kde-format
 msgctxt "@info"
 msgid ""

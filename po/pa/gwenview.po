@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:25+0000\n"
+"POT-Creation-Date: 2023-11-07 01:11+0000\n"
 "PO-Revision-Date: 2021-04-25 13:12-0700\n"
 "Last-Translator: A S Alam <aalam@satluj.org>\n"
 "Language-Team: Punjabi <punjabi-users@lists.sf.net>\n"
@@ -127,7 +127,7 @@ msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
 msgid "Sidebar Alignment Spacer"
 msgstr ""
 
-#: app/browsemainpage.cpp:146 app/mainwindow.cpp:378 app/viewmainpage.cpp:425
+#: app/browsemainpage.cpp:146 app/mainwindow.cpp:378 app/viewmainpage.cpp:404
 #: lib/documentview/documentviewcontroller.cpp:55
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
@@ -587,7 +587,7 @@ msgctxt "@info:tooltip"
 msgid "Configure full screen mode"
 msgstr "ਪੂਰੀ ਸਕਰੀਨ ਮੋਡ ਸੰਰਚਨਾ"
 
-#: app/fullscreencontent.cpp:552 app/viewmainpage.cpp:404
+#: app/fullscreencontent.cpp:552 app/viewmainpage.cpp:383
 #, kde-format
 msgctxt "@info:status %1 current document index, %2 total documents"
 msgid "%1 of %2"
@@ -1587,19 +1587,19 @@ msgid ""
 "on your computer."
 msgstr ""
 
-#: app/viewmainpage.cpp:153 app/viewmainpage.cpp:447
+#: app/viewmainpage.cpp:146 app/viewmainpage.cpp:426
 #, kde-format
 msgid "Synchronize"
 msgstr "ਸੈਕਰੋਨਾਈਜ਼"
 
-#: app/viewmainpage.cpp:428
+#: app/viewmainpage.cpp:407
 #, fuzzy, kde-format
 #| msgid "Show thumbnails"
 msgid "Show Thumbnails"
 msgstr "ਥੰਮਨੇਲ ਵੇਖੋ"
 
 #. i18n: For languages that are read right to left, "right side" refers to the left side in this context.
-#: app/viewmainpage.cpp:431
+#: app/viewmainpage.cpp:410
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1611,20 +1611,20 @@ msgid ""
 "in the settings</link>.</para>"
 msgstr ""
 
-#: app/viewmainpage.cpp:584
+#: app/viewmainpage.cpp:563
 #, fuzzy, kde-format
 #| msgid "Background color:"
 msgctxt "@item:inmenu"
 msgid "Background Color Mode"
 msgstr "ਬੈਕਗਰਾਊਂਡ ਰੰਗ:"
 
-#: app/viewmainpage.cpp:777
+#: app/viewmainpage.cpp:755
 #, kde-format
 msgctxt "@action:button"
 msgid "Discard Changes and Reload"
 msgstr "ਬਦਲਾਅ ਅਣਡਿੱਠੇ ਕਰੋ ਅਤੇ ਮੁੜ ਲੋਡ ਕਰੋ"
 
-#: app/viewmainpage.cpp:779
+#: app/viewmainpage.cpp:757
 #, kde-format
 msgctxt "@info"
 msgid ""
