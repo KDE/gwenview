@@ -128,6 +128,7 @@ struct GvCorePrivate {
             JPEGQualityChooserWidget->setVisible(filter.contains(QLatin1String("jpeg")) || filter.contains(QLatin1String("jxl"))
                                                  || filter.contains(QLatin1String("webp")) || filter.contains(QLatin1String("avif"))
                                                  || filter.contains(QLatin1String("heif")) || filter.contains(QLatin1String("heic")));
+        });
 #else
         QList<KFileFilter> filters;
         for (const QByteArray &mimeName : QImageWriter::supportedMimeTypes()) {
