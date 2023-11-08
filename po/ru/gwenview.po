@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-07 01:11+0000\n"
+"POT-Creation-Date: 2023-11-08 00:40+0000\n"
 "PO-Revision-Date: 2023-11-03 14:48+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -757,23 +757,23 @@ msgctxt "@title:window"
 msgid "Save Image"
 msgstr "Сохранение изображения"
 
-#: app/gvcore.cpp:410
+#: app/gvcore.cpp:429
 #, kde-format
 msgid "Save using another format"
 msgstr "Сохранить в другом формате"
 
-#: app/gvcore.cpp:412
+#: app/gvcore.cpp:431
 #, kde-format
 msgid "Gwenview cannot save images in '%1' format."
 msgstr "Невозможно сохранить изображения в формате «%1»."
 
-#: app/gvcore.cpp:440
+#: app/gvcore.cpp:459
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot save images as %1."
 msgstr "Невозможно сохранить изображения в %1."
 
-#: app/gvcore.cpp:458 app/gvcore.cpp:492
+#: app/gvcore.cpp:477 app/gvcore.cpp:511
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -783,12 +783,12 @@ msgstr ""
 "<emphasis strong='true'>Ошибка сохранения <filename>«%1»</filename>:</"
 "emphasis><nl />%2"
 
-#: app/gvcore.cpp:508
+#: app/gvcore.cpp:527
 #, kde-format
 msgid "You are now viewing the new document."
 msgstr "Сейчас вы просматриваете новый файл."
 
-#: app/gvcore.cpp:510
+#: app/gvcore.cpp:529
 #, kde-format
 msgid "Go back to the original"
 msgstr "Вернуться к исходному"

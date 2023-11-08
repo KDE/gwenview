@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-07 01:11+0000\n"
+"POT-Creation-Date: 2023-11-08 00:40+0000\n"
 "PO-Revision-Date: 2012-07-02 21:42+0300\n"
 "Last-Translator: Einars Sprugis <einars8@gmail.com>\n"
 "Language-Team: Latvian <locale@laka.lv>\n"
@@ -761,23 +761,23 @@ msgctxt "@title:window"
 msgid "Save Image"
 msgstr "Atvērt attēlu"
 
-#: app/gvcore.cpp:410
+#: app/gvcore.cpp:429
 #, kde-format
 msgid "Save using another format"
 msgstr "Saglabāt citā formātā"
 
-#: app/gvcore.cpp:412
+#: app/gvcore.cpp:431
 #, kde-format
 msgid "Gwenview cannot save images in '%1' format."
 msgstr "Gwenview nevar saglabāt attēlus '%1' formātā."
 
-#: app/gvcore.cpp:440
+#: app/gvcore.cpp:459
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot save images as %1."
 msgstr "Gwenview nevar saglabāt attēlus kā '%1'."
 
-#: app/gvcore.cpp:458 app/gvcore.cpp:492
+#: app/gvcore.cpp:477 app/gvcore.cpp:511
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "<b>Saving <filename>%1</filename> failed:</b><br>%2"
@@ -787,12 +787,12 @@ msgid ""
 "emphasis><nl />%2"
 msgstr "<b>Neizdevās saglabāt <filename>%1</filename>:</b><br>%2"
 
-#: app/gvcore.cpp:508
+#: app/gvcore.cpp:527
 #, kde-format
 msgid "You are now viewing the new document."
 msgstr "Jūs tagad redzat jauno dokumentu."
 
-#: app/gvcore.cpp:510
+#: app/gvcore.cpp:529
 #, kde-format
 msgid "Go back to the original"
 msgstr "Atgriezties uz orģinālu"

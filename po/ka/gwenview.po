@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-07 01:11+0000\n"
+"POT-Creation-Date: 2023-11-08 00:40+0000\n"
 "PO-Revision-Date: 2023-09-09 09:35+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -725,23 +725,23 @@ msgctxt "@title:window"
 msgid "Save Image"
 msgstr "გამოსახულების შენახვა"
 
-#: app/gvcore.cpp:410
+#: app/gvcore.cpp:429
 #, kde-format
 msgid "Save using another format"
 msgstr "სხვა ფორმატით შეინახეთ"
 
-#: app/gvcore.cpp:412
+#: app/gvcore.cpp:431
 #, kde-format
 msgid "Gwenview cannot save images in '%1' format."
 msgstr "Gwenview -ს გამოსახულების შენახვა '%1' ფორმატში არ შეუძლია."
 
-#: app/gvcore.cpp:440
+#: app/gvcore.cpp:459
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot save images as %1."
 msgstr "Gwenview -ს გამოსახულების შენახვა '%1' ფორმატში არ შეუძლია."
 
-#: app/gvcore.cpp:458 app/gvcore.cpp:492
+#: app/gvcore.cpp:477 app/gvcore.cpp:511
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -751,12 +751,12 @@ msgstr ""
 "<emphasis strong='true'><filename>%1</filename>-ის შენახვის შეცდომა:</"
 "emphasis><nl />%2"
 
-#: app/gvcore.cpp:508
+#: app/gvcore.cpp:527
 #, kde-format
 msgid "You are now viewing the new document."
 msgstr "ახლა ათვალიერებთ ახალ დოკუმენტს."
 
-#: app/gvcore.cpp:510
+#: app/gvcore.cpp:529
 #, kde-format
 msgid "Go back to the original"
 msgstr "საწყისზე დაბრუნება"

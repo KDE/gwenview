@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdegraphics/gwenview.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-07 01:11+0000\n"
+"POT-Creation-Date: 2023-11-08 00:40+0000\n"
 "PO-Revision-Date: 2007-09-30 16:51-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -759,23 +759,23 @@ msgctxt "@title:window"
 msgid "Save Image"
 msgstr "Oscail Íomhá"
 
-#: app/gvcore.cpp:410
+#: app/gvcore.cpp:429
 #, kde-format
 msgid "Save using another format"
 msgstr "Sábháil i bhformáid eile"
 
-#: app/gvcore.cpp:412
+#: app/gvcore.cpp:431
 #, kde-format
 msgid "Gwenview cannot save images in '%1' format."
 msgstr "Ní féidir le Gwenview íomhánna a shábháil i bhformáid '%1'."
 
-#: app/gvcore.cpp:440
+#: app/gvcore.cpp:459
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot save images as %1."
 msgstr "Ní féidir le Gwenview íomhánna a shábháil mar %1."
 
-#: app/gvcore.cpp:458 app/gvcore.cpp:492
+#: app/gvcore.cpp:477 app/gvcore.cpp:511
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "<b>Saving <filename>%1</filename> failed:</b><br>%2"
@@ -785,12 +785,12 @@ msgid ""
 "emphasis><nl />%2"
 msgstr "<b>Níorbh fhéidir <filename>%1</filename> a shábháil:</b><br>%2"
 
-#: app/gvcore.cpp:508
+#: app/gvcore.cpp:527
 #, kde-format
 msgid "You are now viewing the new document."
 msgstr ""
 
-#: app/gvcore.cpp:510
+#: app/gvcore.cpp:529
 #, kde-format
 msgid "Go back to the original"
 msgstr ""

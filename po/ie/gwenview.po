@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-07 01:11+0000\n"
+"POT-Creation-Date: 2023-11-08 00:40+0000\n"
 "PO-Revision-Date: 2022-11-01 00:37+0700\n"
 "Last-Translator: OIS <mistresssilvara@hotmail.com>\n"
 "Language-Team: Interlingue <kde-i18n-doc@kde.org>\n"
@@ -713,23 +713,23 @@ msgctxt "@title:window"
 msgid "Save Image"
 msgstr "Gardar li image"
 
-#: app/gvcore.cpp:410
+#: app/gvcore.cpp:429
 #, fuzzy, kde-format
 msgid "Save using another format"
 msgstr "Un altri application usa APT:"
 
-#: app/gvcore.cpp:412
+#: app/gvcore.cpp:431
 #, kde-format
 msgid "Gwenview cannot save images in '%1' format."
 msgstr ""
 
-#: app/gvcore.cpp:440
+#: app/gvcore.cpp:459
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot save images as %1."
 msgstr ""
 
-#: app/gvcore.cpp:458 app/gvcore.cpp:492
+#: app/gvcore.cpp:477 app/gvcore.cpp:511
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -737,12 +737,12 @@ msgid ""
 "emphasis><nl />%2"
 msgstr ""
 
-#: app/gvcore.cpp:508
+#: app/gvcore.cpp:527
 #, kde-format
 msgid "You are now viewing the new document."
 msgstr ""
 
-#: app/gvcore.cpp:510
+#: app/gvcore.cpp:529
 #, fuzzy, kde-format
 msgid "Go back to the original"
 msgstr "Ear 10 secondes retro"

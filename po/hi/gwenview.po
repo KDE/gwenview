@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-07 01:11+0000\n"
+"POT-Creation-Date: 2023-11-08 00:40+0000\n"
 "PO-Revision-Date: 2022-02-10 12:40+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -714,24 +714,24 @@ msgctxt "@title:window"
 msgid "Save Image"
 msgstr "छवि सहेजें"
 
-#: app/gvcore.cpp:410
+#: app/gvcore.cpp:429
 #, kde-format
 msgid "Save using another format"
 msgstr "अन्य फ़ॉर्मेट के साथ सहेजें"
 
-#: app/gvcore.cpp:412
+#: app/gvcore.cpp:431
 #, kde-format
 msgid "Gwenview cannot save images in '%1' format."
 msgstr "ग्वेनव्यू छवियों को '%1' फ़ॉर्मेट में सहेज नहीं सकता ।"
 
-#: app/gvcore.cpp:440
+#: app/gvcore.cpp:459
 #, fuzzy, kde-format
 #| msgid "Gwenview can't save images in '%1' format."
 msgctxt "@info"
 msgid "Gwenview cannot save images as %1."
 msgstr "ग्वेनव्यू छवियों को '%1' फ़ॉर्मेट में सहेज नहीं सकता."
 
-#: app/gvcore.cpp:458 app/gvcore.cpp:492
+#: app/gvcore.cpp:477 app/gvcore.cpp:511
 #, fuzzy, kde-kuit-format
 #| msgid "One image modified"
 #| msgid_plural "%1 images modified"
@@ -741,12 +741,12 @@ msgid ""
 "emphasis><nl />%2"
 msgstr "%1 छवियाँ परिवर्धित"
 
-#: app/gvcore.cpp:508
+#: app/gvcore.cpp:527
 #, kde-format
 msgid "You are now viewing the new document."
 msgstr ""
 
-#: app/gvcore.cpp:510
+#: app/gvcore.cpp:529
 #, kde-format
 msgid "Go back to the original"
 msgstr ""
