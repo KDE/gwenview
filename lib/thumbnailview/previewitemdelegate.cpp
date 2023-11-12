@@ -564,7 +564,7 @@ struct PreviewItemDelegatePrivate {
 
     void updateViewGridSize()
     {
-        mView->setGridSize(QSize(itemWidth(), itemHeight()));
+        mView->setGridSize(QSize(itemWidth() + 8, itemHeight() + 8));
     }
 };
 
