@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-08 00:40+0000\n"
+"POT-Creation-Date: 2023-11-13 00:40+0000\n"
 "PO-Revision-Date: 2023-09-09 09:35+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -269,17 +269,17 @@ msgstr "%1, %2"
 msgid "Add Filter"
 msgstr "ფილტრის დამატება"
 
-#: app/configdialog.cpp:70
+#: app/configdialog.cpp:69
 #, kde-format
 msgid "General"
 msgstr "ზოგადი"
 
-#: app/configdialog.cpp:123
+#: app/configdialog.cpp:122
 #, kde-format
 msgid "Image View"
 msgstr "სურათის ხედი"
 
-#: app/configdialog.cpp:134
+#: app/configdialog.cpp:133
 #, kde-format
 msgid "Advanced"
 msgstr "დაწინაურებული"

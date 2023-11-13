@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-08 00:40+0000\n"
+"POT-Creation-Date: 2023-11-13 00:40+0000\n"
 "PO-Revision-Date: 2023-09-09 01:48+0200\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -279,17 +279,17 @@ msgstr "%1, %2"
 msgid "Add Filter"
 msgstr "Aggiungi filtro"
 
-#: app/configdialog.cpp:70
+#: app/configdialog.cpp:69
 #, kde-format
 msgid "General"
 msgstr "Generale"
 
-#: app/configdialog.cpp:123
+#: app/configdialog.cpp:122
 #, kde-format
 msgid "Image View"
 msgstr "Vista immagini"
 
-#: app/configdialog.cpp:134
+#: app/configdialog.cpp:133
 #, kde-format
 msgid "Advanced"
 msgstr "Avanzate"

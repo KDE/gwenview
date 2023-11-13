@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 86ff119b1606fcaa910d6b44fc14b611\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-08 00:40+0000\n"
+"POT-Creation-Date: 2023-11-13 00:40+0000\n"
 "PO-Revision-Date: 2023-02-15 22:16\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@gmail.com>\n"
 "Language-Team: Belarusian\n"
@@ -278,17 +278,17 @@ msgstr "%1, %2"
 msgid "Add Filter"
 msgstr "Дадаць фільтр"
 
-#: app/configdialog.cpp:70
+#: app/configdialog.cpp:69
 #, kde-format
 msgid "General"
 msgstr "Асноўныя"
 
-#: app/configdialog.cpp:123
+#: app/configdialog.cpp:122
 #, kde-format
 msgid "Image View"
 msgstr "Прагляд выяў"
 
-#: app/configdialog.cpp:134
+#: app/configdialog.cpp:133
 #, kde-format
 msgid "Advanced"
 msgstr "Дадатковыя"

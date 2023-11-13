@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-08 00:40+0000\n"
+"POT-Creation-Date: 2023-11-13 00:40+0000\n"
 "PO-Revision-Date: 2010-12-17 21:37+0700\n"
 "Last-Translator: Thanomsub Noppaburana <donga.nb@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -270,17 +270,17 @@ msgstr ""
 msgid "Add Filter"
 msgstr "เพิ่มตัวกรอง"
 
-#: app/configdialog.cpp:70
+#: app/configdialog.cpp:69
 #, kde-format
 msgid "General"
 msgstr "ค่าทั่วไป"
 
-#: app/configdialog.cpp:123
+#: app/configdialog.cpp:122
 #, kde-format
 msgid "Image View"
 msgstr "แสดงภาพ"
 
-#: app/configdialog.cpp:134
+#: app/configdialog.cpp:133
 #, kde-format
 msgid "Advanced"
 msgstr "ตั้งค่าขั้นสูง"

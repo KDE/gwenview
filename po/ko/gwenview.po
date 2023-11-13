@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-08 00:40+0000\n"
+"POT-Creation-Date: 2023-11-13 00:40+0000\n"
 "PO-Revision-Date: 2023-10-08 22:44+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -266,17 +266,17 @@ msgstr "%1, %2"
 msgid "Add Filter"
 msgstr "필터 추가하기"
 
-#: app/configdialog.cpp:70
+#: app/configdialog.cpp:69
 #, kde-format
 msgid "General"
 msgstr "일반"
 
-#: app/configdialog.cpp:123
+#: app/configdialog.cpp:122
 #, kde-format
 msgid "Image View"
 msgstr "그림 보기"
 
-#: app/configdialog.cpp:134
+#: app/configdialog.cpp:133
 #, kde-format
 msgid "Advanced"
 msgstr "고급"
