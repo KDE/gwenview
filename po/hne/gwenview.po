@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-13 00:40+0000\n"
+"POT-Creation-Date: 2023-11-15 00:40+0000\n"
 "PO-Revision-Date: 2009-02-26 15:00+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -1646,38 +1646,38 @@ msgid "Forget All Files"
 msgstr "फोल्डर बनाव"
 
 #. i18n: ectx: property (text), widget (QLabel, mHistoryDisabledLabel)
-#: app/startmainpage.ui:34
+#: app/startmainpage.ui:49
 #, kde-format
 msgid "History has been disabled."
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, mRecentFoldersTab)
-#: app/startmainpage.ui:51
+#: app/startmainpage.ui:66
 #, kde-format
 msgid "Recent Folders"
 msgstr "मौजूदा फोल्डर"
 
 #. i18n: ectx: attribute (title), widget (QWidget, mRecentFilesTab)
-#: app/startmainpage.ui:65
+#: app/startmainpage.ui:92
 #, fuzzy, kde-format
 #| msgid "Recent Folders"
 msgid "Recent Files"
 msgstr "मौजूदा फोल्डर"
 
-#. i18n: ectx: attribute (title), widget (QWidget, placesTab)
-#: app/startmainpage.ui:97
+#. i18n: ectx: attribute (title), widget (KFilePlacesView, mBookmarksView)
+#: app/startmainpage.ui:143
 #, kde-format
 msgid "Places"
 msgstr "जगह"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tagsTab)
-#: app/startmainpage.ui:114
+#: app/startmainpage.ui:154
 #, kde-format
 msgid "Tags"
 msgstr "टैग"
 
 #. i18n: ectx: property (text), widget (QLabel, mTagLabel)
-#: app/startmainpage.ui:120
+#: app/startmainpage.ui:172
 #, kde-format
 msgid ""
 "Browsing by tags is not available. Make sure Nepomuk is properly installed "

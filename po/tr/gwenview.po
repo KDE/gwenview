@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdegraphics-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-13 00:40+0000\n"
+"POT-Creation-Date: 2023-11-15 00:40+0000\n"
 "PO-Revision-Date: 2023-10-16 18:15+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -1566,37 +1566,37 @@ msgid "Forget All Files"
 msgstr "Tüm Dosyaları Unut"
 
 #. i18n: ectx: property (text), widget (QLabel, mHistoryDisabledLabel)
-#: app/startmainpage.ui:34
+#: app/startmainpage.ui:49
 #, kde-format
 msgid "History has been disabled."
 msgstr "Geçmiş devre dışı bırakıldı."
 
 #. i18n: ectx: attribute (title), widget (QWidget, mRecentFoldersTab)
-#: app/startmainpage.ui:51
+#: app/startmainpage.ui:66
 #, kde-format
 msgid "Recent Folders"
 msgstr "Son Kullanılan Klasörler"
 
 #. i18n: ectx: attribute (title), widget (QWidget, mRecentFilesTab)
-#: app/startmainpage.ui:65
+#: app/startmainpage.ui:92
 #, kde-format
 msgid "Recent Files"
 msgstr "Son Kullanılan Dosyalar"
 
-#. i18n: ectx: attribute (title), widget (QWidget, placesTab)
-#: app/startmainpage.ui:97
+#. i18n: ectx: attribute (title), widget (KFilePlacesView, mBookmarksView)
+#: app/startmainpage.ui:143
 #, kde-format
 msgid "Places"
 msgstr "Yerler"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tagsTab)
-#: app/startmainpage.ui:114
+#: app/startmainpage.ui:154
 #, kde-format
 msgid "Tags"
 msgstr "Etiketler"
 
 #. i18n: ectx: property (text), widget (QLabel, mTagLabel)
-#: app/startmainpage.ui:120
+#: app/startmainpage.ui:172
 #, kde-format
 msgid ""
 "Browsing by tags is not available. Make sure Nepomuk is properly installed "
