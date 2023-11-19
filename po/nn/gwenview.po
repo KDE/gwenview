@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-25 00:40+0000\n"
+"POT-Creation-Date: 2023-11-15 00:40+0000\n"
 "PO-Revision-Date: 2023-08-10 18:25+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -140,7 +140,7 @@ msgid "Sidebar Alignment Spacer"
 msgstr "Mellomrom for sidestolpe"
 
 # unreviewed-context
-#: app/browsemainpage.cpp:146 app/mainwindow.cpp:378 app/viewmainpage.cpp:425
+#: app/browsemainpage.cpp:146 app/mainwindow.cpp:378 app/viewmainpage.cpp:404
 #: lib/documentview/documentviewcontroller.cpp:55
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
@@ -274,17 +274,17 @@ msgstr "%1, %2"
 msgid "Add Filter"
 msgstr "Legg til filter"
 
-#: app/configdialog.cpp:70
+#: app/configdialog.cpp:69
 #, kde-format
 msgid "General"
 msgstr "Generelt"
 
-#: app/configdialog.cpp:123
+#: app/configdialog.cpp:122
 #, kde-format
 msgid "Image View"
 msgstr "Biletvising"
 
-#: app/configdialog.cpp:134
+#: app/configdialog.cpp:133
 #, kde-format
 msgid "Advanced"
 msgstr "Avansert"
@@ -602,7 +602,7 @@ msgctxt "@info:tooltip"
 msgid "Configure full screen mode"
 msgstr "Set opp fullskjermsmodus"
 
-#: app/fullscreencontent.cpp:552 app/viewmainpage.cpp:404
+#: app/fullscreencontent.cpp:552 app/viewmainpage.cpp:383
 #, kde-format
 msgctxt "@info:status %1 current document index, %2 total documents"
 msgid "%1 of %2"
@@ -732,23 +732,23 @@ msgctxt "@title:window"
 msgid "Save Image"
 msgstr "Lagra bilete"
 
-#: app/gvcore.cpp:410
+#: app/gvcore.cpp:429
 #, kde-format
 msgid "Save using another format"
 msgstr "Lagra i eit anna format"
 
-#: app/gvcore.cpp:412
+#: app/gvcore.cpp:431
 #, kde-format
 msgid "Gwenview cannot save images in '%1' format."
 msgstr "Gwenview kan ikkje lagra bilete i formatet «%1»."
 
-#: app/gvcore.cpp:440
+#: app/gvcore.cpp:459
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot save images as %1."
 msgstr "Gwenview kan ikkje lagra bilete som «%1»."
 
-#: app/gvcore.cpp:458 app/gvcore.cpp:492
+#: app/gvcore.cpp:477 app/gvcore.cpp:511
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -758,12 +758,12 @@ msgstr ""
 "<emphasis strong='true'>Klarte ikkje lagra <filename>%1</filename>:</"
 "emphasis><nl />%2"
 
-#: app/gvcore.cpp:508
+#: app/gvcore.cpp:527
 #, kde-format
 msgid "You are now viewing the new document."
 msgstr "Du ser no på det nye dokumentet."
 
-#: app/gvcore.cpp:510
+#: app/gvcore.cpp:529
 #, kde-format
 msgid "Go back to the original"
 msgstr "Gå tilbake til originalen"
@@ -1567,37 +1567,37 @@ msgid "Forget All Files"
 msgstr "Gløym alle filer"
 
 #. i18n: ectx: property (text), widget (QLabel, mHistoryDisabledLabel)
-#: app/startmainpage.ui:34
+#: app/startmainpage.ui:49
 #, kde-format
 msgid "History has been disabled."
 msgstr "Historikken er slått av."
 
 #. i18n: ectx: attribute (title), widget (QWidget, mRecentFoldersTab)
-#: app/startmainpage.ui:51
+#: app/startmainpage.ui:66
 #, kde-format
 msgid "Recent Folders"
 msgstr "Nyleg brukte mapper"
 
 #. i18n: ectx: attribute (title), widget (QWidget, mRecentFilesTab)
-#: app/startmainpage.ui:65
+#: app/startmainpage.ui:92
 #, kde-format
 msgid "Recent Files"
 msgstr "Nyleg brukte filer"
 
-#. i18n: ectx: attribute (title), widget (QWidget, placesTab)
-#: app/startmainpage.ui:97
+#. i18n: ectx: attribute (title), widget (KFilePlacesView, mBookmarksView)
+#: app/startmainpage.ui:143
 #, kde-format
 msgid "Places"
 msgstr "Stadar"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tagsTab)
-#: app/startmainpage.ui:114
+#: app/startmainpage.ui:154
 #, kde-format
 msgid "Tags"
 msgstr "Merkelappar"
 
 #. i18n: ectx: property (text), widget (QLabel, mTagLabel)
-#: app/startmainpage.ui:120
+#: app/startmainpage.ui:172
 #, kde-format
 msgid ""
 "Browsing by tags is not available. Make sure Nepomuk is properly installed "
@@ -1606,18 +1606,18 @@ msgstr ""
 "Det er ikkje mogleg å bla gjennom etter merkelappar. Sjå til at Nepomuk er "
 "rett installert."
 
-#: app/viewmainpage.cpp:153 app/viewmainpage.cpp:447
+#: app/viewmainpage.cpp:146 app/viewmainpage.cpp:426
 #, kde-format
 msgid "Synchronize"
 msgstr "Synkroniser"
 
-#: app/viewmainpage.cpp:428
+#: app/viewmainpage.cpp:407
 #, kde-format
 msgid "Show Thumbnails"
 msgstr "Vis miniatyrbilete"
 
 #. i18n: For languages that are read right to left, "right side" refers to the left side in this context.
-#: app/viewmainpage.cpp:431
+#: app/viewmainpage.cpp:410
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1634,19 +1634,19 @@ msgstr ""
 "kan velja å heller visa feltet på høgre side, eller med fleire rader. <link "
 "url='%1'>Set opp dette i innstillingane</link>.</para>"
 
-#: app/viewmainpage.cpp:584
+#: app/viewmainpage.cpp:563
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Background Color Mode"
 msgstr "Bakgrunnsfarge-modus"
 
-#: app/viewmainpage.cpp:777
+#: app/viewmainpage.cpp:755
 #, kde-format
 msgctxt "@action:button"
 msgid "Discard Changes and Reload"
 msgstr "Forkast endringar og oppdater"
 
-#: app/viewmainpage.cpp:779
+#: app/viewmainpage.cpp:757
 #, kde-format
 msgctxt "@info"
 msgid ""
