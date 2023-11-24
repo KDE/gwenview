@@ -257,7 +257,6 @@ add_subdirectory(images)
 add_subdirectory(cursors)
 add_subdirectory(color-schemes)
 add_subdirectory(doc)
-add_subdirectory(kconf_update)
 ecm_qt_install_logging_categories(EXPORT GWENVIEW FILE gwenview.categories DESTINATION ${KDE_INSTALL_LOGGINGCATEGORIESDIR})
 
 ki18n_install(po)
