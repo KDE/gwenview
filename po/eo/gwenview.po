@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-24 02:22+0000\n"
-"PO-Revision-Date: 2023-06-02 21:20+0100\n"
+"PO-Revision-Date: 2023-09-09 10:29+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -236,7 +236,11 @@ msgid "Add Folder to Places"
 msgstr "Aldoni Dosierujon al Lokoj"
 
 #: app/browsemainpage.cpp:246
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "@info:status %1 number of selected documents, %2 total number of "
+#| "documents, ¦%3 total filesize of selected documents"
+#| msgid "Selected %1 of %2 (%3)"
 msgctxt ""
 "@info:status %1 number of selected documents, %2 total number of documents, "
 "%3 total filesize of selected documents"
@@ -1393,7 +1397,11 @@ msgstr[0] "Unu dokumenton ne eblis konservi:"
 msgstr[1] "%1 dokumentojn ne eblis konservi:"
 
 #: app/saveallhelper.cpp:106
-#, kde-kuit-format
+#, fuzzy, kde-kuit-format
+#| msgctxt ""
+#| "@info %1 is the name of the document which failed to save, %2 is the "
+#| "reason ¦for the failure"
+#| msgid "<filename>%1</filename>: %2"
 msgctxt ""
 "@info %1 is the name of the document which failed to save, %2 is the reason "
 "for the failure"
@@ -1977,7 +1985,11 @@ msgid "Search the Web for How to Install Protocol Support for \"%1\"…"
 msgstr "Serĉi en la Reto Kiel Instali Protokolan Subtenon por \"%1\"…"
 
 #: importer/thumbnailpage.cpp:284
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "@info this text will be used as a search term in an online search engine, "
+#| "%1 ¦protocol name"
+#| msgid "How to install protocol support for \"%1\" on Linux"
 msgctxt ""
 "@info this text will be used as a search term in an online search engine, %1 "
 "protocol name"
@@ -1985,7 +1997,11 @@ msgid "How to install protocol support for \"%1\" on Linux"
 msgstr "Kiel instali protokolan subtenon por \"%1\" en Linukso"
 
 #: importer/thumbnailpage.cpp:285
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "search engine URL, %1 search keyword, and translators can replace "
+#| "duckduckgo ¦with other search engines"
+#| msgid "https://duckduckgo.com/?q=%1"
 msgctxt ""
 "search engine URL, %1 search keyword, and translators can replace duckduckgo "
 "with other search engines"
@@ -2067,7 +2083,7 @@ msgstr "Ellaboranto"
 #: lib/bcg/bcgimageoperation.cpp:69
 #, kde-format
 msgid "Adjust Colors"
-msgstr "Alĝustigu Kolorojn"
+msgstr "Alĝustigi Kolorojn"
 
 #: lib/bcg/bcgwidget.cpp:51
 #, kde-format
@@ -2222,7 +2238,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Trash"
-msgstr "Rubujo"
+msgstr "Rubigi"
 
 #: lib/documentview/documentview.cpp:215
 #, kde-format
@@ -2296,7 +2312,11 @@ msgid "Zoom to fill window by fitting to width or height"
 msgstr "Zomi por plenigi fenestron per alĝustigo al larĝo aŭ alteco"
 
 #: lib/documentview/documentviewcontroller.cpp:85
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "@action:button Zoom to fill (fit width or height), shown in status bar, "
+#| "keep ¦it short please"
+#| msgid "Fill"
 msgctxt ""
 "@action:button Zoom to fill (fit width or height), shown in status bar, keep "
 "it short please"
@@ -2664,7 +2684,7 @@ msgstr "eraro"
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Resize"
-msgstr "Regrandigi"
+msgstr "Aligrandigi"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, ResizeImageWidget)
 #: lib/resize/resizeimagewidget.ui:14
@@ -2676,7 +2696,7 @@ msgstr "Regrandigi Bildon"
 #: lib/resize/resizeimagewidget.ui:20
 #, kde-format
 msgid "Estimated new file size:"
-msgstr ""
+msgstr "Taksita nova dosiergrandeco:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: lib/resize/resizeimagewidget.ui:47
@@ -2700,10 +2720,9 @@ msgstr "px"
 
 #. i18n: ectx: property (text), widget (QLabel, mCurrentSizeLabel)
 #: lib/resize/resizeimagewidget.ui:115
-#, fuzzy, kde-format
-#| msgid "Current size:"
+#, kde-format
 msgid "Current file size:"
-msgstr "Nuna grandeco:"
+msgstr "Nuna dosiergrandeco:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, mKeepAspectCheckBox)
 #: lib/resize/resizeimagewidget.ui:145
@@ -2744,13 +2763,13 @@ msgstr "Hazarde"
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Right"
-msgstr "Turni dekstre"
+msgstr "Rotacii Dekstren"
 
 #: lib/transformimageoperation.cpp:61
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Left"
-msgstr "Turni maldekstre"
+msgstr "Rotacii Maldekstren"
 
 #: lib/transformimageoperation.cpp:64
 #, kde-format
@@ -2787,17 +2806,3 @@ msgstr "&Dosiero"
 #, kde-format
 msgid "&View"
 msgstr "&Vidi"
-
-#~ msgid "&Settings"
-#~ msgstr "&Agordo"
-
-#~ msgid "Apply only the profile embedded in the image file"
-#~ msgstr "Apliki nur la profilon enigitan en la bilddosiero"
-
-#~ msgid ""
-#~ "Assume that system-wide color correction already applies monitor profile."
-#~ msgstr ""
-#~ "Supozu, ke tutsistema kolorkorektado jam aplikas monitoran profilon."
-
-#~ msgid "Color profile:"
-#~ msgstr "Kolora profilo:"
