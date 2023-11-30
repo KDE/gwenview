@@ -236,11 +236,7 @@ msgid "Add Folder to Places"
 msgstr "Aldoni Dosierujon al Lokoj"
 
 #: app/browsemainpage.cpp:246
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "@info:status %1 number of selected documents, %2 total number of "
-#| "documents, ¦%3 total filesize of selected documents"
-#| msgid "Selected %1 of %2 (%3)"
+#, kde-format
 msgctxt ""
 "@info:status %1 number of selected documents, %2 total number of documents, "
 "%3 total filesize of selected documents"
@@ -1397,11 +1393,7 @@ msgstr[0] "Unu dokumenton ne eblis konservi:"
 msgstr[1] "%1 dokumentojn ne eblis konservi:"
 
 #: app/saveallhelper.cpp:106
-#, fuzzy, kde-kuit-format
-#| msgctxt ""
-#| "@info %1 is the name of the document which failed to save, %2 is the "
-#| "reason ¦for the failure"
-#| msgid "<filename>%1</filename>: %2"
+#, kde-kuit-format
 msgctxt ""
 "@info %1 is the name of the document which failed to save, %2 is the reason "
 "for the failure"
@@ -1985,11 +1977,7 @@ msgid "Search the Web for How to Install Protocol Support for \"%1\"…"
 msgstr "Serĉi en la Reto Kiel Instali Protokolan Subtenon por \"%1\"…"
 
 #: importer/thumbnailpage.cpp:284
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "@info this text will be used as a search term in an online search engine, "
-#| "%1 ¦protocol name"
-#| msgid "How to install protocol support for \"%1\" on Linux"
+#, kde-format
 msgctxt ""
 "@info this text will be used as a search term in an online search engine, %1 "
 "protocol name"
@@ -1997,11 +1985,7 @@ msgid "How to install protocol support for \"%1\" on Linux"
 msgstr "Kiel instali protokolan subtenon por \"%1\" en Linukso"
 
 #: importer/thumbnailpage.cpp:285
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "search engine URL, %1 search keyword, and translators can replace "
-#| "duckduckgo ¦with other search engines"
-#| msgid "https://duckduckgo.com/?q=%1"
+#, kde-format
 msgctxt ""
 "search engine URL, %1 search keyword, and translators can replace duckduckgo "
 "with other search engines"
@@ -2312,11 +2296,7 @@ msgid "Zoom to fill window by fitting to width or height"
 msgstr "Zomi por plenigi fenestron per alĝustigo al larĝo aŭ alteco"
 
 #: lib/documentview/documentviewcontroller.cpp:85
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "@action:button Zoom to fill (fit width or height), shown in status bar, "
-#| "keep ¦it short please"
-#| msgid "Fill"
+#, kde-format
 msgctxt ""
 "@action:button Zoom to fill (fit width or height), shown in status bar, keep "
 "it short please"
