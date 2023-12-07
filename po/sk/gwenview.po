@@ -4,7 +4,7 @@
 # Miroslav Los <milamby@yahoo.com>, 2009.
 # Michal Sulek <misurel@gmail.com>, 2010, 2011.
 # Richard Frič <Richard.Fric@kdemail.net>, 2011.
-# Roman Paholík <wizzardsk@gmail.com>, 2012, 2013, 2014, 2016, 2017, 2021, 2022.
+# SPDX-FileCopyrightText: 2012, 2013, 2014, 2016, 2017, 2021, 2022, 2023 Roman Paholík <wizzardsk@gmail.com>
 # Mthw <jari_45@hotmail.com>, 2019.
 # Matej Mrenica <matejm98mthw@gmail.com>, 2019, 2020, 2021, 2022.
 # Dušan Kazik <prescott66@gmail.com>, 2020.
@@ -13,14 +13,14 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-15 00:40+0000\n"
-"PO-Revision-Date: 2022-07-19 10:03+0200\n"
-"Last-Translator: Matej Mrenica <matejm98mthw@gmail.com>\n"
-"Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
+"PO-Revision-Date: 2023-12-06 19:09+0100\n"
+"Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
+"Language-Team: Slovak <kde-sk@linux.sk>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 22.07.80\n"
+"X-Generator: Lokalize 23.08.3\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
 #, kde-format
@@ -127,10 +127,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileLabel)
 #: app/advancedconfigpage.ui:275
-#, fuzzy, kde-format
-#| msgid "Too many arguments."
+#, kde-format
 msgid "Color management:"
-msgstr "Priveľa argumentov."
+msgstr "Správa farieb:"
 
 #: app/alignwithsidebarwidgetaction.cpp:23
 #, kde-format
@@ -433,7 +432,7 @@ msgstr "Vytvoriť priečinok..."
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Open in New Window"
-msgstr ""
+msgstr "Otvoriť v novom okne"
 
 #: app/fileopscontextmanageritem.cpp:194
 #, kde-format
@@ -2110,17 +2109,17 @@ msgstr ""
 #: lib/bcg/bcgwidget.cpp:51
 #, kde-format
 msgid "Brightness:"
-msgstr ""
+msgstr "Jas:"
 
 #: lib/bcg/bcgwidget.cpp:52
 #, kde-format
 msgid "Contrast:"
-msgstr ""
+msgstr "Kontrast:"
 
 #: lib/bcg/bcgwidget.cpp:53
 #, kde-format
 msgid "Gamma:"
-msgstr ""
+msgstr "Gama:"
 
 #: lib/crop/cropwidget.cpp:191
 #, kde-format
@@ -2277,12 +2276,10 @@ msgid "%1x%2"
 msgstr "%1x%2"
 
 #: lib/documentview/documentview.cpp:264 lib/zoomcombobox/zoomcombobox.cpp:318
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip of custom toolbar button"
-#| msgid "%1"
+#, kde-format
 msgctxt "Percent value"
 msgid "%1%"
-msgstr "%1"
+msgstr "%1%"
 
 #: lib/documentview/documentview.cpp:543
 #, kde-format
@@ -2356,11 +2353,7 @@ msgid "Fill"
 msgstr "Vyplniť"
 
 #: lib/documentview/documentviewcontroller.cpp:90
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "@action:button Zoom to original size, shown in status bar, keep it short "
-#| "please"
-#| msgid "100%"
+#, kde-format
 msgctxt "Original image size percent value"
 msgid "100%"
 msgstr "100%"
@@ -2563,15 +2556,13 @@ msgstr "Veľkosť súboru"
 #, kde-format
 msgctxt "@item:intable"
 msgid "Date Created"
-msgstr ""
+msgstr "Dátum vytvorenia"
 
 #: lib/imagemetainfomodel.cpp:257
-#, fuzzy, kde-format
-#| msgid "One image modified"
-#| msgid_plural "%1 images modified"
+#, kde-format
 msgctxt "@item:intable"
 msgid "Date Modified"
-msgstr "Zmenený jeden obrázok"
+msgstr "Dátum zmeny"
 
 #: lib/imagemetainfomodel.cpp:258
 #, kde-format
@@ -2583,7 +2574,7 @@ msgstr ""
 #, kde-format
 msgctxt "@item:intable"
 msgid "Path"
-msgstr ""
+msgstr "Cesta"
 
 #: lib/imagemetainfomodel.cpp:260
 #, kde-format
@@ -2598,12 +2589,10 @@ msgid "Comment"
 msgstr "Komentár"
 
 #: lib/imagemetainfomodel.cpp:262
-#, fuzzy, kde-format
-#| msgctxt "@item:intable"
-#| msgid "File Time"
+#, kde-format
 msgctxt "@item:intable"
 msgid "File Type"
-msgstr "Vytvorené"
+msgstr "Typ súboru"
 
 #: lib/imagemetainfomodel.cpp:324
 #, kde-format
