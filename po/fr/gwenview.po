@@ -4,11 +4,11 @@
 # Olivier Serve <tifauv@gmail.com>, 2007, 2008, 2009, 2010, 2012, 2013, 2014.
 # Sébastien Renard <Sebastien.Renard@digitalfox.org>, 2007, 2008.
 # Guillaume Pujol <guill.p@gmail.com>, 2008, 2010.
-# SPDX-FileCopyrightText: 2012, 2013, 2020, 2021, 2022, 2023 xavier <xavier.besnard@neuf.fr>
+# SPDX-FileCopyrightText: 2012, 2013, 2020, 2021, 2022, 2023 xavier <xavier.besnard@kde.org>
 # Sebastien Renard <renard@kde.org>, 2013.
 # Peter Potrowl <peter.potrowl@gmail.com>, 2017, 2018, 2019.
 # Simon Depiets <sdepiets@gmail.com>, 2018, 2019, 2020.
-# Xavier BESNARD <xavier.besnard@neuf.fr>, 2023.
+# Xavier Besnard <xavier.besnard@kde.org>, 2023.
 #
 msgid ""
 msgstr ""
@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-24 02:22+0000\n"
 "PO-Revision-Date: 2023-10-24 21:12+0200\n"
-"Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
+"Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -38,7 +38,7 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr ""
 "tifauv@gmail.com, peter.potrowl@gmail.com, sdepiets@gmail.com, xavier."
-"besnard@neuf.fr"
+"besnard@kde.org"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_LowResourceUsageMode)
 #: app/advancedconfigpage.ui:28
