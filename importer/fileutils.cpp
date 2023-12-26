@@ -33,8 +33,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KIO/CopyJob>
 #include <KIO/Job>
 #include <KIO/JobUiDelegate>
+#include <KIO/StatJob>
+#include <KIO/StoredTransferJob>
 #include <KJobWidgets>
-#include <kio/jobclasses.h>
 
 // Local
 #include "gwenview_importer_debug.h"

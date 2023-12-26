@@ -30,12 +30,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KFileItem>
 #include <KIO/CopyJob>
 #include <KIO/DeleteJob>
-#include <KIO/Job>
 #include <KIO/JobUiDelegate>
 #include <KIO/MkpathJob>
+#include <KIO/SimpleJob>
 #include <KJobWidgets>
 #include <KLocalizedString>
-#include <kio/jobclasses.h>
 
 // stdc++
 #include <memory>

@@ -33,8 +33,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #if KIO_VERSION >= QT_VERSION_CHECK(5, 100, 0)
 #include <KIO/DeleteOrTrashJob>
 #endif
-#include <KIO/Job>
 #include <KIO/JobUiDelegate>
+#include <KIO/SimpleJob>
 #include <KJobWidgets>
 #include <KLocalizedString>
 

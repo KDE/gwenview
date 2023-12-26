@@ -36,7 +36,9 @@
 #include <QTemporaryFile>
 
 // KF
+#include <KIO/FileCopyJob>
 #include <KIO/PreviewJob>
+#include <KIO/StatJob>
 #include <KJobWidgets>
 
 // Local

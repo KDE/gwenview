@@ -41,10 +41,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QtConcurrent>
 
 // KF
-#include <KIO/Job>
+#include <KIO/TransferJob>
 #include <KLocalizedString>
 #include <KProtocolInfo>
-#include <kio/jobclasses.h>
 
 #ifdef KDCRAW_FOUND
 #include <kdcraw/kdcraw.h>
