@@ -37,7 +37,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KSqueezedTextLabel>
 #include <KToggleAction>
 #if HAVE_KACTIVITIES
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <KActivities/ResourceInstance>
+#else
+#include <PlasmaActivities/ResourceInstance>
+#endif
 #endif
 
 // Local

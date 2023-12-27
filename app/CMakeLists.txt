@@ -103,8 +103,13 @@ target_link_libraries(gwenview
     gwenviewlib
     )
 
-if (KF${QT_MAJOR_VERSION}Activities_FOUND)
-    target_link_libraries(gwenview KF${QT_MAJOR_VERSION}::Activities)
+if (HAVE_KACTIVITIES)
+
+    if (QT_MAJOR_VERSION STREQUAL "6")
+        target_link_libraries(gwenview Plasma::Activities)
+    else()
+        target_link_libraries(gwenview KF5::Activities)
+    endif()
 endif()
 
 if (KF${QT_MAJOR_VERSION}Purpose_FOUND)

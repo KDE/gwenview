@@ -94,13 +94,18 @@ find_package(KF${QT_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS
     WidgetsAddons
 )
 find_package(KF${QT_MAJOR_VERSION} ${KF_MIN_VERSION} OPTIONAL_COMPONENTS
-    Activities
     DocTools
     Purpose
 )
-
-set(HAVE_KACTIVITIES ${KF${QT_MAJOR_VERSION}Activities_FOUND})
 set(HAVE_PURPOSE ${KF${QT_MAJOR_VERSION}Purpose_FOUND})
+
+if(QT_MAJOR_VERSION STREQUAL "6")
+    set(KActivitiesPackageName PlasmaActivities)
+else()
+    set(KActivitiesPackageName KF5Activities)
+endif()
+find_package(${KActivitiesPackageName})
+set(HAVE_KACTIVITIES ${${KActivitiesPackageName}_FOUND})
 
 ecm_set_disabled_deprecation_versions(QT 5.14.0 KF 5.99.0
     )
