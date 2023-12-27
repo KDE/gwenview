@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-15 00:40+0000\n"
+"POT-Creation-Date: 2023-12-27 00:39+0000\n"
 "PO-Revision-Date: 2023-09-08 12:06+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -1828,12 +1828,12 @@ msgstr "Importa més documents"
 msgid "Quit"
 msgstr "Ix"
 
-#: importer/importer.cpp:80
+#: importer/importer.cpp:79
 #, kde-format
 msgid "Could not create destination folder."
 msgstr "No s'ha pogut crear la carpeta de destinació."
 
-#: importer/importer.cpp:95 importer/importer.cpp:101
+#: importer/importer.cpp:94 importer/importer.cpp:100
 #, kde-format
 msgid "Could not create temporary upload folder."
 msgstr "No s'ha pogut crear la carpeta temporal de pujada."
@@ -1919,13 +1919,13 @@ msgstr "Carpeta d'origen no vàlida."
 msgid "Importing documents..."
 msgstr "S'estan important els documents..."
 
-#: importer/thumbnailpage.cpp:234
+#: importer/thumbnailpage.cpp:235
 #, kde-format
 msgctxt "@info above install button when Kamera is not installed"
 msgid "Support for your camera is not installed."
 msgstr "El suport per a la vostra càmera no està instal·lat."
 
-#: importer/thumbnailpage.cpp:236
+#: importer/thumbnailpage.cpp:237
 #, kde-format
 msgctxt "@info above install button, %1 protocol name %2 error text from KIO"
 msgid "The protocol support library for \"%1\" is not installed. Error: %2"
@@ -1933,13 +1933,13 @@ msgstr ""
 "La biblioteca d'implementació del protocol per a «%1» no està instal·lada. "
 "Error: %2"
 
-#: importer/thumbnailpage.cpp:238
+#: importer/thumbnailpage.cpp:239
 #, kde-format
 msgctxt "@info above install button, %1 protocol name"
 msgid "The protocol support library for \"%1\" is not installed."
 msgstr "La biblioteca de suport del protocol per a «%1» no està instal·lada."
 
-#: importer/thumbnailpage.cpp:250
+#: importer/thumbnailpage.cpp:251
 #, kde-format
 msgctxt "@info:usagetip above install button"
 msgid ""
@@ -1948,7 +1948,7 @@ msgstr ""
 "Després d'acabar el procés d'instal·lació, reinicieu este importador per a "
 "continuar."
 
-#: importer/thumbnailpage.cpp:257
+#: importer/thumbnailpage.cpp:258
 #, kde-format
 msgctxt "@info:tooltip for a button, %1 protocol name"
 msgid "Launch Discover to install the protocol support library for \"%1\""
@@ -1956,13 +1956,13 @@ msgstr ""
 "Llanceu Discover per a instal·lar la biblioteca de suport del protocol per a "
 "«%1»"
 
-#: importer/thumbnailpage.cpp:259
+#: importer/thumbnailpage.cpp:260
 #, kde-format
 msgctxt "@action:button"
 msgid "Install Support for this Camera…"
 msgstr "Instal·la la implementació per a esta càmera…"
 
-#: importer/thumbnailpage.cpp:260
+#: importer/thumbnailpage.cpp:261
 #, kde-format
 msgctxt "@info:whatsthis for a button when Kamera is not installed"
 msgid ""
@@ -1974,13 +1974,13 @@ msgstr ""
 "càmera. Feu clic ací per a iniciar Discover i instal·lar Kamera per a "
 "habilitar la implementació del protocol per a «camera:/» al vostre sistema."
 
-#: importer/thumbnailpage.cpp:263
+#: importer/thumbnailpage.cpp:264
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Install Protocol Support for \"%1\"…"
 msgstr "Instal·la la implementació del protocol per a «%1»…"
 
-#: importer/thumbnailpage.cpp:264
+#: importer/thumbnailpage.cpp:265
 #, kde-format
 msgctxt "@info:whatsthis for a button, %1 protocol name"
 msgid ""
@@ -1991,14 +1991,14 @@ msgstr ""
 "del protocol que falta per a habilitar la implementació del protocol per a "
 "«%1:/» al vostre sistema."
 
-#: importer/thumbnailpage.cpp:268
+#: importer/thumbnailpage.cpp:269
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Search the Web for How to Install Protocol Support for \"%1\"…"
 msgstr ""
 "Busca en la web per a instal·lar la implementació del protocol per a «%1»…"
 
-#: importer/thumbnailpage.cpp:284
+#: importer/thumbnailpage.cpp:285
 #, kde-format
 msgctxt ""
 "@info this text will be used as a search term in an online search engine, %1 "
@@ -2006,7 +2006,7 @@ msgctxt ""
 msgid "How to install protocol support for \"%1\" on Linux"
 msgstr "Com instal·lar la implementació del protocol per a «%1» a Linux"
 
-#: importer/thumbnailpage.cpp:285
+#: importer/thumbnailpage.cpp:286
 #, kde-format
 msgctxt ""
 "search engine URL, %1 search keyword, and translators can replace duckduckgo "
@@ -2014,17 +2014,17 @@ msgctxt ""
 msgid "https://duckduckgo.com/?q=%1"
 msgstr "https://duckduckgo.com/?q=%1"
 
-#: importer/thumbnailpage.cpp:326
+#: importer/thumbnailpage.cpp:327
 #, kde-format
 msgid "Import Selected"
 msgstr "Importa els seleccionats"
 
-#: importer/thumbnailpage.cpp:329
+#: importer/thumbnailpage.cpp:330
 #, kde-format
 msgid "Import All"
 msgstr "Importa-ho tot"
 
-#: importer/thumbnailpage.cpp:491
+#: importer/thumbnailpage.cpp:492
 #, kde-kuit-format
 msgctxt "@info when failing to open the appstream URL"
 msgid ""
@@ -2035,7 +2035,7 @@ msgstr ""
 "vostre sistema o utilitzeu el gestor de paquets del vostre sistema per a "
 "instal·lar el paquet «kamera»."
 
-#: importer/thumbnailpage.cpp:495
+#: importer/thumbnailpage.cpp:496
 #, kde-kuit-format
 msgctxt "@info when failing to launch plasma-discover, %1 protocol name"
 msgid ""
@@ -2191,25 +2191,25 @@ msgctxt "@info"
 msgid "Gwenview cannot save this kind of documents."
 msgstr "Gwenview no pot guardar esta classe de documents."
 
-#: lib/document/loadingdocumentimpl.cpp:137
+#: lib/document/loadingdocumentimpl.cpp:136
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot display documents of type %1."
 msgstr "Gwenview no pot visualitzar documents del tipus %1."
 
-#: lib/document/loadingdocumentimpl.cpp:398
+#: lib/document/loadingdocumentimpl.cpp:397
 #, kde-format
 msgctxt "@info"
 msgid "Could not open file %1"
 msgstr "No s'ha pogut obrir el fitxer %1"
 
-#: lib/document/loadingdocumentimpl.cpp:489
+#: lib/document/loadingdocumentimpl.cpp:488
 #, kde-format
 msgctxt "@info"
 msgid "Loading meta information failed."
 msgstr "No s'ha pogut carregar la meta-informació."
 
-#: lib/document/loadingdocumentimpl.cpp:515
+#: lib/document/loadingdocumentimpl.cpp:514
 #, kde-format
 msgctxt "@info"
 msgid "Loading image failed."
@@ -2835,7 +2835,7 @@ msgctxt "(qtundo-format)"
 msgid "Transform"
 msgstr "Transforma"
 
-#: part/gvpart.cpp:76
+#: part/gvpart.cpp:77
 #, kde-format
 msgctxt "@action"
 msgid "Properties"

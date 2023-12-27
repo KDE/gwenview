@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-15 00:40+0000\n"
+"POT-Creation-Date: 2023-12-27 00:39+0000\n"
 "PO-Revision-Date: 2023-09-09 09:35+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -1817,12 +1817,12 @@ msgstr "მეტი დოკუმენტის შემოტანა"
 msgid "Quit"
 msgstr "გამოსვლა"
 
-#: importer/importer.cpp:80
+#: importer/importer.cpp:79
 #, kde-format
 msgid "Could not create destination folder."
 msgstr "სამიზნე საქაღალდის შექმნის შეცდომა."
 
-#: importer/importer.cpp:95 importer/importer.cpp:101
+#: importer/importer.cpp:94 importer/importer.cpp:100
 #, kde-format
 msgid "Could not create temporary upload folder."
 msgstr "ატვირთვისთვის დროებითი საქაღალდის შექმნის შეცდომა."
@@ -1907,26 +1907,26 @@ msgstr "არასწორი საწყისი საქაღალდ�
 msgid "Importing documents..."
 msgstr "დოკუმენტების შემოტანა..."
 
-#: importer/thumbnailpage.cpp:234
+#: importer/thumbnailpage.cpp:235
 #, kde-format
 msgctxt "@info above install button when Kamera is not installed"
 msgid "Support for your camera is not installed."
 msgstr "თქვენი კამერის მხარდაჭერა დაყენებული არაა."
 
-#: importer/thumbnailpage.cpp:236
+#: importer/thumbnailpage.cpp:237
 #, kde-format
 msgctxt "@info above install button, %1 protocol name %2 error text from KIO"
 msgid "The protocol support library for \"%1\" is not installed. Error: %2"
 msgstr ""
 "პროტოკოლის მხარდაჭერის ბიბლიოთეკა \"%1\"-სთვის დაყენებული არაა. შეცდომა: %2"
 
-#: importer/thumbnailpage.cpp:238
+#: importer/thumbnailpage.cpp:239
 #, kde-format
 msgctxt "@info above install button, %1 protocol name"
 msgid "The protocol support library for \"%1\" is not installed."
 msgstr "პროტოკოლის მხარდაჭერის ბიბლიოთეკა \"%1\"-სთვის დაყენებული არაა."
 
-#: importer/thumbnailpage.cpp:250
+#: importer/thumbnailpage.cpp:251
 #, kde-format
 msgctxt "@info:usagetip above install button"
 msgid ""
@@ -1935,19 +1935,19 @@ msgstr ""
 "დაყენების პროცესის დასრულების შემდეგ შემომტანი გასაგრძელებლად თავიდან "
 "გაუშვით."
 
-#: importer/thumbnailpage.cpp:257
+#: importer/thumbnailpage.cpp:258
 #, kde-format
 msgctxt "@info:tooltip for a button, %1 protocol name"
 msgid "Launch Discover to install the protocol support library for \"%1\""
 msgstr "\"%1\"-ის მხარდაჭერის ბიბლიოთეკის დასაყენებლად Discover-ის გაშვება"
 
-#: importer/thumbnailpage.cpp:259
+#: importer/thumbnailpage.cpp:260
 #, kde-format
 msgctxt "@action:button"
 msgid "Install Support for this Camera…"
 msgstr "ამ კამერის მხარდაჭერის დაყენება…"
 
-#: importer/thumbnailpage.cpp:260
+#: importer/thumbnailpage.cpp:261
 #, kde-format
 msgctxt "@info:whatsthis for a button when Kamera is not installed"
 msgid ""
@@ -1959,13 +1959,13 @@ msgstr ""
 "Discover-ის გასაშვებად და Kamera-ის დასაყენებლად, რათა \"camera:/\" "
 "პროტოკოლის მხარდაჭერა გქონდეთ."
 
-#: importer/thumbnailpage.cpp:263
+#: importer/thumbnailpage.cpp:264
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Install Protocol Support for \"%1\"…"
 msgstr "\"%1\"-ის პროტოკოლის მხარდაჭერის დაყენება…"
 
-#: importer/thumbnailpage.cpp:264
+#: importer/thumbnailpage.cpp:265
 #, kde-format
 msgctxt "@info:whatsthis for a button, %1 protocol name"
 msgid ""
@@ -1975,14 +1975,14 @@ msgstr ""
 "თქვენს სისტემაში ნაკლული პროტოკოლის (\"%1:/)მხარდაჭერის ბიბლიოთეკის "
 "დასაყენებლად Discover-ის გასაშვებად აქ დააწკაპუნეთ."
 
-#: importer/thumbnailpage.cpp:268
+#: importer/thumbnailpage.cpp:269
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Search the Web for How to Install Protocol Support for \"%1\"…"
 msgstr ""
 "ინტერნეტში მოძებნა, როგორ დავაყენოთ პროტოკოლის მხარდაჭერა \"%1\"-სთვის…"
 
-#: importer/thumbnailpage.cpp:284
+#: importer/thumbnailpage.cpp:285
 #, kde-format
 msgctxt ""
 "@info this text will be used as a search term in an online search engine, %1 "
@@ -1990,7 +1990,7 @@ msgctxt ""
 msgid "How to install protocol support for \"%1\" on Linux"
 msgstr "როგორ დავაყენოთ \"%1\" პროტოკოლის მხარდაჭერა Linux-ზე"
 
-#: importer/thumbnailpage.cpp:285
+#: importer/thumbnailpage.cpp:286
 #, kde-format
 msgctxt ""
 "search engine URL, %1 search keyword, and translators can replace duckduckgo "
@@ -1998,17 +1998,17 @@ msgctxt ""
 msgid "https://duckduckgo.com/?q=%1"
 msgstr "https://duckduckgo.com/?q=%1"
 
-#: importer/thumbnailpage.cpp:326
+#: importer/thumbnailpage.cpp:327
 #, kde-format
 msgid "Import Selected"
 msgstr "მონიშნულის შემოტანა"
 
-#: importer/thumbnailpage.cpp:329
+#: importer/thumbnailpage.cpp:330
 #, kde-format
 msgid "Import All"
 msgstr "ყველას შემოტანა"
 
-#: importer/thumbnailpage.cpp:491
+#: importer/thumbnailpage.cpp:492
 #, kde-kuit-format
 msgctxt "@info when failing to open the appstream URL"
 msgid ""
@@ -2019,7 +2019,7 @@ msgstr ""
 "Discover, ან გამოიყენეთ თქვენი სისტემის პაკეტების მმართველი, რათა 'Kamera' "
 "პაკეტი დააყენოთ."
 
-#: importer/thumbnailpage.cpp:495
+#: importer/thumbnailpage.cpp:496
 #, kde-kuit-format
 msgctxt "@info when failing to launch plasma-discover, %1 protocol name"
 msgid ""
@@ -2175,25 +2175,25 @@ msgctxt "@info"
 msgid "Gwenview cannot save this kind of documents."
 msgstr "Gwenview -ს ამ ტიპის გამოსახულების ჩაწერა არ შეუძლია."
 
-#: lib/document/loadingdocumentimpl.cpp:137
+#: lib/document/loadingdocumentimpl.cpp:136
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot display documents of type %1."
 msgstr "Gwenview -ს %1 ტიპის დოკუმენტების ჩვენება არ შეუძლია."
 
-#: lib/document/loadingdocumentimpl.cpp:398
+#: lib/document/loadingdocumentimpl.cpp:397
 #, kde-format
 msgctxt "@info"
 msgid "Could not open file %1"
 msgstr "ფაილის გახსნის შეცდომა: %1"
 
-#: lib/document/loadingdocumentimpl.cpp:489
+#: lib/document/loadingdocumentimpl.cpp:488
 #, kde-format
 msgctxt "@info"
 msgid "Loading meta information failed."
 msgstr "მეტამონაცემების ჩატვირთვის შეცდომა."
 
-#: lib/document/loadingdocumentimpl.cpp:515
+#: lib/document/loadingdocumentimpl.cpp:514
 #, kde-format
 msgctxt "@info"
 msgid "Loading image failed."
@@ -2815,7 +2815,7 @@ msgctxt "(qtundo-format)"
 msgid "Transform"
 msgstr "ტრასფორმირება"
 
-#: part/gvpart.cpp:76
+#: part/gvpart.cpp:77
 #, kde-format
 msgctxt "@action"
 msgid "Properties"
