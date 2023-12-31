@@ -2026,8 +2026,8 @@ msgid ""
 "Opening Discover failed.<nl/>Please check if Discover is installed on your "
 "system, or use your system's package manager to install \"Kamera\" package."
 msgstr ""
-"No s'ha pogut obrir Discover.<nl/>Comproveu si Discover està instal·lat al "
-"vostre sistema o utilitzeu el gestor de paquets del vostre sistema per a "
+"No s'ha pogut obrir Discover.<nl/>Comproveu si Discover està instal·lat en "
+"el vostre sistema o utilitzeu el gestor de paquets del vostre sistema per a "
 "instal·lar el paquet «kamera»."
 
 #: importer/thumbnailpage.cpp:495
@@ -2038,8 +2038,8 @@ msgid ""
 "system, or use your system's package manager to install the protocol support "
 "library for \"%1\"."
 msgstr ""
-"No s'ha pogut obrir Discover.<nl/>Comproveu si Discover està instal·lat al "
-"vostre sistema o utilitzeu el gestor de paquets del vostre sistema per a "
+"No s'ha pogut obrir Discover.<nl/>Comproveu si Discover està instal·lat en "
+"el vostre sistema o utilitzeu el gestor de paquets del vostre sistema per a "
 "instal·lar la biblioteca d'implementació del protocol per a «%1»."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
