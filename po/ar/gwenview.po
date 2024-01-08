@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-27 00:39+0000\n"
+"POT-Creation-Date: 2024-01-08 00:40+0000\n"
 "PO-Revision-Date: 2023-08-19 21:44+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -137,7 +137,7 @@ msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
 msgid "Sidebar Alignment Spacer"
 msgstr "فاصل محاذاة الشريط الجانبي"
 
-#: app/browsemainpage.cpp:146 app/mainwindow.cpp:378 app/viewmainpage.cpp:404
+#: app/browsemainpage.cpp:146 app/mainwindow.cpp:378 app/viewmainpage.cpp:408
 #: lib/documentview/documentviewcontroller.cpp:55
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
@@ -621,7 +621,7 @@ msgctxt "@info:tooltip"
 msgid "Configure full screen mode"
 msgstr "اضبط نمط ملء الشاشة"
 
-#: app/fullscreencontent.cpp:552 app/viewmainpage.cpp:383
+#: app/fullscreencontent.cpp:552 app/viewmainpage.cpp:387
 #, kde-format
 msgctxt "@info:status %1 current document index, %2 total documents"
 msgid "%1 of %2"
@@ -1644,18 +1644,18 @@ msgid ""
 "on your computer."
 msgstr "وسم الاستعراض غير متاح. تأكد من أن نِبومَك مثبت بشكل صحيح في حاسوبك."
 
-#: app/viewmainpage.cpp:146 app/viewmainpage.cpp:426
+#: app/viewmainpage.cpp:150 app/viewmainpage.cpp:430
 #, kde-format
 msgid "Synchronize"
 msgstr "زامِن"
 
-#: app/viewmainpage.cpp:407
+#: app/viewmainpage.cpp:411
 #, kde-format
 msgid "Show Thumbnails"
 msgstr "أظهر المصغرات"
 
 #. i18n: For languages that are read right to left, "right side" refers to the left side in this context.
-#: app/viewmainpage.cpp:410
+#: app/viewmainpage.cpp:414
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1672,19 +1672,19 @@ msgstr ""
 "إلى الجانب الأيمن من الشاشة أو يمكن أن يحتوي على صفوف متعددة من الصور؛ <link "
 "url = '%1'> اضبط هذه الخيارات في الإعدادات </link>. </para> "
 
-#: app/viewmainpage.cpp:563
+#: app/viewmainpage.cpp:567
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Background Color Mode"
 msgstr "نمط لون الخلفية"
 
-#: app/viewmainpage.cpp:755
+#: app/viewmainpage.cpp:759
 #, kde-format
 msgctxt "@action:button"
 msgid "Discard Changes and Reload"
 msgstr "تجاهل التغييرات و أعد التحميل"
 
-#: app/viewmainpage.cpp:757
+#: app/viewmainpage.cpp:761
 #, kde-format
 msgctxt "@info"
 msgid ""

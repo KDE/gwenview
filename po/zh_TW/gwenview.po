@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-27 00:39+0000\n"
+"POT-Creation-Date: 2024-01-08 00:40+0000\n"
 "PO-Revision-Date: 2023-09-12 02:09+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Chinese <zh-l10n@linux.org.tw>\n"
@@ -137,7 +137,7 @@ msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
 msgid "Sidebar Alignment Spacer"
 msgstr "側邊欄對齊間隔器"
 
-#: app/browsemainpage.cpp:146 app/mainwindow.cpp:378 app/viewmainpage.cpp:404
+#: app/browsemainpage.cpp:146 app/mainwindow.cpp:378 app/viewmainpage.cpp:408
 #: lib/documentview/documentviewcontroller.cpp:55
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
@@ -591,7 +591,7 @@ msgctxt "@info:tooltip"
 msgid "Configure full screen mode"
 msgstr "設定全螢幕模式"
 
-#: app/fullscreencontent.cpp:552 app/viewmainpage.cpp:383
+#: app/fullscreencontent.cpp:552 app/viewmainpage.cpp:387
 #, kde-format
 msgctxt "@info:status %1 current document index, %2 total documents"
 msgid "%1 of %2"
@@ -1579,18 +1579,18 @@ msgid ""
 "on your computer."
 msgstr "無法使用依標籤瀏覽的功能。請確定 Nepomuk 已正確地安裝在您的電腦上。"
 
-#: app/viewmainpage.cpp:146 app/viewmainpage.cpp:426
+#: app/viewmainpage.cpp:150 app/viewmainpage.cpp:430
 #, kde-format
 msgid "Synchronize"
 msgstr "同步"
 
-#: app/viewmainpage.cpp:407
+#: app/viewmainpage.cpp:411
 #, kde-format
 msgid "Show Thumbnails"
 msgstr "顯示縮圖"
 
 #. i18n: For languages that are read right to left, "right side" refers to the left side in this context.
-#: app/viewmainpage.cpp:410
+#: app/viewmainpage.cpp:414
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1606,19 +1606,19 @@ msgstr ""
 "para><para>縮圖列可以被移到螢幕右側，也可以調整為顯示超過一行影像；<link "
 "url='%1'>到設定裡調整這些選項</link>。</para>"
 
-#: app/viewmainpage.cpp:563
+#: app/viewmainpage.cpp:567
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Background Color Mode"
 msgstr "背景顏色模式"
 
-#: app/viewmainpage.cpp:755
+#: app/viewmainpage.cpp:759
 #, kde-format
 msgctxt "@action:button"
 msgid "Discard Changes and Reload"
 msgstr "放棄修改並重新載入"
 
-#: app/viewmainpage.cpp:757
+#: app/viewmainpage.cpp:761
 #, kde-format
 msgctxt "@info"
 msgid ""
