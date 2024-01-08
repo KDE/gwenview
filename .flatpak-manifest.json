@@ -1,7 +1,7 @@
 {
   "id": "org.kde.gwenview",
   "runtime": "org.kde.Platform",
-  "runtime-version": "5.15-22.08",
+  "runtime-version": "6.6-kf6preview",
   "sdk": "org.kde.Sdk",
   "command": "gwenview",
   "rename-icon": "gwenview",
@@ -152,29 +152,14 @@
           "name": "libkdcraw",
           "buildsystem": "cmake-ninja",
           "config-opts": [
-              "-DBUILD_TESTING=OFF"
+              "-DBUILD_TESTING=OFF",
+              "-DBUILD_WITH_QT6=ON"
           ],
           "builddir": true,
           "sources": [
               {
                   "type": "git",
                   "url": "https://invent.kde.org/graphics/libkdcraw",
-                  "branch": "master"
-                  
-              }
-          ]
-      },
-      {
-          "name": "libkipi",
-          "buildsystem": "cmake-ninja",
-          "config-opts": [
-              "-DBUILD_TESTING=OFF"
-          ],
-          "builddir": true,
-          "sources": [
-              {
-                  "type": "git",
-                  "url": "https://invent.kde.org/graphics/libkipi",
                   "branch": "master"
                   
               }
@@ -212,43 +197,7 @@
               {
                   "type": "git",
                   "url": "https://invent.kde.org/frameworks/baloo",
-                  "tag": "v5.104.0"
-              }
-          ]
-      },
-      {
-          "name": "kColorPicker",
-          "buildsystem": "cmake-ninja",
-          "builddir": true,
-          "sources": [
-              {
-                  "type": "archive",
-                  "url": "https://github.com/ksnip/kColorPicker/archive/refs/tags/v0.2.0.tar.gz",
-                  "sha256": "20ffc5e935333a18c5cd813c3d306d3482ec9c826fe0d0c3d7b7635419703d55",
-                  "x-checker-data": {
-                      "type": "anitya",
-                      "project-id": 120606,
-                      "stable-only": true,
-                      "url-template": "https://github.com/ksnip/kColorPicker/archive/refs/tags/v$version.tar.gz"
-                  }
-              }
-          ]
-      },
-      {
-          "name": "kImageAnnotator",
-          "buildsystem": "cmake-ninja",
-          "builddir": true,
-          "sources": [
-              {
-                  "type": "archive",
-                  "url": "https://github.com/ksnip/kImageAnnotator/archive/refs/tags/v0.6.0.tar.gz",
-                  "sha256": "148ef703ed5535a0c23d11629b588d9cb163598798261aa760d5b351756646a7",
-                  "x-checker-data": {
-                      "type": "anitya",
-                      "project-id": 120605,
-                      "stable-only": true,
-                      "url-template": "https://github.com/ksnip/kImageAnnotator/archive/refs/tags/v$version.tar.gz"
-                  }
+                  "tag": "v5.247.0"
               }
           ]
       },
