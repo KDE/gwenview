@@ -161,6 +161,6 @@ target_link_libraries(slideshowfileitemaction
     KF6::KIOWidgets
     KF6::Notifications)
 
-if(kImageAnnotator_FOUND)
+if(kImageAnnotator-Qt6_FOUND)
     target_link_libraries(gwenview kImageAnnotator::kImageAnnotator)
 endif()
