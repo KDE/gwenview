@@ -75,9 +75,7 @@ static void handleTiffError(const char *mod, const char *fmt, va_list ap)
 // To enable AVIF/HEIF/JPEG-XL metadata support in Exiv2
 #include <exiv2/exiv2.hpp>
 
-#ifdef KIMAGEANNOTATOR_CAN_LOAD_TRANSLATIONS
 #include <kImageAnnotator/KImageAnnotator.h>
-#endif
 
 class StartHelper
 {
@@ -211,9 +209,7 @@ int main(int argc, char *argv[])
     // to be async rather than using exec().
     qApp->sendPostedEvents(nullptr, QEvent::DeferredDelete);
 
-#ifdef KIMAGEANNOTATOR_CAN_LOAD_TRANSLATIONS
     kImageAnnotator::loadTranslations();
-#endif
 
     return app.exec();
 }

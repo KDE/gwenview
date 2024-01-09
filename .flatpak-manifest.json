@@ -202,6 +202,51 @@
           ]
       },
       {
+          "name": "kColorPicker",
+          "buildsystem": "cmake-ninja",
+          "builddir": true,
+          "config-opts": [
+              "-DBUILD_TESTING=OFF",
+              "-DBUILD_WITH_QT6=ON"
+          ],
+          "sources": [
+              {
+                  "type": "archive",
+                  "url": "https://github.com/ksnip/kColorPicker/archive/refs/tags/v0.3.0.tar.gz",
+                  "sha256": "cab1efae1ca345a831dc6975b81c344da5c9425d934d73584dd7d0d512af3946",
+                  "x-checker-data": {
+                      "type": "anitya",
+                      "project-id": 120606,
+                      "stable-only": true,
+                      "url-template": "https://github.com/ksnip/kColorPicker/archive/refs/tags/v$version.tar.gz"
+                  }
+              }
+          ]
+      },
+      {
+          "name": "kImageAnnotator",
+          "buildsystem": "cmake-ninja",
+          "builddir": true,
+          "config-opts": [
+              "-DBUILD_TESTS=OFF",
+              "-DBUILD_WITH_QT6=ON",
+              "-DBUILD_EXAMPLE=OFF"
+          ],
+          "sources": [
+              {
+                  "type": "archive",
+                  "url": "https://github.com/ksnip/kImageAnnotator/archive/refs/tags/v0.7.0.tar.gz",
+                  "sha256": "66e6ff5de1f8f808834143130a0a06d203aa01fb8f02e65af73042e61342163a",
+                  "x-checker-data": {
+                      "type": "anitya",
+                      "project-id": 120605,
+                      "stable-only": true,
+                      "url-template": "https://github.com/ksnip/kImageAnnotator/archive/refs/tags/v$version.tar.gz"
+                  }
+              }
+          ]
+      },
+      {
           "name": "gwenview",
           "buildsystem": "cmake-ninja",
           "builddir": true,
