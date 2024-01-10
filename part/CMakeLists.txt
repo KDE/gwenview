@@ -14,7 +14,7 @@ set(gvpart_SRCS
 
 add_library(gvpart MODULE ${gvpart_SRCS})
 
-target_link_libraries(gvpart KF${QT_MAJOR_VERSION}::Parts gwenviewlib)
+target_link_libraries(gvpart KF6::Parts gwenviewlib)
 
 if(QT_MAJOR_VERSION STREQUAL "6")
 JoinListAsString("${IMAGE_MIME_TYPES_LIST}" "\",\"" IMAGE_MIME_LIST)
@@ -25,4 +25,4 @@ kcoreaddons_desktop_to_json(gvpart ${CMAKE_CURRENT_BINARY_DIR}/gvpart.desktop)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/gvpart.desktop DESTINATION ${KDE_INSTALL_KSERVICESDIR})
 endif()
 
-install(TARGETS gvpart DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf${QT_MAJOR_VERSION}/parts)
+install(TARGETS gvpart DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf6/parts)

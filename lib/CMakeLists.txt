@@ -283,20 +283,20 @@ target_link_libraries(gwenviewlib
    Qt::Concurrent
    Qt::Svg
    Qt::PrintSupport
-   KF${QT_MAJOR_VERSION}::GuiAddons
-   KF${QT_MAJOR_VERSION}::ConfigGui
-   KF${QT_MAJOR_VERSION}::KIOCore
-   KF${QT_MAJOR_VERSION}::KIOWidgets
-   KF${QT_MAJOR_VERSION}::KIOFileWidgets
-   KF${QT_MAJOR_VERSION}::I18n
-   KF${QT_MAJOR_VERSION}::WindowSystem
-   KF${QT_MAJOR_VERSION}::IconThemes
-   KF${QT_MAJOR_VERSION}::XmlGui
+   KF6::GuiAddons
+   KF6::ConfigGui
+   KF6::KIOCore
+   KF6::KIOWidgets
+   KF6::KIOFileWidgets
+   KF6::I18n
+   KF6::WindowSystem
+   KF6::IconThemes
+   KF6::XmlGui
    LibExiv2::LibExiv2
    JPEG::JPEG
    PNG::PNG
     ${LCMS2_LIBRARIES}
-    Phonon::phonon4qt${QT_MAJOR_VERSION}
+    Phonon::phonon4qt6
     )
 if (QT_MAJOR_VERSION STREQUAL "6")
     target_link_libraries(gwenviewlib Qt6::OpenGLWidgets KF6::IconWidgets)
@@ -335,8 +335,8 @@ endif()
 
 if (GWENVIEW_SEMANTICINFO_BACKEND_BALOO)
     target_link_libraries(gwenviewlib
-        KF${QT_MAJOR_VERSION}::Baloo
-        KF${QT_MAJOR_VERSION}::FileMetaData
+        KF6::Baloo
+        KF6::FileMetaData
         )
 endif()
 

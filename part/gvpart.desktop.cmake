@@ -73,6 +73,6 @@ Name[zh_CN]=Gwenview 图像查看器
 Name[zh_TW]=Gwenview 影像檢視程式
 MimeType=${IMAGE_MIME_TYPES};
 X-KDE-ServiceTypes=KParts/ReadOnlyPart
-X-KDE-Library=kf${QT_MAJOR_VERSION}/parts/gvpart
+X-KDE-Library=kf6/parts/gvpart
 InitialPreference=12
 Icon=gwenview

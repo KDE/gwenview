@@ -1,7 +1,7 @@
-find_package(Qt${QT_MAJOR_VERSION}Test ${REQUIRED_QT_VERSION} CONFIG QUIET)
+find_package(Qt6Test ${REQUIRED_QT_VERSION} CONFIG QUIET)
 
-if(NOT Qt${QT_MAJOR_VERSION}Test_FOUND)
-    message(STATUS "Qt${QT_MAJOR_VERSION}Test not found, tests will not be built.")
+if(NOT Qt6Test_FOUND)
+    message(STATUS "Qt6Test not found, tests will not be built.")
     return()
 endif()
 

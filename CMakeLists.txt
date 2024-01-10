@@ -58,8 +58,8 @@ if (APPLE OR NOT UNIX)
     set(GWENVIEW_NO_WAYLAND_GESTURES ON)
 endif()
 
-find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} CONFIG REQUIRED Core Widgets Concurrent Svg PrintSupport)
-find_package(Qt${QT_MAJOR_VERSION}DBus ${QT_MIN_VERSION} CONFIG QUIET)
+find_package(Qt6 ${QT_MIN_VERSION} CONFIG REQUIRED Core Widgets Concurrent Svg PrintSupport)
+find_package(Qt6DBus ${QT_MIN_VERSION} CONFIG QUIET)
 if (QT_MAJOR_VERSION STREQUAL "6")
     find_package(Qt6SvgWidgets)
     find_package(Qt6OpenGLWidgets)
@@ -73,16 +73,16 @@ if(NOT GWENVIEW_NO_WAYLAND_GESTURES)
         find_package(QtWaylandScanner REQUIRED)
     endif()
     find_package(Wayland 1.9 REQUIRED Client)
-    find_package(Qt${QT_MAJOR_VERSION} REQUIRED COMPONENTS WaylandClient)
+    find_package(Qt6 REQUIRED COMPONENTS WaylandClient)
 endif()
 
-set(HAVE_QTDBUS ${Qt${QT_MAJOR_VERSION}DBus_FOUND})
+set(HAVE_QTDBUS ${Qt6DBus_FOUND})
 
-find_package(Phonon4Qt${QT_MAJOR_VERSION} 4.6.60 NO_MODULE REQUIRED)
+find_package(Phonon4Qt6 4.6.60 NO_MODULE REQUIRED)
 include_directories(BEFORE SYSTEM ${PHONON_INCLUDES})
 add_definitions(-DPHONON_LIB_SONAME=\"${PHONON_LIB_SONAME}\")
 
-find_package(KF${QT_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS
+find_package(KF6 ${KF_MIN_VERSION} REQUIRED COMPONENTS
     KIO
     ItemModels
     I18n
@@ -93,11 +93,11 @@ find_package(KF${QT_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS
     GuiAddons
     WidgetsAddons
 )
-find_package(KF${QT_MAJOR_VERSION} ${KF_MIN_VERSION} OPTIONAL_COMPONENTS
+find_package(KF6 ${KF_MIN_VERSION} OPTIONAL_COMPONENTS
     DocTools
     Purpose
 )
-set(HAVE_PURPOSE ${KF${QT_MAJOR_VERSION}Purpose_FOUND})
+set(HAVE_PURPOSE ${KF6Purpose_FOUND})
 
 if(QT_MAJOR_VERSION STREQUAL "6")
     set(KActivitiesPackageName PlasmaActivities)
@@ -142,9 +142,9 @@ find_package(LCMS2)
 set_package_properties(LCMS2 PROPERTIES URL "http://www.littlecms.com" DESCRIPTION "Color management engine" TYPE REQUIRED)
 
 if (GWENVIEW_SEMANTICINFO_BACKEND_BALOO)
-    find_package(KF${QT_MAJOR_VERSION}Baloo 5.1.90)
-    set_package_properties(KF${QT_MAJOR_VERSION}Baloo PROPERTIES URL "https://commits.kde.org/baloo" DESCRIPTION "Desktop-wide semantic information support" TYPE OPTIONAL)
-    if (NOT KF${QT_MAJOR_VERSION}Baloo_FOUND)
+    find_package(KF6Baloo 5.1.90)
+    set_package_properties(KF6Baloo PROPERTIES URL "https://commits.kde.org/baloo" DESCRIPTION "Desktop-wide semantic information support" TYPE OPTIONAL)
+    if (NOT KF6Baloo_FOUND)
         message (STATUS "You have selected Baloo for semantic backend, but required version was not found. Overriding the backend to None")
         unset(GWENVIEW_SEMANTICINFO_BACKEND_BALOO)
         set(GWENVIEW_SEMANTICINFO_BACKEND_NONE ON)
@@ -227,7 +227,7 @@ set(IMAGE_MIME_TYPES_LIST
     image/x-xcf
     application/x-krita
 )
-if (KF${QT_MAJOR_VERSION}KDcraw_FOUND)
+if (KF6KDcraw_FOUND)
     list(APPEND IMAGE_MIME_TYPES_LIST
         image/x-kde-raw
         image/x-canon-cr2
@@ -265,7 +265,7 @@ add_subdirectory(doc)
 ecm_qt_install_logging_categories(EXPORT GWENVIEW FILE gwenview.categories DESTINATION ${KDE_INSTALL_LOGGINGCATEGORIESDIR})
 
 ki18n_install(po)
-if(KF${QT_MAJOR_VERSION}DocTools_FOUND)
+if(KF6DocTools_FOUND)
     kdoctools_install(po)
 endif()
 
