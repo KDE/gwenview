@@ -72,12 +72,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #endif
 #if HAVE_PURPOSE
 #include <Purpose/AlternativesModel>
-#include <purpose_version.h>
-#if PURPOSE_VERSION >= QT_VERSION_CHECK(5, 104, 0)
 #include <Purpose/Menu>
-#else
-#include <PurposeWidgets/Menu>
-#endif
+#include <purpose_version.h>
 #endif
 
 // Local
@@ -512,11 +508,7 @@ struct MainWindow::Private {
 #if HAVE_PURPOSE
         mShareAction = new KToolBarPopupAction(QIcon::fromTheme(QStringLiteral("document-share")), i18nc("@action Share images", "Share"), q);
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-        mShareAction->setPopupMode(QToolButton::InstantPopup);
-#else
         mShareAction->setPopupMode(KToolBarPopupAction::InstantPopup);
-#endif
         actionCollection->addAction(QStringLiteral("share"), mShareAction);
         mShareMenu = new Purpose::Menu(q);
         mShareAction->setMenu(mShareMenu);
@@ -1804,29 +1796,17 @@ bool MainWindow::queryClose()
     KGuiItem no(i18n("Discard Changes"), "delete");
     QString msg =
         i18np("One image has been modified.", "%1 images have been modified.", list.size()) + '\n' + i18n("If you quit now, your changes will be lost.");
-#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
     int answer = KMessageBox::warningTwoActionsCancel(this, msg, QString() /* caption */, yes, no);
-#else
-    int answer = KMessageBox::warningYesNoCancel(this, msg, QString() /* caption */, yes, no);
-#endif
 
     switch (answer) {
-#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
     case KMessageBox::PrimaryAction:
-#else
-    case KMessageBox::Yes:
-#endif
         d->mGvCore->saveAll();
         // We need to wait a bit because the DocumentFactory is notified about
         // saved documents through a queued connection.
         qApp->processEvents();
         return DocumentFactory::instance()->modifiedDocumentList().isEmpty();
 
-#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
     case KMessageBox::SecondaryAction:
-#else
-    case KMessageBox::No:
-#endif
         return true;
 
     default: // cancel

@@ -30,9 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "kio_version.h"
 #include <KIO/CopyJob>
 #include <KIO/DeleteJob>
-#if KIO_VERSION >= QT_VERSION_CHECK(5, 100, 0)
 #include <KIO/DeleteOrTrashJob>
-#endif
 #include <KIO/JobUiDelegate>
 #include <KIO/SimpleJob>
 #include <KJobWidgets>
@@ -137,24 +135,6 @@ static void delOrTrash(KIO::JobUiDelegate::DeletionType deletionType, const QLis
 {
     Q_ASSERT(urlList.count() > 0);
 
-#if KIO_VERSION < QT_VERSION_CHECK(5, 100, 0)
-    KIO::JobUiDelegate uiDelegate;
-    uiDelegate.setWindow(parent);
-    if (!uiDelegate.askDeleteConfirmation(urlList, deletionType, KIO::JobUiDelegate::DefaultConfirmation)) {
-        return;
-    }
-    KIO::Job *job = nullptr;
-    switch (deletionType) {
-    case KIO::JobUiDelegate::Trash:
-        job = KIO::trash(urlList);
-        break;
-    case KIO::JobUiDelegate::Delete:
-        job = KIO::del(urlList);
-        break;
-    default: // e.g. EmptyTrash
-        return;
-    }
-#else
     KJob *job = nullptr;
     switch (deletionType) {
     case KIO::JobUiDelegate::Trash:
@@ -166,7 +146,6 @@ static void delOrTrash(KIO::JobUiDelegate::DeletionType deletionType, const QLis
     default: // e.g. EmptyTrash
         return;
     }
-#endif
     Q_ASSERT(job);
     KJobWidgets::setWindow(job, parent);
     job->start();

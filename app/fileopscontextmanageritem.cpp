@@ -37,6 +37,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KFileItemListProperties>
 #include <KIO/ApplicationLauncherJob>
 #include <KIO/JobUiDelegate>
+#include <KIO/JobUiDelegateFactory>
 #include <KIO/OpenFileManagerWindowJob>
 #include <KIO/Paste>
 #include <KIO/PasteJob>
@@ -47,12 +48,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KPropertiesDialog>
 #include <KUrlMimeData>
 #include <KXMLGUIClient>
-#include <kio_version.h>
-#if KIO_VERSION >= QT_VERSION_CHECK(5, 98, 0)
-#include <KIO/JobUiDelegateFactory>
-#else
-#include <KIO/JobUiDelegate>
-#endif
 
 // Local
 #include "fileoperations.h"
@@ -365,11 +360,7 @@ void FileOpsContextManagerItem::createFolder()
 {
     const QUrl url = contextManager()->currentDirUrl();
     mNewFileMenu->setParentWidget(mGroup);
-#if KIO_VERSION >= QT_VERSION_CHECK(5, 97, 0)
     mNewFileMenu->setWorkingDirectory(url);
-#else
-    mNewFileMenu->setPopupFiles(QList<QUrl>() << url);
-#endif
     mNewFileMenu->createDirectory();
 }
 
@@ -411,11 +402,7 @@ void FileOpsContextManagerItem::openInNewWindow()
 
     auto job = new KIO::ApplicationLauncherJob(service);
     job->setUrls(urls);
-#if KIO_VERSION >= QT_VERSION_CHECK(5, 98, 0)
     job->setUiDelegate(KIO::createDefaultJobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, nullptr));
-#else
-    job->setUiDelegate(new KIO::JobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, nullptr));
-#endif
     job->start();
 }
 
@@ -434,11 +421,7 @@ void FileOpsContextManagerItem::openWith(QAction *action)
     // If service is null, ApplicationLauncherJob will invoke the open-with dialog
     auto job = new KIO::ApplicationLauncherJob(service);
     job->setUrls(list);
-#if KIO_VERSION >= QT_VERSION_CHECK(5, 98, 0)
     job->setUiDelegate(KIO::createDefaultJobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, mGroup));
-#else
-    job->setUiDelegate(new KIO::JobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, mGroup));
-#endif
     job->start();
 }
 

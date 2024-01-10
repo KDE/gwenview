@@ -25,23 +25,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QtGlobal>
 
 // KF
-#include <kparts_version.h>
-#if KPARTS_VERSION < QT_VERSION_CHECK(5, 240, 0)
-#include <KParts/BrowserExtension>
-#else
 #include <KParts/NavigationExtension>
-#endif
 
 // Local
 
 namespace Gwenview
 {
 struct GVBrowserExtensionPrivate;
-#if KPARTS_VERSION < QT_VERSION_CHECK(5, 240, 0)
-class GVBrowserExtension : public KParts::BrowserExtension
-#else
 class GVBrowserExtension : public KParts::NavigationExtension
-#endif
 {
     Q_OBJECT
 public:

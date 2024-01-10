@@ -262,11 +262,7 @@ void DocumentTest::testLoadRemote()
     url = url.adjusted(QUrl::StripTrailingSlash);
     url.setPath(url.path() + '/' + "test.png");
 
-#if KIO_VERSION >= QT_VERSION_CHECK(5, 240, 0)
     QVERIFY2(KIO::stat(url, KIO::StatJob::SourceSide, KIO::StatNoDetails)->exec(), "test url not found");
-#else
-    QVERIFY2(KIO::statDetails(url, KIO::StatJob::SourceSide, KIO::StatNoDetails)->exec(), "test url not found");
-#endif
 
     Document::Ptr doc = DocumentFactory::instance()->load(url);
     doc->waitUntilLoaded();

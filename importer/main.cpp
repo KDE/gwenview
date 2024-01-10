@@ -37,9 +37,6 @@ int main(int argc, char *argv[])
 {
     KLocalizedString::setApplicationDomain("gwenview");
     QApplication app(argc, argv);
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    app.setAttribute(Qt::AA_UseHighDpiPixmaps, true);
-#endif
     QScopedPointer<KAboutData> aboutData(Gwenview::createAboutData(QStringLiteral("gwenview_importer"), /* component name */
                                                                    i18n("Gwenview Importer") /* programName */
                                                                    ));

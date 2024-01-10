@@ -50,16 +50,8 @@ namespace Gwenview
 K_PLUGIN_CLASS_WITH_JSON(GVPart, "gvpart.json")
 
 GVPart::GVPart(QWidget *parentWidget, QObject *parent, const KPluginMetaData &metaData, const QVariantList & /*args*/)
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    : KParts::ReadOnlyPart(parent)
-#else
     : KParts::ReadOnlyPart(parent, metaData)
-#endif
 {
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    setMetaData(metaData);
-#endif
-
     auto container = new DocumentViewContainer(parentWidget);
     setWidget(container);
     mDocumentView = container->createView();

@@ -28,7 +28,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KF
 #include <KDirLister>
 #include <KDirModel>
-#include <kio_version.h>
 
 // Qt
 

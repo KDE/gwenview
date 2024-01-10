@@ -37,11 +37,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KSqueezedTextLabel>
 #include <KToggleAction>
 #if HAVE_KACTIVITIES
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#include <KActivities/ResourceInstance>
-#else
 #include <PlasmaActivities/ResourceInstance>
-#endif
 #endif
 
 // Local
@@ -538,7 +534,7 @@ inline void addActionToMenu(QMenu *menu, KActionCollection *actionCollection, co
         menu->addAction(action);
     }
 }
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+
 inline void addActionToMenu(QMenu *menu, KActionCollection *actionCollection, const QString &name)
 {
     QAction *action = actionCollection->action(name);
@@ -546,7 +542,6 @@ inline void addActionToMenu(QMenu *menu, KActionCollection *actionCollection, co
         menu->addAction(action);
     }
 }
-#endif
 
 void ViewMainPage::showContextMenu()
 {

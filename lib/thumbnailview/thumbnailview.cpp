@@ -41,10 +41,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KDirModel>
 #include <KIconLoader>
 #include <KPixmapSequence>
-#include <KUrlMimeData>
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 #include <KPixmapSequenceLoader>
-#endif
+#include <KUrlMimeData>
 
 // Local
 #include "abstractdocumentinfoprovider.h"
@@ -199,11 +197,7 @@ struct ThumbnailViewPrivate {
 
     void setupBusyAnimation()
     {
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-        mBusySequence = KIconLoader::global()->loadPixmapSequence(QStringLiteral("process-working"), 22);
-#else
         mBusySequence = KPixmapSequenceLoader::load(QStringLiteral("process-working"), 22);
-#endif
         mBusyAnimationTimeLine = new QTimeLine(100 * mBusySequence.frameCount(), q);
         mBusyAnimationTimeLine->setEasingCurve(QEasingCurve::Linear);
         mBusyAnimationTimeLine->setEndFrame(mBusySequence.frameCount() - 1);

@@ -154,11 +154,7 @@ struct LoadingDocumentImplPrivate {
             //   https://bugs.kde.org/show_bug.cgi?id=289819
             //
             mFormatHint = mMimeType.preferredSuffix().toLocal8Bit().toLower();
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-            mMetaInfoFuture = QtConcurrent::run(this, &LoadingDocumentImplPrivate::loadMetaInfo);
-#else
             mMetaInfoFuture = QtConcurrent::run(&LoadingDocumentImplPrivate::loadMetaInfo, this);
-#endif
             mMetaInfoFutureWatcher.setFuture(mMetaInfoFuture);
             break;
 
@@ -181,11 +177,7 @@ struct LoadingDocumentImplPrivate {
         Q_ASSERT(mMetaInfoLoaded);
         Q_ASSERT(mImageDataInvertedZoom != 0);
         Q_ASSERT(!mImageDataFuture.isRunning());
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-        mImageDataFuture = QtConcurrent::run(this, &LoadingDocumentImplPrivate::loadImageData);
-#else
         mImageDataFuture = QtConcurrent::run(&LoadingDocumentImplPrivate::loadImageData, this);
-#endif
         mImageDataFutureWatcher.setFuture(mImageDataFuture);
     }
 

@@ -31,18 +31,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KIO/ApplicationLauncherJob>
 #include <KIO/DeleteJob>
 #include <KIO/JobUiDelegate>
+#include <KIO/JobUiDelegateFactory>
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KProtocolInfo>
 #include <KService>
 #include <KStandardGuiItem>
 #include <Solid/Device>
-#include <kio_version.h>
-#if KIO_VERSION >= QT_VERSION_CHECK(5, 98, 0)
-#include <KIO/JobUiDelegateFactory>
-#else
-#include <KIO/JobUiDelegate>
-#endif
 #include <kwidgetsaddons_version.h>
 
 // Local
@@ -124,20 +119,12 @@ public:
                               importedCount + skippedCount);
         }
 
-#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
         int answer = KMessageBox::questionTwoActions(mCentralWidget,
-#else
-        int answer = KMessageBox::questionYesNo(mCentralWidget,
-#endif
                                                      QStringLiteral("<qt>") + message.join(QStringLiteral("<br/>")) + QStringLiteral("</qt>"),
                                                      i18nc("@title:window", "Import Finished"),
                                                      KGuiItem(i18n("Keep")),
                                                      KStandardGuiItem::del());
-#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
         if (answer == KMessageBox::PrimaryAction) {
-#else
-        if (answer == KMessageBox::Yes) {
-#endif
             return;
         }
         QList<QUrl> urls = importedUrls + skippedUrls;
@@ -148,20 +135,12 @@ public:
             }
             // Deleting failed
             int answer =
-#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
                 KMessageBox::warningTwoActions(mCentralWidget,
-#else
-                KMessageBox::warningYesNo(mCentralWidget,
-#endif
                                                i18np("Failed to delete the document:\n%2", "Failed to delete documents:\n%2", urls.count(), job->errorString()),
                                                QString(),
                                                KGuiItem(i18n("Retry")),
                                                KGuiItem(i18n("Ignore")));
-#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
             if (answer != KMessageBox::PrimaryAction) {
-#else
-            if (answer != KMessageBox::Yes) {
-#endif
                 // Ignore
                 break;
             }
@@ -176,11 +155,7 @@ public:
         } else {
             auto job = new KIO::ApplicationLauncherJob(service);
             job->setUrls({mThumbnailPage->destinationUrl()});
-#if KIO_VERSION >= QT_VERSION_CHECK(5, 98, 0)
             job->setUiDelegate(KIO::createDefaultJobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, nullptr));
-#else
-            job->setUiDelegate(new KIO::JobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, nullptr));
-#endif
             job->start();
         }
     }

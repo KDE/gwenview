@@ -72,11 +72,7 @@ QList<QWidget *> TagItemDelegate::createItemWidgets(const QModelIndex &index) co
     return QList<QWidget *>() << removeButton << assignToAllButton;
 }
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-void TagItemDelegate::updateItemWidgets(const QList<QWidget *> widgets, const QStyleOptionViewItem &option, const QPersistentModelIndex &index) const
-#else
 void TagItemDelegate::updateItemWidgets(const QList<QWidget *> &widgets, const QStyleOptionViewItem &option, const QPersistentModelIndex &index) const
-#endif
 {
     const bool fullyAssigned = index.data(TagModel::AssignmentStatusRole).toInt() == int(TagModel::FullyAssigned);
 

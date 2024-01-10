@@ -224,12 +224,8 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
         // Show more friendly text when the protocol is "camera" (which is the usual case)
         const QString scheme(mSrcBaseUrl.scheme());
         // Truncate long protocol name
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-        const QString truncatedScheme(scheme.length() <= 10 ? scheme : scheme.leftRef(5) + QStringLiteral("…") + scheme.rightRef(5));
-#else
         const QString truncatedScheme(
             scheme.length() <= 10 ? scheme : QStringView(scheme).left(5).toString() + QStringLiteral("…") + QStringView(scheme).right(5).toString());
-#endif
         // clang-format off
         if (scheme == QLatin1String("camera")) {
             mPlaceHolderLabel->setText(i18nc("@info above install button when Kamera is not installed", "Support for your camera is not installed."));
