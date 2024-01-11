@@ -1,18 +1,18 @@
 # Translation of gwenview.po to Catalan
-# Copyright (C) 2004-2023 This_file_is_part_of_KDE
+# Copyright (C) 2004-2024 This_file_is_part_of_KDE
 # This file is distributed under the same license as the kegraphics package.
 #
 # Marc Coll Carrillo <marcoll@ya.com>, 2004, 2005, 2006.
 # Albert Astals Cid <aacid@kde.org>, 2004, 2005, 2006.
-# Josep M. Ferrer <txemaq@gmail.com>, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
+# Josep M. Ferrer <txemaq@gmail.com>, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024.
 # Manuel Tortosa Moreno <manutortosa@gmail.com>, 2009.
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2014, 2016, 2017, 2018, 2019, 2020, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-08 00:40+0000\n"
-"PO-Revision-Date: 2023-09-08 12:06+0200\n"
+"POT-Creation-Date: 2024-01-11 00:36+0000\n"
+"PO-Revision-Date: 2024-01-10 11:37+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -143,7 +143,7 @@ msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
 msgid "Sidebar Alignment Spacer"
 msgstr "Espaiador d'alineació de la barra lateral"
 
-#: app/browsemainpage.cpp:146 app/mainwindow.cpp:378 app/viewmainpage.cpp:408
+#: app/browsemainpage.cpp:146 app/mainwindow.cpp:374 app/viewmainpage.cpp:404
 #: lib/documentview/documentviewcontroller.cpp:55
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
@@ -228,8 +228,8 @@ msgctxt "@action:inmenu"
 msgid "Rating"
 msgstr "Puntuació"
 
-#: app/browsemainpage.cpp:195 app/fileopscontextmanageritem.cpp:141
-#: app/mainwindow.cpp:377
+#: app/browsemainpage.cpp:195 app/fileopscontextmanageritem.cpp:136
+#: app/mainwindow.cpp:373
 #, kde-format
 msgctxt "@title actions category"
 msgid "File"
@@ -292,13 +292,13 @@ msgstr "Vista de les imatges"
 msgid "Advanced"
 msgstr "Avançat"
 
-#: app/fileoperations.cpp:67
+#: app/fileoperations.cpp:65
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Copy %1"
 msgstr "Copia %1"
 
-#: app/fileoperations.cpp:69
+#: app/fileoperations.cpp:67
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Copy %1 image"
@@ -306,19 +306,19 @@ msgid_plural "Copy %1 images"
 msgstr[0] "Copia %1 imatge"
 msgstr[1] "Copia %1 imatges"
 
-#: app/fileoperations.cpp:71
+#: app/fileoperations.cpp:69
 #, kde-format
 msgctxt "@action:button"
 msgid "Copy"
 msgstr "Copia"
 
-#: app/fileoperations.cpp:75
+#: app/fileoperations.cpp:73
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Move %1"
 msgstr "Mou %1"
 
-#: app/fileoperations.cpp:77
+#: app/fileoperations.cpp:75
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Move %1 image"
@@ -326,19 +326,19 @@ msgid_plural "Move %1 images"
 msgstr[0] "Mou %1 imatge"
 msgstr[1] "Mou %1 imatges"
 
-#: app/fileoperations.cpp:79
+#: app/fileoperations.cpp:77
 #, kde-format
 msgctxt "@action:button"
 msgid "Move"
 msgstr "Mou"
 
-#: app/fileoperations.cpp:83
+#: app/fileoperations.cpp:81
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Link %1"
 msgstr "Enllaça %1"
 
-#: app/fileoperations.cpp:85
+#: app/fileoperations.cpp:83
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Link %1 image"
@@ -346,106 +346,106 @@ msgid_plural "Link %1 images"
 msgstr[0] "Enllaça %1 imatge"
 msgstr[1] "Enllaça %1 imatges"
 
-#: app/fileoperations.cpp:87
+#: app/fileoperations.cpp:85
 #, kde-format
 msgctxt "@action:button"
 msgid "Link"
 msgstr "Enllaç"
 
-#: app/fileoperations.cpp:217
+#: app/fileoperations.cpp:196
 #, kde-format
 msgid "Move Here"
 msgstr "Mou aquí"
 
-#: app/fileoperations.cpp:218
+#: app/fileoperations.cpp:197
 #, kde-format
 msgid "Copy Here"
 msgstr "Copia aquí"
 
-#: app/fileoperations.cpp:219
+#: app/fileoperations.cpp:198
 #, kde-format
 msgid "Link Here"
 msgstr "Enllaça aquí"
 
-#: app/fileoperations.cpp:221
+#: app/fileoperations.cpp:200
 #, kde-format
 msgid "Cancel"
 msgstr "Cancel·la"
 
-#: app/fileopscontextmanageritem.cpp:131
+#: app/fileopscontextmanageritem.cpp:126
 #, kde-format
 msgid "File Operations"
 msgstr "Operacions amb fitxers"
 
-#: app/fileopscontextmanageritem.cpp:142
+#: app/fileopscontextmanageritem.cpp:137
 #: app/semanticinfocontextmanageritem.cpp:203
 #, kde-format
 msgctxt "@title actions category"
 msgid "Edit"
 msgstr "Edita"
 
-#: app/fileopscontextmanageritem.cpp:149
+#: app/fileopscontextmanageritem.cpp:144
 #, kde-format
 msgctxt "Verb"
 msgid "Copy To..."
 msgstr "Copia a..."
 
-#: app/fileopscontextmanageritem.cpp:154
+#: app/fileopscontextmanageritem.cpp:149
 #, kde-format
 msgctxt "Verb"
 msgid "Move To..."
 msgstr "Mou a..."
 
-#: app/fileopscontextmanageritem.cpp:159
+#: app/fileopscontextmanageritem.cpp:154
 #, kde-format
 msgctxt "Verb: create link to the file where user wants"
 msgid "Link To..."
 msgstr "Enllaça a..."
 
-#: app/fileopscontextmanageritem.cpp:164
+#: app/fileopscontextmanageritem.cpp:159
 #, kde-format
 msgctxt "Verb"
 msgid "Rename..."
 msgstr "Reanomena..."
 
-#: app/fileopscontextmanageritem.cpp:169
+#: app/fileopscontextmanageritem.cpp:164
 #, kde-format
 msgctxt "Verb"
 msgid "Trash"
 msgstr "Paperera"
 
-#: app/fileopscontextmanageritem.cpp:176
+#: app/fileopscontextmanageritem.cpp:171
 #, kde-format
 msgid "Restore"
 msgstr "Restaura"
 
-#: app/fileopscontextmanageritem.cpp:180
+#: app/fileopscontextmanageritem.cpp:175
 #, kde-format
 msgid "Properties"
 msgstr "Propietats"
 
-#: app/fileopscontextmanageritem.cpp:185
+#: app/fileopscontextmanageritem.cpp:180
 #, kde-format
 msgid "Create Folder..."
 msgstr "Crea una carpeta..."
 
-#: app/fileopscontextmanageritem.cpp:189
+#: app/fileopscontextmanageritem.cpp:184
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Open in New Window"
 msgstr "Obre en una finestra nova"
 
-#: app/fileopscontextmanageritem.cpp:194
+#: app/fileopscontextmanageritem.cpp:189
 #, kde-format
 msgid "Open With"
 msgstr "Obre amb"
 
-#: app/fileopscontextmanageritem.cpp:202
+#: app/fileopscontextmanageritem.cpp:197
 #, kde-format
 msgid "Open Containing Folder"
 msgstr "Obre la carpeta contenidora"
 
-#: app/fileopscontextmanageritem.cpp:396
+#: app/fileopscontextmanageritem.cpp:387
 #, kde-format
 msgid "Other Application..."
 msgstr "Altres aplicacions..."
@@ -603,7 +603,7 @@ msgctxt "@info:tooltip"
 msgid "Configure full screen mode"
 msgstr "Configuració del mode de pantalla completa"
 
-#: app/fullscreencontent.cpp:552 app/viewmainpage.cpp:387
+#: app/fullscreencontent.cpp:552 app/viewmainpage.cpp:383
 #, kde-format
 msgctxt "@info:status %1 current document index, %2 total documents"
 msgid "%1 of %2"
@@ -734,23 +734,23 @@ msgctxt "@title:window"
 msgid "Save Image"
 msgstr "Desa la imatge"
 
-#: app/gvcore.cpp:429
+#: app/gvcore.cpp:413
 #, kde-format
 msgid "Save using another format"
 msgstr "Desa emprant un altre format"
 
-#: app/gvcore.cpp:431
+#: app/gvcore.cpp:415
 #, kde-format
 msgid "Gwenview cannot save images in '%1' format."
 msgstr "El Gwenview no pot desar imatges en el format «%1»."
 
-#: app/gvcore.cpp:459
+#: app/gvcore.cpp:443
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot save images as %1."
 msgstr "El Gwenview no pot desar imatges com a %1."
 
-#: app/gvcore.cpp:477 app/gvcore.cpp:511
+#: app/gvcore.cpp:461 app/gvcore.cpp:495
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -760,12 +760,12 @@ msgstr ""
 "<emphasis strong='true'>Ha fallat en desar <filename>%1</filename>:</"
 "emphasis><nl />%2"
 
-#: app/gvcore.cpp:527
+#: app/gvcore.cpp:511
 #, kde-format
 msgid "You are now viewing the new document."
 msgstr "Ara esteu visualitzant el document nou."
 
-#: app/gvcore.cpp:529
+#: app/gvcore.cpp:513
 #, kde-format
 msgid "Go back to the original"
 msgstr "Torna a l'original"
@@ -1064,163 +1064,163 @@ msgid_plural "%1 files"
 msgstr[0] "%1 fitxer"
 msgstr[1] "%1 fitxers"
 
-#: app/main.cpp:178
+#: app/main.cpp:174
 #, kde-format
 msgid "Gwenview"
 msgstr "Gwenview"
 
-#: app/main.cpp:180
+#: app/main.cpp:176
 #, kde-format
 msgid "An Image Viewer"
 msgstr "Un visualitzador d'imatges"
 
-#: app/main.cpp:188
+#: app/main.cpp:184
 #, kde-format
 msgid "Start in fullscreen mode"
 msgstr "Inicia en el mode de pantalla completa"
 
-#: app/main.cpp:189
+#: app/main.cpp:185
 #, kde-format
 msgid "Start in slideshow mode"
 msgstr "Inicia en el mode de presentació de diapositives"
 
-#: app/main.cpp:190
+#: app/main.cpp:186
 #, kde-format
 msgid "A starting file or folders"
 msgstr "Un fitxer o carpeta inicial"
 
-#: app/mainwindow.cpp:387
+#: app/mainwindow.cpp:383
 #, kde-format
 msgctxt "@action Open Recent menu"
 msgid "Clear List"
 msgstr "Neteja la llista"
 
-#: app/mainwindow.cpp:395
+#: app/mainwindow.cpp:391
 #, kde-format
 msgctxt "@action reload the currently viewed image"
 msgid "Reload"
 msgstr "Torna a carregar"
 
-#: app/mainwindow.cpp:400
+#: app/mainwindow.cpp:396
 #, kde-format
 msgctxt "@action:inmenu Navigation Bar"
 msgid "Replace Location"
 msgstr "Substitueix la ubicació"
 
-#: app/mainwindow.cpp:405
+#: app/mainwindow.cpp:401
 #, kde-format
 msgctxt "@action:intoolbar Switch to file list"
 msgid "Browse"
 msgstr "Navega"
 
-#: app/mainwindow.cpp:406
+#: app/mainwindow.cpp:402
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Browse folders for images"
 msgstr "Navega per les carpetes cercant imatges"
 
-#: app/mainwindow.cpp:413
+#: app/mainwindow.cpp:409
 #, kde-format
 msgctxt "@action:intoolbar Switch to image view"
 msgid "View"
 msgstr "Visualitza"
 
-#: app/mainwindow.cpp:414
+#: app/mainwindow.cpp:410
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "View selected images"
 msgstr "Visualitza les imatges seleccionades"
 
-#: app/mainwindow.cpp:433
+#: app/mainwindow.cpp:429
 #, kde-format
 msgctxt "@action"
 msgid "Exit Full Screen"
 msgstr "Surt de pantalla completa"
 
-#: app/mainwindow.cpp:438
+#: app/mainwindow.cpp:434
 #, kde-format
 msgctxt "@action Go to previous image"
 msgid "Previous"
 msgstr "Anterior"
 
-#: app/mainwindow.cpp:439
+#: app/mainwindow.cpp:435
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to previous image"
 msgstr "Va a la imatge anterior"
 
-#: app/mainwindow.cpp:445
+#: app/mainwindow.cpp:441
 #, kde-format
 msgctxt "@action Go to next image"
 msgid "Next"
 msgstr "Següent"
 
-#: app/mainwindow.cpp:446
+#: app/mainwindow.cpp:442
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to next image"
 msgstr "Va a la imatge següent"
 
-#: app/mainwindow.cpp:452
+#: app/mainwindow.cpp:448
 #, kde-format
 msgctxt "@action Go to first image"
 msgid "First"
 msgstr "Primera"
 
-#: app/mainwindow.cpp:453
+#: app/mainwindow.cpp:449
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to first image"
 msgstr "Va a la primera imatge"
 
-#: app/mainwindow.cpp:459
+#: app/mainwindow.cpp:455
 #, kde-format
 msgctxt "@action Go to last image"
 msgid "Last"
 msgstr "Última"
 
-#: app/mainwindow.cpp:460
+#: app/mainwindow.cpp:456
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to last image"
 msgstr "Va a l'última imatge"
 
-#: app/mainwindow.cpp:470
+#: app/mainwindow.cpp:466
 #, kde-format
 msgctxt "@action"
 msgid "Start Page"
 msgstr "Pàgina d'inici"
 
-#: app/mainwindow.cpp:471
+#: app/mainwindow.cpp:467
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open the start page"
 msgstr "Obre la pàgina d'inici"
 
-#: app/mainwindow.cpp:478
+#: app/mainwindow.cpp:474
 #, kde-format
 msgctxt "@action"
 msgid "Sidebar"
 msgstr "Barra lateral"
 
-#: app/mainwindow.cpp:483
+#: app/mainwindow.cpp:479
 #, kde-format
 msgctxt "@action opens crop, rename, etc."
 msgid "Show Editing Tools"
 msgstr "Mostra les eines d'edició"
 
-#: app/mainwindow.cpp:513
+#: app/mainwindow.cpp:509
 #, kde-format
 msgctxt "@action Share images"
 msgid "Share"
 msgstr "Comparteix"
 
-#: app/mainwindow.cpp:526
+#: app/mainwindow.cpp:518
 #, kde-format
 msgid "Error while sharing: %1"
 msgstr "Error en compartir: %1"
 
-#: app/mainwindow.cpp:533
+#: app/mainwindow.cpp:525
 #, kde-format
 msgid ""
 "The shared image link (<a href=\"%1\">%1</a>) has been copied to the "
@@ -1229,104 +1229,104 @@ msgstr ""
 "L'enllaç a la imatge compartida (<a href=\"%1\">%1</a>) s'ha copiat al porta-"
 "retalls."
 
-#: app/mainwindow.cpp:583
+#: app/mainwindow.cpp:575
 #, kde-format
 msgctxt "@title:menu submenu for actions that open configuration dialogs"
 msgid "Configure"
 msgstr "Configura"
 
-#: app/mainwindow.cpp:598
+#: app/mainwindow.cpp:590
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "Edit"
 msgstr "Edita"
 
-#: app/mainwindow.cpp:603
+#: app/mainwindow.cpp:595
 #, kde-format
 msgid "Redo"
 msgstr "Refés"
 
-#: app/mainwindow.cpp:611
+#: app/mainwindow.cpp:603
 #, kde-format
 msgid "Undo"
 msgstr "Desfés"
 
-#: app/mainwindow.cpp:638
+#: app/mainwindow.cpp:630
 #, kde-format
 msgid "Folders"
 msgstr "Carpetes"
 
-#: app/mainwindow.cpp:644
+#: app/mainwindow.cpp:636
 #, kde-format
 msgid "Information"
 msgstr "Informació"
 
-#: app/mainwindow.cpp:683
+#: app/mainwindow.cpp:675
 #, kde-format
 msgid "Operations"
 msgstr "Operacions"
 
-#: app/mainwindow.cpp:942
+#: app/mainwindow.cpp:934
 #, kde-format
 msgid "Viewing media"
 msgstr "Visualització multimèdia"
 
-#: app/mainwindow.cpp:1420
+#: app/mainwindow.cpp:1412
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Oculta la barra lateral"
 
-#: app/mainwindow.cpp:1420
+#: app/mainwindow.cpp:1412
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Mostra la barra lateral"
 
-#: app/mainwindow.cpp:1727
+#: app/mainwindow.cpp:1719
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Obre una imatge"
 
-#: app/mainwindow.cpp:1787
+#: app/mainwindow.cpp:1779
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "Fes pausa en la presentació de diapositives"
 
-#: app/mainwindow.cpp:1790
+#: app/mainwindow.cpp:1782
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "Reprèn la presentació de diapositives"
 
-#: app/mainwindow.cpp:1790
+#: app/mainwindow.cpp:1782
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Inicia la presentació de diapositives"
 
-#: app/mainwindow.cpp:1803
+#: app/mainwindow.cpp:1795
 #, kde-format
 msgid "Save All Changes"
 msgstr "Desa tots els canvis"
 
-#: app/mainwindow.cpp:1804
+#: app/mainwindow.cpp:1796
 #, kde-format
 msgid "Discard Changes"
 msgstr "Descarta els canvis"
 
-#: app/mainwindow.cpp:1806
+#: app/mainwindow.cpp:1798
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "S'ha modificat una imatge."
 msgstr[1] "S'han modificat %1 imatges."
 
-#: app/mainwindow.cpp:1806
+#: app/mainwindow.cpp:1798
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Si sortiu ara, els canvis es perdran."
 
-#: app/mainwindow.cpp:1861
+#: app/mainwindow.cpp:1841
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
@@ -1334,37 +1334,37 @@ msgstr ""
 "Això ocultarà completament la barra de menús. La podeu tornar a mostrar "
 "prement %1."
 
-#: app/mainwindow.cpp:1864
+#: app/mainwindow.cpp:1844
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Oculta la barra de menús"
 
-#: app/mainwindow.cpp:2084
+#: app/mainwindow.cpp:2064
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "Heu arribat al primer document. Què voleu fer?"
 
-#: app/mainwindow.cpp:2085 app/mainwindow.cpp:2099
+#: app/mainwindow.cpp:2065 app/mainwindow.cpp:2079
 #, kde-format
 msgid "Stay There"
 msgstr "Canvia allí"
 
-#: app/mainwindow.cpp:2086
+#: app/mainwindow.cpp:2066
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "Ves al darrer document"
 
-#: app/mainwindow.cpp:2087 app/mainwindow.cpp:2101
+#: app/mainwindow.cpp:2067 app/mainwindow.cpp:2081
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "Torna a la llista de documents"
 
-#: app/mainwindow.cpp:2098
+#: app/mainwindow.cpp:2078
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "Heu arribat al darrer document. Què voleu fer?"
 
-#: app/mainwindow.cpp:2100
+#: app/mainwindow.cpp:2080
 #, kde-format
 msgid "Go to the First Document"
 msgstr "Ves al primer document"
@@ -1607,18 +1607,18 @@ msgstr ""
 "No està disponible la navegació per les etiquetes. Comproveu que el Nepomuk "
 "estigui instal·lat correctament a l'ordinador."
 
-#: app/viewmainpage.cpp:150 app/viewmainpage.cpp:430
+#: app/viewmainpage.cpp:146 app/viewmainpage.cpp:426
 #, kde-format
 msgid "Synchronize"
 msgstr "Sincronitza"
 
-#: app/viewmainpage.cpp:411
+#: app/viewmainpage.cpp:407
 #, kde-format
 msgid "Show Thumbnails"
 msgstr "Mostra les miniatures"
 
 #. i18n: For languages that are read right to left, "right side" refers to the left side in this context.
-#: app/viewmainpage.cpp:414
+#: app/viewmainpage.cpp:410
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1631,25 +1631,25 @@ msgid ""
 msgstr ""
 "<para>Això commuta una petita barra que mostra totes les altres imatges de "
 "la carpeta actual. Seleccionant una d'elles canvia la imatge visualitzada "
-"actualment.</para><para>Seleccioneu diverses imatges al mateix temps per "
+"actualment.</para><para>Seleccioneu diverses imatges al mateix temps per a "
 "veure-les una al costat de l'altra.</para><para>La barra es pot moure "
 "opcionalment a la part dreta de la pantalla i contenir diverses files "
 "d'imatges; <link url='%1'>configureu aquestes opcions a l'arranjament</link>."
 "</para>"
 
-#: app/viewmainpage.cpp:567
+#: app/viewmainpage.cpp:562
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Background Color Mode"
 msgstr "Mode del color de fons"
 
-#: app/viewmainpage.cpp:759
+#: app/viewmainpage.cpp:754
 #, kde-format
 msgctxt "@action:button"
 msgid "Discard Changes and Reload"
 msgstr "Descarta els canvis i torna a carregar"
 
-#: app/viewmainpage.cpp:761
+#: app/viewmainpage.cpp:756
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -1722,14 +1722,14 @@ msgstr "Nom del fitxer original"
 msgid "Original filename, in lower case"
 msgstr "Nom del fitxer original, en minúscules"
 
-#: importer/importdialog.cpp:99
+#: importer/importdialog.cpp:94
 #, kde-format
 msgid "One document has been imported."
 msgid_plural "%1 documents have been imported."
 msgstr[0] "S'ha importat un document."
 msgstr[1] "S'han importat %1 documents."
 
-#: importer/importdialog.cpp:101
+#: importer/importdialog.cpp:96
 #, kde-format
 msgid "One document has been skipped because it had already been imported."
 msgid_plural ""
@@ -1737,7 +1737,7 @@ msgid_plural ""
 msgstr[0] "S'ha omès un document perquè ja ha estat importat."
 msgstr[1] "S'han omès %1 documents perquè ja han estat importats."
 
-#: importer/importdialog.cpp:109
+#: importer/importdialog.cpp:104
 #, kde-format
 msgid ""
 "One of them has been renamed because another document with the same name had "
@@ -1752,21 +1752,21 @@ msgstr[1] ""
 "Se n'han reanomenat %1 perquè ja s'havien importat altres documents amb el "
 "mateix nom."
 
-#: importer/importdialog.cpp:117
+#: importer/importdialog.cpp:112
 #, kde-format
 msgid "Delete the imported document from the device?"
 msgid_plural "Delete the %1 imported documents from the device?"
 msgstr[0] "Suprimeixo el document importat del dispositiu?"
 msgstr[1] "Suprimeixo els %1 documents importats del dispositiu?"
 
-#: importer/importdialog.cpp:119
+#: importer/importdialog.cpp:114
 #, kde-format
 msgid "Delete the skipped document from the device?"
 msgid_plural "Delete the %1 skipped documents from the device?"
 msgstr[0] "Suprimeixo el document omès del dispositiu?"
 msgstr[1] "Suprimeixo els %1 documents omesos del dispositiu?"
 
-#: importer/importdialog.cpp:122
+#: importer/importdialog.cpp:117
 #, kde-format
 msgctxt "Singular sentence is actually never used."
 msgid "Delete the imported or skipped document from the device?"
@@ -1774,18 +1774,18 @@ msgid_plural "Delete the %1 imported and skipped documents from the device?"
 msgstr[0] "Suprimeixo el document importat o omès del dispositiu?"
 msgstr[1] "Suprimeixo els %1 documents importats o omesos del dispositiu?"
 
-#: importer/importdialog.cpp:133
+#: importer/importdialog.cpp:124
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Finished"
 msgstr "Importació finalitzada"
 
-#: importer/importdialog.cpp:134
+#: importer/importdialog.cpp:125
 #, kde-format
 msgid "Keep"
 msgstr "Mantén"
 
-#: importer/importdialog.cpp:156
+#: importer/importdialog.cpp:139
 #, kde-format
 msgid ""
 "Failed to delete the document:\n"
@@ -1800,32 +1800,32 @@ msgstr[1] ""
 "Ha fallat en suprimir els documents:\n"
 "%2"
 
-#: importer/importdialog.cpp:158
+#: importer/importdialog.cpp:141
 #, kde-format
 msgid "Retry"
 msgstr "Torna a intentar-ho"
 
-#: importer/importdialog.cpp:159
+#: importer/importdialog.cpp:142
 #, kde-format
 msgid "Ignore"
 msgstr "Ignora"
 
-#: importer/importdialog.cpp:191
+#: importer/importdialog.cpp:166
 #, kde-format
 msgid "What do you want to do now?"
 msgstr "Què és el que voleu fer ara?"
 
-#: importer/importdialog.cpp:193
+#: importer/importdialog.cpp:168
 #, kde-format
 msgid "View Imported Documents with Gwenview"
 msgstr "Veure els documents importats amb el Gwenview"
 
-#: importer/importdialog.cpp:194
+#: importer/importdialog.cpp:169
 #, kde-format
 msgid "Import more Documents"
 msgstr "Importa més documents"
 
-#: importer/importdialog.cpp:195
+#: importer/importdialog.cpp:170
 #, kde-format
 msgid "Quit"
 msgstr "Surt"
@@ -1872,17 +1872,17 @@ msgstr ""
 "<i>Introduïu text o cliqueu els elements de sota per a personalitzar el "
 "format</i>"
 
-#: importer/main.cpp:44
+#: importer/main.cpp:41
 #, kde-format
 msgid "Gwenview Importer"
 msgstr "Importador del Gwenview"
 
-#: importer/main.cpp:46
+#: importer/main.cpp:43
 #, kde-format
 msgid "Photo Importer"
 msgstr "Importador de fotografies"
 
-#: importer/main.cpp:53
+#: importer/main.cpp:50
 #, kde-format
 msgid ""
 "The device UDI, used to retrieve information about the device (name, icon...)"
@@ -1890,27 +1890,27 @@ msgstr ""
 "L'UDI del dispositiu, usat per a recuperar informació quant al dispositiu "
 "(nom, icona...)"
 
-#: importer/main.cpp:53
+#: importer/main.cpp:50
 #, kde-format
 msgid "Device UDI"
 msgstr "UDI del dispositiu"
 
-#: importer/main.cpp:54
+#: importer/main.cpp:51
 #, kde-format
 msgid "Source folder"
 msgstr "Carpeta d'origen"
 
-#: importer/main.cpp:59
+#: importer/main.cpp:56
 #, kde-format
 msgid "Missing required source folder argument."
 msgstr "Manca l'argument requerit de la carpeta d'origen."
 
-#: importer/main.cpp:63
+#: importer/main.cpp:60
 #, kde-format
 msgid "Too many arguments."
 msgstr "Hi ha massa arguments."
 
-#: importer/main.cpp:69
+#: importer/main.cpp:66
 #, kde-format
 msgid "Invalid source folder."
 msgstr "Carpeta d'origen no vàlida."
@@ -1921,13 +1921,13 @@ msgstr "Carpeta d'origen no vàlida."
 msgid "Importing documents..."
 msgstr "S'estan important els documents..."
 
-#: importer/thumbnailpage.cpp:235
+#: importer/thumbnailpage.cpp:231
 #, kde-format
 msgctxt "@info above install button when Kamera is not installed"
 msgid "Support for your camera is not installed."
 msgstr "El suport per a la vostra càmera no està instal·lat."
 
-#: importer/thumbnailpage.cpp:237
+#: importer/thumbnailpage.cpp:233
 #, kde-format
 msgctxt "@info above install button, %1 protocol name %2 error text from KIO"
 msgid "The protocol support library for \"%1\" is not installed. Error: %2"
@@ -1935,13 +1935,13 @@ msgstr ""
 "La biblioteca d'implementació del protocol per a «%1» no està instal·lada. "
 "Error: %2"
 
-#: importer/thumbnailpage.cpp:239
+#: importer/thumbnailpage.cpp:235
 #, kde-format
 msgctxt "@info above install button, %1 protocol name"
 msgid "The protocol support library for \"%1\" is not installed."
 msgstr "La biblioteca de suport del protocol per a «%1» no està instal·lada."
 
-#: importer/thumbnailpage.cpp:251
+#: importer/thumbnailpage.cpp:247
 #, kde-format
 msgctxt "@info:usagetip above install button"
 msgid ""
@@ -1950,7 +1950,7 @@ msgstr ""
 "Després d'acabar el procés d'instal·lació, reinicieu aquest importador per a "
 "continuar."
 
-#: importer/thumbnailpage.cpp:258
+#: importer/thumbnailpage.cpp:254
 #, kde-format
 msgctxt "@info:tooltip for a button, %1 protocol name"
 msgid "Launch Discover to install the protocol support library for \"%1\""
@@ -1958,13 +1958,13 @@ msgstr ""
 "Llanceu el Discover per a instal·lar la biblioteca de suport del protocol "
 "per a «%1»"
 
-#: importer/thumbnailpage.cpp:260
+#: importer/thumbnailpage.cpp:256
 #, kde-format
 msgctxt "@action:button"
 msgid "Install Support for this Camera…"
 msgstr "Instal·la la implementació per a aquesta càmera…"
 
-#: importer/thumbnailpage.cpp:261
+#: importer/thumbnailpage.cpp:257
 #, kde-format
 msgctxt "@info:whatsthis for a button when Kamera is not installed"
 msgid ""
@@ -1976,13 +1976,13 @@ msgstr ""
 "càmera. Feu clic aquí per a llançar el Discover i instal·lar el Kamera per a "
 "habilitar la implementació del protocol per a «camera:/» al vostre sistema."
 
-#: importer/thumbnailpage.cpp:264
+#: importer/thumbnailpage.cpp:260
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Install Protocol Support for \"%1\"…"
 msgstr "Instal·la la implementació del protocol per a «%1»…"
 
-#: importer/thumbnailpage.cpp:265
+#: importer/thumbnailpage.cpp:261
 #, kde-format
 msgctxt "@info:whatsthis for a button, %1 protocol name"
 msgid ""
@@ -1993,14 +1993,14 @@ msgstr ""
 "suport del protocol que manca per a habilitar la implementació del protocol "
 "per a «%1:/» al vostre sistema."
 
-#: importer/thumbnailpage.cpp:269
+#: importer/thumbnailpage.cpp:265
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Search the Web for How to Install Protocol Support for \"%1\"…"
 msgstr ""
 "Cerca a la web per a instal·lar la implementació del protocol per a «%1»…"
 
-#: importer/thumbnailpage.cpp:285
+#: importer/thumbnailpage.cpp:281
 #, kde-format
 msgctxt ""
 "@info this text will be used as a search term in an online search engine, %1 "
@@ -2008,7 +2008,7 @@ msgctxt ""
 msgid "How to install protocol support for \"%1\" on Linux"
 msgstr "Com instal·lar la implementació del protocol per a «%1» a Linux"
 
-#: importer/thumbnailpage.cpp:286
+#: importer/thumbnailpage.cpp:282
 #, kde-format
 msgctxt ""
 "search engine URL, %1 search keyword, and translators can replace duckduckgo "
@@ -2016,17 +2016,17 @@ msgctxt ""
 msgid "https://duckduckgo.com/?q=%1"
 msgstr "https://duckduckgo.com/?q=%1"
 
-#: importer/thumbnailpage.cpp:327
+#: importer/thumbnailpage.cpp:323
 #, kde-format
 msgid "Import Selected"
 msgstr "Importa els seleccionats"
 
-#: importer/thumbnailpage.cpp:330
+#: importer/thumbnailpage.cpp:326
 #, kde-format
 msgid "Import All"
 msgstr "Importa-ho tot"
 
-#: importer/thumbnailpage.cpp:492
+#: importer/thumbnailpage.cpp:488
 #, kde-kuit-format
 msgctxt "@info when failing to open the appstream URL"
 msgid ""
@@ -2037,7 +2037,7 @@ msgstr ""
 "al vostre sistema o useu el gestor de paquets del vostre sistema per a "
 "instal·lar el paquet «kamera»."
 
-#: importer/thumbnailpage.cpp:496
+#: importer/thumbnailpage.cpp:492
 #, kde-kuit-format
 msgctxt "@info when failing to launch plasma-discover, %1 protocol name"
 msgid ""
@@ -2199,19 +2199,19 @@ msgctxt "@info"
 msgid "Gwenview cannot display documents of type %1."
 msgstr "El Gwenview no pot visualitzar documents del tipus %1."
 
-#: lib/document/loadingdocumentimpl.cpp:397
+#: lib/document/loadingdocumentimpl.cpp:389
 #, kde-format
 msgctxt "@info"
 msgid "Could not open file %1"
 msgstr "No s'ha pogut obrir el fitxer %1"
 
-#: lib/document/loadingdocumentimpl.cpp:488
+#: lib/document/loadingdocumentimpl.cpp:480
 #, kde-format
 msgctxt "@info"
 msgid "Loading meta information failed."
 msgstr "Ha fallat en carregar la meta-informació."
 
-#: lib/document/loadingdocumentimpl.cpp:514
+#: lib/document/loadingdocumentimpl.cpp:506
 #, kde-format
 msgctxt "@info"
 msgid "Loading image failed."
@@ -2232,7 +2232,7 @@ msgstr ""
 "No s'ha pogut obrir el fitxer per a escriptura, comproveu que tingueu els "
 "permisos necessaris per a <filename>%1</filename>."
 
-#: lib/document/savejob.cpp:137
+#: lib/document/savejob.cpp:133
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2837,7 +2837,7 @@ msgctxt "(qtundo-format)"
 msgid "Transform"
 msgstr "Transforma"
 
-#: part/gvpart.cpp:77
+#: part/gvpart.cpp:69
 #, kde-format
 msgctxt "@action"
 msgid "Properties"

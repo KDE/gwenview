@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-08 00:40+0000\n"
+"POT-Creation-Date: 2024-01-11 00:36+0000\n"
 "PO-Revision-Date: 2023-10-20 11:33+0300\n"
 "Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: Hebrew <kde-i18n-doc@kde.org>\n"
@@ -17,7 +17,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
+"n % 10 == 0) ? 2 : 3));\n"
 "X-Generator: Poedit 3.3.2\n"
 
 #, kde-format
@@ -136,7 +137,7 @@ msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
 msgid "Sidebar Alignment Spacer"
 msgstr "מפריד יישור בסרגל צד"
 
-#: app/browsemainpage.cpp:146 app/mainwindow.cpp:378 app/viewmainpage.cpp:408
+#: app/browsemainpage.cpp:146 app/mainwindow.cpp:374 app/viewmainpage.cpp:404
 #: lib/documentview/documentviewcontroller.cpp:55
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
@@ -221,8 +222,8 @@ msgctxt "@action:inmenu"
 msgid "Rating"
 msgstr "דירוג"
 
-#: app/browsemainpage.cpp:195 app/fileopscontextmanageritem.cpp:141
-#: app/mainwindow.cpp:377
+#: app/browsemainpage.cpp:195 app/fileopscontextmanageritem.cpp:136
+#: app/mainwindow.cpp:373
 #, kde-format
 msgctxt "@title actions category"
 msgid "File"
@@ -243,20 +244,24 @@ msgid "Selected %1 of %2 (%3)"
 msgstr "נבחרו %1 מתוך %2 (%3)"
 
 #: app/browsemainpage.cpp:252
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "@info:status Image files"
 msgid "%1 image"
 msgid_plural "%1 images"
 msgstr[0] "תמונה"
 msgstr[1] "%1 תמונות"
+msgstr[2] ""
+msgstr[3] ""
 
 #: app/browsemainpage.cpp:253
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "@info:status Video files"
 msgid "%1 video"
 msgid_plural "%1 videos"
 msgstr[0] "סרט"
 msgstr[1] "%1 סרטונים"
+msgstr[2] ""
+msgstr[3] ""
 
 #: app/browsemainpage.cpp:260
 #, kde-format
@@ -285,160 +290,166 @@ msgstr "מציג תמונות"
 msgid "Advanced"
 msgstr "מתקדם"
 
-#: app/fileoperations.cpp:67
+#: app/fileoperations.cpp:65
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Copy %1"
 msgstr "העתקת %1"
 
-#: app/fileoperations.cpp:69
-#, kde-format
+#: app/fileoperations.cpp:67
+#, fuzzy, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Copy %1 image"
 msgid_plural "Copy %1 images"
 msgstr[0] "העתקת תמונה"
 msgstr[1] "העתקת %1 תמונות"
+msgstr[2] ""
+msgstr[3] ""
 
-#: app/fileoperations.cpp:71
+#: app/fileoperations.cpp:69
 #, kde-format
 msgctxt "@action:button"
 msgid "Copy"
 msgstr "העתקה"
 
-#: app/fileoperations.cpp:75
+#: app/fileoperations.cpp:73
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Move %1"
 msgstr "העברת %1"
 
-#: app/fileoperations.cpp:77
-#, kde-format
+#: app/fileoperations.cpp:75
+#, fuzzy, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Move %1 image"
 msgid_plural "Move %1 images"
 msgstr[0] "העברת תמונה"
 msgstr[1] "העברת %1 תמונות"
+msgstr[2] ""
+msgstr[3] ""
 
-#: app/fileoperations.cpp:79
+#: app/fileoperations.cpp:77
 #, kde-format
 msgctxt "@action:button"
 msgid "Move"
 msgstr "העברה"
 
-#: app/fileoperations.cpp:83
+#: app/fileoperations.cpp:81
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Link %1"
 msgstr "קישור %1"
 
-#: app/fileoperations.cpp:85
-#, kde-format
+#: app/fileoperations.cpp:83
+#, fuzzy, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Link %1 image"
 msgid_plural "Link %1 images"
 msgstr[0] "קישור תמונה"
 msgstr[1] "קישור %1 תמונות"
+msgstr[2] ""
+msgstr[3] ""
 
-#: app/fileoperations.cpp:87
+#: app/fileoperations.cpp:85
 #, kde-format
 msgctxt "@action:button"
 msgid "Link"
 msgstr "קישור"
 
-#: app/fileoperations.cpp:217
+#: app/fileoperations.cpp:196
 #, kde-format
 msgid "Move Here"
 msgstr "העברה לכאן"
 
-#: app/fileoperations.cpp:218
+#: app/fileoperations.cpp:197
 #, kde-format
 msgid "Copy Here"
 msgstr "העתקה לכאן"
 
-#: app/fileoperations.cpp:219
+#: app/fileoperations.cpp:198
 #, kde-format
 msgid "Link Here"
 msgstr "קישור לכאן"
 
-#: app/fileoperations.cpp:221
+#: app/fileoperations.cpp:200
 #, kde-format
 msgid "Cancel"
 msgstr "ביטול"
 
-#: app/fileopscontextmanageritem.cpp:131
+#: app/fileopscontextmanageritem.cpp:126
 #, kde-format
 msgid "File Operations"
 msgstr "פעולות קובץ"
 
-#: app/fileopscontextmanageritem.cpp:142
+#: app/fileopscontextmanageritem.cpp:137
 #: app/semanticinfocontextmanageritem.cpp:203
 #, kde-format
 msgctxt "@title actions category"
 msgid "Edit"
 msgstr "עריכה"
 
-#: app/fileopscontextmanageritem.cpp:149
+#: app/fileopscontextmanageritem.cpp:144
 #, kde-format
 msgctxt "Verb"
 msgid "Copy To..."
 msgstr "העתקה אל…"
 
-#: app/fileopscontextmanageritem.cpp:154
+#: app/fileopscontextmanageritem.cpp:149
 #, kde-format
 msgctxt "Verb"
 msgid "Move To..."
 msgstr "העברה אל…"
 
-#: app/fileopscontextmanageritem.cpp:159
+#: app/fileopscontextmanageritem.cpp:154
 #, kde-format
 msgctxt "Verb: create link to the file where user wants"
 msgid "Link To..."
 msgstr "קישור אל…"
 
-#: app/fileopscontextmanageritem.cpp:164
+#: app/fileopscontextmanageritem.cpp:159
 #, kde-format
 msgctxt "Verb"
 msgid "Rename..."
 msgstr "שינוי שם…"
 
-#: app/fileopscontextmanageritem.cpp:169
+#: app/fileopscontextmanageritem.cpp:164
 #, kde-format
 msgctxt "Verb"
 msgid "Trash"
 msgstr "השלכה לאשפה"
 
-#: app/fileopscontextmanageritem.cpp:176
+#: app/fileopscontextmanageritem.cpp:171
 #, kde-format
 msgid "Restore"
 msgstr "שחזור"
 
-#: app/fileopscontextmanageritem.cpp:180
+#: app/fileopscontextmanageritem.cpp:175
 #, kde-format
 msgid "Properties"
 msgstr "מאפיינים"
 
-#: app/fileopscontextmanageritem.cpp:185
+#: app/fileopscontextmanageritem.cpp:180
 #, kde-format
 msgid "Create Folder..."
 msgstr "יצירת תיקייה…"
 
-#: app/fileopscontextmanageritem.cpp:189
+#: app/fileopscontextmanageritem.cpp:184
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Open in New Window"
 msgstr "פתיחה בחלון חדש"
 
-#: app/fileopscontextmanageritem.cpp:194
+#: app/fileopscontextmanageritem.cpp:189
 #, kde-format
 msgid "Open With"
 msgstr "פתיחה באמצעות"
 
-#: app/fileopscontextmanageritem.cpp:202
+#: app/fileopscontextmanageritem.cpp:197
 #, kde-format
 msgid "Open Containing Folder"
 msgstr "פתיחת התיקייה המכילה"
 
-#: app/fileopscontextmanageritem.cpp:396
+#: app/fileopscontextmanageritem.cpp:387
 #, kde-format
 msgid "Other Application..."
 msgstr "יישום אחר…"
@@ -578,12 +589,14 @@ msgid ", "
 msgstr ", "
 
 #: app/fullscreencontent.cpp:289
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "Slideshow interval in seconds"
 msgid "%1 sec"
 msgid_plural "%1 secs"
 msgstr[0] "שנייה אחת"
 msgstr[1] "%1 שניות"
+msgstr[2] ""
+msgstr[3] ""
 
 #: app/fullscreencontent.cpp:400
 #, kde-format
@@ -596,7 +609,7 @@ msgctxt "@info:tooltip"
 msgid "Configure full screen mode"
 msgstr "הגדרת תצוגה במסך מלא"
 
-#: app/fullscreencontent.cpp:552 app/viewmainpage.cpp:387
+#: app/fullscreencontent.cpp:552 app/viewmainpage.cpp:383
 #, kde-format
 msgctxt "@info:status %1 current document index, %2 total documents"
 msgid "%1 of %2"
@@ -726,23 +739,23 @@ msgctxt "@title:window"
 msgid "Save Image"
 msgstr "שמירת תמונה"
 
-#: app/gvcore.cpp:429
+#: app/gvcore.cpp:413
 #, kde-format
 msgid "Save using another format"
 msgstr "שומר בתצורה אחרת"
 
-#: app/gvcore.cpp:431
+#: app/gvcore.cpp:415
 #, kde-format
 msgid "Gwenview cannot save images in '%1' format."
 msgstr "ל־Gwenview אין אפשרות לשמור תמונות מסוג ‚%1’."
 
-#: app/gvcore.cpp:459
+#: app/gvcore.cpp:443
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot save images as %1."
 msgstr "ל־Gwenview אין אפשרות לשמור תמונות בתור %1."
 
-#: app/gvcore.cpp:477 app/gvcore.cpp:511
+#: app/gvcore.cpp:461 app/gvcore.cpp:495
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -752,12 +765,12 @@ msgstr ""
 "<emphasis strong='true'>שמירת <filename>%1</filename> נכשלה:</emphasis><nl />"
 "%2"
 
-#: app/gvcore.cpp:527
+#: app/gvcore.cpp:511
 #, kde-format
 msgid "You are now viewing the new document."
 msgstr "המסמך המופיע כרגע הוא החדש."
 
-#: app/gvcore.cpp:529
+#: app/gvcore.cpp:513
 #, kde-format
 msgid "Go back to the original"
 msgstr "חזרה למקורי"
@@ -1021,20 +1034,24 @@ msgid "Image Information"
 msgstr "פרטי תמונה"
 
 #: app/infocontextmanageritem.cpp:331
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "@label"
 msgid "%1 file selected"
 msgid_plural "%1 files selected"
 msgstr[0] "קובץ נבחר"
 msgstr[1] "%1 קבצים נבחרו"
+msgstr[2] ""
+msgstr[3] ""
 
 #: app/infocontextmanageritem.cpp:333
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "@label"
 msgid "%1 folder selected"
 msgid_plural "%1 folders selected"
 msgstr[0] "תיקייה נבחרה"
 msgstr[1] "%1 תיקיות נבחרו"
+msgstr[2] ""
+msgstr[3] ""
 
 #: app/infocontextmanageritem.cpp:336
 #, kde-format
@@ -1043,317 +1060,323 @@ msgid "%1 and %2 selected"
 msgstr "%1 ו־%2 נבחרו"
 
 #: app/infocontextmanageritem.cpp:337
-#, kde-format
+#, fuzzy, kde-format
 msgid "%1 folder"
 msgid_plural "%1 folders"
 msgstr[0] "תיקייה"
 msgstr[1] "%1 תיקיות"
+msgstr[2] ""
+msgstr[3] ""
 
 #: app/infocontextmanageritem.cpp:338
-#, kde-format
+#, fuzzy, kde-format
 msgid "%1 file"
 msgid_plural "%1 files"
 msgstr[0] "קובץ"
 msgstr[1] "%1 קבצים"
+msgstr[2] ""
+msgstr[3] ""
 
-#: app/main.cpp:178
+#: app/main.cpp:174
 #, kde-format
 msgid "Gwenview"
 msgstr "Gwenview"
 
-#: app/main.cpp:180
+#: app/main.cpp:176
 #, kde-format
 msgid "An Image Viewer"
 msgstr "מציג תמונות"
 
-#: app/main.cpp:188
+#: app/main.cpp:184
 #, kde-format
 msgid "Start in fullscreen mode"
 msgstr "התחלה במסך מלא"
 
-#: app/main.cpp:189
+#: app/main.cpp:185
 #, kde-format
 msgid "Start in slideshow mode"
 msgstr "התחלה בהצגת מצגת"
 
-#: app/main.cpp:190
+#: app/main.cpp:186
 #, kde-format
 msgid "A starting file or folders"
 msgstr "קובץ או תיקייה להתחלה"
 
-#: app/mainwindow.cpp:387
+#: app/mainwindow.cpp:383
 #, kde-format
 msgctxt "@action Open Recent menu"
 msgid "Clear List"
 msgstr "פינוי הרשימה"
 
-#: app/mainwindow.cpp:395
+#: app/mainwindow.cpp:391
 #, kde-format
 msgctxt "@action reload the currently viewed image"
 msgid "Reload"
 msgstr "טעינה מחדש"
 
-#: app/mainwindow.cpp:400
+#: app/mainwindow.cpp:396
 #, kde-format
 msgctxt "@action:inmenu Navigation Bar"
 msgid "Replace Location"
 msgstr "החלפת מקום"
 
-#: app/mainwindow.cpp:405
+#: app/mainwindow.cpp:401
 #, kde-format
 msgctxt "@action:intoolbar Switch to file list"
 msgid "Browse"
 msgstr "עיון"
 
-#: app/mainwindow.cpp:406
+#: app/mainwindow.cpp:402
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Browse folders for images"
 msgstr "עיון בתיקיות לאיתור תמונות"
 
-#: app/mainwindow.cpp:413
+#: app/mainwindow.cpp:409
 #, kde-format
 msgctxt "@action:intoolbar Switch to image view"
 msgid "View"
 msgstr "תצוגה"
 
-#: app/mainwindow.cpp:414
+#: app/mainwindow.cpp:410
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "View selected images"
 msgstr "הצגת התמונות הנבחרות"
 
-#: app/mainwindow.cpp:433
+#: app/mainwindow.cpp:429
 #, kde-format
 msgctxt "@action"
 msgid "Exit Full Screen"
 msgstr "יציאה ממסך מלא"
 
-#: app/mainwindow.cpp:438
+#: app/mainwindow.cpp:434
 #, kde-format
 msgctxt "@action Go to previous image"
 msgid "Previous"
 msgstr "הקודמת"
 
-#: app/mainwindow.cpp:439
+#: app/mainwindow.cpp:435
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to previous image"
 msgstr "מעבר לתמונה הקודמת"
 
-#: app/mainwindow.cpp:445
+#: app/mainwindow.cpp:441
 #, kde-format
 msgctxt "@action Go to next image"
 msgid "Next"
 msgstr "הבאה"
 
-#: app/mainwindow.cpp:446
+#: app/mainwindow.cpp:442
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to next image"
 msgstr "מעבר לתמונה הבאה"
 
-#: app/mainwindow.cpp:452
+#: app/mainwindow.cpp:448
 #, kde-format
 msgctxt "@action Go to first image"
 msgid "First"
 msgstr "ראשונה"
 
-#: app/mainwindow.cpp:453
+#: app/mainwindow.cpp:449
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to first image"
 msgstr "מעבר לתמונה הראשונה"
 
-#: app/mainwindow.cpp:459
+#: app/mainwindow.cpp:455
 #, kde-format
 msgctxt "@action Go to last image"
 msgid "Last"
 msgstr "אחרונה"
 
-#: app/mainwindow.cpp:460
+#: app/mainwindow.cpp:456
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to last image"
 msgstr "מעבר לתמונה האחרונה"
 
-#: app/mainwindow.cpp:470
+#: app/mainwindow.cpp:466
 #, kde-format
 msgctxt "@action"
 msgid "Start Page"
 msgstr "עמוד פתיחה"
 
-#: app/mainwindow.cpp:471
+#: app/mainwindow.cpp:467
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open the start page"
 msgstr "פתיחת לעמוד הפתיחה"
 
-#: app/mainwindow.cpp:478
+#: app/mainwindow.cpp:474
 #, kde-format
 msgctxt "@action"
 msgid "Sidebar"
 msgstr "סרגל צד"
 
-#: app/mainwindow.cpp:483
+#: app/mainwindow.cpp:479
 #, kde-format
 msgctxt "@action opens crop, rename, etc."
 msgid "Show Editing Tools"
 msgstr "הצגת כלי עריכה"
 
-#: app/mainwindow.cpp:513
+#: app/mainwindow.cpp:509
 #, kde-format
 msgctxt "@action Share images"
 msgid "Share"
 msgstr "שיתוף"
 
-#: app/mainwindow.cpp:526
+#: app/mainwindow.cpp:518
 #, kde-format
 msgid "Error while sharing: %1"
 msgstr "שגיאה במהלך שיתוף: %1"
 
-#: app/mainwindow.cpp:533
+#: app/mainwindow.cpp:525
 #, kde-format
 msgid ""
 "The shared image link (<a href=\"%1\">%1</a>) has been copied to the "
 "clipboard."
 msgstr "קישור התמונה המשותפת (<a href=\"%1\">%1</a>) הועתק ללוח הגזירים."
 
-#: app/mainwindow.cpp:583
+#: app/mainwindow.cpp:575
 #, kde-format
 msgctxt "@title:menu submenu for actions that open configuration dialogs"
 msgid "Configure"
 msgstr "הגדרה"
 
-#: app/mainwindow.cpp:598
+#: app/mainwindow.cpp:590
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "Edit"
 msgstr "עריכה"
 
-#: app/mainwindow.cpp:603
+#: app/mainwindow.cpp:595
 #, kde-format
 msgid "Redo"
 msgstr "ביצוע חוזר"
 
-#: app/mainwindow.cpp:611
+#: app/mainwindow.cpp:603
 #, kde-format
 msgid "Undo"
 msgstr "ביטול שינוי"
 
-#: app/mainwindow.cpp:638
+#: app/mainwindow.cpp:630
 #, kde-format
 msgid "Folders"
 msgstr "תיקיות"
 
-#: app/mainwindow.cpp:644
+#: app/mainwindow.cpp:636
 #, kde-format
 msgid "Information"
 msgstr "מידע"
 
-#: app/mainwindow.cpp:683
+#: app/mainwindow.cpp:675
 #, kde-format
 msgid "Operations"
 msgstr "פעולות"
 
-#: app/mainwindow.cpp:942
+#: app/mainwindow.cpp:934
 #, kde-format
 msgid "Viewing media"
 msgstr "הצגת מדיה"
 
-#: app/mainwindow.cpp:1420
+#: app/mainwindow.cpp:1412
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "הסתרת סרגל צד"
 
-#: app/mainwindow.cpp:1420
+#: app/mainwindow.cpp:1412
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "הצגת סרגל צד"
 
-#: app/mainwindow.cpp:1727
+#: app/mainwindow.cpp:1719
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "פתיחת תמונה"
 
-#: app/mainwindow.cpp:1787
+#: app/mainwindow.cpp:1779
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "השהיית מצגת"
 
-#: app/mainwindow.cpp:1790
+#: app/mainwindow.cpp:1782
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "המשך מצגת"
 
-#: app/mainwindow.cpp:1790
+#: app/mainwindow.cpp:1782
 #, kde-format
 msgid "Start Slideshow"
 msgstr "התחלת מצגת"
 
-#: app/mainwindow.cpp:1803
+#: app/mainwindow.cpp:1795
 #, kde-format
 msgid "Save All Changes"
 msgstr "שמירת כל השינויים"
 
-#: app/mainwindow.cpp:1804
+#: app/mainwindow.cpp:1796
 #, kde-format
 msgid "Discard Changes"
 msgstr "ביטול שינויים"
 
-#: app/mainwindow.cpp:1806
-#, kde-format
+#: app/mainwindow.cpp:1798
+#, fuzzy, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "תמונה אחת נערכה."
 msgstr[1] "%1 תמונות נערכו."
+msgstr[2] ""
+msgstr[3] ""
 
-#: app/mainwindow.cpp:1806
+#: app/mainwindow.cpp:1798
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "בחירה לצאת כעת תוביל לאובדן כל השינויים שלך."
 
-#: app/mainwindow.cpp:1861
+#: app/mainwindow.cpp:1841
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr ""
 "פעולה זו תסתיר את סרגל התפריטים ללחלוטין. אפשר להציג אותו שוב בלחיצה על %1."
 
-#: app/mainwindow.cpp:1864
+#: app/mainwindow.cpp:1844
 #, kde-format
 msgid "Hide menu bar"
 msgstr "הסתרת סרגל תפריטים"
 
-#: app/mainwindow.cpp:2084
+#: app/mainwindow.cpp:2064
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "הגעת למסמך הראשון, מה לעשות?"
 
-#: app/mainwindow.cpp:2085 app/mainwindow.cpp:2099
+#: app/mainwindow.cpp:2065 app/mainwindow.cpp:2079
 #, kde-format
 msgid "Stay There"
 msgstr "להישאר שם"
 
-#: app/mainwindow.cpp:2086
+#: app/mainwindow.cpp:2066
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "מעבר למסמך האחרון"
 
-#: app/mainwindow.cpp:2087 app/mainwindow.cpp:2101
+#: app/mainwindow.cpp:2067 app/mainwindow.cpp:2081
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "חזרה לרשימת המסמכים"
 
-#: app/mainwindow.cpp:2098
+#: app/mainwindow.cpp:2078
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "הגעת למסמך האחרון, מה לעשות עכשיו?"
 
-#: app/mainwindow.cpp:2100
+#: app/mainwindow.cpp:2080
 #, kde-format
 msgid "Go to the First Document"
 msgstr "מעבר למסמך הראשון"
@@ -1388,12 +1411,14 @@ msgid "&Stop"
 msgstr "&עצירה"
 
 #: app/saveallhelper.cpp:82
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "@info"
 msgid "One document could not be saved:"
 msgid_plural "%1 documents could not be saved:"
 msgstr[0] "לא ניתן לשמור מסמך אחד:"
 msgstr[1] "לא ניתן לשמור %1 מסמכים:"
+msgstr[2] ""
+msgstr[3] ""
 
 #: app/saveallhelper.cpp:106
 #, kde-kuit-format
@@ -1426,11 +1451,13 @@ msgid "Next modified image"
 msgstr "התמונה הבאה שנערכה"
 
 #: app/savebar.cpp:183
-#, kde-format
+#, fuzzy, kde-format
 msgid "One image modified"
 msgid_plural "%1 images modified"
 msgstr[0] "תמונה נערכה"
 msgstr[1] "%1 תמונות נערכו"
+msgstr[2] ""
+msgstr[3] ""
 
 #: app/savebar.cpp:185
 #, kde-format
@@ -1592,18 +1619,18 @@ msgid ""
 "on your computer."
 msgstr "עיון לפי תגיות לא זמין. כדאי לוודא ש־Nepomuk מותקן על המחשב שלך כראוי."
 
-#: app/viewmainpage.cpp:150 app/viewmainpage.cpp:430
+#: app/viewmainpage.cpp:146 app/viewmainpage.cpp:426
 #, kde-format
 msgid "Synchronize"
 msgstr "סנכרון"
 
-#: app/viewmainpage.cpp:411
+#: app/viewmainpage.cpp:407
 #, kde-format
 msgid "Show Thumbnails"
 msgstr "הצגת תמונות ממוזערות"
 
 #. i18n: For languages that are read right to left, "right side" refers to the left side in this context.
-#: app/viewmainpage.cpp:414
+#: app/viewmainpage.cpp:410
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1620,19 +1647,19 @@ msgstr ""
 "הימני של המסך והוא יכול להכיל כמה שורות של תמונות, <link url='%1'>כיוון "
 "האפשרויות האלה בהגדרות</link>.</para>"
 
-#: app/viewmainpage.cpp:567
+#: app/viewmainpage.cpp:562
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Background Color Mode"
 msgstr "מצב צבע רקע"
 
-#: app/viewmainpage.cpp:759
+#: app/viewmainpage.cpp:754
 #, kde-format
 msgctxt "@action:button"
 msgid "Discard Changes and Reload"
 msgstr "התעלמות מהשינויים וטעינה מחדש"
 
-#: app/viewmainpage.cpp:761
+#: app/viewmainpage.cpp:756
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -1650,18 +1677,22 @@ msgid "Show failed subfolders..."
 msgstr "הצגת תת־תיקיות שנכשלו…"
 
 #: importer/dialogpage.cpp:71
-#, kde-format
+#, fuzzy, kde-format
 msgid "Failed to import %1 document."
 msgid_plural "Failed to import %1 documents."
 msgstr[0] "ייבוא מסמך נכשל."
 msgstr[1] "ייבוא %1 מסמכים נכשל."
+msgstr[2] ""
+msgstr[3] ""
 
 #: importer/dialogpage.cpp:78
-#, kde-format
+#, fuzzy, kde-format
 msgid "Failed to create %1 destination subfolder."
 msgid_plural "Failed to create %1 destination subfolders."
 msgstr[0] "יצירת תת־תיקיית היעד נכשלה."
 msgstr[1] "יצירת %1 תת־תיקיות יעד נכשלה."
+msgstr[2] ""
+msgstr[3] ""
 
 #: importer/dialogpage.cpp:89
 #, kde-format
@@ -1703,23 +1734,27 @@ msgstr "שם קובץ מקורי"
 msgid "Original filename, in lower case"
 msgstr "שם קובץ מקורי, באותיות קטנות"
 
-#: importer/importdialog.cpp:99
-#, kde-format
+#: importer/importdialog.cpp:94
+#, fuzzy, kde-format
 msgid "One document has been imported."
 msgid_plural "%1 documents have been imported."
 msgstr[0] "מסמך אחד יובא."
 msgstr[1] "%1 מסמכים יובאו."
+msgstr[2] ""
+msgstr[3] ""
 
-#: importer/importdialog.cpp:101
-#, kde-format
+#: importer/importdialog.cpp:96
+#, fuzzy, kde-format
 msgid "One document has been skipped because it had already been imported."
 msgid_plural ""
 "%1 documents have been skipped because they had already been imported."
 msgstr[0] "מסמך אחד כבר יובא ולכן דולג."
 msgstr[1] "%1 מסמכים כבר יובאו ולכן דולגו."
+msgstr[2] ""
+msgstr[3] ""
 
-#: importer/importdialog.cpp:109
-#, kde-format
+#: importer/importdialog.cpp:104
+#, fuzzy, kde-format
 msgid ""
 "One of them has been renamed because another document with the same name had "
 "already been imported."
@@ -1728,42 +1763,50 @@ msgid_plural ""
 "already been imported."
 msgstr[0] "שם הקובץ של אחת התמונות שונה מאחר ומסמך אחר בשם זהה כבר יובא."
 msgstr[1] "%1 שמות קבצים שונו מאחר ומסמכים אחרים בשמות זההים כבר יובאו."
+msgstr[2] ""
+msgstr[3] ""
 
-#: importer/importdialog.cpp:117
-#, kde-format
+#: importer/importdialog.cpp:112
+#, fuzzy, kde-format
 msgid "Delete the imported document from the device?"
 msgid_plural "Delete the %1 imported documents from the device?"
 msgstr[0] "למחוק את הקובץ שיובא מההתקן?"
 msgstr[1] "למחוק את %1 הקבצים שיובאו מההתקן?"
+msgstr[2] ""
+msgstr[3] ""
 
-#: importer/importdialog.cpp:119
-#, kde-format
+#: importer/importdialog.cpp:114
+#, fuzzy, kde-format
 msgid "Delete the skipped document from the device?"
 msgid_plural "Delete the %1 skipped documents from the device?"
 msgstr[0] "למחוק את הקובץ שדולג מההתקן?"
 msgstr[1] "למחוק את %1 הקבצים שדולגו מההתקן?"
+msgstr[2] ""
+msgstr[3] ""
 
-#: importer/importdialog.cpp:122
-#, kde-format
+#: importer/importdialog.cpp:117
+#, fuzzy, kde-format
 msgctxt "Singular sentence is actually never used."
 msgid "Delete the imported or skipped document from the device?"
 msgid_plural "Delete the %1 imported and skipped documents from the device?"
 msgstr[0] "למחוק את הקובץ שיובא או דולג מההתקן?"
 msgstr[1] "למחוק את %1 הקבצים שיובאו או דולגו מההתקן?"
+msgstr[2] ""
+msgstr[3] ""
 
-#: importer/importdialog.cpp:133
+#: importer/importdialog.cpp:124
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Finished"
 msgstr "הייבוא הסתיים"
 
-#: importer/importdialog.cpp:134
+#: importer/importdialog.cpp:125
 #, kde-format
 msgid "Keep"
 msgstr "להשאיר"
 
-#: importer/importdialog.cpp:156
-#, kde-format
+#: importer/importdialog.cpp:139
+#, fuzzy, kde-format
 msgid ""
 "Failed to delete the document:\n"
 "%2"
@@ -1776,33 +1819,35 @@ msgstr[0] ""
 msgstr[1] ""
 "מחיקת המסמכים נכשלה:\n"
 "%2"
+msgstr[2] ""
+msgstr[3] ""
 
-#: importer/importdialog.cpp:158
+#: importer/importdialog.cpp:141
 #, kde-format
 msgid "Retry"
 msgstr "לנסות שוב"
 
-#: importer/importdialog.cpp:159
+#: importer/importdialog.cpp:142
 #, kde-format
 msgid "Ignore"
 msgstr "להתעלם"
 
-#: importer/importdialog.cpp:191
+#: importer/importdialog.cpp:166
 #, kde-format
 msgid "What do you want to do now?"
 msgstr "מה לעשות עכשיו?"
 
-#: importer/importdialog.cpp:193
+#: importer/importdialog.cpp:168
 #, kde-format
 msgid "View Imported Documents with Gwenview"
 msgstr "להציג המסמכים המיובאים עם Gwenview"
 
-#: importer/importdialog.cpp:194
+#: importer/importdialog.cpp:169
 #, kde-format
 msgid "Import more Documents"
 msgstr "לייבא מסמכים נוספים"
 
-#: importer/importdialog.cpp:195
+#: importer/importdialog.cpp:170
 #, kde-format
 msgid "Quit"
 msgstr "לצאת"
@@ -1848,43 +1893,43 @@ msgid "<i>Type text or click the items below to customize the format</i>"
 msgstr ""
 "<i>נא להקליד טקסט או ללחוץ על הפריטים שלהלן כדי להתאים את התבנית אישית</i>"
 
-#: importer/main.cpp:44
+#: importer/main.cpp:41
 #, kde-format
 msgid "Gwenview Importer"
 msgstr "מייבא Gwenview"
 
-#: importer/main.cpp:46
+#: importer/main.cpp:43
 #, kde-format
 msgid "Photo Importer"
 msgstr "מייבא תמונות"
 
-#: importer/main.cpp:53
+#: importer/main.cpp:50
 #, kde-format
 msgid ""
 "The device UDI, used to retrieve information about the device (name, icon...)"
 msgstr "מזהה ההתקן הייחודי, משתמש למשיכת מידע על ההתקן (שם, סמל…)"
 
-#: importer/main.cpp:53
+#: importer/main.cpp:50
 #, kde-format
 msgid "Device UDI"
 msgstr "מזהה ייחודי של התקן"
 
-#: importer/main.cpp:54
+#: importer/main.cpp:51
 #, kde-format
 msgid "Source folder"
 msgstr "תיקיית מקור"
 
-#: importer/main.cpp:59
+#: importer/main.cpp:56
 #, kde-format
 msgid "Missing required source folder argument."
 msgstr "ארגומנט תיקיית מקור נחוץ חסר."
 
-#: importer/main.cpp:63
+#: importer/main.cpp:60
 #, kde-format
 msgid "Too many arguments."
 msgstr "יותר מדי ארגומנטים."
 
-#: importer/main.cpp:69
+#: importer/main.cpp:66
 #, kde-format
 msgid "Invalid source folder."
 msgstr "תיקיית המקור שגויה."
@@ -1895,44 +1940,44 @@ msgstr "תיקיית המקור שגויה."
 msgid "Importing documents..."
 msgstr "מסמכים מיובאים…"
 
-#: importer/thumbnailpage.cpp:235
+#: importer/thumbnailpage.cpp:231
 #, kde-format
 msgctxt "@info above install button when Kamera is not installed"
 msgid "Support for your camera is not installed."
 msgstr "לא מותקנת תמיכה במצלמה שלך."
 
-#: importer/thumbnailpage.cpp:237
+#: importer/thumbnailpage.cpp:233
 #, kde-format
 msgctxt "@info above install button, %1 protocol name %2 error text from KIO"
 msgid "The protocol support library for \"%1\" is not installed. Error: %2"
 msgstr "ספריית תמיכה בפרוטוקול „%1” לא מותקנת. שגיאה: %2"
 
-#: importer/thumbnailpage.cpp:239
+#: importer/thumbnailpage.cpp:235
 #, kde-format
 msgctxt "@info above install button, %1 protocol name"
 msgid "The protocol support library for \"%1\" is not installed."
 msgstr "ספריית תמיכה בפרוטוקול „%1” לא מותקנת."
 
-#: importer/thumbnailpage.cpp:251
+#: importer/thumbnailpage.cpp:247
 #, kde-format
 msgctxt "@info:usagetip above install button"
 msgid ""
 "After finishing the installation process, restart this Importer to continue."
 msgstr "לאחר סיום תהליך ההתקנה, יש להפעיל את המייבא הזה מחדש כדי להמשיך."
 
-#: importer/thumbnailpage.cpp:258
+#: importer/thumbnailpage.cpp:254
 #, kde-format
 msgctxt "@info:tooltip for a button, %1 protocol name"
 msgid "Launch Discover to install the protocol support library for \"%1\""
 msgstr "הפעלת גילוי להתקנת ספריית התמיכה בפרוטוקול „%1”"
 
-#: importer/thumbnailpage.cpp:260
+#: importer/thumbnailpage.cpp:256
 #, kde-format
 msgctxt "@action:button"
 msgid "Install Support for this Camera…"
 msgstr "התקנת תמיכה במצלמה הזאת…"
 
-#: importer/thumbnailpage.cpp:261
+#: importer/thumbnailpage.cpp:257
 #, kde-format
 msgctxt "@info:whatsthis for a button when Kamera is not installed"
 msgid ""
@@ -1944,13 +1989,13 @@ msgstr ""
 "תטען את הגילוי כדי להתקין את Kamera ולהפעיל תמיכה בפרוטוקול „camera:/‎” "
 "במערכת שלך."
 
-#: importer/thumbnailpage.cpp:264
+#: importer/thumbnailpage.cpp:260
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Install Protocol Support for \"%1\"…"
 msgstr "התקנת תמיכה בפרוטוקול „%1”…"
 
-#: importer/thumbnailpage.cpp:265
+#: importer/thumbnailpage.cpp:261
 #, kde-format
 msgctxt "@info:whatsthis for a button, %1 protocol name"
 msgid ""
@@ -1960,13 +2005,13 @@ msgstr ""
 "לחיצה כאן תפעיל את הגילוי כדי להתקין את ספריית התמיכה בפרוטוקול כדי להפעיל "
 "את התמיכה בפרוטוקול „‎%1:/‎‎” במערכת שלך."
 
-#: importer/thumbnailpage.cpp:269
+#: importer/thumbnailpage.cpp:265
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Search the Web for How to Install Protocol Support for \"%1\"…"
 msgstr "לחפש באינטרנט איך להתקין את התמיכה בפרוטוקול „%1”…"
 
-#: importer/thumbnailpage.cpp:285
+#: importer/thumbnailpage.cpp:281
 #, kde-format
 msgctxt ""
 "@info this text will be used as a search term in an online search engine, %1 "
@@ -1974,7 +2019,7 @@ msgctxt ""
 msgid "How to install protocol support for \"%1\" on Linux"
 msgstr "איך להתקין תמיכה בפרוטוקול „%1” בלינוקס"
 
-#: importer/thumbnailpage.cpp:286
+#: importer/thumbnailpage.cpp:282
 #, kde-format
 msgctxt ""
 "search engine URL, %1 search keyword, and translators can replace duckduckgo "
@@ -1982,17 +2027,17 @@ msgctxt ""
 msgid "https://duckduckgo.com/?q=%1"
 msgstr "https://duckduckgo.com/?q=%1"
 
-#: importer/thumbnailpage.cpp:327
+#: importer/thumbnailpage.cpp:323
 #, kde-format
 msgid "Import Selected"
 msgstr "ייבוא הנבחרים"
 
-#: importer/thumbnailpage.cpp:330
+#: importer/thumbnailpage.cpp:326
 #, kde-format
 msgid "Import All"
 msgstr "ייבוא של הכול"
 
-#: importer/thumbnailpage.cpp:492
+#: importer/thumbnailpage.cpp:488
 #, kde-kuit-format
 msgctxt "@info when failing to open the appstream URL"
 msgid ""
@@ -2002,7 +2047,7 @@ msgstr ""
 "פתיחת הגילוי נכשל.<nl/>נא לבדוק אם גילוי מותקן במערכת שלך או להשתמש במנהל "
 "חבילות המערכת שלך כדי להתקין את החבילה „Kamera”."
 
-#: importer/thumbnailpage.cpp:496
+#: importer/thumbnailpage.cpp:492
 #, kde-kuit-format
 msgctxt "@info when failing to launch plasma-discover, %1 protocol name"
 msgid ""
@@ -2163,19 +2208,19 @@ msgctxt "@info"
 msgid "Gwenview cannot display documents of type %1."
 msgstr "ל־Gwenview אין אפשרות להציג מסמכים מסוג %1."
 
-#: lib/document/loadingdocumentimpl.cpp:397
+#: lib/document/loadingdocumentimpl.cpp:389
 #, kde-format
 msgctxt "@info"
 msgid "Could not open file %1"
 msgstr "לא ניתן לפתוח את הקובץ %1"
 
-#: lib/document/loadingdocumentimpl.cpp:488
+#: lib/document/loadingdocumentimpl.cpp:480
 #, kde-format
 msgctxt "@info"
 msgid "Loading meta information failed."
 msgstr "טעינת נתוני העל נכשלה."
 
-#: lib/document/loadingdocumentimpl.cpp:514
+#: lib/document/loadingdocumentimpl.cpp:506
 #, kde-format
 msgctxt "@info"
 msgid "Loading image failed."
@@ -2196,7 +2241,7 @@ msgstr ""
 "לא ניתן לפתוח את הקובץ לכתיבה, נא לבדוק שיש לך את ההרשאות הנדרשות ב־"
 "<filename>%1</filename>."
 
-#: lib/document/savejob.cpp:137
+#: lib/document/savejob.cpp:133
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2778,7 +2823,7 @@ msgctxt "(qtundo-format)"
 msgid "Transform"
 msgstr "התמרה"
 
-#: part/gvpart.cpp:77
+#: part/gvpart.cpp:69
 #, kde-format
 msgctxt "@action"
 msgid "Properties"
