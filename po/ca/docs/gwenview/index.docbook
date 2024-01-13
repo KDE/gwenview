@@ -708,7 +708,7 @@
 >+</guiicon
 > que apareix en passar el cursor sobre una imatge. També podeu seleccionar la carpeta on s'importaran les imatges en el quadre de text a la part inferior de la finestra. En acabar, feu clic al botó <guibutton
 >Importa els seleccionats</guibutton
-> per a sols importar les imatges seleccionades o feu clic a <guibutton
+> per a importar només les imatges seleccionades o feu clic a <guibutton
 >Importa-ho tot</guibutton
 > per a importar totes les imatges que es trobin en el dispositiu.</para>
 </sect2>

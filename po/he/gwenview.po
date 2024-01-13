@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-01-11 00:36+0000\n"
-"PO-Revision-Date: 2023-10-20 11:33+0300\n"
-"Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
+"PO-Revision-Date: 2024-01-10 22:43+0200\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <kde-i18n-doc@kde.org>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.4.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -244,24 +244,24 @@ msgid "Selected %1 of %2 (%3)"
 msgstr "נבחרו %1 מתוך %2 (%3)"
 
 #: app/browsemainpage.cpp:252
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:status Image files"
 msgid "%1 image"
 msgid_plural "%1 images"
 msgstr[0] "תמונה"
-msgstr[1] "%1 תמונות"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[1] "שתי תמונות"
+msgstr[2] "%1 תמונות"
+msgstr[3] "%1 תמונות"
 
 #: app/browsemainpage.cpp:253
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:status Video files"
 msgid "%1 video"
 msgid_plural "%1 videos"
-msgstr[0] "סרט"
-msgstr[1] "%1 סרטונים"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "סרטון"
+msgstr[1] "שני סרטונים"
+msgstr[2] "%1 סרטונים"
+msgstr[3] "%1 סרטונים"
 
 #: app/browsemainpage.cpp:260
 #, kde-format
@@ -297,14 +297,14 @@ msgid "Copy %1"
 msgstr "העתקת %1"
 
 #: app/fileoperations.cpp:67
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Copy %1 image"
 msgid_plural "Copy %1 images"
 msgstr[0] "העתקת תמונה"
-msgstr[1] "העתקת %1 תמונות"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[1] "העתקת שתי תמונות"
+msgstr[2] "העתקת %1 תמונות"
+msgstr[3] "העתקת %1 תמונות"
 
 #: app/fileoperations.cpp:69
 #, kde-format
@@ -319,14 +319,14 @@ msgid "Move %1"
 msgstr "העברת %1"
 
 #: app/fileoperations.cpp:75
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Move %1 image"
 msgid_plural "Move %1 images"
 msgstr[0] "העברת תמונה"
-msgstr[1] "העברת %1 תמונות"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[1] "העברת שתי תמונות"
+msgstr[2] "העברת %1 תמונות"
+msgstr[3] "העברת %1 תמונות"
 
 #: app/fileoperations.cpp:77
 #, kde-format
@@ -341,14 +341,14 @@ msgid "Link %1"
 msgstr "קישור %1"
 
 #: app/fileoperations.cpp:83
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Link %1 image"
 msgid_plural "Link %1 images"
 msgstr[0] "קישור תמונה"
-msgstr[1] "קישור %1 תמונות"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[1] "קישור שתי תמונות"
+msgstr[2] "קישור %1 תמונות"
+msgstr[3] "קישור %1 תמונות"
 
 #: app/fileoperations.cpp:85
 #, kde-format
@@ -589,14 +589,14 @@ msgid ", "
 msgstr ", "
 
 #: app/fullscreencontent.cpp:289
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Slideshow interval in seconds"
 msgid "%1 sec"
 msgid_plural "%1 secs"
-msgstr[0] "שנייה אחת"
-msgstr[1] "%1 שניות"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "שנייה"
+msgstr[1] "שתי שניות"
+msgstr[2] "%1 שניות"
+msgstr[3] "%1 שניות"
 
 #: app/fullscreencontent.cpp:400
 #, kde-format
@@ -1034,24 +1034,24 @@ msgid "Image Information"
 msgstr "פרטי תמונה"
 
 #: app/infocontextmanageritem.cpp:331
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "%1 file selected"
 msgid_plural "%1 files selected"
 msgstr[0] "קובץ נבחר"
-msgstr[1] "%1 קבצים נבחרו"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[1] "שני קבצים נבחרו"
+msgstr[2] "%1 קבצים נבחרו"
+msgstr[3] "%1 קבצים נבחרו"
 
 #: app/infocontextmanageritem.cpp:333
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "%1 folder selected"
 msgid_plural "%1 folders selected"
 msgstr[0] "תיקייה נבחרה"
-msgstr[1] "%1 תיקיות נבחרו"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[1] "שתי תיקיות נבחרו"
+msgstr[2] "%1 תיקיות נבחרו"
+msgstr[3] "%1 תיקיות נבחרו"
 
 #: app/infocontextmanageritem.cpp:336
 #, kde-format
@@ -1060,22 +1060,22 @@ msgid "%1 and %2 selected"
 msgstr "%1 ו־%2 נבחרו"
 
 #: app/infocontextmanageritem.cpp:337
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1 folder"
 msgid_plural "%1 folders"
 msgstr[0] "תיקייה"
-msgstr[1] "%1 תיקיות"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[1] "שתי תיקיות"
+msgstr[2] "%1 תיקיות"
+msgstr[3] "%1 תיקיות"
 
 #: app/infocontextmanageritem.cpp:338
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1 file"
 msgid_plural "%1 files"
 msgstr[0] "קובץ"
-msgstr[1] "%1 קבצים"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[1] "שני קבצים"
+msgstr[2] "%1 קבצים"
+msgstr[3] "%1 קבצים"
 
 #: app/main.cpp:174
 #, kde-format
@@ -1326,13 +1326,13 @@ msgid "Discard Changes"
 msgstr "ביטול שינויים"
 
 #: app/mainwindow.cpp:1798
-#, fuzzy, kde-format
+#, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
-msgstr[0] "תמונה אחת נערכה."
-msgstr[1] "%1 תמונות נערכו."
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "תמונה נערכה."
+msgstr[1] "שתי תמונות נערכו."
+msgstr[2] "%1 תמונות נערכו."
+msgstr[3] "%1 תמונות נערכו."
 
 #: app/mainwindow.cpp:1798
 #, kde-format
@@ -1411,14 +1411,14 @@ msgid "&Stop"
 msgstr "&עצירה"
 
 #: app/saveallhelper.cpp:82
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid "One document could not be saved:"
 msgid_plural "%1 documents could not be saved:"
-msgstr[0] "לא ניתן לשמור מסמך אחד:"
-msgstr[1] "לא ניתן לשמור %1 מסמכים:"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "לא ניתן לשמור מסמך:"
+msgstr[1] "לא ניתן לשמור שני מסמכים:"
+msgstr[2] "לא ניתן לשמור %1 מסמכים:"
+msgstr[3] "לא ניתן לשמור %1 מסמכים:"
 
 #: app/saveallhelper.cpp:106
 #, kde-kuit-format
@@ -1451,13 +1451,13 @@ msgid "Next modified image"
 msgstr "התמונה הבאה שנערכה"
 
 #: app/savebar.cpp:183
-#, fuzzy, kde-format
+#, kde-format
 msgid "One image modified"
 msgid_plural "%1 images modified"
 msgstr[0] "תמונה נערכה"
-msgstr[1] "%1 תמונות נערכו"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[1] "שתי תמונות נערכו"
+msgstr[2] "%1 תמונות נערכו"
+msgstr[3] "%1 תמונות נערכו"
 
 #: app/savebar.cpp:185
 #, kde-format
@@ -1677,22 +1677,22 @@ msgid "Show failed subfolders..."
 msgstr "הצגת תת־תיקיות שנכשלו…"
 
 #: importer/dialogpage.cpp:71
-#, fuzzy, kde-format
+#, kde-format
 msgid "Failed to import %1 document."
 msgid_plural "Failed to import %1 documents."
 msgstr[0] "ייבוא מסמך נכשל."
-msgstr[1] "ייבוא %1 מסמכים נכשל."
-msgstr[2] ""
-msgstr[3] ""
+msgstr[1] "ייבוא שני מסמכים נכשל."
+msgstr[2] "ייבוא %1 מסמכים נכשל."
+msgstr[3] "ייבוא %1 מסמכים נכשל."
 
 #: importer/dialogpage.cpp:78
-#, fuzzy, kde-format
+#, kde-format
 msgid "Failed to create %1 destination subfolder."
 msgid_plural "Failed to create %1 destination subfolders."
 msgstr[0] "יצירת תת־תיקיית היעד נכשלה."
-msgstr[1] "יצירת %1 תת־תיקיות יעד נכשלה."
-msgstr[2] ""
-msgstr[3] ""
+msgstr[1] "יצירת שתי תת־תיקיות יעד נכשלה."
+msgstr[2] "יצירת %1 תת־תיקיות יעד נכשלה."
+msgstr[3] "יצירת %1 תת־תיקיות יעד נכשלה."
 
 #: importer/dialogpage.cpp:89
 #, kde-format
@@ -1735,64 +1735,64 @@ msgid "Original filename, in lower case"
 msgstr "שם קובץ מקורי, באותיות קטנות"
 
 #: importer/importdialog.cpp:94
-#, fuzzy, kde-format
+#, kde-format
 msgid "One document has been imported."
 msgid_plural "%1 documents have been imported."
-msgstr[0] "מסמך אחד יובא."
-msgstr[1] "%1 מסמכים יובאו."
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "מסמך יובא."
+msgstr[1] "שני מסמכים יובאו."
+msgstr[2] "%1 מסמכים יובאו."
+msgstr[3] "%1 מסמכים יובאו."
 
 #: importer/importdialog.cpp:96
-#, fuzzy, kde-format
+#, kde-format
 msgid "One document has been skipped because it had already been imported."
 msgid_plural ""
 "%1 documents have been skipped because they had already been imported."
 msgstr[0] "מסמך אחד כבר יובא ולכן דולג."
-msgstr[1] "%1 מסמכים כבר יובאו ולכן דולגו."
-msgstr[2] ""
-msgstr[3] ""
+msgstr[1] "שני מסמכים כבר יובאו ולכן דולגו."
+msgstr[2] "%1 מסמכים כבר יובאו ולכן דולגו."
+msgstr[3] "%1 מסמכים כבר יובאו ולכן דולגו."
 
 #: importer/importdialog.cpp:104
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "One of them has been renamed because another document with the same name had "
 "already been imported."
 msgid_plural ""
 "%1 of them have been renamed because other documents with the same name had "
 "already been imported."
-msgstr[0] "שם הקובץ של אחת התמונות שונה מאחר ומסמך אחר בשם זהה כבר יובא."
-msgstr[1] "%1 שמות קבצים שונו מאחר ומסמכים אחרים בשמות זההים כבר יובאו."
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "שם הקובץ של אחת התמונות שונה מאחר שמסמך אחר בשם זהה כבר יובא."
+msgstr[1] "שני שמות קבצים שונו מאחר שמסמכים אחרים בשמות זההים כבר יובאו."
+msgstr[2] "%1 שמות קבצים שונו מאחר שמסמכים אחרים בשמות זההים כבר יובאו."
+msgstr[3] "%1 שמות קבצים שונו מאחר שמסמכים אחרים בשמות זההים כבר יובאו."
 
 #: importer/importdialog.cpp:112
-#, fuzzy, kde-format
+#, kde-format
 msgid "Delete the imported document from the device?"
 msgid_plural "Delete the %1 imported documents from the device?"
-msgstr[0] "למחוק את הקובץ שיובא מההתקן?"
-msgstr[1] "למחוק את %1 הקבצים שיובאו מההתקן?"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "למחוק את המסמך שיובא מההתקן?"
+msgstr[1] "למחוק את שני המסמכים שיובאו מההתקן?"
+msgstr[2] "למחוק את %1 המסמכים שיובאו מההתקן?"
+msgstr[3] "למחוק את %1 המסמכים שיובאו מההתקן?"
 
 #: importer/importdialog.cpp:114
-#, fuzzy, kde-format
+#, kde-format
 msgid "Delete the skipped document from the device?"
 msgid_plural "Delete the %1 skipped documents from the device?"
-msgstr[0] "למחוק את הקובץ שדולג מההתקן?"
-msgstr[1] "למחוק את %1 הקבצים שדולגו מההתקן?"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "למחוק את המסמך שדולג מההתקן?"
+msgstr[1] "למחוק את שני המסמכים שדולגו מההתקן?"
+msgstr[2] "למחוק את %1 המסמכים שדולגו מההתקן?"
+msgstr[3] "למחוק את %1 המסמכים שדולגו מההתקן?"
 
 #: importer/importdialog.cpp:117
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Singular sentence is actually never used."
 msgid "Delete the imported or skipped document from the device?"
 msgid_plural "Delete the %1 imported and skipped documents from the device?"
 msgstr[0] "למחוק את הקובץ שיובא או דולג מההתקן?"
-msgstr[1] "למחוק את %1 הקבצים שיובאו או דולגו מההתקן?"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[1] "למחוק את שני הקבצים שיובאו או דולגו מההתקן?"
+msgstr[2] "למחוק את %1 הקבצים שיובאו או דולגו מההתקן?"
+msgstr[3] "למחוק את %1 הקבצים שיובאו או דולגו מההתקן?"
 
 #: importer/importdialog.cpp:124
 #, kde-format
@@ -1806,7 +1806,7 @@ msgid "Keep"
 msgstr "להשאיר"
 
 #: importer/importdialog.cpp:139
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Failed to delete the document:\n"
 "%2"
@@ -1820,7 +1820,11 @@ msgstr[1] ""
 "מחיקת המסמכים נכשלה:\n"
 "%2"
 msgstr[2] ""
+"מחיקת המסמכים נכשלה:\n"
+"%2"
 msgstr[3] ""
+"מחיקת המסמכים נכשלה:\n"
+"%2"
 
 #: importer/importdialog.cpp:141
 #, kde-format
