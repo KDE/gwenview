@@ -389,7 +389,7 @@ void ThumbnailView::setThumbnailProvider(ThumbnailProvider *thumbnailProvider)
 
 void ThumbnailView::updateThumbnailSize()
 {
-    QSize value = d->mThumbnailSize;
+    QSize value = thumbnailPixelSize();
     // mWaitingThumbnail
     const auto dpr = devicePixelRatioF();
     int waitingThumbnailSize;
@@ -398,15 +398,15 @@ void ThumbnailView::updateThumbnailSize()
     } else {
         waitingThumbnailSize = qRound(32 * dpr);
     }
-    QPixmap icon = QIcon::fromTheme(QStringLiteral("chronometer")).pixmap(waitingThumbnailSize);
+    QPixmap icon = QIcon::fromTheme(QStringLiteral("chronometer")).pixmap(64);
     QPixmap pix(value);
+    pix.setDevicePixelRatio(dpr);
     pix.fill(Qt::transparent);
     QPainter painter(&pix);
     painter.setOpacity(0.5);
-    painter.drawPixmap((value.width() - icon.width()) / 2, (value.height() - icon.height()) / 2, icon);
+    style()->drawItemPixmap(&painter, QRect(QPoint(), thumbnailSize()), Qt::AlignCenter, icon);
     painter.end();
     d->mWaitingThumbnail = pix;
-    d->mWaitingThumbnail.setDevicePixelRatio(dpr);
 
     // Stop smoothing
     d->mSmoothThumbnailTimer.stop();
@@ -428,14 +428,11 @@ void ThumbnailView::updateThumbnailSize()
 
 void ThumbnailView::setThumbnailWidth(int width)
 {
-    const auto dpr = devicePixelRatioF();
-    const qreal newWidthF = width * dpr;
-    const int newWidth = qRound(newWidthF);
-    if (d->mThumbnailSize.width() == newWidth) {
+    if (width == d->mThumbnailSize.width()) {
         return;
     }
-    int height = qRound(newWidthF / d->mThumbnailAspectRatio);
-    d->mThumbnailSize = QSize(newWidth, height);
+    int height = round((qreal)width / d->mThumbnailAspectRatio);
+    d->mThumbnailSize = QSize(width, height);
     updateThumbnailSize();
 }
 
@@ -458,7 +455,12 @@ qreal ThumbnailView::thumbnailAspectRatio() const
 
 QSize ThumbnailView::thumbnailSize() const
 {
-    return d->mThumbnailSize / devicePixelRatioF();
+    return d->mThumbnailSize;
+}
+
+QSize ThumbnailView::thumbnailPixelSize() const
+{
+    return d->mThumbnailSize * devicePixelRatioF();
 }
 
 void ThumbnailView::setThumbnailViewHelper(AbstractThumbnailViewHelper *helper)
@@ -611,7 +613,7 @@ void ThumbnailView::setBrokenThumbnail(const KFileItem &item)
         // Special case for videos because our kde install may come without
         // support for video thumbnails so we show the mimetype icon instead of
         // a broken image icon
-        const QPixmap pix = QIcon::fromTheme(item.iconName()).pixmap(d->mThumbnailSize.height());
+        const QPixmap pix = QIcon::fromTheme(item.iconName()).pixmap(thumbnailPixelSize().height());
         thumbnail.initAsIcon(pix);
     } else if (kind == MimeTypeUtils::KIND_DIR) {
         // Special case for folders because ThumbnailProvider does not return a
@@ -648,9 +650,9 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex &index, QSize *fullSi
     // If dir or archive, generate a thumbnail from fileitem pixmap
     MimeTypeUtils::Kind kind = MimeTypeUtils::fileItemKind(item);
     if (kind == MimeTypeUtils::KIND_ARCHIVE || kind == MimeTypeUtils::KIND_DIR) {
-        int groupSize = ThumbnailGroup::pixelSize(ThumbnailGroup::fromPixelSize(d->mThumbnailSize.height()));
+        int groupSize = ThumbnailGroup::pixelSize(ThumbnailGroup::fromPixelSize(thumbnailPixelSize().height()));
         if (thumbnail.mGroupPix.isNull() || thumbnail.mGroupPix.height() < groupSize) {
-            const QPixmap pix = QIcon::fromTheme(item.iconName()).pixmap(d->mThumbnailSize.height());
+            const QPixmap pix = QIcon::fromTheme(item.iconName()).pixmap(thumbnailPixelSize().height());
 
             thumbnail.initAsIcon(pix);
             if (kind == MimeTypeUtils::KIND_ARCHIVE) {
@@ -675,6 +677,7 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex &index, QSize *fullSi
         if (fullSize) {
             *fullSize = QSize();
         }
+        qDebug() << "returning waiting thumb" << d->mWaitingThumbnail.devicePixelRatioF();
         return d->mWaitingThumbnail;
     }
 
@@ -847,7 +850,7 @@ void ThumbnailView::wheelEvent(QWheelEvent *event)
     // their label changes.
     // For some reason it is necessary to set the step here: setting it in
     // setThumbnailSize() does not work
-    // verticalScrollBar()->setSingleStep(d->mThumbnailSize / 5);
+    // verticalScrollBar()->setSingleStep(thumbnailPixelSize() / 5);
     if (event->modifiers() == Qt::ControlModifier) {
         int width = thumbnailSize().width() + (event->angleDelta().y() > 0 ? 1 : -1) * WHEEL_ZOOM_MULTIPLIER;
         width = qMax(int(MinThumbnailSize), qMin(width, int(MaxThumbnailSize)));
@@ -964,7 +967,7 @@ void ThumbnailView::generateThumbnailsForItems()
         }
 
         // Filter out items which already have a thumbnail
-        if (it != d->mThumbnailForUrl.constEnd() && it.value().isGroupPixAdaptedForSize(d->mThumbnailSize.height())) {
+        if (it != d->mThumbnailForUrl.constEnd() && it.value().isGroupPixAdaptedForSize(thumbnailPixelSize().height())) {
             continue;
         }
 

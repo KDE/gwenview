@@ -72,9 +72,14 @@ public:
     void setThumbnailScaleMode(ThumbnailScaleMode);
 
     /**
-     * Returns the thumbnail size.
+     * Returns the thumbnail size in logical pixels
      */
     QSize thumbnailSize() const;
+
+    /**
+     * Returns the thumbnail size in device pixels
+     */
+    QSize thumbnailPixelSize() const;
 
     /**
      * Returns the aspect ratio of the thumbnail.
