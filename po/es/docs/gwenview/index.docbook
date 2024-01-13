@@ -275,12 +275,6 @@
 
 <!--FIXME all actions also available context menus, where to add that info -->
 
-<tip
-><para
->Si usted tiene instalados los complementos KIPI, estará disponible un menú <guimenu
->Complementos</guimenu
-> que le permitirá realizar más operaciones con sus imágenes.</para
-></tip>
 </sect1>
 
 <sect1 id='browse_mode'
@@ -350,12 +344,6 @@
 <listitem
 ><para
 ><guiicon
->Compartir</guiicon
->: Al pulsar este botón se abre un menú de exportación para compartir las imágenes mediante redes sociales y servicios web de recopilación de imágenes. Esta funcionalidad depende de la lista de complementos KIPI instalados.</para
-></listitem>
-<listitem
-><para
-><guiicon
 >Pantalla completa</guiicon
 >: Cambia al modo de pantalla completa.</para
 ></listitem>
@@ -416,7 +404,7 @@
 >Rellenar</guibutton
 > amplía la imagen para llenar la ventana ajustando la anchura o la altura, mientras que el botón <guibutton
 >100%</guibutton
-> ajusta el tamaño de la imagen a su tamaño real en píxeles. El acceso rápido <keycap
+> ajusta el tamaño de la imagen a su tamaño real en píxeles. El atajo de teclado <keycap
 >F</keycap
 > cambia entre el modo <guibutton
 >Ampliar para ajustar</guibutton
@@ -672,7 +660,7 @@
 ></term>
 <listitem
 ><para
->Muestra una lista de todas las carpetas de su sistema permitiéndole cambiar entre ellas. En el modo de navegación se muestran miniaturas de las carpetas, mientras que en modo vista aparece la primera imagen de la carpeta, desde la cual puede navegar por la carpeta usando los botones o accesos rápidos <guibutton
+>Muestra una lista de todas las carpetas de su sistema permitiéndole cambiar entre ellas. En el modo de navegación se muestran miniaturas de las carpetas, mientras que en modo vista aparece la primera imagen de la carpeta, desde la cual puede navegar por la carpeta usando los botones o atajos de teclado <guibutton
 >Anterior</guibutton
 > y <guibutton
 >Siguiente</guibutton
@@ -861,13 +849,13 @@
 >Atajos de teclado</title>
 
 <para
->&gwenview; incluye gran cantidad de accesos rápidos de teclado, que puede ver o modificar seleccionando <menuchoice
+>&gwenview; incluye gran cantidad de atajos de teclado, que puede ver o modificar seleccionando <menuchoice
 ><guimenu
 >Preferencias</guimenu
 ><guimenuitem
->Configurar accesos rápidos...</guimenuitem
+>Configurar los atajos de teclado...</guimenuitem
 ></menuchoice
-> Tenga en cuenta que en las ventanas de los archivos y carpetas, serán funcionales todos los accesos rápidos de &plasma;, a menos que los modifique.</para>
+> Tenga en cuenta que en las ventanas de los archivos y carpetas, serán funcionales todos los atajos de teclado de &plasma;, a menos que los modifique.</para>
 
 <para
 >Algunas de las asociaciones predeterminadas de teclas más prácticas son:</para>
@@ -1032,14 +1020,14 @@
 ><para
 ><keycap
 >F</keycap
->: Al pulsar este acceso rápido se conmuta la ampliación para ajustar al tamaño de la ventana.</para
+>: Al pulsar este atajo de teclado se conmuta la ampliación para ajustar al tamaño de la ventana.</para
 ></listitem>
 
 <listitem
 ><para
 ><keycap
 >P</keycap
->: Cuando se reproduce un vídeo, este acceso conmuta el estado de reproducción.</para
+>: Cuando se reproduce un vídeo, este atajo de teclado conmuta el estado de reproducción.</para
 ></listitem>
 
 <listitem
