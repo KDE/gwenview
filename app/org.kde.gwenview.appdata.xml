@@ -226,6 +226,7 @@
       <li xml:lang="fi">Yksinkertainen kuvanmuokkaus: kääntäminen, rajaaminen, koon muuttaminen, peilaaminen, kiepauttaminen, punasilmäisyyden vähentäminen sekä kirkkauden, kontrastin tai gamman säätäminen</li>
       <li xml:lang="fr">Modifications simples d'images : rotation, rognage, re-dimensionnement, inversion, réduction des yeux rouges, ajustement de la luminosité, du contraste et du gamma.</li>
       <li xml:lang="gl">Edición sinxela de imaxes: rotar, recortar, cambiar de tamaño, inverter en horizontal ou vertical, reducir os ollos vermellos e axustar o brillo, o contraste e a tonalidade.</li>
+      <li xml:lang="hu">Egyszerű képszerkesztés: forgatás, levágás, tükrözés, vöröszem-eltávolítás és fényerő-, kontraszt vagy gammabeállítás</li>
       <li xml:lang="ia">Editar de imagine simple: rota, tonde, redimensiona, reflecte, gira, reduce oculos rubie, e adapta brillantia, contrasto, o gamma</li>
       <li xml:lang="id">Pengeditan gambar yang sederhana: rotasi, ubah ukuran, cermin, jungkir, reduksi mata merah, dan menyetel kecerahan, kontras, atau gamma</li>
       <li xml:lang="it">Operazioni di base di modifica delle immagini: rotazione, ritaglio, ridimensionamento, specchio, rotazione, riduzione occhi rossi, e correzione di luminosità, contrasto o gamma</li>
@@ -258,6 +259,7 @@
       <li xml:lang="fi">Merkitse kuvia nuolin, kuvioin, tekstilaatikoin, leimoin jne.</li>
       <li xml:lang="fr">Annotez et balisez les images avec des flèches, des formes, des zones de texte, des timbres d'images et plus encore</li>
       <li xml:lang="gl">Anotar e marcar imaxes con frechas, formas, caixas de texto, selos de imaxe e máis.</li>
+      <li xml:lang="hu">Képek magyarázata és jelölése nyilakkal, alakzatokkal, szövegdobozokkal, képbélyegzőkkel és egyebekkel</li>
       <li xml:lang="ia">Annota e marca imagines con flechas, umbras, quadratos de texto, timbros de imagine e alteres</li>
       <li xml:lang="id">Menganotasi dan menandai gambar dengan anak panah, bentuk, cap gambar, dan selebihnya</li>
       <li xml:lang="it">Annota e contrassegna immagini con frecce, forme, caselle di testo, timbri e altro</li>
@@ -292,6 +294,7 @@
       <li xml:lang="fi">Tiedostonhallinnan perustoiminnot kuten kopioiminen, siirtäminen, poistaminen jne.</li>
       <li xml:lang="fr">Actions basiques de gestion de fichiers comme copier, déplacer, supprimer et autres</li>
       <li xml:lang="gl">Accións básicas de xestión de ficheiros como copiar, mover, eliminar, etc.</li>
+      <li xml:lang="hu">Egyszerű fájlkezelési műveletek, mint például másolás, áthelyezés, törlés és egyebek</li>
       <li xml:lang="ia">Actiones de gestion de file basic tal como copiar,mover, deler, e alteres</li>
       <li xml:lang="id">Tindakan pengelolaan file dasar seperti salin, pindah, hapus, dan lainnya</li>
       <li xml:lang="it">Semplici azioni di gestione file come copia, spostamento, eliminazione ed altre</li>
