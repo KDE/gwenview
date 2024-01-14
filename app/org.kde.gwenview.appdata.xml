@@ -37,7 +37,7 @@
   <name xml:lang="nds">Gwenview</name>
   <name xml:lang="nl">Gwenview</name>
   <name xml:lang="nn">Gwenview</name>
-  <name xml:lang="pa">ਜੀਵੀਨ-ਵਿਊ</name>
+  <name xml:lang="pa">ਗਵਿਨ-ਵਿਊ</name>
   <name xml:lang="pl">Gwenview</name>
   <name xml:lang="pt">Gwenview</name>
   <name xml:lang="pt-BR">Gwenview</name>
@@ -140,7 +140,7 @@
     <p xml:lang="lt">Gwenview yra greita ir lengva naudoti paveikslų žiūryklė pagal KDE, tobulai tinkanti naršyti ir atvaizduoti paveikslų kolekcijas.</p>
     <p xml:lang="nl">Gwenview is een snelle en gemakkelijk te gebruiken viewer voor afbeeldingen door KDE, ideaal voor bladeren door en weergeven van een verzameling afbeeldingen.</p>
     <p xml:lang="nn">Gwenview er ein biletvisar frå KDE. Han passar svært godt for å bla gjennom og visa ei samling med bilete.</p>
-    <p xml:lang="pa">ਜੀਵੀਨ-ਵਿਊ KDE ਲਈ ਤੇਜ਼ ਤੇ ਵਰਤਣ ਲਈ ਸੌਖਾ ਚਿੱਤਰ ਦਰਸ਼ਕ ਹੈ, ਜੋ ਕਿ ਚਿੱਤਰਾਂ ਦੇ ਭੰਡਾਰ ਨੂੰ ਬਰਾਊਜ਼ ਕਰਨ ਤੇ ਦਿਖਾਉਣ ਲਈ ਢੁੱਕਵਾਂ ਹੈ।</p>
+    <p xml:lang="pa">ਗਵਿਨ-ਵਿਊ KDE ਲਈ ਤੇਜ਼ ਤੇ ਵਰਤਣ ਲਈ ਸੌਖਾ ਚਿੱਤਰ ਦਰਸ਼ਕ ਹੈ, ਜੋ ਕਿ ਚਿੱਤਰਾਂ ਦੇ ਭੰਡਾਰ ਨੂੰ ਬਰਾਊਜ਼ ਕਰਨ ਤੇ ਦਿਖਾਉਣ ਲਈ ਢੁੱਕਵਾਂ ਹੈ।</p>
     <p xml:lang="pl">Gwenview to szybka i łatwa w użyciu przeglądarka obrazów dla KDE. Świetnie nadaje się do przeglądania i wyświetlania zbiorów obrazów.</p>
     <p xml:lang="pt">O Gwenview é um visualizador de imagens rápido e simples de usar do KDE, ideal para a navegação e apresentação de uma colecção de imagens.</p>
     <p xml:lang="pt-BR">Gwenview é um visualizador de imagens rápido e fácil de usar, da KDE, ideal para navegar e exibir uma coleção de imagens.</p>
@@ -302,6 +302,7 @@
       <li xml:lang="ko">파일 복사, 이동, 삭제와 같은 기본 파일 관리 작업</li>
       <li xml:lang="nl">Basis bestandsbeheeracties zoals kopiëren, verplaatsen, verwijderen en andere</li>
       <li xml:lang="nn">Enkle filhandlingar, som kopiering, flytting og sletting</li>
+      <li xml:lang="pa">ਮੁੱਢਲੇ ਫਾਇਲ ਇੰਤਜ਼ਾਮ ਕਾਰਵਾਈਆਂ ਜਿਵੇਂ ਕਿ ਕਾਪੀ ਕਰਨਾ, ਭੇਜਣਾ, ਹਟਾਉਣਾ ਤੇ ਹੋਰ</li>
       <li xml:lang="pl">Proste działania plikowe takie jak kopiuj, przenieś, usuń i inne</li>
       <li xml:lang="pt">Acções básicas de gestão de ficheiros, como a cópia, movimentação, remoção, entre outras</li>
       <li xml:lang="pt-BR">Ações básicas de gerenciamento de arquivos, como copiar, mover, excluir entre outras</li>
@@ -407,7 +408,7 @@
       <caption xml:lang="nds">Gwenview</caption>
       <caption xml:lang="nl">Gwenview</caption>
       <caption xml:lang="nn">Gwenview</caption>
-      <caption xml:lang="pa">ਜੀਵੀਨ-ਵਿਊ</caption>
+      <caption xml:lang="pa">ਗਵਿਨ-ਵਿਊ</caption>
       <caption xml:lang="pl">Gwenview</caption>
       <caption xml:lang="pt">Gwenview</caption>
       <caption xml:lang="pt-BR">Gwenview</caption>
@@ -457,6 +458,7 @@
       <caption xml:lang="lt">Naudokite Gwenview savo paveikslų kolekcijos tvarkymui</caption>
       <caption xml:lang="nl">Gwenview gebruiken om uw verzameling afbeeldingen te beheren</caption>
       <caption xml:lang="nn">Bruk Gwenview til å halda styr på biletsamlinga di</caption>
+      <caption xml:lang="pa">ਤੁਹਾਡੇ ਚਿੱਤਰ ਭੰਡਾਰ ਦੇ ਇੰਤਜ਼ਾਮ ਲਈ ਗਵਿਨ-ਵਿਊ ਵਰਤੋ</caption>
       <caption xml:lang="pl">Użyj Gwenview do zarządzania twoimi zbiorami obrazów</caption>
       <caption xml:lang="pt">Use o Gwenview para gerir a sua colecção de imagens</caption>
       <caption xml:lang="pt-BR">Use o Gwenview para gerenciar sua coleção de imagens</caption>
