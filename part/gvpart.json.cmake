@@ -20,6 +20,7 @@
         "Name[fi]": "Gwenview-kuvakatselin",
         "Name[fr]": "Afficheur d'images Gwenview",
         "Name[gl]": "Visor de imaxes Gwenview",
+        "Name[hu]": "Gwenview képmegjelenítő",
         "Name[ia]": "Visor de imagine Gwenview",
         "Name[id]": "Gwenview Penampil Gambar",
         "Name[it]": "Visore di immagini Gwenview",
