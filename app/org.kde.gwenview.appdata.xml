@@ -33,6 +33,7 @@
   <name xml:lang="ka">Gwenview</name>
   <name xml:lang="ko">Gwenview</name>
   <name xml:lang="lt">Gwenview</name>
+  <name xml:lang="lv">Gwenview</name>
   <name xml:lang="nb">Gwenview</name>
   <name xml:lang="nds">Gwenview</name>
   <name xml:lang="nl">Gwenview</name>
@@ -85,6 +86,7 @@
   <summary xml:lang="ka">სურათების გალერეა</summary>
   <summary xml:lang="ko">그림 뷰어</summary>
   <summary xml:lang="lt">Paveikslų žiūryklė</summary>
+  <summary xml:lang="lv">Attēlu skatītājs</summary>
   <summary xml:lang="nl">Afbeeldingsviewer</summary>
   <summary xml:lang="nn">Biletvisar</summary>
   <summary xml:lang="pa">ਚਿੱਤਰ ਦਰਸ਼ਕ</summary>
@@ -138,6 +140,7 @@
     <p xml:lang="ka">Gwenview სწრაფი და ადვილად გამოსაყენებელი პროგრამაა KDE-სგან. ის იდეალურია სურათების კოლექციების დასათვალიერებლად და დასალაგებლად.</p>
     <p xml:lang="ko">Gwenview는 KDE의 빠르고 사용하기 편한 그림 뷰어입니다.</p>
     <p xml:lang="lt">Gwenview yra greita ir lengva naudoti paveikslų žiūryklė pagal KDE, tobulai tinkanti naršyti ir atvaizduoti paveikslų kolekcijas.</p>
+    <p xml:lang="lv">„Gwenview“ ir KDE izstrādāta ātra un vienkārša programma attēlu atvēršanai, kas ļauj arī pārlūkot un parādīt attēlu kolekcijas.</p>
     <p xml:lang="nl">Gwenview is een snelle en gemakkelijk te gebruiken viewer voor afbeeldingen door KDE, ideaal voor bladeren door en weergeven van een verzameling afbeeldingen.</p>
     <p xml:lang="nn">Gwenview er ein biletvisar frå KDE. Han passar svært godt for å bla gjennom og visa ei samling med bilete.</p>
     <p xml:lang="pa">ਗਵਿਨ-ਵਿਊ KDE ਲਈ ਤੇਜ਼ ਤੇ ਵਰਤਣ ਲਈ ਸੌਖਾ ਚਿੱਤਰ ਦਰਸ਼ਕ ਹੈ, ਜੋ ਕਿ ਚਿੱਤਰਾਂ ਦੇ ਭੰਡਾਰ ਨੂੰ ਬਰਾਊਜ਼ ਕਰਨ ਤੇ ਦਿਖਾਉਣ ਲਈ ਢੁੱਕਵਾਂ ਹੈ।</p>
@@ -189,6 +192,7 @@
     <p xml:lang="ka">თვისებები:</p>
     <p xml:lang="ko">기능:</p>
     <p xml:lang="lt">Ypatybės:</p>
+    <p xml:lang="lv">Iespējas:</p>
     <p xml:lang="nb">Funksjoner:</p>
     <p xml:lang="nds">Markmalen:</p>
     <p xml:lang="nl">Mogelijkheden:</p>
@@ -233,6 +237,7 @@
       <li xml:lang="it">Operazioni di base di modifica delle immagini: rotazione, ritaglio, ridimensionamento, specchio, rotazione, riduzione occhi rossi, e correzione di luminosità, contrasto o gamma</li>
       <li xml:lang="ka">გამოსახულების მარტივი რედაქტორი: მობრუნება, ამოჭრა, ზომის შეცვლა, სარკისებურად გარდაქმნა, წითელი თვალის ეფექტის მოცილება, სიკაშკაშის, კონტრასტისა და გამის მორგება</li>
       <li xml:lang="ko">간단한 그림 편집: 회전, 자르기, 크기 조정, 반전, 적목 감소, 밝기, 명암, 감마 조정</li>
+      <li xml:lang="lv">Vienkārša attēlu rediģēšana: pagriešana, apgriešana, izmēra maiņa, spoguļošana, apmešana, sarkano acu efekta samazināšana, kā arī spilgtuma, kontrasta un gammas koriģēšana</li>
       <li xml:lang="nl">Eenvoudige bewerkingen van afbeelding: draaien, bijsnijden, grootte wijzigen, spiegelen, omklappen, rode ogen reductie en aanpassen van helderheid, contrast of gamma</li>
       <li xml:lang="nn">Enkel biletredigering: dreiing, avskjering, spegelvending, fjerning av raude auge og justering av lysstyrke, kontrast og gamma</li>
       <li xml:lang="pl">Proste edytowanie obrazów: obrót, przycięcie, zmiana rozmiaru, odbicie w pionie i poziomie, usuwanie czerwonych oczu, dostosowywanie jasności, -kontrastu, -gammy</li>
@@ -267,6 +272,7 @@
       <li xml:lang="it">Annota e contrassegna immagini con frecce, forme, caselle di testo, timbri e altro</li>
       <li xml:lang="ka">ისრების, ესკიზების, ტექსტური ფანჯრების, გამოსახულებების შტამპების და ა.შ. ანოტაცია და მონიშვნა</li>
       <li xml:lang="ko">화살표, 도형, 텍스트 상자, 스탬프 등으로 그림 강조 및 꾸미기</li>
+      <li xml:lang="lv">Attēlu anotēšana un marķēšana ar bultām, ģeometriskām formām, tekstlodziņiem, zīmogiem u.c.</li>
       <li xml:lang="nl">Voorzie en markeer afbeeldingen met pijlen, vormen, tekstvakken, afbeeldingstempels en meer</li>
       <li xml:lang="nn">Legg piler, tekst, figurar og andre biletelement på bileta</li>
       <li xml:lang="pl">Opisuj obrazy strzałkami, kształtami, polami tekstowymi, stemplami i więcej</li>
@@ -303,6 +309,7 @@
       <li xml:lang="it">Semplici azioni di gestione file come copia, spostamento, eliminazione ed altre</li>
       <li xml:lang="ka">ფაილების ისეთი მარტივი მანიპულაციების მხარდაჭერა, როგორიცაა კოპირება, გადატანა, წაშლა და სხვა</li>
       <li xml:lang="ko">파일 복사, 이동, 삭제와 같은 기본 파일 관리 작업</li>
+      <li xml:lang="lv">Pamata datņu pārvaldnieka darbības, piemēram, kopēt, pārvietot, dzēst un citas</li>
       <li xml:lang="nl">Basis bestandsbeheeracties zoals kopiëren, verplaatsen, verwijderen en andere</li>
       <li xml:lang="nn">Enkle filhandlingar, som kopiering, flytting og sletting</li>
       <li xml:lang="pa">ਮੁੱਢਲੇ ਫਾਇਲ ਇੰਤਜ਼ਾਮ ਕਾਰਵਾਈਆਂ ਜਿਵੇਂ ਕਿ ਕਾਪੀ ਕਰਨਾ, ਭੇਜਣਾ, ਹਟਾਉਣਾ ਤੇ ਹੋਰ</li>
@@ -347,6 +354,7 @@
       <li xml:lang="ka">შეუძლია ფუნქციონირება როგორც ცალკე აპლიკაციას, ისე, როგორც Konquero-ში ჩადგმულ პროგრამას</li>
       <li xml:lang="ko">단독 앱 및 Konqueror 웹 브라우저의 플러그인으로 작동</li>
       <li xml:lang="lt">Veikia kaip pavienė programa ir kaip įterpta žiūryklė Konqueror naršyklėje</li>
+      <li xml:lang="lv">Darbojas gan kā atsevišķa programma, gan arī kā iegults skatītājs „Konqueror“ tīmekļa pārlūkā</li>
       <li xml:lang="nb">Virker både som et frittstående program og som innebygget viser i nettleseren Konqueror</li>
       <li xml:lang="nds">Funkscheneert för sik oder inbett na den Nettkieker Konqueror</li>
       <li xml:lang="nl">Functies zowel als een alleenstaande toepassing als een ingebedde viewer in de webbrowser Konqueror</li>
@@ -407,6 +415,7 @@
       <caption xml:lang="ka">Gwenview</caption>
       <caption xml:lang="ko">Gwenview</caption>
       <caption xml:lang="lt">Gwenview</caption>
+      <caption xml:lang="lv">Gwenview</caption>
       <caption xml:lang="nb">Gwenview</caption>
       <caption xml:lang="nds">Gwenview</caption>
       <caption xml:lang="nl">Gwenview</caption>
@@ -459,6 +468,7 @@
       <caption xml:lang="ka">გამოიყენეთ Gwenview თქვენი სურათების კოლექციების სამართავად</caption>
       <caption xml:lang="ko">Gwenview로 그림 모음집 관리</caption>
       <caption xml:lang="lt">Naudokite Gwenview savo paveikslų kolekcijos tvarkymui</caption>
+      <caption xml:lang="lv">Izmantojiet „Gwenview“, lai pārvaldītu savu attēlu kolekciju</caption>
       <caption xml:lang="nl">Gwenview gebruiken om uw verzameling afbeeldingen te beheren</caption>
       <caption xml:lang="nn">Bruk Gwenview til å halda styr på biletsamlinga di</caption>
       <caption xml:lang="pa">ਤੁਹਾਡੇ ਚਿੱਤਰ ਭੰਡਾਰ ਦੇ ਇੰਤਜ਼ਾਮ ਲਈ ਗਵਿਨ-ਵਿਊ ਵਰਤੋ</caption>
