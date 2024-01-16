@@ -157,7 +157,7 @@ set(gwenviewlib_SRCS
     touch/touch_helper.cpp
     ${GV_JPEG_DIR}/transupp.c
     )
-if (kImageAnnotator_FOUND)
+if (kImageAnnotator_FOUND OR kImageAnnotator-Qt6_FOUND)
     set(gwenviewlib_SRCS ${gwenviewlib_SRCS}
         annotate/annotatedialog.cpp
         annotate/annotateoperation.cpp
@@ -340,7 +340,7 @@ if (GWENVIEW_SEMANTICINFO_BACKEND_BALOO)
         )
 endif()
 
-if(kImageAnnotator_FOUND)
+if(kImageAnnotator_FOUND OR kImageAnnotator-Qt6_FOUND)
     target_link_libraries(gwenviewlib kImageAnnotator::kImageAnnotator)
 endif()
 
