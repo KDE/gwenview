@@ -107,6 +107,7 @@ GenericName[ka]=სურათები დასათვალიერებ
 GenericName[kk]=KDE кескін қарау құралы
 GenericName[ko]=KDE 그림 뷰어
 GenericName[lt]=KDE paveikslų žiūryklė
+GenericName[lv]=KDE attēlu skatītājs
 GenericName[ml]=കെഡിഇ ചിത്രദര്‍ശിനി
 GenericName[mr]=केडीई प्रतिमा प्रदर्शक
 GenericName[nb]=KDE bildeviser
