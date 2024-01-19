@@ -2851,6 +2851,3 @@ msgstr "&Файл"
 #, kde-format
 msgid "&View"
 msgstr "&Изглед"
-
-#~ msgid "&Settings"
-#~ msgstr "&Настройки"
