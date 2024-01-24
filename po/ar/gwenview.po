@@ -2,14 +2,14 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 # Mohammed Berdai <stuntgp2000@gmail.com>, 2008.
-# zayed <zayed.alsaidi@gmail.com>, 2008, 2021, 2022, 2023.
+# SPDX-FileCopyrightText: 2008, 2021, 2022, 2023, 2024 zayed <zayed.alsaidi@gmail.com>
 # Abdalrahim G. Fakhouri <abdilra7eem@yahoo.com>, 2014.
 msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-24 02:22+0000\n"
-"PO-Revision-Date: 2023-06-08 10:54+0400\n"
+"PO-Revision-Date: 2024-01-17 20:56+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.08.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2740,7 +2740,7 @@ msgstr "أعد التحجيم الصورة"
 #: lib/resize/resizeimagewidget.ui:20
 #, kde-format
 msgid "Estimated new file size:"
-msgstr ""
+msgstr "حجم الملف الجديد المُقدَّر:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: lib/resize/resizeimagewidget.ui:47
@@ -2753,7 +2753,7 @@ msgstr "الحجم الجديد:"
 #: lib/resize/resizeimagewidget.ui:63 lib/resize/resizeimagewidget.ui:195
 #, no-c-format, kde-format
 msgid " %"
-msgstr "٪"
+msgstr " ٪"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, mHeightSpinBox)
 #. i18n: ectx: property (suffix), widget (QSpinBox, mWidthSpinBox)
@@ -2764,8 +2764,7 @@ msgstr "بكسل"
 
 #. i18n: ectx: property (text), widget (QLabel, mCurrentSizeLabel)
 #: lib/resize/resizeimagewidget.ui:115
-#, fuzzy, kde-format
-#| msgid "Current size:"
+#, kde-format
 msgid "Current file size:"
 msgstr "الحجم الحالي:"
 
