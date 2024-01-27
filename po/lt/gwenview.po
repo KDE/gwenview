@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-01-11 00:36+0000\n"
-"PO-Revision-Date: 2022-12-12 21:19+0200\n"
+"PO-Revision-Date: 2024-01-26 20:13+0200\n"
 "Last-Translator: Moo <<>>\n"
 "Language-Team: lt <kde-i18n-lt@kde.org>\n"
 "Language: lt\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n%10>=2 && (n%100<10 || n"
 "%100>=20) ? 1 : n%10==0 || (n%100>10 && n%100<20) ? 2 : 3);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -112,7 +112,7 @@ msgstr "Įsiminti aplankus ir URL adresus"
 #: app/advancedconfigpage.ui:240
 #, kde-format
 msgid "Enable color management"
-msgstr ""
+msgstr "Įjungti spalvų tvarkymą"
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileHelpLabel)
 #: app/advancedconfigpage.ui:265
@@ -123,13 +123,16 @@ msgid ""
 "is only appropriate for displays that are calibrated to the sRGB color space "
 "or are known to provide an incorrect color profile."
 msgstr ""
+"Kai spalvų tvarkymas yra išjungtas, programa Gwenview konvertuos paveikslus "
+"į sRGB spalvų erdvę, o ne į spalvų erdvę, kurią ji aptiks ekranui. Tai "
+"taikoma tik ekranams, kurie yra kalibruoti į sRGB spalvų erdvę arba, kurie, "
+"kaip yra žinoma, pateikia neteisingą spalvų profilį."
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileLabel)
 #: app/advancedconfigpage.ui:275
-#, fuzzy, kde-format
-#| msgid "Too many arguments."
+#, kde-format
 msgid "Color management:"
-msgstr "Per daug argumentų."
+msgstr "Spalvų tvarkymas:"
 
 #: app/alignwithsidebarwidgetaction.cpp:23
 #, kde-format
@@ -437,7 +440,7 @@ msgstr "Sukurti aplanką..."
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Open in New Window"
-msgstr ""
+msgstr "Atverti naujame lange"
 
 #: app/fileopscontextmanageritem.cpp:189
 #, kde-format
@@ -1282,7 +1285,7 @@ msgstr "Operacijos"
 #: app/mainwindow.cpp:934
 #, kde-format
 msgid "Viewing media"
-msgstr ""
+msgstr "Medijos peržiūra"
 
 #: app/mainwindow.cpp:1412
 #, kde-format
@@ -1646,6 +1649,13 @@ msgid ""
 "and contain multiple rows of images; <link url='%1'>configure these options "
 "in the settings</link>.</para>"
 msgstr ""
+"<para>Tai perjungia mažą juostą, atvaizduojančią visus kitus dabartiniame "
+"aplanke esančius paveikslus. Pasirinkus vieną iš tų paveikslų, pasikeis šiuo "
+"metu atvaizduojamas paveikslas.</para><para>Pasirinkite vienu metu kelis "
+"paveikslus, kad matytumėte juos vienas šalia kito.</para><para>Juosta "
+"pasirinktinai gali būti perkelta į dešinę ekrano pusę ir atvaizduoti kelias "
+"paveikslų eilutes; <link url='%1'>konfigūruokite šias parinktis nuostatose</"
+"link>.</para>"
 
 #: app/viewmainpage.cpp:562
 #, kde-format
@@ -1961,19 +1971,19 @@ msgstr "Importuojami dokumentai..."
 #, kde-format
 msgctxt "@info above install button when Kamera is not installed"
 msgid "Support for your camera is not installed."
-msgstr ""
+msgstr "Palaikymas jūsų fotoaparatui nėra įdiegtas."
 
 #: importer/thumbnailpage.cpp:233
 #, kde-format
 msgctxt "@info above install button, %1 protocol name %2 error text from KIO"
 msgid "The protocol support library for \"%1\" is not installed. Error: %2"
-msgstr ""
+msgstr "Nėra įdiegta „%1“ protokolo palaikymo biblioteka. Klaida: %2"
 
 #: importer/thumbnailpage.cpp:235
 #, kde-format
 msgctxt "@info above install button, %1 protocol name"
 msgid "The protocol support library for \"%1\" is not installed."
-msgstr ""
+msgstr "Nėra įdiegta „%1“ protokolo palaikymo biblioteka."
 
 #: importer/thumbnailpage.cpp:247
 #, kde-format
@@ -1981,18 +1991,21 @@ msgctxt "@info:usagetip above install button"
 msgid ""
 "After finishing the installation process, restart this Importer to continue."
 msgstr ""
+"Pasibaigus diegimo procesui, norėdami tęsti, paleiskite šį importavimo "
+"įrankį iš naujo."
 
 #: importer/thumbnailpage.cpp:254
 #, kde-format
 msgctxt "@info:tooltip for a button, %1 protocol name"
 msgid "Launch Discover to install the protocol support library for \"%1\""
 msgstr ""
+"Paleisti Discover, kad būtų įdiegta „%1“ protokolo palaikymo biblioteka."
 
 #: importer/thumbnailpage.cpp:256
 #, kde-format
 msgctxt "@action:button"
 msgid "Install Support for this Camera…"
-msgstr ""
+msgstr "Įdiegti palaikymą šiam fotoaparatui…"
 
 #: importer/thumbnailpage.cpp:257
 #, kde-format
@@ -2002,12 +2015,15 @@ msgid ""
 "to launch Discover to install Kamera to enable protocol support for "
 "\"camera:/\" on your system."
 msgstr ""
+"Norint skaityti iš to fotoaparato, jūsų sistemoje turi būti įdiegtas "
+"papildinys Kamera. Spustelėkite čia, norėdami paleisti Discover ir įdiegti "
+"Kamera, kad įgalintumėte „camera:/“ protokolo palaikymą savo sistemoje."
 
 #: importer/thumbnailpage.cpp:260
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Install Protocol Support for \"%1\"…"
-msgstr ""
+msgstr "Įdiegti „%1“ protokolo palaikymą…"
 
 #: importer/thumbnailpage.cpp:261
 #, kde-format
@@ -2016,12 +2032,15 @@ msgid ""
 "Click here to launch Discover to install the missing protocol support "
 "library to enable the protocol support for \"%1:/\" on your system."
 msgstr ""
+"Spustelėkite čia, norėdami paleisti Discover ir įdiegti trūkstamą protokolo "
+"palaikymo biblioteką, kad įgalintumėte „%1:/“ protokolo palaikymą savo "
+"sistemoje."
 
 #: importer/thumbnailpage.cpp:265
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Search the Web for How to Install Protocol Support for \"%1\"…"
-msgstr ""
+msgstr "Ieškoti internete, kaip įsidiegti „%1“ protokolo palaikymą…"
 
 #: importer/thumbnailpage.cpp:281
 #, kde-format
@@ -2029,7 +2048,7 @@ msgctxt ""
 "@info this text will be used as a search term in an online search engine, %1 "
 "protocol name"
 msgid "How to install protocol support for \"%1\" on Linux"
-msgstr ""
+msgstr "Linux diegti %1 protokolą"
 
 #: importer/thumbnailpage.cpp:282
 #, kde-format
@@ -2037,7 +2056,7 @@ msgctxt ""
 "search engine URL, %1 search keyword, and translators can replace duckduckgo "
 "with other search engines"
 msgid "https://duckduckgo.com/?q=%1"
-msgstr ""
+msgstr "https://duckduckgo.com/?q=%1"
 
 #: importer/thumbnailpage.cpp:323
 #, kde-format
@@ -2056,6 +2075,9 @@ msgid ""
 "Opening Discover failed.<nl/>Please check if Discover is installed on your "
 "system, or use your system's package manager to install \"Kamera\" package."
 msgstr ""
+"Nepavyko atverti Discover.<nl/>Patikrinkite, ar jūsų sistemoje yra įdiegta "
+"Discover, arba naudokite sistemos paketų tvarkytuvę, kad įdiegtumėte "
+"„Kamera“ paketą."
 
 #: importer/thumbnailpage.cpp:492
 #, kde-kuit-format
@@ -2065,6 +2087,9 @@ msgid ""
 "system, or use your system's package manager to install the protocol support "
 "library for \"%1\"."
 msgstr ""
+"Nepavyko atverti Discover.<nl/>Patikrinkite, ar jūsų sistemoje yra įdiegta "
+"Discover, arba naudokite sistemos paketų tvarkytuvę, kad įdiegtumėte „%1“ "
+"protokolo palaikymo biblioteką."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: importer/thumbnailpage.ui:173
@@ -2280,12 +2305,10 @@ msgid "%1x%2"
 msgstr "%1x%2"
 
 #: lib/documentview/documentview.cpp:264 lib/zoomcombobox/zoomcombobox.cpp:318
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip of custom toolbar button"
-#| msgid "%1"
+#, kde-format
 msgctxt "Percent value"
 msgid "%1%"
-msgstr "%1"
+msgstr "%1%"
 
 #: lib/documentview/documentview.cpp:543
 #, kde-format
@@ -2334,6 +2357,18 @@ msgid ""
 "are displayed at a previous zoom value instead <link url='%2'>in the "
 "settings</link>.</para>"
 msgstr ""
+"<para>Tai patalpina paveikslą į prieinamą atvaizdavimo sritį:"
+"<list><item>Paveikslai, kurie yra didesni nei atvaizdavimo sritis, yra "
+"rodomi mažesnio dydžio taip, kad tilptų.</item><item>Paveikslai, kurie yra "
+"mažesni nei atvaizdavimo sritis yra rodomi jiems įprasto dydžio. Jei vietoj "
+"to, norėtumėte, kad mažesni paveikslai naudotų visą prieinamą atvaizdavimo "
+"sritį, įjunkite <link url='%2'>nuostatose</link> <emphasis>Padidinti "
+"mažesnius paveikslus</emphasis>.</item></list></para><para>Jei „%1“ jau "
+"įjungta, paspaudus dar kartą, parinktis bus išjungta ir vietoj to, "
+"paveikslas bus rodomas jam įprasto dydžio.</para><para>„%1“ yra numatytoji "
+"paveikslų mastelio veiksena. Ji gali būti pakeista <link "
+"url='%2'>nuostatose</link>, kad vietoj to, paveikslai būtų rodomi naudojant "
+"ankstesnę mastelio reikšmę.</para>"
 
 #: lib/documentview/documentviewcontroller.cpp:83
 #, kde-format
@@ -2349,11 +2384,7 @@ msgid "Fill"
 msgstr "Užpildyti"
 
 #: lib/documentview/documentviewcontroller.cpp:90
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "@action:button Zoom to original size, shown in status bar, keep it short "
-#| "please"
-#| msgid "100%"
+#, kde-format
 msgctxt "Original image size percent value"
 msgid "100%"
 msgstr "100%"
@@ -2565,27 +2596,25 @@ msgstr "Failo dydis"
 #, kde-format
 msgctxt "@item:intable"
 msgid "Date Created"
-msgstr ""
+msgstr "Sukūrimo data"
 
 #: lib/imagemetainfomodel.cpp:257
-#, fuzzy, kde-format
-#| msgid "One image modified"
-#| msgid_plural "%1 images modified"
+#, kde-format
 msgctxt "@item:intable"
 msgid "Date Modified"
-msgstr "Pakeistas vienas paveikslas"
+msgstr "Modifikavimo data"
 
 #: lib/imagemetainfomodel.cpp:258
 #, kde-format
 msgctxt "@item:intable"
 msgid "Date Accessed"
-msgstr ""
+msgstr "Prieigos data"
 
 #: lib/imagemetainfomodel.cpp:259
 #, kde-format
 msgctxt "@item:intable"
 msgid "Path"
-msgstr ""
+msgstr "Kelias"
 
 #: lib/imagemetainfomodel.cpp:260
 #, kde-format
@@ -2600,12 +2629,10 @@ msgid "Comment"
 msgstr "Komentaras"
 
 #: lib/imagemetainfomodel.cpp:262
-#, fuzzy, kde-format
-#| msgctxt "@item:intable"
-#| msgid "File Time"
+#, kde-format
 msgctxt "@item:intable"
 msgid "File Type"
-msgstr "Failo laikas"
+msgstr "Failo tipas"
 
 #: lib/imagemetainfomodel.cpp:324
 #, kde-format
@@ -2762,7 +2789,7 @@ msgstr "Keisti paveikslo dydį"
 #: lib/resize/resizeimagewidget.ui:20
 #, kde-format
 msgid "Estimated new file size:"
-msgstr ""
+msgstr "Apskaičiuotas naujas failo dydis:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: lib/resize/resizeimagewidget.ui:47
@@ -2786,10 +2813,9 @@ msgstr " piks."
 
 #. i18n: ectx: property (text), widget (QLabel, mCurrentSizeLabel)
 #: lib/resize/resizeimagewidget.ui:115
-#, fuzzy, kde-format
-#| msgid "Current size:"
+#, kde-format
 msgid "Current file size:"
-msgstr "Dabartinis dydis:"
+msgstr "Dabartinis failo dydis:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, mKeepAspectCheckBox)
 #: lib/resize/resizeimagewidget.ui:145
