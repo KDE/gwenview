@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-01-11 00:36+0000\n"
-"PO-Revision-Date: 2024-01-11 21:49-0600\n"
+"PO-Revision-Date: 2024-01-28 20:00-0600\n"
 "Last-Translator: A S Alam <aalam@punlinux.org>\n"
 "Language-Team: Punjabi <kde-i18n-doc@kde.org>\n"
 "Language: pa\n"
@@ -2629,7 +2629,7 @@ msgstr "ਚਿੱਤਰ ਨੂੰ ਮੁੜ-ਆਕਾਰ ਕਰੋ"
 #: lib/resize/resizeimagewidget.ui:20
 #, kde-format
 msgid "Estimated new file size:"
-msgstr ""
+msgstr "ਅੰਦਾਜ਼ਨ ਨਵਾਂ ਫਾਇਲ ਆਕਾਰ:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: lib/resize/resizeimagewidget.ui:47
