@@ -23,6 +23,7 @@
   <name xml:lang="fi">Gwenview</name>
   <name xml:lang="fr">Gwenview</name>
   <name xml:lang="gl">Gwenview</name>
+  <name xml:lang="he">Gwenview</name>
   <name xml:lang="hi">ग्वेन-व्यू</name>
   <name xml:lang="hsb">Gwenview</name>
   <name xml:lang="hu">Gwenview</name>
@@ -76,6 +77,7 @@
   <summary xml:lang="fi">Kuvankatselin</summary>
   <summary xml:lang="fr">Afficheur d'image</summary>
   <summary xml:lang="gl">Visor de imaxes</summary>
+  <summary xml:lang="he">מציג תמונות</summary>
   <summary xml:lang="hi">छवि प्रदर्शक</summary>
   <summary xml:lang="hsb">Wobhladowar za wobrazy</summary>
   <summary xml:lang="hu">Képmegjelenítő</summary>
@@ -130,6 +132,7 @@
     <p xml:lang="fi">Gwenview on KDE:n nopea ja helppokäyttöinen kuvakatselin, joka on ihanteellinen kuvakokoelmien selaukseen ja esittämiseen.</p>
     <p xml:lang="fr">Gwenview est un afficheur d'images rapide et facile à utiliser pour KDE, idéal pour parcourir et afficher une collection d'images.</p>
     <p xml:lang="gl">Gwenview é un visor de imaxes por KDE rápido e doado de usar, ideal para examinar e amosar unha colección de imaxes.</p>
+    <p xml:lang="he">Gwenview הוא מציג תמונות מהיר וקל לשימוש מבית KDE, מושלם לדפדוף והצגת אוספי תמונות.</p>
     <p xml:lang="hi">केडीई द्वारा ग्वेनव्यू एक तेज़ और उपयोग में आसान छवि दर्शक है, जो छवियों के संग्रह को ब्राउज़ करने और प्रदर्शित करने के लिए आदर्श है।</p>
     <p xml:lang="hsb">Gwenview je spěšny a přihódny wobhladowar za wobrazy we KDE, idealny za přehladowanje a pokazowanje zběrki wobrazow.</p>
     <p xml:lang="hu">A Gwenview egy gyors és egyszerűen használható képmegjelenítő a KDE-hez, ideális képgyűjtemények böngészéséhez és megjelenítéséhez.</p>
@@ -182,6 +185,7 @@
     <p xml:lang="fi">Ominaisuudet:</p>
     <p xml:lang="fr">Fonctionnalités :</p>
     <p xml:lang="gl">Funcionalidades:</p>
+    <p xml:lang="he">יכולות:</p>
     <p xml:lang="hi">विशेषताएँ :</p>
     <p xml:lang="hsb">Wosebitosće:</p>
     <p xml:lang="hu">Szolgáltatások:</p>
@@ -231,6 +235,7 @@
       <li xml:lang="fi">Yksinkertainen kuvanmuokkaus: kääntäminen, rajaaminen, koon muuttaminen, peilaaminen, kiepauttaminen, punasilmäisyyden vähentäminen sekä kirkkauden, kontrastin tai gamman säätäminen</li>
       <li xml:lang="fr">Modifications simples d'images : rotation, rognage, re-dimensionnement, inversion, réduction des yeux rouges, ajustement de la luminosité, du contraste et du gamma.</li>
       <li xml:lang="gl">Edición sinxela de imaxes: rotar, recortar, cambiar de tamaño, inverter en horizontal ou vertical, reducir os ollos vermellos e axustar o brillo, o contraste e a tonalidade.</li>
+      <li xml:lang="he">עריכת תמונות פשוטה: סיבוב, חיתוך, שינוי גודל, שיקוף, היפוך, הפחתת עיניים אדומות והתאמת בהירות, ניגודיות או גמא</li>
       <li xml:lang="hu">Egyszerű képszerkesztés: forgatás, levágás, tükrözés, vöröszem-eltávolítás és fényerő-, kontraszt vagy gammabeállítás</li>
       <li xml:lang="ia">Editar de imagine simple: rota, tonde, redimensiona, reflecte, gira, reduce oculos rubie, e adapta brillantia, contrasto, o gamma</li>
       <li xml:lang="id">Pengeditan gambar yang sederhana: rotasi, ubah ukuran, cermin, jungkir, reduksi mata merah, dan menyetel kecerahan, kontras, atau gamma</li>
@@ -267,6 +272,7 @@
       <li xml:lang="fi">Merkitse kuvia nuolin, kuvioin, tekstilaatikoin, leimoin jne.</li>
       <li xml:lang="fr">Annotez et balisez les images avec des flèches, des formes, des zones de texte, des timbres d'images et plus encore</li>
       <li xml:lang="gl">Anotar e marcar imaxes con frechas, formas, caixas de texto, selos de imaxe e máis.</li>
+      <li xml:lang="he">הוספת הערות וסימונים על תמונות עם חיצים, צורות, תיבות טקסט, חותמות בצורות שונות ועוד</li>
       <li xml:lang="hu">Képek magyarázata és jelölése nyilakkal, alakzatokkal, szövegdobozokkal, képbélyegzőkkel és egyebekkel</li>
       <li xml:lang="ia">Annota e marca imagines con flechas, umbras, quadratos de texto, timbros de imagine e alteres</li>
       <li xml:lang="id">Menganotasi dan menandai gambar dengan anak panah, bentuk, cap gambar, dan selebihnya</li>
@@ -305,6 +311,7 @@
       <li xml:lang="fi">Tiedostonhallinnan perustoiminnot kuten kopioiminen, siirtäminen, poistaminen jne.</li>
       <li xml:lang="fr">Actions basiques de gestion de fichiers comme copier, déplacer, supprimer et autres</li>
       <li xml:lang="gl">Accións básicas de xestión de ficheiros como copiar, mover, eliminar, etc.</li>
+      <li xml:lang="he">פעולות ניהול קבצים פשוטות כגון העתקה, העברה, מחיקה ועוד</li>
       <li xml:lang="hu">Egyszerű fájlkezelési műveletek, mint például másolás, áthelyezés, törlés és egyebek</li>
       <li xml:lang="ia">Actiones de gestion de file basic tal como copiar,mover, deler, e alteres</li>
       <li xml:lang="id">Tindakan pengelolaan file dasar seperti salin, pindah, hapus, dan lainnya</li>
@@ -347,6 +354,7 @@
       <li xml:lang="fi">Toimii sekä erillisenä ohjelmana että upotettuna katselimena Konqueror-verkkoselaimessa</li>
       <li xml:lang="fr">Fonctionne à la fois comme application autonome et comme afficheur embarqué dans le navigateur web Konqueror</li>
       <li xml:lang="gl">Pode usarse como unha aplicación autónoma e tamén como un visor incrustado no navegador web Konqueror.</li>
+      <li xml:lang="he">יכולות גם כיישום עצמאי וגם כמציג מוטמע בדפדפן Konquerer</li>
       <li xml:lang="hi">यह कॉन्करर वेब ब्राउज़र एम्बेडेड व्यूअरमें और स्टैंडअलोन एप्लिकेशन दोनों के रूप में कार्य करता है</li>
       <li xml:lang="hsb">Funguje jako samostatna aplikacija a tež jako integrowana přehladowarka w konquerorje</li>
       <li xml:lang="hu">Önálló alkalmazásként és a Konqueror webböngészőbe épített képmegjelenítőként is működik</li>
@@ -408,6 +416,7 @@
       <caption xml:lang="fi">Gwenview</caption>
       <caption xml:lang="fr">Gwenview</caption>
       <caption xml:lang="gl">Gwenview</caption>
+      <caption xml:lang="he">Gwenview</caption>
       <caption xml:lang="hi">ग्वेन-व्यू</caption>
       <caption xml:lang="hsb">Gwenview</caption>
       <caption xml:lang="hu">Gwenview</caption>
@@ -462,6 +471,7 @@
       <caption xml:lang="fi">Hallitse kuvakokoelmaasi Gwenview’lla</caption>
       <caption xml:lang="fr">Utiliser Gwenview pour gérer votre collection d'images.</caption>
       <caption xml:lang="gl">Use Gwenview para xestionar a súa colección de imaxes</caption>
+      <caption xml:lang="he">אפשר להשתמש ב־Gwenview כדי לנהל את אוסף התמונות שלך</caption>
       <caption xml:lang="hi">अपने छवि संग्रह को प्रबंधित करने के लिए ग्वेन-व्यू का उपयोग करें</caption>
       <caption xml:lang="hu">A Gwenview használata a képgyűjteménye kezeléséhez</caption>
       <caption xml:lang="ia">Usa Guenview pro gerer tu collection de image</caption>
