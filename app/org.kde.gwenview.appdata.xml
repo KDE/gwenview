@@ -3,6 +3,7 @@
   <id>org.kde.gwenview.desktop</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
+  <developer_name translate="no">KDE</developer_name>
   <name>Gwenview</name>
   <name xml:lang="ar">جونفيو</name>
   <name xml:lang="az">Gwenview</name>
@@ -396,7 +397,7 @@
   <url type="donation">https://www.kde.org/community/donations/?app=gwenview&amp;source=appdata</url>
   <screenshots>
     <screenshot type="default">
-      <caption>Gwenview</caption>
+      <caption>Main application window displaying an image and controls on the left</caption>
       <caption xml:lang="ar">جونفيو</caption>
       <caption xml:lang="az">Gwenview</caption>
       <caption xml:lang="be">Gwenview</caption>
