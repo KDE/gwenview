@@ -74,6 +74,7 @@ Name[zh_TW]=Gwenview
 GenericName=Image Viewer
 GenericName[ca]=Visualitzador d'imatges
 GenericName[eo]=Bildrigardilo
+GenericName[es]=Visor de imágenes
 GenericName[eu]=Irudi erakuslea
 GenericName[he]=מציג תמונות
 GenericName[ia]=Visor de Image
