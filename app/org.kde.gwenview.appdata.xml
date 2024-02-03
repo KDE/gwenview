@@ -398,60 +398,6 @@
   <screenshots>
     <screenshot type="default">
       <caption>Main application window displaying an image and controls on the left</caption>
-      <caption xml:lang="ar">جونفيو</caption>
-      <caption xml:lang="az">Gwenview</caption>
-      <caption xml:lang="be">Gwenview</caption>
-      <caption xml:lang="bg">Gwenview</caption>
-      <caption xml:lang="bs">Gwenview</caption>
-      <caption xml:lang="ca">Gwenview</caption>
-      <caption xml:lang="ca-valencia">Gwenview</caption>
-      <caption xml:lang="cs">Gwenview</caption>
-      <caption xml:lang="da">Gwenview</caption>
-      <caption xml:lang="de">Gwenview</caption>
-      <caption xml:lang="el">Gwenview</caption>
-      <caption xml:lang="en-GB">Gwenview</caption>
-      <caption xml:lang="eo">Gwenview</caption>
-      <caption xml:lang="es">Gwenview</caption>
-      <caption xml:lang="et">Gwenview</caption>
-      <caption xml:lang="eu">Gwenview</caption>
-      <caption xml:lang="fi">Gwenview</caption>
-      <caption xml:lang="fr">Gwenview</caption>
-      <caption xml:lang="gl">Gwenview</caption>
-      <caption xml:lang="he">Gwenview</caption>
-      <caption xml:lang="hi">ग्वेन-व्यू</caption>
-      <caption xml:lang="hsb">Gwenview</caption>
-      <caption xml:lang="hu">Gwenview</caption>
-      <caption xml:lang="ia">Gwenview</caption>
-      <caption xml:lang="id">Gwenview</caption>
-      <caption xml:lang="is">Gwenview</caption>
-      <caption xml:lang="it">Gwenview</caption>
-      <caption xml:lang="ka">Gwenview</caption>
-      <caption xml:lang="ko">Gwenview</caption>
-      <caption xml:lang="lt">Gwenview</caption>
-      <caption xml:lang="lv">Gwenview</caption>
-      <caption xml:lang="nb">Gwenview</caption>
-      <caption xml:lang="nds">Gwenview</caption>
-      <caption xml:lang="nl">Gwenview</caption>
-      <caption xml:lang="nn">Gwenview</caption>
-      <caption xml:lang="pa">ਗਵਿਨ-ਵਿਊ</caption>
-      <caption xml:lang="pl">Gwenview</caption>
-      <caption xml:lang="pt">Gwenview</caption>
-      <caption xml:lang="pt-BR">Gwenview</caption>
-      <caption xml:lang="ro">Gwenview</caption>
-      <caption xml:lang="ru">Gwenview</caption>
-      <caption xml:lang="sk">Gwenview</caption>
-      <caption xml:lang="sl">Gwenview</caption>
-      <caption xml:lang="sr">Гвенвју</caption>
-      <caption xml:lang="sr-Latn">GwenView</caption>
-      <caption xml:lang="sr-ijekavian">Гвенвју</caption>
-      <caption xml:lang="sr-ijekavianlatin">GwenView</caption>
-      <caption xml:lang="sv">Gwenview</caption>
-      <caption xml:lang="ta">குவென்வியூ</caption>
-      <caption xml:lang="tr">Akbakış</caption>
-      <caption xml:lang="uk">Gwenview</caption>
-      <caption xml:lang="x-test">xxGwenviewxx</caption>
-      <caption xml:lang="zh-CN">Gwenview 图像查看器</caption>
-      <caption xml:lang="zh-TW">Gwenview</caption>
       <image>https://cdn.kde.org/screenshots/gwenview/gwenview-image.png</image>
     </screenshot>
     <screenshot>
