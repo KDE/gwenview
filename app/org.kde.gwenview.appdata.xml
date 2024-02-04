@@ -4,6 +4,18 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
   <developer_name translate="no">KDE</developer_name>
+  <developer_name translate="no" xml:lang="bg">KDE</developer_name>
+  <developer_name translate="no" xml:lang="ca">KDE</developer_name>
+  <developer_name translate="no" xml:lang="eo">KDE</developer_name>
+  <developer_name translate="no" xml:lang="es">KDE</developer_name>
+  <developer_name translate="no" xml:lang="eu">KDE</developer_name>
+  <developer_name translate="no" xml:lang="he">KDE</developer_name>
+  <developer_name translate="no" xml:lang="ka">KDE</developer_name>
+  <developer_name translate="no" xml:lang="nl">KDE</developer_name>
+  <developer_name translate="no" xml:lang="sl">KDE</developer_name>
+  <developer_name translate="no" xml:lang="tr">KDE</developer_name>
+  <developer_name translate="no" xml:lang="uk">KDE</developer_name>
+  <developer_name translate="no" xml:lang="x-test">xxKDExx</developer_name>
   <name>Gwenview</name>
   <name xml:lang="ar">جونفيو</name>
   <name xml:lang="az">Gwenview</name>
@@ -398,6 +410,18 @@
   <screenshots>
     <screenshot type="default">
       <caption>Main application window displaying an image and controls on the left</caption>
+      <caption xml:lang="bg">Основен прозорец на приложението, показващ изображение и контроли вляво</caption>
+      <caption xml:lang="ca">Finestra principal de l'aplicació que mostra una imatge i els controls a l'esquerra</caption>
+      <caption xml:lang="eo">Ĉefa aplikofenestro montranta bildon kaj regilojn maldekstre</caption>
+      <caption xml:lang="es">Ventana principal de la aplicación que muestra una imagen y controles a la izquierda</caption>
+      <caption xml:lang="eu">Aplikazioaren leiho nagusia, irudi bat eta ezkerrean aginteak azaltzen dituena</caption>
+      <caption xml:lang="he">חלון יישום ראשי שמציג תמונה ופקדים מימין</caption>
+      <caption xml:lang="ka">მთავარი აპლიკაციის ფანჯარა, რომელიც გამოსახულებას და კონტროლებს მარცხნივ აჩვენებს</caption>
+      <caption xml:lang="nl">Hoofdvenster van toepassing die een afbeelding toont en links besturing</caption>
+      <caption xml:lang="sl">Glavno okno aplikacije, ki prikazuje sliko, s kontrolami na levi strani</caption>
+      <caption xml:lang="tr">Bir görseli ve solda denetimleri görüntüleyen ana uygulama ekranı</caption>
+      <caption xml:lang="uk">Головне вікно програми із показаним зображенням та засобами керування ліворуч</caption>
+      <caption xml:lang="x-test">xxMain application window displaying an image and controls on the leftxx</caption>
       <image>https://cdn.kde.org/screenshots/gwenview/gwenview-image.png</image>
     </screenshot>
     <screenshot>
