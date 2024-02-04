@@ -72,6 +72,7 @@ Name[x-test]=xxGwenviewxx
 Name[zh_CN]=Gwenview 图像查看器
 Name[zh_TW]=Gwenview
 GenericName=Image Viewer
+GenericName[bg]=Преглед на изображения
 GenericName[ca]=Visualitzador d'imatges
 GenericName[ca@valencia]=Visor d'imatges
 GenericName[eo]=Bildrigardilo
