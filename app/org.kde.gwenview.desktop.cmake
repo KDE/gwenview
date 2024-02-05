@@ -82,6 +82,7 @@ GenericName[fr]=Visionneuse d'images
 GenericName[he]=מציג תמונות
 GenericName[ia]=Visor de Image
 GenericName[it]=Visore di immagini
+GenericName[ja]=画像ビューア
 GenericName[ka]=სურათების გალერეა
 GenericName[lt]=Paveikslų žiūryklė
 GenericName[nl]=Afbeeldingsviewer
