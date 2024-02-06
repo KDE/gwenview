@@ -92,7 +92,7 @@
   <summary xml:lang="pt">Visualizador de Imagens</summary>
   <summary xml:lang="pt-BR">Visualizador de imagens</summary>
   <summary xml:lang="ro">Vizualizor de imagini</summary>
-  <summary xml:lang="ru">Программа просмотра изображений</summary>
+  <summary xml:lang="ru">Приложение для просмотра изображений</summary>
   <summary xml:lang="sk">Prehliadač obrázkov</summary>
   <summary xml:lang="sl">Pregledovalnik slik</summary>
   <summary xml:lang="sr">Приказивач слика</summary>
@@ -145,7 +145,7 @@
     <p xml:lang="pt">O Gwenview é um visualizador de imagens rápido e simples de usar do KDE, ideal para a navegação e apresentação de uma colecção de imagens.</p>
     <p xml:lang="pt-BR">Gwenview é um visualizador de imagens rápido e fácil de usar, da KDE, ideal para navegar e exibir uma coleção de imagens.</p>
     <p xml:lang="ro">Gwenview e un vizualizor de imagini rapid și ușor de folosit de la KDE, ideal pentru răsfoirea și afișarea unei colecții de imagini.</p>
-    <p xml:lang="ru">Gwenview — быстрая и простая в использовании программа просмотра изображений от KDE.</p>
+    <p xml:lang="ru">Gwenview — быстрое и простое в использовании приложение для просмотра изображений, разработанное KDE.</p>
     <p xml:lang="sk">Gwenview je rýchly a jednoducho použiteľný prehliadač obrázkov pre KDE, ideálny na prehliadanie a zobrazenie kolekcie obrázkov.</p>
     <p xml:lang="sl">Gwenview je hiter in enostaven pregledovalnik slik za KDE. Idealen je za brskanje po in prikazovanje zbirk slik.</p>
     <p xml:lang="sr">Гвенвју је брз и лак за употребу приказивач слика од КДЕ‑а, идеалан за прегледање збирки слика.</p>
@@ -461,7 +461,7 @@
       <caption xml:lang="pt">Use o Gwenview para gerir a sua colecção de imagens</caption>
       <caption xml:lang="pt-BR">Use o Gwenview para gerenciar sua coleção de imagens</caption>
       <caption xml:lang="ro">Folosiți Gwenview pentru a vă gestiona colecția de imagini</caption>
-      <caption xml:lang="ru">Используйте Gwenview для работы с коллекцией изображений</caption>
+      <caption xml:lang="ru">Использование Gwenview для работы с коллекцией изображений</caption>
       <caption xml:lang="sk">Použite Gwenview na správu vašej kolekcie obrázkov</caption>
       <caption xml:lang="sl">Uporabite Gwenview za upravljanje svoje zbirke slik</caption>
       <caption xml:lang="sv">Använd Gwenview för att hantera din bildsamling</caption>
