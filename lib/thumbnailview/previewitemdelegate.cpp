@@ -35,6 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QPointer>
 #include <QPropertyAnimation>
 #include <QSequentialAnimationGroup>
+#include <QTimer>
 #include <QToolButton>
 #include <QUrl>
 
@@ -139,6 +140,8 @@ struct PreviewItemDelegatePrivate {
 
     QPointer<ToolTipWidget> mToolTip;
     QScopedPointer<QAbstractAnimation> mToolTipAnimation;
+
+    bool mPendingUpdateItemUnderMouse = false;
 
     void initSaveButtonPixmap()
     {
@@ -666,6 +669,12 @@ bool PreviewItemDelegate::eventFilter(QObject *object, QEvent *event)
         case QEvent::MouseButtonRelease:
             return d->mouseButtonEventFilter(event->type());
 
+        case QEvent::Paint:
+            if (d->mPendingUpdateItemUnderMouse) {
+                updateIndexUnderMouse();
+            }
+            return false;
+
         default:
             return false;
         }
@@ -920,6 +929,12 @@ void PreviewItemDelegate::setTextElideMode(Qt::TextElideMode mode)
 
 void PreviewItemDelegate::slotRowsChanged()
 {
+    d->mPendingUpdateItemUnderMouse = true;
+}
+
+void PreviewItemDelegate::updateIndexUnderMouse()
+{
+    d->mPendingUpdateItemUnderMouse = false;
     // We need to update hover ui because the current index may have
     // disappeared: for example if the current image is removed with "del".
     QPoint pos = d->mView->viewport()->mapFromGlobal(QCursor::pos());
