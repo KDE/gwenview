@@ -99,6 +99,7 @@ Q_SIGNALS:
     void setDocumentRatingRequested(const QUrl &, int rating);
 
 private Q_SLOTS:
+    void updateIndexUnderMouse();
     void setThumbnailSize(const QSize &);
 
     void slotSaveClicked();
