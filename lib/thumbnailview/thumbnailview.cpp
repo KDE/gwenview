@@ -1008,7 +1008,7 @@ void ThumbnailView::generateThumbnailsForItems()
         // Compute distance
         int distance;
         const QRect itemRect = visualRect(index);
-        if (itemRect.isValid()) {
+        if (itemRect.intersected(visibleRect).isValid()) {
             // Item is visible, order thumbnails from left to right, top to bottom
             // Distance is computed so that it is between 0 and visibleSurface
             distance = itemRect.top() * visibleRect.width() + itemRect.left();
