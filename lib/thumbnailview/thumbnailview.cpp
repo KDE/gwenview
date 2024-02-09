@@ -39,6 +39,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QWindow>
 
 // KF
+#include <KDirLister>
 #include <KDirModel>
 #include <KIconLoader>
 #include <KPixmapSequence>
@@ -55,6 +56,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "urlutils.h"
 #include <lib/gvdebug.h>
 #include <lib/scrollerutils.h>
+#include <lib/semanticinfo/sorteddirmodel.h>
 #include <lib/thumbnailprovider/thumbnailprovider.h>
 #include <lib/touch/touch.h>
 
@@ -246,6 +248,8 @@ struct ThumbnailViewPrivate {
     QScroller *mScroller;
     Touch *mTouch;
 
+    bool loading = false;
+
     void setupBusyAnimation()
     {
         mBusySequence = KPixmapSequenceLoader::load(QStringLiteral("process-working"), 22);
@@ -419,6 +423,11 @@ void ThumbnailView::setModel(QAbstractItemModel *newModel)
 {
     if (model()) {
         disconnect(model(), nullptr, this, nullptr);
+
+        const auto sortedModel = qobject_cast<SortedDirModel *>(newModel);
+        if (sortedModel) {
+            sortedModel->dirLister()->disconnect(this);
+        }
     }
     QListView::setModel(newModel);
 
@@ -428,6 +437,18 @@ void ThumbnailView::setModel(QAbstractItemModel *newModel)
             Q_EMIT rowsRemovedSignal(index, first, last);
         }
     });
+
+    const auto sortedModel = qobject_cast<SortedDirModel *>(newModel);
+    if (sortedModel) {
+        connect(sortedModel->dirLister(), &KDirLister::started, this, [this]() {
+            d->loading = true;
+        });
+
+        connect(sortedModel->dirLister(), &KDirLister::listingDirCompleted, this, [this]() {
+            d->loading = false;
+            d->scheduleThumbnailGeneration();
+        });
+    }
 }
 
 void ThumbnailView::setThumbnailProvider(ThumbnailProvider *thumbnailProvider)
@@ -948,7 +969,7 @@ void ThumbnailView::scrollContentsBy(int dx, int dy)
 
 void ThumbnailView::generateThumbnailsForItems()
 {
-    if (!isVisible() || !model()) {
+    if (!isVisible() || !model() || d->loading) {
         return;
     }
     const QRect visibleRect = viewport()->rect();
