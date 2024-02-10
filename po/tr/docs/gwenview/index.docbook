@@ -8,7 +8,7 @@
 
 <book id="gwenview" lang="&language;">
 <title
->Akbakış Kullanıcı Kılavuzu</title>
+>Gwenview Kullanıcı Kılavuzu</title>
 
 <bookinfo>
 <authorgroup>
@@ -130,7 +130,7 @@
 >&gwenview; hızlı ve kullanımı kolay bir görsel ve video görüntüleyicisidir. </para>
 
  <para
->&gwenview; iki ana kip içerir: Göz At ve Görüntüle. Her iki kip de normal uygulama penceresinde ve Tam Ekran'da kullanılabilir. Göz At kipi, görsellerinizin küçük hallerini göstererek bilgisayarınızda dolaşmanızı sağlar; Görüntüle kipi, görselleri birer birer görüntülemenizi ve Tam Ekran, hızlı slayt gösterileri yapmanızı sağlar. Ayrıca, son açılan klasörlerin ve &URL;'lerin yanı sıra yerleriniz ve etiketlerinizin listesini görüntüleyen bir başlangıç ekranı da bulunmaktadır. </para>
+>&gwenview; iki ana kip içerir: Göz At ve Görüntüle. Her iki kip de normal uygulama penceresinde ve Tam Ekran’da kullanılabilir. Göz At kipi, görsellerinizin küçük hallerini göstererek bilgisayarınızda dolaşmanızı sağlar; Görüntüle kipi, görselleri birer birer görüntülemenizi ve Tam Ekran, hızlı slayt gösterileri yapmanızı sağlar. Ayrıca, son açılan klasörlerin ve &URL;’lerin yanı sıra yerleriniz ve etiketlerinizin listesini görüntüleyen bir başlangıç ekranı da bulunmaktadır. </para>
 
 <para
 >Görsel yüklemesi &Qt; kitaplığı tarafından halledilir; böylece &gwenview;, &Qt; kurulumunuzun desteklediği tüm görsel biçimlerini destekler. &gwenview;, hem alfa kanallı (saydam) hem de canlandırmaları düzgünce görüntüleyebilir.</para>
@@ -152,7 +152,7 @@
 ><title
 >Başlangıç Sayfası</title>
 <para
->Başlangıç sayfası, sol tarafta son açılan klasörleri ve URL'leri, sağ tarafta ise yerlerinizi ve etiketlerinizi listeler.</para>
+>Başlangıç sayfası, sol tarafta son açılan klasörleri ve URL’leri, sağ tarafta ise yerlerinizi ve etiketlerinizi listeler.</para>
 
 <screenshot>
   <screeninfo
@@ -348,7 +348,7 @@
 > düğmesine tıklanarak açılabilir. Yeniden tıkladığınızda katlanacaktır. Küçük görsellerin boyutunu değiştirmek için ayırıcıyı &LMB; ile hareket ettirin.</para>
 
 <para
->Görüntüle kipi, birden fazla görselin yan yana görüntülenmesini destekler. Görüntüle kipine geçmeden önce Göz At kipinde birden fazla görseli seçebilirsiniz veya Küçük Görsel Çubuğu'ndaki görsellerin üzerine geldiğinizde o görseli gösteren bir bölme eklemek için görünen <guibutton
+>Görüntüle kipi, birden fazla görselin yan yana görüntülenmesini destekler. Görüntüle kipine geçmeden önce Göz At kipinde birden fazla görseli seçebilirsiniz veya Küçük Görsel Çubuğu’ndaki görsellerin üzerine geldiğinizde o görseli gösteren bir bölme eklemek için görünen <guibutton
 >+</guibutton
 > düğmesine tıklayabilirsiniz. Daha sonra bölmesini kaldırmanıza izin verecek bir <guibutton
 >-</guibutton
@@ -543,7 +543,7 @@
   </mediaobject>
 </screenshot>
 <para
->Göz atarken tam ekrana geçmek, görselleriniz arasında gezinirken size daha sürükleyici bir deneyim sunar. Normal bilgisayarınızda oldukça hoştur; ancak misafirlerinize resimler göstermek için dizüstü bilgisayarınızı oturma odasındaki büyük TV'ye bağladığınızda daha da anlamlı olur. </para>
+>Göz atarken tam ekrana geçmek, görselleriniz arasında gezinirken size daha sürükleyici bir deneyim sunar. Normal bilgisayarınızda oldukça hoştur; ancak misafirlerinize resimler göstermek için dizüstü bilgisayarınızı oturma odasındaki büyük TV’ye bağladığınızda daha da anlamlı olur. </para>
 </sect2>
 
 <sect2 id="fullscreen">
@@ -911,7 +911,7 @@
 ><para
 ><keycap
 >F6</keycap
->: Doğrudan dosya yolunu yazabilmeniz için Konum Çubuğu'nu düzenlenebilir hale getirin. Sağdaki oka basarak standart Konum Çubuğu'na dönebilirsiniz.</para
+>: Doğrudan dosya yolunu yazabilmeniz için Konum Çubuğu’nu düzenlenebilir hale getirin. Sağdaki oka basarak standart Konum Çubuğu’na dönebilirsiniz.</para
 ></listitem>
 
 <listitem
@@ -1440,10 +1440,10 @@
 ></term>
                 <listitem>
                     <para
->&gwenview;'ın ziyaret edilen &URL;'leri anımsamasını ve onları <guilabel
+>&gwenview;’ın ziyaret edilen &URL;’leri anımsamasını ve onları <guilabel
 >Son Kullanılan Klasörler</guilabel
 > bölmesinde göstermesini istiyorsanız <guilabel
->Klasörleri ve URL'leri anımsa</guilabel
+>Klasörleri ve URL’leri anımsa</guilabel
 > onay kutusunu işaretleyin.</para>
                 </listitem>
             </varlistentry>

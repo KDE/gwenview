@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kdegraphics-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-01-11 00:36+0000\n"
-"PO-Revision-Date: 2024-02-09 00:21+0300\n"
+"PO-Revision-Date: 2024-02-09 17:45+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -110,7 +110,7 @@ msgstr "Sunum amacı:"
 #: app/advancedconfigpage.ui:197
 #, kde-format
 msgid "Remember folders and URLs"
-msgstr "Klasörleri ve URL'leri anımsa"
+msgstr "Klasörleri ve URL’leri anımsa"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_EnableColorManagement)
 #: app/advancedconfigpage.ui:240
@@ -1887,7 +1887,7 @@ msgstr "Aygıt UDI, Aygıt hakkında bilgi almak için kullanılır (ad, simge..
 #: importer/main.cpp:50
 #, kde-format
 msgid "Device UDI"
-msgstr "Aygıt UDI'si"
+msgstr "Aygıt UDI’si"
 
 #: importer/main.cpp:51
 #, kde-format
@@ -1946,7 +1946,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip for a button, %1 protocol name"
 msgid "Launch Discover to install the protocol support library for \"%1\""
-msgstr "\"%1\" protokolü destek kitaplığını kurmak için Keşfet'i çalıştırın"
+msgstr "\"%1\" protokolü destek kitaplığını kurmak için Keşfet’i çalıştırın"
 
 #: importer/thumbnailpage.cpp:256
 #, kde-format
@@ -1962,9 +1962,9 @@ msgid ""
 "to launch Discover to install Kamera to enable protocol support for "
 "\"camera:/\" on your system."
 msgstr ""
-"Kameranızdan okumak için sisteminizde Kamera'nın kurulu olması gereklidir. "
+"Kameranızdan okumak için sisteminizde Kamera’nın kurulu olması gereklidir. "
 "Sisteminzde \"camera:/\" desteği kurulumu yapmak için buraya tıklayıp "
-"Keşfet'i çalıştırın."
+"Keşfet’i çalıştırın."
 
 #: importer/thumbnailpage.cpp:260
 #, kde-format
@@ -1979,7 +1979,7 @@ msgid ""
 "Click here to launch Discover to install the missing protocol support "
 "library to enable the protocol support for \"%1:/\" on your system."
 msgstr ""
-"Sisteminzde \"%1:/\" desteği kurulumu yapmak için buraya tıklayıp Keşfet'i "
+"Sisteminzde \"%1:/\" desteği kurulumu yapmak için buraya tıklayıp Keşfet’i "
 "çalıştırın."
 
 #: importer/thumbnailpage.cpp:265
@@ -1987,7 +1987,7 @@ msgstr ""
 msgctxt "@action:button %1 protocol name"
 msgid "Search the Web for How to Install Protocol Support for \"%1\"…"
 msgstr ""
-"\"%1\" protokolü desteği kurulumunun nasıl yapılacağını görmek için web'de "
+"\"%1\" protokolü desteği kurulumunun nasıl yapılacağını görmek için web’de "
 "arama yapın..."
 
 #: importer/thumbnailpage.cpp:281
@@ -2023,7 +2023,7 @@ msgid ""
 "Opening Discover failed.<nl/>Please check if Discover is installed on your "
 "system, or use your system's package manager to install \"Kamera\" package."
 msgstr ""
-"Keşfet'i açma başarısız oldu.<nl/>Sisteminizde Keşfet'in kurulu olduğundan "
+"Keşfet’i açma başarısız oldu.<nl/>Sisteminizde Keşfet’in kurulu olduğundan "
 "emin olun veya \"Kamera\"yı kurmak için sistem paket yöneticinizi kullanın."
 
 #: importer/thumbnailpage.cpp:492
@@ -2034,7 +2034,7 @@ msgid ""
 "system, or use your system's package manager to install the protocol support "
 "library for \"%1\"."
 msgstr ""
-"Keşfet'i açma başarısız oldu.<nl/>Sisteminizde Keşfet'in kurulu olduğundan "
+"Keşfet’i açma başarısız oldu.<nl/>Sisteminizde Keşfet’in kurulu olduğundan "
 "emin olun veya \"%1\" protokolü destek kitaplığını kurmak için sistem paket "
 "yöneticinizi kullanın."
 
@@ -2698,7 +2698,7 @@ msgid ""
 "for lossy images using the value set in 'Lossy image save quality'."
 msgstr ""
 "Görsel biçiminini değişmeyeceği varsayılıyor ve kayıplı görseller\n"
-"için 'Kayıplı görsel kaydetme kalitesi'ndeki değer kullanılıyor."
+"için ’Kayıplı görsel kaydetme kalitesi’ndeki değer kullanılıyor."
 
 #: lib/resize/resizeimagedialog.cpp:219
 #, kde-format
