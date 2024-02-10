@@ -24,6 +24,7 @@ set(gwenview_SRCS
     fileopscontextmanageritem.cpp
     main.cpp
     mainwindow.cpp
+    spotlightmode.cpp
     preloader.cpp
     renamedialog.cpp
     saveallhelper.cpp
@@ -49,6 +50,7 @@ set(gwenview_SRCS
     imageopscontextmanageritem.h
     fileopscontextmanageritem.h
     mainwindow.h
+    spotlightmode.h
     preloader.h
     renamedialog.h
     saveallhelper.h

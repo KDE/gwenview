@@ -44,6 +44,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "fileoperations.h"
 #include "gwenview_app_debug.h"
 #include "splitter.h"
+#include "spotlightmode.h"
 #include <gvcore.h>
 #include <lib/documentview/abstractdocumentviewadapter.h>
 #include <lib/documentview/abstractrasterimageviewtool.h>
@@ -128,6 +129,7 @@ struct ViewMainPagePrivate {
     KToggleAction *mSynchronizeAction = nullptr;
     QCheckBox *mSynchronizeCheckBox = nullptr;
     KSqueezedTextLabel *mDocumentCountLabel = nullptr;
+    SpotlightMode *mSpotlightMode = nullptr;
 
     bool mCompareMode;
     ZoomMode::Enum mZoomMode;
@@ -176,6 +178,10 @@ struct ViewMainPagePrivate {
         mDocumentViewContainer = new DocumentViewContainer;
         mDocumentViewContainer->setAutoFillBackground(true);
         mDocumentViewContainer->setBackgroundRole(QPalette::Base);
+        adapterContainerLayout->addWidget(mDocumentViewContainer);
+        adapterContainerLayout->addWidget(mToolContainer);
+        //--
+        mSpotlightMode = new SpotlightMode(mDocumentViewContainer, mActionCollection);
         adapterContainerLayout->addWidget(mDocumentViewContainer);
         adapterContainerLayout->addWidget(mToolContainer);
         //--
@@ -482,6 +488,9 @@ void ViewMainPage::loadConfig()
     }
 
     d->mZoomMode = GwenviewConfig::zoomMode();
+    if (GwenviewConfig::spotlightMode() != d->mActionCollection->action(QStringLiteral("view_toggle_spotlightmode"))->isChecked())
+        if (parentWidget()->isVisible())
+            d->mActionCollection->action(QStringLiteral("view_toggle_spotlightmode"))->trigger();
 }
 
 void ViewMainPage::saveConfig()
@@ -897,6 +906,17 @@ void ViewMainPage::updateFocus(const AbstractRasterImageViewTool *tool)
 void ViewMainPage::slotDirModelItemsAddedOrRemoved()
 {
     d->updateDocumentCountLabel();
+}
+
+void ViewMainPage::setSpotlightMode(bool spotlightmode)
+{
+    GwenviewConfig::setSpotlightMode(spotlightmode);
+    d->mSpotlightMode->setVisibleSpotlightModeQuitButton(spotlightmode);
+    if (spotlightmode) {
+        d->mThumbnailBar->setVisible(false);
+    } else {
+        d->mThumbnailBar->setVisible(d->mToggleThumbnailBarAction->isChecked());
+    }
 }
 
 } // namespace

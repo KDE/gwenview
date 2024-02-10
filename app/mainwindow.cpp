@@ -207,6 +207,7 @@ struct MainWindow::Private {
     KToggleAction *mToggleSideBarAction = nullptr;
     KToggleAction *mToggleOperationsSideBarAction = nullptr;
     QAction *mFullScreenAction = nullptr;
+    QAction *mSpotlightModeAction = nullptr;
     QAction *mToggleSlideShowAction = nullptr;
     KToggleAction *mShowMenuBarAction = nullptr;
     KToggleAction *mShowStatusBarAction = nullptr;
@@ -427,6 +428,11 @@ struct MainWindow::Private {
         QAction *leaveFullScreenAction = view->addAction("leave_fullscreen", q, SLOT(leaveFullScreen()));
         leaveFullScreenAction->setIcon(QIcon::fromTheme(QStringLiteral("view-restore")));
         leaveFullScreenAction->setText(i18nc("@action", "Exit Full Screen"));
+
+        mSpotlightModeAction = view->addAction(QStringLiteral("view_toggle_spotlightmode"), q, SLOT(toggleSpotlightMode(bool)));
+        mSpotlightModeAction->setCheckable(true);
+        mSpotlightModeAction->setText(i18nc("@action", "Spotlight Mode"));
+        mSpotlightModeAction->setIcon(QIcon::fromTheme(QStringLiteral("image-navigator-symbolic")));
 
         mGoToPreviousAction = view->addAction("go_previous", q, SLOT(goToPrevious()));
         mGoToPreviousAction->setPriority(QAction::LowPriority);
@@ -780,6 +786,7 @@ struct MainWindow::Private {
         setActionEnabled("reload", enabled);
         setActionEnabled("go_start_page", enabled);
         setActionEnabled("add_folder_to_places", enabled);
+        setActionEnabled("view_toggle_spotlightmode", enabled);
     }
 
     void updateActions()
@@ -834,7 +841,9 @@ struct MainWindow::Private {
         case BrowseMainPageId:
             return GwenviewConfig::sideBarVisible();
         case ViewMainPageId:
-            return q->isFullScreen() ? GwenviewConfig::sideBarVisibleViewModeFullScreen() : GwenviewConfig::sideBarVisible();
+            return q->isFullScreen()              ? GwenviewConfig::sideBarVisibleViewModeFullScreen()
+                : GwenviewConfig::spotlightMode() ? GwenviewConfig::sideBarVisibleSpotlightMode()
+                                                  : GwenviewConfig::sideBarVisible();
         }
         return false;
     }
@@ -849,7 +858,9 @@ struct MainWindow::Private {
             GwenviewConfig::setSideBarVisible(visible);
             break;
         case ViewMainPageId:
-            q->isFullScreen() ? GwenviewConfig::setSideBarVisibleViewModeFullScreen(visible) : GwenviewConfig::setSideBarVisible(visible);
+            q->isFullScreen()                     ? GwenviewConfig::setSideBarVisibleViewModeFullScreen(visible)
+                : GwenviewConfig::spotlightMode() ? GwenviewConfig::setSideBarVisibleSpotlightMode(visible)
+                                                  : GwenviewConfig::setSideBarVisible(visible);
             break;
         }
     }
@@ -863,7 +874,9 @@ struct MainWindow::Private {
         case BrowseMainPageId:
             return GwenviewConfig::statusBarVisibleBrowseMode();
         case ViewMainPageId:
-            return q->isFullScreen() ? GwenviewConfig::statusBarVisibleViewModeFullScreen() : GwenviewConfig::statusBarVisibleViewMode();
+            return q->isFullScreen()              ? GwenviewConfig::statusBarVisibleViewModeFullScreen()
+                : GwenviewConfig::spotlightMode() ? GwenviewConfig::statusBarVisibleSpotlightMode()
+                                                  : GwenviewConfig::statusBarVisibleViewMode();
         }
         return false;
     }
@@ -878,7 +891,9 @@ struct MainWindow::Private {
             GwenviewConfig::setStatusBarVisibleBrowseMode(visible);
             break;
         case ViewMainPageId:
-            q->isFullScreen() ? GwenviewConfig::setStatusBarVisibleViewModeFullScreen(visible) : GwenviewConfig::setStatusBarVisibleViewMode(visible);
+            q->isFullScreen()                     ? GwenviewConfig::setStatusBarVisibleViewModeFullScreen(visible)
+                : GwenviewConfig::spotlightMode() ? GwenviewConfig::setStatusBarVisibleSpotlightMode(visible)
+                                                  : GwenviewConfig::setStatusBarVisibleViewMode(visible);
             break;
         }
     }
@@ -1639,6 +1654,7 @@ void MainWindow::toggleFullScreen(bool checked)
 {
     setUpdatesEnabled(false);
     if (checked) {
+        leaveSpotlightMode();
         // Save MainWindow config now, this way if we quit while in
         // fullscreen, we are sure latest MainWindow changes are remembered.
         KConfigGroup saveConfigGroup = autoSaveConfigGroup();
@@ -1687,6 +1703,41 @@ void MainWindow::toggleFullScreen(bool checked)
 
     setUpdatesEnabled(true);
     d->autoAssignThumbnailProvider();
+}
+
+void MainWindow::leaveSpotlightMode()
+{
+    if (d->mSpotlightModeAction->isChecked()) {
+        d->mSpotlightModeAction->trigger();
+    }
+}
+
+void MainWindow::toggleSpotlightMode(bool checked)
+{
+    setUpdatesEnabled(false);
+    if (checked) {
+        leaveFullScreen();
+        KConfigGroup saveConfigGroup = autoSaveConfigGroup();
+        saveMainWindowSettings(saveConfigGroup);
+        d->mStateBeforeFullScreen.mToolBarVisible = toolBar()->isVisible();
+
+        setAutoSaveSettings(saveConfigGroup, false);
+        resetAutoSaveSettings();
+
+        menuBar()->hide();
+        toolBar()->hide();
+    } else {
+        setAutoSaveSettings();
+
+        menuBar()->setVisible(d->mShowMenuBarAction->isChecked());
+        toolBar()->setVisible(d->mStateBeforeFullScreen.mToolBarVisible);
+    }
+
+    d->mViewMainPage->setSpotlightMode(checked);
+
+    toggleSideBar(d->sideBarVisibility());
+    toggleStatusBar(d->statusBarVisibility());
+    setUpdatesEnabled(true);
 }
 
 void MainWindow::saveCurrent()
@@ -1882,6 +1933,7 @@ void MainWindow::saveConfig()
     d->saveSplitterConfig();
     d->saveInformationSplitterConfig();
     GwenviewConfig::setFullScreenModeActive(isFullScreen());
+    GwenviewConfig::setSpotlightMode(d->mSpotlightModeAction->isChecked());
     // Save the last used version when Gwenview closes so we know which settings/features the user
     // is aware of which is needed for migration. The version format is: two digits each for
     // major minor bugfix version. Never decrease this number. Increase it when needed.

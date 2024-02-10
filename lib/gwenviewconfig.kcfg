@@ -27,6 +27,9 @@
         <entry name="SideBarVisibleViewModeFullScreen" key="IsVisible ViewMode FullScreen" type="Bool">
             <default>false</default>
         </entry>
+        <entry name="SideBarVisibleSpotlightMode" key="IsVisible Spotlight Mode" type="Bool">
+            <default>false</default>
+        </entry>
 
         <entry name="SideBarSplitterSizes" type="IntList">
         </entry>
@@ -226,6 +229,10 @@
             <default>true</default>
         </entry>
 
+        <entry name="SpotlightMode" type="Bool">
+            <default>false</default>
+        </entry>
+
         <entry name="NavigationEndNotification" type="Enum">
             <choices name="Gwenview::SlideShow::NavigationEndNotification">
                 <choice name="NavigationEndNotification::NeverWarn"/>
@@ -379,6 +386,9 @@
             <default>true</default>
         </entry>
         <entry name="StatusBarVisibleViewModeFullScreen" key="IsVisible ViewMode FullScreen" type="Bool">
+            <default>false</default>
+        </entry>
+        <entry name="StatusBarVisibleSpotlightMode" key="IsVisible Spotlight Mode" type="Bool">
             <default>false</default>
         </entry>
     </group>

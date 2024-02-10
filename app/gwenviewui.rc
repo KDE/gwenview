@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE gui SYSTEM "kpartgui.dtd">
-<gui name="gwenview" version="68">
+<gui name="gwenview" version="69">
 
 <MenuBar>
     <Menu name="file" >
@@ -20,6 +20,8 @@
     <Menu name="view" >
         <Action name="browse" />
         <Action name="view" />
+        <Separator/>
+        <Action name="view_toggle_spotlightmode" />
         <Separator/>
         <Action name="fullscreen" />
         <Separator/>

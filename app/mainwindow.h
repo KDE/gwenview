@@ -110,6 +110,8 @@ private Q_SLOTS:
 
     void leaveFullScreen();
     void toggleFullScreen(bool);
+    void leaveSpotlightMode();
+    void toggleSpotlightMode(bool);
     void toggleSlideShow();
     void updateSlideShowAction();
 

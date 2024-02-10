@@ -82,16 +82,17 @@ static void handleTiffError(const char *mod, const char *fmt, va_list ap)
 class StartHelper
 {
 public:
-    StartHelper(const QStringList &args, bool fullscreen, bool slideshow)
+    StartHelper(const QStringList &args, bool fullscreen, bool slideshow, bool spotlightmode)
         : mFullScreen(false)
         , mSlideShow(false)
+        , mSpotlightMode(false)
     {
         if (!args.isEmpty()) {
-            parseArgs(args, fullscreen, slideshow);
+            parseArgs(args, fullscreen, slideshow, spotlightmode);
         }
     }
 
-    void parseArgs(const QStringList &args, bool fullscreen, bool slideshow)
+    void parseArgs(const QStringList &args, bool fullscreen, bool slideshow, bool spotlightmode)
     {
         if (args.count() > 1) {
             // Create a temp dir containing links to url args
@@ -122,6 +123,9 @@ public:
                 mSlideShow = true;
             }
         }
+        if (mUrl.isValid() && spotlightmode) {
+            mSpotlightMode = true;
+        }
     }
 
     void createMainWindow()
@@ -136,6 +140,8 @@ public:
         mMainWindow->show();
         if (mFullScreen) {
             mMainWindow->actionCollection()->action(QStringLiteral("fullscreen"))->trigger();
+        } else if (mSpotlightMode) {
+            mMainWindow->actionCollection()->action(QStringLiteral("view_toggle_spotlightmode"))->trigger();
         }
 
         if (mSlideShow) {
@@ -147,6 +153,7 @@ private:
     QUrl mUrl;
     bool mFullScreen;
     bool mSlideShow;
+    bool mSpotlightMode;
     QScopedPointer<QTemporaryDir> mMultipleUrlsDir;
     QPointer<Gwenview::MainWindow> mMainWindow;
 };
@@ -183,6 +190,7 @@ int main(int argc, char *argv[])
     aboutData.data()->setupCommandLine(&parser);
     parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("f") << QStringLiteral("fullscreen"), i18n("Start in fullscreen mode")));
     parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("s") << QStringLiteral("slideshow"), i18n("Start in slideshow mode")));
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("m") << QStringLiteral("spotlight"), i18n("Start in spotlight mode")));
     parser.addPositionalArgument("url", i18n("A starting file or folders"));
     parser.process(app);
     aboutData.data()->processCommandLine(&parser);
@@ -190,7 +198,8 @@ int main(int argc, char *argv[])
     // startHelper must live for the whole life of the application
     StartHelper startHelper(parser.positionalArguments(),
                             parser.isSet(QStringLiteral("f")) ? true : Gwenview::GwenviewConfig::fullScreenModeActive(),
-                            parser.isSet(QStringLiteral("s")));
+                            parser.isSet(QStringLiteral("s")),
+                            parser.isSet(QStringLiteral("m")) ? true : Gwenview::GwenviewConfig::spotlightMode());
     if (app.isSessionRestored()) {
         kRestoreMainWindows<Gwenview::MainWindow>();
     } else {

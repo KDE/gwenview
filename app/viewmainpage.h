@@ -70,6 +70,8 @@ public:
 
     void setFullScreenMode(bool fullScreen);
 
+    void setSpotlightMode(bool spotlight);
+
     int statusBarHeight() const;
 
     QSize sizeHint() const override;
