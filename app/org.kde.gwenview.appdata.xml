@@ -51,7 +51,7 @@
   <name xml:lang="sr-ijekavianlatin">GwenView</name>
   <name xml:lang="sv">Gwenview</name>
   <name xml:lang="ta">குவென்வியூ</name>
-  <name xml:lang="tr">Akbakış</name>
+  <name xml:lang="tr">Gwenview</name>
   <name xml:lang="uk">Gwenview</name>
   <name xml:lang="x-test">xxGwenviewxx</name>
   <name xml:lang="zh-CN">Gwenview 图像查看器</name>
@@ -154,7 +154,7 @@
     <p xml:lang="sr-ijekavianlatin">GwenView je brz i lak za upotrebu prikazivač slika od KDE‑a, idealan za pregledanje zbirki slika.</p>
     <p xml:lang="sv">Gwenview är en snabb och lättanvänd bild- och videovisare av KDE, idealisk för att bläddra i och visa en bildsamling.</p>
     <p xml:lang="ta">குவென்வியூ, கே.டீ.யீ. வழங்கும் எளிய மற்றும் வேகமான படக்காட்டி ஆகும். படக்களஞ்சியத்தில் உலாவ‍வும் படங்களை காண்பிக்கவும் வசதியானது.</p>
-    <p xml:lang="tr">Akbakış, KDE için hızlı ve kolay kullanılır bir görsel görüntüleyicisidir; bir görsel koleksiyonu içinde gezinmek ve onu görüntülemek için idealdir.</p>
+    <p xml:lang="tr">Gwenview, KDE için hızlı ve kolay kullanılır bir görsel görüntüleyicisidir; bir görsel koleksiyonu içinde gezinmek ve onu görüntülemek için idealdir.</p>
     <p xml:lang="uk">Gwenview — швидка і проста у користування програма для перегляду зображень від KDE, ідеальна для навігації збіркою зображень та показу зображень.</p>
     <p xml:lang="x-test">xxGwenview is a fast and easy to use image viewer by KDE, ideal for browsing and displaying a collection of images.xx</p>
     <p xml:lang="zh-CN">Gwenview 是 KDE 出品的一款轻便易用的图像查看器，是浏览、显示多张图像时的理想工具。</p>
@@ -428,7 +428,7 @@
       <caption xml:lang="sr-ijekavianlatin">GwenView</caption>
       <caption xml:lang="sv">Gwenview</caption>
       <caption xml:lang="ta">குவென்வியூ</caption>
-      <caption xml:lang="tr">Akbakış</caption>
+      <caption xml:lang="tr">Gwenview</caption>
       <caption xml:lang="uk">Gwenview</caption>
       <caption xml:lang="x-test">xxGwenviewxx</caption>
       <caption xml:lang="zh-CN">Gwenview 图像查看器</caption>
@@ -474,7 +474,7 @@
       <caption xml:lang="sl">Uporabite Gwenview za upravljanje svoje zbirke slik</caption>
       <caption xml:lang="sv">Använd Gwenview för att hantera din bildsamling</caption>
       <caption xml:lang="ta">உங்கள் படத்தோகுப்பைக் கையாள குவென்வியூவைப் பயன்படுத்துங்கள்</caption>
-      <caption xml:lang="tr">Akbakış'ı görsel koleksiyonunuzu yönetmek için kullanın</caption>
+      <caption xml:lang="tr">Gwenview'ü görsel koleksiyonunuzu yönetmek için kullanın</caption>
       <caption xml:lang="uk">Використання Gwenview для керування вашою збіркою зображень</caption>
       <caption xml:lang="x-test">xxUse Gwenview to manage your image collectionxx</caption>
       <caption xml:lang="zh-CN">使用 Gwenview 来管理您的图像</caption>
