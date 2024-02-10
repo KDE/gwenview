@@ -86,6 +86,7 @@ GenericName[ia]=Visor de Image
 GenericName[it]=Visore di immagini
 GenericName[ja]=画像ビューア
 GenericName[ka]=სურათების გალერეა
+GenericName[ko]=그림 뷰어
 GenericName[lt]=Paveikslų žiūryklė
 GenericName[nl]=Afbeeldingsviewer
 GenericName[pa]=ਚਿੱਤਰ ਦਰਸ਼ਕ
