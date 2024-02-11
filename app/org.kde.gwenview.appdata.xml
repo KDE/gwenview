@@ -4,6 +4,7 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
   <developer_name translate="no">KDE</developer_name>
+  <developer_name translate="no" xml:lang="ar">كِيدِي</developer_name>
   <developer_name translate="no" xml:lang="bg">KDE</developer_name>
   <developer_name translate="no" xml:lang="ca">KDE</developer_name>
   <developer_name translate="no" xml:lang="ca-valencia">KDE</developer_name>
@@ -15,6 +16,7 @@
   <developer_name translate="no" xml:lang="he">KDE</developer_name>
   <developer_name translate="no" xml:lang="hu">KDE</developer_name>
   <developer_name translate="no" xml:lang="ia">KDE</developer_name>
+  <developer_name translate="no" xml:lang="it">KDE</developer_name>
   <developer_name translate="no" xml:lang="ka">KDE</developer_name>
   <developer_name translate="no" xml:lang="ko">KDE</developer_name>
   <developer_name translate="no" xml:lang="nl">KDE</developer_name>
@@ -420,6 +422,7 @@
   <screenshots>
     <screenshot type="default">
       <caption>Main application window displaying an image and controls on the left</caption>
+      <caption xml:lang="ar">نافذة التطبيق الرئيسية تعرض صورة وعناصر تحكم على اليسار</caption>
       <caption xml:lang="bg">Основен прозорец на приложението, показващ изображение и контроли вляво</caption>
       <caption xml:lang="ca">Finestra principal de l'aplicació que mostra una imatge i els controls a l'esquerra</caption>
       <caption xml:lang="ca-valencia">Finestra principal de l'aplicació que mostra una imatge i els controls en l'esquerra</caption>
@@ -430,6 +433,7 @@
       <caption xml:lang="he">חלון יישום ראשי שמציג תמונה ופקדים מימין</caption>
       <caption xml:lang="hu">Az alkalmazás főablaka egy kép megjelenítése közben, bal oldalon a vezérlőkkel</caption>
       <caption xml:lang="ia">Fenestra de application principal monstrante un imagines e controlos sur le sinistra</caption>
+      <caption xml:lang="it">Finestra principale dell'applicazione che mostra un'immagine e i controlli sulla sinistra</caption>
       <caption xml:lang="ka">მთავარი აპლიკაციის ფანჯარა, რომელიც გამოსახულებას და კონტროლებს მარცხნივ აჩვენებს</caption>
       <caption xml:lang="ko">그림과 그 왼쪽에 컨트롤을 표시한 앱 주 창</caption>
       <caption xml:lang="nl">Hoofdvenster van toepassing die een afbeelding toont en links besturing</caption>
