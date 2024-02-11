@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-11 00:36+0000\n"
+"POT-Creation-Date: 2024-02-11 00:36+0000\n"
 "PO-Revision-Date: 2020-11-17 19:47+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -136,7 +136,7 @@ msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
 msgid "Sidebar Alignment Spacer"
 msgstr ""
 
-#: app/browsemainpage.cpp:146 app/mainwindow.cpp:374 app/viewmainpage.cpp:404
+#: app/browsemainpage.cpp:146 app/mainwindow.cpp:375 app/viewmainpage.cpp:410
 #: lib/documentview/documentviewcontroller.cpp:55
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
@@ -222,7 +222,7 @@ msgid "Rating"
 msgstr "Vurdering"
 
 #: app/browsemainpage.cpp:195 app/fileopscontextmanageritem.cpp:136
-#: app/mainwindow.cpp:373
+#: app/mainwindow.cpp:374
 #, kde-format
 msgctxt "@title actions category"
 msgid "File"
@@ -596,7 +596,7 @@ msgctxt "@info:tooltip"
 msgid "Configure full screen mode"
 msgstr "Indstil fuldskærmstilstand"
 
-#: app/fullscreencontent.cpp:552 app/viewmainpage.cpp:383
+#: app/fullscreencontent.cpp:552 app/viewmainpage.cpp:389
 #, kde-format
 msgctxt "@info:status %1 current document index, %2 total documents"
 msgid "%1 of %2"
@@ -765,13 +765,13 @@ msgid "Go back to the original"
 msgstr "Gå tilbage til originalen"
 
 #. i18n: ectx: Menu (rating)
-#: app/gwenviewui.rc:54
+#: app/gwenviewui.rc:56
 #, kde-format
 msgid "&Rating"
 msgstr "Vurde&ring"
 
 #. i18n: ectx: ToolBar (mainToolBar)
-#: app/gwenviewui.rc:87 part/gvpart.rc:16
+#: app/gwenviewui.rc:89 part/gvpart.rc:16
 #, kde-format
 msgid "Main Toolbar"
 msgstr "Hovedværktøjslinje"
@@ -1060,74 +1060,80 @@ msgid_plural "%1 files"
 msgstr[0] "%1 fil"
 msgstr[1] "%1 filer"
 
-#: app/main.cpp:174
+#: app/main.cpp:181
 #, kde-format
 msgid "Gwenview"
 msgstr "Gwenview"
 
-#: app/main.cpp:176
+#: app/main.cpp:183
 #, kde-format
 msgid "An Image Viewer"
 msgstr "En billedfremviser"
 
-#: app/main.cpp:184
+#: app/main.cpp:191
 #, kde-format
 msgid "Start in fullscreen mode"
 msgstr "Start i fuldskærmstilstand"
 
-#: app/main.cpp:185
+#: app/main.cpp:192
 #, kde-format
 msgid "Start in slideshow mode"
 msgstr "Start i diasshow-tilstand"
 
-#: app/main.cpp:186
+#: app/main.cpp:193
+#, fuzzy, kde-format
+#| msgid "Start in slideshow mode"
+msgid "Start in spotlight mode"
+msgstr "Start i diasshow-tilstand"
+
+#: app/main.cpp:194
 #, kde-format
 msgid "A starting file or folders"
 msgstr "En startfil eller mapper"
 
-#: app/mainwindow.cpp:383
+#: app/mainwindow.cpp:384
 #, kde-format
 msgctxt "@action Open Recent menu"
 msgid "Clear List"
 msgstr "Ryd listen"
 
-#: app/mainwindow.cpp:391
+#: app/mainwindow.cpp:392
 #, kde-format
 msgctxt "@action reload the currently viewed image"
 msgid "Reload"
 msgstr "Genindlæs"
 
-#: app/mainwindow.cpp:396
+#: app/mainwindow.cpp:397
 #, kde-format
 msgctxt "@action:inmenu Navigation Bar"
 msgid "Replace Location"
 msgstr "Erstat placering"
 
-#: app/mainwindow.cpp:401
+#: app/mainwindow.cpp:402
 #, kde-format
 msgctxt "@action:intoolbar Switch to file list"
 msgid "Browse"
 msgstr "Gennemse"
 
-#: app/mainwindow.cpp:402
+#: app/mainwindow.cpp:403
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Browse folders for images"
 msgstr "Gennemse mapper efter billeder"
 
-#: app/mainwindow.cpp:409
+#: app/mainwindow.cpp:410
 #, kde-format
 msgctxt "@action:intoolbar Switch to image view"
 msgid "View"
 msgstr "Vis"
 
-#: app/mainwindow.cpp:410
+#: app/mainwindow.cpp:411
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "View selected images"
 msgstr "Vis markerede billeder"
 
-#: app/mainwindow.cpp:429
+#: app/mainwindow.cpp:430
 #, kde-format
 msgctxt "@action"
 msgid "Exit Full Screen"
@@ -1135,88 +1141,94 @@ msgstr "Afslut fuldskærm"
 
 #: app/mainwindow.cpp:434
 #, kde-format
+msgctxt "@action"
+msgid "Spotlight Mode"
+msgstr ""
+
+#: app/mainwindow.cpp:440
+#, kde-format
 msgctxt "@action Go to previous image"
 msgid "Previous"
 msgstr "Forrige"
 
-#: app/mainwindow.cpp:435
+#: app/mainwindow.cpp:441
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to previous image"
 msgstr "Gå til forrige billede"
 
-#: app/mainwindow.cpp:441
+#: app/mainwindow.cpp:447
 #, kde-format
 msgctxt "@action Go to next image"
 msgid "Next"
 msgstr "Næste"
 
-#: app/mainwindow.cpp:442
+#: app/mainwindow.cpp:448
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to next image"
 msgstr "Gå til næste billede"
 
-#: app/mainwindow.cpp:448
+#: app/mainwindow.cpp:454
 #, kde-format
 msgctxt "@action Go to first image"
 msgid "First"
 msgstr "Første"
 
-#: app/mainwindow.cpp:449
+#: app/mainwindow.cpp:455
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to first image"
 msgstr "Gå til første billede"
 
-#: app/mainwindow.cpp:455
+#: app/mainwindow.cpp:461
 #, kde-format
 msgctxt "@action Go to last image"
 msgid "Last"
 msgstr "Sidste"
 
-#: app/mainwindow.cpp:456
+#: app/mainwindow.cpp:462
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to last image"
 msgstr "Gå til sidste billede"
 
-#: app/mainwindow.cpp:466
+#: app/mainwindow.cpp:472
 #, kde-format
 msgctxt "@action"
 msgid "Start Page"
 msgstr "Startside"
 
-#: app/mainwindow.cpp:467
+#: app/mainwindow.cpp:473
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open the start page"
 msgstr "Åbn startsiden"
 
-#: app/mainwindow.cpp:474
+#: app/mainwindow.cpp:480
 #, kde-format
 msgctxt "@action"
 msgid "Sidebar"
 msgstr "Sidepanel"
 
-#: app/mainwindow.cpp:479
+#: app/mainwindow.cpp:485
 #, kde-format
 msgctxt "@action opens crop, rename, etc."
 msgid "Show Editing Tools"
 msgstr ""
 
-#: app/mainwindow.cpp:509
+#: app/mainwindow.cpp:515
 #, kde-format
 msgctxt "@action Share images"
 msgid "Share"
 msgstr "Del"
 
-#: app/mainwindow.cpp:518
+#: app/mainwindow.cpp:524
 #, kde-format
 msgid "Error while sharing: %1"
 msgstr "Fejl under deling: %1"
 
-#: app/mainwindow.cpp:525
+#: app/mainwindow.cpp:531
 #, kde-format
 msgid ""
 "The shared image link (<a href=\"%1\">%1</a>) has been copied to the "
@@ -1225,142 +1237,142 @@ msgstr ""
 "Det delte billedlink (<a href=\"%1\">%1</a>) er blevet kopieret til "
 "udklipsholderen."
 
-#: app/mainwindow.cpp:575
+#: app/mainwindow.cpp:581
 #, fuzzy, kde-format
 #| msgid "Configure"
 msgctxt "@title:menu submenu for actions that open configuration dialogs"
 msgid "Configure"
 msgstr "Indstil"
 
-#: app/mainwindow.cpp:590
+#: app/mainwindow.cpp:596
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "Edit"
 msgstr "Redigér"
 
-#: app/mainwindow.cpp:595
+#: app/mainwindow.cpp:601
 #, kde-format
 msgid "Redo"
 msgstr "Gør om"
 
-#: app/mainwindow.cpp:603
+#: app/mainwindow.cpp:609
 #, kde-format
 msgid "Undo"
 msgstr "Fortryd"
 
-#: app/mainwindow.cpp:630
+#: app/mainwindow.cpp:636
 #, kde-format
 msgid "Folders"
 msgstr "Mapper"
 
-#: app/mainwindow.cpp:636
+#: app/mainwindow.cpp:642
 #, kde-format
 msgid "Information"
 msgstr "Information"
 
-#: app/mainwindow.cpp:675
+#: app/mainwindow.cpp:681
 #, kde-format
 msgid "Operations"
 msgstr "Operationer"
 
-#: app/mainwindow.cpp:934
+#: app/mainwindow.cpp:949
 #, kde-format
 msgid "Viewing media"
 msgstr ""
 
-#: app/mainwindow.cpp:1412
+#: app/mainwindow.cpp:1427
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Skjul sidepanel"
 
-#: app/mainwindow.cpp:1412
+#: app/mainwindow.cpp:1427
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Vis sidepanel"
 
-#: app/mainwindow.cpp:1719
+#: app/mainwindow.cpp:1770
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Åbn billede"
 
-#: app/mainwindow.cpp:1779
+#: app/mainwindow.cpp:1830
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "Sæt diasshow på pause"
 
-#: app/mainwindow.cpp:1782
+#: app/mainwindow.cpp:1833
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "Genoptag diasshow"
 
-#: app/mainwindow.cpp:1782
+#: app/mainwindow.cpp:1833
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Start diasshow"
 
-#: app/mainwindow.cpp:1795
+#: app/mainwindow.cpp:1846
 #, kde-format
 msgid "Save All Changes"
 msgstr "Gem alle ændringer"
 
-#: app/mainwindow.cpp:1796
+#: app/mainwindow.cpp:1847
 #, kde-format
 msgid "Discard Changes"
 msgstr "Kassér ændringer"
 
-#: app/mainwindow.cpp:1798
+#: app/mainwindow.cpp:1849
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "Et billede er ændret."
 msgstr[1] "%1 billeder er ændret."
 
-#: app/mainwindow.cpp:1798
+#: app/mainwindow.cpp:1849
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Hvis du lukker nu, går dine ændringer tabt."
 
-#: app/mainwindow.cpp:1841
+#: app/mainwindow.cpp:1892
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr ""
 "Dette vil skjule menulinjen helt. Du kan få den vist igen ved at trykke %1."
 
-#: app/mainwindow.cpp:1844
+#: app/mainwindow.cpp:1895
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Skjul menulinjen"
 
-#: app/mainwindow.cpp:2064
+#: app/mainwindow.cpp:2116
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "Du nåede det første dokument. Hvad vil du gøre?"
 
-#: app/mainwindow.cpp:2065 app/mainwindow.cpp:2079
+#: app/mainwindow.cpp:2117 app/mainwindow.cpp:2131
 #, kde-format
 msgid "Stay There"
 msgstr "Bliv der"
 
-#: app/mainwindow.cpp:2066
+#: app/mainwindow.cpp:2118
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "Gå til sidste dokument"
 
-#: app/mainwindow.cpp:2067 app/mainwindow.cpp:2081
+#: app/mainwindow.cpp:2119 app/mainwindow.cpp:2133
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "Gå tilbage til dokumentlisten"
 
-#: app/mainwindow.cpp:2078
+#: app/mainwindow.cpp:2130
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "Du nåede det sidste dokument. Hvad vil du gøre?"
 
-#: app/mainwindow.cpp:2080
+#: app/mainwindow.cpp:2132
 #, kde-format
 msgid "Go to the First Document"
 msgstr "Gå til første dokument"
@@ -1607,19 +1619,19 @@ msgstr ""
 "Browsing efter mærker er ikke tilgængeligt. Kontrollér at Nepomuk er korrekt "
 "installeret på din computer."
 
-#: app/viewmainpage.cpp:146 app/viewmainpage.cpp:426
+#: app/viewmainpage.cpp:148 app/viewmainpage.cpp:432
 #, kde-format
 msgid "Synchronize"
 msgstr "Synkronisér"
 
-#: app/viewmainpage.cpp:407
+#: app/viewmainpage.cpp:413
 #, fuzzy, kde-format
 #| msgid "Show thumbnails"
 msgid "Show Thumbnails"
 msgstr "Vis miniaturer"
 
 #. i18n: For languages that are read right to left, "right side" refers to the left side in this context.
-#: app/viewmainpage.cpp:410
+#: app/viewmainpage.cpp:416
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1631,20 +1643,20 @@ msgid ""
 "in the settings</link>.</para>"
 msgstr ""
 
-#: app/viewmainpage.cpp:562
+#: app/viewmainpage.cpp:571
 #, fuzzy, kde-format
 #| msgid "Background color:"
 msgctxt "@item:inmenu"
 msgid "Background Color Mode"
 msgstr "Baggrundsfarve:"
 
-#: app/viewmainpage.cpp:754
+#: app/viewmainpage.cpp:763
 #, kde-format
 msgctxt "@action:button"
 msgid "Discard Changes and Reload"
 msgstr "Kassér ændringer og genindlæs"
 
-#: app/viewmainpage.cpp:756
+#: app/viewmainpage.cpp:765
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2362,7 +2374,7 @@ msgid "%1"
 msgstr "%1"
 
 #. i18n: ectx: whatsthis, entry (PercentageOfMemoryUsageWarning), group (General)
-#: lib/gwenviewconfig.kcfg:60
+#: lib/gwenviewconfig.kcfg:63
 #, kde-format
 msgid ""
 "The percentage of memory used by Gwenview before it\n"
@@ -2372,7 +2384,7 @@ msgstr ""
 "            brugeren advares og det foreslås at gemme ændringer."
 
 #. i18n: ectx: whatsthis, entry (BlackListedExtensions), group (General)
-#: lib/gwenviewconfig.kcfg:67
+#: lib/gwenviewconfig.kcfg:70
 #, kde-format
 msgid ""
 "A list of filename extensions Gwenview should not try to\n"
@@ -2384,7 +2396,7 @@ msgstr ""
 "            der bruges til midlertidige filer af KSaveFile."
 
 #. i18n: ectx: whatsthis, entry (ZoomMode), group (ImageView)
-#: lib/gwenviewconfig.kcfg:208
+#: lib/gwenviewconfig.kcfg:211
 #, kde-format
 msgid ""
 "Defines what happens when going to image B after\n"
@@ -2416,7 +2428,7 @@ msgstr ""
 "            bilve  vist med den opdaterede zoom og placering)."
 
 #. i18n: ectx: whatsthis, entry (RenderingIntent), group (ImageView)
-#: lib/gwenviewconfig.kcfg:222
+#: lib/gwenviewconfig.kcfg:225
 #, kde-format
 msgid ""
 "Defines how colors are rendered when your display\n"
@@ -2435,37 +2447,37 @@ msgstr ""
 "            der ikke kan vises og lade de andre være."
 
 #. i18n: ectx: label, entry (random), group (slide show)
-#: lib/gwenviewconfig.kcfg:325
+#: lib/gwenviewconfig.kcfg:332
 #, kde-format
 msgid "Display slide show images in random order"
 msgstr "Vis diasshow-billeder i tilfældig rækkefølge"
 
 #. i18n: ectx: label, entry (fullscreen), group (slide show)
-#: lib/gwenviewconfig.kcfg:329
+#: lib/gwenviewconfig.kcfg:336
 #, kde-format
 msgid "Show slideshow in fullscreen mode"
 msgstr "Vis diasshow i fuldskærmstilstand"
 
 #. i18n: ectx: label, entry (loop), group (slide show)
-#: lib/gwenviewconfig.kcfg:333
+#: lib/gwenviewconfig.kcfg:340
 #, kde-format
 msgid "Loop on images"
 msgstr "Løkke på billeder"
 
 #. i18n: ectx: label, entry (stopAtEnd), group (slide show)
-#: lib/gwenviewconfig.kcfg:337
+#: lib/gwenviewconfig.kcfg:344
 #, kde-format
 msgid "Stop at last image of folder"
 msgstr "Stop ved mappens sidste billede"
 
 #. i18n: ectx: label, entry (interval), group (slide show)
-#: lib/gwenviewconfig.kcfg:341
+#: lib/gwenviewconfig.kcfg:348
 #, kde-format
 msgid "Interval between images (in seconds)"
 msgstr "Interval mellem billeder (i sekunder)"
 
 #. i18n: ectx: label, entry (CropPreserveAspectRatio), group (Crop)
-#: lib/gwenviewconfig.kcfg:357
+#: lib/gwenviewconfig.kcfg:364
 #, kde-format
 msgid "Restrict crop to image ratio when Advanced Settings disabled"
 msgstr ""
@@ -2473,7 +2485,7 @@ msgstr ""
 "deaktiveret"
 
 #. i18n: ectx: label, entry (CropRatioIndex), group (Crop)
-#: lib/gwenviewconfig.kcfg:361
+#: lib/gwenviewconfig.kcfg:368
 #, kde-format
 msgid "Index representing selected ratio in the Advanced settings combobox"
 msgstr ""
@@ -2481,7 +2493,7 @@ msgstr ""
 "avancerede indstillinger"
 
 #. i18n: ectx: label, entry (CropRatioWidth), group (Crop)
-#: lib/gwenviewconfig.kcfg:365
+#: lib/gwenviewconfig.kcfg:372
 #, kde-format
 msgid "Last used crop ratio width when Advanced Settings enabled"
 msgstr ""
@@ -2489,7 +2501,7 @@ msgstr ""
 "aktiveret"
 
 #. i18n: ectx: label, entry (CropRatioHeight), group (Crop)
-#: lib/gwenviewconfig.kcfg:369
+#: lib/gwenviewconfig.kcfg:376
 #, kde-format
 msgid "Last used crop ratio height when Advanced Settings enabled"
 msgstr ""
