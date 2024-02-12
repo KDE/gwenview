@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-11 00:36+0000\n"
-"PO-Revision-Date: 2024-01-04 19:55+0100\n"
+"PO-Revision-Date: 2024-02-11 05:31+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -1075,13 +1075,12 @@ msgstr "Komenci en plenekrana reĝimo"
 #: app/main.cpp:192
 #, kde-format
 msgid "Start in slideshow mode"
-msgstr "Komencu en bildoprezenta reĝimo"
+msgstr "Komenci en bildoprezenta reĝimo"
 
 #: app/main.cpp:193
-#, fuzzy, kde-format
-#| msgid "Start in slideshow mode"
+#, kde-format
 msgid "Start in spotlight mode"
-msgstr "Komencu en bildoprezenta reĝimo"
+msgstr "Komenci en spotluma reĝimo"
 
 #: app/main.cpp:194
 #, kde-format
@@ -1137,12 +1136,10 @@ msgid "Exit Full Screen"
 msgstr "Eliri Plenan Ekranon"
 
 #: app/mainwindow.cpp:434
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Light Mode"
+#, kde-format
 msgctxt "@action"
 msgid "Spotlight Mode"
-msgstr "Luma Reĝimo"
+msgstr "Spotluma Reĝimo"
 
 #: app/mainwindow.cpp:440
 #, kde-format

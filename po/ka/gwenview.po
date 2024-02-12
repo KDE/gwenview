@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-11 00:36+0000\n"
-"PO-Revision-Date: 2023-09-09 09:35+0200\n"
+"PO-Revision-Date: 2024-02-11 02:33+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -1076,10 +1076,9 @@ msgid "Start in slideshow mode"
 msgstr "სლაიდშოუს რეჟიმში გაშვება"
 
 #: app/main.cpp:193
-#, fuzzy, kde-format
-#| msgid "Start in slideshow mode"
+#, kde-format
 msgid "Start in spotlight mode"
-msgstr "სლაიდშოუს რეჟიმში გაშვება"
+msgstr "გაშვება გამორჩევის რეჟიმში"
 
 #: app/main.cpp:194
 #, kde-format
@@ -1135,12 +1134,10 @@ msgid "Exit Full Screen"
 msgstr "სრული ეკრანიდან გამოსვლა"
 
 #: app/mainwindow.cpp:434
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Light Mode"
+#, kde-format
 msgctxt "@action"
 msgid "Spotlight Mode"
-msgstr "იოლი"
+msgstr "გამორჩევის რეჟიმი"
 
 #: app/mainwindow.cpp:440
 #, kde-format

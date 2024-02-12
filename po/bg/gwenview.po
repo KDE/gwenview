@@ -3,13 +3,13 @@
 #
 # Yasen Pramatarov <yasen@lindeas.com>, 2009, 2010, 2011, 2012, 2013, 2015.
 # Zlatko Popov <zlatkopopov@fsa-bg.org>, 2009, 2012.
-# Mincho Kondarev <mkondarev@yahoo.de>, 2022, 2023.
+# SPDX-FileCopyrightText: 2022, 2023, 2024 Mincho Kondarev <mkondarev@yahoo.de>
 msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-11 00:36+0000\n"
-"PO-Revision-Date: 2023-09-15 18:56+0200\n"
+"PO-Revision-Date: 2024-02-11 16:09+0100\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
 "Language: bg\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.04.3\n"
+"X-Generator: Lokalize 23.08.4\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1081,10 +1081,9 @@ msgid "Start in slideshow mode"
 msgstr "Стартиране в режим \"презентация\""
 
 #: app/main.cpp:193
-#, fuzzy, kde-format
-#| msgid "Start in slideshow mode"
+#, kde-format
 msgid "Start in spotlight mode"
-msgstr "Стартиране в режим \"презентация\""
+msgstr "Стартиране в режим \"под прожектор\""
 
 #: app/main.cpp:194
 #, kde-format
@@ -1140,12 +1139,10 @@ msgid "Exit Full Screen"
 msgstr "Изход от цял екран"
 
 #: app/mainwindow.cpp:434
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Light Mode"
+#, kde-format
 msgctxt "@action"
 msgid "Spotlight Mode"
-msgstr "Светъл режим"
+msgstr "Режим под прожектор"
 
 #: app/mainwindow.cpp:440
 #, kde-format

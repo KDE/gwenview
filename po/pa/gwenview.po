@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-11 00:36+0000\n"
-"PO-Revision-Date: 2024-01-29 21:44-0600\n"
+"PO-Revision-Date: 2024-02-11 12:01-0600\n"
 "Last-Translator: A S Alam <aalam@punlinux.org>\n"
 "Language-Team: Punjabi <kde-i18n-doc@kde.org>\n"
 "Language: pa\n"
@@ -1065,10 +1065,9 @@ msgid "Start in slideshow mode"
 msgstr "ਸਲਾਈਡ-ਸ਼ੋ ਮੋਡ ਵਿੱਚ ਸ਼ੁਰੂ"
 
 #: app/main.cpp:193
-#, fuzzy, kde-format
-#| msgid "Start in slideshow mode"
+#, kde-format
 msgid "Start in spotlight mode"
-msgstr "ਸਲਾਈਡ-ਸ਼ੋ ਮੋਡ ਵਿੱਚ ਸ਼ੁਰੂ"
+msgstr "ਸਪਾਟਲਾਈਟ ਢੰਗ ਵਿੱਚ ਸ਼ੁਰੂ ਕਰੋ"
 
 #: app/main.cpp:194
 #, kde-format
@@ -1124,12 +1123,10 @@ msgid "Exit Full Screen"
 msgstr "ਪੂਰੀ ਸਕਰੀਨ ਤੋਂ ਬਾਹਰ ਜਾਓ"
 
 #: app/mainwindow.cpp:434
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Light Mode"
+#, kde-format
 msgctxt "@action"
 msgid "Spotlight Mode"
-msgstr "ਫਿੱਕਾ ਢੰਗ"
+msgstr "ਸਪਾਟਲਾਈਟ ਢੰਗ"
 
 #: app/mainwindow.cpp:440
 #, kde-format

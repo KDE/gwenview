@@ -4,7 +4,7 @@
 # Tom Albers <tomalbers@kde.nl>, 2005.
 # Rinse de Vries <RinseDeVries@home.nl>, 2005.
 # Bram Schoenmakers <bramschoenmakers@kde.nl>, 2006.
-# SPDX-FileCopyrightText: 2008, 2009, 2023 Freek de Kruijf <f.de.kruijf@hetnet.nl>
+# SPDX-FileCopyrightText: 2008, 2009, 2023, 2024 Freek de Kruijf <f.de.kruijf@hetnet.nl>
 # Freek de Kruijf <freekdekruijf@kde.nl>, 2009, 2010, 2011, 2012.
 # Freek de Kruijf <freekdekruijf@kde.nl>, 2011, 2013, 2014, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
 msgid ""
@@ -12,14 +12,14 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-11 00:36+0000\n"
-"PO-Revision-Date: 2023-09-20 11:03+0200\n"
+"PO-Revision-Date: 2024-02-11 15:57+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.08.1\n"
+"X-Generator: Lokalize 23.08.4\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -27,7 +27,7 @@ msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr ""
 "Rinse de Vries - 2002 tot 2007,Wilbert Berendsen - 2003,Tom Albers - 2005,"
-"Bram Schoenmakers - 2006,Freek de Kruijf - 2014 t/m 2023"
+"Bram Schoenmakers - 2006,Freek de Kruijf - 2014 t/m 2024"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
@@ -1085,10 +1085,9 @@ msgid "Start in slideshow mode"
 msgstr "Als diavoorstelling starten"
 
 #: app/main.cpp:193
-#, fuzzy, kde-format
-#| msgid "Start in slideshow mode"
+#, kde-format
 msgid "Start in spotlight mode"
-msgstr "Als diavoorstelling starten"
+msgstr "In modus schijnwerper starten"
 
 #: app/main.cpp:194
 #, kde-format
@@ -1144,12 +1143,10 @@ msgid "Exit Full Screen"
 msgstr "Volledig scherm verlaten"
 
 #: app/mainwindow.cpp:434
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Light Mode"
+#, kde-format
 msgctxt "@action"
 msgid "Spotlight Mode"
-msgstr "Lichte modus"
+msgstr "Modus schijnwerper"
 
 #: app/mainwindow.cpp:440
 #, kde-format
