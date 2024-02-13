@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-11 00:36+0000\n"
-"PO-Revision-Date: 2024-01-10 11:37+0100\n"
+"PO-Revision-Date: 2024-02-11 10:56+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -1084,10 +1084,9 @@ msgid "Start in slideshow mode"
 msgstr "Inicia en el mode de presentació de diapositives"
 
 #: app/main.cpp:193
-#, fuzzy, kde-format
-#| msgid "Start in slideshow mode"
+#, kde-format
 msgid "Start in spotlight mode"
-msgstr "Inicia en el mode de presentació de diapositives"
+msgstr "Inicia en el mode de focus"
 
 #: app/main.cpp:194
 #, kde-format
@@ -1143,12 +1142,10 @@ msgid "Exit Full Screen"
 msgstr "Ix de pantalla completa"
 
 #: app/mainwindow.cpp:434
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Light Mode"
+#, kde-format
 msgctxt "@action"
 msgid "Spotlight Mode"
-msgstr "Mode clar"
+msgstr "Mode de focus"
 
 #: app/mainwindow.cpp:440
 #, kde-format

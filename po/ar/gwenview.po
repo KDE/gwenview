@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-11 00:36+0000\n"
-"PO-Revision-Date: 2024-01-17 17:43+0400\n"
+"PO-Revision-Date: 2024-02-12 11:55+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -1117,10 +1117,9 @@ msgid "Start in slideshow mode"
 msgstr "ابدأ في نمط عرض الشرائح"
 
 #: app/main.cpp:193
-#, fuzzy, kde-format
-#| msgid "Start in slideshow mode"
+#, kde-format
 msgid "Start in spotlight mode"
-msgstr "ابدأ في نمط عرض الشرائح"
+msgstr "ابدأ في نمط التركيز"
 
 #: app/main.cpp:194
 #, kde-format
@@ -1176,12 +1175,10 @@ msgid "Exit Full Screen"
 msgstr "أنهِ ملء الشاشة"
 
 #: app/mainwindow.cpp:434
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Light Mode"
+#, kde-format
 msgctxt "@action"
 msgid "Spotlight Mode"
-msgstr "نمط فاتح"
+msgstr "نمط التركيز"
 
 #: app/mainwindow.cpp:440
 #, kde-format

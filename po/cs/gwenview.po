@@ -1078,10 +1078,9 @@ msgid "Start in slideshow mode"
 msgstr "Spustit v režimu promítání"
 
 #: app/main.cpp:193
-#, fuzzy, kde-format
-#| msgid "Start in slideshow mode"
+#, kde-format
 msgid "Start in spotlight mode"
-msgstr "Spustit v režimu promítání"
+msgstr ""
 
 #: app/main.cpp:194
 #, kde-format
@@ -1137,12 +1136,10 @@ msgid "Exit Full Screen"
 msgstr "Ukončit celoobrazovkový režim"
 
 #: app/mainwindow.cpp:434
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Light Mode"
+#, kde-format
 msgctxt "@action"
 msgid "Spotlight Mode"
-msgstr "Světlý režim"
+msgstr ""
 
 #: app/mainwindow.cpp:440
 #, kde-format
