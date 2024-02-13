@@ -36,6 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QScroller>
 #include <QTimeLine>
 #include <QTimer>
+#include <QWindow>
 
 // KF
 #include <KDirModel>
@@ -170,15 +171,65 @@ using ThumbnailForUrl = QHash<QUrl, Thumbnail>;
 using UrlQueue = QQueue<QUrl>;
 using PersistentModelIndexSet = QSet<QPersistentModelIndex>;
 
+class WindowScaleWatcher : public QObject
+{
+    Q_OBJECT
+public:
+    void setWindow(QWindow *window)
+    {
+        if (mWindow == window) {
+            return;
+        }
+        if (mWindow) {
+            mWindow->removeEventFilter(this);
+        }
+        mWindow = window;
+        if (mWindow) {
+            mWindow->installEventFilter(this);
+            updateDevicePixelRatio();
+        }
+    }
+
+protected:
+    bool eventFilter(QObject *watched, QEvent *event) override
+    {
+        if (event->type() == QEvent::DevicePixelRatioChange) {
+            updateDevicePixelRatio();
+        }
+        return QObject::eventFilter(watched, event);
+    }
+
+private:
+    void updateDevicePixelRatio()
+    {
+        if (mWindow->devicePixelRatio() != mLastDevicePixelRatio) {
+            Q_EMIT scaleChanged();
+            mLastDevicePixelRatio = mWindow->devicePixelRatio();
+        }
+    }
+
+Q_SIGNALS:
+    void scaleChanged();
+
+private:
+    QPointer<QWindow> mWindow;
+    // we don't know what dpr the widget was using
+    // before getting a window as it comes from the primary screen
+    // always trigger on the first set
+    qreal mLastDevicePixelRatio = -1;
+};
+
 struct ThumbnailViewPrivate {
     ThumbnailView *q;
     ThumbnailView::ThumbnailScaleMode mScaleMode;
     QSize mThumbnailSize;
+    int mThumbnailLogicalWidth = 0;
     qreal mThumbnailAspectRatio;
     AbstractDocumentInfoProvider *mDocumentInfoProvider;
     AbstractThumbnailViewHelper *mThumbnailViewHelper;
     ThumbnailForUrl mThumbnailForUrl;
     QTimer mScheduledThumbnailGenerationTimer;
+    WindowScaleWatcher mWindowScaleWatcher;
 
     UrlQueue mSmoothThumbnailQueue;
     QTimer mSmoothThumbnailTimer;
@@ -328,6 +379,10 @@ ThumbnailView::ThumbnailView(QWidget *parent)
 
     connect(this, &ThumbnailView::activated, this, &ThumbnailView::emitIndexActivatedIfNoModifiers);
 
+    connect(&d->mWindowScaleWatcher, &WindowScaleWatcher::scaleChanged, this, [this]() {
+        setThumbnailWidth(d->mThumbnailLogicalWidth);
+    });
+
     d->mScroller = ScrollerUtils::setQScroller(this->viewport());
     d->mTouch = new Touch(viewport());
     connect(d->mTouch, &Touch::twoFingerTapTriggered, this, &ThumbnailView::showContextMenu);
@@ -403,7 +458,7 @@ void ThumbnailView::updateThumbnailSize()
     pix.fill(Qt::transparent);
     QPainter painter(&pix);
     painter.setOpacity(0.5);
-    painter.drawPixmap((value.width() - icon.width()) / 2, (value.height() - icon.height()) / 2, icon);
+    style()->drawItemPixmap(&painter, QRect(QPoint(), pix.deviceIndependentSize().toSize()), Qt::AlignCenter, icon);
     painter.end();
     d->mWaitingThumbnail = pix;
     d->mWaitingThumbnail.setDevicePixelRatio(dpr);
@@ -428,6 +483,7 @@ void ThumbnailView::updateThumbnailSize()
 
 void ThumbnailView::setThumbnailWidth(int width)
 {
+    d->mThumbnailLogicalWidth = width;
     const auto dpr = devicePixelRatioF();
     const qreal newWidthF = width * dpr;
     const int newWidth = qRound(newWidthF);
@@ -835,6 +891,8 @@ void ThumbnailView::resizeEvent(QResizeEvent *event)
 
 void ThumbnailView::showEvent(QShowEvent *event)
 {
+    d->mWindowScaleWatcher.setWindow(window()->windowHandle());
+
     QListView::showEvent(event);
     d->scheduleThumbnailGeneration();
     QTimer::singleShot(0, this, &ThumbnailView::scrollToSelectedIndex);
@@ -1084,4 +1142,4 @@ void ThumbnailView::setCreateThumbnailsForRemoteUrls(bool createRemoteThumbs)
 
 } // namespace
 
-#include "moc_thumbnailview.cpp"
+#include "thumbnailview.moc"
