@@ -2811,6 +2811,3 @@ msgstr "&Fitxer"
 #, kde-format
 msgid "&View"
 msgstr "Vi&sualitza"
-
-#~ msgid "&Settings"
-#~ msgstr "A&rranjament"
