@@ -2,12 +2,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # SPDX-FileCopyrightText: 2013, 2014, 2017, 2020, 2021, 2022, 2023 Giovanni Sora <g.sora@tiscali.it>
+# giovanni <g.sora@tiscali.it>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-11 00:36+0000\n"
-"PO-Revision-Date: 2023-09-14 23:01+0200\n"
+"POT-Creation-Date: 2024-02-14 00:36+0000\n"
+"PO-Revision-Date: 2024-02-13 16:27+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -15,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.08.0\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1078,10 +1079,9 @@ msgid "Start in slideshow mode"
 msgstr "Initia in modo slideshow (monstra de dispositivas)"
 
 #: app/main.cpp:193
-#, fuzzy, kde-format
-#| msgid "Start in slideshow mode"
+#, kde-format
 msgid "Start in spotlight mode"
-msgstr "Initia in modo slideshow (monstra de dispositivas)"
+msgstr "Initia in modo pharo (spotlight) "
 
 #: app/main.cpp:194
 #, kde-format
@@ -1137,12 +1137,10 @@ msgid "Exit Full Screen"
 msgstr "Exi del schermo integre"
 
 #: app/mainwindow.cpp:434
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Light Mode"
+#, kde-format
 msgctxt "@action"
 msgid "Spotlight Mode"
-msgstr "Modo Clar"
+msgstr "Modo Pharo (spotlight)"
 
 #: app/mainwindow.cpp:440
 #, kde-format
@@ -2260,8 +2258,8 @@ msgid "Deselect"
 msgstr "De-selectiona"
 
 #: lib/documentview/documentview.cpp:260 lib/imagemetainfomodel.cpp:440
-#: lib/thumbnailview/previewitemdelegate.cpp:412
-#: lib/thumbnailview/previewitemdelegate.cpp:820
+#: lib/thumbnailview/previewitemdelegate.cpp:415
+#: lib/thumbnailview/previewitemdelegate.cpp:829
 #, kde-format
 msgctxt "@item:intable %1 is image width, %2 is image height"
 msgid "%1x%2"

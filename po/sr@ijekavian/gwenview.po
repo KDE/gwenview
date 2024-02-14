@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-11 00:36+0000\n"
+"POT-Creation-Date: 2024-02-14 00:36+0000\n"
 "PO-Revision-Date: 2017-10-30 23:08+0100\n"
 "Last-Translator: Chusslove Illich <caslav.ilic@gmx.net>\n"
 "Language-Team: Serbian <kde-i18n-sr@kde.org>\n"
@@ -2386,8 +2386,8 @@ msgid "Deselect"
 msgstr "Поништи избор"
 
 #: lib/documentview/documentview.cpp:260 lib/imagemetainfomodel.cpp:440
-#: lib/thumbnailview/previewitemdelegate.cpp:412
-#: lib/thumbnailview/previewitemdelegate.cpp:820
+#: lib/thumbnailview/previewitemdelegate.cpp:415
+#: lib/thumbnailview/previewitemdelegate.cpp:829
 #, kde-format
 msgctxt "@item:intable %1 is image width, %2 is image height"
 msgid "%1x%2"

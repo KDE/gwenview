@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdegraphics\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-11 00:36+0000\n"
+"POT-Creation-Date: 2024-02-14 00:36+0000\n"
 "PO-Revision-Date: 2014-01-31 20:41+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -2350,8 +2350,8 @@ msgid "Deselect"
 msgstr "Poništi izbor"
 
 #: lib/documentview/documentview.cpp:260 lib/imagemetainfomodel.cpp:440
-#: lib/thumbnailview/previewitemdelegate.cpp:412
-#: lib/thumbnailview/previewitemdelegate.cpp:820
+#: lib/thumbnailview/previewitemdelegate.cpp:415
+#: lib/thumbnailview/previewitemdelegate.cpp:829
 #, kde-format
 msgctxt "@item:intable %1 is image width, %2 is image height"
 msgid "%1x%2"

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KDE Frameworks 5 Applications\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-11 00:36+0000\n"
+"POT-Creation-Date: 2024-02-14 00:36+0000\n"
 "PO-Revision-Date: 2023-06-12 07:43+0700\n"
 "Last-Translator: Wantoyèk <wantoyek@gmail.com>\n"
 "Language-Team: Indonesian <kde-i18n-doc@kde.org>\n"
@@ -2257,8 +2257,8 @@ msgid "Deselect"
 msgstr "Batalkan pilihan"
 
 #: lib/documentview/documentview.cpp:260 lib/imagemetainfomodel.cpp:440
-#: lib/thumbnailview/previewitemdelegate.cpp:412
-#: lib/thumbnailview/previewitemdelegate.cpp:820
+#: lib/thumbnailview/previewitemdelegate.cpp:415
+#: lib/thumbnailview/previewitemdelegate.cpp:829
 #, kde-format
 msgctxt "@item:intable %1 is image width, %2 is image height"
 msgid "%1x%2"
