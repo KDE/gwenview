@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-11 00:36+0000\n"
+"POT-Creation-Date: 2024-02-15 02:20+0000\n"
 "PO-Revision-Date: 2024-01-06 03:34\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -2185,8 +2185,8 @@ msgid "Deselect"
 msgstr "取消选择"
 
 #: lib/documentview/documentview.cpp:260 lib/imagemetainfomodel.cpp:440
-#: lib/thumbnailview/previewitemdelegate.cpp:412
-#: lib/thumbnailview/previewitemdelegate.cpp:820
+#: lib/thumbnailview/previewitemdelegate.cpp:415
+#: lib/thumbnailview/previewitemdelegate.cpp:829
 #, kde-format
 msgctxt "@item:intable %1 is image width, %2 is image height"
 msgid "%1x%2"
