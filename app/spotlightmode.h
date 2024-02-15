@@ -1,3 +1,11 @@
+/*
+This file is part of the KDE project
+SPDX-License-Identifier: GPL-2.0-or-later
+
+Project idea and initial maintainer: Aurélien Gâteau <agateau@kde.org>
+SPDX-FileCopyrightText: 2024 Ravil Saifullin <saifullin.dev@gmail.com>
+
+*/
 #ifndef SPOTLIGHTMODE_H
 #define SPOTLIGHTMODE_H
 
