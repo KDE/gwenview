@@ -2,13 +2,13 @@
 # Copyright (C) 2006, 2007, 2008, 2009 This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 # Sveinn í Felli <sveinki@nett.is>, 2007.
-# Sveinn í Felli <sveinki@nett.is>, 2008, 2009, 2010, 2011, 2013, 2015, 2016, 2017, 2018, 2020, 2021, 2022, 2023.
+# Sveinn í Felli <sveinki@nett.is>, 2008, 2009, 2010, 2011, 2013, 2015, 2016, 2017, 2018, 2020, 2021, 2022, 2023, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-14 00:36+0000\n"
-"PO-Revision-Date: 2023-09-19 11:54+0000\n"
+"PO-Revision-Date: 2024-02-18 08:46+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic\n"
 "Language: is\n"
@@ -1077,10 +1077,9 @@ msgid "Start in slideshow mode"
 msgstr "Byrja í myndskyggnuham"
 
 #: app/main.cpp:193
-#, fuzzy, kde-format
-#| msgid "Start in slideshow mode"
+#, kde-format
 msgid "Start in spotlight mode"
-msgstr "Byrja í myndskyggnuham"
+msgstr "Byrja í kastljósham"
 
 #: app/main.cpp:194
 #, kde-format
@@ -1136,12 +1135,10 @@ msgid "Exit Full Screen"
 msgstr "Fara úr skjáfylliham"
 
 #: app/mainwindow.cpp:434
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Light Mode"
+#, kde-format
 msgctxt "@action"
 msgid "Spotlight Mode"
-msgstr "Ljós hamur"
+msgstr "Kastljóshamur"
 
 #: app/mainwindow.cpp:440
 #, kde-format
