@@ -25,6 +25,7 @@
         "Name[hu]": "Gwenview képmegjelenítő",
         "Name[ia]": "Visor de imagine Gwenview",
         "Name[id]": "Gwenview Penampil Gambar",
+        "Name[is]": "Gwenview myndskoðari",
         "Name[it]": "Visore di immagini Gwenview",
         "Name[ka]": "Gwenview - სურათების დამთვალიერებელი",
         "Name[ko]": "Gwenview 그림 뷰어",
