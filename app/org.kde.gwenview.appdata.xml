@@ -16,6 +16,7 @@
   <developer_name translate="no" xml:lang="he">KDE</developer_name>
   <developer_name translate="no" xml:lang="hu">KDE</developer_name>
   <developer_name translate="no" xml:lang="ia">KDE</developer_name>
+  <developer_name translate="no" xml:lang="is">KDE</developer_name>
   <developer_name translate="no" xml:lang="it">KDE</developer_name>
   <developer_name translate="no" xml:lang="ka">KDE</developer_name>
   <developer_name translate="no" xml:lang="ko">KDE</developer_name>
@@ -342,6 +343,7 @@
       <li xml:lang="hu">Egyszerű fájlkezelési műveletek, mint például másolás, áthelyezés, törlés és egyebek</li>
       <li xml:lang="ia">Actiones de gestion de file basic tal como copiar,mover, deler, e alteres</li>
       <li xml:lang="id">Tindakan pengelolaan file dasar seperti salin, pindah, hapus, dan lainnya</li>
+      <li xml:lang="is">Einfaldar skráastjórnunaraðgerðir á borð við afritun, færslu, eyðingu og fleira</li>
       <li xml:lang="it">Semplici azioni di gestione file come copia, spostamento, eliminazione ed altre</li>
       <li xml:lang="ka">ფაილების ისეთი მარტივი მანიპულაციების მხარდაჭერა, როგორიცაა კოპირება, გადატანა, წაშლა და სხვა</li>
       <li xml:lang="ko">파일 복사, 이동, 삭제와 같은 기본 파일 관리 작업</li>
