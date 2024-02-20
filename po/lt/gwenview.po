@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-15 02:20+0000\n"
+"POT-Creation-Date: 2024-02-20 02:27+0000\n"
 "PO-Revision-Date: 2024-01-26 20:15+0200\n"
 "Last-Translator: Moo <<>>\n"
 "Language-Team: lt <kde-i18n-lt@kde.org>\n"
@@ -1081,27 +1081,27 @@ msgstr[1] "%1 failai"
 msgstr[2] "%1 failų"
 msgstr[3] "%1 failas"
 
-#: app/main.cpp:174
+#: app/main.cpp:172
 #, kde-format
 msgid "Gwenview"
 msgstr "Gwenview"
 
-#: app/main.cpp:176
+#: app/main.cpp:174
 #, kde-format
 msgid "An Image Viewer"
 msgstr "Paveikslų žiūryklė"
 
-#: app/main.cpp:184
+#: app/main.cpp:182
 #, kde-format
 msgid "Start in fullscreen mode"
 msgstr "Paleisti viso ekrano veiksenoje"
 
-#: app/main.cpp:185
+#: app/main.cpp:183
 #, kde-format
 msgid "Start in slideshow mode"
 msgstr "Paleisti skaidrių rodymo veiksenoje"
 
-#: app/main.cpp:186
+#: app/main.cpp:184
 #, kde-format
 msgid "A starting file or folders"
 msgstr "Failas ar aplankas, atveriamas paleidus programą"

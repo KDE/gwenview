@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-15 02:20+0000\n"
+"POT-Creation-Date: 2024-02-20 02:27+0000\n"
 "PO-Revision-Date: 2012-07-02 21:42+0300\n"
 "Last-Translator: Einars Sprugis <einars8@gmail.com>\n"
 "Language-Team: Latvian <locale@laka.lv>\n"
@@ -1101,27 +1101,27 @@ msgstr[0] "%1 fails"
 msgstr[1] "%1 faili"
 msgstr[2] "%1 failu"
 
-#: app/main.cpp:174
+#: app/main.cpp:172
 #, kde-format
 msgid "Gwenview"
 msgstr "Gwenview"
 
-#: app/main.cpp:176
+#: app/main.cpp:174
 #, kde-format
 msgid "An Image Viewer"
 msgstr "Attēlu pārlūks"
 
-#: app/main.cpp:184
+#: app/main.cpp:182
 #, kde-format
 msgid "Start in fullscreen mode"
 msgstr "Sākt pilnekrāna režīmā"
 
-#: app/main.cpp:185
+#: app/main.cpp:183
 #, kde-format
 msgid "Start in slideshow mode"
 msgstr "Sākt slīdrādes režīmā"
 
-#: app/main.cpp:186
+#: app/main.cpp:184
 #, fuzzy, kde-format
 #| msgid "A starting file or folder"
 msgid "A starting file or folders"

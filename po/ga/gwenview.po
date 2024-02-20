@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdegraphics/gwenview.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-15 02:20+0000\n"
+"POT-Creation-Date: 2024-02-20 02:27+0000\n"
 "PO-Revision-Date: 2007-09-30 16:51-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -1107,27 +1107,27 @@ msgstr[2] "%1 chomhad"
 msgstr[3] "%1 gcomhad"
 msgstr[4] "%1 comhad"
 
-#: app/main.cpp:174
+#: app/main.cpp:172
 #, kde-format
 msgid "Gwenview"
 msgstr "Gwenview"
 
-#: app/main.cpp:176
+#: app/main.cpp:174
 #, kde-format
 msgid "An Image Viewer"
 msgstr "Amharcán Íomhánna"
 
-#: app/main.cpp:184
+#: app/main.cpp:182
 #, kde-format
 msgid "Start in fullscreen mode"
 msgstr "Tosaigh sa mhód lánscáileáin"
 
-#: app/main.cpp:185
+#: app/main.cpp:183
 #, kde-format
 msgid "Start in slideshow mode"
 msgstr "Tosaigh sa mód Taispeántais Sleamhnán"
 
-#: app/main.cpp:186
+#: app/main.cpp:184
 #, fuzzy, kde-format
 #| msgid "A starting file or folder"
 msgid "A starting file or folders"

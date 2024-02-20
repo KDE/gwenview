@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-15 02:20+0000\n"
+"POT-Creation-Date: 2024-02-20 02:27+0000\n"
 "PO-Revision-Date: 2023-09-27 17:55+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -1076,27 +1076,27 @@ msgstr[1] "%1 tiedostoa"
 
 # pmap: =/gen=Gwenview’n/
 # pmap: =/elat=Gwenview’stä/
-#: app/main.cpp:174
+#: app/main.cpp:172
 #, kde-format
 msgid "Gwenview"
 msgstr "Gwenview"
 
-#: app/main.cpp:176
+#: app/main.cpp:174
 #, kde-format
 msgid "An Image Viewer"
 msgstr "Kuvakatselin"
 
-#: app/main.cpp:184
+#: app/main.cpp:182
 #, kde-format
 msgid "Start in fullscreen mode"
 msgstr "Aloita koko näytön tilassa"
 
-#: app/main.cpp:185
+#: app/main.cpp:183
 #, kde-format
 msgid "Start in slideshow mode"
 msgstr "Aloita diaesitystilassa"
 
-#: app/main.cpp:186
+#: app/main.cpp:184
 #, kde-format
 msgid "A starting file or folders"
 msgstr "Aloitustiedosto tai -kansiot"
