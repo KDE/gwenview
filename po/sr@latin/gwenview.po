@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-14 00:36+0000\n"
+"POT-Creation-Date: 2024-02-20 00:37+0000\n"
 "PO-Revision-Date: 2017-10-30 23:08+0100\n"
 "Last-Translator: Chusslove Illich <caslav.ilic@gmx.net>\n"
 "Language-Team: Serbian <kde-i18n-sr@kde.org>\n"
@@ -1112,33 +1112,33 @@ msgstr[1] "%1 fajla"
 msgstr[2] "%1 fajlova"
 msgstr[3] "%1 fajl"
 
-#: app/main.cpp:181
+#: app/main.cpp:179
 #, kde-format
 msgid "Gwenview"
 msgstr "GwenView"
 
-#: app/main.cpp:183
+#: app/main.cpp:181
 #, kde-format
 msgid "An Image Viewer"
 msgstr "Prikazivač slika"
 
-#: app/main.cpp:191
+#: app/main.cpp:189
 #, kde-format
 msgid "Start in fullscreen mode"
 msgstr "Pokreni u režimu celog ekrana"
 
-#: app/main.cpp:192
+#: app/main.cpp:190
 #, kde-format
 msgid "Start in slideshow mode"
 msgstr "Pokreni u režimu slajdšoua"
 
-#: app/main.cpp:193
+#: app/main.cpp:191
 #, fuzzy, kde-format
 #| msgid "Start in slideshow mode"
 msgid "Start in spotlight mode"
 msgstr "Pokreni u režimu slajdšoua"
 
-#: app/main.cpp:194
+#: app/main.cpp:192
 #, kde-format
 msgid "A starting file or folders"
 msgstr "Početni fajl ili fascikle"

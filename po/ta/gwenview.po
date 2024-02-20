@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-14 00:36+0000\n"
+"POT-Creation-Date: 2024-02-20 00:37+0000\n"
 "PO-Revision-Date: 2024-02-18 16:54+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -1051,32 +1051,32 @@ msgid_plural "%1 files"
 msgstr[0] "%1 கோப்பு"
 msgstr[1] "%1 கோப்புகள்"
 
-#: app/main.cpp:181
+#: app/main.cpp:179
 #, kde-format
 msgid "Gwenview"
 msgstr "குவென்வியூ"
 
-#: app/main.cpp:183
+#: app/main.cpp:181
 #, kde-format
 msgid "An Image Viewer"
 msgstr "ஒரு படக் காட்டி"
 
-#: app/main.cpp:191
+#: app/main.cpp:189
 #, kde-format
 msgid "Start in fullscreen mode"
 msgstr "முழுத்திரை பயன்முறையில் துவக்கு"
 
-#: app/main.cpp:192
+#: app/main.cpp:190
 #, kde-format
 msgid "Start in slideshow mode"
 msgstr "வில்லைக்காட்சி பயன்முறையில் துவக்கு"
 
-#: app/main.cpp:193
+#: app/main.cpp:191
 #, kde-format
 msgid "Start in spotlight mode"
 msgstr "கவனப் பயன்முறையில் துவக்கு"
 
-#: app/main.cpp:194
+#: app/main.cpp:192
 #, kde-format
 msgid "A starting file or folders"
 msgstr "துவக்கத்தில் காட்ட வேண்டிய கோப்புகள் அல்லது அடைவுகள்"
