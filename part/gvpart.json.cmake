@@ -8,6 +8,7 @@
         "Name": "Gwenview Image Viewer",
         "Name[ar]": "جوِينفيو مستعرض الصورة",
         "Name[az]": "Gwenview şəkilə baxış aləti",
+        "Name[be]": "Праграма для прагляду выяў Gwenview",
         "Name[bg]": "Програма за снимки Gwenview",
         "Name[ca@valencia]": "Visor d'imatges Gwenview",
         "Name[ca]": "Visualitzador d'imatges Gwenview",
