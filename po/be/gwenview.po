@@ -3,10 +3,10 @@
 # Siarhei Liantsevich <serzh.by@gmail.com>, 2008.
 msgid ""
 msgstr ""
-"Project-Id-Version: 86ff119b1606fcaa910d6b44fc14b611\n"
+"Project-Id-Version: fc57ad16a28d02dea100ceb1c60de14e\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-20 00:37+0000\n"
-"PO-Revision-Date: 2023-02-15 22:16\n"
+"PO-Revision-Date: 2024-02-21 01:30\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@gmail.com>\n"
 "Language-Team: Belarusian\n"
 "Language: be\n"
@@ -17,11 +17,11 @@ msgstr ""
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || n%10>=5 && n%10<=9 || n"
 "%100>=11 && n%100<=14 ? 2 : 3);\n"
 "X-Generator: KAider 0.1\n"
-"X-Crowdin-Project: 86ff119b1606fcaa910d6b44fc14b611\n"
-"X-Crowdin-Project-ID: 127\n"
+"X-Crowdin-Project: fc57ad16a28d02dea100ceb1c60de14e\n"
+"X-Crowdin-Project-ID: 136\n"
 "X-Crowdin-Language: be\n"
-"X-Crowdin-File: /main/be/gwenview/gwenview.po\n"
-"X-Crowdin-File-ID: 7679\n"
+"X-Crowdin-File: /[antikruk.KDE] main/KDE6/be/messages/gwenview/gwenview.po\n"
+"X-Crowdin-File-ID: 9842\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -115,7 +115,7 @@ msgstr "Запамінаць каталогі і URL-адрасы"
 #: app/advancedconfigpage.ui:240
 #, kde-format
 msgid "Enable color management"
-msgstr ""
+msgstr "Уключыць кіраванне колерамі"
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileHelpLabel)
 #: app/advancedconfigpage.ui:265
@@ -126,13 +126,16 @@ msgid ""
 "is only appropriate for displays that are calibrated to the sRGB color space "
 "or are known to provide an incorrect color profile."
 msgstr ""
+"Калі кіраванне колерамі адключана, Gwenview будзе пераўтвараць выявы ў "
+"колеравую прастору sRGB, а не ў колеравую прастору, якую ён вызначае для "
+"дысплэя. Гэта пасуе толькі для дысплэяў, якія адкалібраваныя ў адпаведнасці "
+"з колеравай прасторай sRGB або падаюць няправільны колеравы профіль."
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileLabel)
 #: app/advancedconfigpage.ui:275
-#, fuzzy, kde-format
-#| msgid "Too many arguments."
+#, kde-format
 msgid "Color management:"
-msgstr "Занадта шмат аргументаў."
+msgstr "Кіраванне колерамі:"
 
 #: app/alignwithsidebarwidgetaction.cpp:23
 #, kde-format
@@ -440,7 +443,7 @@ msgstr "Стварыць каталог..."
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Open in New Window"
-msgstr ""
+msgstr "Адкрыць у новым акне"
 
 #: app/fileopscontextmanageritem.cpp:189
 #, kde-format
@@ -505,7 +508,7 @@ msgstr "Пазначана"
 #: app/filtercontroller.cpp:174
 #, kde-format
 msgid "Not Tagged"
-msgstr "Без пазнакі"
+msgstr "Няма тэга"
 
 #: app/filtercontroller.cpp:278
 #, kde-format
@@ -529,7 +532,7 @@ msgstr "Фільтраваць па рэйтынгу"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Tag"
-msgstr "Фільтраваць па пазнаке"
+msgstr "Фільтраваць па тэгу"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: app/fullscreenconfigwidget.ui:20
@@ -1102,10 +1105,9 @@ msgid "Start in slideshow mode"
 msgstr "Запускаць у рэжыме слайд-шоу"
 
 #: app/main.cpp:191
-#, fuzzy, kde-format
-#| msgid "Start in slideshow mode"
+#, kde-format
 msgid "Start in spotlight mode"
-msgstr "Запускаць у рэжыме слайд-шоу"
+msgstr "Запускаць у рэжыме пражэктара"
 
 #: app/main.cpp:192
 #, kde-format
@@ -1161,12 +1163,10 @@ msgid "Exit Full Screen"
 msgstr "Выйсці з поўнаэкраннага рэжыму"
 
 #: app/mainwindow.cpp:434
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Light Mode"
+#, kde-format
 msgctxt "@action"
 msgid "Spotlight Mode"
-msgstr "Светлы рэжым"
+msgstr "Рэжым пражэктара"
 
 #: app/mainwindow.cpp:440
 #, kde-format
@@ -1300,7 +1300,7 @@ msgstr "Аперацыі"
 #: app/mainwindow.cpp:949
 #, kde-format
 msgid "Viewing media"
-msgstr ""
+msgstr "Прагляд медыяфайлаў"
 
 #: app/mainwindow.cpp:1427
 #, kde-format
@@ -1511,7 +1511,7 @@ msgstr "Рэдагаванне"
 #, kde-format
 msgctxt "@action"
 msgid "Edit Tags"
-msgstr "Рэдагаваць пазнакі"
+msgstr "Рэдагаваць тэгі"
 
 #: app/semanticinfocontextmanageritem.cpp:215
 #, kde-format
@@ -1523,7 +1523,7 @@ msgstr "Нуль"
 #: app/semanticinfodialog.ui:13
 #, kde-format
 msgid "Tag Editor"
-msgstr "Рэдактар пазнак"
+msgstr "Рэдактар тэгаў"
 
 #. i18n: ectx: property (text), widget (QPushButton, mPreviousButton)
 #: app/semanticinfodialog.ui:31
@@ -1547,7 +1547,7 @@ msgstr "Рэйтынг:"
 #: app/semanticinfosidebaritem.ui:45
 #, kde-format
 msgid "Tags:"
-msgstr "Пазнакі:"
+msgstr "Тэгі:"
 
 #. i18n: ectx: property (placeholderText), widget (QTextEdit, mDescriptionTextEdit)
 #: app/semanticinfosidebaritem.ui:73
@@ -1631,7 +1631,7 @@ msgstr "Размяшчэнні"
 #: app/startmainpage.ui:154
 #, kde-format
 msgid "Tags"
-msgstr "Пазнакі"
+msgstr "Тэгі"
 
 #. i18n: ectx: property (text), widget (QLabel, mTagLabel)
 #: app/startmainpage.ui:172
@@ -1640,7 +1640,7 @@ msgid ""
 "Browsing by tags is not available. Make sure Nepomuk is properly installed "
 "on your computer."
 msgstr ""
-"Агляд па пазнаках недаступны. Пераканайцеся, што на камп'ютары правільна "
+"Агляд па тэгах недаступны. Пераканайцеся, што на камп'ютары правільна "
 "ўсталяваны Nepomuk."
 
 #: app/viewmainpage.cpp:148 app/viewmainpage.cpp:432
@@ -2313,12 +2313,10 @@ msgid "%1x%2"
 msgstr "%1x%2"
 
 #: lib/documentview/documentview.cpp:264 lib/zoomcombobox/zoomcombobox.cpp:318
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip of custom toolbar button"
-#| msgid "%1"
+#, kde-format
 msgctxt "Percent value"
 msgid "%1%"
-msgstr "%1"
+msgstr "%1%"
 
 #: lib/documentview/documentview.cpp:543
 #, kde-format
@@ -2397,7 +2395,7 @@ msgstr "Маштабаваць па памеры"
 #, kde-format
 msgctxt "Original image size percent value"
 msgid "100%"
-msgstr ""
+msgstr "100%"
 
 #: lib/documentview/documentviewcontroller.cpp:98
 #, kde-format
@@ -2601,27 +2599,25 @@ msgstr "Памер файла"
 #, kde-format
 msgctxt "@item:intable"
 msgid "Date Created"
-msgstr ""
+msgstr "Дата стварэння"
 
 #: lib/imagemetainfomodel.cpp:257
-#, fuzzy, kde-format
-#| msgid "One image modified"
-#| msgid_plural "%1 images modified"
+#, kde-format
 msgctxt "@item:intable"
 msgid "Date Modified"
-msgstr "Зменена %1 выява"
+msgstr "Дата змены"
 
 #: lib/imagemetainfomodel.cpp:258
 #, kde-format
 msgctxt "@item:intable"
 msgid "Date Accessed"
-msgstr ""
+msgstr "Дата доступу"
 
 #: lib/imagemetainfomodel.cpp:259
 #, kde-format
 msgctxt "@item:intable"
 msgid "Path"
-msgstr ""
+msgstr "Шлях"
 
 #: lib/imagemetainfomodel.cpp:260
 #, kde-format
@@ -2636,12 +2632,10 @@ msgid "Comment"
 msgstr "Каментар"
 
 #: lib/imagemetainfomodel.cpp:262
-#, fuzzy, kde-format
-#| msgctxt "@item:intable"
-#| msgid "File Time"
+#, kde-format
 msgctxt "@item:intable"
 msgid "File Type"
-msgstr "Час файла"
+msgstr "Тып файлаў"
 
 #: lib/imagemetainfomodel.cpp:324
 #, kde-format
@@ -2798,7 +2792,7 @@ msgstr "Змяніць памеры выявы"
 #: lib/resize/resizeimagewidget.ui:20
 #, kde-format
 msgid "Estimated new file size:"
-msgstr ""
+msgstr "Прыблізны новы памер файла:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: lib/resize/resizeimagewidget.ui:47
@@ -2822,10 +2816,9 @@ msgstr " пікс."
 
 #. i18n: ectx: property (text), widget (QLabel, mCurrentSizeLabel)
 #: lib/resize/resizeimagewidget.ui:115
-#, fuzzy, kde-format
-#| msgid "Current size:"
+#, kde-format
 msgid "Current file size:"
-msgstr "Бягучы памер:"
+msgstr "Бягучы памер файла:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, mKeepAspectCheckBox)
 #: lib/resize/resizeimagewidget.ui:145
@@ -2843,12 +2836,12 @@ msgstr "Бягучы памер:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Assign this tag to all selected images"
-msgstr "Прызначыць гэтую пазнаку ўсім абраным выявам"
+msgstr "Прызначыць гэты тэг усім абраным выявам"
 
 #: lib/semanticinfo/tagwidget.cpp:146
 #, kde-format
 msgid "Add tag"
-msgstr "Дадаць пазнаку"
+msgstr "Дадаць тэг"
 
 #: lib/slideshow.cpp:163
 #, kde-format
