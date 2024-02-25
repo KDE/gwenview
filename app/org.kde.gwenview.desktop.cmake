@@ -81,6 +81,7 @@ GenericName[cs]=Prohlížeč obrázků
 GenericName[eo]=Bildrigardilo
 GenericName[es]=Visor de imágenes
 GenericName[eu]=Irudi erakuslea
+GenericName[fi]=Kuvakatselin
 GenericName[fr]=Visionneuse d'images
 GenericName[he]=מציג תמונות
 GenericName[hu]=Képmegjelenítő
