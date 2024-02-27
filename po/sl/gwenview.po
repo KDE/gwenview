@@ -1,7 +1,7 @@
-# Copyright (C) YEAR This file is copyright:
+# Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the gwenview package.
 #
-# Jure Repinc <jlp@holodeck1.com>, 2007, 2008, 2009, 2010, 2012.
+# SPDX-FileCopyrightText: 2007, 2008, 2009, 2010, 2012, 2024 Jure Repinc <jlp@holodeck1.com>
 # Andrej Mernik <andrejm@ubuntu.si>, 2012, 2013, 2014, 2016, 2017, 2018.
 # Matjaž Jeran <matjaz.jeran@amis.net>, 2019, 2020, 2021, 2022, 2023.
 msgid ""
@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-20 02:27+0000\n"
-"PO-Revision-Date: 2023-09-08 06:39+0200\n"
-"Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
+"PO-Revision-Date: 2024-02-25 23:42+0100\n"
+"Last-Translator: Jure Repinc <jlp@holodeck1.com>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "Translator: Andrej Mernik <andrejm@ubuntu.si>\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Lokalize 24.04.70\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -35,7 +35,7 @@ msgstr "jlp@holodeck.com,andrejm@ubuntu.si,matjaz.jeran@amis.net"
 #: app/advancedconfigpage.ui:28
 #, kde-format
 msgid "Low resource usage mode"
-msgstr "Način rabe pri nizki resoluciji"
+msgstr "Način nizke rabe virov"
 
 #. i18n: ectx: property (text), widget (QLabel, cacheHelpLabel)
 #: app/advancedconfigpage.ui:72
@@ -46,15 +46,15 @@ msgid ""
 "quality that are faster to load, if available."
 msgstr ""
 "To možnost uporabite, če na disku nimate veliko prostora. Tako se boste "
-"izogibali shranjevanju predoglednih sličic na disku in namesto tega se bodo "
-"uporabljale vložene sličice slabše kakovosti, ki se hitro naložijo, če jih "
-"kak program potrebuje."
+"izogibali shranjevanju sličic na disku in namesto tega se bodo uporabljale "
+"vložene sličice slabše kakovosti, ki se hitro naložijo, če jih kak program "
+"potrebuje."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: app/advancedconfigpage.ui:82
 #, kde-format
 msgid "Thumbnails:"
-msgstr "Predogledne sličice:"
+msgstr "Sličice:"
 
 #. i18n: ectx: property (text), widget (QLabel, relativeHelpLabel)
 #: app/advancedconfigpage.ui:92
@@ -84,7 +84,7 @@ msgstr "Relativno kolorimetrično"
 #, kde-format
 msgctxt "@option:Perceptual rendering intent"
 msgid "Perceptual"
-msgstr "Perceptualno"
+msgstr "Zaznavno"
 
 #. i18n: ectx: property (text), widget (QLabel, perceptualHelpLabel)
 #: app/advancedconfigpage.ui:172
@@ -125,8 +125,8 @@ msgid ""
 msgstr ""
 "Kadar je upravljaje barv onemogočeno, bo Gwenview predelal slike v barvni "
 "prostor sRGB namesto barvnega prostora, ki ga zazna za zaslon. To je edino "
-"primerno za zaslone, ki so kalibrirani za prostor sRGB ali pa je znano, da "
-"imajo nekorektni profil barv."
+"primerno za zaslone, ki so umerjeni za prostor sRGB ali pa je znano, da "
+"imajo nepravilen barvni profil."
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileLabel)
 #: app/advancedconfigpage.ui:275
@@ -138,7 +138,7 @@ msgstr "Upravljanje barv:"
 #, kde-format
 msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
 msgid "Sidebar Alignment Spacer"
-msgstr "Distančnik stranske letvice"
+msgstr "Distančnik poravnave na stranski plošči"
 
 #: app/browsemainpage.cpp:146 app/mainwindow.cpp:374 app/viewmainpage.cpp:404
 #: lib/documentview/documentviewcontroller.cpp:55
@@ -181,7 +181,7 @@ msgstr "Velikosti"
 #, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Rating"
-msgstr "Ocena"
+msgstr "Oceni"
 
 #: app/browsemainpage.cpp:174
 #, kde-format
@@ -236,7 +236,7 @@ msgstr "Datoteka"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Add Folder to Places"
-msgstr "Dodaj mape na pult Mesta"
+msgstr "Dodaj mapo na pult Mesta"
 
 #: app/browsemainpage.cpp:246
 #, kde-format
@@ -251,20 +251,20 @@ msgstr "Izbrano %1 od %2 (%3)"
 msgctxt "@info:status Image files"
 msgid "%1 image"
 msgid_plural "%1 images"
-msgstr[0] "%1 slika"
-msgstr[1] "%1 sliki"
-msgstr[2] "%1 slike"
-msgstr[3] "%1 slik"
+msgstr[0] "%1 slik"
+msgstr[1] "%1 slika"
+msgstr[2] "%1 sliki"
+msgstr[3] "%1 slike"
 
 #: app/browsemainpage.cpp:253
 #, kde-format
 msgctxt "@info:status Video files"
 msgid "%1 video"
 msgid_plural "%1 videos"
-msgstr[0] "%1 video"
-msgstr[1] "%1 videa"
-msgstr[2] "%1 videi"
-msgstr[3] "%1 videov"
+msgstr[0] "%1 videov"
+msgstr[1] "%1 video"
+msgstr[2] "%1 videa"
+msgstr[3] "%1 videi"
 
 #: app/browsemainpage.cpp:260
 #, kde-format
@@ -304,10 +304,10 @@ msgstr "Kopiraj %1"
 msgctxt "@title:window %1 number of images"
 msgid "Copy %1 image"
 msgid_plural "Copy %1 images"
-msgstr[0] "Kopiraj %1 sliko"
-msgstr[1] "Kopiraj %1 sliki"
-msgstr[2] "Kopiraj %1 slike"
-msgstr[3] "Kopiraj %1 slik"
+msgstr[0] "Kopiraj %1 slik"
+msgstr[1] "Kopiraj %1 sliko"
+msgstr[2] "Kopiraj %1 sliki"
+msgstr[3] "Kopiraj %1 slike"
 
 #: app/fileoperations.cpp:69
 #, kde-format
@@ -326,10 +326,10 @@ msgstr "Premakni %1"
 msgctxt "@title:window %1 number of images"
 msgid "Move %1 image"
 msgid_plural "Move %1 images"
-msgstr[0] "Premakni %1 sliko"
-msgstr[1] "Premakni %1 sliki"
-msgstr[2] "Premakni %1 slike"
-msgstr[3] "Premakni %1 slik"
+msgstr[0] "Premakni %1 slik"
+msgstr[1] "Premakni %1 sliko"
+msgstr[2] "Premakni %1 sliki"
+msgstr[3] "Premakni %1 slike"
 
 #: app/fileoperations.cpp:77
 #, kde-format
@@ -348,10 +348,10 @@ msgstr "Poveži %1"
 msgctxt "@title:window %1 number of images"
 msgid "Link %1 image"
 msgid_plural "Link %1 images"
-msgstr[0] "Poveži %1 sliko"
-msgstr[1] "Poveži %1 sliki"
-msgstr[2] "Poveži %1 slike"
-msgstr[3] "Poveži %1 slik"
+msgstr[0] "Poveži %1 slik"
+msgstr[1] "Poveži %1 sliko"
+msgstr[2] "Poveži %1 sliki"
+msgstr[3] "Poveži %1 slike"
 
 #: app/fileoperations.cpp:85
 #, kde-format
@@ -395,31 +395,31 @@ msgstr "Urejanje"
 #, kde-format
 msgctxt "Verb"
 msgid "Copy To..."
-msgstr "Kopiraj v..."
+msgstr "Kopiraj v …"
 
 #: app/fileopscontextmanageritem.cpp:149
 #, kde-format
 msgctxt "Verb"
 msgid "Move To..."
-msgstr "Premakni v..."
+msgstr "Premakni v …"
 
 #: app/fileopscontextmanageritem.cpp:154
 #, kde-format
 msgctxt "Verb: create link to the file where user wants"
 msgid "Link To..."
-msgstr "Poveži v..."
+msgstr "Poveži v …"
 
 #: app/fileopscontextmanageritem.cpp:159
 #, kde-format
 msgctxt "Verb"
 msgid "Rename..."
-msgstr "Preimenuj..."
+msgstr "Preimenuj …"
 
 #: app/fileopscontextmanageritem.cpp:164
 #, kde-format
 msgctxt "Verb"
 msgid "Trash"
-msgstr "Smeti"
+msgstr "Premakni v Smeti"
 
 #: app/fileopscontextmanageritem.cpp:171
 #, kde-format
@@ -434,7 +434,7 @@ msgstr "Lastnosti"
 #: app/fileopscontextmanageritem.cpp:180
 #, kde-format
 msgid "Create Folder..."
-msgstr "Ustvari mapo ..."
+msgstr "Ustvari mapo …"
 
 #: app/fileopscontextmanageritem.cpp:184
 #, kde-format
@@ -455,7 +455,7 @@ msgstr "Odpri vsebujočo mapo"
 #: app/fileopscontextmanageritem.cpp:387
 #, kde-format
 msgid "Other Application..."
-msgstr "Drug program ..."
+msgstr "Drug program …"
 
 #: app/filtercontroller.cpp:59
 #, kde-format
@@ -485,7 +485,7 @@ msgstr "Datum <="
 #: app/filtercontroller.cpp:131
 #, kde-format
 msgid "Rating >="
-msgstr "Ocena >="
+msgstr "Ocena ≥"
 
 #: app/filtercontroller.cpp:132
 #, kde-format
@@ -495,7 +495,7 @@ msgstr "Ocena ="
 #: app/filtercontroller.cpp:133
 #, kde-format
 msgid "Rating <="
-msgstr "Ocena <="
+msgstr "Ocena ≤"
 
 #: app/filtercontroller.cpp:173
 #, kde-format
@@ -565,7 +565,7 @@ msgstr "Podatki o sliki"
 #: app/fullscreenconfigwidget.ui:101
 #, kde-format
 msgid "Select Image Information to Display..."
-msgstr "Izberite prikazane podatke o sliki ..."
+msgstr "Izbor prikazanih podatkov o sliki …"
 
 #. i18n: ectx: property (title), widget (QGroupBox, mThumbnailGroupBox)
 #: app/fullscreenconfigwidget.ui:111
@@ -688,7 +688,7 @@ msgstr "Kakovost shranjevanja slike:"
 #: app/generalconfigpage.ui:168
 #, no-c-format, kde-format
 msgid "%"
-msgstr "%"
+msgstr " %"
 
 #. i18n: ectx: property (text), widget (QLabel, lossyImageFormatHelpLabel)
 #: app/generalconfigpage.ui:196
@@ -705,7 +705,7 @@ msgstr ""
 #: app/generalconfigpage.ui:222
 #, kde-format
 msgid "Thumbnail actions:"
-msgstr "Akcije sličic:"
+msgstr "Dejanja sličic:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, allButtonsThumbnailActionsRadioButton)
 #: app/generalconfigpage.ui:229
@@ -735,7 +735,7 @@ msgstr "Kakovost slike:"
 #, kde-format
 msgctxt "Spinbox suffix; percentage 1 - 100"
 msgid "%"
-msgstr "%"
+msgstr " %"
 
 #: app/gvcore.cpp:112
 #, kde-format
@@ -783,7 +783,7 @@ msgstr "Vrni se na izvirnik"
 #: app/gwenviewui.rc:54
 #, kde-format
 msgid "&Rating"
-msgstr "Ocena"
+msgstr "&Ocena"
 
 #. i18n: ectx: ToolBar (mainToolBar)
 #: app/gwenviewui.rc:87 part/gvpart.rc:16
@@ -801,7 +801,7 @@ msgstr "Podatki o sliki"
 #, kde-format
 msgctxt "@title actions category - means actions changing image"
 msgid "Edit"
-msgstr "Uredi"
+msgstr "Urejanje"
 
 #: app/imageopscontextmanageritem.cpp:93
 #, kde-format
@@ -857,7 +857,7 @@ msgstr "Prilagodi barve"
 #: lib/redeyereduction/redeyereductiontool.cpp:48
 #, kde-format
 msgid "Reduce Red Eye"
-msgstr "Zmanjšaj efekt rdečih oči"
+msgstr "Zmanjšaj učinek rdečih oči"
 
 #: app/imageopscontextmanageritem.cpp:133 lib/annotate/annotateoperation.cpp:51
 #, kde-format
@@ -931,7 +931,7 @@ msgstr "Brskanje"
 #, kde-format
 msgctxt "@option:radio action on mouse wheel"
 msgid "Zoom"
-msgstr "Zoom"
+msgstr "Približanje"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: app/imageviewconfigpage.ui:256
@@ -1029,7 +1029,7 @@ msgstr "%1:"
 #, kde-format
 msgctxt "@action show more image meta info"
 msgid "Show more details..."
-msgstr "Prikaži več podrobnosti..."
+msgstr "Prikaži več podrobnosti …"
 
 #: app/infocontextmanageritem.cpp:242
 #, kde-format
@@ -1042,20 +1042,20 @@ msgstr "Informacije o sliki"
 msgctxt "@label"
 msgid "%1 file selected"
 msgid_plural "%1 files selected"
-msgstr[0] "Izbrana je %1 datoteka"
-msgstr[1] "Izbrani sta %1 datoteki"
-msgstr[2] "Izbrane so %1 datoteke"
-msgstr[3] "Izbrano je %1 datotek"
+msgstr[0] "Izbranih je %1 datotek"
+msgstr[1] "Izbrana je %1 datoteka"
+msgstr[2] "Izbrani sta %1 datoteki"
+msgstr[3] "Izbrane so %1 datoteke"
 
 #: app/infocontextmanageritem.cpp:333
 #, kde-format
 msgctxt "@label"
 msgid "%1 folder selected"
 msgid_plural "%1 folders selected"
-msgstr[0] "Izbrana je %1 mapa"
-msgstr[1] "Izbrani sta %1 mapi"
-msgstr[2] "Izbrane so %1 mape"
-msgstr[3] "Izbrano je %1 map"
+msgstr[0] "Izbranih je %1 map"
+msgstr[1] "Izbrana je %1 mapa"
+msgstr[2] "Izbrani sta %1 mapi"
+msgstr[3] "Izbrane so %1 mape"
 
 #: app/infocontextmanageritem.cpp:336
 #, kde-format
@@ -1067,19 +1067,19 @@ msgstr "Izbrano: %1 in %2"
 #, kde-format
 msgid "%1 folder"
 msgid_plural "%1 folders"
-msgstr[0] "%1 mapa"
-msgstr[1] "%1 mapi"
-msgstr[2] "%1 mape"
-msgstr[3] "%1 map"
+msgstr[0] "%1 map"
+msgstr[1] "%1 mapa"
+msgstr[2] "%1 mapi"
+msgstr[3] "%1 mape"
 
 #: app/infocontextmanageritem.cpp:338
 #, kde-format
 msgid "%1 file"
 msgid_plural "%1 files"
-msgstr[0] "%1 datoteka"
-msgstr[1] "%1 datoteki"
-msgstr[2] "%1 datoteke"
-msgstr[3] "%1 datotek"
+msgstr[0] "%1 datotek"
+msgstr[1] "%1 datoteka"
+msgstr[2] "%1 datoteki"
+msgstr[3] "%1 datoteke"
 
 #: app/main.cpp:172
 #, kde-format
@@ -1218,7 +1218,7 @@ msgstr "Odpri začetno stran"
 #, kde-format
 msgctxt "@action"
 msgid "Sidebar"
-msgstr "Stranska vrstica"
+msgstr "Stranska plošča"
 
 #: app/mainwindow.cpp:479
 #, kde-format
@@ -1243,7 +1243,7 @@ msgid ""
 "The shared image link (<a href=\"%1\">%1</a>) has been copied to the "
 "clipboard."
 msgstr ""
-"Skupna povezava do slike (<a href=\"%1\">%1</a>) je bila skopirana na "
+"Deljena povezava do slike (<a href=\"%1\">%1</a>) je bila skopirana na "
 "odložišče."
 
 #: app/mainwindow.cpp:575
@@ -1256,7 +1256,7 @@ msgstr "Sestavi"
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "Edit"
-msgstr "Uredi"
+msgstr "Urejanje"
 
 #: app/mainwindow.cpp:595
 #, kde-format
@@ -1292,13 +1292,13 @@ msgstr "Ogledovanje medija"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
-msgstr "Skrij stransko vrstico"
+msgstr "Skrij stransko ploščo"
 
 #: app/mainwindow.cpp:1412
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
-msgstr "Pokaži stransko vrstico"
+msgstr "Pokaži stransko ploščo"
 
 #: app/mainwindow.cpp:1719
 #, kde-format
@@ -1335,10 +1335,10 @@ msgstr "Zavrzi vse spremembe"
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
-msgstr[0] "%1 slika je bila spremenjena."
-msgstr[1] "%1 sliki sta bili spremenjeni."
-msgstr[2] "%1 slike so bile spremenjene."
-msgstr[3] "%1 slik je bilo spremenjenih."
+msgstr[0] "%1 slik je bilo spremenjenih."
+msgstr[1] "%1 slika je bila spremenjena."
+msgstr[2] "%1 sliki sta bili spremenjeni."
+msgstr[3] "%1 slike so bile spremenjene."
 
 #: app/mainwindow.cpp:1798
 #, kde-format
@@ -1410,7 +1410,7 @@ msgstr "Preimenuj"
 #, kde-format
 msgctxt "@info:progress saving all image changes"
 msgid "Saving..."
-msgstr "Shranjujem..."
+msgstr "Shranjevanje …"
 
 #: app/saveallhelper.cpp:57
 #, kde-format
@@ -1422,8 +1422,8 @@ msgstr "Ustavi"
 msgctxt "@info"
 msgid "One document could not be saved:"
 msgid_plural "%1 documents could not be saved:"
-msgstr[0] "%1 dokumenta ni bilo mogoče shraniti:"
-msgstr[1] "%1 dokumentov ni bilo mogoče shraniti:"
+msgstr[0] "%1 dokumentov ni bilo mogoče shraniti:"
+msgstr[1] "%1 dokumenta ni bilo mogoče shraniti:"
 msgstr[2] "%1 dokumentov ni bilo mogoče shraniti:"
 msgstr[3] "%1 dokumentov ni bilo mogoče shraniti:"
 
@@ -1463,10 +1463,10 @@ msgstr "Naslednja spremenjena slika"
 #, kde-format
 msgid "One image modified"
 msgid_plural "%1 images modified"
-msgstr[0] "%1 spremenjena slika"
-msgstr[1] "%1 spremenjeni sliki"
-msgstr[2] "%1 spremenjene slike"
-msgstr[3] "%1 spremenjenih slik"
+msgstr[0] "%1 spremenjenih slik"
+msgstr[1] "%1 spremenjena slika"
+msgstr[2] "%1 spremenjeni sliki"
+msgstr[3] "%1 spremenjene slike"
 
 #: app/savebar.cpp:185
 #, kde-format
@@ -1558,7 +1558,7 @@ msgstr "Začni predstavitev z izbranimi slikami"
 #, kde-format
 msgctxt "@action Recent Folders view"
 msgid "Add Folder to Places"
-msgstr "Dodaj mapo na Mesta"
+msgstr "Dodaj mapo na pult Mesta"
 
 #: app/startmainpage.cpp:292
 #, kde-format
@@ -1576,7 +1576,7 @@ msgstr "Pozabi vse mape"
 #, kde-format
 msgctxt "@action Recent Files view"
 msgid "Add Containing Folder to Places"
-msgstr "Vse vsebovane mape v Mesta"
+msgstr "Dodaj mapo, ki to vsebuje, na pult Mesta"
 
 #: app/startmainpage.cpp:296
 #, kde-format
@@ -1638,7 +1638,7 @@ msgstr "Uskladi"
 #: app/viewmainpage.cpp:407
 #, kde-format
 msgid "Show Thumbnails"
-msgstr "Pokaži predogledne sličice"
+msgstr "Pokaži sličice"
 
 #. i18n: For languages that are read right to left, "right side" refers to the left side in this context.
 #: app/viewmainpage.cpp:410
@@ -1655,8 +1655,8 @@ msgstr ""
 "<para>To preklopi majhno vrstico, ki prikazuje vse druge slike v trenutni "
 "mapi. Izbira ene od njih spremeni trenutno prikazano sliko.</"
 "para><para>Izberite več slik hkrati, da jih vidite drugo ob drugi.</"
-"para><para> Vrstica se lahko po izbiri premakne na desno stran in vsebujejo "
-"več vrst slik;<link url='%1'>Nastavite te možnosti v nastavitvah</link>.</"
+"para><para>Vrstica se lahko po izbiri premakne na desno stran in vsebuje več "
+"vrstic slik; <link url='%1'>Nastavite te možnosti v nastavitvah</link>.</"
 "para>"
 
 #: app/viewmainpage.cpp:562
@@ -1683,30 +1683,30 @@ msgstr ""
 #: importer/dialogpage.cpp:52
 #, kde-format
 msgid "Show failed files..."
-msgstr "Prikaži spodletele datoteke..."
+msgstr "Prikaži spodletele datoteke …"
 
 #: importer/dialogpage.cpp:57
 #, kde-format
 msgid "Show failed subfolders..."
-msgstr "Prikaži spodletele mape..."
+msgstr "Prikaži spodletele podmape …"
 
 #: importer/dialogpage.cpp:71
 #, kde-format
 msgid "Failed to import %1 document."
 msgid_plural "Failed to import %1 documents."
-msgstr[0] "Spodletel uvoz dokumenta %1."
-msgstr[1] "Spodletel uvoz dokumentov %1."
-msgstr[2] "Spodletel uvoz dokumentov %1."
-msgstr[3] "Spodletel uvoz dokumentov %1."
+msgstr[0] "Spodletel uvoz %1 dokumentov."
+msgstr[1] "Spodletel uvoz %1 dokumenta."
+msgstr[2] "Spodletel uvoz %1 dokumentov."
+msgstr[3] "Spodletel uvoz %1 dokumentov."
 
 #: importer/dialogpage.cpp:78
 #, kde-format
 msgid "Failed to create %1 destination subfolder."
 msgid_plural "Failed to create %1 destination subfolders."
-msgstr[0] "Ni bilo mogoče ustvariti ciljne podmape %1."
-msgstr[1] "Ni bilo mogoče ustvariti ciljni podmapi %1."
-msgstr[2] "Ni bilo mogoče ustvariti ciljne podmape %1."
-msgstr[3] "Ni bilo mogoče ustvariti ciljnih podmap %1."
+msgstr[0] "Ni bilo mogoče ustvariti %1 ciljnih podmap."
+msgstr[1] "Ni bilo mogoče ustvariti %1 ciljne podmape."
+msgstr[2] "Ni bilo mogoče ustvariti %1 ciljnih podmap."
+msgstr[3] "Ni bilo mogoče ustvariti %1 ciljnih podmap."
 
 #: importer/dialogpage.cpp:89
 #, kde-format
@@ -1752,20 +1752,20 @@ msgstr "Prvotno ime datoteke, z malimi črkami"
 #, kde-format
 msgid "One document has been imported."
 msgid_plural "%1 documents have been imported."
-msgstr[0] "Uvožen je bil %1 dokument."
-msgstr[1] "Uvožena sta bila %1 dokumenta."
-msgstr[2] "Uvoženi so bili %1 dokumenti."
-msgstr[3] "Uvoženih je bilo %1 dokumentov."
+msgstr[0] "Uvoženih je bilo %1 dokumentov."
+msgstr[1] "Uvožen je bil %1 dokument."
+msgstr[2] "Uvožena sta bila %1 dokumenta."
+msgstr[3] "Uvoženi so bili %1 dokumenti."
 
 #: importer/importdialog.cpp:96
 #, kde-format
 msgid "One document has been skipped because it had already been imported."
 msgid_plural ""
 "%1 documents have been skipped because they had already been imported."
-msgstr[0] "%1 dokument je bil preskočen, ker so že bil uvožen."
-msgstr[1] "%1 dokumenta sta bil preskočena, ker sta že bila uvožena."
-msgstr[2] "%1 dokumenti so bili preskočeni, ker so že bili uvoženi."
-msgstr[3] "%1 dokumentov je bili preskočenih, ker so že bili uvoženi."
+msgstr[0] "%1 dokumentov je bilo preskočenih, ker so že bili uvoženi."
+msgstr[1] "%1 dokument je bil preskočen, ker je že bil uvožen."
+msgstr[2] "%1 dokumenta sta bila preskočena, ker sta že bila uvožena."
+msgstr[3] "%1 dokumenti so bili preskočeni, ker so že bili uvoženi."
 
 #: importer/importdialog.cpp:104
 #, kde-format
@@ -1776,46 +1776,46 @@ msgid_plural ""
 "%1 of them have been renamed because other documents with the same name had "
 "already been imported."
 msgstr[0] ""
-"%1 izmed njih je bil preimenovan, ker so drugi dokumenti z istim imenom že "
-"bili uvoženi."
-msgstr[1] ""
-"%1 izmed njih sta bila preimenovana, ker sta druga dokument z istim imenom "
-"že bila uvožena."
-msgstr[2] ""
-"%1 izmed njih so bili preimenovani, ker so drugi dokumenti z istim imenom že "
-"bili uvoženi."
-msgstr[3] ""
 "%1 izmed njih je bilo preimenovanih, ker so drugi dokumenti z istim imenom "
 "že bili uvoženi."
+msgstr[1] ""
+"%1 izmed njih je bil preimenovan, ker je drugi dokument z istim imenom že "
+"bil uvožen."
+msgstr[2] ""
+"%1 izmed njih sta bila preimenovana, ker sta druga dokument z istim imenom "
+"že bila uvožena."
+msgstr[3] ""
+"%1 izmed njih so bili preimenovani, ker so drugi dokumenti z istim imenom že "
+"bili uvoženi."
 
 #: importer/importdialog.cpp:112
 #, kde-format
 msgid "Delete the imported document from the device?"
 msgid_plural "Delete the %1 imported documents from the device?"
-msgstr[0] "Ali želite izbrisati %1 uvožen dokument z naprave?"
-msgstr[1] "Ali želite izbrisati %1 uvožena dokumenta z naprave?"
-msgstr[2] "Ali želite izbrisati %1 uvožene dokumente z naprave?"
-msgstr[3] "Ali želite izbrisati %1 uvoženih dokumentov z naprave?"
+msgstr[0] "Ali želite izbrisati %1 uvoženih dokumentov z naprave?"
+msgstr[1] "Ali želite izbrisati %1 uvožen dokument z naprave?"
+msgstr[2] "Ali želite izbrisati %1 uvožena dokumenta z naprave?"
+msgstr[3] "Ali želite izbrisati %1 uvožene dokumente z naprave?"
 
 #: importer/importdialog.cpp:114
 #, kde-format
 msgid "Delete the skipped document from the device?"
 msgid_plural "Delete the %1 skipped documents from the device?"
-msgstr[0] "Ali želite izbrisati %1 preskočen dokument z naprave?"
-msgstr[1] "Ali želite izbrisati %1 preskočena dokumenta z naprave?"
-msgstr[2] "Ali želite izbrisati %1 preskočene dokumente z naprave?"
-msgstr[3] "Ali želite izbrisati %1 preskočenih dokumentov z naprave?"
+msgstr[0] "Ali želite izbrisati %1 preskočenih dokumentov z naprave?"
+msgstr[1] "Ali želite izbrisati %1 preskočen dokument z naprave?"
+msgstr[2] "Ali želite izbrisati %1 preskočena dokumenta z naprave?"
+msgstr[3] "Ali želite izbrisati %1 preskočene dokumente z naprave?"
 
 #: importer/importdialog.cpp:117
 #, kde-format
 msgctxt "Singular sentence is actually never used."
 msgid "Delete the imported or skipped document from the device?"
 msgid_plural "Delete the %1 imported and skipped documents from the device?"
-msgstr[0] "Ali želite izbrisati %1 uvožen ali preskočen dokument z naprave?"
-msgstr[1] "Ali želite izbrisati %1 uvožena ali preskočena dokumenta z naprave?"
-msgstr[2] "Ali želite izbrisati %1 uvožene ali preskočene dokumente z naprave?"
-msgstr[3] ""
+msgstr[0] ""
 "Ali želite izbrisati %1 uvoženih ali preskočenih dokumentov z naprave?"
+msgstr[1] "Ali želite izbrisati %1 uvožen ali preskočen dokument z naprave?"
+msgstr[2] "Ali želite izbrisati %1 uvožena ali preskočena dokumenta z naprave?"
+msgstr[3] "Ali želite izbrisati %1 uvožene ali preskočene dokumente z naprave?"
 
 #: importer/importdialog.cpp:124
 #, kde-format
@@ -1837,10 +1837,10 @@ msgid_plural ""
 "Failed to delete documents:\n"
 "%2"
 msgstr[0] ""
-"Izbris dokumenta je spodletel:\n"
+"Izbris dokumentov je spodletel:\n"
 "%2"
 msgstr[1] ""
-"Izbris dokumentov je spodletel:\n"
+"Izbris dokumenta je spodletel:\n"
 "%2"
 msgstr[2] ""
 "Izbris dokumentov je spodletel:\n"
@@ -1968,25 +1968,25 @@ msgstr "Neveljavna izvorna mapa."
 #: importer/progresspage.ui:30
 #, kde-format
 msgid "Importing documents..."
-msgstr "Uvažanje dokumentov ..."
+msgstr "Uvažanje dokumentov …"
 
 #: importer/thumbnailpage.cpp:231
 #, kde-format
 msgctxt "@info above install button when Kamera is not installed"
 msgid "Support for your camera is not installed."
-msgstr "Podpora za vašo kamero ni nameščena."
+msgstr "Podpora za vaš fotoaparat ni nameščena."
 
 #: importer/thumbnailpage.cpp:233
 #, kde-format
 msgctxt "@info above install button, %1 protocol name %2 error text from KIO"
 msgid "The protocol support library for \"%1\" is not installed. Error: %2"
-msgstr "Knjižnica za podporo protokola \"%1\" ni nameščena. Napaka: %2"
+msgstr "Knjižnica za podporo protokola »%1« ni nameščena. Napaka: %2"
 
 #: importer/thumbnailpage.cpp:235
 #, kde-format
 msgctxt "@info above install button, %1 protocol name"
 msgid "The protocol support library for \"%1\" is not installed."
-msgstr "Knjižnica za podporo protokola \"%1\" ni nameščena."
+msgstr "Knjižnica za podporo protokola »%1« ni nameščena."
 
 #: importer/thumbnailpage.cpp:247
 #, kde-format
@@ -2000,13 +2000,13 @@ msgstr "Po končanju namestitve, ponovno poženite Importer in nadaljujte."
 msgctxt "@info:tooltip for a button, %1 protocol name"
 msgid "Launch Discover to install the protocol support library for \"%1\""
 msgstr ""
-"Zaženite Discover, da bi namestili knjižnico za podporo protokola \"%1\""
+"Zažene Discover, da lahko namestite knjižnico za podporo protokola »%1«"
 
 #: importer/thumbnailpage.cpp:256
 #, kde-format
 msgctxt "@action:button"
 msgid "Install Support for this Camera…"
-msgstr "Namesti podporo za to kamero…"
+msgstr "Namesti podporo za ta fotoaparat …"
 
 #: importer/thumbnailpage.cpp:257
 #, kde-format
@@ -2016,15 +2016,15 @@ msgid ""
 "to launch Discover to install Kamera to enable protocol support for "
 "\"camera:/\" on your system."
 msgstr ""
-"Da bi brali iz kamere, morate v sistemu imeti nameščen program Kamera. "
-"Kliknite sem, za zagon programa Discover za namestitev Kamere, da bi "
-"omogočili podporo za protokol \"camera:/\" na vašem sistemu."
+"Da bi brali s fotoaparata, morate na sistemu imeti nameščen program Kamera. "
+"Kliknite sem za zagon programa Discover in namestitev Kamere, da omogočite "
+"podporo za protokol »camera:/« na vašem sistemu."
 
 #: importer/thumbnailpage.cpp:260
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Install Protocol Support for \"%1\"…"
-msgstr "Namesti podporo protokolu za \"%1\"…"
+msgstr "Namesti podporo protokolu za »%1« …"
 
 #: importer/thumbnailpage.cpp:261
 #, kde-format
@@ -2033,14 +2033,14 @@ msgid ""
 "Click here to launch Discover to install the missing protocol support "
 "library to enable the protocol support for \"%1:/\" on your system."
 msgstr ""
-"Kliknite sem, da bi zagnali Discover, da bi namestili manjkajočo knjižnico "
-"za podporo protokola \"%1:/\" na vašem sistemu."
+"Kliknite sem za zagon programa Discover in namestitev manjkajoče knjižnice "
+"za podporo protokolu za »%1:/« na vašem sistemu."
 
 #: importer/thumbnailpage.cpp:265
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Search the Web for How to Install Protocol Support for \"%1\"…"
-msgstr "Preiščite splet za Kako namestiti podporo za protokol \"%1\"…"
+msgstr "Preišči splet za Kako namestiti podporo protokolu za »%1« …"
 
 #: importer/thumbnailpage.cpp:281
 #, kde-format
@@ -2048,7 +2048,7 @@ msgctxt ""
 "@info this text will be used as a search term in an online search engine, %1 "
 "protocol name"
 msgid "How to install protocol support for \"%1\" on Linux"
-msgstr "Kako namestiti podporo za protokol \"%1\" na Linuxu"
+msgstr "Kako namestiti podporo protokolu za »%1« na Linuxu"
 
 #: importer/thumbnailpage.cpp:282
 #, kde-format
@@ -2075,9 +2075,9 @@ msgid ""
 "Opening Discover failed.<nl/>Please check if Discover is installed on your "
 "system, or use your system's package manager to install \"Kamera\" package."
 msgstr ""
-"Odpiranje programa Discover ni uspelo.<nl/>Preverite, če je Discover "
+"Odpiranje programa Discover ni uspelo.<nl/>Preverite, ali je Discover "
 "nameščen na vašem sistemu ali uporabite vaš program za upravljanje paketov "
-"na vašem sistemu, da bi namestili paket \"Kamera\"."
+"na vašem sistemu, da bi namestili paket »Kamera«."
 
 #: importer/thumbnailpage.cpp:492
 #, kde-kuit-format
@@ -2087,9 +2087,9 @@ msgid ""
 "system, or use your system's package manager to install the protocol support "
 "library for \"%1\"."
 msgstr ""
-"Odpiranje programa Discover ni uspelo.<nl/>Preverite, če je Discover "
+"Odpiranje programa Discover ni uspelo.<nl/>Preverite, ali je Discover "
 "nameščen na vašem sistemu ali uporabite vaš program za upravljanje paketov "
-"na vašem sistemu, da bi namestili knjižnico za podporo protokola \"%1\"."
+"na vašem sistemu, da bi namestili knjižnico za podporo protokolu za »%1«."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: importer/thumbnailpage.ui:173
@@ -2101,7 +2101,7 @@ msgstr "Izberite dokumente za uvoz"
 #: importer/thumbnailpage.ui:185
 #, kde-format
 msgid "Settings..."
-msgstr "Nastavitve ..."
+msgstr "Nastavitve …"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: importer/thumbnailpage.ui:201
@@ -2173,7 +2173,7 @@ msgstr "Ležeče"
 #: lib/crop/cropwidget.cpp:204 lib/crop/cropwidget.cpp:211
 #, kde-format
 msgid "ISO (A4, A3...)"
-msgstr "ISO (A4, A3...)"
+msgstr "ISO (A4, A3 …)"
 
 #: lib/crop/cropwidget.cpp:205 lib/crop/cropwidget.cpp:212
 #, kde-format
@@ -2302,13 +2302,13 @@ msgstr "Odstrani izbiro"
 #, kde-format
 msgctxt "@item:intable %1 is image width, %2 is image height"
 msgid "%1x%2"
-msgstr "%1 x %2"
+msgstr "%1 × %2"
 
 #: lib/documentview/documentview.cpp:264 lib/zoomcombobox/zoomcombobox.cpp:318
 #, kde-format
 msgctxt "Percent value"
 msgid "%1%"
-msgstr "%1%"
+msgstr "%1 %"
 
 #: lib/documentview/documentview.cpp:543
 #, kde-format
@@ -2357,16 +2357,16 @@ msgid ""
 "are displayed at a previous zoom value instead <link url='%2'>in the "
 "settings</link>.</para>"
 msgstr ""
-"<para>To prilagodi sliko razpoložljivemu območje gledanja:<list><item>Slike, "
-"ki so večji od območja gledanja, so prikazane v manjši velikosti, tako da se "
+"<para>To prilagodi sliko razpoložljivemu območju gledanja:<list><item>Slike, "
+"ki so večje od območja gledanja, so prikazane v manjši velikosti, tako da se "
 "prilegajo.</item><item>Slik, ki so manjše od območja se prikažejo v njihovi "
-"normalni velikosti. Če naj bi manjše slike namesto tega uporabile vse "
+"običajni velikosti. Če naj bi manjše slike namesto tega uporabile vse "
 "razpoložljivo območje gledanja, vklopite <emphasis>Povečaj manjše slike</"
 "emphasis> <link url='%2'>v nastavitvah</link>.</item></list></para><para>Če "
-"je \"%1\" že omogočeno, bo ponovni pritisk to izklopil in slika bo prikazana "
-"v normalni velikosti.</para><para>\"%1\" je privzeti način povečave slik. To "
-"se lahko spremeni, tako da se slike prikažejo na prejšnji vrednosti "
-"povečave, namesto <link url='%2'>v nastavitvah</link>.</para>"
+"je »%1« že omogočeno, bo ponovni pritisk to izklopil in slika bo prikazana v "
+"običajni velikosti.</para><para>»%1« je privzeti način povečave slik. To se "
+"lahko spremeni <link url='%2'>v nastavitvah</link>, tako da se slike namesto "
+"tega prikažejo na prejšnji vrednosti povečave.</para>"
 
 #: lib/documentview/documentviewcontroller.cpp:83
 #, kde-format
@@ -2385,7 +2385,7 @@ msgstr "Zapolni"
 #, kde-format
 msgctxt "Original image size percent value"
 msgid "100%"
-msgstr "100%"
+msgstr "100 %"
 
 #: lib/documentview/documentviewcontroller.cpp:98
 #, kde-format
@@ -2499,12 +2499,12 @@ msgid ""
 "colors\n"
 "            that cannot be displayed, and leave the other colors alone."
 msgstr ""
-"Določi, kako so barve prikazane, ko je vaš zaslon\n"
-"uporablja barvni profil ICC in slika ima barve, ki ne\n"
-"ustrezajo barvnemu razponu profila. \"Perceptualno\" bo obsegalo\n"
-"barve celotne slike, tako da se vse prilegajo\n"
-"zmožnostim zaslona. \"Relativni\" bodo stisnili samo tiste barve,\n"
-"ki jih ni mogoče prikazati, ostale barve pa pustili pri miru."
+"Določi, kako so barve prikazane, ko vaš zaslon\n"
+"uporablja barvni profil ICC in slika vsebuje barve, ki ne\n"
+"ustrezajo barvnemu razponu profila. »Zaznavno« bo\n"
+"obsegalo barve celotne slike, tako da se vse prilegajo\n"
+"zmožnostim zaslona. »Relativno« bo stisnil samo tiste barve,\n"
+"ki jih ni mogoče prikazati, ostale barve pa pustil pri miru."
 
 #. i18n: ectx: label, entry (random), group (slide show)
 #: lib/gwenviewconfig.kcfg:325
@@ -2895,6 +2895,13 @@ msgstr "&Datoteka"
 #, kde-format
 msgid "&View"
 msgstr "&Pogled"
+
+#~ msgid "Start in spotlight mode"
+#~ msgstr "Začni v načinu žarometov"
+
+#~ msgctxt "@action"
+#~ msgid "Spotlight Mode"
+#~ msgstr "Način žarometov"
 
 #~ msgid "&Settings"
 #~ msgstr "Na&stavitve"
