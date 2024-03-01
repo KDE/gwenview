@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-20 00:37+0000\n"
-"PO-Revision-Date: 2024-02-05 11:38\n"
+"PO-Revision-Date: 2024-02-29 12:53\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -1064,10 +1064,9 @@ msgid "Start in slideshow mode"
 msgstr "启动到幻灯片模式"
 
 #: app/main.cpp:191
-#, fuzzy, kde-format
-#| msgid "Start in slideshow mode"
+#, kde-format
 msgid "Start in spotlight mode"
-msgstr "启动到幻灯片模式"
+msgstr "启动为聚光灯模式"
 
 #: app/main.cpp:192
 #, kde-format
@@ -1123,12 +1122,10 @@ msgid "Exit Full Screen"
 msgstr "退出全屏"
 
 #: app/mainwindow.cpp:434
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Light Mode"
+#, kde-format
 msgctxt "@action"
 msgid "Spotlight Mode"
-msgstr "浅色模式"
+msgstr "聚光灯模式"
 
 #: app/mainwindow.cpp:440
 #, kde-format
