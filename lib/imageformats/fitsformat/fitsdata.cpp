@@ -148,6 +148,14 @@ bool FITSData::loadFITS(QIODevice &buffer)
 
     channels = naxes[2];
 
+    if (channels != 1 && channels != 3) {
+        // code in both calculateMinMax and convertToQImage assume that images have either
+        // 1 channel or 3. File in bug 482615 has two, so bail out better than crashing
+        errMessage = QString("Images with %1 channels are currently not supported.").arg(channels);
+        buffer.seek(oldPos);
+        return false;
+    }
+
     imageBuffer = new uint8_t[stats.samples_per_channel * channels * stats.bytesPerPixel];
 
     long nelements = stats.samples_per_channel * channels;
