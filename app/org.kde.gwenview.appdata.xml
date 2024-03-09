@@ -139,7 +139,7 @@
     <p xml:lang="hu">A Gwenview egy gyors és egyszerűen használható képmegjelenítő a KDE-hez, ideális képgyűjtemények böngészéséhez és megjelenítéséhez.</p>
     <p xml:lang="ia">Gwenview es un visor de imagine per KDE rapide e facile de usar, ideal per monstrar e navigar  in un colection de images.</p>
     <p xml:lang="id">Gwenview adalah cepat dan mudah untuk penggunaan penampil gambar oleh KDE, sangat baik untuk menelusuri dan menampilkan gambar dari sebuah koleksi.</p>
-    <p xml:lang="is">Gwenview er hraðvirkur og auðveldur myndskoðari frá KDE, hentugur til að vafra og birta myndir í myndasafni.</p>
+    <p xml:lang="is">Gwenview er hraðvirkur og einfaldur myndskoðari frá KDE til að skoða og birta myndir í myndasafni.</p>
     <p xml:lang="it">Gwenview è un visore di immagini veloce e semplice da usare di KDE, ideale per sfogliare e visualizzare una raccolta di immagini.</p>
     <p xml:lang="ka">Gwenview სწრაფი და ადვილად გამოსაყენებელი პროგრამაა KDE-სგან. ის იდეალურია სურათების კოლექციების დასათვალიერებლად და დასალაგებლად.</p>
     <p xml:lang="ko">Gwenview는 KDE의 빠르고 사용하기 편한 그림 뷰어입니다.</p>
@@ -241,6 +241,7 @@
       <li xml:lang="hu">Egyszerű képszerkesztés: forgatás, levágás, tükrözés, vöröszem-eltávolítás és fényerő-, kontraszt vagy gammabeállítás</li>
       <li xml:lang="ia">Editar de imagine simple: rota, tonde, redimensiona, reflecte, gira, reduce oculos rubie, e adapta brillantia, contrasto, o gamma</li>
       <li xml:lang="id">Pengeditan gambar yang sederhana: rotasi, ubah ukuran, cermin, jungkir, reduksi mata merah, dan menyetel kecerahan, kontras, atau gamma</li>
+      <li xml:lang="is">Einfaldar myndvinnsluaðgerðir: snúa, skera af, breyta stærð, spegla, hvolfa, minnka rauð augu og stilla birtu, birtuskil eða gamma</li>
       <li xml:lang="it">Operazioni di base di modifica delle immagini: rotazione, ritaglio, ridimensionamento, specchio, rotazione, riduzione occhi rossi, e correzione di luminosità, contrasto o gamma</li>
       <li xml:lang="ka">გამოსახულების მარტივი რედაქტორი: მობრუნება, ამოჭრა, ზომის შეცვლა, სარკისებურად გარდაქმნა, წითელი თვალის ეფექტის მოცილება, სიკაშკაშის, კონტრასტისა და გამის მორგება</li>
       <li xml:lang="ko">간단한 그림 편집: 회전, 자르기, 크기 조정, 반전, 적목 감소, 밝기, 명암, 감마 조정</li>
@@ -279,6 +280,7 @@
       <li xml:lang="hu">Képek magyarázata és jelölése nyilakkal, alakzatokkal, szövegdobozokkal, képbélyegzőkkel és egyebekkel</li>
       <li xml:lang="ia">Annota e marca imagines con flechas, umbras, quadratos de texto, timbros de imagine e alteres</li>
       <li xml:lang="id">Menganotasi dan menandai gambar dengan anak panah, bentuk, cap gambar, dan selebihnya</li>
+      <li xml:lang="is">Glósa og merkja myndir með örvum, formum, textareitum, myndstimplum og fleira</li>
       <li xml:lang="it">Annota e contrassegna immagini con frecce, forme, caselle di testo, timbri e altro</li>
       <li xml:lang="ka">ისრების, ესკიზების, ტექსტური ფანჯრების, გამოსახულებების შტამპების და ა.შ. ანოტაცია და მონიშვნა</li>
       <li xml:lang="ko">화살표, 도형, 텍스트 상자, 스탬프 등으로 그림 강조 및 꾸미기</li>
@@ -319,7 +321,7 @@
       <li xml:lang="hu">Egyszerű fájlkezelési műveletek, mint például másolás, áthelyezés, törlés és egyebek</li>
       <li xml:lang="ia">Actiones de gestion de file basic tal como copiar,mover, deler, e alteres</li>
       <li xml:lang="id">Tindakan pengelolaan file dasar seperti salin, pindah, hapus, dan lainnya</li>
-      <li xml:lang="is">Einfaldar skráastjórnunaraðgerðir á borð við afritun, færslu, eyðingu og fleira</li>
+      <li xml:lang="is">Einfaldar skráaaðgerðir eins og að afrita, færa, eyða og fleira</li>
       <li xml:lang="it">Semplici azioni di gestione file come copia, spostamento, eliminazione ed altre</li>
       <li xml:lang="ka">ფაილების ისეთი მარტივი მანიპულაციების მხარდაჭერა, როგორიცაა კოპირება, გადატანა, წაშლა და სხვა</li>
       <li xml:lang="ko">파일 복사, 이동, 삭제와 같은 기본 파일 관리 작업</li>
@@ -365,7 +367,7 @@
       <li xml:lang="hu">Önálló alkalmazásként és a Konqueror webböngészőbe épített képmegjelenítőként is működik</li>
       <li xml:lang="ia">Il functiona e como application per se mesme e un visor incorporate in le navigator web Konqueror</li>
       <li xml:lang="id">Fungsi sebagai aplikasi mandiri dan penampil tertanam dalam browser web Konqueror</li>
-      <li xml:lang="is">Virkar bæði sem sjálfstætt forrit og sem ívafinn skoðari í Konqueror netvafranum</li>
+      <li xml:lang="is">Virkar bæði sem sjálfstætt forrit og sem innfelldur skoðari í Konqueror vafranum</li>
       <li xml:lang="it">Funziona sia come applicazione indipendente che come visore integrabile nel browser web Konqueror</li>
       <li xml:lang="ka">შეუძლია ფუნქციონირება როგორც ცალკე აპლიკაციას, ისე, როგორც Konquero-ში ჩადგმულ პროგრამას</li>
       <li xml:lang="ko">단독 앱 및 Konqueror 웹 브라우저의 플러그인으로 작동</li>
@@ -415,6 +417,7 @@
       <caption xml:lang="he">חלון יישום ראשי שמציג תמונה ופקדים מימין</caption>
       <caption xml:lang="hu">Az alkalmazás főablaka egy kép megjelenítése közben, bal oldalon a vezérlőkkel</caption>
       <caption xml:lang="ia">Fenestra de application principal monstrante un imagines e controlos sur le sinistra</caption>
+      <caption xml:lang="is">Aðalgluggi forritsins birtir mynd og stýringarnar vinstra megin</caption>
       <caption xml:lang="it">Finestra principale dell'applicazione che mostra un'immagine e i controlli sulla sinistra</caption>
       <caption xml:lang="ka">მთავარი აპლიკაციის ფანჯარა, რომელიც გამოსახულებას და კონტროლებს მარცხნივ აჩვენებს</caption>
       <caption xml:lang="ko">그림과 그 왼쪽에 컨트롤을 표시한 앱 주 창</caption>
@@ -453,7 +456,7 @@
       <caption xml:lang="hu">A Gwenview használata a képgyűjteménye kezeléséhez</caption>
       <caption xml:lang="ia">Usa Guenview pro gerer tu collection de image</caption>
       <caption xml:lang="id">Gunakan Gwenview untuk mengelola koleksi gambar Anda</caption>
-      <caption xml:lang="is">Notaðu Gwenview til að sýsla með myndasafnið þitt</caption>
+      <caption xml:lang="is">Notaðu Gwenview til að hafa umsjón með myndasafninu þínu</caption>
       <caption xml:lang="it">Usa Gwenview per gestire la raccolta delle immagini</caption>
       <caption xml:lang="ka">გამოიყენეთ Gwenview თქვენი სურათების კოლექციების სამართავად</caption>
       <caption xml:lang="ko">Gwenview로 그림 모음집 관리</caption>
