@@ -3,14 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Sveinn í Felli <sveinki@nett.is>, 2007.
 # Sveinn í Felli <sveinki@nett.is>, 2008, 2009, 2010, 2011, 2013, 2015, 2016, 2017, 2018, 2020, 2021, 2022, 2023, 2024.
+# SPDX-FileCopyrightText: 2024 Guðmundur Erlingsson <gudmundure@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-20 00:37+0000\n"
-"PO-Revision-Date: 2024-02-18 08:46+0000\n"
-"Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
-"Language-Team: Icelandic\n"
+"PO-Revision-Date: 2024-03-06 13:49+0000\n"
+"Last-Translator: Guðmundur Erlingsson <gudmundure@gmail.com>\n"
+"Language-Team: Icelandic <kde-i18n-doc@kde.org>\n"
 "Language: is\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -21,23 +22,23 @@ msgstr ""
 "\n"
 "\n"
 "\n"
-"X-Generator: Lokalize 22.04.3\n"
+"X-Generator: Lokalize 23.08.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Sveinn í Felli"
+msgstr "Sveinn í Felli, Guðmundur Erlingsson"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "sv1@fellsnet.is"
+msgstr "sv1@fellsnet.is, gudmundure@gmail.com"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_LowResourceUsageMode)
 #: app/advancedconfigpage.ui:28
 #, kde-format
 msgid "Low resource usage mode"
-msgstr "Hamur fyrir litla kerfisnotkun"
+msgstr "Snið fyrir litla kerfisnotkun"
 
 #. i18n: ectx: property (text), widget (QLabel, cacheHelpLabel)
 #: app/advancedconfigpage.ui:72
@@ -47,9 +48,9 @@ msgid ""
 "storing thumbnails on disk and will prefer embedded thumbnails of lower "
 "quality that are faster to load, if available."
 msgstr ""
-"Virkjaðu þetta ef þú hefur ekki mikið diskpláss. Þetta kemur í veg fyrir að "
-"smámyndir séu geymdar á diski og mun kjósa að nota ígræddar smámyndir í "
-"minni gæðum sem eru fljótari að hlaðast inn, séu þær fyrir hendi."
+"Virkjaðu þetta ef þú ert ekki með mikið diskpláss. Þetta kemur í veg fyrir "
+"að smámyndir séu geymdar á diski og mun kjósa að nota innfelldar smámyndir í "
+"minni gæðum sem er fljótlegra að hlaða inn, séu þær fyrir hendi."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: app/advancedconfigpage.ui:82
@@ -123,6 +124,10 @@ msgid ""
 "is only appropriate for displays that are calibrated to the sRGB color space "
 "or are known to provide an incorrect color profile."
 msgstr ""
+"Þegar slökkt er á litastýringu umbreytir Gwenview myndum í sRGB-litrýmið "
+"frekar en það litrými sem forritið greinir fyrir skjáinn. Þetta á einungis "
+"við fyrir skjái sem eru stilltir fyrir sRGB-litrýmið eða eru þekktir fyrir "
+"að gefa upp rangt litasnið."
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileLabel)
 #: app/advancedconfigpage.ui:275
@@ -134,7 +139,7 @@ msgstr "Litastýring:"
 #, kde-format
 msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
 msgid "Sidebar Alignment Spacer"
-msgstr "Aðgreinir til jöfnunar hliðarspjalds"
+msgstr "Jöfnunarbil á hliðarstiku"
 
 #: app/browsemainpage.cpp:146 app/mainwindow.cpp:375 app/viewmainpage.cpp:410
 #: lib/documentview/documentviewcontroller.cpp:55
@@ -159,13 +164,13 @@ msgstr "Raða eftir"
 #, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Name"
-msgstr "Nafn"
+msgstr "Heiti"
 
 #: app/browsemainpage.cpp:160
 #, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Date"
-msgstr "Dagsetning"
+msgstr "Dagsetningu"
 
 #: app/browsemainpage.cpp:163
 #, kde-format
@@ -189,13 +194,13 @@ msgstr "Lækkandi"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Thumbnail Details"
-msgstr "Ítarlegar um smámynd"
+msgstr "Upplýsingar um smámynd"
 
 #: app/browsemainpage.cpp:187
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filename"
-msgstr "Skráarheiti"
+msgstr "Skrárheiti"
 
 #: app/browsemainpage.cpp:188
 #, kde-format
@@ -232,7 +237,7 @@ msgstr "Skrá"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Add Folder to Places"
-msgstr "Bæta möppu í 'Staðir'"
+msgstr "Bæta möppu við 'Staðir'"
 
 #: app/browsemainpage.cpp:246
 #, kde-format
@@ -268,7 +273,7 @@ msgstr "%1, %2"
 #: app/browsemainpage.ui:88
 #, kde-format
 msgid "Add Filter"
-msgstr "Bæta síu við"
+msgstr "Bæta við síu"
 
 #: app/configdialog.cpp:69
 #, kde-format
@@ -309,21 +314,21 @@ msgstr "Afrita"
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Move %1"
-msgstr "Flytja %1"
+msgstr "Færa %1"
 
 #: app/fileoperations.cpp:75
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Move %1 image"
 msgid_plural "Move %1 images"
-msgstr[0] "Flytja %1 mynd"
-msgstr[1] "Flytja %1 myndir"
+msgstr[0] "Færa %1 mynd"
+msgstr[1] "Færa %1 myndir"
 
 #: app/fileoperations.cpp:77
 #, kde-format
 msgctxt "@action:button"
 msgid "Move"
-msgstr "Flytja"
+msgstr "Færa"
 
 #: app/fileoperations.cpp:81
 #, kde-format
@@ -343,7 +348,7 @@ msgstr[1] "Tengja %1 myndir"
 #, kde-format
 msgctxt "@action:button"
 msgid "Link"
-msgstr "Tengill"
+msgstr "Tengja"
 
 #: app/fileoperations.cpp:196
 #, kde-format
@@ -368,7 +373,7 @@ msgstr "Hætta við"
 #: app/fileopscontextmanageritem.cpp:126
 #, kde-format
 msgid "File Operations"
-msgstr "Skráameðhöndlun"
+msgstr "Skráaaðgerðir"
 
 #: app/fileopscontextmanageritem.cpp:137
 #: app/semanticinfocontextmanageritem.cpp:203
@@ -436,7 +441,7 @@ msgstr "Opna með"
 #: app/fileopscontextmanageritem.cpp:197
 #, kde-format
 msgid "Open Containing Folder"
-msgstr "Opna umlykjandi möppu"
+msgstr "Opna möppu sem skráin er í"
 
 #: app/fileopscontextmanageritem.cpp:387
 #, kde-format
@@ -486,18 +491,18 @@ msgstr "Einkunn <="
 #: app/filtercontroller.cpp:173
 #, kde-format
 msgid "Tagged"
-msgstr "Merkt"
+msgstr "Með merki"
 
 #: app/filtercontroller.cpp:174
 #, kde-format
 msgid "Not Tagged"
-msgstr "Ekki merkt"
+msgstr "Ekki með merki"
 
 #: app/filtercontroller.cpp:278
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Name"
-msgstr "Sía eftir skráarnafni"
+msgstr "Sía eftir skrárheiti"
 
 #: app/filtercontroller.cpp:280
 #, kde-format
@@ -582,19 +587,19 @@ msgstr ", "
 msgctxt "Slideshow interval in seconds"
 msgid "%1 sec"
 msgid_plural "%1 secs"
-msgstr[0] "%1 sek"
-msgstr[1] "%1 sek"
+msgstr[0] "%1 sek."
+msgstr[1] "%1 sek."
 
 #: app/fullscreencontent.cpp:400
 #, kde-format
 msgid "Configure"
-msgstr "Stilla"
+msgstr "Grunnstilla"
 
 #: app/fullscreencontent.cpp:401
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure full screen mode"
-msgstr "Stilla skjáfylliham"
+msgstr "Grunnstilla skjáfyllisnið"
 
 #: app/fullscreencontent.cpp:552 app/viewmainpage.cpp:389
 #, kde-format
@@ -618,13 +623,13 @@ msgstr "Sýna myndskeið"
 #: app/generalconfigpage.ui:34
 #, kde-format
 msgid "Automatically play"
-msgstr "Sjálfvirk afspilun"
+msgstr "Spila sjálfkrafa"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: app/generalconfigpage.ui:41
 #, kde-format
 msgid "Notify after reaching the last image:"
-msgstr "Láta vita þegar komið er á síðustu mynd:"
+msgstr "Láta vita þegar komið er á síðustu myndina:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, neverShowWrapNoticeRadioButton)
 #: app/generalconfigpage.ui:51
@@ -636,7 +641,7 @@ msgstr "Aldrei"
 #: app/generalconfigpage.ui:58
 #, kde-format
 msgid "Only during slideshows"
-msgstr "Aðeins á meðan skyggnusýningu stendur"
+msgstr "Bara þegar skyggnusýning er í gangi"
 
 #. i18n: ectx: property (text), widget (QRadioButton, alwaysShowWrapNoticeRadioButton)
 #: app/generalconfigpage.ui:65
@@ -666,7 +671,7 @@ msgstr "Svart"
 #: app/generalconfigpage.ui:128
 #, kde-format
 msgid "Lossy image save quality:"
-msgstr "Gæði vistunar með gagnatapi:"
+msgstr "Vistun með gæðatapi (lossy):"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, jpegQualitySpinner)
 #: app/generalconfigpage.ui:168
@@ -681,14 +686,14 @@ msgid ""
 "The quality level when saving images using lossy image formats such as JPEG, "
 "WEBP, AVIF, HEIF, and HEIC. Higher quality increases the file size."
 msgstr ""
-"Gæðastig þegar vistaðar eru myndir með gagnatapi eins og t.d. JPEG, WEBP, "
-"AVIF, HEIF og HEIC. Meiri gæði auka stærð skráa."
+"Gæðastig þegar myndir eru vistaðar á myndsniði með gæðatapi (lossy) eins og "
+"t.d. JPEG, WEBP, AVIF, HEIF og HEIC. Meiri gæði auka stærð skráa."
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: app/generalconfigpage.ui:222
 #, kde-format
 msgid "Thumbnail actions:"
-msgstr "Aðgerð smámyndar:"
+msgstr "Smámyndaaðgerðir:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, allButtonsThumbnailActionsRadioButton)
 #: app/generalconfigpage.ui:229
@@ -700,19 +705,19 @@ msgstr "Allir hnappar"
 #: app/generalconfigpage.ui:236
 #, kde-format
 msgid "Show selection button only"
-msgstr "Sýna einungis myndvalshnapp"
+msgstr "Sýna einungis valhnapp"
 
 #. i18n: ectx: property (text), widget (QRadioButton, noneThumbnailActionsRadioButton)
 #: app/generalconfigpage.ui:243
 #, kde-format
 msgctxt "A number of thumbnail actions to show"
 msgid "None"
-msgstr "Ekkert"
+msgstr "Engin"
 
 #: app/gvcore.cpp:80
 #, kde-format
 msgid "Image quality:"
-msgstr "Gæði mynda:"
+msgstr "Myndgæði:"
 
 #: app/gvcore.cpp:87
 #, kde-format
@@ -729,12 +734,12 @@ msgstr "Vista mynd"
 #: app/gvcore.cpp:413
 #, kde-format
 msgid "Save using another format"
-msgstr "Vista með öðru skráasniði"
+msgstr "Vista á öðru skráasniði"
 
 #: app/gvcore.cpp:415
 #, kde-format
 msgid "Gwenview cannot save images in '%1' format."
-msgstr "Gwenview getur ekki vistað myndir á '%1' sniði."
+msgstr "Gwenview getur ekki vistað myndir á sniðinu '%1'."
 
 #: app/gvcore.cpp:443
 #, kde-format
@@ -749,7 +754,7 @@ msgid ""
 "<emphasis strong='true'>Saving <filename>%1</filename> failed:</"
 "emphasis><nl />%2"
 msgstr ""
-"<emphasis strong='true'>Vistun <filename>%1</filename> mistókst:</"
+"<emphasis strong='true'>Mistókst að vista <filename>%1</filename>:</"
 "emphasis><nl />%2"
 
 #: app/gvcore.cpp:511
@@ -772,7 +777,7 @@ msgstr "Einku&nn"
 #: app/gwenviewui.rc:89 part/gvpart.rc:16
 #, kde-format
 msgid "Main Toolbar"
-msgstr "Aðalverkfæraslá"
+msgstr "Aðaltækjastika"
 
 #: app/imagemetainfodialog.cpp:130
 #, kde-format
@@ -816,7 +821,7 @@ msgstr "Spegla"
 #: app/imageopscontextmanageritem.cpp:109
 #, kde-format
 msgid "Flip"
-msgstr "Fletta"
+msgstr "Hvolfa"
 
 #: app/imageopscontextmanageritem.cpp:113 lib/resize/resizeimagedialog.cpp:71
 #, kde-format
@@ -827,7 +832,7 @@ msgstr "Breyta stærð"
 #: lib/crop/cropwidget.cpp:262
 #, kde-format
 msgid "Crop"
-msgstr "Sníða utan af"
+msgstr "Skera"
 
 #: app/imageopscontextmanageritem.cpp:123
 #, kde-format
@@ -852,13 +857,13 @@ msgstr "Glósa"
 #, kde-format
 msgctxt "@title:window Annotate [filename]"
 msgid "Annotate %1"
-msgstr "Glósa við %1"
+msgstr "Glósa á %1"
 
 #: app/imageopscontextmanageritem.cpp:164 lib/document/documentjob.cpp:77
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot edit this kind of image."
-msgstr "Gwenview getur ekki sýslað með þessa tegund mynda."
+msgstr "Gwenview getur ekki breytt myndum af þessari gerð."
 
 #: app/imageopscontextmanageritem.cpp:175
 #, kde-format
@@ -869,7 +874,7 @@ msgstr "Myndaaðgerðir"
 #: app/imageviewconfigpage.ui:17
 #, kde-format
 msgid "Show transparency with:"
-msgstr "Sýna gegnsæi með:"
+msgstr "Gegnsæi sýnt sem:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, surroundingRadioButton)
 #: app/imageviewconfigpage.ui:38
@@ -920,7 +925,7 @@ msgstr "Aðdráttur"
 #: app/imageviewconfigpage.ui:256
 #, kde-format
 msgid "Zoom mode:"
-msgstr "Aðdráttarhamur:"
+msgstr "Aðdráttarsnið:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, autofitZoomModeRadioButton)
 #: app/imageviewconfigpage.ui:271
@@ -932,26 +937,26 @@ msgstr "Hver mynd passi sjálfvirkt"
 #: app/imageviewconfigpage.ui:298
 #, kde-format
 msgid "Keep same zoom and position"
-msgstr "Halda sama aðdrætti og staðsetningu"
+msgstr "Halda sama aðdrætti og stöðu"
 
 #. i18n: ectx: property (text), widget (QRadioButton, individualZoomModeRadioButton)
 #: app/imageviewconfigpage.ui:322
 #, kde-format
 msgid "Per image zoom and position"
-msgstr "Aðdráttur og staðsetning fyrir hverja mynd"
+msgstr "Aðdráttur og staða eftir mynd"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_EnlargeSmallerImages)
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_PrintEnlargeSmallerImages)
 #: app/imageviewconfigpage.ui:362 lib/print/printoptionspage.ui:98
 #, kde-format
 msgid "Enlarge smaller images"
-msgstr "Stækka smáar myndir"
+msgstr "Stækka litlar myndir"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: app/imageviewconfigpage.ui:400
 #, kde-format
 msgid "Animations:"
-msgstr "Myndhreyfingar:"
+msgstr "Hreyfimyndir:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, glAnimationRadioButton)
 #: app/imageviewconfigpage.ui:415
@@ -975,7 +980,7 @@ msgstr "Ekkert"
 #: app/imageviewconfigpage.ui:504
 #, kde-format
 msgid "<b>Thumbnail Bar</b>"
-msgstr "<b>Smámyndaslá</b>"
+msgstr "<b>Smámyndastika</b>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: app/imageviewconfigpage.ui:527
@@ -1012,7 +1017,7 @@ msgstr "%1:"
 #, kde-format
 msgctxt "@action show more image meta info"
 msgid "Show more details..."
-msgstr "Sýna nánari upplýsingar..."
+msgstr "Sýna ítarlegri upplýsingar..."
 
 #: app/infocontextmanageritem.cpp:242
 #, kde-format
@@ -1069,22 +1074,22 @@ msgstr "Myndskoðari"
 #: app/main.cpp:189
 #, kde-format
 msgid "Start in fullscreen mode"
-msgstr "Fylla allan skjáinn í byrjun"
+msgstr "Byrja á öllum skjánum"
 
 #: app/main.cpp:190
 #, kde-format
 msgid "Start in slideshow mode"
-msgstr "Byrja í myndskyggnuham"
+msgstr "Byrja í skyggnusýningu"
 
 #: app/main.cpp:191
 #, kde-format
 msgid "Start in spotlight mode"
-msgstr "Byrja í kastljósham"
+msgstr "Byrja í lágmarkssniði"
 
 #: app/main.cpp:192
 #, kde-format
 msgid "A starting file or folders"
-msgstr "Upphafsskjal eða möppur"
+msgstr "Upphafsskjal eða -möppur"
 
 #: app/mainwindow.cpp:384
 #, kde-format
@@ -1096,7 +1101,7 @@ msgstr "Hreinsa lista"
 #, kde-format
 msgctxt "@action reload the currently viewed image"
 msgid "Reload"
-msgstr "Endurlesa"
+msgstr "Endurhlaða"
 
 #: app/mainwindow.cpp:397
 #, kde-format
@@ -1132,13 +1137,13 @@ msgstr "Skoða valdar myndir"
 #, kde-format
 msgctxt "@action"
 msgid "Exit Full Screen"
-msgstr "Fara úr skjáfylliham"
+msgstr "Hætta á öllum skjánum"
 
 #: app/mainwindow.cpp:434
 #, kde-format
 msgctxt "@action"
 msgid "Spotlight Mode"
-msgstr "Kastljóshamur"
+msgstr "Lágmarkssnið"
 
 #: app/mainwindow.cpp:440
 #, kde-format
@@ -1150,7 +1155,7 @@ msgstr "Fyrri"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to previous image"
-msgstr "Fara að fyrri mynd"
+msgstr "Fara á fyrri mynd"
 
 #: app/mainwindow.cpp:447
 #, kde-format
@@ -1162,7 +1167,7 @@ msgstr "Næsta"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to next image"
-msgstr "Fara að næstu mynd"
+msgstr "Fara á næstu mynd"
 
 #: app/mainwindow.cpp:454
 #, kde-format
@@ -1174,7 +1179,7 @@ msgstr "Fyrsta"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to first image"
-msgstr "Fara að fyrstu mynd"
+msgstr "Fara á fyrstu mynd"
 
 #: app/mainwindow.cpp:461
 #, kde-format
@@ -1186,7 +1191,7 @@ msgstr "Síðasta"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to last image"
-msgstr "Fara að síðustu mynd"
+msgstr "Fara á síðustu mynd"
 
 #: app/mainwindow.cpp:472
 #, kde-format
@@ -1204,13 +1209,13 @@ msgstr "Opna upphafssíðu"
 #, kde-format
 msgctxt "@action"
 msgid "Sidebar"
-msgstr "Hliðarspjald"
+msgstr "Hliðarstika"
 
 #: app/mainwindow.cpp:485
 #, kde-format
 msgctxt "@action opens crop, rename, etc."
 msgid "Show Editing Tools"
-msgstr "Birta myndvinnsluverkfæri"
+msgstr "Sýna myndvinnsluverkfæri"
 
 #: app/mainwindow.cpp:515
 #, kde-format
@@ -1236,7 +1241,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:menu submenu for actions that open configuration dialogs"
 msgid "Configure"
-msgstr "Stilla"
+msgstr "Grunnstilla"
 
 #: app/mainwindow.cpp:596
 #, kde-format
@@ -1278,13 +1283,13 @@ msgstr "Skoðun myndefnis"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
-msgstr "Fela hliðarspjald"
+msgstr "Fela hliðarstiku"
 
 #: app/mainwindow.cpp:1427
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
-msgstr "Sýna hliðarspjald"
+msgstr "Sýna hliðarstiku"
 
 #: app/mainwindow.cpp:1770
 #, kde-format
@@ -1295,12 +1300,12 @@ msgstr "Opna mynd"
 #: app/mainwindow.cpp:1830
 #, kde-format
 msgid "Pause Slideshow"
-msgstr "Setja myndasýningu í bið"
+msgstr "Gera hlé á skyggnusýningu"
 
 #: app/mainwindow.cpp:1833
 #, kde-format
 msgid "Resume Slideshow"
-msgstr "Halda áfram með myndasýningu"
+msgstr "Halda áfram skyggnusýningu"
 
 #: app/mainwindow.cpp:1833
 #, kde-format
@@ -1327,15 +1332,15 @@ msgstr[1] "%1 myndum hefur verið breytt."
 #: app/mainwindow.cpp:1849
 #, kde-format
 msgid "If you quit now, your changes will be lost."
-msgstr "Ef þú hættir núna, taparðu öllum breytingum."
+msgstr "Ef þú hættir núna taparðu öllum breytingum."
 
 #: app/mainwindow.cpp:1892
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr ""
-"Þetta mun fela valmyndastikuna algerlega. Þú getur birt hana aftur með því "
-"að skrifa %1."
+"Þetta felur valmyndastikuna alveg. Þú getur kallað hana aftur fram með því "
+"að slá inn %1."
 
 #: app/mainwindow.cpp:1895
 #, kde-format
@@ -1345,7 +1350,7 @@ msgstr "Fela valmyndastiku"
 #: app/mainwindow.cpp:2116
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
-msgstr "Þú ert kominn á fyrsta skjalið, hvað viltu gera?"
+msgstr "Þú ert nú á fyrsta skjalinu. Hvað viltu gera?"
 
 #: app/mainwindow.cpp:2117 app/mainwindow.cpp:2131
 #, kde-format
@@ -1355,22 +1360,22 @@ msgstr "Vera hér"
 #: app/mainwindow.cpp:2118
 #, kde-format
 msgid "Go to the Last Document"
-msgstr "Fer á síðasta skjalið"
+msgstr "Fara á síðasta skjalið"
 
 #: app/mainwindow.cpp:2119 app/mainwindow.cpp:2133
 #, kde-format
 msgid "Go Back to the Document List"
-msgstr "Fara til baka í skjalalistanum"
+msgstr "Fara til baka í skjalalistann"
 
 #: app/mainwindow.cpp:2130
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
-msgstr "Þú ert kominn á síðasta skjalið, hvað viltu gera?"
+msgstr "Þú ert nú á síðasta skjalinu. Hvað viltu gera?"
 
 #: app/mainwindow.cpp:2132
 #, kde-format
 msgid "Go to the First Document"
-msgstr "Fer á fyrsta skjalið"
+msgstr "Fara á fyrsta skjalið"
 
 #: app/renamedialog.cpp:48
 #, kde-format
@@ -1406,8 +1411,8 @@ msgstr "&Stöðva"
 msgctxt "@info"
 msgid "One document could not be saved:"
 msgid_plural "%1 documents could not be saved:"
-msgstr[0] "Ekki var hægt að vista eina skrá:"
-msgstr[1] "Ekki var hægt að vista %1 skrár:"
+msgstr[0] "Ekki var hægt að vista eitt skjal:"
+msgstr[1] "Ekki var hægt að vista %1 skjöl:"
 
 #: app/saveallhelper.cpp:106
 #, kde-kuit-format
@@ -1429,7 +1434,7 @@ msgstr ""
 #: app/savebar.cpp:160
 #, kde-format
 msgid "Current image modified"
-msgstr "Nýverandi breytt mynd"
+msgstr "Núverandi mynd breytt"
 
 #: app/savebar.cpp:166
 #, kde-format
@@ -1451,12 +1456,12 @@ msgstr[1] "%1 myndum breytt"
 #: app/savebar.cpp:185
 #, kde-format
 msgid "Go to first modified image"
-msgstr "Fara í fyrstu breyttu myndinni"
+msgstr "Fara á fyrstu breyttu myndina"
 
 #: app/savebar.cpp:187
 #, kde-format
 msgid "Go to it"
-msgstr "Fara að henni"
+msgstr "Fara á hana"
 
 #: app/savebar.cpp:285 app/savebar.cpp:290
 #, kde-format
@@ -1526,19 +1531,19 @@ msgstr "Lýsing"
 #, kde-format
 msgctxt "@action:inmenu Start a slideshow Dolphin context menu"
 msgid "Start a Slideshow"
-msgstr "Hefja skyggnusýningu"
+msgstr "Byrja skyggnusýningu"
 
 #: app/slideshowfileitemaction.cpp:66
 #, kde-format
 msgctxt "@action:inmenu Start a slideshow Dolphin context menu"
 msgid "Start a Slideshow with selected images"
-msgstr "Hefja skyggnusýningu með völdum myndum"
+msgstr "Byrja skyggnusýningu með völdum myndum"
 
 #: app/startmainpage.cpp:291
 #, kde-format
 msgctxt "@action Recent Folders view"
 msgid "Add Folder to Places"
-msgstr "Bæta möppu í 'Staðir'"
+msgstr "Bæta möppu við 'Staðir'"
 
 #: app/startmainpage.cpp:292
 #, kde-format
@@ -1556,7 +1561,7 @@ msgstr "Gleyma öllum möppum"
 #, kde-format
 msgctxt "@action Recent Files view"
 msgid "Add Containing Folder to Places"
-msgstr "Bæta umlykjandi möppu í 'Staðir'"
+msgstr "Bæta möppu sem skráin er í við 'Staðir'"
 
 #: app/startmainpage.cpp:296
 #, kde-format
@@ -1574,7 +1579,7 @@ msgstr "Gleyma öllum skrám"
 #: app/startmainpage.ui:49
 #, kde-format
 msgid "History has been disabled."
-msgstr "Ferilsskráning hefur verið gerð óvirk."
+msgstr "Ferilskráning hefur verið gerð óvirk."
 
 #. i18n: ectx: attribute (title), widget (QWidget, mRecentFoldersTab)
 #: app/startmainpage.ui:66
@@ -1607,8 +1612,8 @@ msgid ""
 "Browsing by tags is not available. Make sure Nepomuk is properly installed "
 "on your computer."
 msgstr ""
-"Sorrý, flakk eftir merkjum er ekki í boði. Vertu viss um að Nepomuk sé rétt "
-"sett upp á tölvunni."
+"Uppfletting eftir merkjum er ekki í boði. Gakktu úr skugga um að Nepomuk sé "
+"rétt sett upp á tölvunni."
 
 #: app/viewmainpage.cpp:148 app/viewmainpage.cpp:432
 #, kde-format
@@ -1632,18 +1637,24 @@ msgid ""
 "and contain multiple rows of images; <link url='%1'>configure these options "
 "in the settings</link>.</para>"
 msgstr ""
+"<para>Þetta sýnir eða felur litla stiku með öllum hinum myndunum í möppunni. "
+"Ef ein af þeim er valin birtist hún í myndglugganum.</para><para>Veldu "
+"nokkrar myndir í einu til að skoða þær hlið við hlið.</para><para>Hægt er að "
+"færa stikuna hægra megin á skjáinn og láta hana birta myndir í nokkrum "
+"röðum. <link url='%1'>Þú getur stillt þessa valkosti í stillingunum</link>.</"
+"para>"
 
 #: app/viewmainpage.cpp:571
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Background Color Mode"
-msgstr "Hamur bakgrunnslitar"
+msgstr "Bakgrunnslitasnið"
 
 #: app/viewmainpage.cpp:763
 #, kde-format
 msgctxt "@action:button"
 msgid "Discard Changes and Reload"
-msgstr "Henda breytingum og endurlesa"
+msgstr "Henda breytingum og endurhlaða"
 
 #: app/viewmainpage.cpp:765
 #, kde-format
@@ -1674,8 +1685,8 @@ msgstr[1] "Mistókst að flytja inn %1 skjöl."
 #, kde-format
 msgid "Failed to create %1 destination subfolder."
 msgid_plural "Failed to create %1 destination subfolders."
-msgstr[0] "Gat ekki búið til %1 úttaks-undirmöppu."
-msgstr[1] "Gat ekki búið til %1 úttaks-undirmöppur."
+msgstr[0] "Gat ekki búið til %1 viðtökuundirmöppu."
+msgstr[1] "Gat ekki búið til %1 viðtökuundirmöppur."
 
 #: importer/dialogpage.cpp:89
 #, kde-format
@@ -1751,23 +1762,23 @@ msgstr[1] ""
 #, kde-format
 msgid "Delete the imported document from the device?"
 msgid_plural "Delete the %1 imported documents from the device?"
-msgstr[0] "Eyða innflutta skjalinu af tækinu?"
-msgstr[1] "Eyða innfluttu %1 skjölunum af tækinu?"
+msgstr[0] "Eyða innflutta skjalinu úr tækinu?"
+msgstr[1] "Eyða innfluttu %1 skjölunum úr tækinu?"
 
 #: importer/importdialog.cpp:114
 #, kde-format
 msgid "Delete the skipped document from the device?"
 msgid_plural "Delete the %1 skipped documents from the device?"
-msgstr[0] "Eyða skjalinu sem var sleppt af tækinu?"
-msgstr[1] "Eyða %1 skjölunum sem var sleppt af tækinu?"
+msgstr[0] "Eyða skjalinu sem var sleppt úr tækinu?"
+msgstr[1] "Eyða %1 skjölunum sem var sleppt úr tækinu?"
 
 #: importer/importdialog.cpp:117
 #, kde-format
 msgctxt "Singular sentence is actually never used."
 msgid "Delete the imported or skipped document from the device?"
 msgid_plural "Delete the %1 imported and skipped documents from the device?"
-msgstr[0] "Eyða skjalinu sem var sleppt eða flutt inn af tækinu?"
-msgstr[1] "Eyða %1 skjölunum sem var sleppt eða flutt inn af tækinu?"
+msgstr[0] "Eyða skjalinu sem var sleppt eða flutt inn úr tækinu?"
+msgstr[1] "Eyða %1 skjölunum sem var sleppt eða flutt inn úr tækinu?"
 
 #: importer/importdialog.cpp:124
 #, kde-format
@@ -1828,12 +1839,12 @@ msgstr "Hætta"
 #: importer/importer.cpp:79
 #, kde-format
 msgid "Could not create destination folder."
-msgstr "Gat ekki búið til úttaksmöppuna."
+msgstr "Gat ekki búið til viðtökumöppuna."
 
 #: importer/importer.cpp:94 importer/importer.cpp:100
 #, kde-format
 msgid "Could not create temporary upload folder."
-msgstr "Gat ekki búið til bráðabirgðamöppu fyrir sendingu."
+msgstr "Gat ekki búið til bráðabirgða upphleðslumöppu."
 
 #: importer/importerconfigdialog.cpp:52
 #, kde-format
@@ -1845,13 +1856,13 @@ msgstr "%1: %2"
 #: importer/importerconfigdialog.ui:17
 #, kde-format
 msgid "Rename documents automatically"
-msgstr "Endurnefna skjöl sjálkrafa"
+msgstr "Endurnefna skjöl sjálfkrafa"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: importer/importerconfigdialog.ui:39
 #, kde-format
 msgid "Rename Format:"
-msgstr "Snið endurnefningar:"
+msgstr "Endurnefningarsnið:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: importer/importerconfigdialog.ui:59
@@ -1863,12 +1874,12 @@ msgstr "Forskoðun:"
 #: importer/importerconfigdialog.ui:83
 #, kde-format
 msgid "<i>Type text or click the items below to customize the format</i>"
-msgstr "<i>Skrifaðu texta eða smelltu á hluti til að sérsníða</i>"
+msgstr "<i>Skrifaðu texta eða smelltu á hluti fyrir neðan til að sérsníða</i>"
 
 #: importer/main.cpp:41
 #, kde-format
 msgid "Gwenview Importer"
-msgstr "Gwenview Innflutningur"
+msgstr "Gwenview innflutningur"
 
 #: importer/main.cpp:43
 #, kde-format
@@ -1880,13 +1891,12 @@ msgstr "Innflutningur ljósmynda"
 msgid ""
 "The device UDI, used to retrieve information about the device (name, icon...)"
 msgstr ""
-"UDI-númer tækisins, notað til að finna upplýsingar um tækið (heiti, "
-"táknmynd...)"
+"UDI-númer tækisins, notað til að finna upplýsingar um tækið (heiti, tákn...)"
 
 #: importer/main.cpp:50
 #, kde-format
 msgid "Device UDI"
-msgstr "UDI tækis"
+msgstr "UDI-númer tækis"
 
 #: importer/main.cpp:51
 #, kde-format
@@ -1924,13 +1934,13 @@ msgstr "Stuðningur við myndavélina þína er ekki uppsettur."
 #, kde-format
 msgctxt "@info above install button, %1 protocol name %2 error text from KIO"
 msgid "The protocol support library for \"%1\" is not installed. Error: %2"
-msgstr "Aðgerðasafn fyrir samskiptamáta við \"%1\" er ekki uppsett. Villa: %2"
+msgstr "Samskiptastuðningur fyrir \"%1\" er ekki uppsettur. Villa: %2"
 
 #: importer/thumbnailpage.cpp:235
 #, kde-format
 msgctxt "@info above install button, %1 protocol name"
 msgid "The protocol support library for \"%1\" is not installed."
-msgstr "Aðgerðasafn fyrir samskiptamáta við \"%1\" er ekki settur upp."
+msgstr "Samskiptastuðningur fyrir \"%1\" er ekki uppsettur."
 
 #: importer/thumbnailpage.cpp:247
 #, kde-format
@@ -1938,14 +1948,14 @@ msgctxt "@info:usagetip above install button"
 msgid ""
 "After finishing the installation process, restart this Importer to continue."
 msgstr ""
-"Eftir að uppsetningarferlinu er lokið, skaltu endurræsa þetta "
-"innflutningsverkfæri áður en haldið er áfram."
+"Þegar uppsetningu er lokið skaltu endurræsa innflutningseininguna til að "
+"halda áfram."
 
 #: importer/thumbnailpage.cpp:254
 #, kde-format
 msgctxt "@info:tooltip for a button, %1 protocol name"
 msgid "Launch Discover to install the protocol support library for \"%1\""
-msgstr "Ræstu Discover til að setja upp aðgerðasafn til stuðnings \"%1\""
+msgstr "Ræstu Discover til að setja upp samskiptastuðning fyrir \"%1\""
 
 #: importer/thumbnailpage.cpp:256
 #, kde-format
@@ -1961,9 +1971,9 @@ msgid ""
 "to launch Discover to install Kamera to enable protocol support for "
 "\"camera:/\" on your system."
 msgstr ""
-"Þú þarft að hafa Kamera uppsett á kerfinu til að lesa af myndavélinni. "
-"Smelltu hér til að ræsa Discover til að setja upp aðgerðasafnið sem vantar "
-"til stuðnings við \"camera:/\" á kerfinu þínu."
+"Kamera þarf að vera uppsett í tölvunni til að geta lesið af myndavélinni. "
+"Smelltu hér til að opna Discover og setja upp Kamera til að virkja "
+"samskiptastuðning fyrir \"camera:/\" í tölvunni þinni."
 
 #: importer/thumbnailpage.cpp:260
 #, kde-format
@@ -1978,8 +1988,8 @@ msgid ""
 "Click here to launch Discover to install the missing protocol support "
 "library to enable the protocol support for \"%1:/\" on your system."
 msgstr ""
-"Smelltu hér til að ræsa Discover til að setja upp aðgerðasafnið sem vantar "
-"til stuðnings við \"%1:/\" á kerfinu þínu."
+"Smelltu hér til að ræsa Discover til að setja upp samskiptastuðninginn sem "
+"vantar fyrir \"%1:/\" í tölvunni."
 
 #: importer/thumbnailpage.cpp:265
 #, kde-format
@@ -1987,7 +1997,7 @@ msgctxt "@action:button %1 protocol name"
 msgid "Search the Web for How to Install Protocol Support for \"%1\"…"
 msgstr ""
 "Leitaðu á netinu að einhverju eins og: \"How to Install Protocol Support for "
-"%1\"…"
+"%1\" (\"Hvernig á að setja upp samskiptastuðning fyrir\")…"
 
 #: importer/thumbnailpage.cpp:281
 #, kde-format
@@ -1995,7 +2005,7 @@ msgctxt ""
 "@info this text will be used as a search term in an online search engine, %1 "
 "protocol name"
 msgid "How to install protocol support for \"%1\" on Linux"
-msgstr "Hvernig á að setja upp samskiptastuðning við \"%1\" á Linux"
+msgstr "Hvernig á að setja upp samskiptastuðning fyrir \"%1\" á Linux"
 
 #: importer/thumbnailpage.cpp:282
 #, kde-format
@@ -2022,9 +2032,9 @@ msgid ""
 "Opening Discover failed.<nl/>Please check if Discover is installed on your "
 "system, or use your system's package manager to install \"Kamera\" package."
 msgstr ""
-"Mistókst að opna Discover.<nl/>Athugaðu hvort Discover sé uppsett á kerfinu "
-"þínu, eða notaðu pakkastjórnunarkerfi stýrikerfisins þíns til að setja upp "
-"\"Kamera\" pakkann."
+"Mistókst að opna Discover.<nl/>Athugaðu hvort Discover sé uppsett í "
+"tölvunniþínni eða notaðu pakkastjóra stýrikerfisins til að setja upp \"Kamera"
+"\"-pakkann."
 
 #: importer/thumbnailpage.cpp:492
 #, kde-kuit-format
@@ -2034,9 +2044,9 @@ msgid ""
 "system, or use your system's package manager to install the protocol support "
 "library for \"%1\"."
 msgstr ""
-"Mistókst að opna Discover.<nl/>Athugaðu hvort Discover sé uppsett á kerfinu "
-"þínu, eða notaðu pakkastjórnunarkerfi stýrikerfisins þíns til að setja upp "
-"aðgerðasafnið fyrir samskiptastuðning við \"%1\"."
+"Mistókst að opna Discover.<nl/>Athugaðu hvort Discover sé uppsett í tölvunni "
+"þinni eða notaðu pakkastjóra stýrikerfisins til að setja "
+"uppsamskiptastuðning fyrir \"%1\"."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: importer/thumbnailpage.ui:173
@@ -2054,7 +2064,7 @@ msgstr "Stillingar..."
 #: importer/thumbnailpage.ui:201
 #, kde-format
 msgid "Enter the import destination"
-msgstr "Settu inn staðinn sem þú vilt flytja inn í"
+msgstr "Sláðu inn staðinn sem á að flytja inn í"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: importer/thumbnailpage.ui:220
@@ -2100,7 +2110,7 @@ msgstr "Litróf:"
 #: lib/crop/cropwidget.cpp:191
 #, kde-format
 msgid "Current Image"
-msgstr "Fyrirliggjandi mynd"
+msgstr "Núverandi mynd"
 
 #: lib/crop/cropwidget.cpp:194
 #, kde-format
@@ -2115,7 +2125,7 @@ msgstr "Þessi skjár"
 #: lib/crop/cropwidget.cpp:199
 #, kde-format
 msgid "Landscape"
-msgstr "Lárétt"
+msgstr "Langsnið"
 
 #: lib/crop/cropwidget.cpp:204 lib/crop/cropwidget.cpp:211
 #, kde-format
@@ -2125,12 +2135,12 @@ msgstr "ISO (A4, A3...)"
 #: lib/crop/cropwidget.cpp:205 lib/crop/cropwidget.cpp:212
 #, kde-format
 msgid "US Letter"
-msgstr "US bréfsefni"
+msgstr "US Letter"
 
 #: lib/crop/cropwidget.cpp:206
 #, kde-format
 msgid "Portrait"
-msgstr "Lóðrétt"
+msgstr "Skammsnið"
 
 #. i18n("%1:%2") because ':' should not be translated, it is
 #. used to parse the ratio string.
@@ -2156,7 +2166,7 @@ msgstr "Ítarlegar stillingar"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Aspect ratio:"
-msgstr "Stærðarhlutföll:"
+msgstr "Myndhlutfall:"
 
 #: lib/crop/cropwidget.cpp:312
 #, kde-format
@@ -2174,19 +2184,19 @@ msgstr "Staða:"
 #, kde-format
 msgctxt "@option:check"
 msgid "Preserve aspect ratio"
-msgstr "Halda stærðarhlutföllum"
+msgstr "Halda myndhlutfalli"
 
 #: lib/document/document.cpp:301
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot save this kind of documents."
-msgstr "Gwenview getur ekki vistað þessa tegund skjala."
+msgstr "Gwenview getur ekki vistað skjöl af þessari gerð."
 
 #: lib/document/loadingdocumentimpl.cpp:136
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot display documents of type %1."
-msgstr "Gwenview getur ekki sýnt skjöl af gerðinni %1."
+msgstr "Gwenview getur ekki birt skjöl af gerðinni %1."
 
 #: lib/document/loadingdocumentimpl.cpp:389
 #, kde-format
@@ -2198,7 +2208,7 @@ msgstr "Get ekki opnað skrána %1"
 #, kde-format
 msgctxt "@info"
 msgid "Loading meta information failed."
-msgstr "Hleðsla metagagna mistókst."
+msgstr "Hleðsla lýsigagna mistókst."
 
 #: lib/document/loadingdocumentimpl.cpp:506
 #, kde-format
@@ -2218,7 +2228,7 @@ msgid ""
 "Could not open file for writing, check that you have the necessary rights in "
 "<filename>%1</filename>."
 msgstr ""
-"Gat ekki opnað skrána til skrifunar, athugaðu hvort þú hafir nauðsynlegar "
+"Gat ekki opnað skrána til að skrifa, athugaðu hvort þú sért með nauðsynlegar "
 "heimildir í <filename>%1</filename>."
 
 #: lib/document/savejob.cpp:133
@@ -2228,8 +2238,8 @@ msgid ""
 "Could not overwrite file, check that you have the necessary rights to write "
 "in <filename>%1</filename>."
 msgstr ""
-"Gat ekki skrifað yfir skrána, athugaðu hvort þú hafir nauðsynlegar heimildir "
-"í  <filename>%1</filename>."
+"Gat ekki skrifað yfir skrána, athugaðu hvort þú sért með nauðsynlegar "
+"heimildir í  <filename>%1</filename>."
 
 #: lib/documentview/documentview.cpp:214
 #, kde-format
@@ -2260,7 +2270,7 @@ msgstr "%1%"
 #: lib/documentview/documentview.cpp:543
 #, kde-format
 msgid "Gwenview does not know how to display this kind of document"
-msgstr "Gwenview getur ekki sýnt þessa tegund skjala"
+msgstr "Gwenview getur ekki birt skjal af þessari gerð"
 
 #: lib/documentview/documentview.cpp:649
 #, kde-kuit-format
@@ -2276,7 +2286,7 @@ msgstr "Aðdráttur svo passi"
 #, kde-format
 msgctxt "@action:button Zoom to fit, shown in status bar, keep it short please"
 msgid "Fit"
-msgstr "Aðlaga"
+msgstr "Passa á síðu"
 
 #: lib/documentview/documentviewcontroller.cpp:64
 #, kde-format
@@ -2304,11 +2314,21 @@ msgid ""
 "are displayed at a previous zoom value instead <link url='%2'>in the "
 "settings</link>.</para>"
 msgstr ""
+"<para>Þetta lagar myndina að skoðunarsvæðinu sem er í boði:<list><item> "
+"Myndir sem eru stærri en skoðunarsvæðið eru minnkaðar þannig að þær passi.</"
+"item><item>Myndir sem eru minni en skoðunarsvæðið eru birtar í eðlilegri "
+"stærð þeirra. Ef þú vilt að minni myndir fylli alveg upp í skoðunarsvæðið "
+"skaltu kveikja á <emphasis>Stækka minni myndir</emphasis> <link url='%2'>í "
+"stillingunum</link>.</item></list></para><para>Ef \"%1\" er nú þegar valið "
+"slokknar á því ef ýtt er aftur og myndin birtist í eðlilegri stærð í staðinn."
+"</para><para>\"%1\" er sjálfgefið aðdráttarstig fyrir myndir. Hægt er að "
+"breyta þessu þannig að myndir noti sama aðdráttarstig og var notað í næstu "
+"mynd á undan <link url='%2'>í stillingunum</link>.</para>"
 
 #: lib/documentview/documentviewcontroller.cpp:83
 #, kde-format
 msgid "Zoom to fill window by fitting to width or height"
-msgstr "Aðdráttur til að fylla glugga svo breidd eða hæð passi"
+msgstr "Auka aðdrátt til að fylla glugga svo breidd eða hæð passi"
 
 #: lib/documentview/documentviewcontroller.cpp:85
 #, kde-format
@@ -2316,7 +2336,7 @@ msgctxt ""
 "@action:button Zoom to fill (fit width or height), shown in status bar, keep "
 "it short please"
 msgid "Fill"
-msgstr "Fylling"
+msgstr "Fylla"
 
 #: lib/documentview/documentviewcontroller.cpp:90
 #, kde-format
@@ -2327,7 +2347,7 @@ msgstr "100%"
 #: lib/documentview/documentviewcontroller.cpp:98
 #, kde-format
 msgid "Show Bird's Eye View When Zoomed In"
-msgstr "Birta yfirlitsmynd við aðdrátt"
+msgstr "Birta yfirlitsmynd þegar aðdráttur er aukinn"
 
 #: lib/documentview/documentviewcontroller.cpp:105
 #, kde-format
@@ -2339,19 +2359,19 @@ msgstr "Fylgja litastefi"
 #, kde-format
 msgctxt "@action"
 msgid "Light Mode"
-msgstr "Ljós hamur"
+msgstr "Ljóst snið"
 
 #: lib/documentview/documentviewcontroller.cpp:117
 #, kde-format
 msgctxt "@action"
 msgid "Neutral Mode"
-msgstr "Hlutlaus hamur"
+msgstr "Hlutlaust snið"
 
 #: lib/documentview/documentviewcontroller.cpp:123
 #, kde-format
 msgctxt "@action"
 msgid "Dark Mode"
-msgstr "Dökkur hamur"
+msgstr "Dökkt snið"
 
 #: lib/documentview/messageviewadapter.cpp:50
 #, kde-format
@@ -2371,8 +2391,8 @@ msgid ""
 "The percentage of memory used by Gwenview before it\n"
 "            warns the user and suggest saving changes."
 msgstr ""
-"Prósentuhlutfall minnis sem notað er af Gwenview áður en það\n"
-"            aðvarar notandann og stingur upp á vistun."
+"Prósentuhlutfall minnis sem Gwenview notar áður en það\n"
+"            varar notandann við og stingur upp á að vista breytingar."
 
 #. i18n: ectx: whatsthis, entry (BlackListedExtensions), group (General)
 #: lib/gwenviewconfig.kcfg:70
@@ -2382,8 +2402,8 @@ msgid ""
 "            load. We exclude *.new as well because this is the extension\n"
 "            used for temporary files by KSaveFile."
 msgstr ""
-"Listi með skráaendingum sem Gwenview ætti ekki að reyna að\n"
-"            hlaða inn. Við útilokum einnig *.new þar sem sú skráaending er\n"
+"Listi yfir skráarendingar sem Gwenview ætti ekki að reyna að\n"
+"            hlaða inn. Við útilokum einnig *.new þar sem sú skráarending er\n"
 "            notuð af KSaveFile fyrir bráðabirgðaskrár."
 
 #. i18n: ectx: whatsthis, entry (ZoomMode), group (ImageView)
@@ -2403,21 +2423,17 @@ msgid ""
 "            be displayed with the updated zoom and position)."
 msgstr ""
 "Skilgreinir hvað gerist þegar farið er á mynd B eftir\n"
-"            að aðdráttur hefur verið settur á svæði í mynd A. Ef stillt er "
-"á\n"
-"            'Passa sjálfvirkt', breytist aðdráttur B svo hún passi á "
-"skjáinn.\n"
-"            Ef stillt er á 'Halda sama' munu allar myndir halda sama "
-"aðdrætti\n"
-"            og staðsetningu: mynd B fær sama aðdrátt og mynd A (og ef\n"
-"            aðdrættinum er breytt, mun mynd A þá vera birt með uppfærðum\n"
-"            aðdrætti og staðsetningu). Ef stillt er á 'Fyrir hverja mynd' "
-"verður\n"
-"            munað hver aðdráttur og staðsetning hverrar myndar er: mynd B\n"
-"            mun upphaflega vera stillt á sama aðdrátt og stöðu og mynd A, \n"
-"            en mun síðan fara á sínar eigin stillingar ( ef þeim er breytt, "
-"mun\n"
-"            mynd A EKKI birtast með uppfærðum aðdráttargildum)."
+"            að aðdráttur hefur verið aukinn á svæði í mynd A. Ef stillt\n"
+"            er á 'Hver mynd passi sjálfkrafa' breytist aðdráttur B svo hún\n"
+"            passi á skjáinn. Ef stillt er á 'Halda sama' munu allar myndir\n"
+"            halda sama aðdrætti og stöðu: mynd B fær sama aðdrátt og\n"
+"            mynd A (og ef aðdrættinum er breytt verður mynd A birt\n"
+"            með uppfærðum aðdrætti og stöðu). Ef stillt er á\n"
+"            'Hver mynd sjálfstæð' man hver mynd aðdrátt sinn og stöðu:\n"
+"            mynd B er upphaflega stillt á sama aðdrátt og stöðu og mynd A,\n"
+"            en mun svo muna eigin aðdrátt og stöðu (ef þessu er breytt\n"
+"            verður mynd A EKKI birt með uppfærðum aðdrætti\n"
+"            og stöðu)."
 
 #. i18n: ectx: whatsthis, entry (RenderingIntent), group (ImageView)
 #: lib/gwenviewconfig.kcfg:225
@@ -2433,22 +2449,22 @@ msgid ""
 msgstr ""
 "Skilgreinir hvernig litir eru meðhöndlaðir þegar skjárinn\n"
 "            notar ICC-litasnið og mynd er með liti sem ekki passa\n"
-"            innan litrófs litasniðsins. \"Skynjanlegt\" mun kvarða liti\n"
+"            innan litrófs litasniðsins. \"Skynjanlegt\" kvarðar liti\n"
 "            allrar myndarinnar þannig að þeir passi innan þess litasviðs\n"
-"            sem skjárinn ræður við. \"Afstætt\" mun fletja einungis þá liti\n"
+"            sem skjárinn ræður við. \"Afstætt\" fletur einungis þá liti\n"
 "            sem ekki er hægt að birta og snertir ekki á hinum litunum."
 
 #. i18n: ectx: label, entry (random), group (slide show)
 #: lib/gwenviewconfig.kcfg:332
 #, kde-format
 msgid "Display slide show images in random order"
-msgstr "Sýna myndir í skyggnusýningum í tilviljanakenndri röð"
+msgstr "Sýna myndir í skyggnusýningum í slembinni röð"
 
 #. i18n: ectx: label, entry (fullscreen), group (slide show)
 #: lib/gwenviewconfig.kcfg:336
 #, kde-format
 msgid "Show slideshow in fullscreen mode"
-msgstr "Sýna myndir í skyggnusýningum í skjáfylliham"
+msgstr "Sýna myndir í skyggnusýningum á öllum skjánum"
 
 #. i18n: ectx: label, entry (loop), group (slide show)
 #: lib/gwenviewconfig.kcfg:340
@@ -2460,7 +2476,7 @@ msgstr "Fara aftur í gegnum myndir"
 #: lib/gwenviewconfig.kcfg:344
 #, kde-format
 msgid "Stop at last image of folder"
-msgstr "Hætta við síðustu mynd í möppu"
+msgstr "Stoppa á síðustu mynd í möppu"
 
 #. i18n: ectx: label, entry (interval), group (slide show)
 #: lib/gwenviewconfig.kcfg:348
@@ -2473,7 +2489,7 @@ msgstr "Tími milli mynda (í sekúndum)"
 #, kde-format
 msgid "Restrict crop to image ratio when Advanced Settings disabled"
 msgstr ""
-"Takmarka utanskurð við stærðarhlutföll myndar þegar ítarlegar stillingar eru "
+"Takmarka afskurð við myndhlutfall myndar þegar Ítarlegar stillingar eru "
 "óvirkar"
 
 #. i18n: ectx: label, entry (CropRatioIndex), group (Crop)
@@ -2481,23 +2497,21 @@ msgstr ""
 #, kde-format
 msgid "Index representing selected ratio in the Advanced settings combobox"
 msgstr ""
-"Vísir sem stendur fyrir valið hlutfall fjölvalsreits í ítarlegum stillingum"
+"Vísir sem sýnir hlutfallið sem er valið í listareitnum í Ítarlegum stillingum"
 
 #. i18n: ectx: label, entry (CropRatioWidth), group (Crop)
 #: lib/gwenviewconfig.kcfg:372
 #, kde-format
 msgid "Last used crop ratio width when Advanced Settings enabled"
 msgstr ""
-"Síðast notaða breidd í hlutfalli utanskurðar þegar ítarlegar stillingar eru "
-"virkar"
+"Síðast notaða breidd skurðhlutfalls þegar Ítarlegar stillingar voru notaðar"
 
 #. i18n: ectx: label, entry (CropRatioHeight), group (Crop)
 #: lib/gwenviewconfig.kcfg:376
 #, kde-format
 msgid "Last used crop ratio height when Advanced Settings enabled"
 msgstr ""
-"Síðast notaða hæð í hlutfalli utanskurðar þegar ítarlegar stillingar eru "
-"virkar"
+"Síðast notaða hæð skurðhlutfalls þegar Ítarlegar stillingar voru notaðar"
 
 #: lib/historymodel.cpp:146
 #, kde-format
@@ -2514,7 +2528,7 @@ msgstr "Loka"
 #, kde-format
 msgctxt "@item:intable Image file name"
 msgid "Name"
-msgstr "Nafn"
+msgstr "Heiti"
 
 #: lib/imagemetainfomodel.cpp:255
 #, kde-format
@@ -2562,7 +2576,7 @@ msgstr "Athugasemd"
 #, kde-format
 msgctxt "@item:intable"
 msgid "File Type"
-msgstr "Skráartegund"
+msgstr "Skrárgerð"
 
 #: lib/imagemetainfomodel.cpp:324
 #, kde-format
@@ -2592,7 +2606,7 @@ msgstr "Gildi"
 #, kde-format
 msgctxt "@info"
 msgid "Could not open file for writing."
-msgstr "Gat ekki opnað skrá til skriftar."
+msgstr "Gat ekki opnað skrá til að skrifa."
 
 #: lib/jpegcontent.cpp:683
 #, kde-format
@@ -2609,13 +2623,13 @@ msgstr "Prenta mynd"
 #: lib/print/printoptionspage.ui:14
 #, kde-format
 msgid "Image Settings"
-msgstr "Myndstillingar"
+msgstr "Stillingar myndar"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: lib/print/printoptionspage.ui:20
 #, kde-format
 msgid "Image Position"
-msgstr "Staðsetning myndar"
+msgstr "Staða myndar"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: lib/print/printoptionspage.ui:45
@@ -2652,13 +2666,13 @@ msgstr "x"
 #: lib/print/printoptionspage.ui:185
 #, kde-format
 msgid "Millimeters"
-msgstr "Millímetrar"
+msgstr "Millimetrar"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_PrintUnit)
 #: lib/print/printoptionspage.ui:190
 #, kde-format
 msgid "Centimeters"
-msgstr "Sentímetrar"
+msgstr "Sentimetrar"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_PrintUnit)
 #: lib/print/printoptionspage.ui:195
@@ -2670,7 +2684,7 @@ msgstr "Tommur"
 #: lib/print/printoptionspage.ui:224
 #, kde-format
 msgid "Keep ratio"
-msgstr "Halda hlutföllum"
+msgstr "Halda hlutfalli"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: lib/redeyereduction/redeyereductionwidget.ui:43
@@ -2684,7 +2698,7 @@ msgstr "Stærð:"
 msgid ""
 "Click on a red eye and choose a size, or double-click to correct instantly."
 msgstr ""
-"Smelltu á rautt auga og veldu stærð, eða tvísmelltu til að lagfæra strax."
+"Smelltu á rautt auga og veldu stærð eða tvísmelltu til að lagfæra strax."
 
 #: lib/resize/resizeimagedialog.cpp:76
 #, kde-format
@@ -2693,8 +2707,8 @@ msgid ""
 "Assuming that the image format won't be changed and\n"
 "for lossy images using the value set in 'Lossy image save quality'."
 msgstr ""
-"Gengið er út frá því að myndsniðið breytist ekki og fyrir\n"
-"myndir með gagnatapi sé notað gildið í 'Gæði vistunar með gagnatapi'."
+"Að því gefnu að myndsniðið breytist ekki og að fyrir myndir\n"
+"með gæðatapi (lossy) sé notað gildið sem valið er í 'Vistun með gæðatapi'."
 
 #: lib/resize/resizeimagedialog.cpp:219
 #, kde-format
@@ -2717,7 +2731,7 @@ msgstr "Breyta stærð myndar"
 #: lib/resize/resizeimagewidget.ui:20
 #, kde-format
 msgid "Estimated new file size:"
-msgstr "Áætluð ný skráastærð:"
+msgstr "Áætluð ný skráarstærð:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: lib/resize/resizeimagewidget.ui:47
@@ -2749,7 +2763,7 @@ msgstr "Núverandi skráarstærð:"
 #: lib/resize/resizeimagewidget.ui:145
 #, kde-format
 msgid "Keep aspect ratio"
-msgstr "Halda stærðarhlutföllum"
+msgstr "Halda myndhlutföllum"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: lib/resize/resizeimagewidget.ui:172
@@ -2766,7 +2780,7 @@ msgstr "Úthluta þessu merki til allra valinna mynda"
 #: lib/semanticinfo/tagwidget.cpp:146
 #, kde-format
 msgid "Add tag"
-msgstr "Bæta merki við"
+msgstr "Bæta við merki"
 
 #: lib/slideshow.cpp:163
 #, kde-format
@@ -2802,7 +2816,7 @@ msgstr "Spegla"
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Flip"
-msgstr "Fletta"
+msgstr "Hvolfa"
 
 #: lib/transformimageoperation.cpp:72
 #, kde-format
