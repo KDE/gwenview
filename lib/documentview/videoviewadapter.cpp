@@ -321,7 +321,10 @@ void VideoViewAdapter::updatePlayUi()
     }
 
     d->mLastSeekSliderActionTime.restart();
-    d->mSeekSlider->setRange(0, d->mMediaObject->totalTime());
+
+    if (d->mMediaObject->totalTime() > 0) {
+        d->mSeekSlider->setRange(0, d->mMediaObject->totalTime());
+    }
 
     switch (d->mMediaObject->state()) {
     case Phonon::PlayingState:
