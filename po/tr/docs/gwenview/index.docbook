@@ -745,7 +745,7 @@
 <title
 >Kendiliğinden Yeniden Adlandırma</title>
 <para
->&gwenview; İçe Aktarıcısı, belirli bir modele göre dosyaları yeniden adlandırabilir. Bunu yapılandırmak için sol alt köşeden <guibutton
+>&gwenview; İçe Aktarıcısı, belirli bir dizgiye göre dosyaları yeniden adlandırabilir. Bunu yapılandırmak için sol alt köşeden <guibutton
 >Ayarlar</guibutton
 >'ı seçin. Bu özelliği, yukarıdaki onay kutusunu kullanarak açabilirsiniz veya kapatabilirsiniz. <guilabel
 >Yeniden Adlandırma Biçimi</guilabel
