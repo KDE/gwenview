@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kdegraphics-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-20 02:27+0000\n"
-"PO-Revision-Date: 2024-03-01 15:41+0300\n"
+"PO-Revision-Date: 2024-03-19 15:23+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -389,25 +389,25 @@ msgstr "Düzenle"
 #, kde-format
 msgctxt "Verb"
 msgid "Copy To..."
-msgstr "Buraya Kopyala..."
+msgstr "Buraya Kopyala…"
 
 #: app/fileopscontextmanageritem.cpp:149
 #, kde-format
 msgctxt "Verb"
 msgid "Move To..."
-msgstr "Buraya Taşı..."
+msgstr "Buraya Taşı…"
 
 #: app/fileopscontextmanageritem.cpp:154
 #, kde-format
 msgctxt "Verb: create link to the file where user wants"
 msgid "Link To..."
-msgstr "Buraya Bağlantıla..."
+msgstr "Buraya Bağlantıla…"
 
 #: app/fileopscontextmanageritem.cpp:159
 #, kde-format
 msgctxt "Verb"
 msgid "Rename..."
-msgstr "Yeniden Adlandır..."
+msgstr "Yeniden Adlandır…"
 
 #: app/fileopscontextmanageritem.cpp:164
 #, kde-format
@@ -428,7 +428,7 @@ msgstr "Özellikler"
 #: app/fileopscontextmanageritem.cpp:180
 #, kde-format
 msgid "Create Folder..."
-msgstr "Klasör Oluştur..."
+msgstr "Klasör Oluştur…"
 
 #: app/fileopscontextmanageritem.cpp:184
 #, kde-format
@@ -449,7 +449,7 @@ msgstr "İçeren Klasörü Aç"
 #: app/fileopscontextmanageritem.cpp:387
 #, kde-format
 msgid "Other Application..."
-msgstr "Diğer Uygulama..."
+msgstr "Diğer Uygulama…"
 
 #: app/filtercontroller.cpp:59
 #, kde-format
@@ -494,12 +494,12 @@ msgstr "Derecelendirme <="
 #: app/filtercontroller.cpp:173
 #, kde-format
 msgid "Tagged"
-msgstr "Etiketlenmiş"
+msgstr "Künyeli"
 
 #: app/filtercontroller.cpp:174
 #, kde-format
 msgid "Not Tagged"
-msgstr "Etiketlenmemiş"
+msgstr "Künyesiz"
 
 #: app/filtercontroller.cpp:278
 #, kde-format
@@ -523,7 +523,7 @@ msgstr "Derecelendirmeye Göre Süz"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Tag"
-msgstr "Etikete Göre Süz"
+msgstr "Künyeye Göre Süz"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: app/fullscreenconfigwidget.ui:20
@@ -559,7 +559,7 @@ msgstr "Görsel Bilgisi"
 #: app/fullscreenconfigwidget.ui:101
 #, kde-format
 msgid "Select Image Information to Display..."
-msgstr "Görüntülenecek Görsel Bilgisini Seç..."
+msgstr "Görüntülenecek Görsel Bilgisini Seç…"
 
 #. i18n: ectx: property (title), widget (QGroupBox, mThumbnailGroupBox)
 #: app/fullscreenconfigwidget.ui:111
@@ -1020,7 +1020,7 @@ msgstr "%1:"
 #, kde-format
 msgctxt "@action show more image meta info"
 msgid "Show more details..."
-msgstr "Daha fazla ayrıntı göster..."
+msgstr "Daha fazla ayrıntı göster…"
 
 #: app/infocontextmanageritem.cpp:242
 #, kde-format
@@ -1389,7 +1389,7 @@ msgstr "Yeniden Adlandır"
 #, kde-format
 msgctxt "@info:progress saving all image changes"
 msgid "Saving..."
-msgstr "Kaydediliyor..."
+msgstr "Kaydediliyor…"
 
 #: app/saveallhelper.cpp:57
 #, kde-format
@@ -1473,7 +1473,7 @@ msgstr "Düzenle"
 #, kde-format
 msgctxt "@action"
 msgid "Edit Tags"
-msgstr "Etiketleri Düzenle"
+msgstr "Künyeleri Düzenle"
 
 #: app/semanticinfocontextmanageritem.cpp:215
 #, kde-format
@@ -1485,7 +1485,7 @@ msgstr "Sıfır"
 #: app/semanticinfodialog.ui:13
 #, kde-format
 msgid "Tag Editor"
-msgstr "Etiket Düzenleyicisi"
+msgstr "Künye Düzenleyicisi"
 
 #. i18n: ectx: property (text), widget (QPushButton, mPreviousButton)
 #: app/semanticinfodialog.ui:31
@@ -1509,7 +1509,7 @@ msgstr "Derecelendirme:"
 #: app/semanticinfosidebaritem.ui:45
 #, kde-format
 msgid "Tags:"
-msgstr "Etiketler:"
+msgstr "Künyeler:"
 
 #. i18n: ectx: property (placeholderText), widget (QTextEdit, mDescriptionTextEdit)
 #: app/semanticinfosidebaritem.ui:73
@@ -1593,7 +1593,7 @@ msgstr "Yerler"
 #: app/startmainpage.ui:154
 #, kde-format
 msgid "Tags"
-msgstr "Etiketler"
+msgstr "Künyeler"
 
 #. i18n: ectx: property (text), widget (QLabel, mTagLabel)
 #: app/startmainpage.ui:172
@@ -1602,8 +1602,8 @@ msgid ""
 "Browsing by tags is not available. Make sure Nepomuk is properly installed "
 "on your computer."
 msgstr ""
-"Etiketlere göre tarama kullanılabilir değil. Nepomuk uygulamasının "
-"bilgisayarınıza doğru bir şekilde kurulduğundan emin olun."
+"Künyelere göre tarama kullanılabilir değil. Nepomuk uygulamasının "
+"bilgisayarınıza düzgünce kurulduğundan emin olun."
 
 #: app/viewmainpage.cpp:146 app/viewmainpage.cpp:426
 #, kde-format
@@ -1658,12 +1658,12 @@ msgstr ""
 #: importer/dialogpage.cpp:52
 #, kde-format
 msgid "Show failed files..."
-msgstr "Başarısız olan dosyaları göster..."
+msgstr "Başarısız olan dosyaları göster…"
 
 #: importer/dialogpage.cpp:57
 #, kde-format
 msgid "Show failed subfolders..."
-msgstr "Başarısız olan alt klasörleri göster..."
+msgstr "Başarısız olan alt klasörleri göster…"
 
 #: importer/dialogpage.cpp:71
 #, kde-format
@@ -1882,7 +1882,7 @@ msgstr "Fotoğraf İçe Aktarıcı"
 #, kde-format
 msgid ""
 "The device UDI, used to retrieve information about the device (name, icon...)"
-msgstr "Aygıt UDI, Aygıt hakkında bilgi almak için kullanılır (ad, simge...)"
+msgstr "Aygıt UDI, Aygıt hakkında bilgi almak için kullanılır (ad, simge…)"
 
 #: importer/main.cpp:50
 #, kde-format
@@ -1913,7 +1913,7 @@ msgstr "Geçersiz kaynak klasörü."
 #: importer/progresspage.ui:30
 #, kde-format
 msgid "Importing documents..."
-msgstr "Belgeler içe aktarılıyor..."
+msgstr "Belgeler içe aktarılıyor…"
 
 #: importer/thumbnailpage.cpp:231
 #, kde-format
@@ -1925,13 +1925,13 @@ msgstr "Kameranız için destek kurulu değil."
 #, kde-format
 msgctxt "@info above install button, %1 protocol name %2 error text from KIO"
 msgid "The protocol support library for \"%1\" is not installed. Error: %2"
-msgstr "\"%1\" için protokol destek kitaplığı kurulu değil. Hata: %2"
+msgstr "“%1” için olan protokol destek kitaplığı kurulu değil. Hata: %2"
 
 #: importer/thumbnailpage.cpp:235
 #, kde-format
 msgctxt "@info above install button, %1 protocol name"
 msgid "The protocol support library for \"%1\" is not installed."
-msgstr "\"%1\" protokolü destek kitaplığı kurulu değil."
+msgstr "“%1” için olan protokol destek kitaplığı kurulu değil."
 
 #: importer/thumbnailpage.cpp:247
 #, kde-format
@@ -1952,7 +1952,7 @@ msgstr "\"%1\" protokolü destek kitaplığını kurmak için Keşfet'i çalış
 #, kde-format
 msgctxt "@action:button"
 msgid "Install Support for this Camera…"
-msgstr "Bu Kamera için Destek Kur..."
+msgstr "Bu Kamera için Destek Kur…"
 
 #: importer/thumbnailpage.cpp:257
 #, kde-format
@@ -1970,7 +1970,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Install Protocol Support for \"%1\"…"
-msgstr "\"%1\" protokolü desteği kuruluyor..."
+msgstr "“%1” protokolü desteği kuruluyor…"
 
 #: importer/thumbnailpage.cpp:261
 #, kde-format
@@ -1996,7 +1996,7 @@ msgctxt ""
 "@info this text will be used as a search term in an online search engine, %1 "
 "protocol name"
 msgid "How to install protocol support for \"%1\" on Linux"
-msgstr "Linux üzerinde \"%1\" protokolü desteği kurulumu nasıl yapılır"
+msgstr "Linux üzerinde “%1” protokolü desteği kurulumu nasıl yapılır"
 
 #: importer/thumbnailpage.cpp:282
 #, kde-format
@@ -2048,7 +2048,7 @@ msgstr "İçe aktarılacak belgeleri seç"
 #: importer/thumbnailpage.ui:185
 #, kde-format
 msgid "Settings..."
-msgstr "Ayarlar..."
+msgstr "Ayarlar…"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: importer/thumbnailpage.ui:201
@@ -2065,7 +2065,7 @@ msgstr "İçerikleri listelenen:"
 #: lib/about.cpp:38
 #, kde-format
 msgid "Copyright 2000-2022 Gwenview authors"
-msgstr "Telif hakkı 2000-2022 Gwenview yazarları"
+msgstr "Telif hakkı 2000–2022 Gwenview yazarları"
 
 #: lib/about.cpp:40
 #, kde-format
@@ -2120,7 +2120,7 @@ msgstr "Yatay"
 #: lib/crop/cropwidget.cpp:204 lib/crop/cropwidget.cpp:211
 #, kde-format
 msgid "ISO (A4, A3...)"
-msgstr "ISO (A4, A3...)"
+msgstr "ISO (A4, A3…)"
 
 #: lib/crop/cropwidget.cpp:205 lib/crop/cropwidget.cpp:212
 #, kde-format
@@ -2156,7 +2156,7 @@ msgstr "Gelişmiş ayarlar"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Aspect ratio:"
-msgstr "En-boy oranı:"
+msgstr "En–boy oranı:"
 
 #: lib/crop/cropwidget.cpp:312
 #, kde-format
@@ -2174,7 +2174,7 @@ msgstr "Konum:"
 #, kde-format
 msgctxt "@option:check"
 msgid "Preserve aspect ratio"
-msgstr "En-boy oranını koru"
+msgstr "En–boy oranını koru"
 
 #: lib/document/document.cpp:301
 #, kde-format
@@ -2310,9 +2310,9 @@ msgstr ""
 "daha küçük görseller olağan boyutlarında görüntülenirler. Küçük görsellerin "
 "tüm kullanılabilir görüntüleme alanını kullanmasını istiyorsanız "
 "<emphasis>Küçükçe görselleri büyüt</emphasis> <link url='%2'>ayarını yapın</"
-"link>.</item></list></para><para>\"%1\" halihazırda etkinse ona yeniden "
-"basmak ayarı kapatır ve görseller olağan boyutlarında görüntülenirler.</"
-"para><para>\"%1\", görseller için öntanımlı yakınlaştırma kipidir. Bu, "
+"link>.</item></list></para><para>“%1” halihazırda etkinse ona yeniden basmak "
+"ayarı kapatır ve görseller olağan boyutlarında görüntülenirler.</"
+"para><para>“%1”, görseller için öntanımlı yakınlaştırma kipidir. Bu, "
 "görsellerin bir önceki yakınlaştırma düzeyinde görüntülenebilmeleri için "
 "<link url='%2'>ayarlarda değiştirilebilir</link>.</para>"
 
@@ -2442,10 +2442,9 @@ msgid ""
 msgstr ""
 "Ekranınız bir ICC renk profili kullandığında ve görselde profilin renk\n"
 "            gamına uymayan renkler varsa renklerin nice sunulduğunu\n"
-"            tanımlar. \"Algısal\", tüm görselin renklerini ölçekler; "
-"böylece\n"
+"            tanımlar. ‘Algısal’, tüm görsel renklerini ölçekler; böylece\n"
 "            renkler ekranın görsel yeteneğine uyacak biçimde görüntülenir.\n"
-"            \"Göreceli\", yalnızca görüntülenemeyen denkleri tıkıştırır\n"
+"            ‘Göreceli’, yalnızca görüntülenemeyen denkleri tıkıştırır\n"
 "            ve diğerlerine dokunmaz."
 
 #. i18n: ectx: label, entry (random), group (slide show)
@@ -2753,7 +2752,7 @@ msgstr "Şu anki dosya boyutu:"
 #: lib/resize/resizeimagewidget.ui:145
 #, kde-format
 msgid "Keep aspect ratio"
-msgstr "En-boy oranını koru"
+msgstr "En–boy oranını koru"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: lib/resize/resizeimagewidget.ui:172
@@ -2765,12 +2764,12 @@ msgstr "Geçerli boyut:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Assign this tag to all selected images"
-msgstr "Bu etiketi seçili tüm görsellere ata"
+msgstr "Bu künyeyi seçili tüm görsellere ata"
 
 #: lib/semanticinfo/tagwidget.cpp:146
 #, kde-format
 msgid "Add tag"
-msgstr "Etiket ekle"
+msgstr "Künye ekle"
 
 #: lib/slideshow.cpp:163
 #, kde-format
