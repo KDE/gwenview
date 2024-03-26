@@ -1887,7 +1887,7 @@ void MainWindow::toggleMenuBar()
 {
     if (!d->mFullScreenAction->isChecked()) {
         if (!d->mShowMenuBarAction->isChecked() && (!toolBar()->isVisible() || !toolBar()->actions().contains(d->mHamburgerMenu))) {
-            const QString accel = d->mShowMenuBarAction->shortcut().toString();
+            const QString accel = d->mShowMenuBarAction->shortcut().toString(QKeySequence::NativeText);
             KMessageBox::information(this,
                                      i18n("This will hide the menu bar completely."
                                           " You can show it again by typing %1.",
