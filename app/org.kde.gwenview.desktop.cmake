@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Gwenview
 Name[ar]=جوِينفيو
+Name[ast]=Gwenview
 Name[az]=Gwenview
 Name[be]=Gwenview
 Name[bg]=Gwenview
@@ -73,6 +74,7 @@ Name[zh_CN]=Gwenview 图像查看器
 Name[zh_TW]=Gwenview
 GenericName=Image Viewer
 GenericName[ar]=عارض صور
+GenericName[ast]=Visor de semeyes
 GenericName[be]=Сродак для прагляду выяў
 GenericName[bg]=Преглед на изображения
 GenericName[ca]=Visualitzador d'imatges
