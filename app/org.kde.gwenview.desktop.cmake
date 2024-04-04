@@ -94,6 +94,7 @@ GenericName[ja]=画像ビューア
 GenericName[ka]=სურათების გალერეა
 GenericName[ko]=그림 뷰어
 GenericName[lt]=Paveikslų žiūryklė
+GenericName[lv]=Attēlu skatītājs
 GenericName[nl]=Afbeeldingsviewer
 GenericName[pa]=ਚਿੱਤਰ ਦਰਸ਼ਕ
 GenericName[pl]=Przeglądarka obrazów
