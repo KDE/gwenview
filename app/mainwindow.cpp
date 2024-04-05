@@ -27,6 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QDateTime>
 #include <QDialog>
 #include <QFileDialog>
+#include <QImageReader>
 #include <QLineEdit>
 #include <QMenuBar>
 #include <QMouseEvent>
@@ -1079,6 +1080,8 @@ MainWindow::MainWindow()
 
     createGUI();
     loadConfig();
+
+    QImageReader::setAllocationLimit(2000);
 
     connect(DocumentFactory::instance(), &DocumentFactory::modifiedDocumentListChanged, this, &MainWindow::slotModifiedDocumentListChanged);
     connect(qApp, &QApplication::focusChanged, this, &MainWindow::onFocusChanged);
