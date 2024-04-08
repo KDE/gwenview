@@ -41,11 +41,6 @@ public:
     SaveBar(QWidget *parent, KActionCollection *collection);
     ~SaveBar() override;
 
-    /**
-     * Init widgets which depend on an initialized actionCollection
-     */
-    void initActionDependentWidgets();
-
     void setFullScreenMode(bool);
 
 public Q_SLOTS:

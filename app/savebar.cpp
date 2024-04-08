@@ -24,118 +24,37 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Qt
 #include <QHBoxLayout>
 #include <QIcon>
-#include <QLabel>
-#include <QToolButton>
 #include <QToolTip>
 #include <QUrl>
 
 // KF
 #include <KActionCollection>
-#include <KColorScheme>
-#include <KIconLoader>
 #include <KLocalizedString>
+#include <KMessageWidget>
 
 // Local
 #include "gwenview_app_debug.h"
 #include "lib/document/documentfactory.h"
 #include "lib/gwenviewconfig.h"
 #include "lib/memoryutils.h"
-#include "lib/paintutils.h"
 
 namespace Gwenview
 {
-QToolButton *createToolButton()
-{
-    auto button = new QToolButton;
-    button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    button->hide();
-    return button;
-}
-
 struct SaveBarPrivate {
     SaveBar *q = nullptr;
     KActionCollection *mActionCollection = nullptr;
-    QWidget *mSaveBarWidget = nullptr;
-    QWidget *mTopRowWidget = nullptr;
-    QToolButton *mUndoButton = nullptr;
-    QToolButton *mRedoButton = nullptr;
-    QToolButton *mSaveCurrentUrlButton = nullptr;
-    QToolButton *mSaveAsButton = nullptr;
-    QToolButton *mSaveAllButton = nullptr;
-    QToolButton *mSaveAllFullScreenButton = nullptr;
-    QLabel *mMessageLabel = nullptr;
-    QLabel *mActionsLabel = nullptr;
-    QFrame *mTooManyChangesFrame = nullptr;
+    KMessageWidget *mSaveMessage = nullptr;
+    KMessageWidget *mTooManyChangesMessage = nullptr;
+    QAction *mSaveAllAction = nullptr;
     QUrl mCurrentUrl;
 
-    void createTooManyChangesFrame()
+    void createTooManyChangesMessage()
     {
-        mTooManyChangesFrame = new QFrame;
-
-        // Icon
-        auto iconLabel = new QLabel;
-        QPixmap pix = QIcon::fromTheme(QStringLiteral("dialog-warning")).pixmap(KIconLoader::SizeSmall);
-        iconLabel->setPixmap(pix);
-
-        // Text label
-        auto textLabel = new QLabel;
-        textLabel->setText(i18n("You have modified many images. To avoid memory problems, you should save your changes."));
-
-        mSaveAllFullScreenButton = createToolButton();
-
-        // Layout
-        auto layout = new QHBoxLayout(mTooManyChangesFrame);
-        layout->setContentsMargins(0, 0, 0, 0);
-        layout->addWidget(iconLabel);
-        layout->addWidget(textLabel);
-        layout->addWidget(mSaveAllFullScreenButton);
-        mTooManyChangesFrame->hide();
-
-        // CSS
-        KColorScheme scheme(mSaveBarWidget->palette().currentColorGroup(), KColorScheme::Window);
-        QColor warningBackgroundColor = scheme.background(KColorScheme::NegativeBackground).color();
-        QColor warningBorderColor = PaintUtils::adjustedHsv(warningBackgroundColor, 0, 150, 0);
-        QColor warningColor = scheme.foreground(KColorScheme::NegativeText).color();
-
-        QString css =
-            ".QFrame {"
-            "	background-color: %1;"
-            "	border: 1px solid %2;"
-            "	border-radius: 4px;"
-            "	padding: 3px;"
-            "}"
-            ".QFrame QLabel {"
-            "	color: %3;"
-            "}";
-        css = css.arg(warningBackgroundColor.name(), warningBorderColor.name(), warningColor.name());
-        mTooManyChangesFrame->setStyleSheet(css);
-    }
-
-    void applyNormalStyleSheet()
-    {
-        const QColor bgColor = QToolTip::palette().base().color();
-        const QColor borderColor = PaintUtils::adjustedHsv(bgColor, 0, 150, 0);
-        const QColor fgColor = QToolTip::palette().text().color();
-
-        QString css =
-            "#saveBarWidget {"
-            "	background-color: %1;"
-            "	border-top: 1px solid %2;"
-            "	border-bottom: 1px solid %2;"
-            "	color: %3;"
-            "}";
-
-        css = css.arg(bgColor.name(), borderColor.name(), fgColor.name());
-        mSaveBarWidget->setStyleSheet(css);
-    }
-
-    void applyFullScreenStyleSheet()
-    {
-        const QString css =
-            "#saveBarWidget {"
-            "	background-color: #333;"
-            "}";
-        mSaveBarWidget->setStyleSheet(css);
+        mTooManyChangesMessage = new KMessageWidget;
+        mTooManyChangesMessage->setIcon(QIcon::fromTheme(QStringLiteral("dialog-warning")));
+        mTooManyChangesMessage->setText(i18n("You have modified many images. To avoid memory problems, you should save your changes."));
+        mTooManyChangesMessage->setCloseButtonVisible(false);
+        mTooManyChangesMessage->setPosition(KMessageWidget::Position::Header);
     }
 
     void updateTooManyChangesFrame(const QList<QUrl> &list)
@@ -148,19 +67,28 @@ struct SaveBarPrivate {
             memoryUsage += doc->memoryUsage();
         }
 
-        mTooManyChangesFrame->setVisible(memoryUsage > maxMemoryUsage);
+        mTooManyChangesMessage->setVisible(memoryUsage > maxMemoryUsage);
     }
 
     void updateTopRowWidget(const QList<QUrl> &lst)
     {
+        mSaveMessage->clearActions();
+
         QStringList links;
         QString message;
 
         if (lst.contains(mCurrentUrl)) {
             message = i18n("Current image modified");
 
-            mUndoButton->show();
-            mRedoButton->show();
+            mSaveMessage->addAction(mActionCollection->action(QStringLiteral("edit_undo")));
+            mSaveMessage->addAction(mActionCollection->action(QStringLiteral("edit_redo")));
+
+            mSaveMessage->addAction(mActionCollection->action(QStringLiteral("file_save")));
+            mSaveMessage->addAction(mActionCollection->action(QStringLiteral("file_save_as")));
+
+            if (lst.size() > 1) {
+                mSaveMessage->addAction(mSaveAllAction);
+            }
 
             if (lst.size() > 1) {
                 QString previous = i18n("Previous modified image");
@@ -177,9 +105,6 @@ struct SaveBarPrivate {
                 }
             }
         } else {
-            mUndoButton->hide();
-            mRedoButton->hide();
-
             message = i18np("One image modified", "%1 images modified", lst.size());
             if (lst.size() > 1) {
                 links << QStringLiteral("<a href='first'>%1</a>").arg(i18n("Go to first modified image"));
@@ -188,26 +113,7 @@ struct SaveBarPrivate {
             }
         }
 
-        mSaveCurrentUrlButton->setVisible(lst.contains(mCurrentUrl));
-        mSaveAsButton->setVisible(lst.contains(mCurrentUrl));
-        mSaveAllButton->setVisible(lst.size() >= 1);
-
-        mMessageLabel->setText(message);
-        mMessageLabel->setMaximumWidth(mMessageLabel->minimumSizeHint().width());
-        mActionsLabel->setText(links.join(QStringLiteral(" | ")));
-    }
-
-    void updateWidgetSizes()
-    {
-        auto layout = static_cast<QVBoxLayout *>(mSaveBarWidget->layout());
-        int topRowHeight = q->window()->isFullScreen() ? 0 : mTopRowWidget->height();
-        int bottomRowHeight = mTooManyChangesFrame->isVisibleTo(mSaveBarWidget) ? mTooManyChangesFrame->sizeHint().height() : 0;
-
-        int height = 2 * layout->contentsMargins().top() + layout->contentsMargins().bottom() + topRowHeight + bottomRowHeight;
-        if (topRowHeight > 0 && bottomRowHeight > 0) {
-            height += layout->spacing();
-        }
-        mSaveBarWidget->setFixedHeight(height);
+        mSaveMessage->setText(message + QStringLiteral(" ") + links.join(QStringLiteral(" | ")));
     }
 };
 
@@ -217,56 +123,37 @@ SaveBar::SaveBar(QWidget *parent, KActionCollection *actionCollection)
 {
     d->q = this;
     d->mActionCollection = actionCollection;
-    d->mSaveBarWidget = new QWidget();
-    d->mSaveBarWidget->setObjectName(QStringLiteral("saveBarWidget"));
-    d->applyNormalStyleSheet();
+    d->mSaveMessage = new KMessageWidget();
+    d->mSaveMessage->setPosition(KMessageWidget::Position::Header);
+    d->mSaveMessage->setCloseButtonVisible(false);
+    d->mSaveMessage->setObjectName(QStringLiteral("saveBarWidget"));
 
-    d->mMessageLabel = new QLabel;
-    d->mMessageLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
+    // Used for navigating between files when more than one is modified
+    connect(d->mSaveMessage, &KMessageWidget::linkActivated, this, &SaveBar::triggerAction);
 
-    d->mUndoButton = createToolButton();
-    d->mRedoButton = createToolButton();
-    d->mSaveCurrentUrlButton = createToolButton();
-    d->mSaveAsButton = createToolButton();
-    d->mSaveAllButton = createToolButton();
+    d->mSaveAllAction = new QAction();
+    d->mSaveAllAction->setText(i18n("Save All"));
+    d->mSaveAllAction->setToolTip(i18nc("@info:tooltip", "Save all modified images"));
+    d->mSaveAllAction->setIcon(QIcon::fromTheme(QStringLiteral("document-save-all")));
+    connect(d->mSaveAllAction, &QAction::triggered, this, &SaveBar::requestSaveAll);
 
-    d->mActionsLabel = new QLabel;
-    d->mActionsLabel->setAlignment(Qt::AlignCenter);
-    d->mActionsLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
+    d->createTooManyChangesMessage();
 
-    d->createTooManyChangesFrame();
+    // The "save bar" and the "too many changes" headers could appear on top of each other, so let's do it
+    auto headerLayout = new QVBoxLayout;
+    headerLayout->setSpacing(0);
+    headerLayout->setContentsMargins(0, 0, 0, 0);
+    headerLayout->addWidget(d->mSaveMessage);
+    headerLayout->addWidget(d->mTooManyChangesMessage);
 
-    // Setup top row
-    d->mTopRowWidget = new QWidget;
-    auto rowLayout = new QHBoxLayout(d->mTopRowWidget);
-    rowLayout->addWidget(d->mMessageLabel);
-    rowLayout->setStretchFactor(d->mMessageLabel, 1);
-    rowLayout->addWidget(d->mUndoButton);
-    rowLayout->addWidget(d->mRedoButton);
-    rowLayout->addWidget(d->mActionsLabel);
-    rowLayout->addWidget(d->mSaveCurrentUrlButton);
-    rowLayout->addWidget(d->mSaveAsButton);
-    rowLayout->addWidget(d->mSaveAllButton);
-    rowLayout->setContentsMargins(0, 0, 0, 0);
+    // Can't set the layout only, we use a widget to slide in and out
+    auto dummyContent = new QWidget;
+    dummyContent->setContentsMargins(0, 0, 0, 0);
+    dummyContent->setLayout(headerLayout);
 
-    // Setup bottom row
-    auto bottomRowLayout = new QHBoxLayout;
-    bottomRowLayout->addStretch();
-    bottomRowLayout->addWidget(d->mTooManyChangesFrame);
-    bottomRowLayout->addStretch();
-
-    // Gather everything together
-    auto layout = new QVBoxLayout(d->mSaveBarWidget);
-    layout->addWidget(d->mTopRowWidget);
-    layout->addLayout(bottomRowLayout);
-    layout->setContentsMargins(3, 3, 3, 3);
-    layout->setSpacing(3);
-
-    setContent(d->mSaveBarWidget);
+    setContent(dummyContent);
 
     connect(DocumentFactory::instance(), &DocumentFactory::modifiedDocumentListChanged, this, &SaveBar::updateContent);
-
-    connect(d->mActionsLabel, &QLabel::linkActivated, this, &SaveBar::triggerAction);
 }
 
 SaveBar::~SaveBar()
@@ -274,34 +161,11 @@ SaveBar::~SaveBar()
     delete d;
 }
 
-void SaveBar::initActionDependentWidgets()
-{
-    d->mUndoButton->setDefaultAction(d->mActionCollection->action(QStringLiteral("edit_undo")));
-    d->mRedoButton->setDefaultAction(d->mActionCollection->action(QStringLiteral("edit_redo")));
-    d->mSaveCurrentUrlButton->setDefaultAction(d->mActionCollection->action(QStringLiteral("file_save")));
-    d->mSaveAsButton->setDefaultAction(d->mActionCollection->action(QStringLiteral("file_save_as")));
-
-    // FIXME: Not using an action for now
-    d->mSaveAllButton->setText(i18n("Save All"));
-    d->mSaveAllButton->setToolTip(i18nc("@info:tooltip", "Save all modified images"));
-    d->mSaveAllButton->setIcon(QIcon::fromTheme(QStringLiteral("document-save-all")));
-    connect(d->mSaveAllButton, &QToolButton::clicked, this, &SaveBar::requestSaveAll);
-
-    d->mSaveAllFullScreenButton->setText(i18n("Save All"));
-    connect(d->mSaveAllFullScreenButton, &QToolButton::clicked, this, &SaveBar::requestSaveAll);
-
-    int height = d->mUndoButton->sizeHint().height();
-    d->mTopRowWidget->setFixedHeight(height);
-    d->updateWidgetSizes();
-}
-
 void SaveBar::setFullScreenMode(bool isFullScreen)
 {
-    d->mSaveAllFullScreenButton->setVisible(isFullScreen);
+    d->mTooManyChangesMessage->clearActions();
     if (isFullScreen) {
-        d->applyFullScreenStyleSheet();
-    } else {
-        d->applyNormalStyleSheet();
+        d->mTooManyChangesMessage->addAction(d->mSaveAllAction);
     }
     updateContent();
 }
@@ -311,16 +175,15 @@ void SaveBar::updateContent()
     QList<QUrl> lst = DocumentFactory::instance()->modifiedDocumentList();
 
     if (window()->isFullScreen()) {
-        d->mTopRowWidget->hide();
+        d->mSaveMessage->hide();
     } else {
-        d->mTopRowWidget->show();
+        d->mSaveMessage->show();
         d->updateTopRowWidget(lst);
     }
 
     d->updateTooManyChangesFrame(lst);
 
-    d->updateWidgetSizes();
-    if (lst.isEmpty() || (window()->isFullScreen() && !d->mTooManyChangesFrame->isVisibleTo(d->mSaveBarWidget))) {
+    if (lst.isEmpty() || (window()->isFullScreen() && !d->mTooManyChangesMessage->isVisibleTo(d->mSaveMessage))) {
         slideOut();
     } else {
         slideIn();

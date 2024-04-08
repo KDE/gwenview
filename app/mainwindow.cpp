@@ -1076,7 +1076,6 @@ MainWindow::MainWindow()
 
     d->updateActions();
     updatePreviousNextActions();
-    d->mSaveBar->initActionDependentWidgets();
 
     createGUI();
     loadConfig();
