@@ -940,7 +940,7 @@ struct MainWindow::Private {
     void setScreenSaverEnabled(bool enabled)
     {
 #ifdef HAVE_QTDBUS
-        if (enabled) {
+        if (!enabled) {
             QDBusMessage message = QDBusMessage::createMethodCall(QStringLiteral("org.freedesktop.ScreenSaver"),
                                                                   QStringLiteral("/ScreenSaver"),
                                                                   QStringLiteral("org.freedesktop.ScreenSaver"),
