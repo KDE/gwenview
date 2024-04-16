@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-20 00:37+0000\n"
-"PO-Revision-Date: 2024-03-06 13:49+0000\n"
+"PO-Revision-Date: 2024-03-20 15:44+0000\n"
 "Last-Translator: Guðmundur Erlingsson <gudmundure@gmail.com>\n"
 "Language-Team: Icelandic <kde-i18n-doc@kde.org>\n"
 "Language: is\n"
@@ -49,7 +49,7 @@ msgid ""
 "quality that are faster to load, if available."
 msgstr ""
 "Virkjaðu þetta ef þú ert ekki með mikið diskpláss. Þetta kemur í veg fyrir "
-"að smámyndir séu geymdar á diski og mun kjósa að nota innfelldar smámyndir í "
+"að smámyndir séu geymdar á diski og frekar notaðar innfelldar smámyndir í "
 "minni gæðum sem er fljótlegra að hlaða inn, séu þær fyrir hendi."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
@@ -65,7 +65,7 @@ msgid ""
 "Squash colors that don't fit within the active color profile's color gamut, "
 "leaving other colors untouched"
 msgstr ""
-"Fletja þá liti sem ekki rúmast innan litasviðs virka litasniðsins og skilja "
+"Fletja liti sem ekki rúmast innan litasviðs virka litasniðsins og skilja "
 "aðra liti eftir ósnerta"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
@@ -126,7 +126,7 @@ msgid ""
 msgstr ""
 "Þegar slökkt er á litastýringu umbreytir Gwenview myndum í sRGB-litrýmið "
 "frekar en það litrými sem forritið greinir fyrir skjáinn. Þetta á einungis "
-"við fyrir skjái sem eru stilltir fyrir sRGB-litrýmið eða eru þekktir fyrir "
+"við fyrir skjái sem eru kvarðaðir fyrir sRGB-litrýmið eða eru þekktir fyrir "
 "að gefa upp rangt litasnið."
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileLabel)
@@ -556,7 +556,7 @@ msgstr "Myndupplýsingar"
 #: app/fullscreenconfigwidget.ui:101
 #, kde-format
 msgid "Select Image Information to Display..."
-msgstr "Veldu þær myndupplýsingar sem á að birta..."
+msgstr "Velja þær myndupplýsingar sem á að birta..."
 
 #. i18n: ectx: property (title), widget (QGroupBox, mThumbnailGroupBox)
 #: app/fullscreenconfigwidget.ui:111
@@ -874,7 +874,7 @@ msgstr "Myndaaðgerðir"
 #: app/imageviewconfigpage.ui:17
 #, kde-format
 msgid "Show transparency with:"
-msgstr "Gegnsæi sýnt sem:"
+msgstr "Gagnsæi sýnt sem:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, surroundingRadioButton)
 #: app/imageviewconfigpage.ui:38
@@ -912,7 +912,7 @@ msgstr "Skruna"
 #, kde-format
 msgctxt "@option:radio action on mouse wheel"
 msgid "Browse"
-msgstr "Vafra"
+msgstr "Fletta"
 
 #. i18n: ectx: property (text), widget (QRadioButton, mouseWheelZoomRadioButton)
 #: app/imageviewconfigpage.ui:218
@@ -931,7 +931,7 @@ msgstr "Aðdráttarsnið:"
 #: app/imageviewconfigpage.ui:271
 #, kde-format
 msgid "Autofit each image"
-msgstr "Hver mynd passi sjálfvirkt"
+msgstr "Hver mynd passi sjálfkrafa"
 
 #. i18n: ectx: property (text), widget (QRadioButton, keepSameZoomModeRadioButton)
 #: app/imageviewconfigpage.ui:298
@@ -950,13 +950,13 @@ msgstr "Aðdráttur og staða eftir mynd"
 #: app/imageviewconfigpage.ui:362 lib/print/printoptionspage.ui:98
 #, kde-format
 msgid "Enlarge smaller images"
-msgstr "Stækka litlar myndir"
+msgstr "Stækka minni myndir"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: app/imageviewconfigpage.ui:400
 #, kde-format
 msgid "Animations:"
-msgstr "Hreyfimyndir:"
+msgstr "Myndhreyfingar:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, glAnimationRadioButton)
 #: app/imageviewconfigpage.ui:415
@@ -1137,7 +1137,7 @@ msgstr "Skoða valdar myndir"
 #, kde-format
 msgctxt "@action"
 msgid "Exit Full Screen"
-msgstr "Hætta á öllum skjánum"
+msgstr "Hætta að fylla skjá"
 
 #: app/mainwindow.cpp:434
 #, kde-format
@@ -1332,7 +1332,7 @@ msgstr[1] "%1 myndum hefur verið breytt."
 #: app/mainwindow.cpp:1849
 #, kde-format
 msgid "If you quit now, your changes will be lost."
-msgstr "Ef þú hættir núna taparðu öllum breytingum."
+msgstr "Ef þú hættir núna tapast allt sem þú hefur breytt."
 
 #: app/mainwindow.cpp:1892
 #, kde-format
@@ -1637,12 +1637,12 @@ msgid ""
 "and contain multiple rows of images; <link url='%1'>configure these options "
 "in the settings</link>.</para>"
 msgstr ""
-"<para>Þetta sýnir eða felur litla stiku með öllum hinum myndunum í möppunni. "
-"Ef ein af þeim er valin birtist hún í myndglugganum.</para><para>Veldu "
-"nokkrar myndir í einu til að skoða þær hlið við hlið.</para><para>Hægt er að "
-"færa stikuna hægra megin á skjáinn og láta hana birta myndir í nokkrum "
-"röðum. <link url='%1'>Þú getur stillt þessa valkosti í stillingunum</link>.</"
-"para>"
+"<para>Þetta sýnir eða felur litla stiku sem sýnir allar hinar myndirnar í "
+"möppunni. Ef ein af þeim er valin birtist hún í myndglugganum.</"
+"para><para>Veldu nokkrar myndir í einu til að skoða þær hlið við hlið.</"
+"para><para>Hægt er að færa stikuna hægra megin á skjáinn og láta hana birta "
+"myndir í nokkrum röðum. <link url='%1'>Þú getur stillt þessa valkosti í "
+"stillingunum</link>.</para>"
 
 #: app/viewmainpage.cpp:571
 #, kde-format
@@ -1740,8 +1740,8 @@ msgstr[1] "%1 myndir hafa verið fluttar inn."
 msgid "One document has been skipped because it had already been imported."
 msgid_plural ""
 "%1 documents have been skipped because they had already been imported."
-msgstr[0] "Einu skjali var sleppt af því það hafði þegar verið flutt inn."
-msgstr[1] "%1 skjölum var sleppt af því þau höfðu þegar verið flutt inn."
+msgstr[0] "Einu skjali var sleppt af því að það hafði þegar verið flutt inn."
+msgstr[1] "%1 skjölum var sleppt af því að þau höfðu þegar verið flutt inn."
 
 #: importer/importdialog.cpp:104
 #, kde-format
@@ -2032,9 +2032,9 @@ msgid ""
 "Opening Discover failed.<nl/>Please check if Discover is installed on your "
 "system, or use your system's package manager to install \"Kamera\" package."
 msgstr ""
-"Mistókst að opna Discover.<nl/>Athugaðu hvort Discover sé uppsett í "
-"tölvunniþínni eða notaðu pakkastjóra stýrikerfisins til að setja upp \"Kamera"
-"\"-pakkann."
+"Mistókst að opna Discover.<nl/>Athugaðu hvort Discover sé uppsett í tölvunni "
+"þinni eða notaðu pakkastjóra stýrikerfisins til að setja upp \"Kamera\"-"
+"pakkann."
 
 #: importer/thumbnailpage.cpp:492
 #, kde-kuit-format
@@ -2064,7 +2064,7 @@ msgstr "Stillingar..."
 #: importer/thumbnailpage.ui:201
 #, kde-format
 msgid "Enter the import destination"
-msgstr "Sláðu inn staðinn sem á að flytja inn í"
+msgstr "Sláðu inn viðstökustaðinn fyrir innflutninginn"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: importer/thumbnailpage.ui:220
@@ -2219,7 +2219,7 @@ msgstr "Mistókst að hlaða inn mynd."
 #: lib/document/loadingjob.cpp:56
 #, kde-format
 msgid "Could not load document %1"
-msgstr "Gat ekki lesið skrá %1"
+msgstr "Gat ekki hlaðið inn skrá %1"
 
 #: lib/document/savejob.cpp:106
 #, kde-format
@@ -2318,12 +2318,12 @@ msgstr ""
 "Myndir sem eru stærri en skoðunarsvæðið eru minnkaðar þannig að þær passi.</"
 "item><item>Myndir sem eru minni en skoðunarsvæðið eru birtar í eðlilegri "
 "stærð þeirra. Ef þú vilt að minni myndir fylli alveg upp í skoðunarsvæðið "
-"skaltu kveikja á <emphasis>Stækka minni myndir</emphasis> <link url='%2'>í "
+"skaltu haka við <emphasis>Stækka minni myndir</emphasis> <link url='%2'>í "
 "stillingunum</link>.</item></list></para><para>Ef \"%1\" er nú þegar valið "
-"slokknar á því ef ýtt er aftur og myndin birtist í eðlilegri stærð í staðinn."
-"</para><para>\"%1\" er sjálfgefið aðdráttarstig fyrir myndir. Hægt er að "
-"breyta þessu þannig að myndir noti sama aðdráttarstig og var notað í næstu "
-"mynd á undan <link url='%2'>í stillingunum</link>.</para>"
+"slokknar á því ef ýtt er aftur á það og myndin birtist í eðlilegri stærð í "
+"staðinn.</para><para>\"%1\" er sjálfgefið aðdráttarstig fyrir myndir. Hægt "
+"er að breyta þessu þannig að myndir noti sama aðdráttarstig og var notað í "
+"myndinni á undan <link url='%2'>í stillingunum</link>.</para>"
 
 #: lib/documentview/documentviewcontroller.cpp:83
 #, kde-format
@@ -2427,13 +2427,12 @@ msgstr ""
 "            er á 'Hver mynd passi sjálfkrafa' breytist aðdráttur B svo hún\n"
 "            passi á skjáinn. Ef stillt er á 'Halda sama' munu allar myndir\n"
 "            halda sama aðdrætti og stöðu: mynd B fær sama aðdrátt og\n"
-"            mynd A (og ef aðdrættinum er breytt verður mynd A birt\n"
-"            með uppfærðum aðdrætti og stöðu). Ef stillt er á\n"
+"            mynd A (og ef aðdrættinum á mynd B er breytt breytist\n"
+"            aðdráttur og staða á mynd A sömuleiðis). Ef stillt er á\n"
 "            'Hver mynd sjálfstæð' man hver mynd aðdrátt sinn og stöðu:\n"
 "            mynd B er upphaflega stillt á sama aðdrátt og stöðu og mynd A,\n"
 "            en mun svo muna eigin aðdrátt og stöðu (ef þessu er breytt\n"
-"            verður mynd A EKKI birt með uppfærðum aðdrætti\n"
-"            og stöðu)."
+"            breytist aðdráttur og staða á mynd A EKKI )."
 
 #. i18n: ectx: whatsthis, entry (RenderingIntent), group (ImageView)
 #: lib/gwenviewconfig.kcfg:225
@@ -2464,7 +2463,7 @@ msgstr "Sýna myndir í skyggnusýningum í slembinni röð"
 #: lib/gwenviewconfig.kcfg:336
 #, kde-format
 msgid "Show slideshow in fullscreen mode"
-msgstr "Sýna myndir í skyggnusýningum á öllum skjánum"
+msgstr "Láta skyggnusýninguna fylla skjáinn"
 
 #. i18n: ectx: label, entry (loop), group (slide show)
 #: lib/gwenviewconfig.kcfg:340
