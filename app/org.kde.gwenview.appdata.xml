@@ -6,6 +6,7 @@
   <developer_name translate="no">KDE</developer_name>
   <name>Gwenview</name>
   <name xml:lang="ar">جونفيو</name>
+  <name xml:lang="ast">Gwenview</name>
   <name xml:lang="az">Gwenview</name>
   <name xml:lang="be">Gwenview</name>
   <name xml:lang="bg">Gwenview</name>
@@ -24,6 +25,7 @@
   <name xml:lang="fi">Gwenview</name>
   <name xml:lang="fr">Gwenview</name>
   <name xml:lang="gl">Gwenview</name>
+  <name xml:lang="he">Gwenview</name>
   <name xml:lang="hi">ग्वेन-व्यू</name>
   <name xml:lang="hsb">Gwenview</name>
   <name xml:lang="hu">Gwenview</name>
@@ -34,6 +36,7 @@
   <name xml:lang="ka">Gwenview</name>
   <name xml:lang="ko">Gwenview</name>
   <name xml:lang="lt">Gwenview</name>
+  <name xml:lang="lv">Gwenview</name>
   <name xml:lang="nb">Gwenview</name>
   <name xml:lang="nds">Gwenview</name>
   <name xml:lang="nl">Gwenview</name>
@@ -76,6 +79,7 @@
   <summary xml:lang="fi">Kuvankatselin</summary>
   <summary xml:lang="fr">Afficheur d'image</summary>
   <summary xml:lang="gl">Visor de imaxes</summary>
+  <summary xml:lang="he">מציג תמונות</summary>
   <summary xml:lang="hi">छवि प्रदर्शक</summary>
   <summary xml:lang="hsb">Wobhladowar za wobrazy</summary>
   <summary xml:lang="hu">Képmegjelenítő</summary>
@@ -86,6 +90,7 @@
   <summary xml:lang="ka">სურათების გალერეა</summary>
   <summary xml:lang="ko">그림 뷰어</summary>
   <summary xml:lang="lt">Paveikslų žiūryklė</summary>
+  <summary xml:lang="lv">Attēlu skatītājs</summary>
   <summary xml:lang="nl">Afbeeldingsviewer</summary>
   <summary xml:lang="nn">Biletvisar</summary>
   <summary xml:lang="pa">ਚਿੱਤਰ ਦਰਸ਼ਕ</summary>
@@ -93,7 +98,7 @@
   <summary xml:lang="pt">Visualizador de Imagens</summary>
   <summary xml:lang="pt-BR">Visualizador de imagens</summary>
   <summary xml:lang="ro">Vizualizor de imagini</summary>
-  <summary xml:lang="ru">Программа просмотра изображений</summary>
+  <summary xml:lang="ru">Приложение для просмотра изображений</summary>
   <summary xml:lang="sk">Prehliadač obrázkov</summary>
   <summary xml:lang="sl">Pregledovalnik slik</summary>
   <summary xml:lang="sr">Приказивач слика</summary>
@@ -129,16 +134,18 @@
     <p xml:lang="fi">Gwenview on KDE:n nopea ja helppokäyttöinen kuvakatselin, joka on ihanteellinen kuvakokoelmien selaukseen ja esittämiseen.</p>
     <p xml:lang="fr">Gwenview est un afficheur d'images rapide et facile à utiliser pour KDE, idéal pour parcourir et afficher une collection d'images.</p>
     <p xml:lang="gl">Gwenview é un visor de imaxes por KDE rápido e doado de usar, ideal para examinar e amosar unha colección de imaxes.</p>
+    <p xml:lang="he">Gwenview הוא מציג תמונות מהיר וקל לשימוש מבית KDE, מושלם לדפדוף והצגת אוספי תמונות.</p>
     <p xml:lang="hi">केडीई द्वारा ग्वेनव्यू एक तेज़ और उपयोग में आसान छवि दर्शक है, जो छवियों के संग्रह को ब्राउज़ करने और प्रदर्शित करने के लिए आदर्श है।</p>
     <p xml:lang="hsb">Gwenview je spěšny a přihódny wobhladowar za wobrazy we KDE, idealny za přehladowanje a pokazowanje zběrki wobrazow.</p>
     <p xml:lang="hu">A Gwenview egy gyors és egyszerűen használható képmegjelenítő a KDE-hez, ideális képgyűjtemények böngészéséhez és megjelenítéséhez.</p>
     <p xml:lang="ia">Gwenview es un visor de imagine per KDE rapide e facile de usar, ideal per monstrar e navigar  in un colection de images.</p>
     <p xml:lang="id">Gwenview adalah cepat dan mudah untuk penggunaan penampil gambar oleh KDE, sangat baik untuk menelusuri dan menampilkan gambar dari sebuah koleksi.</p>
-    <p xml:lang="is">Gwenview er hraðvirkur og auðveldur myndskoðari frá KDE, hentugur til að vafra og birta myndir í myndasafni.</p>
+    <p xml:lang="is">Gwenview er hraðvirkur og einfaldur myndskoðari frá KDE til að skoða og birta myndir í myndasafni.</p>
     <p xml:lang="it">Gwenview è un visore di immagini veloce e semplice da usare di KDE, ideale per sfogliare e visualizzare una raccolta di immagini.</p>
     <p xml:lang="ka">Gwenview სწრაფი და ადვილად გამოსაყენებელი პროგრამაა KDE-სგან. ის იდეალურია სურათების კოლექციების დასათვალიერებლად და დასალაგებლად.</p>
     <p xml:lang="ko">Gwenview는 KDE의 빠르고 사용하기 편한 그림 뷰어입니다.</p>
     <p xml:lang="lt">Gwenview yra greita ir lengva naudoti paveikslų žiūryklė pagal KDE, tobulai tinkanti naršyti ir atvaizduoti paveikslų kolekcijas.</p>
+    <p xml:lang="lv">„Gwenview“ ir KDE izstrādāta ātra un vienkārša programma attēlu atvēršanai, kas ļauj arī pārlūkot un parādīt attēlu kolekcijas.</p>
     <p xml:lang="nl">Gwenview is een snelle en gemakkelijk te gebruiken viewer voor afbeeldingen door KDE, ideaal voor bladeren door en weergeven van een verzameling afbeeldingen.</p>
     <p xml:lang="nn">Gwenview er ein biletvisar frå KDE. Han passar svært godt for å bla gjennom og visa ei samling med bilete.</p>
     <p xml:lang="pa">ਗਵਿਨ-ਵਿਊ KDE ਲਈ ਤੇਜ਼ ਤੇ ਵਰਤਣ ਲਈ ਸੌਖਾ ਚਿੱਤਰ ਦਰਸ਼ਕ ਹੈ, ਜੋ ਕਿ ਚਿੱਤਰਾਂ ਦੇ ਭੰਡਾਰ ਨੂੰ ਬਰਾਊਜ਼ ਕਰਨ ਤੇ ਦਿਖਾਉਣ ਲਈ ਢੁੱਕਵਾਂ ਹੈ।</p>
@@ -146,7 +153,7 @@
     <p xml:lang="pt">O Gwenview é um visualizador de imagens rápido e simples de usar do KDE, ideal para a navegação e apresentação de uma colecção de imagens.</p>
     <p xml:lang="pt-BR">Gwenview é um visualizador de imagens rápido e fácil de usar, da KDE, ideal para navegar e exibir uma coleção de imagens.</p>
     <p xml:lang="ro">Gwenview e un vizualizor de imagini rapid și ușor de folosit de la KDE, ideal pentru răsfoirea și afișarea unei colecții de imagini.</p>
-    <p xml:lang="ru">Gwenview — быстрая и простая в использовании программа просмотра изображений от KDE.</p>
+    <p xml:lang="ru">Gwenview — быстрое и простое в использовании приложение для просмотра изображений, разработанное KDE.</p>
     <p xml:lang="sk">Gwenview je rýchly a jednoducho použiteľný prehliadač obrázkov pre KDE, ideálny na prehliadanie a zobrazenie kolekcie obrázkov.</p>
     <p xml:lang="sl">Gwenview je hiter in enostaven pregledovalnik slik za KDE. Idealen je za brskanje po in prikazovanje zbirk slik.</p>
     <p xml:lang="sr">Гвенвју је брз и лак за употребу приказивач слика од КДЕ‑а, идеалан за прегледање збирки слика.</p>
@@ -180,6 +187,7 @@
     <p xml:lang="fi">Ominaisuudet:</p>
     <p xml:lang="fr">Fonctionnalités :</p>
     <p xml:lang="gl">Funcionalidades:</p>
+    <p xml:lang="he">יכולות:</p>
     <p xml:lang="hi">विशेषताएँ :</p>
     <p xml:lang="hsb">Wosebitosće:</p>
     <p xml:lang="hu">Szolgáltatások:</p>
@@ -190,6 +198,7 @@
     <p xml:lang="ka">თვისებები:</p>
     <p xml:lang="ko">기능:</p>
     <p xml:lang="lt">Ypatybės:</p>
+    <p xml:lang="lv">Iespējas:</p>
     <p xml:lang="nb">Funksjoner:</p>
     <p xml:lang="nds">Markmalen:</p>
     <p xml:lang="nl">Mogelijkheden:</p>
@@ -217,6 +226,7 @@
       <li>Simple image editing: rotate, crop, resize, mirror, flip, reduce red eye, and adjust brightness, contrast, or gamma</li>
       <li xml:lang="ar">تحرير صور سهل: تدوير وقص وتغيير الحجم وعكس وقلب وإزالة العين الحمراء وضبط الإضاءة والتباين والغاما</li>
       <li xml:lang="az">Sadə şəkil redaktoru: döndərmək, kəsmək, ölçüsünü dəyişmək, güzgü effekti, çevirmək, qırmızı göz effektini azaltmaq və parlaqlığı, doyumluluğu və qammanı tənzimləmək</li>
+      <li xml:lang="be">Простае рэдагаванне выяў: паварочванне, абразанне, змена памеру, паказ, перагортванне, памяншэнне эфекту чырвоных вачэй і рэгуляванне яркасці, кантраснасці або гамы</li>
       <li xml:lang="bg">Основно редактиране на изображения: завъртане, изрязване, промяна на размера, огледален образ, обръщане, намаляване на червените очи, и регулиране на яркостта, контраста или гамата</li>
       <li xml:lang="ca">Edició senzilla d'imatges: gira, escapça, redimensiona, emmiralla, capgira, redueix els ulls vermells i ajusta la brillantor, el contrast o la gamma</li>
       <li xml:lang="ca-valencia">Edició senzilla d'imatges: gira, escapça, redimensiona, emmiralla, capgira, reduïx els ulls rojos i ajusta la brillantor, el contrast o la gamma</li>
@@ -228,20 +238,22 @@
       <li xml:lang="fi">Yksinkertainen kuvanmuokkaus: kääntäminen, rajaaminen, koon muuttaminen, peilaaminen, kiepauttaminen, punasilmäisyyden vähentäminen sekä kirkkauden, kontrastin tai gamman säätäminen</li>
       <li xml:lang="fr">Modifications simples d'images : rotation, rognage, re-dimensionnement, inversion, réduction des yeux rouges, ajustement de la luminosité, du contraste et du gamma.</li>
       <li xml:lang="gl">Edición sinxela de imaxes: rotar, recortar, cambiar de tamaño, inverter en horizontal ou vertical, reducir os ollos vermellos e axustar o brillo, o contraste e a tonalidade.</li>
+      <li xml:lang="he">עריכת תמונות פשוטה: סיבוב, חיתוך, שינוי גודל, שיקוף, היפוך, הפחתת עיניים אדומות והתאמת בהירות, ניגודיות או גמא</li>
       <li xml:lang="hu">Egyszerű képszerkesztés: forgatás, levágás, tükrözés, vöröszem-eltávolítás és fényerő-, kontraszt vagy gammabeállítás</li>
       <li xml:lang="ia">Editar de imagine simple: rota, tonde, redimensiona, reflecte, gira, reduce oculos rubie, e adapta brillantia, contrasto, o gamma</li>
       <li xml:lang="id">Pengeditan gambar yang sederhana: rotasi, ubah ukuran, cermin, jungkir, reduksi mata merah, dan menyetel kecerahan, kontras, atau gamma</li>
+      <li xml:lang="is">Einfaldar myndvinnsluaðgerðir: snúa, skera af, breyta stærð, spegla, hvolfa, minnka rauð augu og stilla birtu, birtuskil eða gamma</li>
       <li xml:lang="it">Operazioni di base di modifica delle immagini: rotazione, ritaglio, ridimensionamento, specchio, rotazione, riduzione occhi rossi, e correzione di luminosità, contrasto o gamma</li>
       <li xml:lang="ka">გამოსახულების მარტივი რედაქტორი: მობრუნება, ამოჭრა, ზომის შეცვლა, სარკისებურად გარდაქმნა, წითელი თვალის ეფექტის მოცილება, სიკაშკაშის, კონტრასტისა და გამის მორგება</li>
       <li xml:lang="ko">간단한 그림 편집: 회전, 자르기, 크기 조정, 반전, 적목 감소, 밝기, 명암, 감마 조정</li>
       <li xml:lang="lt">Paprastas paveikslų taisymas: pasukimas, apkarpymas, dydžio keitimas, veidrodinis atspindys, apvertimas, raudonų akių mažinimas ir ryškumo, kontrasto bei gamos reguliavimas</li>
+      <li xml:lang="lv">Vienkārša attēlu rediģēšana: pagriešana, apgriešana, izmēra maiņa, spoguļošana, apmešana, sarkano acu efekta samazināšana, kā arī spilgtuma, kontrasta un gammas koriģēšana</li>
       <li xml:lang="nl">Eenvoudige bewerkingen van afbeelding: draaien, bijsnijden, grootte wijzigen, spiegelen, omklappen, rode ogen reductie en aanpassen van helderheid, contrast of gamma</li>
       <li xml:lang="nn">Enkel biletredigering: dreiing, avskjering, spegelvending, fjerning av raude auge og justering av lysstyrke, kontrast og gamma</li>
       <li xml:lang="pl">Proste edytowanie obrazów: obrót, przycięcie, zmiana rozmiaru, odbicie w pionie i poziomie, usuwanie czerwonych oczu, dostosowywanie jasności, -kontrastu, -gammy</li>
       <li xml:lang="pt">Edição simples das imagens: rotação, recorte, dimensionamento, espelho, inversão, redução de olhos vermelhos e ajustes de brilho, contraste ou gama</li>
       <li xml:lang="pt-BR">Edição de imagem simples: girar, cortar, redimensionar, espelhar, inverter, reduzir olhos vermelhos e ajustar brilho, contraste ou gama</li>
       <li xml:lang="ru">Основные инструменты редактирования: поворот, обрезание, изменение размера, зеркальное отражение и переворот, уменьшение эффекта «красных глаз», управление яркостью, контрастностью и гаммой.</li>
-      <li xml:lang="sk">Jednoduché úpravy obrázkov: otáčanie, orezávanie, zmena veľkosti, zrkadlenie, prevrátenie, redukcia červených očí, a úprava jasu, kontrastu alebo gama</li>
       <li xml:lang="sl">Enostavno urejanje slik: zasuk, obrezovanje, sprememba velikosti, zrcaljenje, obračanje, zmanjšanje rdečine v očesih in prilagajanje svetlosti, kontrasta ali game</li>
       <li xml:lang="sv">Enkel bildredigering: rotera, beskär, ändra storlek, spegla, vänd, reducera röda ögon och justera ljusstyrka, kontrast eller gamma</li>
       <li xml:lang="ta">அடிப்படை படத்திருத்தம்: திருப்புவது; வெட்டுவது; புரட்டுவது; பிரகாசத்தை நிறமாறுபாட்டை அல்லது காமாவை மாற்றுவது; கண்கள் சிவந்திருப்பதைக் குறைப்பது</li>
@@ -253,6 +265,7 @@
       <li>Annotate and mark up images with arrows, shapes, text boxes, image stamps, and more</li>
       <li xml:lang="ar">إضافة شرح على الصور بالأسهم والأشكال ومربعات النصوص وختم وغيرها.</li>
       <li xml:lang="az">Şəkillərə oxlar, fiqurlar, ilə işarələmək və mətn qutuları ilə şərh etmək, şəkili möhürləmək və s.</li>
+      <li xml:lang="be">Стварайце анатацыі і пазначайце выявы стрэлкамі, фігурамі, тэкставымі палямі, адбіткамі і іншым</li>
       <li xml:lang="bg">Анотиране и маркиране на изображения със стрелки, форми, текстови полета, печати за изображения, и др.</li>
       <li xml:lang="ca">Anota i marca les imatges amb fletxes, formes, quadres de text, segells d'imatge i més</li>
       <li xml:lang="ca-valencia">Anota i marca les imatges amb fletxes, formes, quadros de text, segells d'imatge i més</li>
@@ -264,20 +277,22 @@
       <li xml:lang="fi">Merkitse kuvia nuolin, kuvioin, tekstilaatikoin, leimoin jne.</li>
       <li xml:lang="fr">Annotez et balisez les images avec des flèches, des formes, des zones de texte, des timbres d'images et plus encore</li>
       <li xml:lang="gl">Anotar e marcar imaxes con frechas, formas, caixas de texto, selos de imaxe e máis.</li>
+      <li xml:lang="he">הוספת הערות וסימונים על תמונות עם חיצים, צורות, תיבות טקסט, חותמות בצורות שונות ועוד</li>
       <li xml:lang="hu">Képek magyarázata és jelölése nyilakkal, alakzatokkal, szövegdobozokkal, képbélyegzőkkel és egyebekkel</li>
       <li xml:lang="ia">Annota e marca imagines con flechas, umbras, quadratos de texto, timbros de imagine e alteres</li>
       <li xml:lang="id">Menganotasi dan menandai gambar dengan anak panah, bentuk, cap gambar, dan selebihnya</li>
+      <li xml:lang="is">Glósa og merkja myndir með örvum, formum, textareitum, myndstimplum og fleira</li>
       <li xml:lang="it">Annota e contrassegna immagini con frecce, forme, caselle di testo, timbri e altro</li>
       <li xml:lang="ka">ისრების, ესკიზების, ტექსტური ფანჯრების, გამოსახულებების შტამპების და ა.შ. ანოტაცია და მონიშვნა</li>
       <li xml:lang="ko">화살표, 도형, 텍스트 상자, 스탬프 등으로 그림 강조 및 꾸미기</li>
       <li xml:lang="lt">Kurti paveikslams anotacijas ir žymėti juos, naudojant rodykles, formas, teksto langelius, paveikslo atspaudus ir kt.</li>
+      <li xml:lang="lv">Attēlu anotēšana un marķēšana ar bultām, ģeometriskām formām, tekstlodziņiem, zīmogiem u.c.</li>
       <li xml:lang="nl">Voorzie en markeer afbeeldingen met pijlen, vormen, tekstvakken, afbeeldingstempels en meer</li>
       <li xml:lang="nn">Legg piler, tekst, figurar og andre biletelement på bileta</li>
       <li xml:lang="pl">Opisuj obrazy strzałkami, kształtami, polami tekstowymi, stemplami i więcej</li>
       <li xml:lang="pt">Anotação e marcação de imagens com setas, formas, áreas de texto, carimbos de imagens, entre outros</li>
       <li xml:lang="pt-BR">Anotar e marcar imagens com setas, formas, caixas de texto, carimbos de imagem e muito mais</li>
       <li xml:lang="ru">Комментирование и разметка изображения: стрелки, фигуры, текстовые поля, штампы и другие инструменты</li>
-      <li xml:lang="sk">Anotujte a označujte obrázky pomocou šípok, tvarov, textových polí a obrazových pečiatok, a ďalšie</li>
       <li xml:lang="sl">Dodajanje opomb in oznak na slike s puščicami, oblikami, okviri z besedilom, žigi in drugim</li>
       <li xml:lang="sv">Kommentera och märk bilder med pilar, former, textrutor, bildstämplar med mera</li>
       <li xml:lang="ta">அம்புக்குறிகள், சொற்றொடர்கள், வடிவங்கள் போன்றவற்றைக் கொண்டு படங்களிலுள்ளவற்றை முன்னிலைப்படுத்தலாம்</li>
@@ -289,6 +304,7 @@
       <li>Basic file management actions such as copy, move, delete, and others</li>
       <li xml:lang="ar">عمليات إدارة الملفّات البسيطة كالنّسخ، والنّقل، والحذف وغيرها</li>
       <li xml:lang="az">Kopyalamaq, köçürmək, silmək və s. kimi əsas fayl idarəetmə fəaliyyətləri</li>
+      <li xml:lang="be">Асноўныя дзеянні па кіраванні файламі: капіяванне, перамяшчэнне, выдаленне і іншыя</li>
       <li xml:lang="bg">Основни файлови операции като копиране, преместване, изтриване и други</li>
       <li xml:lang="ca">Accions bàsiques de gestió de fitxers com copia, mou, suprimeix i altres</li>
       <li xml:lang="ca-valencia">Accions bàsiques de gestió de fitxers com copia, mou, suprimix i altres</li>
@@ -302,13 +318,16 @@
       <li xml:lang="fi">Tiedostonhallinnan perustoiminnot kuten kopioiminen, siirtäminen, poistaminen jne.</li>
       <li xml:lang="fr">Actions basiques de gestion de fichiers comme copier, déplacer, supprimer et autres</li>
       <li xml:lang="gl">Accións básicas de xestión de ficheiros como copiar, mover, eliminar, etc.</li>
+      <li xml:lang="he">פעולות ניהול קבצים פשוטות כגון העתקה, העברה, מחיקה ועוד</li>
       <li xml:lang="hu">Egyszerű fájlkezelési műveletek, mint például másolás, áthelyezés, törlés és egyebek</li>
       <li xml:lang="ia">Actiones de gestion de file basic tal como copiar,mover, deler, e alteres</li>
       <li xml:lang="id">Tindakan pengelolaan file dasar seperti salin, pindah, hapus, dan lainnya</li>
+      <li xml:lang="is">Einfaldar skráaaðgerðir eins og að afrita, færa, eyða og fleira</li>
       <li xml:lang="it">Semplici azioni di gestione file come copia, spostamento, eliminazione ed altre</li>
       <li xml:lang="ka">ფაილების ისეთი მარტივი მანიპულაციების მხარდაჭერა, როგორიცაა კოპირება, გადატანა, წაშლა და სხვა</li>
       <li xml:lang="ko">파일 복사, 이동, 삭제와 같은 기본 파일 관리 작업</li>
       <li xml:lang="lt">Paprasti failų tvarkymo veiksmai, tokie kaip kopijavimas, perkėlimas, ištrynimas ir kiti</li>
+      <li xml:lang="lv">Pamata datņu pārvaldnieka darbības, piemēram, kopēt, pārvietot, dzēst un citas</li>
       <li xml:lang="nl">Basis bestandsbeheeracties zoals kopiëren, verplaatsen, verwijderen en andere</li>
       <li xml:lang="nn">Enkle filhandlingar, som kopiering, flytting og sletting</li>
       <li xml:lang="pa">ਮੁੱਢਲੇ ਫਾਇਲ ਇੰਤਜ਼ਾਮ ਕਾਰਵਾਈਆਂ ਜਿਵੇਂ ਕਿ ਕਾਪੀ ਕਰਨਾ, ਭੇਜਣਾ, ਹਟਾਉਣਾ ਤੇ ਹੋਰ</li>
@@ -316,7 +335,6 @@
       <li xml:lang="pt">Acções básicas de gestão de ficheiros, como a cópia, movimentação, remoção, entre outras</li>
       <li xml:lang="pt-BR">Ações básicas de gerenciamento de arquivos, como copiar, mover, excluir entre outras</li>
       <li xml:lang="ru">Основные действия с файлами: копирование, перемещение, удаление и другие</li>
-      <li xml:lang="sk">Podporuje základné akcie správy súborov ako kopírovanie, presúvanie, mazanie a iné</li>
       <li xml:lang="sl">Osnovni ukazi za delo z datotekami: kopiranje, premikanje, brisanje in drugo</li>
       <li xml:lang="sv">Grundläggande filhanteringsåtgärder som kopiera, flytta, ta bort, med mera</li>
       <li xml:lang="ta">நகலெடுத்தல், நகர்த்தல், மற்றும் அகற்றல் போன்ற அடிப்படை கோப்புநிர்வாக செய்லகள்</li>
@@ -344,16 +362,18 @@
       <li xml:lang="fi">Toimii sekä erillisenä ohjelmana että upotettuna katselimena Konqueror-verkkoselaimessa</li>
       <li xml:lang="fr">Fonctionne à la fois comme application autonome et comme afficheur embarqué dans le navigateur web Konqueror</li>
       <li xml:lang="gl">Pode usarse como unha aplicación autónoma e tamén como un visor incrustado no navegador web Konqueror.</li>
+      <li xml:lang="he">יכולות גם כיישום עצמאי וגם כמציג מוטמע בדפדפן Konquerer</li>
       <li xml:lang="hi">यह कॉन्करर वेब ब्राउज़र एम्बेडेड व्यूअरमें और स्टैंडअलोन एप्लिकेशन दोनों के रूप में कार्य करता है</li>
       <li xml:lang="hsb">Funguje jako samostatna aplikacija a tež jako integrowana přehladowarka w konquerorje</li>
       <li xml:lang="hu">Önálló alkalmazásként és a Konqueror webböngészőbe épített képmegjelenítőként is működik</li>
       <li xml:lang="ia">Il functiona e como application per se mesme e un visor incorporate in le navigator web Konqueror</li>
       <li xml:lang="id">Fungsi sebagai aplikasi mandiri dan penampil tertanam dalam browser web Konqueror</li>
-      <li xml:lang="is">Virkar bæði sem sjálfstætt forrit og sem ívafinn skoðari í Konqueror netvafranum</li>
+      <li xml:lang="is">Virkar bæði sem sjálfstætt forrit og sem innfelldur skoðari í Konqueror vafranum</li>
       <li xml:lang="it">Funziona sia come applicazione indipendente che come visore integrabile nel browser web Konqueror</li>
       <li xml:lang="ka">შეუძლია ფუნქციონირება როგორც ცალკე აპლიკაციას, ისე, როგორც Konquero-ში ჩადგმულ პროგრამას</li>
       <li xml:lang="ko">단독 앱 및 Konqueror 웹 브라우저의 플러그인으로 작동</li>
       <li xml:lang="lt">Veikia kaip pavienė programa ir kaip įterpta žiūryklė Konqueror naršyklėje</li>
+      <li xml:lang="lv">Darbojas gan kā atsevišķa programma, gan arī kā iegults skatītājs „Konqueror“ tīmekļa pārlūkā</li>
       <li xml:lang="nb">Virker både som et frittstående program og som innebygget viser i nettleseren Konqueror</li>
       <li xml:lang="nds">Funkscheneert för sik oder inbett na den Nettkieker Konqueror</li>
       <li xml:lang="nl">Functies zowel als een alleenstaande toepassing als een ingebedde viewer in de webbrowser Konqueror</li>
@@ -385,6 +405,35 @@
   <screenshots>
     <screenshot type="default">
       <caption>Main application window displaying an image and controls on the left</caption>
+      <caption xml:lang="ar">نافذة التطبيق الرئيسية تعرض صورة وعناصر تحكم على اليسار</caption>
+      <caption xml:lang="be">Галоўнае акно праграмы з выявай і элементамі кіравання злева</caption>
+      <caption xml:lang="bg">Основен прозорец на приложението, показващ изображение и контроли вляво</caption>
+      <caption xml:lang="ca">Finestra principal de l'aplicació que mostra una imatge i els controls a l'esquerra</caption>
+      <caption xml:lang="ca-valencia">Finestra principal de l'aplicació que mostra una imatge i els controls en l'esquerra</caption>
+      <caption xml:lang="eo">Ĉefa aplikofenestro montranta bildon kaj regilojn maldekstre</caption>
+      <caption xml:lang="es">Ventana principal de la aplicación que muestra una imagen y controles a la izquierda</caption>
+      <caption xml:lang="eu">Aplikazioaren leiho nagusia, irudi bat eta ezkerrean aginteak azaltzen dituena</caption>
+      <caption xml:lang="fi">Sovelluksen pääikkuna, jossa kuva ja vasemmalla säätimet</caption>
+      <caption xml:lang="fr">Fenêtre principale de l'application affichant sur la gauche, une image et les contrôles</caption>
+      <caption xml:lang="he">חלון יישום ראשי שמציג תמונה ופקדים מימין</caption>
+      <caption xml:lang="hu">Az alkalmazás főablaka egy kép megjelenítése közben, bal oldalon a vezérlőkkel</caption>
+      <caption xml:lang="ia">Fenestra de application principal monstrante un imagines e controlos sur le sinistra</caption>
+      <caption xml:lang="is">Aðalgluggi forritsins birtir mynd og stýringarnar vinstra megin</caption>
+      <caption xml:lang="it">Finestra principale dell'applicazione che mostra un'immagine e i controlli sulla sinistra</caption>
+      <caption xml:lang="ka">მთავარი აპლიკაციის ფანჯარა, რომელიც გამოსახულებას და კონტროლებს მარცხნივ აჩვენებს</caption>
+      <caption xml:lang="ko">그림과 그 왼쪽에 컨트롤을 표시한 앱 주 창</caption>
+      <caption xml:lang="lt">Pagrindinis programos langas atvaizduojantis paveikslą ir valdiklius kairėje</caption>
+      <caption xml:lang="lv">Programmas pamata logs ar atvērtu attēlu un vadības rīkiem kreisajā pusē</caption>
+      <caption xml:lang="nl">Hoofdvenster van toepassing die een afbeelding toont en links besturing</caption>
+      <caption xml:lang="pl">Główne okno programu, wyświetlające obraz i sterownie po lewej</caption>
+      <caption xml:lang="pt-BR">Janela principal do aplicativo exibindo uma imagem e controles à esquerda</caption>
+      <caption xml:lang="ru">Основное окно приложения с открытым изображением и элементами управления в левой части окна</caption>
+      <caption xml:lang="sl">Glavno okno aplikacije, ki prikazuje sliko, s kontrolami na levi strani</caption>
+      <caption xml:lang="tr">Bir görseli ve solda denetimleri görüntüleyen ana uygulama ekranı</caption>
+      <caption xml:lang="uk">Головне вікно програми із показаним зображенням та засобами керування ліворуч</caption>
+      <caption xml:lang="x-test">xxMain application window displaying an image and controls on the leftxx</caption>
+      <caption xml:lang="zh-CN">Gwenview 的主窗口正在显示一张图像，控件显示在左侧</caption>
+      <caption xml:lang="zh-TW">應用程式主視窗，顯示一張影像以及左方的控制項目</caption>
       <image>https://cdn.kde.org/screenshots/gwenview/gwenview-image.png</image>
     </screenshot>
     <screenshot>
@@ -405,15 +454,17 @@
       <caption xml:lang="fi">Hallitse kuvakokoelmaasi Gwenview’lla</caption>
       <caption xml:lang="fr">Utiliser Gwenview pour gérer votre collection d'images.</caption>
       <caption xml:lang="gl">Use Gwenview para xestionar a súa colección de imaxes</caption>
+      <caption xml:lang="he">אפשר להשתמש ב־Gwenview כדי לנהל את אוסף התמונות שלך</caption>
       <caption xml:lang="hi">अपने छवि संग्रह को प्रबंधित करने के लिए ग्वेन-व्यू का उपयोग करें</caption>
       <caption xml:lang="hu">A Gwenview használata a képgyűjteménye kezeléséhez</caption>
       <caption xml:lang="ia">Usa Guenview pro gerer tu collection de image</caption>
       <caption xml:lang="id">Gunakan Gwenview untuk mengelola koleksi gambar Anda</caption>
-      <caption xml:lang="is">Notaðu Gwenview til að sýsla með myndasafnið þitt</caption>
+      <caption xml:lang="is">Notaðu Gwenview til að hafa umsjón með myndasafninu þínu</caption>
       <caption xml:lang="it">Usa Gwenview per gestire la raccolta delle immagini</caption>
       <caption xml:lang="ka">გამოიყენეთ Gwenview თქვენი სურათების კოლექციების სამართავად</caption>
       <caption xml:lang="ko">Gwenview로 그림 모음집 관리</caption>
       <caption xml:lang="lt">Naudokite Gwenview savo paveikslų kolekcijos tvarkymui</caption>
+      <caption xml:lang="lv">Izmantojiet „Gwenview“, lai pārvaldītu savu attēlu kolekciju</caption>
       <caption xml:lang="nl">Gwenview gebruiken om uw verzameling afbeeldingen te beheren</caption>
       <caption xml:lang="nn">Bruk Gwenview til å halda styr på biletsamlinga di</caption>
       <caption xml:lang="pa">ਤੁਹਾਡੇ ਚਿੱਤਰ ਭੰਡਾਰ ਦੇ ਇੰਤਜ਼ਾਮ ਲਈ ਗਵਿਨ-ਵਿਊ ਵਰਤੋ</caption>
@@ -421,7 +472,7 @@
       <caption xml:lang="pt">Use o Gwenview para gerir a sua colecção de imagens</caption>
       <caption xml:lang="pt-BR">Use o Gwenview para gerenciar sua coleção de imagens</caption>
       <caption xml:lang="ro">Folosiți Gwenview pentru a vă gestiona colecția de imagini</caption>
-      <caption xml:lang="ru">Используйте Gwenview для работы с коллекцией изображений</caption>
+      <caption xml:lang="ru">Использование Gwenview для работы с коллекцией изображений</caption>
       <caption xml:lang="sk">Použite Gwenview na správu vašej kolekcie obrázkov</caption>
       <caption xml:lang="sl">Uporabite Gwenview za upravljanje svoje zbirke slik</caption>
       <caption xml:lang="sv">Använd Gwenview för att hantera din bildsamling</caption>
