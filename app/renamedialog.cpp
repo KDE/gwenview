@@ -69,6 +69,7 @@ void RenameDialog::setFilename(const QString &filename)
         selectionLength -= extension.length() + 1;
     }
     d->mFilename->setSelection(0, selectionLength);
+    d->mFilename->setFocus();
 }
 
 QString RenameDialog::filename() const
