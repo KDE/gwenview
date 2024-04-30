@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-20 00:37+0000\n"
+"POT-Creation-Date: 2024-04-30 02:25+0000\n"
 "PO-Revision-Date: 2012-07-13 22:35+0530\n"
 "Last-Translator: Deepayan Sarkar <deepayan.sarkar@gmail.com>\n"
 "Language-Team: American English <kde-translation@bengalinux.org>\n"
@@ -125,7 +125,7 @@ msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
 msgid "Sidebar Alignment Spacer"
 msgstr ""
 
-#: app/browsemainpage.cpp:146 app/mainwindow.cpp:375 app/viewmainpage.cpp:410
+#: app/browsemainpage.cpp:146 app/mainwindow.cpp:376 app/viewmainpage.cpp:410
 #: lib/documentview/documentviewcontroller.cpp:55
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
@@ -213,7 +213,7 @@ msgid "Rating"
 msgstr "রেটিং"
 
 #: app/browsemainpage.cpp:195 app/fileopscontextmanageritem.cpp:136
-#: app/mainwindow.cpp:374
+#: app/mainwindow.cpp:375
 #, kde-format
 msgctxt "@title actions category"
 msgid "File"
@@ -1112,19 +1112,19 @@ msgstr "স্লাইড-শো মোড-এ চালু করো"
 msgid "A starting file or folders"
 msgstr ""
 
-#: app/mainwindow.cpp:384
+#: app/mainwindow.cpp:385
 #, kde-format
 msgctxt "@action Open Recent menu"
 msgid "Clear List"
 msgstr ""
 
-#: app/mainwindow.cpp:392
+#: app/mainwindow.cpp:393
 #, kde-format
 msgctxt "@action reload the currently viewed image"
 msgid "Reload"
 msgstr "নতুন করে পড়ো"
 
-#: app/mainwindow.cpp:397
+#: app/mainwindow.cpp:398
 #, fuzzy, kde-format
 #| msgctxt "@action:inmenu Navigation Bar"
 #| msgid "Edit Location"
@@ -1132,115 +1132,115 @@ msgctxt "@action:inmenu Navigation Bar"
 msgid "Replace Location"
 msgstr "অবস্থান সম্পাদনা"
 
-#: app/mainwindow.cpp:402
+#: app/mainwindow.cpp:403
 #, kde-format
 msgctxt "@action:intoolbar Switch to file list"
 msgid "Browse"
 msgstr "ব্রাউজ"
 
-#: app/mainwindow.cpp:403
+#: app/mainwindow.cpp:404
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Browse folders for images"
 msgstr ""
 
-#: app/mainwindow.cpp:410
+#: app/mainwindow.cpp:411
 #, kde-format
 msgctxt "@action:intoolbar Switch to image view"
 msgid "View"
 msgstr "ভিউ"
 
-#: app/mainwindow.cpp:411
+#: app/mainwindow.cpp:412
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "View selected images"
 msgstr "নির্বাচিত ছবি দেখাও"
 
-#: app/mainwindow.cpp:430
+#: app/mainwindow.cpp:431
 #, kde-format
 msgctxt "@action"
 msgid "Exit Full Screen"
 msgstr ""
 
-#: app/mainwindow.cpp:434
+#: app/mainwindow.cpp:435
 #, kde-format
 msgctxt "@action"
 msgid "Spotlight Mode"
 msgstr ""
 
-#: app/mainwindow.cpp:440
+#: app/mainwindow.cpp:441
 #, kde-format
 msgctxt "@action Go to previous image"
 msgid "Previous"
 msgstr "পূর্ববর্তী"
 
-#: app/mainwindow.cpp:441
+#: app/mainwindow.cpp:442
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to previous image"
 msgstr "পূর্ববর্তী ছবিতে যাও"
 
-#: app/mainwindow.cpp:447
+#: app/mainwindow.cpp:448
 #, kde-format
 msgctxt "@action Go to next image"
 msgid "Next"
 msgstr "পরবর্তী"
 
-#: app/mainwindow.cpp:448
+#: app/mainwindow.cpp:449
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to next image"
 msgstr "পরবর্তী ছবিতে যাও"
 
-#: app/mainwindow.cpp:454
+#: app/mainwindow.cpp:455
 #, kde-format
 msgctxt "@action Go to first image"
 msgid "First"
 msgstr "প্রথম"
 
-#: app/mainwindow.cpp:455
+#: app/mainwindow.cpp:456
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to first image"
 msgstr "প্রথম ছবিতে যাও"
 
-#: app/mainwindow.cpp:461
+#: app/mainwindow.cpp:462
 #, kde-format
 msgctxt "@action Go to last image"
 msgid "Last"
 msgstr "শেষ"
 
-#: app/mainwindow.cpp:462
+#: app/mainwindow.cpp:463
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to last image"
 msgstr "শেষ ছবিতে যাও"
 
-#: app/mainwindow.cpp:472
+#: app/mainwindow.cpp:473
 #, kde-format
 msgctxt "@action"
 msgid "Start Page"
 msgstr "প্রারম্ভিক পাতা"
 
-#: app/mainwindow.cpp:473
+#: app/mainwindow.cpp:474
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open the start page"
 msgstr "প্রারম্ভিক পাতা খোল"
 
-#: app/mainwindow.cpp:480
+#: app/mainwindow.cpp:481
 #, kde-format
 msgctxt "@action"
 msgid "Sidebar"
 msgstr "সাইডবার"
 
-#: app/mainwindow.cpp:485
+#: app/mainwindow.cpp:486
 #, kde-format
 msgctxt "@action opens crop, rename, etc."
 msgid "Show Editing Tools"
 msgstr ""
 
-#: app/mainwindow.cpp:515
+#: app/mainwindow.cpp:516
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Share"
@@ -1248,159 +1248,159 @@ msgctxt "@action Share images"
 msgid "Share"
 msgstr "জানাও"
 
-#: app/mainwindow.cpp:524
+#: app/mainwindow.cpp:525
 #, kde-format
 msgid "Error while sharing: %1"
 msgstr ""
 
-#: app/mainwindow.cpp:531
+#: app/mainwindow.cpp:532
 #, kde-format
 msgid ""
 "The shared image link (<a href=\"%1\">%1</a>) has been copied to the "
 "clipboard."
 msgstr ""
 
-#: app/mainwindow.cpp:581
+#: app/mainwindow.cpp:582
 #, kde-format
 msgctxt "@title:menu submenu for actions that open configuration dialogs"
 msgid "Configure"
 msgstr ""
 
-#: app/mainwindow.cpp:596
+#: app/mainwindow.cpp:597
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "Edit"
 msgstr "সম্পাদনা"
 
-#: app/mainwindow.cpp:601
+#: app/mainwindow.cpp:602
 #, kde-format
 msgid "Redo"
 msgstr "আবার করো"
 
-#: app/mainwindow.cpp:609
+#: app/mainwindow.cpp:610
 #, kde-format
 msgid "Undo"
 msgstr "বাতিল করো"
 
-#: app/mainwindow.cpp:636
+#: app/mainwindow.cpp:637
 #, kde-format
 msgid "Folders"
 msgstr "ফোল্ডার"
 
-#: app/mainwindow.cpp:642
+#: app/mainwindow.cpp:643
 #, kde-format
 msgid "Information"
 msgstr "তথ্য"
 
-#: app/mainwindow.cpp:681
+#: app/mainwindow.cpp:682
 #, kde-format
 msgid "Operations"
 msgstr ""
 
-#: app/mainwindow.cpp:949
+#: app/mainwindow.cpp:950
 #, kde-format
 msgid "Viewing media"
 msgstr ""
 
-#: app/mainwindow.cpp:1427
+#: app/mainwindow.cpp:1430
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "সাইডবার আড়াল করো"
 
-#: app/mainwindow.cpp:1427
+#: app/mainwindow.cpp:1430
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "সাইডবার দেখাও"
 
-#: app/mainwindow.cpp:1770
+#: app/mainwindow.cpp:1773
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "ছবি খোল"
 
-#: app/mainwindow.cpp:1830
+#: app/mainwindow.cpp:1833
 #, fuzzy, kde-format
 #| msgid "Slideshow"
 msgid "Pause Slideshow"
 msgstr "স্লাইড-শো"
 
-#: app/mainwindow.cpp:1833
+#: app/mainwindow.cpp:1836
 #, fuzzy, kde-format
 #| msgid "Slideshow"
 msgid "Resume Slideshow"
 msgstr "স্লাইড-শো"
 
-#: app/mainwindow.cpp:1833
+#: app/mainwindow.cpp:1836
 #, kde-format
 msgid "Start Slideshow"
 msgstr "স্লাইড-শো শুরু করো"
 
-#: app/mainwindow.cpp:1846
+#: app/mainwindow.cpp:1849
 #, kde-format
 msgid "Save All Changes"
 msgstr "সব পরিবর্তন সংরক্ষণ করো"
 
-#: app/mainwindow.cpp:1847
+#: app/mainwindow.cpp:1850
 #, kde-format
 msgid "Discard Changes"
 msgstr "পরিবর্তন পরিত্যাগ করো"
 
-#: app/mainwindow.cpp:1849
+#: app/mainwindow.cpp:1852
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] ""
 msgstr[1] ""
 
-#: app/mainwindow.cpp:1849
+#: app/mainwindow.cpp:1852
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr ""
 
-#: app/mainwindow.cpp:1892
+#: app/mainwindow.cpp:1895
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr ""
 
-#: app/mainwindow.cpp:1895
+#: app/mainwindow.cpp:1898
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Hide sidebar"
 msgid "Hide menu bar"
 msgstr "সাইডবার আড়াল করো"
 
-#: app/mainwindow.cpp:2116
+#: app/mainwindow.cpp:2119
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr ""
 
-#: app/mainwindow.cpp:2117 app/mainwindow.cpp:2131
+#: app/mainwindow.cpp:2120 app/mainwindow.cpp:2134
 #, kde-format
 msgid "Stay There"
 msgstr ""
 
-#: app/mainwindow.cpp:2118
+#: app/mainwindow.cpp:2121
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Go to last image"
 msgid "Go to the Last Document"
 msgstr "শেষ ছবিতে যাও"
 
-#: app/mainwindow.cpp:2119 app/mainwindow.cpp:2133
+#: app/mainwindow.cpp:2122 app/mainwindow.cpp:2136
 #, fuzzy, kde-format
 #| msgid "Go back to the original"
 msgid "Go Back to the Document List"
 msgstr "মূল ছবিতে ফিরে যাও"
 
-#: app/mainwindow.cpp:2130
+#: app/mainwindow.cpp:2133
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr ""
 
-#: app/mainwindow.cpp:2132
+#: app/mainwindow.cpp:2135
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Go to first image"

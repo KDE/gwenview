@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-20 00:37+0000\n"
+"POT-Creation-Date: 2024-04-30 02:25+0000\n"
 "PO-Revision-Date: 2023-11-02 13:58+0100\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -127,7 +127,7 @@ msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
 msgid "Sidebar Alignment Spacer"
 msgstr "Oddělovač pro zarovnání postranní lišty"
 
-#: app/browsemainpage.cpp:146 app/mainwindow.cpp:375 app/viewmainpage.cpp:410
+#: app/browsemainpage.cpp:146 app/mainwindow.cpp:376 app/viewmainpage.cpp:410
 #: lib/documentview/documentviewcontroller.cpp:55
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
@@ -213,7 +213,7 @@ msgid "Rating"
 msgstr "Hodnocení"
 
 #: app/browsemainpage.cpp:195 app/fileopscontextmanageritem.cpp:136
-#: app/mainwindow.cpp:374
+#: app/mainwindow.cpp:375
 #, kde-format
 msgctxt "@title actions category"
 msgid "File"
@@ -1087,144 +1087,144 @@ msgstr ""
 msgid "A starting file or folders"
 msgstr "Výchozí soubor nebo složky"
 
-#: app/mainwindow.cpp:384
+#: app/mainwindow.cpp:385
 #, kde-format
 msgctxt "@action Open Recent menu"
 msgid "Clear List"
 msgstr "Smazat seznam"
 
-#: app/mainwindow.cpp:392
+#: app/mainwindow.cpp:393
 #, kde-format
 msgctxt "@action reload the currently viewed image"
 msgid "Reload"
 msgstr "Obnovit"
 
-#: app/mainwindow.cpp:397
+#: app/mainwindow.cpp:398
 #, kde-format
 msgctxt "@action:inmenu Navigation Bar"
 msgid "Replace Location"
 msgstr "Nahradit umístění"
 
-#: app/mainwindow.cpp:402
+#: app/mainwindow.cpp:403
 #, kde-format
 msgctxt "@action:intoolbar Switch to file list"
 msgid "Browse"
 msgstr "Procházet"
 
-#: app/mainwindow.cpp:403
+#: app/mainwindow.cpp:404
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Browse folders for images"
 msgstr "Procházet složky s obrázky"
 
-#: app/mainwindow.cpp:410
+#: app/mainwindow.cpp:411
 #, kde-format
 msgctxt "@action:intoolbar Switch to image view"
 msgid "View"
 msgstr "Pohled"
 
-#: app/mainwindow.cpp:411
+#: app/mainwindow.cpp:412
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "View selected images"
 msgstr "Zobrazit vybrané obrázky"
 
-#: app/mainwindow.cpp:430
+#: app/mainwindow.cpp:431
 #, kde-format
 msgctxt "@action"
 msgid "Exit Full Screen"
 msgstr "Ukončit celoobrazovkový režim"
 
-#: app/mainwindow.cpp:434
+#: app/mainwindow.cpp:435
 #, kde-format
 msgctxt "@action"
 msgid "Spotlight Mode"
 msgstr ""
 
-#: app/mainwindow.cpp:440
+#: app/mainwindow.cpp:441
 #, kde-format
 msgctxt "@action Go to previous image"
 msgid "Previous"
 msgstr "Předchozí"
 
-#: app/mainwindow.cpp:441
+#: app/mainwindow.cpp:442
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to previous image"
 msgstr "Přejít na předchozí obrázek"
 
-#: app/mainwindow.cpp:447
+#: app/mainwindow.cpp:448
 #, kde-format
 msgctxt "@action Go to next image"
 msgid "Next"
 msgstr "Následující"
 
-#: app/mainwindow.cpp:448
+#: app/mainwindow.cpp:449
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to next image"
 msgstr "Přejít na následující obrázek"
 
-#: app/mainwindow.cpp:454
+#: app/mainwindow.cpp:455
 #, kde-format
 msgctxt "@action Go to first image"
 msgid "First"
 msgstr "První"
 
-#: app/mainwindow.cpp:455
+#: app/mainwindow.cpp:456
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to first image"
 msgstr "Přejít na první obrázek"
 
-#: app/mainwindow.cpp:461
+#: app/mainwindow.cpp:462
 #, kde-format
 msgctxt "@action Go to last image"
 msgid "Last"
 msgstr "Poslední"
 
-#: app/mainwindow.cpp:462
+#: app/mainwindow.cpp:463
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to last image"
 msgstr "Přejít na poslední obrázek"
 
-#: app/mainwindow.cpp:472
+#: app/mainwindow.cpp:473
 #, kde-format
 msgctxt "@action"
 msgid "Start Page"
 msgstr "První stránka"
 
-#: app/mainwindow.cpp:473
+#: app/mainwindow.cpp:474
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open the start page"
 msgstr "Otevřít úvodní stránku"
 
-#: app/mainwindow.cpp:480
+#: app/mainwindow.cpp:481
 #, kde-format
 msgctxt "@action"
 msgid "Sidebar"
 msgstr "Postranní panel"
 
-#: app/mainwindow.cpp:485
+#: app/mainwindow.cpp:486
 #, kde-format
 msgctxt "@action opens crop, rename, etc."
 msgid "Show Editing Tools"
 msgstr "Zobrazit nástroje pro úpravu"
 
-#: app/mainwindow.cpp:515
+#: app/mainwindow.cpp:516
 #, kde-format
 msgctxt "@action Share images"
 msgid "Share"
 msgstr "Sdílet"
 
-#: app/mainwindow.cpp:524
+#: app/mainwindow.cpp:525
 #, kde-format
 msgid "Error while sharing: %1"
 msgstr "Chyba při sdílení: %1"
 
-#: app/mainwindow.cpp:531
+#: app/mainwindow.cpp:532
 #, kde-format
 msgid ""
 "The shared image link (<a href=\"%1\">%1</a>) has been copied to the "
@@ -1232,92 +1232,92 @@ msgid ""
 msgstr ""
 "Odkaz na sdílený obrázek (<a href=\"%1\">%1</a>) byl zkopírován do schránky."
 
-#: app/mainwindow.cpp:581
+#: app/mainwindow.cpp:582
 #, kde-format
 msgctxt "@title:menu submenu for actions that open configuration dialogs"
 msgid "Configure"
 msgstr "Nastavit"
 
-#: app/mainwindow.cpp:596
+#: app/mainwindow.cpp:597
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "Edit"
 msgstr "Úpravy"
 
-#: app/mainwindow.cpp:601
+#: app/mainwindow.cpp:602
 #, kde-format
 msgid "Redo"
 msgstr "Znovu"
 
-#: app/mainwindow.cpp:609
+#: app/mainwindow.cpp:610
 #, kde-format
 msgid "Undo"
 msgstr "Zpět"
 
-#: app/mainwindow.cpp:636
+#: app/mainwindow.cpp:637
 #, kde-format
 msgid "Folders"
 msgstr "Složky"
 
-#: app/mainwindow.cpp:642
+#: app/mainwindow.cpp:643
 #, kde-format
 msgid "Information"
 msgstr "Informace"
 
-#: app/mainwindow.cpp:681
+#: app/mainwindow.cpp:682
 #, kde-format
 msgid "Operations"
 msgstr "Operace"
 
-#: app/mainwindow.cpp:949
+#: app/mainwindow.cpp:950
 #, kde-format
 msgid "Viewing media"
 msgstr "Prohlížím média"
 
-#: app/mainwindow.cpp:1427
+#: app/mainwindow.cpp:1430
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Skrýt postranní panel"
 
-#: app/mainwindow.cpp:1427
+#: app/mainwindow.cpp:1430
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Zobrazit postranní panel"
 
-#: app/mainwindow.cpp:1770
+#: app/mainwindow.cpp:1773
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Otevřít obrázek"
 
-#: app/mainwindow.cpp:1830
+#: app/mainwindow.cpp:1833
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "Pozastavit prezentaci"
 
-#: app/mainwindow.cpp:1833
+#: app/mainwindow.cpp:1836
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "Pokračovat v prezentaci"
 
-#: app/mainwindow.cpp:1833
+#: app/mainwindow.cpp:1836
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Spustit promítání"
 
-#: app/mainwindow.cpp:1846
+#: app/mainwindow.cpp:1849
 #, kde-format
 msgid "Save All Changes"
 msgstr "Uložit všechny změny"
 
-#: app/mainwindow.cpp:1847
+#: app/mainwindow.cpp:1850
 #, kde-format
 msgid "Discard Changes"
 msgstr "Zahodit změny"
 
-#: app/mainwindow.cpp:1849
+#: app/mainwindow.cpp:1852
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
@@ -1325,49 +1325,49 @@ msgstr[0] "1 obrázek byl změněn."
 msgstr[1] "%1 obrázky byly změněny."
 msgstr[2] "%1 obrázků bylo změněno."
 
-#: app/mainwindow.cpp:1849
+#: app/mainwindow.cpp:1852
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Pokud nyní ukončíte aplikaci, vaše změny budou ztraceny."
 
-#: app/mainwindow.cpp:1892
+#: app/mainwindow.cpp:1895
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr ""
 "Toto úplně skryje panel nabídky. Můžete ji opětovně zobrazit pomocí %1."
 
-#: app/mainwindow.cpp:1895
+#: app/mainwindow.cpp:1898
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Skrýt nabídku"
 
-#: app/mainwindow.cpp:2116
+#: app/mainwindow.cpp:2119
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "Dosáhli jste prvního dokumentu. Co si přejete udělat?"
 
-#: app/mainwindow.cpp:2117 app/mainwindow.cpp:2131
+#: app/mainwindow.cpp:2120 app/mainwindow.cpp:2134
 #, kde-format
 msgid "Stay There"
 msgstr "Zůstat zde"
 
-#: app/mainwindow.cpp:2118
+#: app/mainwindow.cpp:2121
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "Přejít na poslední dokument"
 
-#: app/mainwindow.cpp:2119 app/mainwindow.cpp:2133
+#: app/mainwindow.cpp:2122 app/mainwindow.cpp:2136
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "Přejít zpět na seznam dokumentů"
 
-#: app/mainwindow.cpp:2130
+#: app/mainwindow.cpp:2133
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "Dosáhli jste posledního dokumentu. Co si přejete udělat?"
 
-#: app/mainwindow.cpp:2132
+#: app/mainwindow.cpp:2135
 #, kde-format
 msgid "Go to the First Document"
 msgstr "Přejít na první dokument"
