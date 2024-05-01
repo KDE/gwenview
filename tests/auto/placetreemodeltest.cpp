@@ -123,7 +123,7 @@ void PlaceTreeModelTest::testListPlaces()
 {
     PlaceTreeModel model(nullptr);
 
-    QCOMPARE(model.rowCount(), 8);
+    QCOMPARE(model.rowCount(), 13);
 
     QModelIndex index;
     index = model.index(0, 0);
