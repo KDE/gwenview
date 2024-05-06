@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-28 00:37+0000\n"
-"PO-Revision-Date: 2024-02-11 05:31+0100\n"
+"PO-Revision-Date: 2024-05-05 18:09+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -44,8 +44,8 @@ msgid ""
 "quality that are faster to load, if available."
 msgstr ""
 "Ebligu ĉi tiun opcion se vi ne havas multe da diskospaco. Ĉi tio evitos "
-"stoki bildetojn sur disko kaj preferos enigitajn bildetojn de pli malalta "
-"kvalito, kiuj estas pli rapide ŝarĝeblaj, se disponeblaj."
+"konservi bildetojn sur disko kaj preferos enigitajn bildetojn de pli malalta "
+"kvalito, kiuj estas pli rapide ŝargeblaj, se disponeblaj."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: app/advancedconfigpage.ui:82
@@ -274,7 +274,7 @@ msgstr "Aldoni Filtrilon"
 #: app/configdialog.cpp:69
 #, kde-format
 msgid "General"
-msgstr "Generalo"
+msgstr "Ĝenerala"
 
 #: app/configdialog.cpp:122
 #, kde-format
@@ -1886,7 +1886,7 @@ msgstr "Foto Importisto"
 msgid ""
 "The device UDI, used to retrieve information about the device (name, icon...)"
 msgstr ""
-"La aparato UDI, uzata por preni informojn pri la aparato (nomo, ikono...)"
+"La aparato UDI, uzata por preni informojn pri la aparato (nomo, piktoramo...)"
 
 #: importer/main.cpp:50
 #, kde-format
@@ -2580,7 +2580,7 @@ msgstr "Dosiertipo"
 #, kde-format
 msgctxt "@title:group General info about the image"
 msgid "General"
-msgstr "Generalo"
+msgstr "Ĝenerala"
 
 #: lib/imagemetainfomodel.cpp:446
 #, kde-format
