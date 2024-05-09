@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-30 02:25+0000\n"
-"PO-Revision-Date: 2024-02-15 17:08+0900\n"
+"PO-Revision-Date: 2024-05-09 06:28+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Lokalize 24.01.95\n"
+"X-Generator: Lokalize 24.04.70\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1634,7 +1634,7 @@ msgstr "放棄修改並重新載入"
 msgctxt "@info"
 msgid ""
 "This image has been modified. Reloading it will discard all your changes."
-msgstr "此影像已被修改。重新載入影像的話會將所做的修改全部丟棄。"
+msgstr "此影像已被修改。重新載入影像的話會捨棄所有變更。"
 
 #: importer/dialogpage.cpp:52
 #, kde-format
