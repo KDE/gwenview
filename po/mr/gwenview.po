@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-28 00:37+0000\n"
+"POT-Creation-Date: 2024-05-12 00:37+0000\n"
 "PO-Revision-Date: 2014-10-28 15:32+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: Marathi <kde-i18n-doc@kde.org>\n"
@@ -1305,102 +1305,102 @@ msgstr "क्रिया"
 msgid "Viewing media"
 msgstr ""
 
-#: app/mainwindow.cpp:1430
+#: app/mainwindow.cpp:1429
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "बाजूची पट्टी लपवा"
 
-#: app/mainwindow.cpp:1430
+#: app/mainwindow.cpp:1429
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "बाजूची पट्टी दर्शवा"
 
-#: app/mainwindow.cpp:1773
+#: app/mainwindow.cpp:1772
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "प्रतिमा उघडा"
 
-#: app/mainwindow.cpp:1833
+#: app/mainwindow.cpp:1832
 #, fuzzy, kde-format
 #| msgid "Slideshow"
 msgid "Pause Slideshow"
 msgstr "स्लाइड प्रदर्शन"
 
-#: app/mainwindow.cpp:1836
+#: app/mainwindow.cpp:1835
 #, fuzzy, kde-format
 #| msgid "Slideshow"
 msgid "Resume Slideshow"
 msgstr "स्लाइड प्रदर्शन"
 
-#: app/mainwindow.cpp:1836
+#: app/mainwindow.cpp:1835
 #, kde-format
 msgid "Start Slideshow"
 msgstr "स्लाइडप्रदर्शन सुरु करा"
 
-#: app/mainwindow.cpp:1849
+#: app/mainwindow.cpp:1848
 #, kde-format
 msgid "Save All Changes"
 msgstr "सर्व बदल साठवा"
 
-#: app/mainwindow.cpp:1850
+#: app/mainwindow.cpp:1849
 #, kde-format
 msgid "Discard Changes"
 msgstr "बदल काढून टाका"
 
-#: app/mainwindow.cpp:1852
+#: app/mainwindow.cpp:1851
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "एक प्रतिमा बदललेली आहे."
 msgstr[1] "%1 प्रतिमा बदललेल्या आहेत."
 
-#: app/mainwindow.cpp:1852
+#: app/mainwindow.cpp:1851
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "तुम्ही आता बहर पडलात तर तुम्ही केलेले बदल हरवतील."
 
-#: app/mainwindow.cpp:1895
+#: app/mainwindow.cpp:1894
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr ""
 
-#: app/mainwindow.cpp:1898
+#: app/mainwindow.cpp:1897
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Hide sidebar"
 msgid "Hide menu bar"
 msgstr "बाजूची पट्टी लपवा"
 
-#: app/mainwindow.cpp:2119
+#: app/mainwindow.cpp:2118
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr ""
 
-#: app/mainwindow.cpp:2120 app/mainwindow.cpp:2134
+#: app/mainwindow.cpp:2119 app/mainwindow.cpp:2133
 #, kde-format
 msgid "Stay There"
 msgstr "तेथे थांबा"
 
-#: app/mainwindow.cpp:2121
+#: app/mainwindow.cpp:2120
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "शेवटच्या  दस्तऐवजाकडे जा"
 
-#: app/mainwindow.cpp:2122 app/mainwindow.cpp:2136
+#: app/mainwindow.cpp:2121 app/mainwindow.cpp:2135
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "दस्तऐवज यादीकडे परत जा"
 
-#: app/mainwindow.cpp:2133
+#: app/mainwindow.cpp:2132
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr ""
 
-#: app/mainwindow.cpp:2135
+#: app/mainwindow.cpp:2134
 #, kde-format
 msgid "Go to the First Document"
 msgstr "पहिल्या दस्तऐवजाकडे जा"
@@ -1452,7 +1452,7 @@ msgctxt ""
 msgid "<filename>%1</filename>: %2"
 msgstr "<filename>%1</filename>: %2"
 
-#: app/savebar.cpp:82
+#: app/savebar.cpp:55
 #, kde-format
 msgid ""
 "You have modified many images. To avoid memory problems, you should save "
@@ -1461,44 +1461,44 @@ msgstr ""
 "तुम्ही अनेक प्रतिमात सुधारणा केल्या आहेत. स्मरणसाठ्यात अडचणी निर्माण होऊ नयेत म्हणून हे बदल "
 "साठवा"
 
-#: app/savebar.cpp:160
+#: app/savebar.cpp:81
 #, kde-format
 msgid "Current image modified"
 msgstr "सध्याची प्रतिमा सुधारित केली"
 
-#: app/savebar.cpp:166
+#: app/savebar.cpp:94
 #, kde-format
 msgid "Previous modified image"
 msgstr "मागील प्रतिमा सुधारित केली"
 
-#: app/savebar.cpp:167
+#: app/savebar.cpp:95
 #, kde-format
 msgid "Next modified image"
 msgstr "पुढील प्रतिमा सुधारित केली"
 
-#: app/savebar.cpp:183
+#: app/savebar.cpp:108
 #, kde-format
 msgid "One image modified"
 msgid_plural "%1 images modified"
 msgstr[0] "एक प्रतिमा बदललेली आहे"
 msgstr[1] "%1 प्रतिमा बदललेल्या आहेत"
 
-#: app/savebar.cpp:185
+#: app/savebar.cpp:110
 #, kde-format
 msgid "Go to first modified image"
 msgstr "पहिल्या सुधारित प्रतिमेकडे जा"
 
-#: app/savebar.cpp:187
+#: app/savebar.cpp:112
 #, kde-format
 msgid "Go to it"
 msgstr "तिच्याकडे जा"
 
-#: app/savebar.cpp:285 app/savebar.cpp:290
+#: app/savebar.cpp:135
 #, kde-format
 msgid "Save All"
 msgstr "सर्व साठवा"
 
-#: app/savebar.cpp:286
+#: app/savebar.cpp:136
 #, fuzzy, kde-format
 #| msgid "Next modified image"
 msgctxt "@info:tooltip"

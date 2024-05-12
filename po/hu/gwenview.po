@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-28 00:37+0000\n"
+"POT-Creation-Date: 2024-05-12 00:37+0000\n"
 "PO-Revision-Date: 2024-01-12 22:19+0100\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -1282,98 +1282,98 @@ msgstr "Műveletek"
 msgid "Viewing media"
 msgstr "Média megtekintése"
 
-#: app/mainwindow.cpp:1430
+#: app/mainwindow.cpp:1429
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Oldalsáv elrejtése"
 
-#: app/mainwindow.cpp:1430
+#: app/mainwindow.cpp:1429
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Oldalsáv megjelenítése"
 
-#: app/mainwindow.cpp:1773
+#: app/mainwindow.cpp:1772
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Kép megnyitása"
 
-#: app/mainwindow.cpp:1833
+#: app/mainwindow.cpp:1832
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "Diavetítés szüneteltetése"
 
-#: app/mainwindow.cpp:1836
+#: app/mainwindow.cpp:1835
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "Diavetítés folytatása"
 
-#: app/mainwindow.cpp:1836
+#: app/mainwindow.cpp:1835
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Diavetítés indítása"
 
-#: app/mainwindow.cpp:1849
+#: app/mainwindow.cpp:1848
 #, kde-format
 msgid "Save All Changes"
 msgstr "Minden módosítás mentése"
 
-#: app/mainwindow.cpp:1850
+#: app/mainwindow.cpp:1849
 #, kde-format
 msgid "Discard Changes"
 msgstr "A módosítások eldobása"
 
-#: app/mainwindow.cpp:1852
+#: app/mainwindow.cpp:1851
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "Egy képben történt változás."
 msgstr[1] "%1 képben történt változás."
 
-#: app/mainwindow.cpp:1852
+#: app/mainwindow.cpp:1851
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Ha most kilép, a módosítások elvesznek."
 
-#: app/mainwindow.cpp:1895
+#: app/mainwindow.cpp:1894
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr "Teljesen elrejti a menüsávot. Ezzel a paranccsal állítható vissza: %1."
 
-#: app/mainwindow.cpp:1898
+#: app/mainwindow.cpp:1897
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Menüsáv elrejtése"
 
-#: app/mainwindow.cpp:2119
+#: app/mainwindow.cpp:2118
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "Elérte az első dokumentumot, mit szeretne tenni?"
 
-#: app/mainwindow.cpp:2120 app/mainwindow.cpp:2134
+#: app/mainwindow.cpp:2119 app/mainwindow.cpp:2133
 #, kde-format
 msgid "Stay There"
 msgstr "Maradjon itt"
 
-#: app/mainwindow.cpp:2121
+#: app/mainwindow.cpp:2120
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "Ugrás az utolsó dokumentumra"
 
-#: app/mainwindow.cpp:2122 app/mainwindow.cpp:2136
+#: app/mainwindow.cpp:2121 app/mainwindow.cpp:2135
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "Ugrás vissza a dokumentumlistához"
 
-#: app/mainwindow.cpp:2133
+#: app/mainwindow.cpp:2132
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "Elérte az utolsó dokumentumot, mit szeretne tenni?"
 
-#: app/mainwindow.cpp:2135
+#: app/mainwindow.cpp:2134
 #, kde-format
 msgid "Go to the First Document"
 msgstr "Ugrás az első dokumentumra"
@@ -1423,7 +1423,7 @@ msgctxt ""
 msgid "<filename>%1</filename>: %2"
 msgstr "<filename>%1</filename>: %2"
 
-#: app/savebar.cpp:82
+#: app/savebar.cpp:55
 #, kde-format
 msgid ""
 "You have modified many images. To avoid memory problems, you should save "
@@ -1432,44 +1432,44 @@ msgstr ""
 "Sok kép módosult, a memóriaproblémák megelőzése érdekében célszerű elmenteni "
 "a változásokat."
 
-#: app/savebar.cpp:160
+#: app/savebar.cpp:81
 #, kde-format
 msgid "Current image modified"
 msgstr "Az aktuális kép megváltozott"
 
-#: app/savebar.cpp:166
+#: app/savebar.cpp:94
 #, kde-format
 msgid "Previous modified image"
 msgstr "Előző módosított kép"
 
-#: app/savebar.cpp:167
+#: app/savebar.cpp:95
 #, kde-format
 msgid "Next modified image"
 msgstr "Következő módosított kép"
 
-#: app/savebar.cpp:183
+#: app/savebar.cpp:108
 #, kde-format
 msgid "One image modified"
 msgid_plural "%1 images modified"
 msgstr[0] "Egy kép megváltozott"
 msgstr[1] "%1 kép megváltozott"
 
-#: app/savebar.cpp:185
+#: app/savebar.cpp:110
 #, kde-format
 msgid "Go to first modified image"
 msgstr "Ugrás az első megváltozott képre"
 
-#: app/savebar.cpp:187
+#: app/savebar.cpp:112
 #, kde-format
 msgid "Go to it"
 msgstr "Ugrás"
 
-#: app/savebar.cpp:285 app/savebar.cpp:290
+#: app/savebar.cpp:135
 #, kde-format
 msgid "Save All"
 msgstr "Minden mentése"
 
-#: app/savebar.cpp:286
+#: app/savebar.cpp:136
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Save all modified images"

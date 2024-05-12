@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-28 00:37+0000\n"
+"POT-Creation-Date: 2024-05-12 00:37+0000\n"
 "PO-Revision-Date: 2023-09-27 17:55+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -1295,62 +1295,62 @@ msgstr "Toiminnot"
 msgid "Viewing media"
 msgstr "Katsellaan mediaa"
 
-#: app/mainwindow.cpp:1430
+#: app/mainwindow.cpp:1429
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Piilota sivupalkki"
 
-#: app/mainwindow.cpp:1430
+#: app/mainwindow.cpp:1429
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Näytä sivupalkki"
 
-#: app/mainwindow.cpp:1773
+#: app/mainwindow.cpp:1772
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Avaa kuva"
 
-#: app/mainwindow.cpp:1833
+#: app/mainwindow.cpp:1832
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "Keskeytä diaesitys"
 
-#: app/mainwindow.cpp:1836
+#: app/mainwindow.cpp:1835
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "Jatka diaesitystä"
 
-#: app/mainwindow.cpp:1836
+#: app/mainwindow.cpp:1835
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Aloita diaesitys"
 
-#: app/mainwindow.cpp:1849
+#: app/mainwindow.cpp:1848
 #, kde-format
 msgid "Save All Changes"
 msgstr "Tallenna kaikki muutokset"
 
-#: app/mainwindow.cpp:1850
+#: app/mainwindow.cpp:1849
 #, kde-format
 msgid "Discard Changes"
 msgstr "Hylkää muutokset"
 
-#: app/mainwindow.cpp:1852
+#: app/mainwindow.cpp:1851
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "Yhtä kuvaa on muutettu"
 msgstr[1] "%1 kuvaa on muutettu"
 
-#: app/mainwindow.cpp:1852
+#: app/mainwindow.cpp:1851
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Jos lopetat nyt, menetät muutokset."
 
-#: app/mainwindow.cpp:1895
+#: app/mainwindow.cpp:1894
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
@@ -1359,37 +1359,37 @@ msgstr ""
 "%1.Tämä piilottaa valikkorivin näkyvistä. Sen saa uudellen näkyviin "
 "näppäimellä %1."
 
-#: app/mainwindow.cpp:1898
+#: app/mainwindow.cpp:1897
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Piilota valikkorivi"
 
-#: app/mainwindow.cpp:2119
+#: app/mainwindow.cpp:2118
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "Saavutit ensimmäisen tiedoston. Mitä tehdään?"
 
-#: app/mainwindow.cpp:2120 app/mainwindow.cpp:2134
+#: app/mainwindow.cpp:2119 app/mainwindow.cpp:2133
 #, kde-format
 msgid "Stay There"
 msgstr "Pysy tässä"
 
-#: app/mainwindow.cpp:2121
+#: app/mainwindow.cpp:2120
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "Siirry viimeiseen tiedostoon"
 
-#: app/mainwindow.cpp:2122 app/mainwindow.cpp:2136
+#: app/mainwindow.cpp:2121 app/mainwindow.cpp:2135
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "Palaa tiedostoluetteloon"
 
-#: app/mainwindow.cpp:2133
+#: app/mainwindow.cpp:2132
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "Saavutit viimeisen tiedoston. Mitä tehdään?"
 
-#: app/mainwindow.cpp:2135
+#: app/mainwindow.cpp:2134
 #, kde-format
 msgid "Go to the First Document"
 msgstr "Siirry ensimmäiseen tiedostoon"
@@ -1439,7 +1439,7 @@ msgctxt ""
 msgid "<filename>%1</filename>: %2"
 msgstr "<filename>%1</filename>: %2"
 
-#: app/savebar.cpp:82
+#: app/savebar.cpp:55
 #, kde-format
 msgid ""
 "You have modified many images. To avoid memory problems, you should save "
@@ -1448,44 +1448,44 @@ msgstr ""
 "Monia kuvia on muutettu. Muistiongelmien välttämiseksi muutokset tulisi "
 "tallentaa."
 
-#: app/savebar.cpp:160
+#: app/savebar.cpp:81
 #, kde-format
 msgid "Current image modified"
 msgstr "Nykyistä kuvaa muutettu"
 
-#: app/savebar.cpp:166
+#: app/savebar.cpp:94
 #, kde-format
 msgid "Previous modified image"
 msgstr "Edellinen muutettu kuva"
 
-#: app/savebar.cpp:167
+#: app/savebar.cpp:95
 #, kde-format
 msgid "Next modified image"
 msgstr "Seuraava muutettu kuva"
 
-#: app/savebar.cpp:183
+#: app/savebar.cpp:108
 #, kde-format
 msgid "One image modified"
 msgid_plural "%1 images modified"
 msgstr[0] "Yhtä kuvaa muutettu"
 msgstr[1] "%1 kuvaa muutettu"
 
-#: app/savebar.cpp:185
+#: app/savebar.cpp:110
 #, kde-format
 msgid "Go to first modified image"
 msgstr "Siirry ensimmäiseen muutettuun kuvaan"
 
-#: app/savebar.cpp:187
+#: app/savebar.cpp:112
 #, kde-format
 msgid "Go to it"
 msgstr "Siirry kohteeseen"
 
-#: app/savebar.cpp:285 app/savebar.cpp:290
+#: app/savebar.cpp:135
 #, kde-format
 msgid "Save All"
 msgstr "Tallenna kaikki"
 
-#: app/savebar.cpp:286
+#: app/savebar.cpp:136
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Save all modified images"

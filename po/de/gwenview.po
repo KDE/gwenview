@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-28 00:37+0000\n"
+"POT-Creation-Date: 2024-05-12 00:37+0000\n"
 "PO-Revision-Date: 2023-06-12 00:16+0200\n"
 "Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -1278,62 +1278,62 @@ msgstr "Aktionen"
 msgid "Viewing media"
 msgstr ""
 
-#: app/mainwindow.cpp:1430
+#: app/mainwindow.cpp:1429
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Seitenleiste ausblenden"
 
-#: app/mainwindow.cpp:1430
+#: app/mainwindow.cpp:1429
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Seitenleiste anzeigen"
 
-#: app/mainwindow.cpp:1773
+#: app/mainwindow.cpp:1772
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Bild öffnen"
 
-#: app/mainwindow.cpp:1833
+#: app/mainwindow.cpp:1832
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "Diaschau anhalten"
 
-#: app/mainwindow.cpp:1836
+#: app/mainwindow.cpp:1835
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "Diaschau fortsetzen"
 
-#: app/mainwindow.cpp:1836
+#: app/mainwindow.cpp:1835
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Diaschau starten"
 
-#: app/mainwindow.cpp:1849
+#: app/mainwindow.cpp:1848
 #, kde-format
 msgid "Save All Changes"
 msgstr "Alle Änderungen speichern"
 
-#: app/mainwindow.cpp:1850
+#: app/mainwindow.cpp:1849
 #, kde-format
 msgid "Discard Changes"
 msgstr "Änderungen verwerfen"
 
-#: app/mainwindow.cpp:1852
+#: app/mainwindow.cpp:1851
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "Ein Bild ist geändert worden."
 msgstr[1] "%1 Bilder sind geändert worden."
 
-#: app/mainwindow.cpp:1852
+#: app/mainwindow.cpp:1851
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Wenn Sie jetzt beenden, werden alle Änderungen verworfen."
 
-#: app/mainwindow.cpp:1895
+#: app/mainwindow.cpp:1894
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
@@ -1341,37 +1341,37 @@ msgstr ""
 "Hiermit wird das Menü vollständig ausgeblendet. Geben Sie %1 ein, um es "
 "wieder anzuzeigen."
 
-#: app/mainwindow.cpp:1898
+#: app/mainwindow.cpp:1897
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Menüleiste ausblenden"
 
-#: app/mainwindow.cpp:2119
+#: app/mainwindow.cpp:2118
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "Sie sind wieder ersten Dokument angekommen, was möchten Sie tun?"
 
-#: app/mainwindow.cpp:2120 app/mainwindow.cpp:2134
+#: app/mainwindow.cpp:2119 app/mainwindow.cpp:2133
 #, kde-format
 msgid "Stay There"
 msgstr "Hier bleiben"
 
-#: app/mainwindow.cpp:2121
+#: app/mainwindow.cpp:2120
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "Zum letzten Dokument gehen"
 
-#: app/mainwindow.cpp:2122 app/mainwindow.cpp:2136
+#: app/mainwindow.cpp:2121 app/mainwindow.cpp:2135
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "Zurück zur Übersicht gehen"
 
-#: app/mainwindow.cpp:2133
+#: app/mainwindow.cpp:2132
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "Sie sind beim letzten Dokument angekommen, was möchten Sie tun?"
 
-#: app/mainwindow.cpp:2135
+#: app/mainwindow.cpp:2134
 #, kde-format
 msgid "Go to the First Document"
 msgstr "Zum ersten Dokument gehen"
@@ -1421,7 +1421,7 @@ msgctxt ""
 msgid "<filename>%1</filename>: %2"
 msgstr "<filename>%1</filename>: %2"
 
-#: app/savebar.cpp:82
+#: app/savebar.cpp:55
 #, kde-format
 msgid ""
 "You have modified many images. To avoid memory problems, you should save "
@@ -1430,44 +1430,44 @@ msgstr ""
 "Sie haben viele Bilder bearbeitet. Um Speicherprobleme zu vermeiden, sollten "
 "Sie Ihre Änderungen speichern."
 
-#: app/savebar.cpp:160
+#: app/savebar.cpp:81
 #, kde-format
 msgid "Current image modified"
 msgstr "Aktuelles Bild geändert"
 
-#: app/savebar.cpp:166
+#: app/savebar.cpp:94
 #, kde-format
 msgid "Previous modified image"
 msgstr "Vorheriges geändertes Bild"
 
-#: app/savebar.cpp:167
+#: app/savebar.cpp:95
 #, kde-format
 msgid "Next modified image"
 msgstr "Nächstes geändertes Bild"
 
-#: app/savebar.cpp:183
+#: app/savebar.cpp:108
 #, kde-format
 msgid "One image modified"
 msgid_plural "%1 images modified"
 msgstr[0] "Ein Bild geändert"
 msgstr[1] "%1 Bilder geändert"
 
-#: app/savebar.cpp:185
+#: app/savebar.cpp:110
 #, kde-format
 msgid "Go to first modified image"
 msgstr "Zum ersten geänderten Bild gehen"
 
-#: app/savebar.cpp:187
+#: app/savebar.cpp:112
 #, kde-format
 msgid "Go to it"
 msgstr "Dorthin gehen"
 
-#: app/savebar.cpp:285 app/savebar.cpp:290
+#: app/savebar.cpp:135
 #, kde-format
 msgid "Save All"
 msgstr "Alle speichern"
 
-#: app/savebar.cpp:286
+#: app/savebar.cpp:136
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Save all modified images"

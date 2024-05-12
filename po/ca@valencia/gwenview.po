@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-28 00:37+0000\n"
+"POT-Creation-Date: 2024-05-12 00:37+0000\n"
 "PO-Revision-Date: 2024-02-11 10:56+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -47,7 +47,7 @@ msgid ""
 "storing thumbnails on disk and will prefer embedded thumbnails of lower "
 "quality that are faster to load, if available."
 msgstr ""
-"Seleccioneu esta opció si no teniu molt espai de disc. Açò evitarà "
+"Marqueu esta opció si no teniu molt espai de disc. Açò evitarà "
 "l'emmagatzematge de miniatures al disc i es preferiran les miniatures "
 "incrustades de qualitat més baixa que són més ràpides en carregar, si estan "
 "disponibles."
@@ -387,25 +387,25 @@ msgstr "Edita"
 #, kde-format
 msgctxt "Verb"
 msgid "Copy To..."
-msgstr "Copia a..."
+msgstr "Copia a…"
 
 #: app/fileopscontextmanageritem.cpp:149
 #, kde-format
 msgctxt "Verb"
 msgid "Move To..."
-msgstr "Mou cap a..."
+msgstr "Mou cap a…"
 
 #: app/fileopscontextmanageritem.cpp:154
 #, kde-format
 msgctxt "Verb: create link to the file where user wants"
 msgid "Link To..."
-msgstr "Enllaça a..."
+msgstr "Enllaça amb…"
 
 #: app/fileopscontextmanageritem.cpp:159
 #, kde-format
 msgctxt "Verb"
 msgid "Rename..."
-msgstr "Canvia el nom..."
+msgstr "Canvia el nom…"
 
 #: app/fileopscontextmanageritem.cpp:164
 #, kde-format
@@ -426,7 +426,7 @@ msgstr "Propietats"
 #: app/fileopscontextmanageritem.cpp:180
 #, kde-format
 msgid "Create Folder..."
-msgstr "Crea una carpeta..."
+msgstr "Crea una carpeta…"
 
 #: app/fileopscontextmanageritem.cpp:184
 #, kde-format
@@ -447,7 +447,7 @@ msgstr "Obri la carpeta contenidora"
 #: app/fileopscontextmanageritem.cpp:387
 #, kde-format
 msgid "Other Application..."
-msgstr "Altres aplicacions..."
+msgstr "Altres aplicacions…"
 
 #: app/filtercontroller.cpp:59
 #, kde-format
@@ -557,7 +557,7 @@ msgstr "Informació de la imatge"
 #: app/fullscreenconfigwidget.ui:101
 #, kde-format
 msgid "Select Image Information to Display..."
-msgstr "Seleccioneu la informació que s'haja de mostrar de la imatge..."
+msgstr "Seleccioneu la informació que s'haja de mostrar de la imatge…"
 
 #. i18n: ectx: property (title), widget (QGroupBox, mThumbnailGroupBox)
 #: app/fullscreenconfigwidget.ui:111
@@ -1019,7 +1019,7 @@ msgstr "%1:"
 #, kde-format
 msgctxt "@action show more image meta info"
 msgid "Show more details..."
-msgstr "Mostra més detalls..."
+msgstr "Mostra més detalls…"
 
 #: app/infocontextmanageritem.cpp:242
 #, kde-format
@@ -1281,62 +1281,62 @@ msgstr "Operacions"
 msgid "Viewing media"
 msgstr "Visualització multimèdia"
 
-#: app/mainwindow.cpp:1430
+#: app/mainwindow.cpp:1429
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Oculta la barra lateral"
 
-#: app/mainwindow.cpp:1430
+#: app/mainwindow.cpp:1429
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Mostra la barra lateral"
 
-#: app/mainwindow.cpp:1773
+#: app/mainwindow.cpp:1772
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Obri una imatge"
 
-#: app/mainwindow.cpp:1833
+#: app/mainwindow.cpp:1832
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "Fes pausa en la presentació de diapositives"
 
-#: app/mainwindow.cpp:1836
+#: app/mainwindow.cpp:1835
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "Reprén la presentació de diapositives"
 
-#: app/mainwindow.cpp:1836
+#: app/mainwindow.cpp:1835
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Inicia la presentació de diapositives"
 
-#: app/mainwindow.cpp:1849
+#: app/mainwindow.cpp:1848
 #, kde-format
 msgid "Save All Changes"
 msgstr "Guarda tots els canvis"
 
-#: app/mainwindow.cpp:1850
+#: app/mainwindow.cpp:1849
 #, kde-format
 msgid "Discard Changes"
 msgstr "Descarta els canvis"
 
-#: app/mainwindow.cpp:1852
+#: app/mainwindow.cpp:1851
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "S'ha modificat una imatge."
 msgstr[1] "S'han modificat %1 imatges."
 
-#: app/mainwindow.cpp:1852
+#: app/mainwindow.cpp:1851
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Si eixiu ara, els canvis es perdran."
 
-#: app/mainwindow.cpp:1895
+#: app/mainwindow.cpp:1894
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
@@ -1344,37 +1344,37 @@ msgstr ""
 "Ocultarà completament la barra de menús. La podeu tornar a mostrar prement "
 "%1."
 
-#: app/mainwindow.cpp:1898
+#: app/mainwindow.cpp:1897
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Oculta la barra de menús"
 
-#: app/mainwindow.cpp:2119
+#: app/mainwindow.cpp:2118
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "Heu arribat al primer document. Què voleu fer?"
 
-#: app/mainwindow.cpp:2120 app/mainwindow.cpp:2134
+#: app/mainwindow.cpp:2119 app/mainwindow.cpp:2133
 #, kde-format
 msgid "Stay There"
 msgstr "Canvia allí"
 
-#: app/mainwindow.cpp:2121
+#: app/mainwindow.cpp:2120
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "Ves fins a l'últim document"
 
-#: app/mainwindow.cpp:2122 app/mainwindow.cpp:2136
+#: app/mainwindow.cpp:2121 app/mainwindow.cpp:2135
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "Torna a la llista de documents"
 
-#: app/mainwindow.cpp:2133
+#: app/mainwindow.cpp:2132
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "Heu arribat a l'últim document. Què voleu fer?"
 
-#: app/mainwindow.cpp:2135
+#: app/mainwindow.cpp:2134
 #, kde-format
 msgid "Go to the First Document"
 msgstr "Ves fins al primer document"
@@ -1401,7 +1401,7 @@ msgstr "Canvi de nom"
 #, kde-format
 msgctxt "@info:progress saving all image changes"
 msgid "Saving..."
-msgstr "S'està guardant..."
+msgstr "S'està guardant…"
 
 #: app/saveallhelper.cpp:57
 #, kde-format
@@ -1424,7 +1424,7 @@ msgctxt ""
 msgid "<filename>%1</filename>: %2"
 msgstr "<filename>%1</filename>: %2"
 
-#: app/savebar.cpp:82
+#: app/savebar.cpp:55
 #, kde-format
 msgid ""
 "You have modified many images. To avoid memory problems, you should save "
@@ -1433,44 +1433,44 @@ msgstr ""
 "Heu modificat moltes imatges. Per a evitar problemes de memòria, hauríeu de "
 "guardar els canvis."
 
-#: app/savebar.cpp:160
+#: app/savebar.cpp:81
 #, kde-format
 msgid "Current image modified"
 msgstr "S'ha modificat la imatge actual"
 
-#: app/savebar.cpp:166
+#: app/savebar.cpp:94
 #, kde-format
 msgid "Previous modified image"
 msgstr "S'ha modificat la imatge anterior"
 
-#: app/savebar.cpp:167
+#: app/savebar.cpp:95
 #, kde-format
 msgid "Next modified image"
 msgstr "S'ha modificat la imatge posterior"
 
-#: app/savebar.cpp:183
+#: app/savebar.cpp:108
 #, kde-format
 msgid "One image modified"
 msgid_plural "%1 images modified"
 msgstr[0] "S'ha modificat una imatge"
 msgstr[1] "S'han modificat %1 imatges"
 
-#: app/savebar.cpp:185
+#: app/savebar.cpp:110
 #, kde-format
 msgid "Go to first modified image"
 msgstr "Ves fins a la primera imatge modificada"
 
-#: app/savebar.cpp:187
+#: app/savebar.cpp:112
 #, kde-format
 msgid "Go to it"
 msgstr "Ves-hi"
 
-#: app/savebar.cpp:285 app/savebar.cpp:290
+#: app/savebar.cpp:135
 #, kde-format
 msgid "Save All"
 msgstr "Guarda-ho tot"
 
-#: app/savebar.cpp:286
+#: app/savebar.cpp:136
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Save all modified images"
@@ -1670,12 +1670,12 @@ msgstr ""
 #: importer/dialogpage.cpp:52
 #, kde-format
 msgid "Show failed files..."
-msgstr "Mostra els fitxers que han fallat..."
+msgstr "Mostra els fitxers que han fallat…"
 
 #: importer/dialogpage.cpp:57
 #, kde-format
 msgid "Show failed subfolders..."
-msgstr "Mostra les subcarpetes que han fallat..."
+msgstr "Mostra les subcarpetes que han fallat…"
 
 #: importer/dialogpage.cpp:71
 #, kde-format
@@ -1897,7 +1897,7 @@ msgid ""
 "The device UDI, used to retrieve information about the device (name, icon...)"
 msgstr ""
 "L'UDI del dispositiu, utilitzat per a recuperar informació quant al "
-"dispositiu (nom, icona...)"
+"dispositiu (nom, icona…)"
 
 #: importer/main.cpp:50
 #, kde-format
@@ -1928,7 +1928,7 @@ msgstr "Carpeta d'origen no vàlida."
 #: importer/progresspage.ui:30
 #, kde-format
 msgid "Importing documents..."
-msgstr "S'estan important els documents..."
+msgstr "S'estan important els documents…"
 
 #: importer/thumbnailpage.cpp:231
 #, kde-format
@@ -2068,7 +2068,7 @@ msgstr "Seleccioneu els documents que s'han d'importar"
 #: importer/thumbnailpage.ui:185
 #, kde-format
 msgid "Settings..."
-msgstr "Configuració..."
+msgstr "Configuració…"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: importer/thumbnailpage.ui:201
@@ -2140,7 +2140,7 @@ msgstr "Apaïsat"
 #: lib/crop/cropwidget.cpp:204 lib/crop/cropwidget.cpp:211
 #, kde-format
 msgid "ISO (A4, A3...)"
-msgstr "ISO (A4, A3...)"
+msgstr "ISO (A4, A3…)"
 
 #: lib/crop/cropwidget.cpp:205 lib/crop/cropwidget.cpp:212
 #, kde-format
