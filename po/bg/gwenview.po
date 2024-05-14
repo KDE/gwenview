@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-12 00:37+0000\n"
-"PO-Revision-Date: 2024-02-11 16:09+0100\n"
+"PO-Revision-Date: 2024-05-13 22:47+0200\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
 "Language: bg\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.08.4\n"
+"X-Generator: Lokalize 24.02.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -384,25 +384,25 @@ msgstr "Редактиране"
 #, kde-format
 msgctxt "Verb"
 msgid "Copy To..."
-msgstr "Копиране в..."
+msgstr "Копиране в…"
 
 #: app/fileopscontextmanageritem.cpp:149
 #, kde-format
 msgctxt "Verb"
 msgid "Move To..."
-msgstr "Преместване в..."
+msgstr "Преместване в…"
 
 #: app/fileopscontextmanageritem.cpp:154
 #, kde-format
 msgctxt "Verb: create link to the file where user wants"
 msgid "Link To..."
-msgstr "Връзка към..."
+msgstr "Връзка към…"
 
 #: app/fileopscontextmanageritem.cpp:159
 #, kde-format
 msgctxt "Verb"
 msgid "Rename..."
-msgstr "Преименуване..."
+msgstr "Преименуване…"
 
 #: app/fileopscontextmanageritem.cpp:164
 #, kde-format
@@ -423,7 +423,7 @@ msgstr "Информация"
 #: app/fileopscontextmanageritem.cpp:180
 #, kde-format
 msgid "Create Folder..."
-msgstr "Създаване на директория..."
+msgstr "Създаване на директория…"
 
 #: app/fileopscontextmanageritem.cpp:184
 #, kde-format
@@ -444,7 +444,7 @@ msgstr "Отваряне на съдържащата папка"
 #: app/fileopscontextmanageritem.cpp:387
 #, kde-format
 msgid "Other Application..."
-msgstr "Друга програма..."
+msgstr "Друга програма…"
 
 #: app/filtercontroller.cpp:59
 #, kde-format
@@ -554,7 +554,7 @@ msgstr "Данни на изображението"
 #: app/fullscreenconfigwidget.ui:101
 #, kde-format
 msgid "Select Image Information to Display..."
-msgstr "Избор на данни на изображението за показване..."
+msgstr "Избор на данни на изображението за показване…"
 
 #. i18n: ectx: property (title), widget (QGroupBox, mThumbnailGroupBox)
 #: app/fullscreenconfigwidget.ui:111
@@ -1016,7 +1016,7 @@ msgstr "%1:"
 #, kde-format
 msgctxt "@action show more image meta info"
 msgid "Show more details..."
-msgstr "Показване на повече подробности..."
+msgstr "Показване на повече подробности…"
 
 #: app/infocontextmanageritem.cpp:242
 #, kde-format
@@ -1398,7 +1398,7 @@ msgstr "Преименуване"
 #, kde-format
 msgctxt "@info:progress saving all image changes"
 msgid "Saving..."
-msgstr "Запис..."
+msgstr "Запис…"
 
 #: app/saveallhelper.cpp:57
 #, kde-format
@@ -1666,12 +1666,12 @@ msgstr ""
 #: importer/dialogpage.cpp:52
 #, kde-format
 msgid "Show failed files..."
-msgstr "Показване на неуспешните файлове..."
+msgstr "Показване на неуспешните файлове…"
 
 #: importer/dialogpage.cpp:57
 #, kde-format
 msgid "Show failed subfolders..."
-msgstr "Показване на неуспешните подпапки..."
+msgstr "Показване на неуспешните подпапки…"
 
 #: importer/dialogpage.cpp:71
 #, kde-format
@@ -1924,7 +1924,7 @@ msgstr "Невалидна изходна папка."
 #: importer/progresspage.ui:30
 #, kde-format
 msgid "Importing documents..."
-msgstr "Внасяне на документи..."
+msgstr "Внасяне на документи…"
 
 #: importer/thumbnailpage.cpp:231
 #, kde-format
@@ -2062,7 +2062,7 @@ msgstr "Изберете документи за внасяне"
 #: importer/thumbnailpage.ui:185
 #, kde-format
 msgid "Settings..."
-msgstr "Настройки..."
+msgstr "Настройки…"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: importer/thumbnailpage.ui:201
@@ -2134,7 +2134,7 @@ msgstr "Хоризонтално"
 #: lib/crop/cropwidget.cpp:204 lib/crop/cropwidget.cpp:211
 #, kde-format
 msgid "ISO (A4, A3...)"
-msgstr "ISO (A4, A3...)"
+msgstr "ISO (A4, A3…)"
 
 #: lib/crop/cropwidget.cpp:205 lib/crop/cropwidget.cpp:212
 #, kde-format
