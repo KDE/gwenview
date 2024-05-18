@@ -2,15 +2,15 @@
 # Copyright (C) 2007 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gwenview package.
 # Pierre-Marie Pédrot <pedrotpmx@wanadoo.fr>, 2007.
-# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
+# Oliver Kellogg <olivermkellogg@gmail.com>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-30 02:25+0000\n"
-"PO-Revision-Date: 2024-02-11 05:31+0100\n"
-"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
+"PO-Revision-Date: 2024-05-17 12:22+0100\n"
+"Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
@@ -27,7 +27,7 @@ msgstr "Pierre-Marie Pédrot,Oliver Kellogg"
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "pedrotpmx@wanadoo.fr,okellogg@users.sourceforge.net"
+msgstr "pedrotpmx@wanadoo.fr,olivermkellogg@gmail.com"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_LowResourceUsageMode)
 #: app/advancedconfigpage.ui:28
@@ -44,8 +44,8 @@ msgid ""
 "quality that are faster to load, if available."
 msgstr ""
 "Ebligu ĉi tiun opcion se vi ne havas multe da diskospaco. Ĉi tio evitos "
-"stoki bildetojn sur disko kaj preferos enigitajn bildetojn de pli malalta "
-"kvalito, kiuj estas pli rapide ŝarĝeblaj, se disponeblaj."
+"konservi bildetojn sur disko kaj preferos enigitajn bildetojn de pli malalta "
+"kvalito, kiuj estas pli rapide ŝargeblaj, se disponeblaj."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: app/advancedconfigpage.ui:82
@@ -274,7 +274,7 @@ msgstr "Aldoni Filtrilon"
 #: app/configdialog.cpp:69
 #, kde-format
 msgid "General"
-msgstr "Generalo"
+msgstr "Ĝenerala"
 
 #: app/configdialog.cpp:122
 #, kde-format
@@ -406,7 +406,7 @@ msgstr "Alinomi..."
 #, kde-format
 msgctxt "Verb"
 msgid "Trash"
-msgstr "Rubigi"
+msgstr "Rubujo"
 
 #: app/fileopscontextmanageritem.cpp:171
 #, kde-format
@@ -1886,7 +1886,7 @@ msgstr "Foto Importisto"
 msgid ""
 "The device UDI, used to retrieve information about the device (name, icon...)"
 msgstr ""
-"La aparato UDI, uzata por preni informojn pri la aparato (nomo, ikono...)"
+"La aparato UDI, uzata por preni informojn pri la aparato (nomo, piktoramo...)"
 
 #: importer/main.cpp:50
 #, kde-format
@@ -2083,7 +2083,7 @@ msgstr "Ellaboranto"
 #: lib/bcg/bcgimageoperation.cpp:69
 #, kde-format
 msgid "Adjust Colors"
-msgstr "Alĝustigu Kolorojn"
+msgstr "Alĝustigi Kolorojn"
 
 #: lib/bcg/bcgwidget.cpp:51
 #, kde-format
@@ -2580,7 +2580,7 @@ msgstr "Dosiertipo"
 #, kde-format
 msgctxt "@title:group General info about the image"
 msgid "General"
-msgstr "Generalo"
+msgstr "Ĝenerala"
 
 #: lib/imagemetainfomodel.cpp:446
 #, kde-format
@@ -2718,13 +2718,13 @@ msgstr "eraro"
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Resize"
-msgstr "Regrandigi"
+msgstr "Aligrandigi"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, ResizeImageWidget)
 #: lib/resize/resizeimagewidget.ui:14
 #, kde-format
 msgid "Resize Image"
-msgstr "Regrandigi Bildon"
+msgstr "Aligrandigi Bildon"
 
 #. i18n: ectx: property (text), widget (QLabel, mEstimatedSizeLabel)
 #: lib/resize/resizeimagewidget.ui:20
