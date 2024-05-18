@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-12 00:37+0000\n"
-"PO-Revision-Date: 2024-05-05 18:09+0100\n"
+"PO-Revision-Date: 2024-05-17 12:22+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -2083,7 +2083,7 @@ msgstr "Ellaboranto"
 #: lib/bcg/bcgimageoperation.cpp:69
 #, kde-format
 msgid "Adjust Colors"
-msgstr "Alĝustigu Kolorojn"
+msgstr "Alĝustigi Kolorojn"
 
 #: lib/bcg/bcgwidget.cpp:51
 #, kde-format
@@ -2718,13 +2718,13 @@ msgstr "eraro"
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Resize"
-msgstr "Regrandigi"
+msgstr "Aligrandigi"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, ResizeImageWidget)
 #: lib/resize/resizeimagewidget.ui:14
 #, kde-format
 msgid "Resize Image"
-msgstr "Regrandigi Bildon"
+msgstr "Aligrandigi Bildon"
 
 #. i18n: ectx: property (text), widget (QLabel, mEstimatedSizeLabel)
 #: lib/resize/resizeimagewidget.ui:20
@@ -2797,13 +2797,13 @@ msgstr "Hazarde"
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Right"
-msgstr "Turni dekstre"
+msgstr "Rotacii Dekstren"
 
 #: lib/transformimageoperation.cpp:61
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Left"
-msgstr "Turni maldekstre"
+msgstr "Rotacii Maldekstren"
 
 #: lib/transformimageoperation.cpp:64
 #, kde-format
