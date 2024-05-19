@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-30 02:25+0000\n"
-"PO-Revision-Date: 2024-01-11 10:14+0300\n"
+"PO-Revision-Date: 2024-05-18 10:00+0300\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
 "Language: ru\n"
@@ -1116,10 +1116,9 @@ msgid "Start in slideshow mode"
 msgstr "Запустить в режиме слайд-шоу."
 
 #: app/main.cpp:191
-#, fuzzy, kde-format
-#| msgid "Start in slideshow mode"
+#, kde-format
 msgid "Start in spotlight mode"
-msgstr "Запустить в режиме слайд-шоу."
+msgstr ""
 
 # BUGME: why "folderS"? Implementation of StartHelper::parseArgs() in app/main.cpp suggests that it should be "file or URLs". --aspotashev
 #: app/main.cpp:192
