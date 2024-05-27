@@ -2797,13 +2797,13 @@ msgstr "Hazarde"
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Right"
-msgstr "Turni dekstre"
+msgstr "Rotacii Dekstren"
 
 #: lib/transformimageoperation.cpp:61
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Left"
-msgstr "Turni maldekstre"
+msgstr "Rotacii Maldekstren"
 
 #: lib/transformimageoperation.cpp:64
 #, kde-format
