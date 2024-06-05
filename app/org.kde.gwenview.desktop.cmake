@@ -101,6 +101,7 @@ GenericName[pa]=ਚਿੱਤਰ ਦਰਸ਼ਕ
 GenericName[pl]=Przeglądarka obrazów
 GenericName[pt_BR]=Visualizador de imagens
 GenericName[ru]=Приложение для просмотра изображений
+GenericName[sk]=Prezerač obrázkov
 GenericName[sl]=Pregledovalnik slik
 GenericName[ta]=படக் காட்டி
 GenericName[tr]=Görsel Görüntüleyicisi
