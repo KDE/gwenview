@@ -6,7 +6,7 @@
 # Elias Julkunen <elias.julkunen@gmail.com>, 2008, 2010.
 # Sasu Karttunen <sasu.karttunen@tpnet.fi>, 2010.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2010, 2011, 2012, 2013, 2014, 2015, 2016.
-# Tommi Nieminen <translator@legisign.org>, 2011, 2016, 2018, 2019, 2020, 2021, 2022, 2023.
+# Tommi Nieminen <translator@legisign.org>, 2011, 2016, 2018, 2019, 2020, 2021, 2022, 2023, 2024.
 #
 # KDE Finnish translation sprint participants:
 # Author: Artnay
@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-30 02:25+0000\n"
-"PO-Revision-Date: 2023-09-27 17:55+0300\n"
+"PO-Revision-Date: 2024-03-20 18:18+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -1097,10 +1097,9 @@ msgid "Start in slideshow mode"
 msgstr "Aloita diaesitystilassa"
 
 #: app/main.cpp:191
-#, fuzzy, kde-format
-#| msgid "Start in slideshow mode"
+#, kde-format
 msgid "Start in spotlight mode"
-msgstr "Aloita diaesitystilassa"
+msgstr "Aloita kohdevalotilassa"
 
 #: app/main.cpp:192
 #, kde-format
@@ -1156,12 +1155,10 @@ msgid "Exit Full Screen"
 msgstr "Poistu koko näytöltä"
 
 #: app/mainwindow.cpp:435
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Light Mode"
+#, kde-format
 msgctxt "@action"
 msgid "Spotlight Mode"
-msgstr "Vaalea tila"
+msgstr "Kohdevalotila"
 
 #: app/mainwindow.cpp:441
 #, kde-format
