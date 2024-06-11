@@ -60,9 +60,9 @@ namespace Gwenview
 
 #undef ENABLE_LOG
 #undef LOG
-//#define ENABLE_LOG
+// #define ENABLE_LOG
 #ifdef ENABLE_LOG
-#define LOG(x) //qCDebug(GWENVIEW_LIB_LOG) << x
+#define LOG(x) // qCDebug(GWENVIEW_LIB_LOG) << x
 #else
 #define LOG(x) ;
 #endif
@@ -71,7 +71,7 @@ namespace Cms
 {
 
 //- JPEG -----------------------------------------------------------------------
-static cmsHPROFILE loadFromJpegData(const QByteArray& data)
+static cmsHPROFILE loadFromJpegData(const QByteArray &data)
 {
     cmsHPROFILE profile = nullptr;
     struct jpeg_decompress_struct srcinfo;
@@ -84,7 +84,7 @@ static cmsHPROFILE loadFromJpegData(const QByteArray& data)
         return nullptr;
     }
 
-    QBuffer buffer(const_cast<QByteArray*>(&data));
+    QBuffer buffer(const_cast<QByteArray *>(&data));
     buffer.open(QIODevice::ReadOnly);
     IODeviceJpegSourceManager::setup(&srcinfo, &buffer);
 
@@ -92,7 +92,7 @@ static cmsHPROFILE loadFromJpegData(const QByteArray& data)
     jpeg_read_header(&srcinfo, true);
     jpeg_start_decompress(&srcinfo);
 
-    uchar* profile_data;
+    uchar *profile_data;
     uint profile_len;
     if (read_icc_profile(&srcinfo, &profile_data, &profile_len)) {
         LOG("Found a profile, length:" << profile_len);
@@ -106,8 +106,7 @@ static cmsHPROFILE loadFromJpegData(const QByteArray& data)
 }
 
 //- Profile class --------------------------------------------------------------
-struct ProfilePrivate
-{
+struct ProfilePrivate {
     cmsHPROFILE mProfile;
 
     void reset()
@@ -128,13 +127,13 @@ struct ProfilePrivate
 };
 
 Profile::Profile()
-: d(new ProfilePrivate)
+    : d(new ProfilePrivate)
 {
     d->mProfile = nullptr;
 }
 
 Profile::Profile(cmsHPROFILE hProfile)
-: d(new ProfilePrivate)
+    : d(new ProfilePrivate)
 {
     d->mProfile = hProfile;
 }
@@ -145,7 +144,7 @@ Profile::~Profile()
     delete d;
 }
 
-Profile::Ptr Profile::loadFromImageData(const QByteArray& data, const QByteArray& format)
+Profile::Ptr Profile::loadFromImageData(const QByteArray &data, const QByteArray &format)
 {
     Profile::Ptr ptr;
     cmsHPROFILE hProfile = nullptr;
@@ -160,12 +159,12 @@ Profile::Ptr Profile::loadFromImageData(const QByteArray& data, const QByteArray
     return ptr;
 }
 
-Profile::Ptr Profile::loadFromExiv2Image(const Exiv2::Image* image)
+Profile::Ptr Profile::loadFromExiv2Image(const Exiv2::Image *image)
 {
     Profile::Ptr ptr;
     cmsHPROFILE hProfile = nullptr;
 
-    const Exiv2::ExifData& exifData = image->exifData();
+    const Exiv2::ExifData &exifData = image->exifData();
     Exiv2::ExifKey key("Exif.Image.InterColorProfile");
     auto it = exifData.findKey(key);
     if (it == exifData.end()) {
@@ -177,7 +176,7 @@ Profile::Ptr Profile::loadFromExiv2Image(const Exiv2::Image* image)
 
     QByteArray data;
     data.resize(size);
-    it->copy(reinterpret_cast<Exiv2::byte*>(data.data()), Exiv2::invalidByteOrder);
+    it->copy(reinterpret_cast<Exiv2::byte *>(data.data()), Exiv2::invalidByteOrder);
     hProfile = cmsOpenProfileFromMem(data.constData(), size);
 
     if (hProfile) {
@@ -256,9 +255,9 @@ Profile::Ptr Profile::getMonitorProfile()
                                &format,
                                &nitems,
                                &bytes_after,
-                               (unsigned char **) &str) == Success
-                ) {
-            hProfile = cmsOpenProfileFromMem((void*)str, nitems);
+                               (unsigned char **)&str)
+            == Success) {
+            hProfile = cmsOpenProfileFromMem((void *)str, nitems);
         }
     }
 #endif

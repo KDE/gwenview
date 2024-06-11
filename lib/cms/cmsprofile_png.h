@@ -41,7 +41,7 @@ namespace Cms
  * file as jpeg code: libpng complains about setjmp being included twice.
  */
 
-cmsHPROFILE loadFromPngData(const QByteArray& data);
+cmsHPROFILE loadFromPngData(const QByteArray &data);
 
 } // namespace Cms
 } // namespace Gwenview

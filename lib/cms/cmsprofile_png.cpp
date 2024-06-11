@@ -22,8 +22,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "cmsprofile_png.h"
 
 // Local
-#include <gvdebug.h>
 #include "gwenview_lib_debug.h"
+#include <gvdebug.h>
 
 // KF
 
@@ -47,7 +47,7 @@ static void readPngChunk(png_structp png_ptr, png_bytep data, png_size_t length)
     auto in = (QIODevice *)png_get_io_ptr(png_ptr);
 
     while (length) {
-        int nr = in->read((char*)data, length);
+        int nr = in->read((char *)data, length);
         if (nr <= 0) {
             png_error(png_ptr, "Read Error");
             return;
@@ -56,10 +56,10 @@ static void readPngChunk(png_structp png_ptr, png_bytep data, png_size_t length)
     }
 }
 
-cmsHPROFILE loadFromPngData(const QByteArray& data)
+cmsHPROFILE loadFromPngData(const QByteArray &data)
 {
     QBuffer buffer;
-    buffer.setBuffer(const_cast<QByteArray*>(&data));
+    buffer.setBuffer(const_cast<QByteArray *>(&data));
     buffer.open(QIODevice::ReadOnly);
 
     // Initialize the internal structures
@@ -68,14 +68,14 @@ cmsHPROFILE loadFromPngData(const QByteArray& data)
 
     png_infop info_ptr = png_create_info_struct(png_ptr);
     if (!info_ptr) {
-        png_destroy_read_struct(&png_ptr, (png_infopp)nullptr, (png_infopp)nullptr);
+        png_destroy_read_struct(&png_ptr, (png_infopp) nullptr, (png_infopp) nullptr);
         qCWarning(GWENVIEW_LIB_LOG) << "Could not create info_struct";
         return nullptr;
     }
 
     png_infop end_info = png_create_info_struct(png_ptr);
     if (!end_info) {
-        png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)nullptr);
+        png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) nullptr);
         qCWarning(GWENVIEW_LIB_LOG) << "Could not create info_struct2";
         return nullptr;
     }

@@ -1,0 +1,2 @@
+# Don't format the iccjpeg 3rd party code
+iccjpeg*
