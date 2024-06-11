@@ -100,6 +100,7 @@ GenericName[nl]=Afbeeldingsviewer
 GenericName[pa]=ਚਿੱਤਰ ਦਰਸ਼ਕ
 GenericName[pl]=Przeglądarka obrazów
 GenericName[pt_BR]=Visualizador de imagens
+GenericName[ro]=Vizualizator de imagini
 GenericName[ru]=Приложение для просмотра изображений
 GenericName[sl]=Pregledovalnik slik
 GenericName[ta]=படக் காட்டி
