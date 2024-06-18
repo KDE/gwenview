@@ -103,6 +103,7 @@ GenericName[pt_BR]=Visualizador de imagens
 GenericName[ro]=Vizualizator de imagini
 GenericName[ru]=Приложение для просмотра изображений
 GenericName[sl]=Pregledovalnik slik
+GenericName[sv]=Bildvisare
 GenericName[ta]=படக் காட்டி
 GenericName[tr]=Görsel Görüntüleyicisi
 GenericName[uk]=Переглядач зображень
