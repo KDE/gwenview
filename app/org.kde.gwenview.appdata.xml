@@ -398,6 +398,7 @@
       <li xml:lang="zh-TW">可以是作為獨立的應用程式使用，也可以嵌入在 Konqueror 瀏覽器中</li>
     </ul>
   </description>
+  <launchable type="desktop-id">org.kde.gwenview.desktop</launchable>
   <url type="homepage">https://apps.kde.org/gwenview</url>
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=gwenview</url>
   <url type="help">https://docs.kde.org/?application=gwenview</url>
