@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QDate>
+#include <QImageReader>
 #include <QList>
 #include <QObject>
 #include <QWidget>
@@ -49,6 +50,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 class QAction;
 class QFrame;
 class QLineEdit;
+class QLabel;
 class QComboBox;
 class KComboBox;
 
@@ -333,6 +335,107 @@ private:
 #endif
 
 /**
+ * An AbstractSortedDirModelFilter which filters on the image dimensions
+ */
+class ImageDimensions : public AbstractSortedDirModelFilter
+{
+public:
+    static const uint32_t minImageSizePx = 0; /**< Used to constraint the QLineEdit of the UI  */
+    static const uint32_t maxImageSizePx = 100000; /**< Used to constraint the QLineEdit of the UI  */
+
+    enum Mode {
+        GreaterOrEqual,
+        Equal,
+        LessOrEqual,
+    };
+
+    ImageDimensions(SortedDirModel *model)
+        : AbstractSortedDirModelFilter(model)
+        , mMode(GreaterOrEqual)
+        , mHeight(0)
+        , mWidth(0)
+    {
+    }
+
+    bool needsSemanticInfo() const override
+    {
+        return false;
+    }
+
+    bool acceptsIndex(const QModelIndex &index) const override
+    {
+        KFileItem fileItem = model()->itemForSourceIndex(index);
+        QImageReader reader(fileItem.localPath());
+        const QSize sizeOfImage = reader.size();
+        const uint32_t height = sizeOfImage.height();
+        const uint32_t width = sizeOfImage.width();
+
+        switch (mMode) {
+            case GreaterOrEqual:
+            {
+                return width >= mWidth && height >= mHeight;
+            }
+            case Equal:
+            {
+                return ( (mWidth == 0) || (mWidth == width) ) && ((mHeight == 0) || (mHeight == height));
+            }
+            default: /* LessOrEqual */
+            {
+                return ( (mWidth == 0) || (width <= mWidth) ) && ((mHeight == 0) || (height <= mHeight));
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Sets the filtering mode
+     */
+    void setMode(Mode mode)
+    {
+        mMode = mode;
+        model()->applyFilters();
+    }
+
+    /**
+     * Sets the image dimesions that the filter will use
+     */
+    void setSizes(uint32_t width, uint32_t height)
+    {
+        mWidth = width;
+        mHeight = height;
+        model()->applyFilters();
+    }
+
+
+private:
+    Mode mMode; /**< Contains the filtering mode of the image dimension */
+    uint32_t mHeight; /**< Holds the height that the filter will check */
+    uint32_t mWidth; /**< Holds the width that the filter will check */
+};
+
+class ImageDimensionsWidget : public QWidget
+{
+    Q_OBJECT
+public:
+    ImageDimensionsWidget(SortedDirModel *);
+    ~ImageDimensionsWidget() override;
+
+private Q_SLOTS:
+    void applyImageDimensions();
+
+private:
+    QPointer<ImageDimensions> mFilter;
+    KComboBox *mModeComboBox;
+    KComboBox *mDimensionComboBox;
+    QLineEdit *mLineEditWidth;
+    QLineEdit *mLineEditHeight;
+    QLabel *mLabelWidth;
+    QLabel *mLabelHeight;
+};
+
+
+/**
  * This class manages the filter widgets in the filter frame and assign the
  * corresponding filters to the SortedDirModel
  */
@@ -351,6 +454,7 @@ private Q_SLOTS:
     void addFilterByRating();
     void addFilterByTag();
 #endif
+    void addFilterByImageDimensions();
     void slotFilterWidgetClosed();
 
 private:
