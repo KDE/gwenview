@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-12 00:37+0000\n"
+"POT-Creation-Date: 2024-06-20 00:38+0000\n"
 "PO-Revision-Date: 2024-02-11 08:20+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -455,79 +455,118 @@ msgstr "פתיחת התיקייה המכילה"
 msgid "Other Application..."
 msgstr "יישום אחר…"
 
-#: app/filtercontroller.cpp:59
+#: app/filtercontroller.cpp:60
 #, kde-format
 msgid "Name contains"
 msgstr "השם מכיל"
 
-#: app/filtercontroller.cpp:60
+#: app/filtercontroller.cpp:61
 #, kde-format
 msgid "Name does not contain"
 msgstr "השם לא מכיל"
 
-#: app/filtercontroller.cpp:98
+#: app/filtercontroller.cpp:99
 #, kde-format
 msgid "Date >="
 msgstr "תאריך >="
 
-#: app/filtercontroller.cpp:99
+#: app/filtercontroller.cpp:100
 #, kde-format
 msgid "Date ="
 msgstr "תאריך ="
 
-#: app/filtercontroller.cpp:100
+#: app/filtercontroller.cpp:101
 #, kde-format
 msgid "Date <="
 msgstr "תאריך <="
 
-#: app/filtercontroller.cpp:131
+#: app/filtercontroller.cpp:132
 #, kde-format
 msgid "Rating >="
 msgstr "דירוג >="
 
-#: app/filtercontroller.cpp:132
+#: app/filtercontroller.cpp:133
 #, kde-format
 msgid "Rating ="
 msgstr "דירוג ="
 
-#: app/filtercontroller.cpp:133
+#: app/filtercontroller.cpp:134
 #, kde-format
 msgid "Rating <="
 msgstr "דירוג <="
 
-#: app/filtercontroller.cpp:173
+#: app/filtercontroller.cpp:174
 #, kde-format
 msgid "Tagged"
 msgstr "תויג"
 
-#: app/filtercontroller.cpp:174
+#: app/filtercontroller.cpp:175
 #, kde-format
 msgid "Not Tagged"
 msgstr "לא תויג"
 
-#: app/filtercontroller.cpp:278
+#: app/filtercontroller.cpp:229
+#, kde-format
+msgid "Dimensions >="
+msgstr ""
+
+#: app/filtercontroller.cpp:230
+#, kde-format
+msgid "Dimensions ="
+msgstr ""
+
+#: app/filtercontroller.cpp:231
+#, kde-format
+msgid "Dimensions <="
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: app/filtercontroller.cpp:239 lib/crop/cropwidget.cpp:221
+#: lib/resize/resizeimagewidget.ui:40
+#, kde-format
+msgid "Height"
+msgstr "גובה"
+
+#. i18n("%1:%2") because ':' should not be translated, it is
+#. used to parse the ratio string.
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: app/filtercontroller.cpp:241 lib/crop/cropwidget.cpp:221
+#: lib/resize/resizeimagewidget.ui:30
+#, kde-format
+msgid "Width"
+msgstr "רוחב"
+
+#: app/filtercontroller.cpp:335
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Name"
 msgstr "סינון לפי שם"
 
-#: app/filtercontroller.cpp:280
+#: app/filtercontroller.cpp:337
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Date"
 msgstr "סינון לפי תאריך"
 
-#: app/filtercontroller.cpp:283
+#: app/filtercontroller.cpp:340
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Rating"
 msgstr "סינון לפי דירוג"
 
-#: app/filtercontroller.cpp:285
+#: app/filtercontroller.cpp:342
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Tag"
 msgstr "סינון לפי תיוג"
+
+#: app/filtercontroller.cpp:344
+#, fuzzy, kde-format
+#| msgctxt "@action:inmenu"
+#| msgid "Filter by Date"
+msgctxt "@action:inmenu"
+msgid "Filter by Dimensions"
+msgstr "סינון לפי תאריך"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: app/fullscreenconfigwidget.ui:20
@@ -2167,20 +2206,6 @@ msgstr "US Letter"
 #, kde-format
 msgid "Portrait"
 msgstr "לאורך"
-
-#. i18n("%1:%2") because ':' should not be translated, it is
-#. used to parse the ratio string.
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: lib/crop/cropwidget.cpp:221 lib/resize/resizeimagewidget.ui:30
-#, kde-format
-msgid "Width"
-msgstr "רוחב"
-
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#: lib/crop/cropwidget.cpp:221 lib/resize/resizeimagewidget.ui:40
-#, kde-format
-msgid "Height"
-msgstr "גובה"
 
 #: lib/crop/cropwidget.cpp:290
 #, kde-format

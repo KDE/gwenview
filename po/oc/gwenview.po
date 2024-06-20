@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-12 00:37+0000\n"
+"POT-Creation-Date: 2024-06-20 00:38+0000\n"
 "PO-Revision-Date: 2008-08-05 22:27+0200\n"
 "Last-Translator: Yannig Marchegay (Kokoyaya) <yannig@marchegay.org>\n"
 "Language-Team: Occitan (lengadocian) <ubuntu-l10n-oci@lists.ubuntu.com>\n"
@@ -465,89 +465,128 @@ msgstr ""
 msgid "Other Application..."
 msgstr ""
 
-#: app/filtercontroller.cpp:59
+#: app/filtercontroller.cpp:60
 #, fuzzy, kde-format
 #| msgid "Collections"
 msgid "Name contains"
 msgstr "Colleccions"
 
-#: app/filtercontroller.cpp:60
+#: app/filtercontroller.cpp:61
 #, kde-format
 msgid "Name does not contain"
 msgstr ""
 
-#: app/filtercontroller.cpp:98
+#: app/filtercontroller.cpp:99
 #, fuzzy, kde-format
 #| msgid "Delete"
 msgid "Date >="
 msgstr "Suprimir"
 
-#: app/filtercontroller.cpp:99
+#: app/filtercontroller.cpp:100
 #, fuzzy, kde-format
 #| msgid "Delete"
 msgid "Date ="
 msgstr "Suprimir"
 
-#: app/filtercontroller.cpp:100
+#: app/filtercontroller.cpp:101
 #, fuzzy, kde-format
 #| msgid "Delete"
 msgid "Date <="
 msgstr "Suprimir"
 
-#: app/filtercontroller.cpp:131
+#: app/filtercontroller.cpp:132
 #, fuzzy, kde-format
 #| msgid "&Settings"
 msgid "Rating >="
 msgstr "&Paramètres"
 
-#: app/filtercontroller.cpp:132
+#: app/filtercontroller.cpp:133
 #, fuzzy, kde-format
 #| msgid "&Settings"
 msgid "Rating ="
 msgstr "&Paramètres"
 
-#: app/filtercontroller.cpp:133
+#: app/filtercontroller.cpp:134
 #, fuzzy, kde-format
 #| msgid "&Settings"
 msgid "Rating <="
 msgstr "&Paramètres"
 
-#: app/filtercontroller.cpp:173
+#: app/filtercontroller.cpp:174
 #, kde-format
 msgid "Tagged"
 msgstr ""
 
-#: app/filtercontroller.cpp:174
+#: app/filtercontroller.cpp:175
 #, kde-format
 msgid "Not Tagged"
 msgstr ""
 
-#: app/filtercontroller.cpp:278
+#: app/filtercontroller.cpp:229
+#, kde-format
+msgid "Dimensions >="
+msgstr ""
+
+#: app/filtercontroller.cpp:230
+#, kde-format
+msgid "Dimensions ="
+msgstr ""
+
+#: app/filtercontroller.cpp:231
+#, kde-format
+msgid "Dimensions <="
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: app/filtercontroller.cpp:239 lib/crop/cropwidget.cpp:221
+#: lib/resize/resizeimagewidget.ui:40
+#, fuzzy, kde-format
+#| msgid "Height:"
+msgid "Height"
+msgstr "Nautor :"
+
+#. i18n("%1:%2") because ':' should not be translated, it is
+#. used to parse the ratio string.
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: app/filtercontroller.cpp:241 lib/crop/cropwidget.cpp:221
+#: lib/resize/resizeimagewidget.ui:30
+#, kde-format
+msgid "Width"
+msgstr ""
+
+#: app/filtercontroller.cpp:335
 #, fuzzy, kde-format
 #| msgid "&File"
 msgctxt "@action:inmenu"
 msgid "Filter by Name"
 msgstr "&Fichièr"
 
-#: app/filtercontroller.cpp:280
+#: app/filtercontroller.cpp:337
 #, fuzzy, kde-format
 #| msgid "&File"
 msgctxt "@action:inmenu"
 msgid "Filter by Date"
 msgstr "&Fichièr"
 
-#: app/filtercontroller.cpp:283
+#: app/filtercontroller.cpp:340
 #, fuzzy, kde-format
 #| msgid "&File"
 msgctxt "@action:inmenu"
 msgid "Filter by Rating"
 msgstr "&Fichièr"
 
-#: app/filtercontroller.cpp:285
+#: app/filtercontroller.cpp:342
 #, fuzzy, kde-format
 #| msgid "&File"
 msgctxt "@action:inmenu"
 msgid "Filter by Tag"
+msgstr "&Fichièr"
+
+#: app/filtercontroller.cpp:344
+#, fuzzy, kde-format
+#| msgid "&File"
+msgctxt "@action:inmenu"
+msgid "Filter by Dimensions"
 msgstr "&Fichièr"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
@@ -2201,21 +2240,6 @@ msgstr ""
 #, kde-format
 msgid "Portrait"
 msgstr ""
-
-#. i18n("%1:%2") because ':' should not be translated, it is
-#. used to parse the ratio string.
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: lib/crop/cropwidget.cpp:221 lib/resize/resizeimagewidget.ui:30
-#, kde-format
-msgid "Width"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#: lib/crop/cropwidget.cpp:221 lib/resize/resizeimagewidget.ui:40
-#, fuzzy, kde-format
-#| msgid "Height:"
-msgid "Height"
-msgstr "Nautor :"
 
 #: lib/crop/cropwidget.cpp:290
 #, fuzzy, kde-format

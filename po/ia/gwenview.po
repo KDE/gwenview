@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-12 00:37+0000\n"
+"POT-Creation-Date: 2024-06-20 00:38+0000\n"
 "PO-Revision-Date: 2024-02-13 16:27+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -444,79 +444,118 @@ msgstr "Aperi dossier continente"
 msgid "Other Application..."
 msgstr "Altere application..."
 
-#: app/filtercontroller.cpp:59
+#: app/filtercontroller.cpp:60
 #, kde-format
 msgid "Name contains"
 msgstr "Nomine contine"
 
-#: app/filtercontroller.cpp:60
+#: app/filtercontroller.cpp:61
 #, kde-format
 msgid "Name does not contain"
 msgstr "Nomine non contine"
 
-#: app/filtercontroller.cpp:98
+#: app/filtercontroller.cpp:99
 #, kde-format
 msgid "Date >="
 msgstr "Data >="
 
-#: app/filtercontroller.cpp:99
+#: app/filtercontroller.cpp:100
 #, kde-format
 msgid "Date ="
 msgstr "Data ="
 
-#: app/filtercontroller.cpp:100
+#: app/filtercontroller.cpp:101
 #, kde-format
 msgid "Date <="
 msgstr "Data <="
 
-#: app/filtercontroller.cpp:131
+#: app/filtercontroller.cpp:132
 #, kde-format
 msgid "Rating >="
 msgstr "Evalutation >="
 
-#: app/filtercontroller.cpp:132
+#: app/filtercontroller.cpp:133
 #, kde-format
 msgid "Rating ="
 msgstr "Evalutation ="
 
-#: app/filtercontroller.cpp:133
+#: app/filtercontroller.cpp:134
 #, kde-format
 msgid "Rating <="
 msgstr "Evalutation <="
 
-#: app/filtercontroller.cpp:173
+#: app/filtercontroller.cpp:174
 #, kde-format
 msgid "Tagged"
 msgstr "Etiquettate"
 
-#: app/filtercontroller.cpp:174
+#: app/filtercontroller.cpp:175
 #, kde-format
 msgid "Not Tagged"
 msgstr "Non etiquettate"
 
-#: app/filtercontroller.cpp:278
+#: app/filtercontroller.cpp:229
+#, kde-format
+msgid "Dimensions >="
+msgstr ""
+
+#: app/filtercontroller.cpp:230
+#, kde-format
+msgid "Dimensions ="
+msgstr ""
+
+#: app/filtercontroller.cpp:231
+#, kde-format
+msgid "Dimensions <="
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: app/filtercontroller.cpp:239 lib/crop/cropwidget.cpp:221
+#: lib/resize/resizeimagewidget.ui:40
+#, kde-format
+msgid "Height"
+msgstr "Altessa"
+
+#. i18n("%1:%2") because ':' should not be translated, it is
+#. used to parse the ratio string.
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: app/filtercontroller.cpp:241 lib/crop/cropwidget.cpp:221
+#: lib/resize/resizeimagewidget.ui:30
+#, kde-format
+msgid "Width"
+msgstr "Largessa"
+
+#: app/filtercontroller.cpp:335
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Name"
 msgstr "Filtra per nomine"
 
-#: app/filtercontroller.cpp:280
+#: app/filtercontroller.cpp:337
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Date"
 msgstr "Filtra per data"
 
-#: app/filtercontroller.cpp:283
+#: app/filtercontroller.cpp:340
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Rating"
 msgstr "Filtra per evalutation"
 
-#: app/filtercontroller.cpp:285
+#: app/filtercontroller.cpp:342
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Tag"
 msgstr "Filtra per etiquetta"
+
+#: app/filtercontroller.cpp:344
+#, fuzzy, kde-format
+#| msgctxt "@action:inmenu"
+#| msgid "Filter by Date"
+msgctxt "@action:inmenu"
+msgid "Filter by Dimensions"
+msgstr "Filtra per data"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: app/fullscreenconfigwidget.ui:20
@@ -2145,20 +2184,6 @@ msgstr "Littera US"
 #, kde-format
 msgid "Portrait"
 msgstr "Vertical"
-
-#. i18n("%1:%2") because ':' should not be translated, it is
-#. used to parse the ratio string.
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: lib/crop/cropwidget.cpp:221 lib/resize/resizeimagewidget.ui:30
-#, kde-format
-msgid "Width"
-msgstr "Largessa"
-
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#: lib/crop/cropwidget.cpp:221 lib/resize/resizeimagewidget.ui:40
-#, kde-format
-msgid "Height"
-msgstr "Altessa"
 
 #: lib/crop/cropwidget.cpp:290
 #, kde-format

@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdegraphics-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-12 00:37+0000\n"
+"POT-Creation-Date: 2024-06-20 00:38+0000\n"
 "PO-Revision-Date: 2024-03-19 15:23+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -451,79 +451,118 @@ msgstr "İçeren Klasörü Aç"
 msgid "Other Application..."
 msgstr "Diğer Uygulama…"
 
-#: app/filtercontroller.cpp:59
+#: app/filtercontroller.cpp:60
 #, kde-format
 msgid "Name contains"
 msgstr "Ad şunu içerir"
 
-#: app/filtercontroller.cpp:60
+#: app/filtercontroller.cpp:61
 #, kde-format
 msgid "Name does not contain"
 msgstr "Ad şunu içermez"
 
-#: app/filtercontroller.cpp:98
+#: app/filtercontroller.cpp:99
 #, kde-format
 msgid "Date >="
 msgstr "Tarih >="
 
-#: app/filtercontroller.cpp:99
+#: app/filtercontroller.cpp:100
 #, kde-format
 msgid "Date ="
 msgstr "Tarih ="
 
-#: app/filtercontroller.cpp:100
+#: app/filtercontroller.cpp:101
 #, kde-format
 msgid "Date <="
 msgstr "Tarih <="
 
-#: app/filtercontroller.cpp:131
+#: app/filtercontroller.cpp:132
 #, kde-format
 msgid "Rating >="
 msgstr "Derecelendirme >="
 
-#: app/filtercontroller.cpp:132
+#: app/filtercontroller.cpp:133
 #, kde-format
 msgid "Rating ="
 msgstr "Derecelendirme ="
 
-#: app/filtercontroller.cpp:133
+#: app/filtercontroller.cpp:134
 #, kde-format
 msgid "Rating <="
 msgstr "Derecelendirme <="
 
-#: app/filtercontroller.cpp:173
+#: app/filtercontroller.cpp:174
 #, kde-format
 msgid "Tagged"
 msgstr "Künyeli"
 
-#: app/filtercontroller.cpp:174
+#: app/filtercontroller.cpp:175
 #, kde-format
 msgid "Not Tagged"
 msgstr "Künyesiz"
 
-#: app/filtercontroller.cpp:278
+#: app/filtercontroller.cpp:229
+#, kde-format
+msgid "Dimensions >="
+msgstr ""
+
+#: app/filtercontroller.cpp:230
+#, kde-format
+msgid "Dimensions ="
+msgstr ""
+
+#: app/filtercontroller.cpp:231
+#, kde-format
+msgid "Dimensions <="
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: app/filtercontroller.cpp:239 lib/crop/cropwidget.cpp:221
+#: lib/resize/resizeimagewidget.ui:40
+#, kde-format
+msgid "Height"
+msgstr "Yükseklik"
+
+#. i18n("%1:%2") because ':' should not be translated, it is
+#. used to parse the ratio string.
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: app/filtercontroller.cpp:241 lib/crop/cropwidget.cpp:221
+#: lib/resize/resizeimagewidget.ui:30
+#, kde-format
+msgid "Width"
+msgstr "Genişlik"
+
+#: app/filtercontroller.cpp:335
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Name"
 msgstr "Ada Göre Süz"
 
-#: app/filtercontroller.cpp:280
+#: app/filtercontroller.cpp:337
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Date"
 msgstr "Tarihe Göre Süz"
 
-#: app/filtercontroller.cpp:283
+#: app/filtercontroller.cpp:340
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Rating"
 msgstr "Derecelendirmeye Göre Süz"
 
-#: app/filtercontroller.cpp:285
+#: app/filtercontroller.cpp:342
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Tag"
 msgstr "Künyeye Göre Süz"
+
+#: app/filtercontroller.cpp:344
+#, fuzzy, kde-format
+#| msgctxt "@action:inmenu"
+#| msgid "Filter by Date"
+msgctxt "@action:inmenu"
+msgid "Filter by Dimensions"
+msgstr "Tarihe Göre Süz"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: app/fullscreenconfigwidget.ui:20
@@ -2142,20 +2181,6 @@ msgstr "ABD Mektup"
 #, kde-format
 msgid "Portrait"
 msgstr "Dikey"
-
-#. i18n("%1:%2") because ':' should not be translated, it is
-#. used to parse the ratio string.
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: lib/crop/cropwidget.cpp:221 lib/resize/resizeimagewidget.ui:30
-#, kde-format
-msgid "Width"
-msgstr "Genişlik"
-
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#: lib/crop/cropwidget.cpp:221 lib/resize/resizeimagewidget.ui:40
-#, kde-format
-msgid "Height"
-msgstr "Yükseklik"
 
 #: lib/crop/cropwidget.cpp:290
 #, kde-format
