@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-20 00:38+0000\n"
-"PO-Revision-Date: 2024-02-11 02:33+0100\n"
+"POT-Creation-Date: 2024-06-21 00:37+0000\n"
+"PO-Revision-Date: 2024-06-20 05:10+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -495,17 +495,17 @@ msgstr "ჭდეების გარეშე"
 #: app/filtercontroller.cpp:229
 #, kde-format
 msgid "Dimensions >="
-msgstr ""
+msgstr "განზომილებები >="
 
 #: app/filtercontroller.cpp:230
 #, kde-format
 msgid "Dimensions ="
-msgstr ""
+msgstr "განზომილებები ="
 
 #: app/filtercontroller.cpp:231
 #, kde-format
 msgid "Dimensions <="
-msgstr ""
+msgstr "განზომილებები <="
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: app/filtercontroller.cpp:239 lib/crop/cropwidget.cpp:221
@@ -548,12 +548,10 @@ msgid "Filter by Tag"
 msgstr "ჭდით გაფილტვრა"
 
 #: app/filtercontroller.cpp:344
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Filter by Date"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Dimensions"
-msgstr "თარიღით გაფილტვრა"
+msgstr "განზომილებებით გაფილტვრა"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: app/fullscreenconfigwidget.ui:20
@@ -1094,32 +1092,32 @@ msgid_plural "%1 files"
 msgstr[0] "%1 ფაილი"
 msgstr[1] "%1 ფაილი"
 
-#: app/main.cpp:179
+#: app/main.cpp:181
 #, kde-format
 msgid "Gwenview"
 msgstr "Gwenview"
 
-#: app/main.cpp:181
+#: app/main.cpp:183
 #, kde-format
 msgid "An Image Viewer"
 msgstr "სურათების გალერეა"
 
-#: app/main.cpp:189
+#: app/main.cpp:191
 #, kde-format
 msgid "Start in fullscreen mode"
 msgstr "მთელ ეკრანზე გაშვება"
 
-#: app/main.cpp:190
+#: app/main.cpp:192
 #, kde-format
 msgid "Start in slideshow mode"
 msgstr "სლაიდშოუს რეჟიმში გაშვება"
 
-#: app/main.cpp:191
+#: app/main.cpp:193
 #, kde-format
 msgid "Start in spotlight mode"
 msgstr "გაშვება გამორჩევის რეჟიმში"
 
-#: app/main.cpp:192
+#: app/main.cpp:194
 #, kde-format
 msgid "A starting file or folders"
 msgstr "საწყისი ფაილი ან საქარალდე"

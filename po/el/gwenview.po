@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-20 00:38+0000\n"
+"POT-Creation-Date: 2024-06-21 00:37+0000\n"
 "PO-Revision-Date: 2023-08-21 22:39+0300\n"
 "Last-Translator: George Stefanakis <george.stefanakis@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-doc@kde.org>\n"
@@ -1109,33 +1109,33 @@ msgid_plural "%1 files"
 msgstr[0] "%1 αρχείο"
 msgstr[1] "%1 αρχεία"
 
-#: app/main.cpp:179
+#: app/main.cpp:181
 #, kde-format
 msgid "Gwenview"
 msgstr "Gwenview"
 
-#: app/main.cpp:181
+#: app/main.cpp:183
 #, kde-format
 msgid "An Image Viewer"
 msgstr "Ένας προβολέας εικόνων"
 
-#: app/main.cpp:189
+#: app/main.cpp:191
 #, kde-format
 msgid "Start in fullscreen mode"
 msgstr "Έναρξη σε λειτουργία πλήρους οθόνης"
 
-#: app/main.cpp:190
+#: app/main.cpp:192
 #, kde-format
 msgid "Start in slideshow mode"
 msgstr "Έναρξη σε λειτουργία παρουσίασης διαφανειών"
 
-#: app/main.cpp:191
+#: app/main.cpp:193
 #, fuzzy, kde-format
 #| msgid "Start in slideshow mode"
 msgid "Start in spotlight mode"
 msgstr "Έναρξη σε λειτουργία παρουσίασης διαφανειών"
 
-#: app/main.cpp:192
+#: app/main.cpp:194
 #, kde-format
 msgid "A starting file or folders"
 msgstr "Ένα αρχικό αρχείο ή κατάλογοι"

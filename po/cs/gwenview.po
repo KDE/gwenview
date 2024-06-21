@@ -9,16 +9,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-20 00:38+0000\n"
-"PO-Revision-Date: 2023-11-02 13:58+0100\n"
-"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
+"POT-Creation-Date: 2024-06-21 00:37+0000\n"
+"PO-Revision-Date: 2024-06-20 16:28+0200\n"
+"Last-Translator: Vit Pelcak <vpelcak@suse.cz>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 23.08.4\n"
+"X-Generator: Lokalize 24.05.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -492,17 +492,17 @@ msgstr "Neoznačkováno"
 #: app/filtercontroller.cpp:229
 #, kde-format
 msgid "Dimensions >="
-msgstr ""
+msgstr "Rozměry >="
 
 #: app/filtercontroller.cpp:230
 #, kde-format
 msgid "Dimensions ="
-msgstr ""
+msgstr "Rozměry ="
 
 #: app/filtercontroller.cpp:231
 #, kde-format
 msgid "Dimensions <="
-msgstr ""
+msgstr "Rozměry <="
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: app/filtercontroller.cpp:239 lib/crop/cropwidget.cpp:221
@@ -545,12 +545,10 @@ msgid "Filter by Tag"
 msgstr "Filtrovat podle značky"
 
 #: app/filtercontroller.cpp:344
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Filter by Date"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Dimensions"
-msgstr "Filtrovat podle data"
+msgstr "Filtrovat podle rozměrů"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: app/fullscreenconfigwidget.ui:20
@@ -1096,32 +1094,32 @@ msgstr[0] "1 soubor"
 msgstr[1] "%1 soubory"
 msgstr[2] "%1 souborů"
 
-#: app/main.cpp:179
+#: app/main.cpp:181
 #, kde-format
 msgid "Gwenview"
 msgstr "Gwenview"
 
-#: app/main.cpp:181
+#: app/main.cpp:183
 #, kde-format
 msgid "An Image Viewer"
 msgstr "Prohlížeč obrázků"
 
-#: app/main.cpp:189
+#: app/main.cpp:191
 #, kde-format
 msgid "Start in fullscreen mode"
 msgstr "Spustit v celoobrazovkovém režimu"
 
-#: app/main.cpp:190
+#: app/main.cpp:192
 #, kde-format
 msgid "Start in slideshow mode"
 msgstr "Spustit v režimu promítání"
 
-#: app/main.cpp:191
+#: app/main.cpp:193
 #, kde-format
 msgid "Start in spotlight mode"
 msgstr ""
 
-#: app/main.cpp:192
+#: app/main.cpp:194
 #, kde-format
 msgid "A starting file or folders"
 msgstr "Výchozí soubor nebo složky"

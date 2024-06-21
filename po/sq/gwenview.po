@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdegraphics\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-20 00:38+0000\n"
+"POT-Creation-Date: 2024-06-21 00:37+0000\n"
 "PO-Revision-Date: 2009-08-30 02:35+0000\n"
 "Last-Translator: Vilson Gjeci <vilsongjeci@gmail.com>\n"
 "Language-Team: Albanian <sq@li.org>\n"
@@ -1124,32 +1124,32 @@ msgid_plural "%1 files"
 msgstr[0] ""
 msgstr[1] ""
 
-#: app/main.cpp:179
+#: app/main.cpp:181
 #, kde-format
 msgid "Gwenview"
 msgstr "Gwenview"
 
-#: app/main.cpp:181
+#: app/main.cpp:183
 #, kde-format
 msgid "An Image Viewer"
 msgstr "Një Shfaqës Imazhesh"
 
-#: app/main.cpp:189
+#: app/main.cpp:191
 #, kde-format
 msgid "Start in fullscreen mode"
 msgstr ""
 
-#: app/main.cpp:190
+#: app/main.cpp:192
 #, kde-format
 msgid "Start in slideshow mode"
 msgstr ""
 
-#: app/main.cpp:191
+#: app/main.cpp:193
 #, kde-format
 msgid "Start in spotlight mode"
 msgstr ""
 
-#: app/main.cpp:192
+#: app/main.cpp:194
 #, kde-format
 msgid "A starting file or folders"
 msgstr ""

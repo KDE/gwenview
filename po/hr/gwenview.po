@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-20 00:38+0000\n"
+"POT-Creation-Date: 2024-06-21 00:37+0000\n"
 "PO-Revision-Date: 2011-07-22 16:56+0200\n"
 "Last-Translator: Marko Dimjašević <marko@dimjasevic.net>\n"
 "Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
@@ -1149,33 +1149,33 @@ msgstr[1] "%1 datoteke"
 msgstr[2] "%1 datoteka"
 
 # pmap: =/nom=Gwenview/gen=Gwenviewa/dat=Gwenviewu/aku=Gwenview/lok=Gwenviewu/ins=Gwenviewom/_r=m/_b=j/
-#: app/main.cpp:179
+#: app/main.cpp:181
 #, kde-format
 msgid "Gwenview"
 msgstr "Gwenview"
 
-#: app/main.cpp:181
+#: app/main.cpp:183
 #, kde-format
 msgid "An Image Viewer"
 msgstr "Preglednik slika"
 
-#: app/main.cpp:189
+#: app/main.cpp:191
 #, kde-format
 msgid "Start in fullscreen mode"
 msgstr "Započni u načinu preko cijelog zaslona"
 
-#: app/main.cpp:190
+#: app/main.cpp:192
 #, kde-format
 msgid "Start in slideshow mode"
 msgstr "Započni u načinu Prezentacija"
 
-#: app/main.cpp:191
+#: app/main.cpp:193
 #, fuzzy, kde-format
 #| msgid "Start in slideshow mode"
 msgid "Start in spotlight mode"
 msgstr "Započni u načinu Prezentacija"
 
-#: app/main.cpp:192
+#: app/main.cpp:194
 #, fuzzy, kde-format
 #| msgid "A starting file or folder"
 msgid "A starting file or folders"
