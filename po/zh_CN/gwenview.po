@@ -488,17 +488,17 @@ msgstr "不含标签"
 #: app/filtercontroller.cpp:229
 #, kde-format
 msgid "Dimensions >="
-msgstr ""
+msgstr "尺寸 >="
 
 #: app/filtercontroller.cpp:230
 #, kde-format
 msgid "Dimensions ="
-msgstr ""
+msgstr "尺寸 ="
 
 #: app/filtercontroller.cpp:231
 #, kde-format
 msgid "Dimensions <="
-msgstr ""
+msgstr "尺寸 <="
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: app/filtercontroller.cpp:239 lib/crop/cropwidget.cpp:221
@@ -544,7 +544,7 @@ msgstr "按标签过滤"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Dimensions"
-msgstr ""
+msgstr "按尺寸过滤"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: app/fullscreenconfigwidget.ui:20
