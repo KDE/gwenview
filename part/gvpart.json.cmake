@@ -15,7 +15,6 @@
         "Name[cs]": "Prohlížeč obrázků Gwenview",
         "Name[de]": "Gwenview Bildbetrachter",
         "Name[el]": "Προβολέας εικόνων Gwenview",
-        "Name[en_GB]": "Gwenview Image Viewer",
         "Name[eo]": "Gwenview Bildrigardilo",
         "Name[es]": "Visor de imágenes Gwenview",
         "Name[eu]": "Gwenview irudi erakuslea",
