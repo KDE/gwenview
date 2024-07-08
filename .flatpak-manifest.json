@@ -74,7 +74,7 @@
                 "make shared",
                 "make utils",
                 "make DESTDIR=${FLATPAK_DEST} install",
-                "install -D -m644 License.txt ${FLATPAK_DEST}/share/licenses/cfitsio/LICENSE"
+                "install -D -m644 licenses/* ${FLATPAK_DEST}/share/licenses/cfitsio/LICENSE"
             ],
             "cleanup": [
                 "/bin/cookbook",
@@ -84,8 +84,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://ftp.debian.org/debian/pool/main/c/cfitsio/cfitsio_4.3.1.orig.tar.gz",
-                    "sha256": "47a7c8ee05687be1e1d8eeeb94fb88f060fbf3cd8a4df52ccb88d5eb0f5062be",
+                    "url": "https://ftp.debian.org/debian/pool/main/c/cfitsio/cfitsio_4.4.1.orig.tar.gz",
+                    "sha256": "66a1dc3f21800f9eeabd9eac577b91fcdd9aabba678fbba3b8527319110d1d25",
                     "x-checker-data": {
                         "type": "anitya",
                         "project-id": 270,
