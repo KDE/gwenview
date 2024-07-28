@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-21 00:37+0000\n"
-"PO-Revision-Date: 2024-05-18 14:26+0200\n"
+"PO-Revision-Date: 2024-07-27 21:57+0200\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
 "Language: hu\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 24.02.2\n"
+"X-Generator: Lokalize 24.05.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -501,17 +501,17 @@ msgstr "Nincs ilyen címkéje:"
 #: app/filtercontroller.cpp:229
 #, kde-format
 msgid "Dimensions >="
-msgstr ""
+msgstr "Méret >="
 
 #: app/filtercontroller.cpp:230
 #, kde-format
 msgid "Dimensions ="
-msgstr ""
+msgstr "Méret ="
 
 #: app/filtercontroller.cpp:231
 #, kde-format
 msgid "Dimensions <="
-msgstr ""
+msgstr "Méret <="
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: app/filtercontroller.cpp:239 lib/crop/cropwidget.cpp:221
@@ -554,12 +554,10 @@ msgid "Filter by Tag"
 msgstr "Szűrés címkére"
 
 #: app/filtercontroller.cpp:344
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Filter by Date"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Dimensions"
-msgstr "Szűrés dátumra"
+msgstr "Szűrés méret szerint"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: app/fullscreenconfigwidget.ui:20
