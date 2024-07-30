@@ -5,30 +5,34 @@
 # Martin Schlander <mschlander@opensuse.org>, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2017, 2018, 2020.
 # Anders Lund <anders@alweb.dk>, 2009.
 # Claus Christensen <claus_chr@webspeed.dk>, 2012.
+# SPDX-FileCopyrightText: 2024 rasmus rosendahl-kaa <rasmus@rosendahl-kaa.name>
 msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-21 00:37+0000\n"
-"PO-Revision-Date: 2020-11-17 19:47+0100\n"
-"Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
+"PO-Revision-Date: 2024-07-25 12:49+0200\n"
+"Last-Translator: rasmus rosendahl-kaa <rasmus@rosendahl-kaa.name>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 20.04.2\n"
+"X-Generator: Lokalize 24.05.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Rune Rønde Møller,Martin Schlander,Claus Christensen"
+msgstr ""
+"Rune Rønde Møller,Martin Schlander,Claus Christensen,Rasmus Rosendahl-Kaa"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "runermoeller@gmail.com,mschlander@opensuse.org,claus_chr@webspeed.dk"
+msgstr ""
+"runermoeller@gmail.com,mschlander@opensuse.org,claus_chr@webspeed.dk,"
+"Rasmus@Rosendahl-Kaa.name"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_LowResourceUsageMode)
 #: app/advancedconfigpage.ui:28
@@ -111,7 +115,7 @@ msgstr "Husk mapper og URL'er"
 #: app/advancedconfigpage.ui:240
 #, kde-format
 msgid "Enable color management"
-msgstr ""
+msgstr "Slå farvehåndtering til"
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileHelpLabel)
 #: app/advancedconfigpage.ui:265
@@ -122,19 +126,22 @@ msgid ""
 "is only appropriate for displays that are calibrated to the sRGB color space "
 "or are known to provide an incorrect color profile."
 msgstr ""
+"Når farvehåndtering er slået fra, vil Gwenview konvertere billeder til sRGB "
+"farverummet i stedet for det farverum den detekterer for skærmen. Dette er "
+"kune passende for skærme, der er kalibreret til sRGB farverummet eller er "
+"kendt for at angive en forkert farveprofil"
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileLabel)
 #: app/advancedconfigpage.ui:275
-#, fuzzy, kde-format
-#| msgid "Too many arguments."
+#, kde-format
 msgid "Color management:"
-msgstr "For mange argumenter."
+msgstr "Farvehåndtering:"
 
 #: app/alignwithsidebarwidgetaction.cpp:23
 #, kde-format
 msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
 msgid "Sidebar Alignment Spacer"
-msgstr ""
+msgstr "Sidepanelsindretningsafstandsstykke"
 
 #: app/browsemainpage.cpp:146 app/mainwindow.cpp:376 app/viewmainpage.cpp:410
 #: lib/documentview/documentviewcontroller.cpp:55
@@ -426,7 +433,7 @@ msgstr "Opret mappe..."
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Open in New Window"
-msgstr ""
+msgstr "Åbn i nyt vindue"
 
 #: app/fileopscontextmanageritem.cpp:189
 #, kde-format
@@ -496,17 +503,17 @@ msgstr "Ikke mærket"
 #: app/filtercontroller.cpp:229
 #, kde-format
 msgid "Dimensions >="
-msgstr ""
+msgstr "Dimensioner >="
 
 #: app/filtercontroller.cpp:230
 #, kde-format
 msgid "Dimensions ="
-msgstr ""
+msgstr "Dimensioner ="
 
 #: app/filtercontroller.cpp:231
 #, kde-format
 msgid "Dimensions <="
-msgstr ""
+msgstr "Dimensioner <="
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: app/filtercontroller.cpp:239 lib/crop/cropwidget.cpp:221
@@ -549,12 +556,10 @@ msgid "Filter by Tag"
 msgstr "Filtrér efter mærke"
 
 #: app/filtercontroller.cpp:344
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Filter by Date"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Dimensions"
-msgstr "Filtrér efter dato"
+msgstr "Filtrér efter dimensioner"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: app/fullscreenconfigwidget.ui:20
@@ -663,51 +668,49 @@ msgstr "Afspil automatisk"
 #: app/generalconfigpage.ui:41
 #, kde-format
 msgid "Notify after reaching the last image:"
-msgstr ""
+msgstr "Underret efter at have nået sidste billede:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, neverShowWrapNoticeRadioButton)
 #: app/generalconfigpage.ui:51
 #, kde-format
 msgid "Never"
-msgstr ""
+msgstr "Aldrig"
 
 #. i18n: ectx: property (text), widget (QRadioButton, wrapNoticeOnSlideshowRadioButton)
 #: app/generalconfigpage.ui:58
 #, kde-format
 msgid "Only during slideshows"
-msgstr ""
+msgstr "Kun under diasshow"
 
 #. i18n: ectx: property (text), widget (QRadioButton, alwaysShowWrapNoticeRadioButton)
 #: app/generalconfigpage.ui:65
 #, kde-format
 msgid "Always"
-msgstr ""
+msgstr "Altid"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: app/generalconfigpage.ui:88
-#, fuzzy, kde-format
-#| msgid "&Solid color background:"
+#, kde-format
 msgid "Fullscreen background:"
-msgstr "&Ensfarvet baggrund:"
+msgstr "Fuldskærm baggrund:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, fullscreenBackgroundImageRadioButton)
 #: app/generalconfigpage.ui:98
 #, kde-format
 msgid "Dark gray texture"
-msgstr ""
+msgstr "Mørkegrå tekstur"
 
 #. i18n: ectx: property (text), widget (QRadioButton, fullscreenBackgroundBlackRadioButton)
 #: app/generalconfigpage.ui:105
 #, kde-format
 msgid "Black"
-msgstr ""
+msgstr "Sort"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: app/generalconfigpage.ui:128
-#, fuzzy, kde-format
-#| msgid "JPEG save quality:"
+#, kde-format
 msgid "Lossy image save quality:"
-msgstr "Gemmekvalitet for JPEG:"
+msgstr "Kvalitet for ikke-tabsfrie billedeopbevaring:"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, jpegQualitySpinner)
 #: app/generalconfigpage.ui:168
@@ -722,6 +725,9 @@ msgid ""
 "The quality level when saving images using lossy image formats such as JPEG, "
 "WEBP, AVIF, HEIF, and HEIC. Higher quality increases the file size."
 msgstr ""
+"Kvalitetsniveauet når der gemmes med billder, der bruger et ikke-tabsfrit "
+"format såsom JPEG, WEBP, AVIF, HEIF og HEIC. Højere kvaliteter øger "
+"filstørrelsen."
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: app/generalconfigpage.ui:222
@@ -743,17 +749,15 @@ msgstr "Vis kun markeringsknap"
 
 #. i18n: ectx: property (text), widget (QRadioButton, noneThumbnailActionsRadioButton)
 #: app/generalconfigpage.ui:243
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "A number of thumbnail actions to show"
 msgid "None"
 msgstr "Ingen"
 
 #: app/gvcore.cpp:80
-#, fuzzy, kde-format
-#| msgid "JPEG save quality:"
+#, kde-format
 msgid "Image quality:"
-msgstr "Gemmekvalitet for JPEG:"
+msgstr "Billedekvalitet:"
 
 #: app/gvcore.cpp:87
 #, kde-format
@@ -874,7 +878,7 @@ msgstr "Beskær"
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Adjust Colors"
-msgstr ""
+msgstr "Juster farver"
 
 #: app/imageopscontextmanageritem.cpp:128
 #: lib/redeyereduction/redeyereductionimageoperation.cpp:75
@@ -887,13 +891,13 @@ msgstr "Reducér røde øjne"
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Annotate"
-msgstr ""
+msgstr "Annotér"
 
 #: app/imageopscontextmanageritem.cpp:141
 #, kde-format
 msgctxt "@title:window Annotate [filename]"
 msgid "Annotate %1"
-msgstr ""
+msgstr "Annotér %1"
 
 #: app/imageopscontextmanageritem.cpp:164 lib/document/documentjob.cpp:77
 #, kde-format
@@ -1050,15 +1054,13 @@ msgid "%1:"
 msgstr "%1:"
 
 #: app/infocontextmanageritem.cpp:228
-#, fuzzy, kde-format
-#| msgid "Show failed files..."
+#, kde-format
 msgctxt "@action show more image meta info"
 msgid "Show more details..."
-msgstr "Vis mislykkede filer..."
+msgstr "Vil flere detaljer..."
 
 #: app/infocontextmanageritem.cpp:242
-#, fuzzy, kde-format
-#| msgid "Image Information"
+#, kde-format
 msgctxt "@title:group"
 msgid "Image Information"
 msgstr "Billedinformation"
@@ -1120,10 +1122,9 @@ msgid "Start in slideshow mode"
 msgstr "Start i diasshow-tilstand"
 
 #: app/main.cpp:193
-#, fuzzy, kde-format
-#| msgid "Start in slideshow mode"
+#, kde-format
 msgid "Start in spotlight mode"
-msgstr "Start i diasshow-tilstand"
+msgstr "Start i spotlight-tilstand"
 
 #: app/main.cpp:194
 #, kde-format
@@ -1182,7 +1183,7 @@ msgstr "Afslut fuldskærm"
 #, kde-format
 msgctxt "@action"
 msgid "Spotlight Mode"
-msgstr ""
+msgstr "Spotlight-tilstand"
 
 #: app/mainwindow.cpp:441
 #, kde-format
@@ -1254,7 +1255,7 @@ msgstr "Sidepanel"
 #, kde-format
 msgctxt "@action opens crop, rename, etc."
 msgid "Show Editing Tools"
-msgstr ""
+msgstr "Vis redigeringsværktøjer"
 
 #: app/mainwindow.cpp:516
 #, kde-format
@@ -1277,8 +1278,7 @@ msgstr ""
 "udklipsholderen."
 
 #: app/mainwindow.cpp:582
-#, fuzzy, kde-format
-#| msgid "Configure"
+#, kde-format
 msgctxt "@title:menu submenu for actions that open configuration dialogs"
 msgid "Configure"
 msgstr "Indstil"
@@ -1317,7 +1317,7 @@ msgstr "Operationer"
 #: app/mainwindow.cpp:950
 #, kde-format
 msgid "Viewing media"
-msgstr ""
+msgstr "Viser medie"
 
 #: app/mainwindow.cpp:1429
 #, kde-format
@@ -1508,11 +1508,10 @@ msgid "Save All"
 msgstr "Gem alle"
 
 #: app/savebar.cpp:136
-#, fuzzy, kde-format
-#| msgid "Next modified image"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Save all modified images"
-msgstr "Næste ændrede billede"
+msgstr "Gem alle modificerede billeder"
 
 #: app/semanticinfocontextmanageritem.cpp:186
 #, kde-format
@@ -1568,19 +1567,16 @@ msgid "Description"
 msgstr "Beskrivelse"
 
 #: app/slideshowfileitemaction.cpp:61
-#, fuzzy, kde-format
-#| msgid "Start Slideshow"
+#, kde-format
 msgctxt "@action:inmenu Start a slideshow Dolphin context menu"
 msgid "Start a Slideshow"
-msgstr "Start diasshow"
+msgstr "Start et diasshow"
 
 #: app/slideshowfileitemaction.cpp:66
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "View selected images"
+#, kde-format
 msgctxt "@action:inmenu Start a slideshow Dolphin context menu"
 msgid "Start a Slideshow with selected images"
-msgstr "Vis markerede billeder"
+msgstr "Vis et diasshow med valgte billeder"
 
 #: app/startmainpage.cpp:291
 #, kde-format
@@ -1664,8 +1660,7 @@ msgid "Synchronize"
 msgstr "Synkronisér"
 
 #: app/viewmainpage.cpp:413
-#, fuzzy, kde-format
-#| msgid "Show thumbnails"
+#, kde-format
 msgid "Show Thumbnails"
 msgstr "Vis miniaturer"
 
@@ -1681,13 +1676,18 @@ msgid ""
 "and contain multiple rows of images; <link url='%1'>configure these options "
 "in the settings</link>.</para>"
 msgstr ""
+"<para>Dette slår et lille panel til/fra, der viser alle de andre billeder i "
+"den nuværende mappe. Hvis en vælges, ændres det aktuelt viste billede.</"
+"para><para>Vælg flere billeder på samme tid for at se dem side om side.</"
+"para><para>Panelet kan eventuelt blive flyttet til den højre side af skærmen "
+"og indeholde flere rækker af billeder; <link url='%1'>konfigurér disse "
+"indstillinger i indstillingerne</link>.</para>"
 
 #: app/viewmainpage.cpp:571
-#, fuzzy, kde-format
-#| msgid "Background color:"
+#, kde-format
 msgctxt "@item:inmenu"
 msgid "Background Color Mode"
-msgstr "Baggrundsfarve:"
+msgstr "Baggrundsfarvetilstand:"
 
 #: app/viewmainpage.cpp:763
 #, kde-format
@@ -1972,19 +1972,20 @@ msgstr "Importerer dokumenter..."
 #, kde-format
 msgctxt "@info above install button when Kamera is not installed"
 msgid "Support for your camera is not installed."
-msgstr ""
+msgstr "Understøttelse til dit kamera er ikke installeret"
 
 #: importer/thumbnailpage.cpp:233
 #, kde-format
 msgctxt "@info above install button, %1 protocol name %2 error text from KIO"
 msgid "The protocol support library for \"%1\" is not installed. Error: %2"
 msgstr ""
+"Protokolunderstøttelsesbiblioteket for \"%1\" er ikke installeret. Fejl: %2"
 
 #: importer/thumbnailpage.cpp:235
 #, kde-format
 msgctxt "@info above install button, %1 protocol name"
 msgid "The protocol support library for \"%1\" is not installed."
-msgstr ""
+msgstr "Protokolunderstøttelsesbiblioteket for \"%1% er ikke installeret."
 
 #: importer/thumbnailpage.cpp:247
 #, kde-format
@@ -1992,18 +1993,22 @@ msgctxt "@info:usagetip above install button"
 msgid ""
 "After finishing the installation process, restart this Importer to continue."
 msgstr ""
+"Efter at have færdiggjort installationsprocessen, genstart denne importør "
+"for at fortsætte."
 
 #: importer/thumbnailpage.cpp:254
 #, kde-format
 msgctxt "@info:tooltip for a button, %1 protocol name"
 msgid "Launch Discover to install the protocol support library for \"%1\""
 msgstr ""
+"Start Discover for at installere protokolunderstøttelsesbiblioteket for "
+"\"%1\""
 
 #: importer/thumbnailpage.cpp:256
 #, kde-format
 msgctxt "@action:button"
 msgid "Install Support for this Camera…"
-msgstr ""
+msgstr "Installér understøttelse for dette kamera..."
 
 #: importer/thumbnailpage.cpp:257
 #, kde-format
@@ -2013,12 +2018,15 @@ msgid ""
 "to launch Discover to install Kamera to enable protocol support for "
 "\"camera:/\" on your system."
 msgstr ""
+"Du skal have Kamera installeret på dit system for at læse fra kameraet. Klik "
+"her for at starte Discover og installere Kamera for at slå "
+"protokolunderstøttelse for \"camera:/\" til på dit system."
 
 #: importer/thumbnailpage.cpp:260
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Install Protocol Support for \"%1\"…"
-msgstr ""
+msgstr "Installér protokolunderstøttelse for \"%1\"..."
 
 #: importer/thumbnailpage.cpp:261
 #, kde-format
@@ -2027,12 +2035,17 @@ msgid ""
 "Click here to launch Discover to install the missing protocol support "
 "library to enable the protocol support for \"%1:/\" on your system."
 msgstr ""
+"Klik her for at starte Discover for at installere det manglende "
+"protokolunderstøttelsesbibliotek for at slå protokolunderstøttelse for \"%1:/"
+"\" til på dit system."
 
 #: importer/thumbnailpage.cpp:265
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Search the Web for How to Install Protocol Support for \"%1\"…"
 msgstr ""
+"Søg på nettet for Hvordan skal man installere protokolunderstøttelse for "
+"\"%1\"..."
 
 #: importer/thumbnailpage.cpp:281
 #, kde-format
@@ -2040,7 +2053,7 @@ msgctxt ""
 "@info this text will be used as a search term in an online search engine, %1 "
 "protocol name"
 msgid "How to install protocol support for \"%1\" on Linux"
-msgstr ""
+msgstr "Hvordan man installere protokolunderstøttelse for \"%1\" på Linux"
 
 #: importer/thumbnailpage.cpp:282
 #, kde-format
@@ -2048,7 +2061,7 @@ msgctxt ""
 "search engine URL, %1 search keyword, and translators can replace duckduckgo "
 "with other search engines"
 msgid "https://duckduckgo.com/?q=%1"
-msgstr ""
+msgstr "https://duckduckgo.com/?q=%1"
 
 #: importer/thumbnailpage.cpp:323
 #, kde-format
@@ -2067,6 +2080,9 @@ msgid ""
 "Opening Discover failed.<nl/>Please check if Discover is installed on your "
 "system, or use your system's package manager to install \"Kamera\" package."
 msgstr ""
+"Kunne ikke starte Discover.<nl/>Tjek venligst om Discover er installeret på "
+"dit system, ellers brug dit systems pakkehåndtering for at installere "
+"\"Kamera\"-pakken"
 
 #: importer/thumbnailpage.cpp:492
 #, kde-kuit-format
@@ -2076,6 +2092,9 @@ msgid ""
 "system, or use your system's package manager to install the protocol support "
 "library for \"%1\"."
 msgstr ""
+"Kunne ikke starte Discover<nl/>Tjek venligst om Discover er installeret på "
+"dit system, ellers brug dit systems pakkehåndtering for at installere "
+"protokolunderstøttelsesbiblioteket for \"%1\"."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: importer/thumbnailpage.ui:173
@@ -2102,10 +2121,9 @@ msgid "Listing content of:"
 msgstr "Oplister indhold af:"
 
 #: lib/about.cpp:38
-#, fuzzy, kde-format
-#| msgid "Copyright 2000-2019 Gwenview authors"
+#, kde-format
 msgid "Copyright 2000-2022 Gwenview authors"
-msgstr "Ophavsret 2000-2019 Gwenview-udviklerne"
+msgstr "Ophavsret 2000-2022 Gwenview-udviklerne"
 
 #: lib/about.cpp:40
 #, kde-format
@@ -2120,22 +2138,22 @@ msgstr "Udvikler"
 #: lib/bcg/bcgimageoperation.cpp:69
 #, kde-format
 msgid "Adjust Colors"
-msgstr ""
+msgstr "Justér farver"
 
 #: lib/bcg/bcgwidget.cpp:51
 #, kde-format
 msgid "Brightness:"
-msgstr ""
+msgstr "Lysstyrke:"
 
 #: lib/bcg/bcgwidget.cpp:52
 #, kde-format
 msgid "Contrast:"
-msgstr ""
+msgstr "Kontrast:"
 
 #: lib/bcg/bcgwidget.cpp:53
 #, kde-format
 msgid "Gamma:"
-msgstr ""
+msgstr "Gamma:"
 
 #: lib/crop/cropwidget.cpp:191
 #, kde-format
@@ -2278,12 +2296,10 @@ msgid "%1x%2"
 msgstr "%1x%2"
 
 #: lib/documentview/documentview.cpp:264 lib/zoomcombobox/zoomcombobox.cpp:318
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip of custom toolbar button"
-#| msgid "%1"
+#, kde-format
 msgctxt "Percent value"
 msgid "%1%"
-msgstr "%1"
+msgstr "%1%"
 
 #: lib/documentview/documentview.cpp:543
 #, kde-format
@@ -2296,8 +2312,7 @@ msgid "Loading <filename>%1</filename> failed"
 msgstr "Indlæsning af <filename>%1</filename> mislykkedes"
 
 #: lib/documentview/documentviewcontroller.cpp:61
-#, fuzzy, kde-format
-#| msgid "Zoom to fit"
+#, kde-format
 msgid "Zoom to Fit"
 msgstr "Zoom til vinduesstørrelse"
 
@@ -2308,11 +2323,10 @@ msgid "Fit"
 msgstr "Tilpas"
 
 #: lib/documentview/documentviewcontroller.cpp:64
-#, fuzzy, kde-format
-#| msgid "&Fit image to page"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Fit image into the viewing area"
-msgstr "&Tilpas billede til side"
+msgstr "Tilpas billede til visningsområde"
 
 #. i18n: "a previous zoom value" is worded in such an unclear way because it can either be the zoom value for the image viewed previously or the
 #. zoom value that was used the last time this same image was viewed. Being more clear about this isn't really necessary here so I kept it short
@@ -2334,6 +2348,17 @@ msgid ""
 "are displayed at a previous zoom value instead <link url='%2'>in the "
 "settings</link>.</para>"
 msgstr ""
+"<para>Dette får billedet til at fylde det tilgængelige visningsområde:"
+"<list><item>Billeder, der er større end visningsområdet er vist i en mindre "
+"størrelse, så de passer.</item><item>Billeder, der er mindre end "
+"visningsområdet vises i deres normale størrelse. Hvis mindre billeder i "
+"stedet skal bruge hele det tilfængelige visningsområde, skal "
+"<emphasis>Forstør mindre billeder</emphasis> <link url='%2'> være slået til "
+"i indstillignerne</link>.</item></list></para><para>Hvis \"%1\" allerede er "
+"slået til, vil den slået fra, hvis der trykkes igen, og billederne vises i "
+"deres normale størrelse i stedet.</para><para>\"%1\" er standard zoom-"
+"tilstanden for billeder. Dette kan ændres  <link url='%2'>i indstillingerne</"
+"link> så billeder vises i en tidligere zoom-værdi i stedet.</para>"
 
 #: lib/documentview/documentviewcontroller.cpp:83
 #, kde-format
@@ -2349,11 +2374,7 @@ msgid "Fill"
 msgstr "Udfyld"
 
 #: lib/documentview/documentviewcontroller.cpp:90
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "@action:button Zoom to original size, shown in status bar, keep it short "
-#| "please"
-#| msgid "100%"
+#, kde-format
 msgctxt "Original image size percent value"
 msgid "100%"
 msgstr "100%"
@@ -2361,31 +2382,31 @@ msgstr "100%"
 #: lib/documentview/documentviewcontroller.cpp:98
 #, kde-format
 msgid "Show Bird's Eye View When Zoomed In"
-msgstr ""
+msgstr "Vis fugleperspektiv, når der zoomes ind"
 
 #: lib/documentview/documentviewcontroller.cpp:105
 #, kde-format
 msgctxt "@action"
 msgid "Follow color scheme"
-msgstr ""
+msgstr "Følg farveskema"
 
 #: lib/documentview/documentviewcontroller.cpp:111
 #, kde-format
 msgctxt "@action"
 msgid "Light Mode"
-msgstr ""
+msgstr "Lys tilstand"
 
 #: lib/documentview/documentviewcontroller.cpp:117
 #, kde-format
 msgctxt "@action"
 msgid "Neutral Mode"
-msgstr ""
+msgstr "Neutral tilstand"
 
 #: lib/documentview/documentviewcontroller.cpp:123
 #, kde-format
 msgctxt "@action"
 msgid "Dark Mode"
-msgstr ""
+msgstr "Mørk tilstand"
 
 #: lib/documentview/messageviewadapter.cpp:50
 #, kde-format
@@ -2560,27 +2581,25 @@ msgstr "Filstørrelse"
 #, kde-format
 msgctxt "@item:intable"
 msgid "Date Created"
-msgstr ""
+msgstr "Dato oprettet"
 
 #: lib/imagemetainfomodel.cpp:257
-#, fuzzy, kde-format
-#| msgid "One image modified"
-#| msgid_plural "%1 images modified"
+#, kde-format
 msgctxt "@item:intable"
 msgid "Date Modified"
-msgstr "Et billede ændret"
+msgstr "Dato for ændring"
 
 #: lib/imagemetainfomodel.cpp:258
 #, kde-format
 msgctxt "@item:intable"
 msgid "Date Accessed"
-msgstr ""
+msgstr "Dato for adgang"
 
 #: lib/imagemetainfomodel.cpp:259
 #, kde-format
 msgctxt "@item:intable"
 msgid "Path"
-msgstr ""
+msgstr "Sti"
 
 #: lib/imagemetainfomodel.cpp:260
 #, kde-format
@@ -2595,12 +2614,10 @@ msgid "Comment"
 msgstr "Kommentar"
 
 #: lib/imagemetainfomodel.cpp:262
-#, fuzzy, kde-format
-#| msgctxt "@item:intable"
-#| msgid "File Time"
+#, kde-format
 msgctxt "@item:intable"
 msgid "File Type"
-msgstr "Filens ændringstid"
+msgstr "Filens type"
 
 #: lib/imagemetainfomodel.cpp:324
 #, kde-format
@@ -2731,12 +2748,14 @@ msgid ""
 "Assuming that the image format won't be changed and\n"
 "for lossy images using the value set in 'Lossy image save quality'."
 msgstr ""
+"Forudsat at billedeformatet ikke ændres og\n"
+"for ikke-tabsfrie billeder, der bruger værdien sat i \"Gemmekvalitet for "
+"ikke-tabsfrie billleder\"."
 
 #: lib/resize/resizeimagedialog.cpp:219
-#, fuzzy, kde-format
-#| msgid "Mirror"
+#, kde-format
 msgid "error"
-msgstr "Spejl"
+msgstr "fejl"
 
 #: lib/resize/resizeimageoperation.cpp:70
 #, kde-format
@@ -2754,7 +2773,7 @@ msgstr "Ændr billedstørrelse"
 #: lib/resize/resizeimagewidget.ui:20
 #, kde-format
 msgid "Estimated new file size:"
-msgstr ""
+msgstr "Nye, estimeret, filstørrelse:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: lib/resize/resizeimagewidget.ui:47
@@ -2778,10 +2797,9 @@ msgstr " px"
 
 #. i18n: ectx: property (text), widget (QLabel, mCurrentSizeLabel)
 #: lib/resize/resizeimagewidget.ui:115
-#, fuzzy, kde-format
-#| msgid "Current size:"
+#, kde-format
 msgid "Current file size:"
-msgstr "Nuværende størrelse:"
+msgstr "Nuværende filstørrelse:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, mKeepAspectCheckBox)
 #: lib/resize/resizeimagewidget.ui:145
