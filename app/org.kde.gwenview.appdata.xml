@@ -230,6 +230,7 @@
       <li xml:lang="bg">Основно редактиране на изображения: завъртане, изрязване, промяна на размера, огледален образ, обръщане, намаляване на червените очи, и регулиране на яркостта, контраста или гамата</li>
       <li xml:lang="ca">Edició senzilla d'imatges: gira, escapça, redimensiona, emmiralla, capgira, redueix els ulls vermells i ajusta la brillantor, el contrast o la gamma</li>
       <li xml:lang="ca-valencia">Edició senzilla d'imatges: gira, escapça, redimensiona, emmiralla, capgira, reduïx els ulls rojos i ajusta la brillantor, el contrast o la gamma</li>
+      <li xml:lang="da">Simpel billederedigering; rotér, beskær, ændr størrelse, vend, reducér røde øjne og justér lysstyrke, kontrast eller gamma</li>
       <li xml:lang="el">Απλή επεξεργασία εικόνας: περιστροφή, περικοπή, αλλαγή μεγέθους, καθρέφτης, αναστροφή, μείωση των κόκκινων ματιών, και ρύθμιση της φωτεινότητας, της αντίθεσης ή gamma</li>
       <li xml:lang="en-GB">Simple image editing: rotate, crop, resize, mirror, flip, reduce red eye, and adjust brightness, contrast, or gamma</li>
       <li xml:lang="eo">Simpla bildredaktado: rotacii, tondi, aligrandigi, speguli, renversi, redukti ruĝ-okulon, kaj alĝustigi helecon, kontraston aŭ gamma</li>
@@ -269,6 +270,7 @@
       <li xml:lang="bg">Анотиране и маркиране на изображения със стрелки, форми, текстови полета, печати за изображения, и др.</li>
       <li xml:lang="ca">Anota i marca les imatges amb fletxes, formes, quadres de text, segells d'imatge i més</li>
       <li xml:lang="ca-valencia">Anota i marca les imatges amb fletxes, formes, quadros de text, segells d'imatge i més</li>
+      <li xml:lang="da">Annotér og markér billeder med pile, former, tekstbokse, billedestempler og mere</li>
       <li xml:lang="el">Σημειώστε και επισημάνετε εικόνες με βέλη, σχήματα, πλαίσια κειμένου, σφραγίδες εικόνας, και πολλά άλλα</li>
       <li xml:lang="en-GB">Annotate and mark up images with arrows, shapes, text boxes, image stamps, and more</li>
       <li xml:lang="eo">Prinoti kaj primarki bildojn per sagoj, formoj, tekstskatoloj, bildostampoj kaj pli</li>
@@ -309,6 +311,7 @@
       <li xml:lang="ca">Accions bàsiques de gestió de fitxers com copia, mou, suprimeix i altres</li>
       <li xml:lang="ca-valencia">Accions bàsiques de gestió de fitxers com copia, mou, suprimix i altres</li>
       <li xml:lang="cs">Běžná správa souborů, jako například kopírování, přesun, vymazání a podobně</li>
+      <li xml:lang="da">Basal filhåndteringshandlinger, såsom kopiér, flyt, slet m.m.</li>
       <li xml:lang="de">Grundlegende Dateiverwaltungsaktionen wie Kopieren, Verschieben, Löschen und weitere</li>
       <li xml:lang="el">Βασικές ενέργειες διαχείρισης αρχείων, όπως αντιγραφή, μετακίνηση, διαγραφή και άλλες</li>
       <li xml:lang="en-GB">Basic file management actions such as copy, move, delete, and others</li>
@@ -411,6 +414,7 @@
       <caption xml:lang="bg">Основен прозорец на приложението, показващ изображение и контроли вляво</caption>
       <caption xml:lang="ca">Finestra principal de l'aplicació que mostra una imatge i els controls a l'esquerra</caption>
       <caption xml:lang="ca-valencia">Finestra principal de l'aplicació que mostra una imatge i els controls en l'esquerra</caption>
+      <caption xml:lang="da">Programmets hovedvindue, der viser et billede og kontrollerne til venstre</caption>
       <caption xml:lang="en-GB">Main application window displaying an image and controls on the left</caption>
       <caption xml:lang="eo">Ĉefa aplikofenestro montranta bildon kaj regilojn maldekstre</caption>
       <caption xml:lang="es">Ventana principal de la aplicación que muestra una imagen y controles a la izquierda</caption>
@@ -448,6 +452,7 @@
       <caption xml:lang="ca">Empreu el Gwenview per a gestionar la vostra col·lecció d'imatges</caption>
       <caption xml:lang="ca-valencia">Utilitzeu Gwenview per a gestionar la vostra col·lecció d'imatges</caption>
       <caption xml:lang="cs">Používejte Gwenview pro správu vaší sbírky</caption>
+      <caption xml:lang="da">Brug Gwenview til at håndtere din billedesamling</caption>
       <caption xml:lang="de">Verwenden Sie Gwenview zur Verwaltung Ihrer Bildersammlung</caption>
       <caption xml:lang="el">Χρησιμοποίησε το Gwenview για να διαχειριστείς τη συλλογή των φωτογραφιών σου</caption>
       <caption xml:lang="en-GB">Use Gwenview to manage your image collection</caption>
