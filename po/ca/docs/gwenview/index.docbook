@@ -327,7 +327,7 @@
 > que permet eliminar aquesta subfinestra.</para>
 
 <para
->Quan es mostren múltiples imatges, apareixerà una petita barra d'eines sota de cada imatge que permet eliminar la imatge o la seva subfinestra. Podeu realitzar operacions de zoom independentment per a cada imatge, o sincronitzar-les. Alterneu això marcant l'opció <guilabel
+>Quan es mostren múltiples imatges, apareixerà una petita barra d'eines sota de cada imatge que permet suprimir la imatge o la seva subfinestra. Podeu realitzar operacions de zoom independentment per a cada imatge, o sincronitzar-les. Alterneu això marcant l'opció <guilabel
 >Sincronitza</guilabel
 > a l'esquerra del control lliscant de zoom o prement <keycombo action="simul"
 >&Ctrl;<keycap
@@ -953,7 +953,7 @@
 >&Maj;<keycap
 >Supr</keycap
 ></keycombo
->: Elimina definitivament la imatge del disc. Cal tenir en compte que aquesta operació és irreversible i que no es podrà desfer.</para
+>: Suprimeix definitivament la imatge del disc. Cal tenir en compte que aquesta operació és irreversible i que no es podrà desfer.</para
 ></listitem>
 
 <listitem
