@@ -97,6 +97,7 @@ GenericName[ko]=그림 뷰어
 GenericName[lt]=Paveikslų žiūryklė
 GenericName[lv]=Attēlu skatītājs
 GenericName[nl]=Afbeeldingsviewer
+GenericName[nn]=Biletvisar
 GenericName[pa]=ਚਿੱਤਰ ਦਰਸ਼ਕ
 GenericName[pl]=Przeglądarka obrazów
 GenericName[pt_BR]=Visualizador de imagens
