@@ -26,6 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // KF
 #include <KAboutData>
+#include <KCrash>
 #include <KLocalizedString>
 
 // Local
@@ -43,6 +44,8 @@ int main(int argc, char *argv[])
     aboutData->setShortDescription(i18n("Photo Importer"));
 
     KAboutData::setApplicationData(*aboutData);
+
+    KCrash::initialize();
 
     QCommandLineParser parser;
     aboutData.data()->setupCommandLine(&parser);
