@@ -52,6 +52,7 @@ target_link_libraries(gwenview_importer
     KF6::KIOCore
     KF6::ItemModels
     KF6::WidgetsAddons
+    KF6::Crash
     Qt::Core
     )
 

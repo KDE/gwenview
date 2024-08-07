@@ -31,6 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KF
 #include <KAboutData>
 #include <KActionCollection>
+#include <KCrash>
 #include <KIO/CopyJob>
 #include <KLocalizedString>
 
@@ -185,6 +186,8 @@ int main(int argc, char *argv[])
     aboutData->setOrganizationDomain(QByteArray("kde.org"));
     KAboutData::setApplicationData(*aboutData);
     QApplication::setWindowIcon(QIcon::fromTheme(QStringLiteral("gwenview"), app.windowIcon()));
+
+    KCrash::initialize();
 
     QCommandLineParser parser;
     aboutData.data()->setupCommandLine(&parser);
