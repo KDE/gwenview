@@ -87,6 +87,7 @@ GenericName[es]=Visor de imágenes
 GenericName[eu]=Irudi erakuslea
 GenericName[fi]=Kuvakatselin
 GenericName[fr]=Visionneuse d'images
+GenericName[gl]=Visor de imaxes
 GenericName[he]=מציג תמונות
 GenericName[hu]=Képmegjelenítő
 GenericName[ia]=Visor de Image
