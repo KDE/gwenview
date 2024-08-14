@@ -351,8 +351,13 @@ if (NOT GWENVIEW_NO_WAYLAND_GESTURES)
             BASENAME pointer-gestures-unstable-v1
         )
     else()
+        if (QT_MINOR_VERSION GREATER_EQUAL 8)
+            set(private_code_option  "PRIVATE_CODE")
+        endif()
         qt6_generate_wayland_protocol_client_sources(gwenviewlib FILES
-            ${WaylandProtocols_DATADIR}/unstable/pointer-gestures/pointer-gestures-unstable-v1.xml)
+            ${WaylandProtocols_DATADIR}/unstable/pointer-gestures/pointer-gestures-unstable-v1.xml
+            ${private_code_option}
+        )
     endif()
 
     target_sources(gwenviewlib PRIVATE ${wayland_SRCS})
