@@ -36,6 +36,20 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview
 {
+
+class DummyButton : public QToolButton
+{
+public:
+    int buttonSize(QAbstractItemView *view)
+    {
+        const int iconSize = KIconLoader::global()->currentSize(KIconLoader::Small);
+        QStyleOptionToolButton styleOption;
+        initStyleOption(&styleOption);
+        const auto size = view->style()->sizeFromContents(QStyle::CT_ToolButton, &styleOption, QSize(iconSize, iconSize));
+        return qMax(size.width(), size.height());
+    }
+};
+
 TagItemDelegate::TagItemDelegate(QAbstractItemView *view)
     : KWidgetItemDelegate(view, view)
 {
@@ -43,9 +57,8 @@ TagItemDelegate::TagItemDelegate(QAbstractItemView *view)
     mMargin = pm(PM_ToolBarItemMargin);
     mSpacing = pm(PM_ToolBarItemSpacing);
 #undef pm
-    const int iconSize = KIconLoader::global()->currentSize(KIconLoader::Toolbar);
-    const QSize sz = view->style()->sizeFromContents(QStyle::CT_ToolButton, nullptr, QSize(iconSize, iconSize));
-    mButtonSize = qMax(sz.width(), sz.height());
+    DummyButton dummyButton;
+    mButtonSize = dummyButton.buttonSize(view);
 }
 
 QList<QWidget *> TagItemDelegate::createItemWidgets(const QModelIndex &index) const
