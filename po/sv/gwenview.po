@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-21 00:37+0000\n"
+"POT-Creation-Date: 2024-08-15 02:36+0000\n"
 "PO-Revision-Date: 2024-06-20 20:49+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -2794,7 +2794,7 @@ msgstr "Behåll proportion"
 msgid "Current size:"
 msgstr "Nuvarande storlek:"
 
-#: lib/semanticinfo/tagitemdelegate.cpp:62
+#: lib/semanticinfo/tagitemdelegate.cpp:75
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Assign this tag to all selected images"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-21 00:37+0000\n"
+"POT-Creation-Date: 2024-08-15 02:36+0000\n"
 "PO-Revision-Date: 2023-12-21 23:11+0900\n"
 "Last-Translator: Ryuichi Yamada <ryuichi_ya220@outlook.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -2718,7 +2718,7 @@ msgstr "アスペクト比を保つ(&K)"
 msgid "Current size:"
 msgstr "現在のサイズ:"
 
-#: lib/semanticinfo/tagitemdelegate.cpp:62
+#: lib/semanticinfo/tagitemdelegate.cpp:75
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Assign this tag to all selected images"
