@@ -72,8 +72,8 @@ public:
 private:
     TwoFingerPanRecognizerPrivate *d;
 
-    virtual QGesture *create(QObject *) override;
-    virtual Result recognize(QGesture *, QObject *, QEvent *) override;
+    QGesture *create(QObject *) override;
+    Result recognize(QGesture *, QObject *, QEvent *) override;
 };
 
 } // namespace

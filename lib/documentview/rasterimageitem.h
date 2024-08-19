@@ -60,12 +60,12 @@ public:
     /**
      * Reimplemented from QGraphicsItem::paint
      */
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
     /**
      * Reimplemented from QGraphicsItem::boundingRect
      */
-    virtual QRectF boundingRect() const override;
+    QRectF boundingRect() const override;
 
 private:
     void applyDisplayTransform(QImage &image);

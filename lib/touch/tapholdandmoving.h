@@ -62,8 +62,8 @@ public:
 private:
     TapHoldAndMovingRecognizerPrivate *d;
 
-    virtual QGesture *create(QObject *target) override;
-    virtual Result recognize(QGesture *state, QObject *watched, QEvent *event) override;
+    QGesture *create(QObject *target) override;
+    Result recognize(QGesture *state, QObject *watched, QEvent *event) override;
 };
 
 } // namespace

@@ -30,9 +30,9 @@ public:
     QColor color();
     void setColor(const QColor &color);
 
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem * /*option*/, QWidget * /*widget*/) override;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem * /*option*/, QWidget * /*widget*/) override;
 
-    virtual QRectF boundingRect() const override;
+    QRectF boundingRect() const override;
 
 private:
     void createCheckBoardTexture();
