@@ -192,13 +192,12 @@ bool SortedDirModel::filterAcceptsRow(int row, const QModelIndex &parent) const
 {
     QModelIndex index = d->mSourceModel->index(row, 0, parent);
     KFileItem fileItem = d->mSourceModel->itemForIndex(index);
-
     MimeTypeUtils::Kinds kind = MimeTypeUtils::fileItemKind(fileItem);
     if (d->mKindFilter != MimeTypeUtils::Kinds() && !(d->mKindFilter & kind)) {
         return false;
     }
 
-    if (kind != MimeTypeUtils::KIND_DIR && kind != MimeTypeUtils::KIND_ARCHIVE) {
+    if (kind != MimeTypeUtils::KIND_ARCHIVE) {
         int dotPos = fileItem.name().lastIndexOf(QLatin1Char('.'));
         if (dotPos >= 1) {
             QString extension = fileItem.name().mid(dotPos + 1).toLower();

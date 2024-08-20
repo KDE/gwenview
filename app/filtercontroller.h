@@ -25,18 +25,24 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QDate>
+#include <QDir>
 #include <QImageReader>
 #include <QList>
+#include <QMimeDatabase>
+#include <QMimeType>
 #include <QObject>
 #include <QWidget>
 
 // KF
+#include <KDirModel>
 #include <KFileItem>
 
 // Local
 #include <lib/datewidget.h>
+#include <lib/mimetypeutils.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
 #include <lib/timeutils.h>
+#include <semanticinfo/semanticinfodirmodel.h>
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 // KF
@@ -80,15 +86,55 @@ public:
         return false;
     }
 
+    bool recursiveNameSearch(const QDir &startingDir) const
+    {
+        if (!startingDir.exists()) {
+            return false;
+        }
+
+        const QStringList children = startingDir.entryList(QDir::NoDotAndDotDot | QDir::NoSymLinks | QDir::AllEntries);
+        const QFileInfoList childrenData = startingDir.entryInfoList(QDir::NoDotAndDotDot | QDir::NoSymLinks | QDir::AllEntries);
+        const QStringList acceptedMimeTypes = MimeTypeUtils::imageMimeTypes();
+        // check if current directory has a match
+        const QMimeDatabase db;
+        for (int i = 0, count = childrenData.count(); i < count; ++i) {
+            if ((children[i].contains(mText, Qt::CaseInsensitive) == (mMode == Contains))) {
+                const QMimeType mime = db.mimeTypeForFile(childrenData[i]);
+                if (acceptedMimeTypes.contains(mime.name())) {
+                    return true;
+                }
+            }
+        }
+        // if not check for subdirectories and search those
+        // call this function again if there are any directories in the children
+        for (int i = 0, count = childrenData.count(); i < count; ++i) {
+            if (childrenData[i].isDir() && recursiveNameSearch(QDir(childrenData[i].absoluteFilePath()))) {
+                // if we have found a match, there is no need to search adjacent folders
+                return true;
+            }
+        }
+        return false;
+    }
+
     bool acceptsIndex(const QModelIndex &index) const override
     {
         if (mText.isEmpty()) {
             return true;
         }
+        const SemanticInfoDirModel *currentModel = static_cast<const SemanticInfoDirModel *>(index.model());
+        const KFileItem fileItem = currentModel->itemForIndex(index);
         switch (mMode) {
         case Contains:
+            if (currentModel->hasChildren(index)) {
+                const QDir currentDir = QDir(fileItem.localPath());
+                return recursiveNameSearch(currentDir);
+            }
             return index.data().toString().contains(mText, Qt::CaseInsensitive);
         default: /*DoesNotContain:*/
+            if (currentModel->hasChildren(index)) {
+                const QDir currentDir = QDir(fileItem.localPath());
+                return recursiveNameSearch(currentDir);
+            }
             return !index.data().toString().contains(mText, Qt::CaseInsensitive);
         }
     }

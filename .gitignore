@@ -2,6 +2,7 @@
 tags
 .kdev4/
 *.kdev4
+app/build*/
 /build*/
 CMakeLists.txt.user*
 .cmake/
