@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-15 00:38+0000\n"
-"PO-Revision-Date: 2024-02-17 12:41+0100\n"
+"PO-Revision-Date: 2024-08-19 22:31+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Lokalize 23.08.1\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -489,17 +489,17 @@ msgstr "태그가 붙지 않음"
 #: app/filtercontroller.cpp:229
 #, kde-format
 msgid "Dimensions >="
-msgstr ""
+msgstr "크기가 다음 이상"
 
 #: app/filtercontroller.cpp:230
 #, kde-format
 msgid "Dimensions ="
-msgstr ""
+msgstr "크기가 다음과 같음"
 
 #: app/filtercontroller.cpp:231
 #, kde-format
 msgid "Dimensions <="
-msgstr ""
+msgstr "크기가 다음 이하"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: app/filtercontroller.cpp:239 lib/crop/cropwidget.cpp:221
@@ -521,33 +521,31 @@ msgstr "너비"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Name"
-msgstr "이름으로 필터하기"
+msgstr "이름으로 필터"
 
 #: app/filtercontroller.cpp:337
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Date"
-msgstr "날짜로 필터하기"
+msgstr "날짜로 필터"
 
 #: app/filtercontroller.cpp:340
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Rating"
-msgstr "별점으로 필터하기"
+msgstr "별점으로 필터"
 
 #: app/filtercontroller.cpp:342
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Tag"
-msgstr "태그로 필터하기"
+msgstr "태그로 필터"
 
 #: app/filtercontroller.cpp:344
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Filter by Date"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Dimensions"
-msgstr "날짜로 필터하기"
+msgstr "크기로 필터"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: app/fullscreenconfigwidget.ui:20
