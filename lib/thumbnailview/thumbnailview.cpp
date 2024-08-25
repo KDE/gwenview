@@ -1164,3 +1164,5 @@ void ThumbnailView::setCreateThumbnailsForRemoteUrls(bool createRemoteThumbs)
 } // namespace
 
 #include "thumbnailview.moc"
+
+#include "moc_thumbnailview.cpp"

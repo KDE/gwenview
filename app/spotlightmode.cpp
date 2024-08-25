@@ -57,3 +57,5 @@ void SpotlightMode::emitButtonQuitClicked()
 }
 
 } // namespace
+
+#include "moc_spotlightmode.cpp"
