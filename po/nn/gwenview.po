@@ -555,8 +555,6 @@ msgstr "Filtrer etter merkelapp"
 
 #: app/filtercontroller.cpp:344
 #, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Filter by Date"
 msgctxt "@action:inmenu"
 msgid "Filter by Dimensions"
 msgstr "Filtrer etter dato"
@@ -1123,7 +1121,6 @@ msgstr "Start med lysbiletvising"
 
 #: app/main.cpp:193
 #, fuzzy, kde-format
-#| msgid "Start in slideshow mode"
 msgid "Start in spotlight mode"
 msgstr "Start med lysbiletvising"
 
@@ -1182,8 +1179,6 @@ msgstr "Gå ut av fullskjermsmodus"
 
 #: app/mainwindow.cpp:435
 #, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Light Mode"
 msgctxt "@action"
 msgid "Spotlight Mode"
 msgstr "Lys bakgrunn"

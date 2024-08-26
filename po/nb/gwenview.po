@@ -553,8 +553,6 @@ msgstr "Filtrer etter merke"
 
 #: app/filtercontroller.cpp:344
 #, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Filter by Date"
 msgctxt "@action:inmenu"
 msgid "Filter by Dimensions"
 msgstr "Filtrer etter dato"
@@ -1121,7 +1119,6 @@ msgstr "Start i bildeframvisningsmodus"
 
 #: app/main.cpp:193
 #, fuzzy, kde-format
-#| msgid "Start in slideshow mode"
 msgid "Start in spotlight mode"
 msgstr "Start i bildeframvisningsmodus"
 
