@@ -417,18 +417,16 @@ public:
         const uint32_t width = sizeOfImage.width();
 
         switch (mMode) {
-            case GreaterOrEqual:
-            {
-                return width >= mWidth && height >= mHeight;
-            }
-            case Equal:
-            {
-                return ( (mWidth == 0) || (mWidth == width) ) && ((mHeight == 0) || (mHeight == height));
-            }
-            default: /* LessOrEqual */
-            {
-                return ( (mWidth == 0) || (width <= mWidth) ) && ((mHeight == 0) || (height <= mHeight));
-            }
+        case GreaterOrEqual: {
+            return width >= mWidth && height >= mHeight;
+        }
+        case Equal: {
+            return ((mWidth == 0) || (mWidth == width)) && ((mHeight == 0) || (mHeight == height));
+        }
+        default: /* LessOrEqual */
+        {
+            return ((mWidth == 0) || (width <= mWidth)) && ((mHeight == 0) || (height <= mHeight));
+        }
         }
 
         return true;
@@ -452,7 +450,6 @@ public:
         mHeight = height;
         model()->applyFilters();
     }
-
 
 private:
     Mode mMode; /**< Contains the filtering mode of the image dimension */
@@ -479,7 +476,6 @@ private:
     QLabel *mLabelWidth;
     QLabel *mLabelHeight;
 };
-
 
 /**
  * This class manages the filter widgets in the filter frame and assign the

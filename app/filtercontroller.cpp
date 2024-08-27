@@ -25,8 +25,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QAction>
 #include <QCompleter>
 #include <QIcon>
-#include <QLineEdit>
 #include <QLabel>
+#include <QLineEdit>
 #include <QPainter>
 #include <QPainterPath>
 #include <QTimer>
@@ -230,17 +230,14 @@ ImageDimensionsWidget::ImageDimensionsWidget(SortedDirModel *model)
     mModeComboBox->addItem(i18n("Dimensions ="), ImageDimensions::Equal);
     mModeComboBox->addItem(i18n("Dimensions <="), ImageDimensions::LessOrEqual);
 
-
-    mLineEditHeight = new  QLineEdit;
-    mLineEditHeight->setValidator( new QIntValidator(ImageDimensions::minImageSizePx, ImageDimensions::maxImageSizePx, this) );
-    mLineEditWidth =  new QLineEdit;
-    mLineEditWidth->setValidator( new QIntValidator(ImageDimensions::minImageSizePx, ImageDimensions::maxImageSizePx, this) );
+    mLineEditHeight = new QLineEdit;
+    mLineEditHeight->setValidator(new QIntValidator(ImageDimensions::minImageSizePx, ImageDimensions::maxImageSizePx, this));
+    mLineEditWidth = new QLineEdit;
+    mLineEditWidth->setValidator(new QIntValidator(ImageDimensions::minImageSizePx, ImageDimensions::maxImageSizePx, this));
     mLabelHeight = new QLabel;
     mLabelHeight->setText(i18n("Height"));
     mLabelWidth = new QLabel;
     mLabelWidth->setText(i18n("Width"));
-
-
 
     auto *layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -250,11 +247,9 @@ ImageDimensionsWidget::ImageDimensionsWidget(SortedDirModel *model)
     layout->addWidget(mLabelHeight);
     layout->addWidget(mLineEditHeight);
 
-
-
     connect(mModeComboBox, SIGNAL(currentIndexChanged(int)), SLOT(applyImageDimensions()));
-    connect(mLineEditHeight, &QLineEdit::editingFinished, this,  &ImageDimensionsWidget::applyImageDimensions);
-    connect(mLineEditWidth, &QLineEdit::editingFinished, this,  &ImageDimensionsWidget::applyImageDimensions);
+    connect(mLineEditHeight, &QLineEdit::editingFinished, this, &ImageDimensionsWidget::applyImageDimensions);
+    connect(mLineEditWidth, &QLineEdit::editingFinished, this, &ImageDimensionsWidget::applyImageDimensions);
 
     applyImageDimensions();
 }

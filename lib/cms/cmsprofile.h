@@ -34,7 +34,7 @@ class QString;
 
 namespace Exiv2
 {
-    class Image;
+class Image;
 }
 
 using cmsHPROFILE = void *;
@@ -64,15 +64,15 @@ public:
 
     cmsHPROFILE handle() const;
 
-    static Profile::Ptr loadFromImageData(const QByteArray& data, const QByteArray& format);
-    static Profile::Ptr loadFromExiv2Image(const Exiv2::Image* image);
+    static Profile::Ptr loadFromImageData(const QByteArray &data, const QByteArray &format);
+    static Profile::Ptr loadFromExiv2Image(const Exiv2::Image *image);
     static Profile::Ptr loadFromICC(const QByteArray &data);
     static Profile::Ptr getMonitorProfile();
     static Profile::Ptr getSRgbProfile();
 
 private:
     Profile(cmsHPROFILE);
-    ProfilePrivate* const d;
+    ProfilePrivate *const d;
 };
 
 } // namespace Cms

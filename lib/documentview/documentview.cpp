@@ -885,13 +885,11 @@ void DocumentView::mousePressEvent(QGraphicsSceneMouseEvent *event)
             toggleZoomToFill();
             return;
         }
-    }
-    else if (event->button() == Qt::BackButton) {
+    } else if (event->button() == Qt::BackButton) {
         event->accept();
         Q_EMIT previousImageRequested();
         return;
-    }
-    else if (event->button() == Qt::ForwardButton) {
+    } else if (event->button() == Qt::ForwardButton) {
         event->accept();
         Q_EMIT nextImageRequested();
         return;
