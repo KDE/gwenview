@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-15 00:38+0000\n"
+"POT-Creation-Date: 2024-08-28 00:37+0000\n"
 "PO-Revision-Date: 2008-08-05 22:27+0200\n"
 "Last-Translator: Yannig Marchegay (Kokoyaya) <yannig@marchegay.org>\n"
 "Language-Team: Occitan (lengadocian) <ubuntu-l10n-oci@lists.ubuntu.com>\n"
@@ -538,7 +538,7 @@ msgid "Dimensions <="
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: app/filtercontroller.cpp:239 lib/crop/cropwidget.cpp:221
+#: app/filtercontroller.cpp:238 lib/crop/cropwidget.cpp:221
 #: lib/resize/resizeimagewidget.ui:40
 #, fuzzy, kde-format
 #| msgid "Height:"
@@ -548,41 +548,41 @@ msgstr "Nautor :"
 #. i18n("%1:%2") because ':' should not be translated, it is
 #. used to parse the ratio string.
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: app/filtercontroller.cpp:241 lib/crop/cropwidget.cpp:221
+#: app/filtercontroller.cpp:240 lib/crop/cropwidget.cpp:221
 #: lib/resize/resizeimagewidget.ui:30
 #, kde-format
 msgid "Width"
 msgstr ""
 
-#: app/filtercontroller.cpp:335
+#: app/filtercontroller.cpp:330
 #, fuzzy, kde-format
 #| msgid "&File"
 msgctxt "@action:inmenu"
 msgid "Filter by Name"
 msgstr "&Fichièr"
 
-#: app/filtercontroller.cpp:337
+#: app/filtercontroller.cpp:332
 #, fuzzy, kde-format
 #| msgid "&File"
 msgctxt "@action:inmenu"
 msgid "Filter by Date"
 msgstr "&Fichièr"
 
-#: app/filtercontroller.cpp:340
+#: app/filtercontroller.cpp:335
 #, fuzzy, kde-format
 #| msgid "&File"
 msgctxt "@action:inmenu"
 msgid "Filter by Rating"
 msgstr "&Fichièr"
 
-#: app/filtercontroller.cpp:342
+#: app/filtercontroller.cpp:337
 #, fuzzy, kde-format
 #| msgid "&File"
 msgctxt "@action:inmenu"
 msgid "Filter by Tag"
 msgstr "&Fichièr"
 
-#: app/filtercontroller.cpp:344
+#: app/filtercontroller.cpp:339
 #, fuzzy, kde-format
 #| msgid "&File"
 msgctxt "@action:inmenu"

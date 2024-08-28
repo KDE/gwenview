@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-15 00:38+0000\n"
+"POT-Creation-Date: 2024-08-28 00:37+0000\n"
 "PO-Revision-Date: 2024-06-29 14:04+0000\n"
 "Last-Translator: Gummi <gudmundure@gmail.com>\n"
 "Language-Team: Icelandic <kde-i18n-doc@kde.org>\n"
@@ -514,7 +514,7 @@ msgid "Dimensions <="
 msgstr "Stærðir <="
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: app/filtercontroller.cpp:239 lib/crop/cropwidget.cpp:221
+#: app/filtercontroller.cpp:238 lib/crop/cropwidget.cpp:221
 #: lib/resize/resizeimagewidget.ui:40
 #, kde-format
 msgid "Height"
@@ -523,37 +523,37 @@ msgstr "Hæð"
 #. i18n("%1:%2") because ':' should not be translated, it is
 #. used to parse the ratio string.
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: app/filtercontroller.cpp:241 lib/crop/cropwidget.cpp:221
+#: app/filtercontroller.cpp:240 lib/crop/cropwidget.cpp:221
 #: lib/resize/resizeimagewidget.ui:30
 #, kde-format
 msgid "Width"
 msgstr "Breidd"
 
-#: app/filtercontroller.cpp:335
+#: app/filtercontroller.cpp:330
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Name"
 msgstr "Sía eftir skrárheiti"
 
-#: app/filtercontroller.cpp:337
+#: app/filtercontroller.cpp:332
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Date"
 msgstr "Sía eftir dagsetningu"
 
-#: app/filtercontroller.cpp:340
+#: app/filtercontroller.cpp:335
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Rating"
 msgstr "Sía eftir einkunn"
 
-#: app/filtercontroller.cpp:342
+#: app/filtercontroller.cpp:337
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Tag"
 msgstr "Sía eftir merki"
 
-#: app/filtercontroller.cpp:344
+#: app/filtercontroller.cpp:339
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Dimensions"

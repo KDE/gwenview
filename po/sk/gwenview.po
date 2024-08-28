@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-15 00:38+0000\n"
+"POT-Creation-Date: 2024-08-28 00:37+0000\n"
 "PO-Revision-Date: 2023-12-06 19:09+0100\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -515,7 +515,7 @@ msgid "Dimensions <="
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: app/filtercontroller.cpp:239 lib/crop/cropwidget.cpp:221
+#: app/filtercontroller.cpp:238 lib/crop/cropwidget.cpp:221
 #: lib/resize/resizeimagewidget.ui:40
 #, kde-format
 msgid "Height"
@@ -524,37 +524,37 @@ msgstr "Výška"
 #. i18n("%1:%2") because ':' should not be translated, it is
 #. used to parse the ratio string.
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: app/filtercontroller.cpp:241 lib/crop/cropwidget.cpp:221
+#: app/filtercontroller.cpp:240 lib/crop/cropwidget.cpp:221
 #: lib/resize/resizeimagewidget.ui:30
 #, kde-format
 msgid "Width"
 msgstr "Šírka"
 
-#: app/filtercontroller.cpp:335
+#: app/filtercontroller.cpp:330
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Name"
 msgstr "Filtrovať podľa názvu"
 
-#: app/filtercontroller.cpp:337
+#: app/filtercontroller.cpp:332
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Date"
 msgstr "Filtrovať podľa dátumu"
 
-#: app/filtercontroller.cpp:340
+#: app/filtercontroller.cpp:335
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Rating"
 msgstr "Filtrovať podľa hodnotenia"
 
-#: app/filtercontroller.cpp:342
+#: app/filtercontroller.cpp:337
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Tag"
 msgstr "Filtrovať podľa značky"
 
-#: app/filtercontroller.cpp:344
+#: app/filtercontroller.cpp:339
 #, fuzzy, kde-format
 #| msgctxt "@action:inmenu"
 #| msgid "Filter by Date"
