@@ -282,6 +282,10 @@
         <entry name="AutoplayVideos" type="Bool">
             <default>false</default>
         </entry>
+
+        <entry name="WrapAfterLast" type="Bool">
+            <default>true</default>
+        </entry>
     </group>
 
     <group name="Print">

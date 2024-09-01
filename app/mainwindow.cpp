@@ -1564,7 +1564,9 @@ void MainWindow::goToPrevious()
         && (GwenviewConfig::navigationEndNotification() == SlideShow::NeverWarn
             || (GwenviewConfig::navigationEndNotification() == SlideShow::WarnOnSlideshow && !d->mSlideShow->isRunning() && !d->mFullScreenAction->isChecked())
             || d->hudButtonBox)) {
-        d->goToLastDocument();
+        if (GwenviewConfig::wrapAfterLast()) {
+            d->goToLastDocument();
+        }
     } else if (!previousIndex.isValid()) {
         showFirstDocumentReached();
     } else {
@@ -1591,7 +1593,9 @@ void MainWindow::goToNext()
         && (GwenviewConfig::navigationEndNotification() == SlideShow::NeverWarn
             || (GwenviewConfig::navigationEndNotification() == SlideShow::WarnOnSlideshow && !d->mSlideShow->isRunning() && !d->mFullScreenAction->isChecked())
             || d->hudButtonBox)) {
-        d->goToFirstDocument();
+        if (GwenviewConfig::wrapAfterLast()) {
+            d->goToFirstDocument();
+        }
     } else if (!nextIndex.isValid()) {
         showLastDocumentReached();
     } else {
@@ -1632,8 +1636,10 @@ void MainWindow::updatePreviousNextActions()
         int row = currentIndex.row();
         QModelIndex prevIndex = d->mDirModel->index(row - 1, 0);
         QModelIndex nextIndex = d->mDirModel->index(row + 1, 0);
-        hasPrevious = GwenviewConfig::navigationEndNotification() != SlideShow::AlwaysWarn || (prevIndex.isValid() && !d->indexIsDirOrArchive(prevIndex));
-        hasNext = GwenviewConfig::navigationEndNotification() != SlideShow::AlwaysWarn || (nextIndex.isValid() && !d->indexIsDirOrArchive(nextIndex));
+        hasPrevious = ((GwenviewConfig::navigationEndNotification() != SlideShow::AlwaysWarn) && GwenviewConfig::wrapAfterLast())
+            || (prevIndex.isValid() && !d->indexIsDirOrArchive(prevIndex));
+        hasNext = ((GwenviewConfig::navigationEndNotification() != SlideShow::AlwaysWarn) && GwenviewConfig::wrapAfterLast())
+            || (nextIndex.isValid() && !d->indexIsDirOrArchive(nextIndex));
     } else {
         hasPrevious = false;
         hasNext = false;
