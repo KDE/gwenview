@@ -21,6 +21,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #ifndef SORTING_H
 #define SORTING_H
 
+// Do not assume every file that includes this one, includes the config.h
+#include <config-gwenview.h>
+
 // Qt
 
 // KF
