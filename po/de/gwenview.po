@@ -1,3 +1,4 @@
+# SPDX-FileCopyrightText: 2024 Flori G <Renner03@protonmail.com>
 # Thomas Diehl <thd@kde.org>, 2002, 2003.
 # Thomas Reitelbach <tr@erdfunkstelle.de>, 2004, 2005, 2006, 2007, 2008, 2010.
 # Stephan Johach <hunsum@gmx.de>, 2005.
@@ -12,15 +13,15 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-15 02:36+0000\n"
-"PO-Revision-Date: 2023-06-12 00:16+0200\n"
-"Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
+"PO-Revision-Date: 2024-09-08 16:29+0200\n"
+"Last-Translator: Flori G <Renner03@protonmail.com>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.07.70\n"
+"X-Generator: Lokalize 24.08.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -124,6 +125,10 @@ msgid ""
 "is only appropriate for displays that are calibrated to the sRGB color space "
 "or are known to provide an incorrect color profile."
 msgstr ""
+"Wenn die Farbverwaltung deaktiviert ist, wird Gwenview Bilder in den sRGB-"
+"Farbraum umwandeln anstatt den festgestellten Farbraum der verwendendeten "
+"Anzeige. Dies ist nur für Anzeigen geeignet, die auf den sRGB-Farbraum "
+"kalibriert sind oder bekanntermaßen ein falsches Farbprofil angeben."
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileLabel)
 #: app/advancedconfigpage.ui:275
@@ -497,17 +502,17 @@ msgstr "Kein Stichwort"
 #: app/filtercontroller.cpp:229
 #, kde-format
 msgid "Dimensions >="
-msgstr ""
+msgstr "Abmessungen >="
 
 #: app/filtercontroller.cpp:230
 #, kde-format
 msgid "Dimensions ="
-msgstr ""
+msgstr "Abmessungen ="
 
 #: app/filtercontroller.cpp:231
 #, kde-format
 msgid "Dimensions <="
-msgstr ""
+msgstr "Abmessungen <="
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: app/filtercontroller.cpp:239 lib/crop/cropwidget.cpp:221
@@ -550,12 +555,10 @@ msgid "Filter by Tag"
 msgstr "Nach Stichwort filtern"
 
 #: app/filtercontroller.cpp:344
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Filter by Date"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Dimensions"
-msgstr "Nach Datum filtern"
+msgstr "Nach Abmessungen filtern"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: app/fullscreenconfigwidget.ui:20
@@ -1117,10 +1120,9 @@ msgid "Start in slideshow mode"
 msgstr "Im Diaschaumodus starten"
 
 #: app/main.cpp:193
-#, fuzzy, kde-format
-#| msgid "Start in slideshow mode"
+#, kde-format
 msgid "Start in spotlight mode"
-msgstr "Im Diaschaumodus starten"
+msgstr "Im Vordergrundmodus starten"
 
 #: app/main.cpp:194
 #, kde-format
@@ -1176,12 +1178,10 @@ msgid "Exit Full Screen"
 msgstr "Vollbildmodus verlassen"
 
 #: app/mainwindow.cpp:435
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Light Mode"
+#, kde-format
 msgctxt "@action"
 msgid "Spotlight Mode"
-msgstr "Heller Modus"
+msgstr "Vordergrundmodus"
 
 #: app/mainwindow.cpp:441
 #, kde-format
@@ -1315,7 +1315,7 @@ msgstr "Aktionen"
 #: app/mainwindow.cpp:950
 #, kde-format
 msgid "Viewing media"
-msgstr ""
+msgstr "Medien ansehen"
 
 #: app/mainwindow.cpp:1429
 #, kde-format
@@ -2294,12 +2294,10 @@ msgid "%1x%2"
 msgstr "%1x%2"
 
 #: lib/documentview/documentview.cpp:264 lib/zoomcombobox/zoomcombobox.cpp:318
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip of custom toolbar button"
-#| msgid "%1"
+#, kde-format
 msgctxt "Percent value"
 msgid "%1%"
-msgstr "%1"
+msgstr "%1 %"
 
 #: lib/documentview/documentview.cpp:543
 #, kde-format
@@ -2378,11 +2376,7 @@ msgid "Fill"
 msgstr "Füllen"
 
 #: lib/documentview/documentviewcontroller.cpp:90
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "@action:button Zoom to original size, shown in status bar, keep it short "
-#| "please"
-#| msgid "100%"
+#, kde-format
 msgctxt "Original image size percent value"
 msgid "100%"
 msgstr "100 %"
@@ -2584,27 +2578,25 @@ msgstr "Dateigröße"
 #, kde-format
 msgctxt "@item:intable"
 msgid "Date Created"
-msgstr ""
+msgstr "Erstelldatum"
 
 #: lib/imagemetainfomodel.cpp:257
-#, fuzzy, kde-format
-#| msgid "One image modified"
-#| msgid_plural "%1 images modified"
+#, kde-format
 msgctxt "@item:intable"
 msgid "Date Modified"
-msgstr "Ein Bild geändert"
+msgstr "Änderungsdatum"
 
 #: lib/imagemetainfomodel.cpp:258
 #, kde-format
 msgctxt "@item:intable"
 msgid "Date Accessed"
-msgstr ""
+msgstr "Zugriffsdatum"
 
 #: lib/imagemetainfomodel.cpp:259
 #, kde-format
 msgctxt "@item:intable"
 msgid "Path"
-msgstr ""
+msgstr "Pfad"
 
 #: lib/imagemetainfomodel.cpp:260
 #, kde-format
@@ -2619,12 +2611,10 @@ msgid "Comment"
 msgstr "Kommentar"
 
 #: lib/imagemetainfomodel.cpp:262
-#, fuzzy, kde-format
-#| msgctxt "@item:intable"
-#| msgid "File Time"
+#, kde-format
 msgctxt "@item:intable"
 msgid "File Type"
-msgstr "Geändert"
+msgstr "Dateityp"
 
 #: lib/imagemetainfomodel.cpp:324
 #, kde-format
@@ -2781,7 +2771,7 @@ msgstr "Bildgröße ändern"
 #: lib/resize/resizeimagewidget.ui:20
 #, kde-format
 msgid "Estimated new file size:"
-msgstr ""
+msgstr "Geschätzte neue Dateigröße:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: lib/resize/resizeimagewidget.ui:47
@@ -2805,10 +2795,9 @@ msgstr " px"
 
 #. i18n: ectx: property (text), widget (QLabel, mCurrentSizeLabel)
 #: lib/resize/resizeimagewidget.ui:115
-#, fuzzy, kde-format
-#| msgid "Current size:"
+#, kde-format
 msgid "Current file size:"
-msgstr "Aktuelle Größe:"
+msgstr "Aktuelle Dateigröße:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, mKeepAspectCheckBox)
 #: lib/resize/resizeimagewidget.ui:145
