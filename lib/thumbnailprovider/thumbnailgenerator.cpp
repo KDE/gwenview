@@ -102,7 +102,7 @@ bool ThumbnailContext::load(const QString &pixPath, int pixelSize)
         buffer.setBuffer(&data);
         buffer.open(QIODevice::ReadOnly);
         reader.setDevice(&buffer);
-        reader.setFormat(formatHint);
+        reader.setFormat("jpg");
     } else {
 #else
     {
