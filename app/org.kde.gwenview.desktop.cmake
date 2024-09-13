@@ -80,6 +80,7 @@ GenericName[bg]=Преглед на изображения
 GenericName[ca]=Visualitzador d'imatges
 GenericName[ca@valencia]=Visor d'imatges
 GenericName[cs]=Prohlížeč obrázků
+GenericName[de]=Bildbetrachter
 GenericName[en_GB]=Image Viewer
 GenericName[eo]=Bildrigardilo
 GenericName[es]=Visor de imágenes
