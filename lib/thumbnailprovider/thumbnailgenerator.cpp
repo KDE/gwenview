@@ -70,15 +70,9 @@ bool ThumbnailContext::load(const QString &pixPath, int pixelSize)
     QBuffer buffer;
     int previewRatio = 1;
 
-    bool useRawPlugin = QImageReader::imageFormat(pixPath) == QByteArray("raw");
-    if (useRawPlugin) { // make preview generation faster (same as KDcrawIface::KDcraw::loadHalfPreview)
-        reader.setQuality(1);
-        previewRatio = 2;
-    }
-
 #ifdef KDCRAW_FOUND
     // raw images deserve special treatment
-    if (!useRawPlugin && KDcrawIface::KDcraw::rawFilesList().contains(QString::fromLatin1(formatHint))) {
+    if (KDcrawIface::KDcraw::rawFilesList().contains(QString::fromLatin1(formatHint))) {
         // use KDCraw to extract the preview
         bool ret = KDcrawIface::KDcraw::loadEmbeddedPreview(data, pixPath);
 
@@ -107,6 +101,12 @@ bool ThumbnailContext::load(const QString &pixPath, int pixelSize)
 #else
     {
 #endif
+        if (QImageReader::imageFormat(pixPath) == QByteArray("raw")) {
+            // make preview generation faster (same as KDcrawIface::KDcraw::loadHalfPreview)
+            reader.setQuality(1);
+            previewRatio = 2;
+        }
+
         if (!reader.canRead()) {
             reader.setDecideFormatFromContent(true);
             // Set filename again, otherwise QImageReader won't restart from scratch
