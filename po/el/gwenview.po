@@ -2390,11 +2390,7 @@ msgid "Fill"
 msgstr "Γέμ."
 
 #: lib/documentview/documentviewcontroller.cpp:90
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "@action:button Zoom to original size, shown in status bar, keep it short "
-#| "please"
-#| msgid "100%"
+#, kde-format
 msgctxt "Original image size percent value"
 msgid "100%"
 msgstr "100%"
