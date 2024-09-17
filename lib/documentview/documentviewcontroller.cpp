@@ -67,7 +67,7 @@ struct DocumentViewControllerPrivate {
         // zoom value that was used the last time this same image was viewed. Being more clear about this isn't really necessary here so I kept it short
         // but a more elaborate translation would also be fine.
         // The text "in the settings" is supposed to sound like clicking it opens the settings.
-        mZoomToFitAction->setWhatsThis(xi18nc("@info:whatsthis, %1 the action's text", "<para>This fits the image into the available viewing area:<list>"
+        mZoomToFitAction->setWhatsThis(xi18nc("@info:whatsthis %1 is the action's text", "<para>This fits the image into the available viewing area:<list>"
             "<item>Images that are bigger than the viewing area are displayed at a smaller size so they fit.</item>"
             "<item>Images that are smaller than the viewing area are displayed at their normal size. If smaller images should instead use all of "
             "the available viewing area, turn on <emphasis>Enlarge smaller images</emphasis> <link url='%2'>in the settings</link>.</item></list></para>"
