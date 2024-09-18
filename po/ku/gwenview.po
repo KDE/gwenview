@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-28 00:37+0000\n"
+"POT-Creation-Date: 2024-09-18 00:38+0000\n"
 "PO-Revision-Date: 2009-01-22 22:46+0200\n"
 "Last-Translator: Omer Ensari <oensari@gmail.com>\n"
 "Language-Team: Kurdish <kde-i18n-doc@kde.org>\n"
@@ -2449,7 +2449,7 @@ msgstr "Wêneyê &bicihbike rûpelê"
 #. The text "in the settings" is supposed to sound like clicking it opens the settings.
 #: lib/documentview/documentviewcontroller.cpp:70
 #, kde-kuit-format
-msgctxt "@info:whatsthis, %1 the action's text"
+msgctxt "@info:whatsthis %1 is the action's text"
 msgid ""
 "<para>This fits the image into the available viewing area:<list><item>Images "
 "that are bigger than the viewing area are displayed at a smaller size so "

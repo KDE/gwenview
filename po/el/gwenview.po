@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-28 00:37+0000\n"
+"POT-Creation-Date: 2024-09-18 00:38+0000\n"
 "PO-Revision-Date: 2023-08-21 22:39+0300\n"
 "Last-Translator: George Stefanakis <george.stefanakis@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-doc@kde.org>\n"
@@ -2310,12 +2310,10 @@ msgid "%1x%2"
 msgstr "%1x%2"
 
 #: lib/documentview/documentview.cpp:264 lib/zoomcombobox/zoomcombobox.cpp:318
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip of custom toolbar button"
-#| msgid "%1"
+#, kde-format
 msgctxt "Percent value"
 msgid "%1%"
-msgstr "%1"
+msgstr "%1%"
 
 #: lib/documentview/documentview.cpp:543
 #, kde-format
@@ -2349,8 +2347,21 @@ msgstr "Προσαρμογή εικόνας στην περιοχή προβολ
 #. but a more elaborate translation would also be fine.
 #. The text "in the settings" is supposed to sound like clicking it opens the settings.
 #: lib/documentview/documentviewcontroller.cpp:70
-#, kde-kuit-format
-msgctxt "@info:whatsthis, %1 the action's text"
+#, fuzzy, kde-kuit-format
+#| msgctxt "@info:whatsthis, %1 the action's text"
+#| msgid ""
+#| "<para>This fits the image into the available viewing area:"
+#| "<list><item>Images that are bigger than the viewing area are displayed at "
+#| "a smaller size so they fit.</item><item>Images that are smaller than the "
+#| "viewing area are displayed at their normal size. If smaller images should "
+#| "instead use all of the available viewing area, turn on <emphasis>Enlarge "
+#| "smaller images</emphasis> <link url='%2'>in the settings</link>.</item></"
+#| "list></para><para>If \"%1\" is already enabled, pressing it again will "
+#| "switch it off and the image will be displayed at its normal size instead."
+#| "</para><para>\"%1\" is the default zoom mode for images. This can be "
+#| "changed so images are displayed at a previous zoom value instead <link "
+#| "url='%2'>in the settings</link>.</para>"
+msgctxt "@info:whatsthis %1 is the action's text"
 msgid ""
 "<para>This fits the image into the available viewing area:<list><item>Images "
 "that are bigger than the viewing area are displayed at a smaller size so "
@@ -2630,12 +2641,10 @@ msgid "Comment"
 msgstr "Σχόλιο"
 
 #: lib/imagemetainfomodel.cpp:262
-#, fuzzy, kde-format
-#| msgctxt "@item:intable"
-#| msgid "File Time"
+#, kde-format
 msgctxt "@item:intable"
 msgid "File Type"
-msgstr "Ώρα αρχείου"
+msgstr "Τύπος αρχείου"
 
 #: lib/imagemetainfomodel.cpp:324
 #, kde-format
@@ -2816,10 +2825,9 @@ msgstr " px"
 
 #. i18n: ectx: property (text), widget (QLabel, mCurrentSizeLabel)
 #: lib/resize/resizeimagewidget.ui:115
-#, fuzzy, kde-format
-#| msgid "Current size:"
+#, kde-format
 msgid "Current file size:"
-msgstr "Τρέχον μέγεθος:"
+msgstr "Τρέχον μέγεθος αρχείου:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, mKeepAspectCheckBox)
 #: lib/resize/resizeimagewidget.ui:145
