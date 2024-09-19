@@ -4,7 +4,7 @@
 #
 # Marc Coll Carrillo <marcoll@ya.com>, 2004, 2005, 2006.
 # Albert Astals Cid <aacid@kde.org>, 2004, 2005, 2006.
-# Josep M. Ferrer <txemaq@gmail.com>, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024.
+# SPDX-FileCopyrightText: 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 Josep M. Ferrer <txemaq@gmail.com>
 # Manuel Tortosa Moreno <manutortosa@gmail.com>, 2009.
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2014, 2016, 2017, 2018, 2019, 2020, 2021.
 msgid ""
@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-18 00:38+0000\n"
-"PO-Revision-Date: 2024-06-20 12:35+0200\n"
+"PO-Revision-Date: 2024-09-18 10:04+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 24.08.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2334,20 +2334,7 @@ msgstr "Ajusta la imatge a l'àrea de visualització"
 #. but a more elaborate translation would also be fine.
 #. The text "in the settings" is supposed to sound like clicking it opens the settings.
 #: lib/documentview/documentviewcontroller.cpp:70
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info:whatsthis, %1 the action's text"
-#| msgid ""
-#| "<para>This fits the image into the available viewing area:"
-#| "<list><item>Images that are bigger than the viewing area are displayed at "
-#| "a smaller size so they fit.</item><item>Images that are smaller than the "
-#| "viewing area are displayed at their normal size. If smaller images should "
-#| "instead use all of the available viewing area, turn on <emphasis>Enlarge "
-#| "smaller images</emphasis> <link url='%2'>in the settings</link>.</item></"
-#| "list></para><para>If \"%1\" is already enabled, pressing it again will "
-#| "switch it off and the image will be displayed at its normal size instead."
-#| "</para><para>\"%1\" is the default zoom mode for images. This can be "
-#| "changed so images are displayed at a previous zoom value instead <link "
-#| "url='%2'>in the settings</link>.</para>"
+#, kde-kuit-format
 msgctxt "@info:whatsthis %1 is the action's text"
 msgid ""
 "<para>This fits the image into the available viewing area:<list><item>Images "
@@ -2371,7 +2358,7 @@ msgstr ""
 "emphasis> <link url='%2'> a l'arranjament</link>.</item></list></"
 "para><para>Si ja està activat «%1», prement-lo de nou es desactivarà i la "
 "imatge es mostrarà en la seva mida normal.</para><para>«%1» és el mode de "
-"zoom predeterminat per a les imatges. Això es pot canviar de manera que les "
+"zoom predeterminat de les imatges. Això es pot canviar de manera que les "
 "imatges es mostrin amb el valor d'ampliació anterior <link url='%2'>a "
 "l'arranjament</link>.</para>"
 

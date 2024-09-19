@@ -1,15 +1,15 @@
-# translation of gwenview.po to Spanish
+# Translation of gwenview to Spanish
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
 # SPDX-FileCopyrightText: 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 Eloy Cuadra <ecuadra@eloihr.net>
-# Javier Viñal <fjvinal@gmail.com>, 2013.
+# SPDX-FileCopyrightText: 2013 Javier Viñal <fjvinal@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-18 00:38+0000\n"
-"PO-Revision-Date: 2024-06-20 19:52+0200\n"
+"PO-Revision-Date: 2024-09-18 11:49+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.05.1\n"
+"X-Generator: Lokalize 24.08.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2329,20 +2329,7 @@ msgstr "Ajustar imagen en el área de visualización"
 #. but a more elaborate translation would also be fine.
 #. The text "in the settings" is supposed to sound like clicking it opens the settings.
 #: lib/documentview/documentviewcontroller.cpp:70
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info:whatsthis, %1 the action's text"
-#| msgid ""
-#| "<para>This fits the image into the available viewing area:"
-#| "<list><item>Images that are bigger than the viewing area are displayed at "
-#| "a smaller size so they fit.</item><item>Images that are smaller than the "
-#| "viewing area are displayed at their normal size. If smaller images should "
-#| "instead use all of the available viewing area, turn on <emphasis>Enlarge "
-#| "smaller images</emphasis> <link url='%2'>in the settings</link>.</item></"
-#| "list></para><para>If \"%1\" is already enabled, pressing it again will "
-#| "switch it off and the image will be displayed at its normal size instead."
-#| "</para><para>\"%1\" is the default zoom mode for images. This can be "
-#| "changed so images are displayed at a previous zoom value instead <link "
-#| "url='%2'>in the settings</link>.</para>"
+#, kde-kuit-format
 msgctxt "@info:whatsthis %1 is the action's text"
 msgid ""
 "<para>This fits the image into the available viewing area:<list><item>Images "
