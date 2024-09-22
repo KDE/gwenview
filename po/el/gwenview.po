@@ -508,17 +508,17 @@ msgstr "Δεν έχει ετικέτες"
 #: app/filtercontroller.cpp:229
 #, kde-format
 msgid "Dimensions >="
-msgstr ""
+msgstr "Διαστάσεις >="
 
 #: app/filtercontroller.cpp:230
 #, kde-format
 msgid "Dimensions ="
-msgstr ""
+msgstr "Διαστάσεις ="
 
 #: app/filtercontroller.cpp:231
 #, kde-format
 msgid "Dimensions <="
-msgstr ""
+msgstr "Διαστάσεις <="
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: app/filtercontroller.cpp:238 lib/crop/cropwidget.cpp:221
@@ -561,12 +561,10 @@ msgid "Filter by Tag"
 msgstr "Φίλτρο κατά ετικέτα"
 
 #: app/filtercontroller.cpp:339
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Filter by Date"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Dimensions"
-msgstr "Φίλτρο κατά ημερομηνία"
+msgstr "Φίλτρο ανά διαστάσεις"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: app/fullscreenconfigwidget.ui:20
@@ -1130,10 +1128,9 @@ msgid "Start in slideshow mode"
 msgstr "Έναρξη σε λειτουργία παρουσίασης διαφανειών"
 
 #: app/main.cpp:193
-#, fuzzy, kde-format
-#| msgid "Start in slideshow mode"
+#, kde-format
 msgid "Start in spotlight mode"
-msgstr "Έναρξη σε λειτουργία παρουσίασης διαφανειών"
+msgstr "Έναρξη στη λειτουργία προβολέα"
 
 #: app/main.cpp:194
 #, kde-format
@@ -1189,12 +1186,10 @@ msgid "Exit Full Screen"
 msgstr "Έξοδος από πλήρη οθόνη"
 
 #: app/mainwindow.cpp:435
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Light Mode"
+#, kde-format
 msgctxt "@action"
 msgid "Spotlight Mode"
-msgstr "Ανοιχτόχρωμη λειτουργία"
+msgstr "Λειτουργία προβολέα"
 
 #: app/mainwindow.cpp:441
 #, kde-format
@@ -2593,27 +2588,25 @@ msgstr "Μέγεθος αρχείου"
 #, kde-format
 msgctxt "@item:intable"
 msgid "Date Created"
-msgstr ""
+msgstr "Ημερομηνία δημιουργίας"
 
 #: lib/imagemetainfomodel.cpp:257
-#, fuzzy, kde-format
-#| msgid "One image modified"
-#| msgid_plural "%1 images modified"
+#, kde-format
 msgctxt "@item:intable"
 msgid "Date Modified"
-msgstr "Τροποποιήθηκε μία εικόνα"
+msgstr "Ημερομηνία τροποποίησης"
 
 #: lib/imagemetainfomodel.cpp:258
 #, kde-format
 msgctxt "@item:intable"
 msgid "Date Accessed"
-msgstr ""
+msgstr "Ημερομηνία πρόσβασης"
 
 #: lib/imagemetainfomodel.cpp:259
 #, kde-format
 msgctxt "@item:intable"
 msgid "Path"
-msgstr ""
+msgstr "Διαδρομή"
 
 #: lib/imagemetainfomodel.cpp:260
 #, kde-format
@@ -2788,7 +2781,7 @@ msgstr "Αλλαγή μεγέθους εικόνας"
 #: lib/resize/resizeimagewidget.ui:20
 #, kde-format
 msgid "Estimated new file size:"
-msgstr ""
+msgstr "Εκτιμώμενο νέο μέγεθος αρχείου:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: lib/resize/resizeimagewidget.ui:47
