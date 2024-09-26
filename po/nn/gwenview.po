@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-18 00:38+0000\n"
-"PO-Revision-Date: 2024-09-24 19:28+0200\n"
+"PO-Revision-Date: 2024-09-25 19:13+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
 "Language: nn\n"
@@ -1119,10 +1119,12 @@ msgstr "Start med fullskjerm"
 msgid "Start in slideshow mode"
 msgstr "Start med lysbiletvising"
 
+# Forklaring her:
+# https://invent.kde.org/graphics/gwenview/-/merge_requests/222
 #: app/main.cpp:193
-#, fuzzy, kde-format
+#, kde-format
 msgid "Start in spotlight mode"
-msgstr "Start med lysbiletvising"
+msgstr "Start i søkelys-modus"
 
 #: app/main.cpp:194
 #, kde-format
@@ -1178,10 +1180,10 @@ msgid "Exit Full Screen"
 msgstr "Gå ut av fullskjermsmodus"
 
 #: app/mainwindow.cpp:435
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action"
 msgid "Spotlight Mode"
-msgstr "Lys bakgrunn"
+msgstr "Søkelys-modus"
 
 #: app/mainwindow.cpp:441
 #, kde-format
@@ -2341,6 +2343,16 @@ msgid ""
 "are displayed at a previous zoom value instead <link url='%2'>in the "
 "settings</link>.</para>"
 msgstr ""
+"<para>Tilpassar biletet etter tilgjengeleg visingsområde:<list><item>Bilete "
+"som er større enn visings­området, vert skalerte ned, slik at dei får plass.</"
+"item><item>Bilete som er større enn visings­området, vert viste med normal "
+"storleik. Viss du heller vil at dei skal bruka all ledig plass, slå på "
+"<emphasis>Forstørr mindre bilete</emphasis> <link url='%2'>i innstillingane</"
+"link>.</item></list></para><para>Viss «%1» alt er på, vil eit trykk på det "
+"slå av det av att, og biletet vert vist med normal storleik.</"
+"para><para>Standard forstørring er «%1». Om du vil, kan du endra dette <link "
+"url='%2'>i innstillingane</link> slik at bileta vert viste med det førre "
+"forstørrings­nivået.</para>"
 
 #: lib/documentview/documentviewcontroller.cpp:83
 #, kde-format
