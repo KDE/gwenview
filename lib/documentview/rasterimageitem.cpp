@@ -116,9 +116,26 @@ void RasterImageItem::paint(QPainter *painter, const QStyleOptionGraphicsItem * 
         image = mSixthScaledImage.copy(sourceRect);
     }
 
-    const QImage::Format originalImageFormat = image.format();
     const bool isIndexedColor = !image.colorTable().isEmpty();
-    const bool hasAlphaChannel = image.hasAlphaChannel();
+
+    QImage::Format outputImageFormat = image.format();
+    if (isIndexedColor) {
+        outputImageFormat = image.hasAlphaChannel() ? QImage::Format_ARGB32 : QImage::Format_RGB32;
+    } else {
+        switch (outputImageFormat) {
+        case QImage::Format_ARGB32_Premultiplied:
+            outputImageFormat = QImage::Format_ARGB32;
+            break;
+        case QImage::Format_RGBA8888_Premultiplied:
+            outputImageFormat = QImage::Format_RGBA8888;
+            break;
+        case QImage::Format_RGBA64_Premultiplied:
+            outputImageFormat = QImage::Format_RGBA64;
+            break;
+        // TODO convert formats not supported by LittleCMS?
+        default:;
+        }
+    }
 
     // We want nearest neighbour at high zoom since that provides the most
     // accurate representation of pixels, but at low zoom or when zooming out it
@@ -129,14 +146,10 @@ void RasterImageItem::paint(QPainter *painter, const QStyleOptionGraphicsItem * 
     // Scale the visible image to the requested zoom.
     image = image.scaled(image.size() * targetZoom, Qt::IgnoreAspectRatio, transformationMode);
 
-    // If the original format is indexed, convert to Format_(A)RGB32 (the default format for loading PNG files).
-    // (ARGB32 is necessary for pngquant'd transparent images to show Gwenview's background color.)
-    // Otherwise scaling may convert image to premultiplied formats (unsupported by color correction engine).
-    // Pray originalImageFormat is not premultiplied, and convert image back to it.
-    if (isIndexedColor) {
-        image.convertTo(hasAlphaChannel ? QImage::Format_ARGB32 : QImage::Format_RGB32);
-    } else if (image.format() != originalImageFormat) {
-        image.convertTo(originalImageFormat);
+    // We may load an image in indexed color or premultiplied alpha, or scaling may produce premultiplied alpha.
+    // These are not supported by the color correction engine, so convert to a standard format.
+    if (image.format() != outputImageFormat) {
+        image.convertTo(outputImageFormat);
     }
 
     // Perform color correction on the visible image.
