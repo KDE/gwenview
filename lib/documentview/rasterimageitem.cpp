@@ -117,6 +117,8 @@ void RasterImageItem::paint(QPainter *painter, const QStyleOptionGraphicsItem * 
     }
 
     const QImage::Format originalImageFormat = image.format();
+    const bool isIndexedColor = !image.colorTable().isEmpty();
+    const bool hasAlphaChannel = image.hasAlphaChannel();
 
     // We want nearest neighbour at high zoom since that provides the most
     // accurate representation of pixels, but at low zoom or when zooming out it
@@ -127,9 +129,13 @@ void RasterImageItem::paint(QPainter *painter, const QStyleOptionGraphicsItem * 
     // Scale the visible image to the requested zoom.
     image = image.scaled(image.size() * targetZoom, Qt::IgnoreAspectRatio, transformationMode);
 
-    // Scaling may convert image to premultiplied formats (unsupported by color correction engine),
-    // so we convert image back to originalImageFormat.
-    if (image.format() != originalImageFormat) {
+    // If the original format is indexed, convert to Format_(A)RGB32 (the default format for loading PNG files).
+    // (ARGB32 is necessary for pngquant'd transparent images to show Gwenview's background color.)
+    // Otherwise scaling may convert image to premultiplied formats (unsupported by color correction engine).
+    // Pray originalImageFormat is not premultiplied, and convert image back to it.
+    if (isIndexedColor) {
+        image.convertTo(hasAlphaChannel ? QImage::Format_ARGB32 : QImage::Format_RGB32);
+    } else if (image.format() != originalImageFormat) {
         image.convertTo(originalImageFormat);
     }
 
