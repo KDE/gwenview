@@ -283,6 +283,9 @@ struct LoadingDocumentImplPrivate {
         }
 
         if (!mCmsProfile && reader.canRead()) {
+            if (mImageDataInvertedZoom == 0) {
+                mImageDataInvertedZoom = 1;
+            }
             loadImageData();
             if (!mImage.isNull()) {
                 mCmsProfile = Cms::Profile::loadFromICC(mImage.colorSpace().iccProfile());
