@@ -283,9 +283,9 @@ struct LoadingDocumentImplPrivate {
         }
 
         if (!mCmsProfile && reader.canRead()) {
-            loadImageData();
-            if (!mImage.isNull()) {
-                mCmsProfile = Cms::Profile::loadFromICC(mImage.colorSpace().iccProfile());
+            const QImage qtimage = reader.read();
+            if (!qtimage.isNull()) {
+                mCmsProfile = Cms::Profile::loadFromICC(qtimage.colorSpace().iccProfile());
             }
         }
 
@@ -294,11 +294,6 @@ struct LoadingDocumentImplPrivate {
 
     void loadImageData()
     {
-        // Already loaded?
-        if (!mImage.isNull()) {
-            return;
-        }
-
         QBuffer buffer;
         buffer.setBuffer(&mData);
         buffer.open(QIODevice::ReadOnly);
