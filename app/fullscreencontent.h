@@ -74,6 +74,7 @@ public:
 
 public Q_SLOTS:
     void setCurrentUrl(const QUrl &);
+    void updateDocumentCountLabel();
 
 private Q_SLOTS:
     void updateCurrentUrlWidgets();
@@ -88,7 +89,6 @@ private Q_SLOTS:
     void slotShowThumbnailsToggled(bool value);
     void slotViewModeActionToggled(bool value);
     void adjustSize();
-    void updateDocumentCountLabel();
 
 private:
     KActionCollection *mActionCollection;

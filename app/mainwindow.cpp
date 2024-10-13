@@ -762,6 +762,7 @@ struct MainWindow::Private {
     {
         mFullScreenContent->init(q->actionCollection(), mViewMainPage, mSlideShow);
         setupThumbnailBar(mFullScreenContent->thumbnailBar());
+        connect(mContextManager, &ContextManager::selectionChanged, mFullScreenContent, &FullScreenContent::updateDocumentCountLabel);
     }
 
     inline void setActionEnabled(const char *name, bool enabled)
