@@ -12,21 +12,22 @@
 # Aleksei Baranov <aleksei.ee@gmail.com>, 2014.
 # Alexander Yavorsky <kekcuha@gmail.com>, 2018, 2019, 2020, 2021, 2022, 2023, 2024.
 # Мария Шикунова <translation-team@basealt.ru>, 2021, 2022, 2023.
+# SPDX-FileCopyrightText: 2024 Olesya Gerasimenko <translation-team@basealt.ru>
 msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-15 02:36+0000\n"
-"PO-Revision-Date: 2024-05-18 10:00+0300\n"
-"Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
-"Language-Team: Russian <kde-russian@lists.kde.ru>\n"
+"PO-Revision-Date: 2024-10-14 16:31+0300\n"
+"Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
+"Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Lokalize 21.08.3\n"
+"X-Generator: Lokalize 23.08.5\n"
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
@@ -484,17 +485,17 @@ msgstr "Имя не содержит"
 #: app/filtercontroller.cpp:99
 #, kde-format
 msgid "Date >="
-msgstr "Дата >="
+msgstr "Дата не раньше"
 
 #: app/filtercontroller.cpp:100
 #, kde-format
 msgid "Date ="
-msgstr "Дата ="
+msgstr "Дата равна"
 
 #: app/filtercontroller.cpp:101
 #, kde-format
 msgid "Date <="
-msgstr "Дата <="
+msgstr "Дата не позже"
 
 #: app/filtercontroller.cpp:132
 #, kde-format
@@ -524,17 +525,17 @@ msgstr "Без метки"
 #: app/filtercontroller.cpp:229
 #, kde-format
 msgid "Dimensions >="
-msgstr ""
+msgstr "Размер не меньше"
 
 #: app/filtercontroller.cpp:230
 #, kde-format
 msgid "Dimensions ="
-msgstr ""
+msgstr "Размер равен"
 
 #: app/filtercontroller.cpp:231
 #, kde-format
 msgid "Dimensions <="
-msgstr ""
+msgstr "Размер не больше"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: app/filtercontroller.cpp:239 lib/crop/cropwidget.cpp:221
@@ -568,7 +569,7 @@ msgstr "Фильтр по дате"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Rating"
-msgstr "Фильтр по оценкам"
+msgstr "Фильтр по оценке"
 
 #: app/filtercontroller.cpp:342
 #, kde-format
@@ -577,12 +578,10 @@ msgid "Filter by Tag"
 msgstr "Фильтр по метке"
 
 #: app/filtercontroller.cpp:344
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Filter by Date"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Dimensions"
-msgstr "Фильтр по дате"
+msgstr "Фильтр по размеру"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: app/fullscreenconfigwidget.ui:20
@@ -1157,7 +1156,7 @@ msgstr "Запустить в режиме слайд-шоу."
 #: app/main.cpp:193
 #, kde-format
 msgid "Start in spotlight mode"
-msgstr ""
+msgstr "Запустить в детальном режиме."
 
 # BUGME: why "folderS"? Implementation of StartHelper::parseArgs() in app/main.cpp suggests that it should be "file or URLs". --aspotashev
 #: app/main.cpp:194
@@ -1214,12 +1213,10 @@ msgid "Exit Full Screen"
 msgstr "Выйти из полноэкранного режима"
 
 #: app/mainwindow.cpp:435
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Light Mode"
+#, kde-format
 msgctxt "@action"
 msgid "Spotlight Mode"
-msgstr "Светлый"
+msgstr "Детальный режим"
 
 #: app/mainwindow.cpp:441
 #, kde-format
