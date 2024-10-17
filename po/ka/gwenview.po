@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-18 00:38+0000\n"
+"POT-Creation-Date: 2024-10-17 00:38+0000\n"
 "PO-Revision-Date: 2024-09-18 06:05+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -657,61 +657,77 @@ msgid "Automatically play"
 msgstr "ავტომატურად დაკვრა"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
-#: app/generalconfigpage.ui:41
+#: app/generalconfigpage.ui:57
 #, kde-format
 msgid "Notify after reaching the last image:"
 msgstr "შეტყობინება ბოლო გამოსახულების მიღწევის შესახებ:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, neverShowWrapNoticeRadioButton)
-#: app/generalconfigpage.ui:51
+#: app/generalconfigpage.ui:67
 #, kde-format
 msgid "Never"
 msgstr "არასდროს"
 
 #. i18n: ectx: property (text), widget (QRadioButton, wrapNoticeOnSlideshowRadioButton)
-#: app/generalconfigpage.ui:58
+#: app/generalconfigpage.ui:74
 #, kde-format
 msgid "Only during slideshows"
 msgstr "მხოლოდ სლაიდშოუს მიმდინარეობისას"
 
 #. i18n: ectx: property (text), widget (QRadioButton, alwaysShowWrapNoticeRadioButton)
-#: app/generalconfigpage.ui:65
+#: app/generalconfigpage.ui:81
 #, kde-format
 msgid "Always"
 msgstr "ყოველთვის"
 
-#. i18n: ectx: property (text), widget (QLabel, label_3)
+#. i18n: ectx: property (text), widget (QLabel, label_2)
 #: app/generalconfigpage.ui:88
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "Go to last image"
+msgid "After the last image:"
+msgstr "ბოლო გამოსახულებაზე გადასვლა"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_WrapAfterLast)
+#: app/generalconfigpage.ui:95
+#, fuzzy, kde-format
+#| msgctxt "@action"
+#| msgid "Start Page"
+msgid "Start over"
+msgstr "საწყისი გვერდი"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: app/generalconfigpage.ui:118
 #, kde-format
 msgid "Fullscreen background:"
 msgstr "მთელ ეკრანზე გაშლილი ფონი:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, fullscreenBackgroundImageRadioButton)
-#: app/generalconfigpage.ui:98
+#: app/generalconfigpage.ui:128
 #, kde-format
 msgid "Dark gray texture"
 msgstr "მუქი ნაცრისფერი ტექსტურა"
 
 #. i18n: ectx: property (text), widget (QRadioButton, fullscreenBackgroundBlackRadioButton)
-#: app/generalconfigpage.ui:105
+#: app/generalconfigpage.ui:135
 #, kde-format
 msgid "Black"
 msgstr "შავი"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: app/generalconfigpage.ui:128
+#: app/generalconfigpage.ui:158
 #, kde-format
 msgid "Lossy image save quality:"
 msgstr "კარგვითი ფორმატის მქონე გამოსახულების შენახვის ხარისხი:"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, jpegQualitySpinner)
-#: app/generalconfigpage.ui:168
+#: app/generalconfigpage.ui:198
 #, no-c-format, kde-format
 msgid "%"
 msgstr "%"
 
 #. i18n: ectx: property (text), widget (QLabel, lossyImageFormatHelpLabel)
-#: app/generalconfigpage.ui:196
+#: app/generalconfigpage.ui:226
 #, kde-format
 msgid ""
 "The quality level when saving images using lossy image formats such as JPEG, "
@@ -721,25 +737,25 @@ msgstr ""
 "ხარისხის დონე. მაღალი ხარისხი ფაილის ზომასაც გაზრდის."
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: app/generalconfigpage.ui:222
+#: app/generalconfigpage.ui:252
 #, kde-format
 msgid "Thumbnail actions:"
 msgstr "მინიატურის ქმედებები:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, allButtonsThumbnailActionsRadioButton)
-#: app/generalconfigpage.ui:229
+#: app/generalconfigpage.ui:259
 #, kde-format
 msgid "All buttons"
 msgstr "ყველა ღილაკი"
 
 #. i18n: ectx: property (text), widget (QRadioButton, selectionOnlyThumbnailActionsRadioButton)
-#: app/generalconfigpage.ui:236
+#: app/generalconfigpage.ui:266
 #, kde-format
 msgid "Show selection button only"
 msgstr "მხოლოდ არჩევის ღილაკის ჩვენება"
 
 #. i18n: ectx: property (text), widget (QRadioButton, noneThumbnailActionsRadioButton)
-#: app/generalconfigpage.ui:243
+#: app/generalconfigpage.ui:273
 #, kde-format
 msgctxt "A number of thumbnail actions to show"
 msgid "None"
@@ -1321,86 +1337,86 @@ msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "გვერდითა ზოლის ჩვენება"
 
-#: app/mainwindow.cpp:1772
+#: app/mainwindow.cpp:1778
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "გამოსახულების გახსნა"
 
-#: app/mainwindow.cpp:1832
+#: app/mainwindow.cpp:1838
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "სლაიდშოუს შეჩერება"
 
-#: app/mainwindow.cpp:1835
+#: app/mainwindow.cpp:1841
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "სლაიდშოუს გარძელება"
 
-#: app/mainwindow.cpp:1835
+#: app/mainwindow.cpp:1841
 #, kde-format
 msgid "Start Slideshow"
 msgstr "სლაიდშოუს დაწყება"
 
-#: app/mainwindow.cpp:1848
+#: app/mainwindow.cpp:1854
 #, kde-format
 msgid "Save All Changes"
 msgstr "ყველა ცვლილების შენახვა"
 
-#: app/mainwindow.cpp:1849
+#: app/mainwindow.cpp:1855
 #, kde-format
 msgid "Discard Changes"
 msgstr "ცვლილებების გაუქმება"
 
-#: app/mainwindow.cpp:1851
+#: app/mainwindow.cpp:1857
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "შეცვლილია %1 გამოსახულება."
 msgstr[1] "შეცვლილია %1 გამოსახულება."
 
-#: app/mainwindow.cpp:1851
+#: app/mainwindow.cpp:1857
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "თუ ახლა გახვალთ, ცვლილებები დაიკარგება."
 
-#: app/mainwindow.cpp:1894
+#: app/mainwindow.cpp:1900
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr "ეს მენიუს ზოლს სრულად დამალავს. მისი ჩვენება %1-ზე დაწოლით შეგიძლიათ."
 
-#: app/mainwindow.cpp:1897
+#: app/mainwindow.cpp:1903
 #, kde-format
 msgid "Hide menu bar"
 msgstr "მენიუს ზოლის დამალვა"
 
-#: app/mainwindow.cpp:2118
+#: app/mainwindow.cpp:2124
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "მიაღწიეთ პირველ დოკუმენტს. რისი გაკეთება გნებავთ?"
 
-#: app/mainwindow.cpp:2119 app/mainwindow.cpp:2133
+#: app/mainwindow.cpp:2125 app/mainwindow.cpp:2139
 #, kde-format
 msgid "Stay There"
 msgstr "იქ დარჩენა"
 
-#: app/mainwindow.cpp:2120
+#: app/mainwindow.cpp:2126
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "ბოლო დოკუმენტზე გადასვლა"
 
-#: app/mainwindow.cpp:2121 app/mainwindow.cpp:2135
+#: app/mainwindow.cpp:2127 app/mainwindow.cpp:2141
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "დოკუმენტების სიაზე დაბრუნება"
 
-#: app/mainwindow.cpp:2132
+#: app/mainwindow.cpp:2138
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "მიაღწიეთ ბოლო დოკუმენტს. რისი გაკეთება გნებავთ?"
 
-#: app/mainwindow.cpp:2134
+#: app/mainwindow.cpp:2140
 #, kde-format
 msgid "Go to the First Document"
 msgstr "პირველ დოკუმენტზე გადასვლა"
@@ -2481,37 +2497,37 @@ msgstr ""
 "დატოვებს."
 
 #. i18n: ectx: label, entry (random), group (slide show)
-#: lib/gwenviewconfig.kcfg:332
+#: lib/gwenviewconfig.kcfg:336
 #, kde-format
 msgid "Display slide show images in random order"
 msgstr "შემთხვევითი სლაიდშოუ"
 
 #. i18n: ectx: label, entry (fullscreen), group (slide show)
-#: lib/gwenviewconfig.kcfg:336
+#: lib/gwenviewconfig.kcfg:340
 #, kde-format
 msgid "Show slideshow in fullscreen mode"
 msgstr "სლაიდშოუს მთელ ეკრანზე ჩვენება"
 
 #. i18n: ectx: label, entry (loop), group (slide show)
-#: lib/gwenviewconfig.kcfg:340
+#: lib/gwenviewconfig.kcfg:344
 #, kde-format
 msgid "Loop on images"
 msgstr "სურათების მარყუჟი"
 
 #. i18n: ectx: label, entry (stopAtEnd), group (slide show)
-#: lib/gwenviewconfig.kcfg:344
+#: lib/gwenviewconfig.kcfg:348
 #, kde-format
 msgid "Stop at last image of folder"
 msgstr "საქაღალდეში ბოლო გამოსახულებაზე გაჩერება"
 
 #. i18n: ectx: label, entry (interval), group (slide show)
-#: lib/gwenviewconfig.kcfg:348
+#: lib/gwenviewconfig.kcfg:352
 #, kde-format
 msgid "Interval between images (in seconds)"
 msgstr "ინტერვალი სურთებს შორის (წამებში)"
 
 #. i18n: ectx: label, entry (CropPreserveAspectRatio), group (Crop)
-#: lib/gwenviewconfig.kcfg:364
+#: lib/gwenviewconfig.kcfg:368
 #, kde-format
 msgid "Restrict crop to image ratio when Advanced Settings disabled"
 msgstr ""
@@ -2519,7 +2535,7 @@ msgstr ""
 "გამორთეულია"
 
 #. i18n: ectx: label, entry (CropRatioIndex), group (Crop)
-#: lib/gwenviewconfig.kcfg:368
+#: lib/gwenviewconfig.kcfg:372
 #, kde-format
 msgid "Index representing selected ratio in the Advanced settings combobox"
 msgstr ""
@@ -2527,13 +2543,13 @@ msgstr ""
 "კომბობებში"
 
 #. i18n: ectx: label, entry (CropRatioWidth), group (Crop)
-#: lib/gwenviewconfig.kcfg:372
+#: lib/gwenviewconfig.kcfg:376
 #, kde-format
 msgid "Last used crop ratio width when Advanced Settings enabled"
 msgstr "დამატებით პარამეტრებში ბოლოს გამოყენებული სიგანე"
 
 #. i18n: ectx: label, entry (CropRatioHeight), group (Crop)
-#: lib/gwenviewconfig.kcfg:376
+#: lib/gwenviewconfig.kcfg:380
 #, kde-format
 msgid "Last used crop ratio height when Advanced Settings enabled"
 msgstr "დამატებით პარამეტრებში ბოლოს გამოყენებული სიმაღლე"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-18 00:38+0000\n"
+"POT-Creation-Date: 2024-10-17 00:38+0000\n"
 "PO-Revision-Date: 2024-06-29 14:04+0000\n"
 "Last-Translator: Gummi <gudmundure@gmail.com>\n"
 "Language-Team: Icelandic <kde-i18n-doc@kde.org>\n"
@@ -663,61 +663,77 @@ msgid "Automatically play"
 msgstr "Spila sjálfkrafa"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
-#: app/generalconfigpage.ui:41
+#: app/generalconfigpage.ui:57
 #, kde-format
 msgid "Notify after reaching the last image:"
 msgstr "Láta vita þegar komið er á síðustu myndina:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, neverShowWrapNoticeRadioButton)
-#: app/generalconfigpage.ui:51
+#: app/generalconfigpage.ui:67
 #, kde-format
 msgid "Never"
 msgstr "Aldrei"
 
 #. i18n: ectx: property (text), widget (QRadioButton, wrapNoticeOnSlideshowRadioButton)
-#: app/generalconfigpage.ui:58
+#: app/generalconfigpage.ui:74
 #, kde-format
 msgid "Only during slideshows"
 msgstr "Bara þegar skyggnusýning er í gangi"
 
 #. i18n: ectx: property (text), widget (QRadioButton, alwaysShowWrapNoticeRadioButton)
-#: app/generalconfigpage.ui:65
+#: app/generalconfigpage.ui:81
 #, kde-format
 msgid "Always"
 msgstr "Alltaf"
 
-#. i18n: ectx: property (text), widget (QLabel, label_3)
+#. i18n: ectx: property (text), widget (QLabel, label_2)
 #: app/generalconfigpage.ui:88
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "Go to last image"
+msgid "After the last image:"
+msgstr "Fara á síðustu mynd"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_WrapAfterLast)
+#: app/generalconfigpage.ui:95
+#, fuzzy, kde-format
+#| msgctxt "@action"
+#| msgid "Start Page"
+msgid "Start over"
+msgstr "Upphafssíða"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: app/generalconfigpage.ui:118
 #, kde-format
 msgid "Fullscreen background:"
 msgstr "Bakgrunnur á öllum skjánum:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, fullscreenBackgroundImageRadioButton)
-#: app/generalconfigpage.ui:98
+#: app/generalconfigpage.ui:128
 #, kde-format
 msgid "Dark gray texture"
 msgstr "Dökkgrá áferð"
 
 #. i18n: ectx: property (text), widget (QRadioButton, fullscreenBackgroundBlackRadioButton)
-#: app/generalconfigpage.ui:105
+#: app/generalconfigpage.ui:135
 #, kde-format
 msgid "Black"
 msgstr "Svart"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: app/generalconfigpage.ui:128
+#: app/generalconfigpage.ui:158
 #, kde-format
 msgid "Lossy image save quality:"
 msgstr "Vistun með gæðatapi (lossy):"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, jpegQualitySpinner)
-#: app/generalconfigpage.ui:168
+#: app/generalconfigpage.ui:198
 #, no-c-format, kde-format
 msgid "%"
 msgstr "%"
 
 #. i18n: ectx: property (text), widget (QLabel, lossyImageFormatHelpLabel)
-#: app/generalconfigpage.ui:196
+#: app/generalconfigpage.ui:226
 #, kde-format
 msgid ""
 "The quality level when saving images using lossy image formats such as JPEG, "
@@ -727,25 +743,25 @@ msgstr ""
 "t.d. JPEG, WEBP, AVIF, HEIF og HEIC. Meiri gæði auka stærð skráa."
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: app/generalconfigpage.ui:222
+#: app/generalconfigpage.ui:252
 #, kde-format
 msgid "Thumbnail actions:"
 msgstr "Smámyndaaðgerðir:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, allButtonsThumbnailActionsRadioButton)
-#: app/generalconfigpage.ui:229
+#: app/generalconfigpage.ui:259
 #, kde-format
 msgid "All buttons"
 msgstr "Allir hnappar"
 
 #. i18n: ectx: property (text), widget (QRadioButton, selectionOnlyThumbnailActionsRadioButton)
-#: app/generalconfigpage.ui:236
+#: app/generalconfigpage.ui:266
 #, kde-format
 msgid "Show selection button only"
 msgstr "Sýna einungis valhnapp"
 
 #. i18n: ectx: property (text), widget (QRadioButton, noneThumbnailActionsRadioButton)
-#: app/generalconfigpage.ui:243
+#: app/generalconfigpage.ui:273
 #, kde-format
 msgctxt "A number of thumbnail actions to show"
 msgid "None"
@@ -1328,50 +1344,50 @@ msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Sýna hliðarstiku"
 
-#: app/mainwindow.cpp:1772
+#: app/mainwindow.cpp:1778
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Opna mynd"
 
-#: app/mainwindow.cpp:1832
+#: app/mainwindow.cpp:1838
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "Gera hlé á skyggnusýningu"
 
-#: app/mainwindow.cpp:1835
+#: app/mainwindow.cpp:1841
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "Halda áfram skyggnusýningu"
 
-#: app/mainwindow.cpp:1835
+#: app/mainwindow.cpp:1841
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Hefja skyggnusýningu"
 
-#: app/mainwindow.cpp:1848
+#: app/mainwindow.cpp:1854
 #, kde-format
 msgid "Save All Changes"
 msgstr "Vista allar breytingar"
 
-#: app/mainwindow.cpp:1849
+#: app/mainwindow.cpp:1855
 #, kde-format
 msgid "Discard Changes"
 msgstr "Henda breytingum"
 
-#: app/mainwindow.cpp:1851
+#: app/mainwindow.cpp:1857
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "Einni mynd hefur verið breytt."
 msgstr[1] "%1 myndum hefur verið breytt."
 
-#: app/mainwindow.cpp:1851
+#: app/mainwindow.cpp:1857
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Ef þú hættir núna tapast allt sem þú hefur breytt."
 
-#: app/mainwindow.cpp:1894
+#: app/mainwindow.cpp:1900
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
@@ -1379,37 +1395,37 @@ msgstr ""
 "Þetta felur valmyndastikuna alveg. Þú getur kallað hana aftur fram með því "
 "að slá inn %1."
 
-#: app/mainwindow.cpp:1897
+#: app/mainwindow.cpp:1903
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Fela valmyndastiku"
 
-#: app/mainwindow.cpp:2118
+#: app/mainwindow.cpp:2124
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "Þú ert nú á fyrsta skjalinu. Hvað viltu gera?"
 
-#: app/mainwindow.cpp:2119 app/mainwindow.cpp:2133
+#: app/mainwindow.cpp:2125 app/mainwindow.cpp:2139
 #, kde-format
 msgid "Stay There"
 msgstr "Vera hér"
 
-#: app/mainwindow.cpp:2120
+#: app/mainwindow.cpp:2126
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "Fara á síðasta skjalið"
 
-#: app/mainwindow.cpp:2121 app/mainwindow.cpp:2135
+#: app/mainwindow.cpp:2127 app/mainwindow.cpp:2141
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "Fara til baka í skjalalistann"
 
-#: app/mainwindow.cpp:2132
+#: app/mainwindow.cpp:2138
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "Þú ert nú á síðasta skjalinu. Hvað viltu gera?"
 
-#: app/mainwindow.cpp:2134
+#: app/mainwindow.cpp:2140
 #, kde-format
 msgid "Go to the First Document"
 msgstr "Fara á fyrsta skjalið"
@@ -2490,37 +2506,37 @@ msgstr ""
 "            sem ekki er hægt að birta og snertir ekki á hinum litunum."
 
 #. i18n: ectx: label, entry (random), group (slide show)
-#: lib/gwenviewconfig.kcfg:332
+#: lib/gwenviewconfig.kcfg:336
 #, kde-format
 msgid "Display slide show images in random order"
 msgstr "Sýna myndir í skyggnusýningum í slembinni röð"
 
 #. i18n: ectx: label, entry (fullscreen), group (slide show)
-#: lib/gwenviewconfig.kcfg:336
+#: lib/gwenviewconfig.kcfg:340
 #, kde-format
 msgid "Show slideshow in fullscreen mode"
 msgstr "Láta skyggnusýninguna fylla skjáinn"
 
 #. i18n: ectx: label, entry (loop), group (slide show)
-#: lib/gwenviewconfig.kcfg:340
+#: lib/gwenviewconfig.kcfg:344
 #, kde-format
 msgid "Loop on images"
 msgstr "Fara aftur í gegnum myndir"
 
 #. i18n: ectx: label, entry (stopAtEnd), group (slide show)
-#: lib/gwenviewconfig.kcfg:344
+#: lib/gwenviewconfig.kcfg:348
 #, kde-format
 msgid "Stop at last image of folder"
 msgstr "Stoppa á síðustu mynd í möppu"
 
 #. i18n: ectx: label, entry (interval), group (slide show)
-#: lib/gwenviewconfig.kcfg:348
+#: lib/gwenviewconfig.kcfg:352
 #, kde-format
 msgid "Interval between images (in seconds)"
 msgstr "Tími milli mynda (í sekúndum)"
 
 #. i18n: ectx: label, entry (CropPreserveAspectRatio), group (Crop)
-#: lib/gwenviewconfig.kcfg:364
+#: lib/gwenviewconfig.kcfg:368
 #, kde-format
 msgid "Restrict crop to image ratio when Advanced Settings disabled"
 msgstr ""
@@ -2528,21 +2544,21 @@ msgstr ""
 "óvirkar"
 
 #. i18n: ectx: label, entry (CropRatioIndex), group (Crop)
-#: lib/gwenviewconfig.kcfg:368
+#: lib/gwenviewconfig.kcfg:372
 #, kde-format
 msgid "Index representing selected ratio in the Advanced settings combobox"
 msgstr ""
 "Vísir sem sýnir hlutfallið sem er valið í listareitnum í Ítarlegum stillingum"
 
 #. i18n: ectx: label, entry (CropRatioWidth), group (Crop)
-#: lib/gwenviewconfig.kcfg:372
+#: lib/gwenviewconfig.kcfg:376
 #, kde-format
 msgid "Last used crop ratio width when Advanced Settings enabled"
 msgstr ""
 "Síðast notaða breidd skurðhlutfalls þegar Ítarlegar stillingar voru notaðar"
 
 #. i18n: ectx: label, entry (CropRatioHeight), group (Crop)
-#: lib/gwenviewconfig.kcfg:376
+#: lib/gwenviewconfig.kcfg:380
 #, kde-format
 msgid "Last used crop ratio height when Advanced Settings enabled"
 msgstr ""

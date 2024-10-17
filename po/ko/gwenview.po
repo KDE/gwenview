@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-18 00:38+0000\n"
+"POT-Creation-Date: 2024-10-17 00:38+0000\n"
 "PO-Revision-Date: 2024-08-19 22:31+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -650,61 +650,77 @@ msgid "Automatically play"
 msgstr "자동으로 재생"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
-#: app/generalconfigpage.ui:41
+#: app/generalconfigpage.ui:57
 #, kde-format
 msgid "Notify after reaching the last image:"
 msgstr "마지막 그림에 도달했을 때 알림:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, neverShowWrapNoticeRadioButton)
-#: app/generalconfigpage.ui:51
+#: app/generalconfigpage.ui:67
 #, kde-format
 msgid "Never"
 msgstr "하지 않음"
 
 #. i18n: ectx: property (text), widget (QRadioButton, wrapNoticeOnSlideshowRadioButton)
-#: app/generalconfigpage.ui:58
+#: app/generalconfigpage.ui:74
 #, kde-format
 msgid "Only during slideshows"
 msgstr "슬라이드 쇼 중에만"
 
 #. i18n: ectx: property (text), widget (QRadioButton, alwaysShowWrapNoticeRadioButton)
-#: app/generalconfigpage.ui:65
+#: app/generalconfigpage.ui:81
 #, kde-format
 msgid "Always"
 msgstr "항상"
 
-#. i18n: ectx: property (text), widget (QLabel, label_3)
+#. i18n: ectx: property (text), widget (QLabel, label_2)
 #: app/generalconfigpage.ui:88
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "Go to last image"
+msgid "After the last image:"
+msgstr "마지막 그림으로 가기"
+
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_WrapAfterLast)
+#: app/generalconfigpage.ui:95
+#, fuzzy, kde-format
+#| msgctxt "@action"
+#| msgid "Start Page"
+msgid "Start over"
+msgstr "시작 페이지"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: app/generalconfigpage.ui:118
 #, kde-format
 msgid "Fullscreen background:"
 msgstr "전체 화면 배경:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, fullscreenBackgroundImageRadioButton)
-#: app/generalconfigpage.ui:98
+#: app/generalconfigpage.ui:128
 #, kde-format
 msgid "Dark gray texture"
 msgstr "어두운 회색 텍스처"
 
 #. i18n: ectx: property (text), widget (QRadioButton, fullscreenBackgroundBlackRadioButton)
-#: app/generalconfigpage.ui:105
+#: app/generalconfigpage.ui:135
 #, kde-format
 msgid "Black"
 msgstr "검은색"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: app/generalconfigpage.ui:128
+#: app/generalconfigpage.ui:158
 #, kde-format
 msgid "Lossy image save quality:"
 msgstr "손실 압축 저장 품질:"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, jpegQualitySpinner)
-#: app/generalconfigpage.ui:168
+#: app/generalconfigpage.ui:198
 #, no-c-format, kde-format
 msgid "%"
 msgstr "%"
 
 #. i18n: ectx: property (text), widget (QLabel, lossyImageFormatHelpLabel)
-#: app/generalconfigpage.ui:196
+#: app/generalconfigpage.ui:226
 #, kde-format
 msgid ""
 "The quality level when saving images using lossy image formats such as JPEG, "
@@ -714,25 +730,25 @@ msgstr ""
 "준입니다. 품질이 높아지면 파일 크기도 커집니다."
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: app/generalconfigpage.ui:222
+#: app/generalconfigpage.ui:252
 #, kde-format
 msgid "Thumbnail actions:"
 msgstr "섬네일 동작:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, allButtonsThumbnailActionsRadioButton)
-#: app/generalconfigpage.ui:229
+#: app/generalconfigpage.ui:259
 #, kde-format
 msgid "All buttons"
 msgstr "모든 단추"
 
 #. i18n: ectx: property (text), widget (QRadioButton, selectionOnlyThumbnailActionsRadioButton)
-#: app/generalconfigpage.ui:236
+#: app/generalconfigpage.ui:266
 #, kde-format
 msgid "Show selection button only"
 msgstr "선택 단추만 표시"
 
 #. i18n: ectx: property (text), widget (QRadioButton, noneThumbnailActionsRadioButton)
-#: app/generalconfigpage.ui:243
+#: app/generalconfigpage.ui:273
 #, kde-format
 msgctxt "A number of thumbnail actions to show"
 msgid "None"
@@ -1309,85 +1325,85 @@ msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "사이드바 표시"
 
-#: app/mainwindow.cpp:1772
+#: app/mainwindow.cpp:1778
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "그림 열기"
 
-#: app/mainwindow.cpp:1832
+#: app/mainwindow.cpp:1838
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "슬라이드 쇼 일시 정지"
 
-#: app/mainwindow.cpp:1835
+#: app/mainwindow.cpp:1841
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "슬라이드 쇼 다시 시작"
 
-#: app/mainwindow.cpp:1835
+#: app/mainwindow.cpp:1841
 #, kde-format
 msgid "Start Slideshow"
 msgstr "슬라이드 쇼 시작하기"
 
-#: app/mainwindow.cpp:1848
+#: app/mainwindow.cpp:1854
 #, kde-format
 msgid "Save All Changes"
 msgstr "모든 변경 사항 저장하기"
 
-#: app/mainwindow.cpp:1849
+#: app/mainwindow.cpp:1855
 #, kde-format
 msgid "Discard Changes"
 msgstr "변경 사항 취소"
 
-#: app/mainwindow.cpp:1851
+#: app/mainwindow.cpp:1857
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "그림 %1개를 수정했습니다."
 
-#: app/mainwindow.cpp:1851
+#: app/mainwindow.cpp:1857
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "지금 종료하면 변경 사항이 저장되지 않습니다."
 
-#: app/mainwindow.cpp:1894
+#: app/mainwindow.cpp:1900
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr "메뉴 표시줄을 완전히 숨깁니다. %1 키를 눌러서 다시 볼 수 있습니다."
 
-#: app/mainwindow.cpp:1897
+#: app/mainwindow.cpp:1903
 #, kde-format
 msgid "Hide menu bar"
 msgstr "메뉴 표시줄 숨기기"
 
-#: app/mainwindow.cpp:2118
+#: app/mainwindow.cpp:2124
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "첫 문서에 도달했습니다. 무엇을 하시겠습니까?"
 
-#: app/mainwindow.cpp:2119 app/mainwindow.cpp:2133
+#: app/mainwindow.cpp:2125 app/mainwindow.cpp:2139
 #, kde-format
 msgid "Stay There"
 msgstr "그대로 있기"
 
-#: app/mainwindow.cpp:2120
+#: app/mainwindow.cpp:2126
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "마지막 문서로 가기"
 
-#: app/mainwindow.cpp:2121 app/mainwindow.cpp:2135
+#: app/mainwindow.cpp:2127 app/mainwindow.cpp:2141
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "문서 목록으로 가기"
 
-#: app/mainwindow.cpp:2132
+#: app/mainwindow.cpp:2138
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "마지막 문서에 도달했습니다. 무엇을 하시겠습니까?"
 
-#: app/mainwindow.cpp:2134
+#: app/mainwindow.cpp:2140
 #, kde-format
 msgid "Go to the First Document"
 msgstr "첫 문서로 가기"
@@ -2439,55 +2455,55 @@ msgstr ""
 "            다른 색상은 그대로 둡니다."
 
 #. i18n: ectx: label, entry (random), group (slide show)
-#: lib/gwenviewconfig.kcfg:332
+#: lib/gwenviewconfig.kcfg:336
 #, kde-format
 msgid "Display slide show images in random order"
 msgstr "슬라이드 쇼 그림을 순서 없이 표시하기"
 
 #. i18n: ectx: label, entry (fullscreen), group (slide show)
-#: lib/gwenviewconfig.kcfg:336
+#: lib/gwenviewconfig.kcfg:340
 #, kde-format
 msgid "Show slideshow in fullscreen mode"
 msgstr "전체 화면 모드에서 슬라이드 쇼 시작하기"
 
 #. i18n: ectx: label, entry (loop), group (slide show)
-#: lib/gwenviewconfig.kcfg:340
+#: lib/gwenviewconfig.kcfg:344
 #, kde-format
 msgid "Loop on images"
 msgstr "그림 반복하기"
 
 #. i18n: ectx: label, entry (stopAtEnd), group (slide show)
-#: lib/gwenviewconfig.kcfg:344
+#: lib/gwenviewconfig.kcfg:348
 #, kde-format
 msgid "Stop at last image of folder"
 msgstr "폴더의 마지막 그림에서 멈추기"
 
 #. i18n: ectx: label, entry (interval), group (slide show)
-#: lib/gwenviewconfig.kcfg:348
+#: lib/gwenviewconfig.kcfg:352
 #, kde-format
 msgid "Interval between images (in seconds)"
 msgstr "그림 전환 시간 (초 단위)"
 
 #. i18n: ectx: label, entry (CropPreserveAspectRatio), group (Crop)
-#: lib/gwenviewconfig.kcfg:364
+#: lib/gwenviewconfig.kcfg:368
 #, kde-format
 msgid "Restrict crop to image ratio when Advanced Settings disabled"
 msgstr "고급 설정이 비활성화되어 있을 때 그림 자르기 비율 제한"
 
 #. i18n: ectx: label, entry (CropRatioIndex), group (Crop)
-#: lib/gwenviewconfig.kcfg:368
+#: lib/gwenviewconfig.kcfg:372
 #, kde-format
 msgid "Index representing selected ratio in the Advanced settings combobox"
 msgstr "고급 설정 콤보 상자에서 선택한 비율을 나타내는 인덱스"
 
 #. i18n: ectx: label, entry (CropRatioWidth), group (Crop)
-#: lib/gwenviewconfig.kcfg:372
+#: lib/gwenviewconfig.kcfg:376
 #, kde-format
 msgid "Last used crop ratio width when Advanced Settings enabled"
 msgstr "고급 설정이 활성화되어 있었을 때 마지막으로 사용한 자르기 비율 너비"
 
 #. i18n: ectx: label, entry (CropRatioHeight), group (Crop)
-#: lib/gwenviewconfig.kcfg:376
+#: lib/gwenviewconfig.kcfg:380
 #, kde-format
 msgid "Last used crop ratio height when Advanced Settings enabled"
 msgstr "고급 설정이 활성화되어 있었을 때 마지막으로 사용한 자르기 비율 높이"
