@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-17 00:38+0000\n"
-"PO-Revision-Date: 2024-09-18 11:49+0200\n"
+"PO-Revision-Date: 2024-10-17 22:23+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.08.1\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -685,19 +685,15 @@ msgstr "Siempre"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: app/generalconfigpage.ui:88
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Go to last image"
+#, kde-format
 msgid "After the last image:"
-msgstr "Ir a la última imagen"
+msgstr "Tras la última imagen:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_WrapAfterLast)
 #: app/generalconfigpage.ui:95
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Start Page"
+#, kde-format
 msgid "Start over"
-msgstr "Página de inicio"
+msgstr "Volver a empezar"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: app/generalconfigpage.ui:118

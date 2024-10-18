@@ -674,19 +674,15 @@ msgstr "总是"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: app/generalconfigpage.ui:88
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Go to last image"
+#, kde-format
 msgid "After the last image:"
-msgstr "切换到最后一张图像"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_WrapAfterLast)
 #: app/generalconfigpage.ui:95
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Start Page"
+#, kde-format
 msgid "Start over"
-msgstr "起始页面"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: app/generalconfigpage.ui:118
