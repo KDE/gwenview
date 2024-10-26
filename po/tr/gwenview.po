@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kdegraphics-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-17 00:38+0000\n"
-"PO-Revision-Date: 2024-10-18 01:59+0300\n"
+"PO-Revision-Date: 2024-10-25 18:48+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.11.70\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2084,7 +2084,7 @@ msgid ""
 "system, or use your system's package manager to install \"Kamera\" package."
 msgstr ""
 "Keşfet’i açma başarısız oldu.<nl/>Sisteminizde Keşfet’in kurulu olduğundan "
-"emin olun veya ‘Kamera’yı kurmak için sistem paket yöneticinizi kullanın."
+"emin olun veya “Kamera”yı kurmak için sistem paket yöneticinizi kullanın."
 
 #: importer/thumbnailpage.cpp:492
 #, kde-kuit-format
@@ -2488,9 +2488,9 @@ msgid ""
 msgstr ""
 "Ekranınız bir ICC renk profili kullandığında ve görselde profilin renk\n"
 "            gamına uymayan renkler varsa renklerin nice sunulduğunu\n"
-"            tanımlar. ‘Algısal’, tüm görsel renklerini ölçekler; böylece\n"
+"            tanımlar. “Algısal”, tüm görsel renklerini ölçekler; böylece\n"
 "            renkler ekranın görsel yeteneğine uyacak biçimde görüntülenir.\n"
-"            ‘Göreceli’, yalnızca görüntülenemeyen denkleri tıkıştırır\n"
+"            “Göreceli”, yalnızca görüntülenemeyen denkleri tıkıştırır\n"
 "            ve diğerlerine dokunmaz."
 
 #. i18n: ectx: label, entry (random), group (slide show)
