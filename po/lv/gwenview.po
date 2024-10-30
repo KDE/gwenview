@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-17 00:38+0000\n"
-"PO-Revision-Date: 2024-10-06 17:28+0300\n"
+"PO-Revision-Date: 2024-10-28 19:36+0200\n"
 "Last-Translator: Toms Trasuns <toms.trasuns@posteo.net>\n"
 "Language-Team: Latvian <kde-i18n-doc@kde.org>\n"
 "Language: lv\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
 "2);\n"
-"X-Generator: Lokalize 24.08.0\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -695,19 +695,15 @@ msgstr "Vienmēr"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: app/generalconfigpage.ui:88
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Go to last image"
+#, kde-format
 msgid "After the last image:"
-msgstr "Iet uz pēdējo attēlu"
+msgstr "Pēc pēdējā attēla:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_WrapAfterLast)
 #: app/generalconfigpage.ui:95
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Start Page"
+#, kde-format
 msgid "Start over"
-msgstr "Sākuma lapa"
+msgstr "Sākt no sākuma"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: app/generalconfigpage.ui:118
@@ -1806,9 +1802,9 @@ msgstr[2] "Importēti %1 dokumenti."
 msgid "One document has been skipped because it had already been imported."
 msgid_plural ""
 "%1 documents have been skipped because they had already been imported."
-msgstr[0] "%1 dokuments tika izlaists, jo tas jau iepriekš ir importēts."
-msgstr[1] "%1 dokumenti tika izlaisti, jo tie jau iepriekš bija importēti."
-msgstr[2] "%1 dokumentu tika izlaisti, jo tie jau iepriekš bija importēti."
+msgstr[0] "%1 dokuments ir izlaists, jo tas jau iepriekš ir importēts."
+msgstr[1] "%1 dokumenti ir izlaisti, jo tie jau iepriekš bija importēti."
+msgstr[2] "%1 dokumentu ir izlaists, jo tie jau iepriekš bija importēti."
 
 #: importer/importdialog.cpp:104
 #, kde-format
@@ -1819,13 +1815,13 @@ msgid_plural ""
 "%1 of them have been renamed because other documents with the same name had "
 "already been imported."
 msgstr[0] ""
-"%1 no tiem tika pārdēvēts, jo cits dokuments ar to pašu nosaukumu jau ir "
+"%1 no tiem ir pārdēvēts, jo cits dokuments ar to pašu nosaukumu jau ir "
 "importēts."
 msgstr[1] ""
-"%1 no tiem tika pārdēvēti, jo citi dokumenti ar to pašu nosaukumu jau ir "
+"%1 no tiem ir pārdēvēti, jo citi dokumenti ar to pašu nosaukumu jau ir "
 "importēti."
 msgstr[2] ""
-"%1 no tiem tika pārdēvēti, jo citi dokumenti ar to pašu nosaukumu jau ir "
+"%1 no tiem ir pārdēvēts, jo citi dokumenti ar to pašu nosaukumu jau ir "
 "importēti."
 
 #: importer/importdialog.cpp:112
@@ -2519,13 +2515,13 @@ msgid ""
 "colors\n"
 "            that cannot be displayed, and leave the other colors alone."
 msgstr ""
-"Nosaka, kā krāsas tiek atveidotas, kad displejs\n"
+"Nosaka krāsu atveidošanu, kad displejs\n"
 "            izmanto ICC krāsu profilu, bet attēlam ir krāsas, kas\n"
-"            neietilpst profila krāsu gammā. Iestatījums „Uztveres“ mērogos\n"
+"            neietilpst profila krāsu gammā. „Uztveres“ iestatījums mērogos\n"
 "            visa attēla krāsas, lai tās ietilptu displejā attēlojamo\n"
 "            krāsu diapazonā. Iestatījums „Relatīvi“ saspiedīs tikai tās "
 "krāsas,\n"
-"            kuras nav iespējams parādīt, bet pārējās atstās bez izmaiņām."
+"            ko nav iespējams parādīt, bet pārējās atstās bez izmaiņām."
 
 #. i18n: ectx: label, entry (random), group (slide show)
 #: lib/gwenviewconfig.kcfg:336
