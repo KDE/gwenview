@@ -995,7 +995,10 @@ struct MainWindow::Private {
         }
     }
 
-    enum class ShowPreview { Yes, No };
+    enum class ShowPreview {
+        Yes,
+        No
+    };
     void print(ShowPreview showPreview)
     {
         if (!mContextManager->currentUrlIsRasterImage()) {

@@ -78,7 +78,12 @@ public:
         GLAnimation,
 #endif
     };
-    enum BackgroundColorMode { Auto = 0, Light = 1, Neutral = 2, Dark = 3 };
+    enum BackgroundColorMode {
+        Auto = 0,
+        Light = 1,
+        Neutral = 2,
+        Dark = 3
+    };
     Q_ENUM(BackgroundColorMode)
 
     /**
