@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:38+0000\n"
+"POT-Creation-Date: 2024-11-02 00:38+0000\n"
 "PO-Revision-Date: 2024-09-19 15:04+0300\n"
 "Last-Translator: Antonis Geralis <capoiosct@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -1123,32 +1123,32 @@ msgid_plural "%1 files"
 msgstr[0] "%1 αρχείο"
 msgstr[1] "%1 αρχεία"
 
-#: app/main.cpp:181
+#: app/main.cpp:182
 #, kde-format
 msgid "Gwenview"
 msgstr "Gwenview"
 
-#: app/main.cpp:183
+#: app/main.cpp:184
 #, kde-format
 msgid "An Image Viewer"
 msgstr "Ένας προβολέας εικόνων"
 
-#: app/main.cpp:191
+#: app/main.cpp:194
 #, kde-format
 msgid "Start in fullscreen mode"
 msgstr "Έναρξη σε λειτουργία πλήρους οθόνης"
 
-#: app/main.cpp:192
+#: app/main.cpp:195
 #, kde-format
 msgid "Start in slideshow mode"
 msgstr "Έναρξη σε λειτουργία παρουσίασης διαφανειών"
 
-#: app/main.cpp:193
+#: app/main.cpp:196
 #, kde-format
 msgid "Start in spotlight mode"
 msgstr "Έναρξη στη λειτουργία προβολέα"
 
-#: app/main.cpp:194
+#: app/main.cpp:197
 #, kde-format
 msgid "A starting file or folders"
 msgstr "Ένα αρχικό αρχείο ή κατάλογοι"
@@ -1341,62 +1341,62 @@ msgstr "Λειτουργίες"
 msgid "Viewing media"
 msgstr "Προβολή πολυμέσων"
 
-#: app/mainwindow.cpp:1429
+#: app/mainwindow.cpp:1432
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Απόκρυψη πλευρικής γραμμής"
 
-#: app/mainwindow.cpp:1429
+#: app/mainwindow.cpp:1432
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Εμφάνιση πλευρικής γραμμής"
 
-#: app/mainwindow.cpp:1778
+#: app/mainwindow.cpp:1781
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Άνοιγμα εικόνας"
 
-#: app/mainwindow.cpp:1838
+#: app/mainwindow.cpp:1841
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "Παύση διαφανειών"
 
-#: app/mainwindow.cpp:1841
+#: app/mainwindow.cpp:1844
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "Συνέχιση διαφανειών"
 
-#: app/mainwindow.cpp:1841
+#: app/mainwindow.cpp:1844
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Εκκίνηση παρουσίασης διαφανειών"
 
-#: app/mainwindow.cpp:1854
+#: app/mainwindow.cpp:1857
 #, kde-format
 msgid "Save All Changes"
 msgstr "Αποθήκευση όλων των τροποποιήσεων"
 
-#: app/mainwindow.cpp:1855
+#: app/mainwindow.cpp:1858
 #, kde-format
 msgid "Discard Changes"
 msgstr "Απόρριψη αλλαγών"
 
-#: app/mainwindow.cpp:1857
+#: app/mainwindow.cpp:1860
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "Μία εικόνα έχει τροποποιηθεί."
 msgstr[1] "%1 εικόνες έχουν τροποποιηθεί."
 
-#: app/mainwindow.cpp:1857
+#: app/mainwindow.cpp:1860
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Αν τερματίσετε την εφαρμογή τώρα, οι τροποποιήσεις σας θα χαθούν."
 
-#: app/mainwindow.cpp:1900
+#: app/mainwindow.cpp:1903
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
@@ -1404,37 +1404,37 @@ msgstr ""
 "Με αυτό θα γίνει πλήρης απόκρυψη της γραμμής μενού. Μπορείτε να το "
 "εμφανίσετε πάλι πληκτρολογώντας %1."
 
-#: app/mainwindow.cpp:1903
+#: app/mainwindow.cpp:1906
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Απόκρυψη γραμμής μενού"
 
-#: app/mainwindow.cpp:2124
+#: app/mainwindow.cpp:2127
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "Φτάσατε στο πρώτο έγγραφο, τι επιθυμείτε να κάνετε;"
 
-#: app/mainwindow.cpp:2125 app/mainwindow.cpp:2139
+#: app/mainwindow.cpp:2128 app/mainwindow.cpp:2142
 #, kde-format
 msgid "Stay There"
 msgstr "Παραμονή εδώ"
 
-#: app/mainwindow.cpp:2126
+#: app/mainwindow.cpp:2129
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "Μετάβαση στο τελευταίο έγγραφο"
 
-#: app/mainwindow.cpp:2127 app/mainwindow.cpp:2141
+#: app/mainwindow.cpp:2130 app/mainwindow.cpp:2144
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "Μετάβαση πίσω στη λίστα εγγράφων"
 
-#: app/mainwindow.cpp:2138
+#: app/mainwindow.cpp:2141
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "Φτάσατε στο τελευταίο έγγραφο, τι επιθυμείτε να κάνετε;"
 
-#: app/mainwindow.cpp:2140
+#: app/mainwindow.cpp:2143
 #, kde-format
 msgid "Go to the First Document"
 msgstr "Μετάβαση στο πρώτο έγγραφο"
@@ -1942,17 +1942,17 @@ msgstr ""
 "<i>Πληκτρολογήστε το κείμενο ή κάντε κλικ στα παρακάτω αντικείμενα για να "
 "προσαρμόσετε τον τύπο αρχειοθέτησης</i>"
 
-#: importer/main.cpp:41
+#: importer/main.cpp:42
 #, kde-format
 msgid "Gwenview Importer"
 msgstr "Εισαγωγέας Gwenview"
 
-#: importer/main.cpp:43
+#: importer/main.cpp:44
 #, kde-format
 msgid "Photo Importer"
 msgstr "Εισαγωγέας φωτογραφιών"
 
-#: importer/main.cpp:50
+#: importer/main.cpp:53
 #, kde-format
 msgid ""
 "The device UDI, used to retrieve information about the device (name, icon...)"
@@ -1960,27 +1960,27 @@ msgstr ""
 "Η συσκευή UDI, χρησιμεύει στην ανάκτηση πληροφοριών σχετικά με τη συσκευή "
 "(όνομα, εικονίδιο...)"
 
-#: importer/main.cpp:50
+#: importer/main.cpp:53
 #, kde-format
 msgid "Device UDI"
 msgstr "Συσκευή UDI"
 
-#: importer/main.cpp:51
+#: importer/main.cpp:54
 #, kde-format
 msgid "Source folder"
 msgstr "Φάκελος πηγής"
 
-#: importer/main.cpp:56
+#: importer/main.cpp:59
 #, kde-format
 msgid "Missing required source folder argument."
 msgstr "Λείπει το απαιτούμενο όρισμα φακέλου πηγής."
 
-#: importer/main.cpp:60
+#: importer/main.cpp:63
 #, kde-format
 msgid "Too many arguments."
 msgstr "Πάρα πολλά ορίσματα."
 
-#: importer/main.cpp:66
+#: importer/main.cpp:69
 #, kde-format
 msgid "Invalid source folder."
 msgstr "Μη έγκυρος φάκελος πηγής"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:38+0000\n"
+"POT-Creation-Date: 2024-11-02 00:38+0000\n"
 "PO-Revision-Date: 2022-11-01 00:37+0700\n"
 "Last-Translator: OIS <mistresssilvara@hotmail.com>\n"
 "Language-Team: Interlingue <kde-i18n-doc@kde.org>\n"
@@ -1094,32 +1094,32 @@ msgid_plural "%1 files"
 msgstr[0] "%1 file"
 msgstr[1] "%1 files"
 
-#: app/main.cpp:181
+#: app/main.cpp:182
 #, kde-format
 msgid "Gwenview"
 msgstr "Gwenview"
 
-#: app/main.cpp:183
+#: app/main.cpp:184
 #, kde-format
 msgid "An Image Viewer"
 msgstr "Un visor de images"
 
-#: app/main.cpp:191
+#: app/main.cpp:194
 #, fuzzy, kde-format
 msgid "Start in fullscreen mode"
 msgstr "Lansar in li mode plen-ecran"
 
-#: app/main.cpp:192
+#: app/main.cpp:195
 #, fuzzy, kde-format
 msgid "Start in slideshow mode"
 msgstr "Iniciar un exhibition"
 
-#: app/main.cpp:193
+#: app/main.cpp:196
 #, fuzzy, kde-format
 msgid "Start in spotlight mode"
 msgstr "Iniciar un exhibition"
 
-#: app/main.cpp:194
+#: app/main.cpp:197
 #, fuzzy, kde-format
 msgid "A starting file or folders"
 msgstr "Fólderes"
@@ -1310,98 +1310,98 @@ msgstr "Operationes"
 msgid "Viewing media"
 msgstr ""
 
-#: app/mainwindow.cpp:1429
+#: app/mainwindow.cpp:1432
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Celar li panel lateral"
 
-#: app/mainwindow.cpp:1429
+#: app/mainwindow.cpp:1432
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Monstrar li panel lateral"
 
-#: app/mainwindow.cpp:1778
+#: app/mainwindow.cpp:1781
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Aperter un image"
 
-#: app/mainwindow.cpp:1838
+#: app/mainwindow.cpp:1841
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "Pausar li exhibition"
 
-#: app/mainwindow.cpp:1841
+#: app/mainwindow.cpp:1844
 #, fuzzy, kde-format
 msgid "Resume Slideshow"
 msgstr "Pausar o reprender li exhibition"
 
-#: app/mainwindow.cpp:1841
+#: app/mainwindow.cpp:1844
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Iniciar un exhibition"
 
-#: app/mainwindow.cpp:1854
+#: app/mainwindow.cpp:1857
 #, kde-format
 msgid "Save All Changes"
 msgstr "Gardar omni modificationes"
 
-#: app/mainwindow.cpp:1855
+#: app/mainwindow.cpp:1858
 #, kde-format
 msgid "Discard Changes"
 msgstr "Rejecter li modificationes"
 
-#: app/mainwindow.cpp:1857
+#: app/mainwindow.cpp:1860
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] ""
 msgstr[1] ""
 
-#: app/mainwindow.cpp:1857
+#: app/mainwindow.cpp:1860
 #, fuzzy, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Si vu ne garda it, vor modificationes va esser perdit."
 
-#: app/mainwindow.cpp:1900
+#: app/mainwindow.cpp:1903
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr ""
 
-#: app/mainwindow.cpp:1903
+#: app/mainwindow.cpp:1906
 #, fuzzy, kde-format
 msgid "Hide menu bar"
 msgstr "Celar li barra de menú"
 
-#: app/mainwindow.cpp:2124
+#: app/mainwindow.cpp:2127
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr ""
 
-#: app/mainwindow.cpp:2125 app/mainwindow.cpp:2139
+#: app/mainwindow.cpp:2128 app/mainwindow.cpp:2142
 #, fuzzy, kde-format
 msgid "Stay There"
 msgstr "Sem&pre in avan"
 
-#: app/mainwindow.cpp:2126
+#: app/mainwindow.cpp:2129
 #, fuzzy, kde-format
 msgid "Go to the Last Document"
 msgstr "Ear al ultim definition"
 
-#: app/mainwindow.cpp:2127 app/mainwindow.cpp:2141
+#: app/mainwindow.cpp:2130 app/mainwindow.cpp:2144
 #, fuzzy, kde-format
 msgid "Go Back to the Document List"
 msgstr "Ear 10 secondes retro"
 
-#: app/mainwindow.cpp:2138
+#: app/mainwindow.cpp:2141
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr ""
 
-#: app/mainwindow.cpp:2140
+#: app/mainwindow.cpp:2143
 #, kde-format
 msgid "Go to the First Document"
 msgstr "Ear al document"
@@ -1886,43 +1886,43 @@ msgstr "Previder:"
 msgid "<i>Type text or click the items below to customize the format</i>"
 msgstr ""
 
-#: importer/main.cpp:41
+#: importer/main.cpp:42
 #, kde-format
 msgid "Gwenview Importer"
 msgstr "Importator de Gwenview"
 
-#: importer/main.cpp:43
+#: importer/main.cpp:44
 #, kde-format
 msgid "Photo Importer"
 msgstr "Importator de fotos"
 
-#: importer/main.cpp:50
+#: importer/main.cpp:53
 #, kde-format
 msgid ""
 "The device UDI, used to retrieve information about the device (name, icon...)"
 msgstr ""
 
-#: importer/main.cpp:50
+#: importer/main.cpp:53
 #, kde-format
 msgid "Device UDI"
 msgstr "UDI de aparate:"
 
-#: importer/main.cpp:51
+#: importer/main.cpp:54
 #, fuzzy, kde-format
 msgid "Source folder"
 msgstr "Li fólder de destination es intra li fólder de orígine."
 
-#: importer/main.cpp:56
+#: importer/main.cpp:59
 #, kde-format
 msgid "Missing required source folder argument."
 msgstr ""
 
-#: importer/main.cpp:60
+#: importer/main.cpp:63
 #, fuzzy, kde-format
 msgid "Too many arguments."
 msgstr "Tro mult argumentes."
 
-#: importer/main.cpp:66
+#: importer/main.cpp:69
 #, fuzzy, kde-format
 msgid "Invalid source folder."
 msgstr "Ne posset remover li fólder de orígine."

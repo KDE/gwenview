@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:38+0000\n"
+"POT-Creation-Date: 2024-11-02 00:38+0000\n"
 "PO-Revision-Date: 2014-08-11 13:36+0200\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -1139,33 +1139,33 @@ msgid_plural "%1 files"
 msgstr[0] "%1 Datei"
 msgstr[1] "%1 Dateien"
 
-#: app/main.cpp:181
+#: app/main.cpp:182
 #, kde-format
 msgid "Gwenview"
 msgstr "Gwenview"
 
-#: app/main.cpp:183
+#: app/main.cpp:184
 #, kde-format
 msgid "An Image Viewer"
 msgstr "En Bildkieker"
 
-#: app/main.cpp:191
+#: app/main.cpp:194
 #, kde-format
 msgid "Start in fullscreen mode"
 msgstr "In Heelschirmbedrief starten"
 
-#: app/main.cpp:192
+#: app/main.cpp:195
 #, kde-format
 msgid "Start in slideshow mode"
 msgstr "In Diaschaubedrief starten"
 
-#: app/main.cpp:193
+#: app/main.cpp:196
 #, fuzzy, kde-format
 #| msgid "Start in slideshow mode"
 msgid "Start in spotlight mode"
 msgstr "In Diaschaubedrief starten"
 
-#: app/main.cpp:194
+#: app/main.cpp:197
 #, fuzzy, kde-format
 #| msgid "A starting file or folder"
 msgid "A starting file or folders"
@@ -1361,102 +1361,102 @@ msgstr "Akschonen"
 msgid "Viewing media"
 msgstr ""
 
-#: app/mainwindow.cpp:1429
+#: app/mainwindow.cpp:1432
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Sietpaneel versteken"
 
-#: app/mainwindow.cpp:1429
+#: app/mainwindow.cpp:1432
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Sietpaneel wiesen"
 
-#: app/mainwindow.cpp:1778
+#: app/mainwindow.cpp:1781
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Bild opmaken"
 
-#: app/mainwindow.cpp:1838
+#: app/mainwindow.cpp:1841
 #, fuzzy, kde-format
 #| msgid "Slideshow"
 msgid "Pause Slideshow"
 msgstr "Diaschau"
 
-#: app/mainwindow.cpp:1841
+#: app/mainwindow.cpp:1844
 #, fuzzy, kde-format
 #| msgid "Slideshow"
 msgid "Resume Slideshow"
 msgstr "Diaschau"
 
-#: app/mainwindow.cpp:1841
+#: app/mainwindow.cpp:1844
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Diaschau anfangen"
 
-#: app/mainwindow.cpp:1854
+#: app/mainwindow.cpp:1857
 #, kde-format
 msgid "Save All Changes"
 msgstr "All Ännern sekern"
 
-#: app/mainwindow.cpp:1855
+#: app/mainwindow.cpp:1858
 #, kde-format
 msgid "Discard Changes"
 msgstr "Ännern wegsmieten"
 
-#: app/mainwindow.cpp:1857
+#: app/mainwindow.cpp:1860
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "Een Bild wöör ännert."
 msgstr[1] "%1 Biller wöörn ännert."
 
-#: app/mainwindow.cpp:1857
+#: app/mainwindow.cpp:1860
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Wenn Du nu ophöllst, kaamt Di Dien Ännern weg."
 
-#: app/mainwindow.cpp:1900
+#: app/mainwindow.cpp:1903
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr ""
 
-#: app/mainwindow.cpp:1903
+#: app/mainwindow.cpp:1906
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Hide sidebar"
 msgid "Hide menu bar"
 msgstr "Sietpaneel versteken"
 
-#: app/mainwindow.cpp:2124
+#: app/mainwindow.cpp:2127
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "Du büst bi't eerste Dokment ankamen. Wat wullt Du nu doon?"
 
-#: app/mainwindow.cpp:2125 app/mainwindow.cpp:2139
+#: app/mainwindow.cpp:2128 app/mainwindow.cpp:2142
 #, kde-format
 msgid "Stay There"
 msgstr "Dor blieven"
 
-#: app/mainwindow.cpp:2126
+#: app/mainwindow.cpp:2129
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "Na't leste Dokment gahn"
 
-#: app/mainwindow.cpp:2127 app/mainwindow.cpp:2141
+#: app/mainwindow.cpp:2130 app/mainwindow.cpp:2144
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "Torüch na de Dokmentenlist gahn"
 
-#: app/mainwindow.cpp:2138
+#: app/mainwindow.cpp:2141
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "Du büst bi't leste Dokment ankamen. Wat wullt Du nu doon?"
 
-#: app/mainwindow.cpp:2140
+#: app/mainwindow.cpp:2143
 #, kde-format
 msgid "Go to the First Document"
 msgstr "Na't eerste Dokment gahn"
@@ -1999,43 +1999,43 @@ msgstr ""
 "<i>Text ingeven oder een vun de Indrääg nerrn anklicken, wenn Du dat Formaat "
 "fastleggen wullt.</i>"
 
-#: importer/main.cpp:41
+#: importer/main.cpp:42
 #, kde-format
 msgid "Gwenview Importer"
 msgstr "Gwenview-Importeren"
 
-#: importer/main.cpp:43
+#: importer/main.cpp:44
 #, kde-format
 msgid "Photo Importer"
 msgstr "Foto-Importeren"
 
-#: importer/main.cpp:50
+#: importer/main.cpp:53
 #, kde-format
 msgid ""
 "The device UDI, used to retrieve information about the device (name, icon...)"
 msgstr ""
 
-#: importer/main.cpp:50
+#: importer/main.cpp:53
 #, kde-format
 msgid "Device UDI"
 msgstr "Reedschap-UDI"
 
-#: importer/main.cpp:51
+#: importer/main.cpp:54
 #, kde-format
 msgid "Source folder"
 msgstr "Bornorner"
 
-#: importer/main.cpp:56
+#: importer/main.cpp:59
 #, kde-format
 msgid "Missing required source folder argument."
 msgstr ""
 
-#: importer/main.cpp:60
+#: importer/main.cpp:63
 #, kde-format
 msgid "Too many arguments."
 msgstr ""
 
-#: importer/main.cpp:66
+#: importer/main.cpp:69
 #, fuzzy, kde-format
 #| msgid "Source folder"
 msgid "Invalid source folder."

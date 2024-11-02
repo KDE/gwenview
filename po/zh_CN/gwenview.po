@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:38+0000\n"
+"POT-Creation-Date: 2024-11-02 00:38+0000\n"
 "PO-Revision-Date: 2024-04-22 15:59\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -1092,32 +1092,32 @@ msgid "%1 file"
 msgid_plural "%1 files"
 msgstr[0] "%1 个文件"
 
-#: app/main.cpp:181
+#: app/main.cpp:182
 #, kde-format
 msgid "Gwenview"
 msgstr "Gwenview"
 
-#: app/main.cpp:183
+#: app/main.cpp:184
 #, kde-format
 msgid "An Image Viewer"
 msgstr "图像查看器"
 
-#: app/main.cpp:191
+#: app/main.cpp:194
 #, kde-format
 msgid "Start in fullscreen mode"
 msgstr "启动到全屏模式"
 
-#: app/main.cpp:192
+#: app/main.cpp:195
 #, kde-format
 msgid "Start in slideshow mode"
 msgstr "启动到幻灯片模式"
 
-#: app/main.cpp:193
+#: app/main.cpp:196
 #, kde-format
 msgid "Start in spotlight mode"
 msgstr "启动为聚光灯模式"
 
-#: app/main.cpp:194
+#: app/main.cpp:197
 #, kde-format
 msgid "A starting file or folders"
 msgstr "起始文件或文件夹"
@@ -1308,97 +1308,97 @@ msgstr "操作"
 msgid "Viewing media"
 msgstr "正在查看媒体"
 
-#: app/mainwindow.cpp:1429
+#: app/mainwindow.cpp:1432
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "隐藏侧边栏"
 
-#: app/mainwindow.cpp:1429
+#: app/mainwindow.cpp:1432
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "显示侧边栏"
 
-#: app/mainwindow.cpp:1778
+#: app/mainwindow.cpp:1781
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "打开图像"
 
-#: app/mainwindow.cpp:1838
+#: app/mainwindow.cpp:1841
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "暂停幻灯片放映"
 
-#: app/mainwindow.cpp:1841
+#: app/mainwindow.cpp:1844
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "继续幻灯片放映"
 
-#: app/mainwindow.cpp:1841
+#: app/mainwindow.cpp:1844
 #, kde-format
 msgid "Start Slideshow"
 msgstr "开始幻灯片放映"
 
-#: app/mainwindow.cpp:1854
+#: app/mainwindow.cpp:1857
 #, kde-format
 msgid "Save All Changes"
 msgstr "保存全部更改"
 
-#: app/mainwindow.cpp:1855
+#: app/mainwindow.cpp:1858
 #, kde-format
 msgid "Discard Changes"
 msgstr "丢弃更改"
 
-#: app/mainwindow.cpp:1857
+#: app/mainwindow.cpp:1860
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "%1 个图像已修改。"
 
-#: app/mainwindow.cpp:1857
+#: app/mainwindow.cpp:1860
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "如果现在退出，您的更改将会丢失。"
 
-#: app/mainwindow.cpp:1900
+#: app/mainwindow.cpp:1903
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr "菜单栏将被完全隐藏。按 %1 可以重新显示。"
 
-#: app/mainwindow.cpp:1903
+#: app/mainwindow.cpp:1906
 #, kde-format
 msgid "Hide menu bar"
 msgstr "隐藏菜单栏"
 
-#: app/mainwindow.cpp:2124
+#: app/mainwindow.cpp:2127
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "您已切换到第一张图像，接下来应该怎么做？"
 
-#: app/mainwindow.cpp:2125 app/mainwindow.cpp:2139
+#: app/mainwindow.cpp:2128 app/mainwindow.cpp:2142
 #, kde-format
 msgid "Stay There"
 msgstr "停留在此位置"
 
-#: app/mainwindow.cpp:2126
+#: app/mainwindow.cpp:2129
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "切换到最后一张图像"
 
-#: app/mainwindow.cpp:2127 app/mainwindow.cpp:2141
+#: app/mainwindow.cpp:2130 app/mainwindow.cpp:2144
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "返回到图像列表"
 
-#: app/mainwindow.cpp:2138
+#: app/mainwindow.cpp:2141
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "您已切换到最后一张图像，接下来应该怎么做？"
 
-#: app/mainwindow.cpp:2140
+#: app/mainwindow.cpp:2143
 #, kde-format
 msgid "Go to the First Document"
 msgstr "切换到第一张图像"
@@ -1878,43 +1878,43 @@ msgstr "预览："
 msgid "<i>Type text or click the items below to customize the format</i>"
 msgstr "<b>请在下方输入相应文字，或点击项目来自定义格式</n>"
 
-#: importer/main.cpp:41
+#: importer/main.cpp:42
 #, kde-format
 msgid "Gwenview Importer"
 msgstr "Gwenview 导入程序"
 
-#: importer/main.cpp:43
+#: importer/main.cpp:44
 #, kde-format
 msgid "Photo Importer"
 msgstr "照片导入程序"
 
-#: importer/main.cpp:50
+#: importer/main.cpp:53
 #, kde-format
 msgid ""
 "The device UDI, used to retrieve information about the device (name, icon...)"
 msgstr "设备 UDI，用于检索设备的相关信息 (名称、 图标等)"
 
-#: importer/main.cpp:50
+#: importer/main.cpp:53
 #, kde-format
 msgid "Device UDI"
 msgstr "设备 UDI"
 
-#: importer/main.cpp:51
+#: importer/main.cpp:54
 #, kde-format
 msgid "Source folder"
 msgstr "来源文件夹"
 
-#: importer/main.cpp:56
+#: importer/main.cpp:59
 #, kde-format
 msgid "Missing required source folder argument."
 msgstr "缺少必需的来源文件夹参数。"
 
-#: importer/main.cpp:60
+#: importer/main.cpp:63
 #, kde-format
 msgid "Too many arguments."
 msgstr "参数过多。"
 
-#: importer/main.cpp:66
+#: importer/main.cpp:69
 #, kde-format
 msgid "Invalid source folder."
 msgstr "无效的来源文件夹。"

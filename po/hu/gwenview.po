@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:38+0000\n"
+"POT-Creation-Date: 2024-11-02 00:38+0000\n"
 "PO-Revision-Date: 2024-09-18 21:17+0200\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -1115,32 +1115,32 @@ msgid_plural "%1 files"
 msgstr[0] "%1 fájl"
 msgstr[1] "%1 fájl"
 
-#: app/main.cpp:181
+#: app/main.cpp:182
 #, kde-format
 msgid "Gwenview"
 msgstr "Gwenview"
 
-#: app/main.cpp:183
+#: app/main.cpp:184
 #, kde-format
 msgid "An Image Viewer"
 msgstr "Képnézegető"
 
-#: app/main.cpp:191
+#: app/main.cpp:194
 #, kde-format
 msgid "Start in fullscreen mode"
 msgstr "Indítás teljes képernyős módban"
 
-#: app/main.cpp:192
+#: app/main.cpp:195
 #, kde-format
 msgid "Start in slideshow mode"
 msgstr "Indítás diavetítő módban"
 
-#: app/main.cpp:193
+#: app/main.cpp:196
 #, kde-format
 msgid "Start in spotlight mode"
 msgstr "Indítás reflektorfény módban"
 
-#: app/main.cpp:194
+#: app/main.cpp:197
 #, kde-format
 msgid "A starting file or folders"
 msgstr "Kezdőfájl vagy kezdőkönyvtár"
@@ -1332,98 +1332,98 @@ msgstr "Műveletek"
 msgid "Viewing media"
 msgstr "Média megtekintése"
 
-#: app/mainwindow.cpp:1429
+#: app/mainwindow.cpp:1432
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Oldalsáv elrejtése"
 
-#: app/mainwindow.cpp:1429
+#: app/mainwindow.cpp:1432
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Oldalsáv megjelenítése"
 
-#: app/mainwindow.cpp:1778
+#: app/mainwindow.cpp:1781
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Kép megnyitása"
 
-#: app/mainwindow.cpp:1838
+#: app/mainwindow.cpp:1841
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "Diavetítés szüneteltetése"
 
-#: app/mainwindow.cpp:1841
+#: app/mainwindow.cpp:1844
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "Diavetítés folytatása"
 
-#: app/mainwindow.cpp:1841
+#: app/mainwindow.cpp:1844
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Diavetítés indítása"
 
-#: app/mainwindow.cpp:1854
+#: app/mainwindow.cpp:1857
 #, kde-format
 msgid "Save All Changes"
 msgstr "Minden módosítás mentése"
 
-#: app/mainwindow.cpp:1855
+#: app/mainwindow.cpp:1858
 #, kde-format
 msgid "Discard Changes"
 msgstr "A módosítások eldobása"
 
-#: app/mainwindow.cpp:1857
+#: app/mainwindow.cpp:1860
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "Egy képben történt változás."
 msgstr[1] "%1 képben történt változás."
 
-#: app/mainwindow.cpp:1857
+#: app/mainwindow.cpp:1860
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Ha most kilép, a módosítások elvesznek."
 
-#: app/mainwindow.cpp:1900
+#: app/mainwindow.cpp:1903
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr "Teljesen elrejti a menüsávot. Ezzel a paranccsal állítható vissza: %1."
 
-#: app/mainwindow.cpp:1903
+#: app/mainwindow.cpp:1906
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Menüsáv elrejtése"
 
-#: app/mainwindow.cpp:2124
+#: app/mainwindow.cpp:2127
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "Elérte az első dokumentumot, mit szeretne tenni?"
 
-#: app/mainwindow.cpp:2125 app/mainwindow.cpp:2139
+#: app/mainwindow.cpp:2128 app/mainwindow.cpp:2142
 #, kde-format
 msgid "Stay There"
 msgstr "Maradjon itt"
 
-#: app/mainwindow.cpp:2126
+#: app/mainwindow.cpp:2129
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "Ugrás az utolsó dokumentumra"
 
-#: app/mainwindow.cpp:2127 app/mainwindow.cpp:2141
+#: app/mainwindow.cpp:2130 app/mainwindow.cpp:2144
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "Ugrás vissza a dokumentumlistához"
 
-#: app/mainwindow.cpp:2138
+#: app/mainwindow.cpp:2141
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "Elérte az utolsó dokumentumot, mit szeretne tenni?"
 
-#: app/mainwindow.cpp:2140
+#: app/mainwindow.cpp:2143
 #, kde-format
 msgid "Go to the First Document"
 msgstr "Ugrás az első dokumentumra"
@@ -1931,44 +1931,44 @@ msgid "<i>Type text or click the items below to customize the format</i>"
 msgstr ""
 "<i>Írja be a kívánt szöveget vagy kattintson az alábbi elemek egyikére</i>"
 
-#: importer/main.cpp:41
+#: importer/main.cpp:42
 #, kde-format
 msgid "Gwenview Importer"
 msgstr "Gwenview képimportáló"
 
-#: importer/main.cpp:43
+#: importer/main.cpp:44
 #, kde-format
 msgid "Photo Importer"
 msgstr "Fényképimportáló"
 
-#: importer/main.cpp:50
+#: importer/main.cpp:53
 #, kde-format
 msgid ""
 "The device UDI, used to retrieve information about the device (name, icon...)"
 msgstr ""
 "Az eszköz UDI-ja, az eszköz adatainak lekérdezéséhez használt (név, ikon…)"
 
-#: importer/main.cpp:50
+#: importer/main.cpp:53
 #, kde-format
 msgid "Device UDI"
 msgstr "Eszköz UDI"
 
-#: importer/main.cpp:51
+#: importer/main.cpp:54
 #, kde-format
 msgid "Source folder"
 msgstr "Forrásmappa"
 
-#: importer/main.cpp:56
+#: importer/main.cpp:59
 #, kde-format
 msgid "Missing required source folder argument."
 msgstr "Hiányzó forrásmappa argumentum."
 
-#: importer/main.cpp:60
+#: importer/main.cpp:63
 #, kde-format
 msgid "Too many arguments."
 msgstr "Túl sok argumentum."
 
-#: importer/main.cpp:66
+#: importer/main.cpp:69
 #, kde-format
 msgid "Invalid source folder."
 msgstr "Érvénytelen forrásmappa."

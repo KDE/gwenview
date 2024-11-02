@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:38+0000\n"
+"POT-Creation-Date: 2024-11-02 00:38+0000\n"
 "PO-Revision-Date: 2024-06-20 21:47+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -1104,32 +1104,32 @@ msgid_plural "%1 files"
 msgstr[0] "%1 கோப்பு"
 msgstr[1] "%1 கோப்புகள்"
 
-#: app/main.cpp:181
+#: app/main.cpp:182
 #, kde-format
 msgid "Gwenview"
 msgstr "குவென்வியூ"
 
-#: app/main.cpp:183
+#: app/main.cpp:184
 #, kde-format
 msgid "An Image Viewer"
 msgstr "ஒரு படக் காட்டி"
 
-#: app/main.cpp:191
+#: app/main.cpp:194
 #, kde-format
 msgid "Start in fullscreen mode"
 msgstr "முழுத்திரை பயன்முறையில் துவக்கு"
 
-#: app/main.cpp:192
+#: app/main.cpp:195
 #, kde-format
 msgid "Start in slideshow mode"
 msgstr "வில்லைக்காட்சி பயன்முறையில் துவக்கு"
 
-#: app/main.cpp:193
+#: app/main.cpp:196
 #, kde-format
 msgid "Start in spotlight mode"
 msgstr "கவனப் பயன்முறையில் துவக்கு"
 
-#: app/main.cpp:194
+#: app/main.cpp:197
 #, kde-format
 msgid "A starting file or folders"
 msgstr "துவக்கத்தில் காட்ட வேண்டிய கோப்புகள் அல்லது அடைவுகள்"
@@ -1322,62 +1322,62 @@ msgstr "செயல்பாடுகள்"
 msgid "Viewing media"
 msgstr "படங்களைப் பார்ப்பது"
 
-#: app/mainwindow.cpp:1429
+#: app/mainwindow.cpp:1432
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "பக்கப்பட்டையை மறை"
 
-#: app/mainwindow.cpp:1429
+#: app/mainwindow.cpp:1432
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "பக்கப்பட்டையை காட்டு"
 
-#: app/mainwindow.cpp:1778
+#: app/mainwindow.cpp:1781
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "படத்தை திறத்தல்"
 
-#: app/mainwindow.cpp:1838
+#: app/mainwindow.cpp:1841
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "வில்லைக்காட்சியை இடைநிறுத்து"
 
-#: app/mainwindow.cpp:1841
+#: app/mainwindow.cpp:1844
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "வில்லைக்காட்சியை தொடர்"
 
-#: app/mainwindow.cpp:1841
+#: app/mainwindow.cpp:1844
 #, kde-format
 msgid "Start Slideshow"
 msgstr "வில்லைக்காட்சியை துவக்கு"
 
-#: app/mainwindow.cpp:1854
+#: app/mainwindow.cpp:1857
 #, kde-format
 msgid "Save All Changes"
 msgstr "அனைத்து மாற்றங்களையும் சேமி"
 
-#: app/mainwindow.cpp:1855
+#: app/mainwindow.cpp:1858
 #, kde-format
 msgid "Discard Changes"
 msgstr "மாற்றங்களை கைவிடு"
 
-#: app/mainwindow.cpp:1857
+#: app/mainwindow.cpp:1860
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "ஒரு படம் மாற்றப்பட்டுள்ளது."
 msgstr[1] "%1 படங்கள் மாற்றப்பட்டுள்ளன."
 
-#: app/mainwindow.cpp:1857
+#: app/mainwindow.cpp:1860
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "நீங்கள் இப்போது வெளியேறினால் உங்கள் மாற்றங்களை இழப்பீர்கள்."
 
-#: app/mainwindow.cpp:1900
+#: app/mainwindow.cpp:1903
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
@@ -1385,37 +1385,37 @@ msgstr ""
 "இது பட்டிப் பட்டையை முழுதாக மறைத்துவிடும். %1 என்பதை தட்டி நீங்கள் மறுபடியும் அதை "
 "காட்டலாம்."
 
-#: app/mainwindow.cpp:1903
+#: app/mainwindow.cpp:1906
 #, kde-format
 msgid "Hide menu bar"
 msgstr "பட்டிப் பட்டையை மறை"
 
-#: app/mainwindow.cpp:2124
+#: app/mainwindow.cpp:2127
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "முதல் ஆவணத்தை அடைந்துவிட்டீர்கள். என்ன செய்ய வேண்டும்?"
 
-#: app/mainwindow.cpp:2125 app/mainwindow.cpp:2139
+#: app/mainwindow.cpp:2128 app/mainwindow.cpp:2142
 #, kde-format
 msgid "Stay There"
 msgstr "அங்கேயே இரு"
 
-#: app/mainwindow.cpp:2126
+#: app/mainwindow.cpp:2129
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "கடைசி ஆவணத்திற்கு செல்"
 
-#: app/mainwindow.cpp:2127 app/mainwindow.cpp:2141
+#: app/mainwindow.cpp:2130 app/mainwindow.cpp:2144
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "ஆவணப் பட்டியலுக்கு திரும்ப செல்"
 
-#: app/mainwindow.cpp:2138
+#: app/mainwindow.cpp:2141
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "கடைசி ஆவணத்தை அடைந்துவிட்டீர்கள். என்ன செய்ய வேண்டும்?"
 
-#: app/mainwindow.cpp:2140
+#: app/mainwindow.cpp:2143
 #, kde-format
 msgid "Go to the First Document"
 msgstr "முதல் ஆவணத்திற்கு செல்"
@@ -1915,43 +1915,43 @@ msgstr "முன்தோற்றம்:"
 msgid "<i>Type text or click the items below to customize the format</i>"
 msgstr "<i>பாங்கை மாற்றியமைக்க தட்டச்சிடுங்கள் அல்லது கீழுள்ளவற்றை க்ளிக் செய்யுங்கள்</i>"
 
-#: importer/main.cpp:41
+#: importer/main.cpp:42
 #, kde-format
 msgid "Gwenview Importer"
 msgstr "குவென்வியூ இறக்குமதி நிரல்"
 
-#: importer/main.cpp:43
+#: importer/main.cpp:44
 #, kde-format
 msgid "Photo Importer"
 msgstr "படங்களை இறக்குமதி செய்யும் நிரல்"
 
-#: importer/main.cpp:50
+#: importer/main.cpp:53
 #, kde-format
 msgid ""
 "The device UDI, used to retrieve information about the device (name, icon...)"
 msgstr "சாதனத்தை பற்றிய விவரங்களை (பெயர், சின்னம் போன்றவற்றை) பெற பயன்படும் சாதன UDI"
 
-#: importer/main.cpp:50
+#: importer/main.cpp:53
 #, kde-format
 msgid "Device UDI"
 msgstr "சாதனத்தின் UDI"
 
-#: importer/main.cpp:51
+#: importer/main.cpp:54
 #, kde-format
 msgid "Source folder"
 msgstr "மூல அடைவு"
 
-#: importer/main.cpp:56
+#: importer/main.cpp:59
 #, kde-format
 msgid "Missing required source folder argument."
 msgstr "தேவையான 'மூல அடைவு' தரு மதிப்பு தரப்படவில்லை."
 
-#: importer/main.cpp:60
+#: importer/main.cpp:63
 #, kde-format
 msgid "Too many arguments."
 msgstr "தேவைக்கு அதிகமான தரு மதிப்புகள்."
 
-#: importer/main.cpp:66
+#: importer/main.cpp:69
 #, kde-format
 msgid "Invalid source folder."
 msgstr "செல்லுபடியாகாத மூல அடைவு"

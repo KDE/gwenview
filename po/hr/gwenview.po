@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 00:38+0000\n"
+"POT-Creation-Date: 2024-11-02 00:38+0000\n"
 "PO-Revision-Date: 2011-07-22 16:56+0200\n"
 "Last-Translator: Marko Dimjašević <marko@dimjasevic.net>\n"
 "Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
@@ -1164,33 +1164,33 @@ msgstr[1] "%1 datoteke"
 msgstr[2] "%1 datoteka"
 
 # pmap: =/nom=Gwenview/gen=Gwenviewa/dat=Gwenviewu/aku=Gwenview/lok=Gwenviewu/ins=Gwenviewom/_r=m/_b=j/
-#: app/main.cpp:181
+#: app/main.cpp:182
 #, kde-format
 msgid "Gwenview"
 msgstr "Gwenview"
 
-#: app/main.cpp:183
+#: app/main.cpp:184
 #, kde-format
 msgid "An Image Viewer"
 msgstr "Preglednik slika"
 
-#: app/main.cpp:191
+#: app/main.cpp:194
 #, kde-format
 msgid "Start in fullscreen mode"
 msgstr "Započni u načinu preko cijelog zaslona"
 
-#: app/main.cpp:192
+#: app/main.cpp:195
 #, kde-format
 msgid "Start in slideshow mode"
 msgstr "Započni u načinu Prezentacija"
 
-#: app/main.cpp:193
+#: app/main.cpp:196
 #, fuzzy, kde-format
 #| msgid "Start in slideshow mode"
 msgid "Start in spotlight mode"
 msgstr "Započni u načinu Prezentacija"
 
-#: app/main.cpp:194
+#: app/main.cpp:197
 #, fuzzy, kde-format
 #| msgid "A starting file or folder"
 msgid "A starting file or folders"
@@ -1396,7 +1396,7 @@ msgstr "Postupci"
 msgid "Viewing media"
 msgstr ""
 
-#: app/mainwindow.cpp:1429
+#: app/mainwindow.cpp:1432
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Sidebar"
@@ -1404,7 +1404,7 @@ msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Bočna traka"
 
-#: app/mainwindow.cpp:1429
+#: app/mainwindow.cpp:1432
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Sidebar"
@@ -1412,40 +1412,40 @@ msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Bočna traka"
 
-#: app/mainwindow.cpp:1778
+#: app/mainwindow.cpp:1781
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Otvori sliku"
 
-#: app/mainwindow.cpp:1838
+#: app/mainwindow.cpp:1841
 #, fuzzy, kde-format
 #| msgid "Slideshow"
 msgid "Pause Slideshow"
 msgstr "Prezentacija"
 
-#: app/mainwindow.cpp:1841
+#: app/mainwindow.cpp:1844
 #, fuzzy, kde-format
 #| msgid "Slideshow"
 msgid "Resume Slideshow"
 msgstr "Prezentacija"
 
-#: app/mainwindow.cpp:1841
+#: app/mainwindow.cpp:1844
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Pokreni prezentaciju"
 
-#: app/mainwindow.cpp:1854
+#: app/mainwindow.cpp:1857
 #, kde-format
 msgid "Save All Changes"
 msgstr "Spremi sve promjene"
 
-#: app/mainwindow.cpp:1855
+#: app/mainwindow.cpp:1858
 #, kde-format
 msgid "Discard Changes"
 msgstr "Odbaci promjene"
 
-#: app/mainwindow.cpp:1857
+#: app/mainwindow.cpp:1860
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
@@ -1453,52 +1453,52 @@ msgstr[0] "Izmijenjena je %1 slika."
 msgstr[1] "Izmijenjene su %1 slike."
 msgstr[2] "Izmijenjeno je %1 slika."
 
-#: app/mainwindow.cpp:1857
+#: app/mainwindow.cpp:1860
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Ako sada izađete, vaše promjene će biti izgubljene."
 
-#: app/mainwindow.cpp:1900
+#: app/mainwindow.cpp:1903
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr ""
 
-#: app/mainwindow.cpp:1903
+#: app/mainwindow.cpp:1906
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Sidebar"
 msgid "Hide menu bar"
 msgstr "Bočna traka"
 
-#: app/mainwindow.cpp:2124
+#: app/mainwindow.cpp:2127
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr ""
 
-#: app/mainwindow.cpp:2125 app/mainwindow.cpp:2139
+#: app/mainwindow.cpp:2128 app/mainwindow.cpp:2142
 #, kde-format
 msgid "Stay There"
 msgstr ""
 
-#: app/mainwindow.cpp:2126
+#: app/mainwindow.cpp:2129
 #, fuzzy, kde-format
 #| msgid "Go to Last Image"
 msgid "Go to the Last Document"
 msgstr "Pomakni se na posljednju sliku"
 
-#: app/mainwindow.cpp:2127 app/mainwindow.cpp:2141
+#: app/mainwindow.cpp:2130 app/mainwindow.cpp:2144
 #, fuzzy, kde-format
 #| msgid "Go back to the original"
 msgid "Go Back to the Document List"
 msgstr "Vrati se na izvorno"
 
-#: app/mainwindow.cpp:2138
+#: app/mainwindow.cpp:2141
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr ""
 
-#: app/mainwindow.cpp:2140
+#: app/mainwindow.cpp:2143
 #, fuzzy, kde-format
 #| msgid "Go to First Image"
 msgid "Go to the First Document"
@@ -2054,43 +2054,43 @@ msgid "<i>Type text or click the items below to customize the format</i>"
 msgstr ""
 "<i>Unesite tekst ili niže kliknite na stavke kako bi prilagodili oblik</i>"
 
-#: importer/main.cpp:41
+#: importer/main.cpp:42
 #, kde-format
 msgid "Gwenview Importer"
 msgstr "Uvoznik Gwenviewa"
 
-#: importer/main.cpp:43
+#: importer/main.cpp:44
 #, kde-format
 msgid "Photo Importer"
 msgstr "Uvoznik fotografija"
 
-#: importer/main.cpp:50
+#: importer/main.cpp:53
 #, kde-format
 msgid ""
 "The device UDI, used to retrieve information about the device (name, icon...)"
 msgstr ""
 
-#: importer/main.cpp:50
+#: importer/main.cpp:53
 #, kde-format
 msgid "Device UDI"
 msgstr ""
 
-#: importer/main.cpp:51
+#: importer/main.cpp:54
 #, kde-format
 msgid "Source folder"
 msgstr "Izvorna mapa"
 
-#: importer/main.cpp:56
+#: importer/main.cpp:59
 #, kde-format
 msgid "Missing required source folder argument."
 msgstr ""
 
-#: importer/main.cpp:60
+#: importer/main.cpp:63
 #, kde-format
 msgid "Too many arguments."
 msgstr ""
 
-#: importer/main.cpp:66
+#: importer/main.cpp:69
 #, fuzzy, kde-format
 #| msgid "Source folder"
 msgid "Invalid source folder."
