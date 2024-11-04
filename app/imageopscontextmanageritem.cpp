@@ -89,42 +89,42 @@ struct ImageOpsContextManagerItem::Private {
         KActionCollection *actionCollection = mMainWindow->actionCollection();
         auto edit = new KActionCategory(i18nc("@title actions category - means actions changing image", "Edit"), actionCollection);
 
-        mRotateLeftAction = edit->addAction(QStringLiteral("rotate_left"), q, SLOT(rotateLeft()));
+        mRotateLeftAction = edit->addAction(QStringLiteral("rotate_left"), q, &ImageOpsContextManagerItem::rotateLeft);
         mRotateLeftAction->setText(i18n("Rotate Left"));
         mRotateLeftAction->setToolTip(i18nc("@info:tooltip", "Rotate image to the left"));
         mRotateLeftAction->setIcon(QIcon::fromTheme(QStringLiteral("object-rotate-left")));
         actionCollection->setDefaultShortcut(mRotateLeftAction, Qt::CTRL | Qt::SHIFT | Qt::Key_R);
 
-        mRotateRightAction = edit->addAction(QStringLiteral("rotate_right"), q, SLOT(rotateRight()));
+        mRotateRightAction = edit->addAction(QStringLiteral("rotate_right"), q, &ImageOpsContextManagerItem::rotateRight);
         mRotateRightAction->setText(i18n("Rotate Right"));
         mRotateRightAction->setToolTip(i18nc("@info:tooltip", "Rotate image to the right"));
         mRotateRightAction->setIcon(QIcon::fromTheme(QStringLiteral("object-rotate-right")));
         actionCollection->setDefaultShortcut(mRotateRightAction, Qt::CTRL | Qt::Key_R);
 
-        mMirrorAction = edit->addAction(QStringLiteral("mirror"), q, SLOT(mirror()));
+        mMirrorAction = edit->addAction(QStringLiteral("mirror"), q, &ImageOpsContextManagerItem::mirror);
         mMirrorAction->setText(i18n("Mirror"));
         mMirrorAction->setIcon(QIcon::fromTheme(QStringLiteral("object-flip-horizontal")));
 
-        mFlipAction = edit->addAction(QStringLiteral("flip"), q, SLOT(flip()));
+        mFlipAction = edit->addAction(QStringLiteral("flip"), q, &ImageOpsContextManagerItem::flip);
         mFlipAction->setText(i18n("Flip"));
         mFlipAction->setIcon(QIcon::fromTheme(QStringLiteral("object-flip-vertical")));
 
-        mResizeAction = edit->addAction(QStringLiteral("resize"), q, SLOT(resizeImage()));
+        mResizeAction = edit->addAction(QStringLiteral("resize"), q, &ImageOpsContextManagerItem::resizeImage);
         mResizeAction->setText(i18n("Resize"));
         mResizeAction->setIcon(QIcon::fromTheme(QStringLiteral("transform-scale")));
         actionCollection->setDefaultShortcut(mResizeAction, Qt::SHIFT | Qt::Key_R);
 
-        mCropAction = edit->addAction(QStringLiteral("crop"), q, SLOT(crop()));
+        mCropAction = edit->addAction(QStringLiteral("crop"), q, &ImageOpsContextManagerItem::crop);
         mCropAction->setText(i18n("Crop"));
         mCropAction->setIcon(QIcon::fromTheme(QStringLiteral("transform-crop-and-resize")));
         actionCollection->setDefaultShortcut(mCropAction, Qt::SHIFT | Qt::Key_C);
 
-        mBCGAction = edit->addAction(QStringLiteral("brightness_contrast_gamma"), q, SLOT(startBCG()));
+        mBCGAction = edit->addAction(QStringLiteral("brightness_contrast_gamma"), q, &ImageOpsContextManagerItem::startBCG);
         mBCGAction->setText(i18nc("@action:intoolbar", "Adjust Colors"));
         mBCGAction->setIcon(QIcon::fromTheme(QStringLiteral("contrast")));
         actionCollection->setDefaultShortcut(mBCGAction, Qt::SHIFT | Qt::Key_B);
 
-        mRedEyeReductionAction = edit->addAction(QStringLiteral("red_eye_reduction"), q, SLOT(startRedEyeReduction()));
+        mRedEyeReductionAction = edit->addAction(QStringLiteral("red_eye_reduction"), q, &ImageOpsContextManagerItem::startRedEyeReduction);
         mRedEyeReductionAction->setText(i18n("Reduce Red Eye"));
         mRedEyeReductionAction->setIcon(QIcon::fromTheme(QStringLiteral("redeyes")));
         actionCollection->setDefaultShortcut(mRedEyeReductionAction, Qt::SHIFT | Qt::Key_E);

@@ -59,6 +59,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KMessageWidget>
 #include <KProtocolManager>
 #include <KRecentFilesAction>
+#include <KStandardActions>
 #include <KStandardShortcut>
 #include <KToggleFullScreenAction>
 #include <KToolBar>
@@ -375,9 +376,9 @@ struct MainWindow::Private {
         auto file = new KActionCategory(i18nc("@title actions category", "File"), actionCollection);
         auto view = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface", "View"), actionCollection);
 
-        file->addAction(KStandardAction::Save, q, SLOT(saveCurrent()));
-        file->addAction(KStandardAction::SaveAs, q, SLOT(saveCurrentAs()));
-        file->addAction(KStandardAction::Open, q, SLOT(openFile()));
+        file->addAction(KStandardActions::Save, q, &MainWindow::saveCurrent);
+        file->addAction(KStandardActions::SaveAs, q, &MainWindow::saveCurrentAs);
+        file->addAction(KStandardActions::Open, q, &MainWindow::openFile);
         mFileOpenRecentAction = KStandardAction::openRecent(q, SLOT(openUrl(QUrl)), q);
         connect(mFileOpenRecentAction, &KRecentFilesAction::recentListCleared, mGvCore, &GvCore::clearRecentFilesAndFolders);
         auto clearAction = mFileOpenRecentAction->menu()->findChild<QAction *>("clear_action");
@@ -385,11 +386,11 @@ struct MainWindow::Private {
             clearAction->setText(i18nc("@action Open Recent menu", "Clear List"));
         }
         file->addAction("file_open_recent", mFileOpenRecentAction);
-        file->addAction(KStandardAction::Print, q, SLOT(print()));
-        file->addAction(KStandardAction::PrintPreview, q, SLOT(printPreview()));
-        file->addAction(KStandardAction::Quit, qApp, SLOT(closeAllWindows()));
+        file->addAction(KStandardActions::Print, q, &MainWindow::print);
+        file->addAction(KStandardActions::PrintPreview, q, &MainWindow::printPreview);
+        file->addAction(KStandardActions::Quit, qApp, &QApplication::closeAllWindows);
 
-        QAction *action = file->addAction(QStringLiteral("reload"), q, SLOT(reload()));
+        QAction *action = file->addAction(QStringLiteral("reload"), q, &MainWindow::reload);
         action->setText(i18nc("@action reload the currently viewed image", "Reload"));
         action->setIcon(QIcon::fromTheme(QStringLiteral("view-refresh")));
         actionCollection->setDefaultShortcuts(action, KStandardShortcut::reload());
@@ -426,37 +427,37 @@ struct MainWindow::Private {
 
         connect(mViewMainPage, &ViewMainPage::toggleFullScreenRequested, mFullScreenAction, &QAction::trigger);
 
-        QAction *leaveFullScreenAction = view->addAction("leave_fullscreen", q, SLOT(leaveFullScreen()));
+        QAction *leaveFullScreenAction = view->addAction("leave_fullscreen", q, &MainWindow::leaveFullScreen);
         leaveFullScreenAction->setIcon(QIcon::fromTheme(QStringLiteral("view-restore")));
         leaveFullScreenAction->setText(i18nc("@action", "Exit Full Screen"));
 
-        mSpotlightModeAction = view->addAction(QStringLiteral("view_toggle_spotlightmode"), q, SLOT(toggleSpotlightMode(bool)));
+        mSpotlightModeAction = view->addAction(QStringLiteral("view_toggle_spotlightmode"), q, &MainWindow::toggleSpotlightMode);
         mSpotlightModeAction->setCheckable(true);
         mSpotlightModeAction->setText(i18nc("@action", "Spotlight Mode"));
         mSpotlightModeAction->setIcon(QIcon::fromTheme(QStringLiteral("image-navigator-symbolic")));
 
-        mGoToPreviousAction = view->addAction("go_previous", q, SLOT(goToPrevious()));
+        mGoToPreviousAction = view->addAction("go_previous", q, &MainWindow::goToPrevious);
         mGoToPreviousAction->setPriority(QAction::LowPriority);
         mGoToPreviousAction->setIcon(QIcon::fromTheme(QGuiApplication::layoutDirection() == Qt::LeftToRight ? "go-previous" : "go-previous-symbolic-rtl"));
         mGoToPreviousAction->setText(i18nc("@action Go to previous image", "Previous"));
         mGoToPreviousAction->setToolTip(i18nc("@info:tooltip", "Go to previous image"));
         installDisabledActionShortcutMonitor(mGoToPreviousAction, SLOT(showFirstDocumentReached()));
 
-        mGoToNextAction = view->addAction(QStringLiteral("go_next"), q, SLOT(goToNext()));
+        mGoToNextAction = view->addAction(QStringLiteral("go_next"), q, &MainWindow::goToNext);
         mGoToNextAction->setPriority(QAction::LowPriority);
         mGoToNextAction->setIcon(QIcon::fromTheme(QGuiApplication::layoutDirection() == Qt::LeftToRight ? "go-next" : "go-next-symbolic-rtl"));
         mGoToNextAction->setText(i18nc("@action Go to next image", "Next"));
         mGoToNextAction->setToolTip(i18nc("@info:tooltip", "Go to next image"));
         installDisabledActionShortcutMonitor(mGoToNextAction, SLOT(showLastDocumentReached()));
 
-        mGoToFirstAction = view->addAction(QStringLiteral("go_first"), q, SLOT(goToFirst()));
+        mGoToFirstAction = view->addAction(QStringLiteral("go_first"), q, &MainWindow::goToNext);
         mGoToFirstAction->setPriority(QAction::LowPriority);
         mGoToFirstAction->setIcon(QIcon::fromTheme(QStringLiteral("go-first-view")));
         mGoToFirstAction->setText(i18nc("@action Go to first image", "First"));
         mGoToFirstAction->setToolTip(i18nc("@info:tooltip", "Go to first image"));
         actionCollection->setDefaultShortcut(mGoToFirstAction, Qt::Key_Home);
 
-        mGoToLastAction = view->addAction(QStringLiteral("go_last"), q, SLOT(goToLast()));
+        mGoToLastAction = view->addAction(QStringLiteral("go_last"), q, &MainWindow::goToLast);
         mGoToLastAction->setPriority(QAction::LowPriority);
         mGoToLastAction->setIcon(QIcon::fromTheme(QStringLiteral("go-last-view")));
         mGoToLastAction->setText(i18nc("@action Go to last image", "Last"));
@@ -465,9 +466,9 @@ struct MainWindow::Private {
 
         mPreloadDirectionIsForward = true;
 
-        mGoUpAction = view->addAction(KStandardAction::Up, q, SLOT(goUp()));
+        mGoUpAction = view->addAction(KStandardActions::Up, q, &MainWindow::goUp);
 
-        action = view->addAction("go_start_page", q, SLOT(showStartMainPage()));
+        action = view->addAction("go_start_page", q, &MainWindow::showStartMainPage);
         action->setPriority(QAction::LowPriority);
         action->setIcon(QIcon::fromTheme(QStringLiteral("go-home")));
         action->setText(i18nc("@action", "Start Page"));
@@ -490,14 +491,14 @@ struct MainWindow::Private {
             mToggleOperationsSideBarAction->setChecked(mSideBar->isVisible() && mSideBar->currentPage() == QLatin1String("operations"));
         });
 
-        mToggleSlideShowAction = view->addAction(QStringLiteral("toggle_slideshow"), q, SLOT(toggleSlideShow()));
+        mToggleSlideShowAction = view->addAction(QStringLiteral("toggle_slideshow"), q, &MainWindow::toggleSlideShow);
         q->updateSlideShowAction();
         connect(mSlideShow, &SlideShow::stateChanged, q, &MainWindow::updateSlideShowAction);
 
         q->setStandardToolBarMenuEnabled(true);
 
-        mShowMenuBarAction = static_cast<KToggleAction *>(view->addAction(KStandardAction::ShowMenubar, q, SLOT(toggleMenuBar())));
-        mShowStatusBarAction = static_cast<KToggleAction *>(view->addAction(KStandardAction::ShowStatusbar, q, SLOT(toggleStatusBar(bool))));
+        mShowMenuBarAction = static_cast<KToggleAction *>(view->addAction(KStandardActions::ShowMenubar, q, &MainWindow::toggleMenuBar));
+        mShowStatusBarAction = static_cast<KToggleAction *>(view->addAction(KStandardActions::ShowStatusbar, q, &MainWindow::toggleStatusBar));
 
         actionCollection->setDefaultShortcut(mShowStatusBarAction, Qt::Key_F3);
 
@@ -508,9 +509,9 @@ struct MainWindow::Private {
             q->guiFactory()->refreshActionProperties();
         });
 
-        view->addAction(KStandardAction::Preferences, q, SLOT(showConfigDialog()));
+        view->addAction(KStandardActions::Preferences, q, &MainWindow::showConfigDialog);
 
-        view->addAction(KStandardAction::ConfigureToolbars, q, SLOT(configureToolbars()));
+        view->addAction(KStandardActions::ConfigureToolbars, q, &MainWindow::configureToolbars);
 
 #if HAVE_PURPOSE
         mShareAction = new KToolBarPopupAction(QIcon::fromTheme(QStringLiteral("document-share")), i18nc("@action Share images", "Share"), q);

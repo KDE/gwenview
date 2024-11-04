@@ -144,7 +144,7 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage {
     void setupActions(KActionCollection *actionCollection)
     {
         auto view = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface", "View"), actionCollection);
-        QAction *action = view->addAction("edit_location", q, SLOT(editLocation()));
+        QAction *action = view->addAction("edit_location", q, &BrowseMainPage::editLocation);
         action->setText(i18nc("@action:inmenu Navigation Bar", "Edit Location"));
         actionCollection->setDefaultShortcut(action, Qt::Key_F6);
 
@@ -193,7 +193,7 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage {
 #endif
 
         auto file = new KActionCategory(i18nc("@title actions category", "File"), actionCollection);
-        action = file->addAction(QStringLiteral("add_folder_to_places"), q, SLOT(addFolderToPlaces()));
+        action = file->addAction(QStringLiteral("add_folder_to_places"), q, &BrowseMainPage::addFolderToPlaces);
         action->setText(i18nc("@action:inmenu", "Add Folder to Places"));
         action->setIcon(QIcon::fromTheme(QStringLiteral("bookmark-new")));
     }

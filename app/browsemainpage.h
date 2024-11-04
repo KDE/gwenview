@@ -86,6 +86,8 @@ protected:
 
 private:
     BrowseMainPagePrivate *const d;
+
+    friend struct BrowseMainPagePrivate;
 };
 
 } // namespace

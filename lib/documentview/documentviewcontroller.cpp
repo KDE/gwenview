@@ -22,6 +22,7 @@
 #include <KActionCategory>
 #include <KColorUtils>
 #include <KLocalizedString>
+#include <KStandardActions>
 
 // Qt
 #include <QAction>
@@ -84,13 +85,13 @@ struct DocumentViewControllerPrivate {
         mZoomToFillAction->setIcon(QIcon::fromTheme(QStringLiteral("zoom-fit-best")));
         mZoomToFillAction->setIconText(i18nc("@action:button Zoom to fill (fit width or height), shown in status bar, keep it short please", "Fill"));
 
-        mActualSizeAction = view->addAction(KStandardAction::ActualSize);
+        mActualSizeAction = view->addAction(KStandardActions::ActualSize);
         mActualSizeAction->setCheckable(true);
         mActualSizeAction->setIcon(QIcon::fromTheme(QStringLiteral("zoom-original")));
         mActualSizeAction->setIconText(i18nc("Original image size percent value", "100%"));
 
-        mZoomInAction = view->addAction(KStandardAction::ZoomIn);
-        mZoomOutAction = view->addAction(KStandardAction::ZoomOut);
+        mZoomInAction = view->addAction(KStandardActions::ZoomIn);
+        mZoomOutAction = view->addAction(KStandardActions::ZoomOut);
 
         mToggleBirdEyeViewAction = view->addAction(QStringLiteral("view_toggle_birdeyeview"));
         mToggleBirdEyeViewAction->setCheckable(true);
