@@ -249,7 +249,7 @@ if(KF6DocTools_FOUND)
     kdoctools_install(po)
 endif()
 
-feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
+feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
 include(KDEClangFormat)
 # add clang-format target
