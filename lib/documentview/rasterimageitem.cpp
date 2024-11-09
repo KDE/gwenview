@@ -136,11 +136,8 @@ void RasterImageItem::paint(QPainter *painter, const QStyleOptionGraphicsItem * 
     // Perform color correction on the visible image.
     applyDisplayTransform(image);
 
-    const auto destinationRect = QRect{// Ceil the top left corner to avoid pixel alignment issues on higher DPI because QPoint/QSize/QRect
-                                       // round instead of flooring when converting from float to int.
-                                       QPoint{int(std::ceil(imageRect.left() * (zoom / dpr))), int(std::ceil(imageRect.top() * (zoom / dpr)))},
-                                       // Floor the size, similarly to above.
-                                       QSize{int(image.size().width() / dpr), int(image.size().height() / dpr)}};
+    const auto destinationRect = QRectF{QPointF{std::ceil(imageRect.left() * (zoom / dpr)), std::ceil(imageRect.top() * (zoom / dpr))},
+                                        QSizeF{image.size().width() / dpr, image.size().height() / dpr}};
 
     painter->drawImage(destinationRect, image);
 }
