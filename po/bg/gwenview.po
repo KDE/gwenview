@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-02 00:38+0000\n"
-"PO-Revision-Date: 2024-10-18 09:41+0200\n"
+"PO-Revision-Date: 2024-11-09 20:04+0100\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
 "Language: bg\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.11.70\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -787,7 +787,7 @@ msgstr "Запис в друг формат"
 #: app/gvcore.cpp:415
 #, kde-format
 msgid "Gwenview cannot save images in '%1' format."
-msgstr "Gwenview не може да записва изображения във формат \"%1\"."
+msgstr "Gwenview не може да записва изображения във формат „%1“."
 
 #: app/gvcore.cpp:443
 #, kde-format
@@ -1282,7 +1282,7 @@ msgid ""
 "The shared image link (<a href=\"%1\">%1</a>) has been copied to the "
 "clipboard."
 msgstr ""
-"Връзката за споделено изображение (<a href=\"%1\">%1</a>)е копирана в "
+"Връзката за споделено изображение (<a href=„%1“>%1</a>)е копирана в "
 "клипборда."
 
 #: app/mainwindow.cpp:582
@@ -1985,14 +1985,13 @@ msgstr "Не е инсталирана поддръжка за камерата.
 #, kde-format
 msgctxt "@info above install button, %1 protocol name %2 error text from KIO"
 msgid "The protocol support library for \"%1\" is not installed. Error: %2"
-msgstr ""
-"Библиотеката на поддържащия протокол \"%1\" не е инсталирана. Грешка: %2"
+msgstr "Библиотеката на поддържащия протокол „%1“ не е инсталирана. Грешка: %2"
 
 #: importer/thumbnailpage.cpp:235
 #, kde-format
 msgctxt "@info above install button, %1 protocol name"
 msgid "The protocol support library for \"%1\" is not installed."
-msgstr "Библиотеката на поддържащия протокол \"%1\" не е инсталирана."
+msgstr "Библиотеката на поддържащия протокол „%1“ не е инсталирана."
 
 #: importer/thumbnailpage.cpp:247
 #, kde-format
@@ -2009,7 +2008,7 @@ msgctxt "@info:tooltip for a button, %1 protocol name"
 msgid "Launch Discover to install the protocol support library for \"%1\""
 msgstr ""
 "Стартирайте Discover за да инсталирате библиотеката на поддържащия протокол "
-"\"%1\""
+"„%1“"
 
 #: importer/thumbnailpage.cpp:256
 #, kde-format
@@ -2033,7 +2032,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Install Protocol Support for \"%1\"…"
-msgstr "Инсталиране на поддържащия протокол за \"%1\"…"
+msgstr "Инсталиране на поддържащия протокол за „%1“…"
 
 #: importer/thumbnailpage.cpp:261
 #, kde-format
@@ -2049,7 +2048,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Search the Web for How to Install Protocol Support for \"%1\"…"
-msgstr "Търсене в интернет за Инсталиране на поддържащ протокол за \"%1\"…"
+msgstr "Търсене в интернет за Инсталиране на поддържащ протокол за „%1“…"
 
 #: importer/thumbnailpage.cpp:281
 #, kde-format
@@ -2057,7 +2056,7 @@ msgctxt ""
 "@info this text will be used as a search term in an online search engine, %1 "
 "protocol name"
 msgid "How to install protocol support for \"%1\" on Linux"
-msgstr "Как да се инсталира протокол за поддръжка за \"%1\" на Linux"
+msgstr "Как да се инсталира протокол за поддръжка за „%1“ на Linux"
 
 #: importer/thumbnailpage.cpp:282
 #, kde-format
@@ -2098,8 +2097,7 @@ msgid ""
 msgstr ""
 "Стартирането на Discover е неуспешно.<nl/>Моля, проверете, дали Discover е "
 "инсталиран или използвайте инструмента за инсталиране на пакети на вашата "
-"дистрибуция, за да инсталирате библиотеката на поддържащия протокол за "
-"\"%1\"."
+"дистрибуция, за да инсталирате библиотеката на поддържащия протокол за „%1“."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: importer/thumbnailpage.ui:173
@@ -2359,9 +2357,9 @@ msgstr ""
 "по-малки от зоната за гледане, се показват в нормалния си размер. Ако по-"
 "малки изображения трябва да се показват в цялата област за гледане, включете "
 "<emphasis>Уголемяване на малки изображения</emphasis><link url='%2'>в "
-"настройките</link>.</item></list></para><para>Ако функцията \"%1\" вече е "
+"настройките</link>.</item></list></para><para>Ако функцията „%1“ вече е "
 "включена, повторното ѝ натискане ще я превключи и вместо това изображението "
-"ще бъде показано в нормалния си размер.</para><para>\"%1\" е режимът по "
+"ще бъде показано в нормалния си размер.</para><para>„%1“ е режимът по "
 "подразбиране за увеличаване на изображенията. Той може да бъде променен, "
 "така че изображенията вместо това да се показват с предишна стойност на "
 "увеличението <link url='%2'>в настройките</link>.</para>"
