@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-02 00:38+0000\n"
-"PO-Revision-Date: 2024-11-09 20:04+0100\n"
+"PO-Revision-Date: 2024-11-10 20:20+0100\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
 "Language: bg\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.08.2\n"
+"X-Generator: Lokalize 24.11.70\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1498,7 +1498,7 @@ msgstr "Следващото променено"
 #, kde-format
 msgid "One image modified"
 msgid_plural "%1 images modified"
-msgstr[0] "1 промененно изображение"
+msgstr[0] "1 променено изображение"
 msgstr[1] "%1 променени изображения"
 
 #: app/savebar.cpp:110
@@ -1827,7 +1827,7 @@ msgid "Delete the imported or skipped document from the device?"
 msgid_plural "Delete the %1 imported and skipped documents from the device?"
 msgstr[0] "Да се изтрие ли внесеният или пропуснат документ от устройството?"
 msgstr[1] ""
-"Да се изтрият ли внесените или пропуснти %1 документа от устройството?"
+"Да се изтрият ли внесените или пропуснати %1 документа от устройството?"
 
 #: importer/importdialog.cpp:124
 #, kde-format
