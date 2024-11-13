@@ -116,7 +116,7 @@ void RasterImageItem::paint(QPainter *painter, const QStyleOptionGraphicsItem * 
         image = mSixthScaledImage.copy(sourceRect);
     }
 
-    const bool isIndexedColor = !image.colorTable().isEmpty();
+    const bool isIndexedColor = image.colorCount() > 0;
 
     QImage::Format outputImageFormat = image.format();
     if (isIndexedColor) {
