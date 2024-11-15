@@ -151,8 +151,8 @@ struct DocumentViewControllerPrivate {
         darkPixmap.fill(Qt::transparent);
         autoPixmap.fill(Qt::transparent);
 
-        const QColor &lightColor = usingLightTheme ? qApp->palette().base().color() : qApp->palette().text().color();
-        const QColor &darkColor = usingLightTheme ? qApp->palette().text().color() : qApp->palette().base().color();
+        const QColor lightColor = usingLightTheme ? qApp->palette().base().color() : qApp->palette().text().color();
+        const QColor darkColor = usingLightTheme ? qApp->palette().text().color() : qApp->palette().base().color();
         const QColor neutralColor = KColorUtils::mix(lightColor, darkColor, 0.5);
 
         paintPixmap(lightPixmap, lightColor);
