@@ -863,7 +863,7 @@ void ThumbnailView::dropEvent(QDropEvent *event)
         return;
     }
 
-    QModelIndex destIndex = indexAt(event->pos());
+    QModelIndex destIndex = indexAt(event->position().toPoint());
     if (destIndex.isValid()) {
         KFileItem item = fileItemForIndex(destIndex);
         if (item.isDir()) {
