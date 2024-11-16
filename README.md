@@ -11,7 +11,6 @@ Gwenview is a fast and easy to use image viewer by KDE, ideal for browsing and d
 * Simple image editing: rotate, crop, resize, mirror, flip, reduce red eye, and adjust brightness, contrast, or gamma.
 * Annotate and mark up images with arrows, shapes, text boxes, image stamps, and more
 * Basic file management actions such as copy, move, delete, and others.
-* Functions both as a standalone application and an embedded viewer in the Konqueror web browser.
 
 ## Get It
 
