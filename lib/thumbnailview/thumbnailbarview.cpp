@@ -113,7 +113,7 @@ struct ThumbnailBarItemDelegatePrivate {
 
     bool hoverEventFilter(QHoverEvent *event)
     {
-        QModelIndex index = mView->indexAt(event->pos());
+        QModelIndex index = mView->indexAt(event->position().toPoint());
         if (index != mIndexUnderCursor) {
             updateHoverUi(index);
         }
