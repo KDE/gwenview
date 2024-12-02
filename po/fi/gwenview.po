@@ -6,7 +6,7 @@
 # Elias Julkunen <elias.julkunen@gmail.com>, 2008, 2010.
 # Sasu Karttunen <sasu.karttunen@tpnet.fi>, 2010.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2010, 2011, 2012, 2013, 2014, 2015, 2016.
-# Tommi Nieminen <translator@legisign.org>, 2011, 2016, 2018, 2019, 2020, 2021, 2022, 2023, 2024.
+# SPDX-FileCopyrightText: 2011, 2016, 2018, 2019, 2020, 2021, 2022, 2023, 2024 Tommi Nieminen <translator@legisign.org>
 #
 # KDE Finnish translation sprint participants:
 # Author: Artnay
@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-02 00:38+0000\n"
-"PO-Revision-Date: 2024-03-20 18:18+0200\n"
+"PO-Revision-Date: 2024-10-19 11:16+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -30,8 +30,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 22.12.3\n"
-"X-POT-Import-Date: 2012-12-01 22:24:09+0000\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -514,17 +513,17 @@ msgstr "Ei luokituksia"
 #: app/filtercontroller.cpp:229
 #, kde-format
 msgid "Dimensions >="
-msgstr ""
+msgstr "Mitat ≥"
 
 #: app/filtercontroller.cpp:230
 #, kde-format
 msgid "Dimensions ="
-msgstr ""
+msgstr "Mitat ="
 
 #: app/filtercontroller.cpp:231
 #, kde-format
 msgid "Dimensions <="
-msgstr ""
+msgstr "Mitat ≤"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: app/filtercontroller.cpp:238 lib/crop/cropwidget.cpp:221
@@ -567,12 +566,10 @@ msgid "Filter by Tag"
 msgstr "Suodata luokituksella"
 
 #: app/filtercontroller.cpp:339
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Filter by Date"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Dimensions"
-msgstr "Suodata päiväyksellä"
+msgstr "Suodata mitoilla"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: app/fullscreenconfigwidget.ui:20
@@ -2346,20 +2343,7 @@ msgstr "Sovita kuva näyttöalaan"
 #. but a more elaborate translation would also be fine.
 #. The text "in the settings" is supposed to sound like clicking it opens the settings.
 #: lib/documentview/documentviewcontroller.cpp:70
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info:whatsthis, %1 the action's text"
-#| msgid ""
-#| "<para>This fits the image into the available viewing area:"
-#| "<list><item>Images that are bigger than the viewing area are displayed at "
-#| "a smaller size so they fit.</item><item>Images that are smaller than the "
-#| "viewing area are displayed at their normal size. If smaller images should "
-#| "instead use all of the available viewing area, turn on <emphasis>Enlarge "
-#| "smaller images</emphasis> <link url='%2'>in the settings</link>.</item></"
-#| "list></para><para>If \"%1\" is already enabled, pressing it again will "
-#| "switch it off and the image will be displayed at its normal size instead."
-#| "</para><para>\"%1\" is the default zoom mode for images. This can be "
-#| "changed so images are displayed at a previous zoom value instead <link "
-#| "url='%2'>in the settings</link>.</para>"
+#, kde-kuit-format
 msgctxt "@info:whatsthis %1 is the action's text"
 msgid ""
 "<para>This fits the image into the available viewing area:<list><item>Images "
@@ -2374,16 +2358,15 @@ msgid ""
 "are displayed at a previous zoom value instead <link url='%2'>in the "
 "settings</link>.</para>"
 msgstr ""
-"<para>Sovitetaan kuva käytettävissään olevaan näyttöalaan:"
+"<para>Sovittaa kuvan käytettävissä olevaan näyttöalaan:"
 "<list><item>näyttöalaa suuremmat kuvat näytetään pienempinä, jotta ne "
 "mahtuvat</item><item>näyttöalaa pienemmät kuvat näytetään tavallisessa "
 "koossaan. Jos pienien kuvien tulisi tämän sijaan käyttää koko näyttöala, ota "
-"käyttöön   <emphasis>Suurenna pieniä kuvia</emphasis> -valinta <link "
-"url='%2'>asetuksista</link>.</item></list></para><para>Jos ”%1” on jo "
-"käytössä, sen valinta poistaa sen käytöstä, ja kuva näytetään taas "
-"tavallisessa koossaan.</para><para>”%1” on kuvien oletuslähennystapa. <link "
-"url='%2'>Asetuksista</link> voi myös valita kuvat näytettävän edellisellä "
-"lähennyskertoimella.</para>"
+"<link url='%2'>asetuksista</link> käyttöön <emphasis>Suurenna pieniä kuvia</"
+"emphasis>.</item></list></para><para>Jos ”%1” on jo käytössä, se poistetaan "
+"käytöstä ja kuva näytetään taas tavallisessa koossa.</para><para>”%1” on "
+"kuvien oletuslähennystapa. <link url='%2'>Asetuksista</link> voi myös valita "
+"kuvat näytettävän edellisellä lähennyskertoimella.</para>"
 
 #: lib/documentview/documentviewcontroller.cpp:83
 #, kde-format
