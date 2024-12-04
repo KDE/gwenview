@@ -518,7 +518,7 @@
     <release version="23.08.5" date="2024-02-15"/>
   </releases>
   <custom>
-    <value key="KDE::supporters">Florent Tassy;[elbekai](https://norden.social/@elbekai);retrokestrel;Alex Gurenko</value>
+    <value key="KDE::supporters">Florent Tassy;[elbekai](https://norden.social/@elbekai);retrokestrel;Alex Gurenko;Steven Dunbar</value>
   </custom>
   <content_rating type="oars-1.1"/>
 </component>
