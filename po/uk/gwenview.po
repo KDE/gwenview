@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-02 00:38+0000\n"
+"POT-Creation-Date: 2024-12-08 00:39+0000\n"
 "PO-Revision-Date: 2024-10-17 15:19+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -1343,55 +1343,55 @@ msgstr "Інформація"
 msgid "Operations"
 msgstr "Дії"
 
-#: app/mainwindow.cpp:950
+#: app/mainwindow.cpp:951
 #, kde-format
 msgid "Viewing media"
 msgstr "Перегляд мультимедіа"
 
-#: app/mainwindow.cpp:1432
+#: app/mainwindow.cpp:1433
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Сховати бічну панель"
 
-#: app/mainwindow.cpp:1432
+#: app/mainwindow.cpp:1433
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Показати бічну панель"
 
-#: app/mainwindow.cpp:1781
+#: app/mainwindow.cpp:1782
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Відкривання зображення"
 
-#: app/mainwindow.cpp:1841
+#: app/mainwindow.cpp:1842
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "Призупинити показ слайдів"
 
-#: app/mainwindow.cpp:1844
+#: app/mainwindow.cpp:1845
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "Поновити показ слайдів"
 
-#: app/mainwindow.cpp:1844
+#: app/mainwindow.cpp:1845
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Почати показ слайдів"
 
-#: app/mainwindow.cpp:1857
+#: app/mainwindow.cpp:1858
 #, kde-format
 msgid "Save All Changes"
 msgstr "Зберегти всі зміни"
 
-#: app/mainwindow.cpp:1858
+#: app/mainwindow.cpp:1859
 #, kde-format
 msgid "Discard Changes"
 msgstr "Відкинути зміни"
 
-#: app/mainwindow.cpp:1860
+#: app/mainwindow.cpp:1861
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
@@ -1400,12 +1400,12 @@ msgstr[1] "Було змінено %1 зображення."
 msgstr[2] "Було змінено %1 зображень."
 msgstr[3] "Було змінено %1 зображення."
 
-#: app/mainwindow.cpp:1860
+#: app/mainwindow.cpp:1861
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Якщо ви вийдете тепер, то всі зміни буде втрачено."
 
-#: app/mainwindow.cpp:1903
+#: app/mainwindow.cpp:1904
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
@@ -1413,37 +1413,37 @@ msgstr ""
 "У результаті смужку меню буде повністю приховано. Щоб наказати програмі "
 "знову її показувати, натисніть %1."
 
-#: app/mainwindow.cpp:1906
+#: app/mainwindow.cpp:1907
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Сховати смужку меню"
 
-#: app/mainwindow.cpp:2127
+#: app/mainwindow.cpp:2128
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "Ми досягли першого документа у списку. Що робити далі?"
 
-#: app/mainwindow.cpp:2128 app/mainwindow.cpp:2142
+#: app/mainwindow.cpp:2129 app/mainwindow.cpp:2143
 #, kde-format
 msgid "Stay There"
 msgstr "Залишатися тут"
 
-#: app/mainwindow.cpp:2129
+#: app/mainwindow.cpp:2130
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "Перейти до останнього документа"
 
-#: app/mainwindow.cpp:2130 app/mainwindow.cpp:2144
+#: app/mainwindow.cpp:2131 app/mainwindow.cpp:2145
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "Повернутися до списку документів"
 
-#: app/mainwindow.cpp:2141
+#: app/mainwindow.cpp:2142
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "Ми досягли останнього документа у списку. Що робити далі?"
 
-#: app/mainwindow.cpp:2143
+#: app/mainwindow.cpp:2144
 #, kde-format
 msgid "Go to the First Document"
 msgstr "Перейти до першого документа"

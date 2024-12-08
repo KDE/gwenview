@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-02 00:38+0000\n"
+"POT-Creation-Date: 2024-12-08 00:39+0000\n"
 "PO-Revision-Date: 2011-07-22 16:56+0200\n"
 "Last-Translator: Marko Dimjašević <marko@dimjasevic.net>\n"
 "Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
@@ -1391,12 +1391,12 @@ msgstr "Informacije"
 msgid "Operations"
 msgstr "Postupci"
 
-#: app/mainwindow.cpp:950
+#: app/mainwindow.cpp:951
 #, kde-format
 msgid "Viewing media"
 msgstr ""
 
-#: app/mainwindow.cpp:1432
+#: app/mainwindow.cpp:1433
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Sidebar"
@@ -1404,7 +1404,7 @@ msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Bočna traka"
 
-#: app/mainwindow.cpp:1432
+#: app/mainwindow.cpp:1433
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Sidebar"
@@ -1412,40 +1412,40 @@ msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Bočna traka"
 
-#: app/mainwindow.cpp:1781
+#: app/mainwindow.cpp:1782
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Otvori sliku"
 
-#: app/mainwindow.cpp:1841
+#: app/mainwindow.cpp:1842
 #, fuzzy, kde-format
 #| msgid "Slideshow"
 msgid "Pause Slideshow"
 msgstr "Prezentacija"
 
-#: app/mainwindow.cpp:1844
+#: app/mainwindow.cpp:1845
 #, fuzzy, kde-format
 #| msgid "Slideshow"
 msgid "Resume Slideshow"
 msgstr "Prezentacija"
 
-#: app/mainwindow.cpp:1844
+#: app/mainwindow.cpp:1845
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Pokreni prezentaciju"
 
-#: app/mainwindow.cpp:1857
+#: app/mainwindow.cpp:1858
 #, kde-format
 msgid "Save All Changes"
 msgstr "Spremi sve promjene"
 
-#: app/mainwindow.cpp:1858
+#: app/mainwindow.cpp:1859
 #, kde-format
 msgid "Discard Changes"
 msgstr "Odbaci promjene"
 
-#: app/mainwindow.cpp:1860
+#: app/mainwindow.cpp:1861
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
@@ -1453,52 +1453,52 @@ msgstr[0] "Izmijenjena je %1 slika."
 msgstr[1] "Izmijenjene su %1 slike."
 msgstr[2] "Izmijenjeno je %1 slika."
 
-#: app/mainwindow.cpp:1860
+#: app/mainwindow.cpp:1861
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Ako sada izađete, vaše promjene će biti izgubljene."
 
-#: app/mainwindow.cpp:1903
+#: app/mainwindow.cpp:1904
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr ""
 
-#: app/mainwindow.cpp:1906
+#: app/mainwindow.cpp:1907
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Sidebar"
 msgid "Hide menu bar"
 msgstr "Bočna traka"
 
-#: app/mainwindow.cpp:2127
+#: app/mainwindow.cpp:2128
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr ""
 
-#: app/mainwindow.cpp:2128 app/mainwindow.cpp:2142
+#: app/mainwindow.cpp:2129 app/mainwindow.cpp:2143
 #, kde-format
 msgid "Stay There"
 msgstr ""
 
-#: app/mainwindow.cpp:2129
+#: app/mainwindow.cpp:2130
 #, fuzzy, kde-format
 #| msgid "Go to Last Image"
 msgid "Go to the Last Document"
 msgstr "Pomakni se na posljednju sliku"
 
-#: app/mainwindow.cpp:2130 app/mainwindow.cpp:2144
+#: app/mainwindow.cpp:2131 app/mainwindow.cpp:2145
 #, fuzzy, kde-format
 #| msgid "Go back to the original"
 msgid "Go Back to the Document List"
 msgstr "Vrati se na izvorno"
 
-#: app/mainwindow.cpp:2141
+#: app/mainwindow.cpp:2142
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr ""
 
-#: app/mainwindow.cpp:2143
+#: app/mainwindow.cpp:2144
 #, fuzzy, kde-format
 #| msgid "Go to First Image"
 msgid "Go to the First Document"

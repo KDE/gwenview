@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-02 00:38+0000\n"
+"POT-Creation-Date: 2024-12-08 00:39+0000\n"
 "PO-Revision-Date: 2024-10-17 22:23+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -1321,67 +1321,67 @@ msgstr "Información"
 msgid "Operations"
 msgstr "Operaciones"
 
-#: app/mainwindow.cpp:950
+#: app/mainwindow.cpp:951
 #, kde-format
 msgid "Viewing media"
 msgstr "Viendo medio"
 
-#: app/mainwindow.cpp:1432
+#: app/mainwindow.cpp:1433
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Ocultar el panel lateral"
 
-#: app/mainwindow.cpp:1432
+#: app/mainwindow.cpp:1433
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Mostrar el panel lateral"
 
-#: app/mainwindow.cpp:1781
+#: app/mainwindow.cpp:1782
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Abrir imagen"
 
-#: app/mainwindow.cpp:1841
+#: app/mainwindow.cpp:1842
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "Pausar presentación"
 
-#: app/mainwindow.cpp:1844
+#: app/mainwindow.cpp:1845
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "Continuar presentación"
 
-#: app/mainwindow.cpp:1844
+#: app/mainwindow.cpp:1845
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Comenzar presentación"
 
-#: app/mainwindow.cpp:1857
+#: app/mainwindow.cpp:1858
 #, kde-format
 msgid "Save All Changes"
 msgstr "Guardar todos los cambios"
 
-#: app/mainwindow.cpp:1858
+#: app/mainwindow.cpp:1859
 #, kde-format
 msgid "Discard Changes"
 msgstr "Descartar los cambios"
 
-#: app/mainwindow.cpp:1860
+#: app/mainwindow.cpp:1861
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "Se ha modificado una imagen."
 msgstr[1] "Se han modificado %1 imágenes."
 
-#: app/mainwindow.cpp:1860
+#: app/mainwindow.cpp:1861
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Si sale ahora, sus cambios se perderán."
 
-#: app/mainwindow.cpp:1903
+#: app/mainwindow.cpp:1904
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
@@ -1389,37 +1389,37 @@ msgstr ""
 "Esto ocultará completamente la barra de menú. Puede volver a mostrarla "
 "escribiendo %1."
 
-#: app/mainwindow.cpp:1906
+#: app/mainwindow.cpp:1907
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Ocultar la barra de menú"
 
-#: app/mainwindow.cpp:2127
+#: app/mainwindow.cpp:2128
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "Ha llegado al primer documento. ¿Qué desea hacer?"
 
-#: app/mainwindow.cpp:2128 app/mainwindow.cpp:2142
+#: app/mainwindow.cpp:2129 app/mainwindow.cpp:2143
 #, kde-format
 msgid "Stay There"
 msgstr "Permanecer ahí"
 
-#: app/mainwindow.cpp:2129
+#: app/mainwindow.cpp:2130
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "Ir al último documento"
 
-#: app/mainwindow.cpp:2130 app/mainwindow.cpp:2144
+#: app/mainwindow.cpp:2131 app/mainwindow.cpp:2145
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "Volver a la lista de documentos"
 
-#: app/mainwindow.cpp:2141
+#: app/mainwindow.cpp:2142
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "Ha llegado al último documento. ¿Qué desea hacer?"
 
-#: app/mainwindow.cpp:2143
+#: app/mainwindow.cpp:2144
 #, kde-format
 msgid "Go to the First Document"
 msgstr "Ir al primer documento"

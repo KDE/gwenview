@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-02 00:38+0000\n"
+"POT-Creation-Date: 2024-12-08 00:39+0000\n"
 "PO-Revision-Date: 2014-08-11 13:36+0200\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -1356,107 +1356,107 @@ msgstr "Informatschonen"
 msgid "Operations"
 msgstr "Akschonen"
 
-#: app/mainwindow.cpp:950
+#: app/mainwindow.cpp:951
 #, kde-format
 msgid "Viewing media"
 msgstr ""
 
-#: app/mainwindow.cpp:1432
+#: app/mainwindow.cpp:1433
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Sietpaneel versteken"
 
-#: app/mainwindow.cpp:1432
+#: app/mainwindow.cpp:1433
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Sietpaneel wiesen"
 
-#: app/mainwindow.cpp:1781
+#: app/mainwindow.cpp:1782
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Bild opmaken"
 
-#: app/mainwindow.cpp:1841
+#: app/mainwindow.cpp:1842
 #, fuzzy, kde-format
 #| msgid "Slideshow"
 msgid "Pause Slideshow"
 msgstr "Diaschau"
 
-#: app/mainwindow.cpp:1844
+#: app/mainwindow.cpp:1845
 #, fuzzy, kde-format
 #| msgid "Slideshow"
 msgid "Resume Slideshow"
 msgstr "Diaschau"
 
-#: app/mainwindow.cpp:1844
+#: app/mainwindow.cpp:1845
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Diaschau anfangen"
 
-#: app/mainwindow.cpp:1857
+#: app/mainwindow.cpp:1858
 #, kde-format
 msgid "Save All Changes"
 msgstr "All Ännern sekern"
 
-#: app/mainwindow.cpp:1858
+#: app/mainwindow.cpp:1859
 #, kde-format
 msgid "Discard Changes"
 msgstr "Ännern wegsmieten"
 
-#: app/mainwindow.cpp:1860
+#: app/mainwindow.cpp:1861
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "Een Bild wöör ännert."
 msgstr[1] "%1 Biller wöörn ännert."
 
-#: app/mainwindow.cpp:1860
+#: app/mainwindow.cpp:1861
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Wenn Du nu ophöllst, kaamt Di Dien Ännern weg."
 
-#: app/mainwindow.cpp:1903
+#: app/mainwindow.cpp:1904
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr ""
 
-#: app/mainwindow.cpp:1906
+#: app/mainwindow.cpp:1907
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Hide sidebar"
 msgid "Hide menu bar"
 msgstr "Sietpaneel versteken"
 
-#: app/mainwindow.cpp:2127
+#: app/mainwindow.cpp:2128
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "Du büst bi't eerste Dokment ankamen. Wat wullt Du nu doon?"
 
-#: app/mainwindow.cpp:2128 app/mainwindow.cpp:2142
+#: app/mainwindow.cpp:2129 app/mainwindow.cpp:2143
 #, kde-format
 msgid "Stay There"
 msgstr "Dor blieven"
 
-#: app/mainwindow.cpp:2129
+#: app/mainwindow.cpp:2130
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "Na't leste Dokment gahn"
 
-#: app/mainwindow.cpp:2130 app/mainwindow.cpp:2144
+#: app/mainwindow.cpp:2131 app/mainwindow.cpp:2145
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "Torüch na de Dokmentenlist gahn"
 
-#: app/mainwindow.cpp:2141
+#: app/mainwindow.cpp:2142
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "Du büst bi't leste Dokment ankamen. Wat wullt Du nu doon?"
 
-#: app/mainwindow.cpp:2143
+#: app/mainwindow.cpp:2144
 #, kde-format
 msgid "Go to the First Document"
 msgstr "Na't eerste Dokment gahn"

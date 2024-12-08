@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-02 00:38+0000\n"
+"POT-Creation-Date: 2024-12-08 00:39+0000\n"
 "PO-Revision-Date: 2022-02-10 12:40+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -1344,110 +1344,110 @@ msgstr "जानकारी"
 msgid "Operations"
 msgstr "संचालन"
 
-#: app/mainwindow.cpp:950
+#: app/mainwindow.cpp:951
 #, kde-format
 msgid "Viewing media"
 msgstr ""
 
-#: app/mainwindow.cpp:1432
+#: app/mainwindow.cpp:1433
 #, fuzzy, kde-format
 #| msgid "Hide Side Bar"
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "बाजू पट्टी छुपाएँ"
 
-#: app/mainwindow.cpp:1432
+#: app/mainwindow.cpp:1433
 #, fuzzy, kde-format
 #| msgid "Hide Side Bar"
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "बाजू पट्टी छुपाएँ"
 
-#: app/mainwindow.cpp:1781
+#: app/mainwindow.cpp:1782
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr ""
 
-#: app/mainwindow.cpp:1841
+#: app/mainwindow.cpp:1842
 #, fuzzy, kde-format
 #| msgid "Stop slideshow"
 msgid "Pause Slideshow"
 msgstr "स्लाइड शो बन्द करें"
 
-#: app/mainwindow.cpp:1844
+#: app/mainwindow.cpp:1845
 #, fuzzy, kde-format
 #| msgid "Stop slideshow"
 msgid "Resume Slideshow"
 msgstr "स्लाइड शो बन्द करें"
 
-#: app/mainwindow.cpp:1844
+#: app/mainwindow.cpp:1845
 #, fuzzy, kde-format
 #| msgid "Start slideshow"
 msgid "Start Slideshow"
 msgstr "स्लाइड शो चालू करें"
 
-#: app/mainwindow.cpp:1857
+#: app/mainwindow.cpp:1858
 #, kde-format
 msgid "Save All Changes"
 msgstr "सभी परितवर्तनों को सहेजें"
 
-#: app/mainwindow.cpp:1858
+#: app/mainwindow.cpp:1859
 #, kde-format
 msgid "Discard Changes"
 msgstr "परिवर्तनों को फेंक दें"
 
-#: app/mainwindow.cpp:1860
+#: app/mainwindow.cpp:1861
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "%1 छवियाँ परिवर्धित की गईं."
 msgstr[1] "%1 छवियाँ परिवर्धित की गईं."
 
-#: app/mainwindow.cpp:1860
+#: app/mainwindow.cpp:1861
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "यदि आप अभी बाहर होंगे, आपके परिवर्तन गुम हो जाएंगे."
 
-#: app/mainwindow.cpp:1903
+#: app/mainwindow.cpp:1904
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr ""
 
-#: app/mainwindow.cpp:1906
+#: app/mainwindow.cpp:1907
 #, fuzzy, kde-format
 #| msgid "Hide Side Bar"
 msgid "Hide menu bar"
 msgstr "बाजू पट्टी छुपाएँ"
 
-#: app/mainwindow.cpp:2127
+#: app/mainwindow.cpp:2128
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr ""
 
-#: app/mainwindow.cpp:2128 app/mainwindow.cpp:2142
+#: app/mainwindow.cpp:2129 app/mainwindow.cpp:2143
 #, kde-format
 msgid "Stay There"
 msgstr ""
 
-#: app/mainwindow.cpp:2129
+#: app/mainwindow.cpp:2130
 #, fuzzy, kde-format
 #| msgid "Previous modified image"
 msgid "Go to the Last Document"
 msgstr "पिछली परिवर्धित छवि"
 
-#: app/mainwindow.cpp:2130 app/mainwindow.cpp:2144
+#: app/mainwindow.cpp:2131 app/mainwindow.cpp:2145
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr ""
 
-#: app/mainwindow.cpp:2141
+#: app/mainwindow.cpp:2142
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr ""
 
-#: app/mainwindow.cpp:2143
+#: app/mainwindow.cpp:2144
 #, fuzzy, kde-format
 #| msgid "Previous modified image"
 msgid "Go to the First Document"
