@@ -49,6 +49,7 @@
   <name xml:lang="pt-BR">Gwenview</name>
   <name xml:lang="ro">Gwenview</name>
   <name xml:lang="ru">Gwenview</name>
+  <name xml:lang="sa">ग्वेनव्यू</name>
   <name xml:lang="sk">Gwenview</name>
   <name xml:lang="sl">Gwenview</name>
   <name xml:lang="sr">Гвенвју</name>
@@ -101,6 +102,7 @@
   <summary xml:lang="pt-BR">Visualizador de imagens</summary>
   <summary xml:lang="ro">Vizualizor de imagini</summary>
   <summary xml:lang="ru">Приложение для просмотра изображений</summary>
+  <summary xml:lang="sa">चित्रदर्शकः</summary>
   <summary xml:lang="sk">Prehliadač obrázkov</summary>
   <summary xml:lang="sl">Pregledovalnik slik</summary>
   <summary xml:lang="sr">Приказивач слика</summary>
@@ -156,6 +158,7 @@
     <p xml:lang="pt-BR">Gwenview é um visualizador de imagens rápido e fácil de usar, da KDE, ideal para navegar e exibir uma coleção de imagens.</p>
     <p xml:lang="ro">Gwenview e un vizualizor de imagini rapid și ușor de folosit de la KDE, ideal pentru răsfoirea și afișarea unei colecții de imagini.</p>
     <p xml:lang="ru">Gwenview — быстрое и простое в использовании приложение для просмотра изображений, разработанное KDE.</p>
+    <p xml:lang="sa">Gwenview KDE द्वारा द्रुतं सुलभं च चित्रदर्शकं भवति, यत् चित्रसङ्ग्रहं ब्राउज् कर्तुं प्रदर्शयितुं च आदर्शम् अस्ति ।</p>
     <p xml:lang="sk">Gwenview je rýchly a jednoducho použiteľný prehliadač obrázkov pre KDE, ideálny na prehliadanie a zobrazenie kolekcie obrázkov.</p>
     <p xml:lang="sl">Gwenview je hiter in enostaven pregledovalnik slik za KDE. Idealen je za brskanje po in prikazovanje zbirk slik.</p>
     <p xml:lang="sr">Гвенвју је брз и лак за употребу приказивач слика од КДЕ‑а, идеалан за прегледање збирки слика.</p>
@@ -211,6 +214,7 @@
     <p xml:lang="pt-BR">Funcionalidades:</p>
     <p xml:lang="ro">Caracteristici:</p>
     <p xml:lang="ru">Возможности:</p>
+    <p xml:lang="sa">गुणाः:</p>
     <p xml:lang="sk">Funkcie:</p>
     <p xml:lang="sl">Zmožnosti:</p>
     <p xml:lang="sr">Могућности:</p>
@@ -257,6 +261,7 @@
       <li xml:lang="pt">Edição simples das imagens: rotação, recorte, dimensionamento, espelho, inversão, redução de olhos vermelhos e ajustes de brilho, contraste ou gama</li>
       <li xml:lang="pt-BR">Edição de imagem simples: girar, cortar, redimensionar, espelhar, inverter, reduzir olhos vermelhos e ajustar brilho, contraste ou gama</li>
       <li xml:lang="ru">Основные инструменты редактирования: поворот, обрезание, изменение размера, зеркальное отражение и переворот, уменьшение эффекта «красных глаз», управление яркостью, контрастностью и гаммой.</li>
+      <li xml:lang="sa">सरलं चित्रसम्पादनं : परिभ्रमन्तु, सस्यं कुर्वन्तु, आकारं परिवर्तयन्तु, दर्पणं कुर्वन्तु, पलटयन्तु, रक्तनेत्रं न्यूनीकरोतु, प्रकाशं, विपरीततां, गामा वा समायोजयन्तु</li>
       <li xml:lang="sl">Enostavno urejanje slik: zasuk, obrezovanje, sprememba velikosti, zrcaljenje, obračanje, zmanjšanje rdečine v očesih in prilagajanje svetlosti, kontrasta ali game</li>
       <li xml:lang="sv">Enkel bildredigering: rotera, beskär, ändra storlek, spegla, vänd, reducera röda ögon och justera ljusstyrka, kontrast eller gamma</li>
       <li xml:lang="ta">அடிப்படை படத்திருத்தம்: திருப்புவது; வெட்டுவது; புரட்டுவது; பிரகாசத்தை நிறமாறுபாட்டை அல்லது காமாவை மாற்றுவது; கண்கள் சிவந்திருப்பதைக் குறைப்பது</li>
@@ -297,6 +302,7 @@
       <li xml:lang="pt">Anotação e marcação de imagens com setas, formas, áreas de texto, carimbos de imagens, entre outros</li>
       <li xml:lang="pt-BR">Anotar e marcar imagens com setas, formas, caixas de texto, carimbos de imagem e muito mais</li>
       <li xml:lang="ru">Комментирование и разметка изображения: стрелки, фигуры, текстовые поля, штампы и другие инструменты</li>
+      <li xml:lang="sa">बाणैः, आकारैः, पाठपेटिकाभिः, चित्रमुद्रिकाभिः इत्यादिभिः चित्रैः टिप्पणीं कृत्वा चिह्नं कुर्वन्तु</li>
       <li xml:lang="sl">Dodajanje opomb in oznak na slike s puščicami, oblikami, okviri z besedilom, žigi in drugim</li>
       <li xml:lang="sv">Kommentera och märk bilder med pilar, former, textrutor, bildstämplar med mera</li>
       <li xml:lang="ta">அம்புக்குறிகள், சொற்றொடர்கள், வடிவங்கள் போன்றவற்றைக் கொண்டு படங்களிலுள்ளவற்றை முன்னிலைப்படுத்தலாம்</li>
@@ -340,6 +346,7 @@
       <li xml:lang="pt">Acções básicas de gestão de ficheiros, como a cópia, movimentação, remoção, entre outras</li>
       <li xml:lang="pt-BR">Ações básicas de gerenciamento de arquivos, como copiar, mover, excluir entre outras</li>
       <li xml:lang="ru">Основные действия с файлами: копирование, перемещение, удаление и другие</li>
+      <li xml:lang="sa">मूलभूतसञ्चिकाप्रबन्धनक्रियाः यथा प्रतिलिपिः, चालनं, विलोपनं, अन्ये च</li>
       <li xml:lang="sl">Osnovni ukazi za delo z datotekami: kopiranje, premikanje, brisanje in drugo</li>
       <li xml:lang="sv">Grundläggande filhanteringsåtgärder som kopiera, flytta, ta bort, med mera</li>
       <li xml:lang="ta">நகலெடுத்தல், நகர்த்தல், மற்றும் அகற்றல் போன்ற அடிப்படை கோப்புநிர்வாக செய்லகள்</li>
@@ -387,6 +394,7 @@
       <caption xml:lang="pl">Główne okno programu, wyświetlające obraz i sterownie po lewej</caption>
       <caption xml:lang="pt-BR">Janela principal do aplicativo exibindo uma imagem e controles à esquerda</caption>
       <caption xml:lang="ru">Основное окно приложения с открытым изображением и элементами управления в левой части окна</caption>
+      <caption xml:lang="sa">वामे एकं चित्रं नियन्त्रणानि च प्रदर्शयन् मुख्यः अनुप्रयोगविण्डो</caption>
       <caption xml:lang="sl">Glavno okno aplikacije, ki prikazuje sliko, s kontrolami na levi strani</caption>
       <caption xml:lang="sv">Programmets huvudfönster som visar en bild och kontroller till vänster</caption>
       <caption xml:lang="tr">Bir görseli ve solda denetimleri görüntüleyen ana uygulama ekranı</caption>
@@ -434,6 +442,7 @@
       <caption xml:lang="pt-BR">Use o Gwenview para gerenciar sua coleção de imagens</caption>
       <caption xml:lang="ro">Folosiți Gwenview pentru a vă gestiona colecția de imagini</caption>
       <caption xml:lang="ru">Использование Gwenview для работы с коллекцией изображений</caption>
+      <caption xml:lang="sa">स्वस्य चित्रसङ्ग्रहस्य प्रबन्धनार्थं Gwenview इत्यस्य उपयोगं कुर्वन्तु</caption>
       <caption xml:lang="sk">Použite Gwenview na správu vašej kolekcie obrázkov</caption>
       <caption xml:lang="sl">Uporabite Gwenview za upravljanje svoje zbirke slik</caption>
       <caption xml:lang="sv">Använd Gwenview för att hantera din bildsamling</caption>
