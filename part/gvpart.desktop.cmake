@@ -54,6 +54,7 @@ Name[pt]=Visualizador de Imagens Gwenview
 Name[pt_BR]=Visualizador de imagens Gwenview
 Name[ro]=Vizualizator de imagini KView
 Name[ru]=Просмотр изображений в Gwenview
+Name[sa]=ग्वेनव्यू इमेज दर्शक
 Name[si]=Gwenview පිංතූර දසුන
 Name[sk]=Prehliadač obrázkov Gwenview
 Name[sl]=Pregledovalnik slik Gwenview
