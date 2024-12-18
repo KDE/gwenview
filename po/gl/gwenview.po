@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-08 00:39+0000\n"
-"PO-Revision-Date: 2024-12-08 13:57+0100\n"
+"PO-Revision-Date: 2024-12-17 22:40+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.08.3\n"
+"X-Generator: Lokalize 24.12.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -122,6 +122,7 @@ msgstr "Lembrar os cartafoles e URL."
 msgid "Enable color management"
 msgstr "Activar a xestión da cor."
 
+# skip-rule: trasno-provide
 #. i18n: ectx: property (text), widget (QLabel, colorProfileHelpLabel)
 #: app/advancedconfigpage.ui:265
 #, kde-format
@@ -1484,8 +1485,8 @@ msgid ""
 "You have modified many images. To avoid memory problems, you should save "
 "your changes."
 msgstr ""
-"Modificou moitos ficheiros. Para evitar problemas de memoria debería gardar "
-"os cambios."
+"Modificou moitas imaxes. Para evitar problemas de memoria debería gardar os "
+"cambios."
 
 #: app/savebar.cpp:81
 #, kde-format
