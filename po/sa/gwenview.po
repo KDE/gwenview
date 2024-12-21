@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-08 00:39+0000\n"
-"PO-Revision-Date: 2024-12-14 01:48+0530\n"
+"PO-Revision-Date: 2024-12-20 21:51+0530\n"
 "Last-Translator: kali <skkalwar999@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
 "Language: sa\n"
@@ -51,7 +51,7 @@ msgstr ""
 #: app/advancedconfigpage.ui:82
 #, kde-format
 msgid "Thumbnails:"
-msgstr "लघुचित्रम् : १."
+msgstr "लघुचित्रम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, relativeHelpLabel)
 #: app/advancedconfigpage.ui:92
@@ -94,7 +94,7 @@ msgstr "सक्रियवर्णप्रोफाइलस्य वर�
 #: app/advancedconfigpage.ui:182
 #, kde-format
 msgid "Rendering intent:"
-msgstr "अभिप्रायः प्रतिपादनम् : १."
+msgstr "अभिप्रायः प्रतिपादनम् :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_HistoryEnabled)
 #: app/advancedconfigpage.ui:197
@@ -125,7 +125,7 @@ msgstr ""
 #: app/advancedconfigpage.ui:275
 #, kde-format
 msgid "Color management:"
-msgstr "वर्णप्रबन्धनम् : १."
+msgstr "वर्णप्रबन्धनम् :"
 
 #: app/alignwithsidebarwidgetaction.cpp:23
 #, kde-format
@@ -561,7 +561,7 @@ msgstr "स्लाइड शो"
 #: app/fullscreenconfigwidget.ui:29
 #, kde-format
 msgid "Interval:"
-msgstr "अन्तरालः : १."
+msgstr "अन्तरालः :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, mSlideShowLoopCheckBox)
 #: app/fullscreenconfigwidget.ui:75
@@ -640,7 +640,7 @@ msgstr "%2 इत्यस्य %1"
 #: app/generalconfigpage.ui:17
 #, kde-format
 msgid "Videos:"
-msgstr "विडियोः : १."
+msgstr "विडियोः :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_ListVideos)
 #: app/generalconfigpage.ui:27
@@ -682,7 +682,7 @@ msgstr "सर्वदा"
 #: app/generalconfigpage.ui:88
 #, kde-format
 msgid "After the last image:"
-msgstr "अन्तिमप्रतिबिम्बस्य अनन्तरं : १."
+msgstr "अन्तिमप्रतिबिम्बस्य अनन्तरं :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_WrapAfterLast)
 #: app/generalconfigpage.ui:95
@@ -694,7 +694,7 @@ msgstr "पुनः आरभत"
 #: app/generalconfigpage.ui:118
 #, kde-format
 msgid "Fullscreen background:"
-msgstr "पूर्णपर्दे पृष्ठभूमिः : १."
+msgstr "पूर्णपर्दे पृष्ठभूमिः :"
 
 #. i18n: ectx: property (text), widget (QRadioButton, fullscreenBackgroundImageRadioButton)
 #: app/generalconfigpage.ui:128
@@ -734,7 +734,7 @@ msgstr ""
 #: app/generalconfigpage.ui:252
 #, kde-format
 msgid "Thumbnail actions:"
-msgstr "लघुचित्रक्रियाः : १."
+msgstr "लघुचित्रक्रियाः :"
 
 #. i18n: ectx: property (text), widget (QRadioButton, allButtonsThumbnailActionsRadioButton)
 #: app/generalconfigpage.ui:259
@@ -758,7 +758,7 @@ msgstr "न कश्चित्"
 #: app/gvcore.cpp:80
 #, kde-format
 msgid "Image quality:"
-msgstr "चित्रस्य गुणवत्ता : १."
+msgstr "चित्रस्य गुणवत्ता :"
 
 #: app/gvcore.cpp:87
 #, kde-format
@@ -939,7 +939,7 @@ msgstr "&ठोस रंग पृष्ठभूमि:"
 #: app/imageviewconfigpage.ui:152
 #, kde-format
 msgid "Mouse wheel behavior:"
-msgstr "मूषकचक्रव्यवहारः : १."
+msgstr "मूषकचक्रव्यवहारः :"
 
 #. i18n: ectx: property (text), widget (QRadioButton, mouseWheelScrollRadioButton)
 #: app/imageviewconfigpage.ui:167
@@ -966,7 +966,7 @@ msgstr "जूम"
 #: app/imageviewconfigpage.ui:256
 #, kde-format
 msgid "Zoom mode:"
-msgstr "जूम मोडः : १."
+msgstr "जूम मोडः :"
 
 #. i18n: ectx: property (text), widget (QRadioButton, autofitZoomModeRadioButton)
 #: app/imageviewconfigpage.ui:271
@@ -997,7 +997,7 @@ msgstr "लघुचित्रं विस्तारयन्तु"
 #: app/imageviewconfigpage.ui:400
 #, kde-format
 msgid "Animations:"
-msgstr "सजीवचित्रम् : १."
+msgstr "सजीवचित्रम् :"
 
 #. i18n: ectx: property (text), widget (QRadioButton, glAnimationRadioButton)
 #: app/imageviewconfigpage.ui:415
@@ -1045,14 +1045,14 @@ msgstr "ऊर्ध्वाधर"
 #: app/imageviewconfigpage.ui:588
 #, kde-format
 msgid "Row count:"
-msgstr "पङ्क्तिगणना : १."
+msgstr "पङ्क्तिगणना :"
 
 #: app/infocontextmanageritem.cpp:151
 #, kde-format
 msgctxt ""
 "@item:intext %1 is a key, we append a colon to it. A value is displayed after"
 msgid "%1:"
-msgstr "%1: १."
+msgstr "%1:"
 
 #: app/infocontextmanageritem.cpp:228
 #, kde-format
@@ -1552,7 +1552,7 @@ msgstr "अग्रिम"
 #: app/semanticinfosidebaritem.ui:22
 #, kde-format
 msgid "Rating:"
-msgstr "रेटिंग् : १."
+msgstr "रेटिंग् :"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: app/semanticinfosidebaritem.ui:45
@@ -1729,7 +1729,7 @@ msgstr[1] "%1 गन्तव्य-उपपुटं निर्मातु�
 #: importer/dialogpage.cpp:89
 #, kde-format
 msgid "Failed to import documents:"
-msgstr "दस्तावेजानां आयाते असफलः अभवत् : १."
+msgstr "दस्तावेजानां आयाते असफलः अभवत् :"
 
 #: importer/dialogpage.cpp:95
 #, kde-format
@@ -1898,13 +1898,13 @@ msgstr "दस्तावेजानां नाम स्वयमेव प
 #: importer/importerconfigdialog.ui:39
 #, kde-format
 msgid "Rename Format:"
-msgstr "प्रारूपस्य पुनर्नामकरणम् : १."
+msgstr "प्रारूपस्य पुनर्नामकरणम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: importer/importerconfigdialog.ui:59
 #, kde-format
 msgid "Preview:"
-msgstr "पूर्वावलोकनम् : १."
+msgstr "पूर्वावलोकनम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: importer/importerconfigdialog.ui:83
@@ -2100,7 +2100,7 @@ msgstr "आयात गन्तव्यं प्रविशन्तु"
 #: importer/thumbnailpage.ui:220
 #, kde-format
 msgid "Listing content of:"
-msgstr "इत्यस्य सामग्रीं सूचीकरणम् : १."
+msgstr "इत्यस्य सामग्रीं सूचीकरणम् :"
 
 #: lib/about.cpp:38
 #, kde-format
@@ -2125,7 +2125,7 @@ msgstr "रङ्गं समायोजयन्तु"
 #: lib/bcg/bcgwidget.cpp:51
 #, kde-format
 msgid "Brightness:"
-msgstr "कान्तिः : १."
+msgstr "कान्तिः :"
 
 #: lib/bcg/bcgwidget.cpp:52
 #, kde-format
@@ -2135,7 +2135,7 @@ msgstr "विप्रकर्ष:"
 #: lib/bcg/bcgwidget.cpp:53
 #, kde-format
 msgid "Gamma:"
-msgstr "गाम्मा : १."
+msgstr "गाम्मा :"
 
 #: lib/crop/cropwidget.cpp:191
 #, kde-format
@@ -2182,7 +2182,7 @@ msgstr "उन्नत सेटिंग्स्"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Aspect ratio:"
-msgstr "आस्पेक्ट रेश्यो : १."
+msgstr "आस्पेक्ट रेश्यो :"
 
 #: lib/crop/cropwidget.cpp:312
 #, kde-format
@@ -2281,7 +2281,7 @@ msgstr "%1x%2"
 #, kde-format
 msgctxt "Percent value"
 msgid "%1%"
-msgstr "%1% २."
+msgstr "%1%"
 
 #: lib/documentview/documentview.cpp:543
 #, kde-format
@@ -2358,7 +2358,7 @@ msgstr "पूरण"
 #, kde-format
 msgctxt "Original image size percent value"
 msgid "100%"
-msgstr "१००% २."
+msgstr "१००%"
 
 #: lib/documentview/documentviewcontroller.cpp:98
 #, kde-format
@@ -2500,7 +2500,7 @@ msgstr "फोल्डरस्य अन्तिमे चित्रे स
 #: lib/gwenviewconfig.kcfg:352
 #, kde-format
 msgid "Interval between images (in seconds)"
-msgstr "बिम्बानां मध्ये अन्तरालः (सेकेण्ड्-मात्रेषु) २."
+msgstr "बिम्बानां मध्ये अन्तरालः (सेकेण्ड्-मात्रेषु)"
 
 #. i18n: ectx: label, entry (CropPreserveAspectRatio), group (Crop)
 #: lib/gwenviewconfig.kcfg:368
@@ -2601,7 +2601,7 @@ msgstr "सामान्य"
 #, kde-format
 msgctxt "@item:intable %1 is number of millions of pixels in image"
 msgid "(%1MP)"
-msgstr "(%1MP) २."
+msgstr "(%1MP)"
 
 #: lib/imagemetainfomodel.cpp:597
 #, kde-format
@@ -2743,13 +2743,13 @@ msgstr "चित्रस्य आकारं परिवर्तयतु"
 #: lib/resize/resizeimagewidget.ui:20
 #, kde-format
 msgid "Estimated new file size:"
-msgstr "अनुमानितः नूतनसञ्चिकायाः आकारः : १."
+msgstr "अनुमानितः नूतनसञ्चिकायाः आकारः :"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: lib/resize/resizeimagewidget.ui:47
 #, kde-format
 msgid "New size:"
-msgstr "नवीनः आकारः : १."
+msgstr "नवीनः आकारः :"
 
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, mHeightPercentSpinBox)
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, mWidthPercentSpinBox)
@@ -2769,7 +2769,7 @@ msgstr " px"
 #: lib/resize/resizeimagewidget.ui:115
 #, kde-format
 msgid "Current file size:"
-msgstr "वर्तमान सञ्चिकायाः आकारः : १."
+msgstr "वर्तमान सञ्चिकायाः आकारः :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, mKeepAspectCheckBox)
 #: lib/resize/resizeimagewidget.ui:145
@@ -2781,7 +2781,7 @@ msgstr "आस्पेक्ट रेश्यो रखें"
 #: lib/resize/resizeimagewidget.ui:172
 #, kde-format
 msgid "Current size:"
-msgstr "वर्तमान आकारः : १."
+msgstr "वर्तमान आकारः :"
 
 #: lib/semanticinfo/tagitemdelegate.cpp:75
 #, kde-format
