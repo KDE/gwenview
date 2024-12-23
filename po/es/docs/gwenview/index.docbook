@@ -8,7 +8,7 @@
 
 <book id="gwenview" lang="&language;">
 <title
->Manual de usuario de Gwenview</title>
+>Manual del usuario de Gwenview</title>
 
 <bookinfo>
 <authorgroup>
@@ -187,7 +187,7 @@
 <itemizedlist>
 <listitem
 ><para
->Girar: La operación de girar girará la imagen tanto a la izquierda como a la derecha en función de lo que usted seleccione <menuchoice
+>Girar: La operación de girar girará la imagen tanto a la izquierda como a la derecha en función de lo que seleccione <menuchoice
 > <shortcut
 > <keycombo action="simul"
 >&Ctrl;<keycap
@@ -222,7 +222,7 @@
 > <guimenuitem
 >Espejo</guimenuitem
 > </menuchoice
->: Esta operación reflejará la imagen a lo largo del eje vertical, como si usted la estuviera mirando en un espejo.</para
+>: Esta operación reflejará la imagen a lo largo del eje vertical, como si la estuviera mirando en un espejo.</para
 ></listitem>
 
 <listitem
@@ -282,7 +282,7 @@
 >Modo navegar</title>
 
 <para
->En el modo de navegación usted puede navegar con facilidad por sus archivos y carpetas. La ventana de vista previa muestra miniaturas de las imágenes de la carpeta actual así como sus subcarpetas. </para>
+>En el modo de navegación puede navegar con facilidad por sus archivos y carpetas. La ventana de vista previa muestra miniaturas de las imágenes de la carpeta actual así como sus subcarpetas. </para>
 
 <screenshot>
   <screeninfo
@@ -295,10 +295,10 @@
 </screenshot>
 
 <para
->Al mover el ratón sobre una imagen se muestran botones para seleccionar o rotar la imagen, así como un botón para acceder al modo de pantalla completa. Las imágenes modificadas se indican con un icono abajo a la derecha , púlselo para guardar la imagen modificada. Al pulsar sobre una imagen, se accede al modo ver. Usted puede seleccionar varias imágenes y cambiar al modo ver para ver los elementos cara a cara.</para>
+>Al mover el ratón sobre una imagen se muestran botones para seleccionar o rotar la imagen, así como un botón para acceder al modo de pantalla completa. Las imágenes modificadas se indican con un icono abajo a la derecha , púlselo para guardar la imagen modificada. Al pulsar sobre una imagen, se accede al modo ver. Puede seleccionar varias imágenes y cambiar al modo ver para ver los elementos cara a cara.</para>
 
 <para
->El deslizador de la parte inferior derecha le permite cambiar el tamaño de las imágenes. Usted también puede filtrar las imágenes por nombre de archivo, fecha, etiqueta o puntuación usando el cuadro de la parte inferior izquierda. La barra de herramientas aparece tanto en modo navegación como en modo vista y contiene las acciones más habituales. </para>
+>El deslizador de la parte inferior derecha le permite cambiar el tamaño de las imágenes. También puede filtrar las imágenes por nombre de archivo, fecha, etiqueta o puntuación usando el cuadro de la parte inferior izquierda. La barra de herramientas aparece tanto en modo navegación como en modo vista y contiene las acciones más habituales. </para>
 <itemizedlist>
 <listitem
 ><para
@@ -362,20 +362,20 @@
 >. Pulsando de nuevo se vuelve a plegar. Para cambiar el tamaño de las miniaturas mueva el separador con el &LMB;.</para>
 
 <para
->El modo de vista admite la visualización de varias imágenes cara a cara. Usted puede seleccionar varias imágenes en el modo de navegación antes de cambiar al modo de vista, o puede pulsar el botón <guibutton
+>El modo de vista admite la visualización de varias imágenes cara a cara. Puede seleccionar varias imágenes en el modo de navegación antes de cambiar al modo de vista, o puede pulsar el botón <guibutton
 >+</guibutton
 > que aparece sobre las imágenes en la barra de miniaturas para añadir un panel que muestre cada imagen. Entonces aparece un <guibutton
 >-</guibutton
 > que le permite eliminar ese panel.</para>
 
 <para
->Cuando se muestran varias imágenes, parece una pequeña barra de herramientas bajo cada imagen, que le permite borrar la imagen o eliminar su panel. Usted puede ampliar cada imagen independientemente o sincronizarlas. Conmute esto pulsando <guilabel
+>Cuando se muestran varias imágenes, parece una pequeña barra de herramientas bajo cada imagen, que le permite borrar la imagen o eliminar su panel. Puede ampliar cada imagen independientemente o sincronizarlas. Conmute esto pulsando <guilabel
 >Sincronizar</guilabel
 > a la izquierda del deslizador de ampliación o pulsando <keycombo action="simul"
 >&Ctrl;<keycap
 >Y</keycap
 ></keycombo
->. Usted puede intercambiar imágenes pulsando en su panel o usando su teclado. Para cambiar a la imagen de la derecha pulse <keycombo action="simul"
+>. Puede intercambiar imágenes pulsando en su panel o usando su teclado. Para cambiar a la imagen de la derecha pulse <keycombo action="simul"
 >&Tab;</keycombo
 >. Para cambiar a la imagen de la izquierda pulse <keycombo action="simul"
 >&Shift;&Tab;</keycombo
@@ -468,7 +468,7 @@
 
 <tip
 ><para
->Usted puede comenzar directamente en el modo «ver» iniciando &gwenview; desde un menú de contexto del tipo <guimenuitem
+>Puede comenzar directamente en el modo «ver» iniciando &gwenview; desde un menú de contexto del tipo <guimenuitem
 >Abrir con</guimenuitem
 > en otro programa o ejecutándolo desde la línea de órdenes con una imagen como argumento.</para
 > </tip>
@@ -557,14 +557,14 @@
   </mediaobject>
 </screenshot>
 <para
->El ir al modo de pantalla completa mientras navega le proporciona una experiencia más intensa mientras se desplaza por sus imágenes. Es bastante agradable en un equipo normal, pero tiene incluso más sentido cuando usted conecta su portátil a la gran TV en su sala de estar para mostrar imágenes a sus invitados. </para>
+>El ir al modo de pantalla completa mientras navega le proporciona una experiencia más intensa mientras se desplaza por sus imágenes. Es bastante agradable en un equipo normal, pero tiene incluso más sentido cuando conecta su portátil a la gran TV en su sala de estar para mostrar imágenes a sus invitados. </para>
 </sect2>
 
 <sect2 id="fullscreen">
 <title
 >Pantalla completa de modo de vista</title>
 <para
->El modo de pantalla completa muestra una presentación de las imágenes. Se accede a este modo al pulsar en el botón que aparece cuando usted mueve el ratón sobre las miniaturas en el modo de navegación, pulsando el botón <guiicon
+>El modo de pantalla completa muestra una presentación de las imágenes. Se accede a este modo al pulsar en el botón que aparece cuando mueve el ratón sobre las miniaturas en el modo de navegación, pulsando el botón <guiicon
 >Pantalla completa</guiicon
 > de la barra de tareas. <screenshot>
   <screeninfo
@@ -715,7 +715,7 @@
 <para
 >Cuando conecte un dispositivo, el importador de &gwenview; listará recursivamente todas las imágenes y los vídeos que contenga. </para>
 <para
->Esto no es siempre lo que usted espera, &eg; conectar un móvil que no quiere que liste todos los archivos multimedia del dispositivo; pero solo las imágenes que usted tomó, las cuales, generalmente, están en una subcarpeta especial. </para>
+>Esto no es siempre lo que se espera, &eg; conectar un móvil que no quiere que liste todos los archivos multimedia del dispositivo; pero solo las imágenes que capturó, que generalmente están en una subcarpeta especial. </para>
 
 <screenshot>
   <screeninfo
@@ -727,7 +727,7 @@
   </mediaobject>
 </screenshot>
 <para
->Es posible seleccionar la carpeta raíz a listar y el importador de &gwenview; recordará la última carpeta raíz para cada dispositivo. De este modo, la próxima vez que usted conecte un dispositivo, solo deberían listarse las imágenes y vídeos pertinentes. </para>
+>Es posible seleccionar la carpeta raíz a listar y el importador de &gwenview; recordará la última carpeta raíz para cada dispositivo. De este modo, la próxima vez que conecte un dispositivo, solo deberían listarse las imágenes y vídeos pertinentes. </para>
 
 <sect2>
 <title
@@ -744,11 +744,11 @@
 </screenshot>
 
 <para
->Si lo desea, usted puede seleccionar las imágenes que quiere importar desde <guilabel
+>Si lo desea, puede seleccionar las imágenes que quiere importar desde <guilabel
 >Seleccionar los documentos a importar</guilabel
 > pulsando el botón <guiicon
 >+</guiicon
-> que aparece cuando pasa sobre una imagen. Usted puede seleccionar también la carpeta en la que se importan las imágenes en el área de texto en la parte inferior de la ventana.  Cuando lo haya hecho, pulse el botón <guibutton
+> que aparece cuando pasa sobre una imagen. Puede seleccionar también la carpeta en la que se importan las imágenes en el área de texto en la parte inferior de la ventana.  Cuando lo haya hecho, pulse el botón <guibutton
 > Importar seleccionados</guibutton
 > para importar solo las imágenes que haya seleccionado o pulse <guibutton
 >Importar todos</guibutton
@@ -925,7 +925,7 @@
 ><para
 ><keycap
 >F6</keycap
->: Permite editar la barra de navegación de modo que se pueda teclear directamente la ruta de un archivo. Usted puede volver a la barra de navegación estándar pulsando sobre la flecha de la derecha.</para
+>: Permite editar la barra de navegación de modo que se pueda teclear directamente la ruta de un archivo. Puede volver a la barra de navegación estándar pulsando sobre la flecha de la derecha.</para
 ></listitem>
 
 <listitem
