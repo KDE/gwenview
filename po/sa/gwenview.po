@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-08 00:39+0000\n"
-"PO-Revision-Date: 2024-12-24 20:39+0530\n"
+"PO-Revision-Date: 2024-12-25 19:45+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
 "Language: sa\n"
@@ -223,7 +223,7 @@ msgstr "रेटिंग्"
 #, kde-format
 msgctxt "@title actions category"
 msgid "File"
-msgstr "संचिका"
+msgstr "सञ्चिका"
 
 #: app/browsemainpage.cpp:197
 #, kde-format
@@ -417,7 +417,7 @@ msgstr "गुणाः"
 #: app/fileopscontextmanageritem.cpp:180
 #, kde-format
 msgid "Create Folder..."
-msgstr "फोल्डर् रचयन्तु..."
+msgstr "समुच्चय रचयन्तु..."
 
 #: app/fileopscontextmanageritem.cpp:184
 #, kde-format
@@ -1160,7 +1160,7 @@ msgstr "ब्राउज़ करें"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Browse folders for images"
-msgstr "चित्राणां कृते फोल्डर् ब्राउज् कुर्वन्तु"
+msgstr "चित्राणां कृते समुच्चय ब्राउज् कुर्वन्तु"
 
 #: app/mainwindow.cpp:411
 #, kde-format
