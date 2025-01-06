@@ -687,16 +687,12 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: app/generalconfigpage.ui:88
 #, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Go to last image"
 msgid "After the last image:"
 msgstr "Gå til siste bilde"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_WrapAfterLast)
 #: app/generalconfigpage.ui:95
 #, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Start Page"
 msgid "Start over"
 msgstr "Startside"
 
