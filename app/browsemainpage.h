@@ -79,6 +79,7 @@ private Q_SLOTS:
     void updateThumbnailDetails();
     void slotUrlsDropped(const QUrl &destUrl, QDropEvent *);
     void showMenuForDroppedUrls(const QList<QUrl> &, const QUrl &destUrl);
+    void slotToggleShowHiddenFiles();
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event) override;

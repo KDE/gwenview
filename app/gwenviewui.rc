@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE gui SYSTEM "kpartgui.dtd">
-<gui name="gwenview" version="69">
+<gui name="gwenview" version="70">
 
 <MenuBar>
     <Menu name="file" >
@@ -40,6 +40,7 @@
         <Separator/>
         <Action name="sort_by"/>
         <Action name="thumbnail_details"/>
+        <Action name="view_toggle_showhiddenfiles"/>
         <Separator/>
         <Action name="toggle_sidebar" />
     </Menu>

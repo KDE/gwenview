@@ -106,6 +106,9 @@ public:
 
     AbstractSemanticInfoBackEnd *semanticInfoBackEnd() const;
 
+    void setShowHiddenFiles(bool show);
+    bool isShowHiddenFiles() const;
+
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
     SemanticInfo semanticInfoForSourceIndex(const QModelIndex &sourceIndex) const;
 #endif

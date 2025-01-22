@@ -80,6 +80,7 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage {
     FilterController *mFilterController = nullptr;
     QActionGroup *mSortAction = nullptr;
     KToggleAction *mSortDescendingAction = nullptr;
+    KToggleAction *mShowHiddenFilesAction = nullptr;
     QActionGroup *mThumbnailDetailsActionGroup = nullptr;
     PreviewItemDelegate *mDelegate = nullptr;
 
@@ -195,6 +196,12 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage {
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
         thumbnailDetailsAction->addAction(thumbnailDetailAction(i18nc("@action:inmenu", "Rating"), PreviewItemDelegate::RatingDetail));
 #endif
+        mShowHiddenFilesAction = view->add<KToggleAction>(QStringLiteral("view_toggle_showhiddenfiles"));
+        mShowHiddenFilesAction->setText(i18nc("@action:inmenu View", "Show Hidden Files"));
+        mShowHiddenFilesAction->setIcon(QIcon::fromTheme(QStringLiteral("view-visible")));
+        mShowHiddenFilesAction->setChecked(mDirModel->isShowHiddenFiles());
+        actionCollection->setDefaultShortcuts(mShowHiddenFilesAction, KStandardShortcut::showHideHiddenFiles());
+        QObject::connect(mShowHiddenFilesAction, SIGNAL(triggered(bool)), q, SLOT(slotToggleShowHiddenFiles()));
 
         auto file = new KActionCategory(i18nc("@title actions category", "File"), actionCollection);
         action = file->addAction(QStringLiteral("add_folder_to_places"), q, SLOT(addFolderToPlaces()));
@@ -419,6 +426,11 @@ ThumbnailView *BrowseMainPage::thumbnailView() const
 KUrlNavigator *BrowseMainPage::urlNavigator() const
 {
     return d->mUrlNavigator;
+}
+
+void BrowseMainPage::slotToggleShowHiddenFiles()
+{
+    d->mDirModel->setShowHiddenFiles(d->mShowHiddenFilesAction->isChecked());
 }
 
 void BrowseMainPage::reload()

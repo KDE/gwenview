@@ -140,6 +140,18 @@ void SortedDirModel::reload()
     dirLister()->updateDirectory(dirLister()->url());
 }
 
+void SortedDirModel::setShowHiddenFiles(bool show)
+{
+    dirLister()->setShowHiddenFiles(show);
+    // Actually emit the changes made with setShowHiddenFiles()
+    dirLister()->emitChanges();
+}
+
+bool SortedDirModel::isShowHiddenFiles() const
+{
+    return dirLister()->showHiddenFiles();
+}
+
 void SortedDirModel::setBlackListedExtensions(const QStringList &list)
 {
     d->mBlackListedExtensions = list;
