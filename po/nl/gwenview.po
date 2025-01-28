@@ -12,14 +12,14 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-08 00:39+0000\n"
-"PO-Revision-Date: 2025-01-11 13:27+0100\n"
+"PO-Revision-Date: 2025-01-27 14:52+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.12.0\n"
+"X-Generator: Lokalize 24.12.1\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -1941,7 +1941,7 @@ msgstr "Gwenview-importprogramma"
 #: importer/main.cpp:44
 #, kde-format
 msgid "Photo Importer"
-msgstr "Foto-importeerprogramma"
+msgstr "Foto-importprogramma"
 
 #: importer/main.cpp:53
 #, kde-format
