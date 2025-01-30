@@ -1,6 +1,7 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
+# SPDX-FileCopyrightText: 2024 Olesya Gerasimenko <translation-team@basealt.ru>
 # Nick Shaforostoff <shaforostoff@kde.ru>, 2007, 2008.
 # Artem Sereda <overmind88@gmail.com>, 2008, 2009, 2010.
 # Evgeniy Ivanov <powerfox@kde.ru>, 2008.
@@ -12,22 +13,21 @@
 # Aleksei Baranov <aleksei.ee@gmail.com>, 2014.
 # Alexander Yavorsky <kekcuha@gmail.com>, 2018, 2019, 2020, 2021, 2022, 2023, 2024.
 # Мария Шикунова <translation-team@basealt.ru>, 2021, 2022, 2023.
-# SPDX-FileCopyrightText: 2024 Olesya Gerasimenko <translation-team@basealt.ru>
 msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-02 00:38+0000\n"
-"PO-Revision-Date: 2024-10-14 16:31+0300\n"
-"Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
-"Language-Team: Basealt Translation Team\n"
+"PO-Revision-Date: 2024-12-28 12:12+0300\n"
+"Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
+"Language-Team: Russian <kde-russian@lists.kde.ru>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 21.08.3\n"
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
@@ -714,19 +714,15 @@ msgstr "Всегда"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: app/generalconfigpage.ui:88
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Go to last image"
+#, kde-format
 msgid "After the last image:"
-msgstr "Перейти к последнему изображению"
+msgstr "После показа последнего изображения:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_WrapAfterLast)
 #: app/generalconfigpage.ui:95
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Start Page"
+#, kde-format
 msgid "Start over"
-msgstr "Начальная страница"
+msgstr "Начать заново"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: app/generalconfigpage.ui:118
@@ -2408,7 +2404,7 @@ msgstr "&Вместить изображение в область просмо�
 #. but a more elaborate translation would also be fine.
 #. The text "in the settings" is supposed to sound like clicking it opens the settings.
 #: lib/documentview/documentviewcontroller.cpp:70
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info:whatsthis %1 is the action's text"
 msgid ""
 "<para>This fits the image into the available viewing area:<list><item>Images "
@@ -2423,15 +2419,15 @@ msgid ""
 "are displayed at a previous zoom value instead <link url='%2'>in the "
 "settings</link>.</para>"
 msgstr ""
-"<para>Вмещает изображение в доступную область просмотра:"
-"<list><item>Изображения, которые больше области просмотра, отображаются в "
-"уменьшенном размере.</item><item>Изображения, которые меньше области "
+"<para>Вмещает изображение в доступную область просмотра:<list> "
+"<item>Изображения, которые больше области просмотра, отображаются в "
+"уменьшенном размере.</item> <item>Изображения, которые меньше области "
 "просмотра, отображаются в обычном размере. Если же такие изображения должны "
 "занимать всю доступную область просмотра, включите параметр "
 "<emphasis>Увеличивать маленькие изображения</emphasis> <link url='%2'></"
-"link>.</item></list></para><para>Если активация «%1» уже выполнена, "
+"link>.</item> </list></para> <para>Если активация «%1» уже выполнена, "
 "отключите эту опцию повторным нажатием; изображение будет отображаться в "
-"обычном размере.</para><para>«%1» — стандартный режим масштабирования "
+"обычном размере.</para> <para>«%1» — стандартный режим масштабирования "
 "изображений. Если же при отображении изображений должно использоваться "
 "предыдущее значение масштаба, выполните соответствующую <link "
 "url='%2'>настройку</link>.</para>"
