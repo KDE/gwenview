@@ -412,7 +412,10 @@ struct PreviewItemDelegatePrivate {
             QSize fullSize;
             QPixmap thumbnailPix = mView->thumbnailForIndex(index, &fullSize);
             if (fullSize.isValid()) {
-                const QString text = i18nc("@item:intable %1 is image width, %2 is image height", "%1x%2", fullSize.width(), fullSize.height());
+                const QString text = i18nc("@item:intable %1 is image width, %2 is image height",
+                                           "%1x%2",
+                                           QString::number(fullSize.width()),
+                                           QString::number(fullSize.height()));
                 elided |= isTextElided(text);
                 textList << text;
             }
@@ -826,7 +829,8 @@ void PreviewItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &o
 
     if (!isDirOrArchive && (d->mDetails & PreviewItemDelegate::ImageSizeDetail)) {
         if (fullSize.isValid()) {
-            const QString text = i18nc("@item:intable %1 is image width, %2 is image height", "%1x%2", fullSize.width(), fullSize.height());
+            const QString text =
+                i18nc("@item:intable %1 is image width, %2 is image height", "%1x%2", QString::number(fullSize.width()), QString::number(fullSize.height()));
             d->drawText(painter, textRect, fgColor, text);
             textRect.moveTop(textRect.bottom());
         }

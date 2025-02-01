@@ -257,7 +257,8 @@ struct DocumentViewPrivate {
         QSize size = doc->size();
         if (size.isValid()) {
             caption += QStringLiteral(" - ");
-            caption += i18nc("@item:intable %1 is image width, %2 is image height", "%1x%2", size.width(), size.height());
+            caption += i18nc("@item:intable %1 is image width, %2 is image height", "%1x%2", QString::number(size.width()), QString::number(size.height()));
+
             if (mAdapter->canZoom()) {
                 int intZoom = qRound(mAdapter->zoom() * 100);
                 caption += QStringLiteral(" - ");

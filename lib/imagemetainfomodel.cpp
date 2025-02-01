@@ -437,7 +437,7 @@ void ImageMetaInfoModel::setImageSize(const QSize &size)
 {
     QString imageSize;
     if (size.isValid()) {
-        imageSize = i18nc("@item:intable %1 is image width, %2 is image height", "%1x%2", size.width(), size.height());
+        imageSize = i18nc("@item:intable %1 is image width, %2 is image height", "%1x%2", QString::number(size.width()), QString::number(size.height()));
 
         double megaPixels = size.width() * size.height() / 1000000.;
         if (megaPixels > 0.1) {
