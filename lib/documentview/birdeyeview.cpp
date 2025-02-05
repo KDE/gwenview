@@ -30,7 +30,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QApplication>
+#include <QGraphicsScene>
 #include <QGraphicsSceneEvent>
+#include <QGraphicsView>
 #include <QPainter>
 #include <QPropertyAnimation>
 #include <QTimer>
@@ -136,7 +138,7 @@ void BirdEyeView::adjustGeometry()
     if (!d->mDocView->canZoom() || d->mDocView->zoomToFit()) {
         return;
     }
-    QSizeF size = d->mDocView->document()->size() / qApp->devicePixelRatio();
+    QSizeF size = d->mDocView->document()->size() / scene()->views()[0]->devicePixelRatio();
     size.scale(MIN_SIZE, MIN_SIZE, Qt::KeepAspectRatioByExpanding);
     QRectF docViewRect = d->mDocView->boundingRect();
     int maxBevHeight = docViewRect.height() - 2 * VIEW_OFFSET;
@@ -157,7 +159,7 @@ void BirdEyeView::adjustGeometry()
 
 void BirdEyeView::adjustVisibleRect()
 {
-    const QSizeF docSize = d->mDocView->document()->size() / qApp->devicePixelRatio();
+    const QSizeF docSize = d->mDocView->document()->size() / scene()->views()[0]->devicePixelRatio();
     const qreal viewZoom = d->mDocView->zoom();
     qreal bevZoom;
     if (docSize.height() > docSize.width()) {
