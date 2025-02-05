@@ -90,6 +90,7 @@ public Q_SLOTS:
 protected:
     void showEvent(QShowEvent *) override;
     void resizeEvent(QResizeEvent *) override;
+    bool event(QEvent *) override;
 
 private:
     friend class ViewItem;

@@ -105,6 +105,7 @@ public:
     void setScrollPos(const QPointF &pos);
 
     qreal devicePixelRatio() const;
+    void onDevicePixelRatioChange();
 
     QPointF mapToView(const QPointF &imagePos) const;
     QPoint mapToView(const QPoint &imagePos) const;

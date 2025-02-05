@@ -170,6 +170,16 @@ void DocumentViewContainer::resizeEvent(QResizeEvent *event)
     updateLayout();
 }
 
+bool DocumentViewContainer::event(QEvent *event)
+{
+    if (event->type() == QEvent::DevicePixelRatioChange) {
+        for (auto view : d->mViews) {
+            view->imageView()->onDevicePixelRatioChange();
+        }
+    }
+    return QGraphicsView::event(event);
+}
+
 static bool viewLessThan(DocumentView *v1, DocumentView *v2)
 {
     return v1->sortKey() < v2->sortKey();

@@ -112,6 +112,31 @@ struct AbstractImageViewPrivate {
         mZoomCursor = QCursor(cursorPixmap, 11, 11);
     }
 
+    void reevaluateZoomAndPosition()
+    {
+        if (mZoomToFit) {
+            // setZoom() calls adjustImageOffset(), but only if the zoom changes.
+            // If the view is resized but does not cause a zoom change, we call
+            // adjustImageOffset() ourself.
+            const qreal newZoom = q->computeZoomToFit();
+            if (qFuzzyCompare(q->zoom(), newZoom)) {
+                adjustImageOffset(AbstractImageViewPrivate::Notify);
+            } else {
+                q->setZoom(newZoom);
+            }
+        } else if (mZoomToFill) {
+            const qreal newZoom = q->computeZoomToFill();
+            if (qFuzzyCompare(q->zoom(), newZoom)) {
+                adjustImageOffset(AbstractImageViewPrivate::Notify);
+            } else {
+                q->setZoom(newZoom);
+            }
+        } else {
+            adjustImageOffset();
+            adjustScrollPos();
+        }
+    }
+
     AbstractImageViewPrivate(AbstractImageView *parent)
         : q(parent)
         , mBackgroundItem(new AlphaBackgroundItem{q})
@@ -299,27 +324,7 @@ void AbstractImageView::setZoomToFill(bool on, const QPointF &center)
 void AbstractImageView::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
     QGraphicsWidget::resizeEvent(event);
-    if (d->mZoomToFit) {
-        // setZoom() calls adjustImageOffset(), but only if the zoom changes.
-        // If the view is resized but does not cause a zoom change, we call
-        // adjustImageOffset() ourself.
-        const qreal newZoom = computeZoomToFit();
-        if (qFuzzyCompare(zoom(), newZoom)) {
-            d->adjustImageOffset(AbstractImageViewPrivate::Notify);
-        } else {
-            setZoom(newZoom);
-        }
-    } else if (d->mZoomToFill) {
-        const qreal newZoom = computeZoomToFill();
-        if (qFuzzyCompare(zoom(), newZoom)) {
-            d->adjustImageOffset(AbstractImageViewPrivate::Notify);
-        } else {
-            setZoom(newZoom);
-        }
-    } else {
-        d->adjustImageOffset();
-        d->adjustScrollPos();
-    }
+    d->reevaluateZoomAndPosition();
 }
 
 void AbstractImageView::focusInEvent(QFocusEvent *event)
@@ -543,6 +548,11 @@ qreal AbstractImageView::devicePixelRatio() const
     } else {
         return qApp->devicePixelRatio();
     }
+}
+
+void AbstractImageView::onDevicePixelRatioChange()
+{
+    d->reevaluateZoomAndPosition();
 }
 
 QPointF AbstractImageView::mapToView(const QPointF &imagePos) const
