@@ -1,18 +1,19 @@
 {
     "id": "org.kde.gwenview",
     "runtime": "org.kde.Platform",
-    "runtime-version": "6.7",
+    "runtime-version": "6.8",
     "sdk": "org.kde.Sdk",
     "command": "gwenview",
     "rename-icon": "gwenview",
     "finish-args": [
         "--device=dri",
         "--filesystem=host",
+        "--filesystem=xdg-data/Trash",
         "--share=ipc",
+        "--socket=cups",
         "--socket=fallback-x11",
         "--socket=pulseaudio",
-        "--socket=wayland",
-        "--filesystem=xdg-data/Trash"
+        "--socket=wayland"
     ],
     "cleanup": [
         "*.a",
@@ -23,6 +24,50 @@
         "/share/man"
     ],
     "modules": [
+        {
+            "name": "phonon",
+            "config-opts": [
+                "-DBUILD_TESTING=OFF",
+                "-DPHONON_BUILD_QT5=OFF",
+                "-DPHONON_BUILD_QT6=ON"
+            ],
+            "buildsystem": "cmake-ninja",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://download.kde.org/stable/phonon/4.12.0/phonon-4.12.0.tar.xz",
+                    "sha256": "3287ffe0fbcc2d4aa1363f9e15747302d0b080090fe76e5f211d809ecb43f39a",
+                    "x-checker-data": {
+                        "type": "anitya",
+                        "project-id": 229047,
+                        "stable-only": true,
+                        "url-template": "https://download.kde.org/stable/phonon/$version/phonon-$version.tar.xz"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "inih",
+            "buildsystem": "meson",
+            "config-opts": [
+                "-Ddefault_library=shared",
+                "-Ddistro_install=true",
+                "-Dwith_INIReader=true"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/benhoyt/inih/archive/refs/tags/r58.tar.gz",
+                    "sha256": "e79216260d5dffe809bda840be48ab0eec7737b2bb9f02d2275c1b46344ea7b7",
+                    "x-checker-data": {
+                        "type": "anitya",
+                        "project-id": 11600,
+                        "stable-only": true,
+                        "url-template": "https://github.com/benhoyt/inih/archive/refs/tags/r$version.tar.gz"
+                    }
+                }
+            ]
+        },
         {
             "name": "exiv2",
             "buildsystem": "cmake-ninja",
@@ -53,29 +98,19 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/Exiv2/exiv2/releases/download/v0.27.6/exiv2-0.27.6-Source.tar.gz",
-                    "sha256": "4c192483a1125dc59a3d70b30d30d32edace9e14adf52802d2f853abf72db8a6",
+                    "url": "https://github.com/Exiv2/exiv2/archive/refs/tags/v0.28.3.tar.gz",
+                    "sha256": "1315e17d454bf4da3cc0edb857b1d2c143670f3485b537d0f946d9ed31d87b70",
                     "x-checker-data": {
                         "type": "anitya",
                         "project-id": 769,
                         "stable-only": true,
-                        "url-template": "https://github.com/Exiv2/exiv2/releases/download/v$version/exiv2-$version-Source.tar.gz"
+                        "url-template": "https://github.com/Exiv2/exiv2/archive/refs/tags/v$version.tar.gz"
                     }
                 }
             ]
         },
         {
             "name": "cfitsio",
-            "buildsystem": "simple",
-            "build-commands": [
-                "sed -e 's|LDFLAGS=.*|LDFLAGS=\"$LDFLAGS\"|g' -i configure.in",
-                "autoreconf -vi",
-                "./configure --prefix=/ --enable-reentrant",
-                "make shared",
-                "make utils",
-                "make DESTDIR=${FLATPAK_DEST} install",
-                "install -D -m644 licenses/* ${FLATPAK_DEST}/share/licenses/cfitsio/LICENSE"
-            ],
             "cleanup": [
                 "/bin/cookbook",
                 "/bin/smem",
@@ -84,8 +119,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio-4.4.1.tar.gz",
-                    "sha256": "66a1dc3f21800f9eeabd9eac577b91fcdd9aabba678fbba3b8527319110d1d25",
+                    "url": "http://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio-4.5.0.tar.gz",
+                    "sha256": "e4854fc3365c1462e493aa586bfaa2f3d0bb8c20b75a524955db64c27427ce09",
                     "x-checker-data": {
                         "type": "anitya",
                         "project-id": 270,
@@ -132,8 +167,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://www.libraw.org/data/LibRaw-0.21.2.tar.gz",
-                    "sha256": "fe7288013206854baf6e4417d0fb63ba4ed7227bf36fff021992671c2dd34b03",
+                    "url": "https://www.libraw.org/data/LibRaw-0.21.3.tar.gz",
+                    "sha256": "dba34b7fc1143503942fa32ad9db43e94f714e62a4a856e91617f8f3e1e0aa5c",
                     "x-checker-data": {
                         "type": "anitya",
                         "project-id": 1709,
@@ -175,8 +210,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://git.openldap.org/openldap/openldap/-/archive/LMDB_0.9.32/openldap-LMDB_0.9.32.tar.bz2",
-                    "sha256": "268c849e0b1c375f7545602a45e826c5e5ad9486555c155f46ca836b34294f5f",
+                    "url": "https://git.openldap.org/openldap/openldap/-/archive/LMDB_0.9.33/openldap-LMDB_0.9.33.tar.bz2",
+                    "sha256": "d19d52725800177b89d235161c0af8ae8b2932207e3c9eb87e95b61f1925206d",
                     "x-checker-data": {
                         "type": "anitya",
                         "project-id": 6974,
@@ -197,7 +232,7 @@
                 {
                     "type": "git",
                     "url": "https://invent.kde.org/frameworks/baloo",
-                    "tag": "v5.247.0"
+                    "branch": "master"
                 }
             ]
         },
@@ -248,6 +283,9 @@
         },
         {
             "name": "gwenview",
+            "config-opts": [
+                "-DBUILD_WITH_QT6=ON"
+            ],
             "buildsystem": "cmake-ninja",
             "builddir": true,
             "sources": [
