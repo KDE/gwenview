@@ -6,6 +6,7 @@ include:
     file:
       - /gitlab-templates/clang-format.yml
       - /gitlab-templates/linux-qt6.yml
+      - /gitlab-templates/linux-qt6-next.yml
       - /gitlab-templates/freebsd-qt6.yml
       - /gitlab-templates/flatpak.yml
       - /gitlab-templates/xml-lint.yml
