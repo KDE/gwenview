@@ -101,7 +101,9 @@ const QStringList &rasterImageMimeTypes()
             if (resolved.isEmpty()) {
                 qCWarning(GWENVIEW_LIB_LOG) << "Unresolved raw mime type " << rawMimetype;
             } else {
-                list << resolved;
+                if (!list.contains(resolved)) {
+                    list << resolved;
+                }
             }
         }
     }
