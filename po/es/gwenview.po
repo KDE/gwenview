@@ -1,15 +1,15 @@
 # Translation of gwenview to Spanish
-# Copyright (C) YEAR This_file_is_part_of_KDE
+# Copyright (C) 2007-2025 This_file_is_part_of_KDE
 # This file is distributed under the same license as the gwenview package.
 #
-# SPDX-FileCopyrightText: 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 Eloy Cuadra <ecuadra@eloihr.net>
+# SPDX-FileCopyrightText: 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 # SPDX-FileCopyrightText: 2013 Javier Viñal <fjvinal@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-02 00:38+0000\n"
-"PO-Revision-Date: 2024-10-17 22:23+0200\n"
+"PO-Revision-Date: 2025-02-18 02:24+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.08.2\n"
+"X-Generator: Lokalize 24.12.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -383,25 +383,25 @@ msgstr "Editar"
 #, kde-format
 msgctxt "Verb"
 msgid "Copy To..."
-msgstr "Copiar en..."
+msgstr "Copiar en…"
 
 #: app/fileopscontextmanageritem.cpp:149
 #, kde-format
 msgctxt "Verb"
 msgid "Move To..."
-msgstr "Mover a..."
+msgstr "Mover a…"
 
 #: app/fileopscontextmanageritem.cpp:154
 #, kde-format
 msgctxt "Verb: create link to the file where user wants"
 msgid "Link To..."
-msgstr "Enlazar a..."
+msgstr "Enlazar a…"
 
 #: app/fileopscontextmanageritem.cpp:159
 #, kde-format
 msgctxt "Verb"
 msgid "Rename..."
-msgstr "Cambiar nombre..."
+msgstr "Cambiar nombre…"
 
 #: app/fileopscontextmanageritem.cpp:164
 #, kde-format
@@ -422,7 +422,7 @@ msgstr "Propiedades"
 #: app/fileopscontextmanageritem.cpp:180
 #, kde-format
 msgid "Create Folder..."
-msgstr "Crear carpeta..."
+msgstr "Crear carpeta…"
 
 #: app/fileopscontextmanageritem.cpp:184
 #, kde-format
@@ -443,7 +443,7 @@ msgstr "Abrir la carpeta contenedora"
 #: app/fileopscontextmanageritem.cpp:387
 #, kde-format
 msgid "Other Application..."
-msgstr "Otra aplicación..."
+msgstr "Otra aplicación…"
 
 #: app/filtercontroller.cpp:60
 #, kde-format
@@ -590,7 +590,7 @@ msgstr "Información de la imagen"
 #: app/fullscreenconfigwidget.ui:101
 #, kde-format
 msgid "Select Image Information to Display..."
-msgstr "Seleccione la información de la imagen a mostrar..."
+msgstr "Seleccione la información de la imagen a mostrar…"
 
 #. i18n: ectx: property (title), widget (QGroupBox, mThumbnailGroupBox)
 #: app/fullscreenconfigwidget.ui:111
@@ -1064,7 +1064,7 @@ msgstr "%1:"
 #, kde-format
 msgctxt "@action show more image meta info"
 msgid "Show more details..."
-msgstr "Mostrar más detalles..."
+msgstr "Mostrar más detalles…"
 
 #: app/infocontextmanageritem.cpp:242
 #, kde-format
@@ -1446,7 +1446,7 @@ msgstr "Cambiar nombre"
 #, kde-format
 msgctxt "@info:progress saving all image changes"
 msgid "Saving..."
-msgstr "Guardando..."
+msgstr "Guardando…"
 
 #: app/saveallhelper.cpp:57
 #, kde-format
@@ -1716,12 +1716,12 @@ msgstr ""
 #: importer/dialogpage.cpp:52
 #, kde-format
 msgid "Show failed files..."
-msgstr "Mostrar los archivos que han fallado..."
+msgstr "Mostrar los archivos que han fallado…"
 
 #: importer/dialogpage.cpp:57
 #, kde-format
 msgid "Show failed subfolders..."
-msgstr "Mostrar las subcarpetas que han fallado..."
+msgstr "Mostrar las subcarpetas que han fallado…"
 
 #: importer/dialogpage.cpp:71
 #, kde-format
@@ -1943,7 +1943,7 @@ msgid ""
 "The device UDI, used to retrieve information about the device (name, icon...)"
 msgstr ""
 "El UDI del dispositivo, que se usa para obtener información sobre el mismo "
-"(nombre, icono...)"
+"(nombre, icono…)"
 
 #: importer/main.cpp:53
 #, kde-format
@@ -1974,7 +1974,7 @@ msgstr "Carpeta de origen no válida."
 #: importer/progresspage.ui:30
 #, kde-format
 msgid "Importing documents..."
-msgstr "Importando documentos..."
+msgstr "Importando documentos…"
 
 #: importer/thumbnailpage.cpp:231
 #, kde-format
@@ -2018,7 +2018,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Install Support for this Camera…"
-msgstr "Instalar compatibilidad para esta cámara..."
+msgstr "Instalar compatibilidad para esta cámara…"
 
 #: importer/thumbnailpage.cpp:257
 #, kde-format
@@ -2036,7 +2036,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Install Protocol Support for \"%1\"…"
-msgstr "Instalar la compatibilidad con el protocolo «%1»..."
+msgstr "Instalar la compatibilidad con el protocolo «%1»…"
 
 #: importer/thumbnailpage.cpp:261
 #, kde-format
@@ -2053,7 +2053,7 @@ msgstr ""
 msgctxt "@action:button %1 protocol name"
 msgid "Search the Web for How to Install Protocol Support for \"%1\"…"
 msgstr ""
-"Buscar en la web cómo instalar la compatibilidad con el protocolo «%1»..."
+"Buscar en la web cómo instalar la compatibilidad con el protocolo «%1»…"
 
 #: importer/thumbnailpage.cpp:281
 #, kde-format
@@ -2114,7 +2114,7 @@ msgstr "Seleccione los documentos a importar"
 #: importer/thumbnailpage.ui:185
 #, kde-format
 msgid "Settings..."
-msgstr "Preferencias..."
+msgstr "Preferencias…"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: importer/thumbnailpage.ui:201
@@ -2186,7 +2186,7 @@ msgstr "Apaisado"
 #: lib/crop/cropwidget.cpp:204 lib/crop/cropwidget.cpp:211
 #, kde-format
 msgid "ISO (A4, A3...)"
-msgstr "ISO (A4, A3...)"
+msgstr "ISO (A4, A3…)"
 
 #: lib/crop/cropwidget.cpp:205 lib/crop/cropwidget.cpp:212
 #, kde-format
