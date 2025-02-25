@@ -88,16 +88,6 @@
         },
         {
             "name": "cfitsio",
-            "buildsystem": "simple",
-            "build-commands": [
-                "sed -e 's|LDFLAGS=.*|LDFLAGS=\"$LDFLAGS\"|g' -i configure.in",
-                "autoreconf -vi",
-                "./configure --prefix=/ --enable-reentrant",
-                "make shared",
-                "make utils",
-                "make DESTDIR=${FLATPAK_DEST} install",
-                "install -D -m644 licenses/* ${FLATPAK_DEST}/share/licenses/cfitsio/LICENSE"
-            ],
             "cleanup": [
                 "/bin/cookbook",
                 "/bin/smem",
