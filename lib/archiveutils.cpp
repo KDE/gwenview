@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "archiveutils.h"
 
 // Qt
+#include <QImageReader>
 #include <QMimeDatabase>
 
 // KF
@@ -58,9 +59,11 @@ QString protocolForMimeType(const QString &mimeType)
         return it.value();
     }
 
-    if (mimeType == QLatin1String("image/svg+xml-compressed")) {
-        // We don't want .svgz to be considered as archives because QtSvg knows
-        // how to decode gzip-ed svg files
+    // If we find an image plugin that supports this mime type, use it to open instead
+    // of falling back to a protocol. This ensures we read .ora and .svgz correctly
+    // before opening them as zips.
+    const auto supportedMimeTypes = QImageReader::supportedMimeTypes();
+    if (supportedMimeTypes.contains(mimeType)) {
         cache.insert(mimeType, QString());
         return {};
     }
