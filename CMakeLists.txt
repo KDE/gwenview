@@ -205,6 +205,7 @@ set(IMAGE_MIME_TYPES_LIST
     image/webp
     image/x-tga
     image/x-xcf
+    image/openraster
     application/x-krita
 )
 if (KF6KDcraw_FOUND)
