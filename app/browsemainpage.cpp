@@ -105,6 +105,10 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage {
         mUrlNavigator = new KUrlNavigator(mFilePlacesModel, QUrl(), mUrlNavigatorContainer);
         mUrlNavigatorContainer->setAutoFillBackground(true);
         mUrlNavigatorContainer->setBackgroundRole(QPalette::Mid);
+        mUrlNavigatorContainer->setContentsMargins(mUrlNavigator->style()->pixelMetric(QStyle::PM_LayoutLeftMargin),
+                                                   mUrlNavigator->style()->pixelMetric(QStyle::PM_LayoutTopMargin),
+                                                   mUrlNavigator->style()->pixelMetric(QStyle::PM_LayoutRightMargin),
+                                                   mUrlNavigator->style()->pixelMetric(QStyle::PM_LayoutBottomMargin));
         auto layout = new QVBoxLayout(mUrlNavigatorContainer);
         layout->setContentsMargins(0, 0, 0, 0);
         layout->addWidget(mUrlNavigator);
