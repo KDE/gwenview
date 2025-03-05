@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-08 00:39+0000\n"
+"POT-Creation-Date: 2025-03-05 00:40+0000\n"
 "PO-Revision-Date: 2023-12-06 19:09+0100\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -137,105 +137,105 @@ msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
 msgid "Sidebar Alignment Spacer"
 msgstr "Oddeľovač bočného panela"
 
-#: app/browsemainpage.cpp:146 app/mainwindow.cpp:376 app/viewmainpage.cpp:410
+#: app/browsemainpage.cpp:150 app/mainwindow.cpp:376 app/viewmainpage.cpp:410
 #: lib/documentview/documentviewcontroller.cpp:55
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "View"
 msgstr "Zobraziť"
 
-#: app/browsemainpage.cpp:148
+#: app/browsemainpage.cpp:152
 #, kde-format
 msgctxt "@action:inmenu Navigation Bar"
 msgid "Edit Location"
 msgstr "Upraviť umiestnenie"
 
-#: app/browsemainpage.cpp:152
+#: app/browsemainpage.cpp:156
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Sort By"
 msgstr "Zoradiť podľa"
 
-#: app/browsemainpage.cpp:157
+#: app/browsemainpage.cpp:161
 #, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Name"
 msgstr "Názov"
 
-#: app/browsemainpage.cpp:160
+#: app/browsemainpage.cpp:164
 #, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Date"
 msgstr "Dátum"
 
-#: app/browsemainpage.cpp:163
+#: app/browsemainpage.cpp:167
 #, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Size"
 msgstr "Veľkosť"
 
-#: app/browsemainpage.cpp:167
+#: app/browsemainpage.cpp:171
 #, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Rating"
 msgstr "Hodnotenie"
 
-#: app/browsemainpage.cpp:174
+#: app/browsemainpage.cpp:178
 #, kde-format
 msgctxt "@action:inmenu Sort"
 msgid "Descending"
 msgstr "Klesajúci"
 
-#: app/browsemainpage.cpp:186
+#: app/browsemainpage.cpp:190
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Thumbnail Details"
 msgstr "Podrobnosti miniatúr"
 
-#: app/browsemainpage.cpp:187
+#: app/browsemainpage.cpp:191
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filename"
 msgstr "Názov súboru"
 
-#: app/browsemainpage.cpp:188
+#: app/browsemainpage.cpp:192
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Date"
 msgstr "Dátum"
 
-#: app/browsemainpage.cpp:189
+#: app/browsemainpage.cpp:193
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Image Size"
 msgstr "Veľkosť obrázka"
 
-#: app/browsemainpage.cpp:190
+#: app/browsemainpage.cpp:194
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "File Size"
 msgstr "Veľkosť súboru"
 
-#: app/browsemainpage.cpp:192
+#: app/browsemainpage.cpp:196
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rating"
 msgstr "Hodnotenie"
 
-#: app/browsemainpage.cpp:195 app/fileopscontextmanageritem.cpp:136
+#: app/browsemainpage.cpp:199 app/fileopscontextmanageritem.cpp:136
 #: app/mainwindow.cpp:375
 #, kde-format
 msgctxt "@title actions category"
 msgid "File"
 msgstr "Súbor"
 
-#: app/browsemainpage.cpp:197
+#: app/browsemainpage.cpp:201
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Add Folder to Places"
 msgstr "Pridať priečinok do miest"
 
-#: app/browsemainpage.cpp:246
+#: app/browsemainpage.cpp:250
 #, kde-format
 msgctxt ""
 "@info:status %1 number of selected documents, %2 total number of documents, "
@@ -243,7 +243,7 @@ msgctxt ""
 msgid "Selected %1 of %2 (%3)"
 msgstr "Vybratých %1 z %2 (%3)"
 
-#: app/browsemainpage.cpp:252
+#: app/browsemainpage.cpp:256
 #, kde-format
 msgctxt "@info:status Image files"
 msgid "%1 image"
@@ -252,7 +252,7 @@ msgstr[0] "%1 obrázok"
 msgstr[1] "%1 obrázky"
 msgstr[2] "%1 obrázkov"
 
-#: app/browsemainpage.cpp:253
+#: app/browsemainpage.cpp:257
 #, kde-format
 msgctxt "@info:status Video files"
 msgid "%1 video"
@@ -261,7 +261,7 @@ msgstr[0] "%1 video"
 msgstr[1] "%1 videá"
 msgstr[2] "%1 videí"
 
-#: app/browsemainpage.cpp:260
+#: app/browsemainpage.cpp:264
 #, kde-format
 msgctxt "@info:status images, videos"
 msgid "%1, %2"
@@ -2323,25 +2323,25 @@ msgid "Deselect"
 msgstr "Zrušiť výber"
 
 #: lib/documentview/documentview.cpp:260 lib/imagemetainfomodel.cpp:440
-#: lib/thumbnailview/previewitemdelegate.cpp:415
-#: lib/thumbnailview/previewitemdelegate.cpp:829
+#: lib/thumbnailview/previewitemdelegate.cpp:416
+#: lib/thumbnailview/previewitemdelegate.cpp:833
 #, kde-format
 msgctxt "@item:intable %1 is image width, %2 is image height"
 msgid "%1x%2"
 msgstr "%1x%2"
 
-#: lib/documentview/documentview.cpp:264 lib/zoomcombobox/zoomcombobox.cpp:318
+#: lib/documentview/documentview.cpp:265 lib/zoomcombobox/zoomcombobox.cpp:318
 #, kde-format
 msgctxt "Percent value"
 msgid "%1%"
 msgstr "%1%"
 
-#: lib/documentview/documentview.cpp:543
+#: lib/documentview/documentview.cpp:544
 #, kde-format
 msgid "Gwenview does not know how to display this kind of document"
 msgstr "Gwenview nevie zobraziť tento typ dokumentu"
 
-#: lib/documentview/documentview.cpp:649
+#: lib/documentview/documentview.cpp:650
 #, kde-kuit-format
 msgid "Loading <filename>%1</filename> failed"
 msgstr "Načítanie <filename>%1</filename> zlyhalo"

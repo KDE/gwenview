@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-08 00:39+0000\n"
+"POT-Creation-Date: 2025-03-05 00:40+0000\n"
 "PO-Revision-Date: 2012-07-13 22:35+0530\n"
 "Last-Translator: Deepayan Sarkar <deepayan.sarkar@gmail.com>\n"
 "Language-Team: American English <kde-translation@bengalinux.org>\n"
@@ -125,44 +125,44 @@ msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
 msgid "Sidebar Alignment Spacer"
 msgstr ""
 
-#: app/browsemainpage.cpp:146 app/mainwindow.cpp:376 app/viewmainpage.cpp:410
+#: app/browsemainpage.cpp:150 app/mainwindow.cpp:376 app/viewmainpage.cpp:410
 #: lib/documentview/documentviewcontroller.cpp:55
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "View"
 msgstr "ভিউ"
 
-#: app/browsemainpage.cpp:148
+#: app/browsemainpage.cpp:152
 #, kde-format
 msgctxt "@action:inmenu Navigation Bar"
 msgid "Edit Location"
 msgstr "অবস্থান সম্পাদনা"
 
-#: app/browsemainpage.cpp:152
+#: app/browsemainpage.cpp:156
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Sort By"
 msgstr "সাজাতে ব্যবহার করো"
 
-#: app/browsemainpage.cpp:157
+#: app/browsemainpage.cpp:161
 #, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Name"
 msgstr "নাম"
 
-#: app/browsemainpage.cpp:160
+#: app/browsemainpage.cpp:164
 #, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Date"
 msgstr "তারিখ"
 
-#: app/browsemainpage.cpp:163
+#: app/browsemainpage.cpp:167
 #, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Size"
 msgstr "মাপ"
 
-#: app/browsemainpage.cpp:167
+#: app/browsemainpage.cpp:171
 #, fuzzy, kde-format
 #| msgctxt "@action:inmenu"
 #| msgid "Rating"
@@ -170,62 +170,62 @@ msgctxt "@addAction:inmenu"
 msgid "Rating"
 msgstr "রেটিং"
 
-#: app/browsemainpage.cpp:174
+#: app/browsemainpage.cpp:178
 #, kde-format
 msgctxt "@action:inmenu Sort"
 msgid "Descending"
 msgstr ""
 
-#: app/browsemainpage.cpp:186
+#: app/browsemainpage.cpp:190
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Thumbnail Details"
 msgstr ""
 
-#: app/browsemainpage.cpp:187
+#: app/browsemainpage.cpp:191
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filename"
 msgstr "ফাইলের নাম"
 
-#: app/browsemainpage.cpp:188
+#: app/browsemainpage.cpp:192
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Date"
 msgstr "তারিখ"
 
-#: app/browsemainpage.cpp:189
+#: app/browsemainpage.cpp:193
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Image Size"
 msgstr "ছবির মাপ"
 
-#: app/browsemainpage.cpp:190
+#: app/browsemainpage.cpp:194
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "File Size"
 msgstr "ফাইল-এর মাপ"
 
-#: app/browsemainpage.cpp:192
+#: app/browsemainpage.cpp:196
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rating"
 msgstr "রেটিং"
 
-#: app/browsemainpage.cpp:195 app/fileopscontextmanageritem.cpp:136
+#: app/browsemainpage.cpp:199 app/fileopscontextmanageritem.cpp:136
 #: app/mainwindow.cpp:375
 #, kde-format
 msgctxt "@title actions category"
 msgid "File"
 msgstr "ফাইল"
 
-#: app/browsemainpage.cpp:197
+#: app/browsemainpage.cpp:201
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Add Folder to Places"
 msgstr "ফোল্ডার স্থানতালিকায় যোগ করো"
 
-#: app/browsemainpage.cpp:246
+#: app/browsemainpage.cpp:250
 #, kde-format
 msgctxt ""
 "@info:status %1 number of selected documents, %2 total number of documents, "
@@ -233,7 +233,7 @@ msgctxt ""
 msgid "Selected %1 of %2 (%3)"
 msgstr ""
 
-#: app/browsemainpage.cpp:252
+#: app/browsemainpage.cpp:256
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Go to next image"
@@ -243,7 +243,7 @@ msgid_plural "%1 images"
 msgstr[0] "পরবর্তী ছবিতে যাও"
 msgstr[1] "পরবর্তী ছবিতে যাও"
 
-#: app/browsemainpage.cpp:253
+#: app/browsemainpage.cpp:257
 #, fuzzy, kde-format
 #| msgid "Show videos"
 msgctxt "@info:status Video files"
@@ -252,7 +252,7 @@ msgid_plural "%1 videos"
 msgstr[0] "ভিডিও দেখাও"
 msgstr[1] "ভিডিও দেখাও"
 
-#: app/browsemainpage.cpp:260
+#: app/browsemainpage.cpp:264
 #, kde-format
 msgctxt "@info:status images, videos"
 msgid "%1, %2"
@@ -2311,14 +2311,14 @@ msgid "Deselect"
 msgstr "অ-নির্বাচন করো"
 
 #: lib/documentview/documentview.cpp:260 lib/imagemetainfomodel.cpp:440
-#: lib/thumbnailview/previewitemdelegate.cpp:415
-#: lib/thumbnailview/previewitemdelegate.cpp:829
+#: lib/thumbnailview/previewitemdelegate.cpp:416
+#: lib/thumbnailview/previewitemdelegate.cpp:833
 #, kde-format
 msgctxt "@item:intable %1 is image width, %2 is image height"
 msgid "%1x%2"
 msgstr "%1x%2"
 
-#: lib/documentview/documentview.cpp:264 lib/zoomcombobox/zoomcombobox.cpp:318
+#: lib/documentview/documentview.cpp:265 lib/zoomcombobox/zoomcombobox.cpp:318
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip of custom toolbar button"
 #| msgid "%1"
@@ -2326,12 +2326,12 @@ msgctxt "Percent value"
 msgid "%1%"
 msgstr "%1"
 
-#: lib/documentview/documentview.cpp:543
+#: lib/documentview/documentview.cpp:544
 #, kde-format
 msgid "Gwenview does not know how to display this kind of document"
 msgstr ""
 
-#: lib/documentview/documentview.cpp:649
+#: lib/documentview/documentview.cpp:650
 #, fuzzy, kde-kuit-format
 #| msgctxt ""
 #| "@info %1 is the name of the document which failed to save, %2 is the "

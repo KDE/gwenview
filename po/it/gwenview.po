@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-08 00:39+0000\n"
+"POT-Creation-Date: 2025-03-05 00:40+0000\n"
 "PO-Revision-Date: 2024-10-17 15:59+0200\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -143,68 +143,68 @@ msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
 msgid "Sidebar Alignment Spacer"
 msgstr "Spaziatore di allineamento della barra laterale"
 
-#: app/browsemainpage.cpp:146 app/mainwindow.cpp:376 app/viewmainpage.cpp:410
+#: app/browsemainpage.cpp:150 app/mainwindow.cpp:376 app/viewmainpage.cpp:410
 #: lib/documentview/documentviewcontroller.cpp:55
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "View"
 msgstr "Visualizza"
 
-#: app/browsemainpage.cpp:148
+#: app/browsemainpage.cpp:152
 #, kde-format
 msgctxt "@action:inmenu Navigation Bar"
 msgid "Edit Location"
 msgstr "Modifica indirizzo"
 
-#: app/browsemainpage.cpp:152
+#: app/browsemainpage.cpp:156
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Sort By"
 msgstr "Ordina per"
 
-#: app/browsemainpage.cpp:157
+#: app/browsemainpage.cpp:161
 #, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Name"
 msgstr "Nome"
 
-#: app/browsemainpage.cpp:160
+#: app/browsemainpage.cpp:164
 #, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Date"
 msgstr "Data"
 
-#: app/browsemainpage.cpp:163
+#: app/browsemainpage.cpp:167
 #, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Size"
 msgstr "Dimensione"
 
-#: app/browsemainpage.cpp:167
+#: app/browsemainpage.cpp:171
 #, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Rating"
 msgstr "Voto"
 
-#: app/browsemainpage.cpp:174
+#: app/browsemainpage.cpp:178
 #, kde-format
 msgctxt "@action:inmenu Sort"
 msgid "Descending"
 msgstr "Decrescente"
 
-#: app/browsemainpage.cpp:186
+#: app/browsemainpage.cpp:190
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Thumbnail Details"
 msgstr "Dettagli delle miniature"
 
-#: app/browsemainpage.cpp:187
+#: app/browsemainpage.cpp:191
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filename"
 msgstr "Nome del file"
 
-#: app/browsemainpage.cpp:188
+#: app/browsemainpage.cpp:192
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Date"
@@ -212,38 +212,38 @@ msgstr "Data"
 
 # «Dimensione dell'immagine» è troppo lungo, secondo una segnalazione:
 # https://bugs.kde.org/show_bug.cgi?id=171581
-#: app/browsemainpage.cpp:189
+#: app/browsemainpage.cpp:193
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Image Size"
 msgstr "Dimensione"
 
-#: app/browsemainpage.cpp:190
+#: app/browsemainpage.cpp:194
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "File Size"
 msgstr "Dimensione del file"
 
-#: app/browsemainpage.cpp:192
+#: app/browsemainpage.cpp:196
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rating"
 msgstr "Voto"
 
-#: app/browsemainpage.cpp:195 app/fileopscontextmanageritem.cpp:136
+#: app/browsemainpage.cpp:199 app/fileopscontextmanageritem.cpp:136
 #: app/mainwindow.cpp:375
 #, kde-format
 msgctxt "@title actions category"
 msgid "File"
 msgstr "File"
 
-#: app/browsemainpage.cpp:197
+#: app/browsemainpage.cpp:201
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Add Folder to Places"
 msgstr "Aggiungi cartella a Risorse"
 
-#: app/browsemainpage.cpp:246
+#: app/browsemainpage.cpp:250
 #, kde-format
 msgctxt ""
 "@info:status %1 number of selected documents, %2 total number of documents, "
@@ -251,7 +251,7 @@ msgctxt ""
 msgid "Selected %1 of %2 (%3)"
 msgstr "Selezionati %1 di %2 (%3)"
 
-#: app/browsemainpage.cpp:252
+#: app/browsemainpage.cpp:256
 #, kde-format
 msgctxt "@info:status Image files"
 msgid "%1 image"
@@ -259,7 +259,7 @@ msgid_plural "%1 images"
 msgstr[0] "%1 immagine"
 msgstr[1] "%1 immagini"
 
-#: app/browsemainpage.cpp:253
+#: app/browsemainpage.cpp:257
 #, kde-format
 msgctxt "@info:status Video files"
 msgid "%1 video"
@@ -267,7 +267,7 @@ msgid_plural "%1 videos"
 msgstr[0] "%1 video"
 msgstr[1] "%1 video"
 
-#: app/browsemainpage.cpp:260
+#: app/browsemainpage.cpp:264
 #, kde-format
 msgctxt "@info:status images, videos"
 msgid "%1, %2"
@@ -2300,25 +2300,25 @@ msgid "Deselect"
 msgstr "Deseleziona"
 
 #: lib/documentview/documentview.cpp:260 lib/imagemetainfomodel.cpp:440
-#: lib/thumbnailview/previewitemdelegate.cpp:415
-#: lib/thumbnailview/previewitemdelegate.cpp:829
+#: lib/thumbnailview/previewitemdelegate.cpp:416
+#: lib/thumbnailview/previewitemdelegate.cpp:833
 #, kde-format
 msgctxt "@item:intable %1 is image width, %2 is image height"
 msgid "%1x%2"
 msgstr "%1×%2"
 
-#: lib/documentview/documentview.cpp:264 lib/zoomcombobox/zoomcombobox.cpp:318
+#: lib/documentview/documentview.cpp:265 lib/zoomcombobox/zoomcombobox.cpp:318
 #, kde-format
 msgctxt "Percent value"
 msgid "%1%"
 msgstr "%1%"
 
-#: lib/documentview/documentview.cpp:543
+#: lib/documentview/documentview.cpp:544
 #, kde-format
 msgid "Gwenview does not know how to display this kind of document"
 msgstr "Gwenview non sa come visualizzare questo tipo di documento"
 
-#: lib/documentview/documentview.cpp:649
+#: lib/documentview/documentview.cpp:650
 #, kde-kuit-format
 msgid "Loading <filename>%1</filename> failed"
 msgstr "Caricamento di <filename>%1</filename> non riuscito"
