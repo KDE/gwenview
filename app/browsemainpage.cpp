@@ -201,7 +201,7 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage {
         mShowHiddenFilesAction->setIcon(QIcon::fromTheme(QStringLiteral("view-visible")));
         mShowHiddenFilesAction->setChecked(mDirModel->isShowHiddenFiles());
         actionCollection->setDefaultShortcuts(mShowHiddenFilesAction, KStandardShortcut::showHideHiddenFiles());
-        QObject::connect(mShowHiddenFilesAction, SIGNAL(triggered(bool)), q, SLOT(slotToggleShowHiddenFiles()));
+        QObject::connect(mShowHiddenFilesAction, SIGNAL(toggled(bool)), q, SLOT(slotToggleShowHiddenFiles()));
 
         auto file = new KActionCategory(i18nc("@title actions category", "File"), actionCollection);
         action = file->addAction(QStringLiteral("add_folder_to_places"), q, SLOT(addFolderToPlaces()));
@@ -380,6 +380,7 @@ void BrowseMainPage::loadConfig()
         }
     }
     d->mSortDescendingAction->setChecked(GwenviewConfig::sortDescending());
+    d->mShowHiddenFilesAction->setChecked(GwenviewConfig::showHiddenFiles());
 
     d->updateContextBarActions();
 }
@@ -392,6 +393,7 @@ void BrowseMainPage::saveConfig() const
     GwenviewConfig::setSorting(sortingFromSortAction(d->mSortAction->checkedAction()));
     GwenviewConfig::setSortDescending(d->mSortDescendingAction->isChecked());
     GwenviewConfig::setThumbnailDetails(d->mDelegate->thumbnailDetails());
+    GwenviewConfig::setShowHiddenFiles(d->mShowHiddenFilesAction->isChecked());
 }
 
 bool BrowseMainPage::eventFilter(QObject *watched, QEvent *event)
