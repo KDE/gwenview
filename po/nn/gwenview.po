@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-05 00:40+0000\n"
+"POT-Creation-Date: 2025-03-07 00:40+0000\n"
 "PO-Revision-Date: 2024-10-27 14:45+0100\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -139,105 +139,112 @@ msgid "Sidebar Alignment Spacer"
 msgstr "Mellomrom for sidestolpe"
 
 # unreviewed-context
-#: app/browsemainpage.cpp:150 app/mainwindow.cpp:376 app/viewmainpage.cpp:410
+#: app/browsemainpage.cpp:151 app/mainwindow.cpp:376 app/viewmainpage.cpp:410
 #: lib/documentview/documentviewcontroller.cpp:55
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "View"
 msgstr "Vis"
 
-#: app/browsemainpage.cpp:152
+#: app/browsemainpage.cpp:153
 #, kde-format
 msgctxt "@action:inmenu Navigation Bar"
 msgid "Edit Location"
 msgstr "Rediger adresse"
 
-#: app/browsemainpage.cpp:156
+#: app/browsemainpage.cpp:157
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Sort By"
 msgstr "Sorter etter"
 
-#: app/browsemainpage.cpp:161
+#: app/browsemainpage.cpp:162
 #, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Name"
 msgstr "Namn"
 
-#: app/browsemainpage.cpp:164
+#: app/browsemainpage.cpp:165
 #, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Date"
 msgstr "Dato"
 
-#: app/browsemainpage.cpp:167
+#: app/browsemainpage.cpp:168
 #, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Size"
 msgstr "Storleik"
 
-#: app/browsemainpage.cpp:171
+#: app/browsemainpage.cpp:172
 #, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Rating"
 msgstr "Karakter"
 
-#: app/browsemainpage.cpp:178
+#: app/browsemainpage.cpp:179
 #, kde-format
 msgctxt "@action:inmenu Sort"
 msgid "Descending"
 msgstr "Synkande"
 
-#: app/browsemainpage.cpp:190
+#: app/browsemainpage.cpp:191
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Thumbnail Details"
 msgstr "Miniatyrbiletdetaljar"
 
-#: app/browsemainpage.cpp:191
+#: app/browsemainpage.cpp:192
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filename"
 msgstr "Filnamn"
 
-#: app/browsemainpage.cpp:192
+#: app/browsemainpage.cpp:193
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Date"
 msgstr "Dato"
 
-#: app/browsemainpage.cpp:193
+#: app/browsemainpage.cpp:194
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Image Size"
 msgstr "Biletstorleik"
 
-#: app/browsemainpage.cpp:194
+#: app/browsemainpage.cpp:195
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "File Size"
 msgstr "Filstorleik"
 
-#: app/browsemainpage.cpp:196
+#: app/browsemainpage.cpp:197
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rating"
 msgstr "Karakter"
 
-#: app/browsemainpage.cpp:199 app/fileopscontextmanageritem.cpp:136
+#: app/browsemainpage.cpp:200
+#, fuzzy, kde-format
+#| msgid "Show failed files..."
+msgctxt "@action:inmenu View"
+msgid "Show Hidden Files"
+msgstr "Vis filer med importfeil …"
+
+#: app/browsemainpage.cpp:206 app/fileopscontextmanageritem.cpp:136
 #: app/mainwindow.cpp:375
 #, kde-format
 msgctxt "@title actions category"
 msgid "File"
 msgstr "Fil"
 
-#: app/browsemainpage.cpp:201
+#: app/browsemainpage.cpp:208
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Add Folder to Places"
 msgstr "Legg mappa til «Stadar»-elementet"
 
-#: app/browsemainpage.cpp:250
+#: app/browsemainpage.cpp:257
 #, kde-format
 msgctxt ""
 "@info:status %1 number of selected documents, %2 total number of documents, "
@@ -245,7 +252,7 @@ msgctxt ""
 msgid "Selected %1 of %2 (%3)"
 msgstr "Merkt %1 av %2 (%3)"
 
-#: app/browsemainpage.cpp:256
+#: app/browsemainpage.cpp:263
 #, kde-format
 msgctxt "@info:status Image files"
 msgid "%1 image"
@@ -253,7 +260,7 @@ msgid_plural "%1 images"
 msgstr[0] "%1 bilete"
 msgstr[1] "%1 bilete"
 
-#: app/browsemainpage.cpp:257
+#: app/browsemainpage.cpp:264
 #, kde-format
 msgctxt "@info:status Video files"
 msgid "%1 video"
@@ -261,7 +268,7 @@ msgid_plural "%1 videos"
 msgstr[0] "%1 video"
 msgstr[1] "%1 videoar"
 
-#: app/browsemainpage.cpp:264
+#: app/browsemainpage.cpp:271
 #, kde-format
 msgctxt "@info:status images, videos"
 msgid "%1, %2"
@@ -817,13 +824,13 @@ msgid "Go back to the original"
 msgstr "Gå tilbake til originalen"
 
 #. i18n: ectx: Menu (rating)
-#: app/gwenviewui.rc:56
+#: app/gwenviewui.rc:57
 #, kde-format
 msgid "&Rating"
 msgstr "&Karakter"
 
 #. i18n: ectx: ToolBar (mainToolBar)
-#: app/gwenviewui.rc:89 part/gvpart.rc:16
+#: app/gwenviewui.rc:90 part/gvpart.rc:16
 #, kde-format
 msgid "Main Toolbar"
 msgstr "Hovudverktøylinje"
@@ -2448,7 +2455,7 @@ msgstr ""
 "         som KSaveFile brukar for mellombelse filer."
 
 #. i18n: ectx: whatsthis, entry (ZoomMode), group (ImageView)
-#: lib/gwenviewconfig.kcfg:211
+#: lib/gwenviewconfig.kcfg:214
 #, kde-format
 msgid ""
 "Defines what happens when going to image B after\n"
@@ -2479,7 +2486,7 @@ msgstr ""
 "            og plassering)."
 
 #. i18n: ectx: whatsthis, entry (RenderingIntent), group (ImageView)
-#: lib/gwenviewconfig.kcfg:225
+#: lib/gwenviewconfig.kcfg:228
 #, kde-format
 msgid ""
 "Defines how colors are rendered when your display\n"
@@ -2502,37 +2509,37 @@ msgstr ""
 "            verta verande slik dei er."
 
 #. i18n: ectx: label, entry (random), group (slide show)
-#: lib/gwenviewconfig.kcfg:336
+#: lib/gwenviewconfig.kcfg:339
 #, kde-format
 msgid "Display slide show images in random order"
 msgstr "Vis bileta i lysbiletframvisinga i tilfeldig rekkjefølgje"
 
 #. i18n: ectx: label, entry (fullscreen), group (slide show)
-#: lib/gwenviewconfig.kcfg:340
+#: lib/gwenviewconfig.kcfg:343
 #, kde-format
 msgid "Show slideshow in fullscreen mode"
 msgstr "Vis lysbiletvisinga med fullskjerm"
 
 #. i18n: ectx: label, entry (loop), group (slide show)
-#: lib/gwenviewconfig.kcfg:344
+#: lib/gwenviewconfig.kcfg:347
 #, kde-format
 msgid "Loop on images"
 msgstr "Vis bileta om og om att"
 
 #. i18n: ectx: label, entry (stopAtEnd), group (slide show)
-#: lib/gwenviewconfig.kcfg:348
+#: lib/gwenviewconfig.kcfg:351
 #, kde-format
 msgid "Stop at last image of folder"
 msgstr "Stopp ved det siste biletet i mappa"
 
 #. i18n: ectx: label, entry (interval), group (slide show)
-#: lib/gwenviewconfig.kcfg:352
+#: lib/gwenviewconfig.kcfg:355
 #, kde-format
 msgid "Interval between images (in seconds)"
 msgstr "Kor lenge kvart bilete skal visast (i sekund)"
 
 #. i18n: ectx: label, entry (CropPreserveAspectRatio), group (Crop)
-#: lib/gwenviewconfig.kcfg:368
+#: lib/gwenviewconfig.kcfg:371
 #, kde-format
 msgid "Restrict crop to image ratio when Advanced Settings disabled"
 msgstr ""
@@ -2540,19 +2547,19 @@ msgstr ""
 "slått av"
 
 #. i18n: ectx: label, entry (CropRatioIndex), group (Crop)
-#: lib/gwenviewconfig.kcfg:372
+#: lib/gwenviewconfig.kcfg:375
 #, kde-format
 msgid "Index representing selected ratio in the Advanced settings combobox"
 msgstr "Indeksen representerer det forholdet valt i avanserte innstillingar"
 
 #. i18n: ectx: label, entry (CropRatioWidth), group (Crop)
-#: lib/gwenviewconfig.kcfg:376
+#: lib/gwenviewconfig.kcfg:379
 #, kde-format
 msgid "Last used crop ratio width when Advanced Settings enabled"
 msgstr "Sist brukte relativ breidd når avanserte innstillingar er på"
 
 #. i18n: ectx: label, entry (CropRatioHeight), group (Crop)
-#: lib/gwenviewconfig.kcfg:380
+#: lib/gwenviewconfig.kcfg:383
 #, kde-format
 msgid "Last used crop ratio height when Advanced Settings enabled"
 msgstr "Sist brukte relativ høgd når avanserte innstillingar er på"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-05 00:40+0000\n"
+"POT-Creation-Date: 2025-03-07 00:40+0000\n"
 "PO-Revision-Date: 2024-12-26 21:43+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
@@ -137,105 +137,112 @@ msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
 msgid "Sidebar Alignment Spacer"
 msgstr "Flankmenuo Alineación Spacer"
 
-#: app/browsemainpage.cpp:150 app/mainwindow.cpp:376 app/viewmainpage.cpp:410
+#: app/browsemainpage.cpp:151 app/mainwindow.cpp:376 app/viewmainpage.cpp:410
 #: lib/documentview/documentviewcontroller.cpp:55
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "View"
 msgstr "Vidi"
 
-#: app/browsemainpage.cpp:152
+#: app/browsemainpage.cpp:153
 #, kde-format
 msgctxt "@action:inmenu Navigation Bar"
 msgid "Edit Location"
 msgstr "Redaktu Lokon"
 
-#: app/browsemainpage.cpp:156
+#: app/browsemainpage.cpp:157
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Sort By"
 msgstr "Ordigi laŭ"
 
-#: app/browsemainpage.cpp:161
+#: app/browsemainpage.cpp:162
 #, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Name"
 msgstr "Nomo"
 
-#: app/browsemainpage.cpp:164
+#: app/browsemainpage.cpp:165
 #, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Date"
 msgstr "Dato"
 
-#: app/browsemainpage.cpp:167
+#: app/browsemainpage.cpp:168
 #, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Size"
 msgstr "Grandeco"
 
-#: app/browsemainpage.cpp:171
+#: app/browsemainpage.cpp:172
 #, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Rating"
 msgstr "Taksado"
 
-#: app/browsemainpage.cpp:178
+#: app/browsemainpage.cpp:179
 #, kde-format
 msgctxt "@action:inmenu Sort"
 msgid "Descending"
 msgstr "Malkreskanta"
 
-#: app/browsemainpage.cpp:190
+#: app/browsemainpage.cpp:191
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Thumbnail Details"
 msgstr "Detaloj de Bildetoj"
 
-#: app/browsemainpage.cpp:191
+#: app/browsemainpage.cpp:192
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filename"
 msgstr "Dosiernomo"
 
-#: app/browsemainpage.cpp:192
+#: app/browsemainpage.cpp:193
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Date"
 msgstr "Dato"
 
-#: app/browsemainpage.cpp:193
+#: app/browsemainpage.cpp:194
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Image Size"
 msgstr "Bilda grandeco"
 
-#: app/browsemainpage.cpp:194
+#: app/browsemainpage.cpp:195
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "File Size"
 msgstr "Dosiera grandeco"
 
-#: app/browsemainpage.cpp:196
+#: app/browsemainpage.cpp:197
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rating"
 msgstr "Taksado"
 
-#: app/browsemainpage.cpp:199 app/fileopscontextmanageritem.cpp:136
+#: app/browsemainpage.cpp:200
+#, fuzzy, kde-format
+#| msgid "Show failed files..."
+msgctxt "@action:inmenu View"
+msgid "Show Hidden Files"
+msgstr "Montri malsukcesajn dosierojn..."
+
+#: app/browsemainpage.cpp:206 app/fileopscontextmanageritem.cpp:136
 #: app/mainwindow.cpp:375
 #, kde-format
 msgctxt "@title actions category"
 msgid "File"
 msgstr "Dosiero"
 
-#: app/browsemainpage.cpp:201
+#: app/browsemainpage.cpp:208
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Add Folder to Places"
 msgstr "Aldoni Dosierujon al Lokoj"
 
-#: app/browsemainpage.cpp:250
+#: app/browsemainpage.cpp:257
 #, kde-format
 msgctxt ""
 "@info:status %1 number of selected documents, %2 total number of documents, "
@@ -243,7 +250,7 @@ msgctxt ""
 msgid "Selected %1 of %2 (%3)"
 msgstr "Elektita %1 el %2 (%3)"
 
-#: app/browsemainpage.cpp:256
+#: app/browsemainpage.cpp:263
 #, kde-format
 msgctxt "@info:status Image files"
 msgid "%1 image"
@@ -251,7 +258,7 @@ msgid_plural "%1 images"
 msgstr[0] "%1 bildo"
 msgstr[1] "%1 bildoj"
 
-#: app/browsemainpage.cpp:257
+#: app/browsemainpage.cpp:264
 #, kde-format
 msgctxt "@info:status Video files"
 msgid "%1 video"
@@ -259,7 +266,7 @@ msgid_plural "%1 videos"
 msgstr[0] "%1 filmo"
 msgstr[1] "%1 filmoj"
 
-#: app/browsemainpage.cpp:264
+#: app/browsemainpage.cpp:271
 #, kde-format
 msgctxt "@info:status images, videos"
 msgid "%1, %2"
@@ -813,13 +820,13 @@ msgid "Go back to the original"
 msgstr "Reiri al la originalo"
 
 #. i18n: ectx: Menu (rating)
-#: app/gwenviewui.rc:56
+#: app/gwenviewui.rc:57
 #, kde-format
 msgid "&Rating"
 msgstr "&Taksado"
 
 #. i18n: ectx: ToolBar (mainToolBar)
-#: app/gwenviewui.rc:89 part/gvpart.rc:16
+#: app/gwenviewui.rc:90 part/gvpart.rc:16
 #, kde-format
 msgid "Main Toolbar"
 msgstr "Ĉefa Ilobreto"
@@ -2437,7 +2444,7 @@ msgstr ""
 "            uzata por provizoraj dosieroj de KSaveFile."
 
 #. i18n: ectx: whatsthis, entry (ZoomMode), group (ImageView)
-#: lib/gwenviewconfig.kcfg:211
+#: lib/gwenviewconfig.kcfg:214
 #, kde-format
 msgid ""
 "Defines what happens when going to image B after\n"
@@ -2469,7 +2476,7 @@ msgstr ""
 "            montriĝos kun la ĝisdatigitaj zomo kaj pozicio)."
 
 #. i18n: ectx: whatsthis, entry (RenderingIntent), group (ImageView)
-#: lib/gwenviewconfig.kcfg:225
+#: lib/gwenviewconfig.kcfg:228
 #, kde-format
 msgid ""
 "Defines how colors are rendered when your display\n"
@@ -2489,44 +2496,44 @@ msgstr ""
 "netuŝitaj."
 
 #. i18n: ectx: label, entry (random), group (slide show)
-#: lib/gwenviewconfig.kcfg:336
+#: lib/gwenviewconfig.kcfg:339
 #, kde-format
 msgid "Display slide show images in random order"
 msgstr "Montri bildoprezentojn en hazarda ordo"
 
 #. i18n: ectx: label, entry (fullscreen), group (slide show)
-#: lib/gwenviewconfig.kcfg:340
+#: lib/gwenviewconfig.kcfg:343
 #, kde-format
 msgid "Show slideshow in fullscreen mode"
 msgstr "Montru bildaron en plenekrana reĝimo"
 
 #. i18n: ectx: label, entry (loop), group (slide show)
-#: lib/gwenviewconfig.kcfg:344
+#: lib/gwenviewconfig.kcfg:347
 #, kde-format
 msgid "Loop on images"
 msgstr "Buklo sur bildoj"
 
 #. i18n: ectx: label, entry (stopAtEnd), group (slide show)
-#: lib/gwenviewconfig.kcfg:348
+#: lib/gwenviewconfig.kcfg:351
 #, kde-format
 msgid "Stop at last image of folder"
 msgstr "Ĉesi ĉe la lasta bildo de dosierujo"
 
 #. i18n: ectx: label, entry (interval), group (slide show)
-#: lib/gwenviewconfig.kcfg:352
+#: lib/gwenviewconfig.kcfg:355
 #, kde-format
 msgid "Interval between images (in seconds)"
 msgstr "Intervalo inter bildoj (en sekundoj)"
 
 #. i18n: ectx: label, entry (CropPreserveAspectRatio), group (Crop)
-#: lib/gwenviewconfig.kcfg:368
+#: lib/gwenviewconfig.kcfg:371
 #, kde-format
 msgid "Restrict crop to image ratio when Advanced Settings disabled"
 msgstr ""
 "Limigi rikolton al bilda proporcio kiam Altnivelaj Agordoj estas malŝaltita"
 
 #. i18n: ectx: label, entry (CropRatioIndex), group (Crop)
-#: lib/gwenviewconfig.kcfg:372
+#: lib/gwenviewconfig.kcfg:375
 #, kde-format
 msgid "Index representing selected ratio in the Advanced settings combobox"
 msgstr ""
@@ -2534,13 +2541,13 @@ msgstr ""
 "agordoj"
 
 #. i18n: ectx: label, entry (CropRatioWidth), group (Crop)
-#: lib/gwenviewconfig.kcfg:376
+#: lib/gwenviewconfig.kcfg:379
 #, kde-format
 msgid "Last used crop ratio width when Advanced Settings enabled"
 msgstr "Laste uzata riproporcio-larĝo kiam Altnivelaj Agordoj estas ebligita"
 
 #. i18n: ectx: label, entry (CropRatioHeight), group (Crop)
-#: lib/gwenviewconfig.kcfg:380
+#: lib/gwenviewconfig.kcfg:383
 #, kde-format
 msgid "Last used crop ratio height when Advanced Settings enabled"
 msgstr ""
