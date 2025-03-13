@@ -36,6 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KColorUtils>
 #include <KFileCustomDialog>
 #include <KFileWidget>
+#include <KLocalization>
 #include <KLocalizedString>
 #include <KMessageBox>
 
@@ -84,7 +85,7 @@ struct GvCorePrivate {
         JPEGQualityChooserSpinBox->setMinimum(1);
         JPEGQualityChooserSpinBox->setMaximum(100);
         JPEGQualityChooserSpinBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        JPEGQualityChooserSpinBox->setSuffix(i18nc("Spinbox suffix; percentage 1 - 100", "%"));
+        KLocalization::setupSpinBoxFormatString(JPEGQualityChooserSpinBox, ki18nc("@label:spinbox Percentage 1-100", "%v%"));
         configFileJPEGQualityValue = GwenviewConfig::jPEGQuality();
         JPEGQualityChooserSpinBox->setValue(configFileJPEGQualityValue);
 
