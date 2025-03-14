@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-07 00:40+0000\n"
+"POT-Creation-Date: 2025-03-14 00:40+0000\n"
 "PO-Revision-Date: 2012-07-13 22:35+0530\n"
 "Last-Translator: Deepayan Sarkar <deepayan.sarkar@gmail.com>\n"
 "Language-Team: American English <kde-translation@bengalinux.org>\n"
@@ -782,20 +782,20 @@ msgctxt "A number of thumbnail actions to show"
 msgid "None"
 msgstr "কিছু না"
 
-#: app/gvcore.cpp:80
+#: app/gvcore.cpp:81
 #, kde-format
 msgid "Image quality:"
 msgstr ""
 
-#: app/gvcore.cpp:87
+#: app/gvcore.cpp:88
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip of custom toolbar button"
 #| msgid "%1"
-msgctxt "Spinbox suffix; percentage 1 - 100"
-msgid "%"
+msgctxt "@label:spinbox Percentage 1-100"
+msgid "%v%"
 msgstr "%1"
 
-#: app/gvcore.cpp:112
+#: app/gvcore.cpp:113
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Open Image"
@@ -803,23 +803,23 @@ msgctxt "@title:window"
 msgid "Save Image"
 msgstr "ছবি খোল"
 
-#: app/gvcore.cpp:413
+#: app/gvcore.cpp:414
 #, kde-format
 msgid "Save using another format"
 msgstr "অন্য ফরম্যাট-এ সংরক্ষণ করো"
 
-#: app/gvcore.cpp:415
+#: app/gvcore.cpp:416
 #, kde-format
 msgid "Gwenview cannot save images in '%1' format."
 msgstr ""
 
-#: app/gvcore.cpp:443
+#: app/gvcore.cpp:444
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot save images as %1."
 msgstr ""
 
-#: app/gvcore.cpp:461 app/gvcore.cpp:495
+#: app/gvcore.cpp:462 app/gvcore.cpp:496
 #, fuzzy, kde-kuit-format
 #| msgctxt ""
 #| "@info %1 is the name of the document which failed to save, %2 is the "
@@ -831,12 +831,12 @@ msgid ""
 "emphasis><nl />%2"
 msgstr "<filename>%1</filename>: %2"
 
-#: app/gvcore.cpp:511
+#: app/gvcore.cpp:512
 #, kde-format
 msgid "You are now viewing the new document."
 msgstr ""
 
-#: app/gvcore.cpp:513
+#: app/gvcore.cpp:514
 #, kde-format
 msgid "Go back to the original"
 msgstr "মূল ছবিতে ফিরে যাও"
@@ -2892,6 +2892,13 @@ msgstr "ফা&ইল"
 #, kde-format
 msgid "&View"
 msgstr "ভি&উ"
+
+#, fuzzy
+#~| msgctxt "@info:tooltip of custom toolbar button"
+#~| msgid "%1"
+#~ msgctxt "Spinbox suffix; percentage 1 - 100"
+#~ msgid "%"
+#~ msgstr "%1"
 
 #~ msgid "&Settings"
 #~ msgstr "সেটিং&স"

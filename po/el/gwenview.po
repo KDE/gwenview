@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-07 00:40+0000\n"
+"POT-Creation-Date: 2025-03-14 00:40+0000\n"
 "PO-Revision-Date: 2024-09-19 15:04+0300\n"
 "Last-Translator: Antonis Geralis <capoiosct@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -782,41 +782,43 @@ msgctxt "A number of thumbnail actions to show"
 msgid "None"
 msgstr "Καμία"
 
-#: app/gvcore.cpp:80
+#: app/gvcore.cpp:81
 #, kde-format
 msgid "Image quality:"
 msgstr "Ποιότητα εικόνας:"
 
-#: app/gvcore.cpp:87
-#, kde-format
-msgctxt "Spinbox suffix; percentage 1 - 100"
-msgid "%"
-msgstr "%"
+#: app/gvcore.cpp:88
+#, fuzzy, kde-format
+#| msgctxt "Percent value"
+#| msgid "%1%"
+msgctxt "@label:spinbox Percentage 1-100"
+msgid "%v%"
+msgstr "%1%"
 
-#: app/gvcore.cpp:112
+#: app/gvcore.cpp:113
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Image"
 msgstr "Αποθήκευση εικόνας"
 
-#: app/gvcore.cpp:413
+#: app/gvcore.cpp:414
 #, kde-format
 msgid "Save using another format"
 msgstr "Αποθήκευση με χρήση άλλου τύπου αρχειοθέτησης"
 
-#: app/gvcore.cpp:415
+#: app/gvcore.cpp:416
 #, kde-format
 msgid "Gwenview cannot save images in '%1' format."
 msgstr ""
 "Το Gwenview αδυνατεί να αποθηκεύσει εικόνες σε τύπο αρχειοθέτησης '%1'."
 
-#: app/gvcore.cpp:443
+#: app/gvcore.cpp:444
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot save images as %1."
 msgstr "Το Gwenview αδυνατεί να αποθηκεύσει εικόνες %1."
 
-#: app/gvcore.cpp:461 app/gvcore.cpp:495
+#: app/gvcore.cpp:462 app/gvcore.cpp:496
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -826,12 +828,12 @@ msgstr ""
 "Αποτυχία <emphasis strong='true'>αποθήκευσης <filename>%1</filename>:</"
 "emphasis><nl />%2"
 
-#: app/gvcore.cpp:511
+#: app/gvcore.cpp:512
 #, kde-format
 msgid "You are now viewing the new document."
 msgstr "Τώρα βλέπετε το νέο έγγραφο."
 
-#: app/gvcore.cpp:513
+#: app/gvcore.cpp:514
 #, kde-format
 msgid "Go back to the original"
 msgstr "Μετάβαση πίσω στην αρχική"
@@ -2914,6 +2916,10 @@ msgstr "&Αρχείο"
 #, kde-format
 msgid "&View"
 msgstr "Π&ροβολή"
+
+#~ msgctxt "Spinbox suffix; percentage 1 - 100"
+#~ msgid "%"
+#~ msgstr "%"
 
 #~ msgid "&Settings"
 #~ msgstr "Ρ&υθμίσεις"

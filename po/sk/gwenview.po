@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-07 00:40+0000\n"
+"POT-Creation-Date: 2025-03-14 00:40+0000\n"
 "PO-Revision-Date: 2023-12-06 19:09+0100\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -778,40 +778,42 @@ msgctxt "A number of thumbnail actions to show"
 msgid "None"
 msgstr "Žiadne"
 
-#: app/gvcore.cpp:80
+#: app/gvcore.cpp:81
 #, kde-format
 msgid "Image quality:"
 msgstr "Kvalita obrázka:"
 
-#: app/gvcore.cpp:87
-#, kde-format
-msgctxt "Spinbox suffix; percentage 1 - 100"
-msgid "%"
-msgstr "%"
+#: app/gvcore.cpp:88
+#, fuzzy, kde-format
+#| msgctxt "Percent value"
+#| msgid "%1%"
+msgctxt "@label:spinbox Percentage 1-100"
+msgid "%v%"
+msgstr "%1%"
 
-#: app/gvcore.cpp:112
+#: app/gvcore.cpp:113
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Image"
 msgstr "Uložiť obrázok"
 
-#: app/gvcore.cpp:413
+#: app/gvcore.cpp:414
 #, kde-format
 msgid "Save using another format"
 msgstr "Uložiť v inom formáte"
 
-#: app/gvcore.cpp:415
+#: app/gvcore.cpp:416
 #, kde-format
 msgid "Gwenview cannot save images in '%1' format."
 msgstr "Gwenview nevie ukladať obrázky vo formáte '%1'."
 
-#: app/gvcore.cpp:443
+#: app/gvcore.cpp:444
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot save images as %1."
 msgstr "Gwenview nevie ukladať obrázky ako %1."
 
-#: app/gvcore.cpp:461 app/gvcore.cpp:495
+#: app/gvcore.cpp:462 app/gvcore.cpp:496
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -821,12 +823,12 @@ msgstr ""
 "<emphasis strong='true'>Ukladanie <filename>%1</filename> zlyhalo:</"
 "emphasis><nl />%2"
 
-#: app/gvcore.cpp:511
+#: app/gvcore.cpp:512
 #, kde-format
 msgid "You are now viewing the new document."
 msgstr "Teraz si prezeráte nový dokument."
 
-#: app/gvcore.cpp:513
+#: app/gvcore.cpp:514
 #, kde-format
 msgid "Go back to the original"
 msgstr "Prejsť späť na originál"
@@ -2935,6 +2937,10 @@ msgstr "&Súbor"
 #, kde-format
 msgid "&View"
 msgstr "&Zobraziť"
+
+#~ msgctxt "Spinbox suffix; percentage 1 - 100"
+#~ msgid "%"
+#~ msgstr "%"
 
 #~ msgid "&Settings"
 #~ msgstr "&Nastavenia"

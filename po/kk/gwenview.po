@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-07 00:40+0000\n"
+"POT-Creation-Date: 2025-03-14 00:40+0000\n"
 "PO-Revision-Date: 2013-06-28 02:40+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -788,20 +788,20 @@ msgctxt "A number of thumbnail actions to show"
 msgid "None"
 msgstr "Жоқ"
 
-#: app/gvcore.cpp:80
+#: app/gvcore.cpp:81
 #, kde-format
 msgid "Image quality:"
 msgstr ""
 
-#: app/gvcore.cpp:87
+#: app/gvcore.cpp:88
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip of custom toolbar button"
 #| msgid "%1"
-msgctxt "Spinbox suffix; percentage 1 - 100"
-msgid "%"
+msgctxt "@label:spinbox Percentage 1-100"
+msgid "%v%"
 msgstr "%1"
 
-#: app/gvcore.cpp:112
+#: app/gvcore.cpp:113
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Open Image"
@@ -809,23 +809,23 @@ msgctxt "@title:window"
 msgid "Save Image"
 msgstr "Кескінді ашу"
 
-#: app/gvcore.cpp:413
+#: app/gvcore.cpp:414
 #, kde-format
 msgid "Save using another format"
 msgstr "Басқа пішімде сақтау"
 
-#: app/gvcore.cpp:415
+#: app/gvcore.cpp:416
 #, kde-format
 msgid "Gwenview cannot save images in '%1' format."
 msgstr "Gwenview кескіндерді '%1' пішімінде сақтай алмайды."
 
-#: app/gvcore.cpp:443
+#: app/gvcore.cpp:444
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot save images as %1."
 msgstr "Gwenview кескіндерді %1 деп сақтай алмайды."
 
-#: app/gvcore.cpp:461 app/gvcore.cpp:495
+#: app/gvcore.cpp:462 app/gvcore.cpp:496
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "<b>Saving <filename>%1</filename> failed:</b><br>%2"
@@ -835,12 +835,12 @@ msgid ""
 "emphasis><nl />%2"
 msgstr "<b><filename>%1</filename> дегенді сақтау жаңылысы:</b><br>%2"
 
-#: app/gvcore.cpp:511
+#: app/gvcore.cpp:512
 #, kde-format
 msgid "You are now viewing the new document."
 msgstr "Көріп жатқаныңыз - жаңа құжат."
 
-#: app/gvcore.cpp:513
+#: app/gvcore.cpp:514
 #, kde-format
 msgid "Go back to the original"
 msgstr "Түпнұсқасына қайта өту"
@@ -2920,6 +2920,13 @@ msgstr "&Көрініс"
 #, kde-format
 msgid "&View"
 msgstr "&Көрініс"
+
+#, fuzzy
+#~| msgctxt "@info:tooltip of custom toolbar button"
+#~| msgid "%1"
+#~ msgctxt "Spinbox suffix; percentage 1 - 100"
+#~ msgid "%"
+#~ msgstr "%1"
 
 #~ msgid "&Settings"
 #~ msgstr "&Баптау"

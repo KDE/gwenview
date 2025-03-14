@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-07 00:40+0000\n"
+"POT-Creation-Date: 2025-03-14 00:40+0000\n"
 "PO-Revision-Date: 2025-03-07 09:34+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -772,40 +772,42 @@ msgctxt "A number of thumbnail actions to show"
 msgid "None"
 msgstr "Cap"
 
-#: app/gvcore.cpp:80
+#: app/gvcore.cpp:81
 #, kde-format
 msgid "Image quality:"
 msgstr "Qualitat de la imatge:"
 
-#: app/gvcore.cpp:87
-#, kde-format
-msgctxt "Spinbox suffix; percentage 1 - 100"
-msgid "%"
-msgstr "%"
+#: app/gvcore.cpp:88
+#, fuzzy, kde-format
+#| msgctxt "Percent value"
+#| msgid "%1%"
+msgctxt "@label:spinbox Percentage 1-100"
+msgid "%v%"
+msgstr "%1%"
 
-#: app/gvcore.cpp:112
+#: app/gvcore.cpp:113
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Image"
 msgstr "Desa la imatge"
 
-#: app/gvcore.cpp:413
+#: app/gvcore.cpp:414
 #, kde-format
 msgid "Save using another format"
 msgstr "Desa emprant un altre format"
 
-#: app/gvcore.cpp:415
+#: app/gvcore.cpp:416
 #, kde-format
 msgid "Gwenview cannot save images in '%1' format."
 msgstr "El Gwenview no pot desar imatges en el format «%1»."
 
-#: app/gvcore.cpp:443
+#: app/gvcore.cpp:444
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot save images as %1."
 msgstr "El Gwenview no pot desar imatges com a %1."
 
-#: app/gvcore.cpp:461 app/gvcore.cpp:495
+#: app/gvcore.cpp:462 app/gvcore.cpp:496
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -815,12 +817,12 @@ msgstr ""
 "<emphasis strong='true'>Ha fallat en desar <filename>%1</filename>:</"
 "emphasis><nl />%2"
 
-#: app/gvcore.cpp:511
+#: app/gvcore.cpp:512
 #, kde-format
 msgid "You are now viewing the new document."
 msgstr "Ara esteu visualitzant el document nou."
 
-#: app/gvcore.cpp:513
+#: app/gvcore.cpp:514
 #, kde-format
 msgid "Go back to the original"
 msgstr "Torna a l'original"
@@ -2906,3 +2908,7 @@ msgstr "&Fitxer"
 #, kde-format
 msgid "&View"
 msgstr "Vi&sualitza"
+
+#~ msgctxt "Spinbox suffix; percentage 1 - 100"
+#~ msgid "%"
+#~ msgstr "%"
