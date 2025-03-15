@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-14 00:40+0000\n"
-"PO-Revision-Date: 2025-03-07 16:12+0200\n"
+"PO-Revision-Date: 2025-03-14 13:37+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -787,12 +787,10 @@ msgid "Image quality:"
 msgstr "Якість зображення:"
 
 #: app/gvcore.cpp:88
-#, fuzzy, kde-format
-#| msgctxt "Percent value"
-#| msgid "%1%"
+#, kde-format
 msgctxt "@label:spinbox Percentage 1-100"
 msgid "%v%"
-msgstr "%1%"
+msgstr "%v%"
 
 #: app/gvcore.cpp:113
 #, kde-format
