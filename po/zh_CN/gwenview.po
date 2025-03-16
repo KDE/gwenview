@@ -764,7 +764,7 @@ msgstr "画质："
 #, kde-format
 msgctxt "@label:spinbox Percentage 1-100"
 msgid "%v%"
-msgstr ""
+msgstr "%v%"
 
 #: app/gvcore.cpp:113
 #, kde-format
