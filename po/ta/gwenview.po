@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-14 00:40+0000\n"
-"PO-Revision-Date: 2025-03-09 17:09+0530\n"
+"PO-Revision-Date: 2025-03-16 14:51+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
 "Language: ta\n"
@@ -58,6 +58,7 @@ msgid ""
 "Squash colors that don't fit within the active color profile's color gamut, "
 "leaving other colors untouched"
 msgstr ""
+"செயலிலுள்ள நிறப்பயன்முறையில் அடங்கா நிறங்களை மாற்றி, மற்ற நிறங்களை அப்படியே விடும்."
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: app/advancedconfigpage.ui:102
@@ -86,6 +87,8 @@ msgid ""
 "Scale all colors equally to fit them within the active color profile's color "
 "gamut"
 msgstr ""
+"செயலிலுள்ள நிறப்பயன்முறையில் அனைத்து நிறங்களும் அடங்குமாறு அவற்றை ஒரே விகிதத்தில் "
+"திரியச்செய்யும்."
 
 #. i18n: ectx: property (text), widget (QLabel, colorRenderingLabel)
 #: app/advancedconfigpage.ui:182
@@ -765,12 +768,10 @@ msgid "Image quality:"
 msgstr "படத்தின் தரம்:"
 
 #: app/gvcore.cpp:88
-#, fuzzy, kde-format
-#| msgctxt "Percent value"
-#| msgid "%1%"
+#, kde-format
 msgctxt "@label:spinbox Percentage 1-100"
 msgid "%v%"
-msgstr "%1%"
+msgstr "%v%"
 
 #: app/gvcore.cpp:113
 #, kde-format
