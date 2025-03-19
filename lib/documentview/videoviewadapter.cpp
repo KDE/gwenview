@@ -23,18 +23,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QAction>
+#include <QAudioOutput>
 #include <QElapsedTimer>
 #include <QGraphicsLinearLayout>
 #include <QGraphicsProxyWidget>
+#include <QGraphicsSceneHoverEvent>
+#include <QGraphicsVideoItem>
 #include <QIcon>
 #include <QLabel>
+#include <QMediaPlayer>
 #include <QMouseEvent>
-
-// Phonon
-#include <phonon/AudioOutput>
-#include <phonon/MediaObject>
-#include <phonon/Path>
-#include <phonon/VideoWidget>
 
 // KF
 
@@ -51,9 +49,9 @@ namespace Gwenview
 {
 struct VideoViewAdapterPrivate {
     VideoViewAdapter *q = nullptr;
-    Phonon::MediaObject *mMediaObject = nullptr;
-    Phonon::VideoWidget *mVideoWidget = nullptr;
-    Phonon::AudioOutput *mAudioOutput = nullptr;
+    QMediaPlayer *mMediaPlayer = nullptr;
+    QGraphicsVideoItem *mVideoItem = nullptr;
+    QAudioOutput *mAudioOutput = nullptr;
     HudWidget *mHud = nullptr;
     GraphicsWidgetFloater *mFloater = nullptr;
 
@@ -65,7 +63,7 @@ struct VideoViewAdapterPrivate {
 
     QAction *mPlayPauseAction = nullptr;
     QAction *mMuteAction = nullptr;
-    QGraphicsProxyWidget *mProxy = nullptr;
+    QGraphicsWidget *mWidget = nullptr;
 
     HudSlider *mVolumeSlider = nullptr;
     QElapsedTimer mLastVolumeSliderChangeTime;
@@ -77,12 +75,12 @@ struct VideoViewAdapterPrivate {
         mPlayPauseAction = new QAction(q);
         mPlayPauseAction->setShortcut(Qt::Key_P);
         QObject::connect(mPlayPauseAction, &QAction::triggered, q, &VideoViewAdapter::slotPlayPauseClicked);
-        QObject::connect(mMediaObject, &Phonon::MediaObject::stateChanged, q, &VideoViewAdapter::updatePlayUi);
+        QObject::connect(mMediaPlayer, &QMediaPlayer::playbackStateChanged, q, &VideoViewAdapter::updatePlayUi);
 
         mMuteAction = new QAction(q);
         mMuteAction->setShortcut(Qt::Key_M);
         QObject::connect(mMuteAction, &QAction::triggered, q, &VideoViewAdapter::slotMuteClicked);
-        QObject::connect(mAudioOutput, &Phonon::AudioOutput::mutedChanged, q, &VideoViewAdapter::updateMuteAction);
+        QObject::connect(mAudioOutput, &QAudioOutput::mutedChanged, q, &VideoViewAdapter::updateMuteAction);
     }
 
     void setupHud(QGraphicsWidget *parent)
@@ -96,9 +94,9 @@ struct VideoViewAdapterPrivate {
         mSeekSlider->setPageStep(5000);
         mSeekSlider->setSingleStep(200);
         QObject::connect(mSeekSlider, &HudSlider::actionTriggered, q, &VideoViewAdapter::slotSeekSliderActionTriggered);
-        QObject::connect(mMediaObject, &Phonon::MediaObject::tick, q, &VideoViewAdapter::slotTicked);
-        QObject::connect(mMediaObject, &Phonon::MediaObject::totalTimeChanged, q, &VideoViewAdapter::updatePlayUi);
-        QObject::connect(mMediaObject, &Phonon::MediaObject::seekableChanged, q, &VideoViewAdapter::updatePlayUi);
+        QObject::connect(mMediaPlayer, &QMediaPlayer::positionChanged, q, &VideoViewAdapter::slotTicked);
+        QObject::connect(mMediaPlayer, &QMediaPlayer::durationChanged, q, &VideoViewAdapter::updatePlayUi);
+        QObject::connect(mMediaPlayer, &QMediaPlayer::seekableChanged, q, &VideoViewAdapter::updatePlayUi);
 
         // Mute
         auto muteButton = new HudButton;
@@ -111,7 +109,7 @@ struct VideoViewAdapterPrivate {
         mVolumeSlider->setPageStep(5);
         mVolumeSlider->setSingleStep(1);
         QObject::connect(mVolumeSlider, &HudSlider::valueChanged, q, &VideoViewAdapter::slotVolumeSliderChanged);
-        QObject::connect(mAudioOutput, &Phonon::AudioOutput::volumeChanged, q, &VideoViewAdapter::slotOutputVolumeChanged);
+        QObject::connect(mAudioOutput, &QAudioOutput::volumeChanged, q, &VideoViewAdapter::slotOutputVolumeChanged);
 
         // Timestamps
         mCurrentTime = new QLabel(QStringLiteral("--:--"));
@@ -122,8 +120,8 @@ struct VideoViewAdapterPrivate {
         mRemainingTime->setAttribute(Qt::WA_TranslucentBackground);
         mRemainingTime->setStyleSheet(QStringLiteral("QLabel { color : white; }"));
         mRemainingTime->setAlignment(Qt::AlignCenter);
-        QObject::connect(mMediaObject, &Phonon::MediaObject::stateChanged, q, &VideoViewAdapter::updateTimestamps);
-        QObject::connect(mMediaObject, &Phonon::MediaObject::tick, q, &VideoViewAdapter::updateTimestamps);
+        QObject::connect(mMediaPlayer, &QMediaPlayer::playbackStateChanged, q, &VideoViewAdapter::updateTimestamps);
+        QObject::connect(mMediaPlayer, &QMediaPlayer::positionChanged, q, &VideoViewAdapter::updateTimestamps);
 
         // Layout
         auto hudContent = new QGraphicsWidget;
@@ -159,18 +157,12 @@ struct VideoViewAdapterPrivate {
 
     bool isPlaying() const
     {
-        switch (mMediaObject->state()) {
-        case Phonon::PlayingState:
-        case Phonon::BufferingState:
-            return true;
-        default:
-            return false;
-        }
+        return mMediaPlayer->playbackState() == QMediaPlayer::PlayingState;
     }
 
     void updateHudVisibility(int yPos)
     {
-        const int floaterY = mVideoWidget->height() - mFloater->verticalMargin() - mHud->effectiveSizeHint(Qt::MinimumSize).height() * 3 / 2;
+        const int floaterY = mVideoItem->size().height() - mFloater->verticalMargin() - mHud->effectiveSizeHint(Qt::MinimumSize).height() * 3 / 2;
         if (yPos < floaterY) {
             mHud->fadeOut();
         } else {
@@ -203,53 +195,43 @@ struct VideoViewAdapterPrivate {
     }
 };
 
-/**
- * This is a workaround for a bug in QGraphicsProxyWidget: it does not forward
- * double-click events to the proxy-fied widget.
- *
- * QGraphicsProxyWidget::mouseDoubleClickEvent() correctly forwards the event
- * to its QWidget, but it is never called. This is because for it to be called,
- * the implementation of mousePressEvent() must call
- * QGraphicsItem::mousePressEvent() but it does not.
- */
-class DoubleClickableProxyWidget : public QGraphicsProxyWidget
-{
-protected:
-    void mousePressEvent(QGraphicsSceneMouseEvent *event) override
-    {
-        QGraphicsWidget::mousePressEvent(event);
-    }
-};
-
 VideoViewAdapter::VideoViewAdapter()
     : d(new VideoViewAdapterPrivate)
 {
     d->q = this;
-    d->mMediaObject = new Phonon::MediaObject(this);
-    d->mMediaObject->setTickInterval(350);
-    connect(d->mMediaObject, &Phonon::MediaObject::finished, this, &VideoViewAdapter::videoFinished);
+    d->mMediaPlayer = new QMediaPlayer(this);
+    connect(d->mMediaPlayer, &QMediaPlayer::mediaStatusChanged, this, [=](QMediaPlayer::MediaStatus status) {
+        if (status == QMediaPlayer::EndOfMedia) {
+            Q_EMIT videoFinished();
+        }
+    });
 
-    d->mVideoWidget = new Phonon::VideoWidget;
-    d->mVideoWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    d->mVideoWidget->setAttribute(Qt::WA_Hover);
-    d->mVideoWidget->installEventFilter(this);
+    d->mWidget = new QGraphicsWidget;
+    d->mWidget->setFlag(QGraphicsItem::ItemIsSelectable); // Needed for doubleclick to work
+    d->mWidget->setAcceptHoverEvents(GwenviewConfig::autoplayVideos()); // Makes hud visible when autoplay is disabled
+    d->mWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    d->mWidget->setAttribute(Qt::WA_Hover);
+    d->mWidget->installEventFilter(this);
 
-    Phonon::createPath(d->mMediaObject, d->mVideoWidget);
+    d->mVideoItem = new QGraphicsVideoItem(d->mWidget);
+    d->mMediaPlayer->setVideoOutput(d->mVideoItem);
 
-    d->mAudioOutput = new Phonon::AudioOutput(Phonon::VideoCategory, this);
-    Phonon::createPath(d->mMediaObject, d->mAudioOutput);
+    connect(d->mWidget, &QGraphicsWidget::geometryChanged, this, [=]() {
+        d->mVideoItem->setSize(d->mVideoItem->parentWidget()->size());
+    });
 
-    d->mProxy = new DoubleClickableProxyWidget;
-    d->mProxy->setFlag(QGraphicsItem::ItemIsSelectable); // Needed for doubleclick to work
-    d->mProxy->setWidget(d->mVideoWidget);
-    d->mProxy->setAcceptHoverEvents(GwenviewConfig::autoplayVideos()); // Makes hud visible when autoplay is disabled
-    setWidget(d->mProxy);
+    d->mAudioOutput = new QAudioOutput(this);
+    d->mMediaPlayer->setAudioOutput(d->mAudioOutput);
+
+    setWidget(d->mWidget);
 
     d->setupActions();
-    d->setupHud(d->mProxy);
+    d->setupHud(d->mWidget);
 
     updatePlayUi();
     updateMuteAction();
+    // Enforce a redraw to make the hud visible if needed
+    d->mWidget->adjustSize();
 }
 
 VideoViewAdapter::~VideoViewAdapter()
@@ -257,7 +239,7 @@ VideoViewAdapter::~VideoViewAdapter()
     // This prevents a memory leak that can occur after switching
     // to the next/previous video. For details see:
     // https://git.reviewboard.kde.org/r/108070/
-    d->mMediaObject->stop();
+    d->mMediaPlayer->stop();
 
     delete d;
 }
@@ -266,9 +248,10 @@ void VideoViewAdapter::setDocument(const Document::Ptr &doc)
 {
     d->mHud->show();
     d->mDocument = doc;
-    d->mMediaObject->setCurrentSource(d->mDocument->url());
+    d->mMediaPlayer->setSource(d->mDocument->url());
     if (GwenviewConfig::autoplayVideos()) {
-        d->mMediaObject->play();
+        d->mMediaPlayer->play();
+        Q_EMIT slotOutputVolumeChanged(d->mAudioOutput->volume());
     }
     // If we do not use a queued connection, the signal arrives too early,
     // preventing the listing of the dir content when Gwenview is started with
@@ -284,12 +267,12 @@ Document::Ptr VideoViewAdapter::document() const
 void VideoViewAdapter::slotPlayPauseClicked()
 {
     if (d->isPlaying()) {
-        d->mMediaObject->pause();
+        d->mMediaPlayer->pause();
         d->mHud->fadeIn();
-        d->mProxy->setAcceptHoverEvents(false);
+        d->mWidget->setAcceptHoverEvents(false);
     } else {
-        d->mMediaObject->play();
-        d->mProxy->setAcceptHoverEvents(true);
+        d->mMediaPlayer->play();
+        d->mWidget->setAcceptHoverEvents(true);
     }
 }
 
@@ -300,12 +283,12 @@ void VideoViewAdapter::slotMuteClicked()
 
 bool VideoViewAdapter::eventFilter(QObject *, QEvent *event)
 {
-    if (event->type() == QEvent::MouseMove) {
-        d->updateHudVisibility(static_cast<QMouseEvent *>(event)->y());
+    if (event->type() == QEvent::GraphicsSceneHoverMove) {
+        d->updateHudVisibility(static_cast<QGraphicsSceneHoverEvent *>(event)->scenePos().y());
     } else if (event->type() == QEvent::KeyPress) {
         d->keyPressEvent(static_cast<QKeyEvent *>(event));
-    } else if (event->type() == QEvent::MouseButtonDblClick) {
-        if (static_cast<QMouseEvent *>(event)->modifiers() == Qt::NoModifier) {
+    } else if (event->type() == QEvent::GraphicsSceneMouseDoubleClick) {
+        if (static_cast<QGraphicsSceneMouseEvent *>(event)->modifiers() == Qt::NoModifier) {
             Q_EMIT toggleFullScreenRequested();
         }
     }
@@ -322,22 +305,15 @@ void VideoViewAdapter::updatePlayUi()
 
     d->mLastSeekSliderActionTime.restart();
 
-    if (d->mMediaObject->totalTime() > 0) {
-        d->mSeekSlider->setRange(0, d->mMediaObject->totalTime());
+    if (d->mMediaPlayer->duration() > 0) {
+        d->mSeekSlider->setRange(0, d->mMediaPlayer->duration());
     }
 
-    switch (d->mMediaObject->state()) {
-    case Phonon::PlayingState:
-    case Phonon::BufferingState:
-    case Phonon::PausedState:
-        d->mSeekSlider->setEnabled(true);
-        break;
-    case Phonon::StoppedState:
-    case Phonon::LoadingState:
-    case Phonon::ErrorState:
+    if (d->mMediaPlayer->playbackState() == QMediaPlayer::StoppedState) {
         d->mSeekSlider->setEnabled(false);
         d->mSeekSlider->setValue(0);
-        break;
+    } else {
+        d->mSeekSlider->setEnabled(true);
     }
 }
 
@@ -363,7 +339,7 @@ void VideoViewAdapter::slotOutputVolumeChanged(qreal value)
 void VideoViewAdapter::slotSeekSliderActionTriggered(int /*action*/)
 {
     d->mLastSeekSliderActionTime.restart();
-    d->mMediaObject->seek(d->mSeekSlider->sliderPosition());
+    d->mMediaPlayer->setPosition(d->mSeekSlider->sliderPosition());
 }
 
 void VideoViewAdapter::updateTimestamps()
@@ -371,27 +347,19 @@ void VideoViewAdapter::updateTimestamps()
     QString currentTime(QStringLiteral("--:--"));
     QString remainingTime(QStringLiteral("--:--"));
 
-    switch (d->mMediaObject->state()) {
-    case Phonon::PlayingState:
-    case Phonon::BufferingState:
-    case Phonon::PausedState: {
-        qint64 current = d->mMediaObject->currentTime();
+    if (d->mMediaPlayer->playbackState() != QMediaPlayer::StoppedState) {
+        qint64 current = d->mMediaPlayer->position();
         currentTime = QDateTime::fromSecsSinceEpoch(current / 1000).toUTC().toString(QStringLiteral("h:mm:ss"));
         if (currentTime.startsWith(QStringLiteral("0:"))) {
             currentTime.remove(0, 2);
         }
 
-        qint64 remaining = d->mMediaObject->remainingTime();
+        qint64 remaining = d->mMediaPlayer->duration() - d->mMediaPlayer->position();
         remainingTime = QDateTime::fromSecsSinceEpoch(remaining / 1000).toUTC().toString(QStringLiteral("h:mm:ss"));
         if (remainingTime.startsWith(QStringLiteral("0:"))) {
             remainingTime.remove(0, 2);
         }
         remainingTime = QStringLiteral("-") + remainingTime;
-        break;
-    }
-
-    default:
-        break;
     }
 
     d->mCurrentTime->setText(currentTime);

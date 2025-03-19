@@ -25,6 +25,5 @@ Dependencies:
     'frameworks/kcrash': '@latest-kf6'
     'plasma/plasma-activities': '@latest-kf6'
     'graphics/libkdcraw': '@same'
-    'libraries/phonon': '@latest-kf6'
     'third-party/wayland': '@latest'
     'third-party/wayland-protocols': '@latest'

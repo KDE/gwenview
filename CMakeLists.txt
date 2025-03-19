@@ -58,7 +58,7 @@ if (APPLE OR HAIKU OR NOT UNIX)
     set(GWENVIEW_NO_WAYLAND_GESTURES ON)
 endif()
 
-find_package(Qt6 ${QT_MIN_VERSION} CONFIG REQUIRED Core Widgets Concurrent Svg PrintSupport)
+find_package(Qt6 ${QT_MIN_VERSION} CONFIG REQUIRED Core Widgets Concurrent Svg PrintSupport Multimedia MultimediaWidgets)
 find_package(Qt6DBus ${QT_MIN_VERSION} CONFIG QUIET)
 find_package(Qt6SvgWidgets)
 find_package(Qt6OpenGLWidgets)
@@ -72,10 +72,6 @@ if(NOT GWENVIEW_NO_WAYLAND_GESTURES)
 endif()
 
 set(HAVE_QTDBUS ${Qt6DBus_FOUND})
-
-find_package(Phonon4Qt6 4.6.60 NO_MODULE REQUIRED)
-include_directories(BEFORE SYSTEM ${PHONON_INCLUDES})
-add_definitions(-DPHONON_LIB_SONAME=\"${PHONON_LIB_SONAME}\")
 
 find_package(KF6 ${KF_MIN_VERSION} REQUIRED COMPONENTS
     KIO

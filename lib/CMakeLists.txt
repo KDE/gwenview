@@ -283,6 +283,8 @@ target_link_libraries(gwenviewlib
    Qt::Concurrent
    Qt::Svg
    Qt::PrintSupport
+   Qt::Multimedia
+   Qt::MultimediaWidgets
    KF6::GuiAddons
    KF6::ConfigGui
    KF6::KIOCore
@@ -296,7 +298,6 @@ target_link_libraries(gwenviewlib
    JPEG::JPEG
    PNG::PNG
     ${LCMS2_LIBRARIES}
-    Phonon::phonon4qt6
     )
 if (QT_MAJOR_VERSION STREQUAL "6")
     target_link_libraries(gwenviewlib Qt6::OpenGLWidgets KF6::IconWidgets)
