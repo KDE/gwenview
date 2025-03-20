@@ -213,11 +213,10 @@ msgid "Rating"
 msgstr "Hodnocení"
 
 #: app/browsemainpage.cpp:200
-#, fuzzy, kde-format
-#| msgid "Show failed files..."
+#, kde-format
 msgctxt "@action:inmenu View"
 msgid "Show Hidden Files"
-msgstr "Zobrazit soubory s problémy..."
+msgstr "Zobrazovat skryté soubory"
 
 #: app/browsemainpage.cpp:206 app/fileopscontextmanageritem.cpp:136
 #: app/mainwindow.cpp:375
