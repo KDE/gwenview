@@ -1372,7 +1372,7 @@ msgstr "如果现在退出，您的更改将会丢失。"
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
-msgstr "菜单栏将被完全隐藏。按 %1 可以重新显示。"
+msgstr "这将完全隐藏菜单栏。按 %1 可以重新显示。"
 
 #: app/mainwindow.cpp:1907
 #, kde-format
