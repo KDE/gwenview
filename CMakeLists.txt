@@ -63,7 +63,9 @@ find_package(Qt6DBus ${QT_MIN_VERSION} CONFIG QUIET)
 find_package(Qt6SvgWidgets)
 find_package(Qt6OpenGLWidgets)
 
-
+if (Qt6Gui_VERSION VERSION_GREATER_EQUAL "6.10.0")
+    find_package(Qt6GuiPrivate ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE)
+endif()
 
 if(NOT GWENVIEW_NO_WAYLAND_GESTURES)
     find_package(WaylandProtocols REQUIRED)
