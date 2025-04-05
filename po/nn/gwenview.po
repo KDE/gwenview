@@ -226,7 +226,6 @@ msgstr "Karakter"
 
 #: app/browsemainpage.cpp:200
 #, fuzzy, kde-format
-#| msgid "Show failed files..."
 msgctxt "@action:inmenu View"
 msgid "Show Hidden Files"
 msgstr "Vis filer med importfeil …"
