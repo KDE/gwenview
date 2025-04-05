@@ -226,7 +226,6 @@ msgstr "Karakter"
 
 #: app/browsemainpage.cpp:200
 #, fuzzy, kde-format
-#| msgid "Show failed files..."
 msgctxt "@action:inmenu View"
 msgid "Show Hidden Files"
 msgstr "Vis filer med importfeil …"
@@ -777,8 +776,6 @@ msgstr "Biletkvalitet:"
 
 #: app/gvcore.cpp:88
 #, fuzzy, kde-format
-#| msgctxt "Percent value"
-#| msgid "%1%"
 msgctxt "@label:spinbox Percentage 1-100"
 msgid "%v%"
 msgstr "%1 %"
