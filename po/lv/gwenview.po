@@ -7,13 +7,13 @@
 # Viesturs Zarins <viesturs.zarins@mii.lu.lv>, 2007, 2008, 2009, 2010.
 # Viesturs Zariņš <viesturs.zarins@mii.lu.lv>, 2009.
 # Einars Sprugis <einars8@gmail.com>, 2011, 2012.
-# SPDX-FileCopyrightText: 2024 Toms Trasuns <toms.trasuns@posteo.net>
+# SPDX-FileCopyrightText: 2024, 2025 Toms Trasuns <toms.trasuns@posteo.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-14 00:40+0000\n"
-"PO-Revision-Date: 2024-10-28 19:36+0200\n"
+"PO-Revision-Date: 2025-04-06 17:33+0300\n"
 "Last-Translator: Toms Trasuns <toms.trasuns@posteo.net>\n"
 "Language-Team: Latvian <kde-i18n-doc@kde.org>\n"
 "Language: lv\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
 "2);\n"
-"X-Generator: Lokalize 24.08.2\n"
+"X-Generator: Lokalize 24.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -228,11 +228,10 @@ msgid "Rating"
 msgstr "Vērtējums"
 
 #: app/browsemainpage.cpp:200
-#, fuzzy, kde-format
-#| msgid "Show failed files..."
+#, kde-format
 msgctxt "@action:inmenu View"
 msgid "Show Hidden Files"
-msgstr "Parādīt kļūdainās datnes..."
+msgstr "Rādīt slēptās datnes"
 
 #: app/browsemainpage.cpp:206 app/fileopscontextmanageritem.cpp:136
 #: app/mainwindow.cpp:375
@@ -783,12 +782,10 @@ msgid "Image quality:"
 msgstr "Attēla kvalitāte:"
 
 #: app/gvcore.cpp:88
-#, fuzzy, kde-format
-#| msgctxt "Percent value"
-#| msgid "%1%"
+#, kde-format
 msgctxt "@label:spinbox Percentage 1-100"
 msgid "%v%"
-msgstr "%1%"
+msgstr "%v %"
 
 #: app/gvcore.cpp:113
 #, kde-format
