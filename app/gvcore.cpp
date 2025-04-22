@@ -78,7 +78,7 @@ struct GvCorePrivate {
         JPEGQualityChooserWidget->setVisible(false); // shown only for JPEGs
 
         auto JPEGQualityChooserLabel = new QLabel;
-        JPEGQualityChooserLabel->setText(i18n("Image quality:"));
+        JPEGQualityChooserLabel->setText(i18n("Image &quality:"));
         JPEGQualityChooserLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
         auto JPEGQualityChooserSpinBox = new QSpinBox;
@@ -88,6 +88,7 @@ struct GvCorePrivate {
         KLocalization::setupSpinBoxFormatString(JPEGQualityChooserSpinBox, ki18nc("@label:spinbox Percentage 1-100", "%v%"));
         configFileJPEGQualityValue = GwenviewConfig::jPEGQuality();
         JPEGQualityChooserSpinBox->setValue(configFileJPEGQualityValue);
+        JPEGQualityChooserLabel->setBuddy(JPEGQualityChooserSpinBox);
 
         // Temporarily change JPEG quality value
         QObject::connect(JPEGQualityChooserSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), JPEGQualityChooserSpinBox, [=](int value) {
