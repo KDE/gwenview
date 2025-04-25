@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-07 00:40+0000\n"
-"PO-Revision-Date: 2025-03-08 21:41+0400\n"
+"PO-Revision-Date: 2025-04-23 17:17+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -868,7 +868,7 @@ msgstr "حرر"
 #: app/imageopscontextmanageritem.cpp:93
 #, kde-format
 msgid "Rotate Left"
-msgstr "دور لليسار"
+msgstr "دوّر لليسار"
 
 #: app/imageopscontextmanageritem.cpp:94
 #, kde-format
@@ -879,7 +879,7 @@ msgstr "دوّر الصورة إلى اليسار"
 #: app/imageopscontextmanageritem.cpp:99
 #, kde-format
 msgid "Rotate Right"
-msgstr "دور لليمين"
+msgstr "دوّر لليمين"
 
 #: app/imageopscontextmanageritem.cpp:100
 #, kde-format
@@ -1335,12 +1335,12 @@ msgstr "اضبط"
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "Edit"
-msgstr "حرر"
+msgstr "حرّر"
 
 #: app/mainwindow.cpp:602
 #, kde-format
 msgid "Redo"
-msgstr "كرر"
+msgstr "كرّر"
 
 #: app/mainwindow.cpp:610
 #, kde-format
@@ -1574,13 +1574,13 @@ msgstr "احفظ جميع الصور المعدّلة"
 #: app/semanticinfocontextmanageritem.cpp:186
 #, kde-format
 msgid "Edit"
-msgstr "حرر"
+msgstr "حرّر"
 
 #: app/semanticinfocontextmanageritem.cpp:206
 #, kde-format
 msgctxt "@action"
 msgid "Edit Tags"
-msgstr "حرر الأوسمة"
+msgstr "حرّر الأوسمة"
 
 #: app/semanticinfocontextmanageritem.cpp:215
 #, kde-format
@@ -2254,7 +2254,7 @@ msgstr "بالعرض"
 #: lib/crop/cropwidget.cpp:204 lib/crop/cropwidget.cpp:211
 #, kde-format
 msgid "ISO (A4, A3...)"
-msgstr "مقاسات معيارية (A4, A3...)"
+msgstr "مقاسات معيارية (A4، A3…)"
 
 #: lib/crop/cropwidget.cpp:205 lib/crop/cropwidget.cpp:212
 #, kde-format
@@ -2823,7 +2823,7 @@ msgstr "خطأ"
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Resize"
-msgstr "أعد التحجيم"
+msgstr "غيّر الحجم"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, ResizeImageWidget)
 #: lib/resize/resizeimagewidget.ui:14
@@ -2902,13 +2902,13 @@ msgstr "عشوائي"
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Right"
-msgstr "دور لليمين"
+msgstr "دوّر لليمين"
 
 #: lib/transformimageoperation.cpp:61
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Left"
-msgstr "دور لليسار"
+msgstr "دوّر لليسار"
 
 #: lib/transformimageoperation.cpp:64
 #, kde-format
