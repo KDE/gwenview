@@ -204,6 +204,8 @@ set(IMAGE_MIME_TYPES_LIST
     image/x-tga
     image/x-xcf
     image/openraster
+    image/svg+xml
+    image/svg+xml-compressed
     application/x-krita
 )
 if (KF6KDcraw_FOUND)
