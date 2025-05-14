@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-14 00:40+0000\n"
+"POT-Creation-Date: 2025-05-14 00:41+0000\n"
 "PO-Revision-Date: 2024-06-29 14:04+0000\n"
 "Last-Translator: Gummi <gudmundure@gmail.com>\n"
 "Language-Team: Icelandic <kde-i18n-doc@kde.org>\n"
@@ -775,8 +775,9 @@ msgid "None"
 msgstr "Engin"
 
 #: app/gvcore.cpp:81
-#, kde-format
-msgid "Image quality:"
+#, fuzzy, kde-format
+#| msgid "Image quality:"
+msgid "Image &quality:"
 msgstr "Myndgæði:"
 
 #: app/gvcore.cpp:88
@@ -787,29 +788,29 @@ msgctxt "@label:spinbox Percentage 1-100"
 msgid "%v%"
 msgstr "%1%"
 
-#: app/gvcore.cpp:113
+#: app/gvcore.cpp:114
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Image"
 msgstr "Vista mynd"
 
-#: app/gvcore.cpp:414
+#: app/gvcore.cpp:415
 #, kde-format
 msgid "Save using another format"
 msgstr "Vista á öðru skráasniði"
 
-#: app/gvcore.cpp:416
+#: app/gvcore.cpp:417
 #, kde-format
 msgid "Gwenview cannot save images in '%1' format."
 msgstr "Gwenview getur ekki vistað myndir á sniðinu '%1'."
 
-#: app/gvcore.cpp:444
+#: app/gvcore.cpp:445
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot save images as %1."
 msgstr "Gwenview getur ekki vistað myndir sem %1."
 
-#: app/gvcore.cpp:462 app/gvcore.cpp:496
+#: app/gvcore.cpp:463 app/gvcore.cpp:497
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -819,12 +820,12 @@ msgstr ""
 "<emphasis strong='true'>Mistókst að vista <filename>%1</filename>:</"
 "emphasis><nl />%2"
 
-#: app/gvcore.cpp:512
+#: app/gvcore.cpp:513
 #, kde-format
 msgid "You are now viewing the new document."
 msgstr "Þú ert núna að skoða nýja skjalið."
 
-#: app/gvcore.cpp:514
+#: app/gvcore.cpp:515
 #, kde-format
 msgid "Go back to the original"
 msgstr "Fara til baka á upprunalegu myndina"

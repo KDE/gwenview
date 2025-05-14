@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-14 00:40+0000\n"
+"POT-Creation-Date: 2025-05-14 00:41+0000\n"
 "PO-Revision-Date: 2025-04-16 11:45+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -767,8 +767,9 @@ msgid "None"
 msgstr "Necun"
 
 #: app/gvcore.cpp:81
-#, kde-format
-msgid "Image quality:"
+#, fuzzy, kde-format
+#| msgid "Image quality:"
+msgid "Image &quality:"
 msgstr "Qualitate de imagine:"
 
 #: app/gvcore.cpp:88
@@ -777,29 +778,29 @@ msgctxt "@label:spinbox Percentage 1-100"
 msgid "%v%"
 msgstr "%v%"
 
-#: app/gvcore.cpp:113
+#: app/gvcore.cpp:114
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Image"
 msgstr "Salveguarda imagine"
 
-#: app/gvcore.cpp:414
+#: app/gvcore.cpp:415
 #, kde-format
 msgid "Save using another format"
 msgstr "Salveguarda per usar un altere formato"
 
-#: app/gvcore.cpp:416
+#: app/gvcore.cpp:417
 #, kde-format
 msgid "Gwenview cannot save images in '%1' format."
 msgstr "Gwenview non pote salveguardar imagines in formato de '%1'."
 
-#: app/gvcore.cpp:444
+#: app/gvcore.cpp:445
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot save images as %1."
 msgstr "Gwenview non pote salveguardar imagines como %1."
 
-#: app/gvcore.cpp:462 app/gvcore.cpp:496
+#: app/gvcore.cpp:463 app/gvcore.cpp:497
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -809,12 +810,12 @@ msgstr ""
 "<emphasis strong='true'>Salveguardar<filename>%1</filename> falleva:</"
 "emphasis><nl />%2"
 
-#: app/gvcore.cpp:512
+#: app/gvcore.cpp:513
 #, kde-format
 msgid "You are now viewing the new document."
 msgstr "Tu nunc es vidente le nove documento."
 
-#: app/gvcore.cpp:514
+#: app/gvcore.cpp:515
 #, kde-format
 msgid "Go back to the original"
 msgstr "Retorna al original"

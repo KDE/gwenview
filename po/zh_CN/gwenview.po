@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-14 00:40+0000\n"
+"POT-Creation-Date: 2025-05-14 00:41+0000\n"
 "PO-Revision-Date: 2024-04-22 15:59\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -756,8 +756,9 @@ msgid "None"
 msgstr "无"
 
 #: app/gvcore.cpp:81
-#, kde-format
-msgid "Image quality:"
+#, fuzzy, kde-format
+#| msgid "Image quality:"
+msgid "Image &quality:"
 msgstr "画质："
 
 #: app/gvcore.cpp:88
@@ -766,29 +767,29 @@ msgctxt "@label:spinbox Percentage 1-100"
 msgid "%v%"
 msgstr "%v%"
 
-#: app/gvcore.cpp:113
+#: app/gvcore.cpp:114
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Image"
 msgstr "保存图像"
 
-#: app/gvcore.cpp:414
+#: app/gvcore.cpp:415
 #, kde-format
 msgid "Save using another format"
 msgstr "请使用其他格式保存"
 
-#: app/gvcore.cpp:416
+#: app/gvcore.cpp:417
 #, kde-format
 msgid "Gwenview cannot save images in '%1' format."
 msgstr "Gwenview 无法保存图像为“%1”格式。"
 
-#: app/gvcore.cpp:444
+#: app/gvcore.cpp:445
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot save images as %1."
 msgstr "Gwenview 无法保存图像为 %1。"
 
-#: app/gvcore.cpp:462 app/gvcore.cpp:496
+#: app/gvcore.cpp:463 app/gvcore.cpp:497
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -798,12 +799,12 @@ msgstr ""
 "<emphasis strong='true'>保存 <filename>%1</filename> 失败：</emphasis><nl />"
 "%2"
 
-#: app/gvcore.cpp:512
+#: app/gvcore.cpp:513
 #, kde-format
 msgid "You are now viewing the new document."
 msgstr "您正在查看新图像。"
 
-#: app/gvcore.cpp:514
+#: app/gvcore.cpp:515
 #, kde-format
 msgid "Go back to the original"
 msgstr "返回原始图像"
