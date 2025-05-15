@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-14 00:41+0000\n"
-"PO-Revision-Date: 2025-03-14 13:37+0200\n"
+"PO-Revision-Date: 2025-05-14 09:14+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -782,10 +782,9 @@ msgid "None"
 msgstr "не використовувати"
 
 #: app/gvcore.cpp:81
-#, fuzzy, kde-format
-#| msgid "Image quality:"
+#, kde-format
 msgid "Image &quality:"
-msgstr "Якість зображення:"
+msgstr "&Якість зображення:"
 
 #: app/gvcore.cpp:88
 #, kde-format
