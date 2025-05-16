@@ -758,7 +758,7 @@ msgstr "无"
 #: app/gvcore.cpp:81
 #, kde-format
 msgid "Image &quality:"
-msgstr ""
+msgstr "图像画质(&Q)："
 
 #: app/gvcore.cpp:88
 #, kde-format
