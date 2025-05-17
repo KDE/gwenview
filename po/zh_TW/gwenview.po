@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-14 00:41+0000\n"
-"PO-Revision-Date: 2025-03-24 19:56+0900\n"
+"PO-Revision-Date: 2025-05-16 15:31+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Lokalize 24.12.3\n"
+"X-Generator: Lokalize 25.07.70\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -760,10 +760,10 @@ msgid "None"
 msgstr "無"
 
 #: app/gvcore.cpp:81
-#, fuzzy, kde-format
+#, kde-format
 #| msgid "Image quality:"
 msgid "Image &quality:"
-msgstr "影像品質："
+msgstr "影像品質(&Q)："
 
 #: app/gvcore.cpp:88
 #, kde-format
@@ -2218,8 +2218,7 @@ msgctxt "@info"
 msgid ""
 "Could not open file for writing, check that you have the necessary rights in "
 "<filename>%1</filename>."
-msgstr ""
-"無法開啟檔案寫入。請檢查您是否有足夠的權限寫入 <filename>%1</filename>。"
+msgstr "無法開啟檔案寫入。請檢查您是否有足夠的權限寫入 <filename>%1</filename>。"
 
 #: lib/document/savejob.cpp:133
 #, kde-kuit-format
