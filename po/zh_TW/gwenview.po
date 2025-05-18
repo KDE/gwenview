@@ -761,7 +761,6 @@ msgstr "無"
 
 #: app/gvcore.cpp:81
 #, kde-format
-#| msgid "Image quality:"
 msgid "Image &quality:"
 msgstr "影像品質(&Q)："
 
@@ -2218,7 +2217,8 @@ msgctxt "@info"
 msgid ""
 "Could not open file for writing, check that you have the necessary rights in "
 "<filename>%1</filename>."
-msgstr "無法開啟檔案寫入。請檢查您是否有足夠的權限寫入 <filename>%1</filename>。"
+msgstr ""
+"無法開啟檔案寫入。請檢查您是否有足夠的權限寫入 <filename>%1</filename>。"
 
 #: lib/document/savejob.cpp:133
 #, kde-kuit-format
