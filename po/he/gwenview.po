@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-14 00:41+0000\n"
-"PO-Revision-Date: 2025-03-14 09:06+0200\n"
+"PO-Revision-Date: 2025-05-16 13:41+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 24.12.2\n"
+"X-Generator: Lokalize 25.04.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -779,10 +779,9 @@ msgid "None"
 msgstr "ללא"
 
 #: app/gvcore.cpp:81
-#, fuzzy, kde-format
-#| msgid "Image quality:"
+#, kde-format
 msgid "Image &quality:"
-msgstr "איכות תמונה:"
+msgstr "&איכות תמונה:"
 
 #: app/gvcore.cpp:88
 #, kde-format
