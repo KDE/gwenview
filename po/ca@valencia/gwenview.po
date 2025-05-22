@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-14 00:41+0000\n"
-"PO-Revision-Date: 2025-03-14 09:08+0100\n"
+"PO-Revision-Date: 2025-05-14 09:44+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -772,10 +772,9 @@ msgid "None"
 msgstr "Cap"
 
 #: app/gvcore.cpp:81
-#, fuzzy, kde-format
-#| msgid "Image quality:"
+#, kde-format
 msgid "Image &quality:"
-msgstr "Qualitat de la imatge:"
+msgstr "&Qualitat de la imatge:"
 
 #: app/gvcore.cpp:88
 #, kde-format
@@ -1934,8 +1933,8 @@ msgstr "Vista prèvia:"
 #, kde-format
 msgid "<i>Type text or click the items below to customize the format</i>"
 msgstr ""
-"<i>Introduïu text o cliqueu els elements de davall per a personalitzar el "
-"format</i>"
+"<i>Introduïu text o cliqueu damunt dels elements de davall per a "
+"personalitzar el format</i>"
 
 #: importer/main.cpp:42
 #, kde-format
@@ -2038,7 +2037,7 @@ msgid ""
 "\"camera:/\" on your system."
 msgstr ""
 "Necessiteu instal·lar Kamera al vostre sistema per a llegir des de la "
-"càmera. Feu clic ací per a iniciar Discover i instal·lar Kamera per a "
+"càmera. Cliqueu ací per a iniciar Discover i instal·lar Kamera per a "
 "habilitar la implementació del protocol per a «camera:/» al vostre sistema."
 
 #: importer/thumbnailpage.cpp:260
@@ -2054,7 +2053,7 @@ msgid ""
 "Click here to launch Discover to install the missing protocol support "
 "library to enable the protocol support for \"%1:/\" on your system."
 msgstr ""
-"Feu clic ací per a iniciar Discover per a instal·lar la biblioteca de suport "
+"Cliqueu ací per a iniciar Discover per a instal·lar la biblioteca de suport "
 "del protocol que falta per a habilitar la implementació del protocol per a "
 "«%1:/» al vostre sistema."
 
@@ -2760,7 +2759,7 @@ msgstr "Mida:"
 msgid ""
 "Click on a red eye and choose a size, or double-click to correct instantly."
 msgstr ""
-"Feu clic damunt d'un ull roig i trieu una mida o feu doble clic per a "
+"Cliqueu damunt d'un ull roig i trieu una mida o feu doble clic per a "
 "corregir-ho a l'instant."
 
 #: lib/resize/resizeimagedialog.cpp:76
