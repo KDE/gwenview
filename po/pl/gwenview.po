@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-14 00:41+0000\n"
-"PO-Revision-Date: 2025-03-15 10:27+0100\n"
+"PO-Revision-Date: 2025-05-24 08:36+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -783,10 +783,9 @@ msgid "None"
 msgstr "Bez przycisków"
 
 #: app/gvcore.cpp:81
-#, fuzzy, kde-format
-#| msgid "Image quality:"
+#, kde-format
 msgid "Image &quality:"
-msgstr "Jakość obrazu:"
+msgstr "&Jakość obrazu:"
 
 #: app/gvcore.cpp:88
 #, kde-format
