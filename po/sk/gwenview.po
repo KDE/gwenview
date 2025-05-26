@@ -8,19 +8,20 @@
 # Mthw <jari_45@hotmail.com>, 2019.
 # Matej Mrenica <matejm98mthw@gmail.com>, 2019, 2020, 2021, 2022.
 # Dušan Kazik <prescott66@gmail.com>, 2020.
+# SPDX-FileCopyrightText: 2025 Lucia Mrenica <lucia.mrenica@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-07 00:40+0000\n"
-"PO-Revision-Date: 2023-12-06 19:09+0100\n"
-"Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
-"Language-Team: Slovak <kde-sk@linux.sk>\n"
+"PO-Revision-Date: 2025-05-25 12:23+0200\n"
+"Last-Translator: Lucia Mrenica <lucia.mrenica@gmail.com>\n"
+"Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.08.3\n"
+"X-Generator: Lokalize 25.04.1\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
 #, kde-format
@@ -113,7 +114,7 @@ msgstr "Zapamätať si priečinky a URL adresy"
 #: app/advancedconfigpage.ui:240
 #, kde-format
 msgid "Enable color management"
-msgstr ""
+msgstr "Zapnúť správu farieb"
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileHelpLabel)
 #: app/advancedconfigpage.ui:265
@@ -124,6 +125,10 @@ msgid ""
 "is only appropriate for displays that are calibrated to the sRGB color space "
 "or are known to provide an incorrect color profile."
 msgstr ""
+"Keď je správa farieb vypnutá, Gwenview prevedie obrázky do sRGB farebného "
+"priestoru, a nie do farebného priestoru, ktorý zistí pre displej. To je "
+"vhodné len pre displeje, ktoré sú kalibrované na farebný priestor sRGB alebo "
+"je známe, že poskytujú nesprávny farebný profil."
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileLabel)
 #: app/advancedconfigpage.ui:275
@@ -223,11 +228,10 @@ msgid "Rating"
 msgstr "Hodnotenie"
 
 #: app/browsemainpage.cpp:200
-#, fuzzy, kde-format
-#| msgid "Show failed files..."
+#, kde-format
 msgctxt "@action:inmenu View"
 msgid "Show Hidden Files"
-msgstr "Zobraziť zlyhané súbory..."
+msgstr "Zobraziť skryté súbory"
 
 #: app/browsemainpage.cpp:206 app/fileopscontextmanageritem.cpp:136
 #: app/mainwindow.cpp:375
@@ -509,17 +513,17 @@ msgstr "Neoznačené"
 #: app/filtercontroller.cpp:229
 #, kde-format
 msgid "Dimensions >="
-msgstr ""
+msgstr "Rozmery >="
 
 #: app/filtercontroller.cpp:230
 #, kde-format
 msgid "Dimensions ="
-msgstr ""
+msgstr "Rozmery ="
 
 #: app/filtercontroller.cpp:231
 #, kde-format
 msgid "Dimensions <="
-msgstr ""
+msgstr "Rozmery <="
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: app/filtercontroller.cpp:238 lib/crop/cropwidget.cpp:221
@@ -711,7 +715,7 @@ msgstr "Prejsť na posledný obrázok"
 #| msgctxt "@action"
 #| msgid "Start Page"
 msgid "Start over"
-msgstr "Úvodná stránka"
+msgstr "Začať odznova"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: app/generalconfigpage.ui:118
@@ -902,7 +906,7 @@ msgstr "Orezať"
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Adjust Colors"
-msgstr ""
+msgstr "Nastavenie farieb"
 
 #: app/imageopscontextmanageritem.cpp:128
 #: lib/redeyereduction/redeyereductionimageoperation.cpp:75
@@ -1348,7 +1352,7 @@ msgstr "Operácie"
 #: app/mainwindow.cpp:951
 #, kde-format
 msgid "Viewing media"
-msgstr ""
+msgstr "Prezeranie médií"
 
 #: app/mainwindow.cpp:1433
 #, kde-format
@@ -2019,12 +2023,11 @@ msgid "Support for your camera is not installed."
 msgstr "Podpora pre váš fotoaparát nie je nainštalovaná."
 
 #: importer/thumbnailpage.cpp:233
-#, fuzzy, kde-format
-#| msgctxt "@info above install button, %1 protocol name"
-#| msgid "The protocol support library for \"%1\" is not installed."
+#, kde-format
 msgctxt "@info above install button, %1 protocol name %2 error text from KIO"
 msgid "The protocol support library for \"%1\" is not installed. Error: %2"
-msgstr "Knižnica pre podporu protokolu \"%1\" nie je nainštalovaná."
+msgstr ""
+"Knižnica na podporu protokolu pre \"%1\" nie je nainštalovaná. Chyba: %2"
 
 #: importer/thumbnailpage.cpp:235
 #, kde-format
@@ -2180,7 +2183,7 @@ msgstr "Vývojár"
 #: lib/bcg/bcgimageoperation.cpp:69
 #, kde-format
 msgid "Adjust Colors"
-msgstr ""
+msgstr "Nastavenie farieb"
 
 #: lib/bcg/bcgwidget.cpp:51
 #, kde-format
@@ -2375,20 +2378,7 @@ msgstr "Prispôsobiť obrázok do oblasti zobrazenia"
 #. but a more elaborate translation would also be fine.
 #. The text "in the settings" is supposed to sound like clicking it opens the settings.
 #: lib/documentview/documentviewcontroller.cpp:70
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info:whatsthis, %1 the action's text"
-#| msgid ""
-#| "<para>This fits the image into the available viewing area:"
-#| "<list><item>Images that are bigger than the viewing area are displayed at "
-#| "a smaller size so they fit.</item><item>Images that are smaller than the "
-#| "viewing area are displayed at their normal size. If smaller images should "
-#| "instead use all of the available viewing area, turn on <emphasis>Enlarge "
-#| "smaller images</emphasis> <link url='%2'>in the settings</link>.</item></"
-#| "list></para><para>If \"%1\" is already enabled, pressing it again will "
-#| "switch it off and the image will be displayed at its normal size instead."
-#| "</para><para>\"%1\" is the default zoom mode for images. This can be "
-#| "changed so images are displayed at a previous zoom value instead <link "
-#| "url='%2'>in the settings</link>.</para>"
+#, kde-kuit-format
 msgctxt "@info:whatsthis %1 is the action's text"
 msgid ""
 "<para>This fits the image into the available viewing area:<list><item>Images "
@@ -2643,7 +2633,7 @@ msgstr "Dátum zmeny"
 #, kde-format
 msgctxt "@item:intable"
 msgid "Date Accessed"
-msgstr ""
+msgstr "Dátum prístupu"
 
 #: lib/imagemetainfomodel.cpp:259
 #, kde-format
@@ -2824,7 +2814,7 @@ msgstr "Zmeniť veľkosť"
 #: lib/resize/resizeimagewidget.ui:20
 #, kde-format
 msgid "Estimated new file size:"
-msgstr ""
+msgstr "Odhadovaná veľkosť nového súboru:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: lib/resize/resizeimagewidget.ui:47
@@ -2848,10 +2838,9 @@ msgstr " px"
 
 #. i18n: ectx: property (text), widget (QLabel, mCurrentSizeLabel)
 #: lib/resize/resizeimagewidget.ui:115
-#, fuzzy, kde-format
-#| msgid "Current size:"
+#, kde-format
 msgid "Current file size:"
-msgstr "Aktuálna veľkosť:"
+msgstr "Aktuálna veľkosť súboru:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, mKeepAspectCheckBox)
 #: lib/resize/resizeimagewidget.ui:145
