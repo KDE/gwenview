@@ -262,6 +262,7 @@
       <li xml:lang="pt-BR">Edição de imagem simples: girar, cortar, redimensionar, espelhar, inverter, reduzir olhos vermelhos e ajustar brilho, contraste ou gama</li>
       <li xml:lang="ru">Основные инструменты редактирования: поворот, обрезание, изменение размера, зеркальное отражение и переворот, уменьшение эффекта «красных глаз», управление яркостью, контрастностью и гаммой.</li>
       <li xml:lang="sa">सरलं चित्रसम्पादनं : परिभ्रमन्तु, सस्यं कुर्वन्तु, आकारं परिवर्तयन्तु, दर्पणं कुर्वन्तु, पलटयन्तु, रक्तनेत्रं न्यूनीकरोतु, प्रकाशं, विपरीततां, गामा वा समायोजयन्तु</li>
+      <li xml:lang="sk">Jednoduché úpravy obrázkov: otáčanie, orezávanie, zmena veľkosti, zrkadlenie, prevrátenie, redukcia červených očí, a úprava jasu, kontrastu alebo gama</li>
       <li xml:lang="sl">Enostavno urejanje slik: zasuk, obrezovanje, sprememba velikosti, zrcaljenje, obračanje, zmanjšanje rdečine v očesih in prilagajanje svetlosti, kontrasta ali game</li>
       <li xml:lang="sv">Enkel bildredigering: rotera, beskär, ändra storlek, spegla, vänd, reducera röda ögon och justera ljusstyrka, kontrast eller gamma</li>
       <li xml:lang="ta">அடிப்படை படத்திருத்தம்: திருப்புவது; வெட்டுவது; புரட்டுவது; பிரகாசத்தை நிறமாறுபாட்டை அல்லது காமாவை மாற்றுவது; கண்கள் சிவந்திருப்பதைக் குறைப்பது</li>
@@ -303,6 +304,7 @@
       <li xml:lang="pt-BR">Anotar e marcar imagens com setas, formas, caixas de texto, carimbos de imagem e muito mais</li>
       <li xml:lang="ru">Комментирование и разметка изображения: стрелки, фигуры, текстовые поля, штампы и другие инструменты</li>
       <li xml:lang="sa">बाणैः, आकारैः, पाठपेटिकाभिः, चित्रमुद्रिकाभिः इत्यादिभिः चित्रैः टिप्पणीं कृत्वा चिह्नं कुर्वन्तु</li>
+      <li xml:lang="sk">Anotujte a označujte obrázky pomocou šípok, tvarov, textových polí a obrazových pečiatok, a ďalšie</li>
       <li xml:lang="sl">Dodajanje opomb in oznak na slike s puščicami, oblikami, okviri z besedilom, žigi in drugim</li>
       <li xml:lang="sv">Kommentera och märk bilder med pilar, former, textrutor, bildstämplar med mera</li>
       <li xml:lang="ta">அம்புக்குறிகள், சொற்றொடர்கள், வடிவங்கள் போன்றவற்றைக் கொண்டு படங்களிலுள்ளவற்றை முன்னிலைப்படுத்தலாம்</li>
@@ -347,6 +349,7 @@
       <li xml:lang="pt-BR">Ações básicas de gerenciamento de arquivos, como copiar, mover, excluir entre outras</li>
       <li xml:lang="ru">Основные действия с файлами: копирование, перемещение, удаление и другие</li>
       <li xml:lang="sa">मूलभूतसञ्चिकाप्रबन्धनक्रियाः यथा प्रतिलिपिः, चालनं, विलोपनं, अन्ये च</li>
+      <li xml:lang="sk">Podporuje základné akcie správy súborov ako kopírovanie, presúvanie, mazanie a iné</li>
       <li xml:lang="sl">Osnovni ukazi za delo z datotekami: kopiranje, premikanje, brisanje in drugo</li>
       <li xml:lang="sv">Grundläggande filhanteringsåtgärder som kopiera, flytta, ta bort, med mera</li>
       <li xml:lang="ta">நகலெடுத்தல், நகர்த்தல், மற்றும் அகற்றல் போன்ற அடிப்படை கோப்புநிர்வாக செய்லகள்</li>
