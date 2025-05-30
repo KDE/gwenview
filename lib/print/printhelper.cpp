@@ -168,6 +168,12 @@ void PrintHelper::printPreview(Document::Ptr doc)
     QPrinter printer;
     d->setupPrinter(&printer, doc);
     QPrintPreviewDialog dlg(&printer, d->mParent);
+
+    // ensure proper parent & sizing
+    if (d->mParent && d->mParent->window()) {
+        dlg.resize(d->mParent->window()->size() * 0.8);
+    }
+
     QObject::connect(&dlg, &QPrintPreviewDialog::paintRequested, [this, doc](QPrinter *printer) {
         d->print(printer, doc, false);
     });
