@@ -86,9 +86,11 @@ const QStringList &rasterImageMimeTypes()
         for (const auto &mime : supported) {
             const auto resolved = resolveAlias(QString::fromUtf8(mime));
             if (resolved.isEmpty()) {
-                qCWarning(GWENVIEW_LIB_LOG) << "Unresolved mime type " << mime;
+                qCDebug(GWENVIEW_LIB_LOG) << "Unresolved mime type " << mime;
             } else {
-                list << resolved;
+                if (!list.contains(resolved)) {
+                    list << resolved;
+                }
             }
         }
         // We don't want svg images to be considered as raster images
@@ -99,7 +101,7 @@ const QStringList &rasterImageMimeTypes()
         for (const QString &rawMimetype : rawMimeTypes()) {
             const auto resolved = resolveAlias(rawMimetype);
             if (resolved.isEmpty()) {
-                qCWarning(GWENVIEW_LIB_LOG) << "Unresolved raw mime type " << rawMimetype;
+                qCDebug(GWENVIEW_LIB_LOG) << "Unresolved raw mime type " << rawMimetype;
             } else {
                 if (!list.contains(resolved)) {
                     list << resolved;
