@@ -56,8 +56,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/benhoyt/inih/archive/refs/tags/r58.tar.gz",
-                    "sha256": "e79216260d5dffe809bda840be48ab0eec7737b2bb9f02d2275c1b46344ea7b7",
+                    "url": "https://github.com/benhoyt/inih/archive/refs/tags/r60.tar.gz",
+                    "sha256": "706aa05c888b53bd170e5d8aa8f8a9d9ccf5449dfed262d5103d1f292af26774",
                     "x-checker-data": {
                         "type": "anitya",
                         "project-id": 11600,
@@ -118,13 +118,13 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "http://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio-4.5.0.tar.gz",
-                    "sha256": "e4854fc3365c1462e493aa586bfaa2f3d0bb8c20b75a524955db64c27427ce09",
+                    "url": "https://files.kde.org/craft/sources/libs/cfitsio/cfitsio-4.6.2.tar.gz",
+                    "sha256": "66fd078cc0bea896b0d44b120d46d6805421a5361d3a5ad84d9f397b1b5de2cb",
                     "x-checker-data": {
                         "type": "anitya",
                         "project-id": 270,
                         "stable-only": true,
-                        "url-template": "http://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio-$version.tar.gz"
+                        "url-template": "https://files.kde.org/craft/sources/libs/cfitsio/cfitsio-$version.tar.gz"
                     }
                 }
             ]
@@ -145,8 +145,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/jasper-software/jasper/archive/version-4.2.4.tar.gz",
-                    "sha256": "23a3d58cdeacf3abdf9fa1d81dcefee58da6ab330940790c0f27019703bfd2cd",
+                    "url": "https://github.com/jasper-software/jasper/archive/version-4.2.5.tar.gz",
+                    "sha256": "3f4b1df7cab7a3cc67b9f6e28c730372f030b54b0faa8548a9ee04ae83fffd44",
                     "x-checker-data": {
                         "type": "anitya",
                         "project-id": 1421,
@@ -166,8 +166,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://www.libraw.org/data/LibRaw-0.21.3.tar.gz",
-                    "sha256": "dba34b7fc1143503942fa32ad9db43e94f714e62a4a856e91617f8f3e1e0aa5c",
+                    "url": "https://www.libraw.org/data/LibRaw-0.21.4.tar.gz",
+                    "sha256": "6be43f19397e43214ff56aab056bf3ff4925ca14012ce5a1538a172406a09e63",
                     "x-checker-data": {
                         "type": "anitya",
                         "project-id": 1709,
