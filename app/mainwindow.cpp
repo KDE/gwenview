@@ -1780,6 +1780,7 @@ void MainWindow::openFile()
     dialog->setModal(true);
     dialog->setDirectoryUrl(dirUrl);
     dialog->setWindowTitle(i18nc("@title:window", "Open Image"));
+    dialog->setFileMode(QFileDialog::FileMode::ExistingFile);
     dialog->setMimeTypeFilters(MimeTypeUtils::imageMimeTypes());
     dialog->setAcceptMode(QFileDialog::AcceptOpen);
     connect(dialog, &QDialog::accepted, this, [this, dialog]() {
