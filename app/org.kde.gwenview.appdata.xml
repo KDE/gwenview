@@ -237,6 +237,7 @@
       <li xml:lang="ca">Edició senzilla d'imatges: gira, escapça, redimensiona, emmiralla, capgira, redueix els ulls vermells i ajusta la brillantor, el contrast o la gamma</li>
       <li xml:lang="ca-valencia">Edició senzilla d'imatges: gira, escapça, redimensiona, emmiralla, capgira, reduïx els ulls rojos i ajusta la brillantor, el contrast o la gamma</li>
       <li xml:lang="da">Simpel billederedigering; rotér, beskær, ændr størrelse, vend, reducér røde øjne og justér lysstyrke, kontrast eller gamma</li>
+      <li xml:lang="de">Einfache Bildbearbeitung: Drehen, Zuschneiden, Größenänderung, Spiegeln, Wenden, Rote-Augen-Korrektur, Anpassen von Helligkeit, Kontrast oder Gamma</li>
       <li xml:lang="el">Απλή επεξεργασία εικόνας: περιστροφή, περικοπή, αλλαγή μεγέθους, καθρέφτης, αναστροφή, μείωση των κόκκινων ματιών, και ρύθμιση της φωτεινότητας, της αντίθεσης ή gamma</li>
       <li xml:lang="en-GB">Simple image editing: rotate, crop, resize, mirror, flip, reduce red eye, and adjust brightness, contrast, or gamma</li>
       <li xml:lang="eo">Simpla bildredaktado: rotacii, tondi, aligrandigi, speguli, renversi, redukti ruĝ-okulon, kaj alĝustigi helecon, kontraston aŭ gamma</li>
@@ -278,6 +279,7 @@
       <li xml:lang="ca">Anota i marca les imatges amb fletxes, formes, quadres de text, segells d'imatge i més</li>
       <li xml:lang="ca-valencia">Anota i marca les imatges amb fletxes, formes, quadros de text, segells d'imatge i més</li>
       <li xml:lang="da">Annotér og markér billeder med pile, former, tekstbokse, billedestempler og mere</li>
+      <li xml:lang="de">Versehen Sie Bilder mit Pfeilen, Formen, Textfeldern, Bildstempeln und mehr</li>
       <li xml:lang="el">Σημειώστε και επισημάνετε εικόνες με βέλη, σχήματα, πλαίσια κειμένου, σφραγίδες εικόνας, και πολλά άλλα</li>
       <li xml:lang="en-GB">Annotate and mark up images with arrows, shapes, text boxes, image stamps, and more</li>
       <li xml:lang="eo">Prinoti kaj primarki bildojn per sagoj, formoj, tekstskatoloj, bildostampoj kaj pli</li>
@@ -371,6 +373,7 @@
       <caption xml:lang="ca">Finestra principal de l'aplicació que mostra una imatge i els controls a l'esquerra</caption>
       <caption xml:lang="ca-valencia">Finestra principal de l'aplicació que mostra una imatge i els controls en l'esquerra</caption>
       <caption xml:lang="da">Programmets hovedvindue, der viser et billede og kontrollerne til venstre</caption>
+      <caption xml:lang="de">Das Hauptfenster der Anwendung. Ein Bild wird angezeigt, die Bedienelemente befinden sich links.</caption>
       <caption xml:lang="el">Κύριο παράθυρο της εφαρμογής που εμφανίζει μια εικόνα και στοιχεία ελέγχου στα αριστερά</caption>
       <caption xml:lang="en-GB">Main application window displaying an image and controls on the left</caption>
       <caption xml:lang="eo">Ĉefa aplikofenestro montranta bildon kaj regilojn maldekstre</caption>
