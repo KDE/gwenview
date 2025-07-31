@@ -27,3 +27,6 @@ Dependencies:
     'graphics/libkdcraw': '@same'
     'third-party/wayland': '@latest'
     'third-party/wayland-protocols': '@latest'
+
+Options:
+  require-passing-tests-on: ['@all']
