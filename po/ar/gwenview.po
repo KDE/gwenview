@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-14 00:41+0000\n"
-"PO-Revision-Date: 2025-05-14 17:06+0400\n"
+"PO-Revision-Date: 2025-08-03 11:10+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -1185,7 +1185,7 @@ msgstr "ملف أو مجلدات البدء"
 #, kde-format
 msgctxt "@action Open Recent menu"
 msgid "Clear List"
-msgstr "امسح القائمة"
+msgstr "امحُ القائمة"
 
 #: app/mainwindow.cpp:393
 #, kde-format
@@ -2744,7 +2744,7 @@ msgstr "تحجيم"
 #: lib/print/printoptionspage.ui:51
 #, kde-format
 msgid "&No scaling"
-msgstr "&بدون تحجيم"
+msgstr "&بلا تحجيم"
 
 #. i18n: ectx: property (text), widget (QRadioButton, mScaleToPage)
 #: lib/print/printoptionspage.ui:61
