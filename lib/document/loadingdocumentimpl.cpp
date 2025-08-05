@@ -321,7 +321,18 @@ struct LoadingDocumentImplPrivate {
             LOG("QImageReader::read() failed");
             return;
         }
-
+        // Color space conversion logic
+        if (!mImage.isNull() && mImage.colorSpace().isValid()) {
+            // Convert to sRGB if not already sRGB
+            if (mImage.colorSpace() != QColorSpace::SRgb) {
+                LOG("Converting color space from" << mImage.colorSpace().description() << "to sRGB");
+                QImage convertedImage = mImage.convertedToColorSpace(QColorSpace::SRgb);
+                if (!convertedImage.isNull()) {
+                    mImage = std::move(convertedImage);
+                    LOG("Color space conversion completed");
+                }
+            }
+        }
         if (reader.supportsAnimation() && reader.nextImageDelay() > 0 // Assume delay == 0 <=> only one frame
         ) {
             /*
