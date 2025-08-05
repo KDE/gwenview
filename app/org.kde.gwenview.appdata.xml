@@ -367,7 +367,7 @@
   <screenshots>
     <screenshot type="default">
       <caption>Main application window displaying an image and controls on the left</caption>
-      <caption xml:lang="ar">نافذة التطبيق الرئيسية تعرض صورة وعناصر تحكم على اليسار</caption>
+      <caption xml:lang="ar">نافذة التطبيق الرئيسة تعرض صورة وعناصر تحكم على اليسار</caption>
       <caption xml:lang="be">Галоўнае акно праграмы з выявай і элементамі кіравання злева</caption>
       <caption xml:lang="bg">Основен прозорец на приложението, показващ изображение и контроли вляво</caption>
       <caption xml:lang="ca">Finestra principal de l'aplicació que mostra una imatge i els controls a l'esquerra</caption>
