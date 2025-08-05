@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-14 00:41+0000\n"
-"PO-Revision-Date: 2025-08-03 11:10+0400\n"
+"PO-Revision-Date: 2025-08-04 18:48+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -110,7 +110,7 @@ msgstr "تذكر المجلدات و الوصلات"
 #: app/advancedconfigpage.ui:240
 #, kde-format
 msgid "Enable color management"
-msgstr "فعّل إدارة الألوان"
+msgstr "مكّن إدارة الألوان"
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileHelpLabel)
 #: app/advancedconfigpage.ui:265
@@ -686,7 +686,7 @@ msgstr "أظهر الفيديو"
 #: app/generalconfigpage.ui:34
 #, kde-format
 msgid "Automatically play"
-msgstr "شغل آليا"
+msgstr "شغل آليّا"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: app/generalconfigpage.ui:57
@@ -1005,7 +1005,7 @@ msgstr "نمط التكبير:"
 #: app/imageviewconfigpage.ui:271
 #, kde-format
 msgid "Autofit each image"
-msgstr "احتواء تلقائي لكل صورة"
+msgstr "احتواء آليّ لكل صورة"
 
 #. i18n: ectx: property (text), widget (QRadioButton, keepSameZoomModeRadioButton)
 #: app/imageviewconfigpage.ui:298
@@ -2431,8 +2431,8 @@ msgstr ""
 "emphasis> <link url = '%2'> في الإعدادات </link>. </item> </list> </para> "
 "<para> إذا مُكّن \"%1\" بالفعل، فسيؤدي الضغط عليه مرة أخرى إلى إيقاف تشغيله "
 "وسيتم عرض الصورة بحجمها الطبيعي بدلاً من ذلك. </para> <para> \"%1\" هو "
-"التكبير الافتراضي للصور. يمكن تغيير هذا بحيث تُعرض الصور بقيمة تكبير سابقة "
-"بدلاً من ذلك <link url = '%2'> في الإعدادات </link>. </para>"
+"التكبير المبدئي للصور. يمكن تغيير هذا بحيث تُعرض الصور بقيمة تكبير سابقة بدلاً "
+"من ذلك <link url = '%2'> في الإعدادات </link>. </para>"
 
 #: lib/documentview/documentviewcontroller.cpp:83
 #, kde-format
@@ -2533,7 +2533,7 @@ msgid ""
 msgstr ""
 "يحدد ما يحدث عند الانتقال إلى الصورة ب \n"
 "            بعد تكبير منطقة من الصورة أ. في حالة الضبط على \n"
-"            احتواء تلقائي ، تصغر الصورة ب لملاءمة الشاشة. \n"
+"            احتواء آليّ ، تصغر الصورة ب لملاءمة الشاشة. \n"
 "            في حالة الضبط على حافظ على نفس التناسب ، تشترك \n"
 "            جميع الصور في نفس التكبير والموضع: تعيين الصورة \n"
 "            ب على نفس معلمات التكبير مثل الصورة أ (وإذا غيرت ،\n"
