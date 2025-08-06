@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-14 00:41+0000\n"
-"PO-Revision-Date: 2025-08-04 18:48+0400\n"
+"PO-Revision-Date: 2025-08-05 17:47+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -45,8 +45,8 @@ msgid ""
 "quality that are faster to load, if available."
 msgstr ""
 "فعل هذه الخاصية إذا لم لديك مساحة قرص كافية. سيؤدي ذلك إلى تجنب تخزين الصور "
-"المصغرة على القرص ويفضل الصور المصغرة المضمنة ذات الجودة الأقل والتي يتم "
-"تحميلها بشكل أسرع، إذا كانت متوفرة."
+"المصغرة على القرص ويفضل الصور المصغرة المضمنة ذات الجودة الأقل والتي تُحمل "
+"بشكل أسرع، إذا كانت متوفرة."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: app/advancedconfigpage.ui:82
@@ -104,7 +104,7 @@ msgstr "تجسيد اللون:"
 #: app/advancedconfigpage.ui:197
 #, kde-format
 msgid "Remember folders and URLs"
-msgstr "تذكر المجلدات و الوصلات"
+msgstr "تذكر المجلدات و العناوين"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_EnableColorManagement)
 #: app/advancedconfigpage.ui:240
@@ -122,8 +122,8 @@ msgid ""
 "or are known to provide an incorrect color profile."
 msgstr ""
 "عند تعطيل إدارة الألوان، يقوم جونفيو بتحويل الصور إلى مساحة ألوان sRGB بدلاً "
-"من مساحة الألوان التي يكتشفها للشاشة. هذا مناسب فقط لشاشات العرض التي تمت "
-"معايرتها لمساحة ألوان sRGB أو المعروف عنها أنها توفر ملف تعريف لون غير صحيح."
+"من مساحة الألوان التي يكتشفها للشاشة. هذا مناسب فقط لشاشات العرض المعايرة "
+"لمساحة ألوان sRGB أو المعروف عنها أنها توفر ملف تعريف لون غير صحيح."
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileLabel)
 #: app/advancedconfigpage.ui:275
@@ -540,7 +540,7 @@ msgstr "الأبعاد <="
 #: lib/resize/resizeimagewidget.ui:40
 #, kde-format
 msgid "Height"
-msgstr "الإرتفاع"
+msgstr "الارتفاع"
 
 #. i18n("%1:%2") because ':' should not be translated, it is
 #. used to parse the ratio string.
@@ -809,7 +809,7 @@ msgstr "احفظ الصّورة"
 #: app/gvcore.cpp:415
 #, kde-format
 msgid "Save using another format"
-msgstr "احفظ بإستخدام نسق أخر"
+msgstr "احفظ باستخدام نسق أخر"
 
 #: app/gvcore.cpp:417
 #, kde-format
@@ -1060,7 +1060,7 @@ msgstr "<b>شريط المصغرات</b>"
 #: app/imageviewconfigpage.ui:527
 #, kde-format
 msgid "Orientation:"
-msgstr "الإتجاه:"
+msgstr "الاتجاه:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, horizontalRadioButton)
 #: app/imageviewconfigpage.ui:542
@@ -1460,7 +1460,7 @@ msgstr "ارجع إلى لائحة المستندات"
 #: app/mainwindow.cpp:2142
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
-msgstr "لقدوصلت إلى المستند الأخير، ماذا تريد أن تفعل؟"
+msgstr "لقد وصلت إلى المستند الأخير، ماذا تريد أن تفعل؟"
 
 #: app/mainwindow.cpp:2144
 #, kde-format
@@ -1833,24 +1833,24 @@ msgstr "الاسم الأصلي للملف، بأحرف صغيرة"
 #, kde-format
 msgid "One document has been imported."
 msgid_plural "%1 documents have been imported."
-msgstr[0] "لم يتم استيراد أي ملفات"
-msgstr[1] "تم استيراد ملف واحد."
-msgstr[2] "تم استيراد ملفين."
-msgstr[3] "تم استيراد %1 ملفات"
-msgstr[4] "تم استيراد %1 ملفاً"
-msgstr[5] "تم استيراد %1 ملف"
+msgstr[0] "لم يستورد أي ملفات"
+msgstr[1] "استوردَ ملف واحد."
+msgstr[2] "استوردَ ملفين."
+msgstr[3] "استوردَ %1 ملفات"
+msgstr[4] "استوردَ %1 ملفاً"
+msgstr[5] "استوردَ %1 ملف"
 
 #: importer/importdialog.cpp:96
 #, kde-format
 msgid "One document has been skipped because it had already been imported."
 msgid_plural ""
 "%1 documents have been skipped because they had already been imported."
-msgstr[0] "تخطي مستند واحد لأنه تم استيراده بالفعل."
-msgstr[1] "تخطي مستند واحد لأنه تم استيراده بالفعل."
-msgstr[2] "تخطي مستندين لأنه تم استيراده بالفعل."
-msgstr[3] "تخطي %1 مستندات لأنه تم استيرادها بالفعل."
-msgstr[4] "تخطي %1 مستندا لأنه تم استيراده بالفعل."
-msgstr[5] "تخطي %1 مستند لأنه تم استيرادها بالفعل."
+msgstr[0] "تخطي مستند واحد لأنه استورد من قبل."
+msgstr[1] "تخطي مستند واحد لأنه استورد من قبل."
+msgstr[2] "تخطي مستندين لأنه استورد من قبل."
+msgstr[3] "تخطي %1 مستندات لأنه استورد من قبل."
+msgstr[4] "تخطي %1 مستندا لأنه استورد من قبل."
+msgstr[5] "تخطي %1 مستند لأنه استورد من قبل."
 
 #: importer/importdialog.cpp:104
 #, kde-format
@@ -1894,18 +1894,18 @@ msgstr[5] "أأحذف %1 مستند المتخطى من الجهاز؟"
 msgctxt "Singular sentence is actually never used."
 msgid "Delete the imported or skipped document from the device?"
 msgid_plural "Delete the %1 imported and skipped documents from the device?"
-msgstr[0] "أأحذف المستند الذي تم استيراده أو تخطيه من الجهاز؟"
-msgstr[1] "أأحذف المستند الذي تم استيراده أو تخطيه من الجهاز؟"
-msgstr[2] "أأحذف المستندين اللذان تم استيرادهما أو تخطيتهما من الجهاز؟"
-msgstr[3] "أأحذف %1 المستندات التي تم استيرادها أو تخطيتها من الجهاز؟"
-msgstr[4] "أأحذف %1 مستندا الذي تم استيرادها أو تخطيتها من الجهاز؟"
-msgstr[5] "أأحذف %1 مستند الذي تم استيرادها أو تخطيتها من الجهاز؟"
+msgstr[0] "أأحذف المستند المستورد أم أتخطاه من الجهاز؟"
+msgstr[1] "أأحذف المستند المستورد أم أتخطاه من الجهاز؟"
+msgstr[2] "أأحذف المستندين المستوردين أم أتخطاهما من الجهاز؟"
+msgstr[3] "أأحذف %1 المستندات المستوردة أم أتخطاها من الجهاز؟"
+msgstr[4] "أأحذف %1 مستندًا المستوردة أم أتخطاها من الجهاز؟"
+msgstr[5] "أأحذف %1 مستند المستوردة أم أتخطاها من الجهاز؟"
 
 #: importer/importdialog.cpp:124
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Finished"
-msgstr "تم الاستيراد"
+msgstr "انتهى الاستيراد"
 
 #: importer/importdialog.cpp:125
 #, kde-format
@@ -2024,7 +2024,7 @@ msgstr "مستورد الصور"
 msgid ""
 "The device UDI, used to retrieve information about the device (name, icon...)"
 msgstr ""
-"معرف الجهاز ، يستخدم لاسترجاع المعلومات عن الجهاز (الاسم ، الايقونة ...)"
+"معرف الجهاز ، يستخدم لاسترجاع المعلومات عن الجهاز (الاسم ، الأيقونة ...)"
 
 #: importer/main.cpp:53
 #, kde-format
@@ -2103,7 +2103,7 @@ msgid ""
 "\"camera:/\" on your system."
 msgstr ""
 "تحتاج إلى تثبيت Kamera على نظامك للقراءة من الكاميرا. انقر هنا لبدء تشغيل "
-"المستكشف لتثبيت Kamera لتمكين دعم البروتوكول لـ \"camera:‎/‎\"  على نظامك."
+"المستكشف لتثبيت Kamera لتمكين دعم الميفاق لـ \"camera:‎/‎\"  على نظامك."
 
 #: importer/thumbnailpage.cpp:260
 #, kde-format
@@ -2427,12 +2427,12 @@ msgstr ""
 "<para> هذا يناسب الصورة في منطقة العرض المتاحة: <list> <item> تعرض الصور "
 "الأكبر من مساحة العرض بحجم أصغر حتى تناسبها.  </item> <item> الصور الأصغر "
 "تعرض في منطقة المشاهدة بحجمها الطبيعي. إذا كان يجب أن تكبر الصور الأصغر "
-"لتشغل كامل مساحة العرض، فقم بتشغيل <emphasis> تكبير الصور الأصغر  </"
-"emphasis> <link url = '%2'> في الإعدادات </link>. </item> </list> </para> "
-"<para> إذا مُكّن \"%1\" بالفعل، فسيؤدي الضغط عليه مرة أخرى إلى إيقاف تشغيله "
-"وسيتم عرض الصورة بحجمها الطبيعي بدلاً من ذلك. </para> <para> \"%1\" هو "
-"التكبير المبدئي للصور. يمكن تغيير هذا بحيث تُعرض الصور بقيمة تكبير سابقة بدلاً "
-"من ذلك <link url = '%2'> في الإعدادات </link>. </para>"
+"لتشغل كامل مساحة العرض، فشغّل <emphasis> تكبير الصور الأصغر  </emphasis> "
+"<link url = '%2'> في الإعدادات </link>. </item> </list> </para> <para> إذا "
+"مُكّن \"%1\" بالفعل، فسيؤدي الضغط عليه مرة أخرى إلى إيقاف تشغيله وسيتم عرض "
+"الصورة بحجمها الطبيعي بدلاً من ذلك. </para> <para> \"%1\" هو التكبير المبدئي "
+"للصور. يمكن تغيير هذا بحيث تُعرض الصور بقيمة تكبير سابقة بدلاً من ذلك <link "
+"url = '%2'> في الإعدادات </link>. </para>"
 
 #: lib/documentview/documentviewcontroller.cpp:83
 #, kde-format
@@ -2485,7 +2485,7 @@ msgstr "نمط داكن"
 #: lib/documentview/messageviewadapter.cpp:50
 #, kde-format
 msgid "No document selected"
-msgstr "لم يتم إختيار أي مستند"
+msgstr "لم تحدد أي مستند"
 
 #: lib/fullscreenbar.cpp:269 lib/statusbartoolbutton.cpp:144
 #, kde-format
@@ -2537,10 +2537,10 @@ msgstr ""
 "            في حالة الضبط على حافظ على نفس التناسب ، تشترك \n"
 "            جميع الصور في نفس التكبير والموضع: تعيين الصورة \n"
 "            ب على نفس معلمات التكبير مثل الصورة أ (وإذا غيرت ،\n"
-"            فسيتم عرض الصورة أ مع التكبير والموضع المحدثين). إذا  \n"
+"            فستُعرض الصورة أ مع التكبير والموضع المحدثين). إذا  \n"
 "            عينت على فردي ، فستتذكر جميع الصور نفس معلمات التكبير \n"
 "            مثل الصورة أ ، ولكنها ستتذكر بعد ذلك تكبيرها وموضعها (إذا  \n"
-"            غيرت ، فلن يتم عرض الصورة أ مع التكبير والموضع المحدثين)."
+"            غيرت ، فلن تعرض الصورة أ مع التكبير والموضع المحدثين)."
 
 #. i18n: ectx: whatsthis, entry (RenderingIntent), group (ImageView)
 #: lib/gwenviewconfig.kcfg:228
