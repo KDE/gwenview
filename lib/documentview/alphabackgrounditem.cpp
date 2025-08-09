@@ -55,8 +55,9 @@ void AlphaBackgroundItem::paint(QPainter *painter, const QStyleOptionGraphicsIte
     // _round_ when converting instead of flooring. This means that we need to
     // manually do the flooring here, because we otherwise run into pixel
     // alignment issues with the image that is drawn on top of the background.
-    const auto width = int((mParent->documentSize().width() / qApp->devicePixelRatio()) * mParent->zoom());
-    const auto height = int((mParent->documentSize().height() / qApp->devicePixelRatio()) * mParent->zoom());
+    const auto dpr = painter->device()->devicePixelRatioF();
+    const auto width = int((mParent->documentSize().width() / dpr) * mParent->zoom());
+    const auto height = int((mParent->documentSize().height() / dpr) * mParent->zoom());
     const auto imageRect = QRectF{mParent->imageOffset().toPoint(), QSize{width, height}};
 
     switch (mMode) {
