@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-14 00:41+0000\n"
-"PO-Revision-Date: 2025-08-06 17:37+0400\n"
+"PO-Revision-Date: 2025-08-13 22:51+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -61,8 +61,8 @@ msgid ""
 "Squash colors that don't fit within the active color profile's color gamut, "
 "leaving other colors untouched"
 msgstr ""
-"يضغط الألوان التي لا تتلاءم مع التدرج اللوني لملف تعريف الألوان النشط ، "
-"تاركًا الألوان الأخرى دون تغيير"
+"يضغط الألوان التي لا تتلاءم مع التدرج اللوني لملف تعريف الألوان النشط، تاركًا "
+"الألوان الأخرى دون تغيير"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: app/advancedconfigpage.ui:102
@@ -121,8 +121,8 @@ msgid ""
 "is only appropriate for displays that are calibrated to the sRGB color space "
 "or are known to provide an incorrect color profile."
 msgstr ""
-"عند تعطيل إدارة الألوان، يقوم جونفيو بتحويل الصور إلى مساحة ألوان sRGB بدلاً "
-"من مساحة الألوان التي يكتشفها للشاشة. هذا مناسب فقط لشاشات العرض المعايرة "
+"عند تعطيل إدارة الألوان، يحول جونفيو الصور إلى مساحة ألوان sRGB بدلاً من "
+"مساحة الألوان التي يكتشفها للشاشة. هذا مناسب فقط لشاشات العرض المعايرة "
 "لمساحة ألوان sRGB أو المعروف عنها أنها توفر ملف تعريف لون غير صحيح."
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileLabel)
@@ -2023,8 +2023,7 @@ msgstr "مستورد الصور"
 #, kde-format
 msgid ""
 "The device UDI, used to retrieve information about the device (name, icon...)"
-msgstr ""
-"معرف الجهاز ، يستخدم لاسترجاع المعلومات عن الجهاز (الاسم ، الأيقونة ...)"
+msgstr "معرف الجهاز، يستخدم لاسترجاع المعلومات عن الجهاز (الاسم، الأيقونة ...)"
 
 #: importer/main.cpp:53
 #, kde-format
@@ -2061,19 +2060,19 @@ msgstr "يجري استيراد المستندات..."
 #, kde-format
 msgctxt "@info above install button when Kamera is not installed"
 msgid "Support for your camera is not installed."
-msgstr "دعم كاميرتك غيب مثبت"
+msgstr "حزمة إتاحة كاميرتك غير مثبتة"
 
 #: importer/thumbnailpage.cpp:233
 #, kde-format
 msgctxt "@info above install button, %1 protocol name %2 error text from KIO"
 msgid "The protocol support library for \"%1\" is not installed. Error: %2"
-msgstr "مكتبة دعم ميفاق \"%1\" غير مثبتة. الخطأ: %2"
+msgstr "مكتبة إتاحة ميفاق \"%1\" غير مثبتة. الخطأ: %2"
 
 #: importer/thumbnailpage.cpp:235
 #, kde-format
 msgctxt "@info above install button, %1 protocol name"
 msgid "The protocol support library for \"%1\" is not installed."
-msgstr "مكتبة دعم ميفاق \"%1\" غير مثبتة"
+msgstr "مكتبة إتاحة ميفاق \"%1\" غير مثبتة"
 
 #: importer/thumbnailpage.cpp:247
 #, kde-format
@@ -2086,13 +2085,13 @@ msgstr "بعد الانتهاء من عملية التثبيت أعد المست
 #, kde-format
 msgctxt "@info:tooltip for a button, %1 protocol name"
 msgid "Launch Discover to install the protocol support library for \"%1\""
-msgstr "شغل المستكشف لتثبيت مكتبة دعم ميفاق \"%1\""
+msgstr "شغل المستكشف لتثبيت مكتبة إتاحة ميفاق \"%1\""
 
 #: importer/thumbnailpage.cpp:256
 #, kde-format
 msgctxt "@action:button"
 msgid "Install Support for this Camera…"
-msgstr "ثبت دعم لهذه الكاميرا"
+msgstr "ثبّت الحزمة التي توفر التعامل مع هذه الكاميرا"
 
 #: importer/thumbnailpage.cpp:257
 #, kde-format
@@ -2103,13 +2102,13 @@ msgid ""
 "\"camera:/\" on your system."
 msgstr ""
 "تحتاج إلى تثبيت Kamera على نظامك للقراءة من الكاميرا. انقر هنا لبدء تشغيل "
-"المستكشف لتثبيت Kamera لتمكين دعم الميفاق لـ \"camera:‎/‎\"  على نظامك."
+"المستكشف لتثبيت Kamera لتمكين إتاحة الميفاق لـ \"camera:‎/‎\"  على نظامك."
 
 #: importer/thumbnailpage.cpp:260
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Install Protocol Support for \"%1\"…"
-msgstr "ثبت دعم ميفاق \"%1\"…"
+msgstr "ثبت إتاحة ميفاق \"%1\"…"
 
 #: importer/thumbnailpage.cpp:261
 #, kde-format
@@ -2117,13 +2116,13 @@ msgctxt "@info:whatsthis for a button, %1 protocol name"
 msgid ""
 "Click here to launch Discover to install the missing protocol support "
 "library to enable the protocol support for \"%1:/\" on your system."
-msgstr "انقر هنا لتشغيل المستكشف لتثبيت مكتبة دعم ميفاق \"‎%1:‎/‎\" على نظامك."
+msgstr "انقر هنا لتشغيل المستكشف لتثبيت مكتبة إتاحة ميفاق \"‎%1:‎/‎\" على نظامك."
 
 #: importer/thumbnailpage.cpp:265
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Search the Web for How to Install Protocol Support for \"%1\"…"
-msgstr "ابحث الويب عن كيفية تثبيت دعم ميفاق \"%1\"…"
+msgstr "ابحث في الويب عن كيفية تثبيت إتاحة ميفاق \"%1\"…"
 
 #: importer/thumbnailpage.cpp:281
 #, kde-format
@@ -2131,7 +2130,7 @@ msgctxt ""
 "@info this text will be used as a search term in an online search engine, %1 "
 "protocol name"
 msgid "How to install protocol support for \"%1\" on Linux"
-msgstr "كيف تثبت  \"%1\" دعم على لينكس"
+msgstr "كيف تثبت إتاحة ميفاق \"%1\" على لينكس"
 
 #: importer/thumbnailpage.cpp:282
 #, kde-format
@@ -2158,8 +2157,8 @@ msgid ""
 "Opening Discover failed.<nl/>Please check if Discover is installed on your "
 "system, or use your system's package manager to install \"Kamera\" package."
 msgstr ""
-"فشل فتح المستكشف. <nl/> يرجى التحقق مما إذا كان المستكشف مثبتًا على نظامك ، "
-"أو استخدم مدير الحزم في نظامك لتثبيت حزمة \"Kamera\"."
+"فشل فتح المستكشف. <nl/> يرجى التحقق مما إذا كان المستكشف مثبتًا على نظامك، أو "
+"استخدم مدير الحزم في نظامك لتثبيت حزمة \"Kamera\"."
 
 #: importer/thumbnailpage.cpp:492
 #, kde-kuit-format
@@ -2169,8 +2168,8 @@ msgid ""
 "system, or use your system's package manager to install the protocol support "
 "library for \"%1\"."
 msgstr ""
-"فشل فتح المستكشف. <nl /> الرجاء التحقق مما إذا كان المستكشف مثبتًا على "
-"نظامك ، أو استخدم مدير حزم النظام لتثبيت مكتبة دعم البروتوكول لـ \"%1\"."
+"فشل فتح المستكشف. <nl /> الرجاء التحقق مما إذا كان المستكشف مثبتًا على نظامك، "
+"أو استخدم مدير حزم النظام لتثبيت مكتبة إتاحة ميفاق \"%1\"."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: importer/thumbnailpage.ui:173
@@ -2533,14 +2532,14 @@ msgid ""
 msgstr ""
 "يحدد ما يحدث عند الانتقال إلى الصورة ب \n"
 "            بعد تكبير منطقة من الصورة أ. في حالة الضبط على \n"
-"            احتواء آليّ ، تصغر الصورة ب لملاءمة الشاشة. \n"
-"            في حالة الضبط على حافظ على نفس التناسب ، تشترك \n"
+"            احتواء آليّ، تصغر الصورة ب لملاءمة الشاشة. \n"
+"            في حالة الضبط على حافظ على نفس التناسب، تشترك \n"
 "            جميع الصور في نفس التكبير والموضع: تعيين الصورة \n"
 "            ب على نفس معلمات التكبير مثل الصورة أ (وإذا غيرت ،\n"
 "            فستُعرض الصورة أ مع التكبير والموضع المحدثين). إذا  \n"
-"            عينت على فردي ، فستتذكر جميع الصور نفس معلمات التكبير \n"
-"            مثل الصورة أ ، ولكنها ستتذكر بعد ذلك تكبيرها وموضعها (إذا  \n"
-"            غيرت ، فلن تعرض الصورة أ مع التكبير والموضع المحدثين)."
+"            عينت على فردي، فستتذكر جميع الصور نفس معلمات التكبير \n"
+"            مثل الصورة أ، ولكنها ستتذكر بعد ذلك تكبيرها وموضعها (إذا  \n"
+"            غيرت، فلن تعرض الصورة أ مع التكبير والموضع المحدثين)."
 
 #. i18n: ectx: whatsthis, entry (RenderingIntent), group (ImageView)
 #: lib/gwenviewconfig.kcfg:228
@@ -2560,7 +2559,7 @@ msgstr ""
 "                ستعمل ميزة \"الإدراك\" على قياس ألوان الصورة بأكملها بحيث "
 "تتناسب\n"
 "                جميعها مع إمكانات العرض. نسبي سوف يضغط فقط على الألوان التي\n"
-"                لا يمكن عرضها ، ويترك الألوان الأخرى بمفردها."
+"                لا يمكن عرضها، ويترك الألوان الأخرى بمفردها."
 
 #. i18n: ectx: label, entry (random), group (slide show)
 #: lib/gwenviewconfig.kcfg:339
@@ -2801,7 +2800,7 @@ msgstr "الحجم:"
 msgid ""
 "Click on a red eye and choose a size, or double-click to correct instantly."
 msgstr ""
-"انقر فوق العين الحمراء واختر الحجم ، أو انقر نقرًا مزدوجًا للتصحيح على الفور."
+"انقر فوق العين الحمراء واختر الحجم، أو انقر نقرًا مزدوجًا للتصحيح على الفور."
 
 #: lib/resize/resizeimagedialog.cpp:76
 #, kde-format
