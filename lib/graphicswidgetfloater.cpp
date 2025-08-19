@@ -50,6 +50,13 @@ struct GraphicsWidgetFloaterPrivate {
             return;
         }
 
+        const QObject *childParent = mChild->parent();
+        if (!dynamic_cast<const QGraphicsWidget *>(childParent)) {
+            Q_ASSERT(childParent == mParent);
+            // mParent is being destroyed and its not a QGraphicsWidget anymore
+            return;
+        }
+
         int posX, posY;
         int childWidth, childHeight;
         int parentWidth, parentHeight;
