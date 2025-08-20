@@ -284,7 +284,7 @@ void VideoViewAdapter::slotMuteClicked()
 bool VideoViewAdapter::eventFilter(QObject *, QEvent *event)
 {
     if (event->type() == QEvent::GraphicsSceneHoverMove) {
-        d->updateHudVisibility(static_cast<QGraphicsSceneHoverEvent *>(event)->scenePos().y());
+        d->updateHudVisibility(static_cast<QGraphicsSceneHoverEvent *>(event)->pos().y());
     } else if (event->type() == QEvent::KeyPress) {
         d->keyPressEvent(static_cast<QKeyEvent *>(event));
     } else if (event->type() == QEvent::GraphicsSceneMouseDoubleClick) {
