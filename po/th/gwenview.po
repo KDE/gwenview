@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-14 00:41+0000\n"
+"POT-Creation-Date: 2025-08-20 00:41+0000\n"
 "PO-Revision-Date: 2010-12-17 21:37+0700\n"
 "Last-Translator: Thanomsub Noppaburana <donga.nb@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -2299,7 +2299,7 @@ msgctxt "@info"
 msgid "Gwenview cannot display documents of type %1."
 msgstr "เกวนวิวไม่สามารถแสดงเอกสารประเภท %1 ได้"
 
-#: lib/document/loadingdocumentimpl.cpp:389
+#: lib/document/loadingdocumentimpl.cpp:400
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Could not open file for writing."
@@ -2307,13 +2307,13 @@ msgctxt "@info"
 msgid "Could not open file %1"
 msgstr "ไม่สามารถเปิดแฟ้มเพื่อทำการเขียนได้"
 
-#: lib/document/loadingdocumentimpl.cpp:480
+#: lib/document/loadingdocumentimpl.cpp:491
 #, kde-format
 msgctxt "@info"
 msgid "Loading meta information failed."
 msgstr "ล้มเหลวในการโหลดข้อมูลกำกับ"
 
-#: lib/document/loadingdocumentimpl.cpp:506
+#: lib/document/loadingdocumentimpl.cpp:517
 #, kde-format
 msgctxt "@info"
 msgid "Loading image failed."

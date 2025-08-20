@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-14 00:41+0000\n"
+"POT-Creation-Date: 2025-08-20 00:41+0000\n"
 "PO-Revision-Date: 2024-09-19 15:04+0300\n"
 "Last-Translator: Antonis Geralis <capoiosct@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -2267,19 +2267,19 @@ msgctxt "@info"
 msgid "Gwenview cannot display documents of type %1."
 msgstr "Το Gwenview αδυνατεί να εμφανίσει έγγραφα του τύπου %1."
 
-#: lib/document/loadingdocumentimpl.cpp:389
+#: lib/document/loadingdocumentimpl.cpp:400
 #, kde-format
 msgctxt "@info"
 msgid "Could not open file %1"
 msgstr "Αδυναμία ανοίγματος του αρχείου %1"
 
-#: lib/document/loadingdocumentimpl.cpp:480
+#: lib/document/loadingdocumentimpl.cpp:491
 #, kde-format
 msgctxt "@info"
 msgid "Loading meta information failed."
 msgstr "Αποτυχία φόρτωσης μεταπληροφοριών."
 
-#: lib/document/loadingdocumentimpl.cpp:506
+#: lib/document/loadingdocumentimpl.cpp:517
 #, kde-format
 msgctxt "@info"
 msgid "Loading image failed."

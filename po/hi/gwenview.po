@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-14 00:41+0000\n"
+"POT-Creation-Date: 2025-08-20 00:41+0000\n"
 "PO-Revision-Date: 2022-02-10 12:40+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -2274,19 +2274,19 @@ msgctxt "@info"
 msgid "Gwenview cannot display documents of type %1."
 msgstr "ग्वेनव्यू छवियों को '%1' फ़ॉर्मेट में सहेज नहीं सकता."
 
-#: lib/document/loadingdocumentimpl.cpp:389
+#: lib/document/loadingdocumentimpl.cpp:400
 #, kde-format
 msgctxt "@info"
 msgid "Could not open file %1"
 msgstr ""
 
-#: lib/document/loadingdocumentimpl.cpp:480
+#: lib/document/loadingdocumentimpl.cpp:491
 #, kde-format
 msgctxt "@info"
 msgid "Loading meta information failed."
 msgstr ""
 
-#: lib/document/loadingdocumentimpl.cpp:506
+#: lib/document/loadingdocumentimpl.cpp:517
 #, fuzzy, kde-format
 #| msgid "One image modified"
 #| msgid_plural "%1 images modified"
