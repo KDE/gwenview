@@ -33,7 +33,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KActionCollection>
 #include <KCrash>
 #include <KIO/CopyJob>
+#include <KIconTheme>
 #include <KLocalizedString>
+
+#define HAVE_STYLE_MANAGER __has_include(<KStyleManager>)
+#if HAVE_STYLE_MANAGER
+#include <KStyleManager>
+#endif
 
 // Local
 #include "mainwindow.h"
@@ -176,7 +182,30 @@ int main(int argc, char *argv[])
      */
     QCoreApplication::setAttribute(Qt::AA_CompressHighFrequencyEvents, true);
 
+    /**
+     * trigger initialisation of proper icon theme
+     */
+#if KICONTHEMES_VERSION >= QT_VERSION_CHECK(6, 3, 0)
+    KIconTheme::initTheme();
+#endif
+
     QApplication app(argc, argv);
+
+#if HAVE_STYLE_MANAGER
+    /**
+     * trigger initialisation of proper application style
+     */
+    KStyleManager::initStyle();
+#else
+    /**
+     * For Windows and macOS: use Breeze if available
+     * Of all tested styles that works the best for us
+     */
+#if defined(Q_OS_MACOS) || defined(Q_OS_WIN)
+    QApplication::setStyle(QStringLiteral("breeze"));
+#endif
+#endif
+
     KLocalizedString::setApplicationDomain("gwenview");
     QScopedPointer<KAboutData> aboutData(Gwenview::createAboutData(QStringLiteral("gwenview"), /* component name */
                                                                    i18n("Gwenview") /* display name */
