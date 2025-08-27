@@ -33,6 +33,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KF
 #include <KColorScheme>
+#include <KColorSchemeManager>
+#include <KColorSchemeModel>
 #include <KColorUtils>
 #include <KFileCustomDialog>
 #include <KFileWidget>
@@ -140,7 +142,11 @@ struct GvCorePrivate {
     void setupPalettes()
     {
         // Normal
-        KSharedConfigPtr config = KSharedConfig::openConfig();
+        auto *colorSchemeManager = KColorSchemeManager::instance();
+        const QModelIndex activeColorSchemeIndex = colorSchemeManager->indexForSchemeId(colorSchemeManager->activeSchemeId());
+        const QString colorSchemePath = activeColorSchemeIndex.data(KColorSchemeModel::PathRole).toString();
+
+        KSharedConfigPtr config = KSharedConfig::openConfig(colorSchemePath);
         mPalettes[GvCore::NormalPalette] = KColorScheme::createApplicationPalette(config);
         QPalette viewPalette = mPalettes[GvCore::NormalPalette];
 
