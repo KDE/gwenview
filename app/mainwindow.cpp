@@ -49,6 +49,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KF
 #include <KActionCategory>
 #include <KActionCollection>
+#include <KColorSchemeManager>
+#include <KColorSchemeMenu>
 #include <KDirLister>
 #include <KDirModel>
 #include <KFileItem>
@@ -511,6 +513,11 @@ struct MainWindow::Private {
         view->addAction(KStandardAction::Preferences, q, SLOT(showConfigDialog()));
 
         view->addAction(KStandardAction::ConfigureToolbars, q, SLOT(configureToolbars()));
+
+        auto *manager = KColorSchemeManager::instance();
+        manager->setAutosaveChanges(true);
+        auto *schemeMenu = KColorSchemeMenu::createMenu(manager, q);
+        actionCollection->addAction(QStringLiteral("window-colorscheme-menu"), schemeMenu->menu()->menuAction());
 
 #if HAVE_PURPOSE
         mShareAction = new KToolBarPopupAction(QIcon::fromTheme(QStringLiteral("document-share")), i18nc("@action Share images", "Share"), q);
@@ -1691,8 +1698,9 @@ void MainWindow::toggleFullScreen(bool checked)
         setAutoSaveSettings();
 
         // Back to normal
-        qApp->setProperty("KDE_COLOR_SCHEME_PATH", QVariant());
-        QApplication::setPalette(d->mGvCore->palette(GvCore::NormalPalette));
+        auto *colorSchemeManager = KColorSchemeManager::instance();
+        const QModelIndex activeColorSchemeIndex = colorSchemeManager->indexForSchemeId(colorSchemeManager->activeSchemeId());
+        colorSchemeManager->activateScheme(activeColorSchemeIndex);
 
         d->mSlideShow->pause();
         KToggleFullScreenAction::setFullScreen(this, false);
