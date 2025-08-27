@@ -145,7 +145,7 @@ struct GvCorePrivate {
         QPalette viewPalette = mPalettes[GvCore::NormalPalette];
 
         DocumentView::BackgroundColorMode colorMode = GwenviewConfig::backgroundColorMode();
-        const bool usingLightTheme = qApp->palette().base().color().lightness() > qApp->palette().text().color().lightness();
+        const bool usingLightTheme = mPalettes[GvCore::NormalPalette].base().color().lightness() > mPalettes[GvCore::NormalPalette].text().color().lightness();
 
         if ((usingLightTheme && colorMode == DocumentView::BackgroundColorMode::Dark)
             || (!usingLightTheme && colorMode == DocumentView::BackgroundColorMode::Light)) {
