@@ -762,10 +762,9 @@ msgid "None"
 msgstr "Žádné"
 
 #: app/gvcore.cpp:81
-#, fuzzy, kde-format
-#| msgid "Image quality:"
+#, kde-format
 msgid "Image &quality:"
-msgstr "Kvalita obrázku:"
+msgstr ""
 
 #: app/gvcore.cpp:88
 #, kde-format
