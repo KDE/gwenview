@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-20 00:41+0000\n"
+"POT-Creation-Date: 2025-09-01 00:40+0000\n"
 "PO-Revision-Date: 2022-02-10 12:40+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -1123,34 +1123,34 @@ msgid_plural "%1 files"
 msgstr[0] ""
 msgstr[1] ""
 
-#: app/main.cpp:182
+#: app/main.cpp:211
 #, kde-format
 msgid "Gwenview"
 msgstr "ग्वेन-व्यू"
 
-#: app/main.cpp:184
+#: app/main.cpp:213
 #, kde-format
 msgid "An Image Viewer"
 msgstr "एक छवि प्रदर्शक"
 
-#: app/main.cpp:194
+#: app/main.cpp:223
 #, kde-format
 msgid "Start in fullscreen mode"
 msgstr ""
 
-#: app/main.cpp:195
+#: app/main.cpp:224
 #, fuzzy, kde-format
 #| msgid "Start slideshow"
 msgid "Start in slideshow mode"
 msgstr "स्लाइड शो चालू करें"
 
-#: app/main.cpp:196
+#: app/main.cpp:225
 #, fuzzy, kde-format
 #| msgid "Start slideshow"
 msgid "Start in spotlight mode"
 msgstr "स्लाइड शो चालू करें"
 
-#: app/main.cpp:197
+#: app/main.cpp:226
 #, fuzzy, kde-format
 #| msgid "A starting file or folder"
 msgid "A starting file or folders"

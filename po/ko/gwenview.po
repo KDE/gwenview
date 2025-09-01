@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-20 00:41+0000\n"
+"POT-Creation-Date: 2025-09-01 00:40+0000\n"
 "PO-Revision-Date: 2025-06-10 23:59+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -1099,32 +1099,32 @@ msgid "%1 file"
 msgid_plural "%1 files"
 msgstr[0] "파일 %1개"
 
-#: app/main.cpp:182
+#: app/main.cpp:211
 #, kde-format
 msgid "Gwenview"
 msgstr "Gwenview"
 
-#: app/main.cpp:184
+#: app/main.cpp:213
 #, kde-format
 msgid "An Image Viewer"
 msgstr "그림 뷰어"
 
-#: app/main.cpp:194
+#: app/main.cpp:223
 #, kde-format
 msgid "Start in fullscreen mode"
 msgstr "전체 화면 모드에서 시작하기"
 
-#: app/main.cpp:195
+#: app/main.cpp:224
 #, kde-format
 msgid "Start in slideshow mode"
 msgstr "슬라이드 쇼 모드에서 시작하기"
 
-#: app/main.cpp:196
+#: app/main.cpp:225
 #, kde-format
 msgid "Start in spotlight mode"
 msgstr "스포트라이트 모드에서 시작하기"
 
-#: app/main.cpp:197
+#: app/main.cpp:226
 #, kde-format
 msgid "A starting file or folders"
 msgstr "시작할 파일이나 폴더"

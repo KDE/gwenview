@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fc57ad16a28d02dea100ceb1c60de14e\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-20 00:41+0000\n"
+"POT-Creation-Date: 2025-09-01 00:40+0000\n"
 "PO-Revision-Date: 2024-06-01 17:50\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@gmail.com>\n"
 "Language-Team: Belarusian\n"
@@ -1149,32 +1149,32 @@ msgstr[1] "%1 файлы"
 msgstr[2] "%1 файлаў"
 msgstr[3] "%1 файлы"
 
-#: app/main.cpp:182
+#: app/main.cpp:211
 #, kde-format
 msgid "Gwenview"
 msgstr "Gwenview"
 
-#: app/main.cpp:184
+#: app/main.cpp:213
 #, kde-format
 msgid "An Image Viewer"
 msgstr "Праграма для прагляду выяў"
 
-#: app/main.cpp:194
+#: app/main.cpp:223
 #, kde-format
 msgid "Start in fullscreen mode"
 msgstr "Запуск у поўнаэкранным рэжыме"
 
-#: app/main.cpp:195
+#: app/main.cpp:224
 #, kde-format
 msgid "Start in slideshow mode"
 msgstr "Запускаць у рэжыме слайд-шоу"
 
-#: app/main.cpp:196
+#: app/main.cpp:225
 #, kde-format
 msgid "Start in spotlight mode"
 msgstr "Запускаць у рэжыме пражэктара"
 
-#: app/main.cpp:197
+#: app/main.cpp:226
 #, kde-format
 msgid "A starting file or folders"
 msgstr "Пачатковы файл або каталогі"

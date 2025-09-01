@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-20 00:41+0000\n"
+"POT-Creation-Date: 2025-09-01 00:40+0000\n"
 "PO-Revision-Date: 2025-05-16 13:41+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -1133,32 +1133,32 @@ msgstr[1] "שני קבצים"
 msgstr[2] "%1 קבצים"
 msgstr[3] "%1 קבצים"
 
-#: app/main.cpp:182
+#: app/main.cpp:211
 #, kde-format
 msgid "Gwenview"
 msgstr "Gwenview"
 
-#: app/main.cpp:184
+#: app/main.cpp:213
 #, kde-format
 msgid "An Image Viewer"
 msgstr "מציג תמונות"
 
-#: app/main.cpp:194
+#: app/main.cpp:223
 #, kde-format
 msgid "Start in fullscreen mode"
 msgstr "התחלה במסך מלא"
 
-#: app/main.cpp:195
+#: app/main.cpp:224
 #, kde-format
 msgid "Start in slideshow mode"
 msgstr "התחלה בהצגת מצגת"
 
-#: app/main.cpp:196
+#: app/main.cpp:225
 #, kde-format
 msgid "Start in spotlight mode"
 msgstr "התחלה במצב מוקד עניין"
 
-#: app/main.cpp:197
+#: app/main.cpp:226
 #, kde-format
 msgid "A starting file or folders"
 msgstr "קובץ או תיקייה להתחלה"
