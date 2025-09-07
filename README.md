@@ -1,8 +1,11 @@
-# Gwenview
+# <img src="logo.png" width="48"/>Gwenview 
 
 Gwenview is a fast and easy to use image viewer by KDE, ideal for browsing and displaying a collection of images.
 
 <a href='https://flathub.org/apps/details/org.kde.gwenview'><img width='190px' alt='Download on Flathub' src='https://flathub.org/assets/badges/flathub-badge-i-en.png'/></a>
+
+[![Snap Store Link](https://snapcraft.io/en/dark/install.svg)](https://snapcraft.io/gwenview)
+
 
 ![Gwenview window](https://cdn.kde.org/screenshots/gwenview/gwenview.png)
 
@@ -19,7 +22,7 @@ Details on where to find stable releases of Gwenview can be found on its
 
 ## Support
 
-If you have an issue with Gwenview, please [open a support thread on KDE Discuss](https://discuss.kde.org/c/help/6).
+If you have an issue with Gwenview, please [open a support thread on KDE Discuss](https://discuss.kde.org/tags/c/help/6/gwenview).
 
 ## Building
 
