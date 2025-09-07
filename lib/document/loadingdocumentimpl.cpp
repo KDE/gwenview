@@ -133,7 +133,10 @@ struct LoadingDocumentImplPrivate {
             return true;
 
         default:
-            q->setDocumentErrorString(i18nc("@info", "Gwenview cannot display documents of type %1.", mMimeType.name()));
+            q->setDocumentErrorString(
+                i18nc("@info",
+                      "Gwenview cannot display documents of type %1. Install the kimageformats package to gain support for a wider range of media types.",
+                      mMimeType.name()));
             Q_EMIT q->loadingFailed();
             q->switchToImpl(new EmptyDocumentImpl(q->document()));
             return true;
