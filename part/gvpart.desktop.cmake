@@ -69,7 +69,6 @@ Name[tr]=Gwenview Görsel Görüntüleyicisi
 Name[ug]=Gwenview سۈرەت كۆرگۈ
 Name[uk]=Переглядач зображень Gwenview
 Name[vi]=Bộ xem ảnh Gwenview
-Name[x-test]=xxGwenview Image Viewerxx
 Name[zh_CN]=Gwenview 图像查看器
 Name[zh_TW]=Gwenview 影像檢視程式
 MimeType=${IMAGE_MIME_TYPES};
