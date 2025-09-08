@@ -44,7 +44,6 @@ Name[sv]=Gwenview importverktyg
 Name[ta]=குவென்வியூ இறக்குமதி நிரல்
 Name[tr]=Gwenview İçe Aktarıcısı
 Name[uk]=Інструмент імпортування Gwenview
-Name[x-test]=xxGwenview Importerxx
 Name[zh_CN]=Gwenview 导入程序
 Name[zh_TW]=Gwenview 匯入器
 Exec=gwenview_importer %u
