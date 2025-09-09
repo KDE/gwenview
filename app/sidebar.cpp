@@ -339,7 +339,7 @@ void SideBarTabBar::drawTab(int index, QStylePainter &painter) const
     }
 
     if (hasText) {
-        // The available space to draw the text depends on wether we already drew an icon into our contentRect.
+        // The available space to draw the text depends on whether we already drew an icon into our contentRect.
         const QSize availableSizeForText = !hasIcon ? contentSize : QSize(contentSize.width() - opt.iconSize.width() - 4, contentSize.height());
         // The '4' above is the hardcoded spacing between icons and text used in Qt Widgets.
         const QRect availableRectForText =

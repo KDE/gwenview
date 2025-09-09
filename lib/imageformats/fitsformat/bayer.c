@@ -2226,7 +2226,7 @@ dc1394error_t dc1394_bayer_AHD(const uint8_t *bayer, uint8_t *dst, int sx, int s
                                 homo[d][tr][tc]++;
                 }
             }
-            /*  Combine the most homogenous pixels for the final result:        */
+            /*  Combine the most homogeneous pixels for the final result:        */
             for (row = top + 3; row < top + TS - 3 && row < height - 3; row++)
             {
                 tr = row - top;
@@ -2408,7 +2408,7 @@ dc1394error_t dc1394_bayer_AHD_uint16(const uint16_t *bayer, uint16_t *dst, int 
                                 homo[d][tr][tc]++;
                 }
             }
-            /*  Combine the most homogenous pixels for the final result:        */
+            /*  Combine the most homogeneous pixels for the final result:        */
             for (row = top + 3; row < top + TS - 3 && row < height - 3; row++)
             {
                 tr = row - top;

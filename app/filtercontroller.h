@@ -442,7 +442,7 @@ public:
     }
 
     /**
-     * Sets the image dimesions that the filter will use
+     * Sets the image dimensions that the filter will use
      */
     void setSizes(uint32_t width, uint32_t height)
     {

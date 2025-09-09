@@ -32,7 +32,7 @@ class RasterImageView;
 /**
  * A QGraphicsItem subclass responsible for rendering the main raster image.
  *
- * This class is resposible for painting the main image when it is a raster
+ * This class is responsible for painting the main image when it is a raster
  * image. It will get the visible area from the main image, translate and scale
  * this based on the values from the parent ImageView, then apply color
  * correction. Finally the result will be drawn to the screen.

@@ -1,5 +1,5 @@
 #!/bin/bash
-# This script detects if there is one of wget/curl downloaders availabe and downloads
+# This script detects if there is one of wget/curl downloaders available and downloads
 # three raw files from the digikam's store.
 # If there is none of the two present in the system, the script suggests manual download.
 

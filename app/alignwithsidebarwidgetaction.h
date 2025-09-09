@@ -67,7 +67,7 @@ private:
      * Having a separator directly after an empty space looks bad unless the separator
      * is aligned with a sidebar. This method is used to remove or re-add the separator
      * so everything looks nice.
-     * @param visible Wether a potential separator after this widget should be visible.
+     * @param visible Whether a potential separator after this widget should be visible.
      *                This will always be changed to true if the parent toolbar is vertical.
      */
     void setFollowingSeparatorVisible(bool visible);

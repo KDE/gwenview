@@ -272,7 +272,7 @@ void ZoomComboBox::setMaximum(qreal maximum)
     setValue(qMin(d->value, maximum));
     // Generate zoom presets above 100%
     // NOTE: This probably has the same problem as setMinimum(),
-    // but the problem is never enountered since max zoom doesn't actually change
+    // but the problem is never encountered since max zoom doesn't actually change
     const int actualSizeActionIndex = findData(QVariant::fromValue(d->mActualSizeAction));
     const int count = this->count();
     for (int i = actualSizeActionIndex + 1; i < count; ++i) {

@@ -734,7 +734,7 @@ jtransform_adjust_parameters (j_decompress_ptr srcinfo,
 			      jvirt_barray_ptr *src_coef_arrays,
 			      jpeg_transform_info *info)
 {
-  srcinfo = srcinfo; /* avoid unsued parameter warning */
+  srcinfo = srcinfo; /* avoid unused parameter warning */
   /* If force-to-grayscale is requested, adjust destination parameters */
   if (info->force_grayscale) {
     /* We use jpeg_set_colorspace to make sure subsidiary settings get fixed
@@ -887,7 +887,7 @@ GLOBAL(void)
 jcopy_markers_execute (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 		       JCOPY_OPTION option)
 {
-  option = option; /* avoid unsued parameter warning */
+  option = option; /* avoid unused parameter warning */
   jpeg_saved_marker_ptr marker;
 
   /* In the current implementation, we don't actually need to examine the
