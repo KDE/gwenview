@@ -397,19 +397,19 @@
 >, <guibutton
 >Rellenar</guibutton
 > y <guibutton
->100%</guibutton
+>100 %</guibutton
 > están cerca de la barra de ampliación y son niveles de ampliación predefinidos. El botón <guibutton
 >Ajustar</guibutton
 > amplía el tamaño de la imagen para que se ajuste al de la ventana, el botón <guibutton
 >Rellenar</guibutton
 > amplía la imagen para llenar la ventana ajustando la anchura o la altura, mientras que el botón <guibutton
->100%</guibutton
+>100 %</guibutton
 > ajusta el tamaño de la imagen a su tamaño real en píxeles. El atajo de teclado <keycap
 >F</keycap
 > cambia entre el modo <guibutton
 >Ampliar para ajustar</guibutton
 > y <guibutton
->100%</guibutton
+>100 %</guibutton
 >; al pulsar pressing <keycombo action="simul"
 >&Shift;<keycap
 >F</keycap
