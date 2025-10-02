@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-01 00:40+0000\n"
+"POT-Creation-Date: 2025-10-02 00:40+0000\n"
 "PO-Revision-Date: 2022-11-01 00:37+0700\n"
 "Last-Translator: OIS <mistresssilvara@hotmail.com>\n"
 "Language-Team: Interlingue <kde-i18n-doc@kde.org>\n"
@@ -125,7 +125,7 @@ msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
 msgid "Sidebar Alignment Spacer"
 msgstr "Alineament:"
 
-#: app/browsemainpage.cpp:151 app/mainwindow.cpp:376 app/viewmainpage.cpp:410
+#: app/browsemainpage.cpp:151 app/mainwindow.cpp:378 app/viewmainpage.cpp:410
 #: lib/documentview/documentviewcontroller.cpp:55
 #, fuzzy, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
@@ -217,7 +217,7 @@ msgid "Show Hidden Files"
 msgstr "Ne posset extraher files"
 
 #: app/browsemainpage.cpp:206 app/fileopscontextmanageritem.cpp:136
-#: app/mainwindow.cpp:375
+#: app/mainwindow.cpp:377
 #, kde-format
 msgctxt "@title actions category"
 msgid "File"
@@ -755,13 +755,13 @@ msgctxt "A number of thumbnail actions to show"
 msgid "None"
 msgstr "Null"
 
-#: app/gvcore.cpp:81
+#: app/gvcore.cpp:83
 #, fuzzy, kde-format
 #| msgid "Image quality:"
 msgid "Image &quality:"
 msgstr "Qualitá de image:"
 
-#: app/gvcore.cpp:88
+#: app/gvcore.cpp:90
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip of custom toolbar button"
 #| msgid "%1"
@@ -769,29 +769,29 @@ msgctxt "@label:spinbox Percentage 1-100"
 msgid "%v%"
 msgstr "%1"
 
-#: app/gvcore.cpp:114
+#: app/gvcore.cpp:116
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Image"
 msgstr "Gardar li image"
 
-#: app/gvcore.cpp:415
+#: app/gvcore.cpp:421
 #, fuzzy, kde-format
 msgid "Save using another format"
 msgstr "Un altri application usa APT:"
 
-#: app/gvcore.cpp:417
+#: app/gvcore.cpp:423
 #, kde-format
 msgid "Gwenview cannot save images in '%1' format."
 msgstr ""
 
-#: app/gvcore.cpp:445
+#: app/gvcore.cpp:451
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot save images as %1."
 msgstr ""
 
-#: app/gvcore.cpp:463 app/gvcore.cpp:497
+#: app/gvcore.cpp:469 app/gvcore.cpp:503
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -799,12 +799,12 @@ msgid ""
 "emphasis><nl />%2"
 msgstr ""
 
-#: app/gvcore.cpp:513
+#: app/gvcore.cpp:519
 #, kde-format
 msgid "You are now viewing the new document."
 msgstr ""
 
-#: app/gvcore.cpp:515
+#: app/gvcore.cpp:521
 #, fuzzy, kde-format
 msgid "Go back to the original"
 msgstr "Ear 10 secondes retro"
@@ -815,8 +815,15 @@ msgstr "Ear 10 secondes retro"
 msgid "&Rating"
 msgstr "E&valuation"
 
+#. i18n: ectx: Menu (settings)
+#: app/gwenviewui.rc:87
+#, fuzzy, kde-format
+#| msgid "&Settings"
+msgid "Settings"
+msgstr "&Parametres"
+
 #. i18n: ectx: ToolBar (mainToolBar)
-#: app/gwenviewui.rc:90 part/gvpart.rc:16
+#: app/gwenviewui.rc:93 part/gvpart.rc:16
 #, kde-format
 msgid "Main Toolbar"
 msgstr "Panel de instrumentarium"
@@ -1133,284 +1140,284 @@ msgstr "Iniciar un exhibition"
 msgid "A starting file or folders"
 msgstr "Fólderes"
 
-#: app/mainwindow.cpp:385
+#: app/mainwindow.cpp:387
 #, fuzzy, kde-format
 msgctxt "@action Open Recent menu"
 msgid "Clear List"
 msgstr "Vacuar li liste"
 
-#: app/mainwindow.cpp:393
+#: app/mainwindow.cpp:395
 #, kde-format
 msgctxt "@action reload the currently viewed image"
 msgid "Reload"
 msgstr "Recargar"
 
-#: app/mainwindow.cpp:398
+#: app/mainwindow.cpp:400
 #, fuzzy, kde-format
 msgctxt "@action:inmenu Navigation Bar"
 msgid "Replace Location"
 msgstr "_Vicear per: "
 
-#: app/mainwindow.cpp:403
+#: app/mainwindow.cpp:405
 #, kde-format
 msgctxt "@action:intoolbar Switch to file list"
 msgid "Browse"
 msgstr "Navigator"
 
-#: app/mainwindow.cpp:404
+#: app/mainwindow.cpp:406
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Browse folders for images"
 msgstr "Navigar e rotar images"
 
-#: app/mainwindow.cpp:411
+#: app/mainwindow.cpp:413
 #, kde-format
 msgctxt "@action:intoolbar Switch to image view"
 msgid "View"
 msgstr "Vise"
 
-#: app/mainwindow.cpp:412
+#: app/mainwindow.cpp:414
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "View selected images"
 msgstr "Iniciar un exhibition del selectet images"
 
-#: app/mainwindow.cpp:431
+#: app/mainwindow.cpp:433
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Exit Full Screen"
 msgstr "_Plen-ecran"
 
-#: app/mainwindow.cpp:435
+#: app/mainwindow.cpp:437
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Spotlight Mode"
 msgstr "Lucid"
 
-#: app/mainwindow.cpp:441
+#: app/mainwindow.cpp:443
 #, kde-format
 msgctxt "@action Go to previous image"
 msgid "Previous"
 msgstr "Prec"
 
-#: app/mainwindow.cpp:442
+#: app/mainwindow.cpp:444
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to previous image"
 msgstr "Ear al precedent image"
 
-#: app/mainwindow.cpp:448
+#: app/mainwindow.cpp:450
 #, kde-format
 msgctxt "@action Go to next image"
 msgid "Next"
 msgstr "Seq"
 
-#: app/mainwindow.cpp:449
+#: app/mainwindow.cpp:451
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to next image"
 msgstr "Ear al sequent image"
 
-#: app/mainwindow.cpp:455
+#: app/mainwindow.cpp:457
 #, kde-format
 msgctxt "@action Go to first image"
 msgid "First"
 msgstr "Prim"
 
-#: app/mainwindow.cpp:456
+#: app/mainwindow.cpp:458
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to first image"
 msgstr "Ear al prim image"
 
-#: app/mainwindow.cpp:462
+#: app/mainwindow.cpp:464
 #, kde-format
 msgctxt "@action Go to last image"
 msgid "Last"
 msgstr "Ultim"
 
-#: app/mainwindow.cpp:463
+#: app/mainwindow.cpp:465
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to last image"
 msgstr "Ear al ultim image"
 
-#: app/mainwindow.cpp:473
+#: app/mainwindow.cpp:475
 #, kde-format
 msgctxt "@action"
 msgid "Start Page"
 msgstr "Inicial págine"
 
-#: app/mainwindow.cpp:474
+#: app/mainwindow.cpp:476
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open the start page"
 msgstr "Ear al inicial págine"
 
-#: app/mainwindow.cpp:481
+#: app/mainwindow.cpp:483
 #, kde-format
 msgctxt "@action"
 msgid "Sidebar"
 msgstr "Panel lateral"
 
-#: app/mainwindow.cpp:486
+#: app/mainwindow.cpp:488
 #, fuzzy, kde-format
 msgctxt "@action opens crop, rename, etc."
 msgid "Show Editing Tools"
 msgstr "Utensiles"
 
-#: app/mainwindow.cpp:516
+#: app/mainwindow.cpp:523
 #, kde-format
 msgctxt "@action Share images"
 msgid "Share"
 msgstr "Partir"
 
-#: app/mainwindow.cpp:525
+#: app/mainwindow.cpp:532
 #, fuzzy, kde-format
 msgid "Error while sharing: %1"
 msgstr "Un errore evenit obtenente li information pri partite"
 
-#: app/mainwindow.cpp:532
+#: app/mainwindow.cpp:539
 #, kde-format
 msgid ""
 "The shared image link (<a href=\"%1\">%1</a>) has been copied to the "
 "clipboard."
 msgstr ""
 
-#: app/mainwindow.cpp:582
+#: app/mainwindow.cpp:589
 #, kde-format
 msgctxt "@title:menu submenu for actions that open configuration dialogs"
 msgid "Configure"
 msgstr "Configurar"
 
-#: app/mainwindow.cpp:597
+#: app/mainwindow.cpp:604
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "Edit"
 msgstr "Redacter"
 
-#: app/mainwindow.cpp:602
+#: app/mainwindow.cpp:609
 #, kde-format
 msgid "Redo"
 msgstr "Refar"
 
-#: app/mainwindow.cpp:610
+#: app/mainwindow.cpp:617
 #, kde-format
 msgid "Undo"
 msgstr "Defar"
 
-#: app/mainwindow.cpp:637
+#: app/mainwindow.cpp:644
 #, kde-format
 msgid "Folders"
 msgstr "Fólderes"
 
-#: app/mainwindow.cpp:643
+#: app/mainwindow.cpp:650
 #, kde-format
 msgid "Information"
 msgstr "Information"
 
-#: app/mainwindow.cpp:682
+#: app/mainwindow.cpp:689
 #, kde-format
 msgid "Operations"
 msgstr "Operationes"
 
-#: app/mainwindow.cpp:951
+#: app/mainwindow.cpp:958
 #, kde-format
 msgid "Viewing media"
 msgstr ""
 
-#: app/mainwindow.cpp:1433
+#: app/mainwindow.cpp:1440
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Celar li panel lateral"
 
-#: app/mainwindow.cpp:1433
+#: app/mainwindow.cpp:1440
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Monstrar li panel lateral"
 
-#: app/mainwindow.cpp:1782
+#: app/mainwindow.cpp:1790
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Aperter un image"
 
-#: app/mainwindow.cpp:1842
+#: app/mainwindow.cpp:1850
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "Pausar li exhibition"
 
-#: app/mainwindow.cpp:1845
+#: app/mainwindow.cpp:1853
 #, fuzzy, kde-format
 msgid "Resume Slideshow"
 msgstr "Pausar o reprender li exhibition"
 
-#: app/mainwindow.cpp:1845
+#: app/mainwindow.cpp:1853
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Iniciar un exhibition"
 
-#: app/mainwindow.cpp:1858
+#: app/mainwindow.cpp:1866
 #, kde-format
 msgid "Save All Changes"
 msgstr "Gardar omni modificationes"
 
-#: app/mainwindow.cpp:1859
+#: app/mainwindow.cpp:1867
 #, kde-format
 msgid "Discard Changes"
 msgstr "Rejecter li modificationes"
 
-#: app/mainwindow.cpp:1861
+#: app/mainwindow.cpp:1869
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] ""
 msgstr[1] ""
 
-#: app/mainwindow.cpp:1861
+#: app/mainwindow.cpp:1869
 #, fuzzy, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Si vu ne garda it, vor modificationes va esser perdit."
 
-#: app/mainwindow.cpp:1904
+#: app/mainwindow.cpp:1912
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr ""
 
-#: app/mainwindow.cpp:1907
+#: app/mainwindow.cpp:1915
 #, fuzzy, kde-format
 msgid "Hide menu bar"
 msgstr "Celar li barra de menú"
 
-#: app/mainwindow.cpp:2128
+#: app/mainwindow.cpp:2136
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr ""
 
-#: app/mainwindow.cpp:2129 app/mainwindow.cpp:2143
+#: app/mainwindow.cpp:2137 app/mainwindow.cpp:2151
 #, fuzzy, kde-format
 msgid "Stay There"
 msgstr "Sem&pre in avan"
 
-#: app/mainwindow.cpp:2130
+#: app/mainwindow.cpp:2138
 #, fuzzy, kde-format
 msgid "Go to the Last Document"
 msgstr "Ear al ultim definition"
 
-#: app/mainwindow.cpp:2131 app/mainwindow.cpp:2145
+#: app/mainwindow.cpp:2139 app/mainwindow.cpp:2153
 #, fuzzy, kde-format
 msgid "Go Back to the Document List"
 msgstr "Ear 10 secondes retro"
 
-#: app/mainwindow.cpp:2142
+#: app/mainwindow.cpp:2150
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr ""
 
-#: app/mainwindow.cpp:2144
+#: app/mainwindow.cpp:2152
 #, kde-format
 msgid "Go to the First Document"
 msgstr "Ear al document"
@@ -2792,9 +2799,6 @@ msgstr "&Vise"
 #~ msgctxt "Spinbox suffix; percentage 1 - 100"
 #~ msgid "%"
 #~ msgstr "%"
-
-#~ msgid "&Settings"
-#~ msgstr "&Parametres"
 
 #~ msgid "Color profile:"
 #~ msgstr "Profil de color:"

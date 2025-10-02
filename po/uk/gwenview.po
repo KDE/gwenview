@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-01 00:40+0000\n"
+"POT-Creation-Date: 2025-10-02 00:40+0000\n"
 "PO-Revision-Date: 2025-05-14 09:14+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -140,7 +140,7 @@ msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
 msgid "Sidebar Alignment Spacer"
 msgstr "Роздільник вирівнювання на бічній панелі"
 
-#: app/browsemainpage.cpp:151 app/mainwindow.cpp:376 app/viewmainpage.cpp:410
+#: app/browsemainpage.cpp:151 app/mainwindow.cpp:378 app/viewmainpage.cpp:410
 #: lib/documentview/documentviewcontroller.cpp:55
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
@@ -232,7 +232,7 @@ msgid "Show Hidden Files"
 msgstr "Показати приховані файли"
 
 #: app/browsemainpage.cpp:206 app/fileopscontextmanageritem.cpp:136
-#: app/mainwindow.cpp:375
+#: app/mainwindow.cpp:377
 #, kde-format
 msgctxt "@title actions category"
 msgid "File"
@@ -781,40 +781,40 @@ msgctxt "A number of thumbnail actions to show"
 msgid "None"
 msgstr "не використовувати"
 
-#: app/gvcore.cpp:81
+#: app/gvcore.cpp:83
 #, kde-format
 msgid "Image &quality:"
 msgstr "&Якість зображення:"
 
-#: app/gvcore.cpp:88
+#: app/gvcore.cpp:90
 #, kde-format
 msgctxt "@label:spinbox Percentage 1-100"
 msgid "%v%"
 msgstr "%v%"
 
-#: app/gvcore.cpp:114
+#: app/gvcore.cpp:116
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Image"
 msgstr "Збереження зображення"
 
-#: app/gvcore.cpp:415
+#: app/gvcore.cpp:421
 #, kde-format
 msgid "Save using another format"
 msgstr "Зберегти в іншому форматі"
 
-#: app/gvcore.cpp:417
+#: app/gvcore.cpp:423
 #, kde-format
 msgid "Gwenview cannot save images in '%1' format."
 msgstr "Gwenview не може зберігати зображення в форматі «%1»."
 
-#: app/gvcore.cpp:445
+#: app/gvcore.cpp:451
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot save images as %1."
 msgstr "Gwenview не може зберігати зображення в форматі %1."
 
-#: app/gvcore.cpp:463 app/gvcore.cpp:497
+#: app/gvcore.cpp:469 app/gvcore.cpp:503
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -824,12 +824,12 @@ msgstr ""
 "<emphasis strong='true'>Не вдалося зберегти <filename>%1</filename>:</"
 "emphasis><nl />%2"
 
-#: app/gvcore.cpp:513
+#: app/gvcore.cpp:519
 #, kde-format
 msgid "You are now viewing the new document."
 msgstr "Зараз ви переглядаєте новий документ."
 
-#: app/gvcore.cpp:515
+#: app/gvcore.cpp:521
 #, kde-format
 msgid "Go back to the original"
 msgstr "Повернутися до оригіналу"
@@ -840,8 +840,15 @@ msgstr "Повернутися до оригіналу"
 msgid "&Rating"
 msgstr "&Оцінка"
 
+#. i18n: ectx: Menu (settings)
+#: app/gwenviewui.rc:87
+#, fuzzy, kde-format
+#| msgid "&Settings"
+msgid "Settings"
+msgstr "П&араметри"
+
 #. i18n: ectx: ToolBar (mainToolBar)
-#: app/gwenviewui.rc:90 part/gvpart.rc:16
+#: app/gwenviewui.rc:93 part/gvpart.rc:16
 #, kde-format
 msgid "Main Toolbar"
 msgstr "Головний пенал"
@@ -1166,144 +1173,144 @@ msgstr "Розпочати у режимі акцентів"
 msgid "A starting file or folders"
 msgstr "Початковий файл або теки"
 
-#: app/mainwindow.cpp:385
+#: app/mainwindow.cpp:387
 #, kde-format
 msgctxt "@action Open Recent menu"
 msgid "Clear List"
 msgstr "Спорожнити список"
 
-#: app/mainwindow.cpp:393
+#: app/mainwindow.cpp:395
 #, kde-format
 msgctxt "@action reload the currently viewed image"
 msgid "Reload"
 msgstr "Перезавантажити"
 
-#: app/mainwindow.cpp:398
+#: app/mainwindow.cpp:400
 #, kde-format
 msgctxt "@action:inmenu Navigation Bar"
 msgid "Replace Location"
 msgstr "Замінити адресу"
 
-#: app/mainwindow.cpp:403
+#: app/mainwindow.cpp:405
 #, kde-format
 msgctxt "@action:intoolbar Switch to file list"
 msgid "Browse"
 msgstr "Навігація"
 
-#: app/mainwindow.cpp:404
+#: app/mainwindow.cpp:406
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Browse folders for images"
 msgstr "Навігація теками з зображеннями"
 
-#: app/mainwindow.cpp:411
+#: app/mainwindow.cpp:413
 #, kde-format
 msgctxt "@action:intoolbar Switch to image view"
 msgid "View"
 msgstr "Переглянути"
 
-#: app/mainwindow.cpp:412
+#: app/mainwindow.cpp:414
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "View selected images"
 msgstr "Переглянути позначені зображення"
 
-#: app/mainwindow.cpp:431
+#: app/mainwindow.cpp:433
 #, kde-format
 msgctxt "@action"
 msgid "Exit Full Screen"
 msgstr "Вийти з повноекранного режиму"
 
-#: app/mainwindow.cpp:435
+#: app/mainwindow.cpp:437
 #, kde-format
 msgctxt "@action"
 msgid "Spotlight Mode"
 msgstr "Режим акцентів"
 
-#: app/mainwindow.cpp:441
+#: app/mainwindow.cpp:443
 #, kde-format
 msgctxt "@action Go to previous image"
 msgid "Previous"
 msgstr "Попереднє"
 
-#: app/mainwindow.cpp:442
+#: app/mainwindow.cpp:444
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to previous image"
 msgstr "Перейти до попереднього зображення"
 
-#: app/mainwindow.cpp:448
+#: app/mainwindow.cpp:450
 #, kde-format
 msgctxt "@action Go to next image"
 msgid "Next"
 msgstr "Наступне"
 
-#: app/mainwindow.cpp:449
+#: app/mainwindow.cpp:451
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to next image"
 msgstr "Перейти до наступного зображення"
 
-#: app/mainwindow.cpp:455
+#: app/mainwindow.cpp:457
 #, kde-format
 msgctxt "@action Go to first image"
 msgid "First"
 msgstr "Перше"
 
-#: app/mainwindow.cpp:456
+#: app/mainwindow.cpp:458
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to first image"
 msgstr "Перейти до першого зображення"
 
-#: app/mainwindow.cpp:462
+#: app/mainwindow.cpp:464
 #, kde-format
 msgctxt "@action Go to last image"
 msgid "Last"
 msgstr "Останнє"
 
-#: app/mainwindow.cpp:463
+#: app/mainwindow.cpp:465
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to last image"
 msgstr "Перейти до останнього зображення"
 
-#: app/mainwindow.cpp:473
+#: app/mainwindow.cpp:475
 #, kde-format
 msgctxt "@action"
 msgid "Start Page"
 msgstr "Початкова сторінка"
 
-#: app/mainwindow.cpp:474
+#: app/mainwindow.cpp:476
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open the start page"
 msgstr "Відкрити початкову сторінку"
 
-#: app/mainwindow.cpp:481
+#: app/mainwindow.cpp:483
 #, kde-format
 msgctxt "@action"
 msgid "Sidebar"
 msgstr "Бічна панель"
 
-#: app/mainwindow.cpp:486
+#: app/mainwindow.cpp:488
 #, kde-format
 msgctxt "@action opens crop, rename, etc."
 msgid "Show Editing Tools"
 msgstr "Показати засоби редагування"
 
-#: app/mainwindow.cpp:516
+#: app/mainwindow.cpp:523
 #, kde-format
 msgctxt "@action Share images"
 msgid "Share"
 msgstr "Оприлюднити"
 
-#: app/mainwindow.cpp:525
+#: app/mainwindow.cpp:532
 #, kde-format
 msgid "Error while sharing: %1"
 msgstr "Помилка під час спроби оприлюднити: %1"
 
-#: app/mainwindow.cpp:532
+#: app/mainwindow.cpp:539
 #, kde-format
 msgid ""
 "The shared image link (<a href=\"%1\">%1</a>) has been copied to the "
@@ -1312,92 +1319,92 @@ msgstr ""
 "Посилання на зображення (<a href=\"%1\">%1</a>) було скопійовано до буфера "
 "обміну даними."
 
-#: app/mainwindow.cpp:582
+#: app/mainwindow.cpp:589
 #, kde-format
 msgctxt "@title:menu submenu for actions that open configuration dialogs"
 msgid "Configure"
 msgstr "Налаштувати"
 
-#: app/mainwindow.cpp:597
+#: app/mainwindow.cpp:604
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "Edit"
 msgstr "Змінити"
 
-#: app/mainwindow.cpp:602
+#: app/mainwindow.cpp:609
 #, kde-format
 msgid "Redo"
 msgstr "Повторити"
 
-#: app/mainwindow.cpp:610
+#: app/mainwindow.cpp:617
 #, kde-format
 msgid "Undo"
 msgstr "Вернути"
 
-#: app/mainwindow.cpp:637
+#: app/mainwindow.cpp:644
 #, kde-format
 msgid "Folders"
 msgstr "Теки"
 
-#: app/mainwindow.cpp:643
+#: app/mainwindow.cpp:650
 #, kde-format
 msgid "Information"
 msgstr "Інформація"
 
-#: app/mainwindow.cpp:682
+#: app/mainwindow.cpp:689
 #, kde-format
 msgid "Operations"
 msgstr "Дії"
 
-#: app/mainwindow.cpp:951
+#: app/mainwindow.cpp:958
 #, kde-format
 msgid "Viewing media"
 msgstr "Перегляд мультимедіа"
 
-#: app/mainwindow.cpp:1433
+#: app/mainwindow.cpp:1440
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Сховати бічну панель"
 
-#: app/mainwindow.cpp:1433
+#: app/mainwindow.cpp:1440
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Показати бічну панель"
 
-#: app/mainwindow.cpp:1782
+#: app/mainwindow.cpp:1790
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Відкривання зображення"
 
-#: app/mainwindow.cpp:1842
+#: app/mainwindow.cpp:1850
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "Призупинити показ слайдів"
 
-#: app/mainwindow.cpp:1845
+#: app/mainwindow.cpp:1853
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "Поновити показ слайдів"
 
-#: app/mainwindow.cpp:1845
+#: app/mainwindow.cpp:1853
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Почати показ слайдів"
 
-#: app/mainwindow.cpp:1858
+#: app/mainwindow.cpp:1866
 #, kde-format
 msgid "Save All Changes"
 msgstr "Зберегти всі зміни"
 
-#: app/mainwindow.cpp:1859
+#: app/mainwindow.cpp:1867
 #, kde-format
 msgid "Discard Changes"
 msgstr "Відкинути зміни"
 
-#: app/mainwindow.cpp:1861
+#: app/mainwindow.cpp:1869
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
@@ -1406,12 +1413,12 @@ msgstr[1] "Було змінено %1 зображення."
 msgstr[2] "Було змінено %1 зображень."
 msgstr[3] "Було змінено %1 зображення."
 
-#: app/mainwindow.cpp:1861
+#: app/mainwindow.cpp:1869
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Якщо ви вийдете тепер, то всі зміни буде втрачено."
 
-#: app/mainwindow.cpp:1904
+#: app/mainwindow.cpp:1912
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
@@ -1419,37 +1426,37 @@ msgstr ""
 "У результаті смужку меню буде повністю приховано. Щоб наказати програмі "
 "знову її показувати, натисніть %1."
 
-#: app/mainwindow.cpp:1907
+#: app/mainwindow.cpp:1915
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Сховати смужку меню"
 
-#: app/mainwindow.cpp:2128
+#: app/mainwindow.cpp:2136
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "Ми досягли першого документа у списку. Що робити далі?"
 
-#: app/mainwindow.cpp:2129 app/mainwindow.cpp:2143
+#: app/mainwindow.cpp:2137 app/mainwindow.cpp:2151
 #, kde-format
 msgid "Stay There"
 msgstr "Залишатися тут"
 
-#: app/mainwindow.cpp:2130
+#: app/mainwindow.cpp:2138
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "Перейти до останнього документа"
 
-#: app/mainwindow.cpp:2131 app/mainwindow.cpp:2145
+#: app/mainwindow.cpp:2139 app/mainwindow.cpp:2153
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "Повернутися до списку документів"
 
-#: app/mainwindow.cpp:2142
+#: app/mainwindow.cpp:2150
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "Ми досягли останнього документа у списку. Що робити далі?"
 
-#: app/mainwindow.cpp:2144
+#: app/mainwindow.cpp:2152
 #, kde-format
 msgid "Go to the First Document"
 msgstr "Перейти до першого документа"
@@ -2949,9 +2956,6 @@ msgstr "П&ерегляд"
 #~ msgctxt "Spinbox suffix; percentage 1 - 100"
 #~ msgid "%"
 #~ msgstr "%"
-
-#~ msgid "&Settings"
-#~ msgstr "П&араметри"
 
 #~ msgid "Apply only the profile embedded in the image file"
 #~ msgstr "Застосувати лише профіль, який вбудовано до файла зображення"
