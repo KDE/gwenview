@@ -822,10 +822,9 @@ msgstr "&Hodnocení"
 
 #. i18n: ectx: Menu (settings)
 #: app/gwenviewui.rc:87
-#, fuzzy, kde-format
-#| msgid "Settings..."
+#, kde-format
 msgid "Settings"
-msgstr "Nastavení..."
+msgstr ""
 
 #. i18n: ectx: ToolBar (mainToolBar)
 #: app/gwenviewui.rc:93 part/gvpart.rc:16
