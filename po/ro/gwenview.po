@@ -496,7 +496,7 @@ msgstr "Marcate"
 #: app/filtercontroller.cpp:175
 #, kde-format
 msgid "Not Tagged"
-msgstr "Fără etichetă"
+msgstr "Fără marcaj"
 
 #: app/filtercontroller.cpp:229
 #, kde-format
@@ -624,9 +624,9 @@ msgstr ","
 msgctxt "Slideshow interval in seconds"
 msgid "%1 sec"
 msgid_plural "%1 secs"
-msgstr[0] "%1 sec"
-msgstr[1] "%1 sec"
-msgstr[2] "%1 sec"
+msgstr[0] "%1 sec."
+msgstr[1] "%1 sec."
+msgstr[2] "%1 de sec."
 
 #: app/fullscreencontent.cpp:400
 #, kde-format
