@@ -2,14 +2,14 @@
 # Copyright (C) 2008 This_file_is_part_of_KDE
 # This file is distributed under the same license as the gwenview package.
 # Laurenţiu Buzdugan <lbuz@rolix.org>, 2008".
-# Sergiu Bivol <sergiu@cip.md>, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2020, 2021, 2022.
+# SPDX-FileCopyrightText: 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2020, 2021, 2022, 2025 Sergiu Bivol <sergiu@cip.md>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-14 00:41+0000\n"
-"PO-Revision-Date: 2022-04-04 11:38+0100\n"
+"PO-Revision-Date: 2025-10-01 16:37+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian <kde-i18n-ro@kde.org>\n"
 "Language: ro\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 25.08.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -106,7 +106,7 @@ msgstr "Memorează dosare și URL-uri"
 #: app/advancedconfigpage.ui:240
 #, kde-format
 msgid "Enable color management"
-msgstr ""
+msgstr "Activează gestiunea culorilor"
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileHelpLabel)
 #: app/advancedconfigpage.ui:265
@@ -120,10 +120,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileLabel)
 #: app/advancedconfigpage.ui:275
-#, fuzzy, kde-format
-#| msgid "Too many arguments."
+#, kde-format
 msgid "Color management:"
-msgstr "Prea multe argumente."
+msgstr "Gestiunea culorilor:"
 
 #: app/alignwithsidebarwidgetaction.cpp:23
 #, kde-format
@@ -217,11 +216,10 @@ msgid "Rating"
 msgstr "Punctaj"
 
 #: app/browsemainpage.cpp:200
-#, fuzzy, kde-format
-#| msgid "Show failed files..."
+#, kde-format
 msgctxt "@action:inmenu View"
 msgid "Show Hidden Files"
-msgstr "Arată fișierele eșuate..."
+msgstr "Arată fișierele ascunse"
 
 #: app/browsemainpage.cpp:206 app/fileopscontextmanageritem.cpp:136
 #: app/mainwindow.cpp:375
@@ -433,7 +431,7 @@ msgstr "Creează dosar..."
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Open in New Window"
-msgstr ""
+msgstr "Deschide în fereastră nouă"
 
 #: app/fileopscontextmanageritem.cpp:189
 #, kde-format
@@ -493,27 +491,27 @@ msgstr "Punctaj <="
 #: app/filtercontroller.cpp:174
 #, kde-format
 msgid "Tagged"
-msgstr "Cu etichetă"
+msgstr "Marcate"
 
 #: app/filtercontroller.cpp:175
 #, kde-format
 msgid "Not Tagged"
-msgstr "Fără etichetă"
+msgstr "Fără marcaj"
 
 #: app/filtercontroller.cpp:229
 #, kde-format
 msgid "Dimensions >="
-msgstr ""
+msgstr "Dimensiuni >="
 
 #: app/filtercontroller.cpp:230
 #, kde-format
 msgid "Dimensions ="
-msgstr ""
+msgstr "Dimensiuni ="
 
 #: app/filtercontroller.cpp:231
 #, kde-format
 msgid "Dimensions <="
-msgstr ""
+msgstr "Dimensiuni <="
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: app/filtercontroller.cpp:238 lib/crop/cropwidget.cpp:221
@@ -556,12 +554,10 @@ msgid "Filter by Tag"
 msgstr "Filtrare după etichetă"
 
 #: app/filtercontroller.cpp:339
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Filter by Date"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Dimensions"
-msgstr "Filtrare după dată"
+msgstr "Filtrare după dimensiuni"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: app/fullscreenconfigwidget.ui:20
@@ -628,9 +624,9 @@ msgstr ","
 msgctxt "Slideshow interval in seconds"
 msgid "%1 sec"
 msgid_plural "%1 secs"
-msgstr[0] "%1 sec"
-msgstr[1] "%1 sec"
-msgstr[2] "%1 sec"
+msgstr[0] "%1 sec."
+msgstr[1] "%1 sec."
+msgstr[2] "%1 de sec."
 
 #: app/fullscreencontent.cpp:400
 #, kde-format
@@ -693,19 +689,15 @@ msgstr "Întotdeauna"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: app/generalconfigpage.ui:88
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Go to last image"
+#, kde-format
 msgid "After the last image:"
-msgstr "Mergi la ultima imagine"
+msgstr "După ultima imagine:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_WrapAfterLast)
 #: app/generalconfigpage.ui:95
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Start Page"
+#, kde-format
 msgid "Start over"
-msgstr "Pagina de pornire"
+msgstr "Ia de la capăt"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: app/generalconfigpage.ui:118
@@ -774,18 +766,15 @@ msgid "None"
 msgstr "Niciuna"
 
 #: app/gvcore.cpp:81
-#, fuzzy, kde-format
-#| msgid "Image quality:"
+#, kde-format
 msgid "Image &quality:"
-msgstr "Calitate imagine:"
+msgstr "C&alitate imagine:"
 
 #: app/gvcore.cpp:88
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip of custom toolbar button"
-#| msgid "%1"
+#, kde-format
 msgctxt "@label:spinbox Percentage 1-100"
 msgid "%v%"
-msgstr "%1"
+msgstr "%v%"
 
 #: app/gvcore.cpp:114
 #, kde-format
@@ -900,7 +889,7 @@ msgstr "Decupează"
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Adjust Colors"
-msgstr ""
+msgstr "Ajustare culori"
 
 #: app/imageopscontextmanageritem.cpp:128
 #: lib/redeyereduction/redeyereductionimageoperation.cpp:75
@@ -913,13 +902,13 @@ msgstr "Reduce ochii roșii"
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Annotate"
-msgstr ""
+msgstr "Adnotare"
 
 #: app/imageopscontextmanageritem.cpp:141
 #, kde-format
 msgctxt "@title:window Annotate [filename]"
 msgid "Annotate %1"
-msgstr ""
+msgstr "Adnotează %1"
 
 #: app/imageopscontextmanageritem.cpp:164 lib/document/documentjob.cpp:77
 #, kde-format
@@ -1346,7 +1335,7 @@ msgstr "Operații"
 #: app/mainwindow.cpp:951
 #, kde-format
 msgid "Viewing media"
-msgstr ""
+msgstr "Vizualizare suport"
 
 #: app/mainwindow.cpp:1433
 #, kde-format
@@ -2018,12 +2007,11 @@ msgid "Support for your camera is not installed."
 msgstr "Suportul pentru aparatul dumneavoastră nu e instalat."
 
 #: importer/thumbnailpage.cpp:233
-#, fuzzy, kde-format
-#| msgctxt "@info above install button, %1 protocol name"
-#| msgid "The protocol support library for \"%1\" is not installed."
+#, kde-format
 msgctxt "@info above install button, %1 protocol name %2 error text from KIO"
 msgid "The protocol support library for \"%1\" is not installed. Error: %2"
-msgstr "Biblioteca cu suport de protocol pentru „%1” nu e instalată."
+msgstr ""
+"Biblioteca cu suport de protocol pentru „%1” nu e instalată. Eroare: %2"
 
 #: importer/thumbnailpage.cpp:235
 #, kde-format
@@ -2179,27 +2167,27 @@ msgstr "Dezvoltator"
 #: lib/bcg/bcgimageoperation.cpp:69
 #, kde-format
 msgid "Adjust Colors"
-msgstr ""
+msgstr "Ajustare culori"
 
 #: lib/bcg/bcgwidget.cpp:51
 #, kde-format
 msgid "Brightness:"
-msgstr ""
+msgstr "Strălucire:"
 
 #: lib/bcg/bcgwidget.cpp:52
 #, kde-format
 msgid "Contrast:"
-msgstr ""
+msgstr "Contrast:"
 
 #: lib/bcg/bcgwidget.cpp:53
 #, kde-format
 msgid "Gamma:"
-msgstr ""
+msgstr "Gama:"
 
 #: lib/crop/cropwidget.cpp:191
 #, kde-format
 msgid "Current Image"
-msgstr "Imagine curentă"
+msgstr "Imagine actuală"
 
 #: lib/crop/cropwidget.cpp:194
 #, kde-format
@@ -2337,12 +2325,10 @@ msgid "%1x%2"
 msgstr "%1x%2"
 
 #: lib/documentview/documentview.cpp:265 lib/zoomcombobox/zoomcombobox.cpp:318
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip of custom toolbar button"
-#| msgid "%1"
+#, kde-format
 msgctxt "Percent value"
 msgid "%1%"
-msgstr "%1"
+msgstr "%1%"
 
 #: lib/documentview/documentview.cpp:544
 #, kde-format
@@ -2432,11 +2418,7 @@ msgid "Fill"
 msgstr "Umple"
 
 #: lib/documentview/documentviewcontroller.cpp:90
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "@action:button Zoom to original size, shown in status bar, keep it short "
-#| "please"
-#| msgid "100%"
+#, kde-format
 msgctxt "Original image size percent value"
 msgid "100%"
 msgstr "100%"
@@ -2622,27 +2604,25 @@ msgstr "Mărime fișier"
 #, kde-format
 msgctxt "@item:intable"
 msgid "Date Created"
-msgstr ""
+msgstr "Data creării"
 
 #: lib/imagemetainfomodel.cpp:257
-#, fuzzy, kde-format
-#| msgid "One image modified"
-#| msgid_plural "%1 images modified"
+#, kde-format
 msgctxt "@item:intable"
 msgid "Date Modified"
-msgstr "O imagine modificată"
+msgstr "Data modificării"
 
 #: lib/imagemetainfomodel.cpp:258
 #, kde-format
 msgctxt "@item:intable"
 msgid "Date Accessed"
-msgstr ""
+msgstr "Data accesării"
 
 #: lib/imagemetainfomodel.cpp:259
 #, kde-format
 msgctxt "@item:intable"
 msgid "Path"
-msgstr ""
+msgstr "Cale"
 
 #: lib/imagemetainfomodel.cpp:260
 #, kde-format
@@ -2657,12 +2637,10 @@ msgid "Comment"
 msgstr "Comentariu"
 
 #: lib/imagemetainfomodel.cpp:262
-#, fuzzy, kde-format
-#| msgctxt "@item:intable"
-#| msgid "File Time"
+#, kde-format
 msgctxt "@item:intable"
 msgid "File Type"
-msgstr "Data fișier"
+msgstr "Tip de fișier"
 
 #: lib/imagemetainfomodel.cpp:324
 #, kde-format
@@ -2818,7 +2796,7 @@ msgstr "Redimensionează imaginea"
 #: lib/resize/resizeimagewidget.ui:20
 #, kde-format
 msgid "Estimated new file size:"
-msgstr ""
+msgstr "Dimensiune de fișier nouă estimată:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: lib/resize/resizeimagewidget.ui:47
@@ -2842,10 +2820,9 @@ msgstr " px"
 
 #. i18n: ectx: property (text), widget (QLabel, mCurrentSizeLabel)
 #: lib/resize/resizeimagewidget.ui:115
-#, fuzzy, kde-format
-#| msgid "Current size:"
+#, kde-format
 msgid "Current file size:"
-msgstr "Dimensiune actuală:"
+msgstr "Dimensiune de fișier actuală:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, mKeepAspectCheckBox)
 #: lib/resize/resizeimagewidget.ui:145
