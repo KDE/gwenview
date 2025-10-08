@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-02 00:40+0000\n"
+"POT-Creation-Date: 2025-10-08 00:40+0000\n"
 "PO-Revision-Date: 2022-11-01 00:37+0700\n"
 "Last-Translator: OIS <mistresssilvara@hotmail.com>\n"
 "Language-Team: Interlingue <kde-i18n-doc@kde.org>\n"
@@ -2188,25 +2188,27 @@ msgctxt "@info"
 msgid "Gwenview cannot save this kind of documents."
 msgstr ""
 
-#: lib/document/loadingdocumentimpl.cpp:136
+#: lib/document/loadingdocumentimpl.cpp:138
 #, kde-format
 msgctxt "@info"
-msgid "Gwenview cannot display documents of type %1."
+msgid ""
+"Gwenview cannot display documents of type %1. Install the kimageformats "
+"package to gain support for a wider range of media types."
 msgstr ""
 
-#: lib/document/loadingdocumentimpl.cpp:400
+#: lib/document/loadingdocumentimpl.cpp:403
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Could not open file %1"
 msgstr "Ne successat aperter li file"
 
-#: lib/document/loadingdocumentimpl.cpp:491
+#: lib/document/loadingdocumentimpl.cpp:494
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Loading meta information failed."
 msgstr "Cargante li Meta DTD de XML"
 
-#: lib/document/loadingdocumentimpl.cpp:517
+#: lib/document/loadingdocumentimpl.cpp:520
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Loading image failed."

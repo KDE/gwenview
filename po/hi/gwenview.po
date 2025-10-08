@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-02 00:40+0000\n"
+"POT-Creation-Date: 2025-10-08 00:40+0000\n"
 "PO-Revision-Date: 2022-02-10 12:40+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -2274,26 +2274,27 @@ msgctxt "@info"
 msgid "Gwenview cannot save this kind of documents."
 msgstr "ग्वेनव्यू छवियों को '%1' फ़ॉर्मेट में सहेज नहीं सकता."
 
-#: lib/document/loadingdocumentimpl.cpp:136
-#, fuzzy, kde-format
-#| msgid "Gwenview can't save images in '%1' format."
+#: lib/document/loadingdocumentimpl.cpp:138
+#, kde-format
 msgctxt "@info"
-msgid "Gwenview cannot display documents of type %1."
-msgstr "ग्वेनव्यू छवियों को '%1' फ़ॉर्मेट में सहेज नहीं सकता."
+msgid ""
+"Gwenview cannot display documents of type %1. Install the kimageformats "
+"package to gain support for a wider range of media types."
+msgstr ""
 
-#: lib/document/loadingdocumentimpl.cpp:400
+#: lib/document/loadingdocumentimpl.cpp:403
 #, kde-format
 msgctxt "@info"
 msgid "Could not open file %1"
 msgstr ""
 
-#: lib/document/loadingdocumentimpl.cpp:491
+#: lib/document/loadingdocumentimpl.cpp:494
 #, kde-format
 msgctxt "@info"
 msgid "Loading meta information failed."
 msgstr ""
 
-#: lib/document/loadingdocumentimpl.cpp:517
+#: lib/document/loadingdocumentimpl.cpp:520
 #, fuzzy, kde-format
 #| msgid "One image modified"
 #| msgid_plural "%1 images modified"
@@ -2915,6 +2916,12 @@ msgstr "देखें (&V)"
 #, kde-format
 msgid "&View"
 msgstr "देखें (&V)"
+
+#, fuzzy
+#~| msgid "Gwenview can't save images in '%1' format."
+#~ msgctxt "@info"
+#~ msgid "Gwenview cannot display documents of type %1."
+#~ msgstr "ग्वेनव्यू छवियों को '%1' फ़ॉर्मेट में सहेज नहीं सकता."
 
 #, fuzzy
 #~| msgid "&View Background Color:"

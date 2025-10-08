@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-02 00:40+0000\n"
+"POT-Creation-Date: 2025-10-08 00:40+0000\n"
 "PO-Revision-Date: 2009-02-26 15:00+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -2335,13 +2335,15 @@ msgctxt "@info"
 msgid "Gwenview cannot save this kind of documents."
 msgstr "ग्वेनव्यू अइसन फोटू मन के संपादन नइ कर सके"
 
-#: lib/document/loadingdocumentimpl.cpp:136
+#: lib/document/loadingdocumentimpl.cpp:138
 #, kde-format
 msgctxt "@info"
-msgid "Gwenview cannot display documents of type %1."
-msgstr "ग्वेनव्यू %1 किसिम के कागद ल नइ देखा सके."
+msgid ""
+"Gwenview cannot display documents of type %1. Install the kimageformats "
+"package to gain support for a wider range of media types."
+msgstr ""
 
-#: lib/document/loadingdocumentimpl.cpp:400
+#: lib/document/loadingdocumentimpl.cpp:403
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Could not open file for writing."
@@ -2349,13 +2351,13 @@ msgctxt "@info"
 msgid "Could not open file %1"
 msgstr "लिखे बर फाइल खोल नइ सकिस."
 
-#: lib/document/loadingdocumentimpl.cpp:491
+#: lib/document/loadingdocumentimpl.cpp:494
 #, kde-format
 msgctxt "@info"
 msgid "Loading meta information failed."
 msgstr ""
 
-#: lib/document/loadingdocumentimpl.cpp:517
+#: lib/document/loadingdocumentimpl.cpp:520
 #, kde-format
 msgctxt "@info"
 msgid "Loading image failed."
@@ -2975,6 +2977,10 @@ msgstr "फाइल (&F)"
 #, kde-format
 msgid "&View"
 msgstr "देखव (&V)"
+
+#~ msgctxt "@info"
+#~ msgid "Gwenview cannot display documents of type %1."
+#~ msgstr "ग्वेनव्यू %1 किसिम के कागद ल नइ देखा सके."
 
 #, fuzzy
 #~| msgctxt "@info:tooltip of custom toolbar button"

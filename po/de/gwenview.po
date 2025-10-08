@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-02 00:40+0000\n"
+"POT-Creation-Date: 2025-10-08 00:40+0000\n"
 "PO-Revision-Date: 2025-07-21 22:47+0200\n"
 "Last-Translator: Philipp Kiemle <l10n@prly.mozmail.com>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -2251,25 +2251,27 @@ msgctxt "@info"
 msgid "Gwenview cannot save this kind of documents."
 msgstr "Gwenview kann Dokumente in diesem Format nicht speichern."
 
-#: lib/document/loadingdocumentimpl.cpp:136
+#: lib/document/loadingdocumentimpl.cpp:138
 #, kde-format
 msgctxt "@info"
-msgid "Gwenview cannot display documents of type %1."
-msgstr "Gwenview kann keine Dateien im Format %1 anzeigen."
+msgid ""
+"Gwenview cannot display documents of type %1. Install the kimageformats "
+"package to gain support for a wider range of media types."
+msgstr ""
 
-#: lib/document/loadingdocumentimpl.cpp:400
+#: lib/document/loadingdocumentimpl.cpp:403
 #, kde-format
 msgctxt "@info"
 msgid "Could not open file %1"
 msgstr "Datei „%1“ lässt sich nicht öffnen"
 
-#: lib/document/loadingdocumentimpl.cpp:491
+#: lib/document/loadingdocumentimpl.cpp:494
 #, kde-format
 msgctxt "@info"
 msgid "Loading meta information failed."
 msgstr "Laden der Metainformation fehlgeschlagen."
 
-#: lib/document/loadingdocumentimpl.cpp:517
+#: lib/document/loadingdocumentimpl.cpp:520
 #, kde-format
 msgctxt "@info"
 msgid "Loading image failed."
@@ -2908,6 +2910,10 @@ msgstr "&Datei"
 #, kde-format
 msgid "&View"
 msgstr "&Ansicht"
+
+#~ msgctxt "@info"
+#~ msgid "Gwenview cannot display documents of type %1."
+#~ msgstr "Gwenview kann keine Dateien im Format %1 anzeigen."
 
 #~ msgctxt "Spinbox suffix; percentage 1 - 100"
 #~ msgid "%"

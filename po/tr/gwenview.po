@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdegraphics-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-02 00:40+0000\n"
+"POT-Creation-Date: 2025-10-08 00:40+0000\n"
 "PO-Revision-Date: 2025-10-02 17:03+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -2240,25 +2240,27 @@ msgctxt "@info"
 msgid "Gwenview cannot save this kind of documents."
 msgstr "Gwenview bu biçimdeki belgeleri kaydedemez."
 
-#: lib/document/loadingdocumentimpl.cpp:136
+#: lib/document/loadingdocumentimpl.cpp:138
 #, kde-format
 msgctxt "@info"
-msgid "Gwenview cannot display documents of type %1."
-msgstr "Gwenview %1 biçimindeki belgeleri görüntüleyemez."
+msgid ""
+"Gwenview cannot display documents of type %1. Install the kimageformats "
+"package to gain support for a wider range of media types."
+msgstr ""
 
-#: lib/document/loadingdocumentimpl.cpp:400
+#: lib/document/loadingdocumentimpl.cpp:403
 #, kde-format
 msgctxt "@info"
 msgid "Could not open file %1"
 msgstr "%1 dosyası açılamıyor"
 
-#: lib/document/loadingdocumentimpl.cpp:491
+#: lib/document/loadingdocumentimpl.cpp:494
 #, kde-format
 msgctxt "@info"
 msgid "Loading meta information failed."
 msgstr "Üst bilgiyi yükleme işlemi başarısız oldu."
 
-#: lib/document/loadingdocumentimpl.cpp:517
+#: lib/document/loadingdocumentimpl.cpp:520
 #, kde-format
 msgctxt "@info"
 msgid "Loading image failed."
@@ -2888,6 +2890,10 @@ msgstr "&Dosya"
 #, kde-format
 msgid "&View"
 msgstr "&Görünüm"
+
+#~ msgctxt "@info"
+#~ msgid "Gwenview cannot display documents of type %1."
+#~ msgstr "Gwenview %1 biçimindeki belgeleri görüntüleyemez."
 
 #~ msgctxt "Spinbox suffix; percentage 1 - 100"
 #~ msgid "%"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-02 00:40+0000\n"
+"POT-Creation-Date: 2025-10-08 00:40+0000\n"
 "PO-Revision-Date: 2012-07-11 10:26+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer\n"
@@ -2286,25 +2286,27 @@ msgctxt "@info"
 msgid "Gwenview cannot save this kind of documents."
 msgstr "Gwenview មិន​អាច​រក្សា​ទុក​ឯកសារ​ប្រភេទ​នេះ​បាន​ទេ ។"
 
-#: lib/document/loadingdocumentimpl.cpp:136
+#: lib/document/loadingdocumentimpl.cpp:138
 #, kde-format
 msgctxt "@info"
-msgid "Gwenview cannot display documents of type %1."
-msgstr "Gwenview មិន​អាច​បង្ហាញ​ឯកសារ​ប្រភេទ​ %1 ។"
+msgid ""
+"Gwenview cannot display documents of type %1. Install the kimageformats "
+"package to gain support for a wider range of media types."
+msgstr ""
 
-#: lib/document/loadingdocumentimpl.cpp:400
+#: lib/document/loadingdocumentimpl.cpp:403
 #, kde-format
 msgctxt "@info"
 msgid "Could not open file %1"
 msgstr "មិន​អាច​បើក​ឯកសារ​ %1 បាន​ឡើយ"
 
-#: lib/document/loadingdocumentimpl.cpp:491
+#: lib/document/loadingdocumentimpl.cpp:494
 #, kde-format
 msgctxt "@info"
 msgid "Loading meta information failed."
 msgstr "ការ​ផ្ទុក​ព័ត៌មាន​អំពី​មេតា​បាន​បរាជ័យ​ ។"
 
-#: lib/document/loadingdocumentimpl.cpp:517
+#: lib/document/loadingdocumentimpl.cpp:520
 #, kde-format
 msgctxt "@info"
 msgid "Loading image failed."
@@ -2924,6 +2926,10 @@ msgstr "ឯកសារ"
 #, kde-format
 msgid "&View"
 msgstr "មើល"
+
+#~ msgctxt "@info"
+#~ msgid "Gwenview cannot display documents of type %1."
+#~ msgstr "Gwenview មិន​អាច​បង្ហាញ​ឯកសារ​ប្រភេទ​ %1 ។"
 
 #, fuzzy
 #~| msgctxt "@info:tooltip of custom toolbar button"
