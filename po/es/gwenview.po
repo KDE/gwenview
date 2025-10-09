@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-08 00:40+0000\n"
-"PO-Revision-Date: 2025-10-02 18:51+0100\n"
+"PO-Revision-Date: 2025-10-08 17:44+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -2254,6 +2254,8 @@ msgid ""
 "Gwenview cannot display documents of type %1. Install the kimageformats "
 "package to gain support for a wider range of media types."
 msgstr ""
+"Gwenview no puede mostrar documentos de tipo %1. Instale el paquete "
+"«kimageformats» para poder mostrar más tipos de documentos."
 
 #: lib/document/loadingdocumentimpl.cpp:403
 #, kde-format
@@ -2914,7 +2916,3 @@ msgstr "&Archivo"
 #, kde-format
 msgid "&View"
 msgstr "&Ver"
-
-#~ msgctxt "@info"
-#~ msgid "Gwenview cannot display documents of type %1."
-#~ msgstr "Gwenview no puede mostrar documentos de tipo %1."

@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-08 00:40+0000\n"
-"PO-Revision-Date: 2025-10-02 06:46-0300\n"
+"PO-Revision-Date: 2025-10-08 06:35-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -2230,7 +2230,7 @@ msgstr "Configurações avançadas"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Aspect ratio:"
-msgstr "Taxa de proporção:"
+msgstr "Proporção:"
 
 #: lib/crop/cropwidget.cpp:312
 #, kde-format
@@ -2249,7 +2249,7 @@ msgstr "Posição:"
 #, kde-format
 msgctxt "@option:check"
 msgid "Preserve aspect ratio"
-msgstr "Manter a taxa de proporção"
+msgstr "Manter proporção"
 
 #: lib/document/document.cpp:301
 #, kde-format
@@ -2264,6 +2264,8 @@ msgid ""
 "Gwenview cannot display documents of type %1. Install the kimageformats "
 "package to gain support for a wider range of media types."
 msgstr ""
+"O Gwenview não consegue exibir documentos do tipo %1. Instale o pacote "
+"kimageformats para obter suporte a uma gama maior de tipos de mídia."
 
 #: lib/document/loadingdocumentimpl.cpp:403
 #, kde-format

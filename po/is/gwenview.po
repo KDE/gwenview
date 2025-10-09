@@ -1,7 +1,7 @@
 # translation of gwenview.po to Icelandic
 # Copyright (C) 2006, 2007, 2008, 2009 This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
-# Sveinn í Felli <sveinki@nett.is>, 2007.
+# SPDX-FileCopyrightText: 2007, 2025 Sveinn í Felli <sveinki@nett.is>
 # Sveinn í Felli <sveinki@nett.is>, 2008, 2009, 2010, 2011, 2013, 2015, 2016, 2017, 2018, 2020, 2021, 2022, 2023, 2024.
 # SPDX-FileCopyrightText: 2024 Guðmundur Erlingsson <gudmundure@gmail.com>
 msgid ""
@@ -9,9 +9,9 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-08 00:40+0000\n"
-"PO-Revision-Date: 2024-06-29 14:04+0000\n"
-"Last-Translator: Gummi <gudmundure@gmail.com>\n"
-"Language-Team: Icelandic <kde-i18n-doc@kde.org>\n"
+"PO-Revision-Date: 2025-10-08 09:44+0000\n"
+"Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
+"Language-Team: Icelandic\n"
 "Language: is\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -227,11 +227,10 @@ msgid "Rating"
 msgstr "Einkunn"
 
 #: app/browsemainpage.cpp:200
-#, fuzzy, kde-format
-#| msgid "Show failed files..."
+#, kde-format
 msgctxt "@action:inmenu View"
 msgid "Show Hidden Files"
-msgstr "Sýna misheppnaðar skrár..."
+msgstr "Sýna faldar skrár"
 
 #: app/browsemainpage.cpp:206 app/fileopscontextmanageritem.cpp:136
 #: app/mainwindow.cpp:377
@@ -695,19 +694,15 @@ msgstr "Alltaf"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: app/generalconfigpage.ui:88
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Go to last image"
+#, kde-format
 msgid "After the last image:"
-msgstr "Fara á síðustu mynd"
+msgstr "Eftir síðustu myndina:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_WrapAfterLast)
 #: app/generalconfigpage.ui:95
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Start Page"
+#, kde-format
 msgid "Start over"
-msgstr "Upphafssíða"
+msgstr "Byrja aftur"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: app/generalconfigpage.ui:118
@@ -775,18 +770,15 @@ msgid "None"
 msgstr "Engin"
 
 #: app/gvcore.cpp:83
-#, fuzzy, kde-format
-#| msgid "Image quality:"
+#, kde-format
 msgid "Image &quality:"
-msgstr "Myndgæði:"
+msgstr "Mynd&gæði:"
 
 #: app/gvcore.cpp:90
-#, fuzzy, kde-format
-#| msgctxt "Percent value"
-#| msgid "%1%"
+#, kde-format
 msgctxt "@label:spinbox Percentage 1-100"
 msgid "%v%"
-msgstr "%1%"
+msgstr "%v%"
 
 #: app/gvcore.cpp:116
 #, kde-format
@@ -838,10 +830,9 @@ msgstr "Einku&nn"
 
 #. i18n: ectx: Menu (settings)
 #: app/gwenviewui.rc:87
-#, fuzzy, kde-format
-#| msgid "&Settings"
+#, kde-format
 msgid "Settings"
-msgstr "&Stillingar"
+msgstr "Stillingar"
 
 #. i18n: ectx: ToolBar (mainToolBar)
 #: app/gwenviewui.rc:93 part/gvpart.rc:16
@@ -2255,6 +2246,8 @@ msgid ""
 "Gwenview cannot display documents of type %1. Install the kimageformats "
 "package to gain support for a wider range of media types."
 msgstr ""
+"Gwenview getur ekki sýnt skjöl af gerðinni %1. Settu upp kimageformats-"
+"pakkann til að fá stuðning við fleiri gerðir myndefnis."
 
 #: lib/document/loadingdocumentimpl.cpp:403
 #, kde-format
@@ -2357,20 +2350,7 @@ msgstr "Laga mynd að skoðunarglugga"
 #. but a more elaborate translation would also be fine.
 #. The text "in the settings" is supposed to sound like clicking it opens the settings.
 #: lib/documentview/documentviewcontroller.cpp:70
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info:whatsthis, %1 the action's text"
-#| msgid ""
-#| "<para>This fits the image into the available viewing area:"
-#| "<list><item>Images that are bigger than the viewing area are displayed at "
-#| "a smaller size so they fit.</item><item>Images that are smaller than the "
-#| "viewing area are displayed at their normal size. If smaller images should "
-#| "instead use all of the available viewing area, turn on <emphasis>Enlarge "
-#| "smaller images</emphasis> <link url='%2'>in the settings</link>.</item></"
-#| "list></para><para>If \"%1\" is already enabled, pressing it again will "
-#| "switch it off and the image will be displayed at its normal size instead."
-#| "</para><para>\"%1\" is the default zoom mode for images. This can be "
-#| "changed so images are displayed at a previous zoom value instead <link "
-#| "url='%2'>in the settings</link>.</para>"
+#, kde-kuit-format
 msgctxt "@info:whatsthis %1 is the action's text"
 msgid ""
 "<para>This fits the image into the available viewing area:<list><item>Images "
@@ -2385,16 +2365,17 @@ msgid ""
 "are displayed at a previous zoom value instead <link url='%2'>in the "
 "settings</link>.</para>"
 msgstr ""
-"<para>Þetta lagar myndina að skoðunarsvæðinu sem er í boði:<list><item> "
-"Myndir sem eru stærri en skoðunarsvæðið eru minnkaðar þannig að þær passi.</"
-"item><item>Myndir sem eru minni en skoðunarsvæðið eru birtar í eðlilegri "
-"stærð þeirra. Ef þú vilt að minni myndir fylli alveg upp í skoðunarsvæðið "
-"skaltu haka við <emphasis>Stækka minni myndir</emphasis> <link url='%2'>í "
-"stillingunum</link>.</item></list></para><para>Ef \"%1\" er nú þegar valið "
-"slokknar á því ef ýtt er aftur á það og myndin birtist í eðlilegri stærð í "
-"staðinn.</para><para>\"%1\" er sjálfgefið aðdráttarstig fyrir myndir. Hægt "
-"er að breyta þessu þannig að myndir noti sama aðdráttarstig og var notað í "
-"myndinni á undan <link url='%2'>í stillingunum</link>.</para>"
+"<para>Þetta lagar myndina að skoðunarsvæðinu sem er í boði:"
+"<list><item>Myndir sem eru stærri en skoðunarsvæðið eru minnkaðar þannig að "
+"þær passi.</item><item>Myndir sem eru minni en skoðunarsvæðið eru birtar í "
+"eðlilegri stærð þeirra. Ef þú vilt að minni myndir fylli alveg upp í "
+"skoðunarsvæðið skaltu merkja við <emphasis>Stækka minni myndir</emphasis> "
+"<link url='%2'>í stillingunum</link>.</item></list></para><para>Ef \"%1\" er "
+"nú þegar virkt, slokknar á því ef ýtt er aftur á það og myndin birtist í "
+"eðlilegri stærð í staðinn.</para><para>\"%1\" er sjálfgefið aðdráttarstig "
+"fyrir myndir. Hægt er að breyta þessu þannig að myndir noti sama "
+"aðdráttarstig og var notað í myndinni á undan <link url='%2'>í stillingunum</"
+"link>.</para>"
 
 #: lib/documentview/documentviewcontroller.cpp:83
 #, kde-format

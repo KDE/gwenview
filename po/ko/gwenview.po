@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-08 00:40+0000\n"
-"PO-Revision-Date: 2025-06-10 23:59+0200\n"
+"PO-Revision-Date: 2025-10-09 00:18+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
@@ -817,10 +817,9 @@ msgstr "별점(&R)"
 
 #. i18n: ectx: Menu (settings)
 #: app/gwenviewui.rc:87
-#, fuzzy, kde-format
-#| msgid "&Settings"
+#, kde-format
 msgid "Settings"
-msgstr "설정(&S)"
+msgstr "설정"
 
 #. i18n: ectx: ToolBar (mainToolBar)
 #: app/gwenviewui.rc:93 part/gvpart.rc:16
@@ -2200,6 +2199,8 @@ msgid ""
 "Gwenview cannot display documents of type %1. Install the kimageformats "
 "package to gain support for a wider range of media types."
 msgstr ""
+"Gwenview에서 %1 형식의 문서를 표시할 수 없습니다. 더 많은 미디어 형식 지원이 "
+"필요하다면 kimageformats 패키지를 설치하십시오."
 
 #: lib/document/loadingdocumentimpl.cpp:403
 #, kde-format
