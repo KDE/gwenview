@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-08 00:40+0000\n"
-"PO-Revision-Date: 2025-05-14 20:43+0200\n"
+"PO-Revision-Date: 2025-10-10 15:24+0200\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -835,10 +835,9 @@ msgstr "&Voto"
 
 #. i18n: ectx: Menu (settings)
 #: app/gwenviewui.rc:87
-#, fuzzy, kde-format
-#| msgid "&Settings"
+#, kde-format
 msgid "Settings"
-msgstr "Impo&stazioni"
+msgstr "Impostazioni"
 
 #. i18n: ectx: ToolBar (mainToolBar)
 #: app/gwenviewui.rc:93 part/gvpart.rc:16
@@ -2258,6 +2257,9 @@ msgid ""
 "Gwenview cannot display documents of type %1. Install the kimageformats "
 "package to gain support for a wider range of media types."
 msgstr ""
+"Gwenview non può visualizzare i documenti di tipo %1. Installare il "
+"pacchetto kimageformats per abilitare il supporto ad un maggior numero di "
+"tipi multimediali."
 
 #: lib/document/loadingdocumentimpl.cpp:403
 #, kde-format
