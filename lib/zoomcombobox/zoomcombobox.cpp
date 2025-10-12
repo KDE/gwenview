@@ -7,7 +7,6 @@
 #include <KLocalizedString>
 #include <QAbstractItemView>
 #include <QAction>
-#include <QEvent>
 #include <QLineEdit>
 #include <QSignalBlocker>
 #include <QWheelEvent>
@@ -205,9 +204,10 @@ void ZoomComboBoxPrivate::setActions(QAction *zoomToFitAction, QAction *zoomToFi
 {
     Q_Q(ZoomComboBox);
     q->clear();
-    q->addItem(zoomToFitAction->iconText(), QVariant::fromValue(zoomToFitAction)); // index = 0
-    q->addItem(zoomToFillAction->iconText(), QVariant::fromValue(zoomToFillAction)); // index = 1
-    q->addItem(actualSizeAction->iconText(), QVariant::fromValue(actualSizeAction)); // index will change later
+    // Add items reversed, so there's a consistent behavior between zoom slider and this combo box
+    q->addItem(actualSizeAction->iconText(), QVariant::fromValue(actualSizeAction));
+    q->addItem(zoomToFillAction->iconText(), QVariant::fromValue(zoomToFillAction));
+    q->addItem(zoomToFitAction->iconText(), QVariant::fromValue(zoomToFitAction));
 
     mZoomToFitAction = zoomToFitAction;
     mZoomToFillAction = zoomToFillAction;
@@ -250,7 +250,7 @@ void ZoomComboBox::setMinimum(qreal minimum)
         removeItem(i);
     }
     qreal value = minimum * 2; // The minimum zoom value itself is already available through "fit".
-    for (int i = zoomToFillActionIndex + 1; value < 1.0; ++i) {
+    for (int i = zoomToFillActionIndex; value < 1.0; --i) {
         insertItem(i, textFromValue(value), QVariant::fromValue(value));
         value *= 2;
     }
@@ -274,17 +274,16 @@ void ZoomComboBox::setMaximum(qreal maximum)
     // NOTE: This probably has the same problem as setMinimum(),
     // but the problem is never encountered since max zoom doesn't actually change
     const int actualSizeActionIndex = findData(QVariant::fromValue(d->mActualSizeAction));
-    const int count = this->count();
-    for (int i = actualSizeActionIndex + 1; i < count; ++i) {
+    for (int i = actualSizeActionIndex - 1; i >= 0; i--) {
         removeItem(i);
     }
     qreal value = 2.0;
     while (value < maximum) {
-        addItem(textFromValue(value), QVariant::fromValue(value));
+        insertItem(0, textFromValue(value), QVariant::fromValue(value));
         value *= 2;
     }
     if (fuzzyGreaterEqual(value, maximum)) {
-        addItem(textFromValue(maximum), QVariant::fromValue(maximum));
+        insertItem(0, textFromValue(maximum), QVariant::fromValue(maximum));
     }
 }
 
@@ -418,13 +417,13 @@ void ZoomComboBox::wheelEvent(QWheelEvent *event)
 void ZoomComboBox::updateCurrentIndex()
 {
     Q_D(ZoomComboBox);
-
+    const int count = this->count();
     if (d->mZoomToFitAction->isChecked()) {
-        setCurrentIndex(0);
-        d->lastSelectedIndex = 0;
+        setCurrentIndex(count - 1); // 'zoom to fit' is always last
+        d->lastSelectedIndex = count - 1;
     } else if (d->mZoomToFillAction->isChecked()) {
-        setCurrentIndex(1);
-        d->lastSelectedIndex = 1;
+        setCurrentIndex(count - 2);
+        d->lastSelectedIndex = count - 2; // 'zoom to fill' is always last - 1
     } else if (d->mActualSizeAction->isChecked()) {
         const int actualSizeActionIndex = findData(QVariant::fromValue(d->mActualSizeAction));
         setCurrentIndex(actualSizeActionIndex);
