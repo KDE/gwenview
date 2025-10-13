@@ -12,6 +12,7 @@
     "finish-args": [
         "--device=dri",
         "--filesystem=host",
+        "--filesystem=xdg-cache/thumbnails:rw",
         "--filesystem=xdg-data/Trash",
         "--share=ipc",
         "--socket=cups",
@@ -27,29 +28,18 @@
         "/lib/pkgconfig",
         "/share/man"
     ],
+    "add-extensions": {
+        "org.freedesktop.Platform.ffmpeg-full": {
+            "directory": "lib/ffmpeg",
+            "version": "24.08",
+            "add-ld-path": ".",
+            "no-autodownload": false
+        }
+    },
+    "cleanup-commands": [
+        "mkdir -p /app/lib/ffmpeg"
+    ],
     "modules": [
-        {
-            "name": "phonon",
-            "config-opts": [
-                "-DBUILD_TESTING=OFF",
-                "-DPHONON_BUILD_QT5=OFF",
-                "-DPHONON_BUILD_QT6=ON"
-            ],
-            "buildsystem": "cmake-ninja",
-            "sources": [
-                {
-                    "type": "archive",
-                    "url": "https://download.kde.org/stable/phonon/4.12.0/phonon-4.12.0.tar.xz",
-                    "sha256": "3287ffe0fbcc2d4aa1363f9e15747302d0b080090fe76e5f211d809ecb43f39a",
-                    "x-checker-data": {
-                        "type": "anitya",
-                        "project-id": 229047,
-                        "stable-only": true,
-                        "url-template": "https://download.kde.org/stable/phonon/$version/phonon-$version.tar.xz"
-                    }
-                }
-            ]
-        },
         {
             "name": "inih",
             "buildsystem": "meson",
@@ -61,8 +51,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/benhoyt/inih/archive/refs/tags/r60.tar.gz",
-                    "sha256": "706aa05c888b53bd170e5d8aa8f8a9d9ccf5449dfed262d5103d1f292af26774",
+                    "url": "https://github.com/benhoyt/inih/archive/refs/tags/r62.tar.gz",
+                    "sha256": "9c15fa751bb8093d042dae1b9f125eb45198c32c6704cd5481ccde460d4f8151",
                     "x-checker-data": {
                         "type": "anitya",
                         "project-id": 11600,
@@ -78,32 +68,29 @@
             "builddir": true,
             "config-opts": [
                 "-DBUILD_SHARED_LIBS=ON",
-                "-DEXIV2_ENABLE_XMP=ON",
+                "-DBUILD_TESTING=OFF",
+                "-DEXIV2_BUILD_DOC=OFF",
+                "-DEXIV2_BUILD_EXIV2_COMMAND=OFF",
+                "-DEXIV2_BUILD_SAMPLES=OFF",
+                "-DEXIV2_BUILD_UNIT_TESTS=OFF",
+                "-DEXIV2_ENABLE_CURL=OFF",
+                "-DEXIV2_ENABLE_DYNAMIC_RUNTIME=OFF",
                 "-DEXIV2_ENABLE_EXTERNAL_XMP=OFF",
-                "-DEXIV2_ENABLE_PNG=ON",
-                "-DEXIV2_ENABLE_NLS=ON",
-                "-DEXIV2_ENABLE_PRINTUCS2=ON",
                 "-DEXIV2_ENABLE_LENSDATA=ON",
+                "-DEXIV2_ENABLE_NLS=ON",
+                "-DEXIV2_ENABLE_PNG=ON",
                 "-DEXIV2_ENABLE_VIDEO=OFF",
                 "-DEXIV2_ENABLE_WEBREADY=OFF",
-                "-DEXIV2_ENABLE_DYNAMIC_RUNTIME=OFF",
-                "-DEXIV2_ENABLE_CURL=OFF",
-                "-DEXIV2_ENABLE_SSH=OFF",
-                "-DEXIV2_BUILD_SAMPLES=OFF",
-                "-DEXIV2_BUILD_PO=OFF",
-                "-DEXIV2_BUILD_EXIV2_COMMAND=OFF",
-                "-DEXIV2_BUILD_UNIT_TESTS=OFF",
-                "-DEXIV2_BUILD_DOC=OFF",
+                "-DEXIV2_ENABLE_XMP=ON",
                 "-DEXIV2_TEAM_EXTRA_WARNINGS=OFF",
-                "-DEXIV2_TEAM_WARNINGS_AS_ERRORS=OFF",
                 "-DEXIV2_TEAM_USE_SANITIZERS=OFF",
-                "-DEXIV2_ENABLE_WIN_UNICODE=OFF"
+                "-DEXIV2_TEAM_WARNINGS_AS_ERRORS=OFF"
             ],
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/Exiv2/exiv2/archive/refs/tags/v0.28.5.tar.gz",
-                    "sha256": "e1671f744e379a87ba0c984617406fdf8c0ad0c594e5122f525b2fb7c28d394d",
+                    "url": "https://github.com/Exiv2/exiv2/archive/refs/tags/v0.28.7.tar.gz",
+                    "sha256": "5e292b02614dbc0cee40fe1116db2f42f63ef6b2ba430c77b614e17b8d61a638",
                     "x-checker-data": {
                         "type": "anitya",
                         "project-id": 769,
@@ -123,13 +110,14 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://files.kde.org/craft/sources/libs/cfitsio/cfitsio-4.6.2.tar.gz",
+                    "url": "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio-4.6.2.tar.gz",
                     "sha256": "66fd078cc0bea896b0d44b120d46d6805421a5361d3a5ad84d9f397b1b5de2cb",
+                    "disable-http-decompression": true,
                     "x-checker-data": {
                         "type": "anitya",
                         "project-id": 270,
                         "stable-only": true,
-                        "url-template": "https://files.kde.org/craft/sources/libs/cfitsio/cfitsio-$version.tar.gz"
+                        "url-template": "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio-$version.tar.gz"
                     }
                 }
             ]
@@ -139,19 +127,19 @@
             "buildsystem": "cmake-ninja",
             "builddir": true,
             "config-opts": [
-                "-DJAS_ENABLE_SHARED=ON",
+                "-DALLOW_IN_SOURCE_BUILD=ON",
+                "-DJAS_ENABLE_DOC=OFF",
                 "-DJAS_ENABLE_LIBJPEG=ON",
                 "-DJAS_ENABLE_OPENGL=OFF",
-                "-DJAS_LOCAL=OFF",
-                "-DJAS_ENABLE_DOC=OFF",
                 "-DJAS_ENABLE_PROGRAMS=OFF",
-                "-DALLOW_IN_SOURCE_BUILD=ON"
+                "-DJAS_ENABLE_SHARED=ON",
+                "-DJAS_LOCAL=OFF"
             ],
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/jasper-software/jasper/archive/version-4.2.5.tar.gz",
-                    "sha256": "3f4b1df7cab7a3cc67b9f6e28c730372f030b54b0faa8548a9ee04ae83fffd44",
+                    "url": "https://github.com/jasper-software/jasper/archive/version-4.2.8.tar.gz",
+                    "sha256": "987e8c8b4afcff87553833b6f0fa255b5556a0ecc617b45ee1882e10c1b5ec14",
                     "x-checker-data": {
                         "type": "anitya",
                         "project-id": 1421,
@@ -179,12 +167,6 @@
                         "stable-only": true,
                         "url-template": "https://www.libraw.org/data/LibRaw-$version.tar.gz"
                     }
-                },
-                {
-                    "type": "shell",
-                    "commands": [
-                        "autoreconf -vfi"
-                    ]
                 }
             ]
         },
@@ -193,7 +175,7 @@
             "buildsystem": "cmake-ninja",
             "config-opts": [
                 "-DBUILD_TESTING=OFF",
-                "-DBUILD_WITH_QT6=ON"
+                "-DQT_MAJOR_VERSION=6"
             ],
             "builddir": true,
             "sources": [
@@ -234,20 +216,26 @@
             "builddir": true,
             "sources": [
                 {
-                    "type": "git",
-                    "url": "https://invent.kde.org/frameworks/baloo",
-                    "tag": "v6.10.0"
+                    "type": "archive",
+                    "url": "https://download.kde.org/stable/frameworks/6.18/baloo-6.18.0.tar.xz",
+                    "sha256": "680b01ed7c789b7ef0ee8f14faffaf2e8bdf87a56a26eb2a6f95a472e5630903",
+                    "x-checker-data": {
+                        "type": "anitya",
+                        "project-id": 8762,
+                        "stable-only": true,
+                        "url-template": "https://download.kde.org/stable/frameworks/$major.$minor/baloo-$version.tar.xz"
+                    }
                 }
             ]
         },
         {
             "name": "kColorPicker",
             "buildsystem": "cmake-ninja",
-            "builddir": true,
             "config-opts": [
-                "-DBUILD_TESTING=OFF",
-                "-DBUILD_WITH_QT6=ON"
+                "-DBUILD_WITH_QT6=ON",
+                "-DBUILD_SHARED_LIBS=ON"
             ],
+            "builddir": true,
             "sources": [
                 {
                     "type": "archive",
@@ -265,12 +253,11 @@
         {
             "name": "kImageAnnotator",
             "buildsystem": "cmake-ninja",
-            "builddir": true,
             "config-opts": [
-                "-DBUILD_TESTS=OFF",
                 "-DBUILD_WITH_QT6=ON",
-                "-DBUILD_EXAMPLE=OFF"
+                "-DBUILD_SHARED_LIBS=ON"
             ],
+            "builddir": true,
             "sources": [
                 {
                     "type": "archive",
@@ -298,3 +285,4 @@
         }
     ]
 }
+
