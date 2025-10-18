@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-08 00:40+0000\n"
+"POT-Creation-Date: 2025-10-18 00:40+0000\n"
 "PO-Revision-Date: 2019-12-12 21:15+0000\n"
 "Last-Translator: Vivek KJ Pazhedath <vivekkj2004@gmail.com>\n"
 "Language-Team: Swathanthra|സ്വതന്ത്ര Malayalam|മലയാളം Computing|കമ്പ്യൂട്ടിങ്ങ് <smc."
@@ -2265,7 +2265,7 @@ msgctxt "@item:intable %1 is image width, %2 is image height"
 msgid "%1x%2"
 msgstr ""
 
-#: lib/documentview/documentview.cpp:265 lib/zoomcombobox/zoomcombobox.cpp:318
+#: lib/documentview/documentview.cpp:265 lib/zoomcombobox/zoomcombobox.cpp:317
 #, fuzzy, kde-format
 #| msgctxt "@info:status images, videos"
 #| msgid "%1, %2"

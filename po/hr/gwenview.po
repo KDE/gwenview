@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-08 00:40+0000\n"
+"POT-Creation-Date: 2025-10-18 00:40+0000\n"
 "PO-Revision-Date: 2011-07-22 16:56+0200\n"
 "Last-Translator: Marko Dimjašević <marko@dimjasevic.net>\n"
 "Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
@@ -2437,7 +2437,7 @@ msgctxt "@item:intable %1 is image width, %2 is image height"
 msgid "%1x%2"
 msgstr "%1x%2"
 
-#: lib/documentview/documentview.cpp:265 lib/zoomcombobox/zoomcombobox.cpp:318
+#: lib/documentview/documentview.cpp:265 lib/zoomcombobox/zoomcombobox.cpp:317
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip of custom toolbar button"
 #| msgid "%1"

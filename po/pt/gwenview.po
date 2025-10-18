@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-08 00:40+0000\n"
+"POT-Creation-Date: 2025-10-18 00:40+0000\n"
 "PO-Revision-Date: 2023-06-02 09:46+0100\n"
 "Last-Translator: Pedro Morais <morais@kde.org>\n"
 "Language-Team: pt <kde-i18n-pt@kde.org>\n"
@@ -2330,7 +2330,7 @@ msgctxt "@item:intable %1 is image width, %2 is image height"
 msgid "%1x%2"
 msgstr "%1x%2"
 
-#: lib/documentview/documentview.cpp:265 lib/zoomcombobox/zoomcombobox.cpp:318
+#: lib/documentview/documentview.cpp:265 lib/zoomcombobox/zoomcombobox.cpp:317
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip of custom toolbar button"
 #| msgid "%1"
