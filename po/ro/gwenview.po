@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-18 00:40+0000\n"
-"PO-Revision-Date: 2025-10-01 16:37+0100\n"
+"PO-Revision-Date: 2025-10-18 14:17+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian <kde-i18n-ro@kde.org>\n"
 "Language: ro\n"
@@ -826,10 +826,9 @@ msgstr "Evalua&re"
 
 #. i18n: ectx: Menu (settings)
 #: app/gwenviewui.rc:87
-#, fuzzy, kde-format
-#| msgid "&Settings"
+#, kde-format
 msgid "Settings"
-msgstr "&Configurări"
+msgstr "Configurări"
 
 #. i18n: ectx: ToolBar (mainToolBar)
 #: app/gwenviewui.rc:93 part/gvpart.rc:16
@@ -1144,10 +1143,9 @@ msgid "Start in slideshow mode"
 msgstr "Pornește în regim de diaporamă"
 
 #: app/main.cpp:225
-#, fuzzy, kde-format
-#| msgid "Start in slideshow mode"
+#, kde-format
 msgid "Start in spotlight mode"
-msgstr "Pornește în regim de diaporamă"
+msgstr "Pornește în regim de reflector"
 
 #: app/main.cpp:226
 #, kde-format
@@ -1203,12 +1201,10 @@ msgid "Exit Full Screen"
 msgstr "Ieși din ecranul complet"
 
 #: app/mainwindow.cpp:437
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Light Mode"
+#, kde-format
 msgctxt "@action"
 msgid "Spotlight Mode"
-msgstr "Regim luminos"
+msgstr "Regim de reflector"
 
 #: app/mainwindow.cpp:443
 #, kde-format
