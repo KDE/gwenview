@@ -257,6 +257,7 @@
       <li xml:lang="pl">Proste edytowanie obrazów: obrót, przycięcie, zmiana rozmiaru, odbicie w pionie i poziomie, usuwanie czerwonych oczu, dostosowywanie jasności, -kontrastu, -gammy</li>
       <li xml:lang="pt">Edição simples das imagens: rotação, recorte, dimensionamento, espelho, inversão, redução de olhos vermelhos e ajustes de brilho, contraste ou gama</li>
       <li xml:lang="pt-BR">Edição de imagem simples: girar, cortar, redimensionar, espelhar, inverter, reduzir olhos vermelhos e ajustar brilho, contraste ou gama</li>
+      <li xml:lang="ro">Redactare simplă a imaginilor: rotiți, decupați, redimensionați, oglindiți, răsturnați, reduceți ochii roșii, și ajustați luminozitatea, contrastul sau gamma</li>
       <li xml:lang="ru">Основные инструменты редактирования: поворот, обрезание, изменение размера, зеркальное отражение и переворот, уменьшение эффекта «красных глаз», управление яркостью, контрастностью и гаммой.</li>
       <li xml:lang="sa">सरलं चित्रसम्पादनं : परिभ्रमन्तु, सस्यं कुर्वन्तु, आकारं परिवर्तयन्तु, दर्पणं कुर्वन्तु, पलटयन्तु, रक्तनेत्रं न्यूनीकरोतु, प्रकाशं, विपरीततां, गामा वा समायोजयन्तु</li>
       <li xml:lang="sl">Enostavno urejanje slik: zasuk, obrezovanje, sprememba velikosti, zrcaljenje, obračanje, zmanjšanje rdečine v očesih in prilagajanje svetlosti, kontrasta ali game</li>
@@ -298,6 +299,7 @@
       <li xml:lang="pl">Opisuj obrazy strzałkami, kształtami, polami tekstowymi, stemplami i więcej</li>
       <li xml:lang="pt">Anotação e marcação de imagens com setas, formas, áreas de texto, carimbos de imagens, entre outros</li>
       <li xml:lang="pt-BR">Anotar e marcar imagens com setas, formas, caixas de texto, carimbos de imagem e muito mais</li>
+      <li xml:lang="ro">Adnotați și evidențiați imaginile cu săgeți, forme, casete cu text, ștampile cu imagini, și multe altele</li>
       <li xml:lang="ru">Комментирование и разметка изображения: стрелки, фигуры, текстовые поля, штампы и другие инструменты</li>
       <li xml:lang="sa">बाणैः, आकारैः, पाठपेटिकाभिः, चित्रमुद्रिकाभिः इत्यादिभिः चित्रैः टिप्पणीं कृत्वा चिह्नं कुर्वन्तु</li>
       <li xml:lang="sl">Dodajanje opomb in oznak na slike s puščicami, oblikami, okviri z besedilom, žigi in drugim</li>
@@ -341,6 +343,7 @@
       <li xml:lang="pl">Proste działania plikowe takie jak kopiuj, przenieś, usuń i inne</li>
       <li xml:lang="pt">Acções básicas de gestão de ficheiros, como a cópia, movimentação, remoção, entre outras</li>
       <li xml:lang="pt-BR">Ações básicas de gerenciamento de arquivos, como copiar, mover, excluir entre outras</li>
+      <li xml:lang="ro">Acțiuni simple de gestiunea a fișierelor, cum ar fi copiere, mutare, ștergere, și altele</li>
       <li xml:lang="ru">Основные действия с файлами: копирование, перемещение, удаление и другие</li>
       <li xml:lang="sa">मूलभूतसञ्चिकाप्रबन्धनक्रियाः यथा प्रतिलिपिः, चालनं, विलोपनं, अन्ये च</li>
       <li xml:lang="sl">Osnovni ukazi za delo z datotekami: kopiranje, premikanje, brisanje in drugo</li>
@@ -389,6 +392,7 @@
       <caption xml:lang="nn">Hovudvindauge som viser eit bilete med verktøy til venstre</caption>
       <caption xml:lang="pl">Główne okno programu, wyświetlające obraz i sterownie po lewej</caption>
       <caption xml:lang="pt-BR">Janela principal do aplicativo exibindo uma imagem e controles à esquerda</caption>
+      <caption xml:lang="ro">Fereastra principală a aplicației, afișând o imagine și controale la stânga</caption>
       <caption xml:lang="ru">Основное окно приложения с открытым изображением и элементами управления в левой части окна</caption>
       <caption xml:lang="sa">वामे एकं चित्रं नियन्त्रणानि च प्रदर्शयन् मुख्यः अनुप्रयोगविण्डो</caption>
       <caption xml:lang="sl">Glavno okno aplikacije, ki prikazuje sliko, s kontrolami na levi strani</caption>
