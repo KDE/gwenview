@@ -2902,7 +2902,3 @@ msgstr "&Fil"
 #, kde-format
 msgid "&View"
 msgstr "&Vis"
-
-#~ msgctxt "@info"
-#~ msgid "Gwenview cannot display documents of type %1."
-#~ msgstr "Gwenview kan ikkje visa dokument av typen %1."
