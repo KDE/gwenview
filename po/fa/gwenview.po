@@ -364,7 +364,8 @@ msgstr ""
 msgid "File Operations"
 msgstr ""
 
-#: app/fileopscontextmanageritem.cpp:137 app/semanticinfocontextmanageritem.cpp:203
+#: app/fileopscontextmanageritem.cpp:137
+#: app/semanticinfocontextmanageritem.cpp:203
 #, kde-format
 msgctxt "@title actions category"
 msgid "Edit"
@@ -862,14 +863,13 @@ msgstr ""
 msgid "Flip"
 msgstr ""
 
-#: app/imageopscontextmanageritem.cpp:113
-#: lib/resize/resizeimagedialog.cpp:71
+#: app/imageopscontextmanageritem.cpp:113 lib/resize/resizeimagedialog.cpp:71
 #, kde-format
 msgid "Resize"
 msgstr ""
 
-#: app/imageopscontextmanageritem.cpp:118
-#: lib/crop/cropimageoperation.cpp:70 lib/crop/cropwidget.cpp:262
+#: app/imageopscontextmanageritem.cpp:118 lib/crop/cropimageoperation.cpp:70
+#: lib/crop/cropwidget.cpp:262
 #, kde-format
 msgid "Crop"
 msgstr ""
@@ -887,8 +887,7 @@ msgstr ""
 msgid "Reduce Red Eye"
 msgstr ""
 
-#: app/imageopscontextmanageritem.cpp:133
-#: lib/annotate/annotateoperation.cpp:51
+#: app/imageopscontextmanageritem.cpp:133 lib/annotate/annotateoperation.cpp:51
 #, kde-format
 msgctxt "@action:intoolbar"
 msgid "Annotate"
@@ -900,8 +899,7 @@ msgctxt "@title:window Annotate [filename]"
 msgid "Annotate %1"
 msgstr ""
 
-#: app/imageopscontextmanageritem.cpp:164
-#: lib/document/documentjob.cpp:77
+#: app/imageopscontextmanageritem.cpp:164 lib/document/documentjob.cpp:77
 #, kde-format
 msgctxt "@info"
 msgid "Gwenview cannot edit this kind of image."
