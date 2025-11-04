@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-10-18 00:40+0000\n"
-"PO-Revision-Date: 2025-05-15 07:42+0200\n"
+"PO-Revision-Date: 2025-10-09 09:27+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Accelerator-Marker: &\n"
 "X-Environment: kde\n"
-"X-Generator: Lokalize 25.04.1\n"
+"X-Generator: Lokalize 25.08.1\n"
 "X-Text-Markup: kde4\n"
 
 #, kde-format
@@ -840,10 +840,9 @@ msgstr "No&te"
 
 #. i18n: ectx: Menu (settings)
 #: app/gwenviewui.rc:87
-#, fuzzy, kde-format
-#| msgid "&Settings"
+#, kde-format
 msgid "Settings"
-msgstr "&Configuration"
+msgstr "Configuration"
 
 #. i18n: ectx: ToolBar (mainToolBar)
 #: app/gwenviewui.rc:93 part/gvpart.rc:16
@@ -1709,7 +1708,7 @@ msgid ""
 "and contain multiple rows of images; <link url='%1'>configure these options "
 "in the settings</link>.</para>"
 msgstr ""
-"<para>Ceci fait apparaître / disparaître une petite barre affichant toutes "
+"<para>Ceci fait apparaitre / disparaitre une petite barre affichant toutes "
 "les autres images du dossier en cours. La sélection de l'une d'entre elles "
 "modifie l'image actuellement affichée. </para><para>Sélectionnez plusieurs "
 "images en même temps pour les afficher côte à côte. </para><para>La barre "
@@ -2273,6 +2272,9 @@ msgid ""
 "Gwenview cannot display documents of type %1. Install the kimageformats "
 "package to gain support for a wider range of media types."
 msgstr ""
+"L'affichage de documents de type %1Gwenview est impossible. Veuillez "
+"installer le paquet « kimageformats » pour permettre la prise en charge d'un "
+"plus large éventail de types de média."
 
 #: lib/document/loadingdocumentimpl.cpp:403
 #, kde-format
