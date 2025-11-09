@@ -14,8 +14,8 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf6-trunk/messages/gwenview/gwenview.pot\n"
-"X-Crowdin-File-ID: 49334\n"
+"X-Crowdin-File: /kf6-stable/messages/gwenview/gwenview.pot\n"
+"X-Crowdin-File-ID: 52492\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -73,14 +73,14 @@ msgstr "历史："
 #, kde-format
 msgctxt "@option:Relative Colorimetric rendering intent"
 msgid "Relative Colorimetric"
-msgstr "相对比色"
+msgstr "相对色度"
 
 #. i18n: ectx: property (text), widget (QRadioButton, perceptualRenderingIntentRadioButton)
 #: app/advancedconfigpage.ui:160
 #, kde-format
 msgctxt "@option:Perceptual rendering intent"
 msgid "Perceptual"
-msgstr "可感知"
+msgstr "感知"
 
 #. i18n: ectx: property (text), widget (QLabel, perceptualHelpLabel)
 #: app/advancedconfigpage.ui:172
@@ -94,7 +94,7 @@ msgstr "平均缩放所有颜色以适应显示器色彩特性文件的色域"
 #: app/advancedconfigpage.ui:182
 #, kde-format
 msgid "Rendering intent:"
-msgstr "再现意图："
+msgstr "渲染意图："
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_HistoryEnabled)
 #: app/advancedconfigpage.ui:197
@@ -816,10 +816,9 @@ msgstr "评分(&R)"
 
 #. i18n: ectx: Menu (settings)
 #: app/gwenviewui.rc:87
-#, fuzzy, kde-format
-#| msgid "Settings..."
+#, kde-format
 msgid "Settings"
-msgstr "设置..."
+msgstr "设置"
 
 #. i18n: ectx: ToolBar (mainToolBar)
 #: app/gwenviewui.rc:93 part/gvpart.rc:16
@@ -893,7 +892,7 @@ msgstr "调整颜色"
 #: lib/redeyereduction/redeyereductiontool.cpp:48
 #, kde-format
 msgid "Reduce Red Eye"
-msgstr "减轻红眼"
+msgstr "红眼消除"
 
 #: app/imageopscontextmanageritem.cpp:133 lib/annotate/annotateoperation.cpp:51
 #, kde-format
@@ -2112,7 +2111,7 @@ msgstr "对比度："
 #: lib/bcg/bcgwidget.cpp:53
 #, kde-format
 msgid "Gamma:"
-msgstr "伽玛值："
+msgstr "伽马："
 
 #: lib/crop/cropwidget.cpp:191
 #, kde-format
@@ -2192,6 +2191,8 @@ msgid ""
 "Gwenview cannot display documents of type %1. Install the kimageformats "
 "package to gain support for a wider range of media types."
 msgstr ""
+"Gwenview 无法显示 %1 类型的文档。请安装 kimageformats 软件包以支持更多类型的"
+"媒体文件。"
 
 #: lib/document/loadingdocumentimpl.cpp:403
 #, kde-format
@@ -2430,8 +2431,8 @@ msgid ""
 "            that cannot be displayed, and leave the other colors alone."
 msgstr ""
 "定义当显示器与图像的 ICC 色彩特性文件不一致时的色彩转换方式。\n"
-"　　可感知　：平均缩放所有颜色以适应显示器特性文件的色域。\n"
-"　　相对比色：裁切显示器特性文件色域之外的颜色，保持其他颜色。"
+"　　感知　　：平均缩放所有颜色以适应显示器特性文件的色域。\n"
+"　　相对色度：裁切显示器特性文件色域之外的颜色，保持其他颜色。"
 
 #. i18n: ectx: label, entry (random), group (slide show)
 #: lib/gwenviewconfig.kcfg:339
@@ -2814,7 +2815,3 @@ msgstr "文件(&F)"
 #, kde-format
 msgid "&View"
 msgstr "视图(&V)"
-
-#~ msgctxt "@info"
-#~ msgid "Gwenview cannot display documents of type %1."
-#~ msgstr "Gwenview 无法显示 %1 类型的图像。"
