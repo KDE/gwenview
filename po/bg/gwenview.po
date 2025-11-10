@@ -2911,7 +2911,3 @@ msgstr "&Файл"
 #, kde-format
 msgid "&View"
 msgstr "&Изглед"
-
-#~ msgctxt "@info"
-#~ msgid "Gwenview cannot display documents of type %1."
-#~ msgstr "Gwenview не може да показва документи от вида %1."
