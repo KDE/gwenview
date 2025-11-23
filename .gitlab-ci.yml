@@ -9,5 +9,6 @@ include:
       - /gitlab-templates/linux-qt6-next.yml
       - /gitlab-templates/freebsd-qt6.yml
       - /gitlab-templates/flatpak.yml
+      - /gitlab-templates/snap-snapcraft-lxd.yml
       - /gitlab-templates/xml-lint.yml
       - /gitlab-templates/yaml-lint.yml
