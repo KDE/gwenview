@@ -2917,7 +2917,3 @@ msgstr "&Fitxer"
 #, kde-format
 msgid "&View"
 msgstr "Vi&sualitza"
-
-#~ msgctxt "@info"
-#~ msgid "Gwenview cannot display documents of type %1."
-#~ msgstr "El Gwenview no pot visualitzar documents del tipus %1."
