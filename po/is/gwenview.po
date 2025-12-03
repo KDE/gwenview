@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2025-10-08 09:44+0000\n"
+"PO-Revision-Date: 2025-12-02 13:23+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic\n"
 "Language: is\n"
@@ -200,7 +200,7 @@ msgstr "Upplýsingar um smámynd"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filename"
-msgstr "Skrárheiti"
+msgstr "Skáarheiti"
 
 #: app/browsemainpage.cpp:193
 #, kde-format
@@ -539,7 +539,7 @@ msgstr "Breidd"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Name"
-msgstr "Sía eftir skrárheiti"
+msgstr "Sía eftir skráarheiti"
 
 #: app/filtercontroller.cpp:332
 #, kde-format
@@ -2627,7 +2627,7 @@ msgstr "Athugasemd"
 #, kde-format
 msgctxt "@item:intable"
 msgid "File Type"
-msgstr "Skrárgerð"
+msgstr "Skráargerð"
 
 #: lib/imagemetainfomodel.cpp:324
 #, kde-format
