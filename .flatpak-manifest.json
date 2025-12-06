@@ -217,8 +217,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://download.kde.org/stable/frameworks/6.18/baloo-6.18.0.tar.xz",
-                    "sha256": "680b01ed7c789b7ef0ee8f14faffaf2e8bdf87a56a26eb2a6f95a472e5630903",
+                    "url": "https://download.kde.org/stable/frameworks/6.20/baloo-6.20.0.tar.xz",
+                    "sha256": "06a0dc24b9cae08c7228aebc3215185042b58c4fc58ef86c8863e577493d1314",
                     "x-checker-data": {
                         "type": "anitya",
                         "project-id": 8762,
@@ -261,8 +261,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/ksnip/kImageAnnotator/archive/refs/tags/v0.7.1.tar.gz",
-                    "sha256": "2335c5be15a5dde34c3333c10a6339da114e2232e4c4642dea1793e491e09677",
+                    "url": "https://github.com/ksnip/kImageAnnotator/archive/refs/tags/v0.7.2.tar.gz",
+                    "sha256": "7eb593d975b1590a184354ef68dbc3c26479d58eaea00de461d73695176f623c",
                     "x-checker-data": {
                         "type": "anitya",
                         "project-id": 120605,
@@ -285,4 +285,3 @@
         }
     ]
 }
-
