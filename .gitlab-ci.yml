@@ -12,3 +12,4 @@ include:
       - /gitlab-templates/snap-snapcraft-lxd.yml
       - /gitlab-templates/xml-lint.yml
       - /gitlab-templates/yaml-lint.yml
+      - /gitlab-templates/documentation.yml
