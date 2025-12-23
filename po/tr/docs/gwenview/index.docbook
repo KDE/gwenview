@@ -94,7 +94,7 @@
 >&FDLNotice;</legalnotice>
 
 <date
->2021-06-04</date>
+>2021‒06‒04</date>
 <releaseinfo
 >KDE Gear 21.08</releaseinfo>
 <abstract>
@@ -130,7 +130,7 @@
 >&gwenview; hızlı ve kullanımı kolay bir görsel ve video görüntüleyicisidir. </para>
 
  <para
->&gwenview; iki ana kip içerir: Göz At ve Görüntüle. Her iki kip de normal uygulama penceresinde ve Tam Ekran’da kullanılabilir. Göz At kipi, görsellerinizin küçük hallerini göstererek bilgisayarınızda dolaşmanızı sağlar; Görüntüle kipi, görselleri birer birer görüntülemenizi ve Tam Ekran, hızlı slayt gösterileri yapmanızı sağlar. Ayrıca, son açılan klasörlerin ve &URL;’lerin yanı sıra yerleriniz ve etiketlerinizin listesini görüntüleyen bir başlangıç ekranı da bulunmaktadır. </para>
+>&gwenview; iki ana kip içerir: Göz At ve Görüntüle. Her iki kip de normal uygulama penceresinde ve Tam Ekran’da kullanılabilir. Göz At kipi, görsellerinizin küçük hallerini göstererek bilgisayarınızda dolaşmanızı sağlar; Görüntüle kipi, görselleri birer birer görüntülemenizi ve Tam Ekran, tez slayt gösterileri yapmanızı sağlar. Ayrıca, son açılan klasörlerin ve &URL;’lerin yanı sıra yerleriniz ve etiketlerinizin listesini görüntüleyen bir başlangıç ekranı da bulunmaktadır. </para>
 
 <para
 >Görsel yüklemesi &Qt; kitaplığı tarafından halledilir; böylece &gwenview;, &Qt; kurulumunuzun desteklediği tüm görsel biçimlerini destekler. &gwenview;, hem alfa kanallı (saydam) hem de canlandırmaları düzgünce görüntüleyebilir.</para>
@@ -284,7 +284,7 @@
 >Fareyi bir görselin üzerinde hareket ettirmek, görseli seçmek veya döndürmek için kullanılan düğmelerin yanı sıra Tam Ekran kipine girmek için bir düğme gösterir. Değiştirilen görseller sağ altta bir simgeyle gösterilir; değiştirilen görseli kaydetmek için buna tıklayın. Bir görsele tıklamak sizi Görüntüle kipine götürür. Birden fazla görsel seçip bunları yan yana görüntülemek için Görüntüle kipine geçebilirsiniz.</para>
 
 <para
->Sağ alttaki kaydırıcı görsellerin boyutunu değiştirmenize olanak sağlar. Sol alttaki kutuyu kullanarak görselleri dosya adına, tarihe, etikete veya derecelendirmeye göre de süzebilirsiniz. Araç çubuğu, hem Göz At kipinde hem de Görüntüle kipinde görünür ve en sık kullanılan eylemleri içerir. </para>
+>Sağ alttaki sürgü, görsellerin boyutunu değiştirmenize olanak sağlar. Sol alttaki kutuyu kullanarak görselleri dosya adına, tarihe, etikete veya derecelendirmeye göre de süzebilirsiniz. Araç çubuğu, hem Göz At kipinde hem de Görüntüle kipinde görünür ve en sık kullanılan eylemleri içerir. </para>
 <itemizedlist>
 <listitem
 ><para
@@ -355,7 +355,7 @@
 > de görünecektir.</para>
 
 <para
->Birden çok görsel görüntülendiğinde, her görselin altında, görseli silmenize veya bölmesini kaldırmanıza olanak tanıyan küçük bir araç çubuğu görünür. Yakınlaştırma işlemlerini her görsel için bağımsız olarak gerçekleştirebilir veya eşzamanlayabilirsiniz. Yakınlaştırma kaydırıcısının solundaki <guilabel
+>Birden çok görsel görüntülendiğinde, her görselin altında, görseli silmenize veya bölmesini kaldırmanıza olanak tanıyan küçük bir araç çubuğu görünür. Yakınlaştırma işlemlerini her görsel için bağımsız olarak gerçekleştirebilir veya eşzamanlayabilirsiniz. Yakınlaştırma sürgüsünün solundaki <guilabel
 >Eşzamanla</guilabel
 > seçeneğini işaretleyerek veya <keycombo action="simul"
 >&Ctrl;<keycap
@@ -378,13 +378,13 @@
 </screenshot>
 
 <para
->Sağ ortadaki kaydırıcı görselin yakınlaştırma boyutunu denetler. <guibutton
+>Sağ ortadaki sürgü, görselin yakınlaştırma boyutunu denetler. <guibutton
 >Sığdır</guibutton
 >, <guibutton
 >Doldur</guibutton
 >, <guibutton
 >%​100</guibutton
-> ve üç önden ayarlanmış yakınlaştırma düzeyi için düğmeler kaydırıcının hemen yanında bulunur. <guibutton
+> ve üç önden ayarlanmış yakınlaştırma düzeyi için düğmeler sürgünün hemen yanında bulunur. <guibutton
 >Sığdır</guibutton
 > düğmesi, geçerli görseli pencerenin boyutuna yakınlaştırır; <guibutton
 >Doldur</guibutton
@@ -421,7 +421,7 @@
 ><guimenu
 >Ayarlar</guimenu
 ><guimenuitem
->&gwenview; Uygulamasını Yapılandır...</guimenuitem
+>&gwenview; Uygulamasını Yapılandır…</guimenuitem
 ></menuchoice
 > konumundan erişilebilen &gwenview; yapılandırma penceresinin .<guimenuitem
 >Görsel Görünümü</guimenuitem
@@ -456,7 +456,7 @@
 ><para
 >Başka bir programdaki <guimenuitem
 >Birlikte Aç</guimenuitem
-> gibi bir bağlam menüsünden &gwenview;'ı başlatarak veya argüman olarak bir görseli komut satırından vererek doğrudan Görüntüle kipinde başlayabilirsiniz.</para
+> gibi bir bağlam menüsünden &gwenview;’ü başlatarak veya argüman olarak bir görseli komut satırından vererek doğrudan Görüntüle kipinde başlayabilirsiniz.</para
 > </tip>
 
 <para
@@ -577,7 +577,7 @@
 ><para
 ><guilabel
 >Aralık</guilabel
-> kaydırıcısı, &gwenview;'ın bir sonraki görsele geçmeden önce bir görseli ne kadar süreyle göstereceğini denetler.</para
+> sürgüsü, &gwenview;’ün bir sonraki görsele geçmeden önce bir görseli ne kadar süreyle göstereceğini denetler.</para
 ></listitem>
     <listitem
 ><para
@@ -607,7 +607,7 @@
 ><para
 ><guilabel
 >Yükseklik</guilabel
-> kaydırıcısı, görüntülenen küçük görsellerin boyutunu değiştirir.</para
+> sürgüsü, görüntülenen küçük görsellerin boyutunu değiştirir.</para
 ></listitem>
 </itemizedlist>
 
@@ -663,8 +663,8 @@
 ><para
 >Dosya adı ve boyutu gibi <guilabel
 >Üst Bilgi</guilabel
->'leri görüntüler. <guilabel
->Daha Fazla...</guilabel
+>’leri görüntüler. <guilabel
+>Daha Fazla…</guilabel
 > bağlantısı, kullanılabilir tüm üst veriyi görüntülemenize ve kenar çubuğunda hangi verinin görüneceğini seçmenize olanak tanır.</para
 ></listitem>
 </varlistentry>
@@ -747,9 +747,9 @@
 <para
 >&gwenview; İçe Aktarıcısı, belirli bir dizgiye göre dosyaları yeniden adlandırabilir. Bunu yapılandırmak için sol alt köşeden <guibutton
 >Ayarlar</guibutton
->'ı seçin. Bu özelliği, yukarıdaki onay kutusunu kullanarak açabilirsiniz veya kapatabilirsiniz. <guilabel
+>’ı seçin. Bu özelliği, yukarıdaki onay kutusunu kullanarak açabilirsiniz veya kapatabilirsiniz. <guilabel
 >Yeniden Adlandırma Biçimi</guilabel
->, birkaç parametreyi destekler; bunların arasında görselin oluşturma tarihi veya dosya ado olabilir. Bunlar metin kutusunun altında listelenirler. Metin kutusuna girmek için parametre adını tıklayabilirsiniz veya elle yazabilirsiniz.</para>
+>, birkaç parametreyi destekler; bunların arasında görselin oluşturma tarihi veya dosya adı olabilir. Bunlar metin kutusunun altında listelenirler. Metin kutusuna girmek için parametre adını tıklayabilirsiniz veya elle yazabilirsiniz.</para>
 </sect2>
 </sect1>
 
@@ -839,7 +839,7 @@
 ><guimenu
 >Ayarlar</guimenu
 ><guimenuitem
->Kısayolları Yapılandır...</guimenuitem
+>Kısayolları Yapılandır…</guimenuitem
 ></menuchoice
 > bölümünden yapılandırılabilen ve yeniden eşlemlenebilen birçok klavye kısayolu ile birlikte gelir. Tüm dosyalar ve klasörler görünümünde olağan &plasma; kısayolları değiştirilmedikleri sürece kullanılabilirler.</para>
 
@@ -1091,7 +1091,7 @@
 ><guimenu
 >Ayarlar</guimenu
 > <guimenuitem
->&gwenview; Uygulamasını Yapılandır...</guimenuitem
+>&gwenview; Uygulamasını Yapılandır…</guimenuitem
 ></menuchoice
 > ögesini seçerek &gwenview; uygulamasını yapılandırabilirsiniz. Yapılandırma iletişim kutusu üç bölüme ayrılmıştır. Bu bölümde kullanılabilir seçenekler ayrıntılı olarak açıklanmaktadır. </para>
         <itemizedlist>
@@ -1126,7 +1126,7 @@
 ></term>
                 <listitem>
                     <para
->&gwenview;'ın görseller arasında video göstermesine izin vermek için <guilabel
+>&gwenview;’ün görseller arasında video göstermesine izin vermek için <guilabel
 >Videoları göster</guilabel
 > onay kutusunu işaretleyin.</para>
                     <para
@@ -1142,7 +1142,7 @@
 ></term>
                 <listitem>
                     <para
->&gwenview;'ın ek bildirimler olmadan görseller listesinde dolaşmasına izin vermek için <guilabel
+>&gwenview;’ün ek bildirimler olmadan görseller listesinde dolaşmasına izin vermek için <guilabel
 >Asla</guilabel
 > ögesini seçin.</para>
                     <para
@@ -1164,7 +1164,7 @@
 ></term>
                 <listitem>
                     <para
->Göz At ve Görüntüle kiplerinde gri arka planın rengini siyahtan (en soldaki konum) beyaza (en sağdaki konum) değiştirmek için kaydırıcıyı hareket ettirin.</para>
+>Göz At ve Görüntüle kiplerinde gri arka planın rengini siyahtan (en soldaki konum) beyaza (en sağdaki konum) değiştirmek için sürgüyü sürün.</para>
                 </listitem>
             </varlistentry>
             <varlistentry>
@@ -1334,7 +1334,7 @@
                             <para
 ><guilabel
 >Küçükçe görselleri büyüt</guilabel
-> &mdash; &gwenview;'ın Görüntüle kipinde küçük boyutlu görselleri genişletmesi için bu seçeneği işaretleyin.</para>
+> &mdash; &gwenview;’ün Görüntüle kipinde küçük boyutlu görselleri genişletmesi için bu seçeneği işaretleyin.</para>
                         </listitem>
                     </itemizedlist>
                 </listitem>
@@ -1467,7 +1467,7 @@
                         <listitem>
                             <para
 ><guilabel
->Göreceli Renkölçer</guilabel
+>Bağıl Renkölçüm</guilabel
 > &mdash; Etkin renk profilinin renk gamına uymayan renkleri tıkıştır, diğer renklere dokunulmaz</para>
                         </listitem>
                     </itemizedlist>
@@ -1500,7 +1500,7 @@
 > bulunabilir. </para>
     <important>
         <para
->Yukarıda belirtilen sayfada açıklanan seçenekler, &gwenview;'ı belirli gereksinimlere göre ayarlamanıza yardımcı olabilir; ancak lütfen bir sürümden diğerine çalışmayı sürdüreceklerinin hiçbir garantisinin olmadığını unutmayın. </para>
+>Yukarıda belirtilen sayfada açıklanan seçenekler, &gwenview;’ü belirli gereksinimlere göre ayarlamanıza yardımcı olabilir; ancak lütfen bir sürümden diğerine çalışmayı sürdüreceklerinin hiçbir garantisinin olmadığını unutmayın. </para>
     </important>
     </sect1>
 </chapter>
