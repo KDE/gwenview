@@ -1029,7 +1029,7 @@ struct MainWindow::Private {
         InternalUrlClickedHandler(MainWindow *parent)
             : QObject(parent)
         {
-            Q_CHECK_PTR(parent);
+            Q_ASSERT(parent);
         }
 
         inline bool eventFilter(QObject * /* watched */, QEvent *event) override
