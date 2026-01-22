@@ -46,9 +46,6 @@ public:
     void setCurrentTool(AbstractRasterImageViewTool *tool);
     AbstractRasterImageViewTool *currentTool() const;
 
-    void setRenderingIntent(const RenderingIntent::Enum &renderingIntent);
-    void resetMonitorICC();
-
 Q_SIGNALS:
     void currentToolChanged(AbstractRasterImageViewTool *);
     void imageRectUpdated();

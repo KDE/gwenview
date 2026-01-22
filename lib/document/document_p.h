@@ -31,11 +31,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KF
 
 // Qt
+#include <QFutureWatcher>
 #include <QImage>
 #include <QPointer>
 #include <QQueue>
 #include <QUndoStack>
 #include <QUrl>
+
+#include "lib/renderingintent.h"
 
 namespace Exiv2
 {
@@ -59,6 +62,7 @@ struct DocumentPrivate {
      */
     QSize mSize;
     QImage mImage;
+    QImage mColorCorrectedImage;
     QMap<int, QImage> mDownSampledImageMap;
     std::unique_ptr<Exiv2::Image> mExiv2Image;
     MimeTypeUtils::Kind mKind;
@@ -66,12 +70,17 @@ struct DocumentPrivate {
     ImageMetaInfoModel mImageMetaInfoModel;
     QUndoStack mUndoStack;
     QString mErrorString;
+
     Cms::Profile::Ptr mCmsProfile;
+    bool mApplyDisplayTransform = true;
+    cmsUInt32Number mRenderingIntent = INTENT_PERCEPTUAL;
     /** @} */
 
     void scheduleImageLoading(int invertedZoom);
     void scheduleImageDownSampling(int invertedZoom);
+    void scheduleImageColorCorrection();
     void downSampleImage(int invertedZoom);
+    void colorCorrectImage(QImage const &);
 };
 
 class DownSamplingJob : public DocumentJob
@@ -86,6 +95,19 @@ public:
     void doStart() override;
 
     int mInvertedZoom;
+};
+
+class ColorCorrectionJob : public DocumentJob
+{
+    Q_OBJECT
+public:
+    ColorCorrectionJob();
+    ~ColorCorrectionJob();
+
+    void doStart() override;
+
+private:
+    QFutureWatcher<QImage> mWatcher;
 };
 
 } // namespace

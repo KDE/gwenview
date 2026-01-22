@@ -118,16 +118,6 @@ RasterImageView::~RasterImageView()
     delete d;
 }
 
-void RasterImageView::setRenderingIntent(const RenderingIntent::Enum &renderingIntent)
-{
-    d->mImageItem->setRenderingIntent(renderingIntent);
-}
-
-void RasterImageView::resetMonitorICC()
-{
-    update();
-}
-
 void RasterImageView::loadFromDocument()
 {
     Document::Ptr doc = document();

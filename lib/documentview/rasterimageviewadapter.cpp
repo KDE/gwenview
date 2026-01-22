@@ -137,9 +137,9 @@ void RasterImageViewAdapter::loadConfig()
 {
     d->mView->backgroundItem()->setMode(GwenviewConfig::alphaBackgroundMode());
     d->mView->backgroundItem()->setColor(GwenviewConfig::alphaBackgroundColor());
-    d->mView->setRenderingIntent(GwenviewConfig::renderingIntent());
     d->mView->setEnlargeSmallerImages(GwenviewConfig::enlargeSmallerImages());
-    d->mView->resetMonitorICC();
+    if (document())
+        document()->reload();
 }
 
 RasterImageView *RasterImageViewAdapter::rasterImageView() const

@@ -21,11 +21,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #define DOCUMENT_H
 
 #include <lib/gwenviewlib_export.h>
+#include <lib/renderingintent.h>
 
 // STL
 #include <memory>
 
 // Qt
+#include <QImage>
 #include <QObject>
 #include <QSharedData>
 #include <QSize>
@@ -34,7 +36,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/cms/cmsprofile.h>
 #include <lib/mimetypeutils.h>
 
-class QImage;
 class QRect;
 class QSvgRenderer;
 class QUndoStack;
@@ -111,6 +112,7 @@ public:
      * downSampledImageReady() signal will be emitted.
      */
     bool prepareDownSampledImageForZoom(qreal zoom);
+    void prepareColorCorrectedImage();
 
     LoadingState loadingState() const;
 
@@ -121,6 +123,8 @@ public:
     const QImage &image() const;
 
     const QImage &downSampledImageForZoom(qreal zoom) const;
+
+    QImage colorCorrectedImage() const;
 
     /**
      * Returns an implementation of AbstractDocumentEditor if this document can
@@ -207,6 +211,8 @@ public:
      */
     bool isBusy() const;
 
+    void setRenderingIntent(RenderingIntent::Enum intent);
+
 Q_SIGNALS:
     void downSampledImageReady();
     void imageRectUpdated(const QRect &);
@@ -233,6 +239,7 @@ private:
     friend class DocumentFactory;
     friend struct DocumentPrivate;
     friend class DownSamplingJob;
+    friend class ColorCorrectionJob;
 
     void setImageInternal(const QImage &);
     void setKind(MimeTypeUtils::Kind);

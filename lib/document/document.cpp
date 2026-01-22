@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QImage>
 #include <QUndoStack>
 #include <QUrl>
+#include <QtConcurrentRun>
 
 // KF
 #include <KJobUiDelegate>
@@ -37,6 +38,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "documentjob.h"
 #include "gvdebug.h"
 #include "gwenview_lib_debug.h"
+#include "gwenviewconfig.h"
 #include "imagemetainfomodel.h"
 #include "loadingdocumentimpl.h"
 #include "loadingjob.h"
@@ -86,6 +88,72 @@ static void logQueue(DocumentPrivate *d)
 
 #endif
 
+namespace
+{
+
+cmsHTRANSFORM createDisplayTransform(QImage::Format format, Cms::Profile::Ptr profile, cmsUInt32Number renderingIntent)
+{
+    if (format == QImage::Format_Invalid) {
+        return {};
+    }
+
+    if (!profile) {
+        // The assumption that something unmarked is *probably* sRGB is better than failing to apply any transform when one
+        // has a wide-gamut screen.
+        profile = Cms::Profile::getSRgbProfile();
+    }
+    Cms::Profile::Ptr monitorProfile = Cms::Profile::getMonitorProfile();
+    if (!monitorProfile) {
+        qCWarning(GWENVIEW_LIB_LOG) << "Could not get monitor color profile";
+        return {};
+    }
+
+    cmsUInt32Number cmsFormat = 0;
+    switch (format) {
+    case QImage::Format_RGB32:
+    case QImage::Format_ARGB32:
+        cmsFormat = TYPE_BGRA_8;
+        break;
+    case QImage::Format_Grayscale8:
+        cmsFormat = TYPE_GRAY_8;
+        break;
+    case QImage::Format_RGB888:
+        cmsFormat = TYPE_RGB_8;
+        break;
+    case QImage::Format_RGBX8888:
+    case QImage::Format_RGBA8888:
+        cmsFormat = TYPE_RGBA_8;
+        break;
+    case QImage::Format_Grayscale16:
+        cmsFormat = TYPE_GRAY_16;
+        break;
+    case QImage::Format_RGBA64:
+    case QImage::Format_RGBX64:
+        cmsFormat = TYPE_RGBA_16;
+        break;
+    case QImage::Format_BGR888:
+        cmsFormat = TYPE_BGR_8;
+        break;
+    default:
+        qCWarning(GWENVIEW_LIB_LOG) << "Gwenview cannot apply color profile on" << format << "images";
+        return {};
+    }
+
+    return cmsCreateTransform(profile->handle(), cmsFormat, monitorProfile->handle(), cmsFormat, renderingIntent, cmsFLAGS_BLACKPOINTCOMPENSATION);
+}
+
+void applyDisplayTransform(QImage &image, Cms::Profile::Ptr const &profile, cmsUInt32Number renderingIntent)
+{
+    auto transform = createDisplayTransform(image.format(), profile, renderingIntent);
+    if (!transform)
+        return;
+    quint8 *bytes = image.bits();
+    cmsDoTransform(transform, bytes, bytes, image.width() * image.height());
+    cmsDeleteTransform(transform);
+}
+
+}
+
 //- DocumentPrivate ---------------------------------------
 void DocumentPrivate::scheduleImageLoading(int invertedZoom)
 {
@@ -123,6 +191,21 @@ void DocumentPrivate::scheduleImageDownSampling(int invertedZoom)
     q->enqueueJob(new DownSamplingJob(invertedZoom));
 }
 
+void DocumentPrivate::scheduleImageColorCorrection()
+{
+    auto *job = qobject_cast<ColorCorrectionJob *>(mCurrentJob.data());
+    if (job) {
+        return;
+    }
+
+    if (std::any_of(mJobQueue.begin(), mJobQueue.end(), [](auto *j) {
+            return qobject_cast<ColorCorrectionJob *>(j);
+        }))
+        return;
+
+    q->enqueueJob(new ColorCorrectionJob());
+}
+
 void DocumentPrivate::downSampleImage(int invertedZoom)
 {
     mDownSampledImageMap[invertedZoom] = mImage.scaled(mImage.size() / invertedZoom, Qt::KeepAspectRatio, Qt::FastTransformation);
@@ -139,6 +222,59 @@ void DownSamplingJob::doStart()
     d->downSampleImage(mInvertedZoom);
     setError(NoError);
     emitResult();
+}
+
+ColorCorrectionJob::ColorCorrectionJob()
+{
+    QObject::connect(&mWatcher, &QFutureWatcher<QImage>::finished, this, [this]() {
+        DocumentPrivate *d = document()->d;
+        d->mColorCorrectedImage = mWatcher.future().result();
+        setError(NoError);
+        emitResult();
+    });
+}
+
+void ColorCorrectionJob::doStart()
+{
+    DocumentPrivate *d = document()->d;
+    mWatcher.setFuture(QtConcurrent::run([image = d->mImage, profile = d->mCmsProfile, renderingIntent = d->mRenderingIntent]() {
+        const bool isIndexedColor = image.colorCount() > 0;
+
+        QImage::Format outputImageFormat = image.format();
+        if (isIndexedColor) {
+            outputImageFormat = image.hasAlphaChannel() ? QImage::Format_ARGB32 : QImage::Format_RGB32;
+        } else {
+            switch (outputImageFormat) {
+            case QImage::Format_ARGB32_Premultiplied:
+                outputImageFormat = QImage::Format_ARGB32;
+                break;
+            case QImage::Format_RGBA8888_Premultiplied:
+                outputImageFormat = QImage::Format_RGBA8888;
+                break;
+            case QImage::Format_RGBA64_Premultiplied:
+                outputImageFormat = QImage::Format_RGBA64;
+                break;
+            // TODO convert formats not supported by LittleCMS?
+            default:;
+            }
+        }
+
+        auto colorCorrectedImage = image.copy();
+        // We may load an image in indexed color or premultiplied alpha, or scaling may produce premultiplied alpha.
+        // These are not supported by the color correction engine, so convert to a standard format.
+        if (colorCorrectedImage.format() != outputImageFormat) {
+            colorCorrectedImage.convertTo(outputImageFormat);
+        }
+
+        applyDisplayTransform(colorCorrectedImage, profile, renderingIntent);
+
+        return colorCorrectedImage;
+    }));
+}
+
+ColorCorrectionJob::~ColorCorrectionJob()
+{
+    mWatcher.waitForFinished();
 }
 
 //- Document ----------------------------------------------
@@ -171,6 +307,7 @@ void Document::reload()
 {
     d->mSize = QSize();
     d->mImage = QImage();
+    d->mColorCorrectedImage = QImage();
     d->mDownSampledImageMap.clear();
     d->mExiv2Image.reset();
     d->mKind = MimeTypeUtils::KIND_UNKNOWN;
@@ -182,13 +319,35 @@ void Document::reload()
     d->mUndoStack.clear();
     d->mErrorString.clear();
     d->mCmsProfile = nullptr;
+    d->mRenderingIntent = GwenviewConfig::renderingIntent();
 
     switchToImpl(new LoadingDocumentImpl(this));
+}
+
+void Document::setRenderingIntent(RenderingIntent::Enum intent)
+{
+    d->mRenderingIntent = intent;
 }
 
 const QImage &Document::image() const
 {
     return d->mImage;
+}
+
+QImage Document::colorCorrectedImage() const
+{
+    if (!d->mApplyDisplayTransform) {
+        return d->mImage;
+    }
+
+    if (d->mColorCorrectedImage.isNull()) {
+        // This is just a fallback for the case the job hasn't finished yet
+        auto ret = d->mImage.copy();
+        applyDisplayTransform(ret, d->mCmsProfile, d->mRenderingIntent);
+        d->mColorCorrectedImage = ret;
+        return ret;
+    }
+    return d->mColorCorrectedImage;
 }
 
 /**
@@ -244,6 +403,7 @@ void Document::switchToImpl(AbstractDocumentImpl *impl)
 
     connect(d->mImpl, &AbstractDocumentImpl::metaInfoLoaded, this, &Document::emitMetaInfoLoaded);
     connect(d->mImpl, &AbstractDocumentImpl::loaded, this, &Document::emitLoaded);
+    connect(d->mImpl, &AbstractDocumentImpl::loaded, this, &Document::prepareColorCorrectedImage);
     connect(d->mImpl, &AbstractDocumentImpl::loadingFailed, this, &Document::emitLoadingFailed);
     connect(d->mImpl, &AbstractDocumentImpl::imageRectUpdated, this, &Document::imageRectUpdated);
     connect(d->mImpl, &AbstractDocumentImpl::isAnimatedUpdated, this, &Document::isAnimatedUpdated);
@@ -431,6 +591,11 @@ void Document::startLoadingFullImage()
     } else if (state == LoadingFailed) {
         qCWarning(GWENVIEW_LIB_LOG) << "Can't load full image: loading has already failed";
     }
+}
+
+void Document::prepareColorCorrectedImage()
+{
+    d->scheduleImageColorCorrection();
 }
 
 bool Document::prepareDownSampledImageForZoom(qreal zoom)

@@ -48,11 +48,6 @@ public:
     ~RasterImageItem() override;
 
     /**
-     * Set the rendering intent for color correction.
-     */
-    void setRenderingIntent(RenderingIntent::Enum intent);
-
-    /**
      * Update the internal, smaller cached versions of the main image.
      */
     void updateCache();
@@ -72,13 +67,8 @@ private:
     void updateDisplayTransform(QImage::Format format);
 
     RasterImageView *mParentView;
-    bool mApplyDisplayTransform = true;
-    cmsHTRANSFORM mDisplayTransform = nullptr;
-    cmsUInt32Number mRenderingIntent = INTENT_PERCEPTUAL;
 
     QImage mOriginalImage;
-    QImage mThirdScaledImage;
-    QImage mSixthScaledImage;
 };
 
 }
