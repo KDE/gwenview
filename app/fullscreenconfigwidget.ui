@@ -38,7 +38,7 @@
         <item>
          <widget class="QSlider" name="mSlideShowIntervalSlider">
           <property name="minimum">
-           <number>2</number>
+           <number>1</number>
           </property>
           <property name="maximum">
            <number>60</number>
