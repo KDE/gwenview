@@ -1467,7 +1467,7 @@ msgstr "S'està guardant…"
 #: app/saveallhelper.cpp:57
 #, kde-format
 msgid "&Stop"
-msgstr "A&tura"
+msgstr "&Para"
 
 #: app/saveallhelper.cpp:82
 #, kde-format
