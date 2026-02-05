@@ -7,15 +7,15 @@
 # SPDX-FileCopyrightText: 2010, 2011 Panagiotis Papadopoulos <pano_90@gmx.net>
 # SPDX-FileCopyrightText: 2010 Johannes Obermayr <johannesobermayr@gmx.de>
 # SPDX-FileCopyrightText: 2011 Rolf Eike Beer <kde@opensource.sf-tec.de>
-# SPDX-FileCopyrightText: 2022 Frank Steinmetzger <dev-kde@felsenfleischer.de>
+# SPDX-FileCopyrightText: 2022, 2025 Frank Steinmetzger <dev-kde@felsenfleischer.de>
 # SPDX-FileCopyrightText: 2025 Alois Spitzbart <spitz234@hotmail.com>
-# SPDX-FileCopyrightText: 2025 Philipp Kiemle <l10n.daphipz@fastmail.de>
+# SPDX-FileCopyrightText: 2025, 2026 Philipp Kiemle <l10n.daphipz@fastmail.de>
 msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:39+0000\n"
-"PO-Revision-Date: 2025-07-21 22:47+0200\n"
+"PO-Revision-Date: 2026-01-30 18:20+0100\n"
 "Last-Translator: Philipp Kiemle <l10n.daphipz@fastmail.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 25.04.3\n"
+"X-Generator: Lokalize 25.12.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -362,17 +362,17 @@ msgstr "Verknüpfung"
 #: app/fileoperations.cpp:196
 #, kde-format
 msgid "Move Here"
-msgstr "Hierher verschieben"
+msgstr "Hierher &verschieben"
 
 #: app/fileoperations.cpp:197
 #, kde-format
 msgid "Copy Here"
-msgstr "Hierher kopieren"
+msgstr "Hierher &kopieren"
 
 #: app/fileoperations.cpp:198
 #, kde-format
 msgid "Link Here"
-msgstr "Hiermit verknüpfen"
+msgstr "Verknüp&fung hier erstellen"
 
 #: app/fileoperations.cpp:200
 #, kde-format
@@ -395,36 +395,36 @@ msgstr "Bearbeiten"
 #, kde-format
 msgctxt "Verb"
 msgid "Copy To..."
-msgstr "Kopieren nach …"
+msgstr "&Kopieren nach …"
 
 #: app/fileopscontextmanageritem.cpp:149
 #, kde-format
 msgctxt "Verb"
 msgid "Move To..."
-msgstr "Verschieben nach …"
+msgstr "&Verschieben nach …"
 
 #: app/fileopscontextmanageritem.cpp:154
 #, kde-format
 msgctxt "Verb: create link to the file where user wants"
 msgid "Link To..."
-msgstr "Verknüpfen mit …"
+msgstr "Verknüp&fen mit …"
 
 #: app/fileopscontextmanageritem.cpp:159
 #, kde-format
 msgctxt "Verb"
 msgid "Rename..."
-msgstr "Umbenennen …"
+msgstr "&Umbenennen …"
 
 #: app/fileopscontextmanageritem.cpp:164
 #, kde-format
 msgctxt "Verb"
 msgid "Trash"
-msgstr "In den Papierkorb verschieben"
+msgstr "In den &Papierkorb verschieben"
 
 #: app/fileopscontextmanageritem.cpp:171
 #, kde-format
 msgid "Restore"
-msgstr "Wiederherstellen"
+msgstr "&Wiederherstellen"
 
 #: app/fileopscontextmanageritem.cpp:175
 #, kde-format
@@ -434,23 +434,23 @@ msgstr "Eigenschaften"
 #: app/fileopscontextmanageritem.cpp:180
 #, kde-format
 msgid "Create Folder..."
-msgstr "Ordner erstellen …"
+msgstr "&Ordner erstellen …"
 
 #: app/fileopscontextmanageritem.cpp:184
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Open in New Window"
-msgstr "In neuem Fenster öffnen"
+msgstr "In neuem &Fenster öffnen"
 
 #: app/fileopscontextmanageritem.cpp:189
 #, kde-format
 msgid "Open With"
-msgstr "Öffnen mit"
+msgstr "Öff&nen mit"
 
 #: app/fileopscontextmanageritem.cpp:197
 #, kde-format
 msgid "Open Containing Folder"
-msgstr "Ordner mit diesem Inhalt öffnen"
+msgstr "Ordner mit diesem &Inhalt öffnen"
 
 #: app/fileopscontextmanageritem.cpp:387
 #, kde-format
