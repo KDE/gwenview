@@ -2,14 +2,14 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 # Mohammed Berdai <stuntgp2000@gmail.com>, 2008.
-# SPDX-FileCopyrightText: 2008, 2021, 2022, 2023, 2024, 2025 zayed <zayed.alsaidi@gmail.com>
+# SPDX-FileCopyrightText: 2008, 2021, 2022, 2023, 2024, 2025, 2026 zayed <zayed.alsaidi@gmail.com>
 # Abdalrahim G. Fakhouri <abdilra7eem@yahoo.com>, 2014.
 msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2025-10-08 21:43+0400\n"
+"PO-Revision-Date: 2026-02-21 17:09+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -1651,13 +1651,13 @@ msgstr "أضف المجلد إلى الأماكن"
 #, kde-format
 msgctxt "@action Recent Folders view"
 msgid "Forget This Folder"
-msgstr "انس هذا المجلد"
+msgstr "انسَ هذا المجلد"
 
 #: app/startmainpage.cpp:293
 #, kde-format
 msgctxt "@action Recent Folders view"
 msgid "Forget All Folders"
-msgstr "انس كل المجلدات"
+msgstr "انسَ كل المجلدات"
 
 #: app/startmainpage.cpp:295
 #, kde-format
@@ -1669,25 +1669,25 @@ msgstr "أضف المجلد الحاوي إلى الأماكن"
 #, kde-format
 msgctxt "@action Recent Files view"
 msgid "Forget This File"
-msgstr "انس هذا الملف"
+msgstr "انسَ هذا الملف"
 
 #: app/startmainpage.cpp:297
 #, kde-format
 msgctxt "@action Recent Files view"
 msgid "Forget All Files"
-msgstr "انس جميع الملفات"
+msgstr "انسَ جميع الملفات"
 
 #. i18n: ectx: property (text), widget (QLabel, mHistoryDisabledLabel)
 #: app/startmainpage.ui:49
 #, kde-format
 msgid "History has been disabled."
-msgstr "عطل التاريخ."
+msgstr "عُطّلَ التاريخ."
 
 #. i18n: ectx: attribute (title), widget (QWidget, mRecentFoldersTab)
 #: app/startmainpage.ui:66
 #, kde-format
 msgid "Recent Folders"
-msgstr "المجلدات حديثة"
+msgstr "المجلدات الحديثة"
 
 #. i18n: ectx: attribute (title), widget (QWidget, mRecentFilesTab)
 #: app/startmainpage.ui:92
