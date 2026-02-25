@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2026-02-21 17:09+0400\n"
+"PO-Revision-Date: 2026-02-24 22:42+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -2253,7 +2253,7 @@ msgstr "هذه الشاشة"
 #: lib/crop/cropwidget.cpp:199
 #, kde-format
 msgid "Landscape"
-msgstr "بالعرض"
+msgstr "عرضي"
 
 #: lib/crop/cropwidget.cpp:204 lib/crop/cropwidget.cpp:211
 #, kde-format
@@ -2268,7 +2268,7 @@ msgstr "رسالة أمريكية"
 #: lib/crop/cropwidget.cpp:206
 #, kde-format
 msgid "Portrait"
-msgstr "بالطّول"
+msgstr "طولي"
 
 #: lib/crop/cropwidget.cpp:290
 #, kde-format
