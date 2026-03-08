@@ -498,7 +498,7 @@
 > <guimenuitem
 >Kırmızı Gözü Azalt</guimenuitem
 > </menuchoice
->: Bu işlem, flaşlı fotoğraf makinesiyle çekilen fotoğraflarda yaygın olarak görülen "kırmızı göz" etkisini azaltır. </para
+>: Bu işlem, flaşlı fotoğraf makinesiyle çekilen fotoğraflarda yaygın olarak görülen “kırmızı göz” etkisini azaltır. </para
 ></listitem>
 </itemizedlist>
 
@@ -717,7 +717,7 @@
 
 <sect2>
 <title
->Görselleri İçe Aktarmak</title>
+>Görseller İçe Aktarmak</title>
 
 <screenshot>
   <screeninfo
@@ -759,11 +759,11 @@
 >İpuçları</title>
 <sect1 id='mouse'
 ><title
->Fareyi kullanmak</title>
+>Fareyi Kullanmak</title>
 
 <sect2 id='mouse_panning'
 ><title
->Fare ile kaydırmak</title>
+>Fare ile Kaydırmak</title>
 <itemizedlist>
   <listitem
 ><para
@@ -779,7 +779,7 @@
 
 <sect2 id='mouse_zooming'
 ><title
->Fare ile yakınlaştırmak</title>
+>Fare ile Yakınlaştırmak</title>
 <itemizedlist>
   <listitem
 ><para
@@ -804,7 +804,7 @@
 
 <sect2 id='mouse_browsing'
 ><title
->Fare ile göz atmak</title>
+>Fare ile Göz Atmak</title>
 <itemizedlist>
   <listitem
 ><para
@@ -832,7 +832,7 @@
 
 <sect1 id="keybindings"
 > <title
->Düğme bağıntıları</title>
+>Düğme Bağıntıları</title>
 
 <para
 >&gwenview;, <menuchoice
@@ -1085,7 +1085,7 @@
 >&gwenview; Yapılandırması</title>
     <sect1 id="configindex">
         <title
->Yapılandırma genel görünümü</title>
+>Yapılandırma Genel Görünümü</title>
         <para
 ><menuchoice
 ><guimenu
