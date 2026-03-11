@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2026-02-24 22:42+0400\n"
+"PO-Revision-Date: 2026-03-10 22:32+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -621,7 +621,7 @@ msgstr "اختر معلومات الصورة التي تريد عرضها..."
 #: app/fullscreenconfigwidget.ui:111
 #, kde-format
 msgid "Thumbnails"
-msgstr "المصغرات"
+msgstr "المصغّرات"
 
 #. i18n: ectx: property (text), widget (QCheckBox, mShowThumbnailsCheckBox)
 #: app/fullscreenconfigwidget.ui:120
@@ -1356,7 +1356,7 @@ msgstr "تراجع"
 #: app/mainwindow.cpp:644
 #, kde-format
 msgid "Folders"
-msgstr "المجلدات"
+msgstr "المجلّدات"
 
 #: app/mainwindow.cpp:650
 #, kde-format
