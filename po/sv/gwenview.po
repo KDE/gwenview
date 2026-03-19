@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2026-03-19 00:42+0000\n"
 "PO-Revision-Date: 2025-10-10 21:19+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -1354,44 +1354,44 @@ msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Öppna bild"
 
-#: app/mainwindow.cpp:1850
+#: app/mainwindow.cpp:1851
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "Pausa bildspel"
 
-#: app/mainwindow.cpp:1853
+#: app/mainwindow.cpp:1854
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "Återuppta bildspel"
 
-#: app/mainwindow.cpp:1853
+#: app/mainwindow.cpp:1854
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Starta bildspel"
 
-#: app/mainwindow.cpp:1866
+#: app/mainwindow.cpp:1867
 #, kde-format
 msgid "Save All Changes"
 msgstr "Spara alla ändringar"
 
-#: app/mainwindow.cpp:1867
+#: app/mainwindow.cpp:1868
 #, kde-format
 msgid "Discard Changes"
 msgstr "Kasta ändringar"
 
-#: app/mainwindow.cpp:1869
+#: app/mainwindow.cpp:1870
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "En bild har ändrats."
 msgstr[1] "%1 bilder har ändrats."
 
-#: app/mainwindow.cpp:1869
+#: app/mainwindow.cpp:1870
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Om du avslutar nu, kommer dina ändringar att gå förlorade."
 
-#: app/mainwindow.cpp:1912
+#: app/mainwindow.cpp:1913
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
@@ -1399,37 +1399,37 @@ msgstr ""
 "Det här döljer menyraden fullständigt. Du kan visa den igen genom att skriva "
 "%1."
 
-#: app/mainwindow.cpp:1915
+#: app/mainwindow.cpp:1916
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Dölj menyrad"
 
-#: app/mainwindow.cpp:2136
+#: app/mainwindow.cpp:2137
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "Du har nått det första dokumentet. Vad vill du göra?"
 
-#: app/mainwindow.cpp:2137 app/mainwindow.cpp:2151
+#: app/mainwindow.cpp:2138 app/mainwindow.cpp:2152
 #, kde-format
 msgid "Stay There"
 msgstr "Stanna här"
 
-#: app/mainwindow.cpp:2138
+#: app/mainwindow.cpp:2139
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "Gå till sista dokumentet"
 
-#: app/mainwindow.cpp:2139 app/mainwindow.cpp:2153
+#: app/mainwindow.cpp:2140 app/mainwindow.cpp:2154
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "Gå tillbaka till dokumentlistan"
 
-#: app/mainwindow.cpp:2150
+#: app/mainwindow.cpp:2151
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "Du har nått det sista dokumentet. Vad vill du göra?"
 
-#: app/mainwindow.cpp:2152
+#: app/mainwindow.cpp:2153
 #, kde-format
 msgid "Go to the First Document"
 msgstr "Gå till första dokumentet"

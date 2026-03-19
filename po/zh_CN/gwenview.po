@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2026-03-19 00:42+0000\n"
 "PO-Revision-Date: 2024-04-22 15:59\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -1338,79 +1338,79 @@ msgctxt "@title:window"
 msgid "Open Image"
 msgstr "打开图像"
 
-#: app/mainwindow.cpp:1850
+#: app/mainwindow.cpp:1851
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "暂停幻灯片放映"
 
-#: app/mainwindow.cpp:1853
+#: app/mainwindow.cpp:1854
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "继续幻灯片放映"
 
-#: app/mainwindow.cpp:1853
+#: app/mainwindow.cpp:1854
 #, kde-format
 msgid "Start Slideshow"
 msgstr "开始幻灯片放映"
 
-#: app/mainwindow.cpp:1866
+#: app/mainwindow.cpp:1867
 #, kde-format
 msgid "Save All Changes"
 msgstr "保存全部更改"
 
-#: app/mainwindow.cpp:1867
+#: app/mainwindow.cpp:1868
 #, kde-format
 msgid "Discard Changes"
 msgstr "丢弃更改"
 
-#: app/mainwindow.cpp:1869
+#: app/mainwindow.cpp:1870
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "%1 个图像已修改。"
 
-#: app/mainwindow.cpp:1869
+#: app/mainwindow.cpp:1870
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "如果现在退出，您的更改将会丢失。"
 
-#: app/mainwindow.cpp:1912
+#: app/mainwindow.cpp:1913
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr "这将完全隐藏菜单栏。按 %1 可以重新显示。"
 
-#: app/mainwindow.cpp:1915
+#: app/mainwindow.cpp:1916
 #, kde-format
 msgid "Hide menu bar"
 msgstr "隐藏菜单栏"
 
-#: app/mainwindow.cpp:2136
+#: app/mainwindow.cpp:2137
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "您已切换到第一张图像，接下来应该怎么做？"
 
-#: app/mainwindow.cpp:2137 app/mainwindow.cpp:2151
+#: app/mainwindow.cpp:2138 app/mainwindow.cpp:2152
 #, kde-format
 msgid "Stay There"
 msgstr "停留在此位置"
 
-#: app/mainwindow.cpp:2138
+#: app/mainwindow.cpp:2139
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "切换到最后一张图像"
 
-#: app/mainwindow.cpp:2139 app/mainwindow.cpp:2153
+#: app/mainwindow.cpp:2140 app/mainwindow.cpp:2154
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "返回到图像列表"
 
-#: app/mainwindow.cpp:2150
+#: app/mainwindow.cpp:2151
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "您已切换到最后一张图像，接下来应该怎么做？"
 
-#: app/mainwindow.cpp:2152
+#: app/mainwindow.cpp:2153
 #, kde-format
 msgid "Go to the First Document"
 msgstr "切换到第一张图像"

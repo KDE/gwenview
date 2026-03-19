@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:50+0000\n"
+"POT-Creation-Date: 2026-03-19 00:42+0000\n"
 "PO-Revision-Date: 2025-10-08 06:58+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -1378,32 +1378,32 @@ msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Odpri sliko"
 
-#: app/mainwindow.cpp:1850
+#: app/mainwindow.cpp:1851
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "Ustavi predstavitev"
 
-#: app/mainwindow.cpp:1853
+#: app/mainwindow.cpp:1854
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "Nadaljuj predstavitev"
 
-#: app/mainwindow.cpp:1853
+#: app/mainwindow.cpp:1854
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Začni predstavitev"
 
-#: app/mainwindow.cpp:1866
+#: app/mainwindow.cpp:1867
 #, kde-format
 msgid "Save All Changes"
 msgstr "Shrani vse spremembe"
 
-#: app/mainwindow.cpp:1867
+#: app/mainwindow.cpp:1868
 #, kde-format
 msgid "Discard Changes"
 msgstr "Zavrzi vse spremembe"
 
-#: app/mainwindow.cpp:1869
+#: app/mainwindow.cpp:1870
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
@@ -1412,12 +1412,12 @@ msgstr[1] "%1 slika je bila spremenjena."
 msgstr[2] "%1 sliki sta bili spremenjeni."
 msgstr[3] "%1 slike so bile spremenjene."
 
-#: app/mainwindow.cpp:1869
+#: app/mainwindow.cpp:1870
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Če končate sedaj, bodo vse spremembe izgubljene."
 
-#: app/mainwindow.cpp:1912
+#: app/mainwindow.cpp:1913
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
@@ -1425,37 +1425,37 @@ msgstr ""
 "To bo v celoti skrilo menijsko vrstico. Ponovno jo lahko pokažete tako, da "
 "vtipkate %1."
 
-#: app/mainwindow.cpp:1915
+#: app/mainwindow.cpp:1916
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Skrij menijsko vrstico"
 
-#: app/mainwindow.cpp:2136
+#: app/mainwindow.cpp:2137
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "Dosegli ste prvi dokument, kaj želite narediti?"
 
-#: app/mainwindow.cpp:2137 app/mainwindow.cpp:2151
+#: app/mainwindow.cpp:2138 app/mainwindow.cpp:2152
 #, kde-format
 msgid "Stay There"
 msgstr "Ostani tukaj"
 
-#: app/mainwindow.cpp:2138
+#: app/mainwindow.cpp:2139
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "Pojdi na zadnji dokument"
 
-#: app/mainwindow.cpp:2139 app/mainwindow.cpp:2153
+#: app/mainwindow.cpp:2140 app/mainwindow.cpp:2154
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "Pojdi nazaj na seznam dokumentov"
 
-#: app/mainwindow.cpp:2150
+#: app/mainwindow.cpp:2151
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "Dosegli ste zadnji dokument, kaj želite narediti?"
 
-#: app/mainwindow.cpp:2152
+#: app/mainwindow.cpp:2153
 #, kde-format
 msgid "Go to the First Document"
 msgstr "Pojdi na prvi dokument"
