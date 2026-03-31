@@ -69,6 +69,7 @@ struct VideoViewAdapterPrivate {
     QAction *mLoopAction = nullptr;
     QGraphicsWidget *mWidget = nullptr;
 
+    HudButton *mMuteButton = nullptr;
     HudSlider *mVolumeSlider = nullptr;
     QElapsedTimer mLastVolumeSliderChangeTime;
 
@@ -110,8 +111,8 @@ struct VideoViewAdapterPrivate {
         QObject::connect(mMediaPlayer, &QMediaPlayer::seekableChanged, q, &VideoViewAdapter::updatePlayUi);
 
         // Mute
-        auto muteButton = new HudButton;
-        muteButton->setDefaultAction(mMuteAction);
+        mMuteButton = new HudButton;
+        mMuteButton->setDefaultAction(mMuteAction);
 
         // Volume
         mVolumeSlider = new HudSlider;
@@ -154,7 +155,7 @@ struct VideoViewAdapterPrivate {
         layout->setStretchFactor(mSeekSlider, 6);
         layout->addItem(remainingTimeProxy);
         layout->setStretchFactor(remainingTimeProxy, 1);
-        layout->addItem(muteButton);
+        layout->addItem(mMuteButton);
         layout->addItem(mVolumeSlider);
         layout->setStretchFactor(mVolumeSlider, 2);
         layout->addItem(loopButton);
@@ -274,6 +275,10 @@ void VideoViewAdapter::setDocument(const Document::Ptr &doc)
 {
     d->mHud->show();
     d->mLoopAction->setChecked(false);
+    if (d->mMuteButton) {
+        d->mMuteButton->show();
+    }
+    d->mVolumeSlider->show();
     d->mDocument = doc;
     d->mMediaPlayer->setSource(d->mDocument->url());
     if (GwenviewConfig::autoplayVideos()) {
@@ -296,6 +301,10 @@ void VideoViewAdapter::setSourceDevice(QIODevice *device, const QUrl &url)
     d->mHud->show();
     d->mWidget->setAcceptHoverEvents(true);
     d->mLoopAction->setChecked(true);
+    if (d->mMuteButton) {
+        d->mMuteButton->hide();
+    }
+    d->mVolumeSlider->hide();
     d->mMotionPhotoDevice = device;
     d->mMotionPhotoUrl = url;
     d->mMediaPlayer->setSourceDevice(device, url);
@@ -341,8 +350,6 @@ void VideoViewAdapter::updatePlayUi()
     } else {
         d->mPlayPauseAction->setIcon(QIcon::fromTheme(QStringLiteral("media-playback-start")));
     }
-
-    d->mLastSeekSliderActionTime.restart();
 
     if (d->mMediaPlayer->duration() > 0) {
         d->mSeekSlider->setRange(0, d->mMediaPlayer->duration());
