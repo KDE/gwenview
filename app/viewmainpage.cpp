@@ -26,6 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QItemSelectionModel>
 #include <QMenu>
 #include <QShortcut>
+#include <QToolButton>
 #include <QVBoxLayout>
 
 // KF
@@ -120,6 +121,7 @@ struct ViewMainPagePrivate {
     DocumentViewSynchronizer *mSynchronizer = nullptr;
     QToolButton *mToggleSideBarButton = nullptr;
     QToolButton *mToggleThumbnailBarButton = nullptr;
+    QToolButton *mMotionPhotoButton = nullptr;
     ZoomWidget *mZoomWidget = nullptr;
     DocumentViewContainer *mDocumentViewContainer = nullptr;
     SlideContainer *mToolContainer = nullptr;
@@ -167,7 +169,14 @@ struct ViewMainPagePrivate {
         // Ensure document count label takes up all available space,
         // so its autohide feature works properly (stretch factor = 1)
         statusBarContainerLayout->addWidget(mDocumentCountLabel, 1);
+        mMotionPhotoButton = new QToolButton;
+        mMotionPhotoButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+        mMotionPhotoButton->setIcon(QIcon::fromTheme(QStringLiteral("media-playback-start")));
+        mMotionPhotoButton->setText(i18nc("@action:button", "Play Motion Photo"));
+        mMotionPhotoButton->hide();
+
         statusBarContainerLayout->addStretch();
+        statusBarContainerLayout->addWidget(mMotionPhotoButton);
         statusBarContainerLayout->addWidget(mZoomWidget);
         //--
         mAdapterContainer = new QWidget;
@@ -291,6 +300,17 @@ struct ViewMainPagePrivate {
 
         QObject::connect(view, &DocumentView::videoFinished, mSlideShow, &SlideShow::resumeAndGoToNextUrl);
 
+        QObject::connect(view, &DocumentView::motionPhotoAvailableChanged, q, [this, view](bool available) {
+            if (view == currentView()) {
+                updateMotionPhotoButton(available, view->isPlayingMotionPhoto());
+            }
+        });
+        QObject::connect(view, &DocumentView::motionPhotoPlayingChanged, q, [this, view](bool playing) {
+            if (view == currentView()) {
+                updateMotionPhotoButton(view->isMotionPhotoAvailable(), playing);
+            }
+        });
+
         mDocumentViews << view;
 
         return view;
@@ -333,6 +353,21 @@ struct ViewMainPagePrivate {
         return mDocumentViewController->view();
     }
 
+    void updateMotionPhotoButton(bool available, bool playing)
+    {
+        if (playing) {
+            mMotionPhotoButton->setIcon(QIcon::fromTheme(QStringLiteral("go-previous")));
+            mMotionPhotoButton->setText(i18nc("@action:button", "Back to Image"));
+            mMotionPhotoButton->show();
+        } else if (available) {
+            mMotionPhotoButton->setIcon(QIcon::fromTheme(QStringLiteral("media-playback-start")));
+            mMotionPhotoButton->setText(i18nc("@action:button", "Play Motion Photo"));
+            mMotionPhotoButton->show();
+        } else {
+            mMotionPhotoButton->hide();
+        }
+    }
+
     void setCurrentView(DocumentView *view)
     {
         DocumentView *oldView = currentView();
@@ -345,6 +380,7 @@ struct ViewMainPagePrivate {
         view->setCurrent(true);
         mDocumentViewController->setView(view);
         mSynchronizer->setCurrentView(view);
+        updateMotionPhotoButton(view->isMotionPhotoAvailable(), view->isPlayingMotionPhoto());
 
         QModelIndex index = indexForView(view);
         if (index.isValid()) {
@@ -421,6 +457,11 @@ ViewMainPage::ViewMainPage(QWidget *parent, SlideShow *slideShow, KActionCollect
     actionCollection->setDefaultShortcut(d->mToggleThumbnailBarAction, Qt::CTRL | Qt::Key_B);
     connect(d->mToggleThumbnailBarAction, &KToggleAction::triggered, this, &ViewMainPage::setThumbnailBarVisibility);
     d->mToggleThumbnailBarButton->setDefaultAction(d->mToggleThumbnailBarAction);
+    connect(d->mMotionPhotoButton, &QToolButton::clicked, this, [this]() {
+        if (d->currentView()) {
+            d->currentView()->toggleMotionPhoto();
+        }
+    });
     connect(d->mThumbnailSplitter, &QSplitter::splitterMoved, this, [this]() {
         // The splitter can be moved until the bar has a size of zero which makes it invisible.
         const bool isThumbnailBarVisible = d->mThumbnailSplitter->sizes().constLast() > 0;

@@ -102,9 +102,9 @@ struct DocumentViewPrivate {
     DocumentView *q = nullptr;
     int mSortKey; // Used to sort views when displayed in compare mode
     HudWidget *mHud = nullptr;
-    HudButton *mMotionPhotoPlayButton = nullptr;
     QSharedPointer<QBuffer> mMotionPhotoBuffer;
     bool mPlayingMotionPhoto = false;
+    bool mMotionPhotoAvailable = false;
     BirdEyeView *mBirdEyeView = nullptr;
     QPointer<QPropertyAnimation> mMoveAnimation;
     QPointer<QPropertyAnimation> mFadeAnimation;
@@ -233,29 +233,6 @@ struct DocumentViewPrivate {
         QObject::connect(deselectButton, &HudButton::clicked, q, &DocumentView::emitHudDeselectClicked);
 
         mHud->hide();
-    }
-
-    void setupMotionPhotoHud()
-    {
-        mMotionPhotoPlayButton = new HudButton(q);
-        mMotionPhotoPlayButton->setText(i18nc("@action:button", "Play Motion Photo"));
-        mMotionPhotoPlayButton->setIcon(QIcon::fromTheme(QStringLiteral("media-playback-start")));
-        mMotionPhotoPlayButton->adjustSize();
-
-        auto floater = new GraphicsWidgetFloater(q);
-        floater->setChildWidget(mMotionPhotoPlayButton);
-        mMotionPhotoPlayButton->setZValue(1);
-        floater->setAlignment(Qt::AlignBottom | Qt::AlignHCenter);
-
-        QObject::connect(mMotionPhotoPlayButton, &HudButton::clicked, q, [this]() {
-            if (mPlayingMotionPhoto) {
-                q->slotStopMotionPhoto();
-            } else {
-                q->slotPlayMotionPhoto();
-            }
-        });
-
-        mMotionPhotoPlayButton->hide();
     }
 
     void setupBirdEyeView()
@@ -624,12 +601,10 @@ void DocumentView::finishOpenUrl()
         return;
     }
     createAdapterForDocument();
-    if (d->mPlayingMotionPhoto && d->mMotionPhotoPlayButton) {
-        d->mMotionPhotoPlayButton->setIcon(QIcon::fromTheme(QStringLiteral("media-playback-start")));
-        d->mMotionPhotoPlayButton->setText(i18nc("@action:button", "Play Motion Photo"));
-        d->mMotionPhotoPlayButton->adjustSize();
+    if (d->mPlayingMotionPhoto) {
+        d->mPlayingMotionPhoto = false;
+        Q_EMIT motionPhotoPlayingChanged(false);
     }
-    d->mPlayingMotionPhoto = false;
     d->mMotionPhotoBuffer.reset();
 
     connect(d->mDocument.data(), &Document::loadingFailed, this, &DocumentView::slotLoadingFailed);
@@ -659,20 +634,14 @@ void DocumentView::slotCompleted()
         }
     }
 
+    bool available = false;
     if (d->mAdapter->kind() == MimeTypeUtils::KIND_RASTER_IMAGE && d->mDocument) {
         const QString path = d->mDocument->url().toLocalFile();
-        if (!path.isEmpty() && MotionPhotoUtil::isMotionPhoto(path)) {
-            if (!d->mMotionPhotoPlayButton) {
-                d->setupMotionPhotoHud();
-            }
-            d->mMotionPhotoPlayButton->show();
-        } else if (d->mMotionPhotoPlayButton) {
-            d->mMotionPhotoPlayButton->hide();
-        }
-    } else if (d->mMotionPhotoPlayButton && !d->mPlayingMotionPhoto) {
-        // In video mode without motion photo playback (e.g. regular video): hide the button.
-        // Keep it visible when playing a motion photo so the "Back to Image" button stays accessible.
-        d->mMotionPhotoPlayButton->hide();
+        available = !path.isEmpty() && MotionPhotoUtil::isMotionPhoto(path);
+    }
+    if (available != d->mMotionPhotoAvailable) {
+        d->mMotionPhotoAvailable = available;
+        Q_EMIT motionPhotoAvailableChanged(available);
     }
 
     Q_EMIT completed();
@@ -719,11 +688,7 @@ void DocumentView::slotPlayMotionPhoto()
     }
 
     d->mPlayingMotionPhoto = true;
-    if (d->mMotionPhotoPlayButton) {
-        d->mMotionPhotoPlayButton->setIcon(QIcon::fromTheme(QStringLiteral("go-previous")));
-        d->mMotionPhotoPlayButton->setText(i18nc("@action:button", "Back to Image"));
-        d->mMotionPhotoPlayButton->adjustSize();
-    }
+    Q_EMIT motionPhotoPlayingChanged(true);
 
     d->mMotionPhotoBuffer.reset(new QBuffer);
     d->mMotionPhotoBuffer->setData(videoData);
@@ -738,15 +703,43 @@ void DocumentView::slotPlayMotionPhoto()
 void DocumentView::slotStopMotionPhoto()
 {
     d->mPlayingMotionPhoto = false;
-    if (d->mMotionPhotoPlayButton) {
-        d->mMotionPhotoPlayButton->setIcon(QIcon::fromTheme(QStringLiteral("media-playback-start")));
-        d->mMotionPhotoPlayButton->setText(i18nc("@action:button", "Play Motion Photo"));
-        d->mMotionPhotoPlayButton->adjustSize();
-    }
+    Q_EMIT motionPhotoPlayingChanged(false);
 
     createAdapterForDocument(); // Destroys VideoViewAdapter, creates RasterImageViewAdapter
     d->mMotionPhotoBuffer.reset();
     d->mAdapter->setDocument(d->mDocument);
+}
+
+bool DocumentView::isMotionPhotoAvailable() const
+{
+    return d->mMotionPhotoAvailable;
+}
+
+bool DocumentView::isPlayingMotionPhoto() const
+{
+    return d->mPlayingMotionPhoto;
+}
+
+bool DocumentView::stopMotionPhoto()
+{
+    if (!d->mPlayingMotionPhoto) {
+        return false;
+    }
+    slotStopMotionPhoto();
+    return true;
+}
+
+bool DocumentView::toggleMotionPhoto()
+{
+    if (d->mPlayingMotionPhoto) {
+        slotStopMotionPhoto();
+        return true;
+    }
+    if (d->mMotionPhotoAvailable) {
+        slotPlayMotionPhoto();
+        return true;
+    }
+    return false;
 }
 
 bool DocumentView::canZoom() const

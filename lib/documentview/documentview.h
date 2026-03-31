@@ -172,6 +172,11 @@ public Q_SLOTS:
 
     void hideAndDeleteLater();
 
+    bool isMotionPhotoAvailable() const;
+    bool isPlayingMotionPhoto() const;
+    bool stopMotionPhoto();
+    bool toggleMotionPhoto();
+
 Q_SIGNALS:
     /**
      * Emitted when the part has finished loading
@@ -191,6 +196,9 @@ Q_SIGNALS:
     void toggleFullScreenRequested();
 
     void videoFinished();
+
+    void motionPhotoAvailableChanged(bool available);
+    void motionPhotoPlayingChanged(bool playing);
 
     void backgroundColorModeChanged(BackgroundColorMode);
 
