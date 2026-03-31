@@ -194,18 +194,10 @@ struct VideoViewAdapterPrivate {
 
         switch (event->key()) {
         case Qt::Key_Left:
-            if (mMotionPhotoDevice) {
-                Q_EMIT q->previousImageRequested();
-            } else {
-                mSeekSlider->triggerAction(QAbstractSlider::SliderSingleStepSub);
-            }
+            mSeekSlider->triggerAction(QAbstractSlider::SliderSingleStepSub);
             break;
         case Qt::Key_Right:
-            if (mMotionPhotoDevice) {
-                Q_EMIT q->nextImageRequested();
-            } else {
-                mSeekSlider->triggerAction(QAbstractSlider::SliderSingleStepAdd);
-            }
+            mSeekSlider->triggerAction(QAbstractSlider::SliderSingleStepAdd);
             break;
         case Qt::Key_Up:
             Q_EMIT q->previousImageRequested();

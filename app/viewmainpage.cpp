@@ -171,6 +171,7 @@ struct ViewMainPagePrivate {
         statusBarContainerLayout->addWidget(mDocumentCountLabel, 1);
         mMotionPhotoButton = new QToolButton;
         mMotionPhotoButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+        mMotionPhotoButton->setFocusPolicy(Qt::NoFocus);
         mMotionPhotoButton->setIcon(QIcon::fromTheme(QStringLiteral("media-playback-start")));
         mMotionPhotoButton->setText(i18nc("@action:button", "Play Motion Photo"));
         mMotionPhotoButton->hide();
@@ -211,6 +212,7 @@ struct ViewMainPagePrivate {
         // the native window and to avoid QTBUG-87345.
         mThumbnailBar->setVisible(GwenviewConfig::thumbnailBarIsVisible());
         mThumbnailBar->installEventFilter(q);
+        mDocumentViewContainer->installEventFilter(q);
 
         auto viewMainPageLayout = new QVBoxLayout(q);
         viewMainPageLayout->setContentsMargins(0, 0, 0, 0);
@@ -837,7 +839,24 @@ void ViewMainPage::slotEnterPressed()
 
 bool ViewMainPage::eventFilter(QObject *watched, QEvent *event)
 {
-    if (watched == d->mThumbnailBar && event->type() == QEvent::KeyPress) {
+    if (watched == d->mDocumentViewContainer && event->type() == QEvent::KeyPress) {
+        auto ke = static_cast<QKeyEvent *>(event);
+        if (ke->modifiers() == Qt::NoModifier) {
+            DocumentView *view = d->currentView();
+            if (view && view->isPlayingMotionPhoto()) {
+                switch (ke->key()) {
+                case Qt::Key_Left:
+                    Q_EMIT previousImageRequested();
+                    return true;
+                case Qt::Key_Right:
+                    Q_EMIT nextImageRequested();
+                    return true;
+                default:
+                    break;
+                }
+            }
+        }
+    } else if (watched == d->mThumbnailBar && event->type() == QEvent::KeyPress) {
         auto ke = static_cast<QKeyEvent *>(event);
         switch (ke->key()) {
         case Qt::Key_Left:
