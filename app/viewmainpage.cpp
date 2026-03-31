@@ -356,7 +356,7 @@ struct ViewMainPagePrivate {
     void updateMotionPhotoButton(bool available, bool playing)
     {
         if (playing) {
-            mMotionPhotoButton->setIcon(QIcon::fromTheme(QStringLiteral("go-previous")));
+            mMotionPhotoButton->setIcon(QIcon::fromTheme(QStringLiteral("media-playback-stop")));
             mMotionPhotoButton->setText(i18nc("@action:button", "Back to Image"));
             mMotionPhotoButton->show();
         } else if (available) {

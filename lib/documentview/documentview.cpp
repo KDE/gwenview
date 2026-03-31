@@ -637,7 +637,8 @@ void DocumentView::slotCompleted()
     bool available = false;
     if (d->mAdapter->kind() == MimeTypeUtils::KIND_RASTER_IMAGE && d->mDocument) {
         const QString path = d->mDocument->url().toLocalFile();
-        available = !path.isEmpty() && MotionPhotoUtil::isMotionPhoto(path);
+        available = !path.isEmpty() && (path.endsWith(QLatin1String(".jpg"), Qt::CaseInsensitive) || path.endsWith(QLatin1String(".jpeg"), Qt::CaseInsensitive))
+            && MotionPhotoUtil::isMotionPhoto(path);
     }
     if (available != d->mMotionPhotoAvailable) {
         d->mMotionPhotoAvailable = available;
@@ -684,6 +685,8 @@ void DocumentView::slotPlayMotionPhoto()
 
     if (videoData.isEmpty()) {
         qCWarning(GWENVIEW_LIB_LOG) << "Failed to extract motion photo video from" << path;
+        d->mMotionPhotoAvailable = false;
+        Q_EMIT motionPhotoAvailableChanged(false);
         return;
     }
 

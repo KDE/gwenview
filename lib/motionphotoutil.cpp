@@ -64,7 +64,8 @@ bool isMotionPhoto(const QString &path)
         if (it != xmpData.end() && it->toString() == "1") {
             return true;
         }
-    } catch (...) {
+    } catch (const Exiv2::Error &error) {
+        qCWarning(GWENVIEW_LIB_LOG) << "Exiv2 error reading motion photo metadata:" << QString::fromUtf8(error.what());
     }
 
     return false;
@@ -84,8 +85,8 @@ QByteArray extractVideo(const QString &path)
     // Motion photos embed the MP4 after the JPEG data. The MP4 starts with a
     // ftyp box: [4 bytes big-endian size][4 bytes "ftyp"][...].
     // We scan forward from a safe offset past the JPEG header.
-    const int minOffset = 4096;
-    for (int i = minOffset; i < fileData.size() - 8; ++i) {
+    const qsizetype minOffset = 4096;
+    for (qsizetype i = minOffset; i < fileData.size() - 8; ++i) {
         if (fileData[i + 4] == 'f' && fileData[i + 5] == 't' && fileData[i + 6] == 'y' && fileData[i + 7] == 'p') {
             const quint32 boxSize = (quint8(fileData[i]) << 24) | (quint8(fileData[i + 1]) << 16) | (quint8(fileData[i + 2]) << 8) | quint8(fileData[i + 3]);
             if (boxSize >= 8 && static_cast<qint64>(boxSize) <= fileData.size() - i) {
