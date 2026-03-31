@@ -878,6 +878,20 @@ bool ViewMainPage::eventFilter(QObject *watched, QEvent *event)
                 }
             }
         }
+        if (key == Qt::Key_Space) {
+            DocumentView *view = d->currentView();
+            if (view && view->toggleMotionPhoto()) {
+                event->accept();
+                return true;
+            }
+        }
+        if (key == Qt::Key_Escape) {
+            DocumentView *view = d->currentView();
+            if (view && view->stopMotionPhoto()) {
+                event->accept();
+                return true;
+            }
+        }
         // Leave fullscreen when viewing an image
         if (window()->isFullScreen() && key == Qt::Key_Escape) {
             d->mActionCollection->action(QStringLiteral("leave_fullscreen"))->trigger();
