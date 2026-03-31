@@ -102,7 +102,6 @@ struct DocumentViewPrivate {
     DocumentView *q = nullptr;
     int mSortKey; // Used to sort views when displayed in compare mode
     HudWidget *mHud = nullptr;
-    HudWidget *mMotionPhotoHud = nullptr;
     HudButton *mMotionPhotoPlayButton = nullptr;
     QSharedPointer<QBuffer> mMotionPhotoBuffer;
     bool mPlayingMotionPhoto = false;
@@ -238,18 +237,14 @@ struct DocumentViewPrivate {
 
     void setupMotionPhotoHud()
     {
-        auto playButton = createHudButton(i18nc("@action:button", "Play Motion Photo"), QStringLiteral("media-playback-start"), true);
-
-        auto content = new QGraphicsWidget;
-        auto layout = new QGraphicsLinearLayout(content);
-        layout->addItem(mMotionPhotoPlayButton);
-
-        mMotionPhotoHud = new HudWidget(q);
-        mMotionPhotoHud->init(content, HudWidget::OptionNone);
-        mMotionPhotoHud->setZValue(1);
+        mMotionPhotoPlayButton = new HudButton(q);
+        mMotionPhotoPlayButton->setText(i18nc("@action:button", "Play Motion Photo"));
+        mMotionPhotoPlayButton->setIcon(QIcon::fromTheme(QStringLiteral("media-playback-start")));
+        mMotionPhotoPlayButton->adjustSize();
 
         auto floater = new GraphicsWidgetFloater(q);
-        floater->setChildWidget(mMotionPhotoHud);
+        floater->setChildWidget(mMotionPhotoPlayButton);
+        mMotionPhotoPlayButton->setZValue(1);
         floater->setAlignment(Qt::AlignBottom | Qt::AlignHCenter);
 
         QObject::connect(mMotionPhotoPlayButton, &HudButton::clicked, q, [this]() {
@@ -260,7 +255,7 @@ struct DocumentViewPrivate {
             }
         });
 
-        mMotionPhotoHud->hide();
+        mMotionPhotoPlayButton->hide();
     }
 
     void setupBirdEyeView()
@@ -632,6 +627,7 @@ void DocumentView::finishOpenUrl()
     if (d->mPlayingMotionPhoto && d->mMotionPhotoPlayButton) {
         d->mMotionPhotoPlayButton->setIcon(QIcon::fromTheme(QStringLiteral("media-playback-start")));
         d->mMotionPhotoPlayButton->setText(i18nc("@action:button", "Play Motion Photo"));
+        d->mMotionPhotoPlayButton->adjustSize();
     }
     d->mPlayingMotionPhoto = false;
     d->mMotionPhotoBuffer.reset();
@@ -666,17 +662,17 @@ void DocumentView::slotCompleted()
     if (d->mAdapter->kind() == MimeTypeUtils::KIND_RASTER_IMAGE && d->mDocument) {
         const QString path = d->mDocument->url().toLocalFile();
         if (!path.isEmpty() && MotionPhotoUtil::isMotionPhoto(path)) {
-            if (!d->mMotionPhotoHud) {
+            if (!d->mMotionPhotoPlayButton) {
                 d->setupMotionPhotoHud();
             }
-            d->mMotionPhotoHud->show();
-        } else if (d->mMotionPhotoHud) {
-            d->mMotionPhotoHud->hide();
+            d->mMotionPhotoPlayButton->show();
+        } else if (d->mMotionPhotoPlayButton) {
+            d->mMotionPhotoPlayButton->hide();
         }
-    } else if (d->mMotionPhotoHud && !d->mPlayingMotionPhoto) {
-        // In video mode without motion photo playback (e.g. regular video): hide the HUD.
+    } else if (d->mMotionPhotoPlayButton && !d->mPlayingMotionPhoto) {
+        // In video mode without motion photo playback (e.g. regular video): hide the button.
         // Keep it visible when playing a motion photo so the "Back to Image" button stays accessible.
-        d->mMotionPhotoHud->hide();
+        d->mMotionPhotoPlayButton->hide();
     }
 
     Q_EMIT completed();
@@ -726,6 +722,7 @@ void DocumentView::slotPlayMotionPhoto()
     if (d->mMotionPhotoPlayButton) {
         d->mMotionPhotoPlayButton->setIcon(QIcon::fromTheme(QStringLiteral("go-previous")));
         d->mMotionPhotoPlayButton->setText(i18nc("@action:button", "Back to Image"));
+        d->mMotionPhotoPlayButton->adjustSize();
     }
 
     d->mMotionPhotoBuffer.reset(new QBuffer);
@@ -744,6 +741,7 @@ void DocumentView::slotStopMotionPhoto()
     if (d->mMotionPhotoPlayButton) {
         d->mMotionPhotoPlayButton->setIcon(QIcon::fromTheme(QStringLiteral("media-playback-start")));
         d->mMotionPhotoPlayButton->setText(i18nc("@action:button", "Play Motion Photo"));
+        d->mMotionPhotoPlayButton->adjustSize();
     }
 
     createAdapterForDocument(); // Destroys VideoViewAdapter, creates RasterImageViewAdapter
