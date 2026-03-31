@@ -71,6 +71,7 @@ private Q_SLOTS:
     void slotOutputVolumeChanged(qreal);
     void slotSeekSliderActionTriggered(int);
     void slotTicked(qint64);
+    void updateLoopAction();
 
 private:
     friend struct VideoViewAdapterPrivate;

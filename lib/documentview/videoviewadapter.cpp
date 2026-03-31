@@ -37,6 +37,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QUrl>
 
 // KF
+#include <KLocalizedString>
 
 // Local
 #include "gwenview_lib_debug.h"
@@ -65,6 +66,7 @@ struct VideoViewAdapterPrivate {
 
     QAction *mPlayPauseAction = nullptr;
     QAction *mMuteAction = nullptr;
+    QAction *mLoopAction = nullptr;
     QGraphicsWidget *mWidget = nullptr;
 
     HudSlider *mVolumeSlider = nullptr;
@@ -86,6 +88,10 @@ struct VideoViewAdapterPrivate {
         mMuteAction->setShortcut(Qt::Key_M);
         QObject::connect(mMuteAction, &QAction::triggered, q, &VideoViewAdapter::slotMuteClicked);
         QObject::connect(mAudioOutput, &QAudioOutput::mutedChanged, q, &VideoViewAdapter::updateMuteAction);
+
+        mLoopAction = new QAction(q);
+        mLoopAction->setCheckable(true);
+        QObject::connect(mLoopAction, &QAction::toggled, q, &VideoViewAdapter::updateLoopAction);
     }
 
     void setupHud(QGraphicsWidget *parent)
@@ -115,6 +121,9 @@ struct VideoViewAdapterPrivate {
         mVolumeSlider->setSingleStep(1);
         QObject::connect(mVolumeSlider, &HudSlider::valueChanged, q, &VideoViewAdapter::slotVolumeSliderChanged);
         QObject::connect(mAudioOutput, &QAudioOutput::volumeChanged, q, &VideoViewAdapter::slotOutputVolumeChanged);
+
+        auto loopButton = new HudButton;
+        loopButton->setDefaultAction(mLoopAction);
 
         // Timestamps
         mCurrentTime = new QLabel(QStringLiteral("--:--"));
@@ -148,6 +157,7 @@ struct VideoViewAdapterPrivate {
         layout->addItem(muteButton);
         layout->addItem(mVolumeSlider);
         layout->setStretchFactor(mVolumeSlider, 2);
+        layout->addItem(loopButton);
 
         // Create hud
         mHud = new HudWidget(parent);
@@ -207,10 +217,13 @@ VideoViewAdapter::VideoViewAdapter()
     d->mMediaPlayer = new QMediaPlayer(this);
     connect(d->mMediaPlayer, &QMediaPlayer::mediaStatusChanged, this, [this](QMediaPlayer::MediaStatus status) {
         if (status == QMediaPlayer::EndOfMedia) {
-            if (d->mMotionPhotoDevice) {
-                // Loop motion photo video
-                d->mMotionPhotoDevice->seek(0);
-                d->mMediaPlayer->setSourceDevice(d->mMotionPhotoDevice, d->mMotionPhotoUrl);
+            if (d->mLoopAction->isChecked()) {
+                if (d->mMotionPhotoDevice) {
+                    d->mMotionPhotoDevice->seek(0);
+                    d->mMediaPlayer->setSourceDevice(d->mMotionPhotoDevice, d->mMotionPhotoUrl);
+                } else {
+                    d->mMediaPlayer->setPosition(0);
+                }
                 d->mMediaPlayer->play();
             } else {
                 Q_EMIT videoFinished();
@@ -242,6 +255,7 @@ VideoViewAdapter::VideoViewAdapter()
 
     updatePlayUi();
     updateMuteAction();
+    updateLoopAction();
     // Enforce a redraw to make the hud visible if needed
     d->mWidget->adjustSize();
 }
@@ -259,6 +273,7 @@ VideoViewAdapter::~VideoViewAdapter()
 void VideoViewAdapter::setDocument(const Document::Ptr &doc)
 {
     d->mHud->show();
+    d->mLoopAction->setChecked(false);
     d->mDocument = doc;
     d->mMediaPlayer->setSource(d->mDocument->url());
     if (GwenviewConfig::autoplayVideos()) {
@@ -280,6 +295,7 @@ void VideoViewAdapter::setSourceDevice(QIODevice *device, const QUrl &url)
 {
     d->mHud->show();
     d->mWidget->setAcceptHoverEvents(true);
+    d->mLoopAction->setChecked(true);
     d->mMotionPhotoDevice = device;
     d->mMotionPhotoUrl = url;
     d->mMediaPlayer->setSourceDevice(device, url);
@@ -387,6 +403,13 @@ void VideoViewAdapter::updateTimestamps()
 
     d->mCurrentTime->setText(currentTime);
     d->mRemainingTime->setText(remainingTime);
+}
+
+void VideoViewAdapter::updateLoopAction()
+{
+    const bool loop = d->mLoopAction->isChecked();
+    d->mLoopAction->setIcon(QIcon::fromTheme(loop ? QStringLiteral("media-playlist-repeat") : QStringLiteral("media-playlist-normal")));
+    d->mLoopAction->setToolTip(loop ? i18nc("@info:tooltip", "Loop: On") : i18nc("@info:tooltip", "Loop: Off"));
 }
 
 void VideoViewAdapter::slotTicked(qint64 value)

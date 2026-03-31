@@ -241,6 +241,7 @@ private Q_SLOTS:
     void slotCompleted();
     void slotLoadingFailed();
     void slotPlayMotionPhoto();
+    void slotStopMotionPhoto();
 
     void zoomContinuous(int delta, QPointF center = QPointF(-1, -1));
     void zoomIn(QPointF center = QPointF(-1, -1));
